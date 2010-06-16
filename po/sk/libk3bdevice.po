@@ -1,0 +1,215 @@
+# translation of libk3bdevice.po to Slovak
+# Richard Fric <Richard.Fric@kdemail.net>, 2007, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: libk3bdevice\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-05-03 05:01+0200\n"
+"PO-Revision-Date: 2007-12-26 11:34+0100\n"
+"Last-Translator: Richard Fric <Richard.Fric@kdemail.net>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: k3bdeviceglobals.cpp:29 k3bdeviceglobals.cpp:152
+msgid "CD-R"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:31 k3bdeviceglobals.cpp:154
+msgid "CD-RW"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:33 k3bdeviceglobals.cpp:150
+msgid "CD-ROM"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:35 k3bdeviceglobals.cpp:119
+msgid "DVD-ROM"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:37 k3bdeviceglobals.cpp:133
+msgid "DVD-RAM"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:39 k3bdeviceglobals.cpp:122
+msgid "DVD-R"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:41 k3bdeviceglobals.cpp:136
+msgid "DVD-RW"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:43
+msgid "DVD-R DL"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:45 k3bdeviceglobals.cpp:156
+msgid "HD DVD-ROM"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:47 k3bdeviceglobals.cpp:158
+msgid "HD DVD-R"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:49 k3bdeviceglobals.cpp:160
+msgid "HD DVD-RAM"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:51 k3bdeviceglobals.cpp:162
+msgid "BD-ROM"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:53 k3bdeviceglobals.cpp:165
+msgid "BD-R"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:55 k3bdeviceglobals.cpp:173
+msgid "BD-RE"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:57 k3bdeviceglobals.cpp:144
+msgid "DVD+R"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:59 k3bdeviceglobals.cpp:142
+msgid "DVD+RW"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:61
+msgid "DVD+R DL"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:64 k3bdeviceglobals.cpp:176 k3bdeviceglobals.cpp:198
+msgid "Error"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:74
+msgid "SAO"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:76
+msgid "TAO"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:78
+msgid "RAW"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:80
+msgid "SAO/R96P"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:82
+msgid "SAO/R96R"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:84
+msgid "RAW/R16"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:86
+msgid "RAW/R96P"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:88
+msgid "RAW/R96R"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:90
+msgid "Incremental Sequential"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:92
+msgid "Restricted Overwrite"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:94
+msgid "Layer Jump"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:97
+msgid "Random Recording"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:99
+msgid "Sequential Recording"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:101
+msgid "Sequential Recording + POW"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:104
+msgid "None"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:113 k3bdeviceglobals.cpp:185
+msgid "Unknown"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:117
+msgid "No media"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:124
+msgid "DVD-R Sequential"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:127
+msgid "DVD-R Dual Layer"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:129
+msgid "DVD-R Dual Layer Sequential"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:131
+msgid "DVD-R Dual Layer Jump"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:138
+msgid "DVD-RW Restricted Overwrite"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:140
+msgid "DVD-RW Sequential"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:146
+msgid "DVD+RW Dual Layer"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:148
+msgid "DVD+R Dual Layer"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:167
+msgid "BD-R Sequential (SRM)"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:169
+msgid "BD-R Sequential Pseudo Overwrite (SRM+POW)"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:171
+msgid "BD-R Random (RRM)"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:189
+msgid "no medium"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:191
+msgid "complete medium"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:193
+msgid "incomplete medium"
+msgstr ""
+
+#: k3bdeviceglobals.cpp:195
+msgid "empty medium"
+msgstr ""

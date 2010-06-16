@@ -1,0 +1,224 @@
+# Translation of k3bsetup.po into Serbian.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+# Slobodan Simic <slsimic@gmail.com>, 2008, 2009, 2010.
+# Chusslove Illich <caslav.ilic@gmx.net>, 2010.
+# Dalibor Djuric <daliborddjuric@gmail.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: k3bsetup\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-05-03 05:01+0200\n"
+"PO-Revision-Date: 2010-03-25 02:14+0100\n"
+"Last-Translator: Dalibor Djuric <daliborddjuric@gmail.com>\n"
+"Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
+"Language: sr@latin\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Environment: kde\n"
+
+#: k3bsetup.cpp:77
+msgid "K3bSetup"
+msgstr "K3b‑postava"
+
+#: k3bsetup.cpp:79
+msgid "(C) 2003-2007 Sebastian Trueg"
+msgstr "© 2003—2007, Sebastijan Trig"
+
+#: k3bsetup.cpp:80
+msgid "Sebastian Trueg"
+msgstr "Sebastijan Trig"
+
+# skip-rule: account
+#: k3bsetup.cpp:88
+msgid ""
+"<p>This simple setup assistant is able to set the permissions needed by K3b "
+"in order to burn CDs and DVDs. <p>It does not take things like devfs or "
+"resmgr into account. In most cases this is not a problem but on some systems "
+"the permissions may be altered the next time you login or restart your "
+"computer. In those cases it is best to consult the distribution "
+"documentation.<p><b>Caution:</b> Although K3b::Setup should not be able to "
+"mess up your system no guarantee can be given."
+msgstr ""
+"<html><p>Ovaj jednostavan pomagač za postavljanje može da postavi dozvole "
+"koje su K3bu potrebne za rezanje diskova.</p><p>Ne uzima u obzir stvari "
+"poput <filename>devfs</filename> ili <filename>resmgr</filename>. U većini "
+"slučajeva to nije problem, ali na nekim sistemima dozvole mogu biti "
+"izmenjene sledeći put kada se prijavite ili resetujete računar. U tim "
+"slučajevima najbolje je konsultovati dokumentaciju distribucije.</"
+"p><p><b>Oprez:</b> Iako K3b‑postava ne bi trebalo da naudi vašem sistemu, ne "
+"možemo dati nikakve garancije za to.</p></html>"
+
+# skip-rule: account
+#: k3bsetup.cpp:145
+msgid ""
+"<h2>K3b::Setup</h2><p>This simple setup assistant is able to set the "
+"permissions needed by K3b in order to burn CDs and DVDs.<p>It does not take "
+"into account devfs or resmgr, or similar. In most cases this is not a "
+"problem, but on some systems the permissions may be altered the next time "
+"you login or restart your computer. In these cases it is best to consult the "
+"distribution's documentation.<p>The important task that K3b::Setup performs "
+"is grant write access to the CD and DVD devices.<p><b>Caution:</b> Although "
+"K3b::Setup should not be able to damage your system, no guarantee can be "
+"given."
+msgstr ""
+"<html><h2>K3b‑postava</h2><p>Ovaj jednostavan pomagač za postavljanje može "
+"da postavi dozvole koje su K3bu potrebne za rezanje diskova.</p><p>Ne uzima "
+"u obzir stvari poput <filename>devfs</filename> ili <filename>resmgr</"
+"filename>, i slične. U većini slučajeva to nije problem, ali na nekim "
+"sistemima dozvole mogu biti izmenjene sledeći put kada se prijavite ili "
+"resetujete računar. U tim slučajevima najbolje je konsultovati dokumentaciju "
+"distribucije.</p><p>Važan zadatak koji K3b‑postava obavlja jeste dozvola "
+"pristupa CD i DVD uređajima.</p><p><b>Oprez:</b> Iako K3b‑postava ne bi "
+"trebalo da naudi vašem sistemu, ne možemo dati nikakve garancije za to.</p></"
+"html>"
+
+#: k3bsetup.cpp:188
+#, kde-format
+msgid "There is no group \"%1\"."
+msgstr "Ne postoji grupa „%1“."
+
+#: k3bsetup.cpp:228
+msgid "Cannot run worker."
+msgstr "Ne mogu da pokrenem radnika."
+
+#: k3bsetup.cpp:238
+msgid "Following devices and programs could not be updated:"
+msgstr "Sledeći uređaji i dozvole se ne mogu ažurirati:"
+
+#: k3bsetupdevicesmodel.cpp:170 k3bsetupdevicesmodel.cpp:177
+#: k3bsetupprogramsmodel.cpp:266
+msgid "no change"
+msgstr "bez izmene"
+
+#: k3bsetupdevicesmodel.cpp:237
+msgid "Device"
+msgstr "uređaj"
+
+#: k3bsetupdevicesmodel.cpp:238
+msgid "Devicenode"
+msgstr "čvor uređaja"
+
+#: k3bsetupdevicesmodel.cpp:239 k3bsetupprogramsmodel.cpp:324
+msgid "Permissions"
+msgstr "dozvole"
+
+#: k3bsetupdevicesmodel.cpp:240 k3bsetupprogramsmodel.cpp:325
+msgid "New permissions"
+msgstr "nove dozvole"
+
+#: k3bsetupprogramsmodel.cpp:321
+msgid "Program"
+msgstr "program"
+
+#: k3bsetupprogramsmodel.cpp:322
+msgid "Version"
+msgstr "verzija"
+
+#: k3bsetupprogramsmodel.cpp:323
+msgid "Path"
+msgstr "putanja"
+
+#. i18n: file: base_k3bsetup.ui:22
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: rc.cpp:3
+msgid "Settings"
+msgstr "Podešavanje"
+
+#. i18n: file: base_k3bsetup.ui:31
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:6
+msgid ""
+"<p>If this option is checked, only the users in the specified group will be "
+"able to burn CDs and DVDs, since only they will have access to the devices "
+"and the CD recording programs used by K3b.</p>\n"
+"<p>Otherwise all users on the system have access to the devices and to all "
+"K3b functionality."
+msgstr ""
+"<p>Ako je ova opcija uključena, samo korisnici u navedenoj grupi moći će da "
+"režu diskove, pošto će samo oni imati pristup uređajima i programima za "
+"snimanje koje K3b koristi.</p><p>U suprotnom će svi korisnici na sistemu "
+"imati pristup uređajima i celokupnoj funkcionalnosti K3ba.</p>"
+
+#. i18n: file: base_k3bsetup.ui:34
+#. i18n: ectx: property (text), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:10
+msgid "Use burning group:"
+msgstr "Koristi grupu za rezanje:"
+
+#. i18n: file: base_k3bsetup.ui:44
+#. i18n: ectx: property (text), widget (KLineEdit, m_editBurningGroup)
+#: rc.cpp:13
+msgid "burning"
+msgstr "burning"
+
+#. i18n: file: base_k3bsetup.ui:78
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: rc.cpp:16
+msgid "Users allowed to burn (separated by space):"
+msgstr "Korisnici koji mogu da režu (razdvojeni razmacima):"
+
+#. i18n: file: base_k3bsetup.ui:104
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: rc.cpp:19
+msgid "Devices"
+msgstr "Uređaji"
+
+#. i18n: file: base_k3bsetup.ui:110
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: rc.cpp:22
+msgid "Check the devices whose permissions you want to be changed"
+msgstr "Označite uređaje čije dozvole želite da izmenite"
+
+#. i18n: file: base_k3bsetup.ui:133
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: rc.cpp:25
+msgid "External Programs"
+msgstr "Spoljašnji programi"
+
+#. i18n: file: base_k3bsetup.ui:143
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rc.cpp:28
+msgid "Found Programs"
+msgstr "Nađeni programi"
+
+#. i18n: file: base_k3bsetup.ui:149
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: rc.cpp:31
+msgid "Check the programs whose permissions you want to be changed"
+msgstr "Označite programe čije dozvole želite da promenite"
+
+#. i18n: file: base_k3bsetup.ui:170
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: file: base_k3bsetup.ui:176
+#. i18n: ectx: property (title), widget (KEditListBox, m_editSearchPath)
+#: rc.cpp:34 rc.cpp:37
+msgid "Search Path"
+msgstr "Putanja traženja"
+
+#. i18n: file: base_k3bsetup.ui:186
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: rc.cpp:40
+msgid ""
+"<qt><b>Hint:</b> to force K3b to use another than the default name for the "
+"executable specify it in the search path.</qt>"
+msgstr ""
+"<qt><b>Savet:</b> Da biste primorali K3b da koristi ime različito od "
+"podrazumevanog za izvršni, navedite ga u putanji za traženje.</qt>"
+
+#: rc.cpp:41
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Slobodan Simić"
+
+#: rc.cpp:42
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "slsimic@gmail.com"

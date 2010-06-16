@@ -1,0 +1,4104 @@
+# Traducerea libk3b.po în Română
+# translation of libk3b to Romanian
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# This file is distributed under the same license as the libk3b package.
+#
+# Laurenţiu Buzdugan <lbuz@rolix.org>, 2008".
+# Sergiu Bivol <sergiu-bivol@mail.md>, 2008.
+# Sergiu Bivol <sergiu@ase.md>, 2008, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: libk3b\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-06-13 04:51+0200\n"
+"PO-Revision-Date: 2009-10-11 22:29+0300\n"
+"Last-Translator: Sergiu Bivol <sergiu@ase.md>\n"
+"Language-Team: Română <kde-i18n-ro@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > "
+"0 && n%100 < 20)) ? 1 : 2;\n"
+"X-Generator: Lokalize 1.0\n"
+
+#: tools/k3bmedium.cpp:322
+msgid "Audio CD"
+msgstr "CD audio"
+
+#: tools/k3bmedium.cpp:325
+msgid "Mixed CD"
+msgstr "CD mixt"
+
+#: tools/k3bmedium.cpp:329
+msgid "Video DVD"
+msgstr "DVD video"
+
+#: tools/k3bmedium.cpp:332
+msgid "Video CD"
+msgstr "CD video"
+
+#: tools/k3bmedium.cpp:335
+#, kde-format
+msgid "Appendable Data %1"
+msgstr "Date completabile %1"
+
+#: tools/k3bmedium.cpp:338
+#, kde-format
+msgid "Complete Data %1"
+msgstr "Date complete %1"
+
+#: tools/k3bmedium.cpp:342
+msgid "Empty"
+msgstr "Gol"
+
+#: tools/k3bmedium.cpp:355
+msgid "No medium information"
+msgstr "Nu există informații despre mediu"
+
+#: tools/k3bmedium.cpp:359
+msgid "No medium present"
+msgstr "Nu este găsit nici un mediu"
+
+#: tools/k3bmedium.cpp:363
+#, kde-format
+msgid "Empty %1 medium"
+msgstr "Mediul %1 este gol"
+
+#: tools/k3bmedium.cpp:404
+#, kde-format
+msgid "Appendable %1 medium"
+msgstr "Mediu %1 multisesiune"
+
+#: tools/k3bmedium.cpp:407
+#, kde-format
+msgid "Complete %1 medium"
+msgstr "Mediu %1 complet"
+
+#: tools/k3bmedium.cpp:424
+#, kde-format
+msgid "%1 in 1 track"
+msgid_plural "%1 in %2 tracks"
+msgstr[0] "%1 în 1 pistă"
+msgstr[1] "%1 în %2 piste"
+msgstr[2] "%1 în %2 de piste"
+
+#: tools/k3bmedium.cpp:428
+#, kde-format
+msgid " and %1 session"
+msgid_plural " and %1 sessions"
+msgstr[0] " și %1 sesiune"
+msgstr[1] " și %1 sesiuni"
+msgstr[2] " și %1 de sesiuni"
+
+#: tools/k3bmedium.cpp:433
+#, kde-format
+msgid "Free space: %1"
+msgstr "Spațiu liber: %1"
+
+#: tools/k3bmedium.cpp:437
+#, kde-format
+msgid "Capacity: %1"
+msgstr "Capacitate: %1"
+
+#: tools/k3bmedium.cpp:617
+#, kde-format
+msgid "Please insert an empty medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:619
+msgid "Please insert an empty medium"
+msgstr "Introduceți un suport gol"
+
+#: tools/k3bmedium.cpp:624
+#, fuzzy, kde-format
+#| msgid "Please insert an empty DVD or Blu-Ray medium into drive<p><b>%1</b>"
+msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport DVD sau Blu-Ray gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:626
+#, fuzzy
+#| msgid "Please insert an empty DVD or Blu-Ray medium"
+msgid "Please insert an empty DVD or Blu-ray medium"
+msgstr "Introduceți un suport DVD sau Blu-Ray gol"
+
+#: tools/k3bmedium.cpp:630
+#, fuzzy, kde-format
+#| msgid "Please insert an empty Blu-Ray medium into drive<p><b>%1</b>"
+msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport Blu-Ray gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:632
+#, fuzzy
+#| msgid "Please insert an empty Blu-Ray medium"
+msgid "Please insert an empty Blu-ray medium"
+msgstr "Introduceți un suport Blu-Ray gol"
+
+#: tools/k3bmedium.cpp:636
+#, kde-format
+msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport CD gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:638
+msgid "Please insert an empty CD medium"
+msgstr "Introduceți un suport CD gol"
+
+#: tools/k3bmedium.cpp:642
+#, kde-format
+msgid "Please insert an empty DVD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport DVD gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:644
+msgid "Please insert an empty DVD medium"
+msgstr "Introduceți un suport DVD gol"
+
+#: tools/k3bmedium.cpp:648
+#, kde-format
+msgid "Please insert an empty DVD-DL medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport DVD-DL gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:650
+msgid "Please insert an empty DVD-DL medium"
+msgstr "Introduceți un suport DVD-DL gol"
+
+#: tools/k3bmedium.cpp:654
+#, kde-format
+msgid ""
+"Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
+msgstr ""
+"Introduceți un suport gol de dimensiune %1 sau mai mare în unitatea<p><b>%2</"
+"b>"
+
+#: tools/k3bmedium.cpp:657
+#, kde-format
+msgid "Please insert an empty medium of size %1 or larger"
+msgstr "Introduceți un suport gol de dimensiune %1 sau mai mare"
+
+#: tools/k3bmedium.cpp:663
+#, kde-format
+msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport gol sau completabil în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:665
+msgid "Please insert an empty or appendable medium"
+msgstr "Introduceți un suport gol sau completabil"
+
+#: tools/k3bmedium.cpp:669
+#, fuzzy, kde-format
+#| msgid ""
+#| "Please insert an empty or appendable DVD or Blu-Ray medium into "
+#| "drive<p><b>%1</b>"
+msgid ""
+"Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>%"
+"1</b>"
+msgstr ""
+"Introduceți un suport DVD sau Blu-Ray gol sau completabil în unitatea<p><b>%"
+"1</b>"
+
+#: tools/k3bmedium.cpp:671
+#, fuzzy
+#| msgid "Please insert an empty or appendable DVD or Blu-Ray medium"
+msgid "Please insert an empty or appendable DVD or Blu-ray medium"
+msgstr "Introduceți un suport DVD sau Blu-Ray gol sau completabil"
+
+#: tools/k3bmedium.cpp:675
+#, fuzzy, kde-format
+#| msgid ""
+#| "Please insert an empty or appendable Blu-Ray medium into drive<p><b>%1</b>"
+msgid ""
+"Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
+msgstr ""
+"Introduceți un suport Blu-Ray gol sau completabil în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:677
+#, fuzzy
+#| msgid "Please insert an empty or appendable Blu-Ray medium"
+msgid "Please insert an empty or appendable Blu-ray medium"
+msgstr "Introduceți un suport Blu-Ray gol sau completabil"
+
+#: tools/k3bmedium.cpp:681
+#, kde-format
+msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport CD gol sau completabil în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:683
+msgid "Please insert an empty or appendable CD medium"
+msgstr "Introduceți un suport CD gol sau completabil"
+
+#: tools/k3bmedium.cpp:687
+#, kde-format
+msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport DVD gol sau completabil în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:689
+msgid "Please insert an empty or appendable DVD medium"
+msgstr "Introduceți un suport DVD gol sau completabil"
+
+#: tools/k3bmedium.cpp:693
+#, kde-format
+msgid ""
+"Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
+msgstr ""
+"Introduceți un suport DVD-DL gol sau completabil în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:695
+msgid "Please insert an empty or appendable DVD-DL medium"
+msgstr "Introduceți un suport DVD-DL gol sau completabil"
+
+#: tools/k3bmedium.cpp:701
+#, kde-format
+msgid "Please insert a non-empty medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport ne-gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:703
+msgid "Please insert a non-empty medium"
+msgstr "Introduceți un suport ne-gol"
+
+#: tools/k3bmedium.cpp:707
+#, kde-format
+msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport reinscriptibil ne-gol în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:709
+msgid "Please insert a non-empty rewritable medium"
+msgstr "Introduceți un suport reinscriptibil ne-gol"
+
+#: tools/k3bmedium.cpp:715
+#, kde-format
+msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport reinscriptibil în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:717
+msgid "Please insert a rewritable medium"
+msgstr "Introduceți un suport reinscriptibil"
+
+#: tools/k3bmedium.cpp:723 tools/k3bmedium.cpp:769
+#, kde-format
+msgid "Please insert a suitable medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport potrivit în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:725 tools/k3bmedium.cpp:771
+msgid "Please insert a suitable medium"
+msgstr "Introduceți un suport potrivit"
+
+#: tools/k3bmedium.cpp:738
+#, kde-format
+msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport CD Video în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:740
+msgid "Please insert a Video CD medium"
+msgstr "Introduceți un suport CD Video"
+
+#: tools/k3bmedium.cpp:744
+#, kde-format
+msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport DVD Video în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:746
+msgid "Please insert a Video DVD medium"
+msgstr "Introduceți un suport DVD Video"
+
+#: tools/k3bmedium.cpp:750
+#, kde-format
+msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport CD Regim Mixt în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:752
+msgid "Please insert a Mixed Mode CD medium"
+msgstr "Introduceți un suport CD Regim Mixt"
+
+#: tools/k3bmedium.cpp:756
+#, kde-format
+msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport CD Audio în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:758
+msgid "Please insert an Audio CD medium"
+msgstr "Introduceți un suport CD Audio"
+
+#: tools/k3bmedium.cpp:762
+#, kde-format
+msgid "Please insert a Data medium into drive<p><b>%1</b>"
+msgstr "Introduceți un suport cu date în unitatea<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:764
+msgid "Please insert a Data medium"
+msgstr "Introduceți un suport cu date"
+
+#: tools/k3bmediacache.cpp:139 tools/k3bmediacache.cpp:379
+msgid "CDDB Lookup"
+msgstr "Căutare CDDB"
+
+#: tools/k3bmd5job.cpp:94
+#, kde-format
+msgid "Could not find file %1"
+msgstr "Nu poate fi găsit fișierul %1"
+
+#: tools/k3bmd5job.cpp:101 projects/datacd/k3bdatajob.cpp:393
+#, kde-format
+msgid "Could not open file %1"
+msgstr "Nu poate fi deschis fișierul %1"
+
+#: tools/k3bmd5job.cpp:239
+#, kde-format
+msgid "Error while reading from file %1"
+msgstr "Eroare în timpul citirii fișierului %1"
+
+#: tools/k3bdevicemodel.cpp:138
+msgid "Analyzing medium..."
+msgstr "Analizarea suportului..."
+
+#: tools/k3bprogressdialog.cpp:85
+msgid "Disk successfully erased. Please reload the disk."
+msgstr "Discul a fost șters cu succes. Reintroduceți discul."
+
+#: tools/k3bprogressdialog.cpp:87
+msgid "K3b was unable to erase the disk."
+msgstr "K3b nu a putut șterge discul."
+
+#: tools/k3bdeviceselectiondialog.cpp:45
+msgid "Device Selection"
+msgstr "Selecție dispozitiv"
+
+#: tools/k3bdeviceselectiondialog.cpp:51
+msgid "Please select a device:"
+msgstr "Selectați un dispozitiv:"
+
+#: tools/k3bcddb.cpp:44
+msgid "Multiple CDDB Entries Found"
+msgstr "Au fost găsite mai multe intrări CDDB"
+
+#: tools/k3bcddb.cpp:49
+msgid "K3b found multiple or inexact CDDB entries. Please select one."
+msgstr "K3b a găsit mai multe sau inexacte intrări CDDB. Selectați una."
+
+#: tools/k3bstdguiitems.cpp:28
+msgid "Simulate"
+msgstr "Simulare"
+
+#: tools/k3bstdguiitems.cpp:29
+msgid ""
+"<p>If this option is checked K3b will perform all writing steps with the "
+"laser turned off.<p>This is useful, for example, to test a higher writing "
+"speed or whether your system is able to write on-the-fly.<p><b>Caution:</b> "
+"DVD+R(W) does not support simulated writing."
+msgstr ""
+"<p>Dacă această opțiune este bifată K3b va efectua pașii de scriere cu "
+"laserul oprit.<p>Aceasta este folositoare, de exemplu, pentru a testa o "
+"viteză mai mare de scriere sau dacă sistemul vostru este capabil de scrierea "
+"„din zbor”.<p><b>Atenție:</b> DVD+R(W) nu permite simularea scrierii."
+
+#: tools/k3bstdguiitems.cpp:34
+msgid "Only simulate the writing process"
+msgstr "Doar simulează procesul de scriere"
+
+#: tools/k3bstdguiitems.cpp:40
+msgid "Disk at once"
+msgstr "Disc cu disc"
+
+#: tools/k3bstdguiitems.cpp:41
+msgid ""
+"<p>If this option is checked, K3b will write the CD in 'disk at once' mode "
+"as compared to 'track at once' (TAO).<p>It is always recommended to use DAO "
+"where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
+"seconds are only supported in DAO mode."
+msgstr ""
+"<p>Dacă această opțiune este bifată, K3b va scrie CD-ul în regimul „disc-cu-"
+"disc” (DAO) în loc de regimul „pistă-cu-pistă” (TAO).<p>Este întotdeauna "
+"recomandată folosirea DAO unde se poate.<p><b>Atenție:</b> Doar spațiul cu "
+"lungimea diferită de 2 secunde între piste  este permis în modul DAO."
+
+#: tools/k3bstdguiitems.cpp:46
+msgid "Write in disk at once mode"
+msgstr "Scrie în regimul disc-cu-disc (într-un singur pas)"
+
+#: tools/k3bstdguiitems.cpp:52
+msgid "Use Burnfree"
+msgstr "Folosește „Burnfree”"
+
+#: tools/k3bstdguiitems.cpp:53
+msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
+msgstr ""
+"Activează „Burnfree” (sau „Just Link”) pentru a evita problemele legate de "
+"golirea memoriei tampon"
+
+#: tools/k3bstdguiitems.cpp:54
+#, fuzzy
+#| msgid ""
+#| "<p>If this option is checked, K3b enables <em>Burnfree</em> (or <em>Just "
+#| "Link</em>). This is a feature of the CD writer which avoids buffer "
+#| "underruns.<p>Without <em>burnfree</em>, if the writer cannot get any more "
+#| "data a buffer underrun would occur, since the writer needs a constant "
+#| "stream of data to write the CD.<p>With <em>burnfree</em> the writer can "
+#| "<em>mark</em> the current position of the laser and get back to it when "
+#| "the buffer is filled again;but, since this means having little data gaps "
+#| "on the CD, <b>it is highly recommended to always choose an appropriate "
+#| "writing speed to prevent the usage of burnfree, especially for audio CDs</"
+#| "b> (in the worst case one would hear the gap).<p><em>Burnfree</em> was "
+#| "formerly known as <em>Burnproof</em>, but has since been renamed when it "
+#| "became part of the MMC standard."
+msgid ""
+"<p>If this option is checked, K3b enables <em>Burnfree</em> (or <em>Just "
+"Link</em>). This is a feature of the CD writer which avoids buffer underruns."
+"<p>Without <em>burnfree</em>, if the writer cannot get any more data a "
+"buffer underrun would occur, since the writer needs a constant stream of "
+"data to write the CD.<p>With <em>burnfree</em> the writer can <em>mark</em> "
+"the current position of the laser and get back to it when the buffer is "
+"filled again; but, since this means having little data gaps on the CD, <b>it "
+"is highly recommended to always choose an appropriate writing speed to "
+"prevent the usage of burnfree, especially for audio CDs</b> (in the worst "
+"case one would hear the gap).<p><em>Burnfree</em> was formerly known as "
+"<em>Burnproof</em>, but has since been renamed when it became part of the "
+"MMC standard."
+msgstr ""
+"<p>Dacă această opțiune este activată, K3b activează <em>Burnfree</em> (sau "
+"<em>Just Link</em>). Aceasta este o funcție a unității de CD inscriptor care "
+"evită problemele legate de golirea memoriei tampon. <p>Fără <em>burnfree</"
+"em>, dacă unitatea de scriere nu mai poate obține date atunci vor apărea "
+"problemele legate de golirea memoriei tampon, deoarece unitatea are nevoie "
+"de flux continuu de date pentru scrierea CD-ului. <p>Cu <em>burnfree</em> "
+"unitatea poate <em>marca</em> poziția curentă a razei laser și poate reveni "
+"la ea în momentul când memoria tampon este umplută din nou cu date; dar, "
+"deoarece acest lucru implică apariția de mici spații fără date pe CD, <b> "
+"întotdeauna este intens recomandată alegerea unei viteze de scriere "
+"corespunzătoare pentru a evita folosirea caracteristicii 'burnfree', cu "
+"precădere la CD audio</b> <p><em>Funcția 'Burnfree'</em> a fost inițial "
+"cunoscută sub denumirea de <em>Burnproof</em>, dar a fost redenumită în "
+"momentul în care a fost integrată în standardul MMC."
+
+#: tools/k3bstdguiitems.cpp:73
+msgid "Only create image"
+msgstr "Doar creează imagine"
+
+#: tools/k3bstdguiitems.cpp:74
+msgid ""
+"<p>If this option is checked, K3b will only create an image and not do any "
+"actual writing.<p>The image can later be written to a CD/DVD with most "
+"current writing programs (including K3b of course)."
+msgstr ""
+"<p>Dacă această opțiune este bifată, K3b doar va crea o imagine și nu va "
+"scrie nimic pe CD/DVD. <p>Imaginea va putea fi scrisă mai tîrziu pe un mediu "
+"CD/DVD cu un program de scriere a acestora (aici incluzînd desigur și K3b)."
+
+#: tools/k3bstdguiitems.cpp:78
+msgid "Only create an image"
+msgstr "Doar crează o imagine"
+
+#: tools/k3bstdguiitems.cpp:84
+msgid "Create image"
+msgstr "Crează imagine"
+
+#: tools/k3bstdguiitems.cpp:85
+msgid ""
+"<p>If this option is checked, K3b will create an image before writing the "
+"files to the CD/DVD. Otherwise the data will be written <em>on-the-fly</em>, "
+"i.e. no intermediate image will be created.<p><b>Caution:</b> Although "
+"writing on-the-fly should work on most systems, make sure the data is sent "
+"to the writer fast enough."
+msgstr ""
+"<p>Dacă această opțiune este bifată. K3b va crea o imagine înainte de a "
+"scrie fișierele pe mediul CD/DVD. Altfel datele vor fi scrise <em>din zbor</"
+"em>, fără a mai crea nici o imagine intermediară. <p><b>Atenție:</b> Deși "
+"scrierea 'din zbor' ar trebui să meargă pe cele mai multe sisteme, asigurați-"
+"vă că datele sunt trimise unității de scriere suficient de rapid."
+
+#: tools/k3bstdguiitems.cpp:90 tools/k3bstdguiitems.cpp:112
+msgid "<p>It is recommended to try a simulation first."
+msgstr "<p>Se recomandă să încercați mai întâi simularea."
+
+#: tools/k3bstdguiitems.cpp:91
+msgid "Cache the data to be written on the harddisk"
+msgstr "Pregătirea datelor de a fi scrise pe harddisk"
+
+#: tools/k3bstdguiitems.cpp:97
+msgid "Remove image"
+msgstr "Eliminarea imaginii"
+
+#: tools/k3bstdguiitems.cpp:98
+msgid ""
+"<p>If this option is checked, K3b will remove any created images after the "
+"writing has finished.<p>Uncheck this if you want to keep the images."
+msgstr ""
+"<p>Dacă această opțiune este bifată, K3b va elimina orice imagine creată "
+"după ce scrierea va fi terminată. <p>Debifați această opțiune dacă doriți "
+"păstrarea imaginii."
+
+#: tools/k3bstdguiitems.cpp:101
+msgid "Remove images from disk when finished"
+msgstr "Elimină imaginile de pe disc la sfârșit"
+
+#: tools/k3bstdguiitems.cpp:107
+msgid "On the fly"
+msgstr "Din zbor"
+
+#: tools/k3bstdguiitems.cpp:108
+msgid ""
+"<p>If this option is checked, K3b will not create an image first but write "
+"the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
+"work on most systems, make sure the data is sent to the writer fast enough."
+msgstr ""
+"<p>Dacă această opțiune este bifată, K3b nu va crea imaginea la început ci "
+"va scrie fișierele direct pe mediul CD/DVD. <p><b>Atenție:</b>Deși acest "
+"lucru ar trebui să meargă pe cele mai multe sisteme, asigurați-vă că datele "
+"sunt trimise unității de scriere suficient de rapid."
+
+#: tools/k3bstdguiitems.cpp:113
+msgid "Write files directly to CD/DVD without creating an image"
+msgstr "Scrierea fișierelor direct pe mediul CD/DVD fără a mai crea imagine"
+
+#: tools/k3bstdguiitems.cpp:119
+msgid "Write CD-TEXT"
+msgstr "Scriere CD-TEXT"
+
+#: tools/k3bstdguiitems.cpp:120
+msgid "Create CD-TEXT entries"
+msgstr "Crează intrări pentru CD-TEXT"
+
+#: tools/k3bstdguiitems.cpp:121
+#, fuzzy
+#| msgid ""
+#| "<p>If this option is checked K3b uses some otherwise-unused space on the "
+#| "audio CD to store additional information, such as the artist's name, or "
+#| "the CD title.<p>CD-TEXT is an extension to the audio CD standard "
+#| "introduced by Sony.<p>CD-TEXT will only be usable on CD players that "
+#| "support this extension (mostly car CD players).<p>Since a CD-TEXT-"
+#| "enhanced CDs will work in any CD player it is never a bad idea to enable "
+#| "this (if you specify CD-TEXT data.)"
+msgid ""
+"<p>If this option is checked K3b uses some otherwise-unused space on the "
+"audio CD to store additional information, such as the artist's name, or the "
+"CD title.<p>CD-TEXT is an extension to the audio CD standard introduced by "
+"Sony.<p>CD-TEXT will only be usable on CD players that support this "
+"extension (mostly car CD players).<p>Since a CD-TEXT-enhanced CD will work "
+"in any CD player it is never a bad idea to enable this (if you specify CD-"
+"TEXT data.)"
+msgstr ""
+"<p>Dacă această opțiune este bifată, K3b folosește o parte din spațiul "
+"nefolosit de pe CD-ul audio pentru a stoca informații suplimentare, cum ar "
+"fi numele interpretului sau titlul discului. <p>CD-TEXT este o extensie a "
+"standardului CD audio introdusă de către Sony.<p>CD-TEXT poate fi folosită "
+"doar de către unități de CD care recunosc această extensie (cel mai adesea "
+"unități CD de mașină).<p>Deoarece extensia CD-TEXT este o îmbunătățire a CD-"
+"urilor audio nu este o idee rea să activați această opțiune (dacă "
+"specificați datele CD-TEXT)."
+
+#: tools/k3bstdguiitems.cpp:140
+msgid "Set the paranoia level for reading audio CDs"
+msgstr "Setează nivelul 'paranoia' pentru citirea CD-urilor audio"
+
+#: tools/k3bstdguiitems.cpp:141
+msgid ""
+"<p>Sets the correction mode for digital audio extraction.<ul><li>0: No "
+"checking, data is copied directly from the drive. <li>1: Perform overlapped "
+"reading to avoid jitter.</li><li>2: Like 1 but with additional checks of the "
+"read audio data.</li><li>3: Like 2 but with additional scratch detection and "
+"repair.</li></ul><p><b>The extraction speed reduces from 0 to 3.</b>"
+msgstr ""
+"<p>Setați modul de corecție pentru extragerea digitală a pistelor audio."
+"<ul><li>0:Fără verificare, datele sunt copiate direct de pe disc. <li>1: "
+"Efectuează o citire suprapusă pentru a evita vibrațiile.</li><li>2: La fel "
+"cu pct. 1 dar cu verificări suplimentare a datelor audio citite.</li><li>3: "
+"La fel cu pct. 2 dar cu detecție suplimentară a zgârieturilor și reparare.</"
+"li></ul><p><p>Viteza de extragere se reduce de la pct. 0 la 3."
+
+#: tools/k3bstdguiitems.cpp:153
+msgid "Start multisession CD"
+msgstr "Pornește CD multisesiune"
+
+#: tools/k3bstdguiitems.cpp:154
+msgid "Do not close the disk to allow additional sessions to be added later"
+msgstr ""
+"Nu închideți discul pentru a permite adăugarea ulterioară de noi sesiuni"
+
+#: tools/k3bstdguiitems.cpp:155
+msgid ""
+"<p>If this option is checked K3b will not close the CD, and will write a "
+"temporary table of contents.</p><p>This allows further sessions to be "
+"appended to the CD later.</p>"
+msgstr ""
+"<p>Dacă această opțiune este bifată K3b nu va închide mediul CD, și astfel "
+"va fi scris un cuprins temporar.</p> <p>Aceasta va permite adăugarea de noi "
+"sesiuni de scriere pe CD mai târziu.</p>"
+
+#: tools/k3bstdguiitems.cpp:164
+msgid "Normalize volume levels"
+msgstr "Ajustarea volumelor sonore"
+
+#: tools/k3bstdguiitems.cpp:165
+msgid "Adjust the volume levels of all tracks"
+msgstr "Ajustarea nivelului sonor al tuturor pistelor."
+
+#: tools/k3bstdguiitems.cpp:166
+msgid ""
+"<p>If this option is checked K3b will adjust the volume of all tracks to a "
+"standard level. This is useful for things like creating mixes, where "
+"different recording levels on different albums can cause the volume to vary "
+"greatly from song to song.<p><b>Be aware that K3b currently does not support "
+"normalizing when writing on the fly.</b>"
+msgstr ""
+"<p>Dacă această opțiune este bifată K3b va ajusta volumul tuturor pistelor "
+"la același nivel. Acest lucru este folositor când sunt create mixaje în care "
+"nivele volumului sonor diferă de la album la album ceea ce face ca volumul "
+"să difere mult de la melodie la melodie.<p><b>Atenție, K3b nu poate ajusta "
+"nivelul sonor când scrierea se face 'din zbor'. "
+
+#: tools/k3bstdguiitems.cpp:178
+msgid "Verify written data"
+msgstr "Verificarea datelor scrise"
+
+#: tools/k3bstdguiitems.cpp:179
+msgid "Compare original with written data"
+msgstr "Compară datele originale cu datele scrise"
+
+#: tools/k3bstdguiitems.cpp:180
+msgid ""
+"<p>If this option is checked, then after successfully writing the disk K3b "
+"will compare the original source data with the written data to verify that "
+"the disk has been written correctly."
+msgstr ""
+"<p>Dacă această opțiune este bifată, după scrierea cu succes a discului K3b "
+"va compara datele originale cu datele scrise pentru a verifica dacă au fost "
+"corect scrise."
+
+#: tools/k3bstdguiitems.cpp:190
+msgid "Ignore read errors"
+msgstr "Ignoră erorile de citire"
+
+#: tools/k3bstdguiitems.cpp:191
+msgid "Skip unreadable audio sectors"
+msgstr "Omite sectoarele audio neredabile"
+
+#: tools/k3bstdguiitems.cpp:192
+msgid ""
+"<p>If this option is checked and K3b is not able to read an audio sector "
+"from the source CD it will be replaced with zeros on the resulting copy."
+"<p>Since audio CD Player are able to interpolate small errors in the data it "
+"is no problem to let K3b skip unreadable sectors."
+msgstr ""
+"<p>Dacă această opțiune este bifată și K3b nu poate citi un sector audio de "
+"pe CD-ul sursă atunci îl va înlocui cu zerouri pe copia care va rezulta. "
+"<p>Din moment ce unitățile de CD sunt capabile să interpoleze micile erori "
+"de citire nu este nici o problemă de a lăsa K3b să ignore sectoarele "
+"ilizibile."
+
+#: videodvd/k3bvideodvd.cpp:288
+msgid "AC3"
+msgstr "AC3"
+
+#: videodvd/k3bvideodvd.cpp:290
+msgid "MPEG1"
+msgstr "MPEG1"
+
+#: videodvd/k3bvideodvd.cpp:292
+msgid "MPEG2 Extended"
+msgstr "MPEG2 Extins"
+
+#: videodvd/k3bvideodvd.cpp:294
+msgid "LPCM"
+msgstr "LPCM"
+
+#: videodvd/k3bvideodvd.cpp:296
+msgid "DTS"
+msgstr "DTS"
+
+#: videodvd/k3bvideodvd.cpp:298
+msgid "unknown audio format"
+msgstr "format audio necunoscut"
+
+#: videodvd/k3bvideodvd.cpp:307 videodvd/k3bvideodvd.cpp:339
+#: projects/videocd/k3bvcdtrack.cpp:227
+msgid "Unspecified"
+msgstr "Nespecificat"
+
+#: videodvd/k3bvideodvd.cpp:309
+msgid "Normal"
+msgstr "Normal"
+
+#: videodvd/k3bvideodvd.cpp:311
+msgid "For the visually impaired"
+msgstr "Pentru deficiențe de vedere"
+
+#: videodvd/k3bvideodvd.cpp:313
+msgid "Director's comments 1"
+msgstr "Comentarii 1"
+
+#: videodvd/k3bvideodvd.cpp:315
+msgid "Director's comments 2"
+msgstr "Comentarii 2"
+
+#: videodvd/k3bvideodvd.cpp:317
+msgid "unknown audio code extension"
+msgstr "Cod necunoscut pentru extensia audio"
+
+#: videodvd/k3bvideodvd.cpp:326
+msgid "RLE"
+msgstr "RLE"
+
+#: videodvd/k3bvideodvd.cpp:328
+msgid "Extended"
+msgstr "Extins"
+
+#: videodvd/k3bvideodvd.cpp:330
+msgid "unknown coding mode"
+msgstr "mod de codificare necunoscut"
+
+#: videodvd/k3bvideodvd.cpp:341
+msgid "Caption with normal size characters"
+msgstr "Legendă cu mărime normală a caracterelor"
+
+#: videodvd/k3bvideodvd.cpp:343
+msgid "Caption with bigger size characters"
+msgstr "Legendă cu mărime mai mare a caracterelor"
+
+#: videodvd/k3bvideodvd.cpp:345
+msgid "Caption for children"
+msgstr "Legendă pentru copii"
+
+#: videodvd/k3bvideodvd.cpp:347
+msgid "Closed caption with normal size characters"
+msgstr "Legendă închisă cu mărime normală a caracterelor"
+
+#: videodvd/k3bvideodvd.cpp:349
+msgid "Closed caption with bigger size characters"
+msgstr "Legendă închisă cu mărime mai mare a caracterelor"
+
+#: videodvd/k3bvideodvd.cpp:351
+msgid "Closed caption for children"
+msgstr "Legendă opțională pentru copii"
+
+#: videodvd/k3bvideodvd.cpp:353
+msgid "Forced caption"
+msgstr "Legendă forțată"
+
+#: videodvd/k3bvideodvd.cpp:355
+msgid "Director's comments with normal size characters"
+msgstr "Comentarii cu mărime normală a caracterelor"
+
+#: videodvd/k3bvideodvd.cpp:357
+msgid "Director's comments with bigger size characters"
+msgstr "Comentarii cu mărime mai mare a caracterelor"
+
+#: videodvd/k3bvideodvd.cpp:359
+msgid "Director's comments for children"
+msgstr "Comentarii pentru copii"
+
+#: videodvd/k3bvideodvd.cpp:361
+msgid "unknown code extension"
+msgstr "Codul extensiei este necunoscut"
+
+#: core/k3bglobals.cpp:359
+msgid "Auto"
+msgstr "Automat"
+
+#: projects/datacd/k3bdatadoc.cpp:1182 projects/videocd/k3bvcddoc.cpp:416
+msgid "Could not find the following files:"
+msgstr "Nu pot fi găsite următoarele fișiere:"
+
+#: projects/datacd/k3bdatadoc.cpp:1183 projects/videocd/k3bvcddoc.cpp:417
+msgid "Not Found"
+msgstr "Nu a fost găsit"
+
+#: projects/datacd/k3bdatadoc.cpp:1188
+msgid "No permission to read the following files:"
+msgstr "Lipsește permisiunea de a citi următoarelor fișiere:"
+
+#: projects/datacd/k3bdatadoc.cpp:1189
+msgid "No Read Permission"
+msgstr "Lipsește permisiunea de a citi"
+
+#: projects/datacd/k3bdatadoc.cpp:1342 projects/datacd/k3bdatadoc.cpp:1355
+msgid "From previous session"
+msgstr "Din sesiunea anterioară"
+
+#: projects/datacd/k3bdatadoc.cpp:1462
+msgid "El Torito boot catalog file"
+msgstr "Fișier-catalog de demarare El Torito"
+
+#: projects/datacd/k3bdatadoc.cpp:1463
+msgid "Boot catalog"
+msgstr "Catalog de demarare"
+
+#: projects/datacd/k3bdatajob.cpp:150 projects/audiocd/k3baudiojob.cpp:156
+#: projects/mixedcd/k3bmixedjob.cpp:222 jobs/k3biso9660imagewritingjob.cpp:90
+msgid "Preparing data"
+msgstr "Pregătire date"
+
+#: projects/datacd/k3bdatajob.cpp:219 projects/audiocd/k3baudioimager.cpp:109
+#: projects/mixedcd/k3bmixedjob.cpp:1099
+#, kde-format
+msgid "Could not open %1 for writing"
+msgstr "Nu poate fi deschis %1 pentru scriere."
+
+#: projects/datacd/k3bdatajob.cpp:226
+msgid "Creating image file"
+msgstr "Crearea fișierului imagine"
+
+#: projects/datacd/k3bdatajob.cpp:227
+msgid "Track 1 of 1"
+msgstr "Pista 1 din 1"
+
+#: projects/datacd/k3bdatajob.cpp:228
+#, kde-format
+msgid "Creating image file in %1"
+msgstr "Crearea fișierului imagine în %1"
+
+#: projects/datacd/k3bdatajob.cpp:386
+#, kde-format
+msgid "Image successfully created in %1"
+msgstr "Imagine creată cu succes în %1"
+
+#: projects/datacd/k3bdatajob.cpp:406
+msgid "Error while creating ISO image"
+msgstr "Eroare în timpul creării imaginii  ISO"
+
+#: projects/datacd/k3bdatajob.cpp:440 projects/audiocd/k3baudiojob.cpp:652
+#: projects/mixedcd/k3bmixedjob.cpp:1013 projects/k3bgrowisofswriter.cpp:372
+#: projects/k3bcdrecordwriter.cpp:463 projects/k3bcdrdaowriter.cpp:565
+#: projects/k3bcdrdaowriter.cpp:583 jobs/k3bcdcopyjob.cpp:715
+msgid "Simulating"
+msgstr "Simulare"
+
+#: projects/datacd/k3bdatajob.cpp:442 projects/audiocd/k3baudiojob.cpp:654
+#: projects/mixedcd/k3bmixedjob.cpp:1015 jobs/k3bcdcopyjob.cpp:717
+#, kde-format
+msgid "Writing Copy %1"
+msgstr "Scriere copie %1"
+
+#: projects/datacd/k3bdatajob.cpp:444 projects/audiocd/k3baudiojob.cpp:656
+#: projects/k3bgrowisofswriter.cpp:377 projects/k3bcdrecordwriter.cpp:471
+#: projects/k3bcdrdaowriter.cpp:571
+msgid "Writing"
+msgstr "Scriere"
+
+#: projects/datacd/k3bdatajob.cpp:471 projects/videocd/k3bvcdjob.cpp:466
+#: jobs/k3bclonejob.cpp:225
+#, kde-format
+msgid "Writing Track %1 of %2"
+msgstr "Scriere pistă %1 din %2"
+
+#: projects/datacd/k3bdatajob.cpp:524 jobs/k3biso9660imagewritingjob.cpp:139
+msgid "Verifying written data"
+msgstr "Verificare date scrise"
+
+#: projects/datacd/k3bdatajob.cpp:533 projects/audiocd/k3baudiojob.cpp:421
+#: projects/mixedcd/k3bmixedjob.cpp:543 projects/videocd/k3bvcdjob.cpp:506
+#: jobs/k3bcdcopyjob.cpp:1063
+msgid "K3b was unable to eject the written disk. Please do so manually."
+msgstr ""
+"K3b nu a fost capabil de a scoate discul scris din unitate. Trebuie să o "
+"faceți manual. "
+
+#: projects/datacd/k3bdatajob.cpp:708
+msgid "Internal Error: No medium type fits. This project cannot be burned."
+msgstr ""
+"Eroare internă: Nici un mediu nu corespunde. Acest proiect nu poate fi scris."
+
+#: projects/datacd/k3bdatajob.cpp:712
+msgid "Waiting for a medium"
+msgstr "Așteptare mediu"
+
+#: projects/datacd/k3bdatajob.cpp:729
+#, kde-format
+msgid "Writing %1"
+msgstr "Scriere %1"
+
+#: projects/datacd/k3bdatajob.cpp:746
+msgid "Unable to determine the last track's datamode. Using default."
+msgstr ""
+"Imposibil de determinat modul de scriere al datelor de pe ultima pistă. Este "
+"folosit modul implicit."
+
+#: projects/datacd/k3bdatajob.cpp:783 projects/datacd/k3bdatajob.cpp:806
+#: jobs/k3bmetawriter.cpp:304
+#, kde-format
+msgid "Cannot write %1 media using %2. Falling back to default application."
+msgstr ""
+"Nu poate fi scris mediul %1 folosind %2. Întoarcere la aplicația implicită."
+
+#: projects/datacd/k3bdatajob.cpp:825 projects/datacd/k3bdatajob.cpp:942
+#: jobs/k3bdvdcopyjob.cpp:817 jobs/k3bdvdcopyjob.cpp:910
+#, fuzzy, kde-format
+#| msgid ""
+#| "DVD+R(W) media do not support write simulation. Do you really want to "
+#| "continue? The media will actually be written to."
+msgid ""
+"%1 media do not support write simulation. Do you really want to continue? "
+"The disc will actually be written to."
+msgstr ""
+"Suportul DVD+R(W) nu susține simularea scrierii. Doriți să continuați? "
+"Suportul va fi scris cu adevărat."
+
+#: projects/datacd/k3bdatajob.cpp:828 projects/datacd/k3bdatajob.cpp:945
+#: jobs/k3bdvdcopyjob.cpp:820 jobs/k3bdvdcopyjob.cpp:913
+#, fuzzy, kde-format
+#| msgid "No Simulation with DVD+R(W)"
+msgid "No Simulation with %1"
+msgstr "Nu poate fi simulată cu DVD+R(W)"
+
+#: projects/datacd/k3bdatajob.cpp:836 projects/datacd/k3bdatajob.cpp:953
+#, fuzzy, kde-format
+#| msgid "Writing mode ignored when writing DVD+R(W) media."
+msgid "Writing mode ignored when writing %1 media."
+msgstr "Mod de scriere ignorat în timpul scrierii discului DVD+R(W)."
+
+#: projects/datacd/k3bdatajob.cpp:848 projects/datacd/k3bdatajob.cpp:966
+#, fuzzy, kde-format
+#| msgid "Growing ISO9660 filesystem on DVD+RW."
+msgid "Growing ISO9660 filesystem on %1."
+msgstr "Se crește sistemul de fișiere ISO9669 pe DVD+RW."
+
+#: projects/datacd/k3bdatajob.cpp:850 projects/datacd/k3bdatajob.cpp:968
+#: jobs/k3bmetawriter.cpp:854 jobs/k3bmetawriter.cpp:863
+#: jobs/k3bdvdcopyjob.cpp:832 jobs/k3bdvdcopyjob.cpp:922
+#, kde-format
+msgid "Writing %1."
+msgstr "Scriere %1."
+
+#: projects/datacd/k3bdatajob.cpp:858 jobs/k3bmetawriter.cpp:506
+#: jobs/k3bdvdcopyjob.cpp:840
+#, kde-format
+msgid ""
+"Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
+"really want to continue? The media will actually be written to."
+msgstr ""
+"Inscriptorul dumneavoastră (%1 %2) nu este capabil de simulare cu discuri "
+"DVD-R(W). Doriți sigur să continuați? Suportul va fi scris cu adevărat."
+
+#: projects/datacd/k3bdatajob.cpp:863 jobs/k3bmetawriter.cpp:511
+#: jobs/k3bdvdcopyjob.cpp:845
+msgid "No Simulation with DVD-R(W)"
+msgstr "Fără simulare cu DVD-R(W)"
+
+#: projects/datacd/k3bdatajob.cpp:877 jobs/k3bmetawriter.cpp:850
+#: jobs/k3bdvdcopyjob.cpp:866
+msgid "Writing DVD-RW in restricted overwrite mode."
+msgstr "Scrierea discului DVD-RW în regimul suprascriere restricționată."
+
+#: projects/datacd/k3bdatajob.cpp:880 jobs/k3bmetawriter.cpp:840
+msgid "Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."
+msgstr ""
+"Se crește sistemul de fișiere ISO9669 pe DVD-RW în regim restricționat de "
+"suprascriere."
+
+#: projects/datacd/k3bdatajob.cpp:894 projects/datacd/k3bdatajob.cpp:911
+#: jobs/k3bmetawriter.cpp:856 jobs/k3bdvdcopyjob.cpp:892
+#, kde-format
+msgid "Writing %1 in DAO mode."
+msgstr "Scriere %1 în regimul DAO."
+
+#: projects/datacd/k3bdatajob.cpp:901 jobs/k3bmetawriter.cpp:476
+#, kde-format
+msgid ""
+"Your writer (%1 %2) does not support Incremental Streaming with %3 media. "
+"Multisession will not be possible. Continue anyway?"
+msgstr ""
+"Inscriptorul vostru (%1 %2) nu suportă fluxul incrementat cu medii %3. "
+"Multisesiunea nu este posibilă. Continuați oricum?"
+
+#: projects/datacd/k3bdatajob.cpp:906 jobs/k3bmetawriter.cpp:481
+msgid "No Incremental Streaming"
+msgstr "Nici un flux incrementat"
+
+#: projects/datacd/k3bdatajob.cpp:918 jobs/k3bmetawriter.cpp:443
+#: jobs/k3bmetawriter.cpp:492 jobs/k3bdvdcopyjob.cpp:887
+msgid "Restricted Overwrite is not possible with DVD-R media."
+msgstr "Suprascrierea restricționată nu este posibilă cu disc DVD-R."
+
+#: projects/datacd/k3bdatajob.cpp:920 jobs/k3bmetawriter.cpp:858
+#: jobs/k3bdvdcopyjob.cpp:896
+#, kde-format
+msgid "Writing %1 in incremental mode."
+msgstr "Scriere %1 în regimul incremental."
+
+#: projects/datacd/k3bdatajob.cpp:978
+msgid "Creating Data Image File"
+msgstr "Crearea fișierului imaginii"
+
+#: projects/datacd/k3bdatajob.cpp:982
+msgid "Writing Data Project"
+msgstr "Scriere proiect de date"
+
+#: projects/datacd/k3bdatajob.cpp:988
+msgid "Writing Multisession Project"
+msgstr "Scrierea unui Proiect multisesiune"
+
+#: projects/datacd/k3bdatajob.cpp:1002
+#, kde-format
+msgid "ISO9660 Filesystem (Size: %2) - %1 copy"
+msgid_plural "ISO9660 Filesystem (Size: %2) - %1 copies"
+msgstr[0] "Sistem de fișiere ISO9660 (dimensiune: %2) - %1 copie"
+msgstr[1] "Sistem de fișiere ISO9660 (dimensiune: %2) - %1 copii"
+msgstr[2] "Sistem de fișiere ISO9660 (dimensiune: %2) - %1 de copii"
+
+#: projects/datacd/k3bdatajob.cpp:1007
+#, kde-format
+msgid "ISO9660 Filesystem (Size: %1)"
+msgstr "Sistem de fișiere ISO9660 (dimensiune: %1)"
+
+#: projects/datacd/k3bdatajob.cpp:1024 jobs/k3bdvdcopyjob.cpp:935
+#, kde-format
+msgid "Removed image file %1"
+msgstr "Îndepărtarea fișierului imagine %1"
+
+#: projects/datacd/k3bdatajob.cpp:1054 jobs/k3bmetawriter.cpp:526
+msgid "Most writers do not support writing multisession CDs in DAO mode."
+msgstr ""
+"Cele mai multe inscriptoare nu suportă scrierea CD-urilor multisesiune în "
+"regimul DAO."
+
+#: projects/datacd/k3bisooptions.cpp:30
+#, fuzzy
+#| msgid "K3b data project"
+msgctxt ""
+"This is the default volume identifier of a data project created by K3b. The "
+"string should not be longer than 16 characters to avoid warnings regarding "
+"Joiliet extensions which induce this restriction."
+msgid "K3b data project"
+msgstr "Proiect de date K3b"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:102
+#, kde-format
+msgid "<em>%1</em> renamed to <em>%2</em>"
+msgstr "<em>%1</em> redenumit în <em>%2</em>"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:142
+#, kde-format
+msgid ""
+"Some filenames need to be shortened due to the %1 char restriction of the "
+"Joliet extensions. If the Joliet extensions are disabled filenames do not "
+"have to be shortened but long filenames will not be available on Windows "
+"systems."
+msgstr ""
+"Unele nume de fișiere trebuie scurtate din cauza limitării la %1 caractere a "
+"extensiilor Joliet. Dacă extensiile Joliet sunt dezactivate numele de "
+"fișiere nu vor fi scurtate dar numele lungi nu vor fi disponibile pe sisteme "
+"Windows."
+
+#: projects/datacd/k3bdatapreparationjob.cpp:148
+#: projects/datacd/k3bdatapreparationjob.cpp:172
+#: projects/datacd/k3bdatapreparationjob.cpp:187
+#: projects/datacd/k3bdatapreparationjob.cpp:209
+#: projects/audiocd/k3baudiojob.cpp:178 projects/mixedcd/k3bmixedjob.cpp:191
+msgid "Warning"
+msgstr "Atenție"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:149
+msgid "Shorten Filenames"
+msgstr "Scurtează denumirile de fișiere"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:150
+msgid "Disable Joliet extensions"
+msgstr "Dezactivează extensii Joliet"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:167
+#, kde-format
+msgid ""
+"The Joliet extensions (which are needed for long filenames on Windows "
+"systems) restrict the length of the volume descriptor (the name of the "
+"filesystem) to %1 characters. The selected descriptor '%2' is longer than "
+"that. Do you want it to be cut or do you want to go back and change it "
+"manually?"
+msgstr ""
+"Extensiile Joliet (care sunt cerute pe sistemele Windows pentru numele lungi "
+"de fișiere) restricționează lungimea volumului descriptor (numele sistemului "
+"de fișiere) la %1 caractere. Descriptorul selectat „%2” are o lungime mai "
+"mare decît această limită. Doriți să fie scurtat sau reveniți pentru a-l "
+"schimba manual?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:173
+msgid "Cut volume descriptor in the Joliet tree"
+msgstr "Trunchierea volumului descriptor în arborele Joliet"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:174
+#: projects/datacd/k3bdatapreparationjob.cpp:189
+#: projects/datacd/k3bdatapreparationjob.cpp:211
+#: projects/audiocd/k3baudiojob.cpp:180 projects/mixedcd/k3bmixedjob.cpp:193
+msgid "Cancel and go back"
+msgstr "Renunțare și întoarcere"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:184
+#: projects/audiocd/k3baudiojob.cpp:175 projects/mixedcd/k3bmixedjob.cpp:188
+msgid ""
+"The following files could not be found. Do you want to remove them from the "
+"project and continue without adding them to the image?"
+msgstr ""
+"Următoarele fișiere nu pot fi găsite. Doriți să le eliminați din proiect și "
+"să continuați fără adăugarea lor la imagine?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:188
+#: projects/audiocd/k3baudiojob.cpp:179 projects/mixedcd/k3bmixedjob.cpp:192
+msgid "Remove missing files and continue"
+msgstr "Eliminarea fișierelor lipsă și continuare"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:205
+msgid ""
+"K3b is not able to follow symbolic links to folders after they have been "
+"added to the project. Do you want to continue without writing the symbolic "
+"links to the image?"
+msgstr ""
+"K3b nu poate urma legăturile simbolice la dosare după ce ele au fost "
+"adăugate la proiect. Doriți să continuați fără scrierea legăturilor "
+"simbolice în imagine?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:210
+msgid "Discard symbolic links to folders"
+msgstr "Ignoră legăturile simbolice la dosare"
+
+#: projects/datacd/k3bmkisofshandler.cpp:62
+#: projects/audiocd/k3baudionormalizejob.cpp:62
+#: projects/videocd/k3bvcdjob.cpp:222 projects/k3bgrowisofswriter.cpp:170
+#: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrdaowriter.cpp:458
+#: jobs/k3bdvdformattingjob.cpp:471
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:106
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:143
+#, kde-format
+msgid "Using %1 %2 - Copyright (C) %3"
+msgstr "Folosind %1 %2 - Drept de autor (C) %3"
+
+#: projects/datacd/k3bmkisofshandler.cpp:73
+msgid "Mkisofs executable not found."
+msgstr "Imposibil de găsit executabilul 'mkisofs'."
+
+#: projects/datacd/k3bmkisofshandler.cpp:87
+#, kde-format
+msgid "Read error from file '%1'"
+msgstr "Eroare de citire din fișierul „%1”"
+
+#: projects/datacd/k3bmkisofshandler.cpp:92
+msgid "Used version of mkisofs does not have large file support."
+msgstr ""
+"Versiunea programului mkisofs folosit nu are suport pentru fișiere mari."
+
+#: projects/datacd/k3bmkisofshandler.cpp:93
+msgid "Files bigger than 2 GB cannot be handled."
+msgstr "Fișierele mai mari de 2 GO nu pot fi manipulate."
+
+#: projects/datacd/k3bmkisofshandler.cpp:106
+#, kde-format
+msgid "Encountered an incorrectly encoded filename '%1'"
+msgstr "A fost întîlnită o denumire de fișier codată incorect „%1”"
+
+#: projects/datacd/k3bmkisofshandler.cpp:108
+msgid ""
+"This may be caused by a system update which changed the local character set."
+msgstr ""
+"Aceasta a putut fi cauzată de o actualizare de sistem care a schimbat setul "
+"local de caractere."
+
+#: projects/datacd/k3bmkisofshandler.cpp:109
+msgid ""
+"You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
+"encoding."
+msgstr ""
+"Puteți folosi programul 'convmv' (http://j3e.de/linux/convmv/) pentru a "
+"rezolva problema codificării numelui de fișier."
+
+#: projects/datacd/k3bmkisofshandler.cpp:113
+msgid "The boot image has an invalid size."
+msgstr "Imaginea de demarare are o dimensiune nevalidă."
+
+#: projects/datacd/k3bmkisofshandler.cpp:117
+msgid "The boot image contains multiple partitions.."
+msgstr "Imaginea de demarare conține partiții multiple."
+
+#: projects/datacd/k3bmkisofshandler.cpp:118
+msgid "A hard-disk boot image has to contain a single partition."
+msgstr ""
+"O imagine de demarare pentru discul dur trebuie să conțină o singură "
+"partiție."
+
+#: projects/datacd/k3bisoimager.cpp:162
+msgid ""
+"Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
+"contain more than one backslash:"
+msgstr ""
+"Din cauza unei probleme în mkisofs <= 1.15a40, K3b nu poate accepta nume de "
+"fișiere care conțin mai mult de un caracter '\\'"
+
+#: projects/datacd/k3bisoimager.cpp:171
+#: projects/audiocd/k3baudionormalizejob.cpp:186
+#: projects/videocd/k3bvcdjob.cpp:358 projects/k3bcdrecordwriter.cpp:913
+#: projects/k3bcdrdaowriter.cpp:756 jobs/k3bcdda2wavreader.cpp:241
+#: jobs/k3bdvdbooktypejob.cpp:193 jobs/k3bdvdformattingjob.cpp:272
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:278
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:480
+#, kde-format
+msgid "%1 returned an unknown error (code %2)."
+msgstr "%1 a returnat un cod de eroare necunoscut (cod %2)."
+
+#: projects/datacd/k3bisoimager.cpp:173
+#: projects/audiocd/k3baudionormalizejob.cpp:188
+#: projects/videocd/k3bvcdjob.cpp:360 jobs/k3bdvdbooktypejob.cpp:195
+#: jobs/k3bdvdformattingjob.cpp:274
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:281
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:483
+msgid "Please send me an email with the last output."
+msgstr "Trimiteți autorului un email cu erorile primite. "
+
+#: projects/datacd/k3bisoimager.cpp:181 projects/k3bcdrecordwriter.cpp:933
+#: projects/k3bcdrdaowriter.cpp:767
+#, kde-format
+msgid "%1 crashed."
+msgstr "%1 a eșuat."
+
+#: projects/datacd/k3bisoimager.cpp:307 projects/datacd/k3bisoimager.cpp:449
+#: projects/videocd/k3bvcdjob.cpp:258 projects/k3bgrowisofswriter.cpp:367
+#: projects/k3bcdrecordwriter.cpp:455 projects/k3bcdrdaowriter.cpp:552
+#: jobs/k3bcdda2wavreader.cpp:136 jobs/k3bdvdbooktypejob.cpp:336
+#: jobs/k3bdvdformattingjob.cpp:505
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:181
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:384
+#, kde-format
+msgid "Could not start %1."
+msgstr "Nu s-a putut porni %1."
+
+#: projects/datacd/k3bisoimager.cpp:372
+msgid "Could not determine size of resulting image file."
+msgstr "Nu poate fi determinată mărimea fișierului imagine rezultat."
+
+#: projects/datacd/k3bisoimager.cpp:525
+msgid "No volume id specified. Using default."
+msgstr ""
+"Nu a fost specificat niciun identificator de volum. Utilizare implicit."
+
+#: projects/datacd/k3bisoimager.cpp:618
+#, kde-format
+msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
+msgstr ""
+"Au fost găsite fișiere mai mari de 4 GO. K3b are nevoie de cel puțin %1 "
+"pentru a continua."
+
+#: projects/datacd/k3bisoimager.cpp:626
+msgid ""
+"Found files bigger than 2 GB. These files will only be fully accessible if "
+"mounted with UDF."
+msgstr ""
+"Au fost găsite fișiere mai mari de 2 GO. Aceste fișiere vor fi complet "
+"accesibile doar dacă sunt montate cu UDF."
+
+#: projects/datacd/k3bisoimager.cpp:637
+msgid "Enabling UDF extension."
+msgstr "Activarea extensiei UDF."
+
+#: projects/datacd/k3bisoimager.cpp:682
+msgid "Setting iso level to 3 to support files bigger than 4 GB."
+msgstr "Stabiliți nivelul iso la 3 pentru a suporta fișiere mai mari de 4 GO."
+
+#: projects/datacd/k3bisoimager.cpp:771
+#, kde-format
+msgid "Could not follow link %1 to non-existing file %2. Skipping..."
+msgstr ""
+"Imposibil de urmărit legătura %1 la fișierul inexistent %2. Va fi ignorată..."
+
+#: projects/datacd/k3bisoimager.cpp:775
+#, kde-format
+msgid ""
+"Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
+msgstr ""
+"Legătura %1 la dosarul %2 a fost ignorată. K3b nu poate urma legături la "
+"dosare."
+
+#: projects/datacd/k3bisoimager.cpp:783
+#, kde-format
+msgid "Could not find file %1. Skipping..."
+msgstr "Nu poate fi găsit fișierul %1. Va fi ignorat..."
+
+#: projects/datacd/k3bisoimager.cpp:787
+#, kde-format
+msgid "Could not read file %1. Skipping..."
+msgstr "Nu poate fi citit fișierul %1. Va fi ignorat..."
+
+#: projects/datacd/k3bisoimager.cpp:837
+#, kde-format
+msgid "Failed to backup boot image file %1"
+msgstr ""
+"Nu s-a putut face copie de rezervă pentru fișierul imagine de pornire %1"
+
+#: projects/datacd/k3bisoimager.cpp:993 projects/datacd/k3bisoimager.cpp:1003
+#: projects/datacd/k3bisoimager.cpp:1010 projects/datacd/k3bisoimager.cpp:1016
+msgid "Could not write temporary file"
+msgstr "Fișierul temporar nu poate fi scris"
+
+#: projects/datacd/k3bisoimager.cpp:997
+msgid "No files to be written."
+msgstr "Nici un fișier de scris."
+
+#: projects/datacd/k3bbootitem.cpp:30
+msgid "El Torito Boot image"
+msgstr "Imagine de demarare El Torito"
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:91
+msgid "Searching for old session"
+msgstr "Căutarea sesiunii vechi"
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:227
+#, kde-format
+msgid ""
+"No medium inserted or an empty medium in %1. Cannot continue multisession "
+"disk."
+msgstr ""
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:252
+#: projects/datacd/k3bmsinfofetcher.cpp:152
+#, kde-format
+msgid "Could not open Iso9660 filesystem in %1."
+msgstr "Nu poate fi deschis sistemul de fișiere ISO9660 în %1."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:52
+msgid "Searching previous session"
+msgstr "Căutarea sesiunii anterioare"
+
+#: projects/datacd/k3bmsinfofetcher.cpp:56
+#: projects/datacd/k3bmsinfofetcher.cpp:92 projects/videocd/k3bvcdjob.cpp:204
+#: projects/k3bgrowisofswriter.cpp:156 projects/k3bcdrecordwriter.cpp:214
+#: projects/k3bcdrdaowriter.cpp:450 jobs/k3bcdda2wavreader.cpp:97
+#: jobs/k3bdvdbooktypejob.cpp:288 jobs/k3bclonejob.cpp:88
+#: jobs/k3bdvdformattingjob.cpp:464 jobs/k3breadcdreader.cpp:106
+#, kde-format
+msgid "Could not find %1 executable."
+msgstr "Executabilul %1 nu poate fi găsit."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:164
+msgid "Could not determine next writable address."
+msgstr "Nu poate fi determinată următoarea adresă de scriere."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:180
+#, kde-format
+msgid "Could not start %1"
+msgstr "Nu s-a putut porni %1"
+
+#: projects/datacd/k3bmsinfofetcher.cpp:210
+msgid "Could not retrieve multisession information from disk."
+msgstr "Imposibil de obținut informațiile multisesiunii discului."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:211
+msgid "The disk is either empty or not appendable."
+msgstr "Discul este fie gol, fie nu conține multisesiune."
+
+#: projects/videodvd/k3bvideodvdjob.cpp:54
+msgid "Creating Video DVD Image File"
+msgstr "Creare fișier imagine DVD video."
+
+#: projects/videodvd/k3bvideodvdjob.cpp:57
+msgid "Writing Video DVD"
+msgstr "Scriere DVD video"
+
+#: projects/videodvd/k3bvideodvdjob.cpp:67
+#, kde-format
+msgid "ISO9660/Udf Filesystem (Size: %1)"
+msgstr "Sistem de fișiere ISO9660/Udf (Mărime: %1)"
+
+#: projects/videodvd/k3bvideodvdjob.cpp:69
+#: projects/audiocd/k3baudiojob.cpp:862 projects/movixcd/k3bmovixjob.cpp:128
+#: projects/mixedcd/k3bmixedjob.cpp:1362 projects/videocd/k3bvcdjob.cpp:580
+#, kde-format
+msgid " - %1 copy"
+msgid_plural " - %1 copies"
+msgstr[0] "- copia %1"
+msgstr[1] "- %1 copii"
+msgstr[2] "- %1 de copii"
+
+#: projects/videodvd/k3bvideodvdimager.cpp:112
+#: projects/videodvd/k3bvideodvdimager.cpp:118 jobs/k3bcdcopyjob.cpp:553
+#, fuzzy, kde-format
+#| msgid "Unable to create temporary directory '%1'."
+msgid "Unable to create temporary folder '%1'."
+msgstr "Imposibil de creat directorul temporar „%1”."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:124
+#, kde-format
+msgid "Found invalid entry in the VIDEO_TS folder (%1)."
+msgstr "Dosarul VIDEO_TS conține o intrare invalidă (%1)."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:131
+#, kde-format
+msgid "Unable to link temporary file in folder %1."
+msgstr "Imposibil de legat fișierul temporar în dosarul %1."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:214
+msgid "The project does not contain all necessary Video DVD files."
+msgstr "Proiectul nu conține toate fișierele DVD Video necesare."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:215
+msgid ""
+"The resulting DVD will most likely not be playable on a Hifi DVD player."
+msgstr "DVD-ul rezultat nu va putea fi rulat pe un dispozitiv Hifi DVD."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:56
+msgid "Could not find normalize executable."
+msgstr "Imposibil de găsit programul pentru ajustarea volumului sonor."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:84
+msgid "Could not start normalize."
+msgstr "Nu poate fi pornită normalizarea."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:124
+#, kde-format
+msgid "Track %1 is already normalized."
+msgstr "Volumul sonor al pistei %1 este deja ajustat."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:130
+#, kde-format
+msgid "Adjusting volume level for track %1 of %2"
+msgstr "Ajustarea nivelului sonor pentru pista %1 din %2"
+
+#: projects/audiocd/k3baudionormalizejob.cpp:138
+#, kde-format
+msgid "Computing level for track %1 of %2"
+msgstr "Calcularea nivelului sonor pentru pista %1 din %2"
+
+#: projects/audiocd/k3baudionormalizejob.cpp:181
+msgid "Successfully normalized all tracks."
+msgstr "Volumul sonor al tuturor pistelor a fost ajustat cu succes."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:189
+msgid "Error while normalizing tracks."
+msgstr "Eroare în timpul ajustării volumului sonor al pistelor."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:198
+#: projects/videocd/k3bvcdjob.cpp:366 jobs/k3bcdda2wavreader.cpp:247
+#: jobs/k3bdvdbooktypejob.cpp:201 jobs/k3bdvdformattingjob.cpp:280
+#, kde-format
+msgid "%1 did not exit cleanly."
+msgstr "Programul %1 nu s-a terminat corect."
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:105
+#, kde-format
+msgid "Please insert Audio CD %1%2"
+msgstr "Introduceți CD-ul audio %1%2"
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:255
+msgid "CD Track"
+msgstr "Pistă CD"
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:261
+#, kde-format
+msgid "Track %1 from Audio CD %2"
+msgstr "Pista %1 din CD audio %2"
+
+#: projects/audiocd/k3baudioimager.cpp:93
+#, kde-format
+msgid "Unable to seek in track %1."
+msgstr "Imposibil de parcurs pista %1."
+
+#: projects/audiocd/k3baudioimager.cpp:147
+#, kde-format
+msgid "Error while decoding track %1."
+msgstr "Eroare în timpul decodării pistei %1."
+
+#: projects/audiocd/k3brawaudiodatasource.cpp:82
+msgid "Raw Audio CD Image"
+msgstr "Imagine CD Audio brută"
+
+#: projects/audiocd/k3baudiozerodata.cpp:59
+msgid "Silence"
+msgstr "Blanc"
+
+#: projects/audiocd/k3baudiojob.cpp:198 projects/mixedcd/k3bmixedjob.cpp:211
+msgid "Please add files to your project first."
+msgstr "Adăugați mai întâi fișiere proiectului vostru"
+
+#: projects/audiocd/k3baudiojob.cpp:204
+msgid "Unable to write on-the-fly with these audio sources."
+msgstr "Imposibil de a scrie 'din zbor' cu aceste surse audio."
+
+#: projects/audiocd/k3baudiojob.cpp:253 jobs/k3bmetawriter.cpp:425
+msgid "Track lengths below 4 seconds violate the Red Book standard."
+msgstr ""
+"Pistele cu lungimea sub 4  secunde nu sînt conforme cu standardul Red Book."
+
+#: projects/audiocd/k3baudiojob.cpp:291 projects/mixedcd/k3bmixedjob.cpp:1235
+#: jobs/k3bmetawriter.cpp:457
+msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
+msgstr "Scrierea 'din zbor' cu programul cdrecord < 2.01a13 nu este posibilă"
+
+#: projects/audiocd/k3baudiojob.cpp:298 projects/mixedcd/k3bmixedjob.cpp:1241
+#: jobs/k3bmetawriter.cpp:464
+#, kde-format
+msgid "Cdrecord %1 does not support CD-Text writing."
+msgstr "Unitatea de scriere %1 nu suportă scrierea de CD-Text."
+
+#: projects/audiocd/k3baudiojob.cpp:303 jobs/k3bmetawriter.cpp:469
+#: jobs/k3bcdcopyjob.cpp:863
+msgid "It is not possible to write CD-Text in TAO mode."
+msgstr "Nu este posibil de a scrie CD-TEXT în mod TAO (pistă-cu-pistă)."
+
+#: projects/audiocd/k3baudiojob.cpp:313 projects/mixedcd/k3bmixedjob.cpp:246
+msgid "Determining maximum writing speed"
+msgstr "Determinarea vitezei maxime de scriere"
+
+#: projects/audiocd/k3baudiojob.cpp:348
+#, kde-format
+msgid "Creating image files in %1"
+msgstr "Creare fișiere imagine în %1"
+
+#: projects/audiocd/k3baudiojob.cpp:349 projects/videocd/k3bvcdjob.cpp:192
+msgid "Creating image files"
+msgstr "Crearea fișierelor imaginii"
+
+#: projects/audiocd/k3baudiojob.cpp:361 projects/mixedcd/k3bmixedjob.cpp:330
+msgid "Unable to determine maximum speed for some reason. Ignoring."
+msgstr "Nu poate fi determinată viteza maximă din câteva motive. Ignorare."
+
+#: projects/audiocd/k3baudiojob.cpp:389 projects/mixedcd/k3bmixedjob.cpp:379
+msgid "Writing canceled."
+msgstr "Sriere anulată."
+
+#: projects/audiocd/k3baudiojob.cpp:451 projects/mixedcd/k3bmixedjob.cpp:578
+msgid "Error while decoding audio tracks."
+msgstr "Eroare în timpul decodării pistelor audio."
+
+#: projects/audiocd/k3baudiojob.cpp:459
+msgid "Successfully decoded all tracks."
+msgstr "Toate pistele au fost decodate cu succes."
+
+#: projects/audiocd/k3baudiojob.cpp:483 projects/mixedcd/k3bmixedjob.cpp:618
+#, kde-format
+msgid "Decoding audio track %1 of %2%3"
+msgstr "Decodificarea pistei audio %1 din %2%3"
+
+#: projects/audiocd/k3baudiojob.cpp:501
+msgid "IO Error. Most likely no space left on harddisk."
+msgstr "Eroare de intrare-ieșire. Cel mai probabil hardisk-ul e plin."
+
+#: projects/audiocd/k3baudiojob.cpp:550 projects/mixedcd/k3bmixedjob.cpp:638
+#: projects/mixedcd/k3bmixedjob.cpp:679
+msgid "IO Error"
+msgstr "Eroare de intrare/ieșire"
+
+#: projects/audiocd/k3baudiojob.cpp:591 projects/mixedcd/k3bmixedjob.cpp:881
+#, kde-format
+msgid "Writing track %1 of %2%3"
+msgstr "Scriere pistă %1 din %2%3"
+
+#: projects/audiocd/k3baudiojob.cpp:659 projects/mixedcd/k3bmixedjob.cpp:1022
+#: jobs/k3bdvdbooktypejob.cpp:114 jobs/k3bcdcopyjob.cpp:723
+msgid "Waiting for media"
+msgstr "Așteptare suport"
+
+#: projects/audiocd/k3baudiojob.cpp:697 jobs/k3bcdcopyjob.cpp:1116
+msgid "Removing temporary files."
+msgstr "Eliminarea fișierelor temporare."
+
+#: projects/audiocd/k3baudiojob.cpp:731 projects/mixedcd/k3bmixedjob.cpp:1276
+msgid "Normalizing volume levels"
+msgstr "Ajustarea nivelelor de volum"
+
+#: projects/audiocd/k3baudiojob.cpp:848
+msgid "Writing Audio CD"
+msgstr "Scriere CD audio"
+
+#: projects/audiocd/k3baudiojob.cpp:858
+#, kde-format
+msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
+msgid "1 track (%2 minutes)"
+msgid_plural "%1 tracks (%2 minutes)"
+msgstr[0] "1 pistă (%2 minute)"
+msgstr[1] "%1 piste (%2 minute)"
+msgstr[2] "%1 de piste (%2 minute)"
+
+#: projects/movixcd/k3bmovixdoc.cpp:90
+msgid "Enter New Filename"
+msgstr "Introduceți noul nume al fișierului"
+
+#: projects/movixcd/k3bmovixdoc.cpp:91
+msgid "A file with that name already exists. Please enter a new name:"
+msgstr "Un fișier cu același nume există deja. Introduceți un nume nou:"
+
+#: projects/movixcd/k3bmovixdoc.cpp:181
+#, kde-format
+msgid ""
+"Could not rename subtitle file. File with requested name %1 already exists."
+msgstr ""
+"Nu se poate redenumi subtitrarea. Fișierul cu numele cerut %1 există deja."
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:134
+msgid "Could not find a valid eMovix installation."
+msgstr "Imposibil de găsit o instalare validă eMovix."
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:208
+#: projects/movixcd/k3bmovixprogram.cpp:187
+#: projects/movixcd/k3bmovixprogram.cpp:219
+#: projects/movixcd/k3bmovixprogram.cpp:254
+#: projects/movixcd/k3bmovixprogram.cpp:266
+#: projects/movixcd/k3bmovixprogram.cpp:275
+#: projects/movixcd/k3bmovixprogram.cpp:284
+#: projects/movixcd/k3bmovixprogram.cpp:291
+#: projects/movixcd/k3bmovixprogram.cpp:325
+#: projects/movixcd/k3bmovixprogram.cpp:327
+#: projects/movixcd/k3bmovixprogram.cpp:329
+#: projects/movixcd/k3bmovixprogram.cpp:331
+msgid "default"
+msgstr "implicit"
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:315
+#: projects/movixcd/k3bmovixprogram.cpp:199
+#: projects/movixcd/k3bmovixprogram.cpp:243
+msgid "none"
+msgstr "nimic"
+
+#: projects/movixcd/k3bmovixjob.cpp:116
+msgid "Writing eMovix Project"
+msgstr "Scriere proiect eMovix"
+
+#: projects/movixcd/k3bmovixjob.cpp:118
+#, kde-format
+msgid "Writing eMovix Project (%1)"
+msgstr "Scriere proiect eMovix %1"
+
+#: projects/movixcd/k3bmovixjob.cpp:124
+#, kde-format
+msgid "1 file (%2) and about 8 MB eMovix data"
+msgid_plural "%1 files (%2) and about 8 MB eMovix data"
+msgstr[0] "1 fișier (%2) și aproximativ 8 MB date eMovix"
+msgstr[1] "%1 fișiere (%2) și aproximativ 8 MB date eMovix"
+msgstr[2] "%1 de fișiere (%2) și aproximativ 8 MB date eMovix"
+
+#: projects/mixedcd/k3bmixedjob.cpp:277
+#, kde-format
+msgid "Creating audio image files in %1"
+msgstr "Crearea fișierelor imaginii audio în %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:290 projects/mixedcd/k3bmixedjob.cpp:504
+msgid "Creating audio image files"
+msgstr "Crearea fișierelor imaginii audio"
+
+#: projects/mixedcd/k3bmixedjob.cpp:478
+msgid "Error while creating ISO image."
+msgstr "Eroare în timpul creării imaginii ISO."
+
+#: projects/mixedcd/k3bmixedjob.cpp:493
+msgid "ISO image successfully created."
+msgstr "Imaginea ISO a fost creată cu succes."
+
+#: projects/mixedcd/k3bmixedjob.cpp:529 jobs/k3bverificationjob.cpp:109
+#: jobs/k3bcdcopyjob.cpp:1044
+msgid "Need to reload medium to return to proper state."
+msgstr "Este nevoie de reîncărcarea suportului pentru a obține starea corectă."
+
+#: projects/mixedcd/k3bmixedjob.cpp:564 projects/k3bcdrecordwriter.cpp:750
+#: jobs/k3bverificationjob.cpp:269 jobs/k3bcdcopyjob.cpp:1101
+msgid "Please reload the medium and press 'ok'"
+msgstr "Reintroduceți discul și apoi apăsați 'ok'"
+
+#: projects/mixedcd/k3bmixedjob.cpp:565 projects/k3bcdrecordwriter.cpp:751
+msgid "Unable to close the tray"
+msgstr "Imposibil de a închide tăvița unității de disc"
+
+#: projects/mixedcd/k3bmixedjob.cpp:594
+msgid "Audio images successfully created."
+msgstr "Imaginea audio a fost creată cu succes."
+
+#: projects/mixedcd/k3bmixedjob.cpp:891
+msgid "ISO9660 data"
+msgstr "date ISO9660"
+
+#: projects/mixedcd/k3bmixedjob.cpp:888
+#, kde-format
+msgid "Writing track %1 of %2 (%3)"
+msgstr "Scriere pistă %1 din %2 (%3)"
+
+#: projects/mixedcd/k3bmixedjob.cpp:997
+msgid "Simulating second session"
+msgstr "Simularea sesiunii secunde"
+
+#: projects/mixedcd/k3bmixedjob.cpp:999
+#, kde-format
+msgid "Writing second session of copy %1"
+msgstr "Scrierea sesiunii secunde a copiei %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1001
+msgid "Writing second session"
+msgstr "Scrierea sesiunii secunde"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1005
+msgid "Simulating first session"
+msgstr "Simularea primei sesiuni"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1007
+#, kde-format
+msgid "Writing first session of copy %1"
+msgstr "Scrierea primei sesiuni a copiei %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1009
+msgid "Writing first session"
+msgstr "Scrierea primei sesiuni"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1038 projects/k3bgrowisofshandler.cpp:101
+#: projects/k3bcdrecordwriter.cpp:624
+msgid "Trying to write more than the official disk capacity"
+msgstr "Încercare de scriere peste capacitatea oficială a discului."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1041 projects/k3bgrowisofshandler.cpp:238
+#: projects/k3bcdrecordwriter.cpp:835 projects/k3bcdrdaowriter.cpp:883
+msgid "Data does not fit on disk."
+msgstr "Datele nu încap pe disc."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1087
+msgid "Creating ISO image file"
+msgstr "Crearea fișierului imaginii ISO"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1088 projects/mixedcd/k3bmixedjob.cpp:1089
+#, kde-format
+msgid "Creating ISO image in %1"
+msgstr "Crearea fișierului imaginii ISO în %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1129
+msgid "Removing buffer files."
+msgstr "Eliminarea fișierelor tampon."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1134
+#, kde-format
+msgid "Could not delete file %1."
+msgstr "Nu poate fi șters fișierul %1."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1244
+msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
+msgstr "Nu este posibilă scrierea CD-Text în modul TAO. Încercați DAO sau RAW."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1341
+msgid "Writing Enhanced Audio CD"
+msgstr "Scrierea CD audio îmbunătățit."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1346
+msgid "Writing Mixed Mode CD"
+msgstr "Scriere CD în mod mixt"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1356
+#, kde-format
+msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
+msgid "1 track (%2 minutes audio data, %3 ISO9660 data)"
+msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
+msgstr[0] "1 pistă (%2 minute date audio, %3 date ISO9660)"
+msgstr[1] "%1 piste (%2 minute date audio, %3 date ISO9660)"
+msgstr[2] "%1 de piste (%2 minute date audio, %3 date ISO9660)"
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:69
+#, kde-format
+msgid "File %1 is empty."
+msgstr "Fișierul %1 este gol."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:103
+msgid ""
+"This looks like an elementary video stream but a multiplexed program stream "
+"was required."
+msgstr ""
+"Acesta arată ca un flux video simplu, dar este nevoie de un program pentru "
+"flux multiplex."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:108
+msgid ""
+"This looks like an elementary audio stream but a multiplexed program stream "
+"was required."
+msgstr ""
+"Acesta arată ca un flux audio simplu, dar este nevoie de un program pentru "
+"flux multiplex."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:113
+msgid ""
+"This looks like a RIFF header but a plain multiplexed program stream was "
+"required."
+msgstr ""
+"Blocul de început al fluxului arată ca fiind format RIFF, dar este nevoie de "
+"un program pentru flux multiplex."
+
+#: projects/videocd/k3bvcdtrack.cpp:163 projects/videocd/k3bvcdtrack.cpp:173
+#: projects/videocd/k3bvcdtrack.cpp:186 projects/videocd/k3bvcdtrack.cpp:199
+#: projects/videocd/k3bvcdtrack.cpp:234 projects/videocd/k3bvcdtrack.cpp:262
+#: projects/videocd/k3bvcdtrack.cpp:275 projects/videocd/k3bvcdtrack.cpp:288
+#: projects/videocd/k3bvcdtrack.cpp:301 projects/videocd/k3bvcdtrack.cpp:313
+#: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:352
+#: projects/videocd/k3bvcdtrack.cpp:415
+msgid "n/a"
+msgstr "nedisponibil"
+
+#: projects/videocd/k3bvcdtrack.cpp:194 projects/videocd/k3bvcdtrack.cpp:283
+#, kde-format
+msgid "1 bit/s"
+msgid_plural "%1 bits/s"
+msgstr[0] "1 bit/s"
+msgstr[1] "%1 biți/s"
+msgstr[2] "%1 de biți/s"
+
+#: projects/videocd/k3bvcdtrack.cpp:211
+msgid "Component"
+msgstr "Component"
+
+#: projects/videocd/k3bvcdtrack.cpp:296
+#, kde-format
+msgid "%1 Hz"
+msgstr "%1 Hz"
+
+#: projects/videocd/k3bvcdtrack.cpp:323 projects/videocd/k3bvcdtrack.cpp:325
+msgid "original"
+msgstr "original"
+
+#: projects/videocd/k3bvcdtrack.cpp:323 projects/videocd/k3bvcdtrack.cpp:325
+msgid "duplicate"
+msgstr "duplicat"
+
+#: projects/videocd/k3bvcdtrack.cpp:339
+msgid "Motion Picture"
+msgstr "Imagine în mișcare"
+
+#: projects/videocd/k3bvcdtrack.cpp:341
+msgid "Still Picture"
+msgstr "Captură ecran"
+
+#: projects/videocd/k3bvcdtrack.cpp:348
+#, kde-format
+msgid "Layer %1"
+msgstr "Strat %1"
+
+#: projects/videocd/k3bvcdtrack.cpp:382
+msgid "unknown"
+msgstr "necunoscut"
+
+#: projects/videocd/k3bvcdtrack.cpp:383
+msgid "invalid"
+msgstr "necorespunzător"
+
+#: projects/videocd/k3bvcdtrack.cpp:389
+msgid "stereo"
+msgstr "stereo"
+
+#: projects/videocd/k3bvcdtrack.cpp:390
+msgid "joint stereo"
+msgstr "îmbinare stereo"
+
+#: projects/videocd/k3bvcdtrack.cpp:391 projects/videocd/k3bvcdtrack.cpp:396
+msgid "dual channel"
+msgstr "canal dublu"
+
+#: projects/videocd/k3bvcdtrack.cpp:392
+msgid "single channel"
+msgstr "canal simplu"
+
+#: projects/videocd/k3bvcdtrack.cpp:397
+msgid "surround sound"
+msgstr "sunet surround"
+
+#: projects/videocd/k3bvcddoc.cpp:214
+msgid "VCD"
+msgstr "VCD"
+
+#: projects/videocd/k3bvcddoc.cpp:211 projects/videocd/k3bvcddoc.cpp:221
+#, kde-format
+msgid ""
+"K3b will create a %1 image from the given MPEG files, but these files must "
+"already be in %1 format. K3b does not yet resample MPEG files."
+msgstr ""
+"K3b va crea o imagine %1 din fișierele MPEG date, dar aceste fișiere trebuie "
+"să fie deja în formatul %1. K3b nu poate încă recodifica fișiere MPEG."
+
+#: projects/videocd/k3bvcddoc.cpp:215 projects/videocd/k3bvcddoc.cpp:228
+#: projects/videocd/k3bvcddoc.cpp:257
+msgid "Information"
+msgstr "Informație"
+
+#: projects/videocd/k3bvcddoc.cpp:224
+msgid "SVCD"
+msgstr "SVCD"
+
+#: projects/videocd/k3bvcddoc.cpp:226
+msgid ""
+"Note: Forcing MPEG2 as VCD is not supported by some standalone DVD players."
+msgstr ""
+"Notă: Forțarea formatului MPEG2 ca și VCD nu este suportată de unele "
+"dispozitive de redare DVD."
+
+#: projects/videocd/k3bvcddoc.cpp:229
+msgid "Force VCD"
+msgstr "Forțați formatul VCD"
+
+#: projects/videocd/k3bvcddoc.cpp:230
+msgid "Do not force VCD"
+msgstr "Nu forțați formatul VCD"
+
+#: projects/videocd/k3bvcddoc.cpp:243
+msgid ""
+"You cannot mix MPEG1 and MPEG2 video files.\n"
+"Please start a new Project for this filetype.\n"
+"Resample not implemented in K3b yet."
+msgstr ""
+"Nu puteți amesteca fișiere video în format MPEG1 cu cele în format MPEG2.\n"
+"Porniți un nou proiect pentru acest tip de fișiere.\n"
+"Recodificarea nu este implementată încă în K3b."
+
+#: projects/videocd/k3bvcddoc.cpp:244
+msgid "Wrong File Type for This Project"
+msgstr "Tip de fișier necorespunzător pentru acest proiect"
+
+#: projects/videocd/k3bvcddoc.cpp:255
+msgid ""
+"PBC (Playback control) enabled.\n"
+"Videoplayers can not reach Segments (Mpeg Still Pictures) without Playback "
+"control ."
+msgstr ""
+"PCB (controlul redării) activat. \n"
+"Dispozitivele de redare video nu pot accesa 'Segments' (captură ecran mpeg) "
+"fără controlul redării."
+
+#: projects/videocd/k3bvcddoc.cpp:287
+msgid "Only MPEG1 and MPEG2 video files are supported.\n"
+msgstr "Doar fișierele video în format MPEG1 și MPEG2 sunt suportate.\n"
+
+#: projects/videocd/k3bvcddoc.cpp:288
+msgid "Wrong File Format"
+msgstr "Format de fișier necorespunzător"
+
+#: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:478
+#, kde-format
+msgid "Removing Binary file %1"
+msgstr "Eliminare fișier binar %1"
+
+#: projects/videocd/k3bvcdjob.cpp:134 projects/videocd/k3bvcdjob.cpp:488
+#, kde-format
+msgid "Removing Cue file %1"
+msgstr "Eliminare fișierului în format CUE %1."
+
+#: projects/videocd/k3bvcdjob.cpp:184
+msgid "Could not write correct XML-file."
+msgstr "Nu poate fi scris fișierul XML corect."
+
+#: projects/videocd/k3bvcdjob.cpp:200
+msgid "Creating Cue/Bin files ..."
+msgstr "Crearea fișierelor Cue/Bin ..."
+
+#: projects/videocd/k3bvcdjob.cpp:205
+#, kde-format
+msgid "To create VideoCDs you must install VcdImager Version %1."
+msgstr ""
+"Pentru a crea CD-uri video trebuie să instalați programul VcdImager cu "
+"versiunea %1."
+
+#: projects/videocd/k3bvcdjob.cpp:206 projects/videocd/k3bvcdjob.cpp:215
+msgid ""
+"You can find this on your distribution disks or download it from http://www."
+"vcdimager.org"
+msgstr ""
+"Puteți găsi acest program pe discurile aferente distribuției dumneavoastră "
+"sau le puteți descărca de la adresa http://www.vcdimager.org"
+
+#: projects/videocd/k3bvcdjob.cpp:214
+#, kde-format
+msgid "%1 executable too old: need version %2 or greater."
+msgstr ""
+"Executabilul %1 este prea vechi: este nevoie de versiunea %2 sau mai nouă."
+
+#: projects/videocd/k3bvcdjob.cpp:296
+#, kde-format
+msgid "Scanning video file %1 of %2 (%3)"
+msgstr "Analizarea fișierului video %1 din %2 (%3)"
+
+#: projects/videocd/k3bvcdjob.cpp:332
+#, kde-format
+msgid "Creating Image for track %1"
+msgstr "Crearea imaginii pentru pista %1"
+
+#: projects/videocd/k3bvcdjob.cpp:354
+msgid "Cue/Bin files successfully created."
+msgstr "Fișierele în format cue/bin au fost create cu succes."
+
+#: projects/videocd/k3bvcdjob.cpp:397
+#, kde-format
+msgid "Writing Copy %1 of %2"
+msgstr "Scriere copie %1 din %2"
+
+#: projects/videocd/k3bvcdjob.cpp:523
+#, kde-format
+msgid "One or more BCD fields out of range for %1"
+msgstr "Unul sau mai multe câmpuri BCD nu sunt în intervalul pentru %1"
+
+#: projects/videocd/k3bvcdjob.cpp:526
+msgid "From now on, scan information data errors will not be reported anymore"
+msgstr ""
+"De acum înainte, informațiile de eroare rezultate din scanarea datelor nu "
+"vor mai fi raportate."
+
+#: projects/videocd/k3bvcdjob.cpp:527
+msgid ""
+"Consider enabling the 'update scan offsets' option, if it is not enabled "
+"already."
+msgstr ""
+"Luați în considerare activarea opțiunii 'actualizarea marginilor scanării', "
+"dacă deja nu e activată."
+
+#: projects/videocd/k3bvcdjob.cpp:534
+#, kde-format
+msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
+msgstr ""
+"pts aparținând APS pare a fi în dezordine (pts curent %1, ultimul pts văzut %"
+"2)"
+
+#: projects/videocd/k3bvcdjob.cpp:535
+msgid "Ignoring this aps"
+msgstr "Aplicație ignorată"
+
+#: projects/videocd/k3bvcdjob.cpp:543
+#, kde-format
+msgid "Bad packet at packet #%1 (stream byte offset %2)"
+msgstr "Pachet defectuos la pachetul #%1 (marginea octeților fluxului %2)"
+
+#: projects/videocd/k3bvcdjob.cpp:550
+#, kde-format
+msgid "The remaining byte of the stream will be ignored."
+msgid_plural "The remaining %1 bytes of the stream will be ignored."
+msgstr[0] "Octetul rămas al fluxului va fi ignorat."
+msgstr[1] "Cei %1 octeți rămași ai fluxului vor fi ignorați."
+msgstr[2] "Cei %1 de octeți rămași ai fluxului vor fi ignorați."
+
+#: projects/videocd/k3bvcdjob.cpp:552
+msgid "An unknown number of remaining stream bytes will be ignored."
+msgstr "Un număr necunoscut de octeți rămași în flux vor fi ignorați."
+
+#: projects/videocd/k3bvcdjob.cpp:561
+msgid "Writing Video CD (Version 1.1)"
+msgstr "Scriere CD video (versiunea 1.1)"
+
+#: projects/videocd/k3bvcdjob.cpp:563
+msgid "Writing Video CD (Version 2.0)"
+msgstr "Scriere CD video (versiunea 2.0)"
+
+#: projects/videocd/k3bvcdjob.cpp:565
+msgid "Writing Super Video CD"
+msgstr "Scriere super CD video"
+
+#: projects/videocd/k3bvcdjob.cpp:567
+msgid "Writing High-Quality Video CD"
+msgstr "Scriere CD video de înaltă calitate"
+
+#: projects/videocd/k3bvcdjob.cpp:569
+msgid "Writing Video CD"
+msgstr "Scriere CD video"
+
+#: projects/videocd/k3bvcdjob.cpp:576
+#, kde-format
+msgid "1 MPEG (%2)"
+msgid_plural "%1 MPEGs (%2)"
+msgstr[0] "1 MPEG (%2)"
+msgstr[1] "%1 MPEG-uri (%2)"
+msgstr[2] "%1 de MPEG-uri (%2)"
+
+#: projects/k3babstractwriter.cpp:56
+msgid "Unlocking drive..."
+msgstr "Deblocare unitate ..."
+
+#: projects/k3babstractwriter.cpp:70
+msgid "Could not unlock drive."
+msgstr "Unitatea nu poate fi deblocată."
+
+#: projects/k3babstractwriter.cpp:73
+msgid "Ejecting Medium"
+msgstr "Scoatere suport"
+
+#: projects/k3babstractwriter.cpp:87 jobs/k3bdvdformattingjob.cpp:303
+msgid "Unable to eject medium."
+msgstr "Incapabil de a scoate discul."
+
+#: projects/k3bgrowisofswriter.cpp:161
+#, kde-format
+msgid "Growisofs version %1 is too old. K3b needs at least version 5.10."
+msgstr ""
+"Versiunea growisofs %1 este prea vehe. K3b are nevoie de cel puțin versiunea "
+"5.10."
+
+#: projects/k3bgrowisofswriter.cpp:175
+#, kde-format
+msgid ""
+"Growisofs version %1 does not feature a software buffer which may result in "
+"an unstable burn process."
+msgstr ""
+"Growisofs versiunea %1 nu are un tampon software, ceea ce poate determina un "
+"proces de ardere instabil."
+
+#: projects/k3bgrowisofswriter.cpp:228
+#, kde-format
+msgid "Could not open file %1."
+msgstr "Nu poate fi deschis fișierul %1."
+
+#: projects/k3bgrowisofswriter.cpp:347 projects/k3bcdrecordwriter.cpp:435
+#: projects/k3bcdrdaowriter.cpp:523 jobs/k3bcdcopyjob.cpp:483
+msgid "Preparing write process..."
+msgstr "Pregătirea procesului de scriere..."
+
+#: projects/k3bgrowisofswriter.cpp:351 projects/k3bcdrecordwriter.cpp:439
+#: projects/k3bcdrdaowriter.cpp:535 jobs/k3bdvdformattingjob.cpp:131
+msgid "Unmounting medium"
+msgstr "Demontare disc"
+
+#: projects/k3bgrowisofswriter.cpp:373
+msgid "Starting simulation..."
+msgstr "Pornirea simulării..."
+
+#: projects/k3bgrowisofswriter.cpp:378
+msgid "Starting disc write..."
+msgstr "Pornirea scrierii discului..."
+
+#: projects/k3bgrowisofswriter.cpp:441 projects/k3bcdrecordwriter.cpp:570
+msgid "Writing data"
+msgstr "Scrierea datelor"
+
+#: projects/k3bgrowisofswriter.cpp:522 projects/k3bcdrecordwriter.cpp:814
+#: projects/k3bcdrdaowriter.cpp:748
+#, kde-format
+msgid "Average overall write speed: %1 KB/s (%2x)"
+msgstr "Viteza medie generală de scriere: %1 KB/s (%2x)"
+
+#: projects/k3bgrowisofswriter.cpp:527 projects/k3bcdrecordwriter.cpp:808
+#: projects/k3bcdrdaowriter.cpp:728
+msgid "Simulation successfully completed"
+msgstr "Simulare încheiată cu succes"
+
+#: projects/k3bgrowisofswriter.cpp:529 projects/k3bcdrecordwriter.cpp:810
+#: projects/k3bcdrdaowriter.cpp:736
+msgid "Writing successfully completed"
+msgstr "Scriere încheiată cu succes"
+
+#: projects/k3bgrowisofshandler.cpp:83
+msgid "OPC failed. Please try writing speed 1x."
+msgstr "OPC a eșuat. Încercați viteza de scriere 1x."
+
+#: projects/k3bgrowisofshandler.cpp:88
+msgid "Please try again with writing mode DAO."
+msgstr "Încercați din nou folosind regimul de scriere DAO."
+
+#: projects/k3bgrowisofshandler.cpp:124
+msgid "Flushing Cache"
+msgstr "Ștergerea memoriei rapide"
+
+#: projects/k3bgrowisofshandler.cpp:125
+msgid "Flushing the cache may take some time."
+msgstr "Ștergerea memoriei rapide poate dura ceva timp."
+
+#: projects/k3bgrowisofshandler.cpp:134
+msgid "Closing Track"
+msgstr "Închidere pistă"
+
+#: projects/k3bgrowisofshandler.cpp:137
+msgid "Closing Disk"
+msgstr "Închidere disc"
+
+#: projects/k3bgrowisofshandler.cpp:140 projects/k3bgrowisofshandler.cpp:147
+#: projects/k3bgrowisofshandler.cpp:148 projects/k3bcdrecordwriter.cpp:723
+msgid "Closing Session"
+msgstr "Închidere sesiune"
+
+#: projects/k3bgrowisofshandler.cpp:143 projects/k3bgrowisofshandler.cpp:144
+msgid "Updating RMA"
+msgstr "Actualizare RMA"
+
+#: projects/k3bgrowisofshandler.cpp:151
+msgid "Writing Lead-out"
+msgstr "Scrierea părții de sfârșit de sesiune 'Lead-out'"
+
+#: projects/k3bgrowisofshandler.cpp:152
+msgid "Writing the lead-out may take some time."
+msgstr "Scrierea părții de sfârșit de sesiune 'lead-out' poate dura ceva timp."
+
+#: projects/k3bgrowisofshandler.cpp:155
+msgid "Removing reference to lead-out."
+msgstr "Eliminarea referinței la partea de sfârșit de sesiune 'lead-out'."
+
+#: projects/k3bgrowisofshandler.cpp:158
+msgid "Modifying ISO9660 volume descriptor"
+msgstr "Modificarea volumului descriptor ISO9660"
+
+#: projects/k3bgrowisofshandler.cpp:165
+msgid "Writing mode Incremental Streaming not available"
+msgstr "Scrierea fluxului de date în mod incrementat nu este posibilă"
+
+#: projects/k3bgrowisofshandler.cpp:166
+msgid "Engaging DAO"
+msgstr "Pornire DAO"
+
+#: projects/k3bgrowisofshandler.cpp:178
+#, kde-format
+msgid "Writing speed: %1 KB/s (%2x)"
+msgstr "Viteza de scriere: %1 KB/s (%2)"
+
+#: projects/k3bgrowisofshandler.cpp:229
+msgid "K3b detected a problem with the medium."
+msgstr "K3b a detectat probleme cu suportul."
+
+#: projects/k3bgrowisofshandler.cpp:230
+msgid ""
+"Please try another brand of media, preferably one explicitly recommended by "
+"your writer's vendor."
+msgstr ""
+"Încercați discul altui producător, preferabil unul recomandat explicit de "
+"producătorul unității dumneavoastră."
+
+#: projects/k3bgrowisofshandler.cpp:231
+msgid "Report the problem if it persists anyway."
+msgstr "Raportați problema dacă ea persistă."
+
+#: projects/k3bgrowisofshandler.cpp:236 projects/k3bcdrecordwriter.cpp:833
+msgid "Data did not fit on disk."
+msgstr "Datele nu încap pe disc."
+
+#: projects/k3bgrowisofshandler.cpp:242
+msgid "Unable to set writing speed."
+msgstr "Imposibil de setat viteza de scriere."
+
+#: projects/k3bgrowisofshandler.cpp:243
+msgid "Please try again with the 'ignore speed' setting."
+msgstr "Încercați din nou cu setarea 'ignoră viteza'"
+
+#: projects/k3bgrowisofshandler.cpp:247
+msgid "Optimum Power Calibration failed."
+msgstr "Calibrarea puterii laserului a eșuat."
+
+#: projects/k3bgrowisofshandler.cpp:248
+msgid ""
+"Try adding '-use-the-force-luke=noopc' to the growisofs user parameters in "
+"the K3b settings."
+msgstr ""
+"Încercați adăugarea '-use-the-force-luke=noopc' la parametrii programului "
+"growisofs în setările K3b."
+
+#: projects/k3bgrowisofshandler.cpp:253
+msgid "Unable to allocate software buffer."
+msgstr "Nu poate fi alocată memoria tampon pentru aplicație."
+
+#: projects/k3bgrowisofshandler.cpp:254
+msgid "This error is caused by the low memorylocked resource limit."
+msgstr "Această eroare este datorată limitării resursei de memorie."
+
+#: projects/k3bgrowisofshandler.cpp:255
+msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
+msgstr ""
+"Aceasta poate fi rezolvată prin utilizarea comenzii 'ulimit -l unlimited'..."
+
+#: projects/k3bgrowisofshandler.cpp:256
+msgid ""
+"...or by lowering the used software buffer size in the advanced K3b settings."
+msgstr ""
+"...sau prin reducerea dimensiunii memoriei tampon folosită de program în "
+"setările avansate ale K3b."
+
+#: projects/k3bgrowisofshandler.cpp:260
+msgid "Write error"
+msgstr "Eroare de scriere"
+
+#: projects/k3bgrowisofshandler.cpp:276
+#, kde-format
+msgid "Fatal error at startup: %1"
+msgstr "Eroare fatală la pornire: %1"
+
+#: projects/k3bgrowisofshandler.cpp:284
+msgid "Warning at exit: (1)"
+msgstr "Avertizare la ieșire: (1)"
+
+#: projects/k3bgrowisofshandler.cpp:285
+msgid "Most likely mkisofs failed in some way."
+msgstr "Cel mai probabil programul 'mkisofs' a eșuat cumva.."
+
+#: projects/k3bgrowisofshandler.cpp:288
+#, kde-format
+msgid "Fatal error during recording: %1"
+msgstr "Eroare fatală în timpul scrierii: %1"
+
+#: projects/k3bcdrecordwriter.cpp:248
+#, kde-format
+msgid "Cdrecord version %1 does not support Blu-ray writing."
+msgstr "Programul cdrecord, versiunea %1, nu suportă scrierea Blu-ray."
+
+#: projects/k3bcdrecordwriter.cpp:272
+msgid "Writer does not support disk at once (DAO) recording"
+msgstr "Inscriptorul nu suportă scrierea „disc-cu-disc” (DAO)."
+
+#: projects/k3bcdrecordwriter.cpp:283
+msgid "Writer does not support raw writing."
+msgstr "Inscriptorul nu suportă scrierea în mod raw."
+
+#: projects/k3bcdrecordwriter.cpp:292
+#, kde-format
+msgid "Cdrecord does not support writing %1 media."
+msgstr "Programul cdrecord nu suportă scrierea mediului %1."
+
+#: projects/k3bcdrecordwriter.cpp:312
+msgid "Writer does not support buffer underrun free recording (Burnfree)"
+msgstr "Inscriptorul nu suportă reglarea memoriei tampon (Burnfree)."
+
+#: projects/k3bcdrecordwriter.cpp:317 projects/k3bcdrdaowriter.cpp:274
+msgid "'Force unsafe operations' enabled."
+msgstr "Activarea forțării operațiilor nesigure."
+
+#: projects/k3bcdrecordwriter.cpp:351
+#, kde-format
+msgid "Failed to write temporary file '%1'"
+msgstr "Fișierul temporar „%1” nu a putut fi scris"
+
+#: projects/k3bcdrecordwriter.cpp:371
+#, kde-format
+msgid "Cdrecord %1 does not support overburning."
+msgstr ""
+"Unitatea de scriere %1 nu are funcția de protecție a scrierii la golirea "
+"memoriei tampon."
+
+#: projects/k3bcdrecordwriter.cpp:466
+#, no-c-format, kde-format
+msgid "Starting simulation at %1x speed..."
+msgstr "Începe simularea la viteză %1x..."
+
+#: projects/k3bcdrecordwriter.cpp:468
+#, kde-format
+msgid "Starting %1 simulation at %2x speed..."
+msgstr "Simulare %1 la viteza %2x ..."
+
+#: projects/k3bcdrecordwriter.cpp:474
+#, no-c-format, kde-format
+msgid "Starting writing at %1x speed..."
+msgstr "Începe scrierea la viteză %1x..."
+
+#: projects/k3bcdrecordwriter.cpp:476
+#, kde-format
+msgid "Starting %1 writing at %2x speed..."
+msgstr "Scriere %1 la viteza %2x..."
+
+#: projects/k3bcdrecordwriter.cpp:599
+msgid "DAO (Disk At Once) recording not supported with this writer"
+msgstr ""
+"Regimul de scriere DAO (disc-cu-disc) nu este posibil cu acest inscriptor"
+
+#: projects/k3bcdrecordwriter.cpp:600
+msgid "Please choose TAO (Track At Once) and try again"
+msgstr "Alegeți modul TAO(pistă-cu-pistă) și încercați din nou"
+
+#: projects/k3bcdrecordwriter.cpp:603
+msgid "RAW recording not supported with this writer"
+msgstr "Scrierea în mod raw nu este posibilă cu acest inscriptor"
+
+#: projects/k3bcdrecordwriter.cpp:606
+msgid "Input/output error. Not necessarily serious."
+msgstr "Eroare de intrare/ieșire. Nu este neapărat importantă."
+
+#: projects/k3bcdrecordwriter.cpp:615
+msgid "Reloading of medium required"
+msgstr "Este necesară reîncărcarea mediului"
+
+#: projects/k3bcdrecordwriter.cpp:632 projects/k3bcdrdaowriter.cpp:878
+#, kde-format
+msgid "No valid %1 option: %2"
+msgstr "Opțiunea programului %1 nu este valabilă: %2"
+
+#: projects/k3bcdrecordwriter.cpp:659
+msgid "Only session 1 will be cloned."
+msgstr "Doar sesiunea 1 va fi clonată."
+
+#: projects/k3bcdrecordwriter.cpp:662
+msgid "Unable to fixate the disk."
+msgstr "Imposibil de a imobiliza discul."
+
+#: projects/k3bcdrecordwriter.cpp:688 projects/k3bcdrdaowriter.cpp:784
+#, no-c-format, kde-format
+msgid "Medium or burner does not support writing at %1x speed"
+msgstr "Suportul sau inscriptorul nu susține scrierea la viteza %1x"
+
+#: projects/k3bcdrecordwriter.cpp:692
+#, no-c-format, kde-format
+msgid "Switching burn speed up to %1x"
+msgstr "Comutare la viteza maximă de scriere %1x"
+
+#: projects/k3bcdrecordwriter.cpp:695
+#, no-c-format, kde-format
+msgid "Switching burn speed down to %1x"
+msgstr "Comutare la viteza minimă de scriere %1x"
+
+#: projects/k3bcdrecordwriter.cpp:707
+msgid "Starting disc write"
+msgstr "Începerea scrierii discului"
+
+#: projects/k3bcdrecordwriter.cpp:727
+msgid "Writing Leadin"
+msgstr "Scrierea părții de început a discului (lead-in)"
+
+#: projects/k3bcdrecordwriter.cpp:730
+msgid "Writing Leadout"
+msgstr "Scrierea sfârșitului sesiunii (lead-out)"
+
+#: projects/k3bcdrecordwriter.cpp:733
+msgid "Writing pregap"
+msgstr "Scrierea spațiului care precede pista (pregap)"
+
+#: projects/k3bcdrecordwriter.cpp:736
+msgid "Performing Optimum Power Calibration"
+msgstr "Calibrarea puterii razei laser"
+
+#: projects/k3bcdrecordwriter.cpp:739
+msgid "Sending CUE sheet"
+msgstr "Trimiterea informațiilor despre piste în format CUE"
+
+#: projects/k3bcdrecordwriter.cpp:742
+msgid "Enabled Burnfree"
+msgstr "Funcția 'burnfree' activată"
+
+#: projects/k3bcdrecordwriter.cpp:745
+msgid "Disabled Burnfree"
+msgstr "Funcția 'burnfree' dezactivată"
+
+#: projects/k3bcdrecordwriter.cpp:761
+#, kde-format
+msgid "Burnfree was used once."
+msgid_plural "Burnfree was used %1 times."
+msgstr[0] "Burnfree a fost utilizat o dată."
+msgstr[1] "Burnfree a fost utilizat de %1 ori."
+msgstr[2] "Burnfree a fost utilizat de %1 de ori."
+
+#: projects/k3bcdrecordwriter.cpp:767
+#, kde-format
+msgid "Buffer was low once."
+msgid_plural "Buffer was low %1 times."
+msgstr[0] "Memoria tampon a fost fără date o singură dată."
+msgstr[1] "Memoria tampon a fost fără date de %1 ori."
+msgstr[2] "Memoria tampon a fost fără date de %1 de ori."
+
+#: projects/k3bcdrecordwriter.cpp:806
+#, fuzzy
+#| msgid "Writing successfully completed"
+msgid "Erasing successfully completed"
+msgstr "Scriere încheiată cu succes"
+
+#: projects/k3bcdrecordwriter.cpp:837 projects/k3bcdrdaowriter.cpp:885
+msgid "Enable overburning in the advanced K3b settings to burn anyway."
+msgstr ""
+"Activarea 'overburning' în setările K3b avansate pentru a scrie în orice mod."
+
+#: projects/k3bcdrecordwriter.cpp:844
+#, kde-format
+msgid "%1 could not reserve shared memory segment of requested size."
+msgstr ""
+"%1 nu a reușit să rezerve segmentul de memorie partajată de mărimea cerută."
+
+#: projects/k3bcdrecordwriter.cpp:845
+msgid "Probably you chose a too large buffer size."
+msgstr "Probabil ați ales o dimensiune prea mare a memoriei tampon."
+
+#: projects/k3bcdrecordwriter.cpp:848
+msgid "OPC failed. Probably the writer does not like the medium."
+msgstr ""
+"Calibrarea puterii laserului a eșuat. Probabil inscriptorul nu recunoaște "
+"mediul."
+
+#: projects/k3bcdrecordwriter.cpp:851
+#, kde-format
+msgid "Unable to set write speed to %1."
+msgstr "Imposibil de a seta viteza de scriere la %1."
+
+#: projects/k3bcdrecordwriter.cpp:852
+msgid "Probably this is lower than your writer's lowest writing speed."
+msgstr ""
+"Probabil această valoare este mai mică decât viteza minimă de scriere a "
+"inscriptorului."
+
+#: projects/k3bcdrecordwriter.cpp:855
+msgid "Unable to send CUE sheet."
+msgstr "Imposibil de trimis informațiile despre piste în format CUE."
+
+#: projects/k3bcdrecordwriter.cpp:857 projects/k3bcdrecordwriter.cpp:898
+#: projects/k3bcdrecordwriter.cpp:918
+msgid "Sometimes using TAO writing mode solves this issue."
+msgstr ""
+"Uneori, folosirea modului de scriere pistă-cu-pistă (TAO) rezolvă acest "
+"neajuns."
+
+#: projects/k3bcdrecordwriter.cpp:860
+msgid "Unable to open new session."
+msgstr "Imposibil de deschis o nouă sesiune."
+
+#: projects/k3bcdrecordwriter.cpp:861
+msgid "Probably a problem with the medium."
+msgstr "Probabil este o problemă cu suportul media."
+
+#: projects/k3bcdrecordwriter.cpp:864
+msgid "The disk might still be readable."
+msgstr "Discul ar putea fi încă redabil."
+
+#: projects/k3bcdrecordwriter.cpp:866
+msgid "Try DAO writing mode."
+msgstr "Încercați regimul de scriere DAO."
+
+#: projects/k3bcdrecordwriter.cpp:869
+#, kde-format
+msgid "%1 has no permission to open the device."
+msgstr "%1 nu are permisiunea de a deschide dispozitivul."
+
+#: projects/k3bcdrecordwriter.cpp:871
+msgid "You may use K3bsetup to solve this problem."
+msgstr "Puteți folosi K3bsetup pentru a rezolva această problemă."
+
+#: projects/k3bcdrecordwriter.cpp:875
+msgid "Probably a buffer underrun occurred."
+msgstr "Probabil a apărut o eroare de golire a memoriei tampon a unității."
+
+#: projects/k3bcdrecordwriter.cpp:877
+msgid "Please enable Burnfree or choose a lower burning speed."
+msgstr "Activați 'burnfree' sau alegeți o viteză mai mică de scriere."
+
+#: projects/k3bcdrecordwriter.cpp:879
+msgid "Please choose a lower burning speed."
+msgstr "Alegeți o viteză mai mică de scriere."
+
+#: projects/k3bcdrecordwriter.cpp:882
+msgid "Found a high-speed medium not suitable for the writer being used."
+msgstr ""
+"S-a găsit un disc de mare viteză necorespunzător pentru inscriptorul folosit."
+
+#: projects/k3bcdrecordwriter.cpp:883 projects/k3bcdrecordwriter.cpp:887
+msgid "Use the 'force unsafe operations' option to ignore this."
+msgstr ""
+"Utilizați opțiunea 'forțare operații nesigure' pentru a ignora aceasta."
+
+#: projects/k3bcdrecordwriter.cpp:886
+msgid "Found a low-speed medium not suitable for the writer being used."
+msgstr ""
+"S-a găsit un disc pentru viteză redusă, necorespunzător pentru inscriptorul "
+"folosit."
+
+#: projects/k3bcdrecordwriter.cpp:890
+msgid "Most likely the burning failed due to low-quality media."
+msgstr ""
+"Cel mai probabil scrierea a eșuat din cauza suportului media de calitate "
+"scăzută."
+
+#: projects/k3bcdrecordwriter.cpp:893
+msgid "Another application is blocking the device (most likely automounting)."
+msgstr "O altă aplicație blochează unitatea (cel mai probabil automontarea)."
+
+#: projects/k3bcdrecordwriter.cpp:896
+msgid "A write error occurred."
+msgstr "A apărut o eroare de scriere."
+
+#: projects/k3bcdrecordwriter.cpp:901
+msgid "Some drives do not support all erase types."
+msgstr "Unele inscriptoare nu suportă toate tipurile de ștergere."
+
+#: projects/k3bcdrecordwriter.cpp:902
+msgid "Try again using 'Complete' erasing."
+msgstr "Încercați din nou folosind ștergerea 'completă'."
+
+#: projects/k3bcdrecordwriter.cpp:909
+msgid ""
+"Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
+"suid root anymore."
+msgstr ""
+"Odată cu versiunea de kernel 2.6.8, cdrecord nu mai poate folosi transportul "
+"SCSI când este rulat 'suid' pentru superutilizator."
+
+#: projects/k3bcdrecordwriter.cpp:910
+msgid ""
+"You may use K3b::Setup to solve this problem or remove the suid bit manually."
+msgstr ""
+"Puteți folosi K3b::Setup pentru a rezolva această problemă sau îndepărtați "
+"bitul 'suid' manual."
+
+#: projects/k3bcdrecordwriter.cpp:921
+msgid "If you are running an unpatched cdrecord version..."
+msgstr "Dacă folosiți o versiune nemodificată a programului cdrecord..."
+
+#: projects/k3bcdrecordwriter.cpp:922
+msgid "...and this error also occurs with high quality media..."
+msgstr ""
+"...și eroarea apare și dacă folosiți suport media de calitate foarte bună..."
+
+#: projects/k3bcdrecordwriter.cpp:923
+msgid "...and the K3b FAQ does not help you..."
+msgstr ""
+"... și dacă răspunsurile la cele mai frecvente întrebări puse (FAQ) nu vă "
+"ajută ..."
+
+#: projects/k3bcdrecordwriter.cpp:924
+msgid "...please include the debugging output in your problem report."
+msgstr ""
+"... includeți informațiile de depanare în raportul referitor la problema "
+"voastră."
+
+#: projects/k3bcdrdaowriter.cpp:269
+#, kde-format
+msgid "Cdrdao %1 does not support disabling burnfree."
+msgstr "Programul cdrdao %1 nu suportă dezactivarea 'burnfree'."
+
+#: projects/k3bcdrdaowriter.cpp:293
+#, kde-format
+msgid "Cdrdao %1 does not support overburning."
+msgstr "Programul cdrdao %1 nu suportă 'overburning'."
+
+#: projects/k3bcdrdaowriter.cpp:494
+msgid "Could not backup tocfile."
+msgstr "Nu poate fi făcută copia de rezervă pentru fișierul TOC."
+
+#: projects/k3bcdrdaowriter.cpp:520
+msgid "Preparing read process..."
+msgstr "Pregătirea procesului de citire..."
+
+#: projects/k3bcdrdaowriter.cpp:526
+msgid "Preparing copy process..."
+msgstr "Pregătirea procesului de copiere..."
+
+#: projects/k3bcdrdaowriter.cpp:529
+msgid "Preparing blanking process..."
+msgstr "Pregătirea procesului de ștergere..."
+
+#: projects/k3bcdrdaowriter.cpp:563
+#, no-c-format, kde-format
+msgid "Starting DAO simulation at %1x speed..."
+msgstr "Pornirea simulării disc-cu-disc la viteza %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:570
+#, no-c-format, kde-format
+msgid "Starting DAO writing at %1x speed..."
+msgstr "Pornirea scrierii disc-cu-disc la viteza %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:575
+msgid "Starting reading..."
+msgstr "Pornirea citirii..."
+
+#: projects/k3bcdrdaowriter.cpp:576
+msgid "Reading"
+msgstr "Citire"
+
+#: projects/k3bcdrdaowriter.cpp:582
+#, no-c-format, kde-format
+msgid "Starting simulation copy at %1x speed..."
+msgstr "Pornirea simulării copierii la viteza %1x"
+
+#: projects/k3bcdrdaowriter.cpp:588
+#, no-c-format, kde-format
+msgid "Starting copy at %1x speed..."
+msgstr "Pornirea copierii la viteza %1x"
+
+#: projects/k3bcdrdaowriter.cpp:589
+msgid "Copying"
+msgstr "Copiere"
+
+#: projects/k3bcdrdaowriter.cpp:593
+msgid "Starting blanking..."
+msgstr "Pornirea ștergerii..."
+
+#: projects/k3bcdrdaowriter.cpp:594
+msgid "Blanking"
+msgstr "Ștergere"
+
+#: projects/k3bcdrdaowriter.cpp:705
+#, kde-format
+msgid ""
+"Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
+"to restore it from the backup %2."
+msgstr ""
+"Din cauza unei probleme la programul cdrdao, fișierul toc/cue %1 a fost "
+"șters. K3b nu îl poate reface din copia de rezervă %2."
+
+#: projects/k3bcdrdaowriter.cpp:733
+msgid "Reading successfully completed"
+msgstr "Citire încheiată cu succes"
+
+#: projects/k3bcdrdaowriter.cpp:739
+msgid "Copying successfully completed"
+msgstr "Copiere încheiată cu succes"
+
+#: projects/k3bcdrdaowriter.cpp:742
+msgid "Blanking successfully completed"
+msgstr "Ștergere încheiată cu succes"
+
+#: projects/k3bcdrdaowriter.cpp:758
+msgid "Please include the debugging output in your problem report."
+msgstr ""
+"Includeți informațiile pentru depanare în raportarea problemei voastre."
+
+#: projects/k3bcdrdaowriter.cpp:786
+#, no-c-format, kde-format
+msgid "Switching down burn speed to %1x"
+msgstr "Scăderea vitezei de scriere la %1x"
+
+#: projects/k3bcdrdaowriter.cpp:816
+msgid "Executing Power calibration"
+msgstr "Calibrarea puterii laserului"
+
+#: projects/k3bcdrdaowriter.cpp:820
+msgid "Power calibration successful"
+msgstr "Calibrarea puterii laserului terminată cu succes"
+
+#: projects/k3bcdrdaowriter.cpp:821
+msgid "Preparing burn process..."
+msgstr "Pregătirea procesului de ardere..."
+
+#: projects/k3bcdrdaowriter.cpp:825
+msgid "Flushing cache"
+msgstr "Ștergerea memoriei rapide"
+
+#: projects/k3bcdrdaowriter.cpp:829
+msgid "Writing CD-Text lead-in..."
+msgstr "Scrierea părții 'lead-in' pentru CD-Text..."
+
+#: projects/k3bcdrdaowriter.cpp:833
+msgid "Turning BURN-Proof on"
+msgstr "Activarea 'Burnproof'"
+
+#: projects/k3bcdrdaowriter.cpp:841
+msgid "Found ISRC code"
+msgstr "A fost găsit cod ISRC"
+
+#: projects/k3bcdrdaowriter.cpp:845
+#, kde-format
+msgid "Found pregap: %1"
+msgstr "Spațiu de tranziție găsit: %1"
+
+#: projects/k3bcdrdaowriter.cpp:858
+msgid "No cdrdao driver found."
+msgstr "Nu a fost găsit nici un driver cdrdao."
+
+#: projects/k3bcdrdaowriter.cpp:859
+msgid "Please select one manually in the device settings."
+msgstr "Selectați unul manual în setările perifericului."
+
+#: projects/k3bcdrdaowriter.cpp:860
+msgid "For most current drives this would be 'generic-mmc'."
+msgstr ""
+"Pentru cele mai multe unități actuale acesta ar putea fi 'generic-mmc'."
+
+#: projects/k3bcdrdaowriter.cpp:869
+msgid "Device not ready, waiting."
+msgstr "Unitatea nu este pregătită, așteptare."
+
+#: projects/k3bcdrdaowriter.cpp:873
+msgid "Cue sheet not accepted."
+msgstr "Informațiile despre piste (CUE) nu au fost acceptate."
+
+#: projects/k3bcdrdaowriter.cpp:970
+msgid "Writing leadin "
+msgstr "Scrierea părții de început a discului (lead-in)"
+
+#: projects/k3bcdrdaowriter.cpp:976
+msgid "Writing leadout "
+msgstr "Scrierea sfârșitului sesiunii (lead-out)"
+
+#: jobs/k3bverificationjob.cpp:133 jobs/k3bverificationjob.cpp:363
+#: jobs/k3bdvdcopyjob.cpp:290
+msgid "Unable to determine the ISO9660 filesystem size."
+msgstr "Imposibil de a determina mărimea sistemului de fișiere ISO9660."
+
+#: jobs/k3bverificationjob.cpp:231
+msgid "no tracks added"
+msgstr "nu au fost adăugate piste"
+
+#: jobs/k3bverificationjob.cpp:230 jobs/k3bverificationjob.cpp:286
+#: jobs/k3bverificationjob.cpp:309
+#, kde-format
+msgid "Internal Error: Verification job improperly initialized (%1)"
+msgstr ""
+"Eroare internă: Inițializare necorespunzătoare a procesului verificării (%1)"
+
+#: jobs/k3bverificationjob.cpp:236 jobs/k3bdvdbooktypejob.cpp:129
+#: jobs/k3bdvdbooktypejob.cpp:130 jobs/k3bdvdformattingjob.cpp:154
+#: jobs/k3bdvdformattingjob.cpp:155
+msgid "Checking medium"
+msgstr "Verificare suport"
+
+#: jobs/k3bverificationjob.cpp:270 jobs/k3bcdcopyjob.cpp:1102
+msgid "Failed to reload the medium"
+msgstr "Reîncărcarea suportului a eșuat"
+
+#: jobs/k3bverificationjob.cpp:287 jobs/k3bverificationjob.cpp:310
+#, kde-format
+msgid "specified track number '%1' not found on medium"
+msgstr "numărul pistei specificate „%1” nu a fost găsit pe suport"
+
+#: jobs/k3bverificationjob.cpp:331
+#, kde-format
+msgid "Verifying track %1"
+msgstr "Verificare pistă %1"
+
+#: jobs/k3bverificationjob.cpp:399
+#, fuzzy, kde-format
+#| msgid "Written data in track %1 differs from original."
+msgid "Written data in track %1 differs from original."
+msgstr "Datele scrise în pista %1 diferă față de original."
+
+#: jobs/k3bverificationjob.cpp:403
+msgid "Written data verified."
+msgstr "Datele scrise au fost verificate."
+
+#: jobs/k3biso9660imagewritingjob.cpp:93
+#, kde-format
+msgid "Could not find image %1"
+msgstr "Nu poate fi găsită imaginea de disc %1"
+
+#: jobs/k3biso9660imagewritingjob.cpp:141
+#, kde-format
+msgid "Verifying written copy %1 of %2"
+msgstr "Verificare date copiate din %1 la %2"
+
+#: jobs/k3biso9660imagewritingjob.cpp:155 jobs/k3bdvdcopyjob.cpp:681
+msgid "K3b was unable to eject the written medium. Please do so manually."
+msgstr ""
+"K3b nu a fost capabil de a scoate discul scris din unitate. Trebuie să o "
+"faceți manual. "
+
+#: jobs/k3biso9660imagewritingjob.cpp:214
+msgid "Writing image"
+msgstr "Scriere imagine"
+
+#: jobs/k3biso9660imagewritingjob.cpp:216
+#, kde-format
+msgid "Writing copy %1 of %2"
+msgstr "Scriere date copiate din discul %1 în discul %2"
+
+#: jobs/k3biso9660imagewritingjob.cpp:235
+msgid "Waiting for medium"
+msgstr "Așteptare suport"
+
+#: jobs/k3biso9660imagewritingjob.cpp:342
+msgid "Simulating ISO9660 Image"
+msgstr "Simulare imagine ISO9660"
+
+#: jobs/k3biso9660imagewritingjob.cpp:344
+msgid "Burning ISO9660 Image"
+msgstr "Ardere imagine ISO9660"
+
+#: jobs/k3biso9660imagewritingjob.cpp:346 jobs/k3bbinimagewritingjob.cpp:212
+#, kde-format
+msgid " - %1 Copy"
+msgid_plural " - %1 Copies"
+msgstr[0] " - %1 copie"
+msgstr[1] " - %1 copii"
+msgstr[2] " - %1 de copii"
+
+#: jobs/k3bdatatrackreader.cpp:149 jobs/k3bdatatrackreader.cpp:183
+#: jobs/k3baudiosessionreadingjob.cpp:150
+#, kde-format
+msgid "Could not open device %1"
+msgstr "Nu poate fi deschis dispozitivul %1"
+
+#: jobs/k3bdatatrackreader.cpp:178
+msgid "Unable to open libdvdcss."
+msgstr "Nu poate fi deschisă libdvdcss."
+
+#: jobs/k3bdatatrackreader.cpp:187
+msgid "Retrieving all CSS keys. This might take a while."
+msgstr "Recuperarea tuturor cheilor CSS. Aceasta poate dura ceva timp."
+
+#: jobs/k3bdatatrackreader.cpp:190
+msgid "Failed to retrieve all CSS keys."
+msgstr "Recuperarea tuturor cheilor CSS a eșuat."
+
+#: jobs/k3bdatatrackreader.cpp:191
+msgid "Video DVD decryption failed."
+msgstr "Decriptarea Video DVD a eșuat."
+
+#: jobs/k3bdatatrackreader.cpp:215
+msgid "No support for reading formless Mode2 sectors."
+msgstr "Nu se pot citi sectoarele Mode2 fără format."
+
+#: jobs/k3bdatatrackreader.cpp:217
+msgid "Unsupported sector type."
+msgstr "Tip de sector necunoscut."
+
+#: jobs/k3bdatatrackreader.cpp:224
+#, kde-format
+msgid "Reading with sector size %1."
+msgstr "Citire cu sector de mărimea %1."
+
+#: jobs/k3bdatatrackreader.cpp:240 jobs/k3baudiosessionreadingjob.cpp:209
+#: jobs/k3bdvdcopyjob.cpp:360
+#, kde-format
+msgid "Unable to open '%1' for writing."
+msgstr "Imposibil de deschis „%1” pentru scriere."
+
+#: jobs/k3bdatatrackreader.cpp:271 jobs/k3bdatatrackreader.cpp:446
+#, kde-format
+msgid "Error while reading sector %1."
+msgstr "Eroare în timpul citirii sectorului %1."
+
+#: jobs/k3bdatatrackreader.cpp:353
+#, kde-format
+msgid "Ignored %1 erroneous sector."
+msgid_plural "Ignored a total of %1 erroneous sectors."
+msgstr[0] "S-a ignorat %1 sector defect."
+msgstr[1] "S-au ignorat %1 sectoare defecte."
+msgstr[2] "S-au ignorat %1 de sectoare defecte."
+
+#: jobs/k3bdatatrackreader.cpp:422
+#, kde-format
+msgid "Problem while reading. Retrying from sector %1."
+msgstr "Problemă în timpul citirii. Reîncercare din sectorul %1."
+
+#: jobs/k3bdatatrackreader.cpp:438
+#, kde-format
+msgid "Ignoring read error in sector %1."
+msgstr "Eroare de citire ignorată în sectorul %1."
+
+#: jobs/k3bmetawriter.cpp:310
+#, fuzzy
+#| msgid "DVD and Blu-Ray tracks can only be written in MODE1."
+msgid "DVD and Blu-ray tracks can only be written in MODE1."
+msgstr "Pistele DVD și Blu-Ray pot fi scrise numai în Regimul 1."
+
+#: jobs/k3bmetawriter.cpp:329
+#, fuzzy
+#| msgid ""
+#| "Missing Blu-Ray support in cdrecord and growisofs. Please update the "
+#| "system."
+msgid ""
+"Missing Blu-ray support in cdrecord and growisofs. Please update the system."
+msgstr ""
+"Suportul pentru Blu-Ray lipsește în cdrecord și growisofs. Actualizați "
+"sistemul."
+
+#: jobs/k3bmetawriter.cpp:497
+msgid ""
+"DVD+R(W) media do not support write simulation. Do you really want to "
+"continue? The media will actually be written to."
+msgstr ""
+"Suportul DVD+R(W) nu susține simularea scrierii. Doriți să continuați? "
+"Suportul va fi scris cu adevărat."
+
+#: jobs/k3bmetawriter.cpp:500
+msgid "No Simulation with DVD+R(W)"
+msgstr "Nu poate fi simulată cu DVD+R(W)"
+
+#: jobs/k3bmetawriter.cpp:810
+msgid "Writing CD in Session At Once mode."
+msgstr "Se scrie discul în regim sesiune-cu-sesiune."
+
+#: jobs/k3bmetawriter.cpp:812
+msgid "Writing CD in Track At Once mode."
+msgstr "Se scrie discul în regim pistă-cu-pistă."
+
+#: jobs/k3bmetawriter.cpp:814
+msgid "Writing CD in Raw mode."
+msgstr "Se scrie discul în regim brut."
+
+#: jobs/k3bmetawriter.cpp:817
+msgid "Appending session to CD"
+msgstr "Se adaugă sesiunea la disc"
+
+#: jobs/k3bmetawriter.cpp:824
+msgid "Writing rewritable CD in Session At Once mode."
+msgstr "Se scrie discul reinscriptibil în regim sesiune-cu-sesiune."
+
+#: jobs/k3bmetawriter.cpp:826
+msgid "Writing rewritable CD in Track At Once mode."
+msgstr "Se scrie discul reinscriptibil în regim pistă-cu-pistă."
+
+#: jobs/k3bmetawriter.cpp:828
+msgid "Writing rewritable CD in Raw mode."
+msgstr "Se scrie discul reiscriptibil în regim brut."
+
+#: jobs/k3bmetawriter.cpp:831
+msgid "Appending session to rewritable CD."
+msgstr "Se adaugă sesiunea la discul reinscriptibil."
+
+#: jobs/k3bmetawriter.cpp:838
+msgid "Growing ISO9660 filesystem on DVD+RW."
+msgstr "Se crește sistemul de fișiere ISO9669 pe DVD+RW."
+
+#: jobs/k3bmetawriter.cpp:842
+msgid "Appending session to DVD+R."
+msgstr "Se adaugă sesiunea la DVD+R."
+
+#: jobs/k3bmetawriter.cpp:844
+msgid "Appending session to Double Layer DVD+R."
+msgstr "Se adaugă sesiunea la Double Layer DVD+R."
+
+#: jobs/k3bmetawriter.cpp:846
+#, kde-format
+msgid "Appending session to %1."
+msgstr "Se adaugă sesiunea la %1."
+
+#: jobs/k3bmetawriter.cpp:852
+msgid "Writing Double Layer DVD+R."
+msgstr "Scriere DVD+R dublu strat."
+
+#: jobs/k3bdvdbooktypejob.cpp:85
+msgid "Changing DVD Booktype"
+msgstr "Schimbarea tipului DVD Booktype"
+
+#: jobs/k3bdvdbooktypejob.cpp:103 jobs/k3bdvdformattingjob.cpp:123
+msgid "No device set"
+msgstr "Nici un dispozitiv selectat"
+
+#: jobs/k3bdvdbooktypejob.cpp:119
+#, kde-format
+msgid ""
+"Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</"
+"b>."
+msgstr ""
+"Introduceți un disc DVD+R sau un disc DVD+RW gol în unitatea <p><b>%1 %2 (%3)"
+"</b>."
+
+#: jobs/k3bdvdbooktypejob.cpp:189
+msgid "Booktype successfully changed"
+msgstr "Tipul Booktype al discului a fost schimbat cu succes"
+
+#: jobs/k3bdvdbooktypejob.cpp:218
+msgid "Ejecting DVD..."
+msgstr "Scoatere DVD..."
+
+#: jobs/k3bdvdbooktypejob.cpp:235
+msgid "Unable to eject media."
+msgstr "Imposibil de scos discul."
+
+#: jobs/k3bdvdbooktypejob.cpp:258
+msgid "Cannot change booktype on non-empty DVD+R media."
+msgstr "Nu poate fi schimbat tipul booktype la un disc DVD+R care nu e gol."
+
+#: jobs/k3bdvdbooktypejob.cpp:266
+msgid "No DVD+R(W) media found."
+msgstr "Nu este găsit nici un disc DVD+R(W)."
+
+#: jobs/k3bdvdbooktypejob.cpp:271 jobs/k3bdvdformattingjob.cpp:322
+msgid "Unable to determine media state."
+msgstr "Incapabil de a determina starea discului."
+
+#: jobs/k3bdvdbooktypejob.cpp:341
+msgid "Changing Booktype"
+msgstr "Schimbarea tipului Booktype al discului."
+
+#: jobs/k3baudiosessionreadingjob.cpp:142
+msgid "Could not load libcdparanoia."
+msgstr "Nu s-a putut încărca libcdparanoia."
+
+#: jobs/k3baudiosessionreadingjob.cpp:156
+msgid "Error while initializing audio ripping."
+msgstr "Eroare în timpul inițializării extragerii audio."
+
+#: jobs/k3baudiosessionreadingjob.cpp:243
+#, kde-format
+msgid "Unrecoverable error while ripping track %1."
+msgstr "Eroare iremediabilă în timpul extragerii pistei %1."
+
+#: jobs/k3bclonejob.cpp:94
+#, kde-format
+msgid "Cdrecord version %1 does not have cloning support."
+msgstr "Programul 'cdrecord' cu versiunea %1 nu suportă clonarea."
+
+#: jobs/k3bclonejob.cpp:102
+msgid "No device set."
+msgstr "Nici un dispozitiv selectat."
+
+#: jobs/k3bclonejob.cpp:111
+#, kde-format
+msgid "CD writer %1 (%2) does not support cloning."
+msgstr "Inscriptorul CD %1 (%2) nu suportă clonarea."
+
+#: jobs/k3bclonejob.cpp:144
+msgid "Reading clone image"
+msgstr "Citire imagine-clonă"
+
+#: jobs/k3bclonejob.cpp:242
+#, kde-format
+msgid "Successfully written clone copy %1."
+msgstr "Scrierea clonă copie %1 încheiată cu succes."
+
+#: jobs/k3bclonejob.cpp:290
+msgid "Successfully read disk."
+msgstr "Discul a fost citit cu succes."
+
+#: jobs/k3bclonejob.cpp:302
+msgid "Failed to read disk completely in clone mode."
+msgstr "Citirea completă a discului în regimul clonă a eșuat."
+
+#: jobs/k3bclonejob.cpp:309
+msgid "Error while reading disk."
+msgstr "Eroare la citirea discului."
+
+#: jobs/k3bclonejob.cpp:335
+msgid "Simulating clone copy"
+msgstr "Simularea copiei clonă"
+
+#: jobs/k3bclonejob.cpp:337
+#, kde-format
+msgid "Writing clone copy %1"
+msgstr "Scrierea copiei clonă %1."
+
+#: jobs/k3bclonejob.cpp:346 jobs/k3bcdcopyjob.cpp:1122
+msgid "Removing image files."
+msgstr "Eliminarea fișierelor imagine."
+
+#: jobs/k3bclonejob.cpp:358
+msgid "Creating Clone Image"
+msgstr "Creare imagine-clonă"
+
+#: jobs/k3bclonejob.cpp:361
+msgid "Simulating Clone Image"
+msgstr "Simulare imagine-clonă"
+
+#: jobs/k3bclonejob.cpp:363
+msgid "Burning Clone Image"
+msgstr "Ardere imagine-clonă"
+
+#: jobs/k3bclonejob.cpp:366
+msgid "Simulating CD Cloning"
+msgstr "Simulare clonare CD"
+
+#: jobs/k3bclonejob.cpp:368
+msgid "Cloning CD"
+msgstr "Clonare CD"
+
+#: jobs/k3bclonejob.cpp:374
+#, kde-format
+msgid "Creating 1 clone copy"
+msgid_plural "Creating %1 clone copies"
+msgstr[0] "Crearea unei copii clonă."
+msgstr[1] "Crearea a %1 copii clonă."
+msgstr[2] "Crearea a %1 de copii clonă."
+
+#: jobs/k3bdvdformattingjob.cpp:101
+#, fuzzy
+#| msgid "Formatting"
+msgid "Formatting disc"
+msgstr "Formatare"
+
+#: jobs/k3bdvdformattingjob.cpp:108 jobs/k3bblankingjob.cpp:169
+msgid "Quick Format"
+msgstr "Formatare rapidă"
+
+#: jobs/k3bdvdformattingjob.cpp:144
+#, fuzzy, kde-format
+#| msgid ""
+#| "Please insert a rewritable DVD medium into drive<p><b>%1 %2 (%3)</b>."
+msgid ""
+"Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
+"b>."
+msgstr "Introduceți un disc DVD reinscriptibil în unitate<p><b>%1 %2 (%3)</b>."
+
+#: jobs/k3bdvdformattingjob.cpp:262
+msgid "Formatting successfully completed"
+msgstr "Formatare încheiată cu succes"
+
+#: jobs/k3bdvdformattingjob.cpp:265
+msgid "Do not be concerned with the progress stopping before 100%."
+msgstr ""
+"Nu vă îngrijoarți dacă indicatorul de progres se oprește înainte de 100%."
+
+#: jobs/k3bdvdformattingjob.cpp:266
+msgid "The formatting will continue in the background during writing."
+msgstr "Formatarea va continua în fundal în timpul scrierii."
+
+#: jobs/k3bdvdformattingjob.cpp:291
+msgid "Ejecting medium..."
+msgstr "Scoatere disc ..."
+
+#: jobs/k3bdvdformattingjob.cpp:343
+#, fuzzy, kde-format
+#| msgid "Found %1 media."
+msgid "Found %1 medium."
+msgstr "%1 mediu găsit."
+
+#: jobs/k3bdvdformattingjob.cpp:347
+#, fuzzy
+#| msgid "No rewritable DVD media found. Unable to format."
+msgid "No rewritable DVD or BD medium found. Unable to format."
+msgstr "Nu este găsit nici un disc DVD. Incapabil de a formata."
+
+#: jobs/k3bdvdformattingjob.cpp:372 jobs/k3bdvdformattingjob.cpp:422
+#, kde-format
+msgid "No need to format %1 media more than once."
+msgstr "Reformatarea mediului %1 nu este necesară."
+
+#: jobs/k3bdvdformattingjob.cpp:374 jobs/k3bdvdformattingjob.cpp:424
+msgid "It may simply be overwritten."
+msgstr "Este mai simplă suprascrierea."
+
+#: jobs/k3bdvdformattingjob.cpp:377 jobs/k3bdvdformattingjob.cpp:416
+#: jobs/k3bdvdformattingjob.cpp:427
+msgid "Forcing formatting anyway."
+msgstr "Forțarea formatării în orice mod."
+
+#: jobs/k3bdvdformattingjob.cpp:378
+#, fuzzy, kde-format
+#| msgid "It is not recommended to force formatting of DVD+RW media."
+msgid "It is not recommended to force formatting of %1 media."
+msgstr "Nu este recomandată forțarea formatării unui disc DVD+RW."
+
+#: jobs/k3bdvdformattingjob.cpp:380
+msgid "After 10-20 reformats the media might become unusable."
+msgstr "După 10-20 de reformatări suportul poate deveni inutilizabil."
+
+#: jobs/k3bdvdformattingjob.cpp:389
+#, fuzzy, kde-format
+#| msgid "Formatted in %1 mode."
+msgid "Formatting %1 medium"
+msgstr "Formatat în regimul %1."
+
+#: jobs/k3bdvdformattingjob.cpp:400
+#, kde-format
+msgid "Formatted in %1 mode."
+msgstr "Formatat în regimul %1."
+
+#: jobs/k3bdvdformattingjob.cpp:414
+msgid "Media is already empty."
+msgstr "Suportul este deja gol."
+
+#: jobs/k3bdvdformattingjob.cpp:441
+#, kde-format
+msgid "Formatting DVD-RW in %1 mode."
+msgstr "Se formatează DVD-RW în regimul %1."
+
+#: jobs/k3bdvdformattingjob.cpp:448
+msgid "Unable to determine the current formatting state of the DVD-RW medium."
+msgstr ""
+"Imposibil de a determina starea formatării curente a suportului DVD-RW."
+
+#: jobs/k3bdvdformattingjob.cpp:510
+msgid "Formatting"
+msgstr "Formatare"
+
+#: jobs/k3bdvdcopyjob.cpp:122 jobs/k3bcdcopyjob.cpp:162
+msgid "Checking Source Medium"
+msgstr "Verificare suport sursă"
+
+#: jobs/k3bdvdcopyjob.cpp:127
+#, kde-format
+msgid "K3b does not support writing on-the-fly with growisofs %1."
+msgstr "K3b nu este capabil de a scrie 'din zbor' cu programul 'growisofs' %1."
+
+#: jobs/k3bdvdcopyjob.cpp:129
+msgid "Disabling on-the-fly writing."
+msgstr "Dezactivarea scrierii 'din zbor'."
+
+#: jobs/k3bdvdcopyjob.cpp:132 jobs/k3bcdcopyjob.cpp:165
+msgid "Waiting for source medium"
+msgstr "Așteptare suport sursă"
+
+#: jobs/k3bdvdcopyjob.cpp:144 jobs/k3bcdcopyjob.cpp:175
+msgid "Checking source medium"
+msgstr "Verificare suport sursă"
+
+#: jobs/k3bdvdcopyjob.cpp:164
+msgid "No source medium found."
+msgstr "Nu a fost găsită mediul sursă."
+
+#: jobs/k3bdvdcopyjob.cpp:183
+msgid "Found encrypted DVD."
+msgstr "S-a găsit DVD criptat."
+
+#: jobs/k3bdvdcopyjob.cpp:199
+msgid "Cannot copy encrypted DVDs."
+msgstr "Nu pot fi copiate DVD-uri criptate."
+
+#: jobs/k3bdvdcopyjob.cpp:235
+#, fuzzy
+#| msgid "The writer does not support writing Double Layer DVD."
+msgid "The writer does not support writing Double Layer DVDs."
+msgstr "Inscriptorul nu este capabil de a scrie DVD Double Layer."
+
+#: jobs/k3bdvdcopyjob.cpp:242
+#, fuzzy
+#| msgid "The writer does not support writing Double Layer DVD."
+msgid "This growisofs version does not support writing Double Layer DVDs."
+msgstr "Inscriptorul nu este capabil de a scrie DVD Double Layer."
+
+#: jobs/k3bdvdcopyjob.cpp:259
+msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
+msgstr "K3b nu suportă copierea discurilor DVD multisesiune sau Blu-ray."
+
+#: jobs/k3bdvdcopyjob.cpp:282
+msgid "K3b relies on the size saved in the ISO9660 header."
+msgstr ""
+"K3b se bazează pe mărimea salvată în blocul de început al sistemului de "
+"fișiere ISO9660."
+
+#: jobs/k3bdvdcopyjob.cpp:283
+msgid ""
+"This might result in a corrupt copy if the source was mastered with buggy "
+"software."
+msgstr ""
+"Aceasta ar putea duce la obținerea unei copii defectuoase dacă sursa a fost "
+"creată de programe cu erori."
+
+#: jobs/k3bdvdcopyjob.cpp:299
+msgid "K3b does not support copying DVD-RAM."
+msgstr "K3b nu suportă copierea de discuri DVD-RAM."
+
+#: jobs/k3bdvdcopyjob.cpp:305
+msgid "Unsupported media type."
+msgstr "Tip de disc necunoscut"
+
+#: jobs/k3bdvdcopyjob.cpp:318 jobs/k3bcdcopyjob.cpp:583
+#, kde-format
+msgid "Do you want to overwrite %1?"
+msgstr "Vreți să suprascrieți %1?"
+
+#: jobs/k3bdvdcopyjob.cpp:319 jobs/k3bcdcopyjob.cpp:584
+msgid "File Exists"
+msgstr "Fișierul există"
+
+#: jobs/k3bdvdcopyjob.cpp:323 jobs/k3bcdcopyjob.cpp:542
+#: jobs/k3bcdcopyjob.cpp:588
+msgid "Specified an unusable temporary path. Using default."
+msgstr ""
+"Calea directorului temporar specificat este inutilizabilă. Va fi folosită "
+"cea implicită."
+
+#: jobs/k3bdvdcopyjob.cpp:328 jobs/k3bcdcopyjob.cpp:593
+#, kde-format
+msgid "Writing image file to %1."
+msgstr "Scriere fișier imagine la %1."
+
+#: jobs/k3bdvdcopyjob.cpp:329
+msgid "Reading source medium."
+msgstr "Citirea sursei media."
+
+#: jobs/k3bdvdcopyjob.cpp:344 jobs/k3bcdcopyjob.cpp:319
+#, fuzzy, kde-format
+#| msgid "Unable to determine free space in temporary directory '%1'."
+msgid "Unable to determine free space in temporary folder '%1'."
+msgstr "Imposibil de determinat spațiul liber în directorul temporar „%1”."
+
+#: jobs/k3bdvdcopyjob.cpp:351 jobs/k3bcdcopyjob.cpp:325
+#, fuzzy
+#| msgid "Not enough space left in temporary directory."
+msgid "Not enough space left in temporary folder."
+msgstr "Nu există suficient spațiu liber în directorul temporar."
+
+#: jobs/k3bdvdcopyjob.cpp:368 jobs/k3bcdcopyjob.cpp:334
+msgid "Unmounting source medium"
+msgstr "Demontarea mediului sursă"
+
+#: jobs/k3bdvdcopyjob.cpp:373
+msgid "Creating image"
+msgstr "Creare imagine"
+
+#: jobs/k3bdvdcopyjob.cpp:379
+msgid "Simulating copy"
+msgstr "Simulare copie"
+
+#: jobs/k3bdvdcopyjob.cpp:381 jobs/k3bdvdcopyjob.cpp:596
+#: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
+#, kde-format
+msgid "Writing copy %1"
+msgstr "Scriere copie %1"
+
+#: jobs/k3bdvdcopyjob.cpp:383 jobs/k3bdvdcopyjob.cpp:598
+msgid "Writing copy"
+msgstr "Scriere copie"
+
+#: jobs/k3bdvdcopyjob.cpp:573
+msgid "Successfully read source medium."
+msgstr "Mediul sursă a fost citit cu succes."
+
+#: jobs/k3bdvdcopyjob.cpp:585
+msgid "K3b was unable to eject the source medium. Please do so manually."
+msgstr ""
+"K3b nu a fost capabil de a scoate discul sursă din unitate. Trebuie să o "
+"faceți manual. "
+
+#: jobs/k3bdvdcopyjob.cpp:646
+#, kde-format
+msgid "Successfully written copy %1."
+msgstr "Verificarea copiei %1 a fost făcută cu succes."
+
+#: jobs/k3bdvdcopyjob.cpp:669
+#, kde-format
+msgid "Verifying copy %1"
+msgstr "Verificarea copiei %1"
+
+#: jobs/k3bdvdcopyjob.cpp:671
+msgid "Verifying copy"
+msgstr "Verificarea copiei"
+
+#: jobs/k3bdvdcopyjob.cpp:791
+#, kde-format
+msgid "Unsupported media type: %1"
+msgstr "Tip de disc necunoscut: %1"
+
+#: jobs/k3bdvdcopyjob.cpp:826
+msgid "Writing DVD copy"
+msgstr "Scriere copie DVD"
+
+#: jobs/k3bdvdcopyjob.cpp:830
+msgid "Writing mode ignored when writing DVD+R(W) media."
+msgstr "Mod de scriere ignorat în timpul scrierii discului DVD+R(W)."
+
+#: jobs/k3bdvdcopyjob.cpp:874
+msgid "Writing DVD-RW in DAO mode."
+msgstr "Scriere DVD-RW în regimul DAO."
+
+#: jobs/k3bdvdcopyjob.cpp:878
+msgid "Writing DVD-RW in incremental mode."
+msgstr "Scriere DVD-RW în regimul incremental."
+
+#: jobs/k3bdvdcopyjob.cpp:919
+#, fuzzy
+#| msgid "Writing DVD copy"
+msgid "Writing BD copy"
+msgstr "Scriere copie DVD"
+
+#: jobs/k3bdvdcopyjob.cpp:943
+msgid "Creating Image"
+msgstr "Creare imagine"
+
+#: jobs/k3bdvdcopyjob.cpp:947
+msgid "Copying DVD or BD On-The-Fly"
+msgstr "Se copiază DVD sau BD „din zbor”"
+
+#: jobs/k3bdvdcopyjob.cpp:949
+msgid "Copying DVD or BD"
+msgstr "Se copiază DVD sau BD"
+
+#: jobs/k3bdvdcopyjob.cpp:956 jobs/k3bcdcopyjob.cpp:1230
+#, kde-format
+msgid "Creating 1 copy"
+msgid_plural "Creating %1 copies"
+msgstr[0] "Crearea unei copii"
+msgstr[1] "Crearea a %1 copii"
+msgstr[2] "Crearea a %1 de copii"
+
+#: jobs/k3breadcdreader.cpp:123
+#, kde-format
+msgid "Using readcd %1 instead of default version for clone support."
+msgstr ""
+"Este folosit readcd %1 în locul versiunii implicite pentru suportul clonării."
+
+#: jobs/k3breadcdreader.cpp:130
+msgid "Could not find readcd executable with cloning support."
+msgstr "Nu poate fi găsit programul readcd cu suport pentru clonare CD."
+
+#: jobs/k3breadcdreader.cpp:163 jobs/k3breadcdreader.cpp:164
+#, kde-format
+msgid "Writing image to %1."
+msgstr "Scrierea fișierului imagine în proporție de %1."
+
+#: jobs/k3breadcdreader.cpp:206
+msgid "Could not start readcd."
+msgstr "Nu poate fi pornit readcd."
+
+#: jobs/k3breadcdreader.cpp:262
+msgid "Cannot read source disk."
+msgstr "Nu poate fi citit discul sursă."
+
+#: jobs/k3breadcdreader.cpp:274
+#, kde-format
+msgid "Retrying from sector %1."
+msgstr "Reîncercare din sectorul %1"
+
+#: jobs/k3breadcdreader.cpp:289
+#, kde-format
+msgid "Uncorrected error in sector %1"
+msgstr "Eroare necorectată în sectorul %1"
+
+#: jobs/k3breadcdreader.cpp:292
+#, kde-format
+msgid "Corrected error in sector %1"
+msgstr "Eroare corectată în sectorul %1"
+
+#: jobs/k3breadcdreader.cpp:312
+#, kde-format
+msgid "%1 returned error: %2"
+msgstr "%1 a dat eroarea: %2"
+
+#: jobs/k3breadcdreader.cpp:317
+msgid "Readcd exited abnormally."
+msgstr "Readcd s-a terminat în mod neașteptat."
+
+#: jobs/k3bbinimagewritingjob.cpp:60
+msgid "Write Binary Image"
+msgstr "Scriere imagine binară."
+
+#: jobs/k3bbinimagewritingjob.cpp:188
+#, kde-format
+msgid "%1 copy successfully created"
+msgid_plural "%1 copies successfully created"
+msgstr[0] "%1 copie creată cu succes."
+msgstr[1] "%1 copii create cu succes."
+msgstr[2] "%1 de copii create cu succes."
+
+#: jobs/k3bbinimagewritingjob.cpp:204 jobs/k3bcdcopyjob.cpp:1181
+#: jobs/k3bcdcopyjob.cpp:1183 jobs/k3bcdcopyjob.cpp:1186
+#: jobs/k3bcdcopyjob.cpp:1188
+#, kde-format
+msgid "Writing track %1 of %2"
+msgstr "Scriere pistă %1 din %2"
+
+#: jobs/k3bbinimagewritingjob.cpp:210
+msgid "Writing cue/bin Image"
+msgstr "Scriere imagine cue/bin."
+
+#: jobs/k3bcdcopyjob.cpp:203
+msgid "K3b does not copy CDs containing multiple data tracks."
+msgstr "K3b nu poate copia CD-uri care conțin piste multiple de date."
+
+#: jobs/k3bcdcopyjob.cpp:207
+msgid "Copying Multisession Data CD."
+msgstr "Copiere CD de date cu mai multe sesiuni de lucru."
+
+#: jobs/k3bcdcopyjob.cpp:209
+msgid "Copying Data CD."
+msgstr "Copiere CD de date."
+
+#: jobs/k3bcdcopyjob.cpp:215
+msgid "K3b can only copy CD-Extra mixed mode CDs."
+msgstr "K3b poate copia doar CD-uri în regimul mixt CD-Extra."
+
+#: jobs/k3bcdcopyjob.cpp:219
+msgid "Copying Enhanced Audio CD (CD-Extra)."
+msgstr "Copiere de CD audio îmbunătățit (CD-Extra)."
+
+#: jobs/k3bcdcopyjob.cpp:224
+msgid "Copying Audio CD."
+msgstr "Copiere CD audio."
+
+#: jobs/k3bcdcopyjob.cpp:229
+msgid "The source disk is empty."
+msgstr "Sursa de disc este goală."
+
+#: jobs/k3bcdcopyjob.cpp:271
+msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
+msgstr ""
+"K3b are nevoie de programul cdrecord 2.01a12 sau mai nou pentru a copia "
+"pistele de date în regimul Mode2."
+
+#: jobs/k3bcdcopyjob.cpp:283
+msgid ""
+"You will only be able to copy the first session in raw writing mode. "
+"Continue anyway?"
+msgstr ""
+"Puteți copia doar prima sesiune în regimul de scriere raw. Continuați oricum?"
+
+#: jobs/k3bcdcopyjob.cpp:285
+msgid "Multisession CD"
+msgstr "CD multisesiune"
+
+#: jobs/k3bcdcopyjob.cpp:290
+msgid "Only copying first session."
+msgstr "Copierea doar a primei sesiuni."
+
+#: jobs/k3bcdcopyjob.cpp:363
+msgid "Unable to read Table of contents"
+msgstr "Imposibil de citit TOC"
+
+#: jobs/k3bcdcopyjob.cpp:371
+msgid "Searching CD-TEXT"
+msgstr "Caută CD-TEXT"
+
+#: jobs/k3bcdcopyjob.cpp:385
+#, kde-format
+msgid "Found CD-TEXT (%1 - %2)."
+msgstr "Găsit CD-TEXT (%1 - %2)."
+
+#: jobs/k3bcdcopyjob.cpp:390
+msgid "Found corrupted CD-TEXT. Ignoring it."
+msgstr "Găsit CD-TEXT corup. Este ignorat."
+
+#: jobs/k3bcdcopyjob.cpp:395
+msgid "No CD-TEXT found."
+msgstr "Nici un CD-TEXT nu a fost găsit."
+
+#: jobs/k3bcdcopyjob.cpp:406
+msgid "Querying Cddb"
+msgstr "Interogarea Cddb"
+
+#: jobs/k3bcdcopyjob.cpp:427
+#, kde-format
+msgid "Found Cddb entry (%1 - %2)."
+msgstr "S-a găsit inregistrare Cddb (%1 - %2)."
+
+#: jobs/k3bcdcopyjob.cpp:450
+msgid "No Cddb entry found."
+msgstr "Nu a fost găsită nici o înregistrare Cddb."
+
+#: jobs/k3bcdcopyjob.cpp:453
+#, kde-format
+msgid "Cddb error (%1)."
+msgstr "Eroare Cddb (%1)."
+
+#: jobs/k3bcdcopyjob.cpp:469
+#, kde-format
+msgid ""
+"Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be used "
+"to generate the CD-TEXT on the new CD?"
+msgstr ""
+"S-au găsit înregistrări CD-TEXT (%1 - %2) și Cddb (%3 - %4). Care din ele va "
+"fi folosită pentru a genera CD-TEXT-ul de pe noul CD?"
+
+#: jobs/k3bcdcopyjob.cpp:475
+msgid "CD-TEXT"
+msgstr "CD-TEXT"
+
+#: jobs/k3bcdcopyjob.cpp:476
+msgid "Use CD-TEXT data"
+msgstr "Folosește date CD-TEXT"
+
+#: jobs/k3bcdcopyjob.cpp:477
+msgid "Use Cddb entry"
+msgstr "Folosește înregistrare Cddb"
+
+#: jobs/k3bcdcopyjob.cpp:560
+#, fuzzy, kde-format
+#| msgid "Using temporary directory %1."
+msgid "Using temporary folder %1."
+msgstr "Folosirea directorului temporar %1."
+
+#: jobs/k3bcdcopyjob.cpp:609
+#, kde-format
+msgid "Reading Session %1"
+msgstr "Citire sesiune %1."
+
+#: jobs/k3bcdcopyjob.cpp:611
+msgid "Reading Source Medium"
+msgstr "Citirea sursei media"
+
+#: jobs/k3bcdcopyjob.cpp:614 jobs/k3bcdcopyjob.cpp:1203
+#, kde-format
+msgid "Reading track %1 of %2"
+msgstr "Citire pistă %1 din %2"
+
+#: jobs/k3bcdcopyjob.cpp:707
+#, kde-format
+msgid "Simulating Session %1"
+msgstr "Simulare sesiune %1"
+
+#: jobs/k3bcdcopyjob.cpp:709
+#, kde-format
+msgid "Writing Copy %1 (Session %2)"
+msgstr "Scriere copie %1 (sesiune %2)"
+
+#: jobs/k3bcdcopyjob.cpp:711
+#, kde-format
+msgid "Writing Copy (Session %1)"
+msgstr "Scriere copie (sesiune %1)"
+
+#: jobs/k3bcdcopyjob.cpp:719
+msgid "Writing Copy"
+msgstr "Scriere copie"
+
+#: jobs/k3bcdcopyjob.cpp:982
+#, kde-format
+msgid "Successfully read session %1."
+msgstr "Sesiunea %1 a fost citită cu succes."
+
+#: jobs/k3bcdcopyjob.cpp:984
+msgid "Successfully read source disk."
+msgstr "Discul sursă a fost citit cu succes. "
+
+#: jobs/k3bcdcopyjob.cpp:999
+msgid "K3b was unable to eject the source disk. Please do so manually."
+msgstr ""
+"K3b nu a fost capabil de a scoate discul sursă din unitate. Trebuie să o "
+"faceți manual. "
+
+#: jobs/k3bcdcopyjob.cpp:1016
+#, kde-format
+msgid "Error while reading session %1."
+msgstr "Au fost găsite erori în timpul citirii sesiunii %1."
+
+#: jobs/k3bcdcopyjob.cpp:1045
+msgid "Reloading the medium"
+msgstr "Reîncărcare mediu"
+
+#: jobs/k3bcdcopyjob.cpp:1211
+msgid "Creating CD Image"
+msgstr "Crearea imaginii de CD"
+
+#: jobs/k3bcdcopyjob.cpp:1215
+msgid "Simulating CD Copy On-The-Fly"
+msgstr "Simularea copiei CD 'din zbor'"
+
+#: jobs/k3bcdcopyjob.cpp:1217
+msgid "Simulating CD Copy"
+msgstr "Simularea copiei CD"
+
+#: jobs/k3bcdcopyjob.cpp:1221
+msgid "Copying CD On-The-Fly"
+msgstr "Copiere CD 'din zbor'"
+
+#: jobs/k3bcdcopyjob.cpp:1223
+msgid "Copying CD"
+msgstr "Copiere CD"
+
+#: jobs/k3bblankingjob.cpp:74 jobs/k3bblankingjob.cpp:162
+msgid "Erasing CD-RW"
+msgstr "Ștergere CD-RW"
+
+#: jobs/k3bblankingjob.cpp:75
+msgid "When erasing a CD-RW no progress information is available."
+msgstr ""
+"Când este șters un CD-RW, nu sunt disponibile informații despre progresul "
+"operației."
+
+#: jobs/k3bblankingjob.cpp:115
+#, kde-format
+msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
+msgstr "Introduceți un CD reinscriptibil în unitatea <p><b>%1 %2 (%3)</b>."
+
+#: jobs/k3bblankingjob.cpp:152
+msgid "Blanking error "
+msgstr "Eroare de ștergere"
+
+#: jobs/k3bblankingjob.cpp:153
+msgid "Sorry, no error handling yet."
+msgstr "Manipularea erorii nu a fost încă implementată."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:90
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:127
+#, kde-format
+msgid "%1 executable could not be found."
+msgstr "Executabilul %1 nu poate fi găsit."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:96
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:133
+#, kde-format
+msgid "%1 version %2 is too old."
+msgstr "Versiunea %2 a %1 este prea veche."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:111
+#, kde-format
+msgid "Analysing Title %1 of Video DVD %2"
+msgstr "Analizarea titlului %1 al Video DVD %2. "
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:185
+#, kde-format
+msgid "Analysing Chapter %1 of %2"
+msgstr "Analizarea capitolului %1 al %2"
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:262
+#, fuzzy
+#| msgid "Ignoring last chapter due to its short playback time."
+msgid ""
+"Ignoring clipping values of last chapter due to its short playback time."
+msgstr ""
+"Ultimul capitol este ignorat din cauza timpului scurt de rulare al lui."
+
+#: jobs/k3baudiocuefilewritingjob.cpp:113
+msgid "Writing Audio Cue File"
+msgstr "Scrierea fișierului audio în format CUE"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:196
+msgid "Analysing the audio file failed. Corrupt file?"
+msgstr "Analizarea fișierului audio a eșuat. Posibil fișier corupt? "
+
+#: jobs/k3baudiocuefilewritingjob.cpp:264
+msgid "Analysing the audio file"
+msgstr "Analizare fișier audio"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:265
+#, kde-format
+msgid "Analysing %1"
+msgstr "Analizare %1"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:272
+#, kde-format
+msgid "Unable to handle '%1' due to an unsupported format."
+msgstr "Imposibil de prelucrat „%1” din cauza unui format nerecunoscut."
+
+#: jobs/k3baudiocuefilewritingjob.cpp:277
+#, kde-format
+msgid "No valid audio cue file: '%1'"
+msgstr "Fișier audio în format CUE necorespunzător: „%1”"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:159
+#, kde-format
+msgid "Unable to create folder '%1'"
+msgstr "Dosarul „%1” nu poate fi creat "
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:165
+#, kde-format
+msgid "Invalid filename: '%1'"
+msgstr "Denumire de fișier nevalidă: „%1”"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:177
+#, kde-format
+msgid "Transcoding title %1 from Video DVD %2"
+msgstr "Recodificare titlu %1 din Video DVD %2"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:202
+#, kde-format
+msgid "Invalid Video codec set: %1"
+msgstr "Codec video stabilit nevalid: %1"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:225
+#, kde-format
+msgid "Invalid Audio codec set: %1"
+msgstr "Codec audio stabilit nevalid: %1"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:366
+#, kde-format
+msgid "Resizing picture of title %1 to %2x%3"
+msgstr "Ajustarea imaginii cu titlul %1 la %2x%3"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:389
+msgid "Single-pass Encoding"
+msgstr "Codificare într-un singur pas"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:391
+msgid "Two-pass Encoding: First Pass"
+msgstr "Codificare în 2 pași: primul pas"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:393
+msgid "Two-pass Encoding: Second Pass"
+msgstr "Codificare în 2 pași: al doilea pas"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:417
+#, kde-format
+msgid "Removing incomplete video file '%1'"
+msgstr "Eliminare fișier video incomplet „%1”"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:491
+#, kde-format
+msgid "Execution of %1 failed."
+msgstr "Executarea lui %1 a eșuat."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:492
+msgid "Please consult the debugging output for details."
+msgstr "Consultați mesajele de depanare pentru detalii."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:523
+msgid "AC3 (Stereo)"
+msgstr "AC3 (Stereo)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:525
+msgid "AC3 (Pass-through)"
+msgstr "AC3 (Pass-through)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:527
+msgid "MPEG1 Layer III"
+msgstr "MPEG1 Layer III"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:538
+msgid "MPEG4 (FFMPEG)"
+msgstr "MPEG4 (FFMPEG)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:540
+msgid "XviD"
+msgstr "XviD"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:551
+msgid ""
+"FFmpeg is an open-source project trying to support most video and audio "
+"codecs used these days. Its subproject libavcodec forms the basis for "
+"multimedia players such as xine or mplayer."
+msgstr ""
+"FFmpeg este un proiect cu sursă deschisă care încearcă să asigure suport "
+"pentru cele mai folosite codecuri audio și video curente. Subproiectul său "
+"libavcodec formează bazele pentru programele de redare multimedia gen xine "
+"sau mplayer."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:555
+msgid ""
+"FFmpeg contains an implementation of the MPEG-4 video encoding standard "
+"which produces high quality results."
+msgstr ""
+"FFmpeg conține o implementare a standardului de codificare video MPEG-4 care "
+"produce rezultate cu o calitate foarte bună."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:558
+msgid ""
+"XviD is a free and open source MPEG-4 video codec. XviD was created by a "
+"group of volunteer programmers after the OpenDivX source was closed in July "
+"2001."
+msgstr ""
+"XviD este un codec video gratuit și cu sursă deschisă care a fost creat de "
+"un grup de programatori voluntari după ce sursele OpenDivX au fost închise "
+"în iulie 2001."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:561
+msgid ""
+"XviD features MPEG-4 Advanced Profile settings such as b-frames, global and "
+"quarter pixel motion compensation, lumi masking, trellis quantization, and "
+"H.263, MPEG and custom quantization matrices."
+msgstr ""
+"XviD permite configurarea avansată a profilului MPEG-4 cum ar fi 'b-frames', "
+"'global', compensare 'quarter pixel motion', măști 'lumi', cuantificare "
+"'trellis' și H.263, MPEG și cuantificarea personalizată a matricilor."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:565
+msgid ""
+"XviD is a primary competitor of DivX (XviD being DivX spelled backwards). "
+"While DivX is closed source and may only run on Windows, Mac OS and Linux, "
+"XviD is open source and can potentially run on any platform."
+msgstr ""
+"XviD este concurentul direct pentru DivX (XviD înseamnă DivX citit invers). "
+"În timp ce DivX este cu sursă închisă și poate rula doar pe Windows, Mac OS "
+"și Linux, XviD este cu sursă deschisă și potențial poate rula pe orice "
+"platformă."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:569
+msgid "(Description taken from the Wikipedia article)"
+msgstr "(Descriere luată de la un articol publicat pe Wikipedia)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:579
+msgid ""
+"AC3, better known as Dolby Digital is standardized as ATSC A/52. It contains "
+"up to 6 total channels of sound."
+msgstr ""
+"AC3, cunoscut mai bine ca și Dolby Digital este standardizat ca și ATSC "
+"A/52. El conține până la 6 canale de sunet."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:584
+msgid ""
+"With this setting K3b will create a two-channel stereo Dolby Digital audio "
+"stream."
+msgstr ""
+"Cu aceste setări K3b va crea un flux audio Dolby Digital stereo pe 2 canale."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:588
+msgid ""
+"With this setting K3b will use the Dolby Digital audio stream from the "
+"source DVD without changing it."
+msgstr ""
+"Cu aceste setări K3b va folosi flux audio Dolby Digital de la sursa audio "
+"DVD fără să-l schimbe."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:590
+msgid "Use this setting to preserve 5.1 channel sound from the DVD."
+msgstr ""
+"Folosiți aceste setări pentru a menține sunetul 5.1 provenit de la DVD."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:592
+msgid ""
+"MPEG1 Layer III is better known as MP3 and is the most used lossy audio "
+"format."
+msgstr ""
+"MPEG1 Layer III este mai bine cunoscut sub denumirea de MP3 și este cel mai "
+"folosit format audio cu pierdere de calitate."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:593
+msgid ""
+"With this setting K3b will create a two-channel stereo MPEG1 Layer III audio "
+"stream."
+msgstr ""
+"Cu aceste setări K3b va crea un flux audio MPEG1 Layer III stereo cu 2 "
+"canale."
+
+#: plugin/k3baudioencoder.cpp:53
+msgctxt "plugin type"
+msgid "Audio Encoder"
+msgstr "Codor audio"
+
+#: plugin/k3baudioencoder.cpp:162
+msgid "An unknown error occurred."
+msgstr "A apărut o eroare necunoscută."
+
+#: plugin/k3bprojectplugin.cpp:26
+msgctxt "plugin type"
+msgid "Project plugin"
+msgstr "Modul de proiect"
+
+#: plugin/k3baudiodecoder.cpp:597
+msgctxt "plugin type"
+msgid "Audio Decoder"
+msgstr "Decodor audio"
+
+#: plugin/k3bpluginmanager.cpp:195
+#, kde-format
+msgid "No settings available for plugin %1."
+msgstr "Nu sunt disponibile setări pentru modulul extern %1."
+
+#~ msgid "Checking media..."
+#~ msgstr "Verificare disc..."
+
+#~ msgid "Checking media"
+#~ msgstr "Verificare disc"
+
+#~ msgid ""
+#~ "<p>Unable to handle the following files due to an unsupported format:"
+#~ "<p>You may manually convert these audio files to wave using another "
+#~ "application supporting the audio format and then add the wave files to "
+#~ "the K3b project."
+#~ msgstr ""
+#~ "<p>Este imposibil de a genera următoarele fișiere din cauza unui format "
+#~ "necunoscut: <p> Puteți converti manual aceste fișiere în formatul wave "
+#~ "folosind o altă aplicație care suportă formatul audio și apoi să adăugați "
+#~ "fișierele în format wave proiectului K3b."
+
+#~ msgid "Unsupported Format"
+#~ msgstr "Format nesuportat"
+
+#~ msgid ""
+#~ "K3b does not support simulation with DVD+R(W) media. Do you really want "
+#~ "to continue? The media will actually be written to."
+#~ msgstr ""
+#~ "K3b nu poate simula scrierea cu discuri DVD+R(W). Doriți sigur să "
+#~ "continuați? Discul va fi scris cu adevărat."
+
+#~ msgid "Writing DVD+RW."
+#~ msgstr "Scriere DVD+RW."
+
+#~ msgid "Writing DVD+R."
+#~ msgstr "Scriere DVD+R."
+
+#~ msgid "Formatting DVD±RW"
+#~ msgstr "Formatare DVD±RW"
+
+#~ msgid "Formatting DVD+RW"
+#~ msgstr "Se formatează DVD+RW"
+
+#~ msgid "Configure plugin %1"
+#~ msgstr "Configurare modul extern %1"
+
+#~ msgid "Growisofs >= 5.20 is needed to write Double Layer DVD+R."
+#~ msgstr ""
+#~ "Este necesar programul 'growisofs'>=5.20 pentru a scrie DVD+R Double "
+#~ "Layer (strat dublu)."
+
+#~ msgid "Forced by user. Growisofs will be called without further tests."
+#~ msgstr ""
+#~ "Forțat de utilizator. Programul 'growisofs' va fi rulat fără să mai fie "
+#~ "făcute alte teste."
+
+#~ msgid "%1 (Mixed CD)"
+#~ msgstr "%1 (CD mixt)"
+
+#~ msgid "%1 (Appendable Data %2)"
+#~ msgstr "%1 (Date completabile %2)"
+
+#~ msgid "%1 (Complete Data %2)"
+#~ msgstr "%1 (Date complete %2)"
+
+#~ msgid "Forced by user. Writing will continue without further checks."
+#~ msgstr "Forțat de utilizator. Scrierea va continua fără alte verificări."
+
+#~ msgid "Removed incomplete image file %1."
+#~ msgstr "Eliminat fișierul-imagine incomplet %1."
+
+#, fuzzy
+#~| msgid ""
+#~| "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do "
+#~| "you really want to continue? The media will be written for real."
+#~ msgid ""
+#~ "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do "
+#~ "you really want to continue? The media will actualy be written to."
+#~ msgstr ""
+#~ "Inscriptorul dumneavoastră (%1 %2) nu este capabil de simulare cu discuri "
+#~ "DVD-R(W). Doriți sigur să continuați? Discul va fi scris cu adevărat."
+
+#~ msgid ""
+#~ "K3b does not support simulation with DVD+R(W) media. Do you really want "
+#~ "to continue? The media will be written for real."
+#~ msgstr ""
+#~ "K3b nu suportă simularea scrierii cu discuri DVD+R(W). Sigur doriți să "
+#~ "continuați? Discul va fi scris cu adevărat."
+
+#~ msgid "Ejecting CD"
+#~ msgstr "Scoaterea CD"
+
+#~ msgid "Writer does not support buffer underrun free recording (BURNPROOF)"
+#~ msgstr ""
+#~ "Unitatea de scriere nu are funcția de protecție a scrierii la golirea "
+#~ "memoriei tampon (BURNPROOF)"
+
+#~ msgid "Connected"
+#~ msgstr "Conectat"
+
+#~ msgid "Connection closed"
+#~ msgstr "Conexiune închisă"
+
+#~ msgid "Connection refused"
+#~ msgstr "Conexiune refuzată"
+
+#~ msgid "Could not find host %1"
+#~ msgstr "Nu s-a putut găsi gazda %1"
+
+#~ msgid "Error while reading from %1"
+#~ msgstr "Eroare la citirea din %1"
+
+#~ msgid "Error while connecting to host."
+#~ msgstr "Eroare la conectarea la gazdă."
+
+#~ msgid "Working..."
+#~ msgstr "În lucru..."
+
+#~ msgid "Communication error."
+#~ msgstr "Eroare de comunicare."

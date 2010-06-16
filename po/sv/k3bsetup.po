@@ -1,0 +1,219 @@
+# translation of k3bsetup.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@comhem.se>, 2007, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: k3bsetup\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-05-03 05:01+0200\n"
+"PO-Revision-Date: 2009-05-02 18:22+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@comhem.se>\n"
+"Language-Team: Swedish <sv@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: k3bsetup.cpp:77
+msgid "K3bSetup"
+msgstr "Ställ in K3b"
+
+#: k3bsetup.cpp:79
+msgid "(C) 2003-2007 Sebastian Trueg"
+msgstr "© 2003-2007 Sebastian Trueg"
+
+#: k3bsetup.cpp:80
+msgid "Sebastian Trueg"
+msgstr "Sebastian Trueg"
+
+#: k3bsetup.cpp:88
+msgid ""
+"<p>This simple setup assistant is able to set the permissions needed by K3b "
+"in order to burn CDs and DVDs. <p>It does not take things like devfs or "
+"resmgr into account. In most cases this is not a problem but on some systems "
+"the permissions may be altered the next time you login or restart your "
+"computer. In those cases it is best to consult the distribution "
+"documentation.<p><b>Caution:</b> Although K3b::Setup should not be able to "
+"mess up your system no guarantee can be given."
+msgstr ""
+"<p>Den här enkla inställningsguiden kan ställa in alla behörigheter som "
+"behövs av K3b för att bränna cd och dvd. <p>Den tar inte hänsyn till saker "
+"som devfs eller resmgr. I de flesta fall är det inte ett problem, men på "
+"vissa system kan behörigheterna ändras nästa gång du loggar in eller startar "
+"om datorn. Om så är fallet är det bäst att titta i distributionens "
+"dokumentation.<p><b>Varning:</b> Även om Ställ in K3b inte ska kunna skada "
+"systemet, kan ingen garanti ges."
+
+#: k3bsetup.cpp:145
+msgid ""
+"<h2>K3b::Setup</h2><p>This simple setup assistant is able to set the "
+"permissions needed by K3b in order to burn CDs and DVDs.<p>It does not take "
+"into account devfs or resmgr, or similar. In most cases this is not a "
+"problem, but on some systems the permissions may be altered the next time "
+"you login or restart your computer. In these cases it is best to consult the "
+"distribution's documentation.<p>The important task that K3b::Setup performs "
+"is grant write access to the CD and DVD devices.<p><b>Caution:</b> Although "
+"K3b::Setup should not be able to damage your system, no guarantee can be "
+"given."
+msgstr ""
+"<h2>Ställ in K3b</h2><p>Den här enkla inställningsguiden kan ställa in alla "
+"behörigheter som behövs av K3b för att bränna cd och dvd.<p>Den tar inte "
+"hänsyn till devfs eller resmgr, eller liknande. I de flesta fall är det inte "
+"ett problem, men på vissa system kan behörigheterna ändras nästa gång du "
+"loggar in eller startar om datorn. Om så är fallet är det bäst att titta i "
+"distributionens dokumentation.<p>Den viktigaste uppgiften som Ställ in K3b "
+"utför är att ge skrivbehörigheter till cd- och dvd-enheterna.<p><b>Varning:</"
+"b> Även om Ställ in K3b inte ska kunna skada systemet, kan ingen garanti ges."
+
+#: k3bsetup.cpp:188
+#, kde-format
+msgid "There is no group \"%1\"."
+msgstr "Gruppen \"%1\" finns inte."
+
+#: k3bsetup.cpp:228
+msgid "Cannot run worker."
+msgstr "Kan inte köra arbetsprogram."
+
+#: k3bsetup.cpp:238
+msgid "Following devices and programs could not be updated:"
+msgstr "Följande enheter och program kunde inte uppdateras:"
+
+#: k3bsetupdevicesmodel.cpp:170 k3bsetupdevicesmodel.cpp:177
+#: k3bsetupprogramsmodel.cpp:266
+msgid "no change"
+msgstr "ingen ändring"
+
+#: k3bsetupdevicesmodel.cpp:237
+msgid "Device"
+msgstr "Enhet"
+
+#: k3bsetupdevicesmodel.cpp:238
+msgid "Devicenode"
+msgstr "Enhetsnod"
+
+#: k3bsetupdevicesmodel.cpp:239 k3bsetupprogramsmodel.cpp:324
+msgid "Permissions"
+msgstr "Behörigheter"
+
+#: k3bsetupdevicesmodel.cpp:240 k3bsetupprogramsmodel.cpp:325
+msgid "New permissions"
+msgstr "Nya behörigheter"
+
+#: k3bsetupprogramsmodel.cpp:321
+msgid "Program"
+msgstr "Program"
+
+#: k3bsetupprogramsmodel.cpp:322
+msgid "Version"
+msgstr "Version"
+
+#: k3bsetupprogramsmodel.cpp:323
+msgid "Path"
+msgstr "Sökväg"
+
+#. i18n: file: base_k3bsetup.ui:22
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: rc.cpp:3
+msgid "Settings"
+msgstr "Inställningar"
+
+#. i18n: file: base_k3bsetup.ui:31
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:6
+msgid ""
+"<p>If this option is checked, only the users in the specified group will be "
+"able to burn CDs and DVDs, since only they will have access to the devices "
+"and the CD recording programs used by K3b.</p>\n"
+"<p>Otherwise all users on the system have access to the devices and to all "
+"K3b functionality."
+msgstr ""
+"<p>Om det här alternativet är markerat, kan bara användare i den angivna "
+"gruppen bränna cd och dvd, eftersom bara de har tillgång till enheterna och "
+"cd-brännprogrammen som används av K3b.</p>\n"
+"<p>Annars kan alla användare på systemet komma åt enheterna och alla "
+"funktioner i K3b.</p>"
+
+#. i18n: file: base_k3bsetup.ui:34
+#. i18n: ectx: property (text), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:10
+msgid "Use burning group:"
+msgstr "Använd bränngrupp:"
+
+#. i18n: file: base_k3bsetup.ui:44
+#. i18n: ectx: property (text), widget (KLineEdit, m_editBurningGroup)
+#: rc.cpp:13
+msgid "burning"
+msgstr "Bränna"
+
+#. i18n: file: base_k3bsetup.ui:78
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: rc.cpp:16
+msgid "Users allowed to burn (separated by space):"
+msgstr "Användare som tillåts bränna (åtskilda av mellanslag):"
+
+#. i18n: file: base_k3bsetup.ui:104
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: rc.cpp:19
+msgid "Devices"
+msgstr "Enheter"
+
+#. i18n: file: base_k3bsetup.ui:110
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: rc.cpp:22
+msgid "Check the devices whose permissions you want to be changed"
+msgstr "Markera enheterna vars behörigheter du vill ska ändras"
+
+#. i18n: file: base_k3bsetup.ui:133
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: rc.cpp:25
+msgid "External Programs"
+msgstr "Externa program"
+
+#. i18n: file: base_k3bsetup.ui:143
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rc.cpp:28
+msgid "Found Programs"
+msgstr "Hittade program"
+
+#. i18n: file: base_k3bsetup.ui:149
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: rc.cpp:31
+msgid "Check the programs whose permissions you want to be changed"
+msgstr "Markera programmen vars behörigheter du vill ska ändras"
+
+#. i18n: file: base_k3bsetup.ui:170
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: file: base_k3bsetup.ui:176
+#. i18n: ectx: property (title), widget (KEditListBox, m_editSearchPath)
+#: rc.cpp:34 rc.cpp:37
+msgid "Search Path"
+msgstr "Sökväg"
+
+#. i18n: file: base_k3bsetup.ui:186
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: rc.cpp:40
+msgid ""
+"<qt><b>Hint:</b> to force K3b to use another than the default name for the "
+"executable specify it in the search path.</qt>"
+msgstr ""
+"<qt><b>Tips:</b> För att tvinga K3b att använda något annat än "
+"standardnamnet på det körbara programmet, ange det i sökvägen.</qt>"
+
+#: rc.cpp:41
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Stefan Asserhäll"
+
+#: rc.cpp:42
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "stefan.asserhall@comhem.se"
+
+#~ msgid "Authorization failed."
+#~ msgstr "Behörighetskontroll misslyckades."
+
+#~ msgid "Successfully updated all permissions."
+#~ msgstr "Uppdaterade alla behörigheter."

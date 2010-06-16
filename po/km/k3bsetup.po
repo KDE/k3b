@@ -1,0 +1,211 @@
+# translation of k3bsetup.po to Khmer
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Khoem Sokhem <khoemsokhem@khmeros.info>, 2008, 2009, 2010.
+# Auk Piseth <piseth_dv@khmeros.info>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: k3bsetup\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-05-03 05:01+0200\n"
+"PO-Revision-Date: 2010-06-09 09:11+0700\n"
+"Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
+"Language-Team: Khmer <support@khmeros.info>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"\n"
+
+#: k3bsetup.cpp:77
+msgid "K3bSetup"
+msgstr "K3bSetup"
+
+#: k3bsetup.cpp:79
+msgid "(C) 2003-2007 Sebastian Trueg"
+msgstr "រក្សាសិទ្ធិ​ឆ្នាំ ២០០៣-២០០៧ ដោយ Sebastian Trueg"
+
+#: k3bsetup.cpp:80
+msgid "Sebastian Trueg"
+msgstr "Sebastian Trueg"
+
+#: k3bsetup.cpp:88
+msgid ""
+"<p>This simple setup assistant is able to set the permissions needed by K3b "
+"in order to burn CDs and DVDs. <p>It does not take things like devfs or "
+"resmgr into account. In most cases this is not a problem but on some systems "
+"the permissions may be altered the next time you login or restart your "
+"computer. In those cases it is best to consult the distribution "
+"documentation.<p><b>Caution:</b> Although K3b::Setup should not be able to "
+"mess up your system no guarantee can be given."
+msgstr ""
+"<p>អ្នក​ជំនួយការ​ដំឡើង​ធម្មតា គឺ​អាច​កំណត់​សិទ្ធិ​ដែលត្រូវការ​ដោយ K3b ដើម្បី​ដុត​ស៊ីឌី និង​ឌីវីឌី ។ <p>វា​មិនយក​"
+"វត្ថុ​ដូចគ្នា devfs ឬ resmgr ទៅ​ក្នុង​គណនី ។ ក្នុង​ករណី​ភាគច្រើន វា​មិនមែន​ជា​បញ្ហា​ទេ ប៉ុន្តែ​នៅលើ​"
+"ប្រព័ន្ធ​មួយ​ចំនួន សិទ្ធិ​គឺ​អាច​ត្រូវបាន​ប្ដូរ​នៅពេល​ដែល​អ្នក​ចូល​នៅពេលក្រោយ ឬ​នៅពេល​ចាប់ផ្ដើម​កុំព្យូទ័រ​របស់​អ្នក ។ "
+"ក្នុង​ករណី​ទាំងនោះ វា​ល្អ​ណាស់​ដែល​ពិភាក្សា​អំពី​ឯកសារ​ចែកចាយ ។<p><b>ប្រយ័ត្ន ៖</b> ទោះបី​ជា "
+"K3bSetup 2 មិនអាច​រៀបចំ​ប្រព័ន្ធ ក៏​គ្មាន​ការ​ធានារ៉ាប់រង​ដែរ ។"
+
+#: k3bsetup.cpp:145
+msgid ""
+"<h2>K3b::Setup</h2><p>This simple setup assistant is able to set the "
+"permissions needed by K3b in order to burn CDs and DVDs.<p>It does not take "
+"into account devfs or resmgr, or similar. In most cases this is not a "
+"problem, but on some systems the permissions may be altered the next time "
+"you login or restart your computer. In these cases it is best to consult the "
+"distribution's documentation.<p>The important task that K3b::Setup performs "
+"is grant write access to the CD and DVD devices.<p><b>Caution:</b> Although "
+"K3b::Setup should not be able to damage your system, no guarantee can be "
+"given."
+msgstr ""
+"<h2>K3bSetup 2</h2><p>អ្នក​ជំនួយការ​ដំឡើង​ធម្មតា​នេះ​អាច​កំណត់​សិទ្ធិ​ដែលត្រូវការ​ដោយ K3b ដើម្បី​ដុត​"
+"ស៊ីឌី និង​ឌីវីឌី ។<p>វា​មិន​យក​ទៅក្នុង​គណនី devfs ឬ resmgr ឬ​ស្រដៀង​គ្នា​នេះ ។ ក្នុង​ករណី​ភាគច្រើន វា​មិន​"
+"មែន​ជា​បញ្ហាទេ ប៉ន្តែ​នៅ​លើ​ប្រព័ន្ធ​មួយ​ចំនួន សិទ្ធិ​អាច​ត្រូវបាន​ប្ដូរ​នៅពេល​ដែល​អ្នក​ចូល​នៅពេល​ក្រោយ ឬ​នៅពេល​"
+"ដែល​អ្នក​ចាប់ផ្ដើម​កុំព្យូទ័រ ។ ក្នុង​ករណី​ទាំងនេះ វា​ជា​យោបល់​ល្អ​បំផុតនៃ​ឯកសារ​របស់​ការ​ចែកចាយ ។<p>ភារកិច្ច​"
+"សំខាន់ ដែលអំពើ K3bSetup 2 ផ្ដល់​សិទ្ធិ​ចូល​ដំណើរការ​សរសេរ​ទៅ​កាន់​ឧបករណ៍​ស៊ីឌី និង​ឌីវីឌី ។<p><b>ប្រយ័ត្ន ៖"
+"</b> ទោះ​ជា K3bSetup 2 មិន​អាច​បំផ្លាញ​ប្រព័ន្ធ​របស់​អ្នក​ក៏ដោយ ក៏​មិនមាន​ការ​ធានារ៉ាប់រង ។"
+
+#: k3bsetup.cpp:188
+#, kde-format
+msgid "There is no group \"%1\"."
+msgstr "គ្មាន​ក្រុម \"%1\" ។"
+
+#: k3bsetup.cpp:228
+msgid "Cannot run worker."
+msgstr "មិន​អាច​រត់​កម្មវិធីការងារ​បានទេ ។"
+
+#: k3bsetup.cpp:238
+msgid "Following devices and programs could not be updated:"
+msgstr "ឧបករណ៍ និង​បញ្ហា​ដូច​ខាងក្រោម​មិនអាច​ត្រូវ​បានធ្វើ​​បច្ចុប្បន្នភាព​ទេ ៖"
+
+#: k3bsetupdevicesmodel.cpp:170 k3bsetupdevicesmodel.cpp:177
+#: k3bsetupprogramsmodel.cpp:266
+msgid "no change"
+msgstr "គ្មាន​ការ​ផ្លាស់ប្ដូរ"
+
+#: k3bsetupdevicesmodel.cpp:237
+msgid "Device"
+msgstr "ឧបករណ៍"
+
+#: k3bsetupdevicesmodel.cpp:238
+msgid "Devicenode"
+msgstr "ថ្នាំងឧបករណ៍"
+
+#: k3bsetupdevicesmodel.cpp:239 k3bsetupprogramsmodel.cpp:324
+msgid "Permissions"
+msgstr "សិទ្ធិ"
+
+#: k3bsetupdevicesmodel.cpp:240 k3bsetupprogramsmodel.cpp:325
+msgid "New permissions"
+msgstr "សិទ្ធិ​ថ្មី"
+
+#: k3bsetupprogramsmodel.cpp:321
+msgid "Program"
+msgstr "កម្មវិធី"
+
+#: k3bsetupprogramsmodel.cpp:322
+msgid "Version"
+msgstr "កំណែ"
+
+#: k3bsetupprogramsmodel.cpp:323
+msgid "Path"
+msgstr "ផ្លូវ"
+
+#. i18n: file: base_k3bsetup.ui:22
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: rc.cpp:3
+msgid "Settings"
+msgstr "ការ​កំណត់"
+
+#. i18n: file: base_k3bsetup.ui:31
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:6
+msgid ""
+"<p>If this option is checked, only the users in the specified group will be "
+"able to burn CDs and DVDs, since only they will have access to the devices "
+"and the CD recording programs used by K3b.</p>\n"
+"<p>Otherwise all users on the system have access to the devices and to all "
+"K3b functionality."
+msgstr ""
+"<p>បើ​ជ្រើស​ជម្រើស​នេះ នោះ​មាន​តែ​អ្នកប្រើ​ដែល​ស្ថិត​នៅ​ក្នុង​ក្រុម​ដែល​បាន​បញ្ជាក់​ប៉ុណ្ណោះ នឹង​អាច​ដុត​ស៊ីឌី និង​"
+"ឌីវីឌី​បាន ។ នេះ​គឺ​ដោយ​សារ​តែ​អ្នក​ប្រើ​ទាំងនោះ​មាន​សិទ្ធិ​ចូលដំណើរការ​ឧបករណ៍ និង​កម្មវិធី​ថត​ស៊ីឌី​ដែល​ប្រើ​ដោយ "
+"K3b ។</p>\n"
+"<p>បើ​មិន​ធ្វើ​អញ្ចឹង អ្នក​ប្រើ​ទាំងអស់​នៅ​លើ​ប្រព័ន្ធ​នឹង​អាច​ចូល​ដំណើរការ​ឧបករណ៍ និង​មុខងារ​ទាំងអស់​របស់ K3b "
+"បាត់​ទៅ​ហើយ ។"
+
+#. i18n: file: base_k3bsetup.ui:34
+#. i18n: ectx: property (text), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:10
+msgid "Use burning group:"
+msgstr "ប្រើ​ក្រុម​ដុត ៖"
+
+#. i18n: file: base_k3bsetup.ui:44
+#. i18n: ectx: property (text), widget (KLineEdit, m_editBurningGroup)
+#: rc.cpp:13
+msgid "burning"
+msgstr "ដុត"
+
+#. i18n: file: base_k3bsetup.ui:78
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: rc.cpp:16
+msgid "Users allowed to burn (separated by space):"
+msgstr "អ្នក​ប្រើ​ដែល​អនុញ្ញាត​ឲ្យ​ដុត (បំបែក​ដោយ​ដកឃ្លា) ៖"
+
+#. i18n: file: base_k3bsetup.ui:104
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: rc.cpp:19
+msgid "Devices"
+msgstr "ឧបករណ៍"
+
+#. i18n: file: base_k3bsetup.ui:110
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: rc.cpp:22
+msgid "Check the devices whose permissions you want to be changed"
+msgstr "ពិនិត្យ​មើល​ឧបករណ៍​ដែល​អ្នក​ចង់​ផ្លាស់ប្ដូរ​សិទ្ធិ​របស់​វា"
+
+#. i18n: file: base_k3bsetup.ui:133
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: rc.cpp:25
+msgid "External Programs"
+msgstr "កម្មវិធី​ខាងក្រៅ"
+
+#. i18n: file: base_k3bsetup.ui:143
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rc.cpp:28
+msgid "Found Programs"
+msgstr "បាន​រក​ឃើញ​កម្មវិធី"
+
+#. i18n: file: base_k3bsetup.ui:149
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: rc.cpp:31
+msgid "Check the programs whose permissions you want to be changed"
+msgstr "ពិនិត្យ​មើល​កម្មវិធី​ដែល​អ្នក​ចង់​ផ្លាស់ប្ដូរ​សិទ្ធិ​របស់​វា"
+
+#. i18n: file: base_k3bsetup.ui:170
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: file: base_k3bsetup.ui:176
+#. i18n: ectx: property (title), widget (KEditListBox, m_editSearchPath)
+#: rc.cpp:34 rc.cpp:37
+msgid "Search Path"
+msgstr "ផ្លូវ​ស្វែងរក"
+
+#. i18n: file: base_k3bsetup.ui:186
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: rc.cpp:40
+msgid ""
+"<qt><b>Hint:</b> to force K3b to use another than the default name for the "
+"executable specify it in the search path.</qt>"
+msgstr ""
+"<qt><b>គន្លឺះ​ ៖</b> ដើម្បី​បង្ខំ​ឲ្យ​ K3b ប្រើ​ឈ្មោះ​ផ្សេង​ទៀត​ដែល​អាច​ប្រតិបត្តិ​វា​យ៉ាង​ជាក់​លាក់​ក្នុង​"
+"ការស្វែងរក​ផ្លូវ​ ។</qt>"
+
+#: rc.cpp:41
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "ខឹម សុខែម, ​អេង វណ្ណៈ, អោក ពិសិដ្ឋ​"
+
+#: rc.cpp:42
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "khoemsokhem@khmeros.info,​​evannak@khmeros.info,piseth_dv@khmeros.info"

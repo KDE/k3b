@@ -1,0 +1,253 @@
+# translation of k3bsetup.po to galician
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# mvillarino <mvillarino@users.sourceforge.net>, 2007, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: k3bsetup\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-05-03 05:01+0200\n"
+"PO-Revision-Date: 2008-06-13 22:16+0200\n"
+"Last-Translator: mvillarino <mvillarino@users.sourceforge.net>\n"
+"Language-Team: galician <proxecto@trasno.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: k3bsetup.cpp:77
+#, fuzzy
+#| msgid "K3bSetup 2"
+msgid "K3bSetup"
+msgstr "K3bSetup 2"
+
+#: k3bsetup.cpp:79
+msgid "(C) 2003-2007 Sebastian Trueg"
+msgstr "(C) 2003-2007 Sebastian Trueg"
+
+#: k3bsetup.cpp:80
+msgid "Sebastian Trueg"
+msgstr "Sebastian Trueg"
+
+#: k3bsetup.cpp:88
+#, fuzzy
+#| msgid ""
+#| "<p>This simple setup assistant is able to set the permissions needed by "
+#| "K3b in order to burn CDs and DVDs. <p>It does not take things like devfs "
+#| "or resmgr into account. In most cases this is not a problem but on some "
+#| "systems the permissions may be altered the next time you login or restart "
+#| "your computer. In those cases it is best to consult the distribution "
+#| "documentation.<p><b>Caution:</b> Although K3bSetup 2 should not be able "
+#| "to mess up your system no guarantee can be given."
+msgid ""
+"<p>This simple setup assistant is able to set the permissions needed by K3b "
+"in order to burn CDs and DVDs. <p>It does not take things like devfs or "
+"resmgr into account. In most cases this is not a problem but on some systems "
+"the permissions may be altered the next time you login or restart your "
+"computer. In those cases it is best to consult the distribution "
+"documentation.<p><b>Caution:</b> Although K3b::Setup should not be able to "
+"mess up your system no guarantee can be given."
+msgstr ""
+"<p>Este sinxelo asistente permítelle escoller os permisos precisados por K3b "
+"para gravar CDs e DVD. <p>Non ten en conta cousas como devfs ou resmgr. Na "
+"maioría dos casos isto non é un problema pero nalgúns sistemas os permisos "
+"poden aparecer alterados a vindeira vez que inicie o seu ordenador. Nestes "
+"casos o mellor é consultar a documentación da distribución.<p><b>Coidado:</"
+"b> Aínda que K3bSetup 2 non debera poder danar o seu sistema, non se pode "
+"garantir isto."
+
+#: k3bsetup.cpp:145
+#, fuzzy
+#| msgid ""
+#| "<h2>K3bSetup 2</h2><p>This simple setup assistant is able to set the "
+#| "permissions needed by K3b in order to burn CDs and DVDs.<p>It does not "
+#| "take into account devfs or resmgr, or similar. In most cases this is not "
+#| "a problem, but on some systems the permissions may be altered the next "
+#| "time you login or restart your computer. In these cases it is best to "
+#| "consult the distribution's documentation.<p>The important task that "
+#| "K3bSetup 2 performs is grant write access to the CD and DVD devices."
+#| "<p><b>Caution:</b> Although K3bSetup 2 should not be able to damage your "
+#| "system, no guarantee can be given."
+msgid ""
+"<h2>K3b::Setup</h2><p>This simple setup assistant is able to set the "
+"permissions needed by K3b in order to burn CDs and DVDs.<p>It does not take "
+"into account devfs or resmgr, or similar. In most cases this is not a "
+"problem, but on some systems the permissions may be altered the next time "
+"you login or restart your computer. In these cases it is best to consult the "
+"distribution's documentation.<p>The important task that K3b::Setup performs "
+"is grant write access to the CD and DVD devices.<p><b>Caution:</b> Although "
+"K3b::Setup should not be able to damage your system, no guarantee can be "
+"given."
+msgstr ""
+"<h2>K3bSetup 2</h2><p>Este asistente de configuración é útil para escoller "
+"os permisos precisados por K3b para gravar CDs e DVD.<p>Non ten en conta "
+"devfs, resmgr ou semellantes. Na maioría dos casos isto non é un problema, "
+"pero nalgúns sistemas os permisos poden aparecer cambiados a vindeira vez "
+"que inicie o seu ordenador. Nestes casos é mellor consultar a documentación "
+"da distribución.<p>A tarefa importante que K3bSetup 2 fai é garantir o aceso "
+"aos dispositivos CD e DVD.<p><b>Coidado:</b> Aínda que K3bSetup 2 non debera "
+"poder danar o seu sistema, non é posíbel garantilo."
+
+#: k3bsetup.cpp:188
+#, fuzzy, kde-format
+#| msgid "There is no group %1."
+msgid "There is no group \"%1\"."
+msgstr "Non existe o grupo %1."
+
+#: k3bsetup.cpp:228
+msgid "Cannot run worker."
+msgstr ""
+
+#: k3bsetup.cpp:238
+msgid "Following devices and programs could not be updated:"
+msgstr ""
+
+#: k3bsetupdevicesmodel.cpp:170 k3bsetupdevicesmodel.cpp:177
+#: k3bsetupprogramsmodel.cpp:266
+msgid "no change"
+msgstr "sen cambios"
+
+#: k3bsetupdevicesmodel.cpp:237
+msgid "Device"
+msgstr "Dispositivo"
+
+#: k3bsetupdevicesmodel.cpp:238
+msgid "Devicenode"
+msgstr "Nodo do dispositivo"
+
+#: k3bsetupdevicesmodel.cpp:239 k3bsetupprogramsmodel.cpp:324
+msgid "Permissions"
+msgstr "Permisos"
+
+#: k3bsetupdevicesmodel.cpp:240 k3bsetupprogramsmodel.cpp:325
+#, fuzzy
+#| msgid "New Permissions"
+msgid "New permissions"
+msgstr "Novos permisos"
+
+#: k3bsetupprogramsmodel.cpp:321
+msgid "Program"
+msgstr "Programa"
+
+#: k3bsetupprogramsmodel.cpp:322
+msgid "Version"
+msgstr "Versión"
+
+#: k3bsetupprogramsmodel.cpp:323
+msgid "Path"
+msgstr "Rota"
+
+#. i18n: file: base_k3bsetup.ui:22
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: rc.cpp:3
+msgid "Settings"
+msgstr "Configuración"
+
+#. i18n: file: base_k3bsetup.ui:31
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:6
+msgid ""
+"<p>If this option is checked, only the users in the specified group will be "
+"able to burn CDs and DVDs, since only they will have access to the devices "
+"and the CD recording programs used by K3b.</p>\n"
+"<p>Otherwise all users on the system have access to the devices and to all "
+"K3b functionality."
+msgstr ""
+"<p>Se sinala esta opción, só os usuarios do grupo especificado poderán "
+"gravar CDs e DVD, xa que só eles terán aceso aos dispositivos e programas de "
+"gravación empregados por K3b.</p>\n"
+"<p>Caso contrario todos os usuarios do sistema terán aceso aos dispositivos "
+"e a toda a funcionalidade de K3b."
+
+#. i18n: file: base_k3bsetup.ui:34
+#. i18n: ectx: property (text), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:10
+msgid "Use burning group:"
+msgstr "Empregar o grupo gravación:"
+
+#. i18n: file: base_k3bsetup.ui:44
+#. i18n: ectx: property (text), widget (KLineEdit, m_editBurningGroup)
+#: rc.cpp:13
+msgid "burning"
+msgstr "gravando"
+
+#. i18n: file: base_k3bsetup.ui:78
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: rc.cpp:16
+msgid "Users allowed to burn (separated by space):"
+msgstr "Usuarios autorizados a gravar (separados por un espazo):"
+
+#. i18n: file: base_k3bsetup.ui:104
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: rc.cpp:19
+msgid "Devices"
+msgstr "Dispositivos"
+
+#. i18n: file: base_k3bsetup.ui:110
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: rc.cpp:22
+msgid "Check the devices whose permissions you want to be changed"
+msgstr "Comprobar os dispositivos aos que lles queira cambiar os permisos"
+
+#. i18n: file: base_k3bsetup.ui:133
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: rc.cpp:25
+msgid "External Programs"
+msgstr "Programas Externos"
+
+#. i18n: file: base_k3bsetup.ui:143
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rc.cpp:28
+msgid "Found Programs"
+msgstr "Programas atopados"
+
+#. i18n: file: base_k3bsetup.ui:149
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: rc.cpp:31
+msgid "Check the programs whose permissions you want to be changed"
+msgstr "Comprobar os programas aos que lles queira cambiar os permisos"
+
+#. i18n: file: base_k3bsetup.ui:170
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: file: base_k3bsetup.ui:176
+#. i18n: ectx: property (title), widget (KEditListBox, m_editSearchPath)
+#: rc.cpp:34 rc.cpp:37
+msgid "Search Path"
+msgstr "Procurar a rota"
+
+#. i18n: file: base_k3bsetup.ui:186
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: rc.cpp:40
+msgid ""
+"<qt><b>Hint:</b> to force K3b to use another than the default name for the "
+"executable specify it in the search path.</qt>"
+msgstr ""
+"<qt><b>Consello</b> para forzar a K3b a empregar un nome que non sexa o "
+"predeterminado do executábel especifíqueo na rota da procura.</qt>"
+
+#: rc.cpp:41
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "mvillarino"
+
+#: rc.cpp:42
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "mvillarino@users.sourceforge.net"
+
+#~ msgid "Successfully updated all permissions."
+#~ msgstr "Anováronse satisfactoriamente todos os permisos."
+
+#, fuzzy
+#~| msgid ""
+#~| "Could not update all permissions. You should run K3bSetup 2 as root."
+#~ msgid ""
+#~ "Could not update all permissions. You should run K3b::Setup 2 as root."
+#~ msgstr ""
+#~ "Non foi posíbel actualizar todos os permisos. Debería executar K3bSetup 2 "
+#~ "como root."
+
+#~ msgid "Could not update all permissions."
+#~ msgstr "Non foi posíbel actualizar todos os permisos."

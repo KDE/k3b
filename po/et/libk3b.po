@@ -1,0 +1,3901 @@
+# translation of libk3b.po to Estonian
+#
+# Marek Laane <bald@starman.ee>, 2004-2007.
+# Peeter Russak <pezz@tkwcy.ee>, 2005.
+# Marek Laane <bald@smail.ee>, 2008-2009, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: libk3b\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-06-13 04:51+0200\n"
+"PO-Revision-Date: 2010-03-22 20:25+0200\n"
+"Last-Translator: Marek Laane <bald@smail.ee>\n"
+"Language-Team: Estonian <kde-et@linux.ee>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: tools/k3bmedium.cpp:322
+msgid "Audio CD"
+msgstr "Audio CD"
+
+#: tools/k3bmedium.cpp:325
+msgid "Mixed CD"
+msgstr "Segarežiimis CD"
+
+#: tools/k3bmedium.cpp:329
+msgid "Video DVD"
+msgstr "Video DVD"
+
+#: tools/k3bmedium.cpp:332
+msgid "Video CD"
+msgstr "Video CD"
+
+#: tools/k3bmedium.cpp:335
+#, kde-format
+msgid "Appendable Data %1"
+msgstr "Lisatav andme-%1"
+
+#: tools/k3bmedium.cpp:338
+#, kde-format
+msgid "Complete Data %1"
+msgstr "Terviklik andme-%1"
+
+#: tools/k3bmedium.cpp:342
+msgid "Empty"
+msgstr "Tühi"
+
+#: tools/k3bmedium.cpp:355
+msgid "No medium information"
+msgstr "Andmekandja info puudub"
+
+#: tools/k3bmedium.cpp:359
+msgid "No medium present"
+msgstr "Andmekandja puudub"
+
+#: tools/k3bmedium.cpp:363
+#, kde-format
+msgid "Empty %1 medium"
+msgstr "Tühi %1 andmekandja"
+
+#: tools/k3bmedium.cpp:404
+#, kde-format
+msgid "Appendable %1 medium"
+msgstr "Lisatav %1 andmekandja"
+
+#: tools/k3bmedium.cpp:407
+#, kde-format
+msgid "Complete %1 medium"
+msgstr "Terviklik %1 andmekandja"
+
+#: tools/k3bmedium.cpp:424
+#, kde-format
+msgid "%1 in 1 track"
+msgid_plural "%1 in %2 tracks"
+msgstr[0] "%1 1 rajaga"
+msgstr[1] "%1 %2 rajaga"
+
+#: tools/k3bmedium.cpp:428
+#, kde-format
+msgid " and %1 session"
+msgid_plural " and %1 sessions"
+msgstr[0] " ja %1 seansiga"
+msgstr[1] " ja %1 seansiga"
+
+#: tools/k3bmedium.cpp:433
+#, kde-format
+msgid "Free space: %1"
+msgstr "Vaba ruum: %1"
+
+#: tools/k3bmedium.cpp:437
+#, kde-format
+msgid "Capacity: %1"
+msgstr "Mahtuvus: %1"
+
+#: tools/k3bmedium.cpp:617
+#, kde-format
+msgid "Please insert an empty medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:619
+msgid "Please insert an empty medium"
+msgstr "Palun sisesta tühi andmekandja"
+
+#: tools/k3bmedium.cpp:624
+#, kde-format
+msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi DVD või Blu-ray andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:626
+msgid "Please insert an empty DVD or Blu-ray medium"
+msgstr "Palun sisesta tühi DVD või Blu-ray andmekandja"
+
+#: tools/k3bmedium.cpp:630
+#, kde-format
+msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi Blu-ray andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:632
+msgid "Please insert an empty Blu-ray medium"
+msgstr "Palun sisesta tühi Blu-ray andmekandja"
+
+#: tools/k3bmedium.cpp:636
+#, kde-format
+msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi CD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:638
+msgid "Please insert an empty CD medium"
+msgstr "Palun sisesta tühi CD andmekandja"
+
+#: tools/k3bmedium.cpp:642
+#, kde-format
+msgid "Please insert an empty DVD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi DVD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:644
+msgid "Please insert an empty DVD medium"
+msgstr "Palun sisesta tühi DVD andmekandja"
+
+#: tools/k3bmedium.cpp:648
+#, kde-format
+msgid "Please insert an empty DVD-DL medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi DVD-DL andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:650
+msgid "Please insert an empty DVD-DL medium"
+msgstr "Palun sisesta tühi DVD-DL andmekandja"
+
+#: tools/k3bmedium.cpp:654
+#, kde-format
+msgid ""
+"Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
+msgstr ""
+"Palun sisesta tühi andmekandja suurusega vähemalt %1 seadmesse<p><b>%2</b>"
+
+#: tools/k3bmedium.cpp:657
+#, kde-format
+msgid "Please insert an empty medium of size %1 or larger"
+msgstr "Palun sisesta tühi andmekandja suurusega vähemalt %1"
+
+#: tools/k3bmedium.cpp:663
+#, kde-format
+msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi või lisatav andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:665
+msgid "Please insert an empty or appendable medium"
+msgstr "Palun sisesta tühi või lisatav andmekandja"
+
+#: tools/k3bmedium.cpp:669
+#, kde-format
+msgid ""
+"Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>%"
+"1</b>"
+msgstr ""
+"Palun sisesta tühi või lisatav DVD või Blu-ray andmekandja seadmesse<p><b>%"
+"1</b>"
+
+#: tools/k3bmedium.cpp:671
+msgid "Please insert an empty or appendable DVD or Blu-ray medium"
+msgstr "Palun sisesta tühi või lisatav DVD või Blu-ray andmekandja"
+
+#: tools/k3bmedium.cpp:675
+#, kde-format
+msgid ""
+"Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
+msgstr ""
+"Palun sisesta tühi või lisatav Blu-ray andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:677
+msgid "Please insert an empty or appendable Blu-ray medium"
+msgstr "Palun sisesta tühi või lisatav Blu-ray andmekandja"
+
+#: tools/k3bmedium.cpp:681
+#, kde-format
+msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi või lisatav CD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:683
+msgid "Please insert an empty or appendable CD medium"
+msgstr "Palun sisesta tühi või lisatav CD andmekandja"
+
+#: tools/k3bmedium.cpp:687
+#, kde-format
+msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta tühi või lisatav DVD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:689
+msgid "Please insert an empty or appendable DVD medium"
+msgstr "Palun sisesta tühi või lisatav DVD andmekandja"
+
+#: tools/k3bmedium.cpp:693
+#, kde-format
+msgid ""
+"Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
+msgstr ""
+"Palun sisesta tühi või lisatav DVD-DL andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:695
+msgid "Please insert an empty or appendable DVD-DL medium"
+msgstr "Palun sisesta tühi või lisatav DVD-DL andmekandja"
+
+#: tools/k3bmedium.cpp:701
+#, kde-format
+msgid "Please insert a non-empty medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta mittetühi andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:703
+msgid "Please insert a non-empty medium"
+msgstr "Palun sisesta mittetühi andmekandja"
+
+#: tools/k3bmedium.cpp:707
+#, kde-format
+msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
+msgstr ""
+"Palun sisesta mittetühi korduvkirjutatav andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:709
+msgid "Please insert a non-empty rewritable medium"
+msgstr "Palun sisesta mittetühi korduvkirjutatav andmekandja"
+
+#: tools/k3bmedium.cpp:715
+#, kde-format
+msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta korduvkirjutatav andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:717
+msgid "Please insert a rewritable medium"
+msgstr "Palun sisesta korduvkirjutatav andmekandja"
+
+#: tools/k3bmedium.cpp:723 tools/k3bmedium.cpp:769
+#, kde-format
+msgid "Please insert a suitable medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta sobiv andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:725 tools/k3bmedium.cpp:771
+msgid "Please insert a suitable medium"
+msgstr "Palun sisesta sobiv andmekandja"
+
+#: tools/k3bmedium.cpp:738
+#, kde-format
+msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta video-CD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:740
+msgid "Please insert a Video CD medium"
+msgstr "Palun sisesta video-CD andmekandja"
+
+#: tools/k3bmedium.cpp:744
+#, kde-format
+msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta video-DVD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:746
+msgid "Please insert a Video DVD medium"
+msgstr "Palun sisesta video-DVCD andmekandja"
+
+#: tools/k3bmedium.cpp:750
+#, kde-format
+msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta segarežiimis CD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:752
+msgid "Please insert a Mixed Mode CD medium"
+msgstr "Palun sisesta segarežiimis CD andmekandja"
+
+#: tools/k3bmedium.cpp:756
+#, kde-format
+msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta audio-CD andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:758
+msgid "Please insert an Audio CD medium"
+msgstr "Palun sisesta audio-CD andmekandja"
+
+#: tools/k3bmedium.cpp:762
+#, kde-format
+msgid "Please insert a Data medium into drive<p><b>%1</b>"
+msgstr "Palun sisesta andmete andmekandja seadmesse<p><b>%1</b>"
+
+#: tools/k3bmedium.cpp:764
+msgid "Please insert a Data medium"
+msgstr "Palun sisesta andmete andmekandja"
+
+#: tools/k3bmediacache.cpp:139 tools/k3bmediacache.cpp:379
+msgid "CDDB Lookup"
+msgstr "CDDB otsing"
+
+#: tools/k3bmd5job.cpp:94
+#, kde-format
+msgid "Could not find file %1"
+msgstr "Faili %1 ei leitud"
+
+#: tools/k3bmd5job.cpp:101 projects/datacd/k3bdatajob.cpp:393
+#, kde-format
+msgid "Could not open file %1"
+msgstr "Faili %1 avamine nurjus"
+
+#: tools/k3bmd5job.cpp:239
+#, kde-format
+msgid "Error while reading from file %1"
+msgstr "Viga faili %1 lugemisel"
+
+#: tools/k3bdevicemodel.cpp:138
+msgid "Analyzing medium..."
+msgstr "Andmekandja analüüsimine..."
+
+#: tools/k3bprogressdialog.cpp:85
+msgid "Disk successfully erased. Please reload the disk."
+msgstr "Plaat edukalt kustutatud. Palun laadi plaat uuesti."
+
+#: tools/k3bprogressdialog.cpp:87
+msgid "K3b was unable to erase the disk."
+msgstr "K3b ei suutnud plaati kustutada."
+
+#: tools/k3bdeviceselectiondialog.cpp:45
+msgid "Device Selection"
+msgstr "Seadme valik"
+
+#: tools/k3bdeviceselectiondialog.cpp:51
+msgid "Please select a device:"
+msgstr "Palun vali seade:"
+
+#: tools/k3bcddb.cpp:44
+msgid "Multiple CDDB Entries Found"
+msgstr "Leiti mitu CDDB kirjet"
+
+#: tools/k3bcddb.cpp:49
+msgid "K3b found multiple or inexact CDDB entries. Please select one."
+msgstr "K3b leidis mitu ebatäpset CDDB kirjet. Palun vali neist üks."
+
+#: tools/k3bstdguiitems.cpp:28
+msgid "Simulate"
+msgstr "Kirjutamise simuleerimine"
+
+#: tools/k3bstdguiitems.cpp:29
+msgid ""
+"<p>If this option is checked K3b will perform all writing steps with the "
+"laser turned off.<p>This is useful, for example, to test a higher writing "
+"speed or whether your system is able to write on-the-fly.<p><b>Caution:</b> "
+"DVD+R(W) does not support simulated writing."
+msgstr ""
+"<p>Selle sisselülitamisel sooritab K3b kogu kirjutamisprotsessi ilma laserit "
+"sisse lülitamata.<p>See on kasulik näiteks testimaks suuremat "
+"kirjutamiskiirust või seda, kas süsteem suudab kirjutada \"lennult\"."
+"<p><b>Ettevaatust:</b> DVD+R(W) ei toeta kirjutamise simuleerimist."
+
+#: tools/k3bstdguiitems.cpp:34
+msgid "Only simulate the writing process"
+msgstr "Ainult simuleeritakse kirjutamist"
+
+#: tools/k3bstdguiitems.cpp:40
+msgid "Disk at once"
+msgstr "DAO"
+
+#: tools/k3bstdguiitems.cpp:41
+msgid ""
+"<p>If this option is checked, K3b will write the CD in 'disk at once' mode "
+"as compared to 'track at once' (TAO).<p>It is always recommended to use DAO "
+"where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
+"seconds are only supported in DAO mode."
+msgstr ""
+"<p>Selle sisselülitamisel kirjutab K3b CD 'disk at once' režiimis, mitte "
+"režiimis 'track at once' (TAO).<p>Kui võimalik, on alati soovitatav kasutada "
+"DAO režiimi.<p><b>Ettevaatust:</b> Radade eellüngad pikkusega enam kui 2 "
+"sekundit on toetatud ainult DAO režiimis."
+
+#: tools/k3bstdguiitems.cpp:46
+msgid "Write in disk at once mode"
+msgstr "Kirjutamine DAO režiimis"
+
+#: tools/k3bstdguiitems.cpp:52
+msgid "Use Burnfree"
+msgstr "Burnfree kasutamine"
+
+#: tools/k3bstdguiitems.cpp:53
+msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
+msgstr "Burnfree (või Just Link'i) lubamine puhvri alatäitumise vältimiseks"
+
+#: tools/k3bstdguiitems.cpp:54
+msgid ""
+"<p>If this option is checked, K3b enables <em>Burnfree</em> (or <em>Just "
+"Link</em>). This is a feature of the CD writer which avoids buffer underruns."
+"<p>Without <em>burnfree</em>, if the writer cannot get any more data a "
+"buffer underrun would occur, since the writer needs a constant stream of "
+"data to write the CD.<p>With <em>burnfree</em> the writer can <em>mark</em> "
+"the current position of the laser and get back to it when the buffer is "
+"filled again; but, since this means having little data gaps on the CD, <b>it "
+"is highly recommended to always choose an appropriate writing speed to "
+"prevent the usage of burnfree, especially for audio CDs</b> (in the worst "
+"case one would hear the gap).<p><em>Burnfree</em> was formerly known as "
+"<em>Burnproof</em>, but has since been renamed when it became part of the "
+"MMC standard."
+msgstr ""
+"<p>Selle sisselülitamisel kasutab K3b <em>Burnfree</em> (või <em>Just Link</"
+"em>) meetodit. See on CD-kirjutite võimalus, mis väldib puhvri alatäitumist."
+"<p>Kui <em>burnfree</em> ei ole kasutusel, siis tekib juhul, kui kirjuti ei "
+"saa andmeid, puhvri alatäide, sest kirjuti vajab CD kirjutamiseks pidevat "
+"andmevoogu.<p>Kui <em>burnfree</em> on kasutusel, suudab kirjuti <em>ära "
+"märkida</em> laseri hetkepositsiooni ning selle taastada, kui puhver taas "
+"täitub. Et see võib kaasa tuua väikeste andmelünkade tekkimise CD-le, <b>on "
+"äärmiselt soovitav alati valida sobiv kirjutamiskiirus, et eriti audio CD-de "
+"puhul vältida \"burnfree\" kasutamist</b> (kõige halvemal juhul jääb selline "
+"tühik isegi kuulda).<p><em>Burnfree</em> kandis varem nimetus <em>Burnproof</"
+"em>, kuid pärast seda, kui sellest sai MMC standard, anti talle uus nimetus."
+
+#: tools/k3bstdguiitems.cpp:73
+msgid "Only create image"
+msgstr "Ainult tõmmise loomine"
+
+#: tools/k3bstdguiitems.cpp:74
+msgid ""
+"<p>If this option is checked, K3b will only create an image and not do any "
+"actual writing.<p>The image can later be written to a CD/DVD with most "
+"current writing programs (including K3b of course)."
+msgstr ""
+"<p>Selle sisselülitamisel loob K3b ainult tõmmise ega võta tegelikult "
+"kirjutamist ette.<p>Tõmmise saab hiljem kirjutada CD/DVD-le uusima ja parima "
+"tarkvaraga (mille hulka kuulub mõistagi ka K3b)."
+
+#: tools/k3bstdguiitems.cpp:78
+msgid "Only create an image"
+msgstr "Ainult tõmmise loomine"
+
+#: tools/k3bstdguiitems.cpp:84
+msgid "Create image"
+msgstr "Tõmmise loomine"
+
+#: tools/k3bstdguiitems.cpp:85
+msgid ""
+"<p>If this option is checked, K3b will create an image before writing the "
+"files to the CD/DVD. Otherwise the data will be written <em>on-the-fly</em>, "
+"i.e. no intermediate image will be created.<p><b>Caution:</b> Although "
+"writing on-the-fly should work on most systems, make sure the data is sent "
+"to the writer fast enough."
+msgstr ""
+"<p>Selle sisselülitamisel loob K3b enne failide kirjutamist CD/DVD-le "
+"tõmmise. Vastasel juhul kirjutatakse andmed <em>lennult</em>, s.t. "
+"vahepealset tõmmist ei looda.<p><b>Ettevaatust:</b> Kuigi lennult "
+"kirjutamine peaks töötama valutult enamikus süsteemides, kontrolli siiski, "
+"et kirjuti saaks andmeid piisavalt kiiresti."
+
+#: tools/k3bstdguiitems.cpp:90 tools/k3bstdguiitems.cpp:112
+msgid "<p>It is recommended to try a simulation first."
+msgstr "<p>Soovitatav on eelnevalt proovida simuleerimist."
+
+#: tools/k3bstdguiitems.cpp:91
+msgid "Cache the data to be written on the harddisk"
+msgstr "Kirjutatavad andmed puhverdatakse kõvakettale"
+
+#: tools/k3bstdguiitems.cpp:97
+msgid "Remove image"
+msgstr "Tõmmise eemaldamine"
+
+#: tools/k3bstdguiitems.cpp:98
+msgid ""
+"<p>If this option is checked, K3b will remove any created images after the "
+"writing has finished.<p>Uncheck this if you want to keep the images."
+msgstr ""
+"<p>Selle sisselülitamisel eemaldab K3b kõik loodud tõmmised pärast "
+"kirjutamise lõpetamist.<p>Kui soovid tõmmiseid alles hoida, ära seda märgi."
+
+#: tools/k3bstdguiitems.cpp:101
+msgid "Remove images from disk when finished"
+msgstr "Tõmmis eemaldatakse kõvakettalt pärast lõpetamist"
+
+#: tools/k3bstdguiitems.cpp:107
+msgid "On the fly"
+msgstr "Lennult kirjutamine"
+
+#: tools/k3bstdguiitems.cpp:108
+msgid ""
+"<p>If this option is checked, K3b will not create an image first but write "
+"the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
+"work on most systems, make sure the data is sent to the writer fast enough."
+msgstr ""
+"<p>Selle sisselülitamisel ei loo K3b tõmmist, vaid kirjutab failid otse CD/"
+"DVD-le.<p><b>Ettevaatust:</b> Kuigi see peaks töötama valutult enamikus "
+"süsteemides, kontrolli siiski, et kirjuti saaks andmeid piisavalt kiiresti."
+
+#: tools/k3bstdguiitems.cpp:113
+msgid "Write files directly to CD/DVD without creating an image"
+msgstr "Failid kirjutatakse otse CD/DVD-le tõmmist tegemata"
+
+#: tools/k3bstdguiitems.cpp:119
+msgid "Write CD-TEXT"
+msgstr "CD-teksti kirjutamine"
+
+#: tools/k3bstdguiitems.cpp:120
+msgid "Create CD-TEXT entries"
+msgstr "CD-teksti kirjete loomine"
+
+#: tools/k3bstdguiitems.cpp:121
+msgid ""
+"<p>If this option is checked K3b uses some otherwise-unused space on the "
+"audio CD to store additional information, such as the artist's name, or the "
+"CD title.<p>CD-TEXT is an extension to the audio CD standard introduced by "
+"Sony.<p>CD-TEXT will only be usable on CD players that support this "
+"extension (mostly car CD players).<p>Since a CD-TEXT-enhanced CD will work "
+"in any CD player it is never a bad idea to enable this (if you specify CD-"
+"TEXT data.)"
+msgstr ""
+"<p>Selle sisselülitamisel kasutab K3b muidu audio CD-l kasutamata jäävat "
+"ruumi mõningase lisainfo salvestamiseks (näiteks esitaja nimi, CD tiitel)."
+"<p>CD-tekst on Sony poolt kasutusele võetud audio CD standardi laiendus."
+"<p>CD-tekst on kasutatav ainult sellist võimalust toetavatel CD-mängijatel "
+"(peamiselt autode CD-mängijad).<p>Kuna CD-tekstiga täiendatud CD mängib "
+"siiski suvalises CD-mängijas, ei tee kunagi paha see võimalus sisse lülitada "
+"(eriti kui määrata veel andmed)."
+
+#: tools/k3bstdguiitems.cpp:140
+msgid "Set the paranoia level for reading audio CDs"
+msgstr "Audio CD-de lugemise paranoiatase"
+
+#: tools/k3bstdguiitems.cpp:141
+msgid ""
+"<p>Sets the correction mode for digital audio extraction.<ul><li>0: No "
+"checking, data is copied directly from the drive. <li>1: Perform overlapped "
+"reading to avoid jitter.</li><li>2: Like 1 but with additional checks of the "
+"read audio data.</li><li>3: Like 2 but with additional scratch detection and "
+"repair.</li></ul><p><b>The extraction speed reduces from 0 to 3.</b>"
+msgstr ""
+"<p>Määrab digitaalaudio ekstraktimise korrektsioonirežiimi.<ul><li>0: "
+"kontroll puudub, andmed kopeeritakse otse plaadilt. <li>1: Sooritatakse "
+"korduslugemisi värina vältimiseks.</li><li>2: Sama, mis 1, aga "
+"kontrollitakse üle ka loetud audioandmed.</li><li>3: Sama, mis 2, aga "
+"kontrollitakse ka kriimustusi ja võetakse ette parandusi.</li></"
+"ul><p><b>Ekstraktimise kiirus kahaneb iga täiendava kontrolli lisandudes.</b>"
+
+#: tools/k3bstdguiitems.cpp:153
+msgid "Start multisession CD"
+msgstr "Mitmeseansilise CD käivitamine"
+
+#: tools/k3bstdguiitems.cpp:154
+msgid "Do not close the disk to allow additional sessions to be added later"
+msgstr "Plaat jäetakse avatuks võimalike uute seansside lisamiseks"
+
+#: tools/k3bstdguiitems.cpp:155
+msgid ""
+"<p>If this option is checked K3b will not close the CD, and will write a "
+"temporary table of contents.</p><p>This allows further sessions to be "
+"appended to the CD later.</p>"
+msgstr ""
+"<p>Selle sisselülitamisel jätab K3b CD avatuks ning kirjutab ainult ajutise "
+"sisukorra (TOC).</p><p>See võimaldab hiljem CD-le uusi seansse lisada.</p>"
+
+#: tools/k3bstdguiitems.cpp:164
+msgid "Normalize volume levels"
+msgstr "Helitugevuse normaliseerimine"
+
+#: tools/k3bstdguiitems.cpp:165
+msgid "Adjust the volume levels of all tracks"
+msgstr "Kõigi radade helitugevuse kohendamine"
+
+#: tools/k3bstdguiitems.cpp:166
+msgid ""
+"<p>If this option is checked K3b will adjust the volume of all tracks to a "
+"standard level. This is useful for things like creating mixes, where "
+"different recording levels on different albums can cause the volume to vary "
+"greatly from song to song.<p><b>Be aware that K3b currently does not support "
+"normalizing when writing on the fly.</b>"
+msgstr ""
+"<p>Selle sisselülitamisel kohendab K3b kõigi radade helitugevuse "
+"standardtasemele. See on kasulik näiteks mikside loomisel, kus erinevad "
+"salvestustasemed erinevatel albumitel võivad laulust laulu üsna tugevasti "
+"varieeruda.<p><b>Arvesta, et K3b ei toeta praegu normaliseerimist lennult "
+"kirjutamise korral.</b>"
+
+#: tools/k3bstdguiitems.cpp:178
+msgid "Verify written data"
+msgstr "Kirjutatud andmete kontrollimine"
+
+#: tools/k3bstdguiitems.cpp:179
+msgid "Compare original with written data"
+msgstr "Originaali võrdlemine kirjutatud andmetega"
+
+#: tools/k3bstdguiitems.cpp:180
+msgid ""
+"<p>If this option is checked, then after successfully writing the disk K3b "
+"will compare the original source data with the written data to verify that "
+"the disk has been written correctly."
+msgstr ""
+"<p>Selle sisselülitamisel võrdleb K3b pärast plaadi edukat kirjutamist "
+"originaalallika andmeid kirjutatud andmetega, et kontrollida, kas plaat on "
+"ikka korrektselt kirjutatud."
+
+#: tools/k3bstdguiitems.cpp:190
+msgid "Ignore read errors"
+msgstr "Lugemisvigade eiramine"
+
+#: tools/k3bstdguiitems.cpp:191
+msgid "Skip unreadable audio sectors"
+msgstr "Loetamatute audiosektorite vahelejätmine"
+
+#: tools/k3bstdguiitems.cpp:192
+msgid ""
+"<p>If this option is checked and K3b is not able to read an audio sector "
+"from the source CD it will be replaced with zeros on the resulting copy."
+"<p>Since audio CD Player are able to interpolate small errors in the data it "
+"is no problem to let K3b skip unreadable sectors."
+msgstr ""
+"<p>Selle sisselülitamisel asendatakse sel juhul, kui K3b ei suuda lähte-CD-"
+"lt audiosektorit lugeda, vastav sektor koopias nullidega.<p>Kuna audio-CD-"
+"mängijad suudavad andmete väikseid vigu interpoleerida, ei tekita "
+"loetamatute sektorite vahelejätmine K3b poolt probleeme."
+
+#: videodvd/k3bvideodvd.cpp:288
+msgid "AC3"
+msgstr "AC3"
+
+#: videodvd/k3bvideodvd.cpp:290
+msgid "MPEG1"
+msgstr "MPEG1"
+
+#: videodvd/k3bvideodvd.cpp:292
+msgid "MPEG2 Extended"
+msgstr "MPEG2 Extended"
+
+#: videodvd/k3bvideodvd.cpp:294
+msgid "LPCM"
+msgstr "LPCM"
+
+#: videodvd/k3bvideodvd.cpp:296
+msgid "DTS"
+msgstr "DTS"
+
+#: videodvd/k3bvideodvd.cpp:298
+msgid "unknown audio format"
+msgstr "tundmatu audiovorming"
+
+#: videodvd/k3bvideodvd.cpp:307 videodvd/k3bvideodvd.cpp:339
+#: projects/videocd/k3bvcdtrack.cpp:227
+msgid "Unspecified"
+msgstr "Täpsustamata"
+
+#: videodvd/k3bvideodvd.cpp:309
+msgid "Normal"
+msgstr "Normaalne"
+
+#: videodvd/k3bvideodvd.cpp:311
+msgid "For the visually impaired"
+msgstr "Nägemispuuetega inimestele"
+
+#: videodvd/k3bvideodvd.cpp:313
+msgid "Director's comments 1"
+msgstr "Režissööri kommentaarid 1"
+
+#: videodvd/k3bvideodvd.cpp:315
+msgid "Director's comments 2"
+msgstr "Režissööri kommentaarid 2"
+
+#: videodvd/k3bvideodvd.cpp:317
+msgid "unknown audio code extension"
+msgstr "tundmatu audiokoodilaiend"
+
+#: videodvd/k3bvideodvd.cpp:326
+msgid "RLE"
+msgstr "RLE"
+
+#: videodvd/k3bvideodvd.cpp:328
+msgid "Extended"
+msgstr "Extended"
+
+#: videodvd/k3bvideodvd.cpp:330
+msgid "unknown coding mode"
+msgstr "tundmatu kodeerimisrežiim"
+
+#: videodvd/k3bvideodvd.cpp:341
+msgid "Caption with normal size characters"
+msgstr "Tekst normaalse tähesuurusega"
+
+#: videodvd/k3bvideodvd.cpp:343
+msgid "Caption with bigger size characters"
+msgstr "Tekst suurema tähesuurusega"
+
+#: videodvd/k3bvideodvd.cpp:345
+msgid "Caption for children"
+msgstr "Tekst lastele"
+
+#: videodvd/k3bvideodvd.cpp:347
+msgid "Closed caption with normal size characters"
+msgstr "Suletud tekst normaalse tähesuurusega"
+
+#: videodvd/k3bvideodvd.cpp:349
+msgid "Closed caption with bigger size characters"
+msgstr "Suletud tekst suurema tähesuurusega "
+
+#: videodvd/k3bvideodvd.cpp:351
+msgid "Closed caption for children"
+msgstr "Suletud tekst lastele"
+
+#: videodvd/k3bvideodvd.cpp:353
+msgid "Forced caption"
+msgstr "Pealesunnitud tekst"
+
+#: videodvd/k3bvideodvd.cpp:355
+msgid "Director's comments with normal size characters"
+msgstr "Režissööri kommentaarid normaalse tähesuurusega"
+
+#: videodvd/k3bvideodvd.cpp:357
+msgid "Director's comments with bigger size characters"
+msgstr "Režissööri kommentaarid suurema tähesuurusega"
+
+#: videodvd/k3bvideodvd.cpp:359
+msgid "Director's comments for children"
+msgstr "Režissööri kommentaarid lastele"
+
+#: videodvd/k3bvideodvd.cpp:361
+msgid "unknown code extension"
+msgstr "tundmatu koodilaiend"
+
+#: core/k3bglobals.cpp:359
+msgid "Auto"
+msgstr "Automaatne"
+
+#: projects/datacd/k3bdatadoc.cpp:1182 projects/videocd/k3bvcddoc.cpp:416
+msgid "Could not find the following files:"
+msgstr "Ei leitud järgmisi faile:"
+
+#: projects/datacd/k3bdatadoc.cpp:1183 projects/videocd/k3bvcddoc.cpp:417
+msgid "Not Found"
+msgstr "Leidmine nurjus"
+
+#: projects/datacd/k3bdatadoc.cpp:1188
+msgid "No permission to read the following files:"
+msgstr "Puuduvad õigused lugeda järgmisi faile:"
+
+#: projects/datacd/k3bdatadoc.cpp:1189
+msgid "No Read Permission"
+msgstr "Lugemisõigus puudub"
+
+#: projects/datacd/k3bdatadoc.cpp:1342 projects/datacd/k3bdatadoc.cpp:1355
+msgid "From previous session"
+msgstr "Eelmisest seansist"
+
+#: projects/datacd/k3bdatadoc.cpp:1462
+msgid "El Torito boot catalog file"
+msgstr "El Torito alglaadimiskataloogi fail"
+
+#: projects/datacd/k3bdatadoc.cpp:1463
+msgid "Boot catalog"
+msgstr "Alglaadimiskataloog"
+
+#: projects/datacd/k3bdatajob.cpp:150 projects/audiocd/k3baudiojob.cpp:156
+#: projects/mixedcd/k3bmixedjob.cpp:222 jobs/k3biso9660imagewritingjob.cpp:90
+msgid "Preparing data"
+msgstr "Andmete ettevalmistamine"
+
+#: projects/datacd/k3bdatajob.cpp:219 projects/audiocd/k3baudioimager.cpp:109
+#: projects/mixedcd/k3bmixedjob.cpp:1099
+#, kde-format
+msgid "Could not open %1 for writing"
+msgstr "%1 avamine kirjutamiseks nurjus"
+
+#: projects/datacd/k3bdatajob.cpp:226
+msgid "Creating image file"
+msgstr "Tõmmisefaili loomine"
+
+#: projects/datacd/k3bdatajob.cpp:227
+msgid "Track 1 of 1"
+msgstr "Rada 1 (kokku 1)"
+
+#: projects/datacd/k3bdatajob.cpp:228
+#, kde-format
+msgid "Creating image file in %1"
+msgstr "Tõmmisefaili loomine asukohta %1"
+
+#: projects/datacd/k3bdatajob.cpp:386
+#, kde-format
+msgid "Image successfully created in %1"
+msgstr "Tõmmis edukalt loodud asukohas %1"
+
+#: projects/datacd/k3bdatajob.cpp:406
+msgid "Error while creating ISO image"
+msgstr "Viga ISO tõmmise loomisel"
+
+#: projects/datacd/k3bdatajob.cpp:440 projects/audiocd/k3baudiojob.cpp:652
+#: projects/mixedcd/k3bmixedjob.cpp:1013 projects/k3bgrowisofswriter.cpp:372
+#: projects/k3bcdrecordwriter.cpp:463 projects/k3bcdrdaowriter.cpp:565
+#: projects/k3bcdrdaowriter.cpp:583 jobs/k3bcdcopyjob.cpp:715
+msgid "Simulating"
+msgstr "Simuleerimine"
+
+#: projects/datacd/k3bdatajob.cpp:442 projects/audiocd/k3baudiojob.cpp:654
+#: projects/mixedcd/k3bmixedjob.cpp:1015 jobs/k3bcdcopyjob.cpp:717
+#, kde-format
+msgid "Writing Copy %1"
+msgstr "Koopia %1 kirjutamine"
+
+#: projects/datacd/k3bdatajob.cpp:444 projects/audiocd/k3baudiojob.cpp:656
+#: projects/k3bgrowisofswriter.cpp:377 projects/k3bcdrecordwriter.cpp:471
+#: projects/k3bcdrdaowriter.cpp:571
+msgid "Writing"
+msgstr "Kirjutamine"
+
+#: projects/datacd/k3bdatajob.cpp:471 projects/videocd/k3bvcdjob.cpp:466
+#: jobs/k3bclonejob.cpp:225
+#, kde-format
+msgid "Writing Track %1 of %2"
+msgstr "Raja %1 kirjutamine, kokku %2"
+
+#: projects/datacd/k3bdatajob.cpp:524 jobs/k3biso9660imagewritingjob.cpp:139
+msgid "Verifying written data"
+msgstr "Kirjutatud andmete kontrollimine"
+
+#: projects/datacd/k3bdatajob.cpp:533 projects/audiocd/k3baudiojob.cpp:421
+#: projects/mixedcd/k3bmixedjob.cpp:543 projects/videocd/k3bvcdjob.cpp:506
+#: jobs/k3bcdcopyjob.cpp:1063
+msgid "K3b was unable to eject the written disk. Please do so manually."
+msgstr "K3b ei suutnud kirjutatud plaati väljastada. Palun tee seda käsitsi."
+
+#: projects/datacd/k3bdatajob.cpp:708
+msgid "Internal Error: No medium type fits. This project cannot be burned."
+msgstr ""
+"Sisemine viga: ei sobi ükski andmekandja tüüp. Seda projekti ei saa "
+"kirjutada."
+
+#: projects/datacd/k3bdatajob.cpp:712
+msgid "Waiting for a medium"
+msgstr "Oodatakse andmekandjat"
+
+#: projects/datacd/k3bdatajob.cpp:729
+#, kde-format
+msgid "Writing %1"
+msgstr "%1 kirjutamine"
+
+#: projects/datacd/k3bdatajob.cpp:746
+msgid "Unable to determine the last track's datamode. Using default."
+msgstr "Viimase raja andmerežiimi määramine nurjus. Kasutatakse vaikeväärtust."
+
+#: projects/datacd/k3bdatajob.cpp:783 projects/datacd/k3bdatajob.cpp:806
+#: jobs/k3bmetawriter.cpp:304
+#, kde-format
+msgid "Cannot write %1 media using %2. Falling back to default application."
+msgstr ""
+"%1 andmekandja kirjutamine %2 abil nurjus. Kasutatakse vaikimisi rakendust."
+
+#: projects/datacd/k3bdatajob.cpp:825 projects/datacd/k3bdatajob.cpp:942
+#: jobs/k3bdvdcopyjob.cpp:817 jobs/k3bdvdcopyjob.cpp:910
+#, kde-format
+msgid ""
+"%1 media do not support write simulation. Do you really want to continue? "
+"The disc will actually be written to."
+msgstr ""
+"K3b ei toeta kirjutamise simuleerimist %1 puhul. Kas tõesti jätkata? Plaat "
+"kirjutatakse sel juhul päriselt."
+
+#: projects/datacd/k3bdatajob.cpp:828 projects/datacd/k3bdatajob.cpp:945
+#: jobs/k3bdvdcopyjob.cpp:820 jobs/k3bdvdcopyjob.cpp:913
+#, kde-format
+msgid "No Simulation with %1"
+msgstr "%1 ei toeta simuleerimist"
+
+#: projects/datacd/k3bdatajob.cpp:836 projects/datacd/k3bdatajob.cpp:953
+#, kde-format
+msgid "Writing mode ignored when writing %1 media."
+msgstr "%1 kirjutamisel ignoreeritakse kirjutamisrežiimi."
+
+#: projects/datacd/k3bdatajob.cpp:848 projects/datacd/k3bdatajob.cpp:966
+#, kde-format
+msgid "Growing ISO9660 filesystem on %1."
+msgstr "ISO9660 failisüsteemi kasvatamine %1-l."
+
+#: projects/datacd/k3bdatajob.cpp:850 projects/datacd/k3bdatajob.cpp:968
+#: jobs/k3bmetawriter.cpp:854 jobs/k3bmetawriter.cpp:863
+#: jobs/k3bdvdcopyjob.cpp:832 jobs/k3bdvdcopyjob.cpp:922
+#, kde-format
+msgid "Writing %1."
+msgstr "%1 kirjutamine."
+
+#: projects/datacd/k3bdatajob.cpp:858 jobs/k3bmetawriter.cpp:506
+#: jobs/k3bdvdcopyjob.cpp:840
+#, kde-format
+msgid ""
+"Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
+"really want to continue? The media will actually be written to."
+msgstr ""
+"Sinu kirjuti (%1 %2) ei toeta simuleerimist DVD-R(W) puhul. Kas tõesti "
+"jätkata? Andmekandja kirjutatakse sel juhul päriselt."
+
+#: projects/datacd/k3bdatajob.cpp:863 jobs/k3bmetawriter.cpp:511
+#: jobs/k3bdvdcopyjob.cpp:845
+msgid "No Simulation with DVD-R(W)"
+msgstr "DVD-R(W) ei toeta simuleerimist"
+
+#: projects/datacd/k3bdatajob.cpp:877 jobs/k3bmetawriter.cpp:850
+#: jobs/k3bdvdcopyjob.cpp:866
+msgid "Writing DVD-RW in restricted overwrite mode."
+msgstr "DVD-RW kirjutamine piiratud ülekirjutamise režiimis."
+
+#: projects/datacd/k3bdatajob.cpp:880 jobs/k3bmetawriter.cpp:840
+msgid "Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."
+msgstr ""
+"ISO9660 failisüsteemi kasvatamine DVD-RW-l piiratud ülekirjutamise režiimis."
+
+#: projects/datacd/k3bdatajob.cpp:894 projects/datacd/k3bdatajob.cpp:911
+#: jobs/k3bmetawriter.cpp:856 jobs/k3bdvdcopyjob.cpp:892
+#, kde-format
+msgid "Writing %1 in DAO mode."
+msgstr "%1 kirjutamine DAO režiimis."
+
+#: projects/datacd/k3bdatajob.cpp:901 jobs/k3bmetawriter.cpp:476
+#, kde-format
+msgid ""
+"Your writer (%1 %2) does not support Incremental Streaming with %3 media. "
+"Multisession will not be possible. Continue anyway?"
+msgstr ""
+"Sinu kirjuti (%1 %2) ei toeta %3 andmekandja puhul lisamist, mistõttu "
+"mitmeseansilisus ei ole ilmselt võimalik. Kas siiski jätkata?"
+
+#: projects/datacd/k3bdatajob.cpp:906 jobs/k3bmetawriter.cpp:481
+msgid "No Incremental Streaming"
+msgstr "Lisamise võimalus puudub"
+
+#: projects/datacd/k3bdatajob.cpp:918 jobs/k3bmetawriter.cpp:443
+#: jobs/k3bmetawriter.cpp:492 jobs/k3bdvdcopyjob.cpp:887
+msgid "Restricted Overwrite is not possible with DVD-R media."
+msgstr "DVD-R puhul ei ole piiratud ülekirjutamine võimalik."
+
+#: projects/datacd/k3bdatajob.cpp:920 jobs/k3bmetawriter.cpp:858
+#: jobs/k3bdvdcopyjob.cpp:896
+#, kde-format
+msgid "Writing %1 in incremental mode."
+msgstr "%1 kirjutamine järjestikrežiimis."
+
+#: projects/datacd/k3bdatajob.cpp:978
+msgid "Creating Data Image File"
+msgstr "Andmete tõmmisefaili loomine"
+
+#: projects/datacd/k3bdatajob.cpp:982
+msgid "Writing Data Project"
+msgstr "Andmeprojekti kirjutamine"
+
+#: projects/datacd/k3bdatajob.cpp:988
+msgid "Writing Multisession Project"
+msgstr "Mitmeseansilise projekti kirjutamine"
+
+#: projects/datacd/k3bdatajob.cpp:1002
+#, kde-format
+msgid "ISO9660 Filesystem (Size: %2) - %1 copy"
+msgid_plural "ISO9660 Filesystem (Size: %2) - %1 copies"
+msgstr[0] "ISO9660 failisüsteem (suurus: %2) - %1 koopia"
+msgstr[1] "ISO9660 failisüsteem (suurus: %2) - %1 koopiat"
+
+#: projects/datacd/k3bdatajob.cpp:1007
+#, kde-format
+msgid "ISO9660 Filesystem (Size: %1)"
+msgstr "ISO9660 failisüsteem (suurus: %1)"
+
+#: projects/datacd/k3bdatajob.cpp:1024 jobs/k3bdvdcopyjob.cpp:935
+#, kde-format
+msgid "Removed image file %1"
+msgstr "Eemaldati tõmmisefail %1"
+
+#: projects/datacd/k3bdatajob.cpp:1054 jobs/k3bmetawriter.cpp:526
+msgid "Most writers do not support writing multisession CDs in DAO mode."
+msgstr ""
+"Enamik CD-kirjuteid ei toeta mitmeseansilise CD kirjutamist DAO režiimis."
+
+#: projects/datacd/k3bisooptions.cpp:30
+msgctxt ""
+"This is the default volume identifier of a data project created by K3b. The "
+"string should not be longer than 16 characters to avoid warnings regarding "
+"Joiliet extensions which induce this restriction."
+msgid "K3b data project"
+msgstr "K3b andmeprojekt"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:102
+#, kde-format
+msgid "<em>%1</em> renamed to <em>%2</em>"
+msgstr "<em>%1</em> sai nimeks <em>%2</em>"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:142
+#, kde-format
+msgid ""
+"Some filenames need to be shortened due to the %1 char restriction of the "
+"Joliet extensions. If the Joliet extensions are disabled filenames do not "
+"have to be shortened but long filenames will not be available on Windows "
+"systems."
+msgstr ""
+"Mõned failinimed tuleb lühemaks muuta, et rahuldada Joliet laienduste %1-"
+"sümbolilist piirangut. Kui Joliet laiendused keelata, ei pruugi failinimesid "
+"lühendada, aga pikad failinimed ei ühildu Windowsi süsteemidega."
+
+#: projects/datacd/k3bdatapreparationjob.cpp:148
+#: projects/datacd/k3bdatapreparationjob.cpp:172
+#: projects/datacd/k3bdatapreparationjob.cpp:187
+#: projects/datacd/k3bdatapreparationjob.cpp:209
+#: projects/audiocd/k3baudiojob.cpp:178 projects/mixedcd/k3bmixedjob.cpp:191
+msgid "Warning"
+msgstr "Hoiatus"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:149
+msgid "Shorten Filenames"
+msgstr "Lühenda failinimed"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:150
+msgid "Disable Joliet extensions"
+msgstr "Keela Joliet laiendused"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:167
+#, kde-format
+msgid ""
+"The Joliet extensions (which are needed for long filenames on Windows "
+"systems) restrict the length of the volume descriptor (the name of the "
+"filesystem) to %1 characters. The selected descriptor '%2' is longer than "
+"that. Do you want it to be cut or do you want to go back and change it "
+"manually?"
+msgstr ""
+"Joliet laiendused (mida on Windows süsteemides vaja pikkade failinimede "
+"jaoks) piiravad köite kirjelduse (failisüsteemi nime) pikkuse %1 märgiga. "
+"Valitud kirjeldus '%2' on sellest pikem. Kas soovid seda kärpida või minna "
+"tagasi ja muuta kirjeldust käsitsi?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:173
+msgid "Cut volume descriptor in the Joliet tree"
+msgstr "Kärbi köite kirjeldust Joliet puus"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:174
+#: projects/datacd/k3bdatapreparationjob.cpp:189
+#: projects/datacd/k3bdatapreparationjob.cpp:211
+#: projects/audiocd/k3baudiojob.cpp:180 projects/mixedcd/k3bmixedjob.cpp:193
+msgid "Cancel and go back"
+msgstr "Loobu ja mine tagasi"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:184
+#: projects/audiocd/k3baudiojob.cpp:175 projects/mixedcd/k3bmixedjob.cpp:188
+msgid ""
+"The following files could not be found. Do you want to remove them from the "
+"project and continue without adding them to the image?"
+msgstr ""
+"Järgmisi faile ei leitud. Kas soovid eemaldada need projektist ja jätkata "
+"ilma neid tõmmisele lisamata?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:188
+#: projects/audiocd/k3baudiojob.cpp:179 projects/mixedcd/k3bmixedjob.cpp:192
+msgid "Remove missing files and continue"
+msgstr "Eemalda puuduvad failid ja jätka"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:205
+msgid ""
+"K3b is not able to follow symbolic links to folders after they have been "
+"added to the project. Do you want to continue without writing the symbolic "
+"links to the image?"
+msgstr ""
+"K3b ei suutnud järgida kataloogide viitu pärast nende lisamist projekti. Kas "
+"soovid jätkata ilma viitu tõmmisele kirjutamata?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:210
+msgid "Discard symbolic links to folders"
+msgstr "Kõrvalda kataloogide viidad"
+
+#: projects/datacd/k3bmkisofshandler.cpp:62
+#: projects/audiocd/k3baudionormalizejob.cpp:62
+#: projects/videocd/k3bvcdjob.cpp:222 projects/k3bgrowisofswriter.cpp:170
+#: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrdaowriter.cpp:458
+#: jobs/k3bdvdformattingjob.cpp:471
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:106
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:143
+#, kde-format
+msgid "Using %1 %2 - Copyright (C) %3"
+msgstr "Kasutatakse %1 %2 - autoriõigus (C) %3"
+
+#: projects/datacd/k3bmkisofshandler.cpp:73
+msgid "Mkisofs executable not found."
+msgstr "Mkisofsi käivitatavat faili ei leitud."
+
+#: projects/datacd/k3bmkisofshandler.cpp:87
+#, kde-format
+msgid "Read error from file '%1'"
+msgstr "Viga faili \"%1\" lugemisel"
+
+#: projects/datacd/k3bmkisofshandler.cpp:92
+msgid "Used version of mkisofs does not have large file support."
+msgstr "Kasutatav mkisofs'i versioon ei toeta suuri faile."
+
+#: projects/datacd/k3bmkisofshandler.cpp:93
+msgid "Files bigger than 2 GB cannot be handled."
+msgstr "Enam kui 2 GB faile ei ole võimalik käsitleda"
+
+#: projects/datacd/k3bmkisofshandler.cpp:106
+#, kde-format
+msgid "Encountered an incorrectly encoded filename '%1'"
+msgstr "Leiti vigaselt kodeeritud failinimi '%1'"
+
+#: projects/datacd/k3bmkisofshandler.cpp:108
+msgid ""
+"This may be caused by a system update which changed the local character set."
+msgstr ""
+"Selle põhjuseks võib olla süsteemi uuendamine, mille käigus muudeti lokaati."
+
+#: projects/datacd/k3bmkisofshandler.cpp:109
+msgid ""
+"You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
+"encoding."
+msgstr ""
+"Failinime kodeeringu muutmiseks võib kasutada programmi convmv (http://j3e."
+"de/linux/convmv/)."
+
+#: projects/datacd/k3bmkisofshandler.cpp:113
+msgid "The boot image has an invalid size."
+msgstr "Alglaadimistõmmise suurus on vigane."
+
+#: projects/datacd/k3bmkisofshandler.cpp:117
+msgid "The boot image contains multiple partitions.."
+msgstr "Alglaadimistõmmis sisaldab mitut partitsiooni."
+
+#: projects/datacd/k3bmkisofshandler.cpp:118
+msgid "A hard-disk boot image has to contain a single partition."
+msgstr "Kõvaketta alglaadimistõmmis tohib sisaldada üht partitsiooni."
+
+#: projects/datacd/k3bisoimager.cpp:162
+msgid ""
+"Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
+"contain more than one backslash:"
+msgstr ""
+"Vea tõttu mkisofsi versioonis <= 1.15a40 ei suuda K3b käsitleda "
+"failinimesid, milles on enam kui üks längkriips:"
+
+#: projects/datacd/k3bisoimager.cpp:171
+#: projects/audiocd/k3baudionormalizejob.cpp:186
+#: projects/videocd/k3bvcdjob.cpp:358 projects/k3bcdrecordwriter.cpp:913
+#: projects/k3bcdrdaowriter.cpp:756 jobs/k3bcdda2wavreader.cpp:241
+#: jobs/k3bdvdbooktypejob.cpp:193 jobs/k3bdvdformattingjob.cpp:272
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:278
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:480
+#, kde-format
+msgid "%1 returned an unknown error (code %2)."
+msgstr "%1 tagastas tundmatu vea (kood %2)."
+
+#: projects/datacd/k3bisoimager.cpp:173
+#: projects/audiocd/k3baudionormalizejob.cpp:188
+#: projects/videocd/k3bvcdjob.cpp:360 jobs/k3bdvdbooktypejob.cpp:195
+#: jobs/k3bdvdformattingjob.cpp:274
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:281
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:483
+msgid "Please send me an email with the last output."
+msgstr "Palun saada mulle e-kiri viimase väljundiga."
+
+#: projects/datacd/k3bisoimager.cpp:181 projects/k3bcdrecordwriter.cpp:933
+#: projects/k3bcdrdaowriter.cpp:767
+#, kde-format
+msgid "%1 crashed."
+msgstr "%1 lõpetas krahhiga."
+
+#: projects/datacd/k3bisoimager.cpp:307 projects/datacd/k3bisoimager.cpp:449
+#: projects/videocd/k3bvcdjob.cpp:258 projects/k3bgrowisofswriter.cpp:367
+#: projects/k3bcdrecordwriter.cpp:455 projects/k3bcdrdaowriter.cpp:552
+#: jobs/k3bcdda2wavreader.cpp:136 jobs/k3bdvdbooktypejob.cpp:336
+#: jobs/k3bdvdformattingjob.cpp:505
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:181
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:384
+#, kde-format
+msgid "Could not start %1."
+msgstr "%1 käivitamine nurjus."
+
+#: projects/datacd/k3bisoimager.cpp:372
+msgid "Could not determine size of resulting image file."
+msgstr "Loodava tõmmisefaili suuruse määramine nurjus."
+
+#: projects/datacd/k3bisoimager.cpp:525
+msgid "No volume id specified. Using default."
+msgstr "Köite ID on määramata. Kasutatakse vaikeväärtust."
+
+#: projects/datacd/k3bisoimager.cpp:618
+#, kde-format
+msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
+msgstr "Leiti suuremad kui 4 GB failid. K3b vajab jätkamiseks vähemalt %1."
+
+#: projects/datacd/k3bisoimager.cpp:626
+msgid ""
+"Found files bigger than 2 GB. These files will only be fully accessible if "
+"mounted with UDF."
+msgstr ""
+"Leiti suuremad kui 2 GB failid. Neid saab kasutada ainult siis, kui need "
+"ühendatakse UDF-iga."
+
+#: projects/datacd/k3bisoimager.cpp:637
+msgid "Enabling UDF extension."
+msgstr "UDF laienduste lubamine."
+
+#: projects/datacd/k3bisoimager.cpp:682
+msgid "Setting iso level to 3 to support files bigger than 4 GB."
+msgstr "Suuremate kui 4 GB failide toetuseks määratakse ISO tasemeks 3."
+
+#: projects/datacd/k3bisoimager.cpp:771
+#, kde-format
+msgid "Could not follow link %1 to non-existing file %2. Skipping..."
+msgstr "Olematule failile %2 viitava %1 järgimine nurjus, jäetakse vahele..."
+
+#: projects/datacd/k3bisoimager.cpp:775
+#, kde-format
+msgid ""
+"Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
+msgstr ""
+"Viita %1 kataloogile %2 ignoreeritakse, sest K3b ei suuda järgida viitu "
+"kataloogidele."
+
+#: projects/datacd/k3bisoimager.cpp:783
+#, kde-format
+msgid "Could not find file %1. Skipping..."
+msgstr "Faili %1 leidmine nurjus, jäetakse vahele..."
+
+#: projects/datacd/k3bisoimager.cpp:787
+#, kde-format
+msgid "Could not read file %1. Skipping..."
+msgstr "Faili %1 lugemine nurjus, jäetakse vahele..."
+
+#: projects/datacd/k3bisoimager.cpp:837
+#, kde-format
+msgid "Failed to backup boot image file %1"
+msgstr "Alglaadimistõmmise faili %1 varundamine nurjus"
+
+#: projects/datacd/k3bisoimager.cpp:993 projects/datacd/k3bisoimager.cpp:1003
+#: projects/datacd/k3bisoimager.cpp:1010 projects/datacd/k3bisoimager.cpp:1016
+msgid "Could not write temporary file"
+msgstr "Ajutise faili kirjutamine nurjus"
+
+#: projects/datacd/k3bisoimager.cpp:997
+msgid "No files to be written."
+msgstr "Pole ühtegi faili kirjutada."
+
+#: projects/datacd/k3bbootitem.cpp:30
+msgid "El Torito Boot image"
+msgstr "El Torito alglaadimistõmmis"
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:91
+msgid "Searching for old session"
+msgstr "Vana seansi otsimine"
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:227
+#, kde-format
+msgid ""
+"No medium inserted or an empty medium in %1. Cannot continue multisession "
+"disk."
+msgstr ""
+"Andmekandjat pole sisestatud või sisaldab %1 tühja andmekandjat. "
+"Mitmeseansilise plaadi jätkamine ei ole võimalik."
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:252
+#: projects/datacd/k3bmsinfofetcher.cpp:152
+#, kde-format
+msgid "Could not open Iso9660 filesystem in %1."
+msgstr "%1: ISO9660 failisüsteemi avamine nurjus."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:52
+msgid "Searching previous session"
+msgstr "Eelmise seansi otsimine"
+
+#: projects/datacd/k3bmsinfofetcher.cpp:56
+#: projects/datacd/k3bmsinfofetcher.cpp:92 projects/videocd/k3bvcdjob.cpp:204
+#: projects/k3bgrowisofswriter.cpp:156 projects/k3bcdrecordwriter.cpp:214
+#: projects/k3bcdrdaowriter.cpp:450 jobs/k3bcdda2wavreader.cpp:97
+#: jobs/k3bdvdbooktypejob.cpp:288 jobs/k3bclonejob.cpp:88
+#: jobs/k3bdvdformattingjob.cpp:464 jobs/k3breadcdreader.cpp:106
+#, kde-format
+msgid "Could not find %1 executable."
+msgstr "Programmi %1 käivitatavat faili ei leitud."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:164
+msgid "Could not determine next writable address."
+msgstr "Järgmise kirjutatava aadressi määramine nurjus."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:180
+#, kde-format
+msgid "Could not start %1"
+msgstr "%1 käivitamine nurjus"
+
+#: projects/datacd/k3bmsinfofetcher.cpp:210
+msgid "Could not retrieve multisession information from disk."
+msgstr "Plaadilt mitmeseansilisuse info hankimine nurjus."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:211
+msgid "The disk is either empty or not appendable."
+msgstr "Plaat on tühi või ei ole lisatav."
+
+#: projects/videodvd/k3bvideodvdjob.cpp:54
+msgid "Creating Video DVD Image File"
+msgstr "Video DVD tõmmisefaili loomine"
+
+#: projects/videodvd/k3bvideodvdjob.cpp:57
+msgid "Writing Video DVD"
+msgstr "Video DVD kirjutamine"
+
+#: projects/videodvd/k3bvideodvdjob.cpp:67
+#, kde-format
+msgid "ISO9660/Udf Filesystem (Size: %1)"
+msgstr "ISO9660/UDF failisüsteem (suurus: %1)"
+
+#: projects/videodvd/k3bvideodvdjob.cpp:69
+#: projects/audiocd/k3baudiojob.cpp:862 projects/movixcd/k3bmovixjob.cpp:128
+#: projects/mixedcd/k3bmixedjob.cpp:1362 projects/videocd/k3bvcdjob.cpp:580
+#, kde-format
+msgid " - %1 copy"
+msgid_plural " - %1 copies"
+msgstr[0] " - %1 koopia"
+msgstr[1] " - %1 koopiat"
+
+#: projects/videodvd/k3bvideodvdimager.cpp:112
+#: projects/videodvd/k3bvideodvdimager.cpp:118 jobs/k3bcdcopyjob.cpp:553
+#, kde-format
+msgid "Unable to create temporary folder '%1'."
+msgstr "Ajutise kataloogi '%1' loomine nurjus."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:124
+#, kde-format
+msgid "Found invalid entry in the VIDEO_TS folder (%1)."
+msgstr "Leiti vigane kirje kataloogis VIDEO_TS (%1)."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:131
+#, kde-format
+msgid "Unable to link temporary file in folder %1."
+msgstr "Ajutise faili linkimine kataloogi %1 nurjus."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:214
+msgid "The project does not contain all necessary Video DVD files."
+msgstr "Projekt ei sisalda kõiki vajalikke video-DVD faile."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:215
+msgid ""
+"The resulting DVD will most likely not be playable on a Hifi DVD player."
+msgstr "Loodav DVD ei ole tõenäoliselt Hi-Fi DVD-mängijatel kasutatav."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:56
+msgid "Could not find normalize executable."
+msgstr "Normaliseerimise käivitatavat faili ei leitud."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:84
+msgid "Could not start normalize."
+msgstr "Normaliseerimise käivitamine nurjus."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:124
+#, kde-format
+msgid "Track %1 is already normalized."
+msgstr "Rada %1 on juba normaliseeritud."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:130
+#, kde-format
+msgid "Adjusting volume level for track %1 of %2"
+msgstr "Helitugevuse kohendamine rajal %1 (kokku %2)"
+
+#: projects/audiocd/k3baudionormalizejob.cpp:138
+#, kde-format
+msgid "Computing level for track %1 of %2"
+msgstr "Helitugevuse arvutamine rajale %1 (kokku %2)"
+
+#: projects/audiocd/k3baudionormalizejob.cpp:181
+msgid "Successfully normalized all tracks."
+msgstr "Kõik rajad edukalt normaliseeritud."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:189
+msgid "Error while normalizing tracks."
+msgstr "Viga radade normaliseerimisel."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:198
+#: projects/videocd/k3bvcdjob.cpp:366 jobs/k3bcdda2wavreader.cpp:247
+#: jobs/k3bdvdbooktypejob.cpp:201 jobs/k3bdvdformattingjob.cpp:280
+#, kde-format
+msgid "%1 did not exit cleanly."
+msgstr "%1 ei lõpetanud korralikult."
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:105
+#, kde-format
+msgid "Please insert Audio CD %1%2"
+msgstr "Palun sisesta audio CD %1%2"
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:255
+msgid "CD Track"
+msgstr "CD rada"
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:261
+#, kde-format
+msgid "Track %1 from Audio CD %2"
+msgstr "Audio CD %2 rada %1"
+
+#: projects/audiocd/k3baudioimager.cpp:93
+#, kde-format
+msgid "Unable to seek in track %1."
+msgstr "Rajal %1 ei ole võimalik liikuda."
+
+#: projects/audiocd/k3baudioimager.cpp:147
+#, kde-format
+msgid "Error while decoding track %1."
+msgstr "Viga raja %1 dekodeerimisel."
+
+#: projects/audiocd/k3brawaudiodatasource.cpp:82
+msgid "Raw Audio CD Image"
+msgstr "Audio-CD toortõmmis"
+
+#: projects/audiocd/k3baudiozerodata.cpp:59
+msgid "Silence"
+msgstr "Vaikus"
+
+#: projects/audiocd/k3baudiojob.cpp:198 projects/mixedcd/k3bmixedjob.cpp:211
+msgid "Please add files to your project first."
+msgstr "Palun lisa kõigepealt failid projekti."
+
+#: projects/audiocd/k3baudiojob.cpp:204
+msgid "Unable to write on-the-fly with these audio sources."
+msgstr "Nende audioallikatega ei ole lennult kirjutamine võimalik."
+
+#: projects/audiocd/k3baudiojob.cpp:253 jobs/k3bmetawriter.cpp:425
+msgid "Track lengths below 4 seconds violate the Red Book standard."
+msgstr "Rajapikkus alla 4 sekundi rikub Punase raamatu standardit."
+
+#: projects/audiocd/k3baudiojob.cpp:291 projects/mixedcd/k3bmixedjob.cpp:1235
+#: jobs/k3bmetawriter.cpp:457
+msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
+msgstr "Cdrecord < 2.0.13 ei toeta lennult kirjutamist."
+
+#: projects/audiocd/k3baudiojob.cpp:298 projects/mixedcd/k3bmixedjob.cpp:1241
+#: jobs/k3bmetawriter.cpp:464
+#, kde-format
+msgid "Cdrecord %1 does not support CD-Text writing."
+msgstr "Cdrecord %1 ei toeta CD-teksti kirjutamist."
+
+#: projects/audiocd/k3baudiojob.cpp:303 jobs/k3bmetawriter.cpp:469
+#: jobs/k3bcdcopyjob.cpp:863
+msgid "It is not possible to write CD-Text in TAO mode."
+msgstr "TAO režiimis ei ole võimalik kirjutada CD-teksti."
+
+#: projects/audiocd/k3baudiojob.cpp:313 projects/mixedcd/k3bmixedjob.cpp:246
+msgid "Determining maximum writing speed"
+msgstr "Maksimaalse kirjutamiskiiruse tuvastamine"
+
+#: projects/audiocd/k3baudiojob.cpp:348
+#, kde-format
+msgid "Creating image files in %1"
+msgstr "Tõmmisefailide loomine asukohta %1"
+
+#: projects/audiocd/k3baudiojob.cpp:349 projects/videocd/k3bvcdjob.cpp:192
+msgid "Creating image files"
+msgstr "Tõmmisefailide loomine"
+
+#: projects/audiocd/k3baudiojob.cpp:361 projects/mixedcd/k3bmixedjob.cpp:330
+msgid "Unable to determine maximum speed for some reason. Ignoring."
+msgstr ""
+"Mingil põhjusel ei õnnestunud määrata maksimaalset kirjutamiskiirust. Seda "
+"ignoreeritakse."
+
+#: projects/audiocd/k3baudiojob.cpp:389 projects/mixedcd/k3bmixedjob.cpp:379
+msgid "Writing canceled."
+msgstr "Kirjutamine katkestatud."
+
+#: projects/audiocd/k3baudiojob.cpp:451 projects/mixedcd/k3bmixedjob.cpp:578
+msgid "Error while decoding audio tracks."
+msgstr "Viga audioradade dekodeerimisel."
+
+#: projects/audiocd/k3baudiojob.cpp:459
+msgid "Successfully decoded all tracks."
+msgstr "Kõik rajad edukalt dekodeeritud."
+
+#: projects/audiocd/k3baudiojob.cpp:483 projects/mixedcd/k3bmixedjob.cpp:618
+#, kde-format
+msgid "Decoding audio track %1 of %2%3"
+msgstr "Audioraja %1 dekodeerimine, kokku %2%3"
+
+#: projects/audiocd/k3baudiojob.cpp:501
+msgid "IO Error. Most likely no space left on harddisk."
+msgstr "IO viga. Tõenäoliselt napib kõvakettal ruumi."
+
+#: projects/audiocd/k3baudiojob.cpp:550 projects/mixedcd/k3bmixedjob.cpp:638
+#: projects/mixedcd/k3bmixedjob.cpp:679
+msgid "IO Error"
+msgstr "I/O viga"
+
+#: projects/audiocd/k3baudiojob.cpp:591 projects/mixedcd/k3bmixedjob.cpp:881
+#, kde-format
+msgid "Writing track %1 of %2%3"
+msgstr "Raja %1 kirjutamine, kokku %2%3"
+
+#: projects/audiocd/k3baudiojob.cpp:659 projects/mixedcd/k3bmixedjob.cpp:1022
+#: jobs/k3bdvdbooktypejob.cpp:114 jobs/k3bcdcopyjob.cpp:723
+msgid "Waiting for media"
+msgstr "Oodatakse andmekandjat"
+
+#: projects/audiocd/k3baudiojob.cpp:697 jobs/k3bcdcopyjob.cpp:1116
+msgid "Removing temporary files."
+msgstr "Ajutiste failide eemaldamine."
+
+#: projects/audiocd/k3baudiojob.cpp:731 projects/mixedcd/k3bmixedjob.cpp:1276
+msgid "Normalizing volume levels"
+msgstr "Helitugevuse normaliseerimine"
+
+#: projects/audiocd/k3baudiojob.cpp:848
+msgid "Writing Audio CD"
+msgstr "Audio CD kirjutamine"
+
+#: projects/audiocd/k3baudiojob.cpp:858
+#, kde-format
+msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
+msgid "1 track (%2 minutes)"
+msgid_plural "%1 tracks (%2 minutes)"
+msgstr[0] "1 rada (%2 min)"
+msgstr[1] "%1 rada (%2 min)"
+
+#: projects/movixcd/k3bmovixdoc.cpp:90
+msgid "Enter New Filename"
+msgstr "Uus failinimi"
+
+#: projects/movixcd/k3bmovixdoc.cpp:91
+msgid "A file with that name already exists. Please enter a new name:"
+msgstr "Sellise nimega fail on juba olemas. Palun anna uus nimi:"
+
+#: projects/movixcd/k3bmovixdoc.cpp:181
+#, kde-format
+msgid ""
+"Could not rename subtitle file. File with requested name %1 already exists."
+msgstr "Subtiitrifaili ümbernimetamine nurjus. Fail nimega %1 on juba olemas."
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:134
+msgid "Could not find a valid eMovix installation."
+msgstr "eMovix paistab olevat paigaldamata või katki."
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:208
+#: projects/movixcd/k3bmovixprogram.cpp:187
+#: projects/movixcd/k3bmovixprogram.cpp:219
+#: projects/movixcd/k3bmovixprogram.cpp:254
+#: projects/movixcd/k3bmovixprogram.cpp:266
+#: projects/movixcd/k3bmovixprogram.cpp:275
+#: projects/movixcd/k3bmovixprogram.cpp:284
+#: projects/movixcd/k3bmovixprogram.cpp:291
+#: projects/movixcd/k3bmovixprogram.cpp:325
+#: projects/movixcd/k3bmovixprogram.cpp:327
+#: projects/movixcd/k3bmovixprogram.cpp:329
+#: projects/movixcd/k3bmovixprogram.cpp:331
+msgid "default"
+msgstr "vaikimisi"
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:315
+#: projects/movixcd/k3bmovixprogram.cpp:199
+#: projects/movixcd/k3bmovixprogram.cpp:243
+msgid "none"
+msgstr "puudub"
+
+#: projects/movixcd/k3bmovixjob.cpp:116
+msgid "Writing eMovix Project"
+msgstr "eMovixi projekti kirjutamine"
+
+#: projects/movixcd/k3bmovixjob.cpp:118
+#, kde-format
+msgid "Writing eMovix Project (%1)"
+msgstr "eMovixi projekti kirjutamine (%1)"
+
+#: projects/movixcd/k3bmovixjob.cpp:124
+#, kde-format
+msgid "1 file (%2) and about 8 MB eMovix data"
+msgid_plural "%1 files (%2) and about 8 MB eMovix data"
+msgstr[0] "1 fail (%1) ja umbes 8 MB eMovix andmeid"
+msgstr[1] "%1 faili (%2) ja umbes 8 MB eMovix andmeid"
+
+#: projects/mixedcd/k3bmixedjob.cpp:277
+#, kde-format
+msgid "Creating audio image files in %1"
+msgstr "Audio tõmmisefailide loomine asukohas %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:290 projects/mixedcd/k3bmixedjob.cpp:504
+msgid "Creating audio image files"
+msgstr "Audio tõmmisefailide loomine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:478
+msgid "Error while creating ISO image."
+msgstr "Viga ISO tõmmise loomisel."
+
+#: projects/mixedcd/k3bmixedjob.cpp:493
+msgid "ISO image successfully created."
+msgstr "ISO tõmmis edukalt loodud."
+
+#: projects/mixedcd/k3bmixedjob.cpp:529 jobs/k3bverificationjob.cpp:109
+#: jobs/k3bcdcopyjob.cpp:1044
+msgid "Need to reload medium to return to proper state."
+msgstr "Sobivasse olekusse naasmiseks tuleb andmekandja uuesti laadida."
+
+#: projects/mixedcd/k3bmixedjob.cpp:564 projects/k3bcdrecordwriter.cpp:750
+#: jobs/k3bverificationjob.cpp:269 jobs/k3bcdcopyjob.cpp:1101
+msgid "Please reload the medium and press 'ok'"
+msgstr "Palun laadi andmekandja uuesti ja klõpsa OK"
+
+#: projects/mixedcd/k3bmixedjob.cpp:565 projects/k3bcdrecordwriter.cpp:751
+msgid "Unable to close the tray"
+msgstr "Sahtli sulgemine nurjus"
+
+#: projects/mixedcd/k3bmixedjob.cpp:594
+msgid "Audio images successfully created."
+msgstr "Audiotõmmised edukalt loodud."
+
+#: projects/mixedcd/k3bmixedjob.cpp:891
+msgid "ISO9660 data"
+msgstr "ISO9660 andmed"
+
+#: projects/mixedcd/k3bmixedjob.cpp:888
+#, kde-format
+msgid "Writing track %1 of %2 (%3)"
+msgstr "Raja %1 kirjutamine, kokku %2 (%3)"
+
+#: projects/mixedcd/k3bmixedjob.cpp:997
+msgid "Simulating second session"
+msgstr "Teise seansi simuleerimine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:999
+#, kde-format
+msgid "Writing second session of copy %1"
+msgstr "Koopia %1 teise seansi kirjutamine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1001
+msgid "Writing second session"
+msgstr "Teise seansi kirjutamine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1005
+msgid "Simulating first session"
+msgstr "Esimese seansi simuleerimine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1007
+#, kde-format
+msgid "Writing first session of copy %1"
+msgstr "Koopia %1 esimese seansi kirjutamine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1009
+msgid "Writing first session"
+msgstr "Esimese seansi kirjutamine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1038 projects/k3bgrowisofshandler.cpp:101
+#: projects/k3bcdrecordwriter.cpp:624
+msgid "Trying to write more than the official disk capacity"
+msgstr "Püütakse kirjutada rohkem kui plaadi ametlik mahtuvus"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1041 projects/k3bgrowisofshandler.cpp:238
+#: projects/k3bcdrecordwriter.cpp:835 projects/k3bcdrdaowriter.cpp:883
+msgid "Data does not fit on disk."
+msgstr "Andmed ei mahu plaadile ära."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1087
+msgid "Creating ISO image file"
+msgstr "ISO tõmmisefaili loomine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1088 projects/mixedcd/k3bmixedjob.cpp:1089
+#, kde-format
+msgid "Creating ISO image in %1"
+msgstr "ISO tõmmise loomine asukohas %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1129
+msgid "Removing buffer files."
+msgstr "Puhvrifailide eemaldamine."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1134
+#, kde-format
+msgid "Could not delete file %1."
+msgstr "Faili %1 kustutamine nurjus."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1244
+msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
+msgstr ""
+"TAO režiimis ei ole võimalik kirjutada CD-teksti. Proovi DAO või toorrežiimi."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1341
+msgid "Writing Enhanced Audio CD"
+msgstr "Täiustatud audio CD kirjutamine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1346
+msgid "Writing Mixed Mode CD"
+msgstr "Segarežiimis CD kirjutamine"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1356
+#, kde-format
+msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
+msgid "1 track (%2 minutes audio data, %3 ISO9660 data)"
+msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
+msgstr[0] "1 rada (%2 minutit audioandmeid, %3 ISO9660 andmeid)"
+msgstr[1] "%1 rada (%2 minutit audioandmeid, %3 ISO9660 andmeid)"
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:69
+#, kde-format
+msgid "File %1 is empty."
+msgstr "Fail %1 on tühi."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:103
+msgid ""
+"This looks like an elementary video stream but a multiplexed program stream "
+"was required."
+msgstr ""
+"See näeb välja nagu elementaarne videovoog, aga vajalik on multipleksne "
+"programmivoog."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:108
+msgid ""
+"This looks like an elementary audio stream but a multiplexed program stream "
+"was required."
+msgstr ""
+"See näeb välja nagu elementaarne audiovoog, aga vajalik on multipleksne "
+"programmivoog."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:113
+msgid ""
+"This looks like a RIFF header but a plain multiplexed program stream was "
+"required."
+msgstr ""
+"See näeb välja nagu RIFF päis, aga vajalik on puhas multipleksne "
+"programmivoog."
+
+#: projects/videocd/k3bvcdtrack.cpp:163 projects/videocd/k3bvcdtrack.cpp:173
+#: projects/videocd/k3bvcdtrack.cpp:186 projects/videocd/k3bvcdtrack.cpp:199
+#: projects/videocd/k3bvcdtrack.cpp:234 projects/videocd/k3bvcdtrack.cpp:262
+#: projects/videocd/k3bvcdtrack.cpp:275 projects/videocd/k3bvcdtrack.cpp:288
+#: projects/videocd/k3bvcdtrack.cpp:301 projects/videocd/k3bvcdtrack.cpp:313
+#: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:352
+#: projects/videocd/k3bvcdtrack.cpp:415
+msgid "n/a"
+msgstr "-"
+
+#: projects/videocd/k3bvcdtrack.cpp:194 projects/videocd/k3bvcdtrack.cpp:283
+#, kde-format
+msgid "1 bit/s"
+msgid_plural "%1 bits/s"
+msgstr[0] "1 bit/s"
+msgstr[1] "%1 bit/s"
+
+#: projects/videocd/k3bvcdtrack.cpp:211
+msgid "Component"
+msgstr "Komponent"
+
+#: projects/videocd/k3bvcdtrack.cpp:296
+#, kde-format
+msgid "%1 Hz"
+msgstr "%1 Hz"
+
+#: projects/videocd/k3bvcdtrack.cpp:323 projects/videocd/k3bvcdtrack.cpp:325
+msgid "original"
+msgstr "originaal"
+
+#: projects/videocd/k3bvcdtrack.cpp:323 projects/videocd/k3bvcdtrack.cpp:325
+msgid "duplicate"
+msgstr "duplikaat"
+
+#: projects/videocd/k3bvcdtrack.cpp:339
+msgid "Motion Picture"
+msgstr "Liikuv pilt"
+
+#: projects/videocd/k3bvcdtrack.cpp:341
+msgid "Still Picture"
+msgstr "Seisev pilt"
+
+#: projects/videocd/k3bvcdtrack.cpp:348
+#, kde-format
+msgid "Layer %1"
+msgstr "Kiht %1"
+
+#: projects/videocd/k3bvcdtrack.cpp:382
+msgid "unknown"
+msgstr "tundmatu"
+
+#: projects/videocd/k3bvcdtrack.cpp:383
+msgid "invalid"
+msgstr "vigane"
+
+#: projects/videocd/k3bvcdtrack.cpp:389
+msgid "stereo"
+msgstr "stereo"
+
+#: projects/videocd/k3bvcdtrack.cpp:390
+msgid "joint stereo"
+msgstr "liitstereo"
+
+#: projects/videocd/k3bvcdtrack.cpp:391 projects/videocd/k3bvcdtrack.cpp:396
+msgid "dual channel"
+msgstr "kahe kanaliga"
+
+#: projects/videocd/k3bvcdtrack.cpp:392
+msgid "single channel"
+msgstr "ühe kanaliga"
+
+#: projects/videocd/k3bvcdtrack.cpp:397
+msgid "surround sound"
+msgstr "surround-heli"
+
+#: projects/videocd/k3bvcddoc.cpp:214
+msgid "VCD"
+msgstr "VCD"
+
+#: projects/videocd/k3bvcddoc.cpp:211 projects/videocd/k3bvcddoc.cpp:221
+#, kde-format
+msgid ""
+"K3b will create a %1 image from the given MPEG files, but these files must "
+"already be in %1 format. K3b does not yet resample MPEG files."
+msgstr ""
+"K3b loob %1 tõmmise antud MPEG failidest, kuid need peavad eelnevalt olema %"
+"1 vormingus. K3b ei hakka MPEG faile ümber diskreetima."
+
+#: projects/videocd/k3bvcddoc.cpp:215 projects/videocd/k3bvcddoc.cpp:228
+#: projects/videocd/k3bvcddoc.cpp:257
+msgid "Information"
+msgstr "Info"
+
+#: projects/videocd/k3bvcddoc.cpp:224
+msgid "SVCD"
+msgstr "SVCD"
+
+#: projects/videocd/k3bvcddoc.cpp:226
+msgid ""
+"Note: Forcing MPEG2 as VCD is not supported by some standalone DVD players."
+msgstr ""
+"Märkus: mõned autonoomsed DVD-mängijad ei toeta MPEG2 pealesundimist VCD-na."
+
+#: projects/videocd/k3bvcddoc.cpp:229
+msgid "Force VCD"
+msgstr "Sunni VCD peale"
+
+#: projects/videocd/k3bvcddoc.cpp:230
+msgid "Do not force VCD"
+msgstr "Ära sunni VCD-d peale"
+
+#: projects/videocd/k3bvcddoc.cpp:243
+msgid ""
+"You cannot mix MPEG1 and MPEG2 video files.\n"
+"Please start a new Project for this filetype.\n"
+"Resample not implemented in K3b yet."
+msgstr ""
+"MPEG1 ja MPEG2 videofaile ei saa segada.\n"
+"Palun alusta selle failitüübi jaoks uus projekt.\n"
+"Ümberdiskreetimine ei ole K3b-s veel võimalik."
+
+#: projects/videocd/k3bvcddoc.cpp:244
+msgid "Wrong File Type for This Project"
+msgstr "Vale failitüüp selle projekti jaoks"
+
+#: projects/videocd/k3bvcddoc.cpp:255
+msgid ""
+"PBC (Playback control) enabled.\n"
+"Videoplayers can not reach Segments (Mpeg Still Pictures) without Playback "
+"control ."
+msgstr ""
+"PBC (taasesituse juhtimine) lubatud.\n"
+"Videomängijad ei suuda esitada segmente (MPEG kaadreid) ilma taasesituse "
+"juhtimiseta."
+
+#: projects/videocd/k3bvcddoc.cpp:287
+msgid "Only MPEG1 and MPEG2 video files are supported.\n"
+msgstr "Toetatud on ainult MPEG1 ja MPEG2 videofailid.\n"
+
+#: projects/videocd/k3bvcddoc.cpp:288
+msgid "Wrong File Format"
+msgstr "Vale failivorming"
+
+#: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:478
+#, kde-format
+msgid "Removing Binary file %1"
+msgstr "Binaarfaili %1 eemaldamine"
+
+#: projects/videocd/k3bvcdjob.cpp:134 projects/videocd/k3bvcdjob.cpp:488
+#, kde-format
+msgid "Removing Cue file %1"
+msgstr "Cue faili %1 eemaldamine"
+
+#: projects/videocd/k3bvcdjob.cpp:184
+msgid "Could not write correct XML-file."
+msgstr "Korrektse XML-faili kirjutamine nurjus."
+
+#: projects/videocd/k3bvcdjob.cpp:200
+msgid "Creating Cue/Bin files ..."
+msgstr "Cue/Bin-failide loomine..."
+
+#: projects/videocd/k3bvcdjob.cpp:205
+#, kde-format
+msgid "To create VideoCDs you must install VcdImager Version %1."
+msgstr "Video CD-de loomiseks peab olema paigaldatud VcdImager versioon %1."
+
+#: projects/videocd/k3bvcdjob.cpp:206 projects/videocd/k3bvcdjob.cpp:215
+msgid ""
+"You can find this on your distribution disks or download it from http://www."
+"vcdimager.org"
+msgstr ""
+"Selle leiad oma distributsiooni plaatidelt või internetist aadressil http://"
+"www.vcdimager.org"
+
+#: projects/videocd/k3bvcdjob.cpp:214
+#, kde-format
+msgid "%1 executable too old: need version %2 or greater."
+msgstr ""
+"Käivitatav fail %1 on liiga vana. Vaja on versiooni %2 või veel uuemat."
+
+#: projects/videocd/k3bvcdjob.cpp:296
+#, kde-format
+msgid "Scanning video file %1 of %2 (%3)"
+msgstr "Videofaili %1 skaneerimine, kokku %2 (%3)"
+
+#: projects/videocd/k3bvcdjob.cpp:332
+#, kde-format
+msgid "Creating Image for track %1"
+msgstr "Raja %1 tõmmise loomine"
+
+#: projects/videocd/k3bvcdjob.cpp:354
+msgid "Cue/Bin files successfully created."
+msgstr "Cue/Bin failid edukalt loodud."
+
+#: projects/videocd/k3bvcdjob.cpp:397
+#, kde-format
+msgid "Writing Copy %1 of %2"
+msgstr "Koopia %1 (%2-st) kirjutamine"
+
+#: projects/videocd/k3bvcdjob.cpp:523
+#, kde-format
+msgid "One or more BCD fields out of range for %1"
+msgstr "Üks või enam BCD väli on %1 puhul vahemikust väljas"
+
+#: projects/videocd/k3bvcdjob.cpp:526
+msgid "From now on, scan information data errors will not be reported anymore"
+msgstr "Edaspidi ei teatata skaneerimisinfo andmetevigadest"
+
+#: projects/videocd/k3bvcdjob.cpp:527
+msgid ""
+"Consider enabling the 'update scan offsets' option, if it is not enabled "
+"already."
+msgstr ""
+"Kui see ei ole juba sees, võiksid sisse lülitada võimaluse "
+"'skaneerimisnihete uuendamine'."
+
+#: projects/videocd/k3bvcdjob.cpp:534
+#, kde-format
+msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
+msgstr ""
+"APS punktid paistavad olevat segi (tegelik punkt %1, viimati vaadatud punkt %"
+"2)"
+
+#: projects/videocd/k3bvcdjob.cpp:535
+msgid "Ignoring this aps"
+msgstr "Selle APS eiramine"
+
+#: projects/videocd/k3bvcdjob.cpp:543
+#, kde-format
+msgid "Bad packet at packet #%1 (stream byte offset %2)"
+msgstr "Halb pakett paketis #%1 (voo baidinihe %2)"
+
+#: projects/videocd/k3bvcdjob.cpp:550
+#, kde-format
+msgid "The remaining byte of the stream will be ignored."
+msgid_plural "The remaining %1 bytes of the stream will be ignored."
+msgstr[0] "Voo allesjäänud baiti ignoreeritakse."
+msgstr[1] "Voo allesjäänud %1 baiti ignoreeritakse."
+
+#: projects/videocd/k3bvcdjob.cpp:552
+msgid "An unknown number of remaining stream bytes will be ignored."
+msgstr "Voo allesjäänud teadmata arvu baite ignoreeritakse."
+
+#: projects/videocd/k3bvcdjob.cpp:561
+msgid "Writing Video CD (Version 1.1)"
+msgstr "Video CD kirjutamine (versioon 1.1)"
+
+#: projects/videocd/k3bvcdjob.cpp:563
+msgid "Writing Video CD (Version 2.0)"
+msgstr "Video CD kirjutamine (versioon 2.0)"
+
+#: projects/videocd/k3bvcdjob.cpp:565
+msgid "Writing Super Video CD"
+msgstr "Super Video CD kirjutamine"
+
+#: projects/videocd/k3bvcdjob.cpp:567
+msgid "Writing High-Quality Video CD"
+msgstr "High Quality Video CD kirjutamine"
+
+#: projects/videocd/k3bvcdjob.cpp:569
+msgid "Writing Video CD"
+msgstr "Video CD kirjutamine"
+
+#: projects/videocd/k3bvcdjob.cpp:576
+#, kde-format
+msgid "1 MPEG (%2)"
+msgid_plural "%1 MPEGs (%2)"
+msgstr[0] "1 MPEG (%2)"
+msgstr[1] "%1 MPEG-d (%2)"
+
+#: projects/k3babstractwriter.cpp:56
+msgid "Unlocking drive..."
+msgstr "Seadme lahtilukustamine..."
+
+#: projects/k3babstractwriter.cpp:70
+msgid "Could not unlock drive."
+msgstr "Seadme lahtilukustamine nurjus."
+
+#: projects/k3babstractwriter.cpp:73
+msgid "Ejecting Medium"
+msgstr "Andmekandja väljastamine"
+
+#: projects/k3babstractwriter.cpp:87 jobs/k3bdvdformattingjob.cpp:303
+msgid "Unable to eject medium."
+msgstr "Andmekandja väljastamine nurjus."
+
+#: projects/k3bgrowisofswriter.cpp:161
+#, kde-format
+msgid "Growisofs version %1 is too old. K3b needs at least version 5.10."
+msgstr ""
+"Growisofs versioon %1 on liiga vana. K3b vajab vähemalt versiooni 5.10."
+
+#: projects/k3bgrowisofswriter.cpp:175
+#, kde-format
+msgid ""
+"Growisofs version %1 does not feature a software buffer which may result in "
+"an unstable burn process."
+msgstr ""
+"Growisofs versioon %1 ei võimalda tarkvaralist puhvrit, mis võib põhjustada "
+"kirjutamise ebastabiilsust."
+
+#: projects/k3bgrowisofswriter.cpp:228
+#, kde-format
+msgid "Could not open file %1."
+msgstr "Faili %1 avamine nurjus."
+
+#: projects/k3bgrowisofswriter.cpp:347 projects/k3bcdrecordwriter.cpp:435
+#: projects/k3bcdrdaowriter.cpp:523 jobs/k3bcdcopyjob.cpp:483
+msgid "Preparing write process..."
+msgstr "Kirjutamise ettevalmistamine..."
+
+#: projects/k3bgrowisofswriter.cpp:351 projects/k3bcdrecordwriter.cpp:439
+#: projects/k3bcdrdaowriter.cpp:535 jobs/k3bdvdformattingjob.cpp:131
+msgid "Unmounting medium"
+msgstr "Plaadi lahutamine"
+
+#: projects/k3bgrowisofswriter.cpp:373
+msgid "Starting simulation..."
+msgstr "Simuleerimise alustamine..."
+
+#: projects/k3bgrowisofswriter.cpp:378
+msgid "Starting disc write..."
+msgstr "Plaadi kirjutamise alustamine..."
+
+#: projects/k3bgrowisofswriter.cpp:441 projects/k3bcdrecordwriter.cpp:570
+msgid "Writing data"
+msgstr "Andmete kirjutamine"
+
+#: projects/k3bgrowisofswriter.cpp:522 projects/k3bcdrecordwriter.cpp:814
+#: projects/k3bcdrdaowriter.cpp:748
+#, kde-format
+msgid "Average overall write speed: %1 KB/s (%2x)"
+msgstr "Üldine keskmine kirjutamiskiirus: %1 KB/s (%2x)"
+
+#: projects/k3bgrowisofswriter.cpp:527 projects/k3bcdrecordwriter.cpp:808
+#: projects/k3bcdrdaowriter.cpp:728
+msgid "Simulation successfully completed"
+msgstr "Simuleerimine edukalt lõpetatud"
+
+#: projects/k3bgrowisofswriter.cpp:529 projects/k3bcdrecordwriter.cpp:810
+#: projects/k3bcdrdaowriter.cpp:736
+msgid "Writing successfully completed"
+msgstr "Kirjutamine edukalt lõpetatud"
+
+#: projects/k3bgrowisofshandler.cpp:83
+msgid "OPC failed. Please try writing speed 1x."
+msgstr "OPC nurjus. Palun proovi kirjutamiskiirust 1x."
+
+#: projects/k3bgrowisofshandler.cpp:88
+msgid "Please try again with writing mode DAO."
+msgstr "Palun proovi uuesti kirjutada DAO režiimis."
+
+#: projects/k3bgrowisofshandler.cpp:124
+msgid "Flushing Cache"
+msgstr "Puhvri tühjendamine"
+
+#: projects/k3bgrowisofshandler.cpp:125
+msgid "Flushing the cache may take some time."
+msgstr "Puhvri tühjendamine võib võtta veidi aega."
+
+#: projects/k3bgrowisofshandler.cpp:134
+msgid "Closing Track"
+msgstr "Raja sulgemine"
+
+#: projects/k3bgrowisofshandler.cpp:137
+msgid "Closing Disk"
+msgstr "Plaadi sulgemine"
+
+#: projects/k3bgrowisofshandler.cpp:140 projects/k3bgrowisofshandler.cpp:147
+#: projects/k3bgrowisofshandler.cpp:148 projects/k3bcdrecordwriter.cpp:723
+msgid "Closing Session"
+msgstr "Seansi sulgemine"
+
+#: projects/k3bgrowisofshandler.cpp:143 projects/k3bgrowisofshandler.cpp:144
+msgid "Updating RMA"
+msgstr "RMA uuendamine"
+
+#: projects/k3bgrowisofshandler.cpp:151
+msgid "Writing Lead-out"
+msgstr "Väljajuhatuse kirjutamine"
+
+#: projects/k3bgrowisofshandler.cpp:152
+msgid "Writing the lead-out may take some time."
+msgstr "Väljajuhatuse kirjutamine võib võtta veidi aega."
+
+#: projects/k3bgrowisofshandler.cpp:155
+msgid "Removing reference to lead-out."
+msgstr "Väljajuhatuse viite eemaldamine."
+
+#: projects/k3bgrowisofshandler.cpp:158
+msgid "Modifying ISO9660 volume descriptor"
+msgstr "ISO9660 köite kirjelduse muutmine"
+
+#: projects/k3bgrowisofshandler.cpp:165
+msgid "Writing mode Incremental Streaming not available"
+msgstr "Järjestikuse voo kirjutamise režiim puudub"
+
+#: projects/k3bgrowisofshandler.cpp:166
+msgid "Engaging DAO"
+msgstr "DAO kaasamine"
+
+#: projects/k3bgrowisofshandler.cpp:178
+#, kde-format
+msgid "Writing speed: %1 KB/s (%2x)"
+msgstr "Kirjutamiskiirus: %1 KB/s (%2x)"
+
+#: projects/k3bgrowisofshandler.cpp:229
+msgid "K3b detected a problem with the medium."
+msgstr "K3b tuvastas andmekandja vea."
+
+#: projects/k3bgrowisofshandler.cpp:230
+msgid ""
+"Please try another brand of media, preferably one explicitly recommended by "
+"your writer's vendor."
+msgstr ""
+"Palun proovi mõnd muud tüüpi andmekandjat; kõige parem oleks selline, mida "
+"kirjutusseadme tootja otseselt soovitab."
+
+#: projects/k3bgrowisofshandler.cpp:231
+msgid "Report the problem if it persists anyway."
+msgstr "Palun anna probleemist teada, kui see peaks edasi kestma."
+
+#: projects/k3bgrowisofshandler.cpp:236 projects/k3bcdrecordwriter.cpp:833
+msgid "Data did not fit on disk."
+msgstr "Andmed ei mahtunud plaadile ära."
+
+#: projects/k3bgrowisofshandler.cpp:242
+msgid "Unable to set writing speed."
+msgstr "Kirjutamiskiirust pole võimalik määrata."
+
+#: projects/k3bgrowisofshandler.cpp:243
+msgid "Please try again with the 'ignore speed' setting."
+msgstr "Palun proovi uuesti määratud kiirust ignoreerides."
+
+#: projects/k3bgrowisofshandler.cpp:247
+msgid "Optimum Power Calibration failed."
+msgstr "Optimaalse võimsuse kalibreerimine nurjus."
+
+#: projects/k3bgrowisofshandler.cpp:248
+msgid ""
+"Try adding '-use-the-force-luke=noopc' to the growisofs user parameters in "
+"the K3b settings."
+msgstr ""
+"Proovi K3b seadistustes lisada growisofs kasutaja parameetritele võti '-use-"
+"the-force-luke=noopc'."
+
+#: projects/k3bgrowisofshandler.cpp:253
+msgid "Unable to allocate software buffer."
+msgstr "Tarkvaralise puhvri eraldamine nurjus."
+
+#: projects/k3bgrowisofshandler.cpp:254
+msgid "This error is caused by the low memorylocked resource limit."
+msgstr "Seda viga põhjustab mällu lukustatud ressursside väike limiit."
+
+#: projects/k3bgrowisofshandler.cpp:255
+msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
+msgstr "Selle saab lahendada käsuga 'ulimit -l unlimited'..."
+
+#: projects/k3bgrowisofshandler.cpp:256
+msgid ""
+"...or by lowering the used software buffer size in the advanced K3b settings."
+msgstr ""
+"... või vähendades kasutatava tarkvaralise puhvri suurust K3b seadistustes."
+
+#: projects/k3bgrowisofshandler.cpp:260
+msgid "Write error"
+msgstr "Kirjutamisviga"
+
+#: projects/k3bgrowisofshandler.cpp:276
+#, kde-format
+msgid "Fatal error at startup: %1"
+msgstr "Saatuslik viga käivitamisel: %1"
+
+#: projects/k3bgrowisofshandler.cpp:284
+msgid "Warning at exit: (1)"
+msgstr "Hoiatus väljumisel: (1)"
+
+#: projects/k3bgrowisofshandler.cpp:285
+msgid "Most likely mkisofs failed in some way."
+msgstr "Tõenäoliselt astus mkisofs kuidagi ämbrisse."
+
+#: projects/k3bgrowisofshandler.cpp:288
+#, kde-format
+msgid "Fatal error during recording: %1"
+msgstr "Saatuslik viga salvestamisel: %1"
+
+#: projects/k3bcdrecordwriter.cpp:248
+#, kde-format
+msgid "Cdrecord version %1 does not support Blu-ray writing."
+msgstr "Cdrecord %1 ei toeta Blu-ray kirjutamist."
+
+#: projects/k3bcdrecordwriter.cpp:272
+msgid "Writer does not support disk at once (DAO) recording"
+msgstr "Kirjuti ei toeta salvestamist DAO režiimis"
+
+#: projects/k3bcdrecordwriter.cpp:283
+msgid "Writer does not support raw writing."
+msgstr "Kirjuti ei toeta salvestamist toore kirjutamise režiimis"
+
+#: projects/k3bcdrecordwriter.cpp:292
+#, kde-format
+msgid "Cdrecord does not support writing %1 media."
+msgstr "Cdrecord ei toeta %1 andmekandja kirjutamist."
+
+#: projects/k3bcdrecordwriter.cpp:312
+msgid "Writer does not support buffer underrun free recording (Burnfree)"
+msgstr "Kirjuti ei toeta puhvri alatäitevaba salvestamist (Burnfree)"
+
+#: projects/k3bcdrecordwriter.cpp:317 projects/k3bcdrdaowriter.cpp:274
+msgid "'Force unsafe operations' enabled."
+msgstr "'Ebaturvaliste toimingute pealesundimine' lubatud."
+
+#: projects/k3bcdrecordwriter.cpp:351
+#, kde-format
+msgid "Failed to write temporary file '%1'"
+msgstr "Ajutise faili '%1' kirjutamine nurjus"
+
+#: projects/k3bcdrecordwriter.cpp:371
+#, kde-format
+msgid "Cdrecord %1 does not support overburning."
+msgstr "Cdrecord %1 ei toeta ülekirjutamist."
+
+#: projects/k3bcdrecordwriter.cpp:466
+#, no-c-format, kde-format
+msgid "Starting simulation at %1x speed..."
+msgstr "Simulatsiooni alustamine kiirusel %1x..."
+
+#: projects/k3bcdrecordwriter.cpp:468
+#, kde-format
+msgid "Starting %1 simulation at %2x speed..."
+msgstr "%1 simulatsiooni alustamine kiirusel %2x..."
+
+#: projects/k3bcdrecordwriter.cpp:474
+#, no-c-format, kde-format
+msgid "Starting writing at %1x speed..."
+msgstr "Kirjutamise alustamine kiirusel %1x..."
+
+#: projects/k3bcdrecordwriter.cpp:476
+#, kde-format
+msgid "Starting %1 writing at %2x speed..."
+msgstr "%1 kirjutamise alustamine kiirusel %2x..."
+
+#: projects/k3bcdrecordwriter.cpp:599
+msgid "DAO (Disk At Once) recording not supported with this writer"
+msgstr "See kirjuti ei toeta salvestamist DAO režiimis"
+
+#: projects/k3bcdrecordwriter.cpp:600
+msgid "Please choose TAO (Track At Once) and try again"
+msgstr "Palun vali TAO ja proovi uuesti"
+
+#: projects/k3bcdrecordwriter.cpp:603
+msgid "RAW recording not supported with this writer"
+msgstr "See kirjuti ei toeta salvestamist toorrežiimis"
+
+#: projects/k3bcdrecordwriter.cpp:606
+msgid "Input/output error. Not necessarily serious."
+msgstr "Sisendi/väljundi viga. Ei pruugi olla tõsine."
+
+#: projects/k3bcdrecordwriter.cpp:615
+msgid "Reloading of medium required"
+msgstr "Andmekandja tuleb taaslaadida"
+
+#: projects/k3bcdrecordwriter.cpp:632 projects/k3bcdrdaowriter.cpp:878
+#, kde-format
+msgid "No valid %1 option: %2"
+msgstr "Sobimatu %1 valik: %2"
+
+#: projects/k3bcdrecordwriter.cpp:659
+msgid "Only session 1 will be cloned."
+msgstr "Kloonitakse ainult 1. seanss."
+
+#: projects/k3bcdrecordwriter.cpp:662
+msgid "Unable to fixate the disk."
+msgstr "Plaadi fikseerimine nurjus."
+
+#: projects/k3bcdrecordwriter.cpp:688 projects/k3bcdrdaowriter.cpp:784
+#, no-c-format, kde-format
+msgid "Medium or burner does not support writing at %1x speed"
+msgstr "Andmekandja või kirjuti ei toeta kirjutamist kiirusel %1x"
+
+#: projects/k3bcdrecordwriter.cpp:692
+#, no-c-format, kde-format
+msgid "Switching burn speed up to %1x"
+msgstr "Lülitutakse suuremale kirjutamiskiirusele %1x"
+
+#: projects/k3bcdrecordwriter.cpp:695
+#, no-c-format, kde-format
+msgid "Switching burn speed down to %1x"
+msgstr "Lülitutakse väiksemale kirjutamiskiirusele %1x"
+
+#: projects/k3bcdrecordwriter.cpp:707
+msgid "Starting disc write"
+msgstr "Plaadi kirjutamise alustamine"
+
+#: projects/k3bcdrecordwriter.cpp:727
+msgid "Writing Leadin"
+msgstr "Sissejuhatuse kirjutamine"
+
+#: projects/k3bcdrecordwriter.cpp:730
+msgid "Writing Leadout"
+msgstr "Väljajuhatuse kirjutamine"
+
+#: projects/k3bcdrecordwriter.cpp:733
+msgid "Writing pregap"
+msgstr "Eellünga kirjutamine"
+
+#: projects/k3bcdrecordwriter.cpp:736
+msgid "Performing Optimum Power Calibration"
+msgstr "Optimaalse võimsuse kalibreerimine"
+
+#: projects/k3bcdrecordwriter.cpp:739
+msgid "Sending CUE sheet"
+msgstr "CUE tabeli saatmine"
+
+#: projects/k3bcdrecordwriter.cpp:742
+msgid "Enabled Burnfree"
+msgstr "Burnfree lubatud"
+
+#: projects/k3bcdrecordwriter.cpp:745
+msgid "Disabled Burnfree"
+msgstr "Burnfree keelatud"
+
+#: projects/k3bcdrecordwriter.cpp:761
+#, kde-format
+msgid "Burnfree was used once."
+msgid_plural "Burnfree was used %1 times."
+msgstr[0] "Burnfree'd kasutati 1 kord."
+msgstr[1] "Burnfree'd kasutati %1 korda."
+
+#: projects/k3bcdrecordwriter.cpp:767
+#, kde-format
+msgid "Buffer was low once."
+msgid_plural "Buffer was low %1 times."
+msgstr[0] "Puhver oli alatäidetud 1 kord."
+msgstr[1] "Puhver oli alatäidetud %1 korda."
+
+#: projects/k3bcdrecordwriter.cpp:806
+msgid "Erasing successfully completed"
+msgstr "Kustutamine edukalt lõpetatud"
+
+#: projects/k3bcdrecordwriter.cpp:837 projects/k3bcdrdaowriter.cpp:885
+msgid "Enable overburning in the advanced K3b settings to burn anyway."
+msgstr "Kirjutamiseks lülita K3b seadistustes sisse ülekirjutamise kasutamine."
+
+#: projects/k3bcdrecordwriter.cpp:844
+#, kde-format
+msgid "%1 could not reserve shared memory segment of requested size."
+msgstr "%1 ei suuda reserveerida soovitud suurusega jagatud mälu segmenti."
+
+#: projects/k3bcdrecordwriter.cpp:845
+msgid "Probably you chose a too large buffer size."
+msgstr "Tõenäoliselt valisid liiga suure puhvri."
+
+#: projects/k3bcdrecordwriter.cpp:848
+msgid "OPC failed. Probably the writer does not like the medium."
+msgstr "OPC nurjus. Tõenäoliselt ei meeldi kirjutile andmekandja."
+
+#: projects/k3bcdrecordwriter.cpp:851
+#, kde-format
+msgid "Unable to set write speed to %1."
+msgstr "Kirjutamiskiirust %1 pole võimalik määrata."
+
+#: projects/k3bcdrecordwriter.cpp:852
+msgid "Probably this is lower than your writer's lowest writing speed."
+msgstr "Tõenäoliselt on see madalam kui kirjuti madalaim kirjutamiskiirus."
+
+#: projects/k3bcdrecordwriter.cpp:855
+msgid "Unable to send CUE sheet."
+msgstr "CUE tabeli saatmine nurjus."
+
+#: projects/k3bcdrecordwriter.cpp:857 projects/k3bcdrecordwriter.cpp:898
+#: projects/k3bcdrecordwriter.cpp:918
+msgid "Sometimes using TAO writing mode solves this issue."
+msgstr "Vahel lahendab selle probleemi TAO kirjutamisrežiimi kasutamine."
+
+#: projects/k3bcdrecordwriter.cpp:860
+msgid "Unable to open new session."
+msgstr "Uue seansi avamine nurjus."
+
+#: projects/k3bcdrecordwriter.cpp:861
+msgid "Probably a problem with the medium."
+msgstr "Tõenäoliselt on see andmekandja viga."
+
+#: projects/k3bcdrecordwriter.cpp:864
+msgid "The disk might still be readable."
+msgstr "Plaat võib siiski olla loetav."
+
+#: projects/k3bcdrecordwriter.cpp:866
+msgid "Try DAO writing mode."
+msgstr "Proovi DAO kirjutamisrežiimi."
+
+#: projects/k3bcdrecordwriter.cpp:869
+#, kde-format
+msgid "%1 has no permission to open the device."
+msgstr "%1 ei oma õigusi seadet avada."
+
+#: projects/k3bcdrecordwriter.cpp:871
+msgid "You may use K3bsetup to solve this problem."
+msgstr "Lahendamiseks seadista K3b (K3bSetup)."
+
+#: projects/k3bcdrecordwriter.cpp:875
+msgid "Probably a buffer underrun occurred."
+msgstr "Tõenäoliselt tekkis puhvri alatäide."
+
+#: projects/k3bcdrecordwriter.cpp:877
+msgid "Please enable Burnfree or choose a lower burning speed."
+msgstr "Palun luba Burnfree või vali madalam kirjutamiskiirus."
+
+#: projects/k3bcdrecordwriter.cpp:879
+msgid "Please choose a lower burning speed."
+msgstr "Palun vali madalam kirjutamiskiirus."
+
+#: projects/k3bcdrecordwriter.cpp:882
+msgid "Found a high-speed medium not suitable for the writer being used."
+msgstr "Leiti kiire andmekandja, mis ei sobi kasutatavale kirjutile."
+
+#: projects/k3bcdrecordwriter.cpp:883 projects/k3bcdrecordwriter.cpp:887
+msgid "Use the 'force unsafe operations' option to ignore this."
+msgstr ""
+"Kasuta selle eiramiseks valikut 'ebaturvaliste toimingute pealesundimine'."
+
+#: projects/k3bcdrecordwriter.cpp:886
+msgid "Found a low-speed medium not suitable for the writer being used."
+msgstr "Leiti aeglane andmekandja, mis ei sobi kasutatavale kirjutile."
+
+#: projects/k3bcdrecordwriter.cpp:890
+msgid "Most likely the burning failed due to low-quality media."
+msgstr "Tõenäoliselt nurjus kirjutamine andmekandja kesise kvaliteedi tõttu."
+
+#: projects/k3bcdrecordwriter.cpp:893
+msgid "Another application is blocking the device (most likely automounting)."
+msgstr "Mingi muu rakendus blokeerib seadet (tõenäoliselt automaatühendamine)."
+
+#: projects/k3bcdrecordwriter.cpp:896
+msgid "A write error occurred."
+msgstr "Tekkis kirjutamisviga."
+
+#: projects/k3bcdrecordwriter.cpp:901
+msgid "Some drives do not support all erase types."
+msgstr "Mõned seadmed ei toeta kõiki kustutamistüüpe."
+
+#: projects/k3bcdrecordwriter.cpp:902
+msgid "Try again using 'Complete' erasing."
+msgstr "Proovi uuesti täieliku kustutamise võimalusega."
+
+#: projects/k3bcdrecordwriter.cpp:909
+msgid ""
+"Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
+"suid root anymore."
+msgstr ""
+"Alates kerneli versioonist 2.6.8 ei saa cdrecord kasutada SCSI transporti, "
+"kui see käivitatakse suid root."
+
+#: projects/k3bcdrecordwriter.cpp:910
+msgid ""
+"You may use K3b::Setup to solve this problem or remove the suid bit manually."
+msgstr "Selle lahendamiseks kasuta K3bSetup-i või eemalda suid-bitt käsitsi."
+
+#: projects/k3bcdrecordwriter.cpp:921
+msgid "If you are running an unpatched cdrecord version..."
+msgstr "Kui kasutad paikadeta cdrecordi versiooni..."
+
+#: projects/k3bcdrecordwriter.cpp:922
+msgid "...and this error also occurs with high quality media..."
+msgstr "...ja see viga esineb ka väga kvaliteetse andmekandja korral..."
+
+#: projects/k3bcdrecordwriter.cpp:923
+msgid "...and the K3b FAQ does not help you..."
+msgstr "...ja K3b KKK ei paku mingit abi..."
+
+#: projects/k3bcdrecordwriter.cpp:924
+msgid "...please include the debugging output in your problem report."
+msgstr "...lisa palun vearaportile ka silumise väljund."
+
+#: projects/k3bcdrdaowriter.cpp:269
+#, kde-format
+msgid "Cdrdao %1 does not support disabling burnfree."
+msgstr "Cdrdao %1 ei toeta burnfree väljalülitamist."
+
+#: projects/k3bcdrdaowriter.cpp:293
+#, kde-format
+msgid "Cdrdao %1 does not support overburning."
+msgstr "Cdrdao %1 ei toeta ülekirjutamist."
+
+#: projects/k3bcdrdaowriter.cpp:494
+msgid "Could not backup tocfile."
+msgstr "Sisukorra (TOC) faili varundamine nurjus."
+
+#: projects/k3bcdrdaowriter.cpp:520
+msgid "Preparing read process..."
+msgstr "Lugemise ettevalmistamine..."
+
+#: projects/k3bcdrdaowriter.cpp:526
+msgid "Preparing copy process..."
+msgstr "Kopeerimise ettevalmistamine..."
+
+#: projects/k3bcdrdaowriter.cpp:529
+msgid "Preparing blanking process..."
+msgstr "Tühjendamise ettevalmistamine..."
+
+#: projects/k3bcdrdaowriter.cpp:563
+#, no-c-format, kde-format
+msgid "Starting DAO simulation at %1x speed..."
+msgstr "DAO simuleerimise alustamine kiirusel %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:570
+#, no-c-format, kde-format
+msgid "Starting DAO writing at %1x speed..."
+msgstr "DAO kirjutamise alustamine kiirusel %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:575
+msgid "Starting reading..."
+msgstr "Lugemise alustamine..."
+
+#: projects/k3bcdrdaowriter.cpp:576
+msgid "Reading"
+msgstr "Lugemine"
+
+#: projects/k3bcdrdaowriter.cpp:582
+#, no-c-format, kde-format
+msgid "Starting simulation copy at %1x speed..."
+msgstr "Kopeerimise simuleerimise alustamine kiirusel %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:588
+#, no-c-format, kde-format
+msgid "Starting copy at %1x speed..."
+msgstr "Kopeerimise alustamine kiirusel %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:589
+msgid "Copying"
+msgstr "Kopeerimine"
+
+#: projects/k3bcdrdaowriter.cpp:593
+msgid "Starting blanking..."
+msgstr "Tühjendamise alustamine..."
+
+#: projects/k3bcdrdaowriter.cpp:594
+msgid "Blanking"
+msgstr "Tühjendamine"
+
+#: projects/k3bcdrdaowriter.cpp:705
+#, kde-format
+msgid ""
+"Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
+"to restore it from the backup %2."
+msgstr ""
+"Cdrdao vea tõttu kustutati TOC/Cue fail %1. K3b ei suutnud seda taastada "
+"varukoopiast %2."
+
+#: projects/k3bcdrdaowriter.cpp:733
+msgid "Reading successfully completed"
+msgstr "Lugemine edukalt lõpetatud"
+
+#: projects/k3bcdrdaowriter.cpp:739
+msgid "Copying successfully completed"
+msgstr "Kopeerimine edukalt lõpetatud"
+
+#: projects/k3bcdrdaowriter.cpp:742
+msgid "Blanking successfully completed"
+msgstr "Tühjendamine edukalt lõpetatud"
+
+#: projects/k3bcdrdaowriter.cpp:758
+msgid "Please include the debugging output in your problem report."
+msgstr "Palun lisa vearaportile silumise väljund."
+
+#: projects/k3bcdrdaowriter.cpp:786
+#, no-c-format, kde-format
+msgid "Switching down burn speed to %1x"
+msgstr "Lülitumine madalamale kirjutamiskiirusele %1x"
+
+#: projects/k3bcdrdaowriter.cpp:816
+msgid "Executing Power calibration"
+msgstr "Võimsuse kalibreerimine"
+
+#: projects/k3bcdrdaowriter.cpp:820
+msgid "Power calibration successful"
+msgstr "Võimsuse kalibreerimine oli edukas"
+
+#: projects/k3bcdrdaowriter.cpp:821
+msgid "Preparing burn process..."
+msgstr "Kirjutamise ettevalmistamine..."
+
+#: projects/k3bcdrdaowriter.cpp:825
+msgid "Flushing cache"
+msgstr "Puhvri tühjendamine"
+
+#: projects/k3bcdrdaowriter.cpp:829
+msgid "Writing CD-Text lead-in..."
+msgstr "CD-teksti sissejuhatuse kirjutamine..."
+
+#: projects/k3bcdrdaowriter.cpp:833
+msgid "Turning BURN-Proof on"
+msgstr "BURN-Proofi sisselülitamine"
+
+#: projects/k3bcdrdaowriter.cpp:841
+msgid "Found ISRC code"
+msgstr "Leiti ISRC kood"
+
+#: projects/k3bcdrdaowriter.cpp:845
+#, kde-format
+msgid "Found pregap: %1"
+msgstr "Leiti eellünk: %1"
+
+#: projects/k3bcdrdaowriter.cpp:858
+msgid "No cdrdao driver found."
+msgstr "Cdrdao draiverit ei leitud."
+
+#: projects/k3bcdrdaowriter.cpp:859
+msgid "Please select one manually in the device settings."
+msgstr "Palun vali see käsitsi seadme seadistustes."
+
+#: projects/k3bcdrdaowriter.cpp:860
+msgid "For most current drives this would be 'generic-mmc'."
+msgstr "Enamiku moodsate seadmete korral peaks see olema 'generic-mmc'."
+
+#: projects/k3bcdrdaowriter.cpp:869
+msgid "Device not ready, waiting."
+msgstr "Seade ei ole valmis, oodatakse."
+
+#: projects/k3bcdrdaowriter.cpp:873
+msgid "Cue sheet not accepted."
+msgstr "Cue tabelit ei võetud vastu."
+
+#: projects/k3bcdrdaowriter.cpp:970
+msgid "Writing leadin "
+msgstr "Sissejuhatuse kirjutamine "
+
+#: projects/k3bcdrdaowriter.cpp:976
+msgid "Writing leadout "
+msgstr "Väljajuhatuse kirjutamine "
+
+#: jobs/k3bverificationjob.cpp:133 jobs/k3bverificationjob.cpp:363
+#: jobs/k3bdvdcopyjob.cpp:290
+msgid "Unable to determine the ISO9660 filesystem size."
+msgstr "ISO9660 failisüsteemi suuruse määramine nurjus."
+
+#: jobs/k3bverificationjob.cpp:231
+msgid "no tracks added"
+msgstr "radu ei lisatud"
+
+#: jobs/k3bverificationjob.cpp:230 jobs/k3bverificationjob.cpp:286
+#: jobs/k3bverificationjob.cpp:309
+#, kde-format
+msgid "Internal Error: Verification job improperly initialized (%1)"
+msgstr "Sisemine viga: kontrollimist ei initsialiseeritud korrektselt (%1)"
+
+#: jobs/k3bverificationjob.cpp:236 jobs/k3bdvdbooktypejob.cpp:129
+#: jobs/k3bdvdbooktypejob.cpp:130 jobs/k3bdvdformattingjob.cpp:154
+#: jobs/k3bdvdformattingjob.cpp:155
+msgid "Checking medium"
+msgstr "Andmekandja kontroll"
+
+#: jobs/k3bverificationjob.cpp:270 jobs/k3bcdcopyjob.cpp:1102
+msgid "Failed to reload the medium"
+msgstr "Andmekandja taaslaadimine nurjus"
+
+#: jobs/k3bverificationjob.cpp:287 jobs/k3bverificationjob.cpp:310
+#, kde-format
+msgid "specified track number '%1' not found on medium"
+msgstr "määratud rajanumbrit '%1' andmekandjal ei leitud"
+
+#: jobs/k3bverificationjob.cpp:331
+#, kde-format
+msgid "Verifying track %1"
+msgstr "Raja %1 kontroll"
+
+#: jobs/k3bverificationjob.cpp:399
+#, kde-format
+msgid "Written data in track %1 differs from original."
+msgstr "Raja %1 kirjutatud andmed erinevad originaalist."
+
+#: jobs/k3bverificationjob.cpp:403
+msgid "Written data verified."
+msgstr "Kirjutatud andmed kontrollitud."
+
+#: jobs/k3biso9660imagewritingjob.cpp:93
+#, kde-format
+msgid "Could not find image %1"
+msgstr "Tõmmist %1 ei leitud"
+
+#: jobs/k3biso9660imagewritingjob.cpp:141
+#, kde-format
+msgid "Verifying written copy %1 of %2"
+msgstr "Kirjutatud koopia %1 (%2-st) kontroll"
+
+#: jobs/k3biso9660imagewritingjob.cpp:155 jobs/k3bdvdcopyjob.cpp:681
+msgid "K3b was unable to eject the written medium. Please do so manually."
+msgstr "K3b ei suutnud kirjutatud plaati väljastada. Palun tee seda käsitsi."
+
+#: jobs/k3biso9660imagewritingjob.cpp:214
+msgid "Writing image"
+msgstr "Tõmmise kirjutamine"
+
+#: jobs/k3biso9660imagewritingjob.cpp:216
+#, kde-format
+msgid "Writing copy %1 of %2"
+msgstr "Koopia %1 (%2-st) kirjutamine"
+
+#: jobs/k3biso9660imagewritingjob.cpp:235
+msgid "Waiting for medium"
+msgstr "Oodatakse andmekandjat"
+
+#: jobs/k3biso9660imagewritingjob.cpp:342
+msgid "Simulating ISO9660 Image"
+msgstr "ISO9660 tõmmise simuleerimine"
+
+#: jobs/k3biso9660imagewritingjob.cpp:344
+msgid "Burning ISO9660 Image"
+msgstr "ISO9660 tõmmise kirjutamine"
+
+#: jobs/k3biso9660imagewritingjob.cpp:346 jobs/k3bbinimagewritingjob.cpp:212
+#, kde-format
+msgid " - %1 Copy"
+msgid_plural " - %1 Copies"
+msgstr[0] " - %1 koopia"
+msgstr[1] " - %1 koopiat"
+
+#: jobs/k3bdatatrackreader.cpp:149 jobs/k3bdatatrackreader.cpp:183
+#: jobs/k3baudiosessionreadingjob.cpp:150
+#, kde-format
+msgid "Could not open device %1"
+msgstr "Seadme %1 avamine nurjus"
+
+#: jobs/k3bdatatrackreader.cpp:178
+msgid "Unable to open libdvdcss."
+msgstr "Teegi libdvdcss avamine nurjus."
+
+#: jobs/k3bdatatrackreader.cpp:187
+msgid "Retrieving all CSS keys. This might take a while."
+msgstr "Kõigi CSS-võtmete hankimine. See võib võtta aega."
+
+#: jobs/k3bdatatrackreader.cpp:190
+msgid "Failed to retrieve all CSS keys."
+msgstr "Kõigi CSS-võtmete hankimine nurjus."
+
+#: jobs/k3bdatatrackreader.cpp:191
+msgid "Video DVD decryption failed."
+msgstr "Video-DVD lahtikrüptimine nurjus."
+
+#: jobs/k3bdatatrackreader.cpp:215
+msgid "No support for reading formless Mode2 sectors."
+msgstr "Vormitute režiim2 sektorite lugemine pole toetatud."
+
+#: jobs/k3bdatatrackreader.cpp:217
+msgid "Unsupported sector type."
+msgstr "Toetamata sektori tüüp."
+
+#: jobs/k3bdatatrackreader.cpp:224
+#, kde-format
+msgid "Reading with sector size %1."
+msgstr "Sektori suurusega %1 lugemine."
+
+#: jobs/k3bdatatrackreader.cpp:240 jobs/k3baudiosessionreadingjob.cpp:209
+#: jobs/k3bdvdcopyjob.cpp:360
+#, kde-format
+msgid "Unable to open '%1' for writing."
+msgstr "'%1' avamine kirjutamiseks nurjus."
+
+#: jobs/k3bdatatrackreader.cpp:271 jobs/k3bdatatrackreader.cpp:446
+#, kde-format
+msgid "Error while reading sector %1."
+msgstr "Viga sektori %1 lugemisel."
+
+#: jobs/k3bdatatrackreader.cpp:353
+#, kde-format
+msgid "Ignored %1 erroneous sector."
+msgid_plural "Ignored a total of %1 erroneous sectors."
+msgstr[0] "Ignoreeriti %1 vigast sektorit."
+msgstr[1] "Ignoreeriti kokku %1 vigast sektorit."
+
+#: jobs/k3bdatatrackreader.cpp:422
+#, kde-format
+msgid "Problem while reading. Retrying from sector %1."
+msgstr "Viga lugemisel. Proovitakse uuesti alates sektorist %1."
+
+#: jobs/k3bdatatrackreader.cpp:438
+#, kde-format
+msgid "Ignoring read error in sector %1."
+msgstr "Ignoreeritakse lugemisviga sektoris %1."
+
+#: jobs/k3bmetawriter.cpp:310
+msgid "DVD and Blu-ray tracks can only be written in MODE1."
+msgstr "DVD ja Blu-ray radu saab kirjutada ainult MODE1 režiimis."
+
+#: jobs/k3bmetawriter.cpp:329
+msgid ""
+"Missing Blu-ray support in cdrecord and growisofs. Please update the system."
+msgstr ""
+"Cdrecord ja growisofs ei sisalda Blu-ray toetust. Palun uuenda oma süsteemi."
+
+#: jobs/k3bmetawriter.cpp:497
+msgid ""
+"DVD+R(W) media do not support write simulation. Do you really want to "
+"continue? The media will actually be written to."
+msgstr ""
+"K3b ei toeta kirjutamise simuleerimist DVD+R(W) puhul. Kas tõesti jätkata? "
+"Andmekandja kirjutatakse sel juhul päriselt."
+
+#: jobs/k3bmetawriter.cpp:500
+msgid "No Simulation with DVD+R(W)"
+msgstr "DVD+R(W) ei toeta simuleerimist"
+
+#: jobs/k3bmetawriter.cpp:810
+msgid "Writing CD in Session At Once mode."
+msgstr "CD kirjutamine SAO režiimis."
+
+#: jobs/k3bmetawriter.cpp:812
+msgid "Writing CD in Track At Once mode."
+msgstr "CD kirjutamine TAO režiimis."
+
+#: jobs/k3bmetawriter.cpp:814
+msgid "Writing CD in Raw mode."
+msgstr "CD kirjutamine toorrežiimis."
+
+#: jobs/k3bmetawriter.cpp:817
+msgid "Appending session to CD"
+msgstr "Seansi lisamine CD-le"
+
+#: jobs/k3bmetawriter.cpp:824
+msgid "Writing rewritable CD in Session At Once mode."
+msgstr "Korduvkirjutatava CD kirjutamine SAO režiimis."
+
+#: jobs/k3bmetawriter.cpp:826
+msgid "Writing rewritable CD in Track At Once mode."
+msgstr "Korduvkirjutatava CD kirjutamine TAO režiimis."
+
+#: jobs/k3bmetawriter.cpp:828
+msgid "Writing rewritable CD in Raw mode."
+msgstr "Korduvkirjutatava CD kirjutamine toorrežiimis."
+
+#: jobs/k3bmetawriter.cpp:831
+msgid "Appending session to rewritable CD."
+msgstr "Seansi lisamine korduvkirjutatavale CD-le."
+
+#: jobs/k3bmetawriter.cpp:838
+msgid "Growing ISO9660 filesystem on DVD+RW."
+msgstr "ISO9660 failisüsteemi kasvatamine DVD+RW-l."
+
+#: jobs/k3bmetawriter.cpp:842
+msgid "Appending session to DVD+R."
+msgstr "Seansi lisamine DVD+R-ile."
+
+#: jobs/k3bmetawriter.cpp:844
+msgid "Appending session to Double Layer DVD+R."
+msgstr "Seansi lisamine kahekihilisele DVD+R-ile."
+
+#: jobs/k3bmetawriter.cpp:846
+#, kde-format
+msgid "Appending session to %1."
+msgstr "Seansi lisamine %1-le."
+
+#: jobs/k3bmetawriter.cpp:852
+msgid "Writing Double Layer DVD+R."
+msgstr "Kahekihilise DVD+R kirjutamine."
+
+#: jobs/k3bdvdbooktypejob.cpp:85
+msgid "Changing DVD Booktype"
+msgstr "DVD raamatutüübi muutmine"
+
+#: jobs/k3bdvdbooktypejob.cpp:103 jobs/k3bdvdformattingjob.cpp:123
+msgid "No device set"
+msgstr "Seade pole määratud"
+
+#: jobs/k3bdvdbooktypejob.cpp:119
+#, kde-format
+msgid ""
+"Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</"
+"b>."
+msgstr ""
+"Palun sisesta tühi DVD+R või DVD+RW andmekandja seadmesse<p><b>%1 %2 (%3)</"
+"b>."
+
+#: jobs/k3bdvdbooktypejob.cpp:189
+msgid "Booktype successfully changed"
+msgstr "Raamatutüüp edukalt muudetud"
+
+#: jobs/k3bdvdbooktypejob.cpp:218
+msgid "Ejecting DVD..."
+msgstr "DVD väljalükkamine..."
+
+#: jobs/k3bdvdbooktypejob.cpp:235
+msgid "Unable to eject media."
+msgstr "Andmekandja väljalükkamine nurjus."
+
+#: jobs/k3bdvdbooktypejob.cpp:258
+msgid "Cannot change booktype on non-empty DVD+R media."
+msgstr "Juba täidetud DVD+R andmekandja raamatutüüpi ei saa muuta."
+
+#: jobs/k3bdvdbooktypejob.cpp:266
+msgid "No DVD+R(W) media found."
+msgstr "DVD+R(W) andmekandjat ei leitud."
+
+#: jobs/k3bdvdbooktypejob.cpp:271 jobs/k3bdvdformattingjob.cpp:322
+msgid "Unable to determine media state."
+msgstr "Andmekandja olekut ei õnnestunud määrata."
+
+#: jobs/k3bdvdbooktypejob.cpp:341
+msgid "Changing Booktype"
+msgstr "Raamatutüübi muutmine"
+
+#: jobs/k3baudiosessionreadingjob.cpp:142
+msgid "Could not load libcdparanoia."
+msgstr "Teegi libcdparanoia laadimine nurjus."
+
+#: jobs/k3baudiosessionreadingjob.cpp:156
+msgid "Error while initializing audio ripping."
+msgstr "Viga audio rippimise initsialiseerimisel."
+
+#: jobs/k3baudiosessionreadingjob.cpp:243
+#, kde-format
+msgid "Unrecoverable error while ripping track %1."
+msgstr "Parandamatu viga raja %1 rippimisel."
+
+#: jobs/k3bclonejob.cpp:94
+#, kde-format
+msgid "Cdrecord version %1 does not have cloning support."
+msgstr "Cdrecord %1 ei toeta kloonimist."
+
+#: jobs/k3bclonejob.cpp:102
+msgid "No device set."
+msgstr "Seade pole määratud."
+
+#: jobs/k3bclonejob.cpp:111
+#, kde-format
+msgid "CD writer %1 (%2) does not support cloning."
+msgstr "CD-kirjuti %1 (%2) ei toeta kloonimist."
+
+#: jobs/k3bclonejob.cpp:144
+msgid "Reading clone image"
+msgstr "Kloontõmmise lugemine"
+
+#: jobs/k3bclonejob.cpp:242
+#, kde-format
+msgid "Successfully written clone copy %1."
+msgstr "Kloon %1 edukalt kirjutatud."
+
+#: jobs/k3bclonejob.cpp:290
+msgid "Successfully read disk."
+msgstr "Plaat edukalt loetud."
+
+#: jobs/k3bclonejob.cpp:302
+msgid "Failed to read disk completely in clone mode."
+msgstr "Plaadi täielik lugemine kloonimisrežiimis nurjus."
+
+#: jobs/k3bclonejob.cpp:309
+msgid "Error while reading disk."
+msgstr "Viga plaadi lugemisel."
+
+#: jobs/k3bclonejob.cpp:335
+msgid "Simulating clone copy"
+msgstr "Klooni simuleerimine"
+
+#: jobs/k3bclonejob.cpp:337
+#, kde-format
+msgid "Writing clone copy %1"
+msgstr "Klooni %1 kirjutamine"
+
+#: jobs/k3bclonejob.cpp:346 jobs/k3bcdcopyjob.cpp:1122
+msgid "Removing image files."
+msgstr "Tõmmisefailide eemaldamine."
+
+#: jobs/k3bclonejob.cpp:358
+msgid "Creating Clone Image"
+msgstr "Kloontõmmise loomine"
+
+#: jobs/k3bclonejob.cpp:361
+msgid "Simulating Clone Image"
+msgstr "Kloontõmmise simuleerimine"
+
+#: jobs/k3bclonejob.cpp:363
+msgid "Burning Clone Image"
+msgstr "Kloontõmmise kirjutamine"
+
+#: jobs/k3bclonejob.cpp:366
+msgid "Simulating CD Cloning"
+msgstr "CD kloonimise simuleerimine"
+
+#: jobs/k3bclonejob.cpp:368
+msgid "Cloning CD"
+msgstr "CD kloonimine"
+
+#: jobs/k3bclonejob.cpp:374
+#, kde-format
+msgid "Creating 1 clone copy"
+msgid_plural "Creating %1 clone copies"
+msgstr[0] "1 klooni loomine"
+msgstr[1] "%1 klooni loomine"
+
+#: jobs/k3bdvdformattingjob.cpp:101
+msgid "Formatting disc"
+msgstr "Plaadi vormindamine"
+
+#: jobs/k3bdvdformattingjob.cpp:108 jobs/k3bblankingjob.cpp:169
+msgid "Quick Format"
+msgstr "Kiirvormindus"
+
+#: jobs/k3bdvdformattingjob.cpp:144
+#, kde-format
+msgid ""
+"Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
+"b>."
+msgstr ""
+"Palun sisesta korduvkirjutatav DVD või Blu-ray seadmesse<p><b>%1 %2 (%3)</b>."
+
+#: jobs/k3bdvdformattingjob.cpp:262
+msgid "Formatting successfully completed"
+msgstr "Vormindamine edukalt lõpetatud"
+
+#: jobs/k3bdvdformattingjob.cpp:265
+msgid "Do not be concerned with the progress stopping before 100%."
+msgstr "Ära muretse, kui edenemine paistab peatuvat enne 100%."
+
+#: jobs/k3bdvdformattingjob.cpp:266
+msgid "The formatting will continue in the background during writing."
+msgstr "Vormindamine kestab kirjutamise ajal taustal edasi."
+
+#: jobs/k3bdvdformattingjob.cpp:291
+msgid "Ejecting medium..."
+msgstr "Andmekandja väljastamine..."
+
+#: jobs/k3bdvdformattingjob.cpp:343
+#, kde-format
+msgid "Found %1 medium."
+msgstr "Leiti %1 andmekandja."
+
+#: jobs/k3bdvdformattingjob.cpp:347
+msgid "No rewritable DVD or BD medium found. Unable to format."
+msgstr ""
+"Korduvkirjutatavat DVD-d või BD-d ei leitud. Vormindamine ei ole võimalik."
+
+#: jobs/k3bdvdformattingjob.cpp:372 jobs/k3bdvdformattingjob.cpp:422
+#, kde-format
+msgid "No need to format %1 media more than once."
+msgstr "%1 andmekandjat pole vaja vormindada enam kui üks kord."
+
+#: jobs/k3bdvdformattingjob.cpp:374 jobs/k3bdvdformattingjob.cpp:424
+msgid "It may simply be overwritten."
+msgstr "Selle võib lihtsalt üle kirjutada."
+
+#: jobs/k3bdvdformattingjob.cpp:377 jobs/k3bdvdformattingjob.cpp:416
+#: jobs/k3bdvdformattingjob.cpp:427
+msgid "Forcing formatting anyway."
+msgstr "Vormindamine sunnitakse siiski peale."
+
+#: jobs/k3bdvdformattingjob.cpp:378
+#, kde-format
+msgid "It is not recommended to force formatting of %1 media."
+msgstr "Ei ole soovitatav sundida peale %1 andmekandja vormindamist."
+
+#: jobs/k3bdvdformattingjob.cpp:380
+msgid "After 10-20 reformats the media might become unusable."
+msgstr "10-20 vormindamise järel võib andmekandja osutuda kõlbmatuks."
+
+#: jobs/k3bdvdformattingjob.cpp:389
+#, kde-format
+msgid "Formatting %1 medium"
+msgstr "%1 andmekandja vormindamine."
+
+#: jobs/k3bdvdformattingjob.cpp:400
+#, kde-format
+msgid "Formatted in %1 mode."
+msgstr "Vormindatud %1 režiimis."
+
+#: jobs/k3bdvdformattingjob.cpp:414
+msgid "Media is already empty."
+msgstr "Andmekandja on juba tühi."
+
+#: jobs/k3bdvdformattingjob.cpp:441
+#, kde-format
+msgid "Formatting DVD-RW in %1 mode."
+msgstr "DWD-RW vormindamine %1 režiimis."
+
+#: jobs/k3bdvdformattingjob.cpp:448
+msgid "Unable to determine the current formatting state of the DVD-RW medium."
+msgstr "DVD-RW andmekandja praegust vormindusolekut ei õnnestunud määrata."
+
+#: jobs/k3bdvdformattingjob.cpp:510
+msgid "Formatting"
+msgstr "Vormindamine"
+
+#: jobs/k3bdvdcopyjob.cpp:122 jobs/k3bcdcopyjob.cpp:162
+msgid "Checking Source Medium"
+msgstr "Lähteandmekandja kontroll"
+
+#: jobs/k3bdvdcopyjob.cpp:127
+#, kde-format
+msgid "K3b does not support writing on-the-fly with growisofs %1."
+msgstr "K3b ei toeta lennult kirjutamist growisofs %1 korral."
+
+#: jobs/k3bdvdcopyjob.cpp:129
+msgid "Disabling on-the-fly writing."
+msgstr "Lennult kirjutamise keelamine."
+
+#: jobs/k3bdvdcopyjob.cpp:132 jobs/k3bcdcopyjob.cpp:165
+msgid "Waiting for source medium"
+msgstr "Oodatakse lähteandmekandjat"
+
+#: jobs/k3bdvdcopyjob.cpp:144 jobs/k3bcdcopyjob.cpp:175
+msgid "Checking source medium"
+msgstr "Lähteandmekandja kontroll"
+
+#: jobs/k3bdvdcopyjob.cpp:164
+msgid "No source medium found."
+msgstr "Lähteandmekandjat ei leitud."
+
+#: jobs/k3bdvdcopyjob.cpp:183
+msgid "Found encrypted DVD."
+msgstr "Leiti krüptitud DVD."
+
+#: jobs/k3bdvdcopyjob.cpp:199
+msgid "Cannot copy encrypted DVDs."
+msgstr "Krüptitud DVD kopeerimine ei ole võimalik."
+
+#: jobs/k3bdvdcopyjob.cpp:235
+msgid "The writer does not support writing Double Layer DVDs."
+msgstr "Kirjuti ei toeta kahekihilise DVD kirjutamist."
+
+#: jobs/k3bdvdcopyjob.cpp:242
+msgid "This growisofs version does not support writing Double Layer DVDs."
+msgstr "Growisofs versioon ei toeta kahekihilise DVD kirjutamist."
+
+#: jobs/k3bdvdcopyjob.cpp:259
+msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
+msgstr "K3b ei toeta mitmeseansilise DVD või Blu-ray plaatide kopeerimist."
+
+#: jobs/k3bdvdcopyjob.cpp:282
+msgid "K3b relies on the size saved in the ISO9660 header."
+msgstr "K3b kasutab ISO9660 päises leiduvat suurust."
+
+#: jobs/k3bdvdcopyjob.cpp:283
+msgid ""
+"This might result in a corrupt copy if the source was mastered with buggy "
+"software."
+msgstr ""
+"See võib tekitada vigase koopia, kui allikas on loodud vigase tarkvaraga."
+
+#: jobs/k3bdvdcopyjob.cpp:299
+msgid "K3b does not support copying DVD-RAM."
+msgstr "K3b ei toeta DVD-RAM kopeerimist."
+
+#: jobs/k3bdvdcopyjob.cpp:305
+msgid "Unsupported media type."
+msgstr "Toetamata andmekandja tüüp."
+
+#: jobs/k3bdvdcopyjob.cpp:318 jobs/k3bcdcopyjob.cpp:583
+#, kde-format
+msgid "Do you want to overwrite %1?"
+msgstr "Kas kirjutada üle %1?"
+
+#: jobs/k3bdvdcopyjob.cpp:319 jobs/k3bcdcopyjob.cpp:584
+msgid "File Exists"
+msgstr "Fail on olemas"
+
+#: jobs/k3bdvdcopyjob.cpp:323 jobs/k3bcdcopyjob.cpp:542
+#: jobs/k3bcdcopyjob.cpp:588
+msgid "Specified an unusable temporary path. Using default."
+msgstr "Määratud on sobimatu ajutine asukoht. Kasutatakse vaikeväärtust."
+
+#: jobs/k3bdvdcopyjob.cpp:328 jobs/k3bcdcopyjob.cpp:593
+#, kde-format
+msgid "Writing image file to %1."
+msgstr "Tõmmisefaili kirjutamine asukohta %1."
+
+#: jobs/k3bdvdcopyjob.cpp:329
+msgid "Reading source medium."
+msgstr "Lähteandmekandja lugemine."
+
+#: jobs/k3bdvdcopyjob.cpp:344 jobs/k3bcdcopyjob.cpp:319
+#, kde-format
+msgid "Unable to determine free space in temporary folder '%1'."
+msgstr "Vaba ruumi määramine ajutises kataloogis '%1' nurjus."
+
+#: jobs/k3bdvdcopyjob.cpp:351 jobs/k3bcdcopyjob.cpp:325
+msgid "Not enough space left in temporary folder."
+msgstr "Vaba ruumi ajutises kataloogis napib."
+
+#: jobs/k3bdvdcopyjob.cpp:368 jobs/k3bcdcopyjob.cpp:334
+msgid "Unmounting source medium"
+msgstr "Lähteandmekandja lahutamine"
+
+#: jobs/k3bdvdcopyjob.cpp:373
+msgid "Creating image"
+msgstr "Tõmmise loomine"
+
+#: jobs/k3bdvdcopyjob.cpp:379
+msgid "Simulating copy"
+msgstr "Kopeerimise simuleerimine"
+
+#: jobs/k3bdvdcopyjob.cpp:381 jobs/k3bdvdcopyjob.cpp:596
+#: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
+#, kde-format
+msgid "Writing copy %1"
+msgstr "Koopia %1 kirjutamine"
+
+#: jobs/k3bdvdcopyjob.cpp:383 jobs/k3bdvdcopyjob.cpp:598
+msgid "Writing copy"
+msgstr "Koopia kirjutamine"
+
+#: jobs/k3bdvdcopyjob.cpp:573
+msgid "Successfully read source medium."
+msgstr "Lähteplaat edukalt loetud."
+
+#: jobs/k3bdvdcopyjob.cpp:585
+msgid "K3b was unable to eject the source medium. Please do so manually."
+msgstr "K3b ei suutnud lähteplaati väljastada. Palun tee seda käsitsi."
+
+#: jobs/k3bdvdcopyjob.cpp:646
+#, kde-format
+msgid "Successfully written copy %1."
+msgstr "Koopia %1 edukalt kirjutatud."
+
+#: jobs/k3bdvdcopyjob.cpp:669
+#, kde-format
+msgid "Verifying copy %1"
+msgstr "Koopia %1 kontroll"
+
+#: jobs/k3bdvdcopyjob.cpp:671
+msgid "Verifying copy"
+msgstr "Koopia kontroll"
+
+#: jobs/k3bdvdcopyjob.cpp:791
+#, kde-format
+msgid "Unsupported media type: %1"
+msgstr "Toetamata andmekandja tüüp: %1"
+
+#: jobs/k3bdvdcopyjob.cpp:826
+msgid "Writing DVD copy"
+msgstr "DVD koopia kirjutamine"
+
+#: jobs/k3bdvdcopyjob.cpp:830
+msgid "Writing mode ignored when writing DVD+R(W) media."
+msgstr "DVD+R(W) kirjutamisel ignoreeritakse kirjutamisrežiimi."
+
+#: jobs/k3bdvdcopyjob.cpp:874
+msgid "Writing DVD-RW in DAO mode."
+msgstr "DVD-RW kirjutamine DAO režiimis."
+
+#: jobs/k3bdvdcopyjob.cpp:878
+msgid "Writing DVD-RW in incremental mode."
+msgstr "DVD-RW kirjutamine järjestikrežiimis."
+
+#: jobs/k3bdvdcopyjob.cpp:919
+msgid "Writing BD copy"
+msgstr "BD koopia kirjutamine"
+
+#: jobs/k3bdvdcopyjob.cpp:943
+msgid "Creating Image"
+msgstr "Tõmmise loomine"
+
+#: jobs/k3bdvdcopyjob.cpp:947
+msgid "Copying DVD or BD On-The-Fly"
+msgstr "DVD või BD lennult kopeerimine"
+
+#: jobs/k3bdvdcopyjob.cpp:949
+msgid "Copying DVD or BD"
+msgstr "DVD või BD kopeerimine"
+
+#: jobs/k3bdvdcopyjob.cpp:956 jobs/k3bcdcopyjob.cpp:1230
+#, kde-format
+msgid "Creating 1 copy"
+msgid_plural "Creating %1 copies"
+msgstr[0] "1 koopia loomine"
+msgstr[1] "%1 koopia loomine"
+
+#: jobs/k3breadcdreader.cpp:123
+#, kde-format
+msgid "Using readcd %1 instead of default version for clone support."
+msgstr "Kloonimise toetuseks kasutatakse vaikeversiooni asemel readcd %1."
+
+#: jobs/k3breadcdreader.cpp:130
+msgid "Could not find readcd executable with cloning support."
+msgstr "Kloonimistoetusega readcd käivitatavat faili ei leitud."
+
+#: jobs/k3breadcdreader.cpp:163 jobs/k3breadcdreader.cpp:164
+#, kde-format
+msgid "Writing image to %1."
+msgstr "Tõmmise kirjutamine asukohta %1."
+
+#: jobs/k3breadcdreader.cpp:206
+msgid "Could not start readcd."
+msgstr "readcd käivitamine nurjus."
+
+#: jobs/k3breadcdreader.cpp:262
+msgid "Cannot read source disk."
+msgstr "Lähteplaadi lugemine nurjus."
+
+#: jobs/k3breadcdreader.cpp:274
+#, kde-format
+msgid "Retrying from sector %1."
+msgstr "Alustatakse uuesti sektorist %1."
+
+#: jobs/k3breadcdreader.cpp:289
+#, kde-format
+msgid "Uncorrected error in sector %1"
+msgstr "Parandamata viga sektoris %1"
+
+#: jobs/k3breadcdreader.cpp:292
+#, kde-format
+msgid "Corrected error in sector %1"
+msgstr "Parandatud viga sektoris %1"
+
+#: jobs/k3breadcdreader.cpp:312
+#, kde-format
+msgid "%1 returned error: %2"
+msgstr "%1 tagastas vea: %2"
+
+#: jobs/k3breadcdreader.cpp:317
+msgid "Readcd exited abnormally."
+msgstr "readcd lõpetas ebanormaalselt."
+
+#: jobs/k3bbinimagewritingjob.cpp:60
+msgid "Write Binary Image"
+msgstr "Binaartõmmise kirjutamine"
+
+#: jobs/k3bbinimagewritingjob.cpp:188
+#, kde-format
+msgid "%1 copy successfully created"
+msgid_plural "%1 copies successfully created"
+msgstr[0] "%1 koopia edukalt loodud"
+msgstr[1] "%1 koopiat edukalt loodud"
+
+#: jobs/k3bbinimagewritingjob.cpp:204 jobs/k3bcdcopyjob.cpp:1181
+#: jobs/k3bcdcopyjob.cpp:1183 jobs/k3bcdcopyjob.cpp:1186
+#: jobs/k3bcdcopyjob.cpp:1188
+#, kde-format
+msgid "Writing track %1 of %2"
+msgstr "Raja %1 kirjutamine (kokku %2)"
+
+#: jobs/k3bbinimagewritingjob.cpp:210
+msgid "Writing cue/bin Image"
+msgstr "CUE/BIN tõmmise kirjutamine"
+
+#: jobs/k3bcdcopyjob.cpp:203
+msgid "K3b does not copy CDs containing multiple data tracks."
+msgstr "K3b ei kopeeri mitut andmerada sisaldavaid CD-sid."
+
+#: jobs/k3bcdcopyjob.cpp:207
+msgid "Copying Multisession Data CD."
+msgstr "Mitmeseansilise andme CD kopeerimine."
+
+#: jobs/k3bcdcopyjob.cpp:209
+msgid "Copying Data CD."
+msgstr "Andme CD kopeerimine."
+
+#: jobs/k3bcdcopyjob.cpp:215
+msgid "K3b can only copy CD-Extra mixed mode CDs."
+msgstr "K3b suudab kopeerida ainult CD-Extra segarežiimis CD-sid."
+
+#: jobs/k3bcdcopyjob.cpp:219
+msgid "Copying Enhanced Audio CD (CD-Extra)."
+msgstr "Täiustatud audio CD (CD-Extra) kopeerimine."
+
+#: jobs/k3bcdcopyjob.cpp:224
+msgid "Copying Audio CD."
+msgstr "Audio CD kopeerimine."
+
+#: jobs/k3bcdcopyjob.cpp:229
+msgid "The source disk is empty."
+msgstr "Lähteplaat on tühi."
+
+#: jobs/k3bcdcopyjob.cpp:271
+msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
+msgstr ""
+"Režiim2 andmeradade kopeerimiseks vajab K3b cdrecord 2.01a12 või uuemat."
+
+#: jobs/k3bcdcopyjob.cpp:283
+msgid ""
+"You will only be able to copy the first session in raw writing mode. "
+"Continue anyway?"
+msgstr ""
+"Toorkirjutamise režiimis saab kopeerida ainult esimese seansi. Kas sellele "
+"vaatamata jätkata?"
+
+#: jobs/k3bcdcopyjob.cpp:285
+msgid "Multisession CD"
+msgstr "Mitmeseansiline CD"
+
+#: jobs/k3bcdcopyjob.cpp:290
+msgid "Only copying first session."
+msgstr "Ainult esimese seansi kopeerimine."
+
+#: jobs/k3bcdcopyjob.cpp:363
+msgid "Unable to read Table of contents"
+msgstr "Sisukorra lugemine nurjus."
+
+#: jobs/k3bcdcopyjob.cpp:371
+msgid "Searching CD-TEXT"
+msgstr "CD-teksti otsimine"
+
+#: jobs/k3bcdcopyjob.cpp:385
+#, kde-format
+msgid "Found CD-TEXT (%1 - %2)."
+msgstr "Leiti CD-tekst (%1 - %2)."
+
+#: jobs/k3bcdcopyjob.cpp:390
+msgid "Found corrupted CD-TEXT. Ignoring it."
+msgstr "Leiti vigane CD-tekst, seda ignoreeritakse."
+
+#: jobs/k3bcdcopyjob.cpp:395
+msgid "No CD-TEXT found."
+msgstr "CD-teksti ei leitud."
+
+#: jobs/k3bcdcopyjob.cpp:406
+msgid "Querying Cddb"
+msgstr "CDDB päring"
+
+#: jobs/k3bcdcopyjob.cpp:427
+#, kde-format
+msgid "Found Cddb entry (%1 - %2)."
+msgstr "Leiti CDDB kirje (%1 - %2)."
+
+#: jobs/k3bcdcopyjob.cpp:450
+msgid "No Cddb entry found."
+msgstr "CDDB kirjet ei leitud."
+
+#: jobs/k3bcdcopyjob.cpp:453
+#, kde-format
+msgid "Cddb error (%1)."
+msgstr "CDDB viga (%1)."
+
+#: jobs/k3bcdcopyjob.cpp:469
+#, kde-format
+msgid ""
+"Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be used "
+"to generate the CD-TEXT on the new CD?"
+msgstr ""
+"Leiti CD-teksti (%1 - %2) ja CDDB (%3 - %4) kirjed. Mida kasutada CD-teksti "
+"genereerimiseks uuel CD-l?"
+
+#: jobs/k3bcdcopyjob.cpp:475
+msgid "CD-TEXT"
+msgstr "CD-tekst"
+
+#: jobs/k3bcdcopyjob.cpp:476
+msgid "Use CD-TEXT data"
+msgstr "CD-teksti andmete kasutamine"
+
+#: jobs/k3bcdcopyjob.cpp:477
+msgid "Use Cddb entry"
+msgstr "CDDB kirje kasutamine"
+
+#: jobs/k3bcdcopyjob.cpp:560
+#, kde-format
+msgid "Using temporary folder %1."
+msgstr "Ajutise kataloogi %1 kasutamine."
+
+#: jobs/k3bcdcopyjob.cpp:609
+#, kde-format
+msgid "Reading Session %1"
+msgstr "Seansi %1 lugemine"
+
+#: jobs/k3bcdcopyjob.cpp:611
+msgid "Reading Source Medium"
+msgstr "Lähteandmekandja lugemine"
+
+#: jobs/k3bcdcopyjob.cpp:614 jobs/k3bcdcopyjob.cpp:1203
+#, kde-format
+msgid "Reading track %1 of %2"
+msgstr "Raja %1 lugemine (kokku %2)"
+
+#: jobs/k3bcdcopyjob.cpp:707
+#, kde-format
+msgid "Simulating Session %1"
+msgstr "Seansi %1 simuleerimine"
+
+#: jobs/k3bcdcopyjob.cpp:709
+#, kde-format
+msgid "Writing Copy %1 (Session %2)"
+msgstr "Koopia %1 (seanss %2) kirjutamine"
+
+#: jobs/k3bcdcopyjob.cpp:711
+#, kde-format
+msgid "Writing Copy (Session %1)"
+msgstr "Koopia (seanss %1) kirjutamine"
+
+#: jobs/k3bcdcopyjob.cpp:719
+msgid "Writing Copy"
+msgstr "Koopia kirjutamine"
+
+#: jobs/k3bcdcopyjob.cpp:982
+#, kde-format
+msgid "Successfully read session %1."
+msgstr "Seanss %1 edukalt loetud."
+
+#: jobs/k3bcdcopyjob.cpp:984
+msgid "Successfully read source disk."
+msgstr "Lähteplaat edukalt loetud."
+
+#: jobs/k3bcdcopyjob.cpp:999
+msgid "K3b was unable to eject the source disk. Please do so manually."
+msgstr "K3b ei suutnud lähteplaati väljastada. Palun tee seda käsitsi."
+
+#: jobs/k3bcdcopyjob.cpp:1016
+#, kde-format
+msgid "Error while reading session %1."
+msgstr "Viga seansi %1 lugemisel."
+
+#: jobs/k3bcdcopyjob.cpp:1045
+msgid "Reloading the medium"
+msgstr "Andmekandja taaslaadimine"
+
+#: jobs/k3bcdcopyjob.cpp:1211
+msgid "Creating CD Image"
+msgstr "CD tõmmise loomine"
+
+#: jobs/k3bcdcopyjob.cpp:1215
+msgid "Simulating CD Copy On-The-Fly"
+msgstr "CD lennult kopeerimise simuleerimine"
+
+#: jobs/k3bcdcopyjob.cpp:1217
+msgid "Simulating CD Copy"
+msgstr "CD kopeerimise simuleerimine"
+
+#: jobs/k3bcdcopyjob.cpp:1221
+msgid "Copying CD On-The-Fly"
+msgstr "CD lennult kopeerimine"
+
+#: jobs/k3bcdcopyjob.cpp:1223
+msgid "Copying CD"
+msgstr "CD kopeerimine"
+
+#: jobs/k3bblankingjob.cpp:74 jobs/k3bblankingjob.cpp:162
+msgid "Erasing CD-RW"
+msgstr "CD-RW kustutamine"
+
+#: jobs/k3bblankingjob.cpp:75
+msgid "When erasing a CD-RW no progress information is available."
+msgstr "CD-RW kustutamisel edenemisinfot ei näidata."
+
+#: jobs/k3bblankingjob.cpp:115
+#, kde-format
+msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
+msgstr "Palun sisesta korduvkirjutatav CD seadmesse<p><b>%1 %2 (%3)</b>."
+
+#: jobs/k3bblankingjob.cpp:152
+msgid "Blanking error "
+msgstr "Tühjendamise viga "
+
+#: jobs/k3bblankingjob.cpp:153
+msgid "Sorry, no error handling yet."
+msgstr "Vabandust, veakäitlus veel puudub."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:90
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:127
+#, kde-format
+msgid "%1 executable could not be found."
+msgstr "Prorammi %1 käivitatavat faili ei leitud."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:96
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:133
+#, kde-format
+msgid "%1 version %2 is too old."
+msgstr "Programmi %1 versioon %2 on liiga vana."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:111
+#, kde-format
+msgid "Analysing Title %1 of Video DVD %2"
+msgstr "Video-DVD %2 tiitli %1 analüüs"
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:185
+#, kde-format
+msgid "Analysing Chapter %1 of %2"
+msgstr "Peatüki %1 analüüs (kokku %2)"
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:262
+msgid ""
+"Ignoring clipping values of last chapter due to its short playback time."
+msgstr ""
+"Viimase peatüki kärpimisväärtusi eiratakse lühikese taasesitusaja tõttu."
+
+#: jobs/k3baudiocuefilewritingjob.cpp:113
+msgid "Writing Audio Cue File"
+msgstr "Audio CUE-faili kirjutamine"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:196
+msgid "Analysing the audio file failed. Corrupt file?"
+msgstr "Audiofaili analüüs nurjus. Vigane fail?"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:264
+msgid "Analysing the audio file"
+msgstr "Audiofaili analüüs"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:265
+#, kde-format
+msgid "Analysing %1"
+msgstr "%1 analüüs"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:272
+#, kde-format
+msgid "Unable to handle '%1' due to an unsupported format."
+msgstr "'%1' käitlemine nurjus toetamata vormingu tõttu."
+
+#: jobs/k3baudiocuefilewritingjob.cpp:277
+#, kde-format
+msgid "No valid audio cue file: '%1'"
+msgstr "Sobimatu audio CUE-fail: '%1'"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:159
+#, kde-format
+msgid "Unable to create folder '%1'"
+msgstr "Kataloogi '%1' loomine nurjus."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:165
+#, kde-format
+msgid "Invalid filename: '%1'"
+msgstr "Vigane failinimi: '%1'"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:177
+#, kde-format
+msgid "Transcoding title %1 from Video DVD %2"
+msgstr "Transkodeeritakse tiitel %1 video-DVD-lt %2"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:202
+#, kde-format
+msgid "Invalid Video codec set: %1"
+msgstr "Määratud on vale videokoodek: %1"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:225
+#, kde-format
+msgid "Invalid Audio codec set: %1"
+msgstr "Määratud on vale audiokoodek: %1"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:366
+#, kde-format
+msgid "Resizing picture of title %1 to %2x%3"
+msgstr "Tiitli %1 pildi muutmine suurusele %2x%3"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:389
+msgid "Single-pass Encoding"
+msgstr "Ühekäiguline kodeerimine"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:391
+msgid "Two-pass Encoding: First Pass"
+msgstr "Kahekäiguline kodeerimine: esimene käik"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:393
+msgid "Two-pass Encoding: Second Pass"
+msgstr "Kahekäiguline kodeerimine: teine käik"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:417
+#, kde-format
+msgid "Removing incomplete video file '%1'"
+msgstr "Mittetäieliku videofaili '%1' eemaldamine"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:491
+#, kde-format
+msgid "Execution of %1 failed."
+msgstr "%1 täitmine nurjus."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:492
+msgid "Please consult the debugging output for details."
+msgstr "Palun uuri täpsema info saamiseks silumise väljundit."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:523
+msgid "AC3 (Stereo)"
+msgstr "AC3 (Stereo)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:525
+msgid "AC3 (Pass-through)"
+msgstr "AC3 (Pass-through)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:527
+msgid "MPEG1 Layer III"
+msgstr "MPEG1 Layer III"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:538
+msgid "MPEG4 (FFMPEG)"
+msgstr "MPEG4 (FFMPEG)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:540
+msgid "XviD"
+msgstr "XviD"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:551
+msgid ""
+"FFmpeg is an open-source project trying to support most video and audio "
+"codecs used these days. Its subproject libavcodec forms the basis for "
+"multimedia players such as xine or mplayer."
+msgstr ""
+"FFmpeg on avatud lähtekoodiga projekt, mis üritab toetada enamikku "
+"tänapäeval levinud video- ja audiokoodekeid. Selle alamprojekt libavcodec on "
+"aluseks sellistele multimeediamängijatele nagu xine või MPlayer."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:555
+msgid ""
+"FFmpeg contains an implementation of the MPEG-4 video encoding standard "
+"which produces high quality results."
+msgstr ""
+"FFmpeg sisaldab MPEG-4 video kodeerimise standardi teostust, mis annab kõrge "
+"kvaliteediga tulemused."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:558
+msgid ""
+"XviD is a free and open source MPEG-4 video codec. XviD was created by a "
+"group of volunteer programmers after the OpenDivX source was closed in July "
+"2001."
+msgstr ""
+"XviD on vaba ja avatud lähtekoodiga MPEG-4 videokoodek. XviD lõi rühm "
+"vabatahtlikke programmeerijaid pärast seda, kui 2001. aasta juulis muudeti "
+"OpenDivX lähtekood suletuks."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:561
+msgid ""
+"XviD features MPEG-4 Advanced Profile settings such as b-frames, global and "
+"quarter pixel motion compensation, lumi masking, trellis quantization, and "
+"H.263, MPEG and custom quantization matrices."
+msgstr ""
+"XviD pakub MPEG-4 Advanced Profile'i sätteid, näiteks b-kaadrid, pikslite "
+"liikumise globaalne ja neljandikkompensatsioon, heleduse maskimine, trellis-"
+"kvantimine ning H.263, MPEG ja kohandatud kvantimismaatriksid."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:565
+msgid ""
+"XviD is a primary competitor of DivX (XviD being DivX spelled backwards). "
+"While DivX is closed source and may only run on Windows, Mac OS and Linux, "
+"XviD is open source and can potentially run on any platform."
+msgstr ""
+"XviD on peamine DivX konkurent (XviD ongi DivX tagurpidi). DivX on suletud "
+"lähtekoodiga ja töötab ainult Windowsis, Mac OS-is ja Linuxis, Xvid  aga "
+"avatud lähtekoodiga ja töötab põhimõtteliselt igal platvormil."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:569
+msgid "(Description taken from the Wikipedia article)"
+msgstr "(Kirjeldus on võetud Wikipedia artiklist)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:579
+msgid ""
+"AC3, better known as Dolby Digital is standardized as ATSC A/52. It contains "
+"up to 6 total channels of sound."
+msgstr ""
+"AC3, mida rohkem tuntakse Dolby Digitali nime all, on standardiseeritud kui "
+"ATSC A/52. See sisaldab kuni kuus helikanalit."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:584
+msgid ""
+"With this setting K3b will create a two-channel stereo Dolby Digital audio "
+"stream."
+msgstr ""
+"Selle sisselülitamisel loob K3b kahekanalise Dolby Digital stereoaudiovoo."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:588
+msgid ""
+"With this setting K3b will use the Dolby Digital audio stream from the "
+"source DVD without changing it."
+msgstr ""
+"Selle sisselülitamisel kasutab K3b lähte-DVD Dolby Digitali audiovoogu "
+"muutmatul kujul."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:590
+msgid "Use this setting to preserve 5.1 channel sound from the DVD."
+msgstr "Selle sisselülitamisel säilitatakse DVD 5.1 kanali heli."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:592
+msgid ""
+"MPEG1 Layer III is better known as MP3 and is the most used lossy audio "
+"format."
+msgstr ""
+"MPEG 1 Layer III on rohkem tuntud kui MP3, mis on kõige levinum kadudega "
+"audiovorming."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:593
+msgid ""
+"With this setting K3b will create a two-channel stereo MPEG1 Layer III audio "
+"stream."
+msgstr ""
+"Selle sisselülitamisel loob K3b kahekanalise MPEG1 Layer III stereoaudiovoo."
+
+#: plugin/k3baudioencoder.cpp:53
+msgctxt "plugin type"
+msgid "Audio Encoder"
+msgstr "Heli kodeerija"
+
+#: plugin/k3baudioencoder.cpp:162
+msgid "An unknown error occurred."
+msgstr "Tekkis tundmatu viga."
+
+#: plugin/k3bprojectplugin.cpp:26
+msgctxt "plugin type"
+msgid "Project plugin"
+msgstr "Projekti plugin"
+
+#: plugin/k3baudiodecoder.cpp:597
+msgctxt "plugin type"
+msgid "Audio Decoder"
+msgstr "Helidekooder"
+
+#: plugin/k3bpluginmanager.cpp:195
+#, kde-format
+msgid "No settings available for plugin %1."
+msgstr "Pluginale %1 puuduvad seadistused."
+
+#~ msgid "Checking media..."
+#~ msgstr "Andmekandja kontroll..."
+
+#~ msgid "Checking media"
+#~ msgstr "Andmekandja kontroll"
+
+#~ msgid ""
+#~ "<p>Unable to handle the following files due to an unsupported format:"
+#~ "<p>You may manually convert these audio files to wave using another "
+#~ "application supporting the audio format and then add the wave files to "
+#~ "the K3b project."
+#~ msgstr ""
+#~ "<p>Järgmiste failide käsitlemine ei ole toetamata vormingu tõttu võimalik:"
+#~ "<p>Sul tuleb need audiofailid käsitsi wave-failideks teisendada mõne muu "
+#~ "audiovormingut toetava rakenduse abil ja seejärel lisada wave-failid K3b "
+#~ "projekti."
+
+#~ msgid "Unsupported Format"
+#~ msgstr "Toetamata vorming"
+
+#~ msgid ""
+#~ "K3b does not support simulation with DVD+R(W) media. Do you really want "
+#~ "to continue? The media will actually be written to."
+#~ msgstr ""
+#~ "K3b ei toeta simuleerimist DVD+R(W) puhul. Kas tõesti jätkata? "
+#~ "Andmekandja kirjutatakse sel juhul päriselt."
+
+#~ msgid "Writing DVD+RW."
+#~ msgstr "DVD+RW kirjutamine."
+
+#~ msgid "Writing DVD+R."
+#~ msgstr "DVD+R kirjutamine."
+
+#~ msgid "Formatting DVD±RW"
+#~ msgstr "DVD±RW vormindamine"
+
+#~ msgid "Formatting DVD+RW"
+#~ msgstr "DVD+RW vormindamine"
+
+#~ msgid "Configure plugin %1"
+#~ msgstr "Plugina %1 seadistamine"
+
+#~ msgid "Growisofs >= 5.20 is needed to write Double Layer DVD+R."
+#~ msgstr "Kahekihilise DVD+R kirjutamiseks on vajalik growisofs >= 5.20."
+
+#~ msgid "Forced by user. Growisofs will be called without further tests."
+#~ msgstr ""
+#~ "Kasutaja poolt peale sunnitud. Growisofs kutsutakse välja täiendavate "
+#~ "testideta."
+
+#~ msgid "%1 (Mixed CD)"
+#~ msgstr "%1 (segarežiimis CD)"
+
+#~ msgid "%1 (Appendable Data %2)"
+#~ msgstr "%1 (lisatav andme-%2)"
+
+#~ msgid "%1 (Complete Data %2)"
+#~ msgstr "%1 (terviklik andme-%2)"
+
+#~ msgid "Forced by user. Writing will continue without further checks."
+#~ msgstr ""
+#~ "Kasutaja poolt peale sunnitud. Kirjutamine jätkub täiendavate testideta."
+
+#~ msgid "Removed incomplete image file %1."
+#~ msgstr "Mittetäielik tõmmisefail '%1' eemaldati."
+
+#, fuzzy
+#~| msgid ""
+#~| "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do "
+#~| "you really want to continue? The media will be written for real."
+#~ msgid ""
+#~ "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do "
+#~ "you really want to continue? The media will actualy be written to."
+#~ msgstr ""
+#~ "Sinu kirjuti (%1 %2) ei toeta simuleerimist DVD-R(W) puhul. Kas tõesti "
+#~ "jätkata? Andmekandja kirjutatakse sel juhul päriselt."
+
+#~ msgid ""
+#~ "K3b does not support simulation with DVD+R(W) media. Do you really want "
+#~ "to continue? The media will be written for real."
+#~ msgstr ""
+#~ "K3b ei toeta simuleerimist DVD+R(W) puhul. Kas tõesti jätkata? "
+#~ "Andmekandja kirjutatakse sel juhul päriselt."
+
+#~ msgid "Ejecting CD"
+#~ msgstr "CD väljalükkamine"
+
+#~ msgid "Writer does not support buffer underrun free recording (BURNPROOF)"
+#~ msgstr "Kirjuti ei toeta puhvri alatäitevaba salvestamist (BURNPROOF)"

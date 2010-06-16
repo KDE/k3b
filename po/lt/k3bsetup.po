@@ -1,0 +1,237 @@
+# translation of k3bsetup.po to Lithuanian
+# Automatically generated, 2005.
+# Donatas Glodenis <ziogelis77@takas.lt>, 2005.
+# Nerijus Kislauskas <nierka@splius.lt>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: k3bsetup\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2010-05-03 05:01+0200\n"
+"PO-Revision-Date: 2009-11-08 22:09+0100\n"
+"Last-Translator: Andrius Štikonas <stikonas@gmail.com>\n"
+"Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10==1 && n%100!=11 ? 1 : n%"
+"10>=2 && (n%100<10 || n%100>=20) ? 2 : 3);\n"
+
+#: k3bsetup.cpp:77
+msgid "K3bSetup"
+msgstr ""
+
+#: k3bsetup.cpp:79
+msgid "(C) 2003-2007 Sebastian Trueg"
+msgstr "(C) 2003-2007 Sebastian Trueg"
+
+#: k3bsetup.cpp:80
+msgid "Sebastian Trueg"
+msgstr "Sebastian Trueg"
+
+#: k3bsetup.cpp:88
+#, fuzzy
+#| msgid ""
+#| "<p>This simple setup assistant is able to set the permissions needed by "
+#| "K3b in order to burn CDs and DVDs. <p>It does not take things like devfs "
+#| "or resmgr into account. In most cases this is not a problem but on some "
+#| "systems the permissions may be altered the next time you login or restart "
+#| "your computer. In those cases it is best to consult the distribution "
+#| "documentation.<p><b>Caution:</b> Although K3bSetup 2 should not be able "
+#| "to mess up your system no guarantee can be given."
+msgid ""
+"<p>This simple setup assistant is able to set the permissions needed by K3b "
+"in order to burn CDs and DVDs. <p>It does not take things like devfs or "
+"resmgr into account. In most cases this is not a problem but on some systems "
+"the permissions may be altered the next time you login or restart your "
+"computer. In those cases it is best to consult the distribution "
+"documentation.<p><b>Caution:</b> Although K3b::Setup should not be able to "
+"mess up your system no guarantee can be given."
+msgstr ""
+"<p>Šis paprastas nuostatų asistentas gali nustatyti leidimus, reikalingus "
+"K3b, kad galėtų įrašinėti CD ir DVD laikmenas.<p> Šis asistentas nedirba su "
+"devfs ar resmgr. Dauguma atvejų tai nėra problema, bet kai kuriose sistemose "
+"leidimai gali pradėti veikti kito prisijungimo ar kompiuterio užsikrovimo "
+"metu. Esant tokiems atvejams geriausia paskaityti distributyvo dokumentaciją."
+"<p><b>Įspėjimas:</b> K3bSetup 2 neturėtų sujaukti Jūsų sistemos, bet "
+"negalima duoti jokios garantijos, kad taip neatsitiks."
+
+#: k3bsetup.cpp:145
+#, fuzzy
+#| msgid ""
+#| "<h2>K3bSetup 2</h2><p>This simple setup assistant is able to set the "
+#| "permissions needed by K3b in order to burn CDs and DVDs.<p>It does not "
+#| "take into account devfs or resmgr, or similar. In most cases this is not "
+#| "a problem, but on some systems the permissions may be altered the next "
+#| "time you login or restart your computer. In these cases it is best to "
+#| "consult the distribution's documentation.<p>The important task that "
+#| "K3bSetup 2 performs is grant write access to the CD and DVD devices."
+#| "<p><b>Caution:</b> Although K3bSetup 2 should not be able to damage your "
+#| "system, no guarantee can be given."
+msgid ""
+"<h2>K3b::Setup</h2><p>This simple setup assistant is able to set the "
+"permissions needed by K3b in order to burn CDs and DVDs.<p>It does not take "
+"into account devfs or resmgr, or similar. In most cases this is not a "
+"problem, but on some systems the permissions may be altered the next time "
+"you login or restart your computer. In these cases it is best to consult the "
+"distribution's documentation.<p>The important task that K3b::Setup performs "
+"is grant write access to the CD and DVD devices.<p><b>Caution:</b> Although "
+"K3b::Setup should not be able to damage your system, no guarantee can be "
+"given."
+msgstr ""
+"<h2>K3bSetup 2</h2><p> Šis paprastas nuostatų asistentas gali nustatyti "
+"leidimus, reikalingus K3b, kad galėtų įrašinėti CD ir DVD laikmenas.<p> Šis "
+"asistentas nedirba su devfs ar resmgr. Dauguma atvejų tai nėra problema, bet "
+"kai kuriose sistemose leidimai gali pradėti veikti kito prisijungimo ar "
+"kompiuterio užsikrovimo metu. Esant tokiems atvejams geriausia paskaityti "
+"distributyvo dokumentaciją.<p> Svarbiausia K3bSetup 2 užduotis yra suteikti "
+"įrašymo teises CD ir DVD įrenginiams.<p><b>Įspėjimas:</b> K3bSetup 2 "
+"neturėtų sujaukti Jūsų sistemos, bet negalime duoti jokios garantijos, kad "
+"taip neatsitiks."
+
+#: k3bsetup.cpp:188
+#, kde-format
+msgid "There is no group \"%1\"."
+msgstr "Nėra grupės „%1“."
+
+#: k3bsetup.cpp:228
+msgid "Cannot run worker."
+msgstr ""
+
+#: k3bsetup.cpp:238
+msgid "Following devices and programs could not be updated:"
+msgstr ""
+
+#: k3bsetupdevicesmodel.cpp:170 k3bsetupdevicesmodel.cpp:177
+#: k3bsetupprogramsmodel.cpp:266
+msgid "no change"
+msgstr "nekeista"
+
+#: k3bsetupdevicesmodel.cpp:237
+msgid "Device"
+msgstr "Įrenginys"
+
+#: k3bsetupdevicesmodel.cpp:238
+msgid "Devicenode"
+msgstr "Įrenginio mazgas"
+
+#: k3bsetupdevicesmodel.cpp:239 k3bsetupprogramsmodel.cpp:324
+msgid "Permissions"
+msgstr "Leidimai"
+
+#: k3bsetupdevicesmodel.cpp:240 k3bsetupprogramsmodel.cpp:325
+msgid "New permissions"
+msgstr "Nauji leidimai"
+
+#: k3bsetupprogramsmodel.cpp:321
+msgid "Program"
+msgstr "Programa"
+
+#: k3bsetupprogramsmodel.cpp:322
+msgid "Version"
+msgstr "Versija"
+
+#: k3bsetupprogramsmodel.cpp:323
+msgid "Path"
+msgstr "Kelias"
+
+#. i18n: file: base_k3bsetup.ui:22
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
+#: rc.cpp:3
+msgid "Settings"
+msgstr "Nustatymai"
+
+#. i18n: file: base_k3bsetup.ui:31
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:6
+msgid ""
+"<p>If this option is checked, only the users in the specified group will be "
+"able to burn CDs and DVDs, since only they will have access to the devices "
+"and the CD recording programs used by K3b.</p>\n"
+"<p>Otherwise all users on the system have access to the devices and to all "
+"K3b functionality."
+msgstr ""
+"<p> Jei ši opcija pažymėta, tik naudotojai, esantys nurodytoje grupėje, "
+"galės įrašinėti CD ir DVD laimenas, tik jie turės priėjimą prie įrenginių ir "
+"K3b naudojamų CD įrašymo programų.</p>\n"
+"<p> Kita vertus, visi sistemos naudotojai turi priėjimą prie įrenginių ir "
+"viso K3b funkcionalumo."
+
+#. i18n: file: base_k3bsetup.ui:34
+#. i18n: ectx: property (text), widget (QCheckBox, m_checkUseBurningGroup)
+#: rc.cpp:10
+msgid "Use burning group:"
+msgstr "Naudoti \"burning\" grupę:"
+
+#. i18n: file: base_k3bsetup.ui:44
+#. i18n: ectx: property (text), widget (KLineEdit, m_editBurningGroup)
+#: rc.cpp:13
+msgid "burning"
+msgstr "įrašymas"
+
+#. i18n: file: base_k3bsetup.ui:78
+#. i18n: ectx: property (text), widget (QLabel, textLabel2)
+#: rc.cpp:16
+msgid "Users allowed to burn (separated by space):"
+msgstr "Naudotojai, kuriems leidžiamas įrašinėjimas (atskirti tarpais):"
+
+#. i18n: file: base_k3bsetup.ui:104
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
+#: rc.cpp:19
+msgid "Devices"
+msgstr "Įrenginiai"
+
+#. i18n: file: base_k3bsetup.ui:110
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
+#: rc.cpp:22
+msgid "Check the devices whose permissions you want to be changed"
+msgstr "Patikrinti įrenginius, kurių leidimus norėtum pakeisti"
+
+#. i18n: file: base_k3bsetup.ui:133
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
+#: rc.cpp:25
+msgid "External Programs"
+msgstr "Išorinės programos"
+
+#. i18n: file: base_k3bsetup.ui:143
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#: rc.cpp:28
+msgid "Found Programs"
+msgstr "Rastos programos"
+
+#. i18n: file: base_k3bsetup.ui:149
+#. i18n: ectx: property (text), widget (QLabel, textLabel1)
+#: rc.cpp:31
+msgid "Check the programs whose permissions you want to be changed"
+msgstr "Patikrinti programas, kurių leidimus norėtum pakeisti"
+
+#. i18n: file: base_k3bsetup.ui:170
+#. i18n: ectx: attribute (title), widget (QWidget, tab)
+#. i18n: file: base_k3bsetup.ui:176
+#. i18n: ectx: property (title), widget (KEditListBox, m_editSearchPath)
+#: rc.cpp:34 rc.cpp:37
+msgid "Search Path"
+msgstr "Paieškos kelias"
+
+#. i18n: file: base_k3bsetup.ui:186
+#. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
+#: rc.cpp:40
+msgid ""
+"<qt><b>Hint:</b> to force K3b to use another than the default name for the "
+"executable specify it in the search path.</qt>"
+msgstr ""
+"<qt><b>Užuomina:</b> K3b galima priversti naudoti kitokius vykdomų failų "
+"vardus nei numatyti, tik juos reikėtų įrašyti į paieškos kelią.</qt>"
+
+#: rc.cpp:41
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Nerijus Kislauskas"
+
+#: rc.cpp:42
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "nierka@splius.lt"
+
+#~ msgid "Successfully updated all permissions."
+#~ msgstr "Sėkmingai atnaujinti visi leidimai."
