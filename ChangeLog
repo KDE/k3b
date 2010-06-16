@@ -35,6 +35,7 @@ Bugfixes:
  * Crash when importing previous session (235734)
  * Various crashes during manipulation of eMovix project view
  * Hang before verification (156684)
+ * Crash when "Waiting for medium" dialog is closed (232148)
 
 2.0-rc3 (1.92)
 ==============
