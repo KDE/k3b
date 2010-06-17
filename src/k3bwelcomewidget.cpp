@@ -261,8 +261,8 @@ void K3b::WelcomeWidget::slotThemeChanged()
     }
 
     m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator") + "</body></html>" );
-    m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\"> + i18n("K3b %1 Copyright &copy; 1998&ndash;2010 K3b developers") + "</body></html>")
-                         .arg(KGlobal::mainComponent().aboutData()->version()) );
+    m_infoText->setHtml( "<html><body align=\"center\">" + i18n("K3b %1 Copyright &copy; 1998&ndash;2010 K3b developers")
+                         .arg(KGlobal::mainComponent().aboutData()->version()) + "</body></html>" );
     setMinimumWidth( 2*MARGIN + qMax(( int )m_header->idealWidth(), m_buttonSize.width()) );
     updateBgPix();
     update();
