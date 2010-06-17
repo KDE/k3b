@@ -13,14 +13,12 @@ install( FILES
   k3bmultichoicedialog.h
   k3bdevicehandler.h
   k3bcdparanoialib.h
-  k3blistview.h
   k3bmsfedit.h
   k3bcdtextvalidator.h
   k3bintvalidator.h
   k3bexceptions.h
   k3bprogressdialog.h
   k3bpushbutton.h
-  k3blistviewitemanimator.h
   k3bthreadwidget.h
   k3bsignalwaiter.h
   k3biso9660backend.h
