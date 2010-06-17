@@ -17,43 +17,65 @@
 
 #include "k3bapplication.h"
 #include "k3binteractiondialog.h"
-
 #include "k3baudiodoc.h"
 #include "k3baudiodatasourceiterator.h"
 #include "k3baudiocdtracksource.h"
+#include "k3baudioprojectinterface.h"
 #include "k3bdatadoc.h"
+#include "k3bdataprojectinterface.h"
 #include "k3bvideodvddoc.h"
 #include "k3bmixeddoc.h"
+#include "k3bmixedprojectinterface.h"
 #include "k3bvcddoc.h"
 #include "k3bmovixdoc.h"
 #include "k3bglobals.h"
 #include "k3bisooptions.h"
 #include "k3bdevicemanager.h"
+#include "k3bprojectinterface.h"
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <qlist.h>
-#include <qmap.h>
-#include <qtextstream.h>
-#include <qdom.h>
-#include <qfile.h>
-#include <qapplication.h>
-#include <qcursor.h>
 
-#include <kurl.h>
-#include <kdebug.h>
-#include <kconfig.h>
-#include <kio/netaccess.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kglobal.h>
+#include <KConfig>
+#include <KDebug>
+#include <KGlobal>
+#include <KIO/NetAccess>
+#include <KLocale>
+#include <KMessageBox>
 #include <KSharedConfig>
+#include <KUrl>
+
+#include <QApplication>
+#include <QCursor>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QFile>
+#include <QHash>
+#include <QList>
+#include <QTextStream>
+
+namespace
+{
+    typedef QHash<K3b::Doc*, K3b::ProjectInterface*> ProjectInterfaces;
+
+    K3b::ProjectInterface* createProjectInterface( K3b::Doc* doc )
+    {
+        if( K3b::AudioDoc* audioDoc = dynamic_cast<K3b::AudioDoc*>( doc ) )
+            return new K3b::AudioProjectInterface( audioDoc );
+        else if( K3b::DataDoc* dataDoc = dynamic_cast<K3b::DataDoc*>( doc ) )
+            return new K3b::DataProjectInterface( dataDoc );
+        else if( K3b::MixedDoc* mixedDoc = dynamic_cast<K3b::MixedDoc*>( doc ) )
+            return new K3b::MixedProjectInterface( mixedDoc );
+        else
+            return new K3b::ProjectInterface( doc );
+    }
+}
 
 class K3b::ProjectManager::Private
 {
 public:
-    QList<K3b::Doc*> projects;
-    K3b::Doc* activeProject;
-    QMap<K3b::Doc*, K3b::ProjectInterface*> projectInterfaceMap;
+    QList<Doc*> projects;
+    Doc* activeProject;
+    ProjectInterfaces projectInterfaces;
 
     int audioUntitledCount;
     int dataUntitledCount;
@@ -97,9 +119,10 @@ void K3b::ProjectManager::addProject( K3b::Doc* doc )
     kDebug() << doc;
 
     if( !d->projects.contains( doc ) ) {
-        kDebug() << "(K3b::ProjectManager) adding doc " << doc->URL().toLocalFile();
+        kDebug() << "adding doc " << doc->URL().toLocalFile();
 
-        d->projects.append(doc);
+        d->projects.append( doc );
+        d->projectInterfaces.insert( doc, createProjectInterface( doc ) );
 
         connect( doc, SIGNAL(changed(K3b::Doc*)),
                  this, SLOT(slotProjectChanged(K3b::Doc*)) );
@@ -117,15 +140,11 @@ void K3b::ProjectManager::removeProject( K3b::Doc* docRemove )
     //
     Q_FOREACH( K3b::Doc* doc, d->projects ) {
         if( docRemove == doc ) {
-#if 0
-            // remove the DCOP interface
-            QMap<K3b::Doc*, K3b::ProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
-            if( it != d->projectInterfaceMap.end() ) {
-                // delete the interface
-                delete it.data();
-                d->projectInterfaceMap.remove( it );
+            ProjectInterfaces::iterator interface = d->projectInterfaces.find( doc );
+            if( interface != d->projectInterfaces.end() ) {
+                delete interface.value();
+                d->projectInterfaces.erase( interface );
             }
-#endif
             d->projects.removeAll(doc);
             emit closingProject(doc);
 
@@ -241,9 +260,6 @@ K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::Type type )
     kDebug() << type;
 
     K3b::Doc* doc = createEmptyProject( type );
-
-    // create the dcop interface
-    //dcopInterface( doc );
 
     addProject( doc );
 
@@ -417,27 +433,16 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
     doc->setModified( false );
 }
 
-#if 0
-K3b::ProjectInterface* K3b::ProjectManager::dcopInterface( K3b::Doc* doc )
+
+QString K3b::ProjectManager::dbusPath( K3b::Doc* doc ) const
 {
-    QMap<K3b::Doc*, K3b::ProjectInterface*>::iterator it = d->projectInterfaceMap.find( doc );
-    if( it == d->projectInterfaceMap.end() ) {
-        K3b::ProjectInterface* dcopInterface = 0;
-        if( doc->type() == K3b::Doc::DATA )
-            dcopInterface = new K3b::DataProjectInterface( static_cast<K3b::DataDoc*>(doc) );
-        else if( doc->type() == K3b::Doc::AUDIO )
-            dcopInterface = new K3b::AudioProjectInterface( static_cast<K3b::AudioDoc*>(doc) );
-        else if( doc->type() == K3b::Doc::MIXED )
-            dcopInterface = new K3b::MixedProjectInterface( static_cast<K3b::MixedDoc*>(doc) );
-        else
-            dcopInterface = new K3b::ProjectInterface( doc );
-        d->projectInterfaceMap[doc] = dcopInterface;
-        return dcopInterface;
-    }
+    ProjectInterfaces::const_iterator it = d->projectInterfaces.find( doc );
+    if( it != d->projectInterfaces.end() )
+        return it.value()->dbusPath();
     else
-        return it.data();
+        return QString();
 }
-#endif
+
 
 K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
 {

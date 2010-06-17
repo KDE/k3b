@@ -16,8 +16,6 @@
 #include "k3bapplication.h"
 #include "k3b.h"
 #include "k3bsplash.h"
-//#include "k3binterface.h"
-//#include "k3bjobinterface.h"
 #include "k3bprojectmanager.h"
 #include "k3bappdevicemanager.h"
 #include "k3bpassivepopup.h"
@@ -273,10 +271,6 @@ K3b::Application::Core::Core( QObject* parent )
     m_projectManager = new K3b::ProjectManager( this );
     // we need the themes on startup (loading them is fast anyway :)
     m_themeManager->loadThemes();
-
-    //m_jobInterface = new K3b::JobInterface( this );
-    //m_interface = new K3b::Interface();
-    //dcopClient()->setDefaultObject( m_interface->objId() );
 }
 
 

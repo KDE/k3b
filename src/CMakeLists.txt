@@ -172,10 +172,12 @@ set(k3b_SRCS
   main.cpp
   k3bstatusbarmanager.cpp
   k3burlnavigator.cpp
-  #k3binterface.cpp
-  #k3bjobinterface.cpp
-  #k3bprojectinterface.cpp
-  #k3bdataprojectinterface.cpp
+  k3binterface.cpp
+  k3bjobinterface.cpp
+  k3baudioprojectinterface.cpp
+  k3bdataprojectinterface.cpp
+  k3bmixedprojectinterface.cpp
+  k3bprojectinterface.cpp
   k3bsystemproblemdialog.cpp
   k3bmediacontentsview.cpp
   k3bcontentsview.cpp
@@ -188,8 +190,6 @@ set(k3b_SRCS
   k3binteractiondialog.cpp
   k3bthememanager.cpp
   k3bprojectmanager.cpp
-  #k3baudioprojectinterface.cpp
-  #k3bmixedprojectinterface.cpp
   k3bflatbutton.cpp
   k3bemptydiscwaiter.cpp
   k3bjobprogressosd.cpp
@@ -212,12 +212,24 @@ set(k3b_SRCS
   k3bdevicemenu.cpp
   )
 
+qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3binterface.h org.k3b.MainWindow.xml )
+qt4_add_dbus_adaptor( k3b_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.MainWindow.xml k3binterface.h K3b::Interface k3binterfaceadaptor K3bInterfaceAdaptor )
+qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bjobinterface.h org.k3b.Job.xml )
+qt4_add_dbus_adaptor( k3b_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Job.xml k3bjobinterface.h K3b::JobInterface k3bjobinterfaceadaptor K3bJobInterfaceAdaptor )
+qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bprojectinterface.h org.k3b.Project.xml )
+qt4_add_dbus_adaptor( k3b_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Project.xml k3bprojectinterface.h K3b::ProjectInterface k3bprojectinterfaceadaptor K3bProjectInterfaceAdaptor )
+qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3baudioprojectinterface.h org.k3b.AudioProject.xml )
+qt4_add_dbus_adaptor( k3b_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.AudioProject.xml k3baudioprojectinterface.h K3b::AudioProjectInterface k3baudioprojectinterfaceadaptor K3bAudioProjectInterfaceAdaptor )
+qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bdataprojectinterface.h org.k3b.DataProject.xml )
+qt4_add_dbus_adaptor( k3b_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor )
+
 set(k3b_bin_SRCS
   ${k3b_option_SRCS}
   ${k3b_misc_SRCS}
   ${k3b_project_SRCS}
   ${k3b_kostore_SRCS}
   ${k3b_rip_SRCS}
+  ${k3b_dbus_SRCS}
   ${k3b_SRCS}
 )
 
@@ -255,16 +267,6 @@ if(ENABLE_MUSICBRAINZ)
     projects/k3baudiotracktrmlookupdialog.cpp
     )
 endif(ENABLE_MUSICBRAINZ)
-
-#kde4_add_dcop_skels(k3b_SRCS );
-MESSAGE(STATUS "DCOP stuff was remove into kde4, convert it to dbus please.kde4_add_dcop_skels macro doesn't exist now. We keep it just to remember to port to dbus")
-
-#k3binterface.h
-#k3bjobinterface.h
-#k3bprojectinterface.h
-#k3bdataprojectinterface.h
-#k3baudioprojectinterface.h
-#k3bmixedprojectinterface.h )
 
 kde4_add_app_icon(k3b_bin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-app-k3b.png)
 

@@ -19,7 +19,7 @@
 #include "k3bemptydiscwaiter.h"
 #include "k3bjobprogressosd.h"
 #include "k3bdebuggingoutputdialog.h"
-//#include "k3bjobinterface.h"
+#include "k3bjobinterface.h"
 #include "k3bthemedlabel.h"
 #include "k3b.h"
 #include "k3bjob.h"
@@ -620,8 +620,7 @@ int K3b::JobProgressDialog::startJob( K3b::Job* job )
 {
     if( job ) {
         setJob( job );
-        //FIXME kde4
-        //k3bappcore->jobInterface()->setJob( job );
+        new JobInterface( job );
     }
     else if( !m_job ) {
         kError() << "(K3b::JobProgressDialog) null job!" << endl;

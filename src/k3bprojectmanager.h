@@ -16,16 +16,14 @@
 #ifndef _K3B_PROJECT_MANAGER_H_
 #define _K3B_PROJECT_MANAGER_H_
 
-#include <qobject.h>
-#include <qlist.h>
+#include <QList>
+#include <QObject>
 #include "k3bdoc.h"
 
 
 class KUrl;
 
 namespace K3b {
-
-    class ProjectInterface;
 
     class ProjectManager : public QObject
     {
@@ -60,9 +58,9 @@ namespace K3b {
         bool isEmpty() const;
 
         /**
-         * Will create if none exists.
+         * \return D-BUS object path of given project
          */
-        //ProjectInterface* dcopInterface( Doc* doc );
+        QString dbusPath( Doc* doc ) const;
 
     public Q_SLOTS:
         void addProject( K3b::Doc* );

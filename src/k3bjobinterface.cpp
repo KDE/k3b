@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -13,176 +14,87 @@
  */
 
 #include "k3bjobinterface.h"
-
+#include "k3bjobinterfaceadaptor.h"
 #include "k3bjob.h"
 
-#include <qdatastream.h>
+#include <QDataStream>
+#include <QDBusConnection>
+
+namespace K3b {
 
 
-K3b::JobInterface::JobInterface( QObject* parent )
-  : QObject( parent ),
-    DCOPObject( "K3b::JobInterface" ),
-    m_job( 0 )
+JobInterface::JobInterface( Job* job )
+:
+    QObject( job ),
+    m_job( job ),
+    m_lastProgress( 0 ),
+    m_lastSubProgress( 0 )
 {
-}
+    if( m_job ) {
+        connect( m_job, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
+        connect( m_job, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
+        connect( m_job, SIGNAL(infoMessage(QString, int)), this, SIGNAL(infoMessage(QString,int)) );
+        connect( m_job, SIGNAL(finished(bool)), this, SIGNAL(finished(bool)) );
+        connect( m_job, SIGNAL(started()), this, SIGNAL(started()) );
+        connect( m_job, SIGNAL(canceled()), this, SIGNAL(canceled()) );
+        connect( m_job, SIGNAL(percent(int)), this, SLOT(slotProgress(int)) );
+        connect( m_job, SIGNAL(subPercent(int)), this, SLOT(slotSubProgress(int)) );
+        connect( m_job, SIGNAL(nextTrack(int, int)), this, SIGNAL(nextTrack(int, int)) );
 
-
-void K3b::JobInterface::setJob( K3b::Job* job )
-{
-  if( m_job )
-    m_job->disconnect( this );
-
-  m_job = job;
-  m_lastProgress = m_lastSubProgress = 0;
-
-  if( m_job ) {
-    connect( m_job, SIGNAL(newTask(const QString&)), this, SLOT(slotNewTask(const QString&)) );
-    connect( m_job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
-    connect( m_job, SIGNAL(infoMessage(const QString&, int)), this, SLOT(slotInfoMessage(const QString&, int)) );
-    connect( m_job, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
-    connect( m_job, SIGNAL(started()), this, SLOT(slotStarted()) );
-    connect( m_job, SIGNAL(canceled()), this, SLOT(slotCanceled()) );
-    connect( m_job, SIGNAL(percent(int)), this, SLOT(slotProgress(int)) );
-    connect( m_job, SIGNAL(subPercent(int)), this, SLOT(slotSubProgress(int)) );
-    connect( m_job, SIGNAL(nextTrack(int, int)), this, SLOT(slotNextTrack(int, int)) );
-
-    if( m_job->inherits( "K3b::BurnJob" ) ) {
-      connect( m_job, SIGNAL(bufferStatus(int)), this, SLOT(slotBuffer(int)) );
-      connect( m_job, SIGNAL(deviceBuffer(int)), this, SLOT(slotDeviceBuffer(int)) );
+        if( m_job->inherits( "K3b::BurnJob" ) ) {
+            connect( m_job, SIGNAL(bufferStatus(int)), this, SIGNAL(buffer(int)) );
+            connect( m_job, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
+        }
     }
 
-    connect( m_job, SIGNAL(destroyed()), this, SLOT(slotDestroyed()) );
-  }
+    new K3bJobInterfaceAdaptor( this );
+    QDBusConnection::sessionBus().registerObject( "/job", this );
 }
 
 
-bool K3b::JobInterface::jobRunning() const
+JobInterface::~JobInterface()
 {
-  return ( m_job && m_job->active() );
+    QDBusConnection::sessionBus().unregisterObject( "/job" );
 }
 
 
-QString K3b::JobInterface::jobDescription() const
+bool JobInterface::jobRunning() const
 {
-  if( m_job )
-    return m_job->jobDescription();
-  else
-    return QString();
+    return ( m_job && m_job->active() );
 }
 
 
-QString K3b::JobInterface::jobDetails() const
+QString JobInterface::jobDescription() const
 {
-  if( m_job )
-    return m_job->jobDetails();
-  else
-    return QString();
+    if( m_job )
+        return m_job->jobDescription();
+    else
+        return QString();
 }
 
 
-void K3b::JobInterface::slotStarted()
+QString JobInterface::jobDetails() const
 {
-  m_lastProgress = m_lastSubProgress = 0;
-  emitDCOPSignal( "started()", QByteArray() );
+    if( m_job )
+        return m_job->jobDetails();
+    else
+        return QString();
 }
 
 
-void K3b::JobInterface::slotCanceled()
+void JobInterface::slotProgress( int val )
 {
-  emitDCOPSignal( "canceled()", QByteArray() );
+    if( m_lastProgress != val )
+        Q_EMIT progress( val );
 }
 
 
-void K3b::JobInterface::slotFinished( bool success )
+void JobInterface::slotSubProgress( int val )
 {
-  QByteArray params;
-  QDataStream stream(params, QIODevice::WriteOnly);
-  stream << success;
-  emitDCOPSignal( "finished(bool)", params );
+    if( m_lastSubProgress != val )
+        Q_EMIT subProgress( val );
 }
 
-
-void K3b::JobInterface::slotInfoMessage( const QString& message, int type )
-{
-  QByteArray params;
-  QDataStream stream(params, QIODevice::WriteOnly);
-  stream << message << type;
-  emitDCOPSignal( "infoMessage(QString)", params );
-}
-
-
-void K3b::JobInterface::slotProgress( int val )
-{
-  if( m_lastProgress != val ) {
-    m_lastProgress = val;
-    QByteArray params;
-    QDataStream stream(params, QIODevice::WriteOnly);
-    stream << val;
-    emitDCOPSignal( "progress(int)", params );
-  }
-}
-
-
-void K3b::JobInterface::slotSubProgress( int val )
-{
-  if( m_lastSubProgress != val ) {
-    m_lastSubProgress = val;
-    QByteArray params;
-    QDataStream stream(params, QIODevice::WriteOnly);
-    stream << val;
-    emitDCOPSignal( "subProgress(int)", params );
-  }
-}
-
-
-void K3b::JobInterface::slotNewTask( const QString& task )
-{
-  QByteArray params;
-  QDataStream stream(params, QIODevice::WriteOnly);
-  stream << task;
-  emitDCOPSignal( "newTask(QString)", params );
-}
-
-
-void K3b::JobInterface::slotNewSubTask( const QString& task )
-{
-  QByteArray params;
-  QDataStream stream(params, QIODevice::WriteOnly);
-  stream << task;
-  emitDCOPSignal( "newSubTask(QString)", params );
-}
-
-
-void K3b::JobInterface::slotBuffer( int val )
-{
-  QByteArray params;
-  QDataStream stream(params, QIODevice::WriteOnly);
-  stream << val;
-  emitDCOPSignal( "buffer(int)", params );
-}
-
-
-void K3b::JobInterface::slotDeviceBuffer( int val )
-{
-  QByteArray params;
-  QDataStream stream(params, QIODevice::WriteOnly);
-  stream << val;
-  emitDCOPSignal( "deviceBuffer(int)", params );
-}
-
-
-void K3b::JobInterface::slotNextTrack( int track, int numTracks )
-{
-  QByteArray params;
-  QDataStream stream(params, QIODevice::WriteOnly);
-  stream << track << numTracks;
-  emitDCOPSignal( "nextTrack(int,int)", params );
-}
-
-
-void K3b::JobInterface::slotDestroyed()
-{
-  m_job = 0;
-}
+} // namespace K3b
 
 #include "k3bjobinterface.moc"

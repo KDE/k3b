@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,79 +17,76 @@
 #ifndef _K3B_PROJECT_INTERFACE_H_
 #define _K3B_PROJECT_INTERFACE_H_
 
-#include <dcopobject.h>
 #include <kio/global.h>
-#include <qstringlist.h>
-//Added by qt3to4:
-#include <Q3CString>
-
-namespace K3b {
-    class Doc;
-}
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
 /**
  * Base class for all project interfaces
  */
 namespace K3b {
-class ProjectInterface : public DCOPObject
-{
-  K_DCOP
+    class Doc;
 
- public:
-  ProjectInterface( Doc* );
-  virtual ~ProjectInterface();
+    class ProjectInterface : public QObject
+    {
+        Q_OBJECT
+        Q_CLASSINFO( "D-Bus Interface", "org.k3b.Project" )
 
-  // Generate a name for this interface. Automatically used if name=0 is
-  // passed to the constructor
-  static Q3CString newIfaceName();
+    public:
+        ProjectInterface( Doc* doc, const QString& dbusPath = QString() );
+        ~ProjectInterface();
 
- k_dcop:
-  virtual void addUrls( const QStringList& urls );
-  virtual void addUrl( const QString& url );
+        QString dbusPath() const;
 
-  /**
-   * Opens the burn dialog
-   */
-  virtual void burn();
+    public Q_SLOTS:
+        void addUrls( const QStringList& urls );
+        void addUrl( const QString& url );
 
-  /**
-   * Starts the burning immedeately
-   * \return true if the burning could be started. Be aware that the return
-   *         value does not say anything about the success of the burning
-   *         process.
-   */
-  virtual bool directBurn();
+        /**
+        * Opens the burn dialog
+        */
+        void burn();
 
-  virtual void setBurnDevice( const QString& blockdevicename );
+        /**
+        * Starts the burning immedeately
+        * \return true if the burning could be started. Be aware that the return
+        *         value does not say anything about the success of the burning
+        *         process.
+        */
+        bool directBurn();
 
-  /**
-   * \return the length of the project in blocks (frames).
-   */
-  virtual int length() const;
+        void setBurnDevice( const QString& blockdevicename );
 
-  /**
-   * \return size of the project in bytes.
-   */
-  virtual KIO::filesize_t size() const;
+        /**
+        * \return the length of the project in blocks (frames).
+        */
+        int length() const;
 
-  virtual const QString& imagePath() const;
+        /**
+        * \return size of the project in bytes.
+        */
+        KIO::filesize_t size() const;
 
-  /**
-   * \return A string representation of the project type. One of:
-   * \li "data" - Data
-   * \li "audiocd" - Audio CD
-   * \li "mixedcd" - Mixed Mode CD
-   * \li "videocd" - Video CD
-   * \li "emovix" - eMovix
-   * \li "videodvd" - Video DVD
-   *
-   * Be aware that this is not the same as Doc::documentType for historical reasons.
-   */
-  virtual QString projectType() const;
+        const QString& imagePath() const;
 
- private:
-  Doc* m_doc;
-};
+        /**
+        * \return A string representation of the project type. One of:
+        * \li "data" - Data
+        * \li "audiocd" - Audio CD
+        * \li "mixedcd" - Mixed Mode CD
+        * \li "videocd" - Video CD
+        * \li "emovix" - eMovix
+        * \li "videodvd" - Video DVD
+        *
+        * Be aware that this is not the same as Doc::documentType for historical reasons.
+        */
+        QString projectType() const;
+
+    private:
+        Doc* m_doc;
+        QString m_dbusPath;
+    };
 }
 
 #endif

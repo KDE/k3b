@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -14,6 +15,7 @@
 
 
 #include "k3bprojectinterface.h"
+#include "k3bprojectinterfaceadaptor.h"
 #include "k3bburnprogressdialog.h"
 #include "k3bdoc.h"
 #include "k3bview.h"
@@ -22,114 +24,129 @@
 #include "k3bdevicemanager.h"
 #include "k3bjob.h"
 
-#include <qtimer.h>
-//Added by qt3to4:
-#include <Q3CString>
+#include <QDBusConnection>
+#include <QTimer>
 
+namespace K3b {
 
-//static
-Q3CString K3b::ProjectInterface::newIfaceName()
-{
-  static int s_docIFNumber = 0;
-  Q3CString name;
-  name.setNum( s_docIFNumber++ );
-  name.prepend("K3b::Project-");
-  return name;
-}
-
-
-K3b::ProjectInterface::ProjectInterface( K3b::Doc* doc )
-  : DCOPObject( name ? Q3CString(name) : newIfaceName() ),
+ProjectInterface::ProjectInterface( Doc* doc, const QString& dbusPath )
+:
+    QObject( doc ),
     m_doc( doc )
 {
+    static int id = 0;
+    if( !dbusPath.isEmpty() ) {
+        m_dbusPath = dbusPath;
+    }
+    else {
+        m_dbusPath = QString( "/projects/%1" ).arg( id );
+        ++id;
+    }
+
+    new K3bProjectInterfaceAdaptor( this );
+    QDBusConnection::sessionBus().registerObject( m_dbusPath, this );
 }
 
 
-K3b::ProjectInterface::~ProjectInterface()
+ProjectInterface::~ProjectInterface()
 {
-}
-
-void K3b::ProjectInterface::addUrls( const QStringList& urls )
-{
-  m_doc->addUrls( KUrl::List(urls) );
-}
-
-void K3b::ProjectInterface::addUrl( const QString& url )
-{
-  m_doc->addUrl( KUrl(url) );
-}
-
-void K3b::ProjectInterface::burn()
-{
-  // we want to return this method immediately
-  QTimer::singleShot( 0, m_doc->view(), SLOT(slotBurn()) );
+    QDBusConnection::sessionBus().unregisterObject( m_dbusPath );
 }
 
 
-bool K3b::ProjectInterface::directBurn()
+QString ProjectInterface::dbusPath() const
 {
-  if( m_doc->burner() ) {
-    K3b::JobProgressDialog* dlg = 0;
-    if( m_doc->onlyCreateImages() )
-      dlg = new K3b::JobProgressDialog( m_doc->view() );
+    return m_dbusPath;
+}
+
+
+void ProjectInterface::addUrls( const QStringList& urls )
+{
+    m_doc->addUrls( KUrl::List(urls) );
+}
+
+
+void ProjectInterface::addUrl( const QString& url )
+{
+    m_doc->addUrl( KUrl(url) );
+}
+
+
+void ProjectInterface::burn()
+{
+    // we want to return this method immediately
+    QTimer::singleShot( 0, m_doc->view(), SLOT(slotBurn()) );
+}
+
+
+bool ProjectInterface::directBurn()
+{
+    if( m_doc->burner() ) {
+        JobProgressDialog* dlg = 0;
+        if( m_doc->onlyCreateImages() )
+            dlg = new JobProgressDialog( m_doc->view() );
+        else
+            dlg = new BurnProgressDialog( m_doc->view() );
+
+        Job* job = m_doc->newBurnJob( dlg );
+
+        dlg->startJob( job );
+
+        delete job;
+        delete dlg;
+
+        return true;
+    }
     else
-      dlg = new K3b::BurnProgressDialog( m_doc->view() );
-
-    K3b::Job* job = m_doc->newBurnJob( dlg );
-
-    dlg->startJob( job );
-
-    delete job;
-    delete dlg;
-
-    return true;
-  }
-  else
-    return false;
+        return false;
 }
 
 
-void K3b::ProjectInterface::setBurnDevice( const QString& name )
+void ProjectInterface::setBurnDevice( const QString& name )
 {
-  if( K3b::Device::Device* dev = k3bcore->deviceManager()->findDevice( name ) )
-    m_doc->setBurner( dev );
+    if( Device::Device* dev = k3bcore->deviceManager()->findDevice( name ) )
+        m_doc->setBurner( dev );
 }
 
 
-int K3b::ProjectInterface::length() const
+int ProjectInterface::length() const
 {
-  return m_doc->length().lba();
+    return m_doc->length().lba();
 }
 
 
-KIO::filesize_t K3b::ProjectInterface::size() const
+KIO::filesize_t ProjectInterface::size() const
 {
-  return m_doc->size();
+    return m_doc->size();
 }
 
 
-const QString& K3b::ProjectInterface::imagePath() const
+const QString& ProjectInterface::imagePath() const
 {
-  return m_doc->tempDir();
+    return m_doc->tempDir();
 }
 
 
-QString K3b::ProjectInterface::projectType() const
+QString ProjectInterface::projectType() const
 {
-  switch( m_doc->type() ) {
-  case K3b::Doc::AUDIO:
-    return "audiocd";
-  case K3b::Doc::DATA:
-    return "data";
-  case K3b::Doc::MIXED:
-    return "mixedcd";
-  case K3b::Doc::VCD:
-    return "videocd";
-  case K3b::Doc::MOVIX:
-    return "emovix";
-  case K3b::Doc::VIDEODVD:
-    return "videodvd";
-  default:
-    return "unknown";
-  }
+    switch( m_doc->type() ) {
+        case Doc::AudioProject:
+            return "audiocd";
+        case Doc::DataProject:
+            return "data";
+        case Doc::MixedProject:
+            return "mixedcd";
+        case Doc::VcdProject:
+            return "videocd";
+        case Doc::MovixProject:
+            return "emovix";
+        case Doc::VideoDvdProject:
+            return "videodvd";
+        default:
+            return "unknown";
+    }
 }
+
+} // namespace K3b
+
+#include "k3bprojectinterface.moc"

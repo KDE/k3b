@@ -72,7 +72,7 @@ namespace K3b {
          *  must be called after construction
          */
         void initView();
-        
+
         /**
          * Reimplemented from QMainWindow, adds "Lock Panels" action
          */

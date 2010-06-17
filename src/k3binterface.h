@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,93 +17,73 @@
 #ifndef _K3B_INTERFACE_H_
 #define _K3B_INTERFACE_H_
 
-#include <QList>
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
-#include <KUrl>
 
 namespace K3b {
     class MainWindow;
-}
-namespace Device {
-  class Device;
-}
 
+    class Interface : public QObject
+    {
+        Q_OBJECT
+        Q_CLASSINFO( "D-Bus Interface", "org.k3b.MainWindow" )
 
-namespace K3b {
-class Interface : public DCOPObject
-{
-  K_DCOP
+    public:
+        explicit Interface( MainWindow* main );
+        ~Interface();
 
- public:
-  Interface();
+    public Q_SLOTS:
+        /**
+        * Returns a D-BUS path to a newly created project
+        */
+        QString createDataProject();
+        QString createAudioProject();
+        QString createMixedProject();
+        QString createVcdProject();
+        QString createMovixProject();
+        QString createVideoDvdProject();
 
-  void setMainWindow( MainWindow* mw ) { m_main = mw; }
+        /**
+        * Returns a D-BUS path to the currently active project.
+        */
+        QString currentProject();
 
- k_dcop:
-  /**
-   * returns a DCOPRef to a ProjectInterface
-   */
-  DCOPRef createDataProject();
-  DCOPRef createDataCDProject();
-  DCOPRef createAudioCDProject();
-  DCOPRef createMixedCDProject();
-  DCOPRef createVideoCDProject();
-  DCOPRef createMovixProject();
-  DCOPRef createMovixCDProject();
-  DCOPRef createDataDVDProject();
-  DCOPRef createVideoDVDProject();
-  DCOPRef createMovixDVDProject();
+        QString openProject( const QString& url );
 
-  /**
-   * Returns a reference to the currently active project.
-   * This is useful to do things like:
-   *
-   * <pre>k3b --audiocd</pre>
-   * and then use dcop on the newly created project via:
-   * <pre>dcop $(dcop k3b Interface currentProject) something</pre>
-   */
-  DCOPRef currentProject();
+        QStringList projects();
 
-  DCOPRef openProject( const KUrl& url );
+        void copyMedium();
+        void copyMedium( const QString& dev );
+        void formatMedium();
+        void writeImage();
+        void writeImage( const QString& url );
 
-  QList<DCOPRef> projects();
+        void audioCdRip();
+        void audioCdRip( const QString& dev );
+        void videoCdRip();
+        void videoCdRip( const QString& dev );
+        void videoDvdRip();
+        void videoDvdRip( const QString& dev );
 
-  void copyMedium();
-  void copyCd();
-  void copyDvd();
-  void copyMedium( const KUrl& dev );
-  void copyCd( const KUrl& dev );
-  void copyDvd( const KUrl& dev );
-  void formatMedium();
-  void eraseCdrw();
-  void formatDvd();
-  void burnCdImage( const KUrl& url );
-  void burnDvdImage( const KUrl& url );
+        /**
+        * Add URLs to the current active project.
+        * If no project is open a new Audio or Data CD
+        * project will be created depending on the type
+        * of the first file.
+        */
+        void addUrls( const QStringList& urls );
+        void addUrl( const QString& url );
 
-  /**
-   * Open the audio ripping window for the specified device.
-   */
-  void cddaRip( const KUrl& dev );
-  
-  /**
-   * Add URLs to the current active project.
-   * If no project is open a new Audio or Data CD
-   * project will be created depending on the type
-   * of the first file.
-   */
-  void addUrls( const KUrl::List& urls );
-  void addUrl( const KUrl& url );
+        /**
+        * @return true if currently some job is running.
+        */
+        bool blocked() const;
 
-  /**
-   * @return true if currently some job is running.
-   */
-  bool blocked() const;
-
- private:
-  MainWindow* m_main;
-
-  Device::Device* m_lastDevice;
-};
+    private:
+        MainWindow* m_main;
+    };
 }
 
 #endif

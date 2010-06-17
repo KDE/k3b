@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,91 +19,89 @@
 
 #include "k3bprojectinterface.h"
 
-#include <qstringlist.h>
+#include <QStringList>
+
 
 namespace K3b {
     class DataDoc;
-}
 
+    class DataProjectInterface : public ProjectInterface
+    {
+        Q_OBJECT
+        Q_CLASSINFO( "D-Bus Interface", "org.k3b.DataProject" )
 
-namespace K3b {
-class DataProjectInterface : public ProjectInterface
-{
-  K_DCOP
+    public:
+        DataProjectInterface( DataDoc* doc, const QString& dbusPath = QString() );
 
- public:
-  DataProjectInterface( DataDoc* );
-  ~DataProjectInterface();
+    public Q_SLOTS:
+        /**
+        * Create a new folder in the root of the doc.
+        * This is the same as calling createFolder( name, "/" )
+        */
+        bool createFolder( const QString& name );
 
- k_dcop:
-  /**
-   * Create a new folder in the root of the doc.
-   * This is the same as calling createFolder( name, "/" )
-   */
-  bool createFolder( const QString& name );
+        /**
+        * Create a new folder with name @p name in the folder with the
+        * absolute path @p dir.
+        *
+        * \return true if the folder was created successfully, false if
+        *         an item with the same name already exists or the dir
+        *         directory could not be found.
+        *
+        * Example: createFolder( "test", "/foo/bar" ) will create the
+        *          folder /foo/bar/test.
+        */
+        bool createFolder( const QString& name, const QString& dir );
 
-  /**
-   * Create a new folder with name @p name in the folder with the
-   * absolute path @p parent. 
-   *
-   * \return true if the folder was created successfully, false if 
-   *         an item with the same name already exists or the parent
-   *         directory could not be found.
-   *
-   * Example: createFolder( "test", "/foo/bar" ) will create the
-   *          folder /foo/bar/test.
-   */
-  bool createFolder( const QString& name, const QString& parent );
+        /**
+        * Add urls to a specific folder in the project.
+        *
+        * Example: addUrl( "test.txt", "/foo/bar" ) will add the file test.txt
+        *          to folder /foo/bar.
+        */
+        void addUrl( const QString& url, const QString& dir );
 
-  /**
-   * Add urls to a specific folder in the project.
-   *
-   * Example: addUrl( "test.txt", "/foo/bar" ) will add the file test.txt
-   *          to folder /foo/bar.
-   */
-  void addUrl( const QString& url, const QString& parent );
+        void addUrls( const QStringList& urls, const QString& dir );
 
-  void addUrls( const QStringList& urls, const QString& parent );
+        /**
+        * Remove an item
+        * \return true if the item was successfully removed.
+        */
+        bool removeItem( const QString& path );
 
-  /**
-   * Remove an item
-   * \return true if the item was successfully removed.
-   */
-  bool removeItem( const QString& path );
+        /**
+        * Rename an item
+        * \return true if the item was successfully renamed, false if
+        *         no item could be found at \p path, \p newName is empty,
+        *         or the item cannot be renamed for some reason.
+        */
+        bool renameItem( const QString& path, const QString& newName );
 
-  /**
-   * Rename an item
-   * \return true if the item was successfully renamed, false if
-   *         no item could be found at \p path, \p newName is empty,
-   *         or the item cannot be renamed for some reason.
-   */
-  bool renameItem( const QString& path, const QString& newName );
+        /**
+        * Set the volume ID of the data project. This is the name shown by Windows
+        * when the CD is inserted.
+        */
+        void setVolumeID( const QString& id );
 
-  /**
-   * Set the volume ID of the data project. This is the name shown by Windows
-   * when the CD is inserted.
-   */
-  void setVolumeID( const QString& id );
+        /**
+        * \return true if the specified path exists in the project and it is a folder.
+        */
+        bool isFolder( const QString& path ) const;
 
-  /**
-   * \return true if the specified path exists in the project and it is a folder.
-   */
-  bool isFolder( const QString& path ) const;
+        /**
+        * \return the names of the child elements of the item determined by path.
+        */
+        QStringList children( const QString& path ) const;
 
-  /**
-   * \return the names of the child elements of the item determined by path.
-   */
-  QStringList children( const QString& path ) const;
+        /**
+        * Set the sort weight of an item
+        * \return false if the item at \p could not be found.
+        */
+        bool setSortWeight( const QString& path, long weight ) const;
 
-  /**
-   * Set the sort weight of an item
-   * \return false if the item at \p could not be found.
-   */
-  bool setSortWeight( const QString& path, long weight ) const;
-
- private:
-  DataDoc* m_dataDoc;
-};
+    private:
+        DataDoc* m_dataDoc;
+    };
 }
 
 #endif

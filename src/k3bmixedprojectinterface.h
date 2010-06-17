@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,37 +19,24 @@
 
 #include "k3bprojectinterface.h"
 
-#include <dcopref.h>
-
-namespace K3b {
-    class MixedDoc;
-}
-namespace K3b {
-    class DataProjectInterface;
-}
 namespace K3b {
     class AudioProjectInterface;
-}
+    class DataProjectInterface;
+    class MixedDoc;
 
+    class MixedProjectInterface : public ProjectInterface
+    {
+        Q_OBJECT
 
-namespace K3b {
-class MixedProjectInterface : public ProjectInterface
-{
-  K_DCOP
+    public:
+        explicit MixedProjectInterface( MixedDoc* doc );
 
- public:
-  MixedProjectInterface( MixedDoc* );
+    private:
+        MixedDoc* m_mixedDoc;
 
- k_dcop:
-  DCOPRef dataPart() const;
-  DCOPRef audioPart() const;
-
- private:
-  MixedDoc* m_mixedDoc;
-
-  DataProjectInterface* m_dataInterface;
-  AudioProjectInterface* m_audioInterface;
-};
+        DataProjectInterface* m_dataInterface;
+        AudioProjectInterface* m_audioInterface;
+    };
 }
 
 #endif

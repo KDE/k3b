@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,30 +17,22 @@
 #include "k3bdataprojectinterface.h"
 #include "k3baudioprojectinterface.h"
 
-#include <kapplication.h>
-#include <dcopclient.h>
-
 #include "k3bmixeddoc.h"
 #include "k3bdatadoc.h"
 #include "k3baudiodoc.h"
 
+namespace K3b {
 
-K3b::MixedProjectInterface::MixedProjectInterface( K3b::MixedDoc* doc )
-  : K3b::ProjectInterface( doc ),
+
+MixedProjectInterface::MixedProjectInterface( MixedDoc* doc )
+:
+    ProjectInterface( doc ),
     m_mixedDoc( doc )
 {
-  m_dataInterface = new K3b::DataProjectInterface( doc->dataDoc(), objId() + "-datapart" );
-  m_audioInterface = new K3b::AudioProjectInterface( doc->audioDoc(), objId() + "-audiopart" );
+    m_dataInterface = new DataProjectInterface( doc->dataDoc(), dbusPath() + "-datapart" );
+    m_audioInterface = new AudioProjectInterface( doc->audioDoc(), dbusPath() + "-audiopart" );
 }
 
+} // namespace K3b
 
-DCOPRef K3b::MixedProjectInterface::dataPart() const
-{
-  return DCOPRef( kapp->dcopClient()->appId(), m_dataInterface->objId() );
-}
-
-
-DCOPRef K3b::MixedProjectInterface::audioPart() const
-{
-  return DCOPRef( kapp->dcopClient()->appId(), m_audioInterface->objId() );
-}
+#include "k3bmixedprojectinterface.moc"

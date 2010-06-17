@@ -26,8 +26,6 @@
 
 namespace K3b {
     class MainWindow;
-    class Interface;
-    class JobInterface;
     class AudioServer;
     class ThemeManager;
     class ProjectManager;
@@ -97,10 +95,6 @@ namespace K3b {
 
         MainWindow* k3bMainWindow() const { return m_mainWindow; }
 
-        //Interface* interface() const { return m_interface; }
-
-        //JobInterface* jobInterface() const { return m_jobInterface; }
-
         static Core* k3bAppCore() { return s_k3bAppCore; }
 
     Q_SIGNALS:
@@ -128,9 +122,6 @@ namespace K3b {
 
         bool internalBlockDevice( Device::Device* );
         void internalUnblockDevice( Device::Device* );
-
-        //Interface* m_interface;
-        //JobInterface* m_jobInterface;
 
         ThemeManager* m_themeManager;
         MainWindow* m_mainWindow;

@@ -30,6 +30,7 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bfiletreeview.h"
 #include "k3bglobals.h"
+#include "k3binterface.h"
 #include "k3biso9660.h"
 #include "k3bjob.h"
 #include "k3bmediacache.h"
@@ -270,6 +271,8 @@ K3b::MainWindow::MainWindow()
 //   d->dirTreeDock->resize( QSize( d->dirTreeDock->sizeHint().width(), d->dirTreeDock->height() ) );
 
     readOptions();
+
+    new Interface( this );
 }
 
 K3b::MainWindow::~MainWindow()
