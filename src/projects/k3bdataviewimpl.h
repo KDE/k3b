@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -19,6 +19,8 @@
 #include <QAbstractItemModel>
 #include <KUrl>
 
+class QTreeView;
+
 class KAction;
 class KActionCollection;
 class KMenu;
@@ -27,42 +29,46 @@ namespace K3b {
     class DataDoc;
     class DataProjectModel;
     class View;
-    
+
     /**
      * This class was created to share code and behaviour between \ref K3b::DataView and \ref K3b::MixedView.
      */
     class DataViewImpl : public QObject
     {
         Q_OBJECT
-        
+
     public:
-        DataViewImpl( View* view, DataDoc* doc, DataProjectModel* model, KActionCollection* actionCollection );
-        
+        DataViewImpl( View* view, DataDoc* doc, KActionCollection* actionCollection );
+
         void addUrls( const QModelIndex& parent, const KUrl::List& urls );
-        void newDir( const QModelIndex& parent );
-        void properties( const QModelIndexList& indexes );
-        void open( const QModelIndexList& indexes );
-        
-        KMenu* popupMenu() const { return m_popupMenu; }
-        
+
+        DataProjectModel* model() const { return m_model; }
+        QTreeView* view() const { return m_fileView; }
+
     signals:
         void setCurrentRoot( const QModelIndex& index );
-        
+
     public Q_SLOTS:
         void slotCurrentRootChanged( const QModelIndex& newRoot );
-        void slotSelectionChanged( const QModelIndexList& indexes );
+
+    private Q_SLOTS:
+        void slotNewDir();
+        void slotRemove();
+        void slotRename();
+        void slotProperties();
+        void slotOpen();
+        void slotSelectionChanged();
         void slotItemActivated( const QModelIndex& index );
         void slotImportSession();
         void slotClearImportedSession();
         void slotEditBootImages();
-        
-    private Q_SLOTS:
         void slotImportedSessionChanged( int importedSession );
-        
+
     private:
         View* m_view;
         DataDoc* m_doc;
         DataProjectModel* m_model;
+        QTreeView* m_fileView;
 
         KMenu* m_popupMenu;
         KAction* m_actionParentDir;
@@ -75,7 +81,7 @@ namespace K3b {
         KAction* m_actionClearSession;
         KAction* m_actionEditBootImages;
     };
-    
+
 } // namespace K3b
 
 #endif

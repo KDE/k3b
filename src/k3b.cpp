@@ -123,13 +123,13 @@ namespace {
             iso.close();
             return true;
         }
-        
+
         K3b::CueFileParser parser( url.toLocalFile() );
         if( parser.isValid() &&
             (parser.toc().contentType() == K3b::Device::DATA || parser.toc().contentType() == K3b::Device::MIXED) ) {
             return true;
         }
-            
+
         return false;
     }
 
@@ -169,7 +169,7 @@ namespace {
         }
         return audio;
     }
-    
+
 } // namespace
 
 
@@ -206,7 +206,7 @@ public:
     ThemedHeader* documentHeader;
 
     K3b::UrlNavigator* urlNavigator;
-    
+
     K3b::Doc* lastDoc;
 
     K3b::WelcomeWidget* welcomeWidget;
@@ -358,7 +358,7 @@ void K3b::MainWindow::initActions()
     actionCollection()->addAction("view_lock_panels", d->actionViewLockPanels);
     connect( d->actionViewLockPanels, SIGNAL(toggled(bool)),
              this, SLOT(slotViewLockPanels(bool)) );
-    
+
     d->actionViewDocumentHeader = new KToggleAction(i18n("Show Projects Header"),this);
     actionCollection()->addAction("view_document_header", d->actionViewDocumentHeader);
 
@@ -510,7 +510,7 @@ void K3b::MainWindow::initView()
     setDockOptions( QMainWindow::AnimatedDocks | QMainWindow::AllowNestedDocks );
 
     // setup main docking things
-    
+
     // --- Document Dock ----------------------------------------------------------------------------
     d->documentDock = new QDockWidget( i18n("Projects"), this );
     d->documentDock->setObjectName("documentdock");
@@ -567,7 +567,7 @@ void K3b::MainWindow::initView()
 
     d->dirView = new K3b::DirView( fileTreeView, d->contentsDock );
     d->contentsDock->setWidget( d->dirView );
-    
+
     if( layoutDirection() == Qt::LeftToRight )
     {
         addDockWidget( Qt::TopDockWidgetArea, d->dirTreeDock, Qt::Horizontal );
@@ -641,10 +641,10 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
 
         d->documentTab->addTab( doc );
         d->documentTab->setCurrentTab( doc );
-        
+
         if( d->documentDock->isHidden() )
             d->documentDock->show();
-        
+
         slotCurrentDocChanged();
     }
 }
@@ -1106,7 +1106,7 @@ void K3b::MainWindow::slotFileClose( Doc* doc )
     if( doc && canCloseDocument(doc) ) {
         closeProject(doc);
     }
-    
+
     slotCurrentDocChanged();
 }
 
@@ -1484,7 +1484,7 @@ void K3b::MainWindow::slotDataImportSession()
 {
     if( activeView() ) {
         if( K3b::DataView* view = qobject_cast<K3b::DataView*>(activeView()) ) {
-            view->importSession();
+            view->actionCollection()->action( "project_data_import_session" )->trigger();
         }
     }
 }
@@ -1494,7 +1494,7 @@ void K3b::MainWindow::slotDataClearImportedSession()
 {
     if( activeView() ) {
         if( K3b::DataView* view = qobject_cast<K3b::DataView*>(activeView()) ) {
-            view->clearImportedSession();
+            view->actionCollection()->action( "project_data_clear_imported_session" )->trigger();
         }
     }
 }
@@ -1504,7 +1504,7 @@ void K3b::MainWindow::slotEditBootImages()
 {
     if( activeView() ) {
         if( K3b::DataView* view = qobject_cast<K3b::DataView*>(activeView()) ) {
-            view->editBootImages();
+            view->actionCollection()->action( "project_data_edit_boot_images" )->trigger();
         }
     }
 }

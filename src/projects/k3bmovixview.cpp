@@ -3,7 +3,7 @@
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
  *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
  *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- *           (C) 2009      Michal Malek <michalm@jabster.pl>
+ *           (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -30,31 +30,42 @@
 #include <KDebug>
 #include <KFileDialog>
 #include <KLocale>
-#include <KMenu>
 #include <KMessageBox>
+#include <KToolBar>
 #include <KUrl>
 
 #include <QList>
-#include <KToolBar>
+#include <QHeaderView>
+#include <QItemSelectionModel>
+#include <QTreeView>
 
 K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
-    : K3b::StandardView( doc, parent ),
-      m_doc(doc)
+:
+    View( doc, parent ),
+    m_doc( doc ),
+    m_model( new MovixProjectModel( m_doc, this ) ),
+    m_view( new QTreeView( this ) )
 {
-    m_model = new K3b::MovixProjectModel(m_doc, this);
-    // set the model for the K3b::StandardView's views
-    setModel(m_model);
-    setViewExpanded(true);
-
-    // and hide the side panel as the movix project has no tree hierarchy
-    setShowDirPanel(false);
+    m_view->setModel( m_model );
+    m_view->setAcceptDrops( true );
+    m_view->setDragEnabled( true );
+    m_view->setDragDropMode( QTreeView::DragDrop );
+    m_view->setItemsExpandable( false );
+    m_view->setRootIsDecorated( false );
+    m_view->setSelectionMode( QTreeView::ExtendedSelection );
+    m_view->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    m_view->setContextMenuPolicy( Qt::ActionsContextMenu );
+    // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
+    m_view->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_view->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    setMainWidget( m_view );
 
     // setup actions
     m_actionProperties = K3b::createAction( this, i18n("Properties"), "document-properties",
                                             0, this, SLOT(showPropertiesDialog()),
                                             actionCollection(), "movix_show_props" );
     m_actionRemove = K3b::createAction( this, i18n( "Remove" ), "edit-delete",
-                                        Qt::Key_Delete, this, SLOT(slotRemoveSelectedIndexes()),
+                                        Qt::Key_Delete, this, SLOT(slotRemove()),
                                         actionCollection(), "movix_remove_item" );
     m_actionRemoveSubTitle = K3b::createAction( this, i18n( "Remove Subtitle File" ), "edit-delete",
                                                 0, this, SLOT(slotRemoveSubTitleItems()),
@@ -63,14 +74,18 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
                                              0, this, SLOT(slotAddSubTitleFile()),
                                              actionCollection(), "movix_add_subtitle" );
 
-    m_popupMenu = new KMenu( this );
-    m_popupMenu->addAction( m_actionRemove );
-    m_popupMenu->addAction( m_actionRemoveSubTitle );
-    m_popupMenu->addAction( m_actionAddSubTitle );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( m_actionProperties );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( actionCollection()->action("project_burn") );
+    connect( m_view->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+             this, SLOT(slotSelectionChanged()) );
+
+    QAction* separator = new QAction( this );
+    separator->setSeparator( true );
+    m_view->addAction( m_actionRemove );
+    m_view->addAction( m_actionRemoveSubTitle );
+    m_view->addAction( m_actionAddSubTitle );
+    m_view->addAction( separator );
+    m_view->addAction( m_actionProperties );
+    m_view->addAction( separator );
+    m_view->addAction( actionCollection()->action("project_burn") );
 
     // Setup toolbar
     addPluginButtons();
@@ -85,15 +100,13 @@ K3b::MovixView::~MovixView()
 
 void K3b::MovixView::showPropertiesDialog()
 {
-    QModelIndexList selection = currentSelection();
+    const QModelIndexList selection = m_view->selectionModel()->selectedRows();
 
-    if ( selection.isEmpty() )
-    {
+    if( selection.isEmpty() ) {
         // show project properties
         slotProperties();
     }
-    else
-    {
+    else {
         QList<K3b::DataItem*> items;
 
         foreach(const QModelIndex &index, selection)
@@ -107,13 +120,12 @@ void K3b::MovixView::showPropertiesDialog()
 
 void K3b::MovixView::slotRemoveSubTitleItems()
 {
-    QModelIndexList selection = currentSelection();
+    const QModelIndexList selection = m_view->selectionModel()->selectedRows();
     if ( !selection.count() )
         return;
 
     K3b::MovixFileItem *item = 0;
-    foreach(const QModelIndex &index, selection)
-    {
+    Q_FOREACH( const QModelIndex& index, selection ) {
         item = m_model->itemForIndex(index);
         if (item)
             m_doc->removeSubTitleItem( item );
@@ -123,15 +135,15 @@ void K3b::MovixView::slotRemoveSubTitleItems()
 
 void K3b::MovixView::slotAddSubTitleFile()
 {
-    QModelIndexList selection = currentSelection();
-    if ( !selection.count() )
+    const QModelIndexList selection = m_view->selectionModel()->selectedRows();
+    if( !selection.count() )
         return;
 
-    K3b::MovixFileItem *item = 0;
-    foreach(const QModelIndex &index, selection)
+    MovixFileItem *item = 0;
+    foreach( const QModelIndex& index, selection )
     {
         item = m_model->itemForIndex(index);
-        if (item)
+        if( item )
             break;
     }
 
@@ -147,14 +159,15 @@ void K3b::MovixView::slotAddSubTitleFile()
 }
 
 
-void K3b::MovixView::selectionChanged( const QModelIndexList& indexes )
+void K3b::MovixView::slotSelectionChanged()
 {
-    if( indexes.count() >= 1 ) {
+    const QModelIndexList selection = m_view->selectionModel()->selectedRows();
+    if( selection.count() >= 1 ) {
         m_actionRemove->setEnabled(true);
 
         bool subtitle = false;
         // check if any of the items have a subtitle
-        foreach (const QModelIndex &index, indexes) {
+        Q_FOREACH( const QModelIndex& index, selection ) {
             K3b::MovixFileItem *item = m_model->itemForIndex(index);
             if (item && item->subTitleItem()) {
                 subtitle = true;
@@ -163,7 +176,7 @@ void K3b::MovixView::selectionChanged( const QModelIndexList& indexes )
         }
         m_actionRemoveSubTitle->setEnabled( subtitle );
         // only enable the subtitle adding if there is just one item selected
-        m_actionAddSubTitle->setEnabled( indexes.count() == 1 );
+        m_actionAddSubTitle->setEnabled( selection.count() == 1 );
     }
     else {
         m_actionRemove->setEnabled(false);
@@ -173,9 +186,20 @@ void K3b::MovixView::selectionChanged( const QModelIndexList& indexes )
 }
 
 
-void K3b::MovixView::contextMenu( const QPoint& pos )
+void K3b::MovixView::slotRemove()
 {
-    m_popupMenu->popup( pos );
+    const QModelIndexList selected = m_view->selectionModel()->selectedRows();
+
+    // create a list of persistent model indexes to be able to remove all of them
+    QList<QPersistentModelIndex> indexes;
+    Q_FOREACH( const QModelIndex& index, selected ) {
+        indexes.append( QPersistentModelIndex( index ) );
+    }
+
+    // and now ask the indexes to be removed
+    Q_FOREACH( const QPersistentModelIndex& index, indexes ) {
+        m_model->removeRow( index.row(), index.parent() );
+    }
 }
 
 

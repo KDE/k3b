@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009      Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -17,63 +17,42 @@
 #ifndef K3BDATAVIEW_H
 #define K3BDATAVIEW_H
 
-#include "k3bstandardview.h"
+#include "k3bview.h"
 
 class QModelIndex;
-class KAction;
-class KMenu;
+class QTreeView;
 
 namespace K3b {
     class DataDoc;
-    class DirItem;
-    class DataItem;
     class DataProjectModel;
     class DataViewImpl;
+    class DirProxyModel;
 
-    namespace Device {
-        class Device;
-    }
-
-    class DataView : public StandardView
+    class DataView : public View
     {
         Q_OBJECT
 
     public:
-        DataView(DataDoc* doc, QWidget *parent=0);
+        DataView( DataDoc* doc, QWidget* parent = 0 );
         virtual ~DataView();
 
     public Q_SLOTS:
-        void slotBurn();
-        void importSession();
-        void clearImportedSession();
-        void editBootImages();
-
-        void addUrls( const KUrl::List& );
+        virtual void slotBurn();
+        virtual void addUrls( const KUrl::List& urls );
 
     private Q_SLOTS:
-        void slotNewDir();
-        void slotItemProperties();
-        void slotOpen();
+        void slotParentDir();
+        void slotCurrentDirChanged();
+        void slotSetCurrentRoot( const QModelIndex& index );
 
     protected:
         virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
-        /**
-         * reimplemented from @ref StandardView
-         */
-        virtual void selectionChanged( const QModelIndexList& indexes );
-        virtual void contextMenu( const QPoint& pos );
-
     private:
-        void setupActions();
-        
         DataDoc* m_doc;
-        K3b::DataProjectModel* m_model;
-
         DataViewImpl* m_dataViewImpl;
-
-        // used for mounting when importing old session
-        Device::Device* m_device;
+        QTreeView* m_dirView;
+        DirProxyModel* m_dirProxy;
     };
 }
 

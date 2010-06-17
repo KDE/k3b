@@ -27,68 +27,88 @@
 #include "k3baudiotrackaddingdialog.h"
 #include "k3baudiotrackdialog.h"
 #include "k3baudiotracksplitdialog.h"
+#include "k3baudiotrackview.h"
 #include "k3baudiozerodata.h"
 #include "k3bmsfedit.h"
 #include "k3bview.h"
 // this is not here becasue of base_*.ui troubles
 #include "../rip/k3baudioprojectconvertingdialog.h"
+#include "../rip/k3bviewcolumnadjuster.h"
 
 #include <config-k3b.h>
 
 #include <KAction>
 #include <KActionCollection>
 #include <KLocale>
-#include <KMenu>
 #include <KMessageBox>
 
+#include <QHeaderView>
+#include <QScrollBar>
 
-K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, AudioProjectModel* model, KActionCollection* actionCollection )
-    : QObject( view ), m_view( view ), m_doc( doc ), m_model( model )
+
+K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection* actionCollection )
+:
+    QObject( view ),
+    m_view( view ),
+    m_doc( doc ),
+    m_model( new AudioProjectModel( doc, view ) ),
+    m_trackView( new AudioTrackView( doc, view ) ),
+    m_columnAdjuster( new ViewColumnAdjuster( this ) ),
+    m_updatingColumnWidths( false )
 {
-    m_actionAddSilence = createAction( m_view, i18n("Add Silence..."), 0, 0, 0, 0,
+    m_trackView->setModel( m_model );
+
+    m_actionAddSilence = createAction( m_view, i18n("Add Silence..."), 0, 0, this, SLOT(slotAddSilence()),
                                        actionCollection, "track_add_silence" );
-    m_actionMergeTracks = createAction( m_view, i18n("Merge Tracks"), 0, 0, 0, 0,
+    m_actionMergeTracks = createAction( m_view, i18n("Merge Tracks"), 0, 0, this, SLOT(slotMergeTracks()),
                                         actionCollection, "track_merge" );
-    m_actionSplitSource = createAction( m_view, i18n("Source to Track"), 0, 0, 0, 0,
+    m_actionSplitSource = createAction( m_view, i18n("Source to Track"), 0, 0, this, SLOT(slotSplitSource()),
                                         actionCollection, "source_split" );
-    m_actionSplitTrack = createAction( m_view, i18n("Split Track..."), 0, 0, 0, 0,
+    m_actionSplitTrack = createAction( m_view, i18n("Split Track..."), 0, 0, this, SLOT(slotSplitTrack()),
                                        actionCollection, "track_split" );
-    m_actionEditSource = createAction( m_view, i18n("Edit Source..."), 0, 0, 0, 0,
+    m_actionEditSource = createAction( m_view, i18n("Edit Source..."), 0, 0, this, SLOT(slotEditSource()),
                                        actionCollection, "edit_source" );
-    m_actionPlayTrack = createAction( m_view, i18n("Play Track"), "media-playback-start", 0, 0, 0,
+    m_actionPlayTrack = createAction( m_view, i18n("Play Track"), "media-playback-start", 0, this, SLOT(slotPlayTrack()),
                                       actionCollection, "track_play" );
-    m_actionMusicBrainz = createAction( m_view, i18n("Musicbrainz Lookup"), "musicbrainz", 0, 0, 0,
+    m_actionMusicBrainz = createAction( m_view, i18n("Musicbrainz Lookup"), "musicbrainz", 0, this, SLOT(slotQueryMusicBrainz()),
                                         actionCollection, "project_audio_musicbrainz");
     m_actionMusicBrainz->setToolTip( i18n("Try to determine meta information over the Internet") );
-    m_actionProperties = createAction( m_view, i18n("Properties"), "document-properties", 0, 0, 0,
+    m_actionProperties = createAction( m_view, i18n("Properties"), "document-properties", 0, this, SLOT(slotTrackProperties()),
                                        actionCollection, "track_properties" );
-    m_actionRemove = createAction( m_view, i18n("Remove"), "edit-delete", Qt::Key_Delete, 0, 0,
+    m_actionRemove = createAction( m_view, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemove()),
                                    actionCollection, "track_remove" );
     m_conversionAction = createAction( m_view, i18n("Convert Tracks"), "edit-redo", 0, this, SLOT(slotAudioConversion()),
                                        actionCollection, "project_audio_convert" );
-    
+
+    connect( m_columnAdjuster, SIGNAL( columnsNeedAjusting() ),
+             this, SLOT( slotAdjustColumns() ) );
+    connect( m_trackView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+             this, SLOT(slotSelectionChanged()) );
+
     // Create audio context menu
-    m_popupMenu = new KMenu( m_view );
-    m_popupMenu->addAction( m_actionPlayTrack );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( m_actionRemove );
-    m_popupMenu->addAction( m_actionAddSilence );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( m_actionSplitSource );
-    m_popupMenu->addAction( m_actionSplitTrack );
-    m_popupMenu->addAction( m_actionEditSource );
-    m_popupMenu->addAction( m_actionMergeTracks );
-    m_popupMenu->addAction( m_actionProperties );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( m_actionMusicBrainz );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( actionCollection->action("project_burn") );
-    
+    QAction* separator = new QAction( this );
+    separator->setSeparator( true );
+    m_trackView->setContextMenuPolicy( Qt::ActionsContextMenu );
+    m_trackView->addAction( m_actionPlayTrack );
+    m_trackView->addAction( separator );
+    m_trackView->addAction( m_actionRemove );
+    m_trackView->addAction( m_actionAddSilence );
+    m_trackView->addAction( separator );
+    m_trackView->addAction( m_actionSplitSource );
+    m_trackView->addAction( m_actionSplitTrack );
+    m_trackView->addAction( m_actionEditSource );
+    m_trackView->addAction( m_actionMergeTracks );
+    m_trackView->addAction( m_actionProperties );
+    m_trackView->addAction( separator );
+    m_trackView->addAction( m_actionMusicBrainz );
+    m_trackView->addAction( separator );
+    m_trackView->addAction( actionCollection->action("project_burn") );
+
 #ifndef HAVE_MUSICBRAINZ
     m_actionMusicBrainz->setEnabled( false );
     m_actionMusicBrainz->setVisible( false );
 #endif
-    
+
 #ifdef __GNUC__
 #warning enable player once ported to Phonon
 #endif
@@ -102,14 +122,15 @@ void K3b::AudioViewImpl::addUrls( const KUrl::List& urls )
     AudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, m_view );
 }
 
-    
-void K3b::AudioViewImpl::remove( const QModelIndexList& indexes )
+
+void K3b::AudioViewImpl::slotRemove()
 {
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioTrack*> tracks;
     QList<AudioDataSource*> sources;
     tracksForIndexes( tracks, indexes );
     sourcesForIndexes( sources, indexes );
-    
+
     //
     // remove all sources which belong to one of the selected tracks since they will be
     // deleted along with their tracks
@@ -134,8 +155,9 @@ void K3b::AudioViewImpl::remove( const QModelIndexList& indexes )
 }
 
 
-void K3b::AudioViewImpl::addSilence( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotAddSilence()
 {
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioTrack*> tracks;
     QList<AudioDataSource*> sources;
     tracksForIndexes( tracks, indexes );
@@ -171,8 +193,9 @@ void K3b::AudioViewImpl::addSilence( const QModelIndexList& indexes )
 }
 
 
-void K3b::AudioViewImpl::mergeTracks( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotMergeTracks()
 {
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioTrack*> tracks;
     tracksForIndexes( tracks, indexes );
 
@@ -186,8 +209,9 @@ void K3b::AudioViewImpl::mergeTracks( const QModelIndexList& indexes )
 }
 
 
-void K3b::AudioViewImpl::splitSource( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotSplitSource()
 {
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioDataSource*> sources;
     sourcesForIndexes( sources, indexes );
 
@@ -214,8 +238,9 @@ void K3b::AudioViewImpl::splitSource( const QModelIndexList& indexes )
 }
 
 
-void K3b::AudioViewImpl::splitTrack( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotSplitTrack()
 {
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioTrack*> tracks;
     tracksForIndexes( tracks, indexes );
 
@@ -225,8 +250,9 @@ void K3b::AudioViewImpl::splitTrack( const QModelIndexList& indexes )
 }
 
 
-void K3b::AudioViewImpl::editSource( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotEditSource()
 {
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioTrack*> tracks;
     QList<AudioDataSource*> sources;
     tracksForIndexes( tracks, indexes );
@@ -254,8 +280,9 @@ void K3b::AudioViewImpl::editSource( const QModelIndexList& indexes )
 }
 
 
-void K3b::AudioViewImpl::properties( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotTrackProperties()
 {
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioTrack*> tracks;
     tracksForIndexes( tracks, indexes );
 
@@ -271,9 +298,10 @@ void K3b::AudioViewImpl::properties( const QModelIndexList& indexes )
 }
 
 
-void K3b::AudioViewImpl::queryMusicBrainz( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotQueryMusicBrainz()
 {
 #ifdef HAVE_MUSICBRAINZ
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
     QList<AudioTrack*> tracks;
     tracksForIndexes( tracks, indexes );
 
@@ -290,52 +318,54 @@ void K3b::AudioViewImpl::queryMusicBrainz( const QModelIndexList& indexes )
     // now do the lookup on the files.
     AudioTrackTRMLookupDialog dlg( this );
     dlg.lookup( tracks );
-#else
-    Q_UNUSED( indexes );
 #endif
 }
 
 
-void K3b::AudioViewImpl::slotSelectionChanged( const QModelIndexList& indexes )
+void K3b::AudioViewImpl::slotPlayTrack()
 {
-    QList<K3b::AudioTrack*> tracks;
-    QList<K3b::AudioDataSource*> sources;
-    tracksForIndexes( tracks, indexes );
-    sourcesForIndexes( sources, indexes );
-
-    int numTracks = tracks.count();
-    int numSources = sources.count();
-
-    if( m_actionPlayTrack != 0 ) {
-        m_actionPlayTrack->setVisible( numTracks >= 1 );
-    }
-    m_actionRemove->setVisible( numTracks + numSources );
-    m_actionAddSilence->setVisible( numSources + numTracks == 1 );
-
-    if( numSources == 1 && numTracks == 0 ) {
-        m_actionSplitSource->setVisible( true );
-        m_actionSplitTrack->setVisible( false );
-        m_actionEditSource->setVisible( true );
-        m_actionMergeTracks->setVisible( false );
-    }
-    else if( numTracks == 1 && numSources == 0 ) {
-        m_actionSplitSource->setVisible( false );
-        m_actionSplitTrack->setVisible( tracks.first()->length().lba() > 60 );
-        m_actionEditSource->setVisible( true );
-        m_actionMergeTracks->setVisible( false );
-    }
-    else {
-        m_actionSplitSource->setVisible( false );
-        m_actionSplitTrack->setVisible( false );
-        m_actionEditSource->setVisible( false );
-        m_actionMergeTracks->setVisible( numTracks > 1 );
-    }
+    // Not implemented yet
 }
 
 
-void K3b::AudioViewImpl::slotItemActivated( const QModelIndex& index )
+void K3b::AudioViewImpl::slotSelectionChanged()
 {
-    properties( QModelIndexList() << index );
+    if( m_trackView->hasFocus() ) {
+        QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
+
+        QList<K3b::AudioTrack*> tracks;
+        QList<K3b::AudioDataSource*> sources;
+        tracksForIndexes( tracks, indexes );
+        sourcesForIndexes( sources, indexes );
+
+        int numTracks = tracks.count();
+        int numSources = sources.count();
+
+        if( m_actionPlayTrack != 0 ) {
+            m_actionPlayTrack->setVisible( numTracks >= 1 );
+        }
+        m_actionRemove->setVisible( numTracks + numSources );
+        m_actionAddSilence->setVisible( numSources + numTracks == 1 );
+
+        if( numSources == 1 && numTracks == 0 ) {
+            m_actionSplitSource->setVisible( true );
+            m_actionSplitTrack->setVisible( false );
+            m_actionEditSource->setVisible( true );
+            m_actionMergeTracks->setVisible( false );
+        }
+        else if( numTracks == 1 && numSources == 0 ) {
+            m_actionSplitSource->setVisible( false );
+            m_actionSplitTrack->setVisible( tracks.first()->length().lba() > 60 );
+            m_actionEditSource->setVisible( true );
+            m_actionMergeTracks->setVisible( false );
+        }
+        else {
+            m_actionSplitSource->setVisible( false );
+            m_actionSplitTrack->setVisible( false );
+            m_actionEditSource->setVisible( false );
+            m_actionMergeTracks->setVisible( numTracks > 1 );
+        }
+    }
 }
 
 
@@ -347,8 +377,66 @@ void K3b::AudioViewImpl::slotAudioConversion()
     }
     else {
         KMessageBox::information( m_view, i18n("Please add files to your project first."),
-                                  i18n("No tracks to convert"), QString(), false );
+                                  i18n("No tracks to convert") );
     }
+}
+
+
+void K3b::AudioViewImpl::slotAdjustColumns()
+{
+    kDebug();
+
+    if( m_updatingColumnWidths ) {
+        kDebug() << "already updating column widths.";
+        return;
+    }
+
+    m_updatingColumnWidths = true;
+
+    // now properly resize the columns
+    // minimal width for type, length, pregap
+    // fixed for filename
+    // expand for cd-text
+    int titleWidth = m_columnAdjuster->columnSizeHint( AudioProjectModel::TitleColumn );
+    int artistWidth = m_columnAdjuster->columnSizeHint( AudioProjectModel::ArtistColumn );
+    int typeWidth = m_columnAdjuster->columnSizeHint( AudioProjectModel::TypeColumn );
+    int lengthWidth = m_columnAdjuster->columnSizeHint( AudioProjectModel::LengthColumn );
+    int filenameWidth = m_columnAdjuster->columnSizeHint( AudioProjectModel::FilenameColumn );
+
+    // add a margin
+    typeWidth += 10;
+    lengthWidth += 10;
+
+    // these always need to be completely visible
+    m_trackView->setColumnWidth( AudioProjectModel::TrackNumberColumn, m_columnAdjuster->columnSizeHint( AudioProjectModel::TrackNumberColumn ) );
+    m_trackView->setColumnWidth( AudioProjectModel::TypeColumn, typeWidth );
+    m_trackView->setColumnWidth( AudioProjectModel::LengthColumn, lengthWidth );
+
+    int remaining = m_trackView->contentsRect().width() - typeWidth - lengthWidth - m_trackView->columnWidth(0);
+    if( m_trackView->verticalScrollBar()->isVisible() ) {
+        remaining -= m_trackView->verticalScrollBar()->style()->pixelMetric( QStyle::PM_ScrollBarExtent );
+    }
+
+    // now let's see if there is enough space for all
+    if( remaining >= artistWidth + titleWidth + filenameWidth ) {
+        remaining -= filenameWidth;
+        remaining -= (titleWidth + artistWidth);
+        m_trackView->setColumnWidth( AudioProjectModel::ArtistColumn, artistWidth + remaining/2 );
+        m_trackView->setColumnWidth( AudioProjectModel::TitleColumn, titleWidth + remaining/2 );
+        m_trackView->setColumnWidth( AudioProjectModel::FilenameColumn, filenameWidth );
+    }
+    else if( remaining >= artistWidth + titleWidth + 20 ) {
+        m_trackView->setColumnWidth( AudioProjectModel::ArtistColumn, artistWidth );
+        m_trackView->setColumnWidth( AudioProjectModel::TitleColumn, titleWidth );
+        m_trackView->setColumnWidth( AudioProjectModel::FilenameColumn, remaining - artistWidth - titleWidth );
+    }
+    else {
+        m_trackView->setColumnWidth( AudioProjectModel::ArtistColumn, remaining/3 );
+        m_trackView->setColumnWidth( AudioProjectModel::TitleColumn, remaining/3 );
+        m_trackView->setColumnWidth( AudioProjectModel::FilenameColumn, remaining/3 );
+    }
+
+    m_updatingColumnWidths = false;
 }
 
 
@@ -356,7 +444,7 @@ void K3b::AudioViewImpl::tracksForIndexes( QList<AudioTrack*>& tracks,
                                            const QModelIndexList& indexes ) const
 {
     tracks.clear();
-    
+
     foreach( const QModelIndex& index, indexes ) {
         if ( AudioTrack* track = m_model->trackForIndex( index ) ) {
             tracks << track;

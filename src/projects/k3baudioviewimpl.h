@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
  *
@@ -22,7 +22,7 @@
 
 class KAction;
 class KActionCollection;
-class KMenu;
+class QTreeView;
 
 namespace K3b {
     class AudioDataSource;
@@ -30,48 +30,51 @@ namespace K3b {
     class AudioProjectModel;
     class AudioTrack;
     class View;
-    
+    class ViewColumnAdjuster;
+
     /**
      * This class was created to share code and behaviour between \ref K3b::AudioView and \ref K3b::MixedView.
      */
     class AudioViewImpl : public QObject
     {
         Q_OBJECT
-        
+
     public:
-        AudioViewImpl( View* view, AudioDoc* doc, AudioProjectModel* model, KActionCollection* actionCollection );
-        
+        AudioViewImpl( View* view, AudioDoc* doc, KActionCollection* actionCollection );
+
         void addUrls( const KUrl::List& urls );
-        void remove( const QModelIndexList& indexes );
-        void addSilence( const QModelIndexList& indexes );
-        void mergeTracks( const QModelIndexList& indexes );
-        void splitSource( const QModelIndexList& indexes );
-        void splitTrack( const QModelIndexList& indexes );
-        void editSource( const QModelIndexList& indexes );
-        void properties( const QModelIndexList& indexes );
-        void queryMusicBrainz( const QModelIndexList& indexes );
-        
-        KMenu* popupMenu() const { return m_popupMenu; }
-        
-    public Q_SLOTS:
-        void slotSelectionChanged( const QModelIndexList& indexes );
-        void slotItemActivated( const QModelIndex& index );
-    
-        private Q_SLOTS:
+
+        AudioProjectModel* model() const { return m_model; }
+        QTreeView* view() const { return m_trackView; }
+
+    private Q_SLOTS:
+        void slotRemove();
+        void slotAddSilence();
+        void slotMergeTracks();
+        void slotSplitSource();
+        void slotSplitTrack();
+        void slotEditSource();
+        void slotTrackProperties();
+        void slotPlayTrack();
+        void slotQueryMusicBrainz();
+        void slotSelectionChanged();
         void slotAudioConversion();
-        
+        void slotAdjustColumns();
+
     private:
         void tracksForIndexes( QList<AudioTrack*>& tracks,
                                const QModelIndexList& indexes ) const;
         void sourcesForIndexes( QList<AudioDataSource*>& sources,
                                 const QModelIndexList& indexes ) const;
-        
+
     private:
         View* m_view;
         AudioDoc* m_doc;
         AudioProjectModel* m_model;
-        
-        KMenu* m_popupMenu;
+        QTreeView* m_trackView;
+        ViewColumnAdjuster* m_columnAdjuster;
+        bool m_updatingColumnWidths;
+
         KAction* m_actionAddSilence;
         KAction* m_actionMergeTracks;
         KAction* m_actionSplitSource;
@@ -83,7 +86,7 @@ namespace K3b {
         KAction* m_actionRemove;
         KAction* m_conversionAction;
     };
-    
+
 } // namespace K3b
 
 #endif

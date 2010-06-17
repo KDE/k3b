@@ -1,8 +1,8 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- *           (C) 2009      Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -20,6 +20,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdataprojectmodel.h"
 #include "k3bdataviewimpl.h"
+#include "k3bdirproxymodel.h"
 #include "k3bvolumenamewidget.h"
 
 #include <KAction>
@@ -28,42 +29,53 @@
 #include <KMessageBox>
 #include <KLocale>
 #include <KMenu>
+#include <QSplitter>
 #include <KToolBar>
 #include <KUrl>
 
 #include <QTreeView>
+#include <QHeaderView>
 
 
-K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
-    : K3b::StandardView(doc, parent)
+K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
+:
+    View( doc, parent ),
+    m_doc( doc ),
+    m_dataViewImpl( new DataViewImpl( this, m_doc, actionCollection() ) ),
+    m_dirView( new QTreeView( this ) ),
+    m_dirProxy( new DirProxyModel( this ) )
 {
+    m_dirProxy->setSourceModel( m_dataViewImpl->model() );
+
+    // Dir panel
+    m_dirView->setHeaderHidden( true );
+    m_dirView->setAcceptDrops( true );
+    m_dirView->setDragEnabled( true );
+    m_dirView->setDragDropMode( QTreeView::DragDrop );
+    m_dirView->setSelectionMode( QTreeView::SingleSelection );
+    m_dirView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    m_dirView->setModel( m_dirProxy );
+    m_dirView->expandToDepth( 1 ); // Show first-level directories directories by default
+
+    QSplitter* splitter = new QSplitter( this );
+    splitter->addWidget( m_dirView );
+    splitter->addWidget( m_dataViewImpl->view() );
+    splitter->setStretchFactor( 0, 1 );
+    splitter->setStretchFactor( 1, 3 );
+    setMainWidget( splitter );
+
     // FIXME: always sort folders first in fileview
     // FIXME: allow sorting by clicking fileview headers
 
-    m_doc = doc;
-    m_model = new DataProjectModel(doc, this);
-    m_dataViewImpl = new DataViewImpl( this, m_doc, m_model, actionCollection() );
-
-    connect( this, SIGNAL(currentRootChanged(QModelIndex)),
-             m_dataViewImpl, SLOT(slotCurrentRootChanged(QModelIndex)) );
-    connect( this, SIGNAL(activated(QModelIndex)),
-             m_dataViewImpl, SLOT(slotItemActivated(QModelIndex)) );
-    connect( m_dataViewImpl, SIGNAL(setCurrentRoot(QModelIndex)),
-             this, SLOT(setCurrentRoot(QModelIndex)) );
-
-    // Connect data actions
-    connect( actionCollection()->action( "new_dir" ), SIGNAL( triggered() ),
-             this, SLOT(slotNewDir()) );
-    connect( actionCollection()->action( "remove" ), SIGNAL( triggered() ),
-             this, SLOT(slotRemoveSelectedIndexes()) );
-    connect( actionCollection()->action( "rename" ), SIGNAL( triggered() ),
-             this, SLOT(slotRenameItem()) );
     connect( actionCollection()->action( "parent_dir" ), SIGNAL( triggered() ),
              this, SLOT(slotParentDir()) );
-    connect( actionCollection()->action( "properties" ), SIGNAL( triggered() ),
-             this, SLOT(slotItemProperties()) );
-    connect( actionCollection()->action( "open" ), SIGNAL( triggered() ),
-             this, SLOT(slotOpen()) );
+    connect( m_dirView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+             this, SLOT(slotCurrentDirChanged()) );
+    connect( m_dataViewImpl, SIGNAL(setCurrentRoot(QModelIndex)),
+             this, SLOT(slotSetCurrentRoot(QModelIndex)) );
+
+    if( m_dirProxy->rowCount() > 0 )
+        m_dirView->setCurrentIndex( m_dirProxy->index( 0, 0 ) );
 
     // Setup toolbar
     toolBox()->addAction( actionCollection()->action( "project_data_import_session" ) );
@@ -75,12 +87,6 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
     addPluginButtons();
     toolBox()->addSeparator();
     toolBox()->addWidget( new VolumeNameWidget( m_doc, toolBox() ) );
-
-    // set the model for the StandardView's views
-    setModel(m_model);
-
-    // Show first-level directories directories by default
-    dirView()->expandToDepth( 1 );
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
@@ -100,24 +106,6 @@ K3b::DataView::DataView(K3b::DataDoc* doc, QWidget *parent )
 
 K3b::DataView::~DataView()
 {
-}
-
-
-void K3b::DataView::importSession()
-{
-    m_dataViewImpl->slotImportSession();
-}
-
-
-void K3b::DataView::clearImportedSession()
-{
-    m_dataViewImpl->slotClearImportedSession();
-}
-
-
-void K3b::DataView::editBootImages()
-{
-    m_dataViewImpl->slotEditBootImages();
 }
 
 
@@ -143,37 +131,28 @@ void K3b::DataView::slotBurn()
 
 void K3b::DataView::addUrls( const KUrl::List& urls )
 {
-    m_dataViewImpl->addUrls( currentRoot(), urls );
+    m_dataViewImpl->addUrls( m_dirProxy->mapToSource( m_dirView->currentIndex() ), urls );
 }
 
 
-void K3b::DataView::selectionChanged( const QModelIndexList& indexes )
+void K3b::DataView::slotParentDir()
 {
-    m_dataViewImpl->slotSelectionChanged( indexes );
+    m_dirView->setCurrentIndex( m_dirView->currentIndex().parent() );
 }
 
 
-void K3b::DataView::contextMenu( const QPoint& pos )
+void K3b::DataView::slotCurrentDirChanged()
 {
-    m_dataViewImpl->popupMenu()->exec( pos );
+    QModelIndexList indexes = m_dirView->selectionModel()->selectedRows();
+    if( indexes.count() ) {
+        m_dataViewImpl->slotCurrentRootChanged( m_dirProxy->mapToSource( indexes.first() ) );
+    }
 }
 
 
-void K3b::DataView::slotNewDir()
+void K3b::DataView::slotSetCurrentRoot( const QModelIndex& index )
 {
-    m_dataViewImpl->newDir( currentRoot() );
-}
-
-
-void K3b::DataView::slotItemProperties()
-{
-    m_dataViewImpl->properties( currentSelection() );
-}
-
-
-void K3b::DataView::slotOpen()
-{
-    m_dataViewImpl->open( currentSelection() );
+    m_dirView->setCurrentIndex( m_dirProxy->mapFromSource( index ) );
 }
 
 #include "k3bdataview.moc"

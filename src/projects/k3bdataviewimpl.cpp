@@ -34,20 +34,38 @@
 #include <KRun>
 
 
-K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, DataProjectModel* model, KActionCollection* actionCollection )
-    : QObject( view ), m_view( view ), m_doc( doc ), m_model( model )
+K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* actionCollection )
+:
+    QObject( view ),
+    m_view( view ),
+    m_doc( doc ),
+    m_model( new DataProjectModel( doc, view ) ),
+    m_fileView( new QTreeView( view ) )
 {
-    m_actionNewDir = createAction( m_view, i18n("New Folder..."), "folder-new", Qt::CTRL+Qt::Key_N, 0, 0,
+    m_fileView->setModel( m_model );
+    m_fileView->setAcceptDrops( true );
+    m_fileView->setDragEnabled( true );
+    m_fileView->setDragDropMode( QTreeView::DragDrop );
+    m_fileView->setItemsExpandable( false );
+    m_fileView->setRootIsDecorated( false );
+    m_fileView->setSelectionMode( QTreeView::ExtendedSelection );
+    m_fileView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    m_fileView->setContextMenuPolicy( Qt::ActionsContextMenu );
+    // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
+    m_fileView->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_fileView->setEditTriggers( QAbstractItemView::NoEditTriggers );
+
+    m_actionNewDir = createAction( m_view, i18n("New Folder..."), "folder-new", Qt::CTRL+Qt::Key_N, this, SLOT(slotNewDir()),
                                    actionCollection, "new_dir" );
-    m_actionRemove = createAction( m_view, i18n("Remove"), "edit-delete", Qt::Key_Delete, 0, 0,
+    m_actionRemove = createAction( m_view, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemove()),
                                    actionCollection, "remove" );
-    m_actionRename = createAction( m_view, i18n("Rename"), "edit-rename", Qt::Key_F2, 0, 0,
+    m_actionRename = createAction( m_view, i18n("Rename"), "edit-rename", Qt::Key_F2, this, SLOT(slotRename()),
                                    actionCollection, "rename" );
     m_actionParentDir = createAction( m_view, i18n("Parent Folder"), "go-up", 0, 0, 0,
                                       actionCollection, "parent_dir" );
-    m_actionProperties = createAction( m_view, i18n("Properties"), "document-properties", 0, 0, 0,
+    m_actionProperties = createAction( m_view, i18n("Properties"), "document-properties", 0, this, SLOT(slotProperties()),
                                        actionCollection, "properties" );
-    m_actionOpen = createAction( m_view, i18n("Open"), "document-open", 0, 0, 0,
+    m_actionOpen = createAction( m_view, i18n("Open"), "document-open", 0, this, SLOT(slotOpen()),
                                  actionCollection, "open" );
     m_actionImportSession = createAction( m_view, i18n("&Import Session..."), "document-import", 0, this, SLOT(slotImportSession()),
                                           actionCollection, "project_data_import_session" );
@@ -55,27 +73,34 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, DataProjectModel* mod
                                          actionCollection, "project_data_clear_imported_session" );
     m_actionEditBootImages = createAction( m_view, i18n("&Edit Boot Images..."), "document-properties", 0, this, SLOT(slotEditBootImages()),
                                            actionCollection, "project_data_edit_boot_images" );
-    
+
     m_actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
     m_actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
     m_actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
-    
+
     m_actionClearSession->setEnabled( m_doc->importedSession() > -1 );
-    connect( m_doc, SIGNAL(importedSessionChanged(int)), this, SLOT(slotImportedSessionChanged(int)) );
-    
+
+    connect( m_doc, SIGNAL(importedSessionChanged(int)),
+             this, SLOT(slotImportedSessionChanged(int)) );
+    connect( m_fileView, SIGNAL(doubleClicked(QModelIndex)),
+             this, SLOT(slotItemActivated(QModelIndex)) );
+    connect( m_fileView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+             this, SLOT(slotSelectionChanged()) );
+
     // Create data context menu
-    m_popupMenu = new KMenu( m_view );
-    m_popupMenu->addAction( m_actionParentDir );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( m_actionRename );
-    m_popupMenu->addAction( m_actionRemove );
-    m_popupMenu->addAction( m_actionNewDir );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( m_actionOpen );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( m_actionProperties );
-    m_popupMenu->addSeparator();
-    m_popupMenu->addAction( actionCollection->action("project_burn") );
+    QAction* separator = new QAction( this );
+    separator->setSeparator( true );
+    m_fileView->addAction( m_actionParentDir );
+    m_fileView->addAction( separator );
+    m_fileView->addAction( m_actionRename );
+    m_fileView->addAction( m_actionRemove );
+    m_fileView->addAction( m_actionNewDir );
+    m_fileView->addAction( separator );
+    m_fileView->addAction( m_actionOpen );
+    m_fileView->addAction( separator );
+    m_fileView->addAction( m_actionProperties );
+    m_fileView->addAction( separator );
+    m_fileView->addAction( actionCollection->action("project_burn") );
 }
 
 
@@ -89,8 +114,19 @@ void K3b::DataViewImpl::addUrls( const QModelIndex& parent, const KUrl::List& ur
 }
 
 
-void K3b::DataViewImpl::newDir( const QModelIndex& parent )
+void K3b::DataViewImpl::slotCurrentRootChanged( const QModelIndex& newRoot )
 {
+    // make the file view show only the child nodes of the currently selected
+    // directory from dir view
+    m_fileView->setRootIndex( newRoot );
+    m_fileView->header()->resizeSections( QHeaderView::Stretch );
+    m_actionParentDir->setEnabled( newRoot.isValid() && m_model->indexForItem( m_doc->root() ) != newRoot );
+}
+
+
+void K3b::DataViewImpl::slotNewDir()
+{
+    const QModelIndex parent = m_fileView->rootIndex();
     DirItem* parentDir = 0;
 
     if (parent.isValid())
@@ -120,8 +156,35 @@ void K3b::DataViewImpl::newDir( const QModelIndex& parent )
 }
 
 
-void K3b::DataViewImpl::properties( const QModelIndexList& indexes )
+void K3b::DataViewImpl::slotRemove()
 {
+    const QModelIndexList selected = m_fileView->selectionModel()->selectedRows();
+
+    // create a list of persistent model indexes to be able to remove all of them
+    QList<QPersistentModelIndex> indexes;
+    Q_FOREACH( const QModelIndex& index, selected ) {
+        indexes.append( QPersistentModelIndex( index ) );
+    }
+
+    // and now ask the indexes to be removed
+    Q_FOREACH( const QPersistentModelIndex& index, indexes ) {
+        m_model->removeRow( index.row(), index.parent() );
+    }
+}
+
+
+void K3b::DataViewImpl::slotRename()
+{
+    const QModelIndexList selected = m_fileView->selectionModel()->selectedRows();
+    if( !selected.isEmpty() ) {
+        m_fileView->edit( selected.first() );
+    }
+}
+
+
+void K3b::DataViewImpl::slotProperties()
+{
+    const QModelIndexList indexes = m_fileView->selectionModel()->selectedRows();
     if ( indexes.isEmpty() )
     {
         // show project properties
@@ -141,8 +204,9 @@ void K3b::DataViewImpl::properties( const QModelIndexList& indexes )
 }
 
 
-void K3b::DataViewImpl::open( const QModelIndexList& indexes )
+void K3b::DataViewImpl::slotOpen()
 {
+    const QModelIndexList indexes = m_fileView->selectionModel()->selectedRows();
     if (indexes.isEmpty())
         return;
 
@@ -157,20 +221,16 @@ void K3b::DataViewImpl::open( const QModelIndexList& indexes )
                         m_view );
         }
         else {
-            KRun::displayOpenWithDialog( KUrl::List() << url, false, m_view );
+            KRun::displayOpenWithDialog( KUrl::List() << url, m_view );
         }
     }
 }
 
 
-void K3b::DataViewImpl::slotCurrentRootChanged( const QModelIndex& newRoot )
+void K3b::DataViewImpl::slotSelectionChanged()
 {
-    m_actionParentDir->setEnabled( newRoot.isValid() && m_model->indexForItem(m_doc->root()) != newRoot );
-}
+    const QModelIndexList indexes = m_fileView->selectionModel()->selectedRows();
 
-
-void K3b::DataViewImpl::slotSelectionChanged( const QModelIndexList& indexes )
-{
     bool open = true, rename = true, remove = true;
 
     // we can only rename one item at a time
@@ -208,6 +268,7 @@ void K3b::DataViewImpl::slotSelectionChanged( const QModelIndexList& indexes )
     m_actionOpen->setEnabled( open );
 }
 
+
 void K3b::DataViewImpl::slotItemActivated( const QModelIndex& index )
 {
     if( index.isValid() ) {
@@ -216,7 +277,10 @@ void K3b::DataViewImpl::slotItemActivated( const QModelIndex& index )
             emit setCurrentRoot( index );
         }
         else if( type == (int)FileItemType ) {
-            properties( QModelIndexList() << index );
+            QList<DataItem*> items;
+            items.append( m_model->itemForIndex( index ) );
+            DataPropertiesDialog dlg( items, m_view );
+            dlg.exec();
         }
     }
 }
