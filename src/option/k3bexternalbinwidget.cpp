@@ -70,8 +70,6 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // setup program tab
     // ------------------------------------------------------------
     QWidget* programTab = new QWidget( m_mainTabWidget );
-    QLabel* defaultLabel = new QLabel( i18n("Check program versions K3b should use."), programTab );
-    defaultLabel->setWordWrap( true );
     m_programView = new QTreeView( programTab );
     m_programView->setModel( m_programModel );
     m_programView->setAllColumnsShowFocus( true );
@@ -85,8 +83,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
                                       "desired version on the list.") );
     
     QVBoxLayout* programTabLayout = new QVBoxLayout( programTab );
-    programTabLayout->addWidget( defaultLabel );
-    programTabLayout->addWidget( m_programView, 1 );
+    programTabLayout->addWidget( m_programView );
     
     m_mainTabWidget->addTab( programTab, i18n("Programs") );
 
@@ -125,7 +122,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
 
     m_mainTabWidget->addTab( searchPathTab, i18n("Search Path") );
 
-    connect( m_rescanButton, SIGNAL(clicked()), this, SLOT(rescan()) );
+    connect( m_rescanButton, SIGNAL(clicked(bool)), this, SLOT(rescan()) );
 }
 
 

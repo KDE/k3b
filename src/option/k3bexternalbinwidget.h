@@ -39,11 +39,8 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ExternalBinWidget( ExternalBinManager*, QWidget* parent = 0 );
+        ExternalBinWidget( ExternalBinManager* manager, QWidget* parent = 0 );
         ~ExternalBinWidget();
-
-        class ExternalBinViewItem;
-        class ExternalProgramViewItem;
 
     public Q_SLOTS:
         void rescan();

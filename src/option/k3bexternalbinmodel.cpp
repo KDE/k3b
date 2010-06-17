@@ -139,11 +139,20 @@ QModelIndex ExternalBinModel::parent( const QModelIndex& index ) const
 Qt::ItemFlags ExternalBinModel::flags( const QModelIndex& index ) const
 {
     if( programForIndex( index ) != 0 )
+    {
         return Qt::ItemIsEnabled;
-    else if( index.isValid() )
-        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+    }
+    else if( const ExternalBin* bin = binForIndex( index ) )
+    {
+        if( bin->program()->bins().size() > 1 )
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
+        else
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    }
     else
+    {
         return 0;
+    }
 }
 
 
@@ -174,7 +183,7 @@ QVariant ExternalBinModel::data( const QModelIndex& index, int role ) const
                 default: return QVariant();
             }
         }
-        else if( Qt::CheckStateRole == role && index.column() == PathColumn ) {
+        else if( Qt::CheckStateRole == role && index.column() == PathColumn && bin->program()->bins().size() > 1 ) {
             if( bin == d->defaults[ bin->program() ] )
                 return Qt::Checked;
             else
