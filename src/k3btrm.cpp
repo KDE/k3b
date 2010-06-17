@@ -14,7 +14,7 @@
 
 #include <config-k3b.h>
 
-#ifdef HAVE_MUSICBRAINZ
+#ifdef ENABLE_MUSICBRAINZ
 
 #include "k3btrm.h"
 #include "musicbrainz/mb_c.h"

@@ -212,6 +212,41 @@ set(k3b_SRCS
   k3bdevicemenu.cpp
   )
 
+if(ENABLE_DVD_RIPPING)
+  set(k3b_videodvd_SRCS
+    rip/videodvd/k3bvideodvdaudiomodel.cpp
+    rip/videodvd/k3bvideodvdrippingview.cpp
+    rip/videodvd/k3bvideodvdrippingjob.cpp
+    rip/videodvd/k3bvideodvdrippingwidget.cpp
+    rip/videodvd/k3bvideodvdrippingdialog.cpp
+    rip/videodvd/k3bvideodvdrippingpreview.cpp
+    rip/videodvd/k3bvideodvdtitledelegate.cpp
+    rip/videodvd/k3bvideodvdtitlemodel.cpp
+    )
+
+  kde4_add_ui_files(k3b_videodvd_SRCS
+    rip/videodvd/base_k3bvideodvdrippingwidget.ui)
+
+  set(k3b_rip_SRCS
+    ${k3b_rip_SRCS}
+    ${k3b_videodvd_SRCS}
+    )
+endif(ENABLE_DVD_RIPPING)
+
+if(ENABLE_MUSICBRAINZ)
+  set(k3b_SRCS
+    ${k3b_SRCS}
+    k3btrm.cpp
+    k3bmusicbrainz.cpp
+    )
+  set(k3b_project_SRCS
+    ${k3b_project_SRCS}
+    projects/k3bmusicbrainzjob.cpp
+    projects/k3bmusicbrainztrackloopupjob.cpp
+    projects/k3baudiotracktrmlookupdialog.cpp
+    )
+endif(ENABLE_MUSICBRAINZ)
+
 qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3binterface.h org.k3b.MainWindow.xml )
 qt4_add_dbus_adaptor( k3b_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.MainWindow.xml k3binterface.h K3b::Interface k3binterfaceadaptor K3bInterfaceAdaptor )
 qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bjobinterface.h org.k3b.Job.xml )
@@ -232,41 +267,6 @@ set(k3b_bin_SRCS
   ${k3b_dbus_SRCS}
   ${k3b_SRCS}
 )
-
-if(ENABLE_DVD_RIPPING)
-  set(k3b_videodvd_SRCS
-    rip/videodvd/k3bvideodvdaudiomodel.cpp
-    rip/videodvd/k3bvideodvdrippingview.cpp
-    rip/videodvd/k3bvideodvdrippingjob.cpp
-    rip/videodvd/k3bvideodvdrippingwidget.cpp
-    rip/videodvd/k3bvideodvdrippingdialog.cpp
-    rip/videodvd/k3bvideodvdrippingpreview.cpp
-    rip/videodvd/k3bvideodvdtitledelegate.cpp
-    rip/videodvd/k3bvideodvdtitlemodel.cpp
-    )
-
-  kde4_add_ui_files(k3b_videodvd_SRCS
-    rip/videodvd/base_k3bvideodvdrippingwidget.ui)
-
-  set(k3b_bin_SRCS
-    ${k3b_bin_SRCS}
-    ${k3b_videodvd_SRCS}
-    )
-endif(ENABLE_DVD_RIPPING)
-
-if(ENABLE_MUSICBRAINZ)
-  set(k3b_SRCS
-    ${k3b_SRCS}
-    k3btrm.cpp
-    k3bmusicbrainz.cpp
-    )
-  set(k3b_project_SRCS
-    ${k3b_project_SRCS}
-    projects/k3bmusicbrainzjob.cpp
-    projects/k3bmusicbrainztrackloopupjob.cpp
-    projects/k3baudiotracktrmlookupdialog.cpp
-    )
-endif(ENABLE_MUSICBRAINZ)
 
 kde4_add_app_icon(k3b_bin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-app-k3b.png)
 

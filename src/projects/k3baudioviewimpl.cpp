@@ -27,6 +27,7 @@
 #include "k3baudiotrackaddingdialog.h"
 #include "k3baudiotrackdialog.h"
 #include "k3baudiotracksplitdialog.h"
+#include "k3baudiotracktrmlookupdialog.h"
 #include "k3baudiozerodata.h"
 #include "k3bmsfedit.h"
 #include "k3bview.h"
@@ -80,9 +81,12 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
                                        actionCollection, "edit_source" );
     m_actionPlayTrack = createAction( m_view, i18n("Play Track"), "media-playback-start", 0, this, SLOT(slotPlayTrack()),
                                       actionCollection, "track_play" );
-    m_actionMusicBrainz = createAction( m_view, i18n("Musicbrainz Lookup"), "musicbrainz", 0, this, SLOT(slotQueryMusicBrainz()),
+    m_actionQueryMusicBrainz = createAction( m_view, i18n("Musicbrainz Lookup"), "musicbrainz", 0, this, SLOT(slotQueryMusicBrainz()),
                                         actionCollection, "project_audio_musicbrainz");
-    m_actionMusicBrainz->setToolTip( i18n("Try to determine meta information over the Internet") );
+    m_actionQueryMusicBrainz->setToolTip( i18n("Try to determine meta information over the Internet") );
+    m_actionQueryMusicBrainzTrack = createAction( m_view, i18n("Musicbrainz Lookup"), "musicbrainz", 0, this, SLOT(slotQueryMusicBrainzTrack()),
+                                        actionCollection, "project_audio_musicbrainz_track");
+    m_actionQueryMusicBrainzTrack->setToolTip( i18n("Try to determine meta information over the Internet") );
     m_actionProperties = createAction( m_view, i18n("Properties"), "document-properties", 0, this, SLOT(slotTrackProperties()),
                                        actionCollection, "track_properties" );
     m_actionRemove = createAction( m_view, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemove()),
@@ -110,11 +114,11 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_trackView->addAction( m_actionMergeTracks );
     m_trackView->addAction( m_actionProperties );
     m_trackView->addAction( separator );
-    m_trackView->addAction( m_actionMusicBrainz );
+    m_trackView->addAction( m_actionQueryMusicBrainzTrack );
     m_trackView->addAction( separator );
     m_trackView->addAction( actionCollection->action("project_burn") );
 
-#ifndef HAVE_MUSICBRAINZ
+#ifndef ENABLE_MUSICBRAINZ
     m_actionMusicBrainz->setEnabled( false );
     m_actionMusicBrainz->setVisible( false );
 #endif
@@ -310,13 +314,14 @@ void K3b::AudioViewImpl::slotTrackProperties()
 
 void K3b::AudioViewImpl::slotQueryMusicBrainz()
 {
-#ifdef HAVE_MUSICBRAINZ
-    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
+#ifdef ENABLE_MUSICBRAINZ
     QList<AudioTrack*> tracks;
-    tracksForIndexes( tracks, indexes );
+    for( int i = 1; i <= m_doc->numOfTracks(); ++i ) {
+        tracks.push_back( m_doc->getTrack( i ) );
+    }
 
     if( tracks.isEmpty() ) {
-        KMessageBox::sorry( this, i18n("Please select an audio track.") );
+        KMessageBox::sorry( m_view, i18n("Please add an audio track.") );
         return;
     }
 
@@ -326,7 +331,31 @@ void K3b::AudioViewImpl::slotQueryMusicBrainz()
 //         m_player->stop();
 
     // now do the lookup on the files.
-    AudioTrackTRMLookupDialog dlg( this );
+    AudioTrackTRMLookupDialog dlg( m_view );
+    dlg.lookup( tracks );
+#endif
+}
+
+
+void K3b::AudioViewImpl::slotQueryMusicBrainzTrack()
+{
+#ifdef ENABLE_MUSICBRAINZ
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
+    QList<AudioTrack*> tracks;
+    tracksForIndexes( tracks, indexes );
+
+    if( tracks.isEmpty() ) {
+        KMessageBox::sorry( m_view, i18n("Please select an audio track.") );
+        return;
+    }
+
+    // only one may use the tracks at the same time
+//     if( m_currentlyPlayingTrack &&
+//         tracks.containsRef( m_currentlyPlayingTrack ) )
+//         m_player->stop();
+
+    // now do the lookup on the files.
+    AudioTrackTRMLookupDialog dlg( m_view );
     dlg.lookup( tracks );
 #endif
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
  *
@@ -17,7 +17,7 @@
 
 #include <config-k3b.h>
 
-#ifdef HAVE_MUSICBRAINZ
+#ifdef ENABLE_MUSICBRAINZ
 
 #include "k3bmsf.h"
 #include <QtCore/QByteArray>
