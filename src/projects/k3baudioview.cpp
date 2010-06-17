@@ -24,7 +24,6 @@
 #include "k3baudioviewimpl.h"
 #include "k3bfillstatusdisplay.h"
 #include "k3bpluginmanager.h"
-//#include "k3baudiotrackplayer.h"
 
 #include <QLayout>
 #include <QString>
