@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,8 +20,6 @@
 
 #include "ui_base_k3badvanceddataimagesettings.h"
 
-class Q3CheckListItem;
-
 namespace K3b {
     class IsoOptions;
 
@@ -32,38 +31,8 @@ namespace K3b {
         DataAdvancedImageSettingsDialog( QWidget* parent = 0 );
         ~DataAdvancedImageSettingsDialog();
 
-        void load( const IsoOptions& );
-        void save( IsoOptions& );
-
-    private Q_SLOTS:
-        void slotJolietToggled( bool on );
-
-    private:
-        bool eventFilter( QObject* watched, QEvent* event );
-
-        Q3CheckListItem* m_checkAllowUntranslatedFilenames;
-        Q3CheckListItem* m_checkAllowMaxLengthFilenames;
-        Q3CheckListItem* m_checkAllowFullAscii;
-        Q3CheckListItem* m_checkAllowOther;
-        Q3CheckListItem* m_checkAllowLowercaseCharacters;
-        Q3CheckListItem* m_checkAllowMultiDot;
-        Q3CheckListItem* m_checkOmitVersionNumbers;
-        Q3CheckListItem* m_checkOmitTrailingPeriod;
-        Q3CheckListItem* m_checkCreateTransTbl;
-        Q3CheckListItem* m_checkHideTransTbl;
-        Q3CheckListItem* m_checkFollowSymbolicLinks;
-        Q3CheckListItem* m_checkAllow31CharFilenames;
-        Q3CheckListItem* m_checkAllowBeginningPeriod;
-        Q3CheckListItem* m_checkJolietLong;
-        Q3CheckListItem* m_checkDoNotCacheInodes;
-        Q3CheckListItem* m_checkDoNotImportSession;
-
-        Q3CheckListItem* m_isoLevelController;
-        Q3CheckListItem* m_radioIsoLevel1;
-        Q3CheckListItem* m_radioIsoLevel2;
-        Q3CheckListItem* m_radioIsoLevel3;
-
-        class PrivateCheckViewItem;
+        void load( const IsoOptions& options );
+        void save( IsoOptions& options );
     };
 }
 

@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,49 +14,13 @@
  */
 
 #include "k3bdataadvancedimagesettingsdialog.h"
-
 #include "k3bisooptions.h"
 
-#include <q3buttongroup.h>
-#include <q3header.h>
 #include <QCheckBox>
-#include <QHelpEvent>
-#include <QPainter>
-#include <QPalette>
-#include <QPoint>
 #include <QRadioButton>
-#include <QRegExp>
-#include <QValidator>
-#include <QWhatsThis>
 
-#include <k3listview.h>
-#include <KComboBox>
 #include <KDebug>
 #include <KLocale>
-
-
-class K3b::DataAdvancedImageSettingsDialog::PrivateCheckViewItem : public Q3CheckListItem
-{
-public:
-    PrivateCheckViewItem( Q3ListView* parent, const QString& text, Type tt = Controller )
-        : Q3CheckListItem( parent, text, tt ) {
-    }
-
-    PrivateCheckViewItem( Q3ListViewItem* parent, const QString& text, Type tt = Controller )
-        : Q3CheckListItem( parent, text, tt ) {
-    }
-
-protected:
-    void stateChange( bool on ) {
-        // enable or disable all children
-        Q3ListViewItem* item = firstChild();
-        while( item ) {
-            if( PrivateCheckViewItem* pi = dynamic_cast<PrivateCheckViewItem*>(item) )
-                pi->setEnabled( !on );
-            item = item->nextSibling();
-        }
-    }
-};
 
 
 K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* parent )
@@ -68,111 +33,8 @@ K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* 
     setCaption(i18n("Custom Data Project Filesystems"));
     setModal(true);
 
-    m_viewIsoSettings->header()->hide();
-    m_viewIsoSettings->setSorting( -1 );
-    m_viewIsoSettings->setWhatsThis( i18n("Set special ISO9660 Filesystem preferences.") );
-
-    // handle our custom whatsthis events
-    m_viewIsoSettings->installEventFilter( this );
-
-    // create all the view items
-    Q3CheckListItem* iso9660Root = new Q3CheckListItem( m_viewIsoSettings,
-                                                        i18n("IS09660 Settings"),
-                                                        Q3CheckListItem::Controller );
-    Q3CheckListItem* rrRoot = new Q3CheckListItem( m_viewIsoSettings,
-                                                   iso9660Root,
-                                                   i18n("Rock Ridge Settings"),
-                                                   Q3CheckListItem::Controller );
-    Q3CheckListItem* jolietRoot = new Q3CheckListItem( m_viewIsoSettings,
-                                                       rrRoot,
-                                                       i18n("Joliet Settings"),
-                                                       Q3CheckListItem::Controller );
-    Q3CheckListItem* miscRoot = new Q3CheckListItem( m_viewIsoSettings,
-                                                     jolietRoot,
-                                                     i18n("Misc Settings"),
-                                                     Q3CheckListItem::Controller );
-
-    // ISO9660 settings
-    m_checkAllowUntranslatedFilenames = new PrivateCheckViewItem( iso9660Root,
-                                                                  i18n( "Allow untranslated ISO9660 filenames" ),
-                                                                  Q3CheckListItem::CheckBox );
-    m_checkAllowMaxLengthFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                               i18n( "Allow max length ISO9660 filenames (37 characters)" ),
-                                                               Q3CheckListItem::CheckBox );
-    m_checkAllowFullAscii = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                      i18n( "Allow full ASCII charset for ISO9660 filenames" ),
-                                                      Q3CheckListItem::CheckBox );
-    m_checkAllowOther = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                  i18n( "Allow ~ and # in ISO9660 filenames" ),
-                                                  Q3CheckListItem::CheckBox );
-    m_checkAllowLowercaseCharacters = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                                i18n( "Allow lowercase characters in ISO9660 filenames" ),
-                                                                Q3CheckListItem::CheckBox );
-    m_checkAllowMultiDot = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                     i18n( "Allow multiple dots in ISO9660 filenames" ),
-                                                     Q3CheckListItem::CheckBox );
-    m_checkAllow31CharFilenames = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                            i18n( "Allow 31 character ISO9660 filenames" ),
-                                                            Q3CheckListItem::CheckBox );
-    m_checkAllowBeginningPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                            i18n( "Allow leading period in ISO9660 filenames" ),
-                                                            Q3CheckListItem::CheckBox );
-    m_checkOmitVersionNumbers = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                          i18n( "Omit version numbers in ISO9660 filenames" ),
-                                                          Q3CheckListItem::CheckBox );
-    m_checkOmitTrailingPeriod = new PrivateCheckViewItem( m_checkAllowUntranslatedFilenames,
-                                                          i18n( "Omit trailing period in ISO9660 filenames" ),
-                                                          Q3CheckListItem::CheckBox );
-
-    m_checkAllowUntranslatedFilenames->setOpen(true);
-    m_isoLevelController = new Q3CheckListItem( iso9660Root,
-                                                m_checkAllowUntranslatedFilenames,
-                                                i18n("ISO Level") );
-
-    m_radioIsoLevel3 = new Q3CheckListItem( m_isoLevelController,
-                                            i18n("Level %1",3),
-                                            Q3CheckListItem::RadioButton );
-    m_radioIsoLevel2 = new Q3CheckListItem( m_isoLevelController,
-                                            i18n("Level %1",2),
-                                            Q3CheckListItem::RadioButton );
-    m_radioIsoLevel1 = new Q3CheckListItem( m_isoLevelController,
-                                            i18n("Level %1",1),
-                                            Q3CheckListItem::RadioButton );
-
-    m_isoLevelController->setOpen(true);
-
-    // Joliet Settings
-    m_checkJolietLong = new Q3CheckListItem( jolietRoot,
-                                             i18n("Allow 103 character Joliet filenames"),
-                                             Q3CheckListItem::CheckBox );
-
-    // Rock Ridge Settings
-    m_checkCreateTransTbl = new Q3CheckListItem( rrRoot,
-                                                 i18n( "Create TRANS.TBL files" ),
-                                                 Q3CheckListItem::CheckBox );
-    m_checkHideTransTbl = new Q3CheckListItem( rrRoot, m_checkCreateTransTbl,
-                                               i18n( "Hide TRANS.TBL files in Joliet" ),
-                                               Q3CheckListItem::CheckBox );
-
-    // Misc Settings
-//   m_checkFollowSymbolicLinks = new QCheckListItem( m_viewIsoSettings,
-// 						   i18n( "Follow symbolic links" ),
-// 						   QCheckListItem::CheckBox );
-
-    m_checkDoNotCacheInodes = new Q3CheckListItem( miscRoot,
-                                                   i18n("Do not cache inodes" ),
-                                                   Q3CheckListItem::CheckBox );
-
-    m_checkDoNotImportSession = new Q3CheckListItem( miscRoot,
-                                                     i18n("Do not import previous session" ),
-                                                     Q3CheckListItem::CheckBox );
-
-    iso9660Root->setOpen( true );
-    jolietRoot->setOpen( true );
-    rrRoot->setOpen( true );
-    miscRoot->setOpen( true );
-
-    connect( m_checkJoliet, SIGNAL(toggled(bool)), this, SLOT(slotJolietToggled(bool)) );
+    connect( m_checkRockRidge, SIGNAL(toggled(bool)), m_groupRockRidgeSettings, SLOT(setEnabled(bool)) );
+    connect( m_checkJoliet, SIGNAL(toggled(bool)), m_groupJolietSettings, SLOT(setEnabled(bool)) );
 }
 
 
@@ -181,130 +43,83 @@ K3b::DataAdvancedImageSettingsDialog::~DataAdvancedImageSettingsDialog()
 }
 
 
-void K3b::DataAdvancedImageSettingsDialog::load( const K3b::IsoOptions& o )
+void K3b::DataAdvancedImageSettingsDialog::load( const K3b::IsoOptions& options )
 {
-    m_checkRockRidge->setChecked( o.createRockRidge() );
-    m_checkJoliet->setChecked( o.createJoliet() );
-    m_checkUdf->setChecked( o.createUdf() );
+    m_checkRockRidge->setChecked( options.createRockRidge() );
+    m_checkJoliet->setChecked( options.createJoliet() );
+    m_checkUdf->setChecked( options.createUdf() );
 
-    switch( o.ISOLevel() ) {
+    switch( options.ISOLevel() ) {
     case 1:
-        m_radioIsoLevel1->setOn(true);
+        m_radioIsoLevel1->setChecked(true);
         break;
     case 2:
-        m_radioIsoLevel2->setOn(true);
+        m_radioIsoLevel2->setChecked(true);
         break;
     case 3:
-        m_radioIsoLevel3->setOn(true);
+        m_radioIsoLevel3->setChecked(true);
         break;
     }
 
-    m_checkPreservePermissions->setChecked( o.preserveFilePermissions() );
+    m_checkPreservePermissions->setChecked( options.preserveFilePermissions() );
 
     // RR settings
-    m_checkCreateTransTbl->setOn( o.createTRANS_TBL() );
-    m_checkHideTransTbl->setOn( o.hideTRANS_TBL() );
+    m_checkCreateTransTbl->setChecked( options.createTRANS_TBL() );
+    m_checkHideTransTbl->setChecked( options.hideTRANS_TBL() );
 
     // iso9660 settings
-    m_checkAllowUntranslatedFilenames->setOn( o.ISOuntranslatedFilenames() );
-    m_checkAllow31CharFilenames->setOn( o.ISOallow31charFilenames() );
-    m_checkAllowMaxLengthFilenames->setOn( o.ISOmaxFilenameLength() );
-    m_checkAllowBeginningPeriod->setOn( o.ISOallowPeriodAtBegin() );
-    m_checkAllowFullAscii->setOn( o.ISOrelaxedFilenames() );
-    m_checkOmitVersionNumbers->setOn( o.ISOomitVersionNumbers() );
-    m_checkOmitTrailingPeriod->setOn( o.ISOomitTrailingPeriod() );
-    m_checkAllowOther->setOn( o.ISOnoIsoTranslate() );
-    m_checkAllowMultiDot->setOn( o.ISOallowMultiDot() );
-    m_checkAllowLowercaseCharacters->setOn( o.ISOallowLowercase() );
+    m_checkAllowUntranslatedFilenames->setChecked( options.ISOuntranslatedFilenames() );
+    m_checkAllow31CharFilenames->setChecked( options.ISOallow31charFilenames() );
+    m_checkAllowMaxLengthFilenames->setChecked( options.ISOmaxFilenameLength() );
+    m_checkAllowBeginningPeriod->setChecked( options.ISOallowPeriodAtBegin() );
+    m_checkAllowFullAscii->setChecked( options.ISOrelaxedFilenames() );
+    m_checkOmitVersionNumbers->setChecked( options.ISOomitVersionNumbers() );
+    m_checkOmitTrailingPeriod->setChecked( options.ISOomitTrailingPeriod() );
+    m_checkAllowOther->setChecked( options.ISOnoIsoTranslate() );
+    m_checkAllowMultiDot->setChecked( options.ISOallowMultiDot() );
+    m_checkAllowLowercaseCharacters->setChecked( options.ISOallowLowercase() );
 
     // joliet settings
-    m_checkJolietLong->setOn( o.jolietLong() );
+    m_checkJolietLong->setChecked( options.jolietLong() );
 
     // misc (FIXME: should not be here)
-    m_checkDoNotCacheInodes->setOn( o.doNotCacheInodes() );
-    m_checkDoNotImportSession->setOn( o.doNotImportSession() );
-
-    slotJolietToggled( m_checkJoliet->isChecked() );
+    m_checkDoNotCacheInodes->setChecked( options.doNotCacheInodes() );
+    m_checkDoNotImportSession->setChecked( options.doNotImportSession() );
 }
 
 
-void K3b::DataAdvancedImageSettingsDialog::save( K3b::IsoOptions& o )
+void K3b::DataAdvancedImageSettingsDialog::save( K3b::IsoOptions& options )
 {
-    o.setCreateRockRidge( m_checkRockRidge->isChecked() );
-    o.setCreateJoliet( m_checkJoliet->isChecked() );
-    o.setCreateUdf( m_checkUdf->isChecked() );
+    options.setCreateRockRidge( m_checkRockRidge->isChecked() );
+    options.setCreateJoliet( m_checkJoliet->isChecked() );
+    options.setCreateUdf( m_checkUdf->isChecked() );
 
     // save iso-level
-    if( m_radioIsoLevel3->isOn() )
-        o.setISOLevel( 3 );
-    else if( m_radioIsoLevel2->isOn() )
-        o.setISOLevel( 2 );
+    if( m_radioIsoLevel3->isChecked() )
+        options.setISOLevel( 3 );
+    else if( m_radioIsoLevel2->isChecked() )
+        options.setISOLevel( 2 );
     else
-        o.setISOLevel( 1 );
+        options.setISOLevel( 1 );
 
-    o.setPreserveFilePermissions( m_checkPreservePermissions->isChecked() );
+    options.setPreserveFilePermissions( m_checkPreservePermissions->isChecked() );
 
-    o.setCreateTRANS_TBL( m_checkCreateTransTbl->isOn() );
-    o.setHideTRANS_TBL( m_checkHideTransTbl->isOn() );
-    o.setISOuntranslatedFilenames( m_checkAllowUntranslatedFilenames->isOn() );
-    o.setISOallow31charFilenames( m_checkAllow31CharFilenames->isOn() );
-    o.setISOmaxFilenameLength( m_checkAllowMaxLengthFilenames->isOn() );
-    o.setISOallowPeriodAtBegin( m_checkAllowBeginningPeriod->isOn() );
-    o.setISOrelaxedFilenames( m_checkAllowFullAscii->isOn() );
-    o.setISOomitVersionNumbers( m_checkOmitVersionNumbers->isOn() );
-    o.setISOomitTrailingPeriod( m_checkOmitTrailingPeriod->isOn() );
-    o.setISOnoIsoTranslate( m_checkAllowOther->isOn() );
-    o.setISOallowMultiDot( m_checkAllowMultiDot->isOn() );
-    o.setISOallowLowercase( m_checkAllowLowercaseCharacters->isOn() );
-    //  o.setFollowSymbolicLinks( m_checkFollowSymbolicLinks->isOn() );
-    o.setJolietLong( m_checkJolietLong->isOn() );
-    o.setDoNotCacheInodes( m_checkDoNotCacheInodes->isOn() );
-    o.setDoNotImportSession( m_checkDoNotImportSession->isOn() );
-}
-
-
-void K3b::DataAdvancedImageSettingsDialog::slotJolietToggled( bool on )
-{
-    m_checkJolietLong->setEnabled( on );
-}
-
-
-bool K3b::DataAdvancedImageSettingsDialog::eventFilter( QObject* watched, QEvent* event )
-{
-    if ( watched == m_viewIsoSettings &&
-         event->type() == QEvent::WhatsThis ) {
-        QHelpEvent* he = static_cast<QHelpEvent*>( event );
-
-        QPoint p = he->pos();
-
-        Q3ListViewItem* i = m_viewIsoSettings->itemAt( p );
-
-        QString text;
-        if( i == m_checkAllowUntranslatedFilenames )
-            text = i18n( "Force all options below" );
-        else if( i == m_radioIsoLevel1 ||
-                 i == m_radioIsoLevel2 ||
-                 i == m_radioIsoLevel3 ||
-                 i == m_isoLevelController )
-            text = i18n( "<p>Set the ISO-9660 conformance level.\n"
-                         "<ul>\n"
-                         "<li>Level 1: Files may only consist of one section and filenames are restricted "
-                         "to 8.3 characters.</li>\n"
-                         "<li>Level 2: Files may only consist of one section.</li>\n"
-                         "<li>Level 3: No restrictions.</li>\n"
-                         "</ul>\n"
-                         "<p>With all ISO-9660 levels, all filenames are restricted to upper case letters, "
-                         "numbers and the underscore (_). The maximum filename length is 31 characters, the "
-                         "directory nesting level is restricted to 8 and the maximum path length is limited "
-                         "to 255 characters. (These restrictions may be violated with the additional ISO-9660 features K3b offers.)" );
-
-        if ( !text.isEmpty() ) {
-            QWhatsThis::showText( he->globalPos(), text, m_viewIsoSettings );
-            return true;
-        }
-    }
-
-    return KDialog::eventFilter( watched, event );
+    options.setCreateTRANS_TBL( m_checkCreateTransTbl->isChecked() );
+    options.setHideTRANS_TBL( m_checkHideTransTbl->isChecked() );
+    options.setISOuntranslatedFilenames( m_checkAllowUntranslatedFilenames->isChecked() );
+    options.setISOallow31charFilenames( m_checkAllow31CharFilenames->isChecked() );
+    options.setISOmaxFilenameLength( m_checkAllowMaxLengthFilenames->isChecked() );
+    options.setISOallowPeriodAtBegin( m_checkAllowBeginningPeriod->isChecked() );
+    options.setISOrelaxedFilenames( m_checkAllowFullAscii->isChecked() );
+    options.setISOomitVersionNumbers( m_checkOmitVersionNumbers->isChecked() );
+    options.setISOomitTrailingPeriod( m_checkOmitTrailingPeriod->isChecked() );
+    options.setISOnoIsoTranslate( m_checkAllowOther->isChecked() );
+    options.setISOallowMultiDot( m_checkAllowMultiDot->isChecked() );
+    options.setISOallowLowercase( m_checkAllowLowercaseCharacters->isChecked() );
+    //  o.setFollowSymbolicLinks( m_checkFollowSymbolicLinks->isChecked() );
+    options.setJolietLong( m_checkJolietLong->isChecked() );
+    options.setDoNotCacheInodes( m_checkDoNotCacheInodes->isChecked() );
+    options.setDoNotImportSession( m_checkDoNotImportSession->isChecked() );
 }
 
 #include "k3bdataadvancedimagesettingsdialog.moc"

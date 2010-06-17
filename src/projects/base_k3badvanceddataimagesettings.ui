@@ -1,147 +1,456 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>Sebastian Trueg</author>
-  <comment></comment>
-  <exportmacro></exportmacro>
-  <class>base_K3bAdvancedDataImageSettings</class>
-  <widget class="QWidget" name="base_K3bDataCustomFilesystemsWidget" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>552</width>
-        <height>320</height>
-      </rect>
-    </property>
-    <property name="windowTitle" >
-      <string>Custom Data Filesystems</string>
-    </property>
-    <layout class="QGridLayout" >
-      <property name="margin" >
-        <number>0</number>
-      </property>
-      <property name="spacing" >
-        <number>6</number>
-      </property>
-      <item rowspan="1" row="1" column="0" colspan="2" >
-        <widget class="QGroupBox" name="groupIsoSettings" >
-          <property name="title" >
-            <string>File System Settings</string>
-          </property>
-          <layout class="QVBoxLayout" >
-            <item>
-              <widget class="K3ListView" name="m_viewIsoSettings" >
-                <property name="fullWidth" >
-                  <bool>true</bool>
-                </property>
-                <column>
-                  <property name="text" >
-                    <string>ISO9660 Filesystem</string>
-                  </property>
-                  <property name="clickable" >
-                    <bool>false</bool>
-                  </property>
-                  <property name="resizable" >
-                    <bool>false</bool>
-                  </property>
-                </column>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Sebastian Trueg</author>
+ <class>base_K3bAdvancedDataImageSettings</class>
+ <widget class="QWidget" name="base_K3bAdvancedDataImageSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>552</width>
+    <height>320</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" name="_2">
+   <item row="1" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="whatsThis">
+      <string>Set special ISO9660 Filesystem preferences.</string>
+     </property>
+     <property name="title">
+      <string>File System Settings</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QGroupBox" name="m_groupIsoSettings">
+            <property name="title">
+             <string>ISO9660 Settings</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QCheckBox" name="m_checkAllowUntranslatedFilenames">
+               <property name="whatsThis">
+                <string>Force all options below</string>
+               </property>
+               <property name="text">
+                <string>Allow untranslated ISO9660 filenames</string>
+               </property>
               </widget>
-            </item>
-          </layout>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkOmitTrailingPeriod">
+               <property name="text">
+                <string>Omit trailing period in ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkOmitVersionNumbers">
+               <property name="text">
+                <string>Omit version numbers in ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkAllowBeginningPeriod">
+               <property name="text">
+                <string>Allow leading period in ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkAllow31CharFilenames">
+               <property name="text">
+                <string>Allow 31 character ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkAllowMultiDot">
+               <property name="text">
+                <string>Allow multiple dots in ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkAllowLowercaseCharacters">
+               <property name="text">
+                <string>Allow lowercase characters in ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkAllowOther">
+               <property name="text">
+                <string>Allow ~ and # in ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkAllowFullAscii">
+               <property name="text">
+                <string>Allow full ASCII charset for ISO9660 filenames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkAllowMaxLengthFilenames">
+               <property name="text">
+                <string>Allow max length ISO9660 filenames (37 characters)</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_groupIsoLevel">
+            <property name="whatsThis">
+             <string>&lt;p&gt;Set the ISO-9660 conformance level.
+&lt;ul&gt;
+&lt;li&gt;Level 1: Files may only consist of one section and filenames are restricted to 8.3 characters.&lt;/li&gt;
+&lt;li&gt;Level 2: Files may only consist of one section.&lt;/li&gt;
+&lt;li&gt;Level 3: No restrictions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;With all ISO-9660 levels, all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO-9660 features K3b offers.)</string>
+            </property>
+            <property name="title">
+             <string>ISO9660 Level</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QRadioButton" name="m_radioIsoLevel1">
+               <property name="text">
+                <string>Level 1</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioIsoLevel2">
+               <property name="text">
+                <string>Level 2</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="m_radioIsoLevel3">
+               <property name="text">
+                <string>Level 3</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_groupRockRidgeSettings">
+            <property name="title">
+             <string>Rock Ridge Settings</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QCheckBox" name="m_checkCreateTransTbl">
+               <property name="text">
+                <string>Create TRANS.TBL files</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkHideTransTbl">
+               <property name="text">
+                <string>Hide TRANS.TBL files in Joliet</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_groupJolietSettings">
+            <property name="title">
+             <string>Joliet Settings</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_5">
+             <item>
+              <widget class="QCheckBox" name="m_checkJolietLong">
+               <property name="text">
+                <string>Allow 103 character Joliet filenames</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="m_groupMiscSettings">
+            <property name="title">
+             <string>Misc Settings</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <item>
+              <widget class="QCheckBox" name="m_checkDoNotImportSession">
+               <property name="text">
+                <string>Do not import previous session</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="m_checkDoNotCacheInodes">
+               <property name="text">
+                <string>Do not cache inodes</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
         </widget>
+       </widget>
       </item>
-      <item row="0" column="0" >
-        <widget class="QGroupBox" name="groupBox3" >
-          <property name="title" >
-            <string>File Systems</string>
-          </property>
-          <layout class="QVBoxLayout" >
-            <item>
-              <widget class="QCheckBox" name="m_checkRockRidge" >
-                <property name="text" >
-                  <string>&amp;Generate Rock Ridge extensions</string>
-                </property>
-                <property name="checked" >
-                  <bool>true</bool>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Add Rock Ridge extensions to the file system</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked, K3b will generate the System Use Sharing Protocol records (SUSP) specified by the Rock Ridge Interchange Protocol (IEEE-P1282).
-&lt;p>Rock Ridge extends the ISO-9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames, ...). It uses ISO-8859 or UTF-16 based characters and allows 255 octets.
-&lt;p>Rock Ridge extensions are located at the end of each ISO-9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO-9660 tree.
-&lt;p>&lt;b>It is highly recommended to use Rock Ridge extensions on every data CD or DVD.&lt;/b></string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="QCheckBox" name="m_checkJoliet" >
-                <property name="text" >
-                  <string>Generate &amp;Joliet extensions</string>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Add Joliet extensions to the file system</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked, K3b will add additional Joliet extensions to the ISO-9660 file system.
-&lt;p>Joliet is not an accepted independent international standard like ISO-9660 or Rock Ridge. It is mainly used on Windows systems.
-&lt;p>Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is inconvenient, as modern file systems all allow 255 characters per path name component.
-&lt;p>Joliet uses UTF-16 coding.
-&lt;p>&lt;b>Caution:&lt;/b> With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b>never create Joliet-only CDs or DVDs&lt;/b> for that reason.</string>
-                </property>
-              </widget>
-            </item>
-            <item>
-              <widget class="QCheckBox" name="m_checkUdf" >
-                <property name="text" >
-                  <string>Generate &amp;UDF structures</string>
-                </property>
-                <property name="toolTip" stdset="0" >
-                  <string>Add UDF structures to the file system</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked K3b will create UDF filesystem structures in addition to the ISO9660 filesystem.
-&lt;p>The UDF (&lt;em>&lt;b>U&lt;/b>niversal &lt;b>D&lt;/b>isk &lt;b>F&lt;/b>ormat&lt;/em>) is mainly used for DVDs.</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>File Systems</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="QCheckBox" name="m_checkRockRidge">
+        <property name="toolTip">
+         <string>Add Rock Ridge extensions to the file system</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;p&gt;If this option is checked, K3b will generate the System Use Sharing Protocol records (SUSP) specified by the Rock Ridge Interchange Protocol (IEEE-P1282).
+&lt;p&gt;Rock Ridge extends the ISO-9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames, ...). It uses ISO-8859 or UTF-16 based characters and allows 255 octets.
+&lt;p&gt;Rock Ridge extensions are located at the end of each ISO-9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO-9660 tree.
+&lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data CD or DVD.&lt;/b&gt;</string>
+        </property>
+        <property name="text">
+         <string>&amp;Generate Rock Ridge extensions</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
-      <item row="0" column="1" >
-        <widget class="QGroupBox" name="groupBox5" >
-          <property name="title" >
-            <string>Other Settings</string>
-          </property>
-          <layout class="QVBoxLayout" >
-            <item>
-              <widget class="QCheckBox" name="m_checkPreservePermissions" >
-                <property name="text" >
-                  <string>Preserve file permissions (bac&amp;kup)</string>
-                </property>
-                <property name="whatsThis" stdset="0" >
-                  <string>&lt;p>If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
-&lt;p>This is mainly useful for backups.&lt;p>&lt;b>Caution:&lt;/b> The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
-                </property>
-              </widget>
-            </item>
-          </layout>
-        </widget>
+      <item>
+       <widget class="QCheckBox" name="m_checkJoliet">
+        <property name="toolTip">
+         <string>Add Joliet extensions to the file system</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;p&gt;If this option is checked, K3b will add additional Joliet extensions to the ISO-9660 file system.
+&lt;p&gt;Joliet is not an accepted independent international standard like ISO-9660 or Rock Ridge. It is mainly used on Windows systems.
+&lt;p&gt;Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is inconvenient, as modern file systems all allow 255 characters per path name component.
+&lt;p&gt;Joliet uses UTF-16 coding.
+&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b&gt;never create Joliet-only CDs or DVDs&lt;/b&gt; for that reason.</string>
+        </property>
+        <property name="text">
+         <string>Generate &amp;Joliet extensions</string>
+        </property>
+       </widget>
       </item>
-    </layout>
-  </widget>
-  <customwidgets>
-    <customwidget>
-      <class>K3ListView</class>
-      <extends>Q3ListView</extends>
-      <header location="global" >k3listview.h</header>
-    </customwidget>
-  </customwidgets>
-  <tabstops>
-    <tabstop>m_checkRockRidge</tabstop>
-    <tabstop>m_checkJoliet</tabstop>
-  </tabstops>
-  <includes>
-    <include location="local" >k3listview.h</include>
-  </includes>
+      <item>
+       <widget class="QCheckBox" name="m_checkUdf">
+        <property name="toolTip">
+         <string>Add UDF structures to the file system</string>
+        </property>
+        <property name="whatsThis">
+         <string>&lt;p&gt;If this option is checked K3b will create UDF filesystem structures in addition to the ISO9660 filesystem.
+&lt;p&gt;The UDF (&lt;em&gt;&lt;b&gt;U&lt;/b&gt;niversal &lt;b&gt;D&lt;/b&gt;isk &lt;b&gt;F&lt;/b&gt;ormat&lt;/em&gt;) is mainly used for DVDs.</string>
+        </property>
+        <property name="text">
+         <string>Generate &amp;UDF structures</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Other Settings</string>
+     </property>
+     <layout class="QVBoxLayout">
+      <item>
+       <widget class="QCheckBox" name="m_checkPreservePermissions">
+        <property name="whatsThis">
+         <string>&lt;p&gt;If this option is checked, all files in the resulting file system will have exactly the same permissions as the source files. (Otherwise, all files will have equal permissions and be owned by root).
+&lt;p&gt;This is mainly useful for backups.&lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; The permissions may not make much sense on other file systems; for example, if a user that owns a file on the CD or DVD does not exist.</string>
+        </property>
+        <property name="text">
+         <string>Preserve file permissions (bac&amp;kup)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>m_checkRockRidge</tabstop>
+  <tabstop>m_checkJoliet</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkOmitTrailingPeriod</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkOmitVersionNumbers</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkAllowBeginningPeriod</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>263</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkAllow31CharFilenames</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>158</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkAllowMultiDot</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>185</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkAllowLowercaseCharacters</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>-7</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>155</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkAllowOther</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>-7</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>182</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkAllowFullAscii</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>-7</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>209</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_checkAllowUntranslatedFilenames</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>m_checkAllowMaxLengthFilenames</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>268</x>
+     <y>-7</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>268</x>
+     <y>236</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
