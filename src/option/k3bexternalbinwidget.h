@@ -25,12 +25,14 @@
 
 class QPushButton;
 class QTabWidget;
+class QTreeView;
 class KEditListBox;
 
 namespace K3b {
     class ExternalBinManager;
     class ExternalProgram;
     class ExternalBin;
+    class ExternalBinParamsModel;
 
     class ExternalBinWidget : public QWidget
     {
@@ -55,10 +57,11 @@ namespace K3b {
 
     private:
         ExternalBinManager* m_manager;
+        ExternalBinParamsModel* m_parameterModel;
 
         QTabWidget* m_mainTabWidget;
         ListView* m_programView;
-        ListView* m_parameterView;
+        QTreeView* m_parameterView;
         KEditListBox* m_searchPathBox;
 
         QPushButton* m_defaultButton;

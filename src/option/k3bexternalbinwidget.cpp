@@ -14,6 +14,7 @@
 
 #include "k3bexternalbinwidget.h"
 #include "k3bexternalbinmanager.h"
+#include "k3bexternalbinparamsmodel.h"
 
 #include <qpushbutton.h>
 #include <QPixmap>
@@ -32,6 +33,8 @@
 #include <qcursor.h>
 #include <qapplication.h>
 #include <qbitmap.h>
+#include <QHeaderView>
+#include <QTreeView>
 
 #include <kdialog.h>
 #include <kiconloader.h>
@@ -98,7 +101,9 @@ void K3b::ExternalBinWidget::ExternalBinViewItem::setDefault( bool b )
 
 
 K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWidget* parent )
-    : QWidget( parent ), m_manager( manager )
+    : QWidget( parent ),
+      m_manager( manager ),
+      m_parameterModel( new ExternalBinParamsModel( manager, this ) )
 {
     QGridLayout* mainGrid = new QGridLayout( this );
     mainGrid->setMargin( 0 );
@@ -145,20 +150,17 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // ------------------------------------------------------------
     QWidget* parametersTab = new QWidget( m_mainTabWidget );
     QGridLayout* parametersTabLayout = new QGridLayout( parametersTab );
-    m_parameterView = new K3b::ListView( parametersTab );
+    m_parameterView = new QTreeView( parametersTab );
     QLabel* parametersLabel = new QLabel( i18n("User parameters have to be separated by space."), parametersTab );
     parametersLabel->setWordWrap( true );
     parametersTabLayout->addWidget( m_parameterView, 1, 0 );
     parametersTabLayout->addWidget( parametersLabel, 0, 0 );
-
     parametersTabLayout->setRowStretch( 1, 1 );
 
-    m_parameterView->addColumn( i18n("Program") );
-    m_parameterView->addColumn( i18n("Parameters") );
-    m_parameterView->setAllColumnsShowFocus(true);
-    m_parameterView->setFullWidth(true);
-    m_parameterView->setDefaultRenameAction( Q3ListView::Accept );
-    m_parameterView->setDoubleClickForEdit( false );
+    m_parameterView->setModel( m_parameterModel );
+    m_parameterView->setRootIsDecorated( false );
+    m_parameterView->setEditTriggers( QAbstractItemView::AllEditTriggers );
+    m_parameterView->header()->setResizeMode( ExternalBinParamsModel::ProgramColumn, QHeaderView::ResizeToContents );
 
     m_mainTabWidget->addTab( parametersTab, i18n("User Parameters") );
 
@@ -206,7 +208,7 @@ void K3b::ExternalBinWidget::load()
 {
     m_programView->clear();
     m_programRootItems.clear();
-    m_parameterView->clear();
+    m_parameterModel->reload();
 
     // load programs
     const QMap<QString, K3b::ExternalProgram*>& map = m_manager->programs();
@@ -226,13 +228,6 @@ void K3b::ExternalBinWidget::load()
 
         if( p->bins().isEmpty() )
             pV->setText( 0, p->name() + i18n(" (not found)") );
-
-        // load user parameters
-        if( p->supportsUserParameters() ) {
-            ExternalProgramViewItem* paraV = new ExternalProgramViewItem( p, m_parameterView );
-            paraV->setText( 1, p->userParameters().join( " " ) );
-            paraV->setEditor( 1, K3b::ListViewItem::LINE );
-        }
     }
 
 
@@ -259,16 +254,7 @@ void K3b::ExternalBinWidget::save()
         ++progIt;
     }
 
-
-    // save the user parameters
-    Q3ListViewItemIterator paraIt( m_parameterView );
-    QRegExp reSpace( "\\s" );
-    while( paraIt.current() ) {
-        ExternalProgramViewItem* pV = (ExternalProgramViewItem*)paraIt.current();
-        pV->program()->setUserParameters( pV->text(1).split( reSpace, QString::SkipEmptyParts ) );
-
-        ++paraIt;
-    }
+    m_parameterModel->save();
 }
 
 
