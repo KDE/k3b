@@ -16,7 +16,7 @@
 #define K3BVCDTRACKKEYSMODEL_H
 
 #include <QAbstractTableModel>
-#include <QHash>
+#include <QMap>
 
 
 namespace K3b {
@@ -36,14 +36,15 @@ public:
         TrackRole = Qt::UserRole
     };
     
-    typedef QHash<int, VcdTrack*> Key2Track;
+    typedef QMap<int, VcdTrack*> Key2Track;
     
 public:
-    VcdTrackKeysModel( VcdTrack* selectedTrack, int keyCount, QObject* parent = 0 );
+    VcdTrackKeysModel( int keyCount, QObject* parent = 0 );
     ~VcdTrackKeysModel();
     
     int keyCount() const;
-    const Key2Track& selectedKeys() const;
+    void setKeys( const Key2Track& keys );
+    const Key2Track& keys() const;
     
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
@@ -53,7 +54,8 @@ public:
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual QModelIndex buddy( const QModelIndex& index ) const;
     
-    static QString trackName( VcdTrack* track, VcdTrack* selectedTrack );
+    static QString trackName( VcdTrack* track );
+    static QIcon trackIcon( VcdTrack* track );
     
 private:
     class Private;

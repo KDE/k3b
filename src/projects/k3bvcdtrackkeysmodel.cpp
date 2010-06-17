@@ -15,6 +15,7 @@
 #include "k3bvcdtrackkeysmodel.h"
 #include "k3bvcdtrack.h"
 
+#include <KIcon>
 #include <KLocale>
 
 Q_DECLARE_METATYPE( K3b::VcdTrack* )
@@ -25,24 +26,17 @@ namespace K3b {
 class VcdTrackKeysModel::Private
 {
 public:
-    Private( VcdTrack* st, int kc )
-    : selectedTrack( st ), keyCount( kc ) {}
+    Private( int kc ) : keyCount( kc ) {}
     
-    VcdTrack* selectedTrack;
-    int keyCount;
     Key2Track keys;
+    int keyCount;
 };
 
 
-VcdTrackKeysModel::VcdTrackKeysModel( VcdTrack* selectedTrack, int keyCount, QObject* parent )
+VcdTrackKeysModel::VcdTrackKeysModel( int keyCount, QObject* parent )
     : QAbstractTableModel( parent ),
-      d( new Private( selectedTrack, keyCount ) )
+      d( new Private( keyCount ) )
 {
-    QMap<int, VcdTrack*> keys = selectedTrack->DefinedNumKey();
-    for( QMap<int, VcdTrack*>::const_iterator it = keys.constBegin();
-         it != keys.constEnd(); ++it ) {
-        d->keys.insert( it.key(), it.value() );
-    }
 }
 
 
@@ -58,7 +52,15 @@ int VcdTrackKeysModel::keyCount() const
 }
 
 
-const VcdTrackKeysModel::Key2Track& VcdTrackKeysModel::selectedKeys() const
+void VcdTrackKeysModel::setKeys( const Key2Track& keys )
+{
+    beginResetModel();
+    d->keys = keys;
+    endResetModel();
+}
+
+
+const VcdTrackKeysModel::Key2Track& VcdTrackKeysModel::keys() const
 {
     return d->keys;
 }
@@ -83,7 +85,15 @@ QVariant VcdTrackKeysModel::data( const QModelIndex& index, int role ) const
             else if( index.column() == PlayingColumn ) {
                 Key2Track::const_iterator it = d->keys.constFind( index.row()+1 );
                 if( it != d->keys.constEnd() ) {
-                    return trackName( it.value(), d->selectedTrack );
+                    return trackName( it.value() );
+                }
+            }
+        }
+        else if( role == Qt::DecorationRole ) {
+            if( index.column() == PlayingColumn ) {
+                Key2Track::const_iterator it = d->keys.constFind( index.row()+1 );
+                if( it != d->keys.constEnd() ) {
+                    return trackIcon( it.value() );
                 }
             }
         }
@@ -155,16 +165,25 @@ QModelIndex VcdTrackKeysModel::buddy( const QModelIndex& index ) const
 }
 
 
-QString VcdTrackKeysModel::trackName( VcdTrack* track, VcdTrack* selectedTrack )
+QString VcdTrackKeysModel::trackName( VcdTrack* track )
 {
     if( track == 0 )
         return i18n( "VideoCD END" );
-    else if( track == selectedTrack )
-        return i18n( "ItSelf" );
     else if( track->isSegment() )
         return i18n( "Segment-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
     else
         return i18n( "Sequence-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
+}
+
+
+QIcon VcdTrackKeysModel::trackIcon( VcdTrack* track )
+{
+    if( track == 0 )
+        return KIcon( "media-optical-video" );
+    else if( track->isSegment() )
+        return KIcon( "image-x-generic" );
+    else
+        return KIcon( "video-x-generic" );
 }
 
 } // namespace K3b

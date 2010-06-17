@@ -24,17 +24,15 @@ namespace K3b {
 class VcdTrackKeysDelegate::Private
 {
 public:
-    Private( QList<VcdTrack*>& t, VcdTrack* s )
-        : tracks( t ), selectedTrack( s ) {}
+    Private( QList<VcdTrack*>& t ) : tracks( t ) {}
     
     QList<VcdTrack*>& tracks;
-    VcdTrack* selectedTrack;
 };
 
 
-VcdTrackKeysDelegate::VcdTrackKeysDelegate( QList<VcdTrack*>& tracks, VcdTrack* selectedTrack, QObject* parent )
+VcdTrackKeysDelegate::VcdTrackKeysDelegate( QList<VcdTrack*>& tracks, QObject* parent )
     : QStyledItemDelegate( parent ),
-      d( new Private( tracks, selectedTrack ) )
+      d( new Private( tracks ) )
 {
 }
 
@@ -51,9 +49,15 @@ QWidget* VcdTrackKeysDelegate::createEditor( QWidget* parent, const QStyleOption
         QComboBox* combobox = new QComboBox( parent );
         combobox->addItem( QString(), QVariant() );
         Q_FOREACH( VcdTrack* track, d->tracks ) {
-            combobox->addItem( VcdTrackKeysModel::trackName( track, d->selectedTrack ), QVariant::fromValue( track ) );
+            combobox->addItem(
+                VcdTrackKeysModel::trackIcon( track ),
+                VcdTrackKeysModel::trackName( track ),
+                QVariant::fromValue( track ) );
         }
-        combobox->addItem( VcdTrackKeysModel::trackName( 0, d->selectedTrack ), QVariant::fromValue<VcdTrack*>( 0 ) );
+        combobox->addItem(
+            VcdTrackKeysModel::trackIcon( 0 ),
+            VcdTrackKeysModel::trackName( 0 ),
+            QVariant::fromValue<VcdTrack*>( 0 ) );
         return combobox;
     }
     else {
@@ -76,6 +80,12 @@ void VcdTrackKeysDelegate::setModelData( QWidget* editor, QAbstractItemModel* mo
     if( QComboBox* combobox = qobject_cast<QComboBox*>( editor ) ) {
         model->setData( index, combobox->itemData( combobox->currentIndex() ) );
     }
+}
+
+
+void VcdTrackKeysDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& /*index*/ ) const
+{
+    editor->setGeometry( option.rect );
 }
 
 } // namespace K3b

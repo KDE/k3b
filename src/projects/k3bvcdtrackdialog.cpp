@@ -95,7 +95,7 @@ public:
 
     QGroupBox* groupPlay;
     QGroupBox* groupPbc;
-    QGroupBox* groupKey;
+    QWidget* widgetnumkeys;
 
     QComboBox* pbc_previous;
     QComboBox* pbc_next;
@@ -218,15 +218,15 @@ void K3b::VcdTrackDialog::slotApply()
     if ( d->check_overwritekeys->isChecked() ) {
         
         for( int key = 1; key <= d->keys_model->keyCount(); ++key ) {
-            VcdTrackKeysModel::Key2Track::const_iterator it = d->keys_model->selectedKeys().constFind( key );
-            if( it != d->keys_model->selectedKeys().constEnd() )
+            VcdTrackKeysModel::Key2Track::const_iterator it = d->keys_model->keys().constFind( key );
+            if( it != d->keys_model->keys().constEnd() )
                 selectedTrack->setDefinedNumKey( it.key(), it.value() );
             else
                 selectedTrack->delDefinedNumKey( it.key() );
         }
     } else {
         selectedTrack->setDefinedNumKey( 1, selectedTrack );
-        kDebug() << "Key 1" << " Playing: (default) " << VcdTrackKeysModel::trackName( selectedTrack, selectedTrack ) << "Track: " << selectedTrack;
+        kDebug() << "Key 1" << " Playing: (default) " << VcdTrackKeysModel::trackName( selectedTrack ) << "Track: " << selectedTrack;
     }
 }
 
@@ -291,53 +291,47 @@ void K3b::VcdTrackDialog::fillPbcGui()
     int iAfterTimeOut = -1;
 
     Q_FOREACH( K3b::VcdTrack* track, d->tracks ) {
-        QPixmap pm;
-        if ( track->isSegment() )
-            pm = SmallIcon( "image-x-generic" );
-        else
-            pm = SmallIcon( "video-x-generic" );
+        QString name = VcdTrackKeysModel::trackName( track );
+        QIcon icon = VcdTrackKeysModel::trackIcon( track );
 
-        QString s = VcdTrackKeysModel::trackName( track, selectedTrack );
-
-        d->pbc_previous->addItem( pm, s );
+        d->pbc_previous->addItem( icon, name );
         if ( track == selectedTrack->getPbcTrack( K3b::VcdTrack::PREVIOUS ) )
             iPrevious = d->pbc_previous->count() - 1;
 
-        d->pbc_next->addItem( pm, s );
+        d->pbc_next->addItem( icon, name );
         if ( track == selectedTrack->getPbcTrack( K3b::VcdTrack::NEXT ) )
             iNext = d->pbc_next->count() - 1;
 
-        d->pbc_return->addItem( pm, s );
+        d->pbc_return->addItem( icon, name );
         if ( track == selectedTrack->getPbcTrack( K3b::VcdTrack::RETURN ) )
             iReturn = d->pbc_return->count() - 1;
 
-        d->pbc_default->addItem( pm, s );
+        d->pbc_default->addItem( icon, name );
         if ( track == selectedTrack->getPbcTrack( K3b::VcdTrack::DEFAULT ) )
             iDefault = d->pbc_default->count() - 1;
 
-        d->comboAfterTimeout->addItem( pm, s );
+        d->comboAfterTimeout->addItem( icon, name );
         if ( track == selectedTrack->getPbcTrack( K3b::VcdTrack::AFTERTIMEOUT ) )
             iAfterTimeOut = d->comboAfterTimeout->count() - 1;
-
     }
 
     // add Event Disabled
-    QPixmap pmDisabled = SmallIcon( "process-stop" );
-    QString txtDisabled = i18n( "Event Disabled" );
-    d->pbc_previous->addItem( pmDisabled, txtDisabled );
-    d->pbc_next->addItem( pmDisabled, txtDisabled );
-    d->pbc_return->addItem( pmDisabled, txtDisabled );
-    d->pbc_default->addItem( pmDisabled, txtDisabled );
-    d->comboAfterTimeout->addItem( pmDisabled, txtDisabled );
+    QPixmap disabledIcon = SmallIcon( "process-stop" );
+    QString disabledName = i18n( "Event Disabled" );
+    d->pbc_previous->addItem( disabledIcon, disabledName );
+    d->pbc_next->addItem( disabledIcon, disabledName );
+    d->pbc_return->addItem( disabledIcon, disabledName );
+    d->pbc_default->addItem( disabledIcon, disabledName );
+    d->comboAfterTimeout->addItem( disabledIcon, disabledName );
 
     // add VideoCD End
-    QPixmap pmEnd = SmallIcon( "media-optical-video" );
-    QString txtEnd = i18n( "VideoCD END" );
-    d->pbc_previous->addItem( pmEnd, txtEnd );
-    d->pbc_next->addItem( pmEnd, txtEnd );
-    d->pbc_return->addItem( pmEnd, txtEnd );
-    d->pbc_default->addItem( pmEnd, txtEnd );
-    d->comboAfterTimeout->addItem( pmEnd, txtEnd );
+    QString endName = VcdTrackKeysModel::trackName( 0 );
+    QIcon endIcon = VcdTrackKeysModel::trackIcon( 0 );
+    d->pbc_previous->addItem( endIcon, endName );
+    d->pbc_next->addItem( endIcon, endName );
+    d->pbc_return->addItem( endIcon, endName );
+    d->pbc_default->addItem( endIcon, endName );
+    d->comboAfterTimeout->addItem( endIcon, endName );
 
     int count = d->tracks.count();
 
@@ -375,8 +369,17 @@ void K3b::VcdTrackDialog::fillPbcGui()
 
     d->check_usekeys->setChecked( selectedTrack->PbcNumKeys() );
     d->check_overwritekeys->setChecked( selectedTrack->PbcNumKeysUserdefined() );
+    
+    if( selectedTrack->PbcNumKeysUserdefined() ) {
+        d->keys_model->setKeys( selectedTrack->DefinedNumKey() );
+    }
+    else {
+        QMap<int, VcdTrack*> keys;
+        keys.insert( 1, selectedTrack );
+        d->keys_model->setKeys( keys );
+    }
 
-    d->mainTabbed->setTabEnabled( d->mainTabbed->indexOf( d->groupKey ),
+    d->mainTabbed->setTabEnabled( d->mainTabbed->indexOf( d->widgetnumkeys ),
                                  d->check_usekeys->isChecked() && d->check_pbc->isChecked() );
 }
 
@@ -544,14 +547,14 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
     // /////////////////////////////////////////////////
     // Playback Control Numeric Key's TAB
     // /////////////////////////////////////////////////
-    d->groupKey = new QGroupBox( i18n( "Numeric Keys" ), d->mainTabbed );
+    d->widgetnumkeys = new QWidget( d->mainTabbed );
 
-    d->check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), d->groupKey );
+    d->check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), d->widgetnumkeys );
     
-    d->keys_model = new VcdTrackKeysModel( d->selectedTracks.first(), KEY_COUNT, this );
-    d->keys_delegate = new VcdTrackKeysDelegate( d->tracks, d->selectedTracks.first(), this );
+    d->keys_model = new VcdTrackKeysModel( KEY_COUNT, this );
+    d->keys_delegate = new VcdTrackKeysDelegate( d->tracks, this );
 
-    d->keys_view = new QTreeView( d->groupKey );
+    d->keys_view = new QTreeView( d->widgetnumkeys );
     d->keys_view->setEnabled( false );
     d->keys_view->setModel( d->keys_model );
     d->keys_view->setItemDelegateForColumn( VcdTrackKeysModel::PlayingColumn, d->keys_delegate );
@@ -560,11 +563,11 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
     d->keys_view->setEditTriggers( QAbstractItemView::AllEditTriggers );
     d->keys_view->header()->setResizeMode( VcdTrackKeysModel::KeyColumn, QHeaderView::ResizeToContents );
 
-    QVBoxLayout* groupKeyLayout = new QVBoxLayout( d->groupKey );
-    groupKeyLayout->addWidget( d->check_overwritekeys );
-    groupKeyLayout->addWidget( d->keys_view );
+    QVBoxLayout* layout = new QVBoxLayout( d->widgetnumkeys );
+    layout->addWidget( d->check_overwritekeys );
+    layout->addWidget( d->keys_view );
 
-    d->mainTabbed->addTab( d->groupKey, i18n( "Numeric Keys" ) );
+    d->mainTabbed->addTab( d->widgetnumkeys, i18n( "Numeric Keys" ) );
 
     connect( d->check_overwritekeys, SIGNAL(toggled(bool)), d->keys_view, SLOT(setEnabled(bool)) );
 }
@@ -689,7 +692,7 @@ void K3b::VcdTrackDialog::slotPbcToggled( bool checked )
 
 void K3b::VcdTrackDialog::slotUseKeysToggled( bool checked )
 {
-    d->mainTabbed->setTabEnabled( d->mainTabbed->indexOf( d->groupKey ), checked );
+    d->mainTabbed->setTabEnabled( d->mainTabbed->indexOf( d->widgetnumkeys ), checked );
 }
 
 #include "k3bvcdtrackdialog.moc"
