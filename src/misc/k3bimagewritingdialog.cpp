@@ -1055,6 +1055,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
     }
 
     d->md5SumProgress->hide();
+    d->infoView->setItemWidget( d->md5SumItem, 1, 0 );
 }
 
 
