@@ -80,30 +80,30 @@ namespace K3b {
         const ExternalBin* mostRecentBin() const;
 
         void addUserParameter( const QString& );
-        void setUserParameters( const QStringList& list ) { m_userParameters = list; }
+        void setUserParameters( const QStringList& list );
 
-        QStringList userParameters() const { return m_userParameters; }
-        QString name() const { return m_name; }
+        QStringList userParameters() const;
+        QString name() const;
 
         void addBin( ExternalBin* );
-        void clear() { m_bins.clear(); }
+        void clear();
         void setDefault( const ExternalBin* );
         void setDefault( const QString& path );
 
-        QList<const ExternalBin*> bins() const { return m_bins; }
+        QList<const ExternalBin*> bins() const;
 
         /**
          * this scans for the program in the given path,
          * adds the found bin object to the list and returnes true.
          * if nothing could be found false is returned.
          */
-        virtual bool scan( const QString& ) {return false;}//= 0;
+        virtual bool scan( const QString& ) = 0;
 
         /**
          * reimplement this if it does not make sense to have the user be able
          * to specify additional parameters
          */
-        virtual bool supportsUserParameters() const { return true; }
+        virtual bool supportsUserParameters() const;
 
         /**
          * Builds the path to the program from the \p dir and the \p programName.
@@ -112,10 +112,8 @@ namespace K3b {
         static QString buildProgramPath( const QString& dir, const QString& programName );
 
     private:
-        QString m_name;
-        QStringList m_userParameters;
-        QList<const ExternalBin*> m_bins;
-        QString m_defaultBin;
+        class Private;
+        Private* const d;
     };
 
 
@@ -215,25 +213,21 @@ namespace K3b {
         const ExternalBin* mostRecentBinObject( const QString& name );
 
         ExternalProgram* program( const QString& ) const;
-        QMap<QString, ExternalProgram*> programs() const { return m_programs; }
+        QMap<QString, ExternalProgram*> programs() const;
 
         /** always extends the default searchpath */
         void setSearchPath( const QStringList& );
         void addSearchPath( const QString& );
         void loadDefaultSearchPath();
 
-        QStringList searchPath() const { return m_searchPath; }
+        QStringList searchPath() const;
 
         void addProgram( ExternalProgram* );
         void clear();
 
     private:
-        QMap<QString, ExternalProgram*> m_programs;
-        QStringList m_searchPath;
-
-        static QString m_noPath;  // used for binPath() to return const string
-
-        QString m_gatheredOutput;
+        class Private;
+        Private* const d;
     };
 }
 
