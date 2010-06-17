@@ -117,22 +117,22 @@ void K3b::View::slotProperties()
 }
 
 
-void K3b::View::addPluginButtons()
+QList<QAction*> K3b::View::createPluginsActions( Doc::Type docType )
 {
-    QList<K3b::Plugin*> pl = k3bcore->pluginManager()->plugins( "ProjectPlugin" );
-    for( QList<K3b::Plugin*>::const_iterator it = pl.constBegin();
-         it != pl.constEnd(); ++it ) {
-        K3b::ProjectPlugin* pp = dynamic_cast<K3b::ProjectPlugin*>( *it );
-        if( pp && (pp->type() & m_doc->type()) ) {
-            QAction* button = toolBox()->addAction( pp->text(),
-                                                    this,
-                                                    SLOT(slotPluginButtonClicked()) );
-            button->setIcon( pp->icon() );
-            button->setToolTip( pp->toolTip() );
-            button->setWhatsThis( pp->whatsThis() );
-            m_plugins.insert( button, pp );
+    QList<QAction*> actions;
+    Q_FOREACH( Plugin* plugin, k3bcore->pluginManager()->plugins( "ProjectPlugin" ) ) {
+        ProjectPlugin* pp = dynamic_cast<ProjectPlugin*>( plugin );
+        if( pp && pp->type().testFlag( docType) ) {
+            QAction* action = new KAction( pp->icon(), pp->text(), this );
+            action->setToolTip( pp->toolTip() );
+            action->setWhatsThis( pp->whatsThis() );
+            connect( action, SIGNAL(triggered(bool)),
+                     this, SLOT(slotPluginButtonClicked()) );
+            actions.push_back( action );
+            m_plugins.insert( action, pp );
         }
     }
+    return actions;
 }
 
 

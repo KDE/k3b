@@ -82,14 +82,25 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     connect( m_dataViewImpl, SIGNAL(setCurrentRoot(QModelIndex)),
              this, SLOT(slotSetCurrentRoot(QModelIndex)) );
 
+    // Setup toolbar
+    m_audioActions.push_back( actionCollection()->action( "project_audio_convert" ) );
+    m_dataActions.push_back( actionCollection()->action( "parent_dir" ) );
+    QList<QAction*> audioPluginActions = createPluginsActions( doc->audioDoc()->type() );
+    QList<QAction*> dataPluginActions = createPluginsActions( doc->dataDoc()->type() );
+
+    toolBox()->addActions( m_audioActions );
+    toolBox()->addActions( m_dataActions );
+    toolBox()->addSeparator();
+    toolBox()->addActions( audioPluginActions );
+    toolBox()->addActions( dataPluginActions );
+    toolBox()->addSeparator();
+    m_dataActions.push_back( toolBox()->addWidget( new VolumeNameWidget( doc->dataDoc(), toolBox() ) ) );
+
+    m_audioActions += audioPluginActions;
+    m_dataActions += dataPluginActions;
+
     if( m_dirProxy->rowCount() > 0 )
         m_dirView->setCurrentIndex( m_dirProxy->index( 0, 0 ) );
-
-    // Setup toolbar
-    toolBox()->addAction( actionCollection()->action( "parent_dir" ) );
-    toolBox()->addSeparator();
-    addPluginButtons();
-    toolBox()->addWidget( new VolumeNameWidget( doc->dataDoc(), toolBox() ) );
 
 #ifdef __GNUC__
 #warning enable player once ported to Phonon
@@ -159,12 +170,26 @@ void K3b::MixedView::slotCurrentDirChanged()
 
     if( currentSubModel == m_dataViewImpl->model() ) {
         m_dataViewImpl->slotCurrentRootChanged( m_model->mapToSubModel( newRoot ) );
-        if( m_fileViewWidget->currentWidget() != m_dataViewImpl->view() )
+        if( m_fileViewWidget->currentWidget() != m_dataViewImpl->view() ) {
             m_fileViewWidget->setCurrentWidget( m_dataViewImpl->view() );
+        }
+        Q_FOREACH( QAction* action, m_dataActions ) {
+            action->setVisible( true );
+        }
+        Q_FOREACH( QAction* action, m_audioActions ) {
+            action->setVisible( false );
+        }
     }
     else if( currentSubModel == m_audioViewImpl->model() ) {
-        if( m_fileViewWidget->currentWidget() != m_audioViewImpl->view() )
+        if( m_fileViewWidget->currentWidget() != m_audioViewImpl->view() ) {
             m_fileViewWidget->setCurrentWidget( m_audioViewImpl->view() );
+        }
+        Q_FOREACH( QAction* action, m_dataActions ) {
+            action->setVisible( false );
+        }
+        Q_FOREACH( QAction* action, m_audioActions ) {
+            action->setVisible( true );
+        }
     }
 }
 

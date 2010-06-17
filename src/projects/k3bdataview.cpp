@@ -84,7 +84,7 @@ K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
     toolBox()->addSeparator();
     toolBox()->addAction( actionCollection()->action( "parent_dir" ) );
     toolBox()->addSeparator();
-    addPluginButtons();
+    toolBox()->addActions( createPluginsActions( m_doc->type() ) );
     toolBox()->addSeparator();
     toolBox()->addWidget( new VolumeNameWidget( m_doc, toolBox() ) );
 

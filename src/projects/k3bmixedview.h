@@ -18,8 +18,10 @@
 #define K3B_MIXED_VIEW_H
 
 #include "k3bview.h"
+#include <QList>
 
 class QAbstractItemModel;
+class QAction;
 class QModelIndex;
 class QStackedWidget;
 class QTreeView;
@@ -65,6 +67,8 @@ namespace K3b {
         DirProxyModel* m_dirProxy;
         QTreeView* m_dirView;
         QStackedWidget* m_fileViewWidget;
+        QList<QAction*> m_audioActions;
+        QList<QAction*> m_dataActions;
     };
 }
 

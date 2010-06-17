@@ -88,7 +88,7 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
     m_view->addAction( actionCollection()->action("project_burn") );
 
     // Setup toolbar
-    addPluginButtons();
+    toolBox()->addActions( createPluginsActions( m_doc->type() ) );
     toolBox()->addWidget( new VolumeNameWidget( doc, toolBox() ) );
 }
 

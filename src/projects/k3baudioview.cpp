@@ -36,6 +36,7 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KToolBar>
+#include <fcntl.h>
 
 
 K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
@@ -72,7 +73,7 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
 #endif
 #endif
 
-    addPluginButtons();
+    toolBox()->addActions( createPluginsActions( m_doc->type() ) );
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future

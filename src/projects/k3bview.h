@@ -16,13 +16,15 @@
 #ifndef K3BVIEW_H
 #define K3BVIEW_H
 
+#include "k3bdoc.h"
+
 #ifdef HAVE_CONFIG_H
 #include <config-k3b.h>
 #endif
 
-// include files for Qt
-#include <QWidget>
 #include <QHash>
+#include <QList>
+#include <QWidget>
 
 #include <KXMLGUIClient>
 #include <KUrl>
@@ -31,7 +33,6 @@ class QVBoxLayout;
 class KToolBar;
 
 namespace K3b {
-    class Doc;
     class FillStatusDisplay;
     class ProjectBurnDialog;
     class ProjectPlugin;
@@ -85,10 +86,10 @@ namespace K3b {
         virtual ProjectBurnDialog* newBurnDialog( QWidget* = 0) = 0;
 
         /**
-         * Call this to add the projectplugin buttons to the toolbox. It is not called
-         * automatically to make it possible to add other buttons before.
+         * Call this to get the projectplugin actions.
+         * It is usually used to place plugins buttons on the toolbar.
          */
-        void addPluginButtons();
+        QList<QAction*> createPluginsActions( Doc::Type docType );
 
         FillStatusDisplay* fillStatusDisplay() const { return m_fillStatusDisplay; }
         KToolBar* toolBox() const { return m_toolBox; }
