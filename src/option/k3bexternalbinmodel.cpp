@@ -24,12 +24,12 @@
 #include <QPalette>
 
 namespace K3b {
-    
+
 class ExternalBinModel::Private
 {
 public:
     Private( ExternalBinManager* m ) : manager( m ) {}
-    
+
     ExternalBinManager* manager;
     QList<ExternalProgram*> programs;
     QHash<ExternalProgram*,const ExternalBin*> defaults;
@@ -51,19 +51,19 @@ ExternalBinModel::~ExternalBinModel()
 void ExternalBinModel::reload()
 {
     beginResetModel();
-    
+
     d->programs.clear();
     d->defaults.clear();
-    
+
     // load programs
     const QMap<QString, K3b::ExternalProgram*>& map = d->manager->programs();
     for( QMap<QString, K3b::ExternalProgram*>::const_iterator it = map.begin(); it != map.end(); ++it ) {
-        
+
         K3b::ExternalProgram* p = *it;
         d->programs.append( p );
         d->defaults.insert( p, p->defaultBin() );
     }
-    
+
     endResetModel();
 }
 
@@ -183,7 +183,7 @@ QVariant ExternalBinModel::data( const QModelIndex& index, int role ) const
                 default: return QVariant();
             }
         }
-        else if( Qt::CheckStateRole == role && index.column() == PathColumn && bin->program().bins().size() > 1 ) {
+        else if( Qt::CheckStateRole == role && index.column() == PathColumn ) {
             if( bin == d->defaults[ &bin->program() ] )
                 return Qt::Checked;
             else
@@ -241,6 +241,15 @@ QVariant ExternalBinModel::headerData( int section, Qt::Orientation orientation,
         }
     }
     return QVariant();
+}
+
+
+QModelIndex ExternalBinModel::buddy( const QModelIndex& index ) const
+{
+    if( binForIndex( index ) != 0 )
+        return ExternalBinModel::index( index.row(), PathColumn, index.parent() );
+    else
+        return index;
 }
 
 } // namespace K3b

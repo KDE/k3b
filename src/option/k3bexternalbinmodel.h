@@ -18,7 +18,7 @@
 #include <QAbstractItemModel>
 
 namespace K3b {
-    
+
     class DataDoc;
     class ExternalBin;
     class ExternalBinManager;
@@ -27,7 +27,7 @@ namespace K3b {
     class ExternalBinModel : public QAbstractItemModel
     {
         Q_OBJECT
-        
+
     public:
         enum Columns {
             PathColumn,
@@ -35,27 +35,27 @@ namespace K3b {
             FeaturesColumn,
             NumColumns
         };
-        
+
     public:
         ExternalBinModel( ExternalBinManager* manager, QObject* parent = 0 );
         ~ExternalBinModel();
-        
+
         /**
          * Reloads programs from ExternalBinManager and updates the model
          */
         void reload();
-        
+
         /**
          * Saves all changes made in model to ExternalBinManager
          */
         void save();
-        
+
         ExternalProgram* programForIndex( const QModelIndex& index ) const;
         QModelIndex indexForProgram( ExternalProgram* program, int column = PathColumn ) const;
-        
+
         const ExternalBin* binForIndex( const QModelIndex& index ) const;
         QModelIndex indexForBin( const ExternalBin* bin, int column = PathColumn ) const;
-        
+
         virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
         virtual QModelIndex parent( const QModelIndex& index ) const;
         virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
@@ -64,7 +64,8 @@ namespace K3b {
         virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
         virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
         virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-        
+        virtual QModelIndex buddy( const QModelIndex& index ) const;
+
     private:
         class Private;
         Private* d;
