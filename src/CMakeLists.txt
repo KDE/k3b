@@ -61,6 +61,7 @@ set(k3b_project_SRCS
   projects/k3bdataprojectmodel.cpp
   projects/k3bbootimagedialog.cpp 
   projects/k3bbootimageview.cpp 
+  projects/k3bbootimagemodel.cpp 
   projects/k3bmovixburndialog.cpp 
   projects/k3bmovixoptionswidget.cpp 
   projects/k3bmovixview.cpp 

@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,10 +19,13 @@
 
 #include "ui_base_k3bbootimageview.h"
 
+class QModelIndex;
+
 namespace K3b {
 
     class DataDoc;
     class BootItem;
+    class BootImageModel;
 
     class BootImageView : public QWidget, public Ui::base_K3bBootImageView
     {
@@ -35,7 +39,7 @@ namespace K3b {
         void slotNewBootImage();
         void slotDeleteBootImage();
         void slotToggleOptions();
-        void slotSelectionChanged();
+        void slotCurrentChanged( const QModelIndex& current, const QModelIndex& previous );
 
         /* reimplemeted from base_...*/
         void slotOptionsChanged();
@@ -43,13 +47,11 @@ namespace K3b {
         void slotNoEmulationToggled( bool );
 
     private:
-        void updateBootImages();
         void showAdvancedOptions( bool );
         void loadBootItemSettings( BootItem* );
 
-        class PrivateBootImageViewItem;
-
         DataDoc* m_doc;
+        BootImageModel* m_bootImageModel;
 
         bool m_loadingItem;
     };
