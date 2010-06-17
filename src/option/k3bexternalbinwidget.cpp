@@ -87,6 +87,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     programTabLayout->setRowStretch( 1, 1 );
 
     m_programView->setModel( m_programModel );
+    m_programView->setAllColumnsShowFocus( true );
     m_programView->setRootIsDecorated( false );
     m_programView->setItemsExpandable( false );
     m_programView->header()->setResizeMode( ExternalBinModel::PathColumn, QHeaderView::ResizeToContents );
@@ -107,6 +108,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     parametersTabLayout->setRowStretch( 1, 1 );
 
     m_parameterView->setModel( m_parameterModel );
+    m_parameterView->setAllColumnsShowFocus( true );
     m_parameterView->setRootIsDecorated( false );
     m_parameterView->setEditTriggers( QAbstractItemView::AllEditTriggers );
     m_parameterView->header()->setResizeMode( ExternalBinParamsModel::ProgramColumn, QHeaderView::ResizeToContents );

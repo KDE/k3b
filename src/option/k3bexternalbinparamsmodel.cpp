@@ -169,6 +169,14 @@ QVariant ExternalBinParamsModel::headerData( int section, Qt::Orientation orient
     return QVariant();
 }
 
+QModelIndex ExternalBinParamsModel::buddy( const QModelIndex& index ) const
+{
+    if( index.isValid() && index.column() == ProgramColumn )
+        return QAbstractTableModel::index( index.row(), ParametersColumn );
+    else
+        return index;
+}
+
 } // namespace K3b
 
 #include "k3bexternalbinparamsmodel.moc"
