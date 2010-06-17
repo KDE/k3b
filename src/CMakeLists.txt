@@ -225,6 +225,7 @@ set(k3b_bin_SRCS
 
 if(ENABLE_DVD_RIPPING)
   set(k3b_videodvd_SRCS
+    rip/videodvd/k3bvideodvdaudiomodel.cpp 
     rip/videodvd/k3bvideodvdrippingview.cpp 
     rip/videodvd/k3bvideodvdrippingjob.cpp 
     rip/videodvd/k3bvideodvdrippingwidget.cpp 

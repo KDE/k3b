@@ -28,7 +28,6 @@
 #include <QTimer>
 #include <QWhatsThis>
 
-#include <K3ListView>
 #include <KColorScheme>
 #include <KDialog>
 #include <KDiskFreeSpaceInfo>
@@ -79,12 +78,6 @@ K3b::VideoDVDRippingWidget::VideoDVDRippingWidget( QWidget* parent )
     setupUi( this );
 
     m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-
-    m_titleView->addColumn( i18n("Title") );
-    m_titleView->addColumn( i18n("Video Size") );
-    m_titleView->addColumn( i18n("File Size") );
-    m_titleView->addColumn( i18n("Filename") );
-    m_titleView->setSorting( -1 );
 
     //
     // Example filename pattern

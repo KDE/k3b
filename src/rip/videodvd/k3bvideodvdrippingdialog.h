@@ -16,15 +16,14 @@
 #define _K3B_VIDEODVD_RIPPING_DIALOG_H_
 
 #include "k3binteractiondialog.h"
-#include "k3bvideodvd.h"
-#include "k3bvideodvdrippingjob.h"
 
-#include <qmap.h>
-
-class Q3CheckListItem;
+class QModelIndex;
 
 namespace K3b {
-    class VideoDVDRippingWidget;
+    
+    namespace VideoDVD {
+        class VideoDVD;
+    }
 
     class VideoDVDRippingDialog : public InteractionDialog
     {
@@ -33,7 +32,7 @@ namespace K3b {
     public:
         VideoDVDRippingDialog( const VideoDVD::VideoDVD& dvd,
                                const QList<int>& titles,
-                               QWidget *parent = 0 );
+                               QWidget* parent = 0 );
         ~VideoDVDRippingDialog();
 
         void setBaseDir( const QString& path );
@@ -57,21 +56,11 @@ namespace K3b {
         void slotUpdateFilenames();
         void slotUpdateFilesizes();
         void slotUpdateVideoSizes();
+        void slotAudioModelChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
 
     private:
-        void populateTitleView( const QList<int>& titles );
-
-        QString createFilename( const VideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
-
         void loadSettings( const KConfigGroup& );
         void saveSettings( KConfigGroup );
-
-        VideoDVDRippingWidget* m_w;
-
-        VideoDVD::VideoDVD m_dvd;
-        QMap<Q3CheckListItem*, VideoDVDRippingJob::TitleRipInfo> m_titleRipInfos;
-
-        class AudioStreamViewItem;
 
         class Private;
         Private* d;
