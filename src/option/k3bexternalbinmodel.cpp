@@ -51,6 +51,8 @@ ExternalBinModel::~ExternalBinModel()
 
 void ExternalBinModel::reload()
 {
+    beginResetModel();
+    
     d->programs.clear();
     d->defaults.clear();
     
@@ -63,7 +65,7 @@ void ExternalBinModel::reload()
         d->defaults.insert( p, p->defaultBin() );
     }
     
-    reset();
+    endResetModel();
 }
 
 
@@ -191,7 +193,7 @@ QVariant ExternalBinModel::data( const QModelIndex& index, int role ) const
             }
         }
         else if( Qt::DecorationRole == role && index.column() == PathColumn ) {
-            if( bin == bin->program()->defaultBin() )
+            if( bin == d->defaults[ bin->program() ] )
                 return KIcon( "dialog-ok" );
         }
         else if( Qt::ToolTipRole == role && index.column() == FeaturesColumn ) {

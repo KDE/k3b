@@ -49,6 +49,8 @@ ExternalBinParamsModel::~ExternalBinParamsModel()
 
 void ExternalBinParamsModel::reload()
 {
+    beginResetModel();
+    
     d->programs.clear();
     d->parameters.clear();
     
@@ -64,7 +66,7 @@ void ExternalBinParamsModel::reload()
         }
     }
     
-    reset();
+    endResetModel();
 }
 
 
