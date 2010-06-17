@@ -1,56 +1,56 @@
 /*
-*
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 // K3b Includes
 #include "k3bvcdtrackdialog.h"
 #include "k3bvcdtrack.h"
 #include "k3bmsf.h"
 #include "k3bglobals.h"
-#include "k3blistview.h"
-
-// Qt Includes
-#include <q3buttongroup.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qgroupbox.h>
-
-#include <qlineedit.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qradiobutton.h>
-#include <q3table.h>
-#include <qtooltip.h>
-
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QList>
+#include "k3bvcdtrackkeysdelegate.h"
+#include "k3bvcdtrackkeysmodel.h"
 
 // Kde Includes
-#include <kiconloader.h>
+#include <KIconLoader>
 #include <kio/global.h>
-#include <klocale.h>
-#include <kmimetype.h>
-#include <knuminput.h>
-#include <kurl.h>
-#include <ksqueezedtextlabel.h>
-#include <kvbox.h>
+#include <KLocale>
+#include <KMimeType>
+#include <KNumInput>
+#include <KUrl>
+#include <KSqueezedTextLabel>
+
+// Qt Includes
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QList>
+#include <QPixmap>
+#include <QRadioButton>
+#include <QToolTip>
+#include <QTreeView>
 
 
 K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* _doc, QList<K3b::VcdTrack*>& tracks, QList<K3b::VcdTrack*>& selectedTracks, QWidget* parent )
-    : KDialog( parent )
+    : KDialog( parent ),
+      m_vcdDoc( _doc ),
+      m_tracks( tracks ),
+      m_selectedTracks( selectedTracks )
 {
     setCaption( i18n( "Video Track Properties" ) );
     setButtons( Ok|Apply|Cancel );
@@ -62,11 +62,6 @@ K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* _doc, QList<K3b::VcdTrack*>& t
     setupPbcKeyTab();
     setupVideoTab();
     setupAudioTab();
-
-    m_tracks = tracks;
-    m_selectedTracks = selectedTracks;
-    m_vcdDoc = _doc;
-    m_numkeysmap.clear();
 
     if ( !m_selectedTracks.isEmpty() ) {
 
@@ -149,39 +144,17 @@ void K3b::VcdTrackDialog::slotApply()
     selectedTrack->delDefinedNumKey();
 
     if ( m_check_overwritekeys->isChecked() ) {
-        Q3ListViewItemIterator it( m_list_keys );
-        int skiped = 0;
-        int startkey = 0;
-        while ( it.current() ) {
-            if ( it.current() ->text( 1 ).isEmpty() ) {
-                skiped++;
-            } else {
-
-                if ( startkey > 0 )
-                    for ( ; skiped > 0; skiped-- )
-                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() - skiped << " Playing: " << displayName( selectedTrack ) << " (normaly none)";
-                else {
-                    skiped = 0;
-                    startkey = it.current() ->text( 0 ).toInt();
-                }
-
-                QMap<QString, K3b::VcdTrack*>::Iterator mit;
-                mit = m_numkeysmap.find( it.current() ->text( 1 ) );
-                if ( mit != m_numkeysmap.end() ) {
-                    if ( *mit ) {
-                        selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), mit.value() );
-                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 ) << "Track: " << mit.value();
-                    } else {
-                        selectedTrack->setDefinedNumKey( it.current() ->text( 0 ).toInt(), 0L );
-                        kDebug() << "Key " << it.current() ->text( 0 ).toInt() << " Playing: " << it.current() ->text( 1 );
-                    }
-                }
-            }
-            ++it;
+        
+        for( int key = 1; key <= m_keys_model->keyCount(); ++key ) {
+            VcdTrackKeysModel::Key2Track::const_iterator it = m_keys_model->selectedKeys().constFind( key );
+            if( it != m_keys_model->selectedKeys().constEnd() )
+                selectedTrack->setDefinedNumKey( it.key(), it.value() );
+            else
+                selectedTrack->delDefinedNumKey( it.key() );
         }
     } else {
         selectedTrack->setDefinedNumKey( 1, selectedTrack );
-        kDebug() << "Key 1" << " Playing: (default) " << displayName( selectedTrack ) << "Track: " << selectedTrack;
+        kDebug() << "Key 1" << " Playing: (default) " << VcdTrackKeysModel::trackName( selectedTrack, selectedTrack ) << "Track: " << selectedTrack;
     }
 }
 
@@ -215,7 +188,7 @@ void K3b::VcdTrackDialog::fillGui()
     m_check_pbc->setToolTip( i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
     m_check_usekeys->setToolTip( i18n( "Activate the use of numeric keys." ) );
     m_check_overwritekeys->setToolTip( i18n( "Overwrite default numeric keys." ) );
-    m_list_keys->setToolTip( i18n( "Numeric keys." ) );
+    m_keys_view->setToolTip( i18n( "Numeric keys." ) );
     m_spin_times->setToolTip( i18n( "Times to repeat the playback of 'play track'." ) );
     m_spin_waittime->setToolTip( i18n( "Time in seconds to wait after playback of 'play track'." ) );
 
@@ -245,11 +218,6 @@ void K3b::VcdTrackDialog::fillPbcGui()
     int iDefault = -1;
     int iAfterTimeOut = -1;
 
-    K3b::ListViewItem* item;
-
-    m_numkeysmap.insert( "", 0L );
-    m_numkeysmap.insert( displayName( selectedTrack ) , selectedTrack );
-
     Q_FOREACH( K3b::VcdTrack* track, m_tracks ) {
         QPixmap pm;
         if ( track->isSegment() )
@@ -257,9 +225,7 @@ void K3b::VcdTrackDialog::fillPbcGui()
         else
             pm = SmallIcon( "video-x-generic" );
 
-        QString s = displayName( track );
-        if ( track != selectedTrack )              // donot insert selectedTrack, it was as "ItSelf" inserted to the begin of map
-            m_numkeysmap.insert( s, track );
+        QString s = VcdTrackKeysModel::trackName( track, selectedTrack );
 
         m_pbc_previous->addItem( pm, s );
         if ( track == selectedTrack->getPbcTrack( K3b::VcdTrack::PREVIOUS ) )
@@ -300,12 +266,6 @@ void K3b::VcdTrackDialog::fillPbcGui()
     m_pbc_return->addItem( pmEnd, txtEnd );
     m_pbc_default->addItem( pmEnd, txtEnd );
     m_comboAfterTimeout->addItem( pmEnd, txtEnd );
-    m_numkeysmap.insert( txtEnd, 0L );
-
-    for ( int i = 99; i > 0; i-- ) {
-        item = new K3b::ListViewItem( m_list_keys, QString::number( i ) + " ", "" );
-        item->setEditor( 1, K3b::ListViewItem::COMBO , m_numkeysmap.keys() );
-    }
 
     int count = m_tracks.count();
 
@@ -346,8 +306,6 @@ void K3b::VcdTrackDialog::fillPbcGui()
 
     m_mainTabbed->setTabEnabled( m_mainTabbed->indexOf( m_widgetnumkeys ),
                                  m_check_usekeys->isChecked() && m_check_pbc->isChecked() );
-
-    setDefinedNumKeys();
 }
 
 void K3b::VcdTrackDialog::prepareGui()
@@ -536,19 +494,20 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
 
     m_groupKey = new QGroupBox( i18n( "Numeric Keys" ), m_widgetnumkeys );
     m_groupKey->setEnabled( false );
+    
+    m_keys_model = new VcdTrackKeysModel( m_selectedTracks.first(), 99, this );
+    m_keys_delegate = new VcdTrackKeysDelegate( m_tracks, m_selectedTracks.first(), this );
 
-    m_list_keys = new K3b::ListView( m_groupKey );
-    m_list_keys->setAllColumnsShowFocus( true );
-    m_list_keys->setDoubleClickForEdit( false );
-    m_list_keys->setColumnAlignment( 0, Qt::AlignRight );
-    m_list_keys->setSelectionMode( Q3ListView::NoSelection );
-    m_list_keys->setSorting( -1 );
-    m_list_keys->addColumn( i18n( "Key" ) );
-    m_list_keys->addColumn( i18n( "Playing" ) );
-    m_list_keys->setResizeMode( Q3ListView::LastColumn );
+    m_keys_view = new QTreeView( m_groupKey );
+    m_keys_view->setModel( m_keys_model );
+    m_keys_view->setItemDelegateForColumn( VcdTrackKeysModel::PlayingColumn, m_keys_delegate );
+    m_keys_view->setAllColumnsShowFocus( true );
+    m_keys_view->setRootIsDecorated( false );
+    m_keys_view->setEditTriggers( QAbstractItemView::AllEditTriggers );
+    m_keys_view->header()->setResizeMode( VcdTrackKeysModel::KeyColumn, QHeaderView::ResizeToContents );
 
     QVBoxLayout* groupKeyLayout = new QVBoxLayout( m_groupKey );
-    groupKeyLayout->addWidget( m_list_keys );
+    groupKeyLayout->addWidget( m_keys_view );
 
     m_check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), m_widgetnumkeys );
 
@@ -557,7 +516,7 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
 
     m_mainTabbed->addTab( m_widgetnumkeys, i18n( "Numeric Keys" ) );
 
-    connect( m_check_overwritekeys, SIGNAL( toggled( bool ) ), this, SLOT( slotGroupkeyToggled( bool ) ) );
+    connect( m_check_overwritekeys, SIGNAL(toggled(bool)), m_groupKey, SLOT(setEnabled(bool)) );
 }
 
 void K3b::VcdTrackDialog::setupAudioTab()
@@ -676,53 +635,6 @@ void K3b::VcdTrackDialog::setupVideoTab()
     m_mainTabbed->addTab( w, i18n( "Video" ) );
 }
 
-void K3b::VcdTrackDialog::setDefinedNumKeys( )
-{
-    K3b::VcdTrack * selectedTrack = m_selectedTracks.first();
-    if ( !m_check_overwritekeys->isChecked() ) {
-
-        selectedTrack->delDefinedNumKey();
-        selectedTrack->setDefinedNumKey( 1, selectedTrack );
-
-    }
-
-    Q3ListViewItemIterator it( m_list_keys );
-    QMap<int, K3b::VcdTrack*> definedkeysmap = selectedTrack->DefinedNumKey();
-
-    while ( it.current() ) {
-        int itemId = it.current() ->text( 0 ).toInt();
-
-        QMap<int, K3b::VcdTrack*>::const_iterator keyit = definedkeysmap.constFind( itemId );
-
-        if ( keyit != definedkeysmap.constEnd() ) {
-            if ( keyit.value() ) {
-                if ( m_tracks.lastIndexOf( keyit.value() ) >= 0 ) {
-                    it.current() ->setText( 1 , displayName( keyit.value() ) ) ;
-                } else {
-                    it.current() ->setText( 1 , "" ) ;
-                    selectedTrack->delDefinedNumKey( keyit.key() );
-                }
-            } else {
-                it.current() ->setText( 1 , i18n( "VideoCD END" ) ) ;
-            }
-        } else {
-            it.current() ->setText( 1 , "" ) ;
-        }
-        ++it;
-    }
-}
-
-QString K3b::VcdTrackDialog::displayName( K3b::VcdTrack * track )
-{
-    if ( track == m_selectedTracks.first() )
-        return i18n( "ItSelf" );
-
-    if ( track->isSegment() )
-        return i18n( "Segment-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
-
-    return i18n( "Sequence-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
-}
-
 void K3b::VcdTrackDialog::slotPlayTimeChanged( int value )
 {
     if ( value == 0 ) {
@@ -765,12 +677,6 @@ void K3b::VcdTrackDialog::slotPbcToggled( bool b )
 void K3b::VcdTrackDialog::slotUseKeysToggled( bool b )
 {
     m_mainTabbed->setTabEnabled( m_mainTabbed->indexOf( m_widgetnumkeys ), b );
-}
-
-void K3b::VcdTrackDialog::slotGroupkeyToggled( bool b )
-{
-    m_groupKey->setEnabled( b );
-    setDefinedNumKeys();
 }
 
 #include "k3bvcdtrackdialog.moc"

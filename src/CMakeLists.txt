@@ -70,6 +70,8 @@ set(k3b_project_SRCS
   projects/k3bvideodvdview.cpp 
   projects/k3bvcdburndialog.cpp 
   projects/k3bvcdtrackdialog.cpp 
+  projects/k3bvcdtrackkeysdelegate.cpp
+  projects/k3bvcdtrackkeysmodel.cpp
   projects/k3bvcdview.cpp 
   projects/k3bvcdprojectmodel.cpp
   projects/k3bfillstatusdisplay.cpp 

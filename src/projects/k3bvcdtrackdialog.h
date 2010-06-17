@@ -2,9 +2,10 @@
  *
  * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +17,27 @@
 #ifndef K3BVCDTRACKDIALOG_H
 #define K3BVCDTRACKDIALOG_H
 
-#include <kdialog.h>
-#include <qlist.h>
-#include <qtabwidget.h>
+#include <KComboBox>
+#include <KDialog>
 #include <QLabel>
+#include <QList>
+#include <QTabWidget>
 
 #include "k3bvcddoc.h"
 
-#include <KComboBox>
 
 class QLabel;
 class QCheckBox;
 class QGroupBox;
 class QSpinBox;
+class QTreeView;
 class KSqueezedTextLabel;
 
 namespace K3b {
     class ListView;
     class VcdTrack;
+    class VcdTrackKeysModel;
+    class VcdTrackKeysDelegate;
 
 #ifdef __GNUC__
 #warning We need a simple replacement for CutComboBox
@@ -57,14 +61,11 @@ namespace K3b {
         void slotWaitTimeChanged( int );
         void slotPbcToggled( bool );
         void slotUseKeysToggled( bool );
-        void slotGroupkeyToggled( bool );
-
 
     private:
         VcdDoc* m_vcdDoc;
         QList<VcdTrack*> m_tracks;
         QList<VcdTrack*> m_selectedTracks;
-        QMap<QString, VcdTrack*> m_numkeysmap;
         QTabWidget* m_mainTabbed;
 
         KSqueezedTextLabel* m_displayFileName;
@@ -104,7 +105,9 @@ namespace K3b {
         QCheckBox* m_check_pbc;
         QCheckBox* m_check_usekeys;
         QCheckBox* m_check_overwritekeys;
-        ListView* m_list_keys;
+        QTreeView* m_keys_view;
+        VcdTrackKeysModel* m_keys_model;
+        VcdTrackKeysDelegate* m_keys_delegate;
 
         QSpinBox* m_spin_times;
         QSpinBox* m_spin_waittime;
@@ -118,8 +121,6 @@ namespace K3b {
         void fillPbcGui();
 
         void setPbcTrack( VcdTrack*, CutComboBox*, int );
-        void setDefinedNumKeys( );
-        QString displayName( VcdTrack* );
 
         K3b::VcdOptions* VcdOptions()
         {
