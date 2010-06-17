@@ -35,7 +35,6 @@
 #include "k3bglobals.h"
 #include "k3bwritingmodewidget.h"
 #include "k3bcore.h"
-#include "k3blistview.h"
 #include "k3biso9660.h"
 #include "k3btoc.h"
 #include "k3btrack.h"
@@ -56,7 +55,6 @@
 #include <KUrl>
 #include <KUrlRequester>
 
-#include <Q3Header>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QComboBox>
@@ -68,15 +66,18 @@
 #include <QFontMetrics>
 #include <QGridLayout>
 #include <QGroupBox>
+#include <QHeaderView>
 #include <QLabel>
 #include <QLayout>
 #include <QList>
 #include <QMap>
 #include <QMenu>
+#include <QProgressBar>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QTabWidget>
 #include <QToolTip>
+#include <QTreeWidget>
 
 namespace {
 
@@ -114,16 +115,17 @@ public:
     KComboBox* comboRecentImages;
     QComboBox* comboImageType;
 
-    ListView* infoView;
+    QTreeWidget* infoView;
     TempDirSelectionWidget* tempDirSelectionWidget;
 
-    K3b::ListViewItem* md5SumItem;
+    QTreeWidgetItem* md5SumItem;
+    QProgressBar* md5SumProgress;
     QString lastCheckedFile;
 
     K3b::Md5Job* md5Job;
     bool haveMd5Sum;
 
-    int foundImageType;
+    ImageType foundImageType;
 
     QMap<int,int> imageTypeSelectionMap;
     QMap<int,int> imageTypeSelectionMapRev;
@@ -164,166 +166,169 @@ KIO::filesize_t K3b::ImageWritingDialog::Private::volumeSpaceSize( const Iso9660
 
 void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* isoF )
 {
-    K3b::ListViewItem* isoRootItem = new K3b::ListViewItem( infoView, infoView->lastItem(),
-                                                        i18n("Detected:"),
-                                                        i18n("Iso9660 image") );
-    isoRootItem->setForegroundColor( 0, infoTextColor );
-    isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
+    QTreeWidgetItem* isoRootItem = new QTreeWidgetItem( infoView );
+    isoRootItem->setText( 0, i18n("Detected:") );
+    isoRootItem->setText( 1, i18n("Iso9660 image") );
+    isoRootItem->setForeground( 0, infoTextColor );
+    isoRootItem->setIcon( 0, KIcon( "application-x-cd-image") );
+    isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
     const KIO::filesize_t volumeSpaceSize = Private::volumeSpaceSize( *isoF );
-
-    K3b::ListViewItem* item = new K3b::ListViewItem( isoRootItem, infoView->lastItem(),
-                                                i18n("Filesize:"),
-                                                ( size < volumeSpaceSize )
-                                                ? i18n("%1 (different than declared volume size)", KIO::convertSize( size ))
-                                                : KIO::convertSize( size ) );
-    item->setForegroundColor( 0, infoTextColor );
-
+    
+    QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Filesize:") );
+    item->setText( 1, ( size < volumeSpaceSize )
+                      ? i18n("%1 (different than declared volume size)", KIO::convertSize( size ))
+                      : KIO::convertSize( size ) );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
+    
     if( size < volumeSpaceSize ) {
-        item->setForegroundColor( 1, negativeTextColor );
-
-        item = new ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Volume Size:"),
-                                KIO::convertSize( volumeSpaceSize ) );
-        item->setForegroundColor( 0, infoTextColor );
+        item->setForeground( 1, negativeTextColor );
+        
+        item = new QTreeWidgetItem( infoView );
+        item->setText( 0, i18n("Volume Size:") );
+        item->setText( 1, KIO::convertSize( volumeSpaceSize ) );
+        item->setForeground( 0, infoTextColor );
+        item->setTextAlignment( 0, Qt::AlignRight );
     }
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("System Id:"),
-                                isoF->primaryDescriptor().systemId.isEmpty()
-                                ? QString("-")
-                                : isoF->primaryDescriptor().systemId );
-    item->setForegroundColor( 0, infoTextColor );
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("System Id:") );
+    item->setText( 1, isoF->primaryDescriptor().systemId.isEmpty()
+                      ? QString("-")
+                      : isoF->primaryDescriptor().systemId );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Volume Id:"),
-                                isoF->primaryDescriptor().volumeId.isEmpty()
-                                ? QString("-")
-                                : isoF->primaryDescriptor().volumeId );
-    item->setForegroundColor( 0, infoTextColor );
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Volume Id:") );
+    item->setText( 1, isoF->primaryDescriptor().volumeId.isEmpty()
+                      ? QString("-")
+                      : isoF->primaryDescriptor().volumeId );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Volume Set Id:"),
-                                isoF->primaryDescriptor().volumeSetId.isEmpty()
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Volume Set Id:") );
+    item->setText( 1, isoF->primaryDescriptor().volumeSetId.isEmpty()
                                 ? QString("-")
                                 : isoF->primaryDescriptor().volumeSetId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Publisher Id:"),
-                                isoF->primaryDescriptor().publisherId.isEmpty()
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Publisher Id:") );
+    item->setText( 1, isoF->primaryDescriptor().publisherId.isEmpty()
                                 ? QString("-")
                                 : isoF->primaryDescriptor().publisherId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Preparer Id:"),
-                                isoF->primaryDescriptor().preparerId.isEmpty()
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Preparer Id:") );
+    item->setText( 1, isoF->primaryDescriptor().preparerId.isEmpty()
                                 ? QString("-") : isoF->primaryDescriptor().preparerId );
-    item->setForegroundColor( 0, infoTextColor );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Application Id:"),
-                                isoF->primaryDescriptor().applicationId.isEmpty()
-                                ? QString("-")
-                                : isoF->primaryDescriptor().applicationId );
-    item->setForegroundColor( 0, infoTextColor );
-
-    isoRootItem->setOpen( true );
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Application Id:") );
+    item->setText( 1, isoF->primaryDescriptor().applicationId.isEmpty()
+                      ? QString("-")
+                      : isoF->primaryDescriptor().applicationId );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 }
 
 
 void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& tocFile, const QString& imageFile )
 {
-    K3b::ListViewItem* isoRootItem = new K3b::ListViewItem( infoView, infoView->lastItem(),
-                                                        i18n("Detected:"),
-                                                        i18n("Cdrecord clone image") );
-    isoRootItem->setForegroundColor( 0, infoTextColor );
-    isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
+    QTreeWidgetItem* isoRootItem = new QTreeWidgetItem( infoView );
+    isoRootItem->setText( 0, i18n("Detected:") );
+    isoRootItem->setText( 1, i18n("Cdrecord clone image") );
+    isoRootItem->setForeground( 0, infoTextColor );
+    isoRootItem->setIcon( 0, KIcon( "application-x-cd-image") );
+    isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
-    K3b::ListViewItem* item = new K3b::ListViewItem( isoRootItem, infoView->lastItem(),
-                                                 i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
-    item->setForegroundColor( 0, infoTextColor );
+    QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Filesize:") );
+    item->setText( 1, KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Image file:"),
-                                imageFile );
-    item->setForegroundColor( 0, infoTextColor );
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Image file:") );
+    item->setText( 1, imageFile );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("TOC file:"),
-                                tocFile );
-    item->setForegroundColor( 0, infoTextColor );
-
-    isoRootItem->setOpen( true );
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("TOC file:") );
+    item->setText( 1, tocFile );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 }
 
 
 void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile, const QString& imageFile )
 {
-    K3b::ListViewItem* isoRootItem = new K3b::ListViewItem( infoView, infoView->lastItem(),
-                                                        i18n("Detected:"),
-                                                        i18n("Cue/bin image") );
-    isoRootItem->setForegroundColor( 0, infoTextColor );
-    isoRootItem->setPixmap( 0, SmallIcon( "application-x-cd-image") );
+    QTreeWidgetItem* isoRootItem = new QTreeWidgetItem( infoView );
+    isoRootItem->setText( 0, i18n("Detected:") );
+    isoRootItem->setText( 1, i18n("Cue/bin image") );
+    isoRootItem->setForeground( 0, infoTextColor );
+    isoRootItem->setIcon( 0, KIcon( "application-x-cd-image") );
+    isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
-    K3b::ListViewItem* item = new K3b::ListViewItem( isoRootItem, infoView->lastItem(),
-                                                 i18n("Filesize:"), KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
-    item->setForegroundColor( 0, infoTextColor );
+    QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Filesize:") );
+    item->setText( 1, KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Image file:"),
-                                imageFile );
-    item->setForegroundColor( 0, infoTextColor );
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Image file:") );
+    item->setText( 1, imageFile );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 
-    item = new K3b::ListViewItem( isoRootItem,
-                                infoView->lastItem(),
-                                i18n("Cue file:"),
-                                cueFile );
-    item->setForegroundColor( 0, infoTextColor );
-
-    isoRootItem->setOpen( true );
+    item = new QTreeWidgetItem( infoView );
+    item->setText( 0, i18n("Cue file:") );
+    item->setText( 1, cueFile );
+    item->setForeground( 0, infoTextColor );
+    item->setTextAlignment( 0, Qt::AlignRight );
 }
 
 
 void K3b::ImageWritingDialog::Private::createAudioCueItems( const K3b::CueFileParser& cp )
 {
-    K3b::ListViewItem* rootItem = new K3b::ListViewItem( infoView, infoView->lastItem(),
-                                                     i18n("Detected:"),
-                                                     i18n("Audio Cue Image") );
-    rootItem->setForegroundColor( 0, infoTextColor );
-    rootItem->setPixmap( 0, SmallIcon( "audio-x-generic") );
+    QTreeWidgetItem* rootItem = new QTreeWidgetItem( infoView );
+    rootItem->setText( 0, i18n("Detected:") );
+    rootItem->setText( 1, i18n("Audio Cue Image") );
+    rootItem->setForeground( 0, infoTextColor );
+    rootItem->setIcon( 0, KIcon( "audio-x-generic") );
+    rootItem->setTextAlignment( 0, Qt::AlignRight );
 
-    K3b::ListViewItem* trackParent = new K3b::ListViewItem( rootItem,
-                                                        i18np("%1 track", "%1 tracks", cp.toc().count() ),
-                                                        cp.toc().length().toString() );
-    if( !cp.cdText().isEmpty() )
+    QTreeWidgetItem* trackParent = new QTreeWidgetItem( infoView );
+    trackParent->setText( 0, i18np("%1 track", "%1 tracks", cp.toc().count() ) );
+    trackParent->setText( 1, cp.toc().length().toString() );
+    if( !cp.cdText().isEmpty() ) {
         trackParent->setText( 1,
                               QString("%1 (%2 - %3)")
                               .arg(trackParent->text(1))
                               .arg(cp.cdText().performer())
                               .arg(cp.cdText().title()) );
+    }
 
     int i = 1;
     foreach( const K3b::Device::Track& track, cp.toc() ) {
 
-        K3b::ListViewItem* trackItem =
-            new K3b::ListViewItem( trackParent, infoView->lastItem(),
-                                 i18n("Track") + " " + QString::number(i).rightJustified( 2, '0' ),
-                                 "    " + ( i < cp.toc().count()
-                                            ? track.length().toString()
-                                            : QString("??:??:??") ) );
+        QTreeWidgetItem* trackItem = new QTreeWidgetItem( trackParent );
+        trackItem->setText( 0, i18n("Track") + " " + QString::number(i).rightJustified( 2, '0' ) );
+        trackItem->setText( 1, "    " + ( i < cp.toc().count()
+                                        ? track.length().toString()
+                                        : QString("??:??:??") ) );
 
         if( !cp.cdText().isEmpty() && (cp.cdText().count() > 0) &&!cp.cdText()[i-1].isEmpty() )
             trackItem->setText( 1,
@@ -335,8 +340,7 @@ void K3b::ImageWritingDialog::Private::createAudioCueItems( const K3b::CueFilePa
         ++i;
     }
 
-    rootItem->setOpen( true );
-    trackParent->setOpen( true );
+    trackParent->setExpanded( true );
 }
 
 
@@ -483,19 +487,32 @@ void K3b::ImageWritingDialog::setupGui()
 
     // image info
     // -----------------------------------------------------------------------
-    d->infoView = new K3b::ListView( frame );
-    d->infoView->addColumn( "key" );
-    d->infoView->addColumn( "value" );
-    d->infoView->header()->hide();
-    d->infoView->setNoItemText( i18n("No image file selected") );
-    d->infoView->setSorting( -1 );
-    d->infoView->setAlternateBackground( QColor() );
-    d->infoView->setFullWidth(true);
-    d->infoView->setSelectionMode( Q3ListView::NoSelection );
-    d->infoView->setHScrollBarMode( Q3ScrollView::AlwaysOff );
+    d->infoView = new QTreeWidget( frame );
+    d->infoView->setColumnCount( 2 );
+    d->infoView->headerItem()->setText( 0, "key" );
+    d->infoView->headerItem()->setText( 1, "value" );
+    d->infoView->setHeaderHidden( true );
+    d->infoView->setSelectionMode( QAbstractItemView::NoSelection );
+    d->infoView->setItemsExpandable( false );
+    d->infoView->setRootIsDecorated( false );
+    d->infoView->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+    d->infoView->setFocusPolicy( Qt::NoFocus );
+    d->infoView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    d->infoView->setContextMenuPolicy( Qt::CustomContextMenu );
+    //d->infoView->setNoItemText( i18n("No image file selected") );
+    //d->infoView->setSorting( -1 );
+    //d->infoView->setAlternateBackground( QColor() );
+    //d->infoView->setFullWidth(true);
+    //d->infoView->setSelectionMode( Q3ListView::NoSelection );
+    //d->infoView->setHScrollBarMode( Q3ScrollView::AlwaysOff );
 
-    connect( d->infoView, SIGNAL(contextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)),
-             this, SLOT(slotContextMenu(K3ListView*, Q3ListViewItem*, const QPoint&)) );
+    connect( d->infoView, SIGNAL(customContextMenuRequested(const QPoint&)),
+            this, SLOT(slotContextMenuRequested(const QPoint&)) );
+    
+    d->md5SumProgress = new QProgressBar( d->infoView );
+    d->md5SumProgress->setMaximumHeight( fontMetrics().height() );
+    d->md5SumProgress->setRange( 0, 100 );
+    d->md5SumProgress->hide();
 
 
     d->writerSelectionWidget = new K3b::WriterSelectionWidget( frame );
@@ -751,7 +768,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
     d->haveMd5Sum = false;
     d->md5Job->cancel();
     d->infoView->clear();
-    d->infoView->header()->resizeSection( 0, 20 );
+    //d->infoView->header()->resizeSection( 0, 20 );
     d->md5SumItem = 0;
     d->foundImageType = IMAGE_UNKNOWN;
     d->tocFile.truncate(0);
@@ -852,10 +869,10 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
 
 
         if( d->foundImageType == IMAGE_UNKNOWN ) {
-            K3b::ListViewItem* item = new K3b::ListViewItem( d->infoView, d->infoView->lastItem(),
-                                                         i18n("Seems not to be a usable image") );
-            item->setForegroundColor( 0, d->negativeTextColor );
-            item->setPixmap( 0, SmallIcon( "dialog-error") );
+            QTreeWidgetItem* item = new QTreeWidgetItem( d->infoView );
+            item->setText( 0, i18n("Seems not to be a usable image") );
+            item->setForeground( 0, d->negativeTextColor );
+            item->setIcon( 0, KIcon( "dialog-error") );
         }
         else {
             // remember as recent image
@@ -867,10 +884,10 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
         }
     }
     else {
-        K3b::ListViewItem* item = new K3b::ListViewItem( d->infoView, d->infoView->lastItem(),
-                                                     i18n("File not found") );
-        item->setForegroundColor( 0, d->negativeTextColor );
-        item->setPixmap( 0, SmallIcon( "dialog-error") );
+        QTreeWidgetItem* item = new QTreeWidgetItem( d->infoView );
+        item->setText( 0, i18n("File not found") );
+        item->setForeground( 0, d->negativeTextColor );
+        item->setIcon( 0, KIcon( "dialog-error") );
     }
 
     slotToggleAll();
@@ -974,11 +991,11 @@ void K3b::ImageWritingDialog::toggleAll()
     d->spinCopies->setEnabled( !d->checkDummy->isChecked() );
 
 
-    K3b::ListViewItem* item = dynamic_cast<K3b::ListViewItem*>(d->infoView->firstChild());
-    if( item )
-        item->setForegroundColor( 1,
-                                  d->currentImageType() != d->foundImageType
-                                  ? d->negativeTextColor : d->normalTextColor );
+    if( QTreeWidgetItem* item = d->infoView->topLevelItem( 0 ) ) {
+        item->setForeground( 1,
+                             d->currentImageType() != d->foundImageType
+                             ? d->negativeTextColor : d->normalTextColor );
+    }
 }
 
 
@@ -993,15 +1010,19 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
 {
     d->haveMd5Sum = false;
 
-    if( !d->md5SumItem )
-        d->md5SumItem = new K3b::ListViewItem( d->infoView, d->infoView->firstChild() );
+    if( !d->md5SumItem ) {
+        d->md5SumItem = new QTreeWidgetItem( d->infoView );
+        d->infoView->setItemWidget( d->md5SumItem, 1, d->md5SumProgress );
+    }
 
     d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
-    d->md5SumItem->setForegroundColor( 0, d->infoTextColor );
-    d->md5SumItem->setProgress( 1, 0 );
-    d->md5SumItem->setPixmap( 0, SmallIcon("system-run") );
+    d->md5SumItem->setForeground( 0, d->infoTextColor );
+    d->md5SumItem->setIcon( 0, KIcon("system-run") );
+    d->md5SumItem->setTextAlignment( 0, Qt::AlignRight );
 
     if( file != d->lastCheckedFile ) {
+        d->md5SumProgress->setValue( 0 );
+        d->md5SumProgress->show();
         d->lastCheckedFile = file;
         d->md5Job->setFile( file );
         d->md5Job->start();
@@ -1013,7 +1034,7 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
 
 void K3b::ImageWritingDialog::slotMd5JobPercent( int p )
 {
-    d->md5SumItem->setProgress( 1, p );
+    d->md5SumProgress->setValue( p );
 }
 
 
@@ -1021,24 +1042,24 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
 {
     if( success ) {
         d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
-        d->md5SumItem->setPixmap( 0, SmallIcon("dialog-information") );
+        d->md5SumItem->setIcon( 0, KIcon("dialog-information") );
         d->haveMd5Sum = true;
     }
     else {
-        d->md5SumItem->setForegroundColor( 1, d->negativeTextColor );
+        d->md5SumItem->setForeground( 1, d->negativeTextColor );
         if( d->md5Job->hasBeenCanceled() )
             d->md5SumItem->setText( 1, i18n("Calculation canceled") );
         else
             d->md5SumItem->setText( 1, i18n("Calculation failed") );
-        d->md5SumItem->setPixmap( 0, SmallIcon("dialog-error") );
+        d->md5SumItem->setIcon( 0, KIcon("dialog-error") );
         d->lastCheckedFile.truncate(0);
     }
 
-    d->md5SumItem->setDisplayProgressBar( 1, false );
+    d->md5SumProgress->hide();
 }
 
 
-void K3b::ImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& pos )
+void K3b::ImageWritingDialog::slotContextMenuRequested( const QPoint& pos )
 {
     if( !d->haveMd5Sum )
         return;
@@ -1047,7 +1068,7 @@ void K3b::ImageWritingDialog::slotContextMenu( K3ListView*, Q3ListViewItem*, con
     QAction *copyItem = popup.addAction( i18n("Copy checksum to clipboard") );
     QAction *compareItem = popup.addAction( i18n("Compare checksum...") );
 
-    QAction *act = popup.exec( pos );
+    QAction *act = popup.exec( d->infoView->mapToGlobal( pos ) );
 
     if( act == compareItem ) {
         bool ok;

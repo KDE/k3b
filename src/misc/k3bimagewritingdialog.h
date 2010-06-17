@@ -21,8 +21,6 @@
 class KUrl;
 class QDragEnterEvent;
 class QDropEvent;
-class K3ListView;
-class Q3ListViewItem;
 class QPoint;
 
 namespace K3b {
@@ -48,8 +46,7 @@ namespace K3b {
 
         void slotMd5JobPercent( int );
         void slotMd5JobFinished( bool );
-        void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& pos );
-
+        void slotContextMenuRequested( const QPoint& pos );
         void slotUpdateImage( const QString& );
 
     protected:
