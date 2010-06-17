@@ -65,7 +65,8 @@ void BootImageModel::setImageType( const QModelIndex& index, BootItem::ImageType
 {
     if( BootItem* bootItem = bootItemForIndex( index ) ) {
         bootItem->setImageType( imageType );
-        Q_EMIT dataChanged( index, index );
+        QModelIndex changedIndex = sibling( index.row(), EmulationTypeColumn, index );
+        Q_EMIT dataChanged( changedIndex, changedIndex );
     }
 }
 
