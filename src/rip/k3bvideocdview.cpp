@@ -2,6 +2,7 @@
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -24,7 +25,6 @@
 #include "k3bmsf.h"
 #include "k3btoc.h"
 #include "k3bcore.h"
-#include "k3blistview.h"
 #include "k3bmedium.h"
 #include "k3bstdguiitems.h"
 #include "k3baction.h"
@@ -45,7 +45,6 @@
 #include <KToolBarSpacerAction>
 
 // qt includes
-#include <Q3Header>
 #include <QApplication>
 #include <QCursor>
 #include <QDomElement>
@@ -53,32 +52,36 @@
 #include <QLabel>
 #include <QList>
 #include <QStyle>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QVBoxLayout>
 
 namespace {
 
-    class VideoTrackViewItem : public Q3ListViewItem
+    class VideoTrackViewItem : public QTreeWidgetItem
     {
     public:
-        VideoTrackViewItem( Q3ListViewItem* parent, Q3ListViewItem* after )
-            : Q3ListViewItem( parent, after )
+        VideoTrackViewItem( QTreeWidgetItem* parent, QTreeWidgetItem* preceding )
+            : QTreeWidgetItem( parent, preceding )
         {
-            setSelectable( false );
+            setFlags( flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable) );
         }
 
-        VideoTrackViewItem( Q3ListView* parent, Q3ListViewItem* after )
-            : Q3ListViewItem( parent, after )
+        VideoTrackViewItem( QTreeWidget* parent, QTreeWidgetItem* preceding )
+            : QTreeWidgetItem( parent, preceding )
         {
-            setSelectable( false );
+            setFlags( flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable) );
         }
 
-        VideoTrackViewItem( Q3ListViewItem* parent,
+        VideoTrackViewItem( QTreeWidgetItem* parent,
                             const QString& name,
                             const QString& id,
                             int _trackNumber,
                             const K3b::Msf& length )
-            : Q3ListViewItem( parent )
+            : QTreeWidgetItem( parent )
         {
+            setFlags( flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable) );
+            
             setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
             setText( 1, name );
             if ( length > 0 ) {
@@ -87,7 +90,6 @@ namespace {
             }
 
             trackNumber = _trackNumber;
-            setSelectable( false );
         }
 
         int trackNumber;
@@ -100,40 +102,34 @@ namespace {
 
     };
 
-    class VideoTrackViewCheckItem : public Q3CheckListItem
+    class VideoTrackViewCheckItem : public QTreeWidgetItem
     {
     public:
-        VideoTrackViewCheckItem( Q3ListViewItem* parent,
+        VideoTrackViewCheckItem( QTreeWidgetItem* parent,
                                 const QString& desc )
-            : Q3CheckListItem( parent,
-                            QString(),
-                            Q3CheckListItem::CheckBox )
+            : QTreeWidgetItem( parent )
         {
             setText( 0, desc );
-
-            setOn( true );
+            setFlags( flags() | Qt::ItemIsUserCheckable );
+            setCheckState( 0, Qt::Checked );
         }
 
-        VideoTrackViewCheckItem( Q3ListView* parent,
-                                const QString& desc )
-            : Q3CheckListItem( parent,
-                            QString(),
-                            Q3CheckListItem::CheckBox )
+        VideoTrackViewCheckItem( QTreeWidget* parent,
+                                  const QString& desc )
+            : QTreeWidgetItem( parent )
         {
             setText( 0, desc );
-
-            setOn( true );
+            setFlags( flags() | Qt::ItemIsUserCheckable );
+            setCheckState( 0, Qt::Checked );
         }
 
         VideoTrackViewCheckItem( VideoTrackViewCheckItem* parent,
                                 const QString& desc )
-            : Q3CheckListItem( parent,
-                            QString(),
-                            Q3CheckListItem::CheckBox )
+            : QTreeWidgetItem( parent )
         {
             setText( 0, desc );
-
-            setOn( true );
+            setFlags( flags() | Qt::ItemIsUserCheckable );
+            setCheckState( 0, Qt::Checked );
         }
 
         void updateData( const K3b::Msf& length, bool form2 = false )
@@ -146,6 +142,17 @@ namespace {
         }
 
     };
+    
+    void setCheckState( QTreeWidgetItem* item, Qt::CheckState checkState )
+    {
+        if( item->flags() & Qt::ItemIsUserCheckable ) {
+            item->setCheckState( 0, checkState );
+        }
+        
+        for( int i = 0; i < item->childCount(); ++i ) {
+            setCheckState( item->child( i ), checkState );
+        }
+    }
     
 } // namespace
 
@@ -161,7 +168,7 @@ public:
     VideoCdInfo* videocdinfo;
     VideoCdRippingOptions* videooptions;
 
-    ListView* trackView;
+    QTreeWidget* trackView;
     KToolBar* toolBox;
     QLabel* labelLength;
 
@@ -191,29 +198,22 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
 
     // the track view
     // ----------------------------------------------------------------------------------
-    d->trackView = new K3b::ListView( mainWidget() );
-    d->trackView->setFullWidth( true );
+    d->trackView = new QTreeWidget( mainWidget() );
     d->trackView->setAllColumnsShowFocus( true );
-    d->trackView->setSelectionMode( Q3ListView::Single );
-    d->trackView->setDragEnabled( true );
-    d->trackView->addColumn( i18n( "Item Name" ) );
-    d->trackView->addColumn( i18n( "Extracted Name" ) );
-    d->trackView->addColumn( i18n( "Length" ) );
-    d->trackView->addColumn( i18n( "Size" ) );
+    d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
+    
+    QTreeWidgetItem* header = d->trackView->headerItem();
+    header->setText( 0, i18n( "Item Name" ) );
+    header->setText( 1, i18n( "Extracted Name" ) );
+    header->setText( 2, i18n( "Length" ) );
+    header->setText( 3, i18n( "Size" ) );
 
-    d->trackView->header() ->setClickEnabled( false );
-
-    d->trackView->setItemsRenameable( false );
-    d->trackView->setRootIsDecorated( true );
-
-    connect( d->trackView, SIGNAL( contextMenu( K3ListView*, Q3ListViewItem*, const QPoint& ) ),
-             this, SLOT( slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& ) ) );
-    connect( d->trackView, SIGNAL( selectionChanged( Q3ListViewItem* ) ),
-             this, SLOT( slotTrackSelectionChanged( Q3ListViewItem* ) ) );
-    connect( d->trackView, SIGNAL( clicked( Q3ListViewItem* ) ),
-             this, SLOT( slotStateChanged( Q3ListViewItem* ) ) );
-    connect( d->trackView, SIGNAL( spacePressed( Q3ListViewItem* ) ),
-             this, SLOT( slotStateChanged( Q3ListViewItem* ) ) );
+    connect( d->trackView, SIGNAL( customContextMenuRequested(QPoint) ),
+             this, SLOT( slotContextMenu(QPoint) ) );
+    connect( d->trackView, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ),
+             this, SLOT( slotTrackSelectionChanged(QTreeWidgetItem*,QTreeWidgetItem*) ) );
+    connect( d->trackView, SIGNAL( itemChanged(QTreeWidgetItem*,int) ),
+             this, SLOT( slotStateChanged(QTreeWidgetItem*,int)) );
 
     QVBoxLayout * mainGrid = new QVBoxLayout( mainWidget() );
     mainGrid->addWidget( d->toolBox );
@@ -230,7 +230,7 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
     d->toolBox->addWidget( d->labelLength );
     
-    slotTrackSelectionChanged( 0 );
+    slotTrackSelectionChanged( 0, 0 );
 
     d->videocdinfo = 0L;
     d->videooptions = new K3b::VideoCdRippingOptions();
@@ -267,8 +267,6 @@ void K3b::VideoCdView::reloadMedium()
     d->contentList.append( new VideoTrackViewCheckItem( d->trackView, i18n("Video CD MPEG tracks") ) );
     d->contentList.append( new VideoTrackViewCheckItem( d->trackView, i18n("Video CD DATA track" ) ) );
 
-    ( ( VideoTrackViewCheckItem* ) d->contentList[ 0 ] ) ->setOpen( true );
-
     // create a listviewItem for every video track
     int index = 0;
     d->videocddatasize = 0;
@@ -283,13 +281,13 @@ void K3b::VideoCdView::reloadMedium()
             K3b::Msf length( ( *it ).length() );
             sequenceSize += length;
             d->videocdmpegsize += length.mode2Form2Bytes();
-            ( void ) new VideoTrackViewItem( ( VideoTrackViewCheckItem* ) d->contentList[ 0 ], i18n( "Sequence-%1" , index ), "", index, length );
+            ( void ) new VideoTrackViewItem( d->contentList[ 0 ], i18n( "Sequence-%1" , index ), "", index, length );
         } else {
             K3b::Msf length( ( *it ).length() );
             d->videocddatasize += length.mode2Form1Bytes();
             ( ( VideoTrackViewCheckItem* ) d->contentList[ 1 ] ) ->updateData( length );
-            ( void ) new VideoTrackViewCheckItem( ( VideoTrackViewCheckItem* ) d->contentList[ 1 ], i18n( "Files" ) );
-            ( void ) new VideoTrackViewCheckItem( ( VideoTrackViewCheckItem* ) d->contentList[ 1 ], i18n( "Segments" ) );
+            ( void ) new VideoTrackViewCheckItem( d->contentList[ 1 ], i18n( "Files" ) );
+            ( void ) new VideoTrackViewCheckItem( d->contentList[ 1 ], i18n( "Segments" ) );
         }
 
         index++;
@@ -304,7 +302,6 @@ void K3b::VideoCdView::reloadMedium()
 
     connect( d->videocdinfo, SIGNAL( infoFinished( bool ) ),
              this, SLOT( slotVideoCdInfoFinished( bool ) ) );
-
 }
 
 void K3b::VideoCdView::slotVideoCdInfoFinished( bool success )
@@ -314,6 +311,7 @@ void K3b::VideoCdView::slotVideoCdInfoFinished( bool success )
         updateDisplay();
     }
 
+    d->trackView->expandAll();
     d->trackView->setEnabled( true );
     d->toolBox->setEnabled( true );
     QApplication::restoreOverrideCursor();
@@ -324,17 +322,14 @@ void K3b::VideoCdView::updateDisplay()
 {
     // update the listview
 
-    VideoTrackViewItem * item = ( VideoTrackViewItem* ) d->contentList[ 0 ] ->firstChild();
-    int index = 0;
-    while ( item ) {
-        item->updateData( d->videocdinfoResult.entry( index, K3b::VideoCdInfoResult::SEQUENCE ) );
-        item = ( VideoTrackViewItem* ) item->nextSibling();
-        index++;
+    for( int i = 0; i < d->contentList[ 0 ]->childCount(); ++i ) {
+        VideoTrackViewItem* child = dynamic_cast<VideoTrackViewItem*>( d->contentList[ 0 ]->child( i ) );
+        child->updateData( d->videocdinfoResult.entry( i, K3b::VideoCdInfoResult::SEQUENCE ) );
     }
 
-    VideoTrackViewCheckItem* check_item = ( VideoTrackViewCheckItem* ) d->contentList[ 1 ] ->firstChild();
-    while ( check_item ) {
-        if ( check_item->key( 0, false ).compare( i18n( "Files" ) ) == 0 ) {
+    for( int i = 0; i < d->contentList[ 1 ]->childCount(); ++i ) {
+        QTreeWidgetItem* child = d->contentList[ 1 ]->child( i );
+        if ( child->text( 0 ) == i18n( "Files" ) ) {
             if ( d->domTree.setContent( d->videocdinfoResult.xmlData ) ) {
 
                 QDomElement root = d->domTree.documentElement();
@@ -343,18 +338,17 @@ void K3b::VideoCdView::updateDisplay()
                 while ( !node.isNull() ) {
                     if ( node.isElement() && node.nodeName() == "filesystem" ) {
                         QDomElement body = node.toElement();
-                        buildTree( check_item, body );
+                        buildTree( child, body );
                         break;
                     }
                     node = node.nextSibling();
                 }
             }
         } else {
-            for ( index = 0; index < d->videocdinfoResult.foundEntries( K3b::VideoCdInfoResult::SEGMENT ); index++ ) {
-                ( void ) new VideoTrackViewItem( check_item, d->videocdinfoResult.entry( index, K3b::VideoCdInfoResult::SEGMENT ).name, d->videocdinfoResult.entry( index, K3b::VideoCdInfoResult::SEGMENT ).id , index + 1, 0 );
+            for ( int j = 0; j < d->videocdinfoResult.foundEntries( K3b::VideoCdInfoResult::SEGMENT ); j++ ) {
+                ( void ) new VideoTrackViewItem( child, d->videocdinfoResult.entry( j, K3b::VideoCdInfoResult::SEGMENT ).name, d->videocdinfoResult.entry( j, K3b::VideoCdInfoResult::SEGMENT ).id , j + 1, 0 );
             }
         }
-        check_item = ( VideoTrackViewCheckItem* ) check_item->nextSibling();
     }
 
     if ( !d->videocdinfoResult.volumeId.isEmpty() ) {
@@ -405,55 +399,49 @@ void K3b::VideoCdView::initActions()
 }
 
 
-void K3b::VideoCdView::slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& p )
+void K3b::VideoCdView::slotContextMenu( const QPoint& pos )
 {
-    d->popupMenu->menu()->popup( p );
+    d->popupMenu->menu()->popup( d->trackView->viewport()->mapToGlobal( pos ) );
 }
 
 
-void K3b::VideoCdView::slotTrackSelectionChanged( Q3ListViewItem* item )
+void K3b::VideoCdView::slotTrackSelectionChanged( QTreeWidgetItem* current, QTreeWidgetItem* /*previous*/ )
 {
-    actionCollection() ->action( "check_track" ) ->setEnabled( item != 0 );
-    actionCollection() ->action( "decheck_track" ) ->setEnabled( item != 0 );
+    actionCollection() ->action( "check_track" ) ->setEnabled( current != 0 );
+    actionCollection() ->action( "decheck_track" ) ->setEnabled( current != 0 );
 }
 
-void K3b::VideoCdView::slotStateChanged( Q3ListViewItem* item )
+
+void K3b::VideoCdView::slotStateChanged( QTreeWidgetItem* item, int column )
 {
-    /* > QT 3.1
-       if ( !item == 0 && item ->isSelectable() ) {
-       if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::On)
-       slotCheck();
-       else if ( ( ( VideoTrackViewCheckItem* ) item) ->state() == QCheckListItem::Off)
-       slotUncheck();
-       }
-    */
-    if ( !item == 0 && item ->isSelectable() ) {
-        if ( ( ( VideoTrackViewCheckItem* ) item) ->isOn() )
-            slotCheck();
-        else
-            slotUncheck();
+    if( item && column == 0 ) {
+        for( int i = 0; i < item->childCount(); ++i )
+            setCheckState( item->child( i ), item->checkState( 0 ) );
     }
 }
 
+
 void K3b::VideoCdView::startRip()
 {
-
     int selectedItems  = 0;
-    for ( Q3ListViewItemIterator it( d->trackView ); it.current(); ++it ) {
-        if ( it.current() ->isSelectable() ) {
-            if ( ( ( ( VideoTrackViewCheckItem* ) it.current()) ->key( 0, false ).compare( i18n("Video CD MPEG tracks" ) ) == 0 ) && ( ( VideoTrackViewCheckItem* ) it.current() ) ->isOn() ) {
-                d->videooptions ->setVideoCdRipSequences( true );
-                selectedItems++;
-            }
-            else if ( ( ( ( VideoTrackViewCheckItem* ) it.current()) ->key( 0, false ).compare( i18n("Files" ) ) == 0 ) && ( ( VideoTrackViewCheckItem* ) it.current() ) ->isOn() ) {
-                d->videooptions ->setVideoCdRipFiles( true );
-                selectedItems++;
-            }
-            else if ( ( ( ( VideoTrackViewCheckItem* ) it.current()) ->key( 0, false ).compare( i18n("Segments" ) ) == 0 ) && ( ( VideoTrackViewCheckItem* ) it.current() ) ->isOn() ) {
-                d->videooptions ->setVideoCdRipSegments( true );
-                selectedItems++;
-            }
-        }
+    QList<QTreeWidgetItem*> children;
+    
+    children = d->trackView->findItems( i18n("Video CD MPEG tracks" ), Qt::MatchExactly, 0 );
+    if( !children.isEmpty() && children.first()->checkState( 0 ) == Qt::Checked ) {
+        d->videooptions ->setVideoCdRipSequences( true );
+        ++selectedItems;
+    }
+    
+    children = d->trackView->findItems( i18n("Files" ), Qt::MatchExactly, 0 );
+    if( !children.isEmpty() && children.first()->checkState( 0 ) == Qt::Checked ) {
+        d->videooptions ->setVideoCdRipFiles( true );
+        ++selectedItems;
+    }
+    
+    children = d->trackView->findItems( i18n("Segments" ), Qt::MatchExactly, 0 );
+    if( !children.isEmpty() && children.first()->checkState( 0 ) == Qt::Checked ) {
+        d->videooptions ->setVideoCdRipSegments( true );
+        ++selectedItems;
     }
 
     if( selectedItems == 0 ) {
@@ -474,59 +462,52 @@ void K3b::VideoCdView::startRip()
     }
 }
 
+
 void K3b::VideoCdView::slotCheckAll()
 {
-    for ( Q3ListViewItemIterator it( d->trackView ); it.current(); ++it )
-        if ( it.current() ->isSelectable() )
-            ( ( VideoTrackViewCheckItem* ) it.current() ) ->setOn( true );
+    for( int i = 0; i < d->trackView->topLevelItemCount(); ++i ) {
+        setCheckState( d->trackView->topLevelItem( i ), Qt::Checked );
+    }
 }
+
 
 void K3b::VideoCdView::slotUncheckAll()
 {
-    for ( Q3ListViewItemIterator it( d->trackView ); it.current(); ++it )
-        if ( it.current() ->isSelectable() )
-            ( ( VideoTrackViewCheckItem* ) it.current() ) ->setOn( false );
+    for( int i = 0; i < d->trackView->topLevelItemCount(); ++i ) {
+        setCheckState( d->trackView->topLevelItem( i ), Qt::Unchecked );
+    }
 }
+
 
 void K3b::VideoCdView::slotViewFiles()
 {
     k3bappcore->appDeviceManager()->mountDisk( device() );
 }
 
+
 void K3b::VideoCdView::slotCheck()
 {
-    if ( Q3ListViewItem * sel = d->trackView->selectedItem() ) {
-        ( ( VideoTrackViewCheckItem* ) sel) ->setOn( true );
-        Q3ListViewItem * item = sel ->firstChild();
-        while ( item ) {
-            if ( item ->isSelectable() )
-                ( ( VideoTrackViewCheckItem* ) item) ->setOn( true );
-
-            item = item->nextSibling();
-        }
+    if( QTreeWidgetItem* current = d->trackView->currentItem() ) {
+        setCheckState( current, Qt::Checked );
     }
 }
+
 
 void K3b::VideoCdView::slotUncheck()
 {
-    if ( Q3ListViewItem * sel = d->trackView->selectedItem() ) {
-        ( ( VideoTrackViewCheckItem* ) sel) ->setOn( false );
-        Q3ListViewItem * item = sel ->firstChild();
-        while ( item ) {
-            if ( item ->isSelectable() )
-                ( ( VideoTrackViewCheckItem* ) item) ->setOn( false );
-
-            item = item->nextSibling();
-        }
+    if( QTreeWidgetItem* current = d->trackView->currentItem() ) {
+        setCheckState( current, Qt::Unchecked );
     }
 }
+
 
 void K3b::VideoCdView::enableInteraction( bool b )
 {
     actionCollection()->action( "start_rip" )->setEnabled( b );
 }
 
-void K3b::VideoCdView::buildTree( Q3ListViewItem *parentItem, const QDomElement &parentElement, const QString& pname )
+
+void K3b::VideoCdView::buildTree( QTreeWidgetItem* parentItem, const QDomElement& parentElement, const QString& pname )
 {
     VideoTrackViewItem * thisItem = 0;
     QDomNode node = parentElement.firstChild();

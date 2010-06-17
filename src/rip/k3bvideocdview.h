@@ -1,6 +1,7 @@
 /*
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,9 +19,8 @@
 
 #include "k3bmediacontentsview.h"
 
-class K3ListView;
 class KActionCollection;
-class Q3ListViewItem;
+class QTreeWidgetItem;
 class QDomElement;
 
 namespace K3b {
@@ -35,9 +35,9 @@ class VideoCdView : public MediaContentsView
         KActionCollection* actionCollection() const;
 
     private Q_SLOTS:
-        void slotContextMenu( K3ListView*, Q3ListViewItem*, const QPoint& );
-        void slotTrackSelectionChanged( Q3ListViewItem* );
-        void slotStateChanged( Q3ListViewItem* );
+        void slotContextMenu( const QPoint& pos );
+        void slotTrackSelectionChanged( QTreeWidgetItem* current, QTreeWidgetItem* previous );
+        void slotStateChanged( QTreeWidgetItem* item, int column );
         void slotVideoCdInfoFinished( bool );
 
         void startRip();
@@ -52,7 +52,7 @@ class VideoCdView : public MediaContentsView
         void initActions();
         void updateDisplay();
         void enableInteraction( bool );
-        void buildTree( Q3ListViewItem *parentItem, const QDomElement &parentElement, const QString& pname = QString() );
+        void buildTree( QTreeWidgetItem* parentItem, const QDomElement& parentElement, const QString& pname = QString() );
         
         class Private;
         Private* d;
