@@ -9,16 +9,18 @@
 
 #cmakedefine ENABLE_TAGLIB
 
-#cmakedefine HAVE_SYS_VFS_H 1
+#cmakedefine HAVE_SYS_VFS_H
 
-#cmakedefine HAVE_SYS_STATVFS_H 1
+#cmakedefine HAVE_SYS_STATVFS_H
 
-#cmakedefine HAVE_STAT64 1
+#cmakedefine HAVE_STAT64
 
 #define K3B_VERSION_STRING "${K3B_VERSION_STRING}"
 
 #cmakedefine ENABLE_HAL_SUPPORT
 
-#cmakedefine HAVE_BYTESWAP_H 1
+#cmakedefine HAVE_BYTESWAP_H
 
-#cmakedefine WORDS_BIGENDIAN 1
+#cmakedefine WORDS_BIGENDIAN
+
+#cmakedefine HAVE_ICONV_H
