@@ -16,7 +16,6 @@
 
 #include "k3bvideodvdtitletranscodingjob.h"
 #include "k3bglobals.h"
-#include "k3brichtextlabel.h"
 #include "k3bintmapcombobox.h"
 
 #include <QCheckBox>
@@ -341,12 +340,13 @@ void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
     dlg.setButtons( KDialog::Ok|KDialog::Cancel );
     dlg.setDefaultButton( KDialog::Ok );
 
-    K3b::RichTextLabel* label = new K3b::RichTextLabel( i18n("<p>Please choose the width and height of the resulting video. "
-                                                         "If one value is set to <em>Auto</em> K3b will choose this value "
-                                                         "depending on the aspect ratio of the video picture.<br>"
-                                                         "Be aware that setting both the width and the height to fixed values "
-                                                         "will result in no aspect ratio correction being performed."),
-                                                    dlg.mainWidget() );
+    QLabel* label = new QLabel( i18n("<p>Please choose the width and height of the resulting video. "
+                                     "If one value is set to <em>Auto</em> K3b will choose this value "
+                                     "depending on the aspect ratio of the video picture.<br>"
+                                     "Be aware that setting both the width and the height to fixed values "
+                                     "will result in no aspect ratio correction being performed."),
+                                dlg.mainWidget() );
+    label->setWordWrap( true );
     QSpinBox* spinWidth = new QSpinBox( dlg.mainWidget() );
     spinWidth->setRange( 0, 20000 );
     spinWidth->setSingleStep( 16 );

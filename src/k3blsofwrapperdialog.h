@@ -15,10 +15,11 @@
 #ifndef _K3B_LSOF_WRAPPER_DIALOG_H_
 #define _K3B_LSOF_WRAPPER_DIALOG_H_
 
-#include <kdialog.h>
+#include <KDialog>
+
+class QLabel;
 
 namespace K3b {
-    class RichTextLabel;
 
     namespace Device {
         class Device;
@@ -48,7 +49,7 @@ namespace K3b {
         LsofWrapperDialog( QWidget* parent );
 
         Device::Device* m_device;
-        RichTextLabel* m_label;
+        QLabel* m_label;
     };
 }
 

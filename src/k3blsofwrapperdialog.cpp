@@ -14,17 +14,16 @@
 
 #include "k3blsofwrapperdialog.h"
 #include "k3blsofwrapper.h"
-#include "k3brichtextlabel.h"
 
 #include "k3bdevice.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmessagebox.h>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <qpushbutton.h>
-//Added by qt3to4:
+#include <QLabel>
 #include <QList>
+#include <QPushButton>
 
 #include <sys/types.h>
 #include <signal.h>
@@ -51,7 +50,8 @@ K3b::LsofWrapperDialog::LsofWrapperDialog( QWidget* parent )
     setButtonText(User2,i18n("Check again"));
     setButtonText( Close, i18n("Continue") );
 
-    m_label = new K3b::RichTextLabel( this );
+    m_label = new QLabel( this );
+    m_label->setWordWrap( true );
     setMainWidget( m_label );
 
     connect( this, SIGNAL(user1Clicked()), SLOT(slotQuitOtherApps()) );

@@ -27,7 +27,6 @@ install( FILES
   k3bdirsizejob.h
   k3bchecksumpipe.h
   k3bintmapcombobox.h
-  k3brichtextlabel.h
   k3bactivepipe.h
   k3bfilesplitter.h
   k3bfilesysteminfo.h

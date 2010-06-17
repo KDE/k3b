@@ -14,21 +14,19 @@
 
 #include "k3bmultichoicedialog.h"
 #include "k3bstdguiitems.h"
-#include "k3brichtextlabel.h"
 
-#include <kpushbutton.h>
-#include <kapplication.h>
-#include <kiconloader.h>
+#include <KApplication>
 #include <KDialog>
+#include <KIconLoader>
+#include <KPushButton>
 
-#include <qlayout.h>
-#include <qsignalmapper.h>
-#include <qlabel.h>
-#include <qmessagebox.h>
-#include <QPixmap>
+#include <QCloseEvent>
 #include <QGridLayout>
 #include <QHBoxLayout>
-#include <QCloseEvent>
+#include <QLabel>
+#include <QLayout>
+#include <QMessageBox>
+#include <QSignalMapper>
 
 
 class K3b::MultiChoiceDialog::Private
@@ -54,7 +52,7 @@ static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
 
     switch (icon) {
     case QMessageBox::NoIcon:
-        return QPixmap();
+        return QIcon();
         break;
     case QMessageBox::Information:
         icon_name = "dialog-information";
@@ -101,7 +99,8 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     int size = IconSize(KIconLoader::Dialog);
     pixLabel->setPixmap( themedMessageBoxIcon( icon ).pixmap( size, size ) );
     pixLabel->setScaledContents( false );
-    QLabel* label = new K3b::RichTextLabel( text, this );
+    QLabel* label = new QLabel( text, this );
+    label->setWordWrap( true );
     contents->addWidget( pixLabel, 0 );
     contents->addWidget( label, 1 );
 
