@@ -130,6 +130,7 @@ kde4_add_ui_files(k3b_rip_SRCS
 
 set(k3b_option_SRCS
   option/k3bmiscoptiontab.cpp 
+  option/k3bexternalbinmodel.cpp
   option/k3bexternalbinoptiontab.cpp 
   option/k3bexternalbinparamsmodel.cpp
   option/k3badvancedoptiontab.cpp 

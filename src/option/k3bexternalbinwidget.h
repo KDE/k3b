@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,12 +18,10 @@
 #define K3B_EXTERNAL_BIN_WIDGET_H
 
 
-#include <qwidget.h>
-#include <qlist.h>
-
-#include "k3blistview.h"
+#include <QWidget>
 
 
+class QModelIndex;
 class QPushButton;
 class QTabWidget;
 class QTreeView;
@@ -32,6 +31,7 @@ namespace K3b {
     class ExternalBinManager;
     class ExternalProgram;
     class ExternalBin;
+    class ExternalBinModel;
     class ExternalBinParamsModel;
 
     class ExternalBinWidget : public QWidget
@@ -52,53 +52,21 @@ namespace K3b {
 
     private Q_SLOTS:
         void slotSetDefaultButtonClicked();
-        void slotProgramSelectionChanged( Q3ListViewItem* );
+        void slotProgramSelectionChanged( const QModelIndex& current, const QModelIndex& previous );
         void saveSearchPath();
 
     private:
         ExternalBinManager* m_manager;
+        ExternalBinModel* m_programModel;
         ExternalBinParamsModel* m_parameterModel;
 
         QTabWidget* m_mainTabWidget;
-        ListView* m_programView;
+        QTreeView* m_programView;
         QTreeView* m_parameterView;
         KEditListBox* m_searchPathBox;
 
         QPushButton* m_defaultButton;
         QPushButton* m_rescanButton;
-
-        QList<ExternalProgramViewItem*> m_programRootItems;
-    };
-
-
-    class ExternalBinWidget::ExternalProgramViewItem : public ListViewItem
-    {
-    public:
-        ExternalProgramViewItem( ExternalProgram* p, Q3ListView* parent );
-
-        ExternalProgram* program() const { return m_program; }
-
-    private:
-        ExternalProgram* m_program;
-    };
-
-
-    class ExternalBinWidget::ExternalBinViewItem : public ListViewItem
-    {
-    public:
-        ExternalBinViewItem( const ExternalBin* bin, ExternalProgramViewItem* parent );
-
-        const ExternalBin* bin() const { return m_bin; }
-        ExternalProgramViewItem* parentProgramItem() const { return m_parent; }
-
-        bool isDefault() const { return m_default; }
-        void setDefault( bool b );
-
-    private:
-        const ExternalBin* m_bin;
-        ExternalProgramViewItem* m_parent;
-
-        bool m_default;
     };
 }
 
