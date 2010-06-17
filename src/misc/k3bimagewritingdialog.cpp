@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -40,12 +41,9 @@
 #include "k3btrack.h"
 #include "k3bcdtext.h"
 
-#include <K3URLDrag>
-#include <KApplication>
 #include <KComboBox>
 #include <KConfig>
 #include <KColorScheme>
-#include <KFileDialog>
 #include <KIconLoader>
 #include <KInputDialog>
 #include <kio/global.h>
@@ -55,6 +53,7 @@
 #include <KUrl>
 #include <KUrlRequester>
 
+#include <QApplication>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QComboBox>
@@ -1181,15 +1180,16 @@ void K3b::ImageWritingDialog::saveSettings( KConfigGroup c )
 
 void K3b::ImageWritingDialog::dragEnterEvent( QDragEnterEvent* e )
 {
-    e->setAccepted( K3URLDrag::canDecode(e) );
+    e->setAccepted( e->mimeData()->hasUrls() );
 }
 
 
 void K3b::ImageWritingDialog::dropEvent( QDropEvent* e )
 {
-    KUrl::List urls;
-    K3URLDrag::decode( e, urls );
-    d->editImagePath->setUrl( urls.first().toLocalFile() );
+    QList<QUrl> urls = e->mimeData()->urls();
+    if( !urls.isEmpty() ) {
+        d->editImagePath->setUrl( urls.first().toLocalFile() );
+    }
 }
 
 #include "k3bimagewritingdialog.moc"
