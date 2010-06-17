@@ -35,28 +35,24 @@
 //#include "k3baudiotrackplayer.h"
 #include "k3bintmapcombobox.h"
 
-#include <qtabwidget.h>
-#include <qcheckbox.h>
-#include <q3groupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qtoolbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
+#include <KApplication>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <q3buttongroup.h>
-#include <qradiobutton.h>
-//Added by qt3to4:
+#include <QCheckBox>
 #include <QGridLayout>
-
-#include <klocale.h>
-#include <kconfig.h>
-#include <kapplication.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <kvbox.h>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QTabWidget>
+#include <QToolButton>
+#include <QToolTip>
+#include <QVariant>
 
 
 K3b::MixedBurnDialog::MixedBurnDialog( K3b::MixedDoc* doc, QWidget *parent )
@@ -95,13 +91,13 @@ void K3b::MixedBurnDialog::setupSettingsPage()
 {
     QWidget* w = new QWidget( this );
 
-    Q3GroupBox* groupDataMode = new Q3GroupBox( 1, Qt::Vertical, i18n("Datatrack Mode"), w );
+    QGroupBox* groupDataMode = new QGroupBox( i18n("Datatrack Mode"), w );
     m_dataModeWidget = new K3b::DataModeWidget( groupDataMode );
 
-    Q3GroupBox* groupNormalize = new Q3GroupBox( 1, Qt::Vertical, i18n("Misc"), w );
+    QGroupBox* groupNormalize = new QGroupBox( i18n("Misc"), w );
     m_checkNormalize = K3b::StdGuiItems::normalizeCheckBox( groupNormalize );
 
-    Q3GroupBox* groupMixedType = new Q3GroupBox( 1, Qt::Vertical, i18n("Mixed Mode Type"), w );
+    QGroupBox* groupMixedType = new QGroupBox( i18n("Mixed Mode Type"), w );
     m_comboMixedModeType = new K3b::IntMapComboBox( groupMixedType );
 
     m_comboMixedModeType->insertItem( K3b::MixedDoc::DATA_SECOND_SESSION,

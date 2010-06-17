@@ -16,25 +16,20 @@
 #ifndef K3B_EXTERNALBIN_OPTIONTAB_H
 #define K3B_EXTERNALBIN_OPTIONTAB_H
 
-#include <qwidget.h>
-
-
-
-namespace K3b {
-    class ExternalBinManager;
-}
-namespace K3b {
-    class ExternalBinWidget;
-}
+#include <QWidget>
 
 
 namespace K3b {
+    
+class ExternalBinManager;
+class ExternalBinWidget;
+    
 class ExternalBinOptionTab : public QWidget
 {
 Q_OBJECT
 
  public:
-  ExternalBinOptionTab( ExternalBinManager*, QWidget* = 0 );
+  ExternalBinOptionTab( ExternalBinManager* manager, QWidget* = 0 );
   ~ExternalBinOptionTab();
 
   void readSettings();

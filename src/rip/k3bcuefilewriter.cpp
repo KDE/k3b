@@ -19,9 +19,8 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <qfile.h>
-#include <q3textstream.h>
-#include <qdatetime.h>
+#include <QDateTime>
+#include <QFile>
 
 
 K3b::CueFileWriter::CueFileWriter()

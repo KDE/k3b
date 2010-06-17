@@ -22,7 +22,7 @@
 #include "k3babstractwriter.h"
 #include "k3b_export.h"
 
-class Q3Socket;
+class QTcpSocket;
 
 namespace K3b {
     class ExternalBin;
@@ -126,7 +126,7 @@ namespace K3b {
         Process* m_process;
 
         int m_cdrdaoComm[2];
-        Q3Socket         *m_comSock;
+        QTcpSocket* m_comSock;
 
         bool m_canceled;
 

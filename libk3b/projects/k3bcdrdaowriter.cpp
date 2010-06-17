@@ -26,21 +26,19 @@
 #include "k3bglobals.h"
 #include "k3bglobalsettings.h"
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <q3socket.h>
-#include <q3socketdevice.h>
-#include <QtCore/QFileInfo>
+#include <KDebug>
+#include <KIO/NetAccess>
+#include <KLocale>
+#include <KStandardDirs>
+#include <KTemporaryFile>
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kio/netaccess.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
+#include <QTcpSocket>
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -160,11 +158,10 @@ K3b::CdrdaoWriter::CdrdaoWriter( K3b::Device::Device* dev, K3b::JobHandler* hdl,
     else
     {
         delete m_comSock;
-        m_comSock = new Q3Socket();
-        m_comSock->setSocket(m_cdrdaoComm[1]);
-        m_comSock->socketDevice()->setReceiveBufferSize(49152);
+        m_comSock = new QTcpSocket();
+        m_comSock->setSocketDescriptor( m_cdrdaoComm[1] );
+        m_comSock->setReadBufferSize(49152);
         // magic number from Qt documentation
-        m_comSock->socketDevice()->setBlocking(false);
         connect( m_comSock, SIGNAL(readyRead()),
                  this, SLOT(parseCdrdaoMessage()));
     }
@@ -918,7 +915,7 @@ void K3b::CdrdaoWriter::parseCdrdaoMessage()
     else if ( msgs > 1) {
         // move the read-index forward to the beginnig of the most recent message
         count = ( msgs-1 ) * ( sizeof(msgSync)+d->progressMsgSize );
-        m_comSock->at(count);
+        m_comSock->seek( count );
         kDebug() << "(K3b::CdrdaoParser) " << msgs-1 << " message(s) skipped";
     }
 
@@ -928,7 +925,7 @@ void K3b::CdrdaoWriter::parseCdrdaoMessage()
         int state = 0;
         char buf;
         while( state < 4 ) {
-            buf = m_comSock->getch();
+            m_comSock->getChar( &buf );
             ++count;
             if( count == avail ) {
                 //        kDebug() << "(K3b::CdrdaoParser) remote message sync not found (" << count << ")";

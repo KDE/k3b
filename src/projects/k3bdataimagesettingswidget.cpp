@@ -18,20 +18,17 @@
 
 #include "k3bisooptions.h"
 
-#include <qcheckbox.h>
-#include <qradiobutton.h>
-#include <q3buttongroup.h>
-#include <qlineedit.h>
-#include <qcombobox.h>
-#include <qpushbutton.h>
+#include <KDebug>
+#include <KDialog>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <qlayout.h>
-
-#include <kmessagebox.h>
-#include <klocale.h>
-#include <kdialog.h>
-#include <kdebug.h>
-
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
 
 // indices for the filesystems combobox
 static const int FS_LINUX_ONLY = 0;

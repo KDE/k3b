@@ -57,7 +57,6 @@
 #include <QtGui/QHeaderView>
 
 #include <kurl.h>
-#include <k3urldrag.h>
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
@@ -65,7 +64,6 @@
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <kdialog.h>
-#include <K3URLDrag>
 #include <kactioncollection.h>
 
 

@@ -17,21 +17,12 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bexternalbinwidget.h"
 
-#include <kmessagebox.h>
-#include <kdialog.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <k3listview.h>
+#include <KMessageBox>
+#include <KDialog>
+#include <KLocale>
 
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qfile.h>
-#include <QGridLayout>
-
+#include <QLabel>
+#include <QVBoxLayout>
 
 
 K3b::ExternalBinOptionTab::ExternalBinOptionTab( K3b::ExternalBinManager* manager, QWidget* parent )
@@ -39,18 +30,17 @@ K3b::ExternalBinOptionTab::ExternalBinOptionTab( K3b::ExternalBinManager* manage
 {
     m_manager = manager;
 
-    QGridLayout* frameLayout = new QGridLayout( this );
-    frameLayout->setMargin( 0 );
-
     m_externalBinWidget = new K3b::ExternalBinWidget( manager, this );
-    frameLayout->addWidget( m_externalBinWidget, 1, 0 );
 
     QLabel* m_labelInfo = new QLabel( this );
-    m_labelInfo->setText( "<p>" + i18n( "Specify the paths to the external programs that K3b needs to work properly, "
-                                        "or press \"Search\" to let K3b search for the programs." ) );
     m_labelInfo->setWordWrap( true );
+    m_labelInfo->setText( "<p>" + i18n( "Specify the paths to the external programs that K3b needs to work properly, "
+                                        "or press \"Search\" to let K3b search for the programs." ) + "</p>" );
 
-    frameLayout->addWidget( m_labelInfo, 0, 0 );
+    QVBoxLayout* frameLayout = new QVBoxLayout( this );
+    frameLayout->setContentsMargins( 0, 0, 0, 0 );
+    frameLayout->addWidget( m_labelInfo );
+    frameLayout->addWidget( m_externalBinWidget );
 }
 
 
