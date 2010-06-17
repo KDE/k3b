@@ -49,6 +49,7 @@
 #include <QCursor>
 #include <QDomElement>
 #include <QFont>
+#include <QHeaderView>
 #include <QLabel>
 #include <QList>
 #include <QStyle>
@@ -201,6 +202,7 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     d->trackView = new QTreeWidget( mainWidget() );
     d->trackView->setAllColumnsShowFocus( true );
     d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
+    d->trackView->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
     
     QTreeWidgetItem* header = d->trackView->headerItem();
     header->setText( 0, i18n( "Item Name" ) );
