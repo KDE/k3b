@@ -90,7 +90,7 @@ void ExternalBinModel::setDefault( const QModelIndex& index )
 bool ExternalBinModel::isDefault( const QModelIndex& index ) const
 {
     if( const ExternalBin* bin = binForIndex( index ) )
-        return d->defaults[ bin->program() ];
+        return d->defaults[ bin->program() ] == bin;
     else
         return false;
 }
