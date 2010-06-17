@@ -65,13 +65,13 @@ namespace {
         VideoTrackViewItem( QTreeWidgetItem* parent, QTreeWidgetItem* preceding )
             : QTreeWidgetItem( parent, preceding )
         {
-            setFlags( flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable) );
+            setFlags( flags() & ~Qt::ItemIsUserCheckable );
         }
 
         VideoTrackViewItem( QTreeWidget* parent, QTreeWidgetItem* preceding )
             : QTreeWidgetItem( parent, preceding )
         {
-            setFlags( flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable) );
+            setFlags( flags() & ~Qt::ItemIsUserCheckable );
         }
 
         VideoTrackViewItem( QTreeWidgetItem* parent,
@@ -81,7 +81,7 @@ namespace {
                             const K3b::Msf& length )
             : QTreeWidgetItem( parent )
         {
-            setFlags( flags() & ~(Qt::ItemIsSelectable|Qt::ItemIsUserCheckable) );
+            setFlags( flags() & ~Qt::ItemIsUserCheckable );
             
             setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
             setText( 1, name );
@@ -348,7 +348,9 @@ void K3b::VideoCdView::updateDisplay()
             }
         } else {
             for ( int j = 0; j < d->videocdinfoResult.foundEntries( K3b::VideoCdInfoResult::SEGMENT ); j++ ) {
-                ( void ) new VideoTrackViewItem( child, d->videocdinfoResult.entry( j, K3b::VideoCdInfoResult::SEGMENT ).name, d->videocdinfoResult.entry( j, K3b::VideoCdInfoResult::SEGMENT ).id , j + 1, 0 );
+                ( void ) new VideoTrackViewItem( child,
+                                                 d->videocdinfoResult.entry( j, K3b::VideoCdInfoResult::SEGMENT ).name,
+                                                 d->videocdinfoResult.entry( j, K3b::VideoCdInfoResult::SEGMENT ).id , j + 1, 0 );
             }
         }
     }

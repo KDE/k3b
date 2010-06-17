@@ -1,9 +1,10 @@
 /*
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
+* Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -16,20 +17,15 @@
 #ifndef K3BVIDEOCDINFO_H
 #define K3BVIDEOCDINFO_H
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qobject.h>
 #include <QList>
+#include <QObject>
 #include <QProcess>
-
-#include "k3btoc.h"
-#include "k3bcore.h"
+#include <QString>
 
 namespace K3b {
-    class Process;
-}
 
-namespace K3b {
+class Process;
+
 class VideoCdInfoResultEntry
 {
     public:
@@ -45,9 +41,7 @@ class VideoCdInfoResultEntry
 
         long size;
 };
-}
 
-namespace K3b {
 class VideoCdInfoResult
 {
     public:
@@ -73,9 +67,7 @@ class VideoCdInfoResult
 
         VideoCdInfoResultEntry m_emptyEntry;
 };
-}
 
-namespace K3b {
 class VideoCdInfo : public QObject
 {
         Q_OBJECT
@@ -111,6 +103,7 @@ class VideoCdInfo : public QObject
         bool m_isXml;
 
 };
-}
+
+} // namespace K3b
 
 #endif

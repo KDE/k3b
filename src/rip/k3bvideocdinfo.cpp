@@ -2,9 +2,10 @@
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 * Copyright (C) 2009 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
 *
 * This file is part of the K3b project.
-* Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
+* Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -14,22 +15,21 @@
 */
 
 #include "k3bvideocdinfo.h"
+#include "k3bcore.h"
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtimer.h>
-#include <qdom.h>
+#include <KLocale>
+#include <KConfig>
+#include <KDebug>
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kdebug.h>
+#include <QDomDocument>
+#include <QDomElement>
 
 #include "k3bprocess.h"
 #include "k3bexternalbinmanager.h"
 
 
 K3b::VideoCdInfo::VideoCdInfo( QObject* parent )
-        : QObject( parent )
+    : QObject( parent )
 {
     m_process = 0L;
     m_isXml = false;
@@ -103,16 +103,19 @@ void K3b::VideoCdInfo::slotInfoFinished( int exitCode, QProcess::ExitStatus exit
                 break;
             default:
                 cancelAll();
+                kDebug() << "vcdxrip finished with exit code" << exitCode;
                 emit infoFinished( false );
                 return ;
         }
     } else {
         cancelAll();
+        kDebug() << "vcdxrip crashed!";
         emit infoFinished( false );
         return ;
     }
 
     if ( m_xmlData.isEmpty() ) {
+        kDebug() << "XML data empty!";
         emit infoFinished( false );
         return ;
     }
@@ -150,7 +153,6 @@ void K3b::VideoCdInfo::parseXmlData()
         } else if ( tagName == "sequence-items" ) {
             for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                 QDomElement sel = snode.toElement();
-                QString seqElement = sel.tagName().toLower();
                 m_Result.addEntry( K3b::VideoCdInfoResultEntry(
                                        sel.attribute( "src" ),
                                        sel.attribute( "id" ) ),
@@ -160,7 +162,6 @@ void K3b::VideoCdInfo::parseXmlData()
         } else if ( tagName == "segment-items" ) {
             for ( QDomNode snode = node.firstChild(); !snode.isNull(); snode = snode.nextSibling() ) {
                 QDomElement sel = snode.toElement();
-                QString seqElement = sel.tagName().toLower();
                 m_Result.addEntry( K3b::VideoCdInfoResultEntry(
                                        sel.attribute( "src" ),
                                        sel.attribute( "id" ) ),
