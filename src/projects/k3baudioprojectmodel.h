@@ -39,8 +39,8 @@ namespace K3b {
 
         enum Columns {
             TrackNumberColumn = 0,
-            ArtistColumn,
             TitleColumn,
+            ArtistColumn,
             TypeColumn,
             LengthColumn,
             FilenameColumn,
