@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
@@ -28,7 +28,7 @@ public:
     ~K3bOggVorbisEncoder();
 
     virtual QStringList extensions() const { return QStringList("ogg"); }
-  
+
     virtual QString fileTypeComment( const QString& ) const;
 
     virtual long long fileSize( const QString&, const K3b::Msf& msf ) const;
@@ -39,7 +39,7 @@ private:
     void loadConfig();
     virtual void finishEncoderInternal();
     virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
-    virtual long encodeInternal( const char* data, Q_ULONG len );
+    virtual qint64 encodeInternal( const char* data, qint64 len );
 
     bool writeOggHeaders();
     void cleanup();

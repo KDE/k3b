@@ -643,7 +643,7 @@ void K3b::EmptyDiscWaiter::showDialog()
         d->dialogVisible = true;
         //clear it.
         setAttribute(Qt::WA_DeleteOnClose,false);
-        setWindowFlags(windowFlags () ^ Qt::WShowModal);
+        setWindowModality( Qt::NonModal );
         setResult( 0 );
         show();
     }

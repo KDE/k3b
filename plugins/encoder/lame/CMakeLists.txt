@@ -15,8 +15,7 @@ target_link_libraries(kcm_k3blameencoder
   k3b
   ${KDE4_KDECORE_LIBS}
   ${KDE4_KDEUI_LIBS}
-  ${QT_QTGUI_LIBRARY}
-  ${QT_QT3SUPPORT_LIBRARY})
+  ${QT_QTGUI_LIBRARY})
 
 
 # Plugin

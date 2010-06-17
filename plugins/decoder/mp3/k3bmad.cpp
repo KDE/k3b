@@ -1,4 +1,4 @@
-/* 
+/*
  *
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -60,7 +60,7 @@ bool K3bMad::open( const QString& filename )
   m_channels = m_sampleRate = 0;
 
   m_inputFile.setFileName( filename );
-   
+
   if( !m_inputFile.open( QIODevice::ReadOnly ) ) {
     kError() << "(K3bMad) could not open file " << m_inputFile.fileName() << endl;
     return false;
@@ -103,9 +103,9 @@ bool K3bMad::fillStreamBuffer()
       readStart = m_inputBuffer;
       remaining = 0;
     }
-			
-    // Fill-in the buffer. 
-    Q_LONG result = m_inputFile.read( (char*)readStart, readSize );
+
+    // Fill-in the buffer.
+    qint64 result = m_inputFile.read( (char*)readStart, readSize );
     if( result < 0 ) {
       kDebug() << "(K3bMad) read error on bitstream)";
       m_bInputError = true;
@@ -145,7 +145,7 @@ bool K3bMad::skipTag()
   char buf[4096];
   int bufLen = 4096;
   if( m_inputFile.read( buf, bufLen ) < bufLen ) {
-    kDebug() << "(K3bMad) unable to read " << bufLen << " bytes from " 
+    kDebug() << "(K3bMad) unable to read " << bufLen << " bytes from "
 	      << m_inputFile.fileName() << endl;
     return false;
   }
@@ -156,10 +156,10 @@ bool K3bMad::skipTag()
     bool footer = (buf[5] & 0x10);
 
     // the size is saved as a synched int meaning bit 7 is always cleared to 0
-    unsigned int size = 
-      ( (buf[6] & 0x7f) << 21 ) | 
-      ( (buf[7] & 0x7f) << 14 ) | 
-      ( (buf[8] & 0x7f) << 7) | 
+    unsigned int size =
+      ( (buf[6] & 0x7f) << 21 ) |
+      ( (buf[7] & 0x7f) << 14 ) |
+      ( (buf[8] & 0x7f) << 7) |
       (buf[9] & 0x7f);
     unsigned int offset = size + 10;
     if( footer )
@@ -192,9 +192,9 @@ bool K3bMad::seekFirstHeader()
   // take way to long for non-mp3 files.
   //
   bool headerFound = findNextHeader();
-  QIODevice::Offset inputPos = streamPos();
-  while( !headerFound && 
-	 !m_inputFile.atEnd() && 
+  qint64 inputPos = streamPos();
+  while( !headerFound &&
+	 !m_inputFile.atEnd() &&
 	 streamPos() <= inputPos+1024 ) {
     headerFound = findNextHeader();
   }
@@ -217,24 +217,24 @@ bool K3bMad::seekFirstHeader()
 
 
 bool K3bMad::eof() const
-{ 
+{
   return m_inputFile.atEnd();
 }
 
 
-QIODevice::Offset K3bMad::inputPos() const
+qint64 K3bMad::inputPos() const
 {
   return m_inputFile.pos();
 }
 
 
-QIODevice::Offset K3bMad::streamPos() const
+qint64 K3bMad::streamPos() const
 {
   return inputPos() - (madStream->bufend - madStream->this_frame + 1);
 }
 
 
-bool K3bMad::inputSeek( QIODevice::Offset pos )
+bool K3bMad::inputSeek( qint64 pos )
 {
   return m_inputFile.seek( pos );
 }
@@ -256,21 +256,21 @@ void K3bMad::initMad()
 void K3bMad::cleanup()
 {
   if( m_inputFile.isOpen() ) {
-    kDebug() << "(K3bMad) cleanup at offset: " 
+    kDebug() << "(K3bMad) cleanup at offset: "
 	      << "Input file at: " << m_inputFile.pos() << " "
 	      << "Input file size: " << m_inputFile.size() << " "
-	      << "stream pos: " 
+	      << "stream pos: "
 	      << ( m_inputFile.pos() - (madStream->bufend - madStream->this_frame + 1) )
 	      << endl;
     m_inputFile.close();
   }
-    
+
   if( m_madStructuresInitialized ) {
     mad_frame_finish( madFrame );
     mad_synth_finish( madSynth );
     mad_stream_finish( madStream );
   }
-    
+
   m_madStructuresInitialized = false;
 }
 
@@ -352,7 +352,7 @@ bool K3bMad::checkFrameHeader( mad_header* header ) const
 
   if( m_channels && m_channels != MAD_NCHANNELS(header) )
     return false;
-    
+
   return true;
 }
 

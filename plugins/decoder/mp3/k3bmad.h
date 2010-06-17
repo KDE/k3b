@@ -1,4 +1,4 @@
-/* 
+/*
  *
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
@@ -59,13 +59,13 @@ public:
    * care about the status of the mad stream. Use streamPos()
    * in that case.
    */
-  QIODevice::Offset inputPos() const;
+  qint64 inputPos() const;
 
   /**
    * Current absolut position of the decoder stream.
    */
-  QIODevice::Offset streamPos() const;
-  bool inputSeek( QIODevice::Offset pos );
+  qint64 streamPos() const;
+  bool inputSeek( qint64 pos );
 
   void initMad();
   void cleanup();

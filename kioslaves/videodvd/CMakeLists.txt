@@ -5,7 +5,7 @@ set(kio_videodvd_PART_SRCS videodvd.cpp )
 
 kde4_add_plugin(kio_videodvd ${kio_videodvd_PART_SRCS})
 
-target_link_libraries(kio_videodvd ${QT_QT3SUPPORT_LIBRARY} ${KDE4_KIO_LIBS} k3b k3bdevice )
+target_link_libraries(kio_videodvd ${KDE4_KIO_LIBS} k3b k3bdevice )
 
 install(TARGETS kio_videodvd DESTINATION ${PLUGIN_INSTALL_DIR} )
 

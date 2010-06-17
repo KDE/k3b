@@ -65,7 +65,7 @@ public:
     }
 
     void setPbcTrack( VcdTrack* selected, QComboBox* box, VcdTrack::PbcTracks which );
-    
+
     VcdDoc* doc;
     QList<VcdTrack*> tracks;
     QList<VcdTrack*> selectedTracks;
@@ -120,7 +120,7 @@ void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboB
 {
     const int currentIndex = box->currentIndex();
     const int count = tracks.count();
-    
+
     // TODO: Unset Userdefined on default settings
     kDebug() << QString( "K3b::VcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( currentIndex ).arg( count );
 
@@ -214,7 +214,7 @@ void K3b::VcdTrackDialog::slotApply()
     selectedTrack->delDefinedNumKey();
 
     if ( d->check_overwritekeys->isChecked() ) {
-        
+
         for( int key = 1; key <= d->keys_model->keyCount(); ++key ) {
             VcdTrackKeysModel::Key2Track::const_iterator it = d->keys_model->keys().constFind( key );
             if( it != d->keys_model->keys().constEnd() )
@@ -367,7 +367,7 @@ void K3b::VcdTrackDialog::fillPbcGui()
 
     d->check_usekeys->setChecked( selectedTrack->PbcNumKeys() );
     d->check_overwritekeys->setChecked( selectedTrack->PbcNumKeysUserdefined() );
-    
+
     if( selectedTrack->PbcNumKeysUserdefined() ) {
         d->keys_model->setKeys( selectedTrack->DefinedNumKey() );
     }
@@ -548,7 +548,7 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
     d->widgetnumkeys = new QWidget( d->mainTabbed );
 
     d->check_overwritekeys = new QCheckBox( i18n( "Overwrite default assignment" ), d->widgetnumkeys );
-    
+
     d->keys_model = new VcdTrackKeysModel( KEY_COUNT, this );
     d->keys_delegate = new VcdTrackKeysDelegate( d->tracks, this );
 
@@ -583,11 +583,11 @@ void K3b::VcdTrackDialog::setupAudioTab()
     d->mode_audio = new QLabel( w );
     d->copyright_audio = new QLabel( w );
 
-    d->mpegver_audio->setFrameShape( QLabel::LineEditPanel );
-    d->rate_audio->setFrameShape( QLabel::LineEditPanel );
-    d->sampling_frequency_audio->setFrameShape( QLabel::LineEditPanel );
-    d->mode_audio->setFrameShape( QLabel::LineEditPanel );
-    d->copyright_audio->setFrameShape( QLabel::LineEditPanel );
+    d->mpegver_audio->setFrameShape( QLabel::StyledPanel );
+    d->rate_audio->setFrameShape( QLabel::StyledPanel );
+    d->sampling_frequency_audio->setFrameShape( QLabel::StyledPanel );
+    d->mode_audio->setFrameShape( QLabel::StyledPanel );
+    d->copyright_audio->setFrameShape( QLabel::StyledPanel );
 
     d->mpegver_audio->setFrameShadow( QLabel::Sunken );
     d->rate_audio->setFrameShadow( QLabel::Sunken );
@@ -622,12 +622,12 @@ void K3b::VcdTrackDialog::setupVideoTab()
     d->resolution_video = new QLabel( w );
     d->highresolution_video = new QLabel( w );
 
-    d->mpegver_video->setFrameShape( QLabel::LineEditPanel );
-    d->rate_video->setFrameShape( QLabel::LineEditPanel );
-    d->chromaformat_video->setFrameShape( QLabel::LineEditPanel );
-    d->format_video->setFrameShape( QLabel::LineEditPanel );
-    d->resolution_video->setFrameShape( QLabel::LineEditPanel );
-    d->highresolution_video->setFrameShape( QLabel::LineEditPanel );
+    d->mpegver_video->setFrameShape( QLabel::StyledPanel );
+    d->rate_video->setFrameShape( QLabel::StyledPanel );
+    d->chromaformat_video->setFrameShape( QLabel::StyledPanel );
+    d->format_video->setFrameShape( QLabel::StyledPanel );
+    d->resolution_video->setFrameShape( QLabel::StyledPanel );
+    d->highresolution_video->setFrameShape( QLabel::StyledPanel );
 
     d->mpegver_video->setFrameShadow( QLabel::Sunken );
     d->rate_video->setFrameShadow( QLabel::Sunken );

@@ -90,7 +90,7 @@ namespace K3b {
             META_ALBUM_COMMENT,
             META_YEAR,
             META_GENRE };
-            
+
         typedef QHash<MetaDataField, QVariant> MetaData;
 
         /**
@@ -137,7 +137,7 @@ namespace K3b {
          * Be aware that the returned amount of written data may very well differ
          * from len since the data is encoded.
          */
-        long encode( const char*, Q_ULONG len );
+        qint64 encode( const char*, qint64 len );
 
         /**
          * Use this signal in case of an error to provide the user with information
@@ -163,7 +163,7 @@ namespace K3b {
          * using the default implementation of openFile
          * Returnes the number of bytes actually written.
          */
-        Q_LONG writeData( const char*, Q_ULONG len );
+        qint64 writeData( const char*, qint64 len );
 
         /**
          * initzialize the decoder structures.
@@ -187,7 +187,7 @@ namespace K3b {
          */
         // TODO: use qint16* instead of char*
         // FIXME: why little endian while CDs use big endian???
-        virtual long encodeInternal( const char*, Q_ULONG len ) = 0;
+        virtual qint64 encodeInternal( const char*, qint64 len ) = 0;
 
         /**
          * Use this in combination with the default implementation of lastError()

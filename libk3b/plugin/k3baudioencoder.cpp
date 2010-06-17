@@ -101,7 +101,7 @@ QString K3b::AudioEncoder::filename() const
 }
 
 
-long K3b::AudioEncoder::encode( const char* data, Q_ULONG len )
+qint64 K3b::AudioEncoder::encode( const char* data, qint64 len )
 {
     return encodeInternal( data, len );
 }
@@ -118,7 +118,7 @@ bool K3b::AudioEncoder::initEncoder( const QString& extension, const K3b::Msf& l
 }
 
 
-Q_LONG K3b::AudioEncoder::writeData( const char* data, Q_ULONG len )
+qint64 K3b::AudioEncoder::writeData( const char* data, qint64 len )
 {
     if( d->outputFile ) {
         return d->outputFile->write( data, len );

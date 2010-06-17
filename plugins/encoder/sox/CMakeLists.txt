@@ -22,14 +22,13 @@ kde4_add_plugin(k3bsoxencoder
 target_link_libraries(k3bsoxencoder
     k3bdevice
     k3b
-    ${KDE4_KDE3SUPPORT_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${QT_QTGUI_LIBRARY} )
 
 install(TARGETS
     k3bsoxencoder kcm_k3bsoxencoder
     DESTINATION ${PLUGIN_INSTALL_DIR} )
-    
+
 install(FILES
     k3bsoxencoder.desktop kcm_k3bsoxencoder.desktop
     DESTINATION ${SERVICES_INSTALL_DIR})

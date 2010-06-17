@@ -93,7 +93,7 @@ QValidator::State K3b::IntValidator::validate ( QString &str, int & ) const
     if( (m_max && val > m_max) || (m_min && val < m_min) )
         return QValidator::Invalid;
 
-    return QValidator::Valid;
+    return QValidator::Intermediate;
 }
 
 

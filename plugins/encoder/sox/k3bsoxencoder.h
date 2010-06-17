@@ -51,7 +51,7 @@ private Q_SLOTS:
 private:
     virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
     virtual void finishEncoderInternal();
-    virtual long encodeInternal( const char* data, Q_ULONG len );
+    virtual qint64 encodeInternal( const char* data, qint64 len );
 
     class Private;
     Private* d;

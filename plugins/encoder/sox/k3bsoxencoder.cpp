@@ -228,7 +228,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
 }
 
 
-long K3bSoxEncoder::encodeInternal( const char* data, Q_ULONG len )
+qint64 K3bSoxEncoder::encodeInternal( const char* data, qint64 len )
 {
     if( d->process && d->process->isRunning() )
         return d->process->write( data, len );

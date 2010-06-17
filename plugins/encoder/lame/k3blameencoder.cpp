@@ -24,6 +24,7 @@
 #include <KLocale>
 #include <KConfig>
 #include <KDebug>
+#include <QTextCodec>
 
 #include <stdio.h>
 #include <lame/lame.h>
@@ -226,7 +227,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     // for now we default to both v1 and v2 tags
     id3tag_add_v2( d->flags );
     id3tag_pad_v2( d->flags );
-    
+
     // let's not use UTF-8 here since I don't know how to tell lame...
     // FIXME: when we use the codec we only get garbage. Why?
     QTextCodec* codec = 0;//QTextCodec::codecForName( "ISO8859-1" );
@@ -268,7 +269,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
 }
 
 
-long K3bLameEncoder::encodeInternal( const char* data, Q_ULONG len )
+qint64 K3bLameEncoder::encodeInternal( const char* data, qint64 len )
 {
     // FIXME: we may have to swap data here
     int size = lame_encode_buffer_interleaved( d->flags,

@@ -33,7 +33,7 @@ public:
     QString filename() const;
 
     QStringList extensions() const;
-  
+
     QString fileTypeComment( const QString& ) const;
 
     long long fileSize( const QString&, const K3b::Msf& msf ) const;
@@ -43,7 +43,7 @@ public:
 private:
     void finishEncoderInternal();
     bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
-    long encodeInternal( const char* data, Q_ULONG len );
+    qint64 encodeInternal( const char* data, qint64 len );
 
     class Private;
     Private* d;

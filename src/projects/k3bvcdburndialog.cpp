@@ -458,10 +458,10 @@ void K3b::VcdBurnDialog::setupLabelTab()
     QLabel* labelInfoSystemId = new QLabel( vcdDoc() ->vcdOptions() ->systemId(), w );
     QLabel* labelInfoApplicationId = new QLabel( vcdDoc() ->vcdOptions() ->applicationId(), w );
 
-    labelInfoSystemId->setFrameShape( QLabel::LineEditPanel );
+    labelInfoSystemId->setFrameShape( QLabel::StyledPanel );
     labelInfoSystemId->setFrameShadow( QLabel::Sunken );
 
-    labelInfoApplicationId->setFrameShape( QLabel::LineEditPanel );
+    labelInfoApplicationId->setFrameShape( QLabel::StyledPanel );
     labelInfoApplicationId->setFrameShadow( QLabel::Sunken );
     labelInfoApplicationId->setToolTip( i18n( "ISO application id for VideoCD" ) );
 

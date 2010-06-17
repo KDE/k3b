@@ -193,7 +193,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
     d->oggStream = new ogg_stream_state;
     srand( time(0) );
     ogg_stream_init( d->oggStream, rand() );
-    
+
     // Set meta data
     for( MetaData::const_iterator it = metaData.constBegin(); it != metaData.constEnd(); ++it ) {
         QByteArray key;
@@ -283,7 +283,7 @@ bool K3bOggVorbisEncoder::writeOggHeaders()
 }
 
 
-long K3bOggVorbisEncoder::encodeInternal( const char* data, Q_ULONG len )
+qint64 K3bOggVorbisEncoder::encodeInternal( const char* data, qint64 len )
 {
     if( !d->headersWritten )
         if( !writeOggHeaders() )
@@ -293,7 +293,7 @@ long K3bOggVorbisEncoder::encodeInternal( const char* data, Q_ULONG len )
     float** buffer = vorbis_analysis_buffer( d->vorbisDspState, len/4 );
 
     // uninterleave samples
-    unsigned long i = 0;
+    qint64 i = 0;
     for( i = 0; i < len/4; i++ ) {
         buffer[0][i]=( (data[i*4+1]<<8) | (0x00ff&(int)data[i*4]) ) / 32768.f;
         buffer[1][i]=( (data[i*4+3]<<8) | (0x00ff&(int)data[i*4+2]) ) / 32768.f;
