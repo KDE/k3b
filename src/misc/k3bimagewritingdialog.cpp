@@ -169,7 +169,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Iso9660 image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 0, KIcon( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
@@ -177,20 +177,21 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
     
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
-    item->setText( 1, ( size < volumeSpaceSize )
-                      ? i18n("%1 (different than declared volume size)", KIO::convertSize( size ))
-                      : KIO::convertSize( size ) );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
-    
     if( size < volumeSpaceSize ) {
+        item->setText( 1, i18n("%1 (different than declared volume size)", KIO::convertSize( size )) );
         item->setForeground( 1, negativeTextColor );
+        item->setIcon( 1, KIcon( "dialog-error") );
         
         item = new QTreeWidgetItem( infoView );
         item->setText( 0, i18n("Volume Size:") );
         item->setText( 1, KIO::convertSize( volumeSpaceSize ) );
         item->setForeground( 0, infoTextColor );
         item->setTextAlignment( 0, Qt::AlignRight );
+    }
+    else {
+        item->setText( 1, KIO::convertSize( size ) );   
     }
 
     item = new QTreeWidgetItem( infoView );
@@ -248,7 +249,7 @@ void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& 
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Cdrecord clone image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 0, KIcon( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
@@ -277,7 +278,7 @@ void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Cue/bin image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 0, KIcon( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
@@ -306,7 +307,7 @@ void K3b::ImageWritingDialog::Private::createAudioCueItems( const K3b::CueFilePa
     rootItem->setText( 0, i18n("Detected:") );
     rootItem->setText( 1, i18n("Audio Cue Image") );
     rootItem->setForeground( 0, infoTextColor );
-    rootItem->setIcon( 0, KIcon( "audio-x-generic") );
+    rootItem->setIcon( 1, KIcon( "audio-x-generic") );
     rootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* trackParent = new QTreeWidgetItem( infoView );
@@ -1016,7 +1017,6 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
 
     d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
     d->md5SumItem->setForeground( 0, d->infoTextColor );
-    d->md5SumItem->setIcon( 0, KIcon("system-run") );
     d->md5SumItem->setTextAlignment( 0, Qt::AlignRight );
 
     if( file != d->lastCheckedFile ) {
@@ -1041,7 +1041,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
 {
     if( success ) {
         d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
-        d->md5SumItem->setIcon( 0, KIcon("dialog-information") );
+        d->md5SumItem->setIcon( 1, KIcon("dialog-information") );
         d->haveMd5Sum = true;
     }
     else {
@@ -1050,7 +1050,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
             d->md5SumItem->setText( 1, i18n("Calculation canceled") );
         else
             d->md5SumItem->setText( 1, i18n("Calculation failed") );
-        d->md5SumItem->setIcon( 0, KIcon("dialog-error") );
+        d->md5SumItem->setIcon( 1, KIcon("dialog-error") );
         d->lastCheckedFile.truncate(0);
     }
 
