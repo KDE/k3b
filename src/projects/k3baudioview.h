@@ -20,11 +20,8 @@
 #define K3BAUDIOVIEW_H
 
 #include "k3bview.h"
-#include "k3baudiotrackview.h"
 
 #include <QStringList>
-
-class KMenu;
 
 namespace K3b {
 

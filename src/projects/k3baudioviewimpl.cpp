@@ -27,7 +27,6 @@
 #include "k3baudiotrackaddingdialog.h"
 #include "k3baudiotrackdialog.h"
 #include "k3baudiotracksplitdialog.h"
-#include "k3baudiotrackview.h"
 #include "k3baudiozerodata.h"
 #include "k3bmsfedit.h"
 #include "k3bview.h"
@@ -44,6 +43,7 @@
 
 #include <QHeaderView>
 #include <QScrollBar>
+#include <QTreeView>
 
 
 K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection* actionCollection )
@@ -52,11 +52,22 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_view( view ),
     m_doc( doc ),
     m_model( new AudioProjectModel( doc, view ) ),
-    m_trackView( new AudioTrackView( doc, view ) ),
+    m_trackView( new QTreeView( view ) ),
     m_columnAdjuster( new ViewColumnAdjuster( this ) ),
     m_updatingColumnWidths( false )
 {
     m_trackView->setModel( m_model );
+    m_trackView->setAcceptDrops( true );
+    m_trackView->setDragEnabled( true );
+    m_trackView->setDragDropMode( QTreeView::DragDrop );
+    m_trackView->setItemsExpandable( false );
+    m_trackView->setRootIsDecorated( false );
+    m_trackView->setSelectionMode( QTreeView::ExtendedSelection );
+    m_trackView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
+    //header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_trackView->setEditTriggers( QAbstractItemView::NoEditTriggers );
+    m_trackView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     m_actionAddSilence = createAction( m_view, i18n("Add Silence..."), 0, 0, this, SLOT(slotAddSilence()),
                                        actionCollection, "track_add_silence" );

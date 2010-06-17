@@ -42,7 +42,6 @@ set(k3b_project_SRCS
   projects/k3baudiotrackwidget.cpp
   #projects/k3baudiotrackplayer.cpp
   projects/k3baudiotracksplitdialog.cpp
-  projects/k3baudiotrackview.cpp
   projects/k3baudioview.cpp
   projects/k3baudioviewimpl.cpp
   projects/k3baudioprojectmodel.cpp
@@ -50,7 +49,6 @@ set(k3b_project_SRCS
   projects/k3bmixedview.cpp
   projects/k3bdataadvancedimagesettingsdialog.cpp
   projects/k3bdatadirtreeview.cpp
-  projects/k3bdatafileview.cpp
   projects/k3bdataimagesettingswidget.cpp
   projects/k3bdatapropertiesdialog.cpp
   projects/k3bdataview.cpp

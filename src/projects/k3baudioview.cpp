@@ -28,6 +28,7 @@
 #include <QLayout>
 #include <QString>
 #include <QScrollBar>
+#include <QTreeView>
 
 #include <KAction>
 #include <KActionCollection>
@@ -35,7 +36,6 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KToolBar>
-#include <KMenu>
 
 
 K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
