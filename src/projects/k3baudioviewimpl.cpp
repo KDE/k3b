@@ -64,10 +64,9 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_trackView->setRootIsDecorated( false );
     m_trackView->setSelectionMode( QTreeView::ExtendedSelection );
     m_trackView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-    // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
-    //header()->setResizeMode( QHeaderView::ResizeToContents );
-    m_trackView->setEditTriggers( QAbstractItemView::NoEditTriggers );
     m_trackView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+
+    m_columnAdjuster->setView( m_trackView );
 
     m_actionAddSilence = createAction( m_view, i18n("Add Silence..."), 0, 0, this, SLOT(slotAddSilence()),
                                        actionCollection, "track_add_silence" );

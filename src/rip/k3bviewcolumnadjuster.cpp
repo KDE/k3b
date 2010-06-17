@@ -108,6 +108,7 @@ void K3b::ViewColumnAdjuster::setView( QTreeView* view )
             connect( d->view->model(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SLOT( _k_adjustColumns() ) );
             connect( d->view->model(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), SLOT( _k_adjustColumns() ) );
             connect( d->view->model(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), SLOT( _k_adjustColumns() ) );
+            d->view->header()->setResizeMode( QHeaderView::Interactive );
         }
     }
 }
