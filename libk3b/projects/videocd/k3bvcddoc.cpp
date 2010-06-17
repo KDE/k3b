@@ -461,88 +461,88 @@ void K3b::VcdDoc::setPbcTracks()
         kDebug() << QString( "K3b::VcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count );
 
         Q_FOREACH( K3b::VcdTrack* track, *m_tracks ) {
-            for ( int i = 0; i < K3b::VcdTrack::_maxPbcTracks; i++ ) {
+            Q_FOREACH( VcdTrack::PbcTracks pbc, VcdTrack::trackPlaybackValues() ) {
                 // do not change userdefined tracks
-                if ( !track->isPbcUserDefined( i ) ) {
-                    if ( track->getPbcTrack( i ) )
-                        track->getPbcTrack( i ) ->delFromRevRefList( track );
+                if ( !track->isPbcUserDefined( pbc ) ) {
+                    if ( track->getPbcTrack( pbc ) )
+                        track->getPbcTrack( pbc ) ->delFromRevRefList( track );
 
                     K3b::VcdTrack* t = 0L;
                     int index = track->index();
 
                     // we are the last track
                     if ( index == count - 1 ) {
-                        switch ( i ) {
+                        switch ( pbc ) {
                         case K3b::VcdTrack::PREVIOUS:
                             // we are not alone :)
                             if ( count > 1 ) {
                                 t = m_tracks->at( index - 1 );
                                 t->addToRevRefList( track );
-                                track->setPbcTrack( i, t );
+                                track->setPbcTrack( pbc, t );
                             } else {
-                                track->setPbcTrack( i );
-                                track->setPbcNonTrack( i, K3b::VcdTrack::VIDEOEND );
+                                track->setPbcTrack( pbc );
+                                track->setPbcNonTrack( pbc, K3b::VcdTrack::VIDEOEND );
                             }
                             break;
                         case K3b::VcdTrack::AFTERTIMEOUT:
                         case K3b::VcdTrack::NEXT:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::VIDEOEND );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::VIDEOEND );
                             break;
                         case K3b::VcdTrack::RETURN:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::VIDEOEND );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::VIDEOEND );
                             break;
                         case K3b::VcdTrack::DEFAULT:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::DISABLED );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::DISABLED );
                             break;
                         }
                     }
                     // we are the first track
                     else if ( index == 0 ) {
-                        switch ( i ) {
+                        switch ( pbc ) {
                         case K3b::VcdTrack::PREVIOUS:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::VIDEOEND );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::VIDEOEND );
                             break;
                         case K3b::VcdTrack::AFTERTIMEOUT:
                         case K3b::VcdTrack::NEXT:
                             t = m_tracks->at( index + 1 );
                             t->addToRevRefList( track );
-                            track->setPbcTrack( i, t );
+                            track->setPbcTrack( pbc, t );
                             break;
                         case K3b::VcdTrack::RETURN:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::VIDEOEND );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::VIDEOEND );
                             break;
                         case K3b::VcdTrack::DEFAULT:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::DISABLED );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::DISABLED );
                             break;
                         }
                     }
                     // we are one of the other tracks and have PREVIOUS and NEXT Track
                     else {
-                        switch ( i ) {
+                        switch ( pbc ) {
                         case K3b::VcdTrack::PREVIOUS:
                             t = m_tracks->at( index - 1 );
                             t->addToRevRefList( track );
-                            track->setPbcTrack( i, t );
+                            track->setPbcTrack( pbc, t );
                             break;
                         case K3b::VcdTrack::AFTERTIMEOUT:
                         case K3b::VcdTrack::NEXT:
                             t = m_tracks->at( index + 1 );
                             t->addToRevRefList( track );
-                            track->setPbcTrack( i, t );
+                            track->setPbcTrack( pbc, t );
                             break;
                         case K3b::VcdTrack::RETURN:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::VIDEOEND );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::VIDEOEND );
                             break;
                         case K3b::VcdTrack::DEFAULT:
-                            track->setPbcTrack( i );
-                            track->setPbcNonTrack( i, K3b::VcdTrack::DISABLED );
+                            track->setPbcTrack( pbc );
+                            track->setPbcNonTrack( pbc, K3b::VcdTrack::DISABLED );
                             break;
                         }
                     }
@@ -665,8 +665,8 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
     // do not add saved pbcTrack links when one ore more files missing.
     // TODO: add info message to informAboutNotFoundFiles();
     if ( m_notFoundFiles.isEmpty() ) {
-        int type;
-        int val;
+        VcdTrack::PbcTracks type;
+        VcdTrack::PbcTypes val;
         bool pbctrack;
         for ( uint trackId = 0; trackId < trackNodes.length(); trackId++ ) {
             QDomElement trackElem = trackNodes.item( trackId ).toElement();
@@ -676,11 +676,11 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
                 QString name = trackElem.tagName();
                 if ( name.contains( "pbc" ) ) {
                     if ( trackElem.hasAttribute ( "type" ) ) {
-                        type = trackElem.attribute ( "type" ).toInt();
+                        type = static_cast<VcdTrack::PbcTracks>( trackElem.attribute ( "type" ).toInt() );
                         if ( trackElem.hasAttribute ( "pbctrack" ) ) {
                             pbctrack = ( trackElem.attribute ( "pbctrack" ) == "yes" );
                             if ( trackElem.hasAttribute ( "val" ) ) {
-                                val = trackElem.attribute ( "val" ).toInt();
+                                val = static_cast<VcdTrack::PbcTypes>( trackElem.attribute ( "val" ).toInt() );
                                 K3b::VcdTrack* track = m_tracks->at( trackId );
                                 K3b::VcdTrack* pbcTrack = m_tracks->at( val );
                                 if ( pbctrack ) {
@@ -850,19 +850,17 @@ bool K3b::VcdDoc::saveDocumentData( QDomElement * docElem )
         trackElem.setAttribute( "numkeys", ( track->PbcNumKeys() ) ? "yes" : "no" );
         trackElem.setAttribute( "userdefinednumkeys", ( track->PbcNumKeysUserdefined() ) ? "yes" : "no" );
 
-        for ( int i = 0;
-              i < K3b::VcdTrack::_maxPbcTracks;
-              i++ ) {
-            if ( track->isPbcUserDefined( i ) ) {
+        Q_FOREACH( VcdTrack::PbcTracks pbc, VcdTrack::trackPlaybackValues() ) {
+            if ( track->isPbcUserDefined( pbc ) ) {
                 // save pbcTracks
                 QDomElement pbcElem = doc.createElement( "pbc" );
-                pbcElem.setAttribute( "type", i );
-                if ( track->getPbcTrack( i ) ) {
+                pbcElem.setAttribute( "type", pbc );
+                if ( track->getPbcTrack( pbc ) ) {
                     pbcElem.setAttribute( "pbctrack", "yes" );
-                    pbcElem.setAttribute( "val", track->getPbcTrack( i ) ->index() );
+                    pbcElem.setAttribute( "val", track->getPbcTrack( pbc ) ->index() );
                 } else {
                     pbcElem.setAttribute( "pbctrack", "no" );
-                    pbcElem.setAttribute( "val", track->getNonPbcTrack( i ) );
+                    pbcElem.setAttribute( "val", track->getNonPbcTrack( pbc ) );
                 }
                 trackElem.appendChild( pbcElem );
             }

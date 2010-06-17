@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,11 +59,10 @@ namespace K3b {
             return mpegType() == 1;
         };
 
-
-
         // PBC
-        enum PbcTracks { PREVIOUS, NEXT, RETURN, DEFAULT, AFTERTIMEOUT, _maxPbcTracks };
+        enum PbcTracks { PREVIOUS, NEXT, RETURN, DEFAULT, AFTERTIMEOUT };
         enum PbcTypes { DISABLED, VIDEOEND };
+        static QList<PbcTracks> trackPlaybackValues();
 
         void addToRevRefList( VcdTrack* revreftrack );
         void delFromRevRefList( VcdTrack* revreftrack );
@@ -70,9 +70,9 @@ namespace K3b {
         void delRefToUs();
         void delRefFromUs();
 
-        void setPbcTrack( int, VcdTrack* pbctrack = 0L );
-        void setPbcNonTrack( int, int );
-        void setUserDefined( int, bool );
+        void setPbcTrack( PbcTracks which, VcdTrack* pbctrack = 0L );
+        void setPbcNonTrack( PbcTracks which, PbcTypes type );
+        void setUserDefined( PbcTracks, bool );
         void setPlayTime( int t )
         {
             m_pbcplaytime = t;
@@ -102,9 +102,9 @@ namespace K3b {
             return m_pbcnumkeysuserdefined;
         };
 
-        VcdTrack* getPbcTrack( const int& );
-        int getNonPbcTrack( const int& );
-        bool isPbcUserDefined( int );
+        VcdTrack* getPbcTrack( PbcTracks which );
+        int getNonPbcTrack( PbcTracks which );
+        bool isPbcUserDefined( PbcTracks which );
         int getPlayTime()
         {
             return m_pbcplaytime;
@@ -177,9 +177,9 @@ namespace K3b {
 
         // PBC
         QList<VcdTrack*> m_revreflist;          // List of Tracks which points to us
-        QMap<int, VcdTrack*> m_pbctrackmap;        // Pbc Tracks (Previous, Next, ...)
-        QMap<int, int> m_pbcnontrackmap;              // Pbc NON Track types (Previous, Next, ...)
-        QMap<int, bool> m_pbcusrdefmap;               // Pbc is userdefined or defaults (Previous, Next, ...)
+        QMap<PbcTracks, VcdTrack*> m_pbctrackmap;        // Pbc Tracks (Previous, Next, ...)
+        QMap<PbcTracks, PbcTypes> m_pbcnontrackmap;              // Pbc NON Track types (Previous, Next, ...)
+        QMap<PbcTracks, bool> m_pbcusrdefmap;               // Pbc is userdefined or defaults (Previous, Next, ...)
         QMap<int, VcdTrack*> m_definedkeysmap;
 
         bool m_pbcnumkeys;

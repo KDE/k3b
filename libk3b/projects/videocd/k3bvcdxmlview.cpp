@@ -100,14 +100,14 @@ void K3b::VcdXmlView::Private::doPbc( QDomDocument& doc, QDomElement& parent, K3
 
     setNumkeyBSN( doc, elemSelection, track );
 
-    for ( int i = 0; i < K3b::VcdTrack::_maxPbcTracks; i++ ) {
+    Q_FOREACH( VcdTrack::PbcTracks pbc, VcdTrack::trackPlaybackValues() ) {
         QDomElement elemPbcSelectionPNRDT;
 
-        if ( track->getPbcTrack( i ) ) {
-            int index = track->getPbcTrack( i ) ->index();
-            QString ref = ( track->getPbcTrack( i ) ->isSegment() ) ? "segment" : "sequence";
+        if ( track->getPbcTrack( pbc ) ) {
+            int index = track->getPbcTrack( pbc ) ->index();
+            QString ref = ( track->getPbcTrack( pbc ) ->isSegment() ) ? "segment" : "sequence";
 
-            switch ( i ) {
+            switch ( pbc ) {
             case K3b::VcdTrack::PREVIOUS:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
                 elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
@@ -133,8 +133,8 @@ void K3b::VcdXmlView::Private::doPbc( QDomDocument& doc, QDomElement& parent, K3
             }
         } else {
             // jump to <endlist> otherwise do noop while disabled
-            if ( track->getNonPbcTrack( i ) == K3b::VcdTrack::VIDEOEND ) {
-                switch ( i ) {
+            if ( track->getNonPbcTrack( pbc ) == K3b::VcdTrack::VIDEOEND ) {
+                switch ( pbc ) {
                 case K3b::VcdTrack::PREVIOUS:
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
                     elemPbcSelectionPNRDT.setAttribute( "ref", "end" );

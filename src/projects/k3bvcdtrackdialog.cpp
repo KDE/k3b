@@ -64,7 +64,7 @@ public:
     {
     }
 
-    void setPbcTrack( VcdTrack* selected, QComboBox* box, int which );
+    void setPbcTrack( VcdTrack* selected, QComboBox* box, VcdTrack::PbcTracks which );
     
     VcdDoc* doc;
     QList<VcdTrack*> tracks;
@@ -116,30 +116,28 @@ public:
 };
 
 
-void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboBox* box, int which )
+void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboBox* box, VcdTrack::PbcTracks which )
 {
+    const int currentIndex = box->currentIndex();
+    const int count = tracks.count();
+    
     // TODO: Unset Userdefined on default settings
-    kDebug() << QString( "K3b::VcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( box->currentIndex() ).arg( tracks.count() );
-
-    int count = tracks.count();
-
-    if( selected->getPbcTrack( which ) == tracks.at( box->currentIndex() ) ) {
-        if( selected->getNonPbcTrack( which ) == ( int ) ( box->currentIndex() - count ) ) {
-            kDebug() << "K3b::VcdTrackDialog::setPbcTrack: not changed, return";
-            return ;
-        }
-    }
+    kDebug() << QString( "K3b::VcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( currentIndex ).arg( count );
 
     if( VcdTrack* track = selected->getPbcTrack( which ) )
         track->delFromRevRefList( selected );
 
-    if( box->currentIndex() > count - 1 ) {
-        selected->setPbcTrack( which );
-        selected->setPbcNonTrack( which, box->currentIndex() - count );
+    if( currentIndex >= 0 && currentIndex < count ) {
+        selected->setPbcTrack( which, tracks.at( currentIndex ) );
+        tracks.at( currentIndex ) ->addToRevRefList( selected );
+    }
+    else if( currentIndex == count ) {
+        selected->setPbcTrack( which, 0 );
+        selected->setPbcNonTrack( which, VcdTrack::DISABLED );
     }
     else {
-        selected->setPbcTrack( which, tracks.at( box->currentIndex() ) );
-        tracks.at( box->currentIndex() ) ->addToRevRefList( selected );
+        selected->setPbcTrack( which, 0 );
+        selected->setPbcNonTrack( which, VcdTrack::VIDEOEND );
     }
 
     selected->setUserDefined( which, true );

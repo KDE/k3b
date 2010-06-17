@@ -1,17 +1,18 @@
 /*
-*
-* Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
-* Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
-*
-* This file is part of the K3b project.
-* Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-* See the file "COPYING" for the exact licensing terms.
-*/
+ *
+ * Copyright (C) 2003-2004 Christian Kvasny <chris@k3b.org>
+ * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ *
+ * This file is part of the K3b project.
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * See the file "COPYING" for the exact licensing terms.
+ */
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -37,11 +38,11 @@ K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename 
 {
     m_parent = parent;
     m_title = QFileInfo( m_file ).completeBaseName();
-
-    for ( int i = 0; i < K3b::VcdTrack::_maxPbcTracks; i++ ) {
-        m_pbctrackmap.insert( i, 0L );
-        m_pbcnontrackmap.insert( i, K3b::VcdTrack::DISABLED );
-        m_pbcusrdefmap.insert( i, false );
+    
+    Q_FOREACH( PbcTracks playback, trackPlaybackValues() ) {
+        m_pbctrackmap.insert( playback, 0L );
+        m_pbcnontrackmap.insert( playback, DISABLED );
+        m_pbcusrdefmap.insert( playback, false );
     }
 
     m_reactivity = false;
@@ -53,7 +54,8 @@ K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename 
 
 
 K3b::VcdTrack::~VcdTrack()
-{}
+{
+}
 
 
 KIO::filesize_t K3b::VcdTrack::size() const
@@ -69,6 +71,15 @@ int K3b::VcdTrack::index() const
         kDebug() << "(K3b::VcdTrack) I'm not part of my parent!";
     return i;
 }
+
+
+QList<K3b::VcdTrack::PbcTracks> K3b::VcdTrack::trackPlaybackValues()
+{
+    QList<PbcTracks> playbacks;
+    playbacks << PREVIOUS << NEXT << RETURN << DEFAULT << AFTERTIMEOUT;
+    return playbacks;
+}
+
 
 void K3b::VcdTrack::addToRevRefList( K3b::VcdTrack* revreftrack )
 {
@@ -92,11 +103,11 @@ bool K3b::VcdTrack::hasRevRef()
 void K3b::VcdTrack::delRefToUs()
 {
     Q_FOREACH( K3b::VcdTrack* track, m_revreflist ) {
-        for ( int i = 0; i < K3b::VcdTrack::_maxPbcTracks; i++ ) {
+        Q_FOREACH( PbcTracks playback, trackPlaybackValues() ) {
             kDebug() << "K3b::VcdTrack::delRefToUs count = " << m_revreflist.count() << " empty = " << m_revreflist.isEmpty() << " track = " << track << " this = " << this;
-            if ( this == track->getPbcTrack( i ) ) {
-                track->setPbcTrack( i );
-                track->setUserDefined( i, false );
+            if( this == track->getPbcTrack( playback ) ) {
+                track->setPbcTrack( playback );
+                track->setUserDefined( playback, false );
                 track->delFromRevRefList( this );
             }
         }
@@ -105,31 +116,31 @@ void K3b::VcdTrack::delRefToUs()
 
 void K3b::VcdTrack::delRefFromUs()
 {
-    for ( int i = 0; i < K3b::VcdTrack::_maxPbcTracks; i++ ) {
-        if ( this->getPbcTrack( i ) ) {
-            this->getPbcTrack( i ) ->delFromRevRefList( this );
+    Q_FOREACH( PbcTracks playback, trackPlaybackValues() ) {
+        if ( this->getPbcTrack( playback ) ) {
+            this->getPbcTrack( playback ) ->delFromRevRefList( this );
         }
     }
 }
 
-void K3b::VcdTrack::setPbcTrack( int which, K3b::VcdTrack* pbctrack )
+void K3b::VcdTrack::setPbcTrack( PbcTracks which, K3b::VcdTrack* pbctrack )
 {
     kDebug() << "K3b::VcdTrack::setPbcTrack " << which << ", " << pbctrack;
     m_pbctrackmap[which] = pbctrack;
 }
 
-void K3b::VcdTrack::setPbcNonTrack( int which, int type )
+void K3b::VcdTrack::setPbcNonTrack( PbcTracks which, PbcTypes type )
 {
     kDebug() << "K3b::VcdTrack::setNonPbcTrack " << which << ", " << type;
     m_pbcnontrackmap[which] = type;
 }
 
-void K3b::VcdTrack::setUserDefined( int which, bool ud )
+void K3b::VcdTrack::setUserDefined( PbcTracks which, bool ud )
 {
     m_pbcusrdefmap[which] = ud;
 }
 
-K3b::VcdTrack* K3b::VcdTrack::getPbcTrack( const int& which )
+K3b::VcdTrack* K3b::VcdTrack::getPbcTrack( PbcTracks which )
 {
     if ( m_pbctrackmap.find( which ) == m_pbctrackmap.end() )
         return 0;
@@ -137,7 +148,7 @@ K3b::VcdTrack* K3b::VcdTrack::getPbcTrack( const int& which )
         return m_pbctrackmap[ which ];
 }
 
-int K3b::VcdTrack::getNonPbcTrack( const int& which )
+int K3b::VcdTrack::getNonPbcTrack( PbcTracks which )
 {
     if ( m_pbcnontrackmap.find( which ) == m_pbcnontrackmap.end() )
         return 0;
@@ -145,7 +156,7 @@ int K3b::VcdTrack::getNonPbcTrack( const int& which )
         return m_pbcnontrackmap[ which ];
 }
 
-bool K3b::VcdTrack::isPbcUserDefined( int which )
+bool K3b::VcdTrack::isPbcUserDefined( PbcTracks which )
 {
     return m_pbcusrdefmap[ which ];
 }
