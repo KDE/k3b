@@ -38,7 +38,14 @@ namespace K3b {
         ExternalBinParamsModel( ExternalBinManager* manager, QObject* parent = 0 );
         ~ExternalBinParamsModel();
         
+        /**
+         * Reloads programs from ExternalBinManager and updates the model
+         */
         void reload();
+        
+        /**
+         * Saves all changes made in model to ExternalBinManager
+         */
         void save();
         
         ExternalProgram* programForIndex( const QModelIndex& index ) const;

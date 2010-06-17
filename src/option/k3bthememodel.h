@@ -41,6 +41,9 @@ namespace K3b {
         ThemeModel( ThemeManager* themeManager, QObject* parent = 0 );
         ~ThemeModel();
         
+        /**
+         * Re-reads themes on disk and updates the model
+         */
         void reload();
         
         Theme* themeForIndex( const QModelIndex& index ) const;

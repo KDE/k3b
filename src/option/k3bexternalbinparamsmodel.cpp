@@ -15,15 +15,11 @@
 #include "k3bexternalbinparamsmodel.h"
 #include "k3bexternalbinmanager.h"
 
-#include <kio/deletejob.h>
 #include <KLocale>
 
-#include <QApplication>
-#include <QFile>
 #include <QFont>
 #include <QHash>
 #include <QList>
-#include <QPalette>
 #include <QRegExp>
 
 namespace K3b {
