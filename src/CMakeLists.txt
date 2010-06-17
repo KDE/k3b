@@ -137,6 +137,7 @@ set(k3b_option_SRCS
   option/k3bnotifyoptiontab.cpp 
   option/k3bpluginoptiontab.cpp 
   option/k3bthemeoptiontab.cpp 
+  option/k3bthememodel.cpp 
   option/k3bdevicewidget.cpp 
   option/k3bexternalbinwidget.cpp
   option/k3bcddboptiontab.cpp

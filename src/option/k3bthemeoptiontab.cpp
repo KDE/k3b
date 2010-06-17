@@ -1,9 +1,10 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
- * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,45 +15,31 @@
 
 
 #include "k3bthemeoptiontab.h"
-
-#include "k3bthememanager.h"
-
 #include "k3bapplication.h"
-#include <klocale.h>
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <kurlrequester.h>
-#include <k3listview.h>
+#include "k3bthememanager.h"
+#include "k3bthememodel.h"
+
 #include <kio/global.h>
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
-#include <kstandarddirs.h>
-#include <ktar.h>
-#include <kurlrequesterdlg.h>
+#include <KConfig>
 #include <KGlobalSettings>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KTar>
+#include <KUrlRequester>
+#include <KUrlRequesterDialog>
 
-#include <qlabel.h>
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QItemSelectionModel>
+#include <QLabel>
 
-
-class ThemeViewItem : public K3ListViewItem
-{
-public:
-    ThemeViewItem( K3b::Theme* theme_, Q3ListView* parent, Q3ListViewItem* after )
-        : K3ListViewItem( parent, after ),
-          theme(theme_) {
-        setText( 0, theme->name() );
-        setText( 1, theme->author() );
-        setText( 2, theme->version() );
-        setText( 3, theme->comment() );
-    }
-
-    K3b::Theme* theme;
-};
 
 K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
-    : QWidget( parent )
+    : QWidget( parent ),
+      m_themeModel( new ThemeModel( k3bappcore->themeManager(), this ) )
 {
     setupUi( this );
 
@@ -60,9 +47,9 @@ K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
     m_leftPreviewLabel->setAutoFillBackground( true );
     m_rightPreviewLabel->setAutoFillBackground( true );
 
-    m_viewTheme->setShadeSortColumn( false );
+    m_viewTheme->setModel( m_themeModel );
 
-    connect( m_viewTheme, SIGNAL(selectionChanged()),
+    connect( m_viewTheme->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)),
              this, SLOT(selectionChanged()) );
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(selectionChanged()) );
@@ -80,47 +67,40 @@ K3b::ThemeOptionTab::~ThemeOptionTab()
 
 void K3b::ThemeOptionTab::readSettings()
 {
-    m_viewTheme->clear();
-
-    k3bappcore->themeManager()->loadThemes();
-
-    QList<K3b::Theme*> themes = k3bappcore->themeManager()->themes();
-    for( QList<K3b::Theme*>::const_iterator it = themes.constBegin(); it != themes.constEnd(); ++it ) {
-        K3b::Theme* theme = *it;
-        ThemeViewItem* item = new ThemeViewItem( theme, m_viewTheme, m_viewTheme->lastItem() );
-        if( theme == k3bappcore->themeManager()->currentTheme() )
-            m_viewTheme->setSelected( item, true );
-    }
+    m_themeModel->reload();
+    
+    QModelIndex index = m_themeModel->indexForTheme( k3bappcore->themeManager()->currentTheme() );
+    m_viewTheme->setCurrentIndex( index );
 }
 
 
 bool K3b::ThemeOptionTab::saveSettings()
 {
-    ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
-    if( item )
-        k3bappcore->themeManager()->setCurrentTheme( item->theme );
-
+    QModelIndex index = m_viewTheme->currentIndex();
+    if( Theme* theme = m_themeModel->themeForIndex( index ) ) {
+        k3bappcore->themeManager()->setCurrentTheme( theme );
+    }
     return true;
 }
 
 
 void K3b::ThemeOptionTab::selectionChanged()
 {
-    ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
-    if( item ) {
+    QModelIndex index = m_viewTheme->currentIndex();
+    if( Theme* theme = m_themeModel->themeForIndex( index ) ) {
         m_centerPreviewLabel->setText( i18n("K3b - The CD/DVD Kreator") );
 
         QPalette pal( palette() );
-        pal.setColor( backgroundRole(), item->theme->backgroundColor() );
-        pal.setColor( foregroundRole(), item->theme->backgroundColor() );
+        pal.setColor( backgroundRole(), theme->backgroundColor() );
+        pal.setColor( foregroundRole(), theme->backgroundColor() );
         m_centerPreviewLabel->setPalette( pal );
         m_leftPreviewLabel->setPalette( pal );
         m_rightPreviewLabel->setPalette( pal );
 
-        m_leftPreviewLabel->setPixmap( item->theme->pixmap( K3b::Theme::PROJECT_LEFT ) );
-        m_rightPreviewLabel->setPixmap( item->theme->pixmap( K3b::Theme::PROJECT_RIGHT ) );
+        m_leftPreviewLabel->setPixmap( theme->pixmap( K3b::Theme::PROJECT_LEFT ) );
+        m_rightPreviewLabel->setPixmap( theme->pixmap( K3b::Theme::PROJECT_RIGHT ) );
 
-        m_buttonRemoveTheme->setEnabled( item->theme->local() );
+        m_buttonRemoveTheme->setEnabled( theme->local() );
     }
 }
 
@@ -201,29 +181,21 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 
 void K3b::ThemeOptionTab::slotRemoveTheme()
 {
-    ThemeViewItem* item = (ThemeViewItem*)m_viewTheme->selectedItem();
-    if( item ) {
+    QModelIndex index = m_viewTheme->currentIndex();
+    if( Theme* theme = m_themeModel->themeForIndex( index ) ) {
         QString question=i18n("<qt>Are you sure you want to remove the "
                               "<strong>%1</strong> theme?<br>"
                               "<br>"
-                              "This will delete the files installed by this theme.</qt>",item->text(0));
+                              "This will delete the files installed by this theme.</qt>", theme->name() );
 
         if( KMessageBox::warningContinueCancel( this, question, i18n("Delete"), KStandardGuiItem::del() ) != KMessageBox::Continue )
             return;
 
-        K3b::Theme* theme = item->theme;
-        delete item;
-        QString path = theme->path();
-
-        // delete k3b.theme file to avoid it to get loaded
-        QFile::remove( path + "/k3b.theme" );
+        m_themeModel->removeRow( index.row() );
 
         // reread the themes (this will also set the default theme in case we delete the
         // selected one)
         readSettings();
-
-        // delete the theme data itself
-        KIO::del( path, KIO::HideProgressInfo );
     }
 }
 
