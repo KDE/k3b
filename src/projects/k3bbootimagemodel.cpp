@@ -132,8 +132,8 @@ bool BootImageModel::removeRows( int row, int count, const QModelIndex& parent )
         beginRemoveRows( parent, row, row+count-1 );
         for( int i = 0; i < count; ++i ) {
             if( row >= 0 && row < m_doc->bootImages().size() ) {
-                kDebug() << "removing image at" << row;
-                m_doc->bootImages().removeAt( row );
+                BootItem* item = m_doc->bootImages().takeAt( i );
+                delete item;
             }
         }
         endRemoveRows();
