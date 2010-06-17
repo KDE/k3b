@@ -14,12 +14,9 @@
  */
 
 #include "k3bmixedprojectinterface.h"
-#include "k3bdataprojectinterface.h"
 #include "k3baudioprojectinterface.h"
-
+#include "k3bdataprojectinterface.h"
 #include "k3bmixeddoc.h"
-#include "k3bdatadoc.h"
-#include "k3baudiodoc.h"
 
 namespace K3b {
 
@@ -29,8 +26,8 @@ MixedProjectInterface::MixedProjectInterface( MixedDoc* doc )
     ProjectInterface( doc ),
     m_mixedDoc( doc )
 {
-    m_dataInterface = new DataProjectInterface( doc->dataDoc(), dbusPath() + "-datapart" );
-    m_audioInterface = new AudioProjectInterface( doc->audioDoc(), dbusPath() + "-audiopart" );
+    m_audioInterface = new AudioProjectInterface( doc->audioDoc(), dbusPath() + "/audio" );
+    m_dataInterface = new DataProjectInterface( doc->dataDoc(), dbusPath() + "/data" );
 }
 
 } // namespace K3b

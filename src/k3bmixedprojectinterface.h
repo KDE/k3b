@@ -34,8 +34,8 @@ namespace K3b {
     private:
         MixedDoc* m_mixedDoc;
 
-        DataProjectInterface* m_dataInterface;
         AudioProjectInterface* m_audioInterface;
+        DataProjectInterface* m_dataInterface;
     };
 }
 
