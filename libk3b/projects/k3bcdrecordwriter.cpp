@@ -414,7 +414,7 @@ void K3b::CdrecordWriter::start()
     emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "cdrecord: " ) + d->cdrecordBinObject->version() );
 
     if( !d->cdrecordBinObject->copyright().isEmpty() )
-        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
+        emit infoMessage( i18n("Using %1 %2 – Copyright © %3"
                                ,(d->cdrecordBinObject->hasFeature( "wodim" ) ? "Wodim" : "Cdrecord" )
                                ,d->cdrecordBinObject->version()
                                ,d->cdrecordBinObject->copyright()), MessageInfo );

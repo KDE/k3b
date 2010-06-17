@@ -231,26 +231,26 @@ QVariant VcdProjectModel::headerData( int section, Qt::Orientation orientation, 
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
         switch( section ) {
             case NoColumn:
-                return i18nc( "VideoCD Track Number", "No." );
+                return i18nc( "Video CD Track Number", "No." );
             case TitleColumn:
-                return i18nc( "VideoCD Track Title", "Title" );
+                return i18nc( "Video CD Track Title", "Title" );
             case TypeColumn:
-                return i18nc( "VideoCD Track Type (ie. MPEG1)", "Type" );
+                return i18nc( "Video CD Track Type (ie. MPEG1)", "Type" );
             case ResolutionColumn:
-                return i18nc( "VideoCD Track Resolution", "Resolution" );
+                return i18nc( "Video CD Track Resolution", "Resolution" );
             case HighResolutionColumn:
-                return i18nc(   "VideoCD Track High Resolution",
+                return i18nc(   "Video CD Track High Resolution",
                                 "High Resolution" );
             case FrameRateColumn:
-                return i18nc( "VideoCD Track Framerate", "Framerate" );
+                return i18nc( "Video CD Track Framerate", "Framerate" );
             case MuxRateColumn:
-                return i18nc( "VideoCD Track Muxrate", "Muxrate" );
+                return i18nc( "Video CD Track Muxrate", "Muxrate" );
             case DurationColumn:
-                return i18nc( "VideoCD Track Duration", "Duration" );
+                return i18nc( "Video CD Track Duration", "Duration" );
             case SizeColumn:
-                return i18nc( "VideoCD Track File Size", "File Size" );
+                return i18nc( "Video CD Track File Size", "File Size" );
             case FilenameColumn:
-                return i18nc( "VideoCD Track Filename", "Filename" );
+                return i18nc( "Video CD Track Filename", "Filename" );
             default:
                 return QVariant();
         }

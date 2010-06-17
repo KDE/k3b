@@ -140,7 +140,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
     emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "transcode: " ) + d->usedTranscodeBin->version() );
 
     if( !d->usedTranscodeBin->copyright().isEmpty() )
-        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
+        emit infoMessage( i18n("Using %1 %2 – Copyright © %3"
                                ,d->usedTranscodeBin->name()
                                ,d->usedTranscodeBin->version()
                                ,d->usedTranscodeBin->copyright()), MessageInfo );
@@ -199,7 +199,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         break;
 
     default:
-        emit infoMessage( i18n("Invalid Video codec set: %1",m_videoCodec), MessageError );
+        emit infoMessage( i18n("Invalid video codec set: %1",m_videoCodec), MessageError );
         jobFinished( false );
         return;
     }
@@ -222,7 +222,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         break;
 
     default:
-        emit infoMessage( i18n("Invalid Audio codec set: %1",m_audioCodec), MessageError );
+        emit infoMessage( i18n("Invalid audio codec set: %1",m_audioCodec), MessageError );
         jobFinished( false );
         return;
     }

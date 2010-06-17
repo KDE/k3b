@@ -58,7 +58,7 @@ K3b::VcdJob::VcdJob( K3b::VcdDoc* doc, K3b::JobHandler* jh, QObject* parent )
       d( new Private )
 {
     d->xmlFile = 0;
-    
+
     m_doc = doc;
     m_doc->setCopies( m_doc->dummy() || m_doc->onlyCreateImages() ? 1 : m_doc->copies() );
     m_process = 0;
@@ -76,7 +76,7 @@ K3b::VcdJob::~VcdJob()
 {
     delete d->xmlFile;
     delete d;
-    
+
     delete m_process;
 
     delete m_writerJob;
@@ -167,7 +167,7 @@ void K3b::VcdJob::xmlGen()
 {
     delete d->xmlFile;
     d->xmlFile = new KTemporaryFile;
-    
+
     if( d->xmlFile->open() ) {
         kDebug() << "(K3b::VcdJob) writing XML data to" << d->xmlFile->fileName();
 
@@ -202,7 +202,7 @@ void K3b::VcdJob::vcdxBuild()
     if ( !bin ) {
         kDebug() << "(K3b::VcdJob) could not find vcdxbuild executable";
         emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxbuild") ), K3b::Job::MessageError );
-        emit infoMessage( i18n( "To create VideoCDs you must install VcdImager Version %1." ,QString( ">= 0.7.12") ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "To create Video CDs you have to install VcdImager Version %1." ,QString( ">= 0.7.12") ), K3b::Job::MessageInfo );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
@@ -219,7 +219,7 @@ void K3b::VcdJob::vcdxBuild()
     }
 
     if ( !bin->copyright().isEmpty() )
-        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version() ,bin->copyright() ), MessageInfo );
+        emit infoMessage( i18n( "Using %1 %2 – Copyright © %3" , bin->name() , bin->version() ,bin->copyright() ), MessageInfo );
 
     *m_process << bin;
 

@@ -231,11 +231,11 @@ K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )
        + i18n("<p>This is the normal copy mode for DVD, Blu-ray, and most CD media types. "
                "It allows copying Audio CDs, multi and single session Data Media, and "
                "Enhanced Audio CDs (an Audio CD containing an additional data session)."
-               "<p>For VideoCDs please use the CD Cloning mode.")
+               "<p>For Video CDs please use the CD Cloning mode.")
         + "<p><b>" + i18n("Clone Copy") + "</b>"
         + i18n("<p>In CD Cloning mode K3b performs a raw copy of the CD. That means it does "
                "not care about the content but simply copies the CD bit by bit. It may be used "
-               "to copy VideoCDs or CDs which contain erroneous sectors."
+               "to copy Video CDs or CDs which contain erroneous sectors."
                "<p><b>Caution:</b> Only single session CDs can be cloned.") );
 }
 

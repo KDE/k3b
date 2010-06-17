@@ -99,8 +99,8 @@ void K3b::VcdView::init()
         kDebug() << "(K3b::VcdView) could not find vcdxbuild executable";
         KMessageBox::information( this,
                         i18n( "Could not find VcdImager executable. "
-                        "To create VideoCD's you must install VcdImager >= 0.7.12. "
-                        "You can find this on your distribution disks or download "
+                        "To create Video CDs you have to install VcdImager >= 0.7.12. "
+                        "You can find this on your distribution’s software repository or download "
                         "it from http://www.vcdimager.org" ) );
     }
 }

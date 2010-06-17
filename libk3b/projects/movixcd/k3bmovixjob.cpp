@@ -121,11 +121,11 @@ QString K3b::MovixJob::jobDescription() const
 
 QString K3b::MovixJob::jobDetails() const
 {
-    return ( i18np("1 file (%2) and about 8 MB eMovix data",
+    return ( i18np("One file (%2) and about 8 MB eMovix data",
                    "%1 files (%2) and about 8 MB eMovix data",
                    m_doc->movixFileItems().count(), KIO::convertSize(m_doc->size()))
              + ( m_doc->copies() > 1
-                 ? i18np(" - %1 copy", " - %1 copies", m_doc->copies())
+                 ? i18np(" – One copy", " – %1 copies", m_doc->copies())
                  : QString() ) );
 }
 

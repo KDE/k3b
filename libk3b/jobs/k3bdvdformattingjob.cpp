@@ -468,7 +468,7 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
         }
 
         if( !d->dvdFormatBin->copyright().isEmpty() )
-            emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",d->dvdFormatBin->name(),d->dvdFormatBin->version(),d->dvdFormatBin->copyright()), MessageInfo );
+            emit infoMessage( i18n("Using %1 %2 – Copyright © %3",d->dvdFormatBin->name(),d->dvdFormatBin->version(),d->dvdFormatBin->copyright()), MessageInfo );
 
 
         *d->process << d->dvdFormatBin;

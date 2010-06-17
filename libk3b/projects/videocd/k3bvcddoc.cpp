@@ -253,7 +253,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
             if ( newTrack->isSegment() && !vcdOptions()->PbcEnabled() ) {
                 KMessageBox::information( kapp->activeWindow(),
                                           i18n( "PBC (Playback control) enabled.\n"
-                                                "Videoplayers can not reach Segments (Mpeg Still Pictures) without Playback control ." ) ,
+                                                "Video players cannot reach Segments (MPEG Still Pictures) without Playback control." ) ,
                                           i18n( "Information" ) );
 
                 vcdOptions()->setPbcEnabled( true );

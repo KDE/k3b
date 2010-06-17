@@ -99,8 +99,8 @@ void K3b::VideoCdRip::vcdxRip()
     if ( !bin ) {
         kDebug() << "(K3b::VideoCdRip) could not find vcdxrip executable";
         emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxrip") ), K3b::Job::MessageError );
-        emit infoMessage( i18n( "To rip VideoCD's you must install VcdImager Version %1." , QString(">= 0.7.12") ), K3b::Job::MessageInfo );
-        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "To rip Video CDs you have to install VcdImager Version %1." , QString(">= 0.7.12") ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "You can find this on your distribution’s software repository or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;
@@ -114,9 +114,9 @@ void K3b::VideoCdRip::vcdxRip()
         jobFinished( false );
         return ;
     }
-        
+
     if ( !bin->copyright().isEmpty() )
-        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version() , bin->copyright() ), MessageInfo );
+        emit infoMessage( i18n( "Using %1 %2 – Copyright © %3" , bin->name() , bin->version() , bin->copyright() ), MessageInfo );
 
 
     *m_process << k3bcore ->externalBinManager() ->binPath( "vcdxrip" );
@@ -133,7 +133,7 @@ void K3b::VideoCdRip::vcdxRip()
 
      if ( !m_videooptions ->getVideoCdRipSegments() )
         *m_process << "--nosegments";
-        
+
      if ( !m_videooptions ->getVideoCdRipSequences() )
         *m_process << "--nosequences";
 
@@ -142,14 +142,14 @@ void K3b::VideoCdRip::vcdxRip()
 
      if ( m_videooptions ->getVideoCdSector2336() )
         *m_process << "--sector-2336";
-        
+
      *m_process << "-i" << QFile::encodeName( m_videooptions ->getVideoCdSource() );
 
      if ( m_videooptions ->getVideoCdExtractXml() )
         *m_process << "-o" << QFile::encodeName( m_videooptions ->getVideoCdDescription() + ".xml" );
      else
         *m_process << "-o" << "/dev/null";
-      
+
 
     m_process->setOutputChannelMode( KProcess::MergedChannels );
     connect( m_process, SIGNAL( readyReadStandardOutput() ),
@@ -294,7 +294,7 @@ void K3b::VideoCdRip::parseInformation( QString text )
         jobFinished( false );
         return;
     }
-    
+
     // parse extra info
     else if ( text.contains( "detected extended VCD2.0 PBC files" ) )
         emit infoMessage( i18n( "detected extended VCD2.0 PBC files" ), K3b::Job::MessageInfo );

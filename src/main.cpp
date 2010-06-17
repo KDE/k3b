@@ -1,4 +1,3 @@
-
 /*
  *
  *
@@ -49,17 +48,17 @@ int main( int argc, char* argv[] )
 {
     KAboutData aboutData( "k3b",0, ki18n("K3b"),
                           LIBK3B_VERSION, ki18n(description), KAboutData::License_GPL,
-                          ki18n("(C) 1998-2009 Sebastian Trüg"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
+                          ki18n("Copyright © 1998–2010 K3b authors"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
 
-    aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Maintainer and Lead Developer"), "trueg@k3b.org");
-    aboutData.addAuthor(ki18n("Michał Małek"),ki18n("Developer"), "michalm@jabster.pl");
+    aboutData.addAuthor(ki18n("Michał Małek"),ki18n("Maintainer and current lead Developer"), "michalm@jabster.pl");
+    aboutData.addAuthor(ki18n("Sebastian Trüg"),ki18n("Main developer"), "trueg@k3b.org");
     aboutData.addAuthor(ki18n("Christian Kvasny"),ki18n("Video CD Project and Video CD ripping"), "chris@k3b.org");
     aboutData.addAuthor(ki18n("Montel Laurent"), ki18n("Initial port to KDE Platform 4"), "montel@kde.org");
     aboutData.addAuthor( ki18n("Ralf Habacker"), ki18n( "Windows port" ), "ralf.habacker@freenet.de" );
 
     aboutData.addCredit(ki18n("Klaus-Dieter Krannich"), ki18n("Advanced Cdrdao integration"), "kd@k3b.org" );
     aboutData.addCredit(ki18n("Thomas Froescher"),
-                        ki18n("VideoDVD ripping and video encoding in pre-1.0 versions."),
+                        ki18n("Video DVD ripping and video encoding in pre-1.0 versions."),
                         "tfroescher@k3b.org");
     aboutData.addCredit(ki18n("Alexis Younes aka Ayo"),
                         ki18n("For his bombastic artwork."),

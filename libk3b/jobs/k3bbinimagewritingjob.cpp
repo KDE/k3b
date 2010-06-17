@@ -124,13 +124,13 @@ bool K3b::BinImageWritingJob::prepareWriter()
     else {
         // create cdrdao job
         K3b::CdrdaoWriter* writer = new K3b::CdrdaoWriter( m_device, this );
-        
+
         writer->setCommand( K3b::CdrdaoWriter::WRITE );
         writer->setSimulate( m_simulate );
         writer->setBurnSpeed( m_speed );
         writer->setTocFile( m_tocFile );
         writer->setMulti( m_noFix );
-        
+
         m_writer = writer;
     }
 
@@ -185,7 +185,7 @@ void K3b::BinImageWritingJob::writerFinished(bool ok)
             if ( k3bcore->globalSettings()->ejectMedia() ) {
                 K3b::Device::eject( m_device );
             }
-            emit infoMessage( i18np("%1 copy successfully created", "%1 copies successfully created", m_copies),K3b::Job::MessageInfo );
+            emit infoMessage( i18np("One copy successfully created", "%1 copies successfully created", m_copies),K3b::Job::MessageInfo );
             jobFinished( true );
         }
         else {

@@ -999,8 +999,8 @@ QString K3b::DataJob::jobDetails() const
         !d->doc->dummy() &&
         !(d->doc->multiSessionMode() == K3b::DataDoc::CONTINUE ||
           d->doc->multiSessionMode() == K3b::DataDoc::FINISH) )
-        return i18np("ISO9660 Filesystem (Size: %2) - %1 copy",
-                     "ISO9660 Filesystem (Size: %2) - %1 copies",
+        return i18np("ISO9660 Filesystem (Size: %2) – One copy",
+                     "ISO9660 Filesystem (Size: %2) – %1 copies",
                      d->doc->copies(),
                      KIO::convertSize( d->doc->size() ) );
     else

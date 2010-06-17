@@ -80,11 +80,11 @@ K3b::WelcomeWidget::WelcomeWidget( MainWindow* mainWindow, QWidget* parent )
 
     setAcceptDrops( true );
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
-    
+
     m_rows = m_cols = 1;
 
     m_buttonMore = new K3b::FlatButton( i18n("More actions..."), this );
-    
+
     connect( m_buttonMore, SIGNAL(pressed()), this, SLOT(slotMoreActions()) );
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(update()) );
@@ -216,7 +216,7 @@ void K3b::WelcomeWidget::repositionButtons()
     QRect rect( leftMargin + 2, topOffset + (row*(m_buttonSize.height()+BUTTON_SPACING)) + 2,
                 m_cols*(m_buttonSize.width()+BUTTON_SPACING) - BUTTON_SPACING, m_buttonMore->height() );
     m_buttonMore->setGeometry( QStyle::visualRect( layoutDirection(), contentsRect(), rect ) );
-    
+
     setMinimumHeight( heightForWidth( width() ) );
 }
 
@@ -227,7 +227,7 @@ int K3b::WelcomeWidget::heightForWidth( int width ) const
     m_infoText->setTextWidth( width );
     int h = ( int )m_infoText->size().height();
     m_infoText->setTextWidth( ow );
-    
+
     int cols, rows;
     calculateButtons( width, m_actions.count(), m_buttonSize.width(), cols, rows );
     int height = MARGIN +
@@ -260,8 +260,8 @@ void K3b::WelcomeWidget::slotThemeChanged()
                                           .arg(theme->foregroundColor().name()) );
     }
 
-    m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b - The CD and DVD Kreator") + "</body></html>" );
-    m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\">K3b %1 &copy; 1999&ndash;2010 Sebastian Trüg et al.</body></html>")
+    m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator") + "</body></html>" );
+    m_infoText->setHtml( QString::fromUtf8("<html><body align=\"center\"> + i18n("K3b %1 Copyright &copy; 1998&ndash;2010 K3b developers") + "</body></html>")
                          .arg(KGlobal::mainComponent().aboutData()->version()) );
     setMinimumWidth( 2*MARGIN + qMax(( int )m_header->idealWidth(), m_buttonSize.width()) );
     updateBgPix();

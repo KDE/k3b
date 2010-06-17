@@ -27,7 +27,7 @@ class VcdTrackKeysModel::Private
 {
 public:
     Private( int kc ) : keyCount( kc ) {}
-    
+
     Key2Track keys;
     int keyCount;
 };
@@ -168,7 +168,7 @@ QModelIndex VcdTrackKeysModel::buddy( const QModelIndex& index ) const
 QString VcdTrackKeysModel::trackName( VcdTrack* track )
 {
     if( track == 0 )
-        return i18n( "VideoCD END" );
+        return i18n( "Video CD END" );
     else if( track->isSegment() )
         return i18n( "Segment-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
     else

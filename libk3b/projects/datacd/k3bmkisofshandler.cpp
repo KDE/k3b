@@ -59,7 +59,7 @@ const K3b::ExternalBin* K3b::MkisofsHandler::initMkisofs()
 
     if( d->mkisofsBin ) {
         if( !d->mkisofsBin->copyright().isEmpty() )
-            handleMkisofsInfoMessage( i18n("Using %1 %2 - Copyright (C) %3",
+            handleMkisofsInfoMessage( i18n("Using %1 %2 – Copyright © %3",
                                            QString("mkisofs"),
                                            d->mkisofsBin->version(),
                                            d->mkisofsBin->copyright()),

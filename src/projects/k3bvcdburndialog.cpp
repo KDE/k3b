@@ -108,10 +108,10 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     m_check2336->setToolTip( i18n( "Use 2336 byte sectors for output" ) );
 
     m_editVolumeId->setToolTip( i18n( "Specify ISO volume label for Video CD" ) );
-    m_editAlbumId->setToolTip( i18n( "Specify album id for VideoCD set" ) );
+    m_editAlbumId->setToolTip( i18n( "Specify album id for Video CD set" ) );
     m_spinVolumeNumber->setToolTip( i18n( "Specify album set sequence number ( <= volume-count )" ) );
     m_spinVolumeCount->setToolTip( i18n( "Specify number of volumes in album set" ) );
-    m_checkCdiSupport->setToolTip( i18n( "Enable CD-i Application Support for VideoCD Type 1.1 & 2.0" ) );
+    m_checkCdiSupport->setToolTip( i18n( "Enable CD-i Application Support for Video CD Type 1.1 & 2.0" ) );
     m_editCdiCfg->setToolTip( i18n( "Configuration parameters (only for VCD 2.0)" ) );
 
     m_checkPbc->setToolTip( i18n( "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 disc formats." ) );
@@ -178,10 +178,10 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
                                         "<li><b>/SVCD/SEARCH.DAT</b> is optional instead of being mandatory.</li></ul>" ) );
 
     m_checkAutoDetect->setWhatsThis( i18n( "<p>If Autodetect is:</p>"
-                                           "<ul><li>ON then K3b will set the correct VideoCD type.</li>"
-                                           "<li>OFF then the correct VideoCD type needs to be set by the user.</li></ul>"
-                                           "<p>If you are not sure about the correct VideoCD type, it is best to turn Autodetect ON.</p>"
-                                           "<p>If you want to force the VideoCD type, you must turn Autodetect OFF. This is useful for some standalone DVD players without SVCD support.</p>" ) );
+                                           "<ul><li>ON then K3b will set the correct Video CD type.</li>"
+                                           "<li>OFF then the correct Video CD type needs to be set by the user.</li></ul>"
+                                           "<p>If you are not sure about the correct Video CD type, it is best to turn Autodetect ON.</p>"
+                                           "<p>If you want to force the Video CD type, you must turn Autodetect OFF. This is useful for some standalone DVD players without SVCD support.</p>" ) );
 
     m_checkNonCompliant->setWhatsThis( i18n( "<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV\".</li>"
                                              "<li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</li></ul>" ) );
@@ -197,7 +197,7 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
                                            "<li>be extremely simple to use and easy-to-learn for the end-user</li></ul>"
                                            "<p>The program runs on CD-i players equipped with the CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge." ) );
 
-    m_editCdiCfg->setWhatsThis( i18n( "<p>Configuration parameters only available for VideoCD 2.0"
+    m_editCdiCfg->setWhatsThis( i18n( "<p>Configuration parameters only available for Video CD 2.0"
                                       "<p>The engine works perfectly well when used as-is."
                                       "<p>You have the option to configure the VCD application."
                                       "<p>You can adapt the color and/or the shape of the cursor and lots more." ) );
@@ -392,10 +392,10 @@ void K3b::VcdBurnDialog::setupVideoCdTab()
 
     // ---------------------------------------------------- Format group ----
     m_groupVcdFormat = new QGroupBox( i18n( "Type" ), w );
-    m_radioVcd11 = new QRadioButton( i18n( "VideoCD 1.1" ), m_groupVcdFormat );
-    m_radioVcd20 = new QRadioButton( i18n( "VideoCD 2.0" ), m_groupVcdFormat );
-    m_radioSvcd10 = new QRadioButton( i18n( "Super-VideoCD" ), m_groupVcdFormat );
-    m_radioHqVcd10 = new QRadioButton( i18n( "HQ-VideoCD" ), m_groupVcdFormat );
+    m_radioVcd11 = new QRadioButton( i18n( "Video CD 1.1" ), m_groupVcdFormat );
+    m_radioVcd20 = new QRadioButton( i18n( "Video CD 2.0" ), m_groupVcdFormat );
+    m_radioSvcd10 = new QRadioButton( i18n( "Super Video CD" ), m_groupVcdFormat );
+    m_radioHqVcd10 = new QRadioButton( i18n( "HQ Video CD" ), m_groupVcdFormat );
     m_buttonGroupVcdFormat = new QButtonGroup( m_groupVcdFormat );
     m_buttonGroupVcdFormat->setExclusive( true );
     m_buttonGroupVcdFormat->addButton( m_radioVcd11, K3b::VcdDoc::VCD11);
@@ -413,7 +413,7 @@ void K3b::VcdBurnDialog::setupVideoCdTab()
     // ---------------------------------------------------- Options group ---
 
     m_groupOptions = new QGroupBox( i18n( "Settings" ), w );
-    m_checkAutoDetect = new QCheckBox( i18n( "Autodetect VideoCD type" ), m_groupOptions );
+    m_checkAutoDetect = new QCheckBox( i18n( "Autodetect Video CD type" ), m_groupOptions );
     m_checkNonCompliant = new QCheckBox( i18n( "Enable broken SVCD mode" ), m_groupOptions );
     // Only available on SVCD Type
     m_checkNonCompliant->setEnabled( false );
@@ -432,7 +432,7 @@ void K3b::VcdBurnDialog::setupVideoCdTab()
     groupOptionsLayout->addWidget( m_checkCdiSupport );
 
     // ------------------------------------------------- CD-i Application ---
-    m_groupCdi = new QGroupBox( i18n( "VideoCD on CD-i" ), w );
+    m_groupCdi = new QGroupBox( i18n( "Video CD on CD-i" ), w );
     m_editCdiCfg = new QTextEdit( m_groupCdi );
     m_editCdiCfg->setFrameShape( QFrame::NoFrame );
     QVBoxLayout* groupCdiLayout = new QVBoxLayout( m_groupCdi );
@@ -463,7 +463,7 @@ void K3b::VcdBurnDialog::setupLabelTab()
 
     labelInfoApplicationId->setFrameShape( QLabel::StyledPanel );
     labelInfoApplicationId->setFrameShadow( QLabel::Sunken );
-    labelInfoApplicationId->setToolTip( i18n( "ISO application id for VideoCD" ) );
+    labelInfoApplicationId->setToolTip( i18n( "ISO application identifier for Video CD" ) );
 
     // ----------------------------------------------------------------------
 

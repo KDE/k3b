@@ -452,7 +452,7 @@ void K3b::CdrdaoWriter::start()
     emit debuggingOutput( QLatin1String("Used versions"), QLatin1String( "cdrdao: " ) + m_cdrdaoBinObject->version() );
 
     if( !m_cdrdaoBinObject->copyright().isEmpty() )
-        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",m_cdrdaoBinObject->name(),m_cdrdaoBinObject->version(),m_cdrdaoBinObject->copyright()), MessageInfo );
+        emit infoMessage( i18n("Using %1 %2 – Copyright © %3",m_cdrdaoBinObject->name(),m_cdrdaoBinObject->version(),m_cdrdaoBinObject->copyright()), MessageInfo );
 
 
     // the message size changed in cdrdao 1.1.8)

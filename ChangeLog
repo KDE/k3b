@@ -457,7 +457,7 @@ It is now possible to open an iso image or an audio cue file just like a project
 Create cue files for an audio CD ripped into one single file
 Show writer buffer state in addition to fifo buffer when writing CDs.
 Show device buffer state for DVD writing (does not work always yet)
-Fixed read and save setting in VideoCD project.
+Fixed read and save setting in Video CD project.
 Big parts of the audio project have been rewritten to have a way better design:
 	- K3b now does not create additional silence between the tracks by default
           the pregap is treated as part of the previous track like in all other
@@ -699,7 +699,7 @@ new progressdialog
 faster cddb access (older versions just queried all entries, now only the selected one gets queried)
 K3b is now threaded.
 Gui beautifying.
-videocd:
+Video CD:
    add playback control (PBC)
 	 add customizing of Gaps and Margins
    add HQ-VIDEOCD support

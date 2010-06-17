@@ -220,8 +220,8 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
         m_labelLocalLocation->hide();
         m_spacerLine->hide();
         m_labelSize->setText( KIO::convertSize(dataItem->size()) + "\n(" +
-                              i18np("in 1 file", "in %1 files", dirItem->numFiles()) + " " +
-                              i18np("and 1 folder", "and %1 folders", dirItem->numDirs()) + ")" );
+                              i18np("in one file", "in %1 files", dirItem->numFiles()) + " " +
+                              i18np("and one folder", "and %1 folders", dirItem->numDirs()) + ")" );
     }
     else {
         m_labelIcon->setPixmap( DesktopIcon("unknown", KIconLoader::SizeLarge) );
