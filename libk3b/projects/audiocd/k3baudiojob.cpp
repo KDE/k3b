@@ -296,7 +296,7 @@ void K3b::AudioJob::start()
             d->useCdText ) {
             if( !cdrecordCdText ) {
                 emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",
-                                       k3bcore->externalBinManager()->binObject("cdrecord")->version), MessageError );
+                                       k3bcore->externalBinManager()->binObject("cdrecord")->version()), MessageError );
                 d->useCdText = false;
             }
             else if( m_usedWritingMode == K3b::WritingModeTao ) {

@@ -467,13 +467,13 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
             return;
         }
 
-        if( !d->dvdFormatBin->copyright.isEmpty() )
-            emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",d->dvdFormatBin->name(),d->dvdFormatBin->version,d->dvdFormatBin->copyright), MessageInfo );
+        if( !d->dvdFormatBin->copyright().isEmpty() )
+            emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",d->dvdFormatBin->name(),d->dvdFormatBin->version(),d->dvdFormatBin->copyright()), MessageInfo );
 
 
         *d->process << d->dvdFormatBin;
 
-        if( d->dvdFormatBin->version >= Version( 4, 6 ) )
+        if( d->dvdFormatBin->version() >= Version( 4, 6 ) )
             *d->process << "-gui";
 
         QString p;
@@ -501,7 +501,7 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
         if( !d->process->start( KProcess::OnlyStderrChannel ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
-            kDebug() << "(K3b::DvdFormattingJob) could not start " << d->dvdFormatBin->path;
+            kDebug() << "(K3b::DvdFormattingJob) could not start " << d->dvdFormatBin->path();
             emit infoMessage( i18n("Could not start %1.",d->dvdFormatBin->name()), Job::MessageError );
             d->running = false;
             jobFinished(false);

@@ -77,9 +77,8 @@ public:
             }
             int endPos = out.indexOf( '\n', pos );
             if( pos > 0 && endPos > 0 ) {
-                bin = new K3b::ExternalBin( this );
-                bin->path = path;
-                bin->version = out.mid( pos, endPos-pos );
+                bin = new K3b::ExternalBin( *this, path );
+                bin->setVersion( K3b::Version( out.mid( pos, endPos-pos ) ) );
 
                 addBin( bin );
 
@@ -172,11 +171,11 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
                  this, SLOT(slotSoxOutputLine(QString)) );
 
         // input settings
-        *d->process << soxBin->path
+        *d->process << soxBin->path()
                     << "-t" << "raw"    // raw samples
                     << "-r" << "44100"  // samplerate
                     << "-s";            // signed linear
-        if ( soxBin->version >= K3b::Version( 13, 0, 0 ) )
+        if ( soxBin->version() >= K3b::Version( 13, 0, 0 ) )
             *d->process << "-2";
         else
             *d->process << "-w";        // 16-bit words

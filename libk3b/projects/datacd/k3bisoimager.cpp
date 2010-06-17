@@ -257,7 +257,7 @@ void K3b::IsoImager::startSizeCalculation()
     m_process = new K3b::Process( this );
     m_process->setSplitStdout(true);
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "mkisofs: " ) + d->mkisofsBin->version );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "mkisofs: " ) + d->mkisofsBin->version() );
 
     *m_process << d->mkisofsBin;
 
@@ -627,7 +627,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
                           MessageWarning );
 
         // in genisoimage 1.1.3 "they" silently introduced this aweful parameter
-        if ( d->mkisofsBin->hasFeature( "genisoimage" ) && d->mkisofsBin->version >= K3b::Version( 1, 1, 3 ) ) {
+        if ( d->mkisofsBin->hasFeature( "genisoimage" ) && d->mkisofsBin->version() >= K3b::Version( 1, 1, 3 ) ) {
             *m_process << "-allow-limited-size";
         }
     }

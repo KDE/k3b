@@ -157,22 +157,22 @@ bool K3b::GrowisofsWriter::prepareProcess()
         return false;
     }
 
-    if( d->growisofsBin->version < K3b::Version( 5, 10 ) ) {
+    if( d->growisofsBin->version() < K3b::Version( 5, 10 ) ) {
         emit infoMessage( i18n("Growisofs version %1 is too old. "
-                               "K3b needs at least version 5.10.", d->growisofsBin->version ),
+                               "K3b needs at least version 5.10.", d->growisofsBin->version() ),
                           MessageError );
         return false;
     }
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "growisofs: " ) + d->growisofsBin->version );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "growisofs: " ) + d->growisofsBin->version() );
 
-    if( !d->growisofsBin->copyright.isEmpty() )
+    if( !d->growisofsBin->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",QString("growisofs")
-                               ,d->growisofsBin->version,d->growisofsBin->copyright), MessageInfo );
+                               ,d->growisofsBin->version(),d->growisofsBin->copyright()), MessageInfo );
 
 
     if ( !d->growisofsBin->hasFeature( "buffer" ) ) {
-        emit infoMessage( i18n( "Growisofs version %1 does not feature a software buffer which may result in an unstable burn process.", d->growisofsBin->version ),
+        emit infoMessage( i18n( "Growisofs version %1 does not feature a software buffer which may result in an unstable burn process.", d->growisofsBin->version() ),
                           MessageWarning );
     }
 
@@ -193,7 +193,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
     //        actually write the pad bytes. The only possibility I see right now is to add a padding option
     //        to the pipebuffer.
     int trackSizePadding = 0;
-    if( d->trackSize > 0 && d->growisofsBin->version < K3b::Version( 5, 20 ) ) {
+    if( d->trackSize > 0 && d->growisofsBin->version() < K3b::Version( 5, 20 ) ) {
         if( d->trackSize % 16 ) {
             trackSizePadding = (16 - d->trackSize%16);
             kDebug() << "(K3b::GrowisofsWriter) need to pad " << trackSizePadding << " blocks.";
@@ -363,7 +363,7 @@ void K3b::GrowisofsWriter::start()
         if( !d->process.start( KProcess::MergedChannels ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
-            kDebug() << "(K3b::GrowisofsWriter) could not start " << d->growisofsBin->path;
+            kDebug() << "(K3b::GrowisofsWriter) could not start " << d->growisofsBin->path();
             emit infoMessage( i18n("Could not start %1.",d->growisofsBin->name()), K3b::Job::MessageError );
             jobFinished(false);
         }

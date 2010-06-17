@@ -108,8 +108,8 @@ const ExternalBin* ExternalBinModel::binForIndex( const QModelIndex& index ) con
 QModelIndex ExternalBinModel::indexForBin( const ExternalBin* bin, int column ) const
 {
     if( bin ) {
-        int i = bin->program()->bins().indexOf( bin );
-        if( i >= 0 && i < bin->program()->bins().size() )
+        int i = bin->program().bins().indexOf( bin );
+        if( i >= 0 && i < bin->program().bins().size() )
             return createIndex( i, column, const_cast<void*>( reinterpret_cast<const void*>( bin ) ) );
     }
     return QModelIndex();
@@ -130,7 +130,7 @@ QModelIndex ExternalBinModel::index( int row, int column, const QModelIndex& par
 QModelIndex ExternalBinModel::parent( const QModelIndex& index ) const
 {
     if( const ExternalBin* bin = binForIndex( index ) )
-        return indexForProgram( bin->program() );
+        return indexForProgram( &bin->program() );
     else
         return QModelIndex();
 }
@@ -144,7 +144,7 @@ Qt::ItemFlags ExternalBinModel::flags( const QModelIndex& index ) const
     }
     else if( const ExternalBin* bin = binForIndex( index ) )
     {
-        if( bin->program()->bins().size() > 1 )
+        if( bin->program().bins().size() > 1 )
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
         else
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -177,14 +177,14 @@ QVariant ExternalBinModel::data( const QModelIndex& index, int role ) const
     else if( const ExternalBin* bin = binForIndex( index ) ) {
         if( Qt::DisplayRole == role ) {
             switch( index.column() ) {
-                case PathColumn: return bin->path;
-                case VersionColumn: return bin->version.toString();
+                case PathColumn: return bin->path();
+                case VersionColumn: return bin->version().toString();
                 case FeaturesColumn: return bin->features().join( ", " );
                 default: return QVariant();
             }
         }
-        else if( Qt::CheckStateRole == role && index.column() == PathColumn && bin->program()->bins().size() > 1 ) {
-            if( bin == d->defaults[ bin->program() ] )
+        else if( Qt::CheckStateRole == role && index.column() == PathColumn && bin->program().bins().size() > 1 ) {
+            if( bin == d->defaults[ &bin->program() ] )
                 return Qt::Checked;
             else
                 return Qt::Unchecked;
@@ -201,10 +201,10 @@ bool ExternalBinModel::setData( const QModelIndex& index, const QVariant& value,
 {
     if( Qt::CheckStateRole == role && value.toBool() ) {
         if( const ExternalBin* bin = binForIndex( index ) ) {
-            if( d->defaults[ bin->program() ] != bin ) {
-                d->defaults[ bin->program() ] = bin;
-                Q_EMIT dataChanged( indexForBin( bin->program()->bins().first() ),
-                                    indexForBin( bin->program()->bins().last() ) );
+            if( d->defaults[ &bin->program() ] != bin ) {
+                d->defaults[ &bin->program() ] = bin;
+                Q_EMIT dataChanged( indexForBin( bin->program().bins().first() ),
+                                    indexForBin( bin->program().bins().last() ) );
                 return true;
             }
         }

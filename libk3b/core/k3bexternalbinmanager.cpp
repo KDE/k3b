@@ -38,7 +38,7 @@
 namespace {
     bool compareVersions( const K3b::ExternalBin* bin1, const K3b::ExternalBin* bin2 )
     {
-        return bin1->version > bin2->version;
+        return bin1->version() > bin2->version();
     }
     
     const int EXECUTE_TIMEOUT = 5000; // in seconds
@@ -54,51 +54,96 @@ QString K3b::ExternalBinManager::m_noPath = "";
 //
 // ///////////////////////////////////////////////////////////
 
-K3b::ExternalBin::ExternalBin( K3b::ExternalProgram* p )
-    : m_program(p)
+class K3b::ExternalBin::Private
 {
+public:
+    Private( ExternalProgram& pr, const QString& pa )
+        : program( pr ), path( pa ) {}
+        
+    ExternalProgram& program;
+    QString path;
+    Version version;
+    QString copyright;
+    QStringList features;
+};
+
+K3b::ExternalBin::ExternalBin( ExternalProgram& program, const QString& path )
+    : d( new Private( program, path ) )
+{
+}
+
+
+K3b::ExternalBin::~ExternalBin()
+{
+    delete d;
+}
+
+void K3b::ExternalBin::setVersion( const Version& version )
+{
+    d->version = version;
+}
+
+const K3b::Version& K3b::ExternalBin::version() const
+{
+    return d->version;
+}
+
+void K3b::ExternalBin::setCopyright( const QString& copyright )
+{
+    d->copyright = copyright;
+}
+
+const QString& K3b::ExternalBin::copyright() const
+{
+    return d->copyright;
 }
 
 
 bool K3b::ExternalBin::isEmpty() const
 {
-    return !version.isValid();
+    return !d->version.isValid();
+}
+
+
+const QString& K3b::ExternalBin::path() const
+{
+    return d->path;
 }
 
 
 QString K3b::ExternalBin::name() const
 {
-    return m_program->name();
+    return d->program.name();
 }
 
 
 bool K3b::ExternalBin::hasFeature( const QString& f ) const
 {
-    return m_features.contains( f );
+    return d->features.contains( f );
 }
 
 
 void K3b::ExternalBin::addFeature( const QString& f )
 {
-    m_features.append( f );
+    d->features.append( f );
 }
 
 
 QStringList K3b::ExternalBin::userParameters() const
 {
-    return m_program->userParameters();
+    return d->program.userParameters();
 }
 
 
 QStringList K3b::ExternalBin::features() const
 {
-    return m_features;
+    return d->features;
 }
 
 
-K3b::ExternalProgram* K3b::ExternalBin::program() const
+K3b::ExternalProgram& K3b::ExternalBin::program() const
 {
-    return m_program;
+    return d->program;
 }
 
 
@@ -140,7 +185,7 @@ const K3b::ExternalBin* K3b::ExternalProgram::defaultBin() const
     }
     else {
         for( QList<const K3b::ExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
-            if( ( *it )->path == m_defaultBin ) {
+            if( ( *it )->path() == m_defaultBin ) {
                 return *it;
             }
         }
@@ -159,7 +204,7 @@ void K3b::ExternalProgram::addBin( K3b::ExternalBin* bin )
         qSort( m_bins.begin(), m_bins.end(), compareVersions );
 
         const ExternalBin* defBin = defaultBin();
-        if ( !defBin || bin->version > defBin->version ) {
+        if ( !defBin || bin->version() > defBin->version() ) {
             setDefault( bin );
         }
     }
@@ -170,7 +215,7 @@ void K3b::ExternalProgram::setDefault( const K3b::ExternalBin* bin )
 {
     for( QList<const K3b::ExternalBin*>::const_iterator it = m_bins.constBegin(); it != m_bins.constEnd(); ++it ) {
         if( *it == bin ) {
-            m_defaultBin = (*it)->path;
+            m_defaultBin = (*it)->path();
             break;
         }
     }
@@ -240,8 +285,7 @@ bool K3b::SimpleExternalProgram::scan( const QString& p )
     QString path = getProgramPath( p );
 
     if ( QFile::exists( path ) ) {
-        K3b::ExternalBin* bin = new ExternalBin( this );
-        bin->path = path;
+        K3b::ExternalBin* bin = new ExternalBin( *this, path );
 
         if ( !scanVersion( *bin ) ||
              !scanFeatures( *bin ) ) {
@@ -263,14 +307,14 @@ bool K3b::SimpleExternalProgram::scanVersion( ExternalBin& bin ) const
     // probe version
     KProcess vp;
     vp.setOutputChannelMode( KProcess::MergedChannels );
-    vp << bin.path << "--version";
+    vp << bin.path() << "--version";
     if( vp.execute( EXECUTE_TIMEOUT ) < 0 )
         return false;
 
     QString s = QString::fromLocal8Bit( vp.readAll() );
-    bin.version = parseVersion( s, bin );
-    bin.copyright = parseCopyright( s, bin );
-    return bin.version.isValid();
+    bin.setVersion( parseVersion( s, bin ) );
+    bin.setCopyright( parseCopyright( s, bin ) );
+    return bin.version().isValid();
 }
 
 
@@ -279,7 +323,7 @@ bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin& bin ) const
 #ifndef Q_OS_WIN32
     // check if we run as root
     struct stat s;
-    if( !::stat( QFile::encodeName(bin.path), &s ) ) {
+    if( !::stat( QFile::encodeName(bin.path()), &s ) ) {
         if( (s.st_mode & S_ISUID) && s.st_uid == 0 )
             bin.addFeature( "suidroot" );
     }
@@ -288,7 +332,7 @@ bool K3b::SimpleExternalProgram::scanFeatures( ExternalBin& bin ) const
     // probe features
     KProcess fp;
     fp.setOutputChannelMode( KProcess::MergedChannels );
-    fp << bin.path << "--help";
+    fp << bin.path() << "--help";
     if( fp.execute( EXECUTE_TIMEOUT ) < 0 )
         return false;
 
@@ -346,7 +390,7 @@ K3b::Version K3b::SimpleExternalProgram::parseVersionAt( const QString& data, in
 }
 
 
-QString K3b::SimpleExternalProgram::versionIdentifier( const ExternalBin& bin ) const
+QString K3b::SimpleExternalProgram::versionIdentifier( const ExternalBin& /*bin*/ ) const
 {
     return name();
 }
@@ -394,7 +438,7 @@ bool K3b::ExternalBinManager::readConfig( const KConfigGroup& grp )
         // now search for a newer version and use it (because it was installed after the last
         // K3b run and most users would probably expect K3b to use a newly installed version)
         const K3b::ExternalBin* newestBin = p->mostRecentBin();
-        if( newestBin && newestBin->version > lastMax )
+        if( newestBin && newestBin->version() > lastMax )
             p->setDefault( newestBin );
     }
 
@@ -408,13 +452,13 @@ bool K3b::ExternalBinManager::saveConfig( KConfigGroup grp )
 
     Q_FOREACH( K3b::ExternalProgram* p, m_programs ) {
         if( p->defaultBin() )
-            grp.writeEntry( p->name() + " default", p->defaultBin()->path );
+            grp.writeEntry( p->name() + " default", p->defaultBin()->path() );
 
         grp.writeEntry( p->name() + " user parameters", p->userParameters() );
 
         const K3b::ExternalBin* newestBin = p->mostRecentBin();
         if( newestBin )
-            grp.writeEntry( p->name() + " last seen newest version", newestBin->version.toString() );
+            grp.writeEntry( p->name() + " last seen newest version", newestBin->version().toString() );
     }
 
     return true;
@@ -436,7 +480,7 @@ QString K3b::ExternalBinManager::binPath( const QString& name )
         return m_noPath;
 
     if( m_programs[name]->defaultBin() != 0 )
-        return m_programs[name]->defaultBin()->path;
+        return m_programs[name]->defaultBin()->path();
     else
         return m_noPath;
 }

@@ -462,7 +462,7 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
         !d->cdText.isEmpty() ) {
         if( !cdrecordCdText ) {
             emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",
-                                   k3bcore->externalBinManager()->binObject("cdrecord")->version), MessageError );
+                                   k3bcore->externalBinManager()->binObject("cdrecord")->version()), MessageError );
             return false;
         }
         else if( d->usedWritingMode == K3b::WritingModeTao ) {

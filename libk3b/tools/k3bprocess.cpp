@@ -121,7 +121,7 @@ K3b::Process::~Process()
 
 K3b::Process& K3b::Process::operator<<( const K3b::ExternalBin* bin )
 {
-    return static_cast<Process&>( K3bKProcess::operator<<( bin->path ) );
+    return static_cast<Process&>( K3bKProcess::operator<<( bin->path() ) );
 }
 
 

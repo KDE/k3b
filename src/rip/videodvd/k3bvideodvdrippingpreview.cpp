@@ -76,12 +76,12 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     m_tempDir->setAutoRemove( true );
 
     m_process = new Process();
-    *m_process << bin->path;
-    if ( bin->version >= Version( 1, 1, 0 ) )
+    *m_process << bin->path();
+    if ( bin->version() >= Version( 1, 1, 0 ) )
         *m_process << "--log_no_color";
     *m_process << "-i" << dvd.device()->blockDeviceName();
     *m_process << "-T" << QString("%1,%2").arg(title).arg(chapter);
-    if ( bin->version < Version( 1, 1, 0 ) ) {
+    if ( bin->version() < Version( 1, 1, 0 ) ) {
         *m_process << "-x" << "dvd,null";
         *m_process << "--dvd_access_delay" << "0";
     }

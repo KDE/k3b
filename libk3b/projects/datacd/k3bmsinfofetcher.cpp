@@ -94,7 +94,7 @@ void K3b::MsInfoFetcher::getMsInfo()
             return;
         }
 
-        *m_process << bin->path;
+        *m_process << bin->path();
 
         // add the device (e.g. /dev/sg1)
         *m_process << QString("dev=") + K3b::externalBinDeviceParameter(m_device, bin);

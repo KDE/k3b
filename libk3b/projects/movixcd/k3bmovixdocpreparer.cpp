@@ -122,7 +122,7 @@ bool K3b::MovixDocPreparer::createMovixStructures()
     d->eMovixBin = dynamic_cast<const K3b::MovixBin*>( k3bcore->externalBinManager()->binObject("eMovix") );
     if( d->eMovixBin ) {
         bool success = false;
-        if( d->eMovixBin->version >= K3b::Version( 0, 9, 0 ) )
+        if( d->eMovixBin->version() >= K3b::Version( 0, 9, 0 ) )
             success = addMovixFilesNew();
         else
             success = addMovixFiles();
@@ -261,10 +261,10 @@ bool K3b::MovixDocPreparer::addMovixFiles()
     K3b::DirItem* kernelDir = d->doc->addEmptyDir( "kernel", d->isolinuxDir );
 
     // add the linux kernel
-    (void)new K3b::FileItem( d->eMovixBin->path + "/isolinux/kernel/vmlinuz", d->doc, kernelDir );
+    (void)new K3b::FileItem( d->eMovixBin->path() + "/isolinux/kernel/vmlinuz", d->doc, kernelDir );
 
     // add the boot image
-    K3b::BootItem* bootItem = d->doc->createBootItem( d->eMovixBin->path + "/isolinux/isolinux.bin",
+    K3b::BootItem* bootItem = d->doc->createBootItem( d->eMovixBin->path() + "/isolinux/isolinux.bin",
                                                     d->isolinuxDir );
     bootItem->setImageType( K3b::BootItem::NONE );
     bootItem->setLoadSize( 4 );
@@ -287,14 +287,14 @@ bool K3b::MovixDocPreparer::addMovixFiles()
     isolinuxFiles.removeOne( "kernel/vmlinuz" );
     for( QStringList::const_iterator it = isolinuxFiles.constBegin();
          it != isolinuxFiles.constEnd(); ++it ) {
-        QString path = d->eMovixBin->path + "/isolinux/" + *it;
+        QString path = d->eMovixBin->path() + "/isolinux/" + *it;
         (void)new K3b::FileItem( path, d->doc, d->isolinuxDir );
     }
 
     const QStringList& movixFiles = d->eMovixBin->movixFiles();
     for( QStringList::const_iterator it = movixFiles.constBegin();
          it != movixFiles.constEnd(); ++it ) {
-        QString path = d->eMovixBin->path + "/movix/" + *it;
+        QString path = d->eMovixBin->path() + "/movix/" + *it;
         (void)new K3b::FileItem( path, d->doc, d->movixDir );
     }
 
@@ -340,7 +340,7 @@ bool K3b::MovixDocPreparer::addMovixFiles()
 
     // add movix-config-file and boot-config file
     if( writeMovixRcFile() &&
-        writeIsolinuxConfigFile( d->eMovixBin->path + "/isolinux/isolinux.cfg" ) &&
+        writeIsolinuxConfigFile( d->eMovixBin->path() + "/isolinux/isolinux.cfg" ) &&
         writePlaylistFile() ) {
 
         (void)new K3b::FileItem( d->movixRcFile->fileName(), d->doc, d->movixDir, "movixrc" );

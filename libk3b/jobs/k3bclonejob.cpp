@@ -91,7 +91,7 @@ void K3b::CloneJob::start()
         return;
     }
     else if( !cdrecordBin->hasFeature( "clone" ) ) {
-        emit infoMessage( i18n("Cdrecord version %1 does not have cloning support.",cdrecordBin->version), MessageError );
+        emit infoMessage( i18n("Cdrecord version %1 does not have cloning support.",cdrecordBin->version()), MessageError );
         jobFinished(false);
         m_running = false;
         return;

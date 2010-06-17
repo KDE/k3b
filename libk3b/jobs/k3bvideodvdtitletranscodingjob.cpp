@@ -55,7 +55,7 @@ bool K3b::VideoDVDTitleTranscodingJob::Private::getEncodedFrames( const QString&
     int pos1 = 0;
     int pos2 = 0;
 
-    if ( usedTranscodeBin->version >= Version( 1, 1, 0 ) ) {
+    if ( usedTranscodeBin->version() >= Version( 1, 1, 0 ) ) {
         // encoding=1 frame=1491 first=0 last=-1 fps=14.815 done=-1.000000 timestamp=59.640 timeleft=-1 decodebuf=12 filterbuf=5 encodebuf=3
         if( line.startsWith( "encoding=" ) ) {
             pos1 = line.indexOf( '=', 9 );
@@ -129,21 +129,21 @@ void K3b::VideoDVDTitleTranscodingJob::start()
         return;
     }
 
-    if( d->usedTranscodeBin->version < K3b::Version( 1, 0, 0 ) ){
+    if( d->usedTranscodeBin->version() < K3b::Version( 1, 0, 0 ) ){
         emit infoMessage( i18n("%1 version %2 is too old."
                                ,QString("transcode")
-                               ,d->usedTranscodeBin->version), MessageError );
+                               ,d->usedTranscodeBin->version()), MessageError );
         jobFinished( false );
         return;
     }
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "transcode: " ) + d->usedTranscodeBin->version );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "transcode: " ) + d->usedTranscodeBin->version() );
 
-    if( !d->usedTranscodeBin->copyright.isEmpty() )
+    if( !d->usedTranscodeBin->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
                                ,d->usedTranscodeBin->name()
-                               ,d->usedTranscodeBin->version
-                               ,d->usedTranscodeBin->copyright), MessageInfo );
+                               ,d->usedTranscodeBin->version()
+                               ,d->usedTranscodeBin->copyright()), MessageInfo );
 
     //
     // Let's take a look at the filename
@@ -247,12 +247,12 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
     if( m_lowPriority )
         *d->process << "--nice" << "19";
 
-    if ( d->usedTranscodeBin->version >= Version( 1, 1, 0 ) )
+    if ( d->usedTranscodeBin->version() >= Version( 1, 1, 0 ) )
         *d->process << "--log_no_color";
 
     // we only need 100 steps, but to make sure we use 150
     int progressRate = qMax( 1, ( int )m_dvd[m_titleNumber-1].playbackTime().totalFrames()/150 );
-    if ( d->usedTranscodeBin->version.simplify() >= K3b::Version( 1, 1, 0 ) )
+    if ( d->usedTranscodeBin->version().simplify() >= K3b::Version( 1, 1, 0 ) )
         *d->process << "--progress_meter" << "2" << "--progress_rate" << QString::number(progressRate);
     else
         *d->process << "--print_status" << QString::number(progressRate);

@@ -122,10 +122,10 @@ void K3b::DvdCopyJob::start()
     emit newTask( i18n("Checking Source Medium") );
 
     if( m_onTheFly &&
-        k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 12 ) ) {
+        k3bcore->externalBinManager()->binObject( "growisofs" )->version() < K3b::Version( 5, 12 ) ) {
         m_onTheFly = false;
         emit infoMessage( i18n("K3b does not support writing on-the-fly with growisofs %1.",
-                          k3bcore->externalBinManager()->binObject( "growisofs" )->version), MessageError );
+                          k3bcore->externalBinManager()->binObject( "growisofs" )->version()), MessageError );
         emit infoMessage( i18n("Disabling on-the-fly writing."), MessageInfo );
     }
 

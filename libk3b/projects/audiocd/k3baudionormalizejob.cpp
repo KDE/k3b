@@ -58,8 +58,8 @@ void K3b::AudioNormalizeJob::start()
         return;
     }
 
-    if( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",bin->name(),bin->version,bin->copyright), MessageInfo );
+    if( !bin->copyright().isEmpty() )
+        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",bin->name(),bin->version(),bin->copyright()), MessageInfo );
 
     // create the commandline
     *m_process << bin;

@@ -245,7 +245,7 @@ bool K3b::CdrecordWriter::prepareProcess()
 
     if ( K3b::Device::isBdMedia( d->burnedMediaType ) ) {
         if ( !d->cdrecordBinObject->hasFeature( "blu-ray" ) ) {
-            emit infoMessage( i18n( "Cdrecord version %1 does not support Blu-ray writing." ,d->cdrecordBinObject->version ), MessageError );
+            emit infoMessage( i18n( "Cdrecord version %1 does not support Blu-ray writing." ,d->cdrecordBinObject->version() ), MessageError );
             // FIXME: add a way to fail the whole thing here
         }
         d->process << "-sao";
@@ -368,7 +368,7 @@ bool K3b::CdrecordWriter::prepareProcess()
                 d->process << "-overburn";
         }
         else {
-            emit infoMessage( i18n("Cdrecord %1 does not support overburning.",d->cdrecordBinObject->version), MessageWarning );
+            emit infoMessage( i18n("Cdrecord %1 does not support overburning.",d->cdrecordBinObject->version()), MessageWarning );
         }
     }
 
@@ -411,13 +411,13 @@ void K3b::CdrecordWriter::start()
         return;
     }
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "cdrecord: " ) + d->cdrecordBinObject->version );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "cdrecord: " ) + d->cdrecordBinObject->version() );
 
-    if( !d->cdrecordBinObject->copyright.isEmpty() )
+    if( !d->cdrecordBinObject->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
                                ,(d->cdrecordBinObject->hasFeature( "wodim" ) ? "Wodim" : "Cdrecord" )
-                               ,d->cdrecordBinObject->version
-                               ,d->cdrecordBinObject->copyright), MessageInfo );
+                               ,d->cdrecordBinObject->version()
+                               ,d->cdrecordBinObject->copyright()), MessageInfo );
 
 
     kDebug() << "***** " << d->cdrecordBinObject->name() << " parameters:\n";
@@ -590,8 +590,8 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
     //
 
     else if( line.startsWith( "cdrecord" ) ||
-             line.startsWith( d->cdrecordBinObject->path ) ||
-             line.startsWith( d->cdrecordBinObject->path.left(d->cdrecordBinObject->path.length()-5) ) ) {
+             line.startsWith( d->cdrecordBinObject->path() ) ||
+             line.startsWith( d->cdrecordBinObject->path().left(d->cdrecordBinObject->path().length()-5) ) ) {
         // get rid of the path and the following colon and space
         QString errStr = line.mid( line.indexOf(':') + 2 );
 

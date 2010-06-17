@@ -38,13 +38,16 @@ namespace K3b {
     class LIBK3B_EXPORT ExternalBin
     {
     public:
-        ExternalBin( ExternalProgram* );
-        virtual ~ExternalBin() {}
+        ExternalBin( ExternalProgram& program, const QString& path );
+        virtual ~ExternalBin();
 
-        Version version;
-        QString path;
-        QString copyright;
-
+        void setVersion( const Version& version );
+        const Version& version() const;
+        
+        void setCopyright( const QString& copyright );
+        const QString& copyright() const;
+        
+        const QString& path() const;
         QString name() const;
         bool isEmpty() const;
         QStringList userParameters() const;
@@ -53,11 +56,11 @@ namespace K3b {
         bool hasFeature( const QString& ) const;
         void addFeature( const QString& );
 
-        ExternalProgram* program() const;
+        ExternalProgram& program() const;
 
     private:
-        QStringList m_features;
-        ExternalProgram* m_program;
+        class Private;
+        Private* const d;
     };
 
 

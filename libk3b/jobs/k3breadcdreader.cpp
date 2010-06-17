@@ -120,7 +120,7 @@ void K3b::ReadcdReader::start()
                 const K3b::ExternalBin* bin = *it;
                 if( bin->hasFeature( "clone" ) ) {
                     d->readcdBinObject = bin;
-                    emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.", d->readcdBinObject->version), MessageInfo );
+                    emit infoMessage( i18n("Using readcd %1 instead of default version for clone support.", d->readcdBinObject->version()), MessageInfo );
                     foundCloneSupport = true;
                     break;
                 }

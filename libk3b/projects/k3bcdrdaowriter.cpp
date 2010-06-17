@@ -266,7 +266,7 @@ void K3b::CdrdaoWriter::setWriteArguments()
         if( m_cdrdaoBinObject->hasFeature( "disable-burnproof" ) )
             *m_process << "--buffer-under-run-protection" << "0";
         else
-            emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.",m_cdrdaoBinObject->version), MessageWarning );
+            emit infoMessage( i18n("Cdrdao %1 does not support disabling burnfree.",m_cdrdaoBinObject->version()), MessageWarning );
     }
 
     if( k3bcore->globalSettings()->force() ) {
@@ -290,7 +290,7 @@ void K3b::CdrdaoWriter::setWriteArguments()
         if( m_cdrdaoBinObject->hasFeature("overburn") )
             *m_process << "--overburn";
         else
-            emit infoMessage( i18n("Cdrdao %1 does not support overburning.",m_cdrdaoBinObject->version), MessageWarning );
+            emit infoMessage( i18n("Cdrdao %1 does not support overburning.",m_cdrdaoBinObject->version()), MessageWarning );
     }
 
 }
@@ -452,14 +452,14 @@ void K3b::CdrdaoWriter::start()
         return;
     }
 
-    emit debuggingOutput( QLatin1String("Used versions"), QLatin1String( "cdrdao: " ) + m_cdrdaoBinObject->version );
+    emit debuggingOutput( QLatin1String("Used versions"), QLatin1String( "cdrdao: " ) + m_cdrdaoBinObject->version() );
 
-    if( !m_cdrdaoBinObject->copyright.isEmpty() )
-        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",m_cdrdaoBinObject->name(),m_cdrdaoBinObject->version,m_cdrdaoBinObject->copyright), MessageInfo );
+    if( !m_cdrdaoBinObject->copyright().isEmpty() )
+        emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3",m_cdrdaoBinObject->name(),m_cdrdaoBinObject->version(),m_cdrdaoBinObject->copyright()), MessageInfo );
 
 
     // the message size changed in cdrdao 1.1.8)
-    if( m_cdrdaoBinObject->version >= K3b::Version( 1, 1, 8 ) )
+    if( m_cdrdaoBinObject->version() >= K3b::Version( 1, 1, 8 ) )
         d->progressMsgSize = sizeof(ProgressMsg2);
     else
         d->progressMsgSize = sizeof(ProgressMsg);
@@ -1013,7 +1013,7 @@ QString K3b::CdrdaoWriter::findDriverFile( const K3b::ExternalBin* bin )
         return QString();
 
     // cdrdao normally in (prefix)/bin and driver table in (prefix)/share/cdrdao
-    QString path = bin->path;
+    QString path = bin->path();
     path.truncate( path.lastIndexOf("/") );
     path.truncate( path.lastIndexOf("/") );
     path += "/share/cdrdao/drivers";

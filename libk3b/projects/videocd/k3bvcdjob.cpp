@@ -209,7 +209,7 @@ void K3b::VcdJob::vcdxBuild()
         return ;
     }
 
-    if ( bin->version < K3b::Version( "0.7.12" ) ) {
+    if ( bin->version() < K3b::Version( "0.7.12" ) ) {
         kDebug() << "(K3b::VcdJob) vcdxbuild executable too old!";
         emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ,QString( "Vcdxbuild" ),QString( "0.7.12" )), K3b::Job::MessageError );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
@@ -218,8 +218,8 @@ void K3b::VcdJob::vcdxBuild()
         return ;
     }
 
-    if ( !bin->copyright.isEmpty() )
-        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version ,bin->copyright ), MessageInfo );
+    if ( !bin->copyright().isEmpty() )
+        emit infoMessage( i18n( "Using %1 %2 - Copyright (C) %3" , bin->name() , bin->version() ,bin->copyright() ), MessageInfo );
 
     *m_process << bin;
 

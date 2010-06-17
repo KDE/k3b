@@ -22,8 +22,8 @@ namespace K3b {
     class LIBK3B_EXPORT MovixBin : public ExternalBin
     {
     public:
-        MovixBin( ExternalProgram* p )
-            : ExternalBin( p ) {
+        MovixBin( ExternalProgram& program, const QString& path )
+            : ExternalBin( program, path ) {
         }
 
         const QString& movixDataDir() const { return m_movixPath; }

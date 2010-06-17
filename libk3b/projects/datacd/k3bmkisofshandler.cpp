@@ -58,11 +58,11 @@ const K3b::ExternalBin* K3b::MkisofsHandler::initMkisofs()
     d->mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
 
     if( d->mkisofsBin ) {
-        if( !d->mkisofsBin->copyright.isEmpty() )
+        if( !d->mkisofsBin->copyright().isEmpty() )
             handleMkisofsInfoMessage( i18n("Using %1 %2 - Copyright (C) %3",
                                            QString("mkisofs"),
-                                           d->mkisofsBin->version,
-                                           d->mkisofsBin->copyright),
+                                           d->mkisofsBin->version(),
+                                           d->mkisofsBin->copyright()),
                                       K3b::Job::MessageInfo );
 
         d->firstProgressValue = -1;
@@ -80,9 +80,9 @@ const K3b::ExternalBin* K3b::MkisofsHandler::initMkisofs()
 void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
 {
     if( !line.isEmpty() ) {
-        if( line.startsWith( d->mkisofsBin->path ) ) {
+        if( line.startsWith( d->mkisofsBin->path() ) ) {
             // error or warning
-            QString errorLine = line.mid( d->mkisofsBin->path.length() + 2 );
+            QString errorLine = line.mid( d->mkisofsBin->path().length() + 2 );
             if( errorLine.startsWith( "Input/output error. Cannot read from" ) ) {
                 handleMkisofsInfoMessage( i18n("Read error from file '%1'", errorLine.mid( 38, errorLine.length()-40 ) ),
                                           K3b::Job::MessageError );

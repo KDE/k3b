@@ -60,9 +60,8 @@ bool K3b::MovixProgram::scan( const QString& p )
         QByteArray dout = dp.readAll();
         // movix-version just gives us the version number on stdout
         if( !vout.isEmpty() && !dout.isEmpty() ) {
-            bin = new K3b::MovixBin( this );
-            bin->version = vout.trimmed();
-            bin->path = path;
+            bin = new K3b::MovixBin( *this, path );
+            bin->setVersion( Version( vout.trimmed() ) );
             bin->m_movixPath = dout.trimmed();
         }
     }
@@ -71,7 +70,7 @@ bool K3b::MovixProgram::scan( const QString& p )
         return false;
     }
 
-    if( bin->version >= K3b::Version( 0, 9, 0 ) )
+    if( bin->version() >= K3b::Version( 0, 9, 0 ) )
         return scanNewEMovix( bin, path );
     else
         return scanOldEMovix( bin, path );
@@ -138,7 +137,7 @@ bool K3b::MovixProgram::scanOldEMovix( K3b::MovixBin* bin, const QString& path )
         bin->addFeature( "files" );
 
         KProcess p;
-        p << bin->path + "movix-files";
+        p << bin->path() + "movix-files";
         p.setOutputChannelMode( KProcess::MergedChannels );
         p.start();
         if( p.waitForFinished( -1 ) ) {
@@ -243,7 +242,7 @@ QString K3b::MovixBin::subtitleFontDir( const QString& font ) const
     if( font == i18n("none" ) )
         return "";
     else if( m_supportedSubtitleFonts.contains( font ) )
-        return path + "/mplayer-fonts/" + font;
+        return path() + "/mplayer-fonts/" + font;
     else
         return "";
 }
@@ -254,7 +253,7 @@ QString K3b::MovixBin::languageDir( const QString& lang ) const
     if( lang == i18n("default") )
         return languageDir( "en" );
     else if( m_supportedLanguages.contains( lang ) )
-        return path + "/boot-messages/" + lang;
+        return path() + "/boot-messages/" + lang;
     else
         return "";
 }
@@ -262,7 +261,7 @@ QString K3b::MovixBin::languageDir( const QString& lang ) const
 
 QStringList K3b::MovixBin::supportedSubtitleFonts() const
 {
-    if( version >= K3b::Version( 0, 9, 0 ) )
+    if( version() >= K3b::Version( 0, 9, 0 ) )
         return QStringList( i18n("default") ) += supported( "font" );
     else
         return m_supportedSubtitleFonts;
@@ -271,7 +270,7 @@ QStringList K3b::MovixBin::supportedSubtitleFonts() const
 
 QStringList K3b::MovixBin::supportedLanguages() const
 {
-    if( version >= K3b::Version( 0, 9, 0 ) )
+    if( version() >= K3b::Version( 0, 9, 0 ) )
         return QStringList( i18n("default") ) += supported( "lang" );
     else
         return m_supportedLanguages;
@@ -302,7 +301,7 @@ QStringList K3b::MovixBin::supportedCodecs() const
 QStringList K3b::MovixBin::supported( const QString& type ) const
 {
     KProcess p;
-    p << path + "movix-conf" << "--supported=" + type;
+    p << path() + "movix-conf" << "--supported=" + type;
     p.setOutputChannelMode( KProcess::MergedChannels );
     p.start();
     if( p.waitForFinished( -1 ) )
@@ -319,7 +318,7 @@ QStringList K3b::MovixBin::files( const QString& kbd,
                                   const QStringList& codecs ) const
 {
     KProcess p;
-    p << path + "movix-conf" << "--files";
+    p << path() + "movix-conf" << "--files";
     p.setOutputChannelMode( KProcess::MergedChannels );
 
     if( !kbd.isEmpty() && kbd != i18n("default") )

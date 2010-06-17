@@ -92,21 +92,21 @@ void K3b::VideoDVDTitleDetectClippingJob::start()
         return;
     }
 
-    if( d->usedTranscodeBin->version < K3b::Version( 1, 0, 0 ) ){
+    if( d->usedTranscodeBin->version() < K3b::Version( 1, 0, 0 ) ){
         emit infoMessage( i18n("%1 version %2 is too old.",
                                QString("transcode")
-                               ,d->usedTranscodeBin->version), MessageError );
+                               ,d->usedTranscodeBin->version()), MessageError );
         jobFinished( false );
         return;
     }
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "transcode: " ) + d->usedTranscodeBin->version );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "transcode: " ) + d->usedTranscodeBin->version() );
 
-    if( !d->usedTranscodeBin->copyright.isEmpty() )
+    if( !d->usedTranscodeBin->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 - Copyright (C) %3"
                                ,d->usedTranscodeBin->name()
-                               ,d->usedTranscodeBin->version
-                               ,d->usedTranscodeBin->copyright), MessageInfo );
+                               ,d->usedTranscodeBin->version()
+                               ,d->usedTranscodeBin->copyright()), MessageInfo );
 
     emit newTask( i18n("Analysing Title %1 of Video DVD %2",m_titleNumber,m_dvd.volumeIdentifier()) );
 
@@ -145,7 +145,7 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     if( m_lowPriority )
         *d->process << "--nice" << "19";
 
-    if ( d->usedTranscodeBin->version >= Version( 1, 1, 0 ) )
+    if ( d->usedTranscodeBin->version() >= Version( 1, 1, 0 ) )
         *d->process << "--log_no_color";
 
     // the input

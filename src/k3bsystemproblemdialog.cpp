@@ -214,7 +214,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
         else {
             if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "outdated" ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
-                                                   i18n("Used %1 version %2 is outdated",QString("cdrecord"),QString(k3bcore->externalBinManager()->binObject( "cdrecord" )->version)),
+                                                   i18n("Used %1 version %2 is outdated",QString("cdrecord"),QString(k3bcore->externalBinManager()->binObject( "cdrecord" )->version())),
                                                    i18n("Although K3b supports all cdrtools versions since "
                                                         "1.10 it is highly recommended to at least use "
                                                         "version 2.0."),
@@ -230,7 +230,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
             //
             if( K3b::simpleKernelVersion() >= K3b::Version( 2, 6, 8 ) &&
-                k3bcore->externalBinManager()->binObject( "cdrecord" )->version < K3b::Version( 2, 1, 1, "a05" ) &&
+                k3bcore->externalBinManager()->binObject( "cdrecord" )->version() < K3b::Version( 2, 1, 1, "a05" ) &&
                 !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
                 if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) ) {
                     showK3bSetupButton = true;
@@ -293,24 +293,24 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                i18n("Install the dvd+rw-tools package.") ) );
         }
         else {
-            if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 10 ) ) {
+            if( k3bcore->externalBinManager()->binObject( "growisofs" )->version() < K3b::Version( 5, 10 ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
-                                                   i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+                                                   i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version()),
                                                    i18n("K3b needs at least growisofs version 5.10 to write DVDs. "
                                                         "All older versions will not work and K3b will refuse to use them."),
                                                    i18n("Install a more recent version of %1.",QString("growisofs")) ) );
             }
-            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 5, 12 ) ) {
+            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version() < K3b::Version( 5, 12 ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
-                                                   i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+                                                   i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version()),
                                                    i18n("K3b will not be able to copy DVDs on-the-fly or write a DVD+RW in multiple "
                                                         "sessions using a growisofs "
                                                         "version older than 5.12."),
                                                    i18n("Install a more recent version of %1.",QString("growisofs")) ) );
             }
-            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 7, 0 ) ) {
+            else if( k3bcore->externalBinManager()->binObject( "growisofs" )->version() < K3b::Version( 7, 0 ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
-                                                   i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+                                                   i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version()),
                                                    i18n("It is highly recommended to use growisofs 7.0 or higher. "
                                                         "K3b will not be able to write a DVD+RW in multiple "
                                                         "sessions using a growisofs version older than 7.0." ),
@@ -344,7 +344,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
         problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                            i18n("Used %1 version %2 is outdated",
                                                 QString("mkisofs"),
-                                                k3bcore->externalBinManager()->binObject( "mkisofs" )->version),
+                                                k3bcore->externalBinManager()->binObject( "mkisofs" )->version()),
                                            i18n("K3b needs at least mkisofs version 1.14. Older versions may introduce problems "
                                                 "when creating data projects."),
                                            i18n("Install a more recent version of %1.",QString("mkisofs")) ) );
@@ -405,7 +405,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                     !( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "plain-atapi" ) &&
                        K3b::plainAtapiSupport() ) ) {
                     problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
-                                                       i18n("%1 %2 does not support ATAPI",QString("cdrecord"),k3bcore->externalBinManager()->binObject("cdrecord")->version),
+                                                       i18n("%1 %2 does not support ATAPI",QString("cdrecord"),k3bcore->externalBinManager()->binObject("cdrecord")->version()),
                                                        i18n("The configured version of %1 does not "
                                                             "support writing to ATAPI devices without "
                                                             "SCSI emulation and there is at least one writer "
@@ -426,7 +426,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                     problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                        i18n("%1 %2 does not support ATAPI",
                                                             QLatin1String( "cdrdao"),
-                                                            k3bcore->externalBinManager()->binObject("cdrdao")->version.toString() ),
+                                                            k3bcore->externalBinManager()->binObject("cdrdao")->version().toString() ),
                                                        i18n("The configured version of %1 does not "
                                                             "support writing to ATAPI devices without "
                                                             "SCSI emulation and there is at least one writer "
@@ -446,9 +446,9 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
 
     if( dvd_r_dl && k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
-        if( k3bcore->externalBinManager()->binObject( "growisofs" )->version < K3b::Version( 6, 0 ) ) {
+        if( k3bcore->externalBinManager()->binObject( "growisofs" )->version() < K3b::Version( 6, 0 ) ) {
             problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
-                                               i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version),
+                                               i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version()),
                                                i18n("K3b will not be able to write DVD-R Dual Layer media using a growisofs "
                                                     "version older than 6.0."),
                                                i18n("Install a more recent version of growisofs.") ) );

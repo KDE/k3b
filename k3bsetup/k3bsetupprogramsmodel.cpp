@@ -48,7 +48,7 @@ bool shouldRunSuidRoot( const K3b::ExternalBin* bin )
 
     if( bin->name() == "cdrecord" ) {
         return ( K3b::simpleKernelVersion() < K3b::Version( 2, 6, 8 ) ||
-                 bin->version >= K3b::Version( 2, 1, 1, "a05" ) ||
+                 bin->version() >= K3b::Version( 2, 1, 1, "a05" ) ||
                  bin->hasFeature( "wodim" ) );
     }
     else if( bin->name() == "cdrdao" ) {
@@ -104,9 +104,9 @@ bool ProgramsModel::Private::getProgramInfo( const ExternalBin* program,
 {
     // we need the uid bit which is not supported by QFileInfo
     struct stat s;
-    if( ::stat( QFile::encodeName(program->path), &s ) == 0 ) {
+    if( ::stat( QFile::encodeName(program->path()), &s ) == 0 ) {
 
-        QFileInfo fi( program->path );
+        QFileInfo fi( program->path() );
         owner = fi.owner();
         group = fi.group();
         perm = s.st_mode & 0007777;
@@ -132,7 +132,7 @@ bool ProgramsModel::Private::getProgramInfo( const ExternalBin* program,
         return true;
     }
     else {
-        kDebug() << "(K3bSetup) unable to stat " << program->path;
+        kDebug() << "(K3bSetup) unable to stat " << program->path();
         return false;
     }
 }
@@ -199,7 +199,7 @@ QList<ProgramItem> ProgramsModel::selectedPrograms() const
     Q_FOREACH( const ExternalBin* program, d->selectedPrograms )
     {
         if( d->needChangePermissions( program ) )
-            selectedPrograms << ProgramItem( program->path, shouldRunSuidRoot( program ) );
+            selectedPrograms << ProgramItem( program->path(), shouldRunSuidRoot( program ) );
     }
     return selectedPrograms;
 }
@@ -245,10 +245,10 @@ QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
                 return program->name();
             }
             else if( index.column() == 1 ) {
-                return program->version.toString();
+                return program->version().toString();
             }
             else if( index.column() == 2 ) {
-                return program->path;
+                return program->path();
             }
             else {
                 QString owner, group, wantedGroup;
