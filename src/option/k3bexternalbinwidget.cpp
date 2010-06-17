@@ -31,6 +31,7 @@
 #include <QTabWidget>
 #include <QToolTip>
 #include <QTreeView>
+#include <QVBoxLayout>
 
 #include <KDebug>
 #include <KDialog>
@@ -69,29 +70,23 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // setup program tab
     // ------------------------------------------------------------
     QWidget* programTab = new QWidget( m_mainTabWidget );
-    QGridLayout* programTabLayout = new QGridLayout( programTab );
-    m_programView = new QTreeView( programTab );
-    m_defaultButton = new QPushButton( i18n("Set Default"), programTab );
-    m_defaultButton->setToolTip( i18n("Change the versions K3b should use.") );
-    m_defaultButton->setWhatsThis( i18n("<p>If K3b finds more than one installed version of a program "
-                                        "it will choose one as the <em>default</em>, which will be used "
-                                        "to do the work. If you want to change the default, select the "
-                                        "desired version and press this button.") );
-    QLabel* defaultLabel = new QLabel( i18n("Use the 'Default' button to change the versions K3b should use."),
-                                       programTab );
+    QLabel* defaultLabel = new QLabel( i18n("Check program versions K3b should use."), programTab );
     defaultLabel->setWordWrap( true );
-    programTabLayout->addWidget( m_programView, 1, 0, 1, 2 );
-    programTabLayout->addWidget( m_defaultButton, 0, 1 );
-    programTabLayout->addWidget( defaultLabel, 0, 0 );
-    programTabLayout->setColumnStretch( 0, 1 );
-    programTabLayout->setRowStretch( 1, 1 );
-
+    m_programView = new QTreeView( programTab );
     m_programView->setModel( m_programModel );
     m_programView->setAllColumnsShowFocus( true );
     m_programView->setRootIsDecorated( false );
     m_programView->setItemsExpandable( false );
     m_programView->header()->setResizeMode( ExternalBinModel::PathColumn, QHeaderView::ResizeToContents );
     m_programView->header()->setResizeMode( ExternalBinModel::VersionColumn, QHeaderView::ResizeToContents );
+    m_programView->setWhatsThis( i18n("<p>If K3b finds more than one installed version of a program "
+                                      "it will choose one as the <em>default</em>, which will be used "
+                                      "to do the work. If you want to change the default, check "
+                                      "desired version on the list.") );
+    
+    QVBoxLayout* programTabLayout = new QVBoxLayout( programTab );
+    programTabLayout->addWidget( defaultLabel );
+    programTabLayout->addWidget( m_programView, 1 );
     
     m_mainTabWidget->addTab( programTab, i18n("Programs") );
 
@@ -99,19 +94,18 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // setup parameters tab
     // ------------------------------------------------------------
     QWidget* parametersTab = new QWidget( m_mainTabWidget );
-    QGridLayout* parametersTabLayout = new QGridLayout( parametersTab );
-    m_parameterView = new QTreeView( parametersTab );
     QLabel* parametersLabel = new QLabel( i18n("User parameters have to be separated by space."), parametersTab );
     parametersLabel->setWordWrap( true );
-    parametersTabLayout->addWidget( m_parameterView, 1, 0 );
-    parametersTabLayout->addWidget( parametersLabel, 0, 0 );
-    parametersTabLayout->setRowStretch( 1, 1 );
-
+    m_parameterView = new QTreeView( parametersTab );
     m_parameterView->setModel( m_parameterModel );
     m_parameterView->setAllColumnsShowFocus( true );
     m_parameterView->setRootIsDecorated( false );
     m_parameterView->setEditTriggers( QAbstractItemView::AllEditTriggers );
     m_parameterView->header()->setResizeMode( ExternalBinParamsModel::ProgramColumn, QHeaderView::ResizeToContents );
+
+    QVBoxLayout* parametersTabLayout = new QVBoxLayout( parametersTab );
+    parametersTabLayout->addWidget( parametersLabel );
+    parametersTabLayout->addWidget( m_parameterView, 1 );
 
     m_mainTabWidget->addTab( parametersTab, i18n("User Parameters") );
 
@@ -125,19 +119,13 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
                                          "default name for the executable specify it in the search path.</qt>"),
                                     searchPathTab );
     hintLabel->setWordWrap( true );
-    QGridLayout* searchPathTabLayout = new QGridLayout( searchPathTab );
-    searchPathTabLayout->addWidget( m_searchPathBox, 0, 0 );
-    searchPathTabLayout->addWidget( hintLabel, 1, 0 );
-    searchPathTabLayout->setRowStretch( 0, 1 );
+    QVBoxLayout* searchPathTabLayout = new QVBoxLayout( searchPathTab );
+    searchPathTabLayout->addWidget( m_searchPathBox, 1 );
+    searchPathTabLayout->addWidget( hintLabel );
 
     m_mainTabWidget->addTab( searchPathTab, i18n("Search Path") );
 
     connect( m_rescanButton, SIGNAL(clicked()), this, SLOT(rescan()) );
-    connect( m_defaultButton, SIGNAL(clicked()), this, SLOT(slotSetDefaultButtonClicked()) );
-    connect( m_programView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-             this, SLOT(slotProgramSelectionChanged(QModelIndex,QModelIndex)) );
-
-    slotProgramSelectionChanged( QModelIndex(), QModelIndex() );
 }
 
 
@@ -179,27 +167,6 @@ void K3b::ExternalBinWidget::save()
 void K3b::ExternalBinWidget::saveSearchPath()
 {
     m_manager->setSearchPath( m_searchPathBox->items() );
-}
-
-
-void K3b::ExternalBinWidget::slotSetDefaultButtonClicked()
-{
-    // check if we are on a binItem
-    QModelIndex index = m_programView->currentIndex();
-    m_programModel->setDefault( index );
-}
-
-
-void K3b::ExternalBinWidget::slotProgramSelectionChanged( const QModelIndex& current, const QModelIndex& /*previous*/ )
-{
-    if( current.isValid() && m_programModel->binForIndex( current ) ) {
-        if( m_programModel->isDefault( current ) )
-            m_defaultButton->setEnabled(false);
-        else
-            m_defaultButton->setEnabled(true);
-    }
-    else
-        m_defaultButton->setEnabled(false);
 }
 
 #include "k3bexternalbinwidget.moc"

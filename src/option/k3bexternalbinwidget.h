@@ -51,8 +51,6 @@ namespace K3b {
         void save();
 
     private Q_SLOTS:
-        void slotSetDefaultButtonClicked();
-        void slotProgramSelectionChanged( const QModelIndex& current, const QModelIndex& previous );
         void saveSearchPath();
 
     private:
@@ -65,7 +63,6 @@ namespace K3b {
         QTreeView* m_parameterView;
         KEditListBox* m_searchPathBox;
 
-        QPushButton* m_defaultButton;
         QPushButton* m_rescanButton;
     };
 }

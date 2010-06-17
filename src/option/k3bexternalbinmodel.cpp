@@ -15,7 +15,6 @@
 #include "k3bexternalbinmodel.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KIcon>
 #include <KLocale>
 
 #include <QApplication>
@@ -74,25 +73,6 @@ void ExternalBinModel::save()
     Q_FOREACH( ExternalProgram* program, d->programs ) {
         program->setDefault( d->defaults[ program ] );
     }
-}
-        
-
-void ExternalBinModel::setDefault( const QModelIndex& index )
-{
-    if( const ExternalBin* bin = binForIndex( index ) ) {
-        d->defaults[ bin->program() ] = bin;
-        Q_EMIT dataChanged( indexForBin( bin->program()->bins().first() ),
-                            indexForBin( bin->program()->bins().last() ) );
-    }
-}
-
-
-bool ExternalBinModel::isDefault( const QModelIndex& index ) const
-{
-    if( const ExternalBin* bin = binForIndex( index ) )
-        return d->defaults[ bin->program() ] == bin;
-    else
-        return false;
 }
 
 
@@ -160,8 +140,10 @@ Qt::ItemFlags ExternalBinModel::flags( const QModelIndex& index ) const
 {
     if( programForIndex( index ) != 0 )
         return Qt::ItemIsEnabled;
+    else if( index.isValid() )
+        return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
     else
-        return QAbstractItemModel::flags( index );
+        return 0;
 }
 
 
@@ -192,15 +174,33 @@ QVariant ExternalBinModel::data( const QModelIndex& index, int role ) const
                 default: return QVariant();
             }
         }
-        else if( Qt::DecorationRole == role && index.column() == PathColumn ) {
+        else if( Qt::CheckStateRole == role && index.column() == PathColumn ) {
             if( bin == d->defaults[ bin->program() ] )
-                return KIcon( "dialog-ok" );
+                return Qt::Checked;
+            else
+                return Qt::Unchecked;
         }
         else if( Qt::ToolTipRole == role && index.column() == FeaturesColumn ) {
             return bin->features().join( ", " );
         }
     }
     return QVariant();
+}
+
+
+bool ExternalBinModel::setData( const QModelIndex& index, const QVariant& value, int role )
+{
+    if( Qt::CheckStateRole == role && value.toBool() ) {
+        if( const ExternalBin* bin = binForIndex( index ) ) {
+            if( d->defaults[ bin->program() ] != bin ) {
+                d->defaults[ bin->program() ] = bin;
+                Q_EMIT dataChanged( indexForBin( bin->program()->bins().first() ),
+                                    indexForBin( bin->program()->bins().last() ) );
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 
