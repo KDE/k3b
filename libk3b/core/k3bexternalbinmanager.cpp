@@ -603,7 +603,7 @@ void K3b::ExternalBinManager::search()
 
 K3b::ExternalProgram* K3b::ExternalBinManager::program( const QString& name ) const
 {
-    if( d->programs.find( name ) == d->programs.constEnd() )
+    if( d->programs.constFind( name ) == d->programs.constEnd() )
         return 0;
     else
         return d->programs[name];
