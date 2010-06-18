@@ -411,9 +411,9 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                             "SCSI emulation and there is at least one writer "
                                                             "in your system not configured to use "
                                                             "SCSI emulation.",QString("cdrecord")),
-                                                       i18n("The best and recommended solution is to enable "
-                                                            "ide-scsi (SCSI emulation) for all devices. "
-                                                            "This way you will not have any problems. Or you install "
+                                                       i18n("The best, and recommended, solution is to use "
+                                                            "ide-scsi (SCSI emulation) for all writer devices: "
+                                                            "this way you will not have any problems; or, you can install "
                                                             "(or select as the default) a more recent version of %1.",QString("cdrtools")) ) );
                 }
             }
