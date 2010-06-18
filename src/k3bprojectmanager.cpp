@@ -436,8 +436,8 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 
 QString K3b::ProjectManager::dbusPath( K3b::Doc* doc ) const
 {
-    ProjectInterfaces::const_iterator it = d->projectInterfaces.find( doc );
-    if( it != d->projectInterfaces.end() )
+    ProjectInterfaces::const_iterator it = d->projectInterfaces.constFind( doc );
+    if( it != d->projectInterfaces.constEnd() )
         return it.value()->dbusPath();
     else
         return QString();
