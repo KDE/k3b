@@ -15,7 +15,6 @@
 
 // application specific includes
 #include "k3b.h"
-#include "k3baction.h"
 #include "k3bappdevicemanager.h"
 #include "k3bapplication.h"
 #include "k3baudiodecoder.h"
@@ -70,6 +69,7 @@
 // include files for KDE
 #include <kaboutdata.h>
 #include <KAction>
+#include <KActionCollection>
 #include <KActionMenu>
 #include <KConfig>
 #include <KEditToolBar>
@@ -294,46 +294,88 @@ void K3b::MainWindow::initActions()
     // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
     // see the correct solution?)
 
-    KAction* actionFileOpen = KStandardAction::open(this, SLOT(slotFileOpen()), actionCollection());
-    d->actionFileOpenRecent = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection());
-    d->actionFileSave = KStandardAction::save(this, SLOT(slotFileSave()), actionCollection());
-    d->actionFileSaveAs = KStandardAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
-    KAction* actionFileSaveAll = K3b::createAction(this, i18n("Save All"), "document-save-all", 0, this, SLOT(slotFileSaveAll()),
-                                                   actionCollection(), "file_save_all" );
-    d->actionFileClose = KStandardAction::close(this, SLOT(slotFileClose()), actionCollection());
-    KAction* actionFileCloseAll = K3b::createAction(this, i18n("Close All"), 0, 0, this, SLOT(slotFileCloseAll()),
-                                                    actionCollection(), "file_close_all" );
+    KAction* actionFileOpen = KStandardAction::open( this, SLOT(slotFileOpen()), actionCollection() );
+    actionFileOpen->setToolTip( i18n( "Opens an existing project" ) );
+    actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
+
+    d->actionFileOpenRecent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
+    d->actionFileOpenRecent->setToolTip( i18n( "Opens a recently used file" ) );
+    d->actionFileOpenRecent->setStatusTip( d->actionFileOpenRecent->toolTip() );
+
+    d->actionFileSave = KStandardAction::save( this, SLOT(slotFileSave()), actionCollection() );
+    d->actionFileSave->setToolTip( i18n( "Saves the current project" ) );
+    d->actionFileSave->setStatusTip( d->actionFileSave->toolTip() );
+
+    d->actionFileSaveAs = KStandardAction::saveAs( this, SLOT(slotFileSaveAs()), actionCollection() );
+    d->actionFileSaveAs->setToolTip( i18n( "Saves the current project to a new url" ) );
+    d->actionFileSaveAs->setStatusTip( d->actionFileSaveAs->toolTip() );
+
+    KAction* actionFileSaveAll = new KAction( KIcon( "document-save-all" ), i18n("Save All"), this );
+    actionFileSaveAll->setToolTip( i18n( "Saves all open projects" ) );
+    actionFileSaveAll->setStatusTip( actionFileSaveAll->toolTip() );
+    actionCollection()->addAction( "file_save_all", actionFileSaveAll );
+    connect( actionFileSaveAll, SIGNAL(triggered(bool)), this, SLOT(slotFileSaveAll()) );
+
+    d->actionFileClose = KStandardAction::close( this, SLOT(slotFileClose()), actionCollection() );
+    d->actionFileClose->setToolTip(i18n("Closes the current project"));
+    d->actionFileClose->setStatusTip( d->actionFileClose->toolTip() );
+
+    KAction* actionFileCloseAll = new KAction( i18n("Close All"), this );
+    actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
+    actionFileCloseAll->setStatusTip( actionFileCloseAll->toolTip() );
+    actionCollection()->addAction( "file_close_all", actionFileCloseAll );
+    connect( actionFileCloseAll, SIGNAL(triggered(bool)), this, SLOT(slotFileCloseAll()) );
+
     KAction* actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
-    d->actionViewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
-    KAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
+    actionFileQuit->setToolTip(i18n("Quits the application"));
+    actionFileQuit->setStatusTip( actionFileQuit->toolTip() );
 
-    // the tip action
-    (void)KStandardAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection() );
-    (void)KStandardAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+    KAction* actionFileNewAudio = new KAction( KIcon( "media-optical-audio" ), i18n("New &Audio CD Project"), this );
+    actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
+    actionFileNewAudio->setStatusTip( actionFileNewAudio->toolTip() );
+    actionCollection()->addAction( "file_new_audio", actionFileNewAudio );
+    connect( actionFileNewAudio, SIGNAL(triggered(bool)), this, SLOT(slotNewAudioDoc()) );
 
-    KStandardAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
-    setStandardToolBarMenuEnabled(true);
-    KStandardAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
+    KAction* actionFileNewData = new KAction( KIcon( "media-optical-data" ), i18n("New &Data Project"), this );
+    actionFileNewData->setToolTip( i18n("Creates a new data project") );
+    actionFileNewData->setStatusTip( actionFileNewData->toolTip() );
+    actionCollection()->addAction( "file_new_data", actionFileNewData );
+    connect( actionFileNewData, SIGNAL(triggered(bool)), this, SLOT(slotNewDataDoc()) );
 
-    //FIXME kde4 verify it
+    KAction* actionFileNewMixed = new KAction( KIcon( "media-optical-mixed-cd" ), i18n("New &Mixed Mode CD Project"), this );
+    actionFileNewMixed->setToolTip( i18n("Creates a new mixed audio/data CD project") );
+    actionFileNewMixed->setStatusTip( actionFileNewMixed->toolTip() );
+    actionCollection()->addAction( "file_new_mixed", actionFileNewMixed );
+    connect( actionFileNewMixed, SIGNAL(triggered(bool)), this, SLOT(slotNewMixedDoc()) );
+
+    KAction* actionFileNewVcd = new KAction( KIcon( "media-optical-cd-video" ), i18n("New &Video CD Project"), this );
+    actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
+    actionFileNewVcd->setStatusTip( actionFileNewVcd->toolTip() );
+    actionCollection()->addAction( "file_new_vcd", actionFileNewVcd );
+    connect( actionFileNewVcd, SIGNAL(triggered(bool)), this, SLOT(slotNewVcdDoc()) );
+
+    KAction* actionFileNewMovix = new KAction( KIcon( "media-optical-video" ), i18n("New &eMovix Project"), this );
+    actionFileNewMovix->setToolTip( i18n("Creates a new eMovix project") );
+    actionFileNewMovix->setStatusTip( actionFileNewMovix->toolTip() );
+    actionCollection()->addAction( "file_new_movix", actionFileNewMovix );
+    connect( actionFileNewMovix, SIGNAL(triggered(bool)), this, SLOT(slotNewMovixDoc()) );
+
+    KAction* actionFileNewVideoDvd = new KAction( KIcon( "media-optical-dvd-video" ), i18n("New V&ideo DVD Project"), this );
+    actionFileNewVideoDvd->setToolTip( i18n("Creates a new Video DVD project") );
+    actionFileNewVideoDvd->setStatusTip( actionFileNewVideoDvd->toolTip() );
+    actionCollection()->addAction( "file_new_video_dvd", actionFileNewVideoDvd );
+    connect( actionFileNewVideoDvd, SIGNAL(triggered(bool)), this, SLOT(slotNewVideoDvdDoc()) );
+
+    KAction* actionFileContinueMultisession = new KAction( KIcon( "media-optical-data" ), i18n("Continue Multisession Project"), this );
+    actionFileContinueMultisession->setToolTip( i18n( "Continues multisession project" ) );
+    actionFileContinueMultisession->setStatusTip( actionFileContinueMultisession->toolTip() );
+    actionCollection()->addAction( "file_continue_multisession", actionFileContinueMultisession );
+    connect( actionFileContinueMultisession, SIGNAL(triggered(bool)), this, SLOT(slotContinueMultisession()) );
+
     KActionMenu* actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
     actionFileNewMenu->setIcon( KIcon( "document-new" ) );
-    actionCollection()->addAction( "file_new", actionFileNewMenu );
-    KAction* actionFileNewAudio = K3b::createAction(this,i18n("New &Audio CD Project"), "media-optical-audio", 0, this, SLOT(slotNewAudioDoc()),
-                                                    actionCollection(), "file_new_audio");
-    KAction* actionFileNewData = K3b::createAction(this,i18n("New &Data Project"), "media-optical-data", 0, this, SLOT(slotNewDataDoc()),
-                                                   actionCollection(), "file_new_data");
-    KAction* actionFileNewMixed = K3b::createAction(this,i18n("New &Mixed Mode CD Project"), "media-optical-mixed-cd", 0, this, SLOT(slotNewMixedDoc()),
-                                                    actionCollection(), "file_new_mixed");
-    KAction* actionFileNewVcd = K3b::createAction(this,i18n("New &Video CD Project"), "media-optical-cd-video", 0, this, SLOT(slotNewVcdDoc()),
-                                                  actionCollection(), "file_new_vcd");
-    KAction* actionFileNewMovix = K3b::createAction(this,i18n("New &eMovix Project"), "media-optical-video", 0, this, SLOT(slotNewMovixDoc()),
-                                                    actionCollection(), "file_new_movix");
-    KAction* actionFileNewVideoDvd = K3b::createAction(this,i18n("New V&ideo DVD Project"), "media-optical-dvd-video", 0, this, SLOT(slotNewVideoDvdDoc()),
-                                                       actionCollection(), "file_new_video_dvd");
-    KAction* actionFileContinueMultisession = K3b::createAction(this,i18n("Continue Multisession Project"), "media-optical-data", 0, this, SLOT(slotContinueMultisession()),
-                                                                actionCollection(), "file_continue_multisession" );
-
+    actionFileNewMenu->setToolTip(i18n("Creates a new project"));
+    actionFileNewMenu->setStatusTip( actionFileNewMenu->toolTip() );
     actionFileNewMenu->setDelayed( false );
     actionFileNewMenu->addAction( actionFileNewData );
     actionFileNewMenu->addAction( actionFileContinueMultisession );
@@ -345,148 +387,95 @@ void K3b::MainWindow::initActions()
     actionFileNewMenu->addAction( actionFileNewVideoDvd );
     actionFileNewMenu->addSeparator();
     actionFileNewMenu->addAction( actionFileNewMovix );
+    actionCollection()->addAction( "file_new", actionFileNewMenu );
 
-
-
-
-
-    KAction* actionProjectAddFiles = K3b::createAction(this, i18n("&Add Files..."), "document-open", 0, this, SLOT(slotProjectAddFiles()),
-                                                       actionCollection(), "project_add_files");
-
-    KAction* actionClearProject = K3b::createAction(this,i18n("&Clear Project"), QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr", 0,
-                                                    this, SLOT(slotClearProject()), actionCollection(), "project_clear_project" );
-
-
-    d->actionViewLockPanels = new KToggleAction( i18n("Lock Panels"), this );
-    actionCollection()->addAction("view_lock_panels", d->actionViewLockPanels);
-    connect( d->actionViewLockPanels, SIGNAL(toggled(bool)),
-             this, SLOT(slotViewLockPanels(bool)) );
-
-    d->actionViewDocumentHeader = new KToggleAction(i18n("Show Projects Header"),this);
-    actionCollection()->addAction("view_document_header", d->actionViewDocumentHeader);
-
-    KAction* actionToolsFormatMedium = K3b::createAction( this,
-                                                          i18n("&Format/Erase rewritable disk..."),
-                                                          "tools-media-optical-format",
-                                                          0,
-                                                          this,
-                                                          SLOT(slotFormatMedium()),
-                                                          actionCollection(),
-                                                          "tools_format_medium" );
-    actionToolsFormatMedium->setIconText( i18n( "Format" ) );
-
-    KAction* actionToolsWriteImage = K3b::createAction( this,
-                                                        i18n("&Burn Image..."),
-                                                        "tools-media-optical-burn-image",
-                                                        0,
-                                                        this,
-                                                        SLOT(slotWriteImage()),
-                                                        actionCollection(),
-                                                        "tools_write_image" );
-
-    KAction* actionToolsMediaCopy = K3b::createAction( this,
-                                                       i18n("Copy &Medium..."),
-                                                       "tools-media-optical-copy",
-                                                       0,
-                                                       this,
-                                                       SLOT(slotMediaCopy()),
-                                                       actionCollection(),
-                                                       "tools_copy_medium" );
-    actionToolsMediaCopy->setIconText( i18n( "Copy" ) );
-
-    KAction* actionToolsCddaRip = K3b::createAction( this,
-                                                     i18n("Rip Audio CD..."),
-                                                     "tools-rip-audio-cd",
-                                                     0,
-                                                     this,
-                                                     SLOT(slotCddaRip()),
-                                                     actionCollection(),
-                                                     "tools_cdda_rip" );
-    KAction* actionToolsVideoDvdRip = K3b::createAction( this,
-                                                         i18n("Rip Video DVD..."),
-                                                         "tools-rip-video-dvd",
-                                                         0,
-                                                         this,
-                                                         SLOT(slotVideoDvdRip()),
-                                                         actionCollection(),
-                                                         "tools_videodvd_rip" );
-    KAction* actionToolsVideoCdRip = K3b::createAction( this,
-                                                        i18n("Rip Video CD..."),
-                                                        "tools-rip-video-cd",
-                                                        0,
-                                                        this,
-                                                        SLOT(slotVideoCdRip()),
-                                                        actionCollection(),
-                                                        "tools_videocd_rip" );
-
-    (void)K3b::createAction( this,
-                             i18n("System Check"),
-                             0,
-                             0,
-                             this,
-                             SLOT(slotManualCheckSystem()),
-                             actionCollection(),
-                             "help_check_system" );
-
-#ifdef BUILD_K3BSETUP
-    KAction* actionSettingsK3bSetup = K3b::createAction( this,
-                                                         i18n("&Setup System Permissions..."),
-                                                         "configure",
-                                                         0,
-                                                         this,
-                                                         SLOT(slotK3bSetup()),
-                                                         actionCollection(),
-                                                         "settings_k3bsetup" );
-#endif
-
-    actionFileNewMenu->setToolTip(i18n("Creates a new project"));
-    actionFileNewMenu->setStatusTip( actionFileNewMenu->toolTip() );
-    actionFileNewData->setToolTip( i18n("Creates a new data project") );
-    actionFileNewData->setStatusTip( actionFileNewData->toolTip() );
-    actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
-    actionFileNewAudio->setStatusTip( actionFileNewAudio->toolTip() );
-    actionFileNewMovix->setToolTip( i18n("Creates a new eMovix project") );
-    actionFileNewMovix->setStatusTip( actionFileNewMovix->toolTip() );
-    actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
-    actionFileNewVcd->setStatusTip( actionFileNewVcd->toolTip() );
-    actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
-    actionToolsFormatMedium->setStatusTip( actionToolsFormatMedium->toolTip() );
-    actionToolsWriteImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to an optical disc") );
-    actionToolsWriteImage->setStatusTip( actionToolsWriteImage->toolTip() );
-    actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
-    actionToolsMediaCopy->setStatusTip( actionToolsMediaCopy->toolTip() );
-    actionFileOpen->setToolTip(i18n("Opens an existing project"));
-    actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
-    d->actionFileOpenRecent->setToolTip(i18n("Opens a recently used file"));
-    d->actionFileOpenRecent->setStatusTip( d->actionFileOpenRecent->toolTip() );
-    d->actionFileSave->setToolTip(i18n("Saves the current project"));
-    d->actionFileSave->setStatusTip( d->actionFileSave->toolTip() );
-    d->actionFileSaveAs->setToolTip(i18n("Saves the current project to a new url"));
-    d->actionFileSaveAs->setStatusTip( d->actionFileSaveAs->toolTip() );
-    actionFileSaveAll->setToolTip(i18n("Saves all open projects"));
-    actionFileSaveAll->setStatusTip( actionFileSaveAll->toolTip() );
-    d->actionFileClose->setToolTip(i18n("Closes the current project"));
-    d->actionFileClose->setStatusTip( d->actionFileClose->toolTip() );
-    actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
-    actionFileCloseAll->setStatusTip( actionFileCloseAll->toolTip() );
-    actionFileQuit->setToolTip(i18n("Quits the application"));
-    actionFileQuit->setStatusTip( actionFileQuit->toolTip() );
-    actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
-    actionSettingsConfigure->setStatusTip( actionSettingsConfigure->toolTip() );
-#ifdef BUILD_K3BSETUP
-    actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions") );
-    actionSettingsK3bSetup->setStatusTip( actionSettingsK3bSetup->toolTip() );
-#endif
-    actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
-    actionToolsCddaRip->setStatusTip( actionToolsCddaRip->toolTip() );
-    actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
-    actionToolsVideoDvdRip->setStatusTip( actionToolsVideoDvdRip->toolTip() );
-    actionToolsVideoCdRip->setToolTip( i18n("Extract tracks from a Video CD") );
-    actionToolsVideoCdRip->setStatusTip( actionToolsVideoCdRip->toolTip() );
+    KAction* actionProjectAddFiles = new KAction( KIcon( "document-open" ), i18n("&Add Files..."), this );
     actionProjectAddFiles->setToolTip( i18n("Add files to the current project") );
     actionProjectAddFiles->setStatusTip( actionProjectAddFiles->toolTip() );
+    actionCollection()->addAction( "project_add_files", actionProjectAddFiles );
+    connect( actionProjectAddFiles, SIGNAL(triggered(bool)), this, SLOT(slotProjectAddFiles()) );
+
+    KAction* actionClearProject = new KAction( KIcon( QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr" ), i18n("&Clear Project"), this );
     actionClearProject->setToolTip( i18n("Clear the current project") );
     actionClearProject->setStatusTip( actionClearProject->toolTip() );
+    actionCollection()->addAction( "project_clear_project", actionClearProject );
+    connect( actionClearProject, SIGNAL(triggered(bool)), this, SLOT(slotClearProject()) );
+
+    KAction* actionToolsFormatMedium = new KAction( KIcon( "tools-media-optical-format" ), i18n("&Format/Erase rewritable disk..."), this );
+    actionToolsFormatMedium->setIconText( i18n( "Format" ) );
+    actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
+    actionToolsFormatMedium->setStatusTip( actionToolsFormatMedium->toolTip() );
+    actionCollection()->addAction( "tools_format_medium", actionToolsFormatMedium );
+    connect( actionToolsFormatMedium, SIGNAL(triggered(bool)), this, SLOT(slotFormatMedium()) );
+
+    KAction* actionToolsWriteImage = new KAction( KIcon( "tools-media-optical-burn-image" ), i18n("&Burn Image..."), this );
+    actionToolsWriteImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to an optical disc") );
+    actionToolsWriteImage->setStatusTip( actionToolsWriteImage->toolTip() );
+    actionCollection()->addAction( "tools_write_image", actionToolsWriteImage );
+    connect( actionToolsWriteImage, SIGNAL(triggered(bool)), this, SLOT(slotWriteImage()) );
+
+    KAction* actionToolsMediaCopy = new KAction( KIcon( "tools-media-optical-copy" ), i18n("Copy &Medium..."), this );
+    actionToolsMediaCopy->setIconText( i18n( "Copy" ) );
+    actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
+    actionToolsMediaCopy->setStatusTip( actionToolsMediaCopy->toolTip() );
+    actionCollection()->addAction( "tools_copy_medium", actionToolsMediaCopy );
+    connect( actionToolsMediaCopy, SIGNAL(triggered(bool)), this, SLOT(slotMediaCopy()) );
+
+    KAction* actionToolsCddaRip = new KAction( KIcon( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), this );
+    actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
+    actionToolsCddaRip->setStatusTip( actionToolsCddaRip->toolTip() );
+    actionCollection()->addAction( "tools_cdda_rip", actionToolsCddaRip );
+    connect( actionToolsCddaRip, SIGNAL(triggered(bool)), this, SLOT(slotCddaRip()) );
+
+    KAction* actionToolsVideoDvdRip = new KAction( KIcon( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), this );
+    actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
+    actionToolsVideoDvdRip->setStatusTip( actionToolsVideoDvdRip->toolTip() );
+    connect( actionToolsVideoDvdRip, SIGNAL(triggered(bool)), this, SLOT(slotVideoDvdRip()) );
+    actionCollection()->addAction( "tools_videodvd_rip", actionToolsVideoDvdRip );
+
+    KAction* actionToolsVideoCdRip = new KAction( KIcon( "tools-rip-video-cd" ), i18n("Rip Video CD..."), this );
+    actionToolsVideoCdRip->setToolTip( i18n("Extract tracks from a Video CD") );
+    actionToolsVideoCdRip->setStatusTip( actionToolsVideoCdRip->toolTip() );
+    actionCollection()->addAction( "tools_videocd_rip", actionToolsVideoCdRip );
+    connect( actionToolsVideoCdRip, SIGNAL(triggered(bool)), this, SLOT(slotVideoCdRip()) );
+
+    d->actionViewLockPanels = new KToggleAction( i18n("Lock Panels"), this );
+    d->actionViewLockPanels->setToolTip( i18n("Locks/unlocks layout of the main window") );
+    d->actionViewLockPanels->setStatusTip( d->actionViewLockPanels->toolTip() );
+    actionCollection()->addAction("view_lock_panels", d->actionViewLockPanels);
+    connect( d->actionViewLockPanels, SIGNAL(toggled(bool)), this, SLOT(slotViewLockPanels(bool)) );
+
+    d->actionViewDocumentHeader = new KToggleAction(i18n("Show Projects Header"),this);
+    d->actionViewDocumentHeader->setToolTip( i18n("Shows/hides title header of projects panel") );
+    d->actionViewDocumentHeader->setStatusTip( d->actionViewDocumentHeader->toolTip() );
+    actionCollection()->addAction("view_document_header", d->actionViewDocumentHeader);
+
+    d->actionViewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
+    KStandardAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
+    KStandardAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+    KStandardAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
+    setStandardToolBarMenuEnabled(true);
+
+    KAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
+    actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
+    actionSettingsConfigure->setStatusTip( actionSettingsConfigure->toolTip() );
+
+#ifdef BUILD_K3BSETUP
+    KAction* actionSettingsK3bSetup = new KAction( KIcon( "configure" ), i18n("&Setup System Permissions..."), this );
+    actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions") );
+    actionSettingsK3bSetup->setStatusTip( actionSettingsK3bSetup->toolTip() );
+    actionCollection()->addAction( "settings_k3bsetup", actionSettingsK3bSetup );
+    connect( actionSettingsK3bSetup, SIGNAL(triggered(bool)), this, SLOT(slotK3bSetup()) );
+#endif
+
+    // the tip action
+    KStandardAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection() );
+
+    KAction* actionHelpSystemCheck = new KAction( i18n("System Check"), this );
+    actionHelpSystemCheck->setToolTip( i18n("Checks system configuration") );
+    actionHelpSystemCheck->setStatusTip( actionHelpSystemCheck->toolTip() );
+    actionCollection()->addAction( "help_check_system", actionHelpSystemCheck );
+    connect( actionHelpSystemCheck, SIGNAL(triggered(bool)), this, SLOT(slotManualCheckSystem()) );
 }
 
 

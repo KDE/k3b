@@ -31,9 +31,9 @@
 #include "k3baudiozerodata.h"
 #include "k3bmsfedit.h"
 #include "k3bview.h"
+#include "k3bviewcolumnadjuster.h"
 // this is not here becasue of base_*.ui troubles
 #include "../rip/k3baudioprojectconvertingdialog.h"
-#include "../rip/k3bviewcolumnadjuster.h"
 
 #include <config-k3b.h>
 

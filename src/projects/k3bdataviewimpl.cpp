@@ -25,7 +25,7 @@
 #include "k3bdiritem.h"
 #include "k3bmodeltypes.h"
 #include "k3bview.h"
-#include "../rip/k3bviewcolumnadjuster.h"
+#include "k3bviewcolumnadjuster.h"
 
 #include <KAction>
 #include <KActionCollection>

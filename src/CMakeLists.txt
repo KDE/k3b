@@ -118,7 +118,6 @@ set(k3b_rip_SRCS
   rip/k3baudioprojectconvertingjob.cpp
   rip/categories.cpp
   rip/k3baudiotrackmodel.cpp
-  rip/k3bviewcolumnadjuster.cpp
   )
 
 kde4_add_ui_files(k3b_rip_SRCS
@@ -210,6 +209,7 @@ set(k3b_SRCS
   k3blsofwrapperdialog.cpp
   k3baction.cpp
   k3bdevicemenu.cpp
+  k3bviewcolumnadjuster.cpp
   )
 
 if(ENABLE_DVD_RIPPING)
