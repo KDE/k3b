@@ -32,7 +32,6 @@
 #include <QFontMetrics>
 #include <QFrame>
 #include <QGridLayout>
-#include <QLinearGradient>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPaintEvent>
@@ -56,6 +55,7 @@
 #include <kio/global.h>
 #include <KMenu>
 #include <KMessageBox>
+#include <QStyleOptionProgressBarV2>
 
 
 class K3b::FillStatusDisplayWidget::Private
@@ -126,84 +126,43 @@ void K3b::FillStatusDisplayWidget::mousePressEvent( QMouseEvent* e )
 void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 {
     const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
-    const QColor positiveBg = colorScheme.background( KColorScheme::PositiveBackground ).color();
-    const QColor neutralBg = colorScheme.background( KColorScheme::NeutralBackground ).color();
-    const QColor negativeBg = colorScheme.background( KColorScheme::NegativeBackground ).color();
-    const QColor normalFg = colorScheme.foreground( KColorScheme::NormalText ).color();
-    const QColor positiveFg = colorScheme.foreground( KColorScheme::PositiveText ).color();
-    const QColor neutralFg = colorScheme.foreground( KColorScheme::NeutralText ).color();
-    const QColor negativeFg = colorScheme.foreground( KColorScheme::NegativeText ).color();
-    
+
     QPainter p( this );
-    p.setPen( normalFg );
+    p.setPen( colorScheme.foreground( KColorScheme::NormalText ).color() );
 
-    K3b::Msf docSize;
-    K3b::Msf cdSize;
-    K3b::Msf maxValue;
-    K3b::Msf tolerance;
+    const Msf docSize = d->doc->length();
+    const Msf cdSize = d->cdSize;
+    const Msf maxValue = (cdSize > docSize ? cdSize : docSize) + ( 10*60*75 );
+    const Msf tolerance = 60*75;
 
-    docSize = d->doc->length();
-    cdSize = d->cdSize;
-    maxValue = (cdSize > docSize ? cdSize : docSize) + ( 10*60*75 );
-    tolerance = 60*75;
+    QBrush fillBrush;
+    if( docSize <= cdSize - tolerance ) {
+        fillBrush = colorScheme.background( KColorScheme::PositiveBackground );
+    }
+    else if( docSize > cdSize + tolerance ) {
+        fillBrush = colorScheme.background( KColorScheme::NegativeBackground );
+    }
+    else {
+        fillBrush = colorScheme.background( KColorScheme::NeutralBackground );
+    }
+
+    QStyleOptionProgressBarV2 sopb;
+    sopb.direction = layoutDirection();
+    sopb.fontMetrics = fontMetrics();
+    sopb.palette = palette();
+    sopb.palette.setBrush( QPalette::Highlight, fillBrush );
+    sopb.rect = rect();
+    sopb.state = isEnabled() ? QStyle::State_Enabled : QStyle::State_None;
+    sopb.minimum = 0;
+    sopb.maximum = maxValue.totalFrames();
+    sopb.progress = docSize.totalFrames();
+    style()->drawControl( QStyle::CE_ProgressBar, &sopb, &p );
 
     // so split width() in maxValue pieces
     double one = (double)rect().width() / (double)maxValue.totalFrames();
+
     QRect crect( rect() );
     crect.setWidth( (int)(one*(double)docSize.totalFrames()) );
-
-    p.setClipping(true);
-    p.setClipRect( QStyle::visualRect( layoutDirection(), rect(), crect ) );
-    
-    p.fillRect( QStyle::visualRect( layoutDirection(), rect(), crect ), positiveBg );
-
-    QRect oversizeRect(crect);
-
-    // draw red if docSize > cdSize + tolerance
-    if( docSize > cdSize + tolerance ) {
-        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).totalFrames()) );
-        QRect negativeRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height() );
-        QPoint gradientStart( oversizeRect.left() - rect().height(), 0 );
-        QPoint gradientEnd( oversizeRect.left() + rect().height(), 0 );
-        
-        QLinearGradient gradient( QStyle::visualPos( layoutDirection(), rect(), gradientStart ),
-                                  QStyle::visualPos( layoutDirection(), rect(), gradientEnd ) );
-        gradient.setColorAt( 0.1, positiveBg );
-        gradient.setColorAt( 0.5, neutralBg );
-        gradient.setColorAt( 0.9, negativeBg );
-        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), oversizeRect ), negativeBg );
-        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), negativeRect ), gradient );
-        p.setPen( negativeFg );
-        p.drawLine( QStyle::visualPos( layoutDirection(), rect(), oversizeRect.topRight() ),
-                    QStyle::visualPos( layoutDirection(), rect(), oversizeRect.bottomRight() ) );
-    }
-
-    // draw yellow if cdSize - tolerance < docSize
-    else if( docSize > cdSize - tolerance ) {
-        oversizeRect.setLeft( oversizeRect.left() + (int)(one * (cdSize - tolerance).lba()) );
-        QRect neutralRect( oversizeRect.left() - rect().height(), 0, rect().height()*2, rect().height() );
-        QPoint gradientStart( oversizeRect.left() - rect().height(), 0 );
-        QPoint gradientEnd( oversizeRect.left() + rect().height(), 0 );
-        
-        QLinearGradient gradient( QStyle::visualPos( layoutDirection(), rect(), gradientStart ),
-                                  QStyle::visualPos( layoutDirection(), rect(), gradientEnd ) );
-        gradient.setColorAt( 0.1, positiveBg );
-        gradient.setColorAt( 0.9, neutralBg );
-        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), oversizeRect ), neutralBg );
-        p.fillRect( QStyle::visualRect( layoutDirection(), rect(), neutralRect ), gradient );
-        p.setPen( neutralFg );
-        p.drawLine( QStyle::visualPos( layoutDirection(), rect(), oversizeRect.topRight() ),
-                    QStyle::visualPos( layoutDirection(), rect(), oversizeRect.bottomRight() ) );
-    }
-    
-    // draw end column with foreground color to make bar more readable
-    else {
-        p.setPen( positiveFg );
-        p.drawLine( QStyle::visualPos( layoutDirection(), rect(), crect.topRight() ),
-                    QStyle::visualPos( layoutDirection(), rect(), crect.bottomRight() ) );
-    }
-
-    p.setClipping(false);
 
     // ====================================================================================
     // Now the colored bar is painted
@@ -239,7 +198,6 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     int mediumSizeMarkerPos = rect().left() + (int)(one*cdSize.lba());
     QPoint mediumSizeMarkerFrom( mediumSizeMarkerPos, rect().bottom() );
     QPoint mediumSizeMarkerTo( mediumSizeMarkerPos, rect().top() + ((rect().bottom()-rect().top())/2) );
-    p.setPen( normalFg );
     p.drawLine( QStyle::visualPos( layoutDirection(), rect(), mediumSizeMarkerFrom ),
                 QStyle::visualPos( layoutDirection(), rect(), mediumSizeMarkerTo ) );
     // ====================================================================================
@@ -332,7 +290,7 @@ public:
     K3b::Doc* doc;
 
     QTimer updateTimer;
-    
+
     void setCdSize( const K3b::Msf& size );
 };
 
@@ -343,7 +301,7 @@ void K3b::FillStatusDisplay::Private::setCdSize( const K3b::Msf& size )
     if( QAction* checked = cdSizeGroup->checkedAction() ) {
         checked->setChecked( false );
     }
-    
+
     switch( size.totalFrames() ) {
         case MediaSizeCd74Min:
         case 650*512:
@@ -392,8 +350,6 @@ K3b::FillStatusDisplay::FillStatusDisplay( K3b::Doc* doc, QWidget *parent )
 {
     d = new Private;
     d->doc = doc;
-
-    setFrameStyle( Panel | Sunken );
 
     d->displayWidget = new K3b::FillStatusDisplayWidget( doc, this );
 //   d->buttonMenu = new QToolButton( this );
@@ -700,7 +656,7 @@ void K3b::FillStatusDisplay::slotLoadUserDefaults()
     d->actionShowMinutes->setChecked( d->showTime );
 
     long size = c.readEntry( "default media size", 0 );
-    
+
     // Remove check mark from current checked action
     if( QAction* checked = d->cdSizeGroup->checkedAction() ) {
         checked->setChecked( false );
