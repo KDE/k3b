@@ -26,6 +26,7 @@ class KActionCollection;
 class KMenu;
 
 namespace K3b {
+    class ViewColumnAdjuster;
     class DataDoc;
     class DataProjectModel;
     class View;
@@ -69,6 +70,7 @@ namespace K3b {
         DataDoc* m_doc;
         DataProjectModel* m_model;
         QTreeView* m_fileView;
+        ViewColumnAdjuster* m_columnAdjuster;
 
         KMenu* m_popupMenu;
         KAction* m_actionParentDir;

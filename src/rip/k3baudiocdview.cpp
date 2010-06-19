@@ -88,7 +88,7 @@ public:
     KToolBar* toolBox;
     QLabel* labelLength;
 
-    
+
     QLabel* busyInfoLabel;
 };
 
@@ -119,8 +119,9 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
     d->trackView->setDragEnabled( true );
     K3b::ViewColumnAdjuster* vca = new K3b::ViewColumnAdjuster( d->trackView );
-    vca->setFixedColumns( QList<int>() << 0 << 3 );
-    vca->setColumnMargin( K3b::AudioTrackModel::LengthColumn, 10 );
+    vca->addFixedColumn( AudioTrackModel::TrackNumberColumn );
+    vca->addFixedColumn( AudioTrackModel::LengthColumn );
+    vca->setColumnMargin( AudioTrackModel::LengthColumn, 10 );
 
     connect( d->trackView, SIGNAL(customContextMenuRequested(const QPoint&)),
              this, SLOT(slotContextMenu(const QPoint&)) );
@@ -144,7 +145,7 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     d->toolBox->addAction( d->actionCollection->action( "show_data_part" ) );
     d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
     d->toolBox->addWidget( d->labelLength );
-    
+
     slotTrackSelectionChanged();
 
     setLeftPixmap( K3b::Theme::MEDIA_LEFT );
@@ -204,7 +205,7 @@ void K3b::AudioCdView::reloadMedium()
 
         d->trackModel->setCddbInfo( cddbInfo );
     }
-    
+
     actionCollection()->action( "show_data_part" )->setEnabled( medium().content() & Medium::ContentData );
 
     // update the title

@@ -48,6 +48,7 @@ K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
     m_dirProxy->setSourceModel( m_dataViewImpl->model() );
 
     // Dir panel
+    m_dirView->setRootIsDecorated( false );
     m_dirView->setHeaderHidden( true );
     m_dirView->setAcceptDrops( true );
     m_dirView->setDragEnabled( true );

@@ -51,11 +51,12 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     m_dirView( new QTreeView( this ) ),
     m_fileViewWidget( new QStackedWidget( this ) )
 {
-    m_model->addSubModel( i18n("Data Section"), KIcon("media-optical-data"), m_dataViewImpl->model(), true );
     m_model->addSubModel( i18n("Audio Section"), KIcon("media-optical-audio"), m_audioViewImpl->model() );
+    m_model->addSubModel( i18n("Data Section"), KIcon("media-optical-data"), m_dataViewImpl->model(), true );
     m_dirProxy->setSourceModel( m_model );
 
     // Dir panel
+    m_dirView->setRootIsDecorated( false );
     m_dirView->setHeaderHidden( true );
     m_dirView->setAcceptDrops( true );
     m_dirView->setDragEnabled( true );

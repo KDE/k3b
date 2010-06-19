@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -36,8 +37,12 @@ namespace K3b {
          */
         int columnSizeHint( int col ) const;
 
+        /**
+         * Sets the view column adjuster operates on.
+         * Call this *after* calling setModel() on view,
+         * otherwise column adjuster won't work.
+         */
         void setView( QTreeView* view );
-        void setFixedColumns( const QList<int>& );
         void addFixedColumn( int );
 
         void setColumnMargin( int column, int margin );

@@ -65,7 +65,6 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_trackView->setRootIsDecorated( false );
     m_trackView->setSelectionMode( QTreeView::ExtendedSelection );
     m_trackView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-    m_trackView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     m_columnAdjuster->setView( m_trackView );
 
@@ -451,10 +450,7 @@ void K3b::AudioViewImpl::slotAdjustColumns()
     m_trackView->setColumnWidth( AudioProjectModel::TypeColumn, typeWidth );
     m_trackView->setColumnWidth( AudioProjectModel::LengthColumn, lengthWidth );
 
-    int remaining = m_trackView->contentsRect().width() - typeWidth - lengthWidth - m_trackView->columnWidth(0);
-    if( m_trackView->verticalScrollBar()->isVisible() ) {
-        remaining -= m_trackView->verticalScrollBar()->style()->pixelMetric( QStyle::PM_ScrollBarExtent );
-    }
+    int remaining = m_trackView->viewport()->contentsRect().width() - typeWidth - lengthWidth - m_trackView->columnWidth(0);
 
     // now let's see if there is enough space for all
     if( remaining >= artistWidth + titleWidth + filenameWidth ) {

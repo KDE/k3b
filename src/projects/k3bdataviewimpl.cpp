@@ -25,6 +25,7 @@
 #include "k3bdiritem.h"
 #include "k3bmodeltypes.h"
 #include "k3bview.h"
+#include "../rip/k3bviewcolumnadjuster.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -51,9 +52,16 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_fileView->setSelectionMode( QTreeView::ExtendedSelection );
     m_fileView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_fileView->setContextMenuPolicy( Qt::ActionsContextMenu );
-    // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
-    m_fileView->header()->setResizeMode( QHeaderView::ResizeToContents );
     m_fileView->setEditTriggers( QAbstractItemView::NoEditTriggers );
+
+    m_columnAdjuster = new ViewColumnAdjuster( this );
+    m_columnAdjuster->setView( m_fileView );
+    m_columnAdjuster->addFixedColumn( DataProjectModel::TypeColumn );
+    m_columnAdjuster->setColumnMargin( DataProjectModel::TypeColumn, 10 );
+    m_columnAdjuster->addFixedColumn( DataProjectModel::SizeColumn );
+    m_columnAdjuster->setColumnMargin( DataProjectModel::SizeColumn, 10 );
+    m_columnAdjuster->addFixedColumn( DataProjectModel::LocalPathColumn );
+    m_columnAdjuster->addFixedColumn( DataProjectModel::LinkColumn );
 
     m_actionNewDir = createAction( m_view, i18n("New Folder..."), "folder-new", Qt::CTRL+Qt::Key_N, this, SLOT(slotNewDir()),
                                    actionCollection, "new_dir" );
@@ -119,7 +127,7 @@ void K3b::DataViewImpl::slotCurrentRootChanged( const QModelIndex& newRoot )
     // make the file view show only the child nodes of the currently selected
     // directory from dir view
     m_fileView->setRootIndex( newRoot );
-    m_fileView->header()->resizeSections( QHeaderView::Stretch );
+    m_columnAdjuster->adjustColumns();
     m_actionParentDir->setEnabled( newRoot.isValid() && m_model->indexForItem( m_doc->root() ) != newRoot );
 }
 

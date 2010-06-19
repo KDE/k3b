@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -17,9 +18,10 @@
 #include <QtGui/QTreeView>
 #include <QtGui/QHeaderView>
 #include <QtCore/QAbstractItemModel>
-#include <QtCore/QList>
-#include <QtCore/QHash>
 #include <QtCore/QEvent>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QSet>
 
 #include <KDebug>
 
@@ -37,7 +39,7 @@ public:
     void _k_adjustColumns();
 
     QTreeView* view;
-    QList<int> fixedColumns;
+    QSet<int> fixedColumns;
     QHash<int, int> margins;
 
 private:
@@ -58,8 +60,9 @@ void K3b::ViewColumnAdjuster::Private::_k_adjustColumns()
 
 int K3b::ViewColumnAdjuster::Private::columnSizeHint( int col )
 {
-    int w = qobject_cast<QAbstractItemView*>( view )->sizeHintForColumn( col );
-    if ( view->model()->index( 0, col ).flags() & Qt::ItemIsUserCheckable ) {
+    int w = static_cast<QAbstractItemView*>( view )->sizeHintForColumn( col );
+    QModelIndex firstRow = view->model()->index( 0, col );
+    if ( firstRow.isValid() && firstRow.flags().testFlag( Qt::ItemIsUserCheckable ) ) {
         w += 10; // HACK
     }
     if ( !view->header()->isHidden() ) {
@@ -114,12 +117,6 @@ void K3b::ViewColumnAdjuster::setView( QTreeView* view )
 }
 
 
-void K3b::ViewColumnAdjuster::setFixedColumns( const QList<int>& l )
-{
-    d->fixedColumns = l;
-}
-
-
 void K3b::ViewColumnAdjuster::addFixedColumn( int col )
 {
     d->fixedColumns << col;
@@ -167,10 +164,10 @@ void K3b::ViewColumnAdjuster::adjustColumns()
     // fixed sizes
     int x = 0;
     QList<int> otherCols;
-    for ( int i = 0; i < d->view->model()->columnCount(); ++i ) {
+    for ( int i = 0; i < d->view->model()->columnCount( d->view->rootIndex() ); ++i ) {
         if ( d->fixedColumns.contains( i ) ) {
             int w = d->columnSizeHint( i ) + columnMargin( i );
-            d->view->header()->resizeSection( i, w );
+            d->view->setColumnWidth( i, w );
             x += w;
         }
         else {
@@ -184,7 +181,6 @@ void K3b::ViewColumnAdjuster::adjustColumns()
         int widthLeft = d->view->viewport()->contentsRect().width() - x;
         int max = widthLeft / otherCols.count();
         for ( int i = 0; i < otherCols.count(); ++i ) {
-            kDebug() << i << otherCols[i];
             int sh = d->columnSizeHint( otherCols[i] ) + columnMargin( otherCols[i] );
             otherColSizes << qMin( sh, max );
             xx += qMin( sh, max );
@@ -192,7 +188,7 @@ void K3b::ViewColumnAdjuster::adjustColumns()
 
         // do we have something left
         for ( int i = 0; i < otherCols.count(); ++i ) {
-            d->view->header()->resizeSection( otherCols[i], qMax( 0, otherColSizes[i] + ( widthLeft-xx )/otherColSizes.count() ) );
+            d->view->setColumnWidth( otherCols[i], qMax( 0, otherColSizes[i] + ( widthLeft-xx )/otherColSizes.count() ) );
         }
     }
 }
