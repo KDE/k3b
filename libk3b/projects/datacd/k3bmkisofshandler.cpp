@@ -93,6 +93,11 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
                 handleMkisofsInfoMessage( i18n("Files bigger than 2 GB cannot be handled."), K3b::Job::MessageError );
                 d->readError = true;
             }
+            else if( errorLine.startsWith( "No such file or directory. cannot open" ) ) {
+                handleMkisofsInfoMessage( i18n("No such file or directory '%1'.").arg( errorLine.mid( 40, errorLine.length()-41 ) ),
+                                          K3b::Job::MessageError );
+                d->readError = true;
+            }
         }
         else if( line.contains( "done, estimate" ) ) {
             int p = parseMkisofsProgress( line );
