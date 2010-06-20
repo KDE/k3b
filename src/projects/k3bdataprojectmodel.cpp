@@ -1,8 +1,8 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- *           (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -492,6 +492,7 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
     }
 }
 
+
 bool K3b::DataProjectModel::removeRows( int row, int count, const QModelIndex& parent)
 {
     if( row >= 0 && count > 0 ) {
@@ -509,6 +510,15 @@ bool K3b::DataProjectModel::removeRows( int row, int count, const QModelIndex& p
     else {
         return false;
     }
+}
+
+
+QModelIndex K3b::DataProjectModel::buddy( const QModelIndex& index ) const
+{
+    if( index.isValid() && index.column() != FilenameColumn)
+        return DataProjectModel::index( index.row(), FilenameColumn );
+    else
+        return index;
 }
 
 #include "k3bdataprojectmodel.moc"

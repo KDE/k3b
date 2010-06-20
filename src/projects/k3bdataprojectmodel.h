@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -44,19 +45,20 @@ namespace K3b {
         DataItem* itemForIndex( const QModelIndex& index ) const;
         QModelIndex indexForItem( DataItem* item ) const;
 
-        int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
-        Qt::ItemFlags flags( const QModelIndex& index ) const;
-        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        QModelIndex parent( const QModelIndex& index ) const;
-        int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-        QMimeData* mimeData( const QModelIndexList& indexes ) const;
-        Qt::DropActions supportedDropActions() const;
-        QStringList mimeTypes() const;
-        bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
+        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+        virtual QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
+        virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+        virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
+        virtual QModelIndex parent( const QModelIndex& index ) const;
+        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+        virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+        virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
+        virtual Qt::DropActions supportedDropActions() const;
+        virtual QStringList mimeTypes() const;
+        virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
         virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+        virtual QModelIndex buddy( const QModelIndex& index ) const;
 
     private:
         class Private;

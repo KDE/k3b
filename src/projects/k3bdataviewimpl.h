@@ -60,6 +60,7 @@ namespace K3b {
         void slotOpen();
         void slotSelectionChanged();
         void slotItemActivated( const QModelIndex& index );
+        void slotEnterPressed();
         void slotImportSession();
         void slotClearImportedSession();
         void slotEditBootImages();
