@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -14,31 +15,27 @@
 
 
 #include "k3bdatapropertiesdialog.h"
-
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bvalidators.h"
 
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
-
-#include <qtabwidget.h>
-#include <qvalidator.h>
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QList>
-
-#include <klineedit.h>
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kmimetype.h>
-#include <kurl.h>
+#include <KIcon>
 #include <kio/global.h>
-#include <kfileitem.h>
-#include <ksqueezedtextlabel.h>
+#include <KLineEdit>
+#include <KLocale>
+#include <KMimeType>
+#include <KUrl>
+#include <KSqueezedTextLabel>
+
+#include <QCheckBox>
+#include <QFileInfo>
+#include <QFrame>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QValidator>
 
 
 K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )
@@ -57,6 +54,7 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
         m_labelType = new QLabel( mainWidget() );
         m_labelLocalName = new KSqueezedTextLabel( mainWidget() );
         m_labelLocalLocation = new KSqueezedTextLabel( mainWidget() );
+        m_labelLocalLinkTarget = new KSqueezedTextLabel( mainWidget() );
         m_extraInfoLabel = new QLabel( mainWidget() );
     }
     else {
@@ -108,6 +106,9 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
         m_labelLocalLocationText = new QLabel( i18n("Local location:"), mainWidget() );
         grid->addWidget( m_labelLocalLocationText, row, 0 );
         grid->addWidget( m_labelLocalLocation, row++, 2 );
+        m_labelLocalLinkTargetText = new QLabel( i18n("Local link target:"), mainWidget() );
+        grid->addWidget( m_labelLocalLinkTargetText, row, 0 );
+        grid->addWidget( m_labelLocalLinkTarget, row++, 2 );
     }
 
     grid->addItem( new QSpacerItem( 50, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );
@@ -120,9 +121,9 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
     m_spacerLine = new QFrame( mainWidget() );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
-    grid->addWidget( m_spacerLine, 10, 0, 1, 3 );
-    grid->addWidget( optionTab, 12, 0, 1, 3 );
-    grid->setRowStretch( 11, 1 );
+    grid->addWidget( m_spacerLine, row++, 0, 1, 3 );
+    grid->setRowStretch( row++, 1 );
+    grid->addWidget( optionTab, row++, 0, 1, 3 );
 
     QWidget* hideBox = new QWidget( optionTab );
     QGridLayout* hideBoxGrid = new QGridLayout( hideBox );
@@ -198,26 +199,31 @@ K3b::DataPropertiesDialog::~DataPropertiesDialog()
 void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
 {
     if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>(dataItem) ) {
-        KFileItem kFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl(fileItem->localPath()) );
-        kDebug() << kFileItem << dataItem->k3bPath() << dataItem->localPath();
-        m_labelIcon->setPixmap( kFileItem.pixmap(KIconLoader::SizeLarge) );
-        if( fileItem->isSymLink() )
-            m_labelType->setText( i18n("Link to %1", kFileItem.mimeComment()) );
-        else
-            m_labelType->setText( kFileItem.mimeComment() );
-        m_labelLocalName->setText( kFileItem.name() );
-        QString localLocation = kFileItem.url().path( KUrl::RemoveTrailingSlash );
-        localLocation.truncate( localLocation.lastIndexOf('/') );
-        m_labelLocalLocation->setText( localLocation );
+        QFileInfo fileInfo( fileItem->localPath() );
+        kDebug() << fileItem->k3bPath() << fileItem->localPath();
+        m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge ) );
+        if( fileItem->isSymLink() ) {
+            m_labelType->setText( i18n( "Link to %1", fileItem->mimeType()->comment() ) );
+            m_labelLocalLinkTarget->setText( fileItem->linkDest() );
+        }
+        else {
+            m_labelType->setText( fileItem->mimeType()->comment() );
+            m_labelLocalLinkTargetText->hide();
+            m_labelLocalLinkTarget->hide();
+        }
+        m_labelLocalName->setText( fileInfo.fileName() );
+        m_labelLocalLocation->setText( fileInfo.absolutePath() );
         m_labelSize->setText( KIO::convertSize(dataItem->size()) );
     }
     else if( K3b::DirItem* dirItem = dynamic_cast<K3b::DirItem*>(dataItem) ) {
-        m_labelIcon->setPixmap( KIO::pixmapForUrl( KUrl( "/" )) );
+        m_labelIcon->setPixmap( DesktopIcon( "folder", KIconLoader::SizeLarge ) );
         m_labelType->setText( i18n("Folder") );
         m_labelLocalNameText->hide();
-        m_labelLocalLocationText->hide();
         m_labelLocalName->hide();
+        m_labelLocalLocationText->hide();
         m_labelLocalLocation->hide();
+        m_labelLocalLinkTargetText->hide();
+        m_labelLocalLinkTarget->hide();
         m_spacerLine->hide();
         m_labelSize->setText( KIO::convertSize(dataItem->size()) + "\n(" +
                               i18np("in one file", "in %1 files", dirItem->numFiles()) + " " +
@@ -226,10 +232,12 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
     else {
         m_labelIcon->setPixmap( DesktopIcon("unknown", KIconLoader::SizeLarge) );
         m_labelType->setText( i18n("Special file") );
-        m_labelLocalName->hide();
-        m_labelLocalLocation->hide();
         m_labelLocalNameText->hide();
+        m_labelLocalName->hide();
         m_labelLocalLocationText->hide();
+        m_labelLocalLocation->hide();
+        m_labelLocalLinkTargetText->hide();
+        m_labelLocalLinkTarget->hide();
         m_spacerLine->hide();
         m_labelSize->setText( KIO::convertSize(dataItem->size()) );
     }

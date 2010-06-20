@@ -1,6 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2007 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -16,63 +17,60 @@
 #ifndef K3BDATAPROPERTIESDIALOG_H
 #define K3BDATAPROPERTIESDIALOG_H
 
-#include <kdialog.h>
-
-//Added by qt3to4:
-#include <QFrame>
-#include <QLabel>
+#include <KDialog>
 #include <QList>
 
-namespace K3b {
-    class DataItem;
-}
-
 class KLineEdit;
+class KSqueezedTextLabel;
+class QFrame;
 class QLabel;
 class QCheckBox;
-
 
 /**
  *@author Sebastian Trueg
  */
 namespace K3b {
-class DataPropertiesDialog : public KDialog  
-{
-    Q_OBJECT
+    class DataItem;
 
-public: 
-    DataPropertiesDialog( const QList<DataItem*>&, QWidget* parent = 0 );
-    ~DataPropertiesDialog();
+    class DataPropertiesDialog : public KDialog
+    {
+        Q_OBJECT
 
-protected Q_SLOTS:
-    void slotOk();
+    public:
+        DataPropertiesDialog( const QList<DataItem*>&, QWidget* parent = 0 );
+        ~DataPropertiesDialog();
 
-private:
-    KLineEdit* m_editName;
-    QLabel* m_multiSelectionLabel;
-    QLabel* m_labelIcon;
-    QLabel* m_labelType;
-    QLabel* m_labelLocation;
-    QLabel* m_labelSize;
-    QLabel* m_labelBlocks;
-    QLabel* m_extraInfoLabel;
+    protected Q_SLOTS:
+        void slotOk();
 
-    QFrame* m_spacerLine;
+    private:
+        KLineEdit* m_editName;
+        QLabel* m_multiSelectionLabel;
+        QLabel* m_labelIcon;
+        QLabel* m_labelType;
+        KSqueezedTextLabel* m_labelLocation;
+        QLabel* m_labelSize;
+        QLabel* m_labelBlocks;
+        QLabel* m_extraInfoLabel;
 
-    QLabel* m_labelLocalNameText;
-    QLabel* m_labelLocalLocationText;
-    QLabel* m_labelLocalName;
-    QLabel* m_labelLocalLocation;
+        QFrame* m_spacerLine;
 
-    QCheckBox* m_checkHideOnRockRidge;
-    QCheckBox* m_checkHideOnJoliet;
-    KLineEdit* m_editSortWeight;
+        QLabel* m_labelLocalNameText;
+        QLabel* m_labelLocalLocationText;
+        QLabel* m_labelLocalLinkTargetText;
+        KSqueezedTextLabel* m_labelLocalName;
+        KSqueezedTextLabel* m_labelLocalLocation;
+        KSqueezedTextLabel* m_labelLocalLinkTarget;
 
-    QList<DataItem*> m_dataItems;
+        QCheckBox* m_checkHideOnRockRidge;
+        QCheckBox* m_checkHideOnJoliet;
+        KLineEdit* m_editSortWeight;
 
-    void loadItemProperties( DataItem* );
-    void loadListProperties( const QList<DataItem*>& );
-};
+        QList<DataItem*> m_dataItems;
+
+        void loadItemProperties( DataItem* );
+        void loadListProperties( const QList<DataItem*>& );
+    };
 }
 
 #endif
