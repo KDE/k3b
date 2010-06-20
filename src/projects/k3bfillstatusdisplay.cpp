@@ -110,8 +110,8 @@ QSize K3b::FillStatusDisplayWidget::sizeHint() const
 
 QSize K3b::FillStatusDisplayWidget::minimumSizeHint() const
 {
-    int margin = 2;
-    QFontMetrics fm( font() );
+    const int margin = style()->pixelMetric( QStyle::PM_ButtonMargin );
+    const QFontMetrics fm( font() );
     return QSize( -1, fm.height() + 2 * margin );
 }
 
