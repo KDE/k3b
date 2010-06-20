@@ -118,8 +118,10 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_trackView->addAction( actionCollection->action("project_burn") );
 
 #ifndef ENABLE_MUSICBRAINZ
-    m_actionMusicBrainz->setEnabled( false );
-    m_actionMusicBrainz->setVisible( false );
+    m_actionQueryMusicBrainz->setEnabled( false );
+    m_actionQueryMusicBrainz->setVisible( false );
+    m_actionQueryMusicBrainzTrack->setEnabled( false );
+    m_actionQueryMusicBrainzTrack->setVisible( false );
 #endif
 
 #ifdef __GNUC__
