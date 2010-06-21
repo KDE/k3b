@@ -519,8 +519,9 @@ K3b::Version K3b::DvdBooktypeProgram::parseVersion( const QString& output, const
     if( pos < 0 )
         return Version();
 
-    // No version information. Create dummy version
-    return K3b::Version( 1, 0, 0 );
+    // dvd+rw-booktype does not have version information
+    // create dummy version based on latest release (05-Mar-2008)
+    return K3b::Version( 7, 1 );
 }
 
 
