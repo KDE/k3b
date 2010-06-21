@@ -487,10 +487,23 @@ K3b::Version K3b::DvdformatProgram::parseVersion( const QString& output, const E
     return Version();
 }
 
-QString K3b::DvdformatProgram::parseCopyright( const QString& /*output*/, const ExternalBin& /*bin*/ ) const
+
+QString K3b::DvdformatProgram::parseCopyright( const QString& output, const ExternalBin& /*bin*/ ) const
 {
-    // fixed Copyright:
-    return QLatin1String( "Andy Polyakov <appro@fy.chalmers.se>" );
+    QString copyright = "Andy Polyakov ";
+    // extract fields
+    QStringList outputList = output.split( " " );
+
+    for (int i = 0; i < outputList.size(); ++i) {
+        if ( outputList.at( i ) == "by" ) {
+            // add missing author name
+            copyright.append( outputList.at( i + 1 ) );
+            // remove dot found at the end of the version
+            copyright = copyright.left( copyright.size() - 1 );
+        }
+    }
+
+    return copyright;
 }
 
 
