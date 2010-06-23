@@ -19,11 +19,11 @@
 #include <QAbstractItemModel>
 #include <KUrl>
 
-class QTreeView;
-
 class KAction;
 class KActionCollection;
 class KMenu;
+class QSortFilterProxyModel;
+class QTreeView;
 
 namespace K3b {
     class ViewColumnAdjuster;
@@ -70,6 +70,7 @@ namespace K3b {
         View* m_view;
         DataDoc* m_doc;
         DataProjectModel* m_model;
+        QSortFilterProxyModel* m_sortModel;
         QTreeView* m_fileView;
         ViewColumnAdjuster* m_columnAdjuster;
 

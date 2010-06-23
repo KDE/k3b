@@ -17,7 +17,7 @@
 #include "k3bmetaitemmodel.h"
 // this header is required to return the ItemTypeRole correctly for the
 // places items
-#include "projects/k3bmodeltypes.h"
+#include "k3bdataprojectmodel.h"
 
 #include "k3bcore.h"
 
@@ -424,8 +424,8 @@ QVariant K3b::MetaItemModel::data( const QModelIndex& index, int role ) const
             case Qt::DecorationRole:
                 return node->place()->icon;
 
-            case K3b::ItemTypeRole:
-                return (int) K3b::DirItemType;
+            case DataProjectModel::ItemTypeRole:
+                return (int) DataProjectModel::DirItemType;
 
             default:
                 return QVariant();

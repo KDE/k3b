@@ -35,9 +35,25 @@ namespace K3b {
             FilenameColumn = 0,
             TypeColumn,
             SizeColumn,
-            LocalPathColumn,
-            LinkColumn,
             NumColumns
+        };
+
+        enum AdditionalRoles
+        {
+            ItemTypeRole = Qt::UserRole,  ///< returns int which is a combination of ItemType
+            CustomFlagsRole,              ///< returns int which is a combination of ItemFlags
+            SortRole                      ///< returns data most suitable for sorting
+        };
+
+        enum ItemType
+        {
+            DirItemType,
+            FileItemType
+        };
+
+        enum ItemFlags
+        {
+            ItemIsRemovable = 1
         };
 
         DataDoc* project() const;

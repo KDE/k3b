@@ -1,3 +1,9 @@
+2.1
+====
+Changes:
+ * Added dynamic hiding of irrelevant actions in mixed project (142954)
+ * Added sorting in data project view (191660)
+
 2.0
 ===
 Changes (since 1.0.5):

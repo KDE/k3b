@@ -56,6 +56,7 @@ set(k3b_project_SRCS
   projects/k3bdatavolumedescdialog.cpp
   projects/k3bdataburndialog.cpp
   projects/k3bdataprojectmodel.cpp
+  projects/k3bdataprojectsortproxymodel.cpp
   projects/k3bbootimagedialog.cpp
   projects/k3bbootimageview.cpp
   projects/k3bbootimagemodel.cpp

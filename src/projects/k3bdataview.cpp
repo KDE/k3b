@@ -57,6 +57,8 @@ K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
     m_dirView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_dirView->setModel( m_dirProxy );
     m_dirView->expandToDepth( 1 ); // Show first-level directories directories by default
+    m_dirView->setColumnHidden( DataProjectModel::TypeColumn, true );
+    m_dirView->setColumnHidden( DataProjectModel::SizeColumn, true );
 
     QSplitter* splitter = new QSplitter( this );
     splitter->addWidget( m_dirView );

@@ -19,20 +19,23 @@
 #include "k3bdatadoc.h"
 #include "k3bdatamultisessionimportdialog.h"
 #include "k3bdataprojectmodel.h"
+#include "k3bdataprojectsortproxymodel.h"
 #include "k3bdatapropertiesdialog.h"
 #include "k3bdataurladdingdialog.h"
 #include "k3bdiritem.h"
-#include "k3bmodeltypes.h"
 #include "k3bview.h"
 #include "k3bviewcolumnadjuster.h"
 
 #include <KAction>
 #include <KActionCollection>
+#include <KFileItemDelegate>
 #include <KInputDialog>
 #include <KLocale>
 #include <KMenu>
 #include <KRun>
+
 #include <QShortcut>
+#include <QSortFilterProxyModel>
 
 
 K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* actionCollection )
@@ -41,11 +44,14 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_view( view ),
     m_doc( doc ),
     m_model( new DataProjectModel( doc, view ) ),
+    m_sortModel( new DataProjectSortProxyModel( this ) ),
     m_fileView( new QTreeView( view ) )
 {
     connect( m_doc, SIGNAL(importedSessionChanged(int)), this, SLOT(slotImportedSessionChanged(int)) );
 
-    m_fileView->setModel( m_model );
+    m_sortModel->setSourceModel( m_model );
+
+    m_fileView->setModel( m_sortModel );
     m_fileView->setAcceptDrops( true );
     m_fileView->setDragEnabled( true );
     m_fileView->setDragDropMode( QTreeView::DragDrop );
@@ -54,6 +60,9 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_fileView->setSelectionMode( QTreeView::ExtendedSelection );
     m_fileView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_fileView->setContextMenuPolicy( Qt::ActionsContextMenu );
+    m_fileView->setSortingEnabled( true );
+    m_fileView->sortByColumn( DataProjectModel::FilenameColumn, Qt::AscendingOrder );
+    m_fileView->setMouseTracking( true );
     connect( m_fileView, SIGNAL(doubleClicked(QModelIndex)),
              this, SLOT(slotItemActivated(QModelIndex)) );
     connect( m_fileView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -65,8 +74,6 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_columnAdjuster->setColumnMargin( DataProjectModel::TypeColumn, 10 );
     m_columnAdjuster->addFixedColumn( DataProjectModel::SizeColumn );
     m_columnAdjuster->setColumnMargin( DataProjectModel::SizeColumn, 10 );
-    m_columnAdjuster->addFixedColumn( DataProjectModel::LocalPathColumn );
-    m_columnAdjuster->addFixedColumn( DataProjectModel::LinkColumn );
 
     m_actionNewDir = new KAction( KIcon( "folder-new" ), i18n("New Folder..."), m_view );
     m_actionNewDir->setShortcut( Qt::CTRL + Qt::Key_N );
@@ -140,7 +147,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
 
 void K3b::DataViewImpl::addUrls( const QModelIndex& parent, const KUrl::List& urls )
 {
-    DirItem *item = dynamic_cast<DirItem*>(m_model->itemForIndex(parent));
+    DirItem *item = dynamic_cast<DirItem*>( m_model->itemForIndex( parent ) );
     if (!item)
         item = m_doc->root();
 
@@ -152,7 +159,7 @@ void K3b::DataViewImpl::slotCurrentRootChanged( const QModelIndex& newRoot )
 {
     // make the file view show only the child nodes of the currently selected
     // directory from dir view
-    m_fileView->setRootIndex( newRoot );
+    m_fileView->setRootIndex( m_sortModel->mapFromSource( newRoot ) );
     m_columnAdjuster->adjustColumns();
     m_actionParentDir->setEnabled( newRoot.isValid() && m_model->indexForItem( m_doc->root() ) != newRoot );
 }
@@ -160,11 +167,11 @@ void K3b::DataViewImpl::slotCurrentRootChanged( const QModelIndex& newRoot )
 
 void K3b::DataViewImpl::slotNewDir()
 {
-    const QModelIndex parent = m_fileView->rootIndex();
+    const QModelIndex parent = m_sortModel->mapToSource( m_fileView->rootIndex() );
     DirItem* parentDir = 0;
 
     if (parent.isValid())
-        parentDir = dynamic_cast<DirItem*>(m_model->itemForIndex(parent));
+        parentDir = dynamic_cast<DirItem*>( m_model->itemForIndex( parent ) );
 
     if (!parentDir)
         parentDir = m_doc->root();
@@ -197,7 +204,7 @@ void K3b::DataViewImpl::slotRemove()
     // create a list of persistent model indexes to be able to remove all of them
     QList<QPersistentModelIndex> indexes;
     Q_FOREACH( const QModelIndex& index, selected ) {
-        indexes.append( QPersistentModelIndex( index ) );
+        indexes.append( QPersistentModelIndex( m_sortModel->mapToSource( index ) ) );
     }
 
     // and now ask the indexes to be removed
@@ -211,15 +218,15 @@ void K3b::DataViewImpl::slotRename()
 {
     const QModelIndex current = m_fileView->currentIndex();
     if( current.isValid() ) {
-        m_fileView->edit( m_model->buddy( current ) );
+        m_fileView->edit( m_sortModel->buddy( current ) );
     }
 }
 
 
 void K3b::DataViewImpl::slotProperties()
 {
-    const QModelIndexList indexes = m_fileView->selectionModel()->selectedRows();
-    if ( indexes.isEmpty() )
+    const QModelIndexList indices = m_fileView->selectionModel()->selectedRows();
+    if ( indices.isEmpty() )
     {
         // show project properties
         m_view->slotProperties();
@@ -228,8 +235,8 @@ void K3b::DataViewImpl::slotProperties()
     {
         QList<DataItem*> items;
 
-        foreach(const QModelIndex& index, indexes) {
-            items.append( m_model->itemForIndex(index) );
+        foreach(const QModelIndex& index, indices) {
+            items.append( m_model->itemForIndex( m_sortModel->mapToSource( index ) ) );
         }
 
         DataPropertiesDialog dlg( items, m_view );
@@ -240,11 +247,11 @@ void K3b::DataViewImpl::slotProperties()
 
 void K3b::DataViewImpl::slotOpen()
 {
-    const QModelIndexList indexes = m_fileView->selectionModel()->selectedRows();
-    if (indexes.isEmpty())
+    const QModelIndex current = m_sortModel->mapToSource( m_fileView->currentIndex() );
+    if( !current.isValid() )
         return;
 
-    DataItem* item = m_model->itemForIndex( indexes.first() );
+    DataItem* item = m_model->itemForIndex( current );
 
     if( !item->isFile() ) {
         KUrl url = item->localPath();
@@ -278,7 +285,7 @@ void K3b::DataViewImpl::slotSelectionChanged()
     {
         QModelIndex index = indexes.first();
         rename = (index.flags() & Qt::ItemIsEditable);
-        open = (index.data(ItemTypeRole).toInt() == (int) FileItemType);
+        open = (index.data(DataProjectModel::ItemTypeRole).toInt() == DataProjectModel::FileItemType);
     }
     else // selectedIndex.count() == 0
     {
@@ -290,7 +297,7 @@ void K3b::DataViewImpl::slotSelectionChanged()
     // check if all selected items can be removed
     foreach(const QModelIndex &index, indexes)
     {
-        if (!index.data(CustomFlagsRole).toInt() & ItemIsRemovable)
+        if (!index.data(DataProjectModel::CustomFlagsRole).toInt() & DataProjectModel::ItemIsRemovable)
         {
             remove = false;
             break;
@@ -306,12 +313,12 @@ void K3b::DataViewImpl::slotSelectionChanged()
 void K3b::DataViewImpl::slotItemActivated( const QModelIndex& index )
 {
     if( index.isValid() ) {
-        const int type = index.data( ItemTypeRole ).toInt();
-        if( type == DirItemType ) {
-            emit setCurrentRoot( index );
+        const int type = index.data( DataProjectModel::ItemTypeRole ).toInt();
+        if( type == DataProjectModel::DirItemType ) {
+            emit setCurrentRoot( m_sortModel->mapToSource( index ) );
         }
-        else if( type == FileItemType ) {
-            m_fileView->edit( m_model->buddy( index ) );
+        else if( type == DataProjectModel::FileItemType ) {
+            m_fileView->edit( m_sortModel->buddy( index ) );
         }
     }
 }

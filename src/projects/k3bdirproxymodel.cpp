@@ -1,6 +1,7 @@
 /*
  *
- * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -13,13 +14,14 @@
  */
 
 #include "k3bdirproxymodel.h"
-#include "k3bmodeltypes.h"
+#include "k3bdataprojectmodel.h"
 
 
 K3b::DirProxyModel::DirProxyModel(QObject *parent)
 : QSortFilterProxyModel(parent)
 {
-    setDynamicSortFilter(true);
+    setDynamicSortFilter( true );
+    sort( DataProjectModel::FilenameColumn, Qt::AscendingOrder );
 }
 
 K3b::DirProxyModel::~DirProxyModel()
@@ -32,11 +34,11 @@ bool K3b::DirProxyModel::filterAcceptsRow( int source_row, const QModelIndex & s
     QAbstractItemModel *model = sourceModel();
     QModelIndex index = model->index(source_row, 0, source_parent);
 
-    QVariant data = index.data(K3b::ItemTypeRole);
-    K3b::ItemType type = K3b::FileItemType;
+    QVariant data = index.data( DataProjectModel::ItemTypeRole );
+    DataProjectModel::ItemType type = DataProjectModel::FileItemType;
 
     if (data.isValid())
-        type = (K3b::ItemType) index.data(K3b::ItemTypeRole).toInt();
+        type = (DataProjectModel::ItemType) index.data( DataProjectModel::ItemTypeRole ).toInt();
 
-    return (type == K3b::DirItemType);
+    return (type == DataProjectModel::DirItemType);
 }

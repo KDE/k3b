@@ -16,7 +16,6 @@
 
 #include "k3bdataprojectmodel.h"
 #include "k3bdataurladdingdialog.h"
-#include "k3bmodeltypes.h"
 
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
@@ -193,38 +192,40 @@ QModelIndex K3b::DataProjectModel::indexForItem( K3b::DataItem* item ) const
 }
 
 
-int K3b::DataProjectModel::columnCount( const QModelIndex& index ) const
+int K3b::DataProjectModel::columnCount( const QModelIndex& /*index*/ ) const
 {
-    // the root item has only the first column
-    if (!index.isValid())
-        return 1;
-
     return NumColumns;
 }
 
 
 QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
 {
-    if ( index.isValid() ) {
-        K3b::DataItem* item = itemForIndex( index );
+    if ( DataItem* item = itemForIndex( index ) ) {
 
-        if ( role == K3b::ItemTypeRole ) {
+        if ( role == ItemTypeRole ) {
             if (item->isDir())
-                return (int) K3b::DirItemType;
+                return DirItemType;
             else
-                return (int) K3b::FileItemType;
+                return FileItemType;
         }
-        else if ( role == K3b::CustomFlagsRole ) {
+        else if ( role == CustomFlagsRole ) {
             if (item->isRemoveable())
-                return (int) K3b::ItemIsRemovable;
+                return ItemIsRemovable;
             else
                 return 0;
+        }
+        else if ( role == Qt::StatusTipRole ) {
+            if (item->isSymLink())
+                return i18nc( "Symlink target shown in status bar", "Link to %1", static_cast<FileItem*>( item )->linkDest() );
+            else
+                return QVariant();
         }
 
         switch( index.column() ) {
         case FilenameColumn:
             if( role == Qt::DisplayRole ||
-                role == Qt::EditRole ) {
+                role == Qt::EditRole ||
+                role == SortRole ) {
                 return item->k3bName();
             }
             else if ( role == Qt::DecorationRole ) {
@@ -246,7 +247,8 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
             break;
 
         case TypeColumn:
-            if( role == Qt::DisplayRole ) {
+            if( role == Qt::DisplayRole ||
+                role == SortRole ) {
                 if ( item->isSpecialFile() ) {
                     return static_cast<K3b::SpecialDataItem*>( item )->specialType();
                 }
@@ -260,29 +262,8 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
             if( role == Qt::DisplayRole ) {
                 return KIO::convertSize( item->size() );
             }
-            break;
-
-        case LocalPathColumn:
-            if( role == Qt::DisplayRole ) {
-                return item->localPath();
-            }
-            break;
-
-        case LinkColumn:
-            if( role == Qt::DisplayRole ) {
-                if( item->isSymLink() ) {
-                    QString s;
-                    if ( item->doc()->isoOptions().followSymbolicLinks() ) {
-                        s = K3b::resolveLink( item->localPath() );
-                    }
-                    else {
-                        s = QFileInfo( item->localPath() ).symLinkTarget();
-                    }
-                    if( !item->isValid() ) {
-                        s += " (" + i18n("outside of project") + ")";
-                    }
-                    return s;
-                }
+            else if ( role == SortRole ) {
+                return item->size();
             }
             break;
         }
@@ -304,10 +285,6 @@ QVariant K3b::DataProjectModel::headerData( int section, Qt::Orientation orienta
             return i18nc( "file type", "Type" );
         case SizeColumn:
             return i18nc( "file size", "Size" );
-        case LocalPathColumn:
-            return i18n( "Local Path" );
-        case LinkColumn:
-            return i18nc( "symbolic link target", "Link" );
         }
     }
 
@@ -351,7 +328,7 @@ QModelIndex K3b::DataProjectModel::index( int row, int column, const QModelIndex
     }
     else {
         // doc root item
-        return createIndex( 0, 0, d->project->root() );
+        return createIndex( row, column, d->project->root() );
     }
 }
 
