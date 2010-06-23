@@ -201,12 +201,14 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
     if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>(dataItem) ) {
         QFileInfo fileInfo( fileItem->localPath() );
         kDebug() << fileItem->k3bPath() << fileItem->localPath();
-        m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge ) );
         if( fileItem->isSymLink() ) {
+            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge,
+                                                 KIconLoader::DefaultState, QStringList() << "emblem-symbolic-link" ) );
             m_labelType->setText( i18n( "Link to %1", fileItem->mimeType()->comment() ) );
             m_labelLocalLinkTarget->setText( fileItem->linkDest() );
         }
         else {
+            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge ) );
             m_labelType->setText( fileItem->mimeType()->comment() );
             m_labelLocalLinkTargetText->hide();
             m_labelLocalLinkTarget->hide();

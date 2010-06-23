@@ -229,15 +229,21 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                 return item->k3bName();
             }
             else if ( role == Qt::DecorationRole ) {
+                QString iconName;
                 if ( item->isDir() && item->parent() ) {
-                    return( static_cast<K3b::DirItem*>( item )->depth() > 7 ? KIcon( "folder-root" ) : KIcon( "folder" ) );
+                    iconName = ( static_cast<K3b::DirItem*>( item )->depth() > 7 ? "folder-root" : "folder" );
                 }
                 else if ( item->isDir() ) {
-                    return KIcon( "media-optical-data" );
+                    iconName = "media-optical-data";
                 }
                 else {
-                    return KIcon( item->mimeType()->iconName() );
+                    iconName = item->mimeType()->iconName();
                 }
+
+                if( item->isSymLink() )
+                    return KIcon( iconName, 0, QStringList() << "emblem-symbolic-link" );
+                else
+                    return KIcon( iconName );
             }
             else if( role == Qt::FontRole && item->isSymLink() ) {
                 QFont font;
