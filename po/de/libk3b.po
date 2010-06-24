@@ -7,13 +7,14 @@
 # Frederik Schwarzer <schwarzerf@gmail.com>, 2009.
 # Johannes Obermayr <johannesobermayr@gmx.de>, 2010.
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
+# Markus Slopianka <kamikazow@fishmouth.net>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: http://bugs.kde.org\n"
 "POT-Creation-Date: 2010-06-13 04:51+0200\n"
-"PO-Revision-Date: 2010-06-09 14:39+0200\n"
-"Last-Translator: Markus Slopianka <kamikazow@web.de>\n"
+"PO-Revision-Date: 2010-06-25 01:47+0200\n"
+"Last-Translator: Markus Slopianka <kamikazow@fishmouth.net>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2152,7 +2153,7 @@ msgstr "Brennvorgang erfolgreich abgeschlossen"
 
 #: projects/k3bgrowisofshandler.cpp:83
 msgid "OPC failed. Please try writing speed 1x."
-msgstr "OPC fehlgeschlagen. Bitte mit 1x-Brenngeschwindigkeit versuchen."
+msgstr "OPC fehlgeschlagen. Bitte mit 1-facher Brenngeschwindigkeit versuchen."
 
 #: projects/k3bgrowisofshandler.cpp:88
 msgid "Please try again with writing mode DAO."
@@ -2340,22 +2341,22 @@ msgstr "Version %1 von cdrecord unterstützt kein Überbrennen."
 #: projects/k3bcdrecordwriter.cpp:466
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr "Simulation bei %1x-Geschwindigkeit wird gestartet ..."
+msgstr "Simulation mit %1-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrecordwriter.cpp:468
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
-msgstr "%1-Simulation bei %2x-Geschwindigkeit wird gestartet ..."
+msgstr "%1-Simulation mit %2-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrecordwriter.cpp:474
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr "Brennen bei %1x-Geschwindigkeit wird gestartet ..."
+msgstr "Brennen mit %1-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrecordwriter.cpp:476
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
-msgstr "%1-Brennen bei %2x-Geschwindigkeit wird gestartet ..."
+msgstr "%1-Brennen mit %2-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrecordwriter.cpp:599
 msgid "DAO (Disk At Once) recording not supported with this writer"
@@ -2641,12 +2642,13 @@ msgstr "Löschvorgang wird vorbereitet ..."
 #: projects/k3bcdrdaowriter.cpp:563
 #, no-c-format, kde-format
 msgid "Starting DAO simulation at %1x speed..."
-msgstr "Simulation im DAO-Modus bei %1x-Geschwindigkeit wird gestartet ..."
+msgstr ""
+"Simulation im DAO-Modus mit %1-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrdaowriter.cpp:570
 #, no-c-format, kde-format
 msgid "Starting DAO writing at %1x speed..."
-msgstr "Brennen im DAO-Modus bei %1x-Geschwindigkeit wird gestartet ..."
+msgstr "Brennen im DAO-Modus mit %1-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrdaowriter.cpp:575
 msgid "Starting reading..."
@@ -2659,12 +2661,12 @@ msgstr "Lesevorgang läuft"
 #: projects/k3bcdrdaowriter.cpp:582
 #, no-c-format, kde-format
 msgid "Starting simulation copy at %1x speed..."
-msgstr "Simulation der Kopie mit %1x-Geschwindigkeit wird gestartet ..."
+msgstr "Simulation der Kopie mit %1-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrdaowriter.cpp:588
 #, no-c-format, kde-format
 msgid "Starting copy at %1x speed..."
-msgstr "Kopieren mit %1x-Geschwindigkeit wird gestartet ..."
+msgstr "Kopieren mit %1-facher Geschwindigkeit wird gestartet ..."
 
 #: projects/k3bcdrdaowriter.cpp:589
 msgid "Copying"
