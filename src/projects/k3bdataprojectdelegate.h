@@ -28,6 +28,9 @@ namespace K3b {
 
     protected:
         virtual bool eventFilter( QObject* obj, QEvent* event );
+
+    private:
+        mutable QModelIndex m_current;
     };
 
 }
