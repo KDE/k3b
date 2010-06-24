@@ -18,6 +18,7 @@
 #include "k3bbootimageview.h"
 #include "k3bdatadoc.h"
 #include "k3bdatamultisessionimportdialog.h"
+#include "k3bdataprojectdelegate.h"
 #include "k3bdataprojectmodel.h"
 #include "k3bdataprojectsortproxymodel.h"
 #include "k3bdatapropertiesdialog.h"
@@ -51,6 +52,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
 
     m_sortModel->setSourceModel( m_model );
 
+    m_fileView->setItemDelegate( new DataProjectDelegate( this ) );
     m_fileView->setModel( m_sortModel );
     m_fileView->setAcceptDrops( true );
     m_fileView->setDragEnabled( true );
