@@ -499,7 +499,7 @@ bool K3b::DataProjectModel::removeRows( int row, int count, const QModelIndex& p
 QModelIndex K3b::DataProjectModel::buddy( const QModelIndex& index ) const
 {
     if( index.isValid() && index.column() != FilenameColumn)
-        return DataProjectModel::index( index.row(), FilenameColumn );
+        return DataProjectModel::index( index.row(), FilenameColumn, index.parent() );
     else
         return index;
 }

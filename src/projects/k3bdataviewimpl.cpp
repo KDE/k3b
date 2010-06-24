@@ -63,6 +63,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_fileView->setSortingEnabled( true );
     m_fileView->sortByColumn( DataProjectModel::FilenameColumn, Qt::AscendingOrder );
     m_fileView->setMouseTracking( true );
+    m_fileView->setAllColumnsShowFocus( true );
     connect( m_fileView, SIGNAL(doubleClicked(QModelIndex)),
              this, SLOT(slotItemActivated(QModelIndex)) );
     connect( m_fileView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -218,7 +219,7 @@ void K3b::DataViewImpl::slotRename()
 {
     const QModelIndex current = m_fileView->currentIndex();
     if( current.isValid() ) {
-        m_fileView->edit( m_sortModel->buddy( current ) );
+        m_fileView->edit( current );
     }
 }
 
@@ -318,7 +319,7 @@ void K3b::DataViewImpl::slotItemActivated( const QModelIndex& index )
             emit setCurrentRoot( m_sortModel->mapToSource( index ) );
         }
         else if( type == DataProjectModel::FileItemType ) {
-            m_fileView->edit( m_sortModel->buddy( index ) );
+            m_fileView->edit( index );
         }
     }
 }
