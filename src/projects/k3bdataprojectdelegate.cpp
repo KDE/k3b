@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
@@ -13,8 +13,9 @@
  */
 
 #include "k3bdataprojectdelegate.h"
+#include <KLineEdit>
+#include <KMimeType>
 #include <QFocusEvent>
-#include <QLineEdit>
 
 namespace K3b {
 
@@ -24,17 +25,32 @@ DataProjectDelegate::DataProjectDelegate( QObject* parent )
 {
 }
 
-void DataProjectDelegate::setEditorData( QWidget* editor, const QModelIndex& index ) const
+
+QWidget* DataProjectDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& /*index*/ ) const
 {
-    if( QLineEdit* lineEdit = qobject_cast<QLineEdit*>( editor ) ) {
-        const QString text = index.data().toString();
-        lineEdit->setText( text );
-        int dotPosition = text.lastIndexOf( QChar( '.') );
-        lineEdit->setSelection( 0, 1 );
+    KLineEdit* lineEdit = new KLineEdit( parent );
+    lineEdit->setFrame( false );
+    lineEdit->setAlignment( option.displayAlignment );
+    lineEdit->installEventFilter( const_cast<DataProjectDelegate*>( this ) );
+    return lineEdit;
+}
+
+
+bool DataProjectDelegate::eventFilter( QObject* object, QEvent* event )
+{
+    if( event->type() == QEvent::FocusIn ) {
+        if( KLineEdit* lineEdit = qobject_cast<KLineEdit*>( object ) ) {
+            const QString extension = KMimeType::extractKnownExtension( lineEdit->text() );
+            // Select only filename without extension
+            if( !extension.isEmpty() ) {
+                const int selectionLength = lineEdit->text().length() - extension.length() - 1;
+                lineEdit->setSelection( 0, selectionLength );
+            }
+            event->accept();
+            return true;
+        }
     }
-    else {
-        QStyledItemDelegate::setEditorData( editor, index );
-    }
+    return QStyledItemDelegate::eventFilter( object, event );
 }
 
 } // namespace K3b
