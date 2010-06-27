@@ -127,7 +127,7 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
 
     QWidget* hideBox = new QWidget( optionTab );
     QGridLayout* hideBoxGrid = new QGridLayout( hideBox );
-    m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on Rockridge"), hideBox );
+    m_checkHideOnRockRidge = new QCheckBox( i18n("Hide on RockRidge"), hideBox );
     m_checkHideOnJoliet = new QCheckBox( i18n("Hide on Joliet"), hideBox );
     hideBoxGrid->addWidget( m_checkHideOnRockRidge, 0, 0 );
     hideBoxGrid->addWidget( m_checkHideOnJoliet, 1, 0 );
@@ -297,15 +297,15 @@ void K3b::DataPropertiesDialog::loadListProperties( const QList<K3b::DataItem*>&
         blocks += item->blocks();
         size += item->size();
     }
-    QString s = i18np( "1 Item", "%1 Items", items.count() );
+    QString s = i18np( "One Item", "%1 Items", items.count() );
     s += " - ";
     if ( files > 0 )
-        s += i18np( "1 File", "%1 Files", files );
+        s += i18np( "One File", "%1 Files", files );
     else
         s += "No Files";
     s += " - ";
     if ( folders > 0 )
-        s += i18np( "1 Folder", "%1 Folders", folders );
+        s += i18np( "One Folder", "%1 Folders", folders );
     else
         s += "No Folders";
     m_multiSelectionLabel->setText( s );

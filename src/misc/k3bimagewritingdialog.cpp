@@ -174,7 +174,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
 
     const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
     const KIO::filesize_t volumeSpaceSize = Private::volumeSpaceSize( *isoF );
-    
+
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
     item->setForeground( 0, infoTextColor );
@@ -183,7 +183,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
         item->setText( 1, i18n("%1 (different than declared volume size)", KIO::convertSize( size )) );
         item->setForeground( 1, negativeTextColor );
         item->setIcon( 1, KIcon( "dialog-error") );
-        
+
         item = new QTreeWidgetItem( infoView );
         item->setText( 0, i18n("Volume Size:") );
         item->setText( 1, KIO::convertSize( volumeSpaceSize ) );
@@ -191,7 +191,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
         item->setTextAlignment( 0, Qt::AlignRight );
     }
     else {
-        item->setText( 1, KIO::convertSize( size ) );   
+        item->setText( 1, KIO::convertSize( size ) );
     }
 
     item = new QTreeWidgetItem( infoView );
@@ -311,7 +311,7 @@ void K3b::ImageWritingDialog::Private::createAudioCueItems( const K3b::CueFilePa
     rootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* trackParent = new QTreeWidgetItem( infoView );
-    trackParent->setText( 0, i18np("%1 track", "%1 tracks", cp.toc().count() ) );
+    trackParent->setText( 0, i18np("One track", "%1 tracks", cp.toc().count() ) );
     trackParent->setText( 1, cp.toc().length().toString() );
     if( !cp.cdText().isEmpty() ) {
         trackParent->setText( 1,
@@ -508,7 +508,7 @@ void K3b::ImageWritingDialog::setupGui()
 
     connect( d->infoView, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotContextMenuRequested(const QPoint&)) );
-    
+
     d->md5SumProgress = new QProgressBar( d->infoView );
     d->md5SumProgress->setMaximumHeight( fontMetrics().height() );
     d->md5SumProgress->setRange( 0, 100 );

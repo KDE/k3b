@@ -171,7 +171,7 @@ static QString dataDocStats( K3b::DataDoc* dataDoc )
     return i18np( "One file in %2",
                   "%1 files in %2",
                   dataDoc->root()->numFiles(),
-                  i18np("One folder", "%1 folders", dataDoc->root()->numDirs()+1 ) );
+                  i18np("one folder", "%1 folders", dataDoc->root()->numDirs()+1 ) );
 }
 
 
