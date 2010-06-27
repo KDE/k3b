@@ -7,7 +7,6 @@
 # Frederik Schwarzer <schwarzerf@gmail.com>, 2009.
 # Johannes Obermayr <johannesobermayr@gmx.de>, 2010.
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2010.
-# Markus Slopianka <kamikazow@fishmouth.net>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
