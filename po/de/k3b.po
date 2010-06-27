@@ -13,13 +13,14 @@
 # Markus Slopianka <kamikazow@web.de>, 2009, 2010.
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2009, 2010.
 # Johannes Obermayr <johannesobermayr@gmx.de>, 2010.
+# Markus Slopianka <kamikazow@fishmouth.net>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: http://bugs.kde.org\n"
 "POT-Creation-Date: 2010-06-16 04:59+0200\n"
-"PO-Revision-Date: 2010-05-29 20:55+0200\n"
-"Last-Translator: Markus Slopianka <kamikazow@web.de>\n"
+"PO-Revision-Date: 2010-06-27 15:00+0200\n"
+"Last-Translator: Markus Slopianka <kamikazow@fishmouth.net>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3404,7 +3405,7 @@ msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
 "executable specify it in the search path.</qt>"
 msgstr ""
-"<qt><b>Tipp</b>: Um K3b zu zwingen, einen anderen Namen als den "
+"<qt><b>Tipp:</b> Um K3b zu zwingen, einen anderen Namen als den "
 "Standardnamen für die ausführbare Datei zu benutzen, können Sie diesen im "
 "Suchpfad angeben.</qt>"
 
@@ -4011,7 +4012,7 @@ msgid ""
 "lacks support for any of the codecs supported by K3b.<p>Please make sure it "
 "is installed properly."
 msgstr ""
-"<p>K3b verwendet transcode zum Auslesen von Video-DVDs. Ihr installierte "
+"<p>K3b verwendet transcode zum Auslesen von Video-DVDs. Ihre installierte "
 "Version von transcode unterstützt keinen der von K3b unterstützten Codecs."
 "<p>Bitte stellen Sie sicher, dass es richtig installiert ist."
 
@@ -5287,7 +5288,7 @@ msgstr "Systemüberprüfung"
 
 #: k3b.cpp:430
 msgid "&Setup System Permissions..."
-msgstr "System-Berechtigungen einrichten ..."
+msgstr "&System-Berechtigungen einrichten ..."
 
 #: k3b.cpp:439
 msgid "Creates a new project"
@@ -5689,7 +5690,8 @@ msgstr ""
 "Menü. Auf der anderen Seite hat jedes Aktionsfenster drei Knöpfe zum Laden "
 "und Speichern von Vorgaben für die jeweilige Aktion. So kann man z. B. "
 "Vorgaben zum Kopieren von CDs einstellen. Diese Vorgaben werden dann jedes "
-"Mal beim Öffnen des CD-Kopieren-Dialogs geladen.Falls Sie mal unsicher sind, "
+"Mal beim Öffnen des CD-Kopieren-Dialogs geladen. Falls Sie mal unsicher "
+"sind, "
 "ob Ihre Einstellungen geeignet sind, stellt der Knopf „K3b-Voreinstellungen“ "
 "die <em>K3b-Voreinstellungen</em>wieder her.</p>\n"
 
