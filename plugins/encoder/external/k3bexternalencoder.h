@@ -43,7 +43,7 @@ public:
 
 private Q_SLOTS:
     void slotExternalProgramFinished( int, QProcess::ExitStatus );
-    void slotExternalProgramOutput();
+    void slotExternalProgramOutput( const QString& line );
 
 private:
     virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );

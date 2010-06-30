@@ -18,11 +18,11 @@
 #include <config-k3b.h>
 
 #include "k3bcore.h"
+#include "k3bprocess.h"
 
 #include <KDebug>
 #include <KConfig>
 #include <KLocale>
-#include <KProcess>
 #include <KStandardDirs>
 
 #include <QFile>
@@ -72,7 +72,7 @@ static K3bExternalEncoderCommand commandByExtension( const QString& extension )
 class K3bExternalEncoder::Private
 {
 public:
-    KProcess* process;
+    K3b::Process* process;
     QString fileName;
     K3b::Msf length;
 
@@ -181,15 +181,17 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
             disconnect( d->process );
             d->process->deleteLater();
         }
-        d->process = new KProcess();
-        d->process->setOutputChannelMode( KProcess::MergedChannels );
+        d->process = new K3b::Process();
+        d->process->setSplitStdout( true );
         connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
                 this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
-        connect( d->process, SIGNAL(readyRead()),
-                this, SLOT(slotExternalProgramOutput()) );
+        connect( d->process, SIGNAL(stderrLine(QString)),
+                 this, SLOT(slotExternalProgramOutput(QString)) );
+        connect( d->process, SIGNAL(stdoutLine(QString)),
+                 this, SLOT(slotExternalProgramOutput(QString)) );
 
         d->process->setProgram( params );
-        d->process->start();
+        d->process->start( KProcess::SeparateChannels );
 
         if( d->process->waitForStarted() ) {
             if( d->cmd.writeWaveHeader )
@@ -291,10 +293,9 @@ qint64 K3bExternalEncoder::encodeInternal( const char* data, qint64 len )
 }
 
 
-void K3bExternalEncoder::slotExternalProgramOutput()
+void K3bExternalEncoder::slotExternalProgramOutput( const QString& line )
 {
-    while ( d->process->canReadLine() )
-        kDebug() << "(" << d->cmd.name << ") " << d->process->readLine();
+    kDebug() << "(" << d->cmd.name << ") " << line;
 }
 
 
