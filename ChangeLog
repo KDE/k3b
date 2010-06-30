@@ -1,3 +1,8 @@
+2.0.1
+=====
+Bugfixes:
+ * Freeze on ripping Audio CD using external encoder to MP3 or FLAC (236466)
+
 2.0
 ===
 Changes (since 1.0.5):
