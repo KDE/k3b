@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup – modify permission for CD/DVD burning with K3b
+Comment[bg]=Настройки на K3b - промяна на правата за запис на CD/DVD
 Comment[ca]=K3bSetup - modifica els permisos per gravar CD/DVD amb el K3b
 Comment[ca@valencia]=K3bSetup - modifica els permisos per gravar CD/DVD amb el K3b
 Comment[cs]=K3bSetup - upravit oprávnění pro vypalování CD/DVD s K3b
@@ -74,7 +75,7 @@ Keywords[x-test]=xxK3bSetup,k3bsetupxx
 Keywords[zh_CN]=K3bSetup,k3bsetup2
 Keywords[zh_TW]=K3bSetup,k3bsetup
 Name=K3bSetup
-Name[bg]=Настройване на K3b
+Name[bg]=Настройки на K3b
 Name[ca]=K3bSetup
 Name[ca@valencia]=K3bSetup
 Name[cs]=K3bSetup
@@ -138,6 +139,7 @@ X-KDE-Keywords=k3b,k3bsetup,cd,dvd
 Categories=Application;System;X-KDE-System;
 
 GenericName=CD/DVD/BD Burning Setup
+GenericName[bg]=Настройки на записа на CD и DVD
 GenericName[ca]=Arranjament de gravació de CD i DVD
 GenericName[ca@valencia]=Arranjament de gravació de CD i DVD
 GenericName[cs]=Nastavení vypalování CD/DVD/BD
