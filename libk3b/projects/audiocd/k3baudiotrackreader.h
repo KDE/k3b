@@ -38,7 +38,6 @@ namespace K3b {
         virtual bool open( OpenMode mode );
         virtual void close();
         virtual bool isSequential() const;
-        virtual qint64 pos() const;
         virtual qint64 size() const;
         virtual bool seek( qint64 pos );
 
@@ -46,13 +45,15 @@ namespace K3b {
         virtual qint64 writeData( const char* data, qint64 len );
         virtual qint64 readData( char* data, qint64 maxlen );
 
+    private Q_SLOTS:
+        void slotTrackChanged();
+
     private:
         class Private;
         QScopedPointer<Private> d;
         Q_DISABLE_COPY(AudioTrackReader)
         Q_PRIVATE_SLOT( d, void slotSourceAdded( int position ) )
         Q_PRIVATE_SLOT( d, void slotSourceAboutToBeRemoved( int position ) )
-        Q_PRIVATE_SLOT( d, void slotTrackChanged() )
     };
 
 } // namespace K3b

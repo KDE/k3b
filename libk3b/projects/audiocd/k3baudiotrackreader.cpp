@@ -33,11 +33,9 @@ public:
     Private( AudioTrackReader& audioTrackReader, AudioTrack& t );
     void slotSourceAdded( int position );
     void slotSourceAboutToBeRemoved( int position );
-    void slotTrackChanged();
 
     AudioTrackReader& q;
     AudioTrack& track;
-    qint64 pos;
     IODevices readers;
     int current;
 
@@ -50,7 +48,6 @@ AudioTrackReader::Private::Private( AudioTrackReader& audioTrackReader, AudioTra
 :
     q( audioTrackReader ),
     track( t ),
-    pos( 0 ),
     current( -1 )
 {
 }
@@ -81,15 +78,6 @@ void AudioTrackReader::Private::slotSourceAboutToBeRemoved( int position )
                 ++current;
             readers.removeAt( position );
         }
-    }
-}
-
-
-void AudioTrackReader::Private::slotTrackChanged()
-{
-    QMutexLocker locker( &mutex );
-    if( pos >= q.size() && pos > 0 ) {
-        pos = q.size() - 1LL;
     }
 }
 
@@ -138,7 +126,7 @@ bool AudioTrackReader::open( QIODevice::OpenMode mode )
             }
         }
 
-        d->pos = 0;
+        QIODevice::seek( 0 );
         if( !d->readers.isEmpty() ) {
             d->current = 0;
             d->readers.at( d->current )->seek( 0 );
@@ -156,6 +144,7 @@ void AudioTrackReader::close()
 {
     qDeleteAll( d->readers );
     d->readers.clear();
+    d->current = -1;
     QIODevice::close();
 }
 
@@ -163,12 +152,6 @@ void AudioTrackReader::close()
 bool AudioTrackReader::isSequential() const
 {
     return false;
-}
-
-
-qint64 AudioTrackReader::pos() const
-{
-    return d->pos;
 }
 
 
@@ -191,8 +174,8 @@ bool AudioTrackReader::seek( qint64 pos )
 
     if( next < d->readers.size() ) {
         d->current = next;
-        d->pos = pos;
-        return d->readers.at( next )->seek( pos - curPos );
+        d->readers.at( next )->seek( pos - curPos );
+        return QIODevice::seek( pos );
     }
     else {
         return false;
@@ -210,30 +193,29 @@ qint64 AudioTrackReader::readData( char* data, qint64 maxlen )
 {
     QMutexLocker locker( &d->mutex );
 
-//     if( d->current < 0 || d->current >= d->readers.size() ) {
-//         d->current = 0;
-//         if(  d->current < d->readers.size() ) {
-//             d->readers.at( d->current )->seek( 0 );
-//         }
-//         d->pos = 0;
-//     }
-
-    if( d->current >= 0 && d->current < d->readers.size() ) {
+    while( d->current >= 0 && d->current < d->readers.size() ) {
         qint64 readData = d->readers.at( d->current )->read( data, maxlen );
-        if( readData == 0 ) {
+
+        if( readData >= 0 ) {
+            return readData;
+        }
+        else {
             ++d->current;
             if( d->current >= 0 && d->current < d->readers.size() ) {
                 d->readers.at( d->current )->seek( 0 );
-                return read( data, maxlen ); // read from next source
             }
         }
-
-        d->pos += readData;
-
-        return readData;
     }
-    else {
-        return -1;
+
+    return -1;
+}
+
+
+void AudioTrackReader::slotTrackChanged()
+{
+    QMutexLocker locker( &d->mutex );
+    if( pos() >= size() && pos() > 0 ) {
+        QIODevice::seek( size() - 1LL );
     }
 }
 

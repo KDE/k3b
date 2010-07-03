@@ -67,12 +67,6 @@ bool RawAudioDataReader::isSequential() const
 }
 
 
-qint64 RawAudioDataReader::pos() const
-{
-    return d->imageFile.pos();
-}
-
-
 qint64 RawAudioDataReader::size() const
 {
     return d->imageFile.size();
@@ -81,7 +75,8 @@ qint64 RawAudioDataReader::size() const
 
 bool RawAudioDataReader::seek( qint64 pos )
 {
-    return d->imageFile.seek( pos );
+    d->imageFile.seek( pos );
+    return QIODevice::seek( pos );
 }
 
 

@@ -43,7 +43,6 @@ public:
     AudioCdTrackSource& source;
     bool initialized;
     QScopedPointer<CdparanoiaLib> cdParanoiaLib;
-    Msf position;
 
     bool initParanoia();
     void closeParanoia();
@@ -98,7 +97,7 @@ bool AudioCdTrackReader::Private::initParanoia()
             }
 
             const int start = source.toc()[source.cdTrackNumber()-1].firstSector().lba();
-            cdParanoiaLib->initReading( start + source.startOffset().lba() + position.lba(),
+            cdParanoiaLib->initReading( start + source.startOffset().lba(),
                                         start + source.lastSector().lba() );
 
             // we only block during the initialization because we cannot determine the end of the reading process :(
@@ -172,7 +171,6 @@ qint64 AudioCdTrackReader::readData( char* data, qint64 /*maxlen*/ )
                 return -1;
             }
             else {
-                ++d->position;
                 ::memcpy( data, buf, CD_FRAMESIZE_RAW );
                 return CD_FRAMESIZE_RAW;
             }
@@ -191,12 +189,6 @@ bool AudioCdTrackReader::isSequential() const
 }
 
 
-qint64 AudioCdTrackReader::pos() const
-{
-    return d->position.audioBytes();
-}
-
-
 qint64 AudioCdTrackReader::size() const
 {
     return d->source.length().audioBytes();
@@ -206,10 +198,11 @@ qint64 AudioCdTrackReader::size() const
 bool AudioCdTrackReader::seek( qint64 pos )
 {
     if( d->cdParanoiaLib && d->initialized ) {
-        d->position = Msf::fromAudioBytes( pos );
+        Msf msfPos = Msf::fromAudioBytes( pos );
         const int start = d->source.toc()[d->source.cdTrackNumber()-1].firstSector().lba();
-        return d->cdParanoiaLib->initReading( start + d->source.startOffset().lba() + d->position.lba(),
-                                              start + d->source.lastSector().lba() );
+        d->cdParanoiaLib->initReading( start + d->source.startOffset().lba() + msfPos.lba(),
+                                       start + d->source.lastSector().lba() );
+        return QIODevice::seek( pos );
     }
     else {
         return false;

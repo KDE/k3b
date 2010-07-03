@@ -25,13 +25,11 @@ class AudioFileReader::Private
 public:
     Private( AudioFile& s )
     :
-        source( s ),
-        decodedData( 0 )
+        source( s )
     {
     }
 
     AudioFile& source;
-    qint64 decodedData;
 };
 
 
@@ -71,12 +69,6 @@ bool AudioFileReader::isSequential() const
 }
 
 
-qint64 AudioFileReader::pos() const
-{
-    return d->decodedData;
-}
-
-
 qint64 AudioFileReader::size() const
 {
     return d->source.length().audioBytes();
@@ -89,8 +81,7 @@ bool AudioFileReader::seek( qint64 pos )
     // this is valid once the decoder has been initialized.
     if( d->source.startOffset() + msf <= d->source.lastSector() &&
         d->source.decoder()->seek( d->source.startOffset() + msf ) ) {
-        d->decodedData = pos;
-        return true;
+        return QIODevice::seek( pos );
     }
     else {
         return false;
@@ -108,18 +99,15 @@ qint64 AudioFileReader::readData( char* data, qint64 maxlen )
 {
     // here we can trust on the decoder to always provide enough data
     // see if we decode too much
-    if( maxlen + d->decodedData > size() )
-        maxlen = size() - d->decodedData;
+    if( maxlen + pos() > size() )
+        maxlen = size() - pos();
 
     qint64 read = d->source.decoder()->decode( data, maxlen );
 
-    if( read > 0 ) {
-        d->decodedData += read;
+    if( read > 0 )
         return read;
-    }
-    else {
+    else
         return -1;
-    }
 }
 
 } // namespace K3b

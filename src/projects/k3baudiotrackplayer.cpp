@@ -191,7 +191,7 @@ AudioTrackPlayer::~AudioTrackPlayer()
 }
 
 
-AudioTrack* AudioTrackPlayer::currentPlayingTrack() const
+AudioTrack* AudioTrackPlayer::currentTrack() const
 {
     if( AudioTrackReader* reader = d->audioDocReader->currentTrackReader() )
         return &reader->track();
@@ -202,8 +202,8 @@ AudioTrack* AudioTrackPlayer::currentPlayingTrack() const
 
 void AudioTrackPlayer::playTrack( const K3b::AudioTrack& track )
 {
-    d->audioDocReader->setCurrentTrack( track );
     play();
+    d->audioDocReader->setCurrentTrack( track );
 }
 
 
@@ -272,6 +272,23 @@ void AudioTrackPlayer::slotCurrentTrackChanged( const K3b::AudioTrack& track )
 
 void AudioTrackPlayer::slotStateChanged( QAudio::State state )
 {
+    switch( d->audioOutput->error() ) {
+        case QAudio::OpenError:
+            kDebug() << "QAudioOutput error: OpenError";
+            break;
+        case QAudio::IOError:
+            kDebug() << "QAudioOutput error: IOError";
+            break;
+        case QAudio::UnderrunError:
+            kDebug() << "QAudioOutput error: UnderrunError";
+            break;
+        case QAudio::FatalError:
+            kDebug() << "QAudioOutput error: FatalError";
+            break;
+        default:
+            break;
+    }
+
     if( QAudio::ActiveState == state ) {
         d->actionPause->setVisible( true );
         d->actionPlay->setVisible( false );

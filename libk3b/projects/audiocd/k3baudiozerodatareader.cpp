@@ -24,13 +24,11 @@ class AudioZeroDataReader::Private
 {
 public:
     Private( AudioZeroData& s )
-        : source( s ),
-          writtenData( 0 )
+        : source( s )
     {
     }
 
     AudioZeroData& source;
-    qint64 writtenData;
 };
 
 
@@ -64,27 +62,9 @@ bool AudioZeroDataReader::isSequential() const
 }
 
 
-qint64 AudioZeroDataReader::pos() const
-{
-    return d->writtenData;
-}
-
-
 qint64 AudioZeroDataReader::size() const
 {
     return d->source.length().audioBytes();
-}
-
-
-bool AudioZeroDataReader::seek( qint64 pos )
-{
-    if( pos < size() ) {
-        d->writtenData = pos;
-        return true;
-    }
-    else {
-        return false;
-    }
 }
 
 
@@ -96,10 +76,8 @@ qint64 AudioZeroDataReader::writeData( const char* /*data*/, qint64 /*len*/ )
 
 qint64 AudioZeroDataReader::readData( char* data, qint64 maxlen )
 {
-    if( d->writtenData + maxlen > size() )
-        maxlen = size() - d->writtenData;
-
-    d->writtenData += maxlen;
+    if( pos() + maxlen > size() )
+        maxlen = size() - pos();
 
     ::memset( data, 0, maxlen );
 

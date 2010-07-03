@@ -41,7 +41,6 @@ namespace K3b {
         virtual bool open( OpenMode mode = ReadOnly );
         virtual void close();
         virtual bool isSequential() const;
-        virtual qint64 pos() const;
         virtual qint64 size() const;
         virtual bool seek( qint64 pos );
 
@@ -55,6 +54,9 @@ namespace K3b {
     protected:
         virtual qint64 writeData( const char* data, qint64 len );
         virtual qint64 readData( char* data, qint64 maxlen );
+
+    private:
+        void updatePos();
 
     private:
         class Private;

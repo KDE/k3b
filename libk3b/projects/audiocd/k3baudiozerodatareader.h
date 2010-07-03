@@ -33,9 +33,7 @@ namespace K3b {
 
         virtual bool open( OpenMode mode );
         virtual bool isSequential() const;
-        virtual qint64 pos() const;
         virtual qint64 size() const;
-        virtual bool seek(qint64 pos);
 
     protected:
         virtual qint64 writeData(const char* data, qint64 len);

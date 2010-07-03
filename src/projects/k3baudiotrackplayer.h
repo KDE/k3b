@@ -35,7 +35,7 @@ namespace K3b {
         AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionCollection, QObject* parent = 0 );
         ~AudioTrackPlayer();
 
-        AudioTrack* currentPlayingTrack() const;
+        AudioTrack* currentTrack() const;
 
     public Q_SLOTS:
         void playTrack( const K3b::AudioTrack& track );
@@ -52,7 +52,7 @@ namespace K3b {
         void stopped();
 
     private Q_SLOTS:
-        void slotSeek( int );
+        void slotSeek( int bytes );
         void slotUpdateSlider();
         void slotCurrentTrackChanged( const K3b::AudioTrack& track );
         void slotStateChanged( QAudio::State state );

@@ -46,9 +46,9 @@ public:
     void _k_trackAdded();
     void _k_trackAboutToBeRemoved( int position );
     void _k_trackRemoved();
-    void _k_sourceAboutToBeAdded( const K3b::AudioTrack* parent, int position );
+    void _k_sourceAboutToBeAdded( K3b::AudioTrack* parent, int position );
     void _k_sourceAdded();
-    void _k_sourceAboutToBeRemoved( const K3b::AudioTrack* parent, int position );
+    void _k_sourceAboutToBeRemoved( K3b::AudioTrack* parent, int position );
     void _k_sourceRemoved();
 
 private:
@@ -88,7 +88,7 @@ void K3b::AudioProjectModel::Private::_k_trackRemoved()
 }
 
 
-void K3b::AudioProjectModel::Private::_k_sourceAboutToBeAdded( const K3b::AudioTrack* parent, int position )
+void K3b::AudioProjectModel::Private::_k_sourceAboutToBeAdded( K3b::AudioTrack* parent, int position )
 {
     q->beginInsertRows( q->indexForTrack( parent ), position, position );
 }
@@ -100,7 +100,7 @@ void K3b::AudioProjectModel::Private::_k_sourceAdded()
 }
 
 
-void K3b::AudioProjectModel::Private::_k_sourceAboutToBeRemoved( const K3b::AudioTrack* parent, int position )
+void K3b::AudioProjectModel::Private::_k_sourceAboutToBeRemoved( K3b::AudioTrack* parent, int position )
 {
     q->beginRemoveRows( q->indexForTrack( parent ), position, position );
 }
