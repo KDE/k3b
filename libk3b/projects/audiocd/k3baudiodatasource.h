@@ -164,6 +164,9 @@ namespace K3b {
          */
         virtual QIODevice* createReader( QObject* parent = 0 ) = 0;
 
+    Q_SIGNALS:
+        void changed();
+
     protected:
         /**
          * Informs the parent track about changes.

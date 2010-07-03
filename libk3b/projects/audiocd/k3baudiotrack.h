@@ -188,25 +188,32 @@ namespace K3b {
          */
         AudioDataSource* getSource( int index ) const;
 
-        /**
-         * Tells the audio doc one source was removed from the list.
-         */
-        void emitSourceRemoved( AudioDataSource* );
+    Q_SIGNALS:
+        void sourceAboutToBeRemoved( int position );
+        void sourceRemoved( int position );
+        void sourceAboutToBeAdded( int position );
+        void sourceAdded( int position );
 
+    protected:
         /**
          * Tells the audio doc one source is about to be removed
          */
-        void emitAboutToRemoveSource( AudioDataSource* );
+        void emitSourceAboutToBeRemoved( AudioDataSource* source );
+
+        /**
+         * Tells the audio doc one source was removed from the list.
+         */
+        void emitSourceRemoved( AudioDataSource* source );
 
         /**
          * Tells the audio doc one source is about to be added
          */
-        void emitAboutToAddSource( int position );
+        void emitSourceAboutToBeAdded( int position );
 
         /**
          * Tells the audio doc one source was added to the list.
          */
-        void emitSourceAdded( AudioDataSource* );
+        void emitSourceAdded( AudioDataSource* source );
 
     private:
         /**

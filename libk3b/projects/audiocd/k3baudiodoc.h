@@ -182,21 +182,21 @@ namespace K3b {
         void setAudioRippingIgnoreReadErrors( bool b );
 
     private Q_SLOTS:
-        void slotTrackChanged( K3b::AudioTrack* );
-        void slotTrackRemoved( K3b::AudioTrack* );
+        void slotTrackChanged( K3b::AudioTrack* track );
+        void slotTrackRemoved( int position );
 
     Q_SIGNALS:
-        void trackAdded( K3b::AudioTrack* );
-        void trackChanged( K3b::AudioTrack* );
-        void trackRemoved( K3b::AudioTrack* );
+        void trackChanged( K3b::AudioTrack* track );
 
         // signals for the model
-        void aboutToAddTrack( int position );
-        void aboutToRemoveTrack( K3b::AudioTrack* );
-        void aboutToAddSource( K3b::AudioTrack*, int position );
-        void sourceAdded( K3b::AudioTrack*, int position );
-        void aboutToRemoveSource( K3b::AudioTrack*, int position );
-        void sourceRemoved( K3b::AudioTrack* );
+        void trackAboutToBeAdded( int position );
+        void trackAdded( int position );
+        void trackAboutToBeRemoved( int position );
+        void trackRemoved( int position );
+        void sourceAboutToBeAdded( K3b::AudioTrack* parent, int position );
+        void sourceAdded( K3b::AudioTrack* parent, int position );
+        void sourceAboutToBeRemoved( K3b::AudioTrack* parent, int position );
+        void sourceRemoved( K3b::AudioTrack* parent, int position );
 
     protected:
         /** reimplemented from Doc */

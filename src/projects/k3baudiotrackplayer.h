@@ -56,7 +56,7 @@ namespace K3b {
     private Q_SLOTS:
         void slotSeek( int );
         void slotTrackChanged( K3b::AudioTrack* track );
-        void slotTrackRemoved( K3b::AudioTrack* track );
+        void slotTrackAboutToBeRemoved( int position );
         void slotUpdateSlider();
         void slotDocChanged();
         void slotCurrentTrackChanged( const K3b::AudioTrack& track );

@@ -162,8 +162,8 @@ AudioTrackPlayer::AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionColl
              this, SLOT(slotDocChanged()) );
     connect( d->doc, SIGNAL(trackChanged(K3b::AudioTrack*)),
              this, SLOT(slotTrackChanged(K3b::AudioTrack*)) );
-    connect( d->doc, SIGNAL(trackRemoved(K3b::AudioTrack*)),
-             this, SLOT(slotTrackRemoved(K3b::AudioTrack*)) );
+    connect( d->doc, SIGNAL(trackAboutToBeRemoved(int)),
+             this, SLOT(slotTrackAboutToBeRemoved(int)) );
     connect( d->audioOutput, SIGNAL(notify()),
              this, SLOT(slotUpdateSlider()) );
     connect( d->audioOutput, SIGNAL(stateChanged(QAudio::State)),
@@ -249,7 +249,7 @@ void AudioTrackPlayer::slotSeek( int bytes )
 }
 
 
-void AudioTrackPlayer::slotTrackRemoved( K3b::AudioTrack* /*track*/ )
+void AudioTrackPlayer::slotTrackAboutToBeRemoved( int /*position*/ )
 {
     /*if( m_currentTrack == track ) {
         stop();

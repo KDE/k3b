@@ -1013,7 +1013,7 @@ void K3b::AudioDoc::slotTrackChanged( K3b::AudioTrack* track )
     setModified( true );
     // if the track is empty now we simply delete it
     if( track->firstSource() ) {
-        emit trackChanged(track);
+        emit trackChanged( track );
         emit changed();
     }
     else {
@@ -1024,10 +1024,10 @@ void K3b::AudioDoc::slotTrackChanged( K3b::AudioTrack* track )
 }
 
 
-void K3b::AudioDoc::slotTrackRemoved( K3b::AudioTrack* track )
+void K3b::AudioDoc::slotTrackRemoved( int position )
 {
     setModified( true );
-    emit trackRemoved(track);
+    emit trackRemoved( position );
     emit changed();
 }
 

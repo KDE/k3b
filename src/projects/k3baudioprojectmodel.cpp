@@ -42,14 +42,14 @@ public:
     K3b::AudioDoc* project;
 
     void _k_docChanged();
-    void _k_aboutToAddTrack( int position );
-    void _k_trackAdded( K3b::AudioTrack* );
-    void _k_aboutToRemoveTrack( K3b::AudioTrack* );
+    void _k_trackAboutToBeAdded( int position );
+    void _k_trackAdded();
+    void _k_trackAboutToBeRemoved( int position );
     void _k_trackRemoved();
-    void _k_aboutToAddSource( K3b::AudioTrack*, int );
-    void _k_sourceAdded( K3b::AudioTrack*, int );
-    void _k_aboutToRemoveSource( K3b::AudioTrack*, int );
-    void _k_sourceRemoved( K3b::AudioTrack* );
+    void _k_sourceAboutToBeAdded( K3b::AudioTrack* parent, int position );
+    void _k_sourceAdded();
+    void _k_sourceAboutToBeRemoved( K3b::AudioTrack* parent, int position );
+    void _k_sourceRemoved();
 
 private:
     AudioProjectModel* q;
@@ -62,28 +62,23 @@ void K3b::AudioProjectModel::Private::_k_docChanged()
 }
 
 
-void K3b::AudioProjectModel::Private::_k_aboutToAddTrack( int position )
+void K3b::AudioProjectModel::Private::_k_trackAboutToBeAdded( int position )
 {
-    if (position >= 0) {
+    if( position >= 0 ) {
         q->beginInsertRows( QModelIndex(), position, position );
     }
 }
 
 
-void K3b::AudioProjectModel::Private::_k_trackAdded( K3b::AudioTrack* track )
+void K3b::AudioProjectModel::Private::_k_trackAdded()
 {
-    int index = track->trackNumber() - 1;
-    if (index >= 0) {
-        // do nothing
-        q->endInsertRows();
-    }
+    q->endInsertRows();
 }
 
 
-void K3b::AudioProjectModel::Private::_k_aboutToRemoveTrack( K3b::AudioTrack* track )
+void K3b::AudioProjectModel::Private::_k_trackAboutToBeRemoved( int position )
 {
-    int index = track->trackNumber() - 1;
-    q->beginRemoveRows( QModelIndex(), index, index );
+    q->beginRemoveRows( QModelIndex(), position, position );
 }
 
 
@@ -93,31 +88,26 @@ void K3b::AudioProjectModel::Private::_k_trackRemoved()
 }
 
 
-void K3b::AudioProjectModel::Private::_k_aboutToAddSource( K3b::AudioTrack* track, int position )
+void K3b::AudioProjectModel::Private::_k_sourceAboutToBeAdded( K3b::AudioTrack* parent, int position )
 {
-    QModelIndex parent = q->indexForTrack( track );
-    q->beginInsertRows( parent, position, position );
+    q->beginInsertRows( q->indexForTrack( parent ), position, position );
 }
 
 
-void K3b::AudioProjectModel::Private::_k_sourceAdded( K3b::AudioTrack*, int )
+void K3b::AudioProjectModel::Private::_k_sourceAdded()
 {
-    // do nothing
     q->endInsertRows();
 }
 
 
-void K3b::AudioProjectModel::Private::_k_aboutToRemoveSource( K3b::AudioTrack* track, int position )
+void K3b::AudioProjectModel::Private::_k_sourceAboutToBeRemoved( K3b::AudioTrack* parent, int position )
 {
-    QModelIndex parent = q->indexForTrack( track );
-    q->beginRemoveRows( parent, position, position );
+    q->beginRemoveRows( q->indexForTrack( parent ), position, position );
 }
 
 
-void K3b::AudioProjectModel::Private::_k_sourceRemoved( K3b::AudioTrack* track )
+void K3b::AudioProjectModel::Private::_k_sourceRemoved()
 {
-    Q_UNUSED( track );
-
     q->endRemoveRows();
 }
 
@@ -130,21 +120,23 @@ K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
 
     connect( doc, SIGNAL( changed() ),
              this, SLOT( _k_docChanged() ), Qt::DirectConnection );
-    connect( doc, SIGNAL( aboutToRemoveTrack( K3b::AudioTrack* ) ),
-             this, SLOT( _k_aboutToRemoveTrack( K3b::AudioTrack* ) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( aboutToAddTrack( int ) ),
-             this, SLOT( _k_aboutToAddTrack( int ) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( trackAdded( K3b::AudioTrack* ) ),
-             this, SLOT( _k_trackAdded( K3b::AudioTrack* ) ), Qt::DirectConnection );
+    connect( doc, SIGNAL(trackAboutToBeRemoved(int)),
+             this, SLOT(_k_trackAboutToBeRemoved(int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(trackRemoved(int)),
+             this, SLOT(_k_trackRemoved()), Qt::DirectConnection );
+    connect( doc, SIGNAL(trackAboutToBeAdded(int)),
+             this, SLOT(_k_trackAboutToBeAdded(int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(trackAdded(int)),
+             this, SLOT(_k_trackAdded()), Qt::DirectConnection );
 
-    connect( doc, SIGNAL( aboutToAddSource( K3b::AudioTrack*, int ) ),
-             this, SLOT( _k_aboutToAddSource( K3b::AudioTrack*, int ) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( sourceAdded( K3b::AudioTrack*, int ) ),
-             this, SLOT( _k_sourceAdded( K3b::AudioTrack*, int ) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( aboutToRemoveSource( K3b::AudioTrack*, int ) ),
-             this, SLOT( _k_aboutToRemoveSource( K3b::AudioTrack*, int ) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( sourceRemoved( K3b::AudioTrack* ) ),
-             this, SLOT( _k_sourceRemoved( K3b::AudioTrack* ) ), Qt::DirectConnection );
+    connect( doc, SIGNAL(sourceAboutToBeAdded(K3b::AudioTrack*,int)),
+             this, SLOT(_k_sourceAboutToBeAdded(K3b::AudioTrack*,int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(sourceAdded(K3b::AudioTrack*,int)),
+             this, SLOT(_k_sourceAdded()), Qt::DirectConnection );
+    connect( doc, SIGNAL(sourceAboutToBeRemoved(K3b::AudioTrack*,int)),
+             this, SLOT(_k_sourceAboutToBeRemoved(K3b::AudioTrack*,int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(sourceRemoved(K3b::AudioTrack*,int)),
+             this, SLOT(_k_sourceRemoved()), Qt::DirectConnection );
 }
 
 

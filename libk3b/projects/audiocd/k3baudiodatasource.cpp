@@ -56,15 +56,15 @@ K3b::AudioDataSource* K3b::AudioDataSource::take()
 {
     // if we do not have a track we are not in any list
     if( m_track ) {
-        m_track->emitAboutToRemoveSource(this);
-        
+        m_track->emitSourceAboutToBeRemoved(this);
+
         // sets the first source of the track, if necessary
         if( m_prev )
             m_prev->m_next = m_next;
         if( m_next )
             m_next->m_prev = m_prev;
 
-        // the emitSourceRemoved() function will take care of setting the 
+        // the emitSourceRemoved() function will take care of setting the
         // first source in the track (to avoid the track accessing a deleted
         // source, or a source accessing a deleted track
         m_track->emitSourceRemoved(this);
@@ -85,8 +85,8 @@ void K3b::AudioDataSource::moveAfter( K3b::AudioDataSource* source )
 
     if( source == this )
         return;
-    
-    source->track()->emitAboutToAddSource( source->sourceIndex()+1 );
+
+    source->track()->emitSourceAboutToBeAdded( source->sourceIndex()+1 );
 
     // remove this from the list
     take();
@@ -116,8 +116,8 @@ void K3b::AudioDataSource::moveAhead( K3b::AudioDataSource* source )
 
     if( source == this )
         return;
-    
-    source->track()->emitAboutToAddSource( source->sourceIndex() );
+
+    source->track()->emitSourceAboutToBeAdded( source->sourceIndex() );
 
     // remove this from the list
     take();
@@ -144,6 +144,7 @@ void K3b::AudioDataSource::moveAhead( K3b::AudioDataSource* source )
 
 void K3b::AudioDataSource::emitChange()
 {
+    emit changed();
     if( m_track )
         m_track->sourceChanged( this );
 }

@@ -19,16 +19,11 @@
 #include <QtCore/QAbstractItemModel>
 
 namespace K3b {
-    class AudioDoc;
-}
-namespace K3b {
-    class AudioTrack;
-}
-namespace K3b {
-    class AudioDataSource;
-}
 
-namespace K3b {
+    class AudioDataSource;
+    class AudioDoc;
+    class AudioTrack;
+
     class AudioProjectModel : public QAbstractItemModel
     {
         Q_OBJECT
@@ -73,14 +68,14 @@ namespace K3b {
         Private* const d;
 
         Q_PRIVATE_SLOT( d, void _k_docChanged() )
-        Q_PRIVATE_SLOT( d, void _k_aboutToAddTrack( int position ) )
-        Q_PRIVATE_SLOT( d, void _k_trackAdded( K3b::AudioTrack* ) )
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveTrack( K3b::AudioTrack* ) )
+        Q_PRIVATE_SLOT( d, void _k_trackAboutToBeAdded( int position ) )
+        Q_PRIVATE_SLOT( d, void _k_trackAdded() )
+        Q_PRIVATE_SLOT( d, void _k_trackAboutToBeRemoved( int position ) )
         Q_PRIVATE_SLOT( d, void _k_trackRemoved() )
-        Q_PRIVATE_SLOT( d, void _k_aboutToAddSource( K3b::AudioTrack*, int ) )
-        Q_PRIVATE_SLOT( d, void _k_sourceAdded( K3b::AudioTrack*, int ) )
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveSource( K3b::AudioTrack*, int ) )
-        Q_PRIVATE_SLOT( d, void _k_sourceRemoved( K3b::AudioTrack* ) )
+        Q_PRIVATE_SLOT( d, void _k_sourceAboutToBeAdded( K3b::AudioTrack* parent, int position ) )
+        Q_PRIVATE_SLOT( d, void _k_sourceAdded() )
+        Q_PRIVATE_SLOT( d, void _k_sourceAboutToBeRemoved( K3b::AudioTrack* parent, int position ) )
+        Q_PRIVATE_SLOT( d, void _k_sourceRemoved() )
     };
 }
 
