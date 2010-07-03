@@ -13,6 +13,7 @@
  */
 
 #include "k3brawaudiodatasource.h"
+#include "k3brawaudiodatareader.h"
 
 #include <QtCore/QFile>
 
@@ -22,6 +23,7 @@
 class K3b::RawAudioDataSource::Private
 {
 public:
+    QString path;
     QFile imageFile;
 
     bool openImageFile() {
@@ -41,6 +43,7 @@ K3b::RawAudioDataSource::RawAudioDataSource( const QString& path )
     : AudioDataSource(),
       d( new Private() )
 {
+    d->path = path;
     d->imageFile.setFileName( path );
 }
 
@@ -49,6 +52,7 @@ K3b::RawAudioDataSource::RawAudioDataSource( const RawAudioDataSource& other )
     : AudioDataSource( other ),
       d( new Private() )
 {
+    d->path = other.d->path;
     d->imageFile.setFileName( other.d->imageFile.fileName() );
 }
 
@@ -56,6 +60,12 @@ K3b::RawAudioDataSource::RawAudioDataSource( const RawAudioDataSource& other )
 K3b::RawAudioDataSource::~RawAudioDataSource()
 {
     delete d;
+}
+
+
+QString K3b::RawAudioDataSource::path() const
+{
+    return d->path;
 }
 
 
@@ -92,4 +102,10 @@ QString K3b::RawAudioDataSource::sourceComment() const
 K3b::AudioDataSource* K3b::RawAudioDataSource::copy() const
 {
     return new RawAudioDataSource( *this );
+}
+
+
+QIODevice* K3b::RawAudioDataSource::createReader( QObject* parent )
+{
+    return new RawAudioDataReader( *this, parent );
 }

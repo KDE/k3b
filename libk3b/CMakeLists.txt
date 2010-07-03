@@ -150,15 +150,20 @@ set(k3b_project_SRCS
 set(k3b_project_audiocd_SRCS
   projects/audiocd/k3baudiojob.cpp
   projects/audiocd/k3baudiotrack.cpp
+  projects/audiocd/k3baudiotrackreader.cpp
   projects/audiocd/k3baudiodoc.cpp
   projects/audiocd/k3baudiofile.cpp
+  projects/audiocd/k3baudiofilereader.cpp
   projects/audiocd/k3baudiozerodata.cpp
+  projects/audiocd/k3baudiozerodatareader.cpp
   projects/audiocd/k3baudiodatasource.cpp
+  projects/audiocd/k3brawaudiodatareader.cpp
   projects/audiocd/k3brawaudiodatasource.cpp
   projects/audiocd/k3baudionormalizejob.cpp
   projects/audiocd/k3baudiojobtempdata.cpp
   projects/audiocd/k3baudioimager.cpp
   projects/audiocd/k3baudiomaxspeedjob.cpp
+  projects/audiocd/k3baudiocdtrackreader.cpp
   projects/audiocd/k3baudiocdtracksource.cpp
   projects/audiocd/k3baudiocdtrackdrag.cpp
   projects/audiocd/k3baudiodatasourceiterator.cpp

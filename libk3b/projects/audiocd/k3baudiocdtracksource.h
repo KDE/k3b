@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -16,18 +17,16 @@
 #define _K3B_AUDIO_CD_TRACK_SOURCE_H_
 
 #include "k3baudiodatasource.h"
-
-#include "k3btoc.h"
-
 #include "k3b_export.h"
+
+#include <QtCore/QScopedPointer>
 
 
 namespace K3b {
     namespace Device {
         class Device;
+        class Toc;
     }
-
-    class CdparanoiaLib;
 
     /**
      * Audio data source which reads it's data directly from an audio CD.
@@ -57,13 +56,13 @@ namespace K3b {
         AudioCdTrackSource( const AudioCdTrackSource& );
         ~AudioCdTrackSource();
 
-        unsigned int discId() const { return m_discId; }
-        int cdTrackNumber() const { return m_cdTrackNumber; }
+        unsigned int discId() const;
+        int cdTrackNumber() const;
 
-        QString artist() const { return m_artist; }
-        QString title() const { return m_title; }
-        QString cdArtist() const { return m_cdArtist; }
-        QString cdTitle() const { return m_cdTitle; }
+        QString artist() const;
+        QString title() const;
+        QString cdArtist() const;
+        QString cdTitle() const;
 
         Msf originalLength() const;
         bool seek( const Msf& );
@@ -71,6 +70,7 @@ namespace K3b {
         QString type() const;
         QString sourceComment() const;
         AudioDataSource* copy() const;
+        virtual QIODevice* createReader( QObject* parent = 0 );
 
         /**
          * Searches for the corresponding Audio CD and returns the device in which it has
@@ -83,27 +83,12 @@ namespace K3b {
          */
         void setDevice( Device::Device* dev );
 
+        const Device::Toc& toc() const;
+        void setToc( const Device::Toc& toc );
+
     private:
-        bool initParanoia();
-        void closeParanoia();
-        bool searchForAudioCD( Device::Device* ) const;
-
-        unsigned int m_discId;
-        Msf m_length;
-        Device::Toc m_toc;
-        int m_cdTrackNumber;
-
-        QString m_artist;
-        QString m_title;
-        QString m_cdArtist;
-        QString m_cdTitle;
-
-        // ripping
-        // we only save the device we last saw the CD in
-        Device::Device* m_lastUsedDevice;
-        CdparanoiaLib* m_cdParanoiaLib;
-        Msf m_position;
-        bool m_initialized;
+        class Private;
+        QScopedPointer<Private> d;
     };
 }
 

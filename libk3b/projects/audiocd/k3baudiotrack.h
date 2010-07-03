@@ -172,6 +172,11 @@ namespace K3b {
         AudioTrack* split( const Msf& pos );
 
         /**
+         * Create reader associated with the track
+         */
+        virtual QIODevice* createReader( QObject* parent = 0 );
+
+        /**
          * Is this track in a list
          */
         bool inList() const;
@@ -192,7 +197,7 @@ namespace K3b {
          * Tells the audio doc one source is about to be removed
          */
         void emitAboutToRemoveSource( AudioDataSource* );
-        
+
         /**
          * Tells the audio doc one source is about to be added
          */

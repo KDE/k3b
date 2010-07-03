@@ -17,9 +17,9 @@
 
 #include "k3baudiodatasource.h"
 
-#include "k3bmsf.h"
-#include <kurl.h>
 #include "k3b_export.h"
+
+#include <QtCore/QScopedPointer>
 
 namespace K3b {
     class AudioDecoder;
@@ -44,14 +44,18 @@ namespace K3b {
          *
          * Use AudioDoc::getDecoderForUrl to create a decoder.
          */
-        AudioFile( AudioDecoder*, AudioDoc* );
-        AudioFile( const AudioFile& );
+        AudioFile( AudioDecoder* decoder, AudioDoc* doc );
+        AudioFile( const AudioFile& file );
 
         /**
          * The AudioFile deregisters itself from the doc. If it was the last file
          * to use the decoder the doc will take care of deleting it.
          */
         ~AudioFile();
+
+        AudioDecoder* decoder() const;
+
+        AudioDoc* doc() const;
 
         QString filename() const;
 
@@ -65,19 +69,17 @@ namespace K3b {
 
         bool isValid() const;
 
-        AudioDecoder* decoder() const { return m_decoder; }
-
         bool seek( const Msf& );
 
         int read( char* data, unsigned int max );
 
         AudioDataSource* copy() const;
 
-    private:
-        AudioDoc* m_doc;
-        AudioDecoder* m_decoder;
+        virtual QIODevice* createReader( QObject* parent = 0 );
 
-        unsigned long long m_decodedData;
+    private:
+        class Private;
+        QScopedPointer<Private> d;
     };
 }
 

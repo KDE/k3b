@@ -36,6 +36,7 @@ namespace K3b {
         int read( char* data, unsigned int max );
 
         AudioDataSource* copy() const;
+        virtual QIODevice* createReader( QObject* parent = 0 );
 
         /**
          * Only changes the length

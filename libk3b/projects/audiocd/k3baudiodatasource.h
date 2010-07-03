@@ -15,6 +15,7 @@
 #ifndef _K3B_AUDIO_DATA_SOURCE_H_
 #define _K3B_AUDIO_DATA_SOURCE_H_
 
+#include <QtCore/QIODevice>
 #include <QtCore/QObject>
 
 #include "k3bmsf.h"
@@ -157,6 +158,11 @@ namespace K3b {
          * The default implementation uses copy() to create a new source instance
          */
         virtual AudioDataSource* split( const Msf& pos );
+
+        /**
+         * Create reader associated with the source
+         */
+        virtual QIODevice* createReader( QObject* parent = 0 ) = 0;
 
     protected:
         /**

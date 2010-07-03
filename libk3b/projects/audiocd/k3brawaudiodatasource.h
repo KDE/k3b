@@ -33,6 +33,8 @@ namespace K3b {
         RawAudioDataSource( const RawAudioDataSource& );
         ~RawAudioDataSource();
 
+        QString path() const;
+
         Msf originalLength() const;
         bool seek( const Msf& );
 
@@ -42,6 +44,7 @@ namespace K3b {
         QString sourceComment() const;
 
         AudioDataSource* copy() const;
+        virtual QIODevice* createReader( QObject* parent = 0 );
 
     private:
         class Private;

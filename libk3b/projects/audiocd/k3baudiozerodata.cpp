@@ -13,6 +13,7 @@
  */
 
 #include "k3baudiozerodata.h"
+#include "k3baudiozerodatareader.h"
 #include "k3baudiotrack.h"
 
 #include <klocale.h>
@@ -93,6 +94,12 @@ int K3b::AudioZeroData::read( char* data, unsigned int max )
 K3b::AudioDataSource* K3b::AudioZeroData::copy() const
 {
     return new K3b::AudioZeroData( *this );
+}
+
+
+QIODevice* K3b::AudioZeroData::createReader( QObject* parent )
+{
+    return new AudioZeroDataReader( *this, parent );
 }
 
 

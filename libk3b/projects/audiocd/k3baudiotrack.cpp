@@ -17,6 +17,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiodoc.h"
 #include "k3baudiodatasource.h"
+#include "k3baudiotrackreader.h"
 
 #include "k3baudiodecoder.h"
 #include "k3bcore.h"
@@ -306,7 +307,7 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
     else {
         // remove this from the list
         take();
-        
+
         emit track->doc()->aboutToAddTrack( track->trackNumber()-1 );
 
         // set the new parent doc
@@ -360,7 +361,7 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
     else {
         // remove this from the list
         take();
-        
+
         emit track->doc()->aboutToAddTrack( track->trackNumber()-1 );
 
         // set the new parent doc
@@ -590,6 +591,12 @@ K3b::AudioTrack* K3b::AudioTrack::split( const K3b::Msf& pos )
     }
     else
         return 0;
+}
+
+
+QIODevice* K3b::AudioTrack::createReader( QObject* parent )
+{
+    return new AudioTrackReader( *this, parent );
 }
 
 
