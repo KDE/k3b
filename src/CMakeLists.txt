@@ -40,7 +40,7 @@ set(k3b_project_SRCS
   projects/k3baudioeditorwidget.cpp
   projects/k3baudiotrackdialog.cpp
   projects/k3baudiotrackwidget.cpp
-  #projects/k3baudiotrackplayer.cpp
+  projects/k3baudiotrackplayer.cpp
   projects/k3baudiotracksplitdialog.cpp
   projects/k3baudioview.cpp
   projects/k3baudioviewimpl.cpp
@@ -294,6 +294,7 @@ target_link_libraries(k3b_bin
   ${KDE4_KNOTIFYCONFIG_LIBS}
   ${KDE4_KUTILS_LIBS}
   ${KDE4_SOLID_LIBS}
+  ${QT_QTMULTIMEDIA_LIBRARY}
   ${QT_QTWEBKIT_LIBRARY}
   ${X11_LIBRARIES}
   )

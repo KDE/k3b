@@ -50,27 +50,19 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
     fillStatusDisplay()->showTime();
 
     toolBox()->addAction( actionCollection()->action( "project_audio_convert" ) );
-    toolBox()->addSeparator();
-
-#ifdef __GNUC__
-#warning enable player once ported to Phonon
-#endif
-//     toolBox()->addAction( m_songlist->player()->action( AudioTrackPlayer::ACTION_PLAY ) );
-//     toolBox()->addAction( m_songlist->player()->action( AudioTrackPlayer::ACTION_PAUSE ) );
-//     toolBox()->addAction( m_songlist->player()->action( AudioTrackPlayer::ACTION_STOP ) );
-//     toolBox()->addSpacing();
-//     toolBox()->addAction( m_songlist->player()->action( AudioTrackPlayer::ACTION_PREV ) );
-//     toolBox()->addAction( m_songlist->player()->action( AudioTrackPlayer::ACTION_NEXT ) );
-//     toolBox()->addSpacing();
-//     m_songlist->player()->action( AudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
-//     toolBox()->addSeparator();
-
-#ifdef ENABLE_MUSICBRAINZ
     toolBox()->addAction( actionCollection()->action( "project_audio_musicbrainz" ) );
     toolBox()->addSeparator();
-#endif
 
     toolBox()->addActions( createPluginsActions( m_doc->type() ) );
+
+    toolBox()->addSeparator();
+    toolBox()->addAction( actionCollection()->action( "player_previous" ) );
+    toolBox()->addAction( actionCollection()->action( "player_play_pause" ) );
+    toolBox()->addAction( actionCollection()->action( "player_stop" ) );
+    toolBox()->addAction( actionCollection()->action( "player_next" ) );
+    toolBox()->addSeparator();
+    toolBox()->addAction( actionCollection()->action( "player_seek" ) );
+    toolBox()->addSeparator();
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future

@@ -18,6 +18,8 @@
 #include "k3baudiotrack.h"
 
 #include <QLinkedList>
+#include <QMutex>
+#include <QMutexLocker>
 
 namespace K3b {
 
@@ -40,6 +42,9 @@ public:
     qint64 alreadyReadBytes;
     IODevices readers;
     IODevices::const_iterator currentReader;
+
+    // used to make sure that no seek and read operation occur in parallel
+    QMutex mutex;
 };
 
 
@@ -57,12 +62,25 @@ AudioTrackReader::~AudioTrackReader()
 }
 
 
+const AudioTrack& AudioTrackReader::track() const
+{
+    return d->track;
+}
+
+
+AudioTrack& AudioTrackReader::track()
+{
+    return d->track;
+}
+
+
 bool AudioTrackReader::open( QIODevice::OpenMode mode )
 {
     if( !mode.testFlag( QIODevice::WriteOnly ) && d->readers.empty() && d->track.numberSources() > 0 ) {
 
         for( AudioDataSource* source = d->track.firstSource(); source != 0; source = source->next() ) {
             d->readers.push_back( source->createReader() );
+            d->readers.back()->open( mode );
         }
 
         d->alreadyReadBytes = 0;
@@ -107,6 +125,8 @@ qint64 AudioTrackReader::size() const
 
 bool AudioTrackReader::seek( qint64 pos )
 {
+    QMutexLocker locker( &d->mutex );
+
     IODevices::const_iterator reader = d->readers.begin();
     qint64 curPos = 0;
 
@@ -133,6 +153,8 @@ qint64 AudioTrackReader::writeData( const char* /*data*/, qint64 /*len*/ )
 
 qint64 AudioTrackReader::readData( char* data, qint64 maxlen )
 {
+    QMutexLocker locker( &d->mutex );
+
     if( d->currentReader == d->readers.end() ) {
         d->currentReader = d->readers.begin();
         if( d->currentReader != d->readers.end() ) {

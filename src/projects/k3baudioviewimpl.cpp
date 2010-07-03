@@ -3,7 +3,7 @@
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009      Arthur Mello <arthur@mandriva.com>
  * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- * Copyright (C) 2009      Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010      Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -26,6 +26,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackaddingdialog.h"
 #include "k3baudiotrackdialog.h"
+#include "k3baudiotrackplayer.h"
 #include "k3baudiotracksplitdialog.h"
 #include "k3baudiotracktrmlookupdialog.h"
 #include "k3baudiozerodata.h"
@@ -54,6 +55,7 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_doc( doc ),
     m_model( new AudioProjectModel( doc, view ) ),
     m_trackView( new QTreeView( view ) ),
+    m_player( new AudioTrackPlayer( doc, actionCollection, this ) ),
     m_columnAdjuster( new ViewColumnAdjuster( this ) ),
     m_updatingColumnWidths( false )
 {

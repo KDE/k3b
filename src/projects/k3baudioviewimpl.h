@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -29,6 +29,7 @@ namespace K3b {
     class AudioDoc;
     class AudioProjectModel;
     class AudioTrack;
+    class AudioTrackPlayer;
     class View;
     class ViewColumnAdjuster;
 
@@ -73,10 +74,11 @@ namespace K3b {
         AudioDoc* m_doc;
         AudioProjectModel* m_model;
         QTreeView* m_trackView;
+        AudioTrackPlayer* m_player;
         ViewColumnAdjuster* m_columnAdjuster;
         bool m_updatingColumnWidths;
 
-        KAction* m_actionAddSilence;
+		KAction* m_actionAddSilence;
         KAction* m_actionMergeTracks;
         KAction* m_actionSplitSource;
         KAction* m_actionSplitTrack;

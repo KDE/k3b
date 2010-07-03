@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -13,388 +14,349 @@
  */
 
 #include "k3baudiotrackplayer.h"
+#include "k3baction.h"
 #include "k3baudiodoc.h"
+#include "k3baudiodocreader.h"
 #include "k3baudiotrack.h"
-#include "k3baudioserver.h"
+#include "k3baudiotrackreader.h"
 
-#include <kactionclasses.h>
-#include <klocale.h>
-#include <kaction.h>
+#include <KAction>
+#include <KActionCollection>
+#include <KLocale>
 
+#include <QAudioDeviceInfo>
+#include <QAudioFormat>
+#include <QAudioOutput>
 #include <QSlider>
-#include <QTimer>
-#include <QMutex>
-#include <QMutexLocker>
 #include <QToolTip>
+#include <QWidgetAction>
 
-#if 0
-K3b::AudioTrackPlayerSeekAction::AudioTrackPlayerSeekAction( K3b::AudioTrackPlayer* player, QObject* parent )
-    : K3b::WidgetFactoryAction( parent ),
+
+namespace K3b {
+
+namespace {
+
+class AudioTrackPlayerSeekAction : public QWidgetAction
+{
+public:
+    AudioTrackPlayerSeekAction( AudioTrackPlayer* player, QObject* parent );
+    ~AudioTrackPlayerSeekAction();
+
+    void setValue( int value );
+    void setMaximum( int value );
+
+protected:
+    virtual QWidget* createWidget( QWidget* parent );
+
+private:
+    AudioTrackPlayer* m_player;
+};
+
+
+AudioTrackPlayerSeekAction::AudioTrackPlayerSeekAction( AudioTrackPlayer* player, QObject* parent )
+    : QWidgetAction( parent ),
       m_player( player )
 {
 }
 
 
-K3b::AudioTrackPlayerSeekAction::~AudioTrackPlayerSeekAction()
+AudioTrackPlayerSeekAction::~AudioTrackPlayerSeekAction()
 {
 }
 
-void K3b::AudioTrackPlayerSeekAction::setValue( int v )
+
+void AudioTrackPlayerSeekAction::setValue( int value )
 {
-    int len = containerCount();
-    for( int i = 0; i < len; ++i ) {
-        QWidget* w = widget( container( i ) );
-        if ( w ) {
-            static_cast<QSlider*>( w )->setValue( v );
+    Q_FOREACH( QWidget* widget, createdWidgets() ) {
+        if( QSlider* slider = qobject_cast<QSlider*>( widget ) ) {
+            slider->setValue( value );
         }
-        else
-            kDebug() << "(K3b::AudioTrackPlayerSeekAction::setValue) no widget found for container " << container( i );
     }
 }
 
 
-void K3b::AudioTrackPlayerSeekAction::setMaxValue( int v )
+void AudioTrackPlayerSeekAction::setMaximum( int value )
 {
-    int len = containerCount();
-    for( int i = 0; i < len; ++i ) {
-        QWidget* w = widget( container( i ) );
-        if ( w ) {
-            static_cast<QSlider*>( w )->setMaxValue( v );
+    Q_FOREACH( QWidget* widget, createdWidgets() ) {
+        if( QSlider* slider = qobject_cast<QSlider*>( widget ) ) {
+            slider->setMaximum( value );
         }
-        else
-            kDebug() << "(K3b::AudioTrackPlayerSeekAction::setMaxValue) no widget found for container " << container( i );
     }
 }
 
 
-QWidget* K3b::AudioTrackPlayerSeekAction::createWidget( QWidget* container)
+QWidget* AudioTrackPlayerSeekAction::createWidget( QWidget* container)
 {
-    QSlider* seekSlider = new QSlider( 0, 100, 1, 0, Qt::Horizontal, container );
-    connect( seekSlider, SIGNAL(sliderMoved(int)), m_player, SLOT(slotSeek(int)) );
-    return seekSlider;
+    QSlider* slider = new QSlider( container );
+    slider->setRange( 0, 100 );
+    slider->setOrientation( Qt::Horizontal );
+    connect( slider, SIGNAL(sliderMoved(int)), m_player, SLOT(slotSeek(int)) );
+    return slider;
 }
-#endif
 
-class K3b::AudioTrackPlayer::Private
+} // namespace
+
+
+class AudioTrackPlayer::Private
 {
 public:
-  KAction* actionPlay;
-  KAction* actionPause;
-  KAction* actionPlayPause;
-  KAction* actionStop;
-  KAction* actionNext;
-  KAction* actionPrev;
-  //K3b::AudioTrackPlayerSeekAction* actionSeek;
+    AudioDoc* doc;
+    AudioDocReader* audioDocReader;
+    QAudioOutput* audioOutput;
 
-  // just to handle them easily;
-  KActionCollection* actionCollection;
-
-  QTimer sliderTimer;
-
-  // used to make sure that no seek and read operation occur in parallel
-  QMutex mutex;
-
-  bool playing;
-  bool paused;
+    KAction* actionPlay;
+    KAction* actionPause;
+    KAction* actionPlayPause;
+    KAction* actionStop;
+    KAction* actionNext;
+    KAction* actionPrevious;
+    AudioTrackPlayerSeekAction* actionSeek;
 };
 
 
-K3b::AudioTrackPlayer::AudioTrackPlayer( K3b::AudioDoc* doc, QObject* parent )
+AudioTrackPlayer::AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionCollection, QObject* parent )
   : QObject( parent ),
-    K3b::AudioClient(),
-    m_doc( doc ),
-    m_currentTrack( 0 )
+    d( new Private )
 {
-  d = new Private;
-  d->paused = false;
-  d->playing = false;
+    d->doc = doc;
+    d->audioDocReader = new AudioDocReader( *doc, this );
 
-  // TODO: handle the shortcuts: pass a widget to the action collection (perhaps the trackview?)
-  d->actionCollection = new KActionCollection( 0, this );
+    QAudioFormat audioFormat;
+    audioFormat.setFrequency( 44100 );
+    audioFormat.setChannels( 2 );
+    audioFormat.setSampleSize( 16 );
+    audioFormat.setSampleType( QAudioFormat::SignedInt );
+    audioFormat.setCodec( "audio/pcm" );
+    audioFormat.setByteOrder( QAudioFormat::BigEndian );
+    d->audioOutput = new QAudioOutput( QAudioDeviceInfo::defaultOutputDevice(), audioFormat, this );
 
-  // create the actions
-  // TODO: create shortcuts (is there a way to let the user change them?)
-  d->actionPlay = new KAction( i18n("Play"),
-			       "player_play",
-			       KShortcut(),
-			       this, SLOT(playPause()),
-			       d->actionCollection,
-			       "play" );
-  d->actionPause = new KAction( i18n("Pause"),
-				"player_pause",
-				KShortcut(),
-				this, SLOT(playPause()),
-				d->actionCollection,
-				"pause" );
-  d->actionPlayPause = new KAction( i18n("Play/Pause"),
-				    "player_play",
-				    KShortcut(),
-				    this, SLOT(playPause()),
-				    d->actionCollection,
-				    "play_pause" );
+    // create the actions
+    // TODO: create shortcuts (is there a way to let the user change them?)
+    d->actionPlay = createAction( this, i18n("Play"),
+                                  "media-playback-start",
+                                  QKeySequence(),
+                                  this, SLOT(playPause()),
+                                  actionCollection,
+                                  "player_play" );
+    d->actionPause = createAction( this, i18n("Pause"),
+                                   "media-playback-pause",
+                                   QKeySequence(),
+                                   this, SLOT(playPause()),
+                                   actionCollection,
+                                   "player_pause" );
+    d->actionPlayPause = createAction( this, i18n("Play/Pause"),
+                                       "media-playback-start",
+                                       QKeySequence(),
+                                       this, SLOT(playPause()),
+                                       actionCollection,
+                                       "player_play_pause" );
 
-  d->actionStop = new KAction( i18n("Stop"),
-			       "player_stop",
-			       KShortcut(),
-			       this, SLOT(stop()),
-			       d->actionCollection,
-			       "stop" );
-  d->actionNext = new KAction( i18n("Next"),
-			       "player_end",
-			       KShortcut(),
-			       this, SLOT(next()),
-			       d->actionCollection,
-			       "next" );
-  d->actionPrev = new KAction( i18n("Prev"),
-			       "player_start",
-			       KShortcut(),
-			       this, SLOT(prev()),
-			       d->actionCollection,
-			       "prev" );
-  //d->actionSeek = new K3b::AudioTrackPlayerSeekAction( this, d->actionCollection, "seek" );
+    d->actionStop = createAction( this, i18n("Stop"),
+                                  "media-playback-stop",
+                                  QKeySequence(),
+                                  this, SLOT(stop()),
+                                  actionCollection,
+                                  "player_stop" );
+    d->actionNext = createAction( this, i18n("Next"),
+                                  "media-skip-forward",
+                                  QKeySequence(),
+                                  this, SLOT(next()),
+                                  actionCollection,
+                                  "player_next" );
+    d->actionPrevious = createAction( this, i18n("Previous"),
+                                      "media-skip-backward",
+                                      QKeySequence(),
+                                      this, SLOT(previous()),
+                                      actionCollection,
+                                      "player_previous" );
+    d->actionSeek = new AudioTrackPlayerSeekAction( this, actionCollection );
+    if( actionCollection ) {
+        actionCollection->addAction( "player_seek", d->actionSeek );
+    }
 
-  d->actionStop->setEnabled(false);
-  d->actionPause->setEnabled(false);
-  d->actionNext->setEnabled(false);
-  d->actionPrev->setEnabled(false);
-  //d->actionSeek->setEnabled(false);
+    d->actionStop->setEnabled( false );
+    d->actionPause->setEnabled( false );
+    d->actionNext->setEnabled( false );
+    d->actionPrevious->setEnabled( false );
+    d->actionSeek->setEnabled( false );
 
-  connect( m_doc, SIGNAL(changed()),
-	   this, SLOT(slotDocChanged()) );
-  connect( m_doc, SIGNAL(trackChanged(K3b::AudioTrack*)),
-	   this, SLOT(slotTrackChanged(K3b::AudioTrack*)) );
-  connect( m_doc, SIGNAL(trackRemoved(K3b::AudioTrack*)),
-	   this, SLOT(slotTrackRemoved(K3b::AudioTrack*)) );
-  connect( &d->sliderTimer, SIGNAL(timeout()),
-	   this, SLOT(slotUpdateSlider()) );
+    connect( d->doc, SIGNAL(changed()),
+             this, SLOT(slotDocChanged()) );
+    connect( d->doc, SIGNAL(trackChanged(K3b::AudioTrack*)),
+             this, SLOT(slotTrackChanged(K3b::AudioTrack*)) );
+    connect( d->doc, SIGNAL(trackRemoved(K3b::AudioTrack*)),
+             this, SLOT(slotTrackRemoved(K3b::AudioTrack*)) );
+    connect( d->audioOutput, SIGNAL(notify()),
+             this, SLOT(slotUpdateSlider()) );
+    connect( d->audioOutput, SIGNAL(stateChanged(QAudio::State)),
+             this, SLOT(slotStateChanged(QAudio::State)) );
+    connect( d->audioDocReader, SIGNAL(currentTrackChanged(K3b::AudioTrack)),
+             this, SLOT(slotCurrentTrackChanged(K3b::AudioTrack)) );
 
-  // we just stop the player if the audio server has an error. K3b::MainWindow will show the error message
-  // This is all very hacky and has to be improved for K3b 2.0. But then we will probably use Phonon anyway...
-  connect( K3b::AudioServer::instance(), SIGNAL(error(const QString&)), this, SLOT(stop()) );
-
-  // tooltips
-  d->actionPlay->setToolTip( i18n("Play") );
-  d->actionStop->setToolTip( i18n("Stop") );
-  d->actionPause->setToolTip( i18n("Pause") );
-  d->actionNext->setToolTip( i18n("Next") );
-  d->actionPrev->setToolTip( i18n("Previous") );
+    // tooltips
+    d->actionPlay->setToolTip( i18n("Play") );
+    d->actionStop->setToolTip( i18n("Stop") );
+    d->actionPause->setToolTip( i18n("Pause") );
+    d->actionNext->setToolTip( i18n("Next") );
+    d->actionPrevious->setToolTip( i18n("Previous") );
 }
 
 
-K3b::AudioTrackPlayer::~AudioTrackPlayer()
+AudioTrackPlayer::~AudioTrackPlayer()
 {
-  stop();
-  delete d;
 }
 
 
-KAction* K3b::AudioTrackPlayer::action( int action ) const
+AudioTrack* AudioTrackPlayer::currentPlayingTrack() const
 {
-  switch( action ) {
-  case ACTION_PLAY:
-    return d->actionPlay;
-  case ACTION_PAUSE:
-    return d->actionPause;
-  case ACTION_PLAY_PAUSE:
-    return d->actionPlayPause;
-  case ACTION_STOP:
-    return d->actionStop;
-  case ACTION_NEXT:
-    return d->actionNext;
-  case ACTION_PREV:
-    return d->actionPrev;
-  //case ACTION_SEEK:
-    //return d->actionSeek;
-  default:
-    return 0;
-  }
+    if( AudioTrackReader* reader = d->audioDocReader->currentTrackReader() )
+        return &reader->track();
+    else
+        return 0;
 }
 
 
-void K3b::AudioTrackPlayer::playTrack( K3b::AudioTrack* track )
+void AudioTrackPlayer::playTrack( const K3b::AudioTrack& track )
 {
-  if( track ) {
-    // we show the currently playing track as a tooltip on the slider
+    d->audioDocReader->setCurrentTrack( track );
+}
+
+
+void AudioTrackPlayer::playPause()
+{
+    if( d->audioOutput->state() == QAudio::StoppedState ) {
+        d->actionPlayPause->setIcon( KIcon( "media-playback-start" ) );
+        d->actionPause->setEnabled( true );
+        d->actionPlay->setEnabled( false );
+        d->actionStop->setEnabled( true );
+        d->actionSeek->setEnabled( true );
+        d->audioDocReader->open();
+        d->audioOutput->start( d->audioDocReader );
+    }
+    else if( d->audioOutput->state() == QAudio::SuspendedState ) {
+        d->actionPlayPause->setIcon( KIcon( "media-playback-pause" ) );
+        d->actionPause->setEnabled( true );
+        d->actionPlay->setEnabled( false );
+        d->actionStop->setEnabled( true );
+        d->audioOutput->resume();
+    }
+    else {
+        d->actionPlayPause->setIcon( KIcon( "media-playback-start" ) );
+        d->actionPause->setEnabled( false );
+        d->actionPlay->setEnabled( true );
+        d->actionStop->setEnabled( true );
+        d->audioOutput->suspend();
+    }
+}
+
+
+void AudioTrackPlayer::stop()
+{
+    d->actionStop->setEnabled( false );
+    d->actionPause->setEnabled( false );
+    d->actionPlay->setEnabled( true );
+    d->actionSeek->setEnabled( false );
+    d->actionNext->setEnabled( false );
+    d->actionPrevious->setEnabled( false );
+    d->audioOutput->stop();
+    d->audioDocReader->close();
+
+    d->actionPlayPause->setIcon( KIcon( "media-playback-start" ) );
+
+    emit stopped();
+}
+
+
+void AudioTrackPlayer::next()
+{
+    d->audioDocReader->nextTrack();
+}
+
+
+void AudioTrackPlayer::previous()
+{
+    d->audioDocReader->previousTrack();
+}
+
+
+void AudioTrackPlayer::slotSeek( int bytes )
+{
+    if( AudioTrackReader* reader = d->audioDocReader->currentTrackReader() ) {
+        reader->seek( bytes );
+    }
+}
+
+
+void AudioTrackPlayer::slotTrackRemoved( K3b::AudioTrack* /*track*/ )
+{
+    /*if( m_currentTrack == track ) {
+        stop();
+        m_currentTrack = 0;
+    }*/
+}
+
+
+void AudioTrackPlayer::slotTrackChanged( K3b::AudioTrack* /*track*/ )
+{
 /*
-    d->actionSeek->setToolTip( i18n("Playing track %1: %2 - %3")
-                               .arg(track->trackNumber())
-                               .arg(track->artist())
-                               .arg(track->title()) );
-    d->actionSeek->setMaxValue( track->length().totalFrames() );
+    if( m_currentTrack == track ) {
+        d->actionSeek->setMaximum( track->length().audioBytes() );
+    }
 */
-    m_currentTrack = track;
-    d->paused = true;
+}
 
-    d->actionNext->setEnabled( m_currentTrack->next() != 0 );
-    d->actionPrev->setEnabled( m_currentTrack->prev() != 0 );
 
-    seek(0);
-    playPause();
+void AudioTrackPlayer::slotUpdateSlider()
+{
+    if( AudioTrackReader* reader = d->audioDocReader->currentTrackReader() )
+        d->actionSeek->setValue( reader->pos() );
+}
+
+
+void AudioTrackPlayer::slotDocChanged()
+{/*
+    // update the controls in case a new track has been added before or after
+    // the current one and it has been the first or last track
+    if( m_currentTrack ) {
+        d->actionNext->setEnabled( m_currentTrack->next() != 0 );
+        d->actionPrevious->setEnabled( m_currentTrack->prev() != 0 );
+    }*/
+}
+
+
+void AudioTrackPlayer::slotCurrentTrackChanged( const K3b::AudioTrack& track )
+{
+    // we show the currently playing track as a tooltip on the slider
+    d->actionSeek->setToolTip( i18n("Playing track %1: %2 - %3")
+                                .arg(track.trackNumber())
+                                .arg(track.artist())
+                                .arg(track.title()) );
+    d->actionSeek->setMaximum( track.length().audioBytes() );
+    d->actionNext->setEnabled( &track != d->doc->lastTrack() );
+    d->actionPrevious->setEnabled( &track != d->doc->firstTrack() );
 
     emit playingTrack( track );
-  }
 }
 
 
-void K3b::AudioTrackPlayer::playPause()
+void AudioTrackPlayer::slotStateChanged( QAudio::State state )
 {
-  if( !m_currentTrack ) {
-    playTrack( m_doc->firstTrack() );
-  }
-  else {
-    if( !d->playing ) {
-      seek( m_currentPosition );
-      d->playing = true;
-      d->actionPlayPause->setIcon( "media-playback-start" );
-      d->actionPause->setEnabled(true);
-      d->actionPlay->setEnabled(false);
-      //d->actionSeek->setEnabled(true);
-      startStreaming();
-      d->sliderTimer.start(1000);
+    switch( state )
+    {
+        case QAudio::ActiveState:
+            emit started();
+            break;
+        case QAudio::SuspendedState:
+            emit paused();
+            break;
+        case QAudio::IdleState:
+        case QAudio::StoppedState:
+        default:
+            emit stopped();
+            break;
     }
-    else if( d->paused ) {
-      d->paused = false;
-      d->actionPlayPause->setIcon( "media-playback-pause" );
-      d->actionPause->setEnabled(true);
-      d->actionPlay->setEnabled(false);
-      startStreaming();
-      d->sliderTimer.start(1000);
-
-      emit paused( false );
-    }
-    else {
-      d->paused = true;
-      d->actionPlayPause->setIcon( "media-playback-start" );
-      d->actionPause->setEnabled(false);
-      d->actionPlay->setEnabled(true);
-      stopStreaming();
-      d->sliderTimer.stop();
-
-      emit paused( true );
-    }
-
-    d->actionStop->setEnabled(true);
-  }
 }
 
-
-void K3b::AudioTrackPlayer::stop()
-{
-  m_currentTrack = 0;
-  m_currentPosition = 0;
-  stopStreaming();
-  d->paused = false;
-  d->playing = false;
-  d->actionStop->setEnabled(false);
-  d->actionPause->setEnabled(false);
-  d->actionPlay->setEnabled(true);
-  //d->actionSeek->setEnabled(false);
-  d->actionNext->setEnabled(false);
-  d->actionPrev->setEnabled(false);
-  d->sliderTimer.stop();
-
-  d->actionPlayPause->setIcon( "media-playback-start" );
-
-  emit stopped();
-}
-
-
-void K3b::AudioTrackPlayer::next()
-{
-  if( m_currentTrack && m_currentTrack->next() ) {
-    playTrack( m_currentTrack->next() );
-  }
-}
-
-
-void K3b::AudioTrackPlayer::prev()
-{
-  if( m_currentTrack && m_currentTrack->prev() ) {
-    playTrack( m_currentTrack->prev() );
-  }
-}
-
-
-void K3b::AudioTrackPlayer::seek( const K3b::Msf& msf )
-{
-  if( m_currentTrack ) {
-    if( msf < m_currentTrack->length() ) {
-      QMutexLocker locker( &d->mutex );
-      m_currentTrack->seek( msf );
-      m_currentPosition = msf;
-      slotUpdateSlider();
-    }
-    else
-      next();
-  }
-}
-
-
-void K3b::AudioTrackPlayer::slotSeek( int frames )
-{
-  seek( K3b::Msf( frames ) );
-}
-
-
-int K3b::AudioTrackPlayer::read( char* data, int maxlen )
-{
-  if( m_currentTrack ) {
-    QMutexLocker locker( &d->mutex );
-    int len = m_currentTrack->read( data, maxlen );
-    locker.unlock();
-    if( len > 0 ) {
-      m_currentPosition += (int)( (double)len / 2352.0 + 0.5 );
-    }
-    else if( m_currentTrack->next() ) {
-      // play the next track
-      next();
-      return read( data, maxlen );
-    }
-    else {
-      stop();
-      return -1; // no more tracks
-    }
-
-    return len;
-  }
-  else
-    return -1;
-}
-
-
-void K3b::AudioTrackPlayer::slotTrackRemoved( K3b::AudioTrack* track )
-{
-  if( m_currentTrack == track ) {
-    stop();
-    m_currentTrack = 0;
-  }
-}
-
-
-void K3b::AudioTrackPlayer::slotTrackChanged( K3b::AudioTrack* track )
-{
-/*
-  if( m_currentTrack == track ) {
-    d->actionSeek->setMaxValue( track->length().totalFrames() );
-  }
-*/
-}
-
-
-void K3b::AudioTrackPlayer::slotUpdateSlider()
-{
-  //d->actionSeek->setValue( m_currentPosition.totalFrames() );
-}
-
-
-void K3b::AudioTrackPlayer::slotDocChanged()
-{
-  // update the controls in case a new track has been added before or after
-  // the current one and it has been the first or last track
-  if( m_currentTrack ) {
-    d->actionNext->setEnabled( m_currentTrack->next() != 0 );
-    d->actionPrev->setEnabled( m_currentTrack->prev() != 0 );
-  }
-}
+} // namespace K3b
 
 #include "k3baudiotrackplayer.moc"

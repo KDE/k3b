@@ -1,5 +1,6 @@
 install( FILES
   k3baudiodoc.h
+  k3baudiodocreader.h
   k3baudiojob.h
   k3baudiocdtrackdrag.h
   k3baudiotrack.h

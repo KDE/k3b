@@ -152,6 +152,7 @@ set(k3b_project_audiocd_SRCS
   projects/audiocd/k3baudiotrack.cpp
   projects/audiocd/k3baudiotrackreader.cpp
   projects/audiocd/k3baudiodoc.cpp
+  projects/audiocd/k3baudiodocreader.cpp
   projects/audiocd/k3baudiofile.cpp
   projects/audiocd/k3baudiofilereader.cpp
   projects/audiocd/k3baudiozerodata.cpp

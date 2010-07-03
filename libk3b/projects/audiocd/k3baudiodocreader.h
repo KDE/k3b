@@ -1,5 +1,6 @@
 /*
  *
+ * Copyright (C) 2004 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
@@ -12,8 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_AUDIO_TRACK_READER_H_
-#define _K3B_AUDIO_TRACK_READER_H_
+#ifndef _K3B_AUDIO_DOC_READER_H_
+#define _K3B_AUDIO_DOC_READER_H_
 
 #include "k3b_export.h"
 
@@ -22,23 +23,34 @@
 
 namespace K3b {
 
+    class AudioDoc;
     class AudioTrack;
+    class AudioTrackReader;
 
-    class LIBK3B_EXPORT AudioTrackReader : public QIODevice
+    class LIBK3B_EXPORT AudioDocReader : public QIODevice
     {
+        Q_OBJECT
+
     public:
-        AudioTrackReader( AudioTrack& track, QObject* parent = 0 );
-        ~AudioTrackReader();
+        AudioDocReader( AudioDoc& doc, QObject* parent = 0 );
+        ~AudioDocReader();
 
-        const AudioTrack& track() const;
-        AudioTrack& track();
+        AudioTrackReader* currentTrackReader() const;
+        bool setCurrentTrack( const AudioTrack& track );
 
-        virtual bool open( OpenMode mode );
+        virtual bool open( OpenMode mode = ReadOnly );
         virtual void close();
         virtual bool isSequential() const;
         virtual qint64 pos() const;
         virtual qint64 size() const;
         virtual bool seek( qint64 pos );
+
+    public Q_SLOTS:
+        void nextTrack();
+        void previousTrack();
+
+    Q_SIGNALS:
+        void currentTrackChanged( const K3b::AudioTrack& track );
 
     protected:
         virtual qint64 writeData( const char* data, qint64 len );
@@ -47,9 +59,9 @@ namespace K3b {
     private:
         class Private;
         QScopedPointer<Private> d;
-        Q_DISABLE_COPY(AudioTrackReader)
+        Q_DISABLE_COPY(AudioDocReader)
     };
 
 } // namespace K3b
 
-#endif // _K3B_AUDIO_TRACK_READER_H_
+#endif // _K3B_AUDIO_DOC_READER_H_
