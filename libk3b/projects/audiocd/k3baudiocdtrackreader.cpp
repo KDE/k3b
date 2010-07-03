@@ -169,7 +169,7 @@ qint64 AudioCdTrackReader::readData( char* data, qint64 /*maxlen*/ )
             if( buf == 0 ) {
                 // done
                 d->closeParanoia();
-                return 0;
+                return -1;
             }
             else {
                 ++d->position;

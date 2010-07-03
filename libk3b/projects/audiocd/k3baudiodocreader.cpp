@@ -221,7 +221,7 @@ qint64 AudioDocReader::readData( char* data, qint64 maxlen )
     }
 
     qint64 readData = (*d->currentReader)->read( data, maxlen );
-    if( readData == 0 ) {
+    if( readData < 0 ) {
         ++d->currentReader;
         if( d->currentReader != d->readers.end() ) {
             emit currentTrackChanged( (*d->currentReader)->track() );

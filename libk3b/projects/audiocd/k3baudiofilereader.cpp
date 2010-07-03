@@ -112,10 +112,13 @@ qint64 AudioFileReader::readData( char* data, qint64 maxlen )
 
     qint64 read = d->source.decoder()->decode( data, maxlen );
 
-    if( read > 0 )
+    if( read > 0 ) {
         d->decodedData += read;
-
-    return read;
+        return read;
+    }
+    else {
+        return -1;
+    }
 }
 
 } // namespace K3b

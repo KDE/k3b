@@ -101,6 +101,8 @@ K3b::AudioTrack::~AudioTrack()
 
 void K3b::AudioTrack::emitChanged()
 {
+    emit changed();
+
     if( m_parent && !m_currentlyDeleting )
         m_parent->slotTrackChanged( this );
 }

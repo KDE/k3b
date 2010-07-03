@@ -17,41 +17,93 @@
 #include "k3baudiodatasource.h"
 #include "k3baudiotrack.h"
 
-#include <QLinkedList>
+#include <QList>
 #include <QMutex>
 #include <QMutexLocker>
 
 namespace K3b {
 
 namespace {
-    typedef QLinkedList< QIODevice* > IODevices;
+    typedef QList< QIODevice* > IODevices;
 }
 
 class AudioTrackReader::Private
 {
 public:
-    Private( AudioTrack& t )
-    :
-        track( t ),
-        alreadyReadBytes( 0 ),
-        currentReader( readers.end() )
-    {
-    }
+    Private( AudioTrackReader& audioTrackReader, AudioTrack& t );
+    void slotSourceAdded( int position );
+    void slotSourceAboutToBeRemoved( int position );
+    void slotTrackChanged();
 
+    AudioTrackReader& q;
     AudioTrack& track;
-    qint64 alreadyReadBytes;
+    qint64 pos;
     IODevices readers;
-    IODevices::const_iterator currentReader;
+    int current;
 
     // used to make sure that no seek and read operation occur in parallel
     QMutex mutex;
 };
 
 
+AudioTrackReader::Private::Private( AudioTrackReader& audioTrackReader, AudioTrack& t )
+:
+    q( audioTrackReader ),
+    track( t ),
+    pos( 0 ),
+    current( -1 )
+{
+}
+
+
+void AudioTrackReader::Private::slotSourceAdded( int position )
+{
+    if( q.isOpen() ) {
+        QMutexLocker locker( &mutex );
+        if( position >= 0 && position <= readers.size() ) { // No mistake here, "position" can have size() value
+            if( AudioDataSource* source = track.getSource( position ) ) {
+                readers.insert( position, source->createReader() );
+                readers.at( position )->open( q.openMode() );
+                if( position == current )
+                    readers.at( position )->seek( 0 );
+            }
+        }
+    }
+}
+
+
+void AudioTrackReader::Private::slotSourceAboutToBeRemoved( int position )
+{
+    if( q.isOpen() ) {
+        QMutexLocker locker( &mutex );
+        if( position >= 0 && position < readers.size() ) {
+            if( position == current )
+                ++current;
+            readers.removeAt( position );
+        }
+    }
+}
+
+
+void AudioTrackReader::Private::slotTrackChanged()
+{
+    QMutexLocker locker( &mutex );
+    if( pos >= q.size() && pos > 0 ) {
+        pos = q.size() - 1LL;
+    }
+}
+
+
 AudioTrackReader::AudioTrackReader( AudioTrack& track, QObject* parent )
     : QIODevice( parent ),
-      d( new Private( track ) )
+      d( new Private( *this, track ) )
 {
+    connect( &track, SIGNAL(sourceAdded(int)),
+             this, SLOT(slotSourceAdded(int)) );
+    connect( &track, SIGNAL(sourceAboutToBeRemoved(int)),
+             this, SLOT(slotSourceAboutToBeRemoved(int)) );
+    connect( &track, SIGNAL(changed()),
+             this, SLOT(slotTrackChanged()) );
 }
 
 
@@ -59,6 +111,7 @@ AudioTrackReader::~AudioTrackReader()
 {
     qDeleteAll( d->readers.begin(), d->readers.end() );
     d->readers.clear();
+    d->current = -1;
 }
 
 
@@ -83,10 +136,10 @@ bool AudioTrackReader::open( QIODevice::OpenMode mode )
             d->readers.back()->open( mode );
         }
 
-        d->alreadyReadBytes = 0;
-        d->currentReader = d->readers.begin();
-        if( d->currentReader != d->readers.end() ) {
-            (*d->currentReader)->seek( 0 );
+        d->pos = 0;
+        if( !d->readers.isEmpty() ) {
+            d->current = 0;
+            d->readers.at( d->current )->seek( 0 );
         }
 
         return QIODevice::open( mode );
@@ -113,7 +166,7 @@ bool AudioTrackReader::isSequential() const
 
 qint64 AudioTrackReader::pos() const
 {
-    return d->alreadyReadBytes;
+    return d->pos;
 }
 
 
@@ -127,17 +180,17 @@ bool AudioTrackReader::seek( qint64 pos )
 {
     QMutexLocker locker( &d->mutex );
 
-    IODevices::const_iterator reader = d->readers.begin();
+    int next = 0;
     qint64 curPos = 0;
 
-    for( ; reader != d->readers.end() && curPos + (*reader)->size() < pos; ++reader ) {
-        curPos += (*reader)->size();
+    for( ; next < d->readers.size() && curPos + d->readers.at( next )->size() < pos; ++next ) {
+        curPos += d->readers.at( next )->size();
     }
 
-    if( reader != d->readers.end() ) {
-        d->currentReader = reader;
-        d->alreadyReadBytes = pos;
-        return (*reader)->seek( pos - curPos );
+    if( next < d->readers.size() ) {
+        d->current = next;
+        d->pos = pos;
+        return d->readers.at( next )->seek( pos - curPos );
     }
     else {
         return false;
@@ -155,26 +208,33 @@ qint64 AudioTrackReader::readData( char* data, qint64 maxlen )
 {
     QMutexLocker locker( &d->mutex );
 
-    if( d->currentReader == d->readers.end() ) {
-        d->currentReader = d->readers.begin();
-        if( d->currentReader != d->readers.end() ) {
-            (*d->currentReader)->seek( 0 );
+//     if( d->current < 0 || d->current >= d->readers.size() ) {
+//         d->current = 0;
+//         if(  d->current < d->readers.size() ) {
+//             d->readers.at( d->current )->seek( 0 );
+//         }
+//         d->pos = 0;
+//     }
+
+    if( d->current >= 0 && d->current < d->readers.size() ) {
+        qint64 readData = d->readers.at( d->current )->read( data, maxlen );
+        if( readData == 0 ) {
+            ++d->current;
+            if( d->current >= 0 && d->current < d->readers.size() ) {
+                d->readers.at( d->current )->seek( 0 );
+                return read( data, maxlen ); // read from next source
+            }
         }
-        d->alreadyReadBytes = 0;
+
+        d->pos += readData;
+
+        return readData;
     }
-
-    qint64 readData = (*d->currentReader)->read( data, maxlen );
-    if( readData == 0 ) {
-        ++d->currentReader;
-        if( d->currentReader != d->readers.end() ) {
-            (*d->currentReader)->seek( 0 );
-            return read( data, maxlen ); // read from next source
-        }
+    else {
+        return -1;
     }
-
-    d->alreadyReadBytes += readData;
-
-    return readData;
 }
 
 } // namespace K3b
+
+#include "k3baudiotrackreader.moc"

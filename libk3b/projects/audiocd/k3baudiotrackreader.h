@@ -26,6 +26,8 @@ namespace K3b {
 
     class LIBK3B_EXPORT AudioTrackReader : public QIODevice
     {
+        Q_OBJECT
+
     public:
         AudioTrackReader( AudioTrack& track, QObject* parent = 0 );
         ~AudioTrackReader();
@@ -48,6 +50,9 @@ namespace K3b {
         class Private;
         QScopedPointer<Private> d;
         Q_DISABLE_COPY(AudioTrackReader)
+        Q_PRIVATE_SLOT( d, void slotSourceAdded( int position ) )
+        Q_PRIVATE_SLOT( d, void slotSourceAboutToBeRemoved( int position ) )
+        Q_PRIVATE_SLOT( d, void slotTrackChanged() )
     };
 
 } // namespace K3b

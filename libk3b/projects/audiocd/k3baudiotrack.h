@@ -193,6 +193,7 @@ namespace K3b {
         void sourceRemoved( int position );
         void sourceAboutToBeAdded( int position );
         void sourceAdded( int position );
+        void changed();
 
     protected:
         /**
