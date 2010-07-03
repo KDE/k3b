@@ -27,6 +27,7 @@ class QTreeView;
 namespace K3b {
     class AudioDataSource;
     class AudioDoc;
+    class AudioProjectDelegate;
     class AudioProjectModel;
     class AudioTrack;
     class AudioTrackPlayer;
@@ -62,6 +63,8 @@ namespace K3b {
         void slotSelectionChanged();
         void slotAudioConversion();
         void slotAdjustColumns();
+        void slotPlayingTrack( const K3b::AudioTrack& track );
+        void slotPlayerStopped();
 
     private:
         void tracksForIndexes( QList<AudioTrack*>& tracks,
@@ -74,6 +77,7 @@ namespace K3b {
         AudioDoc* m_doc;
         AudioProjectModel* m_model;
         QTreeView* m_trackView;
+        AudioProjectDelegate* m_delegate;
         AudioTrackPlayer* m_player;
         ViewColumnAdjuster* m_columnAdjuster;
         bool m_updatingColumnWidths;

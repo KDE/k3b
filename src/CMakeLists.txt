@@ -44,6 +44,7 @@ set(k3b_project_SRCS
   projects/k3baudiotracksplitdialog.cpp
   projects/k3baudioview.cpp
   projects/k3baudioviewimpl.cpp
+  projects/k3baudioprojectdelegate.cpp
   projects/k3baudioprojectmodel.cpp
   projects/k3bmixedburndialog.cpp
   projects/k3bmixedview.cpp

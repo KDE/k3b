@@ -47,7 +47,7 @@ namespace K3b {
         AudioTrack* trackForIndex( const QModelIndex& index ) const;
         AudioDataSource* sourceForIndex( const QModelIndex& index ) const;
 
-        QModelIndex indexForTrack( AudioTrack* track ) const;
+        QModelIndex indexForTrack( const AudioTrack* track ) const;
         QModelIndex indexForSource( AudioDataSource* source ) const;
 
         int columnCount( const QModelIndex& parent = QModelIndex() ) const;
@@ -72,9 +72,9 @@ namespace K3b {
         Q_PRIVATE_SLOT( d, void _k_trackAdded() )
         Q_PRIVATE_SLOT( d, void _k_trackAboutToBeRemoved( int position ) )
         Q_PRIVATE_SLOT( d, void _k_trackRemoved() )
-        Q_PRIVATE_SLOT( d, void _k_sourceAboutToBeAdded( K3b::AudioTrack* parent, int position ) )
+        Q_PRIVATE_SLOT( d, void _k_sourceAboutToBeAdded( const K3b::AudioTrack* parent, int position ) )
         Q_PRIVATE_SLOT( d, void _k_sourceAdded() )
-        Q_PRIVATE_SLOT( d, void _k_sourceAboutToBeRemoved( K3b::AudioTrack* parent, int position ) )
+        Q_PRIVATE_SLOT( d, void _k_sourceAboutToBeRemoved( const K3b::AudioTrack* parent, int position ) )
         Q_PRIVATE_SLOT( d, void _k_sourceRemoved() )
     };
 }

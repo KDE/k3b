@@ -22,6 +22,7 @@
 #include "k3baudiodecoder.h"
 #include "k3baudiodoc.h"
 #include "k3baudiofile.h"
+#include "k3baudioprojectdelegate.h"
 #include "k3baudioprojectmodel.h"
 #include "k3baudiotrack.h"
 #include "k3baudiotrackaddingdialog.h"
@@ -55,11 +56,13 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_doc( doc ),
     m_model( new AudioProjectModel( doc, view ) ),
     m_trackView( new QTreeView( view ) ),
+    m_delegate( new AudioProjectDelegate( *m_trackView, this ) ),
     m_player( new AudioTrackPlayer( doc, actionCollection, this ) ),
     m_columnAdjuster( new ViewColumnAdjuster( this ) ),
     m_updatingColumnWidths( false )
 {
     m_trackView->setModel( m_model );
+    m_trackView->setItemDelegate( m_delegate );
     m_trackView->setAcceptDrops( true );
     m_trackView->setDragEnabled( true );
     m_trackView->setDragDropMode( QTreeView::DragDrop );
@@ -99,6 +102,10 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
              this, SLOT( slotAdjustColumns() ) );
     connect( m_trackView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              this, SLOT(slotSelectionChanged()) );
+    connect( m_player, SIGNAL(playingTrack(K3b::AudioTrack)),
+             this, SLOT(slotPlayingTrack(K3b::AudioTrack)) );
+    connect( m_player, SIGNAL(stopped()),
+             this, SLOT(slotPlayerStopped()) );
 
     // Create audio context menu
     QAction* separator = new QAction( this );
@@ -475,6 +482,18 @@ void K3b::AudioViewImpl::slotAdjustColumns()
     }
 
     m_updatingColumnWidths = false;
+}
+
+
+void K3b::AudioViewImpl::slotPlayingTrack( const K3b::AudioTrack& track )
+{
+    m_delegate->setPlayingTrack( m_model->indexForTrack( &track ) );
+}
+
+
+void K3b::AudioViewImpl::slotPlayerStopped()
+{
+    m_delegate->setPlayingTrack( QModelIndex() );
 }
 
 
