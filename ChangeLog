@@ -2,6 +2,7 @@
 =====
 Bugfixes:
  * Freeze on ripping Audio CD using external encoder to MP3 or FLAC (236466)
+ * Drag and drop from Dolphin doesn't work (242745)
 
 2.0
 ===
