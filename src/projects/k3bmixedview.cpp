@@ -85,36 +85,31 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
 
     // Setup toolbar
     m_audioActions.push_back( actionCollection()->action( "project_audio_convert" ) );
+    m_audioActions += createPluginsActions( doc->audioDoc()->type() );
+
+    QList<QAction*> playerActions;
+    playerActions.push_back( actionCollection()->action( "player_previous" ) );
+    playerActions.push_back( actionCollection()->action( "player_play" ) );
+    playerActions.push_back( actionCollection()->action( "player_pause" ) );
+    playerActions.push_back( actionCollection()->action( "player_stop" ) );
+    playerActions.push_back( actionCollection()->action( "player_next" ) );
+    playerActions.push_back( actionCollection()->action( "player_seek" ) );
+
     m_dataActions.push_back( actionCollection()->action( "parent_dir" ) );
-    QList<QAction*> audioPluginActions = createPluginsActions( doc->audioDoc()->type() );
-    QList<QAction*> dataPluginActions = createPluginsActions( doc->dataDoc()->type() );
+    m_dataActions += createPluginsActions( doc->dataDoc()->type() );
 
     toolBox()->addActions( m_audioActions );
-    toolBox()->addActions( m_dataActions );
     toolBox()->addSeparator();
-    toolBox()->addActions( audioPluginActions );
-    toolBox()->addActions( dataPluginActions );
+    toolBox()->addActions( playerActions );
+    toolBox()->addSeparator();
+    toolBox()->addActions( m_dataActions );
     toolBox()->addSeparator();
     m_dataActions.push_back( toolBox()->addWidget( new VolumeNameWidget( doc->dataDoc(), toolBox() ) ) );
 
-    m_audioActions += audioPluginActions;
-    m_dataActions += dataPluginActions;
+    m_audioActions += playerActions;
 
     if( m_dirProxy->rowCount() > 0 )
         m_dirView->setCurrentIndex( m_dirProxy->index( 0, 0 ) );
-
-#ifdef __GNUC__
-#warning enable player once ported to Phonon
-#endif
-//   toolBox()->addAction( m_audioListView->player()->action( K3b::AudioTrackPlayer::ACTION_PLAY ) );
-//   toolBox()->addAction( m_audioListView->player()->action( K3b::AudioTrackPlayer::ACTION_PAUSE ) );
-//   toolBox()->addAction( m_audioListView->player()->action( K3b::AudioTrackPlayer::ACTION_STOP ) );
-//   toolBox()->addSpacing();
-//   toolBox()->addAction( m_audioListView->player()->action( K3b::AudioTrackPlayer::ACTION_PREV ) );
-//   toolBox()->addAction( m_audioListView->player()->action( K3b::AudioTrackPlayer::ACTION_NEXT ) );
-//   toolBox()->addSpacing();
-//   m_audioListView->player()->action( K3b::AudioTrackPlayer::ACTION_SEEK )->plug( toolBox() );
-//   toolBox()->addSeparator();
 }
 
 
