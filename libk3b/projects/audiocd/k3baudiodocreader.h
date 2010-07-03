@@ -60,6 +60,8 @@ namespace K3b {
         class Private;
         QScopedPointer<Private> d;
         Q_DISABLE_COPY(AudioDocReader)
+        Q_PRIVATE_SLOT( d, void slotTrackAdded( int position ) )
+        Q_PRIVATE_SLOT( d, void slotTrackAboutToBeRemoved( int position ) )
     };
 
 } // namespace K3b

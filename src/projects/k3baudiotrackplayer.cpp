@@ -19,6 +19,7 @@
 #include "k3baudiodocreader.h"
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
+#include "k3bmsf.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -166,12 +167,6 @@ AudioTrackPlayer::AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionColl
         actionCollection->addAction( "player_seek", d->actionSeek );
     }
 
-    connect( d->doc, SIGNAL(changed()),
-             this, SLOT(slotDocChanged()) );
-    connect( d->doc, SIGNAL(trackChanged(K3b::AudioTrack*)),
-             this, SLOT(slotTrackChanged(K3b::AudioTrack*)) );
-    connect( d->doc, SIGNAL(trackAboutToBeRemoved(int)),
-             this, SLOT(slotTrackAboutToBeRemoved(int)) );
     connect( d->audioOutput, SIGNAL(notify()),
              this, SLOT(slotUpdateSlider()) );
     connect( d->audioOutput, SIGNAL(stateChanged(QAudio::State)),
@@ -216,8 +211,9 @@ void AudioTrackPlayer::play()
 {
     if( d->audioOutput->state() == QAudio::StoppedState ||
         d->audioOutput->state() == QAudio::IdleState ) {
-        d->audioDocReader->open();
-        d->audioOutput->start( d->audioDocReader );
+        if( d->audioDocReader->open() ) {
+            d->audioOutput->start( d->audioDocReader );
+        }
     }
     else if( d->audioOutput->state() == QAudio::SuspendedState ) {
         d->audioOutput->resume();
@@ -257,40 +253,10 @@ void AudioTrackPlayer::slotSeek( int bytes )
 }
 
 
-void AudioTrackPlayer::slotTrackAboutToBeRemoved( int /*position*/ )
-{
-    /*if( m_currentTrack == track ) {
-        stop();
-        m_currentTrack = 0;
-    }*/
-}
-
-
-void AudioTrackPlayer::slotTrackChanged( K3b::AudioTrack* /*track*/ )
-{
-/*
-    if( m_currentTrack == track ) {
-        d->actionSeek->setMaximum( track->length().audioBytes() );
-    }
-*/
-}
-
-
 void AudioTrackPlayer::slotUpdateSlider()
 {
     if( AudioTrackReader* reader = d->audioDocReader->currentTrackReader() )
         d->actionSeek->setValue( reader->pos() );
-}
-
-
-void AudioTrackPlayer::slotDocChanged()
-{/*
-    // update the controls in case a new track has been added before or after
-    // the current one and it has been the first or last track
-    if( m_currentTrack ) {
-        d->actionNext->setEnabled( m_currentTrack->next() != 0 );
-        d->actionPrevious->setEnabled( m_currentTrack->prev() != 0 );
-    }*/
 }
 
 

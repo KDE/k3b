@@ -43,6 +43,7 @@ AudioZeroDataReader::AudioZeroDataReader( AudioZeroData& source, QObject* parent
 
 AudioZeroDataReader::~AudioZeroDataReader()
 {
+    close();
 }
 
 

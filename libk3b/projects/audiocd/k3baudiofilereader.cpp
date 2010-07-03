@@ -44,6 +44,7 @@ AudioFileReader::AudioFileReader( AudioFile& source, QObject* parent )
 
 AudioFileReader::~AudioFileReader()
 {
+    close();
 }
 
 

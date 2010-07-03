@@ -18,9 +18,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QScopedPointer>
-#include <QtMultimedia/qaudio.h>
-
-#include "k3bmsf.h"
+#include <QtMultimedia/QAudio>
 
 class KActionCollection;
 
@@ -55,10 +53,7 @@ namespace K3b {
 
     private Q_SLOTS:
         void slotSeek( int );
-        void slotTrackChanged( K3b::AudioTrack* track );
-        void slotTrackAboutToBeRemoved( int position );
         void slotUpdateSlider();
-        void slotDocChanged();
         void slotCurrentTrackChanged( const K3b::AudioTrack& track );
         void slotStateChanged( QAudio::State state );
 

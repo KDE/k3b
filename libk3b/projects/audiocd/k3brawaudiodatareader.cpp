@@ -44,6 +44,7 @@ RawAudioDataReader::RawAudioDataReader( RawAudioDataSource& source, QObject* par
 
 RawAudioDataReader::~RawAudioDataReader()
 {
+    close();
 }
 
 

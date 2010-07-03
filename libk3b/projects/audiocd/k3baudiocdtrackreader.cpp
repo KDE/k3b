@@ -131,7 +131,7 @@ AudioCdTrackReader::AudioCdTrackReader( AudioCdTrackSource& source, QObject* par
 
 AudioCdTrackReader::~AudioCdTrackReader()
 {
-    d->closeParanoia();
+    close();
 }
 
 

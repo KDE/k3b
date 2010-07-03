@@ -109,8 +109,7 @@ AudioTrackReader::AudioTrackReader( AudioTrack& track, QObject* parent )
 
 AudioTrackReader::~AudioTrackReader()
 {
-    qDeleteAll( d->readers.begin(), d->readers.end() );
-    d->readers.clear();
+    close();
     d->current = -1;
 }
 
@@ -133,7 +132,10 @@ bool AudioTrackReader::open( QIODevice::OpenMode mode )
 
         for( AudioDataSource* source = d->track.firstSource(); source != 0; source = source->next() ) {
             d->readers.push_back( source->createReader() );
-            d->readers.back()->open( mode );
+            if( !d->readers.back()->open( mode ) ) {
+                d->readers.clear();
+                return false;
+            }
         }
 
         d->pos = 0;
@@ -152,7 +154,7 @@ bool AudioTrackReader::open( QIODevice::OpenMode mode )
 
 void AudioTrackReader::close()
 {
-    qDeleteAll( d->readers.begin(), d->readers.end() );
+    qDeleteAll( d->readers );
     d->readers.clear();
     QIODevice::close();
 }
