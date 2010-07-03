@@ -100,7 +100,8 @@ QWidget* AudioTrackPlayerSeekAction::createWidget( QWidget* container)
     slider->setSingleStep( Msf::fromSeconds( 10 ).audioBytes() );
     slider->setPageStep( Msf::fromSeconds( 30 ).audioBytes() );
     slider->setOrientation( Qt::Horizontal );
-    connect( slider, SIGNAL(sliderMoved(int)), m_player, SLOT(slotSeek(int)) );
+    slider->setTracking( false );
+    connect( slider, SIGNAL(valueChanged(int)), m_player, SLOT(slotSeek(int)) );
     return slider;
 }
 
