@@ -417,7 +417,7 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
 
 Qt::DropActions K3b::DataProjectModel::supportedDropActions() const
 {
-    return Qt::CopyAction;
+    return Qt::CopyAction | Qt::MoveAction;
 }
 
 
@@ -450,6 +450,9 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
     }
 
     if ( data->hasFormat( "application/x-k3bdataitem" ) ) {
+        if( action == Qt::MoveAction )
+            return false;
+
         kDebug() << "data item drop";
 
         QByteArray itemData = data->data( "application/x-k3bdataitem" );
