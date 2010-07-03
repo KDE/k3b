@@ -57,7 +57,8 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
 
     toolBox()->addSeparator();
     toolBox()->addAction( actionCollection()->action( "player_previous" ) );
-    toolBox()->addAction( actionCollection()->action( "player_play_pause" ) );
+    toolBox()->addAction( actionCollection()->action( "player_play" ) );
+    toolBox()->addAction( actionCollection()->action( "player_pause" ) );
     toolBox()->addAction( actionCollection()->action( "player_stop" ) );
     toolBox()->addAction( actionCollection()->action( "player_next" ) );
     toolBox()->addSeparator();

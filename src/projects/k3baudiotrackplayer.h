@@ -41,7 +41,8 @@ namespace K3b {
 
     public Q_SLOTS:
         void playTrack( const K3b::AudioTrack& track );
-        void playPause();
+        void play();
+        void pause();
         void stop();
         void next();
         void previous();

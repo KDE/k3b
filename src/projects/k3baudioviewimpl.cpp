@@ -125,12 +125,6 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_actionQueryMusicBrainzTrack->setEnabled( false );
     m_actionQueryMusicBrainzTrack->setVisible( false );
 #endif
-
-#ifdef __GNUC__
-#warning enable player once ported to Phonon
-#endif
-    m_actionPlayTrack->setEnabled( false );
-    m_actionPlayTrack->setVisible( false );
 }
 
 
@@ -315,6 +309,17 @@ void K3b::AudioViewImpl::slotTrackProperties()
 }
 
 
+void K3b::AudioViewImpl::slotPlayTrack()
+{
+    const QModelIndexList indexes = m_trackView->selectionModel()->selectedRows();
+	QList<AudioTrack*> tracks;
+    tracksForIndexes( tracks, indexes );
+
+    if( !tracks.empty() && tracks.first() != 0 )
+        m_player->playTrack( *tracks.first() );
+}
+
+
 void K3b::AudioViewImpl::slotQueryMusicBrainz()
 {
 #ifdef ENABLE_MUSICBRAINZ
@@ -361,12 +366,6 @@ void K3b::AudioViewImpl::slotQueryMusicBrainzTrack()
     AudioTrackTRMLookupDialog dlg( m_view );
     dlg.lookup( tracks );
 #endif
-}
-
-
-void K3b::AudioViewImpl::slotPlayTrack()
-{
-    // Not implemented yet
 }
 
 
