@@ -43,6 +43,7 @@ public:
 
     void setValue( int value );
     void setCurrentTrack( const K3b::AudioTrack& track );
+    void reset();
 
 protected:
     virtual QWidget* createWidget( QWidget* parent );
@@ -66,6 +67,13 @@ void AudioTrackPlayerSeekAction::setValue( int value )
             slider->setValue( value );
         }
     }
+}
+
+
+
+void AudioTrackPlayerSeekAction::reset()
+{
+    setValue( 0 );
 }
 
 
@@ -319,6 +327,7 @@ void AudioTrackPlayer::slotStateChanged( QAudio::State state )
         d->actionNext->setEnabled( false );
         d->actionPrevious->setEnabled( false );
         d->audioDocReader->close();
+        d->actionSeek->reset();
         emit stopped();
     }
 }
