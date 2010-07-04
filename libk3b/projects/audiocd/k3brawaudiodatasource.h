@@ -36,9 +36,6 @@ namespace K3b {
         QString path() const;
 
         Msf originalLength() const;
-        bool seek( const Msf& );
-
-        int read( char* data, unsigned int max );
 
         QString type() const;
         QString sourceComment() const;

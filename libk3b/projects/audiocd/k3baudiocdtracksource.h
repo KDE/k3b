@@ -65,8 +65,6 @@ namespace K3b {
         QString cdTitle() const;
 
         Msf originalLength() const;
-        bool seek( const Msf& );
-        int read( char* data, unsigned int max );
         QString type() const;
         QString sourceComment() const;
         AudioDataSource* copy() const;

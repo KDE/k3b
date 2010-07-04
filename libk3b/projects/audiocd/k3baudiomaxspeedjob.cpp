@@ -23,16 +23,18 @@
 
 #include "k3bthread.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <KDebug>
+#include <KLocale>
 
-#include <qdatetime.h>
+#include <QDateTime>
+#include <QIODevice>
+#include <QScopedPointer>
 
 
 class K3b::AudioMaxSpeedJob::Private
 {
 public:
-    int speedTest( K3b::AudioDataSource* source );
+    int speedTest( K3b::AudioDataSource* source, QIODevice& sourceReader );
     int maxSpeedByMedia() const;
 
     int maxSpeed;
@@ -42,7 +44,7 @@ public:
 
 
 // returns the amount of data read from this source
-int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source )
+int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source, QIODevice& sourceReader )
 {
     //
     // in case of an audio track source we only test when the cd is inserted since asking the user would
@@ -61,14 +63,14 @@ int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source )
     }
 
     QTime t;
-    int dataRead = 0;
-    int r = 0;
+    qint64 dataRead = 0;
+    qint64 r = 0;
 
     // start the timer
     t.start();
 
     // read ten seconds of audio data. This is some value which seemed about right. :)
-    while( dataRead < 2352*75*10 && (r = source->read( buffer, 2352*10 )) > 0 ) {
+    while( dataRead < 2352*75*10 && (r = sourceReader.read( buffer, 2352LL*10LL )) > 0 ) {
         dataRead += r;
     }
 
@@ -155,14 +157,16 @@ bool K3b::AudioMaxSpeedJob::run()
     it.first();
 
     while( it.current() && !canceled() ) {
-        if( !it.current()->seek(0) ) {
-            kDebug() << "(K3b::AudioMaxSpeedJob) seek failed.";
+        QScopedPointer<QIODevice> sourceReader( it.current()->createReader() );
+
+        if( !sourceReader->open( QIODevice::ReadOnly ) ) {
+            kDebug() << "Cannot open source reader!";
             success = false;
             break;
         }
 
         // read some data
-        int speed = d->speedTest( it.current() );
+        int speed = d->speedTest( it.current(), *sourceReader );
 
         ++sourcesDone;
         emit percent( 100*numSources/sourcesDone );

@@ -24,7 +24,6 @@ class K3b::AudioFile::Private
 public:
     AudioDoc* doc;
     AudioDecoder* decoder;
-    unsigned long long decodedData;
 };
 
 
@@ -34,7 +33,6 @@ K3b::AudioFile::AudioFile( K3b::AudioDecoder* decoder, K3b::AudioDoc* doc )
 {
     d->doc = doc;
     d->decoder = decoder;
-    d->decodedData = 0;
     // FIXME: somehow make it possible to switch docs
     d->doc->increaseDecoderUsage( d->decoder );
 }
@@ -46,7 +44,6 @@ K3b::AudioFile::AudioFile( const K3b::AudioFile& file )
 {
     d->doc = file.d->doc;
     d->decoder = file.d->decoder;
-    d->decodedData = 0;
     d->doc->increaseDecoderUsage( d->decoder );
 }
 
@@ -96,35 +93,6 @@ bool K3b::AudioFile::isValid() const
 K3b::Msf K3b::AudioFile::originalLength() const
 {
     return d->decoder->length();
-}
-
-
-bool K3b::AudioFile::seek( const K3b::Msf& msf )
-{
-    // this is valid once the decoder has been initialized.
-    if( startOffset() + msf <= lastSector() &&
-        d->decoder->seek( startOffset() + msf ) ) {
-        d->decodedData = msf.audioBytes();
-        return true;
-    }
-    else
-        return false;
-}
-
-
-int K3b::AudioFile::read( char* data, unsigned int max )
-{
-    // here we can trust on the decoder to always provide enough data
-    // see if we decode too much
-    if( max + d->decodedData > length().audioBytes() )
-        max = length().audioBytes() - d->decodedData;
-
-    int read = d->decoder->decode( data, max );
-
-    if( read > 0 )
-        d->decodedData += read;
-
-    return read;
 }
 
 

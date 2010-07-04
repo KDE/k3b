@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -16,6 +17,7 @@
 #include "k3btrm.h"
 #include "k3bmusicbrainz.h"
 #include "k3baudiotrack.h"
+#include "k3baudiotrackreader.h"
 
 #include <KLocale>
 
@@ -78,20 +80,20 @@ bool K3b::MusicBrainzTrackLookupJob::run()
     emit infoMessage( i18n("Generating fingerprint for track %1.",
                            d->track->trackNumber()), MessageInfo );
 
-    d->track->seek(0);
+    AudioTrackReader trackReader( *d->track );
     d->trm.start( d->track->length() );
 
     char buffer[2352*10];
-    int len = 0;
-    long long dataRead = 0;
+    qint64 len = 0;
+    qint64 dataRead = 0;
     while( !canceled() &&
-           (len = d->track->read( buffer, 2352*10 )) > 0 ) {
+           (len = trackReader.read( buffer, sizeof(buffer) )) > 0 ) {
 
         dataRead += len;
 
         // swap data
         char buf;
-        for( int i = 0; i < len-1; i+=2 ) {
+        for( qint64 i = 0; i < len-1; i+=2 ) {
             buf = buffer[i];
             buffer[i] = buffer[i+1];
             buffer[i+1] = buf;
@@ -103,7 +105,7 @@ bool K3b::MusicBrainzTrackLookupJob::run()
         }
 
         // FIXME: useless since libmusicbrainz does never need all the data
-        emit percent( 100*dataRead/d->track->length().audioBytes() );
+        emit percent( 100LL*dataRead/trackReader.size() );
     }
 
     if( canceled() ) {

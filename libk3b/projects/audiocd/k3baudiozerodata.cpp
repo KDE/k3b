@@ -16,23 +16,19 @@
 #include "k3baudiozerodatareader.h"
 #include "k3baudiotrack.h"
 
-#include <klocale.h>
-
-#include <string.h>
+#include <KLocale>
 
 
 K3b::AudioZeroData::AudioZeroData( const K3b::Msf& len )
     : K3b::AudioDataSource(),
-      m_length(len),
-      m_writtenData(0)
+      m_length(len)
 {
 }
 
 
 K3b::AudioZeroData::AudioZeroData( const K3b::AudioZeroData& zero )
     : K3b::AudioDataSource( zero ),
-      m_length( zero.m_length ),
-      m_writtenData( 0 )
+      m_length( zero.m_length )
 {
 }
 
@@ -49,8 +45,6 @@ void K3b::AudioZeroData::setLength( const K3b::Msf& msf )
     else
         m_length = 1; // 1 frame
 
-    m_writtenData = 0;
-
     emitChange();
 }
 
@@ -64,30 +58,6 @@ QString K3b::AudioZeroData::type() const
 QString K3b::AudioZeroData::sourceComment() const
 {
     return QString();
-}
-
-
-bool K3b::AudioZeroData::seek( const K3b::Msf& msf )
-{
-    if( msf < length() ) {
-        m_writtenData = msf.audioBytes();
-        return true;
-    }
-    else
-        return false;
-}
-
-
-int K3b::AudioZeroData::read( char* data, unsigned int max )
-{
-    if( m_writtenData + max > length().audioBytes() )
-        max = length().audioBytes() - m_writtenData;
-
-    m_writtenData += max;
-
-    ::memset( data, 0, max );
-
-    return max;
 }
 
 

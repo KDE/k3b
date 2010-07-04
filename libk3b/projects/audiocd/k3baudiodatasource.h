@@ -80,13 +80,6 @@ namespace K3b {
          */
         KIO::filesize_t size() const { return length().audioBytes(); }
 
-        virtual bool seek( const Msf& ) = 0;
-
-        /**
-         * Read data from the source.
-         */
-        virtual int read( char* data, unsigned int max ) = 0;
-
         /**
          * Type of the data in readable form.
          */

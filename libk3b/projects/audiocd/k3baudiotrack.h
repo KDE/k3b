@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -17,9 +18,7 @@
 #define K3BAUDIOTRACK_H
 
 #include <QtCore/QObject>
-#include <qstring.h>
-#include <qfileinfo.h>
-#include <qfile.h>
+#include <QtCore/QString>
 
 #include <kio/global.h>
 
@@ -48,7 +47,7 @@ namespace K3b {
         AudioTrack( AudioDoc* parent );
         ~AudioTrack();
 
-        AudioDoc* doc() const { return m_parent; }
+        AudioDoc* doc() const;
 
         Device::Track toCdTrack() const;
 
@@ -58,18 +57,18 @@ namespace K3b {
         Msf length() const;
         KIO::filesize_t size() const;
 
-        QString artist() const { return m_cdText.performer(); }
-        QString performer() const { return m_cdText.performer(); }
-        QString title() const { return m_cdText.title(); }
-        QString arranger() const { return m_cdText.arranger(); }
-        QString songwriter() const { return m_cdText.songwriter(); }
-        QString composer() const { return m_cdText.composer(); }
-        QString isrc() const { return m_cdText.isrc(); }
-        QString cdTextMessage() const { return m_cdText.message(); }
-        Device::TrackCdText cdText() const { return m_cdText; }
+        QString artist() const;
+        QString performer() const;
+        QString title() const;
+        QString arranger() const;
+        QString songwriter() const;
+        QString composer() const;
+        QString isrc() const;
+        QString cdTextMessage() const;
+        Device::TrackCdText cdText() const;
 
-        bool copyProtection() const { return m_copy; }
-        bool preEmp() const { return m_preEmp; }
+        bool copyProtection() const;
+        bool preEmp() const;
 
         /**
          * @obsolete use setPerformer
@@ -85,8 +84,8 @@ namespace K3b {
 
         void setCdText( const Device::TrackCdText& cdtext );
 
-        void setPreEmp( bool b ) { m_preEmp = b; emitChanged(); }
-        void setCopyProtection( bool b ) { m_copy = b; emitChanged(); }
+        void setPreEmp( bool b );
+        void setCopyProtection( bool b );
 
         Msf index0() const;
         /**
@@ -125,14 +124,14 @@ namespace K3b {
          */
         void merge( AudioTrack* trackToMerge, AudioDataSource* sourceAfter = 0 );
 
-        AudioTrack* prev() const { return m_prev; }
-        AudioTrack* next() const { return m_next; }
+        AudioTrack* prev() const;
+        AudioTrack* next() const;
 
         /**
          * Use with care.
          */
         void setFirstSource( AudioDataSource* source );
-        AudioDataSource* firstSource() const { return m_firstSource; }
+        AudioDataSource* firstSource() const;
         AudioDataSource* lastSource() const;
         int numberSources() const;
 
@@ -140,15 +139,6 @@ namespace K3b {
          * Append source to the end of the sources list.
          */
         void addSource( AudioDataSource* source );
-
-        bool seek( const Msf& );
-
-        /**
-         * Read data from the track.
-         *
-         * @return number of read bytes
-         */
-        int read( char* data, unsigned int max );
 
         /**
          * called by AudioDataSource because of the lack of signals
@@ -216,6 +206,9 @@ namespace K3b {
          */
         void emitSourceAdded( AudioDataSource* source );
 
+        void setIndex0Offset( const Msf& msf );
+        void setParent( AudioDoc* parent );
+
     private:
         /**
          * Tells the doc that the track has changed
@@ -223,28 +216,6 @@ namespace K3b {
         void emitChanged();
 
         void debug();
-
-        AudioDoc* m_parent;
-
-        /** copy protection */
-        bool m_copy;
-        bool m_preEmp;
-
-        Msf m_index0Offset;
-
-        Device::TrackCdText m_cdText;
-
-        // list
-        AudioTrack* m_prev;
-        AudioTrack* m_next;
-
-        AudioDataSource* m_firstSource;
-
-
-        AudioDataSource* m_currentSource;
-        long long m_alreadyReadBytes;
-
-        bool m_currentlyDeleting;
 
         class Private;
         Private* d;

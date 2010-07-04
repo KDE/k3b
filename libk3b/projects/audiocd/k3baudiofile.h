@@ -69,10 +69,6 @@ namespace K3b {
 
         bool isValid() const;
 
-        bool seek( const Msf& );
-
-        int read( char* data, unsigned int max );
-
         AudioDataSource* copy() const;
 
         virtual QIODevice* createReader( QObject* parent = 0 );

@@ -35,7 +35,7 @@ namespace K3b {
         const AudioTrack& track() const;
         AudioTrack& track();
 
-        virtual bool open( OpenMode mode );
+        virtual bool open( OpenMode mode = QIODevice::ReadOnly );
         virtual void close();
         virtual bool isSequential() const;
         virtual qint64 size() const;

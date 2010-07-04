@@ -418,9 +418,9 @@ K3b::AudioTrack* K3b::AudioDoc::importCueFile( const QString& cuefile, K3b::Audi
 
             // we do not know the length of the source yet so we have to force the index value
             if( track.index0() > 0 )
-                newTrack->m_index0Offset = track.length() - track.index0();
+                newTrack->setIndex0Offset( track.length() - track.index0() );
             else
-                newTrack->m_index0Offset = 0;
+                newTrack->setIndex0Offset( 0 );
 
             // cd-text
             newTrack->setTitle( parser.cdText()[i].title() );
@@ -523,7 +523,7 @@ void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
 {
     kDebug() << "(" << track << "," << position << ")";
 
-    track->m_parent = this;
+    track->setParent( this );
     if( !d->firstTrack )
         d->firstTrack = d->lastTrack = track;
     else if( position == 0 )

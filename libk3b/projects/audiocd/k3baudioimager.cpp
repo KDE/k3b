@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -16,16 +17,17 @@
 #include "k3baudiodoc.h"
 #include "k3baudiojobtempdata.h"
 #include "k3baudiotrack.h"
+#include "k3baudiotrackreader.h"
 #include "k3baudiodatasource.h"
 
 #include "k3bthread.h"
 #include "k3bwavefilewriter.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KLocale>
+#include <KDebug>
 
-#include <qfile.h>
-#include <QtCore/QIODevice>
+#include <QIODevice>
+#include <QFile>
 
 #include <unistd.h>
 
@@ -78,8 +80,8 @@ bool K3b::AudioImager::run()
 
     K3b::WaveFileWriter waveFileWriter;
 
-    unsigned long long totalSize = d->doc->length().audioBytes();
-    unsigned long long totalRead = 0;
+    qint64 totalSize = d->doc->length().audioBytes();
+    qint64 totalRead = 0;
     char buffer[2352 * 10];
 
     for( AudioTrack* track = d->doc->firstTrack(); track != 0; track = track->next() ) {
@@ -87,18 +89,19 @@ bool K3b::AudioImager::run()
         emit nextTrack( track->trackNumber(), d->doc->numOfTracks() );
 
         //
-        // Seek to the beginning of the track
+        // Create track reader
         //
-        if( !track->seek(0) ) {
-            emit infoMessage( i18n("Unable to seek in track %1.", track->trackNumber()), K3b::Job::MessageError );
+        AudioTrackReader trackReader( *track );
+        if( !trackReader.open() ) {
+            emit infoMessage( i18n("Unable to read track %1.", track->trackNumber()), K3b::Job::MessageError );
             return false;
         }
 
         //
         // Initialize the reading
         //
-        int read = 0;
-        unsigned long long trackRead = 0;
+        qint64 read = 0;
+        qint64 trackRead = 0;
 
         //
         // Create the image file
@@ -114,7 +117,7 @@ bool K3b::AudioImager::run()
         //
         // Read data from the track
         //
-        while( (read = track->read( buffer, sizeof(buffer) )) > 0 ) {
+        while( (read = trackReader.read( buffer, sizeof(buffer) )) > 0 ) {
             if( !d->ioDev ) {
                 waveFileWriter.write( buffer, read, K3b::WaveFileWriter::BigEndian );
             }
@@ -137,10 +140,10 @@ bool K3b::AudioImager::run()
             totalRead += read;
             trackRead += read;
 
-            emit subPercent( 100*trackRead/track->length().audioBytes() );
-            emit percent( 100*totalRead/totalSize );
-            emit processedSubSize( trackRead/1024/1024, track->length().audioBytes()/1024/1024 );
-            emit processedSize( totalRead/1024/1024, totalSize/1024/1024 );
+            emit subPercent( 100LL*trackRead/trackReader.size() );
+            emit percent( 100LL*totalRead/totalSize );
+            emit processedSubSize( trackRead/1024LL/1024LL, trackReader.size()/1024LL/1024LL );
+            emit processedSize( totalRead/1024LL/1024LL, totalSize/1024LL/1024LL );
         }
 
         if( read < 0 ) {

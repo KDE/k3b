@@ -32,9 +32,6 @@ namespace K3b {
         QString type() const;
         QString sourceComment() const;
 
-        bool seek( const Msf& );
-        int read( char* data, unsigned int max );
-
         AudioDataSource* copy() const;
         virtual QIODevice* createReader( QObject* parent = 0 );
 
@@ -50,7 +47,6 @@ namespace K3b {
 
     private:
         Msf m_length;
-        unsigned long long m_writtenData;
     };
 }
 

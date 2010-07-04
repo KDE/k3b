@@ -17,7 +17,6 @@
 #include "k3baudiocdtrackreader.h"
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
-#include "k3bcdparanoialib.h"
 #include "k3bcore.h"
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
@@ -48,84 +47,11 @@ public:
     // ripping
     // we only save the device we last saw the CD in
     Device::Device* lastUsedDevice;
-    CdparanoiaLib* cdParanoiaLib;
     Msf position;
     bool initialized;
 
-    bool initParanoia();
-    void closeParanoia();
     bool searchForAudioCD( Device::Device* ) const;
 };
-
-
-bool K3b::AudioCdTrackSource::Private::initParanoia()
-{
-    if( !initialized ) {
-        if( !cdParanoiaLib )
-            cdParanoiaLib = K3b::CdparanoiaLib::create();
-
-        if( cdParanoiaLib ) {
-            lastUsedDevice = q->searchForAudioCD();
-
-            // ask here for the cd since searchForAudioCD() may also be called from outside
-            if( !lastUsedDevice ) {
-                // could not find the CD, so ask for it
-                QString s = i18n("Please insert Audio CD %1%2"
-                                 ,QString::number(discId),
-                                 cdTitle.isEmpty() || cdArtist.isEmpty()
-                                 ? QString()
-                                 : " (" + cdArtist + " - " + cdTitle + ")");
-
-                while( K3b::Device::Device* dev = K3b::ThreadWidget::selectDevice( q->track()->doc()->view(), s ) ) {
-                    if( searchForAudioCD( dev ) ) {
-                        lastUsedDevice = dev;
-                        break;
-                    }
-                }
-            }
-
-            // user canceled
-            if( !lastUsedDevice )
-                return false;
-
-            k3bcore->blockDevice( lastUsedDevice );
-
-            if( toc.isEmpty() )
-                toc = lastUsedDevice->readToc();
-
-            if( !cdParanoiaLib->initParanoia( lastUsedDevice, toc ) ) {
-                k3bcore->unblockDevice( lastUsedDevice );
-                return false;
-            }
-
-            if( q->doc() ) {
-                cdParanoiaLib->setParanoiaMode( q->doc()->audioRippingParanoiaMode() );
-                cdParanoiaLib->setNeverSkip( !q->doc()->audioRippingIgnoreReadErrors() );
-                cdParanoiaLib->setMaxRetries( q->doc()->audioRippingRetries() );
-            }
-
-            cdParanoiaLib->initReading( toc[cdTrackNumber-1].firstSector().lba() + q->startOffset().lba() + position.lba(),
-                                        toc[cdTrackNumber-1].firstSector().lba() + q->lastSector().lba() );
-
-            // we only block during the initialization because we cannot determine the end of the reading process :(
-            k3bcore->unblockDevice( lastUsedDevice );
-
-            initialized = true;
-            kDebug() << "(K3b::AudioCdTrackSource) initialized.";
-        }
-    }
-
-    return initialized;
-}
-
-
-void K3b::AudioCdTrackSource::Private::closeParanoia()
-{
-    if( cdParanoiaLib && initialized ) {
-        cdParanoiaLib->close();
-    }
-    initialized = false;
-}
 
 
 bool K3b::AudioCdTrackSource::Private::searchForAudioCD( K3b::Device::Device* dev ) const
@@ -152,7 +78,6 @@ K3b::AudioCdTrackSource::AudioCdTrackSource( const K3b::Device::Toc& toc, int cd
     d->cdArtist = cdartist;
     d->cdTitle = cdtitle;
     d->lastUsedDevice = dev;
-    d->cdParanoiaLib = 0;
     d->initialized = false;
 }
 
@@ -171,7 +96,6 @@ K3b::AudioCdTrackSource::AudioCdTrackSource( unsigned int discid, const K3b::Msf
     d->cdArtist = cdArtist;
     d->cdTitle = cdTitle;
     d->lastUsedDevice = 0;
-    d->cdParanoiaLib = 0;
     d->initialized = false;
 }
 
@@ -188,15 +112,12 @@ K3b::AudioCdTrackSource::AudioCdTrackSource( const K3b::AudioCdTrackSource& sour
     d->cdArtist = source.d->cdArtist;
     d->cdTitle = source.d->cdTitle;
     d->lastUsedDevice = source.d->lastUsedDevice;
-    d->cdParanoiaLib = 0;
     d->initialized = false;
 }
 
 
 K3b::AudioCdTrackSource::~AudioCdTrackSource()
 {
-    d->closeParanoia();
-    delete d->cdParanoiaLib;
 }
 
 
@@ -281,52 +202,6 @@ void K3b::AudioCdTrackSource::setToc( const Device::Toc& toc )
 K3b::Msf K3b::AudioCdTrackSource::originalLength() const
 {
     return d->length;
-}
-
-
-bool K3b::AudioCdTrackSource::seek( const K3b::Msf& msf )
-{
-    // HACK: to reinitialize every time we restart the decoding
-    if( msf == 0 && d->cdParanoiaLib )
-        d->closeParanoia();
-
-    d->position = msf;
-
-    if( d->cdParanoiaLib && d->cdTrackNumber > 0 && d->cdTrackNumber <= d->toc.size() ) {
-		const int trackFirstSector = d->toc.at( d->cdTrackNumber-1 ).firstSector().lba();
-        d->cdParanoiaLib->initReading( trackFirstSector + startOffset().lba() + d->position.lba(),
-                                       trackFirstSector + lastSector().lba() );
-	}
-
-    return true;
-}
-
-
-int K3b::AudioCdTrackSource::read( char* data, unsigned int )
-{
-    if( d->initParanoia() ) {
-        int status = 0;
-        char* buf = d->cdParanoiaLib->read( &status, 0, false /* big endian */ );
-        if( status == K3b::CdparanoiaLib::S_OK ) {
-            if( buf == 0 ) {
-                // done
-                d->closeParanoia();
-                return 0;
-            }
-            else {
-                ++d->position;
-                ::memcpy( data, buf, CD_FRAMESIZE_RAW );
-                return CD_FRAMESIZE_RAW;
-            }
-        }
-        else {
-            // in case the reading fails we go back to "not initialized"
-            d->closeParanoia();
-            return -1;
-        }
-    }
-    else
-        return -1;
 }
 
 
