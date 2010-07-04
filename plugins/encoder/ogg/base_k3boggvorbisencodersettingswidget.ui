@@ -48,7 +48,7 @@
            </font>
           </property>
           <property name="text">
-           <string>textLabel1</string>
+           <string comment="KDE::DoNotExtract">textLabel1</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
