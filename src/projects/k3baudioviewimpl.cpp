@@ -487,7 +487,9 @@ void K3b::AudioViewImpl::slotAdjustColumns()
 
 void K3b::AudioViewImpl::slotPlayingTrack( const K3b::AudioTrack& track )
 {
-    m_delegate->setPlayingTrack( m_model->indexForTrack( &track ) );
+    QModelIndex index = m_model->indexForTrack( &track );
+    m_trackView->scrollTo( index );
+    m_delegate->setPlayingTrack( index );
 }
 
 
