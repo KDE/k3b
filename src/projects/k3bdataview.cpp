@@ -21,7 +21,6 @@
 #include "k3bdataprojectmodel.h"
 #include "k3bdataviewimpl.h"
 #include "k3bdirproxymodel.h"
-#include "k3bvolumenamewidget.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -89,7 +88,7 @@ K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
     toolBox()->addSeparator();
     toolBox()->addActions( createPluginsActions( m_doc->type() ) );
     toolBox()->addSeparator();
-    toolBox()->addWidget( new VolumeNameWidget( m_doc, toolBox() ) );
+    toolBox()->addAction( actionCollection()->action( "project_volume_name" ) );
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future

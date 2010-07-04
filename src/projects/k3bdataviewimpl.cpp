@@ -26,6 +26,7 @@
 #include "k3bdiritem.h"
 #include "k3bview.h"
 #include "k3bviewcolumnadjuster.h"
+#include "k3bvolumenamewidget.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -37,6 +38,32 @@
 
 #include <QShortcut>
 #include <QSortFilterProxyModel>
+#include <QWidgetAction>
+
+
+namespace {
+
+class VolumeNameWidgetAction : public QWidgetAction
+{
+public:
+    VolumeNameWidgetAction( K3b::DataDoc* doc, QObject* parent )
+    :
+        QWidgetAction( parent ),
+        m_doc( doc )
+    {
+    }
+
+protected:
+    virtual QWidget* createWidget( QWidget* parent )
+    {
+        return new K3b::VolumeNameWidget( m_doc, parent );
+    }
+
+private:
+    K3b::DataDoc* m_doc;
+};
+
+} // namespace
 
 
 K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* actionCollection )
@@ -126,6 +153,9 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
     actionCollection->addAction( "project_data_edit_boot_images", m_actionEditBootImages );
     connect( m_actionEditBootImages, SIGNAL(triggered(bool)), this, SLOT(slotEditBootImages()) );
+
+    QWidgetAction* volumeNameWidgetAction = new VolumeNameWidgetAction( m_doc, this );
+    actionCollection->addAction( "project_volume_name", volumeNameWidgetAction );
 
     QShortcut* enterShortcut = new QShortcut( QKeySequence( Qt::Key_Return ), m_fileView );
     enterShortcut->setContext( Qt::WidgetShortcut );

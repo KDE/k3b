@@ -17,7 +17,6 @@
 #include "k3bmixedview.h"
 #include "k3baudiodoc.h"
 #include "k3baudioprojectmodel.h"
-//#include "k3baudiotrackplayer.h"
 #include "k3baudioviewimpl.h"
 #include "k3bdatadoc.h"
 #include "k3bdataprojectmodel.h"
@@ -26,7 +25,6 @@
 #include "k3bmetaitemmodel.h"
 #include "k3bmixeddoc.h"
 #include "k3bmixedburndialog.h"
-#include "k3bvolumenamewidget.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -104,7 +102,8 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     toolBox()->addSeparator();
     toolBox()->addActions( m_dataActions );
     toolBox()->addSeparator();
-    m_dataActions.push_back( toolBox()->addWidget( new VolumeNameWidget( doc->dataDoc(), toolBox() ) ) );
+    toolBox()->addAction( actionCollection()->action( "project_volume_name" ) );
+    m_dataActions.push_back( actionCollection()->action( "project_volume_name" ) );
 
     m_audioActions += playerActions;
 
