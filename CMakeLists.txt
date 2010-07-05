@@ -42,11 +42,8 @@ option(K3B_BUILD_EXTERNAL_ENCODER_PLUGIN "Build external app encoder plugin" ON)
 option(K3B_BUILD_WAVE_DECODER_PLUGIN "Build Wave decoder plugin" ON)
 
 ##################  K3b requirements #################################
-if(K3B_BUILD_K3BSETUP)
-    set(KDE_MIN_VERSION 4.3.85)
-else(K3B_BUILD_K3BSETUP)
-    set(KDE_MIN_VERSION 4.3.0)
-endif(K3B_BUILD_K3BSETUP)
+set(QT_MIN_VERSION 4.6.0)
+set(KDE_MIN_VERSION 4.4.0)
 
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
@@ -73,7 +70,7 @@ if(K3B_ENABLE_TAGLIB)
     FALSE "1.4.0" "")
 endif(K3B_ENABLE_TAGLIB)
 
-macro_optional_find_package(Samplerate)
+find_package(Samplerate)
 macro_log_feature( SAMPLERATE_FOUND "Samplerate"
   "Audio sampling rate conversion."
   "http://www.mega-nerd.com/SRC/"
