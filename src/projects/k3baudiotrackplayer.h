@@ -18,7 +18,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QScopedPointer>
-#include <QtMultimedia/QAudio>
+#include <QtMultimedia/qaudio.h>
 
 class KActionCollection;
 
