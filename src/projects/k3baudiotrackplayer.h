@@ -32,8 +32,17 @@ namespace K3b {
         Q_OBJECT
 
     public:
+        enum State {
+            Stopped,
+            Playing,
+            Paused
+        };
+
+    public:
         AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionCollection, QObject* parent = 0 );
         ~AudioTrackPlayer();
+
+        State state() const;
 
         AudioTrack* currentTrack() const;
 
@@ -47,9 +56,7 @@ namespace K3b {
 
     Q_SIGNALS:
         void playingTrack( const K3b::AudioTrack& track );
-        void started();
-        void paused();
-        void stopped();
+        void stateChanged();
 
     private Q_SLOTS:
         void slotSeek( int bytes );

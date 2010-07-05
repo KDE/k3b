@@ -21,6 +21,7 @@
 #include "k3baudioburndialog.h"
 #include "k3baudiodoc.h"
 #include "k3baudioprojectmodel.h"
+#include "k3baudiotrackplayer.h"
 #include "k3baudioviewimpl.h"
 #include "k3bfillstatusdisplay.h"
 #include "k3bpluginmanager.h"
@@ -63,6 +64,9 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
     toolBox()->addAction( actionCollection()->action( "player_seek" ) );
     toolBox()->addSeparator();
 
+    connect( m_audioViewImpl->player(), SIGNAL(stateChanged()),
+             this, SLOT(slotPlayerStateChanged()) );
+
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
     // we only add the additional actions since View already added the default actions
@@ -93,6 +97,19 @@ void K3b::AudioView::addUrls( const KUrl::List& urls )
 K3b::ProjectBurnDialog* K3b::AudioView::newBurnDialog( QWidget* parent )
 {
     return new AudioBurnDialog( m_doc, parent );
+}
+
+
+void K3b::AudioView::slotPlayerStateChanged()
+{
+    if( m_audioViewImpl->player()->state() == AudioTrackPlayer::Playing ) {
+        actionCollection()->action( "player_play" )->setVisible( false );
+        actionCollection()->action( "player_pause" )->setVisible( true );
+    }
+    else {
+        actionCollection()->action( "player_play" )->setVisible( true );
+        actionCollection()->action( "player_pause" )->setVisible( false );
+    }
 }
 
 #include "k3baudioview.moc"

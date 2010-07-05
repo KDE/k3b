@@ -17,6 +17,7 @@
 #include "k3bmixedview.h"
 #include "k3baudiodoc.h"
 #include "k3baudioprojectmodel.h"
+#include "k3baudiotrackplayer.h"
 #include "k3baudioviewimpl.h"
 #include "k3bdatadoc.h"
 #include "k3bdataprojectmodel.h"
@@ -78,6 +79,8 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
              this, SLOT(slotParentDir()) );
     connect( m_dirView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(slotCurrentDirChanged()) );
+    connect( m_audioViewImpl->player(), SIGNAL(stateChanged()),
+             this, SLOT(slotUpdateActions()) );
     connect( m_dataViewImpl, SIGNAL(setCurrentRoot(QModelIndex)),
              this, SLOT(slotSetCurrentRoot(QModelIndex)) );
 
@@ -168,6 +171,19 @@ void K3b::MixedView::slotCurrentDirChanged()
         if( m_fileViewWidget->currentWidget() != m_dataViewImpl->view() ) {
             m_fileViewWidget->setCurrentWidget( m_dataViewImpl->view() );
         }
+    }
+    else if( currentSubModel == m_audioViewImpl->model() ) {
+        if( m_fileViewWidget->currentWidget() != m_audioViewImpl->view() ) {
+            m_fileViewWidget->setCurrentWidget( m_audioViewImpl->view() );
+        }
+    }
+    slotUpdateActions();
+}
+
+
+void K3b::MixedView::slotUpdateActions()
+{
+    if( m_fileViewWidget->currentWidget() == m_dataViewImpl->view() ) {
         Q_FOREACH( QAction* action, m_dataActions ) {
             action->setVisible( true );
         }
@@ -175,15 +191,19 @@ void K3b::MixedView::slotCurrentDirChanged()
             action->setVisible( false );
         }
     }
-    else if( currentSubModel == m_audioViewImpl->model() ) {
-        if( m_fileViewWidget->currentWidget() != m_audioViewImpl->view() ) {
-            m_fileViewWidget->setCurrentWidget( m_audioViewImpl->view() );
-        }
+    else if( m_fileViewWidget->currentWidget() == m_audioViewImpl->view() ) {
         Q_FOREACH( QAction* action, m_dataActions ) {
             action->setVisible( false );
         }
         Q_FOREACH( QAction* action, m_audioActions ) {
             action->setVisible( true );
+        }
+
+        if( m_audioViewImpl->player()->state() == AudioTrackPlayer::Playing ) {
+            actionCollection()->action( "player_play" )->setVisible( false );
+        }
+        else {
+            actionCollection()->action( "player_pause" )->setVisible( false );
         }
     }
 }

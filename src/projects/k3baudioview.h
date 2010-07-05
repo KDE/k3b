@@ -44,6 +44,9 @@ namespace K3b {
     protected:
         virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
 
+    private Q_SLOTS:
+        void slotPlayerStateChanged();
+
     private:
         AudioDoc* m_doc;
         AudioViewImpl* m_audioViewImpl;

@@ -121,6 +121,7 @@ public:
     KAction* actionNext;
     KAction* actionPrevious;
     AudioTrackPlayerSeekAction* actionSeek;
+    State state;
 };
 
 
@@ -130,6 +131,7 @@ AudioTrackPlayer::AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionColl
 {
     d->doc = doc;
     d->audioDocReader = new AudioDocReader( *doc, this );
+    d->state = Stopped;
 
     QAudioFormat audioFormat;
     audioFormat.setFrequency( 44100 );
@@ -189,6 +191,12 @@ AudioTrackPlayer::AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionColl
 
 AudioTrackPlayer::~AudioTrackPlayer()
 {
+}
+
+
+AudioTrackPlayer::State AudioTrackPlayer::state() const
+{
+    return d->state;
 }
 
 
@@ -291,29 +299,30 @@ void AudioTrackPlayer::slotStateChanged( QAudio::State state )
     }
 
     if( QAudio::ActiveState == state ) {
-        d->actionPause->setVisible( true );
-        d->actionPlay->setVisible( false );
+        d->actionPause->setEnabled( true );
+        d->actionPlay->setEnabled( false );
         d->actionStop->setEnabled( true );
         d->actionSeek->setEnabled( true );
-        emit started();
+        d->state = Playing;
     }
     else if( QAudio::SuspendedState == state ) {
-        d->actionPause->setVisible( false );
-        d->actionPlay->setVisible( true );
+        d->actionPause->setEnabled( false );
+        d->actionPlay->setEnabled( true );
         d->actionStop->setEnabled( true );
-        emit paused();
+        d->state = Paused;
     }
     else /*if( QAudio::IdleState == state || QAudio::StoppedState == state )*/ {
+        d->actionPause->setEnabled( false );
+        d->actionPlay->setEnabled( true );
         d->actionStop->setEnabled( false );
-        d->actionPause->setVisible( false );
-        d->actionPlay->setVisible( true );
         d->actionSeek->setEnabled( false );
         d->actionNext->setEnabled( false );
         d->actionPrevious->setEnabled( false );
         d->audioDocReader->close();
         d->actionSeek->reset();
-        emit stopped();
+        d->state = Stopped;
     }
+    emit stateChanged();
 }
 
 } // namespace K3b

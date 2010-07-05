@@ -104,8 +104,8 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
              this, SLOT(slotSelectionChanged()) );
     connect( m_player, SIGNAL(playingTrack(K3b::AudioTrack)),
              this, SLOT(slotPlayingTrack(K3b::AudioTrack)) );
-    connect( m_player, SIGNAL(stopped()),
-             this, SLOT(slotPlayerStopped()) );
+    connect( m_player, SIGNAL(stateChanged()),
+             this, SLOT(slotPlayerStateChanged()) );
 
     // Create audio context menu
     QAction* separator = new QAction( this );
@@ -493,9 +493,11 @@ void K3b::AudioViewImpl::slotPlayingTrack( const K3b::AudioTrack& track )
 }
 
 
-void K3b::AudioViewImpl::slotPlayerStopped()
+void K3b::AudioViewImpl::slotPlayerStateChanged()
 {
-    m_delegate->setPlayingTrack( QModelIndex() );
+    if( m_player->state() == AudioTrackPlayer::Stopped ) {
+        m_delegate->setPlayingTrack( QModelIndex() );
+    }
 }
 
 

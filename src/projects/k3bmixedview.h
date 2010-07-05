@@ -28,7 +28,6 @@ class QTreeView;
 
 namespace K3b {
     class AudioTrack;
-    class AudioTrackPlayer;
     class AudioDataSource;
     class AudioViewImpl;
     class DataViewImpl;
@@ -51,6 +50,7 @@ namespace K3b {
     private Q_SLOTS:
         void slotParentDir();
         void slotCurrentDirChanged();
+        void slotUpdateActions();
         void slotSetCurrentRoot( const QModelIndex& index );
 
     protected:

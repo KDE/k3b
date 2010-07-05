@@ -15,10 +15,11 @@
 #ifndef K3B_AUDIO_VIEW_IMPL_H
 #define K3B_AUDIO_VIEW_IMPL_H
 
+#include <KUrl>
+
 #include <QObject>
 #include <QAbstractItemModel>
 #include <QList>
-#include <KUrl>
 
 class KAction;
 class KActionCollection;
@@ -49,6 +50,8 @@ namespace K3b {
         AudioProjectModel* model() const { return m_model; }
         QTreeView* view() const { return m_trackView; }
 
+        AudioTrackPlayer* player() const { return m_player; }
+
     private Q_SLOTS:
         void slotRemove();
         void slotAddSilence();
@@ -64,7 +67,7 @@ namespace K3b {
         void slotAudioConversion();
         void slotAdjustColumns();
         void slotPlayingTrack( const K3b::AudioTrack& track );
-        void slotPlayerStopped();
+        void slotPlayerStateChanged();
 
     private:
         void tracksForIndexes( QList<AudioTrack*>& tracks,
