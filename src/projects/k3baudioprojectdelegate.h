@@ -21,24 +21,28 @@ class QAbstractItemView;
 
 namespace K3b {
 
-class AudioProjectDelegate : public QStyledItemDelegate
-{
-    Q_OBJECT
+    class AudioProjectDelegate : public QStyledItemDelegate
+    {
+        Q_OBJECT
 
-public:
-    AudioProjectDelegate( QAbstractItemView& view, QObject* parent = 0 );
-    ~AudioProjectDelegate();
+    public:
+        AudioProjectDelegate( QAbstractItemView& view, QObject* parent = 0 );
+        ~AudioProjectDelegate();
 
-public Q_SLOTS:
-    void setPlayingTrack( const QModelIndex& index );
+        virtual QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
-protected:
-    virtual void initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const;
+    public Q_SLOTS:
+        void setPlayingTrack( const QModelIndex& index );
 
-private:
-    QAbstractItemView& m_view;
-    QPersistentModelIndex m_playingTrack;
-};
+    protected:
+        virtual void initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const;
+        virtual bool eventFilter( QObject* obj, QEvent* event );
+
+    private:
+        QAbstractItemView& m_view;
+        QPersistentModelIndex m_playingTrack;
+        mutable QPersistentModelIndex m_current;
+    };
 
 } // namespace K3b
 

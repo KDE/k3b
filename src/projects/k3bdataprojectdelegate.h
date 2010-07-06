@@ -30,7 +30,7 @@ namespace K3b {
         virtual bool eventFilter( QObject* obj, QEvent* event );
 
     private:
-        mutable QModelIndex m_current;
+        mutable QPersistentModelIndex m_current;
     };
 
 }
