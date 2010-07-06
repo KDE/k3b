@@ -130,62 +130,76 @@ void K3b::AudioTrack::setArtist( const QString& a )
 
 void K3b::AudioTrack::setPerformer( const QString& a )
 {
-    QString s( a );
-    d->cdTextValidator->fixup( s );
-    d->cdText.setPerformer(s);
-    emitChanged();
+    if( performer() != a ) {
+        QString s( a );
+        d->cdTextValidator->fixup( s );
+        d->cdText.setPerformer(s);
+        emitChanged();
+    }
 }
 
 
 void K3b::AudioTrack::setTitle( const QString& t )
 {
-    QString s( t );
-    d->cdTextValidator->fixup( s );
-    d->cdText.setTitle(s);
-    emitChanged();
+    if( title() != t ) {
+        QString s( t );
+        d->cdTextValidator->fixup( s );
+        d->cdText.setTitle(s);
+        emitChanged();
+    }
 }
 
 
 void K3b::AudioTrack::setArranger( const QString& t )
 {
-    QString s( t );
-    d->cdTextValidator->fixup( s );
-    d->cdText.setArranger(s);
-    emitChanged();
+    if( arranger() != t ) {
+        QString s( t );
+        d->cdTextValidator->fixup( s );
+        d->cdText.setArranger(s);
+        emitChanged();
+    }
 }
 
 
 void K3b::AudioTrack::setSongwriter( const QString& t )
 {
-    QString s( t );
-    d->cdTextValidator->fixup( s );
-    d->cdText.setSongwriter(s);
-    emitChanged();
+    if( songwriter() != t ) {
+        QString s( t );
+        d->cdTextValidator->fixup( s );
+        d->cdText.setSongwriter(s);
+        emitChanged();
+    }
 }
 
 
 void K3b::AudioTrack::setComposer( const QString& t )
 {
-    QString s( t );
-    d->cdTextValidator->fixup( s );
-    d->cdText.setComposer(s);
-    emitChanged();
+    if( composer() != t ) {
+        QString s( t );
+        d->cdTextValidator->fixup( s );
+        d->cdText.setComposer(s);
+        emitChanged();
+    }
 }
 
 
 void K3b::AudioTrack::setIsrc( const QString& t )
 {
-    d->cdText.setIsrc(t);
-    emitChanged();
+    if( isrc() != t ) {
+        d->cdText.setIsrc(t);
+        emitChanged();
+    }
 }
 
 
 void K3b::AudioTrack::setCdTextMessage( const QString& t )
 {
-    QString s( t );
-    d->cdTextValidator->fixup( s );
-    d->cdText.setMessage(s);
-    emitChanged();
+    if( cdTextMessage() != t ) {
+        QString s( t );
+        d->cdTextValidator->fixup( s );
+        d->cdText.setMessage(s);
+        emitChanged();
+    }
 }
 
 
@@ -198,15 +212,19 @@ void K3b::AudioTrack::setCdText( const K3b::Device::TrackCdText& cdtext )
 
 void K3b::AudioTrack::setPreEmp( bool b )
 {
-    d->preEmp = b;
-    emitChanged();
+    if( d->preEmp != b ) {
+        d->preEmp = b;
+        emitChanged();
+    }
 }
 
 
 void K3b::AudioTrack::setCopyProtection( bool b )
 {
-    d->copy = b;
-    emitChanged();
+    if( d->copy != b ) {
+        d->copy = b;
+        emitChanged();
+    }
 }
 
 

@@ -41,7 +41,6 @@ public:
 
     K3b::AudioDoc* project;
 
-    void _k_docChanged();
     void _k_trackAboutToBeAdded( int position );
     void _k_trackAdded();
     void _k_trackAboutToBeRemoved( int position );
@@ -54,12 +53,6 @@ public:
 private:
     AudioProjectModel* q;
 };
-
-
-void K3b::AudioProjectModel::Private::_k_docChanged()
-{
-    q->reset();
-}
 
 
 void K3b::AudioProjectModel::Private::_k_trackAboutToBeAdded( int position )
@@ -118,8 +111,6 @@ K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
 {
     setSupportedDragActions( Qt::MoveAction );
 
-    connect( doc, SIGNAL( changed() ),
-             this, SLOT( _k_docChanged() ), Qt::DirectConnection );
     connect( doc, SIGNAL(trackAboutToBeRemoved(int)),
              this, SLOT(_k_trackAboutToBeRemoved(int)), Qt::DirectConnection );
     connect( doc, SIGNAL(trackRemoved(int)),
@@ -399,15 +390,19 @@ int K3b::AudioProjectModel::rowCount( const QModelIndex& parent ) const
 
 bool K3b::AudioProjectModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    if ( index.isValid() ) {
-        if ( K3b::AudioTrack* track = trackForIndex( index ) ) {
-            if ( role == Qt::EditRole ) {
-                switch( index.column() ) {
-                case ArtistColumn:
+    if ( K3b::AudioTrack* track = trackForIndex( index ) ) {
+        if ( role == Qt::EditRole ) {
+            if ( index.column() == ArtistColumn ) {
+                if( value.toString() != track->artist() ) {
                     track->setArtist( value.toString() );
+                    emit dataChanged( index, index );
                     return true;
-                case TitleColumn:
+                }
+            }
+            else if ( index.column() == TitleColumn ) {
+                if( value.toString() != track->artist() ) {
                     track->setTitle( value.toString() );
+                    emit dataChanged( index, index );
                     return true;
                 }
             }

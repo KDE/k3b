@@ -67,7 +67,6 @@ namespace K3b {
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_docChanged() )
         Q_PRIVATE_SLOT( d, void _k_trackAboutToBeAdded( int position ) )
         Q_PRIVATE_SLOT( d, void _k_trackAdded() )
         Q_PRIVATE_SLOT( d, void _k_trackAboutToBeRemoved( int position ) )
