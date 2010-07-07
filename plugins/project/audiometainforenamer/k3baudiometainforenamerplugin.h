@@ -19,6 +19,7 @@
 #include <qwidget.h>
 
 namespace K3b {
+    class DataDoc;
     class DirItem;
     class FileItem;
 }
@@ -31,7 +32,7 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3b::ProjectP
     Q_OBJECT
 
 public:
-    K3bAudioMetainfoRenamerPluginWidget( K3b::Doc* doc, QWidget* parent = 0 );
+    K3bAudioMetainfoRenamerPluginWidget( K3b::DataDoc* doc, QWidget* parent = 0 );
     ~K3bAudioMetainfoRenamerPluginWidget();
 
     QWidget* qWidget() { return this; }

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -20,6 +21,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
+#include "k3bmixeddoc.h"
 
 #include <KComboBox>
 #include <KComponentData>
@@ -101,12 +103,12 @@ public:
 };
 
 
-K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::Doc* doc,
+K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::DataDoc* doc,
                                                                           QWidget* parent )
     : QWidget( parent )
 {
     d = new Private();
-    d->doc = static_cast<K3b::DataDoc*>(doc);
+    d->doc = doc;
     //  d->progressDialog = 0;
 
     // pattern group
@@ -393,7 +395,12 @@ K3bAudioMetainfoRenamerPlugin::~K3bAudioMetainfoRenamerPlugin()
 
 K3b::ProjectPluginGUIBase* K3bAudioMetainfoRenamerPlugin::createGUI( K3b::Doc* doc, QWidget* parent )
 {
-    return new K3bAudioMetainfoRenamerPluginWidget( doc, parent );
+    if( K3b::DataDoc* dataDoc = dynamic_cast<K3b::DataDoc*>( doc ) )
+        return new K3bAudioMetainfoRenamerPluginWidget( dataDoc, parent );
+    else if( K3b::MixedDoc* mixedDoc = dynamic_cast<K3b::MixedDoc*>( doc ) )
+        return new K3bAudioMetainfoRenamerPluginWidget( mixedDoc->dataDoc(), parent );
+    else
+        return 0;
 }
 
 #include "k3baudiometainforenamerplugin.moc"

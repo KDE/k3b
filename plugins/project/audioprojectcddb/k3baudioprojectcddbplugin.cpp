@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -22,6 +23,7 @@
 #include "k3baudiotrack.h"
 #include "k3btoc.h"
 #include "k3btrack.h"
+#include "k3bmixeddoc.h"
 #include "k3bmsf.h"
 #include "k3bprogressdialog.h"
 #include "k3bcddb.h"
@@ -58,7 +60,11 @@ K3bAudioProjectCddbPlugin::~K3bAudioProjectCddbPlugin()
 
 void K3bAudioProjectCddbPlugin::activate( K3b::Doc* doc, QWidget* parent )
 {
-    m_doc = dynamic_cast<K3b::AudioDoc*>( doc );
+    if( K3b::MixedDoc* mixedDoc = dynamic_cast<K3b::MixedDoc*>( doc ) )
+        m_doc = mixedDoc->audioDoc();
+    else
+        m_doc = dynamic_cast<K3b::AudioDoc*>( doc );
+
     m_parentWidget = parent;
     m_canceled = false;
 
