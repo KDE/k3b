@@ -29,7 +29,6 @@ include_directories(
 add_subdirectory( pics )
 add_subdirectory( icons )
 add_subdirectory( services )
-add_subdirectory( sounds )
 
 
 ########### next target ###############
