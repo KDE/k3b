@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=K3b MAD Decoder
+Name[x-test]=xxK3b MAD Decoderxx
 Comment=Decoding module to decode MPEG 1 Layer III files
+Comment[x-test]=xxDecoding module to decode MPEG 1 Layer III filesxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

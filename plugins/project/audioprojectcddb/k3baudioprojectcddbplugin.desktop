@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=K3b Cddb Audio Plugin
+Name[x-test]=xxK3b Cddb Audio Pluginxx
 Comment=Plugin to query a cddb server for information about an audio project.
+Comment[x-test]=xxPlugin to query a cddb server for information about an audio project.xx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

@@ -8,4 +8,5 @@ MimeType=audio/*;
 [Desktop Action CreateK3bAudioProject]
 Exec=k3b --audiocd %F
 Name=Create Audio CD with K3b
+Name[x-test]=xxCreate Audio CD with K3bxx
 Icon=k3b

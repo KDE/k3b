@@ -7,4 +7,5 @@ MimeType=application/x-iso;application/x-cd-image;inode/ISO-image;
 [Desktop Action WriteCdImage]
 Exec=k3b --image %F
 Name=Write image to disc with K3b
+Name[x-test]=xxWrite image to disc with K3bxx
 Icon=k3b

@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=K3b Musepack Decoder
+Name[x-test]=xxK3b Musepack Decoderxx
 Comment=Decoding module to decode Musepack audio files
+Comment[x-test]=xxDecoding module to decode Musepack audio filesxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

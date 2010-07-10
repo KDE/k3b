@@ -6,5 +6,6 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bCopy]
 Name=Copy with K3b
+Name[x-test]=xxCopy with K3bxx
 Exec=k3b --copy %i
 Icon=k3b

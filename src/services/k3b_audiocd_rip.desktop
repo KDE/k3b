@@ -6,5 +6,6 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bRip]
 Name=Extract Digital Audio with K3b
+Name[x-test]=xxExtract Digital Audio with K3bxx
 Exec=k3b --cddarip %i
 Icon=k3b

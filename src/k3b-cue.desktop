@@ -5,4 +5,5 @@ Exec=k3b --image %U
 Icon=k3b
 Terminal=false
 Name=K3b
+Name[x-test]=xxK3bxx
 MimeType=application/x-cue;

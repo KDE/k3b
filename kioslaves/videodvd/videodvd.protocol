@@ -16,3 +16,4 @@ deleting=false
 moving=false
 opening=true
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
+Description[x-test]=xxA kioslave that allows files to be copied from a Video DVD (including decryption)xx
