@@ -2,6 +2,7 @@
 =====
 Changes:
  * Added K3B_ENABLE_HAL_SUPPORT option to the build configuration. It allows to disable any direct calls to HAL (253388)
+ * Using Oxygen sounds for events (242395)
 
 Bugfixes:
  * Crash on start when checking device capabilities (246822)
