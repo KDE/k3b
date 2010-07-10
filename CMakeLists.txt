@@ -289,6 +289,3 @@ endif(BUILD_K3BSETUP)
 
 ##################  K3b config summary ################################
 macro_display_feature_log()
-find_package(Msgfmt REQUIRED)
-find_package(Gettext REQUIRED)
-add_subdirectory( po )
