@@ -256,7 +256,7 @@ void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
             }
 
             // recursively add all the files in the directory
-            QStringList dlist = QDir( f.absoluteFilePath() ).entryList( QDir::TypeMask|QDir::System|QDir::Hidden|QDir::NoDotAndDotDot );
+            QStringList dlist = QDir( f.absoluteFilePath() ).entryList( QDir::AllEntries|QDir::System|QDir::Hidden|QDir::NoDotAndDotDot );
             KUrl::List newUrls;
             for( QStringList::ConstIterator it = dlist.constBegin(); it != dlist.constEnd(); ++it )
                 newUrls.append( KUrl( f.absoluteFilePath() + "/" + *it ) );

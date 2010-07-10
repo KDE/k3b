@@ -91,7 +91,7 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<DataItem*>& items, Di
       m_lastProgress(0)
 {
     init();
-    
+
     m_infoLabel->setText( i18n("Moving files to project \"%1\"...", dir->doc()->URL().fileName()) );
     m_copyItems = copy;
 
@@ -146,7 +146,7 @@ K3b::DataUrlAddingDialog::~DataUrlAddingDialog()
     QString message = resultMessage();
     if( !message.isEmpty() )
         KMessageBox::detailedSorry( parentWidget(), i18n("Problems while adding files to the project."), message );
-    
+
     delete m_encodingConverter;
 }
 
@@ -530,7 +530,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
             }
 
             QDir newDir( absoluteFilePath );
-            foreach( const QString& dir, newDir.entryList( QDir::TypeMask|QDir::Hidden|QDir::System|QDir::NoDotAndDotDot ) ) {
+            foreach( const QString& dir, newDir.entryList( QDir::AllEntries|QDir::Hidden|QDir::System|QDir::NoDotAndDotDot ) ) {
                 m_urlQueue.append( qMakePair( KUrl(absoluteFilePath + '/' + dir ), newDirItem ) );
             }
         }
