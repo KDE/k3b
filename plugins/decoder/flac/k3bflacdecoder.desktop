@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=K3b FLAC Decoder
+Name[uk]=K3b декодувальник FLAC
 Name[x-test]=xxK3b FLAC Decoderxx
 Comment=Decoding module to decode FLAC files
+Comment[uk]=Модуль декодування для файлів FLAC
 Comment[x-test]=xxDecoding module to decode FLAC filesxx
 Type=Service
 ServiceTypes=K3b/Plugin

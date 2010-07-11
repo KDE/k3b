@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=K3b Wave Decoder
+Name[uk]=Декодер Wave для K3b
 Name[x-test]=xxK3b Wave Decoderxx
 Comment=Decoding module to decode wave files
+Comment[uk]=Модуль декодування файлів wave
 Comment[x-test]=xxDecoding module to decode wave filesxx
 Type=Service
 ServiceTypes=K3b/Plugin

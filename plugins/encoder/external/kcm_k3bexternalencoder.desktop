@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder Config Widget
+Name[uk]=Віджет налаштування зовнішнього кодувальника звуку для K3b
 Name[x-test]=xxK3b External Audio Encoder Config Widgetxx
 Type=Service
 X-KDE-ServiceTypes=KCModule

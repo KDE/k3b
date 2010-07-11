@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Encoder
+Name[uk]=Кодувальник Ogg Vorbis для K3b
 Name[x-test]=xxK3b Ogg Vorbis Encoderxx
 Comment=Encoding module to encode Ogg Vorbis files
+Comment[uk]=Модуль кодування файлів Ogg Vorbis
 Comment[x-test]=xxEncoding module to encode Ogg Vorbis filesxx
 Type=Service
 ServiceTypes=K3b/Plugin

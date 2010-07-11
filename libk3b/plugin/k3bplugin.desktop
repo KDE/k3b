@@ -2,4 +2,5 @@
 Type=ServiceType
 X-KDE-ServiceType=K3b/Plugin
 Name=K3b Plugin
+Name[uk]=Додаток K3b
 Name[x-test]=xxK3b Pluginxx

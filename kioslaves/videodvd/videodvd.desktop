@@ -4,6 +4,7 @@ Type=Link
 URL=videodvd:/
 Icon=media-optical-video
 Name=Video DVD Browser
+Name[uk]=Навігатор відео-DVD
 Name[x-test]=xxVideo DVD Browserxx
 Open=false
 X-KDE-TreeModule=Directory

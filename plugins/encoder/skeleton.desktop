@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=K3b ??? Encoder
+Name[uk]=Кодувальник ??? для K3b
 Name[x-test]=xxK3b ??? Encoderxx
 Comment=Encoding module to encode <name> files
+Comment[uk]=Модуль кодування файлів <name>
 Comment[x-test]=xxEncoding module to encode <name> filesxx
 Type=Service
 X-KDE-ServiceTypes=K3b/Plugin

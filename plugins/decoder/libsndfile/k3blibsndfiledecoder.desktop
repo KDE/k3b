@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=K3b Libsndfile Decoder
+Name[uk]=Декодер Libsndfile для K3b
 Name[x-test]=xxK3b Libsndfile Decoderxx
 Comment=Decoding module to decode audio files supported by libsndfile
+Comment[uk]=Модуль декодування звукових файлів, що підтримується libsndfile
 Comment[x-test]=xxDecoding module to decode audio files supported by libsndfilexx
 Type=Service
 ServiceTypes=K3b/Plugin

@@ -1,7 +1,9 @@
 [Desktop Entry]
 Name=K3b FFMpeg Decoder
+Name[uk]=K3b декодувальник FFMpeg
 Name[x-test]=xxK3b FFMpeg Decoderxx
 Comment=Decoding module to decode wma files
+Comment[uk]=Модуль для декодування файлів wma
 Comment[x-test]=xxDecoding module to decode wma filesxx
 Type=Service
 ServiceTypes=K3b/Plugin

@@ -16,4 +16,5 @@ deleting=false
 moving=false
 opening=true
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
+Description[uk]=Підлеглий В/В, який дає змогу копіювати файли з відео-DVD (включаючи розшифровування)
 Description[x-test]=xxA kioslave that allows files to be copied from a Video DVD (including decryption)xx

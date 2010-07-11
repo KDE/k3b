@@ -1,28 +1,35 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[uk]=K3b
 Comment[x-test]=xxK3bxx
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[uk]=Процес успішний
 Name[x-test]=xxProcess successfulxx
 Comment=Process successfully finished
+Comment[uk]=Процес закінчився успішно
 Comment[x-test]=xxProcess successfully finishedxx
 Sound=k3b_success1.wav
 Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[uk]=Помилка процесу
 Name[x-test]=xxProcess errorxx
 Comment=Process finished with errors
+Comment[uk]=Процес закінчився з помилками
 Comment[x-test]=xxProcess finished with errorsxx
 Sound=k3b_error1.wav
 Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[uk]=Очікування носія
 Name[x-test]=xxWaiting for mediumxx
 Comment=The user needs to insert a medium
+Comment[uk]=Користувач повинен вставити носій
 Comment[x-test]=xxThe user needs to insert a mediumxx
 Sound=k3b_wait_media1.wav
 Action=Sound
