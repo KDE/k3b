@@ -22,7 +22,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
+#include <QStringList>
 #include <QTextStream>
 
 #include <KDebug>
@@ -470,24 +470,21 @@ K3b::DvdformatProgram::DvdformatProgram()
 
 K3b::Version K3b::DvdformatProgram::parseVersion( const QString& output, const ExternalBin& /*bin*/ ) const
 {
-    // different locales make searching for the +- char difficult
-    // so we simply ignore it.
-    int pos = output.indexOf( QRegExp("DVD.*RW(/-RAM)? format utility") );
-    if( pos < 0 )
-        return Version();
+    QString version;
+    // extract fields
+    QStringList outputList = output.split( " " );
 
-    pos = output.indexOf( "version", pos );
-    if( pos < 0 )
-        return Version();
+    for (int i = 0; i < outputList.size(); ++i) {
+        if ( outputList.at( i ) == "version" ) {
+            // extract version number
+            version = outputList.at( i + 1 );
+            // remove dot and spaces found at the end of the version
+            version = version.left( version.size() - 3 );
+            return version;
+        }
+    }
 
-    pos += 8;
-
-    // the version ends in a dot.
-    int endPos = output.indexOf( QRegExp("\\.\\D"), pos );
-    if( endPos < 0 )
-        return Version();
-
-    return output.mid( pos, endPos-pos );
+    return Version();
 }
 
 QString K3b::DvdformatProgram::parseCopyright( const QString& /*output*/, const ExternalBin& /*bin*/ ) const
