@@ -1,14 +1,20 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[nl]=K3b
+Comment[sv]=K3b
 Comment[uk]=K3b
 Comment[x-test]=xxK3bxx
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[nl]=Proces was succesvol
+Name[sv]=Processen lyckades
 Name[uk]=Процес успішний
 Name[x-test]=xxProcess successfulxx
 Comment=Process successfully finished
+Comment[nl]=Proces met succes voltooid
+Comment[sv]=Processen avslutades med lyckat resultat
 Comment[uk]=Процес закінчився успішно
 Comment[x-test]=xxProcess successfully finishedxx
 Sound=k3b_success1.wav
@@ -16,9 +22,13 @@ Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[nl]=Procesfout
+Name[sv]=Processfel
 Name[uk]=Помилка процесу
 Name[x-test]=xxProcess errorxx
 Comment=Process finished with errors
+Comment[nl]=Proces voltooid met fouten
+Comment[sv]=Processen avslutades med fel
 Comment[uk]=Процес закінчився з помилками
 Comment[x-test]=xxProcess finished with errorsxx
 Sound=k3b_error1.wav
@@ -26,9 +36,13 @@ Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[nl]=Wacht op medium
+Name[sv]=Väntar på mediet
 Name[uk]=Очікування носія
 Name[x-test]=xxWaiting for mediumxx
 Comment=The user needs to insert a medium
+Comment[nl]=De gebruiker dient een medium in te voeren
+Comment[sv]=Användaren måste mata in ett medium
 Comment[uk]=Користувач повинен вставити носій
 Comment[x-test]=xxThe user needs to insert a mediumxx
 Sound=k3b_wait_media1.wav

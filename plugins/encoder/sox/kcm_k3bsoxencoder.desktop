@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=K3b SoX Audio Encoder Config Module
+Name[nl]=K3b SoX-audio-codeerder configuratiemodule
+Name[sv]=Inställningsmodul för K3b Sox ljudkodare
 Name[uk]=Модуль налаштування аудіокодувальника SoX K3b
 Name[x-test]=xxK3b SoX Audio Encoder Config Modulexx
 Type=Service

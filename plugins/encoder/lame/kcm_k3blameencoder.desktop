@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=K3b Lame Mp3 Encoder Config Module
+Name[nl]=K3b Lame Mp3-codeerder Configuratiemodule
+Name[sv]=Inställningsmodul för K3b Lame MP3-kodare
 Name[uk]=Модуль налаштування кодувальника Lame Mp3 K3b
 Name[x-test]=xxK3b Lame Mp3 Encoder Config Modulexx
 Type=Service

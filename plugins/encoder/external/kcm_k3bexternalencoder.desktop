@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder Config Widget
+Name[nl]=K3b Externe-audio-codeerder Configuratiemodule
+Name[sv]=Grafisk inställningskomponent för K3b extern ljudkodare
 Name[uk]=Віджет налаштування зовнішнього кодувальника звуку для K3b
 Name[x-test]=xxK3b External Audio Encoder Config Widgetxx
 Type=Service

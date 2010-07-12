@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=K3b ??? Encoder
+Name[nl]=K3b ???-codeerder
+Name[sv]=K3b ???-kodare
 Name[uk]=Кодувальник ??? для K3b
 Name[x-test]=xxK3b ??? Encoderxx
 Comment=Encoding module to encode <name> files
+Comment[nl]=Module voor het coderen van <name>-bestanden
+Comment[sv]=Kodningsmodul för att koda <namn>-filer
 Comment[uk]=Модуль кодування файлів <name>
 Comment[x-test]=xxEncoding module to encode <name> filesxx
 Type=Service

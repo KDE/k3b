@@ -1,9 +1,13 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Decoder
+Name[nl]=K3b Ogg Vorbis-decoder
+Name[sv]=K3b Ogg Vorbis-avkodare
 Name[uk]=Декодер Ogg Vorbis для K3b
 Name[x-test]=xxK3b Ogg Vorbis Decoderxx
 X-KDE-ServiceTypes=K3b/Plugin
 Comment=Decoding module to decode Ogg Vorbis files
+Comment[nl]=Module voor het decoderen van Ogg Vorbis-bestanden
+Comment[sv]=Avkodningsmodul för att avkoda Ogg Vorbis-filer
 Comment[uk]=Модуль декодування файлів Ogg Vorbis
 Comment[x-test]=xxDecoding module to decode Ogg Vorbis filesxx
 Type=Service

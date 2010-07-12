@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=K3b Wave Decoder
+Name[nl]=K3b Wave-decoder
+Name[sv]=K3b Wav-avkodare
 Name[uk]=Декодер Wave для K3b
 Name[x-test]=xxK3b Wave Decoderxx
 Comment=Decoding module to decode wave files
+Comment[nl]=Module voor het decoderen van wave-bestanden
+Comment[sv]=Avkodningsmodul för att avkoda Wav-filer
 Comment[uk]=Модуль декодування файлів wave
 Comment[x-test]=xxDecoding module to decode wave filesxx
 Type=Service

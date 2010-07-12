@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=K3b Lame Mp3 Encoder
+Name[nl]=K3b Lame Mp3-codeerder
+Name[sv]=K3b Lame MP3-kodare
 Name[uk]=Кодувальник Lame Mp3 для K3b
 Name[x-test]=xxK3b Lame Mp3 Encoderxx
 Comment=Encoding module to encode MPEG1 Layer III (mp3) files
+Comment[nl]=Module voor het coderen van  MPEG1 Layer III-bestanden (mp3)
+Comment[sv]=Kodningsmodul för att koda MPEG 1 lager III (MP3)-filer
 Comment[uk]=Модуль кодування файлів MPEG1 Layer III (mp3)
 Comment[x-test]=xxEncoding module to encode MPEG1 Layer III (mp3) filesxx
 Type=Service

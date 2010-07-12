@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=K3b SoX Audio Encoder
+Name[nl]=K3b SoX Audio-codeerder
+Name[sv]=K3b Sox-ljudkodare
 Name[uk]=Кодувальник звуку SoX для K3b
 Name[x-test]=xxK3b SoX Audio Encoderxx
 Comment=Encoding module to encode many file formats using SoX
+Comment[nl]=Module voor het coderen van veel bestandsformaten met behulp van SoX
+Comment[sv]=Kodningsmodul för att koda många filformat med användning av Sox
 Comment[uk]=Модуль кодування багатьох форматів файлів за допомогою SoX
 Comment[x-test]=xxEncoding module to encode many file formats using SoXxx
 Type=Service

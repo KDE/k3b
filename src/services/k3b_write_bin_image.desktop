@@ -7,6 +7,8 @@ MimeType=application/x-cue;
 [Desktop Action WriteCdImage]
 Exec=k3b --image %F
 Name=Write CD Image with K3b
+Name[nl]=Cd-image schrijven met K3b
+Name[sv]=Skriv cd-avbild med K3b
 Name[uk]=Записати штамп КД через K3b
 Name[x-test]=xxWrite CD Image with K3bxx
 Icon=k3b

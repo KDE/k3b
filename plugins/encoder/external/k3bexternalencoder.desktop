@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder
+Name[nl]=K3b Externe-audio-codeerder
+Name[sv]=K3b extern ljudkodare
 Name[uk]=Зовнішній кодувальник аудіо для K3b
 Name[x-test]=xxK3b External Audio Encoderxx
 Comment=Encoding module that allows specifying an encoding command
+Comment[nl]=Module voor het specificeren van een codeercommando
+Comment[sv]=Avkodningsmodul som tillåter att ett avkodningskommando anges
 Comment[uk]=Модуль кодування, що дозволяє визначення команди кодування
 Comment[x-test]=xxEncoding module that allows specifying an encoding commandxx
 Type=Service

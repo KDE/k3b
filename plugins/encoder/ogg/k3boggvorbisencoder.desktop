@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Encoder
+Name[nl]=K3b Ogg Vorbis-codeerder
+Name[sv]=K3b Ogg Vorbis-kodare
 Name[uk]=Кодувальник Ogg Vorbis для K3b
 Name[x-test]=xxK3b Ogg Vorbis Encoderxx
 Comment=Encoding module to encode Ogg Vorbis files
+Comment[nl]=Module voor het coderen van Ogg Vorbis-bestanden
+Comment[sv]=Kodningsmodul för att koda Ogg Vorbis-filer
 Comment[uk]=Модуль кодування файлів Ogg Vorbis
 Comment[x-test]=xxEncoding module to encode Ogg Vorbis filesxx
 Type=Service

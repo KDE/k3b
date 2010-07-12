@@ -1,8 +1,12 @@
 [Desktop Entry]
 Name=K3b Musepack Decoder
+Name[nl]=K3b Musepack-decoder
+Name[sv]=K3b Musepack-avkodare
 Name[uk]=Декодер Musepack для K3b
 Name[x-test]=xxK3b Musepack Decoderxx
 Comment=Decoding module to decode Musepack audio files
+Comment[nl]=Module voor het decoderen van Musepack-audiobestanden
+Comment[sv]=Avkodningsmodul för att avkoda Musepack-ljudfiler
 Comment[uk]=Модуль декодування звукових файлів Musepack
 Comment[x-test]=xxDecoding module to decode Musepack audio filesxx
 Type=Service
