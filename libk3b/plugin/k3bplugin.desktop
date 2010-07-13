@@ -2,7 +2,11 @@
 Type=ServiceType
 X-KDE-ServiceType=K3b/Plugin
 Name=K3b Plugin
+Name[hr]=K3b priključak
+Name[nds]=K3b-Moduul
 Name[nl]=K3b-plugin
+Name[pt_BR]=Plug-in do K3b
 Name[sv]=K3b-insticksprogram
 Name[uk]=Додаток K3b
 Name[x-test]=xxK3b Pluginxx
+Name[zh_TW]=K3b 外掛程式

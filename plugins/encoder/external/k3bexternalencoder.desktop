@@ -1,14 +1,20 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder
+Name[nds]=Extern Klangkoderer för K3b
 Name[nl]=K3b Externe-audio-codeerder
+Name[pt_BR]=Codificador de áudio externo do K3b
 Name[sv]=K3b extern ljudkodare
 Name[uk]=Зовнішній кодувальник аудіо для K3b
 Name[x-test]=xxK3b External Audio Encoderxx
+Name[zh_TW]=K3b 外部音效編碼器
 Comment=Encoding module that allows specifying an encoding command
+Comment[nds]=Koderer-Moduul, mit dat sik Kodeerbefehlen bruken laat
 Comment[nl]=Module voor het specificeren van een codeercommando
+Comment[pt_BR]=Módulo de codificação que permite especificar um comando de codificação
 Comment[sv]=Avkodningsmodul som tillåter att ett avkodningskommando anges
 Comment[uk]=Модуль кодування, що дозволяє визначення команди кодування
 Comment[x-test]=xxEncoding module that allows specifying an encoding commandxx
+Comment[zh_TW]=讓您透過指定外部指令的方式做編碼的模組
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

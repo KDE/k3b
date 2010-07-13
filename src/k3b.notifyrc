@@ -1,49 +1,70 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[nds]=K3b
 Comment[nl]=K3b
+Comment[pt_BR]=K3b
 Comment[sv]=K3b
 Comment[uk]=K3b
 Comment[x-test]=xxK3bxx
+Comment[zh_TW]=K3b
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[nds]=Vörgang is glückt
 Name[nl]=Proces was succesvol
+Name[pt_BR]=Processo com sucesso
 Name[sv]=Processen lyckades
 Name[uk]=Процес успішний
 Name[x-test]=xxProcess successfulxx
+Name[zh_TW]=行程成功
 Comment=Process successfully finished
+Comment[nds]=Vörgang afslaten
 Comment[nl]=Proces met succes voltooid
+Comment[pt_BR]=Processo concluído com sucesso
 Comment[sv]=Processen avslutades med lyckat resultat
 Comment[uk]=Процес закінчився успішно
 Comment[x-test]=xxProcess successfully finishedxx
+Comment[zh_TW]=行程已成功結束
 Sound=k3b_success1.wav
 Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[nds]=Perzessfehler
 Name[nl]=Procesfout
+Name[pt_BR]=Erro no processo
 Name[sv]=Processfel
 Name[uk]=Помилка процесу
 Name[x-test]=xxProcess errorxx
+Name[zh_TW]=行程發生錯誤
 Comment=Process finished with errors
+Comment[nds]=Vörgang mit Fehlers afslaten
 Comment[nl]=Proces voltooid met fouten
+Comment[pt_BR]=Processo concluído com erros
 Comment[sv]=Processen avslutades med fel
 Comment[uk]=Процес закінчився з помилками
 Comment[x-test]=xxProcess finished with errorsxx
+Comment[zh_TW]=行程已完成，但是發生錯誤
 Sound=k3b_error1.wav
 Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[nds]=Bi to töven op en Schiev
 Name[nl]=Wacht op medium
+Name[pt_BR]=Aguardando pela mídia
 Name[sv]=Väntar på mediet
 Name[uk]=Очікування носія
 Name[x-test]=xxWaiting for mediumxx
+Name[zh_TW]=等候媒體中
 Comment=The user needs to insert a medium
+Comment[nds]=De Bruker mutt en Schiev inleggen
 Comment[nl]=De gebruiker dient een medium in te voeren
+Comment[pt_BR]=O usuário precisa inserir uma mídia
 Comment[sv]=Användaren måste mata in ett medium
 Comment[uk]=Користувач повинен вставити носій
 Comment[x-test]=xxThe user needs to insert a mediumxx
+Comment[zh_TW]=使用者需要插入媒體
 Sound=k3b_wait_media1.wav
 Action=Sound

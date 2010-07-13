@@ -1,21 +1,30 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup – modify permission for CD/DVD burning with K3b
+Comment[nds]=K3b-Inrichthölper – Verlöven för't Brennen vun CDs oder DVDs mit K3b ännern
 Comment[nl]=K3bSetup - stelt de toegangsrechten in voor cd/dvd-branden met K3b
+Comment[pt_BR]=Configurações avançadas do K3b - modifica as permissões para gravação de CD/DVD com o K3b
 Comment[sv]=Ställ in K3b: ändra rättigheter för att bränna cd/dvd med K3b
 Comment[uk]=K3bSetup — змініть права для запису КД/DVD у K3b
 Comment[x-test]=xxK3bSetup – modify permission for CD/DVD burning with K3bxx
+Comment[zh_TW]=K3bSetup - 修改以 K3b 進行 CD/DVD 燒錄的許可權限
 Exec=k3bsetup
 Keywords=K3bSetup,k3bsetup
+Keywords[nds]=K3bSetup,k3bsetup,K3b-Inrichthölper
 Keywords[nl]=K3bSetup,k3bsetup
+Keywords[pt_BR]=Configurações avançadas do K3b,configurações avançadas do K3b
 Keywords[sv]=Ställ in K3b,k3bsetup
 Keywords[uk]=K3bSetup,k3bsetup
 Keywords[x-test]=xxK3bSetup,k3bsetupxx
+Keywords[zh_TW]=K3bSetup,k3bsetup
 Name=K3bSetup
+Name[nds]=K3b-Inrichthölper
 Name[nl]=K3bSetup
+Name[pt_BR]=Configurações avançadas do K3b
 Name[sv]=Ställ in K3b
 Name[uk]=K3bSetup
 Name[x-test]=xxK3bSetupxx
+Name[zh_TW]=K3bSetup
 
 Terminal=false
 Type=Service
@@ -29,7 +38,10 @@ X-KDE-Keywords=k3b,k3bsetup,cd,dvd
 Categories=Application;System;X-KDE-System;
 
 GenericName=CD/DVD/BD Burning Setup
+GenericName[nds]=Brennen vun CD, DVD un BD instellen
 GenericName[nl]=cd/dvd/bd-branden instellen
+GenericName[pt_BR]=Configuração da gravação de CD/DVD/BD
 GenericName[sv]=Cd, dvd och bd-bränninställning
 GenericName[uk]=Налаштування запису КД, DVD та BD
 GenericName[x-test]=xxCD/DVD/BD Burning Setupxx
+GenericName[zh_TW]=CD/DVD/BD 燒錄設定

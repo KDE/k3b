@@ -1,12 +1,18 @@
 [org.kde.kcontrol.k3bsetup.save]
 Name=Update device and programs permissions
+Name[nds]=Reedschap- un Programmverlöven opfrischen
 Name[nl]=Rechten van apparaat en programma's bijwerken
+Name[pt_BR]=Atualizar as permissões dos programas e dispositivos
 Name[sv]=Uppdatera rättigheter för enheter och program
 Name[uk]=Оновлення прав доступу до пристроїв і програм
 Name[x-test]=xxUpdate device and programs permissionsxx
+Name[zh_TW]=更新裝置與程式的權限
 Description=Authentication is required to update permissions of devices and programs
+Description[nds]=För't Opfrischen vun Reedschap- un Programmverlöven deit en Identiteetprööv noot.
 Description[nl]=Authenticatie is vereist om rechten van apparaten en programma's bij te werken
+Description[pt_BR]=É necessária autenticação para atualizar as permissões dos programas e dispositivos
 Description[sv]=Behörighetskontroll krävs för att uppdatera rättigheter för enheter och program
 Description[uk]=Для оновлення прав доступу до пристроїв та програм слід пройти розпізнавання
 Description[x-test]=xxAuthentication is required to update permissions of devices and programsxx
+Description[zh_TW]=更新裝置與程式的權限時需要驗證身份
 Policy=auth_admin

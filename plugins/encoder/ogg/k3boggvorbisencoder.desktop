@@ -1,14 +1,20 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Encoder
+Name[nds]=Ogg-Vorbis-Koderer för K3b
 Name[nl]=K3b Ogg Vorbis-codeerder
+Name[pt_BR]=Codificador Ogg Vorbis do K3b
 Name[sv]=K3b Ogg Vorbis-kodare
 Name[uk]=Кодувальник Ogg Vorbis для K3b
 Name[x-test]=xxK3b Ogg Vorbis Encoderxx
+Name[zh_TW]=K3b Ogg Vorbis 編碼器
 Comment=Encoding module to encode Ogg Vorbis files
+Comment[nds]=Kodeermoduul för Dateien in't Formaat "MPEG 1 Laag III"
 Comment[nl]=Module voor het coderen van Ogg Vorbis-bestanden
+Comment[pt_BR]=Módulo de codificação para codificar arquivos Ogg Vorbis
 Comment[sv]=Kodningsmodul för att koda Ogg Vorbis-filer
 Comment[uk]=Модуль кодування файлів Ogg Vorbis
 Comment[x-test]=xxEncoding module to encode Ogg Vorbis filesxx
+Comment[zh_TW]=編碼 Ogg Vorbis 檔案格式的模組
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

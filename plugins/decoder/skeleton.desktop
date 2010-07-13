@@ -1,14 +1,20 @@
 [Desktop Entry]
 Name=K3b ??? Decoder
+Name[nds]=???-Dekoderer för K3b
 Name[nl]=K3b ???-decoder
+Name[pt_BR]=Decodificador ??? do K3b
 Name[sv]=K3b ???-avkodare
 Name[uk]=Декодер ??? для K3b
 Name[x-test]=xxK3b ??? Decoderxx
+Name[zh_TW]=K3b ??? 解碼器
 Comment=Decoding module to decode ??? files
+Comment[nds]=Dekodeermoduul för "???"-Dateien
 Comment[nl]=Module voor het decoderen van ???-bestanden
+Comment[pt_BR]=Módulo de decodificação para decodificar arquivos ???
 Comment[sv]=Avkodningsmodul för att avkoda ???-filer
 Comment[uk]=Модуль декодування файлів ???
 Comment[x-test]=xxDecoding module to decode ??? filesxx
+Comment[zh_TW]=解碼 ??? 檔案的模組
 Type=Service
 X-KDE-ServiceTypes=K3b/Plugin
 

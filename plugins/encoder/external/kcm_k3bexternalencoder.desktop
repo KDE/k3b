@@ -1,9 +1,12 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder Config Widget
+Name[nds]=Instelldialoog för extern Klangkoderer för K3b
 Name[nl]=K3b Externe-audio-codeerder Configuratiemodule
+Name[pt_BR]=Widget de configuração do codificador de áudio externo do K3b
 Name[sv]=Grafisk inställningskomponent för K3b extern ljudkodare
 Name[uk]=Віджет налаштування зовнішнього кодувальника звуку для K3b
 Name[x-test]=xxK3b External Audio Encoder Config Widgetxx
+Name[zh_TW]=K3b 外部音效編碼器設定元件
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3bexternalencoder

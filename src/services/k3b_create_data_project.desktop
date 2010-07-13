@@ -8,8 +8,11 @@ ExcludeServiceTypes=application/x-iso;
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --data %F
 Name=Create file project with K3b
+Name[nds]=Dateiprojekt mit K3b opstellen
 Name[nl]=Bestandsproject aanmaken met K3b
+Name[pt_BR]=Criar um projeto de arquivos com o K3b
 Name[sv]=Skapa filprojekt med K3b
 Name[uk]=Створити файловий проект за допомогою K3b
 Name[x-test]=xxCreate file project with K3bxx
+Name[zh_TW]=用 K3b 建立檔案專案
 Icon=k3b
