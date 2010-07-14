@@ -7,9 +7,16 @@ MimeType=video/mpeg;
 [Desktop Action CreateK3bVcdProject]
 Exec=k3b --videocd %F
 Name=Create Video CD with K3b
+Name[nb]=Lag video-DVD med K3b
 Name[nds]=Video-CD mit K3b opstellen
 Name[nl]=Video-cd aanmaken met K3b
+Name[nn]=Lag video-CD med K3b
 Name[pt_BR]=Criar CD de vídeo com o K3b
+Name[sk]=Vytvoriť Video CD pomocou K3b
+Name[sr]=Направи видео ЦД К3бом...
+Name[sr@ijekavian]=Направи видео ЦД К3бом...
+Name[sr@ijekavianlatin]=Napravi Video CD K3bom...
+Name[sr@latin]=Napravi Video CD K3bom...
 Name[sv]=Skapa video-cd med K3b
 Name[uk]=Створити відео-КД через K3b
 Name[x-test]=xxCreate Video CD with K3bxx

@@ -7,9 +7,16 @@ MimeType=application/x-iso;application/x-cd-image;inode/ISO-image;
 [Desktop Action WriteCdImage]
 Exec=k3b --image %F
 Name=Write image to disc with K3b
+Name[nb]=Skriv bilde til harddisk med K3b
 Name[nds]=Afbild mit K3b na Fastplaat schrieven
 Name[nl]=Image naar schijf schrijven met K3b
+Name[nn]=Brenn bilete til plate med K3b
 Name[pt_BR]=Gravar imagem para disco com o K3b
+Name[sk]=Zapísať obraz na disk pomocou K3b
+Name[sr]=Упиши одраз на диск К3бом...
+Name[sr@ijekavian]=Упиши одраз на диск К3бом...
+Name[sr@ijekavianlatin]=Upiši odraz na disk K3bom...
+Name[sr@latin]=Upiši odraz na disk K3bom...
 Name[sv]=Skriv avbild till skiva med K3b
 Name[uk]=Записати штамп на диск за допомогою K3b
 Name[x-test]=xxWrite image to disc with K3bxx

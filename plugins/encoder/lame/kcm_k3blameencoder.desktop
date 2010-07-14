@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=K3b Lame Mp3 Encoder Config Module
+Name[nb]=K3b oppsettselement for Lame Mp3-koder
 Name[nds]=Instellmoduul för Lame-MP3-Koderer för K3b
 Name[nl]=K3b Lame Mp3-codeerder Configuratiemodule
 Name[pt_BR]=Módulo de configuração do codificador Lame Mp3 do K3b
+Name[sk]=Ovládací modul Lame Mp3 enkodéra pre K3b
+Name[sr]=Модул за подешавање Лејмовог МП3 кодера за К3б
+Name[sr@ijekavian]=Модул за подешавање Лејмовог МП3 кодера за К3б
+Name[sr@ijekavianlatin]=Modul za podešavanje Lameovog MP3 kodera za K3b
+Name[sr@latin]=Modul za podešavanje Lameovog MP3 kodera za K3b
 Name[sv]=Inställningsmodul för K3b Lame MP3-kodare
 Name[uk]=Модуль налаштування кодувальника Lame Mp3 K3b
 Name[x-test]=xxK3b Lame Mp3 Encoder Config Modulexx

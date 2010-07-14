@@ -1,8 +1,14 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder Config Widget
+Name[nb]=K3b oppsettselement for ekstern lydkoder
 Name[nds]=Instelldialoog för extern Klangkoderer för K3b
 Name[nl]=K3b Externe-audio-codeerder Configuratiemodule
 Name[pt_BR]=Widget de configuração do codificador de áudio externo do K3b
+Name[sk]=Ovládací prvok externého zvukového enkodéra pre K3b
+Name[sr]=Виџет за подешавање спољашњег аудио кодера за К3б
+Name[sr@ijekavian]=Виџет за подешавање спољашњег аудио кодера за К3б
+Name[sr@ijekavianlatin]=Vidžet za podešavanje spoljašnjeg audio kodera za K3b
+Name[sr@latin]=Vidžet za podešavanje spoljašnjeg audio kodera za K3b
 Name[sv]=Grafisk inställningskomponent för K3b extern ljudkodare
 Name[uk]=Віджет налаштування зовнішнього кодувальника звуку для K3b
 Name[x-test]=xxK3b External Audio Encoder Config Widgetxx
