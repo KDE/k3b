@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=K3b FFMpeg Decoder
+Name[ga]=Díchódóir FFMpeg K3b
 Name[nb]=K3b FFMpeg dekoder
 Name[nds]=FFMpeg-Dekoderer för K3b
 Name[nl]=K3b FFMpeg-decoder
@@ -15,6 +16,7 @@ Name[uk]=K3b декодувальник FFMpeg
 Name[x-test]=xxK3b FFMpeg Decoderxx
 Name[zh_TW]=K3b FFMpeg 解碼器
 Comment=Decoding module to decode wma files
+Comment[ga]=Modúl díchódaithe a dhíchódaíonn comhaid wma
 Comment[nb]=Modul som dekoder wma-filer
 Comment[nds]=Dekodeermoduul för "wma"-Dateien
 Comment[nl]=Module voor het decoderen van wma-bestanden

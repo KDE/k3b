@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=K3b Musepack Decoder
+Name[ga]=Díchódóir Musepack K3b
 Name[nb]=K3b Musepack-dekoder
 Name[nds]=Musepack-Dekoderer för K3b
 Name[nl]=K3b Musepack-decoder
@@ -14,6 +15,7 @@ Name[uk]=Декодер Musepack для K3b
 Name[x-test]=xxK3b Musepack Decoderxx
 Name[zh_TW]=K3b Musepack 解碼器
 Comment=Decoding module to decode Musepack audio files
+Comment[ga]=Modúl díchódaithe a dhíchódaíonn comhaid Musepack
 Comment[nb]=Modul som dekoder Musepack lydfiler
 Comment[nds]=Dekodeermoduul för "Musepack"-Klangdateien
 Comment[nl]=Module voor het decoderen van Musepack-audiobestanden

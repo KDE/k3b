@@ -4,6 +4,7 @@ Type=Link
 URL=videodvd:/
 Icon=media-optical-video
 Name=Video DVD Browser
+Name[ga]=Brabhsálaí DVD Físe
 Name[nb]=Bla etter video-dvd-er
 Name[nds]=Video-DVD-Kieker
 Name[nl]=Video DVD Browser

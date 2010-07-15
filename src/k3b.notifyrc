@@ -1,6 +1,7 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[ga]=K3b
 Comment[nb]=K3b
 Comment[nds]=K3b
 Comment[nl]=K3b
@@ -18,6 +19,7 @@ Comment[zh_TW]=K3b
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[ga]=D'éirigh leis an bpróiseas
 Name[ms]=Proses berjaya
 Name[nb]=Prosessen lyktes
 Name[nds]=Vörgang is glückt
@@ -34,6 +36,7 @@ Name[uk]=Процес успішний
 Name[x-test]=xxProcess successfulxx
 Name[zh_TW]=行程成功
 Comment=Process successfully finished
+Comment[ga]=D'éirigh leis an bpróiseas
 Comment[nb]=Prosessen ble vellykket utført
 Comment[nds]=Vörgang afslaten
 Comment[nl]=Proces met succes voltooid
@@ -53,6 +56,7 @@ Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[ga]=Earráid sa phróiseas
 Name[ms]=Ralat proses
 Name[nb]=Prosessen mislyktes
 Name[nds]=Perzessfehler
@@ -69,6 +73,7 @@ Name[uk]=Помилка процесу
 Name[x-test]=xxProcess errorxx
 Name[zh_TW]=行程發生錯誤
 Comment=Process finished with errors
+Comment[ga]=Chríochnaigh an próiseas le hearráidí
 Comment[ms]=Proses selesai dengan ralat
 Comment[nb]=Prosessen ble fullført, men ga feil
 Comment[nds]=Vörgang mit Fehlers afslaten
@@ -89,6 +94,7 @@ Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[ga]=Ag feitheamh leis an meán
 Name[nb]=Venter på medium
 Name[nds]=Bi to töven op en Schiev
 Name[nl]=Wacht op medium
@@ -104,6 +110,7 @@ Name[uk]=Очікування носія
 Name[x-test]=xxWaiting for mediumxx
 Name[zh_TW]=等候媒體中
 Comment=The user needs to insert a medium
+Comment[ga]=Caithfidh an t-úsáideoir meán a chur isteach
 Comment[nb]=Brukeren må sette inn et medium
 Comment[nds]=De Bruker mutt en Schiev inleggen
 Comment[nl]=De gebruiker dient een medium in te voeren

@@ -6,6 +6,7 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bRip]
 Name=Rip Video DVD Titles with K3b
+Name[ga]=Srac Teidil DVD Físe le K3b
 Name[nb]=Lag kopi av video-DVD titler med K3b
 Name[nds]=Video-DVD-Stücken mit K3b utlesen
 Name[nl]=Video-dvd-titels rippen met K3b
