@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=K3b ??? Encoder
+Name[ca]=Codificador ??? del K3b
+Name[cs]=K3b ??? enkodér
 Name[ga]=Ionchódóir ??? K3b
 Name[nb]=K3b ??? koder
 Name[nds]=???-Koderer för K3b
@@ -15,6 +17,8 @@ Name[uk]=Кодувальник ??? для K3b
 Name[x-test]=xxK3b ??? Encoderxx
 Name[zh_TW]=K3b ??? 編碼器
 Comment=Encoding module to encode <name> files
+Comment[ca]=Mòdul de codificació per codificar fitxers <name>
+Comment[cs]=Modul pro kompresi do souborů <name>
 Comment[ga]=Modúl ionchódaithe a ionchódaíonn comhaid <name>
 Comment[nb]=Modul som koder <name>-filer
 Comment[nds]=Kodeermoduul för <Naam>-Dateien

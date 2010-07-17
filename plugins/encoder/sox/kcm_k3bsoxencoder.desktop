@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=K3b SoX Audio Encoder Config Module
+Name[ca]=Mòdul de configuració del codificador d'àudio SoX
+Name[cs]=Ovládací modul formátu K3b SoX
 Name[nb]=K3b oppsettsmodul for SoX lydkoder
 Name[nds]=Instellmoduul för SoX-Klangkoderer för K3b
 Name[nl]=K3b SoX-audio-codeerder configuratiemodule

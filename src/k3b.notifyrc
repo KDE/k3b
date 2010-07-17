@@ -1,6 +1,8 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[ca]=K3b
+Comment[cs]=K3b
 Comment[ga]=K3b
 Comment[nb]=K3b
 Comment[nds]=K3b
@@ -19,6 +21,8 @@ Comment[zh_TW]=K3b
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[ca]=Procés correcte
+Name[cs]=Proces úspěšný
 Name[ga]=D'éirigh leis an bpróiseas
 Name[ms]=Proses berjaya
 Name[nb]=Prosessen lyktes
@@ -36,6 +40,8 @@ Name[uk]=Процес успішний
 Name[x-test]=xxProcess successfulxx
 Name[zh_TW]=行程成功
 Comment=Process successfully finished
+Comment[ca]=El procés s'ha completat correctament
+Comment[cs]=Proces úspěšně dokončen
 Comment[ga]=D'éirigh leis an bpróiseas
 Comment[nb]=Prosessen ble vellykket utført
 Comment[nds]=Vörgang afslaten
@@ -56,6 +62,8 @@ Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[ca]=Error de procés
+Name[cs]=Chyba procesu
 Name[ga]=Earráid sa phróiseas
 Name[ms]=Ralat proses
 Name[nb]=Prosessen mislyktes
@@ -73,6 +81,8 @@ Name[uk]=Помилка процесу
 Name[x-test]=xxProcess errorxx
 Name[zh_TW]=行程發生錯誤
 Comment=Process finished with errors
+Comment[ca]=El procés ha finalitzat amb errors
+Comment[cs]=Proces ukončen s chybami
 Comment[ga]=Chríochnaigh an próiseas le hearráidí
 Comment[ms]=Proses selesai dengan ralat
 Comment[nb]=Prosessen ble fullført, men ga feil
@@ -94,6 +104,8 @@ Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[ca]=S'està esperant el suport
+Name[cs]=Čeká se na médium
 Name[ga]=Ag feitheamh leis an meán
 Name[nb]=Venter på medium
 Name[nds]=Bi to töven op en Schiev
@@ -110,6 +122,8 @@ Name[uk]=Очікування носія
 Name[x-test]=xxWaiting for mediumxx
 Name[zh_TW]=等候媒體中
 Comment=The user needs to insert a medium
+Comment[ca]=L'usuari ha d'introduir un suport
+Comment[cs]=Uživatel musí vložit médium
 Comment[ga]=Caithfidh an t-úsáideoir meán a chur isteach
 Comment[nb]=Brukeren må sette inn et medium
 Comment[nds]=De Bruker mutt en Schiev inleggen

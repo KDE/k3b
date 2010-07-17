@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=K3b SoX Audio Encoder
+Name[ca]=Codificador d'àudio SoX del K3b
+Name[cs]=K3b SoX audio enkodér
 Name[ga]=Ionchódóir SoX K3b
 Name[nb]=K3b SoX lydkoder
 Name[nds]="SoX Audio"-Dekoderer för K3b
@@ -15,6 +17,8 @@ Name[uk]=Кодувальник звуку SoX для K3b
 Name[x-test]=xxK3b SoX Audio Encoderxx
 Name[zh_TW]=K3b SoX 音效編碼器
 Comment=Encoding module to encode many file formats using SoX
+Comment[ca]=Mòdul de codificació per codificar molts formats de fitxers usant SoX
+Comment[cs]=Modul pro kompresi do mnoha formátů pomocí SoX
 Comment[ga]=Modúl ionchódaithe a ionchódaíonn a lán formáidí comhaid le SoX
 Comment[nb]=Modul som koder mange filformater ved bruk av SoXs
 Comment[nds]=Kodeermoduul för vele Dateiformaten, de SoX bruukt

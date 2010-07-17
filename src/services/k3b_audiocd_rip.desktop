@@ -6,6 +6,8 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bRip]
 Name=Extract Digital Audio with K3b
+Name[ca]=Extreu àudio digital amb el K3b
+Name[cs]=Extrahovat digitální zvuk pomocí K3b
 Name[ga]=Bain Fuaim Dhigiteach Amach le K3b
 Name[hr]=Izdvoji digitalni zvuk pomoću K3b-a
 Name[nb]=Trekk ut digital lyd med K3b

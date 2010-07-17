@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Encoder
+Name[ca]=Codificador Ogg Vorbis del K3b
+Name[cs]=K3b Ogg Vorbis enkodér
 Name[ga]=Ionchódóir Ogg Vorbis K3b
 Name[nb]=K3b Ogg Vorbis-koder
 Name[nds]=Ogg-Vorbis-Koderer för K3b
@@ -15,6 +17,8 @@ Name[uk]=Кодувальник Ogg Vorbis для K3b
 Name[x-test]=xxK3b Ogg Vorbis Encoderxx
 Name[zh_TW]=K3b Ogg Vorbis 編碼器
 Comment=Encoding module to encode Ogg Vorbis files
+Comment[ca]=Mòdul de codificació per codificar fitxers Ogg Vorbis
+Comment[cs]=Modul pro kompresi do souborů Ogg Vorbis
 Comment[ga]=Modúl ionchódaithe a ionchódaíonn comhaid Ogg Vorbis
 Comment[nb]=Modul som koder Ogg Vorbis-filer
 Comment[nds]=Kodeermoduul för Dateien in't Formaat "MPEG 1 Laag III"

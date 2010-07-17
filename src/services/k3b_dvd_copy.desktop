@@ -6,6 +6,8 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bDVDCopy]
 Name=Copy DVD with K3b
+Name[ca]=Copia un DVD amb el K3b
+Name[cs]=Kopírovat DVD pomocí K3b
 Name[ga]=Cóipeáil DVD le K3b
 Name[nb]=Kopier DVD med K3b
 Name[nds]=DVD mit K3b koperen

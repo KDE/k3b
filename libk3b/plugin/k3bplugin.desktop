@@ -2,6 +2,8 @@
 Type=ServiceType
 X-KDE-ServiceType=K3b/Plugin
 Name=K3b Plugin
+Name[ca]=Connector K3b
+Name[cs]=Modul K3b
 Name[ga]=Breiseán K3b
 Name[hr]=K3b priključak
 Name[nb]=K3b programtillegg
