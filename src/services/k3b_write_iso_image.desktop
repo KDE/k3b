@@ -9,6 +9,7 @@ Exec=k3b --image %F
 Name=Write image to disc with K3b
 Name[ca]=Escriu imatge al disc amb el K3b
 Name[cs]=Vypálit pomocí K3b obraz na disk...
+Name[da]=Brænd image-fil til disk med K3b
 Name[nb]=Skriv bilde til harddisk med K3b
 Name[nds]=Afbild mit K3b na Fastplaat schrieven
 Name[nl]=Image naar schijf schrijven met K3b

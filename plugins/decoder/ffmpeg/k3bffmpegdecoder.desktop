@@ -2,6 +2,7 @@
 Name=K3b FFMpeg Decoder
 Name[ca]=Descodificador FFMpeg del K3b
 Name[cs]=FFMpeg dekodér K3b
+Name[da]=K3b FFMpeg-dekoder
 Name[ga]=Díchódóir FFMpeg K3b
 Name[ja]=K3b FFMpeg デコーダ
 Name[nb]=K3b FFMpeg dekoder
@@ -21,6 +22,7 @@ Name[zh_TW]=K3b FFMpeg 解碼器
 Comment=Decoding module to decode wma files
 Comment[ca]=Mòdul de descodificació per descodificar fitxers wma
 Comment[cs]=Modul pro dekódování souborů wma
+Comment[da]=Dekodermodul til dekodning af WMA-filer
 Comment[ga]=Modúl díchódaithe a dhíchódaíonn comhaid wma
 Comment[ja]=WMA ファイルをデコードするモジュール
 Comment[nb]=Modul som dekoder wma-filer

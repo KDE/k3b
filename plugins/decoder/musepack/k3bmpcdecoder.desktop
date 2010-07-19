@@ -2,6 +2,7 @@
 Name=K3b Musepack Decoder
 Name[ca]=Descodificador Musepack del K3b
 Name[cs]=Musepack dekodér K3b
+Name[da]=K3b Musepack-dekoder
 Name[ga]=Díchódóir Musepack K3b
 Name[ja]=K3b Musepack デコーダ
 Name[nb]=K3b Musepack-dekoder
@@ -20,6 +21,7 @@ Name[zh_TW]=K3b Musepack 解碼器
 Comment=Decoding module to decode Musepack audio files
 Comment[ca]=Mòdul de descodificació per descodificar fitxers d'àudio Musepack
 Comment[cs]=Modul pro dekódování souborů Musepack
+Comment[da]=Dekodermodul til dekodning af Musepack-lydfiler
 Comment[ga]=Modúl díchódaithe a dhíchódaíonn comhaid Musepack
 Comment[ja]=Musepack オーディオファイルをデコードするモジュール
 Comment[nb]=Modul som dekoder Musepack lydfiler

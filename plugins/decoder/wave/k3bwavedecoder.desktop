@@ -2,6 +2,7 @@
 Name=K3b Wave Decoder
 Name[ca]=Descodificador Wave del K3b
 Name[cs]=Wave dekodér K3b
+Name[da]=K3b wave-dekoder
 Name[ga]=Díchódóir Wave K3b
 Name[ja]=K3b wave デコーダ
 Name[nb]=K3b Wave-dekoder
@@ -21,6 +22,7 @@ Name[zh_TW]=K3b Wave 解碼器
 Comment=Decoding module to decode wave files
 Comment[ca]=Mòdul de descodificació per descodificar fitxers wave
 Comment[cs]=Modul pro dekódování souborů wave
+Comment[da]=Dekodermodul til dekodning af wave-filer
 Comment[ga]=Modúl díchódaithe a dhíchódaíonn comhaid Wave
 Comment[ja]=wave ファイルをデコードするモジュール
 Comment[nb]=Modul som dekoder wave-filer

@@ -2,6 +2,7 @@
 Name=K3b Ogg Vorbis Encoder
 Name[ca]=Codificador Ogg Vorbis del K3b
 Name[cs]=K3b Ogg Vorbis enkodér
+Name[da]=K3b Ogg Vorbis-indkodning
 Name[ga]=Ionchódóir Ogg Vorbis K3b
 Name[ja]=K3b Ogg Vorbis エンコーダ
 Name[nb]=K3b Ogg Vorbis-koder
@@ -20,6 +21,7 @@ Name[zh_TW]=K3b Ogg Vorbis 編碼器
 Comment=Encoding module to encode Ogg Vorbis files
 Comment[ca]=Mòdul de codificació per codificar fitxers Ogg Vorbis
 Comment[cs]=Modul pro kompresi do souborů Ogg Vorbis
+Comment[da]=Indkodnignsmodul til Ogg Vorbis-filer
 Comment[ga]=Modúl ionchódaithe a ionchódaíonn comhaid Ogg Vorbis
 Comment[ja]=Ogg Vorbis ファイルをエンコードするモジュール
 Comment[nb]=Modul som koder Ogg Vorbis-filer

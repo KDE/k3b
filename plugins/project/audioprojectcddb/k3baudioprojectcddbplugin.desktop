@@ -2,6 +2,7 @@
 Name=K3b Cddb Audio Plugin
 Name[ca]=Connector Cddb d'àudio del K3b
 Name[cs]=Audi modul K3b Cddb
+Name[da]=CDDB-plugin til K3b
 Name[ga]=Breiseán Fuaime Cddb K3b
 Name[nb]=K3b programtillegg for Cddb.lyd
 Name[nds]=CDDB-Audiomoduul för K3b
@@ -19,6 +20,7 @@ Name[zh_TW]=K3b Cddb 音效外掛程式
 Comment=Plugin to query a cddb server for information about an audio project.
 Comment[ca]=Connector per consultar un servidor cddb informació quant a un projecte d'àudio.
 Comment[cs]=Modul pro dotazování cddb serveru na informaci o audio projektu.
+Comment[da]=Plugin til at forespørge en CDDB-server om information om et lydprojekt.
 Comment[ga]=Breiseán a dhéanann iarratais ar eolas faoi thionscadal fuaime ó fhreastalaí cddb.
 Comment[nb]=Programtillegg som søker i en cddb-tjener etter informasjon om et lydprosjekt.
 Comment[nds]=Moduul för de Söök vun Informatschonen över en Klangprojekt op en CDDB-Server

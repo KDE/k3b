@@ -9,6 +9,7 @@ Exec=k3b --device %i --audiocd
 Name=Create Audio CD with K3b
 Name[ca]=Crea un CD d'àudio amb el K3b
 Name[cs]=Vytvořit pomocí K3b zvukové CD...
+Name[da]=Opret lyd-cd med K3b
 Name[nb]=Lag lyd-CD med K3b
 Name[nds]=Klang-CD mit K3b opstellen
 Name[nl]=Audio-cd aanmaken met K3b
