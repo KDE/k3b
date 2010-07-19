@@ -4,6 +4,7 @@ Bugfixes:
  * Freeze on ripping Audio CD using external encoder to MP3 or FLAC (236466)
  * Drag and drop from Dolphin doesn't work (242745)
  * Symbolic links are not added to a project when a folder is added recursively (243555)
+ * Install app icons to hicolor so that they are visible in non KDE WMs
 
 2.0
 ===
