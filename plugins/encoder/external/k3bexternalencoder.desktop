@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder
 Name[ca]=Codificador extern d'àudio del K3b
+Name[ca@valencia]=Codificador extern d'àudio del K3b
 Name[cs]=Externí audio dekodér K3b
 Name[da]=K3b ekstern lydindkodning
+Name[de]=Externer Audio-Kodierer
 Name[ga]=Ionchódóir Seachtrach Fuaime K3b
 Name[ja]=K3b 外部オーディオエンコーダ
 Name[nb]=K3b ekstern lydkoder
@@ -20,7 +22,9 @@ Name[x-test]=xxK3b External Audio Encoderxx
 Name[zh_TW]=K3b 外部音效編碼器
 Comment=Encoding module that allows specifying an encoding command
 Comment[ca]=Mòdul extern que permet especificar una ordre de codificació
+Comment[ca@valencia]=Mòdul extern que permet especificar una orde de codificació
 Comment[da]=Indkodningsmodul som muliggør angivelse af en indkodningskommando
+Comment[de]=Kodierungsmodul zur Unterstützung externer Kodierprogramme
 Comment[ga]=Modúl ionchódaithe a cheadaíonn duit ordú ionchódaithe a roghnú
 Comment[ja]=エンコードコマンドの指定を可能にするエンコードモジュール
 Comment[nb]=Kodingsmodul som tillater å oppgi en kodingskommando

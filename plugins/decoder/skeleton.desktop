@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=K3b ??? Decoder
 Name[ca]=Descodificador ??? del K3b
+Name[ca@valencia]=Descodificador ??? del K3b
 Name[cs]=K3b ??? dekodér
 Name[da]=K3b ???-dekoder
+Name[de]=???-Dekodierer
 Name[ga]=Díchódóir ??? K3b
 Name[ja]=K3b ??? デコーダ
 Name[nb]=K3b ??? Decoder
@@ -21,8 +23,10 @@ Name[x-test]=xxK3b ??? Decoderxx
 Name[zh_TW]=K3b ??? 解碼器
 Comment=Decoding module to decode ??? files
 Comment[ca]=Mòdul de descodificació per descodificar fitxers ???
+Comment[ca@valencia]=Mòdul de descodificació per descodificar fitxers ???
 Comment[cs]=Modul pro dekódování souborů ???
 Comment[da]=Dekodermodul til dekodning af ???-filer
+Comment[de]=Dekodierungsmodul für ???-Dateien
 Comment[ga]=Modúl díchódaithe a dhíchódaíonn comhaid ???
 Comment[ja]=??? ファイルをデコードするモジュール
 Comment[nb]=Modul som dekoder ??? filer

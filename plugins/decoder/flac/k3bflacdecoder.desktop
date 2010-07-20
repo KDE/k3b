@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=K3b FLAC Decoder
 Name[ca]=Descodificador FLAC del K3b
+Name[ca@valencia]=Descodificador FLAC del K3b
 Name[cs]=FLAC dekodér K3b
 Name[da]=K3b FLAC-dekoder
+Name[de]=FLAC-Dekodierer
 Name[ga]=Díchódóir FLAC K3b
 Name[ja]=K3b FLAC デコーダ
 Name[nb]=K3b Flac-dekoder
@@ -21,8 +23,10 @@ Name[x-test]=xxK3b FLAC Decoderxx
 Name[zh_TW]=K3b FLAC 解碼器
 Comment=Decoding module to decode FLAC files
 Comment[ca]=Mòdul de descodificació per descodificar fitxers FLAC
+Comment[ca@valencia]=Mòdul de descodificació per descodificar fitxers FLAC
 Comment[cs]=Modul pro dekódování souborů FLAC
 Comment[da]=Dekodermodul til dekodning af FLAC-filer
+Comment[de]=Dekodierungsmodul für FLAC-Dateien
 Comment[ga]=Modúl díchódaithe a dhíchódaíonn comhaid FLAC
 Comment[ja]=FLAC ファイルをデコードするモジュール
 Comment[nb]=Modul som dekoder FLAC-filer

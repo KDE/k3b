@@ -1,8 +1,10 @@
 [Desktop Entry]
 Name=K3b Lame Mp3 Encoder Config Module
 Name[ca]=Mòdul de configuració del codificador Mp3 Lame del K3b
+Name[ca@valencia]=Mòdul de configuració del codificador Mp3 Lame del K3b
 Name[cs]=Ovládací modul K3b Lame Mp3 formátu
 Name[da]=Konfigurationsmodul til K3b Lame mp3-indkodning
+Name[de]=Bedienelement zur Kodierung von MP3 mittels Lame
 Name[ga]=Modúl Cumraíochta Ionchódóir Lame MP3 K3b
 Name[ja]=K3b Lame MP3 エンコーダ設定モジュール
 Name[nb]=K3b oppsettselement for Lame Mp3-koder
