@@ -6,27 +6,6 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bRip]
 Name=Rip Video DVD Titles with K3b
-Name[ca]=Extreu títols de DVD amb el K3b
-Name[ca@valencia]=Extreu títols de DVD amb el K3b
-Name[cs]=Ripovat pomocí K3b titulky video DVD
-Name[da]=Rip video-dvd-titler med K3b
-Name[de]=DVD-Titel mit K3b auslesen
-Name[ga]=Srac Teidil DVD Físe le K3b
-Name[ja]=K3b で DVD タイトルを吸い出し...
-Name[nb]=Lag kopi av video-DVD titler med K3b
-Name[nds]=Video-DVD-Stücken mit K3b utlesen
-Name[nl]=Video-dvd-titels rippen met K3b
-Name[nn]=Ta opp video-DVD med K3b
-Name[pt_BR]=Extrair títulos do DVD de vídeo com o K3b
-Name[ru]=Считать разделы Video DVD, используя K3b
-Name[sk]=Ripovať tituly Video DVD pomocou K3b
-Name[sr]=Ишчупај наслове са видео ДВД‑а К3бом
-Name[sr@ijekavian]=Ишчупај наслове са видео ДВД‑а К3бом
-Name[sr@ijekavianlatin]=Iščupaj naslove sa video DVD‑a K3bom
-Name[sr@latin]=Iščupaj naslove sa video DVD‑a K3bom
-Name[sv]=Lagra dvd-titlar med K3b
-Name[uk]=Видерти відео DVD з K3b
 Name[x-test]=xxRip Video DVD Titles with K3bxx
-Name[zh_TW]=用 K3b 擷取影像 DVD 標題
 Exec=k3b --videodvdrip %i
 Icon=k3b
