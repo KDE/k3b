@@ -23,6 +23,7 @@ Description[da]=En kioslave som muliggør kopiering af filer fra en video-dvd (i
 Description[de]=Ein-/Ausgabemodul, mit dem man Dateien von einer Video-DVD kopieren kann (inkl. Entschlüsselung)
 Description[en_GB]=A kioslave that allows files to be copied from a Video DVD (including decryption)
 Description[ga]=Sclábhaí KIO a cheadaíonn duit comhaid a chóipeáil ó DVD físe (díchriptiú san áireamh)
+Description[hu]=Kioslave, amellyel fájlokat lehet másolni Video DVD-ről (dekódolással együtt)
 Description[ja]=ビデオ DVD からファイルをコピーすることを可能にする kioslave (暗号解除も含む)
 Description[nb]=En kioslave som tillater at filer blir kopiert fra en video-DVD (også dekryptering)
 Description[nds]=En In-/Utgaavmoduul, mit dat sik Dateien vun en Video-DVD koperen laat (ok mit Opslöteln)
