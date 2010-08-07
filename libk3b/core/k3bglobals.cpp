@@ -23,6 +23,7 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bcore.h"
 #include "k3bmediacache.h"
+#include "k3bmsf.h"
 
 #include <kdeversion.h>
 #include <kglobal.h>
@@ -582,6 +583,19 @@ QString K3b::formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaTy
     else {
         return QString::number( normalizedSpeed/speedFactor );
     }
+}
+
+
+bool K3b::IsOverburnAllowed( const K3b::Msf& projectSize, const K3b::Msf& capacity )
+{
+    return IsOverburnAllowed( projectSize, capacity, Msf() );
+}
+
+
+bool K3b::IsOverburnAllowed( const Msf& projectSize, const Msf& capacity, const Msf& usedCapacity )
+{
+    return( k3bcore->globalSettings()->overburn() &&
+        (projectSize + usedCapacity) <= ( capacity.lba() - usedCapacity.lba() + capacity.lba() * 10 / 100 ) ); // 10% tolerance in overburn mode
 }
 
 

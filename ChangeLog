@@ -3,7 +3,7 @@
 Changes:
  * Added dynamic hiding of irrelevant actions in mixed project (142954)
  * Added sorting in data project view (191660)
- * Using Oxygen sounds for event (242395)
+ * Using Oxygen sounds for events (242395)
 
 2.0.1
 =====
@@ -14,6 +14,7 @@ Bugfixes:
  * Install app icons to hicolor so that they are visible in non KDE WMs
    (https://bugzilla.novell.com/show_bug.cgi?id=619731)
  * Translation fixes
+  * Overburn doesn't work (241534)
 
 2.0
 ===

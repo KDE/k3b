@@ -109,9 +109,7 @@ void K3b::VideoDvdBurnDialog::readSettingsFromProject()
 
     // in case overburn is enabled we allow some made up max size
     // before we force a DL medium
-    if( doc()->size() > 4700372992LL &&
-        ( !k3bcore->globalSettings()->overburn() ||
-          doc()->size() > 4900000000LL ) )
+    if( doc()->length() > MediaSizeDvd4Gb && !IsOverburnAllowed( doc()->length(), MediaSizeDvd4Gb ) )
         m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_DVD_DL );
     else
         m_writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE_DVD );

@@ -22,6 +22,7 @@
 #include "k3bdevicemanager.h"
 #include "k3bdeviceglobals.h"
 #include "k3bdiskinfo.h"
+#include "k3bglobals.h"
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 
@@ -392,11 +393,10 @@ bool K3b::MediaSelectionComboBox::showMedium( const K3b::Medium& m ) const
 
             &&
 
-            ( d->wantedMediumSize == 0 ||                                    // no specific size requested
-              d->wantedMediumSize <= m.diskInfo().capacity() ||              // size fits
-              ( !( d->wantedMediumState & K3b::Device::STATE_COMPLETE ) &&   // size does not fit but an empty/appendable medium in overburn mode is requested
-                k3bcore->globalSettings()->overburn() &&
-                d->wantedMediumSize <= ( m.diskInfo().capacity().lba() * 110 / 100 ) ) ) // 10% tolerance in overburn mode
+            ( d->wantedMediumSize == 0 ||                                        // no specific size requested
+              d->wantedMediumSize <= m.diskInfo().capacity() ||                  // size fits
+              ( !d->wantedMediumState.testFlag( K3b::Device::STATE_COMPLETE ) && // size does not fit but an empty/appendable medium in overburn mode is requested
+                IsOverburnAllowed( d->wantedMediumSize, m.diskInfo().capacity() ) ) )
         );
 }
 

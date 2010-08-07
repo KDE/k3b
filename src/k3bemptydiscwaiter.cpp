@@ -255,7 +255,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 #warning FIXME: We need to preformat empty BD-RE just like we do with empty DVD+RW
 
         if( d->wantedMediaState == K3b::Device::STATE_EMPTY &&
-            d->wantedMinMediaSize <= medium.diskInfo().capacity() ) {
+            ( d->wantedMinMediaSize <= medium.diskInfo().capacity() ||
+              IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity() ) ) ) {
             // check if the media contains a filesystem
             K3b::Iso9660 isoF( d->device );
             bool hasIso = isoF.open();
@@ -284,7 +285,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
         // are handled the same everywhere (isofs is grown).
         //
         else if ( d->wantedMediaState != Device::STATE_EMPTY &&
-                  d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
+                  ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ||
+                    IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity(), medium.actuallyUsedCapacity() ) ) ) {
             finishWaiting( K3b::Device::MEDIA_BD_RE );
         }
         else {
@@ -309,7 +311,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
         if( medium.diskInfo().diskState() == K3b::Device::STATE_EMPTY ) {
             if( d->wantedMediaState & K3b::Device::STATE_EMPTY &&
-                d->wantedMinMediaSize <= medium.diskInfo().capacity() ) {
+                ( d->wantedMinMediaSize <= medium.diskInfo().capacity() ||
+                  IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity() ) ) ) {
                 // special case for the formatting job which wants to preformat on it's own!
                 if( d->wantedMediaState & K3b::Device::STATE_COMPLETE &&
                     d->wantedMediaState & K3b::Device::STATE_EMPTY ) {
@@ -344,7 +347,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             // We have a DVD+RW medium which is already preformatted
             //
             if( d->wantedMediaState == K3b::Device::STATE_EMPTY ) {
-                if ( d->wantedMinMediaSize <= medium.diskInfo().capacity() ) {
+                if ( d->wantedMinMediaSize <= medium.diskInfo().capacity() ||
+                     IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity() ) ) {
                     // check if the media contains a filesystem
                     K3b::Iso9660 isoF( d->device );
                     bool hasIso = isoF.open();
@@ -378,7 +382,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             // We want a DVD+RW not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
             // are handled the same everywhere (isofs is grown).
             //
-            else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
+            else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ||
+                      IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity(), medium.actuallyUsedCapacity() ) ) {
                 finishWaiting( K3b::Device::MEDIA_DVD_PLUS_RW );
             }
             else {
@@ -416,7 +421,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
         // size for read-only cases, thus using remainingSize() is perfectly fine)
         if( (d->wantedMediaType & medium.diskInfo().mediaType()) &&
             (d->wantedMediaState & medium.diskInfo().diskState()) &&
-            d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
+            ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ||
+              IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity(), medium.actuallyUsedCapacity() ) ) ) {
             finishWaiting( medium.diskInfo().mediaType() );
         }
 
@@ -424,7 +430,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
         else if( (medium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_RW_OVWR) &&
                  (d->wantedMediaType & K3b::Device::MEDIA_DVD_RW_OVWR) ) {
             if( d->wantedMediaState == K3b::Device::STATE_EMPTY &&
-                d->wantedMinMediaSize <= medium.diskInfo().capacity() ) {
+                ( d->wantedMinMediaSize <= medium.diskInfo().capacity() ||
+                  IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity() ) ) ) {
 
                 kDebug() << "------ DVD-RW restricted overwrite.";
 
@@ -471,7 +478,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             // We want a DVD-RW overwrite not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
             // are handled the same everywhere (isofs is grown).
             //
-            else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
+            else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ||
+                      IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity(), medium.actuallyUsedCapacity() ) ) {
                 finishWaiting( K3b::Device::MEDIA_DVD_RW_OVWR );
             }
             else {
@@ -608,7 +616,8 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
     // size for read-only cases, thus using remainingSize() is perfectly fine)
     else if( (d->wantedMediaType & medium.diskInfo().mediaType()) &&
              (d->wantedMediaState & medium.diskInfo().diskState()) &&
-             d->wantedMinMediaSize <= medium.actuallyRemainingSize() ) {
+             (d->wantedMinMediaSize <= medium.actuallyRemainingSize() ||
+              IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity(), medium.actuallyUsedCapacity() )) ) {
         finishWaiting( medium.diskInfo().mediaType() );
     }
 

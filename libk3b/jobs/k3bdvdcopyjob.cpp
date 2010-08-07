@@ -230,7 +230,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         case K3b::Device::MEDIA_DVD_R_DL_JUMP:
             if( !m_onlyCreateImage ) {
                 if( dh->diskInfo().numLayers() > 1 &&
-                    dh->diskInfo().size().mode1Bytes() > 4700372992LL ) {
+                    dh->diskInfo().size() > MediaSizeDvd4Gb ) {
                     if( !(m_writerDevice->type() & (K3b::Device::DEVICE_DVD_R_DL|K3b::Device::DEVICE_DVD_PLUS_R_DL)) ) {
                         emit infoMessage( i18n("The writer does not support writing Double Layer DVDs."), MessageError );
                         d->running = false;
