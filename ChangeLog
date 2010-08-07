@@ -7,6 +7,7 @@ Bugfixes:
  * Install app icons to hicolor so that they are visible in non KDE WMs
    (https://bugzilla.novell.com/show_bug.cgi?id=619731)
  * Translation fixes
+ * Overburn doesn't work (241534)
 
 2.0
 ===

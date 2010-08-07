@@ -451,7 +451,7 @@ void K3b::MediaCopyDialog::toggleAll()
 
         if ( K3b::Device::isDvdMedia( sourceMedium.diskInfo().mediaType() ) ) {
             m_writerSelectionWidget->setWantedMediumType( sourceMedium.diskInfo().numLayers() > 1 &&
-                                                          sourceMedium.diskInfo().size().mode1Bytes() > 4700372992LL
+                                                          sourceMedium.diskInfo().size() > MediaSizeDvd4Gb
                                                           ? K3b::Device::MEDIA_WRITABLE_DVD_DL
                                                           : K3b::Device::MEDIA_WRITABLE_DVD );
         }

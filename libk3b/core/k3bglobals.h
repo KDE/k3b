@@ -40,8 +40,9 @@
 
 
 namespace K3b {
-    class Version;
     class ExternalBin;
+    class Msf;
+    class Version;
     namespace Device {
         class Device;
     }
@@ -299,6 +300,23 @@ namespace K3b {
      */
     LIBK3B_EXPORT QString
     formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaType, SpeedFormat speedFormat = SpeedFormatReal );
+
+    /**
+     * Checks if overburn can be performed taking into consideration
+     * project size and 'overburn' setting in GlobalSettings.
+     * \param projectSize Size of project to be written
+     * \param capacity Declared capacity of a medium
+     */
+    LIBK3B_EXPORT bool IsOverburnAllowed( const Msf& projectSize, const Msf& capacity );
+
+    /**
+     * Checks if overburn can be performed taking into consideration
+     * project size, size of data already written to disk and 'overburn' setting in GlobalSettings.
+     * \param projectSize Size of project to be written
+     * \param capacity Declared capacity of a medium
+     * \param usedCapacity Size of the used part of a medium
+     */
+    LIBK3B_EXPORT bool IsOverburnAllowed( const Msf& projectSize, const Msf& capacity, const Msf& usedCapacity );
 
     QDebug& operator<<( QDebug& dbg, WritingMode );
     QDebug& operator<<( QDebug& dbg, WritingModes );
