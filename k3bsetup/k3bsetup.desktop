@@ -139,7 +139,7 @@ X-KDE-System-Settings-Parent-Category=system
 X-KDE-System-Settings-Parent-Category-V2=permissions
 X-KDE-Keywords=k3b,k3bsetup,cd,dvd
 Categories=Application;System;X-KDE-System;
-
+X-DocPath=k3b/index.html#pre-setup
 GenericName=CD/DVD/BD Burning Setup
 GenericName[bg]=Настройки на записа на CD и DVD
 GenericName[ca]=Arranjament de gravació de CD i DVD
