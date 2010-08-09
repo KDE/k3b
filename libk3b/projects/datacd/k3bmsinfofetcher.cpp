@@ -112,7 +112,7 @@ void K3b::MsInfoFetcher::getMsInfo()
         emit debuggingOutput( "msinfo command:", s );
 
 
-        connect( m_process, SIGNAL(finished()),
+        connect( m_process, SIGNAL(finished(int)),
                  this, SLOT(slotProcessExited()) );
 
         m_msInfo = QString();

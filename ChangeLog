@@ -14,7 +14,8 @@ Bugfixes:
  * Install app icons to hicolor so that they are visible in non KDE WMs
    (https://bugzilla.novell.com/show_bug.cgi?id=619731)
  * Translation fixes
-  * Overburn doesn't work (241534)
+ * Overburn doesn't work (241534)
+ * Data part of mixed CD is not written - searching for previous session doesn't work (246798)
 
 2.0
 ===
