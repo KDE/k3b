@@ -199,6 +199,10 @@ void K3b::AudioTrackSplitDialog::slotRemoveRange()
 void K3b::AudioTrackSplitDialog::splitTrack( K3b::AudioTrack* track,
 					   QWidget* parent )
 {
+    if ( !track ) {
+        return ;
+    }
+
     K3b::AudioTrackSplitDialog d( track, parent );
     if( d.exec() == QDialog::Accepted ) {
         QList<int> ranges = d.m_editorWidget->allRanges();
