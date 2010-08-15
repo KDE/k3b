@@ -680,19 +680,19 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
 
     else if( line.contains( "at speed" ) ) {
         // parse the speed and inform the user if cdrdao switched it down
-        int pos = line.indexOf( "at speed" );
-        int pos2 = line.indexOf( "in", pos+9 );
-        int speed = K3b::speedMultiplicatorForMediaType( d->burnedMediaType ) * line.mid( pos+9, pos2-pos-10 ).toDouble();  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
-        if( speed > 0 && qAbs( speed - d->usedSpeed ) > 5 ) {
+        const int pos = line.indexOf( "at speed" );
+        const int pos2 = line.indexOf( "in", pos+9 );
+        const int speed( double( K3b::speedMultiplicatorForMediaType( d->burnedMediaType ) ) * line.mid( pos+9, pos2-pos-10 ).toDouble() );  // cdrecord-dvd >= 2.01a25 uses 8.0 and stuff
+        if( speed > 0 && double( qAbs( speed - d->usedSpeed ) ) > 0.5*double( K3b::speedMultiplicatorForMediaType( d->burnedMediaType ) ) ) {
             // xgettext: no-c-format
-            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed", formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType, SpeedFormatInteger ) ),
+            emit infoMessage( i18n("Medium or burner does not support writing at %1x speed", formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType ) ),
                               K3b::Job::MessageWarning );
             if( speed > d->usedSpeed )
                 // xgettext: no-c-format
-                emit infoMessage( i18n("Switching burn speed up to %1x",speed), K3b::Job::MessageWarning );
+                emit infoMessage( i18n("Switching burn speed up to %1x", formatWritingSpeedFactor( speed, d->burnedMediaType ) ), K3b::Job::MessageWarning );
             else
                 // xgettext: no-c-format
-                emit infoMessage( i18n("Switching burn speed down to %1x",speed), K3b::Job::MessageWarning );
+                emit infoMessage( i18n("Switching burn speed down to %1x", formatWritingSpeedFactor( speed, d->burnedMediaType ) ), K3b::Job::MessageWarning );
         }
     }
     else if( line.startsWith( "Starting new" ) ) {
