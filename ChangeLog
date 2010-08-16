@@ -10,6 +10,8 @@ Bugfixes:
  * Overburn doesn't work (241534)
  * Data part of mixed CD is not written - searching for previous session doesn't work (246798)
  * Fixed the speed comparision and formatting when cdrecord changes the writing speed automatically (246262, 243482)
+ * Track pointer seg fault (247588)
+
 2.0
 ===
 Changes (since 1.0.5):
