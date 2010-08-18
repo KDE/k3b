@@ -1,0 +1,218 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY k3b "<application>K3b</application>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+]>
+<book lang="&language;">
+<bookinfo>
+<title>The K3b Handbook</title>
+<authorgroup>
+<author>
+<personname>
+    <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/K3b">K3b</ulink> page.</firstname>
+<surname></surname>
+</personname>
+    </author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+    </authorgroup>
+<legalnotice>&FDLNotice;</legalnotice>
+<date>2010-06-18</date>
+    <releaseinfo>&kde; SC 4.5</releaseinfo>
+<abstract>
+<para></para>
+    </abstract>
+    <keywordset>
+<keyword>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp>2010-06-18T13:57:40Z</timestamp>-->
+
+<!--userbase-content-->
+<chapter id="introduction"><title>Introduction</title>
+<para>If you have used a burning program such as Nero under Windows, &k3b; will feel quite familiar.
+</para>
+<para>Featuring a simple, yet powerful graphical interface, &k3b; provides various options for burning a CD, DVD, or BD (Blu-ray disc). Various types of optical projects are supported including (but not limited to) audio and data, video projects for DVD and VCD, as well as multi-session and mixed-mode discs. &k3b; also has the ability to erase re-writeable media and can perform more complicated tasks such as audiovisual encoding and decoding.
+</para>
+</chapter>
+<chapter id="pre-setup"><title>Pre-setup</title>
+<para>When you run &k3b; for the first time, you may find &k3b; informing you that no optical writer drivers have been found, meaning you will not be able to write to any optical discs. There is no need to panic as &k3b; will open a configuration window which will help you get various tools used by &k3b; up and running. This includes viewing the user group that owns those applications. You shouldn't need to change this as &k3b; will apply the correct permissions on external programs itself. These programs are generally <command>cdrecord</command>, <command>growisofs</command> and <command>cdrdao</command>. If preferred, one can tell &k3b; to use the <guilabel>burning</guilabel> user group and point it to the optical drive. Below is an image of the configuration window where these settings are possible.
+</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-user-interface"><title>Configuring the User Interface</title>
+<para>Upon starting &k3b; you are offered quick starts to the three most popular processes
+</para>
+<itemizedlist>
+<listitem><para><guilabel>New Data Project</guilabel>
+</para></listitem>
+<listitem><para><guilabel>New Audio CD Project</guilabel>
+</para></listitem>
+<listitem><para><guilabel>Copy Medium</guilabel>
+</para></listitem>
+</itemizedlist>
+<para>&k3b; can perform much more than these tasks though, and so you may find that some of the other possibilities are just as useful to you. Take a look at this list for a taste of other available functions:
+</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>Perhaps a quick start for one or more of these other tasks would be useful to you and so &k3b; can give you that, too. Simply right click on the application desktop, and here you will see a menu for adding buttons:
+</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"><title>Configuring the internals</title>
+<para>Most of the default settings can simply be left alone. It is however, recommended that you do take a look at the <guilabel>Advanced Settings</guilabel> page. Here you can set various important settings, if required.
+</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem><para><guilabel>Use Burnfree</guilabel> should be set - it controls the burn, ensuring that the buffer never gets dangerously low (which reduces the quantity of bad burns).
+</para></listitem>
+<listitem><para>You may wish to automatically erase re-writable disks.
+</para></listitem>
+<listitem><para>The option <guilabel>Do not eject medium after write process</guilabel> is invaluable if your drive is one that cannot be closed quickly enough for <guilabel>Verify</guilabel> to happen.
+</para></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"><title>Preparing to burn a disk</title>
+<para>When starting a new project, you should ensure that &k3b; has detected the correct optical media, such as CD or DVD. On the status line at the bottom of the screen you should see the size of disk which is currently set. If this is not correct, or you require a different size, simply right-click on it and set the preferred size from the provided list:
+</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>All that's left to do now, is choose what is to be burned. The top half of the screen functions like a file manager. Simply drag and drop the files and directories you wish to burn onto the large pane at bottom right. On the left you will see a tree view forming of your chosen files. Should there be some files or directories which you do not want to burn, these can be easily removed from the project by simply removing them from the panel at the bottom. Select the file to be removed (you can control-click to select multiple ones), then right-click, and select <guilabel>Remove</guilabel>. After this, the bottom left-hand panel should show an updated tree representation of the directories and files.
+</para>
+<para>The top line will be the title of the disk. In many cases this will be fine, but if you would like to change this to something else, simply right-click on the title and rename it.
+</para>
+</chapter>
+<chapter id="final-steps"><title>Final Steps</title>
+<para>You are now ready to hit the <guilabel>Burn</guilabel> button.  
+</para>
+<para>
+<screenshot>
+<screeninfo></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para>You will see on my screenshot that no disk was present. When you have inserted the appropriate disk you will see a description of it on that line.
+</para>
+<para>There are still one or two choices to be made. I would <emphasis>recommend</emphasis> that you set <guilabel>Verify written data</guilabel>, then hit the <guilabel>Save</guilabel> icon at the bottom of the screen, ensuring that it becomes your personal default. For most modern drives it's safe to leave mode and speed to <guilabel>Auto</guilabel>. If you may wish to burn another copy of the disk at a later date, select <guilabel>Create image</guilabel>, which will save having to set up the burn again. Set the number of copies you want to burn, then, when you are satisfied, hit <guilabel>Burn</guilabel>.
+</para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"><title>Burning an Audio CD</title>
+<sect1 id="k3b-audio-support"><title>Starting an Audio CD Project</title>
+<para>&k3b; supports a lot of audio formats and can convert them automatically for you.
+</para>
+<note><para>Some distributions split this capability of &k3b; into a separate package, &eg; on Debian and Ubuntu distributions you need to install the package libk3b6-extracodecs, on openSUSE the name of the package is k3b-codecs. On some distributions (&eg; Mandriva) you do not need to install any additional packages.</para></note>
+
+<sect2 id="selecting-files"><title>Selecting the files</title>
+<para>There are two ways to select the audio files you want to burn onto an audio cd:</para>
+<variablelist>
+<varlistentry>
+<term>Using &k3b;</term>
+<listitem>
+<para>At the bottom half of the &k3b; window click on <guilabel>New Audio CD Project</guilabel> and select the files you want to burn.
+</para>
+<para>Alternatively navigate in the folders panel to the location of the audio files. Double click on an audio file or drag and drop selected audio files into the bottom part of &k3b;'s window automatically starts a <guilabel>New Audio CD Project</guilabel> with these files.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Using the file manager</term>
+<listitem>
+<para>Go to the folder containing your music files in &dolphin; or &konqueror;</para>
+<para>Choose the files to burn and select <menuchoice><guimenu>Actions</guimenu><guimenuitem>Create Audio CD with &k3b;</guimenuitem></menuchoice> from the context menu.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"><title>Edit the Title Information</title>
+<para>You can give the tracks titles or import those from <acronym>CDDB</acronym> (a online service for track names). To do so double click on the track (lower half of the window).
+</para>
+</sect2>
+<sect2 id="burn-the-cd"><title>Burn the CD</title>
+<para>Insert a blanc CD-R or CD-RW disc into your CD writer and click on <guilabel>Burn</guilabel>. In the upcoming dialog check if you like the presets and when done click on <guilabel>Burn</guilabel>. The CD will now be burned for you.
+</para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title>Credits and License</title>
+    <para>
+Documentation Copyright see the UserBase     
+<ulink url="http://userbase.kde.org/index.php?title=K3b&amp;action=history">K3b page history</ulink></para>
+    <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
+&underFDL;
+</chapter>
+&documentation.index;
+</book>
