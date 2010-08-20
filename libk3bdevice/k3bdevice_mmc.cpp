@@ -80,6 +80,7 @@ bool K3b::Device::Device::getFeature( unsigned char** data, unsigned int& dataLe
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": GET CONFIGURATION with real length "
                  << dataLen << " failed." << endl;
         delete [] *data;
+        *data = 0;
     }
 
     return false;
@@ -237,6 +238,7 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
             kDebug() << "(K3b::Device::Device) " << blockDeviceName()
                     << ": GET PERFORMANCE reports invalid dataLen:" << dataLen << endl;
             delete [] *data;
+            *data = 0;
             return false;
         }
     }
@@ -245,6 +247,7 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
                  << ": GET PERFORMANCE with real length "
                  << dataLen << " failed." << endl;
         delete [] *data;
+        *data = 0;
         return false;
     }
 }
@@ -343,6 +346,7 @@ bool K3b::Device::Device::readTrackInformation( unsigned char** data, unsigned i
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
                  << dataLen << " failed." << endl;
         delete [] *data;
+        *data = 0;
     }
 
     return false;
@@ -543,6 +547,7 @@ bool K3b::Device::Device::readSubChannel( unsigned char** data, unsigned int& da
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
                  << dataLen << " failed." << endl;
         delete [] *data;
+        *data = 0;
     }
 
     return false;
@@ -620,6 +625,7 @@ bool K3b::Device::Device::readTocPmaAtip( unsigned char** data, unsigned int& da
         if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
             // useless length
             delete [] *data;
+            *data = 0;
             return false;
         }
         else
@@ -630,6 +636,7 @@ bool K3b::Device::Device::readTocPmaAtip( unsigned char** data, unsigned int& da
                  << format << " with real length "
                  << dataLen << " failed." << endl;
         delete [] *data;
+        *data = 0;
     }
 
     return false;
@@ -680,6 +687,7 @@ bool K3b::Device::Device::mechanismStatus( unsigned char** data, unsigned int& d
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS with real length "
                  << dataLen << " failed." << endl;
         delete [] *data;
+        *data = 0;
     }
 
     return false;
@@ -727,6 +735,7 @@ bool K3b::Device::Device::modeSense( unsigned char** pageData, unsigned int& pag
     }
     else {
         delete [] *pageData;
+        *pageData = 0;
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE with real length "
                  << pageLen << " failed." << endl;
     }
@@ -866,6 +875,7 @@ bool K3b::Device::Device::readDiscInformation( unsigned char** data, unsigned in
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
                  << dataLen << " failed." << endl;
         delete [] *data;
+        *data = 0;
     }
 
     return false;
@@ -921,6 +931,7 @@ bool K3b::Device::Device::readDiscStructure( unsigned char** data, unsigned int&
         else {
             kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed.";
             delete [] *data;
+            *data = 0;
         }
     }
     else
