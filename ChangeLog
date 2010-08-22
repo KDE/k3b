@@ -5,6 +5,11 @@ Changes:
  * Added sorting in data project view (191660)
  * Using Oxygen sounds for events (242395)
 
+2.0.2
+=====
+Bugfixes:
+ * Crash on start when checking device capabilities (246822)
+
 2.0.1
 =====
 Bugfixes:

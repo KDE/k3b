@@ -439,7 +439,7 @@ bool K3b::DataTrackReader::retryRead( unsigned char* buffer, unsigned long start
                 emit debuggingOutput( "K3b::DataTrackReader", QString( "Ignoring read error in sector %1.").arg(sector) );
 
                 ++d->errorSectorCount;
-                //	  ::memset( &buffer[i], 0, 1 );
+                //    ::memset( &buffer[i], 0, 1 );
                 success = true;
             }
             else {
@@ -456,15 +456,13 @@ bool K3b::DataTrackReader::retryRead( unsigned char* buffer, unsigned long start
 
 bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code )
 {
-    unsigned char* data = 0;
-    unsigned int dataLen = 0;
-    if( !dev->modeSense( &data, dataLen, 0x01 ) )
+    Device::UByteArray data;
+    if( !dev->modeSense( data, 0x01 ) )
         return false;
 
     // in MMC1 the page has 8 bytes (12 in MMC4 but we only need the first 3 anyway)
-    if( dataLen < 8+8 ) {
-        kDebug() << "(K3b::DataTrackReader) modepage 0x01 data too small: " << dataLen;
-        delete [] data;
+    if( data.size() < 8+8 ) {
+        kDebug() << "(K3b::DataTrackReader) modepage 0x01 data too small: " << data.size();
         return false;
     }
 
@@ -474,9 +472,7 @@ bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code 
     if( d->oldErrorRecoveryMode != code )
         kDebug() << "(K3b::DataTrackReader) changing data recovery mode from " << d->oldErrorRecoveryMode << " to " << code;
 
-    bool success = dev->modeSelect( data, dataLen, true, false );
-
-    delete [] data;
+    bool success = dev->modeSelect( data, true, false );
 
     return success;
 }

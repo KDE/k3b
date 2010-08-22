@@ -36,7 +36,7 @@ bool K3b::Device::Device::testUnitReady() const
 }
 
 
-bool K3b::Device::Device::getFeature( unsigned char** data, unsigned int& dataLen, unsigned int feature ) const
+bool K3b::Device::Device::getFeature( UByteArray& data, unsigned int feature ) const
 {
     unsigned char header[2048];
     ::memset( header, 0, 2048 );
@@ -50,7 +50,7 @@ bool K3b::Device::Device::getFeature( unsigned char** data, unsigned int& dataLe
     cmd[9] = 0;      // Necessary to set the proper command length
 
     // we only read the data length first
-    dataLen = 8;
+    unsigned int dataLen = 8;
     if( !cmd.transport( TR_DIR_READ, header, 8 ) )
         dataLen = from4Byte( header ) + 4;
     else
@@ -67,35 +67,31 @@ bool K3b::Device::Device::getFeature( unsigned char** data, unsigned int& dataLe
         dataLen = 0xFFFF;
 
     // again with real length
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+    data.resize( dataLen );
+    ::memset( data.data(), 0, data.size() );
 
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-        dataLen = qMin( dataLen, from4Byte( *data ) + 4 );
+    cmd[7] = data.size() >> 8;
+    cmd[8] = data.size();
+    if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+        data.resize( qMin( data.size(), (int)from4Byte( data.data() ) + 4 ) );
         return true;
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": GET CONFIGURATION with real length "
-                 << dataLen << " failed." << endl;
-        delete [] *data;
+                 << data.size() << " failed." << endl;
+        data.clear();
+        return false;
     }
-
-    return false;
 }
 
 
 int K3b::Device::Device::featureCurrent( unsigned int feature ) const
 {
-    unsigned char* data = 0;
-    unsigned int dataLen = 0;
-    if( getFeature( &data, dataLen, feature ) ) {
+    UByteArray data;
+    if( getFeature( data, feature ) ) {
         int ret = -1;
-        if( dataLen >= 11 )
+        if( data.size() >= 11 )
             ret = ( data[8+2]&1 ? 1 : 0 );  // check the current flag
-
-        delete [] data;
 
         return ret;
     }
@@ -106,13 +102,12 @@ int K3b::Device::Device::featureCurrent( unsigned int feature ) const
 
 bool K3b::Device::Device::readIsrc( unsigned int track, QByteArray& isrc ) const
 {
-    unsigned char* data = 0;
-    unsigned int dataLen = 0;
+    UByteArray data;
 
-    if( readSubChannel( &data, dataLen, 0x3, track ) ) {
+    if( readSubChannel( data, 0x3, track ) ) {
         bool isrcValid = false;
 
-        if( dataLen >= 8+18 ) {
+        if( data.size() >= 8+18 ) {
             isrcValid = (data[8+4]>>7 & 0x1);
 
             if( isrcValid ) {
@@ -123,8 +118,6 @@ bool K3b::Device::Device::readIsrc( unsigned int track, QByteArray& isrc ) const
             }
         }
 
-        delete [] data;
-
         return isrcValid;
     }
     else
@@ -134,20 +127,17 @@ bool K3b::Device::Device::readIsrc( unsigned int track, QByteArray& isrc ) const
 
 bool K3b::Device::Device::readMcn( QByteArray& mcn ) const
 {
-    unsigned char* data = 0;
-    unsigned int dataLen = 0;
+    UByteArray data;
 
-    if( readSubChannel( &data, dataLen, 0x2, 0 ) ) {
+    if( readSubChannel( data, 0x2, 0 ) ) {
         bool mcnValid = false;
 
-        if( dataLen >= 8+18 ) {
+        if( data.size() >= 8+18 ) {
             mcnValid = (data[8+4]>>7 & 0x1);
 
             if( mcnValid )
                 mcn = QByteArray( reinterpret_cast<char*>(data[8+5]), 14 );
         }
-
-        delete [] data;
 
         return mcnValid;
     }
@@ -156,7 +146,7 @@ bool K3b::Device::Device::readMcn( QByteArray& mcn ) const
 }
 
 
-bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& dataLen,
+bool K3b::Device::Device::getPerformance( UByteArray& data,
                                           unsigned int type,
                                           unsigned int dataType,
                                           unsigned int lba ) const
@@ -183,7 +173,7 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
         break;
     }
 
-    dataLen = descLen + 8;
+    unsigned int dataLen = descLen + 8;
     unsigned char header[dataLen];
     ::memset( header, 0, dataLen );
 
@@ -220,31 +210,31 @@ bool K3b::Device::Device::getPerformance( unsigned char** data, unsigned int& da
         return false;
     }
 
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+    data.resize( dataLen );
+    ::memset( data.data(), 0, data.size() );
 
     unsigned int numDesc = (dataLen-8)/descLen;
 
     cmd[8] = numDesc>>8;
     cmd[9] = numDesc;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-        dataLen = qMin( dataLen, from4Byte( *data ) + 4 );
+    if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+        data.resize( qMin( data.size(), (int)from4Byte( data.data() ) + 4 ) );
 
-        if( dataLen > 8 ) {
+        if( data.size() > 8 ) {
             return true;
         }
         else {
             kDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                    << ": GET PERFORMANCE reports invalid dataLen:" << dataLen << endl;
-            delete [] *data;
+                    << ": GET PERFORMANCE reports invalid data size:" << data.size() << endl;
+            data.clear();
             return false;
         }
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE with real length "
-                 << dataLen << " failed." << endl;
-        delete [] *data;
+                 << data.size() << " failed." << endl;
+        data.clear();
         return false;
     }
 }
@@ -279,7 +269,7 @@ bool K3b::Device::Device::seek( unsigned long lba ) const
 }
 
 
-bool K3b::Device::Device::readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, int value ) const
+bool K3b::Device::Device::readTrackInformation( UByteArray& data, int type, int value ) const
 {
     unsigned char header[2048];
     ::memset( header, 0, 2048 );
@@ -304,7 +294,7 @@ bool K3b::Device::Device::readTrackInformation( unsigned char** data, unsigned i
     }
 
     // first we read the header
-    dataLen = 4;
+    unsigned int dataLen = 4;
     cmd[8] = 4;
     if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
         dataLen = from2Byte( header ) + 2;
@@ -330,22 +320,21 @@ bool K3b::Device::Device::readTrackInformation( unsigned char** data, unsigned i
     }
 
     // again with real length
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+    data.resize( dataLen );
+    ::memset( data.data(), 0, data.size() );
 
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-        dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
+    cmd[7] = data.size() >> 8;
+    cmd[8] = data.size();
+    if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+        data.resize( qMin( data.size(), from2Byte( data.data() ) + 2 ) );
         return true;
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
-                 << dataLen << " failed." << endl;
-        delete [] *data;
+                 << data.size() << " failed." << endl;
+        data.clear();
+        return false;
     }
-
-    return false;
 }
 
 
@@ -498,7 +487,7 @@ bool K3b::Device::Device::readCdMsf( unsigned char* data,
 }
 
 
-bool K3b::Device::Device::readSubChannel( unsigned char** data, unsigned int& dataLen,
+bool K3b::Device::Device::readSubChannel( UByteArray& data,
                                         unsigned int subchannelParam,
                                         unsigned int trackNumber ) const
 {
@@ -514,7 +503,7 @@ bool K3b::Device::Device::readSubChannel( unsigned char** data, unsigned int& da
     cmd[9] = 0;      // Necessary to set the proper command length
 
     // first we read the header
-    dataLen = 4;
+    unsigned int dataLen = 4;
     if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
         dataLen = from2Byte( &header[2] ) + 4;
     else
@@ -530,26 +519,25 @@ bool K3b::Device::Device::readSubChannel( unsigned char** data, unsigned int& da
         dataLen = 0xFFFF;
 
     // again with real length
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+    data.resize( dataLen );
+    ::memset( data.data(), 0, data.size() );
 
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-        dataLen = qMin( dataLen, from2Byte( (*data)+2 ) + 4u );
+    cmd[7] = data.size() >> 8;
+    cmd[8] = data.size();
+    if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+        data.resize( qMin( data.size(), from2Byte( &data[2] ) + 4 ) );
         return true;
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
-                 << dataLen << " failed." << endl;
-        delete [] *data;
+                 << data.size() << " failed." << endl;
+        data.clear();
+        return false;
     }
-
-    return false;
 }
 
 
-bool K3b::Device::Device::readTocPmaAtip( unsigned char** data, unsigned int& dataLen, int format, bool time, int track ) const
+bool K3b::Device::Device::readTocPmaAtip( UByteArray& data, int format, bool time, int track ) const
 {
     unsigned int descLen = 0;
 
@@ -586,7 +574,7 @@ bool K3b::Device::Device::readTocPmaAtip( unsigned char** data, unsigned int& da
     cmd[9] = 0;      // Necessary to set the proper command length
 
     // we only read the header
-    dataLen = 4;
+    unsigned int dataLen = 4;
     if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
         dataLen = from2Byte( header ) + 2;
     else
@@ -610,33 +598,34 @@ bool K3b::Device::Device::readTocPmaAtip( unsigned char** data, unsigned int& da
         ++dataLen;
 
     // again with real length
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+    data.resize( dataLen );
+    ::memset( data.data(), 0, data.size() );
 
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-        dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
+    cmd[7] = data.size() >> 8;
+    cmd[8] = data.size();
+    if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+        dataLen = qMin( dataLen, from2Byte( data.data() ) + 2u );
         if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
             // useless length
-            delete [] *data;
+            data.clear();
             return false;
         }
-        else
+        else {
+            data.resize( dataLen );
             return true;
+        }
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
                  << format << " with real length "
-                 << dataLen << " failed." << endl;
-        delete [] *data;
+                 << data.size() << " failed." << endl;
+        data.clear();
+        return false;
     }
-
-    return false;
 }
 
 
-bool K3b::Device::Device::mechanismStatus( unsigned char** data, unsigned int& dataLen ) const
+bool K3b::Device::Device::mechanismStatus( UByteArray& data ) const
 {
     unsigned char header[2048];
     ::memset( header, 0, 2048 );
@@ -647,7 +636,7 @@ bool K3b::Device::Device::mechanismStatus( unsigned char** data, unsigned int& d
     cmd[11] = 0;    // Necessary to set the proper command length
 
     // first we read the header
-    dataLen = 8;
+    unsigned int dataLen = 8;
     if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
         dataLen = from4Byte( &header[6] ) + 8;
     else
@@ -667,27 +656,26 @@ bool K3b::Device::Device::mechanismStatus( unsigned char** data, unsigned int& d
              << (int)header[5] << " slots." << endl;
 
     // again with real length
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+    data.resize( dataLen );
+    ::memset( data.data(), 0, data.size() );
 
-    cmd[8] = dataLen>>8;
-    cmd[9] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-        dataLen = qMin( dataLen, from4Byte( (*data)+6 ) + 8 );
+    cmd[8] = data.size() >> 8;
+    cmd[9] = data.size();
+    if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+        data.resize( qMin( data.size(), (int)from4Byte( &data[6] ) + 8 ) );
         return true;
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS with real length "
-                 << dataLen << " failed." << endl;
-        delete [] *data;
+                 << data.size() << " failed." << endl;
+        data.clear();
+        return false;
     }
-
-    return false;
 }
 
 
 
-bool K3b::Device::Device::modeSense( unsigned char** pageData, unsigned int& pageLen, int page ) const
+bool K3b::Device::Device::modeSense( UByteArray& pageData, int page ) const
 {
     unsigned char header[2048];
     ::memset( header, 0, 2048 );
@@ -700,7 +688,7 @@ bool K3b::Device::Device::modeSense( unsigned char** pageData, unsigned int& pag
     cmd[9] = 0;           // Necessary to set the proper command length
 
     // first we determine the data length
-    pageLen = 8;
+    int pageLen = 8;
     if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
         pageLen = from2Byte( header ) + 2;
     else
@@ -716,46 +704,45 @@ bool K3b::Device::Device::modeSense( unsigned char** pageData, unsigned int& pag
         pageLen = 0xFFFF;
 
     // again with real length
-    *pageData = new unsigned char[pageLen];
-    ::memset( *pageData, 0, pageLen );
+    pageData.resize( pageLen );
+    ::memset( pageData.data(), 0, pageData.size() );
 
     cmd[7] = pageLen>>8;
     cmd[8] = pageLen;
-    if( cmd.transport( TR_DIR_READ, *pageData, pageLen ) == 0 ) {
-        pageLen = qMin( pageLen, from2Byte( *pageData ) + 2u );
+    if( cmd.transport( TR_DIR_READ, pageData.data(), pageData.size() ) == 0 ) {
+        pageLen = qMin( pageLen, from2Byte( pageData.data() ) + 2 );
         return true;
     }
     else {
-        delete [] *pageData;
+        pageData.clear();
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE with real length "
                  << pageLen << " failed." << endl;
+        return false;
     }
-
-    return false;
 }
 
 
-bool K3b::Device::Device::modeSelect( unsigned char* page, unsigned int pageLen, bool pf, bool sp ) const
+bool K3b::Device::Device::modeSelect( UByteArray& pageData, bool pf, bool sp ) const
 {
-    page[0] = 0;
-    page[1] = 0;
-    page[4] = 0;
-    page[5] = 0;
+    pageData[0] = 0;
+    pageData[1] = 0;
+    pageData[4] = 0;
+    pageData[5] = 0;
 
     // we do not support Block Descriptors here
-    page[6] = 0;
-    page[7] = 0;
+    pageData[6] = 0;
+    pageData[7] = 0;
 
     // PS bit reserved
-    page[8] &= 0x3F;
+    pageData[8] &= 0x3F;
 
     ScsiCommand cmd( this );
     cmd[0] = MMC_MODE_SELECT;
     cmd[1] = ( sp ? 1 : 0 ) | ( pf ? 0x10 : 0 );
-    cmd[7] = pageLen>>8;
-    cmd[8] = pageLen;
+    cmd[7] = pageData.size()>>8;
+    cmd[8] = pageData.size();
     cmd[9] = 0;
-    return( cmd.transport( TR_DIR_WRITE, page, pageLen ) == 0 );
+    return( cmd.transport( TR_DIR_WRITE, pageData.data(), pageData.size() ) == 0 );
 }
 
 
@@ -831,7 +818,7 @@ bool K3b::Device::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 }
 
 
-bool K3b::Device::Device::readDiscInformation( unsigned char** data, unsigned int& dataLen ) const
+bool K3b::Device::Device::readDiscInformation( UByteArray& data ) const
 {
     unsigned char header[2];
     ::memset( header, 0, 2 );
@@ -841,8 +828,9 @@ bool K3b::Device::Device::readDiscInformation( unsigned char** data, unsigned in
     cmd[8] = 2;
     cmd[9] = 0;      // Necessary to set the proper command length
 
+    unsigned int dataLen = 0;
     if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 )
-        dataLen = from2Byte( header ) + 2;
+        dataLen = from2Byte( header ) + 2u;
     else
         kDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": READ DISC INFORMATION length det failed" << endl;
@@ -853,36 +841,35 @@ bool K3b::Device::Device::readDiscInformation( unsigned char** data, unsigned in
         dataLen = 32;
     }
 
-    *data = new unsigned char[dataLen];
-    ::memset( *data, 0, dataLen );
+    data.resize( dataLen );
+    ::memset( data.data(), 0, data.size() );
 
-    cmd[7] = dataLen>>8;
-    cmd[8] = dataLen;
-    if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-        dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
+    cmd[7] = data.size() >> 8;
+    cmd[8] = data.size();
+    if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+        data.resize( qMin( data.size(), from2Byte( data.data() ) + 2 ) );
         return true;
     }
     else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
                  << dataLen << " failed." << endl;
-        delete [] *data;
+        data.clear();
+        return false;
     }
-
-    return false;
 }
 
 
-bool K3b::Device::Device::readDvdStructure( unsigned char** data, unsigned int& dataLen,
+bool K3b::Device::Device::readDvdStructure( UByteArray&  data,
                                           unsigned int format,
                                           unsigned int layer,
                                           unsigned long address,
                                           unsigned int agid ) const
 {
-    return readDiscStructure( data, dataLen, 0x0, format, layer, address, agid );
+    return readDiscStructure( data, 0x0, format, layer, address, agid );
 }
 
 
-bool K3b::Device::Device::readDiscStructure( unsigned char** data, unsigned int& dataLen,
+bool K3b::Device::Device::readDiscStructure( UByteArray& data,
                                            unsigned int mediaType,
                                            unsigned int format,
                                            unsigned int layer,
@@ -907,26 +894,27 @@ bool K3b::Device::Device::readDiscStructure( unsigned char** data, unsigned int&
     cmd[9] = 4;
     if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 ) {
         // again with real length
-        dataLen = from2Byte( header ) + 2;
+        unsigned int dataLen = from2Byte( header ) + 2;
 
-        *data = new unsigned char[dataLen];
-        ::memset( *data, 0, dataLen );
+        data.resize( dataLen );
+        ::memset( data.data(), 0, data.size() );
 
-        cmd[8] = dataLen>>8;
-        cmd[9] = dataLen;
-        if( cmd.transport( TR_DIR_READ, *data, dataLen ) == 0 ) {
-            dataLen = qMin( dataLen, from2Byte( *data ) + 2u );
+        cmd[8] = data.size() >> 8;
+        cmd[9] = data.size();
+        if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
+            data.resize( qMin( data.size(), from2Byte( data.data() ) + 2 ) );
             return true;
         }
         else {
             kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed.";
-            delete [] *data;
+            data.clear();
+            return false;
         }
     }
-    else
+    else {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DVD STRUCTURE length det failed";
-
-    return false;
+        return false;
+    }
 }
 
 

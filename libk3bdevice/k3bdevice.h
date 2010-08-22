@@ -16,8 +16,8 @@
 #ifndef K3BDEVICE_H
 #define K3BDEVICE_H
 
-#include <qstringlist.h>
 #include <qglobal.h>
+#include <QVarLengthArray>
 
 #include "k3bdevicetypes.h"
 #include "k3bdiskinfo.h"
@@ -47,6 +47,8 @@ namespace K3b {
     namespace Device
     {
         class Toc;
+
+        typedef QVarLengthArray< unsigned char > UByteArray;
 
         /**
          * \brief The main class representing a device.
@@ -463,24 +465,24 @@ namespace K3b {
              * if true is returned dataLen specifies the actual length of *data which needs to be
              * deleted after using.
              */
-            bool readDiscInformation( unsigned char** data, unsigned int& dataLen ) const;
+            bool readDiscInformation( UByteArray& data ) const;
 
             /**
              * @param pf If false all fields in the descriptor data is vendor specific. Default should be true.
              */
-            bool modeSelect( unsigned char* page, unsigned int pageLen, bool pf, bool sp ) const;
+            bool modeSelect( UByteArray& pageData, bool pf, bool sp ) const;
 
             /**
              * if true is returned pageLen specifies the actual length of *pageData which needs to be
              * deleted after using.
              */
-            bool modeSense( unsigned char** pageData, unsigned int& pageLen, int page ) const;
+            bool modeSense( UByteArray& pageData, int page ) const;
 
             /**
              * if true is returned dataLen specifies the actual length of *data which needs to be
              * deleted after using.
              */
-            bool readTocPmaAtip( unsigned char** data, unsigned int& dataLen, int format, bool msf, int track ) const;
+            bool readTocPmaAtip( UByteArray& data, int format, bool msf, int track ) const;
 
             /**
              * @param type specifies what value means:
@@ -490,13 +492,13 @@ namespace K3b {
              *        \li 10b - value refers to a session number
              *
              */
-            bool readTrackInformation( unsigned char** data, unsigned int& dataLen, int type, int value ) const;
+            bool readTrackInformation( UByteArray& data, int type, int value ) const;
 
             /**
              * if true is returned dataLen specifies the actual length of *data which needs to be
              * deleted after using.
              */
-            bool readDiscStructure( unsigned char** data, unsigned int& dataLen,
+            bool readDiscStructure( UByteArray& data,
                                     unsigned int mediaType = 0x0,
                                     unsigned int format = 0x0,
                                     unsigned int layer = 0x0,
@@ -507,7 +509,7 @@ namespace K3b {
              * In MMC5 readDvdStructure was renamed to readDiscStructure. This method does the same
              * like the above.
              */
-            bool readDvdStructure( unsigned char** data, unsigned int& dataLen,
+            bool readDvdStructure( UByteArray& data,
                                    unsigned int format = 0x0,
                                    unsigned int layer = 0x0,
                                    unsigned long address = 0,
@@ -517,20 +519,20 @@ namespace K3b {
              * if true is returned dataLen specifies the actual length of *data which needs to be
              * deleted after using.
              */
-            bool mechanismStatus( unsigned char** data, unsigned int& dataLen ) const;
+            bool mechanismStatus( UByteArray& data ) const;
 
             /**
              * Read a single feature.
              * data will be filled with the feature header and the descriptor
              */
-            bool getFeature( unsigned char** data, unsigned int& dataLen, unsigned int feature ) const;
+            bool getFeature( UByteArray& data, unsigned int feature ) const;
 
 
             /**
              * if true is returned dataLen specifies the actual length of *data which needs to be
              * deleted after using.
              */
-            bool getPerformance( unsigned char** data, unsigned int& dataLen,
+            bool getPerformance( UByteArray& data,
                                  unsigned int type,
                                  unsigned int dataType,
                                  unsigned int lba = 0 ) const;
@@ -623,8 +625,7 @@ namespace K3b {
              *                         03h - ISRC
              * @param trackNumber only valid if subchannelParam == 03h
              */
-            bool readSubChannel( unsigned char** data,
-                                 unsigned int& dataLen,
+            bool readSubChannel( UByteArray& data,
                                  unsigned int subchannelParam,
                                  unsigned int trackNumber ) const;
 
@@ -744,7 +745,7 @@ namespace K3b {
              * Internal method which checks if the raw toc data has bcd values or hex.
              * @return 0 if hex, 1 if bcd, -1 if none
              */
-            int rawTocDataWithBcdValues( unsigned char* data, unsigned int dataLen ) const;
+            int rawTocDataWithBcdValues( const UByteArray& data ) const;
 
             bool getSupportedWriteSpeedsVia2A( QList<int>& list, MediaType type ) const;
             bool getSupportedWriteSpeedsViaGP( QList<int>& list, MediaType type ) const;
