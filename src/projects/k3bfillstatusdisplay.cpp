@@ -125,10 +125,9 @@ void K3b::FillStatusDisplayWidget::mousePressEvent( QMouseEvent* e )
 
 void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 {
-    const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
-
     QPainter p( this );
-    p.setPen( colorScheme.foreground( KColorScheme::NormalText ).color() );
+
+    const QPalette::ColorGroup colorGroup = isEnabled() ? QPalette::Normal : QPalette::Disabled;
 
     const Msf docSize = d->doc->length();
     const Msf cdSize = d->cdSize;
@@ -137,14 +136,17 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     QBrush fillBrush;
     if( docSize <= cdSize - tolerance ) {
-        fillBrush = colorScheme.background( KColorScheme::PositiveBackground );
+        fillBrush = KColorScheme( colorGroup, KColorScheme::Selection ).background( KColorScheme::PositiveBackground );
     }
     else if( docSize > cdSize + tolerance ) {
-        fillBrush = colorScheme.background( KColorScheme::NegativeBackground );
+        fillBrush = KColorScheme( colorGroup, KColorScheme::Selection ).background( KColorScheme::NegativeBackground );
     }
     else {
-        fillBrush = colorScheme.background( KColorScheme::NeutralBackground );
+        fillBrush = KColorScheme( colorGroup, KColorScheme::Selection ).background( KColorScheme::NeutralBackground );
     }
+
+    const QPen normalPen = KColorScheme( colorGroup, KColorScheme::Window ).foreground( KColorScheme::NormalText ).color();
+    const QPen fillPen = KColorScheme( colorGroup, KColorScheme::Selection ).foreground( KColorScheme::NormalText ).color();
 
     QStyleOptionProgressBarV2 sopb;
     sopb.direction = layoutDirection();
@@ -158,10 +160,12 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     sopb.progress = docSize.totalFrames();
     style()->drawControl( QStyle::CE_ProgressBar, &sopb, &p );
 
-    // so split width() in maxValue pieces
-    double one = (double)rect().width() / (double)maxValue.totalFrames();
+    const QRect barRect = style()->subElementRect( QStyle::SE_ProgressBarContents, &sopb );
 
-    QRect crect( rect() );
+    // so split width() in maxValue pieces
+    double one = (double)barRect.width() / (double)maxValue.totalFrames();
+
+    QRect crect( barRect );
     crect.setWidth( (int)(one*(double)docSize.totalFrames()) );
 
     // ====================================================================================
@@ -193,16 +197,12 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
                             : KIO::convertSize( (long long)d->doc->size() - cdSize.mode1Bytes() ) );
     // ====================================================================================
 
-    // draw the medium size marker
+    // calculate the medium size marker
     // ====================================================================================
-    int mediumSizeMarkerPos = rect().left() + (int)(one*cdSize.lba());
-    QPoint mediumSizeMarkerFrom( mediumSizeMarkerPos, rect().bottom() );
-    QPoint mediumSizeMarkerTo( mediumSizeMarkerPos, rect().top() + ((rect().bottom()-rect().top())/2) );
-    p.drawLine( QStyle::visualPos( layoutDirection(), rect(), mediumSizeMarkerFrom ),
-                QStyle::visualPos( layoutDirection(), rect(), mediumSizeMarkerTo ) );
+    int mediumSizeMarkerPos = barRect.left() + (int)(one*cdSize.lba());
+    QPoint mediumSizeMarkerFrom( mediumSizeMarkerPos, barRect.bottom() );
+    QPoint mediumSizeMarkerTo( mediumSizeMarkerPos, barRect.top() + barRect.height()/2 );
     // ====================================================================================
-
-
 
     // we want to draw the docSizeText centered in the filled area
     // if there is not enough space we just align it left
@@ -221,14 +221,14 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     }
     // ====================================================================================
 
-    // draw the over size text
+    // calculate the over size text
     // ====================================================================================
-    QFont fnt(font());
-    fnt.setPointSize( qMax( 8, fnt.pointSize()-4 ) );
-    fnt.setBold(false);
+    QFont overSizeFont(font());
+    overSizeFont.setPointSize( qMax( 8, overSizeFont.pointSize()-4 ) );
+    overSizeFont.setBold(false);
 
-    QRect overSizeTextRect( rect() );
-    int overSizeTextLength = QFontMetrics(fnt).width(overSizeText);
+    QRect overSizeTextRect( barRect );
+    int overSizeTextLength = QFontMetrics(overSizeFont).width(overSizeText);
     if( overSizeTextLength + 5 > overSizeTextRect.width() - (int)(one*cdSize.totalFrames()) ) {
         // we don't have enough space on the right, so we paint to the left of the line
         overSizeTextRect.setLeft( (int)(one*cdSize.totalFrames()) - overSizeTextLength - 5 );
@@ -241,13 +241,30 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     if( overSizeTextRect.left() < docSizeTextPos + docSizeTextLength )
         docSizeTextPos = qMax( crect.left() + 5, qMin( overSizeTextRect.left() - docSizeTextLength - 5, mediumSizeMarkerPos - docSizeTextLength - 5 ) );
 
-    QRect docTextRect( rect() );
+    QRect docTextRect( barRect );
     docTextRect.setLeft( docSizeTextPos );
-    p.drawText( QStyle::visualRect( layoutDirection(), rect(), docTextRect ),
-                QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), docSizeText );
 
-    p.setFont(fnt);
-    p.drawText( QStyle::visualRect( layoutDirection(), rect(), overSizeTextRect ),
+    // Draw the fill part
+    p.setPen( fillPen );
+    p.setClipRect( crect );
+    p.drawLine( QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerFrom ),
+                QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerTo ) );
+    p.drawText( QStyle::visualRect( layoutDirection(), barRect, docTextRect ),
+                QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), docSizeText );
+    p.setFont(overSizeFont);
+    p.drawText( QStyle::visualRect( layoutDirection(), barRect, overSizeTextRect ),
+                QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), overSizeText );
+
+    // Draw the remain part
+    p.setPen( normalPen );
+    p.setClipRect( crect.right(), barRect.top(), barRect.width()-crect.width(), barRect.height() );
+    p.drawLine( QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerFrom ),
+                QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerTo ) );
+    p.setFont( font() );
+    p.drawText( QStyle::visualRect( layoutDirection(), barRect, docTextRect ),
+                QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), docSizeText );
+    p.setFont(overSizeFont);
+    p.drawText( QStyle::visualRect( layoutDirection(), barRect, overSizeTextRect ),
                 QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), overSizeText );
     // ====================================================================================
 }

@@ -1,6 +1,9 @@
 2.1
 ====
 Changes:
+ * Revamped project size indicator widget - it now fits better into a widget style
+
+Bugfixes:
  * Added dynamic hiding of irrelevant actions in mixed project (142954)
  * Added sorting in data project view (191660)
  * Using Oxygen sounds for events (242395)
