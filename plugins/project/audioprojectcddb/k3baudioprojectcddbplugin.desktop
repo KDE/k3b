@@ -74,6 +74,7 @@ Comment[th]=ส่วนเสริมสำหรับสืบค้นบ�
 Comment[tr]=Bir ses projesi için cddb sunucusundan bilgi sorgulayabilen bir eklenti.
 Comment[uk]=Додаток для опитування сервера cddb щодо даних про аудіо-проект.
 Comment[x-test]=xxPlugin to query a cddb server for information about an audio project.xx
+Comment[zh_CN]=向 CDDB 服务器查询音频光盘方案所需信息的插件。
 Comment[zh_TW]=到 cddb 伺服器查詢音效專案的資訊的外掛程式。
 Type=Service
 ServiceTypes=K3b/Plugin
