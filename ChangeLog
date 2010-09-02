@@ -2,6 +2,7 @@
 =====
 Bugfixes:
  * Crash on start when checking device capabilities (246822)
+ * Search paths on "Programs" options are not saved (248648)
 
 2.0.1
 =====
