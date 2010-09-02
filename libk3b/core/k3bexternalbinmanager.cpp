@@ -40,7 +40,7 @@ namespace {
     {
         return bin1->version() > bin2->version();
     }
-    
+
     const int EXECUTE_TIMEOUT = 5000; // in seconds
 }
 
@@ -56,7 +56,7 @@ class K3b::ExternalBin::Private
 public:
     Private( ExternalProgram& pr, const QString& pa )
         : program( pr ), path( pa ) {}
-        
+
     ExternalProgram& program;
     QString path;
     Version version;
@@ -157,7 +157,7 @@ class K3b::ExternalProgram::Private
 public:
     Private( const QString& n )
         : name( n ) {}
-    
+
     QString name;
     QStringList userParameters;
     QList<const ExternalBin*> bins;
@@ -644,12 +644,9 @@ QStringList K3b::ExternalBinManager::searchPath() const
 
 void K3b::ExternalBinManager::setSearchPath( const QStringList& list )
 {
-    loadDefaultSearchPath();
-
+    d->searchPath.clear();
     for( QStringList::const_iterator it = list.constBegin(); it != list.constEnd(); ++it ) {
-        QString aPath = QDir::fromNativeSeparators( *it );
-        if( !d->searchPath.contains( aPath ) )
-            d->searchPath.append( aPath );
+        d->searchPath.append( QDir::fromNativeSeparators( *it ) );
     }
 }
 
