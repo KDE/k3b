@@ -13,6 +13,7 @@ Bugfixes:
 Bugfixes:
  * Crash on start when checking device capabilities (246822)
  * Search paths on "Programs" options are not saved (248648)
+ * Crash on generation of DVD previews in DVD ripping list (249941)
 
 2.0.1
 =====
