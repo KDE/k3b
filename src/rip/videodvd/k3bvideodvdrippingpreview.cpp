@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -37,7 +38,7 @@ K3b::VideoDVDRippingPreview::VideoDVDRippingPreview( QObject* parent )
 K3b::VideoDVDRippingPreview::~VideoDVDRippingPreview()
 {
     cancel();
-    delete m_process;
+    m_process->deleteLater();
     delete m_tempDir;
 }
 
@@ -46,9 +47,9 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
 {
     // cleanup first
     cancel();
-    delete m_process;
-    delete m_tempDir;
+    m_process->deleteLater();
     m_process = 0;
+    delete m_tempDir;
     m_tempDir = 0;
     m_canceled = false;
 
@@ -99,9 +100,9 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
         // something went wrong when starting the program
         // it "should" be the executable
         kDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
-        delete m_process;
-        delete m_tempDir;
+        m_process->deleteLater();
         m_process = 0;
+        delete m_tempDir;
         m_tempDir = 0;
         emit previewDone( false );
     }
@@ -131,7 +132,7 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
     m_tempDir = 0;
 
     // clean up
-    delete m_process;
+    m_process->deleteLater();
     m_process = 0;
 
     kDebug() << "Preview done:" << success;
