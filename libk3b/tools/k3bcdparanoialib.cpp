@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -202,26 +203,17 @@ extern "C" {
 
 namespace K3b {
     /**
-     * Internal class used by K3b::CdparanoiaLib
+     * Internal class used by CdparanoiaLib
      */
     class CdparanoiaLibData
     {
     public:
-        CdparanoiaLibData( K3b::Device::Device* dev )
-            : m_device(dev),
-              m_drive(0),
-              m_paranoia(0),
-              m_currentSector(0) {
-            s_dataMap.insert( dev, this );
-        }
-
-        ~CdparanoiaLibData() {
+        ~CdparanoiaLibData()
+        {
             paranoiaFree();
-
-            s_dataMap.remove( m_device );
         }
 
-        K3b::Device::Device* device() const { return m_device; }
+        Device::Device* device() const { return m_device; }
         void paranoiaModeSet( int );
         bool paranoiaInit();
         void paranoiaFree();
@@ -231,27 +223,40 @@ namespace K3b {
         long lastSector( int );
         long sector() const { return m_currentSector; }
 
-        static K3b::CdparanoiaLibData* data( K3b::Device::Device* dev ) {
-            QMap<K3b::Device::Device*, K3b::CdparanoiaLibData*>::const_iterator it = s_dataMap.constFind( dev );
-            if( it == s_dataMap.constEnd() )
-                return new K3b::CdparanoiaLibData( dev );
+        static CdparanoiaLibData* data( Device::Device* dev )
+        {
+            QMap<Device::Device*, CdparanoiaLibData*>::const_iterator it = s_dataMap.constFind( dev );
+            if( it == s_dataMap.constEnd() ) {
+                CdparanoiaLibData* data = new CdparanoiaLibData( dev );
+                s_dataMap.insert( dev, data );
+                return data;
+            }
             else
                 return *it;
         }
 
-        static void freeAll() {
-            // clean up all K3b::CdparanoiaLibData instances
+        static void freeAll()
+        {
+            // clean up all CdparanoiaLibData instances
             qDeleteAll( s_dataMap );
             s_dataMap.clear();
         }
 
     private:
-        //
-        // We have exactly one instance of K3b::CdparanoiaLibData per device
-        //
-        static QMap<K3b::Device::Device*, K3b::CdparanoiaLibData*> s_dataMap;
+        CdparanoiaLibData( Device::Device* dev )
+            : m_device(dev),
+              m_drive(0),
+              m_paranoia(0),
+              m_currentSector(0)
+        {
+        }
 
-        K3b::Device::Device* m_device;
+        //
+        // We have exactly one instance of CdparanoiaLibData per device
+        //
+        static QMap<Device::Device*, CdparanoiaLibData*> s_dataMap;
+
+        Device::Device* m_device;
 
         cdrom_drive* m_drive;
         cdrom_paranoia* m_paranoia;
