@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -125,13 +126,15 @@ K3b::Device::Device* K3b::AppDeviceManager::addDevice( const Solid::Device& soli
 
 void K3b::AppDeviceManager::removeDevice( const Solid::Device& solidDev )
 {
-    if( findDevice( solidDev.as<Solid::Block>()->device() ) == currentDevice() )
-        setCurrentDevice( 0 );
+    if( const Solid::Block* blockDevice = solidDev.as<Solid::Block>() ) {
+        if( findDevice( blockDevice->device() ) == currentDevice() )
+            setCurrentDevice( 0 );
 
-    K3b::Device::DeviceManager::removeDevice( solidDev );
+        K3b::Device::DeviceManager::removeDevice( solidDev );
 
-    if( currentDevice() == 0 && !allDevices().isEmpty() )
-        setCurrentDevice( allDevices().first() );
+        if( currentDevice() == 0 && !allDevices().isEmpty() )
+            setCurrentDevice( allDevices().first() );
+    }
 }
 
 
