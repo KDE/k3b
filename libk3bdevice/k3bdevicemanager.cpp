@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -290,7 +291,7 @@ void K3b::Device::DeviceManager::clear()
 
     emit changed( this );
     emit changed();
-    
+
     qDeleteAll( devicesToDelete );
 }
 
@@ -354,12 +355,13 @@ bool K3b::Device::DeviceManager::saveConfig( KConfigGroup c )
 
 K3b::Device::Device* K3b::Device::DeviceManager::addDevice( const Solid::Device& solidDevice )
 {
-    if ( findDevice( solidDevice.as<Solid::Block>()->device() ) ) {
-        kDebug() << "(K3b::Device::DeviceManager) dev " << solidDevice.as<Solid::Block>()->device()  << " already found";
-        return 0;
+    if( const Solid::Block* blockDevice = solidDevice.as<Solid::Block>() ) {
+        if( !findDevice( blockDevice->device() ) )
+            return addDevice( new K3b::Device::Device( solidDevice ) );
+        else
+            kDebug() << "(K3b::Device::DeviceManager) dev " << blockDevice->device()  << " already found";
     }
-
-    return addDevice( new K3b::Device::Device( solidDevice ) );
+    return 0;
 }
 
 
@@ -409,19 +411,21 @@ K3b::Device::Device* K3b::Device::DeviceManager::addDevice( K3b::Device::Device*
 
 void K3b::Device::DeviceManager::removeDevice( const Solid::Device& dev )
 {
-    if( Device* device = findDevice( dev.as<Solid::Block>()->device() ) ) {
-        d->cdReader.removeAll( device );
-        d->dvdReader.removeAll( device );
-        d->bdReader.removeAll( device );
-        d->cdWriter.removeAll( device );
-        d->dvdWriter.removeAll( device );
-        d->bdWriter.removeAll( device );
-        d->allDevices.removeAll( device );
+    if( const Solid::Block* blockDevice = dev.as<Solid::Block>() ) {
+        if( Device* device = findDevice( blockDevice->device() ) ) {
+            d->cdReader.removeAll( device );
+            d->dvdReader.removeAll( device );
+            d->bdReader.removeAll( device );
+            d->cdWriter.removeAll( device );
+            d->dvdWriter.removeAll( device );
+            d->bdWriter.removeAll( device );
+            d->allDevices.removeAll( device );
 
-        emit changed( this );
-        emit changed();
+            emit changed( this );
+            emit changed();
 
-        delete device;
+            delete device;
+        }
     }
 }
 
