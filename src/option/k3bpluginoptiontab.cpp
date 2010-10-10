@@ -23,6 +23,7 @@
 #include <KPluginSelector>
 #include <KPluginInfo>
 
+#include <QHash>
 #include <QList>
 
 
@@ -43,12 +44,25 @@ K3b::PluginOptionTab::PluginOptionTab( QWidget* parent )
     layout->addWidget( label );
     layout->addWidget( pluginSelector );
 
-    foreach( K3b::Plugin* plugin, k3bcore->pluginManager()->plugins() ) {
-        kDebug() << "Adding plugin" << plugin->pluginInfo().name();
-        pluginSelector->addPlugins( QList<KPluginInfo>() << plugin->pluginInfo(),
+    // find all categories
+    QHash<QString, QString> categoryNames;
+
+    foreach( Plugin* plugin, k3bcore->pluginManager()->plugins() ) {
+        categoryNames[ plugin->category() ] = plugin->categoryName();
+    }
+
+    // add all plugins in each category
+    foreach( const QString &category, categoryNames.keys() ) {
+        QList<KPluginInfo> plugins;
+
+        foreach( Plugin* plugin, k3bcore->pluginManager()->plugins( category ) ) {
+            plugins << plugin->pluginInfo();
+            kDebug() << "Adding plugin" << plugin->pluginInfo().name();
+        }
+        pluginSelector->addPlugins( plugins,
                                     KPluginSelector::ReadConfigFile,
-                                    plugin->categoryName(),
-                                    plugin->category() );
+                                    categoryNames[ category ],
+                                    category );
     }
 }
 
