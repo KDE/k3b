@@ -24,10 +24,7 @@
 
 
 K3b::IsoOptions::IsoOptions()
-    : m_volumeID( i18nc( "This is the default volume identifier of a data project created by K3b. "
-                         "The string should not be longer than 16 characters to avoid warnings regarding "
-                         "Joiliet extensions which induce this restriction.",
-                         "K3b data project" ) ),
+    : m_volumeID( "K3b data project" ),
       m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2010 SEBASTIAN TRUEG AND MICHAL MALEK") ),
       m_systemId( K3b::systemName().toUpper() ),
       m_whiteSpaceTreatmentReplaceString( "_" )

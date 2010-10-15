@@ -92,6 +92,15 @@ static bool compareAdvancedOptions( const K3b::IsoOptions& o1, const K3b::IsoOpt
 
 static void initializePresets()
 {
+    QString vid = i18nc( "This is the default volume identifier of a data project created by K3b. "
+                         "The string should not be longer than 16 characters to avoid warnings regarding "
+                         "Joiliet extensions which induce this restriction.",
+                         "K3b data project" );
+
+    for ( int i = 0; i < FS_CUSTOM; ++i ) {
+        s_fsPresets[i].setVolumeID( vid );
+    }
+
     // Linux-only
     s_fsPresets[FS_LINUX_ONLY].setCreateJoliet( false );
     s_fsPresets[FS_LINUX_ONLY].setISOallow31charFilenames( true );
