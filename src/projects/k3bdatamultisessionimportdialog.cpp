@@ -54,7 +54,7 @@ namespace {
         int sessionNumber;
         K3b::Device::Device* device;
     };
-    
+
     typedef QMap<QTreeWidgetItem*, SessionInfo> Sessions;
 }
 
@@ -83,7 +83,7 @@ void K3b::DataMultisessionImportDialog::slotOk()
     Sessions::const_iterator session = d->sessions.constFind( d->sessionView->currentItem() );
     if ( session != d->sessions.constEnd() ) {
         QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
-        
+
         K3b::Device::Device* dev = session->device;
 
         //
@@ -221,7 +221,7 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
             d->sessions.insert( sessionItem, SessionInfo( lastSession, medium.device() ) );
         }
     }
-    
+
     if( 0 == lastSession ) {
         // the medium item in case we have no session info (will always use the last session)
         d->sessions.insert( mediumItem, SessionInfo( 0, medium.device() ) );
@@ -230,7 +230,7 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
         // we have a session item, there is no need to select the medium as a whole
         mediumItem->setFlags( mediumItem->flags() ^ Qt::ItemIsSelectable );
     }
-    
+
     mediumItem->setExpanded( true );
 }
 
@@ -272,7 +272,7 @@ K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent
     setModal(true);
     setCaption(i18n("Session Import"));
     QVBoxLayout* layout = new QVBoxLayout( widget );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     QLabel* label = new QLabel( i18n( "Please select a session to import." ), widget );
     d->sessionView = new QTreeWidget( widget );

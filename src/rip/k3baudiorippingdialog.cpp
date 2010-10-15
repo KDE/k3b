@@ -136,7 +136,7 @@ void K3b::AudioRippingDialog::setupGui()
 {
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
-    Form1Layout->setMargin( 0 );
+    Form1Layout->setContentsMargins( 0, 0, 0, 0 );
 
     QTreeWidgetItem* header = new QTreeWidgetItem;
     header->setText( 0, i18n( "Filename") );

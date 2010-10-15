@@ -599,7 +599,7 @@ void K3b::ImageWritingDialog::setupGui()
 
 
     QGridLayout* grid = new QGridLayout( frame );
-    grid->setMargin( 0 );
+    grid->setContentsMargins( 0, 0, 0, 0 );
 
     grid->addWidget( groupImageUrl, 0, 0 );
     grid->addWidget( groupImageType, 0, 1 );

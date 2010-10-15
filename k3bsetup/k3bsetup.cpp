@@ -69,7 +69,7 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
 {
     d = new Private();
     d->config = new KConfig( "k3bsetuprc" );
-    
+
     qRegisterMetaType<K3b::Setup::ProgramItem>();
     qRegisterMetaTypeStreamOperators<K3b::Setup::ProgramItem>( "K3b::Setup::ProgramItem" );
 
@@ -81,7 +81,7 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
     setAboutData( aboutData );
 
     QHBoxLayout* box = new QHBoxLayout( this );
-    box->setMargin(0);
+    box->setContentsMargins( 0, 0, 0, 0 );
 
     KTextEdit* label = new KTextEdit( this );
     label->setText( "<h2>K3b::Setup</h2>"
@@ -126,7 +126,7 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
     m_viewDevices->header()->setResizeMode( QHeaderView::ResizeToContents );
     m_viewPrograms->setModel( d->programsModel );
     m_viewPrograms->header()->setResizeMode( QHeaderView::ResizeToContents );
-    
+
     setNeedsAuthorization(true);
 
     load();
@@ -198,17 +198,17 @@ void K3bSetup::save()
 
     d->devicesModel->save( *d->config );
     d->programsModel->save( *d->config );
-    
+
     QVariantMap args;
     // Set burning group name as first argument
     if( m_checkUseBurningGroup->isChecked() && !m_editBurningGroup->text().isEmpty() )
         args["burningGroup"] = m_editBurningGroup->text();
     else
         args["burningGroup"] = QString();
-    
+
     // Set devices list as second argument
     args["devices"] =  d->devicesModel->selectedDevices();
-    
+
     // Set programs list as third argument
     QVariantList programs;
     Q_FOREACH( const K3b::Setup::ProgramItem& item, d->programsModel->selectedPrograms() )
@@ -216,12 +216,12 @@ void K3bSetup::save()
         programs << QVariant::fromValue( item );
     }
     args["programs"] = programs;
-    
+
     KAuth::Action *action = authAction();
     action->setArguments(args);
-    
+
     KAuth::ActionReply reply = action->execute();
-    
+
     if (reply.failed()) {
         // TODO: We can give some more details about the error here
         kDebug() << reply.errorCode() << reply.errorDescription();
@@ -233,7 +233,7 @@ void K3bSetup::save()
         QStringList failedToUpdate = reply.data()["failedToUpdate"].toStringList();
         kDebug() << "Objects updated: " << updated;
         kDebug() << "Objects failed to update: " << failedToUpdate;
-    
+
         if( !failedToUpdate.isEmpty() )
             KMessageBox::errorList( this, i18n("Following devices and programs could not be updated:"), failedToUpdate );
 
@@ -250,7 +250,7 @@ void K3bSetup::slotDataChanged()
     KConfigGroup grp(d->config, "General Settings" );
     bool useBurningGroupChanged = m_checkUseBurningGroup->isChecked() != grp.readEntry( "use burning group", false );
     bool burningGroupChanged = m_checkUseBurningGroup->isChecked() && m_editBurningGroup->text() != grp.readEntry( "burning group", "burning" );
-    
+
     emit changed(
         useBurningGroupChanged ||
         burningGroupChanged ||
@@ -269,7 +269,7 @@ void K3bSetup::slotBurningGroupChanged()
         d->devicesModel->setBurningGroup( QString() );
         d->programsModel->setBurningGroup( QString() );
     }
-    
+
     slotDataChanged();
 }
 

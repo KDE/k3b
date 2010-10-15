@@ -57,7 +57,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
       m_parameterModel( new ExternalBinParamsModel( manager, this ) )
 {
     QGridLayout* mainGrid = new QGridLayout( this );
-    mainGrid->setMargin( 0 );
+    mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     m_mainTabWidget = new QTabWidget( this );
     m_rescanButton = new QPushButton( i18n("&Search"), this );
@@ -81,10 +81,10 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
                                       "it will choose one as the <em>default</em>, which will be used "
                                       "to do the work. If you want to change the default, check "
                                       "desired version on the list.") );
-    
+
     QVBoxLayout* programTabLayout = new QVBoxLayout( programTab );
     programTabLayout->addWidget( m_programView );
-    
+
     m_mainTabWidget->addTab( programTab, i18n("Programs") );
 
 
@@ -145,7 +145,7 @@ void K3b::ExternalBinWidget::load()
     m_programModel->reload();
     m_programView->expandAll();
     m_parameterModel->reload();
-    
+
     // load search path
     m_searchPathBox->clear();
     m_searchPathBox->insertStringList( m_manager->searchPath() );

@@ -111,7 +111,7 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
     d->labelFoundMedia->setFont( f );
 
     QGridLayout* grid = new QGridLayout( mainWidget() );
-    grid->setMargin( 0 );
+    grid->setContentsMargins( 0, 0, 0, 0 );
 
     grid->addWidget( d->pixLabel, 0, 0, 3, 1 );
     grid->addItem( new QSpacerItem( 20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );

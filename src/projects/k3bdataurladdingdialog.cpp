@@ -117,7 +117,7 @@ void K3b::DataUrlAddingDialog::init()
     setCaption(i18n("Adding files to project '%1'",m_doc->URL().fileName()));
     setAttribute( Qt::WA_DeleteOnClose );
     QGridLayout* grid = new QGridLayout( page );
-    grid->setMargin( 0 );
+    grid->setContentsMargins( 0, 0, 0, 0 );
 
     m_counterLabel = new QLabel( page );
     m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'"

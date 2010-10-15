@@ -49,7 +49,7 @@ K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     m_layout->addWidget( m_toolBox );
     m_layout->addLayout( fillStatusDisplayLayout );
     m_layout->setSpacing( 0 );
-    m_layout->setMargin( 0 );
+    m_layout->setContentsMargins( 0, 0, 0, 0 );
 
     KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
                                             actionCollection(), "project_burn");

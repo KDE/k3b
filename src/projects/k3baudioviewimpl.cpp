@@ -192,7 +192,7 @@ void K3b::AudioViewImpl::slotAddSilence()
         dlg.setCaption(i18n("Add Silence"));
 
         QHBoxLayout* dlgLayout = new QHBoxLayout( widget );
-        dlgLayout->setMargin( 0 );
+        dlgLayout->setContentsMargins( 0, 0, 0, 0 );
         QLabel* label = new QLabel( i18n("Length of silence:"), widget );
         MsfEdit* msfEdit = new MsfEdit( widget );
         msfEdit->setValue( 150 ); // 2 seconds default

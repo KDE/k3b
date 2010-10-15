@@ -47,13 +47,13 @@ K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidg
     m_msfEditEnd = new K3b::MsfEdit( frame );
 
     QVBoxLayout* layout = new QVBoxLayout( frame );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     // FIXME: After the string freeze replace the text with a better one explaning how to use this dialog
     layout->addWidget( new QLabel( i18n("Please select the position where the track should be split."),
                                    frame ) );
     layout->addWidget( m_editorWidget );
-    
+
     QHBoxLayout* rangeLayout = new QHBoxLayout;
     rangeLayout->addWidget( new QLabel( i18n("Split track at:"), frame ), 1 );
     rangeLayout->addWidget( m_msfEditStart, 0 );

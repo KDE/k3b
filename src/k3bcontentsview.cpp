@@ -29,7 +29,7 @@ K3b::ContentsView::ContentsView( bool withHeader,
 {
     if( withHeader ) {
         QVBoxLayout* lay = new QVBoxLayout( this );
-        lay->setMargin( 0 );
+        lay->setContentsMargins( 0, 0, 0, 0 );
         lay->setSpacing( 0 );
 
         m_header = new K3b::ThemedHeader( this );

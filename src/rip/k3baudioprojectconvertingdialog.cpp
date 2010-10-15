@@ -120,13 +120,13 @@ void K3b::AudioProjectConvertingDialog::setupGui()
 {
     QWidget *frame = mainWidget();
     QGridLayout* Form1Layout = new QGridLayout( frame );
-    Form1Layout->setMargin( 0 );
+    Form1Layout->setContentsMargins( 0, 0, 0, 0 );
 
     QTreeWidgetItem* header = new QTreeWidgetItem;
     header->setText( 0, i18n( "Filename (relative to base folder)") );
     header->setText( 1, i18n( "Length") );
     header->setText( 2, i18n( "File Size") );
-    
+
     d->viewTracks = new QTreeWidget( frame );
     d->viewTracks->setSortingEnabled( false );
     d->viewTracks->setAllColumnsShowFocus( true );
@@ -314,7 +314,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                                                  m_patternWidget->filenamePattern(),
                                                                  m_patternWidget->replaceBlanks(),
                                                                  m_patternWidget->blankReplaceString() );
-            
+
             QTreeWidgetItem* item = new QTreeWidgetItem( d->viewTracks );
             item->setText( 0, filename );
             item->setText( 1, track->length().toString() );
@@ -331,7 +331,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
                                                              m_patternWidget->playlistPattern(),
                                                              m_patternWidget->replaceBlanks(),
                                                              m_patternWidget->blankReplaceString() );
-        
+
         QTreeWidgetItem* item = new QTreeWidgetItem( d->viewTracks );
         item->setText( 0, filename );
         item->setText( 1, "-" );

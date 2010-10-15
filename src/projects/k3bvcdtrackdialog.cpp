@@ -440,7 +440,7 @@ void K3b::VcdTrackDialog::prepareGui()
     d->mainTabbed = new QTabWidget( frame );
 
     QHBoxLayout* mainLayout = new QHBoxLayout( frame );
-    mainLayout->setMargin( 0 );
+    mainLayout->setContentsMargins( 0, 0, 0, 0 );
     mainLayout->addWidget( groupFileInfo, 0 );
     mainLayout->addWidget( d->mainTabbed, 1 );
 }

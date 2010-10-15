@@ -35,7 +35,7 @@ K3b::PluginOptionTab::PluginOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     QLabel* label = new QLabel( i18n( "<p>Here all <em>K3b Plugins</em> may be configured. Be aware that this does not include the "
                                       "<em>KPart Plugins</em> which embed themselves in the K3b menu structure.</p>" ), this );

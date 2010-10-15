@@ -110,7 +110,7 @@ void K3b::JobProgressDialog::setupGUI()
     setButtonGuiItem( User2, KStandardGuiItem::close() );
 
     QVBoxLayout* mainLayout = new QVBoxLayout( mainWidget() );
-    mainLayout->setMargin( 0 );
+    mainLayout->setContentsMargins( 0, 0, 0, 0 );
 
     // header
     // ------------------------------------------------------------------------------------------
@@ -121,7 +121,7 @@ void K3b::JobProgressDialog::setupGUI()
     d->headerFrame->setAutoFillBackground( true );
     //d->headerFrame->setMargin( 1 );
     QHBoxLayout* headerLayout = new QHBoxLayout( d->headerFrame );
-    headerLayout->setMargin( 0 );
+    headerLayout->setContentsMargins( 0, 0, 0, 0 );
     headerLayout->setSpacing( 0 );
     m_pixLabel = new K3b::ThemedLabel( d->headerFrame );
     headerLayout->addWidget( m_pixLabel );
@@ -167,7 +167,7 @@ void K3b::JobProgressDialog::setupGUI()
     d->progressHeaderFrame->setAutoFillBackground( true );
 
     QHBoxLayout* progressHeaderLayout = new QHBoxLayout( d->progressHeaderFrame );
-    progressHeaderLayout->setMargin( 0 );
+    progressHeaderLayout->setContentsMargins( 0, 0, 0, 0 );
     progressHeaderLayout->setSpacing( 0 );
 
     m_labelTask = new K3b::ThemedLabel( d->progressHeaderFrame );
@@ -220,7 +220,7 @@ void K3b::JobProgressDialog::setupGUI()
     m_frameExtraInfo->setFrameShape( QFrame::NoFrame );
     m_frameExtraInfo->setFrameShadow( QFrame::Raised );
     m_frameExtraInfoLayout = new QGridLayout( m_frameExtraInfo );
-    m_frameExtraInfoLayout->setMargin(0);
+    m_frameExtraInfoLayout->setContentsMargins( 0, 0, 0,0 );
     mainLayout->addWidget( m_frameExtraInfo );
 
     m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_WORKING );

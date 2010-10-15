@@ -25,13 +25,13 @@
 #include <QLabel>
 
 namespace K3b {
-    
+
 class VolumeNameWidget::Private
 {
 public:
     DataDoc* doc;
     KLineEdit* volumeNameEdit;
-    
+
     void fontChanged( const QFontMetrics& fontMetrics );
 };
 
@@ -47,17 +47,17 @@ VolumeNameWidget::VolumeNameWidget( DataDoc* doc, QWidget* parent )
       d( new Private )
 {
     d->doc = doc;
-    
+
     d->volumeNameEdit = new KLineEdit( doc->isoOptions().volumeID(), this );
     d->volumeNameEdit->setValidator( new Latin1Validator( d->volumeNameEdit ) );
     d->volumeNameEdit->setClearButtonShown( true );
     d->fontChanged( fontMetrics() );
-    
+
     QHBoxLayout* layout = new QHBoxLayout( this );
     layout->addWidget( new QLabel( i18n("Volume Name:"), this ), 1, Qt::AlignRight );
     layout->addWidget( d->volumeNameEdit, 2 );
-    layout->setMargin( 0 );
-    
+    layout->setContentsMargins( 0, 0, 0, 0 );
+
     connect( d->volumeNameEdit, SIGNAL(textChanged(const QString&)),
              d->doc, SLOT(setVolumeID(const QString&)) );
     connect( d->doc, SIGNAL(changed()),

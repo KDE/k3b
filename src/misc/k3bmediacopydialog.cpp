@@ -74,7 +74,7 @@ K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )
     QWidget* main = mainWidget();
 
     QGridLayout* mainGrid = new QGridLayout( main );
-    mainGrid->setMargin( 0 );
+    mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     QGroupBox* groupSource = new QGroupBox( i18n("Source Medium"), main );
     m_comboSourceDevice = new K3b::MediaSelectionComboBox( groupSource );

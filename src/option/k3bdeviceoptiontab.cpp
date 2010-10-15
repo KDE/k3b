@@ -35,7 +35,7 @@ K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     QGridLayout* frameLayout = new QGridLayout( this );
-    frameLayout->setMargin( 0 );
+    frameLayout->setContentsMargins( 0, 0, 0, 0 );
 
 
     // Info Label

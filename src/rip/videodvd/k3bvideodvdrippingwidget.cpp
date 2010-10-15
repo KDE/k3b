@@ -248,7 +248,7 @@ void K3b::VideoDVDRippingWidget::slotUpdateFreeTempSpace()
 
     const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
     QColor textColor;
-    
+
     KDiskFreeSpaceInfo free = KDiskFreeSpaceInfo::freeSpaceInfo( path );
     if( free.isValid() ) {
         m_labelFreeSpace->setText( KIO::convertSizeFromKiB(free.available()/1024) );
@@ -261,7 +261,7 @@ void K3b::VideoDVDRippingWidget::slotUpdateFreeTempSpace()
         textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
         m_labelFreeSpace->setText("-");
     }
-    
+
     QPalette pal( m_labelFreeSpace->palette() );
     pal.setColor( QPalette::Text, textColor );
     m_labelFreeSpace->setPalette( pal );
@@ -363,7 +363,7 @@ void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
     labelH->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
 
     QGridLayout* grid = new QGridLayout( dlg.mainWidget() );
-    grid->setMargin( 0 );
+    grid->setContentsMargins( 0, 0, 0, 0 );
     grid->addWidget( label, 0, 0, 1, 4 );
     grid->addWidget( labelW, 1, 0 );
     grid->addWidget( spinWidth, 1, 1 );

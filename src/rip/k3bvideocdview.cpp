@@ -82,7 +82,7 @@ namespace {
             : QTreeWidgetItem( parent )
         {
             setFlags( flags() & ~Qt::ItemIsUserCheckable );
-            
+
             setText( 0, QString( "%1. %2" ).arg( _trackNumber ).arg( id ) );
             setText( 1, name );
             if ( length > 0 ) {
@@ -143,18 +143,18 @@ namespace {
         }
 
     };
-    
+
     void setCheckState( QTreeWidgetItem* item, Qt::CheckState checkState )
     {
         if( item->flags() & Qt::ItemIsUserCheckable ) {
             item->setCheckState( 0, checkState );
         }
-        
+
         for( int i = 0; i < item->childCount(); ++i ) {
             setCheckState( item->child( i ), checkState );
         }
     }
-    
+
 } // namespace
 
 class K3b::VideoCdView::Private
@@ -203,7 +203,7 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     d->trackView->setAllColumnsShowFocus( true );
     d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
     d->trackView->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
-    
+
     QTreeWidgetItem* header = d->trackView->headerItem();
     header->setText( 0, i18n( "Item Name" ) );
     header->setText( 1, i18n( "Extracted Name" ) );
@@ -221,7 +221,7 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     mainGrid->addWidget( d->toolBox );
     mainGrid->addWidget( d->trackView );
     mainGrid->setSpacing( 0 );
-    mainGrid->setMargin( 0 );
+    mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     initActions();
 
@@ -231,7 +231,7 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     d->toolBox->addAction( d->actionCollection->action( "view_files" ) );
     d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
     d->toolBox->addWidget( d->labelLength );
-    
+
     slotTrackSelectionChanged( 0, 0 );
 
     d->videocdinfo = 0L;
@@ -370,7 +370,7 @@ void K3b::VideoCdView::updateDisplay()
 void K3b::VideoCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
-    
+
     K3b::createAction( this, i18n( "Check All" ), 0, 0, this,
                        SLOT( slotCheckAll() ), actionCollection(),
                        "check_all" );
@@ -429,19 +429,19 @@ void K3b::VideoCdView::startRip()
 {
     int selectedItems  = 0;
     QList<QTreeWidgetItem*> children;
-    
+
     children = d->trackView->findItems( i18n("Video CD MPEG tracks" ), Qt::MatchExactly, 0 );
     if( !children.isEmpty() && children.first()->checkState( 0 ) == Qt::Checked ) {
         d->videooptions ->setVideoCdRipSequences( true );
         ++selectedItems;
     }
-    
+
     children = d->trackView->findItems( i18n("Files" ), Qt::MatchExactly, 0 );
     if( !children.isEmpty() && children.first()->checkState( 0 ) == Qt::Checked ) {
         d->videooptions ->setVideoCdRipFiles( true );
         ++selectedItems;
     }
-    
+
     children = d->trackView->findItems( i18n("Segments" ), Qt::MatchExactly, 0 );
     if( !children.isEmpty() && children.first()->checkState( 0 ) == Qt::Checked ) {
         d->videooptions ->setVideoCdRipSegments( true );

@@ -49,7 +49,7 @@ static QPixmap themedMessageBoxIcon( K3b::PassivePopup::MessageType mt )
 {
     QString icon_name;
     QMessageBox::Icon qIcon;
-    
+
     switch( mt ) {
     case K3b::PassivePopup::Information:
         qIcon = QMessageBox::Information;
@@ -67,9 +67,9 @@ static QPixmap themedMessageBoxIcon( K3b::PassivePopup::MessageType mt )
         return QPixmap();
         break;
     }
-    
+
     QPixmap ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeMedium, KIconLoader::DefaultState, QStringList(), 0,true);
-    
+
     if( ret.isNull() )
         return QMessageBox::standardIcon( qIcon );
     else
@@ -82,7 +82,7 @@ class K3b::PassivePopup::Private
 public:
     int timeout;
     int showEffect;
-    
+
     K3b::TimeoutWidget* timeoutWidget;
     QLabel* titleLabel;
     QLabel* messageLabel;
@@ -98,34 +98,34 @@ K3b::PassivePopup::PassivePopup( QWidget* parent )
     d = new Private;
     d->timeout = 6000;
     d->showEffect = 0;
-    
+
     setFrameStyle( QFrame::StyledPanel | QFrame::Raised );
     setAutoFillBackground( true );
-    
+
     d->titleLabel = new QLabel( this );
-    d->titleLabel->setMargin( 5 );
+    d->titleLabel->setContentsMargins( 5, 5, 5, 5 );
     d->titleLabel->setAlignment( Qt::AlignCenter );
     d->titleLabel->setAutoFillBackground( true );
     QFont fnt( d->titleLabel->font() );
     fnt.setBold( true );
     d->titleLabel->setFont( fnt );
-    
+
     d->messageLabel = new QLabel( this );
     d->messageLabel->setTextInteractionFlags( Qt::TextSelectableByMouse | Qt::LinksAccessibleByMouse );
-    
+
     d->pixmapLabel = new QLabel( this );
     d->pixmapLabel->setAlignment( Qt::AlignTop );
     d->pixmapLabel->setPixmap( themedMessageBoxIcon( Information ) );
-    
+
     d->timeoutWidget = new K3b::TimeoutWidget( this );
     connect( d->timeoutWidget, SIGNAL(timeout()), this, SLOT(slotClose()) );
-    
+
     d->closeButton = new K3b::MiniButton( d->titleLabel );
     d->closeButton->setIcon( style()->standardIcon( QStyle::SP_TitleBarCloseButton ) );
     d->closeButton->setFixedSize( 16, 16 );
     d->closeButton->setToolTip( i18n("Close") );
     connect( d->closeButton, SIGNAL(clicked()), this, SLOT(slotClose()) );
-    
+
     d->stickyButton = new K3b::MiniButton( d->titleLabel );
     d->stickyButton->setCheckable( true );
     d->stickyButton->setIcon( QIcon( QPixmap( const_cast< const char** >( sticky_xpm ) ) ) );
@@ -134,21 +134,21 @@ K3b::PassivePopup::PassivePopup( QWidget* parent )
     connect( d->stickyButton, SIGNAL(toggled(bool)), this, SLOT(slotSticky(bool)) );
 
     QHBoxLayout* titleLay = new QHBoxLayout( d->titleLabel );
-    titleLay->setMargin( d->titleLabel->margin() );
+    titleLay->setContentsMargins( d->titleLabel->margin(), d->titleLabel->margin(), d->titleLabel->margin(), d->titleLabel->margin() );
     titleLay->setSpacing( 2 );
     titleLay->addStretch();
     titleLay->addWidget( d->stickyButton );
     titleLay->addWidget( d->closeButton );
 
     QHBoxLayout* msgLay = new QHBoxLayout;
-    msgLay->setMargin( 9 );
+    msgLay->setContentsMargins( 9, 9, 9, 9 );
     msgLay->setSpacing( 6 );
     msgLay->addWidget( d->pixmapLabel );
     msgLay->addWidget( d->messageLabel, 1 );
     msgLay->addWidget( d->timeoutWidget );
 
     QVBoxLayout* mainLay = new QVBoxLayout( this );
-    mainLay->setMargin( frameWidth() );
+    mainLay->setContentsMargins( frameWidth(), frameWidth(), frameWidth(), frameWidth() );
     mainLay->setSpacing( 0 );
     mainLay->addWidget( d->titleLabel );
     mainLay->addLayout( msgLay, 1 );

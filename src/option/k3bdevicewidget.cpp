@@ -49,7 +49,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
       m_readerParentViewItem( 0 )
 {
     QVBoxLayout* frameLayout = new QVBoxLayout( this );
-    frameLayout->setMargin( 0 );
+    frameLayout->setContentsMargins( 0, 0, 0, 0 );
 
 
     // buttons
@@ -58,7 +58,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     QPushButton* buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this );
     buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
     QHBoxLayout* refreshButtonGrid = new QHBoxLayout;
-    refreshButtonGrid->setMargin(0);
+    refreshButtonGrid->setContentsMargins( 0, 0, 0, 0 );
     refreshButtonGrid->addStretch();
     refreshButtonGrid->addWidget( modifyPermissions );
     refreshButtonGrid->addWidget( buttonRefreshDevices );
@@ -222,7 +222,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
         item->setText( 0, i18n("none") );
         item->setFont( 0, fItalic );
     }
-    
+
     m_viewDevices->expandAll();
 }
 

@@ -67,7 +67,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
 
     mainGrid = new QGridLayout( KDialog::mainWidget() );
 
-    mainGrid->setMargin( 0 );
+    mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     // header
     // ---------------------------------------------------------------------------------------------------

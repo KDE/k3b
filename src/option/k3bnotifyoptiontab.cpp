@@ -28,7 +28,7 @@ K3b::NotifyOptionTab::NotifyOptionTab( QWidget* parent )
     m_notifyWidget = new KNotifyConfigWidget(this);
     m_notifyWidget->setApplication();
     QHBoxLayout* layout = new QHBoxLayout( this );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
     layout->addWidget( m_notifyWidget );
 }
 

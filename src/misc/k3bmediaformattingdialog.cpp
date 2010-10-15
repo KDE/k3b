@@ -77,7 +77,7 @@ K3b::MediaFormattingDialog::MediaFormattingDialog( QWidget* parent )
     groupOptionsLayout->addStretch( 1 );
 
     QGridLayout* grid = new QGridLayout( frame );
-    grid->setMargin( 0 );
+    grid->setContentsMargins( 0, 0, 0, 0 );
 
     grid->addWidget( m_writerSelectionWidget, 0, 0, 1, 2 );
     grid->addWidget( groupWritingMode, 1, 0 );

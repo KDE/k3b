@@ -246,7 +246,7 @@ void K3b::ProjectBurnDialog::slotStartClicked()
 void K3b::ProjectBurnDialog::prepareGui()
 {
     QVBoxLayout* mainLay = new QVBoxLayout( mainWidget() );
-    mainLay->setMargin( 0 );
+    mainLay->setContentsMargins( 0, 0, 0, 0 );
 
     m_writerSelectionWidget = new K3b::WriterSelectionWidget( mainWidget() );
     m_writerSelectionWidget->setWantedMediumType( m_doc->supportedMediaTypes() );

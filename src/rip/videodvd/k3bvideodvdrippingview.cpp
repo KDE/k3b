@@ -74,13 +74,13 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     // toolbox
     // ----------------------------------------------------------------------------------
     d->toolBox = new KToolBar( mainWidget() );
-    
+
     KUrlLabel* showFilesLabel = new KUrlLabel( d->toolBox );
     showFilesLabel->setText( i18n("Show files") );
     showFilesLabel->setWhatsThis( i18n("Shows plain Video DVD vob files from the DVD "
                                        "(including decryption) for further processing with another application") );
     connect( showFilesLabel, SIGNAL(leftClickedUrl()), this, SLOT(slotShowFiles()) );
-    
+
     d->labelLength = new QLabel( d->toolBox );
     d->labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     d->labelLength->setContentsMargins( 0, 0, style()->pixelMetric( QStyle::PM_LayoutRightMargin ), 0 );
@@ -112,7 +112,7 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     QVBoxLayout* mainGrid = new QVBoxLayout( mainWidget() );
     mainGrid->addWidget( d->toolBox );
     mainGrid->addWidget( d->view );
-    mainGrid->setMargin( 0 );
+    mainGrid->setContentsMargins( 0, 0, 0, 0 );
     mainGrid->setSpacing( 0 );
 
     setLeftPixmap( K3b::Theme::MEDIA_LEFT );
@@ -272,7 +272,7 @@ void K3b::VideoDVDRippingView::activate( bool active )
         //
         d->model->stopPreviewGen();
     }
-    
+
     MediaContentsView::activate( active );
 }
 

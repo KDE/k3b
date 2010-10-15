@@ -42,7 +42,7 @@ K3b::BurnProgressDialog::BurnProgressDialog( QWidget *parent, bool showSubProgre
     m_labelWriter->setFrameShape( QFrame::StyledPanel );
     m_labelWriter->setFrameShadow( QFrame::Sunken );
     m_labelWriter->setLineWidth( 1 );
-    m_labelWriter->setMargin( 5 );
+    m_labelWriter->setContentsMargins( 5, 5, 5, 5 );
     QFont textLabel14_font( m_labelWriter->font() );
     textLabel14_font.setBold( true );
     m_labelWriter->setFont( textLabel14_font );

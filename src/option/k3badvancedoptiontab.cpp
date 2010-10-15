@@ -53,7 +53,7 @@ void K3b::AdvancedOptionTab::setupGui()
 {
     QGridLayout* groupAdvancedLayout = new QGridLayout( this );
     groupAdvancedLayout->setAlignment( Qt::AlignTop );
-    groupAdvancedLayout->setMargin( 0 );
+    groupAdvancedLayout->setContentsMargins( 0, 0, 0, 0 );
 
 
     QGroupBox* groupWritingApp = new QGroupBox( i18n("Burning"), this );

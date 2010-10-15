@@ -28,7 +28,7 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
     : QWidget( parent )
 {
     QHBoxLayout* layout = new QHBoxLayout( this );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     m_cddbKcm = 0;
     if ( KService::Ptr service = KService::serviceByStorageId( "libkcddb.desktop" ) )
@@ -39,7 +39,7 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
 //     }
 
     if ( m_cddbKcm ) {
-        m_cddbKcm->layout()->setMargin(0);
+        m_cddbKcm->layout()->setContentsMargins( 0, 0, 0, 0 );
         layout->addWidget( m_cddbKcm );
     }
     else {

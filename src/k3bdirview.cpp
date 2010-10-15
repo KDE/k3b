@@ -64,7 +64,7 @@ public:
 
     bool bViewDiskInfo;
     bool contextMediaInfoRequested;
-    
+
     void setCurrentView( K3b::ContentsView* view );
 };
 
@@ -74,7 +74,7 @@ void K3b::DirView::Private::setCurrentView( K3b::ContentsView* view )
     if( ContentsView* previous = qobject_cast<ContentsView*>( viewStack->currentWidget() ) ) {
         previous->activate( false );
     }
-    
+
     viewStack->setCurrentWidget( view );
     view->activate( true );
 }
@@ -89,7 +89,7 @@ K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
     d->contextMediaInfoRequested = false;
 
     QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
     if( !d->fileTreeView ) {
         d->mainSplitter = new QSplitter( this );

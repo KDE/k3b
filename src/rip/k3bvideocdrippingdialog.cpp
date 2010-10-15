@@ -68,7 +68,7 @@ void K3b::VideoCdRippingDialog::setupGui()
 {
     QWidget * frame = mainWidget();
     QGridLayout* MainLayout = new QGridLayout( frame );
-    MainLayout->setMargin( 0 );
+    MainLayout->setContentsMargins( 0, 0, 0, 0 );
 
     // ---------------------------------------------------- Directory group ---
     QGroupBox* groupDirectory = new QGroupBox( i18n( "Destination Folder" ), frame );
@@ -203,7 +203,7 @@ void K3b::VideoCdRippingDialog::slotFreeSpace(const QString&,
         textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
     else
         textColor = colorScheme.foreground( KColorScheme::NormalText ).color();
-    
+
     QPalette pal( m_labelNecessarySize->palette() );
     pal.setColor( m_labelNecessarySize->foregroundRole(), textColor );
     m_labelNecessarySize->setPalette( pal );

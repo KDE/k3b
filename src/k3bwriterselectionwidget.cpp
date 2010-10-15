@@ -147,7 +147,7 @@ K3b::WriterSelectionWidget::WriterSelectionWidget( QWidget *parent )
 
     QGridLayout* mainLayout = new QGridLayout( this );
     mainLayout->setAlignment( Qt::AlignTop );
-    mainLayout->setMargin( 0 );
+    mainLayout->setContentsMargins( 0, 0, 0, 0 );
 
     mainLayout->addWidget( groupWriter, 0, 0 );
 

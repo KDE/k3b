@@ -120,7 +120,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     grid->addWidget( view, 1, 0, 1, 2 );
     grid->addWidget( m_checkDontShowAgain, 2, 0 );
     QHBoxLayout* buttonBox = new QHBoxLayout;
-    buttonBox->setMargin( 0 );
+    buttonBox->setContentsMargins( 0, 0, 0, 0 );
     if( k3bsetupButton != 0 ) {
         buttonBox->addWidget( k3bsetupButton );
     }
@@ -128,7 +128,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     grid->addLayout( buttonBox, 2, 1 );
     grid->setColumnStretch( 0, 1 );
     grid->setRowStretch( 1, 1 );
-    
+
     const KColorScheme colorScheme( QPalette::Normal, KColorScheme::Button );
     const QColor negativeTextColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
 
@@ -175,7 +175,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 {
     QList<K3b::SystemProblem> problems;
     bool showK3bSetupButton = false;
-    
+
 #ifdef BUILD_K3BSETUP
     const QString k3bSetupSolutionText = i18n("Click \"Modify Permissions...\" to solve this problem.");
 #else

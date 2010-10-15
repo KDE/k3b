@@ -40,7 +40,7 @@ K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )
     endLabel->setAlignment( Qt::AlignRight );
 
     QGridLayout* grid = new QGridLayout( this );
-    grid->setMargin( 0 );
+    grid->setContentsMargins( 0, 0, 0, 0 );
 
     grid->addWidget( startLabel, 0, 0 );
     grid->addWidget( m_editStartOffset, 1, 0 );

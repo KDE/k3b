@@ -59,7 +59,7 @@ K3b::FileView::FileView(QWidget *parent )
     d->toolBox->setToolButtonStyle( Qt::ToolButtonIconOnly );
 
     QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->setMargin( 0 );
+    layout->setContentsMargins( 0, 0, 0, 0 );
     layout->setSpacing( 0 );
     layout->addWidget( d->toolBox );
     layout->addWidget( d->dirOp, 1 );
@@ -76,7 +76,7 @@ K3b::FileView::FileView(QWidget *parent )
     filterLayout->addWidget( new QLabel( i18n("Filter:"), filterBox ) );
     d->filterWidget = new KFileFilterCombo( filterBox );
     filterLayout->addWidget( d->filterWidget );
-    filterLayout->setMargin( 0 );
+    filterLayout->setContentsMargins( 0, 0, 0, 0 );
 
     d->filterWidget->setEditable( true );
     QString filter = i18n("*|All Files");
@@ -86,10 +86,10 @@ K3b::FileView::FileView(QWidget *parent )
     filter += "\n" + i18n("application/x-ogg |Ogg Vorbis Sound Files");
     filter += "\n" + i18n("video/mpeg |MPEG Video Files");
     d->filterWidget->setFilter(filter);
-    
+
     d->actionShowBookmarks = new KAction( i18n("Show Bookmarks"), d->toolBox );
     d->actionShowBookmarks->setCheckable( true );
-    
+
     KActionMenu* actionOptions = new KActionMenu( KIcon("configure"), i18n("Options"), d->toolBox );
     actionOptions->setDelayed( false );
     actionOptions->addAction( d->dirOp->actionCollection()->action("sorting menu") );
@@ -114,12 +114,12 @@ K3b::FileView::FileView(QWidget *parent )
     d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
     d->toolBox->addAction( actionOptions );
     d->toolBox->addAction( d->dirOp->bookmarkMenu() );
-    
+
     if( QAction* action = d->dirOp->actionCollection()->action("show hidden") ) {
         action->setShortcut( Qt::ALT + Qt::Key_Period );
         action->setShortcutContext( Qt::ApplicationShortcut );
     }
-    
+
     connect( d->dirOp, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
     connect( d->filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
     connect( d->actionShowBookmarks, SIGNAL(toggled(bool)), d->dirOp->bookmarkMenu(), SLOT(setVisible(bool)) );

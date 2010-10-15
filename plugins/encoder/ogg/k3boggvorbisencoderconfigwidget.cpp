@@ -52,7 +52,7 @@ namespace {
         320,
         400
     };
-    
+
 } // namespace
 
 K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
@@ -80,7 +80,7 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* p
 
 
     QHBoxLayout* lay = new QHBoxLayout( this );
-    lay->setMargin( 0 );
+    lay->setContentsMargins( 0, 0, 0, 0 );
 
     lay->addWidget( w );
 

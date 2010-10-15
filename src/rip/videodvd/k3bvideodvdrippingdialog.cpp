@@ -127,13 +127,13 @@ class K3b::VideoDVDRippingDialog::Private
 public:
     Private( const K3b::VideoDVD::VideoDVD& d )
         : dvd( d ), w( 0 ), audioModel( 0 ) {}
-    
+
     VideoDVD::VideoDVD dvd;
     VideoDVDRippingWidget* w;
     VideoDVDAudioModel* audioModel;
     TitleRipInfos titleRipInfos;
     K3b::FileSystemInfo fsInfo;
-    
+
     QString createFilename( const VideoDVDRippingJob::TitleRipInfo& info, const QString& pattern ) const;
 };
 
@@ -334,7 +334,7 @@ K3b::VideoDVDRippingDialog::VideoDVDRippingDialog( const K3b::VideoDVD::VideoDVD
       d( new Private( dvd ) )
 {
     d->audioModel = new VideoDVDAudioModel( dvd, titles, this );
-    
+
     QWidget* frame = mainWidget();
     d->w = new K3b::VideoDVDRippingWidget( frame );
     d->w->m_titleView->setModel( d->audioModel );
@@ -342,9 +342,9 @@ K3b::VideoDVDRippingDialog::VideoDVDRippingDialog( const K3b::VideoDVD::VideoDVD
     d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::TitleColumn, QHeaderView::ResizeToContents );
     d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::VideoSizeColumn, QHeaderView::ResizeToContents );
     d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::FileSizeColumn, QHeaderView::ResizeToContents );
-    
+
     QHBoxLayout* frameLayout = new QHBoxLayout( frame );
-    frameLayout->setMargin( 0 );
+    frameLayout->setContentsMargins( 0, 0, 0, 0 );
     frameLayout->addWidget( d->w );
 
     connect( d->w, SIGNAL(changed()),
@@ -389,7 +389,7 @@ void K3b::VideoDVDRippingDialog::slotUpdateFilenames()
         if( d->w->m_checkBlankReplace->isChecked() )
             f.replace( QRegExp( "\\s" ), d->w->m_editBlankReplace->text() );
         it.value().filename = baseDir + f;
-        
+
         d->audioModel->setFileName( *it.key(), f );
     }
 }

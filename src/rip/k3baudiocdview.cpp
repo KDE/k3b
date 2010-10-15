@@ -131,7 +131,7 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     mainGrid->addWidget( d->toolBox );
     mainGrid->addWidget( d->trackView );
     mainGrid->setSpacing( 0 );
-    mainGrid->setMargin( 0 );
+    mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     initActions();
 
@@ -153,7 +153,7 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
 
     d->busyInfoLabel = new K3b::ThemedLabel( i18n("Searching for Artist information..."), this );
     d->busyInfoLabel->setFrameStyle( QFrame::Box|QFrame::Plain );
-    d->busyInfoLabel->setMargin( 6 );
+    d->busyInfoLabel->setContentsMargins( 6, 6, 6, 6 );
     d->busyInfoLabel->hide();
 }
 

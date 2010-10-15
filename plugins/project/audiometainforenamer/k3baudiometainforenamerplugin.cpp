@@ -135,7 +135,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
 
     // layout
     QVBoxLayout* box = new QVBoxLayout( this );
-    box->setMargin( 0 );
+    box->setContentsMargins( 0, 0, 0, 0 );
 
     box->addWidget( patternGroup );
     box->addWidget( filesGroup );

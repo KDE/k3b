@@ -93,7 +93,7 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
 
     QHBoxLayout* contents = new QHBoxLayout;
     contents->setSpacing( KDialog::spacingHint()*2 );
-    contents->setMargin( 0 );
+    contents->setContentsMargins( 0, 0, 0, 0 );
 
     QLabel* pixLabel = new QLabel( this );
     int size = IconSize(KIconLoader::Dialog);
@@ -105,7 +105,7 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     contents->addWidget( label, 1 );
 
     d->buttonLayout = new QHBoxLayout;
-    d->buttonLayout->setMargin( 0 );
+    d->buttonLayout->setContentsMargins( 0, 0, 0, 0 );
 
     mainGrid->addLayout( contents, 0, 0, 1, 3 );
     mainGrid->addWidget( K3b::StdGuiItems::horizontalLine( this ), 1, 0, 1, 3 );

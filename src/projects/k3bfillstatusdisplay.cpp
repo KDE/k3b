@@ -377,7 +377,7 @@ K3b::FillStatusDisplay::FillStatusDisplay( K3b::Doc* doc, QWidget *parent )
 
     QGridLayout* layout = new QGridLayout( this );
     layout->setSpacing(5);
-    layout->setMargin(frameWidth());
+    layout->setContentsMargins( frameWidth(), frameWidth(), frameWidth(), frameWidth() );
     layout->addWidget( d->displayWidget, 0, 0 );
     //  layout->addWidget( d->buttonMenu, 0, 1 );
     layout->setColumnStretch( 0, 1 );
