@@ -524,11 +524,13 @@ void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
     kDebug() << "(" << track << "," << position << ")";
 
     track->setParent( this );
-    if( !d->firstTrack )
+    if( !d->firstTrack ) {
+        emit trackAboutToBeAdded( 0 );
         d->firstTrack = d->lastTrack = track;
-    else if( position == 0 )
+        emit trackAdded( 0 );
+    } else if( position == 0 ) {
         track->moveAhead( d->firstTrack );
-    else {
+    } else {
         K3b::AudioTrack* after = getTrack( position );
         if( after )
             track->moveAfter( after );
@@ -538,6 +540,7 @@ void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
 
     emit changed();
 }
+
 
 void K3b::AudioDoc::removeTrack( K3b::AudioTrack* track )
 {
