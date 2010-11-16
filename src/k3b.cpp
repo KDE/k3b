@@ -266,7 +266,7 @@ K3b::MainWindow::MainWindow()
     connect( k3bcore->deviceManager(), SIGNAL(changed()), this, SLOT(slotCheckSystemTimed()) );
 
     // FIXME: now make sure the welcome screen is displayed completely
-    resize( 780, 550 );
+    //resize( 780, 550 );
 //   getMainDockWidget()->resize( getMainDockWidget()->size().expandedTo( d->welcomeWidget->sizeHint() ) );
 //   d->dirTreeDock->resize( QSize( d->dirTreeDock->sizeHint().width(), d->dirTreeDock->height() ) );
 

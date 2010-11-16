@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2010-2010 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -19,18 +20,16 @@
 #include <kuniqueapplication.h>
 #include "k3bcore.h"
 
-#include <qmap.h>
+#include <QtCore/QMap>
 
 #define k3bappcore K3b::Application::Core::k3bAppCore()
 
 
 namespace K3b {
     class MainWindow;
-    class AudioServer;
     class ThemeManager;
     class ProjectManager;
     class AppDeviceManager;
-
 
     class Application : public KUniqueApplication
     {
@@ -40,26 +39,20 @@ namespace K3b {
         Application();
         ~Application();
 
-        int newInstance();
+        virtual int newInstance();
 
         class Core;
-
-    public Q_SLOTS:
-        void init();
-
-    Q_SIGNALS:
-        void initializationInfo( const QString& );
-        void initializationDone();
 
     private Q_SLOTS:
         void slotShutDown();
 
     private:
-        bool processCmdLineArgs();
+        Q_INVOKABLE void init();
+        Q_INVOKABLE void processCmdLineArgs();
 
         Core* m_core;
-        //AudioServer* m_audioServer;
         MainWindow* m_mainWindow;
+        bool m_initialized;
     };
 
 
@@ -75,17 +68,12 @@ namespace K3b {
         Core( QObject* parent );
         ~Core();
 
-        void init();
+        Q_INVOKABLE virtual void init();
 
-        void readSettings( KSharedConfig::Ptr c );
-        void saveSettings( KSharedConfig::Ptr c );
+        Q_INVOKABLE virtual void readSettings( KSharedConfig::Ptr c );
+        Q_INVOKABLE virtual void saveSettings( KSharedConfig::Ptr c );
 
-        /**
-         * \reimplemented from Core. We use our own devicemanager here.
-         */
-        Device::DeviceManager* deviceManager() const;
-
-        AppDeviceManager* appDeviceManager() const { return m_appDeviceManager; }
+        AppDeviceManager* appDeviceManager() const;
 
         ThemeManager* themeManager() const { return m_themeManager; }
 
@@ -96,11 +84,6 @@ namespace K3b {
         static Core* k3bAppCore() { return s_k3bAppCore; }
 
     Q_SIGNALS:
-        /**
-         * This is used for showing info in the K3b splashscreen
-         */
-        void initializationInfo( const QString& );
-
         /**
          * Any component may request busy info
          * In the K3b main app this will be displayed
@@ -116,7 +99,7 @@ namespace K3b {
         void busyFinishRequested();
 
     private:
-        void initDeviceManager();
+        virtual Device::DeviceManager* createDeviceManager() const;
 
         bool internalBlockDevice( Device::Device* );
         void internalUnblockDevice( Device::Device* );
@@ -124,7 +107,6 @@ namespace K3b {
         ThemeManager* m_themeManager;
         MainWindow* m_mainWindow;
         ProjectManager* m_projectManager;
-        AppDeviceManager* m_appDeviceManager;
 
         QMap<Device::Device*, int> m_deviceBlockMap;
 

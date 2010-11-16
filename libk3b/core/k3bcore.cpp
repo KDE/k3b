@@ -145,35 +145,48 @@ K3b::Core::~Core()
 
 K3b::MediaCache* K3b::Core::mediaCache() const
 {
-    const_cast<K3b::Core*>(this)->initMediaCache();
+    if ( !d->mediaCache ) {
+        // create the media cache but do not connect it to the device manager
+        // yet to speed up application start. We connect it in init()
+        // once the devicemanager has scanned for devices.
+        d->mediaCache = new K3b::MediaCache( const_cast<Core*>( this ) );
+    }
     return d->mediaCache;
 }
 
 
 K3b::Device::DeviceManager* K3b::Core::deviceManager() const
 {
-    const_cast<K3b::Core*>(this)->initDeviceManager();
+    if( !d->deviceManager ) {
+        d->deviceManager = createDeviceManager();
+    }
     return d->deviceManager;
 }
 
 
 K3b::ExternalBinManager* K3b::Core::externalBinManager() const
 {
-    const_cast<K3b::Core*>(this)->initExternalBinManager();
+    if( !d->externalBinManager ) {
+        d->externalBinManager = new ExternalBinManager( const_cast<Core*>( this ) );
+        addDefaultPrograms( d->externalBinManager );
+    }
     return d->externalBinManager;
 }
 
 
 K3b::PluginManager* K3b::Core::pluginManager() const
 {
-    const_cast<K3b::Core*>(this)->initPluginManager();
+    if( !d->pluginManager )
+        d->pluginManager = new K3b::PluginManager( const_cast<Core*>( this ) );
     return d->pluginManager;
 }
 
 
 K3b::GlobalSettings* K3b::Core::globalSettings() const
 {
-    const_cast<K3b::Core*>(this)->initGlobalSettings();
+    if( !d->globalSettings ) {
+        d->globalSettings = new GlobalSettings();
+    }
     return d->globalSettings;
 }
 
@@ -186,11 +199,6 @@ K3b::Version K3b::Core::version() const
 
 void K3b::Core::init()
 {
-    initGlobalSettings();
-    initExternalBinManager();
-    initDeviceManager();
-    initPluginManager();
-
     // load the plugins before doing anything else
     // they might add external bins
     pluginManager()->loadAll();
@@ -203,44 +211,9 @@ void K3b::Core::init()
 }
 
 
-void K3b::Core::initGlobalSettings()
+K3b::Device::DeviceManager* K3b::Core::createDeviceManager() const
 {
-    if( !d->globalSettings )
-        d->globalSettings = new K3b::GlobalSettings();
-}
-
-
-void K3b::Core::initExternalBinManager()
-{
-    if( !d->externalBinManager ) {
-        d->externalBinManager = new K3b::ExternalBinManager( this );
-        K3b::addDefaultPrograms( d->externalBinManager );
-    }
-}
-
-
-void K3b::Core::initDeviceManager()
-{
-    if( !d->deviceManager )
-        d->deviceManager = new K3b::Device::DeviceManager( this );
-}
-
-
-void K3b::Core::initMediaCache()
-{
-    if ( !d->mediaCache ) {
-        // create the media cache but do not connect it to the device manager
-        // yet to speed up application start. We connect it in init()
-        // once the devicemanager has scanned for devices.
-        d->mediaCache = new K3b::MediaCache( this );
-    }
-}
-
-
-void K3b::Core::initPluginManager()
-{
-    if( !d->pluginManager )
-        d->pluginManager = new K3b::PluginManager( this );
+    return new K3b::Device::DeviceManager( const_cast<Core*>( this ) );
 }
 
 

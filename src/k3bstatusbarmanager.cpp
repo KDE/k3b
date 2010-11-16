@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -27,22 +28,21 @@
 #include "k3bdiritem.h"
 #include "k3bview.h"
 
-#include <kiconloader.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
+#include <KAboutData>
+#include <KAction>
+#include <KConfig>
+#include <KHBox>
+#include <KIconLoader>
 #include <kio/global.h>
-#include <kstatusbar.h>
-#include <kaboutdata.h>
-#include <kaction.h>
+#include <KLocale>
+#include <KStandardDirs>
+#include <KStatusBar>
 
-#include <qlabel.h>
-
-#include <qfile.h>
-#include <qtimer.h>
-#include <qevent.h>
-#include <qtooltip.h>
-#include <kvbox.h>
+#include <QtCore/QFile>
+#include <QtCore/QTimer>
+#include <QtCore/QEvent>
+#include <QtGui/QLabel>
+#include <QtGui/QToolTip>
 
 
 
@@ -81,19 +81,14 @@ K3b::StatusBarManager::StatusBarManager( K3b::MainWindow* parent )
     // a spacer item
     m_mainWindow->statusBar()->addPermanentWidget( new QLabel( "  ", m_mainWindow->statusBar() ), 0 );
 
-    connect( m_mainWindow, SIGNAL(configChanged(KSharedConfig::Ptr)), this, SLOT(update()) );
-    //FIXME kde4
-#if 0
-    connect( m_mainWindow->actionCollection(), SIGNAL(actionStatusText(const QString&)),
-             this, SLOT(showActionStatusText(const QString&)) );
-    connect( m_mainWindow->actionCollection(), SIGNAL(clearStatusText()),
-             this, SLOT(clearActionStatusText()) );
-#endif
+    connect( m_mainWindow, SIGNAL(configChanged(KSharedConfig::Ptr)),
+             this, SLOT(update()) );
     connect( k3bappcore->projectManager(), SIGNAL(activeProjectChanged(K3b::Doc*)),
              this, SLOT(slotActiveProjectChanged(K3b::Doc*)) );
     connect( k3bappcore->projectManager(), SIGNAL(projectChanged(K3b::Doc*)),
              this, SLOT(slotActiveProjectChanged(K3b::Doc*)) );
-    connect( (m_updateTimer = new QTimer( this )), SIGNAL(timeout()), this, SLOT(slotUpdateProjectStats()) );
+    connect( (m_updateTimer = new QTimer( this )), SIGNAL(timeout()),
+             this, SLOT(slotUpdateProjectStats()) );
 
     update();
 }
@@ -112,29 +107,22 @@ void K3b::StatusBarManager::update()
         path.truncate( path.lastIndexOf('/') );
 
     unsigned long size, avail;
-    if( K3b::kbFreeOnFs( path, size, avail ) )
-        slotFreeTempSpace( path, size, 0, avail );
-    else
+    if( K3b::kbFreeOnFs( path, size, avail ) ) {
+        m_labelFreeTemp->setText(KIO::convertSizeFromKiB(avail)  + "/" +
+                                KIO::convertSizeFromKiB(size)  );
+
+        // if we have less than 640 MB that is not good
+        if( avail < 655360 )
+            m_pixFreeTemp->setPixmap( SmallIcon("folder-red") );
+        else
+            m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
+    } else {
         m_labelFreeTemp->setText(i18n("No info"));
+    }
+    
     if(path != m_labelFreeTemp->parentWidget()->toolTip())
         m_labelFreeTemp->parentWidget()->setToolTip( path );
-}
-
-
-void K3b::StatusBarManager::slotFreeTempSpace(const QString&,
-                                            unsigned long kbSize,
-                                            unsigned long,
-                                            unsigned long kbAvail)
-{
-    m_labelFreeTemp->setText(KIO::convertSizeFromKiB(kbAvail)  + "/" +
-                             KIO::convertSizeFromKiB(kbSize)  );
-
-    // if we have less than 640 MB that is not good
-    if( kbAvail < 655360 )
-        m_pixFreeTemp->setPixmap( SmallIcon("folder-red") );
-    else
-        m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
-
+    
     // update the display every second
     QTimer::singleShot( 2000, this, SLOT(update()) );
 }

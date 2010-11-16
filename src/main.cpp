@@ -143,10 +143,6 @@ int main( int argc, char* argv[] )
                          << " current is: " << KGlobal::locale()->language() << endl;
         }
         K3b::Application app;
-
-        // we need a running app for the init method
-        QTimer::singleShot( 0, &app, SLOT(init()) );
-
         return app.exec();
     }
 }

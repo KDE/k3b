@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -17,22 +18,17 @@
 #ifndef K3B_STATUSBAR_MANAGER_H
 #define K3B_STATUSBAR_MANAGER_H
 
-#include <qobject.h>
-//Added by qt3to4:
-#include <QEvent>
-#include <QLabel>
+#include <QtCore/QObject>
 
 class QLabel;
-namespace K3b {
-    class MainWindow;
-}
 class QEvent;
-namespace K3b {
-    class Doc;
-}
 class QTimer;
 
 namespace K3b {
+    
+    class Doc;
+    class MainWindow;
+    
     class StatusBarManager : public QObject
     {
         Q_OBJECT
@@ -45,7 +41,6 @@ namespace K3b {
         void update();
 
     private Q_SLOTS:
-        void slotFreeTempSpace( const QString&, unsigned long, unsigned long, unsigned long );
         void showActionStatusText( const QString& text );
         void clearActionStatusText();
         void slotActiveProjectChanged( K3b::Doc* doc );

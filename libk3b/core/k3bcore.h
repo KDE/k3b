@@ -85,11 +85,7 @@ namespace K3b {
 
         MediaCache* mediaCache() const;
 
-        /**
-         * If this is reimplemented it is recommended to also reimplement
-         * init().
-         */
-        virtual Device::DeviceManager* deviceManager() const;
+        Device::DeviceManager* deviceManager() const;
 
         /**
          * Returns the external bin manager from Core.
@@ -161,11 +157,7 @@ namespace K3b {
         virtual bool internalBlockDevice( Device::Device* );
         virtual void internalUnblockDevice( Device::Device* );
 
-        virtual void initGlobalSettings();
-        virtual void initExternalBinManager();
-        virtual void initDeviceManager();
-        virtual void initPluginManager();
-        virtual void initMediaCache();
+        virtual Device::DeviceManager* createDeviceManager() const;
 
         virtual void customEvent( QEvent* e );
 
