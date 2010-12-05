@@ -117,7 +117,7 @@ bool K3b::AudioImager::run()
         //
         // Read data from the track
         //
-        while( (read = trackReader.read( buffer, sizeof(buffer) )) > 0 ) {
+        while( !trackReader.atEnd() && (read = trackReader.read( buffer, sizeof(buffer) )) > 0 ) {
             if( !d->ioDev ) {
                 waveFileWriter.write( buffer, read, K3b::WaveFileWriter::BigEndian );
             }
