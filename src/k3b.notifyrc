@@ -53,7 +53,7 @@ Comment[tr]=K3b
 Comment[uk]=K3b
 Comment[x-test]=xxK3bxx
 Comment[zh_CN]=K3b
-Comment[zh_TW]=K3b
+Comment[zh_TW]=K3b 光碟燒錄軟體
 
 [Event/SuccessfullyFinished]
 Name=Process successful
