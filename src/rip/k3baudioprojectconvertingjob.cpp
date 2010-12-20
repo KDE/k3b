@@ -256,7 +256,7 @@ bool K3b::AudioProjectConvertingJob::convertTrack( AudioTrack& track, const QStr
     AudioTrackReader trackReader( track );
     trackReader.open();
 
-    while( !canceled() && ( readLength = trackReader.read( buffer, bufferLength ) ) > 0 ) {
+    while( !canceled() && !trackReader.atEnd() && ( readLength = trackReader.read( buffer, bufferLength ) ) > 0 ) {
 
         if( d->encoder ) {
             // the tracks produce big endian samples
@@ -288,7 +288,7 @@ bool K3b::AudioProjectConvertingJob::convertTrack( AudioTrack& track, const QStr
     }
 
     emit infoMessage( i18n("Successfully converted track %1.", track.trackNumber()), K3b::Job::MessageInfo );
-    return ( readLength == 0 );
+    return trackReader.atEnd();
 }
 
 
