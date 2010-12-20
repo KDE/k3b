@@ -354,6 +354,14 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     const KColorScheme colorScheme( QPalette::Normal, KColorScheme::Window );
     QPalette taskPalette( m_labelTask->palette() );
 
+    // Show elapsed time at the end of the task
+    {
+        const int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
+        const QString elapsed = KGlobal::locale()->formatLocaleTime( QTime().addSecs( elapsedSecs ), KLocale::TimeDuration );
+        m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::formatLocaleTime",
+                                            "Elapsed time: %1", elapsed ) );
+    }
+
     if( success ) {
         m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_SUCCESS );
 
@@ -366,9 +374,6 @@ void K3b::JobProgressDialog::slotFinished( bool success )
         m_progressPercent->setValue(100);
         m_progressSubPercent->setValue(100);
         slotProgress(100);
-
-        // one last time update to be sure no remaining time is displayed anymore
-        slotUpdateTime();
 
         if( m_osd )
             m_osd->setText( i18n("Success.") );
@@ -535,21 +540,16 @@ void K3b::JobProgressDialog::slotStarted()
 
 void K3b::JobProgressDialog::slotUpdateTime()
 {
-    int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
-
-    QString s = i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-                       "Elapsed time: %1",
-                       KGlobal::locale()->prettyFormatDuration( elapsedSecs*1000 ) );
-
-    if( d->lastProgress > 0 && d->lastProgress < 100 ) {
-        int remainingSecs = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
-        s += " / ";
-        s += i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-                    "Remaining: %1",
-                    KGlobal::locale()->prettyFormatDuration( remainingSecs*1000 ) );
+    int remainingSecs;
+    if( d->lastProgress >= 0 && d->lastProgress <= 100 ) {
+        remainingSecs = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
+    } else {
+        remainingSecs = 0;
     }
 
-    m_labelElapsedTime->setText( s );
+    const QString remaining = KGlobal::locale()->formatLocaleTime( QTime().addSecs( remainingSecs ), KLocale::TimeDuration );
+    m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::formatLocaleTime",
+                                        "Remaining time: %1", remaining ) );
 }
 
 
