@@ -17,6 +17,7 @@ Bugfixes:
  * Crash on closing dialog after succesful audio CD ripping (241630)
  * Crash on device detection (249371)
  * Crash when showing settings window (238819)
+ * Fixed playlist sort order (249395)
 
 2.0.1
 =====

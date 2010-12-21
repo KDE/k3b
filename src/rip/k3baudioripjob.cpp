@@ -40,6 +40,22 @@
 #include <KStandardDirs>
 
 
+namespace
+{
+
+    struct SortByTrackNumber
+    {
+        SortByTrackNumber( K3b::AudioRipJob::Tracks const& tracks ) : m_tracks( tracks ) {}
+
+        bool operator()( QString const& lhs, QString const& rhs )
+        {
+            return m_tracks.value( lhs ) < m_tracks.value( rhs );
+        }
+
+        K3b::AudioRipJob::Tracks const& m_tracks;
+    };
+
+} // namespace
 
 
 class K3b::AudioRipJob::Private
@@ -242,7 +258,7 @@ bool K3b::AudioRipJob::run()
     d->overallSectorsRead = 0;
     d->overallSectorsToRead = 0;
     d->lengths.clear();
-    
+
     Q_FOREACH( const QString& filename, d->tracks.keys().toSet() ) {
         d->lengths.insert( filename, 0 );
         Q_FOREACH( int track, d->tracks.values( filename ) ) {
@@ -263,7 +279,7 @@ bool K3b::AudioRipJob::run()
         }
         lastFilename = d->currentTrack.key();
     }
-    
+
     if( d->encoder ) {
         d->encoder->closeFile();
     }
@@ -312,7 +328,7 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename, const QStri
             emit infoMessage( i18n("Unable to create folder %1", dir), K3b::Job::MessageError );
             return false;
         }
-        
+
         // Close the previous file if the new filename is different
         if( prevFilename != filename ) {
             if( d->encoder )
@@ -343,7 +359,7 @@ bool K3b::AudioRipJob::ripTrack( int track, const QString& filename, const QStri
                     metaData.insert( AudioEncoder::META_TRACK_TITLE, d->cddbEntry.get( KCDDB::Title ) );
                     metaData.insert( AudioEncoder::META_TRACK_COMMENT, d->cddbEntry.get( KCDDB::Comment ) );
                 }
-                
+
                 isOpen = d->encoder->openFile( d->fileType, filename, d->lengths[ filename ], metaData );
                 if( !isOpen )
                     emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
@@ -433,14 +449,19 @@ bool K3b::AudioRipJob::writePlaylist()
         // format descriptor
         t << "#EXTM3U" << endl;
 
-        Q_FOREACH( const QString& filename, d->tracks.keys().toSet() ) {
-            
+        // Get list of the ripped filenames sorted by track number
+        QStringList filenames = d->tracks.keys();
+        filenames.removeDuplicates();
+        qSort( filenames.begin(), filenames.end(), SortByTrackNumber( d->tracks ) );
+
+        Q_FOREACH( const QString& filename, filenames ) {
+
             // extra info
             t << "#EXTINF:" << d->lengths[filename].totalFrames()/75 << ",";
-            
+
             QVariant artist;
             QVariant title;
-        
+
             QList<int> trackNums = d->tracks.values( filename );
             if( trackNums.count() == 1 ) {
                 int trackIndex = trackNums.first()-1;
@@ -451,7 +472,7 @@ bool K3b::AudioRipJob::writePlaylist()
                 artist = d->cddbEntry.get( KCDDB::Artist );
                 title = d->cddbEntry.get( KCDDB::Title );
             }
-            
+
             if( !artist.toString().isEmpty() && !title.toString().isEmpty() ) {
                 t << artist.toString() << " - " << title.toString() << endl;
             }
@@ -460,7 +481,7 @@ bool K3b::AudioRipJob::writePlaylist()
                                   filename.length() - filename.lastIndexOf('/') - 5)
                 << endl; // filename without extension
             }
-        
+
             // filename
             if( d->relativePathInPlaylist )
                 t << findRelativePath( filename, playlistDir ) << endl;
@@ -490,7 +511,7 @@ bool K3b::AudioRipJob::writeCueFile()
         text.setPerformer( d->cddbEntry.get( KCDDB::Artist ).toString() );
         text.setTitle( d->cddbEntry.get( KCDDB::Title ).toString() );
         K3b::Msf currentSector;
-        
+
         QList<int> trackNums = d->tracks.values( filename );
         for( int i = 0; i < trackNums.size(); ++i ) {
             int trackNum = trackNums[ i ];
@@ -510,7 +531,7 @@ bool K3b::AudioRipJob::writeCueFile()
         // we always use a relative filename here
         QString imageFile = filename.section( '/', -1 );
         cueWriter.setImage( imageFile, ( d->fileType.isEmpty() ? QString("WAVE") : d->fileType ) );
-        
+
         // use the same base name as the image file
         QString cueFile = filename;
         cueFile.truncate( cueFile.lastIndexOf('.') );
