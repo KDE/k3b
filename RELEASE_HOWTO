@@ -1,27 +1,34 @@
-Howto create a K3b release (stable branch)
+How To Create a K3b Release
+---------------------------
 
-1. create a package from the stable branch using the createPackage.sh script:
-   createPackage.sh -a k3b -av 0.12 -ab branches/stable/extragear/multimedia --notoplevel -ib branches/stable/l10n
-      -is extragear-multimedia --pofiles "k3b libk3b libk3bdevice k3bsetup" --postprocess postprocessk3b.sh --split
-      --admin /branches/KDE/3.4/kde-common/admin
-      
-2. Make sure the version in src/main.cpp, k3b.lsm, README, INSTALL is valid.
-   Check the version in libk3b.
+1. Get "releaseme" script:
+   git clone git://anongit.kde.org/releaseme
+   cd releaseme
 
-3. Create the tarball.
+2. Edit "k3brc" file and update "version" entry.
 
-4. Test the tarball. That includes removing any trace of K3b from the test system before and in the ideal
-   case compile on a minimal system meaning minimal KDE/QT versions.
+3. Run:
+   ./k3b.rb
+   The script fetches sources from git repository, translations from SVN and makes a source package.
+   On success the script creates a source tarball, e.g. "k3b-2.0.0.tar.bz2".
 
-5. Upload the tarball to upload.sf.net/incoming and create a release on www.sourceforge.net (or use releaseforge,
-   a nice little application which automates the whole sourceforge release thing).
+4. Make sure the version in "CMakeLists.txt", "README", "INSTALL" is valid.
 
-6. Create a news entry on www.k3b.org and update the download page.
+5. Test the tarball. Uncompress and build it. In ideal case the compilation should be performed
+   on vanilla environment (without any trace of K3b, minimal requirements with default environment
+   variables etc.). After compilation check if the application runs.
 
-7. Promote the release on www.kde-apps.org and freshmeat.net (the latter may also be done with releaseforge)
+6. Upload the tarball to the server (http://sourceforge.net/projects/k3b).
 
-8. Send an announcement email to:
-    k3b-user@lists.sourceforge.net
-    k3b-announce@lists.sourceforge.net
-    kde-extra-gear@kde.org
-    kde-announce@kde.org
+7. Add new version] to the bug tracker (https://bugs.kde.org/editversions.cgi?product=k3b).</li>
+
+8. Write release announcement and publish it on k3b.org]. Update download page.
+
+9. Send an announcement email to:
+   * k3b@kde.org
+   * kde-extra-gear@kde.org</li>
+
+10. Update K3b status on software sites. Following sites needs an update:
+    * Sourceforge (http://sourceforge.net/projects/k3b)
+    * Freshmeat (http://freshmeat.net/projects/k3b)
+    * KDE-Apps.org (http://kde-apps.org/content/show.php/K3b?content=9875)
