@@ -140,5 +140,5 @@ Name[zh_TW]=燒錄軟體_K3b
 MimeType=application/x-k3b;application/x-iso;application/x-cd-image;application/x-cue;
 X-KDE-StartupNotify=true
 X-KDE-NativeMimeType=application/x-k3b;
-Categories=KDE;Qt;AudioVideo;DiscBurning;
+Categories=KDE;Qt;AudioVideo;DiscBurning;System;Filesystem;
 X-DBUS-ServiceType=Unique
