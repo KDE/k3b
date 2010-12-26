@@ -1,5 +1,8 @@
 2.0.2
 =====
+Changes:
+ * Added K3B_ENABLE_HAL_SUPPORT option to the build configuration. It allows to disable any direct calls to HAL (253388)
+
 Bugfixes:
  * Crash on start when checking device capabilities (246822)
  * Search paths on "Programs" options are not saved (248648)

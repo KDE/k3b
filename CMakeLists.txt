@@ -19,14 +19,15 @@ set(K3B_LIB_VERSION_RELEASE 0)
 
 
 ##################  K3b options #################################
-if (NOT WIN32)
-    option(K3B_BUILD_K3BSETUP "Build k3bsetup" ON)
-endif(NOT WIN32)
 option(K3B_DEBUG "K3b additional debugging support")
 option(K3B_ENABLE_MUSICBRAINZ "Support for querying metadata about audio tracks from Musicbrainz." ON)
 option(K3B_ENABLE_DVD_RIPPING "Support for ripping Video DVDs with optional decryption." ON)
 option(K3B_ENABLE_TAGLIB "Support for reading audio file metadata using Taglib." ON)
 option(K3B_BUILD_API_DOCS "Build the API documentation for the K3b libs." OFF)
+if(NOT WIN32 AND NOT APPLE)
+  option(K3B_BUILD_K3BSETUP "Graphical utility for managing device permissions" ON)
+  option(K3B_ENABLE_HAL_SUPPORT "Support for inhibiting HAL from polling disk during write." ON)
+endif(NOT WIN32 AND NOT APPLE)
 
 # plugin options
 option(K3B_BUILD_FFMPEG_DECODER_PLUGIN "Build FFmpeg decoder plugin" ON)
@@ -224,9 +225,9 @@ if(K3B_BUILD_EXTERNAL_ENCODER_PLUGIN)
  set(BUILD_EXTERNAL_ENCODER_PLUGIN 1)
 endif(K3B_BUILD_EXTERNAL_ENCODER_PLUGIN)
 
-if(NOT WIN32 AND NOT APPLE)
+if(K3B_ENABLE_HAL_SUPPORT)
   set(ENABLE_HAL_SUPPORT 1)
-endif(NOT WIN32 AND NOT APPLE)
+endif(K3B_ENABLE_HAL_SUPPORT)
 
 configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
 
