@@ -32,7 +32,6 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bversion.h"
 #include "k3bcore.h"
-//#include "k3baudiotrackplayer.h"
 #include "k3bintmapcombobox.h"
 
 #include <KApplication>

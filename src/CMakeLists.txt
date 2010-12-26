@@ -39,7 +39,6 @@ set(k3b_project_SRCS
   projects/k3baudioeditorwidget.cpp
   projects/k3baudiotrackdialog.cpp
   projects/k3baudiotrackwidget.cpp
-  projects/k3baudiotrackplayer.cpp
   projects/k3baudiotracksplitdialog.cpp
   projects/k3baudioview.cpp
   projects/k3baudioviewimpl.cpp
@@ -86,6 +85,13 @@ set(k3b_project_SRCS
   projects/k3bdatamultisessionimportdialog.cpp
   projects/k3bvolumenamewidget.cpp
   )
+
+if(ENABLE_AUDIO_PLAYER)
+    set(k3b_project_SRCS
+        ${k3b_project_SRCS}
+        projects/k3baudiotrackplayer.cpp
+    )
+endif(ENABLE_AUDIO_PLAYER)
 
 kde4_add_ui_files(k3b_project_SRCS
   projects/base_k3baudiocdtextwidget.ui
@@ -294,10 +300,15 @@ target_link_libraries(k3b_bin
   ${KDE4_KNOTIFYCONFIG_LIBS}
   ${KDE4_KUTILS_LIBS}
   ${KDE4_SOLID_LIBS}
-  ${QT_QTMULTIMEDIA_LIBRARY}
   ${QT_QTWEBKIT_LIBRARY}
   ${X11_LIBRARIES}
   )
+
+if(ENABLE_AUDIO_PLAYER)
+  target_link_libraries(k3b_bin
+    ${QT_QTMULTIMEDIA_LIBRARY}
+  )
+endif(ENABLE_AUDIO_PLAYER)
 
 if(ENABLE_MUSICBRAINZ)
   target_link_libraries(k3b_bin ${MUSICBRAINZ_LIBRARIES})

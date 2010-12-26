@@ -17,7 +17,6 @@
 #include "k3bmixedview.h"
 #include "k3baudiodoc.h"
 #include "k3baudioprojectmodel.h"
-#include "k3baudiotrackplayer.h"
 #include "k3baudioviewimpl.h"
 #include "k3bdatadoc.h"
 #include "k3bdataprojectmodel.h"
@@ -26,6 +25,11 @@
 #include "k3bmetaitemmodel.h"
 #include "k3bmixeddoc.h"
 #include "k3bmixedburndialog.h"
+
+#include "config-k3b.h"
+#ifdef ENABLE_AUDIO_PLAYER
+#include "k3baudiotrackplayer.h"
+#endif // ENABLE_AUDIO_PLAYER
 
 #include <KAction>
 #include <KActionCollection>
@@ -79,8 +83,10 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
              this, SLOT(slotParentDir()) );
     connect( m_dirView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(slotCurrentDirChanged()) );
+#ifdef ENABLE_AUDIO_PLAYER
     connect( m_audioViewImpl->player(), SIGNAL(stateChanged()),
              this, SLOT(slotUpdateActions()) );
+#endif // ENABLE_AUDIO_PLAYER
     connect( m_dataViewImpl, SIGNAL(setCurrentRoot(QModelIndex)),
              this, SLOT(slotSetCurrentRoot(QModelIndex)) );
 
@@ -89,12 +95,14 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     m_audioActions += createPluginsActions( doc->audioDoc()->type() );
 
     QList<QAction*> playerActions;
+#ifdef ENABLE_AUDIO_PLAYER
     playerActions.push_back( actionCollection()->action( "player_previous" ) );
     playerActions.push_back( actionCollection()->action( "player_play" ) );
     playerActions.push_back( actionCollection()->action( "player_pause" ) );
     playerActions.push_back( actionCollection()->action( "player_stop" ) );
     playerActions.push_back( actionCollection()->action( "player_next" ) );
     playerActions.push_back( actionCollection()->action( "player_seek" ) );
+#endif // ENABLE_AUDIO_PLAYER
 
     m_dataActions.push_back( actionCollection()->action( "parent_dir" ) );
     m_dataActions += createPluginsActions( doc->dataDoc()->type() );
@@ -199,12 +207,14 @@ void K3b::MixedView::slotUpdateActions()
             action->setVisible( true );
         }
 
+#ifdef ENABLE_AUDIO_PLAYER
         if( m_audioViewImpl->player()->state() == AudioTrackPlayer::Playing ) {
             actionCollection()->action( "player_play" )->setVisible( false );
         }
         else {
             actionCollection()->action( "player_pause" )->setVisible( false );
         }
+#endif // ENABLE_AUDIO_PLAYER
     }
 }
 

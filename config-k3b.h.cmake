@@ -19,6 +19,8 @@
 
 #cmakedefine ENABLE_HAL_SUPPORT
 
+#cmakedefine ENABLE_AUDIO_PLAYER
+
 #cmakedefine HAVE_BYTESWAP_H
 
 #cmakedefine WORDS_BIGENDIAN

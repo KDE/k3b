@@ -27,7 +27,6 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackaddingdialog.h"
 #include "k3baudiotrackdialog.h"
-#include "k3baudiotrackplayer.h"
 #include "k3baudiotracksplitdialog.h"
 #include "k3baudiotracktrmlookupdialog.h"
 #include "k3baudiozerodata.h"
@@ -37,7 +36,10 @@
 // this is not here becasue of base_*.ui troubles
 #include "../rip/k3baudioprojectconvertingdialog.h"
 
-#include <config-k3b.h>
+#include "config-k3b.h"
+#ifdef ENABLE_AUDIO_PLAYER
+#include "k3baudiotrackplayer.h"
+#endif // ENABLE_AUDIO_PLAYER
 
 #include <KAction>
 #include <KActionCollection>
@@ -57,7 +59,11 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_model( new AudioProjectModel( doc, view ) ),
     m_trackView( new QTreeView( view ) ),
     m_delegate( new AudioProjectDelegate( *m_trackView, this ) ),
+#ifdef ENABLE_AUDIO_PLAYER
     m_player( new AudioTrackPlayer( doc, actionCollection, this ) ),
+#else
+    m_player( 0 ),
+#endif // ENABLE_AUDIO_PLAYER
     m_columnAdjuster( new ViewColumnAdjuster( this ) ),
     m_updatingColumnWidths( false )
 {
@@ -102,10 +108,12 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
              this, SLOT( slotAdjustColumns() ) );
     connect( m_trackView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              this, SLOT(slotSelectionChanged()) );
+#ifdef ENABLE_AUDIO_PLAYER
     connect( m_player, SIGNAL(playingTrack(K3b::AudioTrack)),
              this, SLOT(slotPlayingTrack(K3b::AudioTrack)) );
     connect( m_player, SIGNAL(stateChanged()),
              this, SLOT(slotPlayerStateChanged()) );
+#endif // ENABLE_AUDIO_PLAYER
 
     // Create audio context menu
     QAction* separator = new QAction( this );
@@ -322,8 +330,10 @@ void K3b::AudioViewImpl::slotPlayTrack()
 	QList<AudioTrack*> tracks;
     tracksForIndexes( tracks, indexes );
 
+#ifdef ENABLE_AUDIO_PLAYER
     if( !tracks.empty() && tracks.first() != 0 )
         m_player->playTrack( *tracks.first() );
+#endif // ENABLE_AUDIO_PLAYER
 }
 
 
@@ -495,9 +505,11 @@ void K3b::AudioViewImpl::slotPlayingTrack( const K3b::AudioTrack& track )
 
 void K3b::AudioViewImpl::slotPlayerStateChanged()
 {
+#ifdef ENABLE_AUDIO_PLAYER
     if( m_player->state() == AudioTrackPlayer::Stopped ) {
         m_delegate->setPlayingTrack( QModelIndex() );
     }
+#endif // ENABLE_AUDIO_PLAYER
 }
 
 

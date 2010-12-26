@@ -15,7 +15,6 @@
 
 #include "k3baudioburndialog.h"
 #include "k3baudioview.h"
-//#include "k3baudiotrackplayer.h"
 #include "k3baudiotrack.h"
 #include "k3baudiocdtracksource.h"
 #include "k3bcore.h"

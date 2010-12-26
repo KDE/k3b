@@ -54,6 +54,10 @@ macro_log_feature( KDE4_FOUND "kdelibs"
     "The toolkit K3b uses to build"
     "http://www.kde.org"
     TRUE ${KDE_MIN_VERSION} "" )
+macro_log_feature( QT_QTMULTIMEDIA_FOUND "QtMultimedia"
+    "Low-level multimedia library used for previewing audio projects"
+    "http://doc.qt.nokia.com/latest/qtmultimedia.html"
+    FALSE )
 
 if(K3B_ENABLE_DVD_RIPPING)
   find_package(DvdRead)
@@ -225,6 +229,10 @@ endif(K3B_BUILD_EXTERNAL_ENCODER_PLUGIN)
 if(K3B_ENABLE_HAL_SUPPORT)
   set(ENABLE_HAL_SUPPORT 1)
 endif(K3B_ENABLE_HAL_SUPPORT)
+
+if(QT_QTMULTIMEDIA_FOUND)
+    set(ENABLE_AUDIO_PLAYER 1)
+endif(QT_QTMULTIMEDIA_FOUND)
 
 configure_file (config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h )
 

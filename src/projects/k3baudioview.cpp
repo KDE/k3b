@@ -21,10 +21,14 @@
 #include "k3baudioburndialog.h"
 #include "k3baudiodoc.h"
 #include "k3baudioprojectmodel.h"
-#include "k3baudiotrackplayer.h"
 #include "k3baudioviewimpl.h"
 #include "k3bfillstatusdisplay.h"
 #include "k3bpluginmanager.h"
+
+#include "config-k3b.h"
+#ifdef ENABLE_AUDIO_PLAYER
+#include "k3baudiotrackplayer.h"
+#endif // ENABLE_AUDIO_PLAYER
 
 #include <QLayout>
 #include <QString>
@@ -56,6 +60,8 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
 
     toolBox()->addActions( createPluginsActions( m_doc->type() ) );
     toolBox()->addSeparator();
+
+#ifdef ENABLE_AUDIO_PLAYER
     toolBox()->addAction( actionCollection()->action( "player_previous" ) );
     toolBox()->addAction( actionCollection()->action( "player_play" ) );
     toolBox()->addAction( actionCollection()->action( "player_pause" ) );
@@ -66,6 +72,7 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
 
     connect( m_audioViewImpl->player(), SIGNAL(stateChanged()),
              this, SLOT(slotPlayerStateChanged()) );
+#endif // ENABLE_AUDIO_PLAYER
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
@@ -102,6 +109,7 @@ K3b::ProjectBurnDialog* K3b::AudioView::newBurnDialog( QWidget* parent )
 
 void K3b::AudioView::slotPlayerStateChanged()
 {
+#ifdef ENABLE_AUDIO_PLAYER
     if( m_audioViewImpl->player()->state() == AudioTrackPlayer::Playing ) {
         actionCollection()->action( "player_play" )->setVisible( false );
         actionCollection()->action( "player_pause" )->setVisible( true );
@@ -110,6 +118,7 @@ void K3b::AudioView::slotPlayerStateChanged()
         actionCollection()->action( "player_play" )->setVisible( true );
         actionCollection()->action( "player_pause" )->setVisible( false );
     }
+#endif // ENABLE_AUDIO_PLAYER
 }
 
 #include "k3baudioview.moc"

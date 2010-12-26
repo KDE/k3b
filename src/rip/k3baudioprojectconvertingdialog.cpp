@@ -22,7 +22,6 @@
 
 #include "k3baudiodoc.h"
 #include "k3baudioview.h"
-#include "k3baudiotrackplayer.h"
 #include "k3baudiotrack.h"
 #include "k3bjobprogressdialog.h"
 #include "k3bcore.h"
@@ -161,12 +160,6 @@ void K3b::AudioProjectConvertingDialog::setupGui()
 
 void K3b::AudioProjectConvertingDialog::slotStartClicked()
 {
-    // make sure we have the tracks just for ourselves
-#ifdef __GNUC__
-#warning FIXME kde4: port audio player
-#endif
-    //static_cast<K3b::AudioView*>(m_doc->view())->player()->stop();
-
     // check if all filenames differ
     if( d->filenames.count() > 1 ) {
         bool differ = true;
