@@ -541,7 +541,7 @@ void K3b::JobProgressDialog::slotStarted()
 void K3b::JobProgressDialog::slotUpdateTime()
 {
     int remainingSecs;
-    if( d->lastProgress >= 0 && d->lastProgress <= 100 ) {
+    if( d->lastProgress > 0 && d->lastProgress <= 100 ) {
         remainingSecs = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
     } else {
         remainingSecs = 0;
