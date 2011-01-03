@@ -60,8 +60,6 @@ namespace K3b {
         Core* m_core;
         //AudioServer* m_audioServer;
         MainWindow* m_mainWindow;
-
-        bool m_needToInit;
     };
 
 

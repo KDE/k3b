@@ -22,6 +22,7 @@ Bugfixes:
  * Crash when showing settings window (238819)
  * Fixed playlist sort order (249395)
  * Show K3b also in "System" category in KDE launch menus (250749)
+ * Crash when multiple instances start at the same time (253794)
 
 2.0.1
 =====
