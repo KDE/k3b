@@ -63,8 +63,7 @@ K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = 0;
 
 K3b::Application::Application()
     : KUniqueApplication(),
-      m_mainWindow(0),
-      m_needToInit(true)
+      m_mainWindow(0)
 {
     // insert library i18n data
     KGlobal::locale()->insertCatalog( "libk3bdevice" );
@@ -153,19 +152,19 @@ void K3b::Application::init()
 
 int K3b::Application::newInstance()
 {
-    if( m_needToInit ) {
-        //    init();
-        m_needToInit = false;
-    }
-    else
-        processCmdLineArgs();
-
+    processCmdLineArgs();
     return KUniqueApplication::newInstance();
 }
 
 
 bool K3b::Application::processCmdLineArgs()
 {
+    // There were cases when newInstance() has been called before init()
+    // (when user run k3b two times at once). It resulted in crash. So we
+    // check here if m_mainWindow is initalized and if not, we go back.
+    if( !m_mainWindow )
+        return false;
+
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     bool showTips = true;
