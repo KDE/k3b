@@ -2,7 +2,7 @@
 Name=K3b Ogg Vorbis Decoder
 Name[bg]=Ogg Vorbis декодер за K3b
 Name[ca]=Descodificador Ogg Vorbis del K3b
-Name[ca@valencia]=Decodificador Ogg Vorbis del K3b
+Name[ca@valencia]=Descodificador Ogg Vorbis del K3b
 Name[cs]=Ogg Vorbis dekodér K3b
 Name[csb]=Dekòder Ogg Vorbis dlô K3b
 Name[da]=K3b Ogg Vorbis-dekoder
@@ -51,7 +51,7 @@ X-KDE-ServiceTypes=K3b/Plugin
 Comment=Decoding module to decode Ogg Vorbis files
 Comment[bg]=Декодер за файлове във формат Ogg Vorbis
 Comment[ca]=Mòdul de descodificació per descodificar fitxers Ogg Vorbis
-Comment[ca@valencia]=Mòdul de decodificació per decodificar fitxers Ogg Vorbis
+Comment[ca@valencia]=Mòdul de descodificació per descodificar fitxers Ogg Vorbis
 Comment[cs]=Modul pro dekódování souborů Ogg Vorbis
 Comment[csb]=Mòdul dekòdërëjący lopczi Ogg Vorbis
 Comment[da]=Dekodermodul til dekodning af Ogg Vorbis-filer
