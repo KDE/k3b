@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -98,6 +98,15 @@ public:
     }
 
     typedef QLinkedList<Marker> List;
+};
+
+
+struct K3b::AudioEditorWidget::SortByStart
+{
+    bool operator()( Range const* lhs, Range const* rhs )
+    {
+        return lhs->start < rhs->start;
+    }
 };
 
 
@@ -361,11 +370,20 @@ K3b::Msf K3b::AudioEditorWidget::rangeEnd( int identifier ) const
 
 QList<int> K3b::AudioEditorWidget::allRanges() const
 {
-    QList<int> identifiers;
-    for( Range::List::const_iterator it = d->ranges.constBegin(); it != d->ranges.constEnd(); ++it ) {
-        identifiers.append( it->id );
+    // First collect all ranges to one random-access container...
+    QList<Range const*> ranges;
+    Q_FOREACH( Range const& range, d->ranges ) {
+        ranges.push_back( &range );
     }
-    qSort( identifiers );
+
+    // ...then sort it...
+    qSort( ranges.begin(), ranges.end(), SortByStart() );
+
+    // ...finally collect its identifiers and return the collection.
+    QList<int> identifiers;
+    Q_FOREACH( Range const* range, ranges ) {
+        identifiers.push_back( range->id );
+    }
     return identifiers;
 }
 
@@ -567,16 +585,16 @@ void K3b::AudioEditorWidget::fixupOverlappingRanges( int rangeId )
 {
     Range* r = getRange( rangeId );
     Range::List::iterator range = d->ranges.begin();
-    
+
     while( r != 0 && range != d->ranges.end() ) {
         if( range->id != rangeId ) {
-            
+
             // remove the range if it is covered completely
             if( range->start >= r->start &&
                 range->end <= r->end ) {
                 if( d->selectedRangeId == range->id )
                     setSelectedRange( 0 );
-                
+
                 range = d->ranges.erase( range );
                 emit rangeRemoved( rangeId );
                 // "r" may be invalid at this point, let's find it once again
@@ -733,24 +751,24 @@ bool K3b::AudioEditorWidget::event( QEvent* e )
     if( e->type() == QEvent::ToolTip ) {
         QHelpEvent* helpEvent = dynamic_cast<QHelpEvent*>( e );
         const QPoint pos = mapFromGlobal( helpEvent->globalPos() );
-        
+
         if( Marker* m = findMarker( pos ) ) {
             QToolTip::showText( helpEvent->globalPos(),
                                 m->toolTip.isEmpty() ? m->pos.toString() : QString("%1 (%2)").arg(m->toolTip).arg(m->pos.toString()),
                                 this );
         }
         else if( Range* range = findRange( pos ) ) {
-            QToolTip::showText( helpEvent->globalPos(), 
+            QToolTip::showText( helpEvent->globalPos(),
                                 range->toolTip.isEmpty()
                                 ? QString("%1 - %2").arg(range->start.toString()).arg(range->end.toString())
                                 : QString("%1 (%2 - %3)").arg(range->toolTip).arg(range->start.toString()).arg(range->end.toString()),
                                 this );
-            
+
         }
         else {
             QToolTip::hideText();
         }
-        
+
         e->accept();
         return true;
     }

@@ -1,7 +1,7 @@
-/* 
+/*
  *
  * Copyright (C) 2004-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -52,7 +52,7 @@ public:
      *
      * @return -1 on error or an identifier on success (be aware that the highest value for end is length-1)
      */
-    int addRange( const K3b::Msf& start, const K3b::Msf& end, 
+    int addRange( const K3b::Msf& start, const K3b::Msf& end,
                   bool startFixed = false, bool endFixed = false,
                   const QString& toolTip = QString(),
                   const QBrush& brush = QBrush() );
@@ -95,7 +95,7 @@ public:
      * @param fixed if true the marker cannot be changed by the user, only with moveMarker
      * @return -1 on error or an identifier on success.
      */
-    int addMarker( const K3b::Msf& pos, bool fixed = false, 
+    int addMarker( const K3b::Msf& pos, bool fixed = false,
                    const QString& toolTip = QString(), const QColor& color = QColor() );
 
     /**
@@ -168,7 +168,7 @@ Q_SIGNALS:
     void markerMoved( int identifier, const K3b::Msf& pos );
     void markerAdded( int identifier, const K3b::Msf& pos );
     void markerRemoved( int identifier );
-    
+
 protected:
     virtual void paintEvent( QPaintEvent* e );
     virtual void mousePressEvent( QMouseEvent* e );
@@ -180,6 +180,7 @@ protected:
 private:
     class Range;
     class Marker;
+    struct SortByStart;
 
     class Private;
     Private* d;
