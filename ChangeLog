@@ -24,6 +24,7 @@ Bugfixes:
  * Show K3b also in "System" category in KDE launch menus (250749)
  * Crash when multiple instances start at the same time (253794)
  * Crash after track splitting (261188)
+ * Inline editing of tracks in CD ripping view no longer works (250600)
 
 2.0.1
 =====

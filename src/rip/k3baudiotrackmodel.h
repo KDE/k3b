@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -71,7 +72,6 @@ namespace K3b {
         virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
         virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
         virtual QStringList mimeTypes() const;
-        virtual QModelIndex buddy( const QModelIndex& index ) const;
 
     public Q_SLOTS:
         void checkAll();

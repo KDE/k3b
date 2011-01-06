@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
@@ -37,6 +37,9 @@ public:
 public Q_SLOTS:
     void queryCddb();
 
+protected:
+    virtual bool eventFilter( QObject* obj, QEvent* event );
+
 private Q_SLOTS:
     void slotContextMenu( const QPoint& );
     void slotTrackSelectionChanged();
@@ -56,7 +59,7 @@ private:
     void enableInteraction( bool );
     void showBusyLabel( bool );
     void updateTitle();
-    
+
     class Private;
     Private* d;
 };
