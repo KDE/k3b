@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -54,6 +54,7 @@
 #include <QFont>
 #include <QVBoxLayout>
 #include <QItemSelectionModel>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QList>
 #include <QSpinBox>
@@ -118,6 +119,7 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     d->trackView->setRootIsDecorated( false );
     d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
     d->trackView->setDragEnabled( true );
+    d->trackView->installEventFilter( this );
     K3b::ViewColumnAdjuster* vca = new K3b::ViewColumnAdjuster( d->trackView );
     vca->setFixedColumns( QList<int>() << 0 << 3 );
     vca->setColumnMargin( K3b::AudioTrackModel::LengthColumn, 10 );
@@ -436,6 +438,24 @@ void K3b::AudioCdView::queryCddb()
 {
     enableInteraction( false );
     k3bcore->mediaCache()->lookupCddb( medium().device() );
+}
+
+
+bool K3b::AudioCdView::eventFilter( QObject* obj, QEvent* event )
+{
+    if( event->type() == QEvent::KeyPress ) {
+        // Due to limitation of default implementation of QTreeView
+        // checking items with Space key doesn't work for columns other than first.
+        // Using below code a user can do that.
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
+        if( keyEvent->key() == Qt::Key_Space ) {
+            foreach( int track, selectedTrackIndices( d->trackView ) ) {
+                d->trackModel->setTrackChecked( track, !d->trackModel->trackChecked( track ) );
+            }
+            return true;
+        }
+    }
+    return MediaContentsView::eventFilter( obj, event );
 }
 
 

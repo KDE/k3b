@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -234,12 +235,9 @@ Qt::ItemFlags K3b::AudioTrackModel::flags( const QModelIndex& index ) const
     if ( index.isValid() && index.row() >= 0 && index.row() < d->medium.toc().count() &&
          d->medium.toc()[index.row()].type() == K3b::Device::Track::TYPE_AUDIO ) {
 
-        f |= Qt::ItemIsDragEnabled|Qt::ItemIsEnabled;
+        f |= Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
 
         switch( index.column() ) {
-        case TrackNumberColumn:
-            f |= Qt::ItemIsUserCheckable;
-            break;
         case ArtistColumn:
         case TitleColumn:
             f |= Qt::ItemIsEditable;
@@ -286,7 +284,7 @@ void K3b::AudioTrackModel::setTrackChecked( int track, bool checked )
 {
     if ( track >= 0 && track < d->itemCheckedList.count() ) {
         d->itemCheckedList[track] = checked;
-        emit dataChanged( index( track, 0 ), index( track, 0 ) );
+        emit dataChanged( index( track, TrackNumberColumn ), index( track, TrackNumberColumn ) );
     }
 }
 
@@ -370,7 +368,7 @@ QMimeData* K3b::AudioTrackModel::mimeData( const QModelIndexList& indexes ) cons
     // d'n'd is not a problem
     QList<int> trackNumbers;
     foreach( const QModelIndex& index, indexes ) {
-        if ( index.column() == 0 )
+        if ( index.column() == TrackNumberColumn )
             trackNumbers << index.data( TrackNumberColumn ).toInt();
     }
     AudioCdTrackDrag drag( d->medium.toc(), trackNumbers, d->cddbCache, d->medium.device() );
@@ -380,21 +378,12 @@ QMimeData* K3b::AudioTrackModel::mimeData( const QModelIndexList& indexes ) cons
 }
 
 
-QModelIndex K3b::AudioTrackModel::buddy( const QModelIndex& index ) const
-{
-    if( index.isValid() && index.column() != TrackNumberColumn )
-        return AudioTrackModel::index( index.row(), TrackNumberColumn );
-    else
-        return index;
-}
-
-
 void K3b::AudioTrackModel::checkAll()
 {
     for ( int i = 0; i < d->medium.toc().count(); ++i ) {
         d->itemCheckedList[i] = true;
     }
-    emit dataChanged( index( 0, 0 ), index( d->itemCheckedList.count(), 0 ) );
+    emit dataChanged( index( 0, TrackNumberColumn ), index( d->itemCheckedList.count(), TrackNumberColumn ) );
 }
 
 
@@ -403,7 +392,7 @@ void K3b::AudioTrackModel::uncheckAll()
     for ( int i = 0; i < d->medium.toc().count(); ++i ) {
         d->itemCheckedList[i] = false;
     }
-    emit dataChanged( index( 0, 0 ), index( d->itemCheckedList.count(), 0 ) );
+    emit dataChanged( index( 0, TrackNumberColumn ), index( d->itemCheckedList.count(), TrackNumberColumn ) );
 }
 
 #include "k3baudiotrackmodel.moc"
