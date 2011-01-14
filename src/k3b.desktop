@@ -142,3 +142,4 @@ X-KDE-StartupNotify=true
 X-KDE-NativeMimeType=application/x-k3b;
 Categories=KDE;Qt;AudioVideo;DiscBurning;System;Filesystem;
 X-DBUS-ServiceType=Unique
+InitialPreference=5
