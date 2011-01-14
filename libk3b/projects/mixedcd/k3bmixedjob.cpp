@@ -739,7 +739,7 @@ bool K3b::MixedJob::writeTocFile()
 {
     // FIXME: create the tocfile in the same directory like all the other files.
 
-    if( m_tocFile ) delete m_tocFile;
+    delete m_tocFile;
     m_tocFile = new KTemporaryFile();
     m_tocFile->setSuffix( ".toc" );
     m_tocFile->open();
