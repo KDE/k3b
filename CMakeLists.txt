@@ -289,8 +289,12 @@ add_subdirectory( kioslaves )
 add_subdirectory( plugins )
 add_subdirectory( doc )
 if(BUILD_K3BSETUP)
-   add_subdirectory(k3bsetup)
+    add_subdirectory(k3bsetup)
 endif(BUILD_K3BSETUP)
+if(KDE4_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory( tests )
+endif(KDE4_BUILD_TESTS)
 
 
 ##################  K3b config summary ################################
