@@ -26,7 +26,7 @@ option(K3B_ENABLE_TAGLIB "Support for reading audio file metadata using Taglib."
 option(K3B_BUILD_API_DOCS "Build the API documentation for the K3b libs." OFF)
 if(NOT WIN32 AND NOT APPLE)
   option(K3B_BUILD_K3BSETUP "Graphical utility for managing device permissions" ON)
-  option(K3B_ENABLE_HAL_SUPPORT "Support for inhibiting HAL from polling disk during write." ON)
+  option(K3B_ENABLE_HAL_SUPPORT "Support for inhibiting HAL from polling disk during write." OFF)
 endif(NOT WIN32 AND NOT APPLE)
 
 # plugin options
