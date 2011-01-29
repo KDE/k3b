@@ -246,7 +246,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     // Draw the fill part
     p.setPen( fillPen );
-    p.setClipRect( crect );
+    p.setClipRect( QStyle::visualRect( layoutDirection(), barRect, crect ) );
     p.drawLine( QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerFrom ),
                 QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerTo ) );
     p.drawText( QStyle::visualRect( layoutDirection(), barRect, docTextRect ),
@@ -257,7 +257,8 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     // Draw the remain part
     p.setPen( normalPen );
-    p.setClipRect( crect.right(), barRect.top(), barRect.width()-crect.width(), barRect.height() );
+    p.setClipRect( QStyle::visualRect( layoutDirection(), barRect,
+                                       QRect( crect.right(), barRect.top(), barRect.width()-crect.width(), barRect.height() ) ) );
     p.drawLine( QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerFrom ),
                 QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerTo ) );
     p.setFont( font() );
