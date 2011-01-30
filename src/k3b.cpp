@@ -86,7 +86,6 @@
 #include <KStandardAction>
 #include <KStandardDirs>
 #include <KStatusBar>
-#include <ktip.h>
 #include <KToggleAction>
 #include <KUrl>
 #include <KXMLGUIFactory>
@@ -467,9 +466,6 @@ void K3b::MainWindow::initActions()
     actionCollection()->addAction( "settings_k3bsetup", actionSettingsK3bSetup );
     connect( actionSettingsK3bSetup, SIGNAL(triggered(bool)), this, SLOT(slotK3bSetup()) );
 #endif
-
-    // the tip action
-    KStandardAction::tipOfDay(this, SLOT(slotShowTips()), actionCollection() );
 
     KAction* actionHelpSystemCheck = new KAction( i18n("System Check"), this );
     actionHelpSystemCheck->setToolTip( i18n("Checks system configuration") );
@@ -1434,12 +1430,6 @@ void K3b::MainWindow::slotShowMenuBar()
         menuBar()->hide();
     else
         menuBar()->show();
-}
-
-
-void K3b::MainWindow::slotShowTips()
-{
-    KTipDialog::showTip( this, QString(), true );
 }
 
 

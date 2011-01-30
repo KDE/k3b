@@ -109,7 +109,6 @@ namespace K3b {
         void slotWarningMessage(const QString&);
 
         void slotConfigureKeys();
-        void slotShowTips();
         void slotCheckSystem();
         void slotManualCheckSystem();
 
