@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -31,7 +31,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QFrame>
-#include <QGridLayout>
+#include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QPainter>
 #include <QPaintEvent>
@@ -51,7 +51,7 @@
 #include <KGlobal>
 #include <KInputDialog>
 #include <KLocale>
-#include <KIconLoader>
+#include <KIcon>
 #include <kio/global.h>
 #include <KMenu>
 #include <KMessageBox>
@@ -370,18 +370,17 @@ K3b::FillStatusDisplay::FillStatusDisplay( K3b::Doc* doc, QWidget *parent )
     d->doc = doc;
 
     d->displayWidget = new K3b::FillStatusDisplayWidget( doc, this );
-//   d->buttonMenu = new QToolButton( this );
-//   d->buttonMenu->setIconSet( SmallIconSet("media-optical") );
-//   d->buttonMenu->setAutoRaise(true);
-//   d->buttonMenu->setToolTip( i18n("Fill display properties") );
-//   connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
+    d->buttonMenu = new QToolButton( this );
+    d->buttonMenu->setIcon( KIcon( "configure" ) );
+    d->buttonMenu->setAutoRaise( true );
+    d->buttonMenu->setToolTip( i18n( "Set medium size" ) );
+    connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
 
-    QGridLayout* layout = new QGridLayout( this );
-    layout->setSpacing(5);
+    QHBoxLayout* layout = new QHBoxLayout( this );
+    layout->setSpacing( frameWidth() );
     layout->setContentsMargins( frameWidth(), frameWidth(), frameWidth(), frameWidth() );
-    layout->addWidget( d->displayWidget, 0, 0 );
-    //  layout->addWidget( d->buttonMenu, 0, 1 );
-    layout->setColumnStretch( 0, 1 );
+    layout->addWidget( d->displayWidget, 1, Qt::AlignVCenter );
+    layout->addWidget( d->buttonMenu );
 
     setupPopupMenu();
 
@@ -629,9 +628,9 @@ void K3b::FillStatusDisplay::slotCustomSize()
 
 void K3b::FillStatusDisplay::slotMenuButtonClicked()
 {
-    QSize size = d->popup->sizeHint();
-    slotPopupMenu( d->buttonMenu->mapToGlobal(QPoint(d->buttonMenu->width(), 0)) +
-                   QPoint(-1*size.width(), -1*size.height()) );
+    QRect alignedMenu = style()->alignedRect( layoutDirection(), Qt::AlignRight, d->popup->sizeHint(), d->buttonMenu->frameGeometry() );
+    alignedMenu.moveBottom( d->buttonMenu->frameGeometry().top() - 1 );
+    slotPopupMenu( mapToGlobal( alignedMenu.topLeft() ) );
 }
 
 
