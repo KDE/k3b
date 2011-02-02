@@ -26,6 +26,9 @@
 #include <KDebug>
 #include <KLocale>
 
+#ifdef Q_OS_WIN32
+#undef S_OK
+#endif
 
 namespace K3b {
 

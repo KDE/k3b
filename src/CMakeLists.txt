@@ -304,6 +304,12 @@ target_link_libraries(k3b_bin
   ${X11_LIBRARIES}
   )
 
+if(WIN32)
+  target_link_libraries(k3b_bin
+    iconv
+  )
+endif(WIN32)
+
 if(ENABLE_AUDIO_PLAYER)
   target_link_libraries(k3b_bin
     ${QT_QTMULTIMEDIA_LIBRARY}

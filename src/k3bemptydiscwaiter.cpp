@@ -252,7 +252,11 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
         kDebug() << "------ found BD-RE as wanted.";
 
+#if _MSC_VER
+#pragma message ("WARNING: FIXME: We need to preformat empty BD-RE just like we do with empty DVD+RW")
+#else
 #warning FIXME: We need to preformat empty BD-RE just like we do with empty DVD+RW
+#endif
 
         if( d->wantedMediaState == K3b::Device::STATE_EMPTY &&
             ( d->wantedMinMediaSize <= medium.diskInfo().capacity() ||

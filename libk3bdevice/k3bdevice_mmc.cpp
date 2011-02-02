@@ -174,8 +174,8 @@ bool K3b::Device::Device::getPerformance( UByteArray& data,
     }
 
     unsigned int dataLen = descLen + 8;
-    unsigned char header[dataLen];
-    ::memset( header, 0, dataLen );
+    UByteArray header( dataLen );
+    ::memset( header.data(), 0, dataLen );
 
     ScsiCommand cmd( this );
     cmd[0] = MMC_GET_PERFORMANCE;
@@ -187,13 +187,13 @@ bool K3b::Device::Device::getPerformance( UByteArray& data,
     cmd[9] = 1;      // first we read one descriptor
     cmd[10] = type;
     cmd[11] = 0;     // Necessary to set the proper command length
-    if( cmd.transport( TR_DIR_READ, header, dataLen ) ) {
+    if( cmd.transport( TR_DIR_READ, header.data(), dataLen ) ) {
         kDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE length det failed." << endl;
         return false;
     }
 
-    dataLen = from4Byte( header ) + 4;
+    dataLen = from4Byte( header.data() ) + 4;
 
     // At least one Panasonic drive returns gigantic changing numbers for the data length
     // which makes K3b crash below when *data cannot be allocated. That's why we cut the

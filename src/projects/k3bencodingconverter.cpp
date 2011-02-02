@@ -56,7 +56,7 @@ bool K3b::EncodingConverter::encodedLocally( const QByteArray& s )
 {
 #ifdef HAVE_ICONV_H
     QByteArray utf8Encoded( s.length()*2, '\0' );
-#if (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(__DragonFly__)
+#if defined(Q_OS_WIN) || (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(__DragonFly__)
     const char* in = s.data();
 #else
     char* in = const_cast<char*>( s.data() );

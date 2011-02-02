@@ -19,7 +19,7 @@ endif ( SAMPLERATE_INCLUDE_DIR AND SAMPLERATE_LIBRARIES )
 FIND_PATH(SAMPLERATE_INCLUDE_DIR NAMES samplerate.h
 )
 
-FIND_LIBRARY(SAMPLERATE_LIBRARIES NAMES samplerate samplerate-0
+FIND_LIBRARY(SAMPLERATE_LIBRARIES NAMES samplerate samplerate-0 libsamplerate libsamplerate-0
 )
 
 include(FindPackageHandleStandardArgs)
