@@ -12,19 +12,28 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef K3B_GLOBALS_TEST_H
-#define K3B_GLOBALS_TEST_H
+#ifndef K3B_META_ITEM_MODEL_TEST_H
+#define K3B_META_ITEM_MODEL_TEST_H
 
 #include <QtCore/QObject>
 
-class GlobalsTest : public QObject
+class QStringListModel;
+class QStandardItemModel;
+
+class MetaItemModelTest : public QObject
 {
     Q_OBJECT
 public:
-    GlobalsTest();
+    MetaItemModelTest();
+    
 private slots:
-    void testCutFilename();
-    void testRemoveFilenameExtension();
+    void testCreate();
+    void testAddSubModel();
+    void testAddFlatSubModel();
+    
+private:
+    QStringListModel* stringListModel_;
+    QStandardItemModel* standardItemModel_;
 };
 
-#endif // K3B_GLOBALS_TEST_H
+#endif // K3B_META_ITEM_MODEL_TEST_H
