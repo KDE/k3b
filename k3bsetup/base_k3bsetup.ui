@@ -138,7 +138,7 @@
           <property name="currentIndex">
            <number>0</number>
           </property>
-          <widget class="QWidget" name="tab">
+          <widget class="QWidget" name="foundProgramstab">
            <attribute name="title">
             <string>Found Programs</string>
            </attribute>
@@ -165,7 +165,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab">
+          <widget class="QWidget" name="searchPathtab">
            <attribute name="title">
             <string>Search Path</string>
            </attribute>
