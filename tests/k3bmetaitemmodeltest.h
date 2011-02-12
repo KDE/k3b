@@ -16,6 +16,7 @@
 #define K3B_META_ITEM_MODEL_TEST_H
 
 #include <QtCore/QObject>
+#include <QtCore/QPointer>
 
 class QStringListModel;
 class QStandardItemModel;
@@ -23,17 +24,19 @@ class QStandardItemModel;
 class MetaItemModelTest : public QObject
 {
     Q_OBJECT
-public:
-    MetaItemModelTest();
     
 private slots:
+    void init(); // executed before each test function
     void testCreate();
     void testAddSubModel();
     void testAddFlatSubModel();
+    void testRemoveSubModel();
+    void testDynamicChanges();
+    void testDynamicChangesInFlatModel();
     
 private:
-    QStringListModel* stringListModel_;
-    QStandardItemModel* standardItemModel_;
+    QPointer<QStringListModel> m_stringListModel;
+    QPointer<QStandardItemModel> m_standardItemModel;
 };
 
 #endif // K3B_META_ITEM_MODEL_TEST_H

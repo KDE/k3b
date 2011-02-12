@@ -18,7 +18,6 @@
 #include <KIcon>
 #include <qtest_kde.h>
 
-#include <QtCore/QPointer>
 #include <QtCore/QStringList>
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStringListModel>
@@ -26,54 +25,121 @@
 
 QTEST_KDEMAIN_CORE( MetaItemModelTest )
 
-MetaItemModelTest::MetaItemModelTest()
-:
-    stringListModel_( new QStringListModel( this ) ),
-    standardItemModel_( new QStandardItemModel( this ) )
+void MetaItemModelTest::init()
 {
+    m_stringListModel = new QStringListModel( this );
+    m_standardItemModel = new QStandardItemModel( this );
+    
     QStringList stringList;
     stringList.push_back( "a" );
     stringList.push_back( "b" );
     stringList.push_back( "c" );
     stringList.push_back( "d" );
-    stringListModel_->setStringList( stringList );
+    m_stringListModel->setStringList( stringList );
     
-    standardItemModel_->appendRow( new QStandardItem( KIcon( "edit-copy" ), "copy" ) );
-    standardItemModel_->appendRow( new QStandardItem( KIcon( "edit-paste" ), "paste" ) );
-    standardItemModel_->item( 0 )->appendRow( new QStandardItem( KIcon( "edit-cut" ), "cut" ) );
+    m_standardItemModel->appendRow( new QStandardItem( KIcon( "edit-copy" ), "copy" ) );
+    m_standardItemModel->appendRow( new QStandardItem( KIcon( "edit-paste" ), "paste" ) );
+    m_standardItemModel->item( 0 )->appendRow( new QStandardItem( KIcon( "edit-cut" ), "cut" ) );
 }
+
 
 void MetaItemModelTest::testCreate()
 {
-    QPointer<K3b::MetaItemModel>( new K3b::MetaItemModel( this ) );
+    K3b::MetaItemModel model;
 }
+
 
 void MetaItemModelTest::testAddSubModel()
 {
-    QPointer<K3b::MetaItemModel> model( new K3b::MetaItemModel( this ) );
-    model->addSubModel( "stringList", KIcon( "configure" ), stringListModel_ );
-    model->addSubModel( "standard", KIcon( "go-previous" ), standardItemModel_ );
+    K3b::MetaItemModel model;
+    model.addSubModel( "stringList", KIcon( "configure" ), m_stringListModel );
+    model.addSubModel( "standard", KIcon( "go-previous" ), m_standardItemModel );
     
-    QCOMPARE( 2, model->rowCount() );
+    QCOMPARE( model.rowCount(), 2 );
     
-    QModelIndex firstIndex = model->index( 0, 0 );
+    QModelIndex firstIndex = model.index( 0, 0 );
     QVERIFY( firstIndex.isValid() );
-    QCOMPARE( 4, model->rowCount( firstIndex ) );
+    QCOMPARE( model.rowCount( firstIndex ), 4 );
     
-    QModelIndex secondIndex = model->index( 1, 0 );
+    QModelIndex secondIndex = model.index( 1, 0 );
     QVERIFY( secondIndex.isValid() );
-    QCOMPARE( 2, model->rowCount( secondIndex ) );
+    QCOMPARE( model.rowCount( secondIndex ), 2 );
 }
+
 
 void MetaItemModelTest::testAddFlatSubModel()
 {
-    QPointer<K3b::MetaItemModel> model( new K3b::MetaItemModel( this ) );
-    model->addSubModel( "stringList", KIcon( "configure" ), stringListModel_, true );
-    model->addSubModel( "standard", KIcon( "go-previous" ), standardItemModel_, true );
+    K3b::MetaItemModel model;
+    model.addSubModel( "stringList", KIcon( "configure" ), m_stringListModel, true );
+    model.addSubModel( "standard", KIcon( "go-previous" ), m_standardItemModel, true );
     
-    QCOMPARE( 6, model->rowCount() );
+    QCOMPARE( model.rowCount(), 6 );
     
-    QModelIndex fifthIndex = model->index( 4, 0 );
+    QModelIndex fifthIndex = model.index( 4, 0 );
     QVERIFY( fifthIndex.isValid() );
-    QCOMPARE( 1, model->rowCount( fifthIndex ) );
+    QCOMPARE( model.rowCount( fifthIndex ), 1 );
 }
+
+
+void MetaItemModelTest::testRemoveSubModel()
+{
+    K3b::MetaItemModel model;
+    model.addSubModel( "stringList", KIcon( "configure" ), m_stringListModel );
+    model.addSubModel( "standard", KIcon( "go-previous" ), m_standardItemModel, true );
+    QCOMPARE( model.rowCount(), 3 );
+    
+    model.removeSubModel( m_stringListModel );
+    QCOMPARE( model.rowCount(), 2 );
+    
+    model.removeSubModel( m_standardItemModel );
+    QCOMPARE( model.rowCount(), 0 );
+}
+
+
+void MetaItemModelTest::testDynamicChanges()
+{
+    K3b::MetaItemModel model;
+    model.addSubModel( "stringList", KIcon( "configure" ), m_stringListModel );
+    QModelIndex firstIndex = model.index( 0, 0 );
+    
+    QCOMPARE( model.rowCount(), 1 );
+    QCOMPARE( model.rowCount( firstIndex ), 4 ); 
+    
+    m_stringListModel->removeRow( 2 );
+    QCOMPARE( model.rowCount( firstIndex ), 3 );
+    
+    model.addSubModel( "standard", KIcon( "go-previous" ), m_standardItemModel );
+    QModelIndex secondIndex = model.index( 1, 0 );
+    
+    QCOMPARE( model.rowCount(), 2 );
+    QCOMPARE( model.rowCount( secondIndex ), 2 );
+    
+    m_standardItemModel->removeRow( 1 );
+    QCOMPARE( model.rowCount( secondIndex ), 1 );
+    
+    model.removeSubModel( m_stringListModel );
+    QCOMPARE( model.rowCount(), 1 );
+}
+
+
+void MetaItemModelTest::testDynamicChangesInFlatModel()
+{
+    K3b::MetaItemModel model;
+    model.addSubModel( "stringList", KIcon( "configure" ), m_stringListModel, true );
+    QCOMPARE( model.rowCount(), 4 );
+    
+    m_stringListModel->removeRow( 2 );
+    QCOMPARE( model.rowCount(), 3 );
+    
+    model.addSubModel( "standard", KIcon( "go-previous" ), m_standardItemModel, true );
+    QCOMPARE( model.rowCount(), 5 );
+    
+    m_standardItemModel->removeRow( 1 );
+    QCOMPARE( model.rowCount(), 4 );
+    
+    model.removeSubModel( m_stringListModel );
+    QCOMPARE( model.rowCount(), 1 );
+}
+
+
+#include "k3bmetaitemmodeltest.moc"
