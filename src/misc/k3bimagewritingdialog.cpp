@@ -118,7 +118,6 @@ public:
     TempDirSelectionWidget* tempDirSelectionWidget;
 
     QTreeWidgetItem* md5SumItem;
-    QProgressBar* md5SumProgress;
     QString lastCheckedFile;
 
     K3b::Md5Job* md5Job;
@@ -508,12 +507,6 @@ void K3b::ImageWritingDialog::setupGui()
 
     connect( d->infoView, SIGNAL(customContextMenuRequested(const QPoint&)),
             this, SLOT(slotContextMenuRequested(const QPoint&)) );
-
-    d->md5SumProgress = new QProgressBar( d->infoView );
-    d->md5SumProgress->setMaximumHeight( fontMetrics().height() );
-    d->md5SumProgress->setRange( 0, 100 );
-    d->md5SumProgress->hide();
-
 
     d->writerSelectionWidget = new K3b::WriterSelectionWidget( frame );
     d->writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE );
@@ -1012,7 +1005,6 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
 
     if( !d->md5SumItem ) {
         d->md5SumItem = new QTreeWidgetItem( d->infoView );
-        d->infoView->setItemWidget( d->md5SumItem, 1, d->md5SumProgress );
     }
 
     d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
@@ -1020,8 +1012,12 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
     d->md5SumItem->setTextAlignment( 0, Qt::AlignRight );
 
     if( file != d->lastCheckedFile ) {
-        d->md5SumProgress->setValue( 0 );
-        d->md5SumProgress->show();
+
+        QProgressBar* progress = new QProgressBar( d->infoView );
+        progress->setMaximumHeight( fontMetrics().height() );
+        progress->setRange( 0, 100 );
+        progress->setValue( 0 );
+        d->infoView->setItemWidget( d->md5SumItem, 1, progress );
         d->lastCheckedFile = file;
         d->md5Job->setFile( file );
         d->md5Job->start();
@@ -1033,7 +1029,11 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
 
 void K3b::ImageWritingDialog::slotMd5JobPercent( int p )
 {
-    d->md5SumProgress->setValue( p );
+    QWidget* widget = d->infoView->itemWidget( d->md5SumItem, 1 );
+    if( QProgressBar* progress = qobject_cast<QProgressBar*>( widget ) )
+    {
+        progress->setValue( p );
+    }
 }
 
 
@@ -1054,7 +1054,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
         d->lastCheckedFile.truncate(0);
     }
 
-    d->md5SumProgress->hide();
+    // Hide progress bar
     d->infoView->setItemWidget( d->md5SumItem, 1, 0 );
 }
 
