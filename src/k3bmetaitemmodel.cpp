@@ -726,6 +726,7 @@ void K3b::MetaItemModel::addSubModel( const QString& name, const KIcon& icon, QA
     place.name = name;
     place.icon = icon;
     place.flat = flat;
+    place.updateChildren();
 
     d->updatePlaceRows();
 
