@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -18,7 +19,6 @@
 
 #include "k3bapplication.h"
 #include "k3bsystemproblemdialog.h"
-#include "k3bpassivepopup.h"
 #include "k3bthemedheader.h"
 #include "k3btitlelabel.h"
 #include "k3bexternalbinmanager.h"
@@ -37,6 +37,7 @@
 #include <KGlobal>
 #include <KLocale>
 #include <KMessageBox>
+#include <KNotification>
 #include <KProcess>
 #include <KPushButton>
 #include <KStandardGuiItem>
@@ -589,7 +590,9 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     if( problems.isEmpty() ) {
         kDebug() << "          - none - ";
         if( level == AlwaysNotify ) {
-            K3b::PassivePopup::showPopup( i18n("No problems found in system configuration."), i18n("System configured properly") );
+            KNotification::event( KNotification::Notification,
+                                  i18n("System configured properly"),
+                                  i18n("No problems found in system configuration.") );
         }
     }
     else {

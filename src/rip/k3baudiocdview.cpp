@@ -19,7 +19,6 @@
 #include "k3bviewcolumnadjuster.h"
 
 #include "k3bappdevicemanager.h"
-#include "k3bpassivepopup.h"
 #include "k3btoc.h"
 #include "k3bdiskinfo.h"
 #include "k3bdevicehandler.h"
@@ -46,6 +45,7 @@
 #include <KLocale>
 #include <KMenu>
 #include <KMessageBox>
+#include <KNotification>
 #include <KStandardAction>
 #include <KStandardDirs>
 #include <KToolBar>
@@ -465,9 +465,10 @@ void K3b::AudioCdView::slotSaveCddbLocally()
     KCDDB::Client cddbClient;
     cddbClient.config().readConfig();
     cddbClient.store( d->trackModel->cddbInfo(), K3b::CDDB::createTrackOffsetList( d->trackModel->medium().toc() ) );
-    K3b::PassivePopup::showPopup( i18n("Saved entry in category %1.",
-                                     d->trackModel->cddbInfo().get( KCDDB::Category ).toString() ),
-                                i18n("CDDB") );
+    KNotification::event( KNotification::Notification,
+                          i18n( "CDDB" ),
+                          i18n( "Saved entry in category %1.",
+                                d->trackModel->cddbInfo().get( KCDDB::Category ).toString() ) );
 }
 
 

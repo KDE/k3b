@@ -19,7 +19,6 @@
 #include "k3bsplash.h"
 #include "k3bprojectmanager.h"
 #include "k3bappdevicemanager.h"
-#include "k3bpassivepopup.h"
 #include "k3blsofwrapperdialog.h"
 #include "config-k3b.h"
 
@@ -49,6 +48,7 @@
 #include <KDebug>
 #include <KGlobal>
 #include <KLocale>
+#include <KNotification>
 #include <QTimer>
 
 
@@ -157,9 +157,9 @@ void K3b::Application::processCmdLineArgs()
     bool dialogOpen = false;
 
     if( k3bcore->jobsRunning() > 0 ) {
-        PassivePopup::showPopup( i18n("K3b is currently busy and cannot start any other operations."),
-                                 i18n("K3b is busy"),
-                                 PassivePopup::Information );
+        KNotification::event( KNotification::Notification,
+                              i18n("K3b is busy"),
+                              i18n("K3b is currently busy and cannot start any other operations.") );
         return;
     }
 

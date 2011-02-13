@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -20,23 +21,22 @@
 #include "k3bbusywidget.h"
 #include "k3baudiotrack.h"
 #include "k3baudiofile.h"
-#include "k3bpassivepopup.h"
 
-#include <kmessagebox.h>
-#include <kinputdialog.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kglobal.h>
-#include <kdebug.h>
+#include <KDebug>
+#include <KGlobal>
+#include <KIconLoader>
+#include <KInputDialog>
+#include <KLocale>
+#include <KMessageBox>
+#include <KNotification>
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qtimer.h>
-#include <qeventloop.h>
-#include <qpushbutton.h>
-#include <qapplication.h>
-#include <QGridLayout>
 #include <QtCore/QEventLoop>
+#include <QtCore/QTimer>
+#include <QtGui/QApplication>
+#include <QtGui/QGridLayout>
+#include <QtGui/QLabel>
+#include <QtGui/QLayout>
+#include <QtGui/QPushButton>
 
 
 K3b::AudioTrackTRMLookupDialog::AudioTrackTRMLookupDialog( QWidget* parent )
@@ -119,9 +119,10 @@ void K3b::AudioTrackTRMLookupDialog::slotCancel()
 void K3b::AudioTrackTRMLookupDialog::slotTrackFinished( K3b::AudioTrack* track, bool success )
 {
     if( !success )
-        K3b::PassivePopup::showPopup( i18n("Track %1 was not found in the MusicBrainz database.",
-                                         track->trackNumber()),
-                                    i18n("Audio Project") );
+        KNotification::event( KNotification::Warning,
+                              i18n("Audio Project"),
+                              i18n("Track %1 was not found in the MusicBrainz database.",
+                                   track->trackNumber()) );
 }
 
 #include "k3baudiotracktrmlookupdialog.moc"

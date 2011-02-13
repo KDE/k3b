@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -25,7 +26,6 @@
 #include "k3bfileview.h"
 #include "k3bfiletreeview.h"
 #include "k3bmediacache.h"
-#include "k3bpassivepopup.h"
 #include "k3bthememanager.h"
 #include "rip/k3baudiocdview.h"
 #include "rip/k3bvideocdview.h"
@@ -37,6 +37,7 @@
 #include <KConfig>
 #include <KLocale>
 #include <KMessageBox>
+#include <KNotification>
 #include <KUrl>
 
 // QT-includes
@@ -235,12 +236,12 @@ void K3b::DirView::slotMountFinished( const QString& mp )
     }
     else {
         d->setCurrentView( d->fileView );
-        K3b::PassivePopup::showPopup( i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>"
-                                         ,k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString()
-                                         ,k3bappcore->appDeviceManager()->currentDevice()->vendor()
-                                         ,k3bappcore->appDeviceManager()->currentDevice()->description() ),
-                                    i18n("Mount Failed"),
-                                    K3b::PassivePopup::Warning );
+        KNotification::event( KNotification::Warning,
+                              i18n("Mount Failed"),
+                              i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>",
+                                   k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString(),
+                                   k3bappcore->appDeviceManager()->currentDevice()->vendor(),
+                                   k3bappcore->appDeviceManager()->currentDevice()->description() ) );
     }
 }
 
@@ -251,12 +252,12 @@ void K3b::DirView::slotUnmountFinished( bool success )
         // TODO: check if the fileview is still displaying a folder from the medium
     }
     else {
-        K3b::PassivePopup::showPopup( i18n("<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>"
-                                         ,k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString()
-                                         ,k3bappcore->appDeviceManager()->currentDevice()->vendor()
-                                         ,k3bappcore->appDeviceManager()->currentDevice()->description() ),
-                                    i18n("Unmount Failed"),
-                                    K3b::PassivePopup::Warning );
+        KNotification::event( KNotification::Warning,
+                              i18n("Unmount Failed"),
+                              i18n("<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>",
+                                   k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString(),
+                                   k3bappcore->appDeviceManager()->currentDevice()->vendor(),
+                                   k3bappcore->appDeviceManager()->currentDevice()->description() ) );
     }
 }
 

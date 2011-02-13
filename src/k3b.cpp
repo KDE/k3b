@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ *           (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -40,7 +40,6 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixview.h"
 #include "k3bprojectburndialog.h"
-#include "k3bpassivepopup.h"
 #include "k3bplugin.h"
 #include "k3bpluginmanager.h"
 #include "k3bprojectmanager.h"

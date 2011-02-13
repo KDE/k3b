@@ -378,7 +378,7 @@ void K3b::JobProgressDialog::slotFinished( bool success )
         if( m_osd )
             m_osd->setText( i18n("Success.") );
 
-        KNotification::event("SuccessfullyFinished", i18n("Successfully finished."), QPixmap(), 0);
+        KNotification::event("SuccessfullyFinished", i18n("Successfully finished."));
     }
     else {
         m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_FAIL );
@@ -396,7 +396,7 @@ void K3b::JobProgressDialog::slotFinished( bool success )
             if( m_osd )
                 m_osd->setText( i18n("Error.") );
         }
-        KNotification::event("FinishedWithError", i18n("Finished with errors"), QPixmap(), 0);
+        KNotification::event("FinishedWithError", i18n("Finished with errors"));
     }
 
     m_labelTask->setPalette( taskPalette );

@@ -651,7 +651,7 @@ void K3b::EmptyDiscWaiter::showDialog()
     // we need to show the dialog if not done already
     if( !d->dialogVisible ) {
 
-        KNotification::event( "WaitingForMedium", i18n("Waiting for Medium"),QPixmap(),0 );
+        KNotification::event( "WaitingForMedium", i18n("Waiting for Medium") );
 
         d->dialogVisible = true;
         //clear it.

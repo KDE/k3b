@@ -208,7 +208,6 @@ set(k3b_SRCS
   k3bwidgetshoweffect.cpp
   k3bmediaselectiondialog.cpp
   k3bdiskinfoview.cpp
-  k3bpassivepopup.cpp
   k3btimeoutwidget.cpp
   k3bminibutton.cpp
   k3bthemedheader.cpp
