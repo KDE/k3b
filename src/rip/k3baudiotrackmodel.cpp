@@ -24,6 +24,7 @@
 #include <libkcddb/cdinfo.h>
 
 #include <QtCore/QMimeData>
+#include <QtGui/QFont>
 
 Q_DECLARE_METATYPE( K3b::Medium )
 Q_DECLARE_METATYPE( K3b::Msf )
@@ -205,7 +206,12 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
         case ArtistColumn:
             return d->getField( KCDDB::Artist, trackIndex );
         case TitleColumn:
-            return d->getField( KCDDB::Title, trackIndex );
+        {
+            if( d->medium.toc()[trackIndex].type() == Device::Track::TYPE_DATA )
+                return i18n( "Data Track" );
+            else
+                return d->getField( KCDDB::Title, trackIndex );
+        }
         case LengthColumn:
             return d->medium.toc()[trackIndex].length().toString();
         }
@@ -222,6 +228,14 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
             return Qt::AlignHCenter;
         }
         break;
+        
+    case Qt::FontRole:
+        if( d->medium.toc()[trackIndex].type() == Device::Track::TYPE_DATA )
+        {
+            QFont font;
+            font.setItalic( true );
+            return font;
+        }
     }
 
     return QVariant();

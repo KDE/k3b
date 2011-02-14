@@ -18,15 +18,13 @@
 
 #include <QtCore/QAbstractItemModel>
 
-namespace K3b {
-    class Medium;
-}
-
 namespace KCDDB {
     class CDInfo;
 }
 
 namespace K3b {
+    class Medium;
+    
     class AudioTrackModel : public QAbstractItemModel
     {
         Q_OBJECT
@@ -37,8 +35,8 @@ namespace K3b {
 
         enum Columns {
             TrackNumberColumn = 0,
-            ArtistColumn,
             TitleColumn,
+            ArtistColumn,
             LengthColumn,
             NumColumns
         };
