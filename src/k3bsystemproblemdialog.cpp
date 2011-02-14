@@ -590,7 +590,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     if( problems.isEmpty() ) {
         kDebug() << "          - none - ";
         if( level == AlwaysNotify ) {
-            KNotification::event( KNotification::Notification,
+            KNotification::event( "NoProblemsFound",
                                   i18n("System configured properly"),
                                   i18n("No problems found in system configuration.") );
         }

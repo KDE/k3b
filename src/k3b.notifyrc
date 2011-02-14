@@ -379,3 +379,28 @@ Comment[zh_CN]=用户需要插入存储介质
 Comment[zh_TW]=使用者需要插入媒體
 Sound=KDE-K3B-Insert-Medium.ogg
 Action=Sound
+
+[Event/Busy]
+Name=Busy
+Comment=K3b is currently busy and cannot start any other operations
+Action=Popup
+
+[Event/NoProblemsFound]
+Name=No problems found
+Comment=No problems found in system configuration
+Action=Popup
+
+[Event/MountFailed]
+Name=Mount/unmount failed
+Comment=Medium cannot be mount or unmounted
+Action=Popup
+
+[Event/TrackDataNotFound]
+Name=Track data not found
+Comment=Track information has not been found in the online database
+Action=Popup
+
+[Event/TrackDataSaved]
+Name=Track data saved
+Comment=Track information has been saved
+Action=Popup

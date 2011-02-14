@@ -157,7 +157,7 @@ void K3b::Application::processCmdLineArgs()
     bool dialogOpen = false;
 
     if( k3bcore->jobsRunning() > 0 ) {
-        KNotification::event( KNotification::Notification,
+        KNotification::event( "Busy",
                               i18n("K3b is busy"),
                               i18n("K3b is currently busy and cannot start any other operations.") );
         return;

@@ -236,7 +236,7 @@ void K3b::DirView::slotMountFinished( const QString& mp )
     }
     else {
         d->setCurrentView( d->fileView );
-        KNotification::event( KNotification::Warning,
+        KNotification::event( "MountFailed",
                               i18n("Mount Failed"),
                               i18n("<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>",
                                    k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString(),
@@ -252,7 +252,7 @@ void K3b::DirView::slotUnmountFinished( bool success )
         // TODO: check if the fileview is still displaying a folder from the medium
     }
     else {
-        KNotification::event( KNotification::Warning,
+        KNotification::event( "MountFailed",
                               i18n("Unmount Failed"),
                               i18n("<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>",
                                    k3bappcore->mediaCache()->medium( k3bappcore->appDeviceManager()->currentDevice() ).shortString(),

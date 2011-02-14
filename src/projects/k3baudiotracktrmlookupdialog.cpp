@@ -119,7 +119,7 @@ void K3b::AudioTrackTRMLookupDialog::slotCancel()
 void K3b::AudioTrackTRMLookupDialog::slotTrackFinished( K3b::AudioTrack* track, bool success )
 {
     if( !success )
-        KNotification::event( KNotification::Warning,
+        KNotification::event( "TrackDataNotFound",
                               i18n("Audio Project"),
                               i18n("Track %1 was not found in the MusicBrainz database.",
                                    track->trackNumber()) );

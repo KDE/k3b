@@ -465,7 +465,7 @@ void K3b::AudioCdView::slotSaveCddbLocally()
     KCDDB::Client cddbClient;
     cddbClient.config().readConfig();
     cddbClient.store( d->trackModel->cddbInfo(), K3b::CDDB::createTrackOffsetList( d->trackModel->medium().toc() ) );
-    KNotification::event( KNotification::Notification,
+    KNotification::event( "TrackDataSaved",
                           i18n( "CDDB" ),
                           i18n( "Saved entry in category %1.",
                                 d->trackModel->cddbInfo().get( KCDDB::Category ).toString() ) );
