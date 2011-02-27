@@ -25,6 +25,9 @@ class MetaItemModelTest : public QObject
 {
     Q_OBJECT
     
+public:
+    MetaItemModelTest();
+    
 private slots:
     void init(); // executed before each test function
     void testCreate();
@@ -33,10 +36,11 @@ private slots:
     void testRemoveSubModel();
     void testDynamicChanges();
     void testDynamicChangesInFlatModel();
+    void testDataChanges();
     
 private:
-    QPointer<QStringListModel> m_stringListModel;
-    QPointer<QStandardItemModel> m_standardItemModel;
+    QPointer<QStandardItemModel> m_listModel;
+    QPointer<QStandardItemModel> m_treeModel;
 };
 
 #endif // K3B_META_ITEM_MODEL_TEST_H
