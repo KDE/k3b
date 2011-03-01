@@ -382,25 +382,75 @@ Action=Sound
 
 [Event/Busy]
 Name=Busy
+Name[et]=Hõivatud
+Name[pt]=Ocupado
+Name[sv]=Upptaget
+Name[uk]=Виконується завдання
+Name[x-test]=xxBusyxx
 Comment=K3b is currently busy and cannot start any other operations
+Comment[et]=K3b on parajasti hõivatud ega suuda käivitada ühtegi muud toimingut
+Comment[pt]=O K3b está ocupado de momento e não pode iniciar outras operações
+Comment[sv]=K3b är för närvarande upptaget och kan inte starta några nya åtgärder
+Comment[uk]=Зараз програма K3b виконує завдання, тому не може почати ніяку іншу дію
+Comment[x-test]=xxK3b is currently busy and cannot start any other operationsxx
 Action=Popup
 
 [Event/NoProblemsFound]
 Name=No problems found
+Name[et]=Probleeme ei leitud
+Name[pt]=Sem problemas encontrados
+Name[sv]=Inga problem hittades
+Name[uk]=Проблем не виявлено
+Name[x-test]=xxNo problems foundxx
 Comment=No problems found in system configuration
+Comment[et]=Süsteemi seadistustes probleeme ei leitud
+Comment[pt]=Não foram encontrados problemas na configuração do sistema
+Comment[sv]=Inga problem hittades i systeminställningarna
+Comment[uk]=В конфігурації системи не виявлено проблем
+Comment[x-test]=xxNo problems found in system configurationxx
 Action=Popup
 
 [Event/MountFailed]
 Name=Mount/unmount failed
+Name[et]=Ühendamine/lahutamine nurjus
+Name[pt]=A montagem/desmontagem falhou
+Name[sv]=Montering eller avmontering misslyckades
+Name[uk]=Помилка монтування або демонтування
+Name[x-test]=xxMount/unmount failedxx
 Comment=Medium cannot be mount or unmounted
+Comment[et]=Andmekandja ühendamine või lahutamine nurjus
+Comment[pt]=Não é possível montar ou desmontar o disco
+Comment[sv]=Medium kan inte monteras eller avmonteras
+Comment[uk]=Не вдалося змонтувати або демонтувати носій
+Comment[x-test]=xxMedium cannot be mount or unmountedxx
 Action=Popup
 
 [Event/TrackDataNotFound]
 Name=Track data not found
+Name[et]=Raja andmeid ei leitud
+Name[pt]=Dados da faixa não encontrados
+Name[sv]=Spårdata hittades inte
+Name[uk]=Не знайдено даних композиції
+Name[x-test]=xxTrack data not foundxx
 Comment=Track information has not been found in the online database
+Comment[et]=Andmebaasis ei leitud teavet raja kohta
+Comment[pt]=A informação da faixa não foi encontrada na base de dados 'online'
+Comment[sv]=Spårinformation hittades inte i nätdatabasen
+Comment[uk]=Не вдалося знайти дані композиції у базі даних у інтернеті
+Comment[x-test]=xxTrack information has not been found in the online databasexx
 Action=Popup
 
 [Event/TrackDataSaved]
 Name=Track data saved
+Name[et]=Raja andmed on salvestatud
+Name[pt]=Dados da faixa gravados
+Name[sv]=Spårdata sparad
+Name[uk]=Збережено дані композиції
+Name[x-test]=xxTrack data savedxx
 Comment=Track information has been saved
+Comment[et]=Teave raja kohta salvestati
+Comment[pt]=A informação da faixa foi gravada
+Comment[sv]=Spårinformation har sparats
+Comment[uk]=Дані щодо композиції було збережено
+Comment[x-test]=xxTrack information has been savedxx
 Action=Popup
