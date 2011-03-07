@@ -382,7 +382,9 @@ Action=Sound
 
 [Event/Busy]
 Name=Busy
+Name[da]=Optaget
 Name[et]=Hõivatud
+Name[fr]=Occupé
 Name[nl]=Bezig
 Name[pt]=Ocupado
 Name[pt_BR]=Ocupado
@@ -391,7 +393,9 @@ Name[uk]=Виконується завдання
 Name[x-test]=xxBusyxx
 Name[zh_TW]=忙碌
 Comment=K3b is currently busy and cannot start any other operations
+Comment[da]=K3b er optaget og kan ikke starte andre handlinger
 Comment[et]=K3b on parajasti hõivatud ega suuda käivitada ühtegi muud toimingut
+Comment[fr]=K3b est actuellement occupé et ne peut démarrer une autre opération
 Comment[nl]=K3b is momenteel bezig en kan geen andere operaties starten
 Comment[pt]=O K3b está ocupado de momento e não pode iniciar outras operações
 Comment[pt_BR]=O K3b está ocupado no momento, e não pode iniciar quaisquer outras operações
@@ -403,7 +407,9 @@ Action=Popup
 
 [Event/NoProblemsFound]
 Name=No problems found
+Name[da]=Ingen problemer fundet
 Name[et]=Probleeme ei leitud
+Name[fr]=Aucun problème trouvé
 Name[nl]=Geen probleem gevonden
 Name[pt]=Sem problemas encontrados
 Name[pt_BR]=Nenhum problema encontrado
@@ -412,7 +418,9 @@ Name[uk]=Проблем не виявлено
 Name[x-test]=xxNo problems foundxx
 Name[zh_TW]=沒有發現問題
 Comment=No problems found in system configuration
+Comment[da]=Ingen problemer fundet i systemkonfigurationen
 Comment[et]=Süsteemi seadistustes probleeme ei leitud
+Comment[fr]=Aucun problème trouvé dans la configuration du système
 Comment[nl]=Geen problemen gevonden in de systeemconfiguratie
 Comment[pt]=Não foram encontrados problemas na configuração do sistema
 Comment[pt_BR]=Nenhum problema foi encontrado nas configurações do sistema
@@ -424,7 +432,9 @@ Action=Popup
 
 [Event/MountFailed]
 Name=Mount/unmount failed
+Name[da]=Montering/afmontering mislykkedes
 Name[et]=Ühendamine/lahutamine nurjus
+Name[fr]=Échec du montage / démontage
 Name[nl]=Aan/afkoppelen is mislukt
 Name[pt]=A montagem/desmontagem falhou
 Name[pt_BR]=A montagem/desmontagem falhou
@@ -433,7 +443,9 @@ Name[uk]=Помилка монтування або демонтування
 Name[x-test]=xxMount/unmount failedxx
 Name[zh_TW]=掛載/卸載失敗
 Comment=Medium cannot be mount or unmounted
+Comment[da]=Mediet kan ikke afmonteres
 Comment[et]=Andmekandja ühendamine või lahutamine nurjus
+Comment[fr]=Le média ne peut être monté ou démonté
 Comment[nl]=Kan het medium niet aan- of afkoppelen
 Comment[pt]=Não é possível montar ou desmontar o disco
 Comment[pt_BR]=Não foi possível montar ou desmontar a mídia
@@ -445,7 +457,9 @@ Action=Popup
 
 [Event/TrackDataNotFound]
 Name=Track data not found
+Name[da]=Spordata ikke fundet
 Name[et]=Raja andmeid ei leitud
+Name[fr]=Impossible de trouver la piste de donnée
 Name[nl]=Gegevens van track niet gevonden
 Name[pt]=Dados da faixa não encontrados
 Name[pt_BR]=Dados da faixa não encontrados
@@ -454,7 +468,9 @@ Name[uk]=Не знайдено даних композиції
 Name[x-test]=xxTrack data not foundxx
 Name[zh_TW]=找不到音軌資料
 Comment=Track information has not been found in the online database
+Comment[da]=Fandt ikke sporinformation i online-databasen
 Comment[et]=Andmebaasis ei leitud teavet raja kohta
+Comment[fr]=Les informations de pistes n'ont pas été trouvé dans la base de donnée en ligne
 Comment[nl]=Informatie over de track is niet gevonden in de online-database
 Comment[pt]=A informação da faixa não foi encontrada na base de dados 'online'
 Comment[pt_BR]=A informação da faixa não foi encontrada no banco de dados on-line
@@ -466,7 +482,9 @@ Action=Popup
 
 [Event/TrackDataSaved]
 Name=Track data saved
+Name[da]=Spordata gemt
 Name[et]=Raja andmed on salvestatud
+Name[fr]=Piste de donnée enregistrée
 Name[nl]=Gegevens van track opgeslagen
 Name[pt]=Dados da faixa gravados
 Name[pt_BR]=Dados da faixa gravados
@@ -475,7 +493,9 @@ Name[uk]=Збережено дані композиції
 Name[x-test]=xxTrack data savedxx
 Name[zh_TW]=音軌資料已儲存
 Comment=Track information has been saved
+Comment[da]=Sporinformationen er blevet gemt
 Comment[et]=Teave raja kohta salvestati
+Comment[fr]=Les informations de piste ont été enregistrées
 Comment[nl]=Trackinformatie is opgeslagen
 Comment[pt]=A informação da faixa foi gravada
 Comment[pt_BR]=A informação da faixa foi salva
