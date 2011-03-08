@@ -624,7 +624,6 @@ void K3b::ExternalBinManager::loadDefaultSearchPath()
                                                 "/usr/local/bin/",
                                                 "/usr/sbin/",
                                                 "/usr/local/sbin/",
-                                                "/opt/schily/bin/",
                                                 "/sbin",
 #endif
                                                 0 };
