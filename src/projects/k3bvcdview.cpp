@@ -124,7 +124,7 @@ void K3b::VcdView::slotProperties()
 
     if( selection.isEmpty() ) {
         // show project properties
-        slotProperties();
+	    View::slotProperties();
     }
     else {
         QList<K3b::VcdTrack*> selected;
