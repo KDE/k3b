@@ -33,7 +33,6 @@
 #include <QLayout>
 #include <QMenu>
 #include <QPoint>
-#include <QPointer>
 #include <QString>
 #include <QTimer>
 #include <QToolButton>
