@@ -29,7 +29,6 @@
 #include "k3bthememanager.h"
 #include "k3baudiocdtrackdrag.h"
 #include "k3bthemedlabel.h"
-#include "k3baction.h"
 #include "k3bcddb.h"
 #include "k3bmediacache.h"
 
@@ -84,7 +83,7 @@ public:
     KActionCollection* actionCollection;
     KMenu* popupMenu;
 
-    K3b::AudioTrackModel* trackModel;
+    AudioTrackModel* trackModel;
     QTreeView* trackView;
     KToolBar* toolBox;
     QLabel* labelLength;
@@ -95,10 +94,10 @@ public:
 
 
 K3b::AudioCdView::AudioCdView( QWidget* parent )
-    : K3b::MediaContentsView( true,
-                            K3b::Medium::ContentAudio,
-                            K3b::Device::MEDIA_CD_ALL,
-                            K3b::Device::STATE_INCOMPLETE|K3b::Device::STATE_COMPLETE,
+    : MediaContentsView( true,
+                            Medium::ContentAudio,
+                            Device::MEDIA_CD_ALL,
+                            Device::STATE_INCOMPLETE | Device::STATE_COMPLETE,
                             parent ),
       d( new Private )
 {
@@ -113,14 +112,14 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
 
     // the track view
     // ----------------------------------------------------------------------------------
-    d->trackModel = new K3b::AudioTrackModel( this );
+    d->trackModel = new AudioTrackModel( this );
     d->trackView = new QTreeView( mainWidget() );
     d->trackView->setModel( d->trackModel );
     d->trackView->setRootIsDecorated( false );
     d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
     d->trackView->setDragEnabled( true );
     d->trackView->installEventFilter( this );
-    K3b::ViewColumnAdjuster* vca = new K3b::ViewColumnAdjuster( d->trackView );
+    ViewColumnAdjuster* vca = new ViewColumnAdjuster( d->trackView );
     vca->addFixedColumn( AudioTrackModel::TrackNumberColumn );
     vca->addFixedColumn( AudioTrackModel::LengthColumn );
     vca->setColumnMargin( AudioTrackModel::LengthColumn, 10 );
@@ -129,6 +128,8 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
              this, SLOT(slotContextMenu(const QPoint&)) );
     connect( d->trackView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
              this, SLOT(slotTrackSelectionChanged()) );
+    connect( k3bcore->mediaCache(), SIGNAL(mediumCddbChanged(K3b::Device::Device*)),
+             this, SLOT(slotCddbChanged(K3b::Device::Device*)) );
 
     mainGrid->addWidget( d->toolBox );
     mainGrid->addWidget( d->trackView );
@@ -140,20 +141,21 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     // setup the toolbox
     d->toolBox->addAction( d->actionCollection->action( "start_rip" ) );
     d->toolBox->addSeparator();
-    d->toolBox->addAction( d->actionCollection->action( "query_cddb" ) );
+    d->toolBox->addAction( d->actionCollection->action( "load_cd_info" ) );
     d->toolBox->addAction( d->actionCollection->action( "save_cddb_local" ) );
     d->toolBox->addAction( d->actionCollection->action( "edit_track_cddb" ) );
     d->toolBox->addAction( d->actionCollection->action( "edit_album_cddb" ) );
+    d->toolBox->addSeparator();
     d->toolBox->addAction( d->actionCollection->action( "show_data_part" ) );
     d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
     d->toolBox->addWidget( d->labelLength );
 
     slotTrackSelectionChanged();
 
-    setLeftPixmap( K3b::Theme::MEDIA_LEFT );
-    setRightPixmap( K3b::Theme::MEDIA_AUDIO );
+    setLeftPixmap( Theme::MEDIA_LEFT );
+    setRightPixmap( Theme::MEDIA_AUDIO );
 
-    d->busyInfoLabel = new K3b::ThemedLabel( i18n("Searching for Artist information..."), this );
+    d->busyInfoLabel = new ThemedLabel( i18n("Searching for Artist information..."), this );
     d->busyInfoLabel->setFrameStyle( QFrame::Box|QFrame::Plain );
     d->busyInfoLabel->setContentsMargins( 6, 6, 6, 6 );
     d->busyInfoLabel->hide();
@@ -176,39 +178,10 @@ void K3b::AudioCdView::reloadMedium()
 {
     d->trackModel->setMedium( medium() );
 
-    // we only use the manually edited cddb in the model
-    d->trackModel->setCddbInfo( medium().cddbInfo() );
-
-    // cddb vs. cd-text
-    // ----------------
-    if( !medium().cddbInfo().isValid() ||
-        ( !medium().cdText().isEmpty() &&
-          KMessageBox::questionYesNo( this,
-                                      i18n("Found Cd-Text (%1 - %2). Do you want to use it instead of CDDB (%3 - %4)?",
-                                           medium().cdText().performer(),
-                                           medium().cdText().title(),
-                                           medium().cddbInfo().get( KCDDB::Artist ).toString(),
-                                           medium().cddbInfo().get( KCDDB::Title ).toString() ),
-                                      i18n("Found Cd-Text"),
-                                      KGuiItem( i18n("Use CD-Text") ),
-                                      KGuiItem( i18n("Use CDDB") ),
-                                      "prefereCdTextOverCddb" ) == KMessageBox::Yes ) ) {
-        // simulate a cddb entry with the cdtext data
-        KCDDB::CDInfo cddbInfo;
-        cddbInfo.set( KCDDB::Artist, medium().cdText().performer() );
-        cddbInfo.set( KCDDB::Title, medium().cdText().title() );
-        cddbInfo.set( KCDDB::Comment, medium().cdText().message() );
-
-        for( int i = 0; i < medium().cdText().count(); ++i ) {
-            cddbInfo.track( i ).set( KCDDB::Title, medium().cdText()[i].title() );
-            cddbInfo.track( i ).set( KCDDB::Artist, medium().cdText()[i].performer() );
-            cddbInfo.track( i ).set( KCDDB::Comment, medium().cdText()[i].message() );
-        }
-
-        d->trackModel->setCddbInfo( cddbInfo );
-    }
+    loadCdInfo();
 
     actionCollection()->action( "show_data_part" )->setEnabled( medium().content() & Medium::ContentData );
+    actionCollection()->action( "read_cd_text" )->setEnabled( !medium().cdText().isEmpty() );
 
     // update the title
     // ----------------
@@ -246,30 +219,72 @@ void K3b::AudioCdView::updateTitle()
 void K3b::AudioCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
+    
+    KAction* actionCheckAll = new KAction( i18n("Check All"), this );
+    d->actionCollection->addAction( "check_all", actionCheckAll );
+    connect( actionCheckAll, SIGNAL(triggered(bool)), d->trackModel, SLOT(checkAll()) );
 
-    K3b::createAction(this, i18n("Check All"), 0, 0, d->trackModel,
-                      SLOT(checkAll()), actionCollection(), "check_all" );
-    K3b::createAction(this, i18n("Uncheck All"), 0, 0, d->trackModel,
-                      SLOT(uncheckAll()), actionCollection(), "uncheck_all" );
-    K3b::createAction(this, i18n("Check Track"), 0, 0, this,
-                      SLOT(slotSelect()), actionCollection(), "select_track" );
-    K3b::createAction(this, i18n("Uncheck Track"), 0, 0, this,
-                      SLOT(slotDeselect()), actionCollection(), "deselect_track" );
-    K3b::createAction(this, i18n("Edit Track CDDB Info"), "document-properties", 0, this,
-                      SLOT(slotEditTrackCddb()), actionCollection(), "edit_track_cddb" );
-    K3b::createAction(this, i18n("Edit Album CDDB Info"), "help-about", 0, this,
-                      SLOT(slotEditAlbumCddb()), actionCollection(), "edit_album_cddb" );
-    K3b::createAction(this, i18n("Start Ripping"), "tools-rip-audio-cd", 0, this,
-                      SLOT(startRip()), actionCollection(), "start_rip" );
-    K3b::createAction(this, i18n("Query CDDB"), "view-refresh", 0, this,
-                      SLOT(queryCddb()), actionCollection(), "query_cddb" );
-    K3b::createAction(this, i18n("Save CDDB Entry Locally"), "document-save", 0, this,
-                      SLOT(slotSaveCddbLocally()), actionCollection(), "save_cddb_local" );
-    KAction* actionShowDataPart = K3b::createAction( this, i18n("Show Data Part"), "media-optical-data", 0, this,
-                                                     SLOT(slotShowDataPart()), actionCollection(), "show_data_part" );
+    KAction* actionUncheckAll = new KAction( i18n("Uncheck All"), this );
+    d->actionCollection->addAction( "uncheck_all", actionUncheckAll );
+    connect( actionUncheckAll, SIGNAL(triggered(bool)), d->trackModel, SLOT(uncheckAll()) );
+    
+    KAction* actionCheckTrack = new KAction( i18n("Check Track"), this );
+    d->actionCollection->addAction( "select_track", actionCheckTrack );
+    connect( actionCheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotSelect()) );
+    
+    KAction* actionUncheckTrack = new KAction( i18n("Uncheck Track"), this );
+    d->actionCollection->addAction( "deselect_track", actionUncheckTrack );
+    connect( actionUncheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotDeselect()) );
+    
+    KAction* actionEditTrackInfo = new KAction( KIcon( "document-properties" ), i18n("Edit Track Info..."), this );
+    actionEditTrackInfo->setToolTip( i18n( "Edit current track information" ) );
+    actionEditTrackInfo->setStatusTip( actionEditTrackInfo->toolTip() );
+    d->actionCollection->addAction( "edit_track_cddb", actionEditTrackInfo );
+    connect( actionEditTrackInfo, SIGNAL(triggered(bool)), this, SLOT(slotEditTrackCddb()) );
+    
+    KAction* actionEditAlbumInfo = new KAction( KIcon( "help-about" ), i18n("Edit Album Info..."), this );
+    actionEditAlbumInfo->setToolTip( i18n( "Edit album information" ) );
+    actionEditAlbumInfo->setStatusTip( actionEditAlbumInfo->toolTip() );
+    d->actionCollection->addAction( "edit_album_cddb", actionEditAlbumInfo );
+    connect( actionEditAlbumInfo, SIGNAL(triggered(bool)), this, SLOT(slotEditAlbumCddb()) );
+    
+    KAction* actionStartRip = new KAction( KIcon( "tools-rip-audio-cd" ), i18n("Start Ripping"), this );
+    actionStartRip->setToolTip( i18n( "Start audio ripping process" ) );
+    actionStartRip->setStatusTip( actionStartRip->toolTip() );
+    d->actionCollection->addAction( "start_rip", actionStartRip );
+    connect( actionStartRip, SIGNAL(triggered(bool)), this, SLOT(startRip()) );
+    
+    KAction* actionQueryCddb = new KAction( KIcon( "download" ), i18n("Query CD Database"), this );
+    actionQueryCddb->setToolTip( i18n( "Look for information on CDDB" ) );
+    actionQueryCddb->setStatusTip( actionQueryCddb->toolTip() );
+    d->actionCollection->addAction( "query_cddb", actionQueryCddb );
+    connect( actionQueryCddb, SIGNAL(triggered(bool)), this, SLOT(queryCddb()) );
+    
+    KAction* actionReadCdText = new KAction( KIcon( "media-optical" ), i18n("Read CD-Text"), this );
+    actionReadCdText->setToolTip( i18n( "Read CD-Text information" ) );
+    actionReadCdText->setStatusTip( actionReadCdText->toolTip() );
+    d->actionCollection->addAction( "read_cd_text", actionReadCdText );
+    connect( actionReadCdText, SIGNAL(triggered(bool)), this, SLOT(readCdText()) );
+        
+    KActionMenu* actionQueryInfo = new KActionMenu( KIcon( "view-refresh" ), i18n("Load CD Info"), this );
+    actionQueryInfo->setToolTip( i18n( "Load track and album information" ) );
+    actionQueryInfo->setStatusTip( actionQueryInfo->toolTip() );
+    actionQueryInfo->addAction( actionQueryCddb );
+    actionQueryInfo->addAction( actionReadCdText );
+    d->actionCollection->addAction( "load_cd_info", actionQueryInfo );
+    connect( actionQueryInfo, SIGNAL(triggered(bool)), this, SLOT(loadCdInfo()) );
+    
+    KAction* actionSaveCddb = new KAction( KIcon( "document-save" ), i18n("Save CD Info Locally"), this );
+    actionSaveCddb->setToolTip( i18n( "Save track and album information to the local CDDB cache" ) );
+    actionSaveCddb->setStatusTip( actionSaveCddb->toolTip() );
+    d->actionCollection->addAction( "save_cddb_local", actionSaveCddb );
+    connect( actionSaveCddb, SIGNAL(triggered(bool)), this, SLOT(slotSaveCddbLocally()) );
+    
+    KAction* actionShowDataPart = new KAction( KIcon( "media-optical-data" ), i18n("Show Data Part"), this );
     actionShowDataPart->setToolTip( i18n("Mounts the data part of CD") );
-
-    // TODO: set the actions tooltips and whatsthis infos
+    actionShowDataPart->setStatusTip( actionShowDataPart->toolTip() );
+    d->actionCollection->addAction( "show_data_part", actionShowDataPart );
+    connect( actionShowDataPart, SIGNAL(triggered(bool)), this, SLOT(slotShowDataPart()) );
 
     // setup the popup menu
     d->popupMenu = new KMenu( this );
@@ -308,10 +323,11 @@ void K3b::AudioCdView::startRip()
                             i18n("No Tracks Selected") );
     }
     else {
-        K3b::AudioRippingDialog rip( medium(),
-                                   d->trackModel->cddbInfo(),
-                                   trackIndices,
-                                   this );
+        AudioRippingDialog rip( medium(),
+                                d->trackModel->cddbInfo(),
+                                trackIndices,
+                                this );
+ 
         rip.setDelayedInitialization( true );
         rip.exec();
     }
@@ -331,9 +347,9 @@ void K3b::AudioCdView::slotEditTrackCddb()
         dialog.setModal(true);
         QWidget* w = new QWidget( &dialog );
 
-        KLineEdit* editTitle = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), K3b::AudioTrackModel::TitleRole ).toString(), w );
-        KLineEdit* editArtist = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), K3b::AudioTrackModel::ArtistRole ).toString(), w );
-        KLineEdit* editExtInfo = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), K3b::AudioTrackModel::CommentRole ).toString(), w );
+        KLineEdit* editTitle = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), AudioTrackModel::TitleRole ).toString(), w );
+        KLineEdit* editArtist = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), AudioTrackModel::ArtistRole ).toString(), w );
+        KLineEdit* editExtInfo = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), AudioTrackModel::CommentRole ).toString(), w );
         QFrame* line = new QFrame( w );
         line->setFrameShape( QFrame::HLine );
         line->setFrameShadow( QFrame::Sunken );
@@ -353,9 +369,9 @@ void K3b::AudioCdView::slotEditTrackCddb()
         dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
         if( dialog.exec() == QDialog::Accepted ) {
-            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editTitle->text(), K3b::AudioTrackModel::TitleRole );
-            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editArtist->text(), K3b::AudioTrackModel::ArtistRole );
-            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editExtInfo->text(), K3b::AudioTrackModel::CommentRole );
+            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editTitle->text(), AudioTrackModel::TitleRole );
+            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editArtist->text(), AudioTrackModel::ArtistRole );
+            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editExtInfo->text(), AudioTrackModel::CommentRole );
         }
     }
 }
@@ -435,10 +451,43 @@ void K3b::AudioCdView::slotEditAlbumCddb()
 }
 
 
+void K3b::AudioCdView::loadCdInfo()
+{
+    // cddb vs. cd-text
+    // ----------------
+    if( !medium().cddbInfo().isValid() ) {
+        readCdText();
+    } else {
+        //slotCddbChanged( medium().device() );
+        queryCddb();
+    }
+}
+
+
 void K3b::AudioCdView::queryCddb()
 {
     enableInteraction( false );
     k3bcore->mediaCache()->lookupCddb( medium().device() );
+}
+
+
+void K3b::AudioCdView::readCdText()
+{
+    if( !medium().cdText().isEmpty() ) {
+        // simulate a cddb entry with the cdtext data
+        KCDDB::CDInfo cddbInfo;
+        cddbInfo.set( KCDDB::Artist, medium().cdText().performer() );
+        cddbInfo.set( KCDDB::Title, medium().cdText().title() );
+        cddbInfo.set( KCDDB::Comment, medium().cdText().message() );
+
+        for( int i = 0; i < medium().cdText().count(); ++i ) {
+            cddbInfo.track( i ).set( KCDDB::Title, medium().cdText()[i].title() );
+            cddbInfo.track( i ).set( KCDDB::Artist, medium().cdText()[i].performer() );
+            cddbInfo.track( i ).set( KCDDB::Comment, medium().cdText()[i].message() );
+        }
+
+        d->trackModel->setCddbInfo( cddbInfo );
+    }
 }
 
 
@@ -464,11 +513,7 @@ void K3b::AudioCdView::slotSaveCddbLocally()
 {
     KCDDB::Client cddbClient;
     cddbClient.config().readConfig();
-    cddbClient.store( d->trackModel->cddbInfo(), K3b::CDDB::createTrackOffsetList( d->trackModel->medium().toc() ) );
-    KNotification::event( "TrackDataSaved",
-                          i18n( "CDDB" ),
-                          i18n( "Saved entry in category %1.",
-                                d->trackModel->cddbInfo().get( KCDDB::Category ).toString() ) );
+    cddbClient.store( d->trackModel->cddbInfo(), CDDB::createTrackOffsetList( d->trackModel->medium().toc() ) );
 }
 
 
@@ -491,6 +536,15 @@ void K3b::AudioCdView::slotDeselect()
 void K3b::AudioCdView::slotShowDataPart()
 {
     k3bappcore->appDeviceManager()->mountDisk( medium().device() );
+}
+
+
+void K3b::AudioCdView::slotCddbChanged( K3b::Device::Device* dev )
+{
+    if ( medium().device() == dev ) {
+        // we only use the manually edited cddb in the model
+        d->trackModel->setCddbInfo( medium().cddbInfo() );
+    }
 }
 
 

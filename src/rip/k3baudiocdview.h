@@ -35,7 +35,9 @@ public:
     KActionCollection* actionCollection() const;
 
 public Q_SLOTS:
+    void loadCdInfo();
     void queryCddb();
+    void readCdText();
 
 protected:
     virtual bool eventFilter( QObject* obj, QEvent* event );
@@ -51,6 +53,7 @@ private Q_SLOTS:
     void slotSelect();
     void slotDeselect();
     void slotShowDataPart();
+    void slotCddbChanged( K3b::Device::Device* dev );
 
 private:
     void reloadMedium();

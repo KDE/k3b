@@ -155,6 +155,7 @@ void K3b::MediaCache::Private::_k_cddbJobFinished( KJob* job )
         if ( !job->error() ) {
             // update it
             deviceMap[oldMedium.device()]->medium.d->cddbInfo = cddbJob->cddbResult();
+            emit q->mediumCddbChanged( oldMedium.device() );
         }
 
         emit q->mediumChanged( oldMedium.device() );

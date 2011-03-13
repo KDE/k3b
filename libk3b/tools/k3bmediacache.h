@@ -132,6 +132,11 @@ namespace K3b {
          * Analyzation of the medium is finished once mediumChanged has been emitted.
          */
         void checkingMedium( K3b::Device::Device* dev, const QString& message );
+        
+        /**
+         * Emitted whenever medium CDDB information changes.
+         */
+        void mediumCddbChanged( K3b::Device::Device* dev );
 
     public Q_SLOTS:
         /**
