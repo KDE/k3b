@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -44,14 +44,16 @@ protected:
 
 private Q_SLOTS:
     void slotContextMenu( const QPoint& );
+    void slotContextMenuAboutToShow();
     void slotTrackSelectionChanged();
     void slotSaveCddbLocally();
 
     void slotEditTrackCddb();
     void slotEditAlbumCddb();
     void startRip();
-    void slotSelect();
-    void slotDeselect();
+    void slotCheck();
+    void slotUncheck();
+    void slotToggle();
     void slotShowDataPart();
     void slotCddbChanged( K3b::Device::Device* dev );
 

@@ -244,12 +244,12 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
 
 Qt::ItemFlags K3b::AudioTrackModel::flags( const QModelIndex& index ) const
 {
-    Qt::ItemFlags f = Qt::ItemIsSelectable;
+    Qt::ItemFlags f = 0;
 
     if ( index.isValid() && index.row() >= 0 && index.row() < d->medium.toc().count() &&
          d->medium.toc()[index.row()].type() == K3b::Device::Track::TYPE_AUDIO ) {
 
-        f |= Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
+        f |= Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
 
         switch( index.column() ) {
         case ArtistColumn:

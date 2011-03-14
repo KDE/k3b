@@ -51,6 +51,7 @@
 #include <KToolBarSpacerAction>
 
 #include <QFont>
+#include <QFormLayout>
 #include <QVBoxLayout>
 #include <QItemSelectionModel>
 #include <QKeyEvent>
@@ -62,19 +63,50 @@
 #include <libkcddb/genres.h>
 #include <libkcddb/cdinfo.h>
 #include <libkcddb/client.h>
-//#include <libkcddb/categories.h>
 #include "categories.h"
 
 
-namespace {
-    QList<int> selectedTrackIndices( QTreeView* view ) {
-        QList<int> l;
-        foreach( const QModelIndex& index, view->selectionModel()->selectedRows() ) {
-            l.append( index.row() );
+namespace
+{    
+    Qt::CheckState overallCheckState( QAbstractItemView* view )
+    {
+        int checked = 0;
+        const QModelIndexList selection = view->selectionModel()->selectedRows();
+        foreach( const QModelIndex& index, selection ) {
+            if( index.data( Qt::CheckStateRole ).toInt() == Qt::Checked ) {
+                ++checked;
+            }
         }
-        return l;
+        
+        if( checked == 0 )
+            return Qt::Unchecked;
+        else if( checked == selection.count() )
+            return Qt::Checked;
+        else
+            return Qt::PartiallyChecked;
     }
-}
+    
+    QString commonData( const QModelIndexList& indexes, int role = Qt::DisplayRole )
+    {
+        if( !indexes.isEmpty() ) {
+            QString firstData = indexes.first().data( role ).toString();
+            for( int i = 1; i < indexes.size(); ++i ) {
+                if( indexes[i].data( role ).toString() != firstData )
+                    return QString();
+            }
+            return firstData;
+        }
+        return QString();
+    }
+    
+    void setCommonData( QAbstractItemModel* model, const QModelIndexList& indexes, const QString& value, int role = Qt::EditRole )
+    {
+        Q_FOREACH( QModelIndex index, indexes ) {
+            if( !value.isEmpty() || indexes.size() == 1 )
+                model->setData( index, value, role );
+        }
+    }
+} // namespace
 
 
 class K3b::AudioCdView::Private
@@ -114,6 +146,7 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     // ----------------------------------------------------------------------------------
     d->trackModel = new AudioTrackModel( this );
     d->trackView = new QTreeView( mainWidget() );
+    d->trackView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     d->trackView->setModel( d->trackModel );
     d->trackView->setRootIsDecorated( false );
     d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -126,7 +159,7 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
 
     connect( d->trackView, SIGNAL(customContextMenuRequested(const QPoint&)),
              this, SLOT(slotContextMenu(const QPoint&)) );
-    connect( d->trackView->selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
+    connect( d->trackView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(slotTrackSelectionChanged()) );
     connect( k3bcore->mediaCache(), SIGNAL(mediumCddbChanged(K3b::Device::Device*)),
              this, SLOT(slotCddbChanged(K3b::Device::Device*)) );
@@ -220,21 +253,13 @@ void K3b::AudioCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
     
-    KAction* actionCheckAll = new KAction( i18n("Check All"), this );
-    d->actionCollection->addAction( "check_all", actionCheckAll );
-    connect( actionCheckAll, SIGNAL(triggered(bool)), d->trackModel, SLOT(checkAll()) );
-
-    KAction* actionUncheckAll = new KAction( i18n("Uncheck All"), this );
-    d->actionCollection->addAction( "uncheck_all", actionUncheckAll );
-    connect( actionUncheckAll, SIGNAL(triggered(bool)), d->trackModel, SLOT(uncheckAll()) );
+    KAction* actionCheckTracks = new KAction( i18n("Check Tracks"), this );
+    d->actionCollection->addAction( "check_tracks", actionCheckTracks );
+    connect( actionCheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotCheck()) );
     
-    KAction* actionCheckTrack = new KAction( i18n("Check Track"), this );
-    d->actionCollection->addAction( "select_track", actionCheckTrack );
-    connect( actionCheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotSelect()) );
-    
-    KAction* actionUncheckTrack = new KAction( i18n("Uncheck Track"), this );
-    d->actionCollection->addAction( "deselect_track", actionUncheckTrack );
-    connect( actionUncheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotDeselect()) );
+    KAction* actionUncheckTracks = new KAction( i18n("Uncheck Tracks"), this );
+    d->actionCollection->addAction( "uncheck_tracks", actionUncheckTracks );
+    connect( actionUncheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotUncheck()) );
     
     KAction* actionEditTrackInfo = new KAction( KIcon( "document-properties" ), i18n("Edit Track Info..."), this );
     actionEditTrackInfo->setToolTip( i18n( "Edit current track information" ) );
@@ -285,18 +310,21 @@ void K3b::AudioCdView::initActions()
     actionShowDataPart->setStatusTip( actionShowDataPart->toolTip() );
     d->actionCollection->addAction( "show_data_part", actionShowDataPart );
     connect( actionShowDataPart, SIGNAL(triggered(bool)), this, SLOT(slotShowDataPart()) );
+    
+    KAction* actionSelectAll = KStandardAction::selectAll( d->trackView, SLOT(selectAll()), actionCollection() );
 
     // setup the popup menu
     d->popupMenu = new KMenu( this );
-    d->popupMenu->addAction( d->actionCollection->action( "select_track" ) );
-    d->popupMenu->addAction( d->actionCollection->action( "deselect_track" ) );
-    d->popupMenu->addAction( d->actionCollection->action( "check_all" ) );
-    d->popupMenu->addAction( d->actionCollection->action( "uncheck_all" ) );
+    d->popupMenu->addAction( actionCheckTracks );
+    d->popupMenu->addAction( actionUncheckTracks );
     d->popupMenu->addSeparator();
-    d->popupMenu->addAction( d->actionCollection->action( "edit_track_cddb" ) );
-    d->popupMenu->addAction( d->actionCollection->action( "edit_album_cddb" ) );
+    d->popupMenu->addAction( actionSelectAll );
+    d->popupMenu->addSeparator();
+    d->popupMenu->addAction( actionEditTrackInfo );
+    d->popupMenu->addAction( actionEditAlbumInfo );
     d->popupMenu->addSeparator();
     d->popupMenu->addAction( d->actionCollection->action( "start_rip" ) );
+    connect( d->popupMenu, SIGNAL(aboutToShow()), this, SLOT(slotContextMenuAboutToShow()) );
 }
 
 
@@ -306,12 +334,24 @@ void K3b::AudioCdView::slotContextMenu( const QPoint& p )
 }
 
 
+void K3b::AudioCdView::slotContextMenuAboutToShow()
+{
+    if ( d->trackView->selectionModel()->hasSelection() ) {
+        const Qt::CheckState overallState = overallCheckState( d->trackView );
+        kDebug() << "overallState:" << overallState;
+        actionCollection()->action("check_tracks")->setVisible( overallState != Qt::Checked );
+        actionCollection()->action("uncheck_tracks")->setVisible( overallState != Qt::Unchecked );
+    } else {
+        kDebug() << "Hiding";
+        actionCollection()->action("check_tracks")->setVisible( false );
+        actionCollection()->action("uncheck_tracks")->setVisible( false );
+    }
+}
+
+
 void K3b::AudioCdView::slotTrackSelectionChanged()
 {
-    bool itemsSelected = !selectedTrackIndices( d->trackView ).isEmpty();
-    actionCollection()->action("edit_track_cddb")->setEnabled( itemsSelected );
-    actionCollection()->action("select_track")->setEnabled( itemsSelected );
-    actionCollection()->action("deselect_track")->setEnabled( itemsSelected );
+    actionCollection()->action("edit_track_cddb")->setEnabled( d->trackView->selectionModel()->hasSelection() );
 }
 
 
@@ -336,42 +376,38 @@ void K3b::AudioCdView::startRip()
 
 void K3b::AudioCdView::slotEditTrackCddb()
 {
-    QList<int> items = selectedTrackIndices( d->trackView );
-    if( !items.isEmpty() ) {
-        int trackIndex = items.first();
-
-        KDialog dialog( this);
-        dialog.setCaption(i18n("CDDB Track %1", trackIndex) );
+    const QModelIndexList selection = d->trackView->selectionModel()->selectedRows();
+    if( !selection.isEmpty() ) {
+        KDialog dialog( this );
+        if( selection.size() > 1 )
+            dialog.setCaption( i18n( "Multiple Tracks" ) );
+        else
+            dialog.setCaption( i18n( "CDDB Track %1", selection.first().data( AudioTrackModel::TrackNumberRole ).toInt() ) );
         dialog.setButtons(KDialog::Ok|KDialog::Cancel);
         dialog.setDefaultButton(KDialog::Ok);
         dialog.setModal(true);
         QWidget* w = new QWidget( &dialog );
 
-        KLineEdit* editTitle = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), AudioTrackModel::TitleRole ).toString(), w );
-        KLineEdit* editArtist = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), AudioTrackModel::ArtistRole ).toString(), w );
-        KLineEdit* editExtInfo = new KLineEdit( d->trackModel->data( d->trackModel->index( trackIndex, 0 ), AudioTrackModel::CommentRole ).toString(), w );
+        KLineEdit* editTitle = new KLineEdit( commonData( selection, AudioTrackModel::TitleRole ), w );
+        KLineEdit* editArtist = new KLineEdit( commonData( selection, AudioTrackModel::ArtistRole ), w );
+        KLineEdit* editExtInfo = new KLineEdit( commonData( selection, AudioTrackModel::CommentRole ), w );
+        
         QFrame* line = new QFrame( w );
         line->setFrameShape( QFrame::HLine );
         line->setFrameShadow( QFrame::Sunken );
-
-        QGridLayout* grid = new QGridLayout( w );
-
-        grid->addWidget( new QLabel( i18n("Title:"), w ), 0, 0 );
-        grid->addWidget( editTitle, 0, 1 );
-        grid->addWidget( line, 1, 0, 1, 2 );
-        grid->addWidget( new QLabel( i18n("Artist:"), w ), 2, 0 );
-        grid->addWidget( editArtist, 2, 1 );
-        grid->addWidget( new QLabel( i18n("Extra info:"), w ), 3, 0 );
-        grid->addWidget( editExtInfo, 3, 1 );
-        grid->setRowStretch( 4, 1 );
+        QFormLayout* form = new QFormLayout( w );
+        form->addRow( i18n("Title:"), editTitle );
+        form->addRow( line );
+        form->addRow( i18n("Artist:"), editArtist );
+        form->addRow( i18n("Extra info:"), editExtInfo );
 
         dialog.setMainWidget(w);
         dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
         if( dialog.exec() == QDialog::Accepted ) {
-            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editTitle->text(), AudioTrackModel::TitleRole );
-            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editArtist->text(), AudioTrackModel::ArtistRole );
-            d->trackModel->setData( d->trackModel->index( trackIndex, 0 ), editExtInfo->text(), AudioTrackModel::CommentRole );
+            setCommonData( d->trackModel, selection, editTitle->text(), AudioTrackModel::TitleRole );
+            setCommonData( d->trackModel, selection, editArtist->text(), AudioTrackModel::ArtistRole );
+            setCommonData( d->trackModel, selection, editExtInfo->text(), AudioTrackModel::CommentRole );
         }
     }
 }
@@ -416,22 +452,14 @@ void K3b::AudioCdView::slotEditAlbumCddb()
         }
     }
 
-    QGridLayout* grid = new QGridLayout( w );
-
-    grid->addWidget( new QLabel( i18n("Title:"), w ), 0, 0 );
-    grid->addWidget( editTitle, 0, 1 );
-    grid->addWidget( new QLabel( i18n("Artist:"), w ), 1, 0 );
-    grid->addWidget( editArtist, 1, 1 );
-    grid->addWidget( new QLabel( i18n("Extra info:"), w ), 2, 0 );
-    grid->addWidget( editExtInfo, 2, 1 );
-    grid->addWidget( new QLabel( i18n("Genre:"), w ), 3, 0 );
-    grid->addWidget( comboGenre, 3, 1 );
-    grid->addWidget( new QLabel( i18n("Year:"), w ), 4, 0 );
-    grid->addWidget( spinYear, 4, 1 );
-    grid->addWidget( line, 5, 0, 1, 2 );
-    grid->addWidget( new QLabel( i18n("Category:"), w ), 6, 0 );
-    grid->addWidget( comboCat, 6, 1 );
-    grid->setRowStretch( 7, 1 );
+    QFormLayout* form = new QFormLayout( w );
+    form->addRow( i18n("Title:"), editTitle );
+    form->addRow( i18n("Artist:"), editArtist );
+    form->addRow( i18n("Extra info:"), editExtInfo );
+    form->addRow( i18n("Genre:"), comboGenre );
+    form->addRow( i18n("Year:"), spinYear );
+    form->addRow( line );
+    form->addRow( i18n("Category:"), comboCat );
 
     dialog.setMainWidget(w);
     dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
@@ -499,8 +527,12 @@ bool K3b::AudioCdView::eventFilter( QObject* obj, QEvent* event )
         // Using below code a user can do that.
         QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
         if( keyEvent->key() == Qt::Key_Space ) {
-            foreach( int track, selectedTrackIndices( d->trackView ) ) {
-                d->trackModel->setTrackChecked( track, !d->trackModel->trackChecked( track ) );
+            if( keyEvent->modifiers().testFlag( Qt::ControlModifier ) ) {
+                QItemSelectionModel* selectionModel = d->trackView->selectionModel();
+                QModelIndex current = d->trackView->currentIndex();
+                selectionModel->select( current, QItemSelectionModel::Toggle | QItemSelectionModel::Rows );
+            } else {
+                slotToggle();
             }
             return true;
         }
@@ -517,18 +549,32 @@ void K3b::AudioCdView::slotSaveCddbLocally()
 }
 
 
-void K3b::AudioCdView::slotSelect()
+void K3b::AudioCdView::slotCheck()
 {
-    foreach( int track, selectedTrackIndices( d->trackView ) ) {
-        d->trackModel->setTrackChecked( track, true );
+    foreach( const QModelIndex& index, d->trackView->selectionModel()->selectedRows() ) {
+        d->trackModel->setData( index, Qt::Checked, Qt::CheckStateRole );
     }
 }
 
 
-void K3b::AudioCdView::slotDeselect()
+void K3b::AudioCdView::slotUncheck()
 {
-    foreach( int track, selectedTrackIndices( d->trackView ) ) {
-        d->trackModel->setTrackChecked( track, false );
+    foreach( const QModelIndex& index, d->trackView->selectionModel()->selectedRows() ) {
+        d->trackModel->setData( index, Qt::Unchecked, Qt::CheckStateRole );
+    }
+}
+
+
+void K3b::AudioCdView::slotToggle()
+{
+    Qt::CheckState overallState = overallCheckState( d->trackView );
+    if( overallState == Qt::Checked )
+        overallState = Qt::Unchecked;
+    else
+        overallState = Qt::Checked;
+    
+    foreach( const QModelIndex& index, d->trackView->selectionModel()->selectedRows() ) {
+        d->trackModel->setData( index, overallState, Qt::CheckStateRole );
     }
 }
 
