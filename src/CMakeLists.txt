@@ -209,7 +209,6 @@ set(k3b_SRCS
   k3bmediaselectiondialog.cpp
   k3bdiskinfoview.cpp
   k3btimeoutwidget.cpp
-  k3bminibutton.cpp
   k3bthemedheader.cpp
   k3bthemedlabel.cpp
   k3blsofwrapper.cpp
