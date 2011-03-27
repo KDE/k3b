@@ -1,7 +1,7 @@
 /* 
  *
  * Copyright (C) 2006 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -32,11 +32,16 @@ namespace K3b {
 
         KActionCollection* actionCollection() const;
 
+    protected:
+        virtual bool eventFilter( QObject* obj, QEvent* event );
+
     private Q_SLOTS:
         void slotStartRipping();
         void slotContextMenu( const QPoint& pos );
+        void slotContextMenuAboutToShow();
         void slotCheck();
         void slotUncheck();
+        void slotToggle();
         void slotShowFiles();
 
     private:

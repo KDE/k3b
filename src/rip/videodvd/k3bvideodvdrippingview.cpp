@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2006-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -27,14 +27,16 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
+#include "k3bmodelutils.h"
 
-#include <QCursor>
-#include <QDesktopServices>
-#include <QVBoxLayout>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLayout>
-#include <QTreeView>
+#include <QtGui/QCursor>
+#include <QtGui/QDesktopServices>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QHeaderView>
+#include <QtGui/QKeyEvent>
+#include <QtGui/QLabel>
+#include <QtGui/QLayout>
+#include <QtGui/QTreeView>
 
 #include <KAction>
 #include <KActionCollection>
@@ -46,6 +48,9 @@
 #include <KToolBar>
 #include <KToolBarSpacerAction>
 #include <KUrlLabel>
+
+
+namespace mu = K3b::ModelUtils;
 
 
 class K3b::VideoDVDRippingView::Private
@@ -88,22 +93,16 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     d->delegate = new VideoDVDTitleDelegate( this );
     d->model = new VideoDVDTitleModel( this );
 
-    initActions();
-
-    d->toolBox->addAction( actionCollection()->action("start_rip") );
-    d->toolBox->addSeparator();
-    d->toolBox->addWidget( showFilesLabel );
-    d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
-    d->toolBox->addWidget( d->labelLength );
-
     // the title view
     // ----------------------------------------------------------------------------------
     d->view = new QTreeView( mainWidget() );
     d->view->setItemDelegate( d->delegate );
+    d->view->setSelectionMode( QAbstractItemView::ExtendedSelection );
     d->view->setModel( d->model );
     d->view->setRootIsDecorated( false );
     d->view->header()->setResizeMode( QHeaderView::ResizeToContents );
     d->view->setContextMenuPolicy( Qt::CustomContextMenu );
+    d->view->installEventFilter( this );
     connect( d->view, SIGNAL(customContextMenuRequested(const QPoint&)),
              this, SLOT(slotContextMenu(const QPoint&)) );
 
@@ -117,6 +116,14 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
 
     setLeftPixmap( K3b::Theme::MEDIA_LEFT );
     setRightPixmap( K3b::Theme::MEDIA_VIDEO );
+
+    initActions();
+
+    d->toolBox->addAction( actionCollection()->action("start_rip") );
+    d->toolBox->addSeparator();
+    d->toolBox->addWidget( showFilesLabel );
+    d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
+    d->toolBox->addWidget( d->labelLength );
 }
 
 
@@ -129,6 +136,28 @@ K3b::VideoDVDRippingView::~VideoDVDRippingView()
 KActionCollection* K3b::VideoDVDRippingView::actionCollection() const
 {
     return d->actionCollection;
+}
+
+
+bool K3b::VideoDVDRippingView::eventFilter( QObject* obj, QEvent* event )
+{
+    if( event->type() == QEvent::KeyPress ) {
+        // Due to limitation of default implementation of QTreeView
+        // checking items with Space key doesn't work for columns other than first.
+        // Using below code a user can do that.
+        QKeyEvent* keyEvent = static_cast<QKeyEvent*>( event );
+        if( keyEvent->key() == Qt::Key_Space ) {
+            if( keyEvent->modifiers().testFlag( Qt::ControlModifier ) ) {
+                QItemSelectionModel* selectionModel = d->view->selectionModel();
+                QModelIndex current = d->view->currentIndex();
+                selectionModel->select( current, QItemSelectionModel::Toggle | QItemSelectionModel::Rows );
+            } else {
+                slotToggle();
+            }
+            return true;
+        }
+    }
+    return MediaContentsView::eventFilter( obj, event );
 }
 
 
@@ -153,6 +182,19 @@ void K3b::VideoDVDRippingView::slotContextMenu( const QPoint& pos )
 }
 
 
+void K3b::VideoDVDRippingView::slotContextMenuAboutToShow()
+{
+    if ( d->view->selectionModel()->hasSelection() ) {
+        const Qt::CheckState commonState = mu::commonCheckState( d->view->selectionModel()->selectedRows() );
+        actionCollection()->action("check_tracks")->setVisible( commonState != Qt::Checked );
+        actionCollection()->action("uncheck_tracks")->setVisible( commonState != Qt::Unchecked );
+    } else {
+        actionCollection()->action("check_tracks")->setVisible( false );
+        actionCollection()->action("uncheck_tracks")->setVisible( false );
+    }
+}
+
+
 void K3b::VideoDVDRippingView::slotCheck()
 {
     Q_FOREACH( const QModelIndex& index, d->view->selectionModel()->selectedRows() )
@@ -168,6 +210,12 @@ void K3b::VideoDVDRippingView::slotUncheck()
     {
         d->model->setData( index, Qt::Unchecked, Qt::CheckStateRole );
     }
+}
+
+
+void K3b::VideoDVDRippingView::slotToggle()
+{
+    mu::toggleCommonCheckState( d->model, d->view->selectionModel()->selectedRows() );
 }
 
 
@@ -281,25 +329,15 @@ void K3b::VideoDVDRippingView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
 
-    KAction* actionSelectAll = new KAction( this );
-    actionSelectAll->setText( i18n("Check All") );
-    connect( actionSelectAll, SIGNAL( triggered() ), d->model, SLOT( checkAll() ) );
-    actionCollection()->addAction( "check_all", actionSelectAll );
+    KAction* actionCheck = new KAction( this );
+    actionCheck->setText( i18n("Check Tracks") );
+    connect( actionCheck, SIGNAL( triggered() ), this, SLOT( slotCheck() ) );
+    actionCollection()->addAction( "check_tracks", actionCheck );
 
-    KAction* actionDeselectAll = new KAction( this );
-    actionDeselectAll->setText( i18n("Uncheck All") );
-    connect( actionDeselectAll, SIGNAL( triggered() ), d->model, SLOT( uncheckAll() ) );
-    actionCollection()->addAction( "uncheck_all", actionSelectAll );
-
-    KAction* actionSelect = new KAction( this );
-    actionSelect->setText( i18n("Check Track") );
-    connect( actionSelect, SIGNAL( triggered() ), this, SLOT( slotCheck() ) );
-    actionCollection()->addAction( "select_track", actionSelect );
-
-    KAction* actionDeselect = new KAction( this );
-    actionDeselect->setText( i18n("Uncheck Track") );
-    connect( actionDeselect, SIGNAL( triggered() ), this, SLOT( slotUncheck() ) );
-    actionCollection()->addAction( "deselect_track", actionDeselect );
+    KAction* actionUncheck = new KAction( this );
+    actionUncheck->setText( i18n("Uncheck Tracks") );
+    connect( actionUncheck, SIGNAL( triggered() ), this, SLOT( slotUncheck() ) );
+    actionCollection()->addAction( "uncheck_tracks", actionUncheck );
 
     KAction* actionStartRip = new KAction( this );
     actionStartRip->setText( i18n("Start Ripping") );
@@ -314,15 +352,18 @@ void K3b::VideoDVDRippingView::initActions()
                                        "and extras it is recommended to use the K3b Copy tool.") );
     connect( actionStartRip, SIGNAL( triggered() ), this, SLOT( slotStartRipping() ) );
     actionCollection()->addAction( "start_rip", actionStartRip );
+    
+    KAction* actionSelectAll = KStandardAction::selectAll( d->view, SLOT(selectAll()), actionCollection() );
 
     // setup the popup menu
     d->popupMenu = new KMenu( this );
-    d->popupMenu->addAction( actionSelect );
-    d->popupMenu->addAction( actionDeselect );
+    d->popupMenu->addAction( actionCheck );
+    d->popupMenu->addAction( actionUncheck );
+    d->popupMenu->addSeparator();
     d->popupMenu->addAction( actionSelectAll );
-    d->popupMenu->addAction( actionDeselectAll );
     d->popupMenu->addSeparator();
     d->popupMenu->addAction( actionStartRip );
+    connect( d->popupMenu, SIGNAL(aboutToShow()), this, SLOT(slotContextMenuAboutToShow()) );
 }
 
 
