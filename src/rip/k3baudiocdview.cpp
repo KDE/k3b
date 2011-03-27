@@ -31,6 +31,7 @@
 #include "k3bthemedlabel.h"
 #include "k3bcddb.h"
 #include "k3bmediacache.h"
+#include "k3bmodelutils.h"
 
 #include <KAction>
 #include <KActionCollection>
@@ -65,49 +66,7 @@
 #include <libkcddb/client.h>
 #include "categories.h"
 
-
-namespace
-{    
-    Qt::CheckState overallCheckState( QAbstractItemView* view )
-    {
-        int checked = 0;
-        const QModelIndexList selection = view->selectionModel()->selectedRows();
-        foreach( const QModelIndex& index, selection ) {
-            if( index.data( Qt::CheckStateRole ).toInt() == Qt::Checked ) {
-                ++checked;
-            }
-        }
-        
-        if( checked == 0 )
-            return Qt::Unchecked;
-        else if( checked == selection.count() )
-            return Qt::Checked;
-        else
-            return Qt::PartiallyChecked;
-    }
-    
-    QString commonData( const QModelIndexList& indexes, int role = Qt::DisplayRole )
-    {
-        if( !indexes.isEmpty() ) {
-            QString firstData = indexes.first().data( role ).toString();
-            for( int i = 1; i < indexes.size(); ++i ) {
-                if( indexes[i].data( role ).toString() != firstData )
-                    return QString();
-            }
-            return firstData;
-        }
-        return QString();
-    }
-    
-    void setCommonData( QAbstractItemModel* model, const QModelIndexList& indexes, const QString& value, int role = Qt::EditRole )
-    {
-        Q_FOREACH( QModelIndex index, indexes ) {
-            if( !value.isEmpty() || indexes.size() == 1 )
-                model->setData( index, value, role );
-        }
-    }
-} // namespace
-
+namespace mu = K3b::ModelUtils;
 
 class K3b::AudioCdView::Private
 {
@@ -337,12 +296,10 @@ void K3b::AudioCdView::slotContextMenu( const QPoint& p )
 void K3b::AudioCdView::slotContextMenuAboutToShow()
 {
     if ( d->trackView->selectionModel()->hasSelection() ) {
-        const Qt::CheckState overallState = overallCheckState( d->trackView );
-        kDebug() << "overallState:" << overallState;
-        actionCollection()->action("check_tracks")->setVisible( overallState != Qt::Checked );
-        actionCollection()->action("uncheck_tracks")->setVisible( overallState != Qt::Unchecked );
+        const Qt::CheckState commonState = mu::commonCheckState( d->trackView->selectionModel()->selectedRows() );
+        actionCollection()->action("check_tracks")->setVisible( commonState != Qt::Checked );
+        actionCollection()->action("uncheck_tracks")->setVisible( commonState != Qt::Unchecked );
     } else {
-        kDebug() << "Hiding";
         actionCollection()->action("check_tracks")->setVisible( false );
         actionCollection()->action("uncheck_tracks")->setVisible( false );
     }
@@ -388,9 +345,9 @@ void K3b::AudioCdView::slotEditTrackCddb()
         dialog.setModal(true);
         QWidget* w = new QWidget( &dialog );
 
-        KLineEdit* editTitle = new KLineEdit( commonData( selection, AudioTrackModel::TitleRole ), w );
-        KLineEdit* editArtist = new KLineEdit( commonData( selection, AudioTrackModel::ArtistRole ), w );
-        KLineEdit* editExtInfo = new KLineEdit( commonData( selection, AudioTrackModel::CommentRole ), w );
+        KLineEdit* editTitle = new KLineEdit( mu::commonText( selection, AudioTrackModel::TitleRole ), w );
+        KLineEdit* editArtist = new KLineEdit( mu::commonText( selection, AudioTrackModel::ArtistRole ), w );
+        KLineEdit* editExtInfo = new KLineEdit( mu::commonText( selection, AudioTrackModel::CommentRole ), w );
         
         QFrame* line = new QFrame( w );
         line->setFrameShape( QFrame::HLine );
@@ -405,9 +362,9 @@ void K3b::AudioCdView::slotEditTrackCddb()
         dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
         if( dialog.exec() == QDialog::Accepted ) {
-            setCommonData( d->trackModel, selection, editTitle->text(), AudioTrackModel::TitleRole );
-            setCommonData( d->trackModel, selection, editArtist->text(), AudioTrackModel::ArtistRole );
-            setCommonData( d->trackModel, selection, editExtInfo->text(), AudioTrackModel::CommentRole );
+            mu::setCommonText( d->trackModel, selection, editTitle->text(), AudioTrackModel::TitleRole );
+            mu::setCommonText( d->trackModel, selection, editArtist->text(), AudioTrackModel::ArtistRole );
+            mu::setCommonText( d->trackModel, selection, editExtInfo->text(), AudioTrackModel::CommentRole );
         }
     }
 }
@@ -567,15 +524,7 @@ void K3b::AudioCdView::slotUncheck()
 
 void K3b::AudioCdView::slotToggle()
 {
-    Qt::CheckState overallState = overallCheckState( d->trackView );
-    if( overallState == Qt::Checked )
-        overallState = Qt::Unchecked;
-    else
-        overallState = Qt::Checked;
-    
-    foreach( const QModelIndex& index, d->trackView->selectionModel()->selectedRows() ) {
-        d->trackModel->setData( index, overallState, Qt::CheckStateRole );
-    }
+    mu::toggleCommonCheckState( d->trackModel, d->trackView->selectionModel()->selectedRows() );
 }
 
 

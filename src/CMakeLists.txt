@@ -216,6 +216,7 @@ set(k3b_SRCS
   k3baction.cpp
   k3bdevicemenu.cpp
   k3bviewcolumnadjuster.cpp
+  k3bmodelutils.cpp
   )
 
 if(ENABLE_DVD_RIPPING)
