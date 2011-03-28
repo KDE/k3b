@@ -36,6 +36,7 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QLabel>
 #include <QtGui/QLayout>
+#include <QtGui/QStyle>
 #include <QtGui/QTreeView>
 
 #include <KAction>
@@ -81,6 +82,8 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     d->toolBox = new KToolBar( mainWidget() );
 
     KUrlLabel* showFilesLabel = new KUrlLabel( d->toolBox );
+    showFilesLabel->setContentsMargins( style()->pixelMetric( QStyle::PM_LayoutLeftMargin ), 0,
+                                        style()->pixelMetric( QStyle::PM_LayoutRightMargin ), 0 );
     showFilesLabel->setText( i18n("Show files") );
     showFilesLabel->setWhatsThis( i18n("Shows plain Video DVD vob files from the DVD "
                                        "(including decryption) for further processing with another application") );
@@ -88,7 +91,8 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
 
     d->labelLength = new QLabel( d->toolBox );
     d->labelLength->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-    d->labelLength->setContentsMargins( 0, 0, style()->pixelMetric( QStyle::PM_LayoutRightMargin ), 0 );
+    d->labelLength->setContentsMargins( style()->pixelMetric( QStyle::PM_LayoutLeftMargin ), 0,
+                                        style()->pixelMetric( QStyle::PM_LayoutRightMargin ), 0 );
 
     d->delegate = new VideoDVDTitleDelegate( this );
     d->model = new VideoDVDTitleModel( this );
