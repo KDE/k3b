@@ -251,13 +251,12 @@ target_link_libraries(k3b
   ${KDE4_KPTY_LIBS}
   ${KDE4_SOLID_LIBS}
   ${SAMPLERATE_LIBRARIES}
+  ${CMAKE_DL_LIBS}
   k3bdevice
 )
-if(NOT WIN32)
-	target_link_libraries(k3b dl)
-else(NOT WIN32)
+if(WIN32)
 	target_link_libraries(k3b uuid ole32)
-endif(NOT WIN32)
+endif(WIN32)
 
 if(ENABLE_DVD_RIPPING)
   target_link_libraries(k3b ${DVDREAD_LIBRARIES})
