@@ -251,7 +251,6 @@ target_link_libraries(k3b
   ${KDE4_KPTY_LIBS}
   ${KDE4_SOLID_LIBS}
   ${SAMPLERATE_LIBRARIES}
-  ${CMAKE_DL_LIBS}
   k3bdevice
 )
 if(WIN32)

@@ -155,10 +155,6 @@ namespace K3b {
 
         class Private;
         Private* d;
-
-        static void* s_libInterface;
-        static void* s_libParanoia;
-        static int s_counter;
     };
 }
 

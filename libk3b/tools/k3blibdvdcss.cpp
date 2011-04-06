@@ -20,52 +20,12 @@
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
+#include <kglobal.h>
+
 #include <qfile.h>
+#include <qlibrary.h>
 #include <qpair.h>
 
-// TODO replace dlopen/dlsym/dlclose by platform independent QLibrary
-#ifdef Q_OS_WIN32
-
-#include <QLibrary>
-
-inline void *dlopen(char *fileName, int b)
-{
-	static QLibrary lib;
-	lib.setFileName(fileName);
-	if (lib.isLoaded())
-		return &lib;
-	if (lib.load())
-		return &lib;
-	return 0;
-}
-
-inline void *dlsym(void *a, char *b)
-{
-	QLibrary *lib = (QLibrary *)a;
-	return lib->resolve(b);
-}
-
-inline void dlclose(void *a)
-{
-	QLibrary *lib = (QLibrary *)a;
-	lib->unload();
-}
-
-#define RTLD_GLOBAL 0
-#define RTLD_NOW 0
-#define RTLD_LAZY 0
-#else
-#include <dlfcn.h>
-#endif
-
-#ifdef Q_OS_WIN32
-#define LIBDVDCSS_NAME "dvdcss.dll"
-#else
-#define LIBDVDCSS_NAME "libdvdcss.so.2"
-#endif
-
-void* K3b::LibDvdCss::s_libDvdCss = 0;
-int K3b::LibDvdCss::s_counter = 0;
 
 
 extern "C" {
@@ -77,6 +37,9 @@ extern "C" {
     int (*k3b_dvdcss_seek)( dvdcss_t, int, int );
     int (*k3b_dvdcss_read)( dvdcss_t, void*, int, int );
 }
+
+
+K_GLOBAL_STATIC(QLibrary, s_libDvdCss)
 
 
 
@@ -97,7 +60,6 @@ public:
 K3b::LibDvdCss::LibDvdCss()
 {
     d = new Private();
-    s_counter++;
 }
 
 
@@ -105,11 +67,6 @@ K3b::LibDvdCss::~LibDvdCss()
 {
     close();
     delete d;
-    s_counter--;
-    if( s_counter == 0 ) {
-        dlclose( s_libDvdCss );
-        s_libDvdCss = 0;
-    }
 }
 
 
@@ -315,26 +272,27 @@ bool K3b::LibDvdCss::crackAllKeys()
 
 K3b::LibDvdCss* K3b::LibDvdCss::create()
 {
-    if( s_libDvdCss == 0 ) {
-        s_libDvdCss = dlopen( LIBDVDCSS_NAME, RTLD_LAZY|RTLD_GLOBAL );
-        if( s_libDvdCss ) {
-            k3b_dvdcss_open = (dvdcss_t (*)(char*))dlsym( s_libDvdCss, "dvdcss_open" );
-            k3b_dvdcss_close = (int (*)( dvdcss_t ))dlsym( s_libDvdCss, "dvdcss_close" );
-            k3b_dvdcss_seek = (int (*)( dvdcss_t, int, int ))dlsym( s_libDvdCss, "dvdcss_seek" );
-            k3b_dvdcss_read = (int (*)( dvdcss_t, void*, int, int ))dlsym( s_libDvdCss, "dvdcss_read" );
+    if( !s_libDvdCss->isLoaded() ) {
+        s_libDvdCss->setFileName( "dvdcss" );
+        s_libDvdCss->setLoadHints( QLibrary::ExportExternalSymbolsHint );
+
+        if( s_libDvdCss->load() ) {
+            k3b_dvdcss_open = (dvdcss_t (*)(char*))s_libDvdCss->resolve( "dvdcss_open" );
+            k3b_dvdcss_close = (int (*)( dvdcss_t ))s_libDvdCss->resolve( "dvdcss_close" );
+            k3b_dvdcss_seek = (int (*)( dvdcss_t, int, int ))s_libDvdCss->resolve( "dvdcss_seek" );
+            k3b_dvdcss_read = (int (*)( dvdcss_t, void*, int, int ))s_libDvdCss->resolve( "dvdcss_read" );
 
             if( !k3b_dvdcss_open || !k3b_dvdcss_close || !k3b_dvdcss_seek || !k3b_dvdcss_read ) {
                 kDebug() << "(K3b::LibDvdCss) unable to resolve libdvdcss.";
-                dlclose( s_libDvdCss );
-                s_libDvdCss = 0;
+                s_libDvdCss->unload();
+                return 0;
             }
         }
-        else
+        else {
             kDebug() << "(K3b::LibDvdCss) unable to load libdvdcss.";
+            return 0;
+        }
     }
 
-    if( s_libDvdCss )
-        return new K3b::LibDvdCss();
-    else
-        return 0;
+    return new K3b::LibDvdCss();
 }

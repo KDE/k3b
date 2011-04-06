@@ -76,9 +76,6 @@ namespace K3b {
         Private* d;
 
         LibDvdCss();
-
-        static void* s_libDvdCss;
-        static int s_counter;
     };
 }
 

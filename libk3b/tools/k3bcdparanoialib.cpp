@@ -22,62 +22,19 @@
 #include "k3bmsf.h"
 
 #include <KDebug>
-
-// TODO replace dlopen/dlsym/dlclose by platform independent QLibrary
-#ifdef Q_OS_WIN32
-
-#include <QLibrary>
-
-inline void *dlopen(char *fileName, int b)
-{
-	static QLibrary lib;
-	lib.setFileName(fileName);
-	if (lib.isLoaded())
-		return &lib;
-	if (lib.load())
-		return &lib;
-	return 0;
-}
-
-inline void *dlsym(void *a, const char *b)
-{
-	QLibrary *lib = (QLibrary *)a;
-	return lib->resolve(b);
-}
-
-inline void dlclose(void *a)
-{
-	QLibrary *lib = (QLibrary *)a;
-	lib->unload();
-}
-
-#define RTLD_GLOBAL 0
-#define RTLD_NOW 0
-#define RTLD_LAZY 0
-
-typedef short int int16_t;
-#else
-#include <dlfcn.h>
-#endif
+#include <KGlobal>
 
 #include <QFile>
+#include <QLibrary>
 #include <QMutex>
 #include <QMutexLocker>
 
 #ifdef Q_OS_WIN32
-#define LIBCDIO_CDDA "cdio_cdda.dll"
-#define LIBCDIO_PARANOIA "cdio_paranoia.dll"
-#else
-#define LIBCDIO_CDDA "libcdio_cdda.so"
-#define LIBCDIO_PARANOIA "libcdio_paranoia.so.0"
+typedef short int int16_t;
 #endif
 
 static bool s_haveLibCdio = false;
 
-
-void* K3b::CdparanoiaLib::s_libInterface = 0;
-void* K3b::CdparanoiaLib::s_libParanoia = 0;
-int K3b::CdparanoiaLib::s_counter = 0;
 
 
 #define CDDA_IDENTIFY          s_haveLibCdio ? "cdio_cddap_identify" : "cdda_identify"
@@ -109,6 +66,10 @@ int K3b::CdparanoiaLib::s_counter = 0;
 #define PARANOIA_CB_FIXUP_DROPPED 10
 #define PARANOIA_CB_FIXUP_DUPED   11
 #define PARANOIA_CB_READERR       12
+
+
+K_GLOBAL_STATIC(QLibrary, s_libInterface)
+K_GLOBAL_STATIC(QLibrary, s_libParanoia)
 
 
 
@@ -434,41 +395,30 @@ public:
 K3b::CdparanoiaLib::CdparanoiaLib()
 {
     d = new Private();
-    s_counter++;
 }
 
 
 K3b::CdparanoiaLib::~CdparanoiaLib()
 {
     delete d;
-    s_counter--;
-    if( s_counter == 0 ) {
-        K3b::CdparanoiaLibData::freeAll();
-
-        // cleanup the dynamically loaded lib
-        dlclose( s_libInterface );
-        dlclose( s_libParanoia );
-        s_libInterface = 0;
-        s_libParanoia = 0;
-    }
 }
 
 
 bool K3b::CdparanoiaLib::load()
 {
-    cdda_cdda_identify = (cdrom_drive* (*) (const char*, int, char**))dlsym( s_libInterface, CDDA_IDENTIFY );
-    cdda_cdda_open = (int (*) (cdrom_drive*))dlsym( s_libInterface, CDDA_OPEN );
-    cdda_cdda_close = (int (*) (cdrom_drive*))dlsym( s_libInterface, CDDA_CLOSE );
-    cdda_cdda_track_firstsector = (long (*)(cdrom_drive*, int))dlsym( s_libInterface, CDDA_TRACK_FIRSTSECTOR );
-    cdda_cdda_track_lastsector = (long (*)(cdrom_drive*, int))dlsym( s_libInterface, CDDA_TRACK_LASTSECTOR );
-    cdda_cdda_verbose_set = (void (*)(cdrom_drive *d,int err_action, int mes_action))dlsym( s_libInterface, CDDA_VERBOSE_SET );
-    cdda_cdda_disc_firstsector = (long (*)(cdrom_drive *d))dlsym( s_libInterface, CDDA_DISC_FIRSTSECTOR );
+    cdda_cdda_identify = (cdrom_drive* (*) (const char*, int, char**))s_libInterface->resolve( CDDA_IDENTIFY );
+    cdda_cdda_open = (int (*) (cdrom_drive*))s_libInterface->resolve( CDDA_OPEN );
+    cdda_cdda_close = (int (*) (cdrom_drive*))s_libInterface->resolve( CDDA_CLOSE );
+    cdda_cdda_track_firstsector = (long (*)(cdrom_drive*, int))s_libInterface->resolve( CDDA_TRACK_FIRSTSECTOR );
+    cdda_cdda_track_lastsector = (long (*)(cdrom_drive*, int))s_libInterface->resolve( CDDA_TRACK_LASTSECTOR );
+    cdda_cdda_verbose_set = (void (*)(cdrom_drive *d,int err_action, int mes_action))s_libInterface->resolve( CDDA_VERBOSE_SET );
+    cdda_cdda_disc_firstsector = (long (*)(cdrom_drive *d))s_libInterface->resolve( CDDA_DISC_FIRSTSECTOR );
 
-    cdda_paranoia_init = (cdrom_paranoia* (*)(cdrom_drive*))dlsym( s_libParanoia, PARANOIA_INIT );
-    cdda_paranoia_free = (void (*)(cdrom_paranoia *p))dlsym( s_libParanoia, PARANOIA_FREE );
-    cdda_paranoia_modeset = (void (*)(cdrom_paranoia *p, int mode))dlsym( s_libParanoia, PARANOIA_MODESET );
-    cdda_paranoia_read_limited = (int16_t* (*)(cdrom_paranoia *p, void(*callback)(long,int), int))dlsym( s_libParanoia, PARANOIA_READ_LIMITED );
-    cdda_paranoia_seek = (long (*)(cdrom_paranoia *p,long seek,int mode))dlsym( s_libParanoia, PARANOIA_SEEK );
+    cdda_paranoia_init = (cdrom_paranoia* (*)(cdrom_drive*))s_libParanoia->resolve( PARANOIA_INIT );
+    cdda_paranoia_free = (void (*)(cdrom_paranoia *p))s_libParanoia->resolve( PARANOIA_FREE );
+    cdda_paranoia_modeset = (void (*)(cdrom_paranoia *p, int mode))s_libParanoia->resolve( PARANOIA_MODESET );
+    cdda_paranoia_read_limited = (int16_t* (*)(cdrom_paranoia *p, void(*callback)(long,int), int))s_libParanoia->resolve( PARANOIA_READ_LIMITED );
+    cdda_paranoia_seek = (long (*)(cdrom_paranoia *p,long seek,int mode))s_libParanoia->resolve( PARANOIA_SEEK );
 
     // check if all symbols could be resoled
     if( cdda_cdda_identify == 0 ) {
@@ -529,41 +479,40 @@ bool K3b::CdparanoiaLib::load()
 K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
 {
     // check if libcdda_interface is avalilable
-    if( s_libInterface == 0 ) {
+    if( !s_libInterface->isLoaded() ) {
         s_haveLibCdio = false;
-#ifndef Q_OS_WIN32
-        s_libInterface = dlopen( "libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
 
-        // try the redhat & Co. location
-        if( s_libInterface == 0 )
-            s_libInterface = dlopen( "cdda/libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
-#endif
-        // try the new cdio lib
-        if( s_libInterface == 0 ) {
-            s_libInterface = dlopen( LIBCDIO_CDDA, RTLD_NOW|RTLD_GLOBAL );
+        s_libInterface->setFileName( "cdda_interface" );
+        s_libInterface->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
+
+        bool load_ok = s_libInterface->load();
+
+        if (!load_ok) {
+            // try the new cdio lib
+            s_libInterface->setFileName( "cdio_cdda" );
             s_haveLibCdio = true;
+            load_ok = s_libInterface->load();
         }
 
-        if( s_libInterface == 0 ) {
+        if( !load_ok ) {
             kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_interface. ";
             return 0;
         }
 
-#ifndef Q_OS_WIN32
-        s_libParanoia = dlopen( "libcdda_paranoia.so.0", RTLD_NOW );
+        s_libParanoia->setFileName( "cdda_paranoia" );
+        s_libParanoia->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
 
-        // try the redhat & Co. location
-        if( s_libParanoia == 0 )
-            s_libParanoia = dlopen( "cdda/libcdda_paranoia.so.0", RTLD_NOW );
-#endif
-        // try the new cdio lib
-        if( s_haveLibCdio && s_libParanoia == 0 )
-            s_libParanoia = dlopen( LIBCDIO_PARANOIA, RTLD_NOW );
+        load_ok = s_libParanoia->load();
 
-        if( s_libParanoia == 0 ) {
+        if ( s_haveLibCdio && !load_ok ) {
+            // try the new cdio lib
+            s_libParanoia->setFileName( "cdio_paranoia" );
+            load_ok = s_libParanoia->load();
+        }
+
+        if( !load_ok ) {
             kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_paranoia. ";
-            dlclose( s_libInterface );
-            s_libInterface = 0;
+            s_libInterface->unload();
             return 0;
         }
     }
@@ -571,6 +520,8 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
     K3b::CdparanoiaLib* lib = new K3b::CdparanoiaLib();
     if( !lib->load() ) {
         kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve all symbols!";
+        s_libInterface->unload();
+        s_libParanoia->unload();
         delete lib;
         return 0;
     }
