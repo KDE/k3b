@@ -25,7 +25,7 @@ kde4_add_plugin(k3blameencoder
 target_link_libraries(k3blameencoder
   ${KDE4_KDECORE_LIBS}
   k3b k3bdevice
-  mp3lame)
+  ${LAME_LIBRARIES})
 
 install(TARGETS
   k3blameencoder kcm_k3blameencoder
