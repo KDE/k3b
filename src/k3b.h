@@ -217,6 +217,8 @@ namespace K3b {
          */
         void initStatusBar();
 
+        void embedDialog( QWidget* );
+
         class Private;
         Private* d;
     };

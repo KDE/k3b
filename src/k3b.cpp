@@ -605,6 +605,14 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
 }
 
 
+void K3b::MainWindow::embedDialog(QWidget* dlg )
+{
+    dlg->setAttribute( Qt::WA_DeleteOnClose );
+    d->mainStack->addWidget( dlg );
+    d->mainStack->setCurrentWidget( dlg );
+}
+
+
 K3b::View* K3b::MainWindow::activeView() const
 {
     if( Doc* doc = activeDoc() )
@@ -1304,16 +1312,16 @@ void K3b::MainWindow::slotWarningMessage(const QString& message)
 
 void K3b::MainWindow::slotWriteImage()
 {
-    K3b::ImageWritingDialog d( this );
-    d.exec();
+    K3b::ImageWritingDialog* dlg = new K3b::ImageWritingDialog( this );
+    embedDialog( dlg );
 }
 
 
 void K3b::MainWindow::slotWriteImage( const KUrl& url )
 {
-    K3b::ImageWritingDialog d( this );
-    d.setImage( url );
-    d.exec();
+    K3b::ImageWritingDialog* dlg = new K3b::ImageWritingDialog( this );
+    dlg->setImage( url );
+    embedDialog( dlg );
 }
 
 
@@ -1354,9 +1362,9 @@ void K3b::MainWindow::slotK3bSetup()
 
 void K3b::MainWindow::formatMedium( K3b::Device::Device* dev )
 {
-    K3b::MediaFormattingDialog d( this );
-    d.setDevice( dev );
-    d.exec();
+    K3b::MediaFormattingDialog* dlg = new K3b::MediaFormattingDialog( this );
+    dlg->setDevice( dev );
+    embedDialog( dlg );
 }
 
 
@@ -1368,9 +1376,9 @@ void K3b::MainWindow::slotFormatMedium()
 
 void K3b::MainWindow::mediaCopy( K3b::Device::Device* dev )
 {
-    K3b::MediaCopyDialog d( this );
-    d.setReadingDevice( dev );
-    d.exec();
+    K3b::MediaCopyDialog* dlg = new K3b::MediaCopyDialog( this );
+    dlg->setReadingDevice( dev );
+    embedDialog( dlg );
 }
 
 
