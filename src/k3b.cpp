@@ -57,7 +57,7 @@
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdview.h"
 #include "k3bview.h"
-#include "k3bwelcomewidget.h"
+//#include "k3bwelcomewidget.h"
 #include "misc/k3bimagewritingdialog.h"
 #include "misc/k3bmediacopydialog.h"
 #include "misc/k3bmediaformattingdialog.h"
@@ -92,6 +92,8 @@
 #include <kio/deletejob.h>
 
 // include files for QT
+#include <QDeclarativeContext>
+#include <QDeclarativeView>
 #include <QDir>
 #include <QDockWidget>
 #include <QFile>
@@ -172,6 +174,22 @@ namespace {
 
 } // namespace
 
+namespace K3b {
+
+class QMLWelcomeWidget : public QDeclarativeView
+{
+public:
+    QMLWelcomeWidget( KActionCollection* collection, QWidget* parent = 0 )
+    : QDeclarativeView( parent )
+    {
+        setResizeMode( SizeRootObjectToView );
+        setSource( QUrl(KStandardDirs::locate("appdata", "welcomescreen/test.qml" ) ) );
+        rootContext()->setContextProperty("copyCdAction", collection->action("tools_copy_medium"));
+        rootContext()->setContextProperty("audioCdAction", collection->action("file_new_audio"));
+    }
+};
+
+} // namespace
 
 class K3b::MainWindow::Private
 {
@@ -204,7 +222,7 @@ public:
 
     K3b::Doc* lastDoc;
 
-    K3b::WelcomeWidget* welcomeWidget;
+    K3b::QMLWelcomeWidget* welcomeWidget;
     QSplitter* mainSplitter;
     QStackedWidget* mainStack;
     QWidget* documentHull;
@@ -245,8 +263,8 @@ K3b::MainWindow::MainWindow()
              this, SLOT(showDiskInfo(K3b::Device::Device*)) );
 
     // we need the actions for the welcomewidget
-    KConfigGroup grp( config(), "Welcome Widget" );
-    d->welcomeWidget->loadConfig( grp );
+    //KConfigGroup grp( config(), "Welcome Widget" );
+    //d->welcomeWidget->loadConfig( grp );
 
     // fill the tabs action menu
     d->documentTab->addAction( d->actionFileSave );
@@ -520,7 +538,7 @@ void K3b::MainWindow::initView()
     connect( d->documentTab, SIGNAL(currentChanged(int)), this, SLOT(slotCurrentDocChanged()) );
     connect( d->documentTab, SIGNAL(tabCloseRequested(Doc*)), this, SLOT(slotFileClose(Doc*)) );
 
-    d->welcomeWidget = new K3b::WelcomeWidget( this, d->mainStack );
+    d->welcomeWidget = new K3b::QMLWelcomeWidget( actionCollection(), d->mainStack ); //new K3b::WelcomeWidget( this, d->mainStack );
     d->mainStack->addWidget( d->welcomeWidget );
     d->mainStack->setCurrentWidget( d->welcomeWidget );
     // ---------------------------------------------------------------------------------------------
@@ -683,8 +701,8 @@ void K3b::MainWindow::saveOptions()
 
     k3bcore->saveSettings( config() );
 
-    KConfigGroup grp(config(), "Welcome Widget" );
-    d->welcomeWidget->saveConfig( grp );
+    //KConfigGroup grp(config(), "Welcome Widget" );
+    //d->welcomeWidget->saveConfig( grp );
 
     KConfigGroup grpOption( config(), "General Options" );
     grpOption.writeEntry( "Show Document Header", d->actionViewDocumentHeader->isChecked() );
