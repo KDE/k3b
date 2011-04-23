@@ -261,11 +261,13 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
     bool cdrecordOnTheFly = false;
     bool cdrecordCdText = false;
     bool cdrecordBluRay = false;
+    bool cdrecordWodim = false;
     bool growisofsBluRay = false;
     if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
         cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
         cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
         cdrecordBluRay = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" );
+        cdrecordWodim = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" );
     }
     if( k3bcore->externalBinManager()->binObject("growisofs") ) {
         growisofsBluRay = k3bcore->externalBinManager()->binObject("growisofs")->hasFeature( "blu-ray" );
@@ -316,10 +318,16 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
                 d->usedWritingApp = WritingAppGrowisofs;
             }
             else if( mediaType & Device::MEDIA_DVD_ALL ) {
-                d->usedWritingApp = WritingAppCdrecord;
+                // wodim (at least on fedora) doesn't do DVDs all that well, use growisofs instead
+                if ( cdrecordWodim ) {
+                    d->usedWritingApp = WritingAppGrowisofs;
+                }
+                else {
+                    d->usedWritingApp = WritingAppCdrecord;
+                }
             }
             else if( mediaType & Device::MEDIA_BD_ALL ) {
-                if( cdrecordBluRay ) {
+                if( cdrecordBluRay && ! cdrecordWodim ) {
                     d->usedWritingApp = WritingAppCdrecord;
                 }
                 else if( growisofsBluRay ) {
