@@ -17,7 +17,6 @@
 #include "k3bjobprogressdialog.h"
 #include "k3bapplication.h"
 #include "k3bemptydiscwaiter.h"
-#include "k3bjobprogressosd.h"
 #include "k3bdebuggingoutputdialog.h"
 #include "k3bjobinterface.h"
 #include "k3bthemedlabel.h"
@@ -27,6 +26,7 @@
 #include "k3bdevicemanager.h"
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
+#include "k3bkjobbridge.h"
 #include "k3bstdguiitems.h"
 #include "k3bversion.h"
 #include "k3bthememanager.h"
@@ -36,6 +36,8 @@
 #include <KDebug>
 #include <KGlobal>
 #include <KGlobalSettings>
+#include <kio/global.h>
+#include <kjobtrackerinterface.h>
 #include <KLocale>
 #include <KMessageBox>
 #include <KNotification>
@@ -74,8 +76,7 @@ public:
 
 K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
                                            bool showSubProgress )
-    : KDialog( parent ),
-      m_osd(0)
+    : KDialog( parent )
 {
     d = new Private;
     setupGUI();
@@ -98,7 +99,6 @@ K3b::JobProgressDialog::~JobProgressDialog()
 {
     kDebug();
     delete d;
-    delete m_osd;
 }
 
 
@@ -247,11 +247,6 @@ void K3b::JobProgressDialog::showEvent( QShowEvent* e )
         if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) ) {
             k3bappcore->k3bMainWindow()->hide();
         }
-
-        if( m_osd ) {
-            m_osd->readSettings( KGlobal::config()->group( "OSD Position" ) );
-            m_osd->show();
-        }
     }
     KDialog::showEvent( e );
 }
@@ -265,11 +260,6 @@ void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 
         if( !m_plainCaption.isEmpty() )
             k3bappcore->k3bMainWindow()->setPlainCaption( m_plainCaption );
-
-        if( m_osd ) {
-            m_osd->hide();
-            m_osd->saveSettings( KGlobal::config()->group( "OSD Position" ) );
-        }
     }
     else
         e->ignore();
@@ -375,9 +365,6 @@ void K3b::JobProgressDialog::slotFinished( bool success )
         m_progressSubPercent->setValue(100);
         slotProgress(100);
 
-        if( m_osd )
-            m_osd->setText( i18n("Success.") );
-
         KNotification::event("SuccessfullyFinished", i18n("Successfully finished."));
     }
     else {
@@ -388,13 +375,9 @@ void K3b::JobProgressDialog::slotFinished( bool success )
 
         if( m_bCanceled ) {
             m_labelTask->setText( i18n("Canceled.") );
-            if( m_osd )
-                m_osd->setText( i18n("Canceled.") );
         }
         else {
             m_labelTask->setText( i18n("Error.") );
-            if( m_osd )
-                m_osd->setText( i18n("Error.") );
         }
         KNotification::event("FinishedWithError", i18n("Finished with errors"));
     }
@@ -467,17 +450,7 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
         setCaption( m_job->jobDescription() );
 
         if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
-            if( !m_osd )
-                m_osd = new K3b::JobProgressOSD( this );
-        }
-        else
-            delete m_osd;
-
-        if( m_osd ) {
-            m_osd->setText( job->jobDescription() );
-            // FIXME: use a setJob method and let the osd also change the text color to red/green
-            //      connect( job, SIGNAL(newTask(const QString&)), m_osd, SLOT(setText(const QString&)) );
-            connect( job, SIGNAL(percent(int)), m_osd, SLOT(setProgress(int)) );
+            KIO::getJobTracker()->registerJob( new KJobBridge( *job ) );
         }
     }
 }

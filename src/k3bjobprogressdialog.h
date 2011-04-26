@@ -37,7 +37,6 @@ class QTimer;
 
 namespace K3b {
     class Job;
-    class JobProgressOSD;
     class ThemedLabel;
 
     class JobProgressDialog : public KDialog, public JobHandler
@@ -142,8 +141,6 @@ namespace K3b {
         bool m_bCanceled;
 
         QString m_plainCaption;
-
-        JobProgressOSD* m_osd;
     };
 }
 

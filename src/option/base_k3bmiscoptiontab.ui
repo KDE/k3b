@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>base_K3bMiscOptionTab</class>
  <widget class="QWidget" name="base_K3bMiscOptionTab">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>346</width>
+    <height>322</height>
+   </rect>
+  </property>
   <layout class="QVBoxLayout">
    <property name="margin">
     <number>0</number>
@@ -80,10 +88,10 @@
       <item>
        <widget class="QCheckBox" name="m_checkShowProgressOSD">
         <property name="whatsThis">
-         <string>&lt;p&gt;If this option is checked K3b will display the progress in an OSD which always stays on top of all other windows.</string>
+         <string>&lt;p&gt;If this option is checked K3b will display the progress in KDE notification area. If K3b is run outside KDE environment a separate progress window may be shown instead.&lt;/p&gt;</string>
         </property>
         <property name="text">
-         <string>Show progress &amp;OSD</string>
+         <string>Show &amp;progress in notification area</string>
         </property>
        </widget>
       </item>

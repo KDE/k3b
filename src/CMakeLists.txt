@@ -199,7 +199,6 @@ set(k3b_SRCS
   k3bprojectmanager.cpp
   k3bflatbutton.cpp
   k3bemptydiscwaiter.cpp
-  k3bjobprogressosd.cpp
   k3bdebuggingoutputcache.cpp
   k3bdebuggingoutputdialog.cpp
   k3bdebuggingoutputfile.cpp
