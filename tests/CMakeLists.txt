@@ -9,6 +9,7 @@ kde4_add_unit_test( k3bglobalstest
     k3bglobalstest.cpp )
 target_link_libraries( k3bglobalstest
     ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
     k3b )
 
 kde4_add_unit_test( k3bmetaitemmodeltest
@@ -23,5 +24,4 @@ kde4_add_unit_test( k3bmodelutilstest
     ${CMAKE_SOURCE_DIR}/src/k3bmodelutils.cpp )
 target_link_libraries( k3bmodelutilstest
     ${QT_QTTEST_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS} )
