@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -45,8 +46,10 @@ namespace K3b {
         AudioRipJob( JobHandler* hdl, QObject* parent );
         ~AudioRipJob();
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        virtual QString jobDescription() const;
+        virtual QString jobDetails() const;
+        virtual QString jobSource() const;
+        virtual QString jobTarget() const;
 
         // paranoia settings
         void setParanoiaMode( int mode );

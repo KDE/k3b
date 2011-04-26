@@ -15,6 +15,8 @@
 #include "k3bkjobbridge.h"
 #include "k3bjob.h"
 
+#include <KLocale>
+
 namespace K3b
 {
     
@@ -33,7 +35,6 @@ public:
 KJobBridge::KJobBridge( Job& job )
     : d( new Private( job ) )
 {
-    connect( &d->job, SIGNAL(canceled()), this, SLOT(slotCanceled()) );
     connect( &d->job, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
     connect( &d->job, SIGNAL(infoMessage(QString,int)), this, SLOT(slotInfoMessage(QString,int)) );
     connect( &d->job, SIGNAL(percent(int)), this, SLOT(slotPercent(int)) );
@@ -59,12 +60,6 @@ bool KJobBridge::doKill()
 {
     d->job.cancel();
     return true;
-}
-
-
-void KJobBridge::slotCanceled()
-{
-    kill();
 }
 
 
@@ -105,7 +100,13 @@ void KJobBridge::slotProcessedSize( int processed, int size )
 
 void KJobBridge::slotNewTask( const QString& task )
 {
-    emit description( this, task );
+    if( !d->job.jobSource().isEmpty() && !d->job.jobTarget().isEmpty() ) {
+        emit description( this, task,
+                        qMakePair( i18n( "Source" ), d->job.jobSource() ),
+                        qMakePair( i18n( "Target" ), d->job.jobTarget() ) );
+    } else {
+        emit description( this, task );
+    }
     emit infoMessage( this, task );
 }
 

@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
@@ -351,6 +352,21 @@ QString K3b::Iso9660ImageWritingJob::jobDescription() const
 QString K3b::Iso9660ImageWritingJob::jobDetails() const
 {
     return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(m_imagePath)));
+}
+
+
+QString K3b::Iso9660ImageWritingJob::jobSource() const
+{
+    return m_imagePath;
+}
+
+
+QString K3b::Iso9660ImageWritingJob::jobTarget() const
+{
+    if( m_device )
+        return m_device->vendor() + " " + m_device->description();
+    else
+        return QString ();
 }
 
 

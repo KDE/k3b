@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -40,15 +41,18 @@ namespace K3b {
         CdCopyJob( JobHandler* hdl, QObject* parent = 0 );
         ~CdCopyJob();
 
-        Device::Device* writer() const { return m_onlyCreateImages ? 0 : m_writerDevice; }
+        virtual Device::Device* writer() const { return m_onlyCreateImages ? 0 : m_writerDevice; }
         Device::Device* reader() const { return m_readerDevice; }
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        virtual QString jobDescription() const;
+        virtual QString jobDetails() const;
+        
+        virtual QString jobSource() const;
+        virtual QString jobTarget() const;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        virtual void start();
+        virtual void cancel();
 
     public:
         void setWriterDevice( K3b::Device::Device* dev ) { m_writerDevice = dev; }

@@ -2,6 +2,7 @@
  *
  * Copyright (C) 2003 Klaus-Dieter Krannich <kd@k3b.org>
  * Copyright (C) 2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -217,6 +218,21 @@ QString K3b::BinImageWritingJob::jobDescription() const
 QString K3b::BinImageWritingJob::jobDetails() const
 {
     return m_tocFile.section("/", -1);
+}
+
+
+QString K3b::BinImageWritingJob::jobSource() const
+{
+    return m_tocFile;
+}
+
+
+QString K3b::BinImageWritingJob::jobTarget() const
+{
+    if( Device::Device* device = writer() )
+        return device->vendor() + " " + device->description();
+    else
+        return QString();
 }
 
 

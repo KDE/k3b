@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2005-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -117,6 +118,21 @@ QString K3b::AudioCueFileWritingJob::jobDescription() const
 QString K3b::AudioCueFileWritingJob::jobDetails() const
 {
     return d->cueFile.section( '/', -1 );
+}
+
+
+QString K3b::AudioCueFileWritingJob::jobSource() const
+{
+    return d->cueFile;
+}
+
+
+QString K3b::AudioCueFileWritingJob::jobTarget() const
+{
+    if( Device::Device* device = writer() )
+        return device->vendor() + " " + device->description();
+    else
+        return QString();
 }
 
 

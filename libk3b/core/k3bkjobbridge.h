@@ -39,7 +39,6 @@ protected:
     virtual bool doKill();
     
 private Q_SLOTS:
-    void slotCanceled();
     void slotFinished( bool success );
     void slotInfoMessage( const QString& message, int type );
     void slotPercent( int progress );

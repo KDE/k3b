@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
@@ -16,11 +17,13 @@
 #ifndef K3BJOB_H
 #define K3BJOB_H
 
-#include <qobject.h>
-#include "k3bjobhandler.h"
 #include "k3b_export.h"
-#include "k3bglobals.h"
 #include "k3bdevicetypes.h"
+#include "k3bglobals.h"
+#include "k3bjobhandler.h"
+
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 namespace K3b {
     namespace Device {
@@ -73,6 +76,16 @@ namespace K3b {
 
         virtual QString jobDescription() const { return "Job"; }
         virtual QString jobDetails() const { return QString(); }
+        
+        /**
+         * @returns job source (e.g. path to image file)
+         */
+        virtual QString jobSource() const { return QString(); }
+        
+        /**
+         * @return job target (e.g. name of the burner)
+         */
+        virtual QString jobTarget() const { return QString(); }
 
         /**
          * @returns the number of running subjobs.

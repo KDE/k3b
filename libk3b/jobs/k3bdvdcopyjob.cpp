@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
@@ -956,6 +957,24 @@ QString K3b::DvdCopyJob::jobDetails() const
     return i18np("Creating 1 copy",
                  "Creating %1 copies",
                  (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
+}
+
+
+QString K3b::DvdCopyJob::jobSource() const
+{
+    if( Device::Device* device = readingDevice() )
+        return device->vendor() + " " + device->description();
+    else
+        return QString();
+}
+
+
+QString K3b::DvdCopyJob::jobTarget() const
+{
+    if( Device::Device* device = writer() )
+        return device->vendor() + " " + device->description();
+    else
+        return m_imagePath;
 }
 
 

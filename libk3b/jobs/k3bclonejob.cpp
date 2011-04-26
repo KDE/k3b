@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -374,6 +375,24 @@ QString K3b::CloneJob::jobDetails() const
     return i18np("Creating 1 clone copy",
                  "Creating %1 clone copies",
                  (m_simulate||m_onlyCreateImage) ? 1 : m_copies );
+}
+
+
+QString K3b::CloneJob::jobSource() const
+{
+    if( m_readerDevice )
+        return m_readerDevice->vendor() + " " + m_readerDevice->description();
+    else
+        return QString();
+}
+
+
+QString K3b::CloneJob::jobTarget() const
+{
+    if( m_writerDevice )
+        return m_writerDevice->vendor() + " " + m_writerDevice->description();
+    else
+        return m_imagePath;
 }
 
 #include "k3bclonejob.moc"

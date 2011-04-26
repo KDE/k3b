@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -578,6 +578,7 @@ QString K3b::AudioRipJob::jobDescription() const
                      d->cddbEntry.get( KCDDB::Title ).toString() );
 }
 
+
 QString K3b::AudioRipJob::jobDetails() const
 {
     if( d->encoder )
@@ -588,6 +589,25 @@ QString K3b::AudioRipJob::jobDetails() const
     else
         return i18np( "1 track", "%1 tracks",
                       d->tracks.count() );
+}
+
+
+QString K3b::AudioRipJob::jobSource() const
+{
+    if( d->device )
+        return d->device->vendor() + " " + d->device->description();
+    else
+        return QString();
+}
+
+
+QString K3b::AudioRipJob::jobTarget() const
+{
+    Tracks::const_iterator it = d->tracks.begin();
+    if( it != d->tracks.end() )
+        return QFileInfo( it.key() ).absolutePath();
+    else
+        return QString();
 }
 
 #include "k3baudioripjob.moc"
