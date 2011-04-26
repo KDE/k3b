@@ -57,6 +57,7 @@ set(k3b_core_SRCS
   core/k3bexternalbinmanager.cpp
   core/k3bversion.cpp
   core/k3bjob.cpp
+  core/k3bkjobbridge.cpp
   core/k3bthread.cpp
   core/k3bthreadjob.cpp
   core/k3bglobalsettings.cpp
