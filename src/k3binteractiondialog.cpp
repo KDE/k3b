@@ -20,7 +20,6 @@
 #include "k3bthemedheader.h"
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
-#include "k3bmultichoicedialog.h"
 
 #include <QApplication>
 #include <QDialogButtonBox>
@@ -279,34 +278,6 @@ void K3b::InteractionDialog::saveLastSettings()
 void K3b::InteractionDialog::slotStartClickedInternal()
 {
     saveLastSettings();
-
-    KConfigGroup c( KGlobal::config(), "General Options" );
-    if( !c.readEntry( "action dialog startup settings", 0 ) ) {
-        // first time saving last used settings
-        switch( K3b::MultiChoiceDialog::choose( i18n("Action Dialog Settings"),
-                                                i18n("<p>K3b handles three sets of settings in action dialogs: "
-                                                     "the defaults, the saved settings, and the last used settings. "
-                                                     "Please choose which of these sets should be loaded if an action "
-                                                     "dialog is opened again."
-                                                     "<p><em>Be aware that this choice can always be changed from the K3b "
-                                                     "configuration dialog.</em>"),
-                                                QMessageBox::Question,
-                                                this,
-                                                3,
-                                                KGuiItem(i18n("Default Settings")),
-                                                KGuiItem(i18n("Saved Settings")),
-                                                KGuiItem(i18n("Last Used Settings")) ) ) {
-        case 1:
-            c.writeEntry( "action dialog startup settings", int(LOAD_K3B_DEFAULTS) );
-            break;
-        case 2:
-            c.writeEntry( "action dialog startup settings", int(LOAD_SAVED_SETTINGS) );
-            break;
-        case 3:
-            c.writeEntry( "action dialog startup settings", int(LOAD_LAST_SETTINGS) );
-            break;
-        }
-    }
 
     slotStartClicked();
 }
