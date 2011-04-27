@@ -1,3 +1,8 @@
+2.0.3
+=====
+Bugfixes:
+ * Missing "Extract Digital Audio with K3b" in device notifier for Audio CD medium (265819)
+
 2.0.2
 =====
 Changes:
