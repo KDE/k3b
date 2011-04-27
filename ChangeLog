@@ -9,6 +9,11 @@ Bugfixes:
  * Added dynamic hiding of irrelevant actions in mixed project (142954)
  * Added sorting in data project view (191660)
 
+2.0.3
+=====
+Bugfixes:
+ * Missing "Extract Digital Audio with K3b" in device notifier for Audio CD medium (265819)
+
 2.0.2
 =====
 Changes:
