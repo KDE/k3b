@@ -603,8 +603,8 @@ QString K3b::AudioRipJob::jobSource() const
 
 QString K3b::AudioRipJob::jobTarget() const
 {
-    Tracks::const_iterator it = d->tracks.begin();
-    if( it != d->tracks.end() )
+    Tracks::const_iterator it = d->tracks.constBegin();
+    if( it != d->tracks.constEnd() )
         return QFileInfo( it.key() ).absolutePath();
     else
         return QString();
