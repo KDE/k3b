@@ -116,6 +116,7 @@ void K3b::CDDB::CDDBJob::Private::_k_cddbQueryFinished( KCDDB::Result result )
         }
     }
     else {
+        q->setError( KJob::UserDefinedError );
         q->setErrorText( KCDDB::resultToString( result ) );
     }
 

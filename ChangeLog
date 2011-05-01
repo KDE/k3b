@@ -13,6 +13,7 @@ Bugfixes:
 =====
 Bugfixes:
  * Missing "Extract Digital Audio with K3b" in device notifier for Audio CD medium (265819)
+ * Clearing up track info in audio project when CDDB query failed
 
 2.0.2
 =====
