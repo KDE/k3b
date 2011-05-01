@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2004-2009 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -23,6 +23,7 @@
 #include <KComboBox>
 #include <KConfig>
 #include <KDiskFreeSpaceInfo>
+#include <KGlobalSettings>
 #include <KLocale>
 #include <KIconLoader>
 #include <KUrlRequester>
@@ -289,7 +290,7 @@ QString K3b::AudioConvertingOptionWidget::extension() const
 
 void K3b::AudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 {
-    m_editBaseDir->setUrl( c.readEntry( "last ripping directory", QDir::homePath() ) );
+    m_editBaseDir->setUrl( c.readEntry( "last ripping directory", KGlobalSettings::musicPath() ) );
 
     m_checkSingleFile->setChecked( c.readEntry( "single_file", false ) );
     m_checkWriteCueFile->setChecked( c.readEntry( "write_cue_file", false ) );
