@@ -217,7 +217,7 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
     K3b::JobProgressDialog progressDialog( parentWidget() );
     K3b::AudioProjectConvertingJob job( m_doc, &progressDialog, 0 );
     job.setCddbEntry( createCddbEntryFromDoc( m_doc ) );
-    job.setTracksToRip( tracksToRip );
+    job.setTrackList( tracksToRip );
     job.setEncoder( encoder );
     job.setWriteCueFile( m_optionWidget->createSingleFile() && m_optionWidget->createCueFile() );
     if( m_optionWidget->createPlaylist() )

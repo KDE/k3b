@@ -17,39 +17,23 @@
 #ifndef K3B_AUDIO_RIP_THREAD_H
 #define K3B_AUDIO_RIP_THREAD_H
 
-#include "k3bthreadjob.h"
-#include <QMultiMap>
-
-#include <libkcddb/cdinfo.h>
+#include "k3bmassaudioencodingjob.h"
+#include <QtCore/QScopedPointer>
 
 
 namespace K3b {
-    class AudioEncoder;
 
     namespace Device {
         class Device;
     }
 
-    class AudioRipJob : public ThreadJob
+    class AudioRipJob : public MassAudioEncodingJob
     {
         Q_OBJECT
-
-    public:
-        /**
-         * Maps filenames to track 1-based track indexes
-         * When multiple tracks are associated with one filename
-         * they are merged and ripped into one file.
-         */
-        typedef QMultiMap<QString,int> Tracks;
         
     public:
         AudioRipJob( JobHandler* hdl, QObject* parent );
         ~AudioRipJob();
-
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
-        virtual QString jobSource() const;
-        virtual QString jobTarget() const;
 
         // paranoia settings
         void setParanoiaMode( int mode );
@@ -59,41 +43,33 @@ namespace K3b {
 
         void setDevice( Device::Device* device );
 
-        void setCddbEntry( const KCDDB::CDInfo& e );
-
-        // if 0 (default) wave files are created
-        void setEncoder( AudioEncoder* encoder );
-
-        /**
-         * Used for encoders that support multiple formats
-         */
-        void setFileType( const QString& fileType );
-
-        void setTracksToRip( const Tracks& tracks );
-
-        void setWritePlaylist( const QString& filename, bool relativePaths );
-        void setWriteCueFile( bool b );
-
-    public Q_SLOTS:
-        void start();
-
-    private:
-        bool run();
-        void jobFinished( bool );
-
-        bool ripTrack( int track, const QString& filename, const QString& prevFilename );
-        void cleanupAfterCancellation();
-        bool writePlaylist();
-        bool writeCueFile();
-
-        /**
-         * Finds a relative path from baseDir to absPath
-         */
-        QString findRelativePath( const QString& absPath, const QString& baseDir );
+        virtual QString jobDescription() const;
+        virtual QString jobSource() const;
 
         class Private;
-        Private* d;
+
+    public Q_SLOTS:
+        virtual void start();
+
+    private:
+        virtual void jobFinished( bool );
+
+        virtual bool init();
+
+        virtual void cleanup();
+
+        virtual Msf trackLength( int trackIndex ) const;
+
+        virtual QIODevice* createReader( int trackIndex ) const;
+
+        virtual void trackStarted( int trackIndex );
+
+        virtual void trackFinished( int trackIndex, const QString& filename );
+
+    private:
+        QScopedPointer<Private> d;
     };
-}
+
+} // namespace K3b
 
 #endif

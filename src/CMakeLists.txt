@@ -116,6 +116,7 @@ set(k3b_rip_SRCS
   rip/k3baudiorippingdialog.cpp
   rip/k3baudiocdview.cpp
   rip/k3bcddbpatternwidget.cpp
+  rip/k3bmassaudioencodingjob.cpp
   rip/k3bvideocdinfo.cpp
   rip/k3bvideocdview.cpp
   rip/k3bvideocdrip.cpp

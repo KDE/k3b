@@ -288,7 +288,7 @@ void K3b::AudioRippingDialog::slotStartClicked()
     K3b::AudioRipJob* job = new K3b::AudioRipJob( &ripDialog, this );
     job->setDevice( m_medium.device() );
     job->setCddbEntry( m_cddbEntry );
-    job->setTracksToRip( tracksToRip );
+    job->setTrackList( tracksToRip );
     job->setParanoiaMode( m_comboParanoiaMode->currentText().toInt() );
     job->setMaxRetries( m_spinRetries->value() );
     job->setNeverSkip( !m_checkIgnoreReadErrors->isChecked() );
