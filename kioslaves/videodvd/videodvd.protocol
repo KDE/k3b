@@ -17,6 +17,7 @@ moving=false
 opening=true
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
 Description[bg]=kioslave, позволяващ ви да копирате файлове от видео DVD (включително разшифроването)
+Description[bs]=U/I program za kopiranje datoteka sa video DVD‑ova (uključujući dešifrovanje)
 Description[ca]=Un kioslave que permet que es copiïn fitxers des d'un DVD de vídeo (incloent el desxifrat)
 Description[ca@valencia]=Un kioslave que permet que es copien fitxers des d'un DVD de vídeo (incloent el desxifrat)
 Description[cs]=Kioslave umožňující kopírování video DVD (včetně dešifrování)
