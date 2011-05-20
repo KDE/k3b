@@ -34,6 +34,7 @@ Description[fr]=Un module d'E/S pour KDE permettant de copier des fichiers depui
 Description[ga]=Sclábhaí KIO a cheadaíonn duit comhaid a chóipeáil ó DVD físe (díchriptiú san áireamh)
 Description[gl]=Un kioslave que permite copiar ficheiros desde un DVD de vídeo (incluindo a decifraxe)
 Description[he]=עבד קלט/פלט של KDE המאפשר לקבצים להיות מועתקים מתקליטור וידאו של DVD (כולל פענוח)
+Description[hr]=kioslave koji omogućuje kopiranje datoteka iz video DVD-a (uključuje dekriptiranje)
 Description[hu]=Kioslave, amellyel fájlokat lehet másolni Video DVD-ről (dekódolással együtt)
 Description[it]=Un kioslave per permettere ai file di essere copiati da un DVD video (inclusa decifrazione)
 Description[ja]=ビデオ DVD からファイルをコピーすることを可能にする kioslave (暗号解除も含む)
