@@ -403,6 +403,7 @@ Action=Sound
 
 [Event/Busy]
 Name=Busy
+Name[bs]=Zauzet
 Name[ca]=Ocupat
 Name[da]=Optaget
 Name[de]=Beschäftigt
@@ -423,6 +424,7 @@ Name[uk]=Виконується завдання
 Name[x-test]=xxBusyxx
 Name[zh_TW]=忙碌
 Comment=K3b is currently busy and cannot start any other operations
+Comment[bs]=K3b je trenutno zauzet i ne može započeti druge operacije
 Comment[ca]=El K3b ara mateix està ocupat i no pot iniciar altres operacions
 Comment[da]=K3b er optaget og kan ikke starte andre handlinger
 Comment[de]=K3b ist derzeit beschäftigt und kann keine weiteren Vorgänge starten
@@ -445,6 +447,7 @@ Action=Popup
 
 [Event/NoProblemsFound]
 Name=No problems found
+Name[bs]=Nema nađenih problema
 Name[ca]=No s'ha trobat cap problema
 Name[da]=Ingen problemer fundet
 Name[de]=Keine Probleme gefunden
@@ -464,6 +467,7 @@ Name[uk]=Проблем не виявлено
 Name[x-test]=xxNo problems foundxx
 Name[zh_TW]=沒有發現問題
 Comment=No problems found in system configuration
+Comment[bs]=Nema nađenih problema u sistemskoj konfiguraciji
 Comment[ca]=No s'han trobat problemes en la configuració del sistema
 Comment[da]=Ingen problemer fundet i systemkonfigurationen
 Comment[de]=Es wurden keine Probleme mit der Systemeinrichtung gefunden
@@ -486,6 +490,7 @@ Action=Popup
 
 [Event/MountFailed]
 Name=Mount/unmount failed
+Name[bs]=Montiranje/demontiranje neuspjelo
 Name[ca]=Ha fallat en muntar/desmuntar
 Name[da]=Montering/afmontering mislykkedes
 Name[es]=Fallo al montar/desmontar
@@ -503,6 +508,7 @@ Name[uk]=Помилка монтування або демонтування
 Name[x-test]=xxMount/unmount failedxx
 Name[zh_TW]=掛載/卸載失敗
 Comment=Medium cannot be mount or unmounted
+Comment[bs]=Medij se ne može montirati ili demontirati
 Comment[ca]=El suport no es pot muntar o desmuntar
 Comment[da]=Mediet kan ikke afmonteres
 Comment[de]=Das Medium kann nicht eingehängt oder gelöst werden
@@ -524,6 +530,7 @@ Action=Popup
 
 [Event/TrackDataNotFound]
 Name=Track data not found
+Name[bs]=Podaci o stazi nisu nađeni
 Name[ca]=No s'han trobat les dades de la pista
 Name[da]=Spordata ikke fundet
 Name[es]=Datos de la pista no encontrados
@@ -541,6 +548,7 @@ Name[uk]=Не знайдено даних композиції
 Name[x-test]=xxTrack data not foundxx
 Name[zh_TW]=找不到音軌資料
 Comment=Track information has not been found in the online database
+Comment[bs]=Podaci o stazi nisu nađeni u bazi podataka na mreži
 Comment[ca]=No s'ha trobat la informació de la pista a la base de dades en línia
 Comment[da]=Fandt ikke sporinformation i online-databasen
 Comment[es]=No se ha encontrado información de la pista en la base de datos en línea
