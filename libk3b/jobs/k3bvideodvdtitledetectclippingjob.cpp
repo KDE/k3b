@@ -100,7 +100,7 @@ void K3b::VideoDVDTitleDetectClippingJob::start()
         return;
     }
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "transcode: " ) + d->usedTranscodeBin->version() );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QString::fromLatin1( "transcode: %1" ).arg(d->usedTranscodeBin->version()) );
 
     if( !d->usedTranscodeBin->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 – Copyright © %3"

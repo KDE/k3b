@@ -411,7 +411,7 @@ void K3b::CdrecordWriter::start()
         return;
     }
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "cdrecord: " ) + d->cdrecordBinObject->version() );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QString::fromLatin1( "cdrecord: %1" ).arg(d->cdrecordBinObject->version()) );
 
     if( !d->cdrecordBinObject->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 – Copyright © %3"

@@ -147,7 +147,7 @@ QVariant DevicesModel::data( const QModelIndex& index, int role ) const
     
     if( role == Qt::DisplayRole &&  index.column() >= 0 && index.column() <= 3 ) {
         if( index.column() == 0 ) {
-            return device->vendor() + " " + device->description();
+            return QString(device->vendor() + " " + device->description());
         }
         else if( index.column() == 1 ) {
             return device->blockDeviceName();
@@ -160,19 +160,19 @@ QVariant DevicesModel::data( const QModelIndex& index, int role ) const
                 int perm = s.st_mode & 0000777;
 
                 if( index.column() == 2 ) {
-                    return QString::number( perm, 8 ).rightJustified( 3, '0' ) + " " + fi.owner() + "." + fi.group();
+                    return QString(QString::number( perm, 8 ).rightJustified( 3, '0' ) + " " + fi.owner() + "." + fi.group());
                 }
                 else if( !d->burningGroup.isEmpty() ) {
                     // we ignore the device's owner here
                     if( perm != 0000660 || fi.group() != d->burningGroup )
-                        return "660 " + fi.owner() + "." + d->burningGroup;
+                        return QString("660 " + fi.owner() + "." + d->burningGroup);
                     else
                         return i18n("no change");
                 }
                 else {
                     // we ignore the device's owner and group here
                     if( perm != 0000666 )
-                        return "666 " + fi.owner() + "." + fi.group();
+                        return QString("666 " + fi.owner() + "." + fi.group());
                     else
                         return i18n("no change");
                 }

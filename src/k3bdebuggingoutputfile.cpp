@@ -39,10 +39,10 @@ bool K3b::DebuggingOutputFile::open( OpenMode mode )
     if( !QFile::open( mode|WriteOnly|Unbuffered ) )
         return false;
 
-    addOutput( QLatin1String( "System" ), QLatin1String( "K3b Version: " ) + k3bcore->version() );
-    addOutput( QLatin1String( "System" ), QLatin1String( "KDE Version: " ) + QString(KDE::versionString()) );
-    addOutput( QLatin1String( "System" ), QLatin1String( "QT Version:  " ) + QString(qVersion()) );
-    addOutput( QLatin1String( "System" ), QLatin1String( "Kernel:      " ) + K3b::kernelVersion() );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "K3b Version: %1" ).arg(k3bcore->version()) );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KDE::versionString()) );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "QT Version:  %1" ).arg(qVersion()) );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "Kernel:      %1" ).arg(K3b::kernelVersion()) );
 
     // devices in the logfile
     Q_FOREACH( K3b::Device::Device* dev, k3bcore->deviceManager()->allDevices() ) {

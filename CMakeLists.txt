@@ -261,7 +261,7 @@ endif(K3B_BUILD_API_DOCS)
 ##################  K3b build environment ################################
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
+add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 include_directories(
   ${k3b_BINARY_DIR}
   ${k3b_SOURCE_DIR}/libk3bdevice

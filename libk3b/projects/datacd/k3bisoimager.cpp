@@ -257,7 +257,7 @@ void K3b::IsoImager::startSizeCalculation()
     m_process = new K3b::Process( this );
     m_process->setSplitStdout(true);
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "mkisofs: " ) + d->mkisofsBin->version() );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QString::fromLatin1( "mkisofs: %1").arg(d->mkisofsBin->version()) );
 
     *m_process << d->mkisofsBin;
 

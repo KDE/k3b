@@ -264,9 +264,9 @@ QVariant VideoDVDTitleModel::data( const QModelIndex& index, int role ) const
     else if( AspectRatioRole == role ) {
         QString aspectRatio( title.videoStream().displayAspectRatio() == K3b::VideoDVD::VIDEO_ASPECT_RATIO_4_3 ? "4:3" : "16:9" );
         if( title.videoStream().letterboxed() )
-            return aspectRatio + " - " + i18n("letterboxed");
+            return QString::fromLatin1("%1 - %2").arg(aspectRatio).arg(i18n("letterboxed"));
         else if( title.videoStream().permittedDf() == K3b::VideoDVD::VIDEO_PERMITTED_DF_LETTERBOXED )
-            return aspectRatio + " - " + i18n("anamorph");
+            return QString::fromLatin1("%1 - %2").arg(aspectRatio).arg(i18n("anamorph"));
         else
             return aspectRatio;
     }

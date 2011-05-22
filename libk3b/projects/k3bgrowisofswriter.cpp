@@ -164,7 +164,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
         return false;
     }
 
-    emit debuggingOutput( QLatin1String( "Used versions" ), QLatin1String( "growisofs: " ) + d->growisofsBin->version() );
+    emit debuggingOutput( QLatin1String( "Used versions" ), QString::fromLatin1( "growisofs: %1" ).arg(d->growisofsBin->version()) );
 
     if( !d->growisofsBin->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 – Copyright © %3",QString("growisofs")

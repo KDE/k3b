@@ -257,7 +257,7 @@ QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
                 if( d->getProgramInfo( program, owner, group, wantedGroup, perm, wantedPerm ) ) {
 
                     if( index.column() == 3 ) {
-                        return QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + owner + "." + group;
+                        return QString(QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + owner + "." + group);
                     }
                     else if ( index.column() == 4 ) {
                         if( perm != wantedPerm || owner != "root" || group != wantedGroup )
