@@ -498,7 +498,7 @@ bool K3b::AudioJob::prepareWriter()
 
         if( !writeInfFiles() ) {
             kDebug() << "(K3b::AudioJob) could not write inf-files.";
-            emit infoMessage( i18n("IO Error. Most likely no space left on harddisk."), MessageError );
+            emit infoMessage( i18n("I/O Error. Most likely no space left on harddisk."), MessageError );
 
             return false;
         }
@@ -547,7 +547,7 @@ bool K3b::AudioJob::prepareWriter()
     else {
         if( !writeTocFile() ) {
             kDebug() << "(K3b::DataJob) could not write tocfile.";
-            emit infoMessage( i18n("IO Error"), MessageError );
+            emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;
         }

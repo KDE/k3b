@@ -302,12 +302,12 @@ void K3b::DataPropertiesDialog::loadListProperties( const QList<K3b::DataItem*>&
     if ( files > 0 )
         s += i18np( "One File", "%1 Files", files );
     else
-        s += "No Files";
+        s += i18n( "No Files" );
     s += " - ";
     if ( folders > 0 )
         s += i18np( "One Folder", "%1 Folders", folders );
     else
-        s += "No Folders";
+        s += i18n( "No Folders" );
     m_multiSelectionLabel->setText( s );
 
     m_labelSize->setText( KIO::convertSize(size) );

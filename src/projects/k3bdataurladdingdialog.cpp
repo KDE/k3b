@@ -120,8 +120,8 @@ void K3b::DataUrlAddingDialog::init()
     grid->setContentsMargins( 0, 0, 0, 0 );
 
     m_counterLabel = new QLabel( page );
-    m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'"
-                                               ,m_doc->URL().fileName()) + "...", page );
+    m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'..."
+                                               ,m_doc->URL().fileName()), page );
     m_progressWidget = new QProgressBar( page );
 
     grid->addWidget( m_counterLabel, 0, 1 );

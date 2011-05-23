@@ -293,7 +293,7 @@ QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
                     if(item->isValid())
                         return item->linkDest();
                     else
-                        return QString(item->linkDest() + i18n(" (broken)"));
+                        return i18n( "%1 (broken)", item->linkDest() );
                 }
                 break;
         }

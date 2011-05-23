@@ -267,7 +267,7 @@ void K3b::VideoDVDRippingView::reloadMedium()
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
     if( d->dvd.open( device() ) ) {
-        setTitle( medium().beautifiedVolumeId() + " (" + i18n("Video DVD") + ")" );
+        setTitle( i18n( "%1 (Video DVD)", medium().beautifiedVolumeId() ) );
         d->labelLength->setText( i18np("%1 title", "%1 titles", d->dvd.numTitles() ) );
         d->model->setVideoDVD( d->dvd );
         QApplication::restoreOverrideCursor();

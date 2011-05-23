@@ -35,8 +35,8 @@ K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )
     m_editStartOffset = new K3b::MsfEdit( this );
     m_editEndOffset = new K3b::MsfEdit( this );
 
-    QLabel* startLabel = new QLabel( i18n("Start Offset") + ":", this );
-    QLabel* endLabel = new QLabel( i18n("End Offset") + ":", this );
+    QLabel* startLabel = new QLabel( i18n("Start Offset:"), this );
+    QLabel* endLabel = new QLabel( i18n("End Offset:"), this );
     endLabel->setAlignment( Qt::AlignRight );
 
     QGridLayout* grid = new QGridLayout( this );

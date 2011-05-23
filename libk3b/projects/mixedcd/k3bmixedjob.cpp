@@ -561,7 +561,7 @@ void K3b::MixedJob::slotWriterFinished( bool success )
 void K3b::MixedJob::slotMediaReloadedForSecondSession( K3b::Device::DeviceHandler* dh )
 {
     if( !dh->success() ) {
-        blockingInformation( i18n("Please reload the medium and press 'ok'"),
+        blockingInformation( i18n("Please reload the medium and press 'OK'"),
                              i18n("Unable to close the tray") );
     }
 
@@ -635,7 +635,7 @@ bool K3b::MixedJob::prepareWriter()
 
         if( !writeInfFiles() ) {
             kDebug() << "(K3b::MixedJob) could not write inf-files.";
-            emit infoMessage( i18n("IO Error"), MessageError );
+            emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;
         }
@@ -676,7 +676,7 @@ bool K3b::MixedJob::prepareWriter()
     else {
         if( !writeTocFile() ) {
             kDebug() << "(K3b::DataJob) could not write tocfile.";
-            emit infoMessage( i18n("IO Error"), MessageError );
+            emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;
         }

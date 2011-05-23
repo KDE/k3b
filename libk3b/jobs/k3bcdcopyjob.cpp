@@ -1099,7 +1099,7 @@ void K3b::CdCopyJob::slotWriterFinished( bool success )
 void K3b::CdCopyJob::slotMediaReloadedForNextSession( K3b::Device::DeviceHandler* dh )
 {
     if( !dh->success() )
-        blockingInformation( i18n("Please reload the medium and press 'ok'"),
+        blockingInformation( i18n("Please reload the medium and press 'OK'"),
                              i18n("Failed to reload the medium") );
 
     if( !writeNextSession() ) {

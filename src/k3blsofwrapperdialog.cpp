@@ -98,8 +98,8 @@ void K3b::LsofWrapperDialog::slotQuitOtherApps()
         const QList<K3b::LsofWrapper::Process>& apps = lsof.usingApplications();
         if( apps.count() > 0 ) {
             if( KMessageBox::warningYesNo( this,
-                                           i18n("<p>Do you really want K3b to kill the following processes: <em>")
-                                           + joinProcessNames(apps) ) == KMessageBox::Yes ) {
+                                           i18n("<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>", joinProcessNames(apps))
+                                           ) == KMessageBox::Yes ) {
                 for( QList<K3b::LsofWrapper::Process>::const_iterator it = apps.begin();
                      it != apps.end(); ++it )
                     ::kill( (*it).pid, SIGTERM );

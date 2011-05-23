@@ -355,9 +355,9 @@ void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
     spinHeight->setSingleStep( 16 );
     spinWidth->setSpecialValueText( i18n("Auto") );
     spinHeight->setSpecialValueText( i18n("Auto") );
-    QLabel* labelW = new QLabel( i18n("Width") + ':', dlg.mainWidget() );
+    QLabel* labelW = new QLabel( i18n("Width:"), dlg.mainWidget() );
     labelW->setBuddy( spinWidth );
-    QLabel* labelH = new QLabel( i18n("Height") + ':', dlg.mainWidget() );
+    QLabel* labelH = new QLabel( i18n("Height:"), dlg.mainWidget() );
     labelH->setBuddy( spinHeight );
     labelW->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
     labelH->setAlignment( Qt::AlignRight|Qt::AlignVCenter );

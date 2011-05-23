@@ -181,7 +181,7 @@ void K3b::VcdJob::xmlGen()
     }
     else {
         kDebug() << "(K3b::VcdJob) could not write xmlfile.";
-        emit infoMessage( i18n( "Could not write correct XML-file." ), K3b::Job::MessageError );
+        emit infoMessage( i18n( "Could not write correct XML file." ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
     }

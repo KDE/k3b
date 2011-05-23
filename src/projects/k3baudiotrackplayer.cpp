@@ -83,10 +83,10 @@ void AudioTrackPlayerSeekAction::setCurrentTrack( const K3b::AudioTrack& track )
     Q_FOREACH( QWidget* widget, createdWidgets() ) {
         if( QSlider* slider = qobject_cast<QSlider*>( widget ) ) {
             // we show the currently playing track as a tooltip on the slider
-            slider->setToolTip( i18n("Playing track %1: %2 - %3")
-                                .arg( track.trackNumber() )
-                                .arg( track.artist() )
-                                .arg( track.title()) );
+            slider->setToolTip( i18n("Playing track %1: %2 - %3",
+                                track.trackNumber(),
+                                track.artist(),
+                                track.title()) );
             slider->setMaximum( track.length().audioBytes() );
         }
     }

@@ -141,11 +141,11 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
     }
     else if( line.contains( "updating RMA" ) ) {
         emit newSubTask( i18n("Updating RMA") );
-        emit infoMessage( i18n("Updating RMA") + "...", K3b::Job::MessageInfo );
+        emit infoMessage( i18n("Updating RMA..."), K3b::Job::MessageInfo );
     }
     else if( line.contains( "closing session" ) ) {
         emit newSubTask( i18n("Closing Session") );
-        emit infoMessage( i18n("Closing Session") + "...", K3b::Job::MessageInfo );
+        emit infoMessage( i18n("Closing Session..."), K3b::Job::MessageInfo );
     }
     else if( line.contains( "writing lead-out" ) ) {
         emit newSubTask( i18n("Writing Lead-out") );

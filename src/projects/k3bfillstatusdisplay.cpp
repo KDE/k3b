@@ -177,7 +177,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     // ====================================================================================
     QString docSizeText;
     if( d->showTime )
-        docSizeText = d->doc->length().toString(false) + " " + i18n("min");
+        docSizeText = i18n("%1 min", d->doc->length().toString(false));
     else
         docSizeText = KIO::convertSize( d->doc->size() );
 
@@ -846,7 +846,7 @@ bool K3b::FillStatusDisplay::event( QEvent* event )
         QToolTip::showText( he->globalPos(),
                             KIO::convertSize( d->doc->size() ) +
                             " (" + KGlobal::locale()->formatNumber( d->doc->size(), 0 ) + "), " +
-                            d->doc->length().toString(false) + " " + i18n("min") +
+                            i18n("%1 min", d->doc->length().toString(false)) +
                             " (" + i18n("Right click for media sizes") + ")");
 
         event->accept();

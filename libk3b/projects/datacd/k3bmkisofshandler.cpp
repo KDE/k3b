@@ -94,7 +94,7 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
                 d->readError = true;
             }
             else if( errorLine.startsWith( "No such file or directory. cannot open" ) ) {
-                handleMkisofsInfoMessage( i18n("No such file or directory '%1'.").arg( errorLine.mid( 40, errorLine.length()-41 ) ),
+                handleMkisofsInfoMessage( i18n("No such file or directory '%1'.", errorLine.mid( 40, errorLine.length()-41 ) ),
                                           K3b::Job::MessageError );
                 d->readError = true;
             }
@@ -119,7 +119,7 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
             d->readError = true;
         }
         else if( line.endsWith( "has multiple partitions." ) ) {
-            handleMkisofsInfoMessage( i18n("The boot image contains multiple partitions.."), K3b::Job::MessageError );
+            handleMkisofsInfoMessage( i18n("The boot image contains multiple partitions."), K3b::Job::MessageError );
             handleMkisofsInfoMessage( i18n("A hard-disk boot image has to contain a single partition."), K3b::Job::MessageError );
             d->readError = true;
         }
