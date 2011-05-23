@@ -66,7 +66,7 @@ void K3b::DebuggingOutputCache::clear()
 
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "K3b Version: %1" ).arg(k3bcore->version()) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KDE::versionString()) );
-    addOutput( QLatin1String( "System" ), QString::fromLatin1( "QT Version:  %1" ).arg(qVersion()) );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "Qt Version:  %1" ).arg(qVersion()) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Kernel:      %1" ).arg(K3b::kernelVersion()) );
 
     // devices in the logfile
