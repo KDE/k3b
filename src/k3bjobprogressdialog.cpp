@@ -114,12 +114,19 @@ void K3b::JobProgressDialog::setupGUI()
 
     // header
     // ------------------------------------------------------------------------------------------
-    d->headerFrame = new QFrame( mainWidget() );
-    d->headerFrame->setFrameShape( QFrame::StyledPanel );
-    d->headerFrame->setFrameShadow( QFrame::Sunken );
-    d->headerFrame->setLineWidth( 1 );
+    QFrame* headerParentFrame = new QFrame( mainWidget() );
+    headerParentFrame->setFrameShape( QFrame::StyledPanel );
+    headerParentFrame->setFrameShadow( QFrame::Sunken );
+    headerParentFrame->setLineWidth( 1 );
+    headerParentFrame->setLayout( new QVBoxLayout() );
+    headerParentFrame->layout()->setSpacing(0);
+    headerParentFrame->layout()->setMargin(0);
+
+    d->headerFrame = new QFrame( headerParentFrame );
+    d->headerFrame->setFrameStyle( QFrame::NoFrame );
     d->headerFrame->setAutoFillBackground( true );
-    //d->headerFrame->setMargin( 1 );
+    headerParentFrame->layout()->addWidget( d->headerFrame );
+
     QHBoxLayout* headerLayout = new QHBoxLayout( d->headerFrame );
     headerLayout->setContentsMargins( 0, 0, 0, 0 );
     headerLayout->setSpacing( 0 );
@@ -145,7 +152,7 @@ void K3b::JobProgressDialog::setupGUI()
     headerLayout->addLayout( jobLabelsLayout );
     headerLayout->setAlignment( jobLabelsLayout, Qt::AlignVCenter );
 
-    mainLayout->addWidget( d->headerFrame );
+    mainLayout->addWidget( headerParentFrame );
     // ------------------------------------------------------------------------------------------
 
     d->viewInfo = new QTreeWidget( mainWidget() );
@@ -160,11 +167,18 @@ void K3b::JobProgressDialog::setupGUI()
 
     // progress header
     // ------------------------------------------------------------------------------------------
-    d->progressHeaderFrame = new QFrame( mainWidget() );
-    d->progressHeaderFrame->setFrameShape( QFrame::StyledPanel );
-    d->progressHeaderFrame->setFrameShadow( QFrame::Sunken );
-    d->progressHeaderFrame->setLineWidth( 1 );
+    QFrame* progressHeaderParentFrame = new QFrame( mainWidget() );
+    progressHeaderParentFrame->setFrameShape( QFrame::StyledPanel );
+    progressHeaderParentFrame->setFrameShadow( QFrame::Sunken );
+    progressHeaderParentFrame->setLineWidth( 1 );
+    progressHeaderParentFrame->setLayout( new QVBoxLayout() );
+    progressHeaderParentFrame->layout()->setSpacing(0);
+    progressHeaderParentFrame->layout()->setMargin(0);
+
+    d->progressHeaderFrame = new QFrame( progressHeaderParentFrame );
+    d->progressHeaderFrame->setFrameStyle( QFrame::NoFrame );
     d->progressHeaderFrame->setAutoFillBackground( true );
+    progressHeaderParentFrame->layout()->addWidget( d->progressHeaderFrame );
 
     QHBoxLayout* progressHeaderLayout = new QHBoxLayout( d->progressHeaderFrame );
     progressHeaderLayout->setContentsMargins( 0, 0, 0, 0 );
@@ -186,7 +200,7 @@ void K3b::JobProgressDialog::setupGUI()
     progressHeaderLayout->addLayout( jobProgressLayout );
     progressHeaderLayout->setAlignment( jobProgressLayout, Qt::AlignVCenter );
     progressHeaderLayout->addWidget( new K3b::ThemedLabel( K3b::Theme::PROGRESS_RIGHT, d->progressHeaderFrame ) );
-    mainLayout->addWidget( d->progressHeaderFrame );
+    mainLayout->addWidget( progressHeaderParentFrame );
     // ------------------------------------------------------------------------------------------
 
     QHBoxLayout* layout3 = new QHBoxLayout;

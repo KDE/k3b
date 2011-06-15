@@ -38,16 +38,23 @@ K3b::BurnProgressDialog::BurnProgressDialog( QWidget *parent, bool showSubProgre
     m_frameExtraInfoLayout->addWidget( m_labelWritingSpeed, 2, 0 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Estimated writing speed:"), m_frameExtraInfo ), 1, 0 );
 
-    m_labelWriter = new K3b::ThemedLabel( m_frameExtraInfo );
-    m_labelWriter->setFrameShape( QFrame::StyledPanel );
-    m_labelWriter->setFrameShadow( QFrame::Sunken );
-    m_labelWriter->setLineWidth( 1 );
+    QFrame* labelParentWriter = new QFrame( m_frameExtraInfo );
+    labelParentWriter->setFrameShape( QFrame::StyledPanel );
+    labelParentWriter->setFrameShadow( QFrame::Sunken );
+    labelParentWriter->setLineWidth( 1 );
+    labelParentWriter->setLayout( new QVBoxLayout() );
+    labelParentWriter->layout()->setSpacing(0);
+    labelParentWriter->layout()->setMargin(0);
+
+    m_labelWriter = new K3b::ThemedLabel( labelParentWriter );
+    m_labelWriter->setFrameStyle( QFrame::NoFrame );
     m_labelWriter->setContentsMargins( 5, 5, 5, 5 );
     QFont textLabel14_font( m_labelWriter->font() );
     textLabel14_font.setBold( true );
     m_labelWriter->setFont( textLabel14_font );
+    labelParentWriter->layout()->addWidget( m_labelWriter );
 
-    m_frameExtraInfoLayout->addWidget( m_labelWriter, 0, 0, 1, 4 );
+    m_frameExtraInfoLayout->addWidget( labelParentWriter, 0, 0, 1, 4 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Software buffer:"), m_frameExtraInfo ), 1, 2 );
     m_frameExtraInfoLayout->addWidget( new QLabel( i18n("Device buffer:"), m_frameExtraInfo ), 2, 2 );
 
