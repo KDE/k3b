@@ -103,7 +103,7 @@ void K3b::ThemedHeader::init()
     m_rightLabel->setAutoFillBackground( true );
 
     QHBoxLayout* layout = new QHBoxLayout( this );
-    layout->setContentsMargins( 2, 2, 2, 2 ); // to make sure the frame gets displayed
+    layout->setMargin(0);
     layout->setSpacing( 0 );
     layout->addWidget( m_leftLabel );
     layout->addWidget( m_titleLabel );
