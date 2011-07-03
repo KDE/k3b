@@ -324,7 +324,7 @@ void K3b::AudioCdView::slotEditTrackCddb()
         int trackIndex = items.first();
 
         KDialog dialog( this);
-        dialog.setCaption(i18n("CDDB Track %1", trackIndex) );
+        dialog.setCaption(i18n("CDDB Track %1", trackIndex+1) );
         dialog.setButtons(KDialog::Ok|KDialog::Cancel);
         dialog.setDefaultButton(KDialog::Ok);
         dialog.setModal(true);
