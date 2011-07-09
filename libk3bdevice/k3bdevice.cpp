@@ -3253,7 +3253,7 @@ QList<int> K3b::Device::Device::determineSupportedWriteSpeeds() const
             int max = 0;
             unsigned char* data = 0;
             unsigned int dataLen = 0;
-            if( modeSense( &data, dataLen, 0x2A ) ) {
+            if( modeSense( &data, dataLen, 0x2A ) && dataLen >= 8 ) {
                 mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
 
                 // MMC1 used byte 18 and 19 for the max write speed
