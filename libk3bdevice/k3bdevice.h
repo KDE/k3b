@@ -462,8 +462,7 @@ namespace K3b {
                            bool cav = false ) const;
 
             /**
-             * if true is returned dataLen specifies the actual length of *data which needs to be
-             * deleted after using.
+             * if true is returned \param data is resized.
              */
             bool readDiscInformation( UByteArray& data ) const;
 
@@ -473,14 +472,12 @@ namespace K3b {
             bool modeSelect( UByteArray& pageData, bool pf, bool sp ) const;
 
             /**
-             * if true is returned pageLen specifies the actual length of *pageData which needs to be
-             * deleted after using.
+             * if true is returned \param pageData is resized.
              */
             bool modeSense( UByteArray& pageData, int page ) const;
 
             /**
-             * if true is returned dataLen specifies the actual length of *data which needs to be
-             * deleted after using.
+             * if true is returned \param data is resized.
              */
             bool readTocPmaAtip( UByteArray& data, int format, bool msf, int track ) const;
 
@@ -495,8 +492,7 @@ namespace K3b {
             bool readTrackInformation( UByteArray& data, int type, int value ) const;
 
             /**
-             * if true is returned dataLen specifies the actual length of *data which needs to be
-             * deleted after using.
+             * if true is returned \param data is resized.
              */
             bool readDiscStructure( UByteArray& data,
                                     unsigned int mediaType = 0x0,
@@ -516,8 +512,7 @@ namespace K3b {
                                    unsigned int agid = 0x0 ) const;
 
             /**
-             * if true is returned dataLen specifies the actual length of *data which needs to be
-             * deleted after using.
+             * if true is returned \param data is resized.
              */
             bool mechanismStatus( UByteArray& data ) const;
 
@@ -529,8 +524,7 @@ namespace K3b {
 
 
             /**
-             * if true is returned dataLen specifies the actual length of *data which needs to be
-             * deleted after using.
+             * if true is returned \param data is resized.
              */
             bool getPerformance( UByteArray& data,
                                  unsigned int type,

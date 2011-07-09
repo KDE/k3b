@@ -707,10 +707,10 @@ bool K3b::Device::Device::modeSense( UByteArray& pageData, int page ) const
     pageData.resize( pageLen );
     ::memset( pageData.data(), 0, pageData.size() );
 
-    cmd[7] = pageLen>>8;
-    cmd[8] = pageLen;
+    cmd[7] = pageData.size() >> 8;
+    cmd[8] = pageData.size();
     if( cmd.transport( TR_DIR_READ, pageData.data(), pageData.size() ) == 0 ) {
-        pageLen = qMin( pageLen, from2Byte( pageData.data() ) + 2 );
+        pageData.resize( qMin( pageData.size(), from2Byte( pageData.data() ) + 2 ) );
         return true;
     }
     else {

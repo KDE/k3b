@@ -3179,8 +3179,8 @@ QList<int> K3b::Device::Device::determineSupportedWriteSpeeds() const
             // cdrecord also uses it as the max writing speed.
             int max = 0;
             UByteArray data;
-            if( modeSense( data, 0x2A ) ) {
-                mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
+            if( modeSense( data, 0x2A ) && data.size() >= 8 ) {
+                const mm_cap_page_2A* mm = (mm_cap_page_2A const*)&data.at(8);
 
                 // MMC1 used byte 18 and 19 for the max write speed
                 if( data.size() > 19 )

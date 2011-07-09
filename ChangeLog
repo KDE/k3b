@@ -15,6 +15,7 @@ Bugfixes:
  * Missing "Extract Digital Audio with K3b" in device notifier for Audio CD medium (265819)
  * Clearing up track info in audio project when CDDB query failed
  * Improper track number in CDDB track edit window title (276681)
+ * Crash on detecting writing speeds (272427)
 
 2.0.2
 =====

@@ -35,8 +35,8 @@ namespace K3b {
         LIBK3BDEVICE_EXPORT QString mediaTypeString( int, bool simplyfied = false );
         LIBK3BDEVICE_EXPORT void debugBitfield( unsigned char* data, long len );
 
-        LIBK3BDEVICE_EXPORT quint16 from2Byte( unsigned char* );
-        LIBK3BDEVICE_EXPORT quint32 from4Byte( unsigned char* );
+        LIBK3BDEVICE_EXPORT quint16 from2Byte( const unsigned char* );
+        LIBK3BDEVICE_EXPORT quint32 from4Byte( const unsigned char* );
 
         LIBK3BDEVICE_EXPORT char fromBcd( const char& );
         LIBK3BDEVICE_EXPORT char toBcd( const char& );
