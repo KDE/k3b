@@ -212,11 +212,11 @@ void K3b::AudioCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
     
-    KAction* actionCheckTracks = new KAction( i18n("Check Tracks"), this );
+    KAction* actionCheckTracks = new KAction( this );
     d->actionCollection->addAction( "check_tracks", actionCheckTracks );
     connect( actionCheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotCheck()) );
     
-    KAction* actionUncheckTracks = new KAction( i18n("Uncheck Tracks"), this );
+    KAction* actionUncheckTracks = new KAction( this );
     d->actionCollection->addAction( "uncheck_tracks", actionUncheckTracks );
     connect( actionUncheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotUncheck()) );
     
@@ -295,13 +295,19 @@ void K3b::AudioCdView::slotContextMenu( const QPoint& p )
 
 void K3b::AudioCdView::slotContextMenuAboutToShow()
 {
-    if ( d->trackView->selectionModel()->hasSelection() ) {
-        const Qt::CheckState commonState = mu::commonCheckState( d->trackView->selectionModel()->selectedRows() );
-        actionCollection()->action("check_tracks")->setVisible( commonState != Qt::Checked );
-        actionCollection()->action("uncheck_tracks")->setVisible( commonState != Qt::Unchecked );
+    QAction *actionCheckTracks = actionCollection()->action("check_tracks");
+    QAction *actionUncheckTracks = actionCollection()->action("uncheck_tracks");
+    const QModelIndexList selectedRows = d->trackView->selectionModel()->selectedRows();
+
+    if ( !selectedRows.empty() ) {
+        const Qt::CheckState commonState = mu::commonCheckState( selectedRows );
+        actionCheckTracks->setVisible( commonState != Qt::Checked );
+        actionCheckTracks->setText( selectedRows.count() == 1 ? i18n("Check Track") : i18n("Check Tracks") );
+        actionUncheckTracks->setVisible( commonState != Qt::Unchecked );
+        actionUncheckTracks->setText( selectedRows.count() == 1 ? i18n("Uncheck Track") : i18n("Uncheck Tracks") );
     } else {
-        actionCollection()->action("check_tracks")->setVisible( false );
-        actionCollection()->action("uncheck_tracks")->setVisible( false );
+        actionCheckTracks->setVisible( false );
+        actionUncheckTracks->setVisible( false );
     }
 }
 

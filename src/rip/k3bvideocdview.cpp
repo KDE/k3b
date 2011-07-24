@@ -2,7 +2,7 @@
 *
 * Copyright (C) 2003 Christian Kvasny <chris@k3b.org>
 * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
-* Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+* Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
 *
 * This file is part of the K3b project.
 * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -27,7 +27,6 @@
 #include "k3bcore.h"
 #include "k3bmedium.h"
 #include "k3bstdguiitems.h"
-#include "k3baction.h"
 
 
 // kde includes
@@ -371,35 +370,42 @@ void K3b::VideoCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
 
-    K3b::createAction( this, i18n( "Check All" ), 0, 0, this,
-                       SLOT(slotCheckAll()), actionCollection(),
-                       "check_all" );
-    K3b::createAction( this, i18n( "Uncheck All" ), 0, 0, this,
-                       SLOT(slotUncheckAll()), actionCollection(),
-                       "decheck_all" );
-    K3b::createAction( this, i18n( "Check Track" ), 0, 0, this,
-                       SLOT(slotCheck()), actionCollection(),
-                       "check_track" );
-    K3b::createAction( this, i18n( "Uncheck Track" ), 0, 0, this,
-                       SLOT(slotUncheck()), actionCollection(),
-                       "decheck_track" );
-    K3b::createAction( this, i18n( "Start Ripping" ), "tools-rip-video-cd", 0, this,
-                       SLOT(startRip()), actionCollection(),
-                       "start_rip" );
-    KAction* actionShowDataPart = K3b::createAction( this, i18n("View Files"), "media-optical-data", 0, this,
-                                                     SLOT(slotViewFiles()), actionCollection(), "view_files" );
-    actionShowDataPart->setToolTip( i18n("View plain data files") );
+    KAction *actionCheckAll = new KAction(i18n("Check All"), this);
+    d->actionCollection->addAction("check_all", actionCheckAll);
+    connect(actionCheckAll, SIGNAL(triggered(bool)), this, SLOT(slotCheckAll()));
+
+    KAction *actionUncheckAll = new KAction(i18n("Uncheck All"), this);
+    d->actionCollection->addAction("decheck_all", actionUncheckAll);
+    connect(actionUncheckAll, SIGNAL(triggered(bool)), this, SLOT(slotUncheckAll()));
+
+    KAction *actionCheckTrack = new KAction(i18n("Check Track"), this);
+    d->actionCollection->addAction("check_track", actionCheckTrack);
+    connect(actionCheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotCheck()));
+
+    KAction *actionUncheckTrack = new KAction(i18n("Uncheck Track"), this);
+    d->actionCollection->addAction("decheck_track", actionUncheckTrack);
+    connect(actionUncheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotUncheck()));
+
+    KAction *actionStartRipping = new KAction(KIcon("tools-rip-video-cd"), i18n("Start Ripping"), this);
+    d->actionCollection->addAction("start_rip", actionStartRipping);
+    connect(actionStartRipping, SIGNAL(triggered(bool)), this, SLOT(startRip()));
+
+    KAction* actionShowDataPart = new KAction(KIcon("media-optical-data"), i18n("View Files"), this);
+    actionShowDataPart->setToolTip(i18n("View plain data files"));
+    actionShowDataPart->setStatusTip(actionShowDataPart->toolTip());
+    d->actionCollection->addAction("view_files", actionShowDataPart);
+    connect(actionShowDataPart, SIGNAL(triggered(bool)), this, SLOT(slotViewFiles()));
 
     // TODO: set the actions tooltips and whatsthis infos
 
     // setup the popup menu
     d->popupMenu = new KActionMenu( actionCollection() );
-    d->popupMenu->addAction( d->actionCollection->action( "check_track" ) );
-    d->popupMenu->addAction( d->actionCollection->action( "decheck_track" ) );
-    d->popupMenu->addAction( d->actionCollection->action( "check_all" ) );
-    d->popupMenu->addAction( d->actionCollection->action( "decheck_all" ) );
+    d->popupMenu->addAction( actionCheckTrack );
+    d->popupMenu->addAction( actionUncheckTrack );
+    d->popupMenu->addAction( actionCheckAll );
+    d->popupMenu->addAction( actionUncheckTrack );
     d->popupMenu->addSeparator();
-    d->popupMenu->addAction( d->actionCollection->action( "start_rip" ) );
+    d->popupMenu->addAction( actionStartRipping );
 }
 
 

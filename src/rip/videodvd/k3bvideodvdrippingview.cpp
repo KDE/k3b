@@ -188,13 +188,19 @@ void K3b::VideoDVDRippingView::slotContextMenu( const QPoint& pos )
 
 void K3b::VideoDVDRippingView::slotContextMenuAboutToShow()
 {
-    if ( d->view->selectionModel()->hasSelection() ) {
-        const Qt::CheckState commonState = mu::commonCheckState( d->view->selectionModel()->selectedRows() );
-        actionCollection()->action("check_tracks")->setVisible( commonState != Qt::Checked );
-        actionCollection()->action("uncheck_tracks")->setVisible( commonState != Qt::Unchecked );
+    QAction *actionCheckTracks = actionCollection()->action("check_tracks");
+    QAction *actionUncheckTracks = actionCollection()->action("uncheck_tracks");
+    const QModelIndexList selectedRows = d->view->selectionModel()->selectedRows();
+
+    if ( !selectedRows.empty() ) {
+        const Qt::CheckState commonState = mu::commonCheckState( selectedRows );
+        actionCheckTracks->setVisible( commonState != Qt::Checked );
+        actionCheckTracks->setText( selectedRows.count() == 1 ? i18n("Check Track") : i18n("Check Tracks") );
+        actionUncheckTracks->setVisible( commonState != Qt::Unchecked );
+        actionUncheckTracks->setText( selectedRows.count() == 1 ? i18n("Uncheck Track") : i18n("Uncheck Tracks") );
     } else {
-        actionCollection()->action("check_tracks")->setVisible( false );
-        actionCollection()->action("uncheck_tracks")->setVisible( false );
+        actionCheckTracks->setVisible( false );
+        actionUncheckTracks->setVisible( false );
     }
 }
 
@@ -334,19 +340,16 @@ void K3b::VideoDVDRippingView::initActions()
     d->actionCollection = new KActionCollection( this );
 
     KAction* actionCheck = new KAction( this );
-    actionCheck->setText( i18n("Check Tracks") );
     connect( actionCheck, SIGNAL(triggered()), this, SLOT(slotCheck()) );
     actionCollection()->addAction( "check_tracks", actionCheck );
 
     KAction* actionUncheck = new KAction( this );
-    actionUncheck->setText( i18n("Uncheck Tracks") );
     connect( actionUncheck, SIGNAL(triggered()), this, SLOT(slotUncheck()) );
     actionCollection()->addAction( "uncheck_tracks", actionUncheck );
 
-    KAction* actionStartRip = new KAction( this );
-    actionStartRip->setText( i18n("Start Ripping") );
-    actionStartRip->setIcon( KIcon( "tools-rip-video-dvd" ) );
+    KAction* actionStartRip = new KAction( KIcon( "tools-rip-video-dvd" ), i18n("Start Ripping"), this );
     actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
+    actionStartRip->setStatusTip(actionStartRip->toolTip());
     actionStartRip->setWhatsThis( i18n("<p>Rips single titles from a video DVD "
                                        "into a compressed format such as XviD. Menu structures are completely ignored."
                                        "<p>If you intend to copy the plain Video DVD vob files from the DVD "
