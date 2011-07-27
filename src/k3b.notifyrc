@@ -409,6 +409,7 @@ Action=Sound
 
 [Event/Busy]
 Name=Busy
+Name[bg]=Заето
 Name[bs]=Zauzet
 Name[ca]=Ocupat
 Name[ca@valencia]=Ocupat
@@ -436,6 +437,7 @@ Name[uk]=Виконується завдання
 Name[x-test]=xxBusyxx
 Name[zh_TW]=忙碌
 Comment=K3b is currently busy and cannot start any other operations
+Comment[bg]=В момента K3b работи и не може да извършва други действия
 Comment[bs]=K3b je trenutno zauzet i ne može započeti druge operacije
 Comment[ca]=El K3b ara mateix està ocupat i no pot iniciar altres operacions
 Comment[ca@valencia]=El K3b ara mateix està ocupat i no pot iniciar altres operacions
@@ -464,6 +466,7 @@ Action=Popup
 
 [Event/NoProblemsFound]
 Name=No problems found
+Name[bg]=Не са открити проблеми
 Name[bs]=Nema nađenih problema
 Name[ca]=No s'ha trobat cap problema
 Name[ca@valencia]=No s'ha trobat cap problema
@@ -489,6 +492,7 @@ Name[uk]=Проблем не виявлено
 Name[x-test]=xxNo problems foundxx
 Name[zh_TW]=沒有發現問題
 Comment=No problems found in system configuration
+Comment[bg]=Не бяха открити проблеми с настройките на системата
 Comment[bs]=Nema nađenih problema u sistemskoj konfiguraciji
 Comment[ca]=No s'han trobat problemes en la configuració del sistema
 Comment[ca@valencia]=No s'han trobat problemes en la configuració del sistema
@@ -517,6 +521,7 @@ Action=Popup
 
 [Event/MountFailed]
 Name=Mount/unmount failed
+Name[bg]=Грешка при монтиране или демонтиране
 Name[bs]=Montiranje/demontiranje neuspjelo
 Name[ca]=Ha fallat en muntar/desmuntar
 Name[ca@valencia]=Ha fallat en muntar/desmuntar
@@ -542,6 +547,7 @@ Name[uk]=Помилка монтування або демонтування
 Name[x-test]=xxMount/unmount failedxx
 Name[zh_TW]=掛載/卸載失敗
 Comment=Medium cannot be mount or unmounted
+Comment[bg]=Медията не може да се монтира или демонтира
 Comment[bs]=Medij se ne može montirati ili demontirati
 Comment[ca]=El suport no es pot muntar o desmuntar
 Comment[ca@valencia]=El suport no es pot muntar o desmuntar
@@ -568,6 +574,7 @@ Action=Popup
 
 [Event/TrackDataNotFound]
 Name=Track data not found
+Name[bg]=Не са открити данни за запис
 Name[bs]=Podaci o stazi nisu nađeni
 Name[ca]=No s'han trobat les dades de la pista
 Name[ca@valencia]=No s'han trobat les dades de la pista
@@ -592,6 +599,7 @@ Name[uk]=Не знайдено даних композиції
 Name[x-test]=xxTrack data not foundxx
 Name[zh_TW]=找不到音軌資料
 Comment=Track information has not been found in the online database
+Comment[bg]=Не бяха открити данни за записа в базата в Интернет
 Comment[bs]=Podaci o stazi nisu nađeni u bazi podataka na mreži
 Comment[ca]=No s'ha trobat la informació de la pista a la base de dades en línia
 Comment[ca@valencia]=No s'ha trobat la informació de la pista a la base de dades en línia
