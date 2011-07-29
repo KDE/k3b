@@ -116,8 +116,8 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     vca->addFixedColumn( AudioTrackModel::LengthColumn );
     vca->setColumnMargin( AudioTrackModel::LengthColumn, 10 );
 
-    connect( d->trackView, SIGNAL(customContextMenuRequested(const QPoint&)),
-             this, SLOT(slotContextMenu(const QPoint&)) );
+    connect( d->trackView, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(slotContextMenu(QPoint)) );
     connect( d->trackView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(slotTrackSelectionChanged()) );
     connect( k3bcore->mediaCache(), SIGNAL(mediumCddbChanged(K3b::Device::Device*)),

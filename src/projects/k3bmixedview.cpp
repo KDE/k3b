@@ -79,7 +79,7 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     splitter->setStretchFactor( 1, 3 );
     setMainWidget( splitter );
 
-    connect( actionCollection()->action( "parent_dir" ), SIGNAL( triggered() ),
+    connect( actionCollection()->action( "parent_dir" ), SIGNAL(triggered()),
              this, SLOT(slotParentDir()) );
     connect( m_dirView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(slotCurrentDirChanged()) );

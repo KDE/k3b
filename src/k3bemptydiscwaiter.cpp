@@ -125,9 +125,9 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(slotMediumChanged(K3b::Device::Device*)) );
 
-    connect( this, SIGNAL( cancelClicked() ), this, SLOT( slotCancel() ) );
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT( slotUser1() ) );
-    connect( this, SIGNAL( user2Clicked() ), this, SLOT( slotUser2() ) );
+    connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancel()) );
+    connect( this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()) );
+    connect( this, SIGNAL(user2Clicked()), this, SLOT(slotUser2()) );
 }
 
 

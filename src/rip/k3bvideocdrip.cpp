@@ -152,10 +152,10 @@ void K3b::VideoCdRip::vcdxRip()
 
 
     m_process->setOutputChannelMode( KProcess::MergedChannels );
-    connect( m_process, SIGNAL( readyReadStandardOutput() ),
-             this, SLOT( slotParseVcdXRipOutput() ) );
-    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-             this, SLOT( slotVcdXRipFinished( int, QProcess::ExitStatus ) ) );
+    connect( m_process, SIGNAL(readyReadStandardOutput()),
+             this, SLOT(slotParseVcdXRipOutput()) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(slotVcdXRipFinished(int,QProcess::ExitStatus)) );
 
     m_process->setWorkingDirectory( m_videooptions ->getVideoCdDestination() );
 

@@ -104,8 +104,8 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_conversionAction = createAction( m_view, i18n("Convert Tracks"), "edit-redo", 0, this, SLOT(slotAudioConversion()),
                                        actionCollection, "project_audio_convert" );
 
-    connect( m_columnAdjuster, SIGNAL( columnsNeedAjusting() ),
-             this, SLOT( slotAdjustColumns() ) );
+    connect( m_columnAdjuster, SIGNAL(columnsNeedAjusting()),
+             this, SLOT(slotAdjustColumns()) );
     connect( m_trackView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              this, SLOT(slotSelectionChanged()) );
 #ifdef ENABLE_AUDIO_PLAYER

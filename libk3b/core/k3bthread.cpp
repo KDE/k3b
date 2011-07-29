@@ -72,7 +72,7 @@ bool K3b::Thread::success() const
 void K3b::Thread::ensureDone()
 {
     // we wait for 5 seconds before we terminate the thread
-    QTimer::singleShot( 5000, this, SLOT( slotEnsureDoneTimeout() ) );
+    QTimer::singleShot( 5000, this, SLOT(slotEnsureDoneTimeout()) );
 }
 
 

@@ -534,10 +534,10 @@ void K3b::VcdTrackDialog::setupPbcTab()
     d->groupPlay->setEnabled( false );
     d->groupPbc->setEnabled( false );
 
-    connect( d->check_pbc, SIGNAL( toggled( bool ) ), this, SLOT( slotPbcToggled( bool ) ) );
-    connect( d->spin_times, SIGNAL( valueChanged( int ) ), this, SLOT( slotPlayTimeChanged( int ) ) );
-    connect( d->spin_waittime, SIGNAL( valueChanged( int ) ), this, SLOT( slotWaitTimeChanged( int ) ) );
-    connect( d->check_usekeys, SIGNAL( toggled( bool ) ), this, SLOT( slotUseKeysToggled( bool ) ) );
+    connect( d->check_pbc, SIGNAL(toggled(bool)), this, SLOT(slotPbcToggled(bool)) );
+    connect( d->spin_times, SIGNAL(valueChanged(int)), this, SLOT(slotPlayTimeChanged(int)) );
+    connect( d->spin_waittime, SIGNAL(valueChanged(int)), this, SLOT(slotWaitTimeChanged(int)) );
+    connect( d->check_usekeys, SIGNAL(toggled(bool)), this, SLOT(slotUseKeysToggled(bool)) );
 }
 
 void K3b::VcdTrackDialog::setupPbcKeyTab()

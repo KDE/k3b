@@ -152,18 +152,18 @@ void K3b::AppDeviceManager::slotMediumChanged( K3b::Device::Device* dev )
             d->actionMount->setEnabled( mediumMountable );
             d->actionUnmount->setEnabled( mediumMountable );
 
-            disconnect( this, SLOT(slotMountChanged(bool,const QString&)) );
-            disconnect( this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,const QString&)) );
-            disconnect( this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,const QString&)) );
+            disconnect( this, SLOT(slotMountChanged(bool,QString)) );
+            disconnect( this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,QString)) );
+            disconnect( this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,QString)) );
 
             Solid::StorageAccess* storage = dev->solidStorage();
             if( storage != 0 ) {
-                connect( storage, SIGNAL(accessibilityChanged(bool,const QString&)),
-                        this, SLOT(slotMountChanged(bool,const QString&)) );
-                connect( storage, SIGNAL(setupDone(Solid::ErrorType,QVariant,const QString&)),
-                        this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,const QString&)) );
-                connect( storage, SIGNAL(teardownDone(Solid::ErrorType,QVariant,const QString&)),
-                        this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,const QString&)) );
+                connect( storage, SIGNAL(accessibilityChanged(bool,QString)),
+                        this, SLOT(slotMountChanged(bool,QString)) );
+                connect( storage, SIGNAL(setupDone(Solid::ErrorType,QVariant,QString)),
+                        this, SLOT(slotMountFinished(Solid::ErrorType,QVariant,QString)) );
+                connect( storage, SIGNAL(teardownDone(Solid::ErrorType,QVariant,QString)),
+                        this, SLOT(slotUnmountFinished(Solid::ErrorType,QVariant,QString)) );
                 d->actionMount->setVisible( !storage->isAccessible() );
                 d->actionUnmount->setVisible( storage->isAccessible() );
             }

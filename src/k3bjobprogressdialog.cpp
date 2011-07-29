@@ -440,23 +440,23 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
 
     if( job ) {
         kDebug() << "connecting";
-        connect( job, SIGNAL(infoMessage(const QString&,int)), this, SLOT(slotInfoMessage(const QString&,int)) );
+        connect( job, SIGNAL(infoMessage(QString,int)), this, SLOT(slotInfoMessage(QString,int)) );
 
         connect( job, SIGNAL(percent(int)), m_progressPercent, SLOT(setValue(int)) );
         connect( job, SIGNAL(percent(int)), this, SLOT(slotProgress(int)) );
         connect( job, SIGNAL(subPercent(int)), m_progressSubPercent, SLOT(setValue(int)) );
 
-        connect( job, SIGNAL(processedSubSize(int, int)), this, SLOT(slotProcessedSubSize(int, int)) );
-        connect( job, SIGNAL(processedSize(int, int)), this, SLOT(slotProcessedSize(int, int)) );
+        connect( job, SIGNAL(processedSubSize(int,int)), this, SLOT(slotProcessedSubSize(int,int)) );
+        connect( job, SIGNAL(processedSize(int,int)), this, SLOT(slotProcessedSize(int,int)) );
 
-        connect( job, SIGNAL(newTask(const QString&)), this, SLOT(slotNewTask(const QString&)) );
-        connect( job, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
+        connect( job, SIGNAL(newTask(QString)), this, SLOT(slotNewTask(QString)) );
+        connect( job, SIGNAL(newSubTask(QString)), this, SLOT(slotNewSubTask(QString)) );
         connect( job, SIGNAL(started()), this, SLOT(slotStarted()) );
         connect( job, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)) );
         connect( job, SIGNAL(canceled()), this, SLOT(slotCanceled()) );
 
-        connect( job, SIGNAL(debuggingOutput(const QString&, const QString&)),
-                 this, SLOT(slotDebuggingOutput(const QString&, const QString&)) );
+        connect( job, SIGNAL(debuggingOutput(QString,QString)),
+                 this, SLOT(slotDebuggingOutput(QString,QString)) );
 
         m_labelJob->setText( m_job->jobDescription() );
         m_labelJobDetails->setText( m_job->jobDetails() );

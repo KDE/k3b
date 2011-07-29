@@ -87,7 +87,7 @@ void K3b::BurnProgressDialog::setBurnJob( K3b::BurnJob* burnJob )
     if( burnJob ) {
         connect( burnJob, SIGNAL(bufferStatus(int)), this, SLOT(slotBufferStatus(int)) );
         connect( burnJob, SIGNAL(deviceBuffer(int)), this, SLOT(slotDeviceBuffer(int)) );
-        connect( burnJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SLOT(slotWriteSpeed(int, K3b::Device::SpeedMultiplicator)) );
+        connect( burnJob, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)), this, SLOT(slotWriteSpeed(int,K3b::Device::SpeedMultiplicator)) );
         connect( burnJob, SIGNAL(burning(bool)), m_progressWritingBuffer, SLOT(setEnabled(bool)) );
         connect( burnJob, SIGNAL(burning(bool)), m_progressDeviceBuffer, SLOT(setEnabled(bool)) );
         connect( burnJob, SIGNAL(burning(bool)), m_labelWritingSpeed, SLOT(setEnabled(bool)) );

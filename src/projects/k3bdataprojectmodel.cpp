@@ -151,16 +151,16 @@ K3b::DataProjectModel::DataProjectModel( K3b::DataDoc* doc, QObject* parent )
 {
     d->project = doc;
 
-    connect( doc, SIGNAL( aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ),
-             this, SLOT( _k_aboutToAddItem(K3b::DirItem*, K3b::DataItem*) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( aboutToRemoveItem(K3b::DataItem*) ),
-             this, SLOT( _k_aboutToRemoveItem(K3b::DataItem*) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( itemAdded(K3b::DataItem*) ),
-             this, SLOT( _k_itemAdded(K3b::DataItem*) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( itemRemoved(K3b::DataItem*) ),
-             this, SLOT( _k_itemRemoved(K3b::DataItem*) ), Qt::DirectConnection );
-    connect( doc, SIGNAL( volumeIdChanged() ),
-             this, SLOT( _k_volumeIdChanged() ), Qt::DirectConnection );
+    connect( doc, SIGNAL(aboutToAddItem(K3b::DirItem*,K3b::DataItem*)),
+             this, SLOT(_k_aboutToAddItem(K3b::DirItem*,K3b::DataItem*)), Qt::DirectConnection );
+    connect( doc, SIGNAL(aboutToRemoveItem(K3b::DataItem*)),
+             this, SLOT(_k_aboutToRemoveItem(K3b::DataItem*)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemAdded(K3b::DataItem*)),
+             this, SLOT(_k_itemAdded(K3b::DataItem*)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemRemoved(K3b::DataItem*)),
+             this, SLOT(_k_itemRemoved(K3b::DataItem*)), Qt::DirectConnection );
+    connect( doc, SIGNAL(volumeIdChanged()),
+             this, SLOT(_k_volumeIdChanged()), Qt::DirectConnection );
 }
 
 

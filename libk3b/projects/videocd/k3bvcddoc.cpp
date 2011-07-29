@@ -53,11 +53,11 @@ K3b::VcdDoc::VcdDoc( QObject* parent )
     m_vcdType = NONE;
 
     m_urlAddingTimer = new QTimer( this );
-    connect( m_urlAddingTimer, SIGNAL( timeout() ), this, SLOT( slotWorkUrlQueue() ) );
+    connect( m_urlAddingTimer, SIGNAL(timeout()), this, SLOT(slotWorkUrlQueue()) );
 
     // FIXME: remove the newTracks() signal and replace it with the changed signal
-    connect( this, SIGNAL( newTracks() ), this, SIGNAL( changed() ) );
-    connect( this, SIGNAL( trackRemoved( K3b::VcdTrack* ) ), this, SIGNAL( changed() ) );
+    connect( this, SIGNAL(newTracks()), this, SIGNAL(changed()) );
+    connect( this, SIGNAL(trackRemoved(K3b::VcdTrack*)), this, SIGNAL(changed()) );
 }
 
 K3b::VcdDoc::~VcdDoc()

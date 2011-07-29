@@ -92,8 +92,8 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     *m_process << "-Z" << "x200";
     *m_process << "-o" << m_tempDir->name();
 
-    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotTranscodeFinished(int, QProcess::ExitStatus)) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(slotTranscodeFinished(int,QProcess::ExitStatus)) );
     if ( !m_process->start(KProcess::ForwardedChannels) ) {
         // something went wrong when starting the program
         // it "should" be the executable

@@ -63,11 +63,11 @@ K3b::AudioTrackTRMLookupDialog::AudioTrackTRMLookupDialog( QWidget* parent )
     grid->addWidget( m_busyWidget, 1, 1 );
 
     m_mbJob = new K3b::MusicBrainzJob( this );
-    connect( m_mbJob, SIGNAL(infoMessage(const QString&, int)),
-             this, SLOT(slotMbJobInfoMessage(const QString&, int)) );
+    connect( m_mbJob, SIGNAL(infoMessage(QString,int)),
+             this, SLOT(slotMbJobInfoMessage(QString,int)) );
     connect( m_mbJob, SIGNAL(finished(bool)), this, SLOT(slotMbJobFinished(bool)) );
-    connect( m_mbJob, SIGNAL(trackFinished(K3b::AudioTrack*, bool)),
-             this, SLOT(slotTrackFinished(K3b::AudioTrack*, bool)) );
+    connect( m_mbJob, SIGNAL(trackFinished(K3b::AudioTrack*,bool)),
+             this, SLOT(slotTrackFinished(K3b::AudioTrack*,bool)) );
 }
 
 

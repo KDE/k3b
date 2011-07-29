@@ -129,10 +129,10 @@ K3b::Device::DeviceManager::DeviceManager( QObject* parent )
     : QObject( parent ),
       d( new Private() )
 {
-    connect( Solid::DeviceNotifier::instance(), SIGNAL( deviceAdded( const QString& ) ),
-             this, SLOT( slotSolidDeviceAdded( const QString& ) ) );
-    connect( Solid::DeviceNotifier::instance(), SIGNAL( deviceRemoved( const QString& ) ),
-             this, SLOT( slotSolidDeviceRemoved( const QString& ) ) );
+    connect( Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
+             this, SLOT(slotSolidDeviceAdded(QString)) );
+    connect( Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
+             this, SLOT(slotSolidDeviceRemoved(QString)) );
 }
 
 

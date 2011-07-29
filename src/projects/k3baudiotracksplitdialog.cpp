@@ -65,14 +65,14 @@ K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidg
     m_editorWidget->enableRangeSelection( true );
     m_editorWidget->installEventFilter( this );
 
-    connect( m_editorWidget, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&)),
-             this, SLOT(slotRangeModified(int, const K3b::Msf&, const K3b::Msf&)) );
+    connect( m_editorWidget, SIGNAL(rangeChanged(int,K3b::Msf,K3b::Msf)),
+             this, SLOT(slotRangeModified(int,K3b::Msf,K3b::Msf)) );
     connect( m_editorWidget, SIGNAL(selectedRangeChanged(int)),
              this, SLOT(slotRangeSelectionChanged(int)) );
-    connect( m_msfEditStart, SIGNAL(valueChanged(const K3b::Msf&)),
-             this, SLOT(slotMsfEditChanged(const K3b::Msf&)) );
-    connect( m_msfEditEnd, SIGNAL(valueChanged(const K3b::Msf&)),
-             this, SLOT(slotMsfEditChanged(const K3b::Msf&)) );
+    connect( m_msfEditStart, SIGNAL(valueChanged(K3b::Msf)),
+             this, SLOT(slotMsfEditChanged(K3b::Msf)) );
+    connect( m_msfEditEnd, SIGNAL(valueChanged(K3b::Msf)),
+             this, SLOT(slotMsfEditChanged(K3b::Msf)) );
 
     setupActions();
 
@@ -99,11 +99,11 @@ void K3b::AudioTrackSplitDialog::setupActions()
 
     KAction* actionSplitHere = new KAction( this );
     actionSplitHere->setText( i18n("Split Here") );
-    connect( actionSplitHere, SIGNAL( triggered() ), this, SLOT( slotSplitHere() ) );
+    connect( actionSplitHere, SIGNAL(triggered()), this, SLOT(slotSplitHere()) );
 
     KAction* actionRemoveRange = new KAction( this );
     actionRemoveRange->setText( i18n("Remove part") );
-    connect( actionRemoveRange, SIGNAL( triggered() ), this, SLOT( slotRemoveRange() ) );
+    connect( actionRemoveRange, SIGNAL(triggered()), this, SLOT(slotRemoveRange()) );
 
     m_popupMenu->addAction( actionSplitHere );
     m_popupMenu->addAction( actionRemoveRange );

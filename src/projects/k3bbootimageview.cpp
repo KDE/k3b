@@ -50,18 +50,18 @@ K3b::BootImageView::BootImageView( K3b::DataDoc* doc, QWidget* parent )
              this, SLOT(slotDeleteBootImage()) );
     connect( m_buttonToggleOptions, SIGNAL(clicked()),
              this, SLOT(slotToggleOptions()) );
-    connect( m_viewImages->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)),
-             this, SLOT(slotCurrentChanged(const QModelIndex&,const QModelIndex&)) );
+    connect( m_viewImages->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+             this, SLOT(slotCurrentChanged(QModelIndex,QModelIndex)) );
     connect( m_radioNoEmulation, SIGNAL(toggled(bool)),
              this, SLOT(slotNoEmulationToggled(bool)) );
-    connect( m_radioFloppy, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
-    connect( m_radioHarddisk, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
-    connect( m_checkNoBoot, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
-    connect( m_checkInfoTable, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
-    connect( m_radioNoEmulation, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
-    connect( m_editLoadSegment, SIGNAL(textChanged(QString) ),this,SLOT(slotOptionsChanged() ) );
-    connect( m_editLoadSize, SIGNAL(textChanged(QString) ),this,SLOT(slotOptionsChanged() ) );
-    connect( m_radioFloppy, SIGNAL(toggled(bool) ),this,SLOT(slotOptionsChanged() ) );
+    connect( m_radioFloppy, SIGNAL(toggled(bool)),this,SLOT(slotOptionsChanged()) );
+    connect( m_radioHarddisk, SIGNAL(toggled(bool)),this,SLOT(slotOptionsChanged()) );
+    connect( m_checkNoBoot, SIGNAL(toggled(bool)),this,SLOT(slotOptionsChanged()) );
+    connect( m_checkInfoTable, SIGNAL(toggled(bool)),this,SLOT(slotOptionsChanged()) );
+    connect( m_radioNoEmulation, SIGNAL(toggled(bool)),this,SLOT(slotOptionsChanged()) );
+    connect( m_editLoadSegment, SIGNAL(textChanged(QString)),this,SLOT(slotOptionsChanged()) );
+    connect( m_editLoadSize, SIGNAL(textChanged(QString)),this,SLOT(slotOptionsChanged()) );
+    connect( m_radioFloppy, SIGNAL(toggled(bool)),this,SLOT(slotOptionsChanged()) );
 
     K3b::IntValidator* v = new K3b::IntValidator( this );
     m_editLoadSegment->setValidator( v );

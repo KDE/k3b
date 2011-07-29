@@ -114,11 +114,11 @@ K3b::CdrecordWriter::CdrecordWriter( K3b::Device::Device* dev, K3b::JobHandler* 
     d->process.setSplitStdout(true);
     d->process.setSuppressEmptyLines(true);
     d->process.setFlags( K3bQProcess::RawStdin );
-    connect( &d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotStdLine(const QString&)) );
+    connect( &d->process, SIGNAL(stdoutLine(QString)), this, SLOT(slotStdLine(QString)) );
 
     // we use a queued connection to give the process object time to wrap up and return to a correct state
     qRegisterMetaType<QProcess::ExitStatus>();
-    connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)), Qt::QueuedConnection );
+    connect( &d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotProcessExited(int,QProcess::ExitStatus)), Qt::QueuedConnection );
 }
 
 

@@ -89,8 +89,8 @@ K3b::VideoDVDRippingJob::VideoDVDRippingJob( K3b::JobHandler* hdl, QObject* pare
     m_transcodingJob = new K3b::VideoDVDTitleTranscodingJob( this, this );
     connectSubJob( m_transcodingJob,
                    SLOT(slotTranscodingJobFinished(bool)),
-                   SIGNAL(newTask(const QString&)),
-                   SIGNAL(newSubTask(const QString&)),
+                   SIGNAL(newTask(QString)),
+                   SIGNAL(newSubTask(QString)),
                    SLOT(slotTranscodingProgress(int)),
                    SIGNAL(subPercent(int)),
                    0,
@@ -234,8 +234,8 @@ void K3b::VideoDVDRippingJob::startDetectClipping( int ripInfoIndex )
         m_detectClippingJob = new K3b::VideoDVDTitleDetectClippingJob( this, this );
         connectSubJob( m_detectClippingJob,
                        SLOT(slotDetectClippingJobFinished(bool)),
-                       SIGNAL(newTask(const QString&)),
-                       SIGNAL(newSubTask(const QString&)),
+                       SIGNAL(newTask(QString)),
+                       SIGNAL(newSubTask(QString)),
                        SLOT(slotDetectClippingProgress(int)),
                        SIGNAL(subPercent(int)),
                        0,

@@ -79,8 +79,8 @@ void K3bAudioProjectCddbPlugin::activate( K3b::Doc* doc, QWidget* parent )
         }
 
         K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( m_doc->toToc() );
-        connect( job, SIGNAL( result( KJob* ) ),
-                 this, SLOT( slotCddbQueryFinished( KJob* ) ) );
+        connect( job, SIGNAL(result(KJob*)),
+                 this, SLOT(slotCddbQueryFinished(KJob*)) );
 
         m_progress->exec(false);
     }

@@ -73,12 +73,12 @@ K3b::DeviceMenu::Private::Private( DeviceMenu* parent )
     q->addSeparator();
 
     // FIXME: Should we move these actions to K3b::AppDeviceManager?
-    actionContinueMultisession = q->addAction( KIcon( "media-optical-data" ), i18n("Continue Multisession Project"), q, SLOT( _k_continueMultisession() ) );
-    actionCopy = q->addAction( KIcon( "tools-media-optical-copy" ), i18n("Copy &Medium..."), q, SLOT( _k_copy() ) );
-    actionFormat = q->addAction( KIcon( "tools-media-optical-erase" ), i18n("&Format/Erase rewritable disk..."), q, SLOT( _k_format() ) );
-    actionRipAudio = q->addAction( KIcon( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), q, SLOT( _k_ripAudio() ) );
-    actionRipVideoDVD = q->addAction( KIcon( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), q, SLOT( _k_ripVideoDVD() ) );
-    actionRipVcd = q->addAction( KIcon( "tools-rip-video-cd"), i18n("Rip Video CD..."), q, SLOT( _k_ripVcd() ) );
+    actionContinueMultisession = q->addAction( KIcon( "media-optical-data" ), i18n("Continue Multisession Project"), q, SLOT(_k_continueMultisession()) );
+    actionCopy = q->addAction( KIcon( "tools-media-optical-copy" ), i18n("Copy &Medium..."), q, SLOT(_k_copy()) );
+    actionFormat = q->addAction( KIcon( "tools-media-optical-erase" ), i18n("&Format/Erase rewritable disk..."), q, SLOT(_k_format()) );
+    actionRipAudio = q->addAction( KIcon( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), q, SLOT(_k_ripAudio()) );
+    actionRipVideoDVD = q->addAction( KIcon( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), q, SLOT(_k_ripVideoDVD()) );
+    actionRipVcd = q->addAction( KIcon( "tools-rip-video-cd"), i18n("Rip Video CD..."), q, SLOT(_k_ripVcd()) );
 
     actionCopy->setToolTip( i18n("Open the media copy dialog") );
     actionCopy->setStatusTip( actionCopy->toolTip() );
@@ -159,8 +159,8 @@ K3b::DeviceMenu::DeviceMenu( QWidget* parent )
     : KMenu( parent ),
       d( new Private(this) )
 {
-    connect( this, SIGNAL( aboutToShow() ),
-             this, SLOT( _k_aboutToShow() ) );
+    connect( this, SIGNAL(aboutToShow()),
+             this, SLOT(_k_aboutToShow()) );
 }
 
 

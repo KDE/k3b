@@ -135,8 +135,8 @@ K3b::CDDB::CDDBJob::CDDBJob( QObject* parent )
 {
     d->q = this;
     d->cddbClient.setBlockingMode( false );
-    connect( &d->cddbClient, SIGNAL( finished( KCDDB::Result ) ),
-             this, SLOT( _k_cddbQueryFinished( KCDDB::Result ) ) );
+    connect( &d->cddbClient, SIGNAL(finished(KCDDB::Result)),
+             this, SLOT(_k_cddbQueryFinished(KCDDB::Result)) );
 }
 
 

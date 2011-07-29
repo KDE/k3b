@@ -138,8 +138,8 @@ void K3b::ReadcdReader::start()
     // create the commandline
     delete d->process;
     d->process = new K3b::Process();
-    connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
-    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
+    connect( d->process, SIGNAL(stderrLine(QString)), this, SLOT(slotStderrLine(QString)) );
+    connect( d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotProcessExited(int,QProcess::ExitStatus)) );
 
 
     *d->process << d->readcdBinObject;

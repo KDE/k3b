@@ -155,12 +155,12 @@ void K3b::CloneJob::prepareReader()
         m_readcdReader = new K3b::ReadcdReader( this, this );
         connect( m_readcdReader, SIGNAL(percent(int)), this, SLOT(slotReadingPercent(int)) );
         connect( m_readcdReader, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
-        connect( m_readcdReader, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+        connect( m_readcdReader, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
         connect( m_readcdReader, SIGNAL(finished(bool)), this, SLOT(slotReadingFinished(bool)) );
-        connect( m_readcdReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-        connect( m_readcdReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-        connect( m_readcdReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
-                 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+        connect( m_readcdReader, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
+        connect( m_readcdReader, SIGNAL(newTask(QString)), this, SIGNAL(newSubTask(QString)) );
+        connect( m_readcdReader, SIGNAL(debuggingOutput(QString,QString)),
+                 this, SIGNAL(debuggingOutput(QString,QString)) );
     }
 
     m_readcdReader->setReadDevice( readingDevice() );
@@ -176,19 +176,19 @@ void K3b::CloneJob::prepareWriter()
 {
     if( !m_writerJob ) {
         m_writerJob = new K3b::CdrecordWriter( writer(), this, this );
-        connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+        connect( m_writerJob, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
         connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
         connect( m_writerJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)) );
-        connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
-        connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+        connect( m_writerJob, SIGNAL(nextTrack(int,int)), this, SLOT(slotWriterNextTrack(int,int)) );
+        connect( m_writerJob, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
         connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
         connect( m_writerJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-        connect( m_writerJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
+        connect( m_writerJob, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)) );
         connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
-        //    connect( m_writerJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-        connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-        connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-                 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+        //    connect( m_writerJob, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
+        connect( m_writerJob, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
+        connect( m_writerJob, SIGNAL(debuggingOutput(QString,QString)),
+                 this, SIGNAL(debuggingOutput(QString,QString)) );
     }
 
     m_writerJob->clearArguments();

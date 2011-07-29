@@ -172,21 +172,21 @@ void K3b::Job::connectJob( K3b::Job* subJob,
                            const char* processedSubSizeSlot )
 {
     // standard connections
-    connect( subJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-    connect( subJob, SIGNAL(infoMessage(const QString&, int)),
-             this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( subJob, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
+    connect( subJob, SIGNAL(infoMessage(QString,int)),
+             this, SIGNAL(infoMessage(QString,int)) );
 
     // task connections
     if( newTaskSlot == DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
+        connect( subJob, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
     else if( newTaskSlot )
-        connect( subJob, SIGNAL(newTask(const QString&)), this, newTaskSlot );
+        connect( subJob, SIGNAL(newTask(QString)), this, newTaskSlot );
 
     if( newSubTaskSlot == DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+        connect( subJob, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
     else if( newSubTaskSlot )
-        connect( subJob, SIGNAL(newSubTask(const QString&)), this, newSubTaskSlot );
+        connect( subJob, SIGNAL(newSubTask(QString)), this, newSubTaskSlot );
 
     if( finishedSlot == DEFAULT_SIGNAL_CONNECTION )
         connect( subJob, SIGNAL(finished(bool)), this, SIGNAL(finished(bool)) );
@@ -206,14 +206,14 @@ void K3b::Job::connectJob( K3b::Job* subJob,
 
     // processed size
     if( processedSizeSlot == DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+        connect( subJob, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSize(int,int)) );
     else if( processedSizeSlot )
-        connect( subJob, SIGNAL(processedSize(int, int)), this, processedSizeSlot );
+        connect( subJob, SIGNAL(processedSize(int,int)), this, processedSizeSlot );
 
     if( processedSubSizeSlot == DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+        connect( subJob, SIGNAL(processedSubSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
     else if( processedSubSizeSlot )
-        connect( subJob, SIGNAL(processedSubSize(int, int)), this, processedSubSizeSlot );
+        connect( subJob, SIGNAL(processedSubSize(int,int)), this, processedSubSizeSlot );
 }
 
 
@@ -227,21 +227,21 @@ void K3b::Job::connectSubJob( K3b::Job* subJob,
                               const char* processedSubSizeSlot )
 {
     // standard connections
-    connect( subJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-    connect( subJob, SIGNAL(infoMessage(const QString&, int)),
-             this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( subJob, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
+    connect( subJob, SIGNAL(infoMessage(QString,int)),
+             this, SIGNAL(infoMessage(QString,int)) );
 
     // task connections
     if( newTaskSlot == DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
+        connect( subJob, SIGNAL(newTask(QString)), this, SIGNAL(newSubTask(QString)) );
     else if( newTaskSlot )
-        connect( subJob, SIGNAL(newTask(const QString&)), this, newTaskSlot );
+        connect( subJob, SIGNAL(newTask(QString)), this, newTaskSlot );
 
     if( newSubTaskSlot == DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(newSubTask(const QString&)), this, SLOT(slotNewSubTask(const QString&)) );
+        connect( subJob, SIGNAL(newSubTask(QString)), this, SLOT(slotNewSubTask(QString)) );
     else if( newSubTaskSlot )
-        connect( subJob, SIGNAL(newSubTask(const QString&)), this, newSubTaskSlot );
+        connect( subJob, SIGNAL(newSubTask(QString)), this, newSubTaskSlot );
 
     if( finishedSlot == DEFAULT_SIGNAL_CONNECTION )
         connect( subJob, SIGNAL(finished(bool)), this, SIGNAL(finished(bool)) );
@@ -259,12 +259,12 @@ void K3b::Job::connectSubJob( K3b::Job* subJob,
 
     // processed size
     if( processedSizeSlot == DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+        connect( subJob, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
     else if( processedSizeSlot )
-        connect( subJob, SIGNAL(processedSize(int, int)), this, processedSizeSlot );
+        connect( subJob, SIGNAL(processedSize(int,int)), this, processedSizeSlot );
 
     if( processedSubSizeSlot != DEFAULT_SIGNAL_CONNECTION )
-        connect( subJob, SIGNAL(processedSubSize(int, int)), this, processedSubSizeSlot );
+        connect( subJob, SIGNAL(processedSubSize(int,int)), this, processedSubSizeSlot );
 }
 
 

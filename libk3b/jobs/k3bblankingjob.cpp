@@ -103,10 +103,10 @@ void K3b::BlankingJob::slotStartErasing()
     }
 
     connect(m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotFinished(bool)));
-    connect(m_writerJob, SIGNAL(infoMessage( const QString&, int)),
-            this,SIGNAL(infoMessage( const QString&, int)));
-    connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    connect(m_writerJob, SIGNAL(infoMessage(QString,int)),
+            this,SIGNAL(infoMessage(QString,int)));
+    connect( m_writerJob, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
 
     if( waitForMedium( m_device,
                        K3b::Device::STATE_COMPLETE|K3b::Device::STATE_INCOMPLETE,

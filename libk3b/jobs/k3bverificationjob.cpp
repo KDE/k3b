@@ -339,10 +339,10 @@ void K3b::VerificationJob::readTrack()
             d->dataTrackReader = new K3b::DataTrackReader( this );
             connect( d->dataTrackReader, SIGNAL(percent(int)), this, SLOT(slotReaderProgress(int)) );
             connect( d->dataTrackReader, SIGNAL(finished(bool)), this, SLOT(slotReaderFinished(bool)) );
-            connect( d->dataTrackReader, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-            connect( d->dataTrackReader, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-            connect( d->dataTrackReader, SIGNAL(debuggingOutput(const QString&, const QString&)),
-                     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+            connect( d->dataTrackReader, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
+            connect( d->dataTrackReader, SIGNAL(newTask(QString)), this, SIGNAL(newSubTask(QString)) );
+            connect( d->dataTrackReader, SIGNAL(debuggingOutput(QString,QString)),
+                     this, SIGNAL(debuggingOutput(QString,QString)) );
         }
 
         d->dataTrackReader->setDevice( d->device );

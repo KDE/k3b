@@ -77,11 +77,11 @@ K3b::FileTreeView::FileTreeView( QWidget *parent )
     initActions();
 
     // react on K3b::PlacesModel::expandToUrl calls
-    connect( d->model, SIGNAL( expand( const QModelIndex& ) ),
-             this, SLOT( slotExpandUrl( const QModelIndex& ) ) );
+    connect( d->model, SIGNAL(expand(QModelIndex)),
+             this, SLOT(slotExpandUrl(QModelIndex)) );
 
-    connect( this, SIGNAL(clicked(const QModelIndex&)), SLOT(slotClicked(const QModelIndex&)) );
-    connect( this, SIGNAL(customContextMenuRequested( const QPoint& )), SLOT( slotContextMenu( const QPoint& ) ) );
+    connect( this, SIGNAL(clicked(QModelIndex)), SLOT(slotClicked(QModelIndex)) );
+    connect( this, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenu(QPoint)) );
 }
 
 

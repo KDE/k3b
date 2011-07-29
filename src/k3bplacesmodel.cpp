@@ -66,12 +66,12 @@ K3b::PlacesModel::PlacesModel( QObject* parent )
         }
     }
 
-    connect( d->deviceModel, SIGNAL( modelAboutToBeReset() ),
-             this, SIGNAL( modelAboutToBeReset() ) );
-    connect( d->deviceModel, SIGNAL( modelReset() ),
-             this, SIGNAL( modelReset() ) );
-    connect( k3bcore->deviceManager(), SIGNAL( changed( K3b::Device::DeviceManager* ) ),
-             this, SLOT( slotDevicesChanged( K3b::Device::DeviceManager* ) ) );
+    connect( d->deviceModel, SIGNAL(modelAboutToBeReset()),
+             this, SIGNAL(modelAboutToBeReset()) );
+    connect( d->deviceModel, SIGNAL(modelReset()),
+             this, SIGNAL(modelReset()) );
+    connect( k3bcore->deviceManager(), SIGNAL(changed(K3b::Device::DeviceManager*)),
+             this, SLOT(slotDevicesChanged(K3b::Device::DeviceManager*)) );
     slotDevicesChanged( k3bcore->deviceManager() );
 }
 
@@ -166,7 +166,7 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
 void K3b::PlacesModel::addPlace( const QString& name, const KIcon& icon, const KUrl& rootUrl )
 {
     KDirModel* model = new KDirModel( this );
-    connect( model, SIGNAL( expand( const QModelIndex& ) ), this, SLOT( slotExpand( const QModelIndex& ) ) );
+    connect( model, SIGNAL(expand(QModelIndex)), this, SLOT(slotExpand(QModelIndex)) );
     model->dirLister()->setAutoErrorHandlingEnabled( false, 0 );
     model->dirLister()->setDirOnlyMode( true );
     model->dirLister()->openUrl( rootUrl, KDirLister::Keep );

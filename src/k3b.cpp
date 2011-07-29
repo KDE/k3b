@@ -296,7 +296,7 @@ void K3b::MainWindow::initActions()
     actionFileOpen->setToolTip( i18n( "Opens an existing project" ) );
     actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
 
-    d->actionFileOpenRecent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(const KUrl&)), actionCollection() );
+    d->actionFileOpenRecent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(KUrl)), actionCollection() );
     d->actionFileOpenRecent->setToolTip( i18n( "Opens a recently used file" ) );
     d->actionFileOpenRecent->setStatusTip( d->actionFileOpenRecent->toolTip() );
 
@@ -450,7 +450,7 @@ void K3b::MainWindow::initActions()
 
     d->actionViewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotViewStatusBar()), actionCollection());
     KStandardAction::showMenubar( this, SLOT(slotShowMenuBar()), actionCollection() );
-    KStandardAction::keyBindings( this, SLOT( slotConfigureKeys() ), actionCollection() );
+    KStandardAction::keyBindings( this, SLOT(slotConfigureKeys()), actionCollection() );
     KStandardAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
     setStandardToolBarMenuEnabled(true);
 
@@ -569,9 +569,9 @@ void K3b::MainWindow::initView()
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
 	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
     d->urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
-    connect( d->urlNavigator, SIGNAL(activated(const KUrl&)), d->dirView, SLOT(showUrl(const KUrl& )) );
-    connect( d->urlNavigator, SIGNAL(activated(K3b::Device::Device*)), d->dirView, SLOT(showDevice(K3b::Device::Device* )) );
-    connect( d->dirView, SIGNAL(urlEntered(const KUrl&)), d->urlNavigator, SLOT(setUrl(const KUrl&)) );
+    connect( d->urlNavigator, SIGNAL(activated(KUrl)), d->dirView, SLOT(showUrl(KUrl)) );
+    connect( d->urlNavigator, SIGNAL(activated(K3b::Device::Device*)), d->dirView, SLOT(showDevice(K3b::Device::Device*)) );
+    connect( d->dirView, SIGNAL(urlEntered(KUrl)), d->urlNavigator, SLOT(setUrl(KUrl)) );
     connect( d->dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), d->urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
     QWidgetAction * urlNavigatorAction = new QWidgetAction(this);
     urlNavigatorAction->setDefaultWidget(d->urlNavigator);

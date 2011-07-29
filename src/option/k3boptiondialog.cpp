@@ -68,9 +68,9 @@ K3b::OptionDialog::OptionDialog(QWidget *parent )
     // because of the label in the device-tab
     resize( 700, 500 );
 
-    connect( this, SIGNAL( okClicked() ), SLOT( slotOk() ) );
-    connect( this, SIGNAL( defaultClicked() ), SLOT( slotDefault() ) );
-    connect( this, SIGNAL( applyClicked() ), SLOT( slotApply() ) );
+    connect( this, SIGNAL(okClicked()), SLOT(slotOk()) );
+    connect( this, SIGNAL(defaultClicked()), SLOT(slotDefault()) );
+    connect( this, SIGNAL(applyClicked()), SLOT(slotApply()) );
 }
 
 

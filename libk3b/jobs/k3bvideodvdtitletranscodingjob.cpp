@@ -237,8 +237,8 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
     d->process = new K3b::Process();
     d->process->setSuppressEmptyLines(true);
     d->process->setSplitStdout(true);
-    connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotTranscodeStderr(const QString&)) );
-    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotTranscodeExited(int, QProcess::ExitStatus)) );
+    connect( d->process, SIGNAL(stdoutLine(QString)), this, SLOT(slotTranscodeStderr(QString)) );
+    connect( d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotTranscodeExited(int,QProcess::ExitStatus)) );
 
     // the executable
     *d->process << d->usedTranscodeBin;

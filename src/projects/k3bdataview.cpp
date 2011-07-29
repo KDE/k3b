@@ -69,7 +69,7 @@ K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
     // FIXME: always sort folders first in fileview
     // FIXME: allow sorting by clicking fileview headers
 
-    connect( actionCollection()->action( "parent_dir" ), SIGNAL( triggered() ),
+    connect( actionCollection()->action( "parent_dir" ), SIGNAL(triggered()),
              this, SLOT(slotParentDir()) );
     connect( m_dirView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
              this, SLOT(slotCurrentDirChanged()) );

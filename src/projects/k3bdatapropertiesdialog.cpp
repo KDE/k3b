@@ -187,7 +187,7 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
                                          "It sorts the order in which the file data is "
                                          "written to the image.") );
 
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
 }
 
 

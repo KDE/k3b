@@ -183,8 +183,8 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
         }
         d->process = new K3b::Process();
         d->process->setSplitStdout( true );
-        connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-                this, SLOT(slotExternalProgramFinished(int, QProcess::ExitStatus)) );
+        connect( d->process, SIGNAL(finished(int,QProcess::ExitStatus)),
+                this, SLOT(slotExternalProgramFinished(int,QProcess::ExitStatus)) );
         connect( d->process, SIGNAL(stderrLine(QString)),
                  this, SLOT(slotExternalProgramOutput(QString)) );
         connect( d->process, SIGNAL(stdoutLine(QString)),

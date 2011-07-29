@@ -320,18 +320,18 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
                           : Device::Track::MODE1 );
     d->writer->setSessionToWrite( toc );
 
-    connect( d->writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
-    connect( d->writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotNextTrack(int, int)) );
+    connect( d->writer, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
+    connect( d->writer, SIGNAL(nextTrack(int,int)), this, SLOT(slotNextTrack(int,int)) );
     connect( d->writer, SIGNAL(percent(int)), this, SLOT(slotWriterPercent(int)) );
-    connect( d->writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+    connect( d->writer, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSize(int,int)) );
     connect( d->writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
     connect( d->writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-    connect( d->writer, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
+    connect( d->writer, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)) );
     connect( d->writer, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
-    connect( d->writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-    connect( d->writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( d->writer, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    connect( d->writer, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
+    connect( d->writer, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
+    connect( d->writer, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
 
     return true;
 }

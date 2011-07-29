@@ -165,8 +165,8 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
         d->process = new K3b::Process();
         d->process->setSplitStdout(true);
 
-        connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)),
-                 this, SLOT(slotSoxFinished(int, QProcess::ExitStatus)) );
+        connect( d->process, SIGNAL(finished(int,QProcess::ExitStatus)),
+                 this, SLOT(slotSoxFinished(int,QProcess::ExitStatus)) );
         connect( d->process, SIGNAL(stdoutLine(QString)),
                  this, SLOT(slotSoxOutputLine(QString)) );
 

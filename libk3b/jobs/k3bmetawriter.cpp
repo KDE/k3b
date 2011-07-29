@@ -186,10 +186,10 @@ void K3b::MetaWriter::start()
              this, SIGNAL(buffer(int)) );
     connect( d->writingJob, SIGNAL(deviceBuffer(int)),
              this, SIGNAL(deviceBuffer(int)) );
-    connect( d->writingJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)),
-             this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
-    connect( d->writingJob, SIGNAL(nextTrack(int, int)),
-             this, SIGNAL(nextTrack(int, int)) );
+    connect( d->writingJob, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)),
+             this, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)) );
+    connect( d->writingJob, SIGNAL(nextTrack(int,int)),
+             this, SIGNAL(nextTrack(int,int)) );
 
     d->writingJob->start();
 }

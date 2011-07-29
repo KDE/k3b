@@ -34,10 +34,10 @@ K3b::DeviceModel::DeviceModel( QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private() )
 {
-    connect( k3bcore->mediaCache(), SIGNAL( mediumChanged( K3b::Device::Device* ) ),
-             this, SLOT( slotMediumChanged( K3b::Device::Device* ) ) );
-    connect( k3bcore->mediaCache(), SIGNAL( checkingMedium( K3b::Device::Device*, QString ) ),
-             this, SLOT( slotCheckingMedium( K3b::Device::Device*, QString ) ) );
+    connect( k3bcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
+             this, SLOT(slotMediumChanged(K3b::Device::Device*)) );
+    connect( k3bcore->mediaCache(), SIGNAL(checkingMedium(K3b::Device::Device*,QString)),
+             this, SLOT(slotCheckingMedium(K3b::Device::Device*,QString)) );
 }
 
 

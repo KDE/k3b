@@ -90,11 +90,11 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     setupLabelTab();
     setupAdvancedTab();
 
-    connect( m_spinVolumeCount, SIGNAL( valueChanged( int ) ), this, SLOT( slotSpinVolumeCount() ) );
-    connect( m_buttonGroupVcdFormat, SIGNAL( buttonClicked( int ) ), this, SLOT( slotVcdTypeClicked( int ) ) );
-    connect( m_checkCdiSupport, SIGNAL( toggled( bool ) ), this, SLOT( slotCdiSupportChecked( bool ) ) );
-    connect( m_checkAutoDetect, SIGNAL( toggled( bool ) ), this, SLOT( slotAutoDetect( bool ) ) );
-    connect( m_checkGaps, SIGNAL( toggled( bool ) ), this, SLOT( slotGapsChecked( bool ) ) );
+    connect( m_spinVolumeCount, SIGNAL(valueChanged(int)), this, SLOT(slotSpinVolumeCount()) );
+    connect( m_buttonGroupVcdFormat, SIGNAL(buttonClicked(int)), this, SLOT(slotVcdTypeClicked(int)) );
+    connect( m_checkCdiSupport, SIGNAL(toggled(bool)), this, SLOT(slotCdiSupportChecked(bool)) );
+    connect( m_checkAutoDetect, SIGNAL(toggled(bool)), this, SLOT(slotAutoDetect(bool)) );
+    connect( m_checkGaps, SIGNAL(toggled(bool)), this, SLOT(slotGapsChecked(bool)) );
 
     // ToolTips
     // -------------------------------------------------------------------------

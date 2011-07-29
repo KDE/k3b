@@ -29,7 +29,7 @@ K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )
     // Curently we don't support burning from custom protocols so let's filter them out
     KUrlNavigator::setCustomProtocols( QStringList() << "file" << "audiocd" );
     
-	connect( this, SIGNAL(urlChanged(const KUrl&)), this, SLOT(urlActivated(const KUrl&)) );
+	connect( this, SIGNAL(urlChanged(KUrl)), this, SLOT(urlActivated(KUrl)) );
 }
 
 K3b::UrlNavigator::~UrlNavigator()

@@ -132,18 +132,18 @@ K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
         d->mainSplitter->setSizes( sizes );
     }
 
-    connect( d->fileTreeView, SIGNAL(activated(const KUrl&)),
-             this, SLOT(slotDirActivated(const KUrl&)) );
+    connect( d->fileTreeView, SIGNAL(activated(KUrl)),
+             this, SLOT(slotDirActivated(KUrl)) );
     connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SLOT(showDevice(K3b::Device::Device*)) );
     connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SIGNAL(deviceSelected(K3b::Device::Device*)) );
 
-    connect( d->fileView, SIGNAL(urlEntered(const KUrl&)), d->fileTreeView, SLOT(setSelectedUrl(const KUrl&)) );
-    connect( d->fileView, SIGNAL(urlEntered(const KUrl&)), this, SIGNAL(urlEntered(const KUrl&)) );
+    connect( d->fileView, SIGNAL(urlEntered(KUrl)), d->fileTreeView, SLOT(setSelectedUrl(KUrl)) );
+    connect( d->fileView, SIGNAL(urlEntered(KUrl)), this, SIGNAL(urlEntered(KUrl)) );
 
-    connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(const QString&)),
-             this, SLOT(slotMountFinished(const QString&)) );
+    connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(QString)),
+             this, SLOT(slotMountFinished(QString)) );
     connect( k3bappcore->appDeviceManager(), SIGNAL(unmountFinished(bool)),
              this, SLOT(slotUnmountFinished(bool)) );
 }

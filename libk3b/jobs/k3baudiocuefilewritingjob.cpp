@@ -69,22 +69,22 @@ K3b::AudioCueFileWritingJob::AudioCueFileWritingJob( K3b::JobHandler* jh, QObjec
     d->audioJob = new K3b::AudioJob( d->audioDoc, this, this );
 
     // just loop all through
-    connect( d->audioJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-    connect( d->audioJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( d->audioJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-    connect( d->audioJob, SIGNAL(infoMessage(const QString&, int)),
-             this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( d->audioJob, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
+    connect( d->audioJob, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
+    connect( d->audioJob, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
+    connect( d->audioJob, SIGNAL(infoMessage(QString,int)),
+             this, SIGNAL(infoMessage(QString,int)) );
     connect( d->audioJob, SIGNAL(finished(bool)), this, SIGNAL(finished(bool)) );
     connect( d->audioJob, SIGNAL(canceled()), this, SIGNAL(canceled()) );
     connect( d->audioJob, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
     connect( d->audioJob, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
-    connect( d->audioJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
-    connect( d->audioJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
+    connect( d->audioJob, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
+    connect( d->audioJob, SIGNAL(processedSubSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
     connect( d->audioJob, SIGNAL(burning(bool)), this, SIGNAL(burning(bool)) );
     connect( d->audioJob, SIGNAL(bufferStatus(int)), this, SIGNAL(bufferStatus(int)) );
     connect( d->audioJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-    connect( d->audioJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
+    connect( d->audioJob, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)) );
 
     d->canceled = false;
     d->audioJobRunning = false;

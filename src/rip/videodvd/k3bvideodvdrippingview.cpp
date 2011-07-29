@@ -107,8 +107,8 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     d->view->header()->setResizeMode( QHeaderView::ResizeToContents );
     d->view->setContextMenuPolicy( Qt::CustomContextMenu );
     d->view->installEventFilter( this );
-    connect( d->view, SIGNAL(customContextMenuRequested(const QPoint&)),
-             this, SLOT(slotContextMenu(const QPoint&)) );
+    connect( d->view, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(slotContextMenu(QPoint)) );
 
     // general layout
     // ----------------------------------------------------------------------------------
@@ -335,12 +335,12 @@ void K3b::VideoDVDRippingView::initActions()
 
     KAction* actionCheck = new KAction( this );
     actionCheck->setText( i18n("Check Tracks") );
-    connect( actionCheck, SIGNAL( triggered() ), this, SLOT( slotCheck() ) );
+    connect( actionCheck, SIGNAL(triggered()), this, SLOT(slotCheck()) );
     actionCollection()->addAction( "check_tracks", actionCheck );
 
     KAction* actionUncheck = new KAction( this );
     actionUncheck->setText( i18n("Uncheck Tracks") );
-    connect( actionUncheck, SIGNAL( triggered() ), this, SLOT( slotUncheck() ) );
+    connect( actionUncheck, SIGNAL(triggered()), this, SLOT(slotUncheck()) );
     actionCollection()->addAction( "uncheck_tracks", actionUncheck );
 
     KAction* actionStartRip = new KAction( this );
@@ -354,7 +354,7 @@ void K3b::VideoDVDRippingView::initActions()
                                        "please use \"Show files\" button."
                                        "<p>If you intend to make a copy of the entire Video DVD including all menus "
                                        "and extras it is recommended to use the K3b Copy tool.") );
-    connect( actionStartRip, SIGNAL( triggered() ), this, SLOT( slotStartRipping() ) );
+    connect( actionStartRip, SIGNAL(triggered()), this, SLOT(slotStartRipping()) );
     actionCollection()->addAction( "start_rip", actionStartRip );
     
     KAction* actionSelectAll = KStandardAction::selectAll( d->view, SLOT(selectAll()), actionCollection() );

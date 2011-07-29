@@ -456,8 +456,8 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
     if( format ) {
         delete d->process;
         d->process = new Process();
-        connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
-        connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int, QProcess::ExitStatus)) );
+        connect( d->process, SIGNAL(stderrLine(QString)), this, SLOT(slotStderrLine(QString)) );
+        connect( d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int,QProcess::ExitStatus)) );
 
         d->dvdFormatBin = k3bcore->externalBinManager()->binObject( "dvd+rw-format" );
         if( !d->dvdFormatBin ) {

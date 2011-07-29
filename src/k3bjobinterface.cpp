@@ -33,13 +33,13 @@ JobInterface::JobInterface( Job* job )
     if( m_job ) {
         connect( m_job, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
         connect( m_job, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
-        connect( m_job, SIGNAL(infoMessage(QString, int)), this, SIGNAL(infoMessage(QString,int)) );
+        connect( m_job, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
         connect( m_job, SIGNAL(finished(bool)), this, SIGNAL(finished(bool)) );
         connect( m_job, SIGNAL(started()), this, SIGNAL(started()) );
         connect( m_job, SIGNAL(canceled()), this, SIGNAL(canceled()) );
         connect( m_job, SIGNAL(percent(int)), this, SLOT(slotProgress(int)) );
         connect( m_job, SIGNAL(subPercent(int)), this, SLOT(slotSubProgress(int)) );
-        connect( m_job, SIGNAL(nextTrack(int, int)), this, SIGNAL(nextTrack(int, int)) );
+        connect( m_job, SIGNAL(nextTrack(int,int)), this, SIGNAL(nextTrack(int,int)) );
 
         if( m_job->inherits( "K3b::BurnJob" ) ) {
             connect( m_job, SIGNAL(bufferStatus(int)), this, SIGNAL(buffer(int)) );

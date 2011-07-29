@@ -27,7 +27,7 @@ KAction* K3b::createAction( QObject* parent,
     }
     action->setShortcut( shortcut );
     if( receiver ) {
-        QObject::connect( action, SIGNAL( triggered() ),
+        QObject::connect( action, SIGNAL(triggered()),
                           receiver, slot );
     }
     if( actionCollection ) {
@@ -50,7 +50,7 @@ KToggleAction* K3b::createToggleAction( QObject* parent,
     }
     action->setShortcut( shortcut );
     if( receiver ) {
-        QObject::connect( action, SIGNAL( triggered(bool) ),
+        QObject::connect( action, SIGNAL(triggered(bool)),
                           receiver, slot );
     }
     if( actionCollection ) {

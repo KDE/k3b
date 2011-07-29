@@ -153,7 +153,7 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
 
     d = new Private();
 
-    connect( m_editBaseDir, SIGNAL(textChanged(const QString&)),
+    connect( m_editBaseDir, SIGNAL(textChanged(QString)),
              this, SLOT(slotUpdateFreeTempSpace()) );
     connect( m_comboFileType, SIGNAL(activated(int)),
              this, SLOT(slotEncoderChanged()) );
@@ -163,7 +163,7 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
     connect( m_checkSingleFile, SIGNAL(toggled(bool)), this, SIGNAL(changed()) );
     connect( m_checkWriteCueFile, SIGNAL(toggled(bool)), this, SIGNAL(changed()) );
     connect( m_comboFileType, SIGNAL(activated(int)), this, SIGNAL(changed()) );
-    connect( m_editBaseDir, SIGNAL(textChanged(const QString&)), this, SIGNAL(changed()) );
+    connect( m_editBaseDir, SIGNAL(textChanged(QString)), this, SIGNAL(changed()) );
     connect( m_buttonConfigurePlugin, SIGNAL(clicked()), this, SLOT(slotConfigurePlugin()) );
 
     m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );

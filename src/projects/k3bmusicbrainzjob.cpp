@@ -45,7 +45,7 @@ K3b::MusicBrainzJob::MusicBrainzJob( QWidget* parent )
     connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SIGNAL(subPercent(int)), Qt::QueuedConnection );
     connect( d->mbTrackLookupJob, SIGNAL(percent(int)), this, SLOT(slotTrmPercent(int)), Qt::QueuedConnection );
     connect( d->mbTrackLookupJob, SIGNAL(finished(bool)), this, SLOT(slotMbJobFinished(bool)), Qt::QueuedConnection );
-    connect( d->mbTrackLookupJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)), Qt::QueuedConnection );
+    connect( d->mbTrackLookupJob, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)), Qt::QueuedConnection );
 }
 
 

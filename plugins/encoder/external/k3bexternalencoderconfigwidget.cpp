@@ -109,9 +109,9 @@ K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* par
 {
     setupUi( this );
 
-    connect( m_viewEncoders, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+    connect( m_viewEncoders, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
              this, SLOT(slotSelectionChanged(QTreeWidgetItem*)) );
-    connect( m_viewEncoders, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+    connect( m_viewEncoders, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
              this, SLOT(slotEditCommand()) );
     connect( m_buttonAdd, SIGNAL(clicked()),
              this, SLOT(slotNewCommand()) );

@@ -210,12 +210,12 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     header->setText( 2, i18n( "Length" ) );
     header->setText( 3, i18n( "Size" ) );
 
-    connect( d->trackView, SIGNAL( customContextMenuRequested(QPoint) ),
-             this, SLOT( slotContextMenu(QPoint) ) );
-    connect( d->trackView, SIGNAL( currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*) ),
-             this, SLOT( slotTrackSelectionChanged(QTreeWidgetItem*,QTreeWidgetItem*) ) );
-    connect( d->trackView, SIGNAL( itemChanged(QTreeWidgetItem*,int) ),
-             this, SLOT( slotStateChanged(QTreeWidgetItem*,int)) );
+    connect( d->trackView, SIGNAL(customContextMenuRequested(QPoint)),
+             this, SLOT(slotContextMenu(QPoint)) );
+    connect( d->trackView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
+             this, SLOT(slotTrackSelectionChanged(QTreeWidgetItem*,QTreeWidgetItem*)) );
+    connect( d->trackView, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
+             this, SLOT(slotStateChanged(QTreeWidgetItem*,int)) );
 
     QVBoxLayout * mainGrid = new QVBoxLayout( mainWidget() );
     mainGrid->addWidget( d->toolBox );
@@ -302,8 +302,8 @@ void K3b::VideoCdView::reloadMedium()
     d->videocdinfo = new K3b::VideoCdInfo( this );
     d->videocdinfo->info( device()->blockDeviceName() );
 
-    connect( d->videocdinfo, SIGNAL( infoFinished( bool ) ),
-             this, SLOT( slotVideoCdInfoFinished( bool ) ) );
+    connect( d->videocdinfo, SIGNAL(infoFinished(bool)),
+             this, SLOT(slotVideoCdInfoFinished(bool)) );
 }
 
 void K3b::VideoCdView::slotVideoCdInfoFinished( bool success )
@@ -372,19 +372,19 @@ void K3b::VideoCdView::initActions()
     d->actionCollection = new KActionCollection( this );
 
     K3b::createAction( this, i18n( "Check All" ), 0, 0, this,
-                       SLOT( slotCheckAll() ), actionCollection(),
+                       SLOT(slotCheckAll()), actionCollection(),
                        "check_all" );
     K3b::createAction( this, i18n( "Uncheck All" ), 0, 0, this,
-                       SLOT( slotUncheckAll() ), actionCollection(),
+                       SLOT(slotUncheckAll()), actionCollection(),
                        "decheck_all" );
     K3b::createAction( this, i18n( "Check Track" ), 0, 0, this,
-                       SLOT( slotCheck() ), actionCollection(),
+                       SLOT(slotCheck()), actionCollection(),
                        "check_track" );
     K3b::createAction( this, i18n( "Uncheck Track" ), 0, 0, this,
-                       SLOT( slotUncheck() ), actionCollection(),
+                       SLOT(slotUncheck()), actionCollection(),
                        "decheck_track" );
     K3b::createAction( this, i18n( "Start Ripping" ), "tools-rip-video-cd", 0, this,
-                       SLOT( startRip() ), actionCollection(),
+                       SLOT(startRip()), actionCollection(),
                        "start_rip" );
     KAction* actionShowDataPart = K3b::createAction( this, i18n("View Files"), "media-optical-data", 0, this,
                                                      SLOT(slotViewFiles()), actionCollection(), "view_files" );

@@ -423,9 +423,9 @@ void K3b::FillStatusDisplay::setupPopupMenu()
     d->actionDvdDoubleLayer = K3b::createToggleAction( this, KIO::convertSizeFromKiB((int)(8.0*1024.0*1024.0)),
                                                        0, 0, this, SLOT(slotDvdDoubleLayer()),
                                                        d->actionCollection, "fillstatus_dvd_double_layer" );
-    d->actionBD25 = K3b::createToggleAction( this, KIO::convertSizeFromKiB( 25*1024*1024 ), 0, 0, this, SLOT( slotBD25() ),
+    d->actionBD25 = K3b::createToggleAction( this, KIO::convertSizeFromKiB( 25*1024*1024 ), 0, 0, this, SLOT(slotBD25()),
                                              d->actionCollection, "fillstatus_bd_25" );
-    d->actionBD50 = K3b::createToggleAction( this, KIO::convertSizeFromKiB( 50*1024*1024 ), 0, 0, this, SLOT( slotBD50() ),
+    d->actionBD50 = K3b::createToggleAction( this, KIO::convertSizeFromKiB( 50*1024*1024 ), 0, 0, this, SLOT(slotBD50()),
                                              d->actionCollection, "fillstatus_bd_50" );
 
     d->actionCustomSize = K3b::createAction( this, i18n("Custom..."), 0, 0, this, SLOT(slotCustomSize()),
@@ -488,7 +488,7 @@ void K3b::FillStatusDisplay::setupPopupMenu()
     d->popup->addAction( d->actionLoadUserDefaults );
     d->popup->addAction( d->actionSaveUserDefaults );
 
-    connect( d->displayWidget, SIGNAL(contextMenu(const QPoint&)), this, SLOT(slotPopupMenu(const QPoint&)) );
+    connect( d->displayWidget, SIGNAL(contextMenu(QPoint)), this, SLOT(slotPopupMenu(QPoint)) );
 }
 
 

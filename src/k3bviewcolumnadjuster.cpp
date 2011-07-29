@@ -49,7 +49,7 @@ private:
 
 void K3b::ViewColumnAdjuster::Private::_k_adjustColumns()
 {
-    if ( q->receivers( SIGNAL( columnsNeedAjusting() ) ) ) {
+    if ( q->receivers( SIGNAL(columnsNeedAjusting()) ) ) {
         emit q->columnsNeedAjusting();
     }
     else {
@@ -104,13 +104,13 @@ void K3b::ViewColumnAdjuster::setView( QTreeView* view )
         if ( d->view ) {
             d->view->header()->setResizeMode( QHeaderView::Fixed );
             d->view->installEventFilter( this );
-            connect( d->view->model(), SIGNAL( modelReset() ), SLOT( _k_adjustColumns() ) );
-            connect( d->view->model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), SLOT( _k_adjustColumns() ) );
-            connect( d->view->model(), SIGNAL( headerDataChanged( Qt::Orientation, int, int ) ), SLOT( _k_adjustColumns() ) );
-            connect( d->view->model(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), SLOT( _k_adjustColumns() ) );
-            connect( d->view->model(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), SLOT( _k_adjustColumns() ) );
-            connect( d->view->model(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), SLOT( _k_adjustColumns() ) );
-            connect( d->view->model(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), SLOT( _k_adjustColumns() ) );
+            connect( d->view->model(), SIGNAL(modelReset()), SLOT(_k_adjustColumns()) );
+            connect( d->view->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(_k_adjustColumns()) );
+            connect( d->view->model(), SIGNAL(headerDataChanged(Qt::Orientation,int,int)), SLOT(_k_adjustColumns()) );
+            connect( d->view->model(), SIGNAL(rowsInserted(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
+            connect( d->view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
+            connect( d->view->model(), SIGNAL(columnsInserted(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
+            connect( d->view->model(), SIGNAL(columnsRemoved(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
             d->view->header()->setResizeMode( QHeaderView::Interactive );
         }
     }

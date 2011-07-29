@@ -63,7 +63,7 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     // do not use row 3 here since that could be used in setNeededSize below
     layout->setRowStretch( 4, 1 );
 
-    connect( m_editDirectory, SIGNAL(textChanged(const QString&)),
+    connect( m_editDirectory, SIGNAL(textChanged(QString)),
              this, SLOT(slotUpdateFreeTempSpace()) );
     connect( m_editDirectory->lineEdit(), SIGNAL(lostFocus()),
              this, SLOT(slotFixTempPath()) );

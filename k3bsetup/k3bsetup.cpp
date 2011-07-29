@@ -117,7 +117,7 @@ K3bSetup::K3bSetup( QWidget *parent, const QVariantList& )
              this, SLOT(slotDataChanged()) );
     connect( m_checkUseBurningGroup, SIGNAL(toggled(bool)),
              this, SLOT(slotBurningGroupChanged()) );
-    connect( m_editBurningGroup, SIGNAL(textChanged(const QString&)),
+    connect( m_editBurningGroup, SIGNAL(textChanged(QString)),
              this, SLOT(slotBurningGroupChanged()) );
     connect( m_editSearchPath, SIGNAL(changed()),
              this, SLOT(slotSearchPathChanged()) );

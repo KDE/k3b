@@ -58,8 +58,8 @@ VolumeNameWidget::VolumeNameWidget( DataDoc* doc, QWidget* parent )
     layout->addWidget( d->volumeNameEdit, 2 );
     layout->setContentsMargins( 0, 0, 0, 0 );
 
-    connect( d->volumeNameEdit, SIGNAL(textChanged(const QString&)),
-             d->doc, SLOT(setVolumeID(const QString&)) );
+    connect( d->volumeNameEdit, SIGNAL(textChanged(QString)),
+             d->doc, SLOT(setVolumeID(QString)) );
     connect( d->doc, SIGNAL(changed()),
              this, SLOT(slotDocChanged()) );
 }

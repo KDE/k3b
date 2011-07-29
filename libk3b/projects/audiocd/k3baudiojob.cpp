@@ -101,16 +101,16 @@ K3b::AudioJob::AudioJob( K3b::AudioDoc* doc, K3b::JobHandler* hdl, QObject* pare
 
     m_tempData = new K3b::AudioJobTempData( m_doc, this );
     m_audioImager = new K3b::AudioImager( m_doc, m_tempData, this, this );
-    connect( m_audioImager, SIGNAL(infoMessage(const QString&, int)),
-             this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_audioImager, SIGNAL(infoMessage(QString,int)),
+             this, SIGNAL(infoMessage(QString,int)) );
     connect( m_audioImager, SIGNAL(percent(int)),
              this, SLOT(slotAudioDecoderPercent(int)) );
     connect( m_audioImager, SIGNAL(subPercent(int)),
              this, SLOT(slotAudioDecoderSubPercent(int)) );
     connect( m_audioImager, SIGNAL(finished(bool)),
              this, SLOT(slotAudioDecoderFinished(bool)) );
-    connect( m_audioImager, SIGNAL(nextTrack(int, int)),
-             this, SLOT(slotAudioDecoderNextTrack(int, int)) );
+    connect( m_audioImager, SIGNAL(nextTrack(int,int)),
+             this, SLOT(slotAudioDecoderNextTrack(int,int)) );
 
     m_writer = 0;
 }
@@ -563,20 +563,20 @@ bool K3b::AudioJob::prepareWriter()
         m_writer = writer;
     }
 
-    connect( m_writer, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_writer, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
     connect( m_writer, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
-    connect( m_writer, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+    connect( m_writer, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSize(int,int)) );
     connect( m_writer, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
-    connect( m_writer, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
-    connect( m_writer, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
+    connect( m_writer, SIGNAL(processedSubSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
+    connect( m_writer, SIGNAL(nextTrack(int,int)), this, SLOT(slotWriterNextTrack(int,int)) );
     connect( m_writer, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
     connect( m_writer, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-    connect( m_writer, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
+    connect( m_writer, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)) );
     connect( m_writer, SIGNAL(finished(bool)), this, SLOT(slotWriterFinished(bool)) );
-    //  connect( m_writer, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-    connect( m_writer, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( m_writer, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    //  connect( m_writer, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
+    connect( m_writer, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
+    connect( m_writer, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
 
     return true;
 }
@@ -707,14 +707,14 @@ void K3b::AudioJob::normalizeFiles()
     if( !m_normalizeJob ) {
         m_normalizeJob = new K3b::AudioNormalizeJob( this, this );
 
-        connect( m_normalizeJob, SIGNAL(infoMessage(const QString&, int)),
-                 this, SIGNAL(infoMessage(const QString&, int)) );
+        connect( m_normalizeJob, SIGNAL(infoMessage(QString,int)),
+                 this, SIGNAL(infoMessage(QString,int)) );
         connect( m_normalizeJob, SIGNAL(percent(int)), this, SLOT(slotNormalizeProgress(int)) );
         connect( m_normalizeJob, SIGNAL(subPercent(int)), this, SLOT(slotNormalizeSubProgress(int)) );
         connect( m_normalizeJob, SIGNAL(finished(bool)), this, SLOT(slotNormalizeJobFinished(bool)) );
-        connect( m_normalizeJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-        connect( m_normalizeJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-                 this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+        connect( m_normalizeJob, SIGNAL(newTask(QString)), this, SIGNAL(newSubTask(QString)) );
+        connect( m_normalizeJob, SIGNAL(debuggingOutput(QString,QString)),
+                 this, SIGNAL(debuggingOutput(QString,QString)) );
     }
 
     // add all the files

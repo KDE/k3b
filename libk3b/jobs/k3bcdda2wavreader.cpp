@@ -106,9 +106,9 @@ void K3b::Cdda2wavReader::start( bool onlyInfo )
     d->process->setSplitStdout(true);
     d->process->setSuppressEmptyLines(true);
     d->process->setWorkingDirectory( m_imagePath );
-    connect( d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotProcessLine(const QString&)) );
-    connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotProcessLine(const QString&)) );
-    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
+    connect( d->process, SIGNAL(stdoutLine(QString)), this, SLOT(slotProcessLine(QString)) );
+    connect( d->process, SIGNAL(stderrLine(QString)), this, SLOT(slotProcessLine(QString)) );
+    connect( d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotProcessExited(int,QProcess::ExitStatus)) );
 
     // create the command line
     *d->process << d->cdda2wavBin->path;

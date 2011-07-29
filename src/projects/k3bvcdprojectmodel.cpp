@@ -66,12 +66,12 @@ VcdProjectModel::VcdProjectModel( VcdDoc* doc, QObject* parent )
 {
     d->doc = doc;
 
-    connect( doc, SIGNAL(aboutToAddVCDTracks(int, int)),
-             this, SLOT(_k_aboutToAddRows(int, int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(aboutToAddVCDTracks(int,int)),
+             this, SLOT(_k_aboutToAddRows(int,int)), Qt::DirectConnection );
     connect( doc, SIGNAL(addedVCDTracks()),
              this, SLOT(_k_addedRows()), Qt::DirectConnection );
-    connect( doc, SIGNAL(aboutToRemoveVCDTracks(int, int)),
-             this, SLOT(_k_aboutToRemoveRows(int, int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(aboutToRemoveVCDTracks(int,int)),
+             this, SLOT(_k_aboutToRemoveRows(int,int)), Qt::DirectConnection );
     connect( doc, SIGNAL(removedVCDTracks()),
              this, SLOT(_k_removedRows()), Qt::DirectConnection );
 

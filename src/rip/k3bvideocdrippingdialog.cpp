@@ -118,7 +118,7 @@ void K3b::VideoCdRippingDialog::setupGui()
     setStartButtonText( i18n( "Start Ripping" ), i18n( "Starts extracting the selected VideoCd tracks" ) );
     // ----------------------------------------------------------------------------------
 
-    connect( m_editDirectory, SIGNAL(textChanged(const QString&)), this, SLOT(slotUpdateFreeSpace()) );
+    connect( m_editDirectory, SIGNAL(textChanged(QString)), this, SLOT(slotUpdateFreeSpace()) );
 
     m_labelNecessarySize ->setText( KIO::convertSize( m_videooptions ->getVideoCdSize() ) );
 }

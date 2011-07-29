@@ -42,11 +42,11 @@ K3b::MediaCache::DeviceEntry::DeviceEntry( K3b::MediaCache* c, K3b::Device::Devi
       cache(c)
 {
     thread = new K3b::MediaCache::PollThread( this );
-    connect( thread, SIGNAL( mediumChanged( K3b::Device::Device* ) ),
-             c, SLOT( _k_mediumChanged( K3b::Device::Device* ) ),
+    connect( thread, SIGNAL(mediumChanged(K3b::Device::Device*)),
+             c, SLOT(_k_mediumChanged(K3b::Device::Device*)),
              Qt::QueuedConnection );
-    connect( thread, SIGNAL( checkingMedium( K3b::Device::Device*, QString ) ),
-             c, SIGNAL( checkingMedium( K3b::Device::Device*, QString ) ),
+    connect( thread, SIGNAL(checkingMedium(K3b::Device::Device*,QString)),
+             c, SIGNAL(checkingMedium(K3b::Device::Device*,QString)),
              Qt::QueuedConnection );
 }
 
@@ -134,8 +134,8 @@ void K3b::MediaCache::Private::_k_mediumChanged( K3b::Device::Device* dev )
 {
     if ( q->medium( dev ).content() & K3b::Medium::ContentAudio ) {
         K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( q->medium( dev ) );
-        connect( job, SIGNAL( result( KJob* ) ),
-                 q, SLOT( _k_cddbJobFinished( KJob* ) ) );
+        connect( job, SIGNAL(result(KJob*)),
+                 q, SLOT(_k_cddbJobFinished(KJob*)) );
         emit q->checkingMedium( dev, i18n( "CDDB Lookup" ) );
     }
     else {
@@ -375,8 +375,8 @@ void K3b::MediaCache::lookupCddb( K3b::Device::Device* dev )
     K3b::Medium m = medium( dev );
     if ( m.content() & K3b::Medium::ContentAudio ) {
         K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( m );
-        connect( job, SIGNAL( result( KJob* ) ),
-                 this, SLOT( _k_cddbJobFinished( KJob* ) ) );
+        connect( job, SIGNAL(result(KJob*)),
+                 this, SLOT(_k_cddbJobFinished(KJob*)) );
         emit checkingMedium( dev, i18n( "CDDB Lookup" ) );
     }
 }

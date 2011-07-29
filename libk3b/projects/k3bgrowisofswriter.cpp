@@ -100,10 +100,10 @@ K3b::GrowisofsWriter::GrowisofsWriter( K3b::Device::Device* dev, K3b::JobHandler
              this, SLOT(slotThroughput(int)) );
 
     d->gh = new K3b::GrowisofsHandler( this );
-    connect( d->gh, SIGNAL(infoMessage(const QString&, int)),
-             this,SIGNAL(infoMessage(const QString&, int)) );
-    connect( d->gh, SIGNAL(newSubTask(const QString&)),
-             this, SIGNAL(newSubTask(const QString&)) );
+    connect( d->gh, SIGNAL(infoMessage(QString,int)),
+             this,SIGNAL(infoMessage(QString,int)) );
+    connect( d->gh, SIGNAL(newSubTask(QString)),
+             this, SIGNAL(newSubTask(QString)) );
     connect( d->gh, SIGNAL(buffer(int)),
              this, SIGNAL(buffer(int)) );
     connect( d->gh, SIGNAL(deviceBuffer(int)),
@@ -114,8 +114,8 @@ K3b::GrowisofsWriter::GrowisofsWriter( K3b::Device::Device* dev, K3b::JobHandler
     d->process.setSplitStdout(true);
     d->process.setSuppressEmptyLines(true);
     d->process.setFlags( K3bQProcess::RawStdin );
-    connect( &d->process, SIGNAL(stdoutLine(const QString&)), this, SLOT(slotReceivedStderr(const QString&)) );
-    connect( &d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
+    connect( &d->process, SIGNAL(stdoutLine(QString)), this, SLOT(slotReceivedStderr(QString)) );
+    connect( &d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotProcessExited(int,QProcess::ExitStatus)) );
 }
 
 

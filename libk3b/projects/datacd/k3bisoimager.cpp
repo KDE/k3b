@@ -288,16 +288,16 @@ void K3b::IsoImager::startSizeCalculation()
     // everything is written to stderr
     // last line is: "Total extents scheduled to be written = XXXXX"
 
-    connect( m_process, SIGNAL(stdoutLine(const QString&)),
-             this, SLOT(slotCollectMkisofsPrintSizeStdout(const QString&)) );
-    connect( m_process, SIGNAL(stderrLine(const QString&)),
-             this, SLOT(slotCollectMkisofsPrintSizeStderr(const QString&)) );
-    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+    connect( m_process, SIGNAL(stdoutLine(QString)),
+             this, SLOT(slotCollectMkisofsPrintSizeStdout(QString)) );
+    connect( m_process, SIGNAL(stderrLine(QString)),
+             this, SLOT(slotCollectMkisofsPrintSizeStderr(QString)) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
              this, SLOT(slotMkisofsPrintSizeFinished()) );
 
     // we also want error messages
-    connect( m_process, SIGNAL(stderrLine( const QString& )),
-             this, SLOT(slotReceivedStderr( const QString& )) );
+    connect( m_process, SIGNAL(stderrLine(QString)),
+             this, SLOT(slotReceivedStderr(QString)) );
 
     m_collectedMkisofsPrintSizeStdout = QString();
     m_collectedMkisofsPrintSizeStderr = QString();
@@ -432,10 +432,10 @@ void K3b::IsoImager::start()
         return;
     }
 
-    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
-    connect( m_process, SIGNAL(stderrLine( const QString& )),
-             this, SLOT(slotReceivedStderr( const QString& )) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(slotProcessExited(int,QProcess::ExitStatus)) );
+    connect( m_process, SIGNAL(stderrLine(QString)),
+             this, SLOT(slotReceivedStderr(QString)) );
 
     kDebug() << "***** mkisofs parameters:\n";
     QString s = m_process->joinedArgs();

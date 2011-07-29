@@ -49,7 +49,7 @@ K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
 
     m_viewTheme->setModel( m_themeModel );
 
-    connect( m_viewTheme->selectionModel(), SIGNAL(currentChanged(const QModelIndex&,const QModelIndex&)),
+    connect( m_viewTheme->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              this, SLOT(selectionChanged()) );
     connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(selectionChanged()) );

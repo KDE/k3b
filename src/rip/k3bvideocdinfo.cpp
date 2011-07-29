@@ -70,8 +70,8 @@ void K3b::VideoCdInfo::info( const QString& device )
              this, SLOT(slotParseOutput(QString)) );
     connect( m_process, SIGNAL(stdoutLine(QString)),
              this, SLOT(slotParseOutput(QString)) );
-    connect( m_process, SIGNAL( finished( int, QProcess::ExitStatus ) ),
-             this, SLOT( slotInfoFinished( int, QProcess::ExitStatus ) ) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(slotInfoFinished(int,QProcess::ExitStatus)) );
 
     if ( !m_process->start( KProcess::SeparateChannels ) ) {
         kDebug() << "(K3b::VideoCdInfo::info) could not start vcdxrip";

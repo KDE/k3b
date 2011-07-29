@@ -433,10 +433,10 @@ void K3b::CdrdaoWriter::start()
     m_process->setSplitStdout(false);
     m_process->setOutputChannelMode( KProcess::MergedChannels );
     m_process->setFlags( K3bQProcess::RawStdin );
-    connect( m_process, SIGNAL(stdoutLine(const QString&)),
-             this, SLOT(slotStdLine(const QString&)) );
-    connect( m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-             this, SLOT(slotProcessExited(int, QProcess::ExitStatus)) );
+    connect( m_process, SIGNAL(stdoutLine(QString)),
+             this, SLOT(slotStdLine(QString)) );
+    connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
+             this, SLOT(slotProcessExited(int,QProcess::ExitStatus)) );
 
     m_canceled = false;
     m_knownError = false;

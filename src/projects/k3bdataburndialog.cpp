@@ -96,8 +96,8 @@ K3b::DataBurnDialog::DataBurnDialog(K3b::DataDoc* _doc, QWidget *parent )
         m_tempDirSelectionWidget->setDefaultImageFileName( _doc->isoOptions().volumeID() + ".iso" );
     }
 
-    connect( m_imageSettingsWidget->m_editVolumeName, SIGNAL(textChanged(const QString&)),
-             m_tempDirSelectionWidget, SLOT(setDefaultImageFileName(const QString&)) );
+    connect( m_imageSettingsWidget->m_editVolumeName, SIGNAL(textChanged(QString)),
+             m_tempDirSelectionWidget, SLOT(setDefaultImageFileName(QString)) );
 }
 
 K3b::DataBurnDialog::~DataBurnDialog(){

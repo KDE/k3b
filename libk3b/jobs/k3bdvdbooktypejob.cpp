@@ -280,8 +280,8 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
     delete d->process;
     d->process = new K3b::Process();
     d->process->setSuppressEmptyLines(true);
-    connect( d->process, SIGNAL(stderrLine(const QString&)), this, SLOT(slotStderrLine(const QString&)) );
-    connect( d->process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int, QProcess::ExitStatus)) );
+    connect( d->process, SIGNAL(stderrLine(QString)), this, SLOT(slotStderrLine(QString)) );
+    connect( d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotProcessFinished(int,QProcess::ExitStatus)) );
 
     d->dvdBooktypeBin = k3bcore->externalBinManager()->binObject( "dvd+rw-booktype" );
     if( !d->dvdBooktypeBin ) {

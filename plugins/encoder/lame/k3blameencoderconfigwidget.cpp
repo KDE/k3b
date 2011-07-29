@@ -81,14 +81,14 @@ K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, con
     updateManualSettingsLabel();
     slotQualityLevelChanged( 5 );
 
-    connect( m_radioQualityLevel, SIGNAL(toggled( bool )), this, SLOT( changed() ) );
-    connect( m_sliderQuality, SIGNAL(valueChanged( int )), this, SLOT( changed() ) );
-    connect( m_radioManual, SIGNAL(toggled( bool )), this, SLOT( changed() ) );
-    connect( m_spinEncoderQuality, SIGNAL(valueChanged( int )), this, SLOT( changed() ) );
-    connect( m_checkCopyright, SIGNAL(toggled( bool )), this, SLOT( changed() ) );
-    connect( m_checkOriginal, SIGNAL(toggled( bool )), this, SLOT( changed() ) );
-    connect( m_checkISO, SIGNAL(toggled( bool )), this, SLOT( changed() ) );
-    connect( m_checkError, SIGNAL(toggled( bool )), this, SLOT( changed() ) );
+    connect( m_radioQualityLevel, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( m_sliderQuality, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
+    connect( m_radioManual, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( m_spinEncoderQuality, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
+    connect( m_checkCopyright, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( m_checkOriginal, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( m_checkISO, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( m_checkError, SIGNAL(toggled(bool)), this, SLOT(changed()) );
 }
 
 

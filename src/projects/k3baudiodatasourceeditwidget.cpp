@@ -50,14 +50,14 @@ K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )
     grid->setColumnStretch( 1, 1 );
 
     // setup connections between the msfedits and the editor
-    connect( m_editor, SIGNAL(rangeChanged(int, const K3b::Msf&, const K3b::Msf&)),
-             this, SLOT(slotRangeModified(int, const K3b::Msf&, const K3b::Msf&)) );
+    connect( m_editor, SIGNAL(rangeChanged(int,K3b::Msf,K3b::Msf)),
+             this, SLOT(slotRangeModified(int,K3b::Msf,K3b::Msf)) );
 
-    connect( m_editStartOffset, SIGNAL(valueChanged(const K3b::Msf&)),
-             this, SLOT(slotStartOffsetEdited(const K3b::Msf&)) );
+    connect( m_editStartOffset, SIGNAL(valueChanged(K3b::Msf)),
+             this, SLOT(slotStartOffsetEdited(K3b::Msf)) );
 
-    connect( m_editEndOffset, SIGNAL(valueChanged(const K3b::Msf&)),
-             this, SLOT(slotEndOffsetEdited(const K3b::Msf&)) );
+    connect( m_editEndOffset, SIGNAL(valueChanged(K3b::Msf)),
+             this, SLOT(slotEndOffsetEdited(K3b::Msf)) );
 
     m_editor->setToolTip( i18n("Drag the edges of the highlighted area to define the portion of the "
                                "audio source you want to include in the Audio CD track. "

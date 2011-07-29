@@ -89,15 +89,15 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* p
 
     slotQualityLevelChanged( 4 );
 
-    connect( w->m_radioQualityLevel, SIGNAL( toggled( bool ) ), this, SLOT( changed() ) );
-    connect( w->m_slideQualityLevel, SIGNAL( valueChanged( int ) ), this, SLOT( changed() ) );
-    connect( w->m_radioManual, SIGNAL( toggled( bool ) ), this, SLOT( changed() ) );
-    connect( w->m_checkBitrateUpper, SIGNAL( toggled( bool ) ), this, SLOT( changed() ) );
-    connect( w->m_checkBitrateNominal, SIGNAL( toggled( bool ) ), this, SLOT( changed() ) );
-    connect( w->m_checkBitrateLower, SIGNAL( toggled( bool ) ), this, SLOT( changed() ) );
-    connect( w->m_inputBitrateUpper, SIGNAL( valueChanged( int ) ), this, SLOT( changed() ) );
-    connect( w->m_inputBitrateNominal, SIGNAL( valueChanged( int ) ), this, SLOT( changed() ) );
-    connect( w->m_inputBitrateLower, SIGNAL( valueChanged( int ) ), this, SLOT( changed() ) );
+    connect( w->m_radioQualityLevel, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( w->m_slideQualityLevel, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
+    connect( w->m_radioManual, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( w->m_checkBitrateUpper, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( w->m_checkBitrateNominal, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( w->m_checkBitrateLower, SIGNAL(toggled(bool)), this, SLOT(changed()) );
+    connect( w->m_inputBitrateUpper, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
+    connect( w->m_inputBitrateNominal, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
+    connect( w->m_inputBitrateLower, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
 }
 
 

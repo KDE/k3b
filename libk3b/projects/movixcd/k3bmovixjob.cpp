@@ -37,24 +37,24 @@ K3b::MovixJob::MovixJob( K3b::MovixDoc* doc, K3b::JobHandler* jh, QObject* paren
     // pipe signals
     connect( m_dataJob, SIGNAL(percent(int)), this, SIGNAL(percent(int)) );
     connect( m_dataJob, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
-    connect( m_dataJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
-    connect( m_dataJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+    connect( m_dataJob, SIGNAL(processedSubSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
+    connect( m_dataJob, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSize(int,int)) );
     connect( m_dataJob, SIGNAL(bufferStatus(int)), this, SIGNAL(bufferStatus(int)) );
     connect( m_dataJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-    connect( m_dataJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
-    connect( m_dataJob, SIGNAL(newTask(const QString&)), this, SIGNAL(newTask(const QString&)) );
-    connect( m_dataJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( m_dataJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
-    connect( m_dataJob, SIGNAL(infoMessage(const QString&, int)),
-             this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_dataJob, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)) );
+    connect( m_dataJob, SIGNAL(newTask(QString)), this, SIGNAL(newTask(QString)) );
+    connect( m_dataJob, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
+    connect( m_dataJob, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
+    connect( m_dataJob, SIGNAL(infoMessage(QString,int)),
+             this, SIGNAL(infoMessage(QString,int)) );
     connect( m_dataJob, SIGNAL(burning(bool)), this, SIGNAL(burning(bool)) );
 
     // we need to clean up here
     connect( m_dataJob, SIGNAL(finished(bool)), this, SLOT(slotDataJobFinished(bool)) );
 
-    connect( m_movixDocPreparer, SIGNAL(infoMessage(const QString&, int)),
-             this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_movixDocPreparer, SIGNAL(infoMessage(QString,int)),
+             this, SIGNAL(infoMessage(QString,int)) );
 }
 
 

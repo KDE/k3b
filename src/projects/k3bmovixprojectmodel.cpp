@@ -87,12 +87,12 @@ MovixProjectModel::MovixProjectModel( MovixDoc* doc, QObject* parent )
     d( new Private( this, doc ) )
 {
     // item handling
-    connect( doc, SIGNAL(itemsAboutToBeInserted(int, int)),
-             this, SLOT(_k_itemsAboutToBeInserted(int, int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemsAboutToBeInserted(int,int)),
+             this, SLOT(_k_itemsAboutToBeInserted(int,int)), Qt::DirectConnection );
     connect( doc, SIGNAL(itemsInserted()),
              this, SLOT(_k_itemsInserted()), Qt::DirectConnection );
-    connect( doc, SIGNAL(itemsAboutToBeRemoved(int, int)),
-             this, SLOT(_k_itemsAboutToBeRemoved(int, int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemsAboutToBeRemoved(int,int)),
+             this, SLOT(_k_itemsAboutToBeRemoved(int,int)), Qt::DirectConnection );
     connect( doc, SIGNAL(itemsRemoved()),
              this, SLOT(_k_itemsRemoved()), Qt::DirectConnection );
 

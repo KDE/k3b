@@ -392,8 +392,8 @@ K3b::ImageWritingDialog::ImageWritingDialog( QWidget* parent )
              this, SLOT(slotToggleAll()) );
     connect( d->writingModeWidget, SIGNAL(writingModeChanged(WritingMode)),
              this, SLOT(slotToggleAll()) );
-    connect( d->editImagePath, SIGNAL(textChanged(const QString&)),
-             this, SLOT(slotUpdateImage(const QString&)) );
+    connect( d->editImagePath, SIGNAL(textChanged(QString)),
+             this, SLOT(slotUpdateImage(QString)) );
     connect( d->checkDummy, SIGNAL(toggled(bool)),
              this, SLOT(slotToggleAll()) );
     connect( d->checkCacheImage, SIGNAL(toggled(bool)),
@@ -505,8 +505,8 @@ void K3b::ImageWritingDialog::setupGui()
     //d->infoView->setSelectionMode( Q3ListView::NoSelection );
     //d->infoView->setHScrollBarMode( Q3ScrollView::AlwaysOff );
 
-    connect( d->infoView, SIGNAL(customContextMenuRequested(const QPoint&)),
-            this, SLOT(slotContextMenuRequested(const QPoint&)) );
+    connect( d->infoView, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(slotContextMenuRequested(QPoint)) );
 
     d->writerSelectionWidget = new K3b::WriterSelectionWidget( frame );
     d->writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE );

@@ -95,9 +95,9 @@ K3b::DataJob::DataJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent 
     d = new Private;
     d->multiSessionParameterJob = new K3b::DataMultiSessionParameterJob( doc, this, this );
     connectSubJob( d->multiSessionParameterJob,
-                   SLOT( slotMultiSessionParamterSetupDone( bool ) ),
-                   SIGNAL( newTask( const QString& ) ),
-                   SIGNAL( newSubTask( const QString& ) ) );
+                   SLOT(slotMultiSessionParamterSetupDone(bool)),
+                   SIGNAL(newTask(QString)),
+                   SIGNAL(newSubTask(QString)) );
 
     d->doc = doc;
     m_writerJob = 0;
@@ -498,20 +498,20 @@ void K3b::DataJob::finishCopy()
     if( d->doc->verifyData() ) {
         if( !d->verificationJob ) {
             d->verificationJob = new K3b::VerificationJob( this, this );
-            connect( d->verificationJob, SIGNAL(infoMessage(const QString&, int)),
-                     this, SIGNAL(infoMessage(const QString&, int)) );
-            connect( d->verificationJob, SIGNAL(newTask(const QString&)),
-                     this, SIGNAL(newSubTask(const QString&)) );
-            connect( d->verificationJob, SIGNAL(newSubTask(const QString&)),
-                     this, SIGNAL(newSubTask(const QString&)) );
+            connect( d->verificationJob, SIGNAL(infoMessage(QString,int)),
+                     this, SIGNAL(infoMessage(QString,int)) );
+            connect( d->verificationJob, SIGNAL(newTask(QString)),
+                     this, SIGNAL(newSubTask(QString)) );
+            connect( d->verificationJob, SIGNAL(newSubTask(QString)),
+                     this, SIGNAL(newSubTask(QString)) );
             connect( d->verificationJob, SIGNAL(percent(int)),
                      this, SLOT(slotVerificationProgress(int)) );
             connect( d->verificationJob, SIGNAL(percent(int)),
                      this, SIGNAL(subPercent(int)) );
             connect( d->verificationJob, SIGNAL(finished(bool)),
                      this, SLOT(slotVerificationFinished(bool)) );
-            connect( d->verificationJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-                     this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+            connect( d->verificationJob, SIGNAL(debuggingOutput(QString,QString)),
+                     this, SIGNAL(debuggingOutput(QString,QString)) );
 
         }
         d->verificationJob->clear();
@@ -615,19 +615,19 @@ void K3b::DataJob::setWriterJob( K3b::AbstractWriter* writer )
     kDebug();
     // FIXME: progressedsize for multiple copies
     m_writerJob = writer;
-    connect( m_writerJob, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_writerJob, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
     connect( m_writerJob, SIGNAL(percent(int)), this, SLOT(slotWriterJobPercent(int)) );
-    connect( m_writerJob, SIGNAL(processedSize(int, int)), this, SIGNAL(processedSize(int, int)) );
+    connect( m_writerJob, SIGNAL(processedSize(int,int)), this, SIGNAL(processedSize(int,int)) );
     connect( m_writerJob, SIGNAL(subPercent(int)), this, SIGNAL(subPercent(int)) );
-    connect( m_writerJob, SIGNAL(processedSubSize(int, int)), this, SIGNAL(processedSubSize(int, int)) );
-    connect( m_writerJob, SIGNAL(nextTrack(int, int)), this, SLOT(slotWriterNextTrack(int, int)) );
+    connect( m_writerJob, SIGNAL(processedSubSize(int,int)), this, SIGNAL(processedSubSize(int,int)) );
+    connect( m_writerJob, SIGNAL(nextTrack(int,int)), this, SLOT(slotWriterNextTrack(int,int)) );
     connect( m_writerJob, SIGNAL(buffer(int)), this, SIGNAL(bufferStatus(int)) );
     connect( m_writerJob, SIGNAL(deviceBuffer(int)), this, SIGNAL(deviceBuffer(int)) );
-    connect( m_writerJob, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int, K3b::Device::SpeedMultiplicator)) );
+    connect( m_writerJob, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)), this, SIGNAL(writeSpeed(int,K3b::Device::SpeedMultiplicator)) );
     connect( m_writerJob, SIGNAL(finished(bool)), this, SLOT(slotWriterJobFinished(bool)) );
-    connect( m_writerJob, SIGNAL(newSubTask(const QString&)), this, SIGNAL(newSubTask(const QString&)) );
-    connect( m_writerJob, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    connect( m_writerJob, SIGNAL(newSubTask(QString)), this, SIGNAL(newSubTask(QString)) );
+    connect( m_writerJob, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
 }
 
 
@@ -648,11 +648,11 @@ void K3b::DataJob::connectImager()
 {
     kDebug();
     m_isoImager->disconnect( this );
-    connect( m_isoImager, SIGNAL(infoMessage(const QString&, int)), this, SIGNAL(infoMessage(const QString&, int)) );
+    connect( m_isoImager, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
     connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
     connect( m_isoImager, SIGNAL(finished(bool)), this, SLOT(slotIsoImagerFinished(bool)) );
-    connect( m_isoImager, SIGNAL(debuggingOutput(const QString&, const QString&)),
-             this, SIGNAL(debuggingOutput(const QString&, const QString&)) );
+    connect( m_isoImager, SIGNAL(debuggingOutput(QString,QString)),
+             this, SIGNAL(debuggingOutput(QString,QString)) );
 }
 
 

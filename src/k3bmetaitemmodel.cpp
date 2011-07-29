@@ -730,23 +730,23 @@ void K3b::MetaItemModel::addSubModel( const QString& name, const KIcon& icon, QA
 
     d->updatePlaceRows();
 
-    connect( place.model(), SIGNAL( modelReset() ),
-             this, SLOT( slotReset() ) );
+    connect( place.model(), SIGNAL(modelReset()),
+             this, SLOT(slotReset()) );
 
-    connect( place.model(), SIGNAL( rowsAboutToBeInserted( const QModelIndex&, int, int ) ),
-             this, SLOT( slotRowsAboutToBeInserted( const QModelIndex&, int, int ) ) );
+    connect( place.model(), SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)),
+             this, SLOT(slotRowsAboutToBeInserted(QModelIndex,int,int)) );
 
-    connect( place.model(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-             this, SLOT( slotRowsInserted( const QModelIndex&, int, int ) ) );
+    connect( place.model(), SIGNAL(rowsInserted(QModelIndex,int,int)),
+             this, SLOT(slotRowsInserted(QModelIndex,int,int)) );
 
-    connect( place.model(), SIGNAL( rowsAboutToBeRemoved( const QModelIndex&, int, int ) ),
-             this, SLOT( slotRowsAboutToBeRemoved( const QModelIndex&, int, int ) ) );
+    connect( place.model(), SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)),
+             this, SLOT(slotRowsAboutToBeRemoved(QModelIndex,int,int)) );
 
-    connect( place.model(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-             this, SLOT( slotRowsRemoved( const QModelIndex&, int, int ) ) );
+    connect( place.model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
+             this, SLOT(slotRowsRemoved(QModelIndex,int,int)) );
 
-    connect( place.model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-             this, SLOT( slotDataChanged( const QModelIndex&, const QModelIndex& ) ) );
+    connect( place.model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+             this, SLOT(slotDataChanged(QModelIndex,QModelIndex)) );
 
     if ( first <= last )
         endInsertRows();

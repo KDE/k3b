@@ -113,17 +113,17 @@ K3b::VideoDVDRippingWidget::VideoDVDRippingWidget( QWidget* parent )
 
     slotAudioCodecChanged( m_comboAudioCodec->selectedValue() );
 
-    connect( m_comboAudioBitrate, SIGNAL(textChanged(const QString&)),
+    connect( m_comboAudioBitrate, SIGNAL(textChanged(QString)),
              this, SIGNAL(changed()) );
     connect( m_spinVideoBitrate, SIGNAL(valueChanged(int)),
              this, SIGNAL(changed()) );
     connect( m_checkBlankReplace, SIGNAL(toggled(bool)),
              this, SIGNAL(changed()) );
-    connect( m_editBlankReplace, SIGNAL(textChanged(const QString&)),
+    connect( m_editBlankReplace, SIGNAL(textChanged(QString)),
              this, SIGNAL(changed()) );
-    connect( m_comboFilenamePattern, SIGNAL(textChanged(const QString&)),
+    connect( m_comboFilenamePattern, SIGNAL(textChanged(QString)),
              this, SIGNAL(changed()) );
-    connect( m_editBaseDir, SIGNAL(textChanged(const QString&)),
+    connect( m_editBaseDir, SIGNAL(textChanged(QString)),
              this, SIGNAL(changed()) );
 
     connect( m_comboAudioCodec, SIGNAL(valueChanged(int)),

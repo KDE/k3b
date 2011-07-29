@@ -73,8 +73,8 @@ K3b::DataDirTreeView::DataDirTreeView( K3b::View* view, K3b::DataDoc* doc, QWidg
         hideColumn( i );
     }
 
-    connect( selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ),
-             this, SLOT( slotSelectionChanged( const QItemSelection&, const QItemSelection& ) ) );
+    connect( selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+             this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)) );
 }
 
 
