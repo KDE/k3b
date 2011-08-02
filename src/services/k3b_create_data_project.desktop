@@ -3,7 +3,7 @@ Actions=CreateK3bDataProject;
 Type=Service
 ServiceTypes=KonqPopupMenu/Plugin
 MimeType=all/all;
-ExcludeServiceTypes=application/x-iso;
+ExcludeServiceTypes=application/x-cd-image
 
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --data %F
