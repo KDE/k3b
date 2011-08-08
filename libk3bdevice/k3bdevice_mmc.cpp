@@ -322,7 +322,7 @@ bool K3b::Device::Device::readTrackInformation( unsigned char** data, unsigned i
     // DVD-DL: 48 (MMC5)
     // CD:     36 (MMC2)
     //
-    if( dataLen <= 4 ) {
+    if( dataLen <= 6 ) {
         int m = mediaType();
         if( m & (MEDIA_DVD_R_DL|MEDIA_DVD_R_DL_SEQ|MEDIA_DVD_R_DL_JUMP) )
             dataLen = 48;
