@@ -17,6 +17,8 @@ Bugfixes:
  * Clearing up track info in audio project when CDDB query failed
  * Improper track number in CDDB track edit window title (276681)
  * Crash on detecting writing speeds (272427)
+ * Incorrect capacity returned by HL-DT-ST BH10LS30. Patch by Stephane Berthelot, thanks! (268307)
+ * Compilation fails with new FFMPEG (274817)
 
 2.0.2
 =====
