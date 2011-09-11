@@ -101,7 +101,6 @@ namespace K3b {
         void slotVideoDvdRip();
         void videoCdRip( K3b::Device::Device* );
         void slotVideoCdRip();
-        void slotK3bSetup();
 
         void showDiskInfo( K3b::Device::Device* );
 

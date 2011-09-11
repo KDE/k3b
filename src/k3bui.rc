@@ -29,7 +29,6 @@
             <Action name="view_document_header" />
         </Menu>
         <Action name="view_audio_player" append="show_merge" />
-        <Action name="settings_k3bsetup" append="configure_merge" />
     </Menu>
 
     <Menu name="help"><text>&amp;Help</text>

@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C)      2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -18,18 +18,21 @@
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
-#include "config-k3b.h"
 
+#include <KAction>
+#include <KAuth/Action>
 #include <KConfig>
 #include <KIcon>
 #include <KLocale>
 #include <KStandardDirs>
+#include <KMessageWidget>
 #include <kio/global.h>
 
 #include <QColor>
-#include <QHBoxLayout>
+#include <QFileInfo>
 #include <QGridLayout>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QHeaderView>
 #include <QLayout>
 #include <QList>
@@ -40,6 +43,8 @@
 #include <QVariant>
 #include <QVBoxLayout>
 
+#include <grp.h>
+#include <unistd.h>
 
 
 K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *parent )
@@ -48,32 +53,25 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
       m_writerParentViewItem( 0 ),
       m_readerParentViewItem( 0 )
 {
-    QVBoxLayout* frameLayout = new QVBoxLayout( this );
-    frameLayout->setContentsMargins( 0, 0, 0, 0 );
-
+    // message widget
+    m_messageWidget = new KMessageWidget( this );
+    m_messageWidget->hide();
+    m_messageWidget->setWordWrap( true );
+    m_addToGroupAction = new KAction( KIcon("dialog-password"), QString(), this );
 
     // buttons
     // ------------------------------------------------
-    QPushButton* modifyPermissions = new QPushButton( i18n( "Modify Permissions..." ), this );
-    QPushButton* buttonRefreshDevices = new QPushButton( i18n( "Refresh" ), this );
+    QPushButton* buttonRefreshDevices = new QPushButton( KIcon( "view-refresh" ), i18n( "Refresh" ), this );
     buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
     QHBoxLayout* refreshButtonGrid = new QHBoxLayout;
     refreshButtonGrid->setContentsMargins( 0, 0, 0, 0 );
     refreshButtonGrid->addStretch();
-    refreshButtonGrid->addWidget( modifyPermissions );
     refreshButtonGrid->addWidget( buttonRefreshDevices );
     // ------------------------------------------------
 
-#ifndef BUILD_K3BSETUP
-    modifyPermissions->setVisible( false );
-#endif
-
-    // Devices Box
+    // Devices view
     // ------------------------------------------------
-    QGroupBox* groupDevices = new QGroupBox( i18n( "CD/DVD/BD Drives" ), this );
-    QVBoxLayout* groupDevicesLayout = new QVBoxLayout( groupDevices );
-
-    m_viewDevices = new QTreeWidget( groupDevices );
+    m_viewDevices = new QTreeWidget( this );
     m_viewDevices->setAllColumnsShowFocus( true );
     m_viewDevices->setHeaderHidden( true );
     m_viewDevices->setColumnCount( 2 );
@@ -83,20 +81,20 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_viewDevices->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
     m_viewDevices->setFocusPolicy( Qt::NoFocus );
     m_viewDevices->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-
-    groupDevicesLayout->addWidget( m_viewDevices );
     // ------------------------------------------------
 
-
-    frameLayout->addWidget( groupDevices );
-    frameLayout->addLayout( refreshButtonGrid );
+    QVBoxLayout* frameLayout = new QVBoxLayout( this );
+    frameLayout->setContentsMargins( 0, 0, 0, 0 );
+    frameLayout->addWidget( m_messageWidget, 0 );
+    frameLayout->addWidget( m_viewDevices, 1 );
+    frameLayout->addLayout( refreshButtonGrid, 0 );
     // ------------------------------------------------
 
     // connections
     // ------------------------------------------------
-    connect( modifyPermissions, SIGNAL(clicked()), this, SIGNAL(modifyPermissionsButtonClicked()) );
-    connect( buttonRefreshDevices, SIGNAL(clicked()), this, SIGNAL(refreshButtonClicked()) );
-    connect( m_deviceManager, SIGNAL(changed()), this, SLOT(init()) );
+    connect( buttonRefreshDevices, SIGNAL(clicked()), SIGNAL(refreshButtonClicked()) );
+    connect( m_deviceManager, SIGNAL(changed()), SLOT(init()) );
+    connect( m_addToGroupAction, SIGNAL(triggered(bool)), SLOT(addUserToGroup()) );
     // ------------------------------------------------
 }
 
@@ -224,6 +222,60 @@ void K3b::DeviceWidget::updateDeviceListViews()
     }
 
     m_viewDevices->expandAll();
+
+    // Show warning message if the current user does not belong to
+    // the group device belongs to
+    QList<Device::Device*> devices = m_deviceManager->allDevices();
+    if( !devices.empty() ) {
+        QFileInfo fileInfo( devices.front()->blockDeviceName() );
+        m_deviceGroup = fileInfo.group();
+
+        if( m_deviceGroup != "root" ) {
+            QVector<gid_t> gids(::getgroups(0, 0));
+            ::getgroups(gids.size(), gids.data());
+
+            QSet<QString> groupNames;
+            Q_FOREACH( gid_t gid, gids ) {
+                if( ::group* g = ::getgrgid( gid ) ) {
+                    groupNames.insert( QString::fromLocal8Bit( g->gr_name ) );
+                }
+            }
+
+            if (!groupNames.contains(m_deviceGroup)) {
+                m_messageWidget->setMessageType(KMessageWidget::Warning);
+                m_messageWidget->setText(i18n("In order to give K3b full access to the writer device the current user needs be added to a group <em>%1</em>.", m_deviceGroup));
+                m_messageWidget->addAction(m_addToGroupAction);
+                m_messageWidget->animatedShow();
+                m_addToGroupAction->setText(i18n("Add"));
+            }
+        }
+    }
+}
+
+void K3b::DeviceWidget::addUserToGroup()
+{
+    QVariantMap args;
+    args["groupName"] = m_deviceGroup;
+    args["userName"] = QString::fromLocal8Bit(::cuserid(NULL));
+
+    KAuth::Action action("org.kde.k3b.addtogroup");
+    action.setHelperID("org.kde.k3b");
+    action.setParentWidget(this);
+    action.setArguments(args);
+
+    KAuth::ActionReply reply = action.execute();
+    if (reply.succeeded()) {
+        m_messageWidget->removeAction(m_addToGroupAction);
+        m_messageWidget->setMessageType(KMessageWidget::Information);
+        m_messageWidget->setText(i18n("Please relogin to apply the changes."));
+    } else if (reply.type() != KAuth::ActionReply::KAuthError ||
+               (reply.errorCode() != KAuth::ActionReply::NoError &&
+                reply.errorCode() != KAuth::ActionReply::AuthorizationDenied &&
+                reply.errorCode() != KAuth::ActionReply::UserCancelled)) {
+        m_messageWidget->setMessageType(KMessageWidget::Error);
+        m_messageWidget->setText(i18n("Unable to execute the action: %1", reply.errorDescription()));
+        m_addToGroupAction->setText(i18n("Retry"));
+    }
 }
 
 #include "k3bdevicewidget.moc"

@@ -21,17 +21,23 @@ include_directories(
   ${libk3b_BINARY_DIR}/tools
   ${libk3b_BINARY_DIR}/projects
   ${libk3b_BINARY_DIR}/jobs
+  ${CMAKE_CURRENT_SOURCE_DIR}/helper
   ${CMAKE_CURRENT_SOURCE_DIR}/projects
   ${CMAKE_CURRENT_SOURCE_DIR}/projects/kostore/
   ${libk3b_SOURCE_DIR}/cddb
   )
 
-add_subdirectory( pics )
+add_subdirectory( helper )
 add_subdirectory( icons )
+add_subdirectory( pics )
 add_subdirectory( services )
 
 
 ########### next target ###############
+
+set(k3b_helper_SRCS
+  helper/k3bhelperprogramitem.cpp
+)
 
 set(k3b_project_SRCS
   projects/k3baudioburndialog.cpp
@@ -139,6 +145,7 @@ set(k3b_option_SRCS
   option/k3bexternalbinmodel.cpp
   option/k3bexternalbinoptiontab.cpp
   option/k3bexternalbinparamsmodel.cpp
+  option/k3bexternalbinpermissionmodel.cpp
   option/k3badvancedoptiontab.cpp
   option/k3boptiondialog.cpp
   option/k3bdeviceoptiontab.cpp
@@ -266,6 +273,7 @@ qt4_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bdataprojectinterface
 qt4_add_dbus_adaptor( k3b_dbus_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor )
 
 set(k3b_bin_SRCS
+  ${k3b_helper_SRCS}
   ${k3b_option_SRCS}
   ${k3b_misc_SRCS}
   ${k3b_project_SRCS}
@@ -293,6 +301,7 @@ target_link_libraries(k3b_bin
   k3bdevice
   k3b
   ${KCDDB_LIBRARIES}
+  ${KDE4_KDEUI_LIBS}
   ${KDE4_KFILE_LIBS}
   ${KDE4_KIO_LIBS}
   ${KDE4_KPARTS_LIBS}

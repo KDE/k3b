@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
@@ -33,6 +33,7 @@ namespace K3b {
     class ExternalBin;
     class ExternalBinModel;
     class ExternalBinParamsModel;
+    class ExternalBinPermissionModel;
 
     class ExternalBinWidget : public QWidget
     {
@@ -49,17 +50,22 @@ namespace K3b {
 
     private Q_SLOTS:
         void saveSearchPath();
+        void slotPermissionModelChanged();
+        void slotChangePermissions();
 
     private:
         ExternalBinManager* m_manager;
         ExternalBinModel* m_programModel;
         ExternalBinParamsModel* m_parameterModel;
+        ExternalBinPermissionModel* m_permissionModel;
 
         QTabWidget* m_mainTabWidget;
         QTreeView* m_programView;
         QTreeView* m_parameterView;
+        QTreeView* m_permissionView;
         KEditListBox* m_searchPathBox;
 
+        QPushButton* m_changePermissionsButton;
         QPushButton* m_rescanButton;
     };
 }

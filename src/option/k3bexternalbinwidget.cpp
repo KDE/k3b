@@ -17,6 +17,8 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bexternalbinmodel.h"
 #include "k3bexternalbinparamsmodel.h"
+#include "k3bexternalbinpermissionmodel.h"
+#include "config-k3b.h"
 
 #include <QApplication>
 #include <QCursor>
@@ -33,13 +35,16 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
+#include <KAuth/Action>
 #include <KDebug>
 #include <KDialog>
 #include <KEditListBox>
 #include <KGlobalSettings>
 #include <KLocale>
+#include <KMessageBox>
+#include <KPushButton>
 
-
+#include <grp.h>
 
 
 
@@ -60,12 +65,11 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     m_mainTabWidget = new QTabWidget( this );
-    m_rescanButton = new QPushButton( i18n("&Search"), this );
-    mainGrid->addWidget( m_mainTabWidget, 0, 0, 1, 2 );
-    mainGrid->addWidget( m_rescanButton, 1, 1 );
+    m_rescanButton = new QPushButton( KIcon( "view-refresh" ), i18n( "Refresh" ), this );
+    mainGrid->addWidget( m_mainTabWidget, 0, 0, 1, 3 );
+    mainGrid->addWidget( m_rescanButton, 1, 2 );
     mainGrid->setColumnStretch( 0, 1 );
     mainGrid->setRowStretch( 0, 1 );
-
 
     // setup program tab
     // ------------------------------------------------------------
@@ -98,13 +102,31 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     m_parameterView->setAllColumnsShowFocus( true );
     m_parameterView->setRootIsDecorated( false );
     m_parameterView->setEditTriggers( QAbstractItemView::AllEditTriggers );
-    m_parameterView->header()->setResizeMode( ExternalBinParamsModel::ProgramColumn, QHeaderView::ResizeToContents );
+    m_parameterView->header()->setResizeMode( QHeaderView::ResizeToContents );
 
     QVBoxLayout* parametersTabLayout = new QVBoxLayout( parametersTab );
     parametersTabLayout->addWidget( parametersLabel );
     parametersTabLayout->addWidget( m_parameterView, 1 );
 
     m_mainTabWidget->addTab( parametersTab, i18n("User Parameters") );
+
+
+    // setup permissions tab
+    // ------------------------------------------------------------
+    QWidget* permissionsTab = new QWidget( m_mainTabWidget );
+    QLabel* permissionsLabel = new QLabel( i18n("Check the programs whose permissions you want to be changed:"), permissionsTab );
+    m_permissionModel = new ExternalBinPermissionModel( *manager, permissionsTab );
+    m_permissionView = new QTreeView( permissionsTab );
+    m_permissionView->setModel( m_permissionModel );
+    m_permissionView->setAllColumnsShowFocus( true );
+    m_permissionView->setRootIsDecorated( false );
+    m_permissionView->header()->setResizeMode( ExternalBinPermissionModel::ProgramColumn, QHeaderView::ResizeToContents );
+    m_changePermissionsButton = new KPushButton( KIcon("dialog-password"), i18n( "Change Permissions..." ), this );
+    QVBoxLayout* permissionsTabLayout = new QVBoxLayout( permissionsTab );
+    permissionsTabLayout->addWidget( permissionsLabel );
+    permissionsTabLayout->addWidget( m_permissionView );
+    permissionsTabLayout->addWidget( m_changePermissionsButton );
+    m_mainTabWidget->addTab( permissionsTab, i18n("Permissions") );
 
 
     // setup search path tab
@@ -122,7 +144,23 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
 
     m_mainTabWidget->addTab( searchPathTab, i18n("Search Path") );
 
+    connect( m_changePermissionsButton, SIGNAL(clicked()), SLOT(slotChangePermissions()) );
+    connect( m_permissionModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(slotPermissionModelChanged()) );
+    connect( m_permissionModel, SIGNAL(modelReset()), SLOT(slotPermissionModelChanged()) );
     connect( m_rescanButton, SIGNAL(clicked(bool)), this, SLOT(rescan()) );
+
+    qRegisterMetaType<HelperProgramItem>();
+    qRegisterMetaTypeStreamOperators<HelperProgramItem>("K3b::HelperProgramItem");
+
+    while (::group *g = ::getgrent()) {
+        const QString groupName = QString::fromLocal8Bit(g->gr_name);
+        if (groupName == "cdrom" ||
+            groupName == "optical" ||
+            groupName == "operator" ) {
+            m_permissionModel->setBurningGroup(groupName);
+        }
+    }
+    ::endgrent();
 }
 
 
@@ -164,6 +202,58 @@ void K3b::ExternalBinWidget::save()
 void K3b::ExternalBinWidget::saveSearchPath()
 {
     m_manager->setSearchPath( m_searchPathBox->items() );
+}
+
+
+void K3b::ExternalBinWidget::slotPermissionModelChanged()
+{
+    m_changePermissionsButton->setEnabled(m_permissionModel->changesNeeded());
+}
+
+
+void K3b::ExternalBinWidget::slotChangePermissions()
+{
+    KAuth::Action action("org.kde.k3b.updatepermissions");
+    action.setHelperID("org.kde.k3b");
+    action.setParentWidget(this);
+
+    QVariantMap args;
+
+    // Set burning group name as first argument
+    args["burningGroup"] = m_permissionModel->burningGroup();
+
+    // Set devices list as second argument
+    args["devices"] = QStringList();
+
+    // Set programs list as third argument
+    QVariantList programs;
+    Q_FOREACH(const HelperProgramItem& item, m_permissionModel->selectedPrograms()) {
+        programs << QVariant::fromValue(item);
+    }
+    args["programs"] = programs;
+
+    action.setArguments(args);
+
+    KAuth::ActionReply reply = action.execute();
+
+    if (reply.succeeded()) {
+        // Success!!
+        QStringList updated = reply.data()["updated"].toStringList();
+        QStringList failedToUpdate = reply.data()["failedToUpdate"].toStringList();
+        kDebug() << "Objects updated: " << updated;
+        kDebug() << "Objects failed to update: " << failedToUpdate;
+
+        if (!failedToUpdate.isEmpty()) {
+            KMessageBox::errorList(this, i18n("Following programs could not be updated:"), failedToUpdate);
+        }
+
+        m_permissionModel->update();
+    } else if (reply.type() != KAuth::ActionReply::KAuthError ||
+               (reply.errorCode() != KAuth::ActionReply::NoError &&
+                reply.errorCode() != KAuth::ActionReply::AuthorizationDenied &&
+                reply.errorCode() != KAuth::ActionReply::UserCancelled)) {
+        KMessageBox::error(this, i18n("Unable to execute the action: %1", reply.errorDescription()));
+    }
 }
 
 #include "k3bexternalbinwidget.moc"

@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -21,39 +22,21 @@
 #include <KConfigGroup>
 #include <KGlobal>
 #include <KLocale>
-#include <KMessageBox>
-#include <KProcess>
 
-#include <QApplication>
-#include <QCursor>
-#include <QGridLayout>
-#include <QLabel>
-#include <QString>
+#include <QtGui/QApplication>
+#include <QtGui/QCursor>
+#include <QtGui/QVBoxLayout>
 
 
 K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
     : QWidget( parent )
 {
-    QGridLayout* frameLayout = new QGridLayout( this );
-    frameLayout->setContentsMargins( 0, 0, 0, 0 );
-
-
-    // Info Label
-    // ------------------------------------------------
-    m_labelDevicesInfo = new QLabel( this );
-    m_labelDevicesInfo->setAlignment( Qt::AlignVCenter | Qt::AlignLeft );
-    m_labelDevicesInfo->setText( "<p>" + i18n( "K3b tries to detect all your devices properly. "
-                                               "If K3b is unable to detect your drive, you need to modify "
-                                               "their permissions to give K3b write access to all devices." ) );
-    m_labelDevicesInfo->setWordWrap(true);
-    // ------------------------------------------------
-
     m_deviceWidget = new K3b::DeviceWidget( k3bcore->deviceManager(), this );
 
-    frameLayout->addWidget( m_labelDevicesInfo, 0, 0 );
-    frameLayout->addWidget( m_deviceWidget, 1, 0 );
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setContentsMargins( 0, 0, 0, 0 );
+    layout->addWidget( m_deviceWidget );
 
-    connect( m_deviceWidget, SIGNAL(modifyPermissionsButtonClicked()), this, SLOT(slotModifyPermissionsButtonClicked()) );
     connect( m_deviceWidget, SIGNAL(refreshButtonClicked()), this, SLOT(slotRefreshButtonClicked()) );
 }
 
@@ -74,15 +57,6 @@ void K3b::DeviceOptionTab::saveDevices()
 {
     // save the config
     k3bcore->deviceManager()->saveConfig( KGlobal::config()->group( "Devices" ) );
-}
-
-
-void K3b::DeviceOptionTab::slotModifyPermissionsButtonClicked()
-{
-    QStringList args;
-    args << "k3bsetup" << "--lang" << KGlobal::locale()->language();
-    if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
-        KMessageBox::error( this, i18n("Unable to start K3b::Setup.") );
 }
 
 

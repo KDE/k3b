@@ -14,13 +14,11 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bsetupprogramsmodel.h"
+#include "k3bexternalbinpermissionmodel.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bdefaultexternalprograms.h"
 #include "k3bglobals.h"
 
-#include <KConfig>
-#include <KConfigGroup>
 #include <KDebug>
 #include <KLocale>
 
@@ -69,12 +67,12 @@ bool shouldRunSuidRoot( const K3b::ExternalBin* bin )
 } // namespace
 
 namespace K3b {
-namespace Setup {
 
-class ProgramsModel::Private
+class ExternalBinPermissionModel::Private
 {
 public:
-    ExternalBinManager* externalBinManager;
+    explicit Private(ExternalBinManager const& ebm) : externalBinManager(ebm) {}
+    ExternalBinManager const& externalBinManager;
     QString burningGroup;
     QList<const ExternalBin*> programs;
     QSet<const ExternalBin*> selectedPrograms;
@@ -87,18 +85,22 @@ public:
 };
 
 
-void ProgramsModel::Private::buildProgramList()
+void ExternalBinPermissionModel::Private::buildProgramList()
 {
-    externalBinManager->search();
     programs.clear();
-    const QMap<QString, ExternalProgram*>& map = externalBinManager->programs();
+    const QMap<QString, ExternalProgram*>& map = externalBinManager.programs();
     for( QMap<QString, ExternalProgram*>::const_iterator it = map.constBegin(); it != map.constEnd(); ++it ) {
-        programs += it.value()->bins();
+        if (it.key() == "cdrecord" ||
+            it.key() == "cdrdao" ||
+            it.key() == "growisofs") {
+            programs += it.value()->bins();
+        }
     }
+    selectedPrograms = programs.toSet();
 }
 
 
-bool ProgramsModel::Private::getProgramInfo( const ExternalBin* program,
+bool ExternalBinPermissionModel::Private::getProgramInfo( const ExternalBin* program,
                                                   QString& owner, QString& group, QString& wantedGroup,
                                                   int& perm, int& wantedPerm ) const
 {
@@ -111,19 +113,19 @@ bool ProgramsModel::Private::getProgramInfo( const ExternalBin* program,
         group = fi.group();
         perm = s.st_mode & 0007777;
 
-        if( !burningGroup.isEmpty() )
+        if( !burningGroup.isEmpty() && burningGroup != "root" )
             wantedGroup = burningGroup;
         else
             wantedGroup = "root";
 
         if( shouldRunSuidRoot( program ) ) {
-            if( !burningGroup.isEmpty() )
+            if( wantedGroup != "root" )
                 wantedPerm = 0004710;
             else
                 wantedPerm = 0004711;
         }
         else {
-            if( !burningGroup.isEmpty() )
+            if( wantedGroup != "root" )
                 wantedPerm = 0000750;
             else
                 wantedPerm = 0000755;
@@ -132,13 +134,13 @@ bool ProgramsModel::Private::getProgramInfo( const ExternalBin* program,
         return true;
     }
     else {
-        kDebug() << "(K3bSetup) unable to stat " << program->path();
+        kDebug() << "(ExternalBinPermissionModel) unable to stat " << program->path();
         return false;
     }
 }
 
 
-bool ProgramsModel::Private::needChangePermissions( const ExternalBin* program ) const
+bool ExternalBinPermissionModel::Private::needChangePermissions( const ExternalBin* program ) const
 {
     QString owner, group, wantedGroup;
     int perm, wantedPerm;
@@ -150,74 +152,52 @@ bool ProgramsModel::Private::needChangePermissions( const ExternalBin* program )
 }
 
 
-ProgramsModel::ProgramsModel( QObject* parent )
+ExternalBinPermissionModel::ExternalBinPermissionModel(ExternalBinManager const& externalBinManager, QObject* parent)
 :
     QAbstractItemModel( parent ),
-    d( new Private )
+    d( new Private( externalBinManager ) )
 {
-    d->externalBinManager = new ExternalBinManager( this );
-    // these are the only programs that need special permissions
-    d->externalBinManager->addProgram( new CdrdaoProgram() );
-    d->externalBinManager->addProgram( new CdrecordProgram() );
-    d->externalBinManager->addProgram( new GrowisofsProgram() );
     d->buildProgramList();
 }
 
 
-ProgramsModel::~ProgramsModel()
+ExternalBinPermissionModel::~ExternalBinPermissionModel()
 {
     delete d;
 }
 
 
-void ProgramsModel::load( const KConfig& config )
+QList<HelperProgramItem> ExternalBinPermissionModel::selectedPrograms() const
 {
-    d->selectedPrograms.clear();
-    d->externalBinManager->readConfig( config.group( "External Programs" ) );
-    d->buildProgramList();
-    reset();
-}
-
-
-void ProgramsModel::save( KConfig& config ) const
-{
-    d->externalBinManager->saveConfig( config.group( "External Programs" ) );
-}
-
-
-void ProgramsModel::defaults()
-{
-    d->selectedPrograms.clear();
-    d->buildProgramList();
-    reset();
-}
-
-
-QList<ProgramItem> ProgramsModel::selectedPrograms() const
-{
-    QList<ProgramItem> selectedPrograms;
+    QList<HelperProgramItem> selectedPrograms;
     Q_FOREACH( const ExternalBin* program, d->selectedPrograms )
     {
         if( d->needChangePermissions( program ) )
-            selectedPrograms << ProgramItem( program->path(), shouldRunSuidRoot( program ) );
+            selectedPrograms << HelperProgramItem( program->path(), shouldRunSuidRoot( program ) );
     }
     return selectedPrograms;
 }
 
 
-bool ProgramsModel::changesNeeded() const
+bool ExternalBinPermissionModel::changesNeeded() const
 {
     return !selectedPrograms().isEmpty();
 }
 
 
-QStringList ProgramsModel::searchPaths() const
+QStringList ExternalBinPermissionModel::searchPaths() const
 {
-    return d->externalBinManager->searchPath();
+    return d->externalBinManager.searchPath();
 }
 
 
-const ExternalBin* ProgramsModel::programForIndex( const QModelIndex& index ) const
+const QString& ExternalBinPermissionModel::burningGroup() const
+{
+    return d->burningGroup;
+}
+
+
+const ExternalBin* ExternalBinPermissionModel::programForIndex( const QModelIndex& index ) const
 {
     if( index.isValid() )
         return static_cast<const ExternalBin*>( index.internalPointer() );
@@ -226,7 +206,7 @@ const ExternalBin* ProgramsModel::programForIndex( const QModelIndex& index ) co
 }
 
 
-QModelIndex ProgramsModel::indexForProgram( const ExternalBin* program ) const
+QModelIndex ExternalBinPermissionModel::indexForProgram( const ExternalBin* program ) const
 {
     if( program != 0 && !d->programs.isEmpty() ) {
         int row = d->programs.indexOf( program );
@@ -237,29 +217,21 @@ QModelIndex ProgramsModel::indexForProgram( const ExternalBin* program ) const
 }
 
 
-QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
+QVariant ExternalBinPermissionModel::data( const QModelIndex& index, int role ) const
 {
     if( const ExternalBin* program = programForIndex( index ) ) {
         if( role == Qt::DisplayRole ) {
-            if( index.column() == 0 ) {
-                return program->name();
-            }
-            else if( index.column() == 1 ) {
-                return program->version().toString();
-            }
-            else if( index.column() == 2 ) {
+            if( index.column() == ProgramColumn ) {
                 return program->path();
-            }
-            else {
+            } else {
                 QString owner, group, wantedGroup;
                 int perm, wantedPerm;
 
                 if( d->getProgramInfo( program, owner, group, wantedGroup, perm, wantedPerm ) ) {
 
-                    if( index.column() == 3 ) {
+                    if( index.column() == PermissionsColumn ) {
                         return QString(QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + owner + "." + group);
-                    }
-                    else if ( index.column() == 4 ) {
+                    } else if ( index.column() == NewPermissionsColumn ) {
                         if( perm != wantedPerm || owner != "root" || group != wantedGroup )
                             return QString("%1 root.%2").arg(wantedPerm,0,8).arg(wantedGroup);
                         else
@@ -268,7 +240,7 @@ QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
                 }
             }
         }
-        else if( role == Qt::CheckStateRole && index.column() == 0 && d->needChangePermissions( program ) ) {
+        else if( role == Qt::CheckStateRole && index.column() == ProgramColumn && d->needChangePermissions( program ) ) {
             if( d->selectedPrograms.contains( program ) )
                 return Qt::Checked;
             else
@@ -279,7 +251,7 @@ QVariant ProgramsModel::data( const QModelIndex& index, int role ) const
 }
 
 
-bool ProgramsModel::setData( const QModelIndex& index, const QVariant& value, int role )
+bool ExternalBinPermissionModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
     if( role == Qt::CheckStateRole ) {
         if( const ExternalBin* program = programForIndex( index ) ) {
@@ -299,11 +271,11 @@ bool ProgramsModel::setData( const QModelIndex& index, const QVariant& value, in
 }
 
 
-Qt::ItemFlags ProgramsModel::flags( const QModelIndex& index ) const
+Qt::ItemFlags ExternalBinPermissionModel::flags( const QModelIndex& index ) const
 {
     if( const ExternalBin* program = programForIndex( index ) )
     {
-        if( index.column() == 0 && d->needChangePermissions( program ) )
+        if( index.column() == ProgramColumn && d->needChangePermissions( program ) )
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
         else
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -313,16 +285,14 @@ Qt::ItemFlags ProgramsModel::flags( const QModelIndex& index ) const
 }
 
 
-QVariant ProgramsModel::headerData( int section, Qt::Orientation orientation, int role ) const
+QVariant ExternalBinPermissionModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     if( orientation == Qt::Horizontal && role == Qt::DisplayRole ) {
         switch( section )
         {
-            case 0: return i18n( "Program" );
-            case 1: return i18n( "Version" );
-            case 2: return i18n( "Path" );
-            case 3: return i18n( "Permissions" );
-            case 4: return i18n( "New permissions" );
+            case ProgramColumn: return i18n( "Program" );
+            case PermissionsColumn: return i18n( "Permissions" );
+            case NewPermissionsColumn: return i18n( "New permissions" );
             default: return QVariant();
         }
     }
@@ -331,7 +301,7 @@ QVariant ProgramsModel::headerData( int section, Qt::Orientation orientation, in
 }
 
 
-QModelIndex ProgramsModel::index( int row, int column, const QModelIndex& parent ) const
+QModelIndex ExternalBinPermissionModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if( hasIndex(row, column, parent) && !parent.isValid() ) {
         const ExternalBin* program = d->programs.at( row );
@@ -345,14 +315,14 @@ QModelIndex ProgramsModel::index( int row, int column, const QModelIndex& parent
 }
 
 
-QModelIndex ProgramsModel::parent( const QModelIndex& index ) const
+QModelIndex ExternalBinPermissionModel::parent( const QModelIndex& index ) const
 {
     Q_UNUSED( index );
     return QModelIndex();
 }
 
 
-int ProgramsModel::rowCount( const QModelIndex& parent ) const
+int ExternalBinPermissionModel::rowCount( const QModelIndex& parent ) const
 {
     if( !parent.isValid() )
         return d->programs.size();
@@ -361,14 +331,23 @@ int ProgramsModel::rowCount( const QModelIndex& parent ) const
 }
 
 
-int ProgramsModel::columnCount( const QModelIndex& parent ) const
+int ExternalBinPermissionModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
-    return 5;
+    return NumColumns;
 }
 
 
-void ProgramsModel::setBurningGroup( const QString& burningGroup )
+QModelIndex ExternalBinPermissionModel::buddy( const QModelIndex& index ) const
+{
+    if( programForIndex( index ) != 0 )
+        return ExternalBinPermissionModel::index( index.row(), ProgramColumn, index.parent() );
+    else
+        return index;
+}
+
+
+void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {
         d->burningGroup = burningGroup;
@@ -387,22 +366,13 @@ void ProgramsModel::setBurningGroup( const QString& burningGroup )
     }
 }
 
-void ProgramsModel::setSearchPaths( const QStringList& searchPaths )
-{
-    if( searchPaths != d->externalBinManager->searchPath() ) {
-        d->externalBinManager->setSearchPath( searchPaths );
-        update();
-    }
-}
-
-void ProgramsModel::update()
+void ExternalBinPermissionModel::update()
 {
     d->buildProgramList();
     d->selectedPrograms.intersect( d->programs.toSet() );
     reset();
 }
 
-} // namespace Setup
 } // namespace K3b
 
-#include "k3bsetupprogramsmodel.moc"
+#include "k3bexternalbinpermissionmodel.moc"

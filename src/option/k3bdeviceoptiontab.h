@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,8 +19,6 @@
 
 #include <QWidget>
 
-class QLabel;
-
 namespace K3b {
     class DeviceWidget;
 
@@ -35,11 +34,9 @@ namespace K3b {
         void saveDevices();
 
     private Q_SLOTS:
-        void slotModifyPermissionsButtonClicked();
         void slotRefreshButtonClicked();
 
     private:
-        QLabel* m_labelDevicesInfo;
         DeviceWidget* m_deviceWidget;
     };
 }

@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2009 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -18,6 +19,8 @@
 
 #include <QWidget>
 
+class KMessageWidget;
+class QAction;
 class QTreeWidget;
 class QTreeWidgetItem;
 
@@ -39,11 +42,11 @@ namespace K3b {
         void init();
 
     Q_SIGNALS:
-        void modifyPermissionsButtonClicked();
         void refreshButtonClicked();
 
     private Q_SLOTS:
         void updateDeviceListViews();
+        void addUserToGroup();
 
     private:
         Device::DeviceManager* m_deviceManager;
@@ -52,6 +55,9 @@ namespace K3b {
         QTreeWidgetItem* m_readerParentViewItem;
 
         QTreeWidget* m_viewDevices;
+        KMessageWidget* m_messageWidget;
+        QAction* m_addToGroupAction;
+        QString m_deviceGroup;
     };
 }
 

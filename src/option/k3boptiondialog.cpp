@@ -140,7 +140,7 @@ void K3b::OptionDialog::setupDevicePage()
 {
     m_deviceOptionTab = new K3b::DeviceOptionTab;
     m_devicePage = addPage( m_deviceOptionTab, i18n("Devices") );
-    m_devicePage->setHeader( i18n("Setup Devices") );
+    m_devicePage->setHeader( i18n("Optical Devices") );
     m_devicePage->setIcon( KIcon( "drive-optical" ) );
     m_pages.insert( Devices, m_devicePage );
 }

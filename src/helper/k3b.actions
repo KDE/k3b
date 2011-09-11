@@ -1,4 +1,4 @@
-[org.kde.kcontrol.k3bsetup.save]
+[org.kde.k3b.updatepermissions]
 Name=Update device and programs permissions
 Name[bg]=Обновяване правата върху устройства и програми
 Name[bs]=Osvježi uređaje i dozvole programa
@@ -80,4 +80,9 @@ Description[tr]=Aygıt ve uygulama dizinlerini güncellemek için yetki gerekiyo
 Description[uk]=Для оновлення прав доступу до пристроїв та програм слід пройти розпізнавання
 Description[x-test]=xxAuthentication is required to update permissions of devices and programsxx
 Description[zh_TW]=更新裝置與程式的權限時需要驗證身份
+Policy=auth_admin
+
+[org.kde.k3b.addtogroup]
+Name=Adds current user to a specified group
+Description=Authentication is required to add current user to a group
 Policy=auth_admin

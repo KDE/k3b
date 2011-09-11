@@ -17,8 +17,9 @@
 #include <config-k3b.h>
 
 
-#include "k3bapplication.h"
 #include "k3bsystemproblemdialog.h"
+#include "k3b.h"
+#include "k3bapplication.h"
 #include "k3bthemedheader.h"
 #include "k3btitlelabel.h"
 #include "k3bexternalbinmanager.h"
@@ -82,7 +83,8 @@ K3b::SystemProblem::SystemProblem( Type t,
 
 
 K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& problems,
-                                               bool showK3bSetupButton,
+                                               bool showDeviceSettingsButton,
+                                               bool showBinSettingsButton,
                                                QWidget* parent)
     : KDialog( parent )
 {
@@ -100,15 +102,14 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     connect( closeButton, SIGNAL(clicked()), this, SLOT(close()) );
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 
-    QPushButton* k3bsetupButton = 0;
-#ifdef BUILD_K3BSETUP
-    if( showK3bSetupButton ) {
-        k3bsetupButton = new QPushButton( i18n("Modify Permissions..."), widget );
-        connect( k3bsetupButton, SIGNAL(clicked()), this, SLOT(slotK3bSetup()) );
+    QPushButton* configureButton = new QPushButton( KIcon( "configure" ), i18n("Configure K3b..."), widget );
+    if( showDeviceSettingsButton ) {
+        connect( configureButton, SIGNAL(clicked()), SLOT(slotShowDeviceSettings()) );
+    } else if( showBinSettingsButton ) {
+        connect( configureButton, SIGNAL(clicked()), SLOT(slotShowBinSettings()) );
+    } else {
+        configureButton->hide();
     }
-#else
-    Q_UNUSED( showK3bSetupButton );
-#endif
 
     // setup the problem view
     // ---------------------------------------------------------------------------------------------------
@@ -122,9 +123,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     grid->addWidget( m_checkDontShowAgain, 2, 0 );
     QHBoxLayout* buttonBox = new QHBoxLayout;
     buttonBox->setContentsMargins( 0, 0, 0, 0 );
-    if( k3bsetupButton != 0 ) {
-        buttonBox->addWidget( k3bsetupButton );
-    }
+    buttonBox->addWidget( configureButton );
     buttonBox->addWidget( closeButton );
     grid->addLayout( buttonBox, 2, 1 );
     grid->setColumnStretch( 0, 1 );
@@ -175,13 +174,8 @@ void K3b::SystemProblemDialog::closeEvent( QCloseEvent* e )
 void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel level )
 {
     QList<K3b::SystemProblem> problems;
-    bool showK3bSetupButton = false;
-
-#ifdef BUILD_K3BSETUP
-    const QString k3bSetupSolutionText = i18n("Click \"Modify Permissions...\" to solve this problem.");
-#else
-    const QString k3bSetupSolutionText = QString();
-#endif
+    bool showDeviceSettingsButton = false;
+    bool showBinSettingsButton = false;
 
     if( k3bcore->deviceManager()->allDevices().isEmpty() ) {
         problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
@@ -234,18 +228,18 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                 k3bcore->externalBinManager()->binObject( "cdrecord" )->version() < K3b::Version( 2, 1, 1, "a05" ) &&
                 !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
                 if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) ) {
-                    showK3bSetupButton = true;
+                    showBinSettingsButton = true;
                     problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                          i18n("%1 will be run with root privileges on kernel >= 2.6.8",QString("cdrecord <= 2.01.01a05")),
                                                          i18n("Since Linux kernel 2.6.8 %1 will not work when run suid "
                                                               "root for security reasons anymore.",
                                                          QLatin1String( "cdrecord <= 2.01.01a05") ),
-                                                         k3bSetupSolutionText ) );
+                                                         i18n("Click \"Configure K3b...\" to solve this problem.") ) );
                 }
             }
 #ifdef CDRECORD_SUID_ROOT_CHECK
             else if( !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) && getuid() != 0 ) { // not root
-                showK3bSetupButton = true;
+                showBinSettingsButton = true;
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                      i18n("%1 will be run without root privileges",QString("cdrecord")),
                                                      i18n("It is highly recommended to configure cdrecord "
@@ -254,7 +248,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                           "stability of the burning process. As well as this, "
                                                           "it allows the size of the burning buffer to be changed, "
                                                           "and a lot of user problems can be solved this way."),
-                                                     k3bSetupSolutionText ) );
+                                                     i18n("Click \"Configure K3b...\" to solve this problem.") ) );
             }
 #endif // CDRECORD_SUID_ROOT_CHECK
 #endif
@@ -270,13 +264,13 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 #ifdef Q_OS_LINUX
 #ifdef CDRECORD_SUID_ROOT_CHECK
             if( !k3bcore->externalBinManager()->binObject( "cdrdao" )->hasFeature( "suidroot" ) && getuid() != 0 ) {
-                showK3bSetupButton = true;
+                showBinSettingsButton = true;
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                      i18n("%1 will be run without root privileges",QString("cdrdao")),
                                                      i18n("It is highly recommended to configure cdrdao "
                                                           "to run with root privileges to increase the "
                                                           "overall stability of the burning process."),
-                                                     k3bSetupSolutionText ) );
+                                                     i18n("Click \"Configure K3b...\" to solve this problem.") ) );
             }
 #endif // CDRECORD_SUID_ROOT_CHECK
 #endif
@@ -319,14 +313,14 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             }
 //            // for now we ignore the suid root bit becasue of the memorylocked issue
 //            else if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
-//                showK3bSetupButton = true;
+//                showBinSettingsButton = true;
 //                problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
 //                                                     i18n("%1 will be run without root privileges","growisofs"),
 //                                                     i18n("It is highly recommended to configure growisofs "
 //                                                          "to run with root privileges. Only then growisofs "
 //                                                          "runs with high priority which increases the overall "
 //                                                          "stability of the burning process."),
-//                                                     k3bSetupSolutionText ) );
+//                                                     i18n("Click \"Configure K3b...\" to solve this problem.") ) );
 //            }
         }
 
@@ -462,7 +456,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
         K3b::Device::Device* dev = (*it);
 #ifndef Q_OS_WIN32
         if( !QFileInfo( dev->blockDeviceName() ).isWritable() ) {
-            showK3bSetupButton = true;
+            showDeviceSettingsButton = true;
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("No write access to device %1",dev->blockDeviceName()),
                                                i18n("K3b needs write access to all the devices to perform certain tasks. "
@@ -552,16 +546,14 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     // the kdelibs refuse it.
     //
     if( ::getuid() == 0 ) {
-        showK3bSetupButton = true;
+        showDeviceSettingsButton = true;
         problems.append( K3b::SystemProblem( K3b::SystemProblem::WARNING,
                                            i18n("Running K3b as root user"),
                                            i18n("It is not recommended to run K3b under the root user account. "
                                                 "This introduces unnecessary security risks."),
                                            i18n("Run K3b from a proper user account and setup the device and "
                                                 "external tool permissions appropriately.")
-#ifdef BUILD_K3BSETUP
-                                           + ' ' + i18n("The latter can be done via \"Modify Permissions...\".")
-#endif
+                                           + ' ' + i18n("The latter can be done via \"Configure K3b...\".")
                                            ) );
     }
 
@@ -599,7 +591,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
         static K3b::SystemProblemDialog* s_openDlg = 0;
         if( s_openDlg )
             s_openDlg->close();
-        K3b::SystemProblemDialog dlg( problems, showK3bSetupButton, parent );
+        K3b::SystemProblemDialog dlg( problems, showDeviceSettingsButton, showBinSettingsButton, parent );
         s_openDlg = &dlg;
         dlg.exec();
         s_openDlg = 0;
@@ -610,12 +602,15 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     cfg.writeEntry( "Last system check version", QString(k3bcore->version()) );
 }
 
-void K3b::SystemProblemDialog::slotK3bSetup()
+void K3b::SystemProblemDialog::slotShowDeviceSettings()
 {
-    QStringList args;
-    args << "k3bsetup" << "--lang" << KGlobal::locale()->language();
-    if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
-        KMessageBox::error( 0, i18n("Unable to start K3b::Setup.") );
+    k3bappcore->k3bMainWindow()->showOptionDialog( OptionDialog::Devices );
+}
+
+
+void K3b::SystemProblemDialog::slotShowBinSettings()
+{
+    k3bappcore->k3bMainWindow()->showOptionDialog( OptionDialog::Programs );
 }
 
 

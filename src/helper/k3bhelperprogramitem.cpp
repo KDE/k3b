@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  * Copyright (C)      2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
@@ -13,32 +13,30 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bsetupprogramitem.h"
+#include "k3bhelperprogramitem.h"
 
 namespace K3b {
-namespace Setup {
 
-ProgramItem::ProgramItem()
+HelperProgramItem::HelperProgramItem()
 {
 }
 
-ProgramItem::ProgramItem( const QString& path, bool needSuid )
+HelperProgramItem::HelperProgramItem( const QString& path, bool needSuid )
 :
     m_path( path ),
     m_needSuid( needSuid )
 {
 }
 
-} // namespace Setup
 } // namespace K3b
 
-QDataStream& operator<<( QDataStream& data, const K3b::Setup::ProgramItem& item )
+QDataStream& operator<<( QDataStream& data, const K3b::HelperProgramItem& item )
 {
     data << item.m_path << item.m_needSuid;
     return data;
 }
 
-const QDataStream& operator>>( QDataStream& data, K3b::Setup::ProgramItem& item )
+const QDataStream& operator>>( QDataStream& data, K3b::HelperProgramItem& item )
 {
     data >> item.m_path >> item.m_needSuid;
     return data;

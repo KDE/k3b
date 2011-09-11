@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
@@ -13,21 +13,22 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bsetupworker.h"
-#include "k3bsetupprogramitem.h"
+#include "k3bhelper.h"
+#include "k3bhelperprogramitem.h"
 
-#include <QFile>
-#include <QString>
-#include <QStringList>
+#include <QtCore/QFile>
+#include <QtCore/QProcess>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
+#include <grp.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <grp.h>
 
 namespace {
 
-bool updateDevicePermissions( struct group* g, const QString& device )
+bool updateDevicePermissions( ::group* g, const QString& device )
 {
     bool success = true;
     if( g != 0 ) {
@@ -45,7 +46,7 @@ bool updateDevicePermissions( struct group* g, const QString& device )
 }
 
 
-bool updateProgramPermissions( struct group* g, const QString& path, bool suid )
+bool updateProgramPermissions( ::group* g, const QString& path, bool suid )
 {
     bool success = true;
     if( g != 0 ) {
@@ -81,24 +82,22 @@ bool updateProgramPermissions( struct group* g, const QString& path, bool suid )
 
 
 namespace K3b {
-namespace Setup {
 
-Worker::Worker()
+Helper::Helper()
 {
-    qRegisterMetaType<ProgramItem>();
-    qRegisterMetaTypeStreamOperators<ProgramItem>( "K3b::Setup::ProgramItem" );
+    qRegisterMetaType<HelperProgramItem>();
+    qRegisterMetaTypeStreamOperators<HelperProgramItem>( "K3b::HelperProgramItem" );
 }
-  
-ActionReply Worker::save( QVariantMap args )
+
+ActionReply Helper::updatepermissions( QVariantMap args )
 {
     QString burningGroup = args["burningGroup"].toString();
     QStringList devices = args["devices"].toStringList();
     QVariantList programs = args["programs"].value<QVariantList>();
         
-    struct group* g = 0;
+    ::group* g = 0;
     if( !burningGroup.isEmpty() ) {
-        // TODO: create the group if it's not there
-        g = getgrnam( burningGroup.toLocal8Bit() );
+        g = ::getgrnam( burningGroup.toLocal8Bit() );
     }
     
     QStringList updated;
@@ -114,7 +113,7 @@ ActionReply Worker::save( QVariantMap args )
     
     Q_FOREACH( const QVariant& v, programs )
     {
-        ProgramItem program = v.value<ProgramItem>();
+        HelperProgramItem program = v.value<HelperProgramItem>();
         
         if( !program.m_path.isEmpty() && updateProgramPermissions( g, program.m_path, program.m_needSuid ) )
             updated.push_back( program.m_path );
@@ -127,13 +126,32 @@ ActionReply Worker::save( QVariantMap args )
     data["updated"] = updated;
     data["failedToUpdate"] = failedToUpdate;
     reply.setData(data);
-    
+
     return reply;
 }
 
-} // namespace Setup
+ActionReply Helper::addtogroup( QVariantMap args )
+{
+    const QString groupName = args["groupName"].toString();
+    const QString userName = args["userName"].toString();
+
+    QProcess gpasswd;
+    int errorCode = gpasswd.execute( "gpasswd", QStringList() << "--add" << userName << groupName );
+
+    ActionReply reply;
+    if( errorCode == 0 ) {
+        reply = KAuth::ActionReply::SuccessReply;
+    } else {
+        reply = KAuth::ActionReply::HelperErrorReply;
+        reply.setErrorCode( errorCode );
+        reply.setErrorDescription( QString::fromLocal8Bit( gpasswd.readAllStandardError().data() ) );
+    }
+
+    return reply;
+}
+
 } // namespace K3b
 
-KDE4_AUTH_HELPER_MAIN("org.kde.kcontrol.k3bsetup", K3b::Setup::Worker)
+KDE4_AUTH_HELPER_MAIN("org.kde.k3b", K3b::Helper)
 
-#include "k3bsetupworker.moc"
+#include "k3bhelper.moc"

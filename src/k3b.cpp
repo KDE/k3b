@@ -63,7 +63,6 @@
 #include "misc/k3bmediaformattingdialog.h"
 #include "option/k3boptiondialog.h"
 #include "projects/k3bdatamultisessionimportdialog.h"
-#include "config-k3b.h"
 
 // include files for KDE
 #include <kaboutdata.h>
@@ -457,14 +456,6 @@ void K3b::MainWindow::initActions()
     KAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
     actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
     actionSettingsConfigure->setStatusTip( actionSettingsConfigure->toolTip() );
-
-#ifdef BUILD_K3BSETUP
-    KAction* actionSettingsK3bSetup = new KAction( KIcon( "configure" ), i18n("&Setup System Permissions..."), this );
-    actionSettingsK3bSetup->setToolTip( i18n("Setup the system permissions") );
-    actionSettingsK3bSetup->setStatusTip( actionSettingsK3bSetup->toolTip() );
-    actionCollection()->addAction( "settings_k3bsetup", actionSettingsK3bSetup );
-    connect( actionSettingsK3bSetup, SIGNAL(triggered(bool)), this, SLOT(slotK3bSetup()) );
-#endif
 
     KAction* actionHelpSystemCheck = new KAction( i18n("System Check"), this );
     actionHelpSystemCheck->setToolTip( i18n("Checks system configuration") );
@@ -1375,15 +1366,6 @@ void K3b::MainWindow::slotProjectAddFiles()
     }
     else
         KMessageBox::error( this, i18n("Please create a project before adding files"), i18n("No Active Project"));
-}
-
-
-void K3b::MainWindow::slotK3bSetup()
-{
-    QStringList args;
-    args << "k3bsetup" << "--lang" << KGlobal::locale()->language();
-    if( !KProcess::startDetached( K3b::findExe("kcmshell4"), args ) )
-        KMessageBox::error( 0, i18n("Unable to start K3b::Setup.") );
 }
 
 

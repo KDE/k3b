@@ -25,7 +25,6 @@ option(K3B_ENABLE_DVD_RIPPING "Support for ripping Video DVDs with optional decr
 option(K3B_ENABLE_TAGLIB "Support for reading audio file metadata using Taglib." ON)
 option(K3B_BUILD_API_DOCS "Build the API documentation for the K3b libs." OFF)
 if(NOT WIN32 AND NOT APPLE)
-  option(K3B_BUILD_K3BSETUP "Graphical utility for managing device permissions" ON)
   option(K3B_ENABLE_HAL_SUPPORT "Support for inhibiting HAL from polling disk during write." OFF)
 endif(NOT WIN32 AND NOT APPLE)
 
@@ -164,10 +163,6 @@ endif(WIN32)
 ##################  K3b build settings #################################
 include(ConfigureChecks)
 
-if(K3B_BUILD_K3BSETUP)
-  set(BUILD_K3BSETUP 1)
-endif(K3B_BUILD_K3BSETUP)
-
 macro_bool_to_01(ADD_K3B_DEBUG K3B_DEBUG)
 
 if(K3B_ENABLE_DVD_RIPPING AND DVDREAD_FOUND)
@@ -288,9 +283,6 @@ add_subdirectory( src )
 add_subdirectory( kioslaves )
 add_subdirectory( plugins )
 add_subdirectory( doc )
-if(BUILD_K3BSETUP)
-    add_subdirectory(k3bsetup)
-endif(BUILD_K3BSETUP)
 if(KDE4_BUILD_TESTS)
     enable_testing()
     add_subdirectory( tests )

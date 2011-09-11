@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2009 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  * Copyright (C) 2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
@@ -13,22 +13,21 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3BSETUPWORKER_H_
-#define _K3BSETUPWORKER_H_
+#ifndef K3BHELPER_H
+#define K3BHELPER_H
 
 #include <kauth.h>
 
 using namespace KAuth;
  
 namespace K3b {
-namespace Setup {
  
-class Worker : public QObject
+class Helper : public QObject
 {
     Q_OBJECT
-    
+
 public:
-    Worker();
+    Helper();
 
 public slots:
     /**
@@ -36,13 +35,18 @@ public slots:
      * @param burningGroup name of the burning group. If not set burning group will not be used
      * @param devices list of devices which will have updated permissions
      * @param programs list of the programs which will have updated permissions. Each element
-     *                 of the list is a @see K3b::Setup::ProgramItem object
+     *                 of the list is a @see K3b::HelperProgramItem object
      */
-    ActionReply save( QVariantMap args );
+    ActionReply updatepermissions( QVariantMap args );
 
+    /**
+     * Adds user to a specified group
+     * @param groupName name of the group
+     * @param userName name of the user
+     */
+    ActionReply addtogroup( QVariantMap args );
 };
 
-} // namespace Setup
 } // namespace K3b
  
-#endif
+#endif // K3BHELPER_H

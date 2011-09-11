@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  * Copyright (C)      2010 Dario Freddi <drf@kde.org>
  *
  * This file is part of the K3b project.
@@ -13,31 +13,29 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3BSETUPPROGRAMITEM_H_
-#define _K3BSETUPPROGRAMITEM_H_
+#ifndef K3BHELPERPROGRAMITEM_H
+#define K3BHELPERPROGRAMITEM_H
 
-#include <QMetaType>
-#include <QString>
+#include <QtCore/QMetaType>
+#include <QtCore/QString>
 
 namespace K3b {
-namespace Setup {
 
-class ProgramItem
+class HelperProgramItem
 {
 public:
-    ProgramItem();
-    ProgramItem( const QString& path, bool needSuid );
-    
+    HelperProgramItem();
+    HelperProgramItem( const QString& path, bool needSuid );
+
     QString m_path;
     bool m_needSuid;
 };
 
-} // namespace Setup
 } // namespace K3b
 
-Q_DECLARE_METATYPE( K3b::Setup::ProgramItem )
+Q_DECLARE_METATYPE( K3b::HelperProgramItem )
 
-QDataStream& operator<<( QDataStream& stream, const K3b::Setup::ProgramItem& item );
-const QDataStream& operator>>( QDataStream& stream, K3b::Setup::ProgramItem& item );
+QDataStream& operator<<( QDataStream& stream, const K3b::HelperProgramItem& item );
+const QDataStream& operator>>( QDataStream& stream, K3b::HelperProgramItem& item );
 
-#endif
+#endif // K3BHELPERPROGRAMITEM_H

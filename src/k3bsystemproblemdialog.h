@@ -85,11 +85,13 @@ namespace K3b {
         void closeEvent( QCloseEvent* );
 
     private Q_SLOTS:
-        void slotK3bSetup();
+        void slotShowDeviceSettings();
+        void slotShowBinSettings();
 
     private:
         SystemProblemDialog( const QList<SystemProblem>& problems,
-                             bool showK3bSetupButton,
+                             bool showDeviceSettingsButton,
+                             bool showBinSettingsButton,
                              QWidget* parent = 0);
         static int dmaActivated( Device::Device* );
 #ifndef Q_OS_WIN32
