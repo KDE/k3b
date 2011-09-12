@@ -867,7 +867,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
                 break;
             case PERMISSION_DENIED:
                 emit infoMessage( i18n("%1 has no permission to open the device.",QString("cdrecord")), MessageError );
-                emit infoMessage( i18n("Modify device K3b settings to solve this problem."), MessageError );
+                emit infoMessage( i18n("Modify device settings in K3b to solve this problem."), MessageError );
                 break;
             case BUFFER_UNDERRUN:
                 emit infoMessage( i18n("Probably a buffer underrun occurred."), MessageError );
