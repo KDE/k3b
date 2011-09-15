@@ -43,7 +43,7 @@ option(K3B_BUILD_WAVE_DECODER_PLUGIN "Build Wave decoder plugin" ON)
 
 ##################  K3b requirements #################################
 set(QT_MIN_VERSION 4.6.0)
-set(KDE_MIN_VERSION 4.4.0)
+set(KDE_MIN_VERSION 4.7.0)
 
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
