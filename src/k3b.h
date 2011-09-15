@@ -73,11 +73,6 @@ namespace K3b {
          */
         void initView();
 
-        /**
-         * Reimplemented from QMainWindow, adds "Lock Panels" action
-         */
-        virtual QMenu* createPopupMenu();
-
     public Q_SLOTS:
         K3b::Doc* slotNewAudioDoc();
         K3b::Doc* slotNewDataDoc();
@@ -178,8 +173,6 @@ namespace K3b {
         /** toggles the statusbar
          */
         void slotViewStatusBar();
-
-        void slotViewLockPanels( bool checked );
 
         /** changes the statusbar contents for the standard label permanently, used to indicate current actions.
          * @param text the text that is displayed in the statusbar

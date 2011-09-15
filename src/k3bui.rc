@@ -20,14 +20,7 @@
     </Menu>
 
     <Menu name="settings">
-        <Menu name="view_panels" append="show_merge"><text>Panels</text>
-            <Action name="view_projects" />
-            <Action name="view_dir_tree" />
-            <Action name="view_contents" />
-            <Separator />
-            <Action name="view_lock_panels" />
-            <Action name="view_document_header" />
-        </Menu>
+        <Action name="view_document_header" append="show_merge" />
         <Action name="view_audio_player" append="show_merge" />
     </Menu>
 
