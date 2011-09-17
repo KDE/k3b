@@ -595,7 +595,7 @@ bool K3b::IsOverburnAllowed( const K3b::Msf& projectSize, const K3b::Msf& capaci
 bool K3b::IsOverburnAllowed( const Msf& projectSize, const Msf& capacity, const Msf& usedCapacity )
 {
     return( k3bcore->globalSettings()->overburn() &&
-        (projectSize + usedCapacity) <= ( capacity.lba() - usedCapacity.lba() + capacity.lba() / 4 ) ); // 25% tolerance in overburn mode
+        (projectSize + usedCapacity) <= ( capacity.lba() + capacity.lba() / 4 ) ); // 25% tolerance in overburn mode
 }
 
 
