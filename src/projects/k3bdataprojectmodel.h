@@ -80,10 +80,10 @@ namespace K3b {
         class Private;
         Private* const d;
 
-        Q_PRIVATE_SLOT( d, void _k_aboutToAddItem( K3b::DirItem* dir, K3b::DataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_aboutToRemoveItem( K3b::DataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_itemAdded( K3b::DataItem* item ) )
-        Q_PRIVATE_SLOT( d, void _k_itemRemoved( K3b::DataItem* item ) )
+        Q_PRIVATE_SLOT( d, void _k_itemsAboutToBeInserted( K3b::DirItem* parent, int start, int end ) )
+        Q_PRIVATE_SLOT( d, void _k_itemsAboutToBeRemoved( K3b::DirItem* parent, int start, int end ) )
+        Q_PRIVATE_SLOT( d, void _k_itemsInserted( K3b::DirItem* parent, int start, int end ) )
+        Q_PRIVATE_SLOT( d, void _k_itemsRemoved( K3b::DirItem* parent, int start, int end ) )
         Q_PRIVATE_SLOT( d, void _k_volumeIdChanged() )
     };
 }

@@ -223,10 +223,10 @@ namespace K3b {
         void setVolumeID( const QString& );
 
     Q_SIGNALS:
-        void aboutToRemoveItem( K3b::DataItem* );
-        void aboutToAddItem( K3b::DirItem* futureParent, K3b::DataItem* );
-        void itemRemoved( K3b::DataItem* );
-        void itemAdded( K3b::DataItem* );
+        void itemsAboutToBeInserted( K3b::DirItem* parent, int start, int end );
+        void itemsAboutToBeRemoved( K3b::DirItem* parent, int start, int end );
+        void itemsInserted( K3b::DirItem* parent, int start, int end );
+        void itemsRemoved( K3b::DirItem* parent, int start, int end );
         void volumeIdChanged();
         void importedSessionChanged( int importedSession );
 
@@ -248,10 +248,10 @@ namespace K3b {
         /**
          * used by DirItem to inform about removed items.
          */
-        void aboutToRemoveItemFromDir( DirItem* parent, DataItem* removedItem );
-        void aboutToAddItemToDir( DirItem* parent, DataItem* addedItem );
-        void itemRemovedFromDir( DirItem* parent, DataItem* removedItem );
-        void itemAddedToDir( DirItem* parent, DataItem* addedItem );
+        void beginInsertItems( DirItem* parent, int start, int end );
+        void endInsertItems( DirItem* parent, int start, int end );
+        void beginRemoveItems( DirItem* parent, int start, int end );
+        void endRemoveItems( DirItem* parent, int start, int end );
 
         /**
          * load recursivly

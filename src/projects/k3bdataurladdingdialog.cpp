@@ -525,8 +525,9 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
         if( isDir && !isSymLink ) {
             if( !newDirItem ) { // maybe we reuse an already existing dir
-                newDirItem = new K3b::DirItem( newName , dir->doc(), dir );
+                newDirItem = new K3b::DirItem( newName , dir->doc() );
                 newDirItem->setLocalPath( url.toLocalFile() ); // HACK: see k3bdiritem.h
+                dir->addDataItem( newDirItem );
             }
 
             QDir newDir( absoluteFilePath );
@@ -535,11 +536,14 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
             }
         }
         else {
-            (void)new K3b::FileItem( &statBuf, &resolvedStatBuf, url.toLocalFile(), dir->doc(), dir, newName );
+            m_newItems[ dir ].append( new K3b::FileItem( &statBuf, &resolvedStatBuf, url.toLocalFile(), dir->doc(), newName ) );
         }
     }
 
     if( m_urlQueue.isEmpty() ) {
+        Q_FOREACH( DirItem* dir, m_newItems.keys() ) {
+            dir->addDataItems( m_newItems[ dir ] );
+        }
         m_dirSizeJob->cancel();
         m_progressWidget->setMaximum( 100 );
         accept();
@@ -586,7 +590,7 @@ void K3b::DataUrlAddingDialog::slotCopyMoveItems()
             // reuse an existing dir: move all child items into the old dir
             //
             if( oldItem->isDir() && item->isDir() ) {
-                QList<K3b::DataItem*> cl = dynamic_cast<K3b::DirItem*>( item )->children();
+                QList<K3b::DataItem*> const& cl = dynamic_cast<K3b::DirItem*>( item )->children();
                 for( QList<K3b::DataItem*>::const_iterator it = cl.constBegin();
                      it != cl.constEnd(); ++it )
                     m_items.append( qMakePair( *it, dynamic_cast<K3b::DirItem*>( oldItem ) ) );

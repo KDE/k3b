@@ -43,13 +43,12 @@ public:
 
     K3b::DataDoc* project;
 
-    int countDirs( K3b::DirItem* dir );
     K3b::DataItem* getChild( K3b::DirItem* dir, int offset );
     int findChildIndex( K3b::DataItem* item );
-    void _k_aboutToAddItem( K3b::DirItem* dir, K3b::DataItem* item );
-    void _k_aboutToRemoveItem( K3b::DataItem* item );
-    void _k_itemAdded( K3b::DataItem* item );
-    void _k_itemRemoved( K3b::DataItem* item );
+    void _k_itemsAboutToBeInserted( K3b::DirItem* parent, int start, int end );
+    void _k_itemsAboutToBeRemoved( K3b::DirItem* parent, int start, int end );
+    void _k_itemsInserted( K3b::DirItem* parent, int start, int end );
+    void _k_itemsRemoved( K3b::DirItem* parent, int start, int end );
     void _k_volumeIdChanged();
 
 private:
@@ -60,22 +59,9 @@ private:
 
 
 
-int K3b::DataProjectModel::Private::countDirs( K3b::DirItem* dir )
-{
-    int cnt = 0;
-    QList<K3b::DataItem*> children = dir->children();
-    for ( int i = 0; i < children.count(); ++i ) {
-        if ( children[i]->isDir() ) {
-            ++cnt;
-        }
-    }
-    return cnt;
-}
-
-
 K3b::DataItem* K3b::DataProjectModel::Private::getChild( K3b::DirItem* dir, int offset )
 {
-    QList<K3b::DataItem*> children = dir->children();
+    QList<K3b::DataItem*> const& children = dir->children();
     if ( offset >= 0 && offset < children.count() ) {
         return children[offset];
     }
@@ -86,52 +72,37 @@ K3b::DataItem* K3b::DataProjectModel::Private::getChild( K3b::DirItem* dir, int 
 
 int K3b::DataProjectModel::Private::findChildIndex( K3b::DataItem* item )
 {
-    if (!item) {
+    if ( !item )
         return 0;
-    }
-
-    K3b::DirItem* dir = item->parent();
-    if ( dir ) {
-        QList<K3b::DataItem*> cl = dir->children();
-        for ( int i = 0; i < cl.count(); ++i ) {
-            if ( cl[i] == item ) {
-                return i;
-            }
-        }
-        Q_ASSERT( 0 );
-    }
-
-    return 0;
+    else if ( DirItem* dir = item->parent() )
+        return dir->children().indexOf( item );
+    else
+        return 0;
 }
 
 
-void K3b::DataProjectModel::Private::_k_aboutToAddItem( K3b::DirItem* dir, K3b::DataItem* )
+void K3b::DataProjectModel::Private::_k_itemsAboutToBeInserted( K3b::DirItem* parent, int start, int end )
 {
-    int row = dir->children().count();
-    q->beginInsertRows( q->indexForItem( dir ), row, row );
+    q->beginInsertRows( q->indexForItem( parent ), start, end );
 }
 
 
-void K3b::DataProjectModel::Private::_k_aboutToRemoveItem( K3b::DataItem* item )
+void K3b::DataProjectModel::Private::_k_itemsAboutToBeRemoved( K3b::DirItem* parent, int start, int end )
 {
     m_removingItem = true;
-    int row = findChildIndex( item );
-    kDebug() << item << q->indexForItem( item->parent() ) << row;
-    q->beginRemoveRows( q->indexForItem( item->parent() ), row, row );
+    kDebug() << q->indexForItem( parent ) << start << end;
+    q->beginRemoveRows( q->indexForItem( parent ), start, end );
 }
 
 
-void K3b::DataProjectModel::Private::_k_itemAdded( K3b::DataItem* item )
+void K3b::DataProjectModel::Private::_k_itemsInserted( K3b::DirItem* /*parent*/, int /*start*/, int /*end*/ )
 {
-    Q_UNUSED( item );
     q->endInsertRows();
 }
 
 
-void K3b::DataProjectModel::Private::_k_itemRemoved( K3b::DataItem* item )
+void K3b::DataProjectModel::Private::_k_itemsRemoved( K3b::DirItem* /*parent*/, int /*start*/, int /*end*/ )
 {
-    kDebug() << item;
-    Q_UNUSED( item );
     if ( m_removingItem ) {
         q->endRemoveRows();
     }
@@ -151,14 +122,14 @@ K3b::DataProjectModel::DataProjectModel( K3b::DataDoc* doc, QObject* parent )
 {
     d->project = doc;
 
-    connect( doc, SIGNAL(aboutToAddItem(K3b::DirItem*,K3b::DataItem*)),
-             this, SLOT(_k_aboutToAddItem(K3b::DirItem*,K3b::DataItem*)), Qt::DirectConnection );
-    connect( doc, SIGNAL(aboutToRemoveItem(K3b::DataItem*)),
-             this, SLOT(_k_aboutToRemoveItem(K3b::DataItem*)), Qt::DirectConnection );
-    connect( doc, SIGNAL(itemAdded(K3b::DataItem*)),
-             this, SLOT(_k_itemAdded(K3b::DataItem*)), Qt::DirectConnection );
-    connect( doc, SIGNAL(itemRemoved(K3b::DataItem*)),
-             this, SLOT(_k_itemRemoved(K3b::DataItem*)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemsAboutToBeInserted(K3b::DirItem*,int,int)),
+             this, SLOT(_k_itemsAboutToBeInserted(K3b::DirItem*,int,int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemsAboutToBeRemoved(K3b::DirItem*,int,int)),
+             this, SLOT(_k_itemsAboutToBeRemoved(K3b::DirItem*,int,int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemsInserted(K3b::DirItem*,int,int)),
+             this, SLOT(_k_itemsInserted(K3b::DirItem*,int,int)), Qt::DirectConnection );
+    connect( doc, SIGNAL(itemsRemoved(K3b::DirItem*,int,int)),
+             this, SLOT(_k_itemsRemoved(K3b::DirItem*,int,int)), Qt::DirectConnection );
     connect( doc, SIGNAL(volumeIdChanged()),
              this, SLOT(_k_volumeIdChanged()), Qt::DirectConnection );
 }

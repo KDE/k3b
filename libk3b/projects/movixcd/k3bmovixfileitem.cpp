@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -17,15 +17,13 @@
 
 #include "k3bmovixfileitem.h"
 #include "k3bmovixdoc.h"
-
 #include "k3bdiritem.h"
 
 K3b::MovixSubtitleItem::MovixSubtitleItem( const QString& fileName,
                                            K3b::MovixDoc* doc,
-                                           K3b::DirItem* dir,
                                            K3b::MovixFileItem* parent,
                                            const QString& k3bName )
-    : K3b::MovixFileItem( fileName, doc, dir, k3bName ),
+    : K3b::MovixFileItem( fileName, doc, k3bName ),
       m_parent( parent )
 {
 }
@@ -36,9 +34,8 @@ K3b::MovixSubtitleItem::~MovixSubtitleItem()
 
 K3b::MovixFileItem::MovixFileItem( const QString& fileName,
                                    K3b::MovixDoc* doc,
-                                   K3b::DirItem* dir,
                                    const QString& k3bName )
-    : K3b::FileItem( fileName, doc, dir, k3bName ),
+    : K3b::FileItem( fileName, doc, k3bName ),
       m_doc(doc),
       m_subTitleItem(0)
 {

@@ -26,7 +26,7 @@ namespace K3b {
     class LIBK3B_EXPORT MovixFileItem : public FileItem
     {
     public:
-        MovixFileItem( const QString& fileName, MovixDoc* doc, DirItem* dir, const QString& k3bName = 0 );
+        MovixFileItem( const QString& fileName, MovixDoc* doc, const QString& k3bName = 0 );
         virtual ~MovixFileItem();
 
         virtual bool isSubtitle() { return false; }
@@ -56,7 +56,7 @@ namespace K3b {
     class LIBK3B_EXPORT MovixSubtitleItem : public MovixFileItem
     {
     public:
-        MovixSubtitleItem( const QString& fileName, MovixDoc* doc, DirItem* dir, MovixFileItem *parent, const QString& k3bName = 0 );
+        MovixSubtitleItem( const QString& fileName, MovixDoc* doc, MovixFileItem *parent, const QString& k3bName = 0 );
         virtual ~MovixSubtitleItem();
 
         virtual bool isSubtitle() { return true; }

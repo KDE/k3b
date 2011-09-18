@@ -251,8 +251,9 @@ void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
         // QFileInfo::exists and QFileInfo::isReadable return false for broken symlinks :(
         if( f.isDir() && !f.isSymLink() ) {
             if( !newDirItem ) {
-                newDirItem = new K3b::DirItem( k3bname, this, dir );
+                newDirItem = new K3b::DirItem( k3bname, this );
                 newDirItem->setLocalPath( url.toLocalFile() ); // HACK: see k3bdiritem.h
+                dir->addDataItem( newDirItem );
             }
 
             // recursively add all the files in the directory
@@ -262,8 +263,9 @@ void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
                 newUrls.append( KUrl( f.absoluteFilePath() + "/" + *it ) );
             addUrlsToDir( newUrls, newDirItem );
         }
-        else if( f.isSymLink() || f.isFile() )
-            (void)new K3b::FileItem( url.toLocalFile(), this, dir, k3bname );
+        else if( f.isSymLink() || f.isFile() ) {
+            dir->addDataItem( new FileItem( url.toLocalFile(), this, k3bname ) );
+        }
     }
 
     emit changed();
@@ -283,11 +285,16 @@ bool K3b::DataDoc::nameAlreadyInDir( const QString& name, K3b::DirItem* dir )
 
 K3b::DirItem* K3b::DataDoc::addEmptyDir( const QString& name, K3b::DirItem* parent )
 {
-    K3b::DirItem* item = new K3b::DirItem( name, this, parent );
+    if( parent != 0 ) {
+        K3b::DirItem* item = new K3b::DirItem( name, this );
+        parent->addDataItem( item );
 
-    setModified( true );
+        setModified( true );
 
-    return item;
+        return item;
+    } else {
+        return 0;
+    }
 }
 
 
@@ -563,6 +570,9 @@ bool K3b::DataDoc::loadDocumentDataHeader( QDomElement headerElem )
 
 bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
 {
+    if( !parent )
+        return false;
+
     K3b::DataItem* newItem = 0;
 
     if( elem.nodeName() == "file" ) {
@@ -585,8 +595,8 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
         else if( !elem.attribute( "bootimage" ).isEmpty() ) {
             K3b::BootItem* bootItem = new K3b::BootItem( urlElem.text(),
                                                          this,
-                                                         parent,
                                                          elem.attributeNode( "name" ).value() );
+            parent->addDataItem( bootItem );
             if( elem.attribute( "bootimage" ) == "floppy" )
                 bootItem->setImageType( K3b::BootItem::FLOPPY );
             else if( elem.attribute( "bootimage" ) == "harddisk" )
@@ -604,8 +614,8 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
         else {
             newItem = new K3b::FileItem( urlElem.text(),
                                          this,
-                                         parent,
                                          elem.attributeNode( "name" ).value() );
+            parent->addDataItem( newItem );
         }
     }
     else if( elem.nodeName() == "special" ) {
@@ -625,8 +635,10 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
             }
         }
 
-        if( !newDirItem )
-            newDirItem = new K3b::DirItem( elem.attributeNode( "name" ).value(), this, parent );
+        if( !newDirItem ) {
+            newDirItem = new K3b::DirItem( elem.attributeNode( "name" ).value(), this );
+            parent->addDataItem( newDirItem );
+        }
         QDomNodeList childNodes = elem.childNodes();
         for( int i = 0; i < childNodes.count(); i++ ) {
 
@@ -946,49 +958,55 @@ void K3b::DataDoc::removeItem( K3b::DataItem* item )
 }
 
 
-void K3b::DataDoc::aboutToRemoveItemFromDir( K3b::DirItem* /*parent*/, K3b::DataItem* removedItem )
+void K3b::DataDoc::beginInsertItems( DirItem* parent, int start, int end )
 {
-    emit aboutToRemoveItem( removedItem );
+    emit itemsAboutToBeInserted( parent, start, end );
 }
 
 
-void K3b::DataDoc::aboutToAddItemToDir( K3b::DirItem* parent, K3b::DataItem* addedItem )
+void K3b::DataDoc::endInsertItems( DirItem* parent, int start, int end )
 {
-    emit aboutToAddItem( parent, addedItem );
-}
+    for( int i = start; i <= end; ++i ) {
+        DataItem* item = parent->children().at( i );
+        // update the project size
+        if( !item->isFromOldSession() )
+            d->sizeHandler->addFile( item );
 
-
-void K3b::DataDoc::itemRemovedFromDir( K3b::DirItem*, K3b::DataItem* removedItem )
-{
-    // update the project size
-    if( !removedItem->isFromOldSession() )
-        d->sizeHandler->removeFile( removedItem );
-
-    // update the boot item list
-    if( removedItem->isBootItem() ) {
-        d->bootImages.removeAll( static_cast<K3b::BootItem*>( removedItem ) );
-        if( d->bootImages.isEmpty() ) {
-            delete d->bootCataloge;
-            d->bootCataloge = 0;
-        }
+        // update the boot item list
+        if( item->isBootItem() )
+            d->bootImages.append( static_cast<K3b::BootItem*>( item ) );
     }
 
-    emit itemRemoved( removedItem );
+    emit itemsInserted( parent, start, end );
     emit changed();
 }
 
 
-void K3b::DataDoc::itemAddedToDir( K3b::DirItem*, K3b::DataItem* item )
+void K3b::DataDoc::beginRemoveItems( DirItem* parent, int start, int end )
 {
-    // update the project size
-    if( !item->isFromOldSession() )
-        d->sizeHandler->addFile( item );
+    emit itemsAboutToBeRemoved( parent, start, end );
 
-    // update the boot item list
-    if( item->isBootItem() )
-        d->bootImages.append( static_cast<K3b::BootItem*>( item ) );
+    for( int i = start; i <= end; ++i ) {
+        DataItem* item = parent->children().at( i );
+        // update the project size
+        if( !item->isFromOldSession() )
+            d->sizeHandler->removeFile( item );
 
-    emit itemAdded( item );
+        // update the boot item list
+        if( item->isBootItem() ) {
+            d->bootImages.removeAll( static_cast<K3b::BootItem*>( item ) );
+            if( d->bootImages.isEmpty() ) {
+                delete d->bootCataloge;
+                d->bootCataloge = 0;
+            }
+        }
+    }
+}
+
+
+void K3b::DataDoc::endRemoveItems( DirItem* parent, int start, int end )
+{
+    emit itemsRemoved( parent, start, end );
     emit changed();
 }
 
@@ -1314,6 +1332,9 @@ bool K3b::DataDoc::importSession( K3b::Device::Device* device, int session )
 
 void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* importDir, K3b::DirItem* parent )
 {
+    if( !parent )
+        return;
+
     Q_ASSERT(importDir);
     QStringList entries = importDir->entries();
     entries.removeAll( "." );
@@ -1331,7 +1352,8 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
                     // we overwrite without warning!
                     if( oldItem )
                         removeItem( oldItem );
-                    dir = new K3b::DirItem( entry->name(), this, parent );
+                    dir = new K3b::DirItem( entry->name(), this );
+                    parent->addDataItem( dir );
                 }
 
                 dir->setRemoveable(false);
@@ -1351,8 +1373,9 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
                 if( oldItem )
                     removeItem( oldItem );
 
-                K3b::SessionImportItem* item = new K3b::SessionImportItem( file, this, parent );
+                K3b::SessionImportItem* item = new K3b::SessionImportItem( file, this );
                 item->setExtraInfo( i18n("From previous session") );
+                parent->addDataItem( item );
                 d->oldSession.append( item );
             }
         }
@@ -1418,7 +1441,8 @@ K3b::DirItem* K3b::DataDoc::bootImageDir()
 {
     K3b::DataItem* b = d->root->find( "boot" );
     if( !b ) {
-        b = new K3b::DirItem( "boot", this, d->root );
+        b = new K3b::DirItem( "boot", this );
+        d->root->addDataItem( b );
         setModified( true );
     }
 
@@ -1435,7 +1459,8 @@ K3b::BootItem* K3b::DataDoc::createBootItem( const QString& filename, K3b::DirIt
     if( !dir )
         dir = bootImageDir();
 
-    K3b::BootItem* boot = new K3b::BootItem( filename, this, dir );
+    K3b::BootItem* boot = new K3b::BootItem( filename, this );
+    dir->addDataItem( boot );
 
     if( !d->bootCataloge )
         createBootCatalogeItem(dir);
@@ -1454,7 +1479,8 @@ K3b::DataItem* K3b::DataDoc::createBootCatalogeItem( K3b::DirItem* dir )
             newName = QString( "boot%1.catalog" ).arg(i);
         }
 
-        K3b::SpecialDataItem* b = new K3b::SpecialDataItem( this, 0, dir, newName );
+        K3b::SpecialDataItem* b = new K3b::SpecialDataItem( this, 0, newName );
+        dir->addDataItem( b );
         d->bootCataloge = b;
         d->bootCataloge->setRemoveable(false);
         d->bootCataloge->setHideable(false);

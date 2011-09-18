@@ -26,7 +26,7 @@ namespace K3b {
     class SessionImportItem : public SpecialDataItem
     {
     public:
-        SessionImportItem( const Iso9660File*, DataDoc* doc, DirItem* );
+        SessionImportItem( const Iso9660File*, DataDoc* doc );
         SessionImportItem( const SessionImportItem& );
         ~SessionImportItem();
 

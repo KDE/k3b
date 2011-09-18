@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -17,8 +18,8 @@
 #define K3BDIRITEM_H
 
 
-#include <qstring.h>
-#include <qlist.h>
+#include <QtCore/QList>
+#include <QtCore/QString>
 
 #include <kio/global.h>
 
@@ -31,7 +32,10 @@ namespace K3b {
     class LIBK3B_EXPORT DirItem : public DataItem
     {
     public:
-        DirItem( const QString& name, DataDoc*, DirItem* parentDir = 0, const ItemFlags& flags = ItemFlags() );
+        typedef QList<DataItem*> Children;
+
+    public:
+        DirItem( const QString& name, DataDoc*, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor. Copies the dir including all children. However, none of the
@@ -45,8 +49,9 @@ namespace K3b {
 
         DirItem* getDirItem() const;
 
-        QList<DataItem*> children() const { return m_children; }
+        Children const& children() const { return m_children; }
         DirItem* addDataItem( DataItem* item );
+        void addDataItems( Children const& items );
         DataItem* takeDataItem( DataItem* item );
 
         DataItem* nextSibling() const;
@@ -66,7 +71,7 @@ namespace K3b {
          * this dir item
          * (returns also true if item == this
          */
-        bool isSubItem( DataItem* item ) const;
+        bool isSubItem( const DataItem* item ) const;
 
         virtual bool isRemoveable() const;
 
@@ -118,7 +123,10 @@ namespace K3b {
          */
         void updateOldSessionFlag();
 
-        mutable QList<DataItem*> m_children;
+        bool canAddDataItem( DataItem* item ) const;
+        void addDataItemImpl( DataItem* item );
+
+        mutable Children m_children;
 
         // size of the items simply added
         KIO::filesize_t m_size;

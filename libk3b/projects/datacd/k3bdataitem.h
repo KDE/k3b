@@ -45,7 +45,7 @@ namespace K3b {
         Q_DECLARE_FLAGS( ItemFlags, ItemFlag )
         
     public:
-        DataItem( DataDoc* doc, DataItem* parent = 0, const ItemFlags& flags = ItemFlags() );
+        DataItem( DataDoc* doc, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor.
@@ -65,8 +65,7 @@ namespace K3b {
          */
         virtual DataItem* copy() const = 0;
 
-        DirItem* parent() { return m_parentDir; }
-        DirItem* getParent() const { return m_parentDir; }
+        DirItem* parent() const { return m_parentDir; }
 
         /**
          * Remove this item from it's parent and return a pointer to it.
@@ -138,7 +137,7 @@ namespace K3b {
         /**
          * \returne the dir of the item (or the item itself if it is a dir)
          */
-        virtual DirItem* getDirItem() const { return getParent(); }
+        virtual DirItem* getDirItem() const { return parent(); }
 
         virtual void reparent( DirItem* );
 

@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -19,15 +20,12 @@
 #include "k3bfileitem.h"
 #include "k3bisooptions.h"
 
-#include <QString>
-#include <QList>
-
 #include <KDebug>
 #include <KLocale>
 
 
-K3b::DirItem::DirItem(const QString& name, K3b::DataDoc* doc, K3b::DirItem* parentDir, const ItemFlags& flags)
-    : K3b::DataItem( doc, parentDir, flags | DIR ),
+K3b::DirItem::DirItem(const QString& name, K3b::DataDoc* doc, const ItemFlags& flags)
+    : K3b::DataItem( doc, flags | DIR ),
       m_size(0),
       m_followSymlinksSize(0),
       m_blocks(0),
@@ -36,10 +34,6 @@ K3b::DirItem::DirItem(const QString& name, K3b::DataDoc* doc, K3b::DirItem* pare
       m_dirs(0)
 {
     m_k3bName = name;
-
-    // add automagically like a qlistviewitem
-    if( parent() )
-        parent()->addDataItem( this );
 }
 
 
@@ -90,43 +84,11 @@ K3b::DirItem* K3b::DirItem::getDirItem() const
     return const_cast<K3b::DirItem*>(this);
 }
 
+
 K3b::DirItem* K3b::DirItem::addDataItem( K3b::DataItem* item )
 {
-    // check if we are a subdir of item
-    if( K3b::DirItem* dirItem = dynamic_cast<K3b::DirItem*>(item) ) {
-        if( dirItem->isSubItem( this ) ) {
-            kDebug() << "(K3b::DirItem) trying to move a dir item down in it's own tree.";
-            return this;
-        }
-    }
+    if( canAddDataItem( item ) ) {
 
-    if( m_children.lastIndexOf( item ) == -1 ) {
-        if( item->isFile() ) {
-            // do we replace an old item?
-            QString name = item->k3bName();
-            int cnt = 1;
-            while( K3b::DataItem* oldItem = find( name ) ) {
-                if( !oldItem->isDir() && oldItem->isFromOldSession() ) {
-                    // in this case we remove this item from it's parent and save it in the new one
-                    // to be able to recover it
-                    oldItem->take();
-                    static_cast<K3b::SessionImportItem*>(oldItem)->setReplaceItem( static_cast<K3b::FileItem*>(item) );
-                    static_cast<K3b::FileItem*>(item)->setReplacedItemFromOldSession( oldItem );
-                    break;
-                }
-                else {
-                    //
-                    // add a counter to the filename
-                    //
-                    if( item->k3bName()[item->k3bName().length()-4] == '.' )
-                        name = item->k3bName().left( item->k3bName().length()-4 ) + QString::number(cnt++) + item->k3bName().right(4);
-                    else
-                        name = item->k3bName() + QString::number(cnt++);
-                }
-            }
-            item->setK3bName( name );
-        }
-        
         // Detach item from its parent in case it's moved from elsewhere.
         // It is essential to do this before calling doc()->aboutToAddItemToDir()
         // avoid situation when beginRemoveRows() is called after beginInsertRows()
@@ -135,28 +97,52 @@ K3b::DirItem* K3b::DirItem::addDataItem( K3b::DataItem* item )
 
         // inform the doc
         if( doc() )
-            doc()->aboutToAddItemToDir( this, item );
+            doc()->beginInsertItems( this, m_children.size(), m_children.size() );
 
-        m_children.append( item );
-        updateSize( item, false );
-        if( item->isDir() )
-            updateFiles( ((K3b::DirItem*)item)->numFiles(), ((K3b::DirItem*)item)->numDirs()+1 );
-        else
-            updateFiles( 1, 0 );
+        addDataItemImpl( item );
 
-        item->setParentDir( this );
-        
-        // If item is from previous session,flag this directory as such also
-        if( !isFromOldSession() && item->isFromOldSession() ) {
-            setFlags( flags() | OLD_SESSION );
-        }
-
-        // inform the doc
         if( doc() )
-            doc()->itemAddedToDir( this, item );
+            doc()->endInsertItems( this, m_children.size()-1, m_children.size()-1 );
     }
 
     return this;
+}
+
+
+void K3b::DirItem::addDataItems( const Children& items )
+{
+    Children newItems;
+    newItems.reserve( items.size() );
+    Q_FOREACH( DataItem* item, items ) {
+        if( canAddDataItem( item ) ) {
+            // Detach item from its parent in case it's moved from elsewhere.
+            // It is essential to do this before calling doc()->aboutToAddItemToDir()
+            // avoid situation when beginRemoveRows() is called after beginInsertRows()
+            // in DataProjectModel
+            item->take();
+
+            newItems.push_back( item );
+        }
+    }
+
+    if( !newItems.empty() ) {
+        const int start = m_children.size();
+        const int end = m_children.size() + newItems.size() - 1;
+
+        // inform the doc
+        if( doc() )
+            doc()->beginInsertItems( this, start, end );
+
+        // pre-alloc space for items
+        m_children.reserve( m_children.size() + newItems.size() );
+
+        Q_FOREACH( DataItem* item, newItems ) {
+            addDataItemImpl( item );
+        }
+
+        if( doc() )
+            doc()->endInsertItems( this, start, end );
+    }
 }
 
 
@@ -165,7 +151,7 @@ K3b::DataItem* K3b::DirItem::takeDataItem( K3b::DataItem* item )
     int x = m_children.lastIndexOf( item );
     if( x > -1 ) {
         if ( doc() )
-            doc()->aboutToRemoveItemFromDir( this, item );
+            doc()->beginRemoveItems( this, x, x );
 
         K3b::DataItem* item = m_children.takeAt(x);
         updateSize( item, true );
@@ -181,7 +167,7 @@ K3b::DataItem* K3b::DirItem::takeDataItem( K3b::DataItem* item )
 
         // inform the doc
         if( doc() )
-            doc()->itemRemovedFromDir( this, item );
+            doc()->endRemoveItems( this, x, x );
 
         if( item->isFile() ) {
             // restore the item imported from an old session
@@ -282,10 +268,12 @@ bool K3b::DirItem::mkdir( const QString& dirPath )
     }
 
     K3b::DataItem* dir = find( dirName );
-    if( !dir )
-        dir = new K3b::DirItem( dirName, doc(), this );
-    else if( !dir->isDir() )
+    if( !dir ) {
+        dir = new K3b::DirItem( dirName, doc() );
+        addDataItem( dir );
+    } else if( !dir->isDir() ) {
         return false;
+    }
 
     if( !restPath.isEmpty() )
         return static_cast<K3b::DirItem*>(dir)->mkdir( restPath );
@@ -312,17 +300,12 @@ K3b::Msf K3b::DirItem::itemBlocks( bool followSymlinks ) const
 }
 
 
-bool K3b::DirItem::isSubItem( K3b::DataItem* item ) const
+bool K3b::DirItem::isSubItem( const DataItem* item ) const
 {
-    if( dynamic_cast<K3b::DirItem*>(item) == this )
-        return true;
-
-    K3b::DirItem* d = item->parent();
-    while( d ) {
-        if( d == this ) {
+    for( const DirItem* dir = dynamic_cast<const DirItem*>(item); dir != 0; dir = dir->parent() ) {
+        if( dir == this ) {
             return true;
         }
-        d = d->parent();
     }
 
     return false;
@@ -346,8 +329,7 @@ bool K3b::DirItem::isRemoveable() const
     if( !K3b::DataItem::isRemoveable() )
         return false;
 
-    QList<K3b::DataItem*>::const_iterator end( m_children.constEnd() );
-    for( QList<K3b::DataItem*>::const_iterator it = m_children.constBegin(); it != end; ++it ) {
+    for( Children::const_iterator it = m_children.constBegin(), end = m_children.constEnd(); it != end; ++it ) {
         if( !( *it )->isRemoveable() )
             return false;
     }
@@ -389,8 +371,7 @@ void K3b::DirItem::updateFiles( long files, long dirs )
 void K3b::DirItem::updateOldSessionFlag()
 {
     if( flags().testFlag( OLD_SESSION ) ) {
-        QList<K3b::DataItem*>::const_iterator end( m_children.constEnd() );
-        for( QList<K3b::DataItem*>::const_iterator it = m_children.constBegin(); it != end; ++it ) {
+        for( Children::const_iterator it = m_children.constBegin(), end = m_children.constEnd(); it != end; ++it ) {
             if( (*it)->isFromOldSession() ) {
                 return;
             }
@@ -403,8 +384,8 @@ void K3b::DirItem::updateOldSessionFlag()
 bool K3b::DirItem::writeToCd() const
 {
     // check if this dir contains items to write
-    QList<K3b::DataItem*>::const_iterator end( m_children.constEnd() );
-    for( QList<K3b::DataItem*>::const_iterator it = m_children.constBegin(); it != end; ++it ) {
+    Children::const_iterator end( m_children.constEnd() );
+    for( Children::const_iterator it = m_children.constBegin(); it != end; ++it ) {
         if( (*it)->writeToCd() )
             return true;
     }
@@ -415,6 +396,65 @@ bool K3b::DirItem::writeToCd() const
 KMimeType::Ptr K3b::DirItem::mimeType() const
 {
     return KMimeType::mimeType( "inode/directory" );
+}
+
+
+bool K3b::DirItem::canAddDataItem( DataItem* item ) const
+{
+    // check if we are a subdir of item
+    DirItem* dirItem = dynamic_cast<DirItem*>( item );
+    if( dirItem && dirItem->isSubItem( this ) ) {
+        kDebug() << "(K3b::DirItem) trying to move a dir item down in it's own tree.";
+        return false;
+    } else if( !item || m_children.contains( item ) ) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+void K3b::DirItem::addDataItemImpl( DataItem* item )
+{
+    if( item->isFile() ) {
+        // do we replace an old item?
+        QString name = item->k3bName();
+        int cnt = 1;
+        while( DataItem* oldItem = find( name ) ) {
+            if( !oldItem->isDir() && oldItem->isFromOldSession() ) {
+                // in this case we remove this item from it's parent and save it in the new one
+                // to be able to recover it
+                oldItem->take();
+                static_cast<SessionImportItem*>(oldItem)->setReplaceItem( static_cast<FileItem*>(item) );
+                static_cast<FileItem*>(item)->setReplacedItemFromOldSession( oldItem );
+                break;
+            }
+            else {
+                //
+                // add a counter to the filename
+                //
+                if( item->k3bName()[item->k3bName().length()-4] == '.' )
+                    name = item->k3bName().left( item->k3bName().length()-4 ) + QString::number(cnt++) + item->k3bName().right(4);
+                else
+                    name = item->k3bName() + QString::number(cnt++);
+            }
+        }
+        item->setK3bName( name );
+    }
+
+    m_children.append( item );
+    updateSize( item, false );
+    if( item->isDir() )
+        updateFiles( ((DirItem*)item)->numFiles(), ((DirItem*)item)->numDirs()+1 );
+    else
+        updateFiles( 1, 0 );
+
+    item->setParentDir( this );
+
+    // If item is from previous session,flag this directory as such also
+    if( !isFromOldSession() && item->isFromOldSession() ) {
+        setFlags( flags() | OLD_SESSION );
+    }
 }
 
 

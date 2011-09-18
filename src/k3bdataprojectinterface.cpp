@@ -107,7 +107,7 @@ QStringList DataProjectInterface::children( const QString& path ) const
     QStringList l;
     DataItem* item =  m_dataDoc->root()->findByPath( path );
     if( item && item->isDir() ) {
-        QList<DataItem*> cl = static_cast<DirItem*>(item)->children();
+        QList<DataItem*> const& cl = static_cast<DirItem*>(item)->children();
         Q_FOREACH( DataItem* item, cl ) {
             l.append( item->k3bName() );
         }

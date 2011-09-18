@@ -29,14 +29,10 @@ namespace K3b {
     class SpecialDataItem : public DataItem
     {
     public:
-        SpecialDataItem( DataDoc* doc, KIO::filesize_t size, DirItem* parent = 0, const QString& k3bName = QString(), const ItemFlags& flags = ItemFlags() )
-            : DataItem( doc, parent, flags | SPECIALFILE ),
+        SpecialDataItem( DataDoc* doc, KIO::filesize_t size, const QString& k3bName = QString(), const ItemFlags& flags = ItemFlags() )
+            : DataItem( doc, flags | SPECIALFILE ),
               m_size( size ) {
             setK3bName( k3bName );
-            
-            // add automagically like a qlistviewitem
-            if( parent )
-                parent->addDataItem( this );
         }
 
         SpecialDataItem( const SpecialDataItem& item )

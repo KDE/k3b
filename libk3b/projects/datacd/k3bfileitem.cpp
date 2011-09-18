@@ -55,8 +55,8 @@ bool K3b::operator>( const K3b::FileItem::Id& id1, const K3b::FileItem::Id& id2 
 
 
 
-K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName, const ItemFlags& flags )
-    : K3b::DataItem( doc, dir, flags | FILE ),
+K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, const QString& k3bName, const ItemFlags& flags )
+    : K3b::DataItem( doc, flags | FILE ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -89,8 +89,8 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, K3b::DirIte
 
 K3b::FileItem::FileItem( const k3b_struct_stat* stat,
                           const k3b_struct_stat* followedStat,
-                          const QString& filePath, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName, const ItemFlags& flags )
-    : K3b::DataItem( doc, dir, flags | FILE ),
+                          const QString& filePath, K3b::DataDoc* doc, const QString& k3bName, const ItemFlags& flags )
+    : K3b::DataItem( doc, flags | FILE ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -174,7 +174,7 @@ QString K3b::FileItem::localPath() const
 
 K3b::DirItem* K3b::FileItem::getDirItem() const
 {
-    return getParent();
+    return parent();
 }
 
 
@@ -199,7 +199,7 @@ bool K3b::FileItem::isValid() const
             return false;  // absolut links can never be part of the compilation!
 
         // parse the link
-        K3b::DirItem* dir = getParent();
+        K3b::DirItem* dir = parent();
 
         QStringList tokens = dest.split( QRegExp("/+") );  // two slashes or more do the same as one does!
 

@@ -29,8 +29,9 @@ public:
 };
 
 
-K3b::DataItem::DataItem( K3b::DataDoc* doc, K3b::DataItem* parent, const ItemFlags& flags )
-    : m_sortWeight(0),
+K3b::DataItem::DataItem( K3b::DataDoc* doc, const ItemFlags& flags )
+    : m_parentDir(0),
+      m_sortWeight(0),
       m_bHideOnRockRidge(false),
       m_bHideOnJoliet(false),
       m_bRemoveable(true),
@@ -44,11 +45,6 @@ K3b::DataItem::DataItem( K3b::DataDoc* doc, K3b::DataItem* parent, const ItemFla
 
     m_doc = doc;
     m_bHideOnRockRidge = m_bHideOnJoliet = false;
-
-    if( parent )
-        m_parentDir = parent->getDirItem();
-    else
-        m_parentDir = 0;
 }
 
 
@@ -188,48 +184,48 @@ K3b::DataItem* K3b::DataItem::take()
 
 QString K3b::DataItem::k3bPath() const
 {
-    if( !getParent() )
+    if( !parent() )
         return QString();  // the root item is the only one not having a parent
     else if( isDir() )
-        return getParent()->k3bPath() + k3bName() + "/";
+        return parent()->k3bPath() + k3bName() + "/";
     else
-        return getParent()->k3bPath() + k3bName();
+        return parent()->k3bPath() + k3bName();
 }
 
 
 QString K3b::DataItem::writtenPath() const
 {
-    if( !getParent() )
+    if( !parent() )
         return QString();  // the root item is the only one not having a parent
     else if( isDir() )
-        return getParent()->writtenPath() + writtenName() + "/";
+        return parent()->writtenPath() + writtenName() + "/";
     else
-        return getParent()->writtenPath() + writtenName();
+        return parent()->writtenPath() + writtenName();
 }
 
 
 QString K3b::DataItem::iso9660Path() const
 {
-    if( !getParent() )
+    if( !parent() )
         return QString();  // the root item is the only one not having a parent
     else if( isDir() )
-        return getParent()->iso9660Path() + iso9660Name() + "/";
+        return parent()->iso9660Path() + iso9660Name() + "/";
     else
-        return getParent()->iso9660Path() + iso9660Name();
+        return parent()->iso9660Path() + iso9660Name();
 }
 
 
 K3b::DataItem* K3b::DataItem::nextSibling() const
 {
     K3b::DataItem* item = const_cast<K3b::DataItem*>(this); // urg, but we know that we don't mess with it, so...
-    K3b::DirItem* parentItem = getParent();
+    K3b::DirItem* parentItem = parent();
 
     while( parentItem ) {
         if( K3b::DataItem* i = parentItem->nextChild( item ) )
             return i;
 
         item = parentItem;
-        parentItem = item->getParent();
+        parentItem = item->parent();
     }
 
     return 0;
@@ -247,8 +243,8 @@ bool K3b::DataItem::hideOnRockRidge() const
 {
     if( !isHideable() )
         return false;
-    if( getParent() )
-        return m_bHideOnRockRidge || getParent()->hideOnRockRidge();
+    if( parent() )
+        return m_bHideOnRockRidge || parent()->hideOnRockRidge();
     else
         return m_bHideOnRockRidge;
 }
@@ -258,8 +254,8 @@ bool K3b::DataItem::hideOnJoliet() const
 {
     if( !isHideable() )
         return false;
-    if( getParent() )
-        return m_bHideOnJoliet || getParent()->hideOnJoliet();
+    if( parent() )
+        return m_bHideOnJoliet || parent()->hideOnJoliet();
     else
         return m_bHideOnJoliet;
 }
@@ -269,7 +265,7 @@ void K3b::DataItem::setHideOnRockRidge( bool b )
 {
     // there is no use in changing the value if
     // it is already set by the parent
-    if( ( !getParent() || !getParent()->hideOnRockRidge() ) &&
+    if( ( !parent() || !parent()->hideOnRockRidge() ) &&
         b != m_bHideOnRockRidge ) {
         m_bHideOnRockRidge = b;
         if ( m_doc )
@@ -282,7 +278,7 @@ void K3b::DataItem::setHideOnJoliet( bool b )
 {
     // there is no use in changing the value if
     // it is already set by the parent
-    if( ( !getParent() || !getParent()->hideOnJoliet() ) &&
+    if( ( !parent() || !parent()->hideOnJoliet() ) &&
         b != m_bHideOnJoliet ) {
         m_bHideOnJoliet = b;
         if ( m_doc )
@@ -293,8 +289,8 @@ void K3b::DataItem::setHideOnJoliet( bool b )
 
 int K3b::DataItem::depth() const
 {
-    if( getParent() )
-        return getParent()->depth() + 1;
+    if( parent() )
+        return parent()->depth() + 1;
     else
         return 0;
 }

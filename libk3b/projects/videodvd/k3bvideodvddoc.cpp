@@ -37,17 +37,19 @@ bool K3b::VideoDvdDoc::newDocument()
   if( K3b::DataDoc::newDocument() ) {
 
     // K3b::DataDoc::newDocument already deleted m_videoTsDir (again: bad design!)
-    m_videoTsDir = new K3b::DirItem( "VIDEO_TS", this, root() );
+    m_videoTsDir = new K3b::DirItem( "VIDEO_TS", this );
     m_videoTsDir->setRemoveable(false);
     m_videoTsDir->setRenameable(false);
     m_videoTsDir->setMoveable(false);
     m_videoTsDir->setHideable(false);
+    root()->addDataItem( m_videoTsDir );
 
-    K3b::DirItem* audioTsDir = new K3b::DirItem( "AUDIO_TS", this, root() );
+    K3b::DirItem* audioTsDir = new K3b::DirItem( "AUDIO_TS", this );
     audioTsDir->setRemoveable(false);
     audioTsDir->setRenameable(false);
     audioTsDir->setMoveable(false);
     audioTsDir->setHideable(false);
+    root()->addDataItem( audioTsDir );
 
     setMultiSessionMode( NONE );
 

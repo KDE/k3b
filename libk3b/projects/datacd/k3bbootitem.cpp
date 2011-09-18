@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
@@ -18,9 +19,10 @@
 
 #include <KLocale>
 
+namespace K3b {
 
-K3b::BootItem::BootItem( const QString& fileName, K3b::DataDoc* doc, K3b::DirItem* dir, const QString& k3bName )
-    : K3b::FileItem( fileName, doc, dir, k3bName, ItemFlags(FILE|BOOT_IMAGE) ),
+BootItem::BootItem( const QString& fileName, DataDoc* doc, const QString& k3bName )
+    : FileItem( fileName, doc, k3bName, ItemFlags(FILE|BOOT_IMAGE) ),
       m_noBoot(false),
       m_bootInfoTable(false),
       m_loadSegment(0),
@@ -31,8 +33,8 @@ K3b::BootItem::BootItem( const QString& fileName, K3b::DataDoc* doc, K3b::DirIte
 }
 
 
-K3b::BootItem::BootItem( const K3b::BootItem& item )
-    : K3b::FileItem( item ),
+BootItem::BootItem( const BootItem& item )
+    : FileItem( item ),
       m_noBoot( item.m_noBoot ),
       m_bootInfoTable( item.m_bootInfoTable ),
       m_loadSegment( item.m_loadSegment ),
@@ -43,13 +45,15 @@ K3b::BootItem::BootItem( const K3b::BootItem& item )
 }
 
 
-K3b::BootItem::~BootItem()
+BootItem::~BootItem()
 {
     take();
 }
 
 
-K3b::DataItem* K3b::BootItem::copy() const
+DataItem* BootItem::copy() const
 {
-    return new K3b::BootItem( *this );
+    return new BootItem( *this );
 }
+
+} // namespace K3b
