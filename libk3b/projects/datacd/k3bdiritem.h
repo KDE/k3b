@@ -52,7 +52,9 @@ namespace K3b {
         Children const& children() const { return m_children; }
         DirItem* addDataItem( DataItem* item );
         void addDataItems( Children const& items );
+        void removeDataItems( int start, int count );
         DataItem* takeDataItem( DataItem* item );
+        Children takeDataItems( int start, int count );
 
         DataItem* nextSibling() const;
         DataItem* nextChild( DataItem* ) const;

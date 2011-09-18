@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -83,6 +83,7 @@ int K3b::DataProjectModel::Private::findChildIndex( K3b::DataItem* item )
 
 void K3b::DataProjectModel::Private::_k_itemsAboutToBeInserted( K3b::DirItem* parent, int start, int end )
 {
+        kDebug() << q->indexForItem( parent ) << start << end;
     q->beginInsertRows( q->indexForItem( parent ), start, end );
 }
 
@@ -452,16 +453,10 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
 
 bool K3b::DataProjectModel::removeRows( int row, int count, const QModelIndex& parent)
 {
-    if( row >= 0 && count > 0 ) {
+    DirItem* dirItem = dynamic_cast<DirItem*>( itemForIndex( parent ) );
+    if( dirItem && row >= 0 && count > 0 ) {
         // remove the indexes from the project
-        while (count > 0)
-        {
-            QModelIndex i = index( row, 0, parent );
-            d->project->removeItem( itemForIndex(i) );
-
-            row++;
-            count--;
-        }
+        d->project->removeItems( dirItem, row, count );
         return true;
     }
     else {

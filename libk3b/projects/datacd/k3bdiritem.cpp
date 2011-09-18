@@ -146,39 +146,72 @@ void K3b::DirItem::addDataItems( const Children& items )
 }
 
 
+void K3b::DirItem::removeDataItems( int start, int count )
+{
+    Children takenItems = takeDataItems( start, count );
+    qDeleteAll( takenItems );
+}
+
+
 K3b::DataItem* K3b::DirItem::takeDataItem( K3b::DataItem* item )
 {
-    int x = m_children.lastIndexOf( item );
-    if( x > -1 ) {
-        if ( doc() )
-            doc()->beginRemoveItems( this, x, x );
+    int i = m_children.lastIndexOf( item );
+    if( i > -1 ) {
+        takeDataItems( i, 1 );
+        return item;
+    } else {
+        return 0;
+    }
+}
 
-        K3b::DataItem* item = m_children.takeAt(x);
-        updateSize( item, true );
-        if( item->isDir() )
-            updateFiles( -1*((K3b::DirItem*)item)->numFiles(), -1*((K3b::DirItem*)item)->numDirs()-1 );
-        else
-            updateFiles( -1, 0 );
 
-        item->setParentDir( 0 );
-        
-        // unset OLD_SESSION flag if it was the last child from previous sessions
-        updateOldSessionFlag();
+K3b::DirItem::Children K3b::DirItem::takeDataItems( int start, int count )
+{
+    Children takenItems;
+
+    if( start >= 0 && count > 0 ) {
+        if( doc() )
+            doc()->beginRemoveItems( this, start, start+count-1 );
+
+        for( int i = 0; i < count; ++i ) {
+            DataItem* item = m_children.at( start+i );
+            updateSize( item, true );
+            if( item->isDir() )
+                updateFiles( -1*((DirItem*)item)->numFiles(), -1*((DirItem*)item)->numDirs()-1 );
+            else
+                updateFiles( -1, 0 );
+
+            item->setParentDir( 0 );
+
+            // unset OLD_SESSION flag if it was the last child from previous sessions
+            updateOldSessionFlag();
+
+            takenItems.append( item );
+        }
+
+        // filling the gap: move items from after removed range
+        qCopy( m_children.begin()+start+count, m_children.end(),
+               m_children.begin()+start );
+
+        // remove unused space
+        for( int i = 0; i < count; ++i ) {
+            m_children.pop_back();
+        }
 
         // inform the doc
         if( doc() )
-            doc()->endRemoveItems( this, x, x );
+            doc()->endRemoveItems( this, start, start+count-1 );
 
-        if( item->isFile() ) {
-            // restore the item imported from an old session
-            if( static_cast<K3b::FileItem*>(item)->replaceItemFromOldSession() )
-                addDataItem( static_cast<K3b::FileItem*>(item)->replaceItemFromOldSession() );
+        Q_FOREACH( DataItem* item, takenItems ) {
+            if( item->isFile() ) {
+                // restore the item imported from an old session
+                if( DataItem* replaceItem = static_cast<FileItem*>(item)->replaceItemFromOldSession() )
+                    addDataItem( replaceItem );
+            }
         }
-
-        return item;
     }
-    else
-        return 0;
+
+    return takenItems;
 }
 
 

@@ -1,6 +1,7 @@
 /*
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -955,6 +956,14 @@ void K3b::DataDoc::removeItem( K3b::DataItem* item )
     }
     else
         kDebug() << "(K3b::DataDoc) tried to remove non-removable entry!";
+}
+
+
+void K3b::DataDoc::removeItems( K3b::DirItem* parent, int start, int count )
+{
+    if( parent ) {
+        parent->removeDataItems( start, count );
+    }
 }
 
 

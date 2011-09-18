@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2003-2008 Sebastian Trueg <trueg@k3b.org>
  * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- * Copyright (C) 2009-2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2009-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -232,17 +232,11 @@ void K3b::DataViewImpl::slotNewDir()
 
 void K3b::DataViewImpl::slotRemove()
 {
-    const QModelIndexList selected = m_fileView->selectionModel()->selectedRows();
-
-    // create a list of persistent model indexes to be able to remove all of them
-    QList<QPersistentModelIndex> indexes;
-    Q_FOREACH( const QModelIndex& index, selected ) {
-        indexes.append( QPersistentModelIndex( m_sortModel->mapToSource( index ) ) );
-    }
-
-    // and now ask the indexes to be removed
-    Q_FOREACH( const QPersistentModelIndex& index, indexes ) {
-        m_model->removeRow( index.row(), index.parent() );
+    // Remove items directly from sort model to avoid unnecessary mapping of indexes
+    const QItemSelection selection = m_fileView->selectionModel()->selection();
+    const QModelIndex parentDirectory = m_fileView->rootIndex();
+    for( int i = selection.size() - 1; i >= 0; --i ) {
+        m_sortModel->removeRows( selection.at(i).top(), selection.at(i).height(), parentDirectory );
     }
 }
 

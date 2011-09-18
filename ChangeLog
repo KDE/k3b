@@ -9,6 +9,7 @@ Changes:
 Bugfixes:
  * Added dynamic hiding of irrelevant actions in mixed project (142954)
  * Added sorting in data project view (191660)
+ * Improved performance of adding/removing large number of files to a data project (226029)
 
 2.0.3
 =====
