@@ -45,6 +45,7 @@ Comment[bg]=Приставка за преименуиване на аудои �
 Comment[bs]=Priključak za preimenovanje zvučnih datoteka na osnovu metapodataka.
 Comment[ca]=Connector per reanomenar fitxers d'àudio en un projecte de dades basat en la meta-informació.
 Comment[ca@valencia]=Connector per reanomenar fitxers d'àudio en un projecte de dades basat en la meta-informació.
+Comment[cs]=Modul pro přejmenování zvukových souborů v datovém projektu podle jejich meta informací.
 Comment[da]=Plugin til at omdøbe lydfiler i et dataprojekt baseret på metainfo.
 Comment[de]=Modul zum Umbenennen von Audio-Dateien in einem Daten-Projekt, basierend auf den Metadaten.
 Comment[el]=Πρόσθετο για μετονομασία αρχείων ήχου σε έργο δεδομένων με βάση μετα πληροφορίες.

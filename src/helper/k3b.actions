@@ -84,6 +84,7 @@ Policy=auth_admin
 
 [org.kde.k3b.addtogroup]
 Name=Adds current user to a specified group
+Name[cs]=Přidá nynějšího uživatele do určené skupiny
 Name[da]=Tilføjer den aktuelle bruger til en angiven gruppe
 Name[es]=Añade el usuario actual a un grupo específico
 Name[nb]=Legger til gjeldende bruker til en oppgitt gruppe
