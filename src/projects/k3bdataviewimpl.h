@@ -28,7 +28,9 @@ class QTreeView;
 namespace K3b {
     class ViewColumnAdjuster;
     class DataDoc;
+    class DataItem;
     class DataProjectModel;
+    class DirItem;
     class View;
 
     /**
@@ -65,6 +67,8 @@ namespace K3b {
         void slotClearImportedSession();
         void slotEditBootImages();
         void slotImportedSessionChanged( int importedSession );
+        void slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir );
+        void slotMoveItemsRequested( QList<K3b::DataItem*> items, K3b::DirItem* targetDir );
 
     private:
         View* m_view;

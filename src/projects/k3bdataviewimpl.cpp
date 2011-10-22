@@ -76,6 +76,8 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_fileView( new QTreeView( view ) )
 {
     connect( m_doc, SIGNAL(importedSessionChanged(int)), this, SLOT(slotImportedSessionChanged(int)) );
+    connect( m_model, SIGNAL(addUrlsRequested(KUrl::List,K3b::DirItem*)), SLOT(slotAddUrlsRequested(KUrl::List,K3b::DirItem*)) );
+    connect( m_model, SIGNAL(moveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)), SLOT(slotMoveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)) );
 
     m_sortModel->setSourceModel( m_model );
 
@@ -383,6 +385,18 @@ void K3b::DataViewImpl::slotEditBootImages()
 void K3b::DataViewImpl::slotImportedSessionChanged( int importedSession )
 {
     m_actionClearSession->setEnabled( importedSession > -1 );
+}
+
+
+void K3b::DataViewImpl::slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir )
+{
+    DataUrlAddingDialog::addUrls( urls, targetDir, m_view );
+}
+
+
+void K3b::DataViewImpl::slotMoveItemsRequested( QList<K3b::DataItem*> items, K3b::DirItem* targetDir )
+{
+    DataUrlAddingDialog::moveItems( items, targetDir, m_view );
 }
 
 #include "k3bdataviewimpl.moc"

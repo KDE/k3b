@@ -16,21 +16,10 @@
 #ifndef K3BDATADIRTREEVIEW_H
 #define K3BDATADIRTREEVIEW_H
 
+#include <KUrl>
 #include <QtGui/QTreeView>
 
 
-namespace K3b {
-    class DataDoc;
-}
-namespace K3b {
-    class DirItem;
-}
-namespace K3b {
-    class DataItem;
-}
-namespace K3b {
-    class View;
-}
 class QItemSelection;
 
 /**
@@ -38,6 +27,11 @@ class QItemSelection;
  */
 
 namespace K3b {
+    class DataDoc;
+    class DataItem;
+    class DirItem;
+    class View;
+
     class DataDirTreeView : public QTreeView
     {
         Q_OBJECT
@@ -62,6 +56,8 @@ namespace K3b {
 
     private Q_SLOTS:
         void slotSelectionChanged( const QItemSelection& selected, const QItemSelection& );
+        void slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir );
+        void slotMoveItemsRequested( QList<K3b::DataItem*> items, K3b::DirItem* targetDir );
 
     private:
         void startDropAnimation( DirItem* );

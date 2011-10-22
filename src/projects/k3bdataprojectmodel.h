@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2008 Sebastian Trueg <trueg@k3b.org>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2008 Sebastian Trueg <trueg@k3b.org>
@@ -16,6 +16,7 @@
 #ifndef _K3B_DATA_PROJECT_MODEL_H_
 #define _K3B_DATA_PROJECT_MODEL_H_
 
+#include <KUrl>
 #include <QtCore/QAbstractItemModel>
 
 namespace K3b {
@@ -28,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataProjectModel( DataDoc* doc, QObject* parent );
+        DataProjectModel( DataDoc* doc, QObject* parent = 0 );
         ~DataProjectModel();
 
         enum Columns {
@@ -75,6 +76,10 @@ namespace K3b {
         virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
         virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
         virtual QModelIndex buddy( const QModelIndex& index ) const;
+
+    Q_SIGNALS:
+        void addUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir );
+        void moveItemsRequested( QList<K3b::DataItem*> items, K3b::DirItem* targetDir );
 
     private:
         class Private;
