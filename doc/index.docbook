@@ -17,7 +17,7 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
     </authorgroup>
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2010-06-18</date>
+<date>2011-01-20</date>
     <releaseinfo>&kde; SC 4.5</releaseinfo>
 <abstract>
 <para></para>
@@ -26,7 +26,7 @@
 <keyword>KDE</keyword>
 </keywordset>
 </bookinfo>
-<!--userbase <timestamp>2010-06-18T13:57:40Z</timestamp>-->
+<!--userbase <timestamp>2011-01-20T10:52:41Z</timestamp>-->
 
 <!--userbase-content-->
 <chapter id="introduction"><title>Introduction</title>
@@ -135,9 +135,21 @@
   </mediaobject>
 </screenshot>
 </para>
-<para>All that's left to do now, is choose what is to be burned. The top half of the screen functions like a file manager. Simply drag and drop the files and directories you wish to burn onto the large pane at bottom right. On the left you will see a tree view forming of your chosen files. Should there be some files or directories which you do not want to burn, these can be easily removed from the project by simply removing them from the panel at the bottom. Select the file to be removed (you can control-click to select multiple ones), then right-click, and select <guilabel>Remove</guilabel>. After this, the bottom left-hand panel should show an updated tree representation of the directories and files.
+<para>Now choose what is to be burnt.
 </para>
-<para>The top line will be the title of the disk. In many cases this will be fine, but if you would like to change this to something else, simply right-click on the title and rename it.
+<para>The top half of the screen is the <emphasis>source pane</emphasis>; it functions like a file manager. You can choose ordinary files from mounted data volumes or audio tracks from inserted audio discs. Names of audio tracks are automatically read from CD-TEXT data, if your CD drive supports reading it, or generated using <ulink url="http://libcddb.sourceforge.net/">CDDB</ulink>; the exact format is controlled by a button in the bottom pane. If the names are incorrect or simply do not match the description of the disc, you can edit them using the toolbar button. Your changes will be cached locally and submitted to the master registry at <ulink url="http://www.freedb.org/">FreeDB</ulink>. 
+</para>
+<tip>
+<para>If the whole record is performed by the same artist, leave the track artist entries blank, fill the <guilabel>Album artist</guilabel>, save to CDDB and requery.
+</para>
+</tip>
+<para>Now that you have your sources at hand, simply drag and drop the files and directories you wish to burn onto the large pane to the right at the bottom; this is the <emphasis>model pane</emphasis>. Behold a tree of your chosen files forming to the left. Should there be some files or directories which you do not want to burn, these can be easily removed from the project by simply removing them from the panel at the bottom. Select the file to be removed (you can control-click to select multiple ones), then choose <guilabel>Remove</guilabel> from the context menu. 
+</para>
+<tip>
+<para>If you need to compress audio, create a new audio CD project, add the files to be converted and press the button <guilabel>Convert Tracks</guilabel>. This will not affect the contents of the CD if you decide to burn it; however, you will be able to use the compressed files elsewhere. Make sure the original files are lossless (<emphasis>wav</emphasis> or <emphasis>FLAC</emphasis>), otherwise the result will be unsatisfactory.
+</para>
+</tip>
+<para>The top line will be the title of the disk. In many cases this will be fine, but if you would like to change this to something else, simply rename it using the context menu.
 </para>
 </chapter>
 <chapter id="final-steps"><title>Final Steps</title>
