@@ -146,7 +146,7 @@
 <para>Now that you have your sources at hand, simply drag and drop the files and directories you wish to burn onto the large pane to the right at the bottom; this is the <emphasis>model pane</emphasis>. Behold a tree of your chosen files forming to the left. Should there be some files or directories which you do not want to burn, these can be easily removed from the project by simply removing them from the panel at the bottom. Select the file to be removed (you can control-click to select multiple ones), then choose <guilabel>Remove</guilabel> from the context menu. 
 </para>
 <tip>
-<para>If you need to compress audio, create a new audio CD project, add the files to be converted and press the button <guilabel>Change audio format…</guilabel>. This will not affect the contents of the CD if you decide to burn it; however, you will be able to use the compressed files elsewhere. Make sure the original files are lossless (<emphasis>wav</emphasis> or <emphasis>FLAC</emphasis>), otherwise the result will be unsatisfactory.
+<para>If you need to compress audio, create a new audio CD project, add the files to be converted and press the button <guilabel>Convert Tracks</guilabel>. This will not affect the contents of the CD if you decide to burn it; however, you will be able to use the compressed files elsewhere. Make sure the original files are lossless (<emphasis>wav</emphasis> or <emphasis>FLAC</emphasis>), otherwise the result will be unsatisfactory.
 </para>
 </tip>
 <para>The top line will be the title of the disk. In many cases this will be fine, but if you would like to change this to something else, simply rename it using the context menu.
