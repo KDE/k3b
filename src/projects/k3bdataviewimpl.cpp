@@ -107,30 +107,30 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_columnAdjuster->addFixedColumn( DataProjectModel::SizeColumn );
     m_columnAdjuster->setColumnMargin( DataProjectModel::SizeColumn, 10 );
 
-    m_actionNewDir = new KAction( KIcon( "folder-new" ), i18n("New Folder..."), m_view );
+    m_actionNewDir = new KAction( KIcon( "folder-new" ), i18n("New Folder..."), m_fileView );
     m_actionNewDir->setShortcut( Qt::CTRL + Qt::Key_N );
     m_actionNewDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "new_dir", m_actionNewDir );
     connect( m_actionNewDir, SIGNAL(triggered(bool)), this, SLOT(slotNewDir()) );
 
-    m_actionRemove = new KAction( KIcon( "edit-delete" ), i18n("Remove"), m_view );
+    m_actionRemove = new KAction( KIcon( "edit-delete" ), i18n("Remove"), m_fileView );
     m_actionRemove->setShortcut( Qt::Key_Delete );
     m_actionRemove->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "remove", m_actionRemove );
     connect( m_actionRemove, SIGNAL(triggered(bool)), this, SLOT(slotRemove()) );
 
-    m_actionRename = new KAction( KIcon( "edit-rename" ), i18n("Rename"), m_view );
+    m_actionRename = new KAction( KIcon( "edit-rename" ), i18n("Rename"), m_fileView );
     m_actionRename->setShortcut( Qt::Key_F2 );
     m_actionRename->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "rename", m_actionRename );
     connect( m_actionRename, SIGNAL(triggered(bool)), this, SLOT(slotRename()) );
 
-    m_actionParentDir = new KAction( KIcon( "go-up" ), i18n("Parent Folder"), m_view );
+    m_actionParentDir = new KAction( KIcon( "go-up" ), i18n("Parent Folder"), m_fileView );
     m_actionParentDir->setShortcut( Qt::Key_Backspace );
     m_actionParentDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "parent_dir", m_actionParentDir );
 
-    m_actionProperties = new KAction( KIcon( "document-properties" ), i18n("Properties"), m_view );
+    m_actionProperties = new KAction( KIcon( "document-properties" ), i18n("Properties"), m_fileView );
     m_actionProperties->setShortcut( Qt::ALT + Qt::Key_Return );
     m_actionProperties->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "properties", m_actionProperties );

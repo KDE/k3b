@@ -99,8 +99,9 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
     m_actionQueryMusicBrainzTrack->setToolTip( i18n("Try to determine meta information over the Internet") );
     m_actionProperties = createAction( m_view, i18n("Properties"), "document-properties", 0, this, SLOT(slotTrackProperties()),
                                        actionCollection, "track_properties" );
-    m_actionRemove = createAction( m_view, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemove()),
+    m_actionRemove = createAction( m_trackView, i18n("Remove"), "edit-delete", Qt::Key_Delete, this, SLOT(slotRemove()),
                                    actionCollection, "track_remove" );
+    m_actionRemove->setShortcutContext( Qt::WidgetShortcut );
     m_conversionAction = createAction( m_view, i18n("Convert Tracks"), "edit-redo", 0, this, SLOT(slotAudioConversion()),
                                        actionCollection, "project_audio_convert" );
 
