@@ -20,7 +20,7 @@
 #include "k3bdiritem.h"
 
 K3b::MovixSubtitleItem::MovixSubtitleItem( const QString& fileName,
-                                           K3b::MovixDoc* doc,
+                                           K3b::MovixDoc& doc,
                                            K3b::MovixFileItem* parent,
                                            const QString& k3bName )
     : K3b::MovixFileItem( fileName, doc, k3bName ),
@@ -33,10 +33,9 @@ K3b::MovixSubtitleItem::~MovixSubtitleItem()
 }
 
 K3b::MovixFileItem::MovixFileItem( const QString& fileName,
-                                   K3b::MovixDoc* doc,
+                                   K3b::MovixDoc& doc,
                                    const QString& k3bName )
     : K3b::FileItem( fileName, doc, k3bName ),
-      m_doc(doc),
       m_subTitleItem(0)
 {
 }

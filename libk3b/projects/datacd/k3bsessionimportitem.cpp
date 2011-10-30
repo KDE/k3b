@@ -23,8 +23,8 @@
 
 namespace K3b {
 
-SessionImportItem::SessionImportItem( const Iso9660File* isoF, DataDoc* doc )
-    : SpecialDataItem( doc, isoF->size(), isoF->name(), OLD_SESSION ),
+SessionImportItem::SessionImportItem( const Iso9660File* isoF )
+    : SpecialDataItem( isoF->size(), isoF->name(), OLD_SESSION ),
       m_replaceItem(0)
 {
 }

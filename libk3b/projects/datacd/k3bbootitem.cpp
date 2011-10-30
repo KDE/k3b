@@ -21,7 +21,7 @@
 
 namespace K3b {
 
-BootItem::BootItem( const QString& fileName, DataDoc* doc, const QString& k3bName )
+BootItem::BootItem( const QString& fileName, DataDoc& doc, const QString& k3bName )
     : FileItem( fileName, doc, k3bName, ItemFlags(FILE|BOOT_IMAGE) ),
       m_noBoot(false),
       m_bootInfoTable(false),

@@ -24,8 +24,8 @@
 #include <KLocale>
 
 
-K3b::DirItem::DirItem(const QString& name, K3b::DataDoc* doc, const ItemFlags& flags)
-    : K3b::DataItem( doc, flags | DIR ),
+K3b::DirItem::DirItem(const QString& name, const ItemFlags& flags)
+    : K3b::DataItem( flags | DIR ),
       m_size(0),
       m_followSymlinksSize(0),
       m_blocks(0),
@@ -90,19 +90,21 @@ K3b::DirItem* K3b::DirItem::addDataItem( K3b::DataItem* item )
     if( canAddDataItem( item ) ) {
 
         // Detach item from its parent in case it's moved from elsewhere.
-        // It is essential to do this before calling doc()->aboutToAddItemToDir()
+        // It is essential to do this before calling getDoc()->aboutToAddItemToDir()
         // avoid situation when beginRemoveRows() is called after beginInsertRows()
         // in DataProjectModel
         item->take();
 
         // inform the doc
-        if( doc() )
-            doc()->beginInsertItems( this, m_children.size(), m_children.size() );
+        if( DataDoc* doc = getDoc() ) {
+            doc->beginInsertItems( this, m_children.size(), m_children.size() );
+        }
 
         addDataItemImpl( item );
 
-        if( doc() )
-            doc()->endInsertItems( this, m_children.size()-1, m_children.size()-1 );
+        if( DataDoc* doc = getDoc() ) {
+            doc->endInsertItems( this, m_children.size()-1, m_children.size()-1 );
+        }
     }
 
     return this;
@@ -116,7 +118,7 @@ void K3b::DirItem::addDataItems( const Children& items )
     Q_FOREACH( DataItem* item, items ) {
         if( canAddDataItem( item ) ) {
             // Detach item from its parent in case it's moved from elsewhere.
-            // It is essential to do this before calling doc()->aboutToAddItemToDir()
+            // It is essential to do this before calling getDoc()->aboutToAddItemToDir()
             // avoid situation when beginRemoveRows() is called after beginInsertRows()
             // in DataProjectModel
             item->take();
@@ -130,8 +132,9 @@ void K3b::DirItem::addDataItems( const Children& items )
         const int end = m_children.size() + newItems.size() - 1;
 
         // inform the doc
-        if( doc() )
-            doc()->beginInsertItems( this, start, end );
+        if( DataDoc* doc = getDoc() ) {
+            doc->beginInsertItems( this, start, end );
+        }
 
         // pre-alloc space for items
         m_children.reserve( m_children.size() + newItems.size() );
@@ -140,8 +143,9 @@ void K3b::DirItem::addDataItems( const Children& items )
             addDataItemImpl( item );
         }
 
-        if( doc() )
-            doc()->endInsertItems( this, start, end );
+        if( DataDoc* doc = getDoc() ) {
+            doc->endInsertItems( this, start, end );
+        }
     }
 }
 
@@ -170,8 +174,9 @@ K3b::DirItem::Children K3b::DirItem::takeDataItems( int start, int count )
     Children takenItems;
 
     if( start >= 0 && count > 0 ) {
-        if( doc() )
-            doc()->beginRemoveItems( this, start, start+count-1 );
+        if( DataDoc* doc = getDoc() ) {
+            doc->beginRemoveItems( this, start, start+count-1 );
+        }
 
         for( int i = 0; i < count; ++i ) {
             DataItem* item = m_children.at( start+i );
@@ -199,8 +204,9 @@ K3b::DirItem::Children K3b::DirItem::takeDataItems( int start, int count )
         }
 
         // inform the doc
-        if( doc() )
-            doc()->endRemoveItems( this, start, start+count-1 );
+        if( DataDoc* doc = getDoc() ) {
+            doc->endRemoveItems( this, start, start+count-1 );
+        }
 
         Q_FOREACH( DataItem* item, takenItems ) {
             if( item->isFile() ) {
@@ -302,7 +308,7 @@ bool K3b::DirItem::mkdir( const QString& dirPath )
 
     K3b::DataItem* dir = find( dirName );
     if( !dir ) {
-        dir = new K3b::DirItem( dirName, doc() );
+        dir = new K3b::DirItem( dirName );
         addDataItem( dir );
     } else if( !dir->isDir() ) {
         return false;
@@ -491,8 +497,9 @@ void K3b::DirItem::addDataItemImpl( DataItem* item )
 }
 
 
-K3b::RootItem::RootItem( K3b::DataDoc* doc )
-    : K3b::DirItem( "root", doc, 0 )
+K3b::RootItem::RootItem( K3b::DataDoc& doc )
+    : K3b::DirItem( "root", 0 ),
+      m_doc( doc )
 {
 }
 
@@ -502,13 +509,19 @@ K3b::RootItem::~RootItem()
 }
 
 
+K3b::DataDoc* K3b::RootItem::getDoc() const
+{
+    return &m_doc;
+}
+
+
 QString K3b::RootItem::k3bName() const
 {
-    return doc()->isoOptions().volumeID();
+    return m_doc.isoOptions().volumeID();
 }
 
 
 void K3b::RootItem::setK3bName( const QString& text )
 {
-    doc()->setVolumeID( text );
+    m_doc.setVolumeID( text );
 }

@@ -29,7 +29,7 @@ public:
 };
 
 
-K3b::DataItem::DataItem( K3b::DataDoc* doc, const ItemFlags& flags )
+K3b::DataItem::DataItem( const ItemFlags& flags )
     : m_parentDir(0),
       m_sortWeight(0),
       m_bHideOnRockRidge(false),
@@ -42,16 +42,12 @@ K3b::DataItem::DataItem( K3b::DataDoc* doc, const ItemFlags& flags )
 {
     d = new Private;
     d->flags = flags;
-
-    m_doc = doc;
-    m_bHideOnRockRidge = m_bHideOnJoliet = false;
 }
 
 
 K3b::DataItem::DataItem( const K3b::DataItem& item )
     : m_k3bName( item.m_k3bName ),
       m_extraInfo( item.m_extraInfo ),
-      m_doc( 0 ),
       m_parentDir( 0 ),
       m_sortWeight( item.m_sortWeight ),
       m_bHideOnRockRidge( item.m_bHideOnRockRidge ),
@@ -123,19 +119,23 @@ bool K3b::DataItem::isBootItem() const
 
 KIO::filesize_t K3b::DataItem::size() const
 {
-    return itemSize( m_doc
-                     ? m_doc->isoOptions().followSymbolicLinks() ||
-                     !m_doc->isoOptions().createRockRidge()
-                     : false );
+    if( DataDoc* doc = getDoc() ) {
+        return itemSize( doc->isoOptions().followSymbolicLinks() ||
+                         !doc->isoOptions().createRockRidge() );
+    } else {
+        return itemSize( false );
+    }
 }
 
 
 K3b::Msf K3b::DataItem::blocks() const
 {
-    return itemBlocks( m_doc
-                       ? m_doc->isoOptions().followSymbolicLinks() ||
-                       !m_doc->isoOptions().createRockRidge()
-                       : false );
+    if( DataDoc* doc = getDoc() ) {
+        return itemBlocks( doc->isoOptions().followSymbolicLinks() ||
+                           !doc->isoOptions().createRockRidge() );
+    } else {
+        return itemBlocks( false );
+    }
 }
 
 
@@ -162,8 +162,17 @@ void K3b::DataItem::setK3bName( const QString& name ) {
         }
 
         m_k3bName = name;
-        m_doc->setModified();
+
+        if( DataDoc* doc = getDoc() ) {
+            doc->setModified();
+        }
     }
+}
+
+
+K3b::DataDoc* K3b::DataItem::getDoc() const
+{
+    return m_parentDir ? m_parentDir->getDoc() : 0;
 }
 
 
@@ -268,8 +277,9 @@ void K3b::DataItem::setHideOnRockRidge( bool b )
     if( ( !parent() || !parent()->hideOnRockRidge() ) &&
         b != m_bHideOnRockRidge ) {
         m_bHideOnRockRidge = b;
-        if ( m_doc )
-            m_doc->setModified();
+        if( DataDoc* doc = getDoc() ) {
+            doc->setModified();
+        }
     }
 }
 
@@ -281,8 +291,9 @@ void K3b::DataItem::setHideOnJoliet( bool b )
     if( ( !parent() || !parent()->hideOnJoliet() ) &&
         b != m_bHideOnJoliet ) {
         m_bHideOnJoliet = b;
-        if ( m_doc )
-            m_doc->setModified();
+        if( DataDoc* doc = getDoc() ) {
+            doc->setModified();
+        }
     }
 }
 

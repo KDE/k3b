@@ -5,6 +5,15 @@ include_directories(
     ${k3b_SOURCE_DIR}/src/projects
 )
 
+kde4_add_unit_test( k3bdataprojectmodeltest
+    k3bdataprojectmodeltest.cpp
+    k3btestutils.cpp
+    ${CMAKE_SOURCE_DIR}/src/projects/k3bdataprojectmodel.cpp )
+target_link_libraries( k3bdataprojectmodeltest
+    ${QT_QTTEST_LIBRARY}
+    ${KDE4_KDECORE_LIBS}
+    k3b )
+
 kde4_add_unit_test( k3bglobalstest
     k3bglobalstest.cpp )
 target_link_libraries( k3bglobalstest

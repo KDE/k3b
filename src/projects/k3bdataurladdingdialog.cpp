@@ -56,7 +56,7 @@
 
 K3b::DataUrlAddingDialog::DataUrlAddingDialog( const KUrl::List& urls, DirItem* dir, QWidget* parent )
     : KDialog( parent),
-      m_doc( dir->doc() ),
+      m_doc( dir->getDoc() ),
       m_bExistingItemsReplaceAll(false),
       m_bExistingItemsIgnoreAll(false),
       m_bFolderLinksFollowAll(false),
@@ -78,7 +78,7 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( const KUrl::List& urls, DirItem* 
 
 K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent )
     : KDialog( parent),
-      m_doc( dir->doc() ),
+      m_doc( dir->getDoc() ),
       m_bExistingItemsReplaceAll(false),
       m_bExistingItemsIgnoreAll(false),
       m_bFolderLinksFollowAll(false),
@@ -92,7 +92,7 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<DataItem*>& items, Di
 {
     init();
 
-    m_infoLabel->setText( i18n("Moving files to project \"%1\"...", dir->doc()->URL().fileName()) );
+    m_infoLabel->setText( i18n("Moving files to project \"%1\"...", dir->getDoc()->URL().fileName()) );
     m_copyItems = copy;
 
     for( QList<K3b::DataItem*>::const_iterator it = items.begin(); it != items.end(); ++it ) {
@@ -456,7 +456,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
         // that means if it points to some folder above this one
         // if so we cannot follow it anyway
         if( isDir && isSymLink && !absoluteFilePath.startsWith( resolved ) ) {
-            bool followLink = dir->doc()->isoOptions().followSymbolicLinks() || m_bFolderLinksFollowAll;
+            bool followLink = dir->getDoc()->isoOptions().followSymbolicLinks() || m_bFolderLinksFollowAll;
             if( !followLink && !m_bFolderLinksAddAll ) {
                 switch( K3b::MultiChoiceDialog::choose( i18n("Adding link to folder"),
                                                       i18n("<p>'%1' is a symbolic link to folder '%2'."
@@ -518,14 +518,14 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
         // only if the doc was not changed yet
         //
         if( m_urls.count() == 1 &&
-            !dir->doc()->isModified() &&
-            !dir->doc()->isSaved() ) {
-            dir->doc()->setVolumeID( K3b::removeFilenameExtension( newName ) );
+            !dir->getDoc()->isModified() &&
+            !dir->getDoc()->isSaved() ) {
+            dir->getDoc()->setVolumeID( K3b::removeFilenameExtension( newName ) );
         }
 
         if( isDir && !isSymLink ) {
             if( !newDirItem ) { // maybe we reuse an already existing dir
-                newDirItem = new K3b::DirItem( newName , dir->doc() );
+                newDirItem = new K3b::DirItem( newName );
                 newDirItem->setLocalPath( url.toLocalFile() ); // HACK: see k3bdiritem.h
                 dir->addDataItem( newDirItem );
             }
@@ -536,7 +536,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
             }
         }
         else {
-            m_newItems[ dir ].append( new K3b::FileItem( &statBuf, &resolvedStatBuf, url.toLocalFile(), dir->doc(), newName ) );
+            m_newItems[ dir ].append( new K3b::FileItem( &statBuf, &resolvedStatBuf, url.toLocalFile(), *dir->getDoc(), newName ) );
         }
     }
 

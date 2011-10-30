@@ -55,8 +55,8 @@ bool K3b::operator>( const K3b::FileItem::Id& id1, const K3b::FileItem::Id& id2 
 
 
 
-K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, const QString& k3bName, const ItemFlags& flags )
-    : K3b::DataItem( doc, flags | FILE ),
+K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc& doc, const QString& k3bName, const ItemFlags& flags )
+    : K3b::DataItem( flags | FILE ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -89,8 +89,8 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc* doc, const QStri
 
 K3b::FileItem::FileItem( const k3b_struct_stat* stat,
                           const k3b_struct_stat* followedStat,
-                          const QString& filePath, K3b::DataDoc* doc, const QString& k3bName, const ItemFlags& flags )
-    : K3b::DataItem( doc, flags | FILE ),
+                          const QString& filePath, K3b::DataDoc& doc, const QString& k3bName, const ItemFlags& flags )
+    : K3b::DataItem( flags | FILE ),
       m_replacedItemFromOldSession(0),
       m_localPath(filePath)
 {
@@ -141,7 +141,10 @@ KIO::filesize_t K3b::FileItem::itemSize( bool followSymlinks ) const
 
 K3b::FileItem::Id K3b::FileItem::localId() const
 {
-    return localId( doc() ? doc()->isoOptions().followSymbolicLinks() || !doc()->isoOptions().createRockRidge() : false );
+    if( DataDoc* doc = getDoc() )
+        return localId( doc->isoOptions().followSymbolicLinks() || !doc->isoOptions().createRockRidge() );
+    else
+        return localId( false );
 }
 
 
@@ -189,8 +192,10 @@ bool K3b::FileItem::isValid() const
     if( isSymLink() ) {
 
         // this link is not valid if we cannot follow it if we want to
-        if( doc()->isoOptions().followSymbolicLinks() ) {
-            return QFile::exists( K3b::resolveLink( localPath() ) );
+        if( DataDoc* doc = getDoc() ) {
+            if( doc->isoOptions().followSymbolicLinks() ) {
+                return QFile::exists( K3b::resolveLink( localPath() ) );
+            }
         }
 
         QString dest = linkDest();
@@ -245,7 +250,7 @@ bool K3b::FileItem::isValid() const
 
 void K3b::FileItem::init( const QString& filePath,
                           const QString& k3bName,
-                          DataDoc* doc,
+                          DataDoc& doc,
                           const k3b_struct_stat* stat,
                           const k3b_struct_stat* followedStat )
 {
@@ -272,11 +277,9 @@ void K3b::FileItem::init( const QString& filePath,
         m_id.device = 0;
 
         // since we have no proper inode info, disable the inode caching in the doc
-        if( doc ) {
-            K3b::IsoOptions o( doc->isoOptions() );
-            o.setDoNotCacheInodes( true );
-            doc->setIsoOptions( o );
-        }
+        K3b::IsoOptions o( doc.isoOptions() );
+        o.setDoNotCacheInodes( true );
+        doc.setIsoOptions( o );
     }
 
     if( isSymLink() ) {

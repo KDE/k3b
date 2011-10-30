@@ -256,14 +256,14 @@ bool K3b::MovixDocPreparer::writeMovixRcFile()
 bool K3b::MovixDocPreparer::addMovixFiles()
 {
     // first of all we create the directories
-    d->isolinuxDir = new K3b::DirItem( "isolinux", d->doc );
-    d->movixDir = new K3b::DirItem( "movix", d->doc );
+    d->isolinuxDir = new K3b::DirItem( "isolinux" );
+    d->movixDir = new K3b::DirItem( "movix" );
     d->doc->root()->addDataItem( d->isolinuxDir );
     d->doc->root()->addDataItem( d->movixDir );
     K3b::DirItem* kernelDir = d->doc->addEmptyDir( "kernel", d->isolinuxDir );
 
     // add the linux kernel
-    kernelDir->addDataItem( new K3b::FileItem( d->eMovixBin->path() + "/isolinux/kernel/vmlinuz", d->doc ) );
+    kernelDir->addDataItem( new K3b::FileItem( d->eMovixBin->path() + "/isolinux/kernel/vmlinuz", *d->doc ) );
 
     // add the boot image
     K3b::BootItem* bootItem = d->doc->createBootItem( d->eMovixBin->path() + "/isolinux/isolinux.bin",
@@ -290,14 +290,14 @@ bool K3b::MovixDocPreparer::addMovixFiles()
     for( QStringList::const_iterator it = isolinuxFiles.constBegin();
          it != isolinuxFiles.constEnd(); ++it ) {
         QString path = d->eMovixBin->path() + "/isolinux/" + *it;
-        d->isolinuxDir->addDataItem( new K3b::FileItem( path, d->doc ) );
+        d->isolinuxDir->addDataItem( new K3b::FileItem( path, *d->doc ) );
     }
 
     const QStringList& movixFiles = d->eMovixBin->movixFiles();
     for( QStringList::const_iterator it = movixFiles.constBegin();
          it != movixFiles.constEnd(); ++it ) {
         QString path = d->eMovixBin->path() + "/movix/" + *it;
-        d->movixDir->addDataItem( new K3b::FileItem( path, d->doc ) );
+        d->movixDir->addDataItem( new K3b::FileItem( path, *d->doc ) );
     }
 
     // add doku files
@@ -308,33 +308,33 @@ bool K3b::MovixDocPreparer::addMovixFiles()
          it != helpFiles.constEnd(); ++it ) {
         // some emovix installations include backup-files, no one's perfect ;)
         if( !(*it).endsWith( "~" ) )
-            d->isolinuxDir->addDataItem( new K3b::FileItem( path + "/" + *it, d->doc ) );
+            d->isolinuxDir->addDataItem( new K3b::FileItem( path + "/" + *it, *d->doc ) );
     }
 
 
     // add subtitle font dir
     if( !d->doc->subtitleFontset().isEmpty() &&
         d->doc->subtitleFontset() != i18n("none") ) {
-        d->mplayerDir = new K3b::DirItem( "mplayer", d->doc );
+        d->mplayerDir = new K3b::DirItem( "mplayer" );
         d->doc->root()->addDataItem( d->mplayerDir );
 
         QString fontPath = d->eMovixBin->subtitleFontDir( d->doc->subtitleFontset() );
         QFileInfo fontType( fontPath );
         if( fontType.isDir() ) {
-            K3b::DirItem* fontDir = new K3b::DirItem( "font", d->doc );
+            K3b::DirItem* fontDir = new K3b::DirItem( "font" );
             d->mplayerDir->addDataItem( fontDir );
             QDir dir( fontPath );
             QStringList fontFiles = dir.entryList( QDir::Files );
             for( QStringList::const_iterator it = fontFiles.constBegin();
                  it != fontFiles.constEnd(); ++it ) {
-                fontDir->addDataItem( new K3b::FileItem( fontPath + "/" + *it, d->doc ) );
+                fontDir->addDataItem( new K3b::FileItem( fontPath + "/" + *it, *d->doc ) );
             }
         }
         else {
             // just a ttf file
             // needs to be named: subfont.ttf and needs to be placed in mplayer/
             // instead of mplayer/font
-            d->mplayerDir->addDataItem( new K3b::FileItem( fontPath, d->doc, "subfont.ttf" ) );
+            d->mplayerDir->addDataItem( new K3b::FileItem( fontPath, *d->doc, "subfont.ttf" ) );
         }
     }
 
@@ -344,9 +344,9 @@ bool K3b::MovixDocPreparer::addMovixFiles()
         writeIsolinuxConfigFile( d->eMovixBin->path() + "/isolinux/isolinux.cfg" ) &&
         writePlaylistFile() ) {
 
-        d->movixDir->addDataItem( new K3b::FileItem( d->movixRcFile->fileName(), d->doc, "movixrc" ) );
-        d->isolinuxDir->addDataItem( new K3b::FileItem( d->isolinuxConfigFile->fileName(), d->doc, "isolinux.cfg" ) );
-        d->playlistFileItem = new K3b::FileItem( d->playlistFile->fileName(), d->doc, "movix.list" );
+        d->movixDir->addDataItem( new K3b::FileItem( d->movixRcFile->fileName(), *d->doc, "movixrc" ) );
+        d->isolinuxDir->addDataItem( new K3b::FileItem( d->isolinuxConfigFile->fileName(), *d->doc, "isolinux.cfg" ) );
+        d->playlistFileItem = new K3b::FileItem( d->playlistFile->fileName(), *d->doc, "movix.list" );
         d->doc->root()->addDataItem( d->playlistFileItem );
 
         return true;
@@ -435,7 +435,7 @@ K3b::FileItem* K3b::MovixDocPreparer::createItem( const QString& localPath, cons
     K3b::DirItem* dir = createDir( docPath );
 
     // create the file in dir
-    K3b::FileItem* item = new K3b::FileItem( localPath, d->doc );
+    K3b::FileItem* item = new K3b::FileItem( localPath, *d->doc );
     dir->addDataItem( item );
 
     // remember the item to remove it becasue the dir cannot be removed
@@ -453,7 +453,7 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
     for( QStringList::ConstIterator it = docPathSections.constBegin(); it != docPathSections.constEnd(); ++it ) {
         K3b::DataItem* next = dir->find( *it );
         if( !next ) {
-            DirItem* newDir = new K3b::DirItem( *it, d->doc );
+            DirItem* newDir = new K3b::DirItem( *it );
             dir->addDataItem( newDir );
             dir = newDir;
         } else if( next->isDir() ) {

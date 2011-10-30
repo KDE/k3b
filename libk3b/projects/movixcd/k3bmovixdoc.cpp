@@ -93,7 +93,7 @@ void K3b::MovixDoc::addUrlsAt( const KUrl::List& urls, int pos )
         }
 
         if( ok ) {
-            MovixFileItem* newItem = new MovixFileItem( f.absoluteFilePath(), this, newName );
+            MovixFileItem* newItem = new MovixFileItem( f.absoluteFilePath(), *this, newName );
             root()->addDataItem( newItem );
             items.append( newItem );
         }
@@ -186,7 +186,7 @@ void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
 
     emit subTitleAboutToBeInserted( item );
 
-    K3b::MovixSubtitleItem* subItem = new K3b::MovixSubtitleItem( f.absoluteFilePath(), this, item, name );
+    K3b::MovixSubtitleItem* subItem = new K3b::MovixSubtitleItem( f.absoluteFilePath(), *this, item, name );
     item->setSubTitleItem( subItem );
     root()->addDataItem( subItem );
 
@@ -330,7 +330,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
 
             // create the item
             K3b::MovixFileItem* newK3bItem = new K3b::MovixFileItem( urlElem.text(),
-                                                                 this,
+                                                                 *this,
                                                                  e.attributeNode("name").value() );
             root()->addDataItem( newK3bItem );
             m_movixFiles.append( newK3bItem );
@@ -351,7 +351,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
 
                 emit subTitleAboutToBeInserted( newK3bItem );
 
-                K3b::MovixSubtitleItem* subItem = new K3b::MovixSubtitleItem( urlElem.text(), this, newK3bItem, name );
+                K3b::MovixSubtitleItem* subItem = new K3b::MovixSubtitleItem( urlElem.text(), *this, newK3bItem, name );
                 root()->addDataItem( subItem );
                 newK3bItem->setSubTitleItem( subItem );
 

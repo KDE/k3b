@@ -21,7 +21,7 @@ namespace K3b {
     class BootItem : public FileItem
     {
     public:
-        BootItem( const QString& fileName, DataDoc* doc, const QString& k3bName = 0 );
+        BootItem( const QString& fileName, DataDoc& doc, const QString& k3bName = 0 );
         BootItem( const BootItem& );
         ~BootItem();
 

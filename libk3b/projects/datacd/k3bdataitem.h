@@ -45,7 +45,7 @@ namespace K3b {
         Q_DECLARE_FLAGS( ItemFlags, ItemFlag )
         
     public:
-        DataItem( DataDoc* doc, const ItemFlags& flags = ItemFlags() );
+        explicit DataItem( const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor.
@@ -72,7 +72,7 @@ namespace K3b {
          */
         DataItem* take();
 
-        DataDoc* doc() const { return m_doc; }
+        virtual DataDoc* getDoc() const;
         virtual QString k3bName() const;
         virtual void setK3bName( const QString& );
 
@@ -208,7 +208,6 @@ namespace K3b {
         QString m_rawIsoName;
         QString m_extraInfo;
 
-        DataDoc* m_doc;
         DirItem* m_parentDir;
         long m_sortWeight;
 

@@ -36,7 +36,7 @@ namespace K3b {
         /**
          * Creates a new FileItem
          */
-        FileItem( const QString& filePath, DataDoc* doc, const QString& k3bName = 0, const ItemFlags& flags = ItemFlags() );
+        FileItem( const QString& filePath, DataDoc& doc, const QString& k3bName = 0, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Constructor for optimized file item creation which does no additional stat.
@@ -45,7 +45,7 @@ namespace K3b {
          */
         FileItem( const k3b_struct_stat* stat,
                   const k3b_struct_stat* followedStat,
-                  const QString& filePath, DataDoc* doc, const QString& k3bName = 0, const ItemFlags& flags = ItemFlags() );
+                  const QString& filePath, DataDoc& doc, const QString& k3bName = 0, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor
@@ -105,7 +105,7 @@ namespace K3b {
     private:
         void init( const QString& filePath,
                    const QString& k3bName,
-                   DataDoc* doc,
+                   DataDoc& doc,
                    const k3b_struct_stat* stat,
                    const k3b_struct_stat* followedStat );
 
