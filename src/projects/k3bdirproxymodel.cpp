@@ -1,7 +1,7 @@
 /*
  *
  * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
- * Copyright (C) 2010 Michal Malek <michalm@jabster.pl>
+ * Copyright (C) 2010-2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -41,4 +41,13 @@ bool K3b::DirProxyModel::filterAcceptsRow( int source_row, const QModelIndex & s
         type = (DataProjectModel::ItemType) index.data( DataProjectModel::ItemTypeRole ).toInt();
 
     return (type == DataProjectModel::DirItemType);
+}
+
+bool K3b::DirProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+{
+    if( !left.parent().isValid() && !right.parent().isValid() ) {
+        return left.row() < right.row();
+    } else {
+        return QSortFilterProxyModel::lessThan( left, right );
+    }
 }

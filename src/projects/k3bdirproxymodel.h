@@ -1,5 +1,6 @@
 /* 
- * Copyright (C) 2009      Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
+ * Copyright (C) 2011 Michal Malek <michalm@jabster.pl>
  *
  * This file is part of the K3b project.
  * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
@@ -38,8 +39,14 @@ protected:
      * which rows to show. In this specific model we only allow directories to
      * be shown.
      */
-    bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const;
+    virtual bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const;
 
+    /**
+     * Reimplemented method from QSortFilterProxyModel. Prevents from sorting
+     * top-level elements. Sorting top-level elements is not desirable in MixedView as
+     * we need fixed order of items there (first audio part, second data part)
+     */
+    virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 };
 }
 
