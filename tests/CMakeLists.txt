@@ -12,6 +12,7 @@ kde4_add_unit_test( k3bdataprojectmodeltest
 target_link_libraries( k3bdataprojectmodeltest
     ${QT_QTTEST_LIBRARY}
     ${KDE4_KDECORE_LIBS}
+    ${KDE4_KIO_LIBS}
     k3b )
 
 kde4_add_unit_test( k3bglobalstest
