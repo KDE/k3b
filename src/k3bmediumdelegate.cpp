@@ -138,9 +138,9 @@ void K3b::MediumDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
             const QRect tracksRect( rect.left(), rect.top() + previousHeights,
                                     rect.width(), fam.fontM.height() );
             previousHeights += tracksRect.height();
-            QString tracksText =  i18np("%1 in 1 track", "%1 in %2 tracks",
-                                        KIO::convertSize(medium.diskInfo().size().mode1Bytes() ),
-                                        medium.toc().count() );
+            QString tracksText =  i18np("%2 in %1 track", "%2 in %1 tracks",
+                                        medium.toc().count(),
+                                        KIO::convertSize(medium.diskInfo().size().mode1Bytes()) );
             if( medium.diskInfo().numSessions() > 1 )
                 tracksText += i18np(" and %1 session", " and %1 sessions", medium.diskInfo().numSessions() );
             
