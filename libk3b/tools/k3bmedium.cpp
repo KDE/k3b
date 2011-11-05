@@ -421,9 +421,9 @@ QString K3b::Medium::longString( MediumStringFlags flags ) const
 
     if( diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
         diskInfo().diskState() == K3b::Device::STATE_INCOMPLETE  ) {
-        s += "<br/>" + i18np("%1 in 1 track", "%1 in %2 tracks",
-                             KIO::convertSize(diskInfo().size().mode1Bytes() ),
-                             d->toc.count() );
+        s += "<br/>" + i18np("%2 in %1 track", "%2 in %1 tracks",
+                             d->toc.count(),
+                             KIO::convertSize(diskInfo().size().mode1Bytes()) );
         if( diskInfo().numSessions() > 1 )
             s += i18np(" and %1 session", " and %1 sessions", diskInfo().numSessions() );
     }
