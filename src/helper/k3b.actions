@@ -84,6 +84,7 @@ Policy=auth_admin
 
 [org.kde.k3b.addtogroup]
 Name=Adds current user to a specified group
+Name[ca]=Afegeix l'usuari actual a un grup especificat
 Name[cs]=Přidá nynějšího uživatele do určené skupiny
 Name[da]=Tilføjer den aktuelle bruger til en angiven gruppe
 Name[de]=Fügt den aktuellen Benutzer zur angegebenen Gruppe hinzu
@@ -101,6 +102,7 @@ Name[uk]=Додавання поточного користувача до вк�
 Name[x-test]=xxAdds current user to a specified groupxx
 Name[zh_TW]=將目前的使用者加到特定的群組
 Description=Authentication is required to add current user to a group
+Description[ca]=Cal autenticar-se per afegir l'usuari actual a un grup
 Description[cs]=Pro přidání současného uživatele do skupiny je potřeba oprávnění
 Description[da]=Autentificering er påkrævet for at føje den aktuelle bruger til en gruppe
 Description[de]=Sie müssen sich authentifizieren, um den aktuellen Benutzer in eine Gruppe einzufügen.
