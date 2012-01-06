@@ -35,7 +35,7 @@ K3b::ExternalBinOptionTab::ExternalBinOptionTab( K3b::ExternalBinManager* manage
     QLabel* m_labelInfo = new QLabel( this );
     m_labelInfo->setWordWrap( true );
     m_labelInfo->setText( "<p>" + i18n( "Specify the paths to the external programs that K3b needs to work properly, "
-                                        "or press \"Search\" to let K3b search for the programs." ) + "</p>" );
+                                        "or press \"Refresh\" to let K3b search for the programs." ) + "</p>" );
 
     QVBoxLayout* frameLayout = new QVBoxLayout( this );
     frameLayout->setContentsMargins( 0, 0, 0, 0 );
