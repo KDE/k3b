@@ -148,7 +148,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
         //
         // every pattern starts with a % sign
         //
-        if( pattern[i] == '%' ) {
+        if( pattern[i] == '%' && i+1 < pattern.length() ) {
             ++i; // skip the %
             QChar c = pattern[i];
 
