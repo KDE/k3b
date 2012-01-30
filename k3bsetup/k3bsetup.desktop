@@ -158,6 +158,13 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system
 X-KDE-System-Settings-Parent-Category-V2=permissions
 X-KDE-Keywords=k3b,k3bsetup,cd,dvd
+X-KDE-Keywords[ca]=k3b,k3bsetup,CD,DVD
+X-KDE-Keywords[pt_BR]=k3b,configurações avançadas do K3b,cd,dvd
+X-KDE-Keywords[sk]=k3b,k3bsetup,cd,dvd
+X-KDE-Keywords[sv]=k3b,ställ in k3b,cd,dvd
+X-KDE-Keywords[uk]=k3b,k3bsetup,cd,dvd,сіді,компакт-диск,дівіді
+X-KDE-Keywords[x-test]=xxk3b,k3bsetup,cd,dvdxx
+X-KDE-Keywords[zh_TW]=k3b,k3bsetup,cd,dvd
 Categories=Application;System;X-KDE-System;
 
 GenericName=CD/DVD/BD Burning Setup
