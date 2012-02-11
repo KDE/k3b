@@ -9,7 +9,7 @@ if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
 else(FFMPEG_INCLUDE_DIR_OLD_STYLE)
     message(STATUS "found new ffmpegcodecpath")
     add_definitions(-DNEWFFMPEGAVCODECPATH)
-    include_directories (${FFMPEG_INCLUDE_DIR})
+    include_directories (${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
 endif(FFMPEG_INCLUDE_DIR_OLD_STYLE)
 
 set(k3bffmpegdecoder_PART_SRCS k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp )
