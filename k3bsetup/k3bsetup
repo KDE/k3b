@@ -1,3 +1,4 @@
+#!/usr/bin/sh
 #
 # $Id$
 # Copyright (C) 2003 Sebastian Trueg <trueg@k3b.org>
@@ -11,8 +12,5 @@
 # (at your option) any later version.
 # See the file "COPYING" for the exact licensing terms.
 #
-
-
-#!/usr/bin/sh
 
 kcmshell4 k3bsetup
