@@ -6,9 +6,9 @@ SIZES="16 22 32 48 64 128 scalable"
 function update_icon() {
 	if [ ${3} = "scalable" ]
 	then
-		svn export ${PREFIX}/${3}/${2}/${1}.svgz ${2}/oxsc-${2}-${1}.svgz
+		svn export ${PREFIX}/${3}/${2}/${1}.svgz ${2}/hisc-${2}-${1}.svgz
 	else
-		svn export ${PREFIX}/${3}x${3}/${2}/${1}.png ${2}/ox${3}-${2}-${1}.png
+		svn export ${PREFIX}/${3}x${3}/${2}/${1}.png ${2}/hi${3}-${2}-${1}.png
 	fi
 }
 
