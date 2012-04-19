@@ -45,6 +45,7 @@
 
 #include <grp.h>
 #include <unistd.h>
+#include <pwd.h>
 
 
 K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *parent )
@@ -256,7 +257,7 @@ void K3b::DeviceWidget::addUserToGroup()
 {
     QVariantMap args;
     args["groupName"] = m_deviceGroup;
-    args["userName"] = QString::fromLocal8Bit(::cuserid(NULL));
+    args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_gecos);
 
     KAuth::Action action("org.kde.k3b.addtogroup");
     action.setHelperID("org.kde.k3b");
