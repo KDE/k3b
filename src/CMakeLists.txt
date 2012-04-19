@@ -283,7 +283,7 @@ set(k3b_bin_SRCS
   ${k3b_SRCS}
 )
 
-kde4_add_app_icon(k3b_bin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/icons/hi*-app-k3b.png)
+kde4_add_app_icon(k3b_bin_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/icons/apps/hi*-apps-k3b.png)
 
 if (MSVC)
     # msvc creates importlibs by default also for executables when symbols are exported.
