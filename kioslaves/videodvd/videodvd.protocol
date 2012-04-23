@@ -38,6 +38,7 @@ Description[hr]=kioslave koji omogućuje kopiranje datoteka iz video DVD-a (uklj
 Description[hu]=Kioslave, amellyel fájlokat lehet másolni Video DVD-ről (dekódolással együtt)
 Description[it]=Un kioslave per permettere ai file di essere copiati da un DVD video (inclusa decifrazione)
 Description[ja]=ビデオ DVD からファイルをコピーすることを可能にする kioslave (暗号解除も含む)
+Description[kk]=Видео DVD-ден (шифрын шешуін қоса) файлдарды көшіріп алуға мүмкіндік беретін kioslave
 Description[km]=kioslave អនុញ្ញាត​ឲ្យ​ចម្លង​ឯកសារ​ពី​ឌីវីឌី​វីដេអូ (ដោយ​រួមបញ្ចូល​ការ​ឌិគ្រីប)
 Description[ko]=비디오 DVD에서 파일을 복사하는 KIO 슬레이브 (암호화 해제 포함)
 Description[lt]=Priedas (kioslave) leidžiantis kopijuoti failus iš Video DVD (taip pat ir iššifruoti)
