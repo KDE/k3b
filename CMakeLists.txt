@@ -274,7 +274,6 @@ include_directories(
   ${k3b_SOURCE_DIR}/libk3b/videodvd
   ${KDE4_INCLUDES}
   ${KDE4_INCLUDE_DIR}
-  ${QT_INCLUDES}
 )
 
 add_subdirectory( libk3bdevice )
