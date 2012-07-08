@@ -69,6 +69,9 @@ public:
             if ( pos >= 0 ) {
                 pos += 17;
             }
+            else if ( ( pos = out.indexOf( "sox:      SoX v" ) ) >= 0 ) {
+                pos += 15;
+            }
             else if ( ( pos = out.indexOf( "sox: SoX v" ) ) >= 0 ) {
                 pos += 10;
             }
