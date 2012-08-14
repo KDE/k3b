@@ -101,7 +101,7 @@ QString K3b::Device::writingModeString( int m )
         s += i18n("Sequential Recording + POW");
 
     if( s.isEmpty() )
-        return i18n("None");
+        return i18nc("no writing mode", "None");
     else
         return s.join( ", " );
 }
@@ -110,7 +110,7 @@ QString K3b::Device::writingModeString( int m )
 QString K3b::Device::mediaTypeString( int m, bool simple )
 {
     if( m == K3b::Device::MEDIA_UNKNOWN )
-        return i18n("Unknown");
+        return i18nc("unknown medium type", "Unknown");
 
     QStringList s;
     if( m & MEDIA_NONE )
@@ -182,7 +182,7 @@ QString K3b::Device::mediaTypeString( int m, bool simple )
 QString K3b::Device::mediaStateString( int state )
 {
     if( state == K3b::Device::STATE_UNKNOWN )
-        return i18n("Unknown");
+        return i18nc("unknown medium state", "Unknown");
 
     QStringList s;
     if( state & STATE_NO_MEDIA )
