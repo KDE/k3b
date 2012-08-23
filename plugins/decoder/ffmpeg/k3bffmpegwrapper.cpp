@@ -88,7 +88,11 @@ bool K3bFFMpegFile::open()
     close();
 
     // open the file
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(53,2,0)
+    int err = ::avformat_open_input( &d->formatContext, m_filename.toLocal8Bit(), 0, 0 );
+#else
     int err = ::av_open_input_file( &d->formatContext, m_filename.toLocal8Bit(), 0, 0, 0 );
+#endif
     if( err < 0 ) {
         kDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err;
         return false;
@@ -143,7 +147,11 @@ bool K3bFFMpegFile::open()
     }
 
     // dump some debugging info
+#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(53,2,0)
+    ::av_dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
+#else
     ::dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
+#endif
 
     return true;
 }
