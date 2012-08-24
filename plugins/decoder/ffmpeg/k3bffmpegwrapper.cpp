@@ -39,7 +39,9 @@ extern "C" {
 
 
 #if LIBAVFORMAT_BUILD < 4629
-#define FFMPEG_BUILD_PRE_4629
+#define FFMPEG_CODEC(s) (&s->codec)
+#else
+#define FFMPEG_CODEC(s) (s->codec)
 #endif
 
 #ifndef HAVE_FFMPEG_AVFORMAT_OPEN_INPUT
@@ -126,11 +128,7 @@ bool K3bFFMpegFile::open()
     }
 
     // urgh... ugly
-#ifdef FFMPEG_BUILD_PRE_4629
-    ::AVCodecContext* codecContext =  &d->formatContext->streams[0]->codec;
-#else
-    ::AVCodecContext* codecContext =  d->formatContext->streams[0]->codec;
-#endif
+    ::AVCodecContext* codecContext =  FFMPEG_CODEC(d->formatContext->streams[0]);
     if( codecContext->codec_type != AVMEDIA_TYPE_AUDIO)
     {
         kDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename;
@@ -173,11 +171,7 @@ void K3bFFMpegFile::close()
     d->packetData = 0;
 
     if( d->codec ) {
-#ifdef FFMPEG_BUILD_PRE_4629
-        ::avcodec_close( &d->formatContext->streams[0]->codec );
-#else
-        ::avcodec_close( d->formatContext->streams[0]->codec );
-#endif
+        ::avcodec_close( FFMPEG_CODEC(d->formatContext->streams[0]) );
         d->codec = 0;
     }
 
@@ -196,31 +190,19 @@ K3b::Msf K3bFFMpegFile::length() const
 
 int K3bFFMpegFile::sampleRate() const
 {
-#ifdef FFMPEG_BUILD_PRE_4629
-    return d->formatContext->streams[0]->codec.sample_rate;
-#else
-    return d->formatContext->streams[0]->codec->sample_rate;
-#endif
+    return FFMPEG_CODEC(d->formatContext->streams[0])->sample_rate;
 }
 
 
 int K3bFFMpegFile::channels() const
 {
-#ifdef FFMPEG_BUILD_PRE_4629
-    return d->formatContext->streams[0]->codec.channels;
-#else
-    return d->formatContext->streams[0]->codec->channels;
-#endif
+    return FFMPEG_CODEC(d->formatContext->streams[0])->channels;
 }
 
 
 int K3bFFMpegFile::type() const
 {
-#ifdef FFMPEG_BUILD_PRE_4629
-    return d->formatContext->streams[0]->codec.codec_id;
-#else
-    return d->formatContext->streams[0]->codec->codec_id;
-#endif
+    return FFMPEG_CODEC(d->formatContext->streams[0])->codec_id;
 }
 
 
@@ -344,11 +326,7 @@ int K3bFFMpegFile::fillOutputBuffer()
 #  endif
 #endif
 
-#ifdef FFMPEG_BUILD_PRE_4629
-            &d->formatContext->streams[0]->codec,
-#else
-            d->formatContext->streams[0]->codec,
-#endif
+            FFMPEG_CODEC(d->formatContext->streams[0]),
             (short*)d->alignedOutputBuffer,
             &d->outputBufferSize,
 #ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO3
