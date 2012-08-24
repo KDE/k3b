@@ -42,6 +42,28 @@ extern "C" {
 #define FFMPEG_BUILD_PRE_4629
 #endif
 
+#ifndef HAVE_FFMPEG_AVFORMAT_OPEN_INPUT
+//      this works because the parameters/options are not used
+#  define avformat_open_input(c,s,f,o) av_open_input_file(c,s,f,0,o)
+#endif
+#ifndef HAVE_FFMPEG_AV_DUMP_FORMAT
+#  define av_dump_format(c,x,f,y) dump_format(c,x,f,y)
+#endif
+#ifndef HAVE_FFMPEG_AVFORMAT_FIND_STREAM_INFO
+#  define avformat_find_stream_info(c,o) av_find_stream_info(c)
+#endif
+#ifndef HAVE_FFMPEG_AVFORMAT_CLOSE_INPUT
+#  define avformat_close_input(c) av_close_input_file(*c)
+#endif
+#ifndef HAVE_FFMPEG_AVCODEC_OPEN2
+#  define avcodec_open2(a,c,o) avcodec_open(a,c)
+#endif
+#ifndef HAVE_FFMPEG_AVMEDIA_TYPE
+#  define AVMEDIA_TYPE_AUDIO CODEC_TYPE_AUDIO
+#endif
+#ifndef HAVE_FFMPEG_CODEC_MP3
+#  define CODEC_ID_MP3 CODEC_ID_MP3LAME
+#endif
 
 K3bFFMpegWrapper* K3bFFMpegWrapper::s_instance = 0;
 
@@ -88,18 +110,14 @@ bool K3bFFMpegFile::open()
     close();
 
     // open the file
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(53,2,0)
     int err = ::avformat_open_input( &d->formatContext, m_filename.toLocal8Bit(), 0, 0 );
-#else
-    int err = ::av_open_input_file( &d->formatContext, m_filename.toLocal8Bit(), 0, 0, 0 );
-#endif
     if( err < 0 ) {
         kDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err;
         return false;
     }
 
     // analyze the streams
-    ::av_find_stream_info( d->formatContext );
+    ::avformat_find_stream_info( d->formatContext, 0 );
 
     // we only handle files containing one audio stream
     if( d->formatContext->nb_streams != 1 ) {
@@ -113,12 +131,7 @@ bool K3bFFMpegFile::open()
 #else
     ::AVCodecContext* codecContext =  d->formatContext->streams[0]->codec;
 #endif
-    if( codecContext->codec_type != 
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(52, 64, 0)
-        AVMEDIA_TYPE_AUDIO)
-#else
-        CODEC_TYPE_AUDIO)
-#endif
+    if( codecContext->codec_type != AVMEDIA_TYPE_AUDIO)
     {
         kDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename;
         return false;
@@ -133,7 +146,7 @@ bool K3bFFMpegFile::open()
 
     // open the codec on our context
     kDebug() << "(K3bFFMpegFile) found codec for " << m_filename;
-    if( ::avcodec_open( codecContext, d->codec ) < 0 ) {
+    if( ::avcodec_open2( codecContext, d->codec, 0 ) < 0 ) {
         kDebug() << "(K3bFFMpegDecoderFactory) could not open codec.";
         return false;
     }
@@ -147,11 +160,7 @@ bool K3bFFMpegFile::open()
     }
 
     // dump some debugging info
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(53,2,0)
     ::av_dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
-#else
-    ::dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
-#endif
 
     return true;
 }
@@ -173,7 +182,7 @@ void K3bFFMpegFile::close()
     }
 
     if( d->formatContext ) {
-        ::av_close_input_file( d->formatContext );
+        ::avformat_close_input( &d->formatContext );
         d->formatContext = 0;
     }
 }
@@ -222,11 +231,7 @@ QString K3bFFMpegFile::typeComment() const
         return i18n("Windows Media v1");
     case CODEC_ID_WMAV2:
         return i18n("Windows Media v2");
-#if LIBAVCODEC_VERSION_MAJOR < 52
-    case CODEC_ID_MP3LAME:
-#else
     case CODEC_ID_MP3:
-#endif
         return i18n("MPEG 1 Layer III");
     case CODEC_ID_AAC:
         return i18n("Advanced Audio Coding (AAC)");
@@ -329,14 +334,14 @@ int K3bFFMpegFile::fillOutputBuffer()
         d->outputBufferPos = d->alignedOutputBuffer;
         d->outputBufferSize = AVCODEC_MAX_AUDIO_FRAME_SIZE;
 
-#if LIBAVCODEC_VERSION_MAJOR < 52
-        int len = ::avcodec_decode_audio(
-#else
-   #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(52, 64, 0)
+#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO3
         int len = ::avcodec_decode_audio3(
-   #else
+#else
+#  ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO2
         int len = ::avcodec_decode_audio2(
-   #endif
+#  else
+        int len = ::avcodec_decode_audio(
+#  endif
 #endif
 
 #ifdef FFMPEG_BUILD_PRE_4629
@@ -346,7 +351,7 @@ int K3bFFMpegFile::fillOutputBuffer()
 #endif
             (short*)d->alignedOutputBuffer,
             &d->outputBufferSize,
-#if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(52, 64, 0)
+#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO3
             &d->packet );
 #else
             d->packetData, d->packetSize );

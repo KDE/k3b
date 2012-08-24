@@ -100,6 +100,53 @@ if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
     "Needed for the K3b FFmpeg decoder plugin which can decode virtually all audio types."
     "http://ffmpeg.org/"
     FALSE "" "")
+  if(FFMPEG_FOUND)
+    include(CMakePushCheckState)
+    cmake_push_check_state()
+
+    if(CMAKE_COMPILER_IS_GNUCC)
+      # FindKDE4Internal.cmake screws things up
+      set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} -std=c99)
+    endif(CMAKE_COMPILER_IS_GNUCC)
+
+    if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+      set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${FFMPEG_INCLUDE_DIR_OLD_STYLE})
+      set(FFMPEG_HEADERS ffmpeg/avcodec.h ffmpeg/avformat.h)
+    else(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+      set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
+      set(FFMPEG_HEADERS libavcodec/avcodec.h libavformat/avformat.h)
+      set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -DNEWFFMPEGAVCODECPATH)
+    endif(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${FFMPEG_LIBRARIES})
+
+    check_symbol_exists(avformat_open_input "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVFORMAT_OPEN_INPUT)
+    check_symbol_exists(av_dump_format "${FFMPEG_HEADERS}" HAVE_FFMPEG_AV_DUMP_FORMAT)
+    check_symbol_exists(avformat_find_stream_info "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVFORMAT_FIND_STREAM_INFO)
+    check_symbol_exists(avformat_close_input "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVFORMAT_CLOSE_INPUT)
+    check_symbol_exists(avcodec_open2 "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVCODEC_OPEN2)
+    check_symbol_exists(avcodec_decode_audio2 "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVCODEC_DECODE_AUDIO2)
+    check_symbol_exists(avcodec_decode_audio3 "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVCODEC_DECODE_AUDIO3)
+    check_symbol_exists(avcodec_decode_audio4 "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4)
+    include(CheckCSourceCompiles)
+    check_c_source_compiles("
+      #ifdef NEWFFMPEGAVCODECPATH
+      #include <libavcodec/avcodec.h>
+      #else
+      #include <ffmpeg/avcodec.h>
+      #endif
+      int main() { enum AVMediaType t = AVMEDIA_TYPE_UNKNOWN; return 0; }
+      " HAVE_FFMPEG_AVMEDIA_TYPE)
+    check_c_source_compiles("
+      #ifdef NEWFFMPEGAVCODECPATH
+      #include <libavcodec/avcodec.h>
+      #else
+      #include <ffmpeg/avcodec.h>
+      #endif
+      int main() { enum CodecID t = CODEC_ID_MP3; return 0; }
+      " HAVE_FFMPEG_CODEC_MP3)
+
+    cmake_pop_check_state()
+  endif(FFMPEG_FOUND)
 endif(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
 
 if(K3B_BUILD_FLAC_DECODER_PLUGIN)
