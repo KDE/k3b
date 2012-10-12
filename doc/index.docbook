@@ -5,7 +5,7 @@
   <!ENTITY % English "INCLUDE">
 ]>
 <book id="k3b" lang="&language;">
-<book id="k3b"info>
+<bookinfo>
 <title>The K3b Handbook</title>
 <authorgroup>
 <author>
