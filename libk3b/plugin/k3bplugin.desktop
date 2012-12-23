@@ -3,7 +3,6 @@ Type=ServiceType
 X-KDE-ServiceType=K3b/Plugin
 Name=K3b Plugin
 Name[bg]=Приставка за K3b
-Name[bs]=K3b Plugin
 Name[ca]=Connector K3b
 Name[ca@valencia]=Connector K3b
 Name[cs]=Modul K3b

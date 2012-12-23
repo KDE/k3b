@@ -8,7 +8,6 @@ MimeType=application/x-cd-image;inode/ISO-image;
 Exec=k3b --image %F
 Name=Write image to disc with K3b
 Name[bg]=Запис на образ върху диск с K3b
-Name[bs]=Upiši sliku na disk K3bom
 Name[ca]=Escriu imatge al disc amb el K3b
 Name[ca@valencia]=Escriu imatge al disc amb el K3b
 Name[cs]=Vypálit pomocí K3b obraz na disk...

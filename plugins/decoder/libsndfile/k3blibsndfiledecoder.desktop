@@ -1,7 +1,6 @@
 [Desktop Entry]
 Name=K3b Libsndfile Decoder
 Name[bg]=Libsndfile декодер за K3b
-Name[bs]=K3b Libsndfile Dekoder
 Name[ca]=Descodificador Libsndfile del K3b
 Name[ca@valencia]=Descodificador Libsndfile del K3b
 Name[cs]=Libsndfile dekodér K3b
@@ -55,7 +54,6 @@ Name[zh_CN]=K3b Libsndfile 解码器
 Name[zh_TW]=K3b Libsndfile 解碼器
 Comment=Decoding module to decode audio files supported by libsndfile
 Comment[bg]=Декодиране на звукови файлове, поддържани от libsndfile
-Comment[bs]=Modul dekodiranja za dekodiranje audio datoteka koje podržava libsndfile
 Comment[ca]=Mòdul de descodificació per descodificar fitxers d'àudio implementats per libsndfile
 Comment[ca@valencia]=Mòdul de descodificació per descodificar fitxers d'àudio implementats per libsndfile
 Comment[cs]=Modul pro dekódování audio souborů posporovaných libsndfile

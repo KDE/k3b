@@ -9,7 +9,6 @@ ExcludeServiceTypes=application/x-cd-image
 Exec=k3b --data %F
 Name=Create file project with K3b
 Name[bg]=Създаване диск с файлове с K3b
-Name[bs]=Napravi proјekat datoteka K3bom
 Name[ca]=Crea un fitxer de projecte amb el K3b
 Name[ca@valencia]=Crea un fitxer de projecte amb el K3b
 Name[cs]=Vytvořit pomocí K3b souborový projekt...
