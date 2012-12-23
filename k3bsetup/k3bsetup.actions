@@ -1,6 +1,7 @@
 [org.kde.kcontrol.k3bsetup.save]
 Name=Update device and programs permissions
 Name[bg]=Обновяване правата върху устройства и програми
+Name[bs]=Ažurirajte uređaje i programske dozvole
 Name[ca]=Actualitza els permisos dels dispositius i programes
 Name[ca@valencia]=Actualitza els permisos dels dispositius i programes
 Name[cs]=Aktualizovat oprávnění zařízení a programů
@@ -47,6 +48,7 @@ Name[zh_CN]=更新设备和程序的权限
 Name[zh_TW]=更新裝置與程式的權限
 Description=Authentication is required to update permissions of devices and programs
 Description[bg]=За обновяване правата върху устройства и програми е нужна автентикация
+Description[bs]=Autentifikacija je potrebna za ažuriranje dozvole uređaja i programa
 Description[ca]=Es requereix l'autenticació per actualitzar els permisos dels dispositius i programes
 Description[ca@valencia]=Es requereix l'autenticació per actualitzar els permisos dels dispositius i programes
 Description[cs]=Pro aktualizaci oprávnění zařízení a programů je potřeba oprávnění
