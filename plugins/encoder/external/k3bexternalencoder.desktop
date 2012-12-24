@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=K3b External Audio Encoder
 Name[bg]=Кодиране на външен звук (K3b)
+Name[bs]=Spoljašnji audio koder za K3b
 Name[ca]=Codificador extern d'àudio del K3b
 Name[ca@valencia]=Codificador extern d'àudio del K3b
 Name[cs]=Externí audio dekodér K3b
@@ -53,6 +54,7 @@ Name[zh_CN]=K3b 扩展音频编码器
 Name[zh_TW]=K3b 外部音效編碼器
 Comment=Encoding module that allows specifying an encoding command
 Comment[bg]=Кодиращ модул, позволяващ подаването на кодираща команда
+Comment[bs]=Modul koji omogućava da navedete naredbu za kodiranje
 Comment[ca]=Mòdul extern que permet especificar una ordre de codificació
 Comment[ca@valencia]=Mòdul extern que permet especificar una orde de codificació
 Comment[cs]=Modul kódování, který umožňuje určení příkazu pro kódování

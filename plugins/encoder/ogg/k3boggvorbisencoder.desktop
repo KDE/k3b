@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Encoder
 Name[bg]=Кодиране на Ogg Vorbis (K3b)
+Name[bs]=OGG Vorbis koder za K3b
 Name[ca]=Codificador Ogg Vorbis del K3b
 Name[ca@valencia]=Codificador Ogg Vorbis del K3b
 Name[cs]=K3b Ogg Vorbis enkodér
@@ -53,6 +54,7 @@ Name[zh_CN]=K3b Ogg Vorbis 编码器
 Name[zh_TW]=K3b Ogg Vorbis 編碼器
 Comment=Encoding module to encode Ogg Vorbis files
 Comment[bg]=Кодиращ модул за Ogg Vorbis файлове
+Comment[bs]=Modul za kodiranje OGG vorbis datoteka
 Comment[ca]=Mòdul de codificació per codificar fitxers Ogg Vorbis
 Comment[ca@valencia]=Mòdul de codificació per codificar fitxers Ogg Vorbis
 Comment[cs]=Modul pro kompresi do souborů Ogg Vorbis
