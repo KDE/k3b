@@ -49,7 +49,6 @@ public:
 public Q_SLOTS:
     void saveConfig( KConfigGroup grp );
     void readConfig( const KConfigGroup &grp );
-    void setAutoUpdate( bool );
 
 private Q_SLOTS:
     void slotFilterChanged();

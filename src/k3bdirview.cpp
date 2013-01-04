@@ -121,8 +121,6 @@ K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
 
 //     d->fileTreeView->setCurrentDevice( k3bappcore->appDeviceManager()->currentDevice() );
 
-    d->fileView->setAutoUpdate( true ); // in case we look at the mounted path
-
     if( d->mainSplitter ) {
         // split
         QList<int> sizes = d->mainSplitter->sizes();

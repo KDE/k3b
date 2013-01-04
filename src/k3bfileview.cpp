@@ -150,13 +150,6 @@ KUrl K3b::FileView::url()
     return d->dirOp->url();
 }
 
-
-void K3b::FileView::setAutoUpdate( bool b )
-{
-    d->dirOp->dirLister()->setAutoUpdate( b );
-}
-
-
 void K3b::FileView::slotFilterChanged()
 {
     QString filter = d->filterWidget->currentFilter();
