@@ -863,7 +863,11 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
 
         if( d->foundImageType == IMAGE_UNKNOWN ) {
             QTreeWidgetItem* item = new QTreeWidgetItem( d->infoView );
-            item->setText( 0, i18n("Seems not to be a usable image") );
+            if ( !info.isReadable() ) {
+                item->setText( 0, i18n("Unable to read image file") );
+            } else {
+                item->setText( 0, i18n("Seems not to be a usable image") );
+            }
             item->setForeground( 0, d->negativeTextColor );
             item->setIcon( 0, KIcon( "dialog-error") );
         }
