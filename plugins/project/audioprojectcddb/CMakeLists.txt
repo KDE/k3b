@@ -1,3 +1,6 @@
+include_directories(
+  ${KCDDB_INCLUDE_DIR}
+  )
 
 set(k3baudioprojectcddbplugin_PART_SRCS
   k3baudioprojectcddbplugin.cpp

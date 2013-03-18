@@ -7,6 +7,7 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}/tools
   ${CMAKE_CURRENT_BINARY_DIR}/projects
   ${CMAKE_CURRENT_BINARY_DIR}/jobs
+  ${KCDDB_INCLUDE_DIR}
   )
 
 set(CMAKE_REQUIRED_LIBRARIES m)

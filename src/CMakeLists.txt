@@ -25,6 +25,7 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/projects
   ${CMAKE_CURRENT_SOURCE_DIR}/projects/kostore/
   ${libk3b_SOURCE_DIR}/cddb
+  ${KCDDB_INCLUDE_DIR}
   )
 
 add_subdirectory( helper )
