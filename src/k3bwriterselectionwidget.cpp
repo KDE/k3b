@@ -375,7 +375,7 @@ void K3b::WriterSelectionWidget::insertSpeedItem( int speed )
                                       ( speed%Device::SPEED_FACTOR_DVD > 0
                                         ? QString::number( float(speed)/float(Device::SPEED_FACTOR_DVD), 'f', 1 )  // example: DVD+R(W): 2.4x
                                         : QString::number( speed/K3b::Device::SPEED_FACTOR_DVD ) )
-                                      + "x",
+                                      + 'x',
                                       QString(),
                                       insertIndex );
         }

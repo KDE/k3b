@@ -1035,7 +1035,7 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
     // This might become important in case we will allow multiple instances of the isoimager
     // to run at the same time.
     //
-    QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
+    QString jobId = qApp->sessionId() + '_' + QString::number( m_sessionNumber );
 
     if( !_appDir.cd( jobId ) ) {
         _appDir.mkdir( jobId );
@@ -1050,13 +1050,13 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
     if( !dir->localPath().isEmpty() ) {
         // permissions
         if( k3b_stat( QFile::encodeName(dir->localPath()), &statBuf ) == 0 ) {
-            name += "_";
+            name += '_';
             name += QString::number( statBuf.st_uid );
-            name += "_";
+            name += '_';
             name += QString::number( statBuf.st_gid );
-            name += "_";
+            name += '_';
             name += QString::number( statBuf.st_mode );
-            name += "_";
+            name += '_';
             name += QString::number( statBuf.st_mtime );
 
             perm = true;
@@ -1080,13 +1080,13 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
         }
     }
 
-    return _appDir.absolutePath() + "/";
+    return _appDir.absolutePath() + '/';
 }
 
 
 void K3b::IsoImager::clearDummyDirs()
 {
-    QString jobId = qApp->sessionId() + "_" + QString::number( m_sessionNumber );
+    QString jobId = qApp->sessionId() + '_' + QString::number( m_sessionNumber );
     QDir appDir( KStandardDirs::locateLocal( "appdata", "temp/" ) );
     if( appDir.cd( jobId ) ) {
         QStringList dummyDirEntries = appDir.entryList( QStringList() << "dummydir*", QDir::Dirs );

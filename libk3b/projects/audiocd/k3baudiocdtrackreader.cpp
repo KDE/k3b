@@ -68,7 +68,7 @@ bool AudioCdTrackReader::Private::initParanoia()
                                  ,QString::number(source.discId()),
                                  source.cdTitle().isEmpty() || source.cdArtist().isEmpty()
                                  ? QString()
-                                 : " (" + source.cdArtist() + " - " + source.cdTitle() + ")");
+                                 : " (" + source.cdArtist() + " - " + source.cdTitle() + ')');
 
                 while( Device::Device* dev = ThreadWidget::selectDevice( source.track()->doc()->view(), s ) ) {
                     if( dev->readToc().discId() == source.discId() ) {

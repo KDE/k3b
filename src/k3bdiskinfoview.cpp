@@ -337,7 +337,7 @@ QString K3b::DiskInfoView::createMediaInfoItems( const K3b::Medium& medium )
     if( info.mediaType() & K3b::Device::MEDIA_WRITABLE ) {
         QString speedStr;
         if( medium.writingSpeeds().isEmpty() ) {
-            speedStr = "-";
+            speedStr = '-';
         }
         else {
             foreach( int speed, medium.writingSpeeds() ) {

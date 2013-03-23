@@ -351,7 +351,7 @@ QString K3b::Iso9660ImageWritingJob::jobDescription() const
 
 QString K3b::Iso9660ImageWritingJob::jobDetails() const
 {
-    return m_imagePath.section("/", -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(m_imagePath)));
+    return m_imagePath.section('/', -1) + QString( " (%1)" ).arg(KIO::convertSize(K3b::filesize(m_imagePath)));
 }
 
 
@@ -364,7 +364,7 @@ QString K3b::Iso9660ImageWritingJob::jobSource() const
 QString K3b::Iso9660ImageWritingJob::jobTarget() const
 {
     if( m_device )
-        return m_device->vendor() + " " + m_device->description();
+        return m_device->vendor() + ' ' + m_device->description();
     else
         return QString ();
 }

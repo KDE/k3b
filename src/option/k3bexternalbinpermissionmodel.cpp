@@ -230,7 +230,7 @@ QVariant ExternalBinPermissionModel::data( const QModelIndex& index, int role ) 
                 if( d->getProgramInfo( program, owner, group, wantedGroup, perm, wantedPerm ) ) {
 
                     if( index.column() == PermissionsColumn ) {
-                        return QString(QString::number( perm, 8 ).rightJustified( 4, '0' ) + " " + owner + "." + group);
+                        return QString(QString::number( perm, 8 ).rightJustified( 4, '0' ) + ' ' + owner + '.' + group);
                     } else if ( index.column() == NewPermissionsColumn ) {
                         if( perm != wantedPerm || owner != "root" || group != wantedGroup )
                             return QString("%1 root.%2").arg(wantedPerm,0,8).arg(wantedGroup);

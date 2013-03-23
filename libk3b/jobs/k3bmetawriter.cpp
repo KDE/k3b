@@ -79,7 +79,7 @@ public:
     {
         infFiles.clear();
 
-        QString prefix = K3b::findUniqueFilePrefix( "k3b_tmp_", path ) + "_";
+        QString prefix = K3b::findUniqueFilePrefix( "k3b_tmp_", path ) + '_';
 
         for( int i = 0; i < toc.count(); ++i ) {
             infFiles.append( prefix + QString::number( i+1 ).rightJustified( 2, '0' ) + ".inf" );

@@ -203,7 +203,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
 
     d->process << d->growisofsBin;
 
-    QString s = burnDevice()->blockDeviceName() + "=";
+    QString s = burnDevice()->blockDeviceName() + '=';
     if( d->image.isEmpty() ) {
         // we always read from stdin
         s += "/dev/fd/0";

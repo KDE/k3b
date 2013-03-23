@@ -641,7 +641,7 @@ bool K3b::CdrdaoWriter::cueSheet()
                 return false;
 
             line = line.mid( pos, endPos-pos );
-            QFileInfo fi( QFileInfo( m_tocFile ).path() + "/" + QFileInfo( line ).fileName() );
+            QFileInfo fi( QFileInfo( m_tocFile ).path() + '/' + QFileInfo( line ).fileName() );
             QString binpath = fi.filePath();
             kDebug() << QString("K3b::CdrdaoWriter::cueSheet() BinFilePath from CueFile: %1").arg( line );
             kDebug() << QString("K3b::CdrdaoWriter::cueSheet() absolute BinFilePath: %1").arg( binpath );

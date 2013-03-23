@@ -116,7 +116,7 @@ int K3b::Iso9660::isofs_callback( struct iso_directory_record *idr, void *udata 
                 if( pos > 0 )
                     path.truncate( pos );
             }
-            if (path.endsWith(".")) path.truncate(path.length()-1);
+            if (path.endsWith('.')) path.truncate(path.length()-1);
         }
     }
 
@@ -572,7 +572,7 @@ void K3b::Iso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
                                isonum_721(((struct default_entry*) be->data)->seccount),
                                this);
             path="Default Image";
-            if (i>1) path += " (" + QString::number(i) + ")";
+            if (i>1) path += " (" + QString::number(i) + ')';
             entry=new K3b::Iso9660File( this, path, path, dirent->permissions() & ~S_IFDIR,
                                       dirent->date(), dirent->adate(), dirent->cdate(),
                                       dirent->user(), dirent->group(), QString(),
@@ -669,7 +669,7 @@ bool K3b::Iso9660::open()
             if( !memcmp( EL_TORITO_ID, bootdesc->system_id, ISODCL(8,39) ) ) {
                 path="El Torito Boot";
                 if( c_b > 1 )
-                    path += " (" + QString::number(c_b) + ")";
+                    path += " (" + QString::number(c_b) + ')';
 
                 dirent = new K3b::Iso9660Directory( this, path, path, access | S_IFDIR,
                                                   buf.st_mtime, buf.st_atime, buf.st_ctime, uid, gid, QString() );
@@ -697,12 +697,12 @@ bool K3b::Iso9660::open()
             if (m_joliet) {
                 path = "Joliet level " + QString::number(m_joliet);
                 if( c_j > 1 )
-                    path += " (" + QString::number(c_j) + ")";
+                    path += " (" + QString::number(c_j) + ')';
             }
             else {
                 path = QString::fromLocal8Bit( primaryDesc->volume_id, 32 );
                 if( c_i > 1 )
-                    path += " (" + QString::number(c_i) + ")";
+                    path += " (" + QString::number(c_i) + ')';
             }
 
             dirent = new K3b::Iso9660Directory( this, path, path, access | S_IFDIR,

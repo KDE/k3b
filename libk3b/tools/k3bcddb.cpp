@@ -67,10 +67,10 @@ int K3b::CDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& ent
 
     int i = 1;
     foreach( const KCDDB::CDInfo& info, entries ) {
-        d.m_listBox->addItem( QString::number(i++) + " " +
+        d.m_listBox->addItem( QString::number(i++) + ' ' +
                               info.get( KCDDB::Artist ).toString() + " - " +
                               info.get( KCDDB::Title ).toString() + " (" +
-                              info.get( KCDDB::Category ).toString() + ")" );
+                              info.get( KCDDB::Category ).toString() + ')' );
     }
 
     d.m_listBox->setCurrentRow( 0 );

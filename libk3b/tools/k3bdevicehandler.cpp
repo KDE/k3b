@@ -325,7 +325,7 @@ QDebug operator<<( QDebug dbg, K3b::Device::DeviceHandler::Commands commands )
         commandStrings << QLatin1String( "CommandBufferCapacity" );
     if ( commands & K3b::Device::DeviceHandler::CommandNextWritableAddress )
         commandStrings << QLatin1String( "CommandNextWritableAddress" );
-    dbg.nospace() << "(" + commandStrings.join( "|" ) + ")";
+    dbg.nospace() << '(' + commandStrings.join( "|" ) + ')';
     return dbg.space();
 }
 

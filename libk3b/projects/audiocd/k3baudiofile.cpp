@@ -62,7 +62,7 @@ QString K3b::AudioFile::type() const
 
 QString K3b::AudioFile::sourceComment() const
 {
-    return d->decoder->filename().section( "/", -1 );
+    return d->decoder->filename().section( '/', -1 );
 }
 
 

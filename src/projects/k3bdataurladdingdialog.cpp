@@ -348,7 +348,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
     // backup dummy name
     if( newName.isEmpty() )
-        newName = "1";
+        newName = '1';
 
     K3b::DirItem* newDirItem = 0;
 

@@ -589,7 +589,7 @@ void K3b::ExternalBinManager::search()
             continue;
         if( p[p.length()-1] == '/' )
             p.truncate( p.length()-1 );
-        if( !paths.contains( p ) && !paths.contains( p + "/" ) )
+        if( !paths.contains( p ) && !paths.contains( p + '/' ) )
             paths.append(p);
     }
 

@@ -173,7 +173,7 @@ QString K3b::TempDirSelectionWidget::tempDirectory() const
 
     QFileInfo fi( td );
     if( fi.exists() && fi.isDir() )
-        return td + "/";
+        return td + '/';
 
     // now we treat the last section as a filename and return the path
     // in front of it

@@ -151,7 +151,7 @@ K3b::Iso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoP
             K3b::Iso9660* iso = new K3b::Iso9660( dev );
             iso->setPlainIso9660( true );
             if( iso->open() /*&& iso->primaryDescriptor().volumeId == volumeId*/ ) {
-                plainIsoPath = url.path().section( "/", 2, -1 ) + "/";
+                plainIsoPath = url.path().section( '/', 2, -1 ) + '/';
                 kDebug() << "(kio_videodvdProtocol) using iso path: " << plainIsoPath;
                 return iso;
             }

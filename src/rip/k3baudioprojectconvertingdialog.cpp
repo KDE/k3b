@@ -274,7 +274,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
         item->setText( 1, m_doc->length().toString() );
         item->setText( 2, filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
 
-        d->filenames.append( K3b::fixupPath( baseDir + "/" + filename ) );
+        d->filenames.append( K3b::fixupPath( baseDir + '/' + filename ) );
 
         if( m_optionWidget->createCueFile() ) {
             QString cueFilename = K3b::PatternParser::parsePattern( cddbEntry, 1,
@@ -313,7 +313,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
             item->setText( 1, track->length().toString() );
             item->setText( 2, filesize < 0 ? i18n("unknown") : KIO::convertSize( filesize ) );
 
-            d->filenames[ track->trackNumber()-1 ] = K3b::fixupPath( baseDir + "/" + filename );
+            d->filenames[ track->trackNumber()-1 ] = K3b::fixupPath( baseDir + '/' + filename );
         }
     }
 
@@ -330,7 +330,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
         item->setText( 1, "-" );
         item->setText( 2, "-" );
 
-        d->playlistFilename = K3b::fixupPath( baseDir + "/" + filename );
+        d->playlistFilename = K3b::fixupPath( baseDir + '/' + filename );
     }
 
     if( overallSize > 0 )

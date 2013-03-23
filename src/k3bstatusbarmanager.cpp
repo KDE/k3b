@@ -108,7 +108,7 @@ void K3b::StatusBarManager::update()
 
     unsigned long size, avail;
     if( K3b::kbFreeOnFs( path, size, avail ) ) {
-        m_labelFreeTemp->setText(KIO::convertSizeFromKiB(avail)  + "/" +
+        m_labelFreeTemp->setText(KIO::convertSizeFromKiB(avail)  + '/' +
                                 KIO::convertSizeFromKiB(size)  );
 
         // if we have less than 640 MB that is not good

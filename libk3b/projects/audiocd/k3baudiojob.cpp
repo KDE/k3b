@@ -485,7 +485,7 @@ void K3b::AudioJob::slotAudioDecoderNextTrack( int t, int tt )
                               tt,
                               track->title().isEmpty() || track->artist().isEmpty()
                               ? QString()
-                              : " (" + track->artist() + " - " + track->title() + ")" ) );
+                              : " (" + track->artist() + " - " + track->title() + ')' ) );
     }
 }
 
@@ -593,7 +593,7 @@ void K3b::AudioJob::slotWriterNextTrack( int t, int tt )
                           tt,
                           track->title().isEmpty() || track->artist().isEmpty()
                           ? QString()
-                          : " (" + track->artist() + " - " + track->title() + ")" ) );
+                          : " (" + track->artist() + " - " + track->title() + ')' ) );
 }
 
 

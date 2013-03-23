@@ -239,7 +239,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
 
 
             if ( numOfTracks() > 0 && vcdOptions() ->mpegVersion() != mpegVersion ) {
-                KMessageBox::error( kapp->activeWindow(), "(" + url.toLocalFile() + ")\n" +
+                KMessageBox::error( kapp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
                                     i18n( "You cannot mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet." ),
                                     i18n( "Wrong File Type for This Project" ) );
 
@@ -283,7 +283,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
     }
 
     // error (unsupported files)
-    KMessageBox::error( kapp->activeWindow(), "(" + url.toLocalFile() + ")\n" +
+    KMessageBox::error( kapp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
                         i18n( "Only MPEG1 and MPEG2 video files are supported.\n" ) + error_string ,
                         i18n( "Wrong File Format" ) );
 

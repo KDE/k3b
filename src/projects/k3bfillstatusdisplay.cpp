@@ -594,7 +594,7 @@ void K3b::FillStatusDisplay::slotCustomSize()
         defaultCustom = KGlobal::locale()->formatNumber(4.4,1) + gbS;
     }
 
-    QRegExp rx( "(\\d+\\" + KGlobal::locale()->decimalSymbol() + "?\\d*)(" + gbS + "|" + mbS + "|" + minS + ")?" );
+    QRegExp rx( "(\\d+\\" + KGlobal::locale()->decimalSymbol() + "?\\d*)(" + gbS + '|' + mbS + '|' + minS + ")?" );
     bool ok;
     QString size = KInputDialog::getText( i18n("Custom Size"),
                                           i18n("<p>Please specify the size of the medium. Use suffixes <b>GB</b>,<b>MB</b>, "
@@ -609,7 +609,7 @@ void K3b::FillStatusDisplay::slotCustomSize()
         if( rx.exactMatch( size ) ) {
             QString valStr = rx.cap(1);
             if( valStr.endsWith( KGlobal::locale()->decimalSymbol() ) )
-                valStr += "0";
+                valStr += '0';
             double val = KGlobal::locale()->readNumber( valStr, &ok );
             if( ok ) {
                 QString s = rx.cap(2);
@@ -847,7 +847,7 @@ bool K3b::FillStatusDisplay::event( QEvent* event )
                             KIO::convertSize( d->doc->size() ) +
                             " (" + KGlobal::locale()->formatNumber( d->doc->size(), 0 ) + "), " +
                             i18n("%1 min", d->doc->length().toString(false)) +
-                            " (" + i18n("Right click for media sizes") + ")");
+                            " (" + i18n("Right click for media sizes") + ')');
 
         event->accept();
 

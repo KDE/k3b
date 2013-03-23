@@ -217,7 +217,7 @@ QString K3b::BinImageWritingJob::jobDescription() const
 
 QString K3b::BinImageWritingJob::jobDetails() const
 {
-    return m_tocFile.section("/", -1);
+    return m_tocFile.section('/', -1);
 }
 
 
@@ -230,7 +230,7 @@ QString K3b::BinImageWritingJob::jobSource() const
 QString K3b::BinImageWritingJob::jobTarget() const
 {
     if( Device::Device* device = writer() )
-        return device->vendor() + " " + device->description();
+        return device->vendor() + ' ' + device->description();
     else
         return QString();
 }

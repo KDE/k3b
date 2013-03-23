@@ -54,7 +54,7 @@ QValidator::State K3b::IntValidator::validate ( QString &str, int & ) const
 
     if( newStr.length() ) {
         // check for < 0
-        bool minus = newStr.startsWith( "-" );
+        bool minus = newStr.startsWith( '-' );
         if( minus )
             newStr.remove( 0, 1 );
 

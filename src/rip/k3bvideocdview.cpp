@@ -355,7 +355,7 @@ void K3b::VideoCdView::updateDisplay()
     }
 
     if ( !d->videocdinfoResult.volumeId.isEmpty() ) {
-        QString description = d->videocdinfoResult.volumeId + " (" + d->videocdinfoResult.type + " " + d->videocdinfoResult.version + ")" ;
+        QString description = d->videocdinfoResult.volumeId + " (" + d->videocdinfoResult.type + ' ' + d->videocdinfoResult.version + ')' ;
         setTitle( description );
         d->videooptions ->setVideoCdDescription( description );
     }
@@ -532,10 +532,10 @@ void K3b::VideoCdView::buildTree( QTreeWidgetItem* parentItem, const QDomElement
             QString txt = node.firstChild().toElement().text();
             thisItem->setText( 0, txt);
             if ( node.nodeName() == "folder" ) {
-                buildTree( thisItem, node.toElement(), pname + "_" + txt.toLower() );
+                buildTree( thisItem, node.toElement(), pname + '_' + txt.toLower() );
             }
             else {
-                thisItem->setText( 1, pname + "_" + txt.toLower() );
+                thisItem->setText( 1, pname + '_' + txt.toLower() );
                 buildTree( thisItem, node.toElement(), pname );
             }
         } else if ( (node.isElement() && node.nodeName() == "segment-item") || node.nodeName() == "sequence-item" ) {

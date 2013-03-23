@@ -148,7 +148,7 @@ QString K3b::parentDir( const QString& path )
     if( pos >= 0 )
         parent.truncate( pos+1 );
     else // relative path, do anything...
-        parent = "/";
+        parent = '/';
 
     return parent;
 }

@@ -47,7 +47,7 @@ namespace {
                 if( data[i] == '\r' )
                     buffer += '\n';
                 else if( data[i] == '\t' )  // replace tabs with a single space
-                    buffer += " ";
+                    buffer += ' ';
                 else
                     buffer += data[i];
             }

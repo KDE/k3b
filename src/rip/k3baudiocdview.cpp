@@ -199,7 +199,7 @@ void K3b::AudioCdView::updateTitle()
     if( !title.isEmpty() ) {
         QString s( title );
         if( !artist.isEmpty() )
-            s += " (" + artist + ")";
+            s += " (" + artist + ')';
         setTitle( s );
     }
     else {

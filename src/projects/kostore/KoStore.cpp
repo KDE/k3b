@@ -547,8 +547,8 @@ bool KoStore::extractFile( const QString &srcName, QIODevice &buffer )
 
 QStringList KoStore::addLocalDirectory( const QString &dirPath, const QString &destName )
 {
-  QString dot = ".";
-  QString dotdot = "..";
+  QString dot(".");
+  QString dotdot("..");
   QStringList content;
 
   QDir dir(dirPath);

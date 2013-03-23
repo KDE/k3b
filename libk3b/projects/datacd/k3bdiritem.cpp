@@ -264,7 +264,7 @@ K3b::DataItem* K3b::DirItem::findByPath( const QString& p )
         return this;
 
     QString path = p;
-    if( path.startsWith("/") )
+    if( path.startsWith('/') )
         path = path.mid(1);
     int pos = path.indexOf( "/" );
     if( pos < 0 )

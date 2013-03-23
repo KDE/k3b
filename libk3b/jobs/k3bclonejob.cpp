@@ -381,7 +381,7 @@ QString K3b::CloneJob::jobDetails() const
 QString K3b::CloneJob::jobSource() const
 {
     if( m_readerDevice )
-        return m_readerDevice->vendor() + " " + m_readerDevice->description();
+        return m_readerDevice->vendor() + ' ' + m_readerDevice->description();
     else
         return QString();
 }
@@ -390,7 +390,7 @@ QString K3b::CloneJob::jobSource() const
 QString K3b::CloneJob::jobTarget() const
 {
     if( m_writerDevice )
-        return m_writerDevice->vendor() + " " + m_writerDevice->description();
+        return m_writerDevice->vendor() + ' ' + m_writerDevice->description();
     else
         return m_imagePath;
 }

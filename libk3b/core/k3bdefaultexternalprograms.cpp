@@ -472,7 +472,7 @@ K3b::Version K3b::DvdformatProgram::parseVersion( const QString& output, const E
 {
     QString version;
     // extract fields
-    QStringList outputList = output.split( " " );
+    QStringList outputList = output.split( ' ' );
 
     for (int i = 0; i < outputList.size(); ++i) {
         if ( outputList.at( i ) == "version" ) {
@@ -492,7 +492,7 @@ QString K3b::DvdformatProgram::parseCopyright( const QString& output, const Exte
 {
     QString copyright = "Andy Polyakov ";
     // extract fields
-    QStringList outputList = output.split( " " );
+    QStringList outputList = output.split( ' ' );
 
     for (int i = 0; i < outputList.size(); ++i) {
         if ( outputList.at( i ) == "by" ) {

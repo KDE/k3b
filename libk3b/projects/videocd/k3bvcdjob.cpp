@@ -290,7 +290,7 @@ void K3b::VcdJob::slotParseVcdxBuildOutput( const QString& line )
             if ( oper == "scan" ) {
                 // Scan Video Files
                 if ( m_stage == stageUnknown || pos < m_bytesFinished ) {
-                    const uint index = el.attribute( "id" ).replace( QRegExp( "sequence-" ), "" ).toUInt();
+                    const uint index = el.attribute( "id" ).remove( QRegExp( "sequence-" ) ).toUInt();
 
                     m_currentWrittenTrack = m_doc->at( m_currentWrittenTrackNumber );
                     emit newSubTask( i18n( "Scanning video file %1 of %2 (%3)" , index + 1 , doc() ->numOfTracks() , m_currentWrittenTrack->fileName() ) );

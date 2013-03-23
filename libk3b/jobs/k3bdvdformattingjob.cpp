@@ -227,7 +227,7 @@ void K3b::DvdFormattingJob::slotStderrLine( const QString& line )
         pos = line.indexOf( QRegExp( "\\d" ), pos );
     }
     // parsing for \b\b... stuff
-    else if( !line.startsWith("*") ) {
+    else if( !line.startsWith('*') ) {
         pos = line.indexOf( QRegExp( "\\d" ) );
     }
     else if( line.startsWith( ":-(" ) ) {

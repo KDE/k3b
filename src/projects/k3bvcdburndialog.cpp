@@ -570,7 +570,7 @@ void K3b::VcdBurnDialog::saveSettingsToProject()
     doc() ->setOnTheFly( false );
 
     // save image file & path (.bin)
-    vcdDoc() ->setVcdImage( m_tempDirSelectionWidget->tempPath() + "/" + m_editVolumeId->text() + ".bin" );
+    vcdDoc() ->setVcdImage( m_tempDirSelectionWidget->tempPath() + '/' + m_editVolumeId->text() + ".bin" );
 
     vcdDoc() ->setVcdType( m_radioVcd11->group()->id( m_radioVcd11->group()->checkedButton() ) );
 

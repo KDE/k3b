@@ -234,7 +234,7 @@ void K3b::VideoDVDRippingView::slotShowFiles()
     QUrl url;
     url.setScheme( "videodvd" );
     if( d->dvd.valid() ) {
-        url.setPath( "/" + d->dvd.volumeIdentifier() );
+        url.setPath( '/' + d->dvd.volumeIdentifier() );
     }
     QDesktopServices::openUrl( url );
 }

@@ -324,7 +324,7 @@ void K3b::ImageWritingDialog::Private::createAudioCueItems( const K3b::CueFilePa
     foreach( const K3b::Device::Track& track, cp.toc() ) {
 
         QTreeWidgetItem* trackItem = new QTreeWidgetItem( trackParent );
-        trackItem->setText( 0, i18n("Track") + " " + QString::number(i).rightJustified( 2, '0' ) );
+        trackItem->setText( 0, i18n("Track") + ' ' + QString::number(i).rightJustified( 2, '0' ) );
         trackItem->setText( 1, "    " + ( i < cp.toc().count()
                                         ? track.length().toString()
                                         : QString("??:??:??") ) );
@@ -450,13 +450,13 @@ void K3b::ImageWritingDialog::setupGui()
     d->editImagePath->setMode( KFile::File|KFile::ExistingOnly );
     d->editImagePath->setWindowTitle( i18n("Choose Image File") );
     d->editImagePath->setFilter( i18n("*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files")
-                                + "\n"
+                                + '\n'
                                 + i18n("*.iso *.ISO|ISO9660 Image Files")
-                                + "\n"
+                                + '\n'
                                 + i18n("*.cue *.CUE|Cue Files")
-                                + "\n"
+                                + '\n'
                                 + i18n("*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images")
-                                + "\n"
+                                + '\n'
                                 + i18n("*|All Files") );
     QHBoxLayout* groupImageUrlLayout = new QHBoxLayout( groupImageUrl );
     groupImageUrlLayout->addWidget( d->editImagePath );

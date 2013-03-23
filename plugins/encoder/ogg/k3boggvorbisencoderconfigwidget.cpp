@@ -108,7 +108,7 @@ K3bOggVorbisEncoderSettingsWidget::~K3bOggVorbisEncoderSettingsWidget()
 
 void K3bOggVorbisEncoderSettingsWidget::slotQualityLevelChanged( int val )
 {
-    w->m_labelQualityLevel->setText( QString::number(val) + " "
+    w->m_labelQualityLevel->setText( QString::number(val) + ' '
                                      + i18n("(targeted VBR of %1)",s_rough_average_quality_level_bitrates[val+1]) );
 }
 

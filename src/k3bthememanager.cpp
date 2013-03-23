@@ -278,7 +278,7 @@ void K3b::ThemeManager::loadThemes()
         QStringList entries = dir.entryList( QDir::Dirs|QDir::NoDotAndDotDot );
         // every theme dir needs to contain a k3b.theme file
         for( QStringList::const_iterator entryIt = entries.constBegin(); entryIt != entries.constEnd(); ++entryIt ) {
-            QString themeDir = *dirIt + *entryIt + "/";
+            QString themeDir = *dirIt + *entryIt + '/';
             if( !themeNames.contains( *entryIt ) && QFile::exists( themeDir + "k3b.theme" ) ) {
                 bool themeValid = true;
 

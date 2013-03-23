@@ -48,7 +48,7 @@ bool K3b::DebuggingOutputFile::open( OpenMode mode )
     Q_FOREACH( K3b::Device::Device* dev, k3bcore->deviceManager()->allDevices() ) {
         addOutput( "Devices",
                    QString( "%1 (%2, %3) [%5] [%6] [%7]" )
-                   .arg( dev->vendor() + " " + dev->description() + " " + dev->version() )
+                   .arg( dev->vendor() + ' ' + dev->description() + ' ' + dev->version() )
                    .arg( dev->blockDeviceName() )
                    .arg( K3b::Device::deviceTypeString( dev->type() ) )
                    .arg( K3b::Device::mediaTypeString( dev->supportedProfiles() ) )

@@ -307,8 +307,8 @@ bool K3b::MovixDocPreparer::addMovixFiles()
     for( QStringList::const_iterator it = helpFiles.constBegin();
          it != helpFiles.constEnd(); ++it ) {
         // some emovix installations include backup-files, no one's perfect ;)
-        if( !(*it).endsWith( "~" ) )
-            d->isolinuxDir->addDataItem( new K3b::FileItem( path + "/" + *it, *d->doc ) );
+        if( !(*it).endsWith( '~' ) )
+            d->isolinuxDir->addDataItem( new K3b::FileItem( path + '/' + *it, *d->doc ) );
     }
 
 
@@ -327,7 +327,7 @@ bool K3b::MovixDocPreparer::addMovixFiles()
             QStringList fontFiles = dir.entryList( QDir::Files );
             for( QStringList::const_iterator it = fontFiles.constBegin();
                  it != fontFiles.constEnd(); ++it ) {
-                fontDir->addDataItem( new K3b::FileItem( fontPath + "/" + *it, *d->doc ) );
+                fontDir->addDataItem( new K3b::FileItem( fontPath + '/' + *it, *d->doc ) );
             }
         }
         else {

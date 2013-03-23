@@ -1237,7 +1237,7 @@ QString K3b::CdCopyJob::jobDetails() const
 QString K3b::CdCopyJob::jobSource() const
 {
     if( Device::Device* device = reader() )
-        return device->vendor() + " " + device->description();
+        return device->vendor() + ' ' + device->description();
     else
         return QString();
 }
@@ -1246,7 +1246,7 @@ QString K3b::CdCopyJob::jobSource() const
 QString K3b::CdCopyJob::jobTarget() const
 {
     if( Device::Device* device = writer() )
-        return device->vendor() + " " + device->description();
+        return device->vendor() + ' ' + device->description();
     else
         return m_tempPath;
 }

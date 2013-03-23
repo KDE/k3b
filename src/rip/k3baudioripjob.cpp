@@ -201,7 +201,7 @@ QString AudioRipJob::jobDescription() const
 QString AudioRipJob::jobSource() const
 {
     if( d->device )
-        return d->device->vendor() + " " + d->device->description();
+        return d->device->vendor() + ' ' + d->device->description();
     else
         return QString();
 }

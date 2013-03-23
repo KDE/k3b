@@ -117,7 +117,7 @@ void K3b::Version::setVersion( const QString& v )
     QString suffix;
     splitVersionString( v.trimmed(), d->m_majorVersion, suffix );
     if( d->m_majorVersion >= 0 ) {
-        if( suffix.startsWith(".") ) {
+        if( suffix.startsWith('.') ) {
             suffix = suffix.mid( 1 );
             splitVersionString( suffix, d->m_minorVersion, suffix );
             if( d->m_minorVersion < 0 ) {
@@ -128,7 +128,7 @@ void K3b::Version::setVersion( const QString& v )
                 d->m_suffix = "";
             }
             else {
-                if( suffix.startsWith(".") ) {
+                if( suffix.startsWith('.') ) {
                     suffix = suffix.mid( 1 );
                     splitVersionString( suffix, d->m_patchLevel, suffix );
                     if( d->m_patchLevel < 0 ) {

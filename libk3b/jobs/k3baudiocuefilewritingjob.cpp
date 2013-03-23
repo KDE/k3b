@@ -130,7 +130,7 @@ QString K3b::AudioCueFileWritingJob::jobSource() const
 QString K3b::AudioCueFileWritingJob::jobTarget() const
 {
     if( Device::Device* device = writer() )
-        return device->vendor() + " " + device->description();
+        return device->vendor() + ' ' + device->description();
     else
         return QString();
 }

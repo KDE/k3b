@@ -970,7 +970,7 @@ QString K3b::DvdCopyJob::jobDetails() const
 QString K3b::DvdCopyJob::jobSource() const
 {
     if( Device::Device* device = readingDevice() )
-        return device->vendor() + " " + device->description();
+        return device->vendor() + ' ' + device->description();
     else
         return QString();
 }
@@ -979,7 +979,7 @@ QString K3b::DvdCopyJob::jobSource() const
 QString K3b::DvdCopyJob::jobTarget() const
 {
     if( Device::Device* device = writer() )
-        return device->vendor() + " " + device->description();
+        return device->vendor() + ' ' + device->description();
     else
         return m_imagePath;
 }

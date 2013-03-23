@@ -136,7 +136,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
     foreach( Device::Device* dev, m_deviceManager->allDevices() ) {
         // create the root device item
         QTreeWidgetItem* devRoot = new QTreeWidgetItem( (dev->burner() ? m_writerParentViewItem : m_readerParentViewItem),
-                                                        QStringList() << ( dev->vendor() + " " + dev->description() ) );
+                                                        QStringList() << ( dev->vendor() + ' ' + dev->description() ) );
         devRoot->setFont( 0, fBold );
 
         // create the read-only info items

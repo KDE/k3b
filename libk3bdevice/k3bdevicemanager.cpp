@@ -309,7 +309,7 @@ bool K3b::Device::DeviceManager::readConfig( const KConfigGroup& c )
     for( QList<K3b::Device::Device*>::iterator it = d->allDevices.begin(); it != d->allDevices.end(); ++it ) {
         K3b::Device::Device* dev = *it;
 
-        QString configEntryName = dev->vendor() + " " + dev->description();
+        QString configEntryName = dev->vendor() + ' ' + dev->description();
         QStringList list = c.readEntry( configEntryName, QStringList() );
         if( !list.isEmpty() ) {
             kDebug() << "(K3b::Device::DeviceManager) found config entry for devicetype: " << configEntryName;
@@ -341,7 +341,7 @@ bool K3b::Device::DeviceManager::saveConfig( KConfigGroup c )
     Q_FOREACH( Device* dev, d->allDevices ) {
 
         // save the device type settings
-        QString configEntryName = dev->vendor() + " " + dev->description();
+        QString configEntryName = dev->vendor() + ' ' + dev->description();
         QStringList list;
         list << QString::number(dev->maxReadSpeed())
              << QString::number(dev->maxWriteSpeed());

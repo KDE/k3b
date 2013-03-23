@@ -150,7 +150,7 @@ void K3b::MsInfoFetcher::slotMediaDetectionFinished( K3b::Device::DeviceHandler*
             }
             else {
                 emit infoMessage( i18n("Could not open Iso9660 filesystem in %1.",
-                                       m_device->vendor() + " " + m_device->description() ), MessageError );
+                                       m_device->vendor() + ' ' + m_device->description() ), MessageError );
                 jobFinished( false );
             }
         }

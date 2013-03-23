@@ -620,7 +620,7 @@ void K3b::MixedJob::slotAudioDecoderNextTrack( int t, int tt )
                               tt,
                               ( track->title().isEmpty() || track->artist().isEmpty()
                                 ? QString()
-                                : " (" + track->artist() + " - " + track->title() + ")" ) ) );
+                                : " (" + track->artist() + " - " + track->title() + ')' ) ) );
     }
 }
 
@@ -883,7 +883,7 @@ void K3b::MixedJob::slotWriterNextTrack( int t, int )
                               ,m_doc->numOfTracks()
                               , track->title().isEmpty() || track->artist().isEmpty()
                               ? QString()
-                              : " (" + track->artist() + " - " + track->title() + ")" ) );
+                              : " (" + track->artist() + " - " + track->title() + ')' ) );
     else
         emit newSubTask( i18n("Writing track %1 of %2 (%3)",
                               t,

@@ -403,7 +403,7 @@ void K3b::AudioRippingDialog::refresh()
                                                          m_patternWidget->replaceBlanks(),
                                                          m_patternWidget->blankReplaceString() );
             if ( filename.isEmpty() ){
-                filename = i18n("Track%1", QString::number( trackIndex+1 ).rightJustified( 2, '0' ) ) + "." + extension;
+                filename = i18n("Track%1", QString::number( trackIndex+1 ).rightJustified( 2, '0' ) ) + '.' + extension;
             }
             filename = d->fsInfo.fixupPath( filename );
 
@@ -426,7 +426,7 @@ void K3b::AudioRippingDialog::refresh()
 
         d->addTrack( filename, "-", "-", i18n("Playlist") );
 
-        d->playlistFilename = d->fsInfo.fixupPath( baseDir + "/" + filename );
+        d->playlistFilename = d->fsInfo.fixupPath( baseDir + '/' + filename );
     }
 
     if( overallSize > 0 )

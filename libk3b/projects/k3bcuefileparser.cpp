@@ -169,7 +169,7 @@ bool K3b::CueFileParser::parseLine( QString& line )
     simplified( line );
 
     // skip comments and empty lines
-    if( line.startsWith("REM") || line.startsWith("#") || line.isEmpty() )
+    if( line.startsWith("REM") || line.startsWith('#') || line.isEmpty() )
         return true;
 
 

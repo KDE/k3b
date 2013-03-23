@@ -228,8 +228,8 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
         m_labelLocalLinkTarget->hide();
         m_spacerLine->hide();
         m_labelSize->setText( KIO::convertSize(dataItem->size()) + "\n(" +
-                              i18np("in one file", "in %1 files", dirItem->numFiles()) + " " +
-                              i18np("and one folder", "and %1 folders", dirItem->numDirs()) + ")" );
+                              i18np("in one file", "in %1 files", dirItem->numFiles()) + ' ' +
+                              i18np("and one folder", "and %1 folders", dirItem->numDirs()) + ')' );
     }
     else {
         m_labelIcon->setPixmap( DesktopIcon("unknown", KIconLoader::SizeLarge) );
@@ -247,12 +247,12 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
     m_editName->setText( dataItem->k3bName() );
     m_labelBlocks->setText( QString::number(dataItem->blocks().lba()) );
 
-    QString location = "/" + dataItem->k3bPath();
+    QString location = '/' + dataItem->k3bPath();
     if( location[location.length()-1] == '/' )
         location.truncate( location.length()-1 );
     location.truncate( location.lastIndexOf('/') );
     if( location.isEmpty() )
-        location = "/";
+        location = '/';
     m_labelLocation->setText( location );
     m_extraInfoLabel->setText( QString( "(%1)" ).arg(dataItem->extraInfo()) );
     if( dataItem->extraInfo().isEmpty() )
@@ -316,12 +316,12 @@ void K3b::DataPropertiesDialog::loadListProperties( const QList<K3b::DataItem*>&
     // the location of all items are the same since it is not possible to
     // select items from different folders
     // FIXME: maybe better use QString::section?
-    QString location = "/" + items.first()->k3bPath();
+    QString location = '/' + items.first()->k3bPath();
     if( location[location.length()-1] == '/' )
         location.truncate( location.length()-1 );
     location.truncate( location.lastIndexOf('/') );
     if( location.isEmpty() )
-        location = "/";
+        location = '/';
     m_labelLocation->setText( location );
 
 

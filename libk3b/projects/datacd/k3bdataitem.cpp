@@ -196,7 +196,7 @@ QString K3b::DataItem::k3bPath() const
     if( !parent() )
         return QString();  // the root item is the only one not having a parent
     else if( isDir() )
-        return parent()->k3bPath() + k3bName() + "/";
+        return parent()->k3bPath() + k3bName() + '/';
     else
         return parent()->k3bPath() + k3bName();
 }
@@ -207,7 +207,7 @@ QString K3b::DataItem::writtenPath() const
     if( !parent() )
         return QString();  // the root item is the only one not having a parent
     else if( isDir() )
-        return parent()->writtenPath() + writtenName() + "/";
+        return parent()->writtenPath() + writtenName() + '/';
     else
         return parent()->writtenPath() + writtenName();
 }
@@ -218,7 +218,7 @@ QString K3b::DataItem::iso9660Path() const
     if( !parent() )
         return QString();  // the root item is the only one not having a parent
     else if( isDir() )
-        return parent()->iso9660Path() + iso9660Name() + "/";
+        return parent()->iso9660Path() + iso9660Name() + '/';
     else
         return parent()->iso9660Path() + iso9660Name();
 }

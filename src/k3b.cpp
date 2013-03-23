@@ -693,7 +693,7 @@ void K3b::MainWindow::saveProperties( KConfigGroup& grp )
     // 3. save the url of the project (might be something like "AudioCD1") in the config
     // 4. save the status of every project (modified/saved)
 
-    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
+    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + '/', true );
 
 //     // FIXME: for some reason the config entries are not properly stored when using the default
 //     //        KMainWindow session config. Since I was not able to find the bug I use another config object
@@ -744,7 +744,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
     // 3. reset the saved urls and the modified state
     // 4. delete "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
 
-    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + "/", true );
+    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + '/', true );
 
 //     // FIXME: for some reason the config entries are not properly stored when using the default
 //     //        KMainWindow session config. Since I was not able to find the bug I use another config object
