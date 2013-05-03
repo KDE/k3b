@@ -575,6 +575,81 @@ bool K3b::Medium::sameMedium( const K3b::Medium& other ) const
 
 
 // static
+QStringList K3b::Medium::mediaRequestStrings(QList< K3b::Medium > unsuitableMediums, K3b::Device::MediaTypes requestedMediaTypes, K3b::Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize, K3b::Device::Device* dev)
+{
+    QStringList toReturn;
+
+    bool okMediaType;
+    bool okMediaState;
+    bool okSize;
+    QString deviceString;
+
+    Q_FOREACH(K3b::Medium medium, unsuitableMediums) {
+        K3b::Device::Device *device = medium.device();
+
+        if ( dev && ( device->blockDeviceName() != dev->blockDeviceName() ) )
+            continue;
+
+        K3b::Device::DiskInfo diskInfo = medium.diskInfo();
+
+        okMediaType = ( diskInfo.mediaType() & requestedMediaTypes );
+        okMediaState = ( diskInfo.diskState() & requestedMediaStates );
+        okSize = ( diskInfo.capacity() >= requestedSize );
+
+        deviceString = device->vendor() + ' ' + device->description() + QLatin1String(" (") + device->blockDeviceName() + ')';
+
+        if (!okMediaType) {
+            QString desiredMedium;
+            if( requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD|Device::MEDIA_WRITABLE_BD) ||
+                requestedMediaTypes == (Device::MEDIA_WRITABLE_DVD_DL|Device::MEDIA_WRITABLE_BD) )
+                desiredMedium = i18nc("To be shown when a DVD or Blu-ray is required but another type of medium is inserted.", "DVD or Blu-ray");
+            else if( requestedMediaTypes == Device::MEDIA_WRITABLE_BD )
+                desiredMedium = i18nc("To be shown when a Blu-ray is required but another type of medium is inserted.", "Blu-ray");
+            else if( requestedMediaTypes == Device::MEDIA_WRITABLE_CD )
+                desiredMedium = i18nc("To be shown when a CD is required but another type of medium is inserted.", "CD");
+            else if( requestedMediaTypes == Device::MEDIA_WRITABLE_DVD )
+                desiredMedium = i18nc("To be shown when a DVD is required but another type of medium is inserted.", "DVD");
+            else if( requestedMediaTypes == Device::MEDIA_WRITABLE_DVD_DL )
+                desiredMedium = i18nc("To be shown when a DVD-DL is required but another type of medium is inserted.", "DVD-DL");
+
+            if ( requestedMediaTypes == Device::MEDIA_REWRITABLE ) {
+                if ( desiredMedium.isEmpty() ) {
+                    desiredMedium = i18n("rewritable medium", desiredMedium);
+                }
+                else {
+                    desiredMedium = i18nc("%1 is type of medium (e.g. DVD)", "rewritable %1", desiredMedium);
+                }
+            }
+
+            if ( desiredMedium.isEmpty() )
+                desiredMedium = i18nc("To be shown when a specific type of medium is required but another type of medium is inserted.", "suitable medium");
+
+            toReturn.append(i18n("Medium in %1 is not a %2.", deviceString, desiredMedium));
+        }
+        else if (!okMediaState) {
+            QString desiredState;
+            if( requestedMediaStates == Device::STATE_EMPTY )
+                desiredState = i18nc("To be shown when an empty medium is required", "empty");
+            else if (requestedMediaStates == (Device::STATE_EMPTY|Device::STATE_INCOMPLETE) )
+                desiredState = i18nc("To be shown when an empty or appendable medium is required", "empty or appendable");
+            else if( requestedMediaStates == (Device::STATE_COMPLETE|Device::STATE_INCOMPLETE) )
+                desiredState = i18nc("To be shown when an non-empty medium is required", "non-empty");
+            else
+                desiredState = i18nc("To be shown when the state of the inserted medium is not suitable.", "suitable");
+
+            toReturn.append(i18n("Medium in %1 is not %2.", deviceString, desiredState));
+        }
+        else if ( !okSize ) {
+            toReturn.append(i18n("Capacity of the medium in %1 is smaller than required.", deviceString));
+        }
+    }
+
+    if (toReturn.isEmpty())
+        toReturn.append(mediaRequestString( requestedMediaTypes, requestedMediaStates, requestedSize, dev));
+    return toReturn;
+}
+
+// static
 QString K3b::Medium::mediaRequestString( Device::MediaTypes requestedMediaTypes, Device::MediaStates requestedMediaStates, const K3b::Msf& requestedSize, Device::Device* dev )
 {
     //

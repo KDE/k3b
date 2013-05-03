@@ -56,6 +56,8 @@ public:
     Medium::MediumContents wantedMediumContent;
     K3b::Msf wantedMediumSize;
 
+    QList<Medium> excludedMediums;
+
     QFont origFont;
 };
 
@@ -215,7 +217,12 @@ void K3b::MediaSelectionComboBox::showNoMediumMessage()
     QFont f( font() );
     f.setItalic( true );
     setFont( f );
-    addItem( noMediumMessage() );
+    if ( d->excludedMediums.isEmpty() ) {
+        addItem( noMediumMessage() );
+    }
+    else {
+        addItems( noMediumMessages() );
+    }
     setItemData( 0, f, Qt::FontRole );
 }
 
@@ -229,6 +236,7 @@ void K3b::MediaSelectionComboBox::updateMedia()
     K3b::Device::Device* selected = selectedDevice();
 
     clear();
+    d->excludedMediums.clear();
 
     //
     // We need to only check a selection of the available devices based on the
@@ -259,8 +267,12 @@ void K3b::MediaSelectionComboBox::updateMedia()
 
         K3b::Medium medium = k3bappcore->mediaCache()->medium( *it );
 
-        if( showMedium( medium ) )
+        if( showMedium( medium ) ) {
             addMedium( *it );
+        }
+        else if( !( medium.diskInfo().diskState() & (Device::STATE_NO_MEDIA|Device::STATE_UNKNOWN) ) ) {
+            d->excludedMediums.append( medium );
+        }
     }
 
     //
@@ -419,6 +431,14 @@ QString K3b::MediaSelectionComboBox::noMediumMessage() const
         return Medium::mediaRequestString( d->wantedMediumContent );
     else
         return Medium::mediaRequestString( d->wantedMediumType, d->wantedMediumState, d->wantedMediumSize );
+}
+
+QStringList K3b::MediaSelectionComboBox::noMediumMessages() const
+{
+    if( d->wantedMediumContent && d->wantedMediumContent != Medium::ContentAll )
+        return QStringList( Medium::mediaRequestString( d->wantedMediumContent ) );
+    else
+        return Medium::mediaRequestStrings( d->excludedMediums, d->wantedMediumType, d->wantedMediumState, d->wantedMediumSize );
 }
 
 

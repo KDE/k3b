@@ -123,6 +123,7 @@ namespace K3b {
         virtual QString mediumString( const Medium& ) const;
         virtual QString mediumToolTip( const Medium& ) const;
         virtual QString noMediumMessage() const;
+        QStringList noMediumMessages() const;
 
     private:
         void updateMedium( Device::Device* );

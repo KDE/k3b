@@ -11,6 +11,7 @@ Bugfixes:
  * Added sorting in data project view (191660)
  * Improved performance of adding/removing large number of files to a data project (226029)
  * Fixed crashes when editing mixed project (266942, 265775)
+ * Usability: Inform the user if the inserted medium is not suitable (259761)
 
 2.0.3
 =====
