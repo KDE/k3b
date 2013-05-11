@@ -30,6 +30,9 @@
 #include "k3btrack.h"
 #include "k3bglobals.h"
 
+#include <vector>
+#include <algorithm>
+
 #include <QFile>
 #include <QFileInfo>
 #include <QHash>
@@ -53,6 +56,30 @@ namespace
         }
 
         K3b::AudioRipJob::Tracks const& m_tracks;
+    };
+
+    struct Task {
+        Task(K3b::AudioRipJob::Tracks::const_iterator const & it) :
+            tracknumber(it.value()),
+            filename   (it.key()),
+            track      (it)
+        { }
+
+        static
+        bool sort_by_filename(Task const & lhs, Task const & rhs)
+        {
+          return lhs.filename < rhs.filename;
+        }
+
+        static
+        bool sort_by_tracknumber(Task const & lhs, Task const & rhs)
+        {
+          return lhs.tracknumber < rhs.tracknumber;
+        }
+
+        int     tracknumber;
+        QString filename;
+        K3b::AudioRipJob::Tracks::const_iterator track;
     };
 
 } // namespace
@@ -270,9 +297,17 @@ bool K3b::AudioRipJob::run()
 
     emit infoMessage( i18n("Starting digital audio extraction (ripping)."), K3b::Job::MessageInfo );
 
+    // rip tracks in *numerical* order
+    std::vector<Task> tasks;
+    tasks.reserve( d->tracks.size() );
+    for (Tracks::const_iterator i = d->tracks.constBegin(); i != d->tracks.constEnd(); ++i )
+        tasks.push_back( Task(i) );
+    std::sort(tasks.begin(), tasks.end(), Task::sort_by_tracknumber);
+
     bool success = true;
     QString lastFilename;
-    for( d->currentTrack = d->tracks.constBegin(); d->currentTrack != d->tracks.constEnd(); ++d->currentTrack ) {
+    for( std::vector<Task>::const_iterator currentTask = tasks.begin(); currentTask != tasks.end(); ++currentTask) {
+        d->currentTrack = currentTask->track;
         if( !ripTrack( d->currentTrack.value(), d->currentTrack.key(), lastFilename ) ) {
             success = false;
             break;
