@@ -57,7 +57,7 @@ K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
 
     m_comboPlaylistPattern->addItem( i18n( "%{albumartist} - %{albumtitle}" ) );
     m_comboPlaylistPattern->addItem( i18n( "Playlist" ) );
-    m_comboPlaylistPattern->addItem( i18n( "playlists/%{albumartist}/%{albumtitle    }" ) );
+    m_comboPlaylistPattern->addItem( i18n( "playlists/%{albumartist}/%{albumtitle}" ) );
 
     connect( m_comboFilenamePattern, SIGNAL(textChanged(QString)),
              this, SIGNAL(changed()) );
