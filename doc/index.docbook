@@ -4,21 +4,27 @@
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
 ]>
-<book lang="&language;">
+<book id="k3b" lang="&language;">
 <bookinfo>
 <title>The K3b Handbook</title>
 <authorgroup>
 <author>
 <personname>
-    <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/K3b">K3b</ulink> page.</firstname>
+    <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/K3b">K3b</ulink> page at 2011-01-20.</firstname>
+<surname></surname>
+</personname>
+    </author>
+<author>
+<personname>
+    <firstname>Update to 2.0 by the &kde; Documentation Team</firstname>
 <surname></surname>
 </personname>
     </author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
     </authorgroup>
 <legalnotice>&FDLNotice;</legalnotice>
-<date>2011-01-20</date>
-    <releaseinfo>&kde; SC 4.5</releaseinfo>
+<date>2012-01-06</date>
+    <releaseinfo>2.0 (&kde; 4.8)</releaseinfo>
 <abstract>
 <para></para>
     </abstract>
@@ -35,8 +41,33 @@
 <para>Featuring a simple, yet powerful graphical interface, &k3b; provides various options for burning a CD, DVD, or BD (Blu-ray disc). Various types of optical projects are supported including (but not limited to) audio and data, video projects for DVD and VCD, as well as multi-session and mixed-mode discs. &k3b; also has the ability to erase re-writeable media and can perform more complicated tasks such as audiovisual encoding and decoding.
 </para>
 </chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
 <chapter id="pre-setup"><title>Pre-setup</title>
-<para>When you run &k3b; for the first time, you may find &k3b; informing you that no optical writer drivers have been found, meaning you will not be able to write to any optical discs. There is no need to panic as &k3b; will open a configuration window which will help you get various tools used by &k3b; up and running. This includes viewing the user group that owns those applications. You shouldn't need to change this as &k3b; will apply the correct permissions on external programs itself. These programs are generally <command>cdrecord</command>, <command>growisofs</command> and <command>cdrdao</command>. If preferred, one can tell &k3b; to use the <guilabel>burning</guilabel> user group and point it to the optical drive. Below is an image of the configuration window where these settings are possible.
+<para>When you run &k3b; for the first time, you may find &k3b; informing you that no optical writer drivers have been found, meaning you will not be able to write to any optical discs. There is no need to panic as &k3b; will open the <guilabel>Permissions</guilabel> tab on the <guilabel>Programs</guilabel> page of the configuration dialog, where permissions can now be changed. In
+all modern systems optical devices belongs to a certain user group (&eg; <quote>cdrom</quote>). If the current user does not belongs to this group, he is offered to add himself to it on this tab.
 </para>
 <para>
 <screenshot>
@@ -52,6 +83,7 @@
 </screenshot>
 </para>
 </chapter>
+
 <chapter id="configuring-the-user-interface"><title>Configuring the User Interface</title>
 <para>Upon starting &k3b; you are offered quick starts to the three most popular processes
 </para>
