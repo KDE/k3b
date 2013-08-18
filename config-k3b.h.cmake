@@ -25,6 +25,7 @@
 #cmakedefine WORDS_BIGENDIAN
 
 #cmakedefine HAVE_ICONV
+#cmakedefine ICONV_SECOND_ARGUMENT_IS_CONST
 
 #cmakedefine HAVE_FFMPEG_AVFORMAT_OPEN_INPUT
 #cmakedefine HAVE_FFMPEG_AV_DUMP_FORMAT
