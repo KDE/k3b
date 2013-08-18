@@ -313,11 +313,11 @@ target_link_libraries(k3b_bin
   ${X11_LIBRARIES}
   )
 
-if(WIN32)
+if(ICONV_FOUND)
   target_link_libraries(k3b_bin
-    iconv
+    ${ICONV_LIBRARIES}
   )
-endif(WIN32)
+endif(ICONV_FOUND)
 
 if(ENABLE_AUDIO_PLAYER)
   target_link_libraries(k3b_bin
