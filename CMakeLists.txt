@@ -58,6 +58,11 @@ macro_log_feature( QT_QTMULTIMEDIA_FOUND "QtMultimedia"
     "http://doc.qt.nokia.com/latest/qtmultimedia.html"
     FALSE )
 
+find_package(Iconv)
+if(ICONV_FOUND)
+  set(HAVE_ICONV 1)
+endif(ICONV_FOUND)
+
 if(K3B_ENABLE_DVD_RIPPING)
   find_package(DvdRead)
   macro_log_feature( DVDREAD_FOUND "libDVDRead"

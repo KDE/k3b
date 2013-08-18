@@ -51,7 +51,7 @@
 #include <QHBoxLayout>
 #include <QList>
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
 #include <langinfo.h>
 #endif
 
@@ -521,7 +521,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                                 "via an online update tool.") ) );
     }
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
     char* codec = nl_langinfo( CODESET );
     if( strcmp( codec, "ANSI_X3.4-1968" ) == 0 ) {
         //

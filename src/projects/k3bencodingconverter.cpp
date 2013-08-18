@@ -17,7 +17,7 @@
 
 #include <KDebug>
 
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
 #include <langinfo.h>
 #include <iconv.h>
 #endif
@@ -26,7 +26,7 @@
 class K3b::EncodingConverter::Private
 {
 public:
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
     iconv_t ic;
 #endif
 };
@@ -35,7 +35,7 @@ public:
 K3b::EncodingConverter::EncodingConverter()
     : d( new Private )
 {
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
     char* codec = nl_langinfo( CODESET );
     kDebug() << "(K3b::DataUrlAddingDialog) using locale codec: " << codec;
     d->ic = ::iconv_open( "UCS-2BE", codec );
@@ -45,7 +45,7 @@ K3b::EncodingConverter::EncodingConverter()
 
 K3b::EncodingConverter::~EncodingConverter()
 {
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
     ::iconv_close( d->ic );
 #endif
     delete d;
@@ -54,7 +54,7 @@ K3b::EncodingConverter::~EncodingConverter()
 
 bool K3b::EncodingConverter::encodedLocally( const QByteArray& s )
 {
-#ifdef HAVE_ICONV_H
+#ifdef HAVE_ICONV
     QByteArray utf8Encoded( s.length()*2, '\0' );
 #if ( defined(Q_OS_WIN) && !defined(__INTEL_COMPILER) ) || (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(__DragonFly__)
     const char* in = s.data();
