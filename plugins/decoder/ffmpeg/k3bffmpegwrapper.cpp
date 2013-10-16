@@ -208,14 +208,20 @@ int K3bFFMpegFile::type() const
 
 QString K3bFFMpegFile::typeComment() const
 {
+#if LIBAVCODEC_BUILD < AV_VERSION_INT(54,25,0)
+    #define AV_CODEC_ID_WMAV1  CODEC_ID_WMAV1
+    #define AV_CODEC_ID_WMAV2  CODEC_ID_WMAV2
+    #define AV_CODEC_ID_MP3    CODEC_ID_MP3
+    #define AV_CODEC_ID_AAC    CODEC_ID_AAC
+#endif
     switch( type() ) {
-    case CODEC_ID_WMAV1:
+    case AV_CODEC_ID_WMAV1:
         return i18n("Windows Media v1");
-    case CODEC_ID_WMAV2:
+    case AV_CODEC_ID_WMAV2:
         return i18n("Windows Media v2");
-    case CODEC_ID_MP3:
+    case AV_CODEC_ID_MP3:
         return i18n("MPEG 1 Layer III");
-    case CODEC_ID_AAC:
+    case AV_CODEC_ID_AAC:
         return i18n("Advanced Audio Coding (AAC)");
     default:
         return QString::fromLocal8Bit( d->codec->name );

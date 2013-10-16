@@ -18,8 +18,6 @@
 
 #include "k3bmsf.h"
 
-
-
 /**
  * Create with K3bFFMpegWrapper::open
  */

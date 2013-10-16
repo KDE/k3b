@@ -147,7 +147,14 @@ if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
       #else
       #include <ffmpeg/avcodec.h>
       #endif
-      int main() { enum CodecID t = CODEC_ID_MP3; return 0; }
+      int main() {
+      #if LIBAVCODEC_BUILD >= AV_VERSION_INT(54,25,0)
+      # Not needed here. AV_CODEC_ID_MP3 exists.
+      #else
+      enum CodecID t = CODEC_ID_MP3;
+      #endif
+      return 0;
+      }
       " HAVE_FFMPEG_CODEC_MP3)
 
     cmake_pop_check_state()
