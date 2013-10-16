@@ -67,6 +67,13 @@ extern "C" {
 #  define CODEC_ID_MP3 CODEC_ID_MP3LAME
 #endif
 
+// Has been deprecated for ages. Now removed. For now do what ffmpeg does
+// http://ffmpeg.org/pipermail/ffmpeg-cvslog/2012-August/053785.html
+// 192000 = 1 second of 48khz 32bit audio
+#ifndef AVCODEC_MAX_AUDIO_FRAME_SIZE
+#define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000
+#endif
+
 K3bFFMpegWrapper* K3bFFMpegWrapper::s_instance = 0;
 
 
