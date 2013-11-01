@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <id type="desktop">k3b.desktop</id>
+  <licence>CC0</licence>
+  <description>
+    <p>
+      K3b was created to be a feature-rich and easy to handle CD burning
+      application.It consists of basicly three parts:
+    </p>
+    <p>
+      The projects: Projects are created from the file menu and then filled with
+      data to burn.
+      The Tools: The tools menu offers different tools like CD copy or DVD
+      formatting.
+      Context sensitive media actions: When clicking on the Icon representing a
+      CD/DVD drive K3b will present it's contents and allow some further action.
+      This is for example the way to rip audio CDs.
+    </p>
+  </description>
+  <url type="homepage">http://www.k3b.org/</url>
+  <screenshots>
+    <screenshot type="default">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</screenshot>
+    <screenshot>http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</screenshot>
+  </screenshots>
+  <updatecontact>k3b@kde.org</updatecontact>
+  <project_group>KDE</project_group>
+</application>
