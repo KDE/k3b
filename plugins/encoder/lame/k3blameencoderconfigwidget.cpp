@@ -57,7 +57,7 @@ K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, con
     setupUi( this );
 
     m_sliderQuality->setRange( 0, 9 );
-    m_spinEncoderQuality->setRange( 0, 9, true );
+    m_spinEncoderQuality->setRange( 0, 9, 1, true );
 
     m_manualSettingsDialog = new K3bLameManualSettingsDialog( this );
     for( int i = 0; s_lame_bitrates[i]; ++i )
