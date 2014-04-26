@@ -854,6 +854,7 @@ bool K3b::MainWindow::queryClose()
 // 	return false;
 //     }
     }
+    saveOptions();
 
     //
     // if we are closed by the session manager everything is fine since we store the
@@ -903,14 +904,6 @@ bool K3b::MainWindow::canCloseDocument( K3b::Doc* doc )
         return false;
     }
 }
-
-bool K3b::MainWindow::queryExit()
-{
-    // TODO: call this in K3b::Application somewhere
-    saveOptions();
-    return true;
-}
-
 
 
 /////////////////////////////////////////////////////////////////////
