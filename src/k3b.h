@@ -113,23 +113,23 @@ namespace K3b {
         void configChanged( KSharedConfig::Ptr c );
 
     protected:
-        /** queryClose is called by KTMainWindow on each closeEvent of a window. Against the
+        /** queryClose is called by KMainWindow on each closeEvent of a window. Against the
          * default implementation (only returns true), this overridden function retrieves all modified documents
          * from the open document list and asks the user to select which files to save before exiting the application.
-         * @see KTMainWindow#queryClose
-         * @see KTMainWindow#closeEvent
+         * @see KMainWindow#queryClose
+         * @see KMainWindow#closeEvent
          */
         virtual bool queryClose();
 
         /** saves the window properties for each open window during session end to the session config file, including saving the currently
          * opened file by a temporary filename provided by KApplication.
-         * @see KTMainWindow#saveProperties
+         * @see KMainWindow#saveProperties
          */
         virtual void saveProperties(KConfigGroup &_cfg);
 
         /** reads the session config file and restores the application's state including the last opened files and documents by reading the
          * temporary files saved by saveProperties()
-         * @see KTMainWindow#readProperties
+         * @see KMainWindow#readProperties
          */
         virtual void readProperties(const KConfigGroup &_cfg);
 
