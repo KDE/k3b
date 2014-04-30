@@ -5,7 +5,7 @@
   <description>
     <p>
       K3b was created to be a feature-rich and easy to handle CD burning
-      application.It consists of basicly three parts:
+      application. It consists of basicly three parts:
     </p>
     <p>
       The projects: Projects are created from the file menu and then filled with
@@ -13,7 +13,7 @@
       The Tools: The tools menu offers different tools like CD copy or DVD
       formatting.
       Context sensitive media actions: When clicking on the Icon representing a
-      CD/DVD drive K3b will present it's contents and allow some further action.
+      CD/DVD drive K3b will present its contents and allow some further action.
       This is for example the way to rip audio CDs.
     </p>
   </description>
