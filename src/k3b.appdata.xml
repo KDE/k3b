@@ -1,27 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <application>
   <id type="desktop">k3b.desktop</id>
+  <id type="desktop" xml:lang="pl">k3b.desktop</id>
+  <id type="desktop" xml:lang="pt">k3b.desktop</id>
+  <id type="desktop" xml:lang="sv">k3b.desktop</id>
+  <id type="desktop" xml:lang="uk">k3b.desktop</id>
+  <id type="desktop" xml:lang="x-test">xxk3b.desktopxx</id>
   <licence>CC0</licence>
+  <licence xml:lang="pl">CC0</licence>
+  <licence xml:lang="pt">CC0</licence>
+  <licence xml:lang="sv">CC0</licence>
+  <licence xml:lang="uk">CC0</licence>
+  <licence xml:lang="x-test">xxCC0xx</licence>
   <description>
     <p>
       K3b was created to be a feature-rich and easy to handle CD burning
       application. It consists of basically three parts:
     </p>
+    <p xml:lang="uk">K3b є повноцінним комплектом програм для спрощення запису компакт-дисків та DVD. Він складається, в основному, з трьох частин:</p>
     <ul>
       <li>The projects: Projects are created from the file menu and then filled with
       data to burn.</li>
+      <li xml:lang="uk">Проектів: проекти створюються за допомогою меню «Файл», а потім заповнюються даними, які слід записати.</li>
       <li>The Tools: The tools menu offers different tools like CD copy or DVD
       formatting.</li>
+      <li xml:lang="uk">Інструментів: за допомогою меню «Інструменти» ви можете скористатися різноманітними інструментами, зокрема інструментами копіювання компакт-дисків або форматування DVD.</li>
       <li>Context sensitive media actions: When clicking on the Icon representing a
       CD/DVD drive K3b will present its contents and allow some further action.
       This is for example the way to rip audio CDs.</li>
+      <li xml:lang="uk">Дій, що відповідають контексту носія даних: після натискання піктограми пристрою для читання компакт-дисків та DVD K3b показує вміст носія та надає змогу вибрати подальші дії з носієм. За допомогою цих дій можна, наприклад, видобути цифрові дані зі звукового компакт-диска.</li>
     </ul>
   </description>
   <url type="homepage">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="pl">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="pt">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="sv">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="uk">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="x-test">xxhttp://www.k3b.org/xx</url>
   <screenshots>
     <screenshot type="default">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</screenshot>
+    <screenshot type="default" xml:lang="pl">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</screenshot>
+    <screenshot type="default" xml:lang="pt">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</screenshot>
+    <screenshot type="default" xml:lang="sv">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</screenshot>
+    <screenshot type="default" xml:lang="uk">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</screenshot>
+    <screenshot type="default" xml:lang="x-test">xxhttp://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.pngxx</screenshot>
     <screenshot>http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</screenshot>
+    <screenshot xml:lang="pl">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</screenshot>
+    <screenshot xml:lang="pt">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</screenshot>
+    <screenshot xml:lang="sv">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</screenshot>
+    <screenshot xml:lang="uk">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</screenshot>
+    <screenshot xml:lang="x-test">xxhttp://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.pngxx</screenshot>
   </screenshots>
   <updatecontact>k3b@kde.org</updatecontact>
+  <updatecontact xml:lang="pl">k3b@kde.org</updatecontact>
+  <updatecontact xml:lang="pt">k3b@kde.org</updatecontact>
+  <updatecontact xml:lang="sv">k3b@kde.org</updatecontact>
+  <updatecontact xml:lang="uk">k3b@kde.org</updatecontact>
+  <updatecontact xml:lang="x-test">xxk3b@kde.orgxx</updatecontact>
   <project_group>KDE</project_group>
+  <project_group xml:lang="pl">KDE</project_group>
+  <project_group xml:lang="pt">KDE</project_group>
+  <project_group xml:lang="sv">KDE</project_group>
+  <project_group xml:lang="uk">KDE</project_group>
+  <project_group xml:lang="x-test">xxKDExx</project_group>
 </application>
