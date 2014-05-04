@@ -1,41 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id type="desktop">k3b.desktop</id>
+  <id type="desktop" xml:lang="ca">k3b.desktop</id>
+  <id type="desktop" xml:lang="cs">k3b.desktop</id>
+  <id type="desktop" xml:lang="de">k3b.desktop</id>
+  <id type="desktop" xml:lang="fi">k3b.desktop</id>
+  <id type="desktop" xml:lang="nl">k3b.desktop</id>
+  <id type="desktop" xml:lang="pl">k3b.desktop</id>
+  <id type="desktop" xml:lang="pt">k3b.desktop</id>
+  <id type="desktop" xml:lang="pt-BR">k3b.desktop</id>
+  <id type="desktop" xml:lang="sk">k3b.desktop</id>
+  <id type="desktop" xml:lang="sv">k3b.desktop</id>
+  <id type="desktop" xml:lang="uk">k3b.desktop</id>
+  <id type="desktop" xml:lang="x-test">xxk3b.desktopxx</id>
   <metadata_license>CC0-1.0</metadata_license>
   <description>
     <p>
       K3b was created to be a feature-rich and easy to handle CD burning
       application. It consists of basically three parts:
     </p>
+    <p xml:lang="ca">El K3b es va crear per ser una aplicació de gravació de CD plena de funcionalitats i fàcil de fer servir. Bàsicament, consisteix de tres parts:</p>
+    <p xml:lang="cs">K3b bylo vytvořeno jako aplikace se spoustou vlastností a zároveň jednoduchá na používání. Skládá se v podstatě ze tří částí:</p>
+    <p xml:lang="nl">K3b is gemaakt om een rijk aan functies en gemakkelijk te gebruiken cd's te branden. Het bestaat in de basis uit drie delen:</p>
+    <p xml:lang="pl">K3b został stworzony, aby być programem do wypalania płyt CD bogatym w cechy i łatwym w obsłudze. Składa się z trzech podstawowych części:</p>
+    <p xml:lang="pt">O K3b foi criado para ser uma aplicação de gravação de CD's completa e fácil de usar. Consiste basicamente em três partes:</p>
+    <p xml:lang="pt-BR">O K3b foi criado para ser um aplicativo para gravação de CDs completo e fácil de usar. Ele consiste basicamente em três partes:</p>
+    <p xml:lang="sk">K3b bol vytvorený na to, aby bola bohatá na funkcie a jednoduchá na používanie aplikácia na napaľovanie. Skladá sa z troch častí:</p>
+    <p xml:lang="sv">K3b skapades för att vara ett funktionsrikt och lätthanterligt program för cd-bränning. Det består i huvudsak av tre delar:</p>
+    <p xml:lang="uk">K3b є повноцінним комплектом програм для спрощення запису компакт-дисків та DVD. Він складається, в основному, з трьох частин:</p>
+    <p xml:lang="x-test">xxK3b was created to be a feature-rich and easy to handle CD burning application. It consists of basically three parts:xx</p>
     <ul>
       <li>
         The projects: Projects are created from the file menu and then filled with
         data to burn.
       </li>
+      <li xml:lang="ca">Els projectes: Els projectes es creen des del menú de fitxer i s'omplen amb les dades a gravar.</li>
+      <li xml:lang="cs">Projekty: Projekty jsou vytvořeny z nabídky souboru a poté naplněny daty pro vypálení.</li>
+      <li xml:lang="nl">De projecten: Projecten worden gemaakt uit het menu voor bestanden en daarna gevuld met gegevens on te branden.</li>
+      <li xml:lang="pl">Projekty: Projekty są tworzone z menu plik, a następnie wypełniane danymi do wypalenia.</li>
+      <li xml:lang="pt">Os projectos: Os projectos são criados a partir do menu de ficheiros e depois preenchidos com os dados a gravar.</li>
+      <li xml:lang="pt-BR">Projetos: Os projetos são criados a partir do menu Arquivo e depois preenchidos com os dados a gravar.</li>
+      <li xml:lang="sk">Projekty: Projekty sa tvoria z ponuky súbor a potom sa naplnia dátami na napálenie.</li>
+      <li xml:lang="sv">Projekten: Projekt skapas från arkivmenyn och fylls därefter med data att bränna.</li>
+      <li xml:lang="uk">Проектів: проекти створюються за допомогою меню «Файл», а потім заповнюються даними, які слід записати.</li>
+      <li xml:lang="x-test">xxThe projects: Projects are created from the file menu and then filled with data to burn.xx</li>
       <li>
         The Tools: The tools menu offers different tools like CD copy or DVD
         formatting.
       </li>
+      <li xml:lang="ca">Les eines: El menú d'eines ofereix eines diferents com la còpia de CD o el formatat de DVD.</li>
+      <li xml:lang="cs">Nástroje: Nabídka nástrojů nabízí různé nástroje jako třeba kopírování CD nebo formátování DVD.</li>
+      <li xml:lang="nl">De hulpmiddelen: Het menu Hulpmiddelen biedt verschillende hulpmiddelen zoals kopiëren van cd of formattering van een dvd.</li>
+      <li xml:lang="pl">Narzędzia: Menu narzędzi dostarcza różnych narzędzi takich jak powielenie CD lub formatowanie DVD.</li>
+      <li xml:lang="pt">As ferramentas: O menu de ferramentas oferece diversas funcionalidades como a cópia de CD's ou a formatação de DVD's.</li>
+      <li xml:lang="pt-BR">Ferramentas: O menu Ferramentas oferece diversas opções, como a cópia de CD ou a formatação de DVD.</li>
+      <li xml:lang="sk">Nástroje: Ponuka nástroje poskytuje iné nástroje ako kopírovanie CD alebo formátovanie DVD.</li>
+      <li xml:lang="sv">Verktygen: Verktygsmenyn erbjuder olika verktyg som cd-kopiering eller dvd-formatering.</li>
+      <li xml:lang="uk">Інструментів: за допомогою меню «Інструменти» ви можете скористатися різноманітними інструментами, зокрема інструментами копіювання компакт-дисків або форматування DVD.</li>
+      <li xml:lang="x-test">xxThe Tools: The tools menu offers different tools like CD copy or DVD formatting.xx</li>
       <li>
         Context sensitive media actions: When clicking on the Icon representing a
         CD/DVD drive K3b will present its contents and allow some further action.
         This is for example the way to rip audio CDs.
       </li>
+      <li xml:lang="ca">Accions de suports sensibles al context: En clicar en la icona que representa una unitat de CD/DVD, el K3b presenta el seu contingut i permet diverses accions. Per exemple, aquesta és la manera d'extreure CD d'àudio.</li>
+      <li xml:lang="cs">Činnosti s médii odpovídají situaci: Při kliknutí na ikonu reprezentující mechaniku CD/DVD, vám K3b zobrazí jejich obsah a nabídne nějakou další činnost. Například se takto dají ripovat audio CD.</li>
+      <li xml:lang="nl">Context gevoelige mediumacties: bij klikken op het pictogram voor een cd/dvd-apparaat zal K3b zijn inhoud weergeven en enige verdere acties. Dit is bijvoorbeeld de manier om audio-cd's te rippen.</li>
+      <li xml:lang="pl">Działania wrażliwe na stosowany nośnik: Przy naciśnięciu na ikonę przedstawiającą napęd CD/DVD K3b przedstawi jej zawartość i umożliwi podjęcie dalszych działań. Jest to na przykład sposób na zgranie płyt CD z muzyką.</li>
+      <li xml:lang="pt">Acções dependentes do contexto: Ao carregar no ícone que representa um leitor de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas acções adicionais. Esta é, por exemplo, a forma de extrair músicas de CD's de áudio.</li>
+      <li xml:lang="pt-BR">Ações que dependem do contexto: Ao clicar no ícone que representa uma unidade de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas ações adicionais. Esta é, por exemplo, a forma de extrair músicas de CDs de áudio.</li>
+      <li xml:lang="sk">Kontextovo citlivé akcie médií: Pri kliknutí na ikonu reprezentujúcu CD/DVD mechaniku, K3b poskytne jej obsah a umožní ďalšie akcie. Je tu napríklad možnosť ripovať zvukové CD.</li>
+      <li xml:lang="sv">Sammanhangsberoende mediaåtgärder: Vid ett klick på ikonen som representerar en cd- eller dvd-enhet, visar K3b dess innehåll och tillåter vissa ytterligare åtgärder. Det är exempelvis sättet man lagrar ljud-cd.</li>
+      <li xml:lang="uk">Дій, що відповідають контексту носія даних: після натискання піктограми пристрою для читання компакт-дисків та DVD K3b показує вміст носія та надає змогу вибрати подальші дії з носієм. За допомогою цих дій можна, наприклад, видобути цифрові дані зі звукового компакт-диска.</li>
+      <li xml:lang="x-test">xxContext sensitive media actions: When clicking on the Icon representing a CD/DVD drive K3b will present its contents and allow some further action. This is for example the way to rip audio CDs.xx</li>
     </ul>
   </description>
   <url type="homepage">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="ca">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="cs">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="de">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="fi">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="nl">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="pl">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="pt">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="pt-BR">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="sk">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="sv">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="uk">http://www.k3b.org/</url>
+  <url type="homepage" xml:lang="x-test">xxhttp://www.k3b.org/xx</url>
   <url type="faq">http://k3b.plainblack.com/faq</url>
   <url type="donation">http://k3b.plainblack.com/donations</url>
   <screenshots>
     <screenshot type="default">
       <image>http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="ca">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="cs">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="de">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="fi">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="nl">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="pl">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="pt">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="pt-BR">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="sk">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="sv">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="uk">http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
+      <image xml:lang="x-test">xxhttp://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.pngxx</image>
     </screenshot>
     <screenshot>
       <image>http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="ca">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="cs">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="de">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="fi">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="nl">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="pl">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="pt">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="pt-BR">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="sk">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="sv">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="uk">http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image xml:lang="x-test">xxhttp://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.pngxx</image>
     </screenshot>
   </screenshots>
   <x-updatecontact>k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="ca">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="cs">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="de">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="fi">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="nl">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="pl">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="pt">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="pt-BR">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="sk">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="sv">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="uk">k3b@kde.org</x-updatecontact>
+  <x-updatecontact xml:lang="x-test">xxk3b@kde.orgxx</x-updatecontact>
   <project_group>KDE</project_group>
+  <project_group xml:lang="ca">KDE</project_group>
+  <project_group xml:lang="cs">KDE</project_group>
+  <project_group xml:lang="de">KDE</project_group>
+  <project_group xml:lang="fi">KDE</project_group>
+  <project_group xml:lang="nl">KDE</project_group>
+  <project_group xml:lang="pl">KDE</project_group>
+  <project_group xml:lang="pt">KDE</project_group>
+  <project_group xml:lang="pt-BR">KDE</project_group>
+  <project_group xml:lang="sk">KDE</project_group>
+  <project_group xml:lang="sv">KDE</project_group>
+  <project_group xml:lang="uk">KDE</project_group>
+  <project_group xml:lang="x-test">xxKDExx</project_group>
   <provides>
     <binary>k3b</binary>
   </provides>
