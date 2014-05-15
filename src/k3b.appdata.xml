@@ -17,6 +17,7 @@
     <p xml:lang="pt">O K3b foi criado para ser uma aplicação de gravação de CD's completa e fácil de usar. Consiste basicamente em três partes:</p>
     <p xml:lang="pt-BR">O K3b foi criado para ser um aplicativo para gravação de CDs completo e fácil de usar. Ele consiste basicamente em três partes:</p>
     <p xml:lang="sk">K3b bol vytvorený na to, aby bola bohatá na funkcie a jednoduchá na používanie aplikácia na napaľovanie. Skladá sa z troch častí:</p>
+    <p xml:lang="sl">K3b je bil ustvarjen kot program za peko CD-jev, ki naj bi bil zmogljiv in hkrati enostaven za uporabo. Sestavljen je iz treh delov:</p>
     <p xml:lang="sr">К3б је замишљен као свеобухватан програм за резање ЦД‑ова, лак за употребу. Састоји се од три дела:</p>
     <p xml:lang="sr-Latn">K3b je zamišljen kao sveobuhvatan program za rezanje CD‑ova, lak za upotrebu. Sastoji se od tri dela:</p>
     <p xml:lang="sr-ijekavian">К3б је замишљен као свеобухватан програм за резање ЦД‑ова, лак за употребу. Састоји се од три дела:</p>
@@ -39,6 +40,7 @@
       <li xml:lang="pt">Os projectos: Os projectos são criados a partir do menu de ficheiros e depois preenchidos com os dados a gravar.</li>
       <li xml:lang="pt-BR">Projetos: Os projetos são criados a partir do menu Arquivo e depois preenchidos com os dados a gravar.</li>
       <li xml:lang="sk">Projekty: Projekty sa tvoria z ponuky súbor a potom sa naplnia dátami na napálenie.</li>
+      <li xml:lang="sl">Projekti: projekti se ustvarijo iz datotečnega menija in se nato zapolnijo s podatki za zapis.</li>
       <li xml:lang="sr">пројекти — праве се кроз мени „Фајл“, а затим попуњавају подацима за резање.</li>
       <li xml:lang="sr-Latn">projekti — prave se kroz meni „Fajl“, a zatim popunjavaju podacima za rezanje.</li>
       <li xml:lang="sr-ijekavian">пројекти — праве се кроз мени „Фајл“, а затим попуњавају подацима за резање.</li>
@@ -60,6 +62,7 @@
       <li xml:lang="pt">As ferramentas: O menu de ferramentas oferece diversas funcionalidades como a cópia de CD's ou a formatação de DVD's.</li>
       <li xml:lang="pt-BR">Ferramentas: O menu Ferramentas oferece diversas opções, como a cópia de CD ou a formatação de DVD.</li>
       <li xml:lang="sk">Nástroje: Ponuka nástroje poskytuje iné nástroje ako kopírovanie CD alebo formátovanie DVD.</li>
+      <li xml:lang="sl">Orodja: meni z orodji ponuja različna orodja kot so kopiranje CD-jev ali formatiranje DVD-jev.</li>
       <li xml:lang="sr">алатке — мени „Алатке“ нуди различите алатке, попут копирања ЦД‑а или форматирања ДВД‑а.</li>
       <li xml:lang="sr-Latn">alatke — meni „Alatke“ nudi različite alatke, poput kopiranja CD‑a ili formatiranja DVD‑a.</li>
       <li xml:lang="sr-ijekavian">алатке — мени „Алатке“ нуди различите алатке, попут копирања ЦД‑а или форматирања ДВД‑а.</li>
@@ -82,6 +85,7 @@
       <li xml:lang="pt">Acções dependentes do contexto: Ao carregar no ícone que representa um leitor de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas acções adicionais. Esta é, por exemplo, a forma de extrair músicas de CD's de áudio.</li>
       <li xml:lang="pt-BR">Ações que dependem do contexto: Ao clicar no ícone que representa uma unidade de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas ações adicionais. Esta é, por exemplo, a forma de extrair músicas de CDs de áudio.</li>
       <li xml:lang="sk">Kontextovo citlivé akcie médií: Pri kliknutí na ikonu reprezentujúcu CD/DVD mechaniku, K3b poskytne jej obsah a umožní ďalšie akcie. Je tu napríklad možnosť ripovať zvukové CD.</li>
+      <li xml:lang="sl">Dejanja odvisna od vsebine: ko kliknete na ikono, ki predstavlja pogon CD/DVD, bo K3b predstavil njeno vsebino in ponudil nadaljnja dejanja. To je na primer način za zajetje zvočnih CD-jev.</li>
       <li xml:lang="sr">контекстно зависне медијске радње — по клику на икону ЦД/ДВД јединице, К3б ће представити њен садржај и понудити даље радње. Овако се, на пример, може чупати са аудио ЦД‑ова.</li>
       <li xml:lang="sr-Latn">kontekstno zavisne medijske radnje — po kliku na ikonu CD/DVD jedinice, K3b će predstaviti njen sadržaj i ponuditi dalje radnje. Ovako se, na primer, može čupati sa audio CD‑ova.</li>
       <li xml:lang="sr-ijekavian">контекстно зависне медијске радње — по клику на икону ЦД/ДВД јединице, К3б ће представити њен садржај и понудити даље радње. Овако се, на пример, може чупати са аудио ЦД‑ова.</li>
