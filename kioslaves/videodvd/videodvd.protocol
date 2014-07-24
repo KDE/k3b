@@ -28,7 +28,6 @@ Description[el]=Ένα kioslave που επιτρέπει την αντιγρα�
 Description[en_GB]=A kioslave that allows files to be copied from a Video DVD (including decryption)
 Description[eo]=Kioslave kiu permesas kopii dosierojn el Video-DVD (inkluzive malĉifrado)
 Description[es]=Un kioslave que permite copiar archivos de un DVD de vídeo (incluye descifrado)
-Description[et]=KIO-moodul, mis võimaldab kopeerida faile video-DVD-lt (vajadusel krüptib lahti)
 Description[eu]=Bideo DVDeetatik fitxategiak kopiatzea ahalbidetzen duen kioslave-a (deszifratze eta guzti)
 Description[fi]=Kioslave-palvelu, joka mahdollistaa tiedostojen purkamisen dvd-levyltä.
 Description[fr]=Un module d'entrées / sorties de KDE permettant de copier des fichiers depuis un DVD (y compris le déchiffrement)
