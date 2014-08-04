@@ -482,14 +482,14 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
     if( !s_libInterface->isLoaded() ) {
         s_haveLibCdio = false;
 
-        s_libInterface->setFileName( "cdda_interface" );
+        s_libInterface->setFileNameAndVersion( "cdda_interface", 0 );
         s_libInterface->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
 
         bool load_ok = s_libInterface->load();
 
         if (!load_ok) {
             // try the new cdio lib
-            s_libInterface->setFileName( "cdio_cdda" );
+            s_libInterface->setFileNameAndVersion( "cdio_cdda", 1 );
             s_haveLibCdio = true;
             load_ok = s_libInterface->load();
         }
@@ -499,14 +499,14 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
             return 0;
         }
 
-        s_libParanoia->setFileName( "cdda_paranoia" );
+        s_libParanoia->setFileNameAndVersion( "cdda_paranoia", 0 );
         s_libParanoia->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
 
         load_ok = s_libParanoia->load();
 
         if ( s_haveLibCdio && !load_ok ) {
             // try the new cdio lib
-            s_libParanoia->setFileName( "cdio_paranoia" );
+            s_libParanoia->setFileNameAndVersion( "cdio_paranoia", 1 );
             load_ok = s_libParanoia->load();
         }
 
