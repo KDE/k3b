@@ -51,7 +51,7 @@ namespace K3b {
 
     private:
         void readFile();
-        bool parseLine( QString& line );
+        bool parseLine( QString line );
         void simplified( QString& s );
         bool findImageFileName( const QString& fileEntry );
 
