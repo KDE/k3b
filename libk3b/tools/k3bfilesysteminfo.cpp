@@ -67,6 +67,7 @@ public:
             switch( fs.f_type ) {
             case 0x4d44: // MS-DOS
                 type = FS_FAT;
+		break;
             default:
                 type = FS_UNKNOWN;
             }
@@ -77,7 +78,7 @@ public:
             kDebug() << "(K3b::FileSystemInfo) statfs failed: " << QString::fromLocal8Bit( ::strerror(errno) );
         }
 #else
-		statDone = true;
+        statDone = true;
 #endif
     }
 };
