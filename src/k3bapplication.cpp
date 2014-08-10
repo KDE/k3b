@@ -139,7 +139,7 @@ void K3b::Application::init()
 int K3b::Application::newInstance()
 {
     processCmdLineArgs();
-    
+
     return KUniqueApplication::newInstance();
 }
 
