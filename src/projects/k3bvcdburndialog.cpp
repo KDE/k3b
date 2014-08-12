@@ -35,8 +35,8 @@
 #include <qlineedit.h>
 #include <qlayout.h>
 #include <qtooltip.h>
-#include <QtGui/QTextEdit>
-#include <QtGui/QButtonGroup>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QButtonGroup>
 
 #include <qtoolbutton.h>
 #include <qfileinfo.h>
@@ -44,11 +44,11 @@
 #include <QFrame>
 #include <QTextStream>
 
-#include <klocale.h>
-#include <kconfig.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
 #include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <kio/global.h>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KIO/Global>
 #include <kapplication.h>
 
 K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )

@@ -15,8 +15,8 @@
 
 #include "k3bmad.h"
 
-#include <qfile.h>
-#include <kdebug.h>
+#include <QtCore/QFile>
+#include <QtCore/QDebug>
 
 
 static const int INPUT_BUFFER_SIZE = 5*8192;
@@ -62,7 +62,7 @@ bool K3bMad::open( const QString& filename )
   m_inputFile.setFileName( filename );
 
   if( !m_inputFile.open( QIODevice::ReadOnly ) ) {
-    kError() << "(K3bMad) could not open file " << m_inputFile.fileName() << endl;
+    qCritical() << "(K3bMad) could not open file " << m_inputFile.fileName() << endl;
     return false;
   }
 
@@ -107,19 +107,19 @@ bool K3bMad::fillStreamBuffer()
     // Fill-in the buffer.
     qint64 result = m_inputFile.read( (char*)readStart, readSize );
     if( result < 0 ) {
-      kDebug() << "(K3bMad) read error on bitstream)";
+      qDebug() << "(K3bMad) read error on bitstream)";
       m_bInputError = true;
       return false;
     }
     else if( result == 0 ) {
-      kDebug() << "(K3bMad) end of input stream";
+      qDebug() << "(K3bMad) end of input stream";
       return false;
     }
     else {
       readStart += result;
 
       if( eof() ) {
-	kDebug() << "(K3bMad::fillStreamBuffer) MAD_BUFFER_GUARD";
+	qDebug() << "(K3bMad::fillStreamBuffer) MAD_BUFFER_GUARD";
 	memset( readStart, 0, MAD_BUFFER_GUARD );
 	result += MAD_BUFFER_GUARD;
       }
@@ -145,7 +145,7 @@ bool K3bMad::skipTag()
   char buf[4096];
   int bufLen = 4096;
   if( m_inputFile.read( buf, bufLen ) < bufLen ) {
-    kDebug() << "(K3bMad) unable to read " << bufLen << " bytes from "
+    qDebug() << "(K3bMad) unable to read " << bufLen << " bytes from "
 	      << m_inputFile.fileName() << endl;
     return false;
   }
@@ -165,11 +165,11 @@ bool K3bMad::skipTag()
     if( footer )
       offset += 10;
 
-    kDebug() << "(K3bMad) skipping past ID3 tag to " << offset;
+    qDebug() << "(K3bMad) skipping past ID3 tag to " << offset;
 
     // skip the id3 tag
     if( !m_inputFile.seek(offset) ) {
-      kDebug() << "(K3bMad) " << m_inputFile.fileName()
+      qDebug() << "(K3bMad) " << m_inputFile.fileName()
 		<< ": couldn't seek to " << offset << endl;
       return false;
     }
@@ -205,7 +205,7 @@ bool K3bMad::seekFirstHeader()
     int bytesToFrame = madStream->this_frame - madStream->buffer;
     m_inputFile.seek( m_inputFile.pos() - streamSize + bytesToFrame );
 
-    kDebug() << "(K3bMad) found first header at " << m_inputFile.pos();
+    qDebug() << "(K3bMad) found first header at " << m_inputFile.pos();
   }
 
   // reset the stream to make sure mad really starts decoding at out seek position
@@ -256,7 +256,7 @@ void K3bMad::initMad()
 void K3bMad::cleanup()
 {
   if( m_inputFile.isOpen() ) {
-    kDebug() << "(K3bMad) cleanup at offset: "
+    qDebug() << "(K3bMad) cleanup at offset: "
 	      << "Input file at: " << m_inputFile.pos() << " "
 	      << "Input file size: " << m_inputFile.size() << " "
 	      << "stream pos: "
@@ -294,7 +294,7 @@ bool K3bMad::findNextHeader()
       return findNextHeader();
     }
     else
-      kDebug() << "(K3bMad::findNextHeader) error: " << mad_stream_errorstr( madStream );
+      qDebug() << "(K3bMad::findNextHeader) error: " << mad_stream_errorstr( madStream );
 
     // FIXME probably we should not do this here since we don't do it
     // in the frame decoding

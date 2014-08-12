@@ -43,16 +43,17 @@
 #include <qlabel.h>
 #include <QGridLayout>
 #include <QVBoxLayout>
-#include <klocale.h>
-#include <kconfig.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <KStandardGuiItem>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <KIconThemes/KIconLoader>
 #include <kvbox.h>
 
 
@@ -233,7 +234,7 @@ void K3b::ProjectBurnDialog::slotStartClicked()
 
     dlg->startJob(m_job);
 
-    kDebug() << "(K3b::ProjectBurnDialog) job done. cleaning up.";
+    qDebug() << "(K3b::ProjectBurnDialog) job done. cleaning up.";
 
     delete m_job;
     m_job = 0;

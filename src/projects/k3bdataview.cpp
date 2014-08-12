@@ -24,9 +24,9 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KDebug>
-#include <KMessageBox>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
 #include <QSplitter>
 #include <KToolBar>

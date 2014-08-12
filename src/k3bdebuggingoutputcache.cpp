@@ -22,9 +22,9 @@
 #include "k3bversion.h"
 #include "k3bglobals.h"
 
-#include <klocale.h>
-#include <kglobalsettings.h>
-#include <kdeversion.h>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/kdeversion.h>
+#include <KDELibs4Support/KDE/KGlobalSettings>
 
 
 static const int s_maxCache = 10*1024*1024; // 10 MB max cache size

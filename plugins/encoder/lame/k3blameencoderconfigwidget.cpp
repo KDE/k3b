@@ -19,7 +19,7 @@
 #include "k3blametyes.h"
 
 #include <QCheckBox>
-#include <QFile>
+#include <QtCore/QFile>
 #include <QLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -29,8 +29,9 @@
 #include <QTextCodec>
 
 #include <KAboutData>
-#include <KConfig>
-#include <KDebug>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
 
 
 namespace {
@@ -142,9 +143,9 @@ void K3bLameEncoderSettingsWidget::slotQualityLevelChanged( int val )
 
 void K3bLameEncoderSettingsWidget::load()
 {
-    kDebug();
+    qDebug();
 
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     QString mode = grp.readEntry( "Mode", DEFAULT_MODE );
@@ -186,9 +187,9 @@ void K3bLameEncoderSettingsWidget::load()
 
 void K3bLameEncoderSettingsWidget::save()
 {
-    kDebug();
+    qDebug();
 
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     QString mode;
@@ -231,7 +232,7 @@ void K3bLameEncoderSettingsWidget::save()
 
 void K3bLameEncoderSettingsWidget::defaults()
 {
-    kDebug();
+    qDebug();
 
     m_manualSettingsDialog->m_comboMode->setCurrentIndex( mode2Index( DEFAULT_MODE ) );
 

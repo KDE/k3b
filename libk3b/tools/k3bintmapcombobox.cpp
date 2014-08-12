@@ -14,7 +14,7 @@
 
 #include "k3bintmapcombobox.h"
 
-#include <KDebug>
+#include <QtCore/QDebug>
 
 #include <QtCore/QHash>
 #include <QtCore/QPair>

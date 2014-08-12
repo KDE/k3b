@@ -43,8 +43,8 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QHeaderView>
 #include <QScrollBar>
@@ -198,7 +198,7 @@ void K3b::AudioViewImpl::slotAddSilence()
         QWidget* widget = dlg.mainWidget();
         dlg.setButtons(KDialog::Ok|KDialog::Cancel);
         dlg.setDefaultButton(KDialog::Ok);
-        dlg.setCaption(i18n("Add Silence"));
+        dlg.setWindowTitle(i18n("Add Silence"));
 
         QHBoxLayout* dlgLayout = new QHBoxLayout( widget );
         dlgLayout->setContentsMargins( 0, 0, 0, 0 );
@@ -293,7 +293,7 @@ void K3b::AudioViewImpl::slotEditSource()
 
     if( source ) {
         KDialog dlg( m_view );
-        dlg.setCaption( i18n("Edit Audio Track Source") );
+        dlg.setWindowTitle( i18n("Edit Audio Track Source") );
         dlg.setButtons( KDialog::Ok|KDialog::Cancel );
         dlg.setDefaultButton( KDialog::Ok );
 
@@ -443,10 +443,10 @@ void K3b::AudioViewImpl::slotAudioConversion()
 
 void K3b::AudioViewImpl::slotAdjustColumns()
 {
-    kDebug();
+    qDebug();
 
     if( m_updatingColumnWidths ) {
-        kDebug() << "already updating column widths.";
+        qDebug() << "already updating column widths.";
         return;
     }
 

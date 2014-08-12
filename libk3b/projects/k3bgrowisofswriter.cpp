@@ -27,11 +27,11 @@
 #include "k3bglobalsettings.h"
 #include "k3bdeviceglobals.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kglobal.h>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobal>
 
-#include <qfile.h>
+#include <QtCore/QFile>
 
 #include <unistd.h>
 
@@ -196,7 +196,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
     if( d->trackSize > 0 && d->growisofsBin->version() < K3b::Version( 5, 20 ) ) {
         if( d->trackSize % 16 ) {
             trackSizePadding = (16 - d->trackSize%16);
-            kDebug() << "(K3b::GrowisofsWriter) need to pad " << trackSizePadding << " blocks.";
+            qDebug() << "(K3b::GrowisofsWriter) need to pad " << trackSizePadding << " blocks.";
         }
     }
 
@@ -338,9 +338,9 @@ void K3b::GrowisofsWriter::start()
     }
     else {
 
-        kDebug() << "***** " << d->growisofsBin->name() << " parameters:\n";
+        qDebug() << "***** " << d->growisofsBin->name() << " parameters:\n";
         QString s = d->process.joinedArgs();
-        kDebug() << s << flush;
+        qDebug() << s << flush;
         emit debuggingOutput( d->growisofsBin->name() + " command:", s);
 
 
@@ -363,7 +363,7 @@ void K3b::GrowisofsWriter::start()
         if( !d->process.start( KProcess::MergedChannels ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
-            kDebug() << "(K3b::GrowisofsWriter) could not start " << d->growisofsBin->path();
+            qDebug() << "(K3b::GrowisofsWriter) could not start " << d->growisofsBin->path();
             emit infoMessage( i18n("Could not start %1.",d->growisofsBin->name()), K3b::Job::MessageError );
             jobFinished(false);
         }
@@ -474,7 +474,7 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
                     d->lastWritingSpeed = speed;
                 }
                 else
-                    kDebug() << "(K3b::GrowisofsWriter) speed parsing failed: '"
+                    qDebug() << "(K3b::GrowisofsWriter) speed parsing failed: '"
                              << line.mid( pos, line.indexOf( 'x', pos ) - pos ) << "'" << endl;
             }
             else {
@@ -482,7 +482,7 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
             }
         }
         else
-            kDebug() << "(K3b::GrowisofsWriter) progress parsing failed: '"
+            qDebug() << "(K3b::GrowisofsWriter) progress parsing failed: '"
                      << line.mid( pos+1, line.indexOf( '(', pos ) - pos - 1 ).trimmed() << "'" << endl;
     }
 

@@ -40,16 +40,16 @@
 #include <qtooltip.h>
 
 #include <qtoolbutton.h>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 #include <qpoint.h>
 
 #include <qspinbox.h>
 #include <QShowEvent>
 #include <QGridLayout>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kconfig.h>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KConfigCore/KConfig>
 #include <kmessagebox.h>
 #include <kvbox.h>
 

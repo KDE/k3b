@@ -19,7 +19,7 @@
 
 #include "k3bvideodvdtitletranscodingjob.h"
 
-#include <kio/global.h>
+#include <KIO/Global>
 
 class QTimer;
 

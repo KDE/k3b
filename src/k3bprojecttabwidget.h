@@ -48,7 +48,7 @@ namespace K3b {
         /**
          * adds the given action into the popup menu for the tabs
          */
-        void addAction( KAction* action );
+        void addAction( QAction* action );
         
     Q_SIGNALS:
         void tabCloseRequested( Doc* doc );

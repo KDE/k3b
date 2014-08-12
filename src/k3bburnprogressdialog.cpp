@@ -22,8 +22,9 @@
 #include "k3bthemedlabel.h"
 #include "k3bthememanager.h"
 
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 
+#include <QtCore/QLocale>
 #include <QGridLayout>
 #include <QLabel>
 #include <QProgressBar>
@@ -130,7 +131,7 @@ void K3b::BurnProgressDialog::slotDeviceBuffer( int b )
 
 void K3b::BurnProgressDialog::slotWriteSpeed( int s, K3b::Device::SpeedMultiplicator multiplicator )
 {
-    m_labelWritingSpeed->setText( QString("%1 KB/s (%2x)").arg(s).arg(KGlobal::locale()->formatNumber((double)s/(double)multiplicator,2)) );
+    m_labelWritingSpeed->setText( QString("%1 KB/s (%2x)").arg(s).arg(QLocale::system().toString((double)s/(double)multiplicator,'g',2)) );
 }
 
 #include "k3bburnprogressdialog.moc"

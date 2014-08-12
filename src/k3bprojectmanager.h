@@ -17,7 +17,7 @@
 #define _K3B_PROJECT_MANAGER_H_
 
 #include <QList>
-#include <QObject>
+#include <QtCore/QObject>
 #include "k3bdoc.h"
 
 

@@ -15,9 +15,10 @@
 
 #include "k3baudioencoder.h"
 
-#include <QFile>
+#include <KI18n/KLocalizedString>
 
-#include <KDebug>
+#include <QtCore/QFile>
+#include <QtCore/QDebug>
 
 
 class K3b::AudioEncoder::Private
@@ -63,7 +64,7 @@ bool K3b::AudioEncoder::openFile( const QString& extension, const QString& filen
         return initEncoder( extension, length, metaData );
     }
     else {
-        kDebug() << "(K3b::AudioEncoder) unable to open file " << filename;
+        qDebug() << "(K3b::AudioEncoder) unable to open file " << filename;
         closeFile();
         return false;
     }
@@ -110,7 +111,7 @@ qint64 K3b::AudioEncoder::encode( const char* data, qint64 len )
 bool K3b::AudioEncoder::initEncoder( const QString& extension, const K3b::Msf& length, const MetaData& metaData )
 {
     if( !isOpen() ) {
-        kDebug() << "(K3b::AudioEncoder) call to initEncoder without openFile!";
+        qDebug() << "(K3b::AudioEncoder) call to initEncoder without openFile!";
         return false;
     }
 
@@ -124,7 +125,7 @@ qint64 K3b::AudioEncoder::writeData( const char* data, qint64 len )
         return d->outputFile->write( data, len );
     }
     else {
-        kDebug() << "(K3b::AudioEncoder) call to writeData without opening a file first.";
+        qDebug() << "(K3b::AudioEncoder) call to writeData without opening a file first.";
         return -1;
     }
 }

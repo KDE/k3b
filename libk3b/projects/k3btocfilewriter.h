@@ -16,7 +16,7 @@
 #define _K3B_TOC_FILE_WRITER_H_
 
 #include <qtextstream.h>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 
 #include "k3btoc.h"
 #include "k3bcdtext.h"

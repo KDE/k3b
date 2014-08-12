@@ -17,7 +17,7 @@
 #include "k3bdiritem.h"
 #include "k3bdatadoc.h"
 #include "k3bisooptions.h"
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 #include <math.h>
 
@@ -149,14 +149,14 @@ void K3b::DataItem::setK3bName( const QString& name ) {
     if ( name != m_k3bName ) {
         // test for not-allowed characters
         if( name.contains('/') ) {
-            kDebug() << "(K3b::DataItem) name contained invalid characters!";
+            qDebug() << "(K3b::DataItem) name contained invalid characters!";
             return;
         }
 
         if( parent() ) {
             K3b::DataItem* item = parent()->find( name );
             if( item && item != this ) {
-                kDebug() << "(K3b::DataItem) item with that name already exists.";
+                qDebug() << "(K3b::DataItem) item with that name already exists.";
                 return;
             }
         }

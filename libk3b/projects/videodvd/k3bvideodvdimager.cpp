@@ -21,14 +21,14 @@
 #include "k3bisooptions.h"
 
 #include <ktemporaryfile.h>
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
 #include <qtextstream.h>
 #include <qdir.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qlist.h>
 
 #include <unistd.h>
@@ -107,7 +107,7 @@ int K3b::VideoDvdImager::writePathSpec()
     //
     QDir dir( KGlobal::dirs()->resourceDirs( "tmp" ).first() );
     d->tempPath = K3b::findUniqueFilePrefix( "k3bVideoDvd", dir.path() );
-    kDebug() << "(K3b::VideoDvdImager) creating temp dir: " << d->tempPath;
+    qDebug() << "(K3b::VideoDvdImager) creating temp dir: " << d->tempPath;
     if( !dir.mkdir( d->tempPath ) ) {
         emit infoMessage( i18n("Unable to create temporary folder '%1'.",d->tempPath), MessageError );
         return -1;

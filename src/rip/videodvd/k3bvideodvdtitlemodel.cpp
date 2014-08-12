@@ -21,8 +21,7 @@
 #include "k3bvideodvdrippingpreview.h"
 #include "k3bvideodvdtitle.h"
 
-#include <KGlobal>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QHash>
 #include <QImage>
@@ -51,7 +50,7 @@ QStringList audioStreamString( const K3b::VideoDVD::Title& title )
                         title.audioStream(i).channels(),
                         title.audioStream(i).langCode().isEmpty()
                             ? i18n("unknown language")
-                            : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ) );
+                            : KLocale::global()->languageCodeToName( title.audioStream(i).langCode() ) );
         }
         if( title.numAudioStreams() > MAX_LINES )
             list.last() += "...";
@@ -75,7 +74,7 @@ QString audioStreamStringToolTip( const K3b::VideoDVD::Title& title )
                     title.audioStream(i).channels(),
                     title.audioStream(i).langCode().isEmpty()
                         ? i18n("unknown language")
-                        : KGlobal::locale()->languageCodeToName( title.audioStream(i).langCode() ),
+                        : KLocale::global()->languageCodeToName( title.audioStream(i).langCode() ),
                     title.audioStream(i).codeExtension() != K3b::VideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
                         ? QString(" ") + K3b::VideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
                         : QString() );
@@ -100,7 +99,7 @@ QStringList subpictureStreamString( const K3b::VideoDVD::Title& title )
                     : i18n("Extended") )
                 .arg( title.subPictureStream(i).langCode().isEmpty()
                     ? i18n("unknown language")
-                    : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) );
+                    : KLocale::global()->languageCodeToName( title.subPictureStream(i).langCode() ) );
         }
         if( title.numSubPictureStreams() > MAX_LINES )
             list.last() += "...";
@@ -125,7 +124,7 @@ QString subpictureStreamStringToolTip( const K3b::VideoDVD::Title& title )
                    : i18n("Extended") )
              .arg( title.subPictureStream(i).langCode().isEmpty()
                    ? i18n("unknown language")
-                   : KGlobal::locale()->languageCodeToName( title.subPictureStream(i).langCode() ) )
+                   : KLocale::global()->languageCodeToName( title.subPictureStream(i).langCode() ) )
              .arg( title.subPictureStream(i).codeExtension() != K3b::VideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
                    ? QString(" ") + K3b::VideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
                    : QString() );

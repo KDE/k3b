@@ -18,11 +18,11 @@
 
 #include "k3bglobals.h"
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qfileinfo.h>
 #include <qregexp.h>
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 #ifdef Q_OS_FREEBSD
 #include <sys/param.h>
@@ -74,7 +74,7 @@ public:
             statDone = true;
         }
         else {
-            kDebug() << "(K3b::FileSystemInfo) statfs failed: " << QString::fromLocal8Bit( ::strerror(errno) );
+            qDebug() << "(K3b::FileSystemInfo) statfs failed: " << QString::fromLocal8Bit( ::strerror(errno) );
         }
 #else
 		statDone = true;

@@ -17,7 +17,7 @@
 #define K3BWAVEFILEWRITER_H
 
 #include <qstring.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qdatastream.h>
 #include "k3b_export.h"
 

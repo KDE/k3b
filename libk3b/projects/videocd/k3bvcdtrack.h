@@ -19,10 +19,10 @@
 // Qt Includes
 #include <qstring.h>
 #include <qfileinfo.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 
 // Kde Includes
-#include <kio/global.h>
+#include <KIO/Global>
 
 // K3b Includes
 #include "mpeginfo/k3bmpeginfo.h"

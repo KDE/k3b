@@ -19,13 +19,13 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <KConfigGroup>
-#include <KGlobal>
-#include <KLocale>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KDELibs4Support/KDE/KLocale>
 
-#include <QtGui/QApplication>
 #include <QtGui/QCursor>
-#include <QtGui/QVBoxLayout>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QVBoxLayout>
 
 
 K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
@@ -56,7 +56,7 @@ void K3b::DeviceOptionTab::readDevices()
 void K3b::DeviceOptionTab::saveDevices()
 {
     // save the config
-    k3bcore->deviceManager()->saveConfig( KGlobal::config()->group( "Devices" ) );
+    k3bcore->deviceManager()->saveConfig( KSharedConfig::openConfig()->group( "Devices" ) );
 }
 
 

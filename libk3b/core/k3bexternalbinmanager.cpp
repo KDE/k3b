@@ -16,16 +16,16 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
-#include <KConfigGroup>
-#include <KDebug>
+#include <KConfigCore/KConfigGroup>
+#include <QtCore/QDebug>
 #include <kdeversion.h>
 #include <kde_file.h>
-#include <KProcess>
-#include <KStandardDirs>
+#include <KCoreAddons/KProcess>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QDir>
 #include <QFileInfo>
-#include <QFile>
+#include <QtCore/QFile>
 #include <QRegExp>
 
 #ifndef Q_OS_WIN32

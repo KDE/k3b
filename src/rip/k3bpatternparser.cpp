@@ -20,8 +20,8 @@
 #include <qdatetime.h>
 #include <qstack.h>
 
-#include <kglobal.h>
-#include <klocale.h>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <libkcddb/cdinfo.h>
 
@@ -175,7 +175,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                     dir.append( s ); // I think it makes more sense to allow empty comments
                     break;
                 case DATE:
-                    dir.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );
+                    dir.append( KLocale::global()->formatDate( QDate::currentDate() ) );
                     break;
                 case EXTENSION:
                     dir.append( extension );
@@ -256,7 +256,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                 s = entry.get( KCDDB::Comment ).toString();
                 break;
             case DATE:
-                s = KGlobal::locale()->formatDate( QDate::currentDate() );
+                s = KLocale::global()->formatDate( QDate::currentDate() );
                 break;
             case EXTENSION:
                 s = extension;

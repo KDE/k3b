@@ -20,7 +20,7 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <kmountpoint.h>
+#include <KIOCore/KMountPoint>
 #include <QDir>
 
 K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )
@@ -39,8 +39,7 @@ K3b::UrlNavigator::~UrlNavigator()
 void K3b::UrlNavigator::setDevice( K3b::Device::Device* dev )
 {
     // Check if device is mounted. If so, switch to the mount path
-    KSharedPtr<KMountPoint> mountPoint = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() );
-    if( !mountPoint.isNull() )
+    if( KMountPoint::Ptr mountPoint = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() ) )
     {
         QString mntPath = mountPoint->mountPoint();
         if( !mntPath.isEmpty() ) {

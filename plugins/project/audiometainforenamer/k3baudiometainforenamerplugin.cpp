@@ -25,17 +25,17 @@
 
 #include <KComboBox>
 #include <KComponentData>
-#include <KConfig>
-#include <KDebug>
-#include <KDialog>
-#include <KFileMetaInfo>
-#include <KIcon>
-#include <KLocale>
-#include <KMessageBox>
-#include <KMimeType>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KFileMetaInfo>
+#include <KDELibs4Support/KDE/KIcon>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KMimeType>
 
 #include <QCheckBox>
-#include <QFile>
+#include <QtCore/QFile>
 #include <QGroupBox>
 #include <QHash>
 #include <QLabel>
@@ -224,7 +224,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 
 void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidgetItem* viewRoot )
 {
-    kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName();
+    qDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName();
 
     d->dirItemHash.insert( dir, viewRoot );
 
@@ -341,7 +341,7 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3b::FileItem* item 
             // Check if files with that name exists and if so append number
             //
             if( existsOtherItemWithSameName( item, newName + extension ) ) {
-                kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name "
+                qDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name "
                          << newName << extension << " already exists" << endl;
                 int i = 1;
                 while( existsOtherItemWithSameName( item, newName + QString( " (%1)").arg(i) + extension ) )

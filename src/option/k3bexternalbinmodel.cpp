@@ -15,7 +15,7 @@
 #include "k3bexternalbinmodel.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QApplication>
 #include <QFont>
@@ -90,7 +90,7 @@ QModelIndex ExternalBinModel::indexForProgram( ExternalProgram* program, int col
 {
     int i = d->programs.indexOf( program );
     if( i >= 0 && i < d->programs.size() )
-        return createIndex( i, column, 0 );
+        return createIndex( i, column, nullptr );
     else
         return QModelIndex();
 }

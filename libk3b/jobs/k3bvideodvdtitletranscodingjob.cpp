@@ -22,11 +22,11 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qfileinfo.h>
 
 
@@ -372,9 +372,9 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         *d->process << *it;
 
     // produce some debugging output
-    kDebug() << "***** transcode parameters:\n";
+    qDebug() << "***** transcode parameters:\n";
     QString s = d->process->joinedArgs();
-    kDebug() << s << flush;
+    qDebug() << s << flush;
     emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
     // start the process

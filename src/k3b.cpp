@@ -69,20 +69,21 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KActionMenu>
-#include <KConfig>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
 #include <KEditToolBar>
 #include <KFileDialog>
 #include <kfileplacesmodel.h>
-#include <KGlobal>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KMenuBar>
 #include <KMimeType>
-#include <KProcess>
+#include <KCoreAddons/KProcess>
 #include <KRecentDocument>
 #include <KRecentFilesAction>
 #include <KShortcutsDialog>
 #include <KStandardAction>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KStatusBar>
 #include <KToggleAction>
 #include <KUrl>
@@ -98,10 +99,10 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLayout>
-#include <QtGui/QSplitter>
-#include <QtGui/QStackedWidget>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QStackedWidget>
 
 #include <cstdlib>
 
@@ -189,10 +190,10 @@ class K3b::MainWindow::Private
 {
 public:
     KRecentFilesAction* actionFileOpenRecent;
-    KAction* actionFileSave;
-    KAction* actionFileSaveAs;
-    KAction* actionFileClose;
-    KAction* actionViewStatusBar;
+    QAction* actionFileSave;
+    QAction* actionFileSaveAs;
+    QAction* actionFileClose;
+    KToggleAction* actionViewStatusBar;
     KToggleAction* actionViewDocumentHeader;
 
     /** The MDI-Interface is managed by this tabbed view */
@@ -277,7 +278,7 @@ K3b::MainWindow::~MainWindow()
 
 KSharedConfig::Ptr K3b::MainWindow::config() const
 {
-    return KGlobal::config();
+    return KSharedConfig::openConfig();
 }
 
 
@@ -288,7 +289,7 @@ void K3b::MainWindow::initActions()
     // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
     // see the correct solution?)
 
-    KAction* actionFileOpen = KStandardAction::open( this, SLOT(slotFileOpen()), actionCollection() );
+    QAction* actionFileOpen = KStandardAction::open( this, SLOT(slotFileOpen()), actionCollection() );
     actionFileOpen->setToolTip( i18n( "Opens an existing project" ) );
     actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
 
@@ -320,7 +321,7 @@ void K3b::MainWindow::initActions()
     actionCollection()->addAction( "file_close_all", actionFileCloseAll );
     connect( actionFileCloseAll, SIGNAL(triggered(bool)), this, SLOT(slotFileCloseAll()) );
 
-    KAction* actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
+    QAction* actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
     actionFileQuit->setToolTip(i18n("Quits the application"));
     actionFileQuit->setStatusTip( actionFileQuit->toolTip() );
 
@@ -444,7 +445,7 @@ void K3b::MainWindow::initActions()
     KStandardAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
     setStandardToolBarMenuEnabled(true);
 
-    KAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
+    QAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
     actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
     actionSettingsConfigure->setStatusTip( actionSettingsConfigure->toolTip() );
 
@@ -543,7 +544,7 @@ void K3b::MainWindow::initView()
 
 void K3b::MainWindow::createClient( K3b::Doc* doc )
 {
-    kDebug();
+    qDebug();
 
     // create the proper K3b::View (maybe we should put this into some other class like K3b::ProjectManager)
     K3b::View* view = 0;
@@ -755,7 +756,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
 
     int cnt = grp.readEntry( "Number of projects", 0 );
 /*
-  kDebug() << "(K3b::MainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
+  qDebug() << "(K3b::MainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
   << "                                read from config group " << c->group() << endl;
 */
     for( int i = 1; i <= cnt; ++i ) {
@@ -777,7 +778,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
             doc->setSaved( saved );
         }
         else
-            kDebug() << "(K3b::MainWindow) could not open session saved doc " << url.toLocalFile();
+            qDebug() << "(K3b::MainWindow) could not open session saved doc " << url.toLocalFile();
 
         // remove the temp file
         if( !saved || modified )
@@ -803,7 +804,7 @@ bool K3b::MainWindow::queryClose()
         // while a job i running
         return false;
 
-//     kDebug() << "(K3b::MainWindow::queryClose) jobs running.";
+//     qDebug() << "(K3b::MainWindow::queryClose) jobs running.";
 //     K3b::Job* job = k3bcore->runningJobs().getFirst();
 
 //     // now search for the major job (to be on the safe side although for now no subjobs register with the k3bcore)
@@ -813,12 +814,12 @@ bool K3b::MainWindow::queryClose()
 //       jh = job->jobHandler();
 //     }
 
-//     kDebug() << "(K3b::MainWindow::queryClose) main job found: " << job->jobDescription();
+//     qDebug() << "(K3b::MainWindow::queryClose) main job found: " << job->jobDescription();
 
 //     // now job is the major job and jh should be a widget
 //     QWidget* progressDialog = dynamic_cast<QWidget*>( jh );
 
-//     kDebug() << "(K3b::MainWindow::queryClose) job active: " << job->active();
+//     qDebug() << "(K3b::MainWindow::queryClose) job active: " << job->active();
 
 //     // now ask the user if he/she really wants to cancel this job
 //     if( job->active() ) {
@@ -826,16 +827,16 @@ bool K3b::MainWindow::queryClose()
 // 				      i18n("Do you really want to cancel?"),
 // 				      i18n("Cancel") ) == KMessageBox::Yes ) {
 // 	// cancel the job
-// 	kDebug() << "(K3b::MainWindow::queryClose) canceling job.";
+// 	qDebug() << "(K3b::MainWindow::queryClose) canceling job.";
 // 	job->cancel();
 
 // 	// wait for the job to finish
-// 	kDebug() << "(K3b::MainWindow::queryClose) waiting for job to finish.";
+// 	qDebug() << "(K3b::MainWindow::queryClose) waiting for job to finish.";
 // 	K3b::SignalWaiter::waitForJob( job );
 
 // 	// close the progress dialog
 // 	if( progressDialog ) {
-// 	  kDebug() << "(K3b::MainWindow::queryClose) closing progress dialog.";
+// 	  qDebug() << "(K3b::MainWindow::queryClose) closing progress dialog.";
 // 	  progressDialog->close();
 // 	  //
 // 	  // now here we have the problem that due to the whole Qt event thing the exec call (or
@@ -848,7 +849,7 @@ bool K3b::MainWindow::queryClose()
 // 	  progressDialog->reparent( 0, QPoint(0,0) );
 // 	}
 
-// 	kDebug() << "(K3b::MainWindow::queryClose) job cleanup done.";
+// 	qDebug() << "(K3b::MainWindow::queryClose) job cleanup done.";
 //       }
 //       else
 // 	return false;
@@ -986,7 +987,7 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
     if( doc ) {
         // we do not use the static KFileDialog method here to be able to specify a filename suggestion
         KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this);
-        dlg.setCaption( i18n("Save As") );
+        dlg.setWindowTitle( i18n("Save As") );
         dlg.setOperationMode( KFileDialog::Saving );
         dlg.setSelection( doc->name() );
         dlg.exec();
@@ -1219,7 +1220,7 @@ void K3b::MainWindow::slotCurrentDocChanged()
             d->lastDoc = v->doc();
         }
         else
-            kDebug() << "(K3b::MainWindow) ERROR: could not get KXMLGUIFactory instance.";
+            qDebug() << "(K3b::MainWindow) ERROR: could not get KXMLGUIFactory instance.";
     }
     else
         k3bappcore->projectManager()->setActive( 0L );

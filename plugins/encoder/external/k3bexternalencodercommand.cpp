@@ -17,9 +17,10 @@
 
 #include "k3bcore.h"
 
-#include <KConfig>
-#include <KConfigGroup>
-#include <KStandardDirs>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QSet>
 
@@ -101,7 +102,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
 
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
     QList<K3bExternalEncoderCommand> commands;
@@ -141,7 +142,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 
 void K3bExternalEncoderCommand::saveCommands( const QList<K3bExternalEncoderCommand>& cmds )
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     c->deleteGroup( "K3bExternalEncoderPlugin" );
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 

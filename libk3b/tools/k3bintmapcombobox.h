@@ -15,7 +15,7 @@
 #ifndef _K3B_INT_MAP_COMBOBOX_H_
 #define _K3B_INT_MAP_COMBOBOX_H_
 
-#include <QtGui/QComboBox>
+#include <QtWidgets/QComboBox>
 
 #include "k3b_export.h"
 

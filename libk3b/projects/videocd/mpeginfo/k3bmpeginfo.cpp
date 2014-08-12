@@ -13,7 +13,7 @@
  */
 
 // kde includes
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
 // k3b includes
 #include "k3bmpeginfo.h"
@@ -45,19 +45,19 @@ K3b::MpegInfo::MpegInfo( const char* filename )
     m_mpegfile = fopen( filename, "rb" );
 
     if ( m_mpegfile == 0 ) {
-        kDebug() << QString( "Unable to open %1" ).arg( m_filename );
+        qDebug() << QString( "Unable to open %1" ).arg( m_filename );
         return ;
     }
 
     if ( fseeko( m_mpegfile, 0, SEEK_END ) ) {
-        kDebug() << QString( "Unable to seek in file %1" ).arg( m_filename );
+        qDebug() << QString( "Unable to seek in file %1" ).arg( m_filename );
         return ;
     }
 
     llong lof = ftello( m_mpegfile );
 
     if ( lof == -1 ) {
-        kDebug() << QString( "Seeking to end of input file %1 failed." ).arg( m_filename );
+        qDebug() << QString( "Seeking to end of input file %1 failed." ).arg( m_filename );
         //give up..
         return ;
     } else
@@ -65,7 +65,7 @@ K3b::MpegInfo::MpegInfo( const char* filename )
 
     // nothing to do on an empty file
     if ( !m_filesize ) {
-        kDebug() << QString( "File %1 is empty." ).arg( m_filename );
+        qDebug() << QString( "File %1 is empty." ).arg( m_filename );
         m_error_string = i18n( "File %1 is empty." , m_filename );
         return ;
     }
@@ -96,20 +96,20 @@ bool K3b::MpegInfo::MpegParsePacket ()
     if ( !EnsureMPEG( 0, MPEG_PACK_HEADER_CODE ) ) {
         llong code = GetNBytes( 0, 4 );
 
-        kDebug() << QString( "(K3b::MpegInfo::mpeg_parse_packet ()) pack header code 0x%1 expected, but 0x%2 found" ).arg( 0x00000100 + MPEG_PACK_HEADER_CODE, 0, 16 ).arg( code, 0, 16 );
+        qDebug() << QString( "(K3b::MpegInfo::mpeg_parse_packet ()) pack header code 0x%1 expected, but 0x%2 found" ).arg( 0x00000100 + MPEG_PACK_HEADER_CODE, 0, 16 ).arg( code, 0, 16 );
 
         if ( code == 0x00000100 + MPEG_SEQUENCE_CODE ) {
-            kDebug() << "...this looks like an elementary video stream but a multiplexed program stream was required.";
+            qDebug() << "...this looks like an elementary video stream but a multiplexed program stream was required.";
             m_error_string = i18n( "This looks like an elementary video stream but a multiplexed program stream was required." );
         }
 
         if ( ( 0xfff00000 & code ) == 0xfff00000 ) {
-            kDebug() << "...this looks like an elementary audio stream but a multiplexed program stream was required.";
+            qDebug() << "...this looks like an elementary audio stream but a multiplexed program stream was required.";
             m_error_string = i18n( "This looks like an elementary audio stream but a multiplexed program stream was required." );
         }
 
         if ( code == 0x52494646 ) {
-            kDebug() << "...this looks like a RIFF header but a plain multiplexed program stream was required.";
+            qDebug() << "...this looks like a RIFF header but a plain multiplexed program stream was required.";
             m_error_string = i18n( "This looks like a RIFF header but a plain multiplexed program stream was required." );
         }
 
@@ -126,7 +126,7 @@ bool K3b::MpegInfo::MpegParsePacket ()
 
     if ( offset != 0 ) {
         // we actually skipped some zeroes
-        kDebug() << QString( "Skipped %1 zeroes at start of file" ).arg( offset );
+        qDebug() << QString( "Skipped %1 zeroes at start of file" ).arg( offset );
     }
 
     // here while schleife
@@ -143,7 +143,7 @@ bool K3b::MpegInfo::MpegParsePacket ()
       offset = FindNextMarker( offset+1, MPEG_PACK_HEADER_CODE );
       }
 
-      kDebug() << "Pkt found: " << pkt;
+      qDebug() << "Pkt found: " << pkt;
     */
 
     //seek the file duration by fetching the last PACK
@@ -161,7 +161,7 @@ bool K3b::MpegInfo::MpegParsePacket ()
     {
         duration = ReadTSMpeg2( last_pack );
     } else {
-        kDebug() << QString( "no timestamp found" );
+        qDebug() << QString( "no timestamp found" );
         duration = ReadTS( last_pack );
     }
 
@@ -196,7 +196,7 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
         int bits;
 
     case MPEG_PACK_HEADER_CODE:
-        // kDebug() << QString( "MPEG_PACK_HEADER_CODE @ %1" ).arg( offset );
+        // qDebug() << QString( "MPEG_PACK_HEADER_CODE @ %1" ).arg( offset );
 
         offset += 4;
 
@@ -220,7 +220,7 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
             if ( m_initial_TS == 0.0 )
             {
                 m_initial_TS = ReadTS( offset );
-                kDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
+                qDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
             }
 
         } else if ( bits >> 2 == 0x1 )                /* %01xx ISO13818-1 */
@@ -237,11 +237,11 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
             if ( m_initial_TS == 0.0 )
             {
                 m_initial_TS = ReadTSMpeg2( offset );
-                kDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
+                qDebug() << QString( "Initial TS = %1" ).arg( m_initial_TS );
             }
 
         } else {
-            kDebug() << QString( "packet not recognized as either version 1 or 2 (%1)" ).arg( bits );
+            qDebug() << QString( "packet not recognized as either version 1 or 2 (%1)" ).arg( bits );
             mpeg_info->version = MPEG_VERS_INVALID;
             return -1;
         }
@@ -260,11 +260,11 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
         offset += 4;
         size = GetSize( offset );
         offset += 2;
-        // kDebug() << QString( "offset = %1, size = %2" ).arg( offset ).arg( size );
+        // qDebug() << QString( "offset = %1, size = %2" ).arg( offset ).arg( size );
 
         switch ( mark ) {
         case MPEG_SYSTEM_HEADER_CODE:
-            // kDebug() << QString( "Systemheader: %1" ).arg( m_code, 0, 16 );
+            // qDebug() << QString( "Systemheader: %1" ).arg( m_code, 0, 16 );
             break;
 
         case MPEG_VIDEO_E0_CODE:
@@ -302,18 +302,18 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
             break;
 
         case MPEG_PRIVATE_1_CODE:
-            kDebug() << QString( "PrivateCode: %1" ).arg( mark, 0, 16 );
+            qDebug() << QString( "PrivateCode: %1" ).arg( mark, 0, 16 );
             break;
         }
         break;
 
     case MPEG_PROGRAM_END_CODE:
-        kDebug() << QString( "ProgramEndCode: %1" ).arg( mark, 0, 16 );
+        qDebug() << QString( "ProgramEndCode: %1" ).arg( mark, 0, 16 );
         offset += 4;
         break;
 
     case MPEG_PICTURE_CODE:
-        kDebug() << QString( "PictureCode: %1" ).arg( mark, 0, 16 );
+        qDebug() << QString( "PictureCode: %1" ).arg( mark, 0, 16 );
         offset += 3;
         break;
 
@@ -331,7 +331,7 @@ byte K3b::MpegInfo::GetByte( llong offset )
     if ( ( offset >= m_buffend ) || ( offset < m_buffstart ) ) {
 
         if ( fseeko( m_mpegfile, offset, SEEK_SET ) ) {
-            kDebug() << QString( "could not get seek to offset (%1) in file %2 (size:%3)" ).arg( offset ).arg( m_filename ).arg( m_filesize );
+            qDebug() << QString( "could not get seek to offset (%1) in file %2 (size:%3)" ).arg( offset ).arg( m_filename ).arg( m_filesize );
             return 0x11;
         }
         nread = fread( m_buffer, 1, BUFFERSIZE, m_mpegfile );
@@ -339,7 +339,7 @@ byte K3b::MpegInfo::GetByte( llong offset )
         m_buffend = offset + nread;
         if ( ( offset >= m_buffend ) || ( offset < m_buffstart ) ) {
             // weird
-            kDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( offset ).arg( m_filename ).arg( m_filesize );
+            qDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( offset ).arg( m_filename ).arg( m_filesize );
             return 0x11;
         }
     }
@@ -361,7 +361,7 @@ byte K3b::MpegInfo::bdGetByte( llong offset )
         m_buffend = start + nread;
         if ( ( offset >= m_buffend ) || ( offset < m_buffstart ) ) {
             // weird
-            kDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( offset ).arg( m_filename ).arg( m_filesize );
+            qDebug() << QString( "could not get offset %1 in file %2 [%3]" ).arg( offset ).arg( m_filename ).arg( m_filesize );
 
             return 0x11;
         }
@@ -530,7 +530,7 @@ int K3b::MpegInfo::GetVideoIdx ( byte marker )
         break;
 
     default:
-        kDebug() << "VideoCode not reached";
+        qDebug() << "VideoCode not reached";
         break;
     }
 
@@ -553,7 +553,7 @@ int K3b::MpegInfo::GetAudioIdx ( byte marker )
         break;
 
     default:
-        kDebug() << "VideoCode not reached";
+        qDebug() << "VideoCode not reached";
         break;
     }
 

@@ -22,21 +22,21 @@
 #include "k3baudiotrack.h"
 #include "k3baudiofile.h"
 
-#include <KDebug>
-#include <KGlobal>
-#include <KIconLoader>
-#include <KInputDialog>
-#include <KLocale>
-#include <KMessageBox>
-#include <KNotification>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KInputDialog>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KNotification>
 
 #include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
-#include <QtGui/QApplication>
-#include <QtGui/QGridLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QLayout>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QPushButton>
 
 
 K3b::AudioTrackTRMLookupDialog::AudioTrackTRMLookupDialog( QWidget* parent )
@@ -45,7 +45,7 @@ K3b::AudioTrackTRMLookupDialog::AudioTrackTRMLookupDialog( QWidget* parent )
 {
     QWidget *widget = new QWidget(this);
     setMainWidget(widget);
-    setCaption(i18n("MusicBrainz Query"));
+    setWindowTitle(i18n("MusicBrainz Query"));
     setButtons(KDialog::Cancel);
     setDefaultButton(KDialog::Cancel);
     setModal(true);

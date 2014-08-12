@@ -18,10 +18,10 @@
 
 #include "k3bisooptions.h"
 
-#include <KDebug>
-#include <KDialog>
-#include <KLocale>
-#include <KMessageBox>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -235,7 +235,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
     m_customFsDlg->save( o );
     for( int i = 0; i < FS_CUSTOM; ++i ) {
         if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
-            kDebug() << "(K3b::DataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
+            qDebug() << "(K3b::DataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
             m_comboFilesystems->setCurrentIndex( i );
             break;
         }

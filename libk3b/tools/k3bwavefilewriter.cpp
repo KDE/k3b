@@ -14,7 +14,7 @@
 
 
 #include "k3bwavefilewriter.h"
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 K3b::WaveFileWriter::WaveFileWriter()
     : m_outputStream( &m_outputFile )
@@ -88,7 +88,7 @@ void K3b::WaveFileWriter::write( const char* data, int len, Endianess e )
         }
         else {
             if( len % 2 > 0 ) {
-                kDebug() << "(K3b::WaveFileWriter) data length ("
+                qDebug() << "(K3b::WaveFileWriter) data length ("
                          << len << ") is not a multiple of 2! Cannot swap bytes." << endl;
                 return;
             }
@@ -147,7 +147,7 @@ void K3b::WaveFileWriter::updateHeader()
             m_outputStream.writeRawData( c, 4 );
         }
         else
-            kDebug() << "(K3b::WaveFileWriter) unable to seek in file: " << m_outputFile.fileName();
+            qDebug() << "(K3b::WaveFileWriter) unable to seek in file: " << m_outputFile.fileName();
 
         if( m_outputFile.seek( 40 ) ) {
             c[0] = (dataSize   >> 0 ) & 0xff;
@@ -157,7 +157,7 @@ void K3b::WaveFileWriter::updateHeader()
             m_outputStream.writeRawData( c, 4 );
         }
         else
-            kDebug() << "(K3b::WaveFileWriter) unable to seek in file: " << m_outputFile.fileName();
+            qDebug() << "(K3b::WaveFileWriter) unable to seek in file: " << m_outputFile.fileName();
 
         // jump back to the end
         m_outputFile.seek( m_outputFile.size() );
@@ -169,7 +169,7 @@ void K3b::WaveFileWriter::padTo2352()
 {
     int bytesToPad = ( m_outputFile.pos() - 44 ) % 2352;
     if( bytesToPad > 0 ) {
-        kDebug() << "(K3b::WaveFileWriter) padding wave file with " << bytesToPad << " bytes.";
+        qDebug() << "(K3b::WaveFileWriter) padding wave file with " << bytesToPad << " bytes.";
 
         char* c = new char[bytesToPad];
         memset( c, 0, bytesToPad );

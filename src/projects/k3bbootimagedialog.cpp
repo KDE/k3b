@@ -16,7 +16,7 @@
 #include "k3bbootimagedialog.h"
 #include "k3bbootimageview.h"
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
 
 K3b::BootImageDialog::BootImageDialog( K3b::DataDoc* doc, 
@@ -24,7 +24,7 @@ K3b::BootImageDialog::BootImageDialog( K3b::DataDoc* doc,
   : KDialog( parent )
 {
 
-  setCaption(i18n("Boot Images"));
+  setWindowTitle(i18n("Boot Images"));
   setButtons(Ok);
   connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   m_bootImageView = new K3b::BootImageView( doc, this );

@@ -19,7 +19,7 @@
 
 #include "k3babstractwriter.h"
 
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 #include <qprocess.h>
 
 namespace K3b {

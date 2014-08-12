@@ -15,8 +15,8 @@
 #include "k3bhalconnection.h"
 #include "k3bdevice.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusInterface>
@@ -50,7 +50,7 @@ namespace {
             return K3b::Device::HalConnection::org_freedesktop_Hal_PermissionDenied;
         }
         else {
-            kDebug() << "Unkown HAL error:" << errorName;
+            qDebug() << "Unkown HAL error:" << errorName;
             return K3b::Device::HalConnection::org_freedesktop_Hal_Unknown;
         }
     }
@@ -85,7 +85,7 @@ K3b::Device::HalConnection::~HalConnection()
 
 K3b::Device::HalConnection::ErrorCode K3b::Device::HalConnection::lock( Device* dev )
 {
-    kDebug() << dev->blockDeviceName();
+    qDebug() << dev->blockDeviceName();
 
     QDBusInterface halIface( "org.freedesktop.Hal",
                              dev->solidDevice().udi(),
@@ -96,21 +96,21 @@ K3b::Device::HalConnection::ErrorCode K3b::Device::HalConnection::lock( Device* 
         
         QDBusMessage msg = halIface.call( QLatin1String( "Lock" ), QLatin1String( "Locked by the K3b libraries" ) );
         if ( msg.type() == QDBusMessage::ErrorMessage ) {
-            kDebug() << "Failed to lock device through HAL:" << msg.errorMessage();
+            qDebug() << "Failed to lock device through HAL:" << msg.errorMessage();
             return toErrorCode( msg.errorName() );
         }
         
         bool exclusive = true;
         msg = halIface.call( QLatin1String( "AcquireInterfaceLock" ), QLatin1String( "org.freedesktop.Hal.Device.Storage" ), exclusive );
         if ( msg.type() == QDBusMessage::ErrorMessage ) {
-            kDebug() << "Failed to acquire storage interface lock through HAL:" << msg.errorMessage();
+            qDebug() << "Failed to acquire storage interface lock through HAL:" << msg.errorMessage();
             return toErrorCode( msg.errorName() );
         }
         
         return org_freedesktop_Hal_Success;
     }
     else {
-        kDebug() << "Could not connect to device object:" << halIface.path();
+        qDebug() << "Could not connect to device object:" << halIface.path();
         return org_freedesktop_Hal_CommunicationError;
     }
 }
@@ -118,7 +118,7 @@ K3b::Device::HalConnection::ErrorCode K3b::Device::HalConnection::lock( Device* 
 
 K3b::Device::HalConnection::ErrorCode K3b::Device::HalConnection::unlock( Device* dev )
 {
-    kDebug() << dev->blockDeviceName();
+    qDebug() << dev->blockDeviceName();
 
     QDBusInterface halIface( "org.freedesktop.Hal",
                              dev->solidDevice().udi(),
@@ -129,20 +129,20 @@ K3b::Device::HalConnection::ErrorCode K3b::Device::HalConnection::unlock( Device
         
         QDBusMessage msg = halIface.call( QLatin1String( "ReleaseInterfaceLock" ), QLatin1String( "org.freedesktop.Hal.Device.Storage" ) );
         if ( msg.type() == QDBusMessage::ErrorMessage ) {
-            kDebug() << "Failed to release storage interface lock through HAL:" << msg.errorMessage();
+            qDebug() << "Failed to release storage interface lock through HAL:" << msg.errorMessage();
             return toErrorCode( msg.errorName() );
         }
         
         msg = halIface.call( QLatin1String( "Unlock" ) );
         if ( msg.type() == QDBusMessage::ErrorMessage ) {
-            kDebug() << "Failed to unlock device through HAL:" << msg.errorMessage();
+            qDebug() << "Failed to unlock device through HAL:" << msg.errorMessage();
             return toErrorCode( msg.errorName() );
         }
         
         return org_freedesktop_Hal_Success;
     }
     else {
-        kDebug() << "Could not connect to device object:" << halIface.path();
+        qDebug() << "Could not connect to device object:" << halIface.path();
         return org_freedesktop_Hal_CommunicationError;
     }
 }

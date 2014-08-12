@@ -10,21 +10,23 @@
 #
 # Copyright (c) 2007, Laurent Montel, <montel@kde.org>
 
+if(SAMPLERATE_INCLUDE_DIR AND SAMPLERATE_LIBRARIES)
+	# in cache already
+	set(Samplerate_FIND_QUIETLY TRUE)
+endif()
 
-if ( SAMPLERATE_INCLUDE_DIR AND SAMPLERATE_LIBRARIES )
-   # in cache already
-   SET(Samplerate_FIND_QUIETLY TRUE)
-endif ( SAMPLERATE_INCLUDE_DIR AND SAMPLERATE_LIBRARIES )
+find_path(SAMPLERATE_INCLUDE_DIR NAMES samplerate.h)
 
-FIND_PATH(SAMPLERATE_INCLUDE_DIR NAMES samplerate.h
-)
-
-FIND_LIBRARY(SAMPLERATE_LIBRARIES NAMES samplerate samplerate-0 libsamplerate libsamplerate-0
-)
+find_library(SAMPLERATE_LIBRARIES NAMES samplerate samplerate-0 libsamplerate libsamplerate-0)
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Samplerate DEFAULT_MSG SAMPLERATE_INCLUDE_DIR SAMPLERATE_LIBRARIES )
+find_package_handle_standard_args(Samplerate DEFAULT_MSG SAMPLERATE_INCLUDE_DIR SAMPLERATE_LIBRARIES)
+
+add_library(samplerate SHARED IMPORTED)
+set_target_properties(samplerate PROPERTIES
+	INTERFACE_INCLUDE_DIRECTORIES "${SAMPLERATE_INCLUDE_DIR}"
+	IMPORTED_LOCATION "${SAMPLERATE_LIBRARIES}"
+)
 
 # show the SAMPLERATE_INCLUDE_DIR and SAMPLERATE_LIBRARIES variables only in the advanced view
-MARK_AS_ADVANCED(SAMPLERATE_INCLUDE_DIR SAMPLERATE_LIBRARIES )
-
+mark_as_advanced(SAMPLERATE_INCLUDE_DIR SAMPLERATE_LIBRARIES)

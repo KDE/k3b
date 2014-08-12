@@ -23,13 +23,13 @@
 
 #include <QTextEdit>
 #include <qcursor.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qclipboard.h>
 #include <QTextStream>
 
-#include <klocale.h>
-#include <KStandardGuiItem>
-#include <kglobalsettings.h>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <kapplication.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
@@ -39,7 +39,7 @@ K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
   : KDialog( parent)
 {
   setModal(true);
-  setCaption(i18n("Debugging Output"));
+  setWindowTitle(i18n("Debugging Output"));
   setButtons(Close|User1|User2);
   setDefaultButton(Close);
   setButtonGuiItem(User1, KStandardGuiItem::saveAs());

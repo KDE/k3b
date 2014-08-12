@@ -21,10 +21,10 @@
 #include "k3bthread.h"
 #include "k3bcore.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
-#include <qfile.h>
+#include <QtCore/QFile>
 
 #include <unistd.h>
 
@@ -169,7 +169,7 @@ bool K3b::DataTrackReader::run()
             // close the device for libdvdcss
             d->device->close();
 
-            kDebug() << "(K3b::DataTrackReader::WorkThread) found encrypted dvd. using libdvdcss.";
+            qDebug() << "(K3b::DataTrackReader::WorkThread) found encrypted dvd. using libdvdcss.";
 
             // open the libdvdcss stuff
             if( !d->libcss )
@@ -259,11 +259,11 @@ bool K3b::DataTrackReader::run()
     s_bufferSizeSectors = 128;
     unsigned char* buffer = new unsigned char[d->usedSectorSize*s_bufferSizeSectors];
     while( s_bufferSizeSectors > 0 && read( buffer, d->firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
-        kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
+        qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
                  << s_bufferSizeSectors << " too high." << endl;
         s_bufferSizeSectors /= 2;
     }
-    kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
+    qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
              << s_bufferSizeSectors << " is max." << endl;
 
     //    s_bufferSizeSectors = K3b::Device::determineMaxReadingBufferSize( d->device, d->firstSector );
@@ -274,7 +274,7 @@ bool K3b::DataTrackReader::run()
         return false;
     }
 
-    kDebug() << "(K3b::DataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks.";
+    qDebug() << "(K3b::DataTrackReader) using buffer size of " << s_bufferSizeSectors << " blocks.";
     emit debuggingOutput( "K3b::DataTrackReader", QString("using buffer size of %1 blocks.").arg( s_bufferSizeSectors ) );
 
     // 2. get it on
@@ -311,7 +311,7 @@ bool K3b::DataTrackReader::run()
 
         if( d->ioDevice ) {
             if( d->ioDevice->write( reinterpret_cast<char*>(buffer ), readBytes ) != readBytes ) {
-                kDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to dev " << d->ioDevice
+                qDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to dev " << d->ioDevice
                          << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << endl;
                 emit debuggingOutput( "K3b::DataTrackReader",
                                       QString("Error while writing to IO device. Current sector is %2.")
@@ -322,7 +322,7 @@ bool K3b::DataTrackReader::run()
         }
         else {
             if( file.write( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
-                kDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to file " << d->imagePath
+                qDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to file " << d->imagePath
                          << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << endl;
                 emit debuggingOutput( "K3b::DataTrackReader",
                                       QString("Error while writing to file %1. Current sector is %2.")
@@ -462,7 +462,7 @@ bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code 
 
     // in MMC1 the page has 8 bytes (12 in MMC4 but we only need the first 3 anyway)
     if( data.size() < 8+8 ) {
-        kDebug() << "(K3b::DataTrackReader) modepage 0x01 data too small: " << data.size();
+        qDebug() << "(K3b::DataTrackReader) modepage 0x01 data too small: " << data.size();
         return false;
     }
 
@@ -470,7 +470,7 @@ bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code 
     data[8+2] = code;
 
     if( d->oldErrorRecoveryMode != code )
-        kDebug() << "(K3b::DataTrackReader) changing data recovery mode from " << d->oldErrorRecoveryMode << " to " << code;
+        qDebug() << "(K3b::DataTrackReader) changing data recovery mode from " << d->oldErrorRecoveryMode << " to " << code;
 
     bool success = dev->modeSelect( data, true, false );
 

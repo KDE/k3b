@@ -15,7 +15,8 @@
 #ifndef _K3B_URL_NAVIGATOR_H_
 #define _K3B_URL_NAVIGATOR_H_
 
-#include <kurlnavigator.h>
+#include <KDELibs4Support/KDE/KUrl>
+#include <KDELibs4Support/KDE/KUrlNavigator>
 
 namespace K3b {
     namespace Device {

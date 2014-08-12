@@ -31,8 +31,8 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KFileItemDelegate>
-#include <KInputDialog>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KInputDialog>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
 #include <KRun>
 
@@ -107,51 +107,51 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_columnAdjuster->addFixedColumn( DataProjectModel::SizeColumn );
     m_columnAdjuster->setColumnMargin( DataProjectModel::SizeColumn, 10 );
 
-    m_actionNewDir = new KAction( KIcon( "folder-new" ), i18n("New Folder..."), m_fileView );
+    m_actionNewDir = new KAction( QIcon::fromTheme( "folder-new" ), i18n("New Folder..."), m_fileView );
     m_actionNewDir->setShortcut( Qt::CTRL + Qt::Key_N );
     m_actionNewDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "new_dir", m_actionNewDir );
     connect( m_actionNewDir, SIGNAL(triggered(bool)), this, SLOT(slotNewDir()) );
 
-    m_actionRemove = new KAction( KIcon( "edit-delete" ), i18n("Remove"), m_fileView );
+    m_actionRemove = new KAction( QIcon::fromTheme( "edit-delete" ), i18n("Remove"), m_fileView );
     m_actionRemove->setShortcut( Qt::Key_Delete );
     m_actionRemove->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "remove", m_actionRemove );
     connect( m_actionRemove, SIGNAL(triggered(bool)), this, SLOT(slotRemove()) );
 
-    m_actionRename = new KAction( KIcon( "edit-rename" ), i18n("Rename"), m_fileView );
+    m_actionRename = new KAction( QIcon::fromTheme( "edit-rename" ), i18n("Rename"), m_fileView );
     m_actionRename->setShortcut( Qt::Key_F2 );
     m_actionRename->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "rename", m_actionRename );
     connect( m_actionRename, SIGNAL(triggered(bool)), this, SLOT(slotRename()) );
 
-    m_actionParentDir = new KAction( KIcon( "go-up" ), i18n("Parent Folder"), m_fileView );
+    m_actionParentDir = new KAction( QIcon::fromTheme( "go-up" ), i18n("Parent Folder"), m_fileView );
     m_actionParentDir->setShortcut( Qt::Key_Backspace );
     m_actionParentDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "parent_dir", m_actionParentDir );
 
-    m_actionProperties = new KAction( KIcon( "document-properties" ), i18n("Properties"), m_fileView );
+    m_actionProperties = new KAction( QIcon::fromTheme( "document-properties" ), i18n("Properties"), m_fileView );
     m_actionProperties->setShortcut( Qt::ALT + Qt::Key_Return );
     m_actionProperties->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "properties", m_actionProperties );
     connect( m_actionProperties, SIGNAL(triggered(bool)), this, SLOT(slotProperties()) );
 
-    m_actionOpen = new KAction( KIcon( "document-open" ), i18n("Open"), m_view );
+    m_actionOpen = new KAction( QIcon::fromTheme( "document-open" ), i18n("Open"), m_view );
     actionCollection->addAction( "open", m_actionOpen );
     connect( m_actionOpen, SIGNAL(triggered(bool)), this, SLOT(slotOpen()) );
 
-    m_actionImportSession = new KAction( KIcon( "document-import" ), i18n("&Import Session..."), m_view );
+    m_actionImportSession = new KAction( QIcon::fromTheme( "document-import" ), i18n("&Import Session..."), m_view );
     m_actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
     actionCollection->addAction( "project_data_import_session", m_actionImportSession );
     connect( m_actionImportSession, SIGNAL(triggered(bool)), this, SLOT(slotImportSession()) );
 
-    m_actionClearSession = new KAction( KIcon( "edit-clear" ), i18n("&Clear Imported Session"), m_view );
+    m_actionClearSession = new KAction( QIcon::fromTheme( "edit-clear" ), i18n("&Clear Imported Session"), m_view );
     m_actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
     m_actionClearSession->setEnabled( m_doc->importedSession() > -1 );
     actionCollection->addAction( "project_data_clear_imported_session", m_actionClearSession );
     connect( m_actionClearSession, SIGNAL(triggered(bool)), this, SLOT(slotClearImportedSession()) );
 
-    m_actionEditBootImages = new KAction( KIcon( "document-properties" ), i18n("&Edit Boot Images..."), m_view );
+    m_actionEditBootImages = new KAction( QIcon::fromTheme( "document-properties" ), i18n("&Edit Boot Images..."), m_view );
     m_actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
     actionCollection->addAction( "project_data_edit_boot_images", m_actionEditBootImages );
     connect( m_actionEditBootImages, SIGNAL(triggered(bool)), this, SLOT(slotEditBootImages()) );
@@ -291,7 +291,7 @@ void K3b::DataViewImpl::slotOpen()
                         m_view );
         }
         else {
-            KRun::displayOpenWithDialog( KUrl::List() << url, m_view );
+            KRun::displayOpenWithDialog( QList<QUrl>() << url, m_view );
         }
     }
 }
@@ -374,7 +374,7 @@ void K3b::DataViewImpl::slotClearImportedSession()
 void K3b::DataViewImpl::slotEditBootImages()
 {
     KDialog dlg( m_view );
-    dlg.setCaption( i18n("Edit Boot Images") );
+    dlg.setWindowTitle( i18n("Edit Boot Images") );
     dlg.setButtons( KDialog::Ok );
     dlg.setDefaultButton( KDialog::Ok );
     dlg.setMainWidget( new K3b::BootImageView( m_doc, &dlg ) );

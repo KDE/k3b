@@ -17,9 +17,10 @@
 #include "k3boggvorbisencoderdefaults.h"
 #include "k3bcore.h"
 
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KNumInput>
 
 #include <QCheckBox>
@@ -115,7 +116,7 @@ void K3bOggVorbisEncoderSettingsWidget::slotQualityLevelChanged( int val )
 
 void K3bOggVorbisEncoderSettingsWidget::load()
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
 
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
@@ -136,7 +137,7 @@ void K3bOggVorbisEncoderSettingsWidget::load()
 
 void K3bOggVorbisEncoderSettingsWidget::save()
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
 
     KConfigGroup grp(c,"K3bOggVorbisEncoderPlugin" );
 

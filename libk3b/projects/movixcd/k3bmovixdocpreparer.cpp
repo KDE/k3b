@@ -24,10 +24,10 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bisoimager.h"
 
-#include <KLocale>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <QtCore/QDebug>
 #include <KTemporaryFile>
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include <QTextStream>
 #include <QDir>
@@ -90,7 +90,7 @@ K3b::MovixDoc* K3b::MovixDocPreparer::doc() const
 
 void K3b::MovixDocPreparer::start()
 {
-    kDebug() << k_funcinfo;
+    qDebug();
     jobStarted();
 
     bool success = true;
@@ -111,7 +111,7 @@ void K3b::MovixDocPreparer::cancel()
 
 bool K3b::MovixDocPreparer::createMovixStructures()
 {
-    kDebug() << k_funcinfo;
+    qDebug();
     removeMovixStructures();
 
     if( doc() ) {
@@ -139,7 +139,7 @@ bool K3b::MovixDocPreparer::createMovixStructures()
 
 void K3b::MovixDocPreparer::removeMovixStructures()
 {
-    kDebug() << k_funcinfo;
+    qDebug();
     // remove movix files from doc
     // the dataitems do the cleanup in the doc
     delete d->movixDir;
@@ -459,7 +459,7 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
         } else if( next->isDir() ) {
             dir = static_cast<K3b::DirItem*>( next );
         } else {
-            kError() << "(K3b::MovixDocPreparer) found non-dir item where a dir was needed." << endl;
+            qCritical() << "(K3b::MovixDocPreparer) found non-dir item where a dir was needed." << endl;
             return 0;
         }
     }

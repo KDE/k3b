@@ -17,12 +17,12 @@
 
 #include "k3btoc.h"
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QListWidget>
-#include <QtGui/QLabel>
-#include <QtGui/QApplication>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QListWidget>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QApplication>
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <libkcddb/client.h>
 
@@ -41,7 +41,7 @@ KCDDB::TrackOffsetList K3b::CDDB::createTrackOffsetList( const K3b::Device::Toc&
 K3b::CDDB::MultiEntriesDialog::MultiEntriesDialog( QWidget* parent )
     : KDialog( parent )
 {
-    setCaption( i18n("Multiple CDDB Entries Found") );
+    setWindowTitle( i18n("Multiple CDDB Entries Found") );
     setButtons( Ok|Cancel );
 
     QWidget* frame = mainWidget();
@@ -154,7 +154,7 @@ K3b::Medium K3b::CDDB::CDDBJob::medium() const
 
 void K3b::CDDB::CDDBJob::start()
 {
-    kDebug();
+    qDebug();
     d->cddbInfo.clear();
     d->cddbClient.lookup( createTrackOffsetList( d->toc ) );
 }
@@ -186,4 +186,4 @@ K3b::CDDB::CDDBJob* K3b::CDDB::CDDBJob::queryCddb( const K3b::Device::Toc& toc )
     return job;
 }
 
-#include "k3bcddb.moc"
+#include "moc_k3bcddb.cpp"

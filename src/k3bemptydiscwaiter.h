@@ -17,6 +17,7 @@
 #define K3BEMPTYDISCWAITER_H
 
 #include <kdialog.h>
+#include <kdemacros.h>
 #include "k3bjobhandler.h"
 
 #include "k3bdiskinfo.h"
@@ -75,7 +76,7 @@ namespace K3b {
         /**
          * This only openes a dialog if the first check failed.
          */
-        KDE_DEPRECATED static Device::MediaType wait( Device::Device* device,
+		Q_DECL_DEPRECATED static Device::MediaType wait( Device::Device* device,
                                                       bool appendable = false,
                                                       Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                                       QWidget* parent = 0 );

@@ -27,12 +27,12 @@
 #include <QTimer>
 #include <QWhatsThis>
 
-#include <KColorScheme>
-#include <KDialog>
+#include <KConfigWidgets/KColorScheme>
+#include <KDELibs4Support/KDE/KDialog>
 #include <KDiskFreeSpaceInfo>
-#include <kio/global.h>
+#include <KIO/Global>
 #include <KLineEdit>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KUrlRequester>
 #include <KUrlLabel>
 
@@ -336,7 +336,7 @@ void K3b::VideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
 void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
 {
     KDialog dlg( this );
-    dlg.setCaption( i18n("Video Picture Size") );
+    dlg.setWindowTitle( i18n("Video Picture Size") );
     dlg.setButtons( KDialog::Ok|KDialog::Cancel );
     dlg.setDefaultButton( KDialog::Ok );
 

@@ -15,7 +15,7 @@
 #ifndef _K3B_LSOF_WRAPPER_DIALOG_H_
 #define _K3B_LSOF_WRAPPER_DIALOG_H_
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 
 class QLabel;
 

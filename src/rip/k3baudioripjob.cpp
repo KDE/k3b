@@ -24,7 +24,7 @@
 
 #include <libkcddb/cdinfo.h>
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 
 namespace K3b {

@@ -18,8 +18,8 @@
 #include "k3bplugin.h"
 #include "k3bcore.h"
 
-#include <KLocale>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <QtCore/QDebug>
 #include <KPluginSelector>
 #include <KPluginInfo>
 
@@ -59,7 +59,7 @@ K3b::PluginOptionTab::PluginOptionTab( QWidget* parent )
 
         foreach( Plugin* plugin, k3bcore->pluginManager()->plugins( category ) ) {
             plugins << plugin->pluginInfo();
-            kDebug() << "Adding plugin" << plugin->pluginInfo().name();
+            qDebug() << "Adding plugin" << plugin->pluginInfo().name();
         }
         pluginSelector->addPlugins( plugins,
                                     KPluginSelector::ReadConfigFile,

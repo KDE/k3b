@@ -49,6 +49,4 @@ private:
     Private* d;
 };
 
-K3B_EXPORT_PLUGIN(k3blameencoder, K3bLameEncoder)
-
 #endif

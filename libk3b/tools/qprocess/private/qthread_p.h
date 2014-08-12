@@ -59,7 +59,7 @@
 #include "QtCore/qmutex.h"
 #include "QtCore/qstack.h"
 #include "QtCore/qwaitcondition.h"
-#include "QtCore/qmap.h"
+#include "QtCore/QtCore/QMap"
 #include "private/qobject_p.h"
 
 QT_BEGIN_NAMESPACE

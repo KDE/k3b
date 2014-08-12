@@ -25,10 +25,10 @@
 #include "k3bglobalsettings.h"
 #include "k3bdevicehandler.h"
 
-#include <KLocale>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <QtCore/QDebug>
 
-#include <QFile>
+#include <QtCore/QFile>
 #include <QTextStream>
 
 
@@ -87,7 +87,7 @@ bool K3b::BinImageWritingJob::prepareWriter()
 
         // IMPROVEME: check if it's a cdrdao toc-file
         if( m_tocFile.right(4) == ".toc" ) {
-            kDebug() << "(K3b::BinImageWritingJob) imagefile has ending toc.";
+            qDebug() << "(K3b::BinImageWritingJob) imagefile has ending toc.";
             usedWritingApp = K3b::WritingAppCdrdao;
         }
         else {
@@ -98,13 +98,13 @@ bool K3b::BinImageWritingJob::prepareWriter()
             if( f.open( QIODevice::ReadOnly ) ) {
                 QTextStream fStr( &f );
                 if( fStr.readAll().contains( "MODE1/2352" ) ) {
-                    kDebug() << "(K3b::BinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao.";
+                    qDebug() << "(K3b::BinImageWritingJob) cuefile contains MODE1/2352 track. using cdrdao.";
                     usedWritingApp = K3b::WritingAppCdrdao;
                 }
                 f.close();
             }
             else
-                kDebug() << "(K3b::BinImageWritingJob) could not open file " << m_tocFile;
+                qDebug() << "(K3b::BinImageWritingJob) could not open file " << m_tocFile;
         }
     }
     else

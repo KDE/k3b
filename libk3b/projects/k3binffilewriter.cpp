@@ -20,7 +20,7 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qdatetime.h>
 
 
@@ -42,7 +42,7 @@ bool K3b::InfFileWriter::save( const QString& filename )
     QFile f( filename );
 
     if( !f.open( QIODevice::WriteOnly ) ) {
-        kDebug() << "(K3b::InfFileWriter) could not open file " << f.fileName();
+        qDebug() << "(K3b::InfFileWriter) could not open file " << f.fileName();
         return false;
     }
 

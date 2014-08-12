@@ -17,7 +17,7 @@
 #ifndef K3BDATAPROPERTIESDIALOG_H
 #define K3BDATAPROPERTIESDIALOG_H
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 #include <QList>
 
 class KLineEdit;

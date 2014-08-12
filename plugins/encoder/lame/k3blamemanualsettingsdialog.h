@@ -16,7 +16,7 @@
 #ifndef _K3B_LAME_MANUAL_SETTINGS_DIALOG_H_
 #define _K3B_LAME_MANUAL_SETTINGS_DIALOG_H_
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 
 #include "ui_base_k3bmanualbitratesettingswidget.h"
 

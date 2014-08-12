@@ -21,7 +21,7 @@
 #include <QStyle>
 
 #include <KIconEffect>
-#include <KIconLoader>
+#include <KIconThemes/KIconLoader>
 
 
 // FIXME: Get the whole animated hovering code from KFileItemDelegate and put it into a generic class which we can then reuse here

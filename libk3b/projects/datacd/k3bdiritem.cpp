@@ -20,8 +20,8 @@
 #include "k3bfileitem.h"
 #include "k3bisooptions.h"
 
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
 
 
 K3b::DirItem::DirItem(const QString& name, const ItemFlags& flags)
@@ -443,7 +443,7 @@ bool K3b::DirItem::canAddDataItem( DataItem* item ) const
     // check if we are a subdir of item
     DirItem* dirItem = dynamic_cast<DirItem*>( item );
     if( dirItem && dirItem->isSubItem( this ) ) {
-        kDebug() << "(K3b::DirItem) trying to move a dir item down in it's own tree.";
+        qDebug() << "(K3b::DirItem) trying to move a dir item down in it's own tree.";
         return false;
     } else if( !item || m_children.contains( item ) ) {
         return false;

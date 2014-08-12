@@ -20,7 +20,7 @@
 #include "k3btoc.h"
 #include "k3bmedium.h"
 
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 #include <QList>
 
 #include <libkcddb/cdinfo.h>

@@ -18,10 +18,10 @@
 #include "k3bexternalbinmanager.h"
 
 #include <qbytearray.h>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 #include <qapplication.h>
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 
 namespace {
@@ -64,7 +64,7 @@ namespace {
             lines.first().prepend( unfinishedLine );
             unfinishedLine.truncate(0);
 
-            kDebug() << "(K3b::Process)           joined line: '" << (lines.first()) << "'";
+            qDebug() << "(K3b::Process)           joined line: '" << (lines.first()) << "'";
         }
 
         QStringList::iterator it;
@@ -75,8 +75,8 @@ namespace {
             QByteRef c = buffer[buffer.length()-1];
             bool hasUnfinishedLine = ( c != '\n' && c != '\r' && QChar( c ) != QChar(46) );  // What is unicode 46?? It is printed as a point
             if( hasUnfinishedLine ) {
-                kDebug() << "(K3b::Process) found unfinished line: '" << lines.last() << "'";
-                kDebug() << "(K3b::Process)             last char: '" << buffer.right(1) << "'";
+                qDebug() << "(K3b::Process) found unfinished line: '" << lines.last() << "'";
+                qDebug() << "(K3b::Process)             last char: '" << buffer.right(1) << "'";
                 unfinishedLine = lines.takeLast();
             }
         }
@@ -197,7 +197,7 @@ QString K3b::Process::joinedArgs()
 
 void K3b::Process::close()
 {
-    kDebug();
+    qDebug();
     closeWriteChannel();
     closeReadChannel( QProcess::StandardOutput );
 }
@@ -205,10 +205,10 @@ void K3b::Process::close()
 
 bool K3b::Process::start( KProcess::OutputChannelMode mode )
 {
-    kDebug();
+    qDebug();
     setOutputChannelMode( mode );
     K3bKProcess::start();
-    kDebug() << "started";
+    qDebug() << "started";
     return K3bQProcess::waitForStarted();
 }
 

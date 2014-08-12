@@ -238,7 +238,7 @@ namespace K3b {
          * be called with urls to every kind of files and if it returns true
          * a decoder of this type is used for the file.
          */
-        virtual bool canDecode( const KUrl& filename ) = 0;
+        virtual bool canDecode( const QUrl& filename ) = 0;
 
         virtual AudioDecoder* createDecoder( QObject* parent = 0 ) const = 0;
 
@@ -249,7 +249,7 @@ namespace K3b {
          *
          * @returns a newly created decoder on success and 0 when no decoder could be found.
          */
-        static AudioDecoder* createDecoder( const KUrl& url );
+        static AudioDecoder* createDecoder( const QUrl& url );
     };
 }
 

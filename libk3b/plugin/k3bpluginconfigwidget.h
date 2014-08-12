@@ -16,11 +16,10 @@
 #ifndef _K3B_PLUGIN_CONFIG_WIDGET_H_
 #define _K3B_PLUGIN_CONFIG_WIDGET_H_
 
-#include <KCModule>
-#include <KPluginFactory>
-#include <KPluginLoader>
-
 #include "k3b_export.h"
+
+#include <KConfigWidgets/KCModule>
+#include <KCoreAddons/KPluginFactory>
 
 class KConfigGroup;
 
@@ -96,8 +95,6 @@ namespace K3b {
     };
 }
 
-#define K3B_EXPORT_PLUGIN_CONFIG_WIDGET( libname, classname )   \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)     \
-        K_EXPORT_PLUGIN(factory(#libname))
+#define K3B_EXPORT_PLUGIN_CONFIG_WIDGET( libname, classname ) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 #endif

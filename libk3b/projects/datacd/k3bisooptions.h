@@ -17,7 +17,7 @@
 
 #include <qstring.h>
 #include "k3b_export.h"
-#include <kconfiggroup.h>
+#include <KConfigCore/KConfigGroup>
 
 
 namespace K3b {

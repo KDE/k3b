@@ -26,8 +26,8 @@
 
 #include <qtabwidget.h>
 #include <klineedit.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 
 

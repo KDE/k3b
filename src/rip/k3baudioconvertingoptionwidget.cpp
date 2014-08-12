@@ -19,13 +19,13 @@
 #include "k3baudioencoder.h"
 #include "k3bcore.h"
 
-#include <KColorScheme>
+#include <KConfigWidgets/KColorScheme>
 #include <KComboBox>
-#include <KConfig>
+#include <KConfigCore/KConfig>
 #include <KDiskFreeSpaceInfo>
-#include <KGlobalSettings>
-#include <KLocale>
-#include <KIconLoader>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KIconThemes/KIconLoader>
 #include <KUrlRequester>
 
 #include <QCheckBox>
@@ -167,7 +167,7 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
     connect( m_buttonConfigurePlugin, SIGNAL(clicked()), this, SLOT(slotConfigurePlugin()) );
 
     m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-    m_buttonConfigurePlugin->setIcon( KIcon( "configure" ) );
+    m_buttonConfigurePlugin->setIcon( QIcon::fromTheme( "configure" ) );
     
     // FIXME: see if sox and the sox encoder are installed and if so do not put the internal wave
     //        writer in the list of encoders.

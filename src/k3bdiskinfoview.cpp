@@ -33,13 +33,14 @@
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpixmap.h>
-#include <QtGui/QTextBrowser>
-#include <QtWebKit/QWebView>
+#include <QtWidgets/QTextBrowser>
+#include <QtWebKitWidgets/QWebView>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
-#include <kio/global.h>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <QtCore/QDebug>
+#include <KIO/Global>
 #include <libkcddb/cdinfo.h>
 
 
@@ -115,7 +116,7 @@ void K3b::DiskInfoView::reloadMedium()
     s += "</body>";
 
     m_infoView->setHtml( s );
-    kDebug() << s;
+    qDebug() << s;
 }
 
 

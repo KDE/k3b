@@ -29,12 +29,12 @@
 #include "k3baudioencoder.h"
 
 #include <KComboBox>
-#include <KConfig>
-#include <KDebug>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
 #include <KFileDialog>
-#include <kio/global.h>
-#include <KLocale>
-#include <KMessageBox>
+#include <KIO/Global>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KUrlRequester>
 
 #include <QCheckBox>

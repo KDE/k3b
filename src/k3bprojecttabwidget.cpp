@@ -24,9 +24,10 @@
 
 #include <KAction>
 #include <KActionMenu>
-#include <KDebug>
-#include <KIconLoader>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KIcon>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
 #include <KUrl>
 
@@ -133,7 +134,7 @@ K3b::Doc* K3b::ProjectTabWidget::currentTab() const
 }
 
 
-void K3b::ProjectTabWidget::addAction( KAction* action )
+void K3b::ProjectTabWidget::addAction( QAction* action )
 {
     d->projectActionMenu->addAction( action );
 }

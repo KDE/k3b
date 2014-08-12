@@ -15,7 +15,7 @@
 #include "k3bbootimagemodel.h"
 #include "k3bdatadoc.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 namespace K3b {
 

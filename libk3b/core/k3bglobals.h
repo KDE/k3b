@@ -20,7 +20,7 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QString>
-#include <kio/global.h>
+#include <KIO/Global>
 #include <KUrl>
 
 #include "k3bdevicetypes.h"

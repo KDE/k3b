@@ -16,7 +16,7 @@
 #include "k3bthroughputestimator.h"
 
 #include <qdatetime.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 
 class K3b::ThroughputEstimator::Private

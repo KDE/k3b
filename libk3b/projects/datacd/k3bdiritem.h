@@ -21,7 +21,7 @@
 #include <QtCore/QList>
 #include <QtCore/QString>
 
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include "k3bdataitem.h"
 #include "k3b_export.h"

@@ -19,9 +19,9 @@
 #include "k3bdevicemanager.h"
 #include "k3bcore.h"
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
-#include <qmap.h>
+#include <QtCore/QMap>
 
 
 class K3b::DeviceComboBox::Private

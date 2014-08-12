@@ -19,7 +19,7 @@
 #include "k3btrm.h"
 #include "musicbrainz/mb_c.h"
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 #include <kprotocolmanager.h>
 #include <kurl.h>
 

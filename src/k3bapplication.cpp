@@ -44,11 +44,11 @@
 
 #include <KAboutData>
 #include <KCmdLineArgs>
-#include <KConfig>
-#include <KDebug>
-#include <KGlobal>
-#include <KLocale>
-#include <KNotification>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KNotification>
 #include <QTimer>
 
 
@@ -61,12 +61,13 @@ K3b::Application::Application()
       m_initialized( false )
 {
     // insert library i18n data
-    KGlobal::locale()->insertCatalog( "libk3bdevice" );
-    KGlobal::locale()->insertCatalog( "libk3b" );
+#warning KLocale::global()->insertCatalog() with KF5 equivalent
+//    KLocale::global()->insertCatalog( "libk3bdevice" );
+//    KLocale::global()->insertCatalog( "libk3b" );
 
     m_core = new Core( this );
     
-    KConfigGroup generalOptions( KGlobal::config(), "General Options" );
+    KConfigGroup generalOptions( KSharedConfig::openConfig(), "General Options" );
 
     Splash* splash = 0;
     if( !qApp->isSessionRestored() ) {
@@ -102,7 +103,7 @@ K3b::Application::Application()
     // Load device, external programs, and stuff.
     //
     QMetaObject::invokeMethod( m_core, "init", Qt::QueuedConnection );
-    QMetaObject::invokeMethod( m_core, "readSettings", Qt::QueuedConnection, Q_ARG( KSharedConfig::Ptr, KGlobal::config() ) );
+    QMetaObject::invokeMethod( m_core, "readSettings", Qt::QueuedConnection, Q_ARG( KSharedConfig::Ptr, KSharedConfig::openConfig() ) );
     QMetaObject::invokeMethod( m_core->deviceManager(), "printDevices", Qt::QueuedConnection );
     QMetaObject::invokeMethod( this, "init", Qt::QueuedConnection );
 
@@ -129,7 +130,7 @@ void K3b::Application::init()
 
     // write the current version to make sure checks such as SystemProblemDialog::readCheckSystemConfig
     // use a proper value
-    KConfigGroup generalOptions( KGlobal::config(), "General Options" );
+    KConfigGroup generalOptions( KSharedConfig::openConfig(), "General Options" );
     generalOptions.writeEntry( "config version", QString(m_core->version()) );
     
     m_initialized = true;
@@ -315,7 +316,7 @@ bool K3b::Application::Core::internalBlockDevice( K3b::Device::Device* dev )
 
 #ifdef ENABLE_HAL_SUPPORT
         if( Device::HalConnection::instance()->lock( dev ) != Device::HalConnection::org_freedesktop_Hal_Success )
-            kDebug() << "(K3b::InterferingSystemsHandler) HAL lock failed.";
+            qDebug() << "(K3b::InterferingSystemsHandler) HAL lock failed.";
 #endif
 
         //

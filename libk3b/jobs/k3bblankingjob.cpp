@@ -22,11 +22,11 @@
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kio/global.h>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIO/Global>
 #include <kio/job.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 #include <qstring.h>
 

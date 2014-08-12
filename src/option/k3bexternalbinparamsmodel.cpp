@@ -15,7 +15,7 @@
 #include "k3bexternalbinparamsmodel.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QFont>
 #include <QHash>

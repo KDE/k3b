@@ -17,7 +17,7 @@
 #define _K3B_DEBUG_OUTPUT_CACHE_H_
 
 #include <qstring.h>
-#include <qmap.h>
+#include <QtCore/QMap>
 
 
 namespace K3b {

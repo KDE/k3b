@@ -27,7 +27,7 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KIcon>
 
 
@@ -169,4 +169,4 @@ K3b::DeviceMenu::~DeviceMenu()
     delete d;
 }
 
-#include "k3bdevicemenu.moc"
+#include "moc_k3bdevicemenu.cpp"

@@ -23,8 +23,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-#include <KLocale>
-#include <kio/global.h>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KIO/Global>
 
 
 // TODO: three modes:
@@ -42,7 +42,7 @@ K3b::AudioTrackDialog::AudioTrackDialog( const QList<K3b::AudioTrack*>& tracks, 
 {
     m_tracks = tracks;
 
-    setCaption(i18n("Audio Track Properties"));
+    setWindowTitle(i18n("Audio Track Properties"));
     setButtons(Ok|Cancel|Apply);
     setDefaultButton(Ok);
     setModal(true);

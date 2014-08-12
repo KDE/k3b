@@ -24,8 +24,8 @@
 #include "k3bthreadwidget.h"
 #include "k3btoc.h"
 
-#include <KLocale>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <QtCore/QDebug>
 
 
 class K3b::AudioCdTrackSource::Private
@@ -56,7 +56,7 @@ public:
 
 bool K3b::AudioCdTrackSource::Private::searchForAudioCD( K3b::Device::Device* dev ) const
 {
-    kDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD(" << dev->description() << ")";
+    qDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD(" << dev->description() << ")";
     K3b::Device::Toc toc = dev->readToc();
     return ( toc.discId() == discId );
 }
@@ -159,7 +159,7 @@ QString K3b::AudioCdTrackSource::cdTitle() const
 
 K3b::Device::Device* K3b::AudioCdTrackSource::searchForAudioCD() const
 {
-    kDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD()";
+    qDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD()";
     // first try the saved device
     if( d->lastUsedDevice && d->searchForAudioCD( d->lastUsedDevice ) )
         return d->lastUsedDevice;
@@ -171,7 +171,7 @@ K3b::Device::Device* K3b::AudioCdTrackSource::searchForAudioCD() const
         }
     }
 
-    kDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD) failed.";
+    qDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD) failed.";
 
     return 0;
 }

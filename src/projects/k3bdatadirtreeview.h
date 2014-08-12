@@ -17,7 +17,7 @@
 #define K3BDATADIRTREEVIEW_H
 
 #include <KUrl>
-#include <QtGui/QTreeView>
+#include <QtWidgets/QTreeView>
 
 
 class QItemSelection;

@@ -29,9 +29,9 @@
 
 // include files for KDE
 #include <KAction>
-#include <KLocale>
-#include <KMessageBox>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <QtCore/QDebug>
 #include <KToolBar>
 
 K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
@@ -98,7 +98,7 @@ void K3b::View::slotBurn()
             delete dlg;
         }
         else {
-            kDebug() << "(K3b::Doc) Error: no burndialog available.";
+            qDebug() << "(K3b::Doc) Error: no burndialog available.";
         }
     }
 }
@@ -112,7 +112,7 @@ void K3b::View::slotProperties()
         delete dlg;
     }
     else {
-        kDebug() << "(K3b::Doc) Error: no burndialog available.";
+        qDebug() << "(K3b::Doc) Error: no burndialog available.";
     }
 }
 

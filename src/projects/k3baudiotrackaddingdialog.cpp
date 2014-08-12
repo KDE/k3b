@@ -24,9 +24,9 @@
 #include "k3bglobals.h"
 #include "k3bcuefileparser.h"
 
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QDir>
 #include <QFileInfo>
@@ -55,7 +55,7 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
     setMainWidget(page);
     setButtons(Cancel);
     setDefaultButton(Cancel);
-    setCaption(i18n("Please be patient..."));
+    setWindowTitle(i18n("Please be patient..."));
     QGridLayout* grid = new QGridLayout( page );
 
     m_infoLabel = new QLabel( page );

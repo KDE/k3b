@@ -41,14 +41,14 @@
 #include <QLayout>
 #include <QList>
 
-#include <KConfig>
-#include <KGlobal>
-#include <KIconLoader>
-#include <KInputDialog>
-#include <KLocale>
-#include <KMessageBox>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KInputDialog>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KUrl>
-#include <KStandardGuiItem>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
 #include <KSqueezedTextLabel>
 
 #include <unistd.h>
@@ -114,7 +114,7 @@ void K3b::DataUrlAddingDialog::init()
     setMainWidget(page);
     setButtons(Cancel);
     setDefaultButton(Cancel);
-    setCaption(i18n("Adding files to project '%1'",m_doc->URL().fileName()));
+    setWindowTitle(i18n("Adding files to project '%1'",m_doc->URL().fileName()));
     setAttribute( Qt::WA_DeleteOnClose );
     QGridLayout* grid = new QGridLayout( page );
     grid->setContentsMargins( 0, 0, 0, 0 );
@@ -576,10 +576,10 @@ void K3b::DataUrlAddingDialog::slotCopyMoveItems()
 
 
     if( dir == item->parent() ) {
-        kDebug() << "(K3b::DataUrlAddingDialog) trying to move an item into its own parent dir.";
+        qDebug() << "(K3b::DataUrlAddingDialog) trying to move an item into its own parent dir.";
     }
     else if( dir == item ) {
-        kDebug() << "(K3b::DataUrlAddingDialog) trying to move an item into itselft.";
+        qDebug() << "(K3b::DataUrlAddingDialog) trying to move an item into itselft.";
     }
     else {
         //

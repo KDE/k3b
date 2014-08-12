@@ -22,10 +22,10 @@
 #include "k3bfileitem.h"
 #include "k3bglobals.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KStringHandler>
 
-#include <QFile>
+#include <QtCore/QFile>
 #include <QFileInfo>
 #include <QList>
 

@@ -12,19 +12,19 @@
  */
 
 
-#include <kcmdlineargs.h>
-#include <kaboutdata.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kstandarddirs.h>
-#include <ksimpleconfig.h>
-#include <KStandardGuiItem>
-#include <kdebug.h>
-#include <kurl.h>
+#include <KDELibs4Support/KDE/K4AboutData>
+#include <KDELibs4Support/KDE/KCmdLineArgs>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KDELibs4Support/KDE/KUrl>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <qfile.h>
-#include <qdatastream.h>
-#include <qtimer.h>
+#include <QtCore/QDataStream>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QTimer>
 
 #include <stdlib.h>
 
@@ -46,8 +46,8 @@ static const char* description = I18N_NOOP("<p>K3b is a full-featured CD/DVD/Blu
 
 int main( int argc, char* argv[] )
 {
-    KAboutData aboutData( "k3b",0, ki18n("K3b"),
-                          LIBK3B_VERSION, ki18n(description), KAboutData::License_GPL,
+    K4AboutData aboutData( "k3b",0, ki18n("K3b"),
+                          LIBK3B_VERSION, ki18n(description), K4AboutData::License_GPL,
                           ki18n("Copyright © 1998–2010 K3b authors"), KLocalizedString(), I18N_NOOP("http://www.k3b.org" ));
 
     aboutData.addAuthor(ki18n("Michał Małek"),ki18n("Maintainer and current lead Developer"), "michalm@jabster.pl");
@@ -138,9 +138,9 @@ int main( int argc, char* argv[] )
         if( args->isSet("lang") ) {
             QStringList lst;
             lst << args->getOption("lang");
-            if( !KGlobal::locale()->setLanguage(lst) )
-                kDebug() << "Unable to set to language " << args->getOption("lang")
-                         << " current is: " << KGlobal::locale()->language() << endl;
+            if( !KLocale::global()->setLanguage(lst) )
+                qDebug() << "Unable to set to language " << args->getOption("lang")
+                         << " current is: " << KLocale::global()->language() << endl;
         }
         K3b::Application app;
         return app.exec();

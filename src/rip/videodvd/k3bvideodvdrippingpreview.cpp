@@ -20,7 +20,7 @@
 #include "k3bdevice.h"
 #include "k3bprocess.h"
 #include <KTempDir>
-#include <KDebug>
+#include <QtCore/QDebug>
 #include <QDir>
 
 
@@ -97,7 +97,7 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     if ( !m_process->start(KProcess::ForwardedChannels) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
+        qDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
         m_process->deleteLater();
         m_process = 0;
         delete m_tempDir;
@@ -121,7 +121,7 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
 {
     // read the image
     QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
-    kDebug() << "(K3b::VideoDVDRippingPreview) reading from file " << filename;
+    qDebug() << "(K3b::VideoDVDRippingPreview) reading from file " << filename;
     m_preview = QImage( filename );
     bool success = !m_preview.isNull() && !m_canceled;
 
@@ -133,7 +133,7 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
     m_process->deleteLater();
     m_process = 0;
 
-    kDebug() << "Preview done:" << success;
+    qDebug() << "Preview done:" << success;
 
     // retry the first chapter in case another failed
     if( !success && m_chapter > 1 )

@@ -23,10 +23,10 @@
 #include "k3bgrowisofswriter.h"
 #include "k3bglobals.h"
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 #include <kmessagebox.h>
 #include <kapplication.h>
-#include <kconfig.h>
+#include <KConfigCore/KConfig>
 
 
 

@@ -17,7 +17,7 @@
 #ifndef _K3B_VIDEOCD_RIPPING_DIALOG_H_
 #define _K3B_VIDEOCD_RIPPING_DIALOG_H_
 
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 //Added by qt3to4:
 #include <QLabel>
 

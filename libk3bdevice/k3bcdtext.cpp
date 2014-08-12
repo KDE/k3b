@@ -17,9 +17,8 @@
 
 #include <config-k3b.h>
 
-#include <kdebug.h>
-
-#include <qtextcodec.h>
+#include <QtCore/QDebug>
+#include <QtCore/QTextCodec>
 #include <QtCore/QSharedData>
 
 #include <string.h>
@@ -59,7 +58,7 @@ namespace {
 
     void debugRawTextPackData( const unsigned char* data, int dataLen )
     {
-        kDebug() << endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |";
+        qDebug() << endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |";
 
         cdtext_pack* pack = (cdtext_pack*)data;
 
@@ -73,22 +72,22 @@ namespace {
             s += QString( " %1 |" ).arg( pack[i].dbcc, 4 );
 //       char str[12];
 //       sprintf( str, "%c%c%c%c%c%c%c%c%c%c%c%c",
-// 	       pack[i].data[0] == '\0' ? '°' : pack[i].data[0],
-// 	       pack[i].data[1] == '\0' ? '°' : pack[i].data[1],
-// 	       pack[i].data[2] == '\0' ? '°' : pack[i].data[2],
-// 	       pack[i].data[3] == '\0' ? '°' : pack[i].data[3],
-// 	       pack[i].data[4] == '\0' ? '°' : pack[i].data[4],
-// 	       pack[i].data[5] == '\0' ? '°' : pack[i].data[5],
-// 	       pack[i].data[6] == '\0' ? '°' : pack[i].data[6],
-// 	       pack[i].data[7] == '\0' ? '°' : pack[i].data[7],
-// 	       pack[i].data[8] == '\0' ? '°' : pack[i].data[8],
-// 	       pack[i].data[9] == '\0' ? '°' : pack[i].data[9],
-// 	       pack[i].data[10] == '\0' ? '°' : pack[i].data[10],
-// 	       pack[i].data[11] == '\0' ? '°' : pack[i].data[11] );
+// 	       pack[i].data[0] == '\0' ? 'ï¿½' : pack[i].data[0],
+// 	       pack[i].data[1] == '\0' ? 'ï¿½' : pack[i].data[1],
+// 	       pack[i].data[2] == '\0' ? 'ï¿½' : pack[i].data[2],
+// 	       pack[i].data[3] == '\0' ? 'ï¿½' : pack[i].data[3],
+// 	       pack[i].data[4] == '\0' ? 'ï¿½' : pack[i].data[4],
+// 	       pack[i].data[5] == '\0' ? 'ï¿½' : pack[i].data[5],
+// 	       pack[i].data[6] == '\0' ? 'ï¿½' : pack[i].data[6],
+// 	       pack[i].data[7] == '\0' ? 'ï¿½' : pack[i].data[7],
+// 	       pack[i].data[8] == '\0' ? 'ï¿½' : pack[i].data[8],
+// 	       pack[i].data[9] == '\0' ? 'ï¿½' : pack[i].data[9],
+// 	       pack[i].data[10] == '\0' ? 'ï¿½' : pack[i].data[10],
+// 	       pack[i].data[11] == '\0' ? 'ï¿½' : pack[i].data[11] );
 //       s += QString( " %1 |" ).arg( "'" + QCString(str,13) + "'", 14 );
 //       quint16 crc = pack[i].crc[0]<<8|pack[i].crc[1];
 //       s += QString( " %1 |" ).arg( crc );
-            kDebug() << s;
+            qDebug() << s;
         }
     }
 
@@ -615,7 +614,7 @@ void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
 
     int r = len%18;
     if( r > 0 && r != 4 ) {
-        kDebug() << "(K3b::Device::CdText) invalid cdtext size: " << len;
+        qDebug() << "(K3b::Device::CdText) invalid cdtext size: " << len;
     }
     else if( len-r > 0 ) {
         debugRawTextPackData( &data[r], len-r );
@@ -626,7 +625,7 @@ void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
         for( int i = 0; i < (len-r)/18; ++i ) {
 
             if( pack[i].dbcc ) {
-                kDebug() << "(K3b::Device::CdText) Double byte code not supported";
+                qDebug() << "(K3b::Device::CdText) Double byte code not supported";
                 return;
             }
 
@@ -642,7 +641,7 @@ void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
             pack[i].crc[1] ^= 0xff;
 
             if( crc != 0x0000 )
-                kDebug() << "(K3b::Device::CdText) CRC invalid!";
+                qDebug() << "(K3b::Device::CdText) CRC invalid!";
 
 
             //
@@ -749,7 +748,7 @@ void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
         d->rawData = QByteArray( reinterpret_cast<const char*>(data), len );
     }
     else
-        kDebug() << "(K3b::Device::CdText) zero-sized CD-TEXT: " << len;
+        qDebug() << "(K3b::Device::CdText) zero-sized CD-TEXT: " << len;
 }
 
 
@@ -1004,7 +1003,7 @@ int K3b::Device::CdText::Private::textLengthForPackType( int packType ) const
 void K3b::Device::CdText::debug() const
 {
     // debug the stuff
-    kDebug() << "CD-TEXT data:" << endl
+    qDebug() << "CD-TEXT data:" << endl
              << "Global:" << endl
              << "  Title:      '" << title() << "'" << endl
              << "  Performer:  '" << performer() << "'" << endl
@@ -1015,7 +1014,7 @@ void K3b::Device::CdText::debug() const
              << "  Disc ID:    '" << discId() << "'" << endl
              << "  Upc Ean:    '" << upcEan() << "'" << endl;
     for( int i = 0; i < count(); ++i ) {
-        kDebug() << "Track " << (i+1) << ":" << endl
+        qDebug() << "Track " << (i+1) << ":" << endl
                  << "  Title:      '" << d->tracks[i].title() << "'" << endl
                  << "  Performer:  '" << d->tracks[i].performer() << "'" << endl
                  << "  Songwriter: '" << d->tracks[i].songwriter() << "'" << endl
@@ -1051,7 +1050,7 @@ bool K3b::Device::CdText::checkCrc( const unsigned char* data, int len )
 {
     int r = len%18;
     if( r > 0 && r != 4 ) {
-        kDebug() << "(K3b::Device::CdText) invalid cdtext size: " << len;
+        qDebug() << "(K3b::Device::CdText) invalid cdtext size: " << len;
         return false;
     }
     else {

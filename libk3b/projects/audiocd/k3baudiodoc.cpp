@@ -27,7 +27,7 @@
 #include "k3bcore.h"
 #include "k3baudiodecoder.h"
 
-#include <QFile>
+#include <QtCore/QFile>
 #include <QFileInfo>
 #include <QDataStream>
 #include <QDir>
@@ -36,11 +36,11 @@
 #include <QTextStream>
 
 #include <KApplication>
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
-#include <kio/global.h>
-#include <KStandardDirs>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KIO/Global>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
 
 class K3b::AudioDoc::Private
@@ -99,9 +99,9 @@ K3b::AudioDoc::~AudioDoc()
     int i = 1;
     int cnt = numOfTracks();
     while( d->firstTrack ) {
-        kDebug() << "(K3b::AudioDoc::AudioDoc) deleting track " << i << " of " << cnt;
+        qDebug() << "(K3b::AudioDoc::AudioDoc) deleting track " << i << " of " << cnt;
         delete d->firstTrack->take();
-        kDebug() << "(K3b::AudioDoc::AudioDoc) deleted.";
+        qDebug() << "(K3b::AudioDoc::AudioDoc) deleted.";
         ++i;
     }
 
@@ -353,7 +353,7 @@ void K3b::AudioDoc::addSources( K3b::AudioTrack* parent,
                               const KUrl::List& urls,
                               K3b::AudioDataSource* sourceAfter )
 {
-    kDebug() << "(K3b::AudioDoc::addSources( " << parent << ", "
+    qDebug() << "(K3b::AudioDoc::addSources( " << parent << ", "
              << urls.first().toLocalFile() << ", "
              << sourceAfter << " )" << endl;
     KUrl::List allUrls = extractUrlList( urls );
@@ -368,7 +368,7 @@ void K3b::AudioDoc::addSources( K3b::AudioTrack* parent,
         }
     }
 
-    kDebug() << "(K3b::AudioDoc::addSources) finished.";
+    qDebug() << "(K3b::AudioDoc::addSources) finished.";
 }
 
 
@@ -377,11 +377,11 @@ K3b::AudioTrack* K3b::AudioDoc::importCueFile( const QString& cuefile, K3b::Audi
     if( !after )
         after = d->lastTrack;
 
-    kDebug() << "(K3b::AudioDoc::importCueFile( " << cuefile << ", " << after << ")";
+    qDebug() << "(K3b::AudioDoc::importCueFile( " << cuefile << ", " << after << ")";
     K3b::CueFileParser parser( cuefile );
     if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
 
-        kDebug() << "(K3b::AudioDoc::importCueFile) parsed with image: " << parser.imageFilename();
+        qDebug() << "(K3b::AudioDoc::importCueFile) parsed with image: " << parser.imageFilename();
 
         // global cd-text
         if( !parser.cdText().title().isEmpty() )
@@ -452,7 +452,7 @@ K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const KUrl& url, bool* reuse
         *reused = true;
     }
     else if( (decoder = K3b::AudioDecoderFactory::createDecoder( url )) ) {
-        kDebug() << "(K3b::AudioDoc) using " << decoder->metaObject()->className()
+        qDebug() << "(K3b::AudioDoc) using " << decoder->metaObject()->className()
                  << " for decoding of " << url.toLocalFile() << endl;
 
         decoder->setFilename( url.toLocalFile() );
@@ -466,7 +466,7 @@ K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const KUrl& url, bool* reuse
 K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
 {
     if( !QFile::exists( url.toLocalFile() ) ) {
-        kDebug() << "(K3b::AudioDoc) could not find file " << url.toLocalFile();
+        qDebug() << "(K3b::AudioDoc) could not find file " << url.toLocalFile();
         return 0;
     }
 
@@ -478,7 +478,7 @@ K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
         return new K3b::AudioFile( decoder, this );
     }
     else {
-        kDebug() << "(K3b::AudioDoc) unknown file type in file " << url.toLocalFile();
+        qDebug() << "(K3b::AudioDoc) unknown file type in file " << url.toLocalFile();
         return 0;
     }
 }
@@ -486,7 +486,7 @@ K3b::AudioFile* K3b::AudioDoc::createAudioFile( const KUrl& url )
 
 K3b::AudioTrack* K3b::AudioDoc::createTrack( const KUrl& url )
 {
-    kDebug() << "(K3b::AudioDoc::createTrack( " << url.toLocalFile() << " )";
+    qDebug() << "(K3b::AudioDoc::createTrack( " << url.toLocalFile() << " )";
     if( K3b::AudioFile* file = createAudioFile( url ) ) {
         K3b::AudioTrack* newTrack = new K3b::AudioTrack( this );
         newTrack->setFirstSource( file );
@@ -521,7 +521,7 @@ K3b::AudioTrack* K3b::AudioDoc::getTrack( int trackNum )
 
 void K3b::AudioDoc::addTrack( K3b::AudioTrack* track, int position )
 {
-    kDebug() << "(" << track << "," << position << ")";
+    qDebug() << "(" << track << "," << position << ")";
 
     track->setParent( this );
     if( !d->firstTrack ) {
@@ -722,12 +722,12 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
                                     track->addSource( cdtrack );
                                 }
                                 else {
-                                    kDebug() << "(K3b::AudioDoc) invalid cdtrack source.";
+                                    qDebug() << "(K3b::AudioDoc) invalid cdtrack source.";
                                     return false;
                                 }
                             }
                             else {
-                                kDebug() << "(K3b::AudioDoc) unknown source type: " << sourceElem.nodeName();
+                                qDebug() << "(K3b::AudioDoc) unknown source type: " << sourceElem.nodeName();
                                 return false;
                             }
                         }
@@ -777,7 +777,7 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
                 if( track->numberSources() > 0 )
                     addTrack( track, 99 ); // append to the end // TODO improve
                 else {
-                    kDebug() << "(K3b::AudioDoc) no sources. deleting track " << track;
+                    qDebug() << "(K3b::AudioDoc) no sources. deleting track " << track;
                     delete track;
                 }
             }
@@ -921,7 +921,7 @@ bool K3b::AudioDoc::saveDocumentData( QDomElement* docElem )
                 sourcesParent.appendChild( sourceElem );
             }
             else {
-                kError() << "(K3b::AudioDoc) saving sources other than file or zero not supported yet." << endl;
+                qCritical() << "(K3b::AudioDoc) saving sources other than file or zero not supported yet." << endl;
                 return false;
             }
         }
@@ -1012,7 +1012,7 @@ K3b::BurnJob* K3b::AudioDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 
 void K3b::AudioDoc::slotTrackChanged( K3b::AudioTrack* track )
 {
-    kDebug() << "(K3b::AudioDoc::slotTrackChanged " << track;
+    qDebug() << "(K3b::AudioDoc::slotTrackChanged " << track;
     setModified( true );
     // if the track is empty now we simply delete it
     if( track->firstSource() ) {
@@ -1020,10 +1020,10 @@ void K3b::AudioDoc::slotTrackChanged( K3b::AudioTrack* track )
         emit changed();
     }
     else {
-        kDebug() << "(K3b::AudioDoc::slotTrackChanged) track " << track << " empty. Deleting.";
+        qDebug() << "(K3b::AudioDoc::slotTrackChanged) track " << track << " empty. Deleting.";
         delete track; // this will emit the proper signal
     }
-    kDebug() << "(K3b::AudioDoc::slotTrackChanged done";
+    qDebug() << "(K3b::AudioDoc::slotTrackChanged done";
 }
 
 
@@ -1036,14 +1036,14 @@ void K3b::AudioDoc::slotTrackRemoved( int position )
 
 void K3b::AudioDoc::increaseDecoderUsage( K3b::AudioDecoder* decoder )
 {
-    kDebug() << "(K3b::AudioDoc::increaseDecoderUsage)";
+    qDebug() << "(K3b::AudioDoc::increaseDecoderUsage)";
     if( !d->decoderUsageCounterMap.contains( decoder ) ) {
         d->decoderUsageCounterMap[decoder] = 1;
         d->decoderPresenceMap[decoder->filename()] = decoder;
     }
     else
         d->decoderUsageCounterMap[decoder]++;
-    kDebug() << "(K3b::AudioDoc::increaseDecoderUsage) finished";
+    qDebug() << "(K3b::AudioDoc::increaseDecoderUsage) finished";
 }
 
 

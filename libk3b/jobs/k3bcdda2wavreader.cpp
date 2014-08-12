@@ -20,8 +20,8 @@
 #include "k3bcore.h"
 #include "k3bprocess.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
 #include <qvector.h>
 #include <qregexp.h>
@@ -132,7 +132,7 @@ void K3b::Cdda2wavReader::start( bool onlyInfo )
     if( !d->process->start( K3Process::All ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kDebug() << "(K3b::Cdda2wavReader) could not start cdda2wav";
+        qDebug() << "(K3b::Cdda2wavReader) could not start cdda2wav";
         emit infoMessage( i18n("Could not start %1.",QString("cdda2wav")), K3b::Job::MessageError );
         d->running = false;
         jobFinished(false);
@@ -188,7 +188,7 @@ void K3b::Cdda2wavReader::slotProcessLine( const QString& line )
         if( ok )
             d->trackOffsets.append( offset );
         else
-            kDebug() << "(K3b::Cdda2wavReader) track offset parsing error: '" << line.mid( pos, endpos-pos ) << "'";
+            qDebug() << "(K3b::Cdda2wavReader) track offset parsing error: '" << line.mid( pos, endpos-pos ) << "'";
     }
 
     else if( line.startsWith( "percent_done" ) ) {
@@ -216,7 +216,7 @@ void K3b::Cdda2wavReader::slotProcessLine( const QString& line )
             emit percent( overall*100/d->trackOffsets[d->trackOffsets.count()-1] );
         }
         else
-            kDebug() << "(K3b::Cdda2wavReader) track progress parsing error: '" << line.left(3) << "'";
+            qDebug() << "(K3b::Cdda2wavReader) track progress parsing error: '" << line.left(3) << "'";
     }
 }
 

@@ -26,8 +26,9 @@
 #include <QList>
 #include <QHeaderView>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 
 class K3b::DataDirTreeView::Private

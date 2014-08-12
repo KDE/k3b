@@ -28,7 +28,7 @@
 #include <KAction>
 #include <KActionMenu>
 #include <KFileItem>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KUrl>
 
 
@@ -116,7 +116,7 @@ KUrl K3b::FileTreeView::selectedUrl() const
 
 void K3b::FileTreeView::slotExpandUrl( const QModelIndex& index )
 {
-    kDebug();
+    qDebug();
     setCurrentIndex( index );
     scrollTo( index );
 }
@@ -141,9 +141,9 @@ void K3b::FileTreeView::slotAddFilesToProject()
 
 void K3b::FileTreeView::setSelectedUrl( const KUrl& url )
 {
-    kDebug();
+    qDebug();
     KFileItem fileItem = d->model->itemForIndex( currentIndex() );
-    if( fileItem.isNull() || !fileItem.url().equals( url, KUrl::CompareWithoutTrailingSlash ) ) {
+    if( fileItem.isNull() || !fileItem.url().matches( url, QUrl::StripTrailingSlash ) ) {
         d->model->expandToUrl( url );
     }
 }

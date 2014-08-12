@@ -25,11 +25,11 @@
 #include <QFileInfo>
 
 #include <KApplication>
-#include <KDebug>
-#include <KGlobal>
-#include <KInputDialog>
-#include <KLocale>
-#include <KMessageBox>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KDELibs4Support/KDE/KInputDialog>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 
 K3b::MovixDoc::MovixDoc( QObject* parent )
@@ -219,7 +219,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
     QDomNodeList nodes = rootElem->childNodes();
 
     if( nodes.item(0).nodeName() != "general" ) {
-        kDebug() << "(K3b::MovixDoc) could not find 'general' section.";
+        qDebug() << "(K3b::MovixDoc) could not find 'general' section.";
         return false;
     }
     if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
@@ -229,7 +229,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
     // parse options
     // -----------------------------------------------------------------
     if( nodes.item(1).nodeName() != "data_options" ) {
-        kDebug() << "(K3b::MovixDoc) could not find 'data_options' section.";
+        qDebug() << "(K3b::MovixDoc) could not find 'data_options' section.";
         return false;
     }
     if( !loadDocumentDataOptions( nodes.item(1).toElement() ) )
@@ -241,7 +241,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
     // parse header
     // -----------------------------------------------------------------
     if( nodes.item(2).nodeName() != "data_header" ) {
-        kDebug() << "(K3b::MovixDoc) could not find 'data_header' section.";
+        qDebug() << "(K3b::MovixDoc) could not find 'data_header' section.";
         return false;
     }
     if( !loadDocumentDataHeader( nodes.item(2).toElement() ) )
@@ -253,7 +253,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
     // parse movix options
     // -----------------------------------------------------------------
     if( nodes.item(3).nodeName() != "movix_options" ) {
-        kDebug() << "(K3b::MovixDoc) could not find 'movix_options' section.";
+        qDebug() << "(K3b::MovixDoc) could not find 'movix_options' section.";
         return false;
     }
 
@@ -294,14 +294,14 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
         else if( e.nodeName() == "loop_playlist")
             setLoopPlaylist( e.text().toInt() );
         else
-            kDebug() << "(K3b::MovixDoc) unknown movix option: " << e.nodeName();
+            qDebug() << "(K3b::MovixDoc) unknown movix option: " << e.nodeName();
     }
     // -----------------------------------------------------------------
 
     // parse files
     // -----------------------------------------------------------------
     if( nodes.item(4).nodeName() != "movix_files" ) {
-        kDebug() << "(K3b::MovixDoc) could not find 'movix_files' section.";
+        qDebug() << "(K3b::MovixDoc) could not find 'movix_files' section.";
         return false;
     }
 
@@ -315,13 +315,13 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
 
         if( e.nodeName() == "file" ) {
             if( !e.hasAttribute( "name" ) ) {
-                kDebug() << "(K3b::MovixDoc) found file tag without name attribute.";
+                qDebug() << "(K3b::MovixDoc) found file tag without name attribute.";
                 return false;
             }
 
             QDomElement urlElem = e.firstChild().toElement();
             if( urlElem.isNull() ) {
-                kDebug() << "(K3b::MovixDoc) found file tag without url child.";
+                qDebug() << "(K3b::MovixDoc) found file tag without url child.";
                 return false;
             }
 
@@ -343,7 +343,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
             if( !subTitleElem.isNull() && subTitleElem.nodeName() == "subtitle_file" ) {
                 urlElem = subTitleElem.firstChild().toElement();
                 if( urlElem.isNull() ) {
-                    kDebug() << "(K3b::MovixDoc) found subtitle_file tag without url child.";
+                    qDebug() << "(K3b::MovixDoc) found subtitle_file tag without url child.";
                     return false;
                 }
 
@@ -359,7 +359,7 @@ bool K3b::MovixDoc::loadDocumentData( QDomElement* rootElem )
             }
         }
         else {
-            kDebug() << "(K3b::MovixDoc) found " << e.nodeName() << " node where 'file' was expected.";
+            qDebug() << "(K3b::MovixDoc) found " << e.nodeName() << " node where 'file' was expected.";
             return false;
         }
     }

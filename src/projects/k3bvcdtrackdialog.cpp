@@ -24,9 +24,10 @@
 #include "k3bvcdtrackkeysmodel.h"
 
 // Kde Includes
-#include <KIconLoader>
-#include <kio/global.h>
-#include <KLocale>
+#include <KIconThemes/KIconLoader>
+#include <KIconThemes/KIconLoader>
+#include <KIO/Global>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMimeType>
 #include <KNumInput>
 #include <KUrl>
@@ -122,7 +123,7 @@ void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboB
     const int count = tracks.count();
 
     // TODO: Unset Userdefined on default settings
-    kDebug() << QString( "K3b::VcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( currentIndex ).arg( count );
+    qDebug() << QString( "K3b::VcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( currentIndex ).arg( count );
 
     if( VcdTrack* track = selected->getPbcTrack( which ) )
         track->delFromRevRefList( selected );
@@ -148,7 +149,7 @@ K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* doc, const QList<K3b::VcdTrack
     : KDialog( parent ),
       d( new Private( doc, tracks, selectedTracks ) )
 {
-    setCaption( i18n( "Video Track Properties" ) );
+    setWindowTitle( i18n( "Video Track Properties" ) );
     setButtons( Ok|Apply|Cancel );
     setDefaultButton( Ok );
 
@@ -224,7 +225,7 @@ void K3b::VcdTrackDialog::slotApply()
         }
     } else {
         selectedTrack->setDefinedNumKey( 1, selectedTrack );
-        kDebug() << "Key 1" << " Playing: (default) " << VcdTrackKeysModel::trackName( selectedTrack ) << "Track: " << selectedTrack;
+        qDebug() << "Key 1" << " Playing: (default) " << VcdTrackKeysModel::trackName( selectedTrack ) << "Track: " << selectedTrack;
     }
 }
 

@@ -15,16 +15,16 @@
 #ifndef _K3B_DATA_URL_ADDING_DIALOG_H_
 #define _K3B_DATA_URL_ADDING_DIALOG_H_
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 #include <KUrl>
 #include <QtCore/QDir>
 #include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QPair>
 #include <QtCore/QStringList>
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
-#include <kio/global.h>
+#include <KIO/Global>
 
 class QProgressBar;
 class QLabel;

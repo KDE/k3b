@@ -18,10 +18,10 @@
 #include <qmenu.h>
 #include <qevent.h>
 
-#include <kglobalsettings.h>
+#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <kapplication.h>
 
-#include <QtGui/QDesktopWidget>
+#include <QtWidgets/QDesktopWidget>
 
 
 class K3b::PushButton::Private

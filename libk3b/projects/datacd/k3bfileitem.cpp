@@ -20,10 +20,10 @@
 #include "k3bisooptions.h"
 #include <config-k3b.h>
 
-#include <KDebug>
+#include <QtCore/QDebug>
 #include <KUrl>
 
-#include <QFile>
+#include <QtCore/QFile>
 #include <QFileInfo>
 #include <QRegExp>
 #include <QString>
@@ -71,17 +71,17 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc& doc, const QStri
         }
         else {
             init( filePath, k3bName, doc, &statBuf, 0 );
-            kError() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         }
     }
     else {
-        kError() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+        qCritical() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         if( k3b_stat( QFile::encodeName(filePath), &followedStatBuf ) == 0 ) {
             init( filePath, k3bName, doc, 0, &followedStatBuf );
         }
         else {
             init( filePath, k3bName, doc, 0, 0 );
-            kError() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         }
     }
 }

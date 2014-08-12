@@ -27,9 +27,9 @@
 
 #include <KAction>
 #include <KApplication>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QHeaderView>
 #include <QItemSelectionModel>
@@ -96,7 +96,7 @@ K3b::ProjectBurnDialog* K3b::VcdView::newBurnDialog( QWidget * parent)
 void K3b::VcdView::init()
 {
     if( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
-        kDebug() << "(K3b::VcdView) could not find vcdxbuild executable";
+        qDebug() << "(K3b::VcdView) could not find vcdxbuild executable";
         KMessageBox::information( this,
                         i18n( "Could not find VcdImager executable. "
                         "To create Video CDs you have to install VcdImager >= 0.7.12. "

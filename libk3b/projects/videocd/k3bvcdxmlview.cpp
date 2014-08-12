@@ -19,8 +19,8 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <KStandardDirs>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <QtCore/QDebug>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -210,7 +210,7 @@ void K3b::VcdXmlView::Private::setNumkeySEL( QDomDocument& doc, QDomElement& par
 
             for ( trackIt = numKeyMap.constBegin(); trackIt != numKeyMap.constEnd(); ++trackIt ) {
 
-                kDebug() << QString( "trackIt key: %1 none: %2" ).arg( trackIt.key() ).arg( none );
+                qDebug() << QString( "trackIt key: %1 none: %2" ).arg( trackIt.key() ).arg( none );
                 while ( none < trackIt.key() ) {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
                     elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( track->index() ).rightJustified( 3, '0' ) ) );

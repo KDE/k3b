@@ -37,14 +37,16 @@
 #include <QToolButton>
 #include <QToolTip>
 
-#include <KConfig>
-#include <KDebug>
-#include <KGlobalSettings>
-#include <KIconLoader>
-#include <KLocale>
-#include <KPushButton>
-#include <KStandardDirs>
-#include <KStandardGuiItem>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KDELibs4Support/KDE/KIcon>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KPushButton>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
 
 
 K3b::InteractionDialog::InteractionDialog( QWidget* parent,
@@ -121,7 +123,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
         m_buttonSave = 0;
     }
     if( buttonMask & CANCEL_BUTTON ) {
-        m_buttonCancel = new KPushButton( KConfigGroup( KGlobal::config(), "General Options" )
+        m_buttonCancel = new KPushButton( KConfigGroup( KSharedConfig::openConfig(), "General Options" )
                                           .readEntry( "keep action dialogs open", false )
                                           ? KStandardGuiItem::close()
                                           : KStandardGuiItem::cancel(),
@@ -145,7 +147,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
 
 K3b::InteractionDialog::~InteractionDialog()
 {
-    kDebug() << this;
+    qDebug() << this;
 }
 
 
@@ -216,7 +218,7 @@ void K3b::InteractionDialog::setTitle( const QString& title, const QString& subT
 {
     m_dialogHeader->setTitle( title, subTitle );
 
-    setCaption( title );
+    setWindowTitle( title );
 }
 
 
@@ -240,7 +242,7 @@ QWidget* K3b::InteractionDialog::mainWidget()
 
 void K3b::InteractionDialog::slotLoadK3bDefaults()
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     c->setReadDefaults( true );
     loadSettings( c->group( m_configGroup ) );
     c->setReadDefaults( false );
@@ -249,28 +251,28 @@ void K3b::InteractionDialog::slotLoadK3bDefaults()
 
 void K3b::InteractionDialog::slotLoadUserDefaults()
 {
-    KConfigGroup c( KGlobal::config(), m_configGroup );
+    KConfigGroup c( KSharedConfig::openConfig(), m_configGroup );
     loadSettings( c );
 }
 
 
 void K3b::InteractionDialog::slotSaveUserDefaults()
 {
-    KConfigGroup c( KGlobal::config(), m_configGroup );
+    KConfigGroup c( KSharedConfig::openConfig(), m_configGroup );
     saveSettings( c );
 }
 
 
 void K3b::InteractionDialog::slotLoadLastSettings()
 {
-    KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
+    KConfigGroup c( KSharedConfig::openConfig(), "last used " + m_configGroup );
     loadSettings( c );
 }
 
 
 void K3b::InteractionDialog::saveLastSettings()
 {
-    KConfigGroup c( KGlobal::config(), "last used " + m_configGroup );
+    KConfigGroup c( KSharedConfig::openConfig(), "last used " + m_configGroup );
     saveSettings( c );
 }
 
@@ -463,7 +465,7 @@ void K3b::InteractionDialog::loadSettings( const KConfigGroup& )
 
 void K3b::InteractionDialog::loadStartupSettings()
 {
-    KConfigGroup c( KGlobal::config(), "General Options" );
+    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
 
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default
@@ -484,7 +486,7 @@ void K3b::InteractionDialog::loadStartupSettings()
 
 int K3b::InteractionDialog::exec()
 {
-    kDebug() << this;
+    qDebug() << this;
 
     loadStartupSettings();
 
@@ -517,7 +519,7 @@ void K3b::InteractionDialog::done( int r )
 
 void K3b::InteractionDialog::hideEvent( QHideEvent* e )
 {
-    kDebug() << this;
+    qDebug() << this;
     KDialog::hideEvent( e );
 }
 

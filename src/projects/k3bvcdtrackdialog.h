@@ -17,7 +17,7 @@
 #ifndef K3BVCDTRACKDIALOG_H
 #define K3BVCDTRACKDIALOG_H
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 #include <QList>
 
 namespace K3b {

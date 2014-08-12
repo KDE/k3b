@@ -15,14 +15,14 @@
 
 // Kde Includes
 #include <kapplication.h>
-#include <kconfig.h>
+#include <KConfigCore/KConfig>
 #include "k3bcore.h"
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
 // Qt Includes
 #include <qstring.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 
 // K3b Includes
 #include "k3bvcdoptions.h"

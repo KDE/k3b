@@ -26,9 +26,9 @@
 #include "k3bstdguiitems.h"
 #include "k3bglobalsettings.h"
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kio/global.h>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIO/Global>
 #include <kmessagebox.h>
 
 #include <QFileInfo>

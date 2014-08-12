@@ -18,13 +18,13 @@
 #include <QFont>
 #include <QLabel>
 #include <QLayout>
-#include <QMap>
+#include <QtCore/QMap>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
-#include <KIconLoader>
-#include <KLocale>
-#include <KMessageBox>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include "k3bcore.h"
 #include "k3bdatadoc.h"
@@ -270,7 +270,7 @@ K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent
     setButtons(Ok|Cancel);
     setDefaultButton(Ok);
     setModal(true);
-    setCaption(i18n("Session Import"));
+    setWindowTitle(i18n("Session Import"));
     QVBoxLayout* layout = new QVBoxLayout( widget );
     layout->setContentsMargins( 0, 0, 0, 0 );
 

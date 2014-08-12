@@ -15,7 +15,7 @@
 #ifndef _K3B_CDDB_H_
 #define _K3B_CDDB_H_
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 #include <KJob>
 
 #include <libkcddb/kcddb.h>

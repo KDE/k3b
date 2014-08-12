@@ -22,11 +22,9 @@
 #ifndef K3B_KPROCESS_H
 #define K3B_KPROCESS_H
 
-#include <kdecore_export.h>
-
 #include "k3bqprocess.h"
 #include "k3b_export.h"
-#include <KProcess>
+#include <KCoreAddons/KProcess>
 
 class K3bKProcessPrivate;
 

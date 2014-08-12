@@ -17,10 +17,10 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
 #include <qstringlist.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 #include <QtCore/QEventLoop>
 
@@ -61,7 +61,7 @@ K3b::Job::~Job()
     // but we do this here for security reasons.
     //
     if( d->active ) {
-        kDebug() << "Finishing job in destuctor! This is NOT good. Fix the job.";
+        qDebug() << "Finishing job in destuctor! This is NOT good. Fix the job.";
         jobFinished( false );
     }
 

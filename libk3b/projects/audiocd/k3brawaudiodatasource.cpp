@@ -17,7 +17,7 @@
 
 #include <QFileInfo>
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 
 class K3b::RawAudioDataSource::Private

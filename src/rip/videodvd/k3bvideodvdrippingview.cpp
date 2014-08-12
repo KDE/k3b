@@ -29,23 +29,23 @@
 #include "k3bmedium.h"
 #include "k3bmodelutils.h"
 
-#include <QtGui/QCursor>
-#include <QtGui/QDesktopServices>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QLabel>
-#include <QtGui/QLayout>
-#include <QtGui/QStyle>
-#include <QtGui/QTreeView>
+#include <QtWidgets/QCursor>
+#include <QtWidgets/QDesktopServices>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QKeyEvent>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QTreeView>
 
 #include <KAction>
 #include <KActionCollection>
 #include <KApplication>
-#include <KConfig>
-#include <KLocale>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
 #include <KUrlLabel>

@@ -18,7 +18,7 @@
 #include "k3bjobhandler.h"
 #include <kdialog.h>
 #include <kurl.h>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 
 
 class QLabel;

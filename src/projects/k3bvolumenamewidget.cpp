@@ -18,7 +18,7 @@
 #include "k3bvalidators.h"
 
 #include <KLineEdit>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QEvent>
 #include <QHBoxLayout>

@@ -22,10 +22,10 @@
 #include <QFileInfo>
 #include <QDomElement>
 
-#include <KLocale>
-#include <KConfig>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KConfigCore/KConfig>
 #include <KApplication>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 
 

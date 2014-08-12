@@ -17,15 +17,15 @@
 
 #include "k3bcore.h"
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QTreeWidget>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QTreeWidget>
 #include <QList>
 
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <KDebug>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bexternalencoder, K3bExternalEncoderSettingsWidget )
 
@@ -34,7 +34,7 @@ K3bExternalEncoderEditDialog::K3bExternalEncoderEditDialog( QWidget* parent )
     : KDialog( parent )
 {
     setModal( true );
-    setCaption( i18n("Editing external audio encoder") );
+    setWindowTitle( i18n("Editing external audio encoder") );
     setButtons( Ok | Cancel );
     setupUi( mainWidget() );
 }
@@ -175,14 +175,14 @@ void K3bExternalEncoderSettingsWidget::slotRemoveCommand()
 
 void K3bExternalEncoderSettingsWidget::load()
 {
-    kDebug();
+    qDebug();
     fillEncoderView( K3bExternalEncoderCommand::readCommands() );
 }
 
 
 void K3bExternalEncoderSettingsWidget::save()
 {
-    kDebug();
+    qDebug();
     K3bExternalEncoderCommand::saveCommands( m_commands.values() );
     emit changed( false );
 }
@@ -190,7 +190,7 @@ void K3bExternalEncoderSettingsWidget::save()
 
 void K3bExternalEncoderSettingsWidget::defaults()
 {
-    kDebug();
+    qDebug();
     fillEncoderView( K3bExternalEncoderCommand::defaultCommands() );
     emit changed( true );
 }

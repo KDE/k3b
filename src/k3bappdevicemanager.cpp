@@ -24,10 +24,10 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KInputDialog>
+#include <KDELibs4Support/KDE/KInputDialog>
 #include <KIO/Job>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <Solid/Block>
 #include <Solid/Device>
@@ -194,7 +194,7 @@ void K3b::AppDeviceManager::slotMountFinished( Solid::ErrorType error, QVariant,
     if( currentDevice() != 0 ) {
         Solid::StorageAccess* storage = currentDevice()->solidStorage();
         if( error == Solid::NoError && storage != 0 ) {
-            kDebug() << "Device mounted at " << storage->filePath();
+            qDebug() << "Device mounted at " << storage->filePath();
             emit mountFinished( storage->filePath() );
         }
     }

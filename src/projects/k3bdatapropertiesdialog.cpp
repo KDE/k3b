@@ -19,10 +19,10 @@
 #include "k3bfileitem.h"
 #include "k3bvalidators.h"
 
-#include <KIcon>
-#include <kio/global.h>
+#include <KIconThemes/KIconLoader>
+#include <KIO/Global>
 #include <KLineEdit>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMimeType>
 #include <KUrl>
 #include <KSqueezedTextLabel>
@@ -41,7 +41,7 @@
 K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )
     : KDialog( parent )
 {
-    setCaption( i18n("File Properties") );
+    setWindowTitle( i18n("File Properties") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
 
@@ -200,7 +200,7 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
 {
     if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>(dataItem) ) {
         QFileInfo fileInfo( fileItem->localPath() );
-        kDebug() << fileItem->k3bPath() << fileItem->localPath();
+        qDebug() << fileItem->k3bPath() << fileItem->localPath();
         if( fileItem->isSymLink() ) {
             m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge,
                                                  KIconLoader::DefaultState, QStringList() << "emblem-symbolic-link" ) );

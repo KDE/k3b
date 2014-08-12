@@ -22,8 +22,8 @@
 #include "k3bchecksumpipe.h"
 #include "k3biso9660.h"
 
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QLinkedList>
 
@@ -150,7 +150,7 @@ K3b::Msf K3b::VerificationJob::Private::trackLength( const TrackEntry& trackEntr
             if( !device->read10( buffer, 2048, track.lastSector().lba(), 1 ) &&
                 !device->read10( buffer, 2048, track.lastSector().lba(), 1 ) ) {
                 trackSize -= 2;
-                kDebug() << "(K3b::CdCopyJob) track " << trackNum << " probably TAO recorded.";
+                qDebug() << "(K3b::CdCopyJob) track " << trackNum << " probably TAO recorded.";
             }
         }
     }

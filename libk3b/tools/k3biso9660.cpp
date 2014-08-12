@@ -23,9 +23,9 @@
 #include "libisofs/isofs.h"
 
 #include <qdir.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 
 /* callback function for libisofs */
@@ -277,7 +277,7 @@ bool K3b::Iso9660File::copyTo( const QString& url ) const
         return !r;
     }
     else {
-        kDebug() << "(K3b::Iso9660File) could not open " << url << " for writing.";
+        qDebug() << "(K3b::Iso9660File) could not open " << url << " for writing.";
         return false;
     }
 }
@@ -313,7 +313,7 @@ void K3b::Iso9660Directory::expand()
     if( !m_bExpanded ) {
         archive()->dirent = this;
         if( ProcessDir( &K3b::Iso9660::read_callback, m_startSector, m_size, &K3b::Iso9660::isofs_callback, archive() ) )
-            kDebug() << "(K3b::Iso9660) failed to expand dir: " << name() << " with size: " << m_size;
+            qDebug() << "(K3b::Iso9660) failed to expand dir: " << name() << " with size: " << m_size;
 
         m_bExpanded = true;
     }
@@ -605,7 +605,7 @@ bool K3b::Iso9660::open()
             // now check if we have a scrambled video dvd
             if( d->cdDevice->copyrightProtectionSystemType() == K3b::Device::COPYRIGHT_PROTECTION_CSS ) {
 
-                kDebug() << "(K3b::Iso9660) found encrypted dvd. using libdvdcss.";
+                qDebug() << "(K3b::Iso9660) found encrypted dvd. using libdvdcss.";
 
                 // open the libdvdcss stuff
                 d->backend = new K3b::Iso9660LibDvdCssBackend( d->cdDevice );
@@ -653,7 +653,7 @@ bool K3b::Iso9660::open()
     desc = ReadISO9660( &K3b::Iso9660::read_callback, d->startSector, this );
 
     if (!desc) {
-        kDebug() << "K3b::Iso9660::openArchive no volume descriptors";
+        qDebug() << "K3b::Iso9660::openArchive no volume descriptors";
         close();
         return false;
     }
@@ -823,32 +823,32 @@ const K3b::Iso9660SimplePrimaryDescriptor& K3b::Iso9660::primaryDescriptor() con
 void K3b::Iso9660::debug() const
 {
     if( isOpen() ) {
-        kDebug() << "System Id:         " << primaryDescriptor().systemId;
-        kDebug() << "Volume Id:         " << primaryDescriptor().volumeId;
-        kDebug() << "Volume Set Id:     " << primaryDescriptor().volumeSetId;
-        kDebug() << "Preparer Id:       " << primaryDescriptor().preparerId;
-        kDebug() << "Publisher Id:      " << primaryDescriptor().publisherId;
-        kDebug() << "Application Id:    " << primaryDescriptor().applicationId;
-        kDebug() << "Volume Set Size:   " << primaryDescriptor().volumeSetSize;
-        kDebug() << "Volume Set Number: " << primaryDescriptor().volumeSetNumber;
+        qDebug() << "System Id:         " << primaryDescriptor().systemId;
+        qDebug() << "Volume Id:         " << primaryDescriptor().volumeId;
+        qDebug() << "Volume Set Id:     " << primaryDescriptor().volumeSetId;
+        qDebug() << "Preparer Id:       " << primaryDescriptor().preparerId;
+        qDebug() << "Publisher Id:      " << primaryDescriptor().publisherId;
+        qDebug() << "Application Id:    " << primaryDescriptor().applicationId;
+        qDebug() << "Volume Set Size:   " << primaryDescriptor().volumeSetSize;
+        qDebug() << "Volume Set Number: " << primaryDescriptor().volumeSetNumber;
 
         if( firstIsoDirEntry() ) {
-            kDebug() << "First ISO Dir entry:";
-            kDebug() << "----------------------------------------------";
+            qDebug() << "First ISO Dir entry:";
+            qDebug() << "----------------------------------------------";
             debugEntry( firstIsoDirEntry(), 0 );
-            kDebug() << "----------------------------------------------";
+            qDebug() << "----------------------------------------------";
         }
         if( firstRRDirEntry() ) {
-            kDebug() << "First RR Dir entry:";
-            kDebug() << "----------------------------------------------";
+            qDebug() << "First RR Dir entry:";
+            qDebug() << "----------------------------------------------";
             debugEntry( firstRRDirEntry(), 0 );
-            kDebug() << "----------------------------------------------";
+            qDebug() << "----------------------------------------------";
         }
         if( firstJolietDirEntry() ) {
-            kDebug() << "First Joliet Dir entry:";
-            kDebug() << "----------------------------------------------";
+            qDebug() << "First Joliet Dir entry:";
+            qDebug() << "----------------------------------------------";
             debugEntry( firstJolietDirEntry(), 0 );
-            kDebug() << "----------------------------------------------";
+            qDebug() << "----------------------------------------------";
         }
     }
 }
@@ -857,13 +857,13 @@ void K3b::Iso9660::debug() const
 void K3b::Iso9660::debugEntry( const K3b::Iso9660Entry* entry, int depth ) const
 {
     if( !entry ) {
-        kDebug() << "(K3b::Iso9660::debugEntry) null entry.";
+        qDebug() << "(K3b::Iso9660::debugEntry) null entry.";
         return;
     }
 
     QString spacer;
     spacer.fill( ' ', depth*3 );
-    kDebug() << spacer << "- " << entry->name() << " (" << entry->isoName() << ")";
+    qDebug() << spacer << "- " << entry->name() << " (" << entry->isoName() << ")";
     if( entry->isDirectory() ) {
         const K3b::Iso9660Directory* dir = dynamic_cast<const K3b::Iso9660Directory*>(entry);
         const QStringList entries = dir->entries();

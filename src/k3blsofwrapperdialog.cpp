@@ -17,9 +17,9 @@
 
 #include "k3bdevice.h"
 
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QLabel>
 #include <QList>
@@ -42,7 +42,7 @@ static QString joinProcessNames( const QList<K3b::LsofWrapper::Process>& apps )
 K3b::LsofWrapperDialog::LsofWrapperDialog( QWidget* parent )
     : KDialog( parent)
 {
-    setCaption(i18n("Device in use"));
+    setWindowTitle(i18n("Device in use"));
     setButtons (Close|User1|User2);
     setDefaultButton(Close);
     setModal(true);

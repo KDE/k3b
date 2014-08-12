@@ -19,7 +19,7 @@
 
 #include <KUrl>
 
-class KIcon;
+class QIcon;
 
 // TODO: * Have a MetaItemView which allows to set delegates for submodel header painting
 //       * implement something like modelHeaderData() to get data for the root elements
@@ -92,7 +92,7 @@ namespace K3b {
          * be merged into the root item list of this model. Otherwise the submodel
          * will be added under a new root item.
          */
-        void addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model, bool flat = false );
+        void addSubModel( const QString& name, const QIcon& icon, QAbstractItemModel* model, bool flat = false );
 
         /**
          * FIXME: better use an id or something?

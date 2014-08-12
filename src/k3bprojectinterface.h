@@ -17,8 +17,8 @@
 #ifndef _K3B_PROJECT_INTERFACE_H_
 #define _K3B_PROJECT_INTERFACE_H_
 
-#include <kio/global.h>
-#include <QObject>
+#include <KIO/Global>
+#include <QtCore/QObject>
 #include <QString>
 #include <QStringList>
 

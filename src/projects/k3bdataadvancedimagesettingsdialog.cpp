@@ -19,8 +19,8 @@
 #include <QCheckBox>
 #include <QRadioButton>
 
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
 
 
 K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* parent )
@@ -30,7 +30,7 @@ K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* 
 
     setButtons(Ok|Cancel);
     setDefaultButton(Ok);
-    setCaption(i18n("Custom Data Project Filesystems"));
+    setWindowTitle(i18n("Custom Data Project Filesystems"));
     setModal(true);
 
     connect( m_checkRockRidge, SIGNAL(toggled(bool)), m_groupRockRidgeSettings, SLOT(setEnabled(bool)) );

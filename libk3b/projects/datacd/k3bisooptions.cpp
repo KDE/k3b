@@ -17,9 +17,9 @@
 #include "k3bversion.h"
 #include "k3bglobals.h"
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <klocale.h>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KI18n/KLocalizedString>
 #include <qstring.h>
 
 

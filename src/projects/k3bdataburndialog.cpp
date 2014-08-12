@@ -46,17 +46,17 @@
 #include <qfileinfo.h>
 #include <qtabwidget.h>
 #include <qspinbox.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <QGridLayout>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kfiledialog.h>
 #include <kcombobox.h>
-#include <kio/global.h>
+#include <KIO/Global>
 
 
 #include "k3bfilecompilationsizehandler.h"

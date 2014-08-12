@@ -16,7 +16,7 @@
 #define _K3B_FILECOMPILATION_SIZE_HANDLER_H_
 
 
-#include <kio/global.h>
+#include <KIO/Global>
 #include "k3bmsf.h"
 
 namespace K3b {

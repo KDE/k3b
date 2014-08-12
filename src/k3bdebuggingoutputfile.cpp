@@ -21,9 +21,10 @@
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 
-#include <kstandarddirs.h>
-#include <kglobalsettings.h>
-#include <kapplication.h>
+#include <KDELibs4Support/kdeversion.h>
+#include <KDELibs4Support/KDE/KApplication>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KGlobalSettings>
 
 #include <qtextstream.h>
 

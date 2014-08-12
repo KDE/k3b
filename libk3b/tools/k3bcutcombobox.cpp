@@ -18,7 +18,7 @@
 
 #include <qfontmetrics.h>
 #include <qevent.h>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 #include <qrect.h>
 #include <qsize.h>
 #include <qpixmap.h>

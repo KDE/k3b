@@ -20,13 +20,13 @@
 #include "k3bdeviceglobals.h"
 
 #include <KAction>
-#include <KAuth/Action>
-#include <KConfig>
+#include <KAuth>
+#include <KConfigCore/KConfig>
 #include <KIcon>
-#include <KLocale>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KMessageWidget>
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include <QColor>
 #include <QFileInfo>
@@ -260,23 +260,25 @@ void K3b::DeviceWidget::addUserToGroup()
     args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_gecos);
 
     KAuth::Action action("org.kde.k3b.addtogroup");
-    action.setHelperID("org.kde.k3b");
+    action.setHelperId("org.kde.k3b");
     action.setParentWidget(this);
     action.setArguments(args);
 
-    KAuth::ActionReply reply = action.execute();
-    if (reply.succeeded()) {
-        m_messageWidget->removeAction(m_addToGroupAction);
-        m_messageWidget->setMessageType(KMessageWidget::Information);
-        m_messageWidget->setText(i18n("Please relogin to apply the changes."));
-    } else if (reply.type() != KAuth::ActionReply::KAuthError ||
-               (reply.errorCode() != KAuth::ActionReply::NoError &&
-                reply.errorCode() != KAuth::ActionReply::AuthorizationDenied &&
-                reply.errorCode() != KAuth::ActionReply::UserCancelled)) {
-        m_messageWidget->setMessageType(KMessageWidget::Error);
-        m_messageWidget->setText(i18n("Unable to execute the action: %1", reply.errorDescription()));
-        m_addToGroupAction->setText(i18n("Retry"));
-    }
+    KAuth::ExecuteJob* job = action.execute();
+    connect( job, &KAuth::ExecuteJob::statusChanged, [&](KAuth::Action::AuthStatus status)
+    {
+        if( status == KAuth::Action::AuthorizedStatus ||
+            status == KAuth::Action::AuthRequiredStatus ) {
+            m_messageWidget->removeAction(m_addToGroupAction);
+            m_messageWidget->setMessageType(KMessageWidget::Information);
+            m_messageWidget->setText(i18n("Please relogin to apply the changes."));
+        } else if( status == KAuth::Action::DeniedStatus ||
+                   status == KAuth::Action::ErrorStatus ||
+                   status == KAuth::Action::InvalidStatus ) {
+            m_messageWidget->setText(i18n("Unable to execute the action: %1", job->errorString()));
+            m_addToGroupAction->setText(i18n("Retry"));
+        }
+    } );
 }
 
 #include "k3bdevicewidget.moc"

@@ -17,7 +17,7 @@
 #define K3B_PROCESS_H
 
 
-//#include <KProcess>
+//#include <KCoreAddons/KProcess>
 #include "k3bkprocess.h"
 
 #include "k3b_export.h"

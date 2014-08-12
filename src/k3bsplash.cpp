@@ -25,9 +25,10 @@
 #include <QPixmap>
 #include <QString>
 
-#include <KAboutData>
+#include <K4AboutData>
 #include <KApplication>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
 K3b::Splash::Splash( QWidget* parent )
     : KVBox( parent)

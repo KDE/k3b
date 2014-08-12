@@ -20,7 +20,7 @@
 
 #include <kprotocolmanager.h>
 #include <kurl.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 
 class K3b::MusicBrainz::Private
@@ -80,7 +80,7 @@ int K3b::MusicBrainz::query( const QByteArray& trm )
     else {
         char buffer[256];
         mb_GetQueryError( d->mb, buffer, 256 );
-        kDebug() << "(K3b::MusicBrainz) query error: " << buffer;
+        qDebug() << "(K3b::MusicBrainz) query error: " << buffer;
         return 0;
     }
 }

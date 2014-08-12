@@ -19,7 +19,7 @@
 
 #include "k3bdevice.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 
 class K3b::DeviceModel::Private

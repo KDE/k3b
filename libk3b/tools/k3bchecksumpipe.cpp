@@ -15,7 +15,8 @@
 #include "k3bchecksumpipe.h"
 
 #include <kcodecs.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
+#include <QtCore/QCryptographicHash>
 
 #include <unistd.h>
 
@@ -24,13 +25,13 @@ class K3b::ChecksumPipe::Private
 {
 public:
     Private()
-        : checksumType(MD5) {
+		: checksumType(MD5), md5(QCryptographicHash::Md5) {
     }
 
     void update( const char* in, qint64 len ) {
         switch( checksumType ) {
         case MD5:
-            md5.update( in, len );
+			md5.addData( in, len );
             break;
         }
     }
@@ -45,7 +46,7 @@ public:
 
     int checksumType;
 
-    KMD5 md5;
+	QCryptographicHash md5;
 };
 
 
@@ -80,7 +81,7 @@ QByteArray K3b::ChecksumPipe::checksum() const
 {
     switch( d->checksumType ) {
     case MD5:
-        return d->md5.hexDigest();
+		return d->md5.result().toHex();
     }
 
     return QByteArray();

@@ -32,14 +32,17 @@
 #include <QStyle>
 #include <QTextDocument>
 
+#include <K4AboutData>
 #include <KActionCollection>
 #include <KAboutData>
-#include <KConfigGroup>
-#include <KGlobal>
-#include <KGlobalSettings>
-#include <KLocale>
+#include <KConfigCore/KConfigGroup>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
 #include <KUrl>
+#include <KIcon>
 
 namespace {
 

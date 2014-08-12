@@ -17,7 +17,7 @@
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
 #include <qlabel.h>
 #include <QGridLayout>
@@ -31,7 +31,7 @@ K3b::MediaSelectionDialog::MediaSelectionDialog( QWidget* parent,
 {
     QWidget *widget = new QWidget();
     setMainWidget(widget);
-    setCaption(title.isEmpty() ? i18n("Medium Selection") : title);
+    setWindowTitle(title.isEmpty() ? i18n("Medium Selection") : title);
     setButtons (Ok|Cancel);
     setModal(modal);
     setDefaultButton(Ok);

@@ -32,12 +32,12 @@
 
 #include <KApplication>
 #include <KComboBox>
-#include <KConfig>
-#include <KDebug>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
 #include <KFileDialog>
-#include <kio/global.h>
-#include <KLocale>
-#include <KMessageBox>
+#include <KIO/Global>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KUrlLabel>
 #include <KUrlRequester>
 
@@ -303,7 +303,7 @@ void K3b::AudioRippingDialog::slotStartClicked()
     hide();
     ripDialog.startJob(job);
 
-    kDebug() << "(K3b::AudioRippingDialog) deleting ripjob.";
+    qDebug() << "(K3b::AudioRippingDialog) deleting ripjob.";
     delete job;
 
     close();

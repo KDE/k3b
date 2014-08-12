@@ -16,8 +16,7 @@
 #include "k3bvideodvd.h"
 #include "k3bvideodvdtitle.h"
 
-#include <KGlobal>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QHash>
 
@@ -56,7 +55,7 @@ VideoDVDAudioModel::VideoDVDAudioModel( const VideoDVD::VideoDVD& dvd, const QLi
             for( int i = 0; i < static_cast<int>( title.numAudioStreams() ); ++i ) {
                 const VideoDVD::AudioStream& audio = title.audioStream( i );
                 d->parents.insert( &audio, &title );
-                if( audio.langCode() == KGlobal::locale()->language() &&
+                if( audio.langCode() == KLocale::global()->language() &&
                     audio.format() != K3b::VideoDVD::AUDIO_FORMAT_DTS ) {
                     d->chosenAudio[ &title ] = i;
                 }
@@ -178,7 +177,7 @@ QVariant VideoDVDAudioModel::data( const QModelIndex& index, int role ) const
                            audio->channels(),
                                 ( audio->langCode().isEmpty()
                                   ? i18n("unknown language")
-                                  : KGlobal::locale()->languageCodeToName( audio->langCode() ) ),
+                                  : KLocale::global()->languageCodeToName( audio->langCode() ) ),
                                 ( audio->codeExtension() != K3b::VideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
                                   ? QString(" ") + K3b::VideoDVD::audioCodeExtensionString( audio->codeExtension() )
                                   : QString() ) );

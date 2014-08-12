@@ -18,6 +18,7 @@
 #include <QtCore/QObject>
 #include <KIcon>
 #include <KToggleAction>
+#include <KAction>
 #include <KActionCollection>
 
 namespace K3b {

@@ -27,13 +27,13 @@
 
 #include <KApplication>
 #include <KComboBox>
-#include <KConfig>
-#include <KConfigGroup>
-#include <KDialog>
-#include <kglobal.h>
-#include <KLocale>
-#include <KMessageBox>
-#include <KStandardDirs>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KUrlRequester>
 
 
@@ -68,7 +68,7 @@ K3b::MiscOptionTab::~MiscOptionTab()
 
 void K3b::MiscOptionTab::readSettings()
 {
-    KConfigGroup c = KGlobal::config()->group( "General Options" );
+    KConfigGroup c = KSharedConfig::openConfig()->group( "General Options" );
 
     m_checkSaveOnExit->setChecked( c.readEntry( "ask_for_saving_changes_on_exit", true ) );
     m_checkShowSplash->setChecked( c.readEntry("Show splash", true) );
@@ -90,7 +90,7 @@ void K3b::MiscOptionTab::readSettings()
 
 bool K3b::MiscOptionTab::saveSettings()
 {
-    KConfigGroup c = KGlobal::config()->group( "General Options" );
+    KConfigGroup c = KSharedConfig::openConfig()->group( "General Options" );
 
     c.writeEntry( "ask_for_saving_changes_on_exit", m_checkSaveOnExit->isChecked() );
     c.writeEntry( "Show splash", m_checkShowSplash->isChecked() );

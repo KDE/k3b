@@ -53,7 +53,7 @@
 // We mean it.
 //
 
-#include "QtCore/qobject.h"
+#include "QtCore/QtCore/QObject"
 #include "QtCore/qt_windows.h"
 
 #include "k3b_export.h"

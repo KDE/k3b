@@ -34,10 +34,10 @@
 #endif
 
 // KDE-includes
-#include <KConfig>
-#include <KLocale>
-#include <KMessageBox>
-#include <KNotification>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KNotification>
 #include <KUrl>
 
 // QT-includes
@@ -154,7 +154,7 @@ K3b::DirView::~DirView()
 
 void K3b::DirView::showUrl( const KUrl& url )
 {
-    kDebug() << url;
+    qDebug() << url;
     slotDirActivated( url );
 }
 
@@ -262,7 +262,7 @@ void K3b::DirView::slotUnmountFinished( bool success )
 
 void K3b::DirView::slotDirActivated( const KUrl& url )
 {
-    kDebug() << url;
+    qDebug() << url;
     d->fileView->setUrl( url, true );
     d->setCurrentView( d->fileView );
 }

@@ -20,8 +20,8 @@
 #include "k3bdevicehandler.h"
 #include "k3bglobalsettings.h"
 
-#include <klocale.h>
-#include <kglobal.h>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KGlobal>
 
 
 

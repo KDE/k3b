@@ -18,7 +18,7 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixfileitem.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KUrl>
 #include <KIcon>
 
@@ -494,4 +494,4 @@ bool MovixProjectModel::removeRows( int row, int count, const QModelIndex& paren
 
 } // namespace K3b
 
-#include "k3bmovixprojectmodel.moc"
+#include "moc_k3bmovixprojectmodel.cpp"

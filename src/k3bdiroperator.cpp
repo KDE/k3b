@@ -24,10 +24,12 @@
 
 #include <KAction>
 #include <KActionCollection>
+#include <KActionMenu>
 #include <KBookmarkMenu>
-#include <KConfigGroup>
+#include <KConfigCore/KConfigGroup>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
 K3b::DirOperator::DirOperator(const KUrl& url, QWidget* parent )
     : KDirOperator( url, parent )
@@ -119,9 +121,9 @@ QString K3b::DirOperator::currentTitle() const
 }
 
 
-QString K3b::DirOperator::currentUrl() const
+QUrl K3b::DirOperator::currentUrl() const
 {
-    return url().prettyUrl();
+    return url();
 }
 
 

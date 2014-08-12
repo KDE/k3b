@@ -30,7 +30,7 @@
 
 #include <QtCore/QFile>
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 
 class K3b::MetaWriter::Private
@@ -534,10 +534,10 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
         emit infoMessage( i18n("Most writers do not support writing "
                                "multisession CDs in DAO mode."), MessageWarning );
 
-    kDebug() << "Writing mode:     " << d->writingMode;
-    kDebug() << "Used Writing mode:" << d->usedWritingMode;
-    kDebug() << "Writing app:     " << d->writingApp;
-    kDebug() << "Used Writing app:" << d->usedWritingApp;
+    qDebug() << "Writing mode:     " << d->writingMode;
+    qDebug() << "Used Writing mode:" << d->usedWritingMode;
+    qDebug() << "Writing app:     " << d->writingApp;
+    qDebug() << "Used Writing app:" << d->usedWritingApp;
 
     return true;
 }

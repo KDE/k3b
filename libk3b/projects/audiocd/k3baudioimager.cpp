@@ -23,11 +23,11 @@
 #include "k3bthread.h"
 #include "k3bwavefilewriter.h"
 
-#include <KLocale>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <QtCore/QDebug>
 
 #include <QIODevice>
-#include <QFile>
+#include <QtCore/QFile>
 
 #include <unistd.h>
 
@@ -124,7 +124,7 @@ bool K3b::AudioImager::run()
             else {
                 qint64 w = d->ioDev->write( buffer, read );
                 if ( w != read ) {
-                    kDebug() << "(K3b::AudioImager::WorkThread) writing to device" << d->ioDev << "failed:" << read << w;
+                    qDebug() << "(K3b::AudioImager::WorkThread) writing to device" << d->ioDev << "failed:" << read << w;
                     d->lastError = K3b::AudioImager::ERROR_FD_WRITE;
                     return false;
                 }
@@ -148,7 +148,7 @@ bool K3b::AudioImager::run()
 
         if( read < 0 ) {
             emit infoMessage( i18n("Error while decoding track %1.", track->trackNumber()), K3b::Job::MessageError );
-            kDebug() << "(K3b::AudioImager::WorkThread) read error on track " << track->trackNumber()
+            qDebug() << "(K3b::AudioImager::WorkThread) read error on track " << track->trackNumber()
                      << " at pos " << K3b::Msf(trackRead/2352) << endl;
             d->lastError = K3b::AudioImager::ERROR_DECODING_TRACK;
             return false;

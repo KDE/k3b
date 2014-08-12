@@ -45,7 +45,7 @@
 #include "private/qfsfileengine_p.h"
 #include <qdebug.h>
 
-#include "qfile.h"
+#include "QtCore/QFile"
 #include "qdir.h"
 #include "qtemporaryfile.h"
 #ifndef QT_NO_REGEXP

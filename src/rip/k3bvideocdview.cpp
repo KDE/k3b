@@ -33,12 +33,12 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KActionMenu>
-#include <KDebug>
-#include <KDialog>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
-#include <KMessageBox>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KStandardAction>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
@@ -465,7 +465,7 @@ void K3b::VideoCdView::startRip()
         if ( d->videooptions ->getVideoCdRipSequences() )
             videocdsize += d->videocdmpegsize;
 
-        kDebug() << QString("(K3b::VideoCdView::startRip())  d->videooptions ->setVideoCdSize( %1)").arg( videocdsize );
+        qDebug() << QString("(K3b::VideoCdView::startRip())  d->videooptions ->setVideoCdSize( %1)").arg( videocdsize );
         d->videooptions ->setVideoCdSize( videocdsize );
         K3b::VideoCdRippingDialog rip( d->videooptions, this );
         rip.exec();

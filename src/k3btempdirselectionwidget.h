@@ -16,11 +16,11 @@
 #ifndef K3BTEMPDIRSELECTIONWIDGET_H
 #define K3BTEMPDIRSELECTIONWIDGET_H
 
-#include <QtGui/QGroupBox>
+#include <QtWidgets/QGroupBox>
 
 #include <QLabel>
-#include <kio/global.h>
-#include <kconfiggroup.h>
+#include <KIO/Global>
+#include <KConfigCore/KConfigGroup>
 
 class QLabel;
 class KUrlRequester;

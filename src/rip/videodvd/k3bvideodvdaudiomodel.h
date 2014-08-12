@@ -15,7 +15,7 @@
 #ifndef _K3B_K3BVIDEODVDAUDIOMODEL_H_
 #define _K3B_K3BVIDEODVDAUDIOMODEL_H_
 
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include <QAbstractItemModel>
 #include <QList>

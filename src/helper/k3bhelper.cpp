@@ -16,6 +16,8 @@
 #include "k3bhelper.h"
 #include "k3bhelperprogramitem.h"
 
+#include <KAuth/KAuthHelperSupport>
+
 #include <QtCore/QFile>
 #include <QtCore/QProcess>
 #include <QtCore/QString>
@@ -89,7 +91,7 @@ Helper::Helper()
     qRegisterMetaTypeStreamOperators<HelperProgramItem>( "K3b::HelperProgramItem" );
 }
 
-ActionReply Helper::updatepermissions( QVariantMap args )
+KAuth::ActionReply Helper::updatepermissions( QVariantMap args )
 {
     QString burningGroup = args["burningGroup"].toString();
     QStringList devices = args["devices"].toStringList();
@@ -121,7 +123,7 @@ ActionReply Helper::updatepermissions( QVariantMap args )
             failedToUpdate.push_back( program.m_path );
     }
     
-    ActionReply reply = ActionReply::SuccessReply;
+    KAuth::ActionReply reply = KAuth::ActionReply::SuccessReply();
     QVariantMap data;
     data["updated"] = updated;
     data["failedToUpdate"] = failedToUpdate;
@@ -130,7 +132,7 @@ ActionReply Helper::updatepermissions( QVariantMap args )
     return reply;
 }
 
-ActionReply Helper::addtogroup( QVariantMap args )
+KAuth::ActionReply Helper::addtogroup( QVariantMap args )
 {
     const QString groupName = args["groupName"].toString();
     const QString userName = args["userName"].toString();
@@ -138,12 +140,12 @@ ActionReply Helper::addtogroup( QVariantMap args )
     QProcess gpasswd;
     int errorCode = gpasswd.execute( "gpasswd", QStringList() << "--add" << userName << groupName );
 
-    ActionReply reply;
+    KAuth::ActionReply reply;
     if( errorCode == 0 ) {
-        reply = KAuth::ActionReply::SuccessReply;
+        reply = KAuth::ActionReply::SuccessReply();
     } else {
-        reply = KAuth::ActionReply::HelperErrorReply;
-        reply.setErrorCode( errorCode );
+        reply = KAuth::ActionReply::HelperErrorReply();
+        reply.setErrorCode( (KAuth::ActionReply::Error) errorCode );
         reply.setErrorDescription( QString::fromLocal8Bit( gpasswd.readAllStandardError().data() ) );
     }
 
@@ -152,6 +154,6 @@ ActionReply Helper::addtogroup( QVariantMap args )
 
 } // namespace K3b
 
-KDE4_AUTH_HELPER_MAIN("org.kde.k3b", K3b::Helper)
+KAUTH_HELPER_MAIN("org.kde.k3b", K3b::Helper)
 
 #include "k3bhelper.moc"

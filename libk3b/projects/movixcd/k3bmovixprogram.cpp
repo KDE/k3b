@@ -16,11 +16,11 @@
 #include "k3bmovixprogram.h"
 
 #include <kprocess.h>
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
 #include <qdir.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qtextstream.h>
 
 
@@ -66,7 +66,7 @@ bool K3b::MovixProgram::scan( const QString& p )
         }
     }
     else {
-        kDebug() << "(K3b::MovixProgram) could not start " << path << "movix-version";
+        qDebug() << "(K3b::MovixProgram) could not start " << path << "movix-version";
         return false;
     }
 
@@ -109,22 +109,22 @@ bool K3b::MovixProgram::scanOldEMovix( K3b::MovixBin* bin, const QString& path )
     QDir dir( bin->movixDataDir() );
     QStringList subdirs = dir.entryList( QDir::Dirs );
     if( !subdirs.contains( "boot-messages" ) ) {
-        kDebug() << "(K3b::MovixProgram) could not find subdir 'boot-messages'";
+        qDebug() << "(K3b::MovixProgram) could not find subdir 'boot-messages'";
         delete bin;
         return false;
     }
     if( !subdirs.contains( "isolinux" ) ) {
-        kDebug() << "(K3b::MovixProgram) could not find subdir 'isolinux'";
+        qDebug() << "(K3b::MovixProgram) could not find subdir 'isolinux'";
         delete bin;
         return false;
     }
     if( !subdirs.contains( "movix" ) ) {
-        kDebug() << "(K3b::MovixProgram) could not find subdir 'movix'";
+        qDebug() << "(K3b::MovixProgram) could not find subdir 'movix'";
         delete bin;
         return false;
     }
     if( !subdirs.contains( "mplayer-fonts" ) ) {
-        kDebug() << "(K3b::MovixProgram) could not find subdir 'mplayer-fonts'";
+        qDebug() << "(K3b::MovixProgram) could not find subdir 'mplayer-fonts'";
         delete bin;
         return false;
     }
@@ -171,7 +171,7 @@ bool K3b::MovixProgram::scanOldEMovix( K3b::MovixBin* bin, const QString& path )
     for( QStringList::const_iterator it = bin->m_isolinuxFiles.constBegin();
          it != bin->m_isolinuxFiles.constEnd(); ++it ) {
         if( !QFile::exists( bin->movixDataDir() + "/isolinux/" + *it ) ) {
-            kDebug() << "(K3b::MovixProgram) Could not find file " << *it;
+            qDebug() << "(K3b::MovixProgram) Could not find file " << *it;
             delete bin;
             return false;
         }
@@ -219,7 +219,7 @@ QStringList K3b::MovixProgram::determineSupportedBootLabels( const QString& isoC
 
     QFile f( isoConfigFile );
     if( !f.open( QIODevice::ReadOnly ) ) {
-        kDebug() << "(K3b::MovixProgram) could not open file '" << f.fileName() << "'";
+        qDebug() << "(K3b::MovixProgram) could not open file '" << f.fileName() << "'";
     }
     else {
         QTextStream fs( &f );

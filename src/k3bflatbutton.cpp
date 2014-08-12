@@ -17,9 +17,9 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KGlobal>
-#include <KGlobalSettings>
-#include <KIconLoader>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KIconThemes/KIconLoader>
 
 #include <QAction>
 #include <QEvent>

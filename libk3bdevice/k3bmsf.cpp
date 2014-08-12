@@ -15,7 +15,7 @@
 #include "k3bmsf.h"
 #include <QtCore/QRegExp>
 #include <QtCore/QSharedData>
-#include <KDebug>
+#include <QtCore/QDebug>
 
 #include <cmath>
 
@@ -302,7 +302,7 @@ K3b::Msf K3b::Msf::fromSeconds( double ms )
 K3b::Msf K3b::Msf::fromAudioBytes( qint64 bytes )
 {
     if( bytes % 2352 != 0 ) {
-        kWarning() << "bytes:" << bytes << "(not aligned to" << 2352 << ")!";
+        qWarning() << "bytes:" << bytes << "(not aligned to" << 2352 << ")!";
     }
     return Msf( bytes/2352 );
 }

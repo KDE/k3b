@@ -17,9 +17,9 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bexternalbinwidget.h"
 
-#include <KMessageBox>
-#include <KDialog>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QLabel>
 #include <QVBoxLayout>

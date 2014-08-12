@@ -26,7 +26,7 @@
 #include <QItemSelectionModel>
 #include <QLabel>
 #include <QLayout>
-#include <QMap>
+#include <QtCore/QMap>
 #include <QPixmap>
 #include <QPushButton>
 #include <QStringList>
@@ -35,14 +35,14 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-#include <KAuth/Action>
-#include <KDebug>
-#include <KDialog>
+#include <KAuth>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KDialog>
 #include <KEditListBox>
-#include <KGlobalSettings>
-#include <KLocale>
-#include <KMessageBox>
-#include <KPushButton>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KPushButton>
 
 #include <grp.h>
 
@@ -65,7 +65,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     m_mainTabWidget = new QTabWidget( this );
-    m_rescanButton = new QPushButton( KIcon( "view-refresh" ), i18n( "Refresh" ), this );
+    m_rescanButton = new QPushButton( QIcon::fromTheme( "view-refresh" ), i18n( "Refresh" ), this );
     mainGrid->addWidget( m_mainTabWidget, 0, 0, 1, 3 );
     mainGrid->addWidget( m_rescanButton, 1, 2 );
     mainGrid->setColumnStretch( 0, 1 );
@@ -121,7 +121,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     m_permissionView->setAllColumnsShowFocus( true );
     m_permissionView->setRootIsDecorated( false );
     m_permissionView->header()->setResizeMode( ExternalBinPermissionModel::ProgramColumn, QHeaderView::ResizeToContents );
-    m_changePermissionsButton = new KPushButton( KIcon("dialog-password"), i18n( "Change Permissions..." ), this );
+    m_changePermissionsButton = new KPushButton( QIcon::fromTheme("dialog-password"), i18n( "Change Permissions..." ), this );
     QVBoxLayout* permissionsTabLayout = new QVBoxLayout( permissionsTab );
     permissionsTabLayout->addWidget( permissionsLabel );
     permissionsTabLayout->addWidget( m_permissionView );
@@ -214,7 +214,7 @@ void K3b::ExternalBinWidget::slotPermissionModelChanged()
 void K3b::ExternalBinWidget::slotChangePermissions()
 {
     KAuth::Action action("org.kde.k3b.updatepermissions");
-    action.setHelperID("org.kde.k3b");
+    action.setHelperId("org.kde.k3b");
     action.setParentWidget(this);
 
     QVariantMap args;
@@ -234,26 +234,28 @@ void K3b::ExternalBinWidget::slotChangePermissions()
 
     action.setArguments(args);
 
-    KAuth::ActionReply reply = action.execute();
+    KAuth::ExecuteJob* job = action.execute();
+    connect( job, &KAuth::ExecuteJob::statusChanged, [&](KAuth::Action::AuthStatus status)
+    {
+        if( status == KAuth::Action::AuthorizedStatus ||
+            status == KAuth::Action::AuthRequiredStatus ) {
+            // Success!!
+            QStringList updated = job->data()["updated"].toStringList();
+            QStringList failedToUpdate = job->data()["failedToUpdate"].toStringList();
+            qDebug() << "Objects updated: " << updated;
+            qDebug() << "Objects failed to update: " << failedToUpdate;
 
-    if (reply.succeeded()) {
-        // Success!!
-        QStringList updated = reply.data()["updated"].toStringList();
-        QStringList failedToUpdate = reply.data()["failedToUpdate"].toStringList();
-        kDebug() << "Objects updated: " << updated;
-        kDebug() << "Objects failed to update: " << failedToUpdate;
+            if (!failedToUpdate.isEmpty()) {
+                KMessageBox::errorList(this, i18n("Following programs could not be updated:"), failedToUpdate);
+            }
 
-        if (!failedToUpdate.isEmpty()) {
-            KMessageBox::errorList(this, i18n("Following programs could not be updated:"), failedToUpdate);
+            m_permissionModel->update();
+        } else if( status == KAuth::Action::DeniedStatus ||
+                   status == KAuth::Action::ErrorStatus ||
+                   status == KAuth::Action::InvalidStatus ) {
+            KMessageBox::error(this, i18n("Unable to execute the action: %1", job->errorString()));
         }
-
-        m_permissionModel->update();
-    } else if (reply.type() != KAuth::ActionReply::KAuthError ||
-               (reply.errorCode() != KAuth::ActionReply::NoError &&
-                reply.errorCode() != KAuth::ActionReply::AuthorizationDenied &&
-                reply.errorCode() != KAuth::ActionReply::UserCancelled)) {
-        KMessageBox::error(this, i18n("Unable to execute the action: %1", reply.errorDescription()));
-    }
+    } );
 }
 
 #include "k3bexternalbinwidget.moc"

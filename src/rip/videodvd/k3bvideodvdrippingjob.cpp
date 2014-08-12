@@ -17,8 +17,8 @@
 #include "k3bvideodvdtitletranscodingjob.h"
 #include "k3bvideodvdtitledetectclippingjob.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
 
 K3b::VideoDVDRippingJob::TitleRipInfo::TitleRipInfo()

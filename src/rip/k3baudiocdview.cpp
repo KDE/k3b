@@ -37,17 +37,17 @@
 #include <KActionCollection>
 #include <KActionMenu>
 #include <KComboBox>
-#include <KConfig>
-#include <KDebug>
-#include <KDialog>
-#include <KIconLoader>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KIconThemes/KIconLoader>
 #include <KLineEdit>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
-#include <KMessageBox>
-#include <KNotification>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KNotification>
 #include <KStandardAction>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
 
@@ -270,7 +270,7 @@ void K3b::AudioCdView::initActions()
     d->actionCollection->addAction( "show_data_part", actionShowDataPart );
     connect( actionShowDataPart, SIGNAL(triggered(bool)), this, SLOT(slotShowDataPart()) );
     
-    KAction* actionSelectAll = KStandardAction::selectAll( d->trackView, SLOT(selectAll()), actionCollection() );
+    QAction* actionSelectAll = KStandardAction::selectAll( d->trackView, SLOT(selectAll()), actionCollection() );
 
     // setup the popup menu
     d->popupMenu = new KMenu( this );
@@ -343,9 +343,9 @@ void K3b::AudioCdView::slotEditTrackCddb()
     if( !selection.isEmpty() ) {
         KDialog dialog( this );
         if( selection.size() > 1 )
-            dialog.setCaption( i18n( "Multiple Tracks" ) );
+            dialog.setWindowTitle( i18n( "Multiple Tracks" ) );
         else
-            dialog.setCaption( i18n( "CDDB Track %1", selection.first().data( AudioTrackModel::TrackNumberRole ).toInt() ) );
+            dialog.setWindowTitle( i18n( "CDDB Track %1", selection.first().data( AudioTrackModel::TrackNumberRole ).toInt() ) );
         dialog.setButtons(KDialog::Ok|KDialog::Cancel);
         dialog.setDefaultButton(KDialog::Ok);
         dialog.setModal(true);
@@ -379,7 +379,7 @@ void K3b::AudioCdView::slotEditTrackCddb()
 void K3b::AudioCdView::slotEditAlbumCddb()
 {
     KDialog dialog( this);
-    dialog.setCaption(i18n("Album Cddb"));
+    dialog.setWindowTitle(i18n("Album Cddb"));
     dialog.setModal(true);
     dialog.setButtons(KDialog::Ok|KDialog::Cancel);
     dialog.setDefaultButton(KDialog::Ok);

@@ -26,25 +26,25 @@
 #include "k3bmsf.h"
 
 #include <kdeversion.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kapplication.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kurl.h>
 #include <kprocess.h>
 #include <KDiskFreeSpaceInfo>
 
-#include <kmountpoint.h>
+#include <KIOCore/KMountPoint>
 #include <Solid/Device>
 #include <Solid/StorageAccess>
 #include <Solid/OpticalDrive>
 
 #include <qdatastream.h>
 #include <qdir.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 
 #include <cmath>
 #include <sys/utsname.h>
@@ -182,10 +182,10 @@ K3b::Version K3b::kernelVersion()
     utsname unameinfo;
     if( ::uname(&unameinfo) == 0 ) {
         v = QString::fromLocal8Bit( unameinfo.release );
-        kDebug() << "kernel version: " << v;
+        qDebug() << "kernel version: " << v;
     }
     else
-        kError() << "could not determine kernel version." ;
+        qCritical() << "could not determine kernel version." ;
     return v;
 }
 
@@ -204,7 +204,7 @@ QString K3b::systemName()
         v = QString::fromLocal8Bit( unameinfo.sysname );
     }
     else
-        kError() << "could not determine system name." ;
+        qCritical() << "could not determine system name." ;
     return v;
 }
 

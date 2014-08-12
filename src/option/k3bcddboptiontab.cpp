@@ -18,10 +18,10 @@
 #include <KCModule>
 #include <KService>
 #include <KServiceTypeTrader>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
-#include <QtGui/QLabel>
-#include <QtGui/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QHBoxLayout>
 
 
 K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )

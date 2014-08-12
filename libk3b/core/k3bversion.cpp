@@ -17,7 +17,7 @@
 #include <qregexp.h>
 #include <QtCore/QSharedData>
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 namespace {
     /**
@@ -121,7 +121,7 @@ void K3b::Version::setVersion( const QString& v )
             suffix = suffix.mid( 1 );
             splitVersionString( suffix, d->m_minorVersion, suffix );
             if( d->m_minorVersion < 0 ) {
-                kDebug() << "(K3b::Version) suffix must not start with a dot!";
+                qDebug() << "(K3b::Version) suffix must not start with a dot!";
                 d->m_majorVersion = -1;
                 d->m_minorVersion = -1;
                 d->m_patchLevel = -1;
@@ -132,7 +132,7 @@ void K3b::Version::setVersion( const QString& v )
                     suffix = suffix.mid( 1 );
                     splitVersionString( suffix, d->m_patchLevel, suffix );
                     if( d->m_patchLevel < 0 ) {
-                        kDebug() << "(K3b::Version) suffix must not start with a dot!";
+                        qDebug() << "(K3b::Version) suffix must not start with a dot!";
                         d->m_majorVersion = -1;
                         d->m_minorVersion = -1;
                         d->m_patchLevel = -1;

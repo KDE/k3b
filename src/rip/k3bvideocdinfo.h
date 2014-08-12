@@ -18,7 +18,7 @@
 #define K3BVIDEOCDINFO_H
 
 #include <QList>
-#include <QObject>
+#include <QtCore/QObject>
 #include <QProcess>
 #include <QString>
 

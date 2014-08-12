@@ -35,10 +35,10 @@
 #include "k3bintmapcombobox.h"
 
 #include <KApplication>
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QCheckBox>
 #include <QGridLayout>

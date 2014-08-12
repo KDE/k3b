@@ -16,7 +16,7 @@
 #include "k3bvcdtrack.h"
 
 #include <KIcon>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 Q_DECLARE_METATYPE( K3b::VcdTrack* )
 

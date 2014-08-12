@@ -29,10 +29,10 @@
 #include "k3bcddb.h"
 
 #include <KAction>
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QString>
 
@@ -48,7 +48,7 @@ K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, const QVa
 {
     setText( i18n("Query CDDB") );
     setToolTip( i18n("Query a CDDB entry for the current audio project.") );
-    setIcon( KIcon( "view-refresh" ) );
+    setIcon( QIcon::fromTheme( "view-refresh" ) );
 }
 
 

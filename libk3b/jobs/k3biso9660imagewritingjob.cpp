@@ -29,13 +29,13 @@
 #include "k3bfilesplitter.h"
 #include "k3bglobalsettings.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 #include <ktemporaryfile.h>
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include <qstring.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qapplication.h>
 
 

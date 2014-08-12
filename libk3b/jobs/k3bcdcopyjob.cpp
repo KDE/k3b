@@ -32,18 +32,18 @@
 #include "k3bglobalsettings.h"
 #include "k3bcddb.h"
 
-#include <kconfig.h>
-#include <kstandarddirs.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 #include <ktemporaryfile.h>
 #include <kio/netaccess.h>
 #include <kio/job.h>
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include <qtimer.h>
-#include <qstringlist.h>
-#include <qfile.h>
+#include <QtCore/QStringList>
+#include <QtCore/QFile>
 #include <qregexp.h>
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -248,11 +248,11 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 if( m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ||
                     m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ) {
                     d->dataSessionProbablyTAORecorded.append(false);
-                    kDebug() << "(K3b::CdCopyJob) track " << i << " probably DAO recorded.";
+                    qDebug() << "(K3b::CdCopyJob) track " << i << " probably DAO recorded.";
                 }
                 else {
                     d->dataSessionProbablyTAORecorded.append(true);
-                    kDebug() << "(K3b::CdCopyJob) track " << i << " probably TAO recorded.";
+                    qDebug() << "(K3b::CdCopyJob) track " << i << " probably TAO recorded.";
                 }
             }
 
@@ -516,7 +516,7 @@ void K3b::CdCopyJob::cancel()
 
 bool K3b::CdCopyJob::prepareImageFiles()
 {
-    kDebug() << "(K3b::CdCopyJob) prepareImageFiles()";
+    qDebug() << "(K3b::CdCopyJob) prepareImageFiles()";
 
     d->imageNames.clear();
     d->infNames.clear();
@@ -549,7 +549,7 @@ bool K3b::CdCopyJob::prepareImageFiles()
         if( !tempDirReady ) {
             QDir dir( m_tempPath );
             m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
-            kDebug() << "(K3b::CdCopyJob) creating temp dir: " << m_tempPath;
+            qDebug() << "(K3b::CdCopyJob) creating temp dir: " << m_tempPath;
             if( !dir.mkdir( m_tempPath ) ) {
                 emit infoMessage( i18n("Unable to create temporary folder '%1'.",m_tempPath), MessageError );
                 return false;
@@ -572,9 +572,9 @@ bool K3b::CdCopyJob::prepareImageFiles()
             ++i;
         }
 
-        kDebug() << "(K3b::CdCopyJob) created image filenames:";
+        qDebug() << "(K3b::CdCopyJob) created image filenames:";
         for( int i = 0; i < d->imageNames.count(); ++i )
-            kDebug() << "(K3b::CdCopyJob) " << d->imageNames[i];
+            qDebug() << "(K3b::CdCopyJob) " << d->imageNames[i];
 
         return true;
     }

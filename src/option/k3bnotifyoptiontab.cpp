@@ -15,10 +15,10 @@
 
 #include "k3bnotifyoptiontab.h"
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 #include <KNotifyConfigWidget>
 
-#include <QtGui/QHBoxLayout>
+#include <QtWidgets/QHBoxLayout>
 
 
 

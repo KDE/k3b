@@ -13,18 +13,18 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kurl.h>
 #include <ktemporaryfile.h>
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include <qstring.h>
 #include <qdatetime.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qtimer.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 #include <qregexp.h>
 #include <qdom.h>
 
@@ -142,7 +142,7 @@ void K3b::VcdJob::cancelAll()
 
 void K3b::VcdJob::start()
 {
-    kDebug() << "(K3b::VcdJob) starting job";
+    qDebug() << "(K3b::VcdJob) starting job";
 
     jobStarted();
     emit burning( false );
@@ -169,7 +169,7 @@ void K3b::VcdJob::xmlGen()
     d->xmlFile = new KTemporaryFile;
 
     if( d->xmlFile->open() ) {
-        kDebug() << "(K3b::VcdJob) writing XML data to" << d->xmlFile->fileName();
+        qDebug() << "(K3b::VcdJob) writing XML data to" << d->xmlFile->fileName();
 
         K3b::VcdXmlView xmlView( m_doc );
         xmlView.write( *d->xmlFile );
@@ -180,7 +180,7 @@ void K3b::VcdJob::xmlGen()
         vcdxBuild();
     }
     else {
-        kDebug() << "(K3b::VcdJob) could not write xmlfile.";
+        qDebug() << "(K3b::VcdJob) could not write xmlfile.";
         emit infoMessage( i18n( "Could not write correct XML file." ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
@@ -200,7 +200,7 @@ void K3b::VcdJob::vcdxBuild()
     emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3b::Job::MessageInfo );
     const K3b::ExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
-        kDebug() << "(K3b::VcdJob) could not find vcdxbuild executable";
+        qDebug() << "(K3b::VcdJob) could not find vcdxbuild executable";
         emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxbuild") ), K3b::Job::MessageError );
         emit infoMessage( i18n( "To create Video CDs you have to install VcdImager Version %1." ,QString( ">= 0.7.12") ), K3b::Job::MessageInfo );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
@@ -210,7 +210,7 @@ void K3b::VcdJob::vcdxBuild()
     }
 
     if ( bin->version() < K3b::Version( "0.7.12" ) ) {
-        kDebug() << "(K3b::VcdJob) vcdxbuild executable too old!";
+        qDebug() << "(K3b::VcdJob) vcdxbuild executable too old!";
         emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ,QString( "Vcdxbuild" ),QString( "0.7.12" )), K3b::Job::MessageError );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
@@ -230,7 +230,7 @@ void K3b::VcdJob::vcdxBuild()
 
 
     if ( vcdDoc() ->vcdOptions() ->Sector2336() ) {
-        kDebug() << "(K3b::VcdJob) Write 2336 Sectors = on";
+        qDebug() << "(K3b::VcdJob) Write 2336 Sectors = on";
         *m_process << "--sector-2336";
     }
 
@@ -248,13 +248,13 @@ void K3b::VcdJob::vcdxBuild()
              this, SLOT(slotVcdxBuildFinished(int,QProcess::ExitStatus)) );
 
     // vcdxbuild commandline parameters
-    kDebug() << "***** vcdxbuild parameters:";
+    qDebug() << "***** vcdxbuild parameters:";
     QString s = m_process->joinedArgs();
-    kDebug() << s << flush;
+    qDebug() << s << flush;
     emit debuggingOutput( "vcdxbuild command:", s );
 
     if ( !m_process->start( KProcess::MergedChannels ) ) {
-        kDebug() << "(K3b::VcdJob) could not start vcdxbuild";
+        qDebug() << "(K3b::VcdJob) could not start vcdxbuild";
         emit infoMessage( i18n( "Could not start %1." , QString("vcdxbuild") ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
@@ -327,15 +327,15 @@ void K3b::VcdJob::slotParseVcdxBuildOutput( const QString& line )
             if ( tel.isText() ) {
                 const QString text = tel.data();
                 if ( m_stage == stageWrite && level == "information" )
-                    kDebug() << QString( "(K3b::VcdJob) VcdxBuild information, %1" ).arg( text );
+                    qDebug() << QString( "(K3b::VcdJob) VcdxBuild information, %1" ).arg( text );
                 if ( ( text ).startsWith( "writing track" ) )
                     emit newSubTask( i18n( "Creating Image for track %1" , ( text ).mid( 14 ) ) );
                 else {
                     if ( level != "error" ) {
-                        kDebug() << QString( "(K3b::VcdJob) vcdxbuild warning, %1" ).arg( text );
+                        qDebug() << QString( "(K3b::VcdJob) vcdxbuild warning, %1" ).arg( text );
                         parseInformation( text );
                     } else {
-                        kDebug() << QString( "(K3b::VcdJob) vcdxbuild error, %1" ).arg( text );
+                        qDebug() << QString( "(K3b::VcdJob) vcdxbuild error, %1" ).arg( text );
                         emit infoMessage( text, K3b::Job::MessageError );
                     }
                 }
@@ -373,7 +373,7 @@ void K3b::VcdJob::slotVcdxBuildFinished( int exitCode, QProcess::ExitStatus exit
     delete d->xmlFile;
     d->xmlFile = 0;
 
-    kDebug() << QString( "(K3b::VcdJob) create only image: %1" ).arg( vcdDoc() ->onlyCreateImages() );
+    qDebug() << QString( "(K3b::VcdJob) create only image: %1" ).arg( vcdDoc() ->onlyCreateImages() );
     if ( !vcdDoc() ->onlyCreateImages() )
         startWriterjob();
     else
@@ -383,7 +383,7 @@ void K3b::VcdJob::slotVcdxBuildFinished( int exitCode, QProcess::ExitStatus exit
 
 void K3b::VcdJob::startWriterjob()
 {
-    kDebug() << QString( "(K3b::VcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() );
+    qDebug() << QString( "(K3b::VcdJob) writing copy %1 of %2" ).arg( m_currentcopy ).arg( m_doc->copies() );
     if ( prepareWriterJob() ) {
         if ( waitForMedium( m_doc->burner() ) == Device::MEDIA_UNKNOWN ) {
             cancel();

@@ -15,9 +15,9 @@
 #include "k3bfilesplitter.h"
 #include "k3bfilesysteminfo.h"
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qfileinfo.h>
 
 
@@ -127,7 +127,7 @@ void K3b::FileSplitter::setName( const QString& filename )
 
 bool K3b::FileSplitter::open( OpenMode mode )
 {
-    kDebug() << mode;
+    qDebug() << mode;
     close();
 
     d->determineMaxFileSize();
@@ -185,7 +185,7 @@ qint64 K3b::FileSplitter::pos() const
 
 bool K3b::FileSplitter::seek( qint64 pos )
 {
-    kDebug() << pos;
+    qDebug() << pos;
     // FIXME: implement me (although not used yet)
     return QIODevice::seek( pos );
 }
@@ -214,7 +214,7 @@ qint64 K3b::FileSplitter::readData( char *data, qint64 maxlen )
         d->currentFilePos += r;
     }
     else {
-        kDebug() << "Read failed from" << d->file.fileName();
+        qDebug() << "Read failed from" << d->file.fileName();
         setErrorString( d->file.errorString() );
     }
     return r;

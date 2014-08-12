@@ -21,13 +21,13 @@
 
 #include "k3bkprocess_p.h"
 
-#include <kstandarddirs.h>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kshell.h>
 #ifdef Q_OS_WIN
 # include <kshell_p.h>
 #endif
 
-#include <qfile.h>
+#include <QtCore/QFile>
 
 #ifdef Q_OS_WIN
 # include <windows.h>
@@ -379,4 +379,4 @@ int K3bKProcess::pid() const
 #endif
 }
 
-#include "k3bkprocess.moc"
+#include "moc_k3bkprocess.cpp"

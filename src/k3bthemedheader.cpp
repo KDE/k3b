@@ -18,7 +18,7 @@
 #include "k3bapplication.h"
 #include "k3btitlelabel.h"
 
-#include <KGlobalSettings>
+#include <KDELibs4Support/KDE/KGlobalSettings>
 
 #include <QApplication>
 #include <QHBoxLayout>

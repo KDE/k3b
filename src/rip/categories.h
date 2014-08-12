@@ -9,7 +9,7 @@
 #define KCDDB_CATEGORIES_H
 
 #include <QString>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 
 namespace KCDDB
 {

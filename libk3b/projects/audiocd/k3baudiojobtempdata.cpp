@@ -20,9 +20,9 @@
 #include "k3bmsf.h"
 #include "k3bcore.h"
 
-#include <KDebug>
+#include <QtCore/QDebug>
 
-#include <QFile>
+#include <QtCore/QFile>
 
 
 class K3b::AudioJobTempData::Private

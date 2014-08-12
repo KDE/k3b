@@ -27,10 +27,10 @@
 #include "k3bvolumenamewidget.h"
 
 #include <KAction>
-#include <KDebug>
+#include <QtCore/QDebug>
 #include <KFileDialog>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KToolBar>
 #include <KUrl>
 

@@ -22,7 +22,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackaddingdialog.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KIcon>
 
 #include <QApplication>
@@ -653,13 +653,13 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     // handle tracks from the audio cd view
     //
     else if ( AudioCdTrackDrag::canDecode( data ) ) {
-        kDebug() << "audiocdtrack dropped.";
+        qDebug() << "audiocdtrack dropped.";
 
         AudioCdTrackDrag drag = AudioCdTrackDrag::fromMimeData( data );
 
         // for now we just create one source
         foreach( int trackNumber, drag.trackNumbers() ) {
-            kDebug() << trackNumber << "dropped";
+            qDebug() << trackNumber << "dropped";
             AudioCdTrackSource* source = new AudioCdTrackSource( drag.toc(),
                                                                  trackNumber,
                                                                  drag.cddbEntry().track( trackNumber-1 ).get( KCDDB::Artist ).toString(),
@@ -691,7 +691,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     // add new tracks
     //
     else if ( KUrl::List::canDecode( data ) ) {
-        kDebug() << "url list drop";
+        qDebug() << "url list drop";
         KUrl::List urls = KUrl::List::fromMimeData( data );
         K3b::AudioTrackAddingDialog::addUrls( urls, d->project, dropTrackAfter, dropTrackParent, dropSourceAfter, qApp->activeWindow() );
         return true;
@@ -701,4 +701,4 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
 }
 
 
-#include "k3baudioprojectmodel.moc"
+#include "moc_k3baudioprojectmodel.cpp"

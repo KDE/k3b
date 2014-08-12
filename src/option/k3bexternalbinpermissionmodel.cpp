@@ -19,10 +19,10 @@
 #include "k3bdefaultexternalprograms.h"
 #include "k3bglobals.h"
 
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
 
-#include <QFile>
+#include <QtCore/QFile>
 #include <QFileInfo>
 #include <QList>
 #include <QSet>
@@ -134,7 +134,7 @@ bool ExternalBinPermissionModel::Private::getProgramInfo( const ExternalBin* pro
         return true;
     }
     else {
-        kDebug() << "(ExternalBinPermissionModel) unable to stat " << program->path();
+        qDebug() << "(ExternalBinPermissionModel) unable to stat " << program->path();
         return false;
     }
 }

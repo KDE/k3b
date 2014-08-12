@@ -18,8 +18,8 @@
 
 #include "k3bglobals.h"
 
-#include <KLocale>
-#include <KConfig>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KConfigCore/KConfig>
 
 #include <QToolTip>
 
@@ -256,4 +256,4 @@ void K3b::WritingModeWidget::determineSupportedModesFromMedium( K3b::Device::Dev
         determineSupportedModesFromMedium( Medium() ); // no medium
 }
 
-#include "k3bwritingmodewidget.moc"
+#include "moc_k3bwritingmodewidget.cpp"

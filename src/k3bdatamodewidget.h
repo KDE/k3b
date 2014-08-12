@@ -17,7 +17,7 @@
 #define _K3B_DATAMODE_WIDGET_H_
 
 #include <qcombobox.h>
-#include <kconfiggroup.h>
+#include <KConfigCore/KConfigGroup>
 
 
 

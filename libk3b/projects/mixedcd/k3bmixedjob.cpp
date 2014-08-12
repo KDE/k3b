@@ -42,15 +42,15 @@
 #include "k3bglobalsettings.h"
 #include "k3baudiofile.h"
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qdatastream.h>
 #include <qapplication.h>
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 #include <ktemporaryfile.h>
 #include <kio/netaccess.h>
-#include <kio/global.h>
+#include <KIO/Global>
 #include <kstringhandler.h>
 
 
@@ -634,7 +634,7 @@ bool K3b::MixedJob::prepareWriter()
         ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::WritingAppCdrecord ) )  {
 
         if( !writeInfFiles() ) {
-            kDebug() << "(K3b::MixedJob) could not write inf-files.";
+            qDebug() << "(K3b::MixedJob) could not write inf-files.";
             emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;
@@ -675,7 +675,7 @@ bool K3b::MixedJob::prepareWriter()
     }
     else {
         if( !writeTocFile() ) {
-            kDebug() << "(K3b::DataJob) could not write tocfile.";
+            qDebug() << "(K3b::DataJob) could not write tocfile.";
             emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;

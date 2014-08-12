@@ -21,16 +21,19 @@
 
 #include "k3bcore.h"
 
-#include <KLocale>
-#include <KConfig>
-#include <KDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
 #include <QTextCodec>
 
 #include <stdio.h>
 #include <lame/lame.h>
 
-#include <QFile>
+#include <QtCore/QFile>
 
+
+K3B_EXPORT_PLUGIN(k3blameencoder, K3bLameEncoder)
 
 class K3bLameEncoder::Private
 {
@@ -104,13 +107,13 @@ QString K3bLameEncoder::filename() const
 
 bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length, const MetaData& metaData )
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     d->flags = lame_init();
 
     if( d->flags == 0 ) {
-        kDebug() << "(K3bLameEncoder) lame_init failed.";
+        qDebug() << "(K3bLameEncoder) lame_init failed.";
         return false;
     }
 
@@ -182,7 +185,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
         if( q < 0 ) q = 0;
         if( q > 9 ) q = 9;
 
-        kDebug() << "(K3bLameEncoder) setting preset encoding value to " << q;
+        qDebug() << "(K3bLameEncoder) setting preset encoding value to " << q;
 
         if ( q < 2 || q > 8 ) {
             lame_set_VBR( d->flags, vbr_abr );
@@ -232,7 +235,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     // FIXME: when we use the codec we only get garbage. Why?
     QTextCodec* codec = 0;//QTextCodec::codecForName( "ISO8859-1" );
 //  if( !codec )
-//    kDebug() << "(K3bLameEncoder) could not find codec ISO8859-1.";
+//    qDebug() << "(K3bLameEncoder) could not find codec ISO8859-1.";
 
     for( MetaData::const_iterator it = metaData.constBegin(); it != metaData.constEnd(); ++it ) {
         QByteArray value = codec ? codec->fromUnicode( it.value().toString() ).data()
@@ -258,7 +261,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
             break;
         case META_GENRE:
             if( id3tag_set_genre( d->flags, value ) )
-                kDebug() << "(K3bLameEncoder) unable to set genre.";
+                qDebug() << "(K3bLameEncoder) unable to set genre.";
             break;
         default:
             break;
@@ -278,7 +281,7 @@ qint64 K3bLameEncoder::encodeInternal( const char* data, qint64 len )
                                                (unsigned char*)d->buffer,
                                                8000 );
     if( size < 0 ) {
-        kDebug() << "(K3bLameEncoder) lame_encode_buffer_interleaved failed.";
+        qDebug() << "(K3bLameEncoder) lame_encode_buffer_interleaved failed.";
         return -1;
     }
 
@@ -315,7 +318,7 @@ QString K3bLameEncoder::fileTypeComment( const QString& ) const
 
 long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
     int bitrate = 0;
     if( grp.readEntry( "Manual Bitrate Settings", DEFAULT_MANUAL_BITRATE ) ) {

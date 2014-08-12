@@ -17,7 +17,7 @@
 
 #include "k3bstringutils.h"
 
-#include <KDebug>
+#include <QtCore/QDebug>
 
 #include <QEvent>
 #include <QFont>
@@ -257,7 +257,7 @@ void K3b::TitleLabel::updatePositioning()
     if( !d->subTitle.isEmpty() )
         d->cachedMinimumWidth += d->spacing;
 
-    kDebug() << d->titleBaseLine << d->subTitleBaseLine;
+    qDebug() << d->titleBaseLine << d->subTitleBaseLine;
 }
 
 

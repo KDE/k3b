@@ -18,11 +18,6 @@
 
 #include "k3baudiodecoder.h"
 
-#include <kurl.h>
-
-
-
-
 class K3bWaveDecoderFactory : public K3b::AudioDecoderFactory
 {
     Q_OBJECT
@@ -31,7 +26,7 @@ public:
     K3bWaveDecoderFactory( QObject* parent, const QVariantList& );
     ~K3bWaveDecoderFactory();
 
-    bool canDecode( const KUrl& filename );
+    bool canDecode( const QUrl& filename );
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
@@ -66,7 +61,5 @@ private:
     class Private;
     Private* d;
 };
-
-K3B_EXPORT_PLUGIN(k3bwavedecoder, K3bWaveDecoderFactory)
 
 #endif

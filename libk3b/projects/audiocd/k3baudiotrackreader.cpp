@@ -221,4 +221,4 @@ void AudioTrackReader::slotTrackChanged()
 
 } // namespace K3b
 
-#include "k3baudiotrackreader.moc"
+#include "moc_k3baudiotrackreader.cpp"

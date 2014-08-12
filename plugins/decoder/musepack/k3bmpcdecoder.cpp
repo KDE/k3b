@@ -18,9 +18,9 @@
 
 #include <config-k3b.h>
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
-
+K3B_EXPORT_PLUGIN(k3bmpcdecoder, K3bMpcDecoderFactory)
 
 K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent, const QVariantList& )
     : K3b::AudioDecoderFactory( parent )
@@ -40,7 +40,7 @@ K3b::AudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent
 }
 
 
-bool K3bMpcDecoderFactory::canDecode( const KUrl& url )
+bool K3bMpcDecoderFactory::canDecode( const QUrl& url )
 {
     K3bMpcWrapper w;
     return w.open( url.toLocalFile() );

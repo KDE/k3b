@@ -33,16 +33,17 @@
 #include "k3bthememanager.h"
 #include "k3bcore.h"
 
-#include <KColorScheme>
-#include <KConfigGroup>
-#include <KGlobal>
-#include <KLocale>
-#include <KMessageBox>
-#include <KNotification>
-#include <KProcess>
-#include <KPushButton>
-#include <KStandardGuiItem>
-#include <KTextEdit>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KCoreAddons/KProcess>
+#include <KDELibs4Support/KDE/KIcon>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KNotification>
+#include <KDELibs4Support/KDE/KPushButton>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KTextWidgets/KTextEdit>
 
 #include <QCheckBox>
 #include <QCloseEvent>
@@ -88,7 +89,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
                                                QWidget* parent)
     : KDialog( parent )
 {
-    setCaption( i18n("System Configuration Problems") );
+    setWindowTitle( i18n("System Configuration Problems") );
     setButtons(KDialog::None);
     QWidget *widget = new QWidget(this);
     setMainWidget(widget);
@@ -163,7 +164,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
 void K3b::SystemProblemDialog::closeEvent( QCloseEvent* e )
 {
     if( m_checkDontShowAgain->isChecked() ) {
-        KConfigGroup grp( KGlobal::config(), "General Options" );
+        KConfigGroup grp( KSharedConfig::openConfig(), "General Options" );
         grp.writeEntry( "check system config", false );
     }
 
@@ -558,29 +559,29 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
 
 
-    kDebug() << "(K3b::Core) System problems:";
+    qDebug() << "(K3b::Core) System problems:";
     for( QList<K3b::SystemProblem>::const_iterator it = problems.constBegin();
          it != problems.constEnd(); ++it ) {
         const K3b::SystemProblem& p = *it;
 
         switch( p.type ) {
         case K3b::SystemProblem::CRITICAL:
-            kDebug() << " CRITICAL";
+            qDebug() << " CRITICAL";
             break;
         case K3b::SystemProblem::NON_CRITICAL:
-            kDebug() << " NON_CRITICAL";
+            qDebug() << " NON_CRITICAL";
             break;
         case K3b::SystemProblem::WARNING:
-            kDebug() << " WARNING";
+            qDebug() << " WARNING";
             break;
         }
-        kDebug() << " PROBLEM:  " << p.problem << endl
+        qDebug() << " PROBLEM:  " << p.problem << endl
                  << " DETAILS:  " << p.details << endl
                  << " SOLUTION: " << p.solution << endl << endl;
 
     }
     if( problems.isEmpty() ) {
-        kDebug() << "          - none - ";
+        qDebug() << "          - none - ";
         if( level == AlwaysNotify ) {
             KNotification::event( "NoProblemsFound",
                                   i18n("System configured properly"),
@@ -598,7 +599,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
 
     // remember which version of K3b checked the system the last time
-    KConfigGroup cfg( KGlobal::config(), "General Options" );
+    KConfigGroup cfg( KSharedConfig::openConfig(), "General Options" );
     cfg.writeEntry( "Last system check version", QString(k3bcore->version()) );
 }
 
@@ -681,7 +682,7 @@ QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
 
 bool K3b::SystemProblemDialog::readCheckSystemConfig()
 {
-    KConfigGroup cfgGrp( KGlobal::config(), "General Options" );
+    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "General Options" );
 
     K3b::Version configVersion( cfgGrp.readEntry( "Last system check version", "0.1" ) );
     if( configVersion < k3bcore->version() )

@@ -20,7 +20,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include "k3bmsf.h"
 #include "k3bcdtext.h"

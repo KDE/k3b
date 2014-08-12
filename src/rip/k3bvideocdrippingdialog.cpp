@@ -24,12 +24,13 @@
 
 // kde include
 #include <KApplication>
-#include <KColorScheme>
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
-#include <KStandardDirs>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
+#include <QtWidgets/QGroupBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KUrlRequester>
 
 // qt includes

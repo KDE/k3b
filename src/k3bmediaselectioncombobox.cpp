@@ -26,11 +26,11 @@
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
 #include <qfont.h>
-#include <qmap.h>
+#include <QtCore/QMap>
 #include <qvector.h>
 #include <QList>
 

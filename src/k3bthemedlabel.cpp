@@ -15,7 +15,7 @@
 #include "k3bthemedlabel.h"
 #include "k3bapplication.h"
 
-#include <KGlobalSettings>
+#include <KDELibs4Support/KDE/KGlobalSettings>
 
 K3b::ThemedLabel::ThemedLabel( QWidget* parent )
     : KSqueezedTextLabel( parent ),

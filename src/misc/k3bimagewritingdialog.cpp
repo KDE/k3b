@@ -42,14 +42,16 @@
 #include "k3bcdtext.h"
 
 #include <KComboBox>
-#include <KConfig>
-#include <KColorScheme>
-#include <KIconLoader>
-#include <KInputDialog>
-#include <kio/global.h>
-#include <KLocale>
-#include <KMessageBox>
-#include <KStandardGuiItem>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <KConfigWidgets/KColorScheme>
+#include <KIconThemes/KIconLoader>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KInputDialog>
+#include <KIO/Global>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
 #include <KUrl>
 #include <KUrlRequester>
 
@@ -59,7 +61,7 @@
 #include <QComboBox>
 #include <QDragEnterEvent>
 #include <QDropEvent>
-#include <QFile>
+#include <QtCore/QFile>
 #include <QFileInfo>
 #include <QFont>
 #include <QFontMetrics>
@@ -69,7 +71,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QList>
-#include <QMap>
+#include <QtCore/QMap>
 #include <QMenu>
 #include <QProgressBar>
 #include <QPushButton>
@@ -77,6 +79,7 @@
 #include <QTabWidget>
 #include <QToolTip>
 #include <QTreeWidget>
+#include <QtCore/QMimeData>
 
 namespace {
 
@@ -405,7 +408,7 @@ K3b::ImageWritingDialog::~ImageWritingDialog()
 {
     d->md5Job->cancel();
 
-    KConfigGroup c( KGlobal::config(), configGroup() );
+    KConfigGroup c( KSharedConfig::openConfig(), configGroup() );
     QStringList recentImages;
     // do not store more than 10 recent images
     for ( int i = 0; i < d->comboRecentImages->count() && recentImages.count() < 10; ++i ) {
@@ -421,7 +424,7 @@ K3b::ImageWritingDialog::~ImageWritingDialog()
 
 void K3b::ImageWritingDialog::init()
 {
-    KConfigGroup c( KGlobal::config(), configGroup() );
+    KConfigGroup c( KSharedConfig::openConfig(), configGroup() );
 
     if( !d->imageForced ) {
         // when opening the dialog first the default settings are loaded and afterwards we set the
@@ -636,7 +639,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     d->md5Job->cancel();
 
     // save the path
-    KConfigGroup grp( KGlobal::config(), configGroup() );
+    KConfigGroup grp( KSharedConfig::openConfig(), configGroup() );
     grp.writePathEntry( "last written image", d->imagePath() );
 
     if( d->imageFile.isEmpty() )
@@ -731,7 +734,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     break;
 
     default:
-        kDebug() << "(K3b::ImageWritingDialog) this should really not happen!";
+        qDebug() << "(K3b::ImageWritingDialog) this should really not happen!";
         break;
     }
 
@@ -744,7 +747,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
 
         delete job;
 
-        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
             show();
         else
             close();

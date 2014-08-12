@@ -20,7 +20,7 @@
 #include <qcombobox.h>
 #include <qpalette.h>
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
 
 QCheckBox* K3b::StdGuiItems::simulateCheckbox( QWidget* parent )

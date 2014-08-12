@@ -15,10 +15,10 @@
 #include "k3bcddbpatternwidget.h"
 
 #include <KComboBox>
-#include <KConfigGroup>
-#include <KDebug>
+#include <KConfigCore/KConfigGroup>
+#include <QtCore/QDebug>
 #include <KLineEdit>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KUrlLabel>
 
 #include <QRegExp>

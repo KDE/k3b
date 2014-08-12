@@ -16,18 +16,17 @@
 
 #include "k3bversion.h"
 
-#include <kstandarddirs.h>
-#include <kglobalsettings.h>
-#include <ksimpleconfig.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <KConfigGroup>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <KConfigCore/KConfigGroup>
 
 #include <qpixmap.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qfileinfo.h>
 #include <qdir.h>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 
 
 K3b::Theme::Theme()
@@ -67,7 +66,7 @@ QPixmap K3b::Theme::pixmap( const QString& name ) const
             return *m_pixmapMap.insert( name, pix );
     }
 
-    kDebug() << "(K3b::Theme) " << m_name << ": could not load image " << name;
+    qDebug() << "(K3b::Theme) " << m_name << ": could not load image " << name;
 
     return m_emptyPixmap;
 }
@@ -218,7 +217,7 @@ void K3b::ThemeManager::readConfig( const KConfigGroup& c )
 
 void K3b::ThemeManager::saveConfig( KConfigGroup c )
 {
-    kDebug() << d->currentThemeName;
+    qDebug() << d->currentThemeName;
     if( !d->currentThemeName.isEmpty() ) {
         c.writeEntry( "current theme", d->currentThemeName );
     }
@@ -285,7 +284,7 @@ void K3b::ThemeManager::loadThemes()
                 // check for all nessessary pixmaps (this is a little evil hacking)
                 for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
                     if( !QFile::exists( themeDir + K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
-                        kDebug() << "(K3b::ThemeManager) theme misses pixmap: " << K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i );
+                        qDebug() << "(K3b::ThemeManager) theme misses pixmap: " << K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i );
                         themeValid = false;
                         break;
                     }

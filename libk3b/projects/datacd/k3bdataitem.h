@@ -18,7 +18,7 @@
 
 #include <qstring.h>
 
-#include <kio/global.h>
+#include <KIO/Global>
 #include <KMimeType>
 
 #include "k3bmsf.h"

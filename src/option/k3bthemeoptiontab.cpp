@@ -19,19 +19,19 @@
 #include "k3bthememanager.h"
 #include "k3bthememodel.h"
 
-#include <kio/global.h>
+#include <KIO/Global>
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
-#include <KConfig>
-#include <KGlobalSettings>
-#include <KLocale>
-#include <KMessageBox>
-#include <KStandardDirs>
-#include <KTar>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KArchive/KTar>
 #include <KUrlRequester>
 #include <KUrlRequesterDialog>
 
-#include <QFile>
+#include <QtCore/QFile>
 #include <QFileInfo>
 #include <QItemSelectionModel>
 #include <QLabel>
@@ -107,7 +107,7 @@ void K3b::ThemeOptionTab::selectionChanged()
 
 void K3b::ThemeOptionTab::slotInstallTheme()
 {
-    KUrl themeURL = KUrlRequesterDialog::getUrl( QString(), this,
+    QUrl themeURL = KUrlRequesterDialog::getUrl( QString(), this,
                                                  i18n("Drag or Type Theme URL") );
 
     if( themeURL.url().isEmpty() )
@@ -118,7 +118,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 
     if( !KIO::NetAccess::download( themeURL, themeTmpFile, this ) ) {
         QString sorryText;
-        QString tmpArg = themeURL.prettyUrl();
+        QString tmpArg = themeURL.toDisplayString();
         if (themeURL.isLocalFile())
             sorryText = i18n("Unable to find the icon theme archive %1.",tmpArg);
         else

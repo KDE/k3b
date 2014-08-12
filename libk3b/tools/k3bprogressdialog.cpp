@@ -21,8 +21,8 @@
 #include <qlayout.h>
 #include <QStackedWidget>
 
-#include <klocale.h>
-#include <QtGui/QProgressBar>
+#include <KI18n/KLocalizedString>
+#include <QtWidgets/QProgressBar>
 
 
 K3b::ProgressDialog::ProgressDialog( const QString& text,
@@ -30,7 +30,7 @@ K3b::ProgressDialog::ProgressDialog( const QString& text,
 				      const QString& caption )
   : KDialog( parent )
 {
-    setCaption( caption );
+    setWindowTitle( caption );
 
     QWidget* main = mainWidget();
     QGridLayout* mainLayout = new QGridLayout( main );

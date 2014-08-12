@@ -19,8 +19,8 @@
 #include "k3bvideodvddoc.h"
 
 #include <KActionCollection>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <QAction>
 
 

@@ -15,13 +15,13 @@
 #ifndef _K3B_THEME_MANAGER_H_
 #define _K3B_THEME_MANAGER_H_
 
-#include <qobject.h>
+#include <QtCore/QObject>
 #include <qstring.h>
-#include <qmap.h>
+#include <QtCore/QMap>
 #include <qcolor.h>
 #include <qpixmap.h>
 
-#include <KConfigGroup>
+#include <KConfigCore/KConfigGroup>
 
 
 namespace K3b {

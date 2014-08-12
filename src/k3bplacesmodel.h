@@ -65,7 +65,7 @@ namespace K3b {
         void expand( const QModelIndex& index );
 
     public Q_SLOTS:
-        void addPlace( const QString& name, const KIcon& icon, const KUrl& rootUrl );
+        void addPlace( const QString& name, const QIcon& icon, const KUrl& rootUrl );
 
         /**
          * \short Lists subdirectories using fetchMore() as needed until the given \p url exists in the model.

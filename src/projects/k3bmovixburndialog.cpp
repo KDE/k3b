@@ -31,12 +31,12 @@
 #include "k3bcore.h"
 #include "k3bmediacache.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 #include <kmessagebox.h>
-#include <kio/global.h>
+#include <KIO/Global>
 #include <kapplication.h>
-#include <kconfig.h>
+#include <KConfigCore/KConfig>
 
 #include <qcheckbox.h>
 #include <qlayout.h>

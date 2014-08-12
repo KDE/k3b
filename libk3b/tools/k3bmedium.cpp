@@ -22,8 +22,8 @@
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
-#include <klocale.h>
-#include <kio/global.h>
+#include <KI18n/KLocalizedString>
+#include <KIO/Global>
 
 #include <QtCore/QSharedData>
 #include <QtCore/QList>
@@ -183,13 +183,13 @@ void K3b::Medium::update()
         d->diskInfo = d->device->diskInfo();
 
         if( d->diskInfo.diskState() != K3b::Device::STATE_NO_MEDIA ) {
-            kDebug() << "found medium: (" << d->device->blockDeviceName() << ')' << endl
+            qDebug() << "found medium: (" << d->device->blockDeviceName() << ')' << endl
                      << "=====================================================";
             d->diskInfo.debug();
-            kDebug() << "=====================================================";
+            qDebug() << "=====================================================";
         }
         else {
-            kDebug() << "no medium found";
+            qDebug() << "no medium found";
         }
 
         if( diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
@@ -231,7 +231,7 @@ void K3b::Medium::analyseContent()
 
     // analyze filesystem
     if( d->content & ContentData ) {
-        //kDebug() << "(K3b::Medium) Checking file system.";
+        //qDebug() << "(K3b::Medium) Checking file system.";
 
         unsigned long startSec = 0;
 
@@ -255,10 +255,10 @@ void K3b::Medium::analyseContent()
             }
         }
         else {
-            kDebug() << "(K3b::Medium) ContentData is set and Toc is empty, disk is probably broken!";
+            qDebug() << "(K3b::Medium) ContentData is set and Toc is empty, disk is probably broken!";
         }
 
-        //kDebug() << "(K3b::Medium) Checking file system at " << startSec;
+        //qDebug() << "(K3b::Medium) Checking file system at " << startSec;
 
         // force the backend since we don't need decryption
         // which just slows down the whole process
@@ -267,7 +267,7 @@ void K3b::Medium::analyseContent()
         iso.setPlainIso9660( true );
         if( iso.open() ) {
             d->isoDesc = iso.primaryDescriptor();
-            kDebug() << "(K3b::Medium) found volume id from start sector " << startSec
+            qDebug() << "(K3b::Medium) found volume id from start sector " << startSec
                      << ": '" << d->isoDesc.volumeId << "'" ;
 
             if( const Iso9660Directory* firstDirEntry = iso.firstIsoDirEntry() ) {
@@ -277,19 +277,19 @@ void K3b::Medium::analyseContent()
                         d->content |= ContentVideoDVD;
                 }
                 else {
-                    kDebug() << "(K3b::Medium) checking for VCD.";
+                    qDebug() << "(K3b::Medium) checking for VCD.";
 
                     // check for VCD
                     const K3b::Iso9660Entry* vcdEntry = firstDirEntry->entry( "VCD/INFO.VCD" );
                     const K3b::Iso9660Entry* svcdEntry = firstDirEntry->entry( "SVCD/INFO.SVD" );
                     const K3b::Iso9660File* vcdInfoFile = 0;
                     if( vcdEntry ) {
-                        kDebug() << "(K3b::Medium) found vcd entry.";
+                        qDebug() << "(K3b::Medium) found vcd entry.";
                         if( vcdEntry->isFile() )
                             vcdInfoFile = static_cast<const K3b::Iso9660File*>(vcdEntry);
                     }
                     if( svcdEntry && !vcdInfoFile ) {
-                        kDebug() << "(K3b::Medium) found svcd entry.";
+                        qDebug() << "(K3b::Medium) found svcd entry.";
                         if( svcdEntry->isFile() )
                             vcdInfoFile = static_cast<const K3b::Iso9660File*>(svcdEntry);
                     }
@@ -306,7 +306,7 @@ void K3b::Medium::analyseContent()
                 }
             }
             else {
-                kDebug() << "(K3b::Medium) root ISO directory is null, disk is probably broken!";
+                qDebug() << "(K3b::Medium) root ISO directory is null, disk is probably broken!";
             }
         }  // opened iso9660
     }

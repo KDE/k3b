@@ -23,7 +23,7 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QAudioDeviceInfo>
 #include <QAudioFormat>
@@ -283,16 +283,16 @@ void AudioTrackPlayer::slotStateChanged( QAudio::State state )
 {
     switch( d->audioOutput->error() ) {
         case QAudio::OpenError:
-            kDebug() << "QAudioOutput error: OpenError";
+            qDebug() << "QAudioOutput error: OpenError";
             break;
         case QAudio::IOError:
-            kDebug() << "QAudioOutput error: IOError";
+            qDebug() << "QAudioOutput error: IOError";
             break;
         case QAudio::UnderrunError:
-            kDebug() << "QAudioOutput error: UnderrunError";
+            qDebug() << "QAudioOutput error: UnderrunError";
             break;
         case QAudio::FatalError:
-            kDebug() << "QAudioOutput error: FatalError";
+            qDebug() << "QAudioOutput error: FatalError";
             break;
         default:
             break;

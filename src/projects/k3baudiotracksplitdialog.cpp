@@ -21,7 +21,7 @@
 
 #include <KActionCollection>
 #include <KAction>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
 
 #include <QContextMenuEvent>
@@ -38,7 +38,7 @@ K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidg
 {
     QFrame* frame = new QFrame();
     setMainWidget(frame);
-    setCaption(i18n("Split Audio Track"));
+    setWindowTitle(i18n("Split Audio Track"));
     setButtons(Ok|Cancel);
     setDefaultButton(Ok);
 

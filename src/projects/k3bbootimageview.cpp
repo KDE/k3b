@@ -20,10 +20,10 @@
 #include "k3bbootitem.h"
 #include "k3bintvalidator.h"
 
-#include <KDebug>
+#include <QtCore/QDebug>
 #include <KFileDialog>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QCheckBox>
 #include <QItemSelectionModel>
@@ -199,10 +199,10 @@ void K3b::BootImageView::slotOptionsChanged()
             bool ok = true;
             item->setLoadSegment( K3b::IntValidator::toInt( m_editLoadSegment->text(), &ok ) );
             if( !ok )
-                kDebug() << "(K3b::BootImageView) parsing number failed: " << m_editLoadSegment->text().toLower();
+                qDebug() << "(K3b::BootImageView) parsing number failed: " << m_editLoadSegment->text().toLower();
             item->setLoadSize( K3b::IntValidator::toInt( m_editLoadSize->text(), &ok ) );
             if( !ok )
-                kDebug() << "(K3b::BootImageView) parsing number failed: " << m_editLoadSize->text().toLower();
+                qDebug() << "(K3b::BootImageView) parsing number failed: " << m_editLoadSize->text().toLower();
 
             if( m_radioFloppy->isChecked() )
                 m_bootImageModel->setImageType( index, BootItem::FLOPPY );

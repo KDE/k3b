@@ -19,7 +19,7 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qdatetime.h>
 
 
@@ -35,7 +35,7 @@ bool K3b::TocFileWriter::save( const QString& filename )
     QFile f( filename );
 
     if( !f.open( QIODevice::WriteOnly ) ) {
-        kDebug() << "(K3b::CueFileWriter) could not open file " << f.fileName();
+        qDebug() << "(K3b::CueFileWriter) could not open file " << f.fileName();
         return false;
     }
 
@@ -139,7 +139,7 @@ bool K3b::TocFileWriter::save( QTextStream& t )
         dataStart = m_toc[trackIndex].firstSector();
     }
 
-    kDebug() << "(K3b::TocFileWriter) using offset of: " << dataStart.toString();
+    qDebug() << "(K3b::TocFileWriter) using offset of: " << dataStart.toString();
 
     while( trackIndex < m_toc.count() ) {
         if( m_toc[trackIndex].session() == 0 || m_toc[trackIndex].session() == m_sessionToWrite )

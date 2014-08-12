@@ -35,13 +35,15 @@
 #include "k3bmediacache.h"
 
 #include <kguiitem.h>
-#include <klocale.h>
-#include <KStandardGuiItem>
-#include <kstandarddirs.h>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kmessagebox.h>
-#include <kconfig.h>
+#include <KConfigCore/KConfig>
 #include <kapplication.h>
 #include <kiconloader.h>
+#include <KIconThemes/KIconLoader>
+#include <KConfigCore/KSharedConfig>
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
@@ -58,7 +60,7 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qsizepolicy.h>
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qfileinfo.h>
 #include <QGridLayout>
 
@@ -385,7 +387,7 @@ void K3b::MediaCopyDialog::slotStartClicked()
     delete dlg;
     delete burnJob;
 
-    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+    if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();

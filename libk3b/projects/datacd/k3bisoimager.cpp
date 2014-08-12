@@ -29,16 +29,16 @@
 #include "k3bfilesplitter.h"
 #include "k3bisooptions.h"
 
-#include <kdebug.h>
-#include <kstandarddirs.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KI18n/KLocalizedString>
 #include <ktemporaryfile.h>
 #include <kio/netaccess.h>
-#include <kio/global.h>
+#include <KIO/Global>
 #include <kio/job.h>
 #include <kstringhandler.h>
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qregexp.h>
 #include <qdir.h>
 #include <qapplication.h>
@@ -95,7 +95,7 @@ K3b::IsoImager::IsoImager( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* par
 
 K3b::IsoImager::~IsoImager()
 {
-    kDebug();
+    qDebug();
     cleanup();
     delete d;
 }
@@ -130,7 +130,7 @@ void K3b::IsoImager::handleMkisofsInfoMessage( const QString& line, int type )
 
 void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitStatus )
 {
-    kDebug();
+    qDebug();
 
     cleanup();
 
@@ -187,7 +187,7 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
 
 void K3b::IsoImager::cleanup()
 {
-    kDebug();
+    qDebug();
 
     // remove all temp files
     delete m_pathSpecFile;
@@ -272,9 +272,9 @@ void K3b::IsoImager::startSizeCalculation()
     // ??? Seems it is not needed after all. At least mkisofs 1.14 and above don't need it. ???
     //  *m_process << dummyDir();
 
-    kDebug() << "***** mkisofs calculate size parameters:";
+    qDebug() << "***** mkisofs calculate size parameters:";
     QString s = m_process->joinedArgs();
-    kDebug() << s << endl << flush;
+    qDebug() << s << endl << flush;
     emit debuggingOutput("mkisofs calculate size command:", s);
 
     // since output changed during mkisofs version changes we grab both
@@ -341,7 +341,7 @@ void K3b::IsoImager::slotMkisofsPrintSizeFinished()
     // if m_collectedMkisofsPrintSizeStdout is not empty we have a recent version of
     // mkisofs and parsing is very easy (s.o.)
     if( !m_collectedMkisofsPrintSizeStdout.isEmpty() ) {
-        kDebug() << "(K3b::IsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout;
+        qDebug() << "(K3b::IsoImager) iso size: " << m_collectedMkisofsPrintSizeStdout;
         m_mkisofsPrintSizeResult = m_collectedMkisofsPrintSizeStdout.toInt( &success );
     }
     else {
@@ -368,7 +368,7 @@ void K3b::IsoImager::slotMkisofsPrintSizeFinished()
     }
     else {
         m_mkisofsPrintSizeResult = 0;
-        kDebug() << "(K3b::IsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout;
+        qDebug() << "(K3b::IsoImager) Parsing mkisofs -print-size failed: " << m_collectedMkisofsPrintSizeStdout;
         emit infoMessage( i18n("Could not determine size of resulting image file."), MessageError );
         jobFinished( false );
     }
@@ -437,15 +437,15 @@ void K3b::IsoImager::start()
     connect( m_process, SIGNAL(stderrLine(QString)),
              this, SLOT(slotReceivedStderr(QString)) );
 
-    kDebug() << "***** mkisofs parameters:\n";
+    qDebug() << "***** mkisofs parameters:\n";
     QString s = m_process->joinedArgs();
-    kDebug() << s << endl << flush;
+    qDebug() << s << endl << flush;
     emit debuggingOutput("mkisofs command:", s);
 
     if( !m_process->start( KProcess::SeparateChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kDebug() << "(K3b::IsoImager) could not start mkisofs";
+        qDebug() << "(K3b::IsoImager) could not start mkisofs";
         emit infoMessage( i18n("Could not start %1.", QLatin1String("mkisofs")), K3b::Job::MessageError );
         jobFinished( false );
         cleanup();
@@ -455,11 +455,11 @@ void K3b::IsoImager::start()
 
 void K3b::IsoImager::cancel()
 {
-    kDebug();
+    qDebug();
     m_canceled = true;
 
     if( m_process && m_process->isRunning() ) {
-        kDebug() << "terminating process";
+        qDebug() << "terminating process";
         m_process->terminate();
     }
     else if( active() ) {
@@ -564,7 +564,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
     int volsetSize = m_doc->isoOptions().volumeSetSize();
     int volsetSeqNo = m_doc->isoOptions().volumeSetNumber();
     if( volsetSeqNo > volsetSize ) {
-        kDebug() << "(K3b::IsoImager) invalid volume set sequence number: " << volsetSeqNo
+        qDebug() << "(K3b::IsoImager) invalid volume set sequence number: " << volsetSeqNo
                  << " with volume set size: " << volsetSize << endl;
         volsetSeqNo = volsetSize;
     }
@@ -735,7 +735,7 @@ int K3b::IsoImager::writePathSpec()
     delete m_pathSpecFile;
     m_pathSpecFile = new KTemporaryFile();
     if ( m_pathSpecFile->open() ) {
-        kDebug() << "Opened path spec file" << m_pathSpecFile->fileName();
+        qDebug() << "Opened path spec file" << m_pathSpecFile->fileName();
         QTextStream s( m_pathSpecFile );
 
         // recursive path spec writing
@@ -750,7 +750,7 @@ int K3b::IsoImager::writePathSpec()
 int K3b::IsoImager::writePathSpecForDir( K3b::DirItem* dirItem, QTextStream& stream )
 {
     if( !m_noDeepDirectoryRelocation && dirItem->depth() > 7 ) {
-        kDebug() << "(K3b::IsoImager) found directory depth > 7. Enabling no deep directory relocation.";
+        qDebug() << "(K3b::IsoImager) found directory depth > 7. Enabling no deep directory relocation.";
         m_noDeepDirectoryRelocation = true;
     }
 
@@ -1066,7 +1066,7 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
 
     if( !_appDir.cd( name ) ) {
 
-        kDebug() << "(K3b::IsoImager) creating dummy dir: " << _appDir.absolutePath() << "/" << name;
+        qDebug() << "(K3b::IsoImager) creating dummy dir: " << _appDir.absolutePath() << "/" << name;
 
         _appDir.mkdir( name );
         _appDir.cd( name );

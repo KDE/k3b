@@ -13,6 +13,8 @@
  */
 #include "k3bprojectplugin.h"
 
+#include <KI18n/KLocalizedString>
+
 K3b::ProjectPlugin::ProjectPlugin( Type type, bool gui, QObject* parent )
   : K3b::Plugin( parent ),
     m_type(type),

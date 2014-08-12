@@ -16,7 +16,7 @@
 #ifndef _K3B_CORE_H_
 #define _K3B_CORE_H_
 
-#include <qobject.h>
+#include <QtCore/QObject>
 #include <qlist.h>
 
 #include "k3b_export.h"
@@ -30,7 +30,6 @@
 
 
 class KConfig;
-class QCustomEvent;
 
 namespace K3b {
 

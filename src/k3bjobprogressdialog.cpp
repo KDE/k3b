@@ -31,19 +31,20 @@
 #include "k3bversion.h"
 #include "k3bthememanager.h"
 
-#include <KColorScheme>
-#include <KConfig>
-#include <KDebug>
-#include <KGlobal>
-#include <KGlobalSettings>
-#include <kio/global.h>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KIcon>
+#include <KIO/Global>
 #include <kjobtrackerinterface.h>
-#include <KLocale>
-#include <KMessageBox>
-#include <KNotification>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KNotification>
 #include <KProgressDialog>
-#include <KPushButton>
-#include <KStandardGuiItem>
+#include <KDELibs4Support/KDE/KPushButton>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
 #include <KSqueezedTextLabel>
 
 #include <QCloseEvent>
@@ -97,7 +98,7 @@ K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
  */
 K3b::JobProgressDialog::~JobProgressDialog()
 {
-    kDebug();
+    qDebug();
     delete d;
 }
 
@@ -258,7 +259,7 @@ void K3b::JobProgressDialog::setExtraInfo( QWidget *extra )
 void K3b::JobProgressDialog::showEvent( QShowEvent* e )
 {
     if( !e->spontaneous() ) {
-        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) ) {
+        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "hide main window while writing", false ) ) {
             k3bappcore->k3bMainWindow()->hide();
         }
     }
@@ -282,45 +283,45 @@ void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 
 void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 {
-#if KDE_IS_VERSION( 4, 3, 80 )
+//#if KDE_IS_VERSION( 4, 3, 80 )
     m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
                                           "%1 of %2",
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
+                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
                                                                              1,
                                                                              KLocale::DefaultBinaryDialect,
                                                                              KLocale::UnitMegaByte ),
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
+                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
                                                                              1,
                                                                              KLocale::DefaultBinaryDialect,
                                                                              KLocale::UnitMegaByte ) ) );
-#else
-    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
-                                          "%1 of %2",
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ) ),
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ) ) ) );
-#endif
+//#else
+//    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+//                                          "%1 of %2",
+//                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ) ),
+//                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ) ) ) );
+//#endif
 }
 
 
 void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int trackSize )
 {
-#if KDE_IS_VERSION( 4, 3, 80 )
+//#if KDE_IS_VERSION( 4, 3, 80 )
     m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
                                              "%1 of %2",
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
+                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
                                                                                 1,
                                                                                 KLocale::DefaultBinaryDialect,
                                                                                 KLocale::UnitMegaByte ),
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
+                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
                                                                                 1,
                                                                                 KLocale::DefaultBinaryDialect,
                                                                                 KLocale::UnitMegaByte ) ) );
-#else
-    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
-                                             "%1 of %2",
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ) ),
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ) ) ) );
-#endif
+//#else
+//    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+//                                             "%1 of %2",
+//                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ) ),
+//                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ) ) ) );
+//#endif
 }
 
 
@@ -351,7 +352,7 @@ void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int typ
 
 void K3b::JobProgressDialog::slotFinished( bool success )
 {
-    kDebug() << "received finished signal!";
+    qDebug() << "received finished signal!";
 
     m_logFile.close();
 
@@ -361,7 +362,7 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     // Show elapsed time at the end of the task
     {
         const int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
-        const QString elapsed = KGlobal::locale()->formatLocaleTime( QTime().addSecs( elapsedSecs ), KLocale::TimeDuration );
+        const QString elapsed = KLocale::global()->formatLocaleTime( QTime().addSecs( elapsedSecs ), KLocale::TimeDuration );
         m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::formatLocaleTime",
                                             "Elapsed time: %1", elapsed ) );
     }
@@ -407,14 +408,14 @@ void K3b::JobProgressDialog::slotFinished( bool success )
 
 void K3b::JobProgressDialog::slotCanceled()
 {
-    kDebug();
+    qDebug();
     m_bCanceled = true;
 }
 
 
 void K3b::JobProgressDialog::setJob( K3b::Job* job )
 {
-    kDebug();
+    qDebug();
     m_bCanceled = false;
 
     // clear everything
@@ -439,7 +440,7 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
     m_job = job;
 
     if( job ) {
-        kDebug() << "connecting";
+        qDebug() << "connecting";
         connect( job, SIGNAL(infoMessage(QString,int)), this, SLOT(slotInfoMessage(QString,int)) );
 
         connect( job, SIGNAL(percent(int)), m_progressPercent, SLOT(setValue(int)) );
@@ -461,9 +462,9 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
         m_labelJob->setText( m_job->jobDescription() );
         m_labelJobDetails->setText( m_job->jobDetails() );
 
-        setCaption( m_job->jobDescription() );
+        setWindowTitle( m_job->jobDescription() );
 
-        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
+        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
             KIO::getJobTracker()->registerJob( new KJobBridge( *job ) );
         }
     }
@@ -472,7 +473,7 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
 
 void K3b::JobProgressDialog::slotButtonClicked( int button )
 {
-    kDebug() << button;
+    qDebug() << button;
 
     switch( button ) {
     case KDialog::Cancel:
@@ -499,7 +500,7 @@ void K3b::JobProgressDialog::slotButtonClicked( int button )
 
 void K3b::JobProgressDialog::slotNewSubTask(const QString& name)
 {
-    kDebug() << name;
+    qDebug() << name;
     m_labelSubTask->setText(name);
     m_labelSubProcessedSize->setText("");
     m_progressSubPercent->setValue(0);
@@ -508,14 +509,14 @@ void K3b::JobProgressDialog::slotNewSubTask(const QString& name)
 
 void K3b::JobProgressDialog::slotNewTask(const QString& name)
 {
-    kDebug() << name;
+    qDebug() << name;
     m_labelTask->setText( name );
 }
 
 
 void K3b::JobProgressDialog::slotStarted()
 {
-    kDebug();
+    qDebug();
     d->lastProgress = 0;
     m_timer->start( 1000 );
     m_startTime = QDateTime::currentDateTime();
@@ -534,7 +535,7 @@ void K3b::JobProgressDialog::slotUpdateTime()
         remainingSecs = 0;
     }
 
-    const QString remaining = KGlobal::locale()->formatLocaleTime( QTime().addSecs( remainingSecs ), KLocale::TimeDuration );
+    const QString remaining = KLocale::global()->formatLocaleTime( QTime().addSecs( remainingSecs ), KLocale::TimeDuration );
     m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::formatLocaleTime",
                                         "Remaining time: %1", remaining ) );
 }
@@ -562,14 +563,14 @@ void K3b::JobProgressDialog::slotProgress( int percent )
         m_lastProgressUpdateTime = QDateTime::currentDateTime();
         k3bappcore->k3bMainWindow()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 
-        setCaption( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
+        setWindowTitle( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
     }
 }
 
 
 void K3b::JobProgressDialog::keyPressEvent( QKeyEvent* e )
 {
-    kDebug() << e;
+    qDebug() << e;
 
     switch ( e->key() ) {
     case Qt::Key_Enter:
@@ -610,7 +611,7 @@ int K3b::JobProgressDialog::startJob( K3b::Job* job )
         new JobInterface( job );
     }
     else if( !m_job ) {
-        kError() << "(K3b::JobProgressDialog) null job!" << endl;
+        qCritical() << "(K3b::JobProgressDialog) null job!" << endl;
         return -1;
     }
 

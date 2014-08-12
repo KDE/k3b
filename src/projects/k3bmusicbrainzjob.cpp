@@ -21,7 +21,7 @@
 
 #include <kmessagebox.h>
 #include <kinputdialog.h>
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
 
 class K3b::MusicBrainzJob::Private

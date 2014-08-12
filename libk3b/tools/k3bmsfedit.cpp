@@ -205,4 +205,4 @@ QAbstractSpinBox::StepEnabled K3b::MsfEdit::stepEnabled () const
     return stepEnabled;
 }
 
-#include "k3bmsfedit.moc"
+#include "moc_k3bmsfedit.cpp"

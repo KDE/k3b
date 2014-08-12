@@ -23,8 +23,8 @@
 #include "k3btoc.h"
 #include "k3bthreadwidget.h"
 
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
 
 #ifdef Q_OS_WIN32
 #undef S_OK
@@ -107,7 +107,7 @@ bool AudioCdTrackReader::Private::initParanoia()
             k3bcore->unblockDevice( device );
 
             initialized = true;
-            kDebug() << "cdParanoia initialized";
+            qDebug() << "cdParanoia initialized";
         }
     }
 

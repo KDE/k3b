@@ -275,4 +275,4 @@ void AudioDocReader::updatePos()
 
 } // namespace K3b
 
-#include "k3baudiodocreader.moc"
+#include "moc_k3baudiodocreader.cpp"

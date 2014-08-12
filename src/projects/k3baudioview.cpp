@@ -37,9 +37,9 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KToolBar>
 #include <fcntl.h>
 

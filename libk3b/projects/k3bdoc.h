@@ -19,11 +19,11 @@
 #include "config-k3b.h"
 #include "k3bglobals.h"
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <QString>
 
 #include <KUrl>
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include "k3b_export.h"
 

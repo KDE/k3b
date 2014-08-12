@@ -16,9 +16,10 @@
 #include "k3bthememanager.h"
 
 #include <kio/deletejob.h>
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
-#include <QFile>
+#include <QtCore/QFile>
+#include <QtCore/QUrl>
 
 namespace K3b {
 
@@ -121,7 +122,7 @@ bool ThemeModel::removeRows( int row, int count, const QModelIndex& parent )
                 QFile::remove( path + "/k3b.theme" );
 
                 // delete the theme data itself
-                KIO::del( path, KIO::HideProgressInfo );
+                KIO::del( QUrl::fromLocalFile( path ), KIO::HideProgressInfo );
             }
         }
         endRemoveRows();

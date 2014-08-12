@@ -17,6 +17,8 @@
 #include "k3bisooptions.h"
 #include "k3bvalidators.h"
 
+#include <KI18n/KLocalizedString>
+
 #include <qlineedit.h>
 #include <qspinbox.h>
 #include <qlabel.h>
@@ -30,7 +32,7 @@ K3b::DataVolumeDescDialog::DataVolumeDescDialog( QWidget* parent )
 
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
-    setCaption( i18n("Volume Descriptor") );
+    setWindowTitle( i18n("Volume Descriptor") );
     setModal( true );
 
     // the maximal number of characters that can be inserted are set in the ui file!

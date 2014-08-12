@@ -32,12 +32,13 @@
 #include <KDirLister>
 #include <KFileFilterCombo>
 #include <KFileItem>
-#include <KLocale>
+#include <KIcon>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KProgressDialog>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
 #include <KUrl>
-#include <KDebug>
+#include <QtCore/QDebug>
 
 
 class K3b::FileView::Private
@@ -140,7 +141,7 @@ KActionCollection* K3b::FileView::actionCollection() const
 
 void K3b::FileView::setUrl(const KUrl& url, bool forward)
 {
-    kDebug() << url;
+    qDebug() << url;
     d->dirOp->setUrl( url, forward );
 }
 

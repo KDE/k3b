@@ -21,10 +21,10 @@
 #include "k3btoc.h"
 #include "k3bmsf.h"
 
-#include <KDebug>
-#include <KGlobal>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobal>
 
-#include <QFile>
+#include <QtCore/QFile>
 #include <QLibrary>
 #include <QMutex>
 #include <QMutexLocker>
@@ -422,52 +422,52 @@ bool K3b::CdparanoiaLib::load()
 
     // check if all symbols could be resoled
     if( cdda_cdda_identify == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_identify'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_identify'";
         return false;
     }
     if( cdda_cdda_open == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_open'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_open'";
         return false;
     }
     if( cdda_cdda_close == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_close'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_close'";
         return false;
     }
     if( cdda_cdda_track_firstsector == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_track_firstsector'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_track_firstsector'";
         return false;
     }
     if( cdda_cdda_track_lastsector == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_track_lastsector'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_track_lastsector'";
         return false;
     }
     if( cdda_cdda_disc_firstsector == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_disc_firstsector'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_disc_firstsector'";
         return false;
     }
     if( cdda_cdda_verbose_set == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_verbose_set'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'cdda_verbose_set'";
         return false;
     }
 
     if( cdda_paranoia_init == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_init'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_init'";
         return false;
     }
     if( cdda_paranoia_free == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_free'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_free'";
         return false;
     }
     if( cdda_paranoia_modeset == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_modeset'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_modeset'";
         return false;
     }
     if( cdda_paranoia_read_limited == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_read_limited'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_read_limited'";
         return false;
     }
     if( cdda_paranoia_seek == 0 ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_seek'";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve 'paranoia_seek'";
         return false;
     }
 
@@ -495,7 +495,7 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
         }
 
         if( !load_ok ) {
-            kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_interface. ";
+            qDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_interface. ";
             return 0;
         }
 
@@ -511,7 +511,7 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
         }
 
         if( !load_ok ) {
-            kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_paranoia. ";
+            qDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_paranoia. ";
             s_libInterface->unload();
             return 0;
         }
@@ -519,7 +519,7 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
 
     K3b::CdparanoiaLib* lib = new K3b::CdparanoiaLib();
     if( !lib->load() ) {
-        kDebug() << "(K3b::CdparanoiaLib) Error: could not resolve all symbols!";
+        qDebug() << "(K3b::CdparanoiaLib) Error: could not resolve all symbols!";
         s_libInterface->unload();
         s_libParanoia->unload();
         delete lib;
@@ -532,7 +532,7 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
 bool K3b::CdparanoiaLib::initParanoia( K3b::Device::Device* dev, const K3b::Device::Toc& toc )
 {
     if( !dev ) {
-        kError() << "(K3b::CdparanoiaLib::initParanoia) dev = 0!" << endl;
+        qCritical() << "(K3b::CdparanoiaLib::initParanoia) dev = 0!" << endl;
         return false;
     }
 
@@ -541,13 +541,13 @@ bool K3b::CdparanoiaLib::initParanoia( K3b::Device::Device* dev, const K3b::Devi
     d->device = dev;
     d->toc = toc;
     if( d->toc.isEmpty() ) {
-        kDebug() << "(K3b::CdparanoiaLib) empty toc.";
+        qDebug() << "(K3b::CdparanoiaLib) empty toc.";
         cleanup();
         return false;
     }
 
     if( d->toc.contentType() == K3b::Device::DATA ) {
-        kDebug() << "(K3b::CdparanoiaLib) No audio tracks found.";
+        qDebug() << "(K3b::CdparanoiaLib) No audio tracks found.";
         cleanup();
         return false;
     }
@@ -611,7 +611,7 @@ bool K3b::CdparanoiaLib::initReading()
         return initReading( start, end );
     }
     else {
-        kDebug() << "(K3b::CdparanoiaLib) initReading without initParanoia.";
+        qDebug() << "(K3b::CdparanoiaLib) initReading without initParanoia.";
         return false;
     }
 }
@@ -626,17 +626,17 @@ bool K3b::CdparanoiaLib::initReading( int track )
                 return initReading( k3bTrack.firstSector().lba(), k3bTrack.lastSector().lba() );
             }
             else {
-                kDebug() << "(K3b::CdparanoiaLib) Track " << track << " no audio track.";
+                qDebug() << "(K3b::CdparanoiaLib) Track " << track << " no audio track.";
                 return false;
             }
         }
         else {
-            kDebug() << "(K3b::CdparanoiaLib) Track " << track << " too high.";
+            qDebug() << "(K3b::CdparanoiaLib) Track " << track << " too high.";
             return false;
         }
     }
     else {
-        kDebug() << "(K3b::CdparanoiaLib) initReading without initParanoia.";
+        qDebug() << "(K3b::CdparanoiaLib) initReading without initParanoia.";
         return false;
     }
 }
@@ -644,7 +644,7 @@ bool K3b::CdparanoiaLib::initReading( int track )
 
 bool K3b::CdparanoiaLib::initReading( long start, long end )
 {
-    kDebug() << "(K3b::CdparanoiaLib) initReading( " << start << ", " << end << " )";
+    qDebug() << "(K3b::CdparanoiaLib) initReading( " << start << ", " << end << " )";
 
     if( d->device ) {
         if( d->toc.firstSector().lba() <= start &&
@@ -662,12 +662,12 @@ bool K3b::CdparanoiaLib::initReading( long start, long end )
             return true;
         }
         else {
-            kDebug() << "(K3b::CdparanoiaLib) " << start << " and " << end << " out of range.";
+            qDebug() << "(K3b::CdparanoiaLib) " << start << " and " << end << " out of range.";
             return false;
         }
     }
     else {
-        kDebug() << "(K3b::CdparanoiaLib) initReading without initParanoia.";
+        qDebug() << "(K3b::CdparanoiaLib) initReading without initParanoia.";
         return false;
     }
 }
@@ -676,7 +676,7 @@ bool K3b::CdparanoiaLib::initReading( long start, long end )
 char* K3b::CdparanoiaLib::read( int* statusCode, unsigned int* track, bool littleEndian )
 {
     if( d->currentSector > d->lastSector ) {
-        kDebug() << "(K3b::CdparanoiaLib) finished ripping. read "
+        qDebug() << "(K3b::CdparanoiaLib) finished ripping. read "
                  << (d->currentSector - d->startSector) << " sectors." << endl
                  << "                   current sector: " << d->currentSector << endl;
         d->status = S_OK;
@@ -686,7 +686,7 @@ char* K3b::CdparanoiaLib::read( int* statusCode, unsigned int* track, bool littl
     }
 
     if( d->currentSector != d->data->sector() ) {
-        kDebug() << "(K3b::CdparanoiaLib) need to seek before read. Looks as if we are reusing the paranoia instance.";
+        qDebug() << "(K3b::CdparanoiaLib) need to seek before read. Looks as if we are reusing the paranoia instance.";
         if( !d->data->paranoiaSeek( d->currentSector, SEEK_SET ) )
             return 0;
     }

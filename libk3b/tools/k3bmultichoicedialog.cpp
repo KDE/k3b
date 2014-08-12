@@ -16,9 +16,9 @@
 #include "k3bstdguiitems.h"
 
 #include <KApplication>
-#include <KDialog>
-#include <KIconLoader>
-#include <KPushButton>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KPushButton>
 
 #include <QCloseEvent>
 #include <QGridLayout>

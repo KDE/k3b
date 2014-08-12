@@ -18,9 +18,9 @@
 
 #include "k3bintvalidator.h"
 
-#include <klocale.h>
-#include <kglobal.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KGlobal>
+#include <QtCore/QDebug>
 
 
 K3b::IntValidator::IntValidator ( QWidget * parent )

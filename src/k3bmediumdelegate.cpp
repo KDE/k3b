@@ -16,7 +16,7 @@
 #include "k3bmediumdelegate.h"
 #include "k3bmedium.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <QApplication>
 #include <QModelIndex>

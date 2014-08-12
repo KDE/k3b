@@ -16,7 +16,7 @@
 #ifndef K3B_DATA_ADVANCED_IMAGE_SETTINGS_DIALOG_H
 #define K3B_DATA_ADVANCED_IMAGE_SETTINGS_DIALOG_H
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 
 #include "ui_base_k3badvanceddataimagesettings.h"
 

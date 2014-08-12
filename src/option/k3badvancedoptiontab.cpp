@@ -30,10 +30,11 @@
 #include <qtooltip.h>
 
 #include <knuminput.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
 #include <kdialog.h>
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 #include <klineedit.h>
 
 
@@ -148,7 +149,7 @@ void K3b::AdvancedOptionTab::setupGui()
 
 void K3b::AdvancedOptionTab::readSettings()
 {
-    KConfigGroup c( KGlobal::config(), "General Options" );
+    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
 
     m_checkAutoErasingRewritable->setChecked( c.readEntry( "auto rewritable erasing", false ) );
     m_checkShowForceGuiElements->setChecked( c.readEntry( "Show advanced GUI", false ) );
@@ -165,7 +166,7 @@ void K3b::AdvancedOptionTab::readSettings()
 
 void K3b::AdvancedOptionTab::saveSettings()
 {
-    KConfigGroup c( KGlobal::config(), "General Options" );
+    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
 
     c.writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
     c.writeEntry( "Show advanced GUI", m_checkShowForceGuiElements->isChecked() );

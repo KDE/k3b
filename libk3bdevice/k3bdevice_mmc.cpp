@@ -21,7 +21,7 @@
 #include "k3bdevice.h"
 #include "k3bscsicommand.h"
 #include "k3bdeviceglobals.h"
-#include "kdebug.h"
+#include "QtCore/QDebug"
 
 #include <string.h>
 
@@ -54,7 +54,7 @@ bool K3b::Device::Device::getFeature( UByteArray& data, unsigned int feature ) c
     if( !cmd.transport( TR_DIR_READ, header, 8 ) )
         dataLen = from4Byte( header ) + 4;
     else
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": GET CONFIGURATION length det failed.";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": GET CONFIGURATION length det failed.";
 
     //
     // Some buggy firmwares do not return the size of the available data
@@ -77,7 +77,7 @@ bool K3b::Device::Device::getFeature( UByteArray& data, unsigned int feature ) c
         return true;
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": GET CONFIGURATION with real length "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": GET CONFIGURATION with real length "
                  << data.size() << " failed." << endl;
         data.clear();
         return false;
@@ -188,7 +188,7 @@ bool K3b::Device::Device::getPerformance( UByteArray& data,
     cmd[10] = type;
     cmd[11] = 0;     // Necessary to set the proper command length
     if( cmd.transport( TR_DIR_READ, header.data(), dataLen ) ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE length det failed." << endl;
         return false;
     }
@@ -205,7 +205,7 @@ bool K3b::Device::Device::getPerformance( UByteArray& data,
     if( (dataLen-8) % descLen ||
         dataLen <= 8 ||
         dataLen > 2048 ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE reports bogus dataLen: " << dataLen << endl;
         return false;
     }
@@ -224,14 +224,14 @@ bool K3b::Device::Device::getPerformance( UByteArray& data,
             return true;
         }
         else {
-            kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+            qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                     << ": GET PERFORMANCE reports invalid data size:" << data.size() << endl;
             data.clear();
             return false;
         }
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE with real length "
                  << data.size() << " failed." << endl;
         data.clear();
@@ -289,7 +289,7 @@ bool K3b::Device::Device::readTrackInformation( UByteArray& data, int type, int 
         cmd[5] = value;
         break;
     default:
-        kDebug() << "(K3b::Device::readTrackInformation) wrong type parameter: " << type;
+        qDebug() << "(K3b::Device::readTrackInformation) wrong type parameter: " << type;
         return false;
     }
 
@@ -299,7 +299,7 @@ bool K3b::Device::Device::readTrackInformation( UByteArray& data, int type, int 
     if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
         dataLen = from2Byte( header ) + 2;
     else
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed.";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TRACK INFORMATION length det failed.";
 
     //
     // Some buggy firmwares do not return the size of the available data
@@ -330,7 +330,7 @@ bool K3b::Device::Device::readTrackInformation( UByteArray& data, int type, int 
         return true;
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TRACK INFORMATION with real length "
                  << data.size() << " failed." << endl;
         data.clear();
         return false;
@@ -359,7 +359,7 @@ bool K3b::Device::Device::read10( unsigned char* data,
     cmd[9] = 0;      // Necessary to set the proper command length
 
     if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ 10 failed!";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ 10 failed!";
         return false;
     }
     else
@@ -391,7 +391,7 @@ bool K3b::Device::Device::read12( unsigned char* data,
     cmd[11] = 0;      // Necessary to set the proper command length
 
     if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ 12 failed!";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ 12 failed!";
         return false;
     }
     else
@@ -435,7 +435,7 @@ bool K3b::Device::Device::readCd( unsigned char* data,
     cmd[11] = 0;      // Necessary to set the proper command length
 
     if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ CD failed!";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ CD failed!";
         return false;
     }
     else {
@@ -479,7 +479,7 @@ bool K3b::Device::Device::readCdMsf( unsigned char* data,
     cmd[11] = 0;      // Necessary to set the proper command length
 
     if( cmd.transport( TR_DIR_READ, data, dataLen ) ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ CD MSF failed!";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ CD MSF failed!";
         return false;
     }
     else
@@ -507,7 +507,7 @@ bool K3b::Device::Device::readSubChannel( UByteArray& data,
     if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
         dataLen = from2Byte( &header[2] ) + 4;
     else
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed.";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ SUB-CHANNEL length det failed.";
 
     //
     // Some buggy firmwares do not return the size of the available data
@@ -529,7 +529,7 @@ bool K3b::Device::Device::readSubChannel( UByteArray& data,
         return true;
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ SUB-CHANNEL with real length "
                  << data.size() << " failed." << endl;
         data.clear();
         return false;
@@ -578,7 +578,7 @@ bool K3b::Device::Device::readTocPmaAtip( UByteArray& data, int format, bool tim
     if( cmd.transport( TR_DIR_READ, header, 4 ) == 0 )
         dataLen = from2Byte( header ) + 2;
     else
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed.";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP length det failed.";
 
     //
     // Some buggy firmwares return an invalid size here
@@ -587,7 +587,7 @@ bool K3b::Device::Device::readTocPmaAtip( UByteArray& data, int format, bool tim
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
     if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned: " << dataLen;
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned: " << dataLen;
         dataLen = 0xFFFF;
     }
 
@@ -616,7 +616,7 @@ bool K3b::Device::Device::readTocPmaAtip( UByteArray& data, int format, bool tim
         }
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP format "
                  << format << " with real length "
                  << data.size() << " failed." << endl;
         data.clear();
@@ -640,7 +640,7 @@ bool K3b::Device::Device::mechanismStatus( UByteArray& data ) const
     if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
         dataLen = from4Byte( &header[6] ) + 8;
     else
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS length det failed.";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS length det failed.";
 
     //
     // Some buggy firmwares do not return the size of the available data
@@ -652,7 +652,7 @@ bool K3b::Device::Device::mechanismStatus( UByteArray& data ) const
     if( (dataLen-8) % 4 || dataLen <= 8 )
         dataLen = 0xFFFF;
 
-    kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS "
+    qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS "
              << (int)header[5] << " slots." << endl;
 
     // again with real length
@@ -666,7 +666,7 @@ bool K3b::Device::Device::mechanismStatus( UByteArray& data ) const
         return true;
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS with real length "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS with real length "
                  << data.size() << " failed." << endl;
         data.clear();
         return false;
@@ -692,7 +692,7 @@ bool K3b::Device::Device::modeSense( UByteArray& pageData, int page ) const
     if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
         pageLen = from2Byte( header ) + 2;
     else
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE length det failed.";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE length det failed.";
 
     //
     // Some buggy firmwares do not return the size of the available data
@@ -715,7 +715,7 @@ bool K3b::Device::Device::modeSense( UByteArray& pageData, int page ) const
     }
     else {
         pageData.clear();
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE with real length "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE with real length "
                  << pageLen << " failed." << endl;
         return false;
     }
@@ -783,7 +783,7 @@ bool K3b::Device::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
 
         unsigned int realLength = buffer[3] + 4;
 
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
                  << (int)(buffer[8]&0x3) << " " << from4Byte( &buffer[4] ) << endl;
 
         if( currentMax )
@@ -800,7 +800,7 @@ bool K3b::Device::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
         //
         for( unsigned int i = 12; i < realLength-4; i+=8 ) {
             int format = (int)((buffer[i+4]>>2)&0x3f);
-            kDebug() << "(K3b::Device::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: "
+            qDebug() << "(K3b::Device::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: "
                      << format << " " << from4Byte( &buffer[i] )
                      << " " << (int)( (buffer[i+5] << 16 & 0xFF0000) |
                                       (buffer[i+6] << 8  & 0xFF00) |
@@ -832,11 +832,11 @@ bool K3b::Device::Device::readDiscInformation( UByteArray& data ) const
     if( cmd.transport( TR_DIR_READ, header, 2 ) == 0 )
         dataLen = from2Byte( header ) + 2u;
     else
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": READ DISC INFORMATION length det failed" << endl;
 
     if( dataLen < 32 ) {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName()
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": Device reports bogus disc information length of " << dataLen << endl;
         dataLen = 32;
     }
@@ -851,7 +851,7 @@ bool K3b::Device::Device::readDiscInformation( UByteArray& data ) const
         return true;
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DISC INFORMATION with real length "
                  << dataLen << " failed." << endl;
         data.clear();
         return false;
@@ -906,13 +906,13 @@ bool K3b::Device::Device::readDiscStructure( UByteArray& data,
             return true;
         }
         else {
-            kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed.";
+            qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DVD STRUCTURE with real length failed.";
             data.clear();
             return false;
         }
     }
     else {
-        kDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DVD STRUCTURE length det failed";
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ DVD STRUCTURE length det failed";
         return false;
     }
 }

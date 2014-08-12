@@ -23,8 +23,8 @@
 #include <QString>
 #include <QWidget>
 
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KLocale>
 
 
 K3b::Doc::Doc( QObject* parent )

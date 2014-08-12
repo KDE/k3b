@@ -20,9 +20,9 @@
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 
-#include <qfile.h>
+#include <QtCore/QFile>
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 
 class K3b::CloneTocReader::Private
@@ -74,7 +74,7 @@ void K3b::CloneTocReader::readFile()
     // now get rid of the ".toc" extension
     QString imageFileName = d->tocFile.left( d->tocFile.length()-4 );
     if( !QFile::exists( imageFileName ) ) {
-        kDebug() << "(K3b::CloneTocReader) could not find image file " << imageFileName;
+        qDebug() << "(K3b::CloneTocReader) could not find image file " << imageFileName;
         return;
     }
 
@@ -92,7 +92,7 @@ void K3b::CloneTocReader::readFile()
         f.close();
 
         if( read == 2048 ) {
-            kDebug() << "(K3b::CloneTocReader) TOC too large.";
+            qDebug() << "(K3b::CloneTocReader) TOC too large.";
             return;
         }
 
@@ -107,7 +107,7 @@ void K3b::CloneTocReader::readFile()
         int dataLen = K3b::Device::from2Byte( th->len ) + 2;  // the len field does not include it's own length
 
         if( th->first != 1 ) {
-            kDebug() << "(K3b::CloneTocReader) first session != 1";
+            qDebug() << "(K3b::CloneTocReader) first session != 1";
             return;
         }
 
@@ -136,7 +136,7 @@ void K3b::CloneTocReader::readFile()
             struct ftrackdesc* ft = (struct ftrackdesc*)&buffer[i];
 
             if( ft->sess_number != 1 ) {
-                kDebug() << "(K3b::CloneTocReader} session number != 1";
+                qDebug() << "(K3b::CloneTocReader} session number != 1";
                 return;
             }
 
@@ -145,7 +145,7 @@ void K3b::CloneTocReader::readFile()
                 if( ft->adr == 1 ) {
                     // check track starttime
                     if( ft->psec > 60 || ft->pframe > 75 ) {
-                        kDebug() << "(K3b::CloneTocReader) invalid track start: "
+                        qDebug() << "(K3b::CloneTocReader) invalid track start: "
                                  << (int)ft->pmin << "."
                                  << (int)ft->psec << "."
                                  << (int)ft->pframe << endl;
@@ -157,46 +157,46 @@ void K3b::CloneTocReader::readFile()
                 switch( ft->point ) {
                 case 0xa0:
                     if( ft->adr != 1 ) {
-                        kDebug() << "(K3b::CloneTocReader) adr != 1";
+                        qDebug() << "(K3b::CloneTocReader) adr != 1";
                         return;
                     }
 
                     // disk type in psec
                     if( ft->psec != 0x00 && ft->psec != 0x10 && ft->psec != 0x20 ) {
-                        kDebug() << "(K3b::CloneTocReader) invalid disktype: " << ft->psec;
+                        qDebug() << "(K3b::CloneTocReader) invalid disktype: " << ft->psec;
                         return;
                     }
 
                     if( ft->pmin != 1 ) {
-                        kDebug() << "(K3b::CloneTocReader) first track number != 1 ";
+                        qDebug() << "(K3b::CloneTocReader) first track number != 1 ";
                         return;
                     }
 
                     if( ft->pframe != 0x0 ) {
-                        kDebug() << "(K3b::CloneTocReader) found data when there should be 0x0";
+                        qDebug() << "(K3b::CloneTocReader) found data when there should be 0x0";
                         return;
                     }
                     break;
 
                 case  0xa1:
                     if( ft->adr != 1 ) {
-                        kDebug() << "(K3b::CloneTocReader) adr != 1";
+                        qDebug() << "(K3b::CloneTocReader) adr != 1";
                         return;
                     }
 
                     if( !(ft->pmin >= 1) ) {
-                        kDebug() << "(K3b::CloneTocReader) last track number needs to be >= 1.";
+                        qDebug() << "(K3b::CloneTocReader) last track number needs to be >= 1.";
                         return;
                     }
                     if( ft->psec != 0x0 || ft->pframe != 0x0 ) {
-                        kDebug() << "(K3b::CloneTocReader) found data when there should be 0x0";
+                        qDebug() << "(K3b::CloneTocReader) found data when there should be 0x0";
                         return;
                     }
                     break;
 
                 case 0xa2:
                     if( ft->adr != 1 ) {
-                        kDebug() << "(K3b::CloneTocReader) adr != 1";
+                        qDebug() << "(K3b::CloneTocReader) adr != 1";
                         return;
                     }
 
@@ -211,7 +211,7 @@ void K3b::CloneTocReader::readFile()
 
                 default:
                     if( ft->adr != 5 ) {
-                        kDebug() << "(K3b::CloneTocReader) adr != 5";
+                        qDebug() << "(K3b::CloneTocReader) adr != 5";
                         return;
                     }
                     break;
@@ -220,7 +220,7 @@ void K3b::CloneTocReader::readFile()
         }
 
         if( d->size.rawBytes() != K3b::filesize( imageFileName ) ) {
-            kDebug() << "(K3b::CloneTocReader) image file size invalid.";
+            qDebug() << "(K3b::CloneTocReader) image file size invalid.";
             return;
         }
 
@@ -228,6 +228,6 @@ void K3b::CloneTocReader::readFile()
         setValid(true);
     }
     else {
-        kDebug() << "(K3b::CloneTocReader) could not open file " << d->tocFile;
+        qDebug() << "(K3b::CloneTocReader) could not open file " << d->tocFile;
     }
 }

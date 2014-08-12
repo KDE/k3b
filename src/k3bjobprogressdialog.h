@@ -21,7 +21,7 @@
 #include "k3bdebuggingoutputcache.h"
 #include "k3bjobhandler.h"
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 
 #include <QDateTime>
 

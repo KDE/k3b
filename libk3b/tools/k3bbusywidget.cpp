@@ -19,7 +19,7 @@
 
 #include <QFrame>
 
-#include <kglobalsettings.h>
+#include <KDELibs4Support/KDE/KGlobalSettings>
 
 
 K3b::BusyWidget::BusyWidget( QWidget* parent )

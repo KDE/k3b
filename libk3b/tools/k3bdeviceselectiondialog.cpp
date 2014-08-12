@@ -27,7 +27,7 @@
 
 #include <QGridLayout>
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
 
 class K3b::DeviceSelectionDialog::Private
@@ -42,7 +42,7 @@ K3b::DeviceSelectionDialog::DeviceSelectionDialog( QWidget* parent,
     : KDialog( parent ),
       d( new Private() )
 {
-    setCaption( i18n("Device Selection") );
+    setWindowTitle( i18n("Device Selection") );
     setButtons( Ok|Cancel );
     setDefaultButton( Ok );
 

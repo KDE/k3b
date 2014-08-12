@@ -19,6 +19,7 @@
 #include "k3baudiotrack.h"
 #include "k3bcdtextvalidator.h"
 
+#include <QtGui/QIcon>
 #include <qcheckbox.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
@@ -26,9 +27,8 @@
 #include <qgroupbox.h>
 
 #include <klineedit.h>
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 #include <kdialog.h>
-#include <kiconloader.h>
 
 
 class K3b::AudioCdTextWidget::AllFieldsDialog : public KDialog, public Ui::base_K3bAudioCdTextAllFieldsWidget
@@ -37,7 +37,7 @@ public:
     AllFieldsDialog( QWidget* parent )
         : KDialog( parent) {
         setModal(true);
-        setCaption(i18n("CD-Text"));
+        setWindowTitle(i18n("CD-Text"));
         setButtons(Ok|Cancel);
         setDefaultButton(Ok);
         QWidget* w = new QWidget( this );
@@ -55,14 +55,14 @@ K3b::AudioCdTextWidget::AudioCdTextWidget( QWidget* parent )
 
     m_allFieldsDlg = new AllFieldsDialog( this );
 
-    m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
-    m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
+    m_buttonCopyTitle->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_buttonCopyPerformer->setIcon( QIcon::fromTheme( "edit-copy" ) );
 
-    m_allFieldsDlg->m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopySongwriter->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopyComposer->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopyArranger->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyTitle->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyPerformer->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopySongwriter->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyComposer->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyArranger->setIcon( QIcon::fromTheme( "edit-copy" ) );
 
     QValidator* cdTextVal = new K3b::CdTextValidator( this );
     m_editTitle->setValidator( cdTextVal );

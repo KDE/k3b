@@ -21,7 +21,7 @@
 
 #include <qdatetime.h>
 #include <qstring.h>
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 #include <qhash.h>
 
 #include "k3b_export.h"

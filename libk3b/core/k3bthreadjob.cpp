@@ -17,7 +17,7 @@
 #include "k3bprogressinfoevent.h"
 #include "k3bthreadjobcommunicationevent.h"
 
-#include <KDebug>
+#include <QtCore/QDebug>
 #include <KApplication>
 
 #include <QSharedPointer>
@@ -69,7 +69,7 @@ void K3b::ThreadJob::start()
         d->thread->start();
     }
     else {
-        kDebug() << "(K3b::ThreadJob) thread not finished yet.";
+        qDebug() << "(K3b::ThreadJob) thread not finished yet.";
     }
 }
 

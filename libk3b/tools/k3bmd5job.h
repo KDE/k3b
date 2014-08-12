@@ -37,8 +37,8 @@ namespace K3b {
         Md5Job( JobHandler* jh , QObject* parent = 0 );
         ~Md5Job();
 
-        QByteArray hexDigest();
-        QByteArray base64Digest();
+		QByteArray hexDigest();
+		QByteArray base64Digest();
 
     public Q_SLOTS:
         void start();

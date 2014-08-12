@@ -19,7 +19,7 @@
 
 #include "k3biso9660.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 namespace K3b {
 

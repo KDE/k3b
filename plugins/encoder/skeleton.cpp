@@ -17,10 +17,12 @@
 
 #include "k3b<name>encoder.h"
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
 
+K3B_EXPORT_PLUGIN(k3b<name>encoder, K3b<name>Encoder)
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_<name>, K3b<name>EncoderConfigWidget )
 
 K3b<name>Encoder::K3b<name>Encoder( QObject* parent, const QVariantList& )
@@ -89,7 +91,7 @@ K3b<name>EncoderConfigWidget::~K3b<name>EncoderConfigWidget()
 
 void K3b<name>EncoderConfigWidget::load()
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     c->setGroup( "K3b<name>EncoderPlugin" );
 
     // PUT YOUR CODE HERE
@@ -98,7 +100,7 @@ void K3b<name>EncoderConfigWidget::load()
 
 void K3b<name>EncoderConfigWidget::save()
 {
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     c->setGroup( "K3b<name>EncoderPlugin" );
 
     // PUT YOUR CODE HERE

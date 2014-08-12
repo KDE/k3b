@@ -25,10 +25,10 @@
 #include "k3bclonetocreader.h"
 #include "k3bglobalsettings.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
-#include <qfile.h>
+#include <QtCore/QFile>
 #include <qfileinfo.h>
 
 

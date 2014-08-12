@@ -24,12 +24,13 @@
 #include "k3bcore.h"
 #include "k3bintmapcombobox.h"
 
-#include <KConfig>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
 #include <KComboBox>
-#include <KDialog>
-#include <KInputDialog>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KInputDialog>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 
 #include <QApplication>
 #include <QCursor>
@@ -194,7 +195,7 @@ K3b::WriterSelectionWidget::WriterSelectionWidget( QWidget *parent )
 
     clearSpeedCombo();
 
-    slotConfigChanged( KGlobal::config() );
+    slotConfigChanged( KSharedConfig::openConfig() );
     slotWriterChanged();
 }
 
@@ -447,7 +448,7 @@ int K3b::WriterSelectionWidget::writerSpeed() const
 
 K3b::WritingApp K3b::WriterSelectionWidget::writingApp() const
 {
-    KConfigGroup g( KGlobal::config(), "General Options" );
+    KConfigGroup g( KSharedConfig::openConfig(), "General Options" );
     if( g.readEntry( "Show advanced GUI", false ) ) {
         return selectedWritingApp();
     }
@@ -484,7 +485,7 @@ void K3b::WriterSelectionWidget::slotWriterChanged()
 
     // save last selected writer
     if( K3b::Device::Device* dev = writerDevice() ) {
-        KConfigGroup g( KGlobal::config(), "General Options" );
+        KConfigGroup g( KSharedConfig::openConfig(), "General Options" );
         g.writeEntry( "current_writer", dev->blockDeviceName() );
     }
 }

@@ -17,7 +17,7 @@
 
 #include "k3bthreadjob.h"
 
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 
 class QIODevice;
 

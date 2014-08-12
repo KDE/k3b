@@ -95,7 +95,7 @@ K3b::AudioCdTrackDrag K3b::AudioCdTrackDrag::fromMimeData( const QMimeData* mime
         s >> fs;
         s >> ls;
         drag.m_toc.append( K3b::Device::Track( fs, ls, K3b::Device::Track::TYPE_AUDIO ) );
-        kDebug() << "decoded track:" << drag.m_toc.last();
+        qDebug() << "decoded track:" << drag.m_toc.last();
     }
 
     // decode cddb
@@ -107,10 +107,10 @@ K3b::AudioCdTrackDrag K3b::AudioCdTrackDrag::fromMimeData( const QMimeData* mime
     drag.m_cddb.set( KCDDB::Title, str );
     for( int i = 0; i < trackCnt; ++i ) {
         s >> str;
-        kDebug() << "Decoded artist for track" << ( i+1 ) << str;
+        qDebug() << "Decoded artist for track" << ( i+1 ) << str;
         drag.m_cddb.track( i ).set( KCDDB::Artist, str );
         s >> str;
-        kDebug() << "Decoded title for track" << ( i+1 ) << str;
+        qDebug() << "Decoded title for track" << ( i+1 ) << str;
         drag.m_cddb.track( i ).set( KCDDB::Title, str );
     }
 

@@ -26,6 +26,9 @@
 #include <QIODevice>
 #include <QStack>
 #include <QByteArray>
+#include <QtCore/QLoggingCategory>
+
+Q_DECLARE_LOGGING_CATEGORY(KOSTORE)
 
 class QWidget;
 
@@ -426,8 +429,6 @@ protected:
   /// Must be set by the constructor.
   bool m_bGood;
   bool m_bFinalized;
-
-  static const int s_area;
 
 private:
   /// Used to push/pop directories to make it easy to save/restore the state

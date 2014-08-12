@@ -18,16 +18,16 @@
 #include "k3bmovixprogram.h"
 
 #include <kcombobox.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KLocale>
+#include <QtCore/QDebug>
 #include <kdialog.h>
 
 #include <qcheckbox.h>
 #include <qspinbox.h>
-#include <qstringlist.h>
-#include <qmap.h>
+#include <QtCore/QStringList>
+#include <QtCore/QMap>
 #include <qlabel.h>
 
 
@@ -46,7 +46,7 @@ public:
             if( *it == i18n("default") )
                 m_box->addItem( *it );
             else {
-                QString lang = KGlobal::locale()->languageCodeToName( *it );
+                QString lang = KLocale::global()->languageCodeToName( *it );
                 if( lang.isEmpty() )
                     lang = *it;
 
@@ -102,7 +102,7 @@ void K3b::MovixOptionsWidget::init( const K3b::MovixBin* bin )
     m_labelKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
     m_comboKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
 
-    kDebug() << bin->supportedSubtitleFonts();
+    qDebug() << bin->supportedSubtitleFonts();
     m_comboSubtitleFontset->addItems( bin->supportedSubtitleFonts() );
     m_helpLangHelper->insertLanguages( bin->supportedLanguages() );
     m_comboDefaultBootLabel->addItems( bin->supportedBootLabels() );

@@ -18,7 +18,7 @@
 #define _K3B_WELCOME_WIDGET_H_
 
 #include <QList>
-#include <QMap>
+#include <QtCore/QMap>
 #include <QImage>
 #include <QPixmap>
 #include <QWidget>

@@ -26,12 +26,12 @@
 #include "k3bvideodvdtitletranscodingjob.h"
 
 #include <KComboBox>
-#include <KConfig>
+#include <KConfigCore/KConfig>
 #include <KLineEdit>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KUrlRequester>
-#include <kio/global.h>
+#include <KIO/Global>
 
 #include <QCheckBox>
 #include <QFontMetrics>
@@ -39,7 +39,7 @@
 #include <QHeaderView>
 #include <QLayout>
 #include <QList>
-#include <QMap>
+#include <QtCore/QMap>
 #include <QSpinBox>
 #include <QStyle>
 #include <QVector>
@@ -261,7 +261,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
                 break;
             case PATTERN_LANGUAGE_NAME:
                 if( title.numAudioStreams() > 0 )
-                    f.append( KGlobal::locale()->languageCodeToName( title.audioStream( info.audioStream ).langCode() ) );
+                    f.append( KLocale::global()->languageCodeToName( title.audioStream( info.audioStream ).langCode() ) );
                 break;
             case PATTERN_AUDIO_FORMAT:
                 // FIXME: what about MPEG audio streams?
@@ -297,7 +297,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
                     f.append( "16:9" );
                 break;
             case PATTERN_CURRENT_DATE:
-                f.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );
+                f.append( KLocale::global()->formatDate( QDate::currentDate() ) );
                 break;
             default:
                 f.append( pattern[i-1] );

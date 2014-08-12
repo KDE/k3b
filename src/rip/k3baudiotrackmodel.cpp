@@ -19,7 +19,7 @@
 #include "k3bmedium.h"
 #include "k3bcdtext.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <libkcddb/cdinfo.h>
 
@@ -172,7 +172,7 @@ QVariant K3b::AudioTrackModel::headerData( int section, Qt::Orientation orientat
 
 QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
 {
-//    kDebug() << index << role;
+//    qDebug() << index << role;
 
     // FIXME: add a cache for all the values that can be changed (maybe a local KCDDB::CDInfo)
     // which will then be the first choice for all values

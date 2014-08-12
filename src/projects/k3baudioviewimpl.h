@@ -17,7 +17,7 @@
 
 #include <KUrl>
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <QAbstractItemModel>
 #include <QList>
 

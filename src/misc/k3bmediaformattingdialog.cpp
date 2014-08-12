@@ -29,9 +29,10 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bjobprogressdialog.h"
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 #include <kmessagebox.h>
-#include <kconfig.h>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
 #include <kapplication.h>
 
 #include <qgroupbox.h>
@@ -156,7 +157,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
 
     delete theJob;
 
-    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+    if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();

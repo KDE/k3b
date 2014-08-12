@@ -18,7 +18,7 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 
-#include <KLocale>
+#include <KDELibs4Support/KDE/KLocale>
 #include <KUrl>
 
 #include <QDataStream>
@@ -397,4 +397,4 @@ bool VcdProjectModel::removeRows( int row, int count, const QModelIndex& parent 
 
 } // namespace K3b
 
-#include "k3bvcdprojectmodel.moc"
+#include "moc_k3bvcdprojectmodel.cpp"

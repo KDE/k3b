@@ -16,10 +16,10 @@
 #include "k3bdiskinfo.h"
 #include "k3bdevice.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
-#include <qstringlist.h>
+#include <QtCore/QStringList>
 
 
 QString K3b::Device::deviceTypeString( int t )
@@ -208,7 +208,7 @@ void K3b::Device::debugBitfield( unsigned char* data, long len )
         index.sprintf( "%4i", i );
         for( int bp = 7; bp >= 0; --bp )
             bitString[7-bp] = ( data[i] & (1<<bp) ? '1' : '0' );
-        kDebug() << index << " - " << bitString << " - " << (int)data[i];
+        qDebug() << index << " - " << bitString << " - " << (int)data[i];
     }
 }
 
@@ -257,11 +257,11 @@ int K3b::Device::determineMaxReadingBufferSize( K3b::Device::Device* dev, const 
     int bufferSizeSectors = 128;
     unsigned char buffer[2048*128];
     while( !dev->read10( buffer, 2048*bufferSizeSectors, firstSector.lba(), bufferSizeSectors ) ) {
-        kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
+        qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
                  << bufferSizeSectors << " too high." << endl;
         bufferSizeSectors--;
     }
-    kDebug() << "(K3b::DataTrackReader) determine max read sectors: "
+    qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
              << bufferSizeSectors << " is max." << endl;
 
     return bufferSizeSectors;

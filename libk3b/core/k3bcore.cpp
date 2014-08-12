@@ -28,11 +28,11 @@
 #include "k3bglobalsettings.h"
 #include "k3bpluginmanager.h"
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
 #include <kaboutdata.h>
-#include <kstandarddirs.h>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kapplication.h>
 
 #include <QThread>

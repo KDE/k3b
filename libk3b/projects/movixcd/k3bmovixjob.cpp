@@ -23,8 +23,8 @@
 #include "k3bdevice.h"
 #include "k3bisooptions.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 
 K3b::MovixJob::MovixJob( K3b::MovixDoc* doc, K3b::JobHandler* jh, QObject* parent )

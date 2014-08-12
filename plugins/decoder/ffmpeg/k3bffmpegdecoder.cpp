@@ -18,7 +18,7 @@
 
 #include <config-k3b.h>
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 extern "C" {
 /*
@@ -37,6 +37,7 @@ extern "C" {
 
 #include <math.h>
 
+K3B_EXPORT_PLUGIN(k3bffmpegdecoder, K3bFFMpegDecoderFactory)
 
 K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent, const QVariantList& )
     : K3b::AudioDecoderFactory( parent )
@@ -55,7 +56,7 @@ K3b::AudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent ) con
 }
 
 
-bool K3bFFMpegDecoderFactory::canDecode( const KUrl& url )
+bool K3bFFMpegDecoderFactory::canDecode( const QUrl& url )
 {
     K3bFFMpegFile* file = K3bFFMpegWrapper::instance()->open( url.toLocalFile() );
     if( file ) {

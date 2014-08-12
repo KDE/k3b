@@ -18,7 +18,9 @@
 #include "ui_base_k3baudiorippingoptionwidget.h"
 
 #include <QCheckBox>
-#include <kio/global.h>
+#include <KIO/Global>
+
+class KConfigGroup;
 
 namespace K3b {
     class AudioEncoder;

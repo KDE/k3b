@@ -20,7 +20,7 @@
 
 #include "k3bpluginconfigwidget.h"
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 #include <QtCore/QList>
 
 

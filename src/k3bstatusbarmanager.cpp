@@ -28,21 +28,22 @@
 #include "k3bdiritem.h"
 #include "k3bview.h"
 
-#include <KAboutData>
-#include <KAction>
-#include <KConfig>
-#include <KHBox>
-#include <KIconLoader>
-#include <kio/global.h>
-#include <KLocale>
-#include <KStandardDirs>
-#include <KStatusBar>
+#include <KConfigCore/KConfig>
+#include <KIconThemes/KIconLoader>
+#include <KIOCore/KIO/Global>
+#include <KDELibs4Support/KDE/K4AboutData>
+#include <KDELibs4Support/KDE/KAction>
+#include <KDELibs4Support/KDE/KHBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KStatusBar>
+#include <KDELibs4Support/KDE/KGlobal>
 
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
-#include <QtGui/QLabel>
-#include <QtGui/QToolTip>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QToolTip>
 
 
 

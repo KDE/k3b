@@ -23,7 +23,7 @@
 #include "k3bspecialdataitem.h"
 
 #include <KIcon>
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <QDataStream>
 #include <QFont>
@@ -80,7 +80,7 @@ int K3b::DataProjectModel::Private::findChildIndex( K3b::DataItem* item )
 
 void K3b::DataProjectModel::Private::_k_itemsAboutToBeInserted( K3b::DirItem* parent, int start, int end )
 {
-        kDebug() << q->indexForItem( parent ) << start << end;
+        qDebug() << q->indexForItem( parent ) << start << end;
     q->beginInsertRows( q->indexForItem( parent ), start, end );
 }
 
@@ -88,7 +88,7 @@ void K3b::DataProjectModel::Private::_k_itemsAboutToBeInserted( K3b::DirItem* pa
 void K3b::DataProjectModel::Private::_k_itemsAboutToBeRemoved( K3b::DirItem* parent, int start, int end )
 {
     m_removingItem = true;
-    kDebug() << q->indexForItem( parent ) << start << end;
+    qDebug() << q->indexForItem( parent ) << start << end;
     q->beginRemoveRows( q->indexForItem( parent ), start, end );
 }
 
@@ -310,7 +310,7 @@ QModelIndex K3b::DataProjectModel::index( int row, int column, const QModelIndex
 
 QModelIndex K3b::DataProjectModel::parent( const QModelIndex& index ) const
 {
-    //kDebug() << index;
+    //qDebug() << index;
     if( K3b::DataItem* item = itemForIndex( index ) ) {
         if( K3b::DirItem* dir = item->parent() ) {
             return createIndex( d->findChildIndex( dir ), 0, dir );
@@ -400,7 +400,7 @@ QStringList K3b::DataProjectModel::mimeTypes() const
 
 bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-    kDebug();
+    qDebug();
 
     // no need to handle the row as item order is not important (the model just forces us to use them above)
     Q_UNUSED( row );
@@ -422,7 +422,7 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
         if( action == Qt::MoveAction )
             return false;
 
-        kDebug() << "data item drop";
+        qDebug() << "data item drop";
 
         QByteArray itemData = data->data( "application/x-k3bdataitem" );
         QDataStream itemDataStream( itemData );
@@ -437,7 +437,7 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
         return true;
     }
     else if ( KUrl::List::canDecode( data ) ) {
-        kDebug() << "url list drop";
+        qDebug() << "url list drop";
         KUrl::List urls = KUrl::List::fromMimeData( data );
         emit addUrlsRequested( urls, dir );
         return true;
@@ -470,4 +470,4 @@ QModelIndex K3b::DataProjectModel::buddy( const QModelIndex& index ) const
         return index;
 }
 
-#include "k3bdataprojectmodel.moc"
+#include "moc_k3bdataprojectmodel.cpp"

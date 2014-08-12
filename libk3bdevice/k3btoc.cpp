@@ -14,7 +14,7 @@
 
 
 #include "k3btoc.h"
-#include "kdebug.h"
+#include <QtCore/QDebug>
 
 #include <qstring.h>
 

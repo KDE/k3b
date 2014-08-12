@@ -16,7 +16,7 @@
 #ifndef _K3B_SYSTEM_DIALOG_H_
 #define _K3B_SYSTEM_DIALOG_H_
 
-#include <KDialog>
+#include <KDELibs4Support/KDE/KDialog>
 
 #include <QString>
 

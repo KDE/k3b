@@ -18,6 +18,7 @@
 
 #include <KBookmarkManager>
 #include <KDirOperator>
+#include <KUrl>
 
 class KActionMenu;
 class KBookmarkMenu;
@@ -58,7 +59,7 @@ public:
     /**
      * reimplemented from KBookmarkOwner
      */
-    QString currentUrl() const;
+    QUrl currentUrl() const;
 
     KActionMenu* bookmarkMenu() const { return m_bmPopup; }
 

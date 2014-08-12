@@ -22,18 +22,18 @@
 
 #include <QDataStream>
 #include <QDomElement>
-#include <QFile>
+#include <QtCore/QFile>
 #include <QImage>
 #include <QTimer>
 
 #include <KApplication>
-#include <KConfig>
-#include <KDebug>
-#include <kio/global.h>
-#include <KLocale>
-#include <KMessageBox>
-#include <KStandardDirs>
-#include <KStandardGuiItem>
+#include <KConfigCore/KConfig>
+#include <QtCore/QDebug>
+#include <KIO/Global>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KStandardGuiItem>
 
 
 #if 0
@@ -163,12 +163,12 @@ void K3b::VcdDoc::slotWorkUrlQueue()
             lastAddedPosition = m_tracks->count();
 
         if ( !item->url.isLocalFile() ) {
-            kDebug() << item->url.toLocalFile() << " no local file";
+            qDebug() << item->url.toLocalFile() << " no local file";
             return ;
         }
 
         if ( !QFile::exists( item->url.toLocalFile() ) ) {
-            kDebug() << "(K3b::VcdDoc) file not found: " << item->url.toLocalFile();
+            qDebug() << "(K3b::VcdDoc) file not found: " << item->url.toLocalFile();
             m_notFoundFiles.append( item->url.toLocalFile() );
             return ;
         }
@@ -302,7 +302,7 @@ void K3b::VcdDoc::addTrack( const KUrl& url, uint position )
 void K3b::VcdDoc::addTrack( K3b::VcdTrack* track, uint position )
 {
     if ( m_tracks->count() >= 98 ) {
-        kDebug() << "(K3b::VcdDoc) VCD Green Book only allows 98 tracks.";
+        qDebug() << "(K3b::VcdDoc) VCD Green Book only allows 98 tracks.";
         // TODO: show some messagebox
         delete track;
         return ;
@@ -458,7 +458,7 @@ void K3b::VcdDoc::setPbcTracks()
 
     if ( m_tracks ) {
         int count = m_tracks->count();
-        kDebug() << QString( "K3b::VcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count );
+        qDebug() << QString( "K3b::VcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count );
 
         Q_FOREACH( K3b::VcdTrack* track, *m_tracks ) {
             Q_FOREACH( VcdTrack::PbcTracks pbc, VcdTrack::trackPlaybackValues() ) {
@@ -581,7 +581,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
 
-        kDebug() << QString( "(K3b::VcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name );
+        qDebug() << QString( "(K3b::VcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name );
 
         if ( name == "volumeId" )
             vcdOptions() ->setVolumeId( item.toElement().text() );

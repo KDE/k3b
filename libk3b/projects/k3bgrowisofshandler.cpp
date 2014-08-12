@@ -20,9 +20,10 @@
 #include "k3bdevice.h"
 #include "k3bdevicehandler.h"
 
-#include <klocale.h>
-#include <kglobal.h>
-#include <kdebug.h>
+#include <KLocale>
+#include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
+#include <QtCore/QLocale>
 
 #include <qtimer.h>
 
@@ -177,9 +178,9 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         if( ok )
             emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)",
                                    int( speed * double( Device::SPEED_FACTOR_DVD ) )
-                                   ,KGlobal::locale()->formatNumber(speed)), K3b::Job::MessageInfo );
+                                   ,QLocale::system().toString(speed)), K3b::Job::MessageInfo );
         else
-            kDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
+            qDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
     }
     else if( (pos = line.indexOf( "RBU" )) > 0 ) {
 
@@ -213,11 +214,11 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
             }
         }
         else
-            kDebug() << "(K3b::GrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'";
+            qDebug() << "(K3b::GrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'";
     }
 
     else {
-        kDebug() << "(growisofs) " << line;
+        qDebug() << "(growisofs) " << line;
     }
 }
 
@@ -310,7 +311,7 @@ void K3b::GrowisofsHandler::slotCheckBufferStatusDone( K3b::Device::DeviceHandle
         QTimer::singleShot( 500, this, SLOT(slotCheckBufferStatus()) );
     }
     else {
-        kDebug() << "(K3b::GrowisofsHandler) stopping buffer check.";
+        qDebug() << "(K3b::GrowisofsHandler) stopping buffer check.";
     }
 }
 

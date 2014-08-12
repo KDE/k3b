@@ -15,7 +15,7 @@
 #ifndef _K3B_SIGNAL_WAITER_H_
 #define _K3B_SIGNAL_WAITER_H_
 
-#include <qobject.h>
+#include <QtCore/QObject>
 
 #include "k3b_export.h"
 

@@ -25,16 +25,16 @@
 #include <QTimer>
 #include <QToolTip>
 
-#include <KColorScheme>
-#include <KConfig>
-#include <KDialog>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KDialog>
 #include <KDiskFreeSpaceInfo>
 #include <KFileDialog>
-#include <KIconLoader>
-#include <kio/global.h>
+#include <KIconThemes/KIconLoader>
+#include <KIO/Global>
 #include <KLineEdit>
-#include <KLocale>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KUrlRequester>
 
 

@@ -19,8 +19,8 @@
 #include "k3bsimplejobhandler.h"
 #include "k3bglobals.h"
 
-#include <kdebug.h>
-#include <kglobal.h>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KGlobal>
 
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -110,7 +110,7 @@ bool K3b::DirSizeJob::run()
         const KUrl& url = *it;
 
         if( !url.isLocalFile() ) {
-            kDebug() << "(K3b::DirSizeJob) no remote support.";
+            qDebug() << "(K3b::DirSizeJob) no remote support.";
             return false;
         }
 

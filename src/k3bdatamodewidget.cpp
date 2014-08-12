@@ -16,8 +16,8 @@
 #include "k3bdatamodewidget.h"
 #include "k3bglobals.h"
 
-#include <klocale.h>
-#include <kconfig.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
 
 
 #include <qtooltip.h>

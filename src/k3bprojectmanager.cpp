@@ -15,6 +15,7 @@
 
 #include "k3bprojectmanager.h"
 
+#include <config-k3b.h>
 #include "k3bapplication.h"
 #include "k3binteractiondialog.h"
 #include "k3baudiodoc.h"
@@ -35,12 +36,12 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-#include <KConfig>
-#include <KDebug>
-#include <KGlobal>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <QtCore/QDebug>
 #include <KIO/NetAccess>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KSharedConfig>
 #include <KUrl>
 
@@ -48,7 +49,7 @@
 #include <QCursor>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QFile>
+#include <QtCore/QFile>
 #include <QHash>
 #include <QList>
 #include <QTextStream>
@@ -116,10 +117,10 @@ QList<K3b::Doc*> K3b::ProjectManager::projects() const
 
 void K3b::ProjectManager::addProject( K3b::Doc* doc )
 {
-    kDebug() << doc;
+    qDebug() << doc;
 
     if( !d->projects.contains( doc ) ) {
-        kDebug() << "adding doc " << doc->URL().toLocalFile();
+        qDebug() << "adding doc " << doc->URL().toLocalFile();
 
         d->projects.append( doc );
         d->projectInterfaces.insert( doc, createProjectInterface( doc ) );
@@ -151,7 +152,7 @@ void K3b::ProjectManager::removeProject( K3b::Doc* docRemove )
             return;
         }
     }
-    kDebug() << "(K3b::ProjectManager) unable to find doc: " << docRemove->URL().toLocalFile();
+    qDebug() << "(K3b::ProjectManager) unable to find doc: " << docRemove->URL().toLocalFile();
 }
 
 
@@ -200,7 +201,7 @@ K3b::Doc* K3b::ProjectManager::activeProject() const
 
 K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
 {
-    kDebug() << type;
+    qDebug() << type;
 
     K3b::Doc* doc = 0;
     QString fileName;
@@ -236,11 +237,13 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
         break;
     }
 
+#ifdef ENABLE_DVD_RIPPING
     case K3b::Doc::VideoDvdProject: {
         doc = new K3b::VideoDvdDoc( this );
         fileName = i18n("VideoDVD%1",d->videoDvdUntitledCount++);
         break;
     }
+#endif
     }
 
     KUrl url;
@@ -257,7 +260,7 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
 
 K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::Type type )
 {
-    kDebug() << type;
+    qDebug() << type;
 
     K3b::Doc* doc = createEmptyProject( type );
 
@@ -269,7 +272,7 @@ K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::Type type )
 
 void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 {
-    KSharedConfig::Ptr config = KGlobal::config();
+    KSharedConfig::Ptr config = KSharedConfig::openConfig();
 
     QString cg = "default " + doc->typeString() + " settings";
 
@@ -485,14 +488,14 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
             char test[5];
             if( f.read( test, 5 ) ) {
                 if( ::strncmp( test, "<?xml", 5 ) ) {
-                    kDebug() << "(K3b::Doc) " << url.toLocalFile() << " seems to be no xml file.";
+                    qDebug() << "(K3b::Doc) " << url.toLocalFile() << " seems to be no xml file.";
                     QApplication::restoreOverrideCursor();
                     return 0;
                 }
                 f.reset();
             }
             else {
-                kDebug() << "(K3b::Doc) could not read from file.";
+                qDebug() << "(K3b::Doc) could not read from file.";
                 QApplication::restoreOverrideCursor();
                 return 0;
             }
@@ -506,7 +509,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
     KIO::NetAccess::removeTempFile( tmpfile );
 
     if( !success ) {
-        kDebug() << "(K3b::Doc) could not open file " << url.toLocalFile();
+        qDebug() << "(K3b::Doc) could not open file " << url.toLocalFile();
         QApplication::restoreOverrideCursor();
         return 0;
     }
@@ -530,7 +533,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
     else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" ) {
         type = K3b::Doc::VideoDvdProject;
     } else {
-        kDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
+        qDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
         QApplication::restoreOverrideCursor();
         return 0;
     }
@@ -554,7 +557,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
         //        that the doc is not changed
         emit projectSaved( newDoc );
 
-        kDebug() << "(K3b::ProjectManager) loading project done.";
+        qDebug() << "(K3b::ProjectManager) loading project done.";
     }
     else {
         delete newDoc;

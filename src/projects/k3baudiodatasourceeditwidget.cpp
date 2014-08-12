@@ -23,7 +23,7 @@
 #include <qtooltip.h>
 #include <QGridLayout>
 
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 #include <kdialog.h>
 
 

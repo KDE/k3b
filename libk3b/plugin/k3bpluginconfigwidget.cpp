@@ -14,8 +14,8 @@
 
 #include "k3bpluginconfigwidget.h"
 
-#include <KGlobal>
-#include <KConfigGroup>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
 #include <KSharedConfig>
 
 #include "k3bcore.h"
@@ -24,7 +24,7 @@
 // we only use the plugins when loaded into the main application. Thus they do not need
 // their own KComponentData
 K3b::PluginConfigWidget::PluginConfigWidget( QWidget* parent, const QVariantList& args )
-    : KCModule( KGlobal::mainComponent(), parent, args )
+    : KCModule( parent, args )
 {
 }
 
@@ -36,7 +36,7 @@ K3b::PluginConfigWidget::~PluginConfigWidget()
 #if 0
 void K3b::PluginConfigWidget::load()
 {
-//    loadConfig( KGlobal::config()->group() );
+//    loadConfig( KSharedConfig::openConfig()->group() );
 }
 
 
@@ -49,7 +49,7 @@ void K3b::PluginConfigWidget::defaults()
 
 void K3b::PluginConfigWidget::save()
 {
-//    saveConfig( KGlobal::config()->group() );
+//    saveConfig( KSharedConfig::openConfig()->group() );
 }
 
 

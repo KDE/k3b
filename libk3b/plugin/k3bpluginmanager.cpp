@@ -18,22 +18,22 @@
 #include "k3bpluginconfigwidget.h"
 #include "k3bversion.h"
 
-#include <KCModuleInfo>
-#include <KCModuleProxy>
-#include <KDebug>
-#include <KDialog>
-#include <KGlobal>
+#include <KCMUtils/KCModuleInfo>
+#include <KCMUtils/KCModuleProxy>
+#include <QtCore/QDebug>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KGlobal>
 #include <KLibLoader>
-#include <KLocale>
-#include <KMessageBox>
+#include <KDELibs4Support/KDE/KLocale>
+#include <KDELibs4Support/KDE/KMessageBox>
 #include <KPluginInfo>
 #include <KService>
 #include <KServiceTypeTrader>
-#include <KStandardDirs>
+#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QDir>
 #include <QList>
-#include <QMap>
+#include <QtCore/QMap>
 #include <QSharedPointer>
 
 
@@ -98,14 +98,14 @@ QList<K3b::Plugin*> K3b::PluginManager::plugins( const QString& group ) const
 
 void K3b::PluginManager::Private::loadPlugin( const KService::Ptr &service )
 {
-    kDebug() << service->name() << service->library();
+    qDebug() << service->name() << service->library();
     K3b::Plugin* plugin = service->createInstance<K3b::Plugin>( m_parent );
     if ( plugin ) {
-        kDebug() << "Loaded plugin" << service->name();
+        qDebug() << "Loaded plugin" << service->name();
         // FIXME: improve this versioning stuff
         if( plugin->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
             delete plugin;
-            kDebug() << "plugin system does not fit";
+            qDebug() << "plugin system does not fit";
         }
         else {
             KPluginInfo pluginInfo( service );
@@ -152,7 +152,7 @@ KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) con
 
 void K3b::PluginManager::loadAll()
 {
-    kDebug();
+    qDebug();
     KService::List services = KServiceTypeTrader::self()->query( "K3b/Plugin" );
     Q_FOREACH( const KService::Ptr &service, services ) {
         d->loadPlugin( service );
@@ -169,7 +169,6 @@ bool K3b::PluginManager::hasPluginDialog( Plugin* plugin ) const
 {
     QSharedPointer<KCModuleProxy> moduleProxy( d->getModuleProxy( plugin ) );
     return moduleProxy;
-    
 }
 
 
