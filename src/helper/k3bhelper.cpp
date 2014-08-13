@@ -156,4 +156,4 @@ KAuth::ActionReply Helper::addtogroup( QVariantMap args )
 
 KAUTH_HELPER_MAIN("org.kde.k3b", K3b::Helper)
 
-#include "k3bhelper.moc"
+

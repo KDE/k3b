@@ -1066,4 +1066,4 @@ bool K3b::CdrdaoWriter::defaultToGenericMMC( K3b::Device::Device* dev, bool writ
         return false;
 }
 
-#include "k3bcdrdaowriter.moc"
+

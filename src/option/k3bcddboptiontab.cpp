@@ -70,4 +70,4 @@ void K3b::CddbOptionTab::apply()
     }
 }
 
-#include "k3bcddboptiontab.moc"
+

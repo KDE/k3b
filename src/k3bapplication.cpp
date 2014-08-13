@@ -346,4 +346,4 @@ void K3b::Application::Core::internalUnblockDevice( K3b::Device::Device* dev )
     K3b::Core::internalUnblockDevice( dev );
 }
 
-#include "k3bapplication.moc"
+

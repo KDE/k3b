@@ -181,4 +181,4 @@ QModelIndex ExternalBinParamsModel::buddy( const QModelIndex& index ) const
 
 } // namespace K3b
 
-#include "k3bexternalbinparamsmodel.moc"
+

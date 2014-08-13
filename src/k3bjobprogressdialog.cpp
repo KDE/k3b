@@ -658,4 +658,4 @@ void K3b::JobProgressDialog::slotThemeChanged()
     }
 }
 
-#include "k3bjobprogressdialog.moc"
+

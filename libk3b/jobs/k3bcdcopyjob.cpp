@@ -1270,4 +1270,4 @@ void K3b::CdCopyJob::finishJob( bool c, bool e )
     }
 }
 
-#include "k3bcdcopyjob.moc"
+

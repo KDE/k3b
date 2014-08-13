@@ -327,4 +327,4 @@ void AudioTrackPlayer::slotStateChanged( QAudio::State state )
 
 } // namespace K3b
 
-#include "k3baudiotrackplayer.moc"
+

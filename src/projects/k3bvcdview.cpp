@@ -169,4 +169,4 @@ void K3b::VcdView::slotItemActivated( const QModelIndex& index )
     }
 }
 
-#include "k3bvcdview.moc"
+

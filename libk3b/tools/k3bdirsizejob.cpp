@@ -162,4 +162,4 @@ bool K3b::DirSizeJob::countFiles( const QStringList& l, const QString& dir )
     return true;
 }
 
-#include "k3bdirsizejob.moc"
+

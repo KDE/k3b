@@ -328,4 +328,4 @@ void K3b::AudioConvertingOptionWidget::saveConfig( KConfigGroup c )
     c.writeEntry( "filetype", d->extForIndex( m_comboFileType->currentIndex() ) );
 }
 
-#include "k3baudioconvertingoptionwidget.moc"
+

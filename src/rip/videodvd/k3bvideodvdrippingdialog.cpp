@@ -565,4 +565,4 @@ void K3b::VideoDVDRippingDialog::slotStartClicked()
     close();
 }
 
-#include "k3bvideodvdrippingdialog.moc"
+

@@ -157,4 +157,4 @@ void K3b::DataView::slotSetCurrentRoot( const QModelIndex& index )
     m_dirView->setCurrentIndex( m_dirProxy->mapFromSource( index ) );
 }
 
-#include "k3bdataview.moc"
+

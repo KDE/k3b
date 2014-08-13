@@ -230,4 +230,4 @@ K3b::ProjectBurnDialog* K3b::MixedView::newBurnDialog( QWidget* parent )
     return new K3b::MixedBurnDialog( m_doc, parent );
 }
 
-#include "k3bmixedview.moc"
+

@@ -125,4 +125,4 @@ void K3b::Splash::addInfo( const QString& s )
 // }
 
 
-#include "k3bsplash.moc"
+

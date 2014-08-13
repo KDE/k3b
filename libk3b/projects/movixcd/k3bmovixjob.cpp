@@ -129,4 +129,4 @@ QString K3b::MovixJob::jobDetails() const
                  : QString() ) );
 }
 
-#include "k3bmovixjob.moc"
+

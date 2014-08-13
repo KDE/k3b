@@ -92,4 +92,4 @@ void K3b::AbstractWriter::slotEjectWhileCancellationFinished( bool success )
 }
 
 
-#include "k3babstractwriter.moc"
+

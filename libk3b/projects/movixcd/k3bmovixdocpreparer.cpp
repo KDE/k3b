@@ -476,4 +476,4 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
     return dir;
 }
 
-#include "k3bmovixdocpreparer.moc"
+

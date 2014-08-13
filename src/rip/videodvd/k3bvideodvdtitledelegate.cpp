@@ -217,4 +217,4 @@ void VideoDVDTitleDelegate::initStyleOption( QStyleOptionViewItem* option, const
 
 } // namespace K3b
 
-#include "k3bvideodvdtitledelegate.moc"
+

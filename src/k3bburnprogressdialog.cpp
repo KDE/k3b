@@ -134,4 +134,4 @@ void K3b::BurnProgressDialog::slotWriteSpeed( int s, K3b::Device::SpeedMultiplic
     m_labelWritingSpeed->setText( QString("%1 KB/s (%2x)").arg(s).arg(QLocale::system().toString((double)s/(double)multiplicator,'g',2)) );
 }
 
-#include "k3bburnprogressdialog.moc"
+

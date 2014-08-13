@@ -264,4 +264,4 @@ void MetaItemModelTest::testDataChanges()
 }
 
 
-#include "k3bmetaitemmodeltest.moc"
+

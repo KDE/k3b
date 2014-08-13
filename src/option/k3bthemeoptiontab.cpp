@@ -199,4 +199,4 @@ void K3b::ThemeOptionTab::slotRemoveTheme()
     }
 }
 
-#include "k3bthemeoptiontab.moc"
+

@@ -43,4 +43,4 @@ void K3b::BootImageDialog::slotOk()
   done( Ok );
 }
 
-#include "k3bbootimagedialog.moc"
+

@@ -106,4 +106,4 @@ void AudioProjectConvertingJob::trackFinished( int trackIndex, const QString& /*
 
 } // namespace K3b
 
-#include "k3baudioprojectconvertingjob.moc"
+

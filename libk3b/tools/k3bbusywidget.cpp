@@ -102,4 +102,4 @@ void K3b::BusyWidget::paintEvent( QPaintEvent*  )
 }
 
 
-#include "k3bbusywidget.moc"
+

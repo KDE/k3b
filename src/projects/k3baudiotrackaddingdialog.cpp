@@ -252,4 +252,4 @@ void K3b::AudioTrackAddingDialog::slotCancelClicked()
     m_analyserJob->wait();
 }
 
-#include "k3baudiotrackaddingdialog.moc"
+

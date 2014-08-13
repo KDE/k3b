@@ -70,4 +70,4 @@ void K3b::DebuggingOutputFile::addOutput( const QString& app, const QString& msg
     flush();
 }
 
-#include "k3bdebuggingoutputfile.moc"
+

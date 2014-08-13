@@ -171,4 +171,4 @@ QString K3b::BlankingJob::jobDetails() const
         return QString();
 }
 
-#include "k3bblankingjob.moc"
+

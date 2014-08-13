@@ -342,4 +342,4 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
     }
 }
 
-#include "k3bdvdbooktypejob.moc"
+

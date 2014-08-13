@@ -83,4 +83,4 @@ void K3b::ThemedLabel::slotThemeChanged()
     }
 }
 
-#include "k3bthemedlabel.moc"
+

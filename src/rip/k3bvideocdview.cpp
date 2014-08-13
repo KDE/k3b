@@ -553,4 +553,4 @@ void K3b::VideoCdView::buildTree( QTreeWidgetItem* parentItem, const QDomElement
     }
 }
 
-#include "k3bvideocdview.moc"
+

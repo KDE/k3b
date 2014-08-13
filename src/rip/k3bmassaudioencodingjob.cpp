@@ -476,4 +476,4 @@ bool MassAudioEncodingJob::writeCueFile()
 
 } // namespace K3b
 
-#include "k3bmassaudioencodingjob.moc"
+

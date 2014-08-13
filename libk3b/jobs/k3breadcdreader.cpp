@@ -335,4 +335,4 @@ void K3b::ReadcdReader::slotReadyRead()
     }
 }
 
-#include "k3breadcdreader.moc"
+

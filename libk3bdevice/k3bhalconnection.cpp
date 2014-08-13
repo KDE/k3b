@@ -146,4 +146,4 @@ K3b::Device::HalConnection::ErrorCode K3b::Device::HalConnection::unlock( Device
     }
 }
 
-#include "k3bhalconnection.moc"
+

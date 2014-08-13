@@ -304,4 +304,4 @@ void K3b::Md5Job::stopAll()
     d->finished = true;
 }
 
-#include "k3bmd5job.moc"
+

@@ -618,4 +618,4 @@ bool K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3b::VideoD
     return bin->hasFeature( QString::fromLatin1( s_codecFeatures[(int)codec] ) );
 }
 
-#include "k3bvideodvdtitletranscodingjob.moc"
+

@@ -666,5 +666,5 @@ const K3b::ExternalBin* K3b::ExternalBinManager::mostRecentBinObject( const QStr
         return 0;
 }
 
-#include "k3bexternalbinmanager.moc"
+
 

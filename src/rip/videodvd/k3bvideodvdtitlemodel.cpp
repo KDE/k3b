@@ -393,4 +393,4 @@ void VideoDVDTitleModel::slotPreviewDone( bool success )
 
 } // namespace K3b
 
-#include "k3bvideodvdtitlemodel.moc"
+

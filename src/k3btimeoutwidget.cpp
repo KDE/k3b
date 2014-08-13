@@ -154,4 +154,4 @@ void K3b::TimeoutWidget::resizeEvent( QResizeEvent* e )
 }
 
 
-#include "k3btimeoutwidget.moc"
+

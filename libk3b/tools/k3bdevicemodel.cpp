@@ -206,4 +206,4 @@ void K3b::DeviceModel::slotCheckingMedium( K3b::Device::Device* dev, const QStri
     }
 }
 
-#include "k3bdevicemodel.moc"
+

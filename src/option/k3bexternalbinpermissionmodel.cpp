@@ -375,4 +375,4 @@ void ExternalBinPermissionModel::update()
 
 } // namespace K3b
 
-#include "k3bexternalbinpermissionmodel.moc"
+

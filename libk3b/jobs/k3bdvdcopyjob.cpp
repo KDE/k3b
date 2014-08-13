@@ -990,4 +990,4 @@ void K3b::DvdCopyJob::setVerifyData( bool b )
     d->verifyData = b;
 }
 
-#include "k3bdvdcopyjob.moc"
+

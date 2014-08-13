@@ -189,4 +189,4 @@ int K3b::MultiChoiceDialog::choose( const QString& caption,
 }
 
 
-#include "k3bmultichoicedialog.moc"
+

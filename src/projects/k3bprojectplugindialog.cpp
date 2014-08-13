@@ -58,4 +58,4 @@ void K3b::ProjectPluginDialog::loadSettings( const KConfigGroup& config )
     m_pluginGui->readSettings( config );
 }
 
-#include "k3bprojectplugindialog.moc"
+

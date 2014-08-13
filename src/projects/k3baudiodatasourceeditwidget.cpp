@@ -162,4 +162,4 @@ void K3b::AudioDataSourceEditWidget::slotEndOffsetEdited( const K3b::Msf& msf )
     }
 }
 
-#include "k3baudiodatasourceeditwidget.moc"
+

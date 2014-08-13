@@ -291,4 +291,4 @@ void K3b::DataBurnDialog::slotMultiSessionModeChanged()
 }
 
 
-#include "k3bdataburndialog.moc"
+

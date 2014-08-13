@@ -518,4 +518,4 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
 }
 
 
-#include "k3bdvdformattingjob.moc"
+

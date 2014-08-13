@@ -235,5 +235,5 @@ void K3b::MovixOptionsWidget::saveConfig( KConfigGroup c )
     c.writeEntry( "no_dma", m_checkNoDma->isChecked() );
 }
 
-#include "k3bmovixoptionswidget.moc"
+
 

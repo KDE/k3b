@@ -182,4 +182,4 @@ void K3b::MediumDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
     }
 }
 
-#include "k3bmediumdelegate.moc"
+

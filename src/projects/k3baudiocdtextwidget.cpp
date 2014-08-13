@@ -236,4 +236,4 @@ void K3b::AudioCdTextWidget::slotCopyComposer()
 }
 
 
-#include "k3baudiocdtextwidget.moc"
+

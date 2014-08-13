@@ -477,4 +477,4 @@ bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code 
     return success;
 }
 
-#include "k3bdatatrackreader.moc"
+

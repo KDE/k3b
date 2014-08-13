@@ -292,5 +292,5 @@ Qt::ItemFlags VideoDVDAudioModel::flags( const QModelIndex& index ) const
 
 } // namespace K3b
 
-#include "k3bvideodvdaudiomodel.moc"
+
 

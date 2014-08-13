@@ -658,4 +658,4 @@ void K3b::WriterSelectionWidget::setIgnoreDevice( K3b::Device::Device* dev )
     m_comboMedium->setIgnoreDevice( dev );
 }
 
-#include "k3bwriterselectionwidget.moc"
+

@@ -194,4 +194,4 @@ void K3b::MediaFormattingDialog::saveSettings( KConfigGroup c )
 }
 
 
-#include "k3bmediaformattingdialog.moc"
+

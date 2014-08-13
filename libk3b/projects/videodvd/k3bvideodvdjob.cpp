@@ -70,4 +70,4 @@ QString K3b::VideoDvdJob::jobDetails() const
                  : QString() ) );
 }
 
-#include "k3bvideodvdjob.moc"
+

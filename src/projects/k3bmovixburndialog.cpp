@@ -251,4 +251,4 @@ void K3b::MovixBurnDialog::toggleAll()
     m_checkStartMultiSesssion->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
-#include "k3bmovixburndialog.moc"
+

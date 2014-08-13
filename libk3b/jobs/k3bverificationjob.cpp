@@ -415,4 +415,4 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
 }
 
 
-#include "k3bverificationjob.moc"
+

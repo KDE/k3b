@@ -441,4 +441,4 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
     }
 }
 
-#include "k3bwelcomewidget.moc"
+

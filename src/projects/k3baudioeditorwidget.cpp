@@ -877,4 +877,4 @@ int K3b::AudioEditorWidget::msfToPos( const K3b::Msf& msf ) const
 }
 
 
-#include "k3baudioeditorwidget.moc"
+

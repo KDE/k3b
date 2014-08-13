@@ -374,4 +374,4 @@ void K3b::VideoDVDRippingView::initActions()
 }
 
 
-#include "k3bvideodvdrippingview.moc"
+

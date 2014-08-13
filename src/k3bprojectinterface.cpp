@@ -149,4 +149,4 @@ QString ProjectInterface::projectType() const
 
 } // namespace K3b
 
-#include "k3bprojectinterface.moc"
+

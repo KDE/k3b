@@ -365,4 +365,4 @@ void K3b::AppDeviceManager::setReadSpeed( K3b::Device::Device* dev )
     setReadSpeed();
 }
 
-#include "k3bappdevicemanager.moc"
+

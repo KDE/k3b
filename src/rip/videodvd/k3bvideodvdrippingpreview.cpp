@@ -142,4 +142,4 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
         emit previewDone( success );
 }
 
-#include "k3bvideodvdrippingpreview.moc"
+

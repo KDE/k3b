@@ -1529,5 +1529,5 @@ void K3b::MainWindow::showDiskInfo( K3b::Device::Device* dev )
     d->dirView->showDiskInfo( dev );
 }
 
-#include "k3b.moc"
+
 

@@ -212,4 +212,4 @@ bool K3b::Process::start( KProcess::OutputChannelMode mode )
     return K3bQProcess::waitForStarted();
 }
 
-#include "k3bprocess.moc"
+

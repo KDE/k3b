@@ -398,4 +398,4 @@ void K3b::ProjectBurnDialog::slotShowImageTip( bool buttonActivated )
     }
 }
 
-#include "k3bprojectburndialog.moc"
+

@@ -285,4 +285,4 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
     return true;
 }
 
-#include "k3bdatamultisessionparameterjob.moc"
+

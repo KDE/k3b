@@ -376,4 +376,4 @@ void K3b::DataPropertiesDialog::slotOk()
 }
 
 
-#include "k3bdatapropertiesdialog.moc"
+

@@ -200,4 +200,4 @@ void K3b::AudioNormalizeJob::slotProcessExited( int exitCode, QProcess::ExitStat
     }
 }
 
-#include "k3baudionormalizejob.moc"
+

@@ -64,4 +64,4 @@ void K3b::VideoDvdView::init()
 }
 
 
-#include "k3bvideodvdview.moc"
+

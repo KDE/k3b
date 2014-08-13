@@ -61,4 +61,4 @@ void K3b::ExternalBinOptionTab::saveSettings()
 }
 
 
-#include "k3bexternalbinoptiontab.moc"
+

@@ -133,4 +133,4 @@ void K3b::PushButton::slotDelayedPopup()
     }
 }
 
-#include "k3bpushbutton.moc"
+

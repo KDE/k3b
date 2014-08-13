@@ -1528,4 +1528,4 @@ K3b::RootItem* K3b::DataDoc::root() const
     return d->root;
 }
 
-#include "k3bdatadoc.moc"
+

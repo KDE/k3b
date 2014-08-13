@@ -691,4 +691,4 @@ bool K3b::SystemProblemDialog::readCheckSystemConfig()
     return cfgGrp.readEntry( "check system config", true );
 }
 
-#include "k3bsystemproblemdialog.moc"
+

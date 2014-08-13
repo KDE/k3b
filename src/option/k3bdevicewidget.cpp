@@ -281,4 +281,4 @@ void K3b::DeviceWidget::addUserToGroup()
     } );
 }
 
-#include "k3bdevicewidget.moc"
+

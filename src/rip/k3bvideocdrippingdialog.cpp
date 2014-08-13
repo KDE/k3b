@@ -245,4 +245,4 @@ void K3b::VideoCdRippingDialog::saveSettings( KConfigGroup c )
     c.writeEntry( "extract xml", m_extractXML ->isChecked( ) );
 }
 
-#include "k3bvideocdrippingdialog.moc"
+

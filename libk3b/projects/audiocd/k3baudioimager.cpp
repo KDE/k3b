@@ -158,4 +158,4 @@ bool K3b::AudioImager::run()
     return true;
 }
 
-#include "k3baudioimager.moc"
+

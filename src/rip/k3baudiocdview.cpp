@@ -582,4 +582,4 @@ void K3b::AudioCdView::enableInteraction( bool b )
         showBusyLabel( false );
 }
 
-#include "k3baudiocdview.moc"
+

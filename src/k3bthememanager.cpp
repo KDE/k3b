@@ -330,4 +330,4 @@ void K3b::ThemeManager::loadTheme( const QString& name )
 }
 
 
-#include "k3bthememanager.moc"
+

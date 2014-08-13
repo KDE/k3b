@@ -218,4 +218,4 @@ void K3b::CutComboBox::cutText()
     }
 }
 
-#include "k3bcutcombobox.moc"
+

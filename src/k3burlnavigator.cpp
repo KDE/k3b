@@ -73,4 +73,4 @@ void K3b::UrlNavigator::urlActivated( const KUrl& url )
     emit activated( url );
 }
 
-#include "k3burlnavigator.moc"
+

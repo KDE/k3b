@@ -114,4 +114,4 @@ K3b::Device::Device* K3b::MediaSelectionDialog::selectMedium( Device::MediaTypes
     }
 }
 
-#include "k3bmediaselectiondialog.moc"
+

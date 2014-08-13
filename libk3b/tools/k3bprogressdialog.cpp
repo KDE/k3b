@@ -101,4 +101,4 @@ void K3b::ProgressDialog::setProgress( int p )
     m_progressBar->setValue( p );
 }
 
-#include "k3bprogressdialog.moc"
+

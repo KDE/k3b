@@ -196,4 +196,4 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
     }
 }
 
-#include "k3bpluginmanager.moc"
+

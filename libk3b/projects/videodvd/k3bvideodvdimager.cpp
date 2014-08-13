@@ -218,4 +218,4 @@ void K3b::VideoDvdImager::slotReceivedStderr( const QString& line )
         K3b::IsoImager::slotReceivedStderr( line );
 }
 
-#include "k3bvideodvdimager.moc"
+

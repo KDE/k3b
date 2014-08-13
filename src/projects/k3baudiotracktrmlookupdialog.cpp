@@ -125,4 +125,4 @@ void K3b::AudioTrackTRMLookupDialog::slotTrackFinished( K3b::AudioTrack* track, 
                                    track->trackNumber()) );
 }
 
-#include "k3baudiotracktrmlookupdialog.moc"
+

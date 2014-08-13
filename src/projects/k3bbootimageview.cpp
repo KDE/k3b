@@ -223,4 +223,4 @@ void K3b::BootImageView::slotNoEmulationToggled( bool on )
         m_checkNoBoot->setChecked(false);
 }
 
-#include "k3bbootimageview.moc"
+

@@ -344,4 +344,4 @@ K3b::WritingApps K3b::BurnJob::supportedWritingApps() const
     return K3b::WritingAppAuto | K3b::WritingAppCdrdao | K3b::WritingAppCdrecord;
 }
 
-#include "k3bjob.moc"
+

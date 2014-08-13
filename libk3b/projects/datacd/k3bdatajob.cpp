@@ -1170,4 +1170,4 @@ bool K3b::DataJob::setupGrowisofsJob()
     return true;
 }
 
-#include "k3bdatajob.moc"
+

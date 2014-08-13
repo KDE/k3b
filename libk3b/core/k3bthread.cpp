@@ -95,4 +95,4 @@ void K3b::Thread::waitUntilFinished()
     qDebug() << "Thread waiting done." << endl;
 }
 
-#include "k3bthread.moc"
+

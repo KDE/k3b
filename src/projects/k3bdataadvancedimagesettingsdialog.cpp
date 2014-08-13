@@ -122,4 +122,4 @@ void K3b::DataAdvancedImageSettingsDialog::save( K3b::IsoOptions& options )
     options.setDoNotImportSession( m_checkDoNotImportSession->isChecked() );
 }
 
-#include "k3bdataadvancedimagesettingsdialog.moc"
+

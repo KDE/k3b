@@ -147,4 +147,4 @@ bool BootImageModel::removeRows( int row, int count, const QModelIndex& parent )
 
 } // namespace K3b
 
-#include "k3bbootimagemodel.moc"
+

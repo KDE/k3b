@@ -94,4 +94,4 @@ void K3b::ThroughputEstimator::dataWritten( unsigned long data )
 }
 
 
-#include "k3bthroughputestimator.moc"
+

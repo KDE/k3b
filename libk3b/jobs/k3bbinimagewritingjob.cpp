@@ -241,4 +241,4 @@ void K3b::BinImageWritingJob::setTocFile(const QString& s)
     m_tocFile = s;
 }
 
-#include "k3bbinimagewritingjob.moc"
+

@@ -172,4 +172,4 @@ void K3b::DataMultiSessionCombobox::setForceNoMultisession( bool f )
     }
 }
 
-#include "k3bdatamultisessioncombobox.moc"
+

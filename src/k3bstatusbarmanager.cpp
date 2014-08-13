@@ -229,4 +229,4 @@ void K3b::StatusBarManager::slotUpdateProjectStats()
     }
 }
 
-#include "k3bstatusbarmanager.moc"
+

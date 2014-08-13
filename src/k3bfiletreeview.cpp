@@ -194,4 +194,4 @@ void K3b::FileTreeView::slotContextMenu( const QPoint& pos )
     }
 }
 
-#include "k3bfiletreeview.moc"
+

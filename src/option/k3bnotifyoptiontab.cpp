@@ -49,4 +49,4 @@ bool K3b::NotifyOptionTab::saveSettings()
     return true;
 }
 
-#include "k3bnotifyoptiontab.moc"
+

@@ -102,4 +102,4 @@ void K3b::DataModeWidget::loadConfig( const KConfigGroup& c )
         setDataMode( K3b::DataModeAuto );
 }
 
-#include "k3bdatamodewidget.moc"
+

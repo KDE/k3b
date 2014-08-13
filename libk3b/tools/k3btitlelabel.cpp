@@ -288,4 +288,4 @@ bool K3b::TitleLabel::event( QEvent* event )
     return QFrame::event( event );
 }
 
-#include "k3btitlelabel.moc"
+

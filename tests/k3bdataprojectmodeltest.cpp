@@ -96,4 +96,3 @@ void DataProjectModelTest::testRemove()
 }
 
 
-#include "k3bdataprojectmodeltest.moc"

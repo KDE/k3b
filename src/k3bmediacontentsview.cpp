@@ -154,4 +154,4 @@ void K3b::MediaContentsView::slotMediumChanged( K3b::Device::Device* dev )
     }
 }
 
-#include "k3bmediacontentsview.moc"
+

@@ -347,4 +347,4 @@ bool K3b::FileSplitter::waitForReadyRead( int )
     }
 }
 
-#include "k3bfilesplitter.moc"
+

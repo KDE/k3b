@@ -379,4 +379,4 @@ void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
     }
 }
 
-#include "k3bvideodvdrippingwidget.moc"
+

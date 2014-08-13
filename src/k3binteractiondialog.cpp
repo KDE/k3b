@@ -545,4 +545,4 @@ void K3b::InteractionDialog::toggleAll()
 {
 }
 
-#include "k3binteractiondialog.moc"
+

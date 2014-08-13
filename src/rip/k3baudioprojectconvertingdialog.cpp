@@ -361,4 +361,4 @@ void K3b::AudioProjectConvertingDialog::saveSettings( KConfigGroup c )
     m_patternWidget->saveConfig( c );
 }
 
-#include "k3baudioprojectconvertingdialog.moc"
+

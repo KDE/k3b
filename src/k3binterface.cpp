@@ -212,4 +212,4 @@ bool Interface::blocked() const
 
 } // namespace K3b
 
-#include "k3binterface.moc"
+

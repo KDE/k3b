@@ -269,4 +269,4 @@ void K3b::TempDirSelectionWidget::fixTempPath( bool forceNewImageName )
     }
 }
 
-#include "k3btempdirselectionwidget.moc"
+

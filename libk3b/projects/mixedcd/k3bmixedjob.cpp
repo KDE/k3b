@@ -1363,4 +1363,4 @@ QString K3b::MixedJob::jobDetails() const
                  : QString() ) );
 }
 
-#include "k3bmixedjob.moc"
+

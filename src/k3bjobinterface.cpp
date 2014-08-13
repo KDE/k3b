@@ -97,4 +97,4 @@ void JobInterface::slotSubProgress( int val )
 
 } // namespace K3b
 
-#include "k3bjobinterface.moc"
+

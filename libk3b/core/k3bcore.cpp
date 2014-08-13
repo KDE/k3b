@@ -328,4 +328,4 @@ void K3b::Core::customEvent( QEvent* e )
     }
 }
 
-#include "k3bcore.moc"
+

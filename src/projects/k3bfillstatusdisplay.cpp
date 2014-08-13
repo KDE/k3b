@@ -858,4 +858,4 @@ bool K3b::FillStatusDisplay::event( QEvent* event )
     return QFrame::event( event );
 }
 
-#include "k3bfillstatusdisplay.moc"
+

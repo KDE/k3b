@@ -884,4 +884,4 @@ K3b::WritingMode K3b::MetaWriter::usedWritingMode() const
     return d->usedWritingMode;
 }
 
-#include "k3bmetawriter.moc"
+

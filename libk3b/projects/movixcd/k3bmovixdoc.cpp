@@ -469,4 +469,4 @@ bool K3b::MovixDoc::saveDocumentData( QDomElement* docElem )
     return true;
 }
 
-#include "k3bmovixdoc.moc"
+

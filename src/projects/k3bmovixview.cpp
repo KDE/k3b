@@ -208,4 +208,4 @@ K3b::ProjectBurnDialog* K3b::MovixView::newBurnDialog( QWidget* parent )
     return new K3b::MovixBurnDialog( m_doc, parent );
 }
 
-#include "k3bmovixview.moc"
+

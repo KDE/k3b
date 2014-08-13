@@ -73,4 +73,4 @@ K3b::PluginOptionTab::~PluginOptionTab()
 {
 }
 
-#include "k3bpluginoptiontab.moc"
+

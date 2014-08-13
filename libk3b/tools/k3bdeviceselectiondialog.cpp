@@ -120,4 +120,4 @@ K3b::Device::Device* K3b::DeviceSelectionDialog::selectWriter( QWidget* parent, 
 }
 
 
-#include "k3bdeviceselectiondialog.moc"
+

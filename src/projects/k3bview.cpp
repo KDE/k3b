@@ -162,4 +162,4 @@ void K3b::View::addUrls( const KUrl::List& urls )
     doc()->addUrls( urls );
 }
 
-#include "k3bview.moc"
+

@@ -130,4 +130,4 @@ bool DataProjectInterface::setSortWeight( const QString& path, long weight ) con
 
 } // namespace K3b
 
-#include "k3bdataprojectinterface.moc"
+

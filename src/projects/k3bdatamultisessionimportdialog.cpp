@@ -298,4 +298,4 @@ K3b::DataMultisessionImportDialog::~DataMultisessionImportDialog()
     delete d;
 }
 
-#include "k3bdatamultisessionimportdialog.moc"
+

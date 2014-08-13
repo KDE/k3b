@@ -188,4 +188,4 @@ void K3b::AdvancedOptionTab::slotSetDefaultBufferSizes( bool b )
 }
 
 
-#include "k3badvancedoptiontab.moc"
+

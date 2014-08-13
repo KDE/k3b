@@ -315,4 +315,4 @@ void K3b::GrowisofsHandler::slotCheckBufferStatusDone( K3b::Device::DeviceHandle
     }
 }
 
-#include "k3bgrowisofshandler.moc"
+
