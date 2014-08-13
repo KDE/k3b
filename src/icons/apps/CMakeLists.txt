@@ -1,1 +1,12 @@
-ecm_install_icons( ${ICON_INSTALL_DIR} )
+ecm_install_icons(
+    ICONS
+        128-apps-k3b.png
+        16-apps-k3b.png
+        22-apps-k3b.png
+        32-apps-k3b.png
+        48-apps-k3b.png
+        64-apps-k3b.png
+        sc-apps-k3b.svgz
+    DESTINATION
+        ${ICON_INSTALL_DIR}
+)
