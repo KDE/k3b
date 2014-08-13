@@ -19,7 +19,7 @@
 #include <QtCore/QMap>
 #include <QtCore/QObject>
 #include <QString>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include "k3b_export.h"
 #include "k3bversion.h"
 

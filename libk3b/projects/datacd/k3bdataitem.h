@@ -16,7 +16,7 @@
 #ifndef K3BDATAITEM_H
 #define K3BDATAITEM_H
 
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include <KIO/Global>
 #include <KMimeType>

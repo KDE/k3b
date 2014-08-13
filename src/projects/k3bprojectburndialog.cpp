@@ -30,7 +30,7 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <qpushbutton.h>
 #include <qtooltip.h>
 

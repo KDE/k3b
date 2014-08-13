@@ -29,7 +29,7 @@
 #include <qtextstream.h>
 #include <qdir.h>
 #include <QtCore/QFile>
-#include <qlist.h>
+#include <QtCore/QList>
 
 #include <unistd.h>
 

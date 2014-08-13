@@ -17,7 +17,7 @@
 #define K3BVCDTRACK_H
 
 // Qt Includes
-#include <qstring.h>
+#include <QtCore/QString>
 #include <qfileinfo.h>
 #include <QtCore/QFile>
 

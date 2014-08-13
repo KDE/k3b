@@ -29,7 +29,7 @@
 #include <QtCore/QMap>
 #include <QPixmap>
 #include <QPushButton>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QTabWidget>
 #include <QToolTip>
 #include <QTreeView>

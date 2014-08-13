@@ -45,7 +45,7 @@
 #include <KIO/Global>
 #include <kio/job.h>
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <qdatetime.h>
 #include <QtCore/QFile>

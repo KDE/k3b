@@ -16,10 +16,9 @@
 #ifndef _K3B_MSF_H_
 #define _K3B_MSF_H_
 
-#include <QtCore/QDebug>
-#include <KIO/Global>
 #include "k3bdevice_export.h"
-
+#include <KIOCore/KIO/Global>
+#include <QtCore/QDebug>
 #include <QtCore/QSharedDataPointer>
 
 namespace K3b

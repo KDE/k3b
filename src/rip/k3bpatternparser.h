@@ -16,7 +16,7 @@
 #ifndef K3BPATTERNPARSER_H
 #define K3BPATTERNPARSER_H
 
-#include <qstring.h>
+#include <QtCore/QString>
 
 namespace KCDDB {
     class CDInfo;

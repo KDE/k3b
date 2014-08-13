@@ -15,7 +15,7 @@
 #ifndef _K3B_IMAGE_FILE_READER_H_
 #define _K3B_IMAGE_FILE_READER_H_
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include "k3b_export.h"
 
 namespace K3b {

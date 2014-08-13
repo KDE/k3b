@@ -20,7 +20,7 @@
 #include <sys/types.h>
 
 #include <qdatetime.h>
-#include <qstring.h>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <qhash.h>
 

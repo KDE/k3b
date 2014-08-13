@@ -17,7 +17,7 @@
 
 #include <KGuiItem>
 #include <qevent.h>
-#include <qstring.h>
+#include <QtCore/QString>
 #include <qwaitcondition.h>
 #include <QEvent>
 

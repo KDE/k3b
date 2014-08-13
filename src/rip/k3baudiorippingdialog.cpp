@@ -59,7 +59,7 @@
 #include <QToolTip>
 #include <QTreeWidget>
 #include <QSpinBox>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QValidator>
 #include <QVariant>
 

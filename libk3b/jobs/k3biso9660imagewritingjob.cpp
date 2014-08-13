@@ -34,7 +34,7 @@
 #include <ktemporaryfile.h>
 #include <KIO/Global>
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <QtCore/QFile>
 #include <qapplication.h>
 

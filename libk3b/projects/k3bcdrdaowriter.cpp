@@ -37,7 +37,7 @@
 #include <QFileInfo>
 #include <QRegExp>
 #include <QString>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QTcpSocket>
 
 #include <sys/types.h>

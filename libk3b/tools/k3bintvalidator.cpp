@@ -14,7 +14,7 @@
 
 
 #include <qwidget.h>
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include "k3bintvalidator.h"
 

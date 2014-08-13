@@ -20,7 +20,7 @@
 #include "k3bhelperprogramitem.h"
 #include <QAbstractItemModel>
 #include <QList>
-#include <QStringList>
+#include <QtCore/QStringList>
 
 namespace K3b {
 

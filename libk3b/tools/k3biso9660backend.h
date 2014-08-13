@@ -15,7 +15,7 @@
 #ifndef _K3B_ISO9660_BACKEND_H_
 #define _K3B_ISO9660_BACKEND_H_
 
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include "k3b_export.h"
 

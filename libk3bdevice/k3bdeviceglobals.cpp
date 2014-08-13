@@ -18,7 +18,6 @@
 
 #include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
-
 #include <QtCore/QStringList>
 
 

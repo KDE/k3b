@@ -20,7 +20,7 @@
 
 #include <kdialog.h>
 #include "k3b_export.h"
-#include <qlist.h>
+#include <QtCore/QList>
 
 namespace K3b {
     namespace Device {

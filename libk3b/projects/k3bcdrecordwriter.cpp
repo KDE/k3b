@@ -27,7 +27,7 @@
 #include "k3bthroughputestimator.h"
 #include "k3bglobalsettings.h"
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <qregexp.h>
 #include <QtCore/QFile>

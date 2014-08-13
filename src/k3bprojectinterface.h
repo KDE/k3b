@@ -20,7 +20,7 @@
 #include <KIO/Global>
 #include <QtCore/QObject>
 #include <QString>
-#include <QStringList>
+#include <QtCore/QStringList>
 
 /**
  * Base class for all project interfaces

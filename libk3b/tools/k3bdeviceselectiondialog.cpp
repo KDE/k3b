@@ -23,7 +23,7 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qlabel.h>
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include <QGridLayout>
 

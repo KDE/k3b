@@ -24,17 +24,16 @@
 
 #include "config-k3b.h"
 
-#include <QtCore/QFile>
-#include <qglobal.h>
-#include <QMutex>
-#include <QStringList>
-
-#include <QtCore/QDebug>
-
 #include <Solid/Device>
 #include <Solid/OpticalDrive>
 #include <Solid/Block>
 #include <Solid/StorageAccess>
+
+#include <qglobal.h>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QMutex>
+#include <QtCore/QStringList>
 
 #include <sys/types.h>
 #include <sys/ioctl.h>

@@ -56,7 +56,7 @@
 #include "QtCore/QtCore/QObject"
 #include "QtCore/qpointer.h"
 #include "QtCore/qcoreevent.h"
-#include "QtCore/qlist.h"
+#include "QtCore/QtCore/QList"
 #include "QtCore/qvector.h"
 #include "QtCore/qreadwritelock.h"
 #include "QtCore/qvariant.h"

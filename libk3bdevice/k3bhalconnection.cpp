@@ -15,13 +15,12 @@
 #include "k3bhalconnection.h"
 #include "k3bdevice.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
+#include <Solid/Device>
 
+#include <QtCore/QDebug>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusInterface>
-
-#include <Solid/Device>
 
 
 Q_GLOBAL_STATIC( K3b::Device::HalConnection, s_instance )

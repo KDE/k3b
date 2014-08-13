@@ -29,7 +29,7 @@
 #include <qlayout.h>
 #include <qfont.h>
 #include <qcolor.h>
-#include <qstring.h>
+#include <QtCore/QString>
 #include <qpainter.h>
 #include <qpalette.h>
 #include <qpixmap.h>

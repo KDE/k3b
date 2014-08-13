@@ -41,7 +41,7 @@
 #include <QDomElement>
 #include <QtCore/QFile>
 #include <QFileInfo>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QTimer>
 
 #include <KApplication>

@@ -40,7 +40,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QLayout>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QTimer>
 #include <QToolTip>
 #include <KVBox>

@@ -20,7 +20,7 @@
 #include <ktemporaryfile.h>
 #include <KIO/Global>
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <qdatetime.h>
 #include <QtCore/QFile>
 #include <qtimer.h>

@@ -36,7 +36,7 @@
 #include <kapplication.h>
 
 #include <QThread>
-#include <QMutex>
+#include <QtCore/QMutex>
 #include <QMutexLocker>
 #include <QEvent>
 

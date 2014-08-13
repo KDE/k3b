@@ -27,7 +27,7 @@
 #include <QFileInfo>
 #include <QRegExp>
 #include <QString>
-#include <QStringList>
+#include <QtCore/QStringList>
 
 #include <errno.h>
 #include <string.h>

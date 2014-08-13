@@ -16,7 +16,7 @@
 #ifndef _videodvd_H_
 #define _videodvd_H_
 
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include <KIOCore/KIO/SlaveBase>
 

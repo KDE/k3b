@@ -20,7 +20,7 @@
 #define CD_FRAMESIZE_RAW 2352
 
 
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include <sys/types.h>
 #include "k3b_export.h"

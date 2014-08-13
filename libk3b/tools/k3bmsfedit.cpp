@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QFontMetrics>
 #include <QLineEdit>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QStyle>
 #include <QStyleOptionSpinBox>
 

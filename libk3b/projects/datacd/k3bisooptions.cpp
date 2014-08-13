@@ -20,7 +20,7 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KI18n/KLocalizedString>
-#include <qstring.h>
+#include <QtCore/QString>
 
 
 K3b::IsoOptions::IsoOptions()

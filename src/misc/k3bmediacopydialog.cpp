@@ -50,7 +50,7 @@
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qgroupbox.h>
-#include <qlist.h>
+#include <QtCore/QList>
 #include <qlabel.h>
 #include <qtooltip.h>
 #include <qtabwidget.h>

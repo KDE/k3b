@@ -32,7 +32,7 @@
 #include <QDataStream>
 #include <QDir>
 #include <QDomElement>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QTextStream>
 
 #include <KApplication>

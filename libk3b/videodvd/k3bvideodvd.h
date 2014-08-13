@@ -19,7 +19,7 @@
 
 #include "k3b_export.h"
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <qvector.h>
 
 

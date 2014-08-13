@@ -28,7 +28,7 @@
 #include <kio/job.h>
 #include <QtCore/QDebug>
 
-#include <qstring.h>
+#include <QtCore/QString>
 
 
 

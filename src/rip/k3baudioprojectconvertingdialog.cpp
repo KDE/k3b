@@ -43,7 +43,7 @@
 #include <QHeaderView>
 #include <QLabel>
 #include <QLayout>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QTabWidget>
 #include <QTreeWidget>
 

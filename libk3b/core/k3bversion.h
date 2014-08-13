@@ -16,7 +16,7 @@
 #ifndef _K3B_VERSION_H_
 #define _K3B_VERSION_H_
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <QtCore/QSharedDataPointer>
 
 #include "k3b_export.h"

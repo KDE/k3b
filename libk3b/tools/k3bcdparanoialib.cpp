@@ -26,7 +26,7 @@
 
 #include <QtCore/QFile>
 #include <QLibrary>
-#include <QMutex>
+#include <QtCore/QMutex>
 #include <QMutexLocker>
 
 #ifdef Q_OS_WIN32

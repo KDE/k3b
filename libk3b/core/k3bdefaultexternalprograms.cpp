@@ -22,7 +22,7 @@
 #include <QDir>
 #include <QtCore/QFile>
 #include <QFileInfo>
-#include <QStringList>
+#include <QtCore/QStringList>
 #include <QTextStream>
 
 #include <QtCore/QDebug>

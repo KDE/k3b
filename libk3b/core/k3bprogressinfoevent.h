@@ -16,7 +16,7 @@
 #define K3B_PROGRESS_INFO_EVENT_H
 
 #include <qevent.h>
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include <QEvent>
 

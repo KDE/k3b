@@ -27,7 +27,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QSet>
-#include <QStringList>
+#include <QtCore/QStringList>
 
 namespace K3b {
 

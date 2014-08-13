@@ -16,7 +16,7 @@
 #define _K3B_PLUGIN_MANAGER_H_
 
 #include <QtCore/QObject>
-#include <qlist.h>
+#include <QtCore/QList>
 #include <QtCore/QStringList>
 #include "k3b_export.h"
 

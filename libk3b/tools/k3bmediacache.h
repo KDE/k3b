@@ -20,7 +20,7 @@
 
 #include <QtCore/QObject>
 
-#include <QMutex>
+#include <QtCore/QMutex>
 #include <QThread>
 
 #include "k3bdevice.h"

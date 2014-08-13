@@ -16,7 +16,7 @@
 #define _K3B_THEME_MANAGER_H_
 
 #include <QtCore/QObject>
-#include <qstring.h>
+#include <QtCore/QString>
 #include <QtCore/QMap>
 #include <qcolor.h>
 #include <qpixmap.h>

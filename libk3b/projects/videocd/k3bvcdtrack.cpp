@@ -17,7 +17,7 @@
 #include <kapplication.h>
 #include <KConfigCore/KConfig>
 
-#include <qstring.h>
+#include <QtCore/QString>
 #include <qfileinfo.h>
 
 #include <stdio.h>

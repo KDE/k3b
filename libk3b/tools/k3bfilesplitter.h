@@ -16,7 +16,7 @@
 #define _K3B_FILE_SPLITTER_H_
 
 #include <qiodevice.h>
-#include <qstring.h>
+#include <QtCore/QString>
 
 #include "k3b_export.h"
 

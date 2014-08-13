@@ -19,7 +19,7 @@
 
 #include <QtCore/QObject>
 #include <QString>
-#include <QStringList>
+#include <QtCore/QStringList>
 
 
 namespace K3b {

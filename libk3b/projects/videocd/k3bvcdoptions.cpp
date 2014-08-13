@@ -21,7 +21,7 @@
 #include <KDELibs4Support/KDE/KStandardDirs>
 
 // Qt Includes
-#include <qstring.h>
+#include <QtCore/QString>
 #include <QtCore/QFile>
 
 // K3b Includes

@@ -21,14 +21,6 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
-#include <QtCore/QTemporaryFile>
-
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 
@@ -37,6 +29,14 @@
 #include <Solid/OpticalDrive>
 #include <Solid/Block>
 #include <Solid/Device>
+
+#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRegExp>
+#include <QtCore/QTemporaryFile>
 
 #include <iostream>
 #include <limits.h>

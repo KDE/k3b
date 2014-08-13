@@ -45,7 +45,7 @@
 #ifndef QT_NO_PROCESS
 
 #if defined QPROCESS_DEBUG
-#include "qstring.h"
+#include "QtCore/QString"
 #include <ctype.h>
 
 /*
@@ -94,7 +94,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 #include <qdatetime.h>
 #include <QtCore/QFile>
 #include <qfileinfo.h>
-#include <qlist.h>
+#include <QtCore/QList>
 #include <QtCore/QMap>
 #include <qmutex.h>
 #include <qsemaphore.h>

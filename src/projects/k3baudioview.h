@@ -21,7 +21,7 @@
 
 #include "k3bview.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 namespace K3b {
 

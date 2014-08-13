@@ -43,7 +43,7 @@
 
 #if defined QPROCESS_DEBUG
 #include <qdebug.h>
-#include <qstring.h>
+#include <QtCore/QString>
 #include <ctype.h>
 #if !defined(Q_OS_WINCE)
 #include <errno.h>
