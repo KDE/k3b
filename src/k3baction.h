@@ -16,7 +16,7 @@
 #define _K3B_ACTION_H_
 
 #include <QtCore/QObject>
-#include <KIcon>
+#include <QtGui/QIcon>
 #include <KToggleAction>
 #include <KAction>
 #include <KActionCollection>

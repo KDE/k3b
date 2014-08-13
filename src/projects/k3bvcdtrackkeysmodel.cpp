@@ -15,7 +15,7 @@
 #include "k3bvcdtrackkeysmodel.h"
 #include "k3bvcdtrack.h"
 
-#include <KIcon>
+#include <QtGui/QIcon>
 #include <KDELibs4Support/KDE/KLocale>
 
 Q_DECLARE_METATYPE( K3b::VcdTrack* )
@@ -179,11 +179,11 @@ QString VcdTrackKeysModel::trackName( VcdTrack* track )
 QIcon VcdTrackKeysModel::trackIcon( VcdTrack* track )
 {
     if( track == 0 )
-        return KIcon( "media-optical-video" );
+        return QIcon::fromTheme( "media-optical-video" );
     else if( track->isSegment() )
-        return KIcon( "image-x-generic" );
+        return QIcon::fromTheme( "image-x-generic" );
     else
-        return KIcon( "video-x-generic" );
+        return QIcon::fromTheme( "video-x-generic" );
 }
 
 } // namespace K3b

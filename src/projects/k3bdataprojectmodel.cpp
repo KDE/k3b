@@ -22,7 +22,7 @@
 #include "k3bisooptions.h"
 #include "k3bspecialdataitem.h"
 
-#include <KIcon>
+#include <KIconThemes/KIconEngine>
 #include <KI18n/KLocalizedString>
 
 #include <QDataStream>
@@ -210,9 +210,9 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                 }
 
                 if( item->isSymLink() )
-                    return KIcon( iconName, 0, QStringList() << "emblem-symbolic-link" );
+                    return QIcon( new KIconEngine( iconName, nullptr, QStringList() << "emblem-symbolic-link" ) );
                 else
-                    return KIcon( iconName );
+                    return QIcon::fromTheme( iconName );
             }
             else if( role == Qt::FontRole && item->isSymLink() ) {
                 QFont font;

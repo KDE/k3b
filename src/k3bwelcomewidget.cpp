@@ -42,7 +42,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
 #include <KUrl>
-#include <KIcon>
+#include <QtGui/QIcon>
 
 namespace {
 

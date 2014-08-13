@@ -37,7 +37,7 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KCoreAddons/KProcess>
-#include <KDELibs4Support/KDE/KIcon>
+#include <QtGui/QIcon>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
@@ -103,7 +103,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     connect( closeButton, SIGNAL(clicked()), this, SLOT(close()) );
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 
-    QPushButton* configureButton = new QPushButton( KIcon( "configure" ), i18n("Configure K3b..."), widget );
+    QPushButton* configureButton = new QPushButton( QIcon::fromTheme( "configure" ), i18n("Configure K3b..."), widget );
     if( showDeviceSettingsButton ) {
         connect( configureButton, SIGNAL(clicked()), SLOT(slotShowDeviceSettings()) );
     } else if( showBinSettingsButton ) {

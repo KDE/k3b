@@ -46,7 +46,6 @@
 #include <KConfigCore/KSharedConfig>
 #include <KConfigWidgets/KColorScheme>
 #include <KIconThemes/KIconLoader>
-#include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KIO/Global>
 #include <KDELibs4Support/KDE/KLocale>
@@ -171,7 +170,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Iso9660 image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
@@ -184,7 +183,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
     if( size < volumeSpaceSize ) {
         item->setText( 1, i18n("%1 (different than declared volume size)", KIO::convertSize( size )) );
         item->setForeground( 1, negativeTextColor );
-        item->setIcon( 1, KIcon( "dialog-error") );
+        item->setIcon( 1, QIcon::fromTheme( "dialog-error") );
 
         item = new QTreeWidgetItem( infoView );
         item->setText( 0, i18n("Volume Size:") );
@@ -251,7 +250,7 @@ void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& 
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Cdrecord clone image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
@@ -280,7 +279,7 @@ void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Cue/bin image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
@@ -309,7 +308,7 @@ void K3b::ImageWritingDialog::Private::createAudioCueItems( const K3b::CueFilePa
     rootItem->setText( 0, i18n("Detected:") );
     rootItem->setText( 1, i18n("Audio Cue Image") );
     rootItem->setForeground( 0, infoTextColor );
-    rootItem->setIcon( 1, KIcon( "audio-x-generic") );
+    rootItem->setIcon( 1, QIcon::fromTheme( "audio-x-generic") );
     rootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* trackParent = new QTreeWidgetItem( infoView );
@@ -872,7 +871,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
                 item->setText( 0, i18n("Seems not to be a usable image") );
             }
             item->setForeground( 0, d->negativeTextColor );
-            item->setIcon( 0, KIcon( "dialog-error") );
+            item->setIcon( 0, QIcon::fromTheme( "dialog-error") );
         }
         else {
             // remember as recent image
@@ -887,7 +886,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
         QTreeWidgetItem* item = new QTreeWidgetItem( d->infoView );
         item->setText( 0, i18n("File not found") );
         item->setForeground( 0, d->negativeTextColor );
-        item->setIcon( 0, KIcon( "dialog-error") );
+        item->setIcon( 0, QIcon::fromTheme( "dialog-error") );
     }
 
     slotToggleAll();
@@ -1048,7 +1047,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
 {
     if( success ) {
         d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
-        d->md5SumItem->setIcon( 1, KIcon("dialog-information") );
+        d->md5SumItem->setIcon( 1, QIcon::fromTheme("dialog-information") );
         d->haveMd5Sum = true;
     }
     else {
@@ -1057,7 +1056,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
             d->md5SumItem->setText( 1, i18n("Calculation canceled") );
         else
             d->md5SumItem->setText( 1, i18n("Calculation failed") );
-        d->md5SumItem->setIcon( 1, KIcon("dialog-error") );
+        d->md5SumItem->setIcon( 1, QIcon::fromTheme("dialog-error") );
         d->lastCheckedFile.truncate(0);
     }
 

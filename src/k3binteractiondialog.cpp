@@ -42,7 +42,7 @@
 #include <QtCore/QDebug>
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KGlobalSettings>
-#include <KDELibs4Support/KDE/KIcon>
+#include <QtGui/QIcon>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KPushButton>
 #include <KDELibs4Support/KDE/KStandardDirs>
@@ -80,7 +80,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
     if( !m_configGroup.isEmpty() ) {
         QHBoxLayout* layout2 = new QHBoxLayout;
         m_buttonLoadSettings = new QToolButton( KDialog::mainWidget() );
-        m_buttonLoadSettings->setIcon( KIcon( "document-revert" ) );
+        m_buttonLoadSettings->setIcon( QIcon::fromTheme( "document-revert" ) );
         m_buttonLoadSettings->setPopupMode( QToolButton::InstantPopup );
         QMenu* userDefaultsPopup = new QMenu( m_buttonLoadSettings );
         userDefaultsPopup->addAction( i18n("Load default settings"), this, SLOT(slotLoadK3bDefaults()) );
@@ -90,7 +90,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
         layout2->addWidget( m_buttonLoadSettings );
 
         m_buttonSaveSettings = new QToolButton( KDialog::mainWidget() );
-        m_buttonSaveSettings->setIcon( KIcon( "document-save" ) );
+        m_buttonSaveSettings->setIcon( QIcon::fromTheme( "document-save" ) );
         layout2->addWidget( m_buttonSaveSettings );
 
         mainGrid->addLayout( layout2, 2, 0 );

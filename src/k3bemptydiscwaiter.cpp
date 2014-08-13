@@ -92,7 +92,7 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
     KDialog::ButtonCodes buttons = KDialog::Cancel|KDialog::User1|KDialog::User2;
     setButtons( buttons );
     setButtonText(KDialog::User1, i18n("Eject"));
-    setButtonIcon( KDialog::User1, KIcon( "media-eject" ) );
+    setButtonIcon( KDialog::User1, QIcon::fromTheme( "media-eject" ) );
     setButtonText(KDialog::User2, i18n("Load"));
     setDefaultButton( KDialog::User2 );
 

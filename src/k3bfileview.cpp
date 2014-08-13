@@ -32,7 +32,7 @@
 #include <KDirLister>
 #include <KFileFilterCombo>
 #include <KFileItem>
-#include <KIcon>
+#include <QtGui/QIcon>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KProgressDialog>
 #include <KToolBar>
@@ -91,7 +91,7 @@ K3b::FileView::FileView(QWidget *parent )
     d->actionShowBookmarks = new KAction( i18n("Show Bookmarks"), d->toolBox );
     d->actionShowBookmarks->setCheckable( true );
 
-    KActionMenu* actionOptions = new KActionMenu( KIcon("configure"), i18n("Options"), d->toolBox );
+    KActionMenu* actionOptions = new KActionMenu( QIcon::fromTheme("configure"), i18n("Options"), d->toolBox );
     actionOptions->setDelayed( false );
     actionOptions->addAction( d->dirOp->actionCollection()->action("sorting menu") );
     actionOptions->addAction( d->dirOp->actionCollection()->action("view menu") );

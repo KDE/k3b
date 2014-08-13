@@ -15,7 +15,7 @@
 #include "k3bvideodvdtitledelegate.h"
 #include "k3bvideodvdtitlemodel.h"
 
-#include <KIcon>
+#include <QtGui/QIcon>
 
 #include <QApplication>
 #include <QPainter>
@@ -95,7 +95,7 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
         }
         else
         {
-            preview = KIcon( "image-missing" ).pixmap( qMin( option.rect.width()-margin,
+            preview = QIcon::fromTheme( "image-missing" ).pixmap( qMin( option.rect.width()-margin,
                                                              option.rect.height()-margin ) );
         }
         style.drawItemPixmap( painter, option.rect, Qt::AlignCenter, preview );

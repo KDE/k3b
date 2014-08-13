@@ -50,7 +50,7 @@ K3b::DirOperator::DirOperator(const KUrl& url, QWidget* parent )
     bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
     bmMan->setUpdate( true );
 
-    m_bmPopup = new KActionMenu( KIcon("bookmarks"),i18n("Bookmarks"), this);
+    m_bmPopup = new KActionMenu( QIcon::fromTheme("bookmarks"),i18n("Bookmarks"), this);
     m_bmPopup->setDelayed( false );
     m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->menu(), actionCollection() );
 

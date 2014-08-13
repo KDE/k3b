@@ -25,7 +25,7 @@
 #include <KAction>
 #include <KActionMenu>
 #include <QtCore/QDebug>
-#include <KIcon>
+#include <QtGui/QIcon>
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
@@ -206,7 +206,7 @@ void K3b::ProjectTabWidget::slotDocChanged( K3b::Doc* doc )
 {
     // we need to cache the icon changes since the changed() signal will be emitted very often
     if( !d->projectDataMap[doc].modified ) {
-        setTabIcon( indexOf( doc->view() ), KIcon( "document-save" ) );
+        setTabIcon( indexOf( doc->view() ), QIcon::fromTheme( "document-save" ) );
         d->projectDataMap[doc].modified = true;
 
         // we need this one for the session management

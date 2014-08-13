@@ -347,7 +347,7 @@ void K3b::VideoDVDRippingView::initActions()
     connect( actionUncheck, SIGNAL(triggered()), this, SLOT(slotUncheck()) );
     actionCollection()->addAction( "uncheck_tracks", actionUncheck );
 
-    KAction* actionStartRip = new KAction( KIcon( "tools-rip-video-dvd" ), i18n("Start Ripping"), this );
+    KAction* actionStartRip = new KAction( QIcon::fromTheme( "tools-rip-video-dvd" ), i18n("Start Ripping"), this );
     actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
     actionStartRip->setStatusTip(actionStartRip->toolTip());
     actionStartRip->setWhatsThis( i18n("<p>Rips single titles from a video DVD "

@@ -500,31 +500,31 @@ QString K3b::Medium::beautifiedVolumeId() const
 }
 
 
-KIcon K3b::Medium::icon() const
+QIcon K3b::Medium::icon() const
 {
     if( diskInfo().diskState() == Device::STATE_NO_MEDIA ) {
-        return KIcon( "drive-optical" );
+        return QIcon::fromTheme( "drive-optical" );
     }
     else if( diskInfo().diskState() == Device::STATE_EMPTY ) {
-        return KIcon( "media-optical-recordable" );
+        return QIcon::fromTheme( "media-optical-recordable" );
     }
     else if( content() == (ContentAudio | ContentData) ) {
-        return KIcon( "media-optical-mixed-cd" );
+        return QIcon::fromTheme( "media-optical-mixed-cd" );
     }
     else if( content() == ContentAudio ) {
-        return KIcon( "media-optical-audio" );
+        return QIcon::fromTheme( "media-optical-audio" );
     }
     else if( content() == ContentData ) {
-        return KIcon( "media-optical-data" );
+        return QIcon::fromTheme( "media-optical-data" );
     }
     else if( content() & ContentVideoDVD ) {
-        return KIcon( "media-optical-dvd-video" );
+        return QIcon::fromTheme( "media-optical-dvd-video" );
     }
     else if( content() & ContentVideoCD ) {
-        return KIcon( "media-optical-cd-video" );
+        return QIcon::fromTheme( "media-optical-cd-video" );
     }
     else {
-        return KIcon( "media-optical" );
+        return QIcon::fromTheme( "media-optical" );
     }
 }
 

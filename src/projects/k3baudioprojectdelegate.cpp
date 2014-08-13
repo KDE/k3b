@@ -15,7 +15,7 @@
 #include "k3baudioprojectdelegate.h"
 #include "k3baudioprojectmodel.h"
 
-#include <KIcon>
+#include <QtGui/QIcon>
 #include <QAbstractItemView>
 #include <QKeyEvent>
 
@@ -65,7 +65,7 @@ void AudioProjectDelegate::initStyleOption( QStyleOptionViewItem* option, const 
     QStyledItemDelegate::initStyleOption( option, index );
     if( option->version == 4 && index.isValid() && index == m_playingTrack ) {
         QStyleOptionViewItemV4* optionV4 = static_cast<QStyleOptionViewItemV4*>( option );
-        optionV4->icon = KIcon( "media-playback-start" );
+        optionV4->icon = QIcon::fromTheme( "media-playback-start" );
         optionV4->features |= QStyleOptionViewItemV2::HasDecoration;
     }
 }

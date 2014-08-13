@@ -52,7 +52,6 @@
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <KIconThemes/KIconLoader>
 #include <kvbox.h>
 

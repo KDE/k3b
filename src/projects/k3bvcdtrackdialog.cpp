@@ -25,7 +25,6 @@
 
 // Kde Includes
 #include <KIconThemes/KIconLoader>
-#include <KIconThemes/KIconLoader>
 #include <KIO/Global>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KMimeType>

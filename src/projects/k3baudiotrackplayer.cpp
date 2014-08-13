@@ -144,18 +144,18 @@ AudioTrackPlayer::AudioTrackPlayer( AudioDoc* doc, KActionCollection* actionColl
 
     // create the actions
     // TODO: create shortcuts (is there a way to let the user change them?)
-    d->actionPlay = new KAction( KIcon( "media-playback-start" ), i18n("Play"), this );
+    d->actionPlay = new KAction( QIcon::fromTheme( "media-playback-start" ), i18n("Play"), this );
     d->actionPlay->setToolTip( i18n("Play") );
-    d->actionPause = new KAction( KIcon( "media-playback-pause" ), i18n("Pause"), this );
+    d->actionPause = new KAction( QIcon::fromTheme( "media-playback-pause" ), i18n("Pause"), this );
     d->actionPause->setVisible( false );
     d->actionPause->setToolTip( i18n("Pause") );
-    d->actionStop = new KAction( KIcon( "media-playback-stop" ), i18n("Stop"), this );
+    d->actionStop = new KAction( QIcon::fromTheme( "media-playback-stop" ), i18n("Stop"), this );
     d->actionStop->setEnabled( false );
     d->actionStop->setToolTip( i18n("Stop") );
-    d->actionNext = new KAction( KIcon( "media-skip-forward" ), i18n("Next"), this );
+    d->actionNext = new KAction( QIcon::fromTheme( "media-skip-forward" ), i18n("Next"), this );
     d->actionNext->setEnabled( false );
     d->actionNext->setToolTip( i18n("Next") );
-    d->actionPrevious = new KAction( KIcon( "media-skip-backward" ), i18n("Previous"), this );
+    d->actionPrevious = new KAction( QIcon::fromTheme( "media-skip-backward" ), i18n("Previous"), this );
     d->actionPrevious->setEnabled( false );
     d->actionPrevious->setToolTip( i18n("Previous") );
     d->actionSeek = new AudioTrackPlayerSeekAction( this, actionCollection );

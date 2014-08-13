@@ -181,7 +181,7 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
     fnt.setBold( true );
     mediumItem->setText( 0, medium.shortString() );
     mediumItem->setFont( 0, fnt );
-    mediumItem->setIcon( 0, KIcon("media-optical-recordable") );
+    mediumItem->setIcon( 0, QIcon::fromTheme("media-optical-recordable") );
 
     const K3b::Device::Toc& toc = medium.toc();
     QTreeWidgetItem* sessionItem = 0;
@@ -214,9 +214,9 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
             sessionItem->setText( 0, i18n( "Session %1", lastSession )
                                      + ( sessionInfo.isEmpty() ? QString() : " (" + sessionInfo + ')' ) );
             if ( track.type() == K3b::Device::Track::TYPE_AUDIO )
-                sessionItem->setIcon( 0, KIcon( "audio-x-generic" ) );
+                sessionItem->setIcon( 0, QIcon::fromTheme( "audio-x-generic" ) );
             else
-                sessionItem->setIcon( 0, KIcon( "application-x-tar" ) );
+                sessionItem->setIcon( 0, QIcon::fromTheme( "application-x-tar" ) );
 
             d->sessions.insert( sessionItem, SessionInfo( lastSession, medium.device() ) );
         }

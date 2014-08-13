@@ -36,7 +36,7 @@
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KGlobalSettings>
-#include <KIcon>
+#include <QtGui/QIcon>
 #include <KIO/Global>
 #include <kjobtrackerinterface.h>
 #include <KDELibs4Support/KDE/KLocale>
@@ -333,17 +333,17 @@ void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int typ
     // set the icon
     switch( type ) {
     case K3b::Job::MessageError:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-error" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-error" ) );
         break;
     case K3b::Job::MessageWarning:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-warning" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-warning" ) );
         break;
     case K3b::Job::MessageSuccess:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-ok" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-ok" ) );
         break;
     case K3b::Job::MessageInfo:
     default:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-information" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-information" ) );
     }
 
     d->viewInfo->scrollToItem( currentInfoItem, QAbstractItemView::EnsureVisible );

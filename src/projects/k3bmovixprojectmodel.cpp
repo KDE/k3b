@@ -20,7 +20,7 @@
 
 #include <KDELibs4Support/KDE/KLocale>
 #include <KUrl>
-#include <KIcon>
+#include <QtGui/QIcon>
 
 #include <QtCore/QMimeData>
 #include <QtCore/QDataStream>
@@ -259,7 +259,7 @@ QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
                 }
                 else if ( role == Qt::DecorationRole )
                 {
-                    return KIcon( item->mimeType()->iconName() );
+                    return QIcon::fromTheme( item->mimeType()->iconName() );
                 }
                 break;
             case TypeColumn:

@@ -41,7 +41,6 @@
 #include <kmessagebox.h>
 #include <KConfigCore/KConfig>
 #include <kapplication.h>
-#include <kiconloader.h>
 #include <KIconThemes/KIconLoader>
 #include <KConfigCore/KSharedConfig>
 

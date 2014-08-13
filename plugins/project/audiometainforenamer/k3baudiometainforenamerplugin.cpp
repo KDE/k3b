@@ -29,7 +29,7 @@
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KFileMetaInfo>
-#include <KDELibs4Support/KDE/KIcon>
+#include <QtGui/QIcon>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KDELibs4Support/KDE/KMimeType>
@@ -208,7 +208,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 
         // create root item
         QTreeWidgetItem* rootItem = new QTreeWidgetItem( d->viewFiles, QStringList() << QLatin1String( "/" ) );
-        rootItem->setIcon( 0, KIcon( "folder" ) );
+        rootItem->setIcon( 0, QIcon::fromTheme( "folder" ) );
 
         //  d->progressDialog->show();
         scanDir( dir, rootItem );
@@ -235,7 +235,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
                 if( !newName.isEmpty() ) {
                     QTreeWidgetItem* fileViewItem = new QTreeWidgetItem( viewRoot, QStringList() << newName << item->k3bName() );
                     fileViewItem->setCheckState( 0, Qt::Checked );
-                    fileViewItem->setIcon( 0, KIcon( item->mimeType()->iconName() ) );
+                    fileViewItem->setIcon( 0, QIcon::fromTheme( item->mimeType()->iconName() ) );
                     d->renamableItems.append( qMakePair( (K3b::FileItem*)item, fileViewItem ) );
                 }
             }
@@ -253,7 +253,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
             K3b::DirItem* dirItem = static_cast<K3b::DirItem*>( item );
             if ( !dirItem->children().isEmpty() ) {
                 QTreeWidgetItem* dirViewItem = new QTreeWidgetItem( viewRoot, QStringList() << item->k3bName() );
-                dirViewItem->setIcon( 0, KIcon( "folder" ) );
+                dirViewItem->setIcon( 0, QIcon::fromTheme( "folder" ) );
                 scanDir( dirItem, dirViewItem );
                 dirViewItem->setExpanded(true);
             }
@@ -384,7 +384,7 @@ K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, c
 {
     setText( i18n("Rename Audio Files") );
     setToolTip( i18n("Rename audio files based on their meta info.") );
-    setIcon( KIcon( "edit-rename" ) );
+    setIcon( QIcon::fromTheme( "edit-rename" ) );
 }
 
 

@@ -22,7 +22,7 @@
 #include <KAction>
 #include <KAuth>
 #include <KConfigCore/KConfig>
-#include <KIcon>
+#include <QtGui/QIcon>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KMessageWidget>
@@ -58,11 +58,11 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_messageWidget = new KMessageWidget( this );
     m_messageWidget->hide();
     m_messageWidget->setWordWrap( true );
-    m_addToGroupAction = new KAction( KIcon("dialog-password"), QString(), this );
+    m_addToGroupAction = new KAction( QIcon::fromTheme("dialog-password"), QString(), this );
 
     // buttons
     // ------------------------------------------------
-    QPushButton* buttonRefreshDevices = new QPushButton( KIcon( "view-refresh" ), i18n( "Refresh" ), this );
+    QPushButton* buttonRefreshDevices = new QPushButton( QIcon::fromTheme( "view-refresh" ), i18n( "Refresh" ), this );
     buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
     QHBoxLayout* refreshButtonGrid = new QHBoxLayout;
     refreshButtonGrid->setContentsMargins( 0, 0, 0, 0 );
@@ -120,12 +120,12 @@ void K3b::DeviceWidget::updateDeviceListViews()
     // create the parent view items
     // -----------------------------------------
     m_writerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Writer Drives") );
-    m_writerParentViewItem->setIcon( 0, KIcon( "media-optical-recordable" ) );
+    m_writerParentViewItem->setIcon( 0, QIcon::fromTheme( "media-optical-recordable" ) );
     // spacer item
     QTreeWidgetItem* spacer = new QTreeWidgetItem( m_viewDevices );
     spacer->setFlags( Qt::NoItemFlags );
     m_readerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Read-only Drives") );
-    m_readerParentViewItem->setIcon( 0, KIcon( "media-optical" ) );
+    m_readerParentViewItem->setIcon( 0, QIcon::fromTheme( "media-optical" ) );
     // -----------------------------------------
 
     QFont fBold( m_viewDevices->font() );

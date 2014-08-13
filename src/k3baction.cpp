@@ -23,7 +23,7 @@ KAction* K3b::createAction( QObject* parent,
     KAction* action = new KAction( parent );
     action->setText( text );
     if( !icon.isEmpty() ) {
-        action->setIcon( KIcon( icon ) );
+        action->setIcon( QIcon::fromTheme( icon ) );
     }
     action->setShortcut( shortcut );
     if( receiver ) {
@@ -46,7 +46,7 @@ KToggleAction* K3b::createToggleAction( QObject* parent,
     KToggleAction* action = new KToggleAction( parent );
     action->setText( text );
     if( !icon.isEmpty() ) {
-        action->setIcon( KIcon( icon ) );
+        action->setIcon( QIcon::fromTheme( icon ) );
     }
     action->setShortcut( shortcut );
     if( receiver ) {
