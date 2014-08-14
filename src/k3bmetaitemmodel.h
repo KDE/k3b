@@ -17,7 +17,7 @@
 
 #include <QAbstractItemModel>
 
-#include <KUrl>
+#include <QtCore/QUrl>
 
 class QIcon;
 

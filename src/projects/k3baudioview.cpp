@@ -95,7 +95,7 @@ K3b::AudioView::~AudioView()
 }
 
 
-void K3b::AudioView::addUrls( const KUrl::List& urls )
+void K3b::AudioView::addUrls( const QList<QUrl>& urls )
 {
     m_audioViewImpl->addUrls( urls );
 }

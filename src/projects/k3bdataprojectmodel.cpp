@@ -22,6 +22,7 @@
 #include "k3bisooptions.h"
 #include "k3bspecialdataitem.h"
 
+#include <KCoreAddons/KUrlMimeData>
 #include <KIconThemes/KIconEngine>
 #include <KI18n/KLocalizedString>
 
@@ -360,17 +361,17 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
     QMimeData* mime = new QMimeData();
 
     QSet<K3b::DataItem*> items;
-    KUrl::List urls;
+    QList<QUrl> urls;
     foreach( const QModelIndex& index, indexes ) {
         K3b::DataItem* item = itemForIndex( index );
         items << item;
 
-        KUrl url( item->localPath() );
+        QUrl url = QUrl::fromLocalFile( item->localPath() );
         if ( item->isFile() && !urls.contains(url) ) {
             urls << url;
         }
     }
-    urls.populateMimeData( mime );
+    mime->setUrls(urls);
 
     // the easy road: encode the pointers
     QByteArray itemData;
@@ -392,7 +393,7 @@ Qt::DropActions K3b::DataProjectModel::supportedDropActions() const
 
 QStringList K3b::DataProjectModel::mimeTypes() const
 {
-    QStringList s = KUrl::List::mimeDataTypes();
+    QStringList s = KUrlMimeData::mimeDataTypes();
     s += QString::fromLatin1( "application/x-k3bdataitem" );
     return s;
 }
@@ -436,9 +437,9 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
         emit moveItemsRequested( items, dir );
         return true;
     }
-    else if ( KUrl::List::canDecode( data ) ) {
+    else if ( data->hasUrls() ) {
         qDebug() << "url list drop";
-        KUrl::List urls = KUrl::List::fromMimeData( data );
+        QList<QUrl> urls = KUrlMimeData::urlsFromMimeData( data );
         emit addUrlsRequested( urls, dir );
         return true;
     }

@@ -24,7 +24,7 @@
 #include <KLineEdit>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KMimeType>
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <KSqueezedTextLabel>
 
 #include <QCheckBox>

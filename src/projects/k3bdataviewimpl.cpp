@@ -76,7 +76,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_fileView( new QTreeView( view ) )
 {
     connect( m_doc, SIGNAL(importedSessionChanged(int)), this, SLOT(slotImportedSessionChanged(int)) );
-    connect( m_model, SIGNAL(addUrlsRequested(KUrl::List,K3b::DirItem*)), SLOT(slotAddUrlsRequested(KUrl::List,K3b::DirItem*)) );
+    connect( m_model, SIGNAL(addUrlsRequested(QList<QUrl>,K3b::DirItem*)), SLOT(slotAddUrlsRequested(QList<QUrl>,K3b::DirItem*)) );
     connect( m_model, SIGNAL(moveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)), SLOT(slotMoveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)) );
 
     m_sortModel->setSourceModel( m_model );
@@ -180,7 +180,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
 }
 
 
-void K3b::DataViewImpl::addUrls( const QModelIndex& parent, const KUrl::List& urls )
+void K3b::DataViewImpl::addUrls( const QModelIndex& parent, const QList<QUrl>& urls )
 {
     DirItem *item = dynamic_cast<DirItem*>( m_model->itemForIndex( parent ) );
     if (!item)
@@ -283,7 +283,7 @@ void K3b::DataViewImpl::slotOpen()
     DataItem* item = m_model->itemForIndex( current );
 
     if( !item->isFile() ) {
-        KUrl url = item->localPath();
+        QUrl url = item->localPath();
         if( !KRun::isExecutableFile( url,
                                     item->mimeType()->name() ) ) {
             KRun::runUrl( url,
@@ -388,7 +388,7 @@ void K3b::DataViewImpl::slotImportedSessionChanged( int importedSession )
 }
 
 
-void K3b::DataViewImpl::slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir )
+void K3b::DataViewImpl::slotAddUrlsRequested( QList<QUrl> urls, K3b::DirItem* targetDir )
 {
     DataUrlAddingDialog::addUrls( urls, targetDir, m_view );
 }

@@ -34,7 +34,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KUrlRequester>
+#include <KIOWidgets/KUrlRequester>
 
 
 K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )

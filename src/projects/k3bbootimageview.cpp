@@ -21,7 +21,7 @@
 #include "k3bintvalidator.h"
 
 #include <QtCore/QDebug>
-#include <KFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 
@@ -97,7 +97,7 @@ void K3b::BootImageView::showAdvancedOptions( bool show )
 
 void K3b::BootImageView::slotNewBootImage()
 {
-    QString file = KFileDialog::getOpenFileName( KUrl(), QString(), this, i18n("Please Choose Boot Image") );
+    QString file = QFileDialog::getOpenFileName( this, i18n("Please Choose Boot Image") );
     if( !file.isEmpty() ) {
         KIO::filesize_t fsize = K3b::filesize( file );
         BootItem::ImageType boottype = K3b::BootItem::FLOPPY;

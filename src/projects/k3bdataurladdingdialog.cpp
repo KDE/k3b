@@ -47,14 +47,14 @@
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <KDELibs4Support/KDE/KStandardGuiItem>
 #include <KSqueezedTextLabel>
 
 #include <unistd.h>
 
 
-K3b::DataUrlAddingDialog::DataUrlAddingDialog( const KUrl::List& urls, DirItem* dir, QWidget* parent )
+K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<QUrl>& urls, DirItem* dir, QWidget* parent )
     : KDialog( parent),
       m_doc( dir->getDoc() ),
       m_bExistingItemsReplaceAll(false),
@@ -71,7 +71,7 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( const KUrl::List& urls, DirItem* 
     init();
 
     m_urls = urls;
-    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it )
+    for( QList<QUrl>::ConstIterator it = urls.begin(); it != urls.end(); ++it )
         m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
 }
 
@@ -151,7 +151,7 @@ K3b::DataUrlAddingDialog::~DataUrlAddingDialog()
 }
 
 
-void K3b::DataUrlAddingDialog::addUrls( const KUrl::List& urls,
+void K3b::DataUrlAddingDialog::addUrls( const QList<QUrl>& urls,
                                      K3b::DirItem* dir,
                                      QWidget* parent )
 {
@@ -234,7 +234,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
         return;
 
     // add next url
-    KUrl url = m_urlQueue.first().first;
+    QUrl url = m_urlQueue.first().first;
     K3b::DirItem* dir = m_urlQueue.first().second;
     m_urlQueue.erase( m_urlQueue.begin() );
     //
@@ -497,10 +497,10 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
                 // count the files in the followed dir
                 if( m_dirSizeJob->active() )
-                    m_dirSizeQueue.append( KUrl(absoluteFilePath) );
+                    m_dirSizeQueue.append( QUrl::fromLocalFile(absoluteFilePath) );
                 else {
                     m_progressWidget->setMaximum( 0 );
-                    m_dirSizeJob->setUrls( KUrl(absoluteFilePath) );
+                    m_dirSizeJob->setUrls( QList<QUrl>() << QUrl::fromLocalFile(absoluteFilePath) );
                     m_dirSizeJob->start();
                 }
             }
@@ -532,7 +532,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
             QDir newDir( absoluteFilePath );
             foreach( const QString& dir, newDir.entryList( QDir::AllEntries|QDir::Hidden|QDir::System|QDir::NoDotAndDotDot ) ) {
-                m_urlQueue.append( qMakePair( KUrl(absoluteFilePath + '/' + dir ), newDirItem ) );
+                m_urlQueue.append( qMakePair( QUrl::fromLocalFile(absoluteFilePath + '/' + dir ), newDirItem ) );
             }
         }
         else {
@@ -725,7 +725,7 @@ void K3b::DataUrlAddingDialog::slotDirSizeDone( bool success )
             updateProgress();
         }
         else {
-            m_dirSizeJob->setUrls( m_dirSizeQueue.back() );
+            m_dirSizeJob->setUrls( QList<QUrl>() << m_dirSizeQueue.back() );
             m_dirSizeQueue.pop_back();
             m_dirSizeJob->start();
         }

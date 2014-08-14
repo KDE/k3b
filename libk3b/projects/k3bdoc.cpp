@@ -74,21 +74,20 @@ void K3b::Doc::setBurner( K3b::Device::Device* dev )
 }
 
 
-void K3b::Doc::addUrl( const KUrl& url )
+void K3b::Doc::addUrl( const QUrl& url )
 {
-    KUrl::List urls(url);
-    addUrls( urls );
+    addUrls( QList<QUrl>() << url );
 }
 
 
-void K3b::Doc::setURL( const KUrl& url )
+void K3b::Doc::setURL( const QUrl& url )
 {
     doc_url = url;
 
     emit changed();
 }
 
-const KUrl& K3b::Doc::URL() const
+const QUrl& K3b::Doc::URL() const
 {
     return doc_url;
 }

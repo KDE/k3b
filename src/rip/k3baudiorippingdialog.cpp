@@ -34,12 +34,11 @@
 #include <KComboBox>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
-#include <KFileDialog>
 #include <KIO/Global>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
-#include <KUrlLabel>
-#include <KUrlRequester>
+#include <KWidgetsAddons/KUrlLabel>
+#include <KIOWidgets/KUrlRequester>
 
 #include <QCheckBox>
 #include <QDir>

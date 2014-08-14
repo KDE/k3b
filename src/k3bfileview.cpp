@@ -37,7 +37,7 @@
 #include <KProgressDialog>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <QtCore/QDebug>
 
 
@@ -55,7 +55,7 @@ K3b::FileView::FileView(QWidget *parent )
     : K3b::ContentsView( false, parent),
       d( new Private )
 {
-    d->dirOp = new K3b::DirOperator( KUrl(QDir::home().absolutePath()), this );
+    d->dirOp = new K3b::DirOperator( QUrl::fromLocalFile(QDir::home().absolutePath()), this );
     d->toolBox = new KToolBar( this );
     d->toolBox->setToolButtonStyle( Qt::ToolButtonIconOnly );
 
@@ -121,7 +121,7 @@ K3b::FileView::FileView(QWidget *parent )
         action->setShortcutContext( Qt::ApplicationShortcut );
     }
 
-    connect( d->dirOp, SIGNAL(urlEntered(KUrl)), this, SIGNAL(urlEntered(KUrl)) );
+    connect( d->dirOp, SIGNAL(urlEntered(QUrl)), this, SIGNAL(urlEntered(QUrl)) );
     connect( d->filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
     connect( d->actionShowBookmarks, SIGNAL(toggled(bool)), d->dirOp->bookmarkMenu(), SLOT(setVisible(bool)) );
 }
@@ -139,14 +139,14 @@ KActionCollection* K3b::FileView::actionCollection() const
 }
 
 
-void K3b::FileView::setUrl(const KUrl& url, bool forward)
+void K3b::FileView::setUrl(const QUrl& url, bool forward)
 {
     qDebug() << url;
     d->dirOp->setUrl( url, forward );
 }
 
 
-KUrl K3b::FileView::url()
+QUrl K3b::FileView::url()
 {
     return d->dirOp->url();
 }

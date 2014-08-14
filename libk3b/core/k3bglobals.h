@@ -21,7 +21,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <KIO/Global>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include "k3bdevicetypes.h"
 #include "k3b_export.h"
@@ -203,7 +203,7 @@ namespace K3b {
 
     LIBK3B_EXPORT QString systemName();
 
-    LIBK3B_EXPORT KIO::filesize_t filesize( const KUrl& );
+    LIBK3B_EXPORT KIO::filesize_t filesize( const QUrl& );
 
     /**
      * Calculate the total size of an image file. This also includes
@@ -211,7 +211,7 @@ namespace K3b {
      *
      * \returns the total size of the image file at url
      */
-    LIBK3B_EXPORT KIO::filesize_t imageFilesize( const KUrl& url );
+    LIBK3B_EXPORT KIO::filesize_t imageFilesize( const QUrl& url );
 
     /**
      * true if the kernel supports ATAPI devices without SCSI emulation.
@@ -235,8 +235,8 @@ namespace K3b {
     /**
      * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
      */
-    LIBK3B_EXPORT KUrl convertToLocalUrl( const KUrl& url );
-    LIBK3B_EXPORT KUrl::List convertToLocalUrls( const KUrl::List& l );
+    LIBK3B_EXPORT QUrl convertToLocalUrl( const QUrl& url );
+    LIBK3B_EXPORT QList<QUrl> convertToLocalUrls( const QList<QUrl>& l );
 
     LIBK3B_EXPORT qint16 fromLe16( char* );
     LIBK3B_EXPORT qint32 fromLe32( char* );

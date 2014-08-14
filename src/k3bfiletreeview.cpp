@@ -29,7 +29,7 @@
 #include <KActionMenu>
 #include <KFileItem>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 
 
@@ -104,11 +104,11 @@ K3b::Device::Device* K3b::FileTreeView::selectedDevice() const
 }
 
 
-KUrl K3b::FileTreeView::selectedUrl() const
+QUrl K3b::FileTreeView::selectedUrl() const
 {
     KFileItem fileItem = d->model->itemForIndex( currentIndex() );
     if( fileItem.isNull() )
-        return KUrl();
+        return QUrl();
     else
         return fileItem.url();
 }
@@ -124,7 +124,7 @@ void K3b::FileTreeView::slotExpandUrl( const QModelIndex& index )
 void K3b::FileTreeView::slotAddFilesToProject()
 {
     QModelIndexList indexes = selectedIndexes();
-    KUrl::List files;
+    QList<QUrl> files;
     foreach(const QModelIndex &index, indexes)
     {
         KFileItem item = d->model->itemForIndex(index);
@@ -139,7 +139,7 @@ void K3b::FileTreeView::slotAddFilesToProject()
 }
 
 
-void K3b::FileTreeView::setSelectedUrl( const KUrl& url )
+void K3b::FileTreeView::setSelectedUrl( const QUrl& url )
 {
     qDebug();
     KFileItem fileItem = d->model->itemForIndex( currentIndex() );

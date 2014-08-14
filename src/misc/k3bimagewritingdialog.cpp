@@ -51,8 +51,8 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KDELibs4Support/KDE/KStandardGuiItem>
-#include <KUrl>
-#include <KUrlRequester>
+#include <QtCore/QUrl>
+#include <KIOWidgets/KUrlRequester>
 
 #include <QApplication>
 #include <QCheckBox>
@@ -173,7 +173,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
     isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
-    const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
+    const KIO::filesize_t size = K3b::filesize( QUrl::fromLocalFile(isoF->fileName()) );
     const KIO::filesize_t volumeSpaceSize = Private::volumeSpaceSize( *isoF );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
@@ -255,7 +255,7 @@ void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& 
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
-    item->setText( 1, KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
+    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imageFile)) ) );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 
@@ -284,7 +284,7 @@ void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
-    item->setText( 1, KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
+    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imageFile)) ) );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 
@@ -704,7 +704,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     {
         K3b::Iso9660 isoFs( d->imageFile );
         if( isoFs.open() ) {
-            if( K3b::filesize( KUrl(d->imageFile) ) < Private::volumeSpaceSize( isoFs ) ) {
+            if( K3b::filesize( QUrl::fromLocalFile(d->imageFile) ) < Private::volumeSpaceSize( isoFs ) ) {
                 if( KMessageBox::questionYesNo( this,
                                                 i18n("<p>The actual file size does not match the size declared in the file header. "
                                                      "If it has been downloaded make sure the download is complete.</p>"
@@ -932,7 +932,7 @@ void K3b::ImageWritingDialog::toggleAll()
 
     // set wanted image size
     if ( d->currentImageType() == IMAGE_ISO )
-        d->writerSelectionWidget->setWantedMediumSize( K3b::filesize( KUrl(d->imagePath()) )/2048 );
+        d->writerSelectionWidget->setWantedMediumSize( K3b::filesize( QUrl::fromLocalFile(d->imagePath()) )/2048 );
     else
         d->writerSelectionWidget->setWantedMediumSize( Msf() );
 
@@ -998,7 +998,7 @@ void K3b::ImageWritingDialog::toggleAll()
 }
 
 
-void K3b::ImageWritingDialog::setImage( const KUrl& url )
+void K3b::ImageWritingDialog::setImage( const QUrl& url )
 {
     d->imageForced = true;
     d->editImagePath->setUrl( url );

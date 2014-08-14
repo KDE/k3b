@@ -485,7 +485,7 @@ void K3b::CdrdaoWriter::start()
                 m_backupTocFile = m_tocFile + ".k3bbak";
 
                 // workaround, cdrdao deletes the tocfile when --remote parameter is set
-                if ( !KIO::NetAccess::file_copy(KUrl(m_tocFile),KUrl(m_backupTocFile), (QWidget*) 0) )
+                if ( !KIO::NetAccess::file_copy(QUrl::fromLocalFile(m_tocFile),QUrl::fromLocalFile(m_backupTocFile), (QWidget*) 0) )
                 {
                     qDebug() << "(K3b::CdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile;
                     emit infoMessage( i18n("Could not backup tocfile."), MessageError );
@@ -689,20 +689,20 @@ void K3b::CdrdaoWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
     case WRITE:
     case COPY:
         if ( !m_binFileLnk.isEmpty() ) {
-            KIO::NetAccess::del(KUrl(m_cueFileLnk), (QWidget*) 0);
-            KIO::NetAccess::del(KUrl(m_binFileLnk), (QWidget*) 0);
+            KIO::NetAccess::del(QUrl::fromLocalFile(m_cueFileLnk), (QWidget*) 0);
+            KIO::NetAccess::del(QUrl::fromLocalFile(m_binFileLnk), (QWidget*) 0);
         }
-        else if( (!QFile::exists( m_tocFile ) || K3b::filesize( KUrl(m_tocFile) ) == 0 ) && !m_onTheFly )
+        else if( (!QFile::exists( m_tocFile ) || K3b::filesize( QUrl::fromLocalFile(m_tocFile) ) == 0 ) && !m_onTheFly )
         {
             // cdrdao removed the tocfile :(
             // we need to recover it
-            if ( !KIO::NetAccess::file_copy(KUrl(m_backupTocFile), KUrl(m_tocFile), (QWidget*) 0) )
+            if ( !KIO::NetAccess::file_copy(QUrl::fromLocalFile(m_backupTocFile), QUrl::fromLocalFile(m_tocFile), (QWidget*) 0) )
             {
                 qDebug() << "(K3b::CdrdaoWriter) restoring tocfile " << m_tocFile << " failed.";
                 emit infoMessage( i18n("Due to a bug in cdrdao the toc/cue file %1 has been deleted. "
                                        "K3b was unable to restore it from the backup %2.",m_tocFile,m_backupTocFile), MessageError );
             }
-            else if ( !KIO::NetAccess::del(KUrl(m_backupTocFile), (QWidget*) 0) )
+            else if ( !KIO::NetAccess::del(QUrl::fromLocalFile(m_backupTocFile), (QWidget*) 0) )
             {
                 qDebug() << "(K3b::CdrdaoWriter) delete tocfile backkup " << m_backupTocFile << " failed.";
             }

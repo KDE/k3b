@@ -32,7 +32,7 @@ Q_DECLARE_LOGGING_CATEGORY(KOSTORE)
 
 class QWidget;
 
-class KUrl;
+class QUrl;
 
 /**
  * Saves and loads KOffice documents using various backends. Currently supported
@@ -89,7 +89,7 @@ public:
    *
    * @bug saving not completely implemented (fixed temporary file)
    */
-  static KoStore* createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( QWidget* window, const QUrl& url, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)

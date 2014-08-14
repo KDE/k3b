@@ -22,6 +22,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackaddingdialog.h"
 
+#include <KCoreAddons/KUrlMimeData>
 #include <KDELibs4Support/KDE/KLocale>
 #include <QtGui/QIcon>
 
@@ -418,15 +419,15 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
 
     QSet<K3b::AudioTrack*> tracks;
     QSet<K3b::AudioDataSource*> sources;
-    KUrl::List urls;
+    QList<QUrl> urls;
     foreach( const QModelIndex& index, indexes ) {
         if ( K3b::AudioTrack* track = trackForIndex( index ) ) {
             tracks << track;
             K3b::AudioDataSource* source = track->firstSource();
             while ( source ) {
                 if ( K3b::AudioFile* file = dynamic_cast<K3b::AudioFile*>( source ) ) {
-                    if ( !urls.contains( KUrl( file->filename() ) ) ) {
-                        urls.append( KUrl( file->filename() ) );
+                    if ( !urls.contains( QUrl::fromLocalFile( file->filename() ) ) ) {
+                        urls.append( QUrl::fromLocalFile( file->filename() ) );
                     }
                 }
                 source = source->next();
@@ -435,13 +436,13 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
         else if ( K3b::AudioDataSource* source = sourceForIndex( index ) ) {
             sources << source;
             if ( K3b::AudioFile* file = dynamic_cast<K3b::AudioFile*>( source ) ) {
-                if ( !urls.contains( KUrl( file->filename() ) ) ) {
-                    urls.append( KUrl( file->filename() ) );
+                if ( !urls.contains( QUrl::fromLocalFile( file->filename() ) ) ) {
+                    urls.append( QUrl::fromLocalFile( file->filename() ) );
                 }
             }
         }
     }
-    urls.populateMimeData( mime );
+    mime->setUrls(urls);
 
     // the easy road: encode the pointers
     if ( !tracks.isEmpty() ) {
@@ -473,7 +474,7 @@ Qt::DropActions K3b::AudioProjectModel::supportedDropActions() const
 
 QStringList K3b::AudioProjectModel::mimeTypes() const
 {
-    QStringList s = KUrl::List::mimeDataTypes();
+    QStringList s = KUrlMimeData::mimeDataTypes();
     s += AudioCdTrackDrag::mimeDataTypes();
     s += QString::fromLatin1( "application/x-k3baudiotrack" );
     s += QString::fromLatin1( "application/x-k3baudiodatasource" );
@@ -547,7 +548,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     //
     QList<K3b::AudioTrack*> tracks;
     QList<K3b::AudioDataSource*> sources;
-    KUrl::List urls;
+    QList<QUrl> urls;
     if ( data->hasFormat( "application/x-k3baudiotrack" ) ||
          data->hasFormat( "application/x-k3baudiodatasource" )) {
 
@@ -690,9 +691,9 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     //
     // add new tracks
     //
-    else if ( KUrl::List::canDecode( data ) ) {
+    else if ( data->hasUrls() ) {
         qDebug() << "url list drop";
-        KUrl::List urls = KUrl::List::fromMimeData( data );
+        QList<QUrl> urls = KUrlMimeData::urlsFromMimeData( data );
         K3b::AudioTrackAddingDialog::addUrls( urls, d->project, dropTrackAfter, dropTrackParent, dropSourceAfter, qApp->activeWindow() );
         return true;
     }

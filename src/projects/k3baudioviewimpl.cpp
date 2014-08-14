@@ -144,7 +144,7 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
 }
 
 
-void K3b::AudioViewImpl::addUrls( const KUrl::List& urls )
+void K3b::AudioViewImpl::addUrls( const QList<QUrl>& urls )
 {
     AudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, m_view );
 }

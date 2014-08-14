@@ -30,7 +30,7 @@
 #include <KMenu>
 #include <QSplitter>
 #include <KToolBar>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QTreeView>
 #include <QHeaderView>
@@ -131,7 +131,7 @@ void K3b::DataView::slotBurn()
 }
 
 
-void K3b::DataView::addUrls( const KUrl::List& urls )
+void K3b::DataView::addUrls( const QList<QUrl>& urls )
 {
     m_dataViewImpl->addUrls( m_dirProxy->mapToSource( m_dirView->currentIndex() ), urls );
 }

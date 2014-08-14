@@ -33,8 +33,8 @@
 #include <KIO/Global>
 #include <KLineEdit>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KUrlRequester>
-#include <KUrlLabel>
+#include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KUrlLabel>
 
 
 static const int s_mp3Bitrates[] = {

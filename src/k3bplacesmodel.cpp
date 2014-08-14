@@ -54,7 +54,7 @@ K3b::PlacesModel::PlacesModel( QObject* parent )
     //       This needs to be changed. Adding, removing and editing places would be also nice.
     for( int i = 0; i < d->filePlacesModel->rowCount(); ++i ) {
         QModelIndex place = d->filePlacesModel->index( i, 0 );
-        KUrl url = d->filePlacesModel->url( place );
+        QUrl url = d->filePlacesModel->url( place );
         
         // Let's filter out device-related places
         // and custom protocols (we doesn't support burning from them)
@@ -109,7 +109,7 @@ QModelIndex K3b::PlacesModel::indexForDevice( K3b::Device::Device* dev ) const
 }
 
 
-void K3b::PlacesModel::expandToUrl( const KUrl& url )
+void K3b::PlacesModel::expandToUrl( const QUrl& url )
 {
     qDebug() << url;
     
@@ -117,14 +117,14 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
     Q_FOREACH( Device::Device* device, d->deviceModel->devices() )
     {
         if( Solid::StorageAccess* solidStorage = device->solidStorage() ) {
-            KUrl parent( solidStorage->filePath() );
+            QUrl parent = QUrl::fromLocalFile( solidStorage->filePath() );
             if( parent.isParentOf( url ) ) {
                 qDebug() << url << "will be expanded to device" << device->description();
                 emit expand( mapFromSubModel( d->deviceModel->indexForDevice( device ) ) );
                 return;
             }
         }
-        else if( url.protocol() == "audiocd" )
+        else if( url.scheme() == "audiocd" )
         {
             const Medium& medium = k3bcore->mediaCache()->medium( device );
             if( medium.content() & Medium::ContentAudio )
@@ -142,7 +142,7 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
 
     for( DirModels::iterator it = d->dirModels.begin(); it != d->dirModels.end(); ++it ) {
         KDirModel* model = it.key();
-        KUrl parent = model->dirLister()->url();
+        QUrl parent = model->dirLister()->url();
         if ( parent.isParentOf( url ) ) {
             if ( parent.path().length() > maxDepth ) {
                 maxDepth = parent.path().length();
@@ -163,7 +163,7 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
 }
 
 
-void K3b::PlacesModel::addPlace( const QString& name, const QIcon& icon, const KUrl& rootUrl )
+void K3b::PlacesModel::addPlace( const QString& name, const QIcon& icon, const QUrl& rootUrl )
 {
     KDirModel* model = new KDirModel( this );
     connect( model, SIGNAL(expand(QModelIndex)), this, SLOT(slotExpand(QModelIndex)) );

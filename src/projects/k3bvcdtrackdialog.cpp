@@ -29,7 +29,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KMimeType>
 #include <KNumInput>
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <KSqueezedTextLabel>
 
 // Qt Includes

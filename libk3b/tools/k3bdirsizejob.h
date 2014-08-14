@@ -17,7 +17,7 @@
 
 #include "k3bthreadjob.h"
 #include <KIO/Global>
-#include <kurl.h>
+#include <QtCore/QUrl>
 
 #include "k3b_export.h"
 
@@ -57,7 +57,7 @@ namespace K3b {
         KIO::filesize_t totalSymlinks() const;
 
     public Q_SLOTS:
-        void setUrls( const KUrl::List& urls );
+        void setUrls( const QList<QUrl>& urls );
         void setFollowSymlinks( bool );
 
     private:

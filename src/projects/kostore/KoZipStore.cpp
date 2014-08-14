@@ -26,7 +26,7 @@
 #include <kzip.h>
 #include <QtCore/QDebug>
 #include <kdeversion.h>
-#include <kurl.h>
+#include <QtCore/QUrl>
 #include <kio/netaccess.h>
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
@@ -46,9 +46,9 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentif
     m_bGood = init( mode, appIdentification );
 }
 
-KoZipStore::KoZipStore( QWidget* window, const KUrl & _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
+KoZipStore::KoZipStore( QWidget* window, const QUrl & _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    qCDebug(KOSTORE) <<"KoZipStore Constructor url" << _url.pathOrUrl()
+    qCDebug(KOSTORE) <<"KoZipStore Constructor url" << _url.toDisplayString( QUrl::PreferLocalFile )
                     << " filename = " << _filename
                     << " mode = " << int(_mode)
                     << " mimetype = " << appIdentification << endl;

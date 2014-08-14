@@ -38,7 +38,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 // QT-includes
 #include <QDir>
@@ -130,15 +130,15 @@ K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
         d->mainSplitter->setSizes( sizes );
     }
 
-    connect( d->fileTreeView, SIGNAL(activated(KUrl)),
-             this, SLOT(slotDirActivated(KUrl)) );
+    connect( d->fileTreeView, SIGNAL(activated(QUrl)),
+             this, SLOT(slotDirActivated(QUrl)) );
     connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SLOT(showDevice(K3b::Device::Device*)) );
     connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SIGNAL(deviceSelected(K3b::Device::Device*)) );
 
-    connect( d->fileView, SIGNAL(urlEntered(KUrl)), d->fileTreeView, SLOT(setSelectedUrl(KUrl)) );
-    connect( d->fileView, SIGNAL(urlEntered(KUrl)), this, SIGNAL(urlEntered(KUrl)) );
+    connect( d->fileView, SIGNAL(urlEntered(QUrl)), d->fileTreeView, SLOT(setSelectedUrl(QUrl)) );
+    connect( d->fileView, SIGNAL(urlEntered(QUrl)), this, SIGNAL(urlEntered(QUrl)) );
 
     connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(QString)),
              this, SLOT(slotMountFinished(QString)) );
@@ -152,7 +152,7 @@ K3b::DirView::~DirView()
 }
 
 
-void K3b::DirView::showUrl( const KUrl& url )
+void K3b::DirView::showUrl( const QUrl& url )
 {
     qDebug() << url;
     slotDirActivated( url );
@@ -229,7 +229,7 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
 void K3b::DirView::slotMountFinished( const QString& mp )
 {
     if( !mp.isEmpty() ) {
-        slotDirActivated( KUrl(mp) );
+        slotDirActivated( QUrl::fromLocalFile(mp) );
         d->fileView->reload(); // HACK to get the contents shown... FIXME
     }
     else {
@@ -260,7 +260,7 @@ void K3b::DirView::slotUnmountFinished( bool success )
 }
 
 
-void K3b::DirView::slotDirActivated( const KUrl& url )
+void K3b::DirView::slotDirActivated( const QUrl& url )
 {
     qDebug() << url;
     d->fileView->setUrl( url, true );
@@ -270,7 +270,7 @@ void K3b::DirView::slotDirActivated( const KUrl& url )
 
 void K3b::DirView::home()
 {
-    slotDirActivated( KUrl(QDir::homePath()) );
+    slotDirActivated( QUrl::fromLocalFile(QDir::homePath()) );
 }
 
 

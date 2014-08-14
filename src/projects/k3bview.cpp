@@ -150,14 +150,13 @@ void K3b::View::slotPluginButtonClicked()
 }
 
 
-void K3b::View::addUrl( const KUrl& url )
+void K3b::View::addUrl( const QUrl& url )
 {
-    KUrl::List urls(url);
-    addUrls( urls );
+    addUrls( QList<QUrl>() << url );
 }
 
 
-void K3b::View::addUrls( const KUrl::List& urls )
+void K3b::View::addUrls( const QList<QUrl>& urls )
 {
     doc()->addUrls( urls );
 }

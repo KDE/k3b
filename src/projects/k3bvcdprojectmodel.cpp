@@ -18,8 +18,9 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 
+#include <KCoreAddons/KUrlMimeData>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QDataStream>
 #include <QMimeData>
@@ -295,18 +296,18 @@ QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
     QMimeData* mime = new QMimeData();
 
     QList<VcdTrack*> tracks;
-    KUrl::List urls;
+    QList<QUrl> urls;
 
     foreach( const QModelIndex& index, indexes ) {
         VcdTrack* track = trackForIndex( index );
         tracks << track;
 
-        if( !urls.contains( KUrl( track->absolutePath() ) ) )
+        if( !urls.contains( QUrl::fromLocalFile( track->absolutePath() ) ) )
         {
-            urls << KUrl( track->absolutePath() );
+            urls << QUrl::fromLocalFile( track->absolutePath() );
         }
     }
-    urls.populateMimeData( mime );
+    mime->setUrls(urls);
 
     // the easy road: encode the pointers
     QByteArray trackData;
@@ -324,7 +325,7 @@ QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
 
 QStringList VcdProjectModel::mimeTypes() const
 {
-    QStringList s = KUrl::List::mimeDataTypes();
+    QStringList s = KUrlMimeData::mimeDataTypes();
 
     s += QString::fromLatin1( "application/x-k3bvcdtrack" );
 
@@ -359,7 +360,7 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action
 
         return true;
     }
-    else if( KUrl::List::canDecode( data ) ) {
+    else if( data->hasUrls() ) {
         int pos;
         if( parent.isValid() )
             row = parent.row();
@@ -369,7 +370,7 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action
         else
             pos = d->doc->numOfTracks();
 
-        KUrl::List urls = KUrl::List::fromMimeData( data );
+        QList<QUrl> urls = KUrlMimeData::urlsFromMimeData( data );
         d->doc->addTracks( urls, pos );
 
         return true;

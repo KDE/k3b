@@ -147,7 +147,7 @@ void K3b::MixedView::slotBurn()
 }
 
 
-void K3b::MixedView::addUrls( const KUrl::List& urls )
+void K3b::MixedView::addUrls( const QList<QUrl>& urls )
 {
     if( m_fileViewWidget->currentWidget() == m_dataViewImpl->view() ) {
         QModelIndex parent = m_model->mapToSubModel( m_dirProxy->mapToSource( m_dirView->currentIndex() ) );

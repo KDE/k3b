@@ -32,7 +32,7 @@
 #include <QtCore/QFile>
 #include <QDir>
 
-#include <kurl.h>
+#include <QtCore/QUrl>
 #include <QtCore/QDebug>
 #include <kdeversion.h>
 #include <KI18n/KLocalizedString>
@@ -141,7 +141,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & 
   }
 }
 
-KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend )
+KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, const QByteArray & appIdentification, Backend backend )
 {
   const bool automatic = ( backend == Auto );
   if ( url.isLocalFile() )
@@ -190,7 +190,7 @@ KoStore* KoStore::createStore( QWidget* window, const KUrl& url, Mode mode, cons
     return new KoEncryptedStore( window, url, tmpFile, mode, appIdentification );
 #endif
   default:
-    qCWarning(KOSTORE) << "Unsupported backend requested for KoStore (KUrl) : " << backend;
+    qCWarning(KOSTORE) << "Unsupported backend requested for KoStore (QUrl) : " << backend;
     KMessageBox::sorry( window,
         i18n("The directory mode is not supported for remote locations."),
         i18n("KOffice Storage"));

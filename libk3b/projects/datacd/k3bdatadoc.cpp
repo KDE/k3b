@@ -194,21 +194,21 @@ void K3b::DataDoc::setVolumeID( const QString& v )
 }
 
 
-void K3b::DataDoc::addUrls( const KUrl::List& urls )
+void K3b::DataDoc::addUrls( const QList<QUrl>& urls )
 {
     addUrlsToDir( urls, root() );
 }
 
 
-void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
+void K3b::DataDoc::addUrlsToDir( const QList<QUrl>& l, K3b::DirItem* dir )
 {
     if( !dir )
         dir = root();
 
-    KUrl::List urls = K3b::convertToLocalUrls(l);
+    QList<QUrl> urls = K3b::convertToLocalUrls(l);
 
-    for( KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
-        const KUrl& url = *it;
+    for( QList<QUrl>::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
+        const QUrl& url = *it;
         QFileInfo f( url.toLocalFile() );
         QString k3bname = f.absoluteFilePath().section( '/', -1 );
 
@@ -259,9 +259,9 @@ void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
 
             // recursively add all the files in the directory
             QStringList dlist = QDir( f.absoluteFilePath() ).entryList( QDir::AllEntries|QDir::System|QDir::Hidden|QDir::NoDotAndDotDot );
-            KUrl::List newUrls;
+            QList<QUrl> newUrls;
             for( QStringList::ConstIterator it = dlist.constBegin(); it != dlist.constEnd(); ++it )
-                newUrls.append( KUrl( f.absoluteFilePath() + '/' + *it ) );
+                newUrls.append( QUrl::fromLocalFile( f.absoluteFilePath() + '/' + *it ) );
             addUrlsToDir( newUrls, newDirItem );
         }
         else if( f.isSymLink() || f.isFile() ) {

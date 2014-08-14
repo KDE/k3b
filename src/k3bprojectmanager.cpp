@@ -43,7 +43,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KSharedConfig>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QApplication>
 #include <QCursor>
@@ -156,7 +156,7 @@ void K3b::ProjectManager::removeProject( K3b::Doc* docRemove )
 }
 
 
-K3b::Doc* K3b::ProjectManager::findByUrl( const KUrl& url )
+K3b::Doc* K3b::ProjectManager::findByUrl( const QUrl& url )
 {
     Q_FOREACH( K3b::Doc* doc, d->projects ) {
         if( doc->URL() == url )
@@ -246,9 +246,7 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
 #endif
     }
 
-    KUrl url;
-    url.setFileName(fileName);
-    doc->setURL(url);
+    doc->setURL(QUrl::fromLocalFile(fileName));
 
     doc->newDocument();
 
@@ -447,7 +445,7 @@ QString K3b::ProjectManager::dbusPath( K3b::Doc* doc ) const
 }
 
 
-K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
+K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 {
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
@@ -570,7 +568,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
 }
 
 
-bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const KUrl& url )
+bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
 {
     QString tmpfile;
     KIO::NetAccess::download( url, tmpfile, 0L );

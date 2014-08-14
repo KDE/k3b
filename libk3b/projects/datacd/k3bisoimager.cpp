@@ -833,7 +833,7 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
         QString tempPath = temp.fileName();
         temp.remove();
 
-        if( !KIO::NetAccess::file_copy( KUrl(item->localPath()), tempPath ) ) {
+        if( !KIO::NetAccess::file_copy( QUrl::fromLocalFile(item->localPath()), tempPath ) ) {
             emit infoMessage( i18n("Failed to backup boot image file %1",item->localPath()), MessageError );
             return;
         }

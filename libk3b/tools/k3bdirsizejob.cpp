@@ -37,7 +37,7 @@ public:
           totalSymlinks(0) {
     }
 
-    KUrl::List urls;
+    QList<QUrl> urls;
     bool followSymlinks;
 
     KIO::filesize_t totalSize;
@@ -86,7 +86,7 @@ KIO::filesize_t K3b::DirSizeJob::totalSymlinks() const
 }
 
 
-void K3b::DirSizeJob::setUrls( const KUrl::List& urls )
+void K3b::DirSizeJob::setUrls( const QList<QUrl>& urls )
 {
     d->urls = urls;
 }
@@ -105,9 +105,9 @@ bool K3b::DirSizeJob::run()
     d->totalSymlinks = 0;
 
     QStringList l;
-    for( KUrl::List::const_iterator it = d->urls.constBegin();
+    for( QList<QUrl>::const_iterator it = d->urls.constBegin();
          it != d->urls.constEnd(); ++it ) {
-        const KUrl& url = *it;
+        const QUrl& url = *it;
 
         if( !url.isLocalFile() ) {
             qDebug() << "(K3b::DirSizeJob) no remote support.";

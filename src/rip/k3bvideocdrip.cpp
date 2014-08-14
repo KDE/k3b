@@ -25,7 +25,7 @@
 #include <KCoreAddons/KProcess>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KTemporaryFile>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QDateTime>
 #include <QDomDocument>

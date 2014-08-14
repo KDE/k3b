@@ -186,7 +186,7 @@ void K3b::Application::processCmdLineArgs()
 
     // if we created a doc the urls are used to populate it
     if( doc ) {
-        KUrl::List urls;
+        QList<QUrl> urls;
         for( int i = 0; i < args->count(); i++ )
             urls.append( args->url(i) );
         dynamic_cast<View*>( doc->view() )->addUrls( urls );
@@ -202,7 +202,7 @@ void K3b::Application::processCmdLineArgs()
     if( args->isSet( "image" ) ) {
         dialogOpen = true;
         if( k3bcore->jobsRunning() == 0 ) {
-            m_mainWindow->slotWriteImage( KUrl(args->getOption( "image" ) ) );
+            m_mainWindow->slotWriteImage( QUrl::fromUserInput(args->getOption( "image" ) ) );
         }
     }
     else if( args->isSet("copy") ) {

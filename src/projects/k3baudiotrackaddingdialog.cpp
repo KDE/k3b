@@ -37,7 +37,7 @@
 
 
 
-K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
+K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const QList<QUrl>& urls,
                                                      AudioDoc* doc,
                                                      AudioTrack* afterTrack,
                                                      AudioTrack* parentTrack,
@@ -100,7 +100,7 @@ K3b::AudioTrackAddingDialog::~AudioTrackAddingDialog()
 }
 
 
-void K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
+void K3b::AudioTrackAddingDialog::addUrls( const QList<QUrl>& urls,
                                           K3b::AudioDoc* doc,
                                           K3b::AudioTrack* afterTrack,
                                           K3b::AudioTrack* parentTrack,
@@ -128,7 +128,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
         return;
     }
 
-    KUrl url = m_urls.first();
+    QUrl url = m_urls.first();
     bool valid = true;
 
     if( url.toLocalFile().right(3).toLower() == "cue" ) {
@@ -145,7 +145,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
             else {
                 // remember cue url and set the new audio file url
                 m_cueUrl = url;
-                url = m_urls[0] = KUrl( parser.imageFilename() );
+                url = m_urls[0] = QUrl::fromLocalFile( parser.imageFilename() );
             }
         }
     }
@@ -201,13 +201,13 @@ void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
         return;
     }
 
-    KUrl url = m_urls.first();
+    QUrl url = m_urls.first();
     m_urls.erase( m_urls.begin() );
 
     if( m_cueUrl.isValid() ) {
         // import the cue file
         m_doc->importCueFile( m_cueUrl.toLocalFile(), m_trackAfter, m_analyserJob->decoder() );
-        m_cueUrl = KUrl();
+        m_cueUrl = QUrl();
     }
     else {
         // create the track and source items

@@ -23,7 +23,7 @@
 
 #include "k3b_export.h"
 
-class KUrl;
+class QUrl;
 class QDomElement;
 namespace K3b {
     class MovixFileItem;
@@ -102,12 +102,12 @@ namespace K3b {
         void subTitleRemoved();
 
     public Q_SLOTS:
-        void addUrls( const KUrl::List& urls );
-        void addUrlsAt( const KUrl::List& urls, int pos );
+        void addUrls( const QList<QUrl>& urls );
+        void addUrlsAt( const QList<QUrl>& urls, int pos );
         void addMovixItems( QList<K3b::MovixFileItem*>& items, int pos = -1 );
         void removeMovixItem( K3b::MovixFileItem* item);
         void moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem* itemAfter );
-        void addSubTitleItem( K3b::MovixFileItem*, const KUrl& );
+        void addSubTitleItem( K3b::MovixFileItem*, const QUrl& );
         void removeSubTitleItem( K3b::MovixFileItem* );
 
     protected:

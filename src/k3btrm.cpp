@@ -21,7 +21,7 @@
 
 #include <QtCore/QDebug>
 #include <kprotocolmanager.h>
-#include <kurl.h>
+#include <QtCore/QUrl>
 
 
 class K3b::TRM::Private
@@ -52,7 +52,7 @@ K3b::TRM::~TRM()
 void K3b::TRM::start( const K3b::Msf& length )
 {
     if( KProtocolManager::useProxy() ) {
-        KUrl proxy = KProtocolManager::proxyFor("http");
+        QUrl proxy = KProtocolManager::proxyFor("http");
         trm_SetProxy( d->trm, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
     }
 

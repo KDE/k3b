@@ -21,7 +21,7 @@
 #include <config-k3b.h>
 
 #include <QtCore/QDebug>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QtCore/QFile>
 #include <QFileInfo>
@@ -303,7 +303,7 @@ void K3b::FileItem::init( const QString& filePath,
         m_idFollowed = m_id;
     }
 
-    m_mimeType = KMimeType::findByUrl( KUrl(filePath) );
+    m_mimeType = KMimeType::findByUrl( QUrl::fromLocalFile(filePath) );
 
     // add automagically like a qlistviewitem
     if( parent() )

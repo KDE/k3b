@@ -15,7 +15,7 @@
 #ifndef K3B_AUDIO_VIEW_IMPL_H
 #define K3B_AUDIO_VIEW_IMPL_H
 
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QtCore/QObject>
 #include <QAbstractItemModel>
@@ -45,7 +45,7 @@ namespace K3b {
     public:
         AudioViewImpl( View* view, AudioDoc* doc, KActionCollection* actionCollection );
 
-        void addUrls( const KUrl::List& urls );
+        void addUrls( const QList<QUrl>& urls );
 
         AudioProjectModel* model() const { return m_model; }
         QTreeView* view() const { return m_trackView; }

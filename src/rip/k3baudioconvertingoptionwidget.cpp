@@ -26,7 +26,7 @@
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KIconThemes/KIconLoader>
-#include <KUrlRequester>
+#include <KIOWidgets/KUrlRequester>
 
 #include <QCheckBox>
 #include <QLabel>

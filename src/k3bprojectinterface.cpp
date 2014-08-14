@@ -62,13 +62,15 @@ QString ProjectInterface::dbusPath() const
 
 void ProjectInterface::addUrls( const QStringList& urls )
 {
-    m_doc->addUrls( KUrl::List(urls) );
+    QList<QUrl> urlList;
+    for( auto& url : urls ) { urlList.push_back( QUrl::fromUserInput( url ) ); }
+    m_doc->addUrls( urlList );
 }
 
 
 void ProjectInterface::addUrl( const QString& url )
 {
-    m_doc->addUrl( KUrl(url) );
+    m_doc->addUrl( QUrl::fromLocalFile(url) );
 }
 
 

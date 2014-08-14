@@ -100,9 +100,9 @@ namespace K3b {
          * the process is finished and check error()
          * to know about the result.
          **/
-        void addUrls( const KUrl::List& );
-        void addTrack( const KUrl&, uint );
-        void addTracks( const KUrl::List&, uint );
+        void addUrls( const QList<QUrl>& );
+        void addTrack( const QUrl&, uint );
+        void addTracks( const QList<QUrl>&, uint );
         /** adds a track without any testing */
         void addTrack( K3b::VcdTrack* track, uint position = 0 );
 
@@ -137,7 +137,7 @@ namespace K3b {
         bool saveDocumentData( QDomElement* );
 
     private:
-        VcdTrack* createTrack( const KUrl& url );
+        VcdTrack* createTrack( const QUrl& url );
         void informAboutNotFoundFiles();
 
         QStringList m_notFoundFiles;
@@ -146,10 +146,10 @@ namespace K3b {
         class PrivateUrlToAdd
         {
         public:
-            PrivateUrlToAdd( const KUrl& u, int _pos )
+            PrivateUrlToAdd( const QUrl& u, int _pos )
                 : url( u ), position( _pos )
             {}
-            KUrl url;
+            QUrl url;
             int position;
         };
 
@@ -161,7 +161,7 @@ namespace K3b {
         KIO::filesize_t calcTotalSize() const;
         KIO::filesize_t ISOsize() const;
 
-        bool isImage( const KUrl& url );
+        bool isImage( const QUrl& url );
 
         VcdTrack* m_lastAddedTrack;
         VcdOptions* m_vcdOptions;

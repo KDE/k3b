@@ -72,7 +72,7 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KEditToolBar>
-#include <KFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <kfileplacesmodel.h>
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KMessageBox>
@@ -86,7 +86,7 @@
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KStatusBar>
 #include <KToggleAction>
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <KXMLGUIFactory>
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
@@ -109,14 +109,14 @@
 
 namespace {
 
-    bool isProjectFile( const KUrl& url )
+    bool isProjectFile( const QUrl& url )
     {
         KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
         return mimeType->is( "application/x-k3b" );
     }
 
 
-    bool isDiscImage( const KUrl& url )
+    bool isDiscImage( const QUrl& url )
     {
         K3b::Iso9660 iso( url.toLocalFile() );
         if( iso.open() ) {
@@ -134,13 +134,13 @@ namespace {
     }
 
 
-    bool areAudioFiles( const KUrl::List& urls )
+    bool areAudioFiles( const QList<QUrl>& urls )
     {
         // check if the files are all audio we can handle. If so create an audio project
         bool audio = true;
         QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
-        for( KUrl::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
-            const KUrl& url = *it;
+        for( QList<QUrl>::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
+            const QUrl& url = *it;
 
             if( QFileInfo(url.toLocalFile()).isDir() ) {
                 audio = false;
@@ -293,7 +293,7 @@ void K3b::MainWindow::initActions()
     actionFileOpen->setToolTip( i18n( "Opens an existing project" ) );
     actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
 
-    d->actionFileOpenRecent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(KUrl)), actionCollection() );
+    d->actionFileOpenRecent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(QUrl)), actionCollection() );
     d->actionFileOpenRecent->setToolTip( i18n( "Opens a recently used file" ) );
     d->actionFileOpenRecent->setStatusTip( d->actionFileOpenRecent->toolTip() );
 
@@ -530,9 +530,9 @@ void K3b::MainWindow::initView()
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
 	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
     d->urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
-    connect( d->urlNavigator, SIGNAL(activated(KUrl)), d->dirView, SLOT(showUrl(KUrl)) );
+    connect( d->urlNavigator, SIGNAL(activated(QUrl)), d->dirView, SLOT(showUrl(QUrl)) );
     connect( d->urlNavigator, SIGNAL(activated(K3b::Device::Device*)), d->dirView, SLOT(showDevice(K3b::Device::Device*)) );
-    connect( d->dirView, SIGNAL(urlEntered(KUrl)), d->urlNavigator, SLOT(setUrl(KUrl)) );
+    connect( d->dirView, SIGNAL(urlEntered(QUrl)), d->urlNavigator, SLOT(setUrl(QUrl)) );
     connect( d->dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), d->urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
     QWidgetAction * urlNavigatorAction = new QWidgetAction(this);
     urlNavigatorAction->setDefaultWidget(d->urlNavigator);
@@ -601,7 +601,7 @@ K3b::Doc* K3b::MainWindow::activeDoc() const
 }
 
 
-K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
+K3b::Doc* K3b::MainWindow::openDocument(const QUrl& url)
 {
     slotStatusMsg(i18n("Opening file..."));
 
@@ -719,9 +719,9 @@ void K3b::MainWindow::saveProperties( KConfigGroup& grp )
 
         // where does the session management save it? If it's not modified and saved this is
         // the same as the url
-        KUrl saveUrl = (doc)->URL();
+        QUrl saveUrl = (doc)->URL();
         if( !(doc)->isSaved() || (doc)->isModified() )
-            saveUrl = KUrl( saveDir + QString::number(cnt) );
+            saveUrl = QUrl::fromLocalFile( saveDir + QString::number(cnt) );
         grp.writePathEntry( QString("%1 saveurl").arg(cnt), saveUrl.url() );
 
         // finally save it
@@ -761,13 +761,13 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
 */
     for( int i = 1; i <= cnt; ++i ) {
         // in this case the constructor works since we saved as url()
-        KUrl url = grp.readPathEntry( QString("%1 url").arg(i),QString() );
+        QUrl url = grp.readPathEntry( QString("%1 url").arg(i),QString() );
 
         bool modified = grp.readEntry( QString("%1 modified").arg(i),false );
 
         bool saved = grp.readEntry( QString("%1 saved").arg(i),false );
 
-        KUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i),QString() );
+        QUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i),QString() );
 
         // now load the project
         if( K3b::Doc* doc = k3bappcore->projectManager()->openProject( saveUrl ) ) {
@@ -786,7 +786,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
     }
 
     // and now remove the temp dir
-    KIO::del( KUrl(saveDir), KIO::HideProgressInfo );
+    KIO::del( QUrl::fromLocalFile(saveDir), KIO::HideProgressInfo );
 }
 
 
@@ -916,17 +916,17 @@ void K3b::MainWindow::slotFileOpen()
 {
     slotStatusMsg(i18n("Opening file..."));
 
-    KUrl::List urls = KFileDialog::getOpenUrls( KUrl(":k3b-projects-folder"),
-                                                i18n("*.k3b|K3b Projects"),
-                                                this,
-                                                i18n("Open Files") );
-    for( KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it ) {
+    QList<QUrl> urls = QFileDialog::getOpenFileUrls( this,
+                                                     i18n("Open Files"),
+                                                     QUrl(),
+                                                     i18n("K3b Projects (*.k3b)"));
+    for( QList<QUrl>::iterator it = urls.begin(); it != urls.end(); ++it ) {
         openDocument( *it );
         d->actionFileOpenRecent->addUrl( *it );
     }
 }
 
-void K3b::MainWindow::slotFileOpenRecent(const KUrl& url)
+void K3b::MainWindow::slotFileOpenRecent(const QUrl& url)
 {
     slotStatusMsg(i18n("Opening file..."));
 
@@ -985,20 +985,20 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
     }
 
     if( doc ) {
-        // we do not use the static KFileDialog method here to be able to specify a filename suggestion
-        KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this);
-        dlg.setWindowTitle( i18n("Save As") );
-        dlg.setOperationMode( KFileDialog::Saving );
-        dlg.setSelection( doc->name() );
+        // we do not use the static QFileDialog method here to be able to specify a filename suggestion
+        QFileDialog dlg( this, i18n("Save As"), QString(), i18n("K3b Projects (*.k3b)") );
+        dlg.setAcceptMode( QFileDialog::AcceptSave );
+        dlg.selectFile( doc->name() );
         dlg.exec();
-        KUrl url = dlg.selectedUrl();
+        QList<QUrl> urls = dlg.selectedUrls();
 
-        if( url.isValid() ) {
+        if( !urls.isEmpty() ) {
+            QUrl url = urls.front();
             KRecentDocument::add( url );
 
             bool exists = KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 );
             if( !exists ||
-                KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),
+                KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.toDisplayString() ),
                                                     i18n("File Exists"), KStandardGuiItem::overwrite() )
                 == KMessageBox::Continue ) {
 
@@ -1282,7 +1282,7 @@ void K3b::MainWindow::slotWriteImage()
 }
 
 
-void K3b::MainWindow::slotWriteImage( const KUrl& url )
+void K3b::MainWindow::slotWriteImage( const QUrl& url )
 {
     K3b::ImageWritingDialog d( this );
     d.setImage( url );
@@ -1295,15 +1295,15 @@ void K3b::MainWindow::slotProjectAddFiles()
     K3b::View* view = activeView();
 
     if( view ) {
-        const QStringList files = KFileDialog::getOpenFileNames( KUrl(":k3b-project-add-files"),
-                                                           i18n("*|All Files"),
-                                                           this,
-                                                           i18n("Select Files to Add to Project") );
+        const QStringList files = QFileDialog::getOpenFileNames(this,
+                                                                i18n("Select Files to Add to Project"),
+                                                                QString(),
+                                                                i18n("All Files (*)") );
 
-        KUrl::List urls;
+        QList<QUrl> urls;
         for( QStringList::ConstIterator it = files.constBegin();
              it != files.constEnd(); it++ ) {
-            KUrl url;
+            QUrl url;
             url.setPath(*it);
             urls.append( url );
         }
@@ -1424,7 +1424,7 @@ void K3b::MainWindow::slotManualCheckSystem()
 }
 
 
-void K3b::MainWindow::addUrls( const KUrl::List& urls )
+void K3b::MainWindow::addUrls( const QList<QUrl>& urls )
 {
     if( urls.count() == 1 && isProjectFile( urls.first() ) ) {
         openDocument( urls.first() );

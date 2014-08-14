@@ -30,7 +30,7 @@
 #include <KLineEdit>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
-#include <KUrlRequester>
+#include <KIOWidgets/KUrlRequester>
 #include <KIO/Global>
 
 #include <QCheckBox>

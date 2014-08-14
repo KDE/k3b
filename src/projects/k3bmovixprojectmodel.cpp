@@ -18,8 +18,9 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixfileitem.h"
 
+#include <KCoreAddons/KUrlMimeData>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <QtGui/QIcon>
 
 #include <QtCore/QMimeData>
@@ -365,19 +366,19 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
     QMimeData* mime = new QMimeData();
 
     QList<MovixFileItem*> items;
-    KUrl::List urls;
+    QList<QUrl> urls;
 
     Q_FOREACH( const QModelIndex& index, indexes ) {
         MovixFileItem* item = itemForIndex( index );
         if (item) {
             items << item;
 
-            if( !urls.contains( KUrl( item->localPath() ) ) ) {
-                urls << KUrl( item->localPath() );
+            if( !urls.contains( QUrl::fromLocalFile( item->localPath() ) ) ) {
+                urls << QUrl::fromLocalFile( item->localPath() );
             }
         }
     }
-    urls.populateMimeData( mime );
+    mime->setUrls(urls);
 
     // the easy road: encode the pointers
     QByteArray trackData;
@@ -394,7 +395,7 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
 
 QStringList MovixProjectModel::mimeTypes() const
 {
-    QStringList s = KUrl::List::mimeDataTypes();
+    QStringList s = KUrlMimeData::mimeDataTypes();
     s += QString::fromLatin1( "application/x-k3bmovixfileitem" );
 
     return s;
@@ -449,7 +450,7 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction acti
         return true;
     }
 
-    if ( KUrl::List::canDecode( data ) )
+    if ( data->hasUrls() )
     {
         int pos;
         if(parent.isValid())
@@ -459,9 +460,9 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction acti
         else
             pos = d->project->movixFileItems().size();
 
-        KUrl::List urls = KUrl::List::fromMimeData( data );
+        QList<QUrl> urls = KUrlMimeData::urlsFromMimeData( data );
 
-        QMetaObject::invokeMethod( d->project, "addUrlsAt", Qt::QueuedConnection, Q_ARG( KUrl::List, urls ), Q_ARG( int, pos ) );
+        QMetaObject::invokeMethod( d->project, "addUrlsAt", Qt::QueuedConnection, Q_ARG( QList<QUrl>, urls ), Q_ARG( int, pos ) );
 
         return true;
     }

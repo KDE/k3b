@@ -16,7 +16,7 @@
 #ifndef _K3B_DATA_PROJECT_MODEL_H_
 #define _K3B_DATA_PROJECT_MODEL_H_
 
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <QtCore/QAbstractItemModel>
 
 namespace K3b {
@@ -78,7 +78,7 @@ namespace K3b {
         virtual QModelIndex buddy( const QModelIndex& index ) const;
 
     Q_SIGNALS:
-        void addUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir );
+        void addUrlsRequested( QList<QUrl> urls, K3b::DirItem* targetDir );
         void moveItemsRequested( QList<K3b::DataItem*> items, K3b::DirItem* targetDir );
 
     private:

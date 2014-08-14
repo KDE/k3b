@@ -28,7 +28,7 @@
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KArchive/KTar>
-#include <KUrlRequester>
+#include <KIOWidgets/KUrlRequester>
 #include <KUrlRequesterDialog>
 
 #include <QtCore/QFile>

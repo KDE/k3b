@@ -29,13 +29,12 @@
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KDiskFreeSpaceInfo>
-#include <KFileDialog>
 #include <KIconThemes/KIconLoader>
 #include <KIO/Global>
 #include <KLineEdit>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KUrlRequester>
+#include <KIOWidgets/KUrlRequester>
 
 
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )

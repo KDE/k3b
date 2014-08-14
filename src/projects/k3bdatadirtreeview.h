@@ -16,7 +16,7 @@
 #ifndef K3BDATADIRTREEVIEW_H
 #define K3BDATADIRTREEVIEW_H
 
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <QtWidgets/QTreeView>
 
 
@@ -56,7 +56,7 @@ namespace K3b {
 
     private Q_SLOTS:
         void slotSelectionChanged( const QItemSelection& selected, const QItemSelection& );
-        void slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir );
+        void slotAddUrlsRequested( QList<QUrl> urls, K3b::DirItem* targetDir );
         void slotMoveItemsRequested( QList<K3b::DataItem*> items, K3b::DirItem* targetDir );
 
     private:

@@ -39,7 +39,7 @@ namespace K3b {
         ~AudioView();
 
     public Q_SLOTS:
-        virtual void addUrls( const KUrl::List& urls );
+        virtual void addUrls( const QList<QUrl>& urls );
 
     protected:
         virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );

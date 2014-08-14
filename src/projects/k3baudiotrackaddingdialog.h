@@ -17,7 +17,7 @@
 
 #include "k3bjobhandler.h"
 #include <kdialog.h>
-#include <kurl.h>
+#include <QtCore/QUrl>
 #include <QtCore/QStringList>
 
 
@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioTrackAddingDialog( const KUrl::List& urls,
+        AudioTrackAddingDialog( const QList<QUrl>& urls,
                                 AudioDoc* doc,
                                 AudioTrack* afterTrack = 0,
                                 AudioTrack* parentTrack = 0,
@@ -47,7 +47,7 @@ namespace K3b {
          * shows AudioTrackAddingDialog in non-blocking fashion
          * (doesn't wait till dialog is closed)
          */
-        static void addUrls( const KUrl::List& urls,
+        static void addUrls( const QList<QUrl>& urls,
                             AudioDoc* doc,
                             AudioTrack* afterTrack = 0,
                             AudioTrack* parentTrack = 0,
@@ -91,14 +91,14 @@ namespace K3b {
         QStringList m_nonLocalFiles;
         QStringList m_unsupportedFiles;
 
-        KUrl::List m_urls;
+        QList<QUrl> m_urls;
 
         AudioDoc* m_doc;
         AudioTrack* m_trackAfter;
         AudioTrack* m_parentTrack;
         AudioDataSource* m_sourceAfter;
 
-        KUrl m_cueUrl;
+        QUrl m_cueUrl;
 
         bool m_bCanceled;
 

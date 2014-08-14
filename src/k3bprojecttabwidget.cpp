@@ -29,7 +29,7 @@
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -187,7 +187,7 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
             QDropEvent* de = static_cast<QDropEvent*>(e);
             if( de->mimeData()->hasUrls() ) {
                 if( Doc* doc = projectAt( de->pos() ) ) {
-                    KUrl::List urls;
+                    QList<QUrl> urls;
                     Q_FOREACH( const QUrl& url, de->mimeData()->urls() ) {
                         urls.append( url );
                     }

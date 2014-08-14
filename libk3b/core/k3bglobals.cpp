@@ -33,7 +33,7 @@
 #include <QtCore/QDebug>
 #include <kio/job.h>
 #include <kio/netaccess.h>
-#include <kurl.h>
+#include <QtCore/QUrl>
 #include <kprocess.h>
 #include <KDiskFreeSpaceInfo>
 
@@ -223,7 +223,7 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 }
 
 
-KIO::filesize_t K3b::filesize( const KUrl& url )
+KIO::filesize_t K3b::filesize( const QUrl& url )
 {
     KIO::filesize_t fSize = 0;
     if( url.isLocalFile() ) {
@@ -240,7 +240,7 @@ KIO::filesize_t K3b::filesize( const KUrl& url )
 }
 
 
-KIO::filesize_t K3b::imageFilesize( const KUrl& url )
+KIO::filesize_t K3b::imageFilesize( const QUrl& url )
 {
     KIO::filesize_t size = K3b::filesize( url );
     int cnt = 0;
@@ -370,7 +370,7 @@ QString K3b::resolveLink( const QString& file )
 }
 
 
-KUrl K3b::convertToLocalUrl( const KUrl& url )
+QUrl K3b::convertToLocalUrl( const QUrl& url )
 {
     if( !url.isLocalFile() ) {
         return KIO::NetAccess::mostLocalUrl( url, 0 );
@@ -380,10 +380,10 @@ KUrl K3b::convertToLocalUrl( const KUrl& url )
 }
 
 
-KUrl::List K3b::convertToLocalUrls( const KUrl::List& urls )
+QList<QUrl> K3b::convertToLocalUrls( const QList<QUrl>& urls )
 {
-    KUrl::List r;
-    for( KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
+    QList<QUrl> r;
+    for( QList<QUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
         r.append( convertToLocalUrl( *it ) );
     return r;
 }

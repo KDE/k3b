@@ -26,7 +26,7 @@
 
 class KZip;
 class KArchiveDirectory;
-class KUrl;
+class QUrl;
 
 class KoZipStore : public KoStoreBase
 {
@@ -34,10 +34,10 @@ public:
     KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification );
     /**
-     * KUrl-constructor
+     * QUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoZipStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
+    KoZipStore( QWidget* window, const QUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     ~KoZipStore();
 
     virtual qint64 write( const char* _data, qint64 _len );

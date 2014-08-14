@@ -19,7 +19,7 @@
 #include <QtCore/QDebug>
 #include <KLineEdit>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KUrlLabel>
+#include <KWidgetsAddons/KUrlLabel>
 
 #include <QRegExp>
 #include <QValidator>

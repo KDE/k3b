@@ -193,7 +193,9 @@ void Interface::videoDvdRip( const QString& dev )
 
 void Interface::addUrls( const QStringList& urls )
 {
-    m_main->addUrls( KUrl::List( urls ) );
+    QList<QUrl> urlList;
+    for( auto& url : urls ) { urlList.push_back( QUrl::fromUserInput( url ) ); }
+    m_main->addUrls( urlList );
 }
 
 

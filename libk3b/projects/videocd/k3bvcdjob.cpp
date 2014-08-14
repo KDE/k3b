@@ -16,7 +16,7 @@
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <kurl.h>
+#include <QtCore/QUrl>
 #include <ktemporaryfile.h>
 #include <KIO/Global>
 

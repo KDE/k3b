@@ -41,7 +41,7 @@
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KMenu>
-#include <KUrl>
+#include <QtCore/QUrl>
 #include <QtGui/QIcon>
 
 namespace {
@@ -353,13 +353,13 @@ void K3b::WelcomeWidget::dragEnterEvent( QDragEnterEvent* event )
 
 void K3b::WelcomeWidget::dropEvent( QDropEvent* e )
 {
-    KUrl::List urls;
+    QList<QUrl> urls;
     Q_FOREACH( const QUrl& url, e->mimeData()->urls() )
     {
         urls.push_back( url );
     }
 
-    QMetaObject::invokeMethod( m_mainWindow, "addUrls", Qt::QueuedConnection, Q_ARG( KUrl::List, urls ) );
+    QMetaObject::invokeMethod( m_mainWindow, "addUrls", Qt::QueuedConnection, Q_ARG( QList<QUrl>, urls ) );
 }
 
 

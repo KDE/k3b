@@ -31,7 +31,7 @@
 #include <KDELibs4Support/KDE/KStandardGuiItem>
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <kapplication.h>
-#include <kfiledialog.h>
+#include <QtWidgets/QFileDialog>
 #include <kmessagebox.h>
 
 
@@ -74,7 +74,7 @@ void K3b::DebuggingOutputDialog::setOutput( const QString& data )
 
 void K3b::DebuggingOutputDialog::slotUser1()
 {
-  QString filename = KFileDialog::getSaveFileName();
+  QString filename = QFileDialog::getSaveFileName( this );
   if( !filename.isEmpty() ) {
     QFile f( filename );
     if( !f.exists() || KMessageBox::warningContinueCancel( this,

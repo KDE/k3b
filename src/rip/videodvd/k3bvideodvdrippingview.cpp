@@ -48,7 +48,7 @@
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
-#include <KUrlLabel>
+#include <KWidgetsAddons/KUrlLabel>
 
 
 namespace mu = K3b::ModelUtils;

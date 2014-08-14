@@ -17,7 +17,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KDELibs4Support/KDE/KStandardGuiItem>
-#include <KDELibs4Support/KDE/KUrl>
+#include <QtCore/QUrl>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 

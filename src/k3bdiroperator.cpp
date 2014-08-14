@@ -31,7 +31,7 @@
 #include <KMenu>
 #include <KDELibs4Support/KDE/KStandardDirs>
 
-K3b::DirOperator::DirOperator(const KUrl& url, QWidget* parent )
+K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
     : KDirOperator( url, parent )
 {
     setMode( KFile::Files );
@@ -89,7 +89,7 @@ void K3b::DirOperator::readConfig( const KConfigGroup& grp )
     // There seems to be another bug in KDELibs which shows
     // neverending busy cursor when we call setUrl() after setView()
     // so we call it in the right order (see bug 113649)
-    setUrl( KUrl(lastUrl), true );
+    setUrl( QUrl::fromLocalFile(lastUrl), true );
     setView( KFile::Default );
 
     emit urlEntered( url() );
@@ -112,12 +112,7 @@ void K3b::DirOperator::openBookmark(const KBookmark & bm, Qt::MouseButtons, Qt::
 
 QString K3b::DirOperator::currentTitle() const
 {
-    const KUrl& u = url();
-    if (u.isLocalFile()) {
-        return u.path( KUrl::RemoveTrailingSlash );
-    } else {
-        return u.prettyUrl();
-    }
+    return url().toDisplayString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash );
 }
 
 
@@ -157,7 +152,7 @@ void K3b::DirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
 
 void K3b::DirOperator::slotAddFilesToProject()
 {
-    KUrl::List files;
+    QList<QUrl> files;
     QList<KFileItem> items(selectedItems());
     Q_FOREACH( const KFileItem& fileItem, items ) {
         files.append( fileItem.url() );

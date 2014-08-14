@@ -28,11 +28,11 @@
 
 #include <KAction>
 #include <QtCore/QDebug>
-#include <KFileDialog>
+#include <QtWidgets/QFileDialog>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KMessageBox>
 #include <KToolBar>
-#include <KUrl>
+#include <QtCore/QUrl>
 
 #include <QList>
 #include <QHeaderView>
@@ -148,7 +148,7 @@ void K3b::MovixView::slotAddSubTitleFile()
     }
 
     if( item ) {
-        KUrl url = KFileDialog::getOpenUrl();
+        QUrl url = QFileDialog::getOpenFileUrl( this );
         if( url.isValid() ) {
             if( url.isLocalFile() )
                 m_doc->addSubTitleItem( item, url );

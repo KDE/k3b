@@ -67,17 +67,17 @@ int K3b::MovixDoc::indexOf( K3b::MovixFileItem* item )
 }
 
 
-void K3b::MovixDoc::addUrls( const KUrl::List& urls )
+void K3b::MovixDoc::addUrls( const QList<QUrl>& urls )
 {
     addUrlsAt(urls, -1);
 }
 
-void K3b::MovixDoc::addUrlsAt( const KUrl::List& urls, int pos )
+void K3b::MovixDoc::addUrlsAt( const QList<QUrl>& urls, int pos )
 {
     QList<K3b::MovixFileItem*> items;
 
-    for( KUrl::List::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
-        KUrl url = K3b::convertToLocalUrl( *it );
+    for( QList<QUrl>::ConstIterator it = urls.begin(); it != urls.end(); ++it ) {
+        QUrl url = K3b::convertToLocalUrl( *it );
 
         QFileInfo f( url.toLocalFile() );
         if( !f.isFile() || !url.isLocalFile() )
@@ -164,7 +164,7 @@ void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem*
 }
 
 
-void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const KUrl& url )
+void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const QUrl& url )
 {
     if( !item )
         return;

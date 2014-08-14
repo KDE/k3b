@@ -130,22 +130,22 @@ K3b::Msf K3b::VcdDoc::length() const
 }
 
 
-bool K3b::VcdDoc::isImage( const KUrl& url )
+bool K3b::VcdDoc::isImage( const QUrl& url )
 {
     QImage p;
     return p.load( QFile::encodeName( url.toLocalFile() ) );
 }
 
-void K3b::VcdDoc::addUrls( const KUrl::List& urls )
+void K3b::VcdDoc::addUrls( const QList<QUrl>& urls )
 {
     // make sure we add them at the end even if urls are in the queue
     addTracks( urls, 99 );
 }
 
-void K3b::VcdDoc::addTracks( const KUrl::List& urls, uint position )
+void K3b::VcdDoc::addTracks( const QList<QUrl>& urls, uint position )
 {
-    KUrl::List::ConstIterator end( urls.end() );
-    for ( KUrl::List::ConstIterator it = urls.begin(); it != end; ++it ) {
+    QList<QUrl>::ConstIterator end( urls.end() );
+    for ( QList<QUrl>::ConstIterator it = urls.begin(); it != end; ++it ) {
         urlsToAdd.enqueue( new PrivateUrlToAdd( K3b::convertToLocalUrl(*it), position++ ) );
     }
 
@@ -191,7 +191,7 @@ void K3b::VcdDoc::slotWorkUrlQueue()
     }
 }
 
-K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
+K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
 {
     char filename[ 255 ];
     QString error_string = "";
@@ -291,7 +291,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
     return 0;
 }
 
-void K3b::VcdDoc::addTrack( const KUrl& url, uint position )
+void K3b::VcdDoc::addTrack( const QUrl& url, uint position )
 {
     urlsToAdd.enqueue( new PrivateUrlToAdd( url, position ) );
 
@@ -646,7 +646,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         if ( !QFile::exists( url ) )
             m_notFoundFiles.append( url );
         else {
-            KUrl k;
+            QUrl k;
             k.setPath( url );
             if ( K3b::VcdTrack * track = createTrack( k ) ) {
                 track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );
