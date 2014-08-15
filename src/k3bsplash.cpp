@@ -18,12 +18,12 @@
 
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QEvent>
-#include <QFontMetrics>
-#include <QLabel>
-#include <QPainter>
-#include <QPixmap>
-#include <QString>
+#include <QtCore/QEvent>
+#include <QtGui/QFontMetrics>
+#include <QtWidgets/QLabel>
+#include <QtGui/QPainter>
+#include <QtGui/QPixmap>
+#include <QtCore/QString>
 
 #include <K4AboutData>
 #include <KApplication>

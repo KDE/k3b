@@ -18,13 +18,14 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <KIO/Global>
-#include <QtCore/QUrl>
-
 #include "k3bdevicetypes.h"
 #include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
+
+#include <QtCore/QFile>
+#include <QtCore/QString>
+#include <QtCore/QUrl>
 
 #include <sys/stat.h>
 

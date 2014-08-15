@@ -15,9 +15,9 @@
 #ifndef _K3B_SIGNAL_WAITER_H_
 #define _K3B_SIGNAL_WAITER_H_
 
-#include <QtCore/QObject>
-
 #include "k3b_export.h"
+
+#include <QtCore/QObject>
 
 namespace K3b {
     class Job;

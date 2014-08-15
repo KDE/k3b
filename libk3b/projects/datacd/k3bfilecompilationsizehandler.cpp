@@ -16,10 +16,9 @@
 #include "k3bfileitem.h"
 
 #include <QtCore/QDebug>
-
 #include <QtCore/QFile>
 #include <QtCore/QMap>
-#include <QList>
+#include <QtCore/QList>
 
 
 // TODO: remove the items from the project if the savedSize differs

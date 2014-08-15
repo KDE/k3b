@@ -14,9 +14,8 @@
 
 #include "k3bstringutils.h"
 
-#include <qfontmetrics.h>
-
 #include <QtCore/QDebug>
+#include <QtGui/QFontMetrics>
 
 
 QString K3b::cutToWidth( const QFontMetrics& fm, const QString& fullText, int cutWidth )

@@ -19,8 +19,8 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <qlabel.h>
-#include <QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QGridLayout>
 
 
 K3b::MediaSelectionDialog::MediaSelectionDialog( QWidget* parent,

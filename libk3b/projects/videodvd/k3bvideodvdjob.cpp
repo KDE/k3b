@@ -23,10 +23,9 @@
 #include "k3bgrowisofswriter.h"
 #include "k3bglobals.h"
 
-#include <KI18n/KLocalizedString>
-#include <kmessagebox.h>
-#include <kapplication.h>
 #include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 
 

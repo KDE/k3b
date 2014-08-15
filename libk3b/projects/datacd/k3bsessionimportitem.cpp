@@ -19,7 +19,7 @@
 
 #include "k3biso9660.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 namespace K3b {
 

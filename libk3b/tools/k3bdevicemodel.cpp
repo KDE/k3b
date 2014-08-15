@@ -19,7 +19,7 @@
 
 #include "k3bdevice.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 
 class K3b::DeviceModel::Private

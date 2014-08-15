@@ -20,9 +20,9 @@
 #include "k3bvalidators.h"
 #include "k3bcdtextvalidator.h"
 
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QToolTip>
 
 #include <qtabwidget.h>
 #include <klineedit.h>

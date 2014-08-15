@@ -37,22 +37,21 @@
 #include "k3bvalidators.h"
 #include "k3bglobalsettings.h"
 
-#include <QDir>
-#include <QDomElement>
-#include <QtCore/QFile>
-#include <QFileInfo>
-#include <QtCore/QStringList>
-#include <QTimer>
-
-#include <KApplication>
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KInputDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KStatusBar>
+
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
+#include <QtCore/QTimer>
+#include <QtWidgets/QApplication>
+#include <QtXml/QDomElement>
 
 #include <string.h>
 #include <stdlib.h>

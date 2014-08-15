@@ -28,14 +28,14 @@
 
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 #include <kmessagebox.h>
 
-#include <QFileInfo>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qtooltip.h>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QToolTip>
 
 
 K3b::VideoDvdBurnDialog::VideoDvdBurnDialog( K3b::VideoDvdDoc* doc, QWidget *parent )

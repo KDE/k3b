@@ -15,10 +15,9 @@
 #ifndef _K3B_DVD_FORMATTING_JOB_H_
 #define _K3B_DVD_FORMATTING_JOB_H_
 
-
-#include <qprocess.h>
 #include "k3bjob.h"
 #include "k3b_export.h"
+#include <QtCore/QProcess>
 
 namespace K3b {
     namespace Device {

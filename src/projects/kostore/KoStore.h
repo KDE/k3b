@@ -21,9 +21,9 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QString>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QIODevice>
+#include <QtCore/QIODevice>
 #include <QStack>
 #include <QByteArray>
 #include <QtCore/QLoggingCategory>

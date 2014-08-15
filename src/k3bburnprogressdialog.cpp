@@ -25,8 +25,8 @@
 #include <KI18n/KLocalizedString>
 
 #include <QtCore/QLocale>
-#include <QGridLayout>
-#include <QLabel>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
 #include <QProgressBar>
 
 

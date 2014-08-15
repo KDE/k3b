@@ -19,7 +19,7 @@
 
 #include <libkcddb/cdinfo.h>
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KStandardDirs>
 

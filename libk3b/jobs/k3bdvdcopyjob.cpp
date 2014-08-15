@@ -34,13 +34,12 @@
 #include "k3bverificationjob.h"
 #include "k3bglobalsettings.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <qfileinfo.h>
-#include <qapplication.h>
+#include <QtCore/QFileInfo>
 
 
 class K3b::DvdCopyJob::Private

@@ -17,10 +17,10 @@
 #ifndef K3BVIDEOCDINFO_H
 #define K3BVIDEOCDINFO_H
 
-#include <QList>
+#include <QtCore/QList>
 #include <QtCore/QObject>
 #include <QProcess>
-#include <QString>
+#include <QtCore/QString>
 
 namespace K3b {
 

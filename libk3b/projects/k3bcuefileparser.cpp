@@ -19,12 +19,11 @@
 #include "k3btrack.h"
 #include "k3bcdtext.h"
 
-#include <QtCore/QFile>
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qdir.h>
-
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRegExp>
 
 
 // avoid usage of QTextStream since K3b often

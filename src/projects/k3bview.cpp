@@ -24,13 +24,13 @@
 #include "k3baction.h"
 
 // include files for Qt
-#include <QList>
+#include <QtCore/QList>
 #include <QVBoxLayout>
 
 // include files for KDE
 #include <KAction>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <QtCore/QDebug>
 #include <KToolBar>
 

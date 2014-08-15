@@ -19,14 +19,14 @@
 #include "k3bdevice.h"
 #include "k3bfilesplitter.h"
 
-#include <kcodecs.h>
+#include <KCodecs/KCodecs>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
-#include <QtCore/QCryptographicHash>
-#include <kio/netaccess.h>
 
-#include <qtimer.h>
-#include <qiodevice.h>
+#include <QtCore/QCryptographicHash>
+#include <QtCore/QDebug>
+#include <QtCore/QIODevice>
+#include <QtCore/QTimer>
 
 
 class K3b::Md5Job::Private

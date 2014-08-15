@@ -21,8 +21,8 @@
 #include <KDELibs4Support/KDE/KGlobalSettings>
 
 #include <QApplication>
-#include <QHBoxLayout>
-#include <QLabel>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 
 
 K3b::ThemedHeader::ThemedHeader( QWidget* parent )

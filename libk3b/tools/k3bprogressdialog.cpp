@@ -13,16 +13,15 @@
  */
 
 #include "k3bprogressdialog.h"
-
 #include "k3bbusywidget.h"
 
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <QStackedWidget>
-
 #include <KI18n/KLocalizedString>
+
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QtWidgets/QProgressBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStackedWidget>
 
 
 K3b::ProgressDialog::ProgressDialog( const QString& text,

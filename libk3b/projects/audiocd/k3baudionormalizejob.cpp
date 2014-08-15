@@ -18,8 +18,8 @@
 #include "k3bprocess.h"
 #include "k3bcore.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 
 K3b::AudioNormalizeJob::AudioNormalizeJob( K3b::JobHandler* hdl, QObject* parent )

@@ -15,18 +15,17 @@
 #include "k3bmultichoicedialog.h"
 #include "k3bstdguiitems.h"
 
-#include <KApplication>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KIconThemes/KIconLoader>
+#include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KPushButton>
 
-#include <QCloseEvent>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLayout>
-#include <QMessageBox>
-#include <QSignalMapper>
+#include <QtCore/QSignalMapper>
+#include <QtGui/QCloseEvent>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QMessageBox>
 
 
 class K3b::MultiChoiceDialog::Private

@@ -33,22 +33,22 @@
 #include "k3bcddb.h"
 
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KIOCore/KIO/Global>
+#include <KIOCore/KIO/Job>
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
-#include <ktemporaryfile.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <KIO/Global>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KTemporaryFile>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 
-#include <qtimer.h>
-#include <QtCore/QStringList>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
-#include <qregexp.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qapplication.h>
-#include <qvector.h>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRegExp>
+#include <QtCore/QStringList>
+#include <QtCore/QTimer>
+#include <QtCore/QVector>
+#include <QtWidgets/QApplication>
 
 #include <libkcddb/client.h>
 #include <libkcddb/cdinfo.h>

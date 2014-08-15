@@ -23,7 +23,7 @@
 
 #include <KDELibs4Support/KDE/KDialog>
 
-#include <QDateTime>
+#include <QtCore/QDateTime>
 
 class KSqueezedTextLabel;
 class QCloseEvent;

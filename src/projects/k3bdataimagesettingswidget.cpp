@@ -20,13 +20,13 @@
 
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QCheckBox>
 #include <QComboBox>
-#include <QLayout>
-#include <QLineEdit>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
 

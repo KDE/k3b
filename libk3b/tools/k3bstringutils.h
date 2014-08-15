@@ -17,7 +17,7 @@
 #define _K3B_STRING_UTILS_H_
 
 #include <QtCore/QString>
-#include <kdemacros.h>
+#include <KDELibs4Support/kdemacros.h>
 
 class QFontMetrics;
 

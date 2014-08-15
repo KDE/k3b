@@ -41,16 +41,16 @@
 #include <kapplication.h>
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <ktemporaryfile.h>
-#include <KIO/Global>
-#include <kio/job.h>
+#include <KDELibs4Support/KDE/KTemporaryFile>
+#include <KIOCore/KIO/Global>
+#include <KIOCore/KIO/Job>
 
+#include <QtCore/QDataStream>
+#include <QtCore/QDateTime>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <qdatetime.h>
-#include <QtCore/QFile>
-#include <qdatastream.h>
-#include <QtCore/QDebug>
 
 
 

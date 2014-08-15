@@ -26,8 +26,8 @@
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KInputDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
 
 #include <QtCore/QEventLoop>

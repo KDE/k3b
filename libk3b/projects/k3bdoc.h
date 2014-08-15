@@ -19,13 +19,12 @@
 #include "config-k3b.h"
 #include "k3bglobals.h"
 
-#include <QtCore/QObject>
-#include <QString>
-
-#include <QtCore/QUrl>
-#include <KIO/Global>
-
 #include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QUrl>
 
 class QDomElement;
 namespace K3b {

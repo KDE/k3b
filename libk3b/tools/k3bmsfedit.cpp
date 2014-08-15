@@ -18,12 +18,12 @@
 #include "k3bmsfedit.h"
 #include "k3bglobals.h"
 
-#include <QApplication>
-#include <QFontMetrics>
-#include <QLineEdit>
 #include <QtCore/QStringList>
-#include <QStyle>
-#include <QStyleOptionSpinBox>
+#include <QtGui/QFontMetrics>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QStyleOptionSpinBox>
 
 #include <cmath>
 

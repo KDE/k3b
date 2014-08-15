@@ -23,7 +23,7 @@
 #include "k3bview.h"
 #include "k3bvalidators.h"
 
-#include <QList>
+#include <QtCore/QList>
 #include <QHeaderView>
 
 #include <KIconThemes/KIconLoader>

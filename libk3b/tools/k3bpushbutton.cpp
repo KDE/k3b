@@ -14,14 +14,14 @@
 
 #include "k3bpushbutton.h"
 
-#include <qtimer.h>
-#include <qmenu.h>
-#include <qevent.h>
-
 #include <KDELibs4Support/KDE/KGlobalSettings>
-#include <kapplication.h>
 
+#include <QtCore/QEvent>
+#include <QtCore/QTimer>
+#include <QtGui/QMouseEvent>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QMenu>
 
 
 class K3b::PushButton::Private

@@ -23,10 +23,10 @@
 #include "k3biso9660backend.h"
 
 #include <KI18n/KLocalizedString>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 
-#include <QtCore/QSharedData>
 #include <QtCore/QList>
+#include <QtCore/QSharedData>
 
 #include <libkcddb/cdinfo.h>
 

@@ -17,14 +17,13 @@
 #ifndef K3BDIRITEM_H
 #define K3BDIRITEM_H
 
+#include "k3bdataitem.h"
+#include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
 
 #include <QtCore/QList>
 #include <QtCore/QString>
-
-#include <KIO/Global>
-
-#include "k3bdataitem.h"
-#include "k3b_export.h"
 
 namespace K3b {
     class DataDoc;

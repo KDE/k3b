@@ -23,12 +23,12 @@
 
 #include "k3bthread.h"
 
-#include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QDateTime>
-#include <QIODevice>
-#include <QScopedPointer>
+#include <QtCore/QDateTime>
+#include <QtCore/QDebug>
+#include <QtCore/QIODevice>
+#include <QtCore/QScopedPointer>
 
 
 class K3b::AudioMaxSpeedJob::Private

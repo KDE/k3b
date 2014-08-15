@@ -19,7 +19,7 @@
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QTreeWidget>
-#include <QList>
+#include <QtCore/QList>
 
 #include <klineedit.h>
 #include <kmessagebox.h>

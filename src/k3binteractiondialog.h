@@ -15,10 +15,10 @@
 #ifndef _K3B_INTERACTION_DIALOG_H_
 #define _K3B_INTERACTION_DIALOG_H_
 
-#include <kdialog.h>
-#include <QGridLayout>
-#include <QEvent>
-#include <QLabel>
+#include <KDELibs4Support/KDE/KDialog>
+#include <QtWidgets/QGridLayout>
+#include <QtCore/QEvent>
+#include <QtWidgets/QLabel>
 
 
 class QGridLayout;

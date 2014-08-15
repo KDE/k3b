@@ -18,14 +18,13 @@
 #include "k3bstringutils.h"
 
 #include <QtCore/QDebug>
-
-#include <QEvent>
-#include <QFont>
-#include <QFontMetrics>
-#include <QHelpEvent>
-#include <QPainter>
-#include <QStyle>
-#include <QToolTip>
+#include <QtCore/QEvent>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QHelpEvent>
+#include <QtGui/QPainter>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QToolTip>
 
 
 class K3b::TitleLabel::Private

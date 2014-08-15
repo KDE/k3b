@@ -16,9 +16,8 @@
 #include "k3bfilesysteminfo.h"
 
 #include <QtCore/QDebug>
-
 #include <QtCore/QFile>
-#include <qfileinfo.h>
+#include <QtCore/QFileInfo>
 
 
 class K3b::FileSplitter::Private

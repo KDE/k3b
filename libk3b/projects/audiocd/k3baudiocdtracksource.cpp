@@ -24,7 +24,7 @@
 #include "k3bthreadwidget.h"
 #include "k3btoc.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 
 

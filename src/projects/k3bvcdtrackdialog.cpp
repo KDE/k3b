@@ -25,9 +25,9 @@
 
 // Kde Includes
 #include <KIconThemes/KIconLoader>
-#include <KIO/Global>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KMimeType>
+#include <KIOCore/KIO/Global>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KMimeType>
 #include <KNumInput>
 #include <QtCore/QUrl>
 #include <KSqueezedTextLabel>
@@ -36,14 +36,14 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFormLayout>
-#include <QGridLayout>
+#include <QtWidgets/QGridLayout>
 #include <QGroupBox>
 #include <QHeaderView>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QList>
-#include <QPixmap>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtCore/QList>
+#include <QtGui/QPixmap>
 #include <QRadioButton>
 #include <QTabWidget>
 #include <QToolTip>

@@ -28,13 +28,13 @@
 #include <KAction>
 #include <KApplication>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QHeaderView>
 #include <QItemSelectionModel>
-#include <QLayout>
-#include <QString>
+#include <QtWidgets/QLayout>
+#include <QtCore/QString>
 #include <QTreeView>
 
 K3b::VcdView::VcdView( K3b::VcdDoc* doc, QWidget* parent )

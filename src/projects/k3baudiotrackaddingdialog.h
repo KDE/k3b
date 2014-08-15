@@ -16,7 +16,7 @@
 #define _K3B_AUDIO_TRACK_ADDING_DIALOG_H_
 
 #include "k3bjobhandler.h"
-#include <kdialog.h>
+#include <KDELibs4Support/KDE/KDialog>
 #include <QtCore/QUrl>
 #include <QtCore/QStringList>
 

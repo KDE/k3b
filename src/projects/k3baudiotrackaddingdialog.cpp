@@ -25,15 +25,15 @@
 #include "k3bcuefileparser.h"
 
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QDir>
-#include <QFileInfo>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLayout>
-#include <QThread>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtCore/QThread>
 
 
 

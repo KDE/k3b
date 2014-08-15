@@ -36,7 +36,7 @@
 
 #include <kguiitem.h>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KWidgetsAddons/KStandardGuiItem>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <kmessagebox.h>
 #include <KConfigCore/KConfig>
@@ -44,24 +44,24 @@
 #include <KIconThemes/KIconLoader>
 #include <KConfigCore/KSharedConfig>
 
-#include <qcheckbox.h>
+#include <QtWidgets/QCheckBox>
 #include <qspinbox.h>
-#include <qcombobox.h>
-#include <qlayout.h>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QLayout>
 #include <qgroupbox.h>
 #include <QtCore/QList>
-#include <qlabel.h>
-#include <qtooltip.h>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QToolTip>
 #include <qtabwidget.h>
 
 
-#include <qpushbutton.h>
+#include <QtWidgets/QPushButton>
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
-#include <qsizepolicy.h>
+#include <QtWidgets/QSizePolicy>
 #include <QtCore/QFile>
-#include <qfileinfo.h>
-#include <QGridLayout>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QGridLayout>
 
 
 K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )

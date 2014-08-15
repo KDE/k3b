@@ -18,15 +18,15 @@
 #include <KConfigCore/KConfigGroup>
 #include <QtCore/QDebug>
 #include <KLineEdit>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KUrlLabel>
 
-#include <QRegExp>
+#include <QtCore/QRegExp>
 #include <QValidator>
 
 #include <QCheckBox>
-#include <QLayout>
-#include <QGridLayout>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QGridLayout>
 #include <QWhatsThis>
 
 

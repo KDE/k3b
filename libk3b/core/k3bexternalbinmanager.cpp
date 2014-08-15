@@ -17,16 +17,16 @@
 #include "k3bglobals.h"
 
 #include <KConfigCore/KConfigGroup>
-#include <QtCore/QDebug>
-#include <kdeversion.h>
-#include <kde_file.h>
 #include <KCoreAddons/KProcess>
+#include <KDELibs4Support/kdeversion.h>
+#include <KDELibs4Support/kde_file.h>
 #include <KDELibs4Support/KDE/KStandardDirs>
 
-#include <QDir>
-#include <QFileInfo>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
 #include <QtCore/QFile>
-#include <QRegExp>
+#include <QtCore/QRegExp>
 
 #ifndef Q_OS_WIN32
 #include <unistd.h>

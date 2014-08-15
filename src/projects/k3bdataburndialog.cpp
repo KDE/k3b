@@ -32,22 +32,22 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bmediacache.h"
 
-#include <qcheckbox.h>
+#include <QtWidgets/QCheckBox>
 #include <qgroupbox.h>
-#include <qlabel.h>
+#include <QtWidgets/QLabel>
 #include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QtWidgets/QPushButton>
 #include <qtoolbutton.h>
-#include <qlayout.h>
+#include <QtWidgets/QLayout>
 #include <qvariant.h>
-#include <qtooltip.h>
+#include <QtWidgets/QToolTip>
 #include <qpoint.h>
 #include <qradiobutton.h>
-#include <qfileinfo.h>
+#include <QtCore/QFileInfo>
 #include <qtabwidget.h>
 #include <qspinbox.h>
 #include <QtCore/QFile>
-#include <QGridLayout>
+#include <QtWidgets/QGridLayout>
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -55,8 +55,8 @@
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <kfiledialog.h>
-#include <kcombobox.h>
-#include <KIO/Global>
+#include <KDELibs4Support/KDE/KComboBox>
+#include <KIOCore/KIO/Global>
 
 
 #include "k3bfilecompilationsizehandler.h"

@@ -17,8 +17,6 @@
 
 #include "k3b_export.h"
 
-#include <QFrame>
-
 class QWidget;
 class QCheckBox;
 class QComboBox;

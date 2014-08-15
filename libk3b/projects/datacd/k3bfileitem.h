@@ -20,9 +20,9 @@
 #include "k3bdataitem.h"
 #include "k3bglobals.h"
 
-#include <KIO/Global>
-#include <KMimeType>
-#include <QString>
+#include <KDELibs4Support/KDE/KMimeType>
+#include <KIOCore/KIO/Global>
+#include <QtCore/QString>
 
 #include "k3b_export.h"
 

@@ -20,8 +20,9 @@
 #include "k3bfileitem.h"
 #include "k3bisooptions.h"
 
+#include <KI18n/KLocalizedString>
+
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
 
 
 K3b::DirItem::DirItem(const QString& name, const ItemFlags& flags)

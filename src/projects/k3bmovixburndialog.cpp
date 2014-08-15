@@ -34,15 +34,15 @@
 #include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 #include <kmessagebox.h>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 #include <kapplication.h>
 #include <KConfigCore/KConfig>
 
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLayout>
 #include <qgroupbox.h>
-#include <qfileinfo.h>
-#include <QGridLayout>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QGridLayout>
 
 
 K3b::MovixBurnDialog::MovixBurnDialog( K3b::MovixDoc* doc, QWidget* parent )

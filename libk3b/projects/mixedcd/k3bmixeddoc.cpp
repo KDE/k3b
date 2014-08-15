@@ -19,13 +19,12 @@
 #include "k3bglobals.h"
 #include "k3bmsf.h"
 
-#include <QFileInfo>
-#include <QDomElement>
-
-#include <KDELibs4Support/KDE/KLocale>
 #include <KConfigCore/KConfig>
-#include <KApplication>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+
+#include <QtCore/QFileInfo>
+#include <QtXml/QDomElement>
 
 
 

@@ -17,11 +17,9 @@
 #include "k3bprocess.h"
 #include "k3bexternalbinmanager.h"
 
-#include <qbytearray.h>
-#include <QtCore/QStringList>
-#include <qapplication.h>
-
+#include <QtCore/QByteArray>
 #include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
 
 namespace {

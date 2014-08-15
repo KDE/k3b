@@ -25,11 +25,11 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMouseEvent>
-#include <QPainter>
+#include <QtGui/QPainter>
 #include <QPaintEvent>
-#include <QResizeEvent>
+#include <QtGui/QResizeEvent>
 #include <QShowEvent>
-#include <QStyle>
+#include <QtWidgets/QStyle>
 #include <QTextDocument>
 
 #include <K4AboutData>
@@ -39,7 +39,7 @@
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
 #include <QtCore/QUrl>
 #include <QtGui/QIcon>

@@ -38,12 +38,12 @@
 #include "k3binffilewriter.h"
 #include "k3bglobalsettings.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
 
-#include <QtCore/QDebug>
+#include <KCoreAddons/KStringHandler>
 #include <KI18n/KLocalizedString>
-#include <ktemporaryfile.h>
-#include <kstringhandler.h>
+#include <KDELibs4Support/KDE/KTemporaryFile>
 
 
 

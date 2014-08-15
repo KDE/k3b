@@ -30,21 +30,21 @@
 #include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KFileMetaInfo>
 #include <QtGui/QIcon>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KMimeType>
 
 #include <QCheckBox>
 #include <QtCore/QFile>
 #include <QGroupBox>
-#include <QHash>
-#include <QLabel>
+#include <QtCore/QHash>
+#include <QtWidgets/QLabel>
 #include <QLatin1String>
-#include <QLayout>
+#include <QtWidgets/QLayout>
 #include <QPair>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QString>
+#include <QtCore/QString>
 #include <QToolTip>
 #include <QTreeWidget>
 #include <QVBoxLayout>

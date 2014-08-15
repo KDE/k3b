@@ -25,11 +25,11 @@
 #include "k3bglobalsettings.h"
 #include "k3bdevicehandler.h"
 
-#include <KDELibs4Support/KDE/KLocale>
-#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <QTextStream>
+#include <QtCore/QTextStream>
 
 
 

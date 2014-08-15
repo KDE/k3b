@@ -34,13 +34,13 @@
 #include <KAction>
 #include <KActionCollection>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KWidgetsAddons/KMessageBox>
 #include <KToolBar>
 
 #include <QSplitter>
-#include <QStackedWidget>
+#include <QtWidgets/QStackedWidget>
 #include <QTreeView>
 
 K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )

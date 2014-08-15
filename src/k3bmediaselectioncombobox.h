@@ -15,10 +15,10 @@
 #ifndef _K3B_MEDIA_SELECTION_COMBOBOX_H_
 #define _K3B_MEDIA_SELECTION_COMBOBOX_H_
 
-#include <kcombobox.h>
+#include <KDELibs4Support/KDE/KComboBox>
 
 #include "k3bmedium.h"
-#include <QList>
+#include <QtCore/QList>
 
 namespace K3b {
     namespace Device {

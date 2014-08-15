@@ -18,8 +18,8 @@
 #include <QtCore/QUrl>
 
 #include <QtCore/QObject>
-#include <QAbstractItemModel>
-#include <QList>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QList>
 
 class KAction;
 class KActionCollection;

@@ -16,10 +16,11 @@
 #ifndef K3BWAVEFILEWRITER_H
 #define K3BWAVEFILEWRITER_H
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
-#include <qdatastream.h>
 #include "k3b_export.h"
+
+#include <QtCore/QDataStream>
+#include <QtCore/QFile>
+#include <QtCore/QString>
 
 namespace K3b {
     /**

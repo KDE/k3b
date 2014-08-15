@@ -21,7 +21,7 @@
 #include "k3bmedium.h"
 
 #include <QtCore/QStringList>
-#include <QList>
+#include <QtCore/QList>
 
 #include <libkcddb/cdinfo.h>
 

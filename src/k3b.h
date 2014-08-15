@@ -23,7 +23,7 @@
 #include <QtCore/QUrl>
 #include <KXmlGuiWindow>
 
-#include <QList>
+#include <QtCore/QList>
 
 namespace K3b {
     class Doc;

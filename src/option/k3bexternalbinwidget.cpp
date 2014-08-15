@@ -24,10 +24,10 @@
 #include <QCursor>
 #include <QHeaderView>
 #include <QItemSelectionModel>
-#include <QLabel>
-#include <QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QtCore/QMap>
-#include <QPixmap>
+#include <QtGui/QPixmap>
 #include <QPushButton>
 #include <QtCore/QStringList>
 #include <QTabWidget>
@@ -40,8 +40,8 @@
 #include <KDELibs4Support/KDE/KDialog>
 #include <KEditListBox>
 #include <KDELibs4Support/KDE/KGlobalSettings>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KPushButton>
 
 #include <grp.h>

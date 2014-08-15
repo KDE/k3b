@@ -16,7 +16,7 @@
 #define _K3B_MEDIA_COPY_DIALOG_H_
 
 #include "k3binteractiondialog.h"
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 
 class QCheckBox;
 class QSpinBox;

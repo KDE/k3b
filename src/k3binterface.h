@@ -18,7 +18,7 @@
 #define _K3B_INTERFACE_H_
 
 #include <QtCore/QObject>
-#include <QString>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
 
 

@@ -28,16 +28,16 @@
 #endif
 
 #include <QBuffer>
-#include <QFileInfo>
+#include <QtCore/QFileInfo>
 #include <QtCore/QFile>
-#include <QDir>
+#include <QtCore/QDir>
 
 #include <QtCore/QUrl>
 #include <QtCore/QDebug>
 #include <kdeversion.h>
 #include <KI18n/KLocalizedString>
 #include <kmessagebox.h>
-#include <kio/netaccess.h>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 
 #define DefaultFormat KoStore::Zip
 

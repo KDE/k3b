@@ -47,10 +47,10 @@
 #include <KConfigWidgets/KColorScheme>
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KInputDialog>
-#include <KIO/Global>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KIOCore/KIO/Global>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KStandardGuiItem>
 #include <QtCore/QUrl>
 #include <KIOWidgets/KUrlRequester>
 
@@ -61,15 +61,15 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QtCore/QFile>
-#include <QFileInfo>
-#include <QFont>
-#include <QFontMetrics>
-#include <QGridLayout>
+#include <QtCore/QFileInfo>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
+#include <QtWidgets/QGridLayout>
 #include <QGroupBox>
 #include <QHeaderView>
-#include <QLabel>
-#include <QLayout>
-#include <QList>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QMenu>
 #include <QProgressBar>

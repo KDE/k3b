@@ -17,10 +17,10 @@
 #ifndef _K3B_WELCOME_WIDGET_H_
 #define _K3B_WELCOME_WIDGET_H_
 
-#include <QList>
+#include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QImage>
-#include <QPixmap>
+#include <QtGui/QPixmap>
 #include <QWidget>
 
 class KConfigGroup;

@@ -18,11 +18,11 @@
 #include "k3bdevice.h"
 
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QLabel>
-#include <QList>
+#include <QtWidgets/QLabel>
+#include <QtCore/QList>
 #include <QPushButton>
 
 #include <sys/types.h>

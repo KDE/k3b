@@ -20,11 +20,11 @@
 
 #include <QCheckBox>
 #include <QComboBox>
-#include <QLabel>
+#include <QtWidgets/QLabel>
 #include <QVBoxLayout>
 
-#include <KDELibs4Support/KDE/KLocale>
-#include <KIO/Global>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
 
 
 // TODO: three modes:

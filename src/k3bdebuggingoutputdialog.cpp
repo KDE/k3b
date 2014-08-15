@@ -25,10 +25,10 @@
 #include <qcursor.h>
 #include <QtCore/QFile>
 #include <qclipboard.h>
-#include <QTextStream>
+#include <QtCore/QTextStream>
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KWidgetsAddons/KStandardGuiItem>
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <kapplication.h>
 #include <QtWidgets/QFileDialog>

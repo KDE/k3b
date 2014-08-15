@@ -16,14 +16,14 @@
 
 #include "k3bstringutils.h"
 
-#include <qfontmetrics.h>
-#include <qevent.h>
+#include <QtCore/QEvent>
 #include <QtCore/QStringList>
-#include <qrect.h>
-#include <qsize.h>
-#include <qpixmap.h>
-#include <qstyle.h>
-#include <qsizepolicy.h>
+#include <QtCore/QRect>
+#include <QtCore/QSize>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QPixmap>
+#include <QtWidgets/QSizePolicy>
+#include <QtWidgets/QStyle>
 
 
 class K3b::CutComboBox::Private

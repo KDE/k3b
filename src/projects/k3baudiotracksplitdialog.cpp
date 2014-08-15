@@ -21,14 +21,14 @@
 
 #include <KActionCollection>
 #include <KAction>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
 
 #include <QContextMenuEvent>
-#include <QEvent>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLayout>
+#include <QtCore/QEvent>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QMouseEvent>
 
 

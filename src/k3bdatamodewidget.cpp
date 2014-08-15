@@ -20,7 +20,7 @@
 #include <KConfigCore/KConfig>
 
 
-#include <qtooltip.h>
+#include <QtWidgets/QToolTip>
 
 static const int s_autoIndex = 0;
 static const int s_mode1Index = 1;

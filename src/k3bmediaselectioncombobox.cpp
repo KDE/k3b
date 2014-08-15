@@ -31,8 +31,8 @@
 
 #include <qfont.h>
 #include <QtCore/QMap>
-#include <qvector.h>
-#include <QList>
+#include <QtCore/QVector>
+#include <QtCore/QList>
 
 Q_DECLARE_METATYPE(K3b::Medium)
 

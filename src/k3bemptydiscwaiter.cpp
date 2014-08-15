@@ -28,20 +28,20 @@
 #include "k3bdvdformattingjob.h"
 
 #include <QApplication>
-#include <QLabel>
-#include <QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QEventLoop>
-#include <QFont>
-#include <QGridLayout>
+#include <QtGui/QFont>
+#include <QtWidgets/QGridLayout>
 #include <QPushButton>
-#include <QTimer>
+#include <QtCore/QTimer>
 #include <QToolTip>
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
 
 

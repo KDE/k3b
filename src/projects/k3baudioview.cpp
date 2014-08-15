@@ -30,16 +30,16 @@
 #include "k3baudiotrackplayer.h"
 #endif // ENABLE_AUDIO_PLAYER
 
-#include <QLayout>
-#include <QString>
+#include <QtWidgets/QLayout>
+#include <QtCore/QString>
 #include <QScrollBar>
 #include <QTreeView>
 
 #include <KAction>
 #include <KActionCollection>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KToolBar>
 #include <fcntl.h>
 

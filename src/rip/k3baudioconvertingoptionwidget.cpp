@@ -22,16 +22,16 @@
 #include <KConfigWidgets/KColorScheme>
 #include <KComboBox>
 #include <KConfigCore/KConfig>
-#include <KDiskFreeSpaceInfo>
+#include <KIOCore/KDiskFreeSpaceInfo>
 #include <KDELibs4Support/KDE/KGlobalSettings>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOWidgets/KUrlRequester>
 
 #include <QCheckBox>
-#include <QLabel>
-#include <QList>
-#include <QTimer>
+#include <QtWidgets/QLabel>
+#include <QtCore/QList>
+#include <QtCore/QTimer>
 #include <QToolButton>
 
 

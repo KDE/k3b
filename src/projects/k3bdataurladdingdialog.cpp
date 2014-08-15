@@ -33,22 +33,22 @@
 #include "k3bsignalwaiter.h"
 #include "k3bexternalbinmanager.h"
 
-#include <QDir>
-#include <QFileInfo>
-#include <QGridLayout>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QGridLayout>
 #include <QProgressBar>
-#include <QLabel>
-#include <QLayout>
-#include <QList>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtCore/QList>
 
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KInputDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <QtCore/QUrl>
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KWidgetsAddons/KStandardGuiItem>
 #include <KSqueezedTextLabel>
 
 #include <unistd.h>

@@ -31,17 +31,17 @@
 #include <KComboBox>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
-#include <KIO/Global>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KIOCore/KIO/Global>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KIOWidgets/KUrlRequester>
 
 #include <QCheckBox>
-#include <QDir>
-#include <QGridLayout>
+#include <QtCore/QDir>
+#include <QtWidgets/QGridLayout>
 #include <QHeaderView>
-#include <QLabel>
-#include <QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QtCore/QStringList>
 #include <QTabWidget>
 #include <QTreeWidget>

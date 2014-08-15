@@ -19,14 +19,14 @@
 #include "k3bglobals.h"
 #include "k3bprocess.h"
 
-#include <QDir>
-#include <QtCore/QFile>
-#include <QFileInfo>
-#include <QtCore/QStringList>
-#include <QTextStream>
+#include <KCoreAddons/KProcess>
 
 #include <QtCore/QDebug>
-#include <KCoreAddons/KProcess>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
+#include <QtCore/QTextStream>
 
 
 void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )

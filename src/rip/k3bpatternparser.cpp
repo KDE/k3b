@@ -16,12 +16,12 @@
 
 #include "k3bpatternparser.h"
 
-#include <qregexp.h>
-#include <qdatetime.h>
+#include <QtCore/QRegExp>
+#include <QtCore/QDateTime>
 #include <qstack.h>
 
-#include <KDELibs4Support/KDE/KLocale>
 #include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KLocale>
 
 #include <libkcddb/cdinfo.h>
 

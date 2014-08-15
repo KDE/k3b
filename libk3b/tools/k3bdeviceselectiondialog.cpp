@@ -20,14 +20,13 @@
 #include "k3bcore.h"
 #include "k3bdevicemanager.h"
 
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <QtCore/QString>
-
-#include <QGridLayout>
-
 #include <KI18n/KLocalizedString>
+
+#include <QtCore/QString>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QGridLayout>
 
 
 class K3b::DeviceSelectionDialog::Private

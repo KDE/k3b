@@ -25,14 +25,14 @@
 #include "k3bglobals.h"
 #include "k3biso9660.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <qfont.h>
 #include <qcolor.h>
 #include <QtCore/QString>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpixmap.h>
+#include <QtGui/QPainter>
+#include <QtGui/QPalette>
+#include <QtGui/QPixmap>
 #include <QtWidgets/QTextBrowser>
 #include <QtWebKitWidgets/QWebView>
 
@@ -40,7 +40,7 @@
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <QtCore/QDebug>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 #include <libkcddb/cdinfo.h>
 
 

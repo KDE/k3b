@@ -27,7 +27,7 @@
 #include <QtCore/QDebug>
 #include <kdeversion.h>
 #include <QtCore/QUrl>
-#include <kio/netaccess.h>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {

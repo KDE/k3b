@@ -42,16 +42,15 @@
 #include "k3bglobalsettings.h"
 #include "k3baudiofile.h"
 
-#include <QtCore/QFile>
-#include <qdatastream.h>
-#include <qapplication.h>
-
-#include <QtCore/QDebug>
+#include <KCoreAddons/KStringHandler>
 #include <KI18n/KLocalizedString>
-#include <ktemporaryfile.h>
-#include <kio/netaccess.h>
-#include <KIO/Global>
-#include <kstringhandler.h>
+#include <KIOCore/KIO/Global>
+#include <KDELibs4Support/KDE/KTemporaryFile>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
+
+#include <QtCore/QDataStream>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
 
 
 static QString createNonExistingFilesString( const QList<K3b::AudioFile*>& items, int max )

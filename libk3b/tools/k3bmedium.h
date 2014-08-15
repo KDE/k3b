@@ -23,10 +23,9 @@
 #include "k3bdevice.h"
 #include "k3biso9660.h"
 
-#include <QtGui/QIcon>
-
 #include <QtCore/QSharedDataPointer>
-#include <QList>
+#include <QtCore/QList>
+#include <QtGui/QIcon>
 
 namespace KCDDB{
     class CDInfo;

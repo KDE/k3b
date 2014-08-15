@@ -23,10 +23,10 @@
 #include "k3bthread.h"
 #include "k3bwavefilewriter.h"
 
-#include <KDELibs4Support/KDE/KLocale>
-#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 
-#include <QIODevice>
+#include <QtCore/QDebug>
+#include <QtCore/QIODevice>
 #include <QtCore/QFile>
 
 #include <unistd.h>

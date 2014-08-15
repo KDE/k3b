@@ -31,10 +31,10 @@
 #include <KAction>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QString>
+#include <QtCore/QString>
 
 #include <libkcddb/cdinfo.h>
 

@@ -15,9 +15,9 @@
 #ifndef _K3B_PUSH_BUTTON_H_
 #define _K3B_PUSH_BUTTON_H_
 
-
-#include <kpushbutton.h>
 #include "k3b_export.h"
+
+#include <KDELibs4Support/KDE/KPushButton>
 
 class QMenu;
 class QEvent;

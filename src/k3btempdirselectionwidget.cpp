@@ -18,21 +18,21 @@
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 
-#include <QFileInfo>
+#include <QtCore/QFileInfo>
 #include <QGroupBox>
-#include <QLabel>
-#include <QLayout>
-#include <QTimer>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtCore/QTimer>
 #include <QToolTip>
 
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDiskFreeSpaceInfo>
+#include <KIOCore/KDiskFreeSpaceInfo>
 #include <KIconThemes/KIconLoader>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 #include <KLineEdit>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KIOWidgets/KUrlRequester>
 

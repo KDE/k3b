@@ -16,7 +16,7 @@
 #define K3B_DATA_VIEW_IMPL_H
 
 #include <QtCore/QObject>
-#include <QAbstractItemModel>
+#include <QtCore/QAbstractItemModel>
 #include <QtCore/QUrl>
 
 class KAction;

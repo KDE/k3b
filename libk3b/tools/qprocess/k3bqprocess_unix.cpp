@@ -91,15 +91,15 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 
 //#include <private/qcoreapplication_p.h>
 //#include <private/qthread_p.h>
-#include <qdatetime.h>
+#include <QtCore/QDateTime>
 #include <QtCore/QFile>
-#include <qfileinfo.h>
+#include <QtCore/QFileInfo>
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include <qmutex.h>
+#include <QtCore/QMutex>
 #include <qsemaphore.h>
 #include <qsocketnotifier.h>
-#include <qthread.h>
+#include <QtCore/QThread>
 
 #include <errno.h>
 #include <stdlib.h>

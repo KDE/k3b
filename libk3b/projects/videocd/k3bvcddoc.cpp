@@ -20,20 +20,20 @@
 #include "k3bglobals.h"
 #include "k3bmsf.h"
 
-#include <QDataStream>
-#include <QDomElement>
-#include <QtCore/QFile>
-#include <QImage>
-#include <QTimer>
-
-#include <KApplication>
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
-#include <KIO/Global>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KStandardGuiItem>
+
+#include <QtCore/QDataStream>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QTimer>
+#include <QtGui/QImage>
+#include <QtWidgets/QApplication>
+#include <QtXml/QDomElement>
 
 
 #if 0
@@ -207,7 +207,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
                 setVcdType( vcdTypes( mpegVersion ) );
                 // FIXME: properly convert the mpeg version
                 vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )mpegVersion );
-                KMessageBox::information( kapp->activeWindow(),
+                KMessageBox::information( qApp->activeWindow(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
                                                 "files, but these files must already be in %1 "
                                                 "format. K3b does not yet resample MPEG files.",
@@ -217,7 +217,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
             } else if ( vcdType() == NONE ) {
                 m_urlAddingTimer->stop();
                 vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )mpegVersion );
-                bool force = KMessageBox::questionYesNo( kapp->activeWindow(),
+                bool force = KMessageBox::questionYesNo( qApp->activeWindow(),
                                                          i18n( "K3b will create a %1 image from the given MPEG "
                                                                "files, but these files must already be in %1 "
                                                                "format. K3b does not yet resample MPEG files.",
@@ -239,7 +239,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
 
 
             if ( numOfTracks() > 0 && vcdOptions() ->mpegVersion() != mpegVersion ) {
-                KMessageBox::error( kapp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
+                KMessageBox::error( qApp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
                                     i18n( "You cannot mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet." ),
                                     i18n( "Wrong File Type for This Project" ) );
 
@@ -251,7 +251,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
             *( newTrack->mpeg_info ) = *( Mpeg->mpeg_info );
 
             if ( newTrack->isSegment() && !vcdOptions()->PbcEnabled() ) {
-                KMessageBox::information( kapp->activeWindow(),
+                KMessageBox::information( qApp->activeWindow(),
                                           i18n( "PBC (Playback control) enabled.\n"
                                                 "Video players cannot reach Segments (MPEG Still Pictures) without Playback control." ) ,
                                           i18n( "Information" ) );
@@ -283,7 +283,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
     }
 
     // error (unsupported files)
-    KMessageBox::error( kapp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
+    KMessageBox::error( qApp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
                         i18n( "Only MPEG1 and MPEG2 video files are supported.\n" ) + error_string ,
                         i18n( "Wrong File Format" ) );
 

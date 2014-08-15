@@ -15,7 +15,7 @@
 #ifndef _K3B_MEDIA_SELECTION_DIALOG_H_
 #define _K3B_MEDIA_SELECTION_DIALOG_H_
 
-#include <kdialog.h>
+#include <KDELibs4Support/KDE/KDialog>
 #include "k3bmedium.h"
 
 namespace K3b {

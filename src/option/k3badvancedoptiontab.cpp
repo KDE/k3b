@@ -18,22 +18,22 @@
 #include "k3bstdguiitems.h"
 #include "k3bglobalsettings.h"
 
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLayout>
 #include <qgroupbox.h>
 #include <qtabwidget.h>
 #include <qradiobutton.h>
-#include <qvalidator.h>
+#include <QtGui/QValidator>
 #include <qspinbox.h>
-#include <qtooltip.h>
+#include <QtWidgets/QToolTip>
 
 #include <knuminput.h>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <kdialog.h>
+#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <klineedit.h>
 

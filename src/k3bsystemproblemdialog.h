@@ -18,7 +18,7 @@
 
 #include <KDELibs4Support/KDE/KDialog>
 
-#include <QString>
+#include <QtCore/QString>
 
 class QCheckBox;
 class QCloseEvent;

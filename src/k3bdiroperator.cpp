@@ -20,7 +20,7 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <QDir>
+#include <QtCore/QDir>
 
 #include <KAction>
 #include <KActionCollection>

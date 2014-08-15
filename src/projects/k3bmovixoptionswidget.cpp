@@ -17,18 +17,18 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixprogram.h"
 
-#include <kcombobox.h>
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KLocale>
 #include <QtCore/QDebug>
-#include <kdialog.h>
+#include <KDELibs4Support/KDE/KComboBox>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/KDE/KLocale>
 
-#include <qcheckbox.h>
+#include <QtWidgets/QCheckBox>
 #include <qspinbox.h>
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
-#include <qlabel.h>
+#include <QtWidgets/QLabel>
 
 
 class K3b::MovixOptionsWidget::LanguageSelectionHelper

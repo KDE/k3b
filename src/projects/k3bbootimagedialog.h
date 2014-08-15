@@ -16,7 +16,7 @@
 #ifndef K3BBOOTIMAGE_DIALOG_H
 #define K3BBOOTIMAGE_DIALOG_H
 
-#include <kdialog.h>
+#include <KDELibs4Support/KDE/KDialog>
 
 namespace K3b {
     class BootImageView;

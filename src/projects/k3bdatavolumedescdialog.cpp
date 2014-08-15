@@ -21,7 +21,7 @@
 
 #include <qlineedit.h>
 #include <qspinbox.h>
-#include <qlabel.h>
+#include <QtWidgets/QLabel>
 #include <qtoolbutton.h>
 
 

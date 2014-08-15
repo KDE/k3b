@@ -15,15 +15,15 @@
 #ifndef _K3B_MEDIUM_P_H_
 #define _K3B_MEDIUM_P_H_
 
-#include <QtCore/QSharedData>
-#include <QtCore/QList>
-
 #include "k3bmedium.h"
 
 #include "k3bdiskinfo.h"
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 #include "k3biso9660.h"
+
+#include <QtCore/QSharedData>
+#include <QtCore/QList>
 
 #include <libkcddb/cdinfo.h>
 

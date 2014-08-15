@@ -26,8 +26,8 @@
 #include <KIconThemes/KIconEngine>
 #include <KI18n/KLocalizedString>
 
-#include <QDataStream>
-#include <QFont>
+#include <QtCore/QDataStream>
+#include <QtGui/QFont>
 #include <QMimeData>
 
 

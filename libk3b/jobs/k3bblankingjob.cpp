@@ -24,10 +24,10 @@
 
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
-#include <KIO/Global>
-#include <kio/job.h>
-#include <QtCore/QDebug>
+#include <KIOCore/KIO/Global>
+#include <KIOCore/KIO/Job>
 
+#include <QtCore/QDebug>
 #include <QtCore/QString>
 
 

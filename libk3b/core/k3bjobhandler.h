@@ -18,7 +18,7 @@
 
 #include "k3bdiskinfo.h"
 #include "k3bdevice.h"
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KWidgetsAddons/KStandardGuiItem>
 
 
 namespace K3b {

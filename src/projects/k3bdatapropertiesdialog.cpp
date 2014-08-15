@@ -20,18 +20,18 @@
 #include "k3bvalidators.h"
 
 #include <KIconThemes/KIconLoader>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 #include <KLineEdit>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KMimeType>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KMimeType>
 #include <QtCore/QUrl>
 #include <KSqueezedTextLabel>
 
 #include <QCheckBox>
-#include <QFileInfo>
-#include <QFrame>
-#include <QGridLayout>
-#include <QLabel>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
 #include <QPushButton>
 #include <QTabWidget>
 #include <QToolTip>

@@ -26,8 +26,8 @@
 #include "k3bview.h"
 
 #include <QDBusConnection>
-#include <QList>
-#include <QTimer>
+#include <QtCore/QList>
+#include <QtCore/QTimer>
 
 namespace K3b {
 

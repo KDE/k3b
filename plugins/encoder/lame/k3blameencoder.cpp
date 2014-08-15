@@ -21,7 +21,7 @@
 
 #include "k3bcore.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>

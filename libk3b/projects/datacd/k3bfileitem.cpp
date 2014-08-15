@@ -21,13 +21,12 @@
 #include <config-k3b.h>
 
 #include <QtCore/QDebug>
-#include <QtCore/QUrl>
-
 #include <QtCore/QFile>
-#include <QFileInfo>
-#include <QRegExp>
-#include <QString>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRegExp>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QUrl>
 
 #include <errno.h>
 #include <string.h>

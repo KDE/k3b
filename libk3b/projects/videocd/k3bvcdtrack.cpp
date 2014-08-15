@@ -14,22 +14,20 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <kapplication.h>
-#include <KConfigCore/KConfig>
+#include "k3bvcdtrack.h"
+#include "k3bglobals.h"
 
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+
+#include <QtCore/QDebug>
 #include <QtCore/QString>
-#include <qfileinfo.h>
+#include <QtCore/QFileInfo>
 
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <QtCore/QDebug>
-#include <KI18n/KLocalizedString>
-
-// K3b Includes
-#include "k3bvcdtrack.h"
-#include "k3bglobals.h"
 
 K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename )
         : m_pbcnumkeys( true ),

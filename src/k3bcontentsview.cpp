@@ -16,7 +16,7 @@
 
 #include "k3bthemedheader.h"
 
-#include <QLabel>
+#include <QtWidgets/QLabel>
 #include <QVBoxLayout>
 
 

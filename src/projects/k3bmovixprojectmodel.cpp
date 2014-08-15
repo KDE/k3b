@@ -19,7 +19,7 @@
 #include "k3bmovixfileitem.h"
 
 #include <KCoreAddons/KUrlMimeData>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <QtCore/QUrl>
 #include <QtGui/QIcon>
 

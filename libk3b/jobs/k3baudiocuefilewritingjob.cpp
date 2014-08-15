@@ -26,8 +26,8 @@
 #include "k3bthread.h"
 #include "k3bthreadjob.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 
 class K3b::AudioCueFileWritingJob::Private

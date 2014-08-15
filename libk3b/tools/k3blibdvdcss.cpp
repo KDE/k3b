@@ -23,8 +23,8 @@
 #include <KDELibs4Support/KDE/KGlobal>
 
 #include <QtCore/QFile>
-#include <qlibrary.h>
-#include <qpair.h>
+#include <QtCore/QLibrary>
+#include <QtCore/QPair>
 
 
 

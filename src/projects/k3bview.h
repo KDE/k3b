@@ -22,8 +22,8 @@
 #include <config-k3b.h>
 #endif
 
-#include <QHash>
-#include <QList>
+#include <QtCore/QHash>
+#include <QtCore/QList>
 #include <QWidget>
 
 #include <KXMLGUIClient>

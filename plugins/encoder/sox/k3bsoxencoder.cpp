@@ -25,10 +25,10 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <QtCore/QFile>
-#include <QFileInfo>
+#include <QtCore/QFileInfo>
 
 #include <sys/types.h>
 

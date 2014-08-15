@@ -27,21 +27,22 @@
 
 #include <KComboBox>
 #include <KConfigCore/KConfig>
-#include <KLineEdit>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KLineEdit>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KIOWidgets/KUrlRequester>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 
 #include <QCheckBox>
-#include <QFontMetrics>
-#include <QHBoxLayout>
+#include <QtGui/QFontMetrics>
+#include <QtWidgets/QHBoxLayout>
 #include <QHeaderView>
-#include <QLayout>
-#include <QList>
+#include <QtWidgets/QLayout>
+#include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QSpinBox>
-#include <QStyle>
+#include <QtWidgets/QStyle>
 #include <QVector>
 
 

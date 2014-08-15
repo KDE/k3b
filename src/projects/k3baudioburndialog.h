@@ -22,7 +22,7 @@
 #include <qvariant.h>
 #include <qwidget.h>
 #include <QShowEvent>
-#include <QLabel>
+#include <QtWidgets/QLabel>
 
 class QCheckBox;
 class QComboBox;

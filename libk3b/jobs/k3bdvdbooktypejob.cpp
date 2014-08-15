@@ -26,9 +26,9 @@
 #include "k3bglobalsettings.h"
 
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 
-#include <qregexp.h>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
 
 #include <errno.h>
 #include <string.h>

@@ -23,13 +23,13 @@
 #include "k3bmsf.h"
 #include "k3bglobals.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 
-#include <qregexp.h>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
 #include <QtCore/QStringList>
-#include <QList>
+#include <QtCore/QList>
 #include <QtCore/QIODevice>
 
 

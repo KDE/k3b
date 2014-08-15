@@ -23,17 +23,17 @@
 
 #include <QApplication>
 #include <QDialogButtonBox>
-#include <QEvent>
-#include <QFont>
-#include <QGridLayout>
-#include <QHBoxLayout>
+#include <QtCore/QEvent>
+#include <QtGui/QFont>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QKeyEvent>
-#include <QLabel>
-#include <QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QMenu>
 #include <QPoint>
-#include <QString>
-#include <QTimer>
+#include <QtCore/QString>
+#include <QtCore/QTimer>
 #include <QToolButton>
 #include <QToolTip>
 
@@ -43,10 +43,10 @@
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <QtGui/QIcon>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KPushButton>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KWidgetsAddons/KStandardGuiItem>
 
 
 K3b::InteractionDialog::InteractionDialog( QWidget* parent,

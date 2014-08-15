@@ -36,10 +36,10 @@
 #include <kapplication.h>
 
 #include <qgroupbox.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolTip>
 
 
 

@@ -24,7 +24,7 @@
 #include <QtCore/QStringList>
 #include <QtWidgets/QLabel>
 
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 
 class QProgressBar;
 class QLabel;

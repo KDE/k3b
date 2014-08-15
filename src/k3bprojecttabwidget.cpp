@@ -27,7 +27,7 @@
 #include <QtCore/QDebug>
 #include <QtGui/QIcon>
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
 #include <QtCore/QUrl>
 

@@ -16,9 +16,10 @@
 #include "k3bvideodvd.h"
 #include "k3bvideodvdtitle.h"
 
+#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KLocale>
 
-#include <QHash>
+#include <QtCore/QHash>
 
 namespace K3b {
     

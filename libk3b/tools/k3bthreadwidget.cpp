@@ -16,12 +16,10 @@
 #include "k3bdeviceselectiondialog.h"
 #include "k3bdevice.h"
 
-#include <qevent.h>
-#include <qapplication.h>
-#include <qwaitcondition.h>
-
-#include <QEvent>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
 #include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
 
 
 class K3b::ThreadWidget::Data
@@ -111,7 +109,7 @@ K3b::Device::Device* K3b::ThreadWidget::selectDevice( QWidget* parent,
     Data* data = K3b::ThreadWidget::instance()->data( K3b::ThreadWidget::instance()->getNewId() );
 
     // inform the instance about the request
-    QApplication::postEvent( K3b::ThreadWidget::instance(),
+    QCoreApplication::postEvent( K3b::ThreadWidget::instance(),
                              new K3b::ThreadWidget::DeviceSelectionEvent( parent, text, data->id ) );
 
     // wait for the result to be ready

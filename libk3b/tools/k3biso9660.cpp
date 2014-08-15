@@ -22,10 +22,9 @@
 
 #include "libisofs/isofs.h"
 
-#include <qdir.h>
-#include <QtCore/QFile>
-
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
 
 
 /* callback function for libisofs */

@@ -15,16 +15,16 @@
 #include "k3bdatamultisessionimportdialog.h"
 
 #include <QCursor>
-#include <QFont>
-#include <QLabel>
-#include <QLayout>
+#include <QtGui/QFont>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QtCore/QMap>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include "k3bcore.h"
 #include "k3bdatadoc.h"

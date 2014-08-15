@@ -17,9 +17,9 @@
 #define K3BWRITERSELECTIONWIDGET_H
 
 #include <qwidget.h>
-#include <QLabel>
+#include <QtWidgets/QLabel>
 
-#include <ksharedconfig.h>
+#include <KConfigCore/KSharedConfig>
 
 #include "k3bglobals.h"
 

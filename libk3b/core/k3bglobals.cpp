@@ -25,26 +25,24 @@
 #include "k3bmediacache.h"
 #include "k3bmsf.h"
 
-#include <kdeversion.h>
 #include <KDELibs4Support/KDE/KGlobal>
-#include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
-#include <kapplication.h>
-#include <QtCore/QDebug>
-#include <kio/job.h>
-#include <kio/netaccess.h>
-#include <QtCore/QUrl>
-#include <kprocess.h>
-#include <KDiskFreeSpaceInfo>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 
+#include <KCoreAddons/KProcess>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KDiskFreeSpaceInfo>
+#include <KIOCore/KIO/Job>
 #include <KIOCore/KMountPoint>
 #include <Solid/Device>
 #include <Solid/StorageAccess>
 #include <Solid/OpticalDrive>
 
-#include <qdatastream.h>
-#include <qdir.h>
+#include <QtCore/QDataStream>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QUrl>
 
 #include <cmath>
 #include <sys/utsname.h>
@@ -422,11 +420,11 @@ qint64 K3b::fromLe64( char* data )
 QString K3b::findExe( const QString& name )
 {
     // first we search the path
-    QString bin = KStandardDirs::findExe( name );
+    QString bin = QStandardPaths::findExecutable( name );
 
     // then go on with our own little list
     if( bin.isEmpty() )
-        bin = KStandardDirs::findExe( name, k3bcore->externalBinManager()->searchPath().join(":") );
+        bin = QStandardPaths::findExecutable( name, k3bcore->externalBinManager()->searchPath() );
 
     return bin;
 }

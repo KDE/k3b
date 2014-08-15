@@ -15,10 +15,10 @@
 #ifndef _K3B_K3BVIDEODVDAUDIOMODEL_H_
 #define _K3B_K3BVIDEODVDAUDIOMODEL_H_
 
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 
-#include <QAbstractItemModel>
-#include <QList>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QList>
 
 
 namespace K3b {

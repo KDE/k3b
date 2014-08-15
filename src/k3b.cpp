@@ -75,9 +75,9 @@
 #include <QtWidgets/QFileDialog>
 #include <kfileplacesmodel.h>
 #include <KDELibs4Support/KDE/KGlobal>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KWidgetsAddons/KMessageBox>
 #include <KMenuBar>
-#include <KMimeType>
+#include <KDELibs4Support/KDE/KMimeType>
 #include <KCoreAddons/KProcess>
 #include <KRecentDocument>
 #include <KRecentFilesAction>
@@ -88,7 +88,7 @@
 #include <KToggleAction>
 #include <QtCore/QUrl>
 #include <KXMLGUIFactory>
-#include <kio/netaccess.h>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <kio/deletejob.h>
 
 // include files for QT

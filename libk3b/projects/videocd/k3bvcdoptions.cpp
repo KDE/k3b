@@ -13,20 +13,16 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-// Kde Includes
-#include <kapplication.h>
-#include <KConfigCore/KConfig>
+#include "k3bvcdoptions.h"
+#include "k3bversion.h"
 #include "k3bcore.h"
+
+#include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KStandardDirs>
 
-// Qt Includes
 #include <QtCore/QString>
 #include <QtCore/QFile>
-
-// K3b Includes
-#include "k3bvcdoptions.h"
-#include "k3bversion.h"
 
 K3b::VcdOptions::VcdOptions()
     : m_restriction( 0 ),

@@ -14,15 +14,12 @@
 
 #include <config-k3b.h>
 
-
 #include "k3bclonetocreader.h"
-
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 
-#include <QtCore/QFile>
-
 #include <QtCore/QDebug>
+#include <QtCore/QFile>
 
 
 class K3b::CloneTocReader::Private

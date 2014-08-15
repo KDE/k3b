@@ -19,8 +19,8 @@
 
 #include "k3babstractwriter.h"
 
+#include <QtCore/QProcess>
 #include <QtCore/QStringList>
-#include <qprocess.h>
 
 namespace K3b {
     class ExternalBin;

@@ -29,12 +29,12 @@
 #include <KAction>
 #include <QtCore/QDebug>
 #include <QtWidgets/QFileDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KToolBar>
 #include <QtCore/QUrl>
 
-#include <QList>
+#include <QtCore/QList>
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QTreeView>

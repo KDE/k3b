@@ -16,7 +16,7 @@
 #ifndef _K3B_DATAMODE_WIDGET_H_
 #define _K3B_DATAMODE_WIDGET_H_
 
-#include <qcombobox.h>
+#include <QtWidgets/QComboBox>
 #include <KConfigCore/KConfigGroup>
 
 

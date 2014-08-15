@@ -43,8 +43,8 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QHeaderView>
 #include <QScrollBar>

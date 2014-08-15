@@ -29,15 +29,15 @@
 #include <KComboBox>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KInputDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QApplication>
 #include <QCursor>
-#include <QGridLayout>
+#include <QtWidgets/QGridLayout>
 #include <QGroupBox>
-#include <QLabel>
-#include <QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QToolButton>
 #include <QToolTip>
 

@@ -22,7 +22,7 @@
 #include "k3bintmapcombobox.h"
 
 #include <QCheckBox>
-#include <QFileInfo>
+#include <QtCore/QFileInfo>
 #include <QRadioButton>
 
 #include <KApplication>
@@ -31,8 +31,8 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KIOWidgets/KUrlRequester>
 

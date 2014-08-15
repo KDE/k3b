@@ -18,8 +18,8 @@
 #include "k3bcore.h"
 #include "k3bjob.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 #include <cmath>
 

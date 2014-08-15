@@ -17,8 +17,8 @@
 #include "k3bdevicemodel.h"
 
 #include <QApplication>
-#include <QPainter>
-#include <QStyle>
+#include <QtGui/QPainter>
+#include <QtWidgets/QStyle>
 
 #include <KIconEffect>
 #include <KIconThemes/KIconLoader>

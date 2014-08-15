@@ -20,7 +20,7 @@
 #include <QRadioButton>
 
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 
 K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* parent )

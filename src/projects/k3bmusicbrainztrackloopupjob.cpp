@@ -19,7 +19,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 
 class K3b::MusicBrainzTrackLookupJob::Private

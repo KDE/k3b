@@ -31,23 +31,23 @@
 #include "k3bcore.h"
 
 #include <QtCore/QString>
-#include <qpushbutton.h>
-#include <qtooltip.h>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolTip>
 
-#include <qlayout.h>
+#include <QtWidgets/QLayout>
 #include <QWhatsThis>
-#include <qcheckbox.h>
+#include <QtWidgets/QCheckBox>
 #include <qtabwidget.h>
 #include <qgroupbox.h>
 #include <qspinbox.h>
-#include <qlabel.h>
-#include <QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QGridLayout>
 #include <QVBoxLayout>
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <kmessagebox.h>
 #include <kguiitem.h>
-#include <KDELibs4Support/KDE/KStandardGuiItem>
+#include <KWidgetsAddons/KStandardGuiItem>
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KStandardDirs>

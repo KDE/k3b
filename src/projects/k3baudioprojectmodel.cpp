@@ -23,7 +23,7 @@
 #include "k3baudiotrackaddingdialog.h"
 
 #include <KCoreAddons/KUrlMimeData>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <QtGui/QIcon>
 
 #include <QApplication>

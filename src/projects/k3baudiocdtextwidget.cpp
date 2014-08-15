@@ -20,15 +20,15 @@
 #include "k3bcdtextvalidator.h"
 
 #include <QtGui/QIcon>
-#include <qcheckbox.h>
+#include <QtWidgets/QCheckBox>
 #include <qtoolbutton.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLayout>
 #include <qgroupbox.h>
 
 #include <klineedit.h>
 #include <KI18n/KLocalizedString>
-#include <kdialog.h>
+#include <KDELibs4Support/KDE/KDialog>
 
 
 class K3b::AudioCdTextWidget::AllFieldsDialog : public KDialog, public Ui::base_K3bAudioCdTextAllFieldsWidget

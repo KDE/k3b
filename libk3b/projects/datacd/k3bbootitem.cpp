@@ -17,7 +17,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 namespace K3b {
 

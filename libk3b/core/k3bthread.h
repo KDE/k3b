@@ -18,7 +18,7 @@
 
 #include "k3bdevicetypes.h"
 #include "k3b_export.h"
-#include <QThread>
+#include <QtCore/QThread>
 
 
 namespace K3b {

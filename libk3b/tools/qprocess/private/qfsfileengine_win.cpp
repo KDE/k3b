@@ -46,10 +46,10 @@
 #include <qdebug.h>
 
 #include "QtCore/QFile"
-#include "qdir.h"
+#include "QtCore/QDir"
 #include "qtemporaryfile.h"
 #ifndef QT_NO_REGEXP
-# include "qregexp.h"
+# include "QtCore/QRegExp"
 #endif
 #include "private/qmutexpool_p.h"
 #include "qvarlengtharray.h"

@@ -17,12 +17,12 @@
 
 #include "k3btoc.h"
 
+#include <KI18n/KLocalizedString>
+
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QApplication>
-
-#include <KDELibs4Support/KDE/KLocale>
 
 #include <libkcddb/client.h>
 

@@ -21,7 +21,7 @@
 
 #include "k3bkprocess_p.h"
 
-#include <KDELibs4Support/KDE/KStandardDirs>
+#include <QtCore/QStandardPaths>
 #include <kshell.h>
 #ifdef Q_OS_WIN
 # include <kshell_p.h>
@@ -245,7 +245,7 @@ void K3bKProcess::setShellCommand(const QString &cmd)
     d->args = KShell::splitArgs(
             cmd, KShell::AbortOnMeta | KShell::TildeExpand, &err);
     if (err == KShell::NoError && !d->args.isEmpty()) {
-        d->prog = KStandardDirs::findExe(d->args[0]);
+        d->prog = QStandardPaths::findExecutable(d->args[0]);
         if (!d->prog.isEmpty()) {
             d->args.removeFirst();
             return;
@@ -263,13 +263,13 @@ void K3bKProcess::setShellCommand(const QString &cmd)
     d->prog = QFile::symLinkTarget(QString::fromLatin1("/bin/sh"));
     if (d->prog.isEmpty()) {
         // Try some known POSIX shells.
-        d->prog = KStandardDirs::findExe("ksh");
+        d->prog = QStandardPaths::findExecutable("ksh");
         if (d->prog.isEmpty()) {
-            d->prog = KStandardDirs::findExe("ash");
+            d->prog = QStandardPaths::findExecutable("ash");
             if (d->prog.isEmpty()) {
-                d->prog = KStandardDirs::findExe("bash");
+                d->prog = QStandardPaths::findExecutable("bash");
                 if (d->prog.isEmpty()) {
-                    d->prog = KStandardDirs::findExe("zsh");
+                    d->prog = QStandardPaths::findExecutable("zsh");
                     if (d->prog.isEmpty())
                         // We're pretty much screwed, to be honest ...
                         d->prog = QString::fromLatin1("/bin/sh");
@@ -288,7 +288,7 @@ void K3bKProcess::setShellCommand(const QString &cmd)
     setEnv(PERCENT_VARIABLE, "%");
 
     //see also TrollTechTaskTracker entry 88373.
-    d->prog = KStandardDirs::findExe("kcmdwrapper");
+    d->prog = QStandardPaths::findExecutable("kcmdwrapper");
 
     UINT size;
     WCHAR sysdir[MAX_PATH + 1];

@@ -35,9 +35,9 @@
 #include <KActionMenu>
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KStandardAction>
 #include <KToolBar>
@@ -46,12 +46,12 @@
 // qt includes
 #include <QApplication>
 #include <QCursor>
-#include <QDomElement>
-#include <QFont>
+#include <QtXml/QDomElement>
+#include <QtGui/QFont>
 #include <QHeaderView>
-#include <QLabel>
-#include <QList>
-#include <QStyle>
+#include <QtWidgets/QLabel>
+#include <QtCore/QList>
+#include <QtWidgets/QStyle>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>

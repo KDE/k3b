@@ -15,14 +15,13 @@
 #ifndef _K3B_THREAD_JOB_COMMUNICATION_EVENT_H_
 #define _K3B_THREAD_JOB_COMMUNICATION_EVENT_H_
 
-#include <KGuiItem>
-#include <qevent.h>
-#include <QtCore/QString>
-#include <qwaitcondition.h>
-#include <QEvent>
-
 #include "k3bdevicetypes.h"
 #include "k3bmsf.h"
+
+#include <KWidgetsAddons/KGuiItem>
+#include <QtCore/QEvent>
+#include <QtCore/QString>
+#include <QtCore/QWaitCondition>
 
 namespace K3b {
     namespace Device {

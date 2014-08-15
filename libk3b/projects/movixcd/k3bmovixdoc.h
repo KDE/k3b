@@ -19,7 +19,7 @@
 
 #include "k3bdatadoc.h"
 
-#include <QList>
+#include <QtCore/QList>
 
 #include "k3b_export.h"
 

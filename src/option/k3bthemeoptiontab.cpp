@@ -19,22 +19,22 @@
 #include "k3bthememanager.h"
 #include "k3bthememodel.h"
 
-#include <KIO/Global>
-#include <kio/netaccess.h>
+#include <KIOCore/KIO/Global>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <kio/deletejob.h>
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KGlobalSettings>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KArchive/KTar>
 #include <KIOWidgets/KUrlRequester>
 #include <KUrlRequesterDialog>
 
 #include <QtCore/QFile>
-#include <QFileInfo>
+#include <QtCore/QFileInfo>
 #include <QItemSelectionModel>
-#include <QLabel>
+#include <QtWidgets/QLabel>
 
 
 K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )

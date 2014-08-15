@@ -15,13 +15,13 @@
 
 #include "k3bmovixprogram.h"
 
-#include <kprocess.h>
-#include <QtCore/QDebug>
+#include <KCoreAddons/KProcess>
 #include <KI18n/KLocalizedString>
 
-#include <qdir.h>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
-#include <qtextstream.h>
+#include <QtCore/QTextStream>
 
 
 K3b::MovixProgram::MovixProgram()

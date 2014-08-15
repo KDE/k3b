@@ -22,10 +22,9 @@
 #include "k3bchecksumpipe.h"
 #include "k3biso9660.h"
 
+#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-
-#include <QLinkedList>
+#include <QtCore/QLinkedList>
 
 
 namespace {

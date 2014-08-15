@@ -19,12 +19,12 @@
 #include "k3bcore.h"
 #include "k3bdevicemanager.h"
 
-#include <QDomElement>
-#include <QString>
-#include <QWidget>
+#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
+#include <QtCore/QString>
+#include <QtXml/QDomElement>
+#include <QtWidgets/QWidget>
 
 
 K3b::Doc::Doc( QObject* parent )

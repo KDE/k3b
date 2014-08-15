@@ -19,8 +19,8 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <qstringlist.h>
 #include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
 #include <QtCore/QEventLoop>
 

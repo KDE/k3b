@@ -20,11 +20,11 @@
 #include "k3bcore.h"
 #include "k3bprocess.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 
-#include <qvector.h>
-#include <qregexp.h>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
+#include <QtCore/QVector>
 
 
 class K3b::Cdda2wavReader::Private

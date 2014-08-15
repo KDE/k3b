@@ -20,7 +20,7 @@
 #include "k3b_export.h"
 
 #include <QtCore/QString>
-#include <qvector.h>
+#include <QtCore/QVector>
 
 
 namespace K3b {

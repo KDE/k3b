@@ -20,11 +20,11 @@
 #include "k3bglobals.h"
 
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <QtCore/QFile>
-#include <QFileInfo>
-#include <QList>
+#include <QtCore/QFileInfo>
+#include <QtCore/QList>
 #include <QSet>
 
 #include <sys/stat.h>

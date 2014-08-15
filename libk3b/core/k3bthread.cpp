@@ -19,7 +19,6 @@
 #include "k3bthreadjobcommunicationevent.h"
 
 #include <QtCore/QDebug>
-
 #include <QtCore/QList>
 #include <QtCore/QTimer>
 

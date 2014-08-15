@@ -29,14 +29,13 @@
 #include "k3bfilesplitter.h"
 #include "k3bglobalsettings.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
-#include <ktemporaryfile.h>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
+#include <KDELibs4Support/KDE/KTemporaryFile>
 
+#include <QtCore/QDebug>
 #include <QtCore/QString>
 #include <QtCore/QFile>
-#include <qapplication.h>
 
 
 class K3b::Iso9660ImageWritingJob::Private

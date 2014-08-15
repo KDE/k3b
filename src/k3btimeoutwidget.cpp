@@ -16,10 +16,10 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <QResizeEvent>
-#include <QPainter>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QPainter>
 #include <QPaintEvent>
-#include <QTimer>
+#include <QtCore/QTimer>
 
 
 class K3b::TimeoutWidget::Private

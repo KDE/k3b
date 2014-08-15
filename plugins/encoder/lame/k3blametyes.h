@@ -16,7 +16,7 @@
 #ifndef _K3B_LAME_TYPES_H_
 #define _K3B_LAME_TYPES_H_
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <lame/lame.h>
 

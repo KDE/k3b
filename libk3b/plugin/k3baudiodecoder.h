@@ -15,7 +15,6 @@
 #ifndef _K3B_AUDIO_DECODER_H_
 #define _K3B_AUDIO_DECODER_H_
 
-
 #include "k3bplugin.h"
 #include "k3bmsf.h"
 #include "k3b_export.h"

@@ -23,11 +23,11 @@
 #include "k3bmedium.h"
 
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KStandardDirs>
 
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <qfileinfo.h>
+#include <QtCore/QFileInfo>
 
 
 class K3b::VideoDVDTitleTranscodingJob::Private

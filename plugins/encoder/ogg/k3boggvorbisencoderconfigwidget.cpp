@@ -20,13 +20,13 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KNumInput>
 
 #include <QCheckBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QLCDNumber>
 #include <QRadioButton>
 #include <QSlider>

@@ -28,20 +28,20 @@
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
 #include <QtWidgets/QGroupBox>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KIOWidgets/KUrlRequester>
 
 // qt includes
 #include <QCheckBox>
-#include <QDir>
-#include <QFileInfo>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLayout>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QtCore/QStringList>
-#include <QTimer>
+#include <QtCore/QTimer>
 #include <QToolTip>
 #include <KVBox>
 

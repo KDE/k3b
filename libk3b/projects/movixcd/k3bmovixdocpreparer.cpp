@@ -24,14 +24,14 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bisoimager.h"
 
-#include <KDELibs4Support/KDE/KLocale>
-#include <QtCore/QDebug>
-#include <KTemporaryFile>
-#include <KIO/Global>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KTemporaryFile>
+#include <KIOCore/KIO/Global>
 
-#include <QTextStream>
-#include <QDir>
-#include <QStack>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QStack>
+#include <QtCore/QTextStream>
 
 
 class K3b::MovixDocPreparer::Private

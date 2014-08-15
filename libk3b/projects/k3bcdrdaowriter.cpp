@@ -26,19 +26,19 @@
 #include "k3bglobals.h"
 #include "k3bglobalsettings.h"
 
-#include <QtCore/QDebug>
-#include <KIO/NetAccess>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KTemporaryFile>
+#include <KDELibs4Support/KDE/KTemporaryFile>
 
-#include <QDir>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
-#include <QFileInfo>
-#include <QRegExp>
-#include <QString>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRegExp>
+#include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QTcpSocket>
+#include <QtNetwork/QTcpSocket>
 
 #include <sys/types.h>
 #include <sys/socket.h>

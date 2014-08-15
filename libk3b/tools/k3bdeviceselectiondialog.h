@@ -18,8 +18,8 @@
 #define K3B_DEVICE_SELECTION_DIALOG_H
 
 
-#include <kdialog.h>
 #include "k3b_export.h"
+#include <KDELibs4Support/KDE/KDialog>
 #include <QtCore/QList>
 
 namespace K3b {

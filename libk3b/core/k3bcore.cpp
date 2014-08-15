@@ -28,17 +28,16 @@
 #include "k3bglobalsettings.h"
 #include "k3bpluginmanager.h"
 
-#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
-#include <kaboutdata.h>
+#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <kapplication.h>
 
-#include <QThread>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QEvent>
 #include <QtCore/QMutex>
-#include <QMutexLocker>
-#include <QEvent>
+#include <QtCore/QMutexLocker>
+#include <QtCore/QThread>
 
 
 static QThread* s_guiThreadHandle = 0;
@@ -274,7 +273,7 @@ bool K3b::Core::blockDevice( K3b::Device::Device* dev )
     else {
         bool success = false;
         DeviceBlockingEventDoneCondition w;
-        QApplication::postEvent( this, new DeviceBlockingEvent( true, dev, &w, &success ) );
+        QCoreApplication::postEvent( this, new DeviceBlockingEvent( true, dev, &w, &success ) );
         w.wait();
         return success;
     }
@@ -288,7 +287,7 @@ void K3b::Core::unblockDevice( K3b::Device::Device* dev )
     }
     else {
         DeviceBlockingEventDoneCondition w;
-        QApplication::postEvent( this, new DeviceBlockingEvent( false, dev, &w, 0 ) );
+        QCoreApplication::postEvent( this, new DeviceBlockingEvent( false, dev, &w, 0 ) );
         w.wait();
     }
 }

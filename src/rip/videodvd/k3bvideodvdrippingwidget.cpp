@@ -20,19 +20,19 @@
 
 #include <QCheckBox>
 #include <QComboBox>
-#include <QGridLayout>
-#include <QLabel>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
 #include <QPushButton>
 #include <QSpinBox>
-#include <QTimer>
+#include <QtCore/QTimer>
 #include <QWhatsThis>
 
 #include <KConfigWidgets/KColorScheme>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDiskFreeSpaceInfo>
-#include <KIO/Global>
+#include <KIOCore/KDiskFreeSpaceInfo>
+#include <KIOCore/KIO/Global>
 #include <KLineEdit>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KIOWidgets/KUrlRequester>
 #include <KWidgetsAddons/KUrlLabel>
 

@@ -28,7 +28,7 @@
 #include <KAction>
 #include <KActionMenu>
 #include <KFileItem>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <QtCore/QUrl>
 
 

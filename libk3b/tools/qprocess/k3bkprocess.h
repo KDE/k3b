@@ -29,7 +29,7 @@
 class K3bKProcessPrivate;
 
 /**
- * \class K3bKProcess kprocess.h <K3bKProcess>
+ * \class K3bKProcess KCoreAddons/KProcess <K3bKProcess>
  *
  * Child process invocation, monitoring and control.
  *

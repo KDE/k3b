@@ -28,9 +28,8 @@
 #include "k3bdevicetypes.h"
 #include "k3bdeviceglobals.h"
 
+#include <KI18n/KLocalizedString>
 #include <QtCore/QFile>
-
-#include <KDELibs4Support/KDE/KLocale>
 
 
 class K3b::MetaWriter::Private

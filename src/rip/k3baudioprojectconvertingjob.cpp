@@ -22,7 +22,7 @@
 
 #include <libkcddb/cdinfo.h>
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 
 namespace K3b {

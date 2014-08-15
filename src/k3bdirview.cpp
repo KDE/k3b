@@ -35,16 +35,16 @@
 
 // KDE-includes
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
 #include <QtCore/QUrl>
 
 // QT-includes
-#include <QDir>
+#include <QtCore/QDir>
 #include <QSplitter>
-#include <QString>
-#include <QStackedWidget>
+#include <QtCore/QString>
+#include <QtWidgets/QStackedWidget>
 #include <QVBoxLayout>
 
 class K3b::DirView::Private

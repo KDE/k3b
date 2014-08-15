@@ -16,7 +16,7 @@
 #define K3BAUDIOTRACKDIALOG_H
 
 
-#include <kdialog.h>
+#include <KDELibs4Support/KDE/KDialog>
 
 #include "k3bmsf.h"
 

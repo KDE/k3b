@@ -19,8 +19,8 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
+#include <QtCore/QDateTime>
 #include <QtCore/QFile>
-#include <qdatetime.h>
 
 
 K3b::TocFileWriter::TocFileWriter()

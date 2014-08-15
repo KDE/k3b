@@ -22,11 +22,11 @@
 #include <KIconThemes/KIconLoader>
 
 #include <QAction>
-#include <QEvent>
-#include <QFontMetrics>
-#include <QFrame>
+#include <QtCore/QEvent>
+#include <QtGui/QFontMetrics>
+#include <QtWidgets/QFrame>
 #include <QMouseEvent>
-#include <QPainter>
+#include <QtGui/QPainter>
 #include <QToolTip>
 
 

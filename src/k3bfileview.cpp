@@ -18,10 +18,10 @@
 #include "k3bdiroperator.h"
 #include "k3bapplication.h"
 
-#include <QDir>
-#include <QHBoxLayout>
-#include <QLayout>
-#include <QLabel>
+#include <QtCore/QDir>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -33,7 +33,7 @@
 #include <KFileFilterCombo>
 #include <KFileItem>
 #include <QtGui/QIcon>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KProgressDialog>
 #include <KToolBar>
 #include <KToolBarSpacerAction>

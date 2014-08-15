@@ -22,10 +22,10 @@
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KConfigCore/KConfigGroup>
 
-#include <qpixmap.h>
+#include <QtGui/QPixmap>
 #include <QtCore/QFile>
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 #include <QtCore/QStringList>
 
 

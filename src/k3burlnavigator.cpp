@@ -21,7 +21,7 @@
 #include "k3bmedium.h"
 
 #include <KIOCore/KMountPoint>
-#include <QDir>
+#include <QtCore/QDir>
 
 K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )
     : KUrlNavigator( model, QUrl::fromLocalFile(QDir::home().absolutePath()), parent )

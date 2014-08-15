@@ -29,19 +29,19 @@
 #include "k3bfilesplitter.h"
 #include "k3bisooptions.h"
 
-#include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KTemporaryFile>
+#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KI18n/KLocalizedString>
-#include <ktemporaryfile.h>
-#include <kio/netaccess.h>
-#include <KIO/Global>
-#include <kio/job.h>
-#include <kstringhandler.h>
+#include <KIOCore/KIO/Global>
+#include <KIOCore/KIO/Job>
+#include <KCoreAddons/KStringHandler>
 
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
-#include <qregexp.h>
-#include <qdir.h>
-#include <qapplication.h>
+#include <QtCore/QRegExp>
+#include <QtWidgets/QApplication>
 
 #include <sys/types.h>
 #include <sys/stat.h>

@@ -47,9 +47,10 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KNotification>
-#include <QTimer>
+#include <QtCore/QTimer>
 
 
 K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = 0;

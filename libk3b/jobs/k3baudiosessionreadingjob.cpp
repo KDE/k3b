@@ -22,8 +22,8 @@
 #include "k3bdevice.h"
 #include "k3bcore.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
+#include <QtCore/QDebug>
 
 #include <unistd.h>
 

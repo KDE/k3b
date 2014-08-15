@@ -20,9 +20,9 @@
 #include "k3bjob.h"
 #include "k3bdevicetypes.h"
 
-#include <qdatetime.h>
+#include <KDELibs4Support/kdemacros.h>
 
-#include <kdemacros.h>
+#include <QtCore/QDateTime>
 
 class QIODevice;
 

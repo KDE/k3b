@@ -20,14 +20,14 @@
 #include "k3bcore.h"
 #include "k3bprocess.h"
 
-#include <QtCore/QDebug>
+#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <QList>
-#include <QRegExp>
+#include <QtCore/QList>
+#include <QtCore/QRegExp>
+#include <QtCore/QStandardPaths>
 
 #include <sys/types.h>
 
@@ -201,7 +201,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
         }
         else {
             QString commandName = d->cmd.command.section( QRegExp("\\s+"), 0 );
-            if( !KStandardDirs::findExe( commandName ).isEmpty() )
+            if( !QStandardPaths::findExecutable( commandName ).isEmpty() )
                 setLastError( i18n("Could not find program '%1'",commandName) );
 
             d->initialized = false;

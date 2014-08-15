@@ -19,7 +19,7 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <QDateTime>
+#include <QtCore/QDateTime>
 #include <QtCore/QFile>
 
 

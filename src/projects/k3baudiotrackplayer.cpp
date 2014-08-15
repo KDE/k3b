@@ -23,7 +23,7 @@
 
 #include <KAction>
 #include <KActionCollection>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <QAudioDeviceInfo>
 #include <QAudioFormat>

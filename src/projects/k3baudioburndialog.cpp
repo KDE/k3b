@@ -28,16 +28,16 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bexternalbinmanager.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <qgroupbox.h>
-#include <qlabel.h>
+#include <QtWidgets/QLabel>
 #include <qlineedit.h>
-#include <qpushbutton.h>
+#include <QtWidgets/QPushButton>
 #include <qtabwidget.h>
-#include <qlayout.h>
+#include <QtWidgets/QLayout>
 #include <qvariant.h>
-#include <qtooltip.h>
+#include <QtWidgets/QToolTip>
 
 #include <qtoolbutton.h>
 #include <QtCore/QStringList>
@@ -45,7 +45,7 @@
 
 #include <qspinbox.h>
 #include <QShowEvent>
-#include <QGridLayout>
+#include <QtWidgets/QGridLayout>
 
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KStandardDirs>

@@ -20,7 +20,7 @@
 
 #include "k3bwidgetshoweffect.h"
 
-#include <qpainter.h>
+#include <QtGui/QPainter>
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QTimerEvent>

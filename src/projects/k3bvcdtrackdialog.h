@@ -18,7 +18,7 @@
 #define K3BVCDTRACKDIALOG_H
 
 #include <KDELibs4Support/KDE/KDialog>
-#include <QList>
+#include <QtCore/QList>
 
 namespace K3b {
     class VcdDoc;

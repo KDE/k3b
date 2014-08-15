@@ -21,7 +21,6 @@
 #include "k3bcore.h"
 
 #include <QtCore/QDebug>
-
 #include <QtCore/QFile>
 
 

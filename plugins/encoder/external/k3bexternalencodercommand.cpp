@@ -20,9 +20,9 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
-#include <QSet>
+#include <QtCore/QSet>
+#include <QtCore/QStandardPaths>
 
 
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
@@ -31,7 +31,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
     
     // check if the lame encoding plugin has been compiled
 #ifndef HAVE_LAME
-    if( !KStandardDirs::findExe( "lame" ).isEmpty() ) {
+    if( !QStandardPaths::findExecutable( "lame" ).isEmpty() ) {
         K3bExternalEncoderCommand lameCmd;
         lameCmd.name = "Mp3 (Lame)";
         lameCmd.extension = "mp3";
@@ -53,7 +53,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
     }
 #endif
 
-    if( !KStandardDirs::findExe( "flac" ).isEmpty() ) {
+    if( !QStandardPaths::findExecutable( "flac" ).isEmpty() ) {
         K3bExternalEncoderCommand flacCmd;
         flacCmd.name = "Flac";
         flacCmd.extension = "flac";
@@ -76,7 +76,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
         commands.append( flacCmd );
     }
 
-    if( !KStandardDirs::findExe( "mppenc" ).isEmpty() ) {
+    if( !QStandardPaths::findExecutable( "mppenc" ).isEmpty() ) {
         K3bExternalEncoderCommand mppCmd;
         mppCmd.name = "Musepack";
         mppCmd.extension = "mpc";

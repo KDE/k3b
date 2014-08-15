@@ -16,13 +16,13 @@
 #ifndef K3BDATAITEM_H
 #define K3BDATAITEM_H
 
-#include <QtCore/QString>
-
-#include <KIO/Global>
-#include <KMimeType>
-
 #include "k3bmsf.h"
 #include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
+#include <KDELibs4Support/KDE/KMimeType>
+
+#include <QtCore/QString>
 
 namespace K3b {
     class DirItem;

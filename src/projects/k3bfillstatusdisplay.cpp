@@ -28,18 +28,18 @@
 #include <QtCore/QLocale>
 #include <QBrush>
 #include <QColor>
-#include <QEvent>
-#include <QFont>
-#include <QFontMetrics>
-#include <QFrame>
-#include <QHBoxLayout>
+#include <QtCore/QEvent>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QHBoxLayout>
 #include <QMouseEvent>
-#include <QPainter>
+#include <QtGui/QPainter>
 #include <QPaintEvent>
-#include <QPixmap>
+#include <QtGui/QPixmap>
 #include <QRect>
-#include <QStyle>
-#include <QTimer>
+#include <QtWidgets/QStyle>
+#include <QtCore/QTimer>
 #include <QToolButton>
 #include <QToolTip>
 #include <QValidator>
@@ -51,9 +51,9 @@
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 #include <KMenu>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KWidgetsAddons/KMessageBox>
 #include <QStyleOptionProgressBarV2>
 
 

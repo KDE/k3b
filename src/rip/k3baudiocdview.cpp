@@ -42,22 +42,22 @@
 #include <KDELibs4Support/KDE/KDialog>
 #include <KIconThemes/KIconLoader>
 #include <KLineEdit>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
 #include <KStandardAction>
 #include <KDELibs4Support/KDE/KStandardDirs>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
 
-#include <QFont>
+#include <QtGui/QFont>
 #include <QFormLayout>
 #include <QVBoxLayout>
 #include <QItemSelectionModel>
 #include <QKeyEvent>
-#include <QLabel>
-#include <QList>
+#include <QtWidgets/QLabel>
+#include <QtCore/QList>
 #include <QSpinBox>
 #include <QTreeView>
 

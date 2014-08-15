@@ -19,7 +19,7 @@
 
 #include <QMouseEvent>
 #include <QPaintEvent>
-#include <QFrame>
+#include <QtWidgets/QFrame>
 
 class QPaintEvent;
 class QMouseEvent;

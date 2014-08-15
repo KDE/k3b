@@ -16,15 +16,15 @@
 #ifndef _K3B_ISO9660_H_
 #define _K3B_ISO9660_H_
 
-#include <sys/stat.h>
-#include <sys/types.h>
+#include "k3b_export.h"
 
-#include <qdatetime.h>
+#include <QtCore/QDateTime>
+#include <QtCore/QHash>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <qhash.h>
 
-#include "k3b_export.h"
+#include <sys/stat.h>
+#include <sys/types.h>
 
 
 struct iso_directory_record;

@@ -21,7 +21,7 @@
 #include "k3bprocess.h"
 #include <KTempDir>
 #include <QtCore/QDebug>
-#include <QDir>
+#include <QtCore/QDir>
 
 
 

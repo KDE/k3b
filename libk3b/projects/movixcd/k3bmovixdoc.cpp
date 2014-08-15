@@ -21,15 +21,14 @@
 #include "k3bfileitem.h"
 #include "k3bglobals.h"
 
-#include <QDomElement>
-#include <QFileInfo>
-
-#include <KApplication>
 #include <QtCore/QDebug>
+#include <QtCore/QFileInfo>
+#include <QtXml/QDomElement>
+
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KInputDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 
 K3b::MovixDoc::MovixDoc( QObject* parent )

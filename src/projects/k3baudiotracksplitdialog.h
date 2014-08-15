@@ -16,7 +16,7 @@
 #define _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 
 #include <KDELibs4Support/KDE/KDialog>
-#include <QEvent>
+#include <QtCore/QEvent>
 
 class KMenu;
 

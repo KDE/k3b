@@ -13,24 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <KI18n/KLocalizedString>
-#include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KStandardDirs>
-#include <QtCore/QUrl>
-#include <ktemporaryfile.h>
-#include <KIO/Global>
-
-#include <QtCore/QString>
-#include <qdatetime.h>
-#include <QtCore/QFile>
-#include <qtimer.h>
-#include <QtCore/QDebug>
-#include <qregexp.h>
-#include <qdom.h>
-
 #include "k3bvcdjob.h"
-
-// K3b Includes
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 #include "k3bvcdxmlview.h"
@@ -44,6 +27,21 @@
 #include "k3bcdrdaowriter.h"
 #include "k3bglobalsettings.h"
 #include "k3bdevicehandler.h"
+
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KTemporaryFile>
+#include <KIOCore/KIO/Global>
+
+#include <QtCore/QString>
+#include <QtCore/QDateTime>
+#include <QtCore/QFile>
+#include <QtCore/QTimer>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
+#include <QtCore/QUrl>
+#include <QtXml/QDomDocument>
 
 
 class K3b::VcdJob::Private

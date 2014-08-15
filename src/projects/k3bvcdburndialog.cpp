@@ -27,28 +27,28 @@
 #include "k3bvalidators.h"
 
 
-#include <qcheckbox.h>
+#include <QtWidgets/QCheckBox>
 #include <qgroupbox.h>
 #include <qspinbox.h>
 #include <qradiobutton.h>
-#include <qlabel.h>
+#include <QtWidgets/QLabel>
 #include <qlineedit.h>
-#include <qlayout.h>
-#include <qtooltip.h>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QToolTip>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QButtonGroup>
 
 #include <qtoolbutton.h>
-#include <qfileinfo.h>
-#include <QGridLayout>
-#include <QFrame>
-#include <QTextStream>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QFrame>
+#include <QtCore/QTextStream>
 
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <kmessagebox.h>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 #include <kapplication.h>
 
 K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )

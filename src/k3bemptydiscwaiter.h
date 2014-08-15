@@ -16,8 +16,8 @@
 #ifndef K3BEMPTYDISCWAITER_H
 #define K3BEMPTYDISCWAITER_H
 
-#include <kdialog.h>
-#include <kdemacros.h>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KDELibs4Support/kdemacros.h>
 #include "k3bjobhandler.h"
 
 #include "k3bdiskinfo.h"

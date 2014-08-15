@@ -18,11 +18,11 @@
 #include "k3bvalidators.h"
 
 #include <KLineEdit>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QEvent>
-#include <QHBoxLayout>
-#include <QLabel>
+#include <QtCore/QEvent>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 
 namespace K3b {
 

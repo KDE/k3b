@@ -16,7 +16,7 @@
 #include "k3bvcdtrack.h"
 
 #include <QtGui/QIcon>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 Q_DECLARE_METATYPE( K3b::VcdTrack* )
 

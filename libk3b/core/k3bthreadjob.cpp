@@ -17,11 +17,10 @@
 #include "k3bprogressinfoevent.h"
 #include "k3bthreadjobcommunicationevent.h"
 
+#include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
-#include <KApplication>
-
-#include <QSharedPointer>
-#include <QThread>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QThread>
 
 
 class K3b::ThreadJob::Private
@@ -108,7 +107,7 @@ K3b::Device::MediaType K3b::ThreadJob::waitForMedium( K3b::Device::Device* devic
                                                                                                minMediaSize,
                                                                                                message );
     QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
-    QApplication::postEvent( this, event );
+    QCoreApplication::postEvent( this, event );
     data->wait();
     return (Device::MediaType)data->intResult();
 }
@@ -124,7 +123,7 @@ bool K3b::ThreadJob::questionYesNo( const QString& text,
                                                                                                buttonYes,
                                                                                                buttonNo );
     QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
-    QApplication::postEvent( this, event );
+    QCoreApplication::postEvent( this, event );
     data->wait();
     return data->boolResult();
 }
@@ -136,7 +135,7 @@ void K3b::ThreadJob::blockingInformation( const QString& text,
     K3b::ThreadJobCommunicationEvent* event = K3b::ThreadJobCommunicationEvent::blockingInformation( text,
                                                                                                      caption );
     QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
-    QApplication::postEvent( this, event );
+    QCoreApplication::postEvent( this, event );
     data->wait();
 }
 

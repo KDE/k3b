@@ -23,18 +23,18 @@
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KGlobal>
-#include <KLibLoader>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
-#include <KPluginInfo>
-#include <KService>
-#include <KServiceTypeTrader>
+#include <KDELibs4Support/KDE/KLibLoader>
 #include <KDELibs4Support/KDE/KStandardDirs>
+#include <KI18n/KLocalizedString>
+#include <KService/KPluginInfo>
+#include <KService/KService>
+#include <KService/KServiceTypeTrader>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QDir>
-#include <QList>
+#include <QtCore/QDir>
+#include <QtCore/QList>
 #include <QtCore/QMap>
-#include <QSharedPointer>
+#include <QtCore/QSharedPointer>
 
 
 

@@ -15,7 +15,7 @@
 #ifndef K3B_K3BVCDTRACKKEYSDELEGATE_H
 #define K3B_K3BVCDTRACKKEYSDELEGATE_H
 
-#include <QList>
+#include <QtCore/QList>
 #include <QStyledItemDelegate>
 
 

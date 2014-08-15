@@ -43,7 +43,7 @@
 #define K3B_QPROCESS_H
 
 #include <QtCore/qiodevice.h>
-#include <QtCore/qstringlist.h>
+#include <QtCore/QStringList>
 #include <QtCore/qprocess.h>
 
 #include "k3b_export.h"

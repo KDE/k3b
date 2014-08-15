@@ -18,12 +18,12 @@
 #include <QApplication>
 #include <QCursor>
 #include <QDesktopWidget>
-#include <QFrame>
-#include <QHelpEvent>
-#include <QLinkedList>
+#include <QtWidgets/QFrame>
+#include <QtGui/QHelpEvent>
+#include <QtCore/QLinkedList>
 #include <QMouseEvent>
-#include <QPainter>
-#include <QPixmap>
+#include <QtGui/QPainter>
+#include <QtGui/QPixmap>
 #include <QPolygon>
 #include <QToolTip>
 

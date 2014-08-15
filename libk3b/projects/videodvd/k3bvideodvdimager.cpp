@@ -20,16 +20,16 @@
 #include "k3bglobals.h"
 #include "k3bisooptions.h"
 
-#include <ktemporaryfile.h>
+#include <KDELibs4Support/KDE/KTemporaryFile>
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 
-#include <qtextstream.h>
-#include <qdir.h>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QList>
+#include <QtCore/QTextStream>
 
 #include <unistd.h>
 

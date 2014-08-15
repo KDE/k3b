@@ -37,15 +37,15 @@
 #include <KApplication>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QCheckBox>
-#include <QGridLayout>
+#include <QtWidgets/QGridLayout>
 #include <QGroupBox>
-#include <QLabel>
-#include <QLayout>
-#include <QLineEdit>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
 #include <QTabWidget>

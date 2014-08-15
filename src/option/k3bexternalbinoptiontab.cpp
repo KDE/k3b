@@ -17,11 +17,11 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bexternalbinwidget.h"
 
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QLabel>
+#include <QtWidgets/QLabel>
 #include <QVBoxLayout>
 
 

@@ -20,12 +20,11 @@
 #include "k3bdevice.h"
 #include "k3bdevicehandler.h"
 
-#include <KLocale>
 #include <KI18n/KLocalizedString>
+
 #include <QtCore/QDebug>
 #include <QtCore/QLocale>
-
-#include <qtimer.h>
+#include <QtCore/QTimer>
 
 #include <errno.h>
 #include <string.h>

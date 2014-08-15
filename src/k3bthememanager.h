@@ -19,7 +19,7 @@
 #include <QtCore/QString>
 #include <QtCore/QMap>
 #include <qcolor.h>
-#include <qpixmap.h>
+#include <QtGui/QPixmap>
 
 #include <KConfigCore/KConfigGroup>
 

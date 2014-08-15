@@ -20,11 +20,11 @@
 #include "k3bversion.h"
 
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <QtCore/QDebug>
 
-#include <QDomDocument>
-#include <QDomElement>
-#include <QTextStream>
+#include <QtCore/QDebug>
+#include <QtCore/QTextStream>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 
 
 class K3b::VcdXmlView::Private

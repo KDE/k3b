@@ -21,10 +21,10 @@
 #include "k3bvcdoptions.h"
 #include "mpeginfo/k3bmpeginfo.h"
 
-#include <QtCore/QStringList>
-#include <QQueue>
-
 #include "k3b_export.h"
+
+#include <QtCore/QStringList>
+#include <QtCore/QQueue>
 
 class QTimer;
 class QDomElement;

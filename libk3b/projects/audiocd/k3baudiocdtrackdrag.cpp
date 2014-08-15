@@ -20,7 +20,7 @@
 #include "k3btrack.h"
 #include "k3bcore.h"
 
-#include <qdatastream.h>
+#include <QtCore/QDataStream>
 #include <QtCore/QMimeData>
 
 

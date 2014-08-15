@@ -22,14 +22,13 @@
 #include "k3bdeviceglobals.h"
 #include "k3bcore.h"
 
-#include <QtCore/QDebug>
-#include <kapplication.h>
+#include <KCoreAddons/KRandom>
 #include <KI18n/KLocalizedString>
 
-#include <qthread.h>
-#include <qmutex.h>
-#include <qevent.h>
-#include <krandom.h>
+#include <QtCore/QDebug>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QEvent>
 
 #include <libkcddb/client.h>
 

@@ -19,7 +19,7 @@
 #include "k3bmedium.h"
 #include "k3bcdtext.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <libkcddb/cdinfo.h>
 

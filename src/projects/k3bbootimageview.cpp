@@ -22,15 +22,15 @@
 
 #include <QtCore/QDebug>
 #include <QtWidgets/QFileDialog>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QCheckBox>
 #include <QItemSelectionModel>
-#include <QLineEdit>
+#include <QtWidgets/QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
-#include <QString>
+#include <QtCore/QString>
 
 
 

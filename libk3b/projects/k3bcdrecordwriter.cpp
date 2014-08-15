@@ -27,15 +27,15 @@
 #include "k3bthroughputestimator.h"
 #include "k3bglobalsettings.h"
 
+#include <QtCore/QDebug>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <qregexp.h>
+#include <QtCore/QRegExp>
 #include <QtCore/QFile>
 
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KGlobal>
-#include <ktemporaryfile.h>
+#include <KDELibs4Support/KDE/KTemporaryFile>
 
 
 Q_DECLARE_METATYPE( QProcess::ExitStatus )

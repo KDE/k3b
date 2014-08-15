@@ -18,7 +18,7 @@
 
 #include "k3bglobals.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 
 #include <QToolTip>

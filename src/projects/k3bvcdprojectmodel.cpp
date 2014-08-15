@@ -19,10 +19,10 @@
 #include "k3bvcdtrack.h"
 
 #include <KCoreAddons/KUrlMimeData>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <QtCore/QUrl>
 
-#include <QDataStream>
+#include <QtCore/QDataStream>
 #include <QMimeData>
 
 namespace K3b {

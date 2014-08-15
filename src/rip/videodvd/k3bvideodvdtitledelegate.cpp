@@ -18,9 +18,9 @@
 #include <QtGui/QIcon>
 
 #include <QApplication>
-#include <QPainter>
-#include <QPixmap>
-#include <QStyle>
+#include <QtGui/QPainter>
+#include <QtGui/QPixmap>
+#include <QtWidgets/QStyle>
 #include <QStyleOptionButton>
 #include <QStyleOptionViewItemV4>
 

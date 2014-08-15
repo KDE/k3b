@@ -17,8 +17,8 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <QtCore/QFile>
 #include <QtCore/QDebug>
+#include <QtCore/QFile>
 
 
 class K3b::AudioEncoder::Private

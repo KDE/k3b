@@ -25,7 +25,7 @@
 #include "k3bjob.h"
 
 #include <QDBusConnection>
-#include <QTimer>
+#include <QtCore/QTimer>
 
 namespace K3b {
 

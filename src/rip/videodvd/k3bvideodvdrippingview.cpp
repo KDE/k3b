@@ -43,9 +43,9 @@
 #include <KActionCollection>
 #include <KApplication>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KWidgetsAddons/KMessageBox>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
 #include <KWidgetsAddons/KUrlLabel>

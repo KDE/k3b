@@ -17,12 +17,12 @@
 #include "k3bvideocdinfo.h"
 #include "k3bcore.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
 
 #include <QDomDocument>
-#include <QDomElement>
+#include <QtXml/QDomElement>
 
 #include "k3bprocess.h"
 #include "k3bexternalbinmanager.h"

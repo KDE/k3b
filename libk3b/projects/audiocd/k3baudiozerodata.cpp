@@ -16,7 +16,7 @@
 #include "k3baudiozerodatareader.h"
 #include "k3baudiotrack.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 
 K3b::AudioZeroData::AudioZeroData( const K3b::Msf& len )

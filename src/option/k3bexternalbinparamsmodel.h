@@ -15,7 +15,7 @@
 #ifndef K3B_EXTERNALBINPARAMSMODEL_H
 #define K3B_EXTERNALBINPARAMSMODEL_H
 
-#include <QAbstractItemModel>
+#include <QtCore/QAbstractItemModel>
 
 namespace K3b {
     

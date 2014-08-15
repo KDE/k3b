@@ -15,9 +15,9 @@
 #ifndef _K3B_ISO9660_BACKEND_H_
 #define _K3B_ISO9660_BACKEND_H_
 
-#include <QtCore/QString>
-
 #include "k3b_export.h"
+
+#include <QtCore/QString>
 
 namespace K3b {
     namespace Device {

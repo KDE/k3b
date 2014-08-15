@@ -18,7 +18,7 @@
 #define K3BDATAPROPERTIESDIALOG_H
 
 #include <KDELibs4Support/KDE/KDialog>
-#include <QList>
+#include <QtCore/QList>
 
 class KLineEdit;
 class KSqueezedTextLabel;

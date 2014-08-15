@@ -22,12 +22,12 @@
 #include "k3bfileitem.h"
 #include "k3bglobals.h"
 
-#include <KDELibs4Support/KDE/KLocale>
-#include <KStringHandler>
+#include <KI18n/KLocalizedString>
+#include <KCoreAddons/KStringHandler>
 
 #include <QtCore/QFile>
-#include <QFileInfo>
-#include <QList>
+#include <QtCore/QFileInfo>
+#include <QtCore/QList>
 
 namespace {
     QString createItemsString( const QList<K3b::DataItem*>& items, int max )

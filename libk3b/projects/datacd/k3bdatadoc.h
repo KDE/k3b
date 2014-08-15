@@ -19,9 +19,9 @@
 
 #include "k3bdoc.h"
 
-#include <KIOCore/KIO/Global>
-
 #include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
 
 class QString;
 class QDomDocument;

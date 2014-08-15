@@ -23,10 +23,10 @@
 #include "k3biso9660.h"
 #include "k3bprocess.h"
 
+#include <KCoreAddons/KProcess>
 #include <KI18n/KLocalizedString>
-#include <kprocess.h>
-#include <QtCore/QDebug>
 
+#include <QtCore/QDebug>
 #include <QtCore/QStringList>
 
 

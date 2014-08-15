@@ -17,7 +17,7 @@
 #define K3BOPTIONDIALOG_H
 
 #include <KPageDialog>
-#include <QHash>
+#include <QtCore/QHash>
 
 class KPageWidgetItem;
 namespace K3b {

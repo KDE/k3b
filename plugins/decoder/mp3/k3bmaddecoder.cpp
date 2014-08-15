@@ -31,7 +31,7 @@
 #include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 
-#include <QString>
+#include <QtCore/QString>
 #include <QtCore/QFile>
 #include <QVector>
 

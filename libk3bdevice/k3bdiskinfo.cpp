@@ -19,7 +19,7 @@
 #include "k3bmsf.h"
 
 #include <KI18n/KLocalizedString>
-#include <KIO/Global>
+#include <KIOCore/KIO/Global>
 
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>

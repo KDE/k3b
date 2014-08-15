@@ -18,8 +18,8 @@
 
 #include <QtWidgets/QGroupBox>
 
-#include <QLabel>
-#include <KIO/Global>
+#include <QtWidgets/QLabel>
+#include <KIOCore/KIO/Global>
 #include <KConfigCore/KConfigGroup>
 
 class QLabel;

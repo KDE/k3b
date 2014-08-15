@@ -27,19 +27,18 @@
 #include "k3bcore.h"
 #include "k3baudiodecoder.h"
 
-#include <QtCore/QFile>
-#include <QFileInfo>
-#include <QDataStream>
-#include <QDir>
-#include <QDomElement>
-#include <QtCore/QStringList>
-#include <QTextStream>
-
-#include <KApplication>
-#include <KConfigCore/KConfig>
+#include <QtCore/QDataStream>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KIO/Global>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
+#include <QtCore/QTextStream>
+#include <QtXml/QDomElement>
+
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
 #include <KDELibs4Support/KDE/KStandardDirs>
 
 

@@ -15,7 +15,7 @@
 #include "k3bkjobbridge.h"
 #include "k3bjob.h"
 
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 namespace K3b
 {

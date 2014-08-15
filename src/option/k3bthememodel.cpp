@@ -16,7 +16,7 @@
 #include "k3bthememanager.h"
 
 #include <kio/deletejob.h>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <QtCore/QFile>
 #include <QtCore/QUrl>

@@ -16,8 +16,9 @@
 #ifndef _K3B_PROGRESS_DIALOG_H_
 #define _K3B_PROGRESS_DIALOG_H_
 
-#include <kdialog.h>
 #include "k3b_export.h"
+
+#include <KDELibs4Support/KDE/KDialog>
 
 class QLabel;
 class QProgressBar;

@@ -14,7 +14,7 @@
 
 #include "k3bdataprojectdelegate.h"
 #include <KLineEdit>
-#include <KMimeType>
+#include <KDELibs4Support/KDE/KMimeType>
 #include <QKeyEvent>
 #include <QFocusEvent>
 

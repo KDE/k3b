@@ -32,7 +32,7 @@
 #include <KActionCollection>
 #include <KFileItemDelegate>
 #include <KDELibs4Support/KDE/KInputDialog>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 #include <KMenu>
 #include <KRun>
 

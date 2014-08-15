@@ -40,19 +40,19 @@
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>
 #include <KIO/NetAccess>
-#include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 #include <KSharedConfig>
 #include <QtCore/QUrl>
 
 #include <QApplication>
 #include <QCursor>
 #include <QDomDocument>
-#include <QDomElement>
+#include <QtXml/QDomElement>
 #include <QtCore/QFile>
-#include <QHash>
-#include <QList>
-#include <QTextStream>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QTextStream>
 
 namespace
 {

@@ -14,12 +14,11 @@
 
 #include "k3bbusywidget.h"
 
-#include <qtimer.h>
-#include <qpainter.h>
-
-#include <QFrame>
-
 #include <KDELibs4Support/KDE/KGlobalSettings>
+
+#include <QtCore/QTimer>
+#include <QtGui/QPainter>
+#include <QtWidgets/QFrame>
 
 
 K3b::BusyWidget::BusyWidget( QWidget* parent )

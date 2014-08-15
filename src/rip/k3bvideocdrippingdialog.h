@@ -19,7 +19,7 @@
 
 #include <QtCore/QStringList>
 //Added by qt3to4:
-#include <QLabel>
+#include <QtWidgets/QLabel>
 
 #include "k3binteractiondialog.h"
 #include "k3bdiskinfo.h"

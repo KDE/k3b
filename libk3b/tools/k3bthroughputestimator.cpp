@@ -15,7 +15,7 @@
 
 #include "k3bthroughputestimator.h"
 
-#include <qdatetime.h>
+#include <QtCore/QDateTime>
 #include <QtCore/QDebug>
 
 
