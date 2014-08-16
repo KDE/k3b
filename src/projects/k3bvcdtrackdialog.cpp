@@ -32,7 +32,7 @@
 #include <KSqueezedTextLabel>
 
 // Qt Includes
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QComboBox>
 #include <QFormLayout>
 #include <QtWidgets/QGridLayout>
@@ -43,7 +43,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtCore/QList>
 #include <QtGui/QPixmap>
-#include <QRadioButton>
+#include <QtWidgets/QRadioButton>
 #include <QTabWidget>
 #include <QtWidgets/QToolTip>
 #include <QTreeView>

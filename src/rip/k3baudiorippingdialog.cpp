@@ -40,7 +40,7 @@
 #include <KWidgetsAddons/KUrlLabel>
 #include <KIOWidgets/KUrlRequester>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtCore/QDir>
 #include <QtGui/QFont>
 #include <QtWidgets/QGridLayout>

@@ -28,7 +28,7 @@
 #include <QAudioDeviceInfo>
 #include <QAudioFormat>
 #include <QAudioOutput>
-#include <QSlider>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QToolTip>
 #include <QWidgetAction>
 

@@ -28,7 +28,7 @@
 #include <KIconThemes/KIconLoader>
 #include <KIOWidgets/KUrlRequester>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLabel>
 #include <QtCore/QList>
 #include <QtCore/QTimer>

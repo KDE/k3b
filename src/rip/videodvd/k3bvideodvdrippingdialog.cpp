@@ -34,7 +34,7 @@
 #include <KIOWidgets/KUrlRequester>
 #include <KIOCore/KIO/Global>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtGui/QFontMetrics>
 #include <QtWidgets/QHBoxLayout>
 #include <QHeaderView>

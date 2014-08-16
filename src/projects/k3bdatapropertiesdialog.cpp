@@ -26,7 +26,7 @@
 #include <QtCore/QUrl>
 #include <KSqueezedTextLabel>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>

@@ -18,21 +18,19 @@
 #include "k3blamemanualsettingsdialog.h"
 #include "k3blametyes.h"
 
-#include <QCheckBox>
+#include <KAboutData>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QRadioButton>
-#include <QSlider>
-#include <QSpinBox>
-#include <QTextCodec>
-
-#include <KAboutData>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
-
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
 
 namespace {
     
@@ -162,9 +160,9 @@ void K3bLameEncoderSettingsWidget::load()
     else
         m_manualSettingsDialog->m_radioConstantBitrate->setChecked( true );
 
-    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Constant Bitrate", DEFAULT_CONSTANT_BITRATE )) );
-    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Maximum Bitrate", DEFAULT_MAXIMUM_BITRATE )) );
-    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE )) );
+    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentText( i18n("%1 kbps",grp.readEntry( "Constant Bitrate", DEFAULT_CONSTANT_BITRATE )) );
+    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentText( i18n("%1 kbps",grp.readEntry( "Maximum Bitrate", DEFAULT_MAXIMUM_BITRATE )) );
+    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentText( i18n("%1 kbps",grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE )) );
     m_manualSettingsDialog->m_spinAverageBitrate->setValue( grp.readEntry( "Average Bitrate", DEFAULT_AVERAGE_BITRATE) );
 
     m_manualSettingsDialog->m_checkBitrateMaximum->setChecked( grp.readEntry( "Use Maximum Bitrate", DEFAULT_USE_MAXIMUM_BITRATE ) );
@@ -246,9 +244,9 @@ void K3bLameEncoderSettingsWidget::defaults()
     else
         m_manualSettingsDialog->m_radioConstantBitrate->setChecked( true );
 
-    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_CONSTANT_BITRATE ) );
-    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_MAXIMUM_BITRATE ) );
-    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_MINIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentText( i18n("%1 kbps", DEFAULT_CONSTANT_BITRATE ) );
+    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentText( i18n("%1 kbps", DEFAULT_MAXIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentText( i18n("%1 kbps", DEFAULT_MINIMUM_BITRATE ) );
     m_manualSettingsDialog->m_spinAverageBitrate->setValue( DEFAULT_AVERAGE_BITRATE );
 
     m_manualSettingsDialog->m_checkBitrateMaximum->setChecked(  DEFAULT_USE_MAXIMUM_BITRATE );

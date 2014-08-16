@@ -18,7 +18,7 @@
 #include "k3bglobals.h"
 #include "k3bintmapcombobox.h"
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>

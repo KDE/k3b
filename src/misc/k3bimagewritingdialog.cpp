@@ -55,7 +55,7 @@
 #include <KIOWidgets/KUrlRequester>
 
 #include <QtWidgets/QApplication>
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QClipboard>
 #include <QComboBox>
 #include <QDragEnterEvent>

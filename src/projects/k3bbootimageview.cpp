@@ -25,11 +25,11 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QItemSelectionModel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
-#include <QRadioButton>
+#include <QtWidgets/QRadioButton>
 #include <QtCore/QString>
 
 

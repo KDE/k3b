@@ -24,7 +24,7 @@
 #include <QtCore/QRegExp>
 #include <QValidator>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QGridLayout>
 #include <QWhatsThis>

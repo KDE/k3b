@@ -36,7 +36,7 @@
 #include <KWidgetsAddons/KMessageBox>
 #include <KIOWidgets/KUrlRequester>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtCore/QDir>
 #include <QtWidgets/QGridLayout>
 #include <QHeaderView>

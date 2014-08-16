@@ -34,7 +34,7 @@
 #include <KIOWidgets/KUrlRequester>
 
 // qt includes
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QGridLayout>

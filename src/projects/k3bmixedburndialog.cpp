@@ -40,14 +40,14 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
 #include <QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
-#include <QRadioButton>
+#include <QtWidgets/QRadioButton>
 #include <QTabWidget>
 #include <QToolButton>
 #include <QtWidgets/QToolTip>

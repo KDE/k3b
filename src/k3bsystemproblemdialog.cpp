@@ -45,7 +45,7 @@
 #include <KWidgetsAddons/KStandardGuiItem>
 #include <KTextWidgets/KTextEdit>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtGui/QCloseEvent>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QGridLayout>

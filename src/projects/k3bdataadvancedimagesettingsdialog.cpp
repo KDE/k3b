@@ -16,8 +16,8 @@
 #include "k3bdataadvancedimagesettingsdialog.h"
 #include "k3bisooptions.h"
 
-#include <QCheckBox>
-#include <QRadioButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QRadioButton>
 
 #include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>

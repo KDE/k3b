@@ -18,18 +18,17 @@
 #include "k3bcore.h"
 
 #include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
-#include <KNumInput>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QLCDNumber>
-#include <QRadioButton>
-#include <QSlider>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QToolTip>
 
 

@@ -23,12 +23,12 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QComboBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
-#include <QRadioButton>
+#include <QtWidgets/QRadioButton>
 
 // indices for the filesystems combobox
 static const int FS_LINUX_ONLY = 0;

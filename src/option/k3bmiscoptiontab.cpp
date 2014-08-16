@@ -21,9 +21,9 @@
 #include "k3binteractiondialog.h"
 #include "k3bintmapcombobox.h"
 
-#include <QCheckBox>
+#include <QtWidgets/QCheckBox>
 #include <QtCore/QFileInfo>
-#include <QRadioButton>
+#include <QtWidgets/QRadioButton>
 
 #include <KApplication>
 #include <KComboBox>
