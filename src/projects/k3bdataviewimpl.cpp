@@ -285,9 +285,9 @@ void K3b::DataViewImpl::slotOpen()
     if( !item->isFile() ) {
         QUrl url = item->localPath();
         if( !KRun::isExecutableFile( url,
-                                    item->mimeType()->name() ) ) {
+                                    item->mimeType().name() ) ) {
             KRun::runUrl( url,
-                        item->mimeType()->name(),
+                        item->mimeType().name(),
                         m_view );
         }
         else {

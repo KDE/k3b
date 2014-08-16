@@ -207,7 +207,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                     iconName = "media-optical-data";
                 }
                 else {
-                    iconName = item->mimeType()->iconName();
+                    iconName = item->mimeType().iconName();
                 }
 
                 if( item->isSymLink() )
@@ -229,7 +229,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                     return static_cast<K3b::SpecialDataItem*>( item )->specialType();
                 }
                 else {
-                    return item->mimeType()->comment();
+                    return item->mimeType().comment();
                 }
             }
             break;

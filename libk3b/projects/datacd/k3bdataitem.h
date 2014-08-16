@@ -20,8 +20,8 @@
 #include "k3b_export.h"
 
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KMimeType>
 
+#include <QtCore/QMimeType>
 #include <QtCore/QString>
 
 namespace K3b {
@@ -174,7 +174,7 @@ namespace K3b {
         /**
          * Default implementation returns the default mimetype.
          */
-        virtual KMimeType::Ptr mimeType() const;
+        virtual QMimeType mimeType() const;
 
         void setRenameable( bool b ) { m_bRenameable = b; }
         void setMoveable( bool b ) { m_bMovable = b; }

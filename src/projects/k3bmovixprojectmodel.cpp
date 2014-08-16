@@ -260,7 +260,7 @@ QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
                 }
                 else if ( role == Qt::DecorationRole )
                 {
-                    return QIcon::fromTheme( item->mimeType()->iconName() );
+                    return QIcon::fromTheme( item->mimeType().iconName() );
                 }
                 break;
             case TypeColumn:
@@ -268,9 +268,9 @@ QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
                     role == Qt::EditRole )
                 {
                     if( item->isSymLink() )
-                        return i18n("Link to %1", item->mimeType()->comment());
+                        return i18n("Link to %1", item->mimeType().comment());
                     else
-                        return item->mimeType()->comment();
+                        return item->mimeType().comment();
                 }
                 break;
             case SizeColumn:

@@ -23,7 +23,6 @@
 #include <KIOCore/KIO/Global>
 #include <KLineEdit>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KMimeType>
 #include <QtCore/QUrl>
 #include <KSqueezedTextLabel>
 
@@ -202,14 +201,14 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
         QFileInfo fileInfo( fileItem->localPath() );
         qDebug() << fileItem->k3bPath() << fileItem->localPath();
         if( fileItem->isSymLink() ) {
-            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge,
+            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType().iconName(), KIconLoader::SizeLarge,
                                                  KIconLoader::DefaultState, QStringList() << "emblem-symbolic-link" ) );
-            m_labelType->setText( i18n( "Link to %1", fileItem->mimeType()->comment() ) );
+            m_labelType->setText( i18n( "Link to %1", fileItem->mimeType().comment() ) );
             m_labelLocalLinkTarget->setText( fileItem->linkDest() );
         }
         else {
-            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge ) );
-            m_labelType->setText( fileItem->mimeType()->comment() );
+            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType().iconName(), KIconLoader::SizeLarge ) );
+            m_labelType->setText( fileItem->mimeType().comment() );
             m_labelLocalLinkTargetText->hide();
             m_labelLocalLinkTarget->hide();
         }

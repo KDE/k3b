@@ -23,6 +23,7 @@
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QMimeDatabase>
 #include <QtCore/QRegExp>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -123,7 +124,7 @@ K3b::DataItem* K3b::FileItem::copy() const
 }
 
 
-KMimeType::Ptr K3b::FileItem::mimeType() const
+QMimeType K3b::FileItem::mimeType() const
 {
     return m_mimeType;
 }
@@ -302,7 +303,7 @@ void K3b::FileItem::init( const QString& filePath,
         m_idFollowed = m_id;
     }
 
-    m_mimeType = KMimeType::findByUrl( QUrl::fromLocalFile(filePath) );
+    m_mimeType = QMimeDatabase().mimeTypeForFile( filePath );
 
     // add automagically like a qlistviewitem
     if( parent() )

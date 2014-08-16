@@ -84,7 +84,7 @@ namespace K3b {
         void setLocalPath( const QString& p ) { m_localPath = p; }
         QString localPath() const { return m_localPath; }
 
-        KMimeType::Ptr mimeType() const;
+        QMimeType mimeType() const override;
 
         /**
          * \reimplemented

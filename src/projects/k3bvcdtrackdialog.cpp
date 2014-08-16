@@ -27,7 +27,6 @@
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KMimeType>
 #include <KNumInput>
 #include <QtCore/QUrl>
 #include <KSqueezedTextLabel>

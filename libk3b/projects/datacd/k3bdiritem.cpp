@@ -23,6 +23,7 @@
 #include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
+#include <QtCore/QMimeDatabase>
 
 
 K3b::DirItem::DirItem(const QString& name, const ItemFlags& flags)
@@ -433,9 +434,9 @@ bool K3b::DirItem::writeToCd() const
 }
 
 
-KMimeType::Ptr K3b::DirItem::mimeType() const
+QMimeType K3b::DirItem::mimeType() const
 {
-    return KMimeType::mimeType( "inode/directory" );
+    return QMimeDatabase().mimeTypeForName( "inode/directory" );
 }
 
 

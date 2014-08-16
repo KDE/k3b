@@ -77,7 +77,6 @@
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KWidgetsAddons/KMessageBox>
 #include <KMenuBar>
-#include <KDELibs4Support/KDE/KMimeType>
 #include <KCoreAddons/KProcess>
 #include <KRecentDocument>
 #include <KRecentFilesAction>
@@ -97,6 +96,8 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QList>
+#include <QtCore/QMimeDatabase>
+#include <QtCore/QMimeType>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
 #include <QtWidgets/QGridLayout>
@@ -109,10 +110,9 @@
 
 namespace {
 
-    bool isProjectFile( const QUrl& url )
+    bool isProjectFile( QMimeDatabase const& mimeDatabase, QUrl const& url )
     {
-        KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
-        return mimeType->is( "application/x-k3b" );
+        return mimeDatabase.mimeTypeForUrl( url ).inherits( "application/x-k3b" );
     }
 
 
@@ -221,6 +221,8 @@ public:
     K3b::WelcomeWidget* welcomeWidget;
     QStackedWidget* documentStack;
     QWidget* documentHull;
+
+    QMimeDatabase mimeDatabase;
 };
 
 K3b::MainWindow::MainWindow()
@@ -1426,7 +1428,7 @@ void K3b::MainWindow::slotManualCheckSystem()
 
 void K3b::MainWindow::addUrls( const QList<QUrl>& urls )
 {
-    if( urls.count() == 1 && isProjectFile( urls.first() ) ) {
+    if( urls.count() == 1 && isProjectFile( d->mimeDatabase, urls.first() ) ) {
         openDocument( urls.first() );
     }
     else if( K3b::View* view = activeView() ) {

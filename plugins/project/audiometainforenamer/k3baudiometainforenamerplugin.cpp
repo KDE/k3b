@@ -68,11 +68,11 @@ namespace {
         {
             QMimeType mimetype = m_mimeDataBase.mimeTypeForFile( QFile::decodeName( fileName ) );
             if ( mimetype.isValid() ) {
-                if ( mimetype->name() == QLatin1String( "audio/mpeg" ) )
+                if ( mimetype.name() == QLatin1String( "audio/mpeg" ) )
                     return new TagLib::MPEG::File(fileName);
-                else if ( mimetype->name() == QLatin1String( "application/ogg" ) )
+                else if ( mimetype.name() == QLatin1String( "application/ogg" ) )
                     return new TagLib::Ogg::Vorbis::File(fileName);
-                else if ( mimetype->name() == QLatin1String( "application/x-flac" ) )
+                else if ( mimetype.name() == QLatin1String( "application/x-flac" ) )
                     return new TagLib::Ogg::FLAC::File(fileName);
             }
 
@@ -236,7 +236,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
                 if( !newName.isEmpty() ) {
                     QTreeWidgetItem* fileViewItem = new QTreeWidgetItem( viewRoot, QStringList() << newName << item->k3bName() );
                     fileViewItem->setCheckState( 0, Qt::Checked );
-                    fileViewItem->setIcon( 0, QIcon::fromTheme( item->mimeType()->iconName() ) );
+                    fileViewItem->setIcon( 0, QIcon::fromTheme( item->mimeType().iconName() ) );
                     d->renamableItems.append( qMakePair( (K3b::FileItem*)item, fileViewItem ) );
                 }
             }

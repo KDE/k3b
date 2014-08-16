@@ -307,7 +307,7 @@ int K3b::DataItem::depth() const
 }
 
 
-KMimeType::Ptr K3b::DataItem::mimeType() const
+QMimeType K3b::DataItem::mimeType() const
 {
-    return KMimeType::defaultMimeTypePtr();
+    return QMimeType();
 }
