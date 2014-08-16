@@ -20,6 +20,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 
 #include <QtCore/QHash>
+#include <QtCore/QSize>
 
 namespace K3b {
     
@@ -74,7 +75,7 @@ VideoDVDAudioModel::~VideoDVDAudioModel()
 
 const VideoDVD::Title* VideoDVDAudioModel::titleForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.internalPointer() == 0 && index.row() >= 0 && index.row() < d->titles.size() )
+    if( index.isValid() && !index.internalPointer() && index.row() >= 0 && index.row() < d->titles.size() )
     {
         const int title = d->titles.at( index.row() ) - 1;
         if( title >= 0 && title < static_cast<int>( d->dvd.numTitles() ) )
@@ -88,7 +89,7 @@ QModelIndex VideoDVDAudioModel::indexForTitle( const VideoDVD::Title& title, int
 {
     int row = d->titles.indexOf( title.titleNumber() );
     if( row >= 0 )
-        return createIndex( row, column, 0 );
+        return createIndex( row, column, nullptr );
     else
         return QModelIndex();
 }
@@ -96,7 +97,7 @@ QModelIndex VideoDVDAudioModel::indexForTitle( const VideoDVD::Title& title, int
         
 const VideoDVD::AudioStream* VideoDVDAudioModel::audioForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.internalPointer() != 0 )
+    if( index.isValid() && index.internalPointer() )
         return static_cast<VideoDVD::AudioStream*>( index.internalPointer() );
     else
         return 0;
@@ -234,7 +235,7 @@ QModelIndex VideoDVDAudioModel::index( int row, int column, const QModelIndex& p
     }
     else if( !parent.isValid() ) {
         if( row >= 0 && row < d->titles.size() )
-            return createIndex( row, column, 0 );
+            return createIndex( row, column, nullptr );
         else
             return QModelIndex();
     }

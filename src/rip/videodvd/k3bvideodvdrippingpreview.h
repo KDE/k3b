@@ -16,8 +16,8 @@
 #define _K3B_VIDEODVD_RIPPING_PREVIEW_H_
 
 #include <QtCore/QObject>
-#include <QtWidgets/QImage>
 #include <QtCore/QProcess>
+#include <QtGui/QImage>
 
 #include "k3bvideodvd.h"
 

@@ -29,26 +29,26 @@
 #include "k3bmedium.h"
 #include "k3bmodelutils.h"
 
-#include <QtWidgets/QCursor>
-#include <QtWidgets/QDesktopServices>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QKeyEvent>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QTreeView>
-
-#include <KAction>
-#include <KActionCollection>
-#include <KApplication>
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
 #include <KWidgetsAddons/KMessageBox>
-#include <KToolBar>
-#include <KToolBarSpacerAction>
+#include <KWidgetsAddons/KToolBarSpacerAction>
 #include <KWidgetsAddons/KUrlLabel>
+#include <KXmlGui/KActionCollection>
+#include <KXmlGui/KToolBar>
+
+#include <QtGui/QCursor>
+#include <QtGui/QGuiApplication>
+#include <QtGui/QDesktopServices>
+#include <QtGui/QKeyEvent>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QTreeView>
 
 
 namespace mu = K3b::ModelUtils;
@@ -58,7 +58,7 @@ class K3b::VideoDVDRippingView::Private
 {
 public:
     KActionCollection* actionCollection;
-    KMenu* popupMenu;
+    QMenu* popupMenu;
 
     KToolBar* toolBox;
     QLabel* labelLength;
@@ -270,13 +270,13 @@ void K3b::VideoDVDRippingView::reloadMedium()
             delete css;
     }
 
-    QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
+    QGuiApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
     if( d->dvd.open( device() ) ) {
         setTitle( i18n( "%1 (Video DVD)", medium().beautifiedVolumeId() ) );
         d->labelLength->setText( i18np("%1 title", "%1 titles", d->dvd.numTitles() ) );
         d->model->setVideoDVD( d->dvd );
-        QApplication::restoreOverrideCursor();
+        QGuiApplication::restoreOverrideCursor();
 
         bool transcodeUsable = true;
 
@@ -307,7 +307,7 @@ void K3b::VideoDVDRippingView::reloadMedium()
         actionCollection()->action("start_rip")->setEnabled( transcodeUsable );
     }
     else {
-        QApplication::restoreOverrideCursor();
+        QGuiApplication::restoreOverrideCursor();
 
         KMessageBox::error( this, i18n("Unable to read Video DVD contents.") );
     }
@@ -339,15 +339,15 @@ void K3b::VideoDVDRippingView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
 
-    KAction* actionCheck = new KAction( this );
+    QAction* actionCheck = new QAction( this );
     connect( actionCheck, SIGNAL(triggered()), this, SLOT(slotCheck()) );
     actionCollection()->addAction( "check_tracks", actionCheck );
 
-    KAction* actionUncheck = new KAction( this );
+    QAction* actionUncheck = new QAction( this );
     connect( actionUncheck, SIGNAL(triggered()), this, SLOT(slotUncheck()) );
     actionCollection()->addAction( "uncheck_tracks", actionUncheck );
 
-    KAction* actionStartRip = new KAction( QIcon::fromTheme( "tools-rip-video-dvd" ), i18n("Start Ripping"), this );
+    QAction* actionStartRip = new QAction( QIcon::fromTheme( "tools-rip-video-dvd" ), i18n("Start Ripping"), this );
     actionStartRip->setToolTip( i18n("Open the Video DVD ripping dialog") );
     actionStartRip->setStatusTip(actionStartRip->toolTip());
     actionStartRip->setWhatsThis( i18n("<p>Rips single titles from a video DVD "
@@ -360,10 +360,10 @@ void K3b::VideoDVDRippingView::initActions()
     connect( actionStartRip, SIGNAL(triggered()), this, SLOT(slotStartRipping()) );
     actionCollection()->addAction( "start_rip", actionStartRip );
     
-    KAction* actionSelectAll = KStandardAction::selectAll( d->view, SLOT(selectAll()), actionCollection() );
+    QAction* actionSelectAll = KStandardAction::selectAll( d->view, SLOT(selectAll()), actionCollection() );
 
     // setup the popup menu
-    d->popupMenu = new KMenu( this );
+    d->popupMenu = new QMenu( this );
     d->popupMenu->addAction( actionCheck );
     d->popupMenu->addAction( actionUncheck );
     d->popupMenu->addSeparator();
