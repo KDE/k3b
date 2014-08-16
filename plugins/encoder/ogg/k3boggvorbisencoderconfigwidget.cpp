@@ -30,7 +30,7 @@
 #include <QLCDNumber>
 #include <QRadioButton>
 #include <QSlider>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 
 

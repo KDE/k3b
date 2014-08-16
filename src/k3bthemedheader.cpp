@@ -20,7 +20,7 @@
 
 #include <KDELibs4Support/KDE/KGlobalSettings>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 

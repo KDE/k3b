@@ -42,7 +42,7 @@
 #include <QtWidgets/QLayout>
 #include <QtCore/QStringList>
 #include <QtCore/QTimer>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <KVBox>
 
 

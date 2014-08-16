@@ -17,7 +17,7 @@
 
 #include <QtGui/QIcon>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QStyle>

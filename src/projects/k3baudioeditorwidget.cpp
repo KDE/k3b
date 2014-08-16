@@ -15,7 +15,7 @@
 
 #include "k3baudioeditorwidget.h"
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QtWidgets/QFrame>
@@ -25,7 +25,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QPolygon>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 
 

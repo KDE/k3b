@@ -48,7 +48,7 @@ include(GenerateExportHeader)
 include(ECMInstallIcons)
 
 find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui Test WebKitWidgets)
-find_package(KF5 REQUIRED COMPONENTS Archive Config DocTools I18n KCMUtils KDELibs4Support KIO NotifyConfig Solid)
+find_package(KF5 REQUIRED COMPONENTS Archive Config DocTools I18n KCMUtils KDELibs4Support KIO NotifyConfig Solid WidgetsAddons)
 
 #find_package(KDE4 REQUIRED)
 #include(KDE4Defaults)

@@ -54,7 +54,7 @@
 #include <QtCore/QUrl>
 #include <KIOWidgets/KUrlRequester>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QCheckBox>
 #include <QClipboard>
 #include <QComboBox>
@@ -73,10 +73,10 @@
 #include <QtCore/QMap>
 #include <QMenu>
 #include <QProgressBar>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QSpinBox>
 #include <QTabWidget>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QTreeWidget>
 #include <QtCore/QMimeData>
 

@@ -18,7 +18,7 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QModelIndex>
 #include <QtGui/QPainter>
 #include <QtWidgets/QStyle>

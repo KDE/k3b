@@ -45,7 +45,7 @@
 #include <KSharedConfig>
 #include <QtCore/QUrl>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QCursor>
 #include <QDomDocument>
 #include <QtXml/QDomElement>

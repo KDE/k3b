@@ -27,7 +27,7 @@
 #include <QComboBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QRadioButton>
 
 // indices for the filesystems combobox

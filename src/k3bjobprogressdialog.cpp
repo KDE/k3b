@@ -56,7 +56,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QKeyEvent>
 #include <QtWidgets/QLabel>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QScrollBar>
 #include <QtCore/QString>
 #include <QtCore/QTimer>

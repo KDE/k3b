@@ -17,7 +17,7 @@
 #include <KConfigCore/KConfigGroup>
 #include <KI18n/KLocalizedString>
 
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 
 static const int s_autoIndex = 0;

@@ -18,12 +18,10 @@
 #include <KI18n/KLocalizedString>
 
 K3bLameManualSettingsDialog::K3bLameManualSettingsDialog( QWidget* parent )
-    : KDialog( parent )
+    : QDialog( parent )
 {
     setWindowTitle( i18n("(Lame) Manual Quality Settings") );
-    setButtons( Ok|Cancel );
-
-    setupUi( mainWidget() );
+    setupUi( this );
 }
 
 

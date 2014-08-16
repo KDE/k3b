@@ -32,9 +32,9 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QTabWidget>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QValidator>
 
 

@@ -21,7 +21,7 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QDialogButtonBox>
 #include <QtCore/QEvent>
 #include <QtGui/QFont>
@@ -35,7 +35,7 @@
 #include <QtCore/QString>
 #include <QtCore/QTimer>
 #include <QToolButton>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>

@@ -20,7 +20,7 @@
 #include "k3bexternalbinpermissionmodel.h"
 #include "config-k3b.h"
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QCursor>
 #include <QHeaderView>
 #include <QItemSelectionModel>
@@ -28,10 +28,10 @@
 #include <QtWidgets/QLayout>
 #include <QtCore/QMap>
 #include <QtGui/QPixmap>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QtCore/QStringList>
 #include <QTabWidget>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QTreeView>
 #include <QVBoxLayout>
 

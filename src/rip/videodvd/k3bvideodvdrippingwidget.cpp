@@ -22,7 +22,7 @@
 #include <QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QSpinBox>
 #include <QtCore/QTimer>
 #include <QWhatsThis>

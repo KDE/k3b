@@ -23,31 +23,29 @@
 #include "k3bfileitem.h"
 #include "k3bmixeddoc.h"
 
-#include <KComboBox>
-#include <KComponentData>
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KFileMetaInfo>
-#include <QtGui/QIcon>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KMimeType>
 
-#include <QCheckBox>
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
-#include <QGroupBox>
+#include <QtCore/QMimeDatabase>
+#include <QtCore/QMimeType>
+#include <QtCore/QPair>
+#include <QtCore/QLatin1String>
 #include <QtCore/QHash>
-#include <QtWidgets/QLabel>
-#include <QLatin1String>
-#include <QtWidgets/QLayout>
-#include <QPair>
-#include <QPushButton>
-#include <QRadioButton>
 #include <QtCore/QString>
-#include <QToolTip>
-#include <QTreeWidget>
-#include <QVBoxLayout>
+#include <QtGui/QIcon>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QVBoxLayout>
 
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
@@ -68,8 +66,8 @@ namespace {
 
         TagLib::File* createFile( TagLib::FileName fileName, bool, TagLib::AudioProperties::ReadStyle ) const
         {
-            KMimeType::Ptr mimetype = KMimeType::findByPath( QFile::decodeName( fileName ) );
-            if ( mimetype ) {
+            QMimeType mimetype = m_mimeDataBase.mimeTypeForFile( QFile::decodeName( fileName ) );
+            if ( mimetype.isValid() ) {
                 if ( mimetype->name() == QLatin1String( "audio/mpeg" ) )
                     return new TagLib::MPEG::File(fileName);
                 else if ( mimetype->name() == QLatin1String( "application/ogg" ) )
@@ -80,6 +78,9 @@ namespace {
 
             return 0;
         }
+
+    private:
+        QMimeDatabase m_mimeDataBase;
     };
 }
 
@@ -90,7 +91,7 @@ public:
     K3b::DataDoc* doc;
     QString pattern;
 
-    KComboBox* comboPattern;
+    QComboBox* comboPattern;
     QTreeWidget* viewFiles;
     //  KProgressDialog* progressDialog;
     QPushButton* scanButton;
@@ -115,7 +116,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
     QGroupBox* patternGroup = new QGroupBox( i18n("Rename Pattern"), this );
     QHBoxLayout* patternGroupLayout = new QHBoxLayout( patternGroup );
 
-    d->comboPattern = new KComboBox( patternGroup );
+    d->comboPattern = new QComboBox( patternGroup );
     d->comboPattern->setEditable( true );
 
     d->scanButton = new QPushButton( i18n("Scan"), patternGroup );

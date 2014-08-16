@@ -16,7 +16,7 @@
 #include "k3bdevicedelegate.h"
 #include "k3bdevicemodel.h"
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QPainter>
 #include <QtWidgets/QStyle>
 

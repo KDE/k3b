@@ -17,7 +17,6 @@ install( FILES
   k3bcdtextvalidator.h
   k3bintvalidator.h
   k3bexceptions.h
-  k3bprogressdialog.h
   k3bpushbutton.h
   k3bthreadwidget.h
   k3bsignalwaiter.h

@@ -44,7 +44,7 @@
 #include <KToolBarSpacerAction>
 
 // qt includes
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QCursor>
 #include <QtXml/QDomElement>
 #include <QtGui/QFont>

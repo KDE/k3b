@@ -46,11 +46,11 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QRadioButton>
 #include <QTabWidget>
 #include <QToolButton>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QVariant>
 
 

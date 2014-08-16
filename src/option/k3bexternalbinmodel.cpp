@@ -17,7 +17,7 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QFont>
 #include <QtCore/QHash>
 #include <QtCore/QList>

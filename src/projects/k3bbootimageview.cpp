@@ -28,7 +28,7 @@
 #include <QCheckBox>
 #include <QItemSelectionModel>
 #include <QtWidgets/QLineEdit>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QRadioButton>
 #include <QtCore/QString>
 

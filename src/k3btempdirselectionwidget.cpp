@@ -23,7 +23,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtCore/QTimer>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>

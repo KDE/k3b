@@ -23,7 +23,7 @@
 
 #include <QtWidgets/QLabel>
 #include <QtCore/QList>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 
 #include <sys/types.h>
 #include <signal.h>

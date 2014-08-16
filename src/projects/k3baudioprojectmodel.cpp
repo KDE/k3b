@@ -26,7 +26,7 @@
 #include <KI18n/KLocalizedString>
 #include <QtGui/QIcon>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QMimeData>
 
 

@@ -21,7 +21,7 @@
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 static const KLocalizedString s_autoHelp =
     ki18n("Let K3b select the best-suited mode. This is the recommended selection.");

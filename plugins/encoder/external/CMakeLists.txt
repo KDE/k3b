@@ -12,7 +12,7 @@ target_link_libraries(k3bexternalencoder
 
 qt5_wrap_ui(ui_sources
     base_k3bexternalencoderconfigwidget.ui
-    base_k3bexternalencodereditwidget.ui
+    base_k3bexternalencodereditdialog.ui
 )
 
 add_library(kcm_k3bexternalencoder MODULE

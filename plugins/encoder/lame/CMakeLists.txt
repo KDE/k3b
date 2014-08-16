@@ -10,7 +10,7 @@ target_link_libraries(k3blameencoder
 
 qt5_wrap_ui(ui_sources
     base_k3blameencodersettingswidget.ui
-    base_k3bmanualbitratesettingswidget.ui
+    base_k3bmanualbitratesettingsdialog.ui
 )
 
 add_library(kcm_k3blameencoder MODULE

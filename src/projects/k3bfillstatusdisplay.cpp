@@ -41,7 +41,7 @@
 #include <QtWidgets/QStyle>
 #include <QtCore/QTimer>
 #include <QToolButton>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QValidator>
 #include <QWhatsThis>
 

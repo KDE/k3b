@@ -31,12 +31,11 @@ K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bexternalencoder, K3bExternalEncoderSetti
 
 
 K3bExternalEncoderEditDialog::K3bExternalEncoderEditDialog( QWidget* parent )
-    : KDialog( parent )
+    : QDialog( parent )
 {
     setModal( true );
     setWindowTitle( i18n("Editing external audio encoder") );
-    setButtons( Ok | Cancel );
-    setupUi( mainWidget() );
+    setupUi( this );
 }
 
 
@@ -67,37 +66,32 @@ void K3bExternalEncoderEditDialog::setCommand( const K3bExternalEncoderCommand& 
 }
 
 
-void K3bExternalEncoderEditDialog::slotButtonClicked( int button )
+void K3bExternalEncoderEditDialog::accept()
 {
-    if ( button == KDialog::Ok ) {
-        if( m_editName->text().isEmpty() ) {
-            KMessageBox::error( this,
-                                i18n("Please specify a name for the command."),
-                                i18n("No name specified") );
-        }
-        else if( m_editExtension->text().isEmpty() ) {
-            KMessageBox::error( this,
-                                i18n("Please specify an extension for the command."),
-                                i18n("No extension specified") );
-        }
-        else if( m_editCommand->text().isEmpty() ) {
-            KMessageBox::error( this,
-                                i18n("Please specify the command line."),
-                                i18n("No command line specified") );
-        }
-        else if( !m_editCommand->text().contains( "%f" ) ) {
-            KMessageBox::error( this,
-                                // xgettext: no-c-format
-                                i18n("Please add the output filename (%f) to the command line."),
-                                i18n("No filename specified") );
-        }
-        // FIXME: check for name and extension uniqueness
-        else {
-            accept();
-        }
+    if( m_editName->text().isEmpty() ) {
+        KMessageBox::error( this,
+                            i18n("Please specify a name for the command."),
+                            i18n("No name specified") );
     }
+    else if( m_editExtension->text().isEmpty() ) {
+        KMessageBox::error( this,
+                            i18n("Please specify an extension for the command."),
+                            i18n("No extension specified") );
+    }
+    else if( m_editCommand->text().isEmpty() ) {
+        KMessageBox::error( this,
+                            i18n("Please specify the command line."),
+                            i18n("No command line specified") );
+    }
+    else if( !m_editCommand->text().contains( "%f" ) ) {
+        KMessageBox::error( this,
+                            // xgettext: no-c-format
+                            i18n("Please add the output filename (%f) to the command line."),
+                            i18n("No filename specified") );
+    }
+    // FIXME: check for name and extension uniqueness
     else {
-        KDialog::slotButtonClicked( button );
+        QDialog::accept();
     }
 }
 

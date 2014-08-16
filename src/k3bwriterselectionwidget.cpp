@@ -32,14 +32,14 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QCursor>
 #include <QtWidgets/QGridLayout>
 #include <QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QToolButton>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 #include <cstdlib>
 

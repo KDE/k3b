@@ -29,7 +29,7 @@
 #include <QAudioFormat>
 #include <QAudioOutput>
 #include <QSlider>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QWidgetAction>
 
 

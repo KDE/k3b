@@ -16,7 +16,7 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <QApplication>
+#include <QtWidgets/QApplication>
 #include <QDesktopWidget>
 #include <QtCore/QEvent>
 #include <QtGui/QFontMetrics>

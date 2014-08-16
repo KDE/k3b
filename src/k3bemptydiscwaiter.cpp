@@ -24,25 +24,25 @@
 #include "k3biso9660.h"
 #include "k3bblankingjob.h"
 #include "k3bbusywidget.h"
-#include "k3bprogressdialog.h"
 #include "k3bdvdformattingjob.h"
 
-#include <QApplication>
+#include <QtCore/QEventLoop>
+#include <QtCore/QTimer>
+#include <QtGui/QFont>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QProgressDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QEventLoop>
-#include <QtGui/QFont>
 #include <QtWidgets/QGridLayout>
-#include <QPushButton>
-#include <QtCore/QTimer>
-#include <QToolTip>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolTip>
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
+#include <KNotifications/KNotification>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KNotification>
 
 
 class K3b::EmptyDiscWaiter::Private
@@ -77,7 +77,7 @@ public:
     QLabel* labelFoundMedia;
     QLabel* pixLabel;
 
-    K3b::ProgressDialog* erasingInfoDialog;
+    QProgressDialog* erasingInfoDialog;
 };
 
 
@@ -333,12 +333,14 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                     job.setForce( false );
                     job.setForceNoEject( true );
 
-                    d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
+                    d->erasingInfoDialog->reset();
+                    d->erasingInfoDialog->setLabelText( i18n("Preformatting DVD+RW") );
+                    d->erasingInfoDialog->setRange( 0, 100 );
                     connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-                    connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+                    connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setValue(int)) );
                     connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
                     job.start( medium.diskInfo() );
-                    d->erasingInfoDialog->exec( true );
+                    d->erasingInfoDialog->exec();
                 }
             }
             else {
@@ -538,12 +540,14 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 job.setForce( false );
                 job.setForceNoEject(true);
 
-                d->erasingInfoDialog->setText( i18n("Formatting DVD-RW") );
+                d->erasingInfoDialog->reset();
+                d->erasingInfoDialog->setLabelText( i18n("Formatting DVD-RW") );
+                d->erasingInfoDialog->setRange( 0, 100 );
                 connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-                connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+                connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setValue(int)) );
                 connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
                 job.start( medium.diskInfo() );
-                d->erasingInfoDialog->exec( true );
+                d->erasingInfoDialog->exec();
             }
             else {
                 qDebug() << "starting devicehandler: no DVD-RW formatting.";
@@ -583,7 +587,9 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             prepareErasingDialog();
 
             // start a k3bblankingjob
-            d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
+            d->erasingInfoDialog->reset();
+            d->erasingInfoDialog->setLabelText( i18n("Erasing CD-RW") );
+            d->erasingInfoDialog->setRange( 0, 0 );
 
             // the user may be using cdrdao for erasing as cdrecord does not work
             WritingApp erasingApp = K3b::WritingAppAuto;
@@ -601,7 +607,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
             connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
             job.start();
-            d->erasingInfoDialog->exec( false );
+            d->erasingInfoDialog->exec();
         }
         else {
             qDebug() << "starting devicehandler: no CD-RW overwrite.";
@@ -757,7 +763,7 @@ void K3b::EmptyDiscWaiter::prepareErasingDialog()
 {
     // we hide the emptydiskwaiter so the info dialog needs to have the same parent
     if( !d->erasingInfoDialog )
-        d->erasingInfoDialog = new K3b::ProgressDialog( QString(), parentWidget() );
+        d->erasingInfoDialog = new QProgressDialog( parentWidget() );
 
     //
     // hide the dialog

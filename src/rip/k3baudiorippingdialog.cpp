@@ -52,10 +52,10 @@
 #include <QtCore/QList>
 #include <QtWidgets/QMessageBox>
 #include <QPair>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QTabWidget>
 #include <QToolButton>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QTreeWidget>
 #include <QSpinBox>
 #include <QtCore/QStringList>

@@ -27,7 +27,7 @@
 #include <QtWidgets/QFrame>
 #include <QMouseEvent>
 #include <QtGui/QPainter>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 
 namespace {

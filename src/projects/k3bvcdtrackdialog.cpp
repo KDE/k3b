@@ -46,7 +46,7 @@
 #include <QtGui/QPixmap>
 #include <QRadioButton>
 #include <QTabWidget>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QTreeView>
 #include <QVBoxLayout>
 

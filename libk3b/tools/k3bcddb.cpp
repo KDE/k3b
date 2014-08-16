@@ -20,6 +20,8 @@
 #include <KI18n/KLocalizedString>
 
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QLabel>
@@ -38,54 +40,42 @@ KCDDB::TrackOffsetList K3b::CDDB::createTrackOffsetList( const K3b::Device::Toc&
 }
 
 
-K3b::CDDB::MultiEntriesDialog::MultiEntriesDialog( QWidget* parent )
-    : KDialog( parent )
-{
-    setWindowTitle( i18n("Multiple CDDB Entries Found") );
-    setButtons( Ok|Cancel );
-
-    QWidget* frame = mainWidget();
-
-    QLabel* infoLabel = new QLabel( i18n("K3b found multiple or inexact CDDB entries. Please select one."), frame );
-    infoLabel->setWordWrap( true );
-
-    m_listBox = new QListWidget( frame );
-    m_listBox->setSelectionMode( QAbstractItemView::SingleSelection );
-
-    QVBoxLayout* layout = new QVBoxLayout( frame );
-    layout->setContentsMargins( 0, 0, 0, 0 );
-    layout->addWidget( infoLabel );
-    layout->addWidget( m_listBox );
-
-    setMinimumSize( 280, 200 );
-}
-
-
 int K3b::CDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent )
 {
-    MultiEntriesDialog d( parent );
+    QDialog dialog( parent );
+    dialog.setWindowTitle( i18n("Multiple CDDB Entries Found") );
+
+    QLabel* infoLabel = new QLabel( i18n("K3b found multiple or inexact CDDB entries. Please select one."), &dialog );
+    infoLabel->setWordWrap( true );
+
+    QListWidget* listBox = new QListWidget( &dialog );
+    listBox->setSelectionMode( QAbstractItemView::SingleSelection );
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+
+    QVBoxLayout* layout = new QVBoxLayout( &dialog );
+    layout->setContentsMargins( 0, 0, 0, 0 );
+    layout->addWidget( infoLabel );
+    layout->addWidget( listBox );
+    layout->addWidget( buttonBox );
+
+    dialog.setMinimumSize( 280, 200 );
 
     int i = 1;
     foreach( const KCDDB::CDInfo& info, entries ) {
-        d.m_listBox->addItem( QString::number(i++) + ' ' +
+        listBox->addItem( QString::number(i++) + ' ' +
                               info.get( KCDDB::Artist ).toString() + " - " +
                               info.get( KCDDB::Title ).toString() + " (" +
                               info.get( KCDDB::Category ).toString() + ')' );
     }
 
-    d.m_listBox->setCurrentRow( 0 );
+    listBox->setCurrentRow( 0 );
 
-    if( d.exec() == QDialog::Accepted )
-        return d.m_listBox->currentRow();
+    if( dialog.exec() == QDialog::Accepted )
+        return listBox->currentRow();
     else
         return -1;
 }
-
-
-K3b::CDDB::MultiEntriesDialog::~MultiEntriesDialog()
-{
-}
-
 
 
 class K3b::CDDB::CDDBJob::Private

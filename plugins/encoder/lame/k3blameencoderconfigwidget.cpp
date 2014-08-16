@@ -22,7 +22,7 @@
 #include <QtCore/QFile>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QRadioButton>
 #include <QSlider>
 #include <QSpinBox>

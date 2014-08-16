@@ -36,9 +36,9 @@
 #include <QHeaderView>
 #include <QtWidgets/QLayout>
 #include <QtCore/QList>
-#include <QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QtCore/QString>
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 #include <QTreeWidget>
 #include <QVariant>
 #include <QVBoxLayout>
