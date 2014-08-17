@@ -24,6 +24,7 @@ if(ENABLE_DVD_RIPPING)
         projects/videodvd/k3bvideodvdjob.cpp
         projects/videodvd/k3bvideodvdimager.cpp
     )
+    set(videodvd_libraries dvdread)
 endif()
 
 if(WIN32)
@@ -210,8 +211,9 @@ target_link_libraries(k3blib
         Qt5::Widgets
         KDE::Libkcddb::kcddb
         samplerate
-        ${DVDREAD_LIBRARIES}
+        ${videodvd_libraries}
 )
+
 if(WIN32)
     target_link_libraries(k3blib uuid ole32)
 endif(WIN32)

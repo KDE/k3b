@@ -17,7 +17,7 @@ configure_file(config-flac.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-flac.h )
 
 add_library(k3bflacdecoder MODULE k3bflacdecoder.cpp)
 
-target_link_libraries(k3bflacdecoder k3b k3bdevice KF5::KDELibs4Support KF5::I18n ${FLAC++_LIBRARIES} ${FLAC_LIBRARIES})
+target_link_libraries(k3bflacdecoder k3blib k3bdevice KF5::KDELibs4Support KF5::I18n ${FLAC++_LIBRARIES} ${FLAC_LIBRARIES})
 
 if(ENABLE_TAGLIB)
   target_link_libraries(k3bflacdecoder ${TAGLIB_LIBRARIES})

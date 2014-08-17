@@ -233,7 +233,8 @@ target_link_libraries(k3b
 )
 
 if(ICONV_FOUND)
-    target_link_libraries(k3b PRIVATE ${ICONV_LIBRARIES})
+    target_include_directories(k3b PRIVATE ${ICONV_INCLUDE_DIR})
+    target_link_libraries(k3b ${ICONV_LIBRARIES})
 endif()
 
 if(ENABLE_AUDIO_PLAYER)
