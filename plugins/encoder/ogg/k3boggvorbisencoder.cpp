@@ -21,8 +21,9 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
+
+#include <QtCore/QDebug>
 
 #include <vorbis/vorbisenc.h>
 

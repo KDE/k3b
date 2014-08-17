@@ -20,8 +20,8 @@
 #include "k3bcore.h"
 #include "k3bprocess.h"
 
-#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

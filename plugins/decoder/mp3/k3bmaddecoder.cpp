@@ -29,11 +29,11 @@
 #include <config-k3b.h>
 
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 
+#include <QtCore/QDebug>
 #include <QtCore/QString>
 #include <QtCore/QFile>
-#include <QVector>
+#include <QtCore/QVector>
 
 #include <stdlib.h>
 #include <cmath>

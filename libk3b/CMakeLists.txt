@@ -203,10 +203,13 @@ target_include_directories(k3blib
 target_link_libraries(k3blib
     PUBLIC
         Qt5::Core
+        KF5::ConfigWidgets
+        KF5::CoreAddons
+        KF5::KIOCore
+        KF5::Service
     PRIVATE
         k3bdevice
         KF5::KCMUtils
-        KF5::KIOCore
         KF5::KDELibs4Support
         Qt5::Widgets
         KDE::Libkcddb::kcddb

@@ -1,10 +1,9 @@
 add_library(k3boggvorbisencoder MODULE k3boggvorbisencoder.cpp)
 
 target_link_libraries(k3boggvorbisencoder
-    KF5::I18n
-    KF5::KDELibs4Support
-    k3blib
     k3bdevice
+    k3blib
+    KF5::I18n
     ${OGGVORBIS_LIBRARIES}
 )
 
@@ -16,10 +15,9 @@ add_library(kcm_k3boggvorbisencoder MODULE
 )
 
 target_link_libraries(kcm_k3boggvorbisencoder
-    KF5::I18n
-    KF5::KDELibs4Support
-    k3blib
     k3bdevice
+    k3blib
+    KF5::I18n
     ${OGGVORBIS_LIBRARIES}
 )
 

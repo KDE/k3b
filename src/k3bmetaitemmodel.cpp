@@ -25,7 +25,7 @@
 #include <QtGui/QIcon>
 
 #include <QMimeData>
-#include <QVector>
+#include <QtCore/QVector>
 
 // IDEA: K3b::MetaItemModel::placeData( int row, int column );
 

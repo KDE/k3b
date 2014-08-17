@@ -48,7 +48,8 @@ include(GenerateExportHeader)
 include(ECMInstallIcons)
 
 find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui Test WebKitWidgets)
-find_package(KF5 REQUIRED COMPONENTS Archive Config DocTools I18n KCMUtils KDELibs4Support KIO NotifyConfig Solid WidgetsAddons)
+find_package(KF5 REQUIRED COMPONENTS Archive Config CoreAddons DocTools I18n KCMUtils
+                                     KDELibs4Support KIO NotifyConfig Service Solid WidgetsAddons)
 
 find_package(Iconv)
 set(HAVE_ICONV "${ICONV_FOUND}")

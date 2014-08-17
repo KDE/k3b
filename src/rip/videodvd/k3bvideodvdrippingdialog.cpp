@@ -43,7 +43,7 @@
 #include <QtCore/QMap>
 #include <QSpinBox>
 #include <QtWidgets/QStyle>
-#include <QVector>
+#include <QtCore/QVector>
 
 
 namespace {

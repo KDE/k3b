@@ -20,10 +20,10 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 
 #include <QtWidgets/QCheckBox>
+#include <QtCore/QDebug>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>

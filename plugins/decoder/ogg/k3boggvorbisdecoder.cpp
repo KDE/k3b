@@ -16,11 +16,11 @@
 
 #include <config-k3b.h>
 
+#include <KI18n/KLocalizedString>
+
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
-
-#include <KI18n/KLocalizedString>
 
 #include <stdio.h>
 #include <stdlib.h>

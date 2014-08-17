@@ -17,6 +17,7 @@
 #define _K3B_WAVE_DECODER_H_
 
 #include "k3baudiodecoder.h"
+#include <QtCore/QScopedPointer>
 
 class K3bWaveDecoderFactory : public K3b::AudioDecoderFactory
 {
@@ -59,7 +60,7 @@ protected:
 
 private:
     class Private;
-    Private* d;
+    QScopedPointer<Private> d;
 };
 
 #endif

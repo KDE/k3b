@@ -15,12 +15,12 @@
 #include <config-k3b.h>
 #include <config-flac.h>
 
+#include <KI18n/KLocalizedString>
+
 #include <QtCore/QBuffer>
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QStringList>
-
-#include <KI18n/KLocalizedString>
 
 #include <string.h>
 #include <math.h>

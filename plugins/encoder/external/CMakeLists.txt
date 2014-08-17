@@ -4,10 +4,9 @@ add_library(k3bexternalencoder MODULE
 )
 
 target_link_libraries(k3bexternalencoder
-    KF5::I18n
-    KF5::KDELibs4Support
     k3bdevice
     k3blib
+    KF5::I18n
 )
 
 qt5_wrap_ui(ui_sources
@@ -22,10 +21,9 @@ add_library(kcm_k3bexternalencoder MODULE
 )
 
 target_link_libraries(kcm_k3bexternalencoder
-    KF5::I18n
-    KF5::KDELibs4Support
     k3bdevice
     k3blib
+    KF5::I18n
 )
 
 install(TARGETS k3bexternalencoder kcm_k3bexternalencoder DESTINATION ${PLUGIN_INSTALL_DIR})

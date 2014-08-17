@@ -17,15 +17,14 @@
 
 #include "k3bcore.h"
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QTreeWidget>
-#include <QtCore/QList>
-
-#include <klineedit.h>
-#include <kmessagebox.h>
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+
 #include <QtCore/QDebug>
+#include <QtCore/QList>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QTreeWidget>
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bexternalencoder, K3bExternalEncoderSettingsWidget )
 

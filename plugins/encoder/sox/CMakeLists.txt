@@ -4,7 +4,6 @@ target_link_libraries(k3bsoxencoder
     k3bdevice
     k3blib
     KF5::I18n
-    KF5::KDELibs4Support
 )
 
 qt5_wrap_ui(ui_sources base_k3bsoxencoderconfigwidget.ui)
@@ -15,7 +14,6 @@ target_link_libraries(kcm_k3bsoxencoder
     k3bdevice
     k3blib
     KF5::I18n
-    KF5::KDELibs4Support
 )
 
 install(TARGETS k3bsoxencoder kcm_k3bsoxencoder DESTINATION ${PLUGIN_INSTALL_DIR} )

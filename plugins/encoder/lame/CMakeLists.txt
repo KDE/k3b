@@ -1,10 +1,9 @@
 add_library(k3blameencoder MODULE k3blameencoder.cpp)
 
 target_link_libraries(k3blameencoder
-    KF5::I18n
-    KF5::KDELibs4Support
-    k3blib
     k3bdevice
+    k3blib
+    KF5::I18n
     ${LAME_LIBRARIES}
 )
 
@@ -23,7 +22,6 @@ target_link_libraries(kcm_k3blameencoder
     k3bdevice
     k3blib
     KF5::I18n
-    KF5::KDELibs4Support
 )
 
 install(TARGETS k3blameencoder kcm_k3blameencoder DESTINATION ${PLUGIN_INSTALL_DIR})

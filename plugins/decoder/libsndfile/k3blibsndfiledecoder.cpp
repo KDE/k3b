@@ -17,11 +17,11 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
+#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
-#include <KI18n/KLocalizedString>
+#include <QtCore/QFile>
+#include <QtCore/QStringList>
 
 #include <math.h>
 #include <stdio.h>

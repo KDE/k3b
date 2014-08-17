@@ -1,6 +1,8 @@
 add_library(k3bmaddecoder MODULE k3bmad.cpp)
 
-target_link_libraries(k3bmaddecoder k3blib k3bdevice KF5::KDELibs4Support KF5::I18n ${MAD_LIBRARIES})
+target_include_directories(k3bmaddecoder PRIVATE ${MAD_INCLUDE_DIR})
+
+target_link_libraries(k3bmaddecoder k3bdevice k3blib KF5::I18n ${MAD_LIBRARIES})
 
 if(ENABLE_TAGLIB)
     target_link_libraries(k3bmaddecoder ${TAGLIB_LIBRARIES})
