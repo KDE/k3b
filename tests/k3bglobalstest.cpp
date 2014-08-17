@@ -15,10 +15,9 @@
 #include "k3bglobalstest.h"
 #include "k3bglobals.h"
 
-#include <qtest_kde.h>
 #include <QtTest/QTest>
 
-QTEST_KDEMAIN_CORE( GlobalsTest )
+QTEST_GUILESS_MAIN( GlobalsTest )
 
 GlobalsTest::GlobalsTest()
 {

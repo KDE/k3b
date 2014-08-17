@@ -15,12 +15,10 @@
 #include "k3bmodelutilstest.h"
 #include "k3bmodelutils.h"
 
-#include <qtest_kde.h>
-
-#include <QtTest/QTest>
 #include <QtGui/QStandardItemModel>
+#include <QtTest/QTest>
 
-QTEST_KDEMAIN_CORE( ModelUtilsTest )
+QTEST_GUILESS_MAIN( ModelUtilsTest )
 
 ModelUtilsTest::ModelUtilsTest()
 {

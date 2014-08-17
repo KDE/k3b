@@ -15,15 +15,13 @@
 #include "k3bmetaitemmodeltest.h"
 #include "k3bmetaitemmodel.h"
 
-#include <QtGui/QIcon>
-#include <qtest_kde.h>
-
 #include <QtCore/QStringList>
+#include <QtGui/QIcon>
 #include <QtGui/QStandardItemModel>
 #include <QtTest/QSignalSpy>
 #include <QtTest/QTest>
 
-QTEST_KDEMAIN_CORE( MetaItemModelTest )
+QTEST_GUILESS_MAIN( MetaItemModelTest )
 
 Q_DECLARE_METATYPE( QModelIndex )
 
