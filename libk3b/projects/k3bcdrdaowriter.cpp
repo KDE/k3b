@@ -28,8 +28,6 @@
 
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
-#include <KDELibs4Support/KDE/KStandardDirs>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
@@ -38,6 +36,7 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QTemporaryFile>
 #include <QtNetwork/QTcpSocket>
 
 #include <sys/types.h>
@@ -649,7 +648,7 @@ bool K3b::CdrdaoWriter::cueSheet()
             if ( !fi.exists() )
                 return false;
 
-            KTemporaryFile tempF;
+            QTemporaryFile tempF;
             tempF.open();
             QString tempFile = tempF.fileName();
             tempF.remove();

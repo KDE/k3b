@@ -24,7 +24,6 @@
 #include <KI18n/KLocalizedString>
 #include <KCoreAddons/KProcess>
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KTemporaryFile>
 #include <QtCore/QUrl>
 
 #include <QtCore/QDateTime>

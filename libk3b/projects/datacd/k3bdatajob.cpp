@@ -40,8 +40,6 @@
 
 #include <kapplication.h>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 #include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/Job>
 
@@ -51,6 +49,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include <QtCore/QTemporaryFile>
 
 
 
@@ -69,7 +68,7 @@ public:
     bool imageFinished;
     bool canceled;
 
-    KTemporaryFile* tocFile;
+    QTemporaryFile* tocFile;
 
     int usedDataMode;
     K3b::WritingApp usedWritingApp;
@@ -1105,8 +1104,7 @@ bool K3b::DataJob::setupCdrdaoJob()
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;
-    d->tocFile = new KTemporaryFile();
-    d->tocFile->setSuffix( ".toc" );
+    d->tocFile = new QTemporaryFile( "XXXXXX.toc" );
     d->tocFile->open();
 
     QTextStream s( d->tocFile );

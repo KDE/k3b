@@ -31,7 +31,6 @@
 
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 
 #include <QtCore/QDebug>
 #include <QtCore/QString>

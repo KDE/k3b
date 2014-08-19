@@ -25,12 +25,12 @@
 #include "k3bisoimager.h"
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 #include <KIOCore/KIO/Global>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QStack>
+#include <QtCore/QTemporaryFile>
 #include <QtCore/QTextStream>
 
 
@@ -52,9 +52,9 @@ public:
     K3b::MovixDoc* doc;
     const K3b::MovixBin* eMovixBin;
 
-    KTemporaryFile* playlistFile;
-    KTemporaryFile* isolinuxConfigFile;
-    KTemporaryFile* movixRcFile;
+    QTemporaryFile* playlistFile;
+    QTemporaryFile* isolinuxConfigFile;
+    QTemporaryFile* movixRcFile;
 
     K3b::DirItem* isolinuxDir;
     K3b::DirItem* movixDir;
@@ -172,7 +172,7 @@ void K3b::MovixDocPreparer::removeMovixStructures()
 bool K3b::MovixDocPreparer::writePlaylistFile()
 {
     delete d->playlistFile;
-    d->playlistFile = new KTemporaryFile();
+    d->playlistFile = new QTemporaryFile();
     d->playlistFile->open();
 
     QTextStream s( d->playlistFile );
@@ -193,7 +193,7 @@ bool K3b::MovixDocPreparer::writePlaylistFile()
 bool K3b::MovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath )
 {
     delete d->isolinuxConfigFile;
-    d->isolinuxConfigFile = new KTemporaryFile();
+    d->isolinuxConfigFile = new QTemporaryFile();
     d->isolinuxConfigFile->open();
 
     QTextStream s( d->isolinuxConfigFile );
@@ -227,7 +227,7 @@ bool K3b::MovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath
 bool K3b::MovixDocPreparer::writeMovixRcFile()
 {
     delete d->movixRcFile;
-    d->movixRcFile = new KTemporaryFile();
+    d->movixRcFile = new QTemporaryFile();
     d->movixRcFile->open();
 
     QTextStream s( d->movixRcFile );

@@ -35,7 +35,7 @@
 
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KGlobal>
-#include <KDELibs4Support/KDE/KTemporaryFile>
+#include <QtCore/QTemporaryFile>
 
 
 Q_DECLARE_METATYPE( QProcess::ExitStatus )
@@ -341,9 +341,6 @@ bool K3b::CdrecordWriter::prepareProcess()
 
     if( d->rawCdText.size() > 0 ) {
         delete d->cdTextFile;
-        // yes, we do want to use QTemporaryFile and not KTemporaryFile because cdrecord
-        // might be started suid root and the KDE tmp might be on an nfs mounted partition
-        // (Mandriva for example uses ~/tmp)
         d->cdTextFile = new QTemporaryFile();
         if ( !d->cdTextFile->open() ||
              d->cdTextFile->write( d->rawCdText ) != d->rawCdText.size() ||

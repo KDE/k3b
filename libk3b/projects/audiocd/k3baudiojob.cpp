@@ -43,7 +43,6 @@
 
 #include <KCoreAddons/KStringHandler>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 
 
 

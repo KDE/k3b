@@ -30,7 +30,6 @@
 #include "k3bisooptions.h"
 
 #include <KDELibs4Support/KDE/KStandardDirs>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
@@ -41,6 +40,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QRegExp>
+#include <QtCore/QTemporaryFile>
 #include <QtWidgets/QApplication>
 
 #include <sys/types.h>
@@ -733,7 +733,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
 int K3b::IsoImager::writePathSpec()
 {
     delete m_pathSpecFile;
-    m_pathSpecFile = new KTemporaryFile();
+    m_pathSpecFile = new QTemporaryFile();
     if ( m_pathSpecFile->open() ) {
         qDebug() << "Opened path spec file" << m_pathSpecFile->fileName();
         QTextStream s( m_pathSpecFile );
@@ -827,7 +827,7 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
     if( m_doc->bootImages().contains( dynamic_cast<K3b::BootItem*>(item) ) ) { // boot-image-backup-hack
 
         // create temp file
-        KTemporaryFile temp;
+        QTemporaryFile temp;
         temp.setAutoRemove( false );
         temp.open();
         QString tempPath = temp.fileName();
@@ -853,7 +853,7 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
 bool K3b::IsoImager::writeRRHideFile()
 {
     delete m_rrHideFile;
-    m_rrHideFile = new KTemporaryFile();
+    m_rrHideFile = new QTemporaryFile();
     m_rrHideFile->open();
 
     QTextStream s( m_rrHideFile );
@@ -874,7 +874,7 @@ bool K3b::IsoImager::writeRRHideFile()
 bool K3b::IsoImager::writeJolietHideFile()
 {
     delete m_jolietHideFile;
-    m_jolietHideFile = new KTemporaryFile();
+    m_jolietHideFile = new QTemporaryFile();
     m_jolietHideFile->open();
 
     QTextStream s( m_jolietHideFile );
@@ -895,7 +895,7 @@ bool K3b::IsoImager::writeJolietHideFile()
 bool K3b::IsoImager::writeSortWeightFile()
 {
     delete m_sortWeightFile;
-    m_sortWeightFile = new KTemporaryFile();
+    m_sortWeightFile = new QTemporaryFile();
     m_sortWeightFile->open();
 
     QTextStream s( m_sortWeightFile );

@@ -45,12 +45,12 @@
 #include <KCoreAddons/KStringHandler>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
 
 #include <QtCore/QDataStream>
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
+#include <QtCore/QTemporaryFile>
 
 
 static QString createNonExistingFilesString( const QList<K3b::AudioFile*>& items, int max )
@@ -739,8 +739,7 @@ bool K3b::MixedJob::writeTocFile()
     // FIXME: create the tocfile in the same directory like all the other files.
 
     delete m_tocFile;
-    m_tocFile = new KTemporaryFile();
-    m_tocFile->setSuffix( ".toc" );
+    m_tocFile = new QTemporaryFile( "XXXXXX.toc" );
     m_tocFile->open();
 
     // write the toc-file

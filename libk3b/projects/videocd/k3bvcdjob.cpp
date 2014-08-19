@@ -30,13 +30,12 @@
 
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 #include <KIOCore/KIO/Global>
 
 #include <QtCore/QString>
 #include <QtCore/QDateTime>
 #include <QtCore/QFile>
+#include <QtCore/QTemporaryFile>
 #include <QtCore/QTimer>
 #include <QtCore/QDebug>
 #include <QtCore/QRegExp>
@@ -47,7 +46,7 @@
 class K3b::VcdJob::Private
 {
 public:
-    KTemporaryFile* xmlFile;
+    QTemporaryFile* xmlFile;
 };
 
 
@@ -164,7 +163,7 @@ void K3b::VcdJob::start()
 void K3b::VcdJob::xmlGen()
 {
     delete d->xmlFile;
-    d->xmlFile = new KTemporaryFile;
+    d->xmlFile = new QTemporaryFile;
 
     if( d->xmlFile->open() ) {
         qDebug() << "(K3b::VcdJob) writing XML data to" << d->xmlFile->fileName();

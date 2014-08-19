@@ -36,8 +36,6 @@
 #include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/Job>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
-#include <KDELibs4Support/KDE/KTemporaryFile>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
 
 #include <QtCore/QDebug>
@@ -46,6 +44,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
+#include <QtCore/QTemporaryFile>
 #include <QtCore/QTimer>
 #include <QtCore/QVector>
 #include <QtWidgets/QApplication>
@@ -798,8 +797,7 @@ bool K3b::CdCopyJob::writeNextSession()
                     // the same way we delete them when writing with images
                     // It is important that the files have the ending inf because
                     // cdrecord only checks this
-                    KTemporaryFile tmp;
-                    tmp.setSuffix( ".inf" );
+                    QTemporaryFile tmp( "XXXXXX.inf" );
                     tmp.setAutoRemove( false );
                     tmp.open();
                     d->infNames.append( tmp.fileName() );
