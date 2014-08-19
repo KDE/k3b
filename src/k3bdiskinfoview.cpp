@@ -38,7 +38,6 @@
 
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <QtCore/QDebug>
 #include <KIOCore/KIO/Global>
 #include <libkcddb/cdinfo.h>

@@ -42,7 +42,6 @@
 #include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>

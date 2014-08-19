@@ -160,7 +160,7 @@ namespace K3b {
     LIBK3B_EXPORT QString findTempFile( const QString& ending = QString(), const QString& d = QString() );
 
     /**
-     * Wrapper around KStandardDirs::findExe which searches the PATH and some additional
+     * Wrapper around QStandardPaths::findExecutable which searches the PATH and some additional
      * directories to find system tools which are normally only in root's PATH.
      */
     LIBK3B_EXPORT QString findExe( const QString& name );

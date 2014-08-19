@@ -48,7 +48,6 @@
 #include <QtWidgets/QGridLayout>
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KConfigCore/KConfig>
 #include <kmessagebox.h>
 #include <kvbox.h>

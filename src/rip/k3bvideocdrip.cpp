@@ -23,7 +23,6 @@
 #include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
 #include <KCoreAddons/KProcess>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <QtCore/QUrl>
 
 #include <QtCore/QDateTime>

@@ -45,7 +45,6 @@
 #include <QtGui/QIcon>
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KPushButton>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KWidgetsAddons/KStandardGuiItem>
 
 

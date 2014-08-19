@@ -28,7 +28,6 @@
 #include <K4AboutData>
 #include <KApplication>
 #include <KDELibs4Support/KDE/KGlobal>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
 K3b::Splash::Splash( QWidget* parent )
     : KVBox( parent)

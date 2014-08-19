@@ -47,7 +47,6 @@
 #include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
 #include <KStandardAction>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KToolBar>
 #include <KToolBarSpacerAction>
 

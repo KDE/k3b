@@ -35,7 +35,6 @@
 #include <KDELibs4Support/KDE/KAction>
 #include <KDELibs4Support/KDE/KHBox>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KDELibs4Support/KDE/KStatusBar>
 #include <KDELibs4Support/KDE/KGlobal>
 

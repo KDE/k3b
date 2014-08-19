@@ -24,7 +24,6 @@
 #include <KConfigCore/KConfig>
 #include <QtGui/QIcon>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KMessageWidget>
 #include <KIOCore/KIO/Global>
 

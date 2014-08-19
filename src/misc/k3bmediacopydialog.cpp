@@ -37,7 +37,6 @@
 #include <kguiitem.h>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kmessagebox.h>
 #include <KConfigCore/KConfig>
 #include <kapplication.h>

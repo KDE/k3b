@@ -39,7 +39,6 @@
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
 
 class K3b::AudioDoc::Private

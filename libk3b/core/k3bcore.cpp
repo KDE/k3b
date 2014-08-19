@@ -31,7 +31,6 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QEvent>

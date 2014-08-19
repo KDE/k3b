@@ -15,7 +15,6 @@
 #include <KDELibs4Support/KDE/K4AboutData>
 #include <KDELibs4Support/KDE/KCmdLineArgs>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KStandardGuiItem>
 #include <QtCore/QUrl>

@@ -33,7 +33,6 @@
 #include <KIOCore/KIO/Global>
 #include <KLineEdit>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KIOWidgets/KUrlRequester>
 
 

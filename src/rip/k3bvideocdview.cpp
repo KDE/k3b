@@ -38,7 +38,6 @@
 #include <KI18n/KLocalizedString>
 #include <KMenu>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KStandardAction>
 #include <KToolBar>
 #include <KToolBarSpacerAction>

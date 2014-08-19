@@ -53,7 +53,6 @@
 #include <klineedit.h>
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kfiledialog.h>
 #include <KDELibs4Support/KDE/KComboBox>
 #include <KIOCore/KIO/Global>
