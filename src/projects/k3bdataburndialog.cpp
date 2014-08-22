@@ -33,23 +33,23 @@
 #include "k3bmediacache.h"
 
 #include <QtWidgets/QCheckBox>
-#include <qgroupbox.h>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
-#include <qlineedit.h>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
-#include <qtoolbutton.h>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QLayout>
 #include <qvariant.h>
 #include <QtWidgets/QToolTip>
 #include <qpoint.h>
-#include <qradiobutton.h>
+#include <QtWidgets/QRadioButton>
 #include <QtCore/QFileInfo>
 #include <qtabwidget.h>
-#include <qspinbox.h>
+#include <QtWidgets/QSpinBox>
 #include <QtCore/QFile>
 #include <QtWidgets/QGridLayout>
 
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <klineedit.h>
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>

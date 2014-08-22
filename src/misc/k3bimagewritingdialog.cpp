@@ -58,8 +58,8 @@
 #include <QtWidgets/QCheckBox>
 #include <QClipboard>
 #include <QComboBox>
-#include <QDragEnterEvent>
-#include <QDropEvent>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDropEvent>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtGui/QFont>

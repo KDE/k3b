@@ -42,7 +42,7 @@
 #include "k3bjob.h"
 #include "k3bmediacache.h"
 
-#include <KAboutData>
+#include <KCoreAddons/KAboutData>
 #include <KCmdLineArgs>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>

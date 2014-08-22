@@ -29,7 +29,7 @@
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QLayout>

@@ -67,14 +67,13 @@
 // include files for KDE
 #include <kaboutdata.h>
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KEditToolBar>
 #include <QtWidgets/QFileDialog>
 #include <kfileplacesmodel.h>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KWidgetsAddons/KMessageBox>
 #include <KMenuBar>
 #include <KCoreAddons/KProcess>
@@ -82,12 +81,12 @@
 #include <KRecentFilesAction>
 #include <KShortcutsDialog>
 #include <KStandardAction>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KStatusBar>
 #include <KToggleAction>
 #include <QtCore/QUrl>
 #include <KXMLGUIFactory>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
+#include <KI18n/KLocalizedString>
 #include <kio/deletejob.h>
 
 // include files for QT
@@ -98,6 +97,7 @@
 #include <QtCore/QList>
 #include <QtCore/QMimeDatabase>
 #include <QtCore/QMimeType>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
 #include <QtWidgets/QGridLayout>
@@ -696,7 +696,10 @@ void K3b::MainWindow::saveProperties( KConfigGroup& grp )
     // 3. save the url of the project (might be something like "AudioCD1") in the config
     // 4. save the status of every project (modified/saved)
 
-    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + '/', true );
+    QString saveDir = QString( "%1/sessions/%2/" ).arg(
+                QStandardPaths::writableLocation( QStandardPaths::DataLocation ),
+                qApp->sessionId() );
+    QDir().mkpath(saveDir);
 
 //     // FIXME: for some reason the config entries are not properly stored when using the default
 //     //        KMainWindow session config. Since I was not able to find the bug I use another config object
@@ -747,7 +750,10 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
     // 3. reset the saved urls and the modified state
     // 4. delete "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
 
-    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + '/', true );
+    QString saveDir = QString( "%1/sessions/%2/" ).arg(
+                QStandardPaths::writableLocation( QStandardPaths::DataLocation ),
+                qApp->sessionId() );
+    QDir().mkpath(saveDir);
 
 //     // FIXME: for some reason the config entries are not properly stored when using the default
 //     //        KMainWindow session config. Since I was not able to find the bug I use another config object

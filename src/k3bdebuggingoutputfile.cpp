@@ -22,15 +22,25 @@
 #include "k3bglobals.h"
 
 #include <KDELibs4Support/kdeversion.h>
-#include <KDELibs4Support/KDE/KApplication>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KDELibs4Support/KDE/KGlobalSettings>
 
-#include <qtextstream.h>
+#include <QtCore/QDir>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QTextStream>
 
+
+namespace
+{
+    QString debuggingOutputFilePath()
+    {
+        QString dirPath = QStandardPaths::writableLocation( QStandardPaths::DataLocation );
+        QDir().mkpath( dirPath );
+        return dirPath + "/lastlog.log";
+    }
+} // namespace
 
 K3b::DebuggingOutputFile::DebuggingOutputFile()
-    : QFile( KStandardDirs::locateLocal( "appdata", "lastlog.log", true ) )
+    : QFile( debuggingOutputFilePath() )
 {
 }
 

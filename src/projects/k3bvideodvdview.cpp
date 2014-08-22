@@ -18,7 +18,7 @@
 #include "k3bvideodvdburndialog.h"
 #include "k3bvideodvddoc.h"
 
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <QAction>

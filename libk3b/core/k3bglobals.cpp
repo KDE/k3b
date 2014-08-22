@@ -25,7 +25,6 @@
 #include "k3bmediacache.h"
 #include "k3bmsf.h"
 
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
 
 #include <KCoreAddons/KProcess>

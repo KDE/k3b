@@ -25,7 +25,7 @@
 #include <KDELibs4Support/KDE/KLocale>
 
 #include <QtWidgets/QCheckBox>
-#include <qspinbox.h>
+#include <QtWidgets/QSpinBox>
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
 #include <QtWidgets/QLabel>

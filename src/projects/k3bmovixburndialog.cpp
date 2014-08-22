@@ -33,14 +33,14 @@
 
 #include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <KIOCore/KIO/Global>
 #include <kapplication.h>
 #include <KConfigCore/KConfig>
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLayout>
-#include <qgroupbox.h>
+#include <QtWidgets/QGroupBox>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QGridLayout>
 

@@ -17,7 +17,7 @@
 #define _K3B_AUDIO_EDITOR_WIDGET_H_
 
 #include <QtCore/QList>
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 #include <QtWidgets/QFrame>
 #include "k3bmsf.h"
 

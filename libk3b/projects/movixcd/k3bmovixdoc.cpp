@@ -25,7 +25,6 @@
 #include <QtCore/QFileInfo>
 #include <QtXml/QDomElement>
 
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>

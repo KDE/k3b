@@ -23,7 +23,6 @@
 #include "k3baudiofile.h"
 
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>

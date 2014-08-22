@@ -36,7 +36,7 @@
 #include <QtCore/QDebug>
 #include <kdeversion.h>
 #include <KI18n/KLocalizedString>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
 
 #define DefaultFormat KoStore::Zip

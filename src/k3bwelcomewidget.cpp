@@ -21,28 +21,27 @@
 #include "k3bthememanager.h"
 #include "k3bversion.h"
 
-#include <QCursor>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QtGui/QPainter>
-#include <QPaintEvent>
-#include <QtGui/QResizeEvent>
-#include <QShowEvent>
-#include <QtWidgets/QStyle>
-#include <QTextDocument>
-
-#include <K4AboutData>
-#include <KActionCollection>
-#include <KAboutData>
 #include <KConfigCore/KConfigGroup>
-#include <KDELibs4Support/KDE/KGlobal>
+#include <KCoreAddons/KAboutData>
 #include <KDELibs4Support/KDE/KGlobalSettings>
+#include <KDELibs4Support/KDE/KMenu>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KXmlGui/KActionCollection>
+
+#include <QtCore/QMimeData>
 #include <QtCore/QUrl>
 #include <QtGui/QIcon>
+#include <QtGui/QCursor>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDropEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QResizeEvent>
+#include <QtGui/QShowEvent>
+#include <QtGui/QTextDocument>
+#include <QtWidgets/QStyle>
 
 namespace {
 
@@ -266,7 +265,7 @@ void K3b::WelcomeWidget::slotThemeChanged()
     m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator") + "</body></html>" );
     m_infoText->setHtml( "<html><body align=\"center\">" 
                          + i18n("K3b %1 Copyright &copy; 1998&ndash;2010 K3b authors",
-                                KGlobal::mainComponent().aboutData()->version()) 
+                                KAboutData::applicationData().version())
                          + "</body></html>" );
     setMinimumWidth( 2*MARGIN + qMax(( int )m_header->idealWidth(), m_buttonSize.width()) );
     updateBgPix();

@@ -22,6 +22,7 @@
 #include "k3bintmapcombobox.h"
 
 #include <QtWidgets/QCheckBox>
+#include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QRadioButton>
 
@@ -33,7 +34,6 @@
 #include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KIOWidgets/KUrlRequester>
 
 
@@ -113,7 +113,7 @@ bool K3b::MiscOptionTab::saveSettings()
                                         i18n("Create Folder"),
                                         KGuiItem( i18n("Create") ),
                                         KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {
-            if( !KStandardDirs::makeDir( fi.absoluteFilePath() ) ) {
+            if( !QDir().mkpath( fi.absoluteFilePath() ) ) {
                 KMessageBox::error( this, i18n("Unable to create folder %1",tempDir) );
                 return false;
             }

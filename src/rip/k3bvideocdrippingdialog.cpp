@@ -30,7 +30,6 @@
 #include <QtWidgets/QGroupBox>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KIOWidgets/KUrlRequester>
 
 // qt includes
@@ -154,7 +153,7 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
     if( !d.exists() ) {
         if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().toLocalFile() ) )
             == KMessageBox::Yes ) {
-            if( !KStandardDirs::makeDir( m_editDirectory->url().toLocalFile() ) ) {
+            if( !QDir().mkpath( m_editDirectory->url().toLocalFile() ) ) {
                 KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url().toLocalFile() ) );
                 return;
             }

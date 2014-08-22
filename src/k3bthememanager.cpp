@@ -16,17 +16,16 @@
 
 #include "k3bversion.h"
 
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KConfigCore/KConfigGroup>
 
-#include <QtGui/QPixmap>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QStringList>
+#include <QtGui/QPixmap>
 
 
 K3b::Theme::Theme()
@@ -266,7 +265,7 @@ void K3b::ThemeManager::loadThemes()
         delete *it;
     d->themes.clear();
 
-    QStringList dirs = KGlobal::dirs()->findDirs( "data", "k3b/pics" );
+    QStringList dirs = QStandardPaths::locateAll( QStandardPaths::GenericDataLocation, "k3b/pics", QStandardPaths::LocateDirectory );
     // now search for themes. As there may be multiple themes with the same name
     // we only use the names from this list and then use findResourceDir to make sure
     // the local is preferred over the global stuff (like testing a theme by copying it
@@ -307,7 +306,7 @@ void K3b::ThemeManager::loadThemes()
 
 void K3b::ThemeManager::loadTheme( const QString& name )
 {
-    QString path = KGlobal::dirs()->findResource( "data", "k3b/pics/" + name + "/k3b.theme" );
+    QString path = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/pics/" + name + "/k3b.theme" );
     if( !path.isEmpty() ) {
         K3b::Theme* t = new K3b::Theme();
         t->m_name = name;

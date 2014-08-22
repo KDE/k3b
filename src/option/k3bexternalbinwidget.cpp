@@ -21,7 +21,7 @@
 #include "config-k3b.h"
 
 #include <QtWidgets/QApplication>
-#include <QCursor>
+#include <QtGui/QCursor>
 #include <QHeaderView>
 #include <QItemSelectionModel>
 #include <QtWidgets/QLabel>

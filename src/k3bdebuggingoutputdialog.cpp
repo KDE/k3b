@@ -32,7 +32,7 @@
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <kapplication.h>
 #include <QtWidgets/QFileDialog>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 
 
 K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )

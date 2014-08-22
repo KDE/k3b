@@ -16,18 +16,16 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <QtWidgets/QApplication>
-#include <QDesktopWidget>
 #include <QtCore/QEvent>
+#include <QtCore/QString>
 #include <QtGui/QFontMetrics>
-#include <QtWidgets/QLabel>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
-#include <QtCore/QString>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QLabel>
 
-#include <K4AboutData>
-#include <KApplication>
-#include <KDELibs4Support/KDE/KGlobal>
+#include <KCoreAddons/KAboutData>
 
 K3b::Splash::Splash( QWidget* parent )
     : KVBox( parent)
@@ -45,7 +43,7 @@ K3b::Splash::Splash( QWidget* parent )
     pal.setColor( QPalette::WindowText, Qt::white );
     setPalette( pal );
 
-    QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
+    QLabel* copyrightLabel = new QLabel( KAboutData::applicationData().copyrightStatement(), this );
     copyrightLabel->setMargin( 5 );
     copyrightLabel->setAlignment( Qt::AlignRight );
 

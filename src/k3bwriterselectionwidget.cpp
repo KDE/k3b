@@ -33,7 +33,7 @@
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtWidgets/QApplication>
-#include <QCursor>
+#include <QtGui/QCursor>
 #include <QtWidgets/QGridLayout>
 #include <QGroupBox>
 #include <QtWidgets/QLabel>

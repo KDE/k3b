@@ -28,7 +28,6 @@
 #include "k3bdeviceglobals.h"
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KGlobal>
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

@@ -30,26 +30,26 @@
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
-#include <qgroupbox.h>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
-#include <qlineedit.h>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <qtabwidget.h>
 #include <QtWidgets/QLayout>
 #include <qvariant.h>
 #include <QtWidgets/QToolTip>
 
-#include <qtoolbutton.h>
+#include <QtWidgets/QToolButton>
 #include <QtCore/QStringList>
 #include <qpoint.h>
 
-#include <qspinbox.h>
-#include <QShowEvent>
+#include <QtWidgets/QSpinBox>
+#include <QtGui/QShowEvent>
 #include <QtWidgets/QGridLayout>
 
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <kvbox.h>
 
 

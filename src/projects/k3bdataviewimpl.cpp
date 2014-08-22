@@ -29,11 +29,11 @@
 #include "k3bvolumenamewidget.h"
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KFileItemDelegate>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 #include <KRun>
 
 #include <QShortcut>

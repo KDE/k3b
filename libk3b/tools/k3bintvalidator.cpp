@@ -19,7 +19,6 @@
 #include "k3bintvalidator.h"
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <QtCore/QDebug>
 
 

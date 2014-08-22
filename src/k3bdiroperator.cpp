@@ -23,13 +23,12 @@
 #include <QtCore/QDir>
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <KBookmarkMenu>
 #include <KConfigCore/KConfigGroup>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
-#include <KDELibs4Support/KDE/KStandardDirs>
+#include <KDELibs4Support/KDE/KMenu>
 
 K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
     : KDirOperator( url, parent )
@@ -45,7 +44,9 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
 
     // add the bookmark stuff
 
-    QString bookmarksFile = KStandardDirs::locateLocal("data", QString::fromLatin1("k3b/bookmarks.xml"));
+    QString dirPath = QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation );
+    QDir().mkpath( dirPath );
+    QString bookmarksFile = dirPath + '/' + QString::fromLatin1("k3b/bookmarks.xml");
     KBookmarkManager* bmMan = KBookmarkManager::managerForFile( bookmarksFile, "k3b" );
     bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
     bmMan->setUpdate( true );

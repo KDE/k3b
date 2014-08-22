@@ -19,7 +19,7 @@
 #include <QtGui/QIcon>
 #include <KToggleAction>
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 
 namespace K3b {
     /**

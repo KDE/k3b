@@ -30,6 +30,7 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
+#include <QtCore/QDir>
 #include <QtCore/QString>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolTip>
@@ -38,19 +39,17 @@
 #include <QWhatsThis>
 #include <QtWidgets/QCheckBox>
 #include <qtabwidget.h>
-#include <qgroupbox.h>
-#include <qspinbox.h>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QGridLayout>
 #include <QVBoxLayout>
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <kguiitem.h>
 #include <KWidgetsAddons/KStandardGuiItem>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KGlobal>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <kapplication.h>
 #include <KIconThemes/KIconLoader>
 #include <kvbox.h>
@@ -197,7 +196,7 @@ void K3b::ProjectBurnDialog::slotStartClicked()
             if( !QFile::exists( tempDir ) ) {
                 if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", tempDir ) )
                     == KMessageBox::Yes ) {
-                    if( !KStandardDirs::makeDir( tempDir ) ) {
+                    if( !QDir().mkpath( tempDir ) ) {
                         KMessageBox::error( this, i18n("Failed to create folder '%1'.", tempDir ) );
                         return;
                     }

@@ -42,7 +42,7 @@
 #endif // ENABLE_AUDIO_PLAYER
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 

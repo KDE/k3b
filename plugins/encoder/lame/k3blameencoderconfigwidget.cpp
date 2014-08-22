@@ -18,7 +18,7 @@
 #include "k3blamemanualsettingsdialog.h"
 #include "k3blametyes.h"
 
-#include <KAboutData>
+#include <KCoreAddons/KAboutData>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>

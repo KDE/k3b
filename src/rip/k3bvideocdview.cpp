@@ -31,12 +31,12 @@
 
 // kde includes
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 #include <KWidgetsAddons/KMessageBox>
 #include <KStandardAction>
 #include <KToolBar>
@@ -44,7 +44,7 @@
 
 // qt includes
 #include <QtWidgets/QApplication>
-#include <QCursor>
+#include <QtGui/QCursor>
 #include <QtXml/QDomElement>
 #include <QtGui/QFont>
 #include <QHeaderView>

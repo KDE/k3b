@@ -19,10 +19,10 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <qlineedit.h>
-#include <qspinbox.h>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QLabel>
-#include <qtoolbutton.h>
+#include <QtWidgets/QToolButton>
 
 
 K3b::DataVolumeDescDialog::DataVolumeDescDialog( QWidget* parent )

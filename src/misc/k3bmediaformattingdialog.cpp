@@ -30,12 +30,12 @@
 #include "k3bjobprogressdialog.h"
 
 #include <KI18n/KLocalizedString>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <kapplication.h>
 
-#include <qgroupbox.h>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QPushButton>

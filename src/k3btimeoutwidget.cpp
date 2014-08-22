@@ -18,7 +18,7 @@
 
 #include <QtGui/QResizeEvent>
 #include <QtGui/QPainter>
-#include <QPaintEvent>
+#include <QtGui/QPaintEvent>
 #include <QtCore/QTimer>
 
 

@@ -33,9 +33,9 @@
 #include <QtGui/QFontMetrics>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
-#include <QPaintEvent>
+#include <QtGui/QPaintEvent>
 #include <QtGui/QPixmap>
 #include <QRect>
 #include <QtWidgets/QStyle>
@@ -52,7 +52,7 @@
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 #include <KWidgetsAddons/KMessageBox>
 #include <QStyleOptionProgressBarV2>
 

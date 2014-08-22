@@ -36,7 +36,7 @@
 #include <QTreeView>
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>

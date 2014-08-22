@@ -21,10 +21,10 @@
 
 #include <QtGui/QIcon>
 #include <QtWidgets/QCheckBox>
-#include <qtoolbutton.h>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLayout>
-#include <qgroupbox.h>
+#include <QtWidgets/QGroupBox>
 
 #include <klineedit.h>
 #include <KI18n/KLocalizedString>

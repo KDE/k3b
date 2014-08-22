@@ -19,9 +19,9 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <KDELibs4Support/KDE/KStandardDirs>
-
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QTextStream>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
@@ -360,15 +360,17 @@ void K3b::VcdXmlView::write( QFile& file )
     if ( d->doc->vcdOptions() ->CdiSupport() ) {
         QDomElement elemFolder = d->addFolderElement( xmlDoc, elemFileSystem, "CDI" );
 
-        d->addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_imag.rtf" ), "CDI_IMAG.RTF", true );
-        d->addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_text.fnt" ), "CDI_TEXT.FNT" );
-        d->addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.app" ), "CDI_VCD.APP" );
+        d->addFileElement( xmlDoc, elemFolder, QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_imag.rtf" ), "CDI_IMAG.RTF", true );
+        d->addFileElement( xmlDoc, elemFolder, QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_text.fnt" ), "CDI_TEXT.FNT" );
+        d->addFileElement( xmlDoc, elemFolder, QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.app" ), "CDI_VCD.APP" );
 
-        QString usercdicfg = KStandardDirs::locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
+        QString dirPath = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/cdi";
+        QDir().mkpath(dirPath);
+        QString usercdicfg = dirPath + "cdi_vcd.cfg";
         if ( QFile::exists( usercdicfg ) )
             d->addFileElement( xmlDoc, elemFolder, usercdicfg, "CDI_VCD.CFG" );
         else
-            d->addFileElement( xmlDoc, elemFolder, KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" ), "CDI_VCD.CFG" );
+            d->addFileElement( xmlDoc, elemFolder, QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.cfg" ), "CDI_VCD.CFG" );
     }
 
     // sequence-items element & segment-items element
@@ -389,9 +391,9 @@ void K3b::VcdXmlView::write( QFile& file )
     if ( !d->doc->vcdOptions()->haveSequence() )  {
         QString filename;
         if  ( d->doc->vcdOptions()->mpegVersion() == 1 )
-            filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotovcd.mpg" );
+            filename = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/extra/k3bphotovcd.mpg" );
         else
-            filename = KStandardDirs::locate( "data", "k3b/extra/k3bphotosvcd.mpg" );
+            filename = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/extra/k3bphotosvcd.mpg" );
 
         elemsequenceItem = d->addSubElement( xmlDoc, elemsequenceItems, "sequence-item" );
         elemsequenceItem.setAttribute( "src", filename );

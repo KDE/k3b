@@ -34,7 +34,7 @@
 #include "k3bmodelutils.h"
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <KComboBox>
 #include <KConfigCore/KConfig>
@@ -43,7 +43,7 @@
 #include <KIconThemes/KIconLoader>
 #include <KLineEdit>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 #include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
 #include <KStandardAction>

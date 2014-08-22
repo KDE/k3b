@@ -26,7 +26,7 @@
 #include "k3bdevicehandler.h"
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KI18n/KLocalizedString>
 #include <QtGui/QIcon>
 

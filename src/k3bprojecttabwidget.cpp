@@ -28,14 +28,14 @@
 #include <QtGui/QIcon>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 #include <QtCore/QUrl>
 
-#include <QDragEnterEvent>
+#include <QtGui/QDragEnterEvent>
 #include <QDragMoveEvent>
-#include <QDropEvent>
+#include <QtGui/QDropEvent>
 #include <QMimeData>
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 #include <QTabBar>
 
 namespace {

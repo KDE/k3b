@@ -21,10 +21,9 @@
 #include "k3btoc.h"
 #include "k3bmsf.h"
 
-#include <KDELibs4Support/KDE/KGlobal>
-
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
+#include <QtCore/QGlobalStatic>
 #include <QtCore/QLibrary>
 #include <QtCore/QMutex>
 #include <QtCore/QMutexLocker>
@@ -68,8 +67,8 @@ static bool s_haveLibCdio = false;
 #define PARANOIA_CB_READERR       12
 
 
-K_GLOBAL_STATIC(QLibrary, s_libInterface)
-K_GLOBAL_STATIC(QLibrary, s_libParanoia)
+Q_GLOBAL_STATIC(QLibrary, s_libInterface)
+Q_GLOBAL_STATIC(QLibrary, s_libParanoia)
 
 
 

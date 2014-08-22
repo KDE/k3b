@@ -34,7 +34,6 @@
 #include <QtCore/QFile>
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <QtCore/QTemporaryFile>
 
 

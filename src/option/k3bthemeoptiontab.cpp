@@ -26,13 +26,13 @@
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KArchive/KTar>
 #include <KIOWidgets/KUrlRequester>
 #include <KUrlRequesterDialog>
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStandardPaths>
 #include <QItemSelectionModel>
 #include <QtWidgets/QLabel>
 
@@ -157,7 +157,8 @@ void K3b::ThemeOptionTab::slotInstallTheme()
         KMessageBox::error( this, i18n("The file is not a valid K3b theme archive.") );
     }
     else {
-        QString themeBasePath = KStandardDirs::locateLocal( "data", "k3b/pics/" );
+        QString themeBasePath = QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation ) + "/k3b/pics/";
+        QDir().mkpath( themeBasePath );
 
         // check if there already is a theme by that name
         if( !QFile::exists( themeBasePath + '/' + themeName ) ||

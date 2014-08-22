@@ -22,11 +22,11 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLayout>
-#include <qgroupbox.h>
+#include <QtWidgets/QGroupBox>
 #include <qtabwidget.h>
-#include <qradiobutton.h>
+#include <QtWidgets/QRadioButton>
 #include <QtGui/QValidator>
-#include <qspinbox.h>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QToolTip>
 
 #include <knuminput.h>

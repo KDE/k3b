@@ -46,7 +46,7 @@
 #include <QtCore/QUrl>
 
 #include <QtWidgets/QApplication>
-#include <QCursor>
+#include <QtGui/QCursor>
 #include <QDomDocument>
 #include <QtXml/QDomElement>
 #include <QtCore/QFile>

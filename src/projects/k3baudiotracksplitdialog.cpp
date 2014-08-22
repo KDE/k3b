@@ -19,17 +19,17 @@
 #include "k3bmsf.h"
 #include "k3bmsfedit.h"
 
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KAction>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 
 #include <QContextMenuEvent>
 #include <QtCore/QEvent>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 
 
 K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidget* parent )

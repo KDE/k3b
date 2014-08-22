@@ -29,19 +29,18 @@
 #include "k3bview.h"
 
 #include <KConfigCore/KConfig>
+#include <KCoreAddons/KAboutData>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/K4AboutData>
 #include <KDELibs4Support/KDE/KAction>
 #include <KDELibs4Support/KDE/KHBox>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStatusBar>
-#include <KDELibs4Support/KDE/KGlobal>
 
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolTip>
 
 
@@ -66,7 +65,7 @@ K3b::StatusBarManager::StatusBarManager( K3b::MainWindow* parent )
     m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
 
     // setup version info
-    m_versionBox = new QLabel( QString("K3b %1").arg(KGlobal::mainComponent().aboutData()->version()), m_mainWindow->statusBar() );
+    m_versionBox = new QLabel( QString("K3b %1").arg(KAboutData::applicationData().version()), m_mainWindow->statusBar() );
     m_versionBox->installEventFilter( this );
 
     // setup the statusbar

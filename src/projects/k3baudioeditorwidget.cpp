@@ -16,12 +16,12 @@
 #include "k3baudioeditorwidget.h"
 
 #include <QtWidgets/QApplication>
-#include <QCursor>
-#include <QDesktopWidget>
+#include <QtGui/QCursor>
+#include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QFrame>
 #include <QtGui/QHelpEvent>
 #include <QtCore/QLinkedList>
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QPolygon>

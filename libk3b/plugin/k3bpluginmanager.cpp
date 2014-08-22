@@ -22,7 +22,6 @@
 #include <KCMUtils/KCModuleProxy>
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KLibLoader>
 #include <KI18n/KLocalizedString>
 #include <KService/KPluginInfo>

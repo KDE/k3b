@@ -20,9 +20,8 @@
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
-#include <KDELibs4Support/KDE/KGlobal>
-
 #include <QtCore/QFile>
+#include <QtCore/QGlobalStatic>
 #include <QtCore/QLibrary>
 #include <QtCore/QPair>
 
@@ -39,7 +38,7 @@ extern "C" {
 }
 
 
-K_GLOBAL_STATIC(QLibrary, s_libDvdCss)
+Q_GLOBAL_STATIC(QLibrary, s_libDvdCss)
 
 
 

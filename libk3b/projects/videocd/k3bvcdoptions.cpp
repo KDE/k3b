@@ -19,10 +19,9 @@
 
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
-
-#include <QtCore/QString>
 #include <QtCore/QFile>
+#include <QtCore/QString>
+#include <QtCore/QStandardPaths>
 
 K3b::VcdOptions::VcdOptions()
     : m_restriction( 0 ),
@@ -61,19 +60,19 @@ K3b::VcdOptions::VcdOptions()
 bool K3b::VcdOptions::checkCdiFiles()
 {
     m_cdisize = 0;
-    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_imag.rtf" ) ) )
+    if ( !QFile::exists( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_imag.rtf" ) ) )
         return false;
-    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_text.fnt" ) ) )
+    if ( !QFile::exists( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_text.fnt" ) ) )
         return false;
-    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.app" ) ) )
+    if ( !QFile::exists( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.app" ) ) )
         return false;
-    if ( !QFile::exists( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" ) ) )
+    if ( !QFile::exists( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.cfg" ) ) )
         return false;
 
-    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_imag.rtf" ) ).size();
-    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_text.fnt" ) ).size();
-    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.app" ) ).size();
-    m_cdisize += QFile( KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" ) ).size();
+    m_cdisize += QFile( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_imag.rtf" ) ).size();
+    m_cdisize += QFile( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_text.fnt" ) ).size();
+    m_cdisize += QFile( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.app" ) ).size();
+    m_cdisize += QFile( QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.cfg" ) ).size();
 
     return true;
 }

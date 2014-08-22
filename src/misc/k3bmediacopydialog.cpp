@@ -37,17 +37,17 @@
 #include <kguiitem.h>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <KConfigCore/KConfig>
 #include <kapplication.h>
 #include <KIconThemes/KIconLoader>
 #include <KConfigCore/KSharedConfig>
 
 #include <QtWidgets/QCheckBox>
-#include <qspinbox.h>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLayout>
-#include <qgroupbox.h>
+#include <QtWidgets/QGroupBox>
 #include <QtCore/QList>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QToolTip>
@@ -56,7 +56,7 @@
 
 #include <QtWidgets/QPushButton>
 #include <qbuttongroup.h>
-#include <qradiobutton.h>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSizePolicy>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>

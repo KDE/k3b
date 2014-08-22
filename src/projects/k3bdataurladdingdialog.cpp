@@ -42,7 +42,6 @@
 #include <QtCore/QList>
 
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>

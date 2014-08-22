@@ -21,7 +21,6 @@
 #include "k3bglobalsettings.h"
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KGlobal>
 
 
 

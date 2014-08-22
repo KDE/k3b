@@ -39,7 +39,6 @@
 
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
 

@@ -21,7 +21,7 @@
 
 #include <qvariant.h>
 #include <qwidget.h>
-#include <QShowEvent>
+#include <QtGui/QShowEvent>
 #include <QtWidgets/QLabel>
 
 class QCheckBox;

@@ -21,7 +21,6 @@
 
 #include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
@@ -253,7 +252,7 @@ bool K3b::MassAudioEncodingJob::encodeTrack( int trackIndex, const QString& file
     }
     
     QDir dir = QFileInfo( filename ).dir();
-    if( !KStandardDirs::makeDir( dir.path() ) ) {
+    if( !QDir().mkpath( dir.path() ) ) {
         emit infoMessage( i18n("Unable to create folder %1",dir.path()), K3b::Job::MessageError );
         return false;
     }
@@ -368,7 +367,7 @@ bool MassAudioEncodingJob::writePlaylist()
     QFileInfo playlistInfo( d->playlistFilename );
     QDir playlistDir( playlistInfo.dir() );
 
-    if( !KStandardDirs::makeDir( playlistDir.path() ) ) {
+    if( !QDir().mkpath( playlistDir.path() ) ) {
         emit infoMessage( i18n("Unable to create folder %1",playlistDir.path()), Job::MessageError );
         return false;
     }

@@ -27,7 +27,7 @@
 #include <QWidget>
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <KDirLister>
 #include <KFileFilterCombo>

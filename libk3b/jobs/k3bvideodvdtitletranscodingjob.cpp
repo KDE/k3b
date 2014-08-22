@@ -23,9 +23,9 @@
 #include "k3bmedium.h"
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 
@@ -155,7 +155,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
         // let's see if the directory exists and we can write to it
         QFileInfo fileInfo( m_filename );
         QFileInfo dirInfo( fileInfo.path() );
-        if( !dirInfo.exists() && !KStandardDirs::makeDir( dirInfo.absoluteFilePath() ) ) {
+        if( !dirInfo.exists() && !QDir().mkpath( dirInfo.absoluteFilePath() ) ) {
             emit infoMessage( i18n("Unable to create folder '%1'",dirInfo.filePath()), MessageError );
             return;
         }

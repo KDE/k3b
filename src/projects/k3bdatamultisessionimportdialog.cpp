@@ -14,7 +14,7 @@
 
 #include "k3bdatamultisessionimportdialog.h"
 
-#include <QCursor>
+#include <QtGui/QCursor>
 #include <QtGui/QFont>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>

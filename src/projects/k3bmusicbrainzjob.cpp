@@ -19,7 +19,7 @@
 #include "k3baudiodatasource.h"
 #include "k3bsimplejobhandler.h"
 
-#include <kmessagebox.h>
+#include <KWidgetsAddons/KMessageBox>
 #include <kinputdialog.h>
 #include <KI18n/KLocalizedString>
 

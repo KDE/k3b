@@ -23,11 +23,11 @@
 #include "k3bdirproxymodel.h"
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <QtCore/QDebug>
 #include <KWidgetsAddons/KMessageBox>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 #include <QSplitter>
 #include <KToolBar>
 #include <QtCore/QUrl>

@@ -19,7 +19,6 @@
 #include "k3bsimplejobhandler.h"
 #include "k3bglobals.h"
 
-#include <KDELibs4Support/KDE/KGlobal>
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>

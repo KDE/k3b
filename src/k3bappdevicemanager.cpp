@@ -23,7 +23,7 @@
 #include "k3bmediacache.h"
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <KDELibs4Support/KDE/KInputDialog>
 #include <KIO/Job>
 #include <KI18n/KLocalizedString>

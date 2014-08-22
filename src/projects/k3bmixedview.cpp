@@ -32,10 +32,10 @@
 #endif // ENABLE_AUDIO_PLAYER
 
 #include <KAction>
-#include <KActionCollection>
+#include <KXmlGui/KActionCollection>
 #include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
-#include <KMenu>
+#include <KDELibs4Support/KDE/KMenu>
 #include <KWidgetsAddons/KMessageBox>
 #include <KToolBar>
 

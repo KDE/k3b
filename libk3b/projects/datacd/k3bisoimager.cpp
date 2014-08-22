@@ -29,7 +29,6 @@
 #include "k3bfilesplitter.h"
 #include "k3bisooptions.h"
 
-#include <KDELibs4Support/KDE/KStandardDirs>
 #include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
@@ -40,6 +39,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QRegExp>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QTemporaryFile>
 #include <QtWidgets/QApplication>
 
@@ -1028,7 +1028,9 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
     // permissions we create different dummy dirs to be passed to mkisofs
     //
 
-    QDir _appDir( KStandardDirs::locateLocal( "appdata", "temp/" ) );
+    QString path = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/temp/";
+    QDir().mkpath(path);
+    QDir _appDir( path );
 
     //
     // create a unique isoimager session id
@@ -1087,7 +1089,9 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
 void K3b::IsoImager::clearDummyDirs()
 {
     QString jobId = qApp->sessionId() + '_' + QString::number( m_sessionNumber );
-    QDir appDir( KStandardDirs::locateLocal( "appdata", "temp/" ) );
+    QString path = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/temp/";
+    QDir().mkpath(path);
+    QDir appDir( path );
     if( appDir.cd( jobId ) ) {
         QStringList dummyDirEntries = appDir.entryList( QStringList() << "dummydir*", QDir::Dirs );
         for( QStringList::iterator it = dummyDirEntries.begin(); it != dummyDirEntries.end(); ++it )

@@ -17,7 +17,6 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KDELibs4Support/KDE/KGlobal>
 #include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KIconThemes/KIconLoader>
 
@@ -25,7 +24,7 @@
 #include <QtCore/QEvent>
 #include <QtGui/QFontMetrics>
 #include <QtWidgets/QFrame>
-#include <QMouseEvent>
+#include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QToolTip>
 
