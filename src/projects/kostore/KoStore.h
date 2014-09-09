@@ -23,15 +23,14 @@
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QIODevice>
-#include <QStack>
-#include <QByteArray>
+#include <QtCore/QStack>
 #include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(KOSTORE)
 
+class QByteArray;
+class QIODevice;
 class QWidget;
-
 class QUrl;
 
 /**

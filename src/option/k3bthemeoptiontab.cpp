@@ -20,7 +20,6 @@
 #include "k3bthememodel.h"
 
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <kio/deletejob.h>
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KGlobalSettings>
@@ -28,11 +27,13 @@
 #include <KWidgetsAddons/KMessageBox>
 #include <KArchive/KTar>
 #include <KIOWidgets/KUrlRequester>
+#include <KIOCore/KIO/StoredTransferJob>
 #include <KUrlRequesterDialog>
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QStandardPaths>
+#include <QtCore/QTemporaryFile>
 #include <QItemSelectionModel>
 #include <QtWidgets/QLabel>
 
@@ -113,10 +114,20 @@ void K3b::ThemeOptionTab::slotInstallTheme()
     if( themeURL.url().isEmpty() )
         return;
 
-    QString themeTmpFile;
-    // themeTmpFile contains the name of the downloaded file
+    QTemporaryFile themeTmpFile;
+    KIO::StoredTransferJob* transferJob = KIO::storedGet( themeURL );
+    bool transferJobSucceed = true;
+    connect( transferJob, &KJob::result, [&](KJob*) {
+        if( transferJob->error() != KJob::NoError ) {
+            themeTmpFile.open();
+            themeTmpFile.write( transferJob->data() );
+            themeTmpFile.close();
+        } else {
+            transferJobSucceed = false;
+        }
+    } );
 
-    if( !KIO::NetAccess::download( themeURL, themeTmpFile, this ) ) {
+    if( transferJob->exec() && !transferJobSucceed ) {
         QString sorryText;
         QString tmpArg = themeURL.toDisplayString();
         if (themeURL.isLocalFile())
@@ -130,7 +141,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 
     // check if the archive contains a dir with a k3b.theme file
     QString themeName;
-    KTar archive( themeTmpFile );
+    KTar archive( &themeTmpFile );
     archive.open(QIODevice::ReadOnly);
     const KArchiveDirectory* themeDir = archive.directory();
     QStringList entries = themeDir->entries();
@@ -174,7 +185,6 @@ void K3b::ThemeOptionTab::slotInstallTheme()
     }
 
     archive.close();
-    KIO::NetAccess::removeTempFile(themeTmpFile);
 
     readSettings();
 }

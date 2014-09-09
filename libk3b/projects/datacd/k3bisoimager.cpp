@@ -29,8 +29,8 @@
 #include "k3bfilesplitter.h"
 #include "k3bisooptions.h"
 
-#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/CopyJob>
 #include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/Job>
 #include <KCoreAddons/KStringHandler>
@@ -833,8 +833,15 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
         QString tempPath = temp.fileName();
         temp.remove();
 
-        if( !KIO::NetAccess::file_copy( QUrl::fromLocalFile(item->localPath()), tempPath ) ) {
-            emit infoMessage( i18n("Failed to backup boot image file %1",item->localPath()), MessageError );
+        KIO::CopyJob* copyJob = KIO::copyAs(QUrl::fromLocalFile(item->localPath()), QUrl::fromLocalFile(tempPath), KIO::HideProgressInfo);
+        bool copyJobSucceed = true;
+        connect(copyJob, &KJob::result, [&](KJob*) {
+            if( copyJob->error() != KJob::NoError ) {
+                emit infoMessage( i18n("Failed to backup boot image file %1",item->localPath()), MessageError );
+                copyJobSucceed = false;
+            }
+        } );
+        if( !copyJob->exec() || !copyJobSucceed ) {
             return;
         }
 

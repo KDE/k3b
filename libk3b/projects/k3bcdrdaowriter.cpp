@@ -27,7 +27,8 @@
 #include "k3bglobalsettings.h"
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
+#include <KIOCore/KIO/CopyJob>
+#include <KIOCore/KIO/DeleteJob>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
@@ -484,13 +485,19 @@ void K3b::CdrdaoWriter::start()
                 m_backupTocFile = m_tocFile + ".k3bbak";
 
                 // workaround, cdrdao deletes the tocfile when --remote parameter is set
-                if ( !KIO::NetAccess::file_copy(QUrl::fromLocalFile(m_tocFile),QUrl::fromLocalFile(m_backupTocFile), (QWidget*) 0) )
-                {
-                    qDebug() << "(K3b::CdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile;
-                    emit infoMessage( i18n("Could not backup tocfile."), MessageError );
-                    jobFinished(false);
+                KIO::CopyJob* copyJob = KIO::copyAs(QUrl::fromLocalFile(m_tocFile),QUrl::fromLocalFile(m_backupTocFile), KIO::HideProgressInfo);
+                bool copyJobSucceed = true;
+                connect(copyJob, &KJob::result, [&](KJob*) {
+                    if( copyJob->error() != KJob::NoError ) {
+                        qDebug() << "(K3b::CdrdaoWriter) could not backup " << m_tocFile << " to " << m_backupTocFile;
+                        emit infoMessage( i18n("Could not backup tocfile."), MessageError );
+                        jobFinished(false);
+                        copyJobSucceed = false;
+                    }
+                } );
+                copyJob->exec();
+                if( !copyJobSucceed )
                     return;
-                }
             }
         }
         break;
@@ -688,23 +695,30 @@ void K3b::CdrdaoWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
     case WRITE:
     case COPY:
         if ( !m_binFileLnk.isEmpty() ) {
-            KIO::NetAccess::del(QUrl::fromLocalFile(m_cueFileLnk), (QWidget*) 0);
-            KIO::NetAccess::del(QUrl::fromLocalFile(m_binFileLnk), (QWidget*) 0);
+            KIO::del(QUrl::fromLocalFile(m_cueFileLnk), KIO::HideProgressInfo);
+            KIO::del(QUrl::fromLocalFile(m_binFileLnk), KIO::HideProgressInfo);
         }
         else if( (!QFile::exists( m_tocFile ) || K3b::filesize( QUrl::fromLocalFile(m_tocFile) ) == 0 ) && !m_onTheFly )
         {
             // cdrdao removed the tocfile :(
             // we need to recover it
-            if ( !KIO::NetAccess::file_copy(QUrl::fromLocalFile(m_backupTocFile), QUrl::fromLocalFile(m_tocFile), (QWidget*) 0) )
-            {
-                qDebug() << "(K3b::CdrdaoWriter) restoring tocfile " << m_tocFile << " failed.";
-                emit infoMessage( i18n("Due to a bug in cdrdao the toc/cue file %1 has been deleted. "
-                                       "K3b was unable to restore it from the backup %2.",m_tocFile,m_backupTocFile), MessageError );
-            }
-            else if ( !KIO::NetAccess::del(QUrl::fromLocalFile(m_backupTocFile), (QWidget*) 0) )
-            {
-                qDebug() << "(K3b::CdrdaoWriter) delete tocfile backkup " << m_backupTocFile << " failed.";
-            }
+            KIO::CopyJob* copyJob = KIO::copyAs(QUrl::fromLocalFile(m_backupTocFile), QUrl::fromLocalFile(m_tocFile), KIO::HideProgressInfo);
+            connect( copyJob, &KJob::result, [&](KJob*) {
+                if( copyJob->error() != KJob::NoError ) {
+                    qDebug() << "(K3b::CdrdaoWriter) restoring tocfile " << m_tocFile << " failed.";
+                    emit infoMessage( i18n("Due to a bug in cdrdao the toc/cue file %1 has been deleted. "
+                                           "K3b was unable to restore it from the backup %2.",m_tocFile,m_backupTocFile), MessageError );
+                } else {
+                    KIO::DeleteJob* deleteJob = KIO::del(QUrl::fromLocalFile(m_backupTocFile), KIO::HideProgressInfo);
+                    connect( deleteJob, &KJob::result, [&](KJob*){
+                        if( deleteJob->error() != KJob::NoError ) {
+                            qDebug() << "(K3b::CdrdaoWriter) delete tocfile backkup " << m_backupTocFile << " failed.";
+                        }
+                    } );
+                    deleteJob->exec();
+                }
+            } );
+            copyJob->exec();
         }
         break;
     case BLANK:

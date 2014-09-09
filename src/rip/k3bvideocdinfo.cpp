@@ -21,7 +21,7 @@
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
 
-#include <QDomDocument>
+#include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
 #include "k3bprocess.h"

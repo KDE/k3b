@@ -26,7 +26,7 @@
 #include <QtCore/QUrl>
 
 #include <QtCore/QDateTime>
-#include <QDomDocument>
+#include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 #include <QDomNode>
 #include <QtCore/QFile>

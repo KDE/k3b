@@ -85,9 +85,9 @@
 #include <KToggleAction>
 #include <QtCore/QUrl>
 #include <KXMLGUIFactory>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KI18n/KLocalizedString>
-#include <kio/deletejob.h>
+#include <KIOCore/KIO/DeleteJob>
+#include <KIOCore/KIO/StatJob>
 
 // include files for QT
 #include <QtAlgorithms>
@@ -1004,7 +1004,11 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
             QUrl url = urls.front();
             KRecentDocument::add( url );
 
-            bool exists = KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 );
+            KIO::StatJob* statJob = KIO::stat(url, KIO::StatJob::DestinationSide, KIO::HideProgressInfo);
+            bool exists = true;
+            QObject::connect(statJob, &KJob::result, [&](KJob*) { exists = ( statJob->error() != KJob::NoError ); } );
+            statJob->exec();
+
             if( !exists ||
                 KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.toDisplayString() ),
                                                     i18n("File Exists"), KStandardGuiItem::overwrite() )

@@ -21,11 +21,10 @@
 #define koZipStore_h
 
 #include "KoStoreBase.h"
-//Added by qt3to4:
-#include <QByteArray>
 
 class KZip;
 class KArchiveDirectory;
+class QByteArray;
 class QUrl;
 
 class KoZipStore : public KoStoreBase

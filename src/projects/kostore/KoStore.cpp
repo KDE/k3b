@@ -27,17 +27,19 @@
 #include "KoEncryptedStore.h"
 #endif
 
-#include <QBuffer>
+#include <QtCore/QBuffer>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
-#include <QtCore/QDir>
-
+#include <QtCore/QIODevice>
+#include <QtCore/QTemporaryFile>
 #include <QtCore/QUrl>
-#include <QtCore/QDebug>
-#include <kdeversion.h>
+
 #include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/StoredTransferJob>
+#include <KJobWidgets/KJobWidgets>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
 
 #define DefaultFormat KoStore::Zip
 
@@ -147,7 +149,7 @@ KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, cons
   if ( url.isLocalFile() )
     return createStore(url.toLocalFile(), mode,  appIdentification, backend );
 
-  QString tmpFile;
+  QTemporaryFile tmpFile;
   if ( mode == KoStore::Write )
   {
     if ( automatic )
@@ -155,8 +157,18 @@ KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, cons
   }
   else
   {
-    const bool downloaded =
-        KIO::NetAccess::download( url, tmpFile, window );
+    KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
+    KJobWidgets::setWindow( transferJob, window );
+    bool downloaded = true;
+    QObject::connect( transferJob, &KJob::result, [&](KJob*) {
+      if( transferJob->error() != KJob::NoError ) {
+        tmpFile.open();
+        tmpFile.write( transferJob->data() );
+        tmpFile.close();
+      } else {
+        downloaded = false;
+      }
+    } );
 
     if (!downloaded)
     {
@@ -165,29 +177,28 @@ KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, cons
     }
     else if ( automatic )
     {
-      QFile file( tmpFile );
-      if ( file.open( QIODevice::ReadOnly ) )
+      if ( tmpFile.open() )
       {
-        backend = determineBackend( &file );
-        file.close();
+        backend = determineBackend( &tmpFile );
+        tmpFile.close();
       }
     }
   }
   switch ( backend )
   {
   //case Tar:
-    //return new KoTarStore( window, url, tmpFile, mode, appIdentification );
+    //return new KoTarStore( &tmpFile, mode, appIdentification );
   case Zip:
 #ifdef QCA2
     if( automatic && mode == Read ) {
         // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
-        return new KoEncryptedStore( window, url, tmpFile, Read, appIdentification );
+        return new KoEncryptedStore( &tmpFile, Read, appIdentification );
     }
 #endif
-    return new KoZipStore( window, url, tmpFile, mode, appIdentification );
+    return new KoZipStore( &tmpFile, mode, appIdentification );
 #ifdef QCA2
   case Encrypted:
-    return new KoEncryptedStore( window, url, tmpFile, mode, appIdentification );
+    return new KoEncryptedStore( &tmpFile, mode, appIdentification );
 #endif
   default:
     qCWarning(KOSTORE) << "Unsupported backend requested for KoStore (QUrl) : " << backend;

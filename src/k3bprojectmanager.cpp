@@ -38,21 +38,21 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
-#include <KIO/NetAccess>
 #include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/StoredTransferJob>
 #include <KWidgetsAddons/KMessageBox>
-#include <KSharedConfig>
-#include <QtCore/QUrl>
 
-#include <QtWidgets/QApplication>
-#include <QtGui/QCursor>
-#include <QDomDocument>
-#include <QtXml/QDomElement>
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QHash>
 #include <QtCore/QList>
+#include <QtCore/QTemporaryFile>
 #include <QtCore/QTextStream>
+#include <QtCore/QUrl>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtGui/QCursor>
+#include <QtWidgets/QApplication>
 
 namespace
 {
@@ -449,8 +449,16 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 {
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
-    QString tmpfile;
-    KIO::NetAccess::download( url, tmpfile, 0L );
+    QTemporaryFile tmpfile;
+    KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
+    connect( transferJob, &KJob::result, [&](KJob*) {
+        if( transferJob->error() != KJob::NoError ) {
+            tmpfile.open();
+            tmpfile.write( transferJob->data() );
+            tmpfile.close();
+        }
+    } );
+    transferJob->exec();
 
     // ///////////////////////////////////////////////
     // first check if it's a store or an old plain xml file
@@ -458,7 +466,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     QDomDocument xmlDoc;
 
     // try opening a store
-    KoStore* store = KoStore::createStore( tmpfile, KoStore::Read );
+    KoStore* store = KoStore::createStore( &tmpfile, KoStore::Read );
     if( store ) {
         if( !store->bad() ) {
             // try opening the document inside the store
@@ -477,35 +485,32 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 
     if( !success ) {
         // try reading an old plain document
-        QFile f( tmpfile );
-        if ( f.open( QIODevice::ReadOnly ) ) {
+        if ( tmpfile.open() ) {
             //
             // First check if this is really an xml file beacuse if this is a very big file
             // the setContent method blocks for a very long time
             //
             char test[5];
-            if( f.read( test, 5 ) ) {
+            if( tmpfile.read( test, 5 ) ) {
                 if( ::strncmp( test, "<?xml", 5 ) ) {
                     qDebug() << "(K3b::Doc) " << url.toLocalFile() << " seems to be no xml file.";
                     QApplication::restoreOverrideCursor();
                     return 0;
                 }
-                f.reset();
+                tmpfile.reset();
             }
             else {
                 qDebug() << "(K3b::Doc) could not read from file.";
                 QApplication::restoreOverrideCursor();
                 return 0;
             }
-            if( xmlDoc.setContent( &f ) )
+            if( xmlDoc.setContent( &tmpfile ) )
                 success = true;
-            f.close();
+            tmpfile.close();
         }
     }
 
     // ///////////////////////////////////////////////
-    KIO::NetAccess::removeTempFile( tmpfile );
-
     if( !success ) {
         qDebug() << "(K3b::Doc) could not open file " << url.toLocalFile();
         QApplication::restoreOverrideCursor();
@@ -570,13 +575,21 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 
 bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
 {
-    QString tmpfile;
-    KIO::NetAccess::download( url, tmpfile, 0L );
+    QTemporaryFile tmpfile;
+    KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
+    connect( transferJob, &KJob::result, [&](KJob*) {
+        if( transferJob->error() != KJob::NoError ) {
+            tmpfile.open();
+            tmpfile.write( transferJob->data() );
+            tmpfile.close();
+        }
+    } );
+    transferJob->exec();
 
     bool success = false;
 
     // create the store
-    KoStore* store = KoStore::createStore( tmpfile, KoStore::Write, "application/x-k3b" );
+    KoStore* store = KoStore::createStore( &tmpfile, KoStore::Write, "application/x-k3b" );
     if( store ) {
         if( store->bad() ) {
             delete store;
@@ -615,8 +628,6 @@ bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
             }
         }
     }
-
-    KIO::NetAccess::removeTempFile( tmpfile );
 
     return success;
 }

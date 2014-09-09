@@ -44,8 +44,9 @@
 
 #include <KCoreAddons/KStringHandler>
 #include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/CopyJob>
+#include <KIOCore/KIO/DeleteJob>
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
 
 #include <QtCore/QDataStream>
 #include <QtCore/QDebug>
@@ -798,8 +799,8 @@ bool K3b::MixedJob::writeTocFile()
     m_tocFile->close();
 
     // backup for debugging
-//    KIO::NetAccess::del("/tmp/trueg/tocfile_debug_backup.toc",0L);
-//    KIO::NetAccess::copy( m_tocFile->name(), "/tmp/trueg/tocfile_debug_backup.toc",0L );
+//    KIO::del("/tmp/trueg/tocfile_debug_backup.toc",0L)->exec();
+//    KIO::copyAs( m_tocFile->name(), "/tmp/trueg/tocfile_debug_backup.toc",0L )->exec();
 
     return success;
 }

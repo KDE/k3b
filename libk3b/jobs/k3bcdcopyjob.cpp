@@ -33,10 +33,10 @@
 #include "k3bcddb.h"
 
 #include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
-#include <KIOCore/KIO/Job>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
+#include <KIOCore/KIO/Global>
+#include <KIOCore/KIO/DeleteJob>
+#include <KIOCore/KIO/Job>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
@@ -1124,7 +1124,7 @@ void K3b::CdCopyJob::cleanup()
 
         // remove the tempdir created in prepareImageFiles()
         if( d->deleteTempDir ) {
-            KIO::NetAccess::del( m_tempPath, 0 );
+            KIO::del( QUrl::fromLocalFile( m_tempPath ), KIO::HideProgressInfo )->exec();
             d->deleteTempDir = false;
         }
     }

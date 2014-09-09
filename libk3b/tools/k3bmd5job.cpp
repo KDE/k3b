@@ -20,7 +20,6 @@
 #include "k3bfilesplitter.h"
 
 #include <KCodecs/KCodecs>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
 #include <KI18n/KLocalizedString>
 
 #include <QtCore/QCryptographicHash>

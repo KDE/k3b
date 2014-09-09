@@ -19,15 +19,13 @@
 
 #include "KoZipStore.h"
 
-#include <QBuffer>
-//Added by qt3to4:
-#include <QByteArray>
-
-#include <kzip.h>
+#include <KArchive/KZip>
+#include <KIOCore/KIO/StoredTransferJob>
+#include <KJobWidgets/KJobWidgets>
+#include <QtCore/QBuffer>
+#include <QtCore/QByteArray>
 #include <QtCore/QDebug>
-#include <kdeversion.h>
 #include <QtCore/QUrl>
-#include <KDELibs4Support/KDE/KIO/NetAccess>
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
@@ -82,11 +80,17 @@ KoZipStore::~KoZipStore()
     // Now we have still some job to do for remote files.
     if ( m_fileMode == KoStoreBase::RemoteRead )
     {
-        KIO::NetAccess::removeTempFile( m_localFileName );
+        QFile::remove( m_localFileName );
     }
     else if ( m_fileMode == KoStoreBase::RemoteWrite )
     {
-        KIO::NetAccess::upload( m_localFileName, m_url, m_window );
+        QFile file( m_localFileName );
+        if( file.open( QFile::ReadOnly ) )
+        {
+            KIO::StoredTransferJob* transferJob = KIO::storedPut( file.readAll(), m_url, -1 );
+            KJobWidgets::setWindow( transferJob, m_window );
+            transferJob->exec();
+        }
         // ### FIXME: delete temp file
     }
 }
