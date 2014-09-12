@@ -18,7 +18,6 @@
 
 #include <KConfigCore/KConfigGroup>
 #include <KCoreAddons/KProcess>
-#include <KDELibs4Support/kdeversion.h>
 #include <KDELibs4Support/kde_file.h>
 #include <KDELibs4Support/KDE/KStandardDirs>
 

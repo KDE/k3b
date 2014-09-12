@@ -21,8 +21,7 @@
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 
-#include <KDELibs4Support/kdeversion.h>
-#include <KDELibs4Support/KDE/KGlobalSettings>
+#include <kcoreaddons_version.h>
 
 #include <QtCore/QDir>
 #include <QtCore/QStandardPaths>
@@ -51,7 +50,7 @@ bool K3b::DebuggingOutputFile::open( OpenMode mode )
         return false;
 
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "K3b Version: %1" ).arg(k3bcore->version()) );
-    addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KDE::versionString()) );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KCOREADDONS_VERSION_STRING) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Qt Version:  %1" ).arg(qVersion()) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Kernel:      %1" ).arg(K3b::kernelVersion()) );
 
