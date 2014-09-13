@@ -36,6 +36,9 @@ namespace K3b {
         void readSettings();
         bool saveSettings();
 
+    protected:
+        bool event( QEvent* event ) override;
+
     private Q_SLOTS:
         void selectionChanged();
         void slotInstallTheme();

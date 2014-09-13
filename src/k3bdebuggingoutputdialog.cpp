@@ -26,10 +26,10 @@
 #include <QtCore/QFile>
 #include <qclipboard.h>
 #include <QtCore/QTextStream>
+#include <QtGui/QFontDatabase>
 
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <kapplication.h>
 #include <QtWidgets/QFileDialog>
 #include <KWidgetsAddons/KMessageBox>
@@ -50,7 +50,7 @@ K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
   debugView = new QTextEdit( this );
   debugView->setReadOnly(true);
   debugView->setAcceptRichText( false );
-  debugView->setCurrentFont( KGlobalSettings::fixedFont() );
+  debugView->setCurrentFont( QFontDatabase::systemFont( QFontDatabase::FixedFont ) );
   debugView->setWordWrapMode( QTextOption::NoWrap );
 
   setMainWidget( debugView );

@@ -22,7 +22,6 @@
 #include <KIOCore/KIO/Global>
 #include <kio/deletejob.h>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KArchive/KTar>
@@ -52,8 +51,6 @@ K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
 
     connect( m_viewTheme->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
              this, SLOT(selectionChanged()) );
-    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
-             this, SLOT(selectionChanged()) );
     connect( m_buttonInstallTheme, SIGNAL(clicked()),
              this, SLOT(slotInstallTheme()) );
     connect( m_buttonRemoveTheme, SIGNAL(clicked()),
@@ -82,6 +79,15 @@ bool K3b::ThemeOptionTab::saveSettings()
         k3bappcore->themeManager()->setCurrentTheme( theme );
     }
     return true;
+}
+
+
+bool K3b::ThemeOptionTab::event( QEvent *event )
+{
+    if( event->type() == QEvent::StyleChange ) {
+        selectionChanged();
+    }
+    return QWidget::event( event );
 }
 
 

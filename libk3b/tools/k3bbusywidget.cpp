@@ -14,8 +14,6 @@
 
 #include "k3bbusywidget.h"
 
-#include <KDELibs4Support/KDE/KGlobalSettings>
-
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>
 #include <QtWidgets/QFrame>

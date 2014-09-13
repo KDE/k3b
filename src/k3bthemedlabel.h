@@ -20,24 +20,29 @@
 
 
 namespace K3b {
+
 class ThemedLabel : public KSqueezedTextLabel
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  ThemedLabel( QWidget* parent = 0 );
-  ThemedLabel( const QString& text, QWidget* parent = 0 );
-  ThemedLabel( Theme::PixmapType, QWidget* parent = 0 );
+public:
+    ThemedLabel( QWidget* parent = 0 );
+    ThemedLabel( const QString& text, QWidget* parent = 0 );
+    ThemedLabel( Theme::PixmapType, QWidget* parent = 0 );
 
- public Q_SLOTS:
-  void setThemePixmap( Theme::PixmapType );
+protected:
+    bool event( QEvent* event ) override;
 
- private Q_SLOTS:
-  void slotThemeChanged();
+public Q_SLOTS:
+    void setThemePixmap( Theme::PixmapType );
 
- private:
-  int m_themePixmapCode;
+private Q_SLOTS:
+    void slotThemeChanged();
+
+private:
+    int m_themePixmapCode;
 };
+
 }
 
 #endif

@@ -48,7 +48,7 @@ namespace K3b {
         void loadConfig( const KConfigGroup& c );
         void saveConfig( KConfigGroup c );
 
-        virtual int heightForWidth( int width ) const;
+        int heightForWidth( int width ) const override;
 
         void addAction( QAction* );
         void removeAction( QAction* );
@@ -57,11 +57,12 @@ namespace K3b {
         void rebuildGui( const QList<QAction*>& );
 
     protected:
-        virtual void resizeEvent( QResizeEvent* );
-        virtual void paintEvent( QPaintEvent* );
-        virtual void dropEvent( QDropEvent* event );
-        virtual void dragEnterEvent( QDragEnterEvent* event );
-        virtual void mousePressEvent ( QMouseEvent* e );
+        bool event( QEvent* event ) override;
+        void resizeEvent( QResizeEvent* ) override;
+        void paintEvent( QPaintEvent* ) override;
+        void dropEvent( QDropEvent* event ) override;
+        void dragEnterEvent( QDragEnterEvent* event ) override;
+        void mousePressEvent ( QMouseEvent* e ) override;
 
     private Q_SLOTS:
         void slotThemeChanged();

@@ -23,7 +23,6 @@
 #include <KComboBox>
 #include <KConfigCore/KConfig>
 #include <KIOCore/KDiskFreeSpaceInfo>
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOWidgets/KUrlRequester>
@@ -31,6 +30,7 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLabel>
 #include <QtCore/QList>
+#include <QtCore/QStandardPaths>
 #include <QtCore/QTimer>
 #include <QToolButton>
 
@@ -290,7 +290,7 @@ QString K3b::AudioConvertingOptionWidget::extension() const
 
 void K3b::AudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 {
-    m_editBaseDir->setUrl( c.readEntry( "last ripping directory", KGlobalSettings::musicPath() ) );
+    m_editBaseDir->setUrl( c.readEntry( "last ripping directory", QStandardPaths::writableLocation(QStandardPaths::MusicLocation) ) );
 
     m_checkSingleFile->setChecked( c.readEntry( "single_file", false ) );
     m_checkWriteCueFile->setChecked( c.readEntry( "write_cue_file", false ) );

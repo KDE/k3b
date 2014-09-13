@@ -16,13 +16,13 @@
 
 #include "k3bversion.h"
 
-#include <KDELibs4Support/KDE/KGlobalSettings>
-#include <QtCore/QDebug>
 #include <KConfigCore/KConfigGroup>
+#include <KConfigWidgets/KColorScheme>
 
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtCore/QDir>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QStringList>
 #include <QtGui/QPixmap>
@@ -39,7 +39,7 @@ QColor K3b::Theme::backgroundColor() const
     if( m_bgColor.isValid() )
         return m_bgColor;
     else
-        return KGlobalSettings::activeTitleColor();
+        return KColorScheme(QPalette::Active, KColorScheme::Window).background(KColorScheme::ActiveBackground).color();
 }
 
 
@@ -48,7 +48,7 @@ QColor K3b::Theme::foregroundColor() const
     if( m_fgColor.isValid() )
         return m_fgColor;
     else
-        return KGlobalSettings::activeTextColor();
+        return KColorScheme(QPalette::Active, KColorScheme::Window).foreground(KColorScheme::ActiveText).color();
 }
 
 

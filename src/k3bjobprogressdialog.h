@@ -46,7 +46,7 @@ namespace K3b {
     public:
         JobProgressDialog( QWidget* parent = 0,
                            bool showSubProgress = true );
-        virtual ~JobProgressDialog();
+        ~JobProgressDialog();
 
         virtual void setJob( Job* job );
         void setExtraInfo( QWidget *extra );
@@ -58,7 +58,7 @@ namespace K3b {
          */
         int startJob( Job* job = 0 );
 
-        virtual QSize sizeHint() const;
+        QSize sizeHint() const override;
 
         /**
          * @reimplemented from JobHandler
@@ -67,7 +67,7 @@ namespace K3b {
                                          Device::MediaStates mediaState = Device::STATE_EMPTY,
                                          Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                          const K3b::Msf& minMediaSize = K3b::Msf(),
-                                         const QString& message = QString() );
+                                         const QString& message = QString() ) override;
 
         /**
          * @reimplemented from JobHandler
@@ -75,13 +75,13 @@ namespace K3b {
         bool questionYesNo( const QString& text,
                             const QString& caption = QString(),
                             const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                            const KGuiItem& buttonNo = KStandardGuiItem::no() );
+                            const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
 
         /**
          * reimplemented from JobHandler
          */
         void blockingInformation( const QString& text,
-                                  const QString& caption = QString() );
+                                  const QString& caption = QString() ) override;
 
     protected Q_SLOTS:
         virtual void slotProcessedSize( int processed, int size );
@@ -97,7 +97,7 @@ namespace K3b {
         /**
          * \reimpl from KDialog
          */
-        virtual void slotButtonClicked( int button );
+        void slotButtonClicked( int button ) override;
         void slotUpdateTime();
         void slotShowDebuggingOutput();
 
@@ -106,9 +106,10 @@ namespace K3b {
         virtual void slotThemeChanged();
 
     protected:
-        virtual void showEvent( QShowEvent* e );
-        virtual void closeEvent( QCloseEvent* e );
-        virtual void keyPressEvent( QKeyEvent* e );
+        bool event( QEvent* event ) override;
+        void showEvent( QShowEvent* e ) override;
+        void closeEvent( QCloseEvent* e ) override;
+        void keyPressEvent( QKeyEvent* e ) override;
 
         void setupGUI();
 

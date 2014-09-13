@@ -39,7 +39,6 @@
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KEditListBox>
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KPushButton>

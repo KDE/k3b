@@ -40,7 +40,6 @@
 #include <kjobtrackerinterface.h>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KNotification>
 #include <KDELibs4Support/KDE/KPushButton>
@@ -245,8 +244,6 @@ void K3b::JobProgressDialog::setupGUI()
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
-             this, SLOT(slotThemeChanged()) );
 }
 
 
@@ -254,6 +251,15 @@ void K3b::JobProgressDialog::setExtraInfo( QWidget *extra )
 {
     extra->setParent( m_frameExtraInfo );
     m_frameExtraInfoLayout->addWidget( extra, 0, 0 );
+}
+
+
+bool K3b::JobProgressDialog::event( QEvent *event )
+{
+    if( event->type() == QEvent::StyleChange ) {
+        slotThemeChanged();
+    }
+    return KDialog::event( event );
 }
 
 

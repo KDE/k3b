@@ -14,8 +14,6 @@
 
 #include "k3bpushbutton.h"
 
-#include <KDELibs4Support/KDE/KGlobalSettings>
-
 #include <QtCore/QEvent>
 #include <QtCore/QTimer>
 #include <QtGui/QMouseEvent>
@@ -105,7 +103,7 @@ bool K3b::PushButton::eventFilter( QObject* o, QEvent* ev )
             }
             else if( ev->type() == QEvent::MouseMove ) {
                 QMouseEvent* mev = static_cast<QMouseEvent*>(ev);
-                if( ( mev->pos() - d->mousePressPos).manhattanLength() > KGlobalSettings::dndEventDelay() ) {
+                if( ( mev->pos() - d->mousePressPos).manhattanLength() > QApplication::startDragDistance() ) {
                     d->popupTimer->stop();
                     slotDelayedPopup();
                     return true;

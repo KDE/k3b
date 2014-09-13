@@ -17,7 +17,6 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KIconThemes/KIconLoader>
 
 #include <QAction>
@@ -79,8 +78,16 @@ void K3b::FlatButton::init()
     setHover(false);
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
-    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );
     slotThemeChanged();
+}
+
+
+bool K3b::FlatButton::event( QEvent *event )
+{
+    if( event->type() == QEvent::StyleChange ) {
+        slotThemeChanged();
+    }
+    return QAbstractButton::event(event);
 }
 
 

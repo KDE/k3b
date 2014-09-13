@@ -23,7 +23,6 @@
 
 #include <KConfigCore/KConfigGroup>
 #include <KCoreAddons/KAboutData>
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <KDELibs4Support/KDE/KMenu>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
@@ -89,7 +88,6 @@ K3b::WelcomeWidget::WelcomeWidget( MainWindow* mainWindow, QWidget* parent )
 
     connect( m_buttonMore, SIGNAL(pressed()), this, SLOT(slotMoreActions()) );
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
-    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(update()) );
 
     slotThemeChanged();
 }
@@ -238,6 +236,15 @@ int K3b::WelcomeWidget::heightForWidth( int width ) const
                  ( ( m_buttonSize.height() + BUTTON_SPACING ) * rows ) + m_buttonMore->height() +
                  HEADER_BUTTON_SPACING + h + MARGIN;
     return height;
+}
+
+
+bool K3b::WelcomeWidget::event( QEvent *event )
+{
+    if( event->type() == QEvent::StyleChange ) {
+        update();
+    }
+    return QWidget::event( event );
 }
 
 

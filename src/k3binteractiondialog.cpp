@@ -41,7 +41,6 @@
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KGlobalSettings>
 #include <QtGui/QIcon>
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KPushButton>
