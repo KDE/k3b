@@ -14,8 +14,6 @@
 
 #include "k3bcutcombobox.h"
 
-#include "k3bstringutils.h"
-
 #include <QtCore/QEvent>
 #include <QtCore/QStringList>
 #include <QtCore/QRect>
@@ -204,11 +202,9 @@ void K3b::CutComboBox::cutText()
         if ( pixmap(i) && !pixmap(i)->isNull() )
             w -= ( pixmap(i)->width() + 4 );
 
-        QString text;
-        if( d->method == SQUEEZE )
-            text = K3b::squeezeTextToWidth( fontMetrics(), d->originalItems[i], w );
-        else
-            text = K3b::cutToWidth( fontMetrics(), d->originalItems[i], w );
+        QString text = fontMetrics().elidedText( d->originalItems[i],
+                                                 d->method == SQUEEZE ? Qt::ElideMiddle : Qt::ElideRight,
+                                                 w );
 
         // now insert the cut text
         if( pixmap(i) )

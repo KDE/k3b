@@ -98,8 +98,6 @@ namespace K3b {
         void slotFlushingCache();
 
     private:
-        bool closeFd();
-
         class Private;
         Private* d;
     };

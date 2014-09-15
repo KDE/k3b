@@ -136,18 +136,6 @@ QIODevice* K3b::GrowisofsWriter::ioDevice() const
 }
 
 
-bool K3b::GrowisofsWriter::closeFd()
-{
-    if ( d->process.isRunning() ) {
-        d->process.closeWriteChannel();
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-
 bool K3b::GrowisofsWriter::prepareProcess()
 {
     d->growisofsBin = k3bcore->externalBinManager()->binObject( "growisofs" );
@@ -387,7 +375,9 @@ void K3b::GrowisofsWriter::cancel()
 {
     if( active() ) {
         d->canceled = true;
-        closeFd();
+        if ( d->process.isRunning() ) {
+            d->process.closeWriteChannel();
+        }
         d->process.terminate();
     }
 }

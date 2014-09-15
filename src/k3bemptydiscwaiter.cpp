@@ -728,20 +728,6 @@ void K3b::EmptyDiscWaiter::slotErasingFinished( bool success )
 }
 
 
-K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, Device::MediaTypes mediaType, QWidget* parent )
-{
-    if( device != 0 ) {
-        K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
-        Device::MediaStates mediaState = K3b::Device::STATE_EMPTY;
-        if( appendable ) mediaState |= K3b::Device::STATE_INCOMPLETE;
-        return d.waitForDisc( mediaState, mediaType );
-    }
-    else {
-        return Device::MEDIA_UNKNOWN;
-    }
-}
-
-
 K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device,
                                                    Device::MediaStates mediaState,
                                                    Device::MediaTypes mediaType,

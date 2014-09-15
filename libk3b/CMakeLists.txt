@@ -60,7 +60,6 @@ add_library(k3blib SHARED
     tools/k3bdeviceselectiondialog.cpp
     tools/k3bmd5job.cpp
     tools/k3btitlelabel.cpp
-    tools/k3bstringutils.cpp
     tools/k3bdevicecombobox.cpp
     tools/k3bstdguiitems.cpp
     tools/k3bvalidators.cpp

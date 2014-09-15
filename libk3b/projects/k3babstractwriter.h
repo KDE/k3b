@@ -20,8 +20,6 @@
 #include "k3bjob.h"
 #include "k3bdevicetypes.h"
 
-#include <KDELibs4Support/kdemacros.h>
-
 #include <QtCore/QDateTime>
 
 class QIODevice;
@@ -46,11 +44,6 @@ namespace K3b {
          * connected to the stdout fd of mkisofs in the isoimager
          */
         virtual QIODevice* ioDevice() const { return 0; }
-
-        /**
-         * \deprecated use QIODevice::close() instead
-         */
-        KDE_DEPRECATED virtual bool closeFd() { return false; }
 
     public Q_SLOTS:
         /**

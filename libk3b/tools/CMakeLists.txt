@@ -4,7 +4,6 @@ install( FILES
   k3bbusywidget.h
   k3bdeviceselectiondialog.h
   k3bmd5job.h
-  k3bstringutils.h
   k3bdevicecombobox.h
   k3bstdguiitems.h
   k3bvalidators.h

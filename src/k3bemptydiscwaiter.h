@@ -17,7 +17,6 @@
 #define K3BEMPTYDISCWAITER_H
 
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/kdemacros.h>
 #include "k3bjobhandler.h"
 
 #include "k3bdiskinfo.h"
@@ -72,14 +71,6 @@ namespace K3b {
          */
         void blockingInformation( const QString& text,
                                   const QString& caption = QString() );
-
-        /**
-         * This only openes a dialog if the first check failed.
-         */
-		Q_DECL_DEPRECATED static Device::MediaType wait( Device::Device* device,
-                                                      bool appendable = false,
-                                                      Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                                                      QWidget* parent = 0 );
 
         /**
          * Starts the emptydiskwaiter.

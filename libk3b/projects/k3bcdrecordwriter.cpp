@@ -140,18 +140,6 @@ QIODevice* K3b::CdrecordWriter::ioDevice() const
 }
 
 
-bool K3b::CdrecordWriter::closeFd()
-{
-    if ( d->process.isRunning() ) {
-        d->process.closeWriteChannel();
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-
 void K3b::CdrecordWriter::setDao( bool b )
 {
     d->writingMode = ( b ? K3b::WritingModeSao : K3b::WritingModeTao );

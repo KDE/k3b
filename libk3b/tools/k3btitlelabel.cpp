@@ -15,8 +15,6 @@
 
 #include "k3btitlelabel.h"
 
-#include "k3bstringutils.h"
-
 #include <QtCore/QDebug>
 #include <QtCore/QEvent>
 #include <QtGui/QFont>

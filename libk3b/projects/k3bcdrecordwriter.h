@@ -54,7 +54,6 @@ namespace K3b {
         qint64 write( const char* data, qint64 maxSize );
 
         QIODevice* ioDevice() const;
-        bool closeFd();
 
     public Q_SLOTS:
         void start();
