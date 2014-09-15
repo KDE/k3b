@@ -41,7 +41,7 @@
 #include "k3btrack.h"
 #include "k3bcdtext.h"
 
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KConfigWidgets/KColorScheme>

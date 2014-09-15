@@ -20,7 +20,7 @@
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KComboBox>
+#include <KCompletion/KComboBox>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KLocale>
 

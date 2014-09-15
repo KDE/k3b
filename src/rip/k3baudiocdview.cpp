@@ -36,7 +36,7 @@
 #include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <KActionMenu>
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>

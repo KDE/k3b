@@ -17,7 +17,7 @@
 #define _K3B_CUT_COMBOBOX_H_
 
 #include "k3b_export.h"
-#include <KDELibs4Support/KDE/KComboBox>
+#include <KCompletion/KComboBox>
 #include <QtGui/QPixmap>
 #include <QtGui/QResizeEvent>
 class QResizeEvent;

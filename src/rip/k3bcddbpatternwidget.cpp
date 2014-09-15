@@ -14,7 +14,7 @@
 
 #include "k3bcddbpatternwidget.h"
 
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfigGroup>
 #include <QtCore/QDebug>
 #include <KLineEdit>

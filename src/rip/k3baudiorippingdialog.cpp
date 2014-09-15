@@ -31,7 +31,7 @@
 #include "k3bmediacache.h"
 
 #include <KApplication>
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
 #include <KIOCore/KIO/Global>

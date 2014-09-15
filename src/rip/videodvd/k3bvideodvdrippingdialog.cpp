@@ -25,7 +25,7 @@
 #include "k3bvideodvdrippingwidget.h"
 #include "k3bvideodvdtitletranscodingjob.h"
 
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KLineEdit>

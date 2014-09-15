@@ -27,7 +27,7 @@
 #include <QtWidgets/QRadioButton>
 
 #include <KApplication>
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>

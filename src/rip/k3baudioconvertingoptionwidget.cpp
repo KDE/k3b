@@ -20,7 +20,7 @@
 #include "k3bcore.h"
 
 #include <KConfigWidgets/KColorScheme>
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <KIOCore/KDiskFreeSpaceInfo>
 #include <KI18n/KLocalizedString>

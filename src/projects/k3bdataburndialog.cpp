@@ -54,7 +54,7 @@
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <kfiledialog.h>
-#include <KDELibs4Support/KDE/KComboBox>
+#include <KCompletion/KComboBox>
 #include <KIOCore/KIO/Global>
 
 

@@ -15,7 +15,7 @@
 #ifndef _K3B_MEDIA_SELECTION_COMBOBOX_H_
 #define _K3B_MEDIA_SELECTION_COMBOBOX_H_
 
-#include <KDELibs4Support/KDE/KComboBox>
+#include <KCompletion/KComboBox>
 
 #include "k3bmedium.h"
 #include <QtCore/QList>

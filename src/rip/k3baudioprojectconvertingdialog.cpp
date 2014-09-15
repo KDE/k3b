@@ -28,7 +28,7 @@
 #include "k3bglobals.h"
 #include "k3baudioencoder.h"
 
-#include <KComboBox>
+#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <QtCore/QDebug>
 #include <KIOCore/KIO/Global>
