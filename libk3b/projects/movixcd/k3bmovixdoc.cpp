@@ -23,9 +23,9 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QFileInfo>
+#include <QtWidgets/QInputDialog>
 #include <QtXml/QDomElement>
 
-#include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
@@ -85,9 +85,10 @@ void K3b::MovixDoc::addUrlsAt( const QList<QUrl>& urls, int pos )
 
         bool ok = true;
         while( ok && nameAlreadyInDir( newName, root() ) ) {
-            newName = KInputDialog::getText( i18n("Enter New Filename"),
+            newName = QInputDialog::getText( view(),
+                                             i18n("Enter New Filename"),
                                              i18n("A file with that name already exists. Please enter a new name:"),
-                                             newName, &ok, view() );
+                                             QLineEdit::Normal, newName, &ok );
         }
 
         if( ok ) {

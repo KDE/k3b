@@ -31,7 +31,7 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QItemSelectionModel>
 #include <QtWidgets/QLayout>
 #include <QtCore/QString>

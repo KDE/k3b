@@ -32,7 +32,7 @@
 #include <QtCore/QList>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QTimer>
-#include <QToolButton>
+#include <QtWidgets/QToolButton>
 
 
 

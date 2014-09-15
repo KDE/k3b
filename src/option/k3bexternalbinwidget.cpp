@@ -22,7 +22,7 @@
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QCursor>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QItemSelectionModel>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
@@ -30,7 +30,7 @@
 #include <QtGui/QPixmap>
 #include <QtWidgets/QPushButton>
 #include <QtCore/QStringList>
-#include <QTabWidget>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
 #include <QTreeView>
 #include <QVBoxLayout>

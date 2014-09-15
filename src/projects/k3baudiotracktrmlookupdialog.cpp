@@ -24,7 +24,6 @@
 
 #include <QtCore/QDebug>
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>

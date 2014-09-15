@@ -19,7 +19,7 @@
 #include "k3bglobalsettings.h"
 
 #include <QtCore/QFileInfo>
-#include <QGroupBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtCore/QTimer>

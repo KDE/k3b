@@ -30,11 +30,11 @@
 #include <QKeyEvent>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QMenu>
+#include <QtWidgets/QMenu>
 #include <QPoint>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
-#include <QToolButton>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
 
 #include <KConfigCore/KConfig>

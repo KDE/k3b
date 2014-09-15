@@ -22,7 +22,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
-#include <QToolButton>
+#include <QtWidgets/QToolButton>
 #include <QVBoxLayout>
 #include <QWidget>
 

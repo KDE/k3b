@@ -26,19 +26,18 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <KComboBox>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtWidgets/QApplication>
 #include <QtGui/QCursor>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
-#include <QGroupBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QInputDialog>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QToolButton>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
 
 #include <cstdlib>
@@ -625,15 +624,14 @@ void K3b::WriterSelectionWidget::slotManualSpeed()
     }
 
     bool ok = true;
-    int newSpeed = KInputDialog::getInteger( i18n("Set writing speed manually"),
+    int newSpeed = QInputDialog::getInteger( this,
+                                             i18n("Set writing speed manually"),
                                              s,
                                              writerDevice()->maxWriteSpeed()/speedFactor,
                                              1,
                                              10000,
                                              1,
-                                             10,
-                                             &ok,
-                                             this ) * speedFactor;
+                                             &ok ) * speedFactor;
     if( ok ) {
         writerDevice()->setMaxWriteSpeed( qMax( newSpeed, writerDevice()->maxWriteSpeed() ) );
         if ( haveSpeeds ) {

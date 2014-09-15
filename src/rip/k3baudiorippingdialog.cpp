@@ -44,22 +44,22 @@
 #include <QtCore/QDir>
 #include <QtGui/QFont>
 #include <QtWidgets/QGridLayout>
-#include <QGroupBox>
+#include <QtWidgets/QGroupBox>
 #include <QtCore/QHash>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtCore/QList>
 #include <QtWidgets/QMessageBox>
 #include <QPair>
 #include <QtWidgets/QPushButton>
-#include <QTabWidget>
-#include <QToolButton>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
-#include <QTreeWidget>
-#include <QSpinBox>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QSpinBox>
 #include <QtCore/QStringList>
-#include <QValidator>
+#include <QtGui/QValidator>
 #include <QVariant>
 
 

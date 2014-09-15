@@ -42,14 +42,14 @@
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
-#include <QGroupBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
-#include <QTabWidget>
-#include <QToolButton>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
 #include <QVariant>
 

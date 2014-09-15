@@ -22,12 +22,12 @@
 #include <KWidgetsAddons/KUrlLabel>
 
 #include <QtCore/QRegExp>
-#include <QValidator>
+#include <QtGui/QValidator>
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QGridLayout>
-#include <QWhatsThis>
+#include <QtWidgets/QWhatsThis>
 
 
 K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )

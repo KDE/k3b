@@ -24,7 +24,7 @@
 #include "k3bvalidators.h"
 
 #include <QtCore/QList>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>

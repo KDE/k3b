@@ -19,7 +19,7 @@
 #include "k3bmsfedit.h"
 
 #include <QtWidgets/QCheckBox>
-#include <QComboBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QLabel>
 #include <QVBoxLayout>
 

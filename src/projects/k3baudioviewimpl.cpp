@@ -46,7 +46,7 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QScrollBar>
 #include <QTreeView>
 

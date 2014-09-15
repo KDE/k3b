@@ -57,7 +57,7 @@
 #include <QKeyEvent>
 #include <QtWidgets/QLabel>
 #include <QtCore/QList>
-#include <QSpinBox>
+#include <QtWidgets/QSpinBox>
 #include <QTreeView>
 
 #include <libkcddb/genres.h>

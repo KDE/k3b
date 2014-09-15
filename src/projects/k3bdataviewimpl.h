@@ -19,9 +19,9 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QUrl>
 
-class KAction;
 class KActionCollection;
 class KMenu;
+class QAction;
 class QSortFilterProxyModel;
 class QTreeView;
 
@@ -79,15 +79,15 @@ namespace K3b {
         ViewColumnAdjuster* m_columnAdjuster;
 
         KMenu* m_popupMenu;
-        KAction* m_actionParentDir;
-        KAction* m_actionRemove;
-        KAction* m_actionRename;
-        KAction* m_actionNewDir;
-        KAction* m_actionProperties;
-        KAction* m_actionOpen;
-        KAction* m_actionImportSession;
-        KAction* m_actionClearSession;
-        KAction* m_actionEditBootImages;
+        QAction* m_actionParentDir;
+        QAction* m_actionRemove;
+        QAction* m_actionRename;
+        QAction* m_actionNewDir;
+        QAction* m_actionProperties;
+        QAction* m_actionOpen;
+        QAction* m_actionImportSession;
+        QAction* m_actionClearSession;
+        QAction* m_actionEditBootImages;
     };
 
 } // namespace K3b

@@ -24,7 +24,7 @@
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtWidgets/QCheckBox>
-#include <QComboBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>

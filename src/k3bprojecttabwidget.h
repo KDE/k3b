@@ -17,7 +17,7 @@
 #ifndef K3BPROJECTTABWIDGET_H
 #define K3BPROJECTTABWIDGET_H
 
-#include <QTabWidget>
+#include <QtWidgets/QTabWidget>
 
 class KAction;
 class KActionMenu;

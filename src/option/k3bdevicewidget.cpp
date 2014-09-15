@@ -27,18 +27,18 @@
 #include <KMessageWidget>
 #include <KIOCore/KIO/Global>
 
-#include <QColor>
+#include <QtGui/QColor>
 #include <QtCore/QFileInfo>
 #include <QtWidgets/QGridLayout>
-#include <QGroupBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLayout>
 #include <QtCore/QList>
 #include <QtWidgets/QPushButton>
 #include <QtCore/QString>
 #include <QtWidgets/QToolTip>
-#include <QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 #include <QVariant>
 #include <QVBoxLayout>
 

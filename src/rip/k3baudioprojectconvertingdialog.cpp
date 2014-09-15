@@ -39,12 +39,12 @@
 #include <QtWidgets/QCheckBox>
 #include <QtCore/QDir>
 #include <QtWidgets/QGridLayout>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtCore/QStringList>
-#include <QTabWidget>
-#include <QTreeWidget>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTreeWidget>
 
 #include <libkcddb/cdinfo.h>
 

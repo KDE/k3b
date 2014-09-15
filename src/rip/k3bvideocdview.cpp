@@ -47,11 +47,11 @@
 #include <QtGui/QCursor>
 #include <QtXml/QDomElement>
 #include <QtGui/QFont>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtCore/QList>
 #include <QtWidgets/QStyle>
-#include <QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 

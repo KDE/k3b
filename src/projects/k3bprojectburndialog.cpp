@@ -36,7 +36,7 @@
 #include <QtWidgets/QToolTip>
 
 #include <QtWidgets/QLayout>
-#include <QWhatsThis>
+#include <QtWidgets/QWhatsThis>
 #include <QtWidgets/QCheckBox>
 #include <qtabwidget.h>
 #include <QtWidgets/QGroupBox>

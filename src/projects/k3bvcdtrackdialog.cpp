@@ -29,22 +29,22 @@
 #include <KI18n/KLocalizedString>
 #include <KNumInput>
 #include <QtCore/QUrl>
-#include <KSqueezedTextLabel>
+#include <KDELibs4Support/KDE/KSqueezedTextLabel>
 
 // Qt Includes
 #include <QtWidgets/QCheckBox>
-#include <QComboBox>
+#include <QtWidgets/QComboBox>
 #include <QFormLayout>
 #include <QtWidgets/QGridLayout>
-#include <QGroupBox>
-#include <QHeaderView>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtCore/QList>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QRadioButton>
-#include <QTabWidget>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
 #include <QTreeView>
 #include <QVBoxLayout>

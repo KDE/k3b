@@ -24,7 +24,6 @@
 
 #include <KAction>
 #include <KXmlGui/KActionCollection>
-#include <KDELibs4Support/KDE/KInputDialog>
 #include <KIO/Job>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
@@ -33,6 +32,7 @@
 #include <Solid/Device>
 #include <Solid/StorageAccess>
 
+#include <QtWidgets/QInputDialog>
 
 class K3b::AppDeviceManager::Private
 {
@@ -285,7 +285,8 @@ void K3b::AppDeviceManager::setReadSpeed()
 {
     if( currentDevice() ) {
         bool ok = false;
-        int s = KInputDialog::getInteger( i18n("CD Read Speed"),
+        int s = QInputDialog::getInteger( nullptr,
+                                          i18n("CD Read Speed"),
                                           i18n("<p>Please enter the preferred read speed for <b>%1</b>. "
                                                "This speed will be used for the currently mounted "
                                                "medium."
@@ -299,9 +300,7 @@ void K3b::AppDeviceManager::setReadSpeed()
                                           1,
                                           currentDevice()->maxReadSpeed(),
                                           1,
-                                          10,
-                                          &ok,
-                                          0 );
+                                          &ok );
         if( ok ) {
             if( !currentDevice()->setSpeed( s*175, 0xFFFF ) )
                 KMessageBox::error( 0, i18n("Setting the read speed failed.") );

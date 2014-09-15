@@ -33,7 +33,7 @@
 #include <QtCore/QUrl>
 
 #include <QTreeView>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 
 
 K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )

@@ -33,22 +33,22 @@
 #include "k3bsignalwaiter.h"
 #include "k3bexternalbinmanager.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtWidgets/QGridLayout>
-#include <QProgressBar>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtCore/QList>
-
 #include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KSqueezedTextLabel>
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <QtCore/QUrl>
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <KSqueezedTextLabel>
+
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtCore/QList>
+#include <QtCore/QUrl>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QInputDialog>
 
 #include <unistd.h>
 
@@ -753,12 +753,15 @@ bool K3b::DataUrlAddingDialog::getNewName( const QString& oldName, K3b::DirItem*
     bool ok = true;
     newName = oldName;
     QValidator* validator = K3b::Validators::iso9660Validator( false, this );
+    int pos;
     do {
-        newName = KInputDialog::getText( i18n("Enter New Filename"),
+        newName = QInputDialog::getText( this,
+                                         i18n("Enter New Filename"),
                                          i18n("A file with that name already exists. Please enter a new name:"),
-                                         newName, &ok, this, validator );
+                                         QLineEdit::Normal,
+                                         newName, &ok );
 
-    } while( ok && dir->find( newName ) );
+    } while( ok && validator->validate( newName, pos ) == QValidator::Acceptable && dir->find( newName ) );
 
     delete validator;
 

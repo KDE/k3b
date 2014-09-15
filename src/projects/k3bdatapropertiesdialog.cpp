@@ -24,7 +24,7 @@
 #include <KLineEdit>
 #include <KI18n/KLocalizedString>
 #include <QtCore/QUrl>
-#include <KSqueezedTextLabel>
+#include <KDELibs4Support/KDE/KSqueezedTextLabel>
 
 #include <QtWidgets/QCheckBox>
 #include <QtCore/QFileInfo>
@@ -32,9 +32,9 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QTabWidget>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
-#include <QValidator>
+#include <QtGui/QValidator>
 
 
 K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )

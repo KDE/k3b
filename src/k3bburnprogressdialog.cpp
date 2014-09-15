@@ -27,7 +27,7 @@
 #include <QtCore/QLocale>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
-#include <QProgressBar>
+#include <QtWidgets/QProgressBar>
 
 
 K3b::BurnProgressDialog::BurnProgressDialog( QWidget *parent, bool showSubProgress )

@@ -35,7 +35,7 @@
 #include <QtCore/QUrl>
 
 #include <QtCore/QList>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QItemSelectionModel>
 #include <QTreeView>
 

@@ -45,7 +45,7 @@
 #include <KDELibs4Support/KDE/KPushButton>
 #include <KProgressDialog>
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <KSqueezedTextLabel>
+#include <KDELibs4Support/KDE/KSqueezedTextLabel>
 
 #include <QtGui/QCloseEvent>
 #include <QtCore/QDateTime>
@@ -59,7 +59,7 @@
 #include <QScrollBar>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
-#include <QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 #include <QVBoxLayout>
 
 

@@ -28,17 +28,16 @@
 #include "k3bviewcolumnadjuster.h"
 #include "k3bvolumenamewidget.h"
 
-#include <KAction>
-#include <KXmlGui/KActionCollection>
 #include <KFileItemDelegate>
-#include <KDELibs4Support/KDE/KInputDialog>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KMenu>
-#include <KRun>
+#include <KIOWidgets/KRun>
+#include <KXmlGui/KActionCollection>
 
-#include <QShortcut>
-#include <QSortFilterProxyModel>
-#include <QWidgetAction>
+#include <QtCore/QSortFilterProxyModel>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QWidgetAction>
+#include <QtWidgets/QShortcut>
 
 
 namespace {
@@ -107,51 +106,51 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_columnAdjuster->addFixedColumn( DataProjectModel::SizeColumn );
     m_columnAdjuster->setColumnMargin( DataProjectModel::SizeColumn, 10 );
 
-    m_actionNewDir = new KAction( QIcon::fromTheme( "folder-new" ), i18n("New Folder..."), m_fileView );
+    m_actionNewDir = new QAction( QIcon::fromTheme( "folder-new" ), i18n("New Folder..."), m_fileView );
     m_actionNewDir->setShortcut( Qt::CTRL + Qt::Key_N );
     m_actionNewDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "new_dir", m_actionNewDir );
     connect( m_actionNewDir, SIGNAL(triggered(bool)), this, SLOT(slotNewDir()) );
 
-    m_actionRemove = new KAction( QIcon::fromTheme( "edit-delete" ), i18n("Remove"), m_fileView );
+    m_actionRemove = new QAction( QIcon::fromTheme( "edit-delete" ), i18n("Remove"), m_fileView );
     m_actionRemove->setShortcut( Qt::Key_Delete );
     m_actionRemove->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "remove", m_actionRemove );
     connect( m_actionRemove, SIGNAL(triggered(bool)), this, SLOT(slotRemove()) );
 
-    m_actionRename = new KAction( QIcon::fromTheme( "edit-rename" ), i18n("Rename"), m_fileView );
+    m_actionRename = new QAction( QIcon::fromTheme( "edit-rename" ), i18n("Rename"), m_fileView );
     m_actionRename->setShortcut( Qt::Key_F2 );
     m_actionRename->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "rename", m_actionRename );
     connect( m_actionRename, SIGNAL(triggered(bool)), this, SLOT(slotRename()) );
 
-    m_actionParentDir = new KAction( QIcon::fromTheme( "go-up" ), i18n("Parent Folder"), m_fileView );
+    m_actionParentDir = new QAction( QIcon::fromTheme( "go-up" ), i18n("Parent Folder"), m_fileView );
     m_actionParentDir->setShortcut( Qt::Key_Backspace );
     m_actionParentDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "parent_dir", m_actionParentDir );
 
-    m_actionProperties = new KAction( QIcon::fromTheme( "document-properties" ), i18n("Properties"), m_fileView );
+    m_actionProperties = new QAction( QIcon::fromTheme( "document-properties" ), i18n("Properties"), m_fileView );
     m_actionProperties->setShortcut( Qt::ALT + Qt::Key_Return );
     m_actionProperties->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "properties", m_actionProperties );
     connect( m_actionProperties, SIGNAL(triggered(bool)), this, SLOT(slotProperties()) );
 
-    m_actionOpen = new KAction( QIcon::fromTheme( "document-open" ), i18n("Open"), m_view );
+    m_actionOpen = new QAction( QIcon::fromTheme( "document-open" ), i18n("Open"), m_view );
     actionCollection->addAction( "open", m_actionOpen );
     connect( m_actionOpen, SIGNAL(triggered(bool)), this, SLOT(slotOpen()) );
 
-    m_actionImportSession = new KAction( QIcon::fromTheme( "document-import" ), i18n("&Import Session..."), m_view );
+    m_actionImportSession = new QAction( QIcon::fromTheme( "document-import" ), i18n("&Import Session..."), m_view );
     m_actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
     actionCollection->addAction( "project_data_import_session", m_actionImportSession );
     connect( m_actionImportSession, SIGNAL(triggered(bool)), this, SLOT(slotImportSession()) );
 
-    m_actionClearSession = new KAction( QIcon::fromTheme( "edit-clear" ), i18n("&Clear Imported Session"), m_view );
+    m_actionClearSession = new QAction( QIcon::fromTheme( "edit-clear" ), i18n("&Clear Imported Session"), m_view );
     m_actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
     m_actionClearSession->setEnabled( m_doc->importedSession() > -1 );
     actionCollection->addAction( "project_data_clear_imported_session", m_actionClearSession );
     connect( m_actionClearSession, SIGNAL(triggered(bool)), this, SLOT(slotClearImportedSession()) );
 
-    m_actionEditBootImages = new KAction( QIcon::fromTheme( "document-properties" ), i18n("&Edit Boot Images..."), m_view );
+    m_actionEditBootImages = new QAction( QIcon::fromTheme( "document-properties" ), i18n("&Edit Boot Images..."), m_view );
     m_actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
     actionCollection->addAction( "project_data_edit_boot_images", m_actionEditBootImages );
     connect( m_actionEditBootImages, SIGNAL(triggered(bool)), this, SLOT(slotEditBootImages()) );
@@ -214,15 +213,21 @@ void K3b::DataViewImpl::slotNewDir()
     QString name;
     bool ok;
 
-    name = KInputDialog::getText( i18n("New Folder"),
-                                i18n("Please insert the name for the new folder:"),
-                                i18n("New Folder"), &ok, m_view );
+    name = QInputDialog::getText( m_view,
+                                  i18n("New Folder"),
+                                  i18n("Please insert the name for the new folder:"),
+                                  QLineEdit::Normal,
+                                  i18n("New Folder"),
+                                  &ok );
 
     while( ok && DataDoc::nameAlreadyInDir( name, parentDir ) ) {
-        name = KInputDialog::getText( i18n("New Folder"),
-                                    i18n("A file with that name already exists. "
-                                        "Please insert the name for the new folder:"),
-                                    i18n("New Folder"), &ok, m_view );
+        name = QInputDialog::getText( m_view,
+                                      i18n("New Folder"),
+                                      i18n("A file with that name already exists. "
+                                           "Please insert the name for the new folder:"),
+                                      QLineEdit::Normal,
+                                      i18n("New Folder"),
+                                      &ok );
     }
 
     if( !ok )

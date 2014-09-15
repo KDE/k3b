@@ -16,7 +16,7 @@
 #define FLATBUTTON_H
 
 #include <QAbstractButton>
-#include <QColor>
+#include <QtGui/QColor>
 
 class QEvent;
 class QMouseEvent;

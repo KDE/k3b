@@ -19,7 +19,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtCore/QMap>
-#include <QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 #include <QVBoxLayout>
 
 #include <KIconThemes/KIconLoader>

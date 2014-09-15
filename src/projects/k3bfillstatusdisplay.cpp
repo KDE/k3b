@@ -25,36 +25,36 @@
 #include "k3bmediacache.h"
 #include "k3baction.h"
 
-#include <QtCore/QLocale>
-#include <QBrush>
-#include <QColor>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
+
+#include <QtCore/QDebug>
 #include <QtCore/QEvent>
+#include <QtCore/QLocale>
+#include <QtCore/QRect>
+#include <QtCore/QTimer>
+#include <QtGui/QBrush>
+#include <QtGui/QColor>
 #include <QtGui/QFont>
 #include <QtGui/QFontMetrics>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QHBoxLayout>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPixmap>
-#include <QRect>
+#include <QtGui/QValidator>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QStyle>
-#include <QtCore/QTimer>
-#include <QToolButton>
+#include <QtWidgets/QStyleOptionProgressBarV2>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
-#include <QValidator>
-#include <QWhatsThis>
-
-#include <KConfigWidgets/KColorScheme>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KInputDialog>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KMenu>
-#include <KWidgetsAddons/KMessageBox>
-#include <QStyleOptionProgressBarV2>
+#include <QtWidgets/QWhatsThis>
 
 
 class K3b::FillStatusDisplayWidget::Private
@@ -296,7 +296,7 @@ public:
     QAction* actionSaveUserDefaults;
     QAction* actionLoadUserDefaults;
 
-    KMenu* popup;
+    QMenu* popup;
 
     QToolButton* buttonMenu;
 
@@ -402,7 +402,7 @@ void K3b::FillStatusDisplay::setupPopupMenu()
     d->actionCollection = new KActionCollection( this );
 
     // we use a nother popup for the dvd sizes
-    d->popup = new KMenu( this );
+    d->popup = new QMenu( this );
 
     d->actionShowMinutes = K3b::createToggleAction( this, i18n("Minutes"), 0, 0, this, SLOT(showTime()),
                                                     d->actionCollection, "fillstatus_show_minutes" );
@@ -458,25 +458,25 @@ void K3b::FillStatusDisplay::setupPopupMenu()
                                                     this, SLOT(slotWhy44()),
                                                     d->actionCollection, "why_44_gb" );
 
-    d->popup->addTitle( i18n("Show Size In") );
+    d->popup->addSection( i18n("Show Size In") );
     d->popup->addAction( d->actionShowMinutes );
     d->popup->addAction( d->actionShowMegs );
     d->popup->addSeparator();
     d->popup->addAction( d->actionAuto );
     if ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_CD_ALL ) {
-        d->popup->addTitle( i18n("CD Size") );
+        d->popup->addSection( i18n("CD Size") );
         d->popup->addAction( d->action74Min );
         d->popup->addAction( d->action80Min );
         d->popup->addAction( d->action100Min );
     }
     if ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_DVD_ALL ) {
-        d->popup->addTitle( i18n("DVD Size") );
+        d->popup->addSection( i18n("DVD Size") );
         d->popup->addAction( dvdSizeInfoAction );
         d->popup->addAction( d->actionDvd4_7GB );
         d->popup->addAction( d->actionDvdDoubleLayer );
     }
     if ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_BD_ALL ) {
-        d->popup->addTitle( i18n("Blu-ray Size") );
+        d->popup->addSection( i18n("Blu-ray Size") );
         d->popup->addAction( d->actionBD25 );
         d->popup->addAction( d->actionBD50 );
     }
@@ -596,16 +596,19 @@ void K3b::FillStatusDisplay::slotCustomSize()
     }
 
     QRegExp rx( QString("(\\d+\\") + locale.decimalPoint() + "?\\d*)(" + gbS + '|' + mbS + '|' + minS + ")?" );
+    QRegExpValidator validator( rx, this );
     bool ok;
-    QString size = KInputDialog::getText( i18n("Custom Size"),
+    QString size = QInputDialog::getText( this,
+                                          i18n("Custom Size"),
                                           i18n("<p>Please specify the size of the medium. Use suffixes <b>GB</b>,<b>MB</b>, "
                                                "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</em>"
                                                " respectively."),
+                                          QLineEdit::Normal,
                                           defaultCustom,
-                                          &ok,
-                                          this,
-                                          new QRegExpValidator( rx, this ) );
-    if( ok ) {
+                                          &ok );
+
+    int validatorPos;
+    if( ok && validator.validate( size, validatorPos ) ) {
         // determine size
         if( rx.exactMatch( size ) ) {
             QString valStr = rx.cap(1);

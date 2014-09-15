@@ -19,13 +19,13 @@
 #include "k3bintmapcombobox.h"
 
 #include <QtWidgets/QCheckBox>
-#include <QComboBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QSpinBox>
+#include <QtWidgets/QSpinBox>
 #include <QtCore/QTimer>
-#include <QWhatsThis>
+#include <QtWidgets/QWhatsThis>
 
 #include <KConfigWidgets/KColorScheme>
 #include <KDELibs4Support/KDE/KDialog>

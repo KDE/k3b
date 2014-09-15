@@ -46,7 +46,6 @@
 #include <KConfigCore/KSharedConfig>
 #include <KConfigWidgets/KColorScheme>
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KInputDialog>
 #include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
@@ -54,31 +53,32 @@
 #include <QtCore/QUrl>
 #include <KIOWidgets/KUrlRequester>
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QCheckBox>
-#include <QClipboard>
-#include <QComboBox>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
-#include <QtWidgets/QGridLayout>
-#include <QGroupBox>
-#include <QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include <QMenu>
-#include <QProgressBar>
-#include <QtWidgets/QPushButton>
-#include <QSpinBox>
-#include <QTabWidget>
-#include <QtWidgets/QToolTip>
-#include <QTreeWidget>
 #include <QtCore/QMimeData>
+#include <QtGui/QClipboard>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDropEvent>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QTreeWidget>
 
 namespace {
 
@@ -1078,11 +1078,12 @@ void K3b::ImageWritingDialog::slotContextMenuRequested( const QPoint& pos )
 
     if( act == compareItem ) {
         bool ok;
-        QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
+        QString md5sumToCompare = QInputDialog::getText( this,
+                                                         i18n("MD5 Sum Check"),
                                                          i18n("Please insert the MD5 Sum to compare:"),
+                                                         QLineEdit::Normal,
                                                          QString(),
-                                                         &ok,
-                                                         this );
+                                                         &ok );
         if( ok ) {
             if( md5sumToCompare.toLower().toUtf8() == d->md5Job->hexDigest().toLower() )
                 KMessageBox::information( this, i18n("The MD5 Sum of %1 equals that specified.",d->imagePath()),

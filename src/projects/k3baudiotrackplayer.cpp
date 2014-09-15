@@ -30,7 +30,7 @@
 #include <QAudioOutput>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QToolTip>
-#include <QWidgetAction>
+#include <QtWidgets/QWidgetAction>
 
 
 namespace K3b {

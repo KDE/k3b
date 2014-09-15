@@ -37,11 +37,11 @@
 #include <QtWidgets/QCheckBox>
 #include <QtGui/QFontMetrics>
 #include <QtWidgets/QHBoxLayout>
-#include <QHeaderView>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLayout>
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include <QSpinBox>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStyle>
 #include <QtCore/QVector>
 
