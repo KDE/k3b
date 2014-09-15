@@ -22,7 +22,7 @@
 #include "k3bdataviewimpl.h"
 #include "k3bdirproxymodel.h"
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <QtCore/QDebug>
 #include <KWidgetsAddons/KMessageBox>

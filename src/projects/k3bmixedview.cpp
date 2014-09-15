@@ -31,7 +31,7 @@
 #include "k3baudiotrackplayer.h"
 #endif // ENABLE_AUDIO_PLAYER
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>

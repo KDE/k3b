@@ -32,7 +32,7 @@
 #include <KCoreAddons/KAboutData>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
-#include <KDELibs4Support/KDE/KAction>
+#include <QtWidgets/QAction>
 #include <KDELibs4Support/KDE/KHBox>
 #include <KI18n/KLocalizedString>
 

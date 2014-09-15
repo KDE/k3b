@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 
 // include files for KDE
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <QtCore/QDebug>
@@ -51,10 +51,10 @@ K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     m_layout->setSpacing( 0 );
     m_layout->setContentsMargins( 0, 0, 0, 0 );
 
-    KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
+    QAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
                                             actionCollection(), "project_burn");
     burnAction->setToolTip( i18n("Open the burn dialog for the current project") );
-    KAction* propAction = K3b::createAction(this, i18n("&Properties"), "document-properties", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
+    QAction* propAction = K3b::createAction(this, i18n("&Properties"), "document-properties", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
                                             actionCollection(), "project_properties");
     propAction->setToolTip( i18n("Open the properties dialog") );
 
@@ -123,7 +123,7 @@ QList<QAction*> K3b::View::createPluginsActions( Doc::Type docType )
     Q_FOREACH( Plugin* plugin, k3bcore->pluginManager()->plugins( "ProjectPlugin" ) ) {
         ProjectPlugin* pp = dynamic_cast<ProjectPlugin*>( plugin );
         if( pp && pp->type().testFlag( docType) ) {
-            QAction* action = new KAction( pp->icon(), pp->text(), this );
+            QAction* action = new QAction( pp->icon(), pp->text(), this );
             action->setToolTip( pp->toolTip() );
             action->setWhatsThis( pp->whatsThis() );
             connect( action, SIGNAL(triggered(bool)),

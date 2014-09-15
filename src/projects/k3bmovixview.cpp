@@ -26,7 +26,7 @@
 #include "k3baction.h"
 #include "k3bvolumenamewidget.h"
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <QtCore/QDebug>
 #include <QtWidgets/QFileDialog>
 #include <KI18n/KLocalizedString>

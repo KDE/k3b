@@ -30,7 +30,7 @@
 
 
 // kde includes
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <QtCore/QDebug>
@@ -369,27 +369,27 @@ void K3b::VideoCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
 
-    KAction *actionCheckAll = new KAction(i18n("Check All"), this);
+    QAction *actionCheckAll = new QAction(i18n("Check All"), this);
     d->actionCollection->addAction("check_all", actionCheckAll);
     connect(actionCheckAll, SIGNAL(triggered(bool)), this, SLOT(slotCheckAll()));
 
-    KAction *actionUncheckAll = new KAction(i18n("Uncheck All"), this);
+    QAction *actionUncheckAll = new QAction(i18n("Uncheck All"), this);
     d->actionCollection->addAction("decheck_all", actionUncheckAll);
     connect(actionUncheckAll, SIGNAL(triggered(bool)), this, SLOT(slotUncheckAll()));
 
-    KAction *actionCheckTrack = new KAction(i18n("Check Track"), this);
+    QAction *actionCheckTrack = new QAction(i18n("Check Track"), this);
     d->actionCollection->addAction("check_track", actionCheckTrack);
     connect(actionCheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotCheck()));
 
-    KAction *actionUncheckTrack = new KAction(i18n("Uncheck Track"), this);
+    QAction *actionUncheckTrack = new QAction(i18n("Uncheck Track"), this);
     d->actionCollection->addAction("decheck_track", actionUncheckTrack);
     connect(actionUncheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotUncheck()));
 
-    KAction *actionStartRipping = new KAction(QIcon::fromTheme("tools-rip-video-cd"), i18n("Start Ripping"), this);
+    QAction *actionStartRipping = new QAction(QIcon::fromTheme("tools-rip-video-cd"), i18n("Start Ripping"), this);
     d->actionCollection->addAction("start_rip", actionStartRipping);
     connect(actionStartRipping, SIGNAL(triggered(bool)), this, SLOT(startRip()));
 
-    KAction* actionShowDataPart = new KAction(QIcon::fromTheme("media-optical-data"), i18n("View Files"), this);
+    QAction* actionShowDataPart = new QAction(QIcon::fromTheme("media-optical-data"), i18n("View Files"), this);
     actionShowDataPart->setToolTip(i18n("View plain data files"));
     actionShowDataPart->setStatusTip(actionShowDataPart->toolTip());
     d->actionCollection->addAction("view_files", actionShowDataPart);

@@ -20,7 +20,7 @@
 #include "k3bmsfedit.h"
 
 #include <KXmlGui/KActionCollection>
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KMenu>
 
@@ -97,11 +97,11 @@ void K3b::AudioTrackSplitDialog::setupActions()
 {
     m_popupMenu = new KMenu( this );
 
-    KAction* actionSplitHere = new KAction( this );
+    QAction* actionSplitHere = new QAction( this );
     actionSplitHere->setText( i18n("Split Here") );
     connect( actionSplitHere, SIGNAL(triggered()), this, SLOT(slotSplitHere()) );
 
-    KAction* actionRemoveRange = new KAction( this );
+    QAction* actionRemoveRange = new QAction( this );
     actionRemoveRange->setText( i18n("Remove part") );
     connect( actionRemoveRange, SIGNAL(triggered()), this, SLOT(slotRemoveRange()) );
 

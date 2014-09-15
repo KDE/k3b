@@ -22,7 +22,7 @@
 
 #include <QtCore/QDir>
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <KBookmarkMenu>

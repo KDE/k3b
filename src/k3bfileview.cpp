@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <KDirLister>
@@ -47,7 +47,7 @@ public:
     KToolBar* toolBox;
     DirOperator* dirOp;
     KFileFilterCombo* filterWidget;
-    KAction* actionShowBookmarks;
+    QAction* actionShowBookmarks;
 };
 
 
@@ -88,7 +88,7 @@ K3b::FileView::FileView(QWidget *parent )
     filter += '\n' + i18n("video/mpeg |MPEG Video Files");
     d->filterWidget->setFilter(filter);
 
-    d->actionShowBookmarks = new KAction( i18n("Show Bookmarks"), d->toolBox );
+    d->actionShowBookmarks = new QAction( i18n("Show Bookmarks"), d->toolBox );
     d->actionShowBookmarks->setCheckable( true );
 
     KActionMenu* actionOptions = new KActionMenu( QIcon::fromTheme("configure"), i18n("Options"), d->toolBox );

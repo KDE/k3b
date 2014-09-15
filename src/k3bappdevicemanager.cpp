@@ -22,7 +22,7 @@
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <KIO/Job>
 #include <KI18n/KLocalizedString>
@@ -37,12 +37,12 @@
 class K3b::AppDeviceManager::Private
 {
 public:
-    KAction* actionDiskInfo;
-    KAction* actionUnmount;
-    KAction* actionMount;
-    KAction* actionEject;
-    KAction* actionLoad;
-    KAction* actionSetReadSpeed;
+    QAction* actionDiskInfo;
+    QAction* actionUnmount;
+    QAction* actionMount;
+    QAction* actionEject;
+    QAction* actionLoad;
+    QAction* actionSetReadSpeed;
 
     K3b::Device::Device* currentDevice;
 };
@@ -62,9 +62,9 @@ K3b::AppDeviceManager::AppDeviceManager( QObject* parent )
                                       actionCollection(), "device_eject");
     d->actionLoad = K3b::createAction(this, i18n("L&oad"), 0, 0, this, SLOT(loadDisk()),
                                      actionCollection(), "device_load");
-//   KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
+//   QAction* actionUnlock = new QAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
 // 				       actionCollection(), "device_unlock" );
-//   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
+//   QAction* actionlock = new QAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
 // 				     actionCollection(), "device_lock" );
     d->actionSetReadSpeed = K3b::createAction(this, i18n("Set Read Speed..."), 0, 0, this, SLOT(setReadSpeed()),
                                              actionCollection(), "device_set_read_speed" );

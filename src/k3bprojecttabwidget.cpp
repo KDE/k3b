@@ -22,7 +22,7 @@
 #include "k3bview.h"
 #include "k3bdoc.h"
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KActionMenu>
 #include <QtCore/QDebug>
 #include <QtGui/QIcon>

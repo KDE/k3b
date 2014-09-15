@@ -19,7 +19,7 @@
 
 #include <QtWidgets/QTabWidget>
 
-class KAction;
+class QAction;
 class KActionMenu;
 namespace K3b {
     class Doc;

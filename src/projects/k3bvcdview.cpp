@@ -25,7 +25,7 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KApplication>
 #include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>

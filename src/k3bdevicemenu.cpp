@@ -25,7 +25,7 @@
 #include "k3bmediacache.h"
 #include "k3bdevicehandler.h"
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <KI18n/KLocalizedString>
 #include <QtGui/QIcon>

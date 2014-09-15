@@ -66,7 +66,7 @@
 
 // include files for KDE
 #include <kaboutdata.h>
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KXmlGui/KActionCollection>
 #include <KActionMenu>
 #include <KConfigCore/KConfig>
@@ -200,7 +200,7 @@ public:
     ProjectTabWidget* documentTab;
 
     // project actions
-    QList<KAction*> dataProjectActions;
+    QList<QAction*> dataProjectActions;
 
     // The K3b-specific widgets
     DirView* dirView;
@@ -307,7 +307,7 @@ void K3b::MainWindow::initActions()
     d->actionFileSaveAs->setToolTip( i18n( "Saves the current project to a new url" ) );
     d->actionFileSaveAs->setStatusTip( d->actionFileSaveAs->toolTip() );
 
-    KAction* actionFileSaveAll = new KAction( QIcon::fromTheme( "document-save-all" ), i18n("Save All"), this );
+    QAction* actionFileSaveAll = new QAction( QIcon::fromTheme( "document-save-all" ), i18n("Save All"), this );
     actionFileSaveAll->setToolTip( i18n( "Saves all open projects" ) );
     actionFileSaveAll->setStatusTip( actionFileSaveAll->toolTip() );
     actionCollection()->addAction( "file_save_all", actionFileSaveAll );
@@ -317,7 +317,7 @@ void K3b::MainWindow::initActions()
     d->actionFileClose->setToolTip(i18n("Closes the current project"));
     d->actionFileClose->setStatusTip( d->actionFileClose->toolTip() );
 
-    KAction* actionFileCloseAll = new KAction( i18n("Close All"), this );
+    QAction* actionFileCloseAll = new QAction( i18n("Close All"), this );
     actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
     actionFileCloseAll->setStatusTip( actionFileCloseAll->toolTip() );
     actionCollection()->addAction( "file_close_all", actionFileCloseAll );
@@ -327,43 +327,43 @@ void K3b::MainWindow::initActions()
     actionFileQuit->setToolTip(i18n("Quits the application"));
     actionFileQuit->setStatusTip( actionFileQuit->toolTip() );
 
-    KAction* actionFileNewAudio = new KAction( QIcon::fromTheme( "media-optical-audio" ), i18n("New &Audio CD Project"), this );
+    QAction* actionFileNewAudio = new QAction( QIcon::fromTheme( "media-optical-audio" ), i18n("New &Audio CD Project"), this );
     actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
     actionFileNewAudio->setStatusTip( actionFileNewAudio->toolTip() );
     actionCollection()->addAction( "file_new_audio", actionFileNewAudio );
     connect( actionFileNewAudio, SIGNAL(triggered(bool)), this, SLOT(slotNewAudioDoc()) );
 
-    KAction* actionFileNewData = new KAction( QIcon::fromTheme( "media-optical-data" ), i18n("New &Data Project"), this );
+    QAction* actionFileNewData = new QAction( QIcon::fromTheme( "media-optical-data" ), i18n("New &Data Project"), this );
     actionFileNewData->setToolTip( i18n("Creates a new data project") );
     actionFileNewData->setStatusTip( actionFileNewData->toolTip() );
     actionCollection()->addAction( "file_new_data", actionFileNewData );
     connect( actionFileNewData, SIGNAL(triggered(bool)), this, SLOT(slotNewDataDoc()) );
 
-    KAction* actionFileNewMixed = new KAction( QIcon::fromTheme( "media-optical-mixed-cd" ), i18n("New &Mixed Mode CD Project"), this );
+    QAction* actionFileNewMixed = new QAction( QIcon::fromTheme( "media-optical-mixed-cd" ), i18n("New &Mixed Mode CD Project"), this );
     actionFileNewMixed->setToolTip( i18n("Creates a new mixed audio/data CD project") );
     actionFileNewMixed->setStatusTip( actionFileNewMixed->toolTip() );
     actionCollection()->addAction( "file_new_mixed", actionFileNewMixed );
     connect( actionFileNewMixed, SIGNAL(triggered(bool)), this, SLOT(slotNewMixedDoc()) );
 
-    KAction* actionFileNewVcd = new KAction( QIcon::fromTheme( "media-optical-cd-video" ), i18n("New &Video CD Project"), this );
+    QAction* actionFileNewVcd = new QAction( QIcon::fromTheme( "media-optical-cd-video" ), i18n("New &Video CD Project"), this );
     actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
     actionFileNewVcd->setStatusTip( actionFileNewVcd->toolTip() );
     actionCollection()->addAction( "file_new_vcd", actionFileNewVcd );
     connect( actionFileNewVcd, SIGNAL(triggered(bool)), this, SLOT(slotNewVcdDoc()) );
 
-    KAction* actionFileNewMovix = new KAction( QIcon::fromTheme( "media-optical-video" ), i18n("New &eMovix Project"), this );
+    QAction* actionFileNewMovix = new QAction( QIcon::fromTheme( "media-optical-video" ), i18n("New &eMovix Project"), this );
     actionFileNewMovix->setToolTip( i18n("Creates a new eMovix project") );
     actionFileNewMovix->setStatusTip( actionFileNewMovix->toolTip() );
     actionCollection()->addAction( "file_new_movix", actionFileNewMovix );
     connect( actionFileNewMovix, SIGNAL(triggered(bool)), this, SLOT(slotNewMovixDoc()) );
 
-    KAction* actionFileNewVideoDvd = new KAction( QIcon::fromTheme( "media-optical-dvd-video" ), i18n("New V&ideo DVD Project"), this );
+    QAction* actionFileNewVideoDvd = new QAction( QIcon::fromTheme( "media-optical-dvd-video" ), i18n("New V&ideo DVD Project"), this );
     actionFileNewVideoDvd->setToolTip( i18n("Creates a new Video DVD project") );
     actionFileNewVideoDvd->setStatusTip( actionFileNewVideoDvd->toolTip() );
     actionCollection()->addAction( "file_new_video_dvd", actionFileNewVideoDvd );
     connect( actionFileNewVideoDvd, SIGNAL(triggered(bool)), this, SLOT(slotNewVideoDvdDoc()) );
 
-    KAction* actionFileContinueMultisession = new KAction( QIcon::fromTheme( "media-optical-data" ), i18n("Continue Multisession Project"), this );
+    QAction* actionFileContinueMultisession = new QAction( QIcon::fromTheme( "media-optical-data" ), i18n("Continue Multisession Project"), this );
     actionFileContinueMultisession->setToolTip( i18n( "Continues multisession project" ) );
     actionFileContinueMultisession->setStatusTip( actionFileContinueMultisession->toolTip() );
     actionCollection()->addAction( "file_continue_multisession", actionFileContinueMultisession );
@@ -386,51 +386,51 @@ void K3b::MainWindow::initActions()
     actionFileNewMenu->addAction( actionFileNewMovix );
     actionCollection()->addAction( "file_new", actionFileNewMenu );
 
-    KAction* actionProjectAddFiles = new KAction( QIcon::fromTheme( "document-open" ), i18n("&Add Files..."), this );
+    QAction* actionProjectAddFiles = new QAction( QIcon::fromTheme( "document-open" ), i18n("&Add Files..."), this );
     actionProjectAddFiles->setToolTip( i18n("Add files to the current project") );
     actionProjectAddFiles->setStatusTip( actionProjectAddFiles->toolTip() );
     actionCollection()->addAction( "project_add_files", actionProjectAddFiles );
     connect( actionProjectAddFiles, SIGNAL(triggered(bool)), this, SLOT(slotProjectAddFiles()) );
 
-    KAction* actionClearProject = new KAction( QIcon::fromTheme( QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr" ), i18n("&Clear Project"), this );
+    QAction* actionClearProject = new QAction( QIcon::fromTheme( QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr" ), i18n("&Clear Project"), this );
     actionClearProject->setToolTip( i18n("Clear the current project") );
     actionClearProject->setStatusTip( actionClearProject->toolTip() );
     actionCollection()->addAction( "project_clear_project", actionClearProject );
     connect( actionClearProject, SIGNAL(triggered(bool)), this, SLOT(slotClearProject()) );
 
-    KAction* actionToolsFormatMedium = new KAction( QIcon::fromTheme( "tools-media-optical-format" ), i18n("&Format/Erase rewritable disk..."), this );
+    QAction* actionToolsFormatMedium = new QAction( QIcon::fromTheme( "tools-media-optical-format" ), i18n("&Format/Erase rewritable disk..."), this );
     actionToolsFormatMedium->setIconText( i18n( "Format" ) );
     actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
     actionToolsFormatMedium->setStatusTip( actionToolsFormatMedium->toolTip() );
     actionCollection()->addAction( "tools_format_medium", actionToolsFormatMedium );
     connect( actionToolsFormatMedium, SIGNAL(triggered(bool)), this, SLOT(slotFormatMedium()) );
 
-    KAction* actionToolsWriteImage = new KAction( QIcon::fromTheme( "tools-media-optical-burn-image" ), i18n("&Burn Image..."), this );
+    QAction* actionToolsWriteImage = new QAction( QIcon::fromTheme( "tools-media-optical-burn-image" ), i18n("&Burn Image..."), this );
     actionToolsWriteImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to an optical disc") );
     actionToolsWriteImage->setStatusTip( actionToolsWriteImage->toolTip() );
     actionCollection()->addAction( "tools_write_image", actionToolsWriteImage );
     connect( actionToolsWriteImage, SIGNAL(triggered(bool)), this, SLOT(slotWriteImage()) );
 
-    KAction* actionToolsMediaCopy = new KAction( QIcon::fromTheme( "tools-media-optical-copy" ), i18n("Copy &Medium..."), this );
+    QAction* actionToolsMediaCopy = new QAction( QIcon::fromTheme( "tools-media-optical-copy" ), i18n("Copy &Medium..."), this );
     actionToolsMediaCopy->setIconText( i18n( "Copy" ) );
     actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
     actionToolsMediaCopy->setStatusTip( actionToolsMediaCopy->toolTip() );
     actionCollection()->addAction( "tools_copy_medium", actionToolsMediaCopy );
     connect( actionToolsMediaCopy, SIGNAL(triggered(bool)), this, SLOT(slotMediaCopy()) );
 
-    KAction* actionToolsCddaRip = new KAction( QIcon::fromTheme( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), this );
+    QAction* actionToolsCddaRip = new QAction( QIcon::fromTheme( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), this );
     actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
     actionToolsCddaRip->setStatusTip( actionToolsCddaRip->toolTip() );
     actionCollection()->addAction( "tools_cdda_rip", actionToolsCddaRip );
     connect( actionToolsCddaRip, SIGNAL(triggered(bool)), this, SLOT(slotCddaRip()) );
 
-    KAction* actionToolsVideoDvdRip = new KAction( QIcon::fromTheme( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), this );
+    QAction* actionToolsVideoDvdRip = new QAction( QIcon::fromTheme( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), this );
     actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
     actionToolsVideoDvdRip->setStatusTip( actionToolsVideoDvdRip->toolTip() );
     connect( actionToolsVideoDvdRip, SIGNAL(triggered(bool)), this, SLOT(slotVideoDvdRip()) );
     actionCollection()->addAction( "tools_videodvd_rip", actionToolsVideoDvdRip );
 
-    KAction* actionToolsVideoCdRip = new KAction( QIcon::fromTheme( "tools-rip-video-cd" ), i18n("Rip Video CD..."), this );
+    QAction* actionToolsVideoCdRip = new QAction( QIcon::fromTheme( "tools-rip-video-cd" ), i18n("Rip Video CD..."), this );
     actionToolsVideoCdRip->setToolTip( i18n("Extract tracks from a Video CD") );
     actionToolsVideoCdRip->setStatusTip( actionToolsVideoCdRip->toolTip() );
     actionCollection()->addAction( "tools_videocd_rip", actionToolsVideoCdRip );
@@ -451,7 +451,7 @@ void K3b::MainWindow::initActions()
     actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
     actionSettingsConfigure->setStatusTip( actionSettingsConfigure->toolTip() );
 
-    KAction* actionHelpSystemCheck = new KAction( i18n("System Check"), this );
+    QAction* actionHelpSystemCheck = new QAction( i18n("System Check"), this );
     actionHelpSystemCheck->setToolTip( i18n("Checks system configuration") );
     actionHelpSystemCheck->setStatusTip( actionHelpSystemCheck->toolTip() );
     actionCollection()->addAction( "help_check_system", actionHelpSystemCheck );

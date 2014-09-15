@@ -19,7 +19,7 @@
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 
-#include <KAction>
+#include <QtWidgets/QAction>
 #include <KAuth>
 #include <KConfigCore/KConfig>
 #include <QtGui/QIcon>
@@ -57,7 +57,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_messageWidget = new KMessageWidget( this );
     m_messageWidget->hide();
     m_messageWidget->setWordWrap( true );
-    m_addToGroupAction = new KAction( QIcon::fromTheme("dialog-password"), QString(), this );
+    m_addToGroupAction = new QAction( QIcon::fromTheme("dialog-password"), QString(), this );
 
     // buttons
     // ------------------------------------------------
