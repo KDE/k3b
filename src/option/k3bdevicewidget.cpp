@@ -274,7 +274,7 @@ void K3b::DeviceWidget::addUserToGroup()
                 reply.errorCode() != KAuth::ActionReply::AuthorizationDenied &&
                 reply.errorCode() != KAuth::ActionReply::UserCancelled)) {
         m_messageWidget->setMessageType(KMessageWidget::Error);
-        m_messageWidget->setText(i18n("Unable to execute the action: %1", reply.errorDescription()));
+        m_messageWidget->setText(i18n("Unable to execute the action: %1 (Error code: %2)", reply.errorDescription(), reply.errorCode()));
         m_addToGroupAction->setText(i18n("Retry"));
     }
 }
