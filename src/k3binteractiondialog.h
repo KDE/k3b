@@ -23,7 +23,7 @@
 
 class QGridLayout;
 class QLabel;
-class KPushButton;
+class QPushButton;
 class KGuiItem;
 class QToolButton;
 
@@ -231,12 +231,12 @@ namespace K3b {
         void saveLastSettings();
         void loadStartupSettings();
 
-        KPushButton* getButton( int );
+        QPushButton* getButton( int );
 
         ThemedHeader* m_dialogHeader;
-        KPushButton* m_buttonStart;
-        KPushButton* m_buttonSave;
-        KPushButton* m_buttonCancel;
+        QPushButton* m_buttonStart;
+        QPushButton* m_buttonSave;
+        QPushButton* m_buttonCancel;
         QWidget* m_mainWidget;
 
         QToolButton* m_buttonLoadSettings;

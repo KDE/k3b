@@ -41,7 +41,7 @@
 #include <KEditListBox>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KPushButton>
+#include <QtWidgets/QPushButton>
 
 #include <grp.h>
 
@@ -120,7 +120,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     m_permissionView->setAllColumnsShowFocus( true );
     m_permissionView->setRootIsDecorated( false );
     m_permissionView->header()->setResizeMode( ExternalBinPermissionModel::ProgramColumn, QHeaderView::ResizeToContents );
-    m_changePermissionsButton = new KPushButton( QIcon::fromTheme("dialog-password"), i18n( "Change Permissions..." ), this );
+    m_changePermissionsButton = new QPushButton( QIcon::fromTheme("dialog-password"), i18n( "Change Permissions..." ), this );
     QVBoxLayout* permissionsTabLayout = new QVBoxLayout( permissionsTab );
     permissionsTabLayout->addWidget( permissionsLabel );
     permissionsTabLayout->addWidget( m_permissionView );

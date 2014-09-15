@@ -42,7 +42,7 @@
 #include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KNotification>
-#include <KDELibs4Support/KDE/KPushButton>
+#include <QtWidgets/QPushButton>
 #include <KProgressDialog>
 #include <KWidgetsAddons/KStandardGuiItem>
 #include <KDELibs4Support/KDE/KSqueezedTextLabel>

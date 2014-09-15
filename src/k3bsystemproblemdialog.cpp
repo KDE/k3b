@@ -41,7 +41,7 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
-#include <KDELibs4Support/KDE/KPushButton>
+#include <QtWidgets/QPushButton>
 #include <KWidgetsAddons/KStandardGuiItem>
 #include <KTextWidgets/KTextEdit>
 
@@ -99,7 +99,8 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     titleFrame->setTitle( i18n("System Configuration Problems"),
                           i18np("1 problem", "%1 problems", problems.count() ) );
 
-    KPushButton* closeButton = new KPushButton( KStandardGuiItem::close(), widget );
+    QPushButton* closeButton = new QPushButton( widget );
+    KGuiItem::assign( closeButton, KStandardGuiItem::close() );
     connect( closeButton, SIGNAL(clicked()), this, SLOT(close()) );
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
 

@@ -17,7 +17,6 @@
 
 #include <KIconThemes/KIconLoader>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KPushButton>
 
 #include <QtCore/QSignalMapper>
 #include <QtGui/QCloseEvent>
@@ -26,6 +25,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
 
 
 class K3b::MultiChoiceDialog::Private
@@ -37,7 +37,7 @@ public:
     }
 
     QSignalMapper* mapper;
-    QList<KPushButton*> buttons;
+    QList<QPushButton*> buttons;
     QHBoxLayout* buttonLayout;
 
     bool buttonClicked;
@@ -124,7 +124,8 @@ K3b::MultiChoiceDialog::~MultiChoiceDialog()
 
 int K3b::MultiChoiceDialog::addButton( const KGuiItem& b )
 {
-    KPushButton* button = new KPushButton( b, this );
+    QPushButton* button = new QPushButton( this );
+    KGuiItem::assign( button, b );
     d->buttonLayout->addWidget( button );
     d->buttons.append(button);
     d->mapper->setMapping( button, d->buttons.count() );

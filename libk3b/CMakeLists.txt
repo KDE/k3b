@@ -73,7 +73,6 @@ add_library(k3blib SHARED
     tools/k3bcdtextvalidator.cpp
     tools/k3bintvalidator.cpp
     tools/k3bexceptions.cpp
-    tools/k3bpushbutton.cpp
     tools/k3bthreadwidget.cpp
     tools/k3bsignalwaiter.cpp
     tools/k3blibdvdcss.cpp
