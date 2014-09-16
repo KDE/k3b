@@ -257,7 +257,7 @@ void K3b::DeviceWidget::addUserToGroup()
 {
     QVariantMap args;
     args["groupName"] = m_deviceGroup;
-    args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_gecos);
+    args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_name);
 
     KAuth::Action action("org.kde.k3b.addtogroup");
     action.setHelperID("org.kde.k3b");
