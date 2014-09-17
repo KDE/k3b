@@ -62,7 +62,9 @@ namespace K3b {
         virtual QModelIndex buddy( const QModelIndex& index ) const;
 
     public Q_SLOTS:
+#ifndef openSUSE
         void setBurningGroup( const QString& burningGroup );
+#endif
         void update();
 
     private:

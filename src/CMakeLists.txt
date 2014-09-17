@@ -28,7 +28,9 @@ include_directories(
   ${KCDDB_INCLUDE_DIR}
   )
 
+if(NOT openSUSE)
 add_subdirectory( helper )
+endif()
 add_subdirectory( icons )
 add_subdirectory( pics )
 add_subdirectory( services )
