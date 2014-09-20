@@ -21,13 +21,13 @@
 #include "k3baudiotrackreader.h"
 #include "k3bmsf.h"
 
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
 #include <KI18n/KLocalizedString>
+#include <KXmlGui/KActionCollection>
 
-#include <QAudioDeviceInfo>
-#include <QAudioFormat>
-#include <QAudioOutput>
+#include <QtMultimedia/QAudioDeviceInfo>
+#include <QtMultimedia/QAudioFormat>
+#include <QtMultimedia/QAudioOutput>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QWidgetAction>

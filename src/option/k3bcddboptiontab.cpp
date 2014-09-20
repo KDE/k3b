@@ -15,7 +15,7 @@
 
 #include "k3bcddboptiontab.h"
 
-#include <KCModule>
+#include <KConfigWidgets/KCModule>
 #include <KService/KService>
 #include <KService/KServiceTypeTrader>
 #include <KI18n/KLocalizedString>

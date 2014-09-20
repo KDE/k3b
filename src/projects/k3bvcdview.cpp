@@ -14,7 +14,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-// K3b Includes
 #include "k3bvcdprojectmodel.h"
 #include "k3bvcdview.h"
 #include "k3bvcddoc.h"
@@ -25,17 +24,16 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <QtWidgets/QAction>
-#include <KApplication>
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtWidgets/QHeaderView>
-#include <QItemSelectionModel>
-#include <QtWidgets/QLayout>
+#include <QtCore/QDebug>
+#include <QtCore/QItemSelectionModel>
 #include <QtCore/QString>
-#include <QTreeView>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QTreeView>
 
 K3b::VcdView::VcdView( K3b::VcdDoc* doc, QWidget* parent )
 :

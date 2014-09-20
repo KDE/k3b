@@ -26,24 +26,24 @@
 #include "k3bvideodvdtitletranscodingjob.h"
 
 #include <KCompletion/KComboBox>
+#include <KCompletion/KLineEdit>
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KLineEdit>
 #include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
 #include <KIOWidgets/KUrlRequester>
 #include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QtWidgets/QCheckBox>
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtCore/QVector>
 #include <QtGui/QFontMetrics>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLayout>
-#include <QtCore/QList>
-#include <QtCore/QMap>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStyle>
-#include <QtCore/QVector>
 
 
 namespace {

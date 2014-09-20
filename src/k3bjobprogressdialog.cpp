@@ -34,33 +34,32 @@
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
-#include <QtGui/QIcon>
-#include <KIOCore/KIO/Global>
-#include <kjobtrackerinterface.h>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KCoreAddons/KJobTrackerInterface>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KNotification>
-#include <QtWidgets/QPushButton>
-#include <KProgressDialog>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KDELibs4Support/KDE/KProgressDialog>
 #include <KDELibs4Support/KDE/KSqueezedTextLabel>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtGui/QCloseEvent>
+#include <QtCore/QDebug>
 #include <QtCore/QDateTime>
+#include <QtCore/QString>
+#include <QtCore/QTimer>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QIcon>
 #include <QtGui/QFont>
+#include <QtGui/QKeyEvent>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
-#include <QKeyEvent>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QScrollBar>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
+#include <QtWidgets/QScrollBar>
 #include <QtWidgets/QTreeWidget>
-#include <QVBoxLayout>
+#include <QtWidgets/QVBoxLayout>
 
 
 class K3b::JobProgressDialog::Private

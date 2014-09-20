@@ -26,11 +26,15 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bvalidators.h"
 
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
+
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QTextStream>
-
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
@@ -44,11 +48,6 @@
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
-
-#include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
 
 K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     : K3b::ProjectBurnDialog( _doc, parent )

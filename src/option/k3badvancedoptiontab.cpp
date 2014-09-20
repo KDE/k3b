@@ -18,24 +18,24 @@
 #include "k3bstdguiitems.h"
 #include "k3bglobalsettings.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QGroupBox>
-#include <qtabwidget.h>
-#include <QtWidgets/QRadioButton>
-#include <QtGui/QValidator>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QToolTip>
-
-#include <knuminput.h>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
+#include <KCompletion/KLineEdit>
+#include <KDELibs4Support/KDE/KNumInput>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
-#include <klineedit.h>
+
+#include <QtGui/QValidator>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolTip>
 
 
 K3b::AdvancedOptionTab::AdvancedOptionTab( QWidget* parent )

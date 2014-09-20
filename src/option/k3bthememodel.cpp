@@ -15,8 +15,8 @@
 #include "k3bthememodel.h"
 #include "k3bthememanager.h"
 
-#include <kio/deletejob.h>
 #include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/DeleteJob>
 
 #include <QtCore/QFile>
 #include <QtCore/QUrl>

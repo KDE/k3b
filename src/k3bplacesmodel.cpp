@@ -21,10 +21,10 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <KDirModel>
-#include <kdirsortfilterproxymodel.h> // use .h to build with KDE 4.2
-#include <KDirLister>
-#include <KFilePlacesModel>
+#include <KIOFileWidgets/KDirSortFilterProxyModel>
+#include <KIOFileWidgets/KFilePlacesModel>
+#include <KIOWidgets/KDirModel>
+#include <KIOWidgets/KDirLister>
 #include <Solid/StorageAccess>
 
 #include <QtGui/QIcon>

@@ -19,13 +19,13 @@
 #include "k3baudioencoder.h"
 #include "k3bcore.h"
 
-#include <KConfigWidgets/KColorScheme>
 #include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
-#include <KIOCore/KDiskFreeSpaceInfo>
+#include <KConfigWidgets/KColorScheme>
 #include <KI18n/KLocalizedString>
-#include <KIconThemes/KIconLoader>
+#include <KIOCore/KDiskFreeSpaceInfo>
 #include <KIOWidgets/KUrlRequester>
+#include <KIconThemes/KIconLoader>
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLabel>

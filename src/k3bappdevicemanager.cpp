@@ -22,16 +22,15 @@
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
 
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
-#include <KIO/Job>
 #include <KI18n/KLocalizedString>
+#include <KIO/Job>
 #include <KWidgetsAddons/KMessageBox>
-
+#include <KXmlGui/KActionCollection>
 #include <Solid/Block>
 #include <Solid/Device>
 #include <Solid/StorageAccess>
 
+#include <QtWidgets/QAction>
 #include <QtWidgets/QInputDialog>
 
 class K3b::AppDeviceManager::Private

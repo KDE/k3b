@@ -31,7 +31,12 @@
 #include "k3bglobals.h"
 #include "k3bwritingmodewidget.h"
 #include "k3bmediacache.h"
+#include "k3bfilecompilationsizehandler.h"
 
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QPoint>
+#include <QtCore/QVariant>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLabel>
@@ -39,26 +44,18 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QLayout>
-#include <qvariant.h>
 #include <QtWidgets/QToolTip>
-#include <qpoint.h>
 #include <QtWidgets/QRadioButton>
-#include <QtCore/QFileInfo>
-#include <qtabwidget.h>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QSpinBox>
-#include <QtCore/QFile>
 #include <QtWidgets/QGridLayout>
 
-#include <KWidgetsAddons/KMessageBox>
-#include <klineedit.h>
-#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
-#include <kfiledialog.h>
 #include <KCompletion/KComboBox>
+#include <KCompletion/KLineEdit>
+#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
-
-
-#include "k3bfilecompilationsizehandler.h"
+#include <KWidgetsAddons/KMessageBox>
 
 
 K3b::DataBurnDialog::DataBurnDialog(K3b::DataDoc* _doc, QWidget *parent )

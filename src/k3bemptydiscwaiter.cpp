@@ -26,6 +26,13 @@
 #include "k3bbusywidget.h"
 #include "k3bdvdformattingjob.h"
 
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KNotifications/KNotification>
+#include <KWidgetsAddons/KMessageBox>
+
 #include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
 #include <QtGui/QFont>
@@ -36,13 +43,6 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolTip>
-
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
-#include <KNotifications/KNotification>
-#include <KWidgetsAddons/KMessageBox>
 
 
 class K3b::EmptyDiscWaiter::Private

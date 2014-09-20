@@ -20,11 +20,11 @@
 
 #include <KCoreAddons/KUrlMimeData>
 #include <KI18n/KLocalizedString>
-#include <QtCore/QUrl>
-#include <QtGui/QIcon>
 
+#include <QtCore/QUrl>
 #include <QtCore/QMimeData>
 #include <QtCore/QDataStream>
+#include <QtGui/QIcon>
 
 namespace K3b {
 

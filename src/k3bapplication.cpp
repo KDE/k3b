@@ -43,13 +43,14 @@
 #include "k3bmediacache.h"
 
 #include <KCoreAddons/KAboutData>
-#include <KCmdLineArgs>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
-#include <KI18n/KLocalizedString>
+#include <KDELibs4Support/KDE/KCmdLineArgs>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KDELibs4Support/KDE/KNotification>
+#include <KI18n/KLocalizedString>
+
+#include <QtCore/QDebug>
 #include <QtCore/QTimer>
 
 

@@ -25,11 +25,12 @@
 #include "k3baction.h"
 #include "k3b.h"
 
-#include <QtWidgets/QAction>
-#include <KActionMenu>
-#include <KFileItem>
 #include <KI18n/KLocalizedString>
+#include <KIOCore/KFileItem>
+#include <KWidgetsAddons/KActionMenu>
+
 #include <QtCore/QUrl>
+#include <QtWidgets/QAction>
 
 
 

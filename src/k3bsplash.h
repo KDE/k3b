@@ -16,7 +16,7 @@
 #ifndef K3BSPLASH_H
 #define K3BSPLASH_H
 
-#include <KVBox>
+#include <KDELibs4Support/KDE/KVBox>
 
 class QLabel;
 class QMouseEvent;

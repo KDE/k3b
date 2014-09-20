@@ -21,30 +21,30 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <QtWidgets/QApplication>
-#include <QDialogButtonBox>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KStandardGuiItem>
+
+#include <QtCore/QDebug>
 #include <QtCore/QEvent>
+#include <QtCore/QPoint>
+#include <QtCore/QString>
+#include <QtCore/QTimer>
 #include <QtGui/QFont>
+#include <QtGui/QIcon>
+#include <QtGui/QKeyEvent>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
-#include <QKeyEvent>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QMenu>
-#include <QPoint>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
-
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
-#include <KIconThemes/KIconLoader>
-#include <QtGui/QIcon>
-#include <KI18n/KLocalizedString>
-#include <QtWidgets/QPushButton>
-#include <KWidgetsAddons/KStandardGuiItem>
 
 
 K3b::InteractionDialog::InteractionDialog( QWidget* parent,

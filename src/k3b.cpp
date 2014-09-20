@@ -13,7 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-// application specific includes
 #include "k3b.h"
 #include "k3bappdevicemanager.h"
 #include "k3bapplication.h"
@@ -64,32 +63,27 @@
 #include "option/k3boptiondialog.h"
 #include "projects/k3bdatamultisessionimportdialog.h"
 
-// include files for KDE
-#include <kaboutdata.h>
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
-#include <KActionMenu>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <KEditToolBar>
-#include <QtWidgets/QFileDialog>
-#include <kfileplacesmodel.h>
-#include <KWidgetsAddons/KMessageBox>
-#include <KMenuBar>
+#include <KConfigWidgets/KRecentFilesAction>
+#include <KConfigWidgets/KStandardAction>
+#include <KCoreAddons/KAboutData>
 #include <KCoreAddons/KProcess>
-#include <KRecentDocument>
-#include <KRecentFilesAction>
-#include <KShortcutsDialog>
-#include <KStandardAction>
-#include <KStatusBar>
-#include <KToggleAction>
-#include <QtCore/QUrl>
-#include <KXMLGUIFactory>
+#include <KDELibs4Support/KDE/KMenuBar>
+#include <KDELibs4Support/KDE/KStatusBar>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/DeleteJob>
 #include <KIOCore/KIO/StatJob>
+#include <KIOCore/KRecentDocument>
+#include <KIOFileWidgets/KFilePlacesModel>
+#include <KWidgetsAddons/KActionMenu>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KToggleAction>
+#include <KXmlGui/KActionCollection>
+#include <KXmlGui/KEditToolBar>
+#include <KXmlGui/KXMLGUIFactory>
+#include <KXmlGui/KShortcutsDialog>
 
-// include files for QT
 #include <QtAlgorithms>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
@@ -100,6 +94,9 @@
 #include <QtCore/QStandardPaths>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
+#include <QtCore/QUrl>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QSplitter>

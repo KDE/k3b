@@ -19,8 +19,8 @@
 #include "k3btrm.h"
 #include "musicbrainz/mb_c.h"
 
+#include <KIOCore/KProtocolManager>
 #include <QtCore/QDebug>
-#include <kprotocolmanager.h>
 #include <QtCore/QUrl>
 
 

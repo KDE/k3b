@@ -37,20 +37,20 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KCoreAddons/KProcess>
-#include <QtGui/QIcon>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KNotification>
-#include <QtWidgets/QPushButton>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KI18n/KLocalizedString>
 #include <KTextWidgets/KTextEdit>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtWidgets/QCheckBox>
-#include <QtGui/QCloseEvent>
 #include <QtCore/QFileInfo>
+#include <QtCore/QList>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QIcon>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
-#include <QtCore/QList>
+#include <QtWidgets/QPushButton>
 
 #ifdef HAVE_ICONV
 #include <langinfo.h>

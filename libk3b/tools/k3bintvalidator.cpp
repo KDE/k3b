@@ -13,7 +13,7 @@
  */
 
 
-#include <qwidget.h>
+#include <QtWidgets/QWidget>
 #include <QtCore/QString>
 
 #include "k3bintvalidator.h"

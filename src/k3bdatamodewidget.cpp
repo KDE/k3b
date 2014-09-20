@@ -16,10 +16,8 @@
 #include "k3bdatamodewidget.h"
 #include "k3bglobals.h"
 
-#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
-
-
+#include <KI18n/KLocalizedString>
 #include <QtWidgets/QToolTip>
 
 static const int s_autoIndex = 0;

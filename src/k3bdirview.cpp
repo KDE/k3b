@@ -13,7 +13,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-// K3B-includes
 #include <config-k3b.h>
 #include "k3bdirview.h"
 #include "k3b.h"
@@ -33,19 +32,17 @@
 #include "rip/videodvd/k3bvideodvdrippingview.h"
 #endif
 
-// KDE-includes
 #include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KNotification>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KNotification>
-#include <QtCore/QUrl>
 
-// QT-includes
 #include <QtCore/QDir>
-#include <QSplitter>
+#include <QtCore/QUrl>
 #include <QtCore/QString>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStackedWidget>
-#include <QVBoxLayout>
+#include <QtWidgets/QVBoxLayout>
 
 class K3b::DirView::Private
 {

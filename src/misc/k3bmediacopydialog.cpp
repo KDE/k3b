@@ -34,33 +34,30 @@
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
 
-#include <kguiitem.h>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KStandardGuiItem>
-#include <KWidgetsAddons/KMessageBox>
 #include <KConfigCore/KConfig>
-#include <kapplication.h>
-#include <KIconThemes/KIconLoader>
 #include <KConfigCore/KSharedConfig>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KGuiItem>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtCore/QList>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QToolTip>
-#include <qtabwidget.h>
-
-
-#include <QtWidgets/QPushButton>
-#include <qbuttongroup.h>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSizePolicy>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QList>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSizePolicy>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QTabWidget>
 
 
 K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )

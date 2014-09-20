@@ -24,8 +24,8 @@
 #include "k3bdevicemanager.h"
 #include "k3bjob.h"
 
-#include <QDBusConnection>
 #include <QtCore/QTimer>
+#include <QtDBus/QDBusConnection>
 
 namespace K3b {
 

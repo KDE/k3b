@@ -17,11 +17,11 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <QtWidgets/QApplication>
-#include <QtGui/QFont>
 #include <QtCore/QHash>
 #include <QtCore/QList>
-#include <QPalette>
+#include <QtGui/QFont>
+#include <QtGui/QPalette>
+#include <QtWidgets/QApplication>
 
 namespace K3b {
 

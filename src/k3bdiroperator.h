@@ -16,8 +16,8 @@
 #ifndef K3BDIROPERATOR_H
 #define K3BDIROPERATOR_H
 
-#include <KBookmarkManager>
-#include <KDirOperator>
+#include <KBookmarks/KBookmarkManager>
+#include <KIOFileWidgets/KDirOperator>
 #include <QtCore/QUrl>
 
 class KActionMenu;

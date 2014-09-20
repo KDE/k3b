@@ -15,7 +15,7 @@
 #ifndef K3B_AUDIO_PROJECT_DELEGATE_H
 #define K3B_AUDIO_PROJECT_DELEGATE_H
 
-#include <QStyledItemDelegate>
+#include <QtWidgets/QStyledItemDelegate>
 
 class QAbstractItemView;
 

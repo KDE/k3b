@@ -29,11 +29,10 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bjobprogressdialog.h"
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <kapplication.h>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QLayout>

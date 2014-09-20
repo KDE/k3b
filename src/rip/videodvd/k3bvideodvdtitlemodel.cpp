@@ -21,13 +21,13 @@
 #include "k3bvideodvdrippingpreview.h"
 #include "k3bvideodvdtitle.h"
 
-#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QtCore/QHash>
-#include <QImage>
+#include <QtGui/QImage>
 #include <QtGui/QPixmap>
-#include <QSet>
+#include <QtCore/QHash>
+#include <QtCore/QSet>
 #include <QtCore/QStringList>
 
 namespace K3b {

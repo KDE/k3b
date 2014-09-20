@@ -18,22 +18,22 @@
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 
-#include <QtCore/QFileInfo>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtCore/QTimer>
-#include <QtWidgets/QToolTip>
-
+#include <KCompletion/KLineEdit>
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
-#include <KLineEdit>
 #include <KI18n/KLocalizedString>
+#include <KIconThemes/KIconLoader>
+#include <KIOCore/KDiskFreeSpaceInfo>
+#include <KIOCore/KIO/Global>
 #include <KIOWidgets/KUrlRequester>
+
+#include <QtCore/QFileInfo>
+#include <QtCore/QTimer>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QToolTip>
 
 
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )

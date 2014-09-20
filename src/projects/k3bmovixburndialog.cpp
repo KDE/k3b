@@ -31,17 +31,16 @@
 #include "k3bcore.h"
 #include "k3bmediacache.h"
 
-#include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
-#include <KWidgetsAddons/KMessageBox>
-#include <KIOCore/KIO/Global>
-#include <kapplication.h>
 #include <KConfigCore/KConfig>
+#include <KIOCore/KIO/Global>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
+#include <QtCore/QDebug>
+#include <QtCore/QFileInfo>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QGroupBox>
-#include <QtCore/QFileInfo>
 #include <QtWidgets/QGridLayout>
 
 

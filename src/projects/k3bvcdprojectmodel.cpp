@@ -20,10 +20,10 @@
 
 #include <KCoreAddons/KUrlMimeData>
 #include <KI18n/KLocalizedString>
-#include <QtCore/QUrl>
 
 #include <QtCore/QDataStream>
-#include <QMimeData>
+#include <QtCore/QMimeData>
+#include <QtCore/QUrl>
 
 namespace K3b {
 

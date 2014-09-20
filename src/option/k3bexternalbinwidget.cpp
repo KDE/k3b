@@ -20,28 +20,27 @@
 #include "k3bexternalbinpermissionmodel.h"
 #include "config-k3b.h"
 
-#include <QtWidgets/QApplication>
-#include <QtGui/QCursor>
-#include <QtWidgets/QHeaderView>
-#include <QItemSelectionModel>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtCore/QMap>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QPushButton>
-#include <QtCore/QStringList>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
-#include <QTreeView>
-#include <QVBoxLayout>
-
-#include <KAuth>
-#include <QtCore/QDebug>
+#include <KAuth/KAuth>
 #include <KDELibs4Support/KDE/KDialog>
-#include <KEditListBox>
+#include <KDELibs4Support/KDE/KEditListBox>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
+
+#include <QtCore/QDebug>
+#include <QtCore/QItemSelectionModel>
+#include <QtCore/QMap>
+#include <QtCore/QStringList>
+#include <QtGui/QCursor>
+#include <QtGui/QPixmap>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QVBoxLayout>
 
 #include <grp.h>
 

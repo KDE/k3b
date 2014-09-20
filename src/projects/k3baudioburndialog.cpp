@@ -28,29 +28,27 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bexternalbinmanager.h"
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <qtabwidget.h>
-#include <QtWidgets/QLayout>
-#include <qvariant.h>
-#include <QtWidgets/QToolTip>
-
-#include <QtWidgets/QToolButton>
-#include <QtCore/QStringList>
-#include <qpoint.h>
-
-#include <QtWidgets/QSpinBox>
-#include <QtGui/QShowEvent>
-#include <QtWidgets/QGridLayout>
-
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
-#include <kvbox.h>
+#include <KDELibs4Support/KDE/KVBox>
+
+#include <QtCore/QPoint>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
+#include <QtGui/QShowEvent>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolTip>
 
 
 K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )

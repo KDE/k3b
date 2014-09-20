@@ -18,13 +18,13 @@
 
 #include "k3baudiodatasource.h"
 
+#include <KDELibs4Support/KDE/KDialog>
+#include <KI18n/KLocalizedString>
+
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QGridLayout>
-
-#include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KDialog>
 
 
 K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )

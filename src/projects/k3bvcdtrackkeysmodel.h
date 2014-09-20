@@ -15,7 +15,7 @@
 #ifndef K3BVCDTRACKKEYSMODEL_H
 #define K3BVCDTRACKKEYSMODEL_H
 
-#include <QAbstractTableModel>
+#include <QtCore/QAbstractTableModel>
 #include <QtCore/QMap>
 
 

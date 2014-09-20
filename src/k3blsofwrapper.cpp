@@ -14,14 +14,13 @@
 
 #include "k3blsofwrapper.h"
 
-#include <KCoreAddons/KProcess>
-
 #include "k3bdevice.h"
 #include "k3bglobals.h"
 
+#include <KCoreAddons/KProcess>
+
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
-//Added by qt3to4:
 #include <QtCore/QList>
 
 #include <sys/types.h>

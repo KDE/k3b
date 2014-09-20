@@ -19,22 +19,22 @@
 #include "k3bfileitem.h"
 #include "k3bvalidators.h"
 
+#include <KCompletion/KLineEdit>
+#include <KDELibs4Support/KDE/KSqueezedTextLabel>
+#include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
-#include <KLineEdit>
-#include <KI18n/KLocalizedString>
-#include <QtCore/QUrl>
-#include <KDELibs4Support/KDE/KSqueezedTextLabel>
 
-#include <QtWidgets/QCheckBox>
 #include <QtCore/QFileInfo>
+#include <QtCore/QUrl>
+#include <QtGui/QValidator>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
-#include <QtGui/QValidator>
 
 
 K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )

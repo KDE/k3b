@@ -19,7 +19,7 @@
 #include "k3binteractiondialog.h"
 #include "k3bglobals.h"
 
-#include <QVBoxLayout>
+#include <QtWidgets/QVBoxLayout>
 
 
 class QGroupBox;

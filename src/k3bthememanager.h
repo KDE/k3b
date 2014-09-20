@@ -18,7 +18,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QMap>
-#include <qcolor.h>
+#include <QtGui/QColor>
 #include <QtGui/QPixmap>
 
 #include <KConfigCore/KConfigGroup>

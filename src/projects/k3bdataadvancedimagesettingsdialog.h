@@ -16,9 +16,9 @@
 #ifndef K3B_DATA_ADVANCED_IMAGE_SETTINGS_DIALOG_H
 #define K3B_DATA_ADVANCED_IMAGE_SETTINGS_DIALOG_H
 
-#include <KDELibs4Support/KDE/KDialog>
-
 #include "ui_base_k3badvanceddataimagesettings.h"
+
+#include <KDELibs4Support/KDE/KDialog>
 
 namespace K3b {
     class IsoOptions;

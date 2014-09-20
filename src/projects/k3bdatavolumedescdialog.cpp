@@ -19,9 +19,9 @@
 
 #include <KI18n/KLocalizedString>
 
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QSpinBox>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QToolButton>
 
 

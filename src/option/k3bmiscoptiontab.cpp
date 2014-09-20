@@ -21,20 +21,19 @@
 #include "k3binteractiondialog.h"
 #include "k3bintmapcombobox.h"
 
-#include <QtWidgets/QCheckBox>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtWidgets/QRadioButton>
-
-#include <KApplication>
 #include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
 #include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KMessageBox>
+
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QRadioButton>
 
 
 K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )

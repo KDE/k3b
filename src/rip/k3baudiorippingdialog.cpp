@@ -30,37 +30,36 @@
 #include "k3baudioencoder.h"
 #include "k3bmediacache.h"
 
-#include <KApplication>
 #include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
-#include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KIOWidgets/KUrlRequester>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KUrlLabel>
-#include <KIOWidgets/KUrlRequester>
 
-#include <QtWidgets/QCheckBox>
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QPair>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
 #include <QtGui/QFont>
+#include <QtGui/QValidator>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
-#include <QtCore/QHash>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QtCore/QList>
 #include <QtWidgets/QMessageBox>
-#include <QPair>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QSpinBox>
-#include <QtCore/QStringList>
-#include <QtGui/QValidator>
-#include <QVariant>
 
 
 

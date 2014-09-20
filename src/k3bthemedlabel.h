@@ -15,9 +15,9 @@
 #ifndef _K3B_THEMED_LABEL_H_
 #define _K3B_THEMED_LABEL_H_
 
-#include <ksqueezedtextlabel.h>
 #include "k3bthememanager.h"
 
+#include <KWidgetsAddons/KSqueezedTextLabel>
 
 namespace K3b {
 

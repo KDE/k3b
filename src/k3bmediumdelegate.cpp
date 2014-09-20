@@ -18,9 +18,9 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <QtWidgets/QApplication>
-#include <QModelIndex>
+#include <QtCore/QModelIndex>
 #include <QtGui/QPainter>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QStyle>
 
 Q_DECLARE_METATYPE(K3b::Medium)

@@ -25,9 +25,9 @@
 #include "k3bprojectmanager.h"
 #include "k3bview.h"
 
-#include <QDBusConnection>
 #include <QtCore/QList>
 #include <QtCore/QTimer>
+#include <QtDBus/QDBusConnection>
 
 namespace K3b {
 

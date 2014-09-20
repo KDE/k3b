@@ -19,12 +19,12 @@
 
 #include <KIconThemes/KIconLoader>
 
-#include <QAction>
 #include <QtCore/QEvent>
 #include <QtGui/QFontMetrics>
-#include <QtWidgets/QFrame>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QToolTip>
 
 

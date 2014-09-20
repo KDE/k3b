@@ -23,16 +23,14 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-// include files for Qt
-#include <QtCore/QList>
-#include <QVBoxLayout>
-
-// include files for KDE
-#include <QtWidgets/QAction>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
+#include <KXmlGui/KToolBar>
+
 #include <QtCore/QDebug>
-#include <KToolBar>
+#include <QtCore/QList>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QVBoxLayout>
 
 K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     : QWidget( parent ),

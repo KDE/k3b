@@ -24,11 +24,11 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QToolTip>
 
-#include <qtabwidget.h>
-#include <klineedit.h>
+#include <KCompletion/KLineEdit>
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 
+#include <QtCore/QDebug>
+#include <QtWidgets/QTabWidget>
 
 
 K3b::AudioTrackWidget::AudioTrackWidget( const QList<K3b::AudioTrack*>& tracks,

@@ -19,16 +19,16 @@
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 
-#include <QtWidgets/QAction>
-#include <KAuth>
+#include <KAuth/KAuth>
 #include <KConfigCore/KConfig>
-#include <QtGui/QIcon>
 #include <KI18n/KLocalizedString>
-#include <KMessageWidget>
 #include <KIOCore/KIO/Global>
+#include <KMessageWidget>
 
-#include <QtGui/QColor>
 #include <QtCore/QFileInfo>
+#include <QtGui/QColor>
+#include <QtGui/QIcon>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -39,8 +39,8 @@
 #include <QtCore/QString>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QTreeWidget>
-#include <QVariant>
-#include <QVBoxLayout>
+#include <QtCore/QVariant>
+#include <QtWidgets/QVBoxLayout>
 
 #include <grp.h>
 #include <unistd.h>

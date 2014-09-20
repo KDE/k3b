@@ -19,16 +19,16 @@
 #include "k3baudiotrack.h"
 #include "k3bcdtextvalidator.h"
 
+#include <KCompletion/KLineEdit>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KI18n/KLocalizedString>
+
 #include <QtGui/QIcon>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QGroupBox>
-
-#include <klineedit.h>
-#include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KDialog>
 
 
 class K3b::AudioCdTextWidget::AllFieldsDialog : public KDialog, public Ui::base_K3bAudioCdTextAllFieldsWidget

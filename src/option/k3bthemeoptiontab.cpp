@@ -19,21 +19,20 @@
 #include "k3bthememanager.h"
 #include "k3bthememodel.h"
 
-#include <KIOCore/KIO/Global>
-#include <kio/deletejob.h>
+#include <KArchive/KTar>
 #include <KConfigCore/KConfig>
 #include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KArchive/KTar>
-#include <KIOWidgets/KUrlRequester>
+#include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/StoredTransferJob>
+#include <KIOWidgets/KUrlRequester>
 #include <KUrlRequesterDialog>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QTemporaryFile>
-#include <QItemSelectionModel>
+#include <QtCore/QItemSelectionModel>
 #include <QtWidgets/QLabel>
 
 

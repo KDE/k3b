@@ -12,28 +12,27 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-// K3b Includes
 #include "k3bvideocdrip.h"
 #include "k3bcore.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
-#include <KIOCore/KIO/Global>
-#include <KI18n/KLocalizedString>
 #include <KCoreAddons/KProcess>
-#include <QtCore/QUrl>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
 
 #include <QtCore/QDateTime>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QDomNode>
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QList>
 #include <QtCore/QRegExp>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
+#include <QtCore/QUrl>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtXml/QDomNode>
 
 
 K3b::VideoCdRip::VideoCdRip( K3b::JobHandler* hdl, K3b::VideoCdRippingOptions* options, QObject* parent )

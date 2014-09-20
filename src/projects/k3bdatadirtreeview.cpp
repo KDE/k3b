@@ -23,12 +23,12 @@
 #include "k3bview.h"
 #include "k3bvalidators.h"
 
+#include <KI18n/KLocalizedString>
+#include <KIconThemes/KIconLoader>
+
+#include <QtCore/QDebug>
 #include <QtCore/QList>
 #include <QtWidgets/QHeaderView>
-
-#include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 
 
 class K3b::DataDirTreeView::Private

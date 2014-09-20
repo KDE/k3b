@@ -18,10 +18,11 @@
 #include "k3bvideodvdburndialog.h"
 #include "k3bvideodvddoc.h"
 
-#include <KXmlGui/KActionCollection>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
-#include <QAction>
+#include <KXmlGui/KActionCollection>
+
+#include <QtWidgets/QAction>
 
 
 K3b::VideoDvdView::VideoDvdView( K3b::VideoDvdDoc* doc, QWidget *parent )

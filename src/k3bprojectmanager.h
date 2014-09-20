@@ -16,9 +16,10 @@
 #ifndef _K3B_PROJECT_MANAGER_H_
 #define _K3B_PROJECT_MANAGER_H_
 
+#include "k3bdoc.h"
+
 #include <QtCore/QList>
 #include <QtCore/QObject>
-#include "k3bdoc.h"
 
 
 class QUrl;

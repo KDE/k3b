@@ -22,10 +22,10 @@
 #define _K3B_WIDGET_SHOW_EFFECT_H_
 
 #include <QtCore/QObject>
-#include <qbitmap.h>
-//Added by qt3to4:
-#include <QTimerEvent>
+#include <QtGui/QBitmap>
 
+
+class QTimerEvent;
 
 /**
  * Helper class to show and hide a widget in a fancy way.

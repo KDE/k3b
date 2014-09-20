@@ -13,36 +13,31 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-// k3b includes
 #include "k3bvideocdrippingdialog.h"
 #include "k3bvideocdrip.h"
-
 #include "k3bjobprogressdialog.h"
 #include "k3bcore.h"
 #include "k3bglobals.h"
 #include "k3bstdguiitems.h"
 
-// kde include
-#include <KApplication>
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
-#include <QtWidgets/QGroupBox>
+#include <KDELibs4Support/KDE/KVBox>
 #include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
 #include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KMessageBox>
 
-// qt includes
-#include <QtWidgets/QCheckBox>
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
+#include <QtCore/QTimer>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QToolTip>
-#include <KVBox>
 
 
 K3b::VideoCdRippingDialog::VideoCdRippingDialog( K3b::VideoCdRippingOptions* options, QWidget* parent )

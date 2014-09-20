@@ -18,6 +18,7 @@
 #define K3B_MIXED_VIEW_H
 
 #include "k3bview.h"
+
 #include <QtCore/QList>
 
 class QAbstractItemModel;

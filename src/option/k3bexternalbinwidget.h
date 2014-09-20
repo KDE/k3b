@@ -18,7 +18,7 @@
 #define K3B_EXTERNAL_BIN_WIDGET_H
 
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 
 class QModelIndex;

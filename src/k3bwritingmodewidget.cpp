@@ -18,8 +18,8 @@
 
 #include "k3bglobals.h"
 
-#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
 
 #include <QtWidgets/QToolTip>
 

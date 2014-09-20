@@ -20,15 +20,15 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <QtCore/QDir>
-
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
-#include <KActionMenu>
-#include <KBookmarkMenu>
+#include <KBookmarks/KBookmarkMenu>
 #include <KConfigCore/KConfigGroup>
-#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KMenu>
+#include <KI18n/KLocalizedString>
+#include <KXmlGui/KActionCollection>
+#include <KWidgetsAddons/KActionMenu>
+
+#include <QtCore/QDir>
+#include <QtWidgets/QAction>
 
 K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
     : KDirOperator( url, parent )

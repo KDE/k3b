@@ -14,7 +14,6 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-// K3b Includes
 #include "k3bvcdtrackdialog.h"
 #include "k3bglobals.h"
 #include "k3bmsf.h"
@@ -23,31 +22,29 @@
 #include "k3bvcdtrackkeysdelegate.h"
 #include "k3bvcdtrackkeysmodel.h"
 
-// Kde Includes
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
-#include <KNumInput>
-#include <QtCore/QUrl>
+#include <KDELibs4Support/KDE/KNumInput>
 #include <KDELibs4Support/KDE/KSqueezedTextLabel>
 
-// Qt Includes
+#include <QtCore/QList>
+#include <QtCore/QUrl>
+#include <QtGui/QPixmap>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
-#include <QFormLayout>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtCore/QList>
-#include <QtGui/QPixmap>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
-#include <QTreeView>
-#include <QVBoxLayout>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QVBoxLayout>
 
 
 namespace {

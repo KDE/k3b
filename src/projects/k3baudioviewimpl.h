@@ -15,11 +15,10 @@
 #ifndef K3B_AUDIO_VIEW_IMPL_H
 #define K3B_AUDIO_VIEW_IMPL_H
 
-#include <QtCore/QUrl>
-
-#include <QtCore/QObject>
 #include <QtCore/QAbstractItemModel>
+#include <QtCore/QObject>
 #include <QtCore/QList>
+#include <QtCore/QUrl>
 
 class QAction;
 class KActionCollection;

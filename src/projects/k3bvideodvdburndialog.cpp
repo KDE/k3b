@@ -32,8 +32,8 @@
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QFileInfo>
-#include <QtWidgets/QLayout>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QToolTip>
 

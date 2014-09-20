@@ -16,12 +16,12 @@
 #ifndef K3BWRITERSELECTIONWIDGET_H
 #define K3BWRITERSELECTIONWIDGET_H
 
-#include <qwidget.h>
-#include <QtWidgets/QLabel>
+#include "k3bglobals.h"
 
 #include <KConfigCore/KSharedConfig>
 
-#include "k3bglobals.h"
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QLabel>
 
 class QLabel;
 

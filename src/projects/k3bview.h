@@ -22,12 +22,12 @@
 #include <config-k3b.h>
 #endif
 
+#include <KXmlGui/KXMLGUIClient>
+
 #include <QtCore/QHash>
 #include <QtCore/QList>
-#include <QWidget>
-
-#include <KXMLGUIClient>
 #include <QtCore/QUrl>
+#include <QtWidgets/QWidget>
 
 class QVBoxLayout;
 class KToolBar;

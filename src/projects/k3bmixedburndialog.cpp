@@ -34,12 +34,12 @@
 #include "k3bcore.h"
 #include "k3bintmapcombobox.h"
 
-#include <KApplication>
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
+#include <QtCore/QDebug>
+#include <QtCore/QVariant>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -51,7 +51,6 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QToolTip>
-#include <QVariant>
 
 
 K3b::MixedBurnDialog::MixedBurnDialog( K3b::MixedDoc* doc, QWidget *parent )

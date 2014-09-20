@@ -18,7 +18,7 @@
 
 #include <QtCore/QRegExp>
 #include <QtCore/QDateTime>
-#include <qstack.h>
+#include <QtCore/QStack>
 
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KLocale>

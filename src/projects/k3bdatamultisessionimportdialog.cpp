@@ -13,19 +13,6 @@
  */
 
 #include "k3bdatamultisessionimportdialog.h"
-
-#include <QtGui/QCursor>
-#include <QtGui/QFont>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtCore/QMap>
-#include <QtWidgets/QTreeWidget>
-#include <QVBoxLayout>
-
-#include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-
 #include "k3bcore.h"
 #include "k3bdatadoc.h"
 #include "k3btoc.h"
@@ -38,6 +25,18 @@
 
 #include "../k3bapplication.h"
 #include "../k3b.h"
+
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+
+#include <QtCore/QMap>
+#include <QtGui/QCursor>
+#include <QtGui/QFont>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QVBoxLayout>
 
 namespace {
     class SessionInfo

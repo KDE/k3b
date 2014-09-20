@@ -35,24 +35,24 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolTip>
 
+#include <KConfigCore/KConfig>
+#include <KDELibs4Support/KDE/KVBox>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KGuiItem>
+#include <KWidgetsAddons/KStandardGuiItem>
+
+#include <QtCore/QDebug>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QWhatsThis>
 #include <QtWidgets/QCheckBox>
-#include <qtabwidget.h>
+#include <QtWidgets/QTabWidget>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QGridLayout>
-#include <QVBoxLayout>
-#include <KI18n/KLocalizedString>
-#include <KConfigCore/KConfig>
-#include <KWidgetsAddons/KMessageBox>
-#include <kguiitem.h>
-#include <KWidgetsAddons/KStandardGuiItem>
-#include <QtCore/QDebug>
-#include <kapplication.h>
-#include <KIconThemes/KIconLoader>
-#include <kvbox.h>
+#include <QtWidgets/QVBoxLayout>
 
 
 K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )

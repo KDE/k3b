@@ -18,23 +18,23 @@
 #include "k3bglobals.h"
 #include "k3bintmapcombobox.h"
 
+#include <KCompletion/KLineEdit>
+#include <KConfigWidgets/KColorScheme>
+#include <KDELibs4Support/KDE/KDialog>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KDiskFreeSpaceInfo>
+#include <KIOCore/KIO/Global>
+#include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KUrlLabel>
+
+#include <QtCore/QTimer>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpinBox>
-#include <QtCore/QTimer>
 #include <QtWidgets/QWhatsThis>
-
-#include <KConfigWidgets/KColorScheme>
-#include <KDELibs4Support/KDE/KDialog>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOCore/KIO/Global>
-#include <KLineEdit>
-#include <KI18n/KLocalizedString>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KUrlLabel>
 
 
 static const int s_mp3Bitrates[] = {

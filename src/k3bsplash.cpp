@@ -16,6 +16,8 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
+#include <KCoreAddons/KAboutData>
+
 #include <QtCore/QEvent>
 #include <QtCore/QString>
 #include <QtGui/QFontMetrics>
@@ -24,8 +26,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QLabel>
-
-#include <KCoreAddons/KAboutData>
 
 K3b::Splash::Splash( QWidget* parent )
     : KVBox( parent)

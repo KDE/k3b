@@ -30,19 +30,19 @@
 
 #include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
-#include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIOCore/KIO/Global>
 #include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QtWidgets/QCheckBox>
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
+#include <QtCore/QStringList>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QtCore/QStringList>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTreeWidget>
 

@@ -14,16 +14,15 @@
 
 #include "k3bcddbpatternwidget.h"
 
-#include <KCompletion/KComboBox>
 #include <KConfigCore/KConfigGroup>
-#include <QtCore/QDebug>
-#include <KLineEdit>
+#include <KCompletion/KComboBox>
+#include <KCompletion/KLineEdit>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KUrlLabel>
 
+#include <QtCore/QDebug>
 #include <QtCore/QRegExp>
 #include <QtGui/QValidator>
-
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QGridLayout>

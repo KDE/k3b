@@ -15,14 +15,13 @@
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingsdialog.h"
 #include "k3bdatavolumedescdialog.h"
-
 #include "k3bisooptions.h"
 
-#include <QtCore/QDebug>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
+#include <QtCore/QDebug>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLayout>

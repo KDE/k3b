@@ -41,14 +41,14 @@
 #include "k3baudiotrackplayer.h"
 #endif // ENABLE_AUDIO_PLAYER
 
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
+#include <KXmlGui/KActionCollection>
 
+#include <QtWidgets/QAction>
 #include <QtWidgets/QHeaderView>
-#include <QScrollBar>
-#include <QTreeView>
+#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QTreeView>
 
 
 K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection* actionCollection )

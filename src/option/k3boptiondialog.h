@@ -16,7 +16,7 @@
 #ifndef K3BOPTIONDIALOG_H
 #define K3BOPTIONDIALOG_H
 
-#include <KPageDialog>
+#include <KWidgetsAddons/KPageDialog>
 #include <QtCore/QHash>
 
 class KPageWidgetItem;

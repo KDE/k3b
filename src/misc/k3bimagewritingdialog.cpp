@@ -50,7 +50,6 @@
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <QtCore/QUrl>
 #include <KIOWidgets/KUrlRequester>
 
 #include <QtCore/QFile>
@@ -58,6 +57,7 @@
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QtCore/QMimeData>
+#include <QtCore/QUrl>
 #include <QtGui/QClipboard>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDropEvent>

@@ -17,14 +17,13 @@
 #include <KDELibs4Support/KDE/KLocale>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <QtCore/QUrl>
-#include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QDataStream>
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
+#include <QtCore/QUrl>
 
 #include <stdlib.h>
 

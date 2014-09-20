@@ -18,27 +18,27 @@
 #include "k3bdiroperator.h"
 #include "k3bapplication.h"
 
+#include <KDELibs4Support/KDE/KProgressDialog>
+#include <KFileFilterCombo>
+#include <KIOCore/KFileItem>
+#include <KI18n/KLocalizedString>
+#include <KIOWidgets/KDirLister>
+#include <KWidgetsAddons/KActionMenu>
+#include <KWidgetsAddons/KToolBarSpacerAction>
+#include <KXmlGui/KActionCollection>
+#include <KXmlGui/KToolBar>
+
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
+#include <QtCore/QUrl>
+#include <QtGui/QIcon>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QToolButton>
-#include <QVBoxLayout>
-#include <QWidget>
-
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
-#include <KActionMenu>
-#include <KDirLister>
-#include <KFileFilterCombo>
-#include <KFileItem>
-#include <QtGui/QIcon>
-#include <KI18n/KLocalizedString>
-#include <KProgressDialog>
-#include <KToolBar>
-#include <KToolBarSpacerAction>
-#include <QtCore/QUrl>
-#include <QtCore/QDebug>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 
 class K3b::FileView::Private

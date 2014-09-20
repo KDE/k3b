@@ -25,23 +25,23 @@
 #include "k3bglobals.h"
 #include "k3biso9660.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <qfont.h>
-#include <qcolor.h>
-#include <QtCore/QString>
-#include <QtGui/QPainter>
-#include <QtGui/QPalette>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QTextBrowser>
-#include <QtWebKitWidgets/QWebView>
+#include <libkcddb/cdinfo.h>
 
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 #include <KIOCore/KIO/Global>
-#include <libkcddb/cdinfo.h>
 
+#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtGui/QFont>
+#include <QtGui/QColor>
+#include <QtGui/QPainter>
+#include <QtGui/QPalette>
+#include <QtGui/QPixmap>
+#include <QtWebKitWidgets/QWebView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QTextBrowser>
 
 namespace {
     QString sectionHeader( const QString& title ) {

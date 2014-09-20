@@ -16,16 +16,15 @@
 
 #include "k3bvideocdinfo.h"
 #include "k3bcore.h"
-
-#include <KI18n/KLocalizedString>
-#include <KConfigCore/KConfig>
-#include <QtCore/QDebug>
-
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-
 #include "k3bprocess.h"
 #include "k3bexternalbinmanager.h"
+
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+
+#include <QtCore/QDebug>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 
 
 K3b::VideoCdInfo::VideoCdInfo( QObject* parent )

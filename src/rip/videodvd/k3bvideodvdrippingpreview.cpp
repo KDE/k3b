@@ -19,7 +19,7 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bdevice.h"
 #include "k3bprocess.h"
-#include <KTempDir>
+#include <KDELibs4Support/KDE/KTempDir>
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 

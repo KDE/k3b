@@ -15,8 +15,8 @@
 #ifndef _K3B_VIDEOCD_OPTIONS_H_
 #define _K3B_VIDEOCD_OPTIONS_H_
 
+#include <KI18n/KLocalizedString>
 #include <QtCore/QString>
-#include <klocalizedstring.h>
 
 namespace K3b {
 class VideoCdRippingOptions

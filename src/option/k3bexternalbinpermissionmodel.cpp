@@ -19,13 +19,13 @@
 #include "k3bdefaultexternalprograms.h"
 #include "k3bglobals.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 
+#include <QtCore/QDebug>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QList>
-#include <QSet>
+#include <QtCore/QSet>
 
 #include <sys/stat.h>
 

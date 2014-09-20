@@ -20,10 +20,10 @@
 #include "option/k3boptiondialog.h"
 
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QUrl>
 #include <KXmlGuiWindow>
 
 #include <QtCore/QList>
+#include <QtCore/QUrl>
 
 namespace K3b {
     class Doc;

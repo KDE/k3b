@@ -17,10 +17,6 @@
 #ifndef _K3B_VIDEOCD_RIPPING_DIALOG_H_
 #define _K3B_VIDEOCD_RIPPING_DIALOG_H_
 
-#include <QtCore/QStringList>
-//Added by qt3to4:
-#include <QtWidgets/QLabel>
-
 #include "k3binteractiondialog.h"
 #include "k3bdiskinfo.h"
 #include "k3bvideocdrippingoptions.h"

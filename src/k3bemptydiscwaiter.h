@@ -16,10 +16,10 @@
 #ifndef K3BEMPTYDISCWAITER_H
 #define K3BEMPTYDISCWAITER_H
 
-#include <KDELibs4Support/KDE/KDialog>
 #include "k3bjobhandler.h"
-
 #include "k3bdiskinfo.h"
+
+#include <KDELibs4Support/KDE/KDialog>
 #include <QtGui/QCloseEvent>
 
 

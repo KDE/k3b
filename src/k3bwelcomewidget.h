@@ -19,9 +19,9 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include <QImage>
+#include <QtGui/QImage>
 #include <QtGui/QPixmap>
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class KConfigGroup;
 class QDragEnterEvent;

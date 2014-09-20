@@ -15,8 +15,8 @@
 #ifndef _K3B_MEDIA_SELECTION_DIALOG_H_
 #define _K3B_MEDIA_SELECTION_DIALOG_H_
 
-#include <KDELibs4Support/KDE/KDialog>
 #include "k3bmedium.h"
+#include <KDELibs4Support/KDE/KDialog>
 
 namespace K3b {
     class MediaSelectionComboBox;

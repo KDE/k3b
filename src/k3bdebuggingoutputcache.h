@@ -16,8 +16,8 @@
 #ifndef _K3B_DEBUG_OUTPUT_CACHE_H_
 #define _K3B_DEBUG_OUTPUT_CACHE_H_
 
-#include <QtCore/QString>
 #include <QtCore/QMap>
+#include <QtCore/QString>
 
 
 namespace K3b {

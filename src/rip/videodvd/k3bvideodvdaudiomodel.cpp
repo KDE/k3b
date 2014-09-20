@@ -16,8 +16,8 @@
 #include "k3bvideodvd.h"
 #include "k3bvideodvdtitle.h"
 
-#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KLocale>
+#include <KI18n/KLocalizedString>
 
 #include <QtCore/QHash>
 #include <QtCore/QSize>

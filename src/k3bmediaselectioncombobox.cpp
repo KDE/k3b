@@ -26,13 +26,13 @@
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 
-#include <qfont.h>
+#include <QtCore/QDebug>
 #include <QtCore/QMap>
 #include <QtCore/QVector>
 #include <QtCore/QList>
+#include <QtGui/QFont>
 
 Q_DECLARE_METATYPE(K3b::Medium)
 

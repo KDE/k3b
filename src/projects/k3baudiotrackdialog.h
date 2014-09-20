@@ -15,10 +15,9 @@
 #ifndef K3BAUDIOTRACKDIALOG_H
 #define K3BAUDIOTRACKDIALOG_H
 
+#include "k3bmsf.h"
 
 #include <KDELibs4Support/KDE/KDialog>
-
-#include "k3bmsf.h"
 
 #include <QtCore/QList>
 

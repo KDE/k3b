@@ -28,16 +28,16 @@
 #include "k3bviewcolumnadjuster.h"
 #include "k3bvolumenamewidget.h"
 
-#include <KFileItemDelegate>
 #include <KI18n/KLocalizedString>
+#include <KIOWidgets/KFileItemDelegate>
 #include <KIOWidgets/KRun>
 #include <KXmlGui/KActionCollection>
 
 #include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QInputDialog>
-#include <QtWidgets/QWidgetAction>
 #include <QtWidgets/QShortcut>
+#include <QtWidgets/QWidgetAction>
 
 
 namespace {

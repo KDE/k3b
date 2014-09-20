@@ -19,8 +19,9 @@
 #include "k3baudiodatasource.h"
 #include "k3bsimplejobhandler.h"
 
-#include <KWidgetsAddons/KMessageBox>
 #include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+
 #include <QtWidgets/QInputDialog>
 
 

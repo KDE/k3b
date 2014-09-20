@@ -19,14 +19,14 @@
 #include "k3bcore.h"
 
 #include <KI18n/KLocalizedString>
-#include <QtCore/QDebug>
 #include <KPluginSelector>
 #include <KService/KPluginInfo>
 
+#include <QtCore/QDebug>
 #include <QtCore/QHash>
-#include <QtWidgets/QLabel>
 #include <QtCore/QList>
-#include <QVBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QVBoxLayout>
 
 
 

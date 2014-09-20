@@ -16,12 +16,12 @@
 #include "k3bdevicedelegate.h"
 #include "k3bdevicemodel.h"
 
-#include <QtWidgets/QApplication>
-#include <QtGui/QPainter>
-#include <QtWidgets/QStyle>
-
-#include <KIconEffect>
+#include <KIconThemes/KIconEffect>
 #include <KIconThemes/KIconLoader>
+
+#include <QtGui/QPainter>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QStyle>
 
 
 // FIXME: Get the whole animated hovering code from KFileItemDelegate and put it into a generic class which we can then reuse here

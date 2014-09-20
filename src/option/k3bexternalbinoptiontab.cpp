@@ -17,12 +17,12 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bexternalbinwidget.h"
 
-#include <KWidgetsAddons/KMessageBox>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
 #include <QtWidgets/QLabel>
-#include <QVBoxLayout>
+#include <QtWidgets/QVBoxLayout>
 
 
 K3b::ExternalBinOptionTab::ExternalBinOptionTab( K3b::ExternalBinManager* manager, QWidget* parent )

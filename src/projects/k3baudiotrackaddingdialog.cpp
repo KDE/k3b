@@ -24,16 +24,16 @@
 #include "k3bglobals.h"
 #include "k3bcuefileparser.h"
 
-#include <QtCore/QDebug>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
+#include <QtCore/QThread>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QtCore/QThread>
 
 
 

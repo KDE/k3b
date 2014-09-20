@@ -24,10 +24,10 @@
 
 #include <KCoreAddons/KUrlMimeData>
 #include <KI18n/KLocalizedString>
-#include <QtGui/QIcon>
 
+#include <QtCore/QMimeData>
+#include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
-#include <QMimeData>
 
 
 // we have K3b::AudioTracks in the first level and K3b::AudioDataSources in the second level

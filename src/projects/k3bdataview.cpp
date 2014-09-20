@@ -22,18 +22,18 @@
 #include "k3bdataviewimpl.h"
 #include "k3bdirproxymodel.h"
 
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
-#include <QtCore/QDebug>
-#include <KWidgetsAddons/KMessageBox>
-#include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KMenu>
-#include <QSplitter>
-#include <KToolBar>
-#include <QtCore/QUrl>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+#include <KXmlGui/KActionCollection>
+#include <KXmlGui/KToolBar>
 
-#include <QTreeView>
+#include <QtCore/QDebug>
+#include <QtCore/QUrl>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QSplitter>
 
 
 K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )

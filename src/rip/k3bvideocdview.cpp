@@ -14,11 +14,9 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-// k3b includes
 #include "k3bvideocdview.h"
 #include "k3bvideocdrippingdialog.h"
 #include "k3bvideocdinfo.h"
-
 #include "k3bappdevicemanager.h"
 #include "k3bapplication.h"
 #include "k3bdevice.h"
@@ -28,32 +26,29 @@
 #include "k3bmedium.h"
 #include "k3bstdguiitems.h"
 
-
-// kde includes
-#include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
-#include <KActionMenu>
-#include <QtCore/QDebug>
+#include <KConfigWidgets/KStandardAction>
+#include <KDELibs4Support/KDE/KMenu>
 #include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KMenu>
+#include <KWidgetsAddons/KActionMenu>
 #include <KWidgetsAddons/KMessageBox>
-#include <KStandardAction>
-#include <KToolBar>
-#include <KToolBarSpacerAction>
+#include <KWidgetsAddons/KToolBarSpacerAction>
+#include <KXmlGui/KToolBar>
+#include <KXmlGui/KActionCollection>
 
-// qt includes
-#include <QtWidgets/QApplication>
+#include <QtCore/QDebug>
+#include <QtCore/QList>
 #include <QtGui/QCursor>
-#include <QtXml/QDomElement>
 #include <QtGui/QFont>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QAction>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
-#include <QtCore/QList>
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QVBoxLayout>
+#include <QtWidgets/QTreeWidgetItem>
+#include <QtWidgets/QVBoxLayout>
+#include <QtXml/QDomElement>
 
 namespace {
 

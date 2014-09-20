@@ -15,11 +15,12 @@
 #ifndef _K3B_ACTION_H_
 #define _K3B_ACTION_H_
 
+#include <KWidgetsAddons/KToggleAction>
+#include <KXmlGui/KActionCollection>
+
 #include <QtCore/QObject>
 #include <QtGui/QIcon>
-#include <KToggleAction>
 #include <QtWidgets/QAction>
-#include <KXmlGui/KActionCollection>
 
 namespace K3b {
     /**
