@@ -15,9 +15,11 @@
 #ifndef _K3B_INTERACTION_DIALOG_H_
 #define _K3B_INTERACTION_DIALOG_H_
 
-#include <KDELibs4Support/KDE/KDialog>
-#include <QtWidgets/QGridLayout>
+#include <KConfigCore/KConfigGroup>
+
 #include <QtCore/QEvent>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 
 
@@ -38,7 +40,7 @@ namespace K3b {
      * The default implementations of the slots just emit the
      * corresponding signals.
      */
-    class InteractionDialog : public KDialog
+    class InteractionDialog : public QDialog
     {
         Q_OBJECT
 

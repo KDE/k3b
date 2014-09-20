@@ -8,22 +8,10 @@
     <x>0</x>
     <y>0</y>
     <width>533</width>
-    <height>616</height>
+    <height>653</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -156,5 +144,38 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>m_buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>base_K3bExternalEncoderEditDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>266</x>
+     <y>637</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>266</x>
+     <y>326</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>base_K3bExternalEncoderEditDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>266</x>
+     <y>637</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>266</x>
+     <y>326</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

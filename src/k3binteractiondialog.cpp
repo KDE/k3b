@@ -53,7 +53,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
                                            int buttonMask,
                                            int defaultButton,
                                            const QString& configGroup )
-    : KDialog( parent ),
+    : QDialog( parent ),
       m_mainWidget(0),
       m_defaultButton(defaultButton),
       m_configGroup(configGroup),
@@ -61,15 +61,14 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
       m_delayedInit(false)
 {
     installEventFilter( this );
-    setButtons( KDialog::None );
 
-    mainGrid = new QGridLayout( KDialog::mainWidget() );
+    mainGrid = new QGridLayout( this );
 
     mainGrid->setContentsMargins( 0, 0, 0, 0 );
 
     // header
     // ---------------------------------------------------------------------------------------------------
-    m_dialogHeader = new K3b::ThemedHeader( KDialog::mainWidget() );
+    m_dialogHeader = new K3b::ThemedHeader( this );
     mainGrid->addWidget( m_dialogHeader, 0, 0, 1, 3 );
 
 
@@ -77,7 +76,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
     // ---------------------------------------------------------------------------------------------------
     if( !m_configGroup.isEmpty() ) {
         QHBoxLayout* layout2 = new QHBoxLayout;
-        m_buttonLoadSettings = new QToolButton( KDialog::mainWidget() );
+        m_buttonLoadSettings = new QToolButton( this );
         m_buttonLoadSettings->setIcon( QIcon::fromTheme( "document-revert" ) );
         m_buttonLoadSettings->setPopupMode( QToolButton::InstantPopup );
         QMenu* userDefaultsPopup = new QMenu( m_buttonLoadSettings );
@@ -87,7 +86,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
         m_buttonLoadSettings->setMenu( userDefaultsPopup );
         layout2->addWidget( m_buttonLoadSettings );
 
-        m_buttonSaveSettings = new QToolButton( KDialog::mainWidget() );
+        m_buttonSaveSettings = new QToolButton( this );
         m_buttonSaveSettings->setIcon( QIcon::fromTheme( "document-save" ) );
         layout2->addWidget( m_buttonSaveSettings );
 
@@ -97,10 +96,12 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
     mainGrid->addItem( spacer, 2, 1 );
 
-
     // action buttons
     // ---------------------------------------------------------------------------------------------------
-    QDialogButtonBox *buttonBox = new QDialogButtonBox( KDialog::mainWidget() );
+    QDialogButtonBox *buttonBox = new QDialogButtonBox( this );
+    connect( buttonBox, SIGNAL(accepted()), this, SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), this, SLOT(reject()) );
+
     if( buttonMask & START_BUTTON ) {
         m_buttonStart = new QPushButton( buttonBox );
         KGuiItem::assign( m_buttonStart, KStandardGuiItem::ok() );
@@ -152,7 +153,7 @@ K3b::InteractionDialog::~InteractionDialog()
 
 void K3b::InteractionDialog::show()
 {
-    KDialog::show();
+    QDialog::show();
     if( QPushButton* b = getButton( m_defaultButton ) )
         b->setFocus();
 }
@@ -160,7 +161,7 @@ void K3b::InteractionDialog::show()
 
 QSize K3b::InteractionDialog::sizeHint() const
 {
-    QSize s = KDialog::sizeHint();
+    QSize s = QDialog::sizeHint();
     // I want the dialogs to look good.
     // That means their height should never outgrow their width
     if( s.height() > s.width() )
@@ -223,7 +224,7 @@ void K3b::InteractionDialog::setTitle( const QString& title, const QString& subT
 
 void K3b::InteractionDialog::setMainWidget( QWidget* w )
 {
-    w->setParent( KDialog::mainWidget() );
+    w->setParent( this );
     mainGrid->addWidget( w, 1, 0, 1, 3 );
     m_mainWidget = w;
 }
@@ -356,7 +357,7 @@ bool K3b::InteractionDialog::eventFilter( QObject* o, QEvent* ev )
         }
     }
 
-    return KDialog::eventFilter( o, ev );
+    return QDialog::eventFilter( o, ev );
 }
 
 
@@ -494,7 +495,7 @@ int K3b::InteractionDialog::exec()
     else
         slotInternalInit();
 
-    return KDialog::exec();
+    return QDialog::exec();
 }
 
 
@@ -506,20 +507,20 @@ void K3b::InteractionDialog::hideTemporarily()
 
 void K3b::InteractionDialog::close()
 {
-    KDialog::close();
+    QDialog::close();
 }
 
 
 void K3b::InteractionDialog::done( int r )
 {
-    KDialog::done( r );
+    QDialog::done( r );
 }
 
 
 void K3b::InteractionDialog::hideEvent( QHideEvent* e )
 {
     qDebug() << this;
-    KDialog::hideEvent( e );
+    QDialog::hideEvent( e );
 }
 
 

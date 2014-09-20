@@ -52,6 +52,8 @@ int K3b::CDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& ent
     listBox->setSelectionMode( QAbstractItemView::SingleSelection );
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+    QObject::connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
+    QObject::connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
 
     QVBoxLayout* layout = new QVBoxLayout( &dialog );
     layout->setContentsMargins( 0, 0, 0, 0 );

@@ -16,7 +16,6 @@
 #include "k3bstdguiitems.h"
 
 #include <KIconThemes/KIconLoader>
-#include <KDELibs4Support/KDE/KDialog>
 
 #include <QtCore/QSignalMapper>
 #include <QtGui/QCloseEvent>
@@ -91,7 +90,7 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     QGridLayout* mainGrid = new QGridLayout( this );
 
     QHBoxLayout* contents = new QHBoxLayout;
-    contents->setSpacing( KDialog::spacingHint()*2 );
+    contents->setSpacing( contents->spacing()*2 );
     contents->setContentsMargins( 0, 0, 0, 0 );
 
     QLabel* pixLabel = new QLabel( this );

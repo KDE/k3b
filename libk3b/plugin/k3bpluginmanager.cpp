@@ -21,7 +21,6 @@
 #include <KCMUtils/KCModuleInfo>
 #include <KCMUtils/KCModuleProxy>
 #include <QtCore/QDebug>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <KService/KPluginInfo>
 #include <KService/KService>
@@ -32,6 +31,10 @@
 #include <QtCore/QList>
 #include <QtCore/QMap>
 #include <QtCore/QSharedPointer>
+#include <QtWidgets/QAbstractButton>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QVBoxLayout>
 
 
 
@@ -172,13 +175,22 @@ bool K3b::PluginManager::hasPluginDialog( Plugin* plugin ) const
 int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
 {
     if( KCModuleProxy* moduleProxy = d->getModuleProxy( plugin ) ) {
-        KDialog dlg( parent );
-        dlg.setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Default);
+        QDialog dlg( parent );
         dlg.setWindowTitle( plugin->pluginInfo().name() );
-        moduleProxy->setParent( &dlg );
-        dlg.setMainWidget( moduleProxy );
-        
-        connect( &dlg, SIGNAL(defaultClicked()), moduleProxy, SLOT(defaults()) );
+        QVBoxLayout* layout = new QVBoxLayout( &dlg );
+        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, &dlg );
+        layout->addWidget( moduleProxy );
+        layout->addWidget( buttonBox );
+
+        connect( buttonBox, &QDialogButtonBox::clicked, [&](QAbstractButton *button) {
+            switch( buttonBox->standardButton( button ) )
+            {
+            case QDialogButtonBox::Ok: dlg.accept(); break;
+            case QDialogButtonBox::Cancel: dlg.reject(); break;
+            case QDialogButtonBox::RestoreDefaults: moduleProxy->defaults(); break;
+            default: break;
+            }
+        } );
         
         int ret = dlg.exec();
         if( ret == QDialog::Accepted )

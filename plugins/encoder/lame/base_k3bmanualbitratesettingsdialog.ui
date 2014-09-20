@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>337</width>
-    <height>351</height>
+    <height>388</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -199,7 +199,7 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
     </spacer>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
+    <widget class="QDialogButtonBox" name="m_buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
@@ -287,6 +287,38 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
     <hint type="destinationlabel">
      <x>136</x>
      <y>169</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>K3bManualBitrateSettingsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>168</x>
+     <y>363</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>168</x>
+     <y>193</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>K3bManualBitrateSettingsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>168</x>
+     <y>363</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>168</x>
+     <y>193</y>
     </hint>
    </hints>
   </connection>

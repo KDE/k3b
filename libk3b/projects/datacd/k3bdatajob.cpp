@@ -38,7 +38,6 @@
 #include "k3bdeviceglobals.h"
 #include "k3bgrowisofswriter.h"
 
-#include <kapplication.h>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/Job>
