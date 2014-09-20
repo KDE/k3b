@@ -18,12 +18,12 @@
 
 #include <KConfigCore/KConfigGroup>
 #include <KCoreAddons/KProcess>
-#include <KDELibs4Support/KDE/KStandardDirs>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtCore/QFile>
+#include <QtCore/QtGlobal>
 #include <QtCore/QRegExp>
 
 #ifndef Q_OS_WIN32
@@ -284,7 +284,7 @@ QString K3b::ExternalProgram::name() const
 QString K3b::ExternalProgram::buildProgramPath( const QString& dir, const QString& programName )
 {
     QString p = K3b::prepareDir( dir ) + programName;
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     p += ".exe";
 #endif
     return p;
@@ -581,7 +581,13 @@ void K3b::ExternalBinManager::search()
 
     // do not search one path twice
     QStringList paths;
-    const QStringList possiblePaths = d->searchPath + KStandardDirs::systemPaths();
+#ifdef Q_OS_WIN
+    const QChar pathSep = QChar::fromLatin1( ';' );
+#else
+    const QChar pathSep = QChar::fromLatin1( ':' );
+#endif
+    const QStringList possiblePaths = QString::fromLatin1( qgetenv( "PATH" ) ).split( pathSep, QString::SkipEmptyParts )
+                                      + d->searchPath;
     foreach( QString p, possiblePaths ) {
         if (p.length() == 0)
             continue;
