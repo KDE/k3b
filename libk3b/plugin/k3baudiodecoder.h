@@ -84,7 +84,7 @@ namespace K3b {
          * This should at least support "Title" and "Artist"
          *
          * the default implementation returns the infos set via @p addMetaInfo
-         * and uses KFileMetaInfo if none was set
+         * and uses KFileMetaData if none was set
          */
         virtual QString metaInfo( MetaDataField );
 

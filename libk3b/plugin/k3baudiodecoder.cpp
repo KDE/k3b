@@ -19,11 +19,15 @@
 #include "k3baudiodecoder.h"
 #include "k3bpluginmanager.h"
 
-#include <KDELibs4Support/KDE/KFileMetaInfo>
+#include <KFileMetaData/ExtractorPlugin>
+#include <KFileMetaData/ExtractorPluginManager>
+#include <KFileMetaData/Properties>
 #include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QMap>
+#include <QtCore/QMimeDatabase>
+#include <QtCore/QMimeType>
 
 #include <math.h>
 
@@ -37,12 +41,57 @@
 // use a one second buffer
 static const int DECODING_BUFFER_SIZE = 75*2352;
 
+namespace
+{
+
+typedef QMap<K3b::AudioDecoder::MetaDataField, QString> MetaInfoMap;
+
+class ExtractionResult : public KFileMetaData::ExtractionResult
+{
+public:
+    ExtractionResult( const QString& filename, const QString& mimetype, MetaInfoMap& metaInfoMap )
+        : KFileMetaData::ExtractionResult( filename, mimetype, KFileMetaData::ExtractionResult::ExtractMetaData ),
+          metaInfoMap_( metaInfoMap ) {}
+
+    void append(const QString& /*text*/) override {}
+
+    void addType(KFileMetaData::Type::Type /*type*/) override {}
+
+    void add(KFileMetaData::Property::Property property, const QVariant& value) override
+    {
+        switch(property)
+        {
+        case KFileMetaData::Property::Title:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_TITLE, value.toString() );
+            break;
+        case KFileMetaData::Property::Artist:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_ARTIST, value.toString() );
+            break;
+        case KFileMetaData::Property::Lyricist:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_SONGWRITER, value.toString() );
+            break;
+        case KFileMetaData::Property::Composer:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_COMPOSER, value.toString() );
+            break;
+        case KFileMetaData::Property::Comment:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_COMMENT, value.toString() );
+            break;
+        default:
+            break;
+        }
+    }
+
+private:
+    MetaInfoMap& metaInfoMap_;
+};
+
+} // namespace
+
 class K3b::AudioDecoder::Private
 {
 public:
     Private()
-        : metaInfo(0),
-          resampleState(0),
+        : resampleState(0),
           resampleData(0),
           inBuffer(0),
           inBufferPos(0),
@@ -69,7 +118,9 @@ public:
 
     K3b::Msf decodingStartPos;
 
-    KFileMetaInfo* metaInfo;
+    KFileMetaData::ExtractorPluginManager metaDataPluginManager;
+    QMimeDatabase mimeDatabase;
+    QMimeType mimeType;
 
     // set to true once decodeInternal() returned 0
     bool decoderFinished;
@@ -95,7 +146,7 @@ public:
     int decodingBufferFill;
 
     QMap<QString, QString> technicalInfoMap;
-    QMap<MetaDataField, QString> metaInfoMap;
+    MetaInfoMap metaInfoMap;
 
     bool valid;
 };
@@ -117,7 +168,6 @@ K3b::AudioDecoder::~AudioDecoder()
     if( d->outBuffer ) delete [] d->outBuffer;
     if( d->monoBuffer ) delete [] d->monoBuffer;
 
-    delete d->metaInfo;
     delete d->resampleData;
     if( d->resampleState )
         src_delete( d->resampleState );
@@ -128,8 +178,7 @@ K3b::AudioDecoder::~AudioDecoder()
 void K3b::AudioDecoder::setFilename( const QString& filename )
 {
     m_fileName = filename;
-    delete d->metaInfo;
-    d->metaInfo = 0;
+    d->mimeType = QMimeType();
 }
 
 
@@ -143,8 +192,7 @@ bool K3b::AudioDecoder::analyseFile()
 {
     d->technicalInfoMap.clear();
     d->metaInfoMap.clear();
-    delete d->metaInfo;
-    d->metaInfo = 0;
+    d->mimeType = QMimeType();
 
     cleanup();
 
@@ -503,33 +551,18 @@ QString K3b::AudioDecoder::metaInfo( MetaDataField f )
     if( d->metaInfoMap.contains( f ) )
         return d->metaInfoMap[f];
 
-    // fall back to KFileMetaInfo
-    if( !d->metaInfo )
-        d->metaInfo = new KFileMetaInfo( filename() );
-
-    if( d->metaInfo->isValid() ) {
-        QString tag;
-        switch( f ) {
-        case META_TITLE:
-            tag = "Title";
-            break;
-        case META_ARTIST:
-            tag = "Artist";
-            break;
-        case META_SONGWRITER:
-            tag = "Songwriter";
-            break;
-        case META_COMPOSER:
-            tag = "Composer";
-            break;
-        case META_COMMENT:
-            tag = "Comment";
-            break;
+    // fall back to KFileMetaData
+    if( !d->mimeType.isValid() )
+    {
+        d->mimeType = d->mimeDatabase.mimeTypeForFile( m_fileName );
+        for( KFileMetaData::ExtractorPlugin* plugin : d->metaDataPluginManager.fetchExtractors( d->mimeType.name() ) )
+        {
+            ExtractionResult extractionResult(m_fileName, d->mimeType.name(), d->metaInfoMap);
+            plugin->extract(&extractionResult);
         }
 
-        KFileMetaInfoItem item = d->metaInfo->item( tag );
-        if( item.isValid() )
-            return item.value().toString();
+        if( d->metaInfoMap.contains( f ) )
+            return d->metaInfoMap[f];
     }
 
     return QString();

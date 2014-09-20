@@ -200,15 +200,19 @@ target_include_directories(k3blib
 
 target_link_libraries(k3blib
     PUBLIC
-        Qt5::Core
+        KF5::Completion
         KF5::ConfigWidgets
         KF5::CoreAddons
         KF5::KIOCore
         KF5::Service
     PRIVATE
         k3bdevice
+        KF5::FileMetaData
+        KF5::IconThemes
+        KF5::I18n
         KF5::KCMUtils
-        KF5::KDELibs4Support
+        KF5::Solid
+        Qt5::Network
         Qt5::Widgets
         KDE::Libkcddb::kcddb
         samplerate
