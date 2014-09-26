@@ -791,7 +791,6 @@ void K3b::DvdCopyJob::slotVerificationFinished( bool success )
 // perhaps this should be moved to some K3b::GrowisofsHandler which also parses the growisofs output?
 bool K3b::DvdCopyJob::waitForDvd()
 {
-    Device::MediaTypes mt = 0;
     if ( !K3b::Device::isDvdMedia( d->sourceDiskInfo.mediaType() ) &&
          !K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
         // this should NEVER happen

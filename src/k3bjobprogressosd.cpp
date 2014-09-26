@@ -171,7 +171,6 @@ void K3b::JobProgressOSD::paintEvent( QPaintEvent* )
         p.drawPixmap( margin, (newSize.height()-icon.height())/2, icon );
 
         // draw the text
-        QSize textSize = fontMetrics().size( 0, m_text );
         int textX = 2*margin + icon.width();
         int textY = margin + fontMetrics().ascent();
         p.drawText( textX, textY, m_text );
