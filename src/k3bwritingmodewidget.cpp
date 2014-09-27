@@ -23,23 +23,23 @@
 
 #include <QToolTip>
 
-static const QString s_autoHelp = i18n("Let K3b select the best-suited mode. This is the recommended selection.");
-static const QString s_daoHelp = i18n("<em>Disk At Once</em> or more properly <em>Session At Once</em>. "
+static const KLocalizedString s_autoHelp = ki18n("Let K3b select the best-suited mode. This is the recommended selection.");
+static const KLocalizedString s_daoHelp = ki18n("<em>Disk At Once</em> or more properly <em>Session At Once</em>. "
                                       "The laser is never turned off while writing the CD or DVD. "
                                       "This is the preferred mode to write audio CDs since it allows "
                                       "pregaps other than 2 seconds. Not all writers support DAO.<br>"
                                       "DVD-R(W)s written in DAO provide the best DVD-Video compatibility.");
-static const QString s_taoHelp = i18n("<em>Track At Once</em> should be supported by every CD writer. "
+static const KLocalizedString s_taoHelp = ki18n("<em>Track At Once</em> should be supported by every CD writer. "
                                       "The laser will be turned off after every track.<br>"
                                       "Most CD writers need this mode for writing multisession CDs.");
 // TODO: add something like: "No CD-TEXT writing in TAO mode."
 
-static const QString s_rawHelp = i18n("RAW writing mode. The error correction data is created by the "
+static const KLocalizedString s_rawHelp = ki18n("RAW writing mode. The error correction data is created by the "
                                       "software instead of the writer device.<br>"
                                       "Try this if your CD writer fails to write in DAO and TAO.");
-static const QString s_seqHelp = i18n("Incremental sequential is the default writing mode for DVD-R(W). "
+static const KLocalizedString s_seqHelp = ki18n("Incremental sequential is the default writing mode for DVD-R(W). "
                                       "It allows multisession DVD-R(W)s. It only applies to DVD-R(W).");
-static const QString s_ovwHelp = i18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
+static const KLocalizedString s_ovwHelp = ki18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
                                       "or a DVD+RW. The media may just be overwritten. It is not possible "
                                       "to write multisession DVD-RWs in this mode but K3b uses growisofs "
                                       "to grow an ISO9660 filesystem within the first session, thus allowing "
@@ -154,17 +154,17 @@ void K3b::WritingModeWidget::updateModes()
     else
         d->selectedModes = d->supportedModes;
 
-    insertItem( WritingModeAuto, i18n("Auto"), s_autoHelp );
+    insertItem( WritingModeAuto, i18n("Auto"), s_autoHelp.toString() );
     if( d->selectedModes & WritingModeSao )
-        insertItem( WritingModeSao, i18n("DAO"), s_daoHelp );
+        insertItem( WritingModeSao, i18n("DAO"), s_daoHelp.toString() );
     if( d->selectedModes & WritingModeTao )
-        insertItem( WritingModeTao, i18n("TAO"), s_taoHelp );
+        insertItem( WritingModeTao, i18n("TAO"), s_taoHelp.toString() );
     if( d->selectedModes & WritingModeRaw )
-        insertItem( WritingModeRaw, i18n("RAW"), s_rawHelp );
+        insertItem( WritingModeRaw, i18n("RAW"), s_rawHelp.toString() );
     if( d->selectedModes & WritingModeRestrictedOverwrite )
-        insertItem( WritingModeRestrictedOverwrite, i18n("Restricted Overwrite"), s_ovwHelp );
+        insertItem( WritingModeRestrictedOverwrite, i18n("Restricted Overwrite"), s_ovwHelp.toString() );
     if( d->selectedModes & WritingModeIncrementalSequential )
-        insertItem( WritingModeIncrementalSequential, i18n("Incremental"), s_seqHelp );
+        insertItem( WritingModeIncrementalSequential, i18n("Incremental"), s_seqHelp.toString() );
 
     setWritingMode( currentMode != -1 ? WritingMode( currentMode ) : WritingModeAuto );
 }
