@@ -82,7 +82,7 @@ namespace K3b {
 
         QList<Job*> runningSubJobs() const;
 
-        static const char* DEFAULT_SIGNAL_CONNECTION;
+        static const char DEFAULT_SIGNAL_CONNECTION[];
 
         /**
          * Connect a job 1-to-1. Useful for wrapper jobs.
