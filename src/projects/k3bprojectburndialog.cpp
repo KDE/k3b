@@ -36,7 +36,6 @@
 #include <QtWidgets/QToolTip>
 
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KVBox>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>

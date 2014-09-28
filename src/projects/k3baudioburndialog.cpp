@@ -31,7 +31,6 @@
 #include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
-#include <KDELibs4Support/KDE/KVBox>
 
 #include <QtCore/QPoint>
 #include <QtCore/QStringList>
@@ -41,6 +40,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLineEdit>
@@ -84,16 +84,19 @@ K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )
     advancedGimmickGroupLayout->addWidget( m_checkHideFirstTrack );
 
     m_audioRippingGroup = new QGroupBox( i18n("Audio Ripping"), advancedTab );
-    KHBox* box = new KHBox( m_audioRippingGroup );
-    box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
-    m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( box );
-    box = new KHBox( m_audioRippingGroup );
-    box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-    m_spinAudioRippingReadRetries = new QSpinBox( box );
+    m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( m_audioRippingGroup );
+    QHBoxLayout* paranoiaModeLayout = new QHBoxLayout;
+    paranoiaModeLayout->addWidget( new QLabel( i18n("Paranoia mode:"), m_audioRippingGroup ), 1 );
+    paranoiaModeLayout->addWidget( m_comboParanoiaMode );
+    m_spinAudioRippingReadRetries = new QSpinBox( m_audioRippingGroup );
     m_spinAudioRippingReadRetries->setRange( 1, 128 );
     m_checkAudioRippingIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), m_audioRippingGroup );
+    QHBoxLayout* readRetriesLayout = new QHBoxLayout;
+    readRetriesLayout->addWidget( new QLabel( i18n("Read retries:" ), m_audioRippingGroup ), 1 );
+    readRetriesLayout->addWidget( m_spinAudioRippingReadRetries );
     QVBoxLayout* audioRippingGroupLayout = new QVBoxLayout( m_audioRippingGroup );
-    audioRippingGroupLayout->addWidget( box );
+    audioRippingGroupLayout->addLayout( paranoiaModeLayout );
+    audioRippingGroupLayout->addLayout( readRetriesLayout );
     audioRippingGroupLayout->addWidget( m_checkAudioRippingIgnoreReadErrors );
 
     advancedTabGrid->addWidget( advancedSettingsGroup, 0, 0 );

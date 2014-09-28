@@ -26,12 +26,11 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QVBoxLayout>
 
 K3b::Splash::Splash( QWidget* parent )
-    : KVBox( parent)
+    : QWidget( parent)
 {
-    setMargin( 0 );
-    setSpacing( 0 );
     setAttribute( Qt::WA_DeleteOnClose );
     setWindowFlags(Qt::FramelessWindowHint|
                    Qt::SplashScreen|
@@ -56,6 +55,13 @@ K3b::Splash::Splash( QWidget* parent )
     m_infoBox = new QLabel( this );
     m_infoBox->setMargin( 5 );
 
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->setContentsMargins( 0, 0, 0, 0 );
+    layout->setSpacing( 0 );
+    layout->addWidget( copyrightLabel );
+    layout->addWidget( picLabel );
+    layout->addWidget( m_infoBox );
+
     // Set geometry, with support for Xinerama systems
     QRect r;
     r.setSize(sizeHint());
@@ -78,7 +84,7 @@ void K3b::Splash::mousePressEvent( QMouseEvent* )
 
 void K3b::Splash::show()
 {
-    KVBox::show();
+    QWidget::show();
     // make sure the splash screen is shown immediately
     qApp->processEvents();
 }

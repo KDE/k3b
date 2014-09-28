@@ -30,7 +30,6 @@
 
 #include <KConfigCore/KConfig>
 #include <KCoreAddons/KAboutData>
-#include <KDELibs4Support/KDE/KHBox>
 #include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
@@ -42,6 +41,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolTip>
+#include <QtWidgets/QHBoxLayout>
 
 
 
@@ -50,16 +50,19 @@ K3b::StatusBarManager::StatusBarManager( K3b::MainWindow* parent )
       m_mainWindow(parent)
 {
     // setup free temp space box
-    KHBox* boxFreeTemp = new KHBox( m_mainWindow->statusBar() );
-    boxFreeTemp->setSpacing(2);
-
-    m_labelProjectInfo = new QLabel( m_mainWindow->statusBar() );
-
+    QWidget* boxFreeTemp = new QWidget( m_mainWindow->statusBar() );
+    boxFreeTemp->installEventFilter( this );
     m_pixFreeTemp = new QLabel( boxFreeTemp );
-    (void)new QLabel( i18n("Temp:"), boxFreeTemp );
     m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
     m_labelFreeTemp = new QLabel( boxFreeTemp );
-    boxFreeTemp->installEventFilter( this );
+
+    QHBoxLayout* boxFreeTempLayout = new QHBoxLayout( boxFreeTemp );
+    boxFreeTempLayout->setSpacing(2);
+    boxFreeTempLayout->addWidget( new QLabel( i18n("Temp:"), boxFreeTemp ) );
+    boxFreeTempLayout->addWidget( m_pixFreeTemp );
+    boxFreeTempLayout->addWidget( m_labelFreeTemp );
+
+    m_labelProjectInfo = new QLabel( m_mainWindow->statusBar() );
 
     // setup info area
     m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );

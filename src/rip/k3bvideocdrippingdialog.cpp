@@ -22,7 +22,6 @@
 
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KVBox>
 #include <KI18n/KLocalizedString>
 #include <KIOWidgets/KUrlRequester>
 #include <KWidgetsAddons/KMessageBox>
@@ -37,6 +36,7 @@
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QToolTip>
 
 
@@ -77,21 +77,22 @@ void K3b::VideoCdRippingDialog::setupGui()
 
     rippathLabel->setBuddy( m_editDirectory );
 
-    KHBox* freeSpaceBox = new KHBox( groupDirectory );
-    ( void ) new QLabel( i18n( "Free space in folder:" ), freeSpaceBox );
-    m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox );
+    QHBoxLayout* freeSpaceBox = new QHBoxLayout;
+    freeSpaceBox->addWidget( new QLabel( i18n( "Free space in folder:" ), groupDirectory ) );
+    m_labelFreeSpace = new QLabel( "                       ", groupDirectory );
     m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    freeSpaceBox->addWidget( m_labelFreeSpace );
 
-    KHBox* necessarySizeBox = new KHBox( groupDirectory );
-    ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox );
-    m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox );
+    QHBoxLayout* necessarySizeBox = new QHBoxLayout;
+    necessarySizeBox->addWidget( new QLabel( i18n( "Necessary storage size:" ), groupDirectory ) );
+    m_labelNecessarySize = new QLabel( "                        ", groupDirectory );
     m_labelNecessarySize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-
+    necessarySizeBox->addWidget( m_labelNecessarySize );
 
     groupDirectoryLayout->addWidget( rippathLabel, 0, 0 );
     groupDirectoryLayout->addWidget( m_editDirectory, 0, 1 );
-    groupDirectoryLayout->addWidget( freeSpaceBox, 1, 1 );
-    groupDirectoryLayout->addWidget( necessarySizeBox, 2, 1 );
+    groupDirectoryLayout->addLayout( freeSpaceBox, 1, 1 );
+    groupDirectoryLayout->addLayout( necessarySizeBox, 2, 1 );
 
     // ---------------------------------------------------- Options group ---
     QGroupBox* groupOptions = new QGroupBox( i18n( "Settings" ), frame );
