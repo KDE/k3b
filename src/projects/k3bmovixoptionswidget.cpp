@@ -19,7 +19,6 @@
 
 #include <KConfigCore/KConfig>
 #include <KCompletion/KComboBox>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KI18n/KLocalizedString>
 

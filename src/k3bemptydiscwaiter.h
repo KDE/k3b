@@ -19,8 +19,8 @@
 #include "k3bjobhandler.h"
 #include "k3bdiskinfo.h"
 
-#include <KDELibs4Support/KDE/KDialog>
 #include <QtGui/QCloseEvent>
+#include <QtWidgets/QDialog>
 
 
 /**
@@ -36,7 +36,7 @@ namespace K3b {
         class Device;
     }
 
-    class EmptyDiscWaiter : public KDialog, public JobHandler
+    class EmptyDiscWaiter : public QDialog, public JobHandler
     {
         Q_OBJECT
 
@@ -88,8 +88,8 @@ namespace K3b {
 
     protected Q_SLOTS:
         void slotCancel();
-        void slotUser1();
-        void slotUser2();
+        void slotEject();
+        void slotLoad();
         void slotMediumChanged( K3b::Device::Device* );
         void showDialog();
         void continueWaiting();

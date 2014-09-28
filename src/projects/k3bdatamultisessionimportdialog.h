@@ -15,7 +15,7 @@
 #ifndef _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 #define _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 
-#include <KDELibs4Support/KDE/KDialog>
+#include <QtWidgets/QDialog>
 
 namespace K3b {
     class DataDoc;
@@ -25,7 +25,7 @@ namespace K3b {
         class Device;
     }
 
-    class DataMultisessionImportDialog : public KDialog
+    class DataMultisessionImportDialog : public QDialog
     {
         Q_OBJECT
 

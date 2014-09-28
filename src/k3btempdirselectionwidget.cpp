@@ -21,7 +21,6 @@
 #include <KCompletion/KLineEdit>
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KDiskFreeSpaceInfo>

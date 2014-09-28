@@ -15,13 +15,13 @@
 #ifndef _K3B_DATA_URL_ADDING_DIALOG_H_
 #define _K3B_DATA_URL_ADDING_DIALOG_H_
 
-#include <KDELibs4Support/KDE/KDialog>
 #include <QtCore/QUrl>
 #include <QtCore/QDir>
 #include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QPair>
 #include <QtCore/QStringList>
+#include <QtWidgets/QDialog>
 #include <QtWidgets/QLabel>
 
 #include <KIOCore/KIO/Global>
@@ -37,7 +37,7 @@ namespace K3b {
     class DirSizeJob;
     class DataDoc;
 
-    class DataUrlAddingDialog : public KDialog
+    class DataUrlAddingDialog : public QDialog
     {
         Q_OBJECT
 
@@ -62,14 +62,14 @@ namespace K3b {
         void slotStartCopyMoveItems();
         void slotAddUrls();
         void slotCopyMoveItems();
-        void slotCancel();
+        void reject() override;
         void slotDirSizeDone( bool );
         void updateProgress();
 
     private:
         DataUrlAddingDialog( const QList<QUrl>& urls, DirItem* dir, QWidget* parent = 0 );
         DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent = 0 );
-        void init();
+        DataUrlAddingDialog( DirItem* dir, QWidget* parent );
         bool getNewName( const QString& oldName, DirItem* dir, QString& newName );
         bool addHiddenFiles();
         bool addSystemFiles();

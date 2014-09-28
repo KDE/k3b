@@ -18,12 +18,10 @@
 
 #include "ui_base_k3badvanceddataimagesettings.h"
 
-#include <KDELibs4Support/KDE/KDialog>
-
 namespace K3b {
     class IsoOptions;
 
-    class DataAdvancedImageSettingsDialog : public KDialog, public Ui::base_K3bAdvancedDataImageSettings
+    class DataAdvancedImageSettingsDialog : public QDialog, public Ui::base_K3bAdvancedDataImageSettings
     {
         Q_OBJECT
 

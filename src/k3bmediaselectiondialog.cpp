@@ -19,30 +19,33 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QPushButton>
 
 
 K3b::MediaSelectionDialog::MediaSelectionDialog( QWidget* parent,
                                                  const QString& title,
                                                  const QString& text,
                                                  bool modal )
-    : KDialog( parent)
+    : QDialog( parent)
 {
-    QWidget *widget = new QWidget();
-    setMainWidget(widget);
     setWindowTitle(title.isEmpty() ? i18n("Medium Selection") : title);
-    setButtons (Ok|Cancel);
     setModal(modal);
-    setDefaultButton(Ok);
-    QGridLayout* lay = new QGridLayout( widget );
 
-    QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, widget );
-    m_combo = new K3b::MediaSelectionComboBox( widget );
+    QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, this );
+    m_combo = new K3b::MediaSelectionComboBox( this );
 
-    lay->addWidget( label, 0, 0 );
-    lay->addWidget( m_combo, 1, 0 );
-    lay->setRowStretch( 2, 1 );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
+    m_okButton = buttonBox->button( QDialogButtonBox::Ok );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
+
+    QVBoxLayout* lay = new QVBoxLayout( this );
+    lay->addWidget( label );
+    lay->addWidget( m_combo );
+    lay->addWidget( buttonBox );
 
     connect( m_combo, SIGNAL(selectionChanged(K3b::Device::Device*)),
              this, SLOT(slotSelectionChanged(K3b::Device::Device*)) );
@@ -82,7 +85,7 @@ K3b::Device::Device* K3b::MediaSelectionDialog::selectedDevice() const
 
 void K3b::MediaSelectionDialog::slotSelectionChanged( K3b::Device::Device* dev )
 {
-    enableButtonOk( dev != 0 );
+    m_okButton->setEnabled( dev != 0 );
 }
 
 

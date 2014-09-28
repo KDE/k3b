@@ -33,7 +33,7 @@
 #endif
 
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KNotification>
+#include <KNotifications/KNotification>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 

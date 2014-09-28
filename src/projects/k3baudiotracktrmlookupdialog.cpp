@@ -22,7 +22,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiofile.h"
 
-#include <KDELibs4Support/KDE/KNotification>
+#include <KNotifications/KNotification>
 #include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KWidgetsAddons/KMessageBox>
@@ -31,6 +31,7 @@
 #include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
@@ -38,27 +39,28 @@
 
 
 K3b::AudioTrackTRMLookupDialog::AudioTrackTRMLookupDialog( QWidget* parent )
-    : KDialog( parent ),
+    : QDialog( parent ),
       m_loop( 0 )
 {
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
     setWindowTitle(i18n("MusicBrainz Query"));
-    setButtons(KDialog::Cancel);
-    setDefaultButton(KDialog::Cancel);
     setModal(true);
-    QGridLayout* grid = new QGridLayout( widget );
+    QGridLayout* grid = new QGridLayout( this );
 
-    m_infoLabel = new QLabel( widget );
-    QLabel* pixLabel = new QLabel( widget );
+    m_infoLabel = new QLabel( this );
+    QLabel* pixLabel = new QLabel( this );
     pixLabel->setPixmap( KIconLoader::global()->loadIcon( "musicbrainz", KIconLoader::NoGroup, 64 ) );
     pixLabel->setScaledContents( false );
 
-    m_busyWidget = new K3b::BusyWidget( widget );
+    m_busyWidget = new K3b::BusyWidget( this );
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+    m_cancelButton = buttonBox->addButton( QDialogButtonBox::Cancel );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
 
     grid->addWidget( pixLabel, 0, 0, 2, 1 );
     grid->addWidget( m_infoLabel, 0, 1 );
     grid->addWidget( m_busyWidget, 1, 1 );
+    grid->addWidget( buttonBox, 2, 0, 1, 2 );
 
     m_mbJob = new K3b::MusicBrainzJob( this );
     connect( m_mbJob, SIGNAL(infoMessage(QString,int)),
@@ -107,9 +109,9 @@ void K3b::AudioTrackTRMLookupDialog::slotMbJobFinished( bool )
 }
 
 
-void K3b::AudioTrackTRMLookupDialog::slotCancel()
+void K3b::AudioTrackTRMLookupDialog::reject()
 {
-    enableButton( KDialog::Cancel, false );
+    m_cancelButton->setEnabled( false );
     m_mbJob->cancel();
 }
 

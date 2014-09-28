@@ -47,7 +47,7 @@
 #include <KConfigCore/KSharedConfig>
 #include <KDELibs4Support/KDE/KCmdLineArgs>
 #include <KDELibs4Support/KDE/KLocale>
-#include <KDELibs4Support/KDE/KNotification>
+#include <KNotifications/KNotification>
 #include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>

@@ -13,14 +13,13 @@
  */
 
 #include "k3baudiocdtextwidget.h"
-#include "ui_base_k3baudiocdtextallfieldswidget.h"
+#include "ui_base_k3baudiocdtextallfieldsdialog.h"
 
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 #include "k3bcdtextvalidator.h"
 
 #include <KCompletion/KLineEdit>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 
 #include <QtGui/QIcon>
@@ -31,18 +30,14 @@
 #include <QtWidgets/QGroupBox>
 
 
-class K3b::AudioCdTextWidget::AllFieldsDialog : public KDialog, public Ui::base_K3bAudioCdTextAllFieldsWidget
+class K3b::AudioCdTextWidget::AllFieldsDialog : public QDialog, public Ui::base_K3bAudioCdTextAllFieldsDialog
 {
 public:
     AllFieldsDialog( QWidget* parent )
-        : KDialog( parent) {
+        : QDialog( parent) {
         setModal(true);
         setWindowTitle(i18n("CD-Text"));
-        setButtons(Ok|Cancel);
-        setDefaultButton(Ok);
-        QWidget* w = new QWidget( this );
-        setupUi( w );
-        setMainWidget( w );
+        setupUi( this );
     }
 };
 

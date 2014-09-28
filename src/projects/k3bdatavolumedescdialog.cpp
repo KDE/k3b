@@ -19,6 +19,7 @@
 
 #include <KI18n/KLocalizedString>
 
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QSpinBox>
@@ -26,12 +27,10 @@
 
 
 K3b::DataVolumeDescDialog::DataVolumeDescDialog( QWidget* parent )
-    : KDialog( parent)
+    : QDialog( parent)
 {
-    setupUi( mainWidget() );
+    setupUi( this );
 
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
     setWindowTitle( i18n("Volume Descriptor") );
     setModal( true );
 

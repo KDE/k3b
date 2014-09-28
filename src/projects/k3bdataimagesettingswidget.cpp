@@ -17,7 +17,6 @@
 #include "k3bdatavolumedescdialog.h"
 #include "k3bisooptions.h"
 
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 

@@ -12,11 +12,11 @@ qt5_wrap_ui(ui_sources
     option/base_k3bmiscoptiontab.ui
     option/base_k3bpluginoptiontab.ui
     projects/base_k3baudiocdtextwidget.ui
-    projects/base_k3bbootimageview.ui
+    projects/base_k3bbootimagedialog.ui
     projects/base_k3badvanceddataimagesettings.ui
-    projects/base_k3baudiocdtextallfieldswidget.ui
+    projects/base_k3baudiocdtextallfieldsdialog.ui
     projects/base_k3bdataimagesettings.ui
-    projects/base_k3bdatavolumedescwidget.ui
+    projects/base_k3bdatavolumedescdialog.ui
     projects/base_k3baudiotrackwidget.ui
     projects/base_k3bmovixoptionswidget.ui
     rip/base_k3baudiorippingoptionwidget.ui
@@ -162,7 +162,6 @@ add_executable(k3b
     projects/k3bdataprojectmodel.cpp
     projects/k3bdataprojectsortproxymodel.cpp
     projects/k3bbootimagedialog.cpp
-    projects/k3bbootimageview.cpp
     projects/k3bbootimagemodel.cpp
     projects/k3bmovixburndialog.cpp
     projects/k3bmovixoptionswidget.cpp

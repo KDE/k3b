@@ -15,7 +15,7 @@
  */
 
 #include "k3bdataviewimpl.h"
-#include "k3bbootimageview.h"
+#include "k3bbootimagedialog.h"
 #include "k3bdatadoc.h"
 #include "k3bdatamultisessionimportdialog.h"
 #include "k3bdataprojectdelegate.h"
@@ -35,6 +35,8 @@
 
 #include <QtCore/QSortFilterProxyModel>
 #include <QtWidgets/QAction>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QShortcut>
 #include <QtWidgets/QWidgetAction>
@@ -378,11 +380,8 @@ void K3b::DataViewImpl::slotClearImportedSession()
 
 void K3b::DataViewImpl::slotEditBootImages()
 {
-    KDialog dlg( m_view );
+    BootImageDialog dlg( m_doc );
     dlg.setWindowTitle( i18n("Edit Boot Images") );
-    dlg.setButtons( KDialog::Ok );
-    dlg.setDefaultButton( KDialog::Ok );
-    dlg.setMainWidget( new K3b::BootImageView( m_doc, &dlg ) );
     dlg.exec();
 }
 

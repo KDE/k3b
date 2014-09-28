@@ -26,20 +26,21 @@
 #include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
 #include <KDELibs4Support/KDE/KNumInput>
-#include <KDELibs4Support/KDE/KSqueezedTextLabel>
+#include <KWidgetsAddons/KSqueezedTextLabel>
 
 #include <QtCore/QList>
 #include <QtCore/QUrl>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
@@ -141,12 +142,10 @@ void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboB
 
 
 K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* doc, const QList<K3b::VcdTrack*>& tracks, QList<K3b::VcdTrack*>& selectedTracks, QWidget* parent )
-    : KDialog( parent ),
+    : QDialog( parent ),
       d( new Private( doc, tracks, selectedTracks ) )
 {
     setWindowTitle( i18n( "Video Track Properties" ) );
-    setButtons( Ok|Apply|Cancel );
-    setDefaultButton( Ok );
 
     prepareGui();
 
@@ -171,8 +170,6 @@ K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* doc, const QList<K3b::VcdTrack
 
         fillGui();
     }
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 }
 
 K3b::VcdTrackDialog::~VcdTrackDialog()
@@ -180,10 +177,10 @@ K3b::VcdTrackDialog::~VcdTrackDialog()
     delete d;
 }
 
-void K3b::VcdTrackDialog::slotOk()
+void K3b::VcdTrackDialog::accept()
 {
     slotApply();
-    done( 0 );
+    QDialog::accept();
 }
 
 void K3b::VcdTrackDialog::slotApply()
@@ -379,12 +376,10 @@ void K3b::VcdTrackDialog::fillPbcGui()
 
 void K3b::VcdTrackDialog::prepareGui()
 {
-    QWidget * frame = mainWidget();
-
     // /////////////////////////////////////////////////
     // FILE-INFO BOX
     // /////////////////////////////////////////////////
-    QGroupBox* groupFileInfo = new QGroupBox( i18n( "File Info" ), frame );
+    QGroupBox* groupFileInfo = new QGroupBox( i18n( "File Info" ), this );
 
     QGridLayout* groupFileInfoLayout = new QGridLayout( groupFileInfo );
     groupFileInfoLayout->setAlignment( Qt::AlignTop );
@@ -433,12 +428,17 @@ void K3b::VcdTrackDialog::prepareGui()
     d->displaySize->setFont( f );
     d->muxrate->setFont( f );
 
-    d->mainTabbed = new QTabWidget( frame );
+    d->mainTabbed = new QTabWidget( this );
 
-    QHBoxLayout* mainLayout = new QHBoxLayout( frame );
-    mainLayout->setContentsMargins( 0, 0, 0, 0 );
-    mainLayout->addWidget( groupFileInfo, 0 );
-    mainLayout->addWidget( d->mainTabbed, 1 );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel, this );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
+    connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()), SLOT(slotApply()) );
+
+    QGridLayout* mainLayout = new QGridLayout( this );
+    mainLayout->addWidget( groupFileInfo, 0, 0 );
+    mainLayout->addWidget( d->mainTabbed, 0, 1 );
+    mainLayout->addWidget( buttonBox, 1, 0, 1, 2 );
 }
 
 void K3b::VcdTrackDialog::setupPbcTab()

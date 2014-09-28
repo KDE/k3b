@@ -27,20 +27,23 @@
 #include "k3bdvdformattingjob.h"
 
 #include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
 #include <KNotifications/KNotification>
+#include <KWidgetsAddons/KGuiItem>
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QEventLoop>
 #include <QtCore/QTimer>
 #include <QtGui/QFont>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QProgressDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QProgressDialog>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolTip>
 
@@ -83,51 +86,54 @@ public:
 
 
 K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* parent )
-    : KDialog( parent ),
+    : QDialog( parent ),
       d( new Private() )
 {
     setWindowTitle(i18n("Waiting for Disk"));
     setModal(true);
 
-    KDialog::ButtonCodes buttons = KDialog::Cancel|KDialog::User1|KDialog::User2;
-    setButtons( buttons );
-    setButtonText(KDialog::User1, i18n("Eject"));
-    setButtonIcon( KDialog::User1, QIcon::fromTheme( "media-eject" ) );
-    setButtonText(KDialog::User2, i18n("Load"));
-    setDefaultButton( KDialog::User2 );
-
     d->device = device;
 
     // setup the gui
     // -----------------------------
-    d->labelRequest = new QLabel( mainWidget() );
+    d->labelRequest = new QLabel( this );
     d->labelRequest->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-    d->labelFoundMedia = new QLabel( mainWidget() );
-    d->pixLabel = new QLabel( mainWidget() );
+    d->labelFoundMedia = new QLabel( this );
+    d->pixLabel = new QLabel( this );
     d->pixLabel->setAlignment( Qt::AlignHCenter | Qt::AlignTop );
 
     QFont f( d->labelFoundMedia->font() );
     f.setBold(true);
     d->labelFoundMedia->setFont( f );
 
-    QGridLayout* grid = new QGridLayout( mainWidget() );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+
+    QPushButton* cancelButton = buttonBox->addButton( QDialogButtonBox::Cancel );
+    connect( cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()) );
+
+    QPushButton* ejectButton = new QPushButton( this );
+    KGuiItem::assign( ejectButton, KGuiItem( i18n("Eject"), QString::fromLatin1( "media-eject" ) ) );
+    buttonBox->addButton( ejectButton, QDialogButtonBox::NoRole );
+    connect( ejectButton, SIGNAL(clicked()), this, SLOT(slotEject()) );
+
+    QPushButton* loadButton = buttonBox->addButton( i18n("Load"), QDialogButtonBox::NoRole );
+    connect( loadButton, SIGNAL(clicked()), this, SLOT(slotLoad()) );
+
+    QGridLayout* grid = new QGridLayout( this );
     grid->setContentsMargins( 0, 0, 0, 0 );
 
     grid->addWidget( d->pixLabel, 0, 0, 3, 1 );
     grid->addItem( new QSpacerItem( 20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );
-    grid->addWidget( new QLabel( i18n("Found medium:"), mainWidget() ), 0, 2 );
+    grid->addWidget( new QLabel( i18n("Found medium:"), this ), 0, 2 );
     grid->addWidget( d->labelFoundMedia, 0, 3 );
     grid->addWidget( d->labelRequest, 1, 2, 1, 2 );
+    grid->addWidget( buttonBox, 2, 0, 4, 1 );
     grid->setRowStretch( 2, 1 );
     grid->setColumnStretch( 3, 1 );
     // -----------------------------
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(slotMediumChanged(K3b::Device::Device*)) );
-
-    connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancel()) );
-    connect( this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()) );
-    connect( this, SIGNAL(user2Clicked()), this, SLOT(slotUser2()) );
 }
 
 
@@ -683,14 +689,14 @@ void K3b::EmptyDiscWaiter::slotCancel()
 }
 
 
-void K3b::EmptyDiscWaiter::slotUser1()
+void K3b::EmptyDiscWaiter::slotEject()
 {
     K3b::unmount( d->device );
     K3b::Device::eject( d->device );
 }
 
 
-void K3b::EmptyDiscWaiter::slotUser2()
+void K3b::EmptyDiscWaiter::slotLoad()
 {
     K3b::Device::load( d->device );
 }

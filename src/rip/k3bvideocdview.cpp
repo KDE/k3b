@@ -28,7 +28,6 @@
 
 #include <KConfigWidgets/KStandardAction>
 #include <KDELibs4Support/KDE/KMenu>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KActionMenu>
 #include <KWidgetsAddons/KMessageBox>

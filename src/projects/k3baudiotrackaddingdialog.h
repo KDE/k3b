@@ -16,9 +16,9 @@
 #define _K3B_AUDIO_TRACK_ADDING_DIALOG_H_
 
 #include "k3bjobhandler.h"
-#include <KDELibs4Support/KDE/KDialog>
 #include <QtCore/QUrl>
 #include <QtCore/QStringList>
+#include <QtWidgets/QDialog>
 
 
 class QLabel;
@@ -30,7 +30,7 @@ namespace K3b {
     class AudioDoc;
     class AudioFileAnalyzerJob;
 
-    class AudioTrackAddingDialog : public KDialog, public JobHandler
+    class AudioTrackAddingDialog : public QDialog, public JobHandler
     {
         Q_OBJECT
 
@@ -67,7 +67,7 @@ namespace K3b {
                                          Device::MediaStates = Device::STATE_EMPTY,
                                          Device::MediaTypes = Device::MEDIA_WRITABLE_CD,
                                          const K3b::Msf& = K3b::Msf(),
-                                         const QString& = QString() ) { return Device::MEDIA_UNKNOWN; }
+                                         const QString& = QString() ) override { return Device::MEDIA_UNKNOWN; }
 
         /**
          * @reimplemented from JobHandler
@@ -75,13 +75,13 @@ namespace K3b {
         bool questionYesNo( const QString&,
                             const QString& = QString(),
                             const KGuiItem& = KStandardGuiItem::yes(),
-                            const KGuiItem& = KStandardGuiItem::no() ) { return false; }
+                            const KGuiItem& = KStandardGuiItem::no() ) override { return false; }
 
         /**
          * @reimplemented from JobHandler
          */
         void blockingInformation( const QString&,
-                                  const QString& = QString() ) {}
+                                  const QString& = QString() ) override {}
 
         BusyWidget* m_busyWidget;
         QLabel* m_infoLabel;

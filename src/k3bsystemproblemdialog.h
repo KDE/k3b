@@ -16,9 +16,8 @@
 #ifndef _K3B_SYSTEM_DIALOG_H_
 #define _K3B_SYSTEM_DIALOG_H_
 
-#include <KDELibs4Support/KDE/KDialog>
-
 #include <QtCore/QString>
+#include <QtWidgets/QDialog>
 
 class QCheckBox;
 class QCloseEvent;
@@ -62,7 +61,7 @@ namespace K3b {
      *    SystemProblemDialog::checkSystem( this );
      * </pre>
      */
-    class SystemProblemDialog : public KDialog
+    class SystemProblemDialog : public QDialog
     {
         Q_OBJECT
 

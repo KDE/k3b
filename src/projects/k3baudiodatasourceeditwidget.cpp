@@ -18,7 +18,6 @@
 
 #include "k3baudiodatasource.h"
 
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 
 #include <QtWidgets/QLayout>

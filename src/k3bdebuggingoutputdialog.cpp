@@ -31,21 +31,18 @@
 #include <QtGui/QCursor>
 #include <QtGui/QFontDatabase>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QTextEdit>
+#include <QtWidgets/QVBoxLayout>
 
 
 K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
-  : KDialog( parent)
+  : QDialog( parent)
 {
   setModal(true);
   setWindowTitle(i18n("Debugging Output"));
-  setButtons(Close|User1|User2);
-  setDefaultButton(Close);
-  setButtonGuiItem(User1, KStandardGuiItem::saveAs());
-  setButtonGuiItem(User2, KGuiItem( i18n("Copy"), "edit-copy" ));
-  setButtonToolTip( User1, i18n("Save to file") );
-  setButtonToolTip( User2, i18n("Copy to clipboard") );
 
   debugView = new QTextEdit( this );
   debugView->setReadOnly(true);
@@ -53,9 +50,24 @@ K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
   debugView->setCurrentFont( QFontDatabase::systemFont( QFontDatabase::FixedFont ) );
   debugView->setWordWrapMode( QTextOption::NoWrap );
 
-  setMainWidget( debugView );
-  connect( this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()) );
-  connect( this, SIGNAL(user2Clicked()), this, SLOT(slotUser2()) );
+  QPushButton* saveButton = new QPushButton( this );
+  KStandardGuiItem::assign( saveButton, KStandardGuiItem::SaveAs );
+  saveButton->setToolTip( i18n("Save to file") );
+  connect( saveButton, SIGNAL(clicked()), this, SLOT(slotSaveAsClicked()) );
+
+  QPushButton* copyButton = new QPushButton( this );
+  KGuiItem::assign( copyButton, KGuiItem( i18n("Copy"), QString::fromLatin1( "edit-copy" ), i18n("Copy to clipboard") ) );
+  connect( copyButton, SIGNAL(clicked()), this, SLOT(slotCopyClicked()) );
+
+  QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+  buttonBox->addButton( QDialogButtonBox::Close );
+  buttonBox->addButton( saveButton, QDialogButtonBox::NoRole );
+  buttonBox->addButton( copyButton, QDialogButtonBox::NoRole );
+  connect( buttonBox, SIGNAL(accepted()), this, SLOT(accept()) );
+
+  QVBoxLayout* layout = new QVBoxLayout( this );
+  layout->addWidget( debugView );
+  layout->addWidget( buttonBox );
 
   resize( 600, 300 );
 }
@@ -72,7 +84,7 @@ void K3b::DebuggingOutputDialog::setOutput( const QString& data )
 }
 
 
-void K3b::DebuggingOutputDialog::slotUser1()
+void K3b::DebuggingOutputDialog::slotSaveAsClicked()
 {
   QString filename = QFileDialog::getSaveFileName( this );
   if( !filename.isEmpty() ) {
@@ -94,7 +106,7 @@ void K3b::DebuggingOutputDialog::slotUser1()
 }
 
 
-void K3b::DebuggingOutputDialog::slotUser2()
+void K3b::DebuggingOutputDialog::slotCopyClicked()
 {
   QApplication::clipboard()->setText( debugView->toPlainText(), QClipboard::Clipboard );
 }

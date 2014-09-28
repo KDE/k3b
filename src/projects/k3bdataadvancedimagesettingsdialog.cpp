@@ -20,16 +20,15 @@
 
 #include <QtCore/QDebug>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QRadioButton>
 
 
 K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* parent )
-    : KDialog( parent )
+    : QDialog( parent )
 {
-    setupUi( mainWidget() );
+    setupUi( this );
 
-    setButtons(Ok|Cancel);
-    setDefaultButton(Ok);
     setWindowTitle(i18n("Custom Data Project Filesystems"));
     setModal(true);
 

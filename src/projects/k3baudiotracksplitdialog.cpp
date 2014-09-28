@@ -27,37 +27,33 @@
 #include <QtGui/QContextMenuEvent>
 #include <QtGui/QMouseEvent>
 #include <QtWidgets/QAction>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 
 
 K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidget* parent )
-    : KDialog( parent),
+    : QDialog( parent),
       m_track(track)
 {
-    QFrame* frame = new QFrame();
-    setMainWidget(frame);
     setWindowTitle(i18n("Split Audio Track"));
-    setButtons(Ok|Cancel);
-    setDefaultButton(Ok);
 
-    m_editorWidget = new K3b::AudioEditorWidget( frame );
-    m_msfEditStart = new K3b::MsfEdit( frame );
-    m_msfEditEnd = new K3b::MsfEdit( frame );
+    m_editorWidget = new K3b::AudioEditorWidget( this );
+    m_msfEditStart = new K3b::MsfEdit( this );
+    m_msfEditEnd = new K3b::MsfEdit( this );
 
-    QVBoxLayout* layout = new QVBoxLayout( frame );
-    layout->setContentsMargins( 0, 0, 0, 0 );
+    QVBoxLayout* layout = new QVBoxLayout( this );
 
     // FIXME: After the string freeze replace the text with a better one explaning how to use this dialog
     layout->addWidget( new QLabel( i18n("Please select the position where the track should be split."),
-                                   frame ) );
+                                   this ) );
     layout->addWidget( m_editorWidget );
 
     QHBoxLayout* rangeLayout = new QHBoxLayout;
-    rangeLayout->addWidget( new QLabel( i18n("Split track at:"), frame ), 1 );
+    rangeLayout->addWidget( new QLabel( i18n("Split track at:"), this ), 1 );
     rangeLayout->addWidget( m_msfEditStart, 0 );
-    rangeLayout->addWidget( new QLabel( " - ", frame ), 0, Qt::AlignCenter );
+    rangeLayout->addWidget( new QLabel( " - ", this ), 0, Qt::AlignCenter );
     rangeLayout->addWidget( m_msfEditEnd, 0 );
     layout->addLayout( rangeLayout );
 
@@ -83,6 +79,11 @@ K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidg
     K3b::Msf mid = m_track->length().lba() / 2;
     m_editorWidget->addRange( 0, mid-1 );
     m_editorWidget->addRange( mid, m_track->length()-1 );
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
+    layout->addWidget( buttonBox );
 
     slotRangeSelectionChanged( 0 );
 }
@@ -180,7 +181,7 @@ bool K3b::AudioTrackSplitDialog::eventFilter( QObject* o, QEvent* e )
         }
     }
 
-    return KDialog::eventFilter( o, e );
+    return QDialog::eventFilter( o, e );
 }
 
 

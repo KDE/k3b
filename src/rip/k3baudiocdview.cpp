@@ -37,11 +37,9 @@
 #include <KCompletion/KLineEdit>
 #include <KConfigCore/KConfig>
 #include <KConfigWidgets/KStandardAction>
-#include <KDELibs4Support/KDE/KDialog>
-#include <KDELibs4Support/KDE/KMenu>
-#include <KDELibs4Support/KDE/KNotification>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
+#include <KNotifications/KNotification>
 #include <KWidgetsAddons/KActionMenu>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KToolBarSpacerAction>
@@ -54,11 +52,14 @@
 #include <QtGui/QFont>
 #include <QtGui/QKeyEvent>
 #include <QtWidgets/QAction>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QFormLayout>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTreeView>
+#include <QtWidgets/QVBoxLayout>
 
 #include <libkcddb/genres.h>
 #include <libkcddb/cdinfo.h>
@@ -71,7 +72,7 @@ class K3b::AudioCdView::Private
 {
 public:
     KActionCollection* actionCollection;
-    KMenu* popupMenu;
+    QMenu* popupMenu;
 
     AudioTrackModel* trackModel;
     QTreeView* trackView;
@@ -272,7 +273,7 @@ void K3b::AudioCdView::initActions()
     QAction* actionSelectAll = KStandardAction::selectAll( d->trackView, SLOT(selectAll()), actionCollection() );
 
     // setup the popup menu
-    d->popupMenu = new KMenu( this );
+    d->popupMenu = new QMenu( this );
     d->popupMenu->addAction( actionCheckTracks );
     d->popupMenu->addAction( actionUncheckTracks );
     d->popupMenu->addSeparator();
@@ -340,30 +341,36 @@ void K3b::AudioCdView::slotEditTrackCddb()
 {
     const QModelIndexList selection = d->trackView->selectionModel()->selectedRows();
     if( !selection.isEmpty() ) {
-        KDialog dialog( this );
+        QDialog dialog( this );
         if( selection.size() > 1 )
             dialog.setWindowTitle( i18n( "Multiple Tracks" ) );
         else
             dialog.setWindowTitle( i18n( "CDDB Track %1", selection.first().data( AudioTrackModel::TrackNumberRole ).toInt() ) );
-        dialog.setButtons(KDialog::Ok|KDialog::Cancel);
-        dialog.setDefaultButton(KDialog::Ok);
         dialog.setModal(true);
-        QWidget* w = new QWidget( &dialog );
 
-        KLineEdit* editTitle = new KLineEdit( mu::commonText( selection, AudioTrackModel::TitleRole ), w );
-        KLineEdit* editArtist = new KLineEdit( mu::commonText( selection, AudioTrackModel::ArtistRole ), w );
-        KLineEdit* editExtInfo = new KLineEdit( mu::commonText( selection, AudioTrackModel::CommentRole ), w );
+        KLineEdit* editTitle = new KLineEdit( mu::commonText( selection, AudioTrackModel::TitleRole ), this );
+        KLineEdit* editArtist = new KLineEdit( mu::commonText( selection, AudioTrackModel::ArtistRole ), this );
+        KLineEdit* editExtInfo = new KLineEdit( mu::commonText( selection, AudioTrackModel::CommentRole ), this );
         
-        QFrame* line = new QFrame( w );
+        QFrame* line = new QFrame( this );
         line->setFrameShape( QFrame::HLine );
         line->setFrameShadow( QFrame::Sunken );
-        QFormLayout* form = new QFormLayout( w );
+
+        QFormLayout* form = new QFormLayout;
         form->addRow( i18n("Title:"), editTitle );
         form->addRow( line );
         form->addRow( i18n("Artist:"), editArtist );
         form->addRow( i18n("Extra info:"), editExtInfo );
+        form->setContentsMargins( 0, 0, 0, 0 );
 
-        dialog.setMainWidget(w);
+        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+        connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
+        connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
+
+        QVBoxLayout* dlgLayout = new QVBoxLayout( this );
+        dlgLayout->addLayout( form );
+        dlgLayout->addWidget( buttonBox );
+
         dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
         if( dialog.exec() == QDialog::Accepted ) {
@@ -377,25 +384,22 @@ void K3b::AudioCdView::slotEditTrackCddb()
 
 void K3b::AudioCdView::slotEditAlbumCddb()
 {
-    KDialog dialog( this);
+    QDialog dialog( this);
     dialog.setWindowTitle(i18n("Album Cddb"));
     dialog.setModal(true);
-    dialog.setButtons(KDialog::Ok|KDialog::Cancel);
-    dialog.setDefaultButton(KDialog::Ok);
-    QWidget* w = new QWidget( &dialog );
 
-    KLineEdit* editTitle = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Title ).toString(), w );
-    KLineEdit* editArtist = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString(), w );
-    KLineEdit* editExtInfo = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Comment ).toString(), w );
-    QSpinBox* spinYear = new QSpinBox( w );
+    KLineEdit* editTitle = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Title ).toString(), this );
+    KLineEdit* editArtist = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString(), this );
+    KLineEdit* editExtInfo = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Comment ).toString(), this );
+    QSpinBox* spinYear = new QSpinBox( this );
     spinYear->setRange( 1, 9999 );
     spinYear->setValue( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() );
-    QFrame* line = new QFrame( w );
+    QFrame* line = new QFrame( this );
     line->setFrameShape( QFrame::HLine );
     line->setFrameShadow( QFrame::Sunken );
-    KComboBox* comboGenre = new KComboBox( w );
+    KComboBox* comboGenre = new KComboBox( this );
     comboGenre->addItems( KCDDB::Genres().i18nList() );
-    KComboBox* comboCat = new KComboBox( w );
+    KComboBox* comboCat = new KComboBox( this );
     comboCat->addItems( KCDDB::Categories().i18nList() );
 
     QString genre = d->trackModel->cddbInfo().get( KCDDB::Genre ).toString();
@@ -414,7 +418,7 @@ void K3b::AudioCdView::slotEditAlbumCddb()
         }
     }
 
-    QFormLayout* form = new QFormLayout( w );
+    QFormLayout* form = new QFormLayout;
     form->addRow( i18n("Title:"), editTitle );
     form->addRow( i18n("Artist:"), editArtist );
     form->addRow( i18n("Extra info:"), editExtInfo );
@@ -422,8 +426,16 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     form->addRow( i18n("Year:"), spinYear );
     form->addRow( line );
     form->addRow( i18n("Category:"), comboCat );
+    form->setContentsMargins( 0, 0, 0, 0 );
 
-    dialog.setMainWidget(w);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+    connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
+
+    QVBoxLayout* dlgLayout = new QVBoxLayout( this );
+    dlgLayout->addLayout( form );
+    dlgLayout->addWidget( buttonBox );
+
     dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
     if( dialog.exec() == QDialog::Accepted ) {

@@ -25,8 +25,8 @@
 #include "k3bintmapcombobox.h"
 
 #include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 

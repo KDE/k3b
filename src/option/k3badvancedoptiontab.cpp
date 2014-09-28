@@ -23,7 +23,6 @@
 #include <KConfigCore/KSharedConfig>
 #include <KCompletion/KLineEdit>
 #include <KDELibs4Support/KDE/KNumInput>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KI18n/KLocalizedString>
 
 #include <QtGui/QValidator>

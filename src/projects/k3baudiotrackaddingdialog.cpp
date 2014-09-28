@@ -31,9 +31,9 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtCore/QThread>
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
+#include <QtWidgets/QVBoxLayout>
 
 
 
@@ -43,7 +43,7 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const QList<QUrl>& urls,
                                                      AudioTrack* parentTrack,
                                                      AudioDataSource* afterSource,
                                                      QWidget* parent )
-    : KDialog( parent),
+    : QDialog( parent),
       m_urls( AudioDoc::extractUrlList( urls ) ),
       m_doc( doc ),
       m_trackAfter( afterTrack ),
@@ -51,20 +51,20 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const QList<QUrl>& urls,
       m_sourceAfter( afterSource ),
       m_bCanceled( false )
 {
-    QWidget* page = new QWidget();
-    setMainWidget(page);
-    setButtons(Cancel);
-    setDefaultButton(Cancel);
     setWindowTitle(i18n("Please be patient..."));
-    QGridLayout* grid = new QGridLayout( page );
 
-    m_infoLabel = new QLabel( page );
+    m_infoLabel = new QLabel( this );
     m_infoLabel->setText( i18n("Adding files to project \"%1\"...",doc->URL().fileName()) );
-    m_busyWidget = new K3b::BusyWidget( page );
+    m_busyWidget = new K3b::BusyWidget( this );
     m_busyWidget->showBusy( true );
 
-    grid->addWidget( m_infoLabel, 0, 0 );
-    grid->addWidget( m_busyWidget, 1, 0 );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Cancel, this );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
+
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->addWidget( m_infoLabel );
+    layout->addWidget( m_busyWidget );
+    layout->addWidget( buttonBox );
 
     m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );

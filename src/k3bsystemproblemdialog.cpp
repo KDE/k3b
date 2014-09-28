@@ -37,7 +37,7 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KCoreAddons/KProcess>
-#include <KDELibs4Support/KDE/KNotification>
+#include <KNotifications/KNotification>
 #include <KI18n/KLocalizedString>
 #include <KTextWidgets/KTextEdit>
 #include <KWidgetsAddons/KMessageBox>
@@ -48,6 +48,7 @@
 #include <QtGui/QCloseEvent>
 #include <QtGui/QIcon>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QPushButton>
@@ -87,47 +88,43 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
                                                bool showDeviceSettingsButton,
                                                bool showBinSettingsButton,
                                                QWidget* parent)
-    : KDialog( parent )
+    : QDialog( parent )
 {
     setWindowTitle( i18n("System Configuration Problems") );
-    setButtons(KDialog::None);
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
     // setup the title
     // ---------------------------------------------------------------------------------------------------
-    K3b::ThemedHeader* titleFrame = new K3b::ThemedHeader( widget );
+    K3b::ThemedHeader* titleFrame = new K3b::ThemedHeader( this );
     titleFrame->setTitle( i18n("System Configuration Problems"),
                           i18np("1 problem", "%1 problems", problems.count() ) );
 
-    QPushButton* closeButton = new QPushButton( widget );
-    KGuiItem::assign( closeButton, KStandardGuiItem::close() );
-    connect( closeButton, SIGNAL(clicked()), this, SLOT(close()) );
-    m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
 
-    QPushButton* configureButton = new QPushButton( QIcon::fromTheme( "configure" ), i18n("Configure K3b..."), widget );
-    if( showDeviceSettingsButton ) {
-        connect( configureButton, SIGNAL(clicked()), SLOT(slotShowDeviceSettings()) );
-    } else if( showBinSettingsButton ) {
-        connect( configureButton, SIGNAL(clicked()), SLOT(slotShowBinSettings()) );
-    } else {
-        configureButton->hide();
+    if( showDeviceSettingsButton || showBinSettingsButton ) {
+        QPushButton* configureButton = buttonBox->addButton( i18n("Configure K3b..."), QDialogButtonBox::NoRole );
+        if( showDeviceSettingsButton ) {
+            connect( configureButton, SIGNAL(clicked()), SLOT(slotShowDeviceSettings()) );
+        } else if( showBinSettingsButton ) {
+            connect( configureButton, SIGNAL(clicked()), SLOT(slotShowBinSettings()) );
+       }
     }
+
+    buttonBox->addButton( QDialogButtonBox::Close );
+
+    m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), this );
 
     // setup the problem view
     // ---------------------------------------------------------------------------------------------------
-    KTextEdit* view = new KTextEdit( widget );
+    KTextEdit* view = new KTextEdit( this );
     view->setReadOnly(true);
 
     // layout everything
-    QGridLayout* grid = new QGridLayout( widget );
+    QGridLayout* grid = new QGridLayout( this );
     grid->addWidget( titleFrame, 0, 0, 1, 2 );
     grid->addWidget( view, 1, 0, 1, 2 );
     grid->addWidget( m_checkDontShowAgain, 2, 0 );
-    QHBoxLayout* buttonBox = new QHBoxLayout;
-    buttonBox->setContentsMargins( 0, 0, 0, 0 );
-    buttonBox->addWidget( configureButton );
-    buttonBox->addWidget( closeButton );
-    grid->addLayout( buttonBox, 2, 1 );
+    grid->addWidget( buttonBox, 2, 1 );
     grid->setColumnStretch( 0, 1 );
     grid->setRowStretch( 1, 1 );
 

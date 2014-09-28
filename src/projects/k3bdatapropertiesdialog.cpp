@@ -20,15 +20,16 @@
 #include "k3bvalidators.h"
 
 #include <KCompletion/KLineEdit>
-#include <KDELibs4Support/KDE/KSqueezedTextLabel>
 #include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KSqueezedTextLabel>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QUrl>
 #include <QtGui/QValidator>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
@@ -38,35 +39,33 @@
 
 
 K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )
-    : KDialog( parent )
+    : QDialog( parent )
 {
     setWindowTitle( i18n("File Properties") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
 
     m_dataItems = dataItems;
 
-    m_labelIcon = new QLabel( mainWidget() );
+    m_labelIcon = new QLabel( this );
     if ( dataItems.count() == 1 ) {
-        m_editName = new KLineEdit( mainWidget() );
+        m_editName = new KLineEdit( this );
         m_editName->setValidator( K3b::Validators::iso9660Validator( false, this ) );
-        m_labelType = new QLabel( mainWidget() );
-        m_labelLocalName = new KSqueezedTextLabel( mainWidget() );
-        m_labelLocalLocation = new KSqueezedTextLabel( mainWidget() );
-        m_labelLocalLinkTarget = new KSqueezedTextLabel( mainWidget() );
-        m_extraInfoLabel = new QLabel( mainWidget() );
+        m_labelType = new QLabel( this );
+        m_labelLocalName = new KSqueezedTextLabel( this );
+        m_labelLocalLocation = new KSqueezedTextLabel( this );
+        m_labelLocalLinkTarget = new KSqueezedTextLabel( this );
+        m_extraInfoLabel = new QLabel( this );
     }
     else {
-        m_multiSelectionLabel = new QLabel( mainWidget() );
+        m_multiSelectionLabel = new QLabel( this );
     }
 
-    m_labelLocation = new KSqueezedTextLabel( mainWidget() );
-    m_labelSize = new QLabel( mainWidget() );
-    m_labelBlocks = new QLabel( mainWidget() );
+    m_labelLocation = new KSqueezedTextLabel( this );
+    m_labelSize = new QLabel( this );
+    m_labelBlocks = new QLabel( this );
 
     // layout
     // -----------------------------
-    QGridLayout* grid = new QGridLayout( mainWidget() );
+    QGridLayout* grid = new QGridLayout( this );
 
     grid->addWidget( m_labelIcon, 0, 0 );
     if ( dataItems.count() == 1 ) {
@@ -77,35 +76,35 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
     }
     int row = 1;
 
-    m_spacerLine = new QFrame( mainWidget() );
+    m_spacerLine = new QFrame( this );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     grid->addWidget( m_spacerLine, row, 0, 1, 3 );
     ++row;
     if ( dataItems.count() == 1 ) {
-        grid->addWidget( new QLabel( i18n("Type:"), mainWidget() ), row, 0 );
+        grid->addWidget( new QLabel( i18n("Type:"), this ), row, 0 );
         grid->addWidget( m_labelType, row++, 2 );
         grid->addWidget( m_extraInfoLabel, row++, 2 );
     }
-    grid->addWidget( new QLabel( i18n("Location:"), mainWidget() ), row, 0 );
+    grid->addWidget( new QLabel( i18n("Location:"), this ), row, 0 );
     grid->addWidget( m_labelLocation, row++, 2 );
-    grid->addWidget( new QLabel( i18n("Size:"), mainWidget() ), row, 0 );
+    grid->addWidget( new QLabel( i18n("Size:"), this ), row, 0 );
     grid->addWidget( m_labelSize, row++, 2 );
-    grid->addWidget( new QLabel( i18n("Used blocks:"), mainWidget() ), row, 0 );
+    grid->addWidget( new QLabel( i18n("Used blocks:"), this ), row, 0 );
     grid->addWidget( m_labelBlocks, row++, 2 );
 
-    m_spacerLine = new QFrame( mainWidget() );
+    m_spacerLine = new QFrame( this );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     grid->addWidget( m_spacerLine, row, 0, 1, 3 );
     ++row;
 
     if ( dataItems.count() == 1 ) {
-        m_labelLocalNameText = new QLabel( i18n("Local name:"), mainWidget() );
+        m_labelLocalNameText = new QLabel( i18n("Local name:"), this );
         grid->addWidget( m_labelLocalNameText, row, 0 );
         grid->addWidget( m_labelLocalName, row++, 2 );
-        m_labelLocalLocationText = new QLabel( i18n("Local location:"), mainWidget() );
+        m_labelLocalLocationText = new QLabel( i18n("Local location:"), this );
         grid->addWidget( m_labelLocalLocationText, row, 0 );
         grid->addWidget( m_labelLocalLocation, row++, 2 );
-        m_labelLocalLinkTargetText = new QLabel( i18n("Local link target:"), mainWidget() );
+        m_labelLocalLinkTargetText = new QLabel( i18n("Local link target:"), this );
         grid->addWidget( m_labelLocalLinkTargetText, row, 0 );
         grid->addWidget( m_labelLocalLinkTarget, row++, 2 );
     }
@@ -116,8 +115,8 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
 
     // OPTIONS
     // /////////////////////////////////////////////////
-    QTabWidget* optionTab = new QTabWidget( mainWidget() );
-    m_spacerLine = new QFrame( mainWidget() );
+    QTabWidget* optionTab = new QTabWidget( this );
+    m_spacerLine = new QFrame( this );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     grid->addWidget( m_spacerLine, row++, 0, 1, 3 );
@@ -186,7 +185,10 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
                                          "It sorts the order in which the file data is "
                                          "written to the image.") );
 
-    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
+    grid->addWidget( buttonBox, row++, 0, 1, 3 );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
 }
 
 
@@ -356,7 +358,7 @@ void K3b::DataPropertiesDialog::loadListProperties( const QList<K3b::DataItem*>&
 }
 
 
-void K3b::DataPropertiesDialog::slotOk()
+void K3b::DataPropertiesDialog::accept()
 {
     if ( m_dataItems.count() == 1 ) {
         m_dataItems.first()->setK3bName( m_editName->text() );
@@ -372,6 +374,8 @@ void K3b::DataPropertiesDialog::slotOk()
         if ( m_editSortWeight->isModified() )
             item->setSortWeight( m_editSortWeight->text().toInt() );
     }
+
+    QDialog::accept();
 }
 
 

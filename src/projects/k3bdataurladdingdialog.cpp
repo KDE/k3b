@@ -34,7 +34,7 @@
 #include "k3bexternalbinmanager.h"
 
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KSqueezedTextLabel>
+#include <KWidgetsAddons/KSqueezedTextLabel>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
@@ -44,6 +44,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QList>
 #include <QtCore/QUrl>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QProgressBar>
 #include <QtWidgets/QLabel>
@@ -54,21 +55,8 @@
 
 
 K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<QUrl>& urls, DirItem* dir, QWidget* parent )
-    : KDialog( parent),
-      m_doc( dir->getDoc() ),
-      m_bExistingItemsReplaceAll(false),
-      m_bExistingItemsIgnoreAll(false),
-      m_bFolderLinksFollowAll(false),
-      m_bFolderLinksAddAll(false),
-      m_iAddHiddenFiles(0),
-      m_iAddSystemFiles(0),
-      m_bCanceled(false),
-      m_totalFiles(0),
-      m_filesHandled(0),
-      m_lastProgress(0)
+    : DataUrlAddingDialog( dir, parent )
 {
-    init();
-
     m_urls = urls;
     for( QList<QUrl>::ConstIterator it = urls.begin(); it != urls.end(); ++it )
         m_urlQueue.append( qMakePair( K3b::convertToLocalUrl(*it), dir ) );
@@ -76,21 +64,8 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<QUrl>& urls, DirItem*
 
 
 K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent )
-    : KDialog( parent),
-      m_doc( dir->getDoc() ),
-      m_bExistingItemsReplaceAll(false),
-      m_bExistingItemsIgnoreAll(false),
-      m_bFolderLinksFollowAll(false),
-      m_bFolderLinksAddAll(false),
-      m_iAddHiddenFiles(0),
-      m_iAddSystemFiles(0),
-      m_bCanceled(false),
-      m_totalFiles(0),
-      m_filesHandled(0),
-      m_lastProgress(0)
+    : DataUrlAddingDialog( dir, parent )
 {
-    init();
-
     m_infoLabel->setText( i18n("Moving files to project \"%1\"...", dir->getDoc()->URL().fileName()) );
     m_copyItems = copy;
 
@@ -105,27 +80,40 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( const QList<DataItem*>& items, Di
 }
 
 
-void K3b::DataUrlAddingDialog::init()
+K3b::DataUrlAddingDialog::DataUrlAddingDialog( DirItem* dir, QWidget* parent )
+    : QDialog( parent),
+      m_doc( dir->getDoc() ),
+      m_bExistingItemsReplaceAll(false),
+      m_bExistingItemsIgnoreAll(false),
+      m_bFolderLinksFollowAll(false),
+      m_bFolderLinksAddAll(false),
+      m_iAddHiddenFiles(0),
+      m_iAddSystemFiles(0),
+      m_bCanceled(false),
+      m_copyItems(false),
+      m_totalFiles(0),
+      m_filesHandled(0),
+      m_lastProgress(0)
 {
     m_encodingConverter = new K3b::EncodingConverter();
 
-    QWidget* page = new QWidget();
-    setMainWidget(page);
-    setButtons(Cancel);
-    setDefaultButton(Cancel);
     setWindowTitle(i18n("Adding files to project '%1'",m_doc->URL().fileName()));
     setAttribute( Qt::WA_DeleteOnClose );
-    QGridLayout* grid = new QGridLayout( page );
+    QGridLayout* grid = new QGridLayout( this );
     grid->setContentsMargins( 0, 0, 0, 0 );
 
-    m_counterLabel = new QLabel( page );
+    m_counterLabel = new QLabel( this );
     m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'..."
-                                               ,m_doc->URL().fileName()), page );
-    m_progressWidget = new QProgressBar( page );
+                                               ,m_doc->URL().fileName()), this );
+    m_progressWidget = new QProgressBar( this );
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Cancel, this );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
 
     grid->addWidget( m_counterLabel, 0, 1 );
     grid->addWidget( m_infoLabel, 0, 0 );
     grid->addWidget( m_progressWidget, 1, 0, 1, 2 );
+    grid->addWidget( buttonBox, 2, 0, 1, 2 );
 
     m_dirSizeJob = new K3b::DirSizeJob( this );
     connect( m_dirSizeJob, SIGNAL(finished(bool)),
@@ -438,7 +426,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
                         valid = false;
                     break;
                 case 6: // cancel
-                    slotCancel();
+                    reject();
                     return;
                 }
             }
@@ -485,7 +473,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
                     followLink = false;
                     break;
                 case 5:
-                    slotCancel();
+                    reject();
                     return;
                 }
             }
@@ -680,7 +668,7 @@ void K3b::DataUrlAddingDialog::slotCopyMoveItems()
                     break;
                 }
                 case 6: // cancel
-                    slotCancel();
+                    reject();
                     return;
                 }
             }
@@ -707,11 +695,11 @@ void K3b::DataUrlAddingDialog::slotCopyMoveItems()
 }
 
 
-void K3b::DataUrlAddingDialog::slotCancel()
+void K3b::DataUrlAddingDialog::reject()
 {
     m_bCanceled = true;
     m_dirSizeJob->cancel();
-    reject();
+    QDialog::reject();
 }
 
 

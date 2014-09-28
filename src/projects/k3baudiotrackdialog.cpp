@@ -23,7 +23,9 @@
 
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
 
 
@@ -38,18 +40,22 @@
 
 
 K3b::AudioTrackDialog::AudioTrackDialog( const QList<K3b::AudioTrack*>& tracks, QWidget *parent )
-    : KDialog( parent)
+    : QDialog( parent)
 {
     m_tracks = tracks;
 
     setWindowTitle(i18n("Audio Track Properties"));
-    setButtons(Ok|Cancel|Apply);
-    setDefaultButton(Ok);
     setModal(true);
-    connect(this,SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 
-    setupGui();
+    m_audioTrackWidget = new K3b::AudioTrackWidget( m_tracks, this );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, this );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
+    connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()), SLOT(slotApply()));
+
+    QVBoxLayout* mainLayout = new QVBoxLayout( this );
+    mainLayout->addWidget( m_audioTrackWidget );
+    mainLayout->addWidget( buttonBox );
 }
 
 
@@ -58,29 +64,16 @@ K3b::AudioTrackDialog::~AudioTrackDialog()
 }
 
 
-void K3b::AudioTrackDialog::slotOk()
+void K3b::AudioTrackDialog::accept()
 {
     slotApply();
-    done(0);
+    QDialog::accept();
 }
 
 
 void K3b::AudioTrackDialog::slotApply()
 {
     m_audioTrackWidget->save();
-}
-
-
-void K3b::AudioTrackDialog::setupGui()
-{
-    QFrame* frame = new QFrame();
-    setMainWidget( frame );
-
-    QVBoxLayout* mainLayout = new QVBoxLayout( frame );
-    mainLayout->setContentsMargins( 0, 0, 0, 0 );
-
-    m_audioTrackWidget = new K3b::AudioTrackWidget( m_tracks, frame );
-    mainLayout->addWidget( m_audioTrackWidget );
 }
 
 

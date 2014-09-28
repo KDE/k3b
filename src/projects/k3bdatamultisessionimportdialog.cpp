@@ -33,8 +33,10 @@
 #include <QtCore/QMap>
 #include <QtGui/QCursor>
 #include <QtGui/QFont>
+#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QVBoxLayout>
 
@@ -63,6 +65,7 @@ class K3b::DataMultisessionImportDialog::Private
 public:
     K3b::DataDoc* doc;
     QTreeWidget* sessionView;
+    QPushButton* okButton;
 
     Sessions sessions;
 };
@@ -239,11 +242,11 @@ void K3b::DataMultisessionImportDialog::slotSelectionChanged()
     Sessions::const_iterator session = d->sessions.constFind( d->sessionView->currentItem() );
     if ( session != d->sessions.constEnd() ) {
         showSessionInfo( session->device, session->sessionNumber );
-        enableButton( Ok, true );
+        d->okButton->setEnabled( true );
     }
     else {
         showSessionInfo( 0, 0 );
-        enableButton( Ok, false );
+        d->okButton->setEnabled( false );
     }
 }
 
@@ -261,26 +264,27 @@ void K3b::DataMultisessionImportDialog::showSessionInfo( K3b::Device::Device* de
 
 
 K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent )
-    : KDialog( parent),
+    : QDialog( parent),
       d( new Private() )
 {
-    QWidget *widget = new QWidget();
-    setMainWidget(widget);
-    setButtons(Ok|Cancel);
-    setDefaultButton(Ok);
     setModal(true);
     setWindowTitle(i18n("Session Import"));
-    QVBoxLayout* layout = new QVBoxLayout( widget );
-    layout->setContentsMargins( 0, 0, 0, 0 );
+    QVBoxLayout* layout = new QVBoxLayout( this );
 
-    QLabel* label = new QLabel( i18n( "Please select a session to import." ), widget );
-    d->sessionView = new QTreeWidget( widget );
+    QLabel* label = new QLabel( i18n( "Please select a session to import." ), this );
+    d->sessionView = new QTreeWidget( this );
     d->sessionView->setHeaderHidden( true );
     d->sessionView->setItemsExpandable( false );
     d->sessionView->setRootIsDecorated( false );
 
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
+    d->okButton = buttonBox->button( QDialogButtonBox::Ok );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
+
     layout->addWidget( label );
     layout->addWidget( d->sessionView );
+    layout->addWidget( buttonBox );
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(updateMedia()) );

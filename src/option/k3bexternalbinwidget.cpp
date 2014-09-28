@@ -21,7 +21,6 @@
 #include "config-k3b.h"
 
 #include <KAuth/KAuth>
-#include <KDELibs4Support/KDE/KDialog>
 #include <KDELibs4Support/KDE/KEditListBox>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
