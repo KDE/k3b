@@ -119,8 +119,11 @@ void K3b::VideoDVDRippingPreview::cancel()
 }
 
 
-void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStatus )
+void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStatus exitStatus)
 {
+    if( exitStatus != QProcess::NormalExit )
+        return;
+
     // read the image
     QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
     kDebug() << "(K3b::VideoDVDRippingPreview) reading from file " << filename;
