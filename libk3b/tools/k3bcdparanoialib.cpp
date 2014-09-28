@@ -69,6 +69,17 @@ typedef short int int16_t;
 #define LIBCDIO_PARANOIA "cdio_paranoia.dll"
 #else
 #define LIBCDIO_CDDA "libcdio_cdda.so"
+#ifdef __NETBSD__
+#define CDDA_LIBCDDA_INTERFACE "cdda/libcdda_interace.so"
+#define CDDA_LIBCDDA_PARANOIA "cdda/libcdda_paranoia.so"
+#define LIBCDDA_INTERFACE "libcdda_interface.so"
+#define LIBCDDA_PARANOIA "libcdda_paranoia.so"
+#define LIBCDIO_PARANOIA "libcdio_paranoia.so"
+#else
+#define CDDA_LIBCDDA_INTERFACE "cdda/libcdda_interace.so.0"
+#define CDDA_LIBCDDA_PARANOIA "cdda/libcdda_paranoia.so.0"
+#define LIBCDDA_INTERFACE "libcdda_interface.so.0"
+#define LIBCDDA_PARANOIA "libcdda_paranoia.so.0"
 #define LIBCDIO_PARANOIA "libcdio_paranoia.so.0"
 #endif
 
@@ -532,11 +543,11 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
     if( s_libInterface == 0 ) {
         s_haveLibCdio = false;
 #ifndef Q_OS_WIN32
-        s_libInterface = dlopen( "libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
+        s_libInterface = dlopen( LIBCDDA_INTERFACE, RTLD_NOW|RTLD_GLOBAL );
 
         // try the redhat & Co. location
         if( s_libInterface == 0 )
-            s_libInterface = dlopen( "cdda/libcdda_interface.so.0", RTLD_NOW|RTLD_GLOBAL );
+            s_libInterface = dlopen( CDDA_LIBCDDA_INTERFACE, RTLD_NOW|RTLD_GLOBAL );
 #endif
         // try the new cdio lib
         if( s_libInterface == 0 ) {
@@ -550,11 +561,11 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
         }
 
 #ifndef Q_OS_WIN32
-        s_libParanoia = dlopen( "libcdda_paranoia.so.0", RTLD_NOW );
+        s_libParanoia = dlopen( LIBCDDA_PARANOIA, RTLD_NOW );
 
         // try the redhat & Co. location
         if( s_libParanoia == 0 )
-            s_libParanoia = dlopen( "cdda/libcdda_paranoia.so.0", RTLD_NOW );
+            s_libParanoia = dlopen( CDDA_LIBCDDA_PARANOIA, RTLD_NOW );
 #endif
         // try the new cdio lib
         if( s_haveLibCdio && s_libParanoia == 0 )
@@ -736,7 +747,7 @@ char* K3b::CdparanoiaLib::read( int* statusCode, unsigned int* track, bool littl
 
     if( d->currentSector != d->data->sector() ) {
         kDebug() << "(K3b::CdparanoiaLib) need to seek before read. Looks as if we are reusing the paranoia instance.";
-        if( !d->data->paranoiaSeek( d->currentSector, SEEK_SET ) )
+        if( !d->data->paranoiaSeek( d->currentSector, SEEK_SET ) == -1 )
             return 0;
     }
 
