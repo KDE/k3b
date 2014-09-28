@@ -27,7 +27,6 @@
 #include "k3bstdguiitems.h"
 
 #include <KConfigWidgets/KStandardAction>
-#include <KDELibs4Support/KDE/KMenu>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KActionMenu>
 #include <KWidgetsAddons/KMessageBox>
@@ -42,6 +41,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QTreeWidget>

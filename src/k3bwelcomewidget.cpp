@@ -23,7 +23,6 @@
 
 #include <KConfigCore/KConfigGroup>
 #include <KCoreAddons/KAboutData>
-#include <KDELibs4Support/KDE/KMenu>
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>
 #include <KXmlGui/KActionCollection>
@@ -40,6 +39,7 @@
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
 #include <QtGui/QTextDocument>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QStyle>
 
 namespace {
@@ -282,7 +282,7 @@ void K3b::WelcomeWidget::slotThemeChanged()
 
 void K3b::WelcomeWidget::slotMoreActions()
 {
-    KMenu popup;
+    QMenu popup;
 
     for ( int i = 0; s_allActions[i]; ++i ) {
         if ( s_allActions[i][0] == '_' ) {
@@ -404,7 +404,7 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton ) {
         QMap<QAction*, QAction*> map;
-        KMenu addPop;
+        QMenu addPop;
         addPop.setTitle( i18n("Add Button") );
 
         QAction* firstAction = 0;
@@ -427,14 +427,14 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
 
         QWidget* widgetAtPos = childAt(e->pos());
         if( widgetAtPos && widgetAtPos->inherits( "K3b::FlatButton" ) ) {
-            KMenu pop;
+            QMenu pop;
             removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
             if ( addPop.actions().count() > 0 )
                 pop.addMenu( &addPop );
             r = pop.exec( e->globalPos() );
         }
         else {
-            addPop.addTitle( addPop.title(), firstAction );
+            addPop.insertSection( firstAction, addPop.title() );
             r = addPop.exec( e->globalPos() );
         }
 

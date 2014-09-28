@@ -156,7 +156,7 @@ void K3b::DeviceMenu::Private::_k_continueMultisession()
 
 
 K3b::DeviceMenu::DeviceMenu( QWidget* parent )
-    : KMenu( parent ),
+    : QMenu( parent ),
       d( new Private(this) )
 {
     connect( this, SIGNAL(aboutToShow()),

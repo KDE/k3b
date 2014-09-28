@@ -22,7 +22,6 @@
 #include "k3bdataviewimpl.h"
 #include "k3bdirproxymodel.h"
 
-#include <KDELibs4Support/KDE/KMenu>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KXmlGui/KActionCollection>

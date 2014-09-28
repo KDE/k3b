@@ -22,7 +22,6 @@
 #include "k3bview.h"
 #include "k3bdoc.h"
 
-#include <KDELibs4Support/KDE/KMenu>
 #include <KI18n/KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KWidgetsAddons/KActionMenu>
@@ -36,6 +35,7 @@
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QMouseEvent>
 #include <QtWidgets/QAction>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QTabBar>
 
 namespace {

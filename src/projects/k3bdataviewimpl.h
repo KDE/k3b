@@ -20,7 +20,6 @@
 #include <QtCore/QUrl>
 
 class KActionCollection;
-class KMenu;
 class QAction;
 class QSortFilterProxyModel;
 class QTreeView;
@@ -78,7 +77,6 @@ namespace K3b {
         QTreeView* m_fileView;
         ViewColumnAdjuster* m_columnAdjuster;
 
-        KMenu* m_popupMenu;
         QAction* m_actionParentDir;
         QAction* m_actionRemove;
         QAction* m_actionRename;

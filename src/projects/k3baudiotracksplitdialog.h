@@ -18,7 +18,7 @@
 #include <QtWidgets/QDialog>
 #include <QtCore/QEvent>
 
-class KMenu;
+class QMenu;
 
 
 /**
@@ -61,7 +61,7 @@ private:
     MsfEdit* m_msfEditStart;
     MsfEdit* m_msfEditEnd;
     AudioTrack* m_track;
-    KMenu* m_popupMenu;
+    QMenu* m_popupMenu;
     QPoint m_lastClickPosition;
 };
 }

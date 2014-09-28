@@ -19,7 +19,6 @@
 #include "k3bmsf.h"
 #include "k3bmsfedit.h"
 
-#include <KDELibs4Support/KDE/KMenu>
 #include <KI18n/KLocalizedString>
 #include <KXmlGui/KActionCollection>
 
@@ -31,6 +30,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
+#include <QtWidgets/QMenu>
 
 
 K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidget* parent )
@@ -96,7 +96,7 @@ K3b::AudioTrackSplitDialog::~AudioTrackSplitDialog()
 
 void K3b::AudioTrackSplitDialog::setupActions()
 {
-    m_popupMenu = new KMenu( this );
+    m_popupMenu = new QMenu( this );
 
     QAction* actionSplitHere = new QAction( this );
     actionSplitHere->setText( i18n("Split Here") );
