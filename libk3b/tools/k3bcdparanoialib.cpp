@@ -68,19 +68,24 @@ typedef short int int16_t;
 #define LIBCDIO_CDDA "cdio_cdda.dll"
 #define LIBCDIO_PARANOIA "cdio_paranoia.dll"
 #else
-#define LIBCDIO_CDDA "libcdio_cdda.so"
 #ifdef __NETBSD__
 #define CDDA_LIBCDDA_INTERFACE "cdda/libcdda_interace.so"
 #define CDDA_LIBCDDA_PARANOIA "cdda/libcdda_paranoia.so"
 #define LIBCDDA_INTERFACE "libcdda_interface.so"
 #define LIBCDDA_PARANOIA "libcdda_paranoia.so"
+#define LIBCDIO_CDDA "libcdio_cdda.so"
 #define LIBCDIO_PARANOIA "libcdio_paranoia.so"
 #else
 #define CDDA_LIBCDDA_INTERFACE "cdda/libcdda_interace.so.0"
 #define CDDA_LIBCDDA_PARANOIA "cdda/libcdda_paranoia.so.0"
 #define LIBCDDA_INTERFACE "libcdda_interface.so.0"
 #define LIBCDDA_PARANOIA "libcdda_paranoia.so.0"
-#define LIBCDIO_PARANOIA "libcdio_paranoia.so.0"
+#define LIBCDIO_CDDA "libcdio_cdda.so.2"
+#define LIBCDIO_CDDA_0 "libcdio_cdda.so.0"
+#define LIBCDIO_CDDA_1 "libcdio_cdda.so.1"
+#define LIBCDIO_PARANOIA "libcdio_paranoia.so.2"
+#define LIBCDIO_PARANOIA_0 "libcdio_paranoia.so.0"
+#define LIBCDIO_PARANOIA_1 "libcdio_paranoia.so.1"
 #endif
 #endif
 
@@ -541,38 +546,58 @@ bool K3b::CdparanoiaLib::load()
 K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
 {
     // check if libcdda_interface is avalilable
-    if( s_libInterface == 0 ) {
-        s_haveLibCdio = false;
+    if( !s_libInterface ) {
 #ifndef Q_OS_WIN32
-        s_libInterface = dlopen( LIBCDDA_INTERFACE, RTLD_NOW|RTLD_GLOBAL );
-
-        // try the redhat & Co. location
-        if( s_libInterface == 0 )
-            s_libInterface = dlopen( CDDA_LIBCDDA_INTERFACE, RTLD_NOW|RTLD_GLOBAL );
+        s_haveLibCdio = true;
 #endif
-        // try the new cdio lib
-        if( s_libInterface == 0 ) {
-            s_libInterface = dlopen( LIBCDIO_CDDA, RTLD_NOW|RTLD_GLOBAL );
-            s_haveLibCdio = true;
-        }
 
-        if( s_libInterface == 0 ) {
+        s_libInterface = dlopen( LIBCDIO_CDDA, RTLD_NOW|RTLD_GLOBAL );
+
+#ifndef Q_OS_WIN32
+        if( !s_libInterface ) {
+#ifndef __NETBSD__
+            s_libInterface = dlopen( LIBCDIO_CDDA_1, RTLD_NOW|RTLD_GLOBAL );
+            if( !s_libInterface ) {
+                s_libInterface = dlopen( LIBCDIO_CDDA_0, RTLD_NOW|RTLD_GLOBAL );
+                if( !s_libInterface ) {
+#endif
+                    s_haveLibCdio = false;
+                    s_libInterface = dlopen( LIBCDDA_INTERFACE, RTLD_NOW|RTLD_GLOBAL );
+                    // try the redhat & Co. location
+                    if( !s_libInterface )
+                        s_libInterface = dlopen( CDDA_LIBCDDA_INTERFACE, RTLD_NOW|RTLD_GLOBAL );
+#ifndef __NETBSD__
+                }
+            }
+#endif
+        }
+#endif
+
+        if( !s_libInterface ) {
             kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_interface. ";
             return 0;
         }
 
 #ifndef Q_OS_WIN32
-        s_libParanoia = dlopen( LIBCDDA_PARANOIA, RTLD_NOW );
-
-        // try the redhat & Co. location
-        if( s_libParanoia == 0 )
-            s_libParanoia = dlopen( CDDA_LIBCDDA_PARANOIA, RTLD_NOW );
-#endif
-        // try the new cdio lib
-        if( s_haveLibCdio && s_libParanoia == 0 )
+        if( s_haveLibCdio ) {
             s_libParanoia = dlopen( LIBCDIO_PARANOIA, RTLD_NOW );
+#ifndef __NETBSD__
+            if( !s_libParanoia ) {
+                s_libParanoia = dlopen( LIBCDIO_PARANOIA_1, RTLD_NOW );
+                if( !s_libParanoia )
+                    s_libParanoia = dlopen( LIBCDIO_PARANOIA_0, RTLD_NOW );
+            }
+        } else {
+            s_libParanoia = dlopen( LIBCDDA_PARANOIA, RTLD_NOW );
+            if( !s_libParanoia )
+                s_libParanoia = dlopen( CDDA_LIBCDDA_PARANOIA, RTLD_NOW );
+#endif
+        }
+#else
+        s_libParanoia = dlopen( LIBCDIO_PARANOIA, RTLD_NOW );
+#endif
 
-        if( s_libParanoia == 0 ) {
+        if( !s_libParanoia ) {
             kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_paranoia. ";
             dlclose( s_libInterface );
             s_libInterface = 0;
