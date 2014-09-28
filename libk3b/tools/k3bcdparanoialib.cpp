@@ -82,6 +82,7 @@ typedef short int int16_t;
 #define LIBCDDA_PARANOIA "libcdda_paranoia.so.0"
 #define LIBCDIO_PARANOIA "libcdio_paranoia.so.0"
 #endif
+#endif
 
 static bool s_haveLibCdio = false;
 
@@ -747,7 +748,7 @@ char* K3b::CdparanoiaLib::read( int* statusCode, unsigned int* track, bool littl
 
     if( d->currentSector != d->data->sector() ) {
         kDebug() << "(K3b::CdparanoiaLib) need to seek before read. Looks as if we are reusing the paranoia instance.";
-        if( !d->data->paranoiaSeek( d->currentSector, SEEK_SET ) == -1 )
+        if( d->data->paranoiaSeek( d->currentSector, SEEK_SET ) == -1 )
             return 0;
     }
 
