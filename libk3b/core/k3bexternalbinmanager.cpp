@@ -646,7 +646,7 @@ QMap<QString, K3b::ExternalProgram*> K3b::ExternalBinManager::programs() const
 
 void K3b::ExternalBinManager::loadDefaultSearchPath()
 {
-    static const char* defaultSearchPaths[] = {
+    static const char* const defaultSearchPaths[] = {
 #ifndef Q_OS_WIN32
                                                 "/usr/bin/",
                                                 "/usr/local/bin/",

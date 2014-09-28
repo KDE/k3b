@@ -256,7 +256,11 @@ bool K3b::DataTrackReader::run()
     //
     d->device->setSpeed( 0xffff, 0xffff );
 
+#ifdef __NETBSD__
+    s_bufferSizeSectors = 31;
+#else
     s_bufferSizeSectors = 128;
+#endif
     unsigned char* buffer = new unsigned char[d->usedSectorSize*s_bufferSizeSectors];
     while( s_bufferSizeSectors > 0 && read( buffer, d->firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
         kDebug() << "(K3b::DataTrackReader) determine max read sectors: "

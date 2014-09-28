@@ -16,7 +16,7 @@
 #ifndef _K3B_LAME_ENCODER_DEFAULTS_H_
 #define _K3B_LAME_ENCODER_DEFAULTS_H_
 
-const char* DEFAULT_MODE = "stereo";
+const char DEFAULT_MODE[] = "stereo";
 const bool DEFAULT_MANUAL_BITRATE = false;
 const bool DEFAULT_VBR = false;
 const int DEFAULT_CONSTANT_BITRATE = 128;

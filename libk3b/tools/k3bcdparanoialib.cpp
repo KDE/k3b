@@ -480,40 +480,77 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
 {
     // check if libcdda_interface is avalilable
     if( !s_libInterface->isLoaded() ) {
-        s_haveLibCdio = false;
+        s_haveLibCdio = true;
 
-        s_libInterface->setFileNameAndVersion( "cdda_interface", 0 );
+        // Windows ignores version:
+        // http://qt-project.org/doc/qt-4.8/qlibrary.html#setFileNameAndVersion
+        s_libInterface->setFileNameAndVersion( "cdio_cdda", 2 );
         s_libInterface->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
-
-        bool load_ok = s_libInterface->load();
-
-        if (!load_ok) {
-            // try the new cdio lib
+#ifndef Q_OS_WIN32
+        if( !s_libInterface->load() ) {
             s_libInterface->setFileNameAndVersion( "cdio_cdda", 1 );
-            s_haveLibCdio = true;
-            load_ok = s_libInterface->load();
+            if( !s_libInterface->load() ) {
+                s_libInterface->setFileNameAndVersion( "cdio_cdda", 0 );
+                if( !s_libInterface->load() ) {
+                    s_libInterface->setFileNameAndVersion( "cdio_cdda", "" );
+                    if( !s_libInterface->load() ) {
+                        s_haveLibCdio = false;
+                        s_libInterface->setFileNameAndVersion( "cdda_interface", 1 );
+                        if( !s_libInterface->load() ) {
+                            s_libInterface->setFileNameAndVersion( "cdda_interface", 0 );
+#endif
+                            if( !s_libInterface->load() ) {
+                                s_libInterface->setFileNameAndVersion( "cdda_interface", "" );
+                                if( !s_libInterface->load() ) {
+                                    kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_interface.";
+                                    return 0;
+                                }
+                            }
+#ifndef Q_OS_WIN32
+                        }
+                    }
+                }
+            }
+        }
+#endif
+
+
+	s_libParanoia->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
+        if( s_haveLibCdio ) {
+            s_libParanoia->setFileNameAndVersion( "cdio_paranoia", 2 );
+#ifndef Q_OS_WIN32
+            if( !s_libParanoia->load() ) {
+                s_libParanoia->setFileNameAndVersion( "cdio_paranoia", 1 );
+                if( !s_libParanoia->load() ) {
+                    s_libParanoia->setFileNameAndVersion( "cdio_paranoia", 0 );
+                    if( !s_libParanoia->load() ) {
+                        s_libParanoia->setFileNameAndVersion( "cdio_paranoia", "" );
+#endif
+                        s_libParanoia->load();
+#ifndef Q_OS_WIN32
+                    }
+                }
+            }
+#endif
         }
 
-        if( !load_ok ) {
-            kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_interface. ";
-            return 0;
-        }
-
-        s_libParanoia->setFileNameAndVersion( "cdda_paranoia", 0 );
-        s_libParanoia->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
-
-        load_ok = s_libParanoia->load();
-
-        if ( s_haveLibCdio && !load_ok ) {
-            // try the new cdio lib
-            s_libParanoia->setFileNameAndVersion( "cdio_paranoia", 1 );
-            load_ok = s_libParanoia->load();
-        }
-
-        if( !load_ok ) {
-            kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_paranoia. ";
-            s_libInterface->unload();
-            return 0;
+        if( !s_libParanoia->isLoaded() ) {
+            s_libParanoia->setFileNameAndVersion( "cdda_paranoia", 1 );
+#ifndef Q_OS_WIN32
+            if( !s_libParanoia->load() ) {
+                s_libParanoia->setFileNameAndVersion( "cdda_paranoia", 0 );
+                if( !s_libParanoia->load() ) {
+                    s_libParanoia->setFileNameAndVersion( "cdda_paranoia", "" );
+#endif
+                    if( !s_libParanoia->load() ) {
+                        kDebug() << "(K3b::CdparanoiaLib) Error while loading libcdda_paranoia.";
+                        s_libInterface->unload();
+                        return 0;
+                    }
+#ifndef Q_OS_WIN32
+                }
+            }
+#endif
         }
     }
 
@@ -687,7 +724,7 @@ char* K3b::CdparanoiaLib::read( int* statusCode, unsigned int* track, bool littl
 
     if( d->currentSector != d->data->sector() ) {
         kDebug() << "(K3b::CdparanoiaLib) need to seek before read. Looks as if we are reusing the paranoia instance.";
-        if( !d->data->paranoiaSeek( d->currentSector, SEEK_SET ) )
+        if( d->data->paranoiaSeek( d->currentSector, SEEK_SET ) == -1 )
             return 0;
     }
 

@@ -28,6 +28,9 @@
 #include <QtCore/QIODevice>
 #include <QtCore/QTextStream>
 
+#include <vector>
+#include <algorithm>
+
 namespace K3b {
 
 namespace
@@ -43,6 +46,30 @@ namespace
         }
 
         MassAudioEncodingJob::Tracks const& m_tracks;
+    };
+
+    struct Task {
+        Task(MassAudioEncodingJob::Tracks::const_iterator const & it) :
+            tracknumber(it.value()),
+            filename   (it.key()),
+            track      (it)
+        { }
+
+        static
+        bool sort_by_filename(Task const & lhs, Task const & rhs)
+        {
+          return lhs.filename < rhs.filename;
+        }
+
+        static
+        bool sort_by_tracknumber(Task const & lhs, Task const & rhs)
+        {
+          return lhs.tracknumber < rhs.tracknumber;
+        }
+
+        int     tracknumber;
+        QString filename;
+        MassAudioEncodingJob::Tracks::const_iterator track;
     };
 
 } // namespace
@@ -209,12 +236,19 @@ bool MassAudioEncodingJob::run()
         }
     }
 
+    // rip tracks in *numerical* order
+    std::vector<Task> tasks;
+    tasks.reserve( d->tracks.size() );
+    for( Tracks::const_iterator i = d->tracks.constBegin(); i != d->tracks.constEnd(); ++i )
+        tasks.push_back( Task(i) );
+    std::sort( tasks.begin(), tasks.end(), Task::sort_by_tracknumber );
+
     bool success = true;
     QString lastFilename;
-    Tracks::const_iterator track;
-    for( track = d->tracks.constBegin(); success && track != d->tracks.constEnd(); ++track ) {
-        success = encodeTrack( track.value(), track.key(), lastFilename );
-        lastFilename = track.key();
+    std::vector<Task>::const_iterator currentTask;
+    for( currentTask = tasks.begin(); success && currentTask != tasks.end(); ++currentTask ) {
+        success = encodeTrack( currentTask->track.value(), currentTask->track.key(), lastFilename );
+        lastFilename = currentTask->track.key();
     }
 
     if( d->encoder )
@@ -231,10 +265,10 @@ bool MassAudioEncodingJob::run()
     }
 
     if( canceled() ) {
-        if( track != d->tracks.constEnd() ) {
-            if( QFile::exists( track.key() ) ) {
-                QFile::remove( track.key() );
-                emit infoMessage( i18n("Removed partial file '%1'.", track.key()), K3b::Job::MessageInfo );
+        if( currentTask != tasks.end() ) {
+            if( QFile::exists( currentTask->track.key() ) ) {
+                QFile::remove( currentTask->track.key() );
+                emit infoMessage( i18n("Removed partial file '%1'.", currentTask->track.key()), K3b::Job::MessageInfo );
             }
         }
 

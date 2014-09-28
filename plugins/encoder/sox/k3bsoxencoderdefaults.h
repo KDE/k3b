@@ -18,7 +18,7 @@
 const bool DEFAULT_MANUAL_SETTINGS = false;
 const int DEFAULT_CHANNELS = 2;
 const int DEFAULT_SAMPLE_RATE = 44100;
-const char* DEFAULT_DATA_ENCODING = "signed";
+const char DEFAULT_DATA_ENCODING[] = "signed";
 const int DEFAULT_DATA_SIZE = 16;
 
 #endif // _K3B_SOX_ENCODER_DEFAULTS_H_
