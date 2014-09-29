@@ -157,7 +157,7 @@ void K3b::DataViewImpl::open( const QModelIndexList& indexes )
                         m_view );
         }
         else {
-            KRun::displayOpenWithDialog( KUrl::List() << url, false, m_view );
+            KRun::displayOpenWithDialog( KUrl::List() << url, m_view );
         }
     }
 }
