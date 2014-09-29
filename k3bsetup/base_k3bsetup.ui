@@ -165,7 +165,7 @@
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="tab">
+          <widget class="QWidget" name="tab1">
            <attribute name="title">
             <string>Search Path</string>
            </attribute>
