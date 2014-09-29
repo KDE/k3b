@@ -347,7 +347,7 @@ void K3b::AudioViewImpl::slotAudioConversion()
     }
     else {
         KMessageBox::information( m_view, i18n("Please add files to your project first."),
-                                  i18n("No tracks to convert"), QString(), false );
+                                  i18n("No tracks to convert"), QString(), KMessageBox::Options() );
     }
 }
 
