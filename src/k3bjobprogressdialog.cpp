@@ -37,7 +37,6 @@
 #include <KCoreAddons/KJobTrackerInterface>
 #include <KDELibs4Support/KDE/KLocale>
 #include <KNotifications/KNotification>
-#include <KDELibs4Support/KDE/KProgressDialog>
 #include <KWidgetsAddons/KSqueezedTextLabel>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
@@ -56,6 +55,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QScrollBar>
 #include <QtWidgets/QTreeWidget>

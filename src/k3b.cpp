@@ -69,8 +69,6 @@
 #include <KConfigWidgets/KStandardAction>
 #include <KCoreAddons/KAboutData>
 #include <KCoreAddons/KProcess>
-#include <KDELibs4Support/KDE/KMenuBar>
-#include <KDELibs4Support/KDE/KStatusBar>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/DeleteJob>
 #include <KIOCore/KIO/StatJob>
@@ -99,8 +97,10 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLayout>
+#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QStatusBar>
 
 #include <cstdlib>
 

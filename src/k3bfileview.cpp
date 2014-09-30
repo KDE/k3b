@@ -18,7 +18,6 @@
 #include "k3bdiroperator.h"
 #include "k3bapplication.h"
 
-#include <KDELibs4Support/KDE/KProgressDialog>
 #include <KFileFilterCombo>
 #include <KIOCore/KFileItem>
 #include <KI18n/KLocalizedString>
@@ -36,6 +35,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>

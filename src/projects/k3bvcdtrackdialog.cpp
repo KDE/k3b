@@ -25,7 +25,6 @@
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KNumInput>
 #include <KWidgetsAddons/KSqueezedTextLabel>
 
 #include <QtCore/QList>
@@ -42,6 +41,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QTreeView>
