@@ -22,7 +22,6 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KCompletion/KLineEdit>
-#include <KDELibs4Support/KDE/KNumInput>
 #include <KI18n/KLocalizedString>
 
 #include <QtGui/QValidator>
@@ -63,7 +62,9 @@ void K3b::AdvancedOptionTab::setupGui()
     m_checkOverburn = new QCheckBox( i18n("Allow &overburning"), groupWritingApp );
     m_checkForceUnsafeOperations = new QCheckBox( i18n("&Force unsafe operations"), groupWritingApp );
     m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ':', groupWritingApp );
-    m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
+    m_editWritingBufferSize = new QSpinBox( groupWritingApp );
+    m_editWritingBufferSize->setRange( 1, 100 );
+    m_editWritingBufferSize->setValue( 4 );
     m_editWritingBufferSize->setSuffix( ' ' + i18n("MB") );
     m_checkShowForceGuiElements = new QCheckBox( i18n("Show &advanced GUI elements"), groupWritingApp );
     bufferLayout->addWidget( m_checkBurnfree, 0, 0, 1, 3 );

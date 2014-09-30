@@ -20,7 +20,7 @@
 
 class QCheckBox;
 class QLabel;
-class KIntNumInput;
+class QSpinBox;
 
 
 
@@ -47,7 +47,7 @@ namespace K3b {
         QCheckBox*    m_checkAutoErasingRewritable;
         QCheckBox*    m_checkOverburn;
         QCheckBox*    m_checkManualWritingBufferSize;
-        KIntNumInput* m_editWritingBufferSize;
+        QSpinBox*     m_editWritingBufferSize;
         QCheckBox*    m_checkShowForceGuiElements;
         QCheckBox*    m_checkForceUnsafeOperations;
     };

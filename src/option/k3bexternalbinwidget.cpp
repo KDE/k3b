@@ -21,9 +21,9 @@
 #include "config-k3b.h"
 
 #include <KAuth/KAuth>
-#include <KDELibs4Support/KDE/KEditListBox>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KEditListWidget>
 
 #include <QtCore/QDebug>
 #include <QtCore/QItemSelectionModel>
@@ -129,7 +129,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // setup search path tab
     // ------------------------------------------------------------
     QWidget* searchPathTab = new QWidget( m_mainTabWidget );
-    m_searchPathBox = new KEditListBox( i18n("Search Path"), searchPathTab );
+    m_searchPathBox = new KEditListWidget( searchPathTab );
     m_searchPathBox->setCheckAtEntering( true );
     QLabel* hintLabel = new QLabel( i18n("<qt><b>Hint:</b> to force K3b to use another than the "
                                          "default name for the executable specify it in the search path.</qt>"),
