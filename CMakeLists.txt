@@ -49,6 +49,8 @@ else(K3B_BUILD_K3BSETUP)
     set(KDE_MIN_VERSION 4.3.0)
 endif(K3B_BUILD_K3BSETUP)
 
+set(QT_MIN_VERSION 4.7.0)
+
 find_package(KDE4 REQUIRED)
 include(KDE4Defaults)
 include(MacroLibrary)

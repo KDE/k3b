@@ -55,7 +55,6 @@
 #include <QPushButton>
 #include <QScrollBar>
 #include <QString>
-#include <QTimer>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
@@ -85,9 +84,6 @@ K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
     }
 
     m_job = 0;
-    m_timer = new QTimer( this );
-
-    connect( m_timer, SIGNAL(timeout()), this, SLOT(slotUpdateTime()) );
 }
 
 
@@ -176,10 +172,12 @@ void K3b::JobProgressDialog::setupGUI()
     m_labelTask_font.setBold( true );
     m_labelTask->setFont( m_labelTask_font );
 
-    m_labelElapsedTime = new K3b::ThemedLabel( d->progressHeaderFrame );
+    m_labelRemainingTime = new QLabel( d->progressHeaderFrame );
+    m_labelElapsedTime = new QLabel( d->progressHeaderFrame );
 
     QVBoxLayout* jobProgressLayout = new QVBoxLayout( d->progressHeaderFrame );
     jobProgressLayout->addWidget( m_labelTask );
+    jobProgressLayout->addWidget( m_labelRemainingTime );
     jobProgressLayout->addWidget( m_labelElapsedTime );
     jobProgressLayout->setContentsMargins( 10, -1, -1, -1 );
 
@@ -354,6 +352,13 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     const KColorScheme colorScheme( QPalette::Normal, KColorScheme::Window );
     QPalette taskPalette( m_labelTask->palette() );
 
+    // Only show elapsed time at the end of the task
+    // setVisible( false ) would move elapsed time one line up ...
+    m_labelRemainingTime->setText( "" );
+    m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
+        "Elapsed time: %1", KGlobal::locale()->prettyFormatDuration( m_timer.elapsed() ) ) );
+    m_timer.invalidate();
+
     if( success ) {
         m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_SUCCESS );
 
@@ -366,9 +371,6 @@ void K3b::JobProgressDialog::slotFinished( bool success )
         m_progressPercent->setValue(100);
         m_progressSubPercent->setValue(100);
         slotProgress(100);
-
-        // one last time update to be sure no remaining time is displayed anymore
-        slotUpdateTime();
 
         if( m_osd )
             m_osd->setText( i18n("Success.") );
@@ -399,7 +401,6 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     showButton( Cancel, false );
     showButton( User1, true );
     showButton( User2, true );
-    m_timer->stop();
 }
 
 
@@ -525,31 +526,10 @@ void K3b::JobProgressDialog::slotStarted()
 {
     kDebug();
     d->lastProgress = 0;
-    m_timer->start( 1000 );
-    m_startTime = QDateTime::currentDateTime();
+    m_timer.start();
     m_plainCaption = k3bappcore->k3bMainWindow()->windowTitle();
 
     m_logFile.open();
-}
-
-
-void K3b::JobProgressDialog::slotUpdateTime()
-{
-    int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
-
-    QString s = i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-                       "Elapsed time: %1",
-                       KGlobal::locale()->prettyFormatDuration( elapsedSecs*1000 ) );
-
-    if( d->lastProgress > 0 && d->lastProgress < 100 ) {
-        int remainingSecs = m_startTime.secsTo( m_lastProgressUpdateTime ) * (100-d->lastProgress) / d->lastProgress;
-        s += " / ";
-        s += i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-                    "Remaining: %1",
-                    KGlobal::locale()->prettyFormatDuration( remainingSecs*1000 ) );
-    }
-
-    m_labelElapsedTime->setText( s );
 }
 
 
@@ -572,10 +552,22 @@ void K3b::JobProgressDialog::slotProgress( int percent )
 {
     if( percent > d->lastProgress ) {
         d->lastProgress = percent;
-        m_lastProgressUpdateTime = QDateTime::currentDateTime();
         k3bappcore->k3bMainWindow()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 
         setCaption( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
+    }
+
+    if( m_timer.isValid() ) {
+	qint64 elapsed = m_timer.elapsed();
+        m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
+            "Elapsed time: %1", KGlobal::locale()->prettyFormatDuration( elapsed ) ) );
+        // Update "Remaining time" max. each second (1000 ms)
+        if ( elapsed - m_lastProgressUpdateTime > 999 ) {
+            m_labelRemainingTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
+                "Remaining: %1", KGlobal::locale()->prettyFormatDuration(
+                ( d->lastProgress > 0 && d->lastProgress < 100 ) ? elapsed * ( 100 - d->lastProgress) / d->lastProgress : 0 ) ) );
+            m_lastProgressUpdateTime = elapsed;
+        }
     }
 }
 
