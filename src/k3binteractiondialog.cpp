@@ -16,7 +16,6 @@
 #include "k3binteractiondialog.h"
 #include "k3btitlelabel.h"
 #include "k3bstdguiitems.h"
-#include "k3bpushbutton.h"
 #include "k3bthemedheader.h"
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
