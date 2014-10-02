@@ -39,7 +39,6 @@
 #include <KCoreAddons/KProcess>
 #include <KNotifications/KNotification>
 #include <KI18n/KLocalizedString>
-#include <KTextWidgets/KTextEdit>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KStandardGuiItem>
 
@@ -52,6 +51,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QTextEdit>
 
 #ifdef HAVE_ICONV
 #include <langinfo.h>
@@ -116,7 +116,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
 
     // setup the problem view
     // ---------------------------------------------------------------------------------------------------
-    KTextEdit* view = new KTextEdit( this );
+    QTextEdit* view = new QTextEdit( this );
     view->setReadOnly(true);
 
     // layout everything
