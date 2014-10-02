@@ -78,7 +78,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_viewDevices->setSelectionMode( QAbstractItemView::NoSelection );
     m_viewDevices->setItemsExpandable( false );
     m_viewDevices->setRootIsDecorated( false );
-    m_viewDevices->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+    m_viewDevices->header()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
     m_viewDevices->setFocusPolicy( Qt::NoFocus );
     m_viewDevices->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     // ------------------------------------------------

@@ -169,9 +169,6 @@ void K3b::MixedView::slotCurrentDirChanged()
     QModelIndex newRoot = m_dirProxy->mapToSource( m_dirView->currentIndex() );
 
     QAbstractItemModel* currentSubModel = m_model->subModelForIndex( newRoot );
-    if( currentSubModel != 0 ) {
-        m_model->setSupportedDragActions( currentSubModel->supportedDragActions() );
-    }
 
     if( currentSubModel == m_dataViewImpl->model() ) {
         m_dataViewImpl->slotCurrentRootChanged( m_model->mapToSubModel( newRoot ) );

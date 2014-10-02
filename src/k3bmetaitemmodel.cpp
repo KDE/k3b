@@ -695,6 +695,17 @@ QMimeData* K3b::MetaItemModel::mimeData( const QModelIndexList& indexes ) const
 }
 
 
+Qt::DropActions K3b::MetaItemModel::supportedDragActions() const
+{
+    Qt::DropActions a = Qt::IgnoreAction;
+
+    for ( int i = 0; i < d->places.count(); ++i ) {
+        a |= d->places[i].model()->supportedDragActions();
+    }
+    return a;
+}
+
+
 Qt::DropActions K3b::MetaItemModel::supportedDropActions() const
 {
     Qt::DropActions a = Qt::IgnoreAction;
@@ -728,6 +739,9 @@ void K3b::MetaItemModel::addSubModel( const QString& name, const QIcon& icon, QA
     place.updateChildren();
 
     d->updatePlaceRows();
+
+    connect( place.model(), SIGNAL(modelAboutToBeReset()),
+             this, SLOT(slotAboutToBeReset()) );
 
     connect( place.model(), SIGNAL(modelReset()),
              this, SLOT(slotReset()) );
@@ -930,6 +944,12 @@ void K3b::MetaItemModel::slotDataChanged( const QModelIndex& topLeft, const QMod
 }
 
 
+void K3b::MetaItemModel::slotAboutToBeReset()
+{
+    beginResetModel();
+}
+
+
 void K3b::MetaItemModel::slotReset()
 {
     // clean out any cached nodes
@@ -938,7 +958,7 @@ void K3b::MetaItemModel::slotReset()
     }
     d->updatePlaceRows();
 
-    reset();
+    endResetModel();
 }
 
 

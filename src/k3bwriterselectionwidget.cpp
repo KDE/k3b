@@ -624,14 +624,14 @@ void K3b::WriterSelectionWidget::slotManualSpeed()
     }
 
     bool ok = true;
-    int newSpeed = QInputDialog::getInteger( this,
-                                             i18n("Set writing speed manually"),
-                                             s,
-                                             writerDevice()->maxWriteSpeed()/speedFactor,
-                                             1,
-                                             10000,
-                                             1,
-                                             &ok ) * speedFactor;
+    int newSpeed = QInputDialog::getInt( this,
+                                         i18n("Set writing speed manually"),
+                                         s,
+                                         writerDevice()->maxWriteSpeed()/speedFactor,
+                                         1,
+                                         10000,
+                                         1,
+                                         &ok ) * speedFactor;
     if( ok ) {
         writerDevice()->setMaxWriteSpeed( qMax( newSpeed, writerDevice()->maxWriteSpeed() ) );
         if ( haveSpeeds ) {

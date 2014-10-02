@@ -52,7 +52,7 @@ K3b::VcdView::VcdView( K3b::VcdDoc* doc, QWidget* parent )
     m_view->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_view->setContextMenuPolicy( Qt::ActionsContextMenu );
     // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
-    m_view->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_view->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
     m_view->setEditTriggers( QAbstractItemView::NoEditTriggers );
     setMainWidget( m_view );
 

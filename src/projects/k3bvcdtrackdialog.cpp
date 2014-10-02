@@ -555,7 +555,7 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
     d->keys_view->setAllColumnsShowFocus( true );
     d->keys_view->setRootIsDecorated( false );
     d->keys_view->setEditTriggers( QAbstractItemView::AllEditTriggers );
-    d->keys_view->header()->setResizeMode( VcdTrackKeysModel::KeyColumn, QHeaderView::ResizeToContents );
+    d->keys_view->header()->setSectionResizeMode( VcdTrackKeysModel::KeyColumn, QHeaderView::ResizeToContents );
 
     QVBoxLayout* layout = new QVBoxLayout( d->widgetnumkeys );
     layout->addWidget( d->check_overwritekeys );

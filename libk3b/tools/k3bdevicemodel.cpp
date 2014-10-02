@@ -49,19 +49,21 @@ K3b::DeviceModel::~DeviceModel()
 
 void K3b::DeviceModel::setDevices( const QList<K3b::Device::Device*>& devices )
 {
+    beginResetModel();
     d->devices = devices;
     foreach( K3b::Device::Device* dev, devices ) {
         d->devicesValid[dev] = true;
     }
-    reset();
+    endResetModel();
 }
 
 
 void K3b::DeviceModel::addDevice( K3b::Device::Device* dev )
 {
     if ( !d->devices.contains( dev ) ) {
+        beginResetModel();
         d->devices.append( dev );
-        reset(); // hardcore reset since entries might change
+        endResetModel(); // hardcore reset since entries might change
     }
 }
 
@@ -69,27 +71,30 @@ void K3b::DeviceModel::addDevice( K3b::Device::Device* dev )
 void K3b::DeviceModel::removeDevice( K3b::Device::Device* dev )
 {
     if ( d->devices.contains( dev ) ) {
+        beginResetModel();
         d->devices.removeOne( dev );
-            reset();
+        endResetModel();
     }
 }
 
 
 void K3b::DeviceModel::addDevices( const QList<K3b::Device::Device*>& devs )
 {
+    beginResetModel();
     Q_FOREACH( K3b::Device::Device* dev, devs ) {
         if ( !d->devices.contains( dev ) ) {
             d->devices.append( dev );
         }
     }
-    reset();
+    endResetModel();
 }
 
 
 void K3b::DeviceModel::clear()
 {
+    beginResetModel();
     d->devices.clear();
-    reset();
+    endResetModel();
 }
 
 

@@ -75,8 +75,6 @@ VcdProjectModel::VcdProjectModel( VcdDoc* doc, QObject* parent )
              this, SLOT(_k_aboutToRemoveRows(int,int)), Qt::DirectConnection );
     connect( doc, SIGNAL(removedVCDTracks()),
              this, SLOT(_k_removedRows()), Qt::DirectConnection );
-
-    setSupportedDragActions( Qt::MoveAction );
 }
 
 
@@ -282,6 +280,12 @@ Qt::ItemFlags VcdProjectModel::flags( const QModelIndex& index ) const
     {
         return QAbstractItemModel::flags( index )|Qt::ItemIsDropEnabled;
     }
+}
+
+
+Qt::DropActions VcdProjectModel::supportedDragActions() const
+{
+    return Qt::MoveAction;
 }
 
 

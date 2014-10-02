@@ -350,6 +350,7 @@ QModelIndex ExternalBinPermissionModel::buddy( const QModelIndex& index ) const
 void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {
+        beginResetModel();
         d->burningGroup = burningGroup;
         
         // Remove from the selected list all programs
@@ -362,15 +363,16 @@ void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
             else
                 ++program;
         }
-        reset();
+        endResetModel();
     }
 }
 
 void ExternalBinPermissionModel::update()
 {
+    beginResetModel();
     d->buildProgramList();
     d->selectedPrograms.intersect( d->programs.toSet() );
-    reset();
+    endResetModel();
 }
 
 } // namespace K3b

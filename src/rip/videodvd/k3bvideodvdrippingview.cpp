@@ -104,7 +104,7 @@ K3b::VideoDVDRippingView::VideoDVDRippingView( QWidget* parent )
     d->view->setSelectionMode( QAbstractItemView::ExtendedSelection );
     d->view->setModel( d->model );
     d->view->setRootIsDecorated( false );
-    d->view->header()->setResizeMode( QHeaderView::ResizeToContents );
+    d->view->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
     d->view->setContextMenuPolicy( Qt::CustomContextMenu );
     d->view->installEventFilter( this );
     connect( d->view, SIGNAL(customContextMenuRequested(QPoint)),

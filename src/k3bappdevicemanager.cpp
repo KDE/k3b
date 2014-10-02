@@ -284,22 +284,22 @@ void K3b::AppDeviceManager::setReadSpeed()
 {
     if( currentDevice() ) {
         bool ok = false;
-        int s = QInputDialog::getInteger( nullptr,
-                                          i18n("CD Read Speed"),
-                                          i18n("<p>Please enter the preferred read speed for <b>%1</b>. "
-                                               "This speed will be used for the currently mounted "
-                                               "medium."
-                                               "<p>This is especially useful to slow down the drive when "
-                                               "watching movies which are read directly from the drive "
-                                               "and the spinning noise is intrusive."
-                                               "<p>Be aware that this has no influence on K3b since it will "
-                                               "change the reading speed again when copying CDs or DVDs."
-                                               ,currentDevice()->vendor() + ' ' + currentDevice()->description()),
-                                          12,
-                                          1,
-                                          currentDevice()->maxReadSpeed(),
-                                          1,
-                                          &ok );
+        int s = QInputDialog::getInt( nullptr,
+                                      i18n("CD Read Speed"),
+                                      i18n("<p>Please enter the preferred read speed for <b>%1</b>. "
+                                           "This speed will be used for the currently mounted "
+                                           "medium."
+                                           "<p>This is especially useful to slow down the drive when "
+                                           "watching movies which are read directly from the drive "
+                                           "and the spinning noise is intrusive."
+                                           "<p>Be aware that this has no influence on K3b since it will "
+                                           "change the reading speed again when copying CDs or DVDs."
+                                           ,currentDevice()->vendor() + ' ' + currentDevice()->description()),
+                                      12,
+                                      1,
+                                      currentDevice()->maxReadSpeed(),
+                                      1,
+                                      &ok );
         if( ok ) {
             if( !currentDevice()->setSpeed( s*175, 0xFFFF ) )
                 KMessageBox::error( 0, i18n("Setting the read speed failed.") );

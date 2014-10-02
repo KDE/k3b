@@ -55,6 +55,7 @@ namespace K3b {
         virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
         virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
         virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+        virtual Qt::DropActions supportedDragActions() const;
         virtual Qt::DropActions supportedDropActions() const;
         virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
         virtual QStringList mimeTypes() const;

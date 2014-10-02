@@ -76,8 +76,8 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     m_programView->setAllColumnsShowFocus( true );
     m_programView->setRootIsDecorated( false );
     m_programView->setItemsExpandable( false );
-    m_programView->header()->setResizeMode( ExternalBinModel::PathColumn, QHeaderView::ResizeToContents );
-    m_programView->header()->setResizeMode( ExternalBinModel::VersionColumn, QHeaderView::ResizeToContents );
+    m_programView->header()->setSectionResizeMode( ExternalBinModel::PathColumn, QHeaderView::ResizeToContents );
+    m_programView->header()->setSectionResizeMode( ExternalBinModel::VersionColumn, QHeaderView::ResizeToContents );
     m_programView->setWhatsThis( i18n("<p>If K3b finds more than one installed version of a program "
                                       "it will choose one as the <em>default</em>, which will be used "
                                       "to do the work. If you want to change the default, check "
@@ -99,7 +99,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     m_parameterView->setAllColumnsShowFocus( true );
     m_parameterView->setRootIsDecorated( false );
     m_parameterView->setEditTriggers( QAbstractItemView::AllEditTriggers );
-    m_parameterView->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_parameterView->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
 
     QVBoxLayout* parametersTabLayout = new QVBoxLayout( parametersTab );
     parametersTabLayout->addWidget( parametersLabel );
@@ -117,7 +117,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     m_permissionView->setModel( m_permissionModel );
     m_permissionView->setAllColumnsShowFocus( true );
     m_permissionView->setRootIsDecorated( false );
-    m_permissionView->header()->setResizeMode( ExternalBinPermissionModel::ProgramColumn, QHeaderView::ResizeToContents );
+    m_permissionView->header()->setSectionResizeMode( ExternalBinPermissionModel::ProgramColumn, QHeaderView::ResizeToContents );
     m_changePermissionsButton = new QPushButton( QIcon::fromTheme("dialog-password"), i18n( "Change Permissions..." ), this );
     QVBoxLayout* permissionsTabLayout = new QVBoxLayout( permissionsTab );
     permissionsTabLayout->addWidget( permissionsLabel );

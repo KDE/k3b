@@ -176,6 +176,7 @@ VideoDVDTitleModel::~VideoDVDTitleModel()
 
 void VideoDVDTitleModel::setVideoDVD( const VideoDVD::VideoDVD& dvd )
 {
+    beginResetModel();
     d->previewGen->cancel();
     d->dvd = dvd;
     d->selectedTitles.clear();
@@ -184,7 +185,7 @@ void VideoDVDTitleModel::setVideoDVD( const VideoDVD::VideoDVD& dvd )
     d->medium = k3bappcore->mediaCache()->medium( d->dvd.device() );
     d->previewGenStopped = false;
     d->previewGen->generatePreview( d->dvd, d->currentPreviewTitle+1 );
-    reset();
+    endResetModel();
     checkAll();
 }
 

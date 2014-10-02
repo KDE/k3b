@@ -101,7 +101,7 @@ void K3b::ViewColumnAdjuster::setView( QTreeView* view )
         }
         d->view = view;
         if ( d->view ) {
-            d->view->header()->setResizeMode( QHeaderView::Fixed );
+            d->view->header()->setSectionResizeMode( QHeaderView::Fixed );
             d->view->installEventFilter( this );
             connect( d->view->model(), SIGNAL(modelReset()), SLOT(_k_adjustColumns()) );
             connect( d->view->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(_k_adjustColumns()) );
@@ -110,7 +110,7 @@ void K3b::ViewColumnAdjuster::setView( QTreeView* view )
             connect( d->view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
             connect( d->view->model(), SIGNAL(columnsInserted(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
             connect( d->view->model(), SIGNAL(columnsRemoved(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
-            d->view->header()->setResizeMode( QHeaderView::Interactive );
+            d->view->header()->setSectionResizeMode( QHeaderView::Interactive );
         }
     }
 }

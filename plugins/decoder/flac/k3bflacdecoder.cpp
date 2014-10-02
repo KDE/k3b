@@ -470,7 +470,7 @@ bool K3bFLACDecoderFactory::canDecode( const QUrl& url )
     }
 
     FLAC::Metadata::StreamInfo info = FLAC::Metadata::StreamInfo();
-    FLAC::Metadata::get_streaminfo(url.toLocalFile().toAscii(), info);
+    FLAC::Metadata::get_streaminfo(url.toLocalFile().toLatin1(), info);
 
     if((info.get_channels() <= 2) &&
        (info.get_bits_per_sample() <= 16)) {

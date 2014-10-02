@@ -150,10 +150,10 @@ void K3b::AudioRippingDialog::setupGui()
     d->viewTracks->setSelectionMode( QAbstractItemView::NoSelection );
     d->viewTracks->setFocusPolicy( Qt::NoFocus );
     d->viewTracks->header()->setStretchLastSection( false );
-    d->viewTracks->header()->setResizeMode( 0, QHeaderView::Stretch );
-    d->viewTracks->header()->setResizeMode( 1, QHeaderView::ResizeToContents );
-    d->viewTracks->header()->setResizeMode( 2, QHeaderView::ResizeToContents );
-    d->viewTracks->header()->setResizeMode( 3, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 0, QHeaderView::Stretch );
+    d->viewTracks->header()->setSectionResizeMode( 1, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 2, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 3, QHeaderView::ResizeToContents );
 
     QTabWidget* mainTab = new QTabWidget( frame );
 

@@ -79,6 +79,12 @@ namespace K3b {
          * The default implementation just returns the list of all drop actions
          * supported by any of the submodels.
          */
+        virtual Qt::DropActions supportedDragActions() const;
+
+        /**
+         * The default implementation just returns the list of all drop actions
+         * supported by any of the submodels.
+         */
         virtual Qt::DropActions supportedDropActions() const;
 
     public Q_SLOTS:
@@ -104,6 +110,7 @@ namespace K3b {
         void slotRowsAboutToBeRemoved( const QModelIndex&, int, int );
         void slotRowsRemoved( const QModelIndex&, int, int );
         void slotDataChanged( const QModelIndex&, const QModelIndex& );
+        void slotAboutToBeReset();
         void slotReset();
 
     private:

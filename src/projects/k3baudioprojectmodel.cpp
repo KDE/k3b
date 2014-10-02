@@ -110,8 +110,6 @@ K3b::AudioProjectModel::AudioProjectModel( K3b::AudioDoc* doc, QObject* parent )
     : QAbstractItemModel( parent ),
       d( new Private( doc, this ) )
 {
-    setSupportedDragActions( Qt::MoveAction );
-
     connect( doc, SIGNAL(trackAboutToBeRemoved(int)),
              this, SLOT(_k_trackAboutToBeRemoved(int)), Qt::DirectConnection );
     connect( doc, SIGNAL(trackRemoved(int)),
@@ -463,6 +461,12 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
     }
 
     return mime;
+}
+
+
+Qt::DropActions K3b::AudioProjectModel::supportedDragActions() const
+{
+    return Qt::MoveAction;
 }
 
 

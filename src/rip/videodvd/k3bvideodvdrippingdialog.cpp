@@ -340,9 +340,9 @@ K3b::VideoDVDRippingDialog::VideoDVDRippingDialog( const K3b::VideoDVD::VideoDVD
     d->w = new K3b::VideoDVDRippingWidget( frame );
     d->w->m_titleView->setModel( d->audioModel );
     d->w->m_titleView->expandAll();
-    d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::TitleColumn, QHeaderView::ResizeToContents );
-    d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::VideoSizeColumn, QHeaderView::ResizeToContents );
-    d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::FileSizeColumn, QHeaderView::ResizeToContents );
+    d->w->m_titleView->header()->setSectionResizeMode( VideoDVDAudioModel::TitleColumn, QHeaderView::ResizeToContents );
+    d->w->m_titleView->header()->setSectionResizeMode( VideoDVDAudioModel::VideoSizeColumn, QHeaderView::ResizeToContents );
+    d->w->m_titleView->header()->setSectionResizeMode( VideoDVDAudioModel::FileSizeColumn, QHeaderView::ResizeToContents );
 
     QHBoxLayout* frameLayout = new QHBoxLayout( frame );
     frameLayout->setContentsMargins( 0, 0, 0, 0 );

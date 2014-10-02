@@ -111,6 +111,7 @@ K3b::AudioTrackModel::~AudioTrackModel()
 
 void K3b::AudioTrackModel::setMedium( const K3b::Medium& medium )
 {
+    beginResetModel();
     d->medium = medium;
     d->itemCheckedList.resize( d->medium.toc().count() );
     for ( int i = 0; i < d->medium.toc().count(); ++i ) {
@@ -119,14 +120,15 @@ void K3b::AudioTrackModel::setMedium( const K3b::Medium& medium )
         else
             d->itemCheckedList[i] = false;
     }
-    reset();
+    endResetModel();
 }
 
 
 void K3b::AudioTrackModel::setCddbInfo( const KCDDB::CDInfo& data )
 {
+    beginResetModel();
     d->cddbCache = data;
-    reset();
+    endResetModel();
 }
 
 

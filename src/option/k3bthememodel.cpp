@@ -37,8 +37,9 @@ ThemeModel::~ThemeModel()
 
 void ThemeModel::reload()
 {
+    beginResetModel();
     m_themeManager->loadThemes();
-    reset();
+    endResetModel();
 }
 
 

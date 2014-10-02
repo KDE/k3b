@@ -496,7 +496,7 @@ void K3b::ImageWritingDialog::setupGui()
     d->infoView->setSelectionMode( QAbstractItemView::NoSelection );
     d->infoView->setItemsExpandable( false );
     d->infoView->setRootIsDecorated( false );
-    d->infoView->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+    d->infoView->header()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
     d->infoView->setFocusPolicy( Qt::NoFocus );
     d->infoView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     d->infoView->setContextMenuPolicy( Qt::CustomContextMenu );
