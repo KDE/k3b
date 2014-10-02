@@ -19,12 +19,12 @@
 
 #include <KConfigCore/KConfig>
 #include <KCompletion/KComboBox>
-#include <KDELibs4Support/KDE/KLocale>
 #include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
-#include <QtCore/QStringList>
+#include <QtCore/QLocale>
 #include <QtCore/QMap>
+#include <QtCore/QStringList>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QSpinBox>
@@ -45,13 +45,9 @@ public:
             if( *it == i18n("default") )
                 m_box->addItem( *it );
             else {
-                QString lang = KLocale::global()->languageCodeToName( *it );
-                if( lang.isEmpty() )
-                    lang = *it;
-
                 m_langMap[m_box->count()] = *it;
                 m_indexMap[*it] = m_box->count();
-                m_box->addItem( lang );
+                m_box->addItem( QLocale( *it ).nativeLanguageName() );
             }
         }
     }

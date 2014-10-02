@@ -16,14 +16,14 @@
 
 #include "k3bpatternparser.h"
 
-#include <QtCore/QRegExp>
-#include <QtCore/QDateTime>
-#include <QtCore/QStack>
+#include <libkcddb/cdinfo.h>
 
 #include <KI18n/KLocalizedString>
-#include <KDELibs4Support/KDE/KLocale>
 
-#include <libkcddb/cdinfo.h>
+#include <QtCore/QDateTime>
+#include <QtCore/QLocale>
+#include <QtCore/QRegExp>
+#include <QtCore/QStack>
 
 
 QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
@@ -175,7 +175,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                     dir.append( s ); // I think it makes more sense to allow empty comments
                     break;
                 case DATE:
-                    dir.append( KLocale::global()->formatDate( QDate::currentDate() ) );
+                    dir.append( QLocale().toString( QDate::currentDate() ) );
                     break;
                 case EXTENSION:
                     dir.append( extension );
@@ -256,7 +256,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                 s = entry.get( KCDDB::Comment ).toString();
                 break;
             case DATE:
-                s = KLocale::global()->formatDate( QDate::currentDate() );
+                s = QLocale().toString( QDate::currentDate() );
                 break;
             case EXTENSION:
                 s = extension;

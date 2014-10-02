@@ -35,7 +35,7 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KCoreAddons/KJobTrackerInterface>
-#include <KDELibs4Support/KDE/KLocale>
+#include <KCoreAddons/KFormat>
 #include <KNotifications/KNotification>
 #include <KWidgetsAddons/KSqueezedTextLabel>
 #include <KI18n/KLocalizedString>
@@ -297,21 +297,21 @@ void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 {
 //#if KDE_IS_VERSION( 4, 3, 80 )
-    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
                                           "%1 of %2",
-                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
-                                                                             1,
-                                                                             KLocale::DefaultBinaryDialect,
-                                                                             KLocale::UnitMegaByte ),
-                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
-                                                                             1,
-                                                                             KLocale::DefaultBinaryDialect,
-                                                                             KLocale::UnitMegaByte ) ) );
+                                          KFormat().formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
+                                                                    1,
+                                                                    KFormat::DefaultBinaryDialect,
+                                                                    KFormat::UnitMegaByte ),
+                                          KFormat().formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
+                                                                    1,
+                                                                    KFormat::DefaultBinaryDialect,
+                                                                    KFormat::UnitMegaByte ) ) );
 //#else
-//    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+//    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
 //                                          "%1 of %2",
-//                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ) ),
-//                                          KLocale::global()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ) ) ) );
+//                                          KFormat().formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ) ),
+//                                          KFormat().formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ) ) ) );
 //#endif
 }
 
@@ -319,21 +319,21 @@ void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int trackSize )
 {
 //#if KDE_IS_VERSION( 4, 3, 80 )
-    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
                                              "%1 of %2",
-                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
-                                                                                1,
-                                                                                KLocale::DefaultBinaryDialect,
-                                                                                KLocale::UnitMegaByte ),
-                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
-                                                                                1,
-                                                                                KLocale::DefaultBinaryDialect,
-                                                                                KLocale::UnitMegaByte ) ) );
+                                             KFormat().formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
+                                                                       1,
+                                                                       KFormat::DefaultBinaryDialect,
+                                                                       KFormat::UnitMegaByte ),
+                                             KFormat().formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
+                                                                       1,
+                                                                       KFormat::DefaultBinaryDialect,
+                                                                       KFormat::UnitMegaByte ) ) );
 //#else
-//    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+//    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
 //                                             "%1 of %2",
-//                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ) ),
-//                                             KLocale::global()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ) ) ) );
+//                                             KFormat().formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ) ),
+//                                             KFormat().formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ) ) ) );
 //#endif
 }
 
@@ -375,8 +375,8 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     // Show elapsed time at the end of the task
     {
         const int elapsedSecs = m_startTime.secsTo( QDateTime::currentDateTime() );
-        const QString elapsed = KLocale::global()->formatLocaleTime( QTime().addSecs( elapsedSecs ), KLocale::TimeDuration );
-        m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::formatLocaleTime",
+        const QString elapsed = QLocale().toString( QTime().addSecs( elapsedSecs ), QLocale::NarrowFormat );
+        m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
                                             "Elapsed time: %1", elapsed ) );
     }
 
@@ -534,8 +534,8 @@ void K3b::JobProgressDialog::slotUpdateTime()
         remainingSecs = 0;
     }
 
-    const QString remaining = KLocale::global()->formatLocaleTime( QTime().addSecs( remainingSecs ), KLocale::TimeDuration );
-    m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::formatLocaleTime",
+    const QString remaining = QLocale().toString( QTime().addSecs( remainingSecs ), QLocale::NarrowFormat );
+    m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
                                         "Remaining time: %1", remaining ) );
 }
 

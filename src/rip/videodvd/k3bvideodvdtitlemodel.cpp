@@ -21,14 +21,14 @@
 #include "k3bvideodvdrippingpreview.h"
 #include "k3bvideodvdtitle.h"
 
-#include <KDELibs4Support/KDE/KLocale>
 #include <KI18n/KLocalizedString>
 
-#include <QtGui/QImage>
-#include <QtGui/QPixmap>
 #include <QtCore/QHash>
+#include <QtCore/QLocale>
 #include <QtCore/QSet>
 #include <QtCore/QStringList>
+#include <QtGui/QImage>
+#include <QtGui/QPixmap>
 
 namespace K3b {
 
@@ -51,7 +51,7 @@ QStringList audioStreamString( const K3b::VideoDVD::Title& title )
                         title.audioStream(i).channels(),
                         title.audioStream(i).langCode().isEmpty()
                             ? i18n("unknown language")
-                            : KLocale::global()->languageCodeToName( title.audioStream(i).langCode() ) );
+                            : QLocale( title.audioStream(i).langCode() ).nativeLanguageName() );
         }
         if( title.numAudioStreams() > MAX_LINES )
             list.last() += "...";
@@ -75,7 +75,7 @@ QString audioStreamStringToolTip( const K3b::VideoDVD::Title& title )
                     title.audioStream(i).channels(),
                     title.audioStream(i).langCode().isEmpty()
                         ? i18n("unknown language")
-                        : KLocale::global()->languageCodeToName( title.audioStream(i).langCode() ),
+                        : QLocale( title.audioStream(i).langCode() ).nativeLanguageName(),
                     title.audioStream(i).codeExtension() != K3b::VideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
                         ? QString(" ") + K3b::VideoDVD::audioCodeExtensionString( title.audioStream(i).codeExtension() )
                         : QString() );
@@ -100,7 +100,7 @@ QStringList subpictureStreamString( const K3b::VideoDVD::Title& title )
                     : i18n("Extended") )
                 .arg( title.subPictureStream(i).langCode().isEmpty()
                     ? i18n("unknown language")
-                    : KLocale::global()->languageCodeToName( title.subPictureStream(i).langCode() ) );
+                    : QLocale( title.subPictureStream(i).langCode() ).nativeLanguageName() );
         }
         if( title.numSubPictureStreams() > MAX_LINES )
             list.last() += "...";
@@ -125,7 +125,7 @@ QString subpictureStreamStringToolTip( const K3b::VideoDVD::Title& title )
                    : i18n("Extended") )
              .arg( title.subPictureStream(i).langCode().isEmpty()
                    ? i18n("unknown language")
-                   : KLocale::global()->languageCodeToName( title.subPictureStream(i).langCode() ) )
+                   : QLocale( title.subPictureStream(i).langCode() ).nativeLanguageName() )
              .arg( title.subPictureStream(i).codeExtension() != K3b::VideoDVD::SUBPIC_CODE_EXT_UNSPECIFIED
                    ? QString(" ") + K3b::VideoDVD::subPictureCodeExtensionString( title.subPictureStream(i).codeExtension() )
                    : QString() );

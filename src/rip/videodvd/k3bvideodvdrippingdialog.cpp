@@ -28,13 +28,13 @@
 #include <KCompletion/KComboBox>
 #include <KCompletion/KLineEdit>
 #include <KConfigCore/KConfig>
-#include <KDELibs4Support/KDE/KLocale>
 #include <KI18n/KLocalizedString>
 #include <KIOWidgets/KUrlRequester>
 #include <KIOCore/KIO/Global>
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QList>
+#include <QtCore/QLocale>
 #include <QtCore/QMap>
 #include <QtCore/QVector>
 #include <QtGui/QFontMetrics>
@@ -262,7 +262,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
                 break;
             case PATTERN_LANGUAGE_NAME:
                 if( title.numAudioStreams() > 0 )
-                    f.append( KLocale::global()->languageCodeToName( title.audioStream( info.audioStream ).langCode() ) );
+                    f.append( QLocale( title.audioStream( info.audioStream ).langCode() ).nativeLanguageName() );
                 break;
             case PATTERN_AUDIO_FORMAT:
                 // FIXME: what about MPEG audio streams?
@@ -298,7 +298,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
                     f.append( "16:9" );
                 break;
             case PATTERN_CURRENT_DATE:
-                f.append( KLocale::global()->formatDate( QDate::currentDate() ) );
+                f.append( QLocale().toString( QDate::currentDate() ) );
                 break;
             default:
                 f.append( pattern[i-1] );
