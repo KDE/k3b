@@ -866,7 +866,7 @@ bool K3b::MainWindow::queryClose()
     // if we are closed by the session manager everything is fine since we store the
     // current state in saveProperties
     //
-    if( kapp->sessionSaving() )
+    if( qApp->isSavingSession() )
         return true;
 
     // FIXME: do not close the docs here. Just ask for them to be saved and return false
