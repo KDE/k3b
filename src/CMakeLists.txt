@@ -30,7 +30,7 @@ include_directories(
 
 if(ENABLE_PERMISSION_HELPER)
   add_subdirectory( helper )
-endif(K3B_ENABLE_PERMISSION_HELPER)
+endif(ENABLE_PERMISSION_HELPER)
 
 add_subdirectory( icons )
 add_subdirectory( pics )
