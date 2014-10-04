@@ -63,8 +63,6 @@ qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.AudioProj
 qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bdataprojectinterface.h org.k3b.DataProject.xml )
 qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor )
 
-kde4_add_app_icon(icon_sources ${CMAKE_CURRENT_SOURCE_DIR}/icons/apps/hi*-apps-k3b.png)
-
 add_executable(k3b
     k3bwelcomewidget.cpp
     k3bapplication.cpp
@@ -225,9 +223,15 @@ target_link_libraries(k3b
     k3blib
     KDE::Libkcddb::kcddb
     KF5::Archive
-    KF5::KDELibs4Support
-    KF5::NotifyConfig
+    KF5::I18n
+    KF5::IconThemes
+    KF5::JobWidgets
+    KF5::KIOFileWidgets
     KF5::KCMUtils
+    KF5::Notifications
+    KF5::NotifyConfig
+    KF5::Solid
+    KF5::XmlGui
     Qt5::WebKitWidgets
 )
 
