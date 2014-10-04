@@ -24,6 +24,7 @@ option(K3B_ENABLE_MUSICBRAINZ "Support for querying metadata about audio tracks 
 option(K3B_ENABLE_DVD_RIPPING "Support for ripping Video DVDs with optional decryption." ON)
 option(K3B_ENABLE_TAGLIB "Support for reading audio file metadata using Taglib." ON)
 option(K3B_BUILD_API_DOCS "Build the API documentation for the K3b libs." OFF)
+option(K3B_ENABLE_PERMISSION_HELPER "Build the permissions helper program" OFF)
 if(NOT WIN32 AND NOT APPLE)
   option(K3B_ENABLE_HAL_SUPPORT "Support for inhibiting HAL from polling disk during write." OFF)
 endif(NOT WIN32 AND NOT APPLE)
@@ -284,6 +285,12 @@ if(K3B_ENABLE_HAL_SUPPORT)
   set(ENABLE_HAL_SUPPORT 1)
 endif(K3B_ENABLE_HAL_SUPPORT)
 
+if(K3B_ENABLE_PERMISSION_HELPER)
+  set(ENABLE_PERMISSION_HELPER 1)
+  message(STATUS "The permission helper will NOT be build")
+  add_definitions(-DENABLE_PERMISSION_HELPER)
+endif(K3B_ENABLE_PERMISSION_HELPER)
+
 if(QT_QTMULTIMEDIA_FOUND)
     set(ENABLE_AUDIO_PLAYER 1)
 endif(QT_QTMULTIMEDIA_FOUND)
@@ -310,23 +317,6 @@ if(K3B_BUILD_API_DOCS)
       COMMAND docs/html/installdox -l qt4.tag@${QTDOCS} docs/html/*.html)
   endif(DOXYGEN_EXECUTABLE)
 endif(K3B_BUILD_API_DOCS)
-
-# openSUSE main distribution classifies changing to cdrom group and the helper
-# as evil: https://bugzilla.novell.com/show_bug.cgi?id=896601#c4
-# So don't allow building the helper on http://build.opensuse.org at all.
-if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" AND
-  EXISTS /home/abuild/.rpmmacros)
-  file(STRINGS /home/abuild/.rpmmacros RPMMACROS)
-  if("${RPMMACROS}" MATCHES "^.*opensuse_bs 1.*$" AND
-    NOT "${RPMMACROS}" MATCHES "^.*packman_bs 1.*$")
-    set(openSUSE ON)
-  endif()
-endif()
-
-if(openSUSE)
-  message(STATUS "Build openSUSE distro specific because it is FORCED by you or you use openSUSE infrastructure")
-  add_definitions(-DopenSUSE)
-endif()
 
 ##################  K3b build environment ################################
 

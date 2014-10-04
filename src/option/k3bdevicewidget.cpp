@@ -58,7 +58,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_messageWidget = new KMessageWidget( this );
     m_messageWidget->hide();
     m_messageWidget->setWordWrap( true );
-#ifndef openSUSE
+#ifdef ENABLE_PERMISSION_HELPER
     m_addToGroupAction = new KAction( KIcon("dialog-password"), QString(), this );
 #endif
 
@@ -97,7 +97,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     // ------------------------------------------------
     connect( buttonRefreshDevices, SIGNAL(clicked()), SIGNAL(refreshButtonClicked()) );
     connect( m_deviceManager, SIGNAL(changed()), SLOT(init()) );
-#ifndef openSUSE
+#ifdef ENABLE_PERMISSION_HELPER
     connect( m_addToGroupAction, SIGNAL(triggered(bool)), SLOT(addUserToGroup()) );
 #endif
     // ------------------------------------------------
@@ -248,14 +248,13 @@ void K3b::DeviceWidget::updateDeviceListViews()
 
             if (!groupNames.contains(m_deviceGroup)) {
 		QString messageText = i18n("In order to give K3b full access to the writer device the current user needs be added to a group <em>%1</em>.", m_deviceGroup);
-#ifdef openSUSE
-		messageText += i18n("<br/>On openSUSE main distribution the function to help you doing that had to be removed due to security doubts.<br/> "
-                                    "Please view the bug report for more information: <a href>%1</a><br/> "
-                                    "Alternatively you can install and use the package from Packman repository to enable this function.", "https://bugzilla.novell.com/show_bug.cgi?id=896601#c4");
+#ifndef ENABLE_PERMISSION_HELPER
+		messageText += i18n("<br/>During the build of this program the function to help you doing that was not enabled.<br/> "
+                                    "Please rebuild the package with the Permission helper enabled or contactt your distribution");
 #endif
                 m_messageWidget->setMessageType(KMessageWidget::Warning);
                 m_messageWidget->setText(messageText);
-#ifndef openSUSE
+#ifdef ENABLE_PERMISSION_HELPER
                 m_messageWidget->addAction(m_addToGroupAction);
                 m_addToGroupAction->setText(i18n("Add"));
 #endif
@@ -265,7 +264,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
     }
 }
 
-#ifndef openSUSE
+#ifdef ENABLE_PERMISSION_HELPER
 void K3b::DeviceWidget::addUserToGroup()
 {
     QVariantMap args;

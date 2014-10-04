@@ -346,7 +346,7 @@ QModelIndex ExternalBinPermissionModel::buddy( const QModelIndex& index ) const
         return index;
 }
 
-#ifndef openSUSE
+#ifdef ENABLE_PERMISSION_HELPER
 void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {

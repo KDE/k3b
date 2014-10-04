@@ -28,9 +28,10 @@ include_directories(
   ${KCDDB_INCLUDE_DIR}
   )
 
-if(NOT openSUSE)
-add_subdirectory( helper )
-endif()
+if(ENABLE_PERMISSION_HELPER)
+  add_subdirectory( helper )
+endif(K3B_ENABLE_PERMISSION_HELPER)
+
 add_subdirectory( icons )
 add_subdirectory( pics )
 add_subdirectory( services )

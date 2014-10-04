@@ -46,7 +46,7 @@ namespace K3b {
 
     private Q_SLOTS:
         void updateDeviceListViews();
-#ifndef openSUSE
+#ifdef ENABLE_PERMISSION_HELPER
         void addUserToGroup();
 #endif
 
