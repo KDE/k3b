@@ -24,8 +24,7 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bglobalsettings.h"
 #include "k3bdevicehandler.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

@@ -25,10 +25,9 @@
 
 #include "k3bmaddecoder.h"
 #include "k3bmad.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
-
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QString>

@@ -24,9 +24,9 @@
 #include "k3bcore.h"
 #include "k3bmediacache.h"
 #include "k3bmsf.h"
+#include "k3b_i18n.h"
 
 #include <KCoreAddons/KProcess>
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KDiskFreeSpaceInfo>
 #include <KIOCore/KIO/Job>
 #include <KIOCore/KIO/StatJob>

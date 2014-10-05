@@ -36,10 +36,10 @@
 #include "k3bmultichoicedialog.h"
 #include "k3bvalidators.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
 
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>

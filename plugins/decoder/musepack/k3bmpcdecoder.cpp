@@ -15,10 +15,9 @@
 
 #include "k3bmpcdecoder.h"
 #include "k3bmpcwrapper.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
-
-#include <KI18n/KLocalizedString>
 
 K3B_EXPORT_PLUGIN(k3bmpcdecoder, K3bMpcDecoderFactory)
 

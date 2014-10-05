@@ -18,8 +18,7 @@
 #include "k3bmsf.h"
 #include "k3bcore.h"
 #include "k3bdevicemanager.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QString>

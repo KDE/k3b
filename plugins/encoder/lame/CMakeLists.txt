@@ -7,7 +7,7 @@ target_link_libraries(k3blameencoder
     ${LAME_LIBRARIES}
 )
 
-qt5_wrap_ui(ui_sources
+ki18n_wrap_ui(ui_sources
     base_k3blameencodersettingswidget.ui
     base_k3bmanualbitratesettingsdialog.ui
 )

@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 #include "k3bffmpegwrapper.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
@@ -34,8 +35,6 @@ extern "C" {
 }
 
 #include <string.h>
-
-#include <KI18n/KLocalizedString>
 
 
 #if LIBAVFORMAT_BUILD < 4629

@@ -25,8 +25,8 @@
 #include "k3bcuefileparser.h"
 #include "k3bthread.h"
 #include "k3bthreadjob.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 
 

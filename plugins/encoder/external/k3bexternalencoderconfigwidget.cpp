@@ -14,11 +14,10 @@
  */
 
 #include "k3bexternalencoderconfigwidget.h"
-
 #include "k3bcore.h"
+#include "k3bplugin_i18n.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QDebug>

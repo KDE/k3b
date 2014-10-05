@@ -13,10 +13,10 @@
  */
 
 #include "k3bdeviceglobals.h"
-#include "k3bdiskinfo.h"
 #include "k3bdevice.h"
+#include "k3bdevice_i18n.h"
+#include "k3bdiskinfo.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
 

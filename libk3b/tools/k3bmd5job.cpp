@@ -18,9 +18,9 @@
 #include "k3bglobals.h"
 #include "k3bdevice.h"
 #include "k3bfilesplitter.h"
+#include "k3b_i18n.h"
 
 #include <KCodecs/KCodecs>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QCryptographicHash>
 #include <QtCore/QDebug>

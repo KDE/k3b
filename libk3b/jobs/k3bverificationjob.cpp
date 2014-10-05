@@ -21,8 +21,8 @@
 #include "k3bdatatrackreader.h"
 #include "k3bchecksumpipe.h"
 #include "k3biso9660.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 #include <QtCore/QLinkedList>
 

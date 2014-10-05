@@ -14,12 +14,10 @@
 
 #include "k3bdevicecombobox.h"
 #include "k3bdevicemodel.h"
-
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
 #include "k3bcore.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtCore/QMap>
 

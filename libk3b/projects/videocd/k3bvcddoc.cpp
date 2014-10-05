@@ -19,9 +19,9 @@
 #include "k3bvcdjob.h"
 #include "k3bglobals.h"
 #include "k3bmsf.h"
+#include "k3b_i18n.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KStandardGuiItem>

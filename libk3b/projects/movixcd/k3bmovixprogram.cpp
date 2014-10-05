@@ -14,9 +14,9 @@
 
 
 #include "k3bmovixprogram.h"
+#include "k3b_i18n.h"
 
 #include <KCoreAddons/KProcess>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>

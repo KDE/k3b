@@ -16,15 +16,14 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixprogram.h"
 #include "k3bmovixfileitem.h"
-
 #include "k3bcore.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bbootitem.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bisoimager.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
 
 #include <QtCore/QDebug>

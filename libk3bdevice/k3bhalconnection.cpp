@@ -14,8 +14,8 @@
 
 #include "k3bhalconnection.h"
 #include "k3bdevice.h"
+#include "k3bdevice_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <Solid/Device>
 
 #include <QtCore/QDebug>

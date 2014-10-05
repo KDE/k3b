@@ -16,12 +16,10 @@
 #include "k3blameencoder.h"
 #include "k3blameencoderdefaults.h"
 #include "k3blametyes.h"
-
+#include "k3bplugin_i18n.h"
+#include "k3bcore.h"
 #include <config-k3b.h>
 
-#include "k3bcore.h"
-
-#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>

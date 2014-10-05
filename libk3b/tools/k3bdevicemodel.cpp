@@ -16,10 +16,8 @@
 #include "k3bmedium.h"
 #include "k3bmediacache.h"
 #include "k3bcore.h"
-
 #include "k3bdevice.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 
 class K3b::DeviceModel::Private

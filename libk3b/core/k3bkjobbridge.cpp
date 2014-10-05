@@ -14,8 +14,8 @@
 
 #include "k3bkjobbridge.h"
 #include "k3bjob.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 
 namespace K3b
 {

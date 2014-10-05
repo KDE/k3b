@@ -25,8 +25,8 @@
 #include "k3bthroughputestimator.h"
 #include "k3bglobals.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/CopyJob>
 #include <KIOCore/KIO/DeleteJob>
 

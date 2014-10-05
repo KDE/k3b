@@ -59,10 +59,7 @@ K3b::Application::Application( int& argc, char** argv )
       m_core( nullptr ),
       m_mainWindow( nullptr )
 {
-    // insert library i18n data
-#warning KLocale::global()->insertCatalog() with KF5 equivalent
-//    KLocale::global()->insertCatalog( "libk3bdevice" );
-//    KLocale::global()->insertCatalog( "libk3b" );
+    KLocalizedString::setApplicationDomain( "k3b" );
 }
 
 void K3b::Application::init( QCommandLineParser* commandLineParser )

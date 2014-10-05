@@ -14,6 +14,7 @@
 
 #include "k3bexternalencoder.h"
 #include "k3bexternalencodercommand.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
@@ -21,7 +22,6 @@
 #include "k3bprocess.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

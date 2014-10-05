@@ -21,10 +21,10 @@
 #include "k3bprocess.h"
 #include "k3bcore.h"
 #include "k3bexternalbinmanager.h"
+#include "k3bplugin_i18n.h"
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

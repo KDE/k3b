@@ -17,16 +17,16 @@
 #include "k3bplugin.h"
 #include "k3bpluginconfigwidget.h"
 #include "k3bversion.h"
+#include "k3b_i18n.h"
 
 #include <KCMUtils/KCModuleInfo>
 #include <KCMUtils/KCModuleProxy>
-#include <QtCore/QDebug>
-#include <KI18n/KLocalizedString>
 #include <KService/KPluginInfo>
 #include <KService/KService>
 #include <KService/KServiceTypeTrader>
 #include <KWidgetsAddons/KMessageBox>
 
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QList>
 #include <QtCore/QMap>

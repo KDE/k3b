@@ -6,7 +6,7 @@ target_link_libraries(k3bsoxencoder
     KF5::I18n
 )
 
-qt5_wrap_ui(ui_sources base_k3bsoxencoderconfigwidget.ui)
+ki18n_wrap_ui(ui_sources base_k3bsoxencoderconfigwidget.ui)
 
 add_library(kcm_k3bsoxencoder MODULE k3bsoxencoderconfigwidget.cpp ${ui_sources})
 

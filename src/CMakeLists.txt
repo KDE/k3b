@@ -7,7 +7,7 @@ add_subdirectory( services )
 
 ########### next target ###############
 
-qt5_wrap_ui(ui_sources
+ki18n_wrap_ui(ui_sources
     option/base_k3bthemeoptiontab.ui
     option/base_k3bmiscoptiontab.ui
     option/base_k3bpluginoptiontab.ui
@@ -39,7 +39,7 @@ if(ENABLE_DVD_RIPPING)
         rip/videodvd/k3bvideodvdtitlemodel.cpp
     )
 
-    qt5_wrap_ui(ui_sources rip/videodvd/base_k3bvideodvdrippingwidget.ui)
+    ki18n_wrap_ui(ui_sources rip/videodvd/base_k3bvideodvdrippingwidget.ui)
 endif()
 
 if(ENABLE_MUSICBRAINZ)

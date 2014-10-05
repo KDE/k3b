@@ -14,10 +14,9 @@
 
 #include "k3brawaudiodatasource.h"
 #include "k3brawaudiodatareader.h"
+#include "k3b_i18n.h"
 
 #include <QtCore/QFileInfo>
-
-#include <KI18n/KLocalizedString>
 
 
 class K3b::RawAudioDataSource::Private

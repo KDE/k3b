@@ -13,14 +13,12 @@
  */
 
 #include "k3bgrowisofshandler.h"
-
 #include "k3bjob.h"
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 #include "k3bdevice.h"
 #include "k3bdevicehandler.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QLocale>

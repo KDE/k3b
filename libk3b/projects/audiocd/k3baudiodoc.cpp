@@ -26,6 +26,10 @@
 #include "k3bcdtextvalidator.h"
 #include "k3bcore.h"
 #include "k3baudiodecoder.h"
+#include "k3b_i18n.h"
+
+#include <KConfigCore/KConfig>
+#include <KIOCore/KIO/Global>
 
 #include <QtCore/QDataStream>
 #include <QtCore/QDebug>
@@ -35,10 +39,6 @@
 #include <QtCore/QStringList>
 #include <QtCore/QTextStream>
 #include <QtXml/QDomElement>
-
-#include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/Global>
 
 
 class K3b::AudioDoc::Private

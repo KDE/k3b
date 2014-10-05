@@ -17,13 +17,12 @@
 #include "k3bmedium.h"
 #include "k3bmedium_p.h"
 #include "k3bcddb.h"
-
 #include "k3bdevicemanager.h"
 #include "k3bdeviceglobals.h"
 #include "k3bcore.h"
+#include "k3b_i18n.h"
 
 #include <KCoreAddons/KRandom>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QThread>

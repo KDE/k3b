@@ -22,10 +22,8 @@
 #include "k3bglobals.h"
 #include "k3btoc.h"
 #include "k3btrack.h"
-
 #include "k3bdatadoc.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 
 class K3b::DataMultiSessionParameterJob::Private

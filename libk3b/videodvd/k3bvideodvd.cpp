@@ -19,12 +19,10 @@
 #endif
 
 #include "k3bvideodvd.h"
-
 #include "k3bdevice.h"
+#include "k3b_i18n.h"
 
 #include <QtCore/QFile>
-
-#include <KI18n/KLocalizedString>
 
 #include <inttypes.h> // needed by dvdreads headers
 #include <dvdread/dvd_reader.h>

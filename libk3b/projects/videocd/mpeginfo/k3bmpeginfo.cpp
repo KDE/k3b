@@ -12,11 +12,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-// kde includes
-#include <KI18n/KLocalizedString>
-
-// k3b includes
 #include "k3bmpeginfo.h"
+#include "k3b_i18n.h"
 
 #ifdef Q_OS_WIN32
 #define ftello ftell

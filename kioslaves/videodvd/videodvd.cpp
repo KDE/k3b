@@ -19,8 +19,7 @@
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 #include "videodvd_export.h"
-
-#include <KI18n/KLocalizedString>
+#include "videodvd_i18n.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDateTime>

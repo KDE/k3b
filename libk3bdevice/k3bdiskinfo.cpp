@@ -14,11 +14,10 @@
 
 #include "k3bdiskinfo.h"
 #include "k3bdiskinfo_p.h"
+#include "k3bdevice_i18n.h"
 #include "k3bdeviceglobals.h"
-
 #include "k3bmsf.h"
 
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
 
 #include <QtCore/QDebug>

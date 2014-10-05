@@ -32,8 +32,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QRegExp>
 #include <QtCore/QFile>
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QTemporaryFile>
 
 

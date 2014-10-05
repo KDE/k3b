@@ -17,8 +17,8 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bprocess.h"
 #include "k3bcore.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 
 

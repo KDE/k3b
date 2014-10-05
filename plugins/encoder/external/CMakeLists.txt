@@ -9,7 +9,7 @@ target_link_libraries(k3bexternalencoder
     KF5::I18n
 )
 
-qt5_wrap_ui(ui_sources
+ki18n_wrap_ui(ui_sources
     base_k3bexternalencoderconfigwidget.ui
     base_k3bexternalencodereditdialog.ui
 )

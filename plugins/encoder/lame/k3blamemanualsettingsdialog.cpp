@@ -14,8 +14,7 @@
  */
 
 #include "k3blamemanualsettingsdialog.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3bplugin_i18n.h"
 
 K3bLameManualSettingsDialog::K3bLameManualSettingsDialog( QWidget* parent )
     : QDialog( parent )

@@ -16,9 +16,9 @@
 #include "k3bvcdoptions.h"
 #include "k3bversion.h"
 #include "k3bcore.h"
+#include "k3b_i18n.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QStandardPaths>

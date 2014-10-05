@@ -16,11 +16,11 @@
 #include "k3boggvorbisencoderconfigwidget.h"
 #include "k3boggvorbisencoderdefaults.h"
 #include "k3bcore.h"
+#include "k3bplugin_i18n.h"
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
 
 #include <QtWidgets/QCheckBox>
 #include <QtCore/QDebug>

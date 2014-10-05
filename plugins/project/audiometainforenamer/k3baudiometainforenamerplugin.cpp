@@ -22,9 +22,9 @@
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bmixeddoc.h"
+#include "k3bplugin_i18n.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QDebug>

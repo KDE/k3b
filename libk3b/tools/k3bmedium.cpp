@@ -15,14 +15,13 @@
 
 #include "k3bmedium.h"
 #include "k3bmedium_p.h"
-
 #include "k3bcddb.h"
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
 
 #include <QtCore/QList>

@@ -16,10 +16,10 @@
 #include "k3bsessionimportitem.h"
 #include "k3bfileitem.h"
 #include "k3bdiritem.h"
+#include "k3b_i18n.h"
 
 #include "k3biso9660.h"
 
-#include <KI18n/KLocalizedString>
 
 namespace K3b {
 

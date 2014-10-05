@@ -16,15 +16,14 @@
 #include "k3bvideodvdjob.h"
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdimager.h"
-
 #include "k3bcore.h"
 #include "k3bisoimager.h"
 #include "k3bisooptions.h"
 #include "k3bgrowisofswriter.h"
 #include "k3bglobals.h"
+#include "k3b_i18n.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
 

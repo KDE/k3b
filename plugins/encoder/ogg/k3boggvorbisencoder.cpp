@@ -15,13 +15,12 @@
 
 #include "k3boggvorbisencoder.h"
 #include "k3boggvorbisencoderdefaults.h"
-#include <config-k3b.h>
-
 #include "k3bcore.h"
+#include "k3bplugin_i18n.h"
+#include <config-k3b.h>
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 

@@ -18,12 +18,9 @@
 #include "k3baudiodoc.h"
 #include "k3baudiocdtracksource.h"
 #include "k3baudiodatasourceiterator.h"
-
 #include "k3bdevice.h"
-
 #include "k3bthread.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>

@@ -19,11 +19,9 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 #include "k3baudiodatasource.h"
-
 #include "k3bthread.h"
 #include "k3bwavefilewriter.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QIODevice>

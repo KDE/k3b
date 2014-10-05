@@ -24,8 +24,7 @@
 #include "k3bcore.h"
 #include "k3bclonetocreader.h"
 #include "k3bglobalsettings.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

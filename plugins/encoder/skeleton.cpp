@@ -16,8 +16,8 @@
 #include <config-k3b.h>
 
 #include "k3b<name>encoder.h"
+#include "k3bplugin_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <QtCore/QDebug>

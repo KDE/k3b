@@ -13,8 +13,7 @@
  */
 
 #include "k3bstdguiitems.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtGui/QPalette>
 #include <QtWidgets/QCheckBox>

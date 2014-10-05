@@ -12,14 +12,12 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-
-#include <QtWidgets/QWidget>
-#include <QtCore/QString>
-
 #include "k3bintvalidator.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtWidgets/QWidget>
 
 
 K3b::IntValidator::IntValidator ( QWidget * parent )

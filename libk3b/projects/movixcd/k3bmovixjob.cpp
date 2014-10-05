@@ -17,13 +17,12 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixfileitem.h"
 #include "k3bmovixdocpreparer.h"
-
 #include "k3bcore.h"
 #include "k3bdatajob.h"
 #include "k3bdevice.h"
 #include "k3bisooptions.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QDebug>
 
 

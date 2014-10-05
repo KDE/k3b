@@ -14,10 +14,8 @@
 
 #include "k3bcddb.h"
 #include "k3bmedium.h"
-
 #include "k3btoc.h"
-
-#include <KI18n/KLocalizedString>
+#include "k3b_i18n.h"
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>

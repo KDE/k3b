@@ -14,10 +14,9 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 #include "k3blibsndfiledecoder.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
-
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>

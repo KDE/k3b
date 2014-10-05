@@ -27,9 +27,9 @@
 #include "k3bcdrdaowriter.h"
 #include "k3bglobalsettings.h"
 #include "k3bdevicehandler.h"
+#include "k3b_i18n.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
 
 #include <QtCore/QString>

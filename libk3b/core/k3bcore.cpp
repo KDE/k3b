@@ -27,10 +27,10 @@
 #include "k3bthreadwidget.h"
 #include "k3bglobalsettings.h"
 #include "k3bpluginmanager.h"
+#include "k3b_i18n.h"
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QEvent>

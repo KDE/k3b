@@ -15,14 +15,13 @@
 #include <config-libk3b.h>
 
 #include "k3bcore.h"
-
 #include "k3baudiodecoder.h"
 #include "k3bpluginmanager.h"
+#include "k3b_i18n.h"
 
 #include <KFileMetaData/ExtractorPlugin>
 #include <KFileMetaData/ExtractorPluginManager>
 #include <KFileMetaData/Properties>
-#include <KI18n/KLocalizedString>
 
 #include <QtCore/QDebug>
 #include <QtCore/QMap>

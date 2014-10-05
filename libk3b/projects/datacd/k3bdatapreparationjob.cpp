@@ -15,14 +15,13 @@
 #include "k3bdatapreparationjob.h"
 #include "k3bdatadoc.h"
 #include "k3bisooptions.h"
-
 #include "k3bthreadjob.h"
 #include "k3bthread.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bglobals.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <KCoreAddons/KStringHandler>
 
 #include <QtCore/QFile>

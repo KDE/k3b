@@ -37,12 +37,12 @@
 #include "k3btocfilewriter.h"
 #include "k3binffilewriter.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
+
+#include <KCoreAddons/KStringHandler>
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
-
-#include <KCoreAddons/KStringHandler>
-#include <KI18n/KLocalizedString>
 
 
 

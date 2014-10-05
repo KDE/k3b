@@ -27,8 +27,8 @@
 #include "k3bmediacache.h"
 #include "k3bdevicetypes.h"
 #include "k3bdeviceglobals.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <QtCore/QFile>
 
 

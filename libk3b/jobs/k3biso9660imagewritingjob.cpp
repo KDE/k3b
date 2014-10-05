@@ -28,8 +28,8 @@
 #include "k3bchecksumpipe.h"
 #include "k3bfilesplitter.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
 
-#include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/Global>
 
 #include <QtCore/QDebug>
