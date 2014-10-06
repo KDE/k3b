@@ -63,8 +63,6 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
 
     mainGrid = new QGridLayout( this );
 
-    mainGrid->setContentsMargins( 0, 0, 0, 0 );
-
     // header
     // ---------------------------------------------------------------------------------------------------
     m_dialogHeader = new K3b::ThemedHeader( this );
@@ -123,7 +121,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
     }
     if( buttonMask & CANCEL_BUTTON ) {
         m_buttonCancel = new QPushButton( buttonBox );
-        KGuiItem::assign( m_buttonSave, KConfigGroup( KSharedConfig::openConfig(), "General Options" )
+        KGuiItem::assign( m_buttonCancel, KConfigGroup( KSharedConfig::openConfig(), "General Options" )
                           .readEntry( "keep action dialogs open", false )
                           ? KStandardGuiItem::close()
                           : KStandardGuiItem::cancel() );
