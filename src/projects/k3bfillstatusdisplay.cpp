@@ -845,7 +845,6 @@ bool K3b::FillStatusDisplay::event( QEvent* event )
 {
     if ( event->type() == QEvent::ToolTip ) {
         QHelpEvent* he = ( QHelpEvent* )event;
-        QPoint pos = he->pos();
 
         QToolTip::showText( he->globalPos(),
                             KIO::convertSize( d->doc->size() ) +

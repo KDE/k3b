@@ -30,6 +30,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <grp.h>
 #endif
 
 
@@ -57,7 +58,7 @@ public:
 
     ExternalProgram& program;
     QString path;
-    bool permissions;
+    QString needGroup;
     Version version;
     QString copyright;
     QStringList features;
@@ -84,14 +85,14 @@ const K3b::Version& K3b::ExternalBin::version() const
     return d->version;
 }
 
-void K3b::ExternalBin::setPermissions( const bool value )
+void K3b::ExternalBin::setNeedGroup( const QString& name )
 {
-    d->permissions = value;
+    d->needGroup = name;
 }
 
-bool K3b::ExternalBin::permissions() const
+const QString& K3b::ExternalBin::needGroup() const
 {
-    return d->permissions;
+    return d->needGroup;
 }
 
 void K3b::ExternalBin::setCopyright( const QString& copyright )
@@ -343,7 +344,7 @@ bool K3b::SimpleExternalProgram::scan( const QString& p )
     if ( QFile::exists( path ) ) {
         K3b::ExternalBin* bin = new ExternalBin( *this, path );
 
-        if ( ( !scanVersion( *bin ) || !scanFeatures( *bin ) ) && bin->permissions() ) {
+        if ( ( !scanVersion( *bin ) || !scanFeatures( *bin ) ) && bin->needGroup().isEmpty() )  {
             delete bin;
             return false;
         }
@@ -365,13 +366,22 @@ bool K3b::SimpleExternalProgram::scanVersion( ExternalBin& bin ) const
     vp << bin.path() << "--version";
     if( vp.execute( EXECUTE_TIMEOUT ) < 0 ) {
         if( vp.error() == 0 ) {
-            qDebug() << "Insufficient permissions for " << bin.path();
-            bin.setPermissions( false );
+            qDebug() << "Insufficient permissions for" << bin.path();
+            // try to get real group or set fictive group to make
+            // K3b::SystemProblemDialog::checkSystem work
+            struct stat st;
+            if( !::stat( QFile::encodeName(bin.path()), &st ) ) {
+                QString group( getgrgid( st.st_gid )->gr_name );
+                qDebug() << "Should be member of \"" << group << "\"";
+                bin.setNeedGroup( group.isEmpty() ? "N/A" : group );
+            } else
+                bin.setNeedGroup( "N/A" );
         }
         return false;
     }
 
-    bin.setPermissions( true );
+    // set empty group to make K3b::SystemProblemDialog::checkSystem work
+    bin.setNeedGroup( "" );
     QString s = QString::fromLocal8Bit( vp.readAll() );
     bin.setVersion( parseVersion( s, bin ) );
     bin.setCopyright( parseCopyright( s, bin ) );
@@ -573,15 +583,15 @@ const K3b::ExternalBin* K3b::ExternalBinManager::binObject( const QString& name 
 }
 
 
-bool K3b::ExternalBinManager::binPermissions( const QString& name )
+QString K3b::ExternalBinManager::binNeedGroup( const QString& name )
 {
     if( d->programs.constFind( name ) == d->programs.constEnd() )
-        return false;
+        return 0;
 
     if( d->programs[name]->defaultBin() != 0 )
-        return d->programs[name]->defaultBin()->permissions();
+        return d->programs[name]->defaultBin()->needGroup();
 
-    return false;
+    return 0;
 }
 
 
@@ -650,7 +660,7 @@ QMap<QString, K3b::ExternalProgram*> K3b::ExternalBinManager::programs() const
 
 void K3b::ExternalBinManager::loadDefaultSearchPath()
 {
-    static const char* defaultSearchPaths[] = {
+    static const char* const defaultSearchPaths[] = {
 #ifndef Q_OS_WIN32
                                                 "/usr/bin/",
                                                 "/usr/local/bin/",

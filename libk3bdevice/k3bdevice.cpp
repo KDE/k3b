@@ -28,6 +28,9 @@
 #include <Solid/OpticalDrive>
 #include <Solid/Block>
 #include <Solid/StorageAccess>
+#ifdef __NETBSD__
+#include <Solid/GenericInterface>
+#endif
 
 #include <qglobal.h>
 #include <QtCore/QDebug>
@@ -241,9 +244,19 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
 
 K3b::Device::Device::Device( const Solid::Device& dev )
 {
+#ifdef __NETBSD__
+    const Solid::GenericInterace *gi = dev.as<Solid::GenericInterface>();
+#endif
     d = new Private;
     d->solidDevice = dev;
+#ifndef __NETBSD__
     d->blockDevice = dev.as<Solid::Block>()->device();
+#else
+    if (gi->propertyExists("block.netbsd.raw_device"))
+        d->blockDevice = gi->property("block.netbsd.raw_device").toString();
+    else
+        d->blockDevice = dev.as<Solid::Block>()->device();
+#endif
     d->writeModes = 0;
     d->maxWriteSpeed = 0;
     d->maxReadSpeed = 0;

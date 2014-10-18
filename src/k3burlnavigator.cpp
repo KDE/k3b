@@ -43,7 +43,7 @@ void K3b::UrlNavigator::setDevice( K3b::Device::Device* dev )
     {
         QString mntPath = mountPoint->mountPoint();
         if( !mntPath.isEmpty() ) {
-            setUrl( QUrl::fromLocalFile( mntPath ) );
+            setLocationUrl( QUrl::fromLocalFile( mntPath ) );
             return;
         }
     }
@@ -51,7 +51,7 @@ void K3b::UrlNavigator::setDevice( K3b::Device::Device* dev )
     const Medium& medium = k3bcore->mediaCache()->medium( dev );
     if( medium.content() & Medium::ContentAudio )
     {
-        setUrl( QUrl( "audiocd://" ) );
+        setLocationUrl( QUrl( "audiocd:/" ) );
     }
 }
 

@@ -37,7 +37,7 @@ public:
 };
 
 
-const char* K3b::Job::DEFAULT_SIGNAL_CONNECTION = "K3b::JobDefault";
+const char K3b::Job::DEFAULT_SIGNAL_CONNECTION[] = "K3b::JobDefault";
 
 
 K3b::Job::Job( K3b::JobHandler* handler, QObject* parent )

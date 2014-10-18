@@ -43,7 +43,7 @@ void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
 
 void K3b::addTranscodePrograms( K3b::ExternalBinManager* m )
 {
-    static const char* transcodeTools[] =  { "transcode",
+    static const char* const transcodeTools[] =  { "transcode",
                                              0, // K3b 1.0 only uses the transcode binary
                                              "tcprobe",
                                              "tccat",
@@ -60,7 +60,7 @@ void K3b::addTranscodePrograms( K3b::ExternalBinManager* m )
 void K3b::addVcdimagerPrograms( K3b::ExternalBinManager* m )
 {
     // don't know if we need more vcdTools in the future (vcdxrip)
-    static const char* vcdTools[] =  { "vcdxbuild",
+    static const char* const vcdTools[] =  { "vcdxbuild",
                                        "vcdxminfo",
                                        "vcdxrip",
                                        0 };

@@ -42,8 +42,8 @@ namespace K3b {
         ExternalBin( ExternalProgram& program, const QString& path );
         virtual ~ExternalBin();
 
-        void setPermissions( const bool value );
-        bool permissions() const;
+        void setNeedGroup( const QString& name );
+        const QString& needGroup() const;
 
         void setVersion( const Version& version );
         const Version& version() const;
@@ -214,7 +214,7 @@ namespace K3b {
         bool foundBin( const QString& name );
         QString binPath( const QString& name );
         const ExternalBin* binObject( const QString& name );
-        bool binPermissions( const QString& name );
+        QString binNeedGroup( const QString& name );
         const ExternalBin* mostRecentBinObject( const QString& name );
 
         ExternalProgram* program( const QString& ) const;

@@ -17,6 +17,7 @@
 
 #include "k3b_export.h"
 #include <KConfigCore/KConfigGroup>
+#include <KI18n/KLocalizedString>
 #include <QtCore/QString>
 
 
@@ -50,7 +51,20 @@ namespace K3b {
         int ISOLevel() const { return m_isoLevel; }
         const QString& systemId() const { return m_systemId; }
         const QString& applicationID() const { return m_applicationID; }
-        const QString& volumeID() const { return m_volumeID; }
+        const QString& volumeID() const {
+            if (m_volumeIDSet)
+                return m_volumeID;
+            else {
+                if (!m_defaultVolumeIDSet) {
+                    m_defaultVolumeIDSet = true;
+                    m_defaultVolumeID = i18nc( "This is the default volume identifier of a data project created by K3b. "
+                         "The string should not be longer than 16 characters to avoid warnings regarding "
+                         "Joiliet extensions which induce this restriction.",
+                         "K3b data project" );
+                }
+                return m_defaultVolumeID;
+            }
+        }
         const QString& volumeSetId() const { return m_volumeSetId; }
         int volumeSetSize() const { return m_volumeSetSize; }
         int volumeSetNumber() const { return m_volumeSetNumber; }
@@ -87,7 +101,7 @@ namespace K3b {
          *
          * max length for this field is 32 chars.
          */
-        void setVolumeID( const QString& s ) { m_volumeID = s; }
+        void setVolumeID( const QString& s ) { m_volumeIDSet = true; m_volumeID = s; }
         void setVolumeSetId( const QString& s ) { m_volumeSetId = s; }
         void setVolumeSetSize( int size ) { m_volumeSetSize = size; }
         void setVolumeSetNumber( int n ) { m_volumeSetNumber = n; }
@@ -126,6 +140,9 @@ namespace K3b {
 
     private:
         // volume descriptor
+        mutable bool m_defaultVolumeIDSet;
+        mutable QString m_defaultVolumeID;
+        bool m_volumeIDSet;
         QString m_volumeID;
         QString m_applicationID;
         QString m_preparer;

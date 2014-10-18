@@ -53,7 +53,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
                                          size_t len )
 {
     bool needToClose = false;
-    int deviceHandler = -1;
+    int deviceHandle = -1;
     if( m_device ) {
         m_device->usageLock();
         if( !m_device->isOpen() ) {

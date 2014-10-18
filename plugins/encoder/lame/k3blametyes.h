@@ -71,7 +71,7 @@ const int s_lame_preset_approx_bitrates[] = {
 };
 
 
-const char* s_lame_preset_strings[] = {
+const char* const s_lame_preset_strings[] = {
     I18N_NOOP("Low quality (56 kbps)"),
     I18N_NOOP("Low quality (90 kbps)"),
 
@@ -88,7 +88,7 @@ const char* s_lame_preset_strings[] = {
 };
 
 
-const char* s_lame_mode_strings[] = {
+const char* const s_lame_mode_strings[] = {
     I18N_NOOP("Stereo"),
     I18N_NOOP("Joint Stereo"),
     I18N_NOOP("Mono")

@@ -24,7 +24,8 @@
 
 
 K3b::IsoOptions::IsoOptions()
-    : m_volumeID( "K3b data project" ),
+    : m_defaultVolumeIDSet(false),
+      m_volumeIDSet(false),
       m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2010 SEBASTIAN TRUEG AND MICHAL MALEK") ),
       m_systemId( K3b::systemName().toUpper() ),
       m_whiteSpaceTreatmentReplaceString( "_" )
@@ -67,7 +68,7 @@ K3b::IsoOptions::IsoOptions()
 void K3b::IsoOptions::save( KConfigGroup c, bool saveVolumeDesc )
 {
     if( saveVolumeDesc ) {
-        c.writeEntry( "volume id", m_volumeID );
+        c.writeEntry( "volume id", volumeID() );
         c.writeEntry( "application id", m_applicationID );
         c.writeEntry( "preparer", m_preparer );
         c.writeEntry( "publisher", m_publisher );

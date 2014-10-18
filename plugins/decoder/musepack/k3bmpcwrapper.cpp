@@ -104,6 +104,8 @@ K3bMpcWrapper::K3bMpcWrapper()
 
 #ifdef MPC_OLD_API
   m_decoder          = new mpc_decoder;
+#else
+  m_decoder          = 0;
 #endif
 
   m_info             = new mpc_streaminfo;

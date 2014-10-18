@@ -63,10 +63,10 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
         unsigned char	bits_per_sample[2];
     } fmt_chunk;
 
-    static const char* WAV_RIFF_MAGIC = "RIFF";		// Magic for file format
-    static const char* WAV_WAVE_MAGIC = "WAVE";		// Magic for Waveform Audio
-    static const char* WAV_FMT_MAGIC  = "fmt ";		// Start of Waveform format
-    static const char* WAV_DATA_MAGIC = "data";		// Start of data chunk
+    static const char WAV_RIFF_MAGIC[] = "RIFF";		// Magic for file format
+    static const char WAV_WAVE_MAGIC[] = "WAVE";		// Magic for Waveform Audio
+    static const char WAV_FMT_MAGIC[]  = "fmt ";		// Start of Waveform format
+    static const char WAV_DATA_MAGIC[] = "data";		// Start of data chunk
 
     chunk_t chunk;
     riff_chunk riff;

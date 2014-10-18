@@ -911,12 +911,16 @@ void K3b::MetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& parent, in
     else
         parentNode = place;
 
-    // remove the contents of pointers
-    for (int i = start; i <= end; ++i)
-        delete parentNode->children[i];
+    // parentNode->children may be empty if one of
+    // the previous remove ended up causing a reset
+    if (!parentNode->children.isEmpty()) {
+        // remove the contents of pointers
+        for (int i = start; i <= end; ++i)
+            delete parentNode->children[i];
 
-    // and remove the pointers themselves
-    parentNode->children.remove( start, (end - start + 1) );
+        // and remove the pointers themselves
+        parentNode->children.remove( start, (end - start + 1) );
+    }
 }
 
 
