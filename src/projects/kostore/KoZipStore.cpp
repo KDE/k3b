@@ -35,13 +35,13 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray 
 
     m_pZip = new KZip( _filename );
 
-        m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+        m_bGood = initZipStore( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification )
 {
     m_pZip = new KZip( dev );
-    m_bGood = init( mode, appIdentification );
+    m_bGood = initZipStore( mode, appIdentification );
 }
 
 KoZipStore::KoZipStore( QWidget* window, const QUrl & _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
@@ -67,7 +67,7 @@ KoZipStore::KoZipStore( QWidget* window, const QUrl & _url, const QString & _fil
     }
 
     m_pZip = new KZip( m_localFileName );
-    m_bGood = init( _mode, appIdentification ); // open the zip file and init some vars
+    m_bGood = initZipStore( _mode, appIdentification ); // open the zip file and init some vars
 }
 
 KoZipStore::~KoZipStore()
@@ -95,7 +95,7 @@ KoZipStore::~KoZipStore()
     }
 }
 
-bool KoZipStore::init( Mode _mode, const QByteArray& appIdentification )
+bool KoZipStore::initZipStore( Mode _mode, const QByteArray& appIdentification )
 {
     KoStore::init( _mode );
     m_currentDir = 0;
