@@ -65,6 +65,22 @@ K3b::IsoOptions::IsoOptions()
 }
 
 
+const QString& K3b::IsoOptions::volumeID() const {
+    if (m_volumeIDSet)
+        return m_volumeID;
+    else {
+        if (!m_defaultVolumeIDSet) {
+            m_defaultVolumeIDSet = true;
+            m_defaultVolumeID = i18nc( "This is the default volume identifier of a data project created by K3b. "
+                 "The string should not be longer than 16 characters to avoid warnings regarding "
+                 "Joiliet extensions which induce this restriction.",
+                 "K3b data project" );
+        }
+        return m_defaultVolumeID;
+    }
+}
+
+
 void K3b::IsoOptions::save( KConfigGroup c, bool saveVolumeDesc )
 {
     if( saveVolumeDesc ) {

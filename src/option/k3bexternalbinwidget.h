@@ -18,6 +18,7 @@
 #define K3B_EXTERNAL_BIN_WIDGET_H
 
 
+#include "config-k3b.h"
 #include <QtWidgets/QWidget>
 
 

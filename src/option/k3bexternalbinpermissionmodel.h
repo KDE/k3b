@@ -18,6 +18,7 @@
 #define K3BEXTERNALBINPERMISSIONMODEL_H
 
 #include "k3bhelperprogramitem.h"
+#include "config-k3b.h"
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QList>
 #include <QtCore/QStringList>

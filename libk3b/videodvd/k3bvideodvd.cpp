@@ -69,7 +69,6 @@ namespace {
 K3b::VideoDVD::VideoDVD::VideoDVD() :
  m_device( 0 )
 {
-    m_device = 0;
 }
 
 

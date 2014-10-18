@@ -586,12 +586,12 @@ const K3b::ExternalBin* K3b::ExternalBinManager::binObject( const QString& name 
 QString K3b::ExternalBinManager::binNeedGroup( const QString& name )
 {
     if( d->programs.constFind( name ) == d->programs.constEnd() )
-        return 0;
+        return QString();
 
     if( d->programs[name]->defaultBin() != 0 )
         return d->programs[name]->defaultBin()->needGroup();
 
-    return 0;
+    return QString();
 }
 
 
