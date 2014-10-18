@@ -637,7 +637,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
     // vcd Tracks
     QDomNodeList trackNodes = nodes.item( 2 ).childNodes();
 
-    for ( uint i = 0; i < trackNodes.length(); i++ ) {
+    for ( int i = 0; i < trackNodes.length(); i++ ) {
 
         // check if url is available
         QDomElement trackElem = trackNodes.item( i ).toElement();
@@ -667,10 +667,10 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         VcdTrack::PbcTracks type;
         VcdTrack::PbcTypes val;
         bool pbctrack;
-        for ( uint trackId = 0; trackId < trackNodes.length(); trackId++ ) {
+        for ( int trackId = 0; trackId < trackNodes.length(); trackId++ ) {
             QDomElement trackElem = trackNodes.item( trackId ).toElement();
             QDomNodeList trackNodes = trackElem.childNodes();
-            for ( uint i = 0; i < trackNodes.length(); i++ ) {
+            for ( int i = 0; i < trackNodes.length(); i++ ) {
                 QDomElement trackElem = trackNodes.item( i ).toElement();
                 QString name = trackElem.tagName();
                 if ( name.contains( "pbc" ) ) {

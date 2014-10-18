@@ -599,7 +599,7 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
 
         else if( e.nodeName() == "audio_ripping" ) {
             QDomNodeList ripNodes = e.childNodes();
-            for( uint j = 0; j < ripNodes.length(); j++ ) {
+            for( int j = 0; j < ripNodes.length(); j++ ) {
                 if( ripNodes.item(j).nodeName() == "paranoia_mode" )
                     setAudioRippingParanoiaMode( ripNodes.item(j).toElement().text().toInt() );
                 else if( ripNodes.item(j).nodeName() == "read_retries" )
@@ -617,7 +617,7 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
             writeCdText( e.attributeNode( "activated" ).value() == "yes" );
 
             QDomNodeList cdTextNodes = e.childNodes();
-            for( uint j = 0; j < cdTextNodes.length(); j++ ) {
+            for( int j = 0; j < cdTextNodes.length(); j++ ) {
                 if( cdTextNodes.item(j).nodeName() == "title" )
                     setTitle( cdTextNodes.item(j).toElement().text() );
 
@@ -648,7 +648,7 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
 
             QDomNodeList contentNodes = e.childNodes();
 
-            for( uint j = 0; j< contentNodes.length(); j++ ) {
+            for( int j = 0; j< contentNodes.length(); j++ ) {
 
                 QDomElement trackElem = contentNodes.item(j).toElement();
 
@@ -669,11 +669,11 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
 
 
                 QDomNodeList trackNodes = trackElem.childNodes();
-                for( uint trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {
+                for( int trackJ = 0; trackJ < trackNodes.length(); trackJ++ ) {
 
                     if( trackNodes.item(trackJ).nodeName() == "sources" ) {
                         QDomNodeList sourcesNodes = trackNodes.item(trackJ).childNodes();
-                        for( unsigned int sourcesIndex = 0; sourcesIndex < sourcesNodes.length(); sourcesIndex++ ) {
+                        for( int sourcesIndex = 0; sourcesIndex < sourcesNodes.length(); sourcesIndex++ ) {
                             QDomElement sourceElem = sourcesNodes.item(sourcesIndex).toElement();
                             if( sourceElem.nodeName() == "file" ) {
                                 if( K3b::AudioFile* file =
@@ -695,7 +695,7 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
                                 QString title, artist, cdTitle, cdArtist;
 
                                 QDomNodeList cdTrackSourceNodes = sourceElem.childNodes();
-                                for( unsigned int cdTrackSourceIndex = 0; cdTrackSourceIndex < cdTrackSourceNodes.length(); ++cdTrackSourceIndex ) {
+                                for( int cdTrackSourceIndex = 0; cdTrackSourceIndex < cdTrackSourceNodes.length(); ++cdTrackSourceIndex ) {
                                     QDomElement cdTrackSourceItemElem = cdTrackSourceNodes.item(cdTrackSourceIndex).toElement();
                                     if( cdTrackSourceItemElem.nodeName() == "title_number" )
                                         titlenum = cdTrackSourceItemElem.text().toInt();
@@ -734,7 +734,7 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
                     // load cd-text
                     else if( trackNodes.item(trackJ).nodeName() == "cd-text" ) {
                         QDomNodeList cdTextNodes = trackNodes.item(trackJ).childNodes();
-                        for( uint trackCdTextJ = 0; trackCdTextJ < cdTextNodes.length(); trackCdTextJ++ ) {
+                        for( int trackCdTextJ = 0; trackCdTextJ < cdTextNodes.length(); trackCdTextJ++ ) {
                             if( cdTextNodes.item(trackCdTextJ).nodeName() == "title" )
                                 track->setTitle( cdTextNodes.item(trackCdTextJ).toElement().text() );
 
