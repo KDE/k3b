@@ -518,7 +518,7 @@ bool K3b::AudioCdView::eventFilter( QObject* obj, QEvent* event )
 void K3b::AudioCdView::slotSaveCddbLocally()
 {
     KCDDB::Client cddbClient;
-    cddbClient.config().readConfig();
+    cddbClient.config().load();
     cddbClient.store( d->trackModel->cddbInfo(), CDDB::createTrackOffsetList( d->trackModel->medium().toc() ) );
 }
 

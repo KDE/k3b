@@ -414,7 +414,7 @@ void K3b::CdCopyJob::queryCddb()
                  this, SLOT(slotCddbQueryFinished(KCDDB::Result)) );
     }
 
-    d->cddb->config().readConfig();
+    d->cddb->config().load();
     d->cddb->lookup( K3b::CDDB::createTrackOffsetList( d->toc ) );
 }
 
