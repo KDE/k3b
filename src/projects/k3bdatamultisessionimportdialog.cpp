@@ -241,24 +241,10 @@ void K3b::DataMultisessionImportDialog::slotSelectionChanged()
 {
     Sessions::const_iterator session = d->sessions.constFind( d->sessionView->currentItem() );
     if ( session != d->sessions.constEnd() ) {
-        showSessionInfo( session->device, session->sessionNumber );
         d->okButton->setEnabled( true );
     }
     else {
-        showSessionInfo( 0, 0 );
         d->okButton->setEnabled( false );
-    }
-}
-
-
-void K3b::DataMultisessionImportDialog::showSessionInfo( K3b::Device::Device* dev, int session )
-{
-    // FIXME: show some information about the selected session
-    if ( dev ) {
-
-    }
-    else {
-
     }
 }
 

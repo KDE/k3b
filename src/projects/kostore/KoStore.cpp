@@ -89,6 +89,8 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QByteAr
         // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
         return new KoEncryptedStore( fileName, Read, appIdentification );
     }
+#else
+    Q_UNUSED( automatic )
 #endif
     return new KoZipStore( fileName, mode, appIdentification );
 //  case Directory:
@@ -131,6 +133,8 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & 
         // When automatically detecting, this might as well be an encrypted file. We'll need to check anyway, so we'll just use the encrypted store.
         return new KoEncryptedStore( device, Read, appIdentification );
     }
+#else
+    Q_UNUSED( automatic )
 #endif
     return new KoZipStore( device, mode, appIdentification );
 #ifdef QCA2

@@ -281,7 +281,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     d->checksumPipe.close();
     d->checksumPipe.readFrom( &d->imageFile, true );
 
-    if( prepareWriter( Device::MediaTypes( media ) ) ) {
+    if( prepareWriter() ) {
         emit burning(true);
         d->writer->start();
 #ifdef __GNUC__
@@ -297,7 +297,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 }
 
 
-bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
+bool K3b::Iso9660ImageWritingJob::prepareWriter()
 {
     delete d->writer;
 
