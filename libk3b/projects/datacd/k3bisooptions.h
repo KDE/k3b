@@ -18,7 +18,6 @@
 #include <qstring.h>
 #include "k3b_export.h"
 #include <kconfiggroup.h>
-#include <klocalizedstring.h>
 
 
 namespace K3b {
@@ -51,20 +50,7 @@ namespace K3b {
         int ISOLevel() const { return m_isoLevel; }
         const QString& systemId() const { return m_systemId; }
         const QString& applicationID() const { return m_applicationID; }
-        const QString& volumeID() const {
-            if (m_volumeIDSet)
-                return m_volumeID;
-            else {
-                if (!m_defaultVolumeIDSet) {
-                    m_defaultVolumeIDSet = true;
-                    m_defaultVolumeID = i18nc( "This is the default volume identifier of a data project created by K3b. "
-                         "The string should not be longer than 16 characters to avoid warnings regarding "
-                         "Joiliet extensions which induce this restriction.",
-                         "K3b data project" );
-                }
-                return m_defaultVolumeID;
-            }
-        }
+        const QString& volumeID() const;
         const QString& volumeSetId() const { return m_volumeSetId; }
         int volumeSetSize() const { return m_volumeSetSize; }
         int volumeSetNumber() const { return m_volumeSetNumber; }
