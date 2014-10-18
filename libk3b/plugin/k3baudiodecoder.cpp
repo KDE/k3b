@@ -19,8 +19,9 @@
 #include "k3bpluginmanager.h"
 #include "k3b_i18n.h"
 
-#include <KFileMetaData/ExtractorPlugin>
-#include <KFileMetaData/ExtractorPluginManager>
+#include <KFileMetaData/ExtractionResult>
+#include <KFileMetaData/Extractor>
+#include <KFileMetaData/ExtractorCollection>
 #include <KFileMetaData/Properties>
 
 #include <QtCore/QDebug>
@@ -117,7 +118,7 @@ public:
 
     K3b::Msf decodingStartPos;
 
-    KFileMetaData::ExtractorPluginManager metaDataPluginManager;
+    KFileMetaData::ExtractorCollection metaDataCollection;
     QMimeDatabase mimeDatabase;
     QMimeType mimeType;
 
@@ -554,7 +555,7 @@ QString K3b::AudioDecoder::metaInfo( MetaDataField f )
     if( !d->mimeType.isValid() )
     {
         d->mimeType = d->mimeDatabase.mimeTypeForFile( m_fileName );
-        for( KFileMetaData::ExtractorPlugin* plugin : d->metaDataPluginManager.fetchExtractors( d->mimeType.name() ) )
+        for( KFileMetaData::Extractor* plugin : d->metaDataCollection.fetchExtractors( d->mimeType.name() ) )
         {
             ExtractionResult extractionResult(m_fileName, d->mimeType.name(), d->metaInfoMap);
             plugin->extract(&extractionResult);
