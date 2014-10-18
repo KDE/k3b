@@ -57,7 +57,9 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_messageWidget = new KMessageWidget( this );
     m_messageWidget->hide();
     m_messageWidget->setWordWrap( true );
+#ifndef openSUSE
     m_addToGroupAction = new QAction( QIcon::fromTheme("dialog-password"), QString(), this );
+#endif
 
     // buttons
     // ------------------------------------------------
@@ -94,7 +96,9 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     // ------------------------------------------------
     connect( buttonRefreshDevices, SIGNAL(clicked()), SIGNAL(refreshButtonClicked()) );
     connect( m_deviceManager, SIGNAL(changed()), SLOT(init()) );
+#ifndef openSUSE
     connect( m_addToGroupAction, SIGNAL(triggered(bool)), SLOT(addUserToGroup()) );
+#endif
     // ------------------------------------------------
 }
 
@@ -242,21 +246,30 @@ void K3b::DeviceWidget::updateDeviceListViews()
             }
 
             if (!groupNames.contains(m_deviceGroup)) {
+		QString messageText = i18n("In order to give K3b full access to the writer device the current user needs be added to a group <em>%1</em>.", m_deviceGroup);
+#ifdef openSUSE
+		messageText += i18n("<br/>On openSUSE main distribution the function to help you doing that had to be removed due to security doubts.<br/> "
+                                    "Please view the bug report for more information: <a href>%1</a><br/> "
+                                    "Alternatively you can install and use the package from Packman repository to enable this function.", "https://bugzilla.novell.com/show_bug.cgi?id=896601#c4");
+#endif
                 m_messageWidget->setMessageType(KMessageWidget::Warning);
-                m_messageWidget->setText(i18n("In order to give K3b full access to the writer device the current user needs be added to a group <em>%1</em>.", m_deviceGroup));
+                m_messageWidget->setText(messageText);
+#ifndef openSUSE
                 m_messageWidget->addAction(m_addToGroupAction);
-                m_messageWidget->animatedShow();
                 m_addToGroupAction->setText(i18n("Add"));
+#endif
+                m_messageWidget->animatedShow();
             }
         }
     }
 }
 
+#ifndef openSUSE
 void K3b::DeviceWidget::addUserToGroup()
 {
     QVariantMap args;
     args["groupName"] = m_deviceGroup;
-    args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_gecos);
+    args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_name);
 
     KAuth::Action action("org.kde.k3b.addtogroup");
     action.setHelperId("org.kde.k3b");
@@ -274,10 +287,10 @@ void K3b::DeviceWidget::addUserToGroup()
         } else if( status == KAuth::Action::DeniedStatus ||
                    status == KAuth::Action::ErrorStatus ||
                    status == KAuth::Action::InvalidStatus ) {
-            m_messageWidget->setText(i18n("Unable to execute the action: %1", job->errorString()));
+            m_messageWidget->setMessageType(KMessageWidget::Error);
+            m_messageWidget->setText(i18n("Unable to execute the action: %1 (Error code: %2)", job->errorString(), job->error()));
             m_addToGroupAction->setText(i18n("Retry"));
         }
     } );
 }
-
-
+#endif

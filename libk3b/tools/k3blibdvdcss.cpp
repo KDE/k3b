@@ -272,7 +272,7 @@ bool K3b::LibDvdCss::crackAllKeys()
 K3b::LibDvdCss* K3b::LibDvdCss::create()
 {
     if( !s_libDvdCss->isLoaded() ) {
-        s_libDvdCss->setFileName( "dvdcss" );
+        s_libDvdCss->setFileNameAndVersion( "dvdcss", 2 );
         s_libDvdCss->setLoadHints( QLibrary::ExportExternalSymbolsHint );
 
         if( s_libDvdCss->load() ) {

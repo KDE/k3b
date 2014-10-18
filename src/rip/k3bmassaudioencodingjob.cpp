@@ -187,7 +187,8 @@ void MassAudioEncodingJob::cleanup()
 
 bool MassAudioEncodingJob::run()
 {
-    init();
+    if ( !init() )
+        return false;
 
     if( !d->encoder )
         if( !d->waveFileWriter )

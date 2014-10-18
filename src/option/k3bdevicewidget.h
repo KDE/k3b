@@ -46,7 +46,9 @@ namespace K3b {
 
     private Q_SLOTS:
         void updateDeviceListViews();
+#ifndef openSUSE
         void addUserToGroup();
+#endif
 
     private:
         Device::DeviceManager* m_deviceManager;

@@ -201,7 +201,7 @@ void K3b::AudioTrackSplitDialog::splitTrack( K3b::AudioTrack* track,
 					   QWidget* parent )
 {
     if ( !track ) {
-        return ;
+        return;
     }
 
     K3b::AudioTrackSplitDialog d( track, parent );

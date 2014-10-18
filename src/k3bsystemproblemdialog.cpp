@@ -198,7 +198,14 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
     else {
         // 1. cdrecord, cdrdao
-        if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
+        if( !k3bcore->externalBinManager()->binPermissions( "cdrecord" ) ) {
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
+                                               i18n("Insufficient permissions for %1 executable: %2",QString("cdrecord"),k3bcore->externalBinManager()->binPath("cdrecord")),
+                                               i18n("K3b uses cdrecord to actually write CDs."),
+                                               i18n("Check permissions via Settings -> Configure K3b... -> Programs -> Permissions. "
+                                                    "If K3b's default value is set make sure you are member of \"cdrom\" group.") ) );
+        }
+        else if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("cdrecord")),
                                                i18n("K3b uses cdrecord to actually write CDs."),
@@ -253,7 +260,15 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 #endif
         }
 
-        if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
+        if( !k3bcore->externalBinManager()->binPermissions( "cdrdao" ) ) {
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
+                                               i18n("Insufficient permissions for %1 executable: %2",QString("cdrdao"),k3bcore->externalBinManager()->binPath("cdrdao")),
+                                               i18n("K3b uses cdrdao to actually write CDs."),
+                                               i18n("Check permissions via Settings -> Configure K3b... -> Programs -> Permissions. "
+                                                    "If K3b's default value is set make sure you are member of \"cdrom\" group.") ) ) ;
+        }
+
+        else if( !k3bcore->externalBinManager()->foundBin( "cdrdao" ) ) {
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("cdrdao")),
                                                i18n("K3b uses cdrdao to actually write CDs."),
@@ -278,7 +293,18 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 
 
     if( !k3bcore->deviceManager()->dvdWriter().isEmpty() ) {
-        if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
+
+        if( !k3bcore->externalBinManager()->binPermissions( "growisofs" ) ) {
+            problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
+                                               i18n("Insufficient permissions for %1 executable: %2",QString("growisofs"),k3bcore->externalBinManager()->binPath("growisofs")),
+                                               i18n("K3b uses growisofs to actually write DVDs. "
+                                                    "Without growisofs you will not be able to write DVDs. "
+                                                    "Make sure to install at least version 5.10."),
+                                               i18n("Check permissions via Settings -> Configure K3b... -> Programs -> Permissions. "
+                                                    "If K3b's default value is set make sure you are member of \"cdrom\" group.") ) );
+        } 
+
+        else if( !k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
             problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                i18n("Unable to find %1 executable",QString("growisofs")),
                                                i18n("K3b uses growisofs to actually write DVDs. "
@@ -439,7 +465,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
         }
     }
 
-    if( dvd_r_dl && k3bcore->externalBinManager()->foundBin( "growisofs" ) ) {
+    if( dvd_r_dl && k3bcore->externalBinManager()->foundBin( "growisofs" ) && k3bcore->externalBinManager()->binPermissions( "growisofs" )) {
         if( k3bcore->externalBinManager()->binObject( "growisofs" )->version() < K3b::Version( 6, 0 ) ) {
             problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
                                                i18n("Used %1 version %2 is outdated",QString("growisofs"),k3bcore->externalBinManager()->binObject( "growisofs" )->version()),

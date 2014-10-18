@@ -111,18 +111,28 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // setup permissions tab
     // ------------------------------------------------------------
     QWidget* permissionsTab = new QWidget( m_mainTabWidget );
+#ifndef openSUSE
     QLabel* permissionsLabel = new QLabel( i18n("Check the programs whose permissions you want to be changed:"), permissionsTab );
+#else
+    QLabel* permissionsLabel = new QLabel( i18n("On openSUSE main distribution the function to change permissions had to be removed.\n"
+                                                "Check the programs whose permissions should be changed:"), permissionsTab );
+#endif
+    permissionsLabel->setWordWrap( true );
     m_permissionModel = new ExternalBinPermissionModel( *manager, permissionsTab );
     m_permissionView = new QTreeView( permissionsTab );
     m_permissionView->setModel( m_permissionModel );
     m_permissionView->setAllColumnsShowFocus( true );
     m_permissionView->setRootIsDecorated( false );
     m_permissionView->header()->setSectionResizeMode( ExternalBinPermissionModel::ProgramColumn, QHeaderView::ResizeToContents );
+#ifndef openSUSE
     m_changePermissionsButton = new QPushButton( QIcon::fromTheme("dialog-password"), i18n( "Change Permissions..." ), this );
+#endif
     QVBoxLayout* permissionsTabLayout = new QVBoxLayout( permissionsTab );
     permissionsTabLayout->addWidget( permissionsLabel );
     permissionsTabLayout->addWidget( m_permissionView );
+#ifndef openSUSE
     permissionsTabLayout->addWidget( m_changePermissionsButton );
+#endif
     m_mainTabWidget->addTab( permissionsTab, i18n("Permissions") );
 
 
@@ -141,14 +151,17 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
 
     m_mainTabWidget->addTab( searchPathTab, i18n("Search Path") );
 
+#ifndef openSUSE
     connect( m_changePermissionsButton, SIGNAL(clicked()), SLOT(slotChangePermissions()) );
     connect( m_permissionModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(slotPermissionModelChanged()) );
     connect( m_permissionModel, SIGNAL(modelReset()), SLOT(slotPermissionModelChanged()) );
+#endif
     connect( m_rescanButton, SIGNAL(clicked(bool)), this, SLOT(rescan()) );
 
     qRegisterMetaType<HelperProgramItem>();
     qRegisterMetaTypeStreamOperators<HelperProgramItem>("K3b::HelperProgramItem");
 
+#ifndef openSUSE
     while (::group *g = ::getgrent()) {
         const QString groupName = QString::fromLocal8Bit(g->gr_name);
         if (groupName == "cdrom" ||
@@ -158,6 +171,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
         }
     }
     ::endgrent();
+#endif
 }
 
 
@@ -202,6 +216,7 @@ void K3b::ExternalBinWidget::saveSearchPath()
 }
 
 
+#ifndef openSUSE
 void K3b::ExternalBinWidget::slotPermissionModelChanged()
 {
     m_changePermissionsButton->setEnabled(m_permissionModel->changesNeeded());
@@ -254,5 +269,6 @@ void K3b::ExternalBinWidget::slotChangePermissions()
         }
     } );
 }
+#endif
 
 

@@ -26,24 +26,6 @@
 #include <QtCore/QRegExp>
 
 
-// avoid usage of QTextStream since K3b often
-// tries to open big files (iso images) in a
-// cue file parser to test it.
-static QString readLine( QFile* f )
-{
-    QByteArray s( 1024, 0 );
-    qint64 r = f->readLine( s.data(), s.size() );
-    if( r >= 0 ) {
-        // remove the trailing newline
-        return QString::fromLatin1( s ).trimmed();
-    }
-    else {
-        // end of file or error
-        return QString();
-    }
-}
-
-
 // TODO: add method: usableByCdrecordDirectly()
 // TODO: add Toc with sector sizes
 
@@ -95,15 +77,11 @@ void K3b::CueFileParser::readFile()
 
     QFile f( filename() );
     if( f.open( QIODevice::ReadOnly ) ) {
-        QString line = readLine( &f );
-        while( !line.isNull() ) {
-
-            if( !parseLine(line) ) {
+        while( !f.atEnd() ) {
+            if( !parseLine( QString::fromUtf8(f.readLine() ) ) ) {
                 setValid(false);
                 break;
             }
-
-            line = readLine( &f );
         }
 
         if( isValid() ) {
@@ -135,10 +113,10 @@ void K3b::CueFileParser::readFile()
 }
 
 
-bool K3b::CueFileParser::parseLine( QString& line )
+bool K3b::CueFileParser::parseLine( QString line )
 {
     // use cap(1) for the filename
-    static QRegExp fileRx( "FILE\\s\"?([^\"]*)\"?\\s([^\"\\s]*)" );
+    static QRegExp fileRx( "FILE\\s\"?([^\"].*[^\"\\s])\"?\\s\"?(.*)\"?" );
 
     // use cap(1) for the flags
     static QRegExp flagsRx( "FLAGS(\\s(DCP|4CH|PRE|SCMS)){1,4}" );
@@ -402,6 +380,8 @@ bool K3b::CueFileParser::findImageFileName( const QString& dataFile )
     // CDRDAO does not use this image filename but replaces the extension from the cue file
     // with "bin" to get the image filename, we should take this into account
     //
+
+    qDebug() << "(K3b::CueFileParser) trying to find file: " << dataFile;
 
     m_imageFilenameInCue = true;
 

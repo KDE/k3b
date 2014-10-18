@@ -50,8 +50,10 @@ namespace K3b {
 
     private Q_SLOTS:
         void saveSearchPath();
+#ifndef openSUSE
         void slotPermissionModelChanged();
         void slotChangePermissions();
+#endif
 
     private:
         ExternalBinManager* m_manager;
@@ -65,7 +67,9 @@ namespace K3b {
         QTreeView* m_permissionView;
         KEditListWidget* m_searchPathBox;
 
+#ifndef openSUSE
         QPushButton* m_changePermissionsButton;
+#endif
         QPushButton* m_rescanButton;
     };
 }

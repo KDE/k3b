@@ -57,6 +57,7 @@ public:
 
     ExternalProgram& program;
     QString path;
+    bool permissions;
     Version version;
     QString copyright;
     QStringList features;
@@ -81,6 +82,16 @@ void K3b::ExternalBin::setVersion( const Version& version )
 const K3b::Version& K3b::ExternalBin::version() const
 {
     return d->version;
+}
+
+void K3b::ExternalBin::setPermissions( const bool value )
+{
+    d->permissions = value;
+}
+
+bool K3b::ExternalBin::permissions() const
+{
+    return d->permissions;
 }
 
 void K3b::ExternalBin::setCopyright( const QString& copyright )
@@ -332,8 +343,7 @@ bool K3b::SimpleExternalProgram::scan( const QString& p )
     if ( QFile::exists( path ) ) {
         K3b::ExternalBin* bin = new ExternalBin( *this, path );
 
-        if ( !scanVersion( *bin ) ||
-             !scanFeatures( *bin ) ) {
+        if ( ( !scanVersion( *bin ) || !scanFeatures( *bin ) ) && bin->permissions() ) {
             delete bin;
             return false;
         }
@@ -353,9 +363,15 @@ bool K3b::SimpleExternalProgram::scanVersion( ExternalBin& bin ) const
     KProcess vp;
     vp.setOutputChannelMode( KProcess::MergedChannels );
     vp << bin.path() << "--version";
-    if( vp.execute( EXECUTE_TIMEOUT ) < 0 )
+    if( vp.execute( EXECUTE_TIMEOUT ) < 0 ) {
+        if( vp.error() == 0 ) {
+            qDebug() << "Insufficient permissions for " << bin.path();
+            bin.setPermissions( false );
+        }
         return false;
+    }
 
+    bin.setPermissions( true );
     QString s = QString::fromLocal8Bit( vp.readAll() );
     bin.setVersion( parseVersion( s, bin ) );
     bin.setCopyright( parseCopyright( s, bin ) );
@@ -554,6 +570,18 @@ const K3b::ExternalBin* K3b::ExternalBinManager::binObject( const QString& name 
         return 0;
 
     return d->programs[name]->defaultBin();
+}
+
+
+bool K3b::ExternalBinManager::binPermissions( const QString& name )
+{
+    if( d->programs.constFind( name ) == d->programs.constEnd() )
+        return false;
+
+    if( d->programs[name]->defaultBin() != 0 )
+        return d->programs[name]->defaultBin()->permissions();
+
+    return false;
 }
 
 

@@ -265,6 +265,22 @@ if(K3B_BUILD_API_DOCS)
     endif()
 endif(K3B_BUILD_API_DOCS)
 
+# openSUSE main distribution classifies changing to cdrom group and the helper
+# as evil: https://bugzilla.novell.com/show_bug.cgi?id=896601#c4
+# So don't allow building the helper on http://build.opensuse.org at all.
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Linux" AND
+  EXISTS /home/abuild/.rpmmacros)
+  file(STRINGS /home/abuild/.rpmmacros RPMMACROS)
+  if("${RPMMACROS}" MATCHES "^.*opensuse_bs 1.*$" AND
+    NOT "${RPMMACROS}" MATCHES "^.*packman_bs 1.*$")
+    set(openSUSE ON)
+  endif()
+endif()
+
+if(openSUSE)
+  message(STATUS "Build openSUSE distro specific because it is FORCED by you or you use openSUSE infrastructure")
+  add_definitions(-DopenSUSE)
+endif()
 
 ##################  K3b build environment ################################
 add_subdirectory( libk3bdevice )
