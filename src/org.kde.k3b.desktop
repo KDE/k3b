@@ -175,3 +175,4 @@ X-KDE-NativeMimeType=application/x-k3b;
 Categories=KDE;Qt;AudioVideo;DiscBurning;System;Filesystem;
 X-DBUS-ServiceType=Unique
 InitialPreference=5
+X-DBUS-ServiceName=org.kde.k3b
