@@ -81,7 +81,8 @@ bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
     //
     // now process its output
     const QStringList l = QString::fromLocal8Bit( p.readAllStandardOutput() ).split( '\n', QString::SkipEmptyParts );
-    for( QStringList::ConstIterator it = l.constBegin(); it != l.constEnd(); ++it ) {
+    QStringList::ConstIterator it = l.constBegin();
+    while ( it != l.constEnd() ) {
         int pid = it->mid(1).toInt();
 
         if ( ++it != l.constEnd() ) {
@@ -92,6 +93,8 @@ bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
             // we don't care about ourselves using the device ;)
             if( pid != (int)::getpid() )
                 d->apps.append( createProcess( app, pid ) );
+
+            ++it;
         }
     }
 
