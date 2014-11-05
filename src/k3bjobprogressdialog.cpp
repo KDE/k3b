@@ -513,6 +513,7 @@ void K3b::JobProgressDialog::slotStarted()
 {
     kDebug();
     d->lastProgress = 0;
+    m_lastProgressUpdateTime = 0;
     m_timer.start();
     m_plainCaption = k3bappcore->k3bMainWindow()->windowTitle();
 
