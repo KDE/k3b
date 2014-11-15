@@ -256,7 +256,7 @@ bool K3b::DataTrackReader::run()
     //
     d->device->setSpeed( 0xffff, 0xffff );
 
-#ifdef __NETBSD__
+#ifdef Q_OS_NETBSD
     s_bufferSizeSectors = 31;
 #else
     s_bufferSizeSectors = 128;
