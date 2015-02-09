@@ -60,6 +60,7 @@
 #include <QList>
 #include <QSpinBox>
 #include <QTreeView>
+#include <QDate>
 
 #include <libkcddb/genres.h>
 #include <libkcddb/cdinfo.h>
@@ -364,6 +365,12 @@ void K3b::AudioCdView::slotEditTrackCddb()
         form->addRow( i18n("Artist:"), editArtist );
         form->addRow( i18n("Extra info:"), editExtInfo );
 
+        editTitle->setFocus( Qt::TabFocusReason );
+
+        // load album's artist by default if no artist is specified yet
+        if ( editArtist->text().isEmpty() )
+            editArtist->setText( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString() );
+
         dialog.setMainWidget(w);
         dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
@@ -390,7 +397,11 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     KLineEdit* editExtInfo = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Comment ).toString(), w );
     QSpinBox* spinYear = new QSpinBox( w );
     spinYear->setRange( 1, 9999 );
-    spinYear->setValue( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() );
+    if ( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() == 0 ) {
+        spinYear->setValue( QDate::currentDate().year() ); // set the current year to default if no year specified yet
+    } else {
+        spinYear->setValue( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() );
+    }
     QFrame* line = new QFrame( w );
     line->setFrameShape( QFrame::HLine );
     line->setFrameShadow( QFrame::Sunken );
@@ -423,6 +434,7 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     form->addRow( i18n("Year:"), spinYear );
     form->addRow( line );
     form->addRow( i18n("Category:"), comboCat );
+    editTitle->setFocus(Qt::TabFocusReason);
 
     dialog.setMainWidget(w);
     dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
