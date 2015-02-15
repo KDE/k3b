@@ -4,9 +4,6 @@
   <exportmacro></exportmacro>
   <class>base_K3bAudioTrackWidget</class>
   <widget class="QWidget" name="K3bAudioTrackWidget" >
-    <property name="windowTitle" >
-      <string>K3bAudioTrackWidget</string>
-    </property>
     <layout class="QHBoxLayout" >
       <property name="margin" >
         <number>0</number>
