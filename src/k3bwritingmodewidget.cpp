@@ -48,7 +48,7 @@ static const KLocalizedString s_ovwHelp =
     ki18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
           "or a DVD+RW. The media may just be overwritten. It is not possible "
           "to write multisession DVD-RWs in this mode but K3b uses growisofs "
-          "to grow an ISO9660 filesystem within the first session, thus allowing "
+          "to grow an ISO 9660 filesystem within the first session, thus allowing "
           "new files to be added to an already burned disk.");
 
 

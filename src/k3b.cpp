@@ -301,7 +301,7 @@ void K3b::MainWindow::initActions()
     d->actionFileSave->setStatusTip( d->actionFileSave->toolTip() );
 
     d->actionFileSaveAs = KStandardAction::saveAs( this, SLOT(slotFileSaveAs()), actionCollection() );
-    d->actionFileSaveAs->setToolTip( i18n( "Saves the current project to a new url" ) );
+    d->actionFileSaveAs->setToolTip( i18n( "Saves the current project to a new URL" ) );
     d->actionFileSaveAs->setStatusTip( d->actionFileSaveAs->toolTip() );
 
     KAction* actionFileSaveAll = new KAction( KIcon( "document-save-all" ), i18n("Save All"), this );
@@ -403,7 +403,7 @@ void K3b::MainWindow::initActions()
     connect( actionToolsFormatMedium, SIGNAL(triggered(bool)), this, SLOT(slotFormatMedium()) );
 
     KAction* actionToolsWriteImage = new KAction( KIcon( "tools-media-optical-burn-image" ), i18n("&Burn Image..."), this );
-    actionToolsWriteImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to an optical disc") );
+    actionToolsWriteImage->setToolTip( i18n("Write an ISO 9660, cue/bin, or cdrecord clone image to an optical disc") );
     actionToolsWriteImage->setStatusTip( actionToolsWriteImage->toolTip() );
     actionCollection()->addAction( "tools_write_image", actionToolsWriteImage );
     connect( actionToolsWriteImage, SIGNAL(triggered(bool)), this, SLOT(slotWriteImage()) );

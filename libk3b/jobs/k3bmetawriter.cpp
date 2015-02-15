@@ -843,9 +843,9 @@ void K3b::MetaWriter::informUser()
     else if( Device::isDvdMedia( medium.diskInfo().mediaType() ) ) {
         if( medium.diskInfo().appendable() ) {
             if( medium.diskInfo().mediaType() & (Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_PLUS_RW_DL) )
-                emit infoMessage( i18n("Growing ISO9660 filesystem on DVD+RW."), MessageInfo );
+                emit infoMessage( i18n("Growing ISO 9660 filesystem on DVD+RW."), MessageInfo );
             else if( medium.diskInfo().mediaType() == Device::MEDIA_DVD_RW_OVWR )
-                emit infoMessage( i18n("Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."), MessageInfo );
+                emit infoMessage( i18n("Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."), MessageInfo );
             else if( medium.diskInfo().mediaType() == Device::MEDIA_DVD_PLUS_R )
                 emit infoMessage( i18n("Appending session to DVD+R."), MessageInfo );
             else if( medium.diskInfo().mediaType() == Device::MEDIA_DVD_PLUS_R_DL )

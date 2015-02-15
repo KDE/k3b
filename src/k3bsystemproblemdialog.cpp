@@ -194,7 +194,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
                                            i18n("K3b did not find an optical writing device in your system. Thus, "
                                                 "you will not be able to burn CDs or DVDs. However, you can still "
                                                 "use other K3b features such as audio track extraction, audio "
-                                                "transcoding or ISO9660 image creation."),
+                                                "transcoding or ISO 9660 image creation."),
                                            QString() ) );
     }
     else {

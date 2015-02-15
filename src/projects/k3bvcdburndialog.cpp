@@ -129,7 +129,7 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     // What's This info
     // -------------------------------------------------------------------------
     m_radioVcd11->setWhatsThis( i18n( "<p>This is the most basic <b>Video CD</b> specification dating back to 1993, which has the following characteristics:"
-                                      "<ul><li>One mode2 mixed form ISO-9660 track containing file pointers to the information areas.</li>"
+                                      "<ul><li>One mode2 mixed form ISO 9660 track containing file pointers to the information areas.</li>"
                                       "<li>Up to 98 multiplex-ed MPEG-1 audio/video streams or CD-DA audio tracks.</li>"
                                       "<li>Up to 500 MPEG sequence entry points used as chapter divisions.</li></ul>"
                                       "<p>The Video CD specification requires the multiplex-ed MPEG-1 stream to have a CBR of less than 174300 bytes (1394400 bits) per second in order to accommodate single speed CD-ROM drives.<br>"

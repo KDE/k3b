@@ -369,7 +369,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 
 void K3b::CdCopyJob::searchCdText()
 {
-    emit newSubTask( i18n("Searching CD-TEXT") );
+    emit newSubTask( i18n("Searching CD-Text") );
 
     connect( K3b::Device::sendCommand( K3b::Device::DeviceHandler::CommandCdTextRaw, m_readerDevice ),
              SIGNAL(finished(K3b::Device::DeviceHandler*)),
@@ -383,17 +383,17 @@ void K3b::CdCopyJob::slotCdTextReady( K3b::Device::DeviceHandler* dh )
     if( dh->success() ) {
         if( K3b::Device::CdText::checkCrc( dh->cdTextRaw() ) ) {
             K3b::Device::CdText cdt( dh->cdTextRaw() );
-            emit infoMessage( i18n("Found CD-TEXT (%1 - %2).",cdt.performer(),cdt.title()), MessageSuccess );
+            emit infoMessage( i18n("Found CD-Text (%1 - %2).",cdt.performer(),cdt.title()), MessageSuccess );
             d->haveCdText = true;
             d->cdTextRaw = dh->cdTextRaw();
         }
         else {
-            emit infoMessage( i18n("Found corrupted CD-TEXT. Ignoring it."), MessageWarning );
+            emit infoMessage( i18n("Found corrupted CD-Text. Ignoring it."), MessageWarning );
             d->haveCdText = false;
         }
     }
     else {
-        emit infoMessage( i18n("No CD-TEXT found."), MessageInfo );
+        emit infoMessage( i18n("No CD-Text found."), MessageInfo );
 
         d->haveCdText = false;
     }
@@ -404,7 +404,7 @@ void K3b::CdCopyJob::slotCdTextReady( K3b::Device::DeviceHandler* dh )
 
 void K3b::CdCopyJob::queryCddb()
 {
-    emit newSubTask( i18n("Querying Cddb") );
+    emit newSubTask( i18n("Querying CDDB") );
 
     d->haveCddb = false;
 
@@ -425,7 +425,7 @@ void K3b::CdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
     if( result == KCDDB::Success ) {
         d->cddbInfo = d->cddb->lookupResponse().first();
         d->haveCddb = true;
-        emit infoMessage( i18n("Found Cddb entry (%1 - %2).",
+        emit infoMessage( i18n("Found CDDB entry (%1 - %2).",
                                d->cddbInfo.get( KCDDB::Artist ).toString(),
                                d->cddbInfo.get( KCDDB::Title ).toString() ),
                           MessageSuccess );
@@ -448,10 +448,10 @@ void K3b::CdCopyJob::slotCddbQueryFinished( KCDDB::Result result )
         }
     }
     else if( result == KCDDB::NoRecordFound ) {
-        emit infoMessage( i18n("No Cddb entry found."), MessageWarning );
+        emit infoMessage( i18n("No CDDB entry found."), MessageWarning );
     }
     else {
-        emit infoMessage( i18n("Cddb error (%1).",
+        emit infoMessage( i18n("CDDB error (%1).",
                                KCDDB::resultToString( result ) ),
                           MessageError );
     }
@@ -467,15 +467,15 @@ void K3b::CdCopyJob::startCopy()
 
     if ( d->haveCdText && d->haveCddb ) {
         K3b::Device::CdText cdt( d->cdTextRaw );
-        if ( !questionYesNo( i18n( "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. "
-                                   "Which one should be used to generate the CD-TEXT on the new CD?",
+        if ( !questionYesNo( i18n( "Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. "
+                                   "Which one should be used to generate the CD-Text on the new CD?",
                                    cdt.performer(),
                                    cdt.title(),
                                    d->cddbInfo.get( KCDDB::Artist ).toString(),
                                    d->cddbInfo.get( KCDDB::Title ).toString() ),
-                             i18n( "CD-TEXT" ),
-                             KGuiItem( i18n( "Use CD-TEXT data" ) ),
-                             KGuiItem( i18n( "Use Cddb entry" ) ) ) ) {
+                             i18n( "CD-Text" ),
+                             KGuiItem( i18n( "Use CD-Text data" ) ),
+                             KGuiItem( i18n( "Use CDDB entry" ) ) ) ) {
             d->haveCdText = false;
         }
     }

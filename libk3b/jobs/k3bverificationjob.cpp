@@ -130,7 +130,7 @@ K3b::Msf K3b::VerificationJob::Private::trackLength( const TrackEntry& trackEntr
                 trackSize = isoF.primaryDescriptor().volumeSpaceSize;
             }
             else {
-                emit q->infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), MessageError );
+                emit q->infoMessage( i18n("Unable to determine the ISO 9660 filesystem size."), MessageError );
                 return 0;
             }
         }
@@ -360,7 +360,7 @@ void K3b::VerificationJob::readTrack()
                                                     isoF.primaryDescriptor().volumeSpaceSize -1 );
             }
             else {
-                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), MessageError );
+                emit infoMessage( i18n("Unable to determine the ISO 9660 filesystem size."), MessageError );
                 jobFinished( false );
                 return;
             }

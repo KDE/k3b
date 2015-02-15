@@ -164,7 +164,7 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
     m_editSortWeight->setToolTip( i18n("Modify the physical sorting") );
     m_checkHideOnRockRidge->setWhatsThis( i18n("<p>If this option is checked, the file or folder "
                                                "(and its entire contents) will be hidden on the "
-                                               "ISO9660 and RockRidge filesystem.</p>"
+                                               "ISO 9660 and RockRidge filesystem.</p>"
                                                "<p>This is useful, for example, for having different README "
                                                "files for RockRidge and Joliet, which can be managed "
                                                "by hiding README.joliet on RockRidge and README.rr "
@@ -177,13 +177,13 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
                                             "by hiding README.joliet on RockRidge and README.rr "
                                             "on the Joliet filesystem.</p>") );
     m_editSortWeight->setWhatsThis( i18n("<p>This value modifies the physical sort order of the files "
-                                         "in the ISO9660 filesystem. A higher weighting means that the "
+                                         "in the ISO 9660 filesystem. A higher weighting means that the "
                                          "file will be located closer to the beginning of the image "
                                          "(and the disk)."
                                          "<p>This option is useful in order to optimize the data layout "
                                          "on a medium."
                                          "<p><b>Caution:</b> This does not sort the order of the file "
-                                         "names that appear in the ISO9660 folder. "
+                                         "names that appear in the ISO 9660 folder. "
                                          "It sorts the order in which the file data is "
                                          "written to the image.") );
 

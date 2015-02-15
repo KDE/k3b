@@ -222,7 +222,7 @@ K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )
                                             "protection based on corrupted sectors.") );
     m_checkReadCdText->setWhatsThis( i18n("<p>If this option is checked K3b will search for CD-Text on the source CD. "
                                           "Disable it if your CD drive has problems with reading CD-Text or you want "
-                                          "to stick to Cddb info.") );
+                                          "to stick to CDDB info.") );
     m_checkIgnoreDataReadErrors->setWhatsThis( i18n("<p>If this option is checked and K3b is not able to read a data sector from the "
                                                     "source medium it will be replaced with zeros on the resulting copy.") );
 

@@ -169,7 +169,7 @@ all modern systems optical devices belongs to a certain user group (&eg; <quote>
 </para>
 <para>Now choose what is to be burnt.
 </para>
-<para>The top half of the screen is the <emphasis>source pane</emphasis>; it functions like a file manager. You can choose ordinary files from mounted data volumes or audio tracks from inserted audio discs. Names of audio tracks are automatically read from CD-TEXT data, if your CD drive supports reading it, or generated using <ulink url="http://libcddb.sourceforge.net/">CDDB</ulink>; the exact format is controlled by a button in the bottom pane. If the names are incorrect or simply do not match the description of the disc, you can edit them using the toolbar button. Your changes will be cached locally and submitted to the master registry at <ulink url="http://www.freedb.org/">FreeDB</ulink>. 
+<para>The top half of the screen is the <emphasis>source pane</emphasis>; it functions like a file manager. You can choose ordinary files from mounted data volumes or audio tracks from inserted audio discs. Names of audio tracks are automatically read from CD-Text data, if your CD drive supports reading it, or generated using <ulink url="http://libcddb.sourceforge.net/">CDDB</ulink>; the exact format is controlled by a button in the bottom pane. If the names are incorrect or simply do not match the description of the disc, you can edit them using the toolbar button. Your changes will be cached locally and submitted to the master registry at <ulink url="http://www.freedb.org/">FreeDB</ulink>.
 </para>
 <tip>
 <para>If the whole record is performed by the same artist, leave the track artist entries blank, fill the <guilabel>Album artist</guilabel>, save to CDDB and requery.

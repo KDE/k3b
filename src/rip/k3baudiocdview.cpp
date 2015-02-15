@@ -386,7 +386,7 @@ void K3b::AudioCdView::slotEditTrackCddb()
 void K3b::AudioCdView::slotEditAlbumCddb()
 {
     KDialog dialog( this);
-    dialog.setCaption(i18n("Album Cddb"));
+    dialog.setCaption(i18n("Album CDDB"));
     dialog.setModal(true);
     dialog.setButtons(KDialog::Ok|KDialog::Cancel);
     dialog.setDefaultButton(KDialog::Ok);

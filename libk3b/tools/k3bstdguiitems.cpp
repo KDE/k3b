@@ -116,15 +116,15 @@ QCheckBox* K3b::StdGuiItems::onTheFlyCheckbox( QWidget* parent )
 
 QCheckBox* K3b::StdGuiItems::cdTextCheckbox( QWidget* parent )
 {
-    QCheckBox* c = new QCheckBox( i18n("Write CD-TEXT"), parent );
-    c->setToolTip( i18n("Create CD-TEXT entries") );
+    QCheckBox* c = new QCheckBox( i18n("Write CD-Text"), parent );
+    c->setToolTip( i18n("Create CD-Text entries") );
     c->setWhatsThis( i18n("<p>If this option is checked K3b uses some otherwise-unused space on the audio "
                           "CD to store additional information, such as the artist's name, or the CD title."
-                          "<p>CD-TEXT is an extension to the audio CD standard introduced by Sony."
-                          "<p>CD-TEXT will only be usable on CD players that support this extension "
+                          "<p>CD-Text is an extension to the audio CD standard introduced by Sony."
+                          "<p>CD-Text will only be usable on CD players that support this extension "
                           "(mostly car CD players)."
-                          "<p>Since a CD-TEXT-enhanced CD will work in any CD player it is never a bad "
-                          "idea to enable this (if you specify CD-TEXT data.)") );
+                          "<p>Since a CD-Text-enhanced CD will work in any CD player it is never a bad "
+                          "idea to enable this (if you specify CD-Text data.)") );
     return c;
 }
 

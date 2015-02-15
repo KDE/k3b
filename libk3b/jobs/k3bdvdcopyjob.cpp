@@ -287,7 +287,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         case K3b::Device::MEDIA_DVD_RW_OVWR:
         case K3b::Device::MEDIA_BD_RE:
         {
-            emit infoMessage( i18n("K3b relies on the size saved in the ISO9660 header."), MessageWarning );
+            emit infoMessage( i18n("K3b relies on the size saved in the ISO 9660 header."), MessageWarning );
             emit infoMessage( i18n("This might result in a corrupt copy if the source was mastered with buggy software."), MessageWarning );
 
             K3b::Iso9660 isoF( m_readerDevice, 0 );
@@ -295,7 +295,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL - 1;
             }
             else {
-                emit infoMessage( i18n("Unable to determine the ISO9660 filesystem size."), MessageError );
+                emit infoMessage( i18n("Unable to determine the ISO 9660 filesystem size."), MessageError );
                 jobFinished(false);
                 d->running = false;
                 return;

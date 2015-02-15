@@ -64,7 +64,7 @@ QString K3b::VideoDvdJob::jobDescription() const
 
 QString K3b::VideoDvdJob::jobDetails() const
 {
-    return ( i18n("ISO9660/Udf Filesystem (Size: %1)",KIO::convertSize( doc()->size() ))
+    return ( i18n("ISO 9660/Udf Filesystem (Size: %1)",KIO::convertSize( doc()->size() ))
              + ( m_doc->copies() > 1
                  ? i18np(" - %1 copy", " - %1 copies", m_doc->copies())
                  : QString() ) );

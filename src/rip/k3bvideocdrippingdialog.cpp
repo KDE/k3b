@@ -131,7 +131,7 @@ void K3b::VideoCdRippingDialog::setupContextHelp()
     m_labelNecessarySize->setToolTip( i18n("Necessary space for extracted files") );
 
     m_ignoreExt->setToolTip( i18n("Ignore extended PSD") );
-    m_ignoreExt->setWhatsThis( i18n("<p>Ignore extended PSD (located in the ISO-9660 filesystem under `/EXT/PSD_X.VCD') and use the <em>standard</em> PSD.</p>") );
+    m_ignoreExt->setWhatsThis( i18n("<p>Ignore extended PSD (located in the ISO 9660 filesystem under `/EXT/PSD_X.VCD') and use the <em>standard</em> PSD.</p>") );
 
     m_sector2336->setToolTip( i18n("Assume a 2336-byte sector mode") );
     m_sector2336->setWhatsThis( i18n("<p>This option only makes sense if you are reading from a BIN CD disk image. This indicates to `vcdxrip' to assume a 2336-byte sector mode for image file.</p>"

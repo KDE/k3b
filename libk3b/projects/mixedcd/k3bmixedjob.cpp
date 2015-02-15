@@ -888,7 +888,7 @@ void K3b::MixedJob::slotWriterNextTrack( int t, int )
         emit newSubTask( i18n("Writing track %1 of %2 (%3)",
                               t,
                               m_doc->numOfTracks(),
-                              i18n("ISO9660 data")) );
+                              i18n("ISO 9660 data")) );
 }
 
 
@@ -1353,8 +1353,8 @@ QString K3b::MixedJob::jobDescription() const
 QString K3b::MixedJob::jobDetails() const
 {
     return ( i18ncp("%2 is of form XX:YY:ZZ, no pluralization needed"
-                  ,"1 track (%2 minutes audio data, %3 ISO9660 data)"
-                  ,"%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
+                  ,"1 track (%2 minutes audio data, %3 ISO 9660 data)"
+                  ,"%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
                   ,m_doc->numOfTracks()
                   ,m_doc->audioDoc()->length().toString()
                   ,KIO::convertSize(m_doc->dataDoc()->size()))
