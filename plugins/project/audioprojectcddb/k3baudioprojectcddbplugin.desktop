@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=K3b CDDB Audio Plugin
+Name[fi]=K3b:n CDDB-ääniliitännäinen
+Name[nl]=K3b CDDB audio-plugin
+Name[pt_BR]=Plugin de áudio CDDB do K3b
+Name[sk]=Zvukový modul CDDB pre K3b
+Name[sv]=K3b CDDB-ljudinsticksprogram
+Name[uk]=Додаток для роботи з CDDB у K3b
+Name[x-test]=xxK3b CDDB Audio Pluginxx
 Comment=Plugin to query a CDDB server for information about an audio project.
+Comment[fi]=Liitännäinen ääniprojektin tietojen kyselemiseksi CDDB-palvelimelta.
+Comment[nl]=Plugin om op een CDDB-server informatie op te zoeken over een audioproject.
+Comment[pt_BR]=Plugin para consultar informações sobre um projeto de áudio em um servidor CDDB.
+Comment[sk]=Modul pre dotazovanie CDDB servera na informácie o zvukovom projekte.
+Comment[sv]=Insticksprogram för att hämta information om ett ljudprojekt från en CDDB-server.
+Comment[uk]=Додаток для опитування сервера CDDB щодо даних про аудіо-проект.
+Comment[x-test]=xxPlugin to query a CDDB server for information about an audio project.xx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin
