@@ -1,15 +1,19 @@
 [Desktop Entry]
 Name=K3b Lame MP3 Encoder
+Name[da]=K3b Lame MP3-indkodning
 Name[fi]=K3b:n lame MP3-pakkaaja
 Name[nl]=K3b Lame MP3-codeerder
+Name[pt]=Codificador de MP3 Lame do K3b
 Name[pt_BR]=Codificador de MP3 Lame do K3b
 Name[sk]=Lame MP3 enkodér pre K3b
 Name[sv]=K3b Lame MP3-kodare
 Name[uk]=Кодувальник Lame MP3 для K3b
 Name[x-test]=xxK3b Lame MP3 Encoderxx
 Comment=Encoding module to encode MPEG1 Layer III (MP3) files
+Comment[da]=Indkodningsmodul til MPEG 1 Layer III-filer (MP3)
 Comment[fi]=MPEG1 Layer III (MP3) -tiedostojen pakkausmoduuli
 Comment[nl]=Module voor het coderen van  MPEG1 Layer III-bestanden (MP3)
+Comment[pt]=Módulo de codificação de ficheiros MPEG 1 Layer III (MP3)
 Comment[pt_BR]=Módulo de codificação de arquivos MPEG1 Layer III (MP3)
 Comment[sk]=Modul pre kódovanie súborov MPEG1 Layer III (MP3)
 Comment[sv]=Kodningsmodul för att koda MPEG 1 lager III (MP3)-filer
