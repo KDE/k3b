@@ -55,6 +55,7 @@ Name[x-test]=xxK3b FFMpeg Decoderxx
 Name[zh_CN]=K3b FFMpeg 解码器
 Name[zh_TW]=K3b FFMpeg 解碼器
 Comment=Decoding module to decode WMA files
+Comment[cs]=Modul pro dekódování souborů WMA
 Comment[da]=Dekodermodul til dekodning af WMA-filer
 Comment[fi]=WMA-tiedostojen purkumoduuli
 Comment[nl]=Module voor het decoderen van WMA-bestanden
