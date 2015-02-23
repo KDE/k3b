@@ -52,6 +52,7 @@ Comment[zh_CN]=K3bSetup - 修改使用 K3b 刻录 CD/DVD 的权限
 Comment[zh_TW]=K3bSetup - 修改以 K3b 進行 CD/DVD 燒錄的許可權限
 Exec=k3bsetup
 Keywords=K3bSetup;k3bsetup;
+Keywords[bs]=K3bSetup;k3bsetup;
 Keywords[ca]=K3bSetup;k3bsetup;
 Keywords[cs]=K3bSetup;k3bsetup;
 Keywords[da]=K3bSetup;k3bsetup;
