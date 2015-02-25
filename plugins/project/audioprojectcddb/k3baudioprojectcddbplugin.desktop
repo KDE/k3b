@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=K3b CDDB Audio Plugin
+Name[bs]=Cddb audio priljučak za K3b
 Name[ca]=Connector CDDB d'àudio del K3b
 Name[cs]=Audio modul K3b CDDB
 Name[da]=CDDB-plugin til K3b
@@ -18,6 +19,7 @@ Name[sv]=K3b CDDB-ljudinsticksprogram
 Name[uk]=Додаток для роботи з CDDB у K3b
 Name[x-test]=xxK3b CDDB Audio Pluginxx
 Comment=Plugin to query a CDDB server for information about an audio project.
+Comment[bs]=Priključak za upite CDDB serveru radi podataka o audio projektu.
 Comment[ca]=Connector per consultar un servidor CDDB informació quant a un projecte d'àudio.
 Comment[cs]=Modul pro dotazování CDDB serveru na informaci o audio projektu.
 Comment[da]=Plugin til at forespørge en CDDB-server om information om et lydprojekt.
