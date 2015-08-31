@@ -342,7 +342,7 @@ void K3b::MainWindow::initActions()
     actionCollection()->addAction( "file_new_mixed", actionFileNewMixed );
     connect( actionFileNewMixed, SIGNAL(triggered(bool)), this, SLOT(slotNewMixedDoc()) );
 
-    KAction* actionFileNewVcd = new KAction( KIcon( "media-optical-cd-video" ), i18n("New &Video CD Project"), this );
+    KAction* actionFileNewVcd = new KAction( KIcon( "media-optical-video" ), i18n("New &Video CD Project"), this );
     actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
     actionFileNewVcd->setStatusTip( actionFileNewVcd->toolTip() );
     actionCollection()->addAction( "file_new_vcd", actionFileNewVcd );
@@ -354,7 +354,7 @@ void K3b::MainWindow::initActions()
     actionCollection()->addAction( "file_new_movix", actionFileNewMovix );
     connect( actionFileNewMovix, SIGNAL(triggered(bool)), this, SLOT(slotNewMovixDoc()) );
 
-    KAction* actionFileNewVideoDvd = new KAction( KIcon( "media-optical-dvd-video" ), i18n("New V&ideo DVD Project"), this );
+    KAction* actionFileNewVideoDvd = new KAction( KIcon( "media-optical-video" ), i18n("New V&ideo DVD Project"), this );
     actionFileNewVideoDvd->setToolTip( i18n("Creates a new Video DVD project") );
     actionFileNewVideoDvd->setStatusTip( actionFileNewVideoDvd->toolTip() );
     actionCollection()->addAction( "file_new_video_dvd", actionFileNewVideoDvd );
