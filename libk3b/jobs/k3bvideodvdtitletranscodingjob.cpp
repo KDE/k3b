@@ -303,7 +303,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         }
 
         // the output filename
-        *d->process << "-o" << QString("\"%1\"").arg(m_filename);
+        *d->process << "-o" << m_filename;
     }
     else {
         // gather information about the video stream, ignore audio
