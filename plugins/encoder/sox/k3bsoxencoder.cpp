@@ -316,7 +316,7 @@ QString K3bSoxEncoder::fileTypeComment( const QString& ext ) const
     else if( ext == "voc" )
         return i18n("Sound Blaster VOC");
     else if( ext == "wav" )
-        return i18n("Wave (Sox)");
+        return i18n("Wave (SoX)");
     else if( ext == "wve" )
         return i18n("Psion 8-bit A-law");
     else if( ext == "raw" )

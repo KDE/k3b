@@ -153,7 +153,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         emit infoMessage( i18n("Removing reference to lead-out."), K3b::Job::MessageInfo );
     }
     else if( line.contains( "copying volume descriptor" ) ) {
-        emit infoMessage( i18n("Modifying ISO9660 volume descriptor"), K3b::Job::MessageInfo );
+        emit infoMessage( i18n("Modifying ISO 9660 volume descriptor"), K3b::Job::MessageInfo );
     }
     else if( line.contains( "FEATURE 21h is not on" ) ) {
         if( !m_dao ) {

@@ -21,7 +21,7 @@
 #include "k3bdebuggingoutputcache.h"
 #include "k3bjobhandler.h"
 
-#include <QtCore/QDateTime>
+#include <QtCore/QElapsedTimer>
 #include <QtWidgets/QDialog>
 
 class KSqueezedTextLabel;
@@ -32,7 +32,7 @@ class QKeyEvent;
 class QLabel;
 class QProgressBar;
 class QShowEvent;
-class QTimer;
+class QElapsedTimer;
 
 namespace K3b {
     class Job;
@@ -97,8 +97,9 @@ namespace K3b {
          * \reimpl from QDialog
          */
         void reject() override;
-        void slotUpdateTime();
-        void slotShowDebuggingOutput();
+        virtual void slotButtonClicked( int button );
+
+	void slotShowDebuggingOutput();
 
         void slotProgress( int );
 
@@ -115,7 +116,8 @@ namespace K3b {
         ThemedLabel* m_labelJob;
         ThemedLabel* m_labelJobDetails;
         ThemedLabel* m_labelTask;
-        ThemedLabel* m_labelElapsedTime;
+        QLabel* m_labelRemainingTime;
+        QLabel* m_labelElapsedTime;
         KSqueezedTextLabel* m_labelSubTask;
         QLabel* m_labelSubProcessedSize;
         QProgressBar* m_progressSubPercent;
@@ -134,9 +136,8 @@ namespace K3b {
         Private* d;
 
         Job* m_job;
-        QTimer* m_timer;
-        QDateTime m_startTime;
-        QDateTime m_lastProgressUpdateTime;
+        QElapsedTimer m_timer;
+        qint64 m_lastProgressUpdateTime;
 
         DebuggingOutputFile m_logFile;
         DebuggingOutputCache m_logCache;

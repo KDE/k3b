@@ -248,7 +248,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
             if (!groupNames.contains(m_deviceGroup)) {
 		QString messageText = i18n("In order to give K3b full access to the writer device the current user needs be added to a group <em>%1</em>.", m_deviceGroup);
 #ifndef ENABLE_PERMISSION_HELPER
-		messageText += i18n("<br/>The Permission helper that could do this for you was not enabled during build.<br/> "
+		messageText += i18n("<br/>The Permission helper that could do this for you was not enabled during build.<br/>"
                                     "Please rebuild the package with the Permission helper enabled or contact your distribution.");
 #endif
                 m_messageWidget->setMessageType(KMessageWidget::Warning);

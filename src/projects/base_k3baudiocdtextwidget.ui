@@ -4,9 +4,6 @@
   <exportmacro></exportmacro>
   <class>base_K3bAudioCdTextWidget</class>
   <widget class="QWidget" name="K3bAudioCDTextWidget" >
-    <property name="windowTitle" >
-      <string>K3bAudioCDTextWidget</string>
-    </property>
     <layout class="QVBoxLayout" >
       <item>
         <widget class="QGroupBox" name="m_groupCdText" >

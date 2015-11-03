@@ -29,7 +29,7 @@
 #include <Solid/OpticalDrive>
 #include <Solid/Block>
 #include <Solid/Device>
-#ifdef __NETBSD__
+#ifdef Q_OS_NETBSD
 #include <Solid/GenericInterface>
 #endif
 
@@ -357,10 +357,10 @@ bool K3b::Device::DeviceManager::saveConfig( KConfigGroup c )
 K3b::Device::Device* K3b::Device::DeviceManager::addDevice( const Solid::Device& solidDevice )
 {
     if( const Solid::Block* blockDevice = solidDevice.as<Solid::Block>() ) {
-#ifndef __NETBSD__
+#ifndef Q_OS_NETBSD
         if( !findDevice( blockDevice->device() ) )
 #else
-        if( !findDevice( solidDevice.as<Solid::GenericInterface>()->propertyExists("block.netbsd.raw_device") ? solidDevice.as<Solid::GenericInterface>()->property("block.netbsd.raw_device").toString() : blockDevice->device() ) );
+        if( !findDevice( solidDevice.as<Solid::GenericInterface>()->propertyExists("block.netbsd.raw_device") ? solidDevice.as<Solid::GenericInterface>()->property("block.netbsd.raw_device").toString() : blockDevice->device() ) )
 #endif
             return addDevice( new K3b::Device::Device( solidDevice ) );
         else

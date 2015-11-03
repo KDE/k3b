@@ -157,7 +157,7 @@
          <string>Select the channel mode.</string>
         </property>
         <property name="whatsThis">
-         <string>&lt;p&gt;Select the channel mode of the resulting Mp3 file:
+         <string>&lt;p&gt;Select the channel mode of the resulting MP3 file:
 &lt;p&gt;&lt;b&gt;Stereo&lt;/b&gt;&lt;br&gt;
 In this mode, the encoder makes no use of potential correlations between the two input channels; it can, however, negotiate the bit demand between both channel, i.e. give one channel more bits if the other contains silence or needs fewer bits because of a lower complexity.
 &lt;p&gt;&lt;b&gt;Joint-Stereo&lt;/b&gt;&lt;br&gt;

@@ -25,8 +25,8 @@
         </property>
         <property name="whatsThis">
          <string>&lt;p&gt;If this option is checked, K3b will generate the System Use Sharing Protocol records (SUSP) specified by the Rock Ridge Interchange Protocol (IEEE-P1282).
-&lt;p&gt;Rock Ridge extends the ISO-9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames, ...). It uses ISO-8859 or UTF-16 based characters and allows 255 octets.
-&lt;p&gt;Rock Ridge extensions are located at the end of each ISO-9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO-9660 tree.
+&lt;p&gt;Rock Ridge extends the ISO 9660 filesystem by features equal to the UNIX filesystems (permissions, symbolic links, very long filenames, ...). It uses ISO-8859 or UTF-16 based characters and allows 255 octets.
+&lt;p&gt;Rock Ridge extensions are located at the end of each ISO 9660 directory record. This makes the Rock Ridge tree closely coupled to the ISO 9660 tree.
 &lt;p&gt;&lt;b&gt;It is highly recommended to use Rock Ridge extensions on every data CD or DVD.&lt;/b&gt;</string>
         </property>
         <property name="text">
@@ -43,8 +43,8 @@
          <string>Add Joliet extensions to the file system</string>
         </property>
         <property name="whatsThis">
-         <string>&lt;p&gt;If this option is checked, K3b will add additional Joliet extensions to the ISO-9660 file system.
-&lt;p&gt;Joliet is not an accepted independent international standard like ISO-9660 or Rock Ridge. It is mainly used on Windows systems.
+         <string>&lt;p&gt;If this option is checked, K3b will add additional Joliet extensions to the ISO 9660 file system.
+&lt;p&gt;Joliet is not an accepted independent international standard like ISO 9660 or Rock Ridge. It is mainly used on Windows systems.
 &lt;p&gt;Joliet does not allow all characters, so the Joliet filenames are not identical to the filenames on disk (as compared to Rock Ridge). Joliet has a filename length limitation of 64 chars (independent from the character coding and type e.g. European vs. Japanese). This is inconvenient, as modern file systems all allow 255 characters per path name component.
 &lt;p&gt;Joliet uses UTF-16 coding.
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; With the exception of Linux and FreeBSD, there is no POSIX-like OS that supports Joliet. So &lt;b&gt;never create Joliet-only CDs or DVDs&lt;/b&gt; for that reason.</string>
@@ -60,7 +60,7 @@
          <string>Add UDF structures to the file system</string>
         </property>
         <property name="whatsThis">
-         <string>&lt;p&gt;If this option is checked K3b will create UDF filesystem structures in addition to the ISO9660 filesystem.
+         <string>&lt;p&gt;If this option is checked K3b will create UDF filesystem structures in addition to the ISO 9660 filesystem.
 &lt;p&gt;The UDF (&lt;em&gt;&lt;b&gt;U&lt;/b&gt;niversal &lt;b&gt;D&lt;/b&gt;isk &lt;b&gt;F&lt;/b&gt;ormat&lt;/em&gt;) is mainly used for DVDs.</string>
         </property>
         <property name="text">
@@ -107,7 +107,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QGroupBox" name="groupBox_3">
      <property name="whatsThis">
-      <string>Set special ISO9660 Filesystem preferences.</string>
+      <string>Set special ISO 9660 Filesystem preferences.</string>
      </property>
      <property name="title">
       <string>File System Settings</string>
@@ -131,7 +131,7 @@
           <item>
            <widget class="QGroupBox" name="m_groupIsoSettings">
             <property name="title">
-             <string>ISO9660 Settings</string>
+             <string>ISO 9660 Settings</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -143,70 +143,70 @@
                 <string>Force all options below</string>
                </property>
                <property name="text">
-                <string>Allow untranslated ISO9660 filenames</string>
+                <string>Allow untranslated ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkOmitTrailingPeriod">
                <property name="text">
-                <string>Omit trailing period in ISO9660 filenames</string>
+                <string>Omit trailing period in ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkOmitVersionNumbers">
                <property name="text">
-                <string>Omit version numbers in ISO9660 filenames</string>
+                <string>Omit version numbers in ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkAllowBeginningPeriod">
                <property name="text">
-                <string>Allow leading period in ISO9660 filenames</string>
+                <string>Allow leading period in ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkAllow31CharFilenames">
                <property name="text">
-                <string>Allow 31 character ISO9660 filenames</string>
+                <string>Allow 31 character ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkAllowMultiDot">
                <property name="text">
-                <string>Allow multiple dots in ISO9660 filenames</string>
+                <string>Allow multiple dots in ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkAllowLowercaseCharacters">
                <property name="text">
-                <string>Allow lowercase characters in ISO9660 filenames</string>
+                <string>Allow lowercase characters in ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkAllowOther">
                <property name="text">
-                <string>Allow ~ and # in ISO9660 filenames</string>
+                <string>Allow ~ and # in ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkAllowFullAscii">
                <property name="text">
-                <string>Allow full ASCII charset for ISO9660 filenames</string>
+                <string>Allow full ASCII charset for ISO 9660 filenames</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QCheckBox" name="m_checkAllowMaxLengthFilenames">
                <property name="text">
-                <string>Allow max length ISO9660 filenames (37 characters)</string>
+                <string>Allow max length ISO 9660 filenames (37 characters)</string>
                </property>
               </widget>
              </item>
@@ -216,16 +216,16 @@
           <item>
            <widget class="QGroupBox" name="m_groupIsoLevel">
             <property name="whatsThis">
-             <string>&lt;p&gt;Set the ISO-9660 conformance level.
+             <string>&lt;p&gt;Set the ISO 9660 conformance level.
 &lt;ul&gt;
 &lt;li&gt;Level 1: Files may only consist of one section and filenames are restricted to 8.3 characters.&lt;/li&gt;
 &lt;li&gt;Level 2: Files may only consist of one section.&lt;/li&gt;
 &lt;li&gt;Level 3: No restrictions.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;With all ISO-9660 levels, all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO-9660 features K3b offers.)</string>
+&lt;p&gt;With all ISO 9660 levels, all filenames are restricted to upper case letters, numbers and the underscore (_). The maximum filename length is 31 characters, the directory nesting level is restricted to 8 and the maximum path length is limited to 255 characters. (These restrictions may be violated with the additional ISO 9660 features K3b offers.)</string>
             </property>
             <property name="title">
-             <string>ISO9660 Level</string>
+             <string>ISO 9660 Level</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>

@@ -181,7 +181,7 @@ void K3b::DataUrlAddingDialog::slotStartAddUrls()
         K3b::Iso9660 isoF( m_urls.first().toLocalFile() );
         if( isoF.open() ) {
             if( KMessageBox::warningYesNo( parentWidget(),
-                                           i18n("<p>The file you are about to add to the project is an ISO9660 image. As such "
+                                           i18n("<p>The file you are about to add to the project is an ISO 9660 image. As such "
                                                 "it can be burned to a medium directly since it already contains a file "
                                                 "system.<br>"
                                                 "Are you sure you want to add this file to the project?"),

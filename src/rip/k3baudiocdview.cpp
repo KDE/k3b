@@ -46,6 +46,7 @@
 #include <KXmlGui/KActionCollection>
 #include <KXmlGui/KToolBar>
 
+#include <QtCore/QDate>
 #include <QtCore/QDebug>
 #include <QtCore/QItemSelectionModel>
 #include <QtCore/QList>
@@ -371,6 +372,12 @@ void K3b::AudioCdView::slotEditTrackCddb()
         dlgLayout->addLayout( form );
         dlgLayout->addWidget( buttonBox );
 
+        editTitle->setFocus( Qt::TabFocusReason );
+
+        // load album's artist by default if no artist is specified yet
+        if ( editArtist->text().isEmpty() )
+            editArtist->setText( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString() );
+
         dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
         if( dialog.exec() == QDialog::Accepted ) {
@@ -385,7 +392,7 @@ void K3b::AudioCdView::slotEditTrackCddb()
 void K3b::AudioCdView::slotEditAlbumCddb()
 {
     QDialog dialog( this);
-    dialog.setWindowTitle(i18n("Album Cddb"));
+    dialog.setWindowTitle(i18n("Album CDDB"));
     dialog.setModal(true);
 
     KLineEdit* editTitle = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Title ).toString(), this );
@@ -393,8 +400,12 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     KLineEdit* editExtInfo = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Comment ).toString(), this );
     QSpinBox* spinYear = new QSpinBox( this );
     spinYear->setRange( 1, 9999 );
-    spinYear->setValue( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() );
-    QFrame* line = new QFrame( this );
+    if ( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() == 0 ) {
+        spinYear->setValue( QDate::currentDate().year() ); // set the current year to default if no year specified yet
+    } else {
+        spinYear->setValue( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() );
+    }
+    QFrame* line = new QFrame( w );
     line->setFrameShape( QFrame::HLine );
     line->setFrameShadow( QFrame::Sunken );
     KComboBox* comboGenre = new KComboBox( this );
@@ -435,6 +446,8 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     QVBoxLayout* dlgLayout = new QVBoxLayout( this );
     dlgLayout->addLayout( form );
     dlgLayout->addWidget( buttonBox );
+
+    editTitle->setFocus(Qt::TabFocusReason);
 
     dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 

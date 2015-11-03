@@ -100,7 +100,7 @@ void K3b::DataMultisessionImportDialog::slotOk()
                                     i18n("<p>K3b found session containing Joliet information for long filenames "
                                          "but no Rock Ridge extensions."
                                          "<p>The filenames in the imported session will be converted to a restricted "
-                                         "character set in the new session. This character set is based on the ISO9660 "
+                                         "character set in the new session. This character set is based on the ISO 9660 "
                                          "settings in the K3b project. K3b is not able to display these converted filenames yet."),
                                     i18n("Session Import Warning") );
             iso.close();

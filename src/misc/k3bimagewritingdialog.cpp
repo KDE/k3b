@@ -168,7 +168,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
 {
     QTreeWidgetItem* isoRootItem = new QTreeWidgetItem( infoView );
     isoRootItem->setText( 0, i18n("Detected:") );
-    isoRootItem->setText( 1, i18n("Iso9660 image") );
+    isoRootItem->setText( 1, i18n("ISO 9660 image") );
     isoRootItem->setForeground( 0, infoTextColor );
     isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
@@ -453,7 +453,7 @@ void K3b::ImageWritingDialog::setupGui()
     d->editImagePath->setWindowTitle( i18n("Choose Image File") );
     d->editImagePath->setFilter( i18n("*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files")
                                 + '\n'
-                                + i18n("*.iso *.ISO|ISO9660 Image Files")
+                                + i18n("*.iso *.ISO|ISO 9660 Image Files")
                                 + '\n'
                                 + i18n("*.cue *.CUE|Cue Files")
                                 + '\n'
@@ -1013,7 +1013,7 @@ void K3b::ImageWritingDialog::calculateMd5Sum( const QString& file )
         d->md5SumItem = new QTreeWidgetItem( d->infoView );
     }
 
-    d->md5SumItem->setText( 0, i18n("Md5 Sum:") );
+    d->md5SumItem->setText( 0, i18n("MD5 Sum:") );
     d->md5SumItem->setForeground( 0, d->infoTextColor );
     d->md5SumItem->setTextAlignment( 0, Qt::AlignRight );
 

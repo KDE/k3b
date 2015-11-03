@@ -977,13 +977,13 @@ void K3b::CdrdaoWriter::parseCdrdaoMessage()
                     emit nextTrack( d->newMsg.track, d->newMsg.totalTracks );
                     break;
                 case PGSMSG_WCD_LEADIN:
-                    emit newSubTask( i18n("Writing leadin ") );
+                    emit newSubTask( i18n("Writing leadin") );
                     break;
                 case PGSMSG_WCD_DATA:
                     emit nextTrack( d->newMsg.track, d->newMsg.totalTracks );
                     break;
                 case PGSMSG_WCD_LEADOUT:
-                    emit newSubTask( i18n("Writing leadout ") );
+                    emit newSubTask( i18n("Writing leadout") );
                     break;
                 }
 

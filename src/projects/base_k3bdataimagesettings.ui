@@ -87,7 +87,7 @@
            <string>Symbolic link handling in the project</string>
           </property>
           <property name="whatsThis">
-           <string>&lt;p&gt;K3b can create ISO9660 filesystems that contain symlinks if the Rock Ridge extensions are enabled (they are by default). You can change the way symlinks are handled in a K3b project.
+           <string>&lt;p&gt;K3b can create ISO 9660 filesystems that contain symlinks if the Rock Ridge extensions are enabled (they are by default). You can change the way symlinks are handled in a K3b project.
 
 &lt;p&gt;&lt;b&gt;No Change&lt;/b&gt;&lt;br&gt;
 Symlinks are used as they have been added to the project. 
@@ -100,7 +100,7 @@ K3b will discard all symbolic links that have been added to the project; meaning
 
 &lt;p&gt;&lt;b&gt;Follow symlinks&lt;/b&gt;&lt;br&gt;
 Each symbolic link in the project will be replaced with the contents of the file it is pointing to. Thus, the resulting filesystem will not contain any symbolic links.&lt;br&gt;
-Be aware that in case Rock Ridge extensions are disabled (which is not recommended) symbolic links are always followed because ISO9660 does not support symbolic links.
+Be aware that in case Rock Ridge extensions are disabled (which is not recommended) symbolic links are always followed because ISO 9660 does not support symbolic links.
 
 &lt;p&gt;&lt;b&gt;Caution:&lt;/b&gt; Symbolic links require Rock Ridge extensions.</string>
           </property>

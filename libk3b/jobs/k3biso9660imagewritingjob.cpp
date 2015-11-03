@@ -338,9 +338,9 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter()
 QString K3b::Iso9660ImageWritingJob::jobDescription() const
 {
     if( m_simulate )
-        return i18n("Simulating ISO9660 Image");
+        return i18n("Simulating ISO 9660 Image");
     else
-        return ( i18n("Burning ISO9660 Image")
+        return ( i18n("Burning ISO 9660 Image")
                  + ( m_copies > 1
                      ? i18np(" - %1 Copy", " - %1 Copies", m_copies)
                      : QString() ) );

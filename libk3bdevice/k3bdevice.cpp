@@ -28,7 +28,7 @@
 #include <Solid/OpticalDrive>
 #include <Solid/Block>
 #include <Solid/StorageAccess>
-#ifdef __NETBSD__
+#ifdef Q_OS_NETBSD
 #include <Solid/GenericInterface>
 #endif
 
@@ -244,12 +244,12 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
 
 K3b::Device::Device::Device( const Solid::Device& dev )
 {
-#ifdef __NETBSD__
-    const Solid::GenericInterace *gi = dev.as<Solid::GenericInterface>();
+#ifdef Q_OS_NETBSD
+    const Solid::GenericInterface *gi = dev.as<Solid::GenericInterface>();
 #endif
     d = new Private;
     d->solidDevice = dev;
-#ifndef __NETBSD__
+#ifndef Q_OS_NETBSD
     d->blockDevice = dev.as<Solid::Block>()->device();
 #else
     if (gi->propertyExists("block.netbsd.raw_device"))

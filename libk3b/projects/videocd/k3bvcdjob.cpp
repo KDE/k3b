@@ -194,12 +194,12 @@ void K3b::VcdJob::vcdxBuild()
     m_process = new K3b::Process();
     m_process->setSplitStdout( true );
 
-    emit infoMessage( i18n( "Creating Cue/Bin files ..." ), K3b::Job::MessageInfo );
+    emit infoMessage( i18n( "Creating Cue/Bin files..." ), K3b::Job::MessageInfo );
     const K3b::ExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxbuild" );
     if ( !bin ) {
         qDebug() << "(K3b::VcdJob) could not find vcdxbuild executable";
         emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxbuild") ), K3b::Job::MessageError );
-        emit infoMessage( i18n( "To create Video CDs you have to install VcdImager Version %1." ,QString( ">= 0.7.12") ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "To create Video CDs you have to install VcdImager version %1." ,QString( ">= 0.7.12") ), K3b::Job::MessageInfo );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );

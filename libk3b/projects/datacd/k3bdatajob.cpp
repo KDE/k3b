@@ -847,7 +847,7 @@ bool K3b::DataJob::waitForBurnMedium()
             if( foundMedium & K3b::Device::MEDIA_DVD_PLUS_RW &&
                 ( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
                   usedMultiSessionMode() == K3b::DataDoc::FINISH ) )
-                emit infoMessage( i18n("Growing ISO9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
+                emit infoMessage( i18n("Growing ISO 9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
             else
                 emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
         }
@@ -879,7 +879,7 @@ bool K3b::DataJob::waitForBurnMedium()
                     emit infoMessage( i18n("Writing DVD-RW in restricted overwrite mode."), MessageInfo );
                 }
                 else {
-                    emit infoMessage( i18n("Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."), MessageInfo );
+                    emit infoMessage( i18n("Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."), MessageInfo );
                     // we can only do this with growisofs
                     d->usedWritingApp = K3b::WritingAppGrowisofs;
                 }
@@ -968,7 +968,7 @@ bool K3b::DataJob::waitForBurnMedium()
         if( foundMedium & K3b::Device::MEDIA_BD_RE &&
             ( usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
               usedMultiSessionMode() == K3b::DataDoc::FINISH ) )
-            emit infoMessage( i18n("Growing ISO9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
+            emit infoMessage( i18n("Growing ISO 9660 filesystem on %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
         else
             emit infoMessage( i18n("Writing %1.", Device::mediaTypeString(foundMedium, true)), MessageInfo );
     }
@@ -1004,12 +1004,12 @@ QString K3b::DataJob::jobDetails() const
         !d->doc->dummy() &&
         !(d->doc->multiSessionMode() == K3b::DataDoc::CONTINUE ||
           d->doc->multiSessionMode() == K3b::DataDoc::FINISH) )
-        return i18np("ISO9660 Filesystem (Size: %2) – One copy",
-                     "ISO9660 Filesystem (Size: %2) – %1 copies",
+        return i18np("ISO 9660 Filesystem (Size: %2) – One copy",
+                     "ISO 9660 Filesystem (Size: %2) – %1 copies",
                      d->doc->copies(),
                      KIO::convertSize( d->doc->size() ) );
     else
-        return i18n( "ISO9660 Filesystem (Size: %1)",
+        return i18n( "ISO 9660 Filesystem (Size: %1)",
                      KIO::convertSize( d->doc->size() ) );
 }
 

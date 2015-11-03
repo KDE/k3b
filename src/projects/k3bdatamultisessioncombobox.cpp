@@ -74,8 +74,8 @@ void K3b::DataMultiSessionCombobox::init( bool force )
     insertItem( s_noneIndex, i18n("No Multisession") );
     if( !m_forceNoMultiSession ) {
         insertItem( s_startIndex, i18n("Start Multisession") );
-        insertItem( s_continueIndex, i18n("Continue Multisession ") );
-        insertItem( s_finishIndex, i18n("Finish Multisession ") );
+        insertItem( s_continueIndex, i18n("Continue Multisession") );
+        insertItem( s_finishIndex, i18n("Finish Multisession") );
     }
 }
 

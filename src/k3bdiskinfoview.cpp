@@ -102,7 +102,7 @@ void K3b::DiskInfoView::reloadMedium()
         s += createMediaInfoItems( medium() );
 
         if( medium().content() & K3b::Medium::ContentData ) {
-            s += sectionHeader( i18n("ISO9660 Filesystem Info") );
+            s += sectionHeader( i18n("ISO 9660 Filesystem Info") );
             s += createIso9660InfoItems( medium().iso9660Descriptor() );
         }
 

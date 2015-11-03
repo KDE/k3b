@@ -223,7 +223,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
     if( m_customFsDlg->m_checkUdf->isChecked() )
         s += i18n("UDF");
     if( s.isEmpty() )
-        m_comboFilesystems->setItemText( FS_CUSTOM,i18n("Custom (ISO9660 only)") );
+        m_comboFilesystems->setItemText( FS_CUSTOM,i18n("Custom (ISO 9660 only)") );
     else
         m_comboFilesystems->setItemText( FS_CUSTOM,i18n("Custom (%1)", s.join(", ") ) );
 
@@ -256,7 +256,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
             KMessageBox::information( this,
                                       i18n("<p>Be aware that without the Joliet extensions Windows "
                                            "systems will not be able to display long filenames. You "
-                                           "will only see the ISO9660 filenames."
+                                           "will only see the ISO 9660 filenames."
                                            "<p>If you do not intend to use the CD/DVD on a Windows "
                                            "system it is safe to disable Joliet."),
                                       i18n("Joliet Extensions Disabled"),

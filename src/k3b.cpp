@@ -301,7 +301,7 @@ void K3b::MainWindow::initActions()
     d->actionFileSave->setStatusTip( d->actionFileSave->toolTip() );
 
     d->actionFileSaveAs = KStandardAction::saveAs( this, SLOT(slotFileSaveAs()), actionCollection() );
-    d->actionFileSaveAs->setToolTip( i18n( "Saves the current project to a new url" ) );
+    d->actionFileSaveAs->setToolTip( i18n( "Saves the current project to a new URL" ) );
     d->actionFileSaveAs->setStatusTip( d->actionFileSaveAs->toolTip() );
 
     QAction* actionFileSaveAll = new QAction( QIcon::fromTheme( "document-save-all" ), i18n("Save All"), this );
@@ -342,7 +342,7 @@ void K3b::MainWindow::initActions()
     actionCollection()->addAction( "file_new_mixed", actionFileNewMixed );
     connect( actionFileNewMixed, SIGNAL(triggered(bool)), this, SLOT(slotNewMixedDoc()) );
 
-    QAction* actionFileNewVcd = new QAction( QIcon::fromTheme( "media-optical-cd-video" ), i18n("New &Video CD Project"), this );
+    QAction* actionFileNewVcd = new QAction( QIcon::fromTheme( "media-optical-video" ), i18n("New &Video CD Project"), this );
     actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
     actionFileNewVcd->setStatusTip( actionFileNewVcd->toolTip() );
     actionCollection()->addAction( "file_new_vcd", actionFileNewVcd );
@@ -354,7 +354,7 @@ void K3b::MainWindow::initActions()
     actionCollection()->addAction( "file_new_movix", actionFileNewMovix );
     connect( actionFileNewMovix, SIGNAL(triggered(bool)), this, SLOT(slotNewMovixDoc()) );
 
-    QAction* actionFileNewVideoDvd = new QAction( QIcon::fromTheme( "media-optical-dvd-video" ), i18n("New V&ideo DVD Project"), this );
+    QAction* actionFileNewVideoDvd = new QAction( QIcon::fromTheme( "media-optical-video" ), i18n("New V&ideo DVD Project"), this );
     actionFileNewVideoDvd->setToolTip( i18n("Creates a new Video DVD project") );
     actionFileNewVideoDvd->setStatusTip( actionFileNewVideoDvd->toolTip() );
     actionCollection()->addAction( "file_new_video_dvd", actionFileNewVideoDvd );
@@ -403,7 +403,7 @@ void K3b::MainWindow::initActions()
     connect( actionToolsFormatMedium, SIGNAL(triggered(bool)), this, SLOT(slotFormatMedium()) );
 
     QAction* actionToolsWriteImage = new QAction( QIcon::fromTheme( "tools-media-optical-burn-image" ), i18n("&Burn Image..."), this );
-    actionToolsWriteImage->setToolTip( i18n("Write an Iso9660, cue/bin, or cdrecord clone image to an optical disc") );
+    actionToolsWriteImage->setToolTip( i18n("Write an ISO 9660, cue/bin, or cdrecord clone image to an optical disc") );
     actionToolsWriteImage->setStatusTip( actionToolsWriteImage->toolTip() );
     actionCollection()->addAction( "tools_write_image", actionToolsWriteImage );
     connect( actionToolsWriteImage, SIGNAL(triggered(bool)), this, SLOT(slotWriteImage()) );

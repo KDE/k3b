@@ -70,7 +70,7 @@ void K3bAudioProjectCddbPlugin::activate( K3b::Doc* doc, QWidget* parent )
     }
     else {
         if( !m_progress ) {
-            m_progress.reset( new QProgressDialog( i18n("Query Cddb"), i18n("Cancel"), 0, 0, parent ) );
+            m_progress.reset( new QProgressDialog( i18n("Query CDDB"), i18n("Cancel"), 0, 0, parent ) );
             m_progress->setWindowTitle( i18n("Audio Project") );
         } else {
             m_progress->reset();
@@ -112,7 +112,7 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( KJob* job )
             m_doc->writeCdText( true );
         }
         else {
-            KMessageBox::information( m_parentWidget, job->errorString(), i18n("Cddb error") );
+            KMessageBox::information( m_parentWidget, job->errorString(), i18n("CDDB error") );
         }
     }
 
