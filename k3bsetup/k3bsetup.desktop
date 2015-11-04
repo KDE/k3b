@@ -54,6 +54,7 @@ Exec=k3bsetup
 Keywords=K3bSetup;k3bsetup;
 Keywords[bs]=K3bSetup;k3bsetup;
 Keywords[ca]=K3bSetup;k3bsetup;
+Keywords[ca@valencia]=K3bSetup;k3bsetup;
 Keywords[cs]=K3bSetup;k3bsetup;
 Keywords[da]=K3bSetup;k3bsetup;
 Keywords[de]=K3b;Einrichtungsassistent;Rechte;Setup;
