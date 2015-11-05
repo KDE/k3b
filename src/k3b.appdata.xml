@@ -9,6 +9,7 @@
     </p>
     <p xml:lang="bs">K3b je stvoren da bude aplikacija za prženje CD-ova bogata funkcijama i jednostavna za rukovanje. Sastoji se od tri dela u osnovi:</p>
     <p xml:lang="ca">El K3b es va crear per ser una aplicació de gravació de CD plena de funcionalitats i fàcil de fer servir. Bàsicament, consisteix de tres parts:</p>
+    <p xml:lang="ca-valencia">El K3b es va crear per ser una aplicació de gravació de CD plena de funcionalitats i fàcil de fer servir. Bàsicament, consisteix de tres parts:</p>
     <p xml:lang="cs">K3b bylo vytvořeno jako aplikace se spoustou vlastností a zároveň jednoduchá na používání. Skládá se v podstatě ze tří částí:</p>
     <p xml:lang="da">K3b blev skabt til at være et funktionsrigt og brugervenligt cd-brænderprogram. Det består basalt set af tre dele:</p>
     <p xml:lang="de">K3b wurde als CD-Brennprogramm mit vielen Funktionen und einfacher Bedienung entwickelt. Es besteht im wesentlichen aus drei Teilen:</p>
@@ -42,6 +43,7 @@
       </li>
       <li xml:lang="bs">Projekti: Projekti se stvaraju iz padajućeg menija, a zatim ispune podacima za upis.</li>
       <li xml:lang="ca">Els projectes: Els projectes es creen des del menú de fitxer i s'omplen amb les dades a gravar.</li>
+      <li xml:lang="ca-valencia">Els projectes: Els projectes es creen des del menú de fitxer i s'omplen amb les dades a gravar.</li>
       <li xml:lang="cs">Projekty: Projekty jsou vytvořeny z nabídky souboru a poté naplněny daty pro vypálení.</li>
       <li xml:lang="da">Projekterne: Projekter oprettes fra menuen Fil og fyldes så med data der skal brændes.</li>
       <li xml:lang="de">Projekte: Projekte werden im Dateimenü erstellt und dann mit Daten zum Brennen gefüllt.</li>
@@ -75,6 +77,7 @@
       <li xml:lang="ast">Les ferramientes: les ferramientes ufren ferramientes distnites como copia de CDo formatéu de DVD.</li>
       <li xml:lang="bs">Alati: Meni alati nudi različite alate kao što CD kopiranje ili DVD formatiranje.</li>
       <li xml:lang="ca">Les eines: El menú d'eines ofereix eines diferents com la còpia de CD o el formatat de DVD.</li>
+      <li xml:lang="ca-valencia">Les eines: El menú d'eines ofereix eines diferents com la còpia de CD o el formatat de DVD.</li>
       <li xml:lang="cs">Nástroje: Nabídka nástrojů nabízí různé nástroje jako třeba kopírování CD nebo formátování DVD.</li>
       <li xml:lang="da">Værktøjerne: Menuen Værktøjer tilbyder forskellige værktøjer såsom cd-kopiering eller dvd-formattering.</li>
       <li xml:lang="de">Extras: Im Menü Extras finden Sie verschiedene Aktionen wie das Kopieren von CDs oder die Formatierung von DVDs.</li>
@@ -108,6 +111,7 @@
       </li>
       <li xml:lang="bs">Kontekstno osjetljive medijske akcije: Kada kliknete na ikonu koja predstavlja CD / DVD uređaj, K3b će predstaviti njegov sadržaj i omogućiti neku dodatnu akciju. Ovo je, na primer način da čupate audio CD.</li>
       <li xml:lang="ca">Accions de suports sensibles al context: En clicar en la icona que representa una unitat de CD/DVD, el K3b presenta el seu contingut i permet diverses accions. Per exemple, aquesta és la manera d'extreure CD d'àudio.</li>
+      <li xml:lang="ca-valencia">Accions de suports sensibles al context: En clicar en la icona que representa una unitat de CD/DVD, el K3b presenta el seu contingut i permet diverses accions. Per exemple, esta és la manera d'extreure CD d'àudio.</li>
       <li xml:lang="cs">Činnosti s médii odpovídají situaci: Při kliknutí na ikonu reprezentující mechaniku CD/DVD, vám K3b zobrazí jejich obsah a nabídne nějakou další činnost. Například se takto dají ripovat audio CD.</li>
       <li xml:lang="da">Kontekstafhængige mediehandlinger: Ved klik på ikonet som svarer til cd-/dvd-drevet vil K3b præsentere dets indhold og muliggøre yderligere handlinger. Det er f.eks. sådan man ripper lyd-cd'er.</li>
       <li xml:lang="de">Kontextsensitive Aktionen für Medien: Wenn Sie auf das Symbol eines CD-/DVD-Laufwerks klicken, zeigt K3b deren Inhalt und ermöglicht weitere Aktionen, zum Beispiel das Auslesen einer Audio-CD.</li>
