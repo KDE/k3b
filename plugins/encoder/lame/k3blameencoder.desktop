@@ -2,6 +2,7 @@
 Name=K3b Lame MP3 Encoder
 Name[bs]=Lame Mp3 koder za K3b
 Name[ca]=Codificador MP3 Lame del K3b
+Name[ca@valencia]=Codificador MP3 Lame del K3b
 Name[cs]=K3b Lame MP3 převodník
 Name[da]=K3b Lame MP3-indkodning
 Name[de]=Lame-MP3-Kodierer
@@ -27,6 +28,7 @@ Name[x-test]=xxK3b Lame MP3 Encoderxx
 Comment=Encoding module to encode MPEG1 Layer III (MP3) files
 Comment[bs]=Modul kodiranja za kodiranje MPEG1 Layer III (mp3) datoteka
 Comment[ca]=Mòdul de codificació per codificar fitxers MPEG 1 Layer III (MP3)
+Comment[ca@valencia]=Mòdul de codificació per codificar fitxers MPEG 1 Layer III (MP3)
 Comment[cs]=Modul pro kompresi do souborů MPEG1 Layer III (MP3)
 Comment[da]=Indkodningsmodul til MPEG 1 Layer III-filer (MP3)
 Comment[de]=Kodierungsmodul zur Kodierung von MPEG1 Layer III-Dateien (MP3)
