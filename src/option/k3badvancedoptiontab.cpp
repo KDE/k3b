@@ -103,7 +103,7 @@ void K3b::AdvancedOptionTab::setupGui()
     m_checkForceUnsafeOperations->setToolTip( i18n("Force K3b to continue some operations otherwise deemed as unsafe") );
 
     m_checkShowForceGuiElements->setWhatsThis( i18n("<p>If this option is checked additional GUI "
-                                                    "elements which allow to influence the behavior of K3b are shown. "
+                                                    "elements which allow one to influence the behavior of K3b are shown. "
                                                     "This includes the manual selection of the used burning tool. "
                                                     "(Choose between cdrecord and cdrdao when writing a CD or between "
                                                     "cdrecord and growisofs when writing a DVD/BD.)"

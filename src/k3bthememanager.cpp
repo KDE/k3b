@@ -205,7 +205,7 @@ K3b::Theme* K3b::ThemeManager::currentTheme() const
 
 void K3b::ThemeManager::readConfig( const KConfigGroup& c )
 {
-    // allow to override the default theme by packaging a default config file
+    // allow one to override the default theme by packaging a default config file
     QString defaultTheme = c.readEntry( "default theme", "quant" );
 
     K3b::Version configVersion( c.readEntry( "config version", "0.1" ) );

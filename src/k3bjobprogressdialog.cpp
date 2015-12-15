@@ -100,7 +100,7 @@ K3b::JobProgressDialog::~JobProgressDialog()
 
 void K3b::JobProgressDialog::setupGUI()
 {
-    // KDialog does not allow to use Cancel and Close buttons at the same time!
+    // KDialog does not allow one to use Cancel and Close buttons at the same time!
     setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2 );
     setButtonText( User1, i18n("Show Debugging Output") );
     setButtonGuiItem( User2, KStandardGuiItem::close() );
