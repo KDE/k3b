@@ -97,7 +97,6 @@ namespace K3b {
          * \reimpl from QDialog
          */
         void reject() override;
-        virtual void slotButtonClicked( int button );
 
 	void slotShowDebuggingOutput();
 

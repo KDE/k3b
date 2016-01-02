@@ -405,7 +405,7 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     } else {
         spinYear->setValue( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() );
     }
-    QFrame* line = new QFrame( w );
+    QFrame* line = new QFrame( this );
     line->setFrameShape( QFrame::HLine );
     line->setFrameShadow( QFrame::Sunken );
     KComboBox* comboGenre = new KComboBox( this );

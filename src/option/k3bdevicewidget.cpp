@@ -58,7 +58,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_messageWidget->hide();
     m_messageWidget->setWordWrap( true );
 #ifdef ENABLE_PERMISSION_HELPER
-    m_addToGroupAction = new KAction( QIcon::fromTheme("dialog-password"), QString(), this );
+    m_addToGroupAction = new QAction( QIcon::fromTheme("dialog-password"), QString(), this );
 #endif
 
     // buttons
