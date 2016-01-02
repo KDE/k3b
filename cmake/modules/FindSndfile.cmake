@@ -21,22 +21,20 @@ endif ( SNDFILE_INCLUDE_DIR AND SNDFILE_LIBRARIES )
 IF (NOT WIN32)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
-  INCLUDE(UsePkgConfig)
+  include(FindPkgConfig)
 
-  PKGCONFIG(sndfile _SndfileIncDir _SndfileLinkDir _SndfileLinkFlags _SndfileCflags)
+  pkg_check_modules(_pc_SNDFILE sndfile)
 ENDIF (NOT WIN32)
 
 
 FIND_PATH(SNDFILE_INCLUDE_DIR
   NAMES sndfile.h
-  PATHS ${_SndfileIncDir}
-  NO_DEFAULT_PATH
+  HINTS ${_pc_SNDFILE_INCLUDE_DIRS}
 )
 
 FIND_LIBRARY(SNDFILE_LIBRARIES 
   NAMES sndfile
-  PATHS ${_SndfileLinkDir}
-  NO_DEFAULT_PATH
+  HINTS ${_pc_SNDFILE_LIBRARY_DIRS}
 )
 
 include(FindPackageHandleStandardArgs)
