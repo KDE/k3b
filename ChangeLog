@@ -223,7 +223,7 @@ Bugfixes:
  * Fixed read retry when reading data tracks (Bug 147778)
  * K3b's dialogs now honor the global button layout setting (Bug 147799)
  * Do not crash on mp3 files without tags if compiled with taglib support (Bug 142651)
- * Do not allow to copy a rewritable media to itself.
+ * Do not allow one to copy a rewritable media to itself.
  * Fixed crash on startup with devices that return bogus GET PERFORMANCE data (Bug 147676)
 
 1.0.2
