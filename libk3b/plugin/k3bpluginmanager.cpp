@@ -99,7 +99,8 @@ QList<K3b::Plugin*> K3b::PluginManager::plugins( const QString& group ) const
 void K3b::PluginManager::Private::loadPlugin( const KService::Ptr &service )
 {
     qDebug() << service->name() << service->library();
-    K3b::Plugin* plugin = service->createInstance<K3b::Plugin>( m_parent );
+    QString err;
+    K3b::Plugin* plugin = service->createInstance<K3b::Plugin>( 0, m_parent, QVariantList(), &err );
     if ( plugin ) {
         qDebug() << "Loaded plugin" << service->name();
         // FIXME: improve this versioning stuff
@@ -108,10 +109,12 @@ void K3b::PluginManager::Private::loadPlugin( const KService::Ptr &service )
             qDebug() << "plugin system does not fit";
         }
         else {
-            KPluginInfo pluginInfo( service );
-            plugin->m_pluginInfo = pluginInfo;
+            plugin->m_pluginInfo = KPluginInfo( service->entryPath() );
             plugins.append( plugin );
         }
+    }
+    else {
+        qDebug() << "Loading plugin" << service->name() << "failed. Error:" << err;
     }
 
 
