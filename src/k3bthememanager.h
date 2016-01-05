@@ -29,6 +29,7 @@ namespace K3b {
     {
     public:
         Theme();
+        Theme( QString name );
 
         QColor backgroundColor() const;
         QColor foregroundColor() const;

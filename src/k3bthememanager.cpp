@@ -34,6 +34,15 @@ K3b::Theme::Theme()
 }
 
 
+K3b::Theme::Theme( QString name)
+    : m_bgMode(BG_TILE)
+{
+    QString path = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/pics/" + name + "/k3b.theme" );
+    if( !path.isEmpty() )
+        m_path = path.left( path.length() - 9 );
+}
+
+
 QColor K3b::Theme::backgroundColor() const
 {
     if( m_bgColor.isValid() )
@@ -65,7 +74,7 @@ QPixmap K3b::Theme::pixmap( const QString& name ) const
             return *m_pixmapMap.insert( name, pix );
     }
 
-    qDebug() << "(K3b::Theme) " << m_name << ": could not load image " << name;
+    qDebug() << "(K3b::Theme)" << m_name << ": could not load image" << name << "in" << m_path;
 
     return m_emptyPixmap;
 }
@@ -276,7 +285,7 @@ void K3b::ThemeManager::loadThemes()
         QStringList entries = dir.entryList( QDir::Dirs|QDir::NoDotAndDotDot );
         // every theme dir needs to contain a k3b.theme file
         for( QStringList::const_iterator entryIt = entries.constBegin(); entryIt != entries.constEnd(); ++entryIt ) {
-            QString themeDir = *dirIt + *entryIt + '/';
+            QString themeDir = *dirIt + '/' + *entryIt + '/';
             if( !themeNames.contains( *entryIt ) && QFile::exists( themeDir + "k3b.theme" ) ) {
                 bool themeValid = true;
 
@@ -306,16 +315,13 @@ void K3b::ThemeManager::loadThemes()
 
 void K3b::ThemeManager::loadTheme( const QString& name )
 {
-    QString path = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/pics/" + name + "/k3b.theme" );
-    if( !path.isEmpty() ) {
-        K3b::Theme* t = new K3b::Theme();
+    K3b::Theme* t = new K3b::Theme( name );
+    if( !t->m_path.isEmpty() ) {
         t->m_name = name;
-        t->m_path = path.left( path.length() - 9 );
-        QFileInfo fi( t->m_path );
-        t->m_local = fi.isWritable();
+        t->m_local = QFileInfo( t->m_path ).isWritable();
 
         // load the stuff
-        KConfig cfg( path );
+        KConfig cfg( t->m_path + "/k3b.theme" );
         KConfigGroup group(&cfg,"");
         t->m_author = group.readEntry( "Author" );
         t->m_comment = group.readEntry( "Comment" );
@@ -325,8 +331,6 @@ void K3b::ThemeManager::loadTheme( const QString& name )
         t->m_bgMode = ( group.readEntry( "BackgroundMode" ) == "Scaled" ? K3b::Theme::BG_SCALE : K3b::Theme::BG_TILE );
 
         d->themes.append( t );
-    }
+    } else
+	delete t;
 }
-
-
-
