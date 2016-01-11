@@ -529,7 +529,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     bool haveMp3Decoder = false;
     for( QList<K3b::Plugin*>::const_iterator it = plugins.constBegin();
          it != plugins.constEnd(); ++it ) {
-        if( (*it)->pluginInfo().pluginName() == "k3bmaddecoder" ) {
+        if( (*it)->pluginInfo().isValid() && (*it)->pluginInfo().pluginName() == "k3bmaddecoder" ) {
             haveMp3Decoder = true;
             break;
         }

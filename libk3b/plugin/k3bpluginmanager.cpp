@@ -109,7 +109,7 @@ void K3b::PluginManager::Private::loadPlugin( const KService::Ptr &service )
             qDebug() << "plugin system does not fit";
         }
         else {
-            plugin->m_pluginInfo = KPluginInfo( service->entryPath() );
+            plugin->m_pluginInfo = KPluginInfo( service );
             plugins.append( plugin );
         }
     }
