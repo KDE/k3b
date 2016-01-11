@@ -48,6 +48,8 @@ K3b::OptionDialog::OptionDialog(QWidget *parent )
     setFaceType( List );
     setWindowTitle( i18n("Settings") );
 
+    this->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply );
+
     setupMiscPage();
     setupDevicePage();
     setupProgramsPage();
@@ -68,9 +70,9 @@ K3b::OptionDialog::OptionDialog(QWidget *parent )
     // because of the label in the device-tab
     resize( 700, 500 );
 
-    connect( this, SIGNAL(okClicked()), SLOT(slotOk()) );
-    connect( this, SIGNAL(defaultClicked()), SLOT(slotDefault()) );
-    connect( this, SIGNAL(applyClicked()), SLOT(slotApply()) );
+    connect( this->buttonBox()->button( QDialogButtonBox::Ok ), SIGNAL(clicked()), SLOT(slotOk()) );
+    connect( this->buttonBox()->button( QDialogButtonBox::RestoreDefaults ), SIGNAL(clicked()), SLOT(slotDefault()) );
+    connect( this->buttonBox()->button( QDialogButtonBox::Apply ), SIGNAL(clicked()), SLOT(slotApply()) );
 }
 
 
