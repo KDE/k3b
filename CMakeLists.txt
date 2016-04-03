@@ -42,7 +42,7 @@ option(K3B_BUILD_WAVE_DECODER_PLUGIN "Build Wave decoder plugin" ON)
 
 ##################  K3b requirements #################################
 include(KDEInstallDirs)
-include(KDECompilerSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
 include(FeatureSummary)
 include(GenerateExportHeader)
