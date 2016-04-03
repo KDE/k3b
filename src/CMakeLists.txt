@@ -260,7 +260,7 @@ install( PROGRAMS  org.kde.k3b.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 #install( FILES  k3b-iso.desktop k3b-cue.desktop DESTINATION ${APPLNK_INSTALL_DIR}/.hidden/ )
 install( FILES  k3b.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR})
 install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/k3b )
-install( FILES  k3b.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
+install( FILES  org.kde.k3b.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
 
 set( SHARED_MIME_INFO_MINIMUM_VERSION "0.23" )
 find_package( SharedMimeInfo REQUIRED )
