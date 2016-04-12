@@ -78,6 +78,7 @@ Comment[sr@ijekavian]=Модул за декодирање ВМА фајлова
 Comment[sr@ijekavianlatin]=Modul za dekodiranje WMA fajlova
 Comment[sr@latin]=Modul za dekodiranje WMA fajlova
 Comment[sv]=Avkodningsmodul för att avkoda WMA-filer
+Comment[tr]=WMA dosyalarının kodlarını çözmek için çözücü modül
 Comment[uk]=Модуль для декодування файлів WMA
 Comment[x-test]=xxDecoding module to decode WMA filesxx
 Type=Service
