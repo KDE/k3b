@@ -101,7 +101,6 @@ K3b::JobProgressDialog::~JobProgressDialog()
 void K3b::JobProgressDialog::setupGUI()
 {
     QVBoxLayout* mainLayout = new QVBoxLayout( this );
-    mainLayout->setContentsMargins( 0, 0, 0, 0 );
 
     // header
     // ------------------------------------------------------------------------------------------
