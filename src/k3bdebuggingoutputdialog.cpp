@@ -63,7 +63,7 @@ K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
   buttonBox->addButton( QDialogButtonBox::Close );
   buttonBox->addButton( saveButton, QDialogButtonBox::NoRole );
   buttonBox->addButton( copyButton, QDialogButtonBox::NoRole );
-  connect( buttonBox, SIGNAL(accepted()), this, SLOT(accept()) );
+  connect( buttonBox->button( QDialogButtonBox::Close ), SIGNAL(clicked()), this, SLOT(accept()) );
 
   QVBoxLayout* layout = new QVBoxLayout( this );
   layout->addWidget( debugView );
