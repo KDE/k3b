@@ -140,15 +140,12 @@
       <li xml:lang="x-test">xxContext sensitive media actions: When clicking on the Icon representing a CD/DVD drive K3b will present its contents and allow some further action. This is for example the way to rip audio CDs.xx</li>
     </ul>
   </description>
-  <url type="homepage">http://www.k3b.org/</url>
+  <url type="homepage">http://k3b.plainblack.com/</url>
   <url type="faq">http://k3b.plainblack.com/faq</url>
   <url type="donation">http://k3b.plainblack.com/donations</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://k3b.plainblack.com/uploads/YG/sD/YGsDcV6bDsyuBRt42GWFSA/welcome_screenshot1.png</image>
-    </screenshot>
-    <screenshot>
-      <image>http://k3b.plainblack.com/uploads/hh/Ia/hhIaQQcwzlzPkOEbV6zSiQ/datadvd.png</image>
+      <image>https://www.kde.org/images/screenshots/k3b.png</image>
     </screenshot>
   </screenshots>
   <x-updatecontact>k3b@kde.org</x-updatecontact>
