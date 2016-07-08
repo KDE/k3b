@@ -94,7 +94,7 @@ void K3b::Iso9660ImageWritingJob::start()
         return;
     }
 
-    KIO::filesize_t mb = K3b::imageFilesize( m_imagePath )/1024ULL/1024ULL;
+    KIO::filesize_t mb = K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/1024ULL/1024ULL;
 
     // very rough test but since most dvd images are 4,x or 8,x GB it should be enough
     d->isDvdImage = ( mb > 900ULL );
@@ -132,7 +132,7 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
             }
             d->verifyJob->setDevice( m_device );
             d->verifyJob->clear();
-            d->verifyJob->addTrack( 1, d->checksumPipe.checksum(), K3b::imageFilesize( m_imagePath )/2048 );
+            d->verifyJob->addTrack( 1, d->checksumPipe.checksum(), K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048 );
 
             if( m_copies == 1 )
                 emit newTask( i18n("Verifying written data") );
@@ -266,7 +266,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 
 
     // wait for the media
-    Device::MediaType media = waitForMedium( m_device, K3b::Device::STATE_EMPTY, mt, K3b::imageFilesize( m_imagePath )/2048 );
+    Device::MediaType media = waitForMedium( m_device, K3b::Device::STATE_EMPTY, mt, K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048 );
     if( media == Device::MEDIA_UNKNOWN ) {
         d->finished = true;
         emit canceled();
@@ -310,7 +310,7 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter()
     d->writer->setMultiSession( m_noFix );
 
     Device::Toc toc;
-    toc << Device::Track( 0, Msf(K3b::imageFilesize( m_imagePath )/2048)-1,
+    toc << Device::Track( 0, Msf(K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048)-1,
                           Device::Track::TYPE_DATA,
                           ( m_dataMode == K3b::DataModeAuto && m_noFix ) ||
                           m_dataMode == K3b::DataMode2

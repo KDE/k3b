@@ -229,11 +229,8 @@ KIO::filesize_t K3b::filesize( const QUrl& url )
     else {
         KIO::UDSEntry uds;
         KIO::StatJob* statJob = KIO::stat( url, KIO::HideProgressInfo );
-        QObject::connect( statJob, &KJob::result, [&](KJob*){
-            if( statJob->error() == KJob::NoError )
-                uds = statJob->statResult();
-        } );
-        statJob->exec();
+        if (statJob->exec())
+            uds = statJob->statResult();
         fSize = uds.numberValue( KIO::UDSEntry::UDS_SIZE );
     }
 
@@ -250,13 +247,10 @@ KIO::filesize_t K3b::imageFilesize( const QUrl& url )
         QUrl nextUrl( url );
         nextUrl.setPath(nextUrl.path() + '.' + QString::number(cnt).rightJustified( 3, '0' ));
         KIO::StatJob* statJob = KIO::stat(nextUrl, KIO::StatJob::SourceSide, KIO::HideProgressInfo);
-        QObject::connect(statJob, &KJob::result, [&](KJob*) {
-            if( statJob->error() != KJob::NoError )
-                size += K3b::filesize( nextUrl );
-            else
-                exists = false;
-        } );
-        statJob->exec();
+        if (statJob->exec())
+            size += K3b::filesize(nextUrl);
+        else
+            exists = false;
     }
     return size;
 }

@@ -104,7 +104,7 @@ void K3b::Md5Job::start()
             return;
         }
 
-        d->imageSize = K3b::filesize( d->filename );
+        d->imageSize = K3b::filesize( QUrl::fromLocalFile(d->filename) );
     }
     else
         d->imageSize = 0;
