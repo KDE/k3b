@@ -17,13 +17,15 @@
 
 #include "k3bdevice.h"
 
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QLabel>
-#include <QList>
-#include <QPushButton>
+#include <QtCore/QDebug>
+#include <QtCore/QList>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
 
 #include <sys/types.h>
 #include <signal.h>
@@ -40,22 +42,28 @@ static QString joinProcessNames( const QList<K3b::LsofWrapper::Process>& apps )
 
 
 K3b::LsofWrapperDialog::LsofWrapperDialog( QWidget* parent )
-    : KDialog( parent)
+    : QDialog( parent)
 {
-    setCaption(i18n("Device in use"));
-    setButtons (Close|User1|User2);
-    setDefaultButton(Close);
+    setWindowTitle(i18n("Device in use"));
     setModal(true);
-    setButtonText(User1,i18n("Quit the other applications"));
-    setButtonText(User2,i18n("Check again"));
-    setButtonText( Close, i18n("Continue") );
 
     m_label = new QLabel( this );
     m_label->setWordWrap( true );
-    setMainWidget( m_label );
 
-    connect( this, SIGNAL(user1Clicked()), SLOT(slotQuitOtherApps()) );
-    connect( this, SIGNAL(user2Clicked()), SLOT(slotCheckDevice()) );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+    QPushButton* continueButton = buttonBox->addButton( i18n("Continue"), QDialogButtonBox::AcceptRole );
+    continueButton->setDefault( true );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+
+    QPushButton* quitButton = buttonBox->addButton( i18n("Quit the other applications"), QDialogButtonBox::NoRole );
+    connect( quitButton, SIGNAL(clicked()), SLOT(slotQuitOtherApps()) );
+
+    QPushButton* checkButton = buttonBox->addButton( i18n("Check again"), QDialogButtonBox::NoRole );
+    connect( checkButton, SIGNAL(clicked()), SLOT(slotCheckDevice()) );
+
+    QVBoxLayout* layout = new QVBoxLayout( this );
+    layout->addWidget( m_label );
+    layout->addWidget( buttonBox );
 }
 
 
@@ -122,4 +130,4 @@ void K3b::LsofWrapperDialog::checkDevice( K3b::Device::Device* dev, QWidget* par
         dlg.exec();
 }
 
-#include "k3blsofwrapperdialog.moc"
+

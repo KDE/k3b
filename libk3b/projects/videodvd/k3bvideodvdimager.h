@@ -19,6 +19,8 @@
 
 #include "k3bisoimager.h"
 
+#include <QtCore/QScopedPointer>
+
 namespace K3b {
     class VideoDvdDoc;
 
@@ -54,7 +56,7 @@ namespace K3b {
         void fixVideoDVDSettings();
 
         class Private;
-        Private* d;
+        QScopedPointer<Private> d;
     };
 }
 

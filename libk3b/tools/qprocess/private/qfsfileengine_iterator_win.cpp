@@ -45,7 +45,7 @@
 #include "qplatformdefs.h"
 
 #include <QtCore/qvariant.h>
-#include <QtCore/qmutex.h>
+#include <QtCore/QtCore/QMutex>
 #include <private/qmutexpool_p.h>
 
 QT_BEGIN_NAMESPACE

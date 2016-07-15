@@ -16,9 +16,9 @@
 #define _K3B_AUDIO_TRACK_ADDING_DIALOG_H_
 
 #include "k3bjobhandler.h"
-#include <kdialog.h>
-#include <kurl.h>
-#include <qstringlist.h>
+#include <QtCore/QUrl>
+#include <QtCore/QStringList>
+#include <QtWidgets/QDialog>
 
 
 class QLabel;
@@ -30,12 +30,12 @@ namespace K3b {
     class AudioDoc;
     class AudioFileAnalyzerJob;
 
-    class AudioTrackAddingDialog : public KDialog, public JobHandler
+    class AudioTrackAddingDialog : public QDialog, public JobHandler
     {
         Q_OBJECT
 
     public:
-        AudioTrackAddingDialog( const KUrl::List& urls,
+        AudioTrackAddingDialog( const QList<QUrl>& urls,
                                 AudioDoc* doc,
                                 AudioTrack* afterTrack = 0,
                                 AudioTrack* parentTrack = 0,
@@ -47,7 +47,7 @@ namespace K3b {
          * shows AudioTrackAddingDialog in non-blocking fashion
          * (doesn't wait till dialog is closed)
          */
-        static void addUrls( const KUrl::List& urls,
+        static void addUrls( const QList<QUrl>& urls,
                             AudioDoc* doc,
                             AudioTrack* afterTrack = 0,
                             AudioTrack* parentTrack = 0,
@@ -67,7 +67,7 @@ namespace K3b {
                                          Device::MediaStates = Device::STATE_EMPTY,
                                          Device::MediaTypes = Device::MEDIA_WRITABLE_CD,
                                          const K3b::Msf& = K3b::Msf(),
-                                         const QString& = QString() ) { return Device::MEDIA_UNKNOWN; }
+                                         const QString& = QString() ) override { return Device::MEDIA_UNKNOWN; }
 
         /**
          * @reimplemented from JobHandler
@@ -75,13 +75,13 @@ namespace K3b {
         bool questionYesNo( const QString&,
                             const QString& = QString(),
                             const KGuiItem& = KStandardGuiItem::yes(),
-                            const KGuiItem& = KStandardGuiItem::no() ) { return false; }
+                            const KGuiItem& = KStandardGuiItem::no() ) override { return false; }
 
         /**
          * @reimplemented from JobHandler
          */
         void blockingInformation( const QString&,
-                                  const QString& = QString() ) {}
+                                  const QString& = QString() ) override {}
 
         BusyWidget* m_busyWidget;
         QLabel* m_infoLabel;
@@ -91,14 +91,14 @@ namespace K3b {
         QStringList m_nonLocalFiles;
         QStringList m_unsupportedFiles;
 
-        KUrl::List m_urls;
+        QList<QUrl> m_urls;
 
         AudioDoc* m_doc;
         AudioTrack* m_trackAfter;
         AudioTrack* m_parentTrack;
         AudioDataSource* m_sourceAfter;
 
-        KUrl m_cueUrl;
+        QUrl m_cueUrl;
 
         bool m_bCanceled;
 

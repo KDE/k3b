@@ -23,16 +23,14 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-// include files for Qt
-#include <QList>
-#include <QVBoxLayout>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+#include <KXmlGui/KToolBar>
 
-// include files for KDE
-#include <KAction>
-#include <KLocale>
-#include <KMessageBox>
-#include <KDebug>
-#include <KToolBar>
+#include <QtCore/QDebug>
+#include <QtCore/QList>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QVBoxLayout>
 
 K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     : QWidget( parent ),
@@ -51,10 +49,10 @@ K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     m_layout->setSpacing( 0 );
     m_layout->setContentsMargins( 0, 0, 0, 0 );
 
-    KAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
+    QAction* burnAction = K3b::createAction(this,i18n("&Burn"), "tools-media-optical-burn", Qt::CTRL + Qt::Key_B, this, SLOT(slotBurn()),
                                             actionCollection(), "project_burn");
     burnAction->setToolTip( i18n("Open the burn dialog for the current project") );
-    KAction* propAction = K3b::createAction(this, i18n("&Properties"), "document-properties", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
+    QAction* propAction = K3b::createAction(this, i18n("&Properties"), "document-properties", Qt::CTRL + Qt::Key_P, this, SLOT(slotProperties()),
                                             actionCollection(), "project_properties");
     propAction->setToolTip( i18n("Open the properties dialog") );
 
@@ -98,7 +96,7 @@ void K3b::View::slotBurn()
             delete dlg;
         }
         else {
-            kDebug() << "(K3b::Doc) Error: no burndialog available.";
+            qDebug() << "(K3b::Doc) Error: no burndialog available.";
         }
     }
 }
@@ -112,7 +110,7 @@ void K3b::View::slotProperties()
         delete dlg;
     }
     else {
-        kDebug() << "(K3b::Doc) Error: no burndialog available.";
+        qDebug() << "(K3b::Doc) Error: no burndialog available.";
     }
 }
 
@@ -123,7 +121,7 @@ QList<QAction*> K3b::View::createPluginsActions( Doc::Type docType )
     Q_FOREACH( Plugin* plugin, k3bcore->pluginManager()->plugins( "ProjectPlugin" ) ) {
         ProjectPlugin* pp = dynamic_cast<ProjectPlugin*>( plugin );
         if( pp && pp->type().testFlag( docType) ) {
-            QAction* action = new KAction( pp->icon(), pp->text(), this );
+            QAction* action = new QAction( pp->icon(), pp->text(), this );
             action->setToolTip( pp->toolTip() );
             action->setWhatsThis( pp->whatsThis() );
             connect( action, SIGNAL(triggered(bool)),
@@ -150,16 +148,15 @@ void K3b::View::slotPluginButtonClicked()
 }
 
 
-void K3b::View::addUrl( const KUrl& url )
+void K3b::View::addUrl( const QUrl& url )
 {
-    KUrl::List urls(url);
-    addUrls( urls );
+    addUrls( QList<QUrl>() << url );
 }
 
 
-void K3b::View::addUrls( const KUrl::List& urls )
+void K3b::View::addUrls( const QList<QUrl>& urls )
 {
     doc()->addUrls( urls );
 }
 
-#include "k3bview.moc"
+

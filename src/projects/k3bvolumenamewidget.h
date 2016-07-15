@@ -15,7 +15,7 @@
 #ifndef K3BVOLUMENAMEWIDGET_H
 #define K3BVOLUMENAMEWIDGET_H
 
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class QEvent;
 

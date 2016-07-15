@@ -15,7 +15,7 @@
 #ifndef _K3B_ENCODING_CONVERTER_H_
 #define _K3B_ENCODING_CONVERTER_H_
 
-#include <QByteArray>
+#include <QtCore/QByteArray>
 
 namespace K3b {
     

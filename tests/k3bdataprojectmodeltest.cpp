@@ -20,12 +20,10 @@
 #include "k3bspecialdataitem.h"
 #include "k3btestutils.h"
 
-#include <qtest_kde.h>
-
 #include <QtTest/QSignalSpy>
 #include <QtTest/QTest>
 
-QTEST_KDEMAIN_CORE( DataProjectModelTest )
+QTEST_GUILESS_MAIN( DataProjectModelTest )
 
 Q_DECLARE_METATYPE( QModelIndex )
 
@@ -96,4 +94,3 @@ void DataProjectModelTest::testRemove()
 }
 
 
-#include "k3bdataprojectmodeltest.moc"

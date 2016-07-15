@@ -33,14 +33,13 @@
 #include "k3bchecksumpipe.h"
 #include "k3bverificationjob.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kio/global.h>
+#include <KIOCore/KIO/Global>
 
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qapplication.h>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 
 class K3b::DvdCopyJob::Private
@@ -191,17 +190,17 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             emit infoMessage( i18n("Found encrypted DVD."), MessageWarning );
             // check for libdvdcss
             bool haveLibdvdcss = false;
-            kDebug() << "(K3b::DvdCopyJob) trying to open libdvdcss.";
+            qDebug() << "(K3b::DvdCopyJob) trying to open libdvdcss.";
             if( K3b::LibDvdCss* libcss = K3b::LibDvdCss::create() ) {
-                kDebug() << "(K3b::DvdCopyJob) succeeded.";
-                kDebug() << "(K3b::DvdCopyJob) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
+                qDebug() << "(K3b::DvdCopyJob) succeeded.";
+                qDebug() << "(K3b::DvdCopyJob) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
                           << libcss->open(m_readerDevice) << endl;
                 haveLibdvdcss = true;
 
                 delete libcss;
             }
             else
-                kDebug() << "(K3b::DvdCopyJob) failed.";
+                qDebug() << "(K3b::DvdCopyJob) failed.";
 
             if( !haveLibdvdcss ) {
                 emit infoMessage( i18n("Cannot copy encrypted DVDs."), MessageError );
@@ -425,7 +424,7 @@ void K3b::DvdCopyJob::cancel()
         d->imageFile.close();
     }
     else {
-        kDebug() << "(K3b::DvdCopyJob) not running.";
+        qDebug() << "(K3b::DvdCopyJob) not running.";
     }
 }
 
@@ -588,7 +587,7 @@ void K3b::DvdCopyJob::slotReaderFinished( bool success )
                 // eject the media (we do this blocking to know if it worked
                 // because if it did not it might happen that k3b overwrites a CD-RW
                 // source)
-                kDebug() << "Ejecting read medium" << m_readerDevice->blockDeviceName();
+                qDebug() << "Ejecting read medium" << m_readerDevice->blockDeviceName();
                 if( !K3b::eject( m_readerDevice ) ) {
                     blockingInformation( i18n("K3b was unable to eject the source medium. Please do so manually.") );
                 }
@@ -989,4 +988,4 @@ void K3b::DvdCopyJob::setVerifyData( bool b )
     d->verifyData = b;
 }
 
-#include "k3bdvdcopyjob.moc"
+

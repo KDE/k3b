@@ -15,7 +15,7 @@
 #ifndef K3BDATAPROJECTSORTPROXYMODEL_H
 #define K3BDATAPROJECTSORTPROXYMODEL_H
 
-#include <QSortFilterProxyModel>
+#include <QtCore/QSortFilterProxyModel>
 
 
 namespace K3b {

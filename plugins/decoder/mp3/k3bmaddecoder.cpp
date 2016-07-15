@@ -25,16 +25,14 @@
 
 #include "k3bmaddecoder.h"
 #include "k3bmad.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
-#include <KUrl>
-#include <KDebug>
-#include <KLocale>
-
-#include <QString>
-#include <QFile>
-#include <QVector>
+#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtCore/QFile>
+#include <QtCore/QVector>
 
 #include <stdlib.h>
 #include <cmath>
@@ -46,6 +44,8 @@
 #endif
 
 
+
+K3B_EXPORT_PLUGIN(k3bmaddecoder, K3bMadDecoderFactory)
 
 int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
 
@@ -158,7 +158,7 @@ bool K3bMadDecoder::initDecoderInternal()
 
 unsigned long K3bMadDecoder::countFrames()
 {
-    kDebug() << "(K3bMadDecoder::countFrames)";
+    qDebug() << "(K3bMadDecoder::countFrames)";
 
     unsigned long frames = 0;
     bool error = false;
@@ -192,12 +192,12 @@ unsigned long K3bMadDecoder::countFrames()
         float seconds = (float)d->handle->madTimer->seconds +
                         (float)d->handle->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
         frames = (unsigned long)ceil(seconds * 75.0);
-        kDebug() << "(K3bMadDecoder) length of track " << seconds;
+        qDebug() << "(K3bMadDecoder) length of track " << seconds;
     }
 
     cleanup();
 
-    kDebug() << "(K3bMadDecoder::countFrames) end";
+    qDebug() << "(K3bMadDecoder::countFrames) end";
 
     return frames;
 }
@@ -267,7 +267,7 @@ bool K3bMadDecoder::createPcmSamples( mad_synth* synth )
     // this should not happen since we only decode if the
     // output buffer has enough free space
     if( d->outputBufferEnd - d->outputPointer < nsamples*4 ) {
-        kDebug() <<  "(K3bMadDecoder) buffer overflow!";
+        qDebug() <<  "(K3bMadDecoder) buffer overflow!";
         return false;
     }
 
@@ -328,7 +328,7 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
     // seek in the input file behind the already decoded data
     d->handle->inputSeek( d->seekPositions[frame] );
 
-    kDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with "
+    qDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with "
              << frameReservoirProtect << " reservoir frames." << endl;
 
     // decode some frames ignoring MAD_ERROR_BADDATAPTR errors
@@ -340,12 +340,12 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
                 if( d->handle->madStream->error == MAD_ERROR_BUFLEN )
                     continue;
                 else if( d->handle->madStream->error != MAD_ERROR_BADDATAPTR ) {
-                    kDebug() << "(K3bMadDecoder) Seeking: recoverable mad error ("
+                    qDebug() << "(K3bMadDecoder) Seeking: recoverable mad error ("
                              << mad_stream_errorstr(d->handle->madStream) << ")" << endl;
                     continue;
                 }
                 else {
-                    kDebug() << "(K3bMadDecoder) Seeking: ignoring ("
+                    qDebug() << "(K3bMadDecoder) Seeking: ignoring ("
                              << mad_stream_errorstr(d->handle->madStream) << ")" << endl;
                 }
             }
@@ -466,7 +466,7 @@ K3b::AudioDecoder* K3bMadDecoderFactory::createDecoder( QObject* parent) const
 }
 
 
-bool K3bMadDecoderFactory::canDecode( const KUrl& url )
+bool K3bMadDecoderFactory::canDecode( const QUrl& url )
 {
     //
     // HACK:
@@ -514,7 +514,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
                 // only support layer III for now since otherwise some wave files
                 // are taken for layer I
                 if( ++cnt >= 5 ) {
-                    kDebug() << "(K3bMadDecoder) valid mpeg 1 layer " << layer
+                    qDebug() << "(K3bMadDecoder) valid mpeg 1 layer " << layer
                              << " file with " << c << " channels and a samplerate of "
                              << s << endl;
                     return ( layer == MAD_LAYER_III );
@@ -525,7 +525,7 @@ bool K3bMadDecoderFactory::canDecode( const KUrl& url )
         }
     }
 
-    kDebug() << "(K3bMadDecoder) unsupported format: " << url.toLocalFile();
+    qDebug() << "(K3bMadDecoder) unsupported format: " << url.toLocalFile();
 
     return false;
 }

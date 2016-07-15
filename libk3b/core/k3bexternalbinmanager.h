@@ -16,12 +16,13 @@
 #ifndef K3B_EXTERNAL_BIN_MANAGER_H
 #define K3B_EXTERNAL_BIN_MANAGER_H
 
-#include <QMap>
-#include <QObject>
-#include <QString>
-#include <QStringList>
 #include "k3b_export.h"
 #include "k3bversion.h"
+
+#include <QtCore/QMap>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 class KConfigGroup;
 

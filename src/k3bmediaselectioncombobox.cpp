@@ -26,13 +26,13 @@
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
 
-#include <qfont.h>
-#include <qmap.h>
-#include <qvector.h>
-#include <QList>
+#include <QtCore/QDebug>
+#include <QtCore/QMap>
+#include <QtCore/QVector>
+#include <QtCore/QList>
+#include <QtGui/QFont>
 
 Q_DECLARE_METATYPE(K3b::Medium)
 
@@ -448,4 +448,4 @@ void K3b::MediaSelectionComboBox::slotUpdateToolTip( K3b::Device::Device* dev )
     setToolTip( dev ? mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) : QString() );
 }
 
-#include "k3bmediaselectioncombobox.moc"
+

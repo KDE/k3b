@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 #include "k3bffmpegwrapper.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
@@ -34,8 +35,6 @@ extern "C" {
 }
 
 #include <string.h>
-
-#include <klocale.h>
 
 
 #if LIBAVFORMAT_BUILD < 4629
@@ -140,7 +139,7 @@ bool K3bFFMpegFile::open()
     // open the file
     int err = ::avformat_open_input( &d->formatContext, m_filename.toLocal8Bit(), 0, 0 );
     if( err < 0 ) {
-        kDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err;
+        qDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err;
         return false;
     }
 
@@ -149,7 +148,7 @@ bool K3bFFMpegFile::open()
 
     // we only handle files containing one audio stream
     if( d->formatContext->nb_streams != 1 ) {
-        kDebug() << "(K3bFFMpegFile) more than one stream in " << m_filename;
+        qDebug() << "(K3bFFMpegFile) more than one stream in " << m_filename;
         return false;
     }
 
@@ -157,21 +156,21 @@ bool K3bFFMpegFile::open()
     ::AVCodecContext* codecContext =  FFMPEG_CODEC(d->formatContext->streams[0]);
     if( codecContext->codec_type != AVMEDIA_TYPE_AUDIO)
     {
-        kDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename;
+        qDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename;
         return false;
     }
 
     // get the codec
     d->codec = ::avcodec_find_decoder(codecContext->codec_id);
     if( !d->codec ) {
-        kDebug() << "(K3bFFMpegFile) no codec found for " << m_filename;
+        qDebug() << "(K3bFFMpegFile) no codec found for " << m_filename;
         return false;
     }
 
     // open the codec on our context
-    kDebug() << "(K3bFFMpegFile) found codec for " << m_filename;
+    qDebug() << "(K3bFFMpegFile) found codec for " << m_filename;
     if( ::avcodec_open2( codecContext, d->codec, 0 ) < 0 ) {
-        kDebug() << "(K3bFFMpegDecoderFactory) could not open codec.";
+        qDebug() << "(K3bFFMpegDecoderFactory) could not open codec.";
         return false;
     }
 
@@ -179,7 +178,7 @@ bool K3bFFMpegFile::open()
     d->length = K3b::Msf::fromSeconds( (double)d->formatContext->duration / (double)AV_TIME_BASE );
 
     if( d->length == 0 ) {
-        kDebug() << "(K3bFFMpegDecoderFactory) invalid length.";
+        qDebug() << "(K3bFFMpegDecoderFactory) invalid length.";
         return false;
     }
 
@@ -380,7 +379,7 @@ int K3bFFMpegFile::fillOutputBuffer()
         if( d->packetSize <= 0 || len < 0 )
             ::av_free_packet( &d->packet );
         if( len < 0 ) {
-            kDebug() << "(K3bFFMpegFile) decoding failed for " << m_filename;
+            qDebug() << "(K3bFFMpegFile) decoding failed for " << m_filename;
             return -1;
         }
 

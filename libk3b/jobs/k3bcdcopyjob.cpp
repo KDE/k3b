@@ -31,24 +31,23 @@
 #include "k3binffilewriter.h"
 #include "k3bglobalsettings.h"
 #include "k3bcddb.h"
+#include "k3b_i18n.h"
 
-#include <kconfig.h>
-#include <kstandarddirs.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <ktemporaryfile.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kio/global.h>
+#include <KConfigCore/KConfig>
+#include <KIOCore/KIO/Global>
+#include <KIOCore/KIO/DeleteJob>
+#include <KIOCore/KIO/Job>
 
-#include <qtimer.h>
-#include <qstringlist.h>
-#include <qfile.h>
-#include <qregexp.h>
-#include <qfileinfo.h>
-#include <qdir.h>
-#include <qapplication.h>
-#include <qvector.h>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QRegExp>
+#include <QtCore/QStringList>
+#include <QtCore/QTemporaryFile>
+#include <QtCore/QTimer>
+#include <QtCore/QVector>
+#include <QtWidgets/QApplication>
 
 #include <libkcddb/client.h>
 #include <libkcddb/cdinfo.h>
@@ -248,11 +247,11 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                 if( m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ||
                     m_readerDevice->read10( buffer, 2048, (*it).lastSector().lba(), 1 ) ) {
                     d->dataSessionProbablyTAORecorded.append(false);
-                    kDebug() << "(K3b::CdCopyJob) track " << i << " probably DAO recorded.";
+                    qDebug() << "(K3b::CdCopyJob) track " << i << " probably DAO recorded.";
                 }
                 else {
                     d->dataSessionProbablyTAORecorded.append(true);
-                    kDebug() << "(K3b::CdCopyJob) track " << i << " probably TAO recorded.";
+                    qDebug() << "(K3b::CdCopyJob) track " << i << " probably TAO recorded.";
                 }
             }
 
@@ -415,7 +414,7 @@ void K3b::CdCopyJob::queryCddb()
                  this, SLOT(slotCddbQueryFinished(KCDDB::Result)) );
     }
 
-    d->cddb->config().readConfig();
+    d->cddb->config().load();
     d->cddb->lookup( K3b::CDDB::createTrackOffsetList( d->toc ) );
 }
 
@@ -516,7 +515,7 @@ void K3b::CdCopyJob::cancel()
 
 bool K3b::CdCopyJob::prepareImageFiles()
 {
-    kDebug() << "(K3b::CdCopyJob) prepareImageFiles()";
+    qDebug() << "(K3b::CdCopyJob) prepareImageFiles()";
 
     d->imageNames.clear();
     d->infNames.clear();
@@ -549,7 +548,7 @@ bool K3b::CdCopyJob::prepareImageFiles()
         if( !tempDirReady ) {
             QDir dir( m_tempPath );
             m_tempPath = K3b::findUniqueFilePrefix( "k3bCdCopy", m_tempPath );
-            kDebug() << "(K3b::CdCopyJob) creating temp dir: " << m_tempPath;
+            qDebug() << "(K3b::CdCopyJob) creating temp dir: " << m_tempPath;
             if( !dir.mkdir( m_tempPath ) ) {
                 emit infoMessage( i18n("Unable to create temporary folder '%1'.",m_tempPath), MessageError );
                 return false;
@@ -572,9 +571,9 @@ bool K3b::CdCopyJob::prepareImageFiles()
             ++i;
         }
 
-        kDebug() << "(K3b::CdCopyJob) created image filenames:";
+        qDebug() << "(K3b::CdCopyJob) created image filenames:";
         for( int i = 0; i < d->imageNames.count(); ++i )
-            kDebug() << "(K3b::CdCopyJob) " << d->imageNames[i];
+            qDebug() << "(K3b::CdCopyJob) " << d->imageNames[i];
 
         return true;
     }
@@ -798,8 +797,7 @@ bool K3b::CdCopyJob::writeNextSession()
                     // the same way we delete them when writing with images
                     // It is important that the files have the ending inf because
                     // cdrecord only checks this
-                    KTemporaryFile tmp;
-                    tmp.setSuffix( ".inf" );
+                    QTemporaryFile tmp( "XXXXXX.inf" );
                     tmp.setAutoRemove( false );
                     tmp.open();
                     d->infNames.append( tmp.fileName() );
@@ -1126,7 +1124,7 @@ void K3b::CdCopyJob::cleanup()
 
         // remove the tempdir created in prepareImageFiles()
         if( d->deleteTempDir ) {
-            KIO::NetAccess::del( m_tempPath, 0 );
+            KIO::del( QUrl::fromLocalFile( m_tempPath ), KIO::HideProgressInfo )->exec();
             d->deleteTempDir = false;
         }
     }
@@ -1270,4 +1268,4 @@ void K3b::CdCopyJob::finishJob( bool c, bool e )
     }
 }
 
-#include "k3bcdcopyjob.moc"
+

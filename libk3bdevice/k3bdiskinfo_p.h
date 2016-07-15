@@ -15,11 +15,11 @@
 #ifndef _K3B_DISKINFO_P_H_
 #define _K3B_DISKINFO_P_H_
 
-#include <QtCore/QByteArray>
-#include <QtCore/QSharedData>
-
 #include "k3bmsf.h"
 #include "k3bdeviceglobals.h"
+
+#include <QtCore/QByteArray>
+#include <QtCore/QSharedData>
 
 namespace K3b {
     namespace Device {

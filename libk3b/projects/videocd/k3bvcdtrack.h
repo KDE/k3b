@@ -16,17 +16,14 @@
 #ifndef K3BVCDTRACK_H
 #define K3BVCDTRACK_H
 
-// Qt Includes
-#include <qstring.h>
-#include <qfileinfo.h>
-#include <qfile.h>
-
-// Kde Includes
-#include <kio/global.h>
-
-// K3b Includes
 #include "mpeginfo/k3bmpeginfo.h"
 #include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
+
+#include <QtCore/QString>
+#include <QtCore/QFileInfo>
+#include <QtCore/QFile>
 
 namespace K3b {
     class LIBK3B_EXPORT VcdTrack

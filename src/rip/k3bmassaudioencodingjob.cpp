@@ -17,12 +17,10 @@
 #include "k3bcuefilewriter.h"
 #include "k3bwavefilewriter.h"
 
+#include <KI18n/KLocalizedString>
 #include <libkcddb/cdinfo.h>
 
-#include <KLocale>
-#include <KDebug>
-#include <KStandardDirs>
-
+#include <QtCore/QDebug>
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtCore/QIODevice>
@@ -288,7 +286,7 @@ bool K3b::MassAudioEncodingJob::encodeTrack( int trackIndex, const QString& file
     }
     
     QDir dir = QFileInfo( filename ).dir();
-    if( !KStandardDirs::makeDir( dir.path() ) ) {
+    if( !QDir().mkpath( dir.path() ) ) {
         emit infoMessage( i18n("Unable to create folder %1",dir.path()), K3b::Job::MessageError );
         return false;
     }
@@ -370,7 +368,7 @@ bool K3b::MassAudioEncodingJob::encodeTrack( int trackIndex, const QString& file
             }
 
             if( d->encoder->encode( buffer, readLength ) < 0 ) {
-                kDebug() << "error while encoding.";
+                qDebug() << "error while encoding.";
                 emit infoMessage( d->encoder->lastErrorString(), K3b::Job::MessageError );
                 emit infoMessage( i18n("Error while encoding track %1.",trackIndex), K3b::Job::MessageError );
                 return false;
@@ -403,7 +401,7 @@ bool MassAudioEncodingJob::writePlaylist()
     QFileInfo playlistInfo( d->playlistFilename );
     QDir playlistDir( playlistInfo.dir() );
 
-    if( !KStandardDirs::makeDir( playlistDir.path() ) ) {
+    if( !QDir().mkpath( playlistDir.path() ) ) {
         emit infoMessage( i18n("Unable to create folder %1",playlistDir.path()), Job::MessageError );
         return false;
     }
@@ -459,7 +457,7 @@ bool MassAudioEncodingJob::writePlaylist()
     }
     else {
         emit infoMessage( i18n("Unable to open '%1' for writing.",d->playlistFilename), Job::MessageError );
-        kDebug() << "could not open file " << d->playlistFilename << " for writing.";
+        qDebug() << "could not open file " << d->playlistFilename << " for writing.";
         return false;
     }
 }
@@ -511,4 +509,4 @@ bool MassAudioEncodingJob::writeCueFile()
 
 } // namespace K3b
 
-#include "k3bmassaudioencodingjob.moc"
+

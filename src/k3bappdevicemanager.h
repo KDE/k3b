@@ -16,8 +16,10 @@
 #define _K3B_APP_DEVICE_MANAGER_H_
 
 #include "k3bdevicemanager.h"
-#include <KXMLGUIClient>
-#include <solid/solidnamespace.h>
+
+#include <KXmlGui/KXMLGUIClient>
+#include <Solid/SolidNamespace>
+
 
 namespace K3b {
     class MediaCache;

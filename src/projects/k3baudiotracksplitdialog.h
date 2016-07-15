@@ -15,10 +15,10 @@
 #ifndef _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 #define _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 
-#include <KDialog>
-#include <QEvent>
+#include <QtWidgets/QDialog>
+#include <QtCore/QEvent>
 
-class KMenu;
+class QMenu;
 
 
 /**
@@ -31,7 +31,7 @@ class AudioEditorWidget;
 class Msf;
 class MsfEdit;
     
-class AudioTrackSplitDialog : public KDialog
+class AudioTrackSplitDialog : public QDialog
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ public:
     AudioTrackSplitDialog( AudioTrack*, QWidget* parent = 0 );
     ~AudioTrackSplitDialog();
 
-    bool eventFilter( QObject* o, QEvent* e );
+    bool eventFilter( QObject* o, QEvent* e ) override;
 
     /**
      * if this method returns true val is filled with the user selected value.
@@ -61,7 +61,7 @@ private:
     MsfEdit* m_msfEditStart;
     MsfEdit* m_msfEditEnd;
     AudioTrack* m_track;
-    KMenu* m_popupMenu;
+    QMenu* m_popupMenu;
     QPoint m_lastClickPosition;
 };
 }

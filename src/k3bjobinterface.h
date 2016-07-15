@@ -16,7 +16,7 @@
 #ifndef _K3B_JOB_INTERFACE_H_
 #define _K3B_JOB_INTERFACE_H_
 
-#include <QObject>
+#include <QtCore/QObject>
 
 /**
  * A D-BUS interface for K3b's currently running job.

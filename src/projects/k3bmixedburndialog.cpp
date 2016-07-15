@@ -34,24 +34,23 @@
 #include "k3bcore.h"
 #include "k3bintmapcombobox.h"
 
-#include <KApplication>
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QLabel>
-#include <QLayout>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QTabWidget>
-#include <QToolButton>
-#include <QToolTip>
-#include <QVariant>
+#include <QtCore/QDebug>
+#include <QtCore/QVariant>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolTip>
 
 
 K3b::MixedBurnDialog::MixedBurnDialog( K3b::MixedDoc* doc, QWidget *parent )
@@ -326,5 +325,5 @@ void K3b::MixedBurnDialog::slotCacheImageToggled( bool on )
 }
 
 
-#include "k3bmixedburndialog.moc"
+
 

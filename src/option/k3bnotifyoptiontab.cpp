@@ -15,10 +15,10 @@
 
 #include "k3bnotifyoptiontab.h"
 
-#include <kdebug.h>
-#include <KNotifyConfigWidget>
+#include <KNotifyConfig/KNotifyConfigWidget>
 
-#include <QtGui/QHBoxLayout>
+#include <QtCore/QDebug>
+#include <QtWidgets/QHBoxLayout>
 
 
 
@@ -49,4 +49,4 @@ bool K3b::NotifyOptionTab::saveSettings()
     return true;
 }
 
-#include "k3bnotifyoptiontab.moc"
+

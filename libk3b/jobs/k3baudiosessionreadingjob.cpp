@@ -21,9 +21,9 @@
 #include "k3bglobals.h"
 #include "k3bdevice.h"
 #include "k3bcore.h"
+#include "k3b_i18n.h"
 
-#include <kdebug.h>
-#include <klocale.h>
+#include <QtCore/QDebug>
 
 #include <unistd.h>
 
@@ -187,7 +187,7 @@ bool K3b::AudioSessionReadingJob::run()
 
         if( d->ioDev ) {
             if( d->ioDev->write( buffer, CD_FRAMESIZE_RAW ) != CD_FRAMESIZE_RAW ) {
-                kDebug() << "(K3b::AudioSessionCopyJob::WorkThread) error while writing to device " << d->ioDev;
+                qDebug() << "(K3b::AudioSessionCopyJob::WorkThread) error while writing to device " << d->ioDev;
                 writeError = true;
                 break;
             }
@@ -200,7 +200,7 @@ bool K3b::AudioSessionReadingJob::run()
                     d->waveFileWriter = new K3b::WaveFileWriter();
 
                 if( d->filenames.count() < ( int )currentTrack ) {
-                    kDebug() << "(K3b::AudioSessionCopyJob) not enough image filenames given: " << currentTrack;
+                    qDebug() << "(K3b::AudioSessionCopyJob) not enough image filenames given: " << currentTrack;
                     writeError = true;
                     break;
                 }
@@ -247,4 +247,4 @@ bool K3b::AudioSessionReadingJob::run()
     return !writeError && !canceled();
 }
 
-#include "k3baudiosessionreadingjob.moc"
+

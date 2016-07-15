@@ -18,7 +18,8 @@
 #define K3B_MIXED_VIEW_H
 
 #include "k3bview.h"
-#include <QList>
+
+#include <QtCore/QList>
 
 class QAbstractItemModel;
 class QAction;
@@ -45,7 +46,7 @@ namespace K3b {
 
     public Q_SLOTS:
         virtual void slotBurn();
-        virtual void addUrls( const KUrl::List& urls );
+        virtual void addUrls( const QList<QUrl>& urls );
 
     private Q_SLOTS:
         void slotParentDir();

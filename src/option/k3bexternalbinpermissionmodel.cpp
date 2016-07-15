@@ -19,13 +19,13 @@
 #include "k3bdefaultexternalprograms.h"
 #include "k3bglobals.h"
 
-#include <KDebug>
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QFile>
-#include <QFileInfo>
-#include <QList>
-#include <QSet>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QList>
+#include <QtCore/QSet>
 
 #include <sys/stat.h>
 
@@ -134,7 +134,7 @@ bool ExternalBinPermissionModel::Private::getProgramInfo( const ExternalBin* pro
         return true;
     }
     else {
-        kDebug() << "(ExternalBinPermissionModel) unable to stat " << program->path();
+        qDebug() << "(ExternalBinPermissionModel) unable to stat " << program->path();
         return false;
     }
 }
@@ -350,6 +350,7 @@ QModelIndex ExternalBinPermissionModel::buddy( const QModelIndex& index ) const
 void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
 {
     if( burningGroup != d->burningGroup ) {
+        beginResetModel();
         d->burningGroup = burningGroup;
         
         // Remove from the selected list all programs
@@ -362,18 +363,19 @@ void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
             else
                 ++program;
         }
-        reset();
+        endResetModel();
     }
 }
 #endif
 
 void ExternalBinPermissionModel::update()
 {
+    beginResetModel();
     d->buildProgramList();
     d->selectedPrograms.intersect( d->programs.toSet() );
-    reset();
+    endResetModel();
 }
 
 } // namespace K3b
 
-#include "k3bexternalbinpermissionmodel.moc"
+

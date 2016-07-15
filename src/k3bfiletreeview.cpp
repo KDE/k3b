@@ -25,11 +25,12 @@
 #include "k3baction.h"
 #include "k3b.h"
 
-#include <KAction>
-#include <KActionMenu>
-#include <KFileItem>
-#include <KLocale>
-#include <KUrl>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KFileItem>
+#include <KWidgetsAddons/KActionMenu>
+
+#include <QtCore/QUrl>
+#include <QtWidgets/QAction>
 
 
 
@@ -104,11 +105,11 @@ K3b::Device::Device* K3b::FileTreeView::selectedDevice() const
 }
 
 
-KUrl K3b::FileTreeView::selectedUrl() const
+QUrl K3b::FileTreeView::selectedUrl() const
 {
     KFileItem fileItem = d->model->itemForIndex( currentIndex() );
     if( fileItem.isNull() )
-        return KUrl();
+        return QUrl();
     else
         return fileItem.url();
 }
@@ -116,7 +117,7 @@ KUrl K3b::FileTreeView::selectedUrl() const
 
 void K3b::FileTreeView::slotExpandUrl( const QModelIndex& index )
 {
-    kDebug();
+    qDebug();
     setCurrentIndex( index );
     scrollTo( index );
 }
@@ -124,7 +125,7 @@ void K3b::FileTreeView::slotExpandUrl( const QModelIndex& index )
 void K3b::FileTreeView::slotAddFilesToProject()
 {
     QModelIndexList indexes = selectedIndexes();
-    KUrl::List files;
+    QList<QUrl> files;
     foreach(const QModelIndex &index, indexes)
     {
         KFileItem item = d->model->itemForIndex(index);
@@ -139,11 +140,11 @@ void K3b::FileTreeView::slotAddFilesToProject()
 }
 
 
-void K3b::FileTreeView::setSelectedUrl( const KUrl& url )
+void K3b::FileTreeView::setSelectedUrl( const QUrl& url )
 {
-    kDebug();
+    qDebug();
     KFileItem fileItem = d->model->itemForIndex( currentIndex() );
-    if( fileItem.isNull() || !fileItem.url().equals( url, KUrl::CompareWithoutTrailingSlash ) ) {
+    if( fileItem.isNull() || !fileItem.url().matches( url, QUrl::StripTrailingSlash ) ) {
         d->model->expandToUrl( url );
     }
 }
@@ -194,4 +195,4 @@ void K3b::FileTreeView::slotContextMenu( const QPoint& pos )
     }
 }
 
-#include "k3bfiletreeview.moc"
+

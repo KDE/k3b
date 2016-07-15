@@ -18,21 +18,22 @@
 #include "k3bglobals.h"
 #include "k3bdevice.h"
 #include "k3bfilesplitter.h"
+#include "k3b_i18n.h"
 
-#include <kcodecs.h>
-#include <klocale.h>
-#include <kdebug.h>
-#include <kio/netaccess.h>
+#include <KCodecs/KCodecs>
 
-#include <qtimer.h>
-#include <qiodevice.h>
+#include <QtCore/QCryptographicHash>
+#include <QtCore/QDebug>
+#include <QtCore/QIODevice>
+#include <QtCore/QTimer>
 
 
 class K3b::Md5Job::Private
 {
 public:
     Private()
-        : ioDevice(0),
+		: md5(QCryptographicHash::Md5),
+		  ioDevice(0),
           finished(true),
           data(0),
           isoFile(0),
@@ -40,7 +41,7 @@ public:
           lastProgress(0) {
     }
 
-    KMD5 md5;
+	QCryptographicHash md5;
     K3b::FileSplitter file;
     QTimer timer;
     QString filename;
@@ -103,7 +104,7 @@ void K3b::Md5Job::start()
             return;
         }
 
-        d->imageSize = K3b::filesize( d->filename );
+        d->imageSize = K3b::filesize( QUrl::fromLocalFile(d->filename) );
     }
     else
         d->imageSize = 0;
@@ -187,7 +188,7 @@ void K3b::Md5Job::slotUpdate()
             readSize = qMin( readSize, d->maxSize - d->readData );
 
         if( readSize <= 0 ) {
-            //      kDebug() << "(K3b::Md5Job) reached max size of " << d->maxSize << ". Stopping.";
+            //      qDebug() << "(K3b::Md5Job) reached max size of " << d->maxSize << ". Stopping.";
             emit debuggingOutput( "K3b::Md5Job", QString("Reached max read of %1. Stopping after %2 bytes.").arg(d->maxSize).arg(d->readData) );
             stopAll();
             emit percent( 100 );
@@ -241,7 +242,7 @@ void K3b::Md5Job::slotUpdate()
                 jobFinished(false);
             }
             else if( read == 0 ) {
-                //	kDebug() << "(K3b::Md5Job) read all data. Total size: " << d->readData << ". Stopping.";
+                //	qDebug() << "(K3b::Md5Job) read all data. Total size: " << d->readData << ". Stopping.";
                 emit debuggingOutput( "K3b::Md5Job", QString("All data read. Stopping after %1 bytes.").arg(d->readData) );
                 stopAll();
                 emit percent( 100 );
@@ -249,7 +250,7 @@ void K3b::Md5Job::slotUpdate()
             }
             else {
                 d->readData += read;
-                d->md5.update( d->data, read );
+				d->md5.addData( d->data, read );
                 int progress = 0;
                 if( d->isoFile || !d->filename.isEmpty() )
                     progress = (int)((double)d->readData * 100.0 / (double)d->imageSize);
@@ -269,7 +270,7 @@ void K3b::Md5Job::slotUpdate()
 QByteArray K3b::Md5Job::hexDigest()
 {
     if( d->finished )
-        return d->md5.hexDigest();
+		return d->md5.result().toHex();
     else
         return "";
 }
@@ -277,11 +278,10 @@ QByteArray K3b::Md5Job::hexDigest()
 
 QByteArray K3b::Md5Job::base64Digest()
 {
-    if( d->finished )
-        return d->md5.base64Digest();
-    else
-        return "";
-
+	if( d->finished )
+		return d->md5.result().toBase64();
+	else
+		return "";
 }
 
 
@@ -303,4 +303,4 @@ void K3b::Md5Job::stopAll()
     d->finished = true;
 }
 
-#include "k3bmd5job.moc"
+

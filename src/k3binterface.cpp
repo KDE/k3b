@@ -25,9 +25,9 @@
 #include "k3bprojectmanager.h"
 #include "k3bview.h"
 
-#include <QDBusConnection>
-#include <QList>
-#include <QTimer>
+#include <QtCore/QList>
+#include <QtCore/QTimer>
+#include <QtDBus/QDBusConnection>
 
 namespace K3b {
 
@@ -193,7 +193,9 @@ void Interface::videoDvdRip( const QString& dev )
 
 void Interface::addUrls( const QStringList& urls )
 {
-    m_main->addUrls( KUrl::List( urls ) );
+    QList<QUrl> urlList;
+    for( auto& url : urls ) { urlList.push_back( QUrl::fromUserInput( url ) ); }
+    m_main->addUrls( urlList );
 }
 
 
@@ -212,4 +214,4 @@ bool Interface::blocked() const
 
 } // namespace K3b
 
-#include "k3binterface.moc"
+

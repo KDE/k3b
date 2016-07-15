@@ -16,17 +16,15 @@
 #include "k3bvideodvdjob.h"
 #include "k3bvideodvddoc.h"
 #include "k3bvideodvdimager.h"
-
 #include "k3bcore.h"
 #include "k3bisoimager.h"
 #include "k3bisooptions.h"
 #include "k3bgrowisofswriter.h"
 #include "k3bglobals.h"
+#include "k3b_i18n.h"
 
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kapplication.h>
-#include <kconfig.h>
+#include <KConfigCore/KConfig>
+#include <KWidgetsAddons/KMessageBox>
 
 
 
@@ -70,4 +68,4 @@ QString K3b::VideoDvdJob::jobDetails() const
                  : QString() ) );
 }
 
-#include "k3bvideodvdjob.moc"
+

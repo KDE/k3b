@@ -24,21 +24,21 @@
 #include "k3bcore.h"
 #include "k3bintmapcombobox.h"
 
-#include <KConfig>
-#include <KComboBox>
-#include <KDialog>
-#include <KInputDialog>
-#include <KLocale>
-#include <KMessageBox>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QApplication>
-#include <QCursor>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QLabel>
-#include <QLayout>
-#include <QToolButton>
-#include <QToolTip>
+#include <QtGui/QCursor>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolTip>
 
 #include <cstdlib>
 
@@ -194,7 +194,7 @@ K3b::WriterSelectionWidget::WriterSelectionWidget( QWidget *parent )
 
     clearSpeedCombo();
 
-    slotConfigChanged( KGlobal::config() );
+    slotConfigChanged( KSharedConfig::openConfig() );
     slotWriterChanged();
 }
 
@@ -447,7 +447,7 @@ int K3b::WriterSelectionWidget::writerSpeed() const
 
 K3b::WritingApp K3b::WriterSelectionWidget::writingApp() const
 {
-    KConfigGroup g( KGlobal::config(), "General Options" );
+    KConfigGroup g( KSharedConfig::openConfig(), "General Options" );
     if( g.readEntry( "Show advanced GUI", false ) ) {
         return selectedWritingApp();
     }
@@ -484,7 +484,7 @@ void K3b::WriterSelectionWidget::slotWriterChanged()
 
     // save last selected writer
     if( K3b::Device::Device* dev = writerDevice() ) {
-        KConfigGroup g( KGlobal::config(), "General Options" );
+        KConfigGroup g( KSharedConfig::openConfig(), "General Options" );
         g.writeEntry( "current_writer", dev->blockDeviceName() );
     }
 }
@@ -624,15 +624,14 @@ void K3b::WriterSelectionWidget::slotManualSpeed()
     }
 
     bool ok = true;
-    int newSpeed = KInputDialog::getInteger( i18n("Set writing speed manually"),
-                                             s,
-                                             writerDevice()->maxWriteSpeed()/speedFactor,
-                                             1,
-                                             10000,
-                                             1,
-                                             10,
-                                             &ok,
-                                             this ) * speedFactor;
+    int newSpeed = QInputDialog::getInt( this,
+                                         i18n("Set writing speed manually"),
+                                         s,
+                                         writerDevice()->maxWriteSpeed()/speedFactor,
+                                         1,
+                                         10000,
+                                         1,
+                                         &ok ) * speedFactor;
     if( ok ) {
         writerDevice()->setMaxWriteSpeed( qMax( newSpeed, writerDevice()->maxWriteSpeed() ) );
         if ( haveSpeeds ) {
@@ -657,4 +656,4 @@ void K3b::WriterSelectionWidget::setIgnoreDevice( K3b::Device::Device* dev )
     m_comboMedium->setIgnoreDevice( dev );
 }
 
-#include "k3bwriterselectionwidget.moc"
+

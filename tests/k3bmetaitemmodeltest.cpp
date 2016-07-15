@@ -15,15 +15,13 @@
 #include "k3bmetaitemmodeltest.h"
 #include "k3bmetaitemmodel.h"
 
-#include <KIcon>
-#include <qtest_kde.h>
-
 #include <QtCore/QStringList>
+#include <QtGui/QIcon>
 #include <QtGui/QStandardItemModel>
 #include <QtTest/QSignalSpy>
 #include <QtTest/QTest>
 
-QTEST_KDEMAIN_CORE( MetaItemModelTest )
+QTEST_GUILESS_MAIN( MetaItemModelTest )
 
 Q_DECLARE_METATYPE( QModelIndex )
 
@@ -71,9 +69,9 @@ void MetaItemModelTest::init()
     m_listModel->appendRow( new QStandardItem( "d" ) );
     
     m_treeModel = new QStandardItemModel( this );
-    m_treeModel->appendRow( new QStandardItem( KIcon( "edit-copy" ), "copy" ) );
-    m_treeModel->appendRow( new QStandardItem( KIcon( "edit-paste" ), "paste" ) );
-    m_treeModel->item( 0 )->appendRow( new QStandardItem( KIcon( "edit-cut" ), "cut" ) );
+    m_treeModel->appendRow( new QStandardItem( QIcon::fromTheme( "edit-copy" ), "copy" ) );
+    m_treeModel->appendRow( new QStandardItem( QIcon::fromTheme( "edit-paste" ), "paste" ) );
+    m_treeModel->item( 0 )->appendRow( new QStandardItem( QIcon::fromTheme( "edit-cut" ), "cut" ) );
 }
 
 
@@ -86,8 +84,8 @@ void MetaItemModelTest::testCreate()
 void MetaItemModelTest::testAddSubModel()
 {
     K3b::MetaItemModel model;
-    model.addSubModel( "stringList", KIcon( "configure" ), m_listModel );
-    model.addSubModel( "standard", KIcon( "go-previous" ), m_treeModel );
+    model.addSubModel( "stringList", QIcon::fromTheme( "configure" ), m_listModel );
+    model.addSubModel( "standard", QIcon::fromTheme( "go-previous" ), m_treeModel );
     
     QCOMPARE( model.rowCount(), 2 );
     
@@ -107,8 +105,8 @@ void MetaItemModelTest::testAddSubModel()
 void MetaItemModelTest::testAddFlatSubModel()
 {
     K3b::MetaItemModel model;
-    model.addSubModel( "stringList", KIcon( "configure" ), m_listModel, true );
-    model.addSubModel( "standard", KIcon( "go-previous" ), m_treeModel, true );
+    model.addSubModel( "stringList", QIcon::fromTheme( "configure" ), m_listModel, true );
+    model.addSubModel( "standard", QIcon::fromTheme( "go-previous" ), m_treeModel, true );
     
     QCOMPARE( model.rowCount(), 6 );
     
@@ -121,8 +119,8 @@ void MetaItemModelTest::testAddFlatSubModel()
 void MetaItemModelTest::testRemoveSubModel()
 {
     K3b::MetaItemModel model;
-    model.addSubModel( "stringList", KIcon( "configure" ), m_listModel );
-    model.addSubModel( "standard", KIcon( "go-previous" ), m_treeModel, true );
+    model.addSubModel( "stringList", QIcon::fromTheme( "configure" ), m_listModel );
+    model.addSubModel( "standard", QIcon::fromTheme( "go-previous" ), m_treeModel, true );
     
     checkForIdenticalData( model, *m_listModel, model.index( 0, 0 ) );
     
@@ -139,7 +137,7 @@ void MetaItemModelTest::testRemoveSubModel()
 void MetaItemModelTest::testDynamicChanges()
 {
     K3b::MetaItemModel model;
-    model.addSubModel( "stringList", KIcon( "configure" ), m_listModel );
+    model.addSubModel( "stringList", QIcon::fromTheme( "configure" ), m_listModel );
     
     QSignalSpy rowsAboutToBeRemovedSpy( &model, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)) );
     QSignalSpy rowsRemovedSpy( &model, SIGNAL(rowsRemoved(QModelIndex,int,int)) );
@@ -167,7 +165,7 @@ void MetaItemModelTest::testDynamicChanges()
     QCOMPARE( model.rowCount( firstIndex ), 3 );
     checkForIdenticalData( model, *m_listModel, firstIndex );
     
-    model.addSubModel( "standard", KIcon( "go-previous" ), m_treeModel );
+    model.addSubModel( "standard", QIcon::fromTheme( "go-previous" ), m_treeModel );
     QModelIndex secondIndex = model.index( 1, 0 );
     
     QCOMPARE( model.rowCount(), 2 );
@@ -197,7 +195,7 @@ void MetaItemModelTest::testDynamicChanges()
 void MetaItemModelTest::testDynamicChangesInFlatModel()
 {
     K3b::MetaItemModel model;
-    model.addSubModel( "stringList", KIcon( "configure" ), m_listModel, true );
+    model.addSubModel( "stringList", QIcon::fromTheme( "configure" ), m_listModel, true );
     QCOMPARE( model.rowCount(), 4 );
     checkForIdenticalData( model, *m_listModel );
     
@@ -221,7 +219,7 @@ void MetaItemModelTest::testDynamicChangesInFlatModel()
     QCOMPARE( model.rowCount(), 3 );
     checkForIdenticalData( model, *m_listModel );
     
-    model.addSubModel( "standard", KIcon( "go-previous" ), m_treeModel, true );
+    model.addSubModel( "standard", QIcon::fromTheme( "go-previous" ), m_treeModel, true );
     QCOMPARE( model.rowCount(), 5 );
     
     m_treeModel->removeRow( 1 );
@@ -247,7 +245,7 @@ void MetaItemModelTest::testDynamicChangesInFlatModel()
 void MetaItemModelTest::testDataChanges()
 {
     K3b::MetaItemModel model;
-    model.addSubModel( "standard", KIcon( "go-previous" ), m_treeModel, true );
+    model.addSubModel( "standard", QIcon::fromTheme( "go-previous" ), m_treeModel, true );
     checkForIdenticalData( model, *m_treeModel );
     
     QSignalSpy dataChangedSpy( &model, SIGNAL(dataChanged(QModelIndex,QModelIndex)) );
@@ -264,4 +262,4 @@ void MetaItemModelTest::testDataChanges()
 }
 
 
-#include "k3bmetaitemmodeltest.moc"
+

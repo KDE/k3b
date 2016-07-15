@@ -24,9 +24,8 @@
 #include "k3bcore.h"
 #include "k3bcdtextvalidator.h"
 
-#include <QString>
-
-#include <KDebug>
+#include <QtCore/QDebug>
+#include <QtCore/QString>
 
 
 
@@ -88,20 +87,20 @@ K3b::AudioTrack::AudioTrack( K3b::AudioDoc* parent )
 
 K3b::AudioTrack::~AudioTrack()
 {
-    kDebug() << this;
+    qDebug() << this;
 
     d->currentlyDeleting = true;
 
     // fix the list
     take();
 
-    kDebug() << "deleting sources.";
+    qDebug() << "deleting sources.";
 
     // delete all sources
     while( d->firstSource )
         delete d->firstSource;
 
-    kDebug() << "finished";
+    qDebug() << "finished";
 
     delete d;
 }
@@ -403,10 +402,10 @@ K3b::AudioTrack* K3b::AudioTrack::take()
 
 void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
 {
-    kDebug() << "(K3b::AudioTrack::moveAfter( " << track << " )";
+    qDebug() << "(K3b::AudioTrack::moveAfter( " << track << " )";
     if( !track ) {
         if( !doc() ) {
-            kDebug() << "(K3b::AudioTrack::moveAfter) no parent set";
+            qDebug() << "(K3b::AudioTrack::moveAfter) no parent set";
             return;
         }
 
@@ -421,7 +420,7 @@ void K3b::AudioTrack::moveAfter( K3b::AudioTrack* track )
         }
     }
     else if( track == this ) {
-        kDebug() << "(K3b::AudioTrack::moveAfter) trying to move this after this.";
+        qDebug() << "(K3b::AudioTrack::moveAfter) trying to move this after this.";
         return;
     }
     else {
@@ -460,7 +459,7 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
 {
     if( !track ) {
         if( !doc() ) {
-            kDebug() << "(K3b::AudioTrack::moveAfter) no parent set";
+            qDebug() << "(K3b::AudioTrack::moveAfter) no parent set";
             return;
         }
 
@@ -475,7 +474,7 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
         }
     }
     else if( track == this ) {
-        kDebug() << "(K3b::AudioTrack::moveAhead) trying to move this ahead of this.";
+        qDebug() << "(K3b::AudioTrack::moveAhead) trying to move this ahead of this.";
         return;
     }
     else {
@@ -512,9 +511,9 @@ void K3b::AudioTrack::moveAhead( K3b::AudioTrack* track )
 
 void K3b::AudioTrack::merge( K3b::AudioTrack* trackToMerge, K3b::AudioDataSource* sourceAfter )
 {
-    kDebug() << "(K3b::AudioTrack::merge) " << trackToMerge << " into " << this;
+    qDebug() << "(K3b::AudioTrack::merge) " << trackToMerge << " into " << this;
     if( this == trackToMerge ) {
-        kDebug() << "(K3b::AudioTrack::merge) trying to merge this with this.";
+        qDebug() << "(K3b::AudioTrack::merge) trying to merge this with this.";
         return;
     }
 
@@ -523,7 +522,7 @@ void K3b::AudioTrack::merge( K3b::AudioTrack* trackToMerge, K3b::AudioDataSource
 
     // in case we prepend all of trackToMerge's sources
     if( !sourceAfter ) {
-        kDebug() << "(K3b::AudioTrack::merge) merging " << trackToMerge->firstSource();
+        qDebug() << "(K3b::AudioTrack::merge) merging " << trackToMerge->firstSource();
         if( d->firstSource ) {
             trackToMerge->firstSource()->moveAhead( d->firstSource );
         }
@@ -533,11 +532,11 @@ void K3b::AudioTrack::merge( K3b::AudioTrack* trackToMerge, K3b::AudioDataSource
         sourceAfter = d->firstSource;
     }
 
-    kDebug() << "(K3b::AudioTrack::merge) now merge the other sources.";
+    qDebug() << "(K3b::AudioTrack::merge) now merge the other sources.";
     // now merge all sources into this track
     while( trackToMerge->firstSource() ) {
         K3b::AudioDataSource* s = trackToMerge->firstSource();
-        kDebug() << "(K3b::AudioTrack::merge) merging source " << s << " from track " << s->track() << " into track "
+        qDebug() << "(K3b::AudioTrack::merge) merging source " << s << " from track " << s->track() << " into track "
                  << this << " after source " << sourceAfter << endl;
         s->moveAfter( sourceAfter );
         sourceAfter = s;
@@ -548,7 +547,7 @@ void K3b::AudioTrack::merge( K3b::AudioTrack* trackToMerge, K3b::AudioDataSource
     // now we can safely delete the track we merged
     delete trackToMerge;
 
-    kDebug() << "(K3b::AudioTrack::merge) finished";
+    qDebug() << "(K3b::AudioTrack::merge) finished";
 
     emitChanged();
 }
@@ -668,7 +667,7 @@ K3b::AudioTrack* K3b::AudioTrack::split( const K3b::Msf& pos )
             splitTrack->addSource( addSource );
         }
 
-        kDebug() << "(K3b::AudioTrack) moving track " << splitTrack << " after this (" << this << ") with parent " << doc();
+        qDebug() << "(K3b::AudioTrack) moving track " << splitTrack << " after this (" << this << ") with parent " << doc();
         splitTrack->moveAfter( this );
 
         return splitTrack;
@@ -719,13 +718,13 @@ K3b::Device::Track K3b::AudioTrack::toCdTrack() const
 
 void K3b::AudioTrack::debug()
 {
-    kDebug() << "Track " << this << endl
+    qDebug() << "Track " << this << endl
              << "  Prev: " << d->prev << endl
              << "  Next: " << d->next << endl
              << "  Sources:" << endl;
     K3b::AudioDataSource* s = d->firstSource;
     while( s ) {
-        kDebug() << "  " << s << " - Prev: " << s->prev() << " Next: " << s->next();
+        qDebug() << "  " << s << " - Prev: " << s->prev() << " Next: " << s->next();
         s = s->next();
     }
 }
@@ -806,4 +805,4 @@ void K3b::AudioTrack::setParent( K3b::AudioDoc* parent )
 }
 
 
-#include "k3baudiotrack.moc"
+

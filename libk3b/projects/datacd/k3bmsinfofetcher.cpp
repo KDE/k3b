@@ -22,12 +22,12 @@
 #include "k3bglobals.h"
 #include "k3biso9660.h"
 #include "k3bprocess.h"
+#include "k3b_i18n.h"
 
-#include <klocale.h>
-#include <kprocess.h>
-#include <kdebug.h>
+#include <KCoreAddons/KProcess>
 
-#include <qstringlist.h>
+#include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
 
 K3b::MsInfoFetcher::MsInfoFetcher( K3b::JobHandler* jh, QObject* parent )
@@ -52,14 +52,14 @@ void K3b::MsInfoFetcher::start()
     emit infoMessage( i18n("Searching previous session"), K3b::Job::MessageInfo );
 
     if( !k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
-        kDebug() << "(K3b::MsInfoFetcher) could not find cdrecord executable";
+        qDebug() << "(K3b::MsInfoFetcher) could not find cdrecord executable";
         emit infoMessage( i18n("Could not find %1 executable.",QString("cdrecord")), K3b::Job::MessageError );
         jobFinished(false);
         return;
     }
 
     if( m_device == 0 ) {
-        kDebug() << "(K3b::MsInfoFetcher) internal error: No device set!";
+        qDebug() << "(K3b::MsInfoFetcher) internal error: No device set!";
         jobFinished(false);
         return;
     }
@@ -104,11 +104,11 @@ void K3b::MsInfoFetcher::getMsInfo()
         // additional user parameters from config
         *m_process << bin->userParameters();
 
-        kDebug() << "***** " << bin->name() << " parameters:\n";
+        qDebug() << "***** " << bin->name() << " parameters:\n";
         QStringList args = m_process->program();
         args.removeFirst();
         QString s = args.join(" ");
-        kDebug() << s << flush;
+        qDebug() << s << flush;
         emit debuggingOutput( "msinfo command:", s );
 
 
@@ -182,7 +182,7 @@ void K3b::MsInfoFetcher::slotProcessExited()
         return;
     }
 
-    kDebug() << "(K3b::MsInfoFetcher) msinfo fetched";
+    qDebug() << "(K3b::MsInfoFetcher) msinfo fetched";
 
     m_collectedOutput = QString::fromLocal8Bit( m_process->readAllStandardOutput() );
 
@@ -204,7 +204,7 @@ void K3b::MsInfoFetcher::slotProcessExited()
         m_msInfo = QString();
     }
 
-    kDebug() << "(K3b::MsInfoFetcher) msinfo parsed: " << m_msInfo;
+    qDebug() << "(K3b::MsInfoFetcher) msinfo parsed: " << m_msInfo;
 
     if( m_msInfo.isEmpty() ) {
         emit infoMessage( i18n("Could not retrieve multisession information from disk."), K3b::Job::MessageError );
@@ -231,4 +231,4 @@ void K3b::MsInfoFetcher::cancel()
 }
 
 
-#include "k3bmsinfofetcher.moc"
+

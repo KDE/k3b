@@ -15,8 +15,10 @@
 #ifndef _K3B_MEDIA_SELECTION_DIALOG_H_
 #define _K3B_MEDIA_SELECTION_DIALOG_H_
 
-#include <kdialog.h>
 #include "k3bmedium.h"
+#include <QtWidgets/QDialog>
+
+class QPushButton;
 
 namespace K3b {
     class MediaSelectionComboBox;
@@ -25,7 +27,7 @@ namespace K3b {
         class Device;
     }
 
-    class MediaSelectionDialog : public KDialog
+    class MediaSelectionDialog : public QDialog
     {
         Q_OBJECT
 
@@ -73,6 +75,7 @@ namespace K3b {
 
     private:
         MediaSelectionComboBox* m_combo;
+        QPushButton* m_okButton;
     };
 }
 

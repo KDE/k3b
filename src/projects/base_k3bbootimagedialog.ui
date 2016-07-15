@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>Sebastian Trueg</author>
- <class>base_K3bBootImageView</class>
- <widget class="QWidget" name="base_K3bBootImageView">
+ <class>base_K3bBootImageDialog</class>
+ <widget class="QDialog" name="base_K3bBootImageDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,9 +12,6 @@
    </rect>
   </property>
   <layout class="QVBoxLayout">
-   <property name="margin">
-    <number>0</number>
-   </property>
    <item>
     <layout class="QHBoxLayout">
      <item>
@@ -74,7 +71,7 @@
          <string>Emulate a 1440/2880 kb floppy</string>
         </property>
         <property name="text">
-         <string>Flopp&amp;y</string>
+         <string>&amp;Floppy</string>
         </property>
        </widget>
       </item>
@@ -84,7 +81,7 @@
          <string>Emulate a harddisk</string>
         </property>
         <property name="text">
-         <string>Harddisk</string>
+         <string>Hardd&amp;isk</string>
         </property>
        </widget>
       </item>
@@ -234,6 +231,13 @@
      </item>
     </layout>
    </item>
+   <item>
+    <widget class="QDialogButtonBox" name="m_buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
   </layout>
  </widget>
  <resources/>
@@ -243,30 +247,96 @@
    <signal>toggled(bool)</signal>
    <receiver>textLabel2_2</receiver>
    <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>m_radioNoEmulation</sender>
    <signal>toggled(bool)</signal>
    <receiver>textLabel3</receiver>
    <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>m_radioNoEmulation</sender>
    <signal>toggled(bool)</signal>
    <receiver>m_editLoadSegment</receiver>
    <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>m_radioNoEmulation</sender>
    <signal>toggled(bool)</signal>
    <receiver>m_editLoadSize</receiver>
    <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
   </connection>
   <connection>
    <sender>m_radioNoEmulation</sender>
    <signal>toggled(bool)</signal>
    <receiver>m_checkNoBoot</receiver>
    <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>20</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>m_buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>base_K3bBootImageDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>470</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>221</x>
+     <y>247</y>
+    </hint>
+   </hints>
   </connection>
  </connections>
 </ui>

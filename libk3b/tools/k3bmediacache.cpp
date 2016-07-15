@@ -17,20 +17,17 @@
 #include "k3bmedium.h"
 #include "k3bmedium_p.h"
 #include "k3bcddb.h"
-
 #include "k3bdevicemanager.h"
 #include "k3bdeviceglobals.h"
 #include "k3bcore.h"
+#include "k3b_i18n.h"
 
-#include <kdebug.h>
-#include <kapplication.h>
-#include <klocale.h>
+#include <KCoreAddons/KRandom>
 
-#include <qthread.h>
-#include <qmutex.h>
-#include <qevent.h>
-#include <QCustomEvent>
-#include <krandom.h>
+#include <QtCore/QDebug>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QEvent>
 
 #include <libkcddb/client.h>
 
@@ -181,7 +178,7 @@ K3b::MediaCache::~MediaCache()
 
 int K3b::MediaCache::blockDevice( K3b::Device::Device* dev )
 {
-    kDebug() << dev->blockDeviceName();
+    qDebug() << dev->blockDeviceName();
     DeviceEntry* e = findDeviceEntry( dev );
     if( e ) {
         if( e->blockedId )
@@ -209,7 +206,7 @@ int K3b::MediaCache::blockDevice( K3b::Device::Device* dev )
 
 bool K3b::MediaCache::unblockDevice( K3b::Device::Device* dev, int id )
 {
-    kDebug() << dev->blockDeviceName();
+    qDebug() << dev->blockDeviceName();
     DeviceEntry* e = findDeviceEntry( dev );
     if( e && e->blockedId && e->blockedId == id ) {
         e->blockedId = 0;
@@ -312,7 +309,7 @@ QString K3b::MediaCache::mediumString( K3b::Device::Device* device, bool useCont
 
 void K3b::MediaCache::clearDeviceList()
 {
-    kDebug() << k_funcinfo;
+    qDebug();
 
     // make all the threads stop
     for( QMap<K3b::Device::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
@@ -323,7 +320,7 @@ void K3b::MediaCache::clearDeviceList()
     // and remove them
     for( QMap<K3b::Device::Device*, DeviceEntry*>::iterator it = d->deviceMap.begin();
          it != d->deviceMap.end(); ++it ) {
-        kDebug() << k_funcinfo << " waiting for info thread " << it.key()->blockDeviceName() << " to finish";
+        qDebug() << " waiting for info thread " << it.key()->blockDeviceName() << " to finish";
         it.value()->thread->wait();
         delete it.value();
     }
@@ -385,7 +382,7 @@ void K3b::MediaCache::lookupCddb( K3b::Device::Device* dev )
 void K3b::MediaCache::resetDevice( K3b::Device::Device* dev )
 {
     if( DeviceEntry* e = findDeviceEntry( dev ) ) {
-        kDebug() << "Resetting medium in" << dev->blockDeviceName();
+        qDebug() << "Resetting medium in" << dev->blockDeviceName();
         e->writeMutex.lock();
         e->readMutex.lock();
         e->medium.reset();
@@ -395,5 +392,4 @@ void K3b::MediaCache::resetDevice( K3b::Device::Device* dev )
     }
 }
 
-#include "k3bmediacache.moc"
-#include "k3bmediacache_p.moc"
+#include "moc_k3bmediacache.cpp"

@@ -15,7 +15,8 @@
 #ifndef K3BDATAPROJECTDELEGATE_H
 #define K3BDATAPROJECTDELEGATE_H
 
-#include <QStyledItemDelegate>
+#include <QtCore/QMimeDatabase>
+#include <QtWidgets/QStyledItemDelegate>
 
 namespace K3b {
 
@@ -31,6 +32,7 @@ namespace K3b {
 
     private:
         mutable QPersistentModelIndex m_current;
+        QMimeDatabase m_mimeDatabase;
     };
 
 }

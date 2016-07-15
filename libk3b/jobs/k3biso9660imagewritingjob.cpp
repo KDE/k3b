@@ -28,15 +28,13 @@
 #include "k3bchecksumpipe.h"
 #include "k3bfilesplitter.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <ktemporaryfile.h>
-#include <kio/global.h>
+#include <KIOCore/KIO/Global>
 
-#include <qstring.h>
-#include <qfile.h>
-#include <qapplication.h>
+#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtCore/QFile>
 
 
 class K3b::Iso9660ImageWritingJob::Private
@@ -96,7 +94,7 @@ void K3b::Iso9660ImageWritingJob::start()
         return;
     }
 
-    KIO::filesize_t mb = K3b::imageFilesize( m_imagePath )/1024ULL/1024ULL;
+    KIO::filesize_t mb = K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/1024ULL/1024ULL;
 
     // very rough test but since most dvd images are 4,x or 8,x GB it should be enough
     d->isDvdImage = ( mb > 900ULL );
@@ -134,7 +132,7 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
             }
             d->verifyJob->setDevice( m_device );
             d->verifyJob->clear();
-            d->verifyJob->addTrack( 1, d->checksumPipe.checksum(), K3b::imageFilesize( m_imagePath )/2048 );
+            d->verifyJob->addTrack( 1, d->checksumPipe.checksum(), K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048 );
 
             if( m_copies == 1 )
                 emit newTask( i18n("Verifying written data") );
@@ -268,7 +266,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 
 
     // wait for the media
-    Device::MediaType media = waitForMedium( m_device, K3b::Device::STATE_EMPTY, mt, K3b::imageFilesize( m_imagePath )/2048 );
+    Device::MediaType media = waitForMedium( m_device, K3b::Device::STATE_EMPTY, mt, K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048 );
     if( media == Device::MEDIA_UNKNOWN ) {
         d->finished = true;
         emit canceled();
@@ -283,7 +281,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     d->checksumPipe.close();
     d->checksumPipe.readFrom( &d->imageFile, true );
 
-    if( prepareWriter( Device::MediaTypes( media ) ) ) {
+    if( prepareWriter() ) {
         emit burning(true);
         d->writer->start();
 #ifdef __GNUC__
@@ -299,7 +297,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 }
 
 
-bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
+bool K3b::Iso9660ImageWritingJob::prepareWriter()
 {
     delete d->writer;
 
@@ -312,7 +310,7 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter( Device::MediaTypes mediaType )
     d->writer->setMultiSession( m_noFix );
 
     Device::Toc toc;
-    toc << Device::Track( 0, Msf(K3b::imageFilesize( m_imagePath )/2048)-1,
+    toc << Device::Track( 0, Msf(K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048)-1,
                           Device::Track::TYPE_DATA,
                           ( m_dataMode == K3b::DataModeAuto && m_noFix ) ||
                           m_dataMode == K3b::DataMode2
@@ -370,4 +368,4 @@ QString K3b::Iso9660ImageWritingJob::jobTarget() const
 }
 
 
-#include "k3biso9660imagewritingjob.moc"
+

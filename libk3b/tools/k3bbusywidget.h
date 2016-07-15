@@ -16,8 +16,8 @@
 #define K3B_BUSY_WIDGET_H
 
 
-#include <QFrame>
 #include "k3b_export.h"
+#include <QtWidgets/QFrame>
 
 class QTimer;
 

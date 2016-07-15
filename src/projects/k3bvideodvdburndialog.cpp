@@ -26,16 +26,16 @@
 #include "k3bstdguiitems.h"
 #include "k3bglobalsettings.h"
 
-#include <kconfig.h>
-#include <klocale.h>
-#include <kio/global.h>
-#include <kmessagebox.h>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QFileInfo>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qtooltip.h>
+#include <QtCore/QFileInfo>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QToolTip>
 
 
 K3b::VideoDvdBurnDialog::VideoDvdBurnDialog( K3b::VideoDvdDoc* doc, QWidget *parent )
@@ -180,4 +180,4 @@ void K3b::VideoDvdBurnDialog::slotStartClicked()
     K3b::ProjectBurnDialog::slotStartClicked();
 }
 
-#include "k3bvideodvdburndialog.moc"
+

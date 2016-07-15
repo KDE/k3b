@@ -25,37 +25,36 @@
 #include "k3bmediacache.h"
 #include "k3baction.h"
 
-#include <QBrush>
-#include <QColor>
-#include <QEvent>
-#include <QFont>
-#include <QFontMetrics>
-#include <QFrame>
-#include <QHBoxLayout>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QPixmap>
-#include <QRect>
-#include <QStyle>
-#include <QTimer>
-#include <QToolButton>
-#include <QToolTip>
-#include <QValidator>
-#include <QWhatsThis>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <KAction>
-#include <KColorScheme>
-#include <KConfigGroup>
-#include <KDebug>
-#include <KGlobal>
-#include <KInputDialog>
-#include <KLocale>
-#include <KIcon>
-#include <kio/global.h>
-#include <KMenu>
-#include <KMessageBox>
-#include <QStyleOptionProgressBarV2>
+#include <QtCore/QDebug>
+#include <QtCore/QEvent>
+#include <QtCore/QLocale>
+#include <QtCore/QRect>
+#include <QtCore/QTimer>
+#include <QtGui/QBrush>
+#include <QtGui/QColor>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QPixmap>
+#include <QtGui/QValidator>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QStyleOptionProgressBarV2>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QWhatsThis>
 
 
 class K3b::FillStatusDisplayWidget::Private
@@ -280,24 +279,24 @@ class K3b::FillStatusDisplay::Private
 {
 public:
     KActionCollection* actionCollection;
-    KAction* actionShowMinutes;
-    KAction* actionShowMegs;
+    QAction* actionShowMinutes;
+    QAction* actionShowMegs;
     QActionGroup* cdSizeGroup;
-    KAction* actionAuto;
-    KAction* action74Min;
-    KAction* action80Min;
-    KAction* action100Min;
-    KAction* actionDvd4_7GB;
-    KAction* actionDvdDoubleLayer;
-    KAction* actionBD25;
-    KAction* actionBD50;
+    QAction* actionAuto;
+    QAction* action74Min;
+    QAction* action80Min;
+    QAction* action100Min;
+    QAction* actionDvd4_7GB;
+    QAction* actionDvdDoubleLayer;
+    QAction* actionBD25;
+    QAction* actionBD50;
 
-    KAction* actionCustomSize;
-    KAction* actionDetermineSize;
-    KAction* actionSaveUserDefaults;
-    KAction* actionLoadUserDefaults;
+    QAction* actionCustomSize;
+    QAction* actionDetermineSize;
+    QAction* actionSaveUserDefaults;
+    QAction* actionLoadUserDefaults;
 
-    KMenu* popup;
+    QMenu* popup;
 
     QToolButton* buttonMenu;
 
@@ -371,7 +370,7 @@ K3b::FillStatusDisplay::FillStatusDisplay( K3b::Doc* doc, QWidget *parent )
 
     d->displayWidget = new K3b::FillStatusDisplayWidget( doc, this );
     d->buttonMenu = new QToolButton( this );
-    d->buttonMenu->setIcon( KIcon( "configure" ) );
+    d->buttonMenu->setIcon( QIcon::fromTheme( "configure" ) );
     d->buttonMenu->setAutoRaise( true );
     d->buttonMenu->setToolTip( i18n( "Set medium size" ) );
     connect( d->buttonMenu, SIGNAL(clicked()), this, SLOT(slotMenuButtonClicked()) );
@@ -403,7 +402,7 @@ void K3b::FillStatusDisplay::setupPopupMenu()
     d->actionCollection = new KActionCollection( this );
 
     // we use a nother popup for the dvd sizes
-    d->popup = new KMenu( this );
+    d->popup = new QMenu( this );
 
     d->actionShowMinutes = K3b::createToggleAction( this, i18n("Minutes"), 0, 0, this, SLOT(showTime()),
                                                     d->actionCollection, "fillstatus_show_minutes" );
@@ -455,29 +454,29 @@ void K3b::FillStatusDisplay::setupPopupMenu()
                                                    this, SLOT(slotSaveUserDefaults()),
                                                    d->actionCollection, "save_user_defaults" );
 
-    KAction* dvdSizeInfoAction = K3b::createAction( this, i18n("Why 4.4 instead of 4.7?"), "", 0,
+    QAction* dvdSizeInfoAction = K3b::createAction( this, i18n("Why 4.4 instead of 4.7?"), "", 0,
                                                     this, SLOT(slotWhy44()),
                                                     d->actionCollection, "why_44_gb" );
 
-    d->popup->addTitle( i18n("Show Size In") );
+    d->popup->addSection( i18n("Show Size In") );
     d->popup->addAction( d->actionShowMinutes );
     d->popup->addAction( d->actionShowMegs );
     d->popup->addSeparator();
     d->popup->addAction( d->actionAuto );
     if ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_CD_ALL ) {
-        d->popup->addTitle( i18n("CD Size") );
+        d->popup->addSection( i18n("CD Size") );
         d->popup->addAction( d->action74Min );
         d->popup->addAction( d->action80Min );
         d->popup->addAction( d->action100Min );
     }
     if ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_DVD_ALL ) {
-        d->popup->addTitle( i18n("DVD Size") );
+        d->popup->addSection( i18n("DVD Size") );
         d->popup->addAction( dvdSizeInfoAction );
         d->popup->addAction( d->actionDvd4_7GB );
         d->popup->addAction( d->actionDvdDoubleLayer );
     }
     if ( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_BD_ALL ) {
-        d->popup->addTitle( i18n("Blu-ray Size") );
+        d->popup->addSection( i18n("Blu-ray Size") );
         d->popup->addAction( d->actionBD25 );
         d->popup->addAction( d->actionBD50 );
     }
@@ -585,32 +584,37 @@ void K3b::FillStatusDisplay::slotCustomSize()
     QString mbS = i18n("MB");
     QString minS = i18n("min");
 
+    QLocale const locale = QLocale::system();
+
     // we certainly do not have BD- or HD-DVD-only projects
     QString defaultCustom;
     if( d->doc->supportedMediaTypes() & K3b::Device::MEDIA_CD_ALL ) {
         defaultCustom = d->showTime ? QString("74") + minS : QString("650") + mbS;
     }
     else {
-        defaultCustom = KGlobal::locale()->formatNumber(4.4,1) + gbS;
+        defaultCustom = locale.toString(4.4,'g',1) + gbS;
     }
 
-    QRegExp rx( "(\\d+\\" + KGlobal::locale()->decimalSymbol() + "?\\d*)(" + gbS + '|' + mbS + '|' + minS + ")?" );
+    QRegExp rx( QString("(\\d+\\") + locale.decimalPoint() + "?\\d*)(" + gbS + '|' + mbS + '|' + minS + ")?" );
+    QRegExpValidator validator( rx, this );
     bool ok;
-    QString size = KInputDialog::getText( i18n("Custom Size"),
+    QString size = QInputDialog::getText( this,
+                                          i18n("Custom Size"),
                                           i18n("<p>Please specify the size of the medium. Use suffixes <b>GB</b>,<b>MB</b>, "
                                                "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</em>"
                                                " respectively."),
+                                          QLineEdit::Normal,
                                           defaultCustom,
-                                          &ok,
-                                          this,
-                                          new QRegExpValidator( rx, this ) );
-    if( ok ) {
+                                          &ok );
+
+    int validatorPos;
+    if( ok && validator.validate( size, validatorPos ) ) {
         // determine size
         if( rx.exactMatch( size ) ) {
             QString valStr = rx.cap(1);
-            if( valStr.endsWith( KGlobal::locale()->decimalSymbol() ) )
+            if( valStr.endsWith( locale.decimalPoint() ) )
                 valStr += '0';
-            double val = KGlobal::locale()->readNumber( valStr, &ok );
+            double val = locale.toDouble( valStr, &ok );
             if( ok ) {
                 QString s = rx.cap(2);
                 if( s == gbS )
@@ -664,7 +668,7 @@ void K3b::FillStatusDisplay::slotDetermineSize()
 void K3b::FillStatusDisplay::slotLoadUserDefaults()
 {
     // load project specific values
-    KConfigGroup c( KGlobal::config(), "default " + d->doc->typeString() + " settings" );
+    KConfigGroup c( KSharedConfig::openConfig(), "default " + d->doc->typeString() + " settings" );
 
     // defaults to megabytes
     d->showTime = c.readEntry( "show minutes", false );
@@ -805,7 +809,7 @@ void K3b::FillStatusDisplay::slotMediumChanged( K3b::Device::Device* )
 void K3b::FillStatusDisplay::slotSaveUserDefaults()
 {
     // save project specific values
-    KConfigGroup c( KGlobal::config(), "default " + d->doc->typeString() + " settings" );
+    KConfigGroup c( KSharedConfig::openConfig(), "default " + d->doc->typeString() + " settings" );
 
     c.writeEntry( "show minutes", d->showTime );
     c.writeEntry( "default media size", d->actionAuto->isChecked() ? 0 : d->displayWidget->cdSize().lba() );
@@ -844,7 +848,7 @@ bool K3b::FillStatusDisplay::event( QEvent* event )
 
         QToolTip::showText( he->globalPos(),
                             KIO::convertSize( d->doc->size() ) +
-                            " (" + KGlobal::locale()->formatNumber( d->doc->size(), 0 ) + "), " +
+                            " (" + QLocale::system().toString( d->doc->size() ) + "), " +
                             i18n("%1 min", d->doc->length().toString(false)) +
                             " (" + i18n("Right click for media sizes") + ')');
 
@@ -856,4 +860,4 @@ bool K3b::FillStatusDisplay::event( QEvent* event )
     return QFrame::event( event );
 }
 
-#include "k3bfillstatusdisplay.moc"
+

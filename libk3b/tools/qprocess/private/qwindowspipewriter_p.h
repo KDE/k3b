@@ -53,10 +53,10 @@
 // We mean it.
 //
 
-#include <qdatetime.h>
-#include <qthread.h>
-#include <qmutex.h>
-#include <qwaitcondition.h>
+#include <QtCore/QDateTime>
+#include <QtCore/QThread>
+#include <QtCore/QMutex>
+#include <QtCore/QWaitCondition>
 #include <qt_windows.h>
 
 QT_BEGIN_HEADER

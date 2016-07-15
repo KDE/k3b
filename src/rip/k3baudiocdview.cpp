@@ -33,34 +33,34 @@
 #include "k3bmediacache.h"
 #include "k3bmodelutils.h"
 
-#include <KAction>
-#include <KActionCollection>
-#include <KActionMenu>
-#include <KComboBox>
-#include <KConfig>
-#include <KDebug>
-#include <KDialog>
-#include <KIconLoader>
-#include <KLineEdit>
-#include <KLocale>
-#include <KMenu>
-#include <KMessageBox>
-#include <KNotification>
-#include <KStandardAction>
-#include <KStandardDirs>
-#include <KToolBar>
-#include <KToolBarSpacerAction>
+#include <KCompletion/KComboBox>
+#include <KCompletion/KLineEdit>
+#include <KConfigCore/KConfig>
+#include <KConfigWidgets/KStandardAction>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KNotifications/KNotification>
+#include <KWidgetsAddons/KActionMenu>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KToolBarSpacerAction>
+#include <KXmlGui/KActionCollection>
+#include <KXmlGui/KToolBar>
 
-#include <QFont>
-#include <QFormLayout>
-#include <QVBoxLayout>
-#include <QItemSelectionModel>
-#include <QKeyEvent>
-#include <QLabel>
-#include <QList>
-#include <QSpinBox>
-#include <QTreeView>
-#include <QDate>
+#include <QtCore/QDate>
+#include <QtCore/QDebug>
+#include <QtCore/QItemSelectionModel>
+#include <QtCore/QList>
+#include <QtGui/QFont>
+#include <QtGui/QKeyEvent>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QFormLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QVBoxLayout>
 
 #include <libkcddb/genres.h>
 #include <libkcddb/cdinfo.h>
@@ -73,7 +73,7 @@ class K3b::AudioCdView::Private
 {
 public:
     KActionCollection* actionCollection;
-    KMenu* popupMenu;
+    QMenu* popupMenu;
 
     AudioTrackModel* trackModel;
     QTreeView* trackView;
@@ -213,45 +213,45 @@ void K3b::AudioCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
     
-    KAction* actionCheckTracks = new KAction( this );
+    QAction* actionCheckTracks = new QAction( this );
     d->actionCollection->addAction( "check_tracks", actionCheckTracks );
     connect( actionCheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotCheck()) );
     
-    KAction* actionUncheckTracks = new KAction( this );
+    QAction* actionUncheckTracks = new QAction( this );
     d->actionCollection->addAction( "uncheck_tracks", actionUncheckTracks );
     connect( actionUncheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotUncheck()) );
     
-    KAction* actionEditTrackInfo = new KAction( KIcon( "document-properties" ), i18n("Edit Track Info..."), this );
+    QAction* actionEditTrackInfo = new QAction( QIcon::fromTheme( "document-properties" ), i18n("Edit Track Info..."), this );
     actionEditTrackInfo->setToolTip( i18n( "Edit current track information" ) );
     actionEditTrackInfo->setStatusTip( actionEditTrackInfo->toolTip() );
     d->actionCollection->addAction( "edit_track_cddb", actionEditTrackInfo );
     connect( actionEditTrackInfo, SIGNAL(triggered(bool)), this, SLOT(slotEditTrackCddb()) );
     
-    KAction* actionEditAlbumInfo = new KAction( KIcon( "help-about" ), i18n("Edit Album Info..."), this );
+    QAction* actionEditAlbumInfo = new QAction( QIcon::fromTheme( "help-about" ), i18n("Edit Album Info..."), this );
     actionEditAlbumInfo->setToolTip( i18n( "Edit album information" ) );
     actionEditAlbumInfo->setStatusTip( actionEditAlbumInfo->toolTip() );
     d->actionCollection->addAction( "edit_album_cddb", actionEditAlbumInfo );
     connect( actionEditAlbumInfo, SIGNAL(triggered(bool)), this, SLOT(slotEditAlbumCddb()) );
     
-    KAction* actionStartRip = new KAction( KIcon( "tools-rip-audio-cd" ), i18n("Start Ripping"), this );
+    QAction* actionStartRip = new QAction( QIcon::fromTheme( "tools-rip-audio-cd" ), i18n("Start Ripping"), this );
     actionStartRip->setToolTip( i18n( "Start audio ripping process" ) );
     actionStartRip->setStatusTip( actionStartRip->toolTip() );
     d->actionCollection->addAction( "start_rip", actionStartRip );
     connect( actionStartRip, SIGNAL(triggered(bool)), this, SLOT(startRip()) );
     
-    KAction* actionQueryCddb = new KAction( KIcon( "download" ), i18n("Query CD Database"), this );
+    QAction* actionQueryCddb = new QAction( QIcon::fromTheme( "download" ), i18n("Query CD Database"), this );
     actionQueryCddb->setToolTip( i18n( "Look for information on CDDB" ) );
     actionQueryCddb->setStatusTip( actionQueryCddb->toolTip() );
     d->actionCollection->addAction( "query_cddb", actionQueryCddb );
     connect( actionQueryCddb, SIGNAL(triggered(bool)), this, SLOT(queryCddb()) );
     
-    KAction* actionReadCdText = new KAction( KIcon( "media-optical" ), i18n("Read CD-Text"), this );
+    QAction* actionReadCdText = new QAction( QIcon::fromTheme( "media-optical" ), i18n("Read CD-Text"), this );
     actionReadCdText->setToolTip( i18n( "Read CD-Text information" ) );
     actionReadCdText->setStatusTip( actionReadCdText->toolTip() );
     d->actionCollection->addAction( "read_cd_text", actionReadCdText );
     connect( actionReadCdText, SIGNAL(triggered(bool)), this, SLOT(readCdText()) );
         
-    KActionMenu* actionQueryInfo = new KActionMenu( KIcon( "view-refresh" ), i18n("Load CD Info"), this );
+    KActionMenu* actionQueryInfo = new KActionMenu( QIcon::fromTheme( "view-refresh" ), i18n("Load CD Info"), this );
     actionQueryInfo->setToolTip( i18n( "Load track and album information" ) );
     actionQueryInfo->setStatusTip( actionQueryInfo->toolTip() );
     actionQueryInfo->addAction( actionQueryCddb );
@@ -259,22 +259,22 @@ void K3b::AudioCdView::initActions()
     d->actionCollection->addAction( "load_cd_info", actionQueryInfo );
     connect( actionQueryInfo, SIGNAL(triggered(bool)), this, SLOT(loadCdInfo()) );
     
-    KAction* actionSaveCddb = new KAction( KIcon( "document-save" ), i18n("Save CD Info Locally"), this );
+    QAction* actionSaveCddb = new QAction( QIcon::fromTheme( "document-save" ), i18n("Save CD Info Locally"), this );
     actionSaveCddb->setToolTip( i18n( "Save track and album information to the local CDDB cache" ) );
     actionSaveCddb->setStatusTip( actionSaveCddb->toolTip() );
     d->actionCollection->addAction( "save_cddb_local", actionSaveCddb );
     connect( actionSaveCddb, SIGNAL(triggered(bool)), this, SLOT(slotSaveCddbLocally()) );
     
-    KAction* actionShowDataPart = new KAction( KIcon( "media-optical-data" ), i18n("Show Data Part"), this );
+    QAction* actionShowDataPart = new QAction( QIcon::fromTheme( "media-optical-data" ), i18n("Show Data Part"), this );
     actionShowDataPart->setToolTip( i18n("Mounts the data part of CD") );
     actionShowDataPart->setStatusTip( actionShowDataPart->toolTip() );
     d->actionCollection->addAction( "show_data_part", actionShowDataPart );
     connect( actionShowDataPart, SIGNAL(triggered(bool)), this, SLOT(slotShowDataPart()) );
     
-    KAction* actionSelectAll = KStandardAction::selectAll( d->trackView, SLOT(selectAll()), actionCollection() );
+    QAction* actionSelectAll = KStandardAction::selectAll( d->trackView, SLOT(selectAll()), actionCollection() );
 
     // setup the popup menu
-    d->popupMenu = new KMenu( this );
+    d->popupMenu = new QMenu( this );
     d->popupMenu->addAction( actionCheckTracks );
     d->popupMenu->addAction( actionUncheckTracks );
     d->popupMenu->addSeparator();
@@ -342,28 +342,35 @@ void K3b::AudioCdView::slotEditTrackCddb()
 {
     const QModelIndexList selection = d->trackView->selectionModel()->selectedRows();
     if( !selection.isEmpty() ) {
-        KDialog dialog( this );
+        QDialog dialog( this );
         if( selection.size() > 1 )
-            dialog.setCaption( i18n( "Multiple Tracks" ) );
+            dialog.setWindowTitle( i18n( "Multiple Tracks" ) );
         else
-            dialog.setCaption( i18n( "CDDB Track %1", selection.first().data( AudioTrackModel::TrackNumberRole ).toInt() ) );
-        dialog.setButtons(KDialog::Ok|KDialog::Cancel);
-        dialog.setDefaultButton(KDialog::Ok);
+            dialog.setWindowTitle( i18n( "CDDB Track %1", selection.first().data( AudioTrackModel::TrackNumberRole ).toInt() ) );
         dialog.setModal(true);
-        QWidget* w = new QWidget( &dialog );
 
-        KLineEdit* editTitle = new KLineEdit( mu::commonText( selection, AudioTrackModel::TitleRole ), w );
-        KLineEdit* editArtist = new KLineEdit( mu::commonText( selection, AudioTrackModel::ArtistRole ), w );
-        KLineEdit* editExtInfo = new KLineEdit( mu::commonText( selection, AudioTrackModel::CommentRole ), w );
+        KLineEdit* editTitle = new KLineEdit( mu::commonText( selection, AudioTrackModel::TitleRole ), this );
+        KLineEdit* editArtist = new KLineEdit( mu::commonText( selection, AudioTrackModel::ArtistRole ), this );
+        KLineEdit* editExtInfo = new KLineEdit( mu::commonText( selection, AudioTrackModel::CommentRole ), this );
         
-        QFrame* line = new QFrame( w );
+        QFrame* line = new QFrame( this );
         line->setFrameShape( QFrame::HLine );
         line->setFrameShadow( QFrame::Sunken );
-        QFormLayout* form = new QFormLayout( w );
+
+        QFormLayout* form = new QFormLayout;
         form->addRow( i18n("Title:"), editTitle );
         form->addRow( line );
         form->addRow( i18n("Artist:"), editArtist );
         form->addRow( i18n("Extra info:"), editExtInfo );
+        form->setContentsMargins( 0, 0, 0, 0 );
+
+        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+        connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
+        connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
+
+        QVBoxLayout* dlgLayout = new QVBoxLayout( this );
+        dlgLayout->addLayout( form );
+        dlgLayout->addWidget( buttonBox );
 
         editTitle->setFocus( Qt::TabFocusReason );
 
@@ -371,7 +378,6 @@ void K3b::AudioCdView::slotEditTrackCddb()
         if ( editArtist->text().isEmpty() )
             editArtist->setText( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString() );
 
-        dialog.setMainWidget(w);
         dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
         if( dialog.exec() == QDialog::Accepted ) {
@@ -385,29 +391,26 @@ void K3b::AudioCdView::slotEditTrackCddb()
 
 void K3b::AudioCdView::slotEditAlbumCddb()
 {
-    KDialog dialog( this);
-    dialog.setCaption(i18n("Album CDDB"));
+    QDialog dialog( this);
+    dialog.setWindowTitle(i18n("Album CDDB"));
     dialog.setModal(true);
-    dialog.setButtons(KDialog::Ok|KDialog::Cancel);
-    dialog.setDefaultButton(KDialog::Ok);
-    QWidget* w = new QWidget( &dialog );
 
-    KLineEdit* editTitle = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Title ).toString(), w );
-    KLineEdit* editArtist = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString(), w );
-    KLineEdit* editExtInfo = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Comment ).toString(), w );
-    QSpinBox* spinYear = new QSpinBox( w );
+    KLineEdit* editTitle = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Title ).toString(), this );
+    KLineEdit* editArtist = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString(), this );
+    KLineEdit* editExtInfo = new KLineEdit( d->trackModel->cddbInfo().get( KCDDB::Comment ).toString(), this );
+    QSpinBox* spinYear = new QSpinBox( this );
     spinYear->setRange( 1, 9999 );
     if ( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() == 0 ) {
         spinYear->setValue( QDate::currentDate().year() ); // set the current year to default if no year specified yet
     } else {
         spinYear->setValue( d->trackModel->cddbInfo().get( KCDDB::Year ).toInt() );
     }
-    QFrame* line = new QFrame( w );
+    QFrame* line = new QFrame( this );
     line->setFrameShape( QFrame::HLine );
     line->setFrameShadow( QFrame::Sunken );
-    KComboBox* comboGenre = new KComboBox( w );
+    KComboBox* comboGenre = new KComboBox( this );
     comboGenre->addItems( KCDDB::Genres().i18nList() );
-    KComboBox* comboCat = new KComboBox( w );
+    KComboBox* comboCat = new KComboBox( this );
     comboCat->addItems( KCDDB::Categories().i18nList() );
 
     QString genre = d->trackModel->cddbInfo().get( KCDDB::Genre ).toString();
@@ -426,7 +429,7 @@ void K3b::AudioCdView::slotEditAlbumCddb()
         }
     }
 
-    QFormLayout* form = new QFormLayout( w );
+    QFormLayout* form = new QFormLayout;
     form->addRow( i18n("Title:"), editTitle );
     form->addRow( i18n("Artist:"), editArtist );
     form->addRow( i18n("Extra info:"), editExtInfo );
@@ -434,9 +437,18 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     form->addRow( i18n("Year:"), spinYear );
     form->addRow( line );
     form->addRow( i18n("Category:"), comboCat );
+    form->setContentsMargins( 0, 0, 0, 0 );
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+    connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
+
+    QVBoxLayout* dlgLayout = new QVBoxLayout( this );
+    dlgLayout->addLayout( form );
+    dlgLayout->addWidget( buttonBox );
+
     editTitle->setFocus(Qt::TabFocusReason);
 
-    dialog.setMainWidget(w);
     dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
     if( dialog.exec() == QDialog::Accepted ) {
@@ -519,7 +531,7 @@ bool K3b::AudioCdView::eventFilter( QObject* obj, QEvent* event )
 void K3b::AudioCdView::slotSaveCddbLocally()
 {
     KCDDB::Client cddbClient;
-    cddbClient.config().readConfig();
+    cddbClient.config().load();
     cddbClient.store( d->trackModel->cddbInfo(), CDDB::createTrackOffsetList( d->trackModel->medium().toc() ) );
 }
 
@@ -594,4 +606,4 @@ void K3b::AudioCdView::enableInteraction( bool b )
         showBusyLabel( false );
 }
 
-#include "k3baudiocdview.moc"
+

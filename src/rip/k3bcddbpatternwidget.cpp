@@ -14,20 +14,19 @@
 
 #include "k3bcddbpatternwidget.h"
 
-#include <KComboBox>
-#include <KConfigGroup>
-#include <KDebug>
-#include <KLineEdit>
-#include <KLocale>
-#include <KUrlLabel>
+#include <KConfigCore/KConfigGroup>
+#include <KCompletion/KComboBox>
+#include <KCompletion/KLineEdit>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KUrlLabel>
 
-#include <QRegExp>
-#include <QValidator>
-
-#include <QCheckBox>
-#include <QLayout>
-#include <QGridLayout>
-#include <QWhatsThis>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
+#include <QtGui/QValidator>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QWhatsThis>
 
 
 K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
@@ -172,5 +171,5 @@ void K3b::CddbPatternWidget::slotSeeConditionalInclusion()
                           m_conditionalInclusionLabel );
 }
 
-#include "k3bcddbpatternwidget.moc"
+
 

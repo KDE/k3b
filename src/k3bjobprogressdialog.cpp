@@ -31,34 +31,34 @@
 #include "k3bversion.h"
 #include "k3bthememanager.h"
 
-#include <KColorScheme>
-#include <KConfig>
-#include <KDebug>
-#include <KGlobal>
-#include <KGlobalSettings>
-#include <kio/global.h>
-#include <kjobtrackerinterface.h>
-#include <KLocale>
-#include <KMessageBox>
-#include <KNotification>
-#include <KProgressDialog>
-#include <KPushButton>
-#include <KStandardGuiItem>
-#include <KSqueezedTextLabel>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <KCoreAddons/KJobTrackerInterface>
+#include <KCoreAddons/KFormat>
+#include <KNotifications/KNotification>
+#include <KWidgetsAddons/KSqueezedTextLabel>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QCloseEvent>
-#include <QDateTime>
-#include <QFont>
-#include <QFrame>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QKeyEvent>
-#include <QLabel>
-#include <QPushButton>
-#include <QScrollBar>
-#include <QString>
-#include <QTreeWidget>
-#include <QVBoxLayout>
+#include <QtCore/QDebug>
+#include <QtCore/QDateTime>
+#include <QtCore/QString>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QIcon>
+#include <QtGui/QFont>
+#include <QtGui/QKeyEvent>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QVBoxLayout>
 
 
 class K3b::JobProgressDialog::Private
@@ -75,7 +75,7 @@ public:
 
 K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
                                            bool showSubProgress )
-    : KDialog( parent )
+    : QDialog( parent )
 {
     d = new Private;
     setupGUI();
@@ -93,24 +93,18 @@ K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
  */
 K3b::JobProgressDialog::~JobProgressDialog()
 {
-    kDebug();
+    qDebug();
     delete d;
 }
 
 
 void K3b::JobProgressDialog::setupGUI()
 {
-    // KDialog does not allow one to use Cancel and Close buttons at the same time!
-    setButtons( KDialog::Cancel|KDialog::User1|KDialog::User2 );
-    setButtonText( User1, i18n("Show Debugging Output") );
-    setButtonGuiItem( User2, KStandardGuiItem::close() );
-
-    QVBoxLayout* mainLayout = new QVBoxLayout( mainWidget() );
-    mainLayout->setContentsMargins( 0, 0, 0, 0 );
+    QVBoxLayout* mainLayout = new QVBoxLayout( this );
 
     // header
     // ------------------------------------------------------------------------------------------
-    QFrame* headerParentFrame = new QFrame( mainWidget() );
+    QFrame* headerParentFrame = new QFrame( this );
     headerParentFrame->setFrameShape( QFrame::StyledPanel );
     headerParentFrame->setFrameShadow( QFrame::Sunken );
     headerParentFrame->setLineWidth( 1 );
@@ -151,7 +145,7 @@ void K3b::JobProgressDialog::setupGUI()
     mainLayout->addWidget( headerParentFrame );
     // ------------------------------------------------------------------------------------------
 
-    d->viewInfo = new QTreeWidget( mainWidget() );
+    d->viewInfo = new QTreeWidget( this );
     d->viewInfo->setAllColumnsShowFocus( true );
     d->viewInfo->setHeaderHidden( true );
     d->viewInfo->setSortingEnabled( false );
@@ -163,7 +157,7 @@ void K3b::JobProgressDialog::setupGUI()
 
     // progress header
     // ------------------------------------------------------------------------------------------
-    QFrame* progressHeaderParentFrame = new QFrame( mainWidget() );
+    QFrame* progressHeaderParentFrame = new QFrame( this );
     progressHeaderParentFrame->setFrameShape( QFrame::StyledPanel );
     progressHeaderParentFrame->setFrameShadow( QFrame::Sunken );
     progressHeaderParentFrame->setLineWidth( 1 );
@@ -203,45 +197,55 @@ void K3b::JobProgressDialog::setupGUI()
 
     QHBoxLayout* layout3 = new QHBoxLayout;
 
-    m_labelSubTask = new KSqueezedTextLabel( mainWidget() );
+    m_labelSubTask = new KSqueezedTextLabel( this );
     m_labelSubTask->setTextElideMode( Qt::ElideRight );
     layout3->addWidget( m_labelSubTask );
 
-    m_labelSubProcessedSize = new QLabel( mainWidget() );
+    m_labelSubProcessedSize = new QLabel( this );
     m_labelSubProcessedSize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout3->addWidget( m_labelSubProcessedSize );
     mainLayout->addLayout( layout3 );
 
-    m_progressSubPercent = new QProgressBar( mainWidget() );
+    m_progressSubPercent = new QProgressBar( this );
     mainLayout->addWidget( m_progressSubPercent );
 
     QHBoxLayout* layout4 = new QHBoxLayout;
 
-    QLabel* textLabel5 = new QLabel( i18n("Overall progress:"), mainWidget() );
+    QLabel* textLabel5 = new QLabel( i18n("Overall progress:"), this );
     layout4->addWidget( textLabel5 );
 
-    m_labelProcessedSize = new QLabel( mainWidget() );
+    m_labelProcessedSize = new QLabel( this );
     m_labelProcessedSize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
     layout4->addWidget( m_labelProcessedSize );
     mainLayout->addLayout( layout4 );
 
-    m_progressPercent = new QProgressBar( mainWidget() );
+    m_progressPercent = new QProgressBar( this );
     mainLayout->addWidget( m_progressPercent );
 
-    m_frameExtraInfo = new QFrame( mainWidget() );
+    m_frameExtraInfo = new QFrame( this );
     m_frameExtraInfo->setFrameShape( QFrame::NoFrame );
     m_frameExtraInfo->setFrameShadow( QFrame::Raised );
     m_frameExtraInfoLayout = new QGridLayout( m_frameExtraInfo );
     m_frameExtraInfoLayout->setContentsMargins( 0, 0, 0,0 );
     mainLayout->addWidget( m_frameExtraInfo );
 
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+    m_cancelButton = buttonBox->addButton( QDialogButtonBox::Cancel );
+    connect( m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
+
+    m_showDbgOutButton = buttonBox->addButton( i18n("Show Debugging Output"), QDialogButtonBox::NoRole );
+    connect( m_showDbgOutButton, SIGNAL(clicked()), this, SLOT(slotShowDebuggingOutput()) );
+
+    m_closeButton = buttonBox->addButton( QDialogButtonBox::Close );
+    connect( m_closeButton, SIGNAL(clicked()), this, SLOT(accept()) );
+
+    mainLayout->addWidget( buttonBox );
+
     m_pixLabel->setThemePixmap( K3b::Theme::PROGRESS_WORKING );
 
     slotThemeChanged();
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-             this, SLOT(slotThemeChanged()) );
-    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(slotThemeChanged()) );
 }
 
@@ -253,21 +257,30 @@ void K3b::JobProgressDialog::setExtraInfo( QWidget *extra )
 }
 
 
+bool K3b::JobProgressDialog::event( QEvent *event )
+{
+    if( event->type() == QEvent::StyleChange ) {
+        slotThemeChanged();
+    }
+    return QDialog::event( event );
+}
+
+
 void K3b::JobProgressDialog::showEvent( QShowEvent* e )
 {
     if( !e->spontaneous() ) {
-        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "hide main window while writing", false ) ) {
+        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "hide main window while writing", false ) ) {
             k3bappcore->k3bMainWindow()->hide();
         }
     }
-    KDialog::showEvent( e );
+    QDialog::showEvent( e );
 }
 
 
 void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 {
-    if( button( User2 )->isVisible() ) {
-        KDialog::closeEvent( e );
+    if( m_closeButton->isVisible() ) {
+        QDialog::closeEvent( e );
         k3bappcore->k3bMainWindow()->show();
 
         if( !m_plainCaption.isEmpty() )
@@ -280,45 +293,45 @@ void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 
 void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 {
-#if KDE_IS_VERSION( 4, 3, 80 )
-    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+//#if KDE_IS_VERSION( 4, 3, 80 )
+    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
                                           "%1 of %2",
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
-                                                                             1,
-                                                                             KLocale::DefaultBinaryDialect,
-                                                                             KLocale::UnitMegaByte ),
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
-                                                                             1,
-                                                                             KLocale::DefaultBinaryDialect,
-                                                                             KLocale::UnitMegaByte ) ) );
-#else
-    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
-                                          "%1 of %2",
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ) ),
-                                          KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ) ) ) );
-#endif
+                                          KFormat().formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
+                                                                    1,
+                                                                    KFormat::DefaultBinaryDialect,
+                                                                    KFormat::UnitMegaByte ),
+                                          KFormat().formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
+                                                                    1,
+                                                                    KFormat::DefaultBinaryDialect,
+                                                                    KFormat::UnitMegaByte ) ) );
+//#else
+//    m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
+//                                          "%1 of %2",
+//                                          KFormat().formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ) ),
+//                                          KFormat().formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ) ) ) );
+//#endif
 }
 
 
 void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int trackSize )
 {
-#if KDE_IS_VERSION( 4, 3, 80 )
-    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
+//#if KDE_IS_VERSION( 4, 3, 80 )
+    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
                                              "%1 of %2",
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
-                                                                                1,
-                                                                                KLocale::DefaultBinaryDialect,
-                                                                                KLocale::UnitMegaByte ),
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
-                                                                                1,
-                                                                                KLocale::DefaultBinaryDialect,
-                                                                                KLocale::UnitMegaByte ) ) );
-#else
-    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KLocale::formatByteSize",
-                                             "%1 of %2",
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ) ),
-                                             KGlobal::locale()->formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ) ) ) );
-#endif
+                                             KFormat().formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
+                                                                       1,
+                                                                       KFormat::DefaultBinaryDialect,
+                                                                       KFormat::UnitMegaByte ),
+                                             KFormat().formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
+                                                                       1,
+                                                                       KFormat::DefaultBinaryDialect,
+                                                                       KFormat::UnitMegaByte ) ) );
+//#else
+//    m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
+//                                             "%1 of %2",
+//                                             KFormat().formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ) ),
+//                                             KFormat().formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ) ) ) );
+//#endif
 }
 
 
@@ -330,17 +343,17 @@ void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int typ
     // set the icon
     switch( type ) {
     case K3b::Job::MessageError:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-error" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-error" ) );
         break;
     case K3b::Job::MessageWarning:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-warning" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-warning" ) );
         break;
     case K3b::Job::MessageSuccess:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-ok" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-ok" ) );
         break;
     case K3b::Job::MessageInfo:
     default:
-        currentInfoItem->setIcon( 0, KIcon( "dialog-information" ) );
+        currentInfoItem->setIcon( 0, QIcon::fromTheme( "dialog-information" ) );
     }
 
     d->viewInfo->scrollToItem( currentInfoItem, QAbstractItemView::EnsureVisible );
@@ -349,7 +362,7 @@ void K3b::JobProgressDialog::slotInfoMessage( const QString& infoString, int typ
 
 void K3b::JobProgressDialog::slotFinished( bool success )
 {
-    kDebug() << "received finished signal!";
+    qDebug() << "received finished signal!";
 
     m_logFile.close();
 
@@ -359,8 +372,8 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     // Only show elapsed time at the end of the task
     // setVisible( false ) would move elapsed time one line up ...
     m_labelRemainingTime->setText( "" );
-    m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-        "Elapsed time: %1", KGlobal::locale()->prettyFormatDuration( m_timer.elapsed() ) ) );
+    m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
+        "Elapsed time: %1", QLocale().toString( QTime().addSecs( m_timer.elapsed() ), QLocale::NarrowFormat ) ) );
     m_timer.invalidate();
 
     if( success ) {
@@ -395,29 +408,29 @@ void K3b::JobProgressDialog::slotFinished( bool success )
 
     m_labelTask->setPalette( taskPalette );
 
-    showButton( Cancel, false );
-    showButton( User1, true );
-    showButton( User2, true );
+    m_cancelButton->hide();
+    m_showDbgOutButton->show();
+    m_closeButton->show();
 }
 
 
 void K3b::JobProgressDialog::slotCanceled()
 {
-    kDebug();
+    qDebug();
     m_bCanceled = true;
 }
 
 
 void K3b::JobProgressDialog::setJob( K3b::Job* job )
 {
-    kDebug();
+    qDebug();
     m_bCanceled = false;
 
     // clear everything
-    showButton( Cancel, true );
-    showButton( User1, false );
-    showButton( User2, false );
-    enableButtonCancel( true );
+    m_cancelButton->show();
+    m_showDbgOutButton->hide();
+    m_closeButton->hide();
+    m_closeButton->setEnabled( true );
 
     d->viewInfo->clear();
     m_progressPercent->setValue(0);
@@ -435,7 +448,7 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
     m_job = job;
 
     if( job ) {
-        kDebug() << "connecting";
+        qDebug() << "connecting";
         connect( job, SIGNAL(infoMessage(QString,int)), this, SLOT(slotInfoMessage(QString,int)) );
 
         connect( job, SIGNAL(percent(int)), m_progressPercent, SLOT(setValue(int)) );
@@ -457,45 +470,31 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
         m_labelJob->setText( m_job->jobDescription() );
         m_labelJobDetails->setText( m_job->jobDetails() );
 
-        setCaption( m_job->jobDescription() );
+        setWindowTitle( m_job->jobDescription() );
 
-        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
+        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
             KIO::getJobTracker()->registerJob( new KJobBridge( *job ) );
         }
     }
 }
 
 
-void K3b::JobProgressDialog::slotButtonClicked( int button )
+void K3b::JobProgressDialog::reject()
 {
-    kDebug() << button;
-
-    switch( button ) {
-    case KDialog::Cancel:
-        if( m_job && m_job->active() ) {
-            if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
-                if( m_job ) {
-                    m_job->cancel();
-                    enableButtonCancel( false );  // do not cancel twice
-                }
+    if( m_job && m_job->active() ) {
+        if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
+            if( m_job ) {
+                m_job->cancel();
+                m_closeButton->setEnabled( false ); // do not cancel twice
             }
         }
-        break;
-
-    case KDialog::User1:
-        slotShowDebuggingOutput();
-        break;
-
-    case KDialog::User2:
-        close();
-        break;
     }
 }
 
 
 void K3b::JobProgressDialog::slotNewSubTask(const QString& name)
 {
-    kDebug() << name;
+    qDebug() << name;
     m_labelSubTask->setText(name);
     m_labelSubProcessedSize->setText("");
     m_progressSubPercent->setValue(0);
@@ -504,14 +503,14 @@ void K3b::JobProgressDialog::slotNewSubTask(const QString& name)
 
 void K3b::JobProgressDialog::slotNewTask(const QString& name)
 {
-    kDebug() << name;
+    qDebug() << name;
     m_labelTask->setText( name );
 }
 
 
 void K3b::JobProgressDialog::slotStarted()
 {
-    kDebug();
+    qDebug();
     d->lastProgress = 0;
     m_lastProgressUpdateTime = 0;
     m_timer.start();
@@ -542,18 +541,18 @@ void K3b::JobProgressDialog::slotProgress( int percent )
         d->lastProgress = percent;
         k3bappcore->k3bMainWindow()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
 
-        setCaption( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
+        setWindowTitle( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
     }
 
     if( m_timer.isValid() ) {
 	qint64 elapsed = m_timer.elapsed();
-        m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-            "Elapsed time: %1", KGlobal::locale()->prettyFormatDuration( elapsed ) ) );
+        m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
+            "Elapsed time: %1", QLocale().toString( QTime().addSecs( elapsed ), QLocale::NarrowFormat ) ) );
         // Update "Remaining time" max. each second (1000 ms)
         if ( elapsed - m_lastProgressUpdateTime > 999 ) {
-            m_labelRemainingTime->setText( i18nc( "@info %1 is a duration formatted using KLocale::prettyFormatDuration",
-                "Remaining: %1", KGlobal::locale()->prettyFormatDuration(
-                ( d->lastProgress > 0 && d->lastProgress < 100 ) ? elapsed * ( 100 - d->lastProgress) / d->lastProgress : 0 ) ) );
+            m_labelRemainingTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
+                "Remaining: %1", QLocale().toString( QTime().addSecs(
+                ( d->lastProgress > 0 && d->lastProgress < 100 ) ? elapsed * ( 100 - d->lastProgress) / d->lastProgress : 0 ), QLocale::NarrowFormat ) ) );
             m_lastProgressUpdateTime = elapsed;
         }
     }
@@ -562,26 +561,26 @@ void K3b::JobProgressDialog::slotProgress( int percent )
 
 void K3b::JobProgressDialog::keyPressEvent( QKeyEvent* e )
 {
-    kDebug() << e;
+    qDebug() << e;
 
     switch ( e->key() ) {
     case Qt::Key_Enter:
     case Qt::Key_Return:
         // if the process finished this closes the dialog
-        if( button( User2 )->isVisible() )
-            close();
+        if( m_closeButton->isVisible() )
+            accept();
         break;
 
     case Qt::Key_Escape:
         // simulate button clicks
         if( m_job && m_job->active() )
-            slotButtonClicked( KDialog::Cancel );
-        else if( button( User2 )->isVisible() )
-            close();
+            reject();
+        else if( m_closeButton->isVisible() )
+            accept();
         break;
 
     default:
-        KDialog::keyPressEvent( e );
+        QDialog::keyPressEvent( e );
         break;
     }
 }
@@ -589,7 +588,7 @@ void K3b::JobProgressDialog::keyPressEvent( QKeyEvent* e )
 
 QSize K3b::JobProgressDialog::sizeHint() const
 {
-    QSize s = KDialog::sizeHint();
+    QSize s = QDialog::sizeHint();
     if( s.width() < s.height() )
         s.setWidth( s.height() );
     return s;
@@ -603,7 +602,7 @@ int K3b::JobProgressDialog::startJob( K3b::Job* job )
         new JobInterface( job );
     }
     else if( !m_job ) {
-        kError() << "(K3b::JobProgressDialog) null job!" << endl;
+        qCritical() << "(K3b::JobProgressDialog) null job!" << endl;
         return -1;
     }
 
@@ -650,4 +649,4 @@ void K3b::JobProgressDialog::slotThemeChanged()
     }
 }
 
-#include "k3bjobprogressdialog.moc"
+

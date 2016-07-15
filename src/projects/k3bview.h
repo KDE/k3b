@@ -22,12 +22,12 @@
 #include <config-k3b.h>
 #endif
 
-#include <QHash>
-#include <QList>
-#include <QWidget>
+#include <KXmlGui/KXMLGUIClient>
 
-#include <KXMLGUIClient>
-#include <KUrl>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QUrl>
+#include <QtWidgets/QWidget>
 
 class QVBoxLayout;
 class KToolBar;
@@ -72,12 +72,12 @@ namespace K3b {
          * Add an url to the doc. The default implementation simply calls
          * addUrls.
          */
-        virtual void addUrl( const KUrl& );
+        virtual void addUrl( const QUrl& );
 
         /**
          * Add urls to the doc. The default implementation calls doc()->addUrls.
          */
-        virtual void addUrls( const KUrl::List& );
+        virtual void addUrls( const QList<QUrl>& );
 
     protected:
         /**

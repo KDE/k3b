@@ -29,7 +29,7 @@ public:
     K3bMpcDecoderFactory( QObject* parent, const QVariantList& );
     ~K3bMpcDecoderFactory();
 
-    bool canDecode( const KUrl& filename );
+    bool canDecode( const QUrl& filename );
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
@@ -57,7 +57,5 @@ protected:
 private:
     K3bMpcWrapper* m_mpc;
 };
-
-K3B_EXPORT_PLUGIN(k3bmpcdecoder, K3bMpcDecoderFactory)
 
 #endif

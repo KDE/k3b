@@ -19,9 +19,10 @@
 #include "k3baudiodatasource.h"
 #include "k3bsimplejobhandler.h"
 
-#include <kmessagebox.h>
-#include <kinputdialog.h>
-#include <klocale.h>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+
+#include <QtWidgets/QInputDialog>
 
 
 class K3b::MusicBrainzJob::Private
@@ -119,15 +120,15 @@ void K3b::MusicBrainzJob::slotMbJobFinished( bool success )
             QString s;
             bool ok = true;
             if( resultStringsUnique.count() > 1 )
-                s = KInputDialog::getItem( i18n("MusicBrainz Query"),
+                s = QInputDialog::getItem( dynamic_cast<QWidget*>(parent()),
+                                           i18n("MusicBrainz Query"),
                                            i18n("Found multiple matches for track %1 (%2). Please select one.",
                                                 currentTrack->trackNumber(),
                                                 currentTrack->firstSource()->sourceComment()),
                                            resultStringsUnique,
                                            0,
                                            false,
-                                           &ok,
-                                           dynamic_cast<QWidget*>(parent()) );
+                                           &ok );
             else
                 s = resultStringsUnique.first();
 
@@ -152,4 +153,4 @@ void K3b::MusicBrainzJob::slotMbJobFinished( bool success )
     }
 }
 
-#include "k3bmusicbrainzjob.moc"
+

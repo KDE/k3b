@@ -16,7 +16,7 @@
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 #include <stdio.h>
 #include <errno.h>
@@ -125,7 +125,7 @@ int K3b::Device::ScsiCommand::Private::transport( const Device* device, Transpor
     ccb.ccb_h.target_id  = device->handle()->target_id;
     ccb.ccb_h.target_lun = device->handle()->target_lun;
 
-    kDebug() << "(K3b::Device::ScsiCommand) transport command " << commandString(ccb.csio.cdb_io.cdb_bytes[0])
+    qDebug() << "(K3b::Device::ScsiCommand) transport command " << commandString(ccb.csio.cdb_io.cdb_bytes[0])
              << " (" << QString::number((int)ccb.csio.cdb_io.cdb_bytes[0], 16) << "), length: " << (int)ccb.csio.cdb_len;
     int direction = CAM_DEV_QFRZDIS;
     if (!len)
@@ -136,22 +136,22 @@ int K3b::Device::ScsiCommand::Private::transport( const Device* device, Transpor
     cam_fill_csio( &(ccb.csio), 1, NULL, direction, MSG_SIMPLE_Q_TAG, (uint8_t*)data, len, sizeof(ccb.csio.sense_data), ccb.csio.cdb_len, 30*1000 );
     int ret = cam_send_ccb( device->handle(), &ccb );
     if( ret < 0 ) {
-        kError() << "(K3b::Device::ScsiCommand) transport cam_send_ccb failed: ret = " << ret
+        qCritical() << "(K3b::Device::ScsiCommand) transport cam_send_ccb failed: ret = " << ret
                  << ", errno = " << errno << ", cam_errbuf = " << cam_errbuf;
         return 1;
     }
     else if( (ccb.ccb_h.status & CAM_STATUS_MASK) == CAM_REQ_CMP ) {
-        kDebug() << "(K3b::Device::ScsiCommand) transport succeeded";
+        qDebug() << "(K3b::Device::ScsiCommand) transport succeeded";
         return 0;
     }
 
-    kDebug() << "(K3b::Device::ScsiCommand) transport command failed: scsi_status = " << QString::number(ccb.csio.scsi_status, 16);
+    qDebug() << "(K3b::Device::ScsiCommand) transport command failed: scsi_status = " << QString::number(ccb.csio.scsi_status, 16);
 
     if( ccb.csio.scsi_status == SCSI_STATUS_CHECK_COND &&
         !(ccb.ccb_h.status & CAM_AUTOSNS_VALID) &&
         ccb.csio.cdb_io.cdb_bytes[0] != MMC_REQUEST_SENSE )
     {
-        kDebug() << "(K3b::Device::ScsiCommand) transport requesting sense data";
+        qDebug() << "(K3b::Device::ScsiCommand) transport requesting sense data";
 
         struct scsi_sense_data sense;
         ScsiCommand::Private cmd;
@@ -163,7 +163,7 @@ int K3b::Device::ScsiCommand::Private::transport( const Device* device, Transpor
         ret = cmd.transport( device, TR_DIR_READ, &sense, SSD_MIN_SIZE );
         if( ret < 0 )
         {
-            kWarning() << "(K3b::Device::ScsiCommand) transport getting sense data failed: " << ret;
+            qWarning() << "(K3b::Device::ScsiCommand) transport getting sense data failed: " << ret;
             return 1;
         }
 
@@ -172,11 +172,11 @@ int K3b::Device::ScsiCommand::Private::transport( const Device* device, Transpor
     }
 
     if( !(ccb.ccb_h.status & CAM_AUTOSNS_VALID) )
-        kDebug() << "(K3b::Device::ScsiCommand) sense data is not available";
+        qDebug() << "(K3b::Device::ScsiCommand) sense data is not available";
 
     ret = sense_to_err(ccb.csio.sense_data);
     if( ret == 0 )
         ret = 1;
-    kDebug() << "(K3b::Device::ScsiCommand) transport failed: " << ret;
+    qDebug() << "(K3b::Device::ScsiCommand) transport failed: " << ret;
     return ret;
 }

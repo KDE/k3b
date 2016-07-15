@@ -15,7 +15,7 @@
 #ifndef _K3B_VIDEODVDTITLEMODEL_H_
 #define _K3B_VIDEODVDTITLEMODEL_H_
 
-#include <QAbstractTableModel>
+#include <QtCore/QAbstractTableModel>
 
 
 namespace K3b {

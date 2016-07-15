@@ -19,7 +19,7 @@
 #include "k3bpluginconfigwidget.h"
 
 #include "ui_base_k3blameencodersettingswidget.h"
-#include "ui_base_k3bmanualbitratesettingswidget.h"
+#include "ui_base_k3bmanualbitratesettingsdialog.h"
 
 class K3bLameManualSettingsDialog;
 

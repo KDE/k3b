@@ -15,14 +15,12 @@
 #ifndef K3B_DATA_VOLUMEDESC_DIALOG_H
 #define K3B_DATA_VOLUMEDESC_DIALOG_H
 
-#include <KDialog>
-
-#include "ui_base_k3bdatavolumedescwidget.h"
+#include "ui_base_k3bdatavolumedescdialog.h"
 
 namespace K3b {
     class IsoOptions;
 
-    class DataVolumeDescDialog : public KDialog, public Ui::base_K3bDataVolumeDescWidget
+    class DataVolumeDescDialog : public QDialog, public Ui::base_K3bDataVolumeDescDialog
     {
         Q_OBJECT
 

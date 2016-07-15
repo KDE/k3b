@@ -15,8 +15,8 @@
 #ifndef _K3B_LSOF_WRAPPER_H_
 #define _K3B_LSOF_WRAPPER_H_
 
-#include <QList>
-#include <QString>
+#include <QtCore/QList>
+#include <QtCore/QString>
 
 namespace K3b {
     namespace Device {

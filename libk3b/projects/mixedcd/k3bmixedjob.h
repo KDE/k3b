@@ -18,7 +18,7 @@
 
 #include "k3bjob.h"
 
-class KTemporaryFile;
+class QTemporaryFile;
 
 namespace K3b {
     
@@ -111,7 +111,7 @@ namespace K3b {
 
         QString m_isoImageFilePath;
 
-        KTemporaryFile* m_tocFile;
+        QTemporaryFile* m_tocFile;
 
         enum Action { INITIALIZING_IMAGER,
                       PREPARING_DATA,

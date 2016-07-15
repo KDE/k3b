@@ -16,22 +16,21 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixprogram.h"
 #include "k3bmovixfileitem.h"
-
 #include "k3bcore.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bbootitem.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bisoimager.h"
+#include "k3b_i18n.h"
 
-#include <KLocale>
-#include <KDebug>
-#include <KTemporaryFile>
-#include <kio/global.h>
+#include <KIOCore/KIO/Global>
 
-#include <QTextStream>
-#include <QDir>
-#include <QStack>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QStack>
+#include <QtCore/QTemporaryFile>
+#include <QtCore/QTextStream>
 
 
 class K3b::MovixDocPreparer::Private
@@ -52,9 +51,9 @@ public:
     K3b::MovixDoc* doc;
     const K3b::MovixBin* eMovixBin;
 
-    KTemporaryFile* playlistFile;
-    KTemporaryFile* isolinuxConfigFile;
-    KTemporaryFile* movixRcFile;
+    QTemporaryFile* playlistFile;
+    QTemporaryFile* isolinuxConfigFile;
+    QTemporaryFile* movixRcFile;
 
     K3b::DirItem* isolinuxDir;
     K3b::DirItem* movixDir;
@@ -90,7 +89,7 @@ K3b::MovixDoc* K3b::MovixDocPreparer::doc() const
 
 void K3b::MovixDocPreparer::start()
 {
-    kDebug() << k_funcinfo;
+    qDebug();
     jobStarted();
 
     bool success = true;
@@ -111,7 +110,7 @@ void K3b::MovixDocPreparer::cancel()
 
 bool K3b::MovixDocPreparer::createMovixStructures()
 {
-    kDebug() << k_funcinfo;
+    qDebug();
     removeMovixStructures();
 
     if( doc() ) {
@@ -139,7 +138,7 @@ bool K3b::MovixDocPreparer::createMovixStructures()
 
 void K3b::MovixDocPreparer::removeMovixStructures()
 {
-    kDebug() << k_funcinfo;
+    qDebug();
     // remove movix files from doc
     // the dataitems do the cleanup in the doc
     delete d->movixDir;
@@ -172,7 +171,7 @@ void K3b::MovixDocPreparer::removeMovixStructures()
 bool K3b::MovixDocPreparer::writePlaylistFile()
 {
     delete d->playlistFile;
-    d->playlistFile = new KTemporaryFile();
+    d->playlistFile = new QTemporaryFile();
     d->playlistFile->open();
 
     QTextStream s( d->playlistFile );
@@ -193,7 +192,7 @@ bool K3b::MovixDocPreparer::writePlaylistFile()
 bool K3b::MovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath )
 {
     delete d->isolinuxConfigFile;
-    d->isolinuxConfigFile = new KTemporaryFile();
+    d->isolinuxConfigFile = new QTemporaryFile();
     d->isolinuxConfigFile->open();
 
     QTextStream s( d->isolinuxConfigFile );
@@ -227,7 +226,7 @@ bool K3b::MovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath
 bool K3b::MovixDocPreparer::writeMovixRcFile()
 {
     delete d->movixRcFile;
-    d->movixRcFile = new KTemporaryFile();
+    d->movixRcFile = new QTemporaryFile();
     d->movixRcFile->open();
 
     QTextStream s( d->movixRcFile );
@@ -459,7 +458,7 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
         } else if( next->isDir() ) {
             dir = static_cast<K3b::DirItem*>( next );
         } else {
-            kError() << "(K3b::MovixDocPreparer) found non-dir item where a dir was needed." << endl;
+            qCritical() << "(K3b::MovixDocPreparer) found non-dir item where a dir was needed." << endl;
             return 0;
         }
     }
@@ -476,4 +475,4 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
     return dir;
 }
 
-#include "k3bmovixdocpreparer.moc"
+

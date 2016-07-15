@@ -19,11 +19,9 @@
 #include "k3bsimplejobhandler.h"
 #include "k3bglobals.h"
 
-#include <kdebug.h>
-#include <kglobal.h>
-
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
 
 
 class K3b::DirSizeJob::Private
@@ -37,7 +35,7 @@ public:
           totalSymlinks(0) {
     }
 
-    KUrl::List urls;
+    QList<QUrl> urls;
     bool followSymlinks;
 
     KIO::filesize_t totalSize;
@@ -86,7 +84,7 @@ KIO::filesize_t K3b::DirSizeJob::totalSymlinks() const
 }
 
 
-void K3b::DirSizeJob::setUrls( const KUrl::List& urls )
+void K3b::DirSizeJob::setUrls( const QList<QUrl>& urls )
 {
     d->urls = urls;
 }
@@ -105,12 +103,12 @@ bool K3b::DirSizeJob::run()
     d->totalSymlinks = 0;
 
     QStringList l;
-    for( KUrl::List::const_iterator it = d->urls.constBegin();
+    for( QList<QUrl>::const_iterator it = d->urls.constBegin();
          it != d->urls.constEnd(); ++it ) {
-        const KUrl& url = *it;
+        const QUrl& url = *it;
 
         if( !url.isLocalFile() ) {
-            kDebug() << "(K3b::DirSizeJob) no remote support.";
+            qDebug() << "(K3b::DirSizeJob) no remote support.";
             return false;
         }
 
@@ -162,4 +160,4 @@ bool K3b::DirSizeJob::countFiles( const QStringList& l, const QString& dir )
     return true;
 }
 
-#include "k3bdirsizejob.moc"
+

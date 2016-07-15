@@ -16,12 +16,12 @@
 #include "k3bmediumdelegate.h"
 #include "k3bmedium.h"
 
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QApplication>
-#include <QModelIndex>
-#include <QPainter>
-#include <QStyle>
+#include <QtCore/QModelIndex>
+#include <QtGui/QPainter>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QStyle>
 
 Q_DECLARE_METATYPE(K3b::Medium)
 
@@ -182,4 +182,4 @@ void K3b::MediumDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
     }
 }
 
-#include "k3bmediumdelegate.moc"
+

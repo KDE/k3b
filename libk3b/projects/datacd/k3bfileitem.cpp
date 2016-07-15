@@ -20,14 +20,14 @@
 #include "k3bisooptions.h"
 #include <config-k3b.h>
 
-#include <KDebug>
-#include <KUrl>
-
-#include <QFile>
-#include <QFileInfo>
-#include <QRegExp>
-#include <QString>
-#include <QStringList>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QMimeDatabase>
+#include <QtCore/QRegExp>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QUrl>
 
 #include <errno.h>
 #include <string.h>
@@ -71,17 +71,17 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc& doc, const QStri
         }
         else {
             init( filePath, k3bName, doc, &statBuf, 0 );
-            kError() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         }
     }
     else {
-        kError() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+        qCritical() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         if( k3b_stat( QFile::encodeName(filePath), &followedStatBuf ) == 0 ) {
             init( filePath, k3bName, doc, 0, &followedStatBuf );
         }
         else {
             init( filePath, k3bName, doc, 0, 0 );
-            kError() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
         }
     }
 }
@@ -124,7 +124,7 @@ K3b::DataItem* K3b::FileItem::copy() const
 }
 
 
-KMimeType::Ptr K3b::FileItem::mimeType() const
+QMimeType K3b::FileItem::mimeType() const
 {
     return m_mimeType;
 }
@@ -303,7 +303,7 @@ void K3b::FileItem::init( const QString& filePath,
         m_idFollowed = m_id;
     }
 
-    m_mimeType = KMimeType::findByUrl( KUrl(filePath) );
+    m_mimeType = QMimeDatabase().mimeTypeForFile( filePath );
 
     // add automagically like a qlistviewitem
     if( parent() )

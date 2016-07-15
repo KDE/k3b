@@ -18,13 +18,12 @@
 
 #include "k3baudiodatasource.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-#include <QGridLayout>
+#include <KI18n/KLocalizedString>
 
-#include <klocale.h>
-#include <kdialog.h>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QGridLayout>
 
 
 K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )
@@ -162,4 +161,4 @@ void K3b::AudioDataSourceEditWidget::slotEndOffsetEdited( const K3b::Msf& msf )
     }
 }
 
-#include "k3baudiodatasourceeditwidget.moc"
+

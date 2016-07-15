@@ -18,12 +18,13 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixfileitem.h"
 
-#include <KLocale>
-#include <KUrl>
-#include <KIcon>
+#include <KCoreAddons/KUrlMimeData>
+#include <KI18n/KLocalizedString>
 
+#include <QtCore/QUrl>
 #include <QtCore/QMimeData>
 #include <QtCore/QDataStream>
+#include <QtGui/QIcon>
 
 namespace K3b {
 
@@ -259,7 +260,7 @@ QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
                 }
                 else if ( role == Qt::DecorationRole )
                 {
-                    return KIcon( item->mimeType()->iconName() );
+                    return QIcon::fromTheme( item->mimeType().iconName() );
                 }
                 break;
             case TypeColumn:
@@ -267,9 +268,9 @@ QVariant MovixProjectModel::data( const QModelIndex& index, int role ) const
                     role == Qt::EditRole )
                 {
                     if( item->isSymLink() )
-                        return i18n("Link to %1", item->mimeType()->comment());
+                        return i18n("Link to %1", item->mimeType().comment());
                     else
-                        return item->mimeType()->comment();
+                        return item->mimeType().comment();
                 }
                 break;
             case SizeColumn:
@@ -365,19 +366,19 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
     QMimeData* mime = new QMimeData();
 
     QList<MovixFileItem*> items;
-    KUrl::List urls;
+    QList<QUrl> urls;
 
     Q_FOREACH( const QModelIndex& index, indexes ) {
         MovixFileItem* item = itemForIndex( index );
         if (item) {
             items << item;
 
-            if( !urls.contains( KUrl( item->localPath() ) ) ) {
-                urls << KUrl( item->localPath() );
+            if( !urls.contains( QUrl::fromLocalFile( item->localPath() ) ) ) {
+                urls << QUrl::fromLocalFile( item->localPath() );
             }
         }
     }
-    urls.populateMimeData( mime );
+    mime->setUrls(urls);
 
     // the easy road: encode the pointers
     QByteArray trackData;
@@ -394,7 +395,7 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
 
 QStringList MovixProjectModel::mimeTypes() const
 {
-    QStringList s = KUrl::List::mimeDataTypes();
+    QStringList s = KUrlMimeData::mimeDataTypes();
     s += QString::fromLatin1( "application/x-k3bmovixfileitem" );
 
     return s;
@@ -449,7 +450,7 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction acti
         return true;
     }
 
-    if ( KUrl::List::canDecode( data ) )
+    if ( data->hasUrls() )
     {
         int pos;
         if(parent.isValid())
@@ -459,9 +460,9 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction acti
         else
             pos = d->project->movixFileItems().size();
 
-        KUrl::List urls = KUrl::List::fromMimeData( data );
+        QList<QUrl> urls = KUrlMimeData::urlsFromMimeData( data );
 
-        QMetaObject::invokeMethod( d->project, "addUrlsAt", Qt::QueuedConnection, Q_ARG( KUrl::List, urls ), Q_ARG( int, pos ) );
+        QMetaObject::invokeMethod( d->project, "addUrlsAt", Qt::QueuedConnection, Q_ARG( QList<QUrl>, urls ), Q_ARG( int, pos ) );
 
         return true;
     }
@@ -494,4 +495,4 @@ bool MovixProjectModel::removeRows( int row, int count, const QModelIndex& paren
 
 } // namespace K3b
 
-#include "k3bmovixprojectmodel.moc"
+#include "moc_k3bmovixprojectmodel.cpp"

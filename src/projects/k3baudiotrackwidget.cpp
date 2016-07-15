@@ -20,15 +20,15 @@
 #include "k3bvalidators.h"
 #include "k3bcdtextvalidator.h"
 
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qtooltip.h>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QToolTip>
 
-#include <qtabwidget.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <kdebug.h>
+#include <KCompletion/KLineEdit>
+#include <KI18n/KLocalizedString>
 
+#include <QtCore/QDebug>
+#include <QtWidgets/QTabWidget>
 
 
 K3b::AudioTrackWidget::AudioTrackWidget( const QList<K3b::AudioTrack*>& tracks,
@@ -158,4 +158,4 @@ void K3b::AudioTrackWidget::save()
     }
 }
 
-#include "k3baudiotrackwidget.moc"
+

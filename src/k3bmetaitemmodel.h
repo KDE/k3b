@@ -15,11 +15,10 @@
 #ifndef _K3B_META_ITEM_MODEL_H_
 #define _K3B_META_ITEM_MODEL_H_
 
-#include <QAbstractItemModel>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QUrl>
 
-#include <KUrl>
-
-class KIcon;
+class QIcon;
 
 // TODO: * Have a MetaItemView which allows to set delegates for submodel header painting
 //       * implement something like modelHeaderData() to get data for the root elements
@@ -80,6 +79,12 @@ namespace K3b {
          * The default implementation just returns the list of all drop actions
          * supported by any of the submodels.
          */
+        virtual Qt::DropActions supportedDragActions() const;
+
+        /**
+         * The default implementation just returns the list of all drop actions
+         * supported by any of the submodels.
+         */
         virtual Qt::DropActions supportedDropActions() const;
 
     public Q_SLOTS:
@@ -92,7 +97,7 @@ namespace K3b {
          * be merged into the root item list of this model. Otherwise the submodel
          * will be added under a new root item.
          */
-        void addSubModel( const QString& name, const KIcon& icon, QAbstractItemModel* model, bool flat = false );
+        void addSubModel( const QString& name, const QIcon& icon, QAbstractItemModel* model, bool flat = false );
 
         /**
          * FIXME: better use an id or something?
@@ -105,6 +110,7 @@ namespace K3b {
         void slotRowsAboutToBeRemoved( const QModelIndex&, int, int );
         void slotRowsRemoved( const QModelIndex&, int, int );
         void slotDataChanged( const QModelIndex&, const QModelIndex& );
+        void slotAboutToBeReset();
         void slotReset();
 
     private:

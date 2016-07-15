@@ -16,11 +16,11 @@
 #ifndef K3B_ADVANCED_OPTION_TAB_H
 #define K3B_ADVANCED_OPTION_TAB_H
 
-#include <qwidget.h>
+#include <QtWidgets/QWidget>
 
 class QCheckBox;
 class QLabel;
-class KIntNumInput;
+class QSpinBox;
 
 
 
@@ -47,7 +47,7 @@ namespace K3b {
         QCheckBox*    m_checkAutoErasingRewritable;
         QCheckBox*    m_checkOverburn;
         QCheckBox*    m_checkManualWritingBufferSize;
-        KIntNumInput* m_editWritingBufferSize;
+        QSpinBox*     m_editWritingBufferSize;
         QCheckBox*    m_checkShowForceGuiElements;
         QCheckBox*    m_checkForceUnsafeOperations;
     };

@@ -16,8 +16,8 @@
 #ifndef K3BVCDJOB_H
 #define K3BVCDJOB_H
 
-#include <qprocess.h>
 #include "k3bjob.h"
+#include <QtCore/QProcess>
 
 class K3Process;
 

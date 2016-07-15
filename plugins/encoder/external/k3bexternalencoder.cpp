@@ -14,20 +14,20 @@
 
 #include "k3bexternalencoder.h"
 #include "k3bexternalencodercommand.h"
+#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
 #include "k3bcore.h"
 #include "k3bprocess.h"
 
-#include <KDebug>
-#include <KConfig>
-#include <KLocale>
-#include <KStandardDirs>
+#include <KConfigCore/KConfig>
 
-#include <QFile>
-#include <QList>
-#include <QRegExp>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QList>
+#include <QtCore/QRegExp>
+#include <QtCore/QStandardPaths>
 
 #include <sys/types.h>
 
@@ -37,7 +37,7 @@ K3B_EXPORT_PLUGIN(k3bexternalencoder, K3bExternalEncoder)
 Q_DECLARE_METATYPE( QProcess::ExitStatus )
 
 
-static const char s_riffHeader[] =
+static const unsigned char s_riffHeader[] =
 {
     0x52, 0x49, 0x46, 0x46, // 0  "RIFF"
     0x00, 0x00, 0x00, 0x00, // 4  wavSize
@@ -63,7 +63,7 @@ static K3bExternalEncoderCommand commandByExtension( const QString& extension )
         if( (*it).extension == extension )
             return *it;
 
-    kDebug() << "(K3bExternalEncoder) could not find command for extension " << extension;
+    qDebug() << "(K3bExternalEncoder) could not find command for extension " << extension;
 
     return K3bExternalEncoderCommand();
 }
@@ -119,7 +119,7 @@ void K3bExternalEncoder::finishEncoderInternal()
 void K3bExternalEncoder::slotExternalProgramFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if( (exitStatus != QProcess::NormalExit) || (exitCode != 0) )
-        kDebug() << "(K3bExternalEncoder) program exited with error.";
+        qDebug() << "(K3bExternalEncoder) program exited with error.";
 }
 
 
@@ -170,8 +170,8 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
         }
 
 
-        kDebug() << "***** external parameters:";
-        kDebug() << params.join( " " ) << flush;
+        qDebug() << "***** external parameters:";
+        qDebug() << params.join( " " ) << flush;
 
         // set one general error message
         setLastError( i18n("Command failed: %1", params.join( " " ) ) );
@@ -201,7 +201,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
         }
         else {
             QString commandName = d->cmd.command.section( QRegExp("\\s+"), 0 );
-            if( !KStandardDirs::findExe( commandName ).isEmpty() )
+            if( !QStandardPaths::findExecutable( commandName ).isEmpty() )
                 setLastError( i18n("Could not find program '%1'",commandName) );
 
             d->initialized = false;
@@ -219,11 +219,11 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
 
 bool K3bExternalEncoder::writeWaveHeader()
 {
-    kDebug() << "(K3bExternalEncoder) writing wave header";
+    qDebug() << "(K3bExternalEncoder) writing wave header";
 
     // write the RIFF thing
-    if( d->process->write( s_riffHeader, 4 ) != 4 ) {
-        kDebug() << "(K3bExternalEncoder) failed to write riff header.";
+    if( d->process->write( (const char*) s_riffHeader, 4 ) != 4 ) {
+        qDebug() << "(K3bExternalEncoder) failed to write riff header.";
         return false;
     }
 
@@ -238,13 +238,13 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[3] = (wavSize   >> 24) & 0xff;
 
     if( d->process->write( c, 4 ) != 4 ) {
-        kDebug() << "(K3bExternalEncoder) failed to write wave size.";
+        qDebug() << "(K3bExternalEncoder) failed to write wave size.";
         return false;
     }
 
     // write static part of the header
-    if( d->process->write( s_riffHeader + 8, 32 ) != 32 ) {
-        kDebug() << "(K3bExternalEncoder) failed to write wave header.";
+    if( d->process->write( (const char*) s_riffHeader + 8, 32 ) != 32 ) {
+        qDebug() << "(K3bExternalEncoder) failed to write wave header.";
         return false;
     }
 
@@ -254,7 +254,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     c[3] = (dataSize   >> 24) & 0xff;
 
     if( d->process->write( c, 4 ) != 4 ) {
-        kDebug() << "(K3bExternalEncoder) failed to write data size.";
+        qDebug() << "(K3bExternalEncoder) failed to write data size.";
         return false;
     }
 
@@ -295,7 +295,7 @@ qint64 K3bExternalEncoder::encodeInternal( const char* data, qint64 len )
 
 void K3bExternalEncoder::slotExternalProgramOutput( const QString& line )
 {
-    kDebug() << "(" << d->cmd.name << ") " << line;
+    qDebug() << "(" << d->cmd.name << ") " << line;
 }
 
 

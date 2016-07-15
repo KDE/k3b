@@ -22,32 +22,30 @@
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bmixeddoc.h"
+#include "k3bplugin_i18n.h"
 
-#include <KComboBox>
-#include <KComponentData>
-#include <KConfig>
-#include <KDebug>
-#include <KDialog>
-#include <KFileMetaInfo>
-#include <KIcon>
-#include <KLocale>
-#include <KMessageBox>
-#include <KMimeType>
+#include <KConfigCore/KConfig>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QCheckBox>
-#include <QFile>
-#include <QGroupBox>
-#include <QHash>
-#include <QLabel>
-#include <QLatin1String>
-#include <QLayout>
-#include <QPair>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QString>
-#include <QToolTip>
-#include <QTreeWidget>
-#include <QVBoxLayout>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QMimeDatabase>
+#include <QtCore/QMimeType>
+#include <QtCore/QPair>
+#include <QtCore/QLatin1String>
+#include <QtCore/QHash>
+#include <QtCore/QString>
+#include <QtGui/QIcon>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QVBoxLayout>
 
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
@@ -68,18 +66,21 @@ namespace {
 
         TagLib::File* createFile( TagLib::FileName fileName, bool, TagLib::AudioProperties::ReadStyle ) const
         {
-            KMimeType::Ptr mimetype = KMimeType::findByPath( QFile::decodeName( fileName ) );
-            if ( mimetype ) {
-                if ( mimetype->name() == QLatin1String( "audio/mpeg" ) )
+            QMimeType mimetype = m_mimeDataBase.mimeTypeForFile( QFile::decodeName( fileName ) );
+            if ( mimetype.isValid() ) {
+                if ( mimetype.name() == QLatin1String( "audio/mpeg" ) )
                     return new TagLib::MPEG::File(fileName);
-                else if ( mimetype->name() == QLatin1String( "application/ogg" ) )
+                else if ( mimetype.name() == QLatin1String( "application/ogg" ) )
                     return new TagLib::Ogg::Vorbis::File(fileName);
-                else if ( mimetype->name() == QLatin1String( "application/x-flac" ) )
+                else if ( mimetype.name() == QLatin1String( "application/x-flac" ) )
                     return new TagLib::Ogg::FLAC::File(fileName);
             }
 
             return 0;
         }
+
+    private:
+        QMimeDatabase m_mimeDataBase;
     };
 }
 
@@ -90,7 +91,7 @@ public:
     K3b::DataDoc* doc;
     QString pattern;
 
-    KComboBox* comboPattern;
+    QComboBox* comboPattern;
     QTreeWidget* viewFiles;
     //  KProgressDialog* progressDialog;
     QPushButton* scanButton;
@@ -115,7 +116,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
     QGroupBox* patternGroup = new QGroupBox( i18n("Rename Pattern"), this );
     QHBoxLayout* patternGroupLayout = new QHBoxLayout( patternGroup );
 
-    d->comboPattern = new KComboBox( patternGroup );
+    d->comboPattern = new QComboBox( patternGroup );
     d->comboPattern->setEditable( true );
 
     d->scanButton = new QPushButton( i18n("Scan"), patternGroup );
@@ -208,7 +209,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 
         // create root item
         QTreeWidgetItem* rootItem = new QTreeWidgetItem( d->viewFiles, QStringList() << QLatin1String( "/" ) );
-        rootItem->setIcon( 0, KIcon( "folder" ) );
+        rootItem->setIcon( 0, QIcon::fromTheme( "folder" ) );
 
         //  d->progressDialog->show();
         scanDir( dir, rootItem );
@@ -224,7 +225,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
 
 void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidgetItem* viewRoot )
 {
-    kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName();
+    qDebug() << "(K3bAudioMetainfoRenamerPluginWidget) scanning dir " << dir->k3bName();
 
     d->dirItemHash.insert( dir, viewRoot );
 
@@ -235,7 +236,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
                 if( !newName.isEmpty() ) {
                     QTreeWidgetItem* fileViewItem = new QTreeWidgetItem( viewRoot, QStringList() << newName << item->k3bName() );
                     fileViewItem->setCheckState( 0, Qt::Checked );
-                    fileViewItem->setIcon( 0, KIcon( item->mimeType()->iconName() ) );
+                    fileViewItem->setIcon( 0, QIcon::fromTheme( item->mimeType().iconName() ) );
                     d->renamableItems.append( qMakePair( (K3b::FileItem*)item, fileViewItem ) );
                 }
             }
@@ -253,7 +254,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
             K3b::DirItem* dirItem = static_cast<K3b::DirItem*>( item );
             if ( !dirItem->children().isEmpty() ) {
                 QTreeWidgetItem* dirViewItem = new QTreeWidgetItem( viewRoot, QStringList() << item->k3bName() );
-                dirViewItem->setIcon( 0, KIcon( "folder" ) );
+                dirViewItem->setIcon( 0, QIcon::fromTheme( "folder" ) );
                 scanDir( dirItem, dirViewItem );
                 dirViewItem->setExpanded(true);
             }
@@ -341,7 +342,7 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3b::FileItem* item 
             // Check if files with that name exists and if so append number
             //
             if( existsOtherItemWithSameName( item, newName + extension ) ) {
-                kDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name "
+                qDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name "
                          << newName << extension << " already exists" << endl;
                 int i = 1;
                 while( existsOtherItemWithSameName( item, newName + QString( " (%1)").arg(i) + extension ) )
@@ -384,7 +385,7 @@ K3bAudioMetainfoRenamerPlugin::K3bAudioMetainfoRenamerPlugin( QObject* parent, c
 {
     setText( i18n("Rename Audio Files") );
     setToolTip( i18n("Rename audio files based on their meta info.") );
-    setIcon( KIcon( "edit-rename" ) );
+    setIcon( QIcon::fromTheme( "edit-rename" ) );
 }
 
 

@@ -17,14 +17,13 @@
 #ifndef K3BDIRITEM_H
 #define K3BDIRITEM_H
 
+#include "k3bdataitem.h"
+#include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
 
 #include <QtCore/QList>
 #include <QtCore/QString>
-
-#include <kio/global.h>
-
-#include "k3bdataitem.h"
-#include "k3b_export.h"
 
 namespace K3b {
     class DataDoc;
@@ -85,7 +84,7 @@ namespace K3b {
         void setLocalPath( const QString& p ) { m_localPath = p; }
         QString localPath() const { return m_localPath; }
 
-        KMimeType::Ptr mimeType() const;
+        QMimeType mimeType() const override;
 
         /**
          * \reimplemented

@@ -14,16 +14,16 @@
 
 #include "k3baction.h"
 
-KAction* K3b::createAction( QObject* parent,
+QAction* K3b::createAction( QObject* parent,
                             const QString& text, const QString& icon, const
                             QKeySequence& shortcut, QObject* receiver, const char* slot,
                             KActionCollection* actionCollection,
                             const QString& actionName )
 {
-    KAction* action = new KAction( parent );
+    QAction* action = new QAction( parent );
     action->setText( text );
     if( !icon.isEmpty() ) {
-        action->setIcon( KIcon( icon ) );
+        action->setIcon( QIcon::fromTheme( icon ) );
     }
     action->setShortcut( shortcut );
     if( receiver ) {
@@ -46,7 +46,7 @@ KToggleAction* K3b::createToggleAction( QObject* parent,
     KToggleAction* action = new KToggleAction( parent );
     action->setText( text );
     if( !icon.isEmpty() ) {
-        action->setIcon( KIcon( icon ) );
+        action->setIcon( QIcon::fromTheme( icon ) );
     }
     action->setShortcut( shortcut );
     if( receiver ) {

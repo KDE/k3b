@@ -17,20 +17,21 @@
 #include "k3bisooptions.h"
 #include "k3bvalidators.h"
 
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qtoolbutton.h>
+#include <KI18n/KLocalizedString>
+
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QToolButton>
 
 
 K3b::DataVolumeDescDialog::DataVolumeDescDialog( QWidget* parent )
-    : KDialog( parent)
+    : QDialog( parent)
 {
-    setupUi( mainWidget() );
+    setupUi( this );
 
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
-    setCaption( i18n("Volume Descriptor") );
+    setWindowTitle( i18n("Volume Descriptor") );
     setModal( true );
 
     // the maximal number of characters that can be inserted are set in the ui file!
@@ -101,4 +102,4 @@ void K3b::DataVolumeDescDialog::slotVolumeSetSizeChanged( int i )
     m_spinVolumeSetNumber->setMaximum( i );
 }
 
-#include "k3bdatavolumedescdialog.moc"
+

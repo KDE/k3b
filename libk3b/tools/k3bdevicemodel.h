@@ -15,9 +15,9 @@
 #ifndef _K3B_DEVICE_MODEL_H_
 #define _K3B_DEVICE_MODEL_H_
 
-#include <QAbstractItemModel>
-
 #include "k3b_export.h"
+
+#include <QtCore/QAbstractItemModel>
 
 namespace K3b {
     namespace Device {

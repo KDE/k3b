@@ -13,36 +13,31 @@
  */
 
 #include "k3baudiocdtextwidget.h"
-#include "ui_base_k3baudiocdtextallfieldswidget.h"
+#include "ui_base_k3baudiocdtextallfieldsdialog.h"
 
 #include "k3baudiodoc.h"
 #include "k3baudiotrack.h"
 #include "k3bcdtextvalidator.h"
 
-#include <qcheckbox.h>
-#include <qtoolbutton.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qgroupbox.h>
+#include <KCompletion/KLineEdit>
+#include <KI18n/KLocalizedString>
 
-#include <klineedit.h>
-#include <klocale.h>
-#include <kdialog.h>
-#include <kiconloader.h>
+#include <QtGui/QIcon>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QGroupBox>
 
 
-class K3b::AudioCdTextWidget::AllFieldsDialog : public KDialog, public Ui::base_K3bAudioCdTextAllFieldsWidget
+class K3b::AudioCdTextWidget::AllFieldsDialog : public QDialog, public Ui::base_K3bAudioCdTextAllFieldsDialog
 {
 public:
     AllFieldsDialog( QWidget* parent )
-        : KDialog( parent) {
+        : QDialog( parent) {
         setModal(true);
-        setCaption(i18n("CD-Text"));
-        setButtons(Ok|Cancel);
-        setDefaultButton(Ok);
-        QWidget* w = new QWidget( this );
-        setupUi( w );
-        setMainWidget( w );
+        setWindowTitle(i18n("CD-Text"));
+        setupUi( this );
     }
 };
 
@@ -55,14 +50,14 @@ K3b::AudioCdTextWidget::AudioCdTextWidget( QWidget* parent )
 
     m_allFieldsDlg = new AllFieldsDialog( this );
 
-    m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
-    m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
+    m_buttonCopyTitle->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_buttonCopyPerformer->setIcon( QIcon::fromTheme( "edit-copy" ) );
 
-    m_allFieldsDlg->m_buttonCopyTitle->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopyPerformer->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopySongwriter->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopyComposer->setIcon( KIcon( "edit-copy" ) );
-    m_allFieldsDlg->m_buttonCopyArranger->setIcon( KIcon( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyTitle->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyPerformer->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopySongwriter->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyComposer->setIcon( QIcon::fromTheme( "edit-copy" ) );
+    m_allFieldsDlg->m_buttonCopyArranger->setIcon( QIcon::fromTheme( "edit-copy" ) );
 
     QValidator* cdTextVal = new K3b::CdTextValidator( this );
     m_editTitle->setValidator( cdTextVal );
@@ -236,4 +231,4 @@ void K3b::AudioCdTextWidget::slotCopyComposer()
 }
 
 
-#include "k3baudiocdtextwidget.moc"
+

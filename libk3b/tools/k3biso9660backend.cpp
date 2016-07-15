@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <qfile.h>
+#include <QtCore/QFile>
 
 #include "k3bdevice.h"
 
@@ -192,12 +192,12 @@ bool K3b::Iso9660LibDvdCssBackend::open()
 
             if( !m_libDvdCss->open( m_device ) ||
                 !m_libDvdCss->crackAllKeys() ) {
-                kDebug() << "(K3b::Iso9660LibDvdCssBackend) Failed to retrieve all CSS keys.";
+                qDebug() << "(K3b::Iso9660LibDvdCssBackend) Failed to retrieve all CSS keys.";
                 close();
             }
         }
         else
-            kDebug() << "(K3b::Iso9660LibDvdCssBackend) failed to open libdvdcss.";
+            qDebug() << "(K3b::Iso9660LibDvdCssBackend) failed to open libdvdcss.";
     }
 
     return ( m_libDvdCss != 0 );

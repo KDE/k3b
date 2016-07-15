@@ -15,18 +15,17 @@
 
 #include "k3bmedium.h"
 #include "k3bmedium_p.h"
-
 #include "k3bcddb.h"
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
+#include "k3b_i18n.h"
 
-#include <klocale.h>
-#include <kio/global.h>
+#include <KIOCore/KIO/Global>
 
-#include <QtCore/QSharedData>
 #include <QtCore/QList>
+#include <QtCore/QSharedData>
 
 #include <libkcddb/cdinfo.h>
 
@@ -183,13 +182,13 @@ void K3b::Medium::update()
         d->diskInfo = d->device->diskInfo();
 
         if( d->diskInfo.diskState() != K3b::Device::STATE_NO_MEDIA ) {
-            kDebug() << "found medium: (" << d->device->blockDeviceName() << ')' << endl
+            qDebug() << "found medium: (" << d->device->blockDeviceName() << ')' << endl
                      << "=====================================================";
             d->diskInfo.debug();
-            kDebug() << "=====================================================";
+            qDebug() << "=====================================================";
         }
         else {
-            kDebug() << "no medium found";
+            qDebug() << "no medium found";
         }
 
         if( diskInfo().diskState() == K3b::Device::STATE_COMPLETE ||
@@ -231,7 +230,7 @@ void K3b::Medium::analyseContent()
 
     // analyze filesystem
     if( d->content & ContentData ) {
-        //kDebug() << "(K3b::Medium) Checking file system.";
+        //qDebug() << "(K3b::Medium) Checking file system.";
 
         unsigned long startSec = 0;
 
@@ -255,10 +254,10 @@ void K3b::Medium::analyseContent()
             }
         }
         else {
-            kDebug() << "(K3b::Medium) ContentData is set and Toc is empty, disk is probably broken!";
+            qDebug() << "(K3b::Medium) ContentData is set and Toc is empty, disk is probably broken!";
         }
 
-        //kDebug() << "(K3b::Medium) Checking file system at " << startSec;
+        //qDebug() << "(K3b::Medium) Checking file system at " << startSec;
 
         // force the backend since we don't need decryption
         // which just slows down the whole process
@@ -267,7 +266,7 @@ void K3b::Medium::analyseContent()
         iso.setPlainIso9660( true );
         if( iso.open() ) {
             d->isoDesc = iso.primaryDescriptor();
-            kDebug() << "(K3b::Medium) found volume id from start sector " << startSec
+            qDebug() << "(K3b::Medium) found volume id from start sector " << startSec
                      << ": '" << d->isoDesc.volumeId << "'" ;
 
             if( const Iso9660Directory* firstDirEntry = iso.firstIsoDirEntry() ) {
@@ -277,19 +276,19 @@ void K3b::Medium::analyseContent()
                         d->content |= ContentVideoDVD;
                 }
                 else {
-                    kDebug() << "(K3b::Medium) checking for VCD.";
+                    qDebug() << "(K3b::Medium) checking for VCD.";
 
                     // check for VCD
                     const K3b::Iso9660Entry* vcdEntry = firstDirEntry->entry( "VCD/INFO.VCD" );
                     const K3b::Iso9660Entry* svcdEntry = firstDirEntry->entry( "SVCD/INFO.SVD" );
                     const K3b::Iso9660File* vcdInfoFile = 0;
                     if( vcdEntry ) {
-                        kDebug() << "(K3b::Medium) found vcd entry.";
+                        qDebug() << "(K3b::Medium) found vcd entry.";
                         if( vcdEntry->isFile() )
                             vcdInfoFile = static_cast<const K3b::Iso9660File*>(vcdEntry);
                     }
                     if( svcdEntry && !vcdInfoFile ) {
-                        kDebug() << "(K3b::Medium) found svcd entry.";
+                        qDebug() << "(K3b::Medium) found svcd entry.";
                         if( svcdEntry->isFile() )
                             vcdInfoFile = static_cast<const K3b::Iso9660File*>(svcdEntry);
                     }
@@ -306,7 +305,7 @@ void K3b::Medium::analyseContent()
                 }
             }
             else {
-                kDebug() << "(K3b::Medium) root ISO directory is null, disk is probably broken!";
+                qDebug() << "(K3b::Medium) root ISO directory is null, disk is probably broken!";
             }
         }  // opened iso9660
     }
@@ -500,31 +499,31 @@ QString K3b::Medium::beautifiedVolumeId() const
 }
 
 
-KIcon K3b::Medium::icon() const
+QIcon K3b::Medium::icon() const
 {
     if( diskInfo().diskState() == Device::STATE_NO_MEDIA ) {
-        return KIcon( "drive-optical" );
+        return QIcon::fromTheme( "drive-optical" );
     }
     else if( diskInfo().diskState() == Device::STATE_EMPTY ) {
-        return KIcon( "media-optical-recordable" );
+        return QIcon::fromTheme( "media-optical-recordable" );
     }
     else if( content() == (ContentAudio | ContentData) ) {
-        return KIcon( "media-optical-mixed-cd" );
+        return QIcon::fromTheme( "media-optical-mixed-cd" );
     }
     else if( content() == ContentAudio ) {
-        return KIcon( "media-optical-audio" );
+        return QIcon::fromTheme( "media-optical-audio" );
     }
     else if( content() == ContentData ) {
-        return KIcon( "media-optical-data" );
+        return QIcon::fromTheme( "media-optical-data" );
     }
     else if( content() & ContentVideoDVD ) {
-        return KIcon( "media-optical-dvd-video" );
+        return QIcon::fromTheme( "media-optical-dvd-video" );
     }
     else if( content() & ContentVideoCD ) {
-        return KIcon( "media-optical-cd-video" );
+        return QIcon::fromTheme( "media-optical-cd-video" );
     }
     else {
-        return KIcon( "media-optical" );
+        return QIcon::fromTheme( "media-optical" );
     }
 }
 

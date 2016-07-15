@@ -53,7 +53,7 @@
 // We mean it.
 //
 
-#include "QtCore/qmutex.h"
+#include "QtCore/QtCore/QMutex"
 
 #ifndef QT_NO_THREAD
 

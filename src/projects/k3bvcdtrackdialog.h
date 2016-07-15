@@ -17,14 +17,14 @@
 #ifndef K3BVCDTRACKDIALOG_H
 #define K3BVCDTRACKDIALOG_H
 
-#include <KDialog>
-#include <QList>
+#include <QtCore/QList>
+#include <QtWidgets/QDialog>
 
 namespace K3b {
     class VcdDoc;
     class VcdTrack;
 
-    class VcdTrackDialog : public KDialog
+    class VcdTrackDialog : public QDialog
     {
         Q_OBJECT
 
@@ -33,7 +33,7 @@ namespace K3b {
         ~VcdTrackDialog();
 
     protected Q_SLOTS:
-        void slotOk();
+        void accept() override;
         void slotApply();
 
     private Q_SLOTS:

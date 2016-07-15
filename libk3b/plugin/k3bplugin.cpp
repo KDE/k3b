@@ -26,4 +26,4 @@ K3b::Plugin::~Plugin()
 {
 }
 
-#include "k3bplugin.moc"
+

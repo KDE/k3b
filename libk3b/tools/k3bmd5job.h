@@ -16,9 +16,9 @@
 #ifndef _K3B_MD5_JOB_H_
 #define _K3B_MD5_JOB_H_
 
-#include "k3bjob.h"
-#include <qbytearray.h>
 #include "k3b_export.h"
+#include "k3bjob.h"
+#include <QtCore/QByteArray>
 
 class QIODevice;
 
@@ -37,8 +37,8 @@ namespace K3b {
         Md5Job( JobHandler* jh , QObject* parent = 0 );
         ~Md5Job();
 
-        QByteArray hexDigest();
-        QByteArray base64Digest();
+		QByteArray hexDigest();
+		QByteArray base64Digest();
 
     public Q_SLOTS:
         void start();

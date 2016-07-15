@@ -16,10 +16,11 @@
 #include "k3bvideodvd.h"
 #include "k3bvideodvdtitle.h"
 
-#include <KGlobal>
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QHash>
+#include <QtCore/QHash>
+#include <QtCore/QLocale>
+#include <QtCore/QSize>
 
 namespace K3b {
     
@@ -56,7 +57,7 @@ VideoDVDAudioModel::VideoDVDAudioModel( const VideoDVD::VideoDVD& dvd, const QLi
             for( int i = 0; i < static_cast<int>( title.numAudioStreams() ); ++i ) {
                 const VideoDVD::AudioStream& audio = title.audioStream( i );
                 d->parents.insert( &audio, &title );
-                if( audio.langCode() == KGlobal::locale()->language() &&
+                if( QLocale( audio.langCode() ).language() == QLocale().language() &&
                     audio.format() != K3b::VideoDVD::AUDIO_FORMAT_DTS ) {
                     d->chosenAudio[ &title ] = i;
                 }
@@ -74,7 +75,7 @@ VideoDVDAudioModel::~VideoDVDAudioModel()
 
 const VideoDVD::Title* VideoDVDAudioModel::titleForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.internalPointer() == 0 && index.row() >= 0 && index.row() < d->titles.size() )
+    if( index.isValid() && !index.internalPointer() && index.row() >= 0 && index.row() < d->titles.size() )
     {
         const int title = d->titles.at( index.row() ) - 1;
         if( title >= 0 && title < static_cast<int>( d->dvd.numTitles() ) )
@@ -88,7 +89,7 @@ QModelIndex VideoDVDAudioModel::indexForTitle( const VideoDVD::Title& title, int
 {
     int row = d->titles.indexOf( title.titleNumber() );
     if( row >= 0 )
-        return createIndex( row, column, 0 );
+        return createIndex( row, column, nullptr );
     else
         return QModelIndex();
 }
@@ -96,7 +97,7 @@ QModelIndex VideoDVDAudioModel::indexForTitle( const VideoDVD::Title& title, int
         
 const VideoDVD::AudioStream* VideoDVDAudioModel::audioForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.internalPointer() != 0 )
+    if( index.isValid() && index.internalPointer() )
         return static_cast<VideoDVD::AudioStream*>( index.internalPointer() );
     else
         return 0;
@@ -178,7 +179,7 @@ QVariant VideoDVDAudioModel::data( const QModelIndex& index, int role ) const
                            audio->channels(),
                                 ( audio->langCode().isEmpty()
                                   ? i18n("unknown language")
-                                  : KGlobal::locale()->languageCodeToName( audio->langCode() ) ),
+                                  : QLocale( audio->langCode() ).nativeLanguageName() ),
                                 ( audio->codeExtension() != K3b::VideoDVD::AUDIO_CODE_EXT_UNSPECIFIED
                                   ? QString(" ") + K3b::VideoDVD::audioCodeExtensionString( audio->codeExtension() )
                                   : QString() ) );
@@ -234,7 +235,7 @@ QModelIndex VideoDVDAudioModel::index( int row, int column, const QModelIndex& p
     }
     else if( !parent.isValid() ) {
         if( row >= 0 && row < d->titles.size() )
-            return createIndex( row, column, 0 );
+            return createIndex( row, column, nullptr );
         else
             return QModelIndex();
     }
@@ -293,5 +294,5 @@ Qt::ItemFlags VideoDVDAudioModel::flags( const QModelIndex& index ) const
 
 } // namespace K3b
 
-#include "k3bvideodvdaudiomodel.moc"
+
 

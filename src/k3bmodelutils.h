@@ -15,8 +15,7 @@
 #ifndef _K3B_MODEL_UTILS_H_
 #define _K3B_MODEL_UTILS_H_
 
-#include <Qt>
-#include <QModelIndexList>
+#include <QtCore/QModelIndexList>
 
 class QAbstractItemModel;
 class QString;

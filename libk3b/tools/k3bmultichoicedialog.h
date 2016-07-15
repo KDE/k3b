@@ -15,11 +15,11 @@
 #ifndef _K3B_MULTI_CHOICE_DIALOG_H_
 #define _K3B_MULTI_CHOICE_DIALOG_H_
 
-#include <QtGui/QDialog>
-#include <KStandardGuiItem>
 #include "k3b_export.h"
 
-#include <qmessagebox.h>
+#include <KWidgetsAddons/KStandardGuiItem>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QMessageBox>
 
 class QCloseEvent;
 

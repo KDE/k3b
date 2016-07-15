@@ -18,9 +18,10 @@
 #define K3BVCDVIEW_H
 
 #include "k3bview.h"
-#include <QModelIndex>
 
-class KAction;
+#include <QtCore/QModelIndex>
+
+class QAction;
 class QTreeView;
 class QWidget;
 
@@ -54,8 +55,8 @@ namespace K3b {
             VcdProjectModel* m_model;
             QTreeView* m_view;
 
-            KAction* m_actionProperties;
-            KAction* m_actionRemove;
+            QAction* m_actionProperties;
+            QAction* m_actionRemove;
     };
 }
 

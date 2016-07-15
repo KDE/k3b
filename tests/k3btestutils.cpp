@@ -1,5 +1,6 @@
 
 #include "k3btestutils.h"
+
 #include <QtCore/QModelIndex>
 #include <QtTest/QTest>
 

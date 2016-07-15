@@ -16,17 +16,15 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
-#include <KConfigGroup>
-#include <KDebug>
-#include <kdeversion.h>
-#include <kde_file.h>
-#include <KProcess>
-#include <KStandardDirs>
+#include <KConfigCore/KConfigGroup>
+#include <KCoreAddons/KProcess>
 
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
-#include <QRegExp>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtCore/QFile>
+#include <QtCore/QtGlobal>
+#include <QtCore/QRegExp>
 
 #ifndef Q_OS_WIN32
 #include <unistd.h>
@@ -298,7 +296,7 @@ QString K3b::ExternalProgram::name() const
 QString K3b::ExternalProgram::buildProgramPath( const QString& dir, const QString& programName )
 {
     QString p = K3b::prepareDir( dir ) + programName;
-#ifdef Q_OS_WIN32
+#ifdef Q_OS_WIN
     p += ".exe";
 #endif
     return p;
@@ -368,13 +366,13 @@ bool K3b::SimpleExternalProgram::scanVersion( ExternalBin& bin ) const
     vp << bin.path() << "--version";
     if( vp.execute( EXECUTE_TIMEOUT ) < 0 ) {
         if( vp.error() == 0 ) {
-            kDebug() << "Insufficient permissions for" << bin.path();
+            qDebug() << "Insufficient permissions for" << bin.path();
             // try to get real group or set fictive group to make
             // K3b::SystemProblemDialog::checkSystem work
             struct stat st;
             if( !::stat( QFile::encodeName(bin.path()), &st ) ) {
                 QString group( getgrgid( st.st_gid )->gr_name );
-                kDebug() << "Should be member of \"" << group << "\"";
+                qDebug() << "Should be member of \"" << group << "\"";
                 bin.setNeedGroup( group.isEmpty() ? "N/A" : group );
             } else
                 bin.setNeedGroup( "N/A" );
@@ -621,7 +619,13 @@ void K3b::ExternalBinManager::search()
 
     // do not search one path twice
     QStringList paths;
-    const QStringList possiblePaths = d->searchPath + KStandardDirs::systemPaths();
+#ifdef Q_OS_WIN
+    const QChar pathSep = QChar::fromLatin1( ';' );
+#else
+    const QChar pathSep = QChar::fromLatin1( ':' );
+#endif
+    const QStringList possiblePaths = QString::fromLatin1( qgetenv( "PATH" ) ).split( pathSep, QString::SkipEmptyParts )
+                                      + d->searchPath;
     foreach( QString p, possiblePaths ) {
         if (p.length() == 0)
             continue;
@@ -704,5 +708,5 @@ const K3b::ExternalBin* K3b::ExternalBinManager::mostRecentBinObject( const QStr
         return 0;
 }
 
-#include "k3bexternalbinmanager.moc"
+
 

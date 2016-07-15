@@ -29,16 +29,16 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bjobprogressdialog.h"
 
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kconfig.h>
-#include <kapplication.h>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KSharedConfig>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qcheckbox.h>
-#include <qpushbutton.h>
-#include <qtooltip.h>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolTip>
 
 
 
@@ -156,7 +156,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
 
     delete theJob;
 
-    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+    if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();
@@ -193,4 +193,4 @@ void K3b::MediaFormattingDialog::saveSettings( KConfigGroup c )
 }
 
 
-#include "k3bmediaformattingdialog.moc"
+

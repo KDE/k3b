@@ -24,25 +24,28 @@
 #include "k3biso9660.h"
 #include "k3bblankingjob.h"
 #include "k3bbusywidget.h"
-#include "k3bprogressdialog.h"
 #include "k3bdvdformattingjob.h"
 
-#include <QApplication>
-#include <QLabel>
-#include <QLayout>
-#include <QEventLoop>
-#include <QFont>
-#include <QGridLayout>
-#include <QPushButton>
-#include <QTimer>
-#include <QToolTip>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KNotifications/KNotification>
+#include <KWidgetsAddons/KGuiItem>
+#include <KWidgetsAddons/KMessageBox>
 
-
-#include <KConfig>
-#include <KIconLoader>
-#include <KLocale>
-#include <KMessageBox>
-#include <KNotification>
+#include <QtCore/QEventLoop>
+#include <QtCore/QTimer>
+#include <QtGui/QFont>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QProgressDialog>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolTip>
 
 
 class K3b::EmptyDiscWaiter::Private
@@ -77,57 +80,60 @@ public:
     QLabel* labelFoundMedia;
     QLabel* pixLabel;
 
-    K3b::ProgressDialog* erasingInfoDialog;
+    QProgressDialog* erasingInfoDialog;
 };
 
 
 
 K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* parent )
-    : KDialog( parent ),
+    : QDialog( parent ),
       d( new Private() )
 {
-    setCaption(i18n("Waiting for Disk"));
+    setWindowTitle(i18n("Waiting for Disk"));
     setModal(true);
-
-    KDialog::ButtonCodes buttons = KDialog::Cancel|KDialog::User1|KDialog::User2;
-    setButtons( buttons );
-    setButtonText(KDialog::User1, i18n("Eject"));
-    setButtonIcon( KDialog::User1, KIcon( "media-eject" ) );
-    setButtonText(KDialog::User2, i18n("Load"));
-    setDefaultButton( KDialog::User2 );
 
     d->device = device;
 
     // setup the gui
     // -----------------------------
-    d->labelRequest = new QLabel( mainWidget() );
+    d->labelRequest = new QLabel( this );
     d->labelRequest->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
-    d->labelFoundMedia = new QLabel( mainWidget() );
-    d->pixLabel = new QLabel( mainWidget() );
+    d->labelFoundMedia = new QLabel( this );
+    d->pixLabel = new QLabel( this );
     d->pixLabel->setAlignment( Qt::AlignHCenter | Qt::AlignTop );
 
     QFont f( d->labelFoundMedia->font() );
     f.setBold(true);
     d->labelFoundMedia->setFont( f );
 
-    QGridLayout* grid = new QGridLayout( mainWidget() );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+
+    QPushButton* cancelButton = buttonBox->addButton( QDialogButtonBox::Cancel );
+    connect( cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()) );
+
+    QPushButton* ejectButton = new QPushButton( this );
+    KGuiItem::assign( ejectButton, KGuiItem( i18n("Eject"), QString::fromLatin1( "media-eject" ) ) );
+    buttonBox->addButton( ejectButton, QDialogButtonBox::NoRole );
+    connect( ejectButton, SIGNAL(clicked()), this, SLOT(slotEject()) );
+
+    QPushButton* loadButton = buttonBox->addButton( i18n("Load"), QDialogButtonBox::NoRole );
+    connect( loadButton, SIGNAL(clicked()), this, SLOT(slotLoad()) );
+
+    QGridLayout* grid = new QGridLayout( this );
     grid->setContentsMargins( 0, 0, 0, 0 );
 
     grid->addWidget( d->pixLabel, 0, 0, 3, 1 );
     grid->addItem( new QSpacerItem( 20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );
-    grid->addWidget( new QLabel( i18n("Found medium:"), mainWidget() ), 0, 2 );
+    grid->addWidget( new QLabel( i18n("Found medium:"), this ), 0, 2 );
     grid->addWidget( d->labelFoundMedia, 0, 3 );
     grid->addWidget( d->labelRequest, 1, 2, 1, 2 );
+    grid->addWidget( buttonBox, 2, 0, 4, 1 );
     grid->setRowStretch( 2, 1 );
     grid->setColumnStretch( 3, 1 );
     // -----------------------------
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(slotMediumChanged(K3b::Device::Device*)) );
-
-    connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancel()) );
-    connect( this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()) );
-    connect( this, SIGNAL(user2Clicked()), this, SLOT(slotUser2()) );
 }
 
 
@@ -143,11 +149,11 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates me
                                                           const QString& message )
 {
     if ( d->inLoop ) {
-        kError() << "Recursive call detected." << endl;
+        qCritical() << "Recursive call detected." << endl;
         return Device::MEDIA_UNKNOWN;
     }
 
-    kDebug() << "Waiting for medium" << mediaState << mediaType << message;
+    qDebug() << "Waiting for medium" << mediaState << mediaType << message;
 
     d->wantedMediaState = mediaState;
     d->wantedMediaType = mediaType;
@@ -202,7 +208,7 @@ int K3b::EmptyDiscWaiter::exec()
 
 void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 {
-    kDebug() << dev->blockDeviceName();
+    qDebug() << dev->blockDeviceName();
     if( d->canceled || d->device != dev )
         return;
 
@@ -218,7 +224,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
     d->blockMediaChange = true;
 
-    bool formatWithoutAsking = KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "auto rewritable erasing", false );
+    bool formatWithoutAsking = KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "auto rewritable erasing", false );
 
     K3b::Medium medium = k3bappcore->mediaCache()->medium( dev );
 
@@ -250,7 +256,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
     if ( (d->wantedMediaType & K3b::Device::MEDIA_BD_RE) &&
          (medium.diskInfo().mediaType() & K3b::Device::MEDIA_BD_RE) ) {
 
-        kDebug() << "------ found BD-RE as wanted.";
+        qDebug() << "------ found BD-RE as wanted.";
 
 #ifdef _MSC_VER
 #pragma message ("WARNING: FIXME: We need to preformat empty BD-RE just like we do with empty DVD+RW")
@@ -278,7 +284,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 finishWaiting( K3b::Device::MEDIA_BD_RE );
             }
             else {
-                kDebug() << "starting devicehandler: no BD-RE overwrite";
+                qDebug() << "starting devicehandler: no BD-RE overwrite";
                 K3b::eject( d->device );
                 continueWaiting();
             }
@@ -294,7 +300,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             finishWaiting( K3b::Device::MEDIA_BD_RE );
         }
         else {
-            kDebug() << "BD-RE medium too small";
+            qDebug() << "BD-RE medium too small";
             continueWaiting();
         }
     }
@@ -311,7 +317,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
     else if( (d->wantedMediaType & K3b::Device::MEDIA_DVD_PLUS_RW) &&
              (medium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_PLUS_RW) ) {
 
-        kDebug() << "------ found DVD+RW as wanted.";
+        qDebug() << "------ found DVD+RW as wanted.";
 
         if( medium.diskInfo().diskState() == K3b::Device::STATE_EMPTY ) {
             if( d->wantedMediaState & K3b::Device::STATE_EMPTY &&
@@ -320,7 +326,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 // special case for the formatting job which wants to preformat on it's own!
                 if( d->wantedMediaState & K3b::Device::STATE_COMPLETE &&
                     d->wantedMediaState & K3b::Device::STATE_EMPTY ) {
-                    kDebug() << "special case: DVD+RW for the formatting job.";
+                    qDebug() << "special case: DVD+RW for the formatting job.";
                     finishWaiting( K3b::Device::MEDIA_DVD_PLUS_RW );
                 }
                 else {
@@ -333,16 +339,18 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                     job.setForce( false );
                     job.setForceNoEject( true );
 
-                    d->erasingInfoDialog->setText( i18n("Preformatting DVD+RW") );
+                    d->erasingInfoDialog->reset();
+                    d->erasingInfoDialog->setLabelText( i18n("Preformatting DVD+RW") );
+                    d->erasingInfoDialog->setRange( 0, 100 );
                     connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-                    connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+                    connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setValue(int)) );
                     connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
                     job.start( medium.diskInfo() );
-                    d->erasingInfoDialog->exec( true );
+                    d->erasingInfoDialog->exec();
                 }
             }
             else {
-                kDebug() << "starting devicehandler: empty DVD+RW where a non-empty was requested.";
+                qDebug() << "starting devicehandler: empty DVD+RW where a non-empty was requested.";
                 continueWaiting();
             }
         }
@@ -371,13 +379,13 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                         finishWaiting( K3b::Device::MEDIA_DVD_PLUS_RW );
                     }
                     else {
-                        kDebug() << "starting devicehandler: no DVD+RW overwrite";
+                        qDebug() << "starting devicehandler: no DVD+RW overwrite";
                         K3b::eject( d->device );
                         continueWaiting();
                     }
                 }
                 else {
-                    kDebug() << "starting devicehandler: DVD+RW too small";
+                    qDebug() << "starting devicehandler: DVD+RW too small";
                     continueWaiting();
                 }
             }
@@ -391,7 +399,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 finishWaiting( K3b::Device::MEDIA_DVD_PLUS_RW );
             }
             else {
-                kDebug() << "starting devicehandler: DVD+RW too small";
+                qDebug() << "starting devicehandler: DVD+RW too small";
                 continueWaiting();
             }
         }
@@ -414,7 +422,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                K3b::Device::MEDIA_DVD_RW_SEQ|
                                                K3b::Device::MEDIA_DVD_RW_OVWR) ) ) {
 
-        kDebug() << "------ found DVD-R(W) as wanted.";
+        qDebug() << "------ found DVD-R(W) as wanted.";
 
         // we format in the following cases:
         // seq. incr. and not empty and empty requested
@@ -437,7 +445,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 ( d->wantedMinMediaSize <= medium.diskInfo().capacity() ||
                   IsOverburnAllowed( d->wantedMinMediaSize, medium.diskInfo().capacity() ) ) ) {
 
-                kDebug() << "------ DVD-RW restricted overwrite.";
+                qDebug() << "------ DVD-RW restricted overwrite.";
 
                 // check if the media contains a filesystem
                 K3b::Iso9660 isoF( d->device );
@@ -457,7 +465,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                     finishWaiting( K3b::Device::MEDIA_DVD_RW_OVWR );
                 }
                 else {
-                    kDebug() << "starting devicehandler: no DVD-RW overwrite.";
+                    qDebug() << "starting devicehandler: no DVD-RW overwrite.";
                     K3b::eject( d->device );
                     continueWaiting();
                 }
@@ -473,7 +481,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                     finishWaiting( K3b::Device::MEDIA_DVD_RW_OVWR );
                 }
                 else {
-                    kDebug() << "starting devicehandler: empty DVD-RW where a non-empty was requested.";
+                    qDebug() << "starting devicehandler: empty DVD-RW where a non-empty was requested.";
                     continueWaiting();
                 }
             }
@@ -487,7 +495,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 finishWaiting( K3b::Device::MEDIA_DVD_RW_OVWR );
             }
             else {
-                kDebug() << "starting devicehandler: DVD-RW too small";
+                qDebug() << "starting devicehandler: DVD-RW too small";
                 continueWaiting();
             }
         }
@@ -506,7 +514,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                    (d->wantedMediaState & K3b::Device::STATE_EMPTY) &&
                    (medium.diskInfo().diskState() != K3b::Device::STATE_EMPTY) ) ) {
 
-            kDebug() << "------ DVD-RW needs to be formated.";
+            qDebug() << "------ DVD-RW needs to be formated.";
 
             if( formatWithoutAsking ||
                 KMessageBox::warningContinueCancel( parentWidgetToUse(),
@@ -519,7 +527,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                                                     KGuiItem(i18n("&Format"), "tools-media-optical-format"),
                                                     KGuiItem(i18n("&Eject"), "media-eject")) == KMessageBox::Continue ) {
 
-                kDebug() << "------ formatting DVD-RW.";
+                qDebug() << "------ formatting DVD-RW.";
 
                 prepareErasingDialog();
 
@@ -538,21 +546,23 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                 job.setForce( false );
                 job.setForceNoEject(true);
 
-                d->erasingInfoDialog->setText( i18n("Formatting DVD-RW") );
+                d->erasingInfoDialog->reset();
+                d->erasingInfoDialog->setLabelText( i18n("Formatting DVD-RW") );
+                d->erasingInfoDialog->setRange( 0, 100 );
                 connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
-                connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setProgress(int)) );
+                connect( &job, SIGNAL(percent(int)), d->erasingInfoDialog, SLOT(setValue(int)) );
                 connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
                 job.start( medium.diskInfo() );
-                d->erasingInfoDialog->exec( true );
+                d->erasingInfoDialog->exec();
             }
             else {
-                kDebug() << "starting devicehandler: no DVD-RW formatting.";
+                qDebug() << "starting devicehandler: no DVD-RW formatting.";
                 K3b::eject( d->device );
                 continueWaiting();
             }
         }
         else {
-            kDebug() << "------ nothing useful found.";
+            qDebug() << "------ nothing useful found.";
             continueWaiting();
         }
     } // --- DVD-RW ------
@@ -583,12 +593,14 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             prepareErasingDialog();
 
             // start a k3bblankingjob
-            d->erasingInfoDialog->setText( i18n("Erasing CD-RW") );
+            d->erasingInfoDialog->reset();
+            d->erasingInfoDialog->setLabelText( i18n("Erasing CD-RW") );
+            d->erasingInfoDialog->setRange( 0, 0 );
 
             // the user may be using cdrdao for erasing as cdrecord does not work
             WritingApp erasingApp = K3b::WritingAppAuto;
-            if( KGlobal::config()->group( "General Options" ).readEntry( "Show advanced GUI", false ) ) {
-                erasingApp = K3b::writingAppFromString( KGlobal::config()->group( "CDRW Erasing" ).readEntry( "writing_app" ) );
+            if( KSharedConfig::openConfig()->group( "General Options" ).readEntry( "Show advanced GUI", false ) ) {
+                erasingApp = K3b::writingAppFromString( KSharedConfig::openConfig()->group( "CDRW Erasing" ).readEntry( "writing_app" ) );
             }
 
             K3b::BlankingJob job( this );
@@ -601,10 +613,10 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             connect( &job, SIGNAL(finished(bool)), this, SLOT(slotErasingFinished(bool)) );
             connect( d->erasingInfoDialog, SIGNAL(cancelClicked()), &job, SLOT(cancel()) );
             job.start();
-            d->erasingInfoDialog->exec( false );
+            d->erasingInfoDialog->exec();
         }
         else {
-            kDebug() << "starting devicehandler: no CD-RW overwrite.";
+            qDebug() << "starting devicehandler: no CD-RW overwrite.";
             K3b::eject( d->device );
             continueWaiting();
         }
@@ -633,7 +645,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
     }
 
     else {
-        kDebug() << "------ nothing useful found.";
+        qDebug() << "------ nothing useful found.";
         continueWaiting();
     }
 
@@ -671,20 +683,20 @@ void K3b::EmptyDiscWaiter::continueWaiting()
 
 void K3b::EmptyDiscWaiter::slotCancel()
 {
-    kDebug() << "slotCancel() ";
+    qDebug() << "slotCancel() ";
     d->canceled = true;
     finishWaiting( Device::MEDIA_UNKNOWN );
 }
 
 
-void K3b::EmptyDiscWaiter::slotUser1()
+void K3b::EmptyDiscWaiter::slotEject()
 {
     K3b::unmount( d->device );
     K3b::Device::eject( d->device );
 }
 
 
-void K3b::EmptyDiscWaiter::slotUser2()
+void K3b::EmptyDiscWaiter::slotLoad()
 {
     K3b::Device::load( d->device );
 }
@@ -692,7 +704,7 @@ void K3b::EmptyDiscWaiter::slotUser2()
 
 void K3b::EmptyDiscWaiter::finishWaiting( Device::MediaType type )
 {
-    kDebug() << "finishWaiting() ";
+    qDebug() << "finishWaiting() ";
 
     d->waitingDone = true;
     d->result = type;
@@ -702,7 +714,7 @@ void K3b::EmptyDiscWaiter::finishWaiting( Device::MediaType type )
 
     if( d->inLoop ) {
         d->inLoop = false;
-        kDebug() << "exitLoop ";
+        qDebug() << "exitLoop ";
         emit leaveModality();
     }
 }
@@ -718,20 +730,6 @@ void K3b::EmptyDiscWaiter::slotErasingFinished( bool success )
         K3b::Device::eject( d->device );
         KMessageBox::error( d->erasingInfoDialog, i18n("Erasing failed.") );
         d->erasingInfoDialog->hide(); // close the dialog thus ending it's event loop -> back to slotMediumChanged
-    }
-}
-
-
-K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device, bool appendable, Device::MediaTypes mediaType, QWidget* parent )
-{
-    if( device != 0 ) {
-        K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
-        Device::MediaStates mediaState = K3b::Device::STATE_EMPTY;
-        if( appendable ) mediaState |= K3b::Device::STATE_INCOMPLETE;
-        return d.waitForDisc( mediaState, mediaType );
-    }
-    else {
-        return Device::MEDIA_UNKNOWN;
     }
 }
 
@@ -757,7 +755,7 @@ void K3b::EmptyDiscWaiter::prepareErasingDialog()
 {
     // we hide the emptydiskwaiter so the info dialog needs to have the same parent
     if( !d->erasingInfoDialog )
-        d->erasingInfoDialog = new K3b::ProgressDialog( QString(), parentWidget() );
+        d->erasingInfoDialog = new QProgressDialog( parentWidget() );
 
     //
     // hide the dialog
@@ -809,4 +807,4 @@ void K3b::EmptyDiscWaiter::blockingInformation( const QString& text,
     KMessageBox::information( this, text, caption );
 }
 
-#include "k3bemptydiscwaiter.moc"
+

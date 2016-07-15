@@ -16,11 +16,11 @@
 #ifndef _K3B_LAME_MANUAL_SETTINGS_DIALOG_H_
 #define _K3B_LAME_MANUAL_SETTINGS_DIALOG_H_
 
-#include <KDialog>
+#include <QtWidgets/QDialog>
 
-#include "ui_base_k3bmanualbitratesettingswidget.h"
+#include "ui_base_k3bmanualbitratesettingsdialog.h"
 
-class K3bLameManualSettingsDialog : public KDialog, public Ui::K3bManualBitrateSettingsWidget
+class K3bLameManualSettingsDialog : public QDialog, public Ui::K3bManualBitrateSettingsDialog
 {
 public:
     K3bLameManualSettingsDialog( QWidget* parent = 0 );

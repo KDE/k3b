@@ -16,13 +16,11 @@
 #include "k3bjob.h"
 #include "k3bglobals.h"
 #include "k3bcore.h"
+#include "k3b_i18n.h"
 
-#include <klocale.h>
-
-#include <qstringlist.h>
-#include <kdebug.h>
-
+#include <QtCore/QDebug>
 #include <QtCore/QEventLoop>
+#include <QtCore/QStringList>
 
 
 
@@ -61,7 +59,7 @@ K3b::Job::~Job()
     // but we do this here for security reasons.
     //
     if( d->active ) {
-        kDebug() << "Finishing job in destuctor! This is NOT good. Fix the job.";
+        qDebug() << "Finishing job in destuctor! This is NOT good. Fix the job.";
         jobFinished( false );
     }
 
@@ -344,4 +342,4 @@ K3b::WritingApps K3b::BurnJob::supportedWritingApps() const
     return K3b::WritingAppAuto | K3b::WritingAppCdrdao | K3b::WritingAppCdrecord;
 }
 
-#include "k3bjob.moc"
+

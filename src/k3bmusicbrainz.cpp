@@ -18,9 +18,9 @@
 
 #include <musicbrainz/mb_c.h>
 
-#include <kprotocolmanager.h>
-#include <kurl.h>
-#include <kdebug.h>
+#include <KIOCore/KProtocolManager>
+#include <QtCore/QDebug>
+#include <QtCore/QUrl>
 
 
 class K3b::MusicBrainz::Private
@@ -54,7 +54,7 @@ int K3b::MusicBrainz::query( const QByteArray& trm )
     d->artists.clear();
 
     if( KProtocolManager::useProxy() ) {
-        KUrl proxy = KProtocolManager::proxyFor("http");
+        QUrl proxy = KProtocolManager::proxyFor("http");
         mb_SetProxy( d->mb, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
     }
 
@@ -80,7 +80,7 @@ int K3b::MusicBrainz::query( const QByteArray& trm )
     else {
         char buffer[256];
         mb_GetQueryError( d->mb, buffer, 256 );
-        kDebug() << "(K3b::MusicBrainz) query error: " << buffer;
+        qDebug() << "(K3b::MusicBrainz) query error: " << buffer;
         return 0;
     }
 }

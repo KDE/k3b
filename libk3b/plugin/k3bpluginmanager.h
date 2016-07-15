@@ -15,10 +15,11 @@
 #ifndef _K3B_PLUGIN_MANAGER_H_
 #define _K3B_PLUGIN_MANAGER_H_
 
-#include <qobject.h>
-#include <qlist.h>
-#include <qstringlist.h>
 #include "k3b_export.h"
+
+#include <QtCore/QList>
+#include <QtCore/QObject>
+#include <QtCore/QStringList>
 
 class QWidget;
 

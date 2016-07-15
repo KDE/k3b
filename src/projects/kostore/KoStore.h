@@ -21,15 +21,17 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QString>
-#include <QStringList>
-#include <QIODevice>
-#include <QStack>
-#include <QByteArray>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QStack>
+#include <QtCore/QLoggingCategory>
 
+Q_DECLARE_LOGGING_CATEGORY(KOSTORE)
+
+class QByteArray;
+class QIODevice;
 class QWidget;
-
-class KUrl;
+class QUrl;
 
 /**
  * Saves and loads KOffice documents using various backends. Currently supported
@@ -86,7 +88,7 @@ public:
    *
    * @bug saving not completely implemented (fixed temporary file)
    */
-  static KoStore* createStore( QWidget* window, const KUrl& url, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
+  static KoStore* createStore( QWidget* window, const QUrl& url, Mode mode, const QByteArray & appIdentification = "", Backend backend = Auto );
 
   /**
    * Destroys the store (i.e. closes the file on the hard disk)
@@ -426,8 +428,6 @@ protected:
   /// Must be set by the constructor.
   bool m_bGood;
   bool m_bFinalized;
-
-  static const int s_area;
 
 private:
   /// Used to push/pop directories to make it easy to save/restore the state

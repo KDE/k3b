@@ -25,11 +25,10 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-
-#include <qregexp.h>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
 
 #include <errno.h>
 #include <string.h>
@@ -180,7 +179,7 @@ void K3b::DvdFormattingJob::cancel()
             d->process->terminate();
     }
     else {
-        kDebug() << "(K3b::DvdFormattingJob) not running.";
+        qDebug() << "(K3b::DvdFormattingJob) not running.";
     }
 }
 
@@ -245,7 +244,7 @@ void K3b::DvdFormattingJob::slotStderrLine( const QString& line )
             emit percent( progress );
         }
         else {
-            kDebug() << "(K3b::DvdFormattingJob) parsing error: '" << line.mid( pos, endPos - pos ) << "'";
+            qDebug() << "(K3b::DvdFormattingJob) parsing error: '" << line.mid( pos, endPos - pos ) << "'";
         }
     }
 }
@@ -493,15 +492,15 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
         for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
             *d->process << *it;
 
-        kDebug() << "***** dvd+rw-format parameters:\n";
+        qDebug() << "***** dvd+rw-format parameters:\n";
         QString s = d->process->joinedArgs();
-        kDebug() << s << endl << flush;
+        qDebug() << s << endl << flush;
         emit debuggingOutput( "dvd+rw-format command:", s );
 
         if( !d->process->start( KProcess::OnlyStderrChannel ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
-            kDebug() << "(K3b::DvdFormattingJob) could not start " << d->dvdFormatBin->path();
+            qDebug() << "(K3b::DvdFormattingJob) could not start " << d->dvdFormatBin->path();
             emit infoMessage( i18n("Could not start %1.",d->dvdFormatBin->name()), Job::MessageError );
             d->running = false;
             jobFinished(false);
@@ -518,4 +517,4 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
 }
 
 
-#include "k3bdvdformattingjob.moc"
+

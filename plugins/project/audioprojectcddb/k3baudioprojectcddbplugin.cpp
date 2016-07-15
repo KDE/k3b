@@ -25,16 +25,15 @@
 #include "k3btrack.h"
 #include "k3bmixeddoc.h"
 #include "k3bmsf.h"
-#include "k3bprogressdialog.h"
 #include "k3bcddb.h"
+#include "k3bplugin_i18n.h"
 
-#include <KAction>
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
+#include <KConfigCore/KConfig>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QString>
+#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtWidgets/QProgressDialog>
 
 #include <libkcddb/cdinfo.h>
 
@@ -43,18 +42,16 @@ K3B_EXPORT_PLUGIN( k3baudioprojectcddbplugin, K3bAudioProjectCddbPlugin )
 
 
 K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, const QVariantList& )
-    : K3b::ProjectPlugin( K3b::Doc::AudioProject, false, parent ),
-      m_progress(0)
+    : K3b::ProjectPlugin( K3b::Doc::AudioProject, false, parent )
 {
     setText( i18n("Query CDDB") );
     setToolTip( i18n("Query a CDDB entry for the current audio project.") );
-    setIcon( KIcon( "view-refresh" ) );
+    setIcon( QIcon::fromTheme( "view-refresh" ) );
 }
 
 
 K3bAudioProjectCddbPlugin::~K3bAudioProjectCddbPlugin()
 {
-    delete m_progress;
 }
 
 
@@ -73,33 +70,26 @@ void K3bAudioProjectCddbPlugin::activate( K3b::Doc* doc, QWidget* parent )
     }
     else {
         if( !m_progress ) {
-            m_progress = new K3b::ProgressDialog( i18n("Query CDDB"), parent, i18n("Audio Project") );
-            connect( m_progress, SIGNAL(cancelClicked()),
-                     this, SLOT(slotCancelClicked()) );
+            m_progress.reset( new QProgressDialog( i18n("Query CDDB"), i18n("Cancel"), 0, 0, parent ) );
+            m_progress->setWindowTitle( i18n("Audio Project") );
+        } else {
+            m_progress->reset();
         }
 
         K3b::CDDB::CDDBJob* job = K3b::CDDB::CDDBJob::queryCddb( m_doc->toToc() );
         connect( job, SIGNAL(result(KJob*)),
                  this, SLOT(slotCddbQueryFinished(KJob*)) );
 
-        m_progress->exec(false);
+        m_progress->exec();
     }
-}
-
-
-void K3bAudioProjectCddbPlugin::slotCancelClicked()
-{
-    m_canceled = true;
-    m_progress->close();
 }
 
 
 void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( KJob* job )
 {
-    if( !m_canceled ) {
-        m_progress->hide();
+    if( !m_progress->wasCanceled() ) {
 
-        if( !job->error() ) {
+        if( !job->error() && m_doc ) {
             K3b::CDDB::CDDBJob* cddbJob = dynamic_cast<K3b::CDDB::CDDBJob*>( job );
             KCDDB::CDInfo cddbInfo = cddbJob->cddbResult();
 
@@ -127,10 +117,9 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( KJob* job )
     }
 
     // make sure the progress dialog does not get deleted by it's parent
-    delete m_progress;
-    m_doc = 0;
-    m_parentWidget = 0;
-    m_progress = 0;
+    m_progress.reset();
+    m_doc.clear();
+    m_parentWidget.clear();
 }
 
 #include "k3baudioprojectcddbplugin.moc"

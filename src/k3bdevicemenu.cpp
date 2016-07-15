@@ -25,10 +25,10 @@
 #include "k3bmediacache.h"
 #include "k3bdevicehandler.h"
 
-#include <KAction>
-#include <KActionCollection>
-#include <KLocale>
-#include <KIcon>
+#include <KI18n/KLocalizedString>
+#include <KXmlGui/KActionCollection>
+#include <QtGui/QIcon>
+#include <QtWidgets/QAction>
 
 
 class K3b::DeviceMenu::Private
@@ -73,12 +73,12 @@ K3b::DeviceMenu::Private::Private( DeviceMenu* parent )
     q->addSeparator();
 
     // FIXME: Should we move these actions to K3b::AppDeviceManager?
-    actionContinueMultisession = q->addAction( KIcon( "media-optical-data" ), i18n("Continue Multisession Project"), q, SLOT(_k_continueMultisession()) );
-    actionCopy = q->addAction( KIcon( "tools-media-optical-copy" ), i18n("Copy &Medium..."), q, SLOT(_k_copy()) );
-    actionFormat = q->addAction( KIcon( "tools-media-optical-erase" ), i18n("&Format/Erase rewritable disk..."), q, SLOT(_k_format()) );
-    actionRipAudio = q->addAction( KIcon( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), q, SLOT(_k_ripAudio()) );
-    actionRipVideoDVD = q->addAction( KIcon( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), q, SLOT(_k_ripVideoDVD()) );
-    actionRipVcd = q->addAction( KIcon( "tools-rip-video-cd"), i18n("Rip Video CD..."), q, SLOT(_k_ripVcd()) );
+    actionContinueMultisession = q->addAction( QIcon::fromTheme( "media-optical-data" ), i18n("Continue Multisession Project"), q, SLOT(_k_continueMultisession()) );
+    actionCopy = q->addAction( QIcon::fromTheme( "tools-media-optical-copy" ), i18n("Copy &Medium..."), q, SLOT(_k_copy()) );
+    actionFormat = q->addAction( QIcon::fromTheme( "tools-media-optical-erase" ), i18n("&Format/Erase rewritable disk..."), q, SLOT(_k_format()) );
+    actionRipAudio = q->addAction( QIcon::fromTheme( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), q, SLOT(_k_ripAudio()) );
+    actionRipVideoDVD = q->addAction( QIcon::fromTheme( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), q, SLOT(_k_ripVideoDVD()) );
+    actionRipVcd = q->addAction( QIcon::fromTheme( "tools-rip-video-cd"), i18n("Rip Video CD..."), q, SLOT(_k_ripVcd()) );
 
     actionCopy->setToolTip( i18n("Open the media copy dialog") );
     actionCopy->setStatusTip( actionCopy->toolTip() );
@@ -156,7 +156,7 @@ void K3b::DeviceMenu::Private::_k_continueMultisession()
 
 
 K3b::DeviceMenu::DeviceMenu( QWidget* parent )
-    : KMenu( parent ),
+    : QMenu( parent ),
       d( new Private(this) )
 {
     connect( this, SIGNAL(aboutToShow()),
@@ -169,4 +169,4 @@ K3b::DeviceMenu::~DeviceMenu()
     delete d;
 }
 
-#include "k3bdevicemenu.moc"
+#include "moc_k3bdevicemenu.cpp"

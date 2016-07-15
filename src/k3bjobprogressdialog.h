@@ -21,9 +21,8 @@
 #include "k3bdebuggingoutputcache.h"
 #include "k3bjobhandler.h"
 
-#include <KDialog>
-
-#include <QElapsedTimer>
+#include <QtCore/QElapsedTimer>
+#include <QtWidgets/QDialog>
 
 class KSqueezedTextLabel;
 class QCloseEvent;
@@ -39,14 +38,14 @@ namespace K3b {
     class Job;
     class ThemedLabel;
 
-    class JobProgressDialog : public KDialog, public JobHandler
+    class JobProgressDialog : public QDialog, public JobHandler
     {
         Q_OBJECT
 
     public:
         JobProgressDialog( QWidget* parent = 0,
                            bool showSubProgress = true );
-        virtual ~JobProgressDialog();
+        ~JobProgressDialog();
 
         virtual void setJob( Job* job );
         void setExtraInfo( QWidget *extra );
@@ -58,7 +57,7 @@ namespace K3b {
          */
         int startJob( Job* job = 0 );
 
-        virtual QSize sizeHint() const;
+        QSize sizeHint() const override;
 
         /**
          * @reimplemented from JobHandler
@@ -67,7 +66,7 @@ namespace K3b {
                                          Device::MediaStates mediaState = Device::STATE_EMPTY,
                                          Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                          const K3b::Msf& minMediaSize = K3b::Msf(),
-                                         const QString& message = QString() );
+                                         const QString& message = QString() ) override;
 
         /**
          * @reimplemented from JobHandler
@@ -75,13 +74,13 @@ namespace K3b {
         bool questionYesNo( const QString& text,
                             const QString& caption = QString(),
                             const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                            const KGuiItem& buttonNo = KStandardGuiItem::no() );
+                            const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
 
         /**
          * reimplemented from JobHandler
          */
         void blockingInformation( const QString& text,
-                                  const QString& caption = QString() );
+                                  const QString& caption = QString() ) override;
 
     protected Q_SLOTS:
         virtual void slotProcessedSize( int processed, int size );
@@ -95,19 +94,21 @@ namespace K3b {
         virtual void slotStarted();
 
         /**
-         * \reimpl from KDialog
+         * \reimpl from QDialog
          */
-        virtual void slotButtonClicked( int button );
-        void slotShowDebuggingOutput();
+        void reject() override;
+
+	void slotShowDebuggingOutput();
 
         void slotProgress( int );
 
         virtual void slotThemeChanged();
 
     protected:
-        virtual void showEvent( QShowEvent* e );
-        virtual void closeEvent( QCloseEvent* e );
-        virtual void keyPressEvent( QKeyEvent* e );
+        bool event( QEvent* event ) override;
+        void showEvent( QShowEvent* e ) override;
+        void closeEvent( QCloseEvent* e ) override;
+        void keyPressEvent( QKeyEvent* e ) override;
 
         void setupGUI();
 
@@ -123,6 +124,9 @@ namespace K3b {
         QProgressBar* m_progressPercent;
         QFrame* m_frameExtraInfo;
         ThemedLabel* m_pixLabel;
+        QPushButton* m_cancelButton;
+        QPushButton* m_showDbgOutButton;
+        QPushButton* m_closeButton;
 
         QGridLayout* m_frameExtraInfoLayout;
 
