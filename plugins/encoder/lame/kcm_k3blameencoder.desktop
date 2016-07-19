@@ -26,6 +26,7 @@ Name[sv]=Inställningsmodul för K3b Lame MP3-kodare
 Name[tr]=K3b Lame MP3 Şifreleyicisi Yapılandırma Modülü
 Name[uk]=Модуль налаштування кодувальника Lame MP3 K3b
 Name[x-test]=xxK3b Lame MP3 Encoder Config Modulexx
+Name[zh_TW]=K3b Lame MP3 編碼器設定模組
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3blameencoder
