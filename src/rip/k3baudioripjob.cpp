@@ -22,7 +22,7 @@
 #include "k3btoc.h"
 #include "k3btrack.h"
 
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Cdinfo>
 
 #include <KI18n/KLocalizedString>
 
