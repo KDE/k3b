@@ -7,8 +7,8 @@ set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/mo
 
 ##################  K3b version  ################################
 set(K3B_VERSION_MAJOR   2)
-set(K3B_VERSION_MINOR   9)
-set(K3B_VERSION_RELEASE 90)
+set(K3B_VERSION_MINOR   10)
+set(K3B_VERSION_RELEASE 0)
 set(K3B_VERSION_STRING "${K3B_VERSION_MAJOR}.${K3B_VERSION_MINOR}.${K3B_VERSION_RELEASE}")
 
 # increase on BC breakage
