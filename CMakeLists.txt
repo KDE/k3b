@@ -60,10 +60,10 @@ set_package_properties(Samplerate PROPERTIES
     URL "http://www.mega-nerd.com/SRC"
     TYPE REQUIRED)
 
-find_package(Libkcddb)
-set_package_properties(Libkcddb PROPERTIES
-    DESCRIPTION "KDE CDDB library"
-    URL "http://projects.kde.org/projects/kde/kdemultimedia/libkcddb"
+find_package(KF5Cddb)
+set_package_properties(KF5Cddb PROPERTIES
+    DESCRIPTION "KF5 CDDB library"
+    URL "https://github.com/isoft-linux/libkcddb"
     TYPE REQUIRED
     PURPOSE "libkcddb is used to retrieve audio CD meta data from the internet.")
 
