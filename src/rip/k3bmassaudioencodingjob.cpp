@@ -18,7 +18,7 @@
 #include "k3bwavefilewriter.h"
 
 #include <KI18n/KLocalizedString>
-#include <KCddb/Cdinfo>
+#include <libkcddb/cdinfo.h>
 
 #include <QtCore/QDebug>
 #include <QtCore/QDir>

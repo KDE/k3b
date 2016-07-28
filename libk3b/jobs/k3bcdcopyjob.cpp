@@ -49,8 +49,8 @@
 #include <QtCore/QVector>
 #include <QtWidgets/QApplication>
 
-#include <KCddb/Client>
-#include <KCddb/Cdinfo>
+#include <libkcddb/client.h>
+#include <libkcddb/cdinfo.h>
 
 
 

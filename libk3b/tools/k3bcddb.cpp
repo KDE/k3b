@@ -24,7 +24,7 @@
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QLabel>
 
-#include <KCddb/Client>
+#include <libkcddb/client.h>
 
 
 KCDDB::TrackOffsetList K3b::CDDB::createTrackOffsetList( const K3b::Device::Toc& toc )

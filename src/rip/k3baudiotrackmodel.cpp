@@ -21,7 +21,7 @@
 
 #include <KI18n/KLocalizedString>
 
-#include <KCddb/Cdinfo>
+#include <libkcddb/cdinfo.h>
 
 #include <QtCore/QMimeData>
 #include <QtGui/QFont>

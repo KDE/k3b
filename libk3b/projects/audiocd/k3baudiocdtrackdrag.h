@@ -19,7 +19,7 @@
 #include "k3bdevice.h"
 #include "k3b_export.h"
 
-#include <KCddb/Cdinfo>
+#include <libkcddb/cdinfo.h>
 
 class QMimeData;
 
