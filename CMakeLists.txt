@@ -48,7 +48,7 @@ include(FeatureSummary)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 
-find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui Test WebKitWidgets)
+find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui WebKitWidgets)
 find_package(KF5 REQUIRED COMPONENTS Archive Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
                                      KCMUtils KIO Notifications NotifyConfig Service Solid WidgetsAddons XmlGui)
 find_package(Iconv)
@@ -274,7 +274,11 @@ add_subdirectory( src )
 add_subdirectory( kioslaves )
 add_subdirectory( plugins )
 add_subdirectory( doc )
-add_subdirectory( tests )
+option(BUILD_TESTING "Build tests" OFF)
+if(BUILD_TESTING)
+    find_package(Qt5Test REQUIRED)
+    add_subdirectory( tests )
+endif()
 
 ###################  K3b config summary ################################
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
