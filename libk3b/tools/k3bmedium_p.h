@@ -25,7 +25,7 @@
 #include <QtCore/QSharedData>
 #include <QtCore/QList>
 
-#include <KCddb/Cdinfo>
+#include <libkcddb/cdinfo.h>
 
 
 namespace K3b {

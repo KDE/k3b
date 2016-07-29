@@ -20,7 +20,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 
-#include <KCddb/Cdinfo>
+#include <libkcddb/cdinfo.h>
 
 #include <KI18n/KLocalizedString>
 

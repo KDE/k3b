@@ -224,7 +224,7 @@ target_include_directories(k3b PRIVATE
 target_link_libraries(k3b
     k3bdevice
     k3blib
-    KF5::Cddb
+    KDE::Libkcddb::kcddb
     KF5::Archive
     KF5::I18n
     KF5::IconThemes

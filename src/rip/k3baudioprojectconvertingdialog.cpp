@@ -46,7 +46,7 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTreeWidget>
 
-#include <KCddb/Cdinfo>
+#include <libkcddb/cdinfo.h>
 
 
 namespace {

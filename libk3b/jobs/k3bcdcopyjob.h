@@ -21,7 +21,7 @@
 #include "k3b_export.h"
 #include "k3bglobals.h"
 
-#include <KCddb/Kcddb>
+#include <libkcddb/kcddb.h>
 
 namespace K3b {
     namespace Device {
