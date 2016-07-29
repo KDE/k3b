@@ -25,7 +25,7 @@
 #include "k3bglobals.h"
 #include "k3biso9660.h"
 
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Cdinfo>
 
 #include <KIconThemes/KIconLoader>
 #include <KI18n/KLocalizedString>

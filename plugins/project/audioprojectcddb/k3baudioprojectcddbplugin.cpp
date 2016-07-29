@@ -35,7 +35,7 @@
 #include <QtCore/QString>
 #include <QtWidgets/QProgressDialog>
 
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Cdinfo>
 
 
 K3B_EXPORT_PLUGIN( k3baudioprojectcddbplugin, K3bAudioProjectCddbPlugin )

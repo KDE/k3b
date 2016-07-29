@@ -48,7 +48,7 @@ include(FeatureSummary)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 
-find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui Test WebKitWidgets)
+find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui WebKitWidgets)
 find_package(KF5 REQUIRED COMPONENTS Archive Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
                                      KCMUtils KIO Notifications NotifyConfig Service Solid WidgetsAddons XmlGui)
 find_package(Iconv)
@@ -60,10 +60,10 @@ set_package_properties(Samplerate PROPERTIES
     URL "http://www.mega-nerd.com/SRC"
     TYPE REQUIRED)
 
-find_package(Libkcddb)
-set_package_properties(Libkcddb PROPERTIES
-    DESCRIPTION "KDE CDDB library"
-    URL "http://projects.kde.org/projects/kde/kdemultimedia/libkcddb"
+find_package(KF5Cddb)
+set_package_properties(KF5Cddb PROPERTIES
+    DESCRIPTION "KF5 CDDB library"
+    URL "https://github.com/isoft-linux/libkcddb"
     TYPE REQUIRED
     PURPOSE "libkcddb is used to retrieve audio CD meta data from the internet.")
 
@@ -274,7 +274,10 @@ add_subdirectory( src )
 add_subdirectory( kioslaves )
 add_subdirectory( plugins )
 add_subdirectory( doc )
-add_subdirectory( tests )
+if(BUILD_TESTING)
+    find_package(Qt5Test REQUIRED)
+    add_subdirectory( tests )
+endif()
 
 ###################  K3b config summary ################################
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

@@ -16,7 +16,7 @@
 
 #include "k3bpatternparser.h"
 
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Cdinfo>
 
 #include <KI18n/KLocalizedString>
 

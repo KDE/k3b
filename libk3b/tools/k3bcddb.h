@@ -17,8 +17,8 @@
 
 #include <KCoreAddons/KJob>
 
-#include <libkcddb/kcddb.h>
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Kcddb>
+#include <KCddb/Cdinfo>
 
 #include "k3b_export.h"
 

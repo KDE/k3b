@@ -27,7 +27,7 @@
 #include <QtCore/QList>
 #include <QtCore/QSharedData>
 
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Cdinfo>
 
 
 

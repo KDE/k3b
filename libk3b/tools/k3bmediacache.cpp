@@ -29,7 +29,7 @@
 #include <QtCore/QMutex>
 #include <QtCore/QEvent>
 
-#include <libkcddb/client.h>
+#include <KCddb/Client>
 
 
 
