@@ -54,7 +54,7 @@
 //
 
 #include "k3bqprocess.h"
-#include <QtCore/QStringList>
+#include "QtCore/qstringlist.h"
 //#include "private/qringbuffer_p.h"
 #include "qringbuffer_p.h"
 //#include "private/qiodevice_p.h"

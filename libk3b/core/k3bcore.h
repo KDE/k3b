@@ -16,13 +16,13 @@
 #ifndef _K3B_CORE_H_
 #define _K3B_CORE_H_
 
+#include <qobject.h>
+#include <qlist.h>
+
 #include "k3b_export.h"
 #include "config-k3b.h"
 
-#include <KConfigCore/KSharedConfig>
-
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <ksharedconfig.h>
 
 #define LIBK3B_VERSION K3B_VERSION_STRING
 
@@ -30,6 +30,7 @@
 
 
 class KConfig;
+class QCustomEvent;
 
 namespace K3b {
 

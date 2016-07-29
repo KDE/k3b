@@ -58,4 +58,6 @@ public:
     virtual void defaults();
 };
 
+K3B_EXPORT_PLUGIN(k3b<name>encoder, K3b<name>Encoder)
+
 #endif

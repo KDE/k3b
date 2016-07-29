@@ -19,20 +19,21 @@
 #include "k3bvcdjob.h"
 #include "k3bglobals.h"
 #include "k3bmsf.h"
-#include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <QDataStream>
+#include <QDomElement>
+#include <QFile>
+#include <QImage>
+#include <QTimer>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTimer>
-#include <QtGui/QImage>
-#include <QtWidgets/QApplication>
-#include <QtXml/QDomElement>
+#include <KApplication>
+#include <KConfig>
+#include <KDebug>
+#include <kio/global.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KStandardGuiItem>
 
 
 #if 0
@@ -129,22 +130,22 @@ K3b::Msf K3b::VcdDoc::length() const
 }
 
 
-bool K3b::VcdDoc::isImage( const QUrl& url )
+bool K3b::VcdDoc::isImage( const KUrl& url )
 {
     QImage p;
     return p.load( QFile::encodeName( url.toLocalFile() ) );
 }
 
-void K3b::VcdDoc::addUrls( const QList<QUrl>& urls )
+void K3b::VcdDoc::addUrls( const KUrl::List& urls )
 {
     // make sure we add them at the end even if urls are in the queue
     addTracks( urls, 99 );
 }
 
-void K3b::VcdDoc::addTracks( const QList<QUrl>& urls, uint position )
+void K3b::VcdDoc::addTracks( const KUrl::List& urls, uint position )
 {
-    QList<QUrl>::ConstIterator end( urls.end() );
-    for ( QList<QUrl>::ConstIterator it = urls.begin(); it != end; ++it ) {
+    KUrl::List::ConstIterator end( urls.end() );
+    for ( KUrl::List::ConstIterator it = urls.begin(); it != end; ++it ) {
         urlsToAdd.enqueue( new PrivateUrlToAdd( K3b::convertToLocalUrl(*it), position++ ) );
     }
 
@@ -162,12 +163,12 @@ void K3b::VcdDoc::slotWorkUrlQueue()
             lastAddedPosition = m_tracks->count();
 
         if ( !item->url.isLocalFile() ) {
-            qDebug() << item->url.toLocalFile() << " no local file";
+            kDebug() << item->url.toLocalFile() << " no local file";
             return ;
         }
 
         if ( !QFile::exists( item->url.toLocalFile() ) ) {
-            qDebug() << "(K3b::VcdDoc) file not found: " << item->url.toLocalFile();
+            kDebug() << "(K3b::VcdDoc) file not found: " << item->url.toLocalFile();
             m_notFoundFiles.append( item->url.toLocalFile() );
             return ;
         }
@@ -190,7 +191,7 @@ void K3b::VcdDoc::slotWorkUrlQueue()
     }
 }
 
-K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
+K3b::VcdTrack* K3b::VcdDoc::createTrack( const KUrl& url )
 {
     char filename[ 255 ];
     QString error_string = "";
@@ -206,7 +207,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
                 setVcdType( vcdTypes( mpegVersion ) );
                 // FIXME: properly convert the mpeg version
                 vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )mpegVersion );
-                KMessageBox::information( qApp->activeWindow(),
+                KMessageBox::information( kapp->activeWindow(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
                                                 "files, but these files must already be in %1 "
                                                 "format. K3b does not yet resample MPEG files.",
@@ -216,7 +217,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
             } else if ( vcdType() == NONE ) {
                 m_urlAddingTimer->stop();
                 vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )mpegVersion );
-                bool force = KMessageBox::questionYesNo( qApp->activeWindow(),
+                bool force = KMessageBox::questionYesNo( kapp->activeWindow(),
                                                          i18n( "K3b will create a %1 image from the given MPEG "
                                                                "files, but these files must already be in %1 "
                                                                "format. K3b does not yet resample MPEG files.",
@@ -238,7 +239,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
 
 
             if ( numOfTracks() > 0 && vcdOptions() ->mpegVersion() != mpegVersion ) {
-                KMessageBox::error( qApp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
+                KMessageBox::error( kapp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
                                     i18n( "You cannot mix MPEG1 and MPEG2 video files.\nPlease start a new Project for this filetype.\nResample not implemented in K3b yet." ),
                                     i18n( "Wrong File Type for This Project" ) );
 
@@ -250,7 +251,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
             *( newTrack->mpeg_info ) = *( Mpeg->mpeg_info );
 
             if ( newTrack->isSegment() && !vcdOptions()->PbcEnabled() ) {
-                KMessageBox::information( qApp->activeWindow(),
+                KMessageBox::information( kapp->activeWindow(),
                                           i18n( "PBC (Playback control) enabled.\n"
                                                 "Video players cannot reach Segments (MPEG Still Pictures) without Playback control." ) ,
                                           i18n( "Information" ) );
@@ -282,7 +283,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
     }
 
     // error (unsupported files)
-    KMessageBox::error( qApp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
+    KMessageBox::error( kapp->activeWindow(), '(' + url.toLocalFile() + ")\n" +
                         i18n( "Only MPEG1 and MPEG2 video files are supported.\n" ) + error_string ,
                         i18n( "Wrong File Format" ) );
 
@@ -290,7 +291,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
     return 0;
 }
 
-void K3b::VcdDoc::addTrack( const QUrl& url, uint position )
+void K3b::VcdDoc::addTrack( const KUrl& url, uint position )
 {
     urlsToAdd.enqueue( new PrivateUrlToAdd( url, position ) );
 
@@ -301,7 +302,7 @@ void K3b::VcdDoc::addTrack( const QUrl& url, uint position )
 void K3b::VcdDoc::addTrack( K3b::VcdTrack* track, uint position )
 {
     if ( m_tracks->count() >= 98 ) {
-        qDebug() << "(K3b::VcdDoc) VCD Green Book only allows 98 tracks.";
+        kDebug() << "(K3b::VcdDoc) VCD Green Book only allows 98 tracks.";
         // TODO: show some messagebox
         delete track;
         return ;
@@ -457,7 +458,7 @@ void K3b::VcdDoc::setPbcTracks()
 
     if ( m_tracks ) {
         int count = m_tracks->count();
-        qDebug() << QString( "K3b::VcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count );
+        kDebug() << QString( "K3b::VcdDoc::setPbcTracks() - we have %1 tracks in list." ).arg( count );
 
         Q_FOREACH( K3b::VcdTrack* track, *m_tracks ) {
             Q_FOREACH( VcdTrack::PbcTracks pbc, VcdTrack::trackPlaybackValues() ) {
@@ -580,7 +581,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         QDomNode item = vcdNodes.item( i );
         QString name = item.nodeName();
 
-        qDebug() << QString( "(K3b::VcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name );
+        kDebug() << QString( "(K3b::VcdDoc::loadDocumentData) nodeName = '%1'" ).arg( name );
 
         if ( name == "volumeId" )
             vcdOptions() ->setVolumeId( item.toElement().text() );
@@ -637,7 +638,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
     // vcd Tracks
     QDomNodeList trackNodes = nodes.item( 2 ).childNodes();
 
-    for ( int i = 0; i < trackNodes.length(); i++ ) {
+    for ( uint i = 0; i < trackNodes.length(); i++ ) {
 
         // check if url is available
         QDomElement trackElem = trackNodes.item( i ).toElement();
@@ -645,7 +646,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         if ( !QFile::exists( url ) )
             m_notFoundFiles.append( url );
         else {
-            QUrl k;
+            KUrl k;
             k.setPath( url );
             if ( K3b::VcdTrack * track = createTrack( k ) ) {
                 track ->setPlayTime( trackElem.attribute( "playtime", "1" ).toInt() );
@@ -667,10 +668,10 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         VcdTrack::PbcTracks type;
         VcdTrack::PbcTypes val;
         bool pbctrack;
-        for ( int trackId = 0; trackId < trackNodes.length(); trackId++ ) {
+        for ( uint trackId = 0; trackId < trackNodes.length(); trackId++ ) {
             QDomElement trackElem = trackNodes.item( trackId ).toElement();
             QDomNodeList trackNodes = trackElem.childNodes();
-            for ( int i = 0; i < trackNodes.length(); i++ ) {
+            for ( uint i = 0; i < trackNodes.length(); i++ ) {
                 QDomElement trackElem = trackNodes.item( i ).toElement();
                 QString name = trackElem.tagName();
                 if ( name.contains( "pbc" ) ) {
@@ -896,4 +897,4 @@ K3b::Device::MediaTypes K3b::VcdDoc::supportedMediaTypes() const
     return K3b::Device::MEDIA_WRITABLE_CD;
 }
 
-
+#include "k3bvcddoc.moc"

@@ -20,8 +20,9 @@
 #include "k3bmsf.h"
 #include "k3bcore.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <KDebug>
+
+#include <QFile>
 
 
 class K3b::AudioJobTempData::Private
@@ -125,4 +126,4 @@ void K3b::AudioJobTempData::cleanup()
 }
 
 
-
+#include "k3baudiojobtempdata.moc"

@@ -16,7 +16,7 @@
 #ifndef K3B_EXTERNALBIN_OPTIONTAB_H
 #define K3B_EXTERNALBIN_OPTIONTAB_H
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 
 namespace K3b {

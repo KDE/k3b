@@ -16,8 +16,8 @@
 
 #include "k3bthemedheader.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
+#include <QLabel>
+#include <QVBoxLayout>
 
 
 K3b::ContentsView::ContentsView( bool withHeader,
@@ -87,4 +87,4 @@ void K3b::ContentsView::activate( bool active )
     m_active = active;
 }
 
-
+#include "k3bcontentsview.moc"

@@ -34,30 +34,33 @@
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KGuiItem>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <kguiitem.h>
+#include <klocale.h>
+#include <KStandardGuiItem>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
+#include <kconfig.h>
+#include <kapplication.h>
+#include <kiconloader.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSizePolicy>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTabWidget>
+#include <qcheckbox.h>
+#include <qspinbox.h>
+#include <qcombobox.h>
+#include <qlayout.h>
+#include <qgroupbox.h>
+#include <qlist.h>
+#include <qlabel.h>
+#include <qtooltip.h>
+#include <qtabwidget.h>
+
+
+#include <qpushbutton.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
+#include <qsizepolicy.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <QGridLayout>
 
 
 K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )
@@ -382,7 +385,7 @@ void K3b::MediaCopyDialog::slotStartClicked()
     delete dlg;
     delete burnJob;
 
-    if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+    if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
         show();
     else
         close();
@@ -635,4 +638,4 @@ KIO::filesize_t K3b::MediaCopyDialog::neededSize() const
         return medium.diskInfo().size().rawBytes();
 }
 
-
+#include "k3bmediacopydialog.moc"

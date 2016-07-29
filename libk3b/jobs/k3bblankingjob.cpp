@@ -21,14 +21,14 @@
 #include "k3bdevicehandler.h"
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
-#include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
-#include <KIOCore/KIO/Job>
+#include <kconfig.h>
+#include <klocale.h>
+#include <kio/global.h>
+#include <kio/job.h>
+#include <kdebug.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
+#include <qstring.h>
 
 
 
@@ -171,4 +171,4 @@ QString K3b::BlankingJob::jobDetails() const
         return QString();
 }
 
-
+#include "k3bblankingjob.moc"

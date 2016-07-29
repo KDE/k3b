@@ -15,7 +15,6 @@
 
 #include "k3bprojectmanager.h"
 
-#include <config-k3b.h>
 #include "k3bapplication.h"
 #include "k3binteractiondialog.h"
 #include "k3baudiodoc.h"
@@ -36,23 +35,23 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/StoredTransferJob>
-#include <KWidgetsAddons/KMessageBox>
+#include <KConfig>
+#include <KDebug>
+#include <KGlobal>
+#include <KIO/NetAccess>
+#include <KLocale>
+#include <KMessageBox>
+#include <KSharedConfig>
+#include <KUrl>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTextStream>
-#include <QtCore/QUrl>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtGui/QCursor>
-#include <QtWidgets/QApplication>
+#include <QApplication>
+#include <QCursor>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QFile>
+#include <QHash>
+#include <QList>
+#include <QTextStream>
 
 namespace
 {
@@ -117,10 +116,10 @@ QList<K3b::Doc*> K3b::ProjectManager::projects() const
 
 void K3b::ProjectManager::addProject( K3b::Doc* doc )
 {
-    qDebug() << doc;
+    kDebug() << doc;
 
     if( !d->projects.contains( doc ) ) {
-        qDebug() << "adding doc " << doc->URL().toLocalFile();
+        kDebug() << "adding doc " << doc->URL().toLocalFile();
 
         d->projects.append( doc );
         d->projectInterfaces.insert( doc, createProjectInterface( doc ) );
@@ -152,11 +151,11 @@ void K3b::ProjectManager::removeProject( K3b::Doc* docRemove )
             return;
         }
     }
-    qDebug() << "(K3b::ProjectManager) unable to find doc: " << docRemove->URL().toLocalFile();
+    kDebug() << "(K3b::ProjectManager) unable to find doc: " << docRemove->URL().toLocalFile();
 }
 
 
-K3b::Doc* K3b::ProjectManager::findByUrl( const QUrl& url )
+K3b::Doc* K3b::ProjectManager::findByUrl( const KUrl& url )
 {
     Q_FOREACH( K3b::Doc* doc, d->projects ) {
         if( doc->URL() == url )
@@ -201,7 +200,7 @@ K3b::Doc* K3b::ProjectManager::activeProject() const
 
 K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
 {
-    qDebug() << type;
+    kDebug() << type;
 
     K3b::Doc* doc = 0;
     QString fileName;
@@ -237,16 +236,16 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
         break;
     }
 
-#ifdef ENABLE_DVD_RIPPING
     case K3b::Doc::VideoDvdProject: {
         doc = new K3b::VideoDvdDoc( this );
         fileName = i18n("VideoDVD%1",d->videoDvdUntitledCount++);
         break;
     }
-#endif
     }
 
-    doc->setURL(QUrl::fromLocalFile(fileName));
+    KUrl url;
+    url.setFileName(fileName);
+    doc->setURL(url);
 
     doc->newDocument();
 
@@ -258,7 +257,7 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
 
 K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::Type type )
 {
-    qDebug() << type;
+    kDebug() << type;
 
     K3b::Doc* doc = createEmptyProject( type );
 
@@ -270,7 +269,7 @@ K3b::Doc* K3b::ProjectManager::createProject( K3b::Doc::Type type )
 
 void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 {
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KSharedConfig::Ptr config = KGlobal::config();
 
     QString cg = "default " + doc->typeString() + " settings";
 
@@ -445,20 +444,12 @@ QString K3b::ProjectManager::dbusPath( K3b::Doc* doc ) const
 }
 
 
-K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
+K3b::Doc* K3b::ProjectManager::openProject( const KUrl& url )
 {
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
-    QTemporaryFile tmpfile;
-    KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
-    connect( transferJob, &KJob::result, [&](KJob*) {
-        if( transferJob->error() != KJob::NoError ) {
-            tmpfile.open();
-            tmpfile.write( transferJob->data() );
-            tmpfile.close();
-        }
-    } );
-    transferJob->exec();
+    QString tmpfile;
+    KIO::NetAccess::download( url, tmpfile, 0L );
 
     // ///////////////////////////////////////////////
     // first check if it's a store or an old plain xml file
@@ -466,7 +457,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     QDomDocument xmlDoc;
 
     // try opening a store
-    KoStore* store = KoStore::createStore( &tmpfile, KoStore::Read );
+    KoStore* store = KoStore::createStore( tmpfile, KoStore::Read );
     if( store ) {
         if( !store->bad() ) {
             // try opening the document inside the store
@@ -485,34 +476,37 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 
     if( !success ) {
         // try reading an old plain document
-        if ( tmpfile.open() ) {
+        QFile f( tmpfile );
+        if ( f.open( QIODevice::ReadOnly ) ) {
             //
             // First check if this is really an xml file beacuse if this is a very big file
             // the setContent method blocks for a very long time
             //
             char test[5];
-            if( tmpfile.read( test, 5 ) ) {
+            if( f.read( test, 5 ) ) {
                 if( ::strncmp( test, "<?xml", 5 ) ) {
-                    qDebug() << "(K3b::Doc) " << url.toLocalFile() << " seems to be no xml file.";
+                    kDebug() << "(K3b::Doc) " << url.toLocalFile() << " seems to be no xml file.";
                     QApplication::restoreOverrideCursor();
                     return 0;
                 }
-                tmpfile.reset();
+                f.reset();
             }
             else {
-                qDebug() << "(K3b::Doc) could not read from file.";
+                kDebug() << "(K3b::Doc) could not read from file.";
                 QApplication::restoreOverrideCursor();
                 return 0;
             }
-            if( xmlDoc.setContent( &tmpfile ) )
+            if( xmlDoc.setContent( &f ) )
                 success = true;
-            tmpfile.close();
+            f.close();
         }
     }
 
     // ///////////////////////////////////////////////
+    KIO::NetAccess::removeTempFile( tmpfile );
+
     if( !success ) {
-        qDebug() << "(K3b::Doc) could not open file " << url.toLocalFile();
+        kDebug() << "(K3b::Doc) could not open file " << url.toLocalFile();
         QApplication::restoreOverrideCursor();
         return 0;
     }
@@ -536,7 +530,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     else if( xmlDoc.doctype().name() == "k3b_video_dvd_project" ) {
         type = K3b::Doc::VideoDvdProject;
     } else {
-        qDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
+        kDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
         QApplication::restoreOverrideCursor();
         return 0;
     }
@@ -560,7 +554,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
         //        that the doc is not changed
         emit projectSaved( newDoc );
 
-        qDebug() << "(K3b::ProjectManager) loading project done.";
+        kDebug() << "(K3b::ProjectManager) loading project done.";
     }
     else {
         delete newDoc;
@@ -573,23 +567,15 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 }
 
 
-bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
+bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const KUrl& url )
 {
-    QTemporaryFile tmpfile;
-    KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
-    connect( transferJob, &KJob::result, [&](KJob*) {
-        if( transferJob->error() != KJob::NoError ) {
-            tmpfile.open();
-            tmpfile.write( transferJob->data() );
-            tmpfile.close();
-        }
-    } );
-    transferJob->exec();
+    QString tmpfile;
+    KIO::NetAccess::download( url, tmpfile, 0L );
 
     bool success = false;
 
     // create the store
-    KoStore* store = KoStore::createStore( &tmpfile, KoStore::Write, "application/x-k3b" );
+    KoStore* store = KoStore::createStore( tmpfile, KoStore::Write, "application/x-k3b" );
     if( store ) {
         if( store->bad() ) {
             delete store;
@@ -629,6 +615,8 @@ bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
         }
     }
 
+    KIO::NetAccess::removeTempFile( tmpfile );
+
     return success;
 }
 
@@ -638,4 +626,4 @@ void K3b::ProjectManager::slotProjectChanged( K3b::Doc* doc )
     emit projectChanged( doc );
 }
 
-
+#include "k3bprojectmanager.moc"

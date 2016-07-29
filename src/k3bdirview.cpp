@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+// K3B-includes
 #include <config-k3b.h>
 #include "k3bdirview.h"
 #include "k3b.h"
@@ -32,17 +33,19 @@
 #include "rip/videodvd/k3bvideodvdrippingview.h"
 #endif
 
-#include <KConfigCore/KConfig>
-#include <KNotifications/KNotification>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+// KDE-includes
+#include <KConfig>
+#include <KLocale>
+#include <KMessageBox>
+#include <KNotification>
+#include <KUrl>
 
-#include <QtCore/QDir>
-#include <QtCore/QUrl>
-#include <QtCore/QString>
-#include <QtWidgets/QSplitter>
-#include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QVBoxLayout>
+// QT-includes
+#include <QDir>
+#include <QSplitter>
+#include <QString>
+#include <QStackedWidget>
+#include <QVBoxLayout>
 
 class K3b::DirView::Private
 {
@@ -127,15 +130,15 @@ K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
         d->mainSplitter->setSizes( sizes );
     }
 
-    connect( d->fileTreeView, SIGNAL(activated(QUrl)),
-             this, SLOT(slotDirActivated(QUrl)) );
+    connect( d->fileTreeView, SIGNAL(activated(KUrl)),
+             this, SLOT(slotDirActivated(KUrl)) );
     connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SLOT(showDevice(K3b::Device::Device*)) );
     connect( d->fileTreeView, SIGNAL(activated(K3b::Device::Device*)),
              this, SIGNAL(deviceSelected(K3b::Device::Device*)) );
 
-    connect( d->fileView, SIGNAL(urlEntered(QUrl)), d->fileTreeView, SLOT(setSelectedUrl(QUrl)) );
-    connect( d->fileView, SIGNAL(urlEntered(QUrl)), this, SIGNAL(urlEntered(QUrl)) );
+    connect( d->fileView, SIGNAL(urlEntered(KUrl)), d->fileTreeView, SLOT(setSelectedUrl(KUrl)) );
+    connect( d->fileView, SIGNAL(urlEntered(KUrl)), this, SIGNAL(urlEntered(KUrl)) );
 
     connect( k3bappcore->appDeviceManager(), SIGNAL(mountFinished(QString)),
              this, SLOT(slotMountFinished(QString)) );
@@ -149,9 +152,9 @@ K3b::DirView::~DirView()
 }
 
 
-void K3b::DirView::showUrl( const QUrl& url )
+void K3b::DirView::showUrl( const KUrl& url )
 {
-    qDebug() << url;
+    kDebug() << url;
     slotDirActivated( url );
 }
 
@@ -226,7 +229,7 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
 void K3b::DirView::slotMountFinished( const QString& mp )
 {
     if( !mp.isEmpty() ) {
-        slotDirActivated( QUrl::fromLocalFile(mp) );
+        slotDirActivated( KUrl(mp) );
         d->fileView->reload(); // HACK to get the contents shown... FIXME
     }
     else {
@@ -257,9 +260,9 @@ void K3b::DirView::slotUnmountFinished( bool success )
 }
 
 
-void K3b::DirView::slotDirActivated( const QUrl& url )
+void K3b::DirView::slotDirActivated( const KUrl& url )
 {
-    qDebug() << url;
+    kDebug() << url;
     d->fileView->setUrl( url, true );
     d->setCurrentView( d->fileView );
 }
@@ -267,7 +270,7 @@ void K3b::DirView::slotDirActivated( const QUrl& url )
 
 void K3b::DirView::home()
 {
-    slotDirActivated( QUrl::fromLocalFile(QDir::homePath()) );
+    slotDirActivated( KUrl(QDir::homePath()) );
 }
 
 
@@ -282,4 +285,4 @@ void K3b::DirView::readConfig( const KConfigGroup &grp )
     d->fileView->readConfig(grp);
 }
 
-
+#include "k3bdirview.moc"

@@ -18,15 +18,13 @@
 #include "k3bmsf.h"
 #include "k3bmsfedit.h"
 
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/Global>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QVBoxLayout>
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QVBoxLayout>
+#include <KLocale>
+#include <kio/global.h>
 
 
 // TODO: three modes:
@@ -40,22 +38,18 @@
 
 
 K3b::AudioTrackDialog::AudioTrackDialog( const QList<K3b::AudioTrack*>& tracks, QWidget *parent )
-    : QDialog( parent)
+    : KDialog( parent)
 {
     m_tracks = tracks;
 
-    setWindowTitle(i18n("Audio Track Properties"));
+    setCaption(i18n("Audio Track Properties"));
+    setButtons(Ok|Cancel|Apply);
+    setDefaultButton(Ok);
     setModal(true);
+    connect(this,SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 
-    m_audioTrackWidget = new K3b::AudioTrackWidget( m_tracks, this );
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply, this );
-    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
-    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
-    connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()), SLOT(slotApply()));
-
-    QVBoxLayout* mainLayout = new QVBoxLayout( this );
-    mainLayout->addWidget( m_audioTrackWidget );
-    mainLayout->addWidget( buttonBox );
+    setupGui();
 }
 
 
@@ -64,16 +58,29 @@ K3b::AudioTrackDialog::~AudioTrackDialog()
 }
 
 
-void K3b::AudioTrackDialog::accept()
+void K3b::AudioTrackDialog::slotOk()
 {
     slotApply();
-    QDialog::accept();
+    done(0);
 }
 
 
 void K3b::AudioTrackDialog::slotApply()
 {
     m_audioTrackWidget->save();
+}
+
+
+void K3b::AudioTrackDialog::setupGui()
+{
+    QFrame* frame = new QFrame();
+    setMainWidget( frame );
+
+    QVBoxLayout* mainLayout = new QVBoxLayout( frame );
+    mainLayout->setContentsMargins( 0, 0, 0, 0 );
+
+    m_audioTrackWidget = new K3b::AudioTrackWidget( m_tracks, frame );
+    mainLayout->addWidget( m_audioTrackWidget );
 }
 
 
@@ -84,4 +91,4 @@ void K3b::AudioTrackDialog::updateTrackLengthDisplay()
 //   m_displaySize->setText( KIO::convertSize(len.audioBytes()) );
 }
 
-
+#include "k3baudiotrackdialog.moc"

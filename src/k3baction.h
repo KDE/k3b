@@ -15,18 +15,16 @@
 #ifndef _K3B_ACTION_H_
 #define _K3B_ACTION_H_
 
-#include <KWidgetsAddons/KToggleAction>
-#include <KXmlGui/KActionCollection>
-
 #include <QtCore/QObject>
-#include <QtGui/QIcon>
-#include <QtWidgets/QAction>
+#include <KIcon>
+#include <KToggleAction>
+#include <KActionCollection>
 
 namespace K3b {
     /**
-     * Create a QAction the old (way cooler) KDE3 way. Porting becomes a simple replacement.
+     * Create a KAction the old (way cooler) KDE3 way. Porting becomes a simple replacement.
      */
-    QAction* createAction( QObject* parent,
+    KAction* createAction( QObject* parent,
                            const QString& text, const QString& icon, const
                            QKeySequence& shortcut, QObject* receiver, const char* slot,
                            KActionCollection* actionCollection = 0,

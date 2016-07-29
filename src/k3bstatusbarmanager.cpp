@@ -28,20 +28,21 @@
 #include "k3bdiritem.h"
 #include "k3bview.h"
 
-#include <KConfigCore/KConfig>
-#include <KCoreAddons/KAboutData>
-#include <KI18n/KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
+#include <KAboutData>
+#include <KAction>
+#include <KConfig>
+#include <KHBox>
+#include <KIconLoader>
+#include <kio/global.h>
+#include <KLocale>
+#include <KStandardDirs>
+#include <KStatusBar>
 
 #include <QtCore/QFile>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QHBoxLayout>
+#include <QtGui/QLabel>
+#include <QtGui/QToolTip>
 
 
 
@@ -50,25 +51,22 @@ K3b::StatusBarManager::StatusBarManager( K3b::MainWindow* parent )
       m_mainWindow(parent)
 {
     // setup free temp space box
-    QWidget* boxFreeTemp = new QWidget( m_mainWindow->statusBar() );
-    boxFreeTemp->installEventFilter( this );
-    m_pixFreeTemp = new QLabel( boxFreeTemp );
-    m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
-    m_labelFreeTemp = new QLabel( boxFreeTemp );
-
-    QHBoxLayout* boxFreeTempLayout = new QHBoxLayout( boxFreeTemp );
-    boxFreeTempLayout->setSpacing(2);
-    boxFreeTempLayout->addWidget( new QLabel( i18n("Temp:"), boxFreeTemp ) );
-    boxFreeTempLayout->addWidget( m_pixFreeTemp );
-    boxFreeTempLayout->addWidget( m_labelFreeTemp );
+    KHBox* boxFreeTemp = new KHBox( m_mainWindow->statusBar() );
+    boxFreeTemp->setSpacing(2);
 
     m_labelProjectInfo = new QLabel( m_mainWindow->statusBar() );
+
+    m_pixFreeTemp = new QLabel( boxFreeTemp );
+    (void)new QLabel( i18n("Temp:"), boxFreeTemp );
+    m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
+    m_labelFreeTemp = new QLabel( boxFreeTemp );
+    boxFreeTemp->installEventFilter( this );
 
     // setup info area
     m_labelInfoMessage = new QLabel( " ", m_mainWindow->statusBar() );
 
     // setup version info
-    m_versionBox = new QLabel( QString("K3b %1").arg(KAboutData::applicationData().version()), m_mainWindow->statusBar() );
+    m_versionBox = new QLabel( QString("K3b %1").arg(KGlobal::mainComponent().aboutData()->version()), m_mainWindow->statusBar() );
     m_versionBox->installEventFilter( this );
 
     // setup the statusbar
@@ -230,4 +228,4 @@ void K3b::StatusBarManager::slotUpdateProjectStats()
     }
 }
 
-
+#include "k3bstatusbarmanager.moc"

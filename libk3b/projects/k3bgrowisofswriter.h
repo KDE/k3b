@@ -15,9 +15,9 @@
 #ifndef _K3B_GROWISOFS_WRITER_H_
 #define _K3B_GROWISOFS_WRITER_H_
 
-#include "k3babstractwriter.h"
+#include <qprocess.h>
 
-#include <QtCore/QProcess>
+#include "k3babstractwriter.h"
 
 
 namespace K3b {
@@ -98,6 +98,8 @@ namespace K3b {
         void slotFlushingCache();
 
     private:
+        bool closeFd();
+
         class Private;
         Private* d;
     };

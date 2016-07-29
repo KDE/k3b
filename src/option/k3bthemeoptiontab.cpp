@@ -19,21 +19,22 @@
 #include "k3bthememanager.h"
 #include "k3bthememodel.h"
 
-#include <KArchive/KTar>
-#include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KIOCore/KIO/StoredTransferJob>
-#include <KIOWidgets/KUrlRequester>
+#include <kio/global.h>
+#include <kio/netaccess.h>
+#include <kio/deletejob.h>
+#include <KConfig>
+#include <KGlobalSettings>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KTar>
+#include <KUrlRequester>
 #include <KUrlRequesterDialog>
-#include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QItemSelectionModel>
-#include <QtWidgets/QLabel>
+#include <QFile>
+#include <QFileInfo>
+#include <QItemSelectionModel>
+#include <QLabel>
 
 
 K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
@@ -49,6 +50,8 @@ K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
     m_viewTheme->setModel( m_themeModel );
 
     connect( m_viewTheme->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+             this, SLOT(selectionChanged()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(selectionChanged()) );
     connect( m_buttonInstallTheme, SIGNAL(clicked()),
              this, SLOT(slotInstallTheme()) );
@@ -81,15 +84,6 @@ bool K3b::ThemeOptionTab::saveSettings()
 }
 
 
-bool K3b::ThemeOptionTab::event( QEvent *event )
-{
-    if( event->type() == QEvent::StyleChange ) {
-        selectionChanged();
-    }
-    return QWidget::event( event );
-}
-
-
 void K3b::ThemeOptionTab::selectionChanged()
 {
     QModelIndex index = m_viewTheme->currentIndex();
@@ -113,28 +107,18 @@ void K3b::ThemeOptionTab::selectionChanged()
 
 void K3b::ThemeOptionTab::slotInstallTheme()
 {
-    QUrl themeURL = KUrlRequesterDialog::getUrl( QString(), this,
+    KUrl themeURL = KUrlRequesterDialog::getUrl( QString(), this,
                                                  i18n("Drag or Type Theme URL") );
 
     if( themeURL.url().isEmpty() )
         return;
 
-    QTemporaryFile themeTmpFile;
-    KIO::StoredTransferJob* transferJob = KIO::storedGet( themeURL );
-    bool transferJobSucceed = true;
-    connect( transferJob, &KJob::result, [&](KJob*) {
-        if( transferJob->error() != KJob::NoError ) {
-            themeTmpFile.open();
-            themeTmpFile.write( transferJob->data() );
-            themeTmpFile.close();
-        } else {
-            transferJobSucceed = false;
-        }
-    } );
+    QString themeTmpFile;
+    // themeTmpFile contains the name of the downloaded file
 
-    if( transferJob->exec() && !transferJobSucceed ) {
+    if( !KIO::NetAccess::download( themeURL, themeTmpFile, this ) ) {
         QString sorryText;
-        QString tmpArg = themeURL.toDisplayString();
+        QString tmpArg = themeURL.prettyUrl();
         if (themeURL.isLocalFile())
             sorryText = i18n("Unable to find the icon theme archive %1.",tmpArg);
         else
@@ -146,7 +130,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 
     // check if the archive contains a dir with a k3b.theme file
     QString themeName;
-    KTar archive( &themeTmpFile );
+    KTar archive( themeTmpFile );
     archive.open(QIODevice::ReadOnly);
     const KArchiveDirectory* themeDir = archive.directory();
     QStringList entries = themeDir->entries();
@@ -173,8 +157,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
         KMessageBox::error( this, i18n("The file is not a valid K3b theme archive.") );
     }
     else {
-        QString themeBasePath = QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation ) + "/k3b/pics/";
-        QDir().mkpath( themeBasePath );
+        QString themeBasePath = KStandardDirs::locateLocal( "data", "k3b/pics/" );
 
         // check if there already is a theme by that name
         if( !QFile::exists( themeBasePath + '/' + themeName ) ||
@@ -190,6 +173,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
     }
 
     archive.close();
+    KIO::NetAccess::removeTempFile(themeTmpFile);
 
     readSettings();
 }
@@ -215,4 +199,4 @@ void K3b::ThemeOptionTab::slotRemoveTheme()
     }
 }
 
-
+#include "k3bthemeoptiontab.moc"

@@ -8,8 +8,8 @@
 #ifndef KCDDB_CATEGORIES_H
 #define KCDDB_CATEGORIES_H
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QString>
+#include <qstringlist.h>
 
 namespace KCDDB
 {

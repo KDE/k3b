@@ -13,9 +13,10 @@
  */
 
 #include "k3bdataprojectdelegate.h"
-#include <QtGui/QKeyEvent>
-#include <QtGui/QFocusEvent>
-#include <QtWidgets/QLineEdit>
+#include <KLineEdit>
+#include <KMimeType>
+#include <QKeyEvent>
+#include <QFocusEvent>
 
 namespace K3b {
 
@@ -29,7 +30,7 @@ DataProjectDelegate::DataProjectDelegate( QObject* parent )
 QWidget* DataProjectDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     m_current = index;
-    QLineEdit* lineEdit = new QLineEdit( parent );
+    KLineEdit* lineEdit = new KLineEdit( parent );
     lineEdit->setFrame( false );
     lineEdit->setAlignment( option.displayAlignment );
     lineEdit->installEventFilter( const_cast<DataProjectDelegate*>( this ) );
@@ -40,8 +41,8 @@ QWidget* DataProjectDelegate::createEditor( QWidget* parent, const QStyleOptionV
 bool DataProjectDelegate::eventFilter( QObject* object, QEvent* event )
 {
     if( event->type() == QEvent::FocusIn ) {
-        if( QLineEdit* editor = qobject_cast<QLineEdit*>( object ) ) {
-            const QString extension = m_mimeDatabase.suffixForFileName( editor->text() );
+        if( KLineEdit* editor = qobject_cast<KLineEdit*>( object ) ) {
+            const QString extension = KMimeType::extractKnownExtension( editor->text() );
             // Select only filename without extension
             if( !extension.isEmpty() ) {
                 const int selectionLength = editor->text().length() - extension.length() - 1;
@@ -79,4 +80,4 @@ bool DataProjectDelegate::eventFilter( QObject* object, QEvent* event )
 
 } // namespace K3b
 
-
+#include "k3bdataprojectdelegate.moc"

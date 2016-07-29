@@ -13,13 +13,14 @@
  */
 
 #include "k3bstdguiitems.h"
-#include "k3b_i18n.h"
 
-#include <QtGui/QPalette>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QToolTip>
+#include <qcheckbox.h>
+#include <qtooltip.h>
+
+#include <qcombobox.h>
+#include <qpalette.h>
+
+#include <klocale.h>
 
 
 QCheckBox* K3b::StdGuiItems::simulateCheckbox( QWidget* parent )

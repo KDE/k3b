@@ -57,4 +57,6 @@ private:
     Private* d;
 };
 
+K3B_EXPORT_PLUGIN( k3bsoxencoder, K3bSoxEncoder )
+
 #endif

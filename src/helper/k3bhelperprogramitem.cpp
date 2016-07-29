@@ -15,8 +15,6 @@
 
 #include "k3bhelperprogramitem.h"
 
-#include <QtCore/QDataStream>
-
 namespace K3b {
 
 HelperProgramItem::HelperProgramItem()

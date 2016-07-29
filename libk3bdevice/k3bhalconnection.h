@@ -19,9 +19,9 @@
 
 #include "k3bdevice_export.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
+#include <qobject.h>
+#include <qmap.h>
+#include <qstringlist.h>
 
 
 namespace K3b {

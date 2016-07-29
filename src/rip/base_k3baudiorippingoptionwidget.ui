@@ -250,6 +250,7 @@ file will contain all tracks one after the other.
  </customwidgets>
  <includes>
   <include location="local">kurlrequester.h</include>
+  <include location="local">kpushbutton.h</include>
  </includes>
  <resources/>
  <connections>

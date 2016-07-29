@@ -16,20 +16,21 @@
 #include "k3bdataadvancedimagesettingsdialog.h"
 #include "k3bisooptions.h"
 
-#include <KI18n/KLocalizedString>
+#include <QCheckBox>
+#include <QRadioButton>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QRadioButton>
+#include <KDebug>
+#include <KLocale>
 
 
 K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* parent )
-    : QDialog( parent )
+    : KDialog( parent )
 {
-    setupUi( this );
+    setupUi( mainWidget() );
 
-    setWindowTitle(i18n("Custom Data Project Filesystems"));
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
+    setCaption(i18n("Custom Data Project Filesystems"));
     setModal(true);
 
     connect( m_checkRockRidge, SIGNAL(toggled(bool)), m_groupRockRidgeSettings, SLOT(setEnabled(bool)) );
@@ -121,4 +122,4 @@ void K3b::DataAdvancedImageSettingsDialog::save( K3b::IsoOptions& options )
     options.setDoNotImportSession( m_checkDoNotImportSession->isChecked() );
 }
 
-
+#include "k3bdataadvancedimagesettingsdialog.moc"

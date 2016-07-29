@@ -17,12 +17,11 @@
 
 #include "k3bcore.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KStandardDirs>
 
-#include <QtCore/QSet>
-#include <QtCore/QStandardPaths>
+#include <QSet>
 
 
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
@@ -31,7 +30,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
     
     // check if the lame encoding plugin has been compiled
 #ifndef HAVE_LAME
-    if( !QStandardPaths::findExecutable( "lame" ).isEmpty() ) {
+    if( !KStandardDirs::findExe( "lame" ).isEmpty() ) {
         K3bExternalEncoderCommand lameCmd;
         lameCmd.name = "Mp3 (Lame)";
         lameCmd.extension = "mp3";
@@ -53,7 +52,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
     }
 #endif
 
-    if( !QStandardPaths::findExecutable( "flac" ).isEmpty() ) {
+    if( !KStandardDirs::findExe( "flac" ).isEmpty() ) {
         K3bExternalEncoderCommand flacCmd;
         flacCmd.name = "Flac";
         flacCmd.extension = "flac";
@@ -76,7 +75,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
         commands.append( flacCmd );
     }
 
-    if( !QStandardPaths::findExecutable( "mppenc" ).isEmpty() ) {
+    if( !KStandardDirs::findExe( "mppenc" ).isEmpty() ) {
         K3bExternalEncoderCommand mppCmd;
         mppCmd.name = "Musepack";
         mppCmd.extension = "mpc";
@@ -102,7 +101,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
 
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 {
-    KSharedConfig::Ptr c = KSharedConfig::openConfig();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
     QList<K3bExternalEncoderCommand> commands;
@@ -142,7 +141,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 
 void K3bExternalEncoderCommand::saveCommands( const QList<K3bExternalEncoderCommand>& cmds )
 {
-    KSharedConfig::Ptr c = KSharedConfig::openConfig();
+    KSharedConfig::Ptr c = KGlobal::config();
     c->deleteGroup( "K3bExternalEncoderPlugin" );
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 

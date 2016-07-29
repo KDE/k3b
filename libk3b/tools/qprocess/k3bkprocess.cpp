@@ -21,13 +21,13 @@
 
 #include "k3bkprocess_p.h"
 
-#include <QtCore/QStandardPaths>
+#include <kstandarddirs.h>
 #include <kshell.h>
 #ifdef Q_OS_WIN
 # include <kshell_p.h>
 #endif
 
-#include <QtCore/QFile>
+#include <qfile.h>
 
 #ifdef Q_OS_WIN
 # include <windows.h>
@@ -245,7 +245,7 @@ void K3bKProcess::setShellCommand(const QString &cmd)
     d->args = KShell::splitArgs(
             cmd, KShell::AbortOnMeta | KShell::TildeExpand, &err);
     if (err == KShell::NoError && !d->args.isEmpty()) {
-        d->prog = QStandardPaths::findExecutable(d->args[0]);
+        d->prog = KStandardDirs::findExe(d->args[0]);
         if (!d->prog.isEmpty()) {
             d->args.removeFirst();
             return;
@@ -263,13 +263,13 @@ void K3bKProcess::setShellCommand(const QString &cmd)
     d->prog = QFile::symLinkTarget(QString::fromLatin1("/bin/sh"));
     if (d->prog.isEmpty()) {
         // Try some known POSIX shells.
-        d->prog = QStandardPaths::findExecutable("ksh");
+        d->prog = KStandardDirs::findExe("ksh");
         if (d->prog.isEmpty()) {
-            d->prog = QStandardPaths::findExecutable("ash");
+            d->prog = KStandardDirs::findExe("ash");
             if (d->prog.isEmpty()) {
-                d->prog = QStandardPaths::findExecutable("bash");
+                d->prog = KStandardDirs::findExe("bash");
                 if (d->prog.isEmpty()) {
-                    d->prog = QStandardPaths::findExecutable("zsh");
+                    d->prog = KStandardDirs::findExe("zsh");
                     if (d->prog.isEmpty())
                         // We're pretty much screwed, to be honest ...
                         d->prog = QString::fromLatin1("/bin/sh");
@@ -288,7 +288,7 @@ void K3bKProcess::setShellCommand(const QString &cmd)
     setEnv(PERCENT_VARIABLE, "%");
 
     //see also TrollTechTaskTracker entry 88373.
-    d->prog = QStandardPaths::findExecutable("kcmdwrapper");
+    d->prog = KStandardDirs::findExe("kcmdwrapper");
 
     UINT size;
     WCHAR sysdir[MAX_PATH + 1];
@@ -379,4 +379,4 @@ int K3bKProcess::pid() const
 #endif
 }
 
-#include "moc_k3bkprocess.cpp"
+#include "k3bkprocess.moc"

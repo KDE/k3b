@@ -14,14 +14,15 @@
 
 #include "k3bdiskinfo.h"
 #include "k3bdiskinfo_p.h"
-#include "k3bdevice_i18n.h"
 #include "k3bdeviceglobals.h"
+
 #include "k3bmsf.h"
 
-#include <KIOCore/KIO/Global>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kio/global.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
+#include <qstringlist.h>
 
 
 K3b::Device::DiskInfo::DiskInfo()
@@ -173,7 +174,7 @@ K3b::Msf K3b::Device::DiskInfo::firstLayerSize() const
 
 void K3b::Device::DiskInfo::debug() const
 {
-    qDebug() << "DiskInfo:" << endl
+    kDebug() << "DiskInfo:" << endl
              << "Mediatype:       " << K3b::Device::mediaTypeString( mediaType() ) << endl
              << "Current Profile: " << K3b::Device::mediaTypeString( currentProfile() ) << endl
              << "Disk state:      " << ( diskState() == K3b::Device::STATE_EMPTY ?
@@ -204,7 +205,7 @@ void K3b::Device::DiskInfo::debug() const
              << ") (" << size().mode1Bytes() << " Bytes)" << endl;
 
     if( mediaType() == K3b::Device::MEDIA_DVD_PLUS_RW )
-        qDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
+        kDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
                                              "none" :
                                              ( bgFormatState() == BG_FORMAT_INCOMPLETE ?
                                                "incomplete" :

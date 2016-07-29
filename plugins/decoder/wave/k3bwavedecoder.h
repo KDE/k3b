@@ -17,7 +17,11 @@
 #define _K3B_WAVE_DECODER_H_
 
 #include "k3baudiodecoder.h"
-#include <QtCore/QScopedPointer>
+
+#include <kurl.h>
+
+
+
 
 class K3bWaveDecoderFactory : public K3b::AudioDecoderFactory
 {
@@ -27,7 +31,7 @@ public:
     K3bWaveDecoderFactory( QObject* parent, const QVariantList& );
     ~K3bWaveDecoderFactory();
 
-    bool canDecode( const QUrl& filename );
+    bool canDecode( const KUrl& filename );
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
@@ -60,7 +64,9 @@ protected:
 
 private:
     class Private;
-    QScopedPointer<Private> d;
+    Private* d;
 };
+
+K3B_EXPORT_PLUGIN(k3bwavedecoder, K3bWaveDecoderFactory)
 
 #endif

@@ -17,8 +17,8 @@
 #include "k3bvideodvdtitletranscodingjob.h"
 #include "k3bvideodvdtitledetectclippingjob.h"
 
-#include <QtCore/QDebug>
-#include <KI18n/KLocalizedString>
+#include <kdebug.h>
+#include <klocale.h>
 
 
 K3b::VideoDVDRippingJob::TitleRipInfo::TitleRipInfo()
@@ -381,4 +381,4 @@ void K3b::VideoDVDRippingJob::initProgressInfo()
     }
 }
 
-
+#include "k3bvideodvdrippingjob.moc"

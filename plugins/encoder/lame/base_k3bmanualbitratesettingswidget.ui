@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>K3bManualBitrateSettingsDialog</class>
- <widget class="QDialog" name="K3bManualBitrateSettingsDialog">
+ <class>K3bManualBitrateSettingsWidget</class>
+ <widget class="QWidget" name="K3bManualBitrateSettingsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>337</width>
-    <height>388</height>
+    <width>273</width>
+    <height>309</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
@@ -20,7 +20,7 @@
       <item>
        <widget class="QRadioButton" name="m_radioConstantBitrate">
         <property name="text">
-         <string>&amp;Constant Bitrate</string>
+         <string>Constant Bitrate</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -46,14 +46,14 @@
          </spacer>
         </item>
         <item>
-         <widget class="QComboBox" name="m_comboConstantBitrate"/>
+         <widget class="KComboBox" name="m_comboConstantBitrate"/>
         </item>
        </layout>
       </item>
       <item>
        <widget class="QRadioButton" name="m_radioVariableBitrate">
         <property name="text">
-         <string>&amp;Variable Bitrate</string>
+         <string>Variable Bitrate</string>
         </property>
        </widget>
       </item>
@@ -71,7 +71,7 @@
           </widget>
          </item>
          <item row="0" column="2">
-          <widget class="QComboBox" name="m_comboMaximumBitrate">
+          <widget class="KComboBox" name="m_comboMaximumBitrate">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -117,7 +117,7 @@
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QComboBox" name="m_comboMinimumBitrate">
+          <widget class="KComboBox" name="m_comboMinimumBitrate">
            <property name="enabled">
             <bool>false</bool>
            </property>
@@ -152,7 +152,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QComboBox" name="m_comboMode">
+       <widget class="KComboBox" name="m_comboMode">
         <property name="toolTip">
          <string>Select the channel mode.</string>
         </property>
@@ -198,16 +198,16 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
      </property>
     </spacer>
    </item>
-   <item>
-    <widget class="QDialogButtonBox" name="m_buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -287,38 +287,6 @@ The input will be encoded as a mono signal. If it was a stereo signal, it will b
     <hint type="destinationlabel">
      <x>136</x>
      <y>169</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>K3bManualBitrateSettingsDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>168</x>
-     <y>363</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>168</x>
-     <y>193</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>K3bManualBitrateSettingsDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>168</x>
-     <y>363</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>168</x>
-     <y>193</y>
     </hint>
    </hints>
   </connection>

@@ -24,10 +24,11 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 #include "k3bglobalsettings.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
+#include <klocale.h>
+#include <kdebug.h>
+
+#include <qregexp.h>
 
 #include <errno.h>
 #include <string.h>
@@ -159,7 +160,7 @@ void K3b::DvdBooktypeJob::cancel()
             d->process->terminate();
     }
     else {
-        qDebug() << "(K3b::DvdBooktypeJob) not running.";
+        kDebug() << "(K3b::DvdBooktypeJob) not running.";
     }
 }
 
@@ -324,9 +325,9 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
 
     *d->process << d->device->blockDeviceName();
 
-    qDebug() << "***** dvd+rw-booktype parameters:\n";
+    kDebug() << "***** dvd+rw-booktype parameters:\n";
     QString s = d->process->joinedArgs();
-    qDebug() << s << endl << flush;
+    kDebug() << s << endl << flush;
     emit debuggingOutput( "dvd+rw-booktype command:", s );
 
     if( !d->process->start( KProcess::OnlyStderrChannel ) ) {
@@ -341,4 +342,4 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
     }
 }
 
-
+#include "k3bdvdbooktypejob.moc"

@@ -20,10 +20,10 @@
 #include "k3btoc.h"
 #include "k3bmedium.h"
 
-#include <libkcddb/cdinfo.h>
+#include <qstringlist.h>
+#include <QList>
 
-#include <QtCore/QList>
-#include <QtCore/QStringList>
+#include <libkcddb/cdinfo.h>
 
 class QCheckBox;
 class QSpinBox;

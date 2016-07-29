@@ -15,17 +15,15 @@
 #ifndef _K3B_INTERACTION_DIALOG_H_
 #define _K3B_INTERACTION_DIALOG_H_
 
-#include <KConfigCore/KConfigGroup>
-
-#include <QtCore/QEvent>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
+#include <kdialog.h>
+#include <QGridLayout>
+#include <QEvent>
+#include <QLabel>
 
 
 class QGridLayout;
 class QLabel;
-class QPushButton;
+class KPushButton;
 class KGuiItem;
 class QToolButton;
 
@@ -40,7 +38,7 @@ namespace K3b {
      * The default implementations of the slots just emit the
      * corresponding signals.
      */
-    class InteractionDialog : public QDialog
+    class InteractionDialog : public KDialog
     {
         Q_OBJECT
 
@@ -233,12 +231,12 @@ namespace K3b {
         void saveLastSettings();
         void loadStartupSettings();
 
-        QPushButton* getButton( int );
+        KPushButton* getButton( int );
 
         ThemedHeader* m_dialogHeader;
-        QPushButton* m_buttonStart;
-        QPushButton* m_buttonSave;
-        QPushButton* m_buttonCancel;
+        KPushButton* m_buttonStart;
+        KPushButton* m_buttonSave;
+        KPushButton* m_buttonCancel;
         QWidget* m_mainWidget;
 
         QToolButton* m_buttonLoadSettings;

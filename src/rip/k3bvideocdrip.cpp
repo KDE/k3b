@@ -12,27 +12,30 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
+// K3b Includes
 #include "k3bvideocdrip.h"
 #include "k3bcore.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
-#include <KConfigCore/KConfig>
-#include <KCoreAddons/KProcess>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/Global>
+#include <KConfig>
+#include <KDebug>
+#include <kio/global.h>
+#include <KLocale>
+#include <KProcess>
+#include <KStandardDirs>
+#include <KTemporaryFile>
+#include <KUrl>
 
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QList>
-#include <QtCore/QRegExp>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtXml/QDomNode>
+#include <QDateTime>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
+#include <QFile>
+#include <QList>
+#include <QRegExp>
+#include <QString>
+#include <QTimer>
 
 
 K3b::VideoCdRip::VideoCdRip( K3b::JobHandler* hdl, K3b::VideoCdRippingOptions* options, QObject* parent )
@@ -75,7 +78,7 @@ void K3b::VideoCdRip::cancelAll()
 
 void K3b::VideoCdRip::start()
 {
-    qDebug() << "(K3b::VideoCdRip) starting job";
+    kDebug() << "(K3b::VideoCdRip) starting job";
 
     jobStarted();
     m_canceled = false;
@@ -94,7 +97,7 @@ void K3b::VideoCdRip::vcdxRip()
     const K3b::ExternalBin* bin = k3bcore ->externalBinManager() ->binObject( "vcdxrip" );
 
     if ( !bin ) {
-        qDebug() << "(K3b::VideoCdRip) could not find vcdxrip executable";
+        kDebug() << "(K3b::VideoCdRip) could not find vcdxrip executable";
         emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxrip") ), K3b::Job::MessageError );
         emit infoMessage( i18n( "To rip Video CDs you have to install VcdImager Version %1." , QString(">= 0.7.12") ), K3b::Job::MessageInfo );
         emit infoMessage( i18n( "You can find this on your distribution’s software repository or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
@@ -104,7 +107,7 @@ void K3b::VideoCdRip::vcdxRip()
     }
 
     if( bin->version() < K3b::Version("0.7.12") ) {
-        qDebug() << "(K3b::VideoCdRip) vcdxrip executable too old!";
+        kDebug() << "(K3b::VideoCdRip) vcdxrip executable too old!";
         emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." , QString("Vcdxrip") , QString("0.7.12") ), K3b::Job::MessageError );
         emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
         cancelAll();
@@ -157,11 +160,11 @@ void K3b::VideoCdRip::vcdxRip()
     m_process->setWorkingDirectory( m_videooptions ->getVideoCdDestination() );
 
     // vcdxrip commandline parameters
-    qDebug() << "***** vcdxrip parameters:";
+    kDebug() << "***** vcdxrip parameters:";
     QStringList args = m_process->program();
     args.removeFirst();
     QString s = args.join(" ");
-    qDebug() << s << flush;
+    kDebug() << s << flush;
     emit debuggingOutput( "vcdxrip command:", s );
 
     emit newTask( i18n( "Extracting" ) );
@@ -170,7 +173,7 @@ void K3b::VideoCdRip::vcdxRip()
 
     m_process->start();
     if ( !m_process->waitForStarted() ) {
-        qDebug() << "(K3b::VideoCdRip) could not start vcdxrip";
+        kDebug() << "(K3b::VideoCdRip) could not start vcdxrip";
         emit infoMessage( i18n( "Could not start %1." , QString("vcdxrip") ), K3b::Job::MessageError );
         cancelAll();
         jobFinished( false );
@@ -217,7 +220,7 @@ void K3b::VideoCdRip::slotParseVcdXRipOutput()
 
                     m_bytesFinished = pos;
 
-                    qDebug() << "(slotParseVcdXRipOutput) overall: " << ((long)overallPos  * 2352)
+                    kDebug() << "(slotParseVcdXRipOutput) overall: " << ((long)overallPos  * 2352)
 			      << ", videocdsize: " << m_videooptions->getVideoCdSize() << endl;
                     double relOverallWritten = ( ( double ) overallPos  * 2352 ) / ( double ) m_videooptions ->getVideoCdSize() ;
                     int newpercent =  ( int ) ( 100 * relOverallWritten );
@@ -236,15 +239,15 @@ void K3b::VideoCdRip::slotParseVcdXRipOutput()
                 if ( tel.isText() ) {
                     const QString text = tel.data();
                     if ( level == "information" ) {
-                        qDebug() << QString( "(K3b::VideoCdRip) vcdxrip information, %1" ).arg( text );
+                        kDebug() << QString( "(K3b::VideoCdRip) vcdxrip information, %1" ).arg( text );
                         parseInformation( text );
                     } else {
                         if ( level != "error" ) {
-                            qDebug() << QString( "(K3b::VideoCdRip) vcdxrip warning, %1" ).arg( text );
+                            kDebug() << QString( "(K3b::VideoCdRip) vcdxrip warning, %1" ).arg( text );
                             emit debuggingOutput( "vcdxrip", text );
                             parseInformation( text );
                         } else {
-                            qDebug() << QString( "(K3b::VideoCdRip) vcdxrip error, %1" ).arg( text );
+                            kDebug() << QString( "(K3b::VideoCdRip) vcdxrip error, %1" ).arg( text );
                             emit infoMessage( text, K3b::Job::MessageError );
                         }
                     }
@@ -347,4 +350,4 @@ QString K3b::VideoCdRip::jobDetails() const
     return QString( "(%1)" ).arg ( KIO::convertSize( m_videooptions ->getVideoCdSize() ) );
 }
 
-
+#include "k3bvideocdrip.moc"

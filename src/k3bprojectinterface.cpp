@@ -24,8 +24,8 @@
 #include "k3bdevicemanager.h"
 #include "k3bjob.h"
 
-#include <QtCore/QTimer>
-#include <QtDBus/QDBusConnection>
+#include <QDBusConnection>
+#include <QTimer>
 
 namespace K3b {
 
@@ -62,15 +62,13 @@ QString ProjectInterface::dbusPath() const
 
 void ProjectInterface::addUrls( const QStringList& urls )
 {
-    QList<QUrl> urlList;
-    for( auto& url : urls ) { urlList.push_back( QUrl::fromUserInput( url ) ); }
-    m_doc->addUrls( urlList );
+    m_doc->addUrls( KUrl::List(urls) );
 }
 
 
 void ProjectInterface::addUrl( const QString& url )
 {
-    m_doc->addUrl( QUrl::fromLocalFile(url) );
+    m_doc->addUrl( KUrl(url) );
 }
 
 
@@ -151,4 +149,4 @@ QString ProjectInterface::projectType() const
 
 } // namespace K3b
 
-
+#include "k3bprojectinterface.moc"

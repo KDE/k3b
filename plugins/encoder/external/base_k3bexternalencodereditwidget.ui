@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>Sebastian Trueg</author>
- <class>base_K3bExternalEncoderEditDialog</class>
- <widget class="QDialog" name="base_K3bExternalEncoderEditDialog">
+ <class>base_K3bExternalEncoderEditWidget</class>
+ <widget class="QWidget" name="base_K3bExternalEncoderEditWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>533</width>
-    <height>653</height>
+    <height>532</height>
    </rect>
   </property>
   <layout class="QVBoxLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -29,7 +32,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="m_editName"/>
+       <widget class="KLineEdit" name="m_editName"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="textLabel3">
@@ -42,9 +45,12 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="m_editExtension"/>
+       <widget class="KLineEdit" name="m_editExtension"/>
       </item>
      </layout>
+     <zorder>m_editExtension</zorder>
+     <zorder>textLabel3</zorder>
+     <zorder>m_editExtension</zorder>
      <zorder>m_editName</zorder>
      <zorder>textLabel1</zorder>
      <zorder>textLabel3</zorder>
@@ -66,18 +72,18 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Please insert the command used to encode the audio data. The command has to read raw little endian (see &lt;em&gt;Swap Byte Order&lt;/em&gt;) 16-bit stereo audio frames from stdin.
-&lt;p&gt;The following strings will be replaced by K3b:&lt;br&gt;
-&lt;b&gt;%f&lt;/b&gt; - The filename of the resulting file. This is where the command has to write its output to.&lt;br&gt;
-&lt;em&gt;The following refer to metadata stored for example in the ID3 tag of an mp3 file (Be aware that these values might be empty).&lt;/em&gt;&lt;br&gt;
-&lt;b&gt;%t&lt;/b&gt; - Title&lt;br&gt;
-&lt;b&gt;%a&lt;/b&gt; - Artist&lt;br&gt;
-&lt;b&gt;%c&lt;/b&gt; - Comment&lt;br&gt;
-&lt;b&gt;%n&lt;/b&gt; - Track number&lt;br&gt;
-&lt;b&gt;%m&lt;/b&gt; - Album Title&lt;br&gt;
-&lt;b&gt;%r&lt;/b&gt; - Album Artist&lt;br&gt;
-&lt;b&gt;%x&lt;/b&gt; - Album comment&lt;br&gt;
-&lt;b&gt;%y&lt;/b&gt; - Release Year</string>
+         <string>Please insert the command used to encode the audio data. The command has to read raw little endian (see &lt;em>Swap Byte Order&lt;/em>) 16-bit stereo audio frames from stdin.
+&lt;p>The following strings will be replaced by K3b:&lt;br>
+&lt;b>%f&lt;/b> - The filename of the resulting file. This is where the command has to write its output to.&lt;br>
+&lt;em>The following refer to metadata stored for example in the ID3 tag of an mp3 file (Be aware that these values might be empty).&lt;/em>&lt;br>
+&lt;b>%t&lt;/b> - Title&lt;br>
+&lt;b>%a&lt;/b> - Artist&lt;br>
+&lt;b>%c&lt;/b> - Comment&lt;br>
+&lt;b>%n&lt;/b> - Track number&lt;br>
+&lt;b>%m&lt;/b> - Album Title&lt;br>
+&lt;b>%r&lt;/b> - Album Artist&lt;br>
+&lt;b>%x&lt;/b> - Album comment&lt;br>
+&lt;b>%y&lt;/b> - Release Year</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
@@ -85,7 +91,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="m_editCommand">
+       <widget class="KLineEdit" name="m_editCommand">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -133,49 +139,16 @@
      </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QDialogButtonBox" name="m_buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>m_buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>base_K3bExternalEncoderEditDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>266</x>
-     <y>637</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>266</x>
-     <y>326</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>base_K3bExternalEncoderEditDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>266</x>
-     <y>637</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>266</x>
-     <y>326</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -15,7 +15,7 @@
  */
 
 #include "k3bdataviewimpl.h"
-#include "k3bbootimagedialog.h"
+#include "k3bbootimageview.h"
 #include "k3bdatadoc.h"
 #include "k3bdatamultisessionimportdialog.h"
 #include "k3bdataprojectdelegate.h"
@@ -28,18 +28,17 @@
 #include "k3bviewcolumnadjuster.h"
 #include "k3bvolumenamewidget.h"
 
-#include <KI18n/KLocalizedString>
-#include <KIOWidgets/KFileItemDelegate>
-#include <KIOWidgets/KRun>
-#include <KXmlGui/KActionCollection>
+#include <KAction>
+#include <KActionCollection>
+#include <KFileItemDelegate>
+#include <KInputDialog>
+#include <KLocale>
+#include <KMenu>
+#include <KRun>
 
-#include <QtCore/QSortFilterProxyModel>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QShortcut>
-#include <QtWidgets/QWidgetAction>
+#include <QShortcut>
+#include <QSortFilterProxyModel>
+#include <QWidgetAction>
 
 
 namespace {
@@ -77,7 +76,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_fileView( new QTreeView( view ) )
 {
     connect( m_doc, SIGNAL(importedSessionChanged(int)), this, SLOT(slotImportedSessionChanged(int)) );
-    connect( m_model, SIGNAL(addUrlsRequested(QList<QUrl>,K3b::DirItem*)), SLOT(slotAddUrlsRequested(QList<QUrl>,K3b::DirItem*)) );
+    connect( m_model, SIGNAL(addUrlsRequested(KUrl::List,K3b::DirItem*)), SLOT(slotAddUrlsRequested(KUrl::List,K3b::DirItem*)) );
     connect( m_model, SIGNAL(moveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)), SLOT(slotMoveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)) );
 
     m_sortModel->setSourceModel( m_model );
@@ -108,51 +107,51 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_columnAdjuster->addFixedColumn( DataProjectModel::SizeColumn );
     m_columnAdjuster->setColumnMargin( DataProjectModel::SizeColumn, 10 );
 
-    m_actionNewDir = new QAction( QIcon::fromTheme( "folder-new" ), i18n("New Folder..."), m_fileView );
+    m_actionNewDir = new KAction( KIcon( "folder-new" ), i18n("New Folder..."), m_fileView );
     m_actionNewDir->setShortcut( Qt::CTRL + Qt::Key_N );
     m_actionNewDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "new_dir", m_actionNewDir );
     connect( m_actionNewDir, SIGNAL(triggered(bool)), this, SLOT(slotNewDir()) );
 
-    m_actionRemove = new QAction( QIcon::fromTheme( "edit-delete" ), i18n("Remove"), m_fileView );
+    m_actionRemove = new KAction( KIcon( "edit-delete" ), i18n("Remove"), m_fileView );
     m_actionRemove->setShortcut( Qt::Key_Delete );
     m_actionRemove->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "remove", m_actionRemove );
     connect( m_actionRemove, SIGNAL(triggered(bool)), this, SLOT(slotRemove()) );
 
-    m_actionRename = new QAction( QIcon::fromTheme( "edit-rename" ), i18n("Rename"), m_fileView );
+    m_actionRename = new KAction( KIcon( "edit-rename" ), i18n("Rename"), m_fileView );
     m_actionRename->setShortcut( Qt::Key_F2 );
     m_actionRename->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "rename", m_actionRename );
     connect( m_actionRename, SIGNAL(triggered(bool)), this, SLOT(slotRename()) );
 
-    m_actionParentDir = new QAction( QIcon::fromTheme( "go-up" ), i18n("Parent Folder"), m_fileView );
+    m_actionParentDir = new KAction( KIcon( "go-up" ), i18n("Parent Folder"), m_fileView );
     m_actionParentDir->setShortcut( Qt::Key_Backspace );
     m_actionParentDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "parent_dir", m_actionParentDir );
 
-    m_actionProperties = new QAction( QIcon::fromTheme( "document-properties" ), i18n("Properties"), m_fileView );
+    m_actionProperties = new KAction( KIcon( "document-properties" ), i18n("Properties"), m_fileView );
     m_actionProperties->setShortcut( Qt::ALT + Qt::Key_Return );
     m_actionProperties->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "properties", m_actionProperties );
     connect( m_actionProperties, SIGNAL(triggered(bool)), this, SLOT(slotProperties()) );
 
-    m_actionOpen = new QAction( QIcon::fromTheme( "document-open" ), i18n("Open"), m_view );
+    m_actionOpen = new KAction( KIcon( "document-open" ), i18n("Open"), m_view );
     actionCollection->addAction( "open", m_actionOpen );
     connect( m_actionOpen, SIGNAL(triggered(bool)), this, SLOT(slotOpen()) );
 
-    m_actionImportSession = new QAction( QIcon::fromTheme( "document-import" ), i18n("&Import Session..."), m_view );
+    m_actionImportSession = new KAction( KIcon( "document-import" ), i18n("&Import Session..."), m_view );
     m_actionImportSession->setToolTip( i18n("Import a previously burned session into the current project") );
     actionCollection->addAction( "project_data_import_session", m_actionImportSession );
     connect( m_actionImportSession, SIGNAL(triggered(bool)), this, SLOT(slotImportSession()) );
 
-    m_actionClearSession = new QAction( QIcon::fromTheme( "edit-clear" ), i18n("&Clear Imported Session"), m_view );
+    m_actionClearSession = new KAction( KIcon( "edit-clear" ), i18n("&Clear Imported Session"), m_view );
     m_actionClearSession->setToolTip( i18n("Remove the imported items from a previous session") );
     m_actionClearSession->setEnabled( m_doc->importedSession() > -1 );
     actionCollection->addAction( "project_data_clear_imported_session", m_actionClearSession );
     connect( m_actionClearSession, SIGNAL(triggered(bool)), this, SLOT(slotClearImportedSession()) );
 
-    m_actionEditBootImages = new QAction( QIcon::fromTheme( "document-properties" ), i18n("&Edit Boot Images..."), m_view );
+    m_actionEditBootImages = new KAction( KIcon( "document-properties" ), i18n("&Edit Boot Images..."), m_view );
     m_actionEditBootImages->setToolTip( i18n("Modify the bootable settings of the current project") );
     actionCollection->addAction( "project_data_edit_boot_images", m_actionEditBootImages );
     connect( m_actionEditBootImages, SIGNAL(triggered(bool)), this, SLOT(slotEditBootImages()) );
@@ -181,7 +180,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
 }
 
 
-void K3b::DataViewImpl::addUrls( const QModelIndex& parent, const QList<QUrl>& urls )
+void K3b::DataViewImpl::addUrls( const QModelIndex& parent, const KUrl::List& urls )
 {
     DirItem *item = dynamic_cast<DirItem*>( m_model->itemForIndex( parent ) );
     if (!item)
@@ -215,21 +214,15 @@ void K3b::DataViewImpl::slotNewDir()
     QString name;
     bool ok;
 
-    name = QInputDialog::getText( m_view,
-                                  i18n("New Folder"),
-                                  i18n("Please insert the name for the new folder:"),
-                                  QLineEdit::Normal,
-                                  i18n("New Folder"),
-                                  &ok );
+    name = KInputDialog::getText( i18n("New Folder"),
+                                i18n("Please insert the name for the new folder:"),
+                                i18n("New Folder"), &ok, m_view );
 
     while( ok && DataDoc::nameAlreadyInDir( name, parentDir ) ) {
-        name = QInputDialog::getText( m_view,
-                                      i18n("New Folder"),
-                                      i18n("A file with that name already exists. "
-                                           "Please insert the name for the new folder:"),
-                                      QLineEdit::Normal,
-                                      i18n("New Folder"),
-                                      &ok );
+        name = KInputDialog::getText( i18n("New Folder"),
+                                    i18n("A file with that name already exists. "
+                                        "Please insert the name for the new folder:"),
+                                    i18n("New Folder"), &ok, m_view );
     }
 
     if( !ok )
@@ -290,15 +283,15 @@ void K3b::DataViewImpl::slotOpen()
     DataItem* item = m_model->itemForIndex( current );
 
     if( !item->isFile() ) {
-        QUrl url = item->localPath();
+        KUrl url = item->localPath();
         if( !KRun::isExecutableFile( url,
-                                    item->mimeType().name() ) ) {
+                                    item->mimeType()->name() ) ) {
             KRun::runUrl( url,
-                        item->mimeType().name(),
+                        item->mimeType()->name(),
                         m_view );
         }
         else {
-            KRun::displayOpenWithDialog( QList<QUrl>() << url, m_view );
+            KRun::displayOpenWithDialog( KUrl::List() << url, m_view );
         }
     }
 }
@@ -380,8 +373,11 @@ void K3b::DataViewImpl::slotClearImportedSession()
 
 void K3b::DataViewImpl::slotEditBootImages()
 {
-    BootImageDialog dlg( m_doc );
-    dlg.setWindowTitle( i18n("Edit Boot Images") );
+    KDialog dlg( m_view );
+    dlg.setCaption( i18n("Edit Boot Images") );
+    dlg.setButtons( KDialog::Ok );
+    dlg.setDefaultButton( KDialog::Ok );
+    dlg.setMainWidget( new K3b::BootImageView( m_doc, &dlg ) );
     dlg.exec();
 }
 
@@ -392,7 +388,7 @@ void K3b::DataViewImpl::slotImportedSessionChanged( int importedSession )
 }
 
 
-void K3b::DataViewImpl::slotAddUrlsRequested( QList<QUrl> urls, K3b::DirItem* targetDir )
+void K3b::DataViewImpl::slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir )
 {
     DataUrlAddingDialog::addUrls( urls, targetDir, m_view );
 }
@@ -403,4 +399,4 @@ void K3b::DataViewImpl::slotMoveItemsRequested( QList<K3b::DataItem*> items, K3b
     DataUrlAddingDialog::moveItems( items, targetDir, m_view );
 }
 
-
+#include "k3bdataviewimpl.moc"

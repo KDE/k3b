@@ -16,9 +16,6 @@
 #include "k3bsoxencoderconfigwidget.h"
 #include "k3bsoxencoderdefaults.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bsoxencoder, K3bSoxEncoderConfigWidget )
 
 
@@ -43,7 +40,7 @@ K3bSoxEncoderConfigWidget::~K3bSoxEncoderConfigWidget()
 
 void K3bSoxEncoderConfigWidget::load()
 {
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup grp( config, "K3bSoxEncoderPlugin" );
 
     m_checkManual->setChecked( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) );
@@ -56,7 +53,7 @@ void K3bSoxEncoderConfigWidget::load()
 
 void K3bSoxEncoderConfigWidget::save()
 {
-    KSharedConfig::Ptr config = KSharedConfig::openConfig();
+    KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup grp( config, "K3bSoxEncoderPlugin" );
 
     grp.writeEntry( "manual settings", m_checkManual->isChecked() );

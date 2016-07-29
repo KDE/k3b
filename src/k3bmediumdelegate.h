@@ -15,7 +15,7 @@
 #ifndef _K3B_MEDIUM_DELEGATE_H_
 #define _K3B_MEDIUM_DELEGATE_H_
 
-#include <QtWidgets/QStyledItemDelegate>
+#include <QtGui/QStyledItemDelegate>
 
 namespace K3b {
     class MediumDelegate : public QStyledItemDelegate

@@ -14,15 +14,15 @@
 
 #include "k3bcddb.h"
 #include "k3bmedium.h"
-#include "k3btoc.h"
-#include "k3b_i18n.h"
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QListWidget>
-#include <QtWidgets/QLabel>
+#include "k3btoc.h"
+
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QListWidget>
+#include <QtGui/QLabel>
+#include <QtGui/QApplication>
+
+#include <KLocale>
 
 #include <libkcddb/client.h>
 
@@ -38,44 +38,54 @@ KCDDB::TrackOffsetList K3b::CDDB::createTrackOffsetList( const K3b::Device::Toc&
 }
 
 
-int K3b::CDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent )
+K3b::CDDB::MultiEntriesDialog::MultiEntriesDialog( QWidget* parent )
+    : KDialog( parent )
 {
-    QDialog dialog( parent );
-    dialog.setWindowTitle( i18n("Multiple CDDB Entries Found") );
+    setCaption( i18n("Multiple CDDB Entries Found") );
+    setButtons( Ok|Cancel );
 
-    QLabel* infoLabel = new QLabel( i18n("K3b found multiple or inexact CDDB entries. Please select one."), &dialog );
+    QWidget* frame = mainWidget();
+
+    QLabel* infoLabel = new QLabel( i18n("K3b found multiple or inexact CDDB entries. Please select one."), frame );
     infoLabel->setWordWrap( true );
 
-    QListWidget* listBox = new QListWidget( &dialog );
-    listBox->setSelectionMode( QAbstractItemView::SingleSelection );
+    m_listBox = new QListWidget( frame );
+    m_listBox->setSelectionMode( QAbstractItemView::SingleSelection );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
-    QObject::connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
-    QObject::connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
-
-    QVBoxLayout* layout = new QVBoxLayout( &dialog );
+    QVBoxLayout* layout = new QVBoxLayout( frame );
     layout->setContentsMargins( 0, 0, 0, 0 );
     layout->addWidget( infoLabel );
-    layout->addWidget( listBox );
-    layout->addWidget( buttonBox );
+    layout->addWidget( m_listBox );
 
-    dialog.setMinimumSize( 280, 200 );
+    setMinimumSize( 280, 200 );
+}
+
+
+int K3b::CDDB::MultiEntriesDialog::selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent )
+{
+    MultiEntriesDialog d( parent );
 
     int i = 1;
     foreach( const KCDDB::CDInfo& info, entries ) {
-        listBox->addItem( QString::number(i++) + ' ' +
+        d.m_listBox->addItem( QString::number(i++) + ' ' +
                               info.get( KCDDB::Artist ).toString() + " - " +
                               info.get( KCDDB::Title ).toString() + " (" +
                               info.get( KCDDB::Category ).toString() + ')' );
     }
 
-    listBox->setCurrentRow( 0 );
+    d.m_listBox->setCurrentRow( 0 );
 
-    if( dialog.exec() == QDialog::Accepted )
-        return listBox->currentRow();
+    if( d.exec() == QDialog::Accepted )
+        return d.m_listBox->currentRow();
     else
         return -1;
 }
+
+
+K3b::CDDB::MultiEntriesDialog::~MultiEntriesDialog()
+{
+}
+
 
 
 class K3b::CDDB::CDDBJob::Private
@@ -144,7 +154,7 @@ K3b::Medium K3b::CDDB::CDDBJob::medium() const
 
 void K3b::CDDB::CDDBJob::start()
 {
-    qDebug();
+    kDebug();
     d->cddbInfo.clear();
     d->cddbClient.lookup( createTrackOffsetList( d->toc ) );
 }
@@ -176,4 +186,4 @@ K3b::CDDB::CDDBJob* K3b::CDDB::CDDBJob::queryCddb( const K3b::Device::Toc& toc )
     return job;
 }
 
-#include "moc_k3bcddb.cpp"
+#include "k3bcddb.moc"

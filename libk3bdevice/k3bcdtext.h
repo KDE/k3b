@@ -16,10 +16,10 @@
 #ifndef _K3B_CDTEXT_H_
 #define _K3B_CDTEXT_H_
 
-#include "k3bdevice_export.h"
-
+#include <QString>
 #include <QtCore/QSharedDataPointer>
-#include <QtCore/QString>
+
+#include "k3bdevice_export.h"
 
 namespace K3b {
     namespace Device {

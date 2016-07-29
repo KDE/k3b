@@ -22,17 +22,18 @@
 #include "k3bdataviewimpl.h"
 #include "k3bdirproxymodel.h"
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KToolBar>
+#include <KAction>
+#include <KActionCollection>
+#include <KDebug>
+#include <KMessageBox>
+#include <KLocale>
+#include <KMenu>
+#include <QSplitter>
+#include <KToolBar>
+#include <KUrl>
 
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QSplitter>
+#include <QTreeView>
+#include <QHeaderView>
 
 
 K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
@@ -130,7 +131,7 @@ void K3b::DataView::slotBurn()
 }
 
 
-void K3b::DataView::addUrls( const QList<QUrl>& urls )
+void K3b::DataView::addUrls( const KUrl::List& urls )
 {
     m_dataViewImpl->addUrls( m_dirProxy->mapToSource( m_dirView->currentIndex() ), urls );
 }
@@ -156,4 +157,4 @@ void K3b::DataView::slotSetCurrentRoot( const QModelIndex& index )
     m_dirView->setCurrentIndex( m_dirProxy->mapFromSource( index ) );
 }
 
-
+#include "k3bdataview.moc"

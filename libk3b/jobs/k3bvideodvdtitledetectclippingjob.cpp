@@ -18,9 +18,9 @@
 #include "k3bprocess.h"
 #include "k3bcore.h"
 #include "k3bglobals.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <klocale.h>
+#include <kdebug.h>
 
 
 static const int s_unrealisticHighClippingValue = 100000;
@@ -169,9 +169,9 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
         *d->process << *it;
 
     // produce some debugging output
-    qDebug() << "***** transcode parameters:\n";
+    kDebug() << "***** transcode parameters:\n";
     QString s = d->process->joinedArgs();
-    qDebug() << s << flush;
+    kDebug() << s << flush;
     emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
     // start the process
@@ -241,7 +241,7 @@ void K3b::VideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& li
             m_clippingRight = qMin( m_clippingRight, values[3].toInt() );
         }
         else
-            qDebug() << "(K3b::VideoDVDTitleDetectClippingJob) failed to parse line: " << line;
+            kDebug() << "(K3b::VideoDVDTitleDetectClippingJob) failed to parse line: " << line;
     }
 }
 
@@ -285,4 +285,4 @@ void K3b::VideoDVDTitleDetectClippingJob::slotTranscodeExited( int exitCode, QPr
     }
 }
 
-
+#include "k3bvideodvdtitledetectclippingjob.moc"

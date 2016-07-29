@@ -15,10 +15,12 @@
 #ifndef K3BAUDIOTRACKDIALOG_H
 #define K3BAUDIOTRACKDIALOG_H
 
+
+#include <kdialog.h>
+
 #include "k3bmsf.h"
 
 #include <QtCore/QList>
-#include <QtWidgets/QDialog>
 
 namespace K3b {
     class AudioTrack;
@@ -27,7 +29,7 @@ namespace K3b {
     /**
      *@author Sebastian Trueg
      */
-    class AudioTrackDialog : public QDialog
+    class AudioTrackDialog : public KDialog
     {
         Q_OBJECT
 
@@ -36,7 +38,7 @@ namespace K3b {
         ~AudioTrackDialog();
 
     protected Q_SLOTS:
-        void accept() override;
+        void slotOk();
         void slotApply();
 
         void updateTrackLengthDisplay();
@@ -45,6 +47,8 @@ namespace K3b {
         QList<AudioTrack*> m_tracks;
 
         AudioTrackWidget* m_audioTrackWidget;
+
+        void setupGui();
     };
 }
 

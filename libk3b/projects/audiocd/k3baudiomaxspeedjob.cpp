@@ -18,14 +18,17 @@
 #include "k3baudiodoc.h"
 #include "k3baudiocdtracksource.h"
 #include "k3baudiodatasourceiterator.h"
-#include "k3bdevice.h"
-#include "k3bthread.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
-#include <QtCore/QIODevice>
-#include <QtCore/QScopedPointer>
+#include "k3bdevice.h"
+
+#include "k3bthread.h"
+
+#include <KDebug>
+#include <KLocale>
+
+#include <QDateTime>
+#include <QIODevice>
+#include <QScopedPointer>
 
 
 class K3b::AudioMaxSpeedJob::Private
@@ -54,7 +57,7 @@ int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source, QIO
             cdts->setDevice( dev );
         }
         else {
-            qDebug() << "(K3b::AudioMaxSpeedJob) ignoring audio cd track source.";
+            kDebug() << "(K3b::AudioMaxSpeedJob) ignoring audio cd track source.";
             return 0;
         }
     }
@@ -75,13 +78,13 @@ int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source, QIO
     int usedT = t.elapsed();
 
     if( r < 0 ) {
-        qDebug() << "(K3b::AudioMaxSpeedJob) read failure.";
+        kDebug() << "(K3b::AudioMaxSpeedJob) read failure.";
         return -1;
     }
 
     // KB/sec (add 1 millisecond to avoid division by 0)
     int throughput = (dataRead*1000+usedT)/(usedT+1)/1024;
-    qDebug() << "(K3b::AudioMaxSpeedJob) throughput: " << throughput
+    kDebug() << "(K3b::AudioMaxSpeedJob) throughput: " << throughput
              << " (" << dataRead << "/" << usedT << ")" << endl;
 
 
@@ -104,7 +107,7 @@ int K3b::AudioMaxSpeedJob::Private::maxSpeedByMedia() const
 
         // this is the first valid speed or the lowest supported one
         s = *it;
-        qDebug() << "(K3b::AudioMaxSpeedJob) using speed factor: " << (s/175);
+        kDebug() << "(K3b::AudioMaxSpeedJob) using speed factor: " << (s/175);
     }
 
     return s;
@@ -137,7 +140,7 @@ int K3b::AudioMaxSpeedJob::maxSpeed() const
 
 bool K3b::AudioMaxSpeedJob::run()
 {
-    qDebug();
+    kDebug() << k_funcinfo;
 
     K3b::AudioDataSourceIterator it( d->doc );
 
@@ -157,7 +160,7 @@ bool K3b::AudioMaxSpeedJob::run()
         QScopedPointer<QIODevice> sourceReader( it.current()->createReader() );
 
         if( !sourceReader->open( QIODevice::ReadOnly ) ) {
-            qDebug() << "Cannot open source reader!";
+            kDebug() << "Cannot open source reader!";
             success = false;
             break;
         }
@@ -185,9 +188,9 @@ bool K3b::AudioMaxSpeedJob::run()
     }
 
     if( success )
-        qDebug() << "(K3b::AudioMaxSpeedJob) max speed: " << d->maxSpeed;
+        kDebug() << "(K3b::AudioMaxSpeedJob) max speed: " << d->maxSpeed;
 
     return success;
 }
 
-
+#include "k3baudiomaxspeedjob.moc"

@@ -1,7 +1,14 @@
-add_library(k3bwavedecoder MODULE k3bwavedecoder.cpp)
+########### next target ###############
 
-target_link_libraries(k3bwavedecoder k3bdevice k3blib KF5::I18n)
+set(k3bwavedecoder_PART_SRCS k3bwavedecoder.cpp )
 
-install(TARGETS k3bwavedecoder DESTINATION ${PLUGIN_INSTALL_DIR})
+kde4_add_plugin(k3bwavedecoder ${k3bwavedecoder_PART_SRCS})
 
-install(FILES  k3bwavedecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+target_link_libraries(k3bwavedecoder k3bdevice ${KDE4_KDECORE_LIBS} k3b )
+
+install(TARGETS k3bwavedecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
+
+
+########### install files ###############
+
+install( FILES  k3bwavedecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )

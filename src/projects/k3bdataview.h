@@ -38,7 +38,7 @@ namespace K3b {
 
     public Q_SLOTS:
         virtual void slotBurn();
-        virtual void addUrls( const QList<QUrl>& urls );
+        virtual void addUrls( const KUrl::List& urls );
 
     private Q_SLOTS:
         void slotParentDir();

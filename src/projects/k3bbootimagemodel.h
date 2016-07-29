@@ -16,7 +16,7 @@
 #define K3B_K3BBOOTIMAGEMODEL_H
 
 #include "k3bbootitem.h"
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 
 
 namespace K3b {

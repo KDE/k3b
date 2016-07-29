@@ -19,53 +19,55 @@
 #include "k3bfileitem.h"
 #include "k3bvalidators.h"
 
-#include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KSqueezedTextLabel>
+#include <KIcon>
+#include <kio/global.h>
+#include <KLineEdit>
+#include <KLocale>
+#include <KMimeType>
+#include <KUrl>
+#include <KSqueezedTextLabel>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QUrl>
-#include <QtGui/QValidator>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
+#include <QCheckBox>
+#include <QFileInfo>
+#include <QFrame>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QValidator>
 
 
 K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )
-    : QDialog( parent )
+    : KDialog( parent )
 {
-    setWindowTitle( i18n("File Properties") );
+    setCaption( i18n("File Properties") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
 
     m_dataItems = dataItems;
 
-    m_labelIcon = new QLabel( this );
+    m_labelIcon = new QLabel( mainWidget() );
     if ( dataItems.count() == 1 ) {
-        m_editName = new KLineEdit( this );
+        m_editName = new KLineEdit( mainWidget() );
         m_editName->setValidator( K3b::Validators::iso9660Validator( false, this ) );
-        m_labelType = new QLabel( this );
-        m_labelLocalName = new KSqueezedTextLabel( this );
-        m_labelLocalLocation = new KSqueezedTextLabel( this );
-        m_labelLocalLinkTarget = new KSqueezedTextLabel( this );
-        m_extraInfoLabel = new QLabel( this );
+        m_labelType = new QLabel( mainWidget() );
+        m_labelLocalName = new KSqueezedTextLabel( mainWidget() );
+        m_labelLocalLocation = new KSqueezedTextLabel( mainWidget() );
+        m_labelLocalLinkTarget = new KSqueezedTextLabel( mainWidget() );
+        m_extraInfoLabel = new QLabel( mainWidget() );
     }
     else {
-        m_multiSelectionLabel = new QLabel( this );
+        m_multiSelectionLabel = new QLabel( mainWidget() );
     }
 
-    m_labelLocation = new KSqueezedTextLabel( this );
-    m_labelSize = new QLabel( this );
-    m_labelBlocks = new QLabel( this );
+    m_labelLocation = new KSqueezedTextLabel( mainWidget() );
+    m_labelSize = new QLabel( mainWidget() );
+    m_labelBlocks = new QLabel( mainWidget() );
 
     // layout
     // -----------------------------
-    QGridLayout* grid = new QGridLayout( this );
+    QGridLayout* grid = new QGridLayout( mainWidget() );
 
     grid->addWidget( m_labelIcon, 0, 0 );
     if ( dataItems.count() == 1 ) {
@@ -76,35 +78,35 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
     }
     int row = 1;
 
-    m_spacerLine = new QFrame( this );
+    m_spacerLine = new QFrame( mainWidget() );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     grid->addWidget( m_spacerLine, row, 0, 1, 3 );
     ++row;
     if ( dataItems.count() == 1 ) {
-        grid->addWidget( new QLabel( i18n("Type:"), this ), row, 0 );
+        grid->addWidget( new QLabel( i18n("Type:"), mainWidget() ), row, 0 );
         grid->addWidget( m_labelType, row++, 2 );
         grid->addWidget( m_extraInfoLabel, row++, 2 );
     }
-    grid->addWidget( new QLabel( i18n("Location:"), this ), row, 0 );
+    grid->addWidget( new QLabel( i18n("Location:"), mainWidget() ), row, 0 );
     grid->addWidget( m_labelLocation, row++, 2 );
-    grid->addWidget( new QLabel( i18n("Size:"), this ), row, 0 );
+    grid->addWidget( new QLabel( i18n("Size:"), mainWidget() ), row, 0 );
     grid->addWidget( m_labelSize, row++, 2 );
-    grid->addWidget( new QLabel( i18n("Used blocks:"), this ), row, 0 );
+    grid->addWidget( new QLabel( i18n("Used blocks:"), mainWidget() ), row, 0 );
     grid->addWidget( m_labelBlocks, row++, 2 );
 
-    m_spacerLine = new QFrame( this );
+    m_spacerLine = new QFrame( mainWidget() );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
     grid->addWidget( m_spacerLine, row, 0, 1, 3 );
     ++row;
 
     if ( dataItems.count() == 1 ) {
-        m_labelLocalNameText = new QLabel( i18n("Local name:"), this );
+        m_labelLocalNameText = new QLabel( i18n("Local name:"), mainWidget() );
         grid->addWidget( m_labelLocalNameText, row, 0 );
         grid->addWidget( m_labelLocalName, row++, 2 );
-        m_labelLocalLocationText = new QLabel( i18n("Local location:"), this );
+        m_labelLocalLocationText = new QLabel( i18n("Local location:"), mainWidget() );
         grid->addWidget( m_labelLocalLocationText, row, 0 );
         grid->addWidget( m_labelLocalLocation, row++, 2 );
-        m_labelLocalLinkTargetText = new QLabel( i18n("Local link target:"), this );
+        m_labelLocalLinkTargetText = new QLabel( i18n("Local link target:"), mainWidget() );
         grid->addWidget( m_labelLocalLinkTargetText, row, 0 );
         grid->addWidget( m_labelLocalLinkTarget, row++, 2 );
     }
@@ -115,8 +117,8 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
 
     // OPTIONS
     // /////////////////////////////////////////////////
-    QTabWidget* optionTab = new QTabWidget( this );
-    m_spacerLine = new QFrame( this );
+    QTabWidget* optionTab = new QTabWidget( mainWidget() );
+    m_spacerLine = new QFrame( mainWidget() );
     m_spacerLine->setFrameStyle( QFrame::HLine | QFrame::Sunken );
 
     grid->addWidget( m_spacerLine, row++, 0, 1, 3 );
@@ -185,10 +187,7 @@ K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& da
                                          "It sorts the order in which the file data is "
                                          "written to the image.") );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
-    grid->addWidget( buttonBox, row++, 0, 1, 3 );
-    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
-    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
+    connect( this, SIGNAL(okClicked()), this, SLOT(slotOk()) );
 }
 
 
@@ -201,16 +200,16 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
 {
     if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>(dataItem) ) {
         QFileInfo fileInfo( fileItem->localPath() );
-        qDebug() << fileItem->k3bPath() << fileItem->localPath();
+        kDebug() << fileItem->k3bPath() << fileItem->localPath();
         if( fileItem->isSymLink() ) {
-            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType().iconName(), KIconLoader::SizeLarge,
+            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge,
                                                  KIconLoader::DefaultState, QStringList() << "emblem-symbolic-link" ) );
-            m_labelType->setText( i18n( "Link to %1", fileItem->mimeType().comment() ) );
+            m_labelType->setText( i18n( "Link to %1", fileItem->mimeType()->comment() ) );
             m_labelLocalLinkTarget->setText( fileItem->linkDest() );
         }
         else {
-            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType().iconName(), KIconLoader::SizeLarge ) );
-            m_labelType->setText( fileItem->mimeType().comment() );
+            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType()->iconName(), KIconLoader::SizeLarge ) );
+            m_labelType->setText( fileItem->mimeType()->comment() );
             m_labelLocalLinkTargetText->hide();
             m_labelLocalLinkTarget->hide();
         }
@@ -358,7 +357,7 @@ void K3b::DataPropertiesDialog::loadListProperties( const QList<K3b::DataItem*>&
 }
 
 
-void K3b::DataPropertiesDialog::accept()
+void K3b::DataPropertiesDialog::slotOk()
 {
     if ( m_dataItems.count() == 1 ) {
         m_dataItems.first()->setK3bName( m_editName->text() );
@@ -374,9 +373,7 @@ void K3b::DataPropertiesDialog::accept()
         if ( m_editSortWeight->isModified() )
             item->setSortWeight( m_editSortWeight->text().toInt() );
     }
-
-    QDialog::accept();
 }
 
 
-
+#include "k3bdatapropertiesdialog.moc"

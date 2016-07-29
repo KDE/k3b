@@ -15,9 +15,8 @@
 #ifndef _K3B_AUDIODATASOURCE_EDITWIDGET_H_
 #define _K3B_AUDIODATASOURCE_EDITWIDGET_H_
 
+#include <qwidget.h>
 #include "k3bmsf.h"
-
-#include <QtWidgets/QWidget>
 
 namespace K3b {
     class AudioDataSource;

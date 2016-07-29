@@ -15,9 +15,9 @@
 #ifndef K3B_DATAIMAGE_SETTINGS_WIDGET_H
 #define K3B_DATAIMAGE_SETTINGS_WIDGET_H
 
-#include "ui_base_k3bdataimagesettings.h"
+#include <QtGui/QWidget>
 
-#include <QtWidgets/QWidget>
+#include "ui_base_k3bdataimagesettings.h"
 
 namespace K3b {
 

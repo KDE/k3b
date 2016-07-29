@@ -13,15 +13,14 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 #include "k3bwavedecoder.h"
-#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <qfile.h>
 
+#include <kdebug.h>
+#include <klocale.h>
 
-K3B_EXPORT_PLUGIN(k3bwavedecoder, K3bWaveDecoderFactory)
 
 static unsigned short le_a_to_u_short( unsigned char* a ) {
     return ((unsigned short)
@@ -43,7 +42,7 @@ static unsigned long le_a_to_u_long( unsigned char* a ) {
  * Otherwise 0 is returned.
  * leave file seek pointer past WAV header.
  */
-static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* channels = 0, int* samplesize = 0 )
+static unsigned long identifyWaveFile( QFile* f, int* samplerate = 0, int* channels = 0, int* samplesize = 0 )
 {
     typedef struct {
         unsigned char	ckid[4];
@@ -74,44 +73,44 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
 
 
     // read riff chunk
-    if( f.read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
-        qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
+    if( f->read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+        kDebug() << "(K3bWaveDecoder) unable to read from " << f->fileName();
         return 0;
     }
     if( qstrncmp( (char*)chunk.ckid, WAV_RIFF_MAGIC, 4 ) ) {
-        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": not a RIFF file.";
+        kDebug() << "(K3bWaveDecoder) " << f->fileName() << ": not a RIFF file.";
         return 0;
     }
 
     // read wave chunk
-    if( f.read( (char*)&riff, sizeof(riff) ) != sizeof(riff) ) {
-        qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
+    if( f->read( (char*)&riff, sizeof(riff) ) != sizeof(riff) ) {
+        kDebug() << "(K3bWaveDecoder) unable to read from " << f->fileName();
         return 0;
     }
     if( qstrncmp( (char*)riff.wave, WAV_WAVE_MAGIC, 4 ) ) {
-        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": not a WAVE file.";
+        kDebug() << "(K3bWaveDecoder) " << f->fileName() << ": not a WAVE file.";
         return 0;
     }
 
 
     // read fmt chunk
-    if( f.read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
-        qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
+    if( f->read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+        kDebug() << "(K3bWaveDecoder) unable to read from " << f->fileName();
         return 0;
     }
     if( qstrncmp( (char*)chunk.ckid, WAV_FMT_MAGIC, 4 ) ) {
-        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": could not find format chunk.";
+        kDebug() << "(K3bWaveDecoder) " << f->fileName() << ": could not find format chunk.";
         return 0;
     }
-    if( f.read( (char*)&fmt, sizeof(fmt) ) != sizeof(fmt) ) {
-        qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
+    if( f->read( (char*)&fmt, sizeof(fmt) ) != sizeof(fmt) ) {
+        kDebug() << "(K3bWaveDecoder) unable to read from " << f->fileName();
         return 0;
     }
     if( le_a_to_u_short(fmt.fmt_tag) != 1 ||
         le_a_to_u_short(fmt.channels) > 2 ||
         ( le_a_to_u_short(fmt.bits_per_sample) != 16 &&
           le_a_to_u_short(fmt.bits_per_sample) != 8 ) ) {
-        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": wrong format:" << endl
+        kDebug() << "(K3bWaveDecoder) " << f->fileName() << ": wrong format:" << endl
                  << "                format:      " << le_a_to_u_short(fmt.fmt_tag) << endl
                  << "                channels:    " << le_a_to_u_short(fmt.channels) << endl
                  << "                samplerate:  " << le_a_to_u_long(fmt.sample_rate) << endl
@@ -130,8 +129,8 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
         *samplesize = sampleSize;
 
     // skip all other (unknown) format chunk fields
-    if( !f.seek( f.pos() + le_a_to_u_long(chunk.cksize) - sizeof(fmt) ) ) {
-        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": could not seek in file.";
+    if( !f->seek( f->pos() + le_a_to_u_long(chunk.cksize) - sizeof(fmt) ) ) {
+        kDebug() << "(K3bWaveDecoder) " << f->fileName() << ": could not seek in file.";
         return 0;
     }
 
@@ -139,16 +138,16 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
     // find data chunk
     bool foundData = false;
     while( !foundData ) {
-        if( f.read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
-            qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
+        if( f->read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+            kDebug() << "(K3bWaveDecoder) unable to read from " << f->fileName();
             return 0;
         }
 
         // skip chunk data of unknown chunk
         if( qstrncmp( (char*)chunk.ckid, WAV_DATA_MAGIC, 4 ) ) {
-            qDebug() << "(K3bWaveDecoder) skipping chunk: " << (char*)chunk.ckid;
-            if( !f.seek( f.pos() + le_a_to_u_long(chunk.cksize) ) ) {
-                qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": could not seek in file.";
+            kDebug() << "(K3bWaveDecoder) skipping chunk: " << (char*)chunk.ckid;
+            if( !f->seek( f->pos() + le_a_to_u_long(chunk.cksize) ) ) {
+                kDebug() << "(K3bWaveDecoder) " << f->fileName() << ": could not seek in file.";
                 return 0;
             }
         }
@@ -158,11 +157,11 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
 
     // found data chunk
     unsigned long size = le_a_to_u_long(chunk.cksize);
-    if( f.pos() + size > (unsigned long)f.size() ) {
-        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": file length " << f.size()
-                 << " does not match length from WAVE header " << f.pos() << " + " << size
+    if( f->pos() + size > (unsigned long)f->size() ) {
+        kDebug() << "(K3bWaveDecoder) " << f->fileName() << ": file length " << f->size()
+                 << " does not match length from WAVE header " << f->pos() << " + " << size
                  << " - using actual length." << endl;
-        size = (f.size() - f.pos());
+        size = (f->size() - f->pos());
     }
 
     return size;
@@ -176,7 +175,7 @@ public:
           bufferSize(0) {
     }
 
-    QFile file;
+    QFile* file;
 
     long headerLength;
     int sampleRate;
@@ -191,14 +190,17 @@ public:
 
 
 K3bWaveDecoder::K3bWaveDecoder( QObject* parent  )
-    : K3b::AudioDecoder( parent ),
-      d( new Private )
+    : K3b::AudioDecoder( parent )
 {
+    d = new Private();
+    d->file = new QFile();
 }
 
 
 K3bWaveDecoder::~K3bWaveDecoder()
 {
+    delete d->file;
+    delete d;
 }
 
 
@@ -209,12 +211,12 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
     maxLen = qMin( maxLen, (int)(d->size - d->alreadyRead) );
 
     if( d->sampleSize == 16 ) {
-        read = d->file.read( _data, maxLen );
+        read = d->file->read( _data, maxLen );
         if( read > 0 ) {
             d->alreadyRead += read;
 
             if( read % 2 > 0 ) {
-                qDebug() << "(K3bWaveDecoder) data length is not a multiple of 2! Cutting data.";
+                kDebug() << "(K3bWaveDecoder) data length is not a multiple of 2! Cutting data.";
                 read -= 1;
             }
 
@@ -233,7 +235,7 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
             d->bufferSize = maxLen/2;
         }
 
-        read = d->file.read( d->buffer, qMin(maxLen/2, d->bufferSize) );
+        read = d->file->read( d->buffer, qMin(maxLen/2, d->bufferSize) );
         d->alreadyRead += read;
 
         // stretch samples to 16 bit
@@ -286,21 +288,21 @@ bool K3bWaveDecoder::initDecoderInternal()
 {
     cleanup();
 
-    d->file.setFileName( filename() );
-    if( !d->file.open( QIODevice::ReadOnly ) ) {
-        qDebug() << "(K3bWaveDecoder) could not open file.";
+    d->file->setFileName( filename() );
+    if( !d->file->open( QIODevice::ReadOnly ) ) {
+        kDebug() << "(K3bWaveDecoder) could not open file.";
         return false;
     }
 
     // skip the header
     d->size = identifyWaveFile( d->file, &d->sampleRate, &d->channels, &d->sampleSize );
     if( d->size <= 0 ) {
-        qDebug() << "(K3bWaveDecoder) no supported wave file.";
+        kDebug() << "(K3bWaveDecoder) no supported wave file.";
         cleanup();
         return false;
     }
 
-    d->headerLength = d->file.pos();
+    d->headerLength = d->file->pos();
     d->alreadyRead = 0;
 
     return true;
@@ -309,14 +311,14 @@ bool K3bWaveDecoder::initDecoderInternal()
 
 bool K3bWaveDecoder::seekInternal( const K3b::Msf& pos )
 {
-    return( d->file.seek( d->headerLength + (pos.totalFrames()*2352) ) );
+    return( d->file->seek( d->headerLength + (pos.totalFrames()*2352) ) );
 }
 
 
 void K3bWaveDecoder::cleanup()
 {
-    if( d->file.isOpen() )
-        d->file.close();
+    if( d->file->isOpen() )
+        d->file->close();
 }
 
 
@@ -364,15 +366,15 @@ K3b::AudioDecoder* K3bWaveDecoderFactory::createDecoder( QObject* parent ) const
 }
 
 
-bool K3bWaveDecoderFactory::canDecode( const QUrl& url )
+bool K3bWaveDecoderFactory::canDecode( const KUrl& url )
 {
     QFile f( url.toLocalFile() );
     if( !f.open(	QIODevice::ReadOnly ) ) {
-        qDebug() << "(K3bWaveDecoder) could not open file " << url.toLocalFile();
+        kDebug() << "(K3bWaveDecoder) could not open file " << url.toLocalFile();
         return false;
     }
 
-    return (identifyWaveFile( f ) > 0);
+    return (identifyWaveFile( &f ) > 0);
 }
 
 

@@ -15,8 +15,8 @@
 
 #include "k3bmpcwrapper.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <kdebug.h>
+#include <qfile.h>
 
 
 #ifdef MPC_OLD_API
@@ -138,7 +138,7 @@ bool K3bMpcWrapper::open( const QString& filename )
 #ifdef MPC_OLD_API
     mpc_streaminfo_init( m_info );
     if( mpc_streaminfo_read( m_info, m_reader ) != ERROR_CODE_OK ) {
-      qDebug() << "(K3bMpcWrapper) Not a valid musepack file: \"" << filename << "\"";
+      kDebug() << "(K3bMpcWrapper) Not a valid musepack file: \"" << filename << "\"";
       return false;
     }
     else {
@@ -148,7 +148,7 @@ bool K3bMpcWrapper::open( const QString& filename )
       m_decoder = mpc_demux_init( m_reader );
       if( !m_decoder ) {
 #endif
-	qDebug() << "(K3bMpcWrapper) failed to initialize the Musepack decoder.";
+	kDebug() << "(K3bMpcWrapper) failed to initialize the Musepack decoder.";
 	close();
 	return false;
       }
@@ -156,7 +156,7 @@ bool K3bMpcWrapper::open( const QString& filename )
 #ifndef MPC_OLD_API
 	mpc_demux_get_info( m_decoder, m_info );
 #endif
-	qDebug() << "(K3bMpcWrapper) valid musepack file. " 
+	kDebug() << "(K3bMpcWrapper) valid musepack file. " 
 		  << channels() << " Channels and Samplerate: " << samplerate() << endl;
 	return true;
       }
@@ -192,7 +192,7 @@ int K3bMpcWrapper::decode( char* data, int max )
 #endif
 
   if( samples*channels()*2 > (unsigned int)max ) {
-    qDebug() << "(K3bMpcWrapper) buffer not big enough.";
+    kDebug() << "(K3bMpcWrapper) buffer not big enough.";
     return -1;
   }
 

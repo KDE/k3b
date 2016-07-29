@@ -15,7 +15,7 @@
 #ifndef _K3B_MKISOfS_HANDLER_H_
 #define _K3B_MKISOfS_HANDLER_H_
 
-#include <QtCore/QString>
+#include <qstring.h>
 
 namespace K3b {
     class ExternalBin;

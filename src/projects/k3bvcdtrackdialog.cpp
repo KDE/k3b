@@ -14,6 +14,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+// K3b Includes
 #include "k3bvcdtrackdialog.h"
 #include "k3bglobals.h"
 #include "k3bmsf.h"
@@ -22,30 +23,32 @@
 #include "k3bvcdtrackkeysdelegate.h"
 #include "k3bvcdtrackkeysmodel.h"
 
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KSqueezedTextLabel>
+// Kde Includes
+#include <KIconLoader>
+#include <kio/global.h>
+#include <KLocale>
+#include <KMimeType>
+#include <KNumInput>
+#include <KUrl>
+#include <KSqueezedTextLabel>
 
-#include <QtCore/QList>
-#include <QtCore/QUrl>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFormLayout>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QVBoxLayout>
+// Qt Includes
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFormLayout>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QList>
+#include <QPixmap>
+#include <QRadioButton>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QTreeView>
+#include <QVBoxLayout>
 
 
 namespace {
@@ -119,7 +122,7 @@ void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboB
     const int count = tracks.count();
 
     // TODO: Unset Userdefined on default settings
-    qDebug() << QString( "K3b::VcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( currentIndex ).arg( count );
+    kDebug() << QString( "K3b::VcdTrackDialog::setPbcTrack: currentIndex = %1, count = %2" ).arg( currentIndex ).arg( count );
 
     if( VcdTrack* track = selected->getPbcTrack( which ) )
         track->delFromRevRefList( selected );
@@ -142,10 +145,12 @@ void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboB
 
 
 K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* doc, const QList<K3b::VcdTrack*>& tracks, QList<K3b::VcdTrack*>& selectedTracks, QWidget* parent )
-    : QDialog( parent ),
+    : KDialog( parent ),
       d( new Private( doc, tracks, selectedTracks ) )
 {
-    setWindowTitle( i18n( "Video Track Properties" ) );
+    setCaption( i18n( "Video Track Properties" ) );
+    setButtons( Ok|Apply|Cancel );
+    setDefaultButton( Ok );
 
     prepareGui();
 
@@ -170,6 +175,8 @@ K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* doc, const QList<K3b::VcdTrack
 
         fillGui();
     }
+    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,SIGNAL(applyClicked()),this,SLOT(slotApply()));
 }
 
 K3b::VcdTrackDialog::~VcdTrackDialog()
@@ -177,10 +184,10 @@ K3b::VcdTrackDialog::~VcdTrackDialog()
     delete d;
 }
 
-void K3b::VcdTrackDialog::accept()
+void K3b::VcdTrackDialog::slotOk()
 {
     slotApply();
-    QDialog::accept();
+    done( 0 );
 }
 
 void K3b::VcdTrackDialog::slotApply()
@@ -217,7 +224,7 @@ void K3b::VcdTrackDialog::slotApply()
         }
     } else {
         selectedTrack->setDefinedNumKey( 1, selectedTrack );
-        qDebug() << "Key 1" << " Playing: (default) " << VcdTrackKeysModel::trackName( selectedTrack ) << "Track: " << selectedTrack;
+        kDebug() << "Key 1" << " Playing: (default) " << VcdTrackKeysModel::trackName( selectedTrack ) << "Track: " << selectedTrack;
     }
 }
 
@@ -376,10 +383,12 @@ void K3b::VcdTrackDialog::fillPbcGui()
 
 void K3b::VcdTrackDialog::prepareGui()
 {
+    QWidget * frame = mainWidget();
+
     // /////////////////////////////////////////////////
     // FILE-INFO BOX
     // /////////////////////////////////////////////////
-    QGroupBox* groupFileInfo = new QGroupBox( i18n( "File Info" ), this );
+    QGroupBox* groupFileInfo = new QGroupBox( i18n( "File Info" ), frame );
 
     QGridLayout* groupFileInfoLayout = new QGridLayout( groupFileInfo );
     groupFileInfoLayout->setAlignment( Qt::AlignTop );
@@ -428,17 +437,12 @@ void K3b::VcdTrackDialog::prepareGui()
     d->displaySize->setFont( f );
     d->muxrate->setFont( f );
 
-    d->mainTabbed = new QTabWidget( this );
+    d->mainTabbed = new QTabWidget( frame );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel, this );
-    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
-    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
-    connect( buttonBox->button( QDialogButtonBox::Apply ), SIGNAL(clicked()), SLOT(slotApply()) );
-
-    QGridLayout* mainLayout = new QGridLayout( this );
-    mainLayout->addWidget( groupFileInfo, 0, 0 );
-    mainLayout->addWidget( d->mainTabbed, 0, 1 );
-    mainLayout->addWidget( buttonBox, 1, 0, 1, 2 );
+    QHBoxLayout* mainLayout = new QHBoxLayout( frame );
+    mainLayout->setContentsMargins( 0, 0, 0, 0 );
+    mainLayout->addWidget( groupFileInfo, 0 );
+    mainLayout->addWidget( d->mainTabbed, 1 );
 }
 
 void K3b::VcdTrackDialog::setupPbcTab()
@@ -555,7 +559,7 @@ void K3b::VcdTrackDialog::setupPbcKeyTab()
     d->keys_view->setAllColumnsShowFocus( true );
     d->keys_view->setRootIsDecorated( false );
     d->keys_view->setEditTriggers( QAbstractItemView::AllEditTriggers );
-    d->keys_view->header()->setSectionResizeMode( VcdTrackKeysModel::KeyColumn, QHeaderView::ResizeToContents );
+    d->keys_view->header()->setResizeMode( VcdTrackKeysModel::KeyColumn, QHeaderView::ResizeToContents );
 
     QVBoxLayout* layout = new QVBoxLayout( d->widgetnumkeys );
     layout->addWidget( d->check_overwritekeys );
@@ -689,4 +693,4 @@ void K3b::VcdTrackDialog::slotUseKeysToggled( bool checked )
     d->mainTabbed->setTabEnabled( d->mainTabbed->indexOf( d->widgetnumkeys ), checked );
 }
 
-
+#include "k3bvcdtrackdialog.moc"

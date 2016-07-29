@@ -13,20 +13,22 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 #include "k3boggvorbisdecoder.h"
-#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
+#include <qfile.h>
+#include <qstringlist.h>
+
+#include <kurl.h>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 
-K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisDecoderFactory)
+
 
 class K3bOggVorbisDecoder::Private
 {
@@ -62,11 +64,11 @@ bool K3bOggVorbisDecoder::openOggVorbisFile()
     if( !d->isOpen ) {
         FILE* file = fopen( QFile::encodeName(filename()), "r" );
         if( !file ) {
-            qDebug() << "(K3bOggVorbisDecoder) Could not open file " << filename();
+            kDebug() << "(K3bOggVorbisDecoder) Could not open file " << filename();
             return false;
         }
         else if( ov_open( file, &d->oggVorbisFile, 0, 0 ) ) {
-            qDebug() << "(K3bOggVorbisDecoder) " << filename()
+            kDebug() << "(K3bOggVorbisDecoder) " << filename()
                      << " seems not to to be an ogg vorbis file." << endl;
             fclose( file );
             return false;
@@ -86,7 +88,7 @@ bool K3bOggVorbisDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate
         // check length of track
         double seconds = ov_time_total( &d->oggVorbisFile, -1 );
         if( seconds == OV_EINVAL ) {
-            qDebug() << "(K3bOggVorbisDecoder) Could not determine length of file " << filename();
+            kDebug() << "(K3bOggVorbisDecoder) Could not determine length of file " << filename();
             cleanup();
             return false;
         }
@@ -154,23 +156,23 @@ int K3bOggVorbisDecoder::decodeInternal( char* data, int maxLen )
                               &bitStream );        // current bitstream
 
     if( bitStream != 0 ) {
-        qDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multiple bitstreams not supported.";
+        kDebug() << "(K3bOggVorbisDecoder) bitstream != 0. Multiple bitstreams not supported.";
         return -1;
     }
 
     else if( bytesRead == OV_HOLE ) {
-        qDebug() << "(K3bOggVorbisDecoder) OV_HOLE";
+        kDebug() << "(K3bOggVorbisDecoder) OV_HOLE";
         // recursive new try
         return decodeInternal( data, maxLen );
     }
 
     else if( bytesRead < 0 ) {
-        qDebug() << "(K3bOggVorbisDecoder) Error: " << bytesRead;
+        kDebug() << "(K3bOggVorbisDecoder) Error: " << bytesRead;
         return -1;
     }
 
     else if( bytesRead == 0 ) {
-        qDebug() << "(K3bOggVorbisDecoder) successfully finished decoding.";
+        kDebug() << "(K3bOggVorbisDecoder) successfully finished decoding.";
         return 0;
     }
 
@@ -219,11 +221,11 @@ K3b::AudioDecoder* K3bOggVorbisDecoderFactory::createDecoder( QObject* parent ) 
 }
 
 
-bool K3bOggVorbisDecoderFactory::canDecode( const QUrl& url )
+bool K3bOggVorbisDecoderFactory::canDecode( const KUrl& url )
 {
     FILE* file = fopen( QFile::encodeName(url.toLocalFile()), "r" );
     if( !file ) {
-        qDebug() << "(K3bOggVorbisDecoder) Could not open file " << url.toLocalFile();
+        kDebug() << "(K3bOggVorbisDecoder) Could not open file " << url.toLocalFile();
         return false;
     }
 
@@ -231,7 +233,7 @@ bool K3bOggVorbisDecoderFactory::canDecode( const QUrl& url )
 
     if( ov_open( file, &of, 0, 0 ) ) {
         fclose( file );
-        qDebug() << "(K3bOggVorbisDecoder) not an Ogg-Vorbis file: " << url.toLocalFile();
+        kDebug() << "(K3bOggVorbisDecoder) not an Ogg-Vorbis file: " << url.toLocalFile();
         return false;
     }
 

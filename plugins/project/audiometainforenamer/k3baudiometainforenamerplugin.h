@@ -16,7 +16,7 @@
 
 
 #include "k3bprojectplugin.h"
-#include <QtWidgets/QWidget>
+#include <qwidget.h>
 
 namespace K3b {
     class DataDoc;

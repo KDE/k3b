@@ -49,4 +49,6 @@ private:
     Private* d;
 };
 
+K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisEncoder)
+
 #endif

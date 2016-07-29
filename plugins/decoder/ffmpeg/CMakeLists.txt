@@ -1,16 +1,27 @@
-add_library(k3bffmpegdecoder MODULE k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp)
+
+
+
+########### next target ###############
 
 if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
     message(STATUS "didn't find new ffmpegcodecpath")
-    target_include_directories(k3bffmpegdecoder PRIVATE ${FFMPEG_INCLUDE_DIR_OLD_STYLE})
-else()
+    include_directories (${FFMPEG_INCLUDE_DIR_OLD_STYLE})
+else(FFMPEG_INCLUDE_DIR_OLD_STYLE)
     message(STATUS "found new ffmpegcodecpath")
-    target_compile_definitions(k3bffmpegdecoder PRIVATE NEWFFMPEGAVCODECPATH)
-    target_include_directories(k3bffmpegdecoder PRIVATE ${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
-endif()
+    add_definitions(-DNEWFFMPEGAVCODECPATH)
+    include_directories (${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
+endif(FFMPEG_INCLUDE_DIR_OLD_STYLE)
 
-target_link_libraries(k3bffmpegdecoder k3bdevice k3blib KF5::I18n ${FFMPEG_LIBRARIES})
+set(k3bffmpegdecoder_PART_SRCS k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp )
+
+kde4_add_plugin(k3bffmpegdecoder ${k3bffmpegdecoder_PART_SRCS})
+
+target_link_libraries(k3bffmpegdecoder k3bdevice  ${KDE4_KDEUI_LIBS} k3b ${FFMPEG_LIBRARIES} )
 
 install(TARGETS k3bffmpegdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-install(FILES k3bffmpegdecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+
+########### install files ###############
+
+install( FILES  k3bffmpegdecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+

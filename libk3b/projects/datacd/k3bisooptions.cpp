@@ -16,11 +16,11 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 #include "k3bglobals.h"
-#include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <QtCore/QString>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <klocale.h>
+#include <qstring.h>
 
 
 K3b::IsoOptions::IsoOptions()

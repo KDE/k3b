@@ -17,8 +17,8 @@
 #ifndef K3BDATAPROPERTIESDIALOG_H
 #define K3BDATAPROPERTIESDIALOG_H
 
-#include <QtCore/QList>
-#include <QtWidgets/QDialog>
+#include <KDialog>
+#include <QList>
 
 class KLineEdit;
 class KSqueezedTextLabel;
@@ -32,7 +32,7 @@ class QCheckBox;
 namespace K3b {
     class DataItem;
 
-    class DataPropertiesDialog : public QDialog
+    class DataPropertiesDialog : public KDialog
     {
         Q_OBJECT
 
@@ -41,7 +41,7 @@ namespace K3b {
         ~DataPropertiesDialog();
 
     protected Q_SLOTS:
-        void accept() override;
+        void slotOk();
 
     private:
         KLineEdit* m_editName;

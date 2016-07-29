@@ -26,28 +26,30 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bvalidators.h"
 
-#include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTextStream>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTextEdit>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QToolTip>
+#include <qcheckbox.h>
+#include <qgroupbox.h>
+#include <qspinbox.h>
+#include <qradiobutton.h>
+#include <qlabel.h>
+#include <qlineedit.h>
+#include <qlayout.h>
+#include <qtooltip.h>
+#include <QtGui/QTextEdit>
+#include <QtGui/QButtonGroup>
+
+#include <qtoolbutton.h>
+#include <qfileinfo.h>
+#include <QGridLayout>
+#include <QFrame>
+#include <QTextStream>
+
+#include <klocale.h>
+#include <kconfig.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <kio/global.h>
+#include <kapplication.h>
 
 K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     : K3b::ProjectBurnDialog( _doc, parent )
@@ -790,10 +792,8 @@ void K3b::VcdBurnDialog::saveSettings( KConfigGroup c )
 
 void K3b::VcdBurnDialog::saveCdiConfig()
 {
-    QString dirPath = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/cdi";
-    QDir().mkpath( dirPath );
 
-    QString filename = dirPath +  "/cdi_vcd.cfg";
+    QString filename = KStandardDirs::locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) )
         QFile::remove
             ( filename );
@@ -808,7 +808,7 @@ void K3b::VcdBurnDialog::saveCdiConfig()
 
 void K3b::VcdBurnDialog::loadCdiConfig()
 {
-    QString filename = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/cdi/cdi_vcd.cfg";
+    QString filename = KStandardDirs::locateLocal( "appdata", "cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) ) {
         QFile cdi( filename );
         if ( cdi.open( QIODevice::ReadOnly ) ) {
@@ -828,7 +828,7 @@ void K3b::VcdBurnDialog::loadCdiConfig()
 
 void K3b::VcdBurnDialog::loadDefaultCdiConfig()
 {
-    QString filename = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.cfg" );
+    QString filename = KStandardDirs::locate( "data", "k3b/cdi/cdi_vcd.cfg" );
     if ( QFile::exists( filename ) ) {
         QFile cdi( filename );
         if ( cdi.open( QIODevice::ReadOnly ) ) {
@@ -990,4 +990,4 @@ void K3b::VcdBurnDialog::toggleAll()
     m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
-
+#include "k3bvcdburndialog.moc"

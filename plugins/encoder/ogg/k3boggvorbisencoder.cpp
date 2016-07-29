@@ -15,14 +15,13 @@
 
 #include "k3boggvorbisencoder.h"
 #include "k3boggvorbisencoderdefaults.h"
-#include "k3bcore.h"
-#include "k3bplugin_i18n.h"
 #include <config-k3b.h>
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
+#include "k3bcore.h"
 
-#include <QtCore/QDebug>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
 
 #include <vorbis/vorbisenc.h>
 
@@ -30,8 +29,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisEncoder)
 
 // quality levels -1 to 10 map to 0 to 11
 static const int s_rough_average_quality_level_bitrates[] = {
@@ -142,7 +139,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
     int ret = 0;
 
     if( d->manualBitrate ) {
-        qDebug() << "(K3bOggVorbisEncoder) calling: "
+        kDebug() << "(K3bOggVorbisEncoder) calling: "
                  << "vorbis_encode_init( d->vorbisInfo, 2, 44100, "
                  << (d->bitrateUpper != -1 ? d->bitrateUpper*1000 : -1) << ", "
                  << (d->bitrateNominal != -1 ? d->bitrateNominal*1000 : -1)  << ", "
@@ -161,7 +158,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
         else if( d->qualityLevel > 10 )
             d->qualityLevel = 10;
 
-        qDebug() << "(K3bOggVorbisEncoder) calling: "
+        kDebug() << "(K3bOggVorbisEncoder) calling: "
                  << "vorbis_encode_init_vbr( d->vorbisInfo, 2, 44100, "
                  << (float)d->qualityLevel/10.0 << ");" << endl;
 
@@ -172,7 +169,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
     }
 
     if( ret ) {
-        qDebug() << "(K3bOggVorbisEncoder) vorbis_encode_init failed: " << ret;
+        kDebug() << "(K3bOggVorbisEncoder) vorbis_encode_init failed: " << ret;
         cleanup();
         return false;
     }
@@ -239,11 +236,11 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
 bool K3bOggVorbisEncoder::writeOggHeaders()
 {
     if( !d->oggStream ) {
-        qDebug() << "(K3bOggVorbisEncoder) call to writeOggHeaders without init.";
+        kDebug() << "(K3bOggVorbisEncoder) call to writeOggHeaders without init.";
         return false;
     }
     if( d->headersWritten ) {
-        qDebug() << "(K3bOggVorbisEncoder) headers already written.";
+        kDebug() << "(K3bOggVorbisEncoder) headers already written.";
         return true;
     }
 
@@ -347,7 +344,7 @@ void K3bOggVorbisEncoder::finishEncoderInternal()
         flushVorbis();
     }
     else
-        qDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init.";
+        kDebug() << "(K3bOggVorbisEncoder) call to finishEncoderInternal without init.";
 }
 
 
@@ -396,7 +393,7 @@ void K3bOggVorbisEncoder::cleanup()
 
 void K3bOggVorbisEncoder::loadConfig()
 {
-    KSharedConfig::Ptr c = KSharedConfig::openConfig();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
     d->manualBitrate = grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE );
@@ -416,7 +413,7 @@ QString K3bOggVorbisEncoder::fileTypeComment( const QString& ) const
 
 long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
-    KSharedConfig::Ptr c = KSharedConfig::openConfig();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
     // the following code is based on the size estimation from the audiocd kioslave

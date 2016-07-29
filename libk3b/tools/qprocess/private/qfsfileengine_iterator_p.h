@@ -54,7 +54,7 @@
 //
 
 #include "qabstractfileengine.h"
-#include "QtCore/QDir"
+#include "qdir.h"
 
 #ifndef QT_NO_FSFILEENGINE
 

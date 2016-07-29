@@ -15,8 +15,8 @@
 #ifndef _K3B_VALIDATORS_H_
 #define _K3B_VALIDATORS_H_
 
+#include <qvalidator.h>
 #include "k3b_export.h"
-#include <QtGui/QValidator>
 
 
 namespace K3b {

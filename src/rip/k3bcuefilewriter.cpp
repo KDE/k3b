@@ -19,8 +19,8 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QFile>
+#include <QDateTime>
+#include <QFile>
 
 
 K3b::CueFileWriter::CueFileWriter()
@@ -33,7 +33,7 @@ bool K3b::CueFileWriter::save( const QString& filename )
     QFile f( filename );
 
     if( !f.open( QIODevice::WriteOnly ) ) {
-        qDebug() << "(K3b::CueFileWriter) could not open file " << f.fileName();
+        kDebug() << "(K3b::CueFileWriter) could not open file " << f.fileName();
         return false;
     }
 

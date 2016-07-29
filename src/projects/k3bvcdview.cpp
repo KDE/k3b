@@ -14,6 +14,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+// K3b Includes
 #include "k3bvcdprojectmodel.h"
 #include "k3bvcdview.h"
 #include "k3bvcddoc.h"
@@ -24,16 +25,17 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KAction>
+#include <KApplication>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QItemSelectionModel>
-#include <QtCore/QString>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QTreeView>
+#include <QHeaderView>
+#include <QItemSelectionModel>
+#include <QLayout>
+#include <QString>
+#include <QTreeView>
 
 K3b::VcdView::VcdView( K3b::VcdDoc* doc, QWidget* parent )
 :
@@ -52,7 +54,7 @@ K3b::VcdView::VcdView( K3b::VcdDoc* doc, QWidget* parent )
     m_view->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_view->setContextMenuPolicy( Qt::ActionsContextMenu );
     // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
-    m_view->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
+    m_view->header()->setResizeMode( QHeaderView::ResizeToContents );
     m_view->setEditTriggers( QAbstractItemView::NoEditTriggers );
     setMainWidget( m_view );
 
@@ -94,7 +96,7 @@ K3b::ProjectBurnDialog* K3b::VcdView::newBurnDialog( QWidget * parent)
 void K3b::VcdView::init()
 {
     if( !k3bcore->externalBinManager()->foundBin( "vcdxbuild" ) ) {
-        qDebug() << "(K3b::VcdView) could not find vcdxbuild executable";
+        kDebug() << "(K3b::VcdView) could not find vcdxbuild executable";
         KMessageBox::information( this,
                         i18n( "Could not find VcdImager executable. "
                         "To create Video CDs you have to install VcdImager >= 0.7.12. "
@@ -167,4 +169,4 @@ void K3b::VcdView::slotItemActivated( const QModelIndex& index )
     }
 }
 
-
+#include "k3bvcdview.moc"

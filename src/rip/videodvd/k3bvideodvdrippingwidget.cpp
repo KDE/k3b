@@ -18,24 +18,23 @@
 #include "k3bglobals.h"
 #include "k3bintmapcombobox.h"
 
-#include <KCompletion/KLineEdit>
-#include <KConfigWidgets/KColorScheme>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOCore/KIO/Global>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KUrlLabel>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTimer>
+#include <QWhatsThis>
 
-#include <QtCore/QTimer>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QWhatsThis>
+#include <KColorScheme>
+#include <KDialog>
+#include <KDiskFreeSpaceInfo>
+#include <kio/global.h>
+#include <KLineEdit>
+#include <KLocale>
+#include <KUrlRequester>
+#include <KUrlLabel>
 
 
 static const int s_mp3Bitrates[] = {
@@ -336,43 +335,40 @@ void K3b::VideoDVDRippingWidget::slotVideoSizeChanged( int sizeIndex )
 
 void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
 {
-    QDialog dlg( this );
-    dlg.setWindowTitle( i18n("Video Picture Size") );
+    KDialog dlg( this );
+    dlg.setCaption( i18n("Video Picture Size") );
+    dlg.setButtons( KDialog::Ok|KDialog::Cancel );
+    dlg.setDefaultButton( KDialog::Ok );
 
     QLabel* label = new QLabel( i18n("<p>Please choose the width and height of the resulting video. "
                                      "If one value is set to <em>Auto</em> K3b will choose this value "
                                      "depending on the aspect ratio of the video picture.<br>"
                                      "Be aware that setting both the width and the height to fixed values "
                                      "will result in no aspect ratio correction being performed."),
-                                &dlg );
+                                dlg.mainWidget() );
     label->setWordWrap( true );
-    QSpinBox* spinWidth = new QSpinBox( &dlg );
+    QSpinBox* spinWidth = new QSpinBox( dlg.mainWidget() );
     spinWidth->setRange( 0, 20000 );
     spinWidth->setSingleStep( 16 );
-    QSpinBox* spinHeight = new QSpinBox( &dlg );
+    QSpinBox* spinHeight = new QSpinBox( dlg.mainWidget() );
     spinHeight->setRange( 0, 20000 );
     spinHeight->setSingleStep( 16 );
     spinWidth->setSpecialValueText( i18n("Auto") );
     spinHeight->setSpecialValueText( i18n("Auto") );
-    QLabel* labelW = new QLabel( i18n("Width:"), &dlg );
+    QLabel* labelW = new QLabel( i18n("Width:"), dlg.mainWidget() );
     labelW->setBuddy( spinWidth );
-    QLabel* labelH = new QLabel( i18n("Height:"), &dlg );
+    QLabel* labelH = new QLabel( i18n("Height:"), dlg.mainWidget() );
     labelH->setBuddy( spinHeight );
     labelW->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
     labelH->setAlignment( Qt::AlignRight|Qt::AlignVCenter );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dlg );
-    connect( buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()) );
-    connect( buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()) );
-
-    QGridLayout* grid = new QGridLayout( &dlg );
+    QGridLayout* grid = new QGridLayout( dlg.mainWidget() );
     grid->setContentsMargins( 0, 0, 0, 0 );
     grid->addWidget( label, 0, 0, 1, 4 );
     grid->addWidget( labelW, 1, 0 );
     grid->addWidget( spinWidth, 1, 1 );
     grid->addWidget( labelH, 1, 2 );
     grid->addWidget( spinHeight, 1, 3 );
-    grid->addWidget( buttonBox, 2, 0, 1, 4 );
 
     spinWidth->setValue( m_customVideoSize.width() );
     spinHeight->setValue( m_customVideoSize.height() );
@@ -383,4 +379,4 @@ void K3b::VideoDVDRippingWidget::slotCustomPictureSize()
     }
 }
 
-
+#include "k3bvideodvdrippingwidget.moc"

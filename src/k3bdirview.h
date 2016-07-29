@@ -16,10 +16,10 @@
 #define K3BDIRVIEW_H
 
 #include "k3bmedium.h"
-#include <QtWidgets/QWidget>
+#include <QtGui/QWidget>
 
 class KConfigGroup;
-class QUrl;
+class KUrl;
 
 namespace K3b {
     class FileTreeView;
@@ -41,19 +41,19 @@ namespace K3b {
     public Q_SLOTS:
         void saveConfig( KConfigGroup grp );
         void readConfig( const KConfigGroup & grp );
-        void showUrl( const QUrl& );
+        void showUrl( const KUrl& );
         void showDevice( K3b::Device::Device* );
         void showDiskInfo( K3b::Device::Device* );
 
     protected Q_SLOTS:
-        void slotDirActivated( const QUrl& url );
+        void slotDirActivated( const KUrl& url );
         void slotMountFinished( const QString& );
         void slotUnmountFinished( bool );
         void showMediumInfo( const Medium& );
         void home();
 
     Q_SIGNALS:
-        void urlEntered( const QUrl& );
+        void urlEntered( const KUrl& );
         void deviceSelected( K3b::Device::Device* );
 
     private:

@@ -18,22 +18,23 @@
 #include "k3bstdguiitems.h"
 #include "k3bglobalsettings.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
+#include <qlabel.h>
+#include <qcombobox.h>
+#include <qcheckbox.h>
+#include <qlayout.h>
+#include <qgroupbox.h>
+#include <qtabwidget.h>
+#include <qradiobutton.h>
+#include <qvalidator.h>
+#include <qspinbox.h>
+#include <qtooltip.h>
 
-#include <QtGui/QValidator>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
+#include <knuminput.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <kdialog.h>
+#include <klocale.h>
+#include <klineedit.h>
 
 
 K3b::AdvancedOptionTab::AdvancedOptionTab( QWidget* parent )
@@ -62,9 +63,7 @@ void K3b::AdvancedOptionTab::setupGui()
     m_checkOverburn = new QCheckBox( i18n("Allow &overburning"), groupWritingApp );
     m_checkForceUnsafeOperations = new QCheckBox( i18n("&Force unsafe operations"), groupWritingApp );
     m_checkManualWritingBufferSize = new QCheckBox( i18n("&Manual writing buffer size") + ':', groupWritingApp );
-    m_editWritingBufferSize = new QSpinBox( groupWritingApp );
-    m_editWritingBufferSize->setRange( 1, 100 );
-    m_editWritingBufferSize->setValue( 4 );
+    m_editWritingBufferSize = new KIntNumInput( 4, groupWritingApp );
     m_editWritingBufferSize->setSuffix( ' ' + i18n("MB") );
     m_checkShowForceGuiElements = new QCheckBox( i18n("Show &advanced GUI elements"), groupWritingApp );
     bufferLayout->addWidget( m_checkBurnfree, 0, 0, 1, 3 );
@@ -149,7 +148,7 @@ void K3b::AdvancedOptionTab::setupGui()
 
 void K3b::AdvancedOptionTab::readSettings()
 {
-    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup c( KGlobal::config(), "General Options" );
 
     m_checkAutoErasingRewritable->setChecked( c.readEntry( "auto rewritable erasing", false ) );
     m_checkShowForceGuiElements->setChecked( c.readEntry( "Show advanced GUI", false ) );
@@ -166,7 +165,7 @@ void K3b::AdvancedOptionTab::readSettings()
 
 void K3b::AdvancedOptionTab::saveSettings()
 {
-    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup c( KGlobal::config(), "General Options" );
 
     c.writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
     c.writeEntry( "Show advanced GUI", m_checkShowForceGuiElements->isChecked() );
@@ -188,4 +187,4 @@ void K3b::AdvancedOptionTab::slotSetDefaultBufferSizes( bool b )
 }
 
 
-
+#include "k3badvancedoptiontab.moc"

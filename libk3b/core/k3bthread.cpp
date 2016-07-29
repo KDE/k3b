@@ -18,7 +18,8 @@
 #include "k3bprogressinfoevent.h"
 #include "k3bthreadjobcommunicationevent.h"
 
-#include <QtCore/QDebug>
+#include <kdebug.h>
+
 #include <QtCore/QList>
 #include <QtCore/QTimer>
 
@@ -87,11 +88,11 @@ void K3b::Thread::slotEnsureDoneTimeout()
 void K3b::Thread::waitUntilFinished()
 {
     foreach( K3b::Thread* thread, s_threads ) {
-        qDebug() << "Waiting for thread " << thread << endl;
+        kDebug() << "Waiting for thread " << thread << endl;
         thread->wait();
     }
 
-    qDebug() << "Thread waiting done." << endl;
+    kDebug() << "Thread waiting done." << endl;
 }
 
-
+#include "k3bthread.moc"

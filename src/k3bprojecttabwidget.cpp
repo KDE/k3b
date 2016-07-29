@@ -22,21 +22,20 @@
 #include "k3bview.h"
 #include "k3bdoc.h"
 
-#include <KI18n/KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KWidgetsAddons/KActionMenu>
+#include <KAction>
+#include <KActionMenu>
+#include <KDebug>
+#include <KIconLoader>
+#include <KLocale>
+#include <KMenu>
+#include <KUrl>
 
-#include <QtCore/QDebug>
-#include <QtCore/QMimeData>
-#include <QtCore/QUrl>
-#include <QtGui/QDragMoveEvent>
-#include <QtGui/QIcon>
-#include <QtGui/QDropEvent>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QMouseEvent>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QTabBar>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QMouseEvent>
+#include <QTabBar>
 
 namespace {
     
@@ -134,7 +133,7 @@ K3b::Doc* K3b::ProjectTabWidget::currentTab() const
 }
 
 
-void K3b::ProjectTabWidget::addAction( QAction* action )
+void K3b::ProjectTabWidget::addAction( KAction* action )
 {
     d->projectActionMenu->addAction( action );
 }
@@ -187,7 +186,7 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
             QDropEvent* de = static_cast<QDropEvent*>(e);
             if( de->mimeData()->hasUrls() ) {
                 if( Doc* doc = projectAt( de->pos() ) ) {
-                    QList<QUrl> urls;
+                    KUrl::List urls;
                     Q_FOREACH( const QUrl& url, de->mimeData()->urls() ) {
                         urls.append( url );
                     }
@@ -206,7 +205,7 @@ void K3b::ProjectTabWidget::slotDocChanged( K3b::Doc* doc )
 {
     // we need to cache the icon changes since the changed() signal will be emitted very often
     if( !d->projectDataMap[doc].modified ) {
-        setTabIcon( indexOf( doc->view() ), QIcon::fromTheme( "document-save" ) );
+        setTabIcon( indexOf( doc->view() ), KIcon( "document-save" ) );
         d->projectDataMap[doc].modified = true;
 
         // we need this one for the session management
@@ -230,5 +229,5 @@ void K3b::ProjectTabWidget::slotTabCloseRequested( int index )
     }
 }
 
-
+#include "k3bprojecttabwidget.moc"
 

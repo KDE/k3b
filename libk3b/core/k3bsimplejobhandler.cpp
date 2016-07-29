@@ -60,4 +60,4 @@ void K3b::SimpleJobHandler::blockingInformation( const QString& text,
     Q_UNUSED( caption );
 }
 
-
+#include "k3bsimplejobhandler.moc"

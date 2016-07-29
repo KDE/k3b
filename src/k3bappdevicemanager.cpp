@@ -22,26 +22,27 @@
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
 
-#include <KI18n/KLocalizedString>
+#include <KAction>
+#include <KActionCollection>
+#include <KInputDialog>
 #include <KIO/Job>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KActionCollection>
+#include <KLocale>
+#include <KMessageBox>
+
 #include <Solid/Block>
 #include <Solid/Device>
 #include <Solid/StorageAccess>
 
-#include <QtWidgets/QAction>
-#include <QtWidgets/QInputDialog>
 
 class K3b::AppDeviceManager::Private
 {
 public:
-    QAction* actionDiskInfo;
-    QAction* actionUnmount;
-    QAction* actionMount;
-    QAction* actionEject;
-    QAction* actionLoad;
-    QAction* actionSetReadSpeed;
+    KAction* actionDiskInfo;
+    KAction* actionUnmount;
+    KAction* actionMount;
+    KAction* actionEject;
+    KAction* actionLoad;
+    KAction* actionSetReadSpeed;
 
     K3b::Device::Device* currentDevice;
 };
@@ -61,9 +62,9 @@ K3b::AppDeviceManager::AppDeviceManager( QObject* parent )
                                       actionCollection(), "device_eject");
     d->actionLoad = K3b::createAction(this, i18n("L&oad"), 0, 0, this, SLOT(loadDisk()),
                                      actionCollection(), "device_load");
-//   QAction* actionUnlock = new QAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
+//   KAction* actionUnlock = new KAction( i18n("Un&lock"), "", 0, this, SLOT(unlockDevice()),
 // 				       actionCollection(), "device_unlock" );
-//   QAction* actionlock = new QAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
+//   KAction* actionlock = new KAction( i18n("Loc&k"), "", 0, this, SLOT(lockDevice()),
 // 				     actionCollection(), "device_lock" );
     d->actionSetReadSpeed = K3b::createAction(this, i18n("Set Read Speed..."), 0, 0, this, SLOT(setReadSpeed()),
                                              actionCollection(), "device_set_read_speed" );
@@ -193,7 +194,7 @@ void K3b::AppDeviceManager::slotMountFinished( Solid::ErrorType error, QVariant,
     if( currentDevice() != 0 ) {
         Solid::StorageAccess* storage = currentDevice()->solidStorage();
         if( error == Solid::NoError && storage != 0 ) {
-            qDebug() << "Device mounted at " << storage->filePath();
+            kDebug() << "Device mounted at " << storage->filePath();
             emit mountFinished( storage->filePath() );
         }
     }
@@ -284,22 +285,23 @@ void K3b::AppDeviceManager::setReadSpeed()
 {
     if( currentDevice() ) {
         bool ok = false;
-        int s = QInputDialog::getInt( nullptr,
-                                      i18n("CD Read Speed"),
-                                      i18n("<p>Please enter the preferred read speed for <b>%1</b>. "
-                                           "This speed will be used for the currently mounted "
-                                           "medium."
-                                           "<p>This is especially useful to slow down the drive when "
-                                           "watching movies which are read directly from the drive "
-                                           "and the spinning noise is intrusive."
-                                           "<p>Be aware that this has no influence on K3b since it will "
-                                           "change the reading speed again when copying CDs or DVDs."
-                                           ,currentDevice()->vendor() + ' ' + currentDevice()->description()),
-                                      12,
-                                      1,
-                                      currentDevice()->maxReadSpeed(),
-                                      1,
-                                      &ok );
+        int s = KInputDialog::getInteger( i18n("CD Read Speed"),
+                                          i18n("<p>Please enter the preferred read speed for <b>%1</b>. "
+                                               "This speed will be used for the currently mounted "
+                                               "medium."
+                                               "<p>This is especially useful to slow down the drive when "
+                                               "watching movies which are read directly from the drive "
+                                               "and the spinning noise is intrusive."
+                                               "<p>Be aware that this has no influence on K3b since it will "
+                                               "change the reading speed again when copying CDs or DVDs."
+                                               ,currentDevice()->vendor() + ' ' + currentDevice()->description()),
+                                          12,
+                                          1,
+                                          currentDevice()->maxReadSpeed(),
+                                          1,
+                                          10,
+                                          &ok,
+                                          0 );
         if( ok ) {
             if( !currentDevice()->setSpeed( s*175, 0xFFFF ) )
                 KMessageBox::error( 0, i18n("Setting the read speed failed.") );
@@ -363,4 +365,4 @@ void K3b::AppDeviceManager::setReadSpeed( K3b::Device::Device* dev )
     setReadSpeed();
 }
 
-
+#include "k3bappdevicemanager.moc"

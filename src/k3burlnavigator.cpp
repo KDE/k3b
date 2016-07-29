@@ -20,16 +20,16 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <KIOCore/KMountPoint>
-#include <QtCore/QDir>
+#include <kmountpoint.h>
+#include <QDir>
 
 K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )
-    : KUrlNavigator( model, QUrl::fromLocalFile(QDir::home().absolutePath()), parent )
+    : KUrlNavigator( model, KUrl(QDir::home().absolutePath()), parent )
 {
     // Curently we don't support burning from custom protocols so let's filter them out
     KUrlNavigator::setCustomProtocols( QStringList() << "file" << "audiocd" );
     
-	connect( this, SIGNAL(urlChanged(QUrl)), this, SLOT(urlActivated(QUrl)) );
+	connect( this, SIGNAL(urlChanged(KUrl)), this, SLOT(urlActivated(KUrl)) );
 }
 
 K3b::UrlNavigator::~UrlNavigator()
@@ -39,11 +39,12 @@ K3b::UrlNavigator::~UrlNavigator()
 void K3b::UrlNavigator::setDevice( K3b::Device::Device* dev )
 {
     // Check if device is mounted. If so, switch to the mount path
-    if( KMountPoint::Ptr mountPoint = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() ) )
+    KSharedPtr<KMountPoint> mountPoint = KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() );
+    if( !mountPoint.isNull() )
     {
         QString mntPath = mountPoint->mountPoint();
         if( !mntPath.isEmpty() ) {
-            setLocationUrl( QUrl::fromLocalFile( mntPath ) );
+            setLocationUrl( KUrl( mntPath ) );
             return;
         }
     }
@@ -51,13 +52,13 @@ void K3b::UrlNavigator::setDevice( K3b::Device::Device* dev )
     const Medium& medium = k3bcore->mediaCache()->medium( dev );
     if( medium.content() & Medium::ContentAudio )
     {
-        setLocationUrl( QUrl( "audiocd:/" ) );
+        setLocationUrl( KUrl( "audiocd:/" ) );
     }
 }
 
-void K3b::UrlNavigator::urlActivated( const QUrl& url )
+void K3b::UrlNavigator::urlActivated( const KUrl& url )
 {
-    if( url.scheme() == "audiocd" )
+    if( url.protocol() == "audiocd" )
     {
         Q_FOREACH( Device::Device* device, k3bcore->deviceManager()->cdReader() )
         {
@@ -73,4 +74,4 @@ void K3b::UrlNavigator::urlActivated( const QUrl& url )
     emit activated( url );
 }
 
-
+#include "k3burlnavigator.moc"

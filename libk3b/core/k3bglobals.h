@@ -18,14 +18,13 @@
 
 #include <config-k3b.h>
 
-#include "k3bdevicetypes.h"
-#include "k3b_export.h"
-
-#include <KIOCore/KIO/Global>
-
 #include <QtCore/QFile>
 #include <QtCore/QString>
-#include <QtCore/QUrl>
+#include <kio/global.h>
+#include <KUrl>
+
+#include "k3bdevicetypes.h"
+#include "k3b_export.h"
 
 #include <sys/stat.h>
 
@@ -160,7 +159,7 @@ namespace K3b {
     LIBK3B_EXPORT QString findTempFile( const QString& ending = QString(), const QString& d = QString() );
 
     /**
-     * Wrapper around QStandardPaths::findExecutable which searches the PATH and some additional
+     * Wrapper around KStandardDirs::findExe which searches the PATH and some additional
      * directories to find system tools which are normally only in root's PATH.
      */
     LIBK3B_EXPORT QString findExe( const QString& name );
@@ -204,7 +203,7 @@ namespace K3b {
 
     LIBK3B_EXPORT QString systemName();
 
-    LIBK3B_EXPORT KIO::filesize_t filesize( const QUrl& );
+    LIBK3B_EXPORT KIO::filesize_t filesize( const KUrl& );
 
     /**
      * Calculate the total size of an image file. This also includes
@@ -212,7 +211,7 @@ namespace K3b {
      *
      * \returns the total size of the image file at url
      */
-    LIBK3B_EXPORT KIO::filesize_t imageFilesize( const QUrl& url );
+    LIBK3B_EXPORT KIO::filesize_t imageFilesize( const KUrl& url );
 
     /**
      * true if the kernel supports ATAPI devices without SCSI emulation.
@@ -236,8 +235,8 @@ namespace K3b {
     /**
      * Tries to convert urls from local protocols != "file" to file (for now supports media:/)
      */
-    LIBK3B_EXPORT QUrl convertToLocalUrl( const QUrl& url );
-    LIBK3B_EXPORT QList<QUrl> convertToLocalUrls( const QList<QUrl>& l );
+    LIBK3B_EXPORT KUrl convertToLocalUrl( const KUrl& url );
+    LIBK3B_EXPORT KUrl::List convertToLocalUrls( const KUrl::List& l );
 
     LIBK3B_EXPORT qint16 fromLe16( char* );
     LIBK3B_EXPORT qint32 fromLe32( char* );

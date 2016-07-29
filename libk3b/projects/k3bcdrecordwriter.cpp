@@ -27,14 +27,15 @@
 #include "k3bthroughputestimator.h"
 #include "k3bglobalsettings.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QRegExp>
-#include <QtCore/QFile>
-#include "k3b_i18n.h"
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qregexp.h>
+#include <qfile.h>
 
-#include <QtCore/QTemporaryFile>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <ktemporaryfile.h>
 
 
 Q_DECLARE_METATYPE( QProcess::ExitStatus )
@@ -137,6 +138,18 @@ bool K3b::CdrecordWriter::active() const
 QIODevice* K3b::CdrecordWriter::ioDevice() const
 {
     return &d->process;
+}
+
+
+bool K3b::CdrecordWriter::closeFd()
+{
+    if ( d->process.isRunning() ) {
+        d->process.closeWriteChannel();
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 
@@ -328,6 +341,9 @@ bool K3b::CdrecordWriter::prepareProcess()
 
     if( d->rawCdText.size() > 0 ) {
         delete d->cdTextFile;
+        // yes, we do want to use QTemporaryFile and not KTemporaryFile because cdrecord
+        // might be started suid root and the KDE tmp might be on an nfs mounted partition
+        // (Mandriva for example uses ~/tmp)
         d->cdTextFile = new QTemporaryFile();
         if ( !d->cdTextFile->open() ||
              d->cdTextFile->write( d->rawCdText ) != d->rawCdText.size() ||
@@ -404,9 +420,9 @@ void K3b::CdrecordWriter::start()
                                ,d->cdrecordBinObject->copyright()), MessageInfo );
 
 
-    qDebug() << "***** " << d->cdrecordBinObject->name() << " parameters:\n";
+    kDebug() << "***** " << d->cdrecordBinObject->name() << " parameters:\n";
     QString s = d->process.joinedArgs();
-    qDebug() << s << flush;
+    kDebug() << s << flush;
     emit debuggingOutput( d->cdrecordBinObject->name() + " command:", s);
 
     d->currentTrack = 0;
@@ -435,7 +451,7 @@ void K3b::CdrecordWriter::start()
     if( !d->process.start( KProcess::MergedChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        qDebug() << "(K3b::CdrecordWriter) could not start " << d->cdrecordBinObject->name();
+        kDebug() << "(K3b::CdrecordWriter) could not start " << d->cdrecordBinObject->name();
         emit infoMessage( i18n("Could not start %1.",d->cdrecordBinObject->name()), K3b::Job::MessageError );
         jobFinished(false);
     }
@@ -513,11 +529,11 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
                     d->totalSize += track.size;
                 }
                 else
-                    qDebug() << "(K3b::CdrecordWriter) track number parse error: "
+                    kDebug() << "(K3b::CdrecordWriter) track number parse error: "
                              << line.mid( sizeStart, sizeEnd-sizeStart );
             }
             else
-                qDebug() << "(K3b::CdrecordWriter) track number parse error: "
+                kDebug() << "(K3b::CdrecordWriter) track number parse error: "
                          << line.mid( 6, 2 );
         }
 
@@ -530,7 +546,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
             emit buffer( fifo );
             d->lastFifoValue = fifo;
 
-            if( s_progressRx.captureCount() > 4 )
+            if( s_progressRx.numCaptures() > 4 )
                 emit deviceBuffer( s_progressRx.cap(5).toInt() );
 
             //
@@ -546,7 +562,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
                 size = d->tracks[d->currentTrack-1].size;
             }
             else {
-                qCritical() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!" << endl;
+                kError() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!" << endl;
             }
 
             if( !d->writingStarted ) {
@@ -685,7 +701,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
             if( d->tracks.count() > d->currentTrack-1 )
                 d->alreadyWritten += d->tracks[d->currentTrack-1].size;
             else
-                qCritical() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!";
+                kError() << "(K3b::CdrecordWriter) Did not parse all tracks sizes!";
         }
         else
             emit infoMessage( i18n("Starting disc write"), MessageInfo );
@@ -693,14 +709,14 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         d->currentTrack++;
 
         if( d->currentTrack > d->tracks.count() ) {
-            qDebug() << "(K3b::CdrecordWriter) need to add dummy track struct.";
+            kDebug() << "(K3b::CdrecordWriter) need to add dummy track struct.";
             struct Private::Track t;
             t.size = 1;
             t.audio = false;
             d->tracks.append(t);
         }
 
-        qDebug() << "(K3b::CdrecordWriter) writing track " << d->currentTrack << " of " << d->totalTracks << " tracks.";
+        kDebug() << "(K3b::CdrecordWriter) writing track " << d->currentTrack << " of " << d->totalTracks << " tracks.";
         emit nextTrack( d->currentTrack, d->totalTracks );
     }
     else if( line.startsWith( "Fixating" ) ) {
@@ -758,7 +774,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
     }
     else {
         // debugging
-        qDebug() << "(" << d->cdrecordBinObject->name() << ") " << line;
+        kDebug() << "(" << d->cdrecordBinObject->name() << ") " << line;
     }
 }
 
@@ -805,7 +821,7 @@ void K3b::CdrecordWriter::slotProcessExited( int exitCode, QProcess::ExitStatus 
         break;
 
         default:
-            qDebug() << "(K3b::CdrecordWriter) error: " << exitCode;
+            kDebug() << "(K3b::CdrecordWriter) error: " << exitCode;
 
             if( d->cdrecordError == UNKNOWN && d->lastFifoValue <= 3 )
                 d->cdrecordError = BUFFER_UNDERRUN;
@@ -932,4 +948,4 @@ qint64 K3b::CdrecordWriter::write( const char* data, qint64 maxSize )
     return d->process.write( data, maxSize );
 }
 
-
+#include "k3bcdrecordwriter.moc"

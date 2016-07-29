@@ -16,7 +16,7 @@
 #ifndef K3BSPLASH_H
 #define K3BSPLASH_H
 
-#include <QtWidgets/QWidget>
+#include <KVBox>
 
 class QLabel;
 class QMouseEvent;
@@ -25,7 +25,7 @@ class QString;
 
 
 namespace K3b {
-class Splash : public QWidget
+class Splash : public KVBox
 {
     Q_OBJECT
 

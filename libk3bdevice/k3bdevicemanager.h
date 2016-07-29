@@ -16,11 +16,12 @@
 #ifndef K3BDEVICEMANAGER_H
 #define K3BDEVICEMANAGER_H
 
-#include "k3bdevice_export.h"
+#include <qobject.h>
+#include <qstring.h>
+#include <qstringlist.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include "k3bdevice_export.h"
+#include <kdebug.h>
 
 class KConfigGroup;
 

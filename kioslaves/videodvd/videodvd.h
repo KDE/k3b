@@ -16,9 +16,11 @@
 #ifndef _videodvd_H_
 #define _videodvd_H_
 
-#include <QtCore/QString>
+#include <qstring.h>
 
-#include <KIOCore/KIO/SlaveBase>
+#include <kurl.h>
+#include <kio/global.h>
+#include <kio/slavebase.h>
 
 class Iso9660Entry;
 class Iso9660;
@@ -34,13 +36,13 @@ public:
     kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket);
     ~kio_videodvdProtocol();
 
-    void mimetype(const QUrl& url);
-    void stat(const QUrl& url);
-    void get(const QUrl& url);
-    void listDir(const QUrl& url);
+    void mimetype( const KUrl& url );
+    void stat( const KUrl& url );
+    void get( const KUrl& url );
+    void listDir( const KUrl& url );
 
 private:
-    K3b::Iso9660* openIso( const QUrl&, QString& plainIsoPath );
+    K3b::Iso9660* openIso( const KUrl&, QString& plainIsoPath );
     KIO::UDSEntry createUDSEntry( const K3b::Iso9660Entry* e ) const;
     void listVideoDVDs();
 

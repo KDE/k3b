@@ -14,9 +14,7 @@
 
 #include "k3bvcdtrackkeysdelegate.h"
 #include "k3bvcdtrackkeysmodel.h"
-#include "k3bvcdtrack.h"
-
-#include <QtWidgets/QComboBox>
+#include <QComboBox>
 
 Q_DECLARE_METATYPE( K3b::VcdTrack* )
 

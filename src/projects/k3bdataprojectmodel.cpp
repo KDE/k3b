@@ -22,13 +22,12 @@
 #include "k3bisooptions.h"
 #include "k3bspecialdataitem.h"
 
-#include <KCoreAddons/KUrlMimeData>
-#include <KI18n/KLocalizedString>
-#include <KIconThemes/KIconEngine>
+#include <KIcon>
+#include <KLocale>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QMimeData>
-#include <QtGui/QFont>
+#include <QDataStream>
+#include <QFont>
+#include <QMimeData>
 
 
 class K3b::DataProjectModel::Private
@@ -81,7 +80,7 @@ int K3b::DataProjectModel::Private::findChildIndex( K3b::DataItem* item )
 
 void K3b::DataProjectModel::Private::_k_itemsAboutToBeInserted( K3b::DirItem* parent, int start, int end )
 {
-        qDebug() << q->indexForItem( parent ) << start << end;
+        kDebug() << q->indexForItem( parent ) << start << end;
     q->beginInsertRows( q->indexForItem( parent ), start, end );
 }
 
@@ -89,7 +88,7 @@ void K3b::DataProjectModel::Private::_k_itemsAboutToBeInserted( K3b::DirItem* pa
 void K3b::DataProjectModel::Private::_k_itemsAboutToBeRemoved( K3b::DirItem* parent, int start, int end )
 {
     m_removingItem = true;
-    qDebug() << q->indexForItem( parent ) << start << end;
+    kDebug() << q->indexForItem( parent ) << start << end;
     q->beginRemoveRows( q->indexForItem( parent ), start, end );
 }
 
@@ -207,13 +206,13 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                     iconName = "media-optical-data";
                 }
                 else {
-                    iconName = item->mimeType().iconName();
+                    iconName = item->mimeType()->iconName();
                 }
 
                 if( item->isSymLink() )
-                    return QIcon( new KIconEngine( iconName, nullptr, QStringList() << "emblem-symbolic-link" ) );
+                    return KIcon( iconName, 0, QStringList() << "emblem-symbolic-link" );
                 else
-                    return QIcon::fromTheme( iconName );
+                    return KIcon( iconName );
             }
             else if( role == Qt::FontRole && item->isSymLink() ) {
                 QFont font;
@@ -229,7 +228,7 @@ QVariant K3b::DataProjectModel::data( const QModelIndex& index, int role ) const
                     return static_cast<K3b::SpecialDataItem*>( item )->specialType();
                 }
                 else {
-                    return item->mimeType().comment();
+                    return item->mimeType()->comment();
                 }
             }
             break;
@@ -311,7 +310,7 @@ QModelIndex K3b::DataProjectModel::index( int row, int column, const QModelIndex
 
 QModelIndex K3b::DataProjectModel::parent( const QModelIndex& index ) const
 {
-    //qDebug() << index;
+    //kDebug() << index;
     if( K3b::DataItem* item = itemForIndex( index ) ) {
         if( K3b::DirItem* dir = item->parent() ) {
             return createIndex( d->findChildIndex( dir ), 0, dir );
@@ -361,17 +360,17 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
     QMimeData* mime = new QMimeData();
 
     QSet<K3b::DataItem*> items;
-    QList<QUrl> urls;
+    KUrl::List urls;
     foreach( const QModelIndex& index, indexes ) {
         K3b::DataItem* item = itemForIndex( index );
         items << item;
 
-        QUrl url = QUrl::fromLocalFile( item->localPath() );
+        KUrl url( item->localPath() );
         if ( item->isFile() && !urls.contains(url) ) {
             urls << url;
         }
     }
-    mime->setUrls(urls);
+    urls.populateMimeData( mime );
 
     // the easy road: encode the pointers
     QByteArray itemData;
@@ -393,7 +392,7 @@ Qt::DropActions K3b::DataProjectModel::supportedDropActions() const
 
 QStringList K3b::DataProjectModel::mimeTypes() const
 {
-    QStringList s = KUrlMimeData::mimeDataTypes();
+    QStringList s = KUrl::List::mimeDataTypes();
     s += QString::fromLatin1( "application/x-k3bdataitem" );
     return s;
 }
@@ -401,7 +400,7 @@ QStringList K3b::DataProjectModel::mimeTypes() const
 
 bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-    qDebug();
+    kDebug();
 
     // no need to handle the row as item order is not important (the model just forces us to use them above)
     Q_UNUSED( row );
@@ -423,7 +422,7 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
         if( action == Qt::MoveAction )
             return false;
 
-        qDebug() << "data item drop";
+        kDebug() << "data item drop";
 
         QByteArray itemData = data->data( "application/x-k3bdataitem" );
         QDataStream itemDataStream( itemData );
@@ -437,9 +436,9 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
         emit moveItemsRequested( items, dir );
         return true;
     }
-    else if ( data->hasUrls() ) {
-        qDebug() << "url list drop";
-        QList<QUrl> urls = KUrlMimeData::urlsFromMimeData( data );
+    else if ( KUrl::List::canDecode( data ) ) {
+        kDebug() << "url list drop";
+        KUrl::List urls = KUrl::List::fromMimeData( data );
         emit addUrlsRequested( urls, dir );
         return true;
     }
@@ -471,4 +470,4 @@ QModelIndex K3b::DataProjectModel::buddy( const QModelIndex& index ) const
         return index;
 }
 
-#include "moc_k3bdataprojectmodel.cpp"
+#include "k3bdataprojectmodel.moc"

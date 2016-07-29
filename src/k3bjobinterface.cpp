@@ -17,8 +17,8 @@
 #include "k3bjobinterfaceadaptor.h"
 #include "k3bjob.h"
 
-#include <QtDBus/QDBusConnection>
-#include <QtCore/QDataStream>
+#include <QDataStream>
+#include <QDBusConnection>
 
 namespace K3b {
 
@@ -97,4 +97,4 @@ void JobInterface::slotSubProgress( int val )
 
 } // namespace K3b
 
-
+#include "k3bjobinterface.moc"

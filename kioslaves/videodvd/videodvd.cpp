@@ -14,55 +14,49 @@
  */
 
 #include <config-k3b.h>
+
+#include <qdatetime.h>
+#include <qbitarray.h>
+
+#include <kdebug.h>
+#include <KComponentData>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kurl.h>
+
+#include <stdlib.h>
+
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
-#include "videodvd_export.h"
-#include "videodvd_i18n.h"
-
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
-#include <QtCore/QBitArray>
-#include <QtCore/QLoggingCategory>
-
-#include <stdlib.h>
 
 #include "videodvd.h"
 
-namespace
-{
-    const int CMD_MIMETYPE = 70; // Should be declared in KIOCore/KIO/Global, but it's missing. Why?
-} // namespace
-
 using namespace KIO;
-
-Q_DECLARE_LOGGING_CATEGORY(KIO_VIDEODVD)
-Q_LOGGING_CATEGORY(KIO_VIDEODVD, "kio_videodvd")
 
 extern "C"
 {
-    VIDEODVD_EXPORT int kdemain( int argc, char **argv )
+    KDE_EXPORT int kdemain( int argc, char **argv )
     {
-        QCoreApplication::setApplicationName( "kio_videodvd" );
+        KComponentData componentData( "kio_videodvd" );
 
-        qCDebug(KIO_VIDEODVD) << "*** Starting kio_videodvd ";
+        kDebug(7101) << "*** Starting kio_videodvd ";
 
         if (argc != 4)
         {
-            qCDebug(KIO_VIDEODVD) << "Usage: kio_videodvd  protocol domain-socket1 domain-socket2";
+            kDebug(7101) << "Usage: kio_videodvd  protocol domain-socket1 domain-socket2";
             exit(-1);
         }
 
         kio_videodvdProtocol slave(argv[2], argv[3]);
         slave.dispatchLoop();
 
-        qCDebug(KIO_VIDEODVD) << "*** kio_videodvd Done";
+        kDebug(7101) << "*** kio_videodvd Done";
         return 0;
     }
 
-    bool isRootDirectory( const QUrl& url )
+    bool isRootDirectory( const KUrl& url )
     {
         QString path = url.path();
         return( path.isEmpty() || path == "/" );
@@ -79,7 +73,7 @@ int kio_videodvdProtocol::s_instanceCnt = 0;
 kio_videodvdProtocol::kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket)
     : SlaveBase("kio_videodvd", pool_socket, app_socket)
 {
-    qDebug() << "kio_videodvdProtocol::kio_videodvdProtocol()";
+    kDebug() << "kio_videodvdProtocol::kio_videodvdProtocol()";
     if( !s_deviceManager )
     {
         s_deviceManager = new K3b::Device::DeviceManager();
@@ -92,7 +86,7 @@ kio_videodvdProtocol::kio_videodvdProtocol(const QByteArray &pool_socket, const 
 
 kio_videodvdProtocol::~kio_videodvdProtocol()
 {
-    qDebug() << "kio_videodvdProtocol::~kio_videodvdProtocol()";
+    kDebug() << "kio_videodvdProtocol::~kio_videodvdProtocol()";
     s_instanceCnt--;
     if( s_instanceCnt == 0 )
     {
@@ -134,12 +128,12 @@ KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3b::Iso9660Entry* e )
 
 // FIXME: remember the iso instance for quicker something and search for the videodvd
 //        in the available devices.
-K3b::Iso9660* kio_videodvdProtocol::openIso( const QUrl& url, QString& plainIsoPath )
+K3b::Iso9660* kio_videodvdProtocol::openIso( const KUrl& url, QString& plainIsoPath )
 {
     // get the volume id from the url
     QString volumeId = url.path().section( '/', 1, 1 );
 
-    qDebug() << "(kio_videodvdProtocol) searching for Video dvd: " << volumeId;
+    kDebug() << "(kio_videodvdProtocol) searching for Video dvd: " << volumeId;
 
 
     // now search the devices for this volume id
@@ -158,7 +152,7 @@ K3b::Iso9660* kio_videodvdProtocol::openIso( const QUrl& url, QString& plainIsoP
             iso->setPlainIso9660( true );
             if( iso->open() /*&& iso->primaryDescriptor().volumeId == volumeId*/ ) {
                 plainIsoPath = url.path().section( '/', 2, -1 ) + '/';
-                qDebug() << "(kio_videodvdProtocol) using iso path: " << plainIsoPath;
+                kDebug() << "(kio_videodvdProtocol) using iso path: " << plainIsoPath;
                 return iso;
             }
             delete iso;
@@ -170,9 +164,9 @@ K3b::Iso9660* kio_videodvdProtocol::openIso( const QUrl& url, QString& plainIsoP
 }
 
 
-void kio_videodvdProtocol::get(const QUrl& url )
+void kio_videodvdProtocol::get(const KUrl& url )
 {
-    qDebug() << "kio_videodvd::get(const QUrl& url)";
+    kDebug() << "kio_videodvd::get(const KUrl& url)";
 
     QString isoPath;
     if( K3b::Iso9660* iso = openIso( url, isoPath ) )
@@ -214,11 +208,11 @@ void kio_videodvdProtocol::get(const QUrl& url )
 }
 
 
-void kio_videodvdProtocol::listDir( const QUrl& url )
+void kio_videodvdProtocol::listDir( const KUrl& url )
 {
     if( isRootDirectory( url ) ) {
 #ifdef Q_OS_WIN32
-    qDebug() << "fix of root path required";
+    kDebug() << "fix of root path required";
 #endif
         listVideoDVDs();
     }
@@ -299,11 +293,11 @@ void kio_videodvdProtocol::listVideoDVDs()
 }
 
 
-void kio_videodvdProtocol::stat( const QUrl& url )
+void kio_videodvdProtocol::stat( const KUrl& url )
 {
     if( isRootDirectory( url ) ) {
 #ifdef Q_OS_WIN32
-    qDebug() << "fix root path detection";
+    kDebug() << "fix root path detection";
 #endif
         //
         // stat the root path
@@ -339,7 +333,7 @@ void kio_videodvdProtocol::stat( const QUrl& url )
 // the "places" widget in the file dialog. Indeed not much used these days.
 // Note that you can also implement it as a get() without the "send the data"
 // part of it. (David)
-void kio_videodvdProtocol::mimetype( const QUrl& url )
+void kio_videodvdProtocol::mimetype( const KUrl& url )
 {
     if( isRootDirectory( url ) ) {
         error( ERR_UNSUPPORTED_ACTION, KIO::unsupportedActionErrorString("videodvd", CMD_MIMETYPE) );

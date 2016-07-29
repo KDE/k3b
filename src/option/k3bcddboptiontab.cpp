@@ -15,13 +15,13 @@
 
 #include "k3bcddboptiontab.h"
 
-#include <KConfigWidgets/KCModule>
-#include <KService/KService>
-#include <KService/KServiceTypeTrader>
-#include <KI18n/KLocalizedString>
+#include <KCModule>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KLocale>
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QHBoxLayout>
+#include <QtGui/QLabel>
+#include <QtGui/QHBoxLayout>
 
 
 K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
@@ -33,10 +33,10 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
     m_cddbKcm = 0;
     if ( KService::Ptr service = KService::serviceByStorageId( "libkcddb.desktop" ) )
         m_cddbKcm = service->createInstance<KCModule>( this );
-        KService::List services = KServiceTypeTrader::self()->query( "KCModule", "[X-KDE-Library] == 'kcm_cddb'" );
-        if ( !services.isEmpty() ) {
-         m_cddbKcm = services.first()->createInstance<KCModule>( this );
-        }
+//     KService::List services = KServiceTypeTrader::self()->query( "KCModule", "[X-KDE-Library] == 'kcm_cddb'" );
+//     if ( !services.isEmpty() ) {
+//         m_cddbKcm = services.first()->createInstance<KCModule>( this );
+//     }
 
     if ( m_cddbKcm ) {
         m_cddbKcm->layout()->setContentsMargins( 0, 0, 0, 0 );
@@ -70,4 +70,4 @@ void K3b::CddbOptionTab::apply()
     }
 }
 
-
+#include "k3bcddboptiontab.moc"

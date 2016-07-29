@@ -14,14 +14,15 @@
 
 #include "k3blsofwrapper.h"
 
+#include <kprocess.h>
+
 #include "k3bdevice.h"
 #include "k3bglobals.h"
 
-#include <KCoreAddons/KProcess>
-
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
+#include <qfile.h>
+#include <qfileinfo.h>
+//Added by qt3to4:
+#include <QList>
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -87,7 +88,7 @@ bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
         if ( ++it != l.constEnd() ) {
             QString app = it->mid( 1 );
 
-            qDebug() << "(K3b::LsofWrapper) matched: app: " << app << " pid: " << pid;
+            kDebug() << "(K3b::LsofWrapper) matched: app: " << app << " pid: " << pid;
 
             // we don't care about ourselves using the device ;)
             if( pid != (int)::getpid() )

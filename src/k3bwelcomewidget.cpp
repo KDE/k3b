@@ -21,26 +21,25 @@
 #include "k3bthememanager.h"
 #include "k3bversion.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KCoreAddons/KAboutData>
-#include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
-#include <KXmlGui/KActionCollection>
+#include <QCursor>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QShowEvent>
+#include <QStyle>
+#include <QTextDocument>
 
-#include <QtCore/QMimeData>
-#include <QtCore/QUrl>
-#include <QtGui/QIcon>
-#include <QtGui/QCursor>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QShowEvent>
-#include <QtGui/QTextDocument>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QStyle>
+#include <KActionCollection>
+#include <KAboutData>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KGlobalSettings>
+#include <KLocale>
+#include <KMenu>
+#include <KUrl>
 
 namespace {
 
@@ -88,6 +87,7 @@ K3b::WelcomeWidget::WelcomeWidget( MainWindow* mainWindow, QWidget* parent )
 
     connect( m_buttonMore, SIGNAL(pressed()), this, SLOT(slotMoreActions()) );
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(update()) );
 
     slotThemeChanged();
 }
@@ -239,15 +239,6 @@ int K3b::WelcomeWidget::heightForWidth( int width ) const
 }
 
 
-bool K3b::WelcomeWidget::event( QEvent *event )
-{
-    if( event->type() == QEvent::StyleChange ) {
-        update();
-    }
-    return QWidget::event( event );
-}
-
-
 void K3b::WelcomeWidget::resizeEvent( QResizeEvent* e )
 {
     m_infoText->setTextWidth( width() - MARGIN );
@@ -272,7 +263,7 @@ void K3b::WelcomeWidget::slotThemeChanged()
     m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator") + "</body></html>" );
     m_infoText->setHtml( "<html><body align=\"center\">" 
                          + i18n("K3b %1 Copyright &copy; 1998&ndash;2010 K3b authors",
-                                KAboutData::applicationData().version())
+                                KGlobal::mainComponent().aboutData()->version()) 
                          + "</body></html>" );
     setMinimumWidth( 2*MARGIN + qMax(( int )m_header->idealWidth(), m_buttonSize.width()) );
     updateBgPix();
@@ -282,7 +273,7 @@ void K3b::WelcomeWidget::slotThemeChanged()
 
 void K3b::WelcomeWidget::slotMoreActions()
 {
-    QMenu popup;
+    KMenu popup;
 
     for ( int i = 0; s_allActions[i]; ++i ) {
         if ( s_allActions[i][0] == '_' ) {
@@ -359,13 +350,13 @@ void K3b::WelcomeWidget::dragEnterEvent( QDragEnterEvent* event )
 
 void K3b::WelcomeWidget::dropEvent( QDropEvent* e )
 {
-    QList<QUrl> urls;
+    KUrl::List urls;
     Q_FOREACH( const QUrl& url, e->mimeData()->urls() )
     {
         urls.push_back( url );
     }
 
-    QMetaObject::invokeMethod( m_mainWindow, "addUrls", Qt::QueuedConnection, Q_ARG( QList<QUrl>, urls ) );
+    QMetaObject::invokeMethod( m_mainWindow, "addUrls", Qt::QueuedConnection, Q_ARG( KUrl::List, urls ) );
 }
 
 
@@ -404,7 +395,7 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton ) {
         QMap<QAction*, QAction*> map;
-        QMenu addPop;
+        KMenu addPop;
         addPop.setTitle( i18n("Add Button") );
 
         QAction* firstAction = 0;
@@ -427,14 +418,14 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
 
         QWidget* widgetAtPos = childAt(e->pos());
         if( widgetAtPos && widgetAtPos->inherits( "K3b::FlatButton" ) ) {
-            QMenu pop;
+            KMenu pop;
             removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
             if ( addPop.actions().count() > 0 )
                 pop.addMenu( &addPop );
             r = pop.exec( e->globalPos() );
         }
         else {
-            addPop.insertSection( firstAction, addPop.title() );
+            addPop.addTitle( addPop.title(), firstAction );
             r = addPop.exec( e->globalPos() );
         }
 
@@ -447,4 +438,4 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
     }
 }
 
-
+#include "k3bwelcomewidget.moc"

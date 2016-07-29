@@ -19,7 +19,7 @@
 
 #include "k3binteractiondialog.h"
 
-class QUrl;
+class KUrl;
 class QDragEnterEvent;
 class QDropEvent;
 class QPoint;
@@ -40,7 +40,7 @@ namespace K3b {
         ImageWritingDialog( QWidget* = 0 );
         ~ImageWritingDialog();
 
-        void setImage( const QUrl& url );
+        void setImage( const KUrl& url );
 
     protected Q_SLOTS:
         void slotStartClicked();

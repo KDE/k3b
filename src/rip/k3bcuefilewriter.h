@@ -15,7 +15,7 @@
 #ifndef _K3B_CUE_FILE_WRITER_H_
 #define _K3B_CUE_FILE_WRITER_H_
 
-#include <QtCore/QTextStream>
+#include <QTextStream>
 
 #include "k3btoc.h"
 #include "k3bcdtext.h"

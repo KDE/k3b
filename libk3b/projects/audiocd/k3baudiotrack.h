@@ -17,15 +17,15 @@
 #ifndef K3BAUDIOTRACK_H
 #define K3BAUDIOTRACK_H
 
+#include <QtCore/QObject>
+#include <QtCore/QString>
+
+#include <kio/global.h>
+
 #include "k3bmsf.h"
 #include "k3bcdtext.h"
 #include "k3btrack.h"
 #include "k3b_export.h"
-
-#include <KIOCore/KIO/Global>
-
-#include <QtCore/QObject>
-#include <QtCore/QString>
 
 namespace K3b {
     class AudioDataSource;

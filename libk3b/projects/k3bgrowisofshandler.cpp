@@ -13,16 +13,18 @@
  */
 
 #include "k3bgrowisofshandler.h"
+
 #include "k3bjob.h"
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 #include "k3bdevice.h"
 #include "k3bdevicehandler.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QLocale>
-#include <QtCore/QTimer>
+#include <klocale.h>
+#include <kglobal.h>
+#include <kdebug.h>
+
+#include <qtimer.h>
 
 #include <errno.h>
 #include <string.h>
@@ -175,9 +177,9 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         if( ok )
             emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)",
                                    int( speed * double( Device::SPEED_FACTOR_DVD ) )
-                                   ,QLocale::system().toString(speed)), K3b::Job::MessageInfo );
+                                   ,KGlobal::locale()->formatNumber(speed)), K3b::Job::MessageInfo );
         else
-            qDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
+            kDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
     }
     else if( (pos = line.indexOf( "RBU" )) > 0 ) {
 
@@ -211,11 +213,11 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
             }
         }
         else
-            qDebug() << "(K3b::GrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'";
+            kDebug() << "(K3b::GrowisofsHandler) failed to parse ring buffer fill from '" << line.mid( pos, endPos-pos ) << "'";
     }
 
     else {
-        qDebug() << "(growisofs) " << line;
+        kDebug() << "(growisofs) " << line;
     }
 }
 
@@ -308,8 +310,8 @@ void K3b::GrowisofsHandler::slotCheckBufferStatusDone( K3b::Device::DeviceHandle
         QTimer::singleShot( 500, this, SLOT(slotCheckBufferStatus()) );
     }
     else {
-        qDebug() << "(K3b::GrowisofsHandler) stopping buffer check.";
+        kDebug() << "(K3b::GrowisofsHandler) stopping buffer check.";
     }
 }
 
-
+#include "k3bgrowisofshandler.moc"

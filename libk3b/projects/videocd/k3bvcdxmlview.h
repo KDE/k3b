@@ -16,9 +16,9 @@
 #ifndef K3B_VCD_XMLVIEW_H
 #define K3B_VCD_XMLVIEW_H
 
-#include "k3bvcddoc.h"
+#include <QString>
 
-#include <QtCore/QString>
+#include "k3bvcddoc.h"
 
 class QFile;
 

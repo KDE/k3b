@@ -32,7 +32,7 @@ public:
     K3bMadDecoderFactory( QObject* parent = 0, const QVariantList& args = QVariantList() );
     ~K3bMadDecoderFactory();
 
-    bool canDecode( const QUrl& filename );
+    bool canDecode( const KUrl& filename );
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
@@ -74,5 +74,7 @@ private:
     class MadDecoderPrivate;
     MadDecoderPrivate* d;
 };
+
+K3B_EXPORT_PLUGIN(k3bmaddecoder, K3bMadDecoderFactory)
 
 #endif

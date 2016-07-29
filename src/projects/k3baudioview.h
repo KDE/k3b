@@ -21,7 +21,7 @@
 
 #include "k3bview.h"
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 namespace K3b {
 
@@ -39,7 +39,7 @@ namespace K3b {
         ~AudioView();
 
     public Q_SLOTS:
-        virtual void addUrls( const QList<QUrl>& urls );
+        virtual void addUrls( const KUrl::List& urls );
 
     protected:
         virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );

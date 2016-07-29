@@ -17,15 +17,13 @@
 #ifndef _K3B_APPLICATION_H_
 #define _K3B_APPLICATION_H_
 
+#include <kuniqueapplication.h>
 #include "k3bcore.h"
 
 #include <QtCore/QMap>
-#include <QtCore/QScopedPointer>
-#include <QtWidgets/QApplication>
 
 #define k3bappcore K3b::Application::Core::k3bAppCore()
 
-class QCommandLineParser;
 
 namespace K3b {
     class MainWindow;
@@ -33,15 +31,15 @@ namespace K3b {
     class ProjectManager;
     class AppDeviceManager;
 
-    class Application : public QApplication
+    class Application : public KUniqueApplication
     {
         Q_OBJECT
 
     public:
-        Application( int& argc, char** argv );
+        Application();
         ~Application();
 
-        void init( QCommandLineParser* commandLineParser );
+        virtual int newInstance();
 
         class Core;
 
@@ -49,12 +47,12 @@ namespace K3b {
         void slotShutDown();
 
     private:
-        Q_INVOKABLE void checkSystemConfig();
+        Q_INVOKABLE void init();
         Q_INVOKABLE void processCmdLineArgs();
 
-        QScopedPointer<QCommandLineParser> m_cmdLine;
         Core* m_core;
         MainWindow* m_mainWindow;
+        bool m_initialized;
     };
 
 

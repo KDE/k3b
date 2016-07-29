@@ -36,19 +36,23 @@
 #include "k3bmultichoicedialog.h"
 #include "k3bvalidators.h"
 #include "k3bglobalsettings.h"
-#include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KWidgetsAddons/KMessageBox>
+#include <QDir>
+#include <QDomElement>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringList>
+#include <QTimer>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
-#include <QtWidgets/QApplication>
-#include <QtXml/QDomElement>
+#include <KApplication>
+#include <KConfig>
+#include <KDebug>
+#include <KGlobal>
+#include <KInputDialog>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KStatusBar>
 
 #include <string.h>
 #include <stdlib.h>
@@ -190,21 +194,21 @@ void K3b::DataDoc::setVolumeID( const QString& v )
 }
 
 
-void K3b::DataDoc::addUrls( const QList<QUrl>& urls )
+void K3b::DataDoc::addUrls( const KUrl::List& urls )
 {
     addUrlsToDir( urls, root() );
 }
 
 
-void K3b::DataDoc::addUrlsToDir( const QList<QUrl>& l, K3b::DirItem* dir )
+void K3b::DataDoc::addUrlsToDir( const KUrl::List& l, K3b::DirItem* dir )
 {
     if( !dir )
         dir = root();
 
-    QList<QUrl> urls = K3b::convertToLocalUrls(l);
+    KUrl::List urls = K3b::convertToLocalUrls(l);
 
-    for( QList<QUrl>::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
-        const QUrl& url = *it;
+    for( KUrl::List::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
+        const KUrl& url = *it;
         QFileInfo f( url.toLocalFile() );
         QString k3bname = f.absoluteFilePath().section( '/', -1 );
 
@@ -255,9 +259,9 @@ void K3b::DataDoc::addUrlsToDir( const QList<QUrl>& l, K3b::DirItem* dir )
 
             // recursively add all the files in the directory
             QStringList dlist = QDir( f.absoluteFilePath() ).entryList( QDir::AllEntries|QDir::System|QDir::Hidden|QDir::NoDotAndDotDot );
-            QList<QUrl> newUrls;
+            KUrl::List newUrls;
             for( QStringList::ConstIterator it = dlist.constBegin(); it != dlist.constEnd(); ++it )
-                newUrls.append( QUrl::fromLocalFile( f.absoluteFilePath() + '/' + *it ) );
+                newUrls.append( KUrl( f.absoluteFilePath() + '/' + *it ) );
             addUrlsToDir( newUrls, newDirItem );
         }
         else if( f.isSymLink() || f.isFile() ) {
@@ -335,7 +339,7 @@ bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
     QDomNodeList nodes = rootElem->childNodes();
 
     if( nodes.item(0).nodeName() != "general" ) {
-        qDebug() << "(K3b::DataDoc) could not find 'general' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'general' section.";
         return false;
     }
     if( !readGeneralDocumentData( nodes.item(0).toElement() ) )
@@ -345,7 +349,7 @@ bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
     // parse options
     // -----------------------------------------------------------------
     if( nodes.item(1).nodeName() != "options" ) {
-        qDebug() << "(K3b::DataDoc) could not find 'options' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'options' section.";
         return false;
     }
     if( !loadDocumentDataOptions( nodes.item(1).toElement() ) )
@@ -357,7 +361,7 @@ bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
     // parse header
     // -----------------------------------------------------------------
     if( nodes.item(2).nodeName() != "header" ) {
-        qDebug() << "(K3b::DataDoc) could not find 'header' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'header' section.";
         return false;
     }
     if( !loadDocumentDataHeader( nodes.item(2).toElement() ) )
@@ -369,7 +373,7 @@ bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
     // parse files
     // -----------------------------------------------------------------
     if( nodes.item(3).nodeName() != "files" ) {
-        qDebug() << "(K3b::DataDoc) could not find 'files' section.";
+        kDebug() << "(K3b::DataDoc) could not find 'files' section.";
         return false;
     }
 
@@ -517,7 +521,7 @@ bool K3b::DataDoc::loadDocumentDataOptions( QDomElement elem )
             setVerifyData( e.attributeNode( "activated" ).value() == "yes" );
 
         else
-            qDebug() << "(K3b::DataDoc) unknown option entry: " << e.nodeName();
+            kDebug() << "(K3b::DataDoc) unknown option entry: " << e.nodeName();
     }
 
     return true;
@@ -558,7 +562,7 @@ bool K3b::DataDoc::loadDocumentDataHeader( QDomElement headerElem )
             d->isoOptions.setSystemId( e.text() );
 
         else
-            qDebug() << "(K3b::DataDoc) unknown header entry: " << e.nodeName();
+            kDebug() << "(K3b::DataDoc) unknown header entry: " << e.nodeName();
     }
 
     return true;
@@ -575,7 +579,7 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
     if( elem.nodeName() == "file" ) {
         QDomElement urlElem = elem.firstChild().toElement();
         if( urlElem.isNull() ) {
-            qDebug() << "(K3b::DataDoc) file-element without url!";
+            kDebug() << "(K3b::DataDoc) file-element without url!";
             return false;
         }
 
@@ -627,7 +631,7 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
                 newDirItem = static_cast<K3b::DirItem*>(item);
             }
             else {
-                qCritical() << "(K3b::DataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << endl;
+                kError() << "(K3b::DataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << endl;
                 return false;
             }
         }
@@ -647,7 +651,7 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
         newItem = newDirItem;
     }
     else {
-        qDebug() << "(K3b::DataDoc) wrong tag in files-section: " << elem.nodeName();
+        kDebug() << "(K3b::DataDoc) wrong tag in files-section: " << elem.nodeName();
         return false;
     }
 
@@ -889,7 +893,7 @@ void K3b::DataDoc::saveDataItem( K3b::DataItem* item, QDomDocument* doc, QDomEle
 {
     if( K3b::FileItem* fileItem = dynamic_cast<K3b::FileItem*>( item ) ) {
         if( d->oldSession.contains( fileItem ) ) {
-            qDebug() << "(K3b::DataDoc) ignoring fileitem " << fileItem->k3bName() << " from old session while saving...";
+            kDebug() << "(K3b::DataDoc) ignoring fileitem " << fileItem->k3bName() << " from old session while saving...";
         }
         else {
             QDomElement topElem = doc->createElement( "file" );
@@ -951,7 +955,7 @@ void K3b::DataDoc::removeItem( K3b::DataItem* item )
         delete item;
     }
     else
-        qDebug() << "(K3b::DataDoc) tried to remove non-removable entry!";
+        kDebug() << "(K3b::DataDoc) tried to remove non-removable entry!";
 }
 
 
@@ -1019,12 +1023,12 @@ void K3b::DataDoc::endRemoveItems( DirItem* parent, int start, int end )
 void K3b::DataDoc::moveItem( K3b::DataItem* item, K3b::DirItem* newParent )
 {
     if( !item || !newParent ) {
-        qDebug() << "(K3b::DataDoc) item or parentitem was NULL while moving.";
+        kDebug() << "(K3b::DataDoc) item or parentitem was NULL while moving.";
         return;
     }
 
     if( !item->isMoveable() ) {
-        qDebug() << "(K3b::DataDoc) item is not movable! ";
+        kDebug() << "(K3b::DataDoc) item is not movable! ";
         return;
     }
 
@@ -1035,7 +1039,7 @@ void K3b::DataDoc::moveItem( K3b::DataItem* item, K3b::DirItem* newParent )
 void K3b::DataDoc::moveItems( const QList<K3b::DataItem*>& itemList, K3b::DirItem* newParent )
 {
     if( !newParent ) {
-        qDebug() << "(K3b::DataDoc) tried to move items to nowhere...!";
+        kDebug() << "(K3b::DataDoc) tried to move items to nowhere...!";
         return;
     }
 
@@ -1090,7 +1094,7 @@ QString K3b::DataDoc::treatWhitespace( const QString& path )
             }
         }
 
-        qDebug() << "(K3b::DataDoc) converted " << path << " to " << result;
+        kDebug() << "(K3b::DataDoc) converted " << path << " to " << result;
         return result;
     }
     else
@@ -1294,7 +1298,7 @@ bool K3b::DataDoc::importSession( K3b::Device::Device* device, int session )
         d->oldSessionSize = toc.last().lastSector().mode1Bytes();
         d->importedSession = session;
 
-        qDebug() << "(K3b::DataDoc) imported session size: " << KIO::convertSize(d->oldSessionSize);
+        kDebug() << "(K3b::DataDoc) imported session size: " << KIO::convertSize(d->oldSessionSize);
 
         // the track size for DVD+RW media and DVD-RW Overwrite media has nothing to do with the filesystem
         // size. in that case we need to use the filesystem's size (which is ok since it's one track anyway,
@@ -1324,12 +1328,12 @@ bool K3b::DataDoc::importSession( K3b::Device::Device* device, int session )
             return true;
         }
         else {
-            qDebug() << "(K3b::DataDoc::importSession) Could not find primary volume desc.";
+            kDebug() << "(K3b::DataDoc::importSession) Could not find primary volume desc.";
             return false;
         }
     }
     else {
-        qDebug() << "(K3b::DataDoc) unable to read toc.";
+        kDebug() << "(K3b::DataDoc) unable to read toc.";
         return false;
     }
 }
@@ -1524,4 +1528,4 @@ K3b::RootItem* K3b::DataDoc::root() const
     return d->root;
 }
 
-
+#include "k3bdatadoc.moc"

@@ -15,18 +15,19 @@
 #include "k3bdatapreparationjob.h"
 #include "k3bdatadoc.h"
 #include "k3bisooptions.h"
+
 #include "k3bthreadjob.h"
 #include "k3bthread.h"
 #include "k3bdiritem.h"
 #include "k3bfileitem.h"
 #include "k3bglobals.h"
-#include "k3b_i18n.h"
 
-#include <KCoreAddons/KStringHandler>
+#include <KLocale>
+#include <KStringHandler>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
+#include <QFile>
+#include <QFileInfo>
+#include <QList>
 
 namespace {
     QString createItemsString( const QList<K3b::DataItem*>& items, int max )
@@ -216,4 +217,4 @@ bool K3b::DataPreparationJob::run()
     return true;
 }
 
-
+#include "k3bdatapreparationjob.moc"

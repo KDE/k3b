@@ -15,7 +15,8 @@
 #include "k3bsignalwaiter.h"
 #include "k3bjob.h"
 
-#include <QtCore/QEventLoop>
+#include <qeventloop.h>
+#include <qapplication.h>
 
 class K3b::SignalWaiter::Private
 {
@@ -63,4 +64,4 @@ void K3b::SignalWaiter::slotSignal()
     }
 }
 
-
+#include "k3bsignalwaiter.moc"

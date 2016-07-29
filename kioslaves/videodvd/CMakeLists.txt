@@ -1,16 +1,17 @@
 
-add_library(kio_videodvd MODULE videodvd.cpp)
+########### next target ###############
 
-target_link_libraries(kio_videodvd KF5::KIOCore KF5::I18n k3blib k3bdevice)
+set(kio_videodvd_PART_SRCS videodvd.cpp )
 
-generate_export_header(kio_videodvd
-    EXPORT_MACRO_NAME VIDEODVD_EXPORT
-    DEPRECATED_MACRO_NAME VIDEODVD_EXPORT_DEPRECATED
-    EXPORT_FILE_NAME videodvd_export.h
-)
+kde4_add_plugin(kio_videodvd ${kio_videodvd_PART_SRCS})
 
-install(TARGETS kio_videodvd DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(kio_videodvd ${KDE4_KIO_LIBS} k3b k3bdevice )
 
-install( FILES  videodvd.protocol DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS kio_videodvd DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-install( FILES  videodvd.desktop DESTINATION ${DATA_INSTALL_DIR}/konqsidebartng/virtual_folders/services)
+
+########### install files ###############
+
+install( FILES  videodvd.protocol DESTINATION ${SERVICES_INSTALL_DIR} )
+install( FILES  videodvd.desktop DESTINATION ${DATA_INSTALL_DIR}/konqsidebartng/virtual_folders/services )
+

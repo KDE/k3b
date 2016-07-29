@@ -42,37 +42,37 @@
 #include "k3bjob.h"
 #include "k3bmediacache.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KNotifications/KNotification>
-#include <KI18n/KLocalizedString>
-
-#include <QtCore/QCommandLineParser>
-#include <QtCore/QDebug>
+#include <KAboutData>
+#include <KCmdLineArgs>
+#include <KConfig>
+#include <KDebug>
+#include <KGlobal>
+#include <KLocale>
+#include <KNotification>
+#include <QTimer>
 
 
 K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = 0;
 
 
-K3b::Application::Application( int& argc, char** argv )
-    : QApplication( argc, argv ),
-      m_core( nullptr ),
-      m_mainWindow( nullptr )
+K3b::Application::Application()
+    : KUniqueApplication(),
+      m_mainWindow( 0 ),
+      m_initialized( false )
 {
-    KLocalizedString::setApplicationDomain( "k3b" );
-}
-
-void K3b::Application::init( QCommandLineParser* commandLineParser )
-{
-    m_cmdLine.reset( commandLineParser );
+    // insert library i18n data
+    KGlobal::locale()->insertCatalog( "libk3bdevice" );
+    KGlobal::locale()->insertCatalog( "libk3b" );
 
     m_core = new Core( this );
     
-    KConfigGroup generalOptions( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup generalOptions( KGlobal::config(), "General Options" );
 
     Splash* splash = 0;
-    if( !isSessionRestored() ) {
-        if( generalOptions.readEntry("Show splash", true) && !m_cmdLine->isSet( "nosplash" ) ) {
+    if( !qApp->isSessionRestored() ) {
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+
+        if( generalOptions.readEntry("Show splash", true) && args->isSet( "splash" ) ) {
             // we need the correct splash pic
             m_core->m_themeManager->readConfig( generalOptions );
 
@@ -102,9 +102,9 @@ void K3b::Application::init( QCommandLineParser* commandLineParser )
     // Load device, external programs, and stuff.
     //
     QMetaObject::invokeMethod( m_core, "init", Qt::QueuedConnection );
-    QMetaObject::invokeMethod( m_core, "readSettings", Qt::QueuedConnection, Q_ARG( KSharedConfig::Ptr, KSharedConfig::openConfig() ) );
+    QMetaObject::invokeMethod( m_core, "readSettings", Qt::QueuedConnection, Q_ARG( KSharedConfig::Ptr, KGlobal::config() ) );
     QMetaObject::invokeMethod( m_core->deviceManager(), "printDevices", Qt::QueuedConnection );
-    QMetaObject::invokeMethod( this, "checkSystemConfig", Qt::QueuedConnection );
+    QMetaObject::invokeMethod( this, "init", Qt::QueuedConnection );
 
     connect( this, SIGNAL(aboutToQuit()), SLOT(slotShutDown()) );
 }
@@ -116,7 +116,7 @@ K3b::Application::~Application()
 }
 
 
-void K3b::Application::checkSystemConfig()
+void K3b::Application::init()
 {
     if( !isSessionRestored() ) {
         
@@ -129,15 +129,30 @@ void K3b::Application::checkSystemConfig()
 
     // write the current version to make sure checks such as SystemProblemDialog::readCheckSystemConfig
     // use a proper value
-    KConfigGroup generalOptions( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup generalOptions( KGlobal::config(), "General Options" );
     generalOptions.writeEntry( "config version", QString(m_core->version()) );
+    
+    m_initialized = true;
+}
+
+
+int K3b::Application::newInstance()
+{
+    processCmdLineArgs();
+
+    return KUniqueApplication::newInstance();
 }
 
 
 void K3b::Application::processCmdLineArgs()
 {
-    if( !m_cmdLine || !m_mainWindow )
+    // There were cases when newInstance() has been called before init()
+    // (when user run k3b two times at once). It resulted in crash. So we
+    // check here if m_mainWindow is initalized and if not, we go back.
+    if( !m_initialized || !m_mainWindow )
         return;
+
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     bool dialogOpen = false;
 
@@ -149,75 +164,74 @@ void K3b::Application::processCmdLineArgs()
     }
 
     Doc* doc = 0;
-    if( m_cmdLine->isSet( "data" ) ) {
+    if( args->isSet( "data" ) ) {
         doc = m_mainWindow->slotNewDataDoc();
     }
-    else if( m_cmdLine->isSet( "audiocd" ) ) {
+    else if( args->isSet( "audiocd" ) ) {
         doc = m_mainWindow->slotNewAudioDoc();
     }
-    else if( m_cmdLine->isSet( "mixedcd" ) ) {
+    else if( args->isSet( "mixedcd" ) ) {
         doc = m_mainWindow->slotNewMixedDoc();
     }
-    else if( m_cmdLine->isSet( "videocd" ) ) {
+    else if( args->isSet( "videocd" ) ) {
         doc = m_mainWindow->slotNewVcdDoc();
     }
-    else if( m_cmdLine->isSet( "emovix" ) ) {
+    else if( args->isSet( "emovix" ) ) {
         doc = m_mainWindow->slotNewMovixDoc();
     }
-    else if( m_cmdLine->isSet( "videodvd" ) ) {
+    else if( args->isSet( "videodvd" ) ) {
         doc = m_mainWindow->slotNewVideoDvdDoc();
     }
 
     // if we created a doc the urls are used to populate it
     if( doc ) {
-        QList<QUrl> urls;
-        for( QString url : m_cmdLine->positionalArguments() ) {
-            urls.append( QUrl::fromUserInput( url ) );
-        }
+        KUrl::List urls;
+        for( int i = 0; i < args->count(); i++ )
+            urls.append( args->url(i) );
         dynamic_cast<View*>( doc->view() )->addUrls( urls );
     }
     // otherwise we open them as documents
     else {
-        for( QString url : m_cmdLine->positionalArguments() ) {
-            m_mainWindow->openDocument( QUrl::fromUserInput( url ) );
+        for( int i = 0; i < args->count(); i++ ) {
+            m_mainWindow->openDocument( args->url(i) );
         }
     }
 
     // we only allow one dialog to be opened
-    if( m_cmdLine->isSet( "image" ) ) {
+    if( args->isSet( "image" ) ) {
         dialogOpen = true;
         if( k3bcore->jobsRunning() == 0 ) {
-            m_mainWindow->slotWriteImage( QUrl::fromUserInput(m_cmdLine->value( "image" ) ) );
+            m_mainWindow->slotWriteImage( KUrl(args->getOption( "image" ) ) );
         }
     }
-    else if( m_cmdLine->isSet("copy") ) {
+    else if( args->isSet("copy") ) {
         dialogOpen = true;
-        m_mainWindow->mediaCopy( m_core->deviceManager()->findDeviceByUdi( m_cmdLine->value( "copy"  ) ) );
+        m_mainWindow->mediaCopy( m_core->deviceManager()->findDeviceByUdi( args->getOption( "copy"  ) ) );
     }
-    else if( m_cmdLine->isSet("format") ) {
+    else if( args->isSet("format") ) {
         dialogOpen = true;
-        m_mainWindow->formatMedium( m_core->deviceManager()->findDeviceByUdi( m_cmdLine->value( "format" ) ) );
+        m_mainWindow->formatMedium( m_core->deviceManager()->findDeviceByUdi( args->getOption( "format" ) ) );
     }
 
     // no dialog used here
-    if( m_cmdLine->isSet( "cddarip" ) ) {
-        m_mainWindow->cddaRip( m_core->deviceManager()->findDeviceByUdi( m_cmdLine->value( "cddarip" ) ) );
+    if( args->isSet( "cddarip" ) ) {
+        m_mainWindow->cddaRip( m_core->deviceManager()->findDeviceByUdi( args->getOption( "cddarip" ) ) );
     }
-    else if( m_cmdLine->isSet( "videodvdrip" ) ) {
-        m_mainWindow->videoDvdRip( m_core->deviceManager()->findDeviceByUdi( m_cmdLine->value( "videodvdrip" ) ) );
+    else if( args->isSet( "videodvdrip" ) ) {
+        m_mainWindow->videoDvdRip( m_core->deviceManager()->findDeviceByUdi( args->getOption( "videodvdrip" ) ) );
     }
-    else if( m_cmdLine->isSet( "videocdrip" ) ) {
-        m_mainWindow->videoCdRip( m_core->deviceManager()->findDeviceByUdi(  m_cmdLine->value( "videocdrip" ) ) );
+    else if( args->isSet( "videocdrip" ) ) {
+        m_mainWindow->videoCdRip( m_core->deviceManager()->findDeviceByUdi(  args->getOption( "videocdrip" ) ) );
     }
 
-    if( !dialogOpen && m_cmdLine->isSet( "burn" ) ) {
+    if( !dialogOpen && args->isSet( "burn" ) ) {
         if( m_core->projectManager()->activeDoc() ) {
             dialogOpen = true;
             static_cast<View*>( m_core->projectManager()->activeDoc()->view() )->slotBurn();
         }
     }
 
-    m_cmdLine.reset();
+    args->clear();
 }
 
 
@@ -301,7 +315,7 @@ bool K3b::Application::Core::internalBlockDevice( K3b::Device::Device* dev )
 
 #ifdef ENABLE_HAL_SUPPORT
         if( Device::HalConnection::instance()->lock( dev ) != Device::HalConnection::org_freedesktop_Hal_Success )
-            qDebug() << "(K3b::InterferingSystemsHandler) HAL lock failed.";
+            kDebug() << "(K3b::InterferingSystemsHandler) HAL lock failed.";
 #endif
 
         //
@@ -331,4 +345,4 @@ void K3b::Application::Core::internalUnblockDevice( K3b::Device::Device* dev )
     K3b::Core::internalUnblockDevice( dev );
 }
 
-
+#include "k3bapplication.moc"

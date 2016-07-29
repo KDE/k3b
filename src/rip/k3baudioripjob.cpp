@@ -24,7 +24,7 @@
 
 #include <libkcddb/cdinfo.h>
 
-#include <KI18n/KLocalizedString>
+#include <KLocale>
 
 
 namespace K3b {
@@ -310,4 +310,4 @@ void AudioRipJob::trackFinished( int trackIndex, const QString& filename )
 
 } // namespace K3b
 
-
+#include "k3baudioripjob.moc"

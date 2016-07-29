@@ -53,10 +53,10 @@
 // We mean it.
 //
 
-#include "QtCore/QtCore/QObject"
+#include "QtCore/qobject.h"
 #include "QtCore/qpointer.h"
 #include "QtCore/qcoreevent.h"
-#include "QtCore/QtCore/QList"
+#include "QtCore/qlist.h"
 #include "QtCore/qvector.h"
 #include "QtCore/qreadwritelock.h"
 #include "QtCore/qvariant.h"

@@ -19,9 +19,9 @@
 
 #include "k3bdoc.h"
 
-#include "k3b_export.h"
+#include <kio/global.h>
 
-#include <KIOCore/KIO/Global>
+#include "k3b_export.h"
 
 class QString;
 class QDomDocument;
@@ -207,14 +207,14 @@ namespace K3b {
         QList<DataItem*> findItemByLocalPath( const QString& path ) const;
 
     public Q_SLOTS:
-        virtual void addUrls( const QList<QUrl>& urls );
+        virtual void addUrls( const KUrl::List& urls );
 
         /**
          * Add urls syncroneously
          * This method adds files recursively including symlinks, hidden, and system files.
          * If a file already exists the new file's name will be appended a number.
          */
-        virtual void addUrlsToDir( const QList<QUrl>& urls, K3b::DirItem* dir );
+        virtual void addUrlsToDir( const KUrl::List& urls, K3b::DirItem* dir );
 
         void clearImportedSession();
 

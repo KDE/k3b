@@ -19,14 +19,15 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bdevice.h"
 #include "k3bprocess.h"
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QTemporaryDir>
+#include <KTempDir>
+#include <KDebug>
+#include <QDir>
 
 
 
 K3b::VideoDVDRippingPreview::VideoDVDRippingPreview( QObject* parent )
     : QObject( parent ),
+      m_tempDir( 0 ),
       m_process( 0 )
 {
 }
@@ -36,6 +37,7 @@ K3b::VideoDVDRippingPreview::~VideoDVDRippingPreview()
 {
     cancel();
     m_process->deleteLater();
+    delete m_tempDir;
 }
 
 
@@ -45,7 +47,8 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     cancel();
     m_process->deleteLater();
     m_process = 0;
-    m_tempDir.reset();
+    delete m_tempDir;
+    m_tempDir = 0;
     m_canceled = false;
 
     const K3b::ExternalBin* bin = k3bcore->externalBinManager()->binObject("transcode");
@@ -68,7 +71,8 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     m_title = title;
     m_chapter = chapter;
 
-    m_tempDir.reset( new QTemporaryDir );
+    m_tempDir = new KTempDir();
+    m_tempDir->setAutoRemove( true );
 
     m_process = new Process();
     *m_process << bin->path();
@@ -86,17 +90,18 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     *m_process << "-y" << "ppm,null";
     *m_process << "-c" << QString("%1-%2").arg( frame ).arg( frame+1 );
     *m_process << "-Z" << "x200";
-    *m_process << "-o" << m_tempDir->path();
+    *m_process << "-o" << m_tempDir->name();
 
     connect( m_process, SIGNAL(finished(int,QProcess::ExitStatus)),
              this, SLOT(slotTranscodeFinished(int,QProcess::ExitStatus)) );
     if ( !m_process->start(KProcess::ForwardedChannels) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        qDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
+        kDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
         m_process->deleteLater();
         m_process = 0;
-        m_tempDir.reset();
+        delete m_tempDir;
+        m_tempDir = 0;
         emit previewDone( false );
     }
 }
@@ -118,19 +123,20 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
         return;
 
     // read the image
-    QString filename = QDir( m_tempDir->path() ).filePath( "000000.ppm" );// + tempQDir->entryList( QDir::Files ).first();
-    qDebug() << "(K3b::VideoDVDRippingPreview) reading from file " << filename;
+    QString filename = m_tempDir->name() + "000000.ppm";// + tempQDir->entryList( QDir::Files ).first();
+    kDebug() << "(K3b::VideoDVDRippingPreview) reading from file " << filename;
     m_preview = QImage( filename );
     bool success = !m_preview.isNull() && !m_canceled;
 
     // remove temp files
-    m_tempDir.reset();
+    delete m_tempDir;
+    m_tempDir = 0;
 
     // clean up
     m_process->deleteLater();
     m_process = 0;
 
-    qDebug() << "Preview done:" << success;
+    kDebug() << "Preview done:" << success;
 
     // retry the first chapter in case another failed
     if( !success && m_chapter > 1 )
@@ -139,4 +145,4 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
         emit previewDone( success );
 }
 
-
+#include "k3bvideodvdrippingpreview.moc"

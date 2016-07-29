@@ -15,7 +15,7 @@
 #ifndef _K3B_GROWISOFS_HANDLER_H_
 #define _K3B_GROWISOFS_HANDLER_H_
 
-#include <QtCore/QObject>
+#include <qobject.h>
 
 namespace K3b {
     namespace Device {

@@ -14,8 +14,9 @@
 
 #include "k3bimagefilereader.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <qfile.h>
+
+#include <kdebug.h>
 
 
 

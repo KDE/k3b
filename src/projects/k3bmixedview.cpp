@@ -31,16 +31,17 @@
 #include "k3baudiotrackplayer.h"
 #endif // ENABLE_AUDIO_PLAYER
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KToolBar>
+#include <KAction>
+#include <KActionCollection>
+#include <KDebug>
+#include <KLocale>
+#include <KMenu>
+#include <KMessageBox>
+#include <KToolBar>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QSplitter>
-#include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QTreeView>
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QTreeView>
 
 K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
 :
@@ -53,8 +54,8 @@ K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
     m_dirView( new QTreeView( this ) ),
     m_fileViewWidget( new QStackedWidget( this ) )
 {
-    m_model->addSubModel( i18n("Audio Section"), QIcon::fromTheme("media-optical-audio"), m_audioViewImpl->model() );
-    m_model->addSubModel( i18n("Data Section"), QIcon::fromTheme("media-optical-data"), m_dataViewImpl->model(), true );
+    m_model->addSubModel( i18n("Audio Section"), KIcon("media-optical-audio"), m_audioViewImpl->model() );
+    m_model->addSubModel( i18n("Data Section"), KIcon("media-optical-data"), m_dataViewImpl->model(), true );
     m_dirProxy->setSourceModel( m_model );
 
     // Dir panel
@@ -140,13 +141,13 @@ void K3b::MixedView::slotBurn()
             delete dlg;
         }
         else {
-            qDebug() << "(K3b::Doc) Error: no burndialog available.";
+            kDebug() << "(K3b::Doc) Error: no burndialog available.";
         }
     }
 }
 
 
-void K3b::MixedView::addUrls( const QList<QUrl>& urls )
+void K3b::MixedView::addUrls( const KUrl::List& urls )
 {
     if( m_fileViewWidget->currentWidget() == m_dataViewImpl->view() ) {
         QModelIndex parent = m_model->mapToSubModel( m_dirProxy->mapToSource( m_dirView->currentIndex() ) );
@@ -169,6 +170,9 @@ void K3b::MixedView::slotCurrentDirChanged()
     QModelIndex newRoot = m_dirProxy->mapToSource( m_dirView->currentIndex() );
 
     QAbstractItemModel* currentSubModel = m_model->subModelForIndex( newRoot );
+    if( currentSubModel != 0 ) {
+        m_model->setSupportedDragActions( currentSubModel->supportedDragActions() );
+    }
 
     if( currentSubModel == m_dataViewImpl->model() ) {
         m_dataViewImpl->slotCurrentRootChanged( m_model->mapToSubModel( newRoot ) );
@@ -226,4 +230,4 @@ K3b::ProjectBurnDialog* K3b::MixedView::newBurnDialog( QWidget* parent )
     return new K3b::MixedBurnDialog( m_doc, parent );
 }
 
-
+#include "k3bmixedview.moc"

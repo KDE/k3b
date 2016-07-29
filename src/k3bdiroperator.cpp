@@ -20,17 +20,16 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <KBookmarks/KBookmarkMenu>
-#include <KConfigCore/KConfigGroup>
-#include <KI18n/KLocalizedString>
-#include <KXmlGui/KActionCollection>
-#include <KWidgetsAddons/KActionMenu>
+#include <QDir>
 
-#include <QtCore/QDir>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenu>
+#include <KAction>
+#include <KActionCollection>
+#include <KBookmarkMenu>
+#include <KConfigGroup>
+#include <KMenu>
+#include <KStandardDirs>
 
-K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
+K3b::DirOperator::DirOperator(const KUrl& url, QWidget* parent )
     : KDirOperator( url, parent )
 {
     setMode( KFile::Files );
@@ -44,14 +43,12 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
 
     // add the bookmark stuff
 
-    QString dirPath = QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation );
-    QDir().mkpath( dirPath );
-    QString bookmarksFile = dirPath + '/' + QString::fromLatin1("k3b/bookmarks.xml");
+    QString bookmarksFile = KStandardDirs::locateLocal("data", QString::fromLatin1("k3b/bookmarks.xml"));
     KBookmarkManager* bmMan = KBookmarkManager::managerForFile( bookmarksFile, "k3b" );
     bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
     bmMan->setUpdate( true );
 
-    m_bmPopup = new KActionMenu( QIcon::fromTheme("bookmarks"),i18n("Bookmarks"), this);
+    m_bmPopup = new KActionMenu( KIcon("bookmarks"),i18n("Bookmarks"), this);
     m_bmPopup->setDelayed( false );
     m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->menu(), actionCollection() );
 
@@ -90,7 +87,7 @@ void K3b::DirOperator::readConfig( const KConfigGroup& grp )
     // There seems to be another bug in KDELibs which shows
     // neverending busy cursor when we call setUrl() after setView()
     // so we call it in the right order (see bug 113649)
-    setUrl( QUrl::fromLocalFile(lastUrl), true );
+    setUrl( KUrl(lastUrl), true );
     setView( KFile::Default );
 
     emit urlEntered( url() );
@@ -113,13 +110,18 @@ void K3b::DirOperator::openBookmark(const KBookmark & bm, Qt::MouseButtons, Qt::
 
 QString K3b::DirOperator::currentTitle() const
 {
-    return url().toDisplayString( QUrl::PreferLocalFile | QUrl::StripTrailingSlash );
+    const KUrl& u = url();
+    if (u.isLocalFile()) {
+        return u.path( KUrl::RemoveTrailingSlash );
+    } else {
+        return u.prettyUrl();
+    }
 }
 
 
-QUrl K3b::DirOperator::currentUrl() const
+QString K3b::DirOperator::currentUrl() const
 {
-    return url();
+    return url().prettyUrl();
 }
 
 
@@ -153,7 +155,7 @@ void K3b::DirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
 
 void K3b::DirOperator::slotAddFilesToProject()
 {
-    QList<QUrl> files;
+    KUrl::List files;
     QList<KFileItem> items(selectedItems());
     Q_FOREACH( const KFileItem& fileItem, items ) {
         files.append( fileItem.url() );
@@ -163,5 +165,5 @@ void K3b::DirOperator::slotAddFilesToProject()
     }
 }
 
-
+#include "k3bdiroperator.moc"
 

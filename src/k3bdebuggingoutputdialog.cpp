@@ -21,53 +21,41 @@
 #include "k3bversion.h"
 #include "k3bglobals.h"
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KStandardGuiItem>
-#include <KWidgetsAddons/KMessageBox>
+#include <QTextEdit>
+#include <qcursor.h>
+#include <qfile.h>
+#include <qclipboard.h>
+#include <QTextStream>
 
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-#include <QtGui/QClipboard>
-#include <QtGui/QCursor>
-#include <QtGui/QFontDatabase>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTextEdit>
-#include <QtWidgets/QVBoxLayout>
+#include <klocale.h>
+#include <KStandardGuiItem>
+#include <kglobalsettings.h>
+#include <kapplication.h>
+#include <kfiledialog.h>
+#include <kmessagebox.h>
 
 
 K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
-  : QDialog( parent)
+  : KDialog( parent)
 {
   setModal(true);
-  setWindowTitle(i18n("Debugging Output"));
+  setCaption(i18n("Debugging Output"));
+  setButtons(Close|User1|User2);
+  setDefaultButton(Close);
+  setButtonGuiItem(User1, KStandardGuiItem::saveAs());
+  setButtonGuiItem(User2, KGuiItem( i18n("Copy"), "edit-copy" ));
+  setButtonToolTip( User1, i18n("Save to file") );
+  setButtonToolTip( User2, i18n("Copy to clipboard") );
 
   debugView = new QTextEdit( this );
   debugView->setReadOnly(true);
   debugView->setAcceptRichText( false );
-  debugView->setCurrentFont( QFontDatabase::systemFont( QFontDatabase::FixedFont ) );
+  debugView->setCurrentFont( KGlobalSettings::fixedFont() );
   debugView->setWordWrapMode( QTextOption::NoWrap );
 
-  QPushButton* saveButton = new QPushButton( this );
-  KStandardGuiItem::assign( saveButton, KStandardGuiItem::SaveAs );
-  saveButton->setToolTip( i18n("Save to file") );
-  connect( saveButton, SIGNAL(clicked()), this, SLOT(slotSaveAsClicked()) );
-
-  QPushButton* copyButton = new QPushButton( this );
-  KGuiItem::assign( copyButton, KGuiItem( i18n("Copy"), QString::fromLatin1( "edit-copy" ), i18n("Copy to clipboard") ) );
-  connect( copyButton, SIGNAL(clicked()), this, SLOT(slotCopyClicked()) );
-
-  QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
-  buttonBox->addButton( QDialogButtonBox::Close );
-  buttonBox->addButton( saveButton, QDialogButtonBox::NoRole );
-  buttonBox->addButton( copyButton, QDialogButtonBox::NoRole );
-  connect( buttonBox->button( QDialogButtonBox::Close ), SIGNAL(clicked()), this, SLOT(accept()) );
-
-  QVBoxLayout* layout = new QVBoxLayout( this );
-  layout->addWidget( debugView );
-  layout->addWidget( buttonBox );
+  setMainWidget( debugView );
+  connect( this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()) );
+  connect( this, SIGNAL(user2Clicked()), this, SLOT(slotUser2()) );
 
   resize( 600, 300 );
 }
@@ -84,9 +72,9 @@ void K3b::DebuggingOutputDialog::setOutput( const QString& data )
 }
 
 
-void K3b::DebuggingOutputDialog::slotSaveAsClicked()
+void K3b::DebuggingOutputDialog::slotUser1()
 {
-  QString filename = QFileDialog::getSaveFileName( this );
+  QString filename = KFileDialog::getSaveFileName();
   if( !filename.isEmpty() ) {
     QFile f( filename );
     if( !f.exists() || KMessageBox::warningContinueCancel( this,
@@ -106,9 +94,9 @@ void K3b::DebuggingOutputDialog::slotSaveAsClicked()
 }
 
 
-void K3b::DebuggingOutputDialog::slotCopyClicked()
+void K3b::DebuggingOutputDialog::slotUser2()
 {
   QApplication::clipboard()->setText( debugView->toPlainText(), QClipboard::Clipboard );
 }
 
-
+#include "k3bdebuggingoutputdialog.moc"

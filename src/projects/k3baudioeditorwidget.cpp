@@ -15,17 +15,17 @@
 
 #include "k3baudioeditorwidget.h"
 
-#include <QtCore/QLinkedList>
-#include <QtGui/QCursor>
-#include <QtGui/QHelpEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QPolygon>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QToolTip>
+#include <QApplication>
+#include <QCursor>
+#include <QDesktopWidget>
+#include <QFrame>
+#include <QHelpEvent>
+#include <QLinkedList>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QPolygon>
+#include <QToolTip>
 
 
 
@@ -877,4 +877,4 @@ int K3b::AudioEditorWidget::msfToPos( const K3b::Msf& msf ) const
 }
 
 
-
+#include "k3baudioeditorwidget.moc"

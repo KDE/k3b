@@ -16,14 +16,14 @@
 #ifndef K3BDEVICE_H
 #define K3BDEVICE_H
 
+#include <qglobal.h>
+#include <QVarLengthArray>
+
 #include "k3bdevicetypes.h"
 #include "k3bdiskinfo.h"
 #include "k3bcdtext.h"
 #include "k3bmsf.h"
 #include "k3bdevice_export.h"
-
-#include <qglobal.h>
-#include <QtCore/QVarLengthArray>
 
 #if defined(__FreeBSD_kernel__)
 #undef Q_OS_LINUX

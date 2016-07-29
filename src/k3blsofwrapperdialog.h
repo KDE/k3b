@@ -15,7 +15,7 @@
 #ifndef _K3B_LSOF_WRAPPER_DIALOG_H_
 #define _K3B_LSOF_WRAPPER_DIALOG_H_
 
-#include <QtWidgets/QDialog>
+#include <KDialog>
 
 class QLabel;
 
@@ -25,7 +25,7 @@ namespace K3b {
         class Device;
     }
 
-    class LsofWrapperDialog : public QDialog
+    class LsofWrapperDialog : public KDialog
     {
         Q_OBJECT
 

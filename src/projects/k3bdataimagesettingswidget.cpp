@@ -15,18 +15,20 @@
 #include "k3bdataimagesettingswidget.h"
 #include "k3bdataadvancedimagesettingsdialog.h"
 #include "k3bdatavolumedescdialog.h"
+
 #include "k3bisooptions.h"
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KDebug>
+#include <KDialog>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
 
 // indices for the filesystems combobox
 static const int FS_LINUX_ONLY = 0;
@@ -233,7 +235,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
     m_customFsDlg->save( o );
     for( int i = 0; i < FS_CUSTOM; ++i ) {
         if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
-            qDebug() << "(K3b::DataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
+            kDebug() << "(K3b::DataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
             m_comboFilesystems->setCurrentIndex( i );
             break;
         }
@@ -356,4 +358,4 @@ void K3b::DataImageSettingsWidget::save( K3b::IsoOptions& o )
     o.setVolumeID( m_editVolumeName->text() );
 }
 
-
+#include "k3bdataimagesettingswidget.moc"

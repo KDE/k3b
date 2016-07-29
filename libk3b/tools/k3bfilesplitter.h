@@ -15,10 +15,10 @@
 #ifndef _K3B_FILE_SPLITTER_H_
 #define _K3B_FILE_SPLITTER_H_
 
-#include "k3b_export.h"
+#include <qiodevice.h>
+#include <qstring.h>
 
-#include <QtCore/QIODevice>
-#include <QtCore/QString>
+#include "k3b_export.h"
 
 
 namespace K3b {

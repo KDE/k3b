@@ -18,12 +18,12 @@
 #include "k3bmsfedit.h"
 #include "k3bglobals.h"
 
-#include <QtCore/QStringList>
-#include <QtGui/QFontMetrics>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QStyleOptionSpinBox>
+#include <QApplication>
+#include <QFontMetrics>
+#include <QLineEdit>
+#include <QStringList>
+#include <QStyle>
+#include <QStyleOptionSpinBox>
 
 #include <cmath>
 
@@ -205,4 +205,4 @@ QAbstractSpinBox::StepEnabled K3b::MsfEdit::stepEnabled () const
     return stepEnabled;
 }
 
-#include "moc_k3bmsfedit.cpp"
+#include "k3bmsfedit.moc"

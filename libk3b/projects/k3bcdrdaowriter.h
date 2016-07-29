@@ -17,10 +17,10 @@
 #ifndef K3B_CDRDAO_WRITER_H
 #define K3B_CDRDAO_WRITER_H
 
+#include <qprocess.h>
+
 #include "k3babstractwriter.h"
 #include "k3b_export.h"
-
-#include <QtCore/QProcess>
 
 class QTcpSocket;
 

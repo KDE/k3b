@@ -22,7 +22,7 @@
 
 #include <libkcddb/cdinfo.h>
 
-#include <KI18n/KLocalizedString>
+#include <KLocale>
 
 
 namespace K3b {
@@ -106,4 +106,4 @@ void AudioProjectConvertingJob::trackFinished( int trackIndex, const QString& /*
 
 } // namespace K3b
 
-
+#include "k3baudioprojectconvertingjob.moc"

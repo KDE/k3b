@@ -19,13 +19,15 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 #include "k3baudiodatasource.h"
+
 #include "k3bthread.h"
 #include "k3bwavefilewriter.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QIODevice>
-#include <QtCore/QFile>
+#include <KLocale>
+#include <KDebug>
+
+#include <QIODevice>
+#include <QFile>
 
 #include <unistd.h>
 
@@ -122,7 +124,7 @@ bool K3b::AudioImager::run()
             else {
                 qint64 w = d->ioDev->write( buffer, read );
                 if ( w != read ) {
-                    qDebug() << "(K3b::AudioImager::WorkThread) writing to device" << d->ioDev << "failed:" << read << w;
+                    kDebug() << "(K3b::AudioImager::WorkThread) writing to device" << d->ioDev << "failed:" << read << w;
                     d->lastError = K3b::AudioImager::ERROR_FD_WRITE;
                     return false;
                 }
@@ -146,7 +148,7 @@ bool K3b::AudioImager::run()
 
         if( read < 0 ) {
             emit infoMessage( i18n("Error while decoding track %1.", track->trackNumber()), K3b::Job::MessageError );
-            qDebug() << "(K3b::AudioImager::WorkThread) read error on track " << track->trackNumber()
+            kDebug() << "(K3b::AudioImager::WorkThread) read error on track " << track->trackNumber()
                      << " at pos " << K3b::Msf(trackRead/2352) << endl;
             d->lastError = K3b::AudioImager::ERROR_DECODING_TRACK;
             return false;
@@ -156,4 +158,4 @@ bool K3b::AudioImager::run()
     return true;
 }
 
-
+#include "k3baudioimager.moc"

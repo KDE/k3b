@@ -25,25 +25,24 @@
 #include "k3bvideodvdrippingwidget.h"
 #include "k3bvideodvdtitletranscodingjob.h"
 
-#include <KCompletion/KComboBox>
-#include <KCompletion/KLineEdit>
-#include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-#include <KIOWidgets/KUrlRequester>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
+#include <KComboBox>
+#include <KConfig>
+#include <KLineEdit>
+#include <KLocale>
+#include <KMessageBox>
+#include <KUrlRequester>
+#include <kio/global.h>
 
-#include <QtCore/QList>
-#include <QtCore/QLocale>
-#include <QtCore/QMap>
-#include <QtCore/QVector>
-#include <QtGui/QFontMetrics>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QStyle>
+#include <QCheckBox>
+#include <QFontMetrics>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLayout>
+#include <QList>
+#include <QMap>
+#include <QSpinBox>
+#include <QStyle>
+#include <QVector>
 
 
 namespace {
@@ -262,7 +261,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
                 break;
             case PATTERN_LANGUAGE_NAME:
                 if( title.numAudioStreams() > 0 )
-                    f.append( QLocale( title.audioStream( info.audioStream ).langCode() ).nativeLanguageName() );
+                    f.append( KGlobal::locale()->languageCodeToName( title.audioStream( info.audioStream ).langCode() ) );
                 break;
             case PATTERN_AUDIO_FORMAT:
                 // FIXME: what about MPEG audio streams?
@@ -298,7 +297,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
                     f.append( "16:9" );
                 break;
             case PATTERN_CURRENT_DATE:
-                f.append( QLocale().toString( QDate::currentDate() ) );
+                f.append( KGlobal::locale()->formatDate( QDate::currentDate() ) );
                 break;
             default:
                 f.append( pattern[i-1] );
@@ -340,9 +339,9 @@ K3b::VideoDVDRippingDialog::VideoDVDRippingDialog( const K3b::VideoDVD::VideoDVD
     d->w = new K3b::VideoDVDRippingWidget( frame );
     d->w->m_titleView->setModel( d->audioModel );
     d->w->m_titleView->expandAll();
-    d->w->m_titleView->header()->setSectionResizeMode( VideoDVDAudioModel::TitleColumn, QHeaderView::ResizeToContents );
-    d->w->m_titleView->header()->setSectionResizeMode( VideoDVDAudioModel::VideoSizeColumn, QHeaderView::ResizeToContents );
-    d->w->m_titleView->header()->setSectionResizeMode( VideoDVDAudioModel::FileSizeColumn, QHeaderView::ResizeToContents );
+    d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::TitleColumn, QHeaderView::ResizeToContents );
+    d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::VideoSizeColumn, QHeaderView::ResizeToContents );
+    d->w->m_titleView->header()->setResizeMode( VideoDVDAudioModel::FileSizeColumn, QHeaderView::ResizeToContents );
 
     QHBoxLayout* frameLayout = new QHBoxLayout( frame );
     frameLayout->setContentsMargins( 0, 0, 0, 0 );
@@ -566,4 +565,4 @@ void K3b::VideoDVDRippingDialog::slotStartClicked()
     close();
 }
 
-
+#include "k3bvideodvdrippingdialog.moc"

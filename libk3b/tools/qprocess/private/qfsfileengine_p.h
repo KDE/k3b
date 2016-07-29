@@ -56,7 +56,7 @@
 #include "qplatformdefs.h"
 #include "qfsfileengine.h"
 #include "private/qabstractfileengine_p.h"
-#include <QtCore/QHash>
+#include <qhash.h>
 
 #include "k3b_export.h"
 

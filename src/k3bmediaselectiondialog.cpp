@@ -17,35 +17,32 @@
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
-#include <KI18n/KLocalizedString>
+#include <klocale.h>
 
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QPushButton>
+#include <qlabel.h>
+#include <QGridLayout>
 
 
 K3b::MediaSelectionDialog::MediaSelectionDialog( QWidget* parent,
                                                  const QString& title,
                                                  const QString& text,
                                                  bool modal )
-    : QDialog( parent)
+    : KDialog( parent)
 {
-    setWindowTitle(title.isEmpty() ? i18n("Medium Selection") : title);
+    QWidget *widget = new QWidget();
+    setMainWidget(widget);
+    setCaption(title.isEmpty() ? i18n("Medium Selection") : title);
+    setButtons (Ok|Cancel);
     setModal(modal);
+    setDefaultButton(Ok);
+    QGridLayout* lay = new QGridLayout( widget );
 
-    QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, this );
-    m_combo = new K3b::MediaSelectionComboBox( this );
+    QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a medium:") : text, widget );
+    m_combo = new K3b::MediaSelectionComboBox( widget );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
-    m_okButton = buttonBox->button( QDialogButtonBox::Ok );
-    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
-    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
-
-    QVBoxLayout* lay = new QVBoxLayout( this );
-    lay->addWidget( label );
-    lay->addWidget( m_combo );
-    lay->addWidget( buttonBox );
+    lay->addWidget( label, 0, 0 );
+    lay->addWidget( m_combo, 1, 0 );
+    lay->setRowStretch( 2, 1 );
 
     connect( m_combo, SIGNAL(selectionChanged(K3b::Device::Device*)),
              this, SLOT(slotSelectionChanged(K3b::Device::Device*)) );
@@ -85,7 +82,7 @@ K3b::Device::Device* K3b::MediaSelectionDialog::selectedDevice() const
 
 void K3b::MediaSelectionDialog::slotSelectionChanged( K3b::Device::Device* dev )
 {
-    m_okButton->setEnabled( dev != 0 );
+    enableButtonOk( dev != 0 );
 }
 
 
@@ -117,4 +114,4 @@ K3b::Device::Device* K3b::MediaSelectionDialog::selectMedium( Device::MediaTypes
     }
 }
 
-
+#include "k3bmediaselectiondialog.moc"

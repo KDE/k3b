@@ -19,14 +19,17 @@
 #include "k3bprocess.h"
 #include "k3bglobals.h"
 #include "k3bisooptions.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QList>
-#include <QtCore/QTemporaryDir>
-#include <QtCore/QTextStream>
+#include <ktemporaryfile.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
+#include <klocale.h>
+
+#include <qtextstream.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qlist.h>
 
 #include <unistd.h>
 
@@ -36,20 +39,21 @@ class K3b::VideoDvdImager::Private
 public:
     K3b::VideoDvdDoc* doc;
 
-    QScopedPointer<QTemporaryDir> tempDir;
+    QString tempPath;
 };
 
 
 K3b::VideoDvdImager::VideoDvdImager( K3b::VideoDvdDoc* doc, K3b::JobHandler* jh, QObject* parent )
-    : K3b::IsoImager( doc, jh, parent ),
-      d( new Private )
+    : K3b::IsoImager( doc, jh, parent )
 {
+    d = new Private;
     d->doc = doc;
 }
 
 
 K3b::VideoDvdImager::~VideoDvdImager()
 {
+    delete d;
 }
 
 
@@ -101,17 +105,17 @@ int K3b::VideoDvdImager::writePathSpec()
     //
     // We do this here since K3b::IsoImager::start calls cleanup which deletes the temp files
     //
-    d->tempDir.reset( new QTemporaryDir( "k3bVideoDvdXXXXXX" ) );
-    QDir dir( d->tempDir->path() );
-    qDebug() << "(K3b::VideoDvdImager) creating temp dir: " << dir.path();
-    if( !dir.mkdir( dir.path() ) ) {
-        emit infoMessage( i18n("Unable to create temporary folder '%1'.",dir.path()), MessageError );
+    QDir dir( KGlobal::dirs()->resourceDirs( "tmp" ).first() );
+    d->tempPath = K3b::findUniqueFilePrefix( "k3bVideoDvd", dir.path() );
+    kDebug() << "(K3b::VideoDvdImager) creating temp dir: " << d->tempPath;
+    if( !dir.mkdir( d->tempPath ) ) {
+        emit infoMessage( i18n("Unable to create temporary folder '%1'.",d->tempPath), MessageError );
         return -1;
     }
 
-    dir.cd( dir.path() );
+    dir.cd( d->tempPath );
     if( !dir.mkdir( "VIDEO_TS" ) ) {
-        emit infoMessage( i18n("Unable to create temporary folder '%1'.",dir.path() + "/VIDEO_TS"), MessageError );
+        emit infoMessage( i18n("Unable to create temporary folder '%1'.",d->tempPath + "/VIDEO_TS"), MessageError );
         return -1;
     }
 
@@ -123,8 +127,8 @@ int K3b::VideoDvdImager::writePathSpec()
 
         // convert to upper case names
         if( ::symlink( QFile::encodeName( item->localPath() ),
-                       QFile::encodeName( dir.path() + "/VIDEO_TS/" + item->k3bName().toUpper() ) ) == -1 ) {
-            emit infoMessage( i18n("Unable to link temporary file in folder %1.", dir.path() ), MessageError );
+                       QFile::encodeName( d->tempPath + "/VIDEO_TS/" + item->k3bName().toUpper() ) ) == -1 ) {
+            emit infoMessage( i18n("Unable to link temporary file in folder %1.", d->tempPath ), MessageError );
             return -1;
         }
     }
@@ -178,7 +182,7 @@ bool K3b::VideoDvdImager::addMkisofsParameters( bool printSize )
     if( K3b::IsoImager::addMkisofsParameters( printSize ) ) {
         *m_process << "-dvd-video";
         *m_process << "-f"; // follow symlinks
-        *m_process << (d->tempDir ? d->tempDir->path() : QString());
+        *m_process << d->tempPath;
         return true;
     }
     else
@@ -188,7 +192,17 @@ bool K3b::VideoDvdImager::addMkisofsParameters( bool printSize )
 
 void K3b::VideoDvdImager::cleanup()
 {
-    d->tempDir.reset();
+    if( QFile::exists( d->tempPath ) ) {
+        QDir dir( d->tempPath );
+        dir.cd( "VIDEO_TS" );
+        Q_FOREACH( K3b::DataItem* item, d->doc->videoTsDir()->children() )
+            dir.remove( item->k3bName().toUpper() );
+        dir.cdUp();
+        dir.rmdir( "VIDEO_TS" );
+        dir.cdUp();
+        dir.rmdir( d->tempPath );
+    }
+    d->tempPath = QString();
 
     K3b::IsoImager::cleanup();
 }
@@ -203,3 +217,5 @@ void K3b::VideoDvdImager::slotReceivedStderr( const QString& line )
     else
         K3b::IsoImager::slotReceivedStderr( line );
 }
+
+#include "k3bvideodvdimager.moc"

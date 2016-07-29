@@ -15,10 +15,12 @@
 #include "k3bmodelutilstest.h"
 #include "k3bmodelutils.h"
 
-#include <QtGui/QStandardItemModel>
-#include <QtTest/QTest>
+#include <qtest_kde.h>
 
-QTEST_GUILESS_MAIN( ModelUtilsTest )
+#include <QtTest/QTest>
+#include <QtGui/QStandardItemModel>
+
+QTEST_KDEMAIN_CORE( ModelUtilsTest )
 
 ModelUtilsTest::ModelUtilsTest()
 {
@@ -139,4 +141,4 @@ void ModelUtilsTest::testSetCommonText()
     QCOMPARE( listModel->item( 2 )->text(), QString( "b" ) );
 }
 
-
+#include "k3bmodelutilstest.moc"

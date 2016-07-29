@@ -21,19 +21,16 @@
 #include "k3bprocess.h"
 #include "k3bcore.h"
 #include "k3bexternalbinmanager.h"
-#include "k3bplugin_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KDebug>
+#include <KLocale>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QFile>
+#include <QFileInfo>
 
 #include <sys/types.h>
 
-
-K3B_EXPORT_PLUGIN( k3bsoxencoder, K3bSoxEncoder )
 
 namespace {
 
@@ -139,7 +136,7 @@ void K3bSoxEncoder::finishEncoderInternal()
 void K3bSoxEncoder::slotSoxFinished( int exitCode, QProcess::ExitStatus exitStatus )
 {
     if( (exitStatus != QProcess::NormalExit) || (exitCode != 0) )
-        qDebug() << "(K3bSoxEncoder) sox exited with error.";
+        kDebug() << "(K3bSoxEncoder) sox exited with error.";
 }
 
 
@@ -191,7 +188,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
         // output settings
         *d->process << "-t" << extension;
 
-        KSharedConfig::Ptr c = KSharedConfig::openConfig();
+        KSharedConfig::Ptr c = KGlobal::config();
         KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
         if( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) ) {
             *d->process << "-r" << QString::number( grp.readEntry( "samplerate", DEFAULT_SAMPLE_RATE ) )
@@ -221,14 +218,14 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
 
         *d->process << d->fileName;
 
-        qDebug() << "***** sox parameters:";
+        kDebug() << "***** sox parameters:";
         QString s = d->process->joinedArgs();
-        qDebug() << s << flush;
+        kDebug() << s << flush;
 
         return d->process->start( KProcess::MergedChannels );
     }
     else {
-        qDebug() << "(K3bSoxEncoder) could not find sox bin.";
+        kDebug() << "(K3bSoxEncoder) could not find sox bin.";
         return false;
     }
 }
@@ -245,7 +242,7 @@ qint64 K3bSoxEncoder::encodeInternal( const char* data, qint64 len )
 
 void K3bSoxEncoder::slotSoxOutputLine( const QString& line )
 {
-    qDebug() << "(sox) " << line;
+    kDebug() << "(sox) " << line;
 }
 
 
@@ -329,7 +326,7 @@ QString K3bSoxEncoder::fileTypeComment( const QString& ext ) const
 long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
     // for now we make a rough assumption based on the settings
-    KSharedConfig::Ptr c = KSharedConfig::openConfig();
+    KSharedConfig::Ptr c = KGlobal::config();
     KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
     if( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) ) {
         int sr =  grp.readEntry( "samplerate", DEFAULT_SAMPLE_RATE );

@@ -16,8 +16,8 @@
 #define _K3B_DVD_BOOKTYPE_JOB_H_
 
 
+#include <qprocess.h>
 #include "k3bjob.h"
-#include <QtCore/QProcess>
 
 
 namespace K3b {

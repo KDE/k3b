@@ -16,15 +16,16 @@
 
 #include "k3bvideocdinfo.h"
 #include "k3bcore.h"
+
+#include <KLocale>
+#include <KConfig>
+#include <KDebug>
+
+#include <QDomDocument>
+#include <QDomElement>
+
 #include "k3bprocess.h"
 #include "k3bexternalbinmanager.h"
-
-#include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-
-#include <QtCore/QDebug>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
 
 
 K3b::VideoCdInfo::VideoCdInfo( QObject* parent )
@@ -51,7 +52,7 @@ void K3b::VideoCdInfo::cancelAll()
 void K3b::VideoCdInfo::info( const QString& device )
 {
     if ( !k3bcore ->externalBinManager() ->foundBin( "vcdxrip" ) ) {
-        qDebug() << "(K3b::VideoCdInfo::info) could not find vcdxrip executable";
+        kDebug() << "(K3b::VideoCdInfo::info) could not find vcdxrip executable";
         emit infoFinished( false );
         return ;
     }
@@ -73,7 +74,7 @@ void K3b::VideoCdInfo::info( const QString& device )
              this, SLOT(slotInfoFinished(int,QProcess::ExitStatus)) );
 
     if ( !m_process->start( KProcess::SeparateChannels ) ) {
-        qDebug() << "(K3b::VideoCdInfo::info) could not start vcdxrip";
+        kDebug() << "(K3b::VideoCdInfo::info) could not start vcdxrip";
         cancelAll();
         emit infoFinished( false );
     }
@@ -87,7 +88,7 @@ void K3b::VideoCdInfo::slotParseOutput( const QString& inp )
     if ( m_isXml )
         m_xmlData += inp;
     else
-        qDebug() << "(K3b::VideoCdInfo::slotParseOutput) " << inp;
+        kDebug() << "(K3b::VideoCdInfo::slotParseOutput) " << inp;
 
     if ( inp.contains( "</videocd>" ) )
         m_isXml = false;
@@ -102,19 +103,19 @@ void K3b::VideoCdInfo::slotInfoFinished( int exitCode, QProcess::ExitStatus exit
                 break;
             default:
                 cancelAll();
-                qDebug() << "vcdxrip finished with exit code" << exitCode;
+                kDebug() << "vcdxrip finished with exit code" << exitCode;
                 emit infoFinished( false );
                 return ;
         }
     } else {
         cancelAll();
-        qDebug() << "vcdxrip crashed!";
+        kDebug() << "vcdxrip crashed!";
         emit infoFinished( false );
         return ;
     }
 
     if ( m_xmlData.isEmpty() ) {
-        qDebug() << "XML data empty!";
+        kDebug() << "XML data empty!";
         emit infoFinished( false );
         return ;
     }
@@ -168,7 +169,7 @@ void K3b::VideoCdInfo::parseXmlData()
                                  );
             }
         } else {
-            qDebug() << QString( "(K3b::VideoCdInfo::parseXmlData) tagName '%1' not used" ).arg( tagName );
+            kDebug() << QString( "(K3b::VideoCdInfo::parseXmlData) tagName '%1' not used" ).arg( tagName );
         }
     }
 }
@@ -194,7 +195,7 @@ const K3b::VideoCdInfoResultEntry& K3b::VideoCdInfoResult::entry( int number, in
                 return m_emptyEntry;
             return m_sequenceEntry[ number ];
         default:
-            qDebug() << "(K3b::VideoCdInfoResult::entry) not supported entrytype.";
+            kDebug() << "(K3b::VideoCdInfoResult::entry) not supported entrytype.";
     }
 
     return m_emptyEntry;
@@ -215,7 +216,7 @@ void K3b::VideoCdInfoResult::addEntry( const K3b::VideoCdInfoResultEntry& entry,
             m_sequenceEntry.append( entry );
             break;
         default:
-            qDebug() << "(K3b::VideoCdInfoResult::addEntry) not supported entrytype.";
+            kDebug() << "(K3b::VideoCdInfoResult::addEntry) not supported entrytype.";
     }
 }
 
@@ -229,10 +230,10 @@ int K3b::VideoCdInfoResult::foundEntries( int type ) const
         case K3b::VideoCdInfoResult::SEQUENCE:
             return m_sequenceEntry.count();
         default:
-            qDebug() << "(K3b::VideoCdInfoResult::addEntry) not supported entrytype.";
+            kDebug() << "(K3b::VideoCdInfoResult::addEntry) not supported entrytype.";
     }
     return 0;
 }
 
-
+#include "k3bvideocdinfo.moc"
 

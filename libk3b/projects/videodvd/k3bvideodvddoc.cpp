@@ -18,7 +18,7 @@
 #include "k3bdiritem.h"
 #include "k3bisooptions.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 
 
 K3b::VideoDvdDoc::VideoDvdDoc( QObject* parent )

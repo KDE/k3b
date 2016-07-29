@@ -15,16 +15,16 @@
 #ifndef _K3B_DATA_URL_ADDING_DIALOG_H_
 #define _K3B_DATA_URL_ADDING_DIALOG_H_
 
-#include <QtCore/QUrl>
+#include <KDialog>
+#include <KUrl>
 #include <QtCore/QDir>
 #include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QPair>
 #include <QtCore/QStringList>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QLabel>
+#include <QtGui/QLabel>
 
-#include <KIOCore/KIO/Global>
+#include <kio/global.h>
 
 class QProgressBar;
 class QLabel;
@@ -37,7 +37,7 @@ namespace K3b {
     class DirSizeJob;
     class DataDoc;
 
-    class DataUrlAddingDialog : public QDialog
+    class DataUrlAddingDialog : public KDialog
     {
         Q_OBJECT
 
@@ -48,7 +48,7 @@ namespace K3b {
          * shows DataUrlAddingDialog in non-blocking fashion
          * (doesn't wait till dialog is closed)
          */
-        static void addUrls( const QList<QUrl>& urls, DirItem* dir,
+        static void addUrls( const KUrl::List& urls, DirItem* dir,
                             QWidget* parent = 0 );
 
         static void moveItems( const QList<DataItem*>& items, DirItem* dir,
@@ -62,14 +62,14 @@ namespace K3b {
         void slotStartCopyMoveItems();
         void slotAddUrls();
         void slotCopyMoveItems();
-        void reject() override;
+        void slotCancel();
         void slotDirSizeDone( bool );
         void updateProgress();
 
     private:
-        DataUrlAddingDialog( const QList<QUrl>& urls, DirItem* dir, QWidget* parent = 0 );
+        DataUrlAddingDialog( const KUrl::List& urls, DirItem* dir, QWidget* parent = 0 );
         DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent = 0 );
-        DataUrlAddingDialog( DirItem* dir, QWidget* parent );
+        void init();
         bool getNewName( const QString& oldName, DirItem* dir, QString& newName );
         bool addHiddenFiles();
         bool addSystemFiles();
@@ -80,10 +80,10 @@ namespace K3b {
         QLabel* m_counterLabel;
         EncodingConverter* m_encodingConverter;
 
-        QList<QUrl> m_urls;
-        QList< QPair<QUrl, DirItem*> > m_urlQueue;
+        KUrl::List m_urls;
+        QList< QPair<KUrl, DirItem*> > m_urlQueue;
         QList< QPair<DataItem*, DirItem*> > m_items;
-        QList<QUrl> m_dirSizeQueue;
+        QList<KUrl> m_dirSizeQueue;
         QHash< DirItem*, QList<DataItem*> > m_newItems;
 
         DataDoc* m_doc;

@@ -16,7 +16,7 @@
 #ifndef _K3B_LAME_TYPES_H_
 #define _K3B_LAME_TYPES_H_
 
-#include "k3bplugin_i18n.h"
+#include <KLocale>
 
 #include <lame/lame.h>
 

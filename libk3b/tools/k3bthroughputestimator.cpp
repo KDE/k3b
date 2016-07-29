@@ -15,8 +15,8 @@
 
 #include "k3bthroughputestimator.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
+#include <qdatetime.h>
+#include <kdebug.h>
 
 
 class K3b::ThroughputEstimator::Private
@@ -94,4 +94,4 @@ void K3b::ThroughputEstimator::dataWritten( unsigned long data )
 }
 
 
-
+#include "k3bthroughputestimator.moc"

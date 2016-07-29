@@ -31,17 +31,18 @@
 #include "k3bcore.h"
 #include "k3bmediacache.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <klocale.h>
+#include <kdebug.h>
+#include <kmessagebox.h>
+#include <kio/global.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFileInfo>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QGridLayout>
+#include <qcheckbox.h>
+#include <qlayout.h>
+#include <qgroupbox.h>
+#include <qfileinfo.h>
+#include <QGridLayout>
 
 
 K3b::MovixBurnDialog::MovixBurnDialog( K3b::MovixDoc* doc, QWidget* parent )
@@ -250,4 +251,4 @@ void K3b::MovixBurnDialog::toggleAll()
     m_checkStartMultiSesssion->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
-
+#include "k3bmovixburndialog.moc"

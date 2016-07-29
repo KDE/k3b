@@ -14,19 +14,19 @@
 #ifndef _K3B_EXTERNAL_ENCODER_CONFIG_WIDGET_H_
 #define _K3B_EXTERNAL_ENCODER_CONFIG_WIDGET_H_
 
-#include "ui_base_k3bexternalencodereditdialog.h"
+#include "ui_base_k3bexternalencodereditwidget.h"
 #include "ui_base_k3bexternalencoderconfigwidget.h"
 #include "k3bexternalencodercommand.h"
 
 #include "k3bpluginconfigwidget.h"
 
+#include <KDialog>
 #include <QtCore/QList>
-#include <QtWidgets/QDialog>
 
 
 class QTreeWidgetItem;
 
-class K3bExternalEncoderEditDialog : public QDialog, public Ui::base_K3bExternalEncoderEditDialog
+class K3bExternalEncoderEditDialog : public KDialog, public Ui::base_K3bExternalEncoderEditWidget
 {
     Q_OBJECT
 
@@ -38,7 +38,7 @@ public:
     void setCommand( const K3bExternalEncoderCommand& cmd );
 
 private Q_SLOTS:
-    void accept() override;
+    void slotButtonClicked( int button );
 };
 
 
@@ -51,9 +51,9 @@ public:
     ~K3bExternalEncoderSettingsWidget();
 
 public Q_SLOTS:
-    void load() override;
-    void save() override;
-    void defaults() override;
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
 
 private Q_SLOTS:
     void slotSelectionChanged( QTreeWidgetItem* current );

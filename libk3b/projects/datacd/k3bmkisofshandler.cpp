@@ -17,9 +17,9 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bcore.h"
 #include "k3bjob.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <cmath>
 
@@ -69,7 +69,7 @@ const K3b::ExternalBin* K3b::MkisofsHandler::initMkisofs()
         d->readError = false;
     }
     else {
-        qDebug() << "(K3b::MkisofsHandler) could not find mkisofs executable";
+        kDebug() << "(K3b::MkisofsHandler) could not find mkisofs executable";
         handleMkisofsInfoMessage( i18n("Mkisofs executable not found."), K3b::Job::MessageError );
     }
 
@@ -124,7 +124,7 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
             d->readError = true;
         }
         else {
-            qDebug() << "(mkisofs) " << line;
+            kDebug() << "(mkisofs) " << line;
         }
     }
 }
@@ -144,7 +144,7 @@ int K3b::MkisofsHandler::parseMkisofsProgress( const QString& line )
     bool ok;
     double p = perStr.toDouble( &ok );
     if( !ok ) {
-        qDebug() << "(K3b::MkisofsHandler) Parsing did not work for " << perStr;
+        kDebug() << "(K3b::MkisofsHandler) Parsing did not work for " << perStr;
         return -1;
     }
     else {

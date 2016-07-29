@@ -16,11 +16,10 @@
 #ifndef _K3B_AUDIO_EDITOR_WIDGET_H_
 #define _K3B_AUDIO_EDITOR_WIDGET_H_
 
+#include <QList>
+#include <QMouseEvent>
+#include <QFrame>
 #include "k3bmsf.h"
-
-#include <QtCore/QList>
-#include <QtGui/QMouseEvent>
-#include <QtWidgets/QFrame>
 
 
 class QPainter;

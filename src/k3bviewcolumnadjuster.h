@@ -16,8 +16,8 @@
 #ifndef _K3B_VIEW_COLUMN_ADJUSTER_H_
 #define _K3B_VIEW_COLUMN_ADJUSTER_H_
 
-#include <QtCore/QList>
 #include <QtCore/QObject>
+#include <QtCore/QList>
 
 class QEvent;
 class QTreeView;

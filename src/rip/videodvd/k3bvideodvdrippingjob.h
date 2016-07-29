@@ -19,7 +19,7 @@
 #include "k3bvideodvd.h"
 #include "k3bvideodvdtitletranscodingjob.h"
 
-#include <QtCore/QVector>
+#include <qvector.h>
 
 
 namespace K3b {

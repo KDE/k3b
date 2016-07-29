@@ -18,9 +18,11 @@
 #include "k3bapplication.h"
 #include "k3btitlelabel.h"
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
+#include <KGlobalSettings>
+
+#include <QApplication>
+#include <QHBoxLayout>
+#include <QLabel>
 
 
 K3b::ThemedHeader::ThemedHeader( QWidget* parent )
@@ -115,15 +117,8 @@ void K3b::ThemedHeader::init()
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-}
-
-
-bool K3b::ThemedHeader::event( QEvent *event )
-{
-    if( event->type() == QEvent::StyleChange ) {
-        slotThemeChanged();
-    }
-    return QFrame::event( event );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
+             this, SLOT(slotThemeChanged()) );
 }
 
 
@@ -140,4 +135,4 @@ void K3b::ThemedHeader::slotThemeChanged()
     }
 }
 
-
+#include "k3bthemedheader.moc"

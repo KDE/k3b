@@ -22,7 +22,7 @@
 
 #include "k3bview.h"
 
-class QAction;
+class KAction;
 class QTreeView;
 
 namespace K3b {
@@ -53,10 +53,10 @@ namespace K3b {
         MovixProjectModel* m_model;
         QTreeView* m_view;
 
-        QAction* m_actionProperties;
-        QAction* m_actionRemove;
-        QAction* m_actionRemoveSubTitle;
-        QAction* m_actionAddSubTitle;
+        KAction* m_actionProperties;
+        KAction* m_actionRemove;
+        KAction* m_actionRemoveSubTitle;
+        KAction* m_actionAddSubTitle;
     };
 }
 

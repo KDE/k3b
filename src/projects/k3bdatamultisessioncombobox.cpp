@@ -14,10 +14,10 @@
 
 #include "k3bdatamultisessioncombobox.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KI18n/KLocalizedString>
+#include <KConfigGroup>
+#include <KLocale>
 
-#include <QtWidgets/QToolTip>
+#include <QToolTip>
 
 
 static const int s_autoIndex = 0;
@@ -172,4 +172,4 @@ void K3b::DataMultiSessionCombobox::setForceNoMultisession( bool f )
     }
 }
 
-
+#include "k3bdatamultisessioncombobox.moc"

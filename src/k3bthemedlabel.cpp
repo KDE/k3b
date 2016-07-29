@@ -15,6 +15,8 @@
 #include "k3bthemedlabel.h"
 #include "k3bapplication.h"
 
+#include <KGlobalSettings>
+
 K3b::ThemedLabel::ThemedLabel( QWidget* parent )
     : KSqueezedTextLabel( parent ),
       m_themePixmapCode( -1 )
@@ -23,6 +25,8 @@ K3b::ThemedLabel::ThemedLabel( QWidget* parent )
     setTextElideMode( Qt::ElideRight );
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+             this, SLOT(slotThemeChanged()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
              this, SLOT(slotThemeChanged()) );
 }
 
@@ -36,6 +40,8 @@ K3b::ThemedLabel::ThemedLabel( const QString& text, QWidget* parent )
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
+             this, SLOT(slotThemeChanged()) );
 }
 
 
@@ -47,15 +53,8 @@ K3b::ThemedLabel::ThemedLabel( K3b::Theme::PixmapType pix, QWidget* parent )
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
              this, SLOT(slotThemeChanged()) );
-}
-
-
-bool K3b::ThemedLabel::event( QEvent *event )
-{
-    if( event->type() == QEvent::StyleChange ) {
-        slotThemeChanged();
-    }
-    return KSqueezedTextLabel::event( event );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()),
+             this, SLOT(slotThemeChanged()) );
 }
 
 
@@ -84,4 +83,4 @@ void K3b::ThemedLabel::slotThemeChanged()
     }
 }
 
-
+#include "k3bthemedlabel.moc"

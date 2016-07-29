@@ -15,7 +15,7 @@
 #ifndef K3B_THEMEMODEL_H
 #define K3B_THEMEMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 
 
 namespace K3b {

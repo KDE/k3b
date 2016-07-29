@@ -45,11 +45,11 @@
 #include "private/qfsfileengine_p.h"
 #include <qdebug.h>
 
-#include "QtCore/QFile"
-#include "QtCore/QDir"
+#include "qfile.h"
+#include "qdir.h"
 #include "qtemporaryfile.h"
 #ifndef QT_NO_REGEXP
-# include "QtCore/QRegExp"
+# include "qregexp.h"
 #endif
 #include "private/qmutexpool_p.h"
 #include "qvarlengtharray.h"

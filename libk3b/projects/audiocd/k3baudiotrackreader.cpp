@@ -17,9 +17,9 @@
 #include "k3baudiodatasource.h"
 #include "k3baudiotrack.h"
 
-#include <QtCore/QList>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
+#include <QList>
+#include <QMutex>
+#include <QMutexLocker>
 
 namespace K3b {
 
@@ -221,4 +221,4 @@ void AudioTrackReader::slotTrackChanged()
 
 } // namespace K3b
 
-#include "moc_k3baudiotrackreader.cpp"
+#include "k3baudiotrackreader.moc"

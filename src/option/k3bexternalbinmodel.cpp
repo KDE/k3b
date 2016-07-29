@@ -15,13 +15,13 @@
 #include "k3bexternalbinmodel.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocale>
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtGui/QFont>
-#include <QtGui/QPalette>
-#include <QtWidgets/QApplication>
+#include <QApplication>
+#include <QFont>
+#include <QHash>
+#include <QList>
+#include <QPalette>
 
 namespace K3b {
 
@@ -90,7 +90,7 @@ QModelIndex ExternalBinModel::indexForProgram( ExternalProgram* program, int col
 {
     int i = d->programs.indexOf( program );
     if( i >= 0 && i < d->programs.size() )
-        return createIndex( i, column, nullptr );
+        return createIndex( i, column, 0 );
     else
         return QModelIndex();
 }
@@ -254,4 +254,4 @@ QModelIndex ExternalBinModel::buddy( const QModelIndex& index ) const
 
 } // namespace K3b
 
-
+#include "k3bexternalbinmodel.moc"

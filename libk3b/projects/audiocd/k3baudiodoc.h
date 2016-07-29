@@ -76,7 +76,7 @@ namespace K3b {
         /**
          * Creates a new audiofile inside this doc which has no track yet.
          */
-        AudioFile* createAudioFile( const QUrl& url );
+        AudioFile* createAudioFile( const KUrl& url );
 
         /** get the current size of the project */
         KIO::filesize_t size() const;
@@ -134,21 +134,21 @@ namespace K3b {
          * \param reused If not null this variable is set to true if the decoder is already in
          *               use and AudioDecoder::analyseFile() does not have to be called anymore.
          */
-        AudioDecoder* getDecoderForUrl( const QUrl& url, bool* reused = 0 );
+        AudioDecoder* getDecoderForUrl( const KUrl& url, bool* reused = 0 );
 
         /**
          * Transforms given url list into flat file list.
          * Each directory and M3U playlist is expanded into the files.
          * Note: directories are not expanded recursively.
          */
-        static QList<QUrl> extractUrlList( const QList<QUrl>& urls );
+        static KUrl::List extractUrlList( const KUrl::List& urls );
 
-        static bool readPlaylistFile( const QUrl& url, QList<QUrl>& playlist );
+        static bool readPlaylistFile( const KUrl& url, KUrl::List& playlist );
 
     public Q_SLOTS:
-        void addUrls( const QList<QUrl>& );
-        void addTrack( const QUrl&, int );
-        void addTracks( const QList<QUrl>&, int );
+        void addUrls( const KUrl::List& );
+        void addTrack( const KUrl&, int );
+        void addTracks( const KUrl::List&, int );
         /**
          * Adds a track without any testing
          *
@@ -156,7 +156,7 @@ namespace K3b {
          */
         void addTrack( AudioTrack* track, int position = 0 );
 
-        void addSources( AudioTrack* parent, const QList<QUrl>& urls, AudioDataSource* sourceAfter = 0 );
+        void addSources( AudioTrack* parent, const KUrl::List& urls, AudioDataSource* sourceAfter = 0 );
 
         void removeTrack( AudioTrack* );
         void moveTrack( AudioTrack* track, AudioTrack* after );
@@ -207,7 +207,7 @@ namespace K3b {
     private:
         // the stuff for adding files
         // ---------------------------------------------------------
-        AudioTrack* createTrack( const QUrl& url );
+        AudioTrack* createTrack( const KUrl& url );
 
         /**
          * Used by AudioTrack to update the track list

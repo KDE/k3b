@@ -1,10 +1,1 @@
-ecm_install_icons(
-    ICONS
-        128-mimetypes-application-x-k3b.png
-        32-mimetypes-application-x-k3b.png
-        48-mimetypes-application-x-k3b.png
-        64-mimetypes-application-x-k3b.png
-        sc-mimetypes-application-x-k3b.svgz
-    DESTINATION
-        ${ICON_INSTALL_DIR}
-)
+kde4_install_icons( ${ICON_INSTALL_DIR} )

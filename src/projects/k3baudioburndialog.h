@@ -19,10 +19,10 @@
 
 #include "k3bprojectburndialog.h"
 
-#include <QtCore/QVariant>
-#include <QtGui/QShowEvent>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QWidget>
+#include <qvariant.h>
+#include <qwidget.h>
+#include <QShowEvent>
+#include <QLabel>
 
 class QCheckBox;
 class QComboBox;

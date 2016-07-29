@@ -8,20 +8,11 @@
     <x>0</x>
     <y>0</y>
     <width>295</width>
-    <height>347</height>
+    <height>291</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -29,7 +20,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab1">
+     <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Settings</string>
       </attribute>
@@ -169,7 +160,7 @@
             <item>
              <widget class="QRadioButton" name="m_radioManual">
               <property name="text">
-               <string>Manua&amp;l settings:</string>
+               <string>Manual settings:</string>
               </property>
              </widget>
             </item>
@@ -202,16 +193,7 @@
             <property name="spacing">
              <number>0</number>
             </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>0</number>
             </property>
             <item>
@@ -260,7 +242,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab2">
+     <widget class="QWidget" name="tab">
       <attribute name="title">
        <string>Advanced</string>
       </attribute>
@@ -272,7 +254,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QSpinBox" name="m_spinEncoderQuality">
+           <widget class="KIntNumInput" name="m_spinEncoderQuality">
             <property name="toolTip">
              <string>Choose the noise shaping &amp; psycho acoustic algorithm.</string>
             </property>
@@ -284,42 +266,11 @@
 &lt;p&gt;0 disables almost all algorithms including psy-model resulting in poor quality.
 &lt;p&gt;&lt;b&gt;This setting has no influence on the size of the resulting file.&lt;/b&gt;</string>
             </property>
-            <property name="maximum">
-             <number>9</number>
-            </property>
-            <property name="value">
-             <number>3</number>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSlider" name="m_sliderEncoderQuality">
-            <property name="maximum">
-             <number>9</number>
-            </property>
-            <property name="pageStep">
-             <number>3</number>
-            </property>
-            <property name="value">
-             <number>3</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
            </widget>
           </item>
           <item>
            <layout class="QHBoxLayout">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>0</number>
             </property>
             <item>
@@ -435,6 +386,13 @@ This results in many wasted bits for high bitrate encodings but will ensure stri
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
@@ -498,38 +456,6 @@ This results in many wasted bits for high bitrate encodings but will ensure stri
     <hint type="destinationlabel">
      <x>147</x>
      <y>119</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_sliderEncoderQuality</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>m_spinEncoderQuality</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>151</x>
-     <y>84</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>m_spinEncoderQuality</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>m_sliderEncoderQuality</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>151</x>
-     <y>84</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>151</x>
-     <y>115</y>
     </hint>
    </hints>
   </connection>

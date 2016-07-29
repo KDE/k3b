@@ -15,10 +15,11 @@
 #ifndef _K3B_AUDIO_DECODER_H_
 #define _K3B_AUDIO_DECODER_H_
 
+
 #include "k3bplugin.h"
 #include "k3bmsf.h"
 #include "k3b_export.h"
-#include <QtCore/QUrl>
+#include <kurl.h>
 
 
 namespace K3b {
@@ -84,7 +85,7 @@ namespace K3b {
          * This should at least support "Title" and "Artist"
          *
          * the default implementation returns the infos set via @p addMetaInfo
-         * and uses KFileMetaData if none was set
+         * and uses KFileMetaInfo if none was set
          */
         virtual QString metaInfo( MetaDataField );
 
@@ -237,7 +238,7 @@ namespace K3b {
          * be called with urls to every kind of files and if it returns true
          * a decoder of this type is used for the file.
          */
-        virtual bool canDecode( const QUrl& filename ) = 0;
+        virtual bool canDecode( const KUrl& filename ) = 0;
 
         virtual AudioDecoder* createDecoder( QObject* parent = 0 ) const = 0;
 
@@ -248,7 +249,7 @@ namespace K3b {
          *
          * @returns a newly created decoder on success and 0 when no decoder could be found.
          */
-        static AudioDecoder* createDecoder( const QUrl& url );
+        static AudioDecoder* createDecoder( const KUrl& url );
     };
 }
 

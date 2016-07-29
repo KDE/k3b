@@ -15,10 +15,11 @@
 #ifndef _K3B_SCSI_COMMAND_H_
 #define _K3B_SCSI_COMMAND_H_
 
+#include <qglobal.h>
+#include <qstring.h>
+
 #include "k3bdevice.h"
 
-#include <qglobal.h>
-#include <QtCore/QString>
 
 namespace K3b {
     namespace Device

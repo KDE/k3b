@@ -19,7 +19,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocale>
 
 
 class K3b::MusicBrainzTrackLookupJob::Private
@@ -123,4 +123,4 @@ bool K3b::MusicBrainzTrackLookupJob::run()
     return( d->results > 0 );
 }
 
-
+#include "k3bmusicbrainztrackloopupjob.moc"

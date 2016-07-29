@@ -30,17 +30,17 @@
 #include "k3baudiotrackplayer.h"
 #endif // ENABLE_AUDIO_PLAYER
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KToolBar>
-#include <KXmlGui/KActionCollection>
+#include <QLayout>
+#include <QString>
+#include <QScrollBar>
+#include <QTreeView>
 
-#include <QtCore/QString>
-#include <QtCore/QDebug>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QScrollBar>
-#include <QtWidgets/QTreeView>
+#include <KAction>
+#include <KActionCollection>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
+#include <KToolBar>
 #include <fcntl.h>
 
 
@@ -95,7 +95,7 @@ K3b::AudioView::~AudioView()
 }
 
 
-void K3b::AudioView::addUrls( const QList<QUrl>& urls )
+void K3b::AudioView::addUrls( const KUrl::List& urls )
 {
     m_audioViewImpl->addUrls( urls );
 }
@@ -121,4 +121,4 @@ void K3b::AudioView::slotPlayerStateChanged()
 #endif // ENABLE_AUDIO_PLAYER
 }
 
-
+#include "k3baudioview.moc"

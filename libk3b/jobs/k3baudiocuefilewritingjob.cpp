@@ -25,9 +25,9 @@
 #include "k3bcuefileparser.h"
 #include "k3bthread.h"
 #include "k3bthreadjob.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <kdebug.h>
+#include <klocale.h>
 
 
 class K3b::AudioCueFileWritingJob::Private
@@ -237,7 +237,7 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
     K3b::CueFileParser parser( d->cueFile );
     if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
 
-        qDebug() << "(K3b::AudioCueFileWritingJob::importCueFile) parsed with image: " << parser.imageFilename();
+        kDebug() << "(K3b::AudioCueFileWritingJob::importCueFile) parsed with image: " << parser.imageFilename();
 
         // global cd-text
         d->audioDoc->setTitle( parser.cdText().title() );
@@ -295,4 +295,4 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
     }
 }
 
-
+#include "k3baudiocuefilewritingjob.moc"

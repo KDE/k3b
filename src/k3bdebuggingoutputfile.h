@@ -15,8 +15,8 @@
 #ifndef _K3B_DEBUGGING_OUTPUT_FILE_H_
 #define _K3B_DEBUGGING_OUTPUT_FILE_H_
 
-#include <QtCore/QFile>
-#include <QtCore/QObject>
+#include <qfile.h>
+#include <qobject.h>
 
 namespace K3b {
     class DebuggingOutputFile : public QFile

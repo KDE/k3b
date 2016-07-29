@@ -15,7 +15,7 @@
 #include "k3bbootimagemodel.h"
 #include "k3bdatadoc.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocale>
 
 namespace K3b {
 
@@ -147,4 +147,4 @@ bool BootImageModel::removeRows( int row, int count, const QModelIndex& parent )
 
 } // namespace K3b
 
-
+#include "k3bbootimagemodel.moc"

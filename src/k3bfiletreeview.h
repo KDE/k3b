@@ -17,8 +17,8 @@
 #ifndef K3BFILETREEVIEW_H
 #define K3BFILETREEVIEW_H
 
-#include <QtCore/QUrl>
-#include <QtWidgets/QTreeView>
+#include <KUrl>
+#include <QTreeView>
 
 class QPoint;
 
@@ -43,14 +43,14 @@ namespace K3b {
         /**
          * returnes an empty url if no url is selected
          */
-        QUrl selectedUrl() const;
+        KUrl selectedUrl() const;
 
     public Q_SLOTS:
-        void setSelectedUrl( const QUrl& url );
+        void setSelectedUrl( const KUrl& url );
         void setSelectedDevice( K3b::Device::Device* dev );
 
     Q_SIGNALS:
-        void activated( const QUrl& url );
+        void activated( const KUrl& url );
         void activated( K3b::Device::Device* dev );
 
     private Q_SLOTS:

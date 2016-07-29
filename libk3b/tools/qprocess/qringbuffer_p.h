@@ -53,8 +53,8 @@
 // We mean it.
 //
 
-#include <QtCore/QByteArray>
-#include <QtCore/QList>
+#include <QtCore/qbytearray.h>
+#include <QtCore/qlist.h>
 
 QT_BEGIN_NAMESPACE
 

@@ -19,9 +19,9 @@
 #include "k3btrm.h"
 #include "musicbrainz/mb_c.h"
 
-#include <KIOCore/KProtocolManager>
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
+#include <kdebug.h>
+#include <kprotocolmanager.h>
+#include <kurl.h>
 
 
 class K3b::TRM::Private
@@ -52,7 +52,7 @@ K3b::TRM::~TRM()
 void K3b::TRM::start( const K3b::Msf& length )
 {
     if( KProtocolManager::useProxy() ) {
-        QUrl proxy = KProtocolManager::proxyFor("http");
+        KUrl proxy = KProtocolManager::proxyFor("http");
         trm_SetProxy( d->trm, const_cast<char*>(proxy.host().toLatin1().constData()), short(proxy.port()) );
     }
 

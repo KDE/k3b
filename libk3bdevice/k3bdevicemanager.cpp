@@ -21,8 +21,18 @@
 
 #include <config-k3b.h>
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
+#include "kdebug.h"
+
+#include <qstring.h>
+#include <qstringlist.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qregexp.h>
+
+#include <kapplication.h>
+#include <kconfig.h>
+#include <kconfiggroup.h>
+#include <ktemporaryfile.h>
 
 #include <Solid/DeviceNotifier>
 #include <Solid/DeviceInterface>
@@ -32,14 +42,6 @@
 #ifdef Q_OS_NETBSD
 #include <Solid/GenericInterface>
 #endif
-
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
-#include <QtCore/QTemporaryFile>
 
 #include <iostream>
 #include <limits.h>
@@ -159,7 +161,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::deviceByName( const QString& na
 K3b::Device::Device* K3b::Device::DeviceManager::findDevice( const QString& devicename )
 {
     if( devicename.isEmpty() ) {
-        qDebug() << "(K3b::Device::DeviceManager) request for empty device!";
+        kDebug() << "(K3b::Device::DeviceManager) request for empty device!";
         return 0;
     }
 
@@ -258,10 +260,10 @@ K3b::Device::Device* K3b::Device::DeviceManager::checkDevice( const Solid::Devic
 
 void K3b::Device::DeviceManager::printDevices()
 {
-    qDebug() << "Devices:" << endl
+    kDebug() << "Devices:" << endl
              << "------------------------------" << endl;
     Q_FOREACH( Device* dev, d->allDevices ) {
-        qDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
+        kDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
                  << "Vendor:         " << dev->vendor() << endl
                  << "Description:    " << dev->description() << endl
                  << "Version:        " << dev->version() << endl
@@ -313,7 +315,7 @@ bool K3b::Device::DeviceManager::readConfig( const KConfigGroup& c )
         QString configEntryName = dev->vendor() + ' ' + dev->description();
         QStringList list = c.readEntry( configEntryName, QStringList() );
         if( !list.isEmpty() ) {
-            qDebug() << "(K3b::Device::DeviceManager) found config entry for devicetype: " << configEntryName;
+            kDebug() << "(K3b::Device::DeviceManager) found config entry for devicetype: " << configEntryName;
 
             dev->setMaxReadSpeed( list[0].toInt() );
             if( list.count() > 1 )
@@ -364,7 +366,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::addDevice( const Solid::Device&
 #endif
             return addDevice( new K3b::Device::Device( solidDevice ) );
         else
-            qDebug() << "(K3b::Device::DeviceManager) dev " << blockDevice->device()  << " already found";
+            kDebug() << "(K3b::Device::DeviceManager) dev " << blockDevice->device()  << " already found";
     }
     return 0;
 }
@@ -375,7 +377,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::addDevice( K3b::Device::Device*
     const QString devicename = device->blockDeviceName();
 
     if( !device->init() ) {
-        qDebug() << "Could not initialize device " << devicename;
+        kDebug() << "Could not initialize device " << devicename;
         delete device;
         return 0;
     }
@@ -400,7 +402,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::addDevice( K3b::Device::Device*
 
         if( device->writesCd() ) {
             // default to max write speed
-            qDebug() << "(K3b::Device::DeviceManager) setting current write speed of device "
+            kDebug() << "(K3b::Device::DeviceManager) setting current write speed of device "
                      << device->blockDeviceName()
                      << " to " << device->maxWriteSpeed() << endl;
             device->setCurrentWriteSpeed( device->maxWriteSpeed() );
@@ -437,14 +439,14 @@ void K3b::Device::DeviceManager::removeDevice( const Solid::Device& dev )
 
 void K3b::Device::DeviceManager::slotSolidDeviceAdded( const QString& udi )
 {
-    qDebug() << udi;
+    kDebug() << udi;
     checkDevice( Solid::Device( udi ) );
 }
 
 
 void K3b::Device::DeviceManager::slotSolidDeviceRemoved( const QString& udi )
 {
-    qDebug() << udi;
+    kDebug() << udi;
     Solid::Device solidDev( udi );
     if ( solidDev.isDeviceInterface( Solid::DeviceInterface::OpticalDrive ) ) {
         if ( solidDev.is<Solid::OpticalDrive>() ) {
@@ -453,4 +455,4 @@ void K3b::Device::DeviceManager::slotSolidDeviceRemoved( const QString& udi )
     }
 }
 
-
+#include "k3bdevicemanager.moc"

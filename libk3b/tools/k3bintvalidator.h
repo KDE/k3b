@@ -16,8 +16,8 @@
 #ifndef _K3B_INT_VALIDATOR_H_
 #define _K3B_INT_VALIDATOR_H_
 
+#include <qvalidator.h>
 #include "k3b_export.h"
-#include <QtGui/QValidator>
 class QWidget;
 class QString;
 

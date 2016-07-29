@@ -16,10 +16,10 @@
 #ifndef _K3B_DEVICE_GLOBALS_H_
 #define _K3B_DEVICE_GLOBALS_H_
 
+#include <qstring.h>
 #include "k3bmsf.h"
 #include "k3bdevice_export.h"
 #include "k3bdevicetypes.h"
-#include <QtCore/QString>
 
 namespace K3b {
     namespace Device

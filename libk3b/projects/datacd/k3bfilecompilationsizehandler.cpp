@@ -15,10 +15,11 @@
 #include "k3bfilecompilationsizehandler.h"
 #include "k3bfileitem.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QMap>
-#include <QtCore/QList>
+#include <KDebug>
+
+#include <QFile>
+#include <QMap>
+#include <QList>
 
 
 // TODO: remove the items from the project if the savedSize differs
@@ -113,13 +114,13 @@ public:
         InodeInfo& inodeInfo = inodeMap[item->localId(followSymlinks)];
 
         if( !inodeInfo.items.contains( item ) ) {
-            qCritical() << "(K3b::FileCompilationSizeHandler) "
+            kError() << "(K3b::FileCompilationSizeHandler) "
                      << item->localPath()
                      << " has been removed without being added!" << endl;
         }
         else {
             if( item->itemSize(followSymlinks) != inodeInfo.savedSize ) {
-                qCritical() << "(K3b::FileCompilationSizeHandler) savedSize differs!" << endl;
+                kError() << "(K3b::FileCompilationSizeHandler) savedSize differs!" << endl;
             }
 
             inodeInfo.items.removeOne( item );
@@ -135,7 +136,7 @@ public:
         // special files do not have a corresponding local file
         // so we just substract their k3bSize
         if( !specialItems.contains( item ) ) {
-            qCritical() << "(K3b::FileCompilationSizeHandler) Special item "
+            kError() << "(K3b::FileCompilationSizeHandler) Special item "
                      << item->k3bName()
                      << " has been removed without being added!" << endl;
         }

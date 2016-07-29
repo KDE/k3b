@@ -15,7 +15,7 @@
 #ifndef _K3B_THROUGHPUT_ESTIMATOR_H_
 #define _K3B_THROUGHPUT_ESTIMATOR_H_
 
-#include <QtCore/QObject>
+#include <qobject.h>
 
 
 namespace K3b {

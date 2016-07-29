@@ -14,7 +14,8 @@
 
 #include "k3bintmapcombobox.h"
 
-#include <QtCore/QDebug>
+#include <KDebug>
+
 #include <QtCore/QHash>
 #include <QtCore/QPair>
 
@@ -157,4 +158,4 @@ void K3b::IntMapComboBox::addGlobalWhatsThisText( const QString& top, const QStr
     d->updateWhatsThis();
 }
 
-
+#include "k3bintmapcombobox.moc"

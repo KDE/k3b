@@ -15,7 +15,7 @@
 #ifndef _K3B_DEVICE_DELEGATE_H_
 #define _K3B_DEVICE_DELEGATE_H_
 
-#include <KIOWidgets/KFileItemDelegate>
+#include <KFileItemDelegate>
 
 namespace K3b {
     class DeviceDelegate : public KFileItemDelegate

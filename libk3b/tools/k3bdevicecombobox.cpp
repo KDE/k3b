@@ -14,12 +14,14 @@
 
 #include "k3bdevicecombobox.h"
 #include "k3bdevicemodel.h"
+
 #include "k3bdevice.h"
 #include "k3bdevicemanager.h"
 #include "k3bcore.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QMap>
+#include <klocale.h>
+
+#include <qmap.h>
 
 
 class K3b::DeviceComboBox::Private
@@ -93,4 +95,4 @@ void K3b::DeviceComboBox::slotActivated( int i )
     emit selectionChanged( d->model->deviceForIndex( d->model->index( i, 0 ) ) );
 }
 
-
+#include "k3bdevicecombobox.moc"

@@ -15,9 +15,9 @@
 #ifndef _K3B_AUDIOTRACK_TRM_LOOKUP_DIALOG_H_
 #define _K3B_AUDIOTRACK_TRM_LOOKUP_DIALOG_H_
 
-#include <QtCore/QList>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QDialog>
+#include <kdialog.h>
+#include <QLabel>
+#include <QList>
 
 class QLabel;
 namespace K3b {
@@ -30,11 +30,10 @@ namespace K3b {
     class BusyWidget;
 }
 class QEventLoop;
-class QPushButton;
 
 
 namespace K3b {
-    class AudioTrackTRMLookupDialog : public QDialog
+    class AudioTrackTRMLookupDialog : public KDialog
     {
         Q_OBJECT
 
@@ -47,18 +46,15 @@ namespace K3b {
          */
         int lookup( const QList<AudioTrack*>& tracks );
 
-    public Q_SLOTS:
-        void reject() override;
-
     private Q_SLOTS:
         void slotMbJobFinished( bool );
         void slotMbJobInfoMessage( const QString&, int );
         void slotTrackFinished( K3b::AudioTrack* track, bool success );
+        void slotCancel();
 
     private:
         QLabel* m_infoLabel;
         BusyWidget* m_busyWidget;
-        QPushButton* m_cancelButton;
         MusicBrainzJob* m_mbJob;
         QEventLoop* m_loop;
     };

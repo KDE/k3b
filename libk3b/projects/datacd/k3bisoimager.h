@@ -19,10 +19,10 @@
 #include "k3bmkisofshandler.h"
 #include "k3bprocess.h"
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 class QTextStream;
-class QTemporaryFile;
+class KTemporaryFile;
 
 namespace K3b {
     class DataDoc;
@@ -119,10 +119,10 @@ namespace K3b {
         virtual void writePathSpecForFile( FileItem*, QTextStream& stream );
         QString escapeGraftPoint( const QString& str );
 
-        QTemporaryFile* m_pathSpecFile;
-        QTemporaryFile* m_rrHideFile;
-        QTemporaryFile* m_jolietHideFile;
-        QTemporaryFile* m_sortWeightFile;
+        KTemporaryFile* m_pathSpecFile;
+        KTemporaryFile* m_rrHideFile;
+        KTemporaryFile* m_jolietHideFile;
+        KTemporaryFile* m_sortWeightFile;
 
         Process* m_process;
 

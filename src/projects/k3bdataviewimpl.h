@@ -15,12 +15,13 @@
 #ifndef K3B_DATA_VIEW_IMPL_H
 #define K3B_DATA_VIEW_IMPL_H
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QObject>
-#include <QtCore/QUrl>
+#include <QObject>
+#include <QAbstractItemModel>
+#include <KUrl>
 
+class KAction;
 class KActionCollection;
-class QAction;
+class KMenu;
 class QSortFilterProxyModel;
 class QTreeView;
 
@@ -42,7 +43,7 @@ namespace K3b {
     public:
         DataViewImpl( View* view, DataDoc* doc, KActionCollection* actionCollection );
 
-        void addUrls( const QModelIndex& parent, const QList<QUrl>& urls );
+        void addUrls( const QModelIndex& parent, const KUrl::List& urls );
 
         DataProjectModel* model() const { return m_model; }
         QTreeView* view() const { return m_fileView; }
@@ -66,7 +67,7 @@ namespace K3b {
         void slotClearImportedSession();
         void slotEditBootImages();
         void slotImportedSessionChanged( int importedSession );
-        void slotAddUrlsRequested( QList<QUrl> urls, K3b::DirItem* targetDir );
+        void slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir );
         void slotMoveItemsRequested( QList<K3b::DataItem*> items, K3b::DirItem* targetDir );
 
     private:
@@ -77,15 +78,16 @@ namespace K3b {
         QTreeView* m_fileView;
         ViewColumnAdjuster* m_columnAdjuster;
 
-        QAction* m_actionParentDir;
-        QAction* m_actionRemove;
-        QAction* m_actionRename;
-        QAction* m_actionNewDir;
-        QAction* m_actionProperties;
-        QAction* m_actionOpen;
-        QAction* m_actionImportSession;
-        QAction* m_actionClearSession;
-        QAction* m_actionEditBootImages;
+        KMenu* m_popupMenu;
+        KAction* m_actionParentDir;
+        KAction* m_actionRemove;
+        KAction* m_actionRename;
+        KAction* m_actionNewDir;
+        KAction* m_actionProperties;
+        KAction* m_actionOpen;
+        KAction* m_actionImportSession;
+        KAction* m_actionClearSession;
+        KAction* m_actionEditBootImages;
     };
 
 } // namespace K3b

@@ -27,7 +27,7 @@ public:
     K3b<name>DecoderFactory( QObject* parent, const QVariantList& );
     ~K3b<name>DecoderFactory();
 
-    bool canDecode( const QUrl& filename );
+    bool canDecode( const KUrl& filename );
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
@@ -52,5 +52,7 @@ protected:
 
     int decodeInternal( char* _data, int maxLen );
 };
+
+K3B_EXPORT_PLUGIN(k3b<name>decoder, K3b<name>DecoderFactory)
 
 #endif

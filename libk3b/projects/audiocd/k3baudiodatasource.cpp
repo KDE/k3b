@@ -228,4 +228,4 @@ void K3b::AudioDataSource::fixupOffsets()
     }
 }
 
-
+#include "k3baudiodatasource.moc"

@@ -17,9 +17,9 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bprocess.h"
 #include "k3bcore.h"
-#include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <kdebug.h>
+#include <klocale.h>
 
 
 K3b::AudioNormalizeJob::AudioNormalizeJob( K3b::JobHandler* hdl, QObject* parent )
@@ -80,7 +80,7 @@ void K3b::AudioNormalizeJob::start()
     if( !m_process->start( KProcess::OnlyStderrChannel ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        qDebug() << "(K3b::AudioNormalizeJob) could not start normalize";
+        kDebug() << "(K3b::AudioNormalizeJob) could not start normalize";
         emit infoMessage( i18n("Could not start normalize."), K3b::Job::MessageError );
         jobFinished(false);
     }
@@ -128,7 +128,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
     else if( line.contains( "--% done") ) {
         if( m_currentAction == ADJUSTING_LEVELS ) {
             emit newTask( i18n("Adjusting volume level for track %1 of %2",m_currentTrack,m_files.count()) );
-            qDebug() << "(K3b::AudioNormalizeJob) adjusting level for track "
+            kDebug() << "(K3b::AudioNormalizeJob) adjusting level for track "
                      << m_currentTrack
                      << " "
                      << m_files.at(m_currentTrack-1)
@@ -136,7 +136,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
         }
         else {
             emit newTask( i18n("Computing level for track %1 of %2",m_currentTrack,m_files.count()) );
-            qDebug() << "(K3b::AudioNormalizeJob) computing level for track "
+            kDebug() << "(K3b::AudioNormalizeJob) computing level for track "
                      << m_currentTrack
                      << " "
                      << m_files.at(m_currentTrack-1)
@@ -156,7 +156,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
         if( ok )
             emit subPercent( p );
         else
-            qDebug() << "(K3b::AudioNormalizeJob) subPercent parsing error at pos "
+            kDebug() << "(K3b::AudioNormalizeJob) subPercent parsing error at pos "
                      << 19 << " in line '" << line.mid( 19, 3 ) << "'" << endl;
 
         // batch progress starts at position 50 in version 0.7.6
@@ -166,7 +166,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
         else if( ok && m_currentAction == ADJUSTING_LEVELS )
             emit percent( 50 + (int)((double)p/2.0) );
         else
-            qDebug() << "(K3b::AudioNormalizeJob) percent parsing error at pos "
+            kDebug() << "(K3b::AudioNormalizeJob) percent parsing error at pos "
                      << 50 << " in line '" << line.mid( 50, 3 ) << "'" << endl;
 
     }
@@ -200,4 +200,4 @@ void K3b::AudioNormalizeJob::slotProcessExited( int exitCode, QProcess::ExitStat
     }
 }
 
-
+#include "k3baudionormalizejob.moc"

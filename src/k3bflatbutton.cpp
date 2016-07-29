@@ -17,15 +17,17 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KIconThemes/KIconLoader>
+#include <KGlobal>
+#include <KGlobalSettings>
+#include <KIconLoader>
 
-#include <QtCore/QEvent>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QToolTip>
+#include <QAction>
+#include <QEvent>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QToolTip>
 
 
 namespace {
@@ -78,16 +80,8 @@ void K3b::FlatButton::init()
     setHover(false);
 
     connect( k3bappcore->themeManager(), SIGNAL(themeChanged()), this, SLOT(slotThemeChanged()) );
+    connect( KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(slotThemeChanged()) );
     slotThemeChanged();
-}
-
-
-bool K3b::FlatButton::event( QEvent *event )
-{
-    if( event->type() == QEvent::StyleChange ) {
-        slotThemeChanged();
-    }
-    return QAbstractButton::event(event);
 }
 
 
@@ -156,4 +150,4 @@ void K3b::FlatButton::slotThemeChanged()
     }
 }
 
-
+#include "k3bflatbutton.moc"

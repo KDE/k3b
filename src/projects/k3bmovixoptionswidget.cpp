@@ -17,17 +17,18 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixprogram.h"
 
-#include <KConfigCore/KConfig>
-#include <KCompletion/KComboBox>
-#include <KI18n/KLocalizedString>
+#include <kcombobox.h>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kglobal.h>
+#include <kdebug.h>
+#include <kdialog.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QLocale>
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QSpinBox>
+#include <qcheckbox.h>
+#include <qspinbox.h>
+#include <qstringlist.h>
+#include <qmap.h>
+#include <qlabel.h>
 
 
 class K3b::MovixOptionsWidget::LanguageSelectionHelper
@@ -45,9 +46,13 @@ public:
             if( *it == i18n("default") )
                 m_box->addItem( *it );
             else {
+                QString lang = KGlobal::locale()->languageCodeToName( *it );
+                if( lang.isEmpty() )
+                    lang = *it;
+
                 m_langMap[m_box->count()] = *it;
                 m_indexMap[*it] = m_box->count();
-                m_box->addItem( QLocale( *it ).nativeLanguageName() );
+                m_box->addItem( lang );
             }
         }
     }
@@ -97,7 +102,7 @@ void K3b::MovixOptionsWidget::init( const K3b::MovixBin* bin )
     m_labelKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
     m_comboKeyboardLayout->setVisible( bin->hasFeature( "newfiles" ) );
 
-    qDebug() << bin->supportedSubtitleFonts();
+    kDebug() << bin->supportedSubtitleFonts();
     m_comboSubtitleFontset->addItems( bin->supportedSubtitleFonts() );
     m_helpLangHelper->insertLanguages( bin->supportedLanguages() );
     m_comboDefaultBootLabel->addItems( bin->supportedBootLabels() );
@@ -230,5 +235,5 @@ void K3b::MovixOptionsWidget::saveConfig( KConfigGroup c )
     c.writeEntry( "no_dma", m_checkNoDma->isChecked() );
 }
 
-
+#include "k3bmovixoptionswidget.moc"
 

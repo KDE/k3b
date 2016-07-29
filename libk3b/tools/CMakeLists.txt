@@ -4,6 +4,7 @@ install( FILES
   k3bbusywidget.h
   k3bdeviceselectiondialog.h
   k3bmd5job.h
+  k3bstringutils.h
   k3bdevicecombobox.h
   k3bstdguiitems.h
   k3bvalidators.h
@@ -16,6 +17,8 @@ install( FILES
   k3bcdtextvalidator.h
   k3bintvalidator.h
   k3bexceptions.h
+  k3bprogressdialog.h
+  k3bpushbutton.h
   k3bthreadwidget.h
   k3bsignalwaiter.h
   k3biso9660backend.h

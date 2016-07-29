@@ -13,6 +13,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+// application specific includes
 #include "k3b.h"
 #include "k3bappdevicemanager.h"
 #include "k3bapplication.h"
@@ -63,57 +64,58 @@
 #include "option/k3boptiondialog.h"
 #include "projects/k3bdatamultisessionimportdialog.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KConfigWidgets/KRecentFilesAction>
-#include <KConfigWidgets/KStandardAction>
-#include <KCoreAddons/KAboutData>
-#include <KCoreAddons/KProcess>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KIO/DeleteJob>
-#include <KIOCore/KIO/StatJob>
-#include <KIOCore/KRecentDocument>
-#include <KIOFileWidgets/KFilePlacesModel>
-#include <KWidgetsAddons/KActionMenu>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KToggleAction>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KEditToolBar>
-#include <KXmlGui/KXMLGUIFactory>
-#include <KXmlGui/KShortcutsDialog>
+// include files for KDE
+#include <kaboutdata.h>
+#include <KAction>
+#include <KActionCollection>
+#include <KActionMenu>
+#include <KConfig>
+#include <KEditToolBar>
+#include <KFileDialog>
+#include <kfileplacesmodel.h>
+#include <KGlobal>
+#include <KMessageBox>
+#include <KMenuBar>
+#include <KMimeType>
+#include <KProcess>
+#include <KRecentDocument>
+#include <KRecentFilesAction>
+#include <KShortcutsDialog>
+#include <KStandardAction>
+#include <KStandardDirs>
+#include <KStatusBar>
+#include <KToggleAction>
+#include <KUrl>
+#include <KXMLGUIFactory>
+#include <kio/netaccess.h>
+#include <kio/deletejob.h>
 
+// include files for QT
 #include <QtAlgorithms>
 #include <QtCore/QDir>
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QList>
-#include <QtCore/QMimeDatabase>
-#include <QtCore/QMimeType>
-#include <QtCore/QStandardPaths>
 #include <QtCore/QString>
 #include <QtCore/QTimer>
-#include <QtCore/QUrl>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QSplitter>
-#include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QStatusBar>
+#include <QtGui/QGridLayout>
+#include <QtGui/QLayout>
+#include <QtGui/QSplitter>
+#include <QtGui/QStackedWidget>
 
 #include <cstdlib>
 
 
 namespace {
 
-    bool isProjectFile( QMimeDatabase const& mimeDatabase, QUrl const& url )
+    bool isProjectFile( const KUrl& url )
     {
-        return mimeDatabase.mimeTypeForUrl( url ).inherits( "application/x-k3b" );
+        KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
+        return mimeType->is( "application/x-k3b" );
     }
 
 
-    bool isDiscImage( const QUrl& url )
+    bool isDiscImage( const KUrl& url )
     {
         K3b::Iso9660 iso( url.toLocalFile() );
         if( iso.open() ) {
@@ -131,13 +133,13 @@ namespace {
     }
 
 
-    bool areAudioFiles( const QList<QUrl>& urls )
+    bool areAudioFiles( const KUrl::List& urls )
     {
         // check if the files are all audio we can handle. If so create an audio project
         bool audio = true;
         QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
-        for( QList<QUrl>::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
-            const QUrl& url = *it;
+        for( KUrl::List::const_iterator it = urls.begin(); it != urls.end(); ++it ) {
+            const KUrl& url = *it;
 
             if( QFileInfo(url.toLocalFile()).isDir() ) {
                 audio = false;
@@ -187,17 +189,17 @@ class K3b::MainWindow::Private
 {
 public:
     KRecentFilesAction* actionFileOpenRecent;
-    QAction* actionFileSave;
-    QAction* actionFileSaveAs;
-    QAction* actionFileClose;
-    KToggleAction* actionViewStatusBar;
+    KAction* actionFileSave;
+    KAction* actionFileSaveAs;
+    KAction* actionFileClose;
+    KAction* actionViewStatusBar;
     KToggleAction* actionViewDocumentHeader;
 
     /** The MDI-Interface is managed by this tabbed view */
     ProjectTabWidget* documentTab;
 
     // project actions
-    QList<QAction*> dataProjectActions;
+    QList<KAction*> dataProjectActions;
 
     // The K3b-specific widgets
     DirView* dirView;
@@ -218,8 +220,6 @@ public:
     K3b::WelcomeWidget* welcomeWidget;
     QStackedWidget* documentStack;
     QWidget* documentHull;
-
-    QMimeDatabase mimeDatabase;
 };
 
 K3b::MainWindow::MainWindow()
@@ -277,7 +277,7 @@ K3b::MainWindow::~MainWindow()
 
 KSharedConfig::Ptr K3b::MainWindow::config() const
 {
-    return KSharedConfig::openConfig();
+    return KGlobal::config();
 }
 
 
@@ -288,11 +288,11 @@ void K3b::MainWindow::initActions()
     // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
     // see the correct solution?)
 
-    QAction* actionFileOpen = KStandardAction::open( this, SLOT(slotFileOpen()), actionCollection() );
+    KAction* actionFileOpen = KStandardAction::open( this, SLOT(slotFileOpen()), actionCollection() );
     actionFileOpen->setToolTip( i18n( "Opens an existing project" ) );
     actionFileOpen->setStatusTip( actionFileOpen->toolTip() );
 
-    d->actionFileOpenRecent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(QUrl)), actionCollection() );
+    d->actionFileOpenRecent = KStandardAction::openRecent( this, SLOT(slotFileOpenRecent(KUrl)), actionCollection() );
     d->actionFileOpenRecent->setToolTip( i18n( "Opens a recently used file" ) );
     d->actionFileOpenRecent->setStatusTip( d->actionFileOpenRecent->toolTip() );
 
@@ -304,7 +304,7 @@ void K3b::MainWindow::initActions()
     d->actionFileSaveAs->setToolTip( i18n( "Saves the current project to a new URL" ) );
     d->actionFileSaveAs->setStatusTip( d->actionFileSaveAs->toolTip() );
 
-    QAction* actionFileSaveAll = new QAction( QIcon::fromTheme( "document-save-all" ), i18n("Save All"), this );
+    KAction* actionFileSaveAll = new KAction( KIcon( "document-save-all" ), i18n("Save All"), this );
     actionFileSaveAll->setToolTip( i18n( "Saves all open projects" ) );
     actionFileSaveAll->setStatusTip( actionFileSaveAll->toolTip() );
     actionCollection()->addAction( "file_save_all", actionFileSaveAll );
@@ -314,60 +314,60 @@ void K3b::MainWindow::initActions()
     d->actionFileClose->setToolTip(i18n("Closes the current project"));
     d->actionFileClose->setStatusTip( d->actionFileClose->toolTip() );
 
-    QAction* actionFileCloseAll = new QAction( i18n("Close All"), this );
+    KAction* actionFileCloseAll = new KAction( i18n("Close All"), this );
     actionFileCloseAll->setToolTip(i18n("Closes all open projects"));
     actionFileCloseAll->setStatusTip( actionFileCloseAll->toolTip() );
     actionCollection()->addAction( "file_close_all", actionFileCloseAll );
     connect( actionFileCloseAll, SIGNAL(triggered(bool)), this, SLOT(slotFileCloseAll()) );
 
-    QAction* actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
+    KAction* actionFileQuit = KStandardAction::quit(this, SLOT(slotFileQuit()), actionCollection());
     actionFileQuit->setToolTip(i18n("Quits the application"));
     actionFileQuit->setStatusTip( actionFileQuit->toolTip() );
 
-    QAction* actionFileNewAudio = new QAction( QIcon::fromTheme( "media-optical-audio" ), i18n("New &Audio CD Project"), this );
+    KAction* actionFileNewAudio = new KAction( KIcon( "media-optical-audio" ), i18n("New &Audio CD Project"), this );
     actionFileNewAudio->setToolTip( i18n("Creates a new audio CD project") );
     actionFileNewAudio->setStatusTip( actionFileNewAudio->toolTip() );
     actionCollection()->addAction( "file_new_audio", actionFileNewAudio );
     connect( actionFileNewAudio, SIGNAL(triggered(bool)), this, SLOT(slotNewAudioDoc()) );
 
-    QAction* actionFileNewData = new QAction( QIcon::fromTheme( "media-optical-data" ), i18n("New &Data Project"), this );
+    KAction* actionFileNewData = new KAction( KIcon( "media-optical-data" ), i18n("New &Data Project"), this );
     actionFileNewData->setToolTip( i18n("Creates a new data project") );
     actionFileNewData->setStatusTip( actionFileNewData->toolTip() );
     actionCollection()->addAction( "file_new_data", actionFileNewData );
     connect( actionFileNewData, SIGNAL(triggered(bool)), this, SLOT(slotNewDataDoc()) );
 
-    QAction* actionFileNewMixed = new QAction( QIcon::fromTheme( "media-optical-mixed-cd" ), i18n("New &Mixed Mode CD Project"), this );
+    KAction* actionFileNewMixed = new KAction( KIcon( "media-optical-mixed-cd" ), i18n("New &Mixed Mode CD Project"), this );
     actionFileNewMixed->setToolTip( i18n("Creates a new mixed audio/data CD project") );
     actionFileNewMixed->setStatusTip( actionFileNewMixed->toolTip() );
     actionCollection()->addAction( "file_new_mixed", actionFileNewMixed );
     connect( actionFileNewMixed, SIGNAL(triggered(bool)), this, SLOT(slotNewMixedDoc()) );
 
-    QAction* actionFileNewVcd = new QAction( QIcon::fromTheme( "media-optical-video" ), i18n("New &Video CD Project"), this );
+    KAction* actionFileNewVcd = new KAction( KIcon( "media-optical-video" ), i18n("New &Video CD Project"), this );
     actionFileNewVcd->setToolTip( i18n("Creates a new Video CD project") );
     actionFileNewVcd->setStatusTip( actionFileNewVcd->toolTip() );
     actionCollection()->addAction( "file_new_vcd", actionFileNewVcd );
     connect( actionFileNewVcd, SIGNAL(triggered(bool)), this, SLOT(slotNewVcdDoc()) );
 
-    QAction* actionFileNewMovix = new QAction( QIcon::fromTheme( "media-optical-video" ), i18n("New &eMovix Project"), this );
+    KAction* actionFileNewMovix = new KAction( KIcon( "media-optical-video" ), i18n("New &eMovix Project"), this );
     actionFileNewMovix->setToolTip( i18n("Creates a new eMovix project") );
     actionFileNewMovix->setStatusTip( actionFileNewMovix->toolTip() );
     actionCollection()->addAction( "file_new_movix", actionFileNewMovix );
     connect( actionFileNewMovix, SIGNAL(triggered(bool)), this, SLOT(slotNewMovixDoc()) );
 
-    QAction* actionFileNewVideoDvd = new QAction( QIcon::fromTheme( "media-optical-video" ), i18n("New V&ideo DVD Project"), this );
+    KAction* actionFileNewVideoDvd = new KAction( KIcon( "media-optical-video" ), i18n("New V&ideo DVD Project"), this );
     actionFileNewVideoDvd->setToolTip( i18n("Creates a new Video DVD project") );
     actionFileNewVideoDvd->setStatusTip( actionFileNewVideoDvd->toolTip() );
     actionCollection()->addAction( "file_new_video_dvd", actionFileNewVideoDvd );
     connect( actionFileNewVideoDvd, SIGNAL(triggered(bool)), this, SLOT(slotNewVideoDvdDoc()) );
 
-    QAction* actionFileContinueMultisession = new QAction( QIcon::fromTheme( "media-optical-data" ), i18n("Continue Multisession Project"), this );
+    KAction* actionFileContinueMultisession = new KAction( KIcon( "media-optical-data" ), i18n("Continue Multisession Project"), this );
     actionFileContinueMultisession->setToolTip( i18n( "Continues multisession project" ) );
     actionFileContinueMultisession->setStatusTip( actionFileContinueMultisession->toolTip() );
     actionCollection()->addAction( "file_continue_multisession", actionFileContinueMultisession );
     connect( actionFileContinueMultisession, SIGNAL(triggered(bool)), this, SLOT(slotContinueMultisession()) );
 
     KActionMenu* actionFileNewMenu = new KActionMenu( i18n("&New Project"),this );
-    actionFileNewMenu->setIcon( QIcon::fromTheme( "document-new" ) );
+    actionFileNewMenu->setIcon( KIcon( "document-new" ) );
     actionFileNewMenu->setToolTip(i18n("Creates a new project"));
     actionFileNewMenu->setStatusTip( actionFileNewMenu->toolTip() );
     actionFileNewMenu->setDelayed( false );
@@ -383,51 +383,51 @@ void K3b::MainWindow::initActions()
     actionFileNewMenu->addAction( actionFileNewMovix );
     actionCollection()->addAction( "file_new", actionFileNewMenu );
 
-    QAction* actionProjectAddFiles = new QAction( QIcon::fromTheme( "document-open" ), i18n("&Add Files..."), this );
+    KAction* actionProjectAddFiles = new KAction( KIcon( "document-open" ), i18n("&Add Files..."), this );
     actionProjectAddFiles->setToolTip( i18n("Add files to the current project") );
     actionProjectAddFiles->setStatusTip( actionProjectAddFiles->toolTip() );
     actionCollection()->addAction( "project_add_files", actionProjectAddFiles );
     connect( actionProjectAddFiles, SIGNAL(triggered(bool)), this, SLOT(slotProjectAddFiles()) );
 
-    QAction* actionClearProject = new QAction( QIcon::fromTheme( QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr" ), i18n("&Clear Project"), this );
+    KAction* actionClearProject = new KAction( KIcon( QApplication::isRightToLeft() ? "edit-clear-locationbar-rtl" : "edit-clear-locationbar-ltr" ), i18n("&Clear Project"), this );
     actionClearProject->setToolTip( i18n("Clear the current project") );
     actionClearProject->setStatusTip( actionClearProject->toolTip() );
     actionCollection()->addAction( "project_clear_project", actionClearProject );
     connect( actionClearProject, SIGNAL(triggered(bool)), this, SLOT(slotClearProject()) );
 
-    QAction* actionToolsFormatMedium = new QAction( QIcon::fromTheme( "tools-media-optical-format" ), i18n("&Format/Erase rewritable disk..."), this );
+    KAction* actionToolsFormatMedium = new KAction( KIcon( "tools-media-optical-format" ), i18n("&Format/Erase rewritable disk..."), this );
     actionToolsFormatMedium->setIconText( i18n( "Format" ) );
     actionToolsFormatMedium->setToolTip( i18n("Open the rewritable disk formatting/erasing dialog") );
     actionToolsFormatMedium->setStatusTip( actionToolsFormatMedium->toolTip() );
     actionCollection()->addAction( "tools_format_medium", actionToolsFormatMedium );
     connect( actionToolsFormatMedium, SIGNAL(triggered(bool)), this, SLOT(slotFormatMedium()) );
 
-    QAction* actionToolsWriteImage = new QAction( QIcon::fromTheme( "tools-media-optical-burn-image" ), i18n("&Burn Image..."), this );
+    KAction* actionToolsWriteImage = new KAction( KIcon( "tools-media-optical-burn-image" ), i18n("&Burn Image..."), this );
     actionToolsWriteImage->setToolTip( i18n("Write an ISO 9660, cue/bin, or cdrecord clone image to an optical disc") );
     actionToolsWriteImage->setStatusTip( actionToolsWriteImage->toolTip() );
     actionCollection()->addAction( "tools_write_image", actionToolsWriteImage );
     connect( actionToolsWriteImage, SIGNAL(triggered(bool)), this, SLOT(slotWriteImage()) );
 
-    QAction* actionToolsMediaCopy = new QAction( QIcon::fromTheme( "tools-media-optical-copy" ), i18n("Copy &Medium..."), this );
+    KAction* actionToolsMediaCopy = new KAction( KIcon( "tools-media-optical-copy" ), i18n("Copy &Medium..."), this );
     actionToolsMediaCopy->setIconText( i18n( "Copy" ) );
     actionToolsMediaCopy->setToolTip( i18n("Open the media copy dialog") );
     actionToolsMediaCopy->setStatusTip( actionToolsMediaCopy->toolTip() );
     actionCollection()->addAction( "tools_copy_medium", actionToolsMediaCopy );
     connect( actionToolsMediaCopy, SIGNAL(triggered(bool)), this, SLOT(slotMediaCopy()) );
 
-    QAction* actionToolsCddaRip = new QAction( QIcon::fromTheme( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), this );
+    KAction* actionToolsCddaRip = new KAction( KIcon( "tools-rip-audio-cd" ), i18n("Rip Audio CD..."), this );
     actionToolsCddaRip->setToolTip( i18n("Digitally extract tracks from an audio CD") );
     actionToolsCddaRip->setStatusTip( actionToolsCddaRip->toolTip() );
     actionCollection()->addAction( "tools_cdda_rip", actionToolsCddaRip );
     connect( actionToolsCddaRip, SIGNAL(triggered(bool)), this, SLOT(slotCddaRip()) );
 
-    QAction* actionToolsVideoDvdRip = new QAction( QIcon::fromTheme( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), this );
+    KAction* actionToolsVideoDvdRip = new KAction( KIcon( "tools-rip-video-dvd" ), i18n("Rip Video DVD..."), this );
     actionToolsVideoDvdRip->setToolTip( i18n("Transcode Video DVD titles") );
     actionToolsVideoDvdRip->setStatusTip( actionToolsVideoDvdRip->toolTip() );
     connect( actionToolsVideoDvdRip, SIGNAL(triggered(bool)), this, SLOT(slotVideoDvdRip()) );
     actionCollection()->addAction( "tools_videodvd_rip", actionToolsVideoDvdRip );
 
-    QAction* actionToolsVideoCdRip = new QAction( QIcon::fromTheme( "tools-rip-video-cd" ), i18n("Rip Video CD..."), this );
+    KAction* actionToolsVideoCdRip = new KAction( KIcon( "tools-rip-video-cd" ), i18n("Rip Video CD..."), this );
     actionToolsVideoCdRip->setToolTip( i18n("Extract tracks from a Video CD") );
     actionToolsVideoCdRip->setStatusTip( actionToolsVideoCdRip->toolTip() );
     actionCollection()->addAction( "tools_videocd_rip", actionToolsVideoCdRip );
@@ -444,11 +444,11 @@ void K3b::MainWindow::initActions()
     KStandardAction::configureToolbars(this, SLOT(slotEditToolbars()), actionCollection());
     setStandardToolBarMenuEnabled(true);
 
-    QAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
+    KAction* actionSettingsConfigure = KStandardAction::preferences(this, SLOT(slotSettingsConfigure()), actionCollection() );
     actionSettingsConfigure->setToolTip( i18n("Configure K3b settings") );
     actionSettingsConfigure->setStatusTip( actionSettingsConfigure->toolTip() );
 
-    QAction* actionHelpSystemCheck = new QAction( i18n("System Check"), this );
+    KAction* actionHelpSystemCheck = new KAction( i18n("System Check"), this );
     actionHelpSystemCheck->setToolTip( i18n("Checks system configuration") );
     actionHelpSystemCheck->setStatusTip( actionHelpSystemCheck->toolTip() );
     actionCollection()->addAction( "help_check_system", actionHelpSystemCheck );
@@ -529,9 +529,9 @@ void K3b::MainWindow::initView()
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
 	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
     d->urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
-    connect( d->urlNavigator, SIGNAL(activated(QUrl)), d->dirView, SLOT(showUrl(QUrl)) );
+    connect( d->urlNavigator, SIGNAL(activated(KUrl)), d->dirView, SLOT(showUrl(KUrl)) );
     connect( d->urlNavigator, SIGNAL(activated(K3b::Device::Device*)), d->dirView, SLOT(showDevice(K3b::Device::Device*)) );
-    connect( d->dirView, SIGNAL(urlEntered(QUrl)), d->urlNavigator, SLOT(setUrl(QUrl)) );
+    connect( d->dirView, SIGNAL(urlEntered(KUrl)), d->urlNavigator, SLOT(setUrl(KUrl)) );
     connect( d->dirView, SIGNAL(deviceSelected(K3b::Device::Device*)), d->urlNavigator, SLOT(setDevice(K3b::Device::Device*)) );
     QWidgetAction * urlNavigatorAction = new QWidgetAction(this);
     urlNavigatorAction->setDefaultWidget(d->urlNavigator);
@@ -543,7 +543,7 @@ void K3b::MainWindow::initView()
 
 void K3b::MainWindow::createClient( K3b::Doc* doc )
 {
-    qDebug();
+    kDebug();
 
     // create the proper K3b::View (maybe we should put this into some other class like K3b::ProjectManager)
     K3b::View* view = 0;
@@ -600,7 +600,7 @@ K3b::Doc* K3b::MainWindow::activeDoc() const
 }
 
 
-K3b::Doc* K3b::MainWindow::openDocument(const QUrl& url)
+K3b::Doc* K3b::MainWindow::openDocument(const KUrl& url)
 {
     slotStatusMsg(i18n("Opening file..."));
 
@@ -693,10 +693,7 @@ void K3b::MainWindow::saveProperties( KConfigGroup& grp )
     // 3. save the url of the project (might be something like "AudioCD1") in the config
     // 4. save the status of every project (modified/saved)
 
-    QString saveDir = QString( "%1/sessions/%2/" ).arg(
-                QStandardPaths::writableLocation( QStandardPaths::DataLocation ),
-                qApp->sessionId() );
-    QDir().mkpath(saveDir);
+    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + '/', true );
 
 //     // FIXME: for some reason the config entries are not properly stored when using the default
 //     //        KMainWindow session config. Since I was not able to find the bug I use another config object
@@ -721,9 +718,9 @@ void K3b::MainWindow::saveProperties( KConfigGroup& grp )
 
         // where does the session management save it? If it's not modified and saved this is
         // the same as the url
-        QUrl saveUrl = (doc)->URL();
+        KUrl saveUrl = (doc)->URL();
         if( !(doc)->isSaved() || (doc)->isModified() )
-            saveUrl = QUrl::fromLocalFile( saveDir + QString::number(cnt) );
+            saveUrl = KUrl( saveDir + QString::number(cnt) );
         grp.writePathEntry( QString("%1 saveurl").arg(cnt), saveUrl.url() );
 
         // finally save it
@@ -747,10 +744,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
     // 3. reset the saved urls and the modified state
     // 4. delete "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
 
-    QString saveDir = QString( "%1/sessions/%2/" ).arg(
-                QStandardPaths::writableLocation( QStandardPaths::DataLocation ),
-                qApp->sessionId() );
-    QDir().mkpath(saveDir);
+    QString saveDir = KGlobal::dirs()->saveLocation( "appdata", "sessions/" + qApp->sessionId() + '/', true );
 
 //     // FIXME: for some reason the config entries are not properly stored when using the default
 //     //        KMainWindow session config. Since I was not able to find the bug I use another config object
@@ -761,18 +755,18 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
 
     int cnt = grp.readEntry( "Number of projects", 0 );
 /*
-  qDebug() << "(K3b::MainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
+  kDebug() << "(K3b::MainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
   << "                                read from config group " << c->group() << endl;
 */
     for( int i = 1; i <= cnt; ++i ) {
         // in this case the constructor works since we saved as url()
-        QUrl url = grp.readPathEntry( QString("%1 url").arg(i),QString() );
+        KUrl url = grp.readPathEntry( QString("%1 url").arg(i),QString() );
 
         bool modified = grp.readEntry( QString("%1 modified").arg(i),false );
 
         bool saved = grp.readEntry( QString("%1 saved").arg(i),false );
 
-        QUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i),QString() );
+        KUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i),QString() );
 
         // now load the project
         if( K3b::Doc* doc = k3bappcore->projectManager()->openProject( saveUrl ) ) {
@@ -783,7 +777,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
             doc->setSaved( saved );
         }
         else
-            qDebug() << "(K3b::MainWindow) could not open session saved doc " << url.toLocalFile();
+            kDebug() << "(K3b::MainWindow) could not open session saved doc " << url.toLocalFile();
 
         // remove the temp file
         if( !saved || modified )
@@ -791,7 +785,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
     }
 
     // and now remove the temp dir
-    KIO::del( QUrl::fromLocalFile(saveDir), KIO::HideProgressInfo );
+    KIO::del( KUrl(saveDir), KIO::HideProgressInfo );
 }
 
 
@@ -809,7 +803,7 @@ bool K3b::MainWindow::queryClose()
         // while a job i running
         return false;
 
-//     qDebug() << "(K3b::MainWindow::queryClose) jobs running.";
+//     kDebug() << "(K3b::MainWindow::queryClose) jobs running.";
 //     K3b::Job* job = k3bcore->runningJobs().getFirst();
 
 //     // now search for the major job (to be on the safe side although for now no subjobs register with the k3bcore)
@@ -819,12 +813,12 @@ bool K3b::MainWindow::queryClose()
 //       jh = job->jobHandler();
 //     }
 
-//     qDebug() << "(K3b::MainWindow::queryClose) main job found: " << job->jobDescription();
+//     kDebug() << "(K3b::MainWindow::queryClose) main job found: " << job->jobDescription();
 
 //     // now job is the major job and jh should be a widget
 //     QWidget* progressDialog = dynamic_cast<QWidget*>( jh );
 
-//     qDebug() << "(K3b::MainWindow::queryClose) job active: " << job->active();
+//     kDebug() << "(K3b::MainWindow::queryClose) job active: " << job->active();
 
 //     // now ask the user if he/she really wants to cancel this job
 //     if( job->active() ) {
@@ -832,16 +826,16 @@ bool K3b::MainWindow::queryClose()
 // 				      i18n("Do you really want to cancel?"),
 // 				      i18n("Cancel") ) == KMessageBox::Yes ) {
 // 	// cancel the job
-// 	qDebug() << "(K3b::MainWindow::queryClose) canceling job.";
+// 	kDebug() << "(K3b::MainWindow::queryClose) canceling job.";
 // 	job->cancel();
 
 // 	// wait for the job to finish
-// 	qDebug() << "(K3b::MainWindow::queryClose) waiting for job to finish.";
+// 	kDebug() << "(K3b::MainWindow::queryClose) waiting for job to finish.";
 // 	K3b::SignalWaiter::waitForJob( job );
 
 // 	// close the progress dialog
 // 	if( progressDialog ) {
-// 	  qDebug() << "(K3b::MainWindow::queryClose) closing progress dialog.";
+// 	  kDebug() << "(K3b::MainWindow::queryClose) closing progress dialog.";
 // 	  progressDialog->close();
 // 	  //
 // 	  // now here we have the problem that due to the whole Qt event thing the exec call (or
@@ -854,7 +848,7 @@ bool K3b::MainWindow::queryClose()
 // 	  progressDialog->reparent( 0, QPoint(0,0) );
 // 	}
 
-// 	qDebug() << "(K3b::MainWindow::queryClose) job cleanup done.";
+// 	kDebug() << "(K3b::MainWindow::queryClose) job cleanup done.";
 //       }
 //       else
 // 	return false;
@@ -866,7 +860,7 @@ bool K3b::MainWindow::queryClose()
     // if we are closed by the session manager everything is fine since we store the
     // current state in saveProperties
     //
-    if( qApp->isSavingSession() )
+    if( kapp->sessionSaving() )
         return true;
 
     // FIXME: do not close the docs here. Just ask for them to be saved and return false
@@ -921,17 +915,17 @@ void K3b::MainWindow::slotFileOpen()
 {
     slotStatusMsg(i18n("Opening file..."));
 
-    QList<QUrl> urls = QFileDialog::getOpenFileUrls( this,
-                                                     i18n("Open Files"),
-                                                     QUrl(),
-                                                     i18n("K3b Projects (*.k3b)"));
-    for( QList<QUrl>::iterator it = urls.begin(); it != urls.end(); ++it ) {
+    KUrl::List urls = KFileDialog::getOpenUrls( KUrl(":k3b-projects-folder"),
+                                                i18n("*.k3b|K3b Projects"),
+                                                this,
+                                                i18n("Open Files") );
+    for( KUrl::List::iterator it = urls.begin(); it != urls.end(); ++it ) {
         openDocument( *it );
         d->actionFileOpenRecent->addUrl( *it );
     }
 }
 
-void K3b::MainWindow::slotFileOpenRecent(const QUrl& url)
+void K3b::MainWindow::slotFileOpenRecent(const KUrl& url)
 {
     slotStatusMsg(i18n("Opening file..."));
 
@@ -990,24 +984,20 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
     }
 
     if( doc ) {
-        // we do not use the static QFileDialog method here to be able to specify a filename suggestion
-        QFileDialog dlg( this, i18n("Save As"), QString(), i18n("K3b Projects (*.k3b)") );
-        dlg.setAcceptMode( QFileDialog::AcceptSave );
-        dlg.selectFile( doc->name() );
+        // we do not use the static KFileDialog method here to be able to specify a filename suggestion
+        KFileDialog dlg( KUrl(":k3b-projects-folder"), i18n("*.k3b|K3b Projects"), this);
+        dlg.setCaption( i18n("Save As") );
+        dlg.setOperationMode( KFileDialog::Saving );
+        dlg.setSelection( doc->name() );
         dlg.exec();
-        QList<QUrl> urls = dlg.selectedUrls();
+        KUrl url = dlg.selectedUrl();
 
-        if( !urls.isEmpty() ) {
-            QUrl url = urls.front();
+        if( url.isValid() ) {
             KRecentDocument::add( url );
 
-            KIO::StatJob* statJob = KIO::stat(url, KIO::StatJob::DestinationSide, KIO::HideProgressInfo);
-            bool exists = true;
-            QObject::connect(statJob, &KJob::result, [&](KJob*) { exists = ( statJob->error() != KJob::NoError ); } );
-            statJob->exec();
-
+            bool exists = KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 );
             if( !exists ||
-                KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.toDisplayString() ),
+                KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.prettyUrl() ),
                                                     i18n("File Exists"), KStandardGuiItem::overwrite() )
                 == KMessageBox::Continue ) {
 
@@ -1229,7 +1219,7 @@ void K3b::MainWindow::slotCurrentDocChanged()
             d->lastDoc = v->doc();
         }
         else
-            qDebug() << "(K3b::MainWindow) ERROR: could not get KXMLGUIFactory instance.";
+            kDebug() << "(K3b::MainWindow) ERROR: could not get KXMLGUIFactory instance.";
     }
     else
         k3bappcore->projectManager()->setActive( 0L );
@@ -1291,7 +1281,7 @@ void K3b::MainWindow::slotWriteImage()
 }
 
 
-void K3b::MainWindow::slotWriteImage( const QUrl& url )
+void K3b::MainWindow::slotWriteImage( const KUrl& url )
 {
     K3b::ImageWritingDialog d( this );
     d.setImage( url );
@@ -1304,15 +1294,15 @@ void K3b::MainWindow::slotProjectAddFiles()
     K3b::View* view = activeView();
 
     if( view ) {
-        const QStringList files = QFileDialog::getOpenFileNames(this,
-                                                                i18n("Select Files to Add to Project"),
-                                                                QString(),
-                                                                i18n("All Files (*)") );
+        const QStringList files = KFileDialog::getOpenFileNames( KUrl(":k3b-project-add-files"),
+                                                           i18n("*|All Files"),
+                                                           this,
+                                                           i18n("Select Files to Add to Project") );
 
-        QList<QUrl> urls;
+        KUrl::List urls;
         for( QStringList::ConstIterator it = files.constBegin();
              it != files.constEnd(); it++ ) {
-            QUrl url;
+            KUrl url;
             url.setPath(*it);
             urls.append( url );
         }
@@ -1433,9 +1423,9 @@ void K3b::MainWindow::slotManualCheckSystem()
 }
 
 
-void K3b::MainWindow::addUrls( const QList<QUrl>& urls )
+void K3b::MainWindow::addUrls( const KUrl::List& urls )
 {
-    if( urls.count() == 1 && isProjectFile( d->mimeDatabase, urls.first() ) ) {
+    if( urls.count() == 1 && isProjectFile( urls.first() ) ) {
         openDocument( urls.first() );
     }
     else if( K3b::View* view = activeView() ) {
@@ -1538,5 +1528,5 @@ void K3b::MainWindow::showDiskInfo( K3b::Device::Device* dev )
     d->dirView->showDiskInfo( dev );
 }
 
-
+#include "k3b.moc"
 

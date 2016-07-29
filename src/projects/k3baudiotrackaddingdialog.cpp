@@ -24,26 +24,26 @@
 #include "k3bglobals.h"
 #include "k3bcuefileparser.h"
 
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QThread>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
+#include <QDir>
+#include <QFileInfo>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QThread>
 
 
 
-K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const QList<QUrl>& urls,
+K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const KUrl::List& urls,
                                                      AudioDoc* doc,
                                                      AudioTrack* afterTrack,
                                                      AudioTrack* parentTrack,
                                                      AudioDataSource* afterSource,
                                                      QWidget* parent )
-    : QDialog( parent),
+    : KDialog( parent),
       m_urls( AudioDoc::extractUrlList( urls ) ),
       m_doc( doc ),
       m_trackAfter( afterTrack ),
@@ -51,20 +51,20 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const QList<QUrl>& urls,
       m_sourceAfter( afterSource ),
       m_bCanceled( false )
 {
-    setWindowTitle(i18n("Please be patient..."));
+    QWidget* page = new QWidget();
+    setMainWidget(page);
+    setButtons(Cancel);
+    setDefaultButton(Cancel);
+    setCaption(i18n("Please be patient..."));
+    QGridLayout* grid = new QGridLayout( page );
 
-    m_infoLabel = new QLabel( this );
+    m_infoLabel = new QLabel( page );
     m_infoLabel->setText( i18n("Adding files to project \"%1\"...",doc->URL().fileName()) );
-    m_busyWidget = new K3b::BusyWidget( this );
+    m_busyWidget = new K3b::BusyWidget( page );
     m_busyWidget->showBusy( true );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Cancel, this );
-    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
-
-    QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->addWidget( m_infoLabel );
-    layout->addWidget( m_busyWidget );
-    layout->addWidget( buttonBox );
+    grid->addWidget( m_infoLabel, 0, 0 );
+    grid->addWidget( m_busyWidget, 1, 0 );
 
     m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );
@@ -100,7 +100,7 @@ K3b::AudioTrackAddingDialog::~AudioTrackAddingDialog()
 }
 
 
-void K3b::AudioTrackAddingDialog::addUrls( const QList<QUrl>& urls,
+void K3b::AudioTrackAddingDialog::addUrls( const KUrl::List& urls,
                                           K3b::AudioDoc* doc,
                                           K3b::AudioTrack* afterTrack,
                                           K3b::AudioTrack* parentTrack,
@@ -128,7 +128,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
         return;
     }
 
-    QUrl url = m_urls.first();
+    KUrl url = m_urls.first();
     bool valid = true;
 
     if( url.toLocalFile().right(3).toLower() == "cue" ) {
@@ -145,7 +145,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
             else {
                 // remember cue url and set the new audio file url
                 m_cueUrl = url;
-                url = m_urls[0] = QUrl::fromLocalFile( parser.imageFilename() );
+                url = m_urls[0] = KUrl( parser.imageFilename() );
             }
         }
     }
@@ -201,13 +201,13 @@ void K3b::AudioTrackAddingDialog::slotAnalysingFinished( bool /*success*/ )
         return;
     }
 
-    QUrl url = m_urls.first();
+    KUrl url = m_urls.first();
     m_urls.erase( m_urls.begin() );
 
     if( m_cueUrl.isValid() ) {
         // import the cue file
         m_doc->importCueFile( m_cueUrl.toLocalFile(), m_trackAfter, m_analyserJob->decoder() );
-        m_cueUrl = QUrl();
+        m_cueUrl = KUrl();
     }
     else {
         // create the track and source items
@@ -252,4 +252,4 @@ void K3b::AudioTrackAddingDialog::slotCancelClicked()
     m_analyserJob->wait();
 }
 
-
+#include "k3baudiotrackaddingdialog.moc"

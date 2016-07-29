@@ -20,7 +20,7 @@
 #include "k3bcontentsview.h"
 
 
-class QUrl;
+class KUrl;
 class KActionCollection;
 class KConfigGroup;
 
@@ -36,15 +36,15 @@ public:
     FileView(QWidget *parent=0);
     ~FileView();
 
-    void setUrl( const QUrl &url, bool forward = true );
-    QUrl url();
+    void setUrl( const KUrl &url, bool forward = true );
+    KUrl url();
 
     KActionCollection* actionCollection() const;
 
     void reload();
 
  Q_SIGNALS:
-    void urlEntered( const QUrl& url );
+    void urlEntered( const KUrl& url );
 
 public Q_SLOTS:
     void saveConfig( KConfigGroup grp );

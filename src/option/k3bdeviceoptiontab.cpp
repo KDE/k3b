@@ -19,13 +19,13 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KLocale>
 
+#include <QtGui/QApplication>
 #include <QtGui/QCursor>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QVBoxLayout>
+#include <QtGui/QVBoxLayout>
 
 
 K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )
@@ -56,7 +56,7 @@ void K3b::DeviceOptionTab::readDevices()
 void K3b::DeviceOptionTab::saveDevices()
 {
     // save the config
-    k3bcore->deviceManager()->saveConfig( KSharedConfig::openConfig()->group( "Devices" ) );
+    k3bcore->deviceManager()->saveConfig( KGlobal::config()->group( "Devices" ) );
 }
 
 
@@ -69,4 +69,4 @@ void K3b::DeviceOptionTab::slotRefreshButtonClicked()
     QApplication::restoreOverrideCursor();
 }
 
-
+#include "k3bdeviceoptiontab.moc"

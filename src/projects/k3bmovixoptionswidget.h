@@ -18,8 +18,6 @@
 
 #include "ui_base_k3bmovixoptionswidget.h"
 
-#include <KConfigCore/KConfigGroup>
-
 namespace K3b {
     class MovixDoc;
     class MovixBin;

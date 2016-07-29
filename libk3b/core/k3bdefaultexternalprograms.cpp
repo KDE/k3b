@@ -19,14 +19,14 @@
 #include "k3bglobals.h"
 #include "k3bprocess.h"
 
-#include <KCoreAddons/KProcess>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringList>
+#include <QTextStream>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+#include <KDebug>
+#include <KProcess>
 
 
 void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
@@ -112,21 +112,21 @@ bool K3b::AbstractCdrtoolsProgram::usingCdrkit( const ExternalBin& bin ) const
 static QString& debianWeirdnessHack( QString& path )
 {
     if( QFile::exists( path + ".mmap" ) ) {
-        qDebug() << "checking for Debian cdrtools wrapper script.";
+        kDebug() << "checking for Debian cdrtools wrapper script.";
         if( QFileInfo( path ).size() < 1024 ) {
-            qDebug() << "Debian Wrapper script size fits. Checking file.";
+            kDebug() << "Debian Wrapper script size fits. Checking file.";
             QFile f( path );
             f.open( QIODevice::ReadOnly );
             QString s = QTextStream( &f ).readAll();
             if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
-                qDebug() << "Found Debian Wrapper script.";
+                kDebug() << "Found Debian Wrapper script.";
                 QString ext;
                 if( K3b::kernelVersion().versionString().left(3) > "2.2" )
                     ext = ".mmap";
                 else
                     ext = ".shm";
 
-                qDebug() << "Using crtools" << ext;
+                kDebug() << "Using crtools" << ext;
 
                 path += ext;
             }
@@ -365,7 +365,7 @@ bool K3b::CdrdaoProgram::scanFeatures( ExternalBin& bin ) const
         return SimpleExternalProgram::scanFeatures( bin );
     }
     else {
-        qDebug() << "could not start " << bin.path();
+        kDebug() << "could not start " << bin.path();
         return false;
     }
 }
@@ -408,7 +408,7 @@ bool K3b::TranscodeProgram::scanFeatures( ExternalBin& bin ) const
         return true;
     }
     else {
-        qDebug() << "Failed to start" << modp.program();
+        kDebug() << "Failed to start" << modp.program();
         return false;
     }
 }

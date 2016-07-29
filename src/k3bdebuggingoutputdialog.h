@@ -15,13 +15,13 @@
 #ifndef _K3B_DEBUGGING_OUTPUT_DIALOG_H_
 #define _K3B_DEBUGGING_OUTPUT_DIALOG_H_
 
-#include <QtCore/QMap>
-#include <QtWidgets/QDialog>
+#include <kdialog.h>
+#include <qmap.h>
 
 class QTextEdit;
 
 namespace K3b {
-class DebuggingOutputDialog : public QDialog
+class DebuggingOutputDialog : public KDialog
 {
   Q_OBJECT
 
@@ -31,8 +31,8 @@ class DebuggingOutputDialog : public QDialog
  public Q_SLOTS:
   void setOutput( const QString& );
 
-  void slotSaveAsClicked();
-  void slotCopyClicked();
+  void slotUser1();
+  void slotUser2();
 private:
 
   QTextEdit* debugView;

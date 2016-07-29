@@ -15,7 +15,7 @@
 #ifndef _K3B_DEVICE_MENU_H_
 #define _K3B_DEVICE_MENU_H_
 
-#include <QtWidgets/QMenu>
+#include <KMenu>
 
 namespace Device {
     class Device;
@@ -30,7 +30,7 @@ namespace K3b {
      * Mounted media have an action to unmount while unmounted media
      * have an action to mount.
      */
-    class DeviceMenu : public QMenu
+    class DeviceMenu : public KMenu
     {
         Q_OBJECT
 

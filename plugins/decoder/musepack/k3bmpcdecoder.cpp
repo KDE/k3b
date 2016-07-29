@@ -15,11 +15,12 @@
 
 #include "k3bmpcdecoder.h"
 #include "k3bmpcwrapper.h"
-#include "k3bplugin_i18n.h"
 
 #include <config-k3b.h>
 
-K3B_EXPORT_PLUGIN(k3bmpcdecoder, K3bMpcDecoderFactory)
+#include <klocale.h>
+
+
 
 K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent, const QVariantList& )
     : K3b::AudioDecoderFactory( parent )
@@ -39,7 +40,7 @@ K3b::AudioDecoder* K3bMpcDecoderFactory::createDecoder( QObject* parent
 }
 
 
-bool K3bMpcDecoderFactory::canDecode( const QUrl& url )
+bool K3bMpcDecoderFactory::canDecode( const KUrl& url )
 {
     K3bMpcWrapper w;
     return w.open( url.toLocalFile() );

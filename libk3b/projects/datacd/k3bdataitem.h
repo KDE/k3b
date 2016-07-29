@@ -16,13 +16,13 @@
 #ifndef K3BDATAITEM_H
 #define K3BDATAITEM_H
 
+#include <qstring.h>
+
+#include <kio/global.h>
+#include <KMimeType>
+
 #include "k3bmsf.h"
 #include "k3b_export.h"
-
-#include <KIOCore/KIO/Global>
-
-#include <QtCore/QMimeType>
-#include <QtCore/QString>
 
 namespace K3b {
     class DirItem;
@@ -174,7 +174,7 @@ namespace K3b {
         /**
          * Default implementation returns the default mimetype.
          */
-        virtual QMimeType mimeType() const;
+        virtual KMimeType::Ptr mimeType() const;
 
         void setRenameable( bool b ) { m_bRenameable = b; }
         void setMoveable( bool b ) { m_bMovable = b; }

@@ -19,11 +19,11 @@
 
 #include "option/k3boptiondialog.h"
 
-#include <KConfigCore/KSharedConfig>
+#include <KSharedConfig>
+#include <KUrl>
 #include <KXmlGuiWindow>
 
-#include <QtCore/QList>
-#include <QtCore/QUrl>
+#include <QList>
 
 namespace K3b {
     class Doc;
@@ -47,7 +47,7 @@ namespace K3b {
         ~MainWindow();
 
         /** opens a file specified by commandline option */
-        Doc* openDocument( const QUrl& url = QUrl() );
+        Doc* openDocument( const KUrl& url = KUrl() );
 
         Device::DeviceManager* deviceManager() const;
         ExternalBinManager* externalBinManager() const;
@@ -85,7 +85,7 @@ namespace K3b {
         void slotClearProject();
 
         void slotWriteImage();
-        void slotWriteImage( const QUrl& url );
+        void slotWriteImage( const KUrl& url );
         void formatMedium( K3b::Device::Device* );
         void slotFormatMedium();
         void mediaCopy( K3b::Device::Device* );
@@ -106,7 +106,7 @@ namespace K3b {
         void slotCheckSystem();
         void slotManualCheckSystem();
 
-        void addUrls( const QList<QUrl>& urls );
+        void addUrls( const KUrl::List& urls );
 
     Q_SIGNALS:
         void initializationInfo( const QString& );
@@ -143,7 +143,7 @@ namespace K3b {
         /** open a file and load it into the document*/
         void slotFileOpen();
         /** opens a file from the recent files menu */
-        void slotFileOpenRecent(const QUrl& url);
+        void slotFileOpenRecent(const KUrl& url);
         /** save a document */
         void slotFileSave();
         /** save a document by a new filename*/

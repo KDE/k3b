@@ -16,8 +16,8 @@
 #define _K3B_DIR_SIZE_JOB_H_
 
 #include "k3bthreadjob.h"
-#include <KIOCore/KIO/Global>
-#include <QtCore/QUrl>
+#include <kio/global.h>
+#include <kurl.h>
 
 #include "k3b_export.h"
 
@@ -57,7 +57,7 @@ namespace K3b {
         KIO::filesize_t totalSymlinks() const;
 
     public Q_SLOTS:
-        void setUrls( const QList<QUrl>& urls );
+        void setUrls( const KUrl::List& urls );
         void setFollowSymlinks( bool );
 
     private:

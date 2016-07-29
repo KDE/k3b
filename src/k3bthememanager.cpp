@@ -16,16 +16,18 @@
 
 #include "k3bversion.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KConfigWidgets/KColorScheme>
+#include <kstandarddirs.h>
+#include <kglobalsettings.h>
+#include <ksimpleconfig.h>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <KConfigGroup>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QStringList>
-#include <QtGui/QPixmap>
+#include <qpixmap.h>
+#include <qfile.h>
+#include <qfileinfo.h>
+#include <qdir.h>
+#include <qstringlist.h>
 
 
 K3b::Theme::Theme()
@@ -34,21 +36,12 @@ K3b::Theme::Theme()
 }
 
 
-K3b::Theme::Theme( QString name)
-    : m_bgMode(BG_TILE)
-{
-    QString path = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/pics/" + name + "/k3b.theme" );
-    if( !path.isEmpty() )
-        m_path = path.left( path.length() - 9 );
-}
-
-
 QColor K3b::Theme::backgroundColor() const
 {
     if( m_bgColor.isValid() )
         return m_bgColor;
     else
-        return KColorScheme(QPalette::Active, KColorScheme::Window).background(KColorScheme::ActiveBackground).color();
+        return KGlobalSettings::activeTitleColor();
 }
 
 
@@ -57,7 +50,7 @@ QColor K3b::Theme::foregroundColor() const
     if( m_fgColor.isValid() )
         return m_fgColor;
     else
-        return KColorScheme(QPalette::Active, KColorScheme::Window).foreground(KColorScheme::ActiveText).color();
+        return KGlobalSettings::activeTextColor();
 }
 
 
@@ -74,7 +67,7 @@ QPixmap K3b::Theme::pixmap( const QString& name ) const
             return *m_pixmapMap.insert( name, pix );
     }
 
-    qDebug() << "(K3b::Theme)" << m_name << ": could not load image" << name << "in" << m_path;
+    kDebug() << "(K3b::Theme) " << m_name << ": could not load image " << name;
 
     return m_emptyPixmap;
 }
@@ -225,7 +218,7 @@ void K3b::ThemeManager::readConfig( const KConfigGroup& c )
 
 void K3b::ThemeManager::saveConfig( KConfigGroup c )
 {
-    qDebug() << d->currentThemeName;
+    kDebug() << d->currentThemeName;
     if( !d->currentThemeName.isEmpty() ) {
         c.writeEntry( "current theme", d->currentThemeName );
     }
@@ -274,7 +267,7 @@ void K3b::ThemeManager::loadThemes()
         delete *it;
     d->themes.clear();
 
-    QStringList dirs = QStandardPaths::locateAll( QStandardPaths::GenericDataLocation, "k3b/pics", QStandardPaths::LocateDirectory );
+    QStringList dirs = KGlobal::dirs()->findDirs( "data", "k3b/pics" );
     // now search for themes. As there may be multiple themes with the same name
     // we only use the names from this list and then use findResourceDir to make sure
     // the local is preferred over the global stuff (like testing a theme by copying it
@@ -285,14 +278,14 @@ void K3b::ThemeManager::loadThemes()
         QStringList entries = dir.entryList( QDir::Dirs|QDir::NoDotAndDotDot );
         // every theme dir needs to contain a k3b.theme file
         for( QStringList::const_iterator entryIt = entries.constBegin(); entryIt != entries.constEnd(); ++entryIt ) {
-            QString themeDir = *dirIt + '/' + *entryIt + '/';
+            QString themeDir = *dirIt + *entryIt + '/';
             if( !themeNames.contains( *entryIt ) && QFile::exists( themeDir + "k3b.theme" ) ) {
                 bool themeValid = true;
 
                 // check for all nessessary pixmaps (this is a little evil hacking)
                 for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
                     if( !QFile::exists( themeDir + K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
-                        qDebug() << "(K3b::ThemeManager) theme misses pixmap: " << K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i );
+                        kDebug() << "(K3b::ThemeManager) theme misses pixmap: " << K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i );
                         themeValid = false;
                         break;
                     }
@@ -315,13 +308,16 @@ void K3b::ThemeManager::loadThemes()
 
 void K3b::ThemeManager::loadTheme( const QString& name )
 {
-    K3b::Theme* t = new K3b::Theme( name );
-    if( !t->m_path.isEmpty() ) {
+    QString path = KGlobal::dirs()->findResource( "data", "k3b/pics/" + name + "/k3b.theme" );
+    if( !path.isEmpty() ) {
+        K3b::Theme* t = new K3b::Theme();
         t->m_name = name;
-        t->m_local = QFileInfo( t->m_path ).isWritable();
+        t->m_path = path.left( path.length() - 9 );
+        QFileInfo fi( t->m_path );
+        t->m_local = fi.isWritable();
 
         // load the stuff
-        KConfig cfg( t->m_path + "/k3b.theme" );
+        KConfig cfg( path );
         KConfigGroup group(&cfg,"");
         t->m_author = group.readEntry( "Author" );
         t->m_comment = group.readEntry( "Comment" );
@@ -331,6 +327,8 @@ void K3b::ThemeManager::loadTheme( const QString& name )
         t->m_bgMode = ( group.readEntry( "BackgroundMode" ) == "Scaled" ? K3b::Theme::BG_SCALE : K3b::Theme::BG_TILE );
 
         d->themes.append( t );
-    } else
-	delete t;
+    }
 }
+
+
+#include "k3bthememanager.moc"

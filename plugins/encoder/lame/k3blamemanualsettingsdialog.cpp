@@ -14,13 +14,16 @@
  */
 
 #include "k3blamemanualsettingsdialog.h"
-#include "k3bplugin_i18n.h"
+
+#include <KLocale>
 
 K3bLameManualSettingsDialog::K3bLameManualSettingsDialog( QWidget* parent )
-    : QDialog( parent )
+    : KDialog( parent )
 {
-    setWindowTitle( i18n("(Lame) Manual Quality Settings") );
-    setupUi( this );
+    setCaption( i18n("(Lame) Manual Quality Settings") );
+    setButtons( Ok|Cancel );
+
+    setupUi( mainWidget() );
 }
 
 

@@ -16,8 +16,6 @@
 #include "k3bhelper.h"
 #include "k3bhelperprogramitem.h"
 
-#include <KAuth/KAuthHelperSupport>
-
 #include <QtCore/QFile>
 #include <QtCore/QProcess>
 #include <QtCore/QString>
@@ -91,7 +89,7 @@ Helper::Helper()
     qRegisterMetaTypeStreamOperators<HelperProgramItem>( "K3b::HelperProgramItem" );
 }
 
-KAuth::ActionReply Helper::updatepermissions( QVariantMap args )
+ActionReply Helper::updatepermissions( QVariantMap args )
 {
     QString burningGroup = args["burningGroup"].toString();
     QStringList devices = args["devices"].toStringList();
@@ -123,7 +121,7 @@ KAuth::ActionReply Helper::updatepermissions( QVariantMap args )
             failedToUpdate.push_back( program.m_path );
     }
     
-    KAuth::ActionReply reply = KAuth::ActionReply::SuccessReply();
+    ActionReply reply = ActionReply::SuccessReply;
     QVariantMap data;
     data["updated"] = updated;
     data["failedToUpdate"] = failedToUpdate;
@@ -132,7 +130,7 @@ KAuth::ActionReply Helper::updatepermissions( QVariantMap args )
     return reply;
 }
 
-KAuth::ActionReply Helper::addtogroup( QVariantMap args )
+ActionReply Helper::addtogroup( QVariantMap args )
 {
     const QString groupName = args["groupName"].toString();
     const QString userName = args["userName"].toString();
@@ -140,12 +138,12 @@ KAuth::ActionReply Helper::addtogroup( QVariantMap args )
     QProcess gpasswd;
     int errorCode = gpasswd.execute( "gpasswd", QStringList() << "--add" << userName << groupName );
 
-    KAuth::ActionReply reply;
+    ActionReply reply;
     if( errorCode == 0 ) {
-        reply = KAuth::ActionReply::SuccessReply();
+        reply = KAuth::ActionReply::SuccessReply;
     } else {
-        reply = KAuth::ActionReply::HelperErrorReply();
-        reply.setErrorCode( (KAuth::ActionReply::Error) errorCode );
+        reply = KAuth::ActionReply::HelperErrorReply;
+        reply.setErrorCode( errorCode );
         reply.setErrorDescription( QString( "gpasswd --add " + userName + " " + groupName + " : " + QString::fromLocal8Bit( gpasswd.readAllStandardError().data() ) ) );
     }
 
@@ -154,6 +152,6 @@ KAuth::ActionReply Helper::addtogroup( QVariantMap args )
 
 } // namespace K3b
 
-KAUTH_HELPER_MAIN("org.kde.k3b", K3b::Helper)
+KDE4_AUTH_HELPER_MAIN("org.kde.k3b", K3b::Helper)
 
-
+#include "k3bhelper.moc"

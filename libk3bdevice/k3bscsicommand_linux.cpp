@@ -18,7 +18,7 @@
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"
 
-#include <QtCore/QDebug>
+#include <kdebug.h>
 
 #include <sys/ioctl.h>
 #undef __STRICT_ANSI__

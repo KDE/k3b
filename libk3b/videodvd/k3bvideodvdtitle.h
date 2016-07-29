@@ -23,7 +23,7 @@
 #include "k3bvideodvdsubpicturestream.h"
 #include "k3bvideodvdptt.h"
 
-#include <QtCore/QVector>
+#include <qvector.h>
 
 
 namespace K3b {

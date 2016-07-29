@@ -13,6 +13,19 @@
  */
 
 #include "k3bdatamultisessionimportdialog.h"
+
+#include <QCursor>
+#include <QFont>
+#include <QLabel>
+#include <QLayout>
+#include <QMap>
+#include <QTreeWidget>
+#include <QVBoxLayout>
+
+#include <KIconLoader>
+#include <KLocale>
+#include <KMessageBox>
+
 #include "k3bcore.h"
 #include "k3bdatadoc.h"
 #include "k3btoc.h"
@@ -25,20 +38,6 @@
 
 #include "../k3bapplication.h"
 #include "../k3b.h"
-
-#include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-
-#include <QtCore/QMap>
-#include <QtGui/QCursor>
-#include <QtGui/QFont>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTreeWidget>
-#include <QtWidgets/QVBoxLayout>
 
 namespace {
     class SessionInfo
@@ -65,7 +64,6 @@ class K3b::DataMultisessionImportDialog::Private
 public:
     K3b::DataDoc* doc;
     QTreeWidget* sessionView;
-    QPushButton* okButton;
 
     Sessions sessions;
 };
@@ -183,7 +181,7 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
     fnt.setBold( true );
     mediumItem->setText( 0, medium.shortString() );
     mediumItem->setFont( 0, fnt );
-    mediumItem->setIcon( 0, QIcon::fromTheme("media-optical-recordable") );
+    mediumItem->setIcon( 0, KIcon("media-optical-recordable") );
 
     const K3b::Device::Toc& toc = medium.toc();
     QTreeWidgetItem* sessionItem = 0;
@@ -216,9 +214,9 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
             sessionItem->setText( 0, i18n( "Session %1", lastSession )
                                      + ( sessionInfo.isEmpty() ? QString() : " (" + sessionInfo + ')' ) );
             if ( track.type() == K3b::Device::Track::TYPE_AUDIO )
-                sessionItem->setIcon( 0, QIcon::fromTheme( "audio-x-generic" ) );
+                sessionItem->setIcon( 0, KIcon( "audio-x-generic" ) );
             else
-                sessionItem->setIcon( 0, QIcon::fromTheme( "application-x-tar" ) );
+                sessionItem->setIcon( 0, KIcon( "application-x-tar" ) );
 
             d->sessions.insert( sessionItem, SessionInfo( lastSession, medium.device() ) );
         }
@@ -241,36 +239,49 @@ void K3b::DataMultisessionImportDialog::slotSelectionChanged()
 {
     Sessions::const_iterator session = d->sessions.constFind( d->sessionView->currentItem() );
     if ( session != d->sessions.constEnd() ) {
-        d->okButton->setEnabled( true );
+        showSessionInfo( session->device, session->sessionNumber );
+        enableButton( Ok, true );
     }
     else {
-        d->okButton->setEnabled( false );
+        showSessionInfo( 0, 0 );
+        enableButton( Ok, false );
+    }
+}
+
+
+void K3b::DataMultisessionImportDialog::showSessionInfo( K3b::Device::Device* dev, int session )
+{
+    // FIXME: show some information about the selected session
+    if ( dev ) {
+
+    }
+    else {
+
     }
 }
 
 
 K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent )
-    : QDialog( parent),
+    : KDialog( parent),
       d( new Private() )
 {
+    QWidget *widget = new QWidget();
+    setMainWidget(widget);
+    setButtons(Ok|Cancel);
+    setDefaultButton(Ok);
     setModal(true);
-    setWindowTitle(i18n("Session Import"));
-    QVBoxLayout* layout = new QVBoxLayout( this );
+    setCaption(i18n("Session Import"));
+    QVBoxLayout* layout = new QVBoxLayout( widget );
+    layout->setContentsMargins( 0, 0, 0, 0 );
 
-    QLabel* label = new QLabel( i18n( "Please select a session to import." ), this );
-    d->sessionView = new QTreeWidget( this );
+    QLabel* label = new QLabel( i18n( "Please select a session to import." ), widget );
+    d->sessionView = new QTreeWidget( widget );
     d->sessionView->setHeaderHidden( true );
     d->sessionView->setItemsExpandable( false );
     d->sessionView->setRootIsDecorated( false );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
-    d->okButton = buttonBox->button( QDialogButtonBox::Ok );
-    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
-    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
-
     layout->addWidget( label );
     layout->addWidget( d->sessionView );
-    layout->addWidget( buttonBox );
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
              this, SLOT(updateMedia()) );
@@ -287,4 +298,4 @@ K3b::DataMultisessionImportDialog::~DataMultisessionImportDialog()
     delete d;
 }
 
-
+#include "k3bdatamultisessionimportdialog.moc"

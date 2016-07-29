@@ -20,8 +20,9 @@
 #include "k3bdataitem.h"
 #include "k3bglobals.h"
 
-#include <KIOCore/KIO/Global>
-#include <QtCore/QString>
+#include <kio/global.h>
+#include <KMimeType>
+#include <QString>
 
 #include "k3b_export.h"
 
@@ -87,7 +88,7 @@ namespace K3b {
 
         QString linkDest() const;
 
-        QMimeType mimeType() const override;
+        virtual KMimeType::Ptr mimeType() const;
 
         /** returns true if the item is not a link or
          *  if the link's destination is part of the compilation */
@@ -118,7 +119,7 @@ namespace K3b {
 
         QString m_localPath;
 
-        QMimeType m_mimeType;
+        KMimeType::Ptr m_mimeType;
     };
 
     bool operator==( const FileItem::Id&, const FileItem::Id& );

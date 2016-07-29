@@ -14,9 +14,9 @@
 
 
 #include "k3btoc.h"
-#include <QtCore/QDebug>
-#include <QtCore/QString>
+#include "kdebug.h"
 
+#include <qstring.h>
 
 
 K3b::Device::Toc::Toc()

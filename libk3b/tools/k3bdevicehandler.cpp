@@ -146,7 +146,7 @@ void K3b::Device::DeviceHandler::setDevice( Device* dev )
 void K3b::Device::DeviceHandler::sendCommand( DeviceHandler::Commands command )
 {
     if( active() ) {
-        qDebug() << "thread already running. canceling thread...";
+        kDebug() << "thread already running. canceling thread...";
         cancel();
         wait();
     }
@@ -215,7 +215,7 @@ void K3b::Device::DeviceHandler::jobFinished( bool success )
 
 bool K3b::Device::DeviceHandler::run()
 {
-    qDebug() << "starting command: " << d->command;
+    kDebug() << "starting command: " << d->command;
 
     d->success = false;
 
@@ -288,7 +288,7 @@ bool K3b::Device::DeviceHandler::run()
         d->dev->close();
     }
 
-    qDebug() << "finished command: " << d->command;
+    kDebug() << "finished command: " << d->command;
 
     return d->success;
 }
@@ -329,4 +329,4 @@ QDebug operator<<( QDebug dbg, K3b::Device::DeviceHandler::Commands commands )
     return dbg.space();
 }
 
-
+#include "k3bdevicehandler.moc"

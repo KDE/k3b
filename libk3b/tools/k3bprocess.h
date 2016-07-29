@@ -17,9 +17,10 @@
 #define K3B_PROCESS_H
 
 
-#include "k3b_export.h"
-
+//#include <KProcess>
 #include "k3bkprocess.h"
+
+#include "k3b_export.h"
 
 namespace K3b {
     class ExternalBin;

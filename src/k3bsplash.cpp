@@ -16,21 +16,24 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KCoreAddons/KAboutData>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QEvent>
+#include <QFontMetrics>
+#include <QLabel>
+#include <QPainter>
+#include <QPixmap>
+#include <QString>
 
-#include <QtCore/QEvent>
-#include <QtCore/QString>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
+#include <KAboutData>
+#include <KApplication>
+#include <KStandardDirs>
 
 K3b::Splash::Splash( QWidget* parent )
-    : QWidget( parent)
+    : KVBox( parent)
 {
+    setMargin( 0 );
+    setSpacing( 0 );
     setAttribute( Qt::WA_DeleteOnClose );
     setWindowFlags(Qt::FramelessWindowHint|
                    Qt::SplashScreen|
@@ -42,7 +45,7 @@ K3b::Splash::Splash( QWidget* parent )
     pal.setColor( QPalette::WindowText, Qt::white );
     setPalette( pal );
 
-    QLabel* copyrightLabel = new QLabel( KAboutData::applicationData().copyrightStatement(), this );
+    QLabel* copyrightLabel = new QLabel( KGlobal::mainComponent().aboutData()->copyrightStatement(), this );
     copyrightLabel->setMargin( 5 );
     copyrightLabel->setAlignment( Qt::AlignRight );
 
@@ -54,13 +57,6 @@ K3b::Splash::Splash( QWidget* parent )
 
     m_infoBox = new QLabel( this );
     m_infoBox->setMargin( 5 );
-
-    QVBoxLayout* layout = new QVBoxLayout( this );
-    layout->setContentsMargins( 0, 0, 0, 0 );
-    layout->setSpacing( 0 );
-    layout->addWidget( copyrightLabel );
-    layout->addWidget( picLabel );
-    layout->addWidget( m_infoBox );
 
     // Set geometry, with support for Xinerama systems
     QRect r;
@@ -84,7 +80,7 @@ void K3b::Splash::mousePressEvent( QMouseEvent* )
 
 void K3b::Splash::show()
 {
-    QWidget::show();
+    KVBox::show();
     // make sure the splash screen is shown immediately
     qApp->processEvents();
 }
@@ -128,4 +124,4 @@ void K3b::Splash::addInfo( const QString& s )
 // }
 
 
-
+#include "k3bsplash.moc"

@@ -19,8 +19,8 @@
 
 #include "k3babstractwriter.h"
 
-#include <QtCore/QProcess>
-#include <QtCore/QStringList>
+#include <qstringlist.h>
+#include <qprocess.h>
 
 namespace K3b {
     class ExternalBin;
@@ -54,6 +54,7 @@ namespace K3b {
         qint64 write( const char* data, qint64 maxSize );
 
         QIODevice* ioDevice() const;
+        bool closeFd();
 
     public Q_SLOTS:
         void start();

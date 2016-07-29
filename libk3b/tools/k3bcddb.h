@@ -15,14 +15,16 @@
 #ifndef _K3B_CDDB_H_
 #define _K3B_CDDB_H_
 
-#include <KCoreAddons/KJob>
+#include <KDialog>
+#include <KJob>
 
 #include <libkcddb/kcddb.h>
 #include <libkcddb/cdinfo.h>
 
 #include "k3b_export.h"
 
-class QWidget;
+
+class QListWidget;
 
 namespace K3b {
     namespace Device {
@@ -32,9 +34,21 @@ namespace K3b {
     class Medium;
 
     namespace CDDB {
-        namespace MultiEntriesDialog {
-             LIBK3B_EXPORT int selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent = nullptr );
-        }
+        class LIBK3B_EXPORT MultiEntriesDialog : public KDialog
+        {
+            Q_OBJECT
+
+        public:
+            ~MultiEntriesDialog();
+
+            static int selectCddbEntry( const KCDDB::CDInfoList& entries, QWidget* parent = 0 );
+
+        protected:
+            MultiEntriesDialog( QWidget* parent = 0 );
+
+        private:
+            QListWidget* m_listBox;
+        };
 
 
         class LIBK3B_EXPORT CDDBJob : public KJob

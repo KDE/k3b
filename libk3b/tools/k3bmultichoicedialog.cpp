@@ -15,16 +15,18 @@
 #include "k3bmultichoicedialog.h"
 #include "k3bstdguiitems.h"
 
-#include <KIconThemes/KIconLoader>
+#include <KApplication>
+#include <KDialog>
+#include <KIconLoader>
+#include <KPushButton>
 
-#include <QtCore/QSignalMapper>
-#include <QtGui/QCloseEvent>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMessageBox>
-#include <QtWidgets/QPushButton>
+#include <QCloseEvent>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QMessageBox>
+#include <QSignalMapper>
 
 
 class K3b::MultiChoiceDialog::Private
@@ -36,7 +38,7 @@ public:
     }
 
     QSignalMapper* mapper;
-    QList<QPushButton*> buttons;
+    QList<KPushButton*> buttons;
     QHBoxLayout* buttonLayout;
 
     bool buttonClicked;
@@ -90,7 +92,7 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     QGridLayout* mainGrid = new QGridLayout( this );
 
     QHBoxLayout* contents = new QHBoxLayout;
-    contents->setSpacing( contents->spacing()*2 );
+    contents->setSpacing( KDialog::spacingHint()*2 );
     contents->setContentsMargins( 0, 0, 0, 0 );
 
     QLabel* pixLabel = new QLabel( this );
@@ -123,8 +125,7 @@ K3b::MultiChoiceDialog::~MultiChoiceDialog()
 
 int K3b::MultiChoiceDialog::addButton( const KGuiItem& b )
 {
-    QPushButton* button = new QPushButton( this );
-    KGuiItem::assign( button, b );
+    KPushButton* button = new KPushButton( b, this );
     d->buttonLayout->addWidget( button );
     d->buttons.append(button);
     d->mapper->setMapping( button, d->buttons.count() );
@@ -188,4 +189,4 @@ int K3b::MultiChoiceDialog::choose( const QString& caption,
 }
 
 
-
+#include "k3bmultichoicedialog.moc"

@@ -41,17 +41,17 @@
 #include "k3binffilewriter.h"
 #include "k3bglobalsettings.h"
 #include "k3baudiofile.h"
-#include "k3b_i18n.h"
 
-#include <KCoreAddons/KStringHandler>
-#include <KIOCore/KIO/CopyJob>
-#include <KIOCore/KIO/DeleteJob>
-#include <KIOCore/KIO/Global>
+#include <qfile.h>
+#include <qdatastream.h>
+#include <qapplication.h>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTemporaryFile>
+#include <kdebug.h>
+#include <klocale.h>
+#include <ktemporaryfile.h>
+#include <kio/netaccess.h>
+#include <kio/global.h>
+#include <kstringhandler.h>
 
 
 static QString createNonExistingFilesString( const QList<K3b::AudioFile*>& items, int max )
@@ -634,7 +634,7 @@ bool K3b::MixedJob::prepareWriter()
         ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::WritingAppCdrecord ) )  {
 
         if( !writeInfFiles() ) {
-            qDebug() << "(K3b::MixedJob) could not write inf-files.";
+            kDebug() << "(K3b::MixedJob) could not write inf-files.";
             emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;
@@ -675,7 +675,7 @@ bool K3b::MixedJob::prepareWriter()
     }
     else {
         if( !writeTocFile() ) {
-            qDebug() << "(K3b::DataJob) could not write tocfile.";
+            kDebug() << "(K3b::DataJob) could not write tocfile.";
             emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;
@@ -740,7 +740,8 @@ bool K3b::MixedJob::writeTocFile()
     // FIXME: create the tocfile in the same directory like all the other files.
 
     delete m_tocFile;
-    m_tocFile = new QTemporaryFile( "XXXXXX.toc" );
+    m_tocFile = new KTemporaryFile();
+    m_tocFile->setSuffix( ".toc" );
     m_tocFile->open();
 
     // write the toc-file
@@ -799,8 +800,8 @@ bool K3b::MixedJob::writeTocFile()
     m_tocFile->close();
 
     // backup for debugging
-//    KIO::del("/tmp/trueg/tocfile_debug_backup.toc",0L)->exec();
-//    KIO::copyAs( m_tocFile->name(), "/tmp/trueg/tocfile_debug_backup.toc",0L )->exec();
+//    KIO::NetAccess::del("/tmp/trueg/tocfile_debug_backup.toc",0L);
+//    KIO::NetAccess::copy( m_tocFile->name(), "/tmp/trueg/tocfile_debug_backup.toc",0L );
 
     return success;
 }
@@ -1362,4 +1363,4 @@ QString K3b::MixedJob::jobDetails() const
                  : QString() ) );
 }
 
-
+#include "k3bmixedjob.moc"

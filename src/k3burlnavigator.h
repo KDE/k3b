@@ -15,8 +15,7 @@
 #ifndef _K3B_URL_NAVIGATOR_H_
 #define _K3B_URL_NAVIGATOR_H_
 
-#include <KIOFileWidgets/KUrlNavigator>
-#include <QtCore/QUrl>
+#include <kurlnavigator.h>
 
 namespace K3b {
     namespace Device {
@@ -35,11 +34,11 @@ namespace K3b {
         void setDevice( K3b::Device::Device* );
 
     Q_SIGNALS:
-        void activated( const QUrl& url );
+        void activated( const KUrl& url );
         void activated( K3b::Device::Device* dev );
 
     private Q_SLOTS:
-        void urlActivated( const QUrl &url );
+        void urlActivated( const KUrl &url );
 
     };
 }

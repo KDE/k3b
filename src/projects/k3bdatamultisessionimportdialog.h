@@ -15,13 +15,17 @@
 #ifndef _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 #define _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 
-#include <QtWidgets/QDialog>
+#include <kdialog.h>
 
 namespace K3b {
     class DataDoc;
     class Medium;
 
-    class DataMultisessionImportDialog : public QDialog
+    namespace Device {
+        class Device;
+    }
+
+    class DataMultisessionImportDialog : public KDialog
     {
         Q_OBJECT
 
@@ -45,6 +49,7 @@ namespace K3b {
         void slotSelectionChanged();
         void updateMedia();
         void addMedium( const K3b::Medium& medium );
+        void showSessionInfo( K3b::Device::Device* dev, int session );
 
     private:
         DataMultisessionImportDialog( QWidget* parent );

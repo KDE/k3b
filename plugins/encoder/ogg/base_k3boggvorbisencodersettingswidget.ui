@@ -218,7 +218,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QSpinBox" name="m_inputBitrateUpper">
+            <widget class="KIntNumInput" name="m_inputBitrateUpper">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -231,7 +231,7 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QSpinBox" name="m_inputBitrateNominal">
+            <widget class="KIntNumInput" name="m_inputBitrateNominal">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -244,7 +244,7 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QSpinBox" name="m_inputBitrateLower">
+            <widget class="KIntNumInput" name="m_inputBitrateLower">
              <property name="enabled">
               <bool>false</bool>
              </property>
@@ -304,6 +304,17 @@
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>KIntNumInput</class>
+   <extends>QWidget</extends>
+   <header>knuminput.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <includes>
+  <include location="local">knuminput.h</include>
+ </includes>
  <resources/>
  <connections>
   <connection>

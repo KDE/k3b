@@ -27,9 +27,10 @@
 #include "k3bmediacache.h"
 #include "k3bdevicetypes.h"
 #include "k3bdeviceglobals.h"
-#include "k3b_i18n.h"
 
 #include <QtCore/QFile>
+
+#include <KLocale>
 
 
 class K3b::MetaWriter::Private
@@ -533,10 +534,10 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
         emit infoMessage( i18n("Most writers do not support writing "
                                "multisession CDs in DAO mode."), MessageWarning );
 
-    qDebug() << "Writing mode:     " << d->writingMode;
-    qDebug() << "Used Writing mode:" << d->usedWritingMode;
-    qDebug() << "Writing app:     " << d->writingApp;
-    qDebug() << "Used Writing app:" << d->usedWritingApp;
+    kDebug() << "Writing mode:     " << d->writingMode;
+    kDebug() << "Used Writing mode:" << d->usedWritingMode;
+    kDebug() << "Writing app:     " << d->writingApp;
+    kDebug() << "Used Writing app:" << d->usedWritingApp;
 
     return true;
 }
@@ -883,4 +884,4 @@ K3b::WritingMode K3b::MetaWriter::usedWritingMode() const
     return d->usedWritingMode;
 }
 
-
+#include "k3bmetawriter.moc"

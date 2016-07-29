@@ -17,8 +17,8 @@
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
+#include <QLabel>
+#include <QLayout>
 
 
 class K3b::MediaContentsView::Private
@@ -137,21 +137,21 @@ void K3b::MediaContentsView::slotMediumChanged( K3b::Device::Device* dev )
         // important since K3b blocks the devices in action and after
         // the release they are signalled as changed)
         if( m == medium() ) {
-            qDebug() << " medium did not change";
+            kDebug() << k_funcinfo << " medium did not change";
             enableInteraction( true );
         }
         else if( ( m.diskInfo().mediaType() == Device::MEDIA_NONE ||
                    m.content() & supportedMediumContent() ) &&
                  m.diskInfo().mediaType() & supportedMediumTypes() &&
                  m.diskInfo().diskState() & supportedMediumStates() ) {
-            qDebug() << " new supported medium found";
+            kDebug() << k_funcinfo << " new supported medium found";
             reload( m );
         }
         else {
-            qDebug() << " unsupported medium found";
+            kDebug() << k_funcinfo << " unsupported medium found";
             enableInteraction( false );
         }
     }
 }
 
-
+#include "k3bmediacontentsview.moc"

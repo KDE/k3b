@@ -17,11 +17,11 @@
 #ifndef _K3B_WELCOME_WIDGET_H_
 #define _K3B_WELCOME_WIDGET_H_
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtGui/QImage>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QWidget>
+#include <QList>
+#include <QMap>
+#include <QImage>
+#include <QPixmap>
+#include <QWidget>
 
 class KConfigGroup;
 class QDragEnterEvent;
@@ -48,7 +48,7 @@ namespace K3b {
         void loadConfig( const KConfigGroup& c );
         void saveConfig( KConfigGroup c );
 
-        int heightForWidth( int width ) const override;
+        virtual int heightForWidth( int width ) const;
 
         void addAction( QAction* );
         void removeAction( QAction* );
@@ -57,12 +57,11 @@ namespace K3b {
         void rebuildGui( const QList<QAction*>& );
 
     protected:
-        bool event( QEvent* event ) override;
-        void resizeEvent( QResizeEvent* ) override;
-        void paintEvent( QPaintEvent* ) override;
-        void dropEvent( QDropEvent* event ) override;
-        void dragEnterEvent( QDragEnterEvent* event ) override;
-        void mousePressEvent ( QMouseEvent* e ) override;
+        virtual void resizeEvent( QResizeEvent* );
+        virtual void paintEvent( QPaintEvent* );
+        virtual void dropEvent( QDropEvent* event );
+        virtual void dragEnterEvent( QDragEnterEvent* event );
+        virtual void mousePressEvent ( QMouseEvent* e );
 
     private Q_SLOTS:
         void slotThemeChanged();

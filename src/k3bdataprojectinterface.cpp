@@ -18,7 +18,7 @@
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
 #include "k3bisooptions.h"
-#include <QtCore/QList>
+#include <QList>
 
 namespace K3b {
 
@@ -58,10 +58,8 @@ void DataProjectInterface::addUrl( const QString& url, const QString& dir )
 void DataProjectInterface::addUrls( const QStringList& urls, const QString& dir )
 {
     DataItem* p = m_dataDoc->root()->findByPath( dir );
-    QList<QUrl> urlList;
-    for( auto& url : urls ) { urlList.push_back( QUrl::fromUserInput( url ) ); }
     if( p && p->isDir() )
-        m_dataDoc->addUrlsToDir( urlList, static_cast<DirItem*>(p) );
+        m_dataDoc->addUrlsToDir( KUrl::List(urls), static_cast<DirItem*>(p) );
 }
 
 
@@ -132,4 +130,4 @@ bool DataProjectInterface::setSortWeight( const QString& path, long weight ) con
 
 } // namespace K3b
 
-
+#include "k3bdataprojectinterface.moc"

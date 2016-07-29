@@ -19,7 +19,7 @@
 #include "k3bmedium.h"
 #include "k3bcdtext.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocale>
 
 #include <libkcddb/cdinfo.h>
 
@@ -111,7 +111,6 @@ K3b::AudioTrackModel::~AudioTrackModel()
 
 void K3b::AudioTrackModel::setMedium( const K3b::Medium& medium )
 {
-    beginResetModel();
     d->medium = medium;
     d->itemCheckedList.resize( d->medium.toc().count() );
     for ( int i = 0; i < d->medium.toc().count(); ++i ) {
@@ -120,15 +119,14 @@ void K3b::AudioTrackModel::setMedium( const K3b::Medium& medium )
         else
             d->itemCheckedList[i] = false;
     }
-    endResetModel();
+    reset();
 }
 
 
 void K3b::AudioTrackModel::setCddbInfo( const KCDDB::CDInfo& data )
 {
-    beginResetModel();
     d->cddbCache = data;
-    endResetModel();
+    reset();
 }
 
 
@@ -174,7 +172,7 @@ QVariant K3b::AudioTrackModel::headerData( int section, Qt::Orientation orientat
 
 QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
 {
-//    qDebug() << index << role;
+//    kDebug() << index << role;
 
     // FIXME: add a cache for all the values that can be changed (maybe a local KCDDB::CDInfo)
     // which will then be the first choice for all values
@@ -411,4 +409,4 @@ void K3b::AudioTrackModel::uncheckAll()
     emit dataChanged( index( 0, TrackNumberColumn ), index( d->itemCheckedList.count(), TrackNumberColumn ) );
 }
 
-
+#include "k3baudiotrackmodel.moc"

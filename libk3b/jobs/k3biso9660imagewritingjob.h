@@ -62,7 +62,7 @@ namespace K3b {
         void startWriting();
 
     private:
-        bool prepareWriter();
+        bool prepareWriter( Device::MediaTypes mediaType );
 
         WritingMode m_writingMode;
         bool m_simulate;

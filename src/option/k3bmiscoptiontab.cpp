@@ -21,18 +21,20 @@
 #include "k3binteractiondialog.h"
 #include "k3bintmapcombobox.h"
 
-#include <KCompletion/KComboBox>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KMessageBox>
+#include <QCheckBox>
+#include <QFileInfo>
+#include <QRadioButton>
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QRadioButton>
+#include <KApplication>
+#include <KComboBox>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KDialog>
+#include <kglobal.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardDirs>
+#include <KUrlRequester>
 
 
 K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )
@@ -66,7 +68,7 @@ K3b::MiscOptionTab::~MiscOptionTab()
 
 void K3b::MiscOptionTab::readSettings()
 {
-    KConfigGroup c = KSharedConfig::openConfig()->group( "General Options" );
+    KConfigGroup c = KGlobal::config()->group( "General Options" );
 
     m_checkSaveOnExit->setChecked( c.readEntry( "ask_for_saving_changes_on_exit", true ) );
     m_checkShowSplash->setChecked( c.readEntry("Show splash", true) );
@@ -88,7 +90,7 @@ void K3b::MiscOptionTab::readSettings()
 
 bool K3b::MiscOptionTab::saveSettings()
 {
-    KConfigGroup c = KSharedConfig::openConfig()->group( "General Options" );
+    KConfigGroup c = KGlobal::config()->group( "General Options" );
 
     c.writeEntry( "ask_for_saving_changes_on_exit", m_checkSaveOnExit->isChecked() );
     c.writeEntry( "Show splash", m_checkShowSplash->isChecked() );
@@ -111,7 +113,7 @@ bool K3b::MiscOptionTab::saveSettings()
                                         i18n("Create Folder"),
                                         KGuiItem( i18n("Create") ),
                                         KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {
-            if( !QDir().mkpath( fi.absoluteFilePath() ) ) {
+            if( !KStandardDirs::makeDir( fi.absoluteFilePath() ) ) {
                 KMessageBox::error( this, i18n("Unable to create folder %1",tempDir) );
                 return false;
             }
@@ -149,4 +151,4 @@ bool K3b::MiscOptionTab::saveSettings()
     return true;
 }
 
-
+#include "k3bmiscoptiontab.moc"

@@ -19,20 +19,20 @@
 #include "k3baudioencoder.h"
 #include "k3bcore.h"
 
-#include <KCompletion/KComboBox>
-#include <KConfigCore/KConfig>
-#include <KConfigWidgets/KColorScheme>
-#include <KI18n/KLocalizedString>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOWidgets/KUrlRequester>
-#include <KIconThemes/KIconLoader>
+#include <KColorScheme>
+#include <KComboBox>
+#include <KConfig>
+#include <KDiskFreeSpaceInfo>
+#include <KGlobalSettings>
+#include <KLocale>
+#include <KIconLoader>
+#include <KUrlRequester>
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLabel>
-#include <QtCore/QList>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTimer>
-#include <QtWidgets/QToolButton>
+#include <QCheckBox>
+#include <QLabel>
+#include <QList>
+#include <QTimer>
+#include <QToolButton>
 
 
 
@@ -167,7 +167,7 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
     connect( m_buttonConfigurePlugin, SIGNAL(clicked()), this, SLOT(slotConfigurePlugin()) );
 
     m_editBaseDir->setMode( KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly );
-    m_buttonConfigurePlugin->setIcon( QIcon::fromTheme( "configure" ) );
+    m_buttonConfigurePlugin->setIcon( KIcon( "configure" ) );
     
     // FIXME: see if sox and the sox encoder are installed and if so do not put the internal wave
     //        writer in the list of encoders.
@@ -290,7 +290,7 @@ QString K3b::AudioConvertingOptionWidget::extension() const
 
 void K3b::AudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 {
-    m_editBaseDir->setUrl( c.readEntry( "last ripping directory", QStandardPaths::writableLocation(QStandardPaths::MusicLocation) ) );
+    m_editBaseDir->setUrl( c.readEntry( "last ripping directory", KGlobalSettings::musicPath() ) );
 
     m_checkSingleFile->setChecked( c.readEntry( "single_file", false ) );
     m_checkWriteCueFile->setChecked( c.readEntry( "write_cue_file", false ) );
@@ -328,4 +328,4 @@ void K3b::AudioConvertingOptionWidget::saveConfig( KConfigGroup c )
     c.writeEntry( "filetype", d->extForIndex( m_comboFileType->currentIndex() ) );
 }
 
-
+#include "k3baudioconvertingoptionwidget.moc"

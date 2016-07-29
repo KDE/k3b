@@ -16,12 +16,12 @@
 #include "k3bdevicedelegate.h"
 #include "k3bdevicemodel.h"
 
-#include <KIconThemes/KIconEffect>
-#include <KIconThemes/KIconLoader>
+#include <QApplication>
+#include <QPainter>
+#include <QStyle>
 
-#include <QtGui/QPainter>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QStyle>
+#include <KIconEffect>
+#include <KIconLoader>
 
 
 // FIXME: Get the whole animated hovering code from KFileItemDelegate and put it into a generic class which we can then reuse here
@@ -180,4 +180,4 @@ void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
     }
 }
 
-
+#include "k3bdevicedelegate.moc"

@@ -24,23 +24,27 @@
 #include "k3bcore.h"
 #include "k3bmediacache.h"
 #include "k3bmsf.h"
-#include "k3b_i18n.h"
 
-#include <KCoreAddons/KProcess>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOCore/KIO/Job>
-#include <KIOCore/KIO/StatJob>
-#include <KIOCore/KMountPoint>
+#include <kdeversion.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <kapplication.h>
+#include <kdebug.h>
+#include <kio/job.h>
+#include <kio/netaccess.h>
+#include <kurl.h>
+#include <kprocess.h>
+#include <KDiskFreeSpaceInfo>
+
+#include <kmountpoint.h>
 #include <Solid/Device>
 #include <Solid/StorageAccess>
 #include <Solid/OpticalDrive>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QUrl>
+#include <qdatastream.h>
+#include <qdir.h>
+#include <qfile.h>
 
 #include <cmath>
 #include <sys/utsname.h>
@@ -178,10 +182,10 @@ K3b::Version K3b::kernelVersion()
     utsname unameinfo;
     if( ::uname(&unameinfo) == 0 ) {
         v = QString::fromLocal8Bit( unameinfo.release );
-        qDebug() << "kernel version: " << v;
+        kDebug() << "kernel version: " << v;
     }
     else
-        qCritical() << "could not determine kernel version." ;
+        kError() << "could not determine kernel version." ;
     return v;
 }
 
@@ -200,7 +204,7 @@ QString K3b::systemName()
         v = QString::fromLocal8Bit( unameinfo.sysname );
     }
     else
-        qCritical() << "could not determine system name." ;
+        kError() << "could not determine system name." ;
     return v;
 }
 
@@ -219,7 +223,7 @@ bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& a
 }
 
 
-KIO::filesize_t K3b::filesize( const QUrl& url )
+KIO::filesize_t K3b::filesize( const KUrl& url )
 {
     KIO::filesize_t fSize = 0;
     if( url.isLocalFile() ) {
@@ -228,9 +232,7 @@ KIO::filesize_t K3b::filesize( const QUrl& url )
     }
     else {
         KIO::UDSEntry uds;
-        KIO::StatJob* statJob = KIO::stat( url, KIO::HideProgressInfo );
-        if (statJob->exec())
-            uds = statJob->statResult();
+        KIO::NetAccess::stat( url, uds, 0 );
         fSize = uds.numberValue( KIO::UDSEntry::UDS_SIZE );
     }
 
@@ -238,20 +240,12 @@ KIO::filesize_t K3b::filesize( const QUrl& url )
 }
 
 
-KIO::filesize_t K3b::imageFilesize( const QUrl& url )
+KIO::filesize_t K3b::imageFilesize( const KUrl& url )
 {
     KIO::filesize_t size = K3b::filesize( url );
-    bool exists = true;
-    for(int cnt = 0; exists; ++cnt)
-    {
-        QUrl nextUrl( url );
-        nextUrl.setPath(nextUrl.path() + '.' + QString::number(cnt).rightJustified( 3, '0' ));
-        KIO::StatJob* statJob = KIO::stat(nextUrl, KIO::StatJob::SourceSide, KIO::HideProgressInfo);
-        if (statJob->exec())
-            size += K3b::filesize(nextUrl);
-        else
-            exists = false;
-    }
+    int cnt = 0;
+    while( KIO::NetAccess::exists( QString(url.url() + '.' + QString::number(cnt).rightJustified( 3, '0' )), KIO::NetAccess::SourceSide, 0 ) )
+        size += K3b::filesize( QString(url.url() + '.' + QString::number(cnt++).rightJustified( 3, '0' )) );
     return size;
 }
 
@@ -376,27 +370,20 @@ QString K3b::resolveLink( const QString& file )
 }
 
 
-QUrl K3b::convertToLocalUrl( const QUrl& url )
+KUrl K3b::convertToLocalUrl( const KUrl& url )
 {
     if( !url.isLocalFile() ) {
-        KIO::StatJob* statJob = KIO::mostLocalUrl( url, KIO::HideProgressInfo );
-        QUrl result;
-        QObject::connect( statJob, &KJob::result, [&](KJob*) {
-            if( statJob->error() == KJob::NoError )
-                result = statJob->mostLocalUrl();
-        } );
-        statJob->exec();
-        return result;
+        return KIO::NetAccess::mostLocalUrl( url, 0 );
     }
 
     return url;
 }
 
 
-QList<QUrl> K3b::convertToLocalUrls( const QList<QUrl>& urls )
+KUrl::List K3b::convertToLocalUrls( const KUrl::List& urls )
 {
-    QList<QUrl> r;
-    for( QList<QUrl>::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
+    KUrl::List r;
+    for( KUrl::List::const_iterator it = urls.constBegin(); it != urls.constEnd(); ++it )
         r.append( convertToLocalUrl( *it ) );
     return r;
 }
@@ -435,11 +422,11 @@ qint64 K3b::fromLe64( char* data )
 QString K3b::findExe( const QString& name )
 {
     // first we search the path
-    QString bin = QStandardPaths::findExecutable( name );
+    QString bin = KStandardDirs::findExe( name );
 
     // then go on with our own little list
     if( bin.isEmpty() )
-        bin = QStandardPaths::findExecutable( name, k3bcore->externalBinManager()->searchPath() );
+        bin = KStandardDirs::findExe( name, k3bcore->externalBinManager()->searchPath().join(":") );
 
     return bin;
 }
@@ -467,10 +454,7 @@ bool K3b::unmount( K3b::Device::Device* dev )
     QString mntDev = dev->blockDeviceName();
 
     // first try to unmount it the standard way
-    KIO::SimpleJob* unmountJob = KIO::unmount( mntDev );
-    bool result = true;
-    QObject::connect( unmountJob, &KJob::result, [&](KJob* job){ result = ( job->error() != KJob::NoError ); } );
-    if( unmountJob->exec() && result )
+    if( KIO::NetAccess::synchronousRun( KIO::unmount( mntDev ), 0 ) )
         return true;
 
     QString mntPath;
@@ -516,10 +500,7 @@ bool K3b::mount( K3b::Device::Device* dev )
     QString mntDev = dev->blockDeviceName();
 
     // first try to mount it the standard way
-    KIO::SimpleJob* mountJob = KIO::mount( true, QByteArray(), mntDev, QString() );
-    bool result = true;
-    QObject::connect( mountJob, &KJob::result, [&](KJob* job){ result = ( job->error() != KJob::NoError ); } );
-    if( mountJob->exec() && result )
+    if( KIO::NetAccess::synchronousRun( KIO::mount( true, QByteArray(), mntDev, QString() ), 0 ) )
         return true;
 
     Solid::StorageAccess* sa = dev->solidStorage();

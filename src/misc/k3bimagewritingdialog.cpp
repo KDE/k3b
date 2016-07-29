@@ -41,44 +41,42 @@
 #include "k3btrack.h"
 #include "k3bcdtext.h"
 
-#include <KCompletion/KComboBox>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KConfigWidgets/KColorScheme>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
-#include <KIOWidgets/KUrlRequester>
+#include <KComboBox>
+#include <KConfig>
+#include <KColorScheme>
+#include <KIconLoader>
+#include <KInputDialog>
+#include <kio/global.h>
+#include <KLocale>
+#include <KMessageBox>
+#include <KStandardGuiItem>
+#include <KUrl>
+#include <KUrlRequester>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QMimeData>
-#include <QtCore/QUrl>
-#include <QtGui/QClipboard>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QProgressBar>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTreeWidget>
+#include <QApplication>
+#include <QCheckBox>
+#include <QClipboard>
+#include <QComboBox>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QFile>
+#include <QFileInfo>
+#include <QFont>
+#include <QFontMetrics>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
+#include <QList>
+#include <QMap>
+#include <QMenu>
+#include <QProgressBar>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QTreeWidget>
 
 namespace {
 
@@ -170,10 +168,10 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("ISO 9660 image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
-    const KIO::filesize_t size = K3b::filesize( QUrl::fromLocalFile(isoF->fileName()) );
+    const KIO::filesize_t size = K3b::filesize( KUrl(isoF->fileName()) );
     const KIO::filesize_t volumeSpaceSize = Private::volumeSpaceSize( *isoF );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
@@ -183,7 +181,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
     if( size < volumeSpaceSize ) {
         item->setText( 1, i18n("%1 (different than declared volume size)", KIO::convertSize( size )) );
         item->setForeground( 1, negativeTextColor );
-        item->setIcon( 1, QIcon::fromTheme( "dialog-error") );
+        item->setIcon( 1, KIcon( "dialog-error") );
 
         item = new QTreeWidgetItem( infoView );
         item->setText( 0, i18n("Volume Size:") );
@@ -250,12 +248,12 @@ void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& 
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Cdrecord clone image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
-    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imageFile)) ) );
+    item->setText( 1, KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 
@@ -279,12 +277,12 @@ void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile
     isoRootItem->setText( 0, i18n("Detected:") );
     isoRootItem->setText( 1, i18n("Cue/bin image") );
     isoRootItem->setForeground( 0, infoTextColor );
-    isoRootItem->setIcon( 1, QIcon::fromTheme( "application-x-cd-image") );
+    isoRootItem->setIcon( 1, KIcon( "application-x-cd-image") );
     isoRootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
-    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imageFile)) ) );
+    item->setText( 1, KIO::convertSize( K3b::filesize(KUrl(imageFile)) ) );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 
@@ -308,7 +306,7 @@ void K3b::ImageWritingDialog::Private::createAudioCueItems( const K3b::CueFilePa
     rootItem->setText( 0, i18n("Detected:") );
     rootItem->setText( 1, i18n("Audio Cue Image") );
     rootItem->setForeground( 0, infoTextColor );
-    rootItem->setIcon( 1, QIcon::fromTheme( "audio-x-generic") );
+    rootItem->setIcon( 1, KIcon( "audio-x-generic") );
     rootItem->setTextAlignment( 0, Qt::AlignRight );
 
     QTreeWidgetItem* trackParent = new QTreeWidgetItem( infoView );
@@ -407,7 +405,7 @@ K3b::ImageWritingDialog::~ImageWritingDialog()
 {
     d->md5Job->cancel();
 
-    KConfigGroup c( KSharedConfig::openConfig(), configGroup() );
+    KConfigGroup c( KGlobal::config(), configGroup() );
     QStringList recentImages;
     // do not store more than 10 recent images
     for ( int i = 0; i < d->comboRecentImages->count() && recentImages.count() < 10; ++i ) {
@@ -423,7 +421,7 @@ K3b::ImageWritingDialog::~ImageWritingDialog()
 
 void K3b::ImageWritingDialog::init()
 {
-    KConfigGroup c( KSharedConfig::openConfig(), configGroup() );
+    KConfigGroup c( KGlobal::config(), configGroup() );
 
     if( !d->imageForced ) {
         // when opening the dialog first the default settings are loaded and afterwards we set the
@@ -496,7 +494,7 @@ void K3b::ImageWritingDialog::setupGui()
     d->infoView->setSelectionMode( QAbstractItemView::NoSelection );
     d->infoView->setItemsExpandable( false );
     d->infoView->setRootIsDecorated( false );
-    d->infoView->header()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
+    d->infoView->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
     d->infoView->setFocusPolicy( Qt::NoFocus );
     d->infoView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     d->infoView->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -638,7 +636,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     d->md5Job->cancel();
 
     // save the path
-    KConfigGroup grp( KSharedConfig::openConfig(), configGroup() );
+    KConfigGroup grp( KGlobal::config(), configGroup() );
     grp.writePathEntry( "last written image", d->imagePath() );
 
     if( d->imageFile.isEmpty() )
@@ -704,7 +702,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     {
         K3b::Iso9660 isoFs( d->imageFile );
         if( isoFs.open() ) {
-            if( K3b::filesize( QUrl::fromLocalFile(d->imageFile) ) < Private::volumeSpaceSize( isoFs ) ) {
+            if( K3b::filesize( KUrl(d->imageFile) ) < Private::volumeSpaceSize( isoFs ) ) {
                 if( KMessageBox::questionYesNo( this,
                                                 i18n("<p>The actual file size does not match the size declared in the file header. "
                                                      "If it has been downloaded make sure the download is complete.</p>"
@@ -733,7 +731,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     break;
 
     default:
-        qDebug() << "(K3b::ImageWritingDialog) this should really not happen!";
+        kDebug() << "(K3b::ImageWritingDialog) this should really not happen!";
         break;
     }
 
@@ -746,7 +744,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
 
         delete job;
 
-        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+        if( KConfigGroup( KGlobal::config(), "General Options" ).readEntry( "keep action dialogs open", false ) )
             show();
         else
             close();
@@ -871,7 +869,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
                 item->setText( 0, i18n("Seems not to be a usable image") );
             }
             item->setForeground( 0, d->negativeTextColor );
-            item->setIcon( 0, QIcon::fromTheme( "dialog-error") );
+            item->setIcon( 0, KIcon( "dialog-error") );
         }
         else {
             // remember as recent image
@@ -886,7 +884,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
         QTreeWidgetItem* item = new QTreeWidgetItem( d->infoView );
         item->setText( 0, i18n("File not found") );
         item->setForeground( 0, d->negativeTextColor );
-        item->setIcon( 0, QIcon::fromTheme( "dialog-error") );
+        item->setIcon( 0, KIcon( "dialog-error") );
     }
 
     slotToggleAll();
@@ -932,7 +930,7 @@ void K3b::ImageWritingDialog::toggleAll()
 
     // set wanted image size
     if ( d->currentImageType() == IMAGE_ISO )
-        d->writerSelectionWidget->setWantedMediumSize( K3b::filesize( QUrl::fromLocalFile(d->imagePath()) )/2048 );
+        d->writerSelectionWidget->setWantedMediumSize( K3b::filesize( KUrl(d->imagePath()) )/2048 );
     else
         d->writerSelectionWidget->setWantedMediumSize( Msf() );
 
@@ -998,7 +996,7 @@ void K3b::ImageWritingDialog::toggleAll()
 }
 
 
-void K3b::ImageWritingDialog::setImage( const QUrl& url )
+void K3b::ImageWritingDialog::setImage( const KUrl& url )
 {
     d->imageForced = true;
     d->editImagePath->setUrl( url );
@@ -1047,7 +1045,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
 {
     if( success ) {
         d->md5SumItem->setText( 1, d->md5Job->hexDigest() );
-        d->md5SumItem->setIcon( 1, QIcon::fromTheme("dialog-information") );
+        d->md5SumItem->setIcon( 1, KIcon("dialog-information") );
         d->haveMd5Sum = true;
     }
     else {
@@ -1056,7 +1054,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
             d->md5SumItem->setText( 1, i18n("Calculation canceled") );
         else
             d->md5SumItem->setText( 1, i18n("Calculation failed") );
-        d->md5SumItem->setIcon( 1, QIcon::fromTheme("dialog-error") );
+        d->md5SumItem->setIcon( 1, KIcon("dialog-error") );
         d->lastCheckedFile.truncate(0);
     }
 
@@ -1078,12 +1076,11 @@ void K3b::ImageWritingDialog::slotContextMenuRequested( const QPoint& pos )
 
     if( act == compareItem ) {
         bool ok;
-        QString md5sumToCompare = QInputDialog::getText( this,
-                                                         i18n("MD5 Sum Check"),
+        QString md5sumToCompare = KInputDialog::getText( i18n("MD5 Sum Check"),
                                                          i18n("Please insert the MD5 Sum to compare:"),
-                                                         QLineEdit::Normal,
                                                          QString(),
-                                                         &ok );
+                                                         &ok,
+                                                         this );
         if( ok ) {
             if( md5sumToCompare.toLower().toUtf8() == d->md5Job->hexDigest().toLower() )
                 KMessageBox::information( this, i18n("The MD5 Sum of %1 equals that specified.",d->imagePath()),
@@ -1200,4 +1197,4 @@ void K3b::ImageWritingDialog::dropEvent( QDropEvent* e )
     }
 }
 
-
+#include "k3bimagewritingdialog.moc"

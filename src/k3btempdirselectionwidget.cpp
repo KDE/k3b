@@ -18,21 +18,24 @@
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 
-#include <KCompletion/KLineEdit>
-#include <KConfigWidgets/KColorScheme>
-#include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOCore/KIO/Global>
-#include <KIOWidgets/KUrlRequester>
+#include <QFileInfo>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QTimer>
+#include <QToolTip>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QTimer>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QToolTip>
+#include <KColorScheme>
+#include <KConfig>
+#include <KDialog>
+#include <KDiskFreeSpaceInfo>
+#include <KFileDialog>
+#include <KIconLoader>
+#include <kio/global.h>
+#include <KLineEdit>
+#include <KLocale>
+#include <KStandardDirs>
+#include <KUrlRequester>
 
 
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
@@ -266,4 +269,4 @@ void K3b::TempDirSelectionWidget::fixTempPath( bool forceNewImageName )
     }
 }
 
-
+#include "k3btempdirselectionwidget.moc"

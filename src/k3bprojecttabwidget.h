@@ -17,9 +17,9 @@
 #ifndef K3BPROJECTTABWIDGET_H
 #define K3BPROJECTTABWIDGET_H
 
-#include <QtWidgets/QTabWidget>
+#include <QTabWidget>
 
-class QAction;
+class KAction;
 class KActionMenu;
 namespace K3b {
     class Doc;
@@ -48,7 +48,7 @@ namespace K3b {
         /**
          * adds the given action into the popup menu for the tabs
          */
-        void addAction( QAction* action );
+        void addAction( KAction* action );
         
     Q_SIGNALS:
         void tabCloseRequested( Doc* doc );

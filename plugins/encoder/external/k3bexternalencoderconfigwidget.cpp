@@ -14,26 +14,29 @@
  */
 
 #include "k3bexternalencoderconfigwidget.h"
+
 #include "k3bcore.h"
-#include "k3bplugin_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KWidgetsAddons/KMessageBox>
+#include <QtGui/QCheckBox>
+#include <QtGui/QTreeWidget>
+#include <QList>
 
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QTreeWidget>
+#include <klineedit.h>
+#include <kmessagebox.h>
+#include <kconfig.h>
+#include <klocale.h>
+#include <KDebug>
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bexternalencoder, K3bExternalEncoderSettingsWidget )
 
 
 K3bExternalEncoderEditDialog::K3bExternalEncoderEditDialog( QWidget* parent )
-    : QDialog( parent )
+    : KDialog( parent )
 {
     setModal( true );
-    setWindowTitle( i18n("Editing external audio encoder") );
-    setupUi( this );
+    setCaption( i18n("Editing external audio encoder") );
+    setButtons( Ok | Cancel );
+    setupUi( mainWidget() );
 }
 
 
@@ -64,32 +67,37 @@ void K3bExternalEncoderEditDialog::setCommand( const K3bExternalEncoderCommand& 
 }
 
 
-void K3bExternalEncoderEditDialog::accept()
+void K3bExternalEncoderEditDialog::slotButtonClicked( int button )
 {
-    if( m_editName->text().isEmpty() ) {
-        KMessageBox::error( this,
-                            i18n("Please specify a name for the command."),
-                            i18n("No name specified") );
+    if ( button == KDialog::Ok ) {
+        if( m_editName->text().isEmpty() ) {
+            KMessageBox::error( this,
+                                i18n("Please specify a name for the command."),
+                                i18n("No name specified") );
+        }
+        else if( m_editExtension->text().isEmpty() ) {
+            KMessageBox::error( this,
+                                i18n("Please specify an extension for the command."),
+                                i18n("No extension specified") );
+        }
+        else if( m_editCommand->text().isEmpty() ) {
+            KMessageBox::error( this,
+                                i18n("Please specify the command line."),
+                                i18n("No command line specified") );
+        }
+        else if( !m_editCommand->text().contains( "%f" ) ) {
+            KMessageBox::error( this,
+                                // xgettext: no-c-format
+                                i18n("Please add the output filename (%f) to the command line."),
+                                i18n("No filename specified") );
+        }
+        // FIXME: check for name and extension uniqueness
+        else {
+            accept();
+        }
     }
-    else if( m_editExtension->text().isEmpty() ) {
-        KMessageBox::error( this,
-                            i18n("Please specify an extension for the command."),
-                            i18n("No extension specified") );
-    }
-    else if( m_editCommand->text().isEmpty() ) {
-        KMessageBox::error( this,
-                            i18n("Please specify the command line."),
-                            i18n("No command line specified") );
-    }
-    else if( !m_editCommand->text().contains( "%f" ) ) {
-        KMessageBox::error( this,
-                            // xgettext: no-c-format
-                            i18n("Please add the output filename (%f) to the command line."),
-                            i18n("No filename specified") );
-    }
-    // FIXME: check for name and extension uniqueness
     else {
-        QDialog::accept();
+        KDialog::slotButtonClicked( button );
     }
 }
 
@@ -167,14 +175,14 @@ void K3bExternalEncoderSettingsWidget::slotRemoveCommand()
 
 void K3bExternalEncoderSettingsWidget::load()
 {
-    qDebug();
+    kDebug();
     fillEncoderView( K3bExternalEncoderCommand::readCommands() );
 }
 
 
 void K3bExternalEncoderSettingsWidget::save()
 {
-    qDebug();
+    kDebug();
     K3bExternalEncoderCommand::saveCommands( m_commands.values() );
     emit changed( false );
 }
@@ -182,7 +190,7 @@ void K3bExternalEncoderSettingsWidget::save()
 
 void K3bExternalEncoderSettingsWidget::defaults()
 {
-    qDebug();
+    kDebug();
     fillEncoderView( K3bExternalEncoderCommand::defaultCommands() );
     emit changed( true );
 }

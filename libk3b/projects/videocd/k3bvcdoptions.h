@@ -16,9 +16,11 @@
 #ifndef K3B_VCD_OPTIONS_H
 #define K3B_VCD_OPTIONS_H
 
+#include <qstring.h>
 #include "k3b_export.h"
-#include <KConfigCore/KConfigGroup>
-#include <QtCore/QString>
+
+#include <kconfiggroup.h>
+
 
 namespace K3b {
     class LIBK3B_EXPORT VcdOptions

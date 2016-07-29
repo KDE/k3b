@@ -18,7 +18,7 @@
 #define K3B_MSF_EDIT_H
 
 
-#include <QtWidgets/QAbstractSpinBox>
+#include <QAbstractSpinBox>
 
 #include "k3bmsf.h"
 #include "k3b_export.h"

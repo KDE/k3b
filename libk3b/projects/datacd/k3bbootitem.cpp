@@ -16,7 +16,8 @@
 #include "k3bbootitem.h"
 #include "k3bdatadoc.h"
 #include "k3bdiritem.h"
-#include "k3b_i18n.h"
+
+#include <KLocale>
 
 namespace K3b {
 

@@ -37,12 +37,13 @@
 #include "k3btocfilewriter.h"
 #include "k3binffilewriter.h"
 #include "k3bglobalsettings.h"
-#include "k3b_i18n.h"
 
-#include <KCoreAddons/KStringHandler>
+#include <qfile.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <kdebug.h>
+#include <klocale.h>
+#include <ktemporaryfile.h>
+#include <kstringhandler.h>
 
 
 
@@ -496,7 +497,7 @@ bool K3b::AudioJob::prepareWriter()
     if( m_usedWritingApp == K3b::WritingAppCdrecord ) {
 
         if( !writeInfFiles() ) {
-            qDebug() << "(K3b::AudioJob) could not write inf-files.";
+            kDebug() << "(K3b::AudioJob) could not write inf-files.";
             emit infoMessage( i18n("I/O Error. Most likely no space left on harddisk."), MessageError );
 
             return false;
@@ -545,7 +546,7 @@ bool K3b::AudioJob::prepareWriter()
     }
     else {
         if( !writeTocFile() ) {
-            qDebug() << "(K3b::DataJob) could not write tocfile.";
+            kDebug() << "(K3b::DataJob) could not write tocfile.";
             emit infoMessage( i18n("I/O Error"), MessageError );
 
             return false;
@@ -862,4 +863,4 @@ QString K3b::AudioJob::jobDetails() const
                  : QString() ) );
 }
 
-
+#include "k3baudiojob.moc"

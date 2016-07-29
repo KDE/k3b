@@ -15,13 +15,14 @@
 #include "k3bvideodvdtitledelegate.h"
 #include "k3bvideodvdtitlemodel.h"
 
-#include <QtGui/QIcon>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QStyleOptionButton>
-#include <QtWidgets/QStyleOptionViewItemV4>
+#include <KIcon>
+
+#include <QApplication>
+#include <QPainter>
+#include <QPixmap>
+#include <QStyle>
+#include <QStyleOptionButton>
+#include <QStyleOptionViewItemV4>
 
 namespace K3b {
     
@@ -94,7 +95,7 @@ void VideoDVDTitleDelegate::paint( QPainter* painter, const QStyleOptionViewItem
         }
         else
         {
-            preview = QIcon::fromTheme( "image-missing" ).pixmap( qMin( option.rect.width()-margin,
+            preview = KIcon( "image-missing" ).pixmap( qMin( option.rect.width()-margin,
                                                              option.rect.height()-margin ) );
         }
         style.drawItemPixmap( painter, option.rect, Qt::AlignCenter, preview );
@@ -216,4 +217,4 @@ void VideoDVDTitleDelegate::initStyleOption( QStyleOptionViewItem* option, const
 
 } // namespace K3b
 
-
+#include "k3bvideodvdtitledelegate.moc"

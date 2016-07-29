@@ -30,28 +30,30 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QString>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QToolTip>
+#include <qstring.h>
+#include <qpushbutton.h>
+#include <qtooltip.h>
 
-#include <KConfigCore/KConfig>
-#include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KGuiItem>
-#include <KWidgetsAddons/KStandardGuiItem>
-
-#include <QtCore/QDebug>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QWhatsThis>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QVBoxLayout>
+#include <qlayout.h>
+#include <QWhatsThis>
+#include <qcheckbox.h>
+#include <qtabwidget.h>
+#include <qgroupbox.h>
+#include <qspinbox.h>
+#include <qlabel.h>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <klocale.h>
+#include <kconfig.h>
+#include <kmessagebox.h>
+#include <kguiitem.h>
+#include <KStandardGuiItem>
+#include <kdebug.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kapplication.h>
+#include <kiconloader.h>
+#include <kvbox.h>
 
 
 K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )
@@ -195,7 +197,7 @@ void K3b::ProjectBurnDialog::slotStartClicked()
             if( !QFile::exists( tempDir ) ) {
                 if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", tempDir ) )
                     == KMessageBox::Yes ) {
-                    if( !QDir().mkpath( tempDir ) ) {
+                    if( !KStandardDirs::makeDir( tempDir ) ) {
                         KMessageBox::error( this, i18n("Failed to create folder '%1'.", tempDir ) );
                         return;
                     }
@@ -231,7 +233,7 @@ void K3b::ProjectBurnDialog::slotStartClicked()
 
     dlg->startJob(m_job);
 
-    qDebug() << "(K3b::ProjectBurnDialog) job done. cleaning up.";
+    kDebug() << "(K3b::ProjectBurnDialog) job done. cleaning up.";
 
     delete m_job;
     m_job = 0;
@@ -395,4 +397,4 @@ void K3b::ProjectBurnDialog::slotShowImageTip( bool buttonActivated )
     }
 }
 
-
+#include "k3bprojectburndialog.moc"

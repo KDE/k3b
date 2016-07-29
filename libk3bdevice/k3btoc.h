@@ -16,11 +16,12 @@
 #ifndef K3BTOC_H
 #define K3BTOC_H
 
-#include "k3bdevice_export.h"
-#include "k3bmsf.h"
-#include "k3btrack.h"
+#include <qlist.h>
 
-#include <QtCore/QList>
+#include "k3bmsf.h"
+
+#include "k3btrack.h"
+#include "k3bdevice_export.h"
 
 namespace K3b {
     namespace Device
