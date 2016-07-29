@@ -357,18 +357,18 @@ void K3b::AudioCdView::slotEditTrackCddb()
         line->setFrameShape( QFrame::HLine );
         line->setFrameShadow( QFrame::Sunken );
 
-        QFormLayout* form = new QFormLayout;
+        QFormLayout* form = new QFormLayout(this);
         form->addRow( i18n("Title:"), editTitle );
         form->addRow( line );
         form->addRow( i18n("Artist:"), editArtist );
         form->addRow( i18n("Extra info:"), editExtInfo );
         form->setContentsMargins( 0, 0, 0, 0 );
 
-        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
         connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
         connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
 
-        QVBoxLayout* dlgLayout = new QVBoxLayout( this );
+        QVBoxLayout* dlgLayout = new QVBoxLayout( &dialog );
         dlgLayout->addLayout( form );
         dlgLayout->addWidget( buttonBox );
 
@@ -377,8 +377,6 @@ void K3b::AudioCdView::slotEditTrackCddb()
         // load album's artist by default if no artist is specified yet
         if ( editArtist->text().isEmpty() )
             editArtist->setText( d->trackModel->cddbInfo().get( KCDDB::Artist ).toString() );
-
-        dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
         if( dialog.exec() == QDialog::Accepted ) {
             mu::setCommonText( d->trackModel, selection, editTitle->text(), AudioTrackModel::TitleRole );
@@ -429,7 +427,7 @@ void K3b::AudioCdView::slotEditAlbumCddb()
         }
     }
 
-    QFormLayout* form = new QFormLayout;
+    QFormLayout* form = new QFormLayout(this);
     form->addRow( i18n("Title:"), editTitle );
     form->addRow( i18n("Artist:"), editArtist );
     form->addRow( i18n("Extra info:"), editExtInfo );
@@ -439,17 +437,15 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     form->addRow( i18n("Category:"), comboCat );
     form->setContentsMargins( 0, 0, 0, 0 );
 
-    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
     connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
     connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
 
-    QVBoxLayout* dlgLayout = new QVBoxLayout( this );
+    QVBoxLayout* dlgLayout = new QVBoxLayout( &dialog );
     dlgLayout->addLayout( form );
     dlgLayout->addWidget( buttonBox );
 
     editTitle->setFocus(Qt::TabFocusReason);
-
-    dialog.resize( qMax( qMax(dialog.sizeHint().height(), dialog.sizeHint().width()), 300), dialog.sizeHint().height() );
 
     if( dialog.exec() == QDialog::Accepted ) {
         KCDDB::CDInfo cddbInfo = d->trackModel->cddbInfo();
