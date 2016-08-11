@@ -216,16 +216,21 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
         //
         // add chapter info
         //
-        m_titles[i].m_ptts.resize( m_titles[i].numPTTs() );
-        for( unsigned int j = 0; j < m_titles[i].numPTTs(); ++j ) {
-            m_titles[i].m_ptts[j].m_pttNum = j+1;
-            m_titles[i].m_ptts[j].m_playbackTime = Time( convertTime(cur_pgc->cell_playback[j].playback_time.hour),
-                                                         convertTime(cur_pgc->cell_playback[j].playback_time.minute),
-                                                         convertTime(cur_pgc->cell_playback[j].playback_time.second),
-                                                         convertFrame(cur_pgc->cell_playback[j].playback_time.frame_u),
-                                                         convertFrameRate(cur_pgc->cell_playback[j].playback_time.frame_u) );
-            m_titles[i].m_ptts[j].m_firstSector = cur_pgc->cell_playback[j].first_sector;
-            m_titles[i].m_ptts[j].m_lastSector = cur_pgc->cell_playback[j].last_sector;
+        if ( !cur_pgc->cell_playback ) {
+            m_titles[i].m_numPTTs = 0;
+        }
+        else {
+            m_titles[i].m_ptts.resize( m_titles[i].numPTTs() );
+            for( unsigned int j = 0; j < m_titles[i].numPTTs(); ++j ) {
+                m_titles[i].m_ptts[j].m_pttNum = j+1;
+                m_titles[i].m_ptts[j].m_playbackTime = Time( convertTime(cur_pgc->cell_playback[j].playback_time.hour),
+                                                             convertTime(cur_pgc->cell_playback[j].playback_time.minute),
+                                                             convertTime(cur_pgc->cell_playback[j].playback_time.second),
+                                                             convertFrame(cur_pgc->cell_playback[j].playback_time.frame_u),
+                                                             convertFrameRate(cur_pgc->cell_playback[j].playback_time.frame_u) );
+                m_titles[i].m_ptts[j].m_firstSector = cur_pgc->cell_playback[j].first_sector;
+                m_titles[i].m_ptts[j].m_lastSector = cur_pgc->cell_playback[j].last_sector;
+            }
         }
 
         ifoClose( titleIfo );
@@ -233,6 +238,13 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
 
     ifoClose( vmg );
     DVDClose( dvdReaderT );
+
+    // discard titles where we could not get info from any chapter
+    for (int i = 0; i < m_titles.count(); i++) {
+        if ( m_titles[i].numChapters() == 0 ) {
+            m_titles.remove(i--);
+        }
+    }
 
     //
     // Setting the device makes this a valid instance
