@@ -23,10 +23,9 @@
 #include "k3bdevice.h"
 #include "k3biso9660.h"
 
-#include <KIcon>
-
 #include <QtCore/QSharedDataPointer>
-#include <QList>
+#include <QtCore/QList>
+#include <QtGui/QIcon>
 
 namespace KCDDB{
     class CDInfo;
@@ -100,7 +99,7 @@ namespace K3b {
         /**
          * An icon representing the contents of the medium.
          */
-        KIcon icon() const;
+        QIcon icon() const;
 
         /**
          * Content type. May be combined by a binary OR.

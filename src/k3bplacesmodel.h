@@ -17,7 +17,7 @@
 
 #include "k3bmetaitemmodel.h"
 
-#include <KUrl>
+#include <QtCore/QUrl>
 
 class KFileItem;
 
@@ -65,7 +65,7 @@ namespace K3b {
         void expand( const QModelIndex& index );
 
     public Q_SLOTS:
-        void addPlace( const QString& name, const KIcon& icon, const KUrl& rootUrl );
+        void addPlace( const QString& name, const QIcon& icon, const QUrl& rootUrl );
 
         /**
          * \short Lists subdirectories using fetchMore() as needed until the given \p url exists in the model.
@@ -82,7 +82,7 @@ namespace K3b {
          *
          * \sa KDirModel::expandToUrl
          */
-        void expandToUrl( const KUrl& url );
+        void expandToUrl( const QUrl& url );
 
     private Q_SLOTS:
         void slotDevicesChanged( K3b::Device::DeviceManager* dm );

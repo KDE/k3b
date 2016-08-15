@@ -28,26 +28,25 @@
 #include "k3bglobals.h"
 #include "k3baudioencoder.h"
 
-#include <KComboBox>
-#include <KConfig>
-#include <KDebug>
-#include <KFileDialog>
-#include <kio/global.h>
-#include <KLocale>
-#include <KMessageBox>
-#include <KUrlRequester>
+#include <KCompletion/KComboBox>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QCheckBox>
-#include <QDir>
-#include <QGridLayout>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLayout>
-#include <QStringList>
-#include <QTabWidget>
-#include <QTreeWidget>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QStringList>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QTreeWidget>
 
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Cdinfo>
 
 
 namespace {
@@ -134,9 +133,9 @@ void K3b::AudioProjectConvertingDialog::setupGui()
     d->viewTracks->setFocusPolicy( Qt::NoFocus );
     d->viewTracks->setHeaderItem( header );
     d->viewTracks->header()->setStretchLastSection( false );
-    d->viewTracks->header()->setResizeMode( 0, QHeaderView::Stretch );
-    d->viewTracks->header()->setResizeMode( 1, QHeaderView::ResizeToContents );
-    d->viewTracks->header()->setResizeMode( 2, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 0, QHeaderView::Stretch );
+    d->viewTracks->header()->setSectionResizeMode( 1, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 2, QHeaderView::ResizeToContents );
 
     QTabWidget* mainTab = new QTabWidget( frame );
 
@@ -361,4 +360,4 @@ void K3b::AudioProjectConvertingDialog::saveSettings( KConfigGroup c )
     m_patternWidget->saveConfig( c );
 }
 
-#include "k3baudioprojectconvertingdialog.moc"
+

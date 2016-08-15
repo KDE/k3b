@@ -19,7 +19,7 @@
 #include "k3bdiskinfo.h"
 #include "k3bvideocdrippingoptions.h"
 
-#include <qprocess.h>
+#include <QtCore/QProcess>
 
 class QString;
 class KProcess;

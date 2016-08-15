@@ -19,13 +19,12 @@
 #include "config-k3b.h"
 #include "k3bglobals.h"
 
-#include <QObject>
-#include <QString>
-
-#include <KUrl>
-#include <kio/global.h>
-
 #include "k3b_export.h"
+
+#include <KIOCore/KIO/Global>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QUrl>
 
 class QDomElement;
 namespace K3b {
@@ -126,10 +125,10 @@ namespace K3b {
          */
         virtual bool saveDocumentData( QDomElement* docElem ) = 0;
 
-        /** returns the KUrl of the document */
-        const KUrl& URL() const;
+        /** returns the QUrl of the document */
+        const QUrl& URL() const;
         /** sets the URL of the document */
-        virtual void setURL( const KUrl& url );
+        virtual void setURL( const QUrl& url );
 
         WritingMode writingMode() const { return m_writingMode; }
         bool dummy() const { return m_dummy; }
@@ -193,8 +192,8 @@ namespace K3b {
          * the default implementation just calls addUrls with
          * list containing the url
          */
-        virtual void addUrl( const KUrl& url );
-        virtual void addUrls( const KUrl::List& urls ) = 0;
+        virtual void addUrl( const QUrl& url );
+        virtual void addUrls( const QList<QUrl>& urls ) = 0;
 
     protected:
         bool saveGeneralDocumentData( QDomElement* );
@@ -207,7 +206,7 @@ namespace K3b {
     private:
         /** the modified flag of the current document */
         bool m_modified;
-        KUrl doc_url;
+        QUrl doc_url;
 
         QWidget* m_view;
 

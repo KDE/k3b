@@ -15,17 +15,14 @@
 
 #include "k3btitlelabel.h"
 
-#include "k3bstringutils.h"
-
-#include <KDebug>
-
-#include <QEvent>
-#include <QFont>
-#include <QFontMetrics>
-#include <QHelpEvent>
-#include <QPainter>
-#include <QStyle>
-#include <QToolTip>
+#include <QtCore/QDebug>
+#include <QtCore/QEvent>
+#include <QtGui/QFont>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QHelpEvent>
+#include <QtGui/QPainter>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QToolTip>
 
 
 class K3b::TitleLabel::Private
@@ -257,7 +254,7 @@ void K3b::TitleLabel::updatePositioning()
     if( !d->subTitle.isEmpty() )
         d->cachedMinimumWidth += d->spacing;
 
-    kDebug() << d->titleBaseLine << d->subTitleBaseLine;
+    qDebug() << d->titleBaseLine << d->subTitleBaseLine;
 }
 
 
@@ -288,4 +285,4 @@ bool K3b::TitleLabel::event( QEvent* event )
     return QFrame::event( event );
 }
 
-#include "k3btitlelabel.moc"
+

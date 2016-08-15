@@ -16,7 +16,7 @@
 #include "k3brawaudiodatareader.h"
 #include "k3brawaudiodatasource.h"
 
-#include <QFile>
+#include <QtCore/QFile>
 
 namespace K3b {
 

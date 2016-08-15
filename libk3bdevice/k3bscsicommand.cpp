@@ -15,7 +15,7 @@
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"
 
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 
 QString K3b::Device::commandString( const unsigned char& command )
@@ -166,7 +166,7 @@ QString K3b::Device::ScsiCommand::senseKeyToString( int key )
 
 void K3b::Device::ScsiCommand::debugError( int command, int errorCode, int senseKey, int asc, int ascq ) {
     if( m_printErrors ) {
-        kDebug() << "(K3b::Device::ScsiCommand) failed: " << endl
+        qDebug() << "(K3b::Device::ScsiCommand) failed: " << endl
                  << "                           command:    " << QString("%1 (%2)")
             .arg( K3b::Device::commandString( command ) )
             .arg( QString::number(command, 16) ) << endl

@@ -19,14 +19,14 @@
 
 
 #include "config-k3b.h"
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 
 class QModelIndex;
 class QPushButton;
 class QTabWidget;
 class QTreeView;
-class KEditListBox;
+class KEditListWidget;
 
 namespace K3b {
     class ExternalBinManager;
@@ -66,7 +66,7 @@ namespace K3b {
         QTreeView* m_programView;
         QTreeView* m_parameterView;
         QTreeView* m_permissionView;
-        KEditListBox* m_searchPathBox;
+        KEditListWidget* m_searchPathBox;
 
 #ifdef ENABLE_PERMISSION_HELPER
         QPushButton* m_changePermissionsButton;

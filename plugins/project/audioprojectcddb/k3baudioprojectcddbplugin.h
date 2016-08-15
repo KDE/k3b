@@ -16,6 +16,9 @@
 
 #include "k3bprojectplugin.h"
 
+#include <QtCore/QPointer>
+#include <QtCore/QScopedPointer>
+
 namespace K3b {
     class Cddb;
     class AudioDoc;
@@ -23,6 +26,7 @@ namespace K3b {
 }
 
 class QWidget;
+class QProgressDialog;
 class KJob;
 
 class K3bAudioProjectCddbPlugin : public K3b::ProjectPlugin
@@ -39,12 +43,11 @@ public:
 
 private Q_SLOTS:
     void slotCddbQueryFinished( KJob* );
-    void slotCancelClicked();
 
 private:
-    K3b::AudioDoc* m_doc;
-    K3b::ProgressDialog* m_progress;
-    QWidget* m_parentWidget;
+    QScopedPointer<QProgressDialog> m_progress;
+    QPointer<K3b::AudioDoc> m_doc;
+    QPointer<QWidget> m_parentWidget;
 
     bool m_canceled;
 };

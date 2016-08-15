@@ -31,35 +31,31 @@
 #include "k3bglobals.h"
 #include "k3bwritingmodewidget.h"
 #include "k3bmediacache.h"
-
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qtoolbutton.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
-#include <qpoint.h>
-#include <qradiobutton.h>
-#include <qfileinfo.h>
-#include <qtabwidget.h>
-#include <qspinbox.h>
-#include <qfile.h>
-#include <QGridLayout>
-
-#include <kmessagebox.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstandarddirs.h>
-#include <kfiledialog.h>
-#include <kcombobox.h>
-#include <kio/global.h>
-
-
 #include "k3bfilecompilationsizehandler.h"
+
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
+#include <QtCore/QPoint>
+#include <QtCore/QVariant>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QGridLayout>
+
+#include <KConfigCore/KConfig>
+#include <KCompletion/KComboBox>
+#include <KCompletion/KLineEdit>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KWidgetsAddons/KMessageBox>
 
 
 K3b::DataBurnDialog::DataBurnDialog(K3b::DataDoc* _doc, QWidget *parent )
@@ -291,4 +287,4 @@ void K3b::DataBurnDialog::slotMultiSessionModeChanged()
 }
 
 
-#include "k3bdataburndialog.moc"
+

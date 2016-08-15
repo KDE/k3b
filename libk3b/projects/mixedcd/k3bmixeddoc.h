@@ -62,7 +62,7 @@ namespace K3b {
 
         int mixedType() const { return m_mixedType; }
 
-        void setURL( const KUrl& url );
+        void setURL( const QUrl& url );
 
         /**
          * Represent the structure of the doc as CD Table of Contents.
@@ -76,7 +76,7 @@ namespace K3b {
 
     public Q_SLOTS:
         void setMixedType( MixedType t ) { m_mixedType = t; }
-        void addUrls( const KUrl::List& urls );
+        void addUrls( const QList<QUrl>& urls );
 
     protected:
         bool loadDocumentData( QDomElement* );

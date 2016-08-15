@@ -14,11 +14,9 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-// k3b includes
 #include "k3bvideocdview.h"
 #include "k3bvideocdrippingdialog.h"
 #include "k3bvideocdinfo.h"
-
 #include "k3bappdevicemanager.h"
 #include "k3bapplication.h"
 #include "k3bdevice.h"
@@ -28,33 +26,28 @@
 #include "k3bmedium.h"
 #include "k3bstdguiitems.h"
 
+#include <KConfigWidgets/KStandardAction>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KActionMenu>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KToolBarSpacerAction>
+#include <KXmlGui/KToolBar>
+#include <KXmlGui/KActionCollection>
 
-// kde includes
-#include <KAction>
-#include <KActionCollection>
-#include <KActionMenu>
-#include <KDebug>
-#include <KDialog>
-#include <KLocale>
-#include <KMenu>
-#include <KMessageBox>
-#include <KStandardDirs>
-#include <KStandardAction>
-#include <KToolBar>
-#include <KToolBarSpacerAction>
-
-// qt includes
-#include <QApplication>
-#include <QCursor>
-#include <QDomElement>
-#include <QFont>
-#include <QHeaderView>
-#include <QLabel>
-#include <QList>
-#include <QStyle>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
-#include <QVBoxLayout>
+#include <QtCore/QDebug>
+#include <QtCore/QList>
+#include <QtGui/QCursor>
+#include <QtGui/QFont>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QStyle>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QTreeWidgetItem>
+#include <QtWidgets/QVBoxLayout>
+#include <QtXml/QDomElement>
 
 namespace {
 
@@ -201,7 +194,7 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     d->trackView = new QTreeWidget( mainWidget() );
     d->trackView->setAllColumnsShowFocus( true );
     d->trackView->setContextMenuPolicy( Qt::CustomContextMenu );
-    d->trackView->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+    d->trackView->header()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
 
     QTreeWidgetItem* header = d->trackView->headerItem();
     header->setText( 0, i18n( "Item Name" ) );
@@ -370,27 +363,27 @@ void K3b::VideoCdView::initActions()
 {
     d->actionCollection = new KActionCollection( this );
 
-    KAction *actionCheckAll = new KAction(i18n("Check All"), this);
+    QAction *actionCheckAll = new QAction(i18n("Check All"), this);
     d->actionCollection->addAction("check_all", actionCheckAll);
     connect(actionCheckAll, SIGNAL(triggered(bool)), this, SLOT(slotCheckAll()));
 
-    KAction *actionUncheckAll = new KAction(i18n("Uncheck All"), this);
+    QAction *actionUncheckAll = new QAction(i18n("Uncheck All"), this);
     d->actionCollection->addAction("decheck_all", actionUncheckAll);
     connect(actionUncheckAll, SIGNAL(triggered(bool)), this, SLOT(slotUncheckAll()));
 
-    KAction *actionCheckTrack = new KAction(i18n("Check Track"), this);
+    QAction *actionCheckTrack = new QAction(i18n("Check Track"), this);
     d->actionCollection->addAction("check_track", actionCheckTrack);
     connect(actionCheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotCheck()));
 
-    KAction *actionUncheckTrack = new KAction(i18n("Uncheck Track"), this);
+    QAction *actionUncheckTrack = new QAction(i18n("Uncheck Track"), this);
     d->actionCollection->addAction("decheck_track", actionUncheckTrack);
     connect(actionUncheckTrack, SIGNAL(triggered(bool)), this, SLOT(slotUncheck()));
 
-    KAction *actionStartRipping = new KAction(KIcon("tools-rip-video-cd"), i18n("Start Ripping"), this);
+    QAction *actionStartRipping = new QAction(QIcon::fromTheme("tools-rip-video-cd"), i18n("Start Ripping"), this);
     d->actionCollection->addAction("start_rip", actionStartRipping);
     connect(actionStartRipping, SIGNAL(triggered(bool)), this, SLOT(startRip()));
 
-    KAction* actionShowDataPart = new KAction(KIcon("media-optical-data"), i18n("View Files"), this);
+    QAction* actionShowDataPart = new QAction(QIcon::fromTheme("media-optical-data"), i18n("View Files"), this);
     actionShowDataPart->setToolTip(i18n("View plain data files"));
     actionShowDataPart->setStatusTip(actionShowDataPart->toolTip());
     d->actionCollection->addAction("view_files", actionShowDataPart);
@@ -465,7 +458,7 @@ void K3b::VideoCdView::startRip()
         if ( d->videooptions ->getVideoCdRipSequences() )
             videocdsize += d->videocdmpegsize;
 
-        kDebug() << QString("(K3b::VideoCdView::startRip())  d->videooptions ->setVideoCdSize( %1)").arg( videocdsize );
+        qDebug() << QString("(K3b::VideoCdView::startRip())  d->videooptions ->setVideoCdSize( %1)").arg( videocdsize );
         d->videooptions ->setVideoCdSize( videocdsize );
         K3b::VideoCdRippingDialog rip( d->videooptions, this );
         rip.exec();
@@ -553,4 +546,4 @@ void K3b::VideoCdView::buildTree( QTreeWidgetItem* parentItem, const QDomElement
     }
 }
 
-#include "k3bvideocdview.moc"
+

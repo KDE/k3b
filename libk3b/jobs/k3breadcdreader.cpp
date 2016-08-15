@@ -22,14 +22,14 @@
 #include "k3bprocess.h"
 #include "k3bmsf.h"
 #include "k3bglobals.h"
+#include "k3b_i18n.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kconfig.h>
+#include <KConfigCore/KConfig>
 
-#include <qregexp.h>
-#include <qstringlist.h>
-#include <QList>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
+#include <QtCore/QStringList>
+#include <QtCore/QList>
 #include <QtCore/QIODevice>
 
 
@@ -192,9 +192,9 @@ void K3b::ReadcdReader::start()
         *d->process << *it;
 
 
-    kDebug() << "***** readcd parameters:\n";
+    qDebug() << "***** readcd parameters:\n";
     QString s = d->process->joinedArgs();
-    kDebug() << s << endl << flush;
+    qDebug() << s << endl << flush;
     emit debuggingOutput("readcd command:", s);
 
     d->canceled = false;
@@ -202,7 +202,7 @@ void K3b::ReadcdReader::start()
     if( !d->process->start( KProcess::SeparateChannels ) ) {
         // something went wrong when starting the program
         // it "should" be the executable
-        kError() << "(K3b::ReadcdReader) could not start readcd" << endl;
+        qCritical() << "(K3b::ReadcdReader) could not start readcd" << endl;
         emit infoMessage( i18n("Could not start readcd."), K3b::Job::MessageError );
         jobFinished( false );
     }
@@ -232,7 +232,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
         if( d->firstSector < d->lastSector )
             d->blocksToRead -= d->firstSector.lba();
         if( !ok )
-            kError() << "(K3b::ReadcdReader) blocksToRead parsing error in line: "
+            qCritical() << "(K3b::ReadcdReader) blocksToRead parsing error in line: "
                      << line.mid(4) << endl;
     }
 
@@ -254,7 +254,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
             }
         }
         else
-            kError() << "(K3b::ReadcdReader) currentReadBlock parsing error in line: "
+            qCritical() << "(K3b::ReadcdReader) currentReadBlock parsing error in line: "
                      << line.mid( 6, line.indexOf("cnt")-7 ) << endl;
     }
 
@@ -268,7 +268,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
         bool ok;
         int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
         if( !ok ) {
-            kError() << "(K3b::ReadcdReader) problemSector parsing error in line: "
+            qCritical() << "(K3b::ReadcdReader) problemSector parsing error in line: "
                      << line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << endl;
         }
         emit infoMessage( i18n("Retrying from sector %1.",problemSector), MessageInfo );
@@ -281,7 +281,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
         bool ok;
         int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
         if( !ok ) {
-            kError() << "(K3b::ReadcdReader) problemSector parsing error in line: "
+            qCritical() << "(K3b::ReadcdReader) problemSector parsing error in line: "
                      << line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << endl;
         }
 
@@ -294,7 +294,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
     }
 
     else {
-        kDebug() << "(readcd) " << line;
+        qDebug() << "(readcd) " << line;
     }
 }
 
@@ -335,4 +335,4 @@ void K3b::ReadcdReader::slotReadyRead()
     }
 }
 
-#include "k3breadcdreader.moc"
+

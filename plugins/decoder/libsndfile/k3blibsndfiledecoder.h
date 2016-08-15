@@ -19,9 +19,6 @@
 
 #include "k3baudiodecoder.h"
 
-class KUrl;
-
-
 class K3bLibsndfileDecoderFactory : public K3b::AudioDecoderFactory
 {
     Q_OBJECT
@@ -30,7 +27,7 @@ public:
     K3bLibsndfileDecoderFactory( QObject* parent, const QVariantList& args  );
     ~K3bLibsndfileDecoderFactory();
 
-    bool canDecode( const KUrl& filename );
+    bool canDecode( const QUrl& filename );
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
@@ -64,7 +61,5 @@ private:
     Private* d;
   
 };
-
-K3B_EXPORT_PLUGIN(k3blibsndfiledecoder, K3bLibsndfileDecoderFactory)
 
 #endif

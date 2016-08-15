@@ -15,15 +15,14 @@
 
 #include "k3bviewcolumnadjuster.h"
 
-#include <QtGui/QTreeView>
-#include <QtGui/QHeaderView>
 #include <QtCore/QAbstractItemModel>
+#include <QtCore/QDebug>
 #include <QtCore/QEvent>
 #include <QtCore/QHash>
 #include <QtCore/QList>
 #include <QtCore/QSet>
-
-#include <KDebug>
+#include <QtWidgets/QTreeView>
+#include <QtWidgets/QHeaderView>
 
 
 class K3b::ViewColumnAdjuster::Private
@@ -102,7 +101,7 @@ void K3b::ViewColumnAdjuster::setView( QTreeView* view )
         }
         d->view = view;
         if ( d->view ) {
-            d->view->header()->setResizeMode( QHeaderView::Fixed );
+            d->view->header()->setSectionResizeMode( QHeaderView::Fixed );
             d->view->installEventFilter( this );
             connect( d->view->model(), SIGNAL(modelReset()), SLOT(_k_adjustColumns()) );
             connect( d->view->model(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(_k_adjustColumns()) );
@@ -111,7 +110,7 @@ void K3b::ViewColumnAdjuster::setView( QTreeView* view )
             connect( d->view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
             connect( d->view->model(), SIGNAL(columnsInserted(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
             connect( d->view->model(), SIGNAL(columnsRemoved(QModelIndex,int,int)), SLOT(_k_adjustColumns()) );
-            d->view->header()->setResizeMode( QHeaderView::Interactive );
+            d->view->header()->setSectionResizeMode( QHeaderView::Interactive );
         }
     }
 }
@@ -193,4 +192,4 @@ void K3b::ViewColumnAdjuster::adjustColumns()
     }
 }
 
-#include "k3bviewcolumnadjuster.moc"
+#include "moc_k3bviewcolumnadjuster.cpp"

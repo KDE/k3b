@@ -21,11 +21,10 @@
 #include "k3bdatatrackreader.h"
 #include "k3bchecksumpipe.h"
 #include "k3biso9660.h"
+#include "k3b_i18n.h"
 
-#include <KDebug>
-#include <KLocale>
-
-#include <QLinkedList>
+#include <QtCore/QDebug>
+#include <QtCore/QLinkedList>
 
 
 namespace {
@@ -150,7 +149,7 @@ K3b::Msf K3b::VerificationJob::Private::trackLength( const TrackEntry& trackEntr
             if( !device->read10( buffer, 2048, track.lastSector().lba(), 1 ) &&
                 !device->read10( buffer, 2048, track.lastSector().lba(), 1 ) ) {
                 trackSize -= 2;
-                kDebug() << "(K3b::CdCopyJob) track " << trackNum << " probably TAO recorded.";
+                qDebug() << "(K3b::CdCopyJob) track " << trackNum << " probably TAO recorded.";
             }
         }
     }
@@ -415,4 +414,4 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
 }
 
 
-#include "k3bverificationjob.moc"
+

@@ -17,9 +17,9 @@
 #ifndef _K3B_INTERFACE_H_
 #define _K3B_INTERFACE_H_
 
-#include <QObject>
-#include <QString>
-#include <QStringList>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
 
 
 namespace K3b {

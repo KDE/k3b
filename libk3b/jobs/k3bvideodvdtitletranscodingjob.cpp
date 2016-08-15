@@ -21,13 +21,12 @@
 #include "k3bglobals.h"
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
+#include "k3b_i18n.h"
 
-#include <klocale.h>
-#include <kdebug.h>
-#include <kstandarddirs.h>
-
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 
 class K3b::VideoDVDTitleTranscodingJob::Private
@@ -155,7 +154,7 @@ void K3b::VideoDVDTitleTranscodingJob::start()
         // let's see if the directory exists and we can write to it
         QFileInfo fileInfo( m_filename );
         QFileInfo dirInfo( fileInfo.path() );
-        if( !dirInfo.exists() && !KStandardDirs::makeDir( dirInfo.absoluteFilePath() ) ) {
+        if( !dirInfo.exists() && !QDir().mkpath( dirInfo.absoluteFilePath() ) ) {
             emit infoMessage( i18n("Unable to create folder '%1'",dirInfo.filePath()), MessageError );
             return;
         }
@@ -372,9 +371,9 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         *d->process << *it;
 
     // produce some debugging output
-    kDebug() << "***** transcode parameters:\n";
+    qDebug() << "***** transcode parameters:\n";
     QString s = d->process->joinedArgs();
-    kDebug() << s << flush;
+    qDebug() << s << flush;
     emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
     // start the process
@@ -618,4 +617,4 @@ bool K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3b::VideoD
     return bin->hasFeature( QString::fromLatin1( s_codecFeatures[(int)codec] ) );
 }
 
-#include "k3bvideodvdtitletranscodingjob.moc"
+

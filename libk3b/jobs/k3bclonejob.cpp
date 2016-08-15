@@ -24,12 +24,11 @@
 #include "k3bcore.h"
 #include "k3bclonetocreader.h"
 #include "k3bglobalsettings.h"
+#include "k3b_i18n.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 
 
@@ -395,4 +394,4 @@ QString K3b::CloneJob::jobTarget() const
         return m_imagePath;
 }
 
-#include "k3bclonejob.moc"
+

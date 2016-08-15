@@ -26,18 +26,18 @@
 #include "k3baction.h"
 #include "k3bvolumenamewidget.h"
 
-#include <KAction>
-#include <KDebug>
-#include <KFileDialog>
-#include <KLocale>
-#include <KMessageBox>
-#include <KToolBar>
-#include <KUrl>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+#include <KXmlGui/KToolBar>
 
-#include <QList>
-#include <QHeaderView>
-#include <QItemSelectionModel>
-#include <QTreeView>
+#include <QtCore/QDebug>
+#include <QtCore/QItemSelectionModel>
+#include <QtCore/QList>
+#include <QtCore/QUrl>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QTreeView>
 
 K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
 :
@@ -56,7 +56,7 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
     m_view->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     m_view->setContextMenuPolicy( Qt::ActionsContextMenu );
     // FIXME: make QHeaderView::Interactive the default but connect to model changes and call header()->resizeSections( QHeaderView::ResizeToContents );
-    m_view->header()->setResizeMode( QHeaderView::ResizeToContents );
+    m_view->header()->setSectionResizeMode( QHeaderView::ResizeToContents );
     m_view->setEditTriggers( QAbstractItemView::NoEditTriggers );
     setMainWidget( m_view );
 
@@ -148,7 +148,7 @@ void K3b::MovixView::slotAddSubTitleFile()
     }
 
     if( item ) {
-        KUrl url = KFileDialog::getOpenUrl();
+        QUrl url = QFileDialog::getOpenFileUrl( this );
         if( url.isValid() ) {
             if( url.isLocalFile() )
                 m_doc->addSubTitleItem( item, url );
@@ -208,4 +208,4 @@ K3b::ProjectBurnDialog* K3b::MovixView::newBurnDialog( QWidget* parent )
     return new K3b::MovixBurnDialog( m_doc, parent );
 }
 
-#include "k3bmovixview.moc"
+

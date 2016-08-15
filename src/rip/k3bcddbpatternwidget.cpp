@@ -14,20 +14,19 @@
 
 #include "k3bcddbpatternwidget.h"
 
-#include <KComboBox>
-#include <KConfigGroup>
-#include <KDebug>
-#include <KLineEdit>
-#include <KLocale>
-#include <KUrlLabel>
+#include <KConfigCore/KConfigGroup>
+#include <KCompletion/KComboBox>
+#include <KCompletion/KLineEdit>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KUrlLabel>
 
-#include <QRegExp>
-#include <QValidator>
-
-#include <QCheckBox>
-#include <QLayout>
-#include <QGridLayout>
-#include <QWhatsThis>
+#include <QtCore/QDebug>
+#include <QtCore/QRegExp>
+#include <QtGui/QValidator>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QWhatsThis>
 
 
 K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
@@ -59,9 +58,9 @@ K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
     m_comboPlaylistPattern->addItem( i18n( "Playlist" ) );
     m_comboPlaylistPattern->addItem( i18n( "playlists/%{albumartist}/%{albumtitle}" ) );
 
-    connect( m_comboFilenamePattern, SIGNAL(textChanged(QString)),
+    connect( m_comboFilenamePattern, SIGNAL(editTextChanged(QString)),
              this, SIGNAL(changed()) );
-    connect( m_comboPlaylistPattern, SIGNAL(textChanged(QString)),
+    connect( m_comboPlaylistPattern, SIGNAL(editTextChanged(QString)),
              this, SIGNAL(changed()) );
     connect( m_editBlankReplace, SIGNAL(textChanged(QString)),
              this, SIGNAL(changed()) );
@@ -172,5 +171,5 @@ void K3b::CddbPatternWidget::slotSeeConditionalInclusion()
                           m_conditionalInclusionLabel );
 }
 
-#include "k3bcddbpatternwidget.moc"
+
 

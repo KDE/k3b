@@ -12,6 +12,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 #include "k3bprojectplugin.h"
+#include "k3b_i18n.h"
 
 K3b::ProjectPlugin::ProjectPlugin( Type type, bool gui, QObject* parent )
   : K3b::Plugin( parent ),

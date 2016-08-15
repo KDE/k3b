@@ -18,14 +18,13 @@
 #include "k3baudiodoc.h"
 #include "k3bglobals.h"
 #include "k3bmsf.h"
+#include "k3b_i18n.h"
 
-#include <QFileInfo>
-#include <QDomElement>
+#include <KConfigCore/KConfig>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <KLocale>
-#include <KConfig>
-#include <KApplication>
-#include <KMessageBox>
+#include <QtCore/QFileInfo>
+#include <QtXml/QDomElement>
 
 
 
@@ -69,7 +68,7 @@ QString K3b::MixedDoc::name() const
 }
 
 
-void K3b::MixedDoc::setURL( const KUrl& url )
+void K3b::MixedDoc::setURL( const QUrl& url )
 {
     K3b::Doc::setURL( url );
     m_audioDoc->setURL( url );
@@ -113,7 +112,7 @@ K3b::BurnJob* K3b::MixedDoc::newBurnJob( K3b::JobHandler* hdl, QObject* parent )
 }
 
 
-void K3b::MixedDoc::addUrls( const KUrl::List& urls )
+void K3b::MixedDoc::addUrls( const QList<QUrl>& urls )
 {
     dataDoc()->addUrls( urls );
 }
@@ -256,5 +255,5 @@ K3b::Device::MediaTypes K3b::MixedDoc::supportedMediaTypes() const
     return K3b::Device::MEDIA_WRITABLE_CD;
 }
 
-#include "k3bmixeddoc.moc"
+
 

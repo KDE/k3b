@@ -16,8 +16,8 @@
 #ifndef _K3B_DEVICE_COMBO_BOX_H_
 #define _K3B_DEVICE_COMBO_BOX_H_
 
-#include <kcombobox.h>
 #include "k3b_export.h"
+#include <KCompletion/KComboBox>
 #include <QtCore/QList>
 
 namespace K3b {

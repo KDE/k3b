@@ -22,9 +22,8 @@
 #include "k3bversion.h"
 #include "k3bglobals.h"
 
-#include <klocale.h>
-#include <kglobalsettings.h>
-#include <kdeversion.h>
+#include <KI18n/KLocalizedString>
+#include <kcoreaddons_version.h>
 
 
 static const int s_maxCache = 10*1024*1024; // 10 MB max cache size
@@ -65,7 +64,7 @@ void K3b::DebuggingOutputCache::clear()
     d->cacheSize = 0;
 
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "K3b Version: %1" ).arg(k3bcore->version()) );
-    addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KDE::versionString()) );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KCOREADDONS_VERSION_STRING) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Qt Version:  %1" ).arg(qVersion()) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Kernel:      %1" ).arg(K3b::kernelVersion()) );
 

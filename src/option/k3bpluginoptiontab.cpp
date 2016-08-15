@@ -18,15 +18,15 @@
 #include "k3bplugin.h"
 #include "k3bcore.h"
 
-#include <KLocale>
-#include <KDebug>
+#include <KI18n/KLocalizedString>
 #include <KPluginSelector>
-#include <KPluginInfo>
+#include <KService/KPluginInfo>
 
-#include <QHash>
-#include <QLabel>
-#include <QList>
-#include <QVBoxLayout>
+#include <QtCore/QDebug>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QVBoxLayout>
 
 
 
@@ -59,7 +59,7 @@ K3b::PluginOptionTab::PluginOptionTab( QWidget* parent )
 
         foreach( Plugin* plugin, k3bcore->pluginManager()->plugins( category ) ) {
             plugins << plugin->pluginInfo();
-            kDebug() << "Adding plugin" << plugin->pluginInfo().name();
+            qDebug() << "Adding plugin" << plugin->pluginInfo().name();
         }
         pluginSelector->addPlugins( plugins,
                                     KPluginSelector::ReadConfigFile,
@@ -73,4 +73,4 @@ K3b::PluginOptionTab::~PluginOptionTab()
 {
 }
 
-#include "k3bpluginoptiontab.moc"
+

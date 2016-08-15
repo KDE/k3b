@@ -19,29 +19,28 @@
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 
-#include <KAction>
-#include <KAuth/Action>
-#include <KConfig>
-#include <KIcon>
-#include <KLocale>
-#include <KStandardDirs>
+#include <KAuth/KAuth>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
 #include <KMessageWidget>
-#include <kio/global.h>
 
-#include <QColor>
-#include <QFileInfo>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHBoxLayout>
-#include <QHeaderView>
-#include <QLayout>
-#include <QList>
-#include <QPushButton>
-#include <QString>
-#include <QToolTip>
-#include <QTreeWidget>
-#include <QVariant>
-#include <QVBoxLayout>
+#include <QtCore/QFileInfo>
+#include <QtGui/QColor>
+#include <QtGui/QIcon>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLayout>
+#include <QtCore/QList>
+#include <QtWidgets/QPushButton>
+#include <QtCore/QString>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QTreeWidget>
+#include <QtCore/QVariant>
+#include <QtWidgets/QVBoxLayout>
 
 #include <grp.h>
 #include <unistd.h>
@@ -59,12 +58,12 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_messageWidget->hide();
     m_messageWidget->setWordWrap( true );
 #ifdef ENABLE_PERMISSION_HELPER
-    m_addToGroupAction = new KAction( KIcon("dialog-password"), QString(), this );
+    m_addToGroupAction = new QAction( QIcon::fromTheme("dialog-password"), QString(), this );
 #endif
 
     // buttons
     // ------------------------------------------------
-    QPushButton* buttonRefreshDevices = new QPushButton( KIcon( "view-refresh" ), i18n( "Refresh" ), this );
+    QPushButton* buttonRefreshDevices = new QPushButton( QIcon::fromTheme( "view-refresh" ), i18n( "Refresh" ), this );
     buttonRefreshDevices->setToolTip( i18n( "Rescan the devices" ) );
     QHBoxLayout* refreshButtonGrid = new QHBoxLayout;
     refreshButtonGrid->setContentsMargins( 0, 0, 0, 0 );
@@ -81,7 +80,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_viewDevices->setSelectionMode( QAbstractItemView::NoSelection );
     m_viewDevices->setItemsExpandable( false );
     m_viewDevices->setRootIsDecorated( false );
-    m_viewDevices->header()->setResizeMode( 0, QHeaderView::ResizeToContents );
+    m_viewDevices->header()->setSectionResizeMode( 0, QHeaderView::ResizeToContents );
     m_viewDevices->setFocusPolicy( Qt::NoFocus );
     m_viewDevices->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     // ------------------------------------------------
@@ -124,12 +123,12 @@ void K3b::DeviceWidget::updateDeviceListViews()
     // create the parent view items
     // -----------------------------------------
     m_writerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Writer Drives") );
-    m_writerParentViewItem->setIcon( 0, KIcon( "media-optical-recordable" ) );
+    m_writerParentViewItem->setIcon( 0, QIcon::fromTheme( "media-optical-recordable" ) );
     // spacer item
     QTreeWidgetItem* spacer = new QTreeWidgetItem( m_viewDevices );
     spacer->setFlags( Qt::NoItemFlags );
     m_readerParentViewItem = new QTreeWidgetItem( m_viewDevices, QStringList() << i18n("Read-only Drives") );
-    m_readerParentViewItem->setIcon( 0, KIcon( "media-optical" ) );
+    m_readerParentViewItem->setIcon( 0, QIcon::fromTheme( "media-optical" ) );
     // -----------------------------------------
 
     QFont fBold( m_viewDevices->font() );
@@ -272,24 +271,25 @@ void K3b::DeviceWidget::addUserToGroup()
     args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_name);
 
     KAuth::Action action("org.kde.k3b.addtogroup");
-    action.setHelperID("org.kde.k3b");
+    action.setHelperId("org.kde.k3b");
     action.setParentWidget(this);
     action.setArguments(args);
 
-    KAuth::ActionReply reply = action.execute();
-    if (reply.succeeded()) {
-        m_messageWidget->removeAction(m_addToGroupAction);
-        m_messageWidget->setMessageType(KMessageWidget::Information);
-        m_messageWidget->setText(i18n("Please relogin to apply the changes."));
-    } else if (reply.type() != KAuth::ActionReply::KAuthError ||
-               (reply.errorCode() != KAuth::ActionReply::NoError &&
-                reply.errorCode() != KAuth::ActionReply::AuthorizationDenied &&
-                reply.errorCode() != KAuth::ActionReply::UserCancelled)) {
-        m_messageWidget->setMessageType(KMessageWidget::Error);
-        m_messageWidget->setText(i18n("Unable to execute the action: %1 (Error code: %2)", reply.errorDescription(), reply.errorCode()));
-        m_addToGroupAction->setText(i18n("Retry"));
-    }
+    KAuth::ExecuteJob* job = action.execute();
+    connect( job, &KAuth::ExecuteJob::statusChanged, [&](KAuth::Action::AuthStatus status)
+    {
+        if( status == KAuth::Action::AuthorizedStatus ||
+            status == KAuth::Action::AuthRequiredStatus ) {
+            m_messageWidget->removeAction(m_addToGroupAction);
+            m_messageWidget->setMessageType(KMessageWidget::Information);
+            m_messageWidget->setText(i18n("Please relogin to apply the changes."));
+        } else if( status == KAuth::Action::DeniedStatus ||
+                   status == KAuth::Action::ErrorStatus ||
+                   status == KAuth::Action::InvalidStatus ) {
+            m_messageWidget->setMessageType(KMessageWidget::Error);
+            m_messageWidget->setText(i18n("Unable to execute the action: %1 (Error code: %2)", job->errorString(), job->error()));
+            m_addToGroupAction->setText(i18n("Retry"));
+        }
+    } );
 }
 #endif
-
-#include "k3bdevicewidget.moc"

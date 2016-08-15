@@ -56,10 +56,10 @@
 
 #include "qplatformdefs.h"
 #include "QtCore/qthread.h"
-#include "QtCore/qmutex.h"
+#include "QtCore/QtCore/QMutex"
 #include "QtCore/qstack.h"
-#include "QtCore/qwaitcondition.h"
-#include "QtCore/qmap.h"
+#include "QtCore/QtCore/QWaitCondition"
+#include "QtCore/QtCore/QMap"
 #include "private/qobject_p.h"
 
 QT_BEGIN_NAMESPACE

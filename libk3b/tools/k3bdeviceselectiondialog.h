@@ -18,9 +18,9 @@
 #define K3B_DEVICE_SELECTION_DIALOG_H
 
 
-#include <kdialog.h>
 #include "k3b_export.h"
-#include <qlist.h>
+#include <QtCore/QList>
+#include <QtWidgets/QDialog>
 
 namespace K3b {
     namespace Device {
@@ -28,7 +28,7 @@ namespace K3b {
     }
 
 
-    class LIBK3B_EXPORT DeviceSelectionDialog : public KDialog
+    class LIBK3B_EXPORT DeviceSelectionDialog : public QDialog
     {
         Q_OBJECT
 

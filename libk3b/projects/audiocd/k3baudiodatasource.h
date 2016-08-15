@@ -15,11 +15,11 @@
 #ifndef _K3B_AUDIO_DATA_SOURCE_H_
 #define _K3B_AUDIO_DATA_SOURCE_H_
 
-#include <QtCore/QIODevice>
-#include <QtCore/QObject>
-
 #include "k3bmsf.h"
 #include "k3b_export.h"
+
+#include <QtCore/QIODevice>
+#include <QtCore/QObject>
 
 namespace K3b {
     class AudioTrack;

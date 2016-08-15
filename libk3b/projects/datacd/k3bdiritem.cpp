@@ -19,9 +19,10 @@
 #include "k3bsessionimportitem.h"
 #include "k3bfileitem.h"
 #include "k3bisooptions.h"
+#include "k3b_i18n.h"
 
-#include <KDebug>
-#include <KLocale>
+#include <QtCore/QDebug>
+#include <QtCore/QMimeDatabase>
 
 
 K3b::DirItem::DirItem(const QString& name, const ItemFlags& flags)
@@ -432,9 +433,9 @@ bool K3b::DirItem::writeToCd() const
 }
 
 
-KMimeType::Ptr K3b::DirItem::mimeType() const
+QMimeType K3b::DirItem::mimeType() const
 {
-    return KMimeType::mimeType( "inode/directory" );
+    return QMimeDatabase().mimeTypeForName( "inode/directory" );
 }
 
 
@@ -443,7 +444,7 @@ bool K3b::DirItem::canAddDataItem( DataItem* item ) const
     // check if we are a subdir of item
     DirItem* dirItem = dynamic_cast<DirItem*>( item );
     if( dirItem && dirItem->isSubItem( this ) ) {
-        kDebug() << "(K3b::DirItem) trying to move a dir item down in it's own tree.";
+        qDebug() << "(K3b::DirItem) trying to move a dir item down in it's own tree.";
         return false;
     } else if( !item || m_children.contains( item ) ) {
         return false;

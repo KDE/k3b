@@ -59,6 +59,7 @@ namespace K3b {
         int rowCount( const QModelIndex& parent = QModelIndex() ) const;
         bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
         QMimeData* mimeData( const QModelIndexList& indexes ) const;
+        Qt::DropActions supportedDragActions() const;
         Qt::DropActions supportedDropActions() const;
         QStringList mimeTypes() const;
         bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );

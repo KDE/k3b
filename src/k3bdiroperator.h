@@ -16,8 +16,9 @@
 #ifndef K3BDIROPERATOR_H
 #define K3BDIROPERATOR_H
 
-#include <KBookmarkManager>
-#include <KDirOperator>
+#include <KBookmarks/KBookmarkManager>
+#include <KIOFileWidgets/KDirOperator>
+#include <QtCore/QUrl>
 
 class KActionMenu;
 class KBookmarkMenu;
@@ -32,7 +33,7 @@ class DirOperator : public KDirOperator, public KBookmarkOwner
     Q_OBJECT
 
 public: 
-    DirOperator( const KUrl& urlName = KUrl(), QWidget* parent = 0 );
+    DirOperator( const QUrl& urlName = QUrl(), QWidget* parent = 0 );
     ~DirOperator();
 
     /**
@@ -58,7 +59,7 @@ public:
     /**
      * reimplemented from KBookmarkOwner
      */
-    QString currentUrl() const;
+    QUrl currentUrl() const;
 
     KActionMenu* bookmarkMenu() const { return m_bmPopup; }
 

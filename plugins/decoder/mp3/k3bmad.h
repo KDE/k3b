@@ -20,7 +20,7 @@ extern "C" {
 #include <mad.h>
 }
 
-#include <qfile.h>
+#include <QtCore/QFile>
 
 
 class K3bMad

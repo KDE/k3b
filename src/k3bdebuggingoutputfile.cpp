@@ -21,15 +21,25 @@
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 
-#include <kstandarddirs.h>
-#include <kglobalsettings.h>
-#include <kapplication.h>
+#include <kcoreaddons_version.h>
 
-#include <qtextstream.h>
+#include <QtCore/QDir>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QTextStream>
 
+
+namespace
+{
+    QString debuggingOutputFilePath()
+    {
+        QString dirPath = QStandardPaths::writableLocation( QStandardPaths::DataLocation );
+        QDir().mkpath( dirPath );
+        return dirPath + "/lastlog.log";
+    }
+} // namespace
 
 K3b::DebuggingOutputFile::DebuggingOutputFile()
-    : QFile( KStandardDirs::locateLocal( "appdata", "lastlog.log", true ) )
+    : QFile( debuggingOutputFilePath() )
 {
 }
 
@@ -40,7 +50,7 @@ bool K3b::DebuggingOutputFile::open( OpenMode mode )
         return false;
 
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "K3b Version: %1" ).arg(k3bcore->version()) );
-    addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KDE::versionString()) );
+    addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KCOREADDONS_VERSION_STRING) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Qt Version:  %1" ).arg(qVersion()) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Kernel:      %1" ).arg(K3b::kernelVersion()) );
 
@@ -69,4 +79,4 @@ void K3b::DebuggingOutputFile::addOutput( const QString& app, const QString& msg
     flush();
 }
 
-#include "k3bdebuggingoutputfile.moc"
+

@@ -15,14 +15,19 @@
 #include <config-libk3b.h>
 
 #include "k3bcore.h"
-
 #include "k3baudiodecoder.h"
 #include "k3bpluginmanager.h"
+#include "k3b_i18n.h"
 
-#include <kdebug.h>
-#include <kfilemetainfo.h>
+#include <KFileMetaData/ExtractionResult>
+#include <KFileMetaData/Extractor>
+#include <KFileMetaData/ExtractorCollection>
+#include <KFileMetaData/Properties>
 
-#include <qmap.h>
+#include <QtCore/QDebug>
+#include <QtCore/QMap>
+#include <QtCore/QMimeDatabase>
+#include <QtCore/QMimeType>
 
 #include <math.h>
 
@@ -36,12 +41,57 @@
 // use a one second buffer
 static const int DECODING_BUFFER_SIZE = 75*2352;
 
+namespace
+{
+
+typedef QMap<K3b::AudioDecoder::MetaDataField, QString> MetaInfoMap;
+
+class ExtractionResult : public KFileMetaData::ExtractionResult
+{
+public:
+    ExtractionResult( const QString& filename, const QString& mimetype, MetaInfoMap& metaInfoMap )
+        : KFileMetaData::ExtractionResult( filename, mimetype, KFileMetaData::ExtractionResult::ExtractMetaData ),
+          metaInfoMap_( metaInfoMap ) {}
+
+    void append(const QString& /*text*/) override {}
+
+    void addType(KFileMetaData::Type::Type /*type*/) override {}
+
+    void add(KFileMetaData::Property::Property property, const QVariant& value) override
+    {
+        switch(property)
+        {
+        case KFileMetaData::Property::Title:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_TITLE, value.toString() );
+            break;
+        case KFileMetaData::Property::Artist:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_ARTIST, value.toString() );
+            break;
+        case KFileMetaData::Property::Lyricist:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_SONGWRITER, value.toString() );
+            break;
+        case KFileMetaData::Property::Composer:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_COMPOSER, value.toString() );
+            break;
+        case KFileMetaData::Property::Comment:
+            metaInfoMap_.insert( K3b::AudioDecoder::META_COMMENT, value.toString() );
+            break;
+        default:
+            break;
+        }
+    }
+
+private:
+    MetaInfoMap& metaInfoMap_;
+};
+
+} // namespace
+
 class K3b::AudioDecoder::Private
 {
 public:
     Private()
-        : metaInfo(0),
-          resampleState(0),
+        : resampleState(0),
           resampleData(0),
           inBuffer(0),
           inBufferPos(0),
@@ -68,7 +118,9 @@ public:
 
     K3b::Msf decodingStartPos;
 
-    KFileMetaInfo* metaInfo;
+    KFileMetaData::ExtractorCollection metaDataCollection;
+    QMimeDatabase mimeDatabase;
+    QMimeType mimeType;
 
     // set to true once decodeInternal() returned 0
     bool decoderFinished;
@@ -94,7 +146,7 @@ public:
     int decodingBufferFill;
 
     QMap<QString, QString> technicalInfoMap;
-    QMap<MetaDataField, QString> metaInfoMap;
+    MetaInfoMap metaInfoMap;
 
     bool valid;
 };
@@ -116,7 +168,6 @@ K3b::AudioDecoder::~AudioDecoder()
     if( d->outBuffer ) delete [] d->outBuffer;
     if( d->monoBuffer ) delete [] d->monoBuffer;
 
-    delete d->metaInfo;
     delete d->resampleData;
     if( d->resampleState )
         src_delete( d->resampleState );
@@ -127,8 +178,7 @@ K3b::AudioDecoder::~AudioDecoder()
 void K3b::AudioDecoder::setFilename( const QString& filename )
 {
     m_fileName = filename;
-    delete d->metaInfo;
-    d->metaInfo = 0;
+    d->mimeType = QMimeType();
 }
 
 
@@ -142,8 +192,7 @@ bool K3b::AudioDecoder::analyseFile()
 {
     d->technicalInfoMap.clear();
     d->metaInfoMap.clear();
-    delete d->metaInfo;
-    d->metaInfo = 0;
+    d->mimeType = QMimeType();
 
     cleanup();
 
@@ -264,7 +313,7 @@ int K3b::AudioDecoder::decode( char* _data, int maxLen )
             // check if we need to pad
             int bytesToPad = lengthToDecode - d->alreadyDecoded;
             if( bytesToPad > 0 ) {
-                kDebug() << "(K3b::AudioDecoder) track length: " << lengthToDecode
+                qDebug() << "(K3b::AudioDecoder) track length: " << lengthToDecode
                          << "; decoded module data: " << d->alreadyDecoded
                          << "; we need to pad " << bytesToPad << " bytes." << endl;
 
@@ -273,12 +322,12 @@ int K3b::AudioDecoder::decode( char* _data, int maxLen )
 
                 ::memset( d->decodingBuffer, 0, bytesToPad );
 
-                kDebug() << "(K3b::AudioDecoder) padded " << bytesToPad << " bytes.";
+                qDebug() << "(K3b::AudioDecoder) padded " << bytesToPad << " bytes.";
 
                 read = bytesToPad;
             }
             else {
-                kDebug() << "(K3b::AudioDecoder) decoded " << d->alreadyDecoded << " bytes.";
+                qDebug() << "(K3b::AudioDecoder) decoded " << d->alreadyDecoded << " bytes.";
                 return 0;
             }
         }
@@ -286,7 +335,7 @@ int K3b::AudioDecoder::decode( char* _data, int maxLen )
 
             // check if we decoded too much
             if( d->alreadyDecoded + read > lengthToDecode ) {
-                kDebug() << "(K3b::AudioDecoder) we decoded too much. Cutting output by "
+                qDebug() << "(K3b::AudioDecoder) we decoded too much. Cutting output by "
                          << (read + d->alreadyDecoded - lengthToDecode) << endl;
                 read = lengthToDecode - d->alreadyDecoded;
             }
@@ -318,7 +367,7 @@ int K3b::AudioDecoder::resample( char* data, int maxLen )
     if( !d->resampleState ) {
         d->resampleState = src_new( SRC_SINC_MEDIUM_QUALITY, d->channels, 0 );
         if( !d->resampleState ) {
-            kDebug() << "(K3b::AudioDecoder) unable to initialize resampler.";
+            qDebug() << "(K3b::AudioDecoder) unable to initialize resampler.";
             return -1;
         }
         d->resampleData = new SRC_DATA;
@@ -340,7 +389,7 @@ int K3b::AudioDecoder::resample( char* data, int maxLen )
 
     int len = 0;
     if( (len = src_process( d->resampleState, d->resampleData ) ) ) {
-        kDebug() << "(K3b::AudioDecoder) error while resampling: " << src_strerror(len);
+        qDebug() << "(K3b::AudioDecoder) error while resampling: " << src_strerror(len);
         return -1;
     }
 
@@ -421,7 +470,7 @@ void K3b::AudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int samp
 
 bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
 {
-    kDebug() << "(K3b::AudioDecoder) seek from " << d->currentPos.toString() << " (+" << d->currentPosOffset
+    qDebug() << "(K3b::AudioDecoder) seek from " << d->currentPos.toString() << " (+" << d->currentPosOffset
              << ") to " << pos.toString() << endl;
 
     if( pos > length() )
@@ -450,11 +499,11 @@ bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
           ( pos == d->currentPos && d->currentPosOffset == 0 ) )
         &&
         ( pos - d->currentPos < K3b::Msf(0,10,0) ) ) {  // < 10 seconds is ok
-        kDebug() << "(K3b::AudioDecoder) performing perfect seek from " << d->currentPos.toString()
+        qDebug() << "(K3b::AudioDecoder) performing perfect seek from " << d->currentPos.toString()
                  << " to " << pos.toString() << ". :)" << endl;
 
         qint64 bytesToDecode = pos.audioBytes() - d->currentPos.audioBytes() - d->currentPosOffset;
-        kDebug() << "(K3b::AudioDecoder) seeking " << bytesToDecode << " bytes.";
+        qDebug() << "(K3b::AudioDecoder) seeking " << bytesToDecode << " bytes.";
         char buffi[10*2352];
         while( bytesToDecode > 0 ) {
             int read = decode( buffi, qMin(( qint64 )( 10*2352 ), bytesToDecode) );
@@ -464,7 +513,7 @@ bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
             bytesToDecode -= read;
         }
 
-        kDebug() << "(K3b::AudioDecoder) perfect seek done.";
+        qDebug() << "(K3b::AudioDecoder) perfect seek done.";
 
         success = true;
     }
@@ -502,33 +551,18 @@ QString K3b::AudioDecoder::metaInfo( MetaDataField f )
     if( d->metaInfoMap.contains( f ) )
         return d->metaInfoMap[f];
 
-    // fall back to KFileMetaInfo
-    if( !d->metaInfo )
-        d->metaInfo = new KFileMetaInfo( filename() );
-
-    if( d->metaInfo->isValid() ) {
-        QString tag;
-        switch( f ) {
-        case META_TITLE:
-            tag = "Title";
-            break;
-        case META_ARTIST:
-            tag = "Artist";
-            break;
-        case META_SONGWRITER:
-            tag = "Songwriter";
-            break;
-        case META_COMPOSER:
-            tag = "Composer";
-            break;
-        case META_COMMENT:
-            tag = "Comment";
-            break;
+    // fall back to KFileMetaData
+    if( !d->mimeType.isValid() )
+    {
+        d->mimeType = d->mimeDatabase.mimeTypeForFile( m_fileName );
+        for( KFileMetaData::Extractor* plugin : d->metaDataCollection.fetchExtractors( d->mimeType.name() ) )
+        {
+            ExtractionResult extractionResult(m_fileName, d->mimeType.name(), d->metaInfoMap);
+            plugin->extract(&extractionResult);
         }
 
-        KFileMetaInfoItem item = d->metaInfo->item( tag );
-        if( item.isValid() )
-            return item.value().toString();
+        if( d->metaInfoMap.contains( f ) )
+            return d->metaInfoMap[f];
     }
 
     return QString();
@@ -540,7 +574,7 @@ void K3b::AudioDecoder::addMetaInfo( MetaDataField f, const QString& value )
     if( !value.isEmpty() )
         d->metaInfoMap[f] = value;
     else
-        kDebug() << "(K3b::AudioDecoder) empty meta data field.";
+        qDebug() << "(K3b::AudioDecoder) empty meta data field.";
 }
 
 
@@ -566,26 +600,26 @@ void K3b::AudioDecoder::addTechnicalInfo( const QString& key, const QString& val
 }
 
 
-K3b::AudioDecoder* K3b::AudioDecoderFactory::createDecoder( const KUrl& url )
+K3b::AudioDecoder* K3b::AudioDecoderFactory::createDecoder( const QUrl& url )
 {
-    kDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.toLocalFile() << " )";
+    qDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.toLocalFile() << " )";
     QList<K3b::Plugin*> fl = k3bcore->pluginManager()->plugins( "AudioDecoder" );
 
     // first search for a single format decoder
     Q_FOREACH( K3b::Plugin* plugin, fl ) {
         K3b::AudioDecoderFactory* f = dynamic_cast<K3b::AudioDecoderFactory*>( plugin );
         if( f && !f->multiFormatDecoder() && f->canDecode( url ) ) {
-            kDebug() << "1"; return f->createDecoder();}
+            qDebug() << "1"; return f->createDecoder();}
     }
 
     // no single format decoder. Search for a multi format decoder
     Q_FOREACH( K3b::Plugin* plugin, fl ) {
         K3b::AudioDecoderFactory* f = dynamic_cast<K3b::AudioDecoderFactory*>( plugin );
         if( f && f->multiFormatDecoder() && f->canDecode( url ) ) {
-            kDebug() << "2"; return f->createDecoder();}
+            qDebug() << "2"; return f->createDecoder();}
     }
 
-    kDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.toLocalFile() << " ) no success";
+    qDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.toLocalFile() << " ) no success";
 
     // nothing found
     return 0;
@@ -597,4 +631,4 @@ QString K3b::AudioDecoderFactory::categoryName() const
     return i18nc( "plugin type", "Audio Decoder" );
 }
 
-#include "k3baudiodecoder.moc"
+

@@ -15,8 +15,8 @@
 #ifndef FLATBUTTON_H
 #define FLATBUTTON_H
 
-#include <QAbstractButton>
-#include <QColor>
+#include <QtGui/QColor>
+#include <QtWidgets/QAbstractButton>
 
 class QEvent;
 class QMouseEvent;
@@ -38,7 +38,7 @@ namespace K3b {
     
         ~FlatButton();
 
-        virtual QSize sizeHint() const;
+        QSize sizeHint() const override;
 
     public Q_SLOTS:
         void setColors( const QColor& fore, const QColor& back );
@@ -48,10 +48,10 @@ namespace K3b {
 
     private:
         void init();
-
-        virtual void enterEvent( QEvent* event );
-        virtual void leaveEvent( QEvent* event );
-        virtual void paintEvent( QPaintEvent* event );
+        bool event( QEvent* event ) override;
+        void enterEvent( QEvent* event ) override;
+        void leaveEvent( QEvent* event ) override;
+        void paintEvent( QPaintEvent* event ) override;
         void setHover( bool );
 
         QColor m_backColor;

@@ -14,10 +14,9 @@
 
 #include "k3bactivepipe.h"
 
-#include <kdebug.h>
-
-#include <qthread.h>
-#include <qiodevice.h>
+#include <QtCore/QDebug>
+#include <QtCore/QIODevice>
+#include <QtCore/QThread>
 
 
 class K3b::ActivePipe::Private : public QThread
@@ -32,7 +31,7 @@ public:
     }
 
     void run() {
-        kDebug() << "(K3b::ActivePipe) writing from" << sourceIODevice << "to" << sinkIODevice;
+        qDebug() << "(K3b::ActivePipe) writing from" << sourceIODevice << "to" << sinkIODevice;
 
         bytesRead = bytesWritten = 0;
         buffer.resize( 10*2048 );
@@ -50,7 +49,7 @@ public:
                     bytesWritten += ww;
                 }
                 else {
-                    kDebug() << "write failed." << sinkIODevice->errorString();
+                    qDebug() << "write failed." << sinkIODevice->errorString();
                     fail = true;
                     break;
                 }
@@ -58,17 +57,17 @@ public:
         }
 
         if ( r < 0 ) {
-            kDebug() << "Read failed:" << sourceIODevice->errorString();
+            qDebug() << "Read failed:" << sourceIODevice->errorString();
         }
 
-        kDebug() << "Done:"
+        qDebug() << "Done:"
                  << ( fail ? QLatin1String( "write failed" ) : QLatin1String( "write succcess" ) )
                  << ( r != 0 ? QLatin1String( "read failed" ) : QLatin1String( "read success" ) )
                  << "(total bytes read/written:" << bytesRead << "/" << bytesWritten << ")";
     }
 
     void _k3b_close() {
-        kDebug();
+        qDebug();
         if ( closeWhenDone )
             m_pipe->close();
     }
@@ -120,18 +119,18 @@ bool K3b::ActivePipe::open( bool closeWhenDone )
     d->closeWhenDone = closeWhenDone;
 
     if( d->sourceIODevice && !d->sourceIODevice->isOpen() ) {
-        kDebug() << "Need to open source device:" << d->sourceIODevice;
+        qDebug() << "Need to open source device:" << d->sourceIODevice;
         if( !d->sourceIODevice->open( QIODevice::ReadOnly ) )
             return false;
     }
 
     if( d->sinkIODevice && !d->sinkIODevice->isOpen()  ) {
-        kDebug() << "Need to open sink device:" << d->sinkIODevice;
+        qDebug() << "Need to open sink device:" << d->sinkIODevice;
         if( !d->sinkIODevice->open( QIODevice::WriteOnly ) )
             return false;
     }
 
-    kDebug() << "(K3b::ActivePipe) successfully opened pipe.";
+    qDebug() << "(K3b::ActivePipe) successfully opened pipe.";
 
     // we only do active piping if both devices are set.
     // Otherwise we only work as a conduit
@@ -145,7 +144,7 @@ bool K3b::ActivePipe::open( bool closeWhenDone )
 
 void K3b::ActivePipe::close()
 {
-    kDebug();
+    qDebug();
     if( d->sourceIODevice && d->closeSourceIODevice )
         d->sourceIODevice->close();
     if( d->sinkIODevice && d->closeSinkIODevice )
@@ -199,4 +198,4 @@ quint64 K3b::ActivePipe::bytesWritten() const
     return d->bytesWritten;
 }
 
-#include "k3bactivepipe.moc"
+#include "moc_k3bactivepipe.cpp"

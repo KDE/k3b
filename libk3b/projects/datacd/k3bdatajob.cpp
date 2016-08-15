@@ -37,20 +37,18 @@
 #include "k3bisooptions.h"
 #include "k3bdeviceglobals.h"
 #include "k3bgrowisofswriter.h"
+#include "k3b_i18n.h"
 
-#include <kapplication.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <ktemporaryfile.h>
-#include <kio/global.h>
-#include <kio/job.h>
+#include <KIOCore/KIO/Global>
+#include <KIOCore/KIO/Job>
 
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qdatetime.h>
-#include <qfile.h>
-#include <qdatastream.h>
-#include <kdebug.h>
+#include <QtCore/QDataStream>
+#include <QtCore/QDateTime>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QTemporaryFile>
 
 
 
@@ -69,7 +67,7 @@ public:
     bool imageFinished;
     bool canceled;
 
-    KTemporaryFile* tocFile;
+    QTemporaryFile* tocFile;
 
     int usedDataMode;
     K3b::WritingApp usedWritingApp;
@@ -108,7 +106,7 @@ K3b::DataJob::DataJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent 
 
 K3b::DataJob::~DataJob()
 {
-    kDebug();
+    qDebug();
     delete d->pipe;
     delete d->tocFile;
     delete d;
@@ -132,7 +130,7 @@ K3b::Device::Device* K3b::DataJob::writer() const
 
 void K3b::DataJob::start()
 {
-    kDebug();
+    qDebug();
     jobStarted();
 
     d->canceled = false;
@@ -158,7 +156,7 @@ void K3b::DataJob::start()
 
 void K3b::DataJob::slotMultiSessionParamterSetupDone( bool success )
 {
-    kDebug() << success;
+    qDebug() << success;
     if ( success ) {
         prepareWriting();
     }
@@ -174,7 +172,7 @@ void K3b::DataJob::slotMultiSessionParamterSetupDone( bool success )
 
 void K3b::DataJob::prepareWriting()
 {
-    kDebug();
+    qDebug();
     if( !d->doc->onlyCreateImages() &&
         ( d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
           d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::FINISH ) ) {
@@ -199,7 +197,7 @@ void K3b::DataJob::prepareWriting()
 
 void K3b::DataJob::writeImage()
 {
-    kDebug();
+    qDebug();
     d->initializingImager = false;
 
     emit burning(false);
@@ -234,7 +232,7 @@ void K3b::DataJob::writeImage()
 
 void K3b::DataJob::startPipe()
 {
-    kDebug();
+    qDebug();
     //
     // Open the active pipe which does the streaming
     //
@@ -263,7 +261,7 @@ void K3b::DataJob::startPipe()
 
 bool K3b::DataJob::startOnTheFlyWriting()
 {
-    kDebug();
+    qDebug();
     if( prepareWriterJob() ) {
         if( startWriterJob() ) {
             d->initializingImager = false;
@@ -278,7 +276,7 @@ bool K3b::DataJob::startOnTheFlyWriting()
 
 void K3b::DataJob::cancel()
 {
-    kDebug();
+    qDebug();
 
     emit canceled();
 
@@ -289,7 +287,7 @@ void K3b::DataJob::cancel()
     // slotIsoImagerFinished, and slotWriterJobFinished take care of the rest
     //
     if ( active() && !cancelAll() ) {
-        kDebug() << "cancellation already done";
+        qDebug() << "cancellation already done";
         cleanup();
         jobFinished( false );
     }
@@ -298,30 +296,30 @@ void K3b::DataJob::cancel()
 
 bool K3b::DataJob::cancelAll()
 {
-    kDebug();
+    qDebug();
     bool somethingCanceled = false;
     if ( m_isoImager->active() ) {
-        kDebug() << "cancelling iso imager";
+        qDebug() << "cancelling iso imager";
         m_isoImager->cancel();
         somethingCanceled = true;
     }
     if( m_writerJob && m_writerJob->active() ) {
-        kDebug() << "cancelling writing job";
+        qDebug() << "cancelling writing job";
         m_writerJob->cancel();
         somethingCanceled = true;
     }
     if( d->verificationJob && d->verificationJob->active() ) {
-        kDebug() << "cancelling verification job";
+        qDebug() << "cancelling verification job";
         d->verificationJob->cancel();
         somethingCanceled = true;
     }
     if ( d->multiSessionParameterJob && d->multiSessionParameterJob->active() ) {
-        kDebug() << "cancelling multiSessionParameterJob";
+        qDebug() << "cancelling multiSessionParameterJob";
         d->multiSessionParameterJob->cancel();
         somethingCanceled = true;
     }
 
-    kDebug() << somethingCanceled;
+    qDebug() << somethingCanceled;
     return somethingCanceled;
 }
 
@@ -351,7 +349,7 @@ void K3b::DataJob::slotIsoImagerPercent( int p )
 
 void K3b::DataJob::slotIsoImagerFinished( bool success )
 {
-    kDebug();
+    qDebug();
     if( d->initializingImager ) {
         if( success ) {
             if( d->doc->onTheFly() && !d->doc->onlyCreateImages() ) {
@@ -435,7 +433,7 @@ void K3b::DataJob::slotIsoImagerFinished( bool success )
 
 bool K3b::DataJob::startWriterJob()
 {
-    kDebug();
+    qDebug();
     if( d->doc->dummy() )
         emit newTask( i18n("Simulating") );
     else if( d->copies > 1 )
@@ -474,7 +472,7 @@ void K3b::DataJob::slotWriterNextTrack( int t, int tt )
 
 void K3b::DataJob::slotWriterJobFinished( bool success )
 {
-    kDebug();
+    qDebug();
 
     if( success ) {
         if ( !d->doc->onTheFly() ||
@@ -577,7 +575,7 @@ void K3b::DataJob::slotVerificationProgress( int p )
 
 void K3b::DataJob::slotVerificationFinished( bool success )
 {
-    kDebug();
+    qDebug();
     d->copiesDone++;
 
     // reconnect our imager which we deconnected for the verification
@@ -612,7 +610,7 @@ void K3b::DataJob::slotVerificationFinished( bool success )
 
 void K3b::DataJob::setWriterJob( K3b::AbstractWriter* writer )
 {
-    kDebug();
+    qDebug();
     // FIXME: progressedsize for multiple copies
     m_writerJob = writer;
     connect( m_writerJob, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
@@ -633,7 +631,7 @@ void K3b::DataJob::setWriterJob( K3b::AbstractWriter* writer )
 
 void K3b::DataJob::setImager( K3b::IsoImager* imager )
 {
-    kDebug();
+    qDebug();
     if( m_isoImager != imager ) {
         delete m_isoImager;
 
@@ -646,7 +644,7 @@ void K3b::DataJob::setImager( K3b::IsoImager* imager )
 
 void K3b::DataJob::connectImager()
 {
-    kDebug();
+    qDebug();
     m_isoImager->disconnect( this );
     connect( m_isoImager, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
     connect( m_isoImager, SIGNAL(percent(int)), this, SLOT(slotIsoImagerPercent(int)) );
@@ -658,7 +656,7 @@ void K3b::DataJob::connectImager()
 
 void K3b::DataJob::prepareImager()
 {
-    kDebug();
+    qDebug();
     if( !m_isoImager )
         setImager( new K3b::IsoImager( d->doc, this, this ) );
 }
@@ -666,7 +664,7 @@ void K3b::DataJob::prepareImager()
 
 bool K3b::DataJob::prepareWriterJob()
 {
-    kDebug();
+    qDebug();
     if( m_writerJob ) {
         delete m_writerJob;
         m_writerJob = 0;
@@ -737,12 +735,12 @@ bool K3b::DataJob::waitForBurnMedium()
                 // try to get the last track's datamode
                 // we already asked for an appendable cdr when fetching
                 // the ms info
-                kDebug() << "(K3b::DataJob) determining last track's datamode...";
+                qDebug() << "(K3b::DataJob) determining last track's datamode...";
 
                 // FIXME: use the DeviceHandler
                 K3b::Device::Toc toc = d->doc->burner()->readToc();
                 if( toc.isEmpty() ) {
-                    kDebug() << "(K3b::DataJob) could not retrieve toc.";
+                    qDebug() << "(K3b::DataJob) could not retrieve toc.";
                     emit infoMessage( i18n("Unable to determine the last track's datamode. Using default."), MessageError );
                     d->usedDataMode = K3b::DataMode2;
                 }
@@ -752,7 +750,7 @@ bool K3b::DataJob::waitForBurnMedium()
                     else
                         d->usedDataMode = K3b::DataMode2;
 
-                    kDebug() << "(K3b::DataJob) using datamode: "
+                    qDebug() << "(K3b::DataJob) using datamode: "
                              << (d->usedDataMode == K3b::DataMode1 ? "mode1" : "mode2")
                              << endl;
                 }
@@ -1024,7 +1022,7 @@ K3b::DataDoc::MultiSessionMode K3b::DataJob::usedMultiSessionMode() const
 
 void K3b::DataJob::cleanup()
 {
-    kDebug();
+    qDebug();
     if( !d->doc->onTheFly() && ( d->doc->removeImages() || d->canceled ) ) {
         if( QFile::exists( d->doc->tempDir() ) ) {
             d->imageFile.remove();
@@ -1047,7 +1045,7 @@ bool K3b::DataJob::hasBeenCanceled() const
 
 bool K3b::DataJob::setupCdrecordJob()
 {
-    kDebug();
+    qDebug();
     K3b::CdrecordWriter* writer = new K3b::CdrecordWriter( d->doc->burner(), this, this );
 
     // cdrecord manpage says that "not all" writers are able to write
@@ -1105,8 +1103,7 @@ bool K3b::DataJob::setupCdrdaoJob()
 
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;
-    d->tocFile = new KTemporaryFile();
-    d->tocFile->setSuffix( ".toc" );
+    d->tocFile = new QTemporaryFile( "XXXXXX.toc" );
     d->tocFile->open();
 
     QTextStream s( d->tocFile );
@@ -1170,4 +1167,4 @@ bool K3b::DataJob::setupGrowisofsJob()
     return true;
 }
 
-#include "k3bdatajob.moc"
+

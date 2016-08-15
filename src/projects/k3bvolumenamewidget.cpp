@@ -17,12 +17,12 @@
 #include "k3bisooptions.h"
 #include "k3bvalidators.h"
 
-#include <KLineEdit>
-#include <KLocale>
+#include <KCompletion/KLineEdit>
+#include <KI18n/KLocalizedString>
 
-#include <QEvent>
-#include <QHBoxLayout>
-#include <QLabel>
+#include <QtCore/QEvent>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 
 namespace K3b {
 

@@ -23,11 +23,12 @@
 #include "k3bview.h"
 #include "k3bvalidators.h"
 
-#include <QList>
-#include <QHeaderView>
+#include <KI18n/KLocalizedString>
+#include <KIconThemes/KIconLoader>
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
+#include <QtCore/QList>
+#include <QtWidgets/QHeaderView>
 
 
 class K3b::DataDirTreeView::Private
@@ -74,8 +75,8 @@ K3b::DataDirTreeView::DataDirTreeView( K3b::View* view, K3b::DataDoc* doc, QWidg
         hideColumn( i );
     }
 
-    connect( d->model, SIGNAL(addUrlsRequested(KUrl::List,K3b::DirItem*)),
-                       SLOT(slotAddUrlsRequested(KUrl::List,K3b::DirItem*)) );
+    connect( d->model, SIGNAL(addUrlsRequested(QList<QUrl>,K3b::DirItem*)),
+                       SLOT(slotAddUrlsRequested(QList<QUrl>,K3b::DirItem*)) );
     connect( d->model, SIGNAL(moveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)),
                        SLOT(slotMoveItemsRequested(QList<K3b::DataItem*>,K3b::DirItem*)) );
     connect( selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
@@ -120,7 +121,7 @@ void K3b::DataDirTreeView::slotSelectionChanged( const QItemSelection& selected,
 }
 
 
-void K3b::DataDirTreeView::slotAddUrlsRequested( KUrl::List urls, K3b::DirItem* targetDir )
+void K3b::DataDirTreeView::slotAddUrlsRequested( QList<QUrl> urls, K3b::DirItem* targetDir )
 {
     DataUrlAddingDialog::addUrls( urls, targetDir, m_view );
 }
@@ -197,4 +198,4 @@ void K3b::DataDirTreeView::stopDropAnimation()
 }
 #endif
 
-#include "k3bdatadirtreeview.moc"
+

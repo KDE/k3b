@@ -16,12 +16,13 @@
 #ifndef _K3B_PROJECT_MANAGER_H_
 #define _K3B_PROJECT_MANAGER_H_
 
-#include <QList>
-#include <QObject>
 #include "k3bdoc.h"
 
+#include <QtCore/QList>
+#include <QtCore/QObject>
 
-class KUrl;
+
+class QUrl;
 
 namespace K3b {
 
@@ -45,16 +46,16 @@ namespace K3b {
          * Opens a K3b project.
          * \return 0 if url does not point to a valid k3b project file, the new project otherwise.
          */
-        Doc* openProject( const KUrl &url );
+        Doc* openProject( const QUrl &url );
 
         /**
          * saves the document under filename and format.
          */
-        bool saveProject( Doc*, const KUrl &url );
+        bool saveProject( Doc*, const QUrl &url );
 
         Doc* activeDoc() const { return activeProject(); }
         Doc* activeProject() const;
-        Doc* findByUrl( const KUrl& url );
+        Doc* findByUrl( const QUrl& url );
         bool isEmpty() const;
 
         /**

@@ -30,38 +30,36 @@
 #include "k3baudioencoder.h"
 #include "k3bmediacache.h"
 
-#include <KApplication>
-#include <KComboBox>
-#include <KConfig>
-#include <KDebug>
-#include <KFileDialog>
-#include <kio/global.h>
-#include <KLocale>
-#include <KMessageBox>
-#include <KUrlLabel>
-#include <KUrlRequester>
+#include <KCompletion/KComboBox>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
+#include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KUrlLabel>
 
-#include <QCheckBox>
-#include <QDir>
-#include <QFont>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QHash>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLayout>
-#include <QList>
-#include <QMessageBox>
-#include <QPair>
-#include <QPushButton>
-#include <QTabWidget>
-#include <QToolButton>
-#include <QToolTip>
-#include <QTreeWidget>
-#include <QSpinBox>
-#include <QStringList>
-#include <QValidator>
-#include <QVariant>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QPair>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
+#include <QtGui/QFont>
+#include <QtGui/QValidator>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QSpinBox>
 
 
 
@@ -152,10 +150,10 @@ void K3b::AudioRippingDialog::setupGui()
     d->viewTracks->setSelectionMode( QAbstractItemView::NoSelection );
     d->viewTracks->setFocusPolicy( Qt::NoFocus );
     d->viewTracks->header()->setStretchLastSection( false );
-    d->viewTracks->header()->setResizeMode( 0, QHeaderView::Stretch );
-    d->viewTracks->header()->setResizeMode( 1, QHeaderView::ResizeToContents );
-    d->viewTracks->header()->setResizeMode( 2, QHeaderView::ResizeToContents );
-    d->viewTracks->header()->setResizeMode( 3, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 0, QHeaderView::Stretch );
+    d->viewTracks->header()->setSectionResizeMode( 1, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 2, QHeaderView::ResizeToContents );
+    d->viewTracks->header()->setSectionResizeMode( 3, QHeaderView::ResizeToContents );
 
     QTabWidget* mainTab = new QTabWidget( frame );
 
@@ -303,7 +301,7 @@ void K3b::AudioRippingDialog::slotStartClicked()
     hide();
     ripDialog.startJob(job);
 
-    kDebug() << "(K3b::AudioRippingDialog) deleting ripjob.";
+    qDebug() << "(K3b::AudioRippingDialog) deleting ripjob.";
     delete job;
 
     close();
@@ -467,4 +465,4 @@ void K3b::AudioRippingDialog::saveSettings( KConfigGroup c )
     m_patternWidget->saveConfig( c );
 }
 
-#include "k3baudiorippingdialog.moc"
+

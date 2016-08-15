@@ -18,10 +18,10 @@
 
 #include "k3bglobals.h"
 
-#include <KLocale>
-#include <KConfig>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
 
-#include <QToolTip>
+#include <QtWidgets/QToolTip>
 
 static const KLocalizedString s_autoHelp =
     ki18n("Let K3b select the best-suited mode. This is the recommended selection.");
@@ -256,4 +256,4 @@ void K3b::WritingModeWidget::determineSupportedModesFromMedium( K3b::Device::Dev
         determineSupportedModesFromMedium( Medium() ); // no medium
 }
 
-#include "k3bwritingmodewidget.moc"
+#include "moc_k3bwritingmodewidget.cpp"

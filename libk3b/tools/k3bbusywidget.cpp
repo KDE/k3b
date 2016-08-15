@@ -14,12 +14,9 @@
 
 #include "k3bbusywidget.h"
 
-#include <qtimer.h>
-#include <qpainter.h>
-
-#include <QFrame>
-
-#include <kglobalsettings.h>
+#include <QtCore/QTimer>
+#include <QtGui/QPainter>
+#include <QtWidgets/QFrame>
 
 
 K3b::BusyWidget::BusyWidget( QWidget* parent )
@@ -102,4 +99,4 @@ void K3b::BusyWidget::paintEvent( QPaintEvent*  )
 }
 
 
-#include "k3bbusywidget.moc"
+

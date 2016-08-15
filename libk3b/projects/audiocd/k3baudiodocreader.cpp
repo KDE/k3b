@@ -18,9 +18,9 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 
-#include <QList>
-#include <QMutex>
-#include <QMutexLocker>
+#include <QtCore/QList>
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
 
 namespace K3b {
 
@@ -275,4 +275,4 @@ void AudioDocReader::updatePos()
 
 } // namespace K3b
 
-#include "k3baudiodocreader.moc"
+#include "moc_k3baudiodocreader.cpp"

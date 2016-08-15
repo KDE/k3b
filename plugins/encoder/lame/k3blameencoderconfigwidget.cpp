@@ -18,20 +18,19 @@
 #include "k3blamemanualsettingsdialog.h"
 #include "k3blametyes.h"
 
-#include <QCheckBox>
-#include <QFile>
-#include <QLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QSlider>
-#include <QSpinBox>
-#include <QTextCodec>
+#include <KCoreAddons/KAboutData>
+#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
 
-#include <KAboutData>
-#include <KConfig>
-#include <KDebug>
-
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSlider>
 
 namespace {
     
@@ -55,9 +54,6 @@ K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, con
     : K3b::PluginConfigWidget( parent, args )
 {
     setupUi( this );
-
-    m_sliderQuality->setRange( 0, 9 );
-    m_spinEncoderQuality->setRange( 0, 9, 1, true );
 
     m_manualSettingsDialog = new K3bLameManualSettingsDialog( this );
     for( int i = 0; s_lame_bitrates[i]; ++i )
@@ -142,9 +138,9 @@ void K3bLameEncoderSettingsWidget::slotQualityLevelChanged( int val )
 
 void K3bLameEncoderSettingsWidget::load()
 {
-    kDebug();
+    qDebug();
 
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     QString mode = grp.readEntry( "Mode", DEFAULT_MODE );
@@ -161,9 +157,9 @@ void K3bLameEncoderSettingsWidget::load()
     else
         m_manualSettingsDialog->m_radioConstantBitrate->setChecked( true );
 
-    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Constant Bitrate", DEFAULT_CONSTANT_BITRATE )) );
-    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Maximum Bitrate", DEFAULT_MAXIMUM_BITRATE )) );
-    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps",grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE )) );
+    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentText( i18n("%1 kbps",grp.readEntry( "Constant Bitrate", DEFAULT_CONSTANT_BITRATE )) );
+    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentText( i18n("%1 kbps",grp.readEntry( "Maximum Bitrate", DEFAULT_MAXIMUM_BITRATE )) );
+    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentText( i18n("%1 kbps",grp.readEntry( "Minimum Bitrate", DEFAULT_MINIMUM_BITRATE )) );
     m_manualSettingsDialog->m_spinAverageBitrate->setValue( grp.readEntry( "Average Bitrate", DEFAULT_AVERAGE_BITRATE) );
 
     m_manualSettingsDialog->m_checkBitrateMaximum->setChecked( grp.readEntry( "Use Maximum Bitrate", DEFAULT_USE_MAXIMUM_BITRATE ) );
@@ -186,9 +182,9 @@ void K3bLameEncoderSettingsWidget::load()
 
 void K3bLameEncoderSettingsWidget::save()
 {
-    kDebug();
+    qDebug();
 
-    KSharedConfig::Ptr c = KGlobal::config();
+    KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c, "K3bLameEncoderPlugin" );
 
     QString mode;
@@ -231,7 +227,7 @@ void K3bLameEncoderSettingsWidget::save()
 
 void K3bLameEncoderSettingsWidget::defaults()
 {
-    kDebug();
+    qDebug();
 
     m_manualSettingsDialog->m_comboMode->setCurrentIndex( mode2Index( DEFAULT_MODE ) );
 
@@ -245,9 +241,9 @@ void K3bLameEncoderSettingsWidget::defaults()
     else
         m_manualSettingsDialog->m_radioConstantBitrate->setChecked( true );
 
-    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_CONSTANT_BITRATE ) );
-    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_MAXIMUM_BITRATE ) );
-    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentItem( i18n("%1 kbps", DEFAULT_MINIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_comboConstantBitrate->setCurrentText( i18n("%1 kbps", DEFAULT_CONSTANT_BITRATE ) );
+    m_manualSettingsDialog->m_comboMaximumBitrate->setCurrentText( i18n("%1 kbps", DEFAULT_MAXIMUM_BITRATE ) );
+    m_manualSettingsDialog->m_comboMinimumBitrate->setCurrentText( i18n("%1 kbps", DEFAULT_MINIMUM_BITRATE ) );
     m_manualSettingsDialog->m_spinAverageBitrate->setValue( DEFAULT_AVERAGE_BITRATE );
 
     m_manualSettingsDialog->m_checkBitrateMaximum->setChecked(  DEFAULT_USE_MAXIMUM_BITRATE );

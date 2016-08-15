@@ -18,7 +18,7 @@
 #define K3BDEVICEWIDGET_H
 
 #include "config-k3b.h"
-#include <QWidget>
+#include <QtWidgets/QWidget>
 
 class KMessageWidget;
 class QAction;

@@ -15,9 +15,9 @@
 #ifndef _K3B_DATA_MULTISESSION_COMBOBOX_H_
 #define _K3B_DATA_MULTISESSION_COMBOBOX_H_
 
-#include <qcombobox.h>
 #include "k3bdatadoc.h"
 
+#include <QtWidgets/QComboBox>
 
 class KConfigGroup;
 

@@ -17,6 +17,7 @@
 
 #include "k3b<name>decoder.h"
 
+K3B_EXPORT_PLUGIN(k3b<name>decoder, K3b<name>DecoderFactory)
 
 K3b<name>DecoderFactory::K3b<name>DecoderFactory( QObject* parent, const QVariantList& )
     : K3b::AudioDecoderFactory( parent )
@@ -36,7 +37,7 @@ K3b::AudioDecoder* K3b<name>DecoderFactory::createDecoder( QObject* parent,
 }
 
 
-bool K3b<name>DecoderFactory::canDecode( const KUrl& url )
+bool K3b<name>DecoderFactory::canDecode( const QUrl& url )
 {
     // PUT YOUR CODE HERE
     return false;

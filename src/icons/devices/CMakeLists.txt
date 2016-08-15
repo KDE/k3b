@@ -1,1 +1,43 @@
-kde4_install_icons( ${DATA_INSTALL_DIR}/k3b/icons )
+ecm_install_icons(
+    ICONS
+        128-devices-media-optical-audio.png
+        128-devices-media-optical-cd-video.png
+        128-devices-media-optical-dvd-video.png
+        128-devices-media-optical-mixed-cd.png
+        128-devices-media-optical-video.png
+        16-devices-media-optical-audio.png
+        16-devices-media-optical-cd-video.png
+        16-devices-media-optical-data.png
+        16-devices-media-optical-mixed-cd.png
+        16-devices-media-optical-video.png
+        22-devices-media-optical-audio.png
+        22-devices-media-optical-cd-video.png
+        22-devices-media-optical-data.png
+        22-devices-media-optical-mixed-cd.png
+        22-devices-media-optical-video.png
+        32-devices-media-optical-audio.png
+        32-devices-media-optical-cd-video.png
+        32-devices-media-optical-data.png
+        32-devices-media-optical-dvd-video.png
+        32-devices-media-optical-mixed-cd.png
+        32-devices-media-optical-video.png
+        48-devices-media-optical-audio.png
+        48-devices-media-optical-cd-video.png
+        48-devices-media-optical-data.png
+        48-devices-media-optical-dvd-video.png
+        48-devices-media-optical-mixed-cd.png
+        48-devices-media-optical-video.png
+        64-devices-media-optical-audio.png
+        64-devices-media-optical-cd-video.png
+        64-devices-media-optical-dvd-video.png
+        64-devices-media-optical-mixed-cd.png
+        64-devices-media-optical-video.png
+        sc-devices-media-optical-audio.svgz
+        sc-devices-media-optical-cd-video.svgz
+        sc-devices-media-optical-data.svgz
+        sc-devices-media-optical-dvd-video.svgz
+        sc-devices-media-optical-mixed-cd.svgz
+        sc-devices-media-optical-video.svgz
+    DESTINATION
+        ${DATA_INSTALL_DIR}/k3b/icons
+)

@@ -20,9 +20,9 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 
-#include <libkcddb/cdinfo.h>
+#include <KCddb/Cdinfo>
 
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 
 
 namespace K3b {
@@ -106,4 +106,4 @@ void AudioProjectConvertingJob::trackFinished( int trackIndex, const QString& /*
 
 } // namespace K3b
 
-#include "k3baudioprojectconvertingjob.moc"
+

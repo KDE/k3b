@@ -41,14 +41,16 @@
 #include "k3baudiotrackplayer.h"
 #endif // ENABLE_AUDIO_PLAYER
 
-#include <KAction>
-#include <KActionCollection>
-#include <KLocale>
-#include <KMessageBox>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+#include <KXmlGui/KActionCollection>
 
-#include <QHeaderView>
-#include <QScrollBar>
-#include <QTreeView>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QScrollBar>
+#include <QtWidgets/QTreeView>
 
 
 K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection* actionCollection )
@@ -144,7 +146,7 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
 }
 
 
-void K3b::AudioViewImpl::addUrls( const KUrl::List& urls )
+void K3b::AudioViewImpl::addUrls( const QList<QUrl>& urls )
 {
     AudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, m_view );
 }
@@ -194,20 +196,23 @@ void K3b::AudioViewImpl::slotAddSilence()
         //
         // create a simple dialog for asking the length of the silence
         //
-        KDialog dlg( m_view );
-        QWidget* widget = dlg.mainWidget();
-        dlg.setButtons(KDialog::Ok|KDialog::Cancel);
-        dlg.setDefaultButton(KDialog::Ok);
-        dlg.setCaption(i18n("Add Silence"));
+        QDialog dlg( m_view );
+        dlg.setWindowTitle(i18n("Add Silence"));
 
-        QHBoxLayout* dlgLayout = new QHBoxLayout( widget );
+        QHBoxLayout* dlgLayout = new QHBoxLayout( &dlg );
         dlgLayout->setContentsMargins( 0, 0, 0, 0 );
-        QLabel* label = new QLabel( i18n("Length of silence:"), widget );
-        MsfEdit* msfEdit = new MsfEdit( widget );
+        QLabel* label = new QLabel( i18n("Length of silence:"), &dlg );
+        MsfEdit* msfEdit = new MsfEdit( &dlg );
         msfEdit->setValue( 150 ); // 2 seconds default
         msfEdit->setFocus();
+
+        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dlg );
+        connect( buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()) );
+        connect( buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()) );
+
         dlgLayout->addWidget( label );
         dlgLayout->addWidget( msfEdit );
+        dlgLayout->addWidget( buttonBox );
 
         if( dlg.exec() == QDialog::Accepted ) {
             AudioZeroData* zero = new AudioZeroData( msfEdit->value() );
@@ -292,14 +297,20 @@ void K3b::AudioViewImpl::slotEditSource()
         source = tracks.first()->firstSource();
 
     if( source ) {
-        KDialog dlg( m_view );
-        dlg.setCaption( i18n("Edit Audio Track Source") );
-        dlg.setButtons( KDialog::Ok|KDialog::Cancel );
-        dlg.setDefaultButton( KDialog::Ok );
+        QDialog dlg( m_view );
+        dlg.setWindowTitle( i18n("Edit Audio Track Source") );
 
         AudioDataSourceEditWidget* editW = new AudioDataSourceEditWidget( &dlg );
-        dlg.setMainWidget( editW );
         editW->loadSource( source );
+
+        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dlg );
+        connect( buttonBox, SIGNAL(accepted()), &dlg, SLOT(accept()) );
+        connect( buttonBox, SIGNAL(rejected()), &dlg, SLOT(reject()) );
+
+        QVBoxLayout* layout = new QVBoxLayout( &dlg );
+        layout->addWidget( editW );
+        layout->addWidget( buttonBox );
+
         if( dlg.exec() == QDialog::Accepted ) {
             editW->saveSource();
         }
@@ -443,10 +454,10 @@ void K3b::AudioViewImpl::slotAudioConversion()
 
 void K3b::AudioViewImpl::slotAdjustColumns()
 {
-    kDebug();
+    qDebug();
 
     if( m_updatingColumnWidths ) {
-        kDebug() << "already updating column widths.";
+        qDebug() << "already updating column widths.";
         return;
     }
 
@@ -545,4 +556,4 @@ void K3b::AudioViewImpl::sourcesForIndexes( QList<AudioDataSource*>& sources,
     }
 }
 
-#include "k3baudioviewimpl.moc"
+

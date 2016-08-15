@@ -21,13 +21,13 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <KDirModel>
-#include <kdirsortfilterproxymodel.h> // use .h to build with KDE 4.2
-#include <KDirLister>
-#include <KFilePlacesModel>
-#include <KIcon>
+#include <KIOFileWidgets/KDirSortFilterProxyModel>
+#include <KIOFileWidgets/KFilePlacesModel>
+#include <KIOWidgets/KDirModel>
+#include <KIOWidgets/KDirLister>
 #include <Solid/StorageAccess>
 
+#include <QtGui/QIcon>
 
 typedef QMap<KDirModel*, KDirSortFilterProxyModel*> DirModels;
 
@@ -48,13 +48,13 @@ K3b::PlacesModel::PlacesModel( QObject* parent )
 {
     d->deviceModel = new K3b::DeviceModel( this );
     d->filePlacesModel = new KFilePlacesModel( this );
-    addSubModel( "Devices", KIcon( "media-optical" ), d->deviceModel, true );
+    addSubModel( "Devices", QIcon::fromTheme( "media-optical" ), d->deviceModel, true );
     
     // TODO: Currently our place list doesn't follow changes KFilePlacesModel.
     //       This needs to be changed. Adding, removing and editing places would be also nice.
     for( int i = 0; i < d->filePlacesModel->rowCount(); ++i ) {
         QModelIndex place = d->filePlacesModel->index( i, 0 );
-        KUrl url = d->filePlacesModel->url( place );
+        QUrl url = d->filePlacesModel->url( place );
         
         // Let's filter out device-related places
         // and custom protocols (we doesn't support burning from them)
@@ -109,27 +109,27 @@ QModelIndex K3b::PlacesModel::indexForDevice( K3b::Device::Device* dev ) const
 }
 
 
-void K3b::PlacesModel::expandToUrl( const KUrl& url )
+void K3b::PlacesModel::expandToUrl( const QUrl& url )
 {
-    kDebug() << url;
+    qDebug() << url;
     
     // Check if url is not device's
     Q_FOREACH( Device::Device* device, d->deviceModel->devices() )
     {
         if( Solid::StorageAccess* solidStorage = device->solidStorage() ) {
-            KUrl parent( solidStorage->filePath() );
+            QUrl parent = QUrl::fromLocalFile( solidStorage->filePath() );
             if( parent.isParentOf( url ) ) {
-                kDebug() << url << "will be expanded to device" << device->description();
+                qDebug() << url << "will be expanded to device" << device->description();
                 emit expand( mapFromSubModel( d->deviceModel->indexForDevice( device ) ) );
                 return;
             }
         }
-        else if( url.protocol() == "audiocd" )
+        else if( url.scheme() == "audiocd" )
         {
             const Medium& medium = k3bcore->mediaCache()->medium( device );
             if( medium.content() & Medium::ContentAudio )
             {
-                kDebug() << url << "will be expanded to device" << device->description();
+                qDebug() << url << "will be expanded to device" << device->description();
                 emit expand( mapFromSubModel( d->deviceModel->indexForDevice( device ) ) );
                 return;
             }
@@ -142,7 +142,7 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
 
     for( DirModels::iterator it = d->dirModels.begin(); it != d->dirModels.end(); ++it ) {
         KDirModel* model = it.key();
-        KUrl parent = model->dirLister()->url();
+        QUrl parent = model->dirLister()->url();
         if ( parent.isParentOf( url ) ) {
             if ( parent.path().length() > maxDepth ) {
                 maxDepth = parent.path().length();
@@ -152,8 +152,8 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
     }
 
     if ( modelToExpand ) {
-        kDebug() << modelToExpand->dirLister()->url() << " will be expanded.";
-        if( modelToExpand->dirLister()->url().equals( url, KUrl::CompareWithoutTrailingSlash ) ) {
+        qDebug() << modelToExpand->dirLister()->url() << " will be expanded.";
+        if( modelToExpand->dirLister()->url().matches( url, QUrl::StripTrailingSlash ) ) {
             emit expand( indexForSubModel( d->dirModels[ modelToExpand ] ) );
         }
         else {
@@ -163,7 +163,7 @@ void K3b::PlacesModel::expandToUrl( const KUrl& url )
 }
 
 
-void K3b::PlacesModel::addPlace( const QString& name, const KIcon& icon, const KUrl& rootUrl )
+void K3b::PlacesModel::addPlace( const QString& name, const QIcon& icon, const QUrl& rootUrl )
 {
     KDirModel* model = new KDirModel( this );
     connect( model, SIGNAL(expand(QModelIndex)), this, SLOT(slotExpand(QModelIndex)) );
@@ -180,7 +180,7 @@ void K3b::PlacesModel::addPlace( const QString& name, const KIcon& icon, const K
 
 void K3b::PlacesModel::slotExpand( const QModelIndex& index )
 {
-    kDebug() << index;
+    qDebug() << index;
     KDirModel* model = ( KDirModel* )index.model();
     emit expand( mapFromSubModel( d->dirModels[model]->mapFromSource( index ) ) );
 }
@@ -188,8 +188,8 @@ void K3b::PlacesModel::slotExpand( const QModelIndex& index )
 
 void K3b::PlacesModel::slotDevicesChanged( K3b::Device::DeviceManager* dm )
 {
-    kDebug();
+    qDebug();
     d->deviceModel->setDevices( dm->allDevices() );
 }
 
-#include "k3bplacesmodel.moc"
+

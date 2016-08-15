@@ -15,9 +15,9 @@
 #ifndef K3B_ISO_OPTIONS_H
 #define K3B_ISO_OPTIONS_H
 
-#include <qstring.h>
 #include "k3b_export.h"
-#include <kconfiggroup.h>
+#include <KConfigCore/KConfigGroup>
+#include <QtCore/QString>
 
 
 namespace K3b {

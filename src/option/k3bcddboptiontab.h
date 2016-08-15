@@ -16,7 +16,7 @@
 #ifndef K3B_CDDB_OPTIONTAB_H
 #define K3B_CDDB_OPTIONTAB_H
 
-#include <qwidget.h>
+#include <QtWidgets/QWidget>
 
 class KCModule;
 

@@ -33,23 +33,25 @@
 #include "k3bthememanager.h"
 #include "k3bcore.h"
 
-#include <KColorScheme>
-#include <KConfigGroup>
-#include <KGlobal>
-#include <KLocale>
-#include <KMessageBox>
-#include <KNotification>
-#include <KProcess>
-#include <KPushButton>
-#include <KStandardGuiItem>
-#include <KTextEdit>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfigGroup>
+#include <KConfigCore/KSharedConfig>
+#include <KCoreAddons/KProcess>
+#include <KNotifications/KNotification>
+#include <KI18n/KLocalizedString>
+#include <KWidgetsAddons/KMessageBox>
+#include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QCheckBox>
-#include <QCloseEvent>
-#include <QFileInfo>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QList>
+#include <QtCore/QFileInfo>
+#include <QtCore/QList>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QIcon>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QTextEdit>
 
 #ifdef HAVE_ICONV
 #include <langinfo.h>
@@ -86,46 +88,43 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
                                                bool showDeviceSettingsButton,
                                                bool showBinSettingsButton,
                                                QWidget* parent)
-    : KDialog( parent )
+    : QDialog( parent )
 {
-    setCaption( i18n("System Configuration Problems") );
-    setButtons(KDialog::None);
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
+    setWindowTitle( i18n("System Configuration Problems") );
     // setup the title
     // ---------------------------------------------------------------------------------------------------
-    K3b::ThemedHeader* titleFrame = new K3b::ThemedHeader( widget );
+    K3b::ThemedHeader* titleFrame = new K3b::ThemedHeader( this );
     titleFrame->setTitle( i18n("System Configuration Problems"),
                           i18np("1 problem", "%1 problems", problems.count() ) );
 
-    KPushButton* closeButton = new KPushButton( KStandardGuiItem::close(), widget );
-    connect( closeButton, SIGNAL(clicked()), this, SLOT(close()) );
-    m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), widget );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
+    connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), SLOT(reject()) );
 
-    QPushButton* configureButton = new QPushButton( KIcon( "configure" ), i18n("Configure K3b..."), widget );
-    if( showDeviceSettingsButton ) {
-        connect( configureButton, SIGNAL(clicked()), SLOT(slotShowDeviceSettings()) );
-    } else if( showBinSettingsButton ) {
-        connect( configureButton, SIGNAL(clicked()), SLOT(slotShowBinSettings()) );
-    } else {
-        configureButton->hide();
+    if( showDeviceSettingsButton || showBinSettingsButton ) {
+        QPushButton* configureButton = buttonBox->addButton( i18n("Configure K3b..."), QDialogButtonBox::NoRole );
+        if( showDeviceSettingsButton ) {
+            connect( configureButton, SIGNAL(clicked()), SLOT(slotShowDeviceSettings()) );
+        } else if( showBinSettingsButton ) {
+            connect( configureButton, SIGNAL(clicked()), SLOT(slotShowBinSettings()) );
+       }
     }
+
+    buttonBox->addButton( QDialogButtonBox::Close );
+
+    m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), this );
 
     // setup the problem view
     // ---------------------------------------------------------------------------------------------------
-    KTextEdit* view = new KTextEdit( widget );
+    QTextEdit* view = new QTextEdit( this );
     view->setReadOnly(true);
 
     // layout everything
-    QGridLayout* grid = new QGridLayout( widget );
+    QGridLayout* grid = new QGridLayout( this );
     grid->addWidget( titleFrame, 0, 0, 1, 2 );
     grid->addWidget( view, 1, 0, 1, 2 );
     grid->addWidget( m_checkDontShowAgain, 2, 0 );
-    QHBoxLayout* buttonBox = new QHBoxLayout;
-    buttonBox->setContentsMargins( 0, 0, 0, 0 );
-    buttonBox->addWidget( configureButton );
-    buttonBox->addWidget( closeButton );
-    grid->addLayout( buttonBox, 2, 1 );
+    grid->addWidget( buttonBox, 2, 1 );
     grid->setColumnStretch( 0, 1 );
     grid->setRowStretch( 1, 1 );
 
@@ -163,7 +162,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
 void K3b::SystemProblemDialog::closeEvent( QCloseEvent* e )
 {
     if( m_checkDontShowAgain->isChecked() ) {
-        KConfigGroup grp( KGlobal::config(), "General Options" );
+        KConfigGroup grp( KSharedConfig::openConfig(), "General Options" );
         grp.writeEntry( "check system config", false );
     }
 
@@ -530,7 +529,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     bool haveMp3Decoder = false;
     for( QList<K3b::Plugin*>::const_iterator it = plugins.constBegin();
          it != plugins.constEnd(); ++it ) {
-        if( (*it)->pluginInfo().pluginName() == "k3bmaddecoder" ) {
+        if( (*it)->pluginInfo().isValid() && (*it)->pluginInfo().pluginName() == "k3bmaddecoder" ) {
             haveMp3Decoder = true;
             break;
         }
@@ -584,29 +583,29 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
 
 
-    kDebug() << "(K3b::Core) System problems:";
+    qDebug() << "(K3b::Core) System problems:";
     for( QList<K3b::SystemProblem>::const_iterator it = problems.constBegin();
          it != problems.constEnd(); ++it ) {
         const K3b::SystemProblem& p = *it;
 
         switch( p.type ) {
         case K3b::SystemProblem::CRITICAL:
-            kDebug() << " CRITICAL";
+            qDebug() << " CRITICAL";
             break;
         case K3b::SystemProblem::NON_CRITICAL:
-            kDebug() << " NON_CRITICAL";
+            qDebug() << " NON_CRITICAL";
             break;
         case K3b::SystemProblem::WARNING:
-            kDebug() << " WARNING";
+            qDebug() << " WARNING";
             break;
         }
-        kDebug() << " PROBLEM:  " << p.problem << endl
+        qDebug() << " PROBLEM:  " << p.problem << endl
                  << " DETAILS:  " << p.details << endl
                  << " SOLUTION: " << p.solution << endl << endl;
 
     }
     if( problems.isEmpty() ) {
-        kDebug() << "          - none - ";
+        qDebug() << "          - none - ";
         if( level == AlwaysNotify ) {
             KNotification::event( "NoProblemsFound",
                                   i18n("System configured properly"),
@@ -624,7 +623,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     }
 
     // remember which version of K3b checked the system the last time
-    KConfigGroup cfg( KGlobal::config(), "General Options" );
+    KConfigGroup cfg( KSharedConfig::openConfig(), "General Options" );
     cfg.writeEntry( "Last system check version", QString(k3bcore->version()) );
 }
 
@@ -707,7 +706,7 @@ QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
 
 bool K3b::SystemProblemDialog::readCheckSystemConfig()
 {
-    KConfigGroup cfgGrp( KGlobal::config(), "General Options" );
+    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "General Options" );
 
     K3b::Version configVersion( cfgGrp.readEntry( "Last system check version", "0.1" ) );
     if( configVersion < k3bcore->version() )
@@ -716,4 +715,4 @@ bool K3b::SystemProblemDialog::readCheckSystemConfig()
     return cfgGrp.readEntry( "check system config", true );
 }
 
-#include "k3bsystemproblemdialog.moc"
+

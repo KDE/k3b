@@ -15,12 +15,12 @@
 #include "k3bexternalbinparamsmodel.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KLocale>
+#include <KI18n/KLocalizedString>
 
-#include <QFont>
-#include <QHash>
-#include <QList>
-#include <QRegExp>
+#include <QtGui/QFont>
+#include <QtCore/QHash>
+#include <QtCore/QList>
+#include <QtCore/QRegExp>
 
 namespace K3b {
     
@@ -181,4 +181,4 @@ QModelIndex ExternalBinParamsModel::buddy( const QModelIndex& index ) const
 
 } // namespace K3b
 
-#include "k3bexternalbinparamsmodel.moc"
+

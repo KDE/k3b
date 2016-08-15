@@ -18,17 +18,16 @@
 
 #include "k3b_export.h"
 
-#include <qobject.h>
-
-#include <QMutex>
-#include <QThread>
-
 #include "k3bdevice.h"
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 #include "k3bdiskinfo.h"
 
 #include "k3bmedium.h"
+
+#include <QtCore/QMutex>
+#include <QtCore/QObject>
+#include <QtCore/QThread>
 
 namespace K3b {
     namespace Device {

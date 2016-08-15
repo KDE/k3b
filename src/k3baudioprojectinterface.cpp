@@ -96,4 +96,4 @@ void AudioProjectInterface::setTrackArtist( int trackNum, const QString& artist 
 
 } // namespace K3b
 
-#include "k3baudioprojectinterface.moc"
+

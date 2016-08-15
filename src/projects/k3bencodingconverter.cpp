@@ -15,7 +15,7 @@
 #include "k3bencodingconverter.h"
 #include <config-k3b.h>
 
-#include <KDebug>
+#include <QtCore/QDebug>
 
 #ifdef HAVE_ICONV
 #include <langinfo.h>
@@ -37,7 +37,7 @@ K3b::EncodingConverter::EncodingConverter()
 {
 #ifdef HAVE_ICONV
     char* codec = nl_langinfo( CODESET );
-    kDebug() << "(K3b::DataUrlAddingDialog) using locale codec: " << codec;
+    qDebug() << "(K3b::DataUrlAddingDialog) using locale codec: " << codec;
     d->ic = ::iconv_open( "UCS-2BE", codec );
 #endif
 }

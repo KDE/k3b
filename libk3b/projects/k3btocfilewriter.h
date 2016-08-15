@@ -15,11 +15,11 @@
 #ifndef _K3B_TOC_FILE_WRITER_H_
 #define _K3B_TOC_FILE_WRITER_H_
 
-#include <qtextstream.h>
-#include <qstringlist.h>
-
 #include "k3btoc.h"
 #include "k3bcdtext.h"
+
+#include <QtCore/QStringList>
+#include <QtCore/QTextStream>
 
 namespace K3b {
     namespace Device {

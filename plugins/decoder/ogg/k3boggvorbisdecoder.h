@@ -20,9 +20,6 @@
 
 #include "k3baudiodecoder.h"
 
-class KUrl;
-
-
 class K3bOggVorbisDecoderFactory : public K3b::AudioDecoderFactory
 {
     Q_OBJECT
@@ -31,7 +28,7 @@ public:
     K3bOggVorbisDecoderFactory( QObject* parent, const QVariantList& );
     ~K3bOggVorbisDecoderFactory();
 
-    bool canDecode( const KUrl& filename );
+    bool canDecode( const QUrl& filename );
 
     int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
 
@@ -67,7 +64,5 @@ private:
     class Private;
     Private* d;
 };
-
-K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisDecoderFactory)
 
 #endif

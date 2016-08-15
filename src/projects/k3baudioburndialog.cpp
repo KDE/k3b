@@ -28,30 +28,27 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bexternalbinmanager.h"
 
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qtabwidget.h>
-#include <qlayout.h>
-#include <qvariant.h>
-#include <qtooltip.h>
+#include <KI18n/KLocalizedString>
+#include <KConfigCore/KConfig>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <qtoolbutton.h>
-#include <qstringlist.h>
-#include <qpoint.h>
-
-#include <qspinbox.h>
-#include <QShowEvent>
-#include <QGridLayout>
-
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <kvbox.h>
+#include <QtCore/QPoint>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
+#include <QtGui/QShowEvent>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolTip>
 
 
 K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )
@@ -87,16 +84,19 @@ K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )
     advancedGimmickGroupLayout->addWidget( m_checkHideFirstTrack );
 
     m_audioRippingGroup = new QGroupBox( i18n("Audio Ripping"), advancedTab );
-    KHBox* box = new KHBox( m_audioRippingGroup );
-    box->setStretchFactor(new QLabel( i18n("Paranoia mode:"), box ), 1 );
-    m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( box );
-    box = new KHBox( m_audioRippingGroup );
-    box->setStretchFactor( new QLabel( i18n("Read retries:"), box ), 1 );
-    m_spinAudioRippingReadRetries = new QSpinBox( box );
+    m_comboParanoiaMode = K3b::StdGuiItems::paranoiaModeComboBox( m_audioRippingGroup );
+    QHBoxLayout* paranoiaModeLayout = new QHBoxLayout;
+    paranoiaModeLayout->addWidget( new QLabel( i18n("Paranoia mode:"), m_audioRippingGroup ), 1 );
+    paranoiaModeLayout->addWidget( m_comboParanoiaMode );
+    m_spinAudioRippingReadRetries = new QSpinBox( m_audioRippingGroup );
     m_spinAudioRippingReadRetries->setRange( 1, 128 );
     m_checkAudioRippingIgnoreReadErrors = new QCheckBox( i18n("Ignore read errors"), m_audioRippingGroup );
+    QHBoxLayout* readRetriesLayout = new QHBoxLayout;
+    readRetriesLayout->addWidget( new QLabel( i18n("Read retries:" ), m_audioRippingGroup ), 1 );
+    readRetriesLayout->addWidget( m_spinAudioRippingReadRetries );
     QVBoxLayout* audioRippingGroupLayout = new QVBoxLayout( m_audioRippingGroup );
-    audioRippingGroupLayout->addWidget( box );
+    audioRippingGroupLayout->addLayout( paranoiaModeLayout );
+    audioRippingGroupLayout->addLayout( readRetriesLayout );
     audioRippingGroupLayout->addWidget( m_checkAudioRippingIgnoreReadErrors );
 
     advancedTabGrid->addWidget( advancedSettingsGroup, 0, 0 );
@@ -323,4 +323,4 @@ void K3b::AudioBurnDialog::slotCacheImageToggled( bool on )
     }
 }
 
-#include "k3baudioburndialog.moc"
+

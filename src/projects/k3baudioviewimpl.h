@@ -15,13 +15,12 @@
 #ifndef K3B_AUDIO_VIEW_IMPL_H
 #define K3B_AUDIO_VIEW_IMPL_H
 
-#include <KUrl>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QObject>
+#include <QtCore/QList>
+#include <QtCore/QUrl>
 
-#include <QObject>
-#include <QAbstractItemModel>
-#include <QList>
-
-class KAction;
+class QAction;
 class KActionCollection;
 class QTreeView;
 
@@ -45,7 +44,7 @@ namespace K3b {
     public:
         AudioViewImpl( View* view, AudioDoc* doc, KActionCollection* actionCollection );
 
-        void addUrls( const KUrl::List& urls );
+        void addUrls( const QList<QUrl>& urls );
 
         AudioProjectModel* model() const { return m_model; }
         QTreeView* view() const { return m_trackView; }
@@ -85,17 +84,17 @@ namespace K3b {
         ViewColumnAdjuster* m_columnAdjuster;
         bool m_updatingColumnWidths;
 
-		KAction* m_actionAddSilence;
-        KAction* m_actionMergeTracks;
-        KAction* m_actionSplitSource;
-        KAction* m_actionSplitTrack;
-        KAction* m_actionEditSource;
-        KAction* m_actionPlayTrack;
-        KAction* m_actionQueryMusicBrainz;
-        KAction* m_actionQueryMusicBrainzTrack;
-        KAction* m_actionProperties;
-        KAction* m_actionRemove;
-        KAction* m_conversionAction;
+		QAction* m_actionAddSilence;
+        QAction* m_actionMergeTracks;
+        QAction* m_actionSplitSource;
+        QAction* m_actionSplitTrack;
+        QAction* m_actionEditSource;
+        QAction* m_actionPlayTrack;
+        QAction* m_actionQueryMusicBrainz;
+        QAction* m_actionQueryMusicBrainzTrack;
+        QAction* m_actionProperties;
+        QAction* m_actionRemove;
+        QAction* m_conversionAction;
     };
 
 } // namespace K3b

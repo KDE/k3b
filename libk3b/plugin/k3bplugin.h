@@ -16,13 +16,12 @@
 #ifndef _K3B_PLUGIN_H_
 #define _K3B_PLUGIN_H_
 
-#include <qobject.h>
-#include <kgenericfactory.h>
 #include "k3b_export.h"
+#include <KCoreAddons/KPluginFactory>
+#include <KService/KPluginInfo>
+#include <QtCore/QObject>
 
-#include <KPluginInfo>
-
-#define K3B_PLUGIN_SYSTEM_VERSION 4
+#define K3B_PLUGIN_SYSTEM_VERSION 5
 
 
 
@@ -61,8 +60,6 @@ namespace K3b {
     };
 }
 
-#define K3B_EXPORT_PLUGIN( libname, classname )             \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();) \
-        K_EXPORT_PLUGIN(factory(#libname))
+#define K3B_EXPORT_PLUGIN( libname, classname ) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
 
 #endif

@@ -17,14 +17,13 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixfileitem.h"
 #include "k3bmovixdocpreparer.h"
-
 #include "k3bcore.h"
 #include "k3bdatajob.h"
 #include "k3bdevice.h"
 #include "k3bisooptions.h"
+#include "k3b_i18n.h"
 
-#include <klocale.h>
-#include <kdebug.h>
+#include <QtCore/QDebug>
 
 
 K3b::MovixJob::MovixJob( K3b::MovixDoc* doc, K3b::JobHandler* jh, QObject* parent )
@@ -129,4 +128,4 @@ QString K3b::MovixJob::jobDetails() const
                  : QString() ) );
 }
 
-#include "k3bmovixjob.moc"
+

@@ -19,15 +19,14 @@
 #include "k3bdevicecombobox.h"
 #include "k3bcore.h"
 #include "k3bdevicemanager.h"
+#include "k3b_i18n.h"
 
-#include <qcombobox.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qstring.h>
-
-#include <QGridLayout>
-
-#include <klocale.h>
+#include <QtCore/QString>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QVBoxLayout>
 
 
 class K3b::DeviceSelectionDialog::Private
@@ -39,21 +38,23 @@ public:
 
 K3b::DeviceSelectionDialog::DeviceSelectionDialog( QWidget* parent,
 						    const QString& text )
-    : KDialog( parent ),
+    : QDialog( parent ),
       d( new Private() )
 {
-    setCaption( i18n("Device Selection") );
-    setButtons( Ok|Cancel );
-    setDefaultButton( Ok );
+    setWindowTitle( i18n("Device Selection") );
 
-    QGridLayout* lay = new QGridLayout( mainWidget() );
+    QVBoxLayout* lay = new QVBoxLayout( this );
 
-    QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, mainWidget() );
-    d->comboDevices = new K3b::DeviceComboBox( mainWidget() );
+    QLabel* label = new QLabel( text.isEmpty() ? i18n("Please select a device:") : text, this );
+    d->comboDevices = new K3b::DeviceComboBox( this );
 
-    lay->addWidget( label, 0, 0 );
-    lay->addWidget( d->comboDevices, 1, 0 );
-    lay->setRowStretch( 2, 1 );
+    QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
+    connect( buttonBox, SIGNAL(accepted()), this, SLOT(accept()) );
+    connect( buttonBox, SIGNAL(rejected()), this, SLOT(reject()) );
+
+    lay->addWidget( label );
+    lay->addWidget( d->comboDevices );
+    lay->addWidget( buttonBox );
 }
 
 
@@ -120,4 +121,4 @@ K3b::Device::Device* K3b::DeviceSelectionDialog::selectWriter( QWidget* parent, 
 }
 
 
-#include "k3bdeviceselectiondialog.moc"
+

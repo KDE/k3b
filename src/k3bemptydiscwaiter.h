@@ -16,11 +16,11 @@
 #ifndef K3BEMPTYDISCWAITER_H
 #define K3BEMPTYDISCWAITER_H
 
-#include <kdialog.h>
 #include "k3bjobhandler.h"
-
 #include "k3bdiskinfo.h"
+
 #include <QtGui/QCloseEvent>
+#include <QtWidgets/QDialog>
 
 
 /**
@@ -36,7 +36,7 @@ namespace K3b {
         class Device;
     }
 
-    class EmptyDiscWaiter : public KDialog, public JobHandler
+    class EmptyDiscWaiter : public QDialog, public JobHandler
     {
         Q_OBJECT
 
@@ -73,14 +73,6 @@ namespace K3b {
                                   const QString& caption = QString() );
 
         /**
-         * This only openes a dialog if the first check failed.
-         */
-        KDE_DEPRECATED static Device::MediaType wait( Device::Device* device,
-                                                      bool appendable = false,
-                                                      Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
-                                                      QWidget* parent = 0 );
-
-        /**
          * Starts the emptydiskwaiter.
          *
          * \param mediaState a bitwise combination of the Device::State enum
@@ -96,8 +88,8 @@ namespace K3b {
 
     protected Q_SLOTS:
         void slotCancel();
-        void slotUser1();
-        void slotUser2();
+        void slotEject();
+        void slotLoad();
         void slotMediumChanged( K3b::Device::Device* );
         void showDialog();
         void continueWaiting();

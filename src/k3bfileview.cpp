@@ -18,26 +18,27 @@
 #include "k3bdiroperator.h"
 #include "k3bapplication.h"
 
-#include <QDir>
-#include <QHBoxLayout>
-#include <QLayout>
-#include <QLabel>
-#include <QToolButton>
-#include <QVBoxLayout>
-#include <QWidget>
-
-#include <KAction>
-#include <KActionCollection>
-#include <KActionMenu>
-#include <KDirLister>
 #include <KFileFilterCombo>
-#include <KFileItem>
-#include <KLocale>
-#include <KProgressDialog>
-#include <KToolBar>
-#include <KToolBarSpacerAction>
-#include <KUrl>
-#include <KDebug>
+#include <KIOCore/KFileItem>
+#include <KI18n/KLocalizedString>
+#include <KIOWidgets/KDirLister>
+#include <KWidgetsAddons/KActionMenu>
+#include <KWidgetsAddons/KToolBarSpacerAction>
+#include <KXmlGui/KActionCollection>
+#include <KXmlGui/KToolBar>
+
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QUrl>
+#include <QtGui/QIcon>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 
 class K3b::FileView::Private
@@ -46,7 +47,7 @@ public:
     KToolBar* toolBox;
     DirOperator* dirOp;
     KFileFilterCombo* filterWidget;
-    KAction* actionShowBookmarks;
+    QAction* actionShowBookmarks;
 };
 
 
@@ -54,7 +55,7 @@ K3b::FileView::FileView(QWidget *parent )
     : K3b::ContentsView( false, parent),
       d( new Private )
 {
-    d->dirOp = new K3b::DirOperator( KUrl(QDir::home().absolutePath()), this );
+    d->dirOp = new K3b::DirOperator( QUrl::fromLocalFile(QDir::home().absolutePath()), this );
     d->toolBox = new KToolBar( this );
     d->toolBox->setToolButtonStyle( Qt::ToolButtonIconOnly );
 
@@ -87,10 +88,10 @@ K3b::FileView::FileView(QWidget *parent )
     filter += '\n' + i18n("video/mpeg |MPEG Video Files");
     d->filterWidget->setFilter(filter);
 
-    d->actionShowBookmarks = new KAction( i18n("Show Bookmarks"), d->toolBox );
+    d->actionShowBookmarks = new QAction( i18n("Show Bookmarks"), d->toolBox );
     d->actionShowBookmarks->setCheckable( true );
 
-    KActionMenu* actionOptions = new KActionMenu( KIcon("configure"), i18n("Options"), d->toolBox );
+    KActionMenu* actionOptions = new KActionMenu( QIcon::fromTheme("configure"), i18n("Options"), d->toolBox );
     actionOptions->setDelayed( false );
     actionOptions->addAction( d->dirOp->actionCollection()->action("sorting menu") );
     actionOptions->addAction( d->dirOp->actionCollection()->action("view menu") );
@@ -120,7 +121,7 @@ K3b::FileView::FileView(QWidget *parent )
         action->setShortcutContext( Qt::ApplicationShortcut );
     }
 
-    connect( d->dirOp, SIGNAL(urlEntered(KUrl)), this, SIGNAL(urlEntered(KUrl)) );
+    connect( d->dirOp, SIGNAL(urlEntered(QUrl)), this, SIGNAL(urlEntered(QUrl)) );
     connect( d->filterWidget, SIGNAL(filterChanged()), SLOT(slotFilterChanged()) );
     connect( d->actionShowBookmarks, SIGNAL(toggled(bool)), d->dirOp->bookmarkMenu(), SLOT(setVisible(bool)) );
 }
@@ -138,14 +139,14 @@ KActionCollection* K3b::FileView::actionCollection() const
 }
 
 
-void K3b::FileView::setUrl(const KUrl& url, bool forward)
+void K3b::FileView::setUrl(const QUrl& url, bool forward)
 {
-    kDebug() << url;
+    qDebug() << url;
     d->dirOp->setUrl( url, forward );
 }
 
 
-KUrl K3b::FileView::url()
+QUrl K3b::FileView::url()
 {
     return d->dirOp->url();
 }
@@ -185,4 +186,4 @@ void K3b::FileView::readConfig( const KConfigGroup& grp )
     d->actionShowBookmarks->setChecked( d->dirOp->bookmarkMenu()->isVisible() );
 }
 
-#include "k3bfileview.moc"
+

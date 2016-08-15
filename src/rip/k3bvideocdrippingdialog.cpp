@@ -13,36 +13,31 @@
 * See the file "COPYING" for the exact licensing terms.
 */
 
-// k3b includes
 #include "k3bvideocdrippingdialog.h"
 #include "k3bvideocdrip.h"
-
 #include "k3bjobprogressdialog.h"
 #include "k3bcore.h"
 #include "k3bglobals.h"
 #include "k3bstdguiitems.h"
 
-// kde include
-#include <KApplication>
-#include <KColorScheme>
-#include <KConfig>
-#include <KDebug>
-#include <KLocale>
-#include <KMessageBox>
-#include <KStandardDirs>
-#include <KUrlRequester>
+#include <KConfigWidgets/KColorScheme>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <KIOWidgets/KUrlRequester>
+#include <KWidgetsAddons/KMessageBox>
 
-// qt includes
-#include <QCheckBox>
-#include <QDir>
-#include <QFileInfo>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLayout>
-#include <QStringList>
-#include <QTimer>
-#include <QToolTip>
-#include <KVBox>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
+#include <QtCore/QTimer>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QToolTip>
 
 
 K3b::VideoCdRippingDialog::VideoCdRippingDialog( K3b::VideoCdRippingOptions* options, QWidget* parent )
@@ -82,21 +77,22 @@ void K3b::VideoCdRippingDialog::setupGui()
 
     rippathLabel->setBuddy( m_editDirectory );
 
-    KHBox* freeSpaceBox = new KHBox( groupDirectory );
-    ( void ) new QLabel( i18n( "Free space in folder:" ), freeSpaceBox );
-    m_labelFreeSpace = new QLabel( "                       ", freeSpaceBox );
+    QHBoxLayout* freeSpaceBox = new QHBoxLayout;
+    freeSpaceBox->addWidget( new QLabel( i18n( "Free space in folder:" ), groupDirectory ) );
+    m_labelFreeSpace = new QLabel( "                       ", groupDirectory );
     m_labelFreeSpace->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
+    freeSpaceBox->addWidget( m_labelFreeSpace );
 
-    KHBox* necessarySizeBox = new KHBox( groupDirectory );
-    ( void ) new QLabel( i18n( "Necessary storage size:" ), necessarySizeBox );
-    m_labelNecessarySize = new QLabel( "                        ", necessarySizeBox );
+    QHBoxLayout* necessarySizeBox = new QHBoxLayout;
+    necessarySizeBox->addWidget( new QLabel( i18n( "Necessary storage size:" ), groupDirectory ) );
+    m_labelNecessarySize = new QLabel( "                        ", groupDirectory );
     m_labelNecessarySize->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
-
+    necessarySizeBox->addWidget( m_labelNecessarySize );
 
     groupDirectoryLayout->addWidget( rippathLabel, 0, 0 );
     groupDirectoryLayout->addWidget( m_editDirectory, 0, 1 );
-    groupDirectoryLayout->addWidget( freeSpaceBox, 1, 1 );
-    groupDirectoryLayout->addWidget( necessarySizeBox, 2, 1 );
+    groupDirectoryLayout->addLayout( freeSpaceBox, 1, 1 );
+    groupDirectoryLayout->addLayout( necessarySizeBox, 2, 1 );
 
     // ---------------------------------------------------- Options group ---
     QGroupBox* groupOptions = new QGroupBox( i18n( "Settings" ), frame );
@@ -153,7 +149,7 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
     if( !d.exists() ) {
         if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().toLocalFile() ) )
             == KMessageBox::Yes ) {
-            if( !KStandardDirs::makeDir( m_editDirectory->url().toLocalFile() ) ) {
+            if( !QDir().mkpath( m_editDirectory->url().toLocalFile() ) ) {
                 KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url().toLocalFile() ) );
                 return;
             }
@@ -244,4 +240,4 @@ void K3b::VideoCdRippingDialog::saveSettings( KConfigGroup c )
     c.writeEntry( "extract xml", m_extractXML ->isChecked( ) );
 }
 
-#include "k3bvideocdrippingdialog.moc"
+

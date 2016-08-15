@@ -16,7 +16,7 @@
 
 #include "k3bprojectplugin.h"
 
-#include <qwidget.h>
+#include <QtWidgets/QWidget>
 
 
 K3b::ProjectPluginDialog::ProjectPluginDialog( K3b::ProjectPlugin* plugin, K3b::Doc* doc, QWidget* parent )
@@ -58,4 +58,4 @@ void K3b::ProjectPluginDialog::loadSettings( const KConfigGroup& config )
     m_pluginGui->readSettings( config );
 }
 
-#include "k3bprojectplugindialog.moc"
+

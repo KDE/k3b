@@ -17,24 +17,24 @@
 #include "k3bplugin.h"
 #include "k3bpluginconfigwidget.h"
 #include "k3bversion.h"
+#include "k3b_i18n.h"
 
-#include <KCModuleInfo>
-#include <KCModuleProxy>
-#include <KDebug>
-#include <KDialog>
-#include <KGlobal>
-#include <KLibLoader>
-#include <KLocale>
-#include <KMessageBox>
-#include <KPluginInfo>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KStandardDirs>
+#include <KCMUtils/KCModuleInfo>
+#include <KCMUtils/KCModuleProxy>
+#include <KService/KPluginInfo>
+#include <KService/KService>
+#include <KService/KServiceTypeTrader>
+#include <KWidgetsAddons/KMessageBox>
 
-#include <QDir>
-#include <QList>
-#include <QMap>
-#include <QSharedPointer>
+#include <QtCore/QDebug>
+#include <QtCore/QDir>
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtCore/QSharedPointer>
+#include <QtWidgets/QAbstractButton>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QVBoxLayout>
 
 
 
@@ -98,20 +98,23 @@ QList<K3b::Plugin*> K3b::PluginManager::plugins( const QString& group ) const
 
 void K3b::PluginManager::Private::loadPlugin( const KService::Ptr &service )
 {
-    kDebug() << service->name() << service->library();
-    K3b::Plugin* plugin = service->createInstance<K3b::Plugin>( m_parent );
+    qDebug() << service->name() << service->library();
+    QString err;
+    K3b::Plugin* plugin = service->createInstance<K3b::Plugin>( 0, m_parent, QVariantList(), &err );
     if ( plugin ) {
-        kDebug() << "Loaded plugin" << service->name();
+        qDebug() << "Loaded plugin" << service->name();
         // FIXME: improve this versioning stuff
         if( plugin->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
             delete plugin;
-            kDebug() << "plugin system does not fit";
+            qDebug() << "plugin system does not fit";
         }
         else {
-            KPluginInfo pluginInfo( service );
-            plugin->m_pluginInfo = pluginInfo;
+            plugin->m_pluginInfo = KPluginInfo( service );
             plugins.append( plugin );
         }
+    }
+    else {
+        qDebug() << "Loading plugin" << service->name() << "failed. Error:" << err;
     }
 
 
@@ -152,7 +155,7 @@ KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) con
 
 void K3b::PluginManager::loadAll()
 {
-    kDebug();
+    qDebug();
     KService::List services = KServiceTypeTrader::self()->query( "K3b/Plugin" );
     Q_FOREACH( const KService::Ptr &service, services ) {
         d->loadPlugin( service );
@@ -169,20 +172,28 @@ bool K3b::PluginManager::hasPluginDialog( Plugin* plugin ) const
 {
     QSharedPointer<KCModuleProxy> moduleProxy( d->getModuleProxy( plugin ) );
     return moduleProxy;
-    
 }
 
 
 int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
 {
     if( KCModuleProxy* moduleProxy = d->getModuleProxy( plugin ) ) {
-        KDialog dlg( parent );
-        dlg.setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Default);
+        QDialog dlg( parent );
         dlg.setWindowTitle( plugin->pluginInfo().name() );
-        moduleProxy->setParent( &dlg );
-        dlg.setMainWidget( moduleProxy );
-        
-        connect( &dlg, SIGNAL(defaultClicked()), moduleProxy, SLOT(defaults()) );
+        QVBoxLayout* layout = new QVBoxLayout( &dlg );
+        QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, &dlg );
+        layout->addWidget( moduleProxy );
+        layout->addWidget( buttonBox );
+
+        connect( buttonBox, &QDialogButtonBox::clicked, [&](QAbstractButton *button) {
+            switch( buttonBox->standardButton( button ) )
+            {
+            case QDialogButtonBox::Ok: dlg.accept(); break;
+            case QDialogButtonBox::Cancel: dlg.reject(); break;
+            case QDialogButtonBox::RestoreDefaults: moduleProxy->defaults(); break;
+            default: break;
+            }
+        } );
         
         int ret = dlg.exec();
         if( ret == QDialog::Accepted )
@@ -197,4 +208,4 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
     }
 }
 
-#include "k3bpluginmanager.moc"
+

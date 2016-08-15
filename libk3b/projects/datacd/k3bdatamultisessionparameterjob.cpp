@@ -22,10 +22,8 @@
 #include "k3bglobals.h"
 #include "k3btoc.h"
 #include "k3btrack.h"
-
 #include "k3bdatadoc.h"
-
-#include <klocale.h>
+#include "k3b_i18n.h"
 
 
 class K3b::DataMultiSessionParameterJob::Private
@@ -156,7 +154,7 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
         // Since one never closes a DVD+RW we only differ between CONTINUE and START
         //
 
-        kDebug() << "(K3b::DataMultiSessionParameterJob) found overwrite medium.";
+        qDebug() << "(K3b::DataMultiSessionParameterJob) found overwrite medium.";
 
         // try to check the filesystem size
         K3b::Iso9660 iso( d->doc->burner() );
@@ -177,7 +175,7 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
         //  4. the project does fit and does not fill up the CD -> continue multisession
         //
 
-        kDebug() << "(K3b::DataMultiSessionParameterJob) found appendable medium.";
+        qDebug() << "(K3b::DataMultiSessionParameterJob) found appendable medium.";
 
         if( d->doc->size() > info.remainingSize().mode1Bytes() &&
             d->doc->importedSession() < 0 ) {
@@ -285,4 +283,4 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
     return true;
 }
 
-#include "k3bdatamultisessionparameterjob.moc"
+

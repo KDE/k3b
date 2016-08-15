@@ -19,7 +19,7 @@
 #include "k3binteractiondialog.h"
 #include "k3bmsf.h"
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 
 namespace K3b {

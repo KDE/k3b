@@ -16,11 +16,9 @@
 #include "k3bdatamodewidget.h"
 #include "k3bglobals.h"
 
-#include <klocale.h>
-#include <kconfig.h>
-
-
-#include <qtooltip.h>
+#include <KConfigCore/KConfig>
+#include <KI18n/KLocalizedString>
+#include <QtWidgets/QToolTip>
 
 static const int s_autoIndex = 0;
 static const int s_mode1Index = 1;
@@ -102,4 +100,4 @@ void K3b::DataModeWidget::loadConfig( const KConfigGroup& c )
         setDataMode( K3b::DataModeAuto );
 }
 
-#include "k3bdatamodewidget.moc"
+

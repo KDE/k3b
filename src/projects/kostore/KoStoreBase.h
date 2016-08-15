@@ -21,7 +21,7 @@
 #ifndef KOSTORE_BASE_H
 #define KOSTORE_BASE_H
 
-#include <kurl.h>
+#include <QtCore/QUrl>
 
 #include "KoStore.h"
 
@@ -41,7 +41,7 @@ protected:
      * original URL of the remote file
      * (undefined for a local file)
      */
-    KUrl m_url;
+    QUrl m_url;
     FileMode m_fileMode;
     QString m_localFileName;
     QWidget* m_window;

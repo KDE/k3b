@@ -25,23 +25,23 @@
 #include "k3bglobals.h"
 #include "k3biso9660.h"
 
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qfont.h>
-#include <qcolor.h>
-#include <qstring.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-#include <QtGui/QTextBrowser>
-#include <QtWebKit/QWebView>
+#include <KCddb/Cdinfo>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
-#include <kio/global.h>
-#include <libkcddb/cdinfo.h>
+#include <KIconThemes/KIconLoader>
+#include <KI18n/KLocalizedString>
+#include <KIOCore/KIO/Global>
 
+#include <QtCore/QDebug>
+#include <QtCore/QString>
+#include <QtGui/QFont>
+#include <QtGui/QColor>
+#include <QtGui/QPainter>
+#include <QtGui/QPalette>
+#include <QtGui/QPixmap>
+#include <QtWebKitWidgets/QWebView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLayout>
+#include <QtWidgets/QTextBrowser>
 
 namespace {
     QString sectionHeader( const QString& title ) {
@@ -115,7 +115,7 @@ void K3b::DiskInfoView::reloadMedium()
     s += "</body>";
 
     m_infoView->setHtml( s );
-    kDebug() << s;
+    qDebug() << s;
 }
 
 
@@ -385,5 +385,5 @@ QString K3b::DiskInfoView::createIso9660InfoItems( const K3b::Iso9660SimplePrima
     return s;
 }
 
-#include "k3bdiskinfoview.moc"
+
 

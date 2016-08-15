@@ -15,12 +15,8 @@
 #ifndef _K3B_THREAD_WIDGET_H_
 #define _K3B_THREAD_WIDGET_H_
 
-#include <qobject.h>
-#include <qhash.h>
-#include <QCustomEvent>
-
-
-class QCustomEvent;
+#include <QtCore/QObject>
+#include <QtCore/QHash>
 
 namespace K3b {
     namespace Device {

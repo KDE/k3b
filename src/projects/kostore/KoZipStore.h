@@ -21,12 +21,11 @@
 #define koZipStore_h
 
 #include "KoStoreBase.h"
-//Added by qt3to4:
-#include <QByteArray>
 
 class KZip;
 class KArchiveDirectory;
-class KUrl;
+class QByteArray;
+class QUrl;
 
 class KoZipStore : public KoStoreBase
 {
@@ -34,15 +33,15 @@ public:
     KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentification );
     /**
-     * KUrl-constructor
+     * QUrl-constructor
      * @todo saving not completely implemented (fixed temporary file)
      */
-    KoZipStore( QWidget* window, const KUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
+    KoZipStore( QWidget* window, const QUrl& _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification );
     ~KoZipStore();
 
     virtual qint64 write( const char* _data, qint64 _len );
 protected:
-    virtual bool init( Mode _mode, const QByteArray& appIdentification );
+    virtual bool initZipStore( Mode _mode, const QByteArray& appIdentification );
     virtual bool doFinalize();
     virtual bool openWrite( const QString& name );
     virtual bool openRead( const QString& name );

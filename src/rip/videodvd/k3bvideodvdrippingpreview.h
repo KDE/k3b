@@ -16,13 +16,14 @@
 #define _K3B_VIDEODVD_RIPPING_PREVIEW_H_
 
 #include <QtCore/QObject>
-#include <QtGui/QImage>
 #include <QtCore/QProcess>
+#include <QtCore/QScopedPointer>
+#include <QtGui/QImage>
 
 #include "k3bvideodvd.h"
 
 
-class KTempDir;
+class QTemporaryDir;
 
 namespace K3b {
     class Process;
@@ -56,7 +57,7 @@ namespace K3b {
 
     private:
         QImage m_preview;
-        KTempDir* m_tempDir;
+        QScopedPointer<QTemporaryDir> m_tempDir;
         Process* m_process;
         int m_title;
         int m_chapter;

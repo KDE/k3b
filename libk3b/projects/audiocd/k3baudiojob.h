@@ -18,7 +18,7 @@
 
 #include "k3bjob.h"
 
-class KTemporaryFile;
+class QTemporaryFile;
 
 namespace K3b {
     class AudioDoc;
@@ -87,7 +87,7 @@ namespace K3b {
         AudioJobTempData* m_tempData;
         AudioMaxSpeedJob* m_maxSpeedJob;
 
-        KTemporaryFile* m_tocFile;
+        QTemporaryFile* m_tocFile;
 
         bool m_canceled;
         bool m_errorOccuredAndAlreadyReported;
