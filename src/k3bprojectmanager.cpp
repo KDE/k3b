@@ -451,15 +451,13 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
     QTemporaryFile tmpfile;
+    tmpfile.setAutoRemove(false);
     KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
-    connect( transferJob, &KJob::result, [&](KJob*) {
-        if( transferJob->error() != KJob::NoError ) {
-            tmpfile.open();
-            tmpfile.write( transferJob->data() );
-            tmpfile.close();
-        }
-    } );
-    transferJob->exec();
+    if (!transferJob->exec())
+        return NULL;
+    tmpfile.open();
+    tmpfile.write(transferJob->data());
+    tmpfile.close();
 
     // ///////////////////////////////////////////////
     // first check if it's a store or an old plain xml file
@@ -467,7 +465,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     QDomDocument xmlDoc;
 
     // try opening a store
-    KoStore* store = KoStore::createStore( &tmpfile, KoStore::Read );
+    KoStore* store = KoStore::createStore( tmpfile.fileName(), KoStore::Read );
     if( store ) {
         if( !store->bad() ) {
             // try opening the document inside the store
@@ -486,6 +484,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 
     if( !success ) {
         // try reading an old plain document
+        tmpfile.remove();
         if ( tmpfile.open() ) {
             //
             // First check if this is really an xml file beacuse if this is a very big file
@@ -507,7 +506,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
             }
             if( xmlDoc.setContent( &tmpfile ) )
                 success = true;
-            tmpfile.close();
+            tmpfile.remove();
         }
     }
 
