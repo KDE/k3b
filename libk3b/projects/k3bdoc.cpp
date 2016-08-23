@@ -24,6 +24,7 @@
 #include <QtCore/QString>
 #include <QtXml/QDomElement>
 #include <QtWidgets/QWidget>
+#include <QDateTime>
 
 
 K3b::Doc::Doc( QObject* parent )
@@ -154,6 +155,10 @@ bool K3b::Doc::saveGeneralDocumentData( QDomElement* part )
     propElem = doc.createElement( "remove_images" );
     propElem.setAttribute( "activated", removeImages() ? "yes" : "no" );
     mainElem.appendChild( propElem );
+
+    propElem = doc.createElement("current_datetime");
+    propElem.appendChild(doc.createTextNode(QDateTime::currentDateTime().toString()));
+    mainElem.appendChild(propElem);
 
     part->appendChild( mainElem );
 
