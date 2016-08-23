@@ -1006,7 +1006,7 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
             QObject::connect(statJob, &KJob::result, [&](KJob*) { exists = ( statJob->error() != KJob::NoError ); } );
             statJob->exec();
 
-            if( !exists ||
+            if( exists ||
                 KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.toDisplayString() ),
                                                     i18n("File Exists"), KStandardGuiItem::overwrite() )
                 == KMessageBox::Continue ) {
