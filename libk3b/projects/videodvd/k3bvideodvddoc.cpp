@@ -73,4 +73,10 @@ K3b::Device::MediaTypes K3b::VideoDvdDoc::supportedMediaTypes() const
     return K3b::Device::MEDIA_WRITABLE_DVD;
 }
 
+bool K3b::VideoDvdDoc::saveDocumentData(QDomElement*)
+{
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__;
+    return true;
+}
+
 //#include "k3bdvddoc.moc"

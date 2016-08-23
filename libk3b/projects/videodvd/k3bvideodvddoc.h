@@ -37,6 +37,7 @@ namespace K3b {
         DirItem* videoTsDir() const { return m_videoTsDir; }
 
         // TODO: implement load- and saveDocumentData since we do not need all those options
+        bool saveDocumentData(QDomElement*);
 
     private:
         DirItem* m_videoTsDir;

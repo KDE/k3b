@@ -575,6 +575,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 
 bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
 {
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << doc << url;
     QTemporaryFile tmpfile;
     KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
     connect( transferJob, &KJob::result, [&](KJob*) {
