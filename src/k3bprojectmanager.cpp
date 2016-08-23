@@ -40,6 +40,7 @@
 #include <KConfigCore/KSharedConfig>
 #include <KI18n/KLocalizedString>
 #include <KIOCore/KIO/StoredTransferJob>
+#include <KIO/CopyJob>
 #include <KWidgetsAddons/KMessageBox>
 
 #include <QtCore/QDebug>
@@ -575,22 +576,14 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
 
 bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
 {
-    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << doc << url;
     QTemporaryFile tmpfile;
-    KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
-    connect( transferJob, &KJob::result, [&](KJob*) {
-        if( transferJob->error() != KJob::NoError ) {
-            tmpfile.open();
-            tmpfile.write( transferJob->data() );
-            tmpfile.close();
-        }
-    } );
-    transferJob->exec();
+    tmpfile.setAutoRemove(false);
+    tmpfile.open();
 
     bool success = false;
 
     // create the store
-    KoStore* store = KoStore::createStore( &tmpfile, KoStore::Write, "application/x-k3b" );
+    KoStore* store = KoStore::createStore( tmpfile.fileName(), KoStore::Write, "application/x-k3b" );
     if( store ) {
         if( store->bad() ) {
             delete store;
@@ -629,6 +622,8 @@ bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
             }
         }
     }
+    KIO::CopyJob *copyJob = KIO::move(QUrl::fromLocalFile(tmpfile.fileName()), url);
+    copyJob->exec();
 
     return success;
 }

@@ -1002,11 +1002,9 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
             KRecentDocument::add( url );
 
             KIO::StatJob* statJob = KIO::stat(url, KIO::StatJob::DestinationSide, KIO::HideProgressInfo);
-            bool exists = true;
-            QObject::connect(statJob, &KJob::result, [&](KJob*) { exists = ( statJob->error() != KJob::NoError ); } );
-            statJob->exec();
+            bool exists = statJob->exec();
 
-            if( exists ||
+            if( !exists ||
                 KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.toDisplayString() ),
                                                     i18n("File Exists"), KStandardGuiItem::overwrite() )
                 == KMessageBox::Continue ) {
