@@ -53,7 +53,7 @@ include(ECMInstallIcons)
 
 find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui WebKitWidgets)
 find_package(KF5 REQUIRED COMPONENTS Archive Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
-                                     KCMUtils KIO Notifications NotifyConfig Service Solid WidgetsAddons XmlGui)
+                                     KCMUtils KIO Notifications NewStuff NotifyConfig Service Solid WidgetsAddons XmlGui)
 find_package(Iconv)
 set(HAVE_ICONV "${ICONV_FOUND}")
 
@@ -247,6 +247,12 @@ set(BUILD_EXTERNAL_ENCODER_PLUGIN "${K3B_BUILD_EXTERNAL_ENCODER_PLUGIN}")
 set(ENABLE_HAL_SUPPORT "${K3B_ENABLE_HAL_SUPPORT}")
 set(ENABLE_AUDIO_PLAYER "${QT_QTMULTIMEDIA_FOUND}")
 set(ENABLE_PERMISSION_HELPER "${K3B_ENABLE_PERMISSION_HELPER}")
+
+if(IS_ABSOLUTE DATA_INSTALL_DIR)
+  set(K3B_DATA_INSTALL_DIR ${DATA_INSTALL_DIR}/k3b)
+else()
+  set(K3B_DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}/k3b)
+endif()
 
 configure_file(config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h)
 include_directories(${CMAKE_BINARY_DIR})

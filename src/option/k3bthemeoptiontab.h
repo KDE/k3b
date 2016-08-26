@@ -43,6 +43,7 @@ namespace K3b {
         void selectionChanged();
         void slotInstallTheme();
         void slotRemoveTheme();
+        void slotGetNewThemes();
         
     private:
         ThemeModel* m_themeModel;

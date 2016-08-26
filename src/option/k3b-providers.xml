@@ -1,0 +1,22 @@
+<providers>
+
+<provider>
+ <id>kdelook</id>
+ <location>http://api.KDELook.org/v1/</location>
+ <name>KDELook.org</name>
+ <icon></icon>
+ <termsofuse>https://kdelook.org/terms/</termsofuse>
+ <register>https://kdelook.org/usermanager/new.php</register>
+ <services>
+   <person ocsversion="1.3" />
+   <friend ocsversion="1.3" />
+   <message ocsversion="1.3" />
+   <activity ocsversion="1.3" />
+   <content ocsversion="1.3" />
+   <fan ocsversion="1.3" />
+   <knowledgebase ocsversion="1.3" />
+   <event ocsversion="1.3" />
+ </services>
+</provider>
+
+</providers>
