@@ -31,10 +31,11 @@ int main( int argc, char* argv[] )
                                                "to be as simple as possible for novice users while also providing all features "
                                                "an advanced user might need."),
                           KAboutLicense::GPL,
-                          i18n("Copyright © 1998–2010 K3b authors"),
+                          i18n("Copyright © 1998–2016 K3b authors"),
                           QString(),
                           i18n("http://www.k3b.org" ) );
 
+    aboutData.addAuthor(i18n("Leslie Zhai"), i18n("Maintainer"), "xiangzhai83@gmail.com");
     aboutData.addAuthor(i18n("Michał Małek"),i18n("Maintainer and current lead Developer"), "michalm@jabster.pl");
     aboutData.addAuthor(i18n("Sebastian Trüg"),i18n("Main developer"), "trueg@k3b.org");
     aboutData.addAuthor(i18n("Christian Kvasny"),i18n("Video CD Project and Video CD ripping"), "chris@k3b.org");
