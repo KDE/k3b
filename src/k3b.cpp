@@ -1302,18 +1302,11 @@ void K3b::MainWindow::slotProjectAddFiles()
     K3b::View* view = activeView();
 
     if( view ) {
-        const QStringList files = QFileDialog::getOpenFileNames(this,
-                                                                i18n("Select Files to Add to Project"),
-                                                                QString(),
-                                                                i18n("All Files (*)") );
+        const QList<QUrl> urls = QFileDialog::getOpenFileUrls(this,
+                                                              i18n("Select Files to Add to Project"),
+                                                              QString(),
+                                                              i18n("All Files (*)") );
 
-        QList<QUrl> urls;
-        for( QStringList::ConstIterator it = files.constBegin();
-             it != files.constEnd(); it++ ) {
-            QUrl url;
-            url.setPath(*it);
-            urls.append( url );
-        }
 
         if( !urls.isEmpty() )
             view->addUrls( urls );
