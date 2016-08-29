@@ -39,5 +39,5 @@ ecm_install_icons(
         sc-devices-media-optical-mixed-cd.svgz
         sc-devices-media-optical-video.svgz
     DESTINATION
-        ${DATA_INSTALL_DIR}/k3b/icons
+        ${K3B_DATA_INSTALL_DIR}/icons
 )

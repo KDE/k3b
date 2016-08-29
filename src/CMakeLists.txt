@@ -231,6 +231,7 @@ target_link_libraries(k3b
     KF5::JobWidgets
     KF5::KIOFileWidgets
     KF5::KCMUtils
+    KF5::NewStuff
     KF5::Notifications
     KF5::NotifyConfig
     KF5::Solid
@@ -253,14 +254,19 @@ endif()
 
 install(TARGETS k3b ${INSTALL_TARGETS_DEFAULT_ARGS})
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/option/k3btheme.knsrc.cmake
+               ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc
+               @ONLY)
+
 
 ########### install files ###############
-
 install( PROGRAMS  org.kde.k3b.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
 #install( FILES  k3b-iso.desktop k3b-cue.desktop DESTINATION ${APPLNK_INSTALL_DIR}/.hidden/ )
-install( FILES  k3b.notifyrc DESTINATION ${KNOTIFYRC_INSTALL_DIR})
+install( FILES  k3b.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
 install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/k3b )
 install( FILES  org.kde.k3b.appdata.xml DESTINATION ${SHARE_INSTALL_PREFIX}/appdata/ )
+install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
+install( FILES  option/k3b-providers.xml DESTINATION ${K3B_DATA_INSTALL_DIR}/pics )
 
 set( SHARED_MIME_INFO_MINIMUM_VERSION "0.23" )
 find_package( SharedMimeInfo REQUIRED )

@@ -114,6 +114,13 @@
       </spacer>
      </item>
      <item>
+      <widget class="QPushButton" name="m_buttonGetNewThemes">
+       <property name="text">
+        <string>Get New Themes...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="m_buttonInstallTheme">
        <property name="text">
         <string>Install New Theme...</string>

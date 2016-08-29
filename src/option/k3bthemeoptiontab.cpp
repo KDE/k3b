@@ -27,9 +27,11 @@
 #include <KIOWidgets/KUrlRequester>
 #include <KUrlRequesterDialog>
 #include <KWidgetsAddons/KMessageBox>
+#include <KNS3/DownloadDialog>
 
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
+#include <QtCore/QPointer>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QTemporaryFile>
 #include <QtCore/QItemSelectionModel>
@@ -54,6 +56,8 @@ K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
              this, SLOT(slotInstallTheme()) );
     connect( m_buttonRemoveTheme, SIGNAL(clicked()),
              this, SLOT(slotRemoveTheme()) );
+    connect( m_buttonGetNewThemes, SIGNAL(clicked()),
+             this, SLOT(slotGetNewThemes()) );
 }
 
 
@@ -215,4 +219,11 @@ void K3b::ThemeOptionTab::slotRemoveTheme()
     }
 }
 
-
+void K3b::ThemeOptionTab::slotGetNewThemes()
+{
+    QPointer<KNS3::DownloadDialog> dialog = new KNS3::DownloadDialog( QStringLiteral("k3btheme.knsrc"), this );
+    dialog->exec();
+    if ( dialog && !dialog->changedEntries().isEmpty() )
+        m_themeModel->reload();
+    delete dialog;
+}

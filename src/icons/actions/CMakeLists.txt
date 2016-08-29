@@ -24,5 +24,5 @@ ecm_install_icons(
         sc-actions-tools-rip-video-cd.svgz
         sc-actions-tools-rip-video-dvd.svgz
     DESTINATION
-        ${DATA_INSTALL_DIR}/k3b/icons
+        ${K3B_DATA_INSTALL_DIR}/icons
 )
