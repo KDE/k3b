@@ -485,7 +485,7 @@ void K3b::JobProgressDialog::reject()
         if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
             if( m_job ) {
                 m_job->cancel();
-                m_closeButton->setEnabled( false ); // do not cancel twice
+                m_closeButton->setEnabled(true);
             }
         }
     }
