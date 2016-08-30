@@ -1,0 +1,74 @@
+#!/bin/false
+# Preceding shebang helps prevent running on its own.
+# But doesn't cause the parent's source cmd to fail
+
+echo ===== Begin initbk.include ====== 1>&2
+
+#### testing must be either true or false ####
+#### Bad things, like extreme data loss, happen if it's wrong. ####
+
+#### DISC MOUNTING VARS ####
+testing=true
+if $testing; then
+   discdev=/dev/sr0
+   disc_mountpoint=/scratch/mnt/disc
+else
+   discdev=/dev/sr0
+   disc_mountpoint=/mnt/disc
+fi
+
+
+#### INITIAL ENV VARS ####
+exe_dir=`pwd`
+mappername=luksimg
+mapperdev="/dev/mapper/$mappername"
+discmappername=luksdisc
+discmapperdev=/dev/mapper/$discmappername
+
+
+#### GET FINAL ARGUMENT ####
+argc=$#
+finalarg=${!argc}
+
+#### HANDLE A FINAL ARGUMENT DEFINING THE MEDIA, REMOVE FROM $newargs ####
+loopmore=true
+if test "$finalarg" == "dvd" || test "$finalarg" == "blu"; then
+	disctype=$finalarg
+	loopmore=false
+fi
+
+#### GET MEDIA TYPE IF NOT ALREADY SET ####
+while   $loopmore; do
+	echo -n 'Choose dvd or blueray, (d or b)=>'
+	read choice
+	choice=`echo $choice | cut -b 1`
+	if test $choice == 'b'; then
+		loopmore=false
+		disctype=blu
+	elif test $choice == 'd'; then
+		loopmore=false
+		disctype=dvd
+	fi
+done
+
+#### SET $imgsize FROM $disctype ####
+imgsize=1KB
+if test $disctype == "blu"; then
+	imgsize=24500MB
+elif test $disctype == "dvd"; then
+	imgsize=4600MB
+else
+	echo "FATAL ERROR, WRONG disctype>$disctype<, ABORTING!" 1>&2
+	exit 1
+fi
+
+
+#### SET OTHER VARS ACCORDING TO TESTING OR NOT
+if $testing; then
+	imgfile=/scratch/volatile/$disctype.img
+	udfmountpoint=/scratch/mnt/udf
+else
+	imgfile=/scratch/volatile/$disctype.img
+	udfmountpoint=/mnt/udf
+fi
+echo =====  End  initbk.include ====== 1>&2

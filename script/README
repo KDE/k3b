@@ -1,0 +1,19 @@
+KDEBUG-363067
+
+Reference
+* LUKS/Blu-ray Objective http://www.troubleshooters.com/lpm/201408/201408.htm#luksbluray_objective
+* Practical malleability attack against CBC-Encrypted LUKS partitions http://www.jakoblell.com/blog/2013/12/22/practical-malleability-attack-against-cbc-encrypted-luks-partitions/
+
+Dependence
+* udftools https://sourceforge.net/projects/linux-udf/
+* udisks
+
+Usage
+./make_luks_udf.sh disctype, where disctype is either blu or dvd.
+Write files to /scratch/mnt/udf ...
+./close_luks_udf.sh loopdevice disctype, where loopdevice is something like /dev/loop0, and disctype is either blu or dvd.
+./reopen_luks_udf.sh disctype disctype is either blu or dvd.
+./burn_disc disctype, where disctype is either blu or dvd.
+./open_luks_disc.sh disctype, where disctype is either blu or dvd.
+./close_luks_disc.sh disctype
+
