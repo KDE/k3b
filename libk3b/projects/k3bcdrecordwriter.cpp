@@ -399,7 +399,7 @@ void K3b::CdrecordWriter::start()
 
     if( !d->cdrecordBinObject->copyright().isEmpty() )
         emit infoMessage( i18n("Using %1 %2 – Copyright © %3"
-                               ,(d->cdrecordBinObject->hasFeature( "wodim" ) ? "Wodim" : "Cdrecord" )
+                               ,QLatin1String("Cdrecord")
                                ,d->cdrecordBinObject->version()
                                ,d->cdrecordBinObject->copyright()), MessageInfo );
 

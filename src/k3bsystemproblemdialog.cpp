@@ -231,8 +231,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
             //
             if( K3b::simpleKernelVersion() >= K3b::Version( 2, 6, 8 ) &&
-                k3bcore->externalBinManager()->binObject( "cdrecord" )->version() < K3b::Version( 2, 1, 1, "a05" ) &&
-                !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
+                k3bcore->externalBinManager()->binObject( "cdrecord" )->version() < K3b::Version( 2, 1, 1, "a05" ) ) {
                 if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) ) {
                     showBinSettingsButton = true;
                     problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,

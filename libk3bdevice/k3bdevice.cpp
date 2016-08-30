@@ -3611,7 +3611,7 @@ int K3b::Device::Device::nextWritableAddress() const
 
         //
         // The state of the last session has to be "empty" (0x0) or "incomplete" (0x1)
-        // The procedure here is taken from the dvd+rw-tools and wodim
+        // The procedure here is taken from the dvd+rw-tools
         //
         if( !(inf->border & 0x2) ) {
             // the incomplete track number is the first track in the last session (the empty session)

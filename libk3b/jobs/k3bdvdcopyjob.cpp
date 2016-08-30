@@ -169,9 +169,8 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         // first let's determine which application to use
         d->usedWritingApp = writingApp();
         if ( d->usedWritingApp == K3b::WritingAppAuto ) {
-            // prefer growisofs to wodim, which doesn't work all that great for DVDs
-            // (and doesn't support BluRay at all)
-            if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" ) )
+            // wodim from cdrkit (CD only, DVD deprecated, unmaintained)
+            if ( false )
                 d->usedWritingApp = K3b::WritingAppGrowisofs;
             // otherwise, let's default to cdrecord for the time being
             // FIXME: use growisofs for non-dao and non-auto mode

@@ -811,12 +811,9 @@ bool K3b::DataJob::waitForBurnMedium()
 
         d->usedWritingApp = writingApp();
         // let's default to cdrecord for the time being (except for special cases below)
-        // but prefer growisofs to wodim for DVDs
+        // but prefer growisofs for DVDs
         if ( d->usedWritingApp == K3b::WritingAppAuto ) {
-            if (k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" ))
-                d->usedWritingApp = K3b::WritingAppGrowisofs;
-            else
-                d->usedWritingApp = K3b::WritingAppCdrecord;
+            d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
         // -------------------------------
@@ -932,10 +929,7 @@ bool K3b::DataJob::waitForBurnMedium()
     else if ( foundMedium & K3b::Device::MEDIA_BD_ALL ) {
         d->usedWritingApp = writingApp();
         if( d->usedWritingApp == K3b::WritingAppAuto ) {
-            if (k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" ))
-                d->usedWritingApp = K3b::WritingAppGrowisofs;
-            else
-                d->usedWritingApp = K3b::WritingAppCdrecord;
+            d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
         if ( d->usedWritingApp == K3b::WritingAppCdrecord &&

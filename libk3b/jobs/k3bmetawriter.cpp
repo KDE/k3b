@@ -266,7 +266,6 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
         cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
         cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
         cdrecordBluRay = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" );
-        cdrecordWodim = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" );
     }
     if( k3bcore->externalBinManager()->binObject("growisofs") ) {
         growisofsBluRay = k3bcore->externalBinManager()->binObject("growisofs")->hasFeature( "blu-ray" );
