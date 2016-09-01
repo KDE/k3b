@@ -197,8 +197,11 @@ bool K3b::GrowisofsWriter::prepareProcess()
     else
         s += d->image;
 
-    if( d->multiSession && !d->multiSessionInfo.isEmpty() )
-        d->process << "-C" << d->multiSessionInfo;
+    // TODO: KDEBUG-367639
+    // wrong alleged_next_session for growisofs!
+    if( d->multiSession && !d->multiSessionInfo.isEmpty() ) {
+        qDebug() << "you don't have to specify -C option, growisofs will construct one for you!";
+    }
 
     if( d->multiSession )
         d->process << "-M";

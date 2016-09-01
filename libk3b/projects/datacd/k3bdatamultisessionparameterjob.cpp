@@ -215,6 +215,8 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
 }
 
 
+// TODO: KDEBUG-367639
+// wrong nextSessionStart for growisofs!
 bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
 {
     K3b::Device::DiskInfo info = d->doc->burner()->diskInfo();
