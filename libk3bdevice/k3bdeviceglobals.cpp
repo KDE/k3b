@@ -214,6 +214,10 @@ void K3b::Device::debugBitfield( unsigned char* data, long len )
 
 quint16 K3b::Device::from2Byte( const unsigned char* d )
 {
+    if (d == NULL) {
+        qWarning() << "Invalid nullptr!";
+        return 0;
+    }
     return ( (d[0] << 8 & 0xFF00) |
              (d[1]      & 0xFF) );
 }
@@ -221,6 +225,10 @@ quint16 K3b::Device::from2Byte( const unsigned char* d )
 
 quint32 K3b::Device::from4Byte( const unsigned char* d )
 {
+    if (d == NULL) {
+        qWarning() << "Invalid nullptr!";
+        return 0;
+    }
     return ( (d[0] << 24 & 0xFF000000) |
              (d[1] << 16 & 0xFF0000)   |
              (d[2] << 8  & 0xFF00)     |

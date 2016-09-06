@@ -46,3 +46,12 @@ target_link_libraries(k3bmodelutilstest
     Qt5::Gui
     Qt5::Test)
 add_test(k3bmodelutilstest k3bmodelutilstest)
+
+add_executable(k3bdeviceglobalstest k3bdeviceglobalstest.cpp)
+target_include_directories(k3bdeviceglobalstest PRIVATE
+    ${CMAKE_SOURCE_DIR}/libk3bdevice)
+target_link_libraries(k3bdeviceglobalstest
+    Qt5::Test
+    KF5::KIOCore
+    k3bdevice)
+add_test(k3bdeviceglobalstest k3bdeviceglobalstest)
