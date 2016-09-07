@@ -88,7 +88,8 @@ namespace {
         IMAGE_CUE_BIN,
         IMAGE_AUDIO_CUE,
         IMAGE_CDRDAO_TOC,
-        IMAGE_CDRECORD_CLONE
+        IMAGE_CDRECORD_CLONE,
+        IMAGE_RAW
     };
 
 } // namespace
@@ -469,21 +470,24 @@ void K3b::ImageWritingDialog::setupGui()
     groupImageTypeLayout->addWidget( d->comboImageType );
     groupImageTypeLayout->addStretch( 1 );
     d->comboImageType->addItem( i18n("Auto Detection") );
-    d->comboImageType->addItem( i18n("Plain data image") );
+    d->comboImageType->addItem(i18n("Optical disc media"));
     d->comboImageType->addItem( i18n("Cue/bin image") );
     d->comboImageType->addItem( i18n("Audio cue file") );
     d->comboImageType->addItem( i18n("Cdrdao TOC file") );
     d->comboImageType->addItem( i18n("Cdrecord clone image") );
+    d->comboImageType->addItem(i18n("Plain data image"));
     d->imageTypeSelectionMap[1] = IMAGE_ISO;
     d->imageTypeSelectionMap[2] = IMAGE_CUE_BIN;
     d->imageTypeSelectionMap[3] = IMAGE_AUDIO_CUE;
     d->imageTypeSelectionMap[4] = IMAGE_CDRDAO_TOC;
     d->imageTypeSelectionMap[5] = IMAGE_CDRECORD_CLONE;
+    d->imageTypeSelectionMap[6] = IMAGE_RAW;
     d->imageTypeSelectionMapRev[IMAGE_ISO] = 1;
     d->imageTypeSelectionMapRev[IMAGE_CUE_BIN] = 2;
     d->imageTypeSelectionMapRev[IMAGE_AUDIO_CUE] = 3;
     d->imageTypeSelectionMapRev[IMAGE_CDRDAO_TOC] = 4;
     d->imageTypeSelectionMapRev[IMAGE_CDRECORD_CLONE] = 5;
+    d->imageTypeSelectionMapRev[IMAGE_RAW] = 6;
 
 
     // image info
@@ -1132,6 +1136,8 @@ void K3b::ImageWritingDialog::loadSettings( const KConfigGroup& c )
         x = d->imageTypeSelectionMapRev[IMAGE_CDRECORD_CLONE];
     else if( imageType == "cdrdao-toc" )
         x = d->imageTypeSelectionMapRev[IMAGE_CDRDAO_TOC];
+    else if (imageType == "raw")
+        x = d->imageTypeSelectionMapRev[IMAGE_RAW];
 
     d->comboImageType->setCurrentIndex( x );
 
@@ -1176,6 +1182,9 @@ void K3b::ImageWritingDialog::saveSettings( KConfigGroup c )
             break;
         case IMAGE_CDRDAO_TOC:
             imageType = "cdrdao-toc";
+            break;
+        case IMAGE_RAW:
+            imageType = "raw";
             break;
         }
     }
