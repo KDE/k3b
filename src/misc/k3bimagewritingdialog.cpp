@@ -704,6 +704,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     }
     break;
 
+    case IMAGE_RAW:
     case IMAGE_ISO:
     {
         K3b::Iso9660 isoFs( d->imageFile );
@@ -865,7 +866,15 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
             // TODO: check for cdrdao tocfile
         }
 
-
+        // TODO: treat unusable image to raw
+        if (d->foundImageType == IMAGE_UNKNOWN) {
+            if (KMessageBox::questionYesNo(this,
+                                           i18n("Seems not to be a usable image, do you want to treat it as RAW?"),
+                                           i18n("Unkown image type")) == KMessageBox::Yes) {
+                d->foundImageType = IMAGE_RAW;
+                d->imageFile = path;
+            }
+        }
 
         if( d->foundImageType == IMAGE_UNKNOWN ) {
             QTreeWidgetItem* item = new QTreeWidgetItem( d->infoView );
@@ -913,7 +922,7 @@ void K3b::ImageWritingDialog::toggleAll()
         break;
     default: {
         K3b::WritingApps apps = K3b::WritingAppCdrecord;
-        if ( d->currentImageType() == IMAGE_ISO ) {
+        if (d->currentImageType() == IMAGE_ISO || d->currentImageType() == IMAGE_RAW) {
             // DVD/BD is always ISO here
             apps |= K3b::WritingAppGrowisofs;
         }
@@ -926,8 +935,8 @@ void K3b::ImageWritingDialog::toggleAll()
     }
 
     // set a wanted media type (DVD/BD -> only ISO)
-    if ( d->currentImageType() == IMAGE_ISO ||
-         d->currentImageType() == IMAGE_UNKNOWN ) {
+    if (d->currentImageType() == IMAGE_ISO ||
+        d->currentImageType() == IMAGE_RAW) {
         d->writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE );
     }
     else {
@@ -935,7 +944,7 @@ void K3b::ImageWritingDialog::toggleAll()
     }
 
     // set wanted image size
-    if ( d->currentImageType() == IMAGE_ISO )
+    if (d->currentImageType() == IMAGE_ISO || d->currentImageType() == IMAGE_RAW)
         d->writerSelectionWidget->setWantedMediumSize( K3b::filesize( QUrl::fromLocalFile(d->imagePath()) )/2048 );
     else
         d->writerSelectionWidget->setWantedMediumSize( Msf() );
@@ -953,8 +962,8 @@ void K3b::ImageWritingDialog::toggleAll()
                       && d->currentImageType() != IMAGE_UNKNOWN
                       && QFile::exists( d->imagePath() ) );
 
-    // some stuff is only available for iso images
-    if( d->currentImageType() == IMAGE_ISO ) {
+    // some stuff is only available for iso and raw images
+    if (d->currentImageType() == IMAGE_ISO || d->currentImageType() == IMAGE_RAW) {
         d->checkVerify->show();
         if( !d->advancedTabVisible ) {
             d->advancedTabIndex = d->optionTabbed->addTab( d->advancedTab, i18n("Advanced") );

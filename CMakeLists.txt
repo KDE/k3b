@@ -22,7 +22,7 @@ set(K3B_LIB_VERSION_RELEASE 0)
 ##################  K3b options #################################
 option(K3B_DEBUG "K3b additional debugging support" OFF)
 if(K3B_DEBUG)
-    add_definitions(-g)
+    add_definitions(-g -DK3B_DEBUG)
 endif()
 option(K3B_ENABLE_MUSICBRAINZ "Support for querying metadata about audio tracks from Musicbrainz." ON)
 option(K3B_ENABLE_DVD_RIPPING "Support for ripping Video DVDs with optional decryption." ON)
