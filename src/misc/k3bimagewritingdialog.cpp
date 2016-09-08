@@ -470,7 +470,7 @@ void K3b::ImageWritingDialog::setupGui()
     groupImageTypeLayout->addWidget( d->comboImageType );
     groupImageTypeLayout->addStretch( 1 );
     d->comboImageType->addItem( i18n("Auto Detection") );
-    d->comboImageType->addItem(i18n("Optical disc media"));
+    d->comboImageType->addItem(i18n("ISO 9660 filesystem image"));
     d->comboImageType->addItem( i18n("Cue/bin image") );
     d->comboImageType->addItem( i18n("Audio cue file") );
     d->comboImageType->addItem( i18n("Cdrdao TOC file") );
@@ -707,20 +707,23 @@ void K3b::ImageWritingDialog::slotStartClicked()
     case IMAGE_RAW:
     case IMAGE_ISO:
     {
-        K3b::Iso9660 isoFs( d->imageFile );
-        if( isoFs.open() ) {
-            if( K3b::filesize( QUrl::fromLocalFile(d->imageFile) ) < Private::volumeSpaceSize( isoFs ) ) {
-                if( KMessageBox::questionYesNo( this,
-                                                i18n("<p>The actual file size does not match the size declared in the file header. "
+        if (d->currentImageType() == IMAGE_ISO) {
+            K3b::Iso9660 isoFs(d->imageFile);
+            if (isoFs.open()) {
+                if (K3b::filesize(QUrl::fromLocalFile(d->imageFile)) < Private::volumeSpaceSize(isoFs)) {
+                    if (KMessageBox::questionYesNo(this,
+                                                   i18n("<p>The actual file size does not match the size declared in the file header. "
                                                      "If it has been downloaded make sure the download is complete.</p>"
                                                      "<p>Only continue if you know what you are doing.</p>"),
-                                                i18n("Warning"),
-                                                KStandardGuiItem::cont(),
-                                                KStandardGuiItem::cancel() ) == KMessageBox::No )
-                    return;
+                                                   i18n("Warning"),
+                                                   KStandardGuiItem::cont(),
+                                                   KStandardGuiItem::cancel() ) == KMessageBox::No )
+                        return;
+                }
             }
         }
 
+        // TODO: it needs a NON ISO 9660 images testcase
         K3b::Iso9660ImageWritingJob* job_ = new K3b::Iso9660ImageWritingJob( &dlg );
 
         job_->setBurnDevice( d->writerSelectionWidget->writerDevice() );
@@ -869,7 +872,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
         // TODO: treat unusable image to raw
         if (d->foundImageType == IMAGE_UNKNOWN) {
             if (KMessageBox::questionYesNo(this,
-                                           i18n("Seems not to be a usable image, do you want to treat it as RAW?"),
+                                           i18n("Type of image file is not recognizable. Do you want to burn it anyway?"),
                                            i18n("Unkown image type")) == KMessageBox::Yes) {
                 d->foundImageType = IMAGE_RAW;
                 d->imageFile = path;
@@ -936,7 +939,8 @@ void K3b::ImageWritingDialog::toggleAll()
 
     // set a wanted media type (DVD/BD -> only ISO)
     if (d->currentImageType() == IMAGE_ISO ||
-        d->currentImageType() == IMAGE_RAW) {
+        d->currentImageType() == IMAGE_RAW ||
+        d->currentImageType() == IMAGE_UNKNOWN/* still keep Unknown type */) {
         d->writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE );
     }
     else {
