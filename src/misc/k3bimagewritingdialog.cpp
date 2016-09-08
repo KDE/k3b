@@ -869,7 +869,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
             // TODO: check for cdrdao tocfile
         }
 
-        // TODO: treat unusable image to raw
+        // TODO: treat unusable image to opaque
         if (d->foundImageType == IMAGE_UNKNOWN) {
             if (KMessageBox::questionYesNo(this,
                                            i18n("Type of image file is not recognizable. Do you want to burn it anyway?"),
@@ -937,10 +937,11 @@ void K3b::ImageWritingDialog::toggleAll()
     }
     }
 
-    // set a wanted media type (DVD/BD -> only ISO)
+    // set a wanted media type
+    // some image types can be put on any medium, some only on CD
     if (d->currentImageType() == IMAGE_ISO ||
         d->currentImageType() == IMAGE_RAW ||
-        d->currentImageType() == IMAGE_UNKNOWN/* still keep Unknown type */) {
+        d->currentImageType() == IMAGE_UNKNOWN) {
         d->writerSelectionWidget->setWantedMediumType( K3b::Device::MEDIA_WRITABLE );
     }
     else {
@@ -966,7 +967,7 @@ void K3b::ImageWritingDialog::toggleAll()
                       && d->currentImageType() != IMAGE_UNKNOWN
                       && QFile::exists( d->imagePath() ) );
 
-    // some stuff is only available for iso and raw images
+    // some stuff is only available for iso and opaque images
     if (d->currentImageType() == IMAGE_ISO || d->currentImageType() == IMAGE_RAW) {
         d->checkVerify->show();
         if( !d->advancedTabVisible ) {
@@ -1149,7 +1150,7 @@ void K3b::ImageWritingDialog::loadSettings( const KConfigGroup& c )
         x = d->imageTypeSelectionMapRev[IMAGE_CDRECORD_CLONE];
     else if( imageType == "cdrdao-toc" )
         x = d->imageTypeSelectionMapRev[IMAGE_CDRDAO_TOC];
-    else if (imageType == "raw")
+    else if (imageType == "opaque")
         x = d->imageTypeSelectionMapRev[IMAGE_RAW];
 
     d->comboImageType->setCurrentIndex( x );
@@ -1197,7 +1198,7 @@ void K3b::ImageWritingDialog::saveSettings( KConfigGroup c )
             imageType = "cdrdao-toc";
             break;
         case IMAGE_RAW:
-            imageType = "raw";
+            imageType = "opaque";
             break;
         }
     }
