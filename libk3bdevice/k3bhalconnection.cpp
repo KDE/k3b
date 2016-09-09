@@ -49,7 +49,7 @@ namespace {
             return K3b::Device::HalConnection::org_freedesktop_Hal_PermissionDenied;
         }
         else {
-            qDebug() << "Unkown HAL error:" << errorName;
+            qDebug() << "Unknown HAL error:" << errorName;
             return K3b::Device::HalConnection::org_freedesktop_Hal_Unknown;
         }
     }

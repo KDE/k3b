@@ -873,7 +873,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
         if (d->foundImageType == IMAGE_UNKNOWN) {
             if (KMessageBox::questionYesNo(this,
                                            i18n("Type of image file is not recognizable. Do you want to burn it anyway?"),
-                                           i18n("Unkown image type")) == KMessageBox::Yes) {
+                                           i18n("Unknown image type")) == KMessageBox::Yes) {
                 d->foundImageType = IMAGE_RAW;
                 d->imageFile = path;
             }
