@@ -326,7 +326,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
     // filenames cannot end in backslashes (mkisofs problem. See comments in k3bisoimager.cpp (escapeGraftPoint()))
     bool bsAtEnd = false;
-    while( newName[newName.length()-1] == '\\' ) {
+    while (!newName.isEmpty() && newName[newName.length() - 1] == '\\') {
         newName.truncate( newName.length()-1 );
         bsAtEnd = true;
     }
