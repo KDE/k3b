@@ -55,3 +55,12 @@ target_link_libraries(k3bdeviceglobalstest
     KF5::KIOCore
     k3bdevice)
 add_test(k3bdeviceglobalstest k3bdeviceglobalstest)
+
+add_executable(k3bexternalbinmanagertest k3bexternalbinmanagertest.cpp)
+target_include_directories(k3bexternalbinmanagertest PRIVATE
+    ${CMAKE_SOURCE_DIR}/libk3b)
+target_link_libraries(k3bexternalbinmanagertest
+    Qt5::Test
+    KF5::KIOCore
+    k3blib)
+add_test(k3bexternalbinmanagertest k3bexternalbinmanagertest)

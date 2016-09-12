@@ -932,8 +932,9 @@ bool K3b::DataJob::waitForBurnMedium()
             d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
-        if ( d->usedWritingApp == K3b::WritingAppCdrecord &&
-             !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) ) {
+        if (d->usedWritingApp == K3b::WritingAppCdrecord &&
+            k3bcore->externalBinManager()->binObject("cdrecord") &&
+            !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature("blu-ray")) {
             d->usedWritingApp = K3b::WritingAppGrowisofs;
         }
 
