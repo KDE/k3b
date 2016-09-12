@@ -6,7 +6,7 @@ endif(ENABLE_PERMISSION_HELPER)
 add_subdirectory( icons )
 add_subdirectory( pics )
 add_subdirectory( services )
-
+add_subdirectory( qml )
 
 ########### next target ###############
 
@@ -67,6 +67,8 @@ qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bdataprojectinterface
 qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor )
 
 add_executable(k3b
+    stringtablemodel.cpp
+    stringgridmodel.cpp
     k3bwelcomewidget.cpp
     k3bapplication.cpp
     k3bdevicedelegate.cpp
@@ -221,6 +223,8 @@ target_include_directories(k3b PRIVATE
     projects/kostore
 )
 
+target_compile_definitions(k3b PRIVATE QML_INSTALL_DIR=${QML_INSTALL_DIR})
+
 target_link_libraries(k3b
     k3bdevice
     k3blib
@@ -236,7 +240,8 @@ target_link_libraries(k3b
     KF5::NotifyConfig
     KF5::Solid
     KF5::XmlGui
-    Qt5::WebKitWidgets
+    Qt5::Quick
+    Qt5::QuickWidgets
 )
 
 if(ICONV_FOUND)

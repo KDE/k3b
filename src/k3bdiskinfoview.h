@@ -19,27 +19,39 @@
 
 #include "k3bmediacontentsview.h"
 
-class QWebView;
+class QQuickWidget;
+class QQmlContext;
+class QQmlApplicationEngine;
+class StringTableModel;
+class StringGridModel;
 
 namespace K3b {
-class DiskInfoView : public MediaContentsView
-{
-    Q_OBJECT
+    class DiskInfoView : public MediaContentsView
+    {
+        Q_OBJECT
 
-public:
-    DiskInfoView( QWidget* parent = 0 );
-    ~DiskInfoView();
+    public:
+        DiskInfoView( QWidget* parent = 0 );
+        ~DiskInfoView();
 
-private:
-    void reloadMedium();
-    void updateTitle();
-
-    QString createMediaInfoItems( const Medium& medium );
-    QString createIso9660InfoItems( const Iso9660SimplePrimaryDescriptor& iso );
-    QString createTrackItems( const Medium& medium );
-
-    QWebView* m_infoView;
-};
+    private:
+        void reloadMedium();
+        void updateTitle();
+        
+        void populateQmlContext(QQmlContext* context);
+        StringTableModel *populateMediumInfoTable(const K3b::Medium& medium);
+        StringTableModel *populateFilesystemInfoTable(const K3b::Iso9660SimplePrimaryDescriptor& iso);
+        StringGridModel *populateTracksTable(const K3b::Medium& medium);
+        
+        template<class T> void swapProperty(const char* key, T **itemPtr, T *newItem);
+        
+        StringTableModel *mediumTable;
+        StringTableModel *filesystemInfoTable;
+        StringGridModel *tracksGrid;
+        
+        QQmlApplicationEngine *m_qmlEngine;
+        QQuickWidget* m_infoView;
+    };
 }
 
 
