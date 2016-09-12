@@ -1,19 +1,18 @@
-Installing K3b 2.0
-------------------
+Installing K3b 2.10
+-------------------
 
 
 What you need to run K3b:
  mandatory:
   - since K3b is a CD writing program a cd writer would be a good thing to have ;-)
-  - the QT4 library (at least version 4.3)
-  - the KDE4 libraries (at least version 4.0)
+  - the QT5 library (at least version 5.6)
+  - the KDE5 libraries (at least version 5.24.0)
   - the cdparanoia library for cd ripping from Monty
   - the cdrtools (cdrecord, mkisofs) from Joerg Schilling
   - the dvd+rw-tools by Andy Polyakov for DVD writing
 
  optional:
   - cdrdao, the other linux cd writing program from Andreas Mueller
-  - the transcode tools for DVD ripping and DivX/XviD encoding from Thomas Oestreich
   - vcdimager >= 0.7 for creating video cds
   - libmad for mp3 decoding
   - ogg-vorbis libraries for encoding and decoding
@@ -35,6 +34,16 @@ After that it's all the same:
   cd build
   cmake ..
 
+For debug:
+
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr    \
+    -DKDE_INSTALL_LIBDIR=lib    \
+    -DKDE_INSTALL_LIBEXECDIR=lib    \
+    -DKDE_INSTALL_USE_QT_SYS_PATHS=ON   \
+    -DK3B_BUILD_API_DOCS=ON \
+    -DK3B_ENABLE_PERMISSION_HELPER=ON   \
+    -DK3B_DEBUG=ON
+
 If the cmake run was successful you are presented with a list of configure results that shows
 which optional features are enabled. Now just compile K3b:
 
@@ -50,3 +59,4 @@ See PERMISSIONS on hints how to properly setup the permissions to use K3b withou
 
 Have fun
 Sebastian Trueg (trueg@k3b.org)
+Leslie Zhai (xiangzhai83@gmail.com)
