@@ -3531,7 +3531,8 @@ void K3b::Device::Device::searchIndexTransitions( long start, long end, K3b::Dev
                 while ( indices.count() < endIndex )
                     indices.append( K3b::Msf() );
                 // we save the index relative to the first sector
-                indices[endIndex-1] = K3b::Msf( end ) - track.firstSector();
+                if (endIndex > 0 && endIndex < indices.size() + 1)
+                    indices[endIndex - 1] = K3b::Msf(end) - track.firstSector();
                 track.setIndices( indices ); // FIXME: better API
             }
             else {
