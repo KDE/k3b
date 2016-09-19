@@ -200,7 +200,15 @@ bool K3b::GrowisofsWriter::prepareProcess()
     // TODO: KDEBUG-367639
     // wrong alleged_next_session for growisofs!
     if( d->multiSession && !d->multiSessionInfo.isEmpty() ) {
-        qDebug() << "you don't have to specify -C option, growisofs will construct one for you!";
+        QStringList ms = d->multiSessionInfo.split(',');
+        if (ms.size() == 2) {
+            if (ms[0] == 0 || ms[1] == "0") {
+                qDebug() << "you don't have to specify -C option, growisofs will construct one for you!";
+                d->process << "-use-the-force-luke=spare=none";
+            } else {
+                d->process << "-C" << d->multiSessionInfo;
+            }
+        }
     }
 
     if( d->multiSession )
