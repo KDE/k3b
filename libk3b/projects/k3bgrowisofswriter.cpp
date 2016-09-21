@@ -198,13 +198,26 @@ bool K3b::GrowisofsWriter::prepareProcess()
         s += d->image;
 
     // TODO: KDEBUG-367639
-    // wrong alleged_next_session for growisofs!
     if( d->multiSession && !d->multiSessionInfo.isEmpty() ) {
         QStringList ms = d->multiSessionInfo.split(',');
         if (ms.size() == 2) {
             if (ms[0] == 0 || ms[1] == "0") {
-                qDebug() << "you don't have to specify -C option, growisofs will construct one for you!";
-                d->process << "-use-the-force-luke=spare=none";
+                FILE* fptr = NULL;
+                if (d->image.isEmpty())
+                    fptr = fopen("/dev/fd/0", "r");
+                else
+                    fptr = fopen(d->image.toStdString().c_str(), "r");
+                if (fptr) {
+                    if (fseek(fptr, 32 * 1024 + 80, SEEK_SET) == 0) {
+                        char buf[4] = { '\0' };
+                        fread(buf, 1, sizeof(buf), fptr);
+                        d->process << "-C 0," << buf;
+                    } else {
+                        qWarning() << strerror(errno);
+                    }
+                    fclose(fptr);
+                    fptr = NULL;
+                }
             } else {
                 d->process << "-C" << d->multiSessionInfo;
             }
