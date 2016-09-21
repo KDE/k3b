@@ -211,7 +211,11 @@ bool K3b::GrowisofsWriter::prepareProcess()
                     if (fseek(fptr, 32 * 1024 + 80, SEEK_SET) == 0) {
                         char buf[4] = { '\0' };
                         fread(buf, 1, sizeof(buf), fptr);
-                        d->process << "-C 0," << buf;
+                        int next = atoi(buf);
+                        bool ok;
+                        int last = ms[0].toInt(&ok);
+                        if (ok && next > last)
+                            d->process << "-C " << ms[0] << "," << buf;
                     } else {
                         qWarning() << strerror(errno);
                     }
