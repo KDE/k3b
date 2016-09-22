@@ -473,6 +473,46 @@ void K3b::IsoImager::setMultiSessionInfo( const QString& info, K3b::Device::Devi
 {
     m_multiSessionInfo = info;
     m_device = dev;
+    if (m_multiSessionInfo.isEmpty())
+        return;
+    QStringList ms = m_multiSessionInfo.split(',');
+    if (ms.size() != 2)
+        return;
+    if (ms[0] != "0" && ms[1] != "0")
+        return;
+    int imgfd = -1;
+    char* in_image = "/dev/fd/0";
+    // Validate file descriptor
+    if (sscanf(in_image, "/dev/fd/%u", &imgfd) == 1)
+        imgfd = dup(imgfd);
+    else
+        imgfd = open(in_image, O_RDONLY);
+    if (imgfd == -1)
+        return;
+    char buf[6] = { '\0' };
+    if (lseek(imgfd, 32 * 1024, SEEK_SET) != -1) {
+        if (read(imgfd, buf, sizeof(buf)) == sizeof(buf)) {
+            // Check for the ISO 9660 magic number
+            if (buf[0] == 0x01 && buf[1] == 'C' && buf[2] == 'D' &&
+                buf[3] == '0'  && buf[4] == '0' && buf[5] == '1') {
+                if (lseek(imgfd, 32 * 1024 + 80, SEEK_SET) != -1) {
+                    uint32_t c2;
+                    uint8_t buf[4] = { '\0' };
+                    if (read(imgfd, buf, sizeof(buf)) == sizeof(buf)) {
+                        // Interpret the read bytes as little-endian number
+                        c2 = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
+                        // Round up to full multipes of 16
+                        c2 += 15;
+                        c2 /= 16;
+                        c2 *= 16;
+                        m_multiSessionInfo = ms[0] + "," + QString::number(c2);
+                    }
+                }
+            }
+        }
+    }
+    close(imgfd);
+    imgfd = -1;
 }
 
 
@@ -501,6 +541,7 @@ static void truncateTheHardWay( QString& s, int max )
 
 bool K3b::IsoImager::addMkisofsParameters( bool printSize )
 {
+    // TODO: KDEBUG-367639
     // add multisession info
     if( !m_multiSessionInfo.isEmpty() ) {
         *m_process << "-cdrecord-params" << m_multiSessionInfo;

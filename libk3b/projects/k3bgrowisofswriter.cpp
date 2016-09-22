@@ -197,36 +197,8 @@ bool K3b::GrowisofsWriter::prepareProcess()
     else
         s += d->image;
 
-    // TODO: KDEBUG-367639
-    if( d->multiSession && !d->multiSessionInfo.isEmpty() ) {
-        QStringList ms = d->multiSessionInfo.split(',');
-        if (ms.size() == 2) {
-            if (ms[0] == 0 || ms[1] == "0") {
-                FILE* fptr = NULL;
-                if (d->image.isEmpty())
-                    fptr = fopen("/dev/fd/0", "r");
-                else
-                    fptr = fopen(d->image.toStdString().c_str(), "r");
-                if (fptr) {
-                    if (fseek(fptr, 32 * 1024 + 80, SEEK_SET) == 0) {
-                        char buf[4] = { '\0' };
-                        fread(buf, 1, sizeof(buf), fptr);
-                        int next = atoi(buf);
-                        bool ok;
-                        int last = ms[0].toInt(&ok);
-                        if (ok && next > last)
-                            d->process << "-C " << ms[0] << "," << buf;
-                    } else {
-                        qWarning() << strerror(errno);
-                    }
-                    fclose(fptr);
-                    fptr = NULL;
-                }
-            } else {
-                d->process << "-C" << d->multiSessionInfo;
-            }
-        }
-    }
+    if (d->multiSession && !d->multiSessionInfo.isEmpty())
+        d->process << "-C" << d->multiSessionInfo;
 
     if( d->multiSession )
         d->process << "-M";

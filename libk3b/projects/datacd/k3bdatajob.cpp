@@ -1151,6 +1151,7 @@ bool K3b::DataJob::setupGrowisofsJob()
 
     if( usedMultiSessionMode() != K3b::DataDoc::NONE ) {
         //
+        // TODO: KDEBUG-367639
         // growisofs wants a valid -C parameter for multisession, so we get it from the
         // K3b::MsInfoFetcher (see K3b::DataJob::prepareWriting)
         //
