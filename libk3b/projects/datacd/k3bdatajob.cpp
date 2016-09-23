@@ -176,6 +176,7 @@ void K3b::DataJob::prepareWriting()
     if( !d->doc->onlyCreateImages() &&
         ( d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
           d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::FINISH ) ) {
+        // TODO: KDEBUG-367639
         unsigned int nextSessionStart = d->multiSessionParameterJob->nextSessionStart();
         // for some reason cdrdao needs 150 additional sectors in the ms info
         if( writingApp() == K3b::WritingAppCdrdao ) {

@@ -197,8 +197,14 @@ bool K3b::GrowisofsWriter::prepareProcess()
     else
         s += d->image;
 
-    if (d->multiSession && !d->multiSessionInfo.isEmpty())
-        d->process << "-C" << d->multiSessionInfo;
+    if (d->multiSession && !d->multiSessionInfo.isEmpty()) {
+        QStringList ms = d->multiSessionInfo.split(',');
+        if (ms.size() == 2 && ms[1] != 0) {
+            d->process << "-C" << d->multiSessionInfo;
+        } else {
+            emit infoMessage(i18n("Medium is not of multi-session type and does not contain ISO 9660. Cannot emulate multi-session on it."), MessageError);
+        }
+    }
 
     if( d->multiSession )
         d->process << "-M";

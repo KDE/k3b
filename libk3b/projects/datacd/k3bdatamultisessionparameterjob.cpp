@@ -280,6 +280,36 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
     }
 
     d->previousSessionStart = lastSessionStart;
+    // TODO: KDEBUG-367639
+    if (nextSessionStart == 0) {
+        int imgfd = -1;
+        // Validate file descriptor
+        imgfd = open(d->doc->burner(), O_RDONLY);
+        if (imgfd != -1) {
+            char buf[6] = { '\0' };
+            if (lseek(imgfd, 32 * 1024, SEEK_SET) != -1) {
+                if (read(imgfd, buf, sizeof(buf)) == sizeof(buf)) {
+                    // Check for the ISO 9660 magic number
+                    if (buf[0] == 0x01 && buf[1] == 'C' && buf[2] == 'D' &&
+                        buf[3] == '0'  && buf[4] == '0' && buf[5] == '1') {
+                        if (lseek(imgfd, 32 * 1024 + 80, SEEK_SET) != -1) {
+                            uint8_t buf[4] = { '\0' };
+                            if (read(imgfd, buf, sizeof(buf)) == sizeof(buf)) {
+                                // Interpret the read bytes as little-endian number
+                                nextSessionStart = buf[0] | (buf[1] << 8) | (buf[2] << 16) | (buf[3] << 24);
+                                // Round up to full multipes of 16
+                                nextSessionStart += 15;
+                                nextSessionStart /= 16;
+                                nextSessionStart *= 16;
+                            }
+                        }
+                    }
+                }
+            }
+            close(imgfd);
+            imgfd = -1;
+        }
+    }
     d->nextSessionStart = nextSessionStart;
 
     return true;
