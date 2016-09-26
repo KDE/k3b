@@ -3586,7 +3586,10 @@ bool K3b::Device::Device::getNextWritableAdress( unsigned int& lastSessionStart,
 
                 // Read start address of the incomplete track
                 if( readTrackInformation( trackData, 0x1, nextTrack ) ) {
-                    nextWritableAdress = from4Byte( &trackData[8] );
+                    if (m == MEDIA_BD_R_SRM_POW && (trackData[7] & 1))
+                        nextWritableAdress = from4Byte(&trackData[12]);
+                    else
+                        nextWritableAdress = from4Byte( &trackData[8] );
 
                     // Read start address of the first track in the last session
                     if( readTocPmaAtip( trackData, 0x1, false, 0x0  ) ) {

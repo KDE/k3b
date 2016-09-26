@@ -176,7 +176,6 @@ void K3b::DataJob::prepareWriting()
     if( !d->doc->onlyCreateImages() &&
         ( d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
           d->multiSessionParameterJob->usedMultiSessionMode() == K3b::DataDoc::FINISH ) ) {
-        // TODO: KDEBUG-367639
         unsigned int nextSessionStart = d->multiSessionParameterJob->nextSessionStart();
         // for some reason cdrdao needs 150 additional sectors in the ms info
         if( writingApp() == K3b::WritingAppCdrdao ) {
@@ -1152,7 +1151,6 @@ bool K3b::DataJob::setupGrowisofsJob()
 
     if( usedMultiSessionMode() != K3b::DataDoc::NONE ) {
         //
-        // TODO: KDEBUG-367639
         // growisofs wants a valid -C parameter for multisession, so we get it from the
         // K3b::MsInfoFetcher (see K3b::DataJob::prepareWriting)
         //
