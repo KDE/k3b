@@ -278,6 +278,10 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
     }
 
     d->previousSessionStart = lastSessionStart;
+    if (nextSessionStart == 0) {
+        emit infoMessage(i18n("Medium is not of multi-session type and does not contain ISO 9660. Cannot emulate multi-session on it."), MessageError);
+        return false;
+    }
     d->nextSessionStart = nextSessionStart;
 
     return true;

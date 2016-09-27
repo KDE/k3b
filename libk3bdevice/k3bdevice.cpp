@@ -3580,7 +3580,11 @@ bool K3b::Device::Device::getNextWritableAdress( unsigned int& lastSessionStart,
             //
             if( !(inf->border & 0x2) ) {
                 // the incomplete track number is the first track in the last session (the empty session)
-                int nextTrack = inf->first_track_l|inf->first_track_m<<8;
+                int nextTrack;
+                if (m == MEDIA_BD_R_SRM_POW)
+                    nextTrack = inf->last_track_l | inf->last_track_m << 8;
+                else
+                    nextTrack  = inf->first_track_l | inf->first_track_m << 8;
 
                 UByteArray trackData;
 
@@ -3591,10 +3595,15 @@ bool K3b::Device::Device::getNextWritableAdress( unsigned int& lastSessionStart,
                     else
                         nextWritableAdress = from4Byte( &trackData[8] );
 
-                    // Read start address of the first track in the last session
-                    if( readTocPmaAtip( trackData, 0x1, false, 0x0  ) ) {
-                        lastSessionStart = from4Byte( &trackData[8] );
+                    if (m == MEDIA_BD_R_SRM_POW) {
+                        lastSessionStart = 0;
                         success = true;
+                    } else {
+                        // Read start address of the first track in the last session
+                        if (readTocPmaAtip(trackData, 0x1, false, 0x0)) {
+                            lastSessionStart = from4Byte(&trackData[8]);
+                            success = true;
+                        }
                     }
                 }
             }
