@@ -5,9 +5,11 @@
         <comment>K3b project</comment>
         <comment xml:lang="ca">Projecte del K3b</comment>
         <comment xml:lang="ca@valencia">Projecte del K3b</comment>
+        <comment xml:lang="cs">Projekt K3b</comment>
         <comment xml:lang="de">K3b-Projekt</comment>
         <comment xml:lang="en_GB">K3b project</comment>
         <comment xml:lang="es">Proyecto de K3b</comment>
+        <comment xml:lang="it">Progetto K3b</comment>
         <comment xml:lang="nl">K3b-project</comment>
         <comment xml:lang="pl">Projekt K3b</comment>
         <comment xml:lang="pt">Projecto do K3b</comment>
@@ -15,6 +17,7 @@
         <comment xml:lang="sl">Projekt K3b</comment>
         <comment xml:lang="sv">K3b-projekt</comment>
         <comment xml:lang="uk">проект K3b</comment>
+        <comment xml:lang="zh_CN">K3b 工程</comment>
         <glob pattern="*.k3b"/>
     </mime-type>
 </mime-info>
