@@ -147,7 +147,9 @@ K3b::DataDoc::MultiSessionMode K3b::DataMultiSessionParameterJob::determineMulti
     if( info.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|
                             K3b::Device::MEDIA_DVD_PLUS_RW_DL|
                             K3b::Device::MEDIA_DVD_RW_OVWR|
-                            K3b::Device::MEDIA_BD_RE) ) {
+                            K3b::Device::MEDIA_BD_RE|
+                            K3b::Device::MEDIA_DVD_RAM|
+                            K3b::Device::MEDIA_BD_R_RRM) ) {
         //
         // we need to handle DVD+RW and DVD-RW overwrite media differently since remainingSize() is not valid
         // in both cases
@@ -238,7 +240,9 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
     if( info.mediaType() & (K3b::Device::MEDIA_DVD_PLUS_RW|
                             K3b::Device::MEDIA_DVD_PLUS_RW_DL|
                             K3b::Device::MEDIA_DVD_RW_OVWR|
-                            K3b::Device::MEDIA_BD_RE) ) {
+                            K3b::Device::MEDIA_BD_RE|
+                            K3b::Device::MEDIA_DVD_RAM|
+                            K3b::Device::MEDIA_BD_R_RRM) ) {
         lastSessionStart = 0;
 
         // get info from iso filesystem
