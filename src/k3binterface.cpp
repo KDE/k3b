@@ -106,7 +106,7 @@ QString Interface::currentProject()
 
 QString Interface::openProject( const QString& url )
 {
-    Doc* doc = k3bappcore->projectManager()->openProject( url );
+    Doc* doc = k3bappcore->projectManager()->openProject( QUrl( url ) );
     if( doc )
         return k3bappcore->projectManager()->dbusPath( doc );
     else
@@ -151,7 +151,7 @@ void Interface::writeImage()
 
 void Interface::writeImage( const QString& url )
 {
-    m_main->slotWriteImage( url );
+    m_main->slotWriteImage( QUrl( url ) );
 }
 
 

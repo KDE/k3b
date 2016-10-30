@@ -766,13 +766,13 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
 */
     for( int i = 1; i <= cnt; ++i ) {
         // in this case the constructor works since we saved as url()
-        QUrl url = grp.readPathEntry( QString("%1 url").arg(i),QString() );
+        QUrl url( grp.readPathEntry( QString("%1 url").arg(i),QString() ) );
 
         bool modified = grp.readEntry( QString("%1 modified").arg(i),false );
 
         bool saved = grp.readEntry( QString("%1 saved").arg(i),false );
 
-        QUrl saveUrl = grp.readPathEntry( QString("%1 saveurl").arg(i),QString() );
+        QUrl saveUrl( grp.readPathEntry( QString("%1 saveurl").arg(i),QString() ) );
 
         // now load the project
         if( K3b::Doc* doc = k3bappcore->projectManager()->openProject( saveUrl ) ) {
@@ -1304,7 +1304,7 @@ void K3b::MainWindow::slotProjectAddFiles()
     if( view ) {
         const QList<QUrl> urls = QFileDialog::getOpenFileUrls(this,
                                                               i18n("Select Files to Add to Project"),
-                                                              QString(),
+                                                              QUrl(),
                                                               i18n("All Files (*)") );
 
 

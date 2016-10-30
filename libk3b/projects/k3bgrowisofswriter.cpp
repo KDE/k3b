@@ -30,6 +30,7 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 #include <unistd.h>
 
@@ -215,7 +216,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
 
     if( !d->image.isEmpty() ) {
         d->inputFile.setFileName( d->image );
-        d->trackSize = (K3b::filesize( d->image ) + 1024) / 2048;
+        d->trackSize = (QFileInfo(d->image).size() + 1024) / 2048;
         if( !d->inputFile.open( QIODevice::ReadOnly ) ) {
             emit infoMessage( i18n("Could not open file %1.",d->image), MessageError );
             return false;

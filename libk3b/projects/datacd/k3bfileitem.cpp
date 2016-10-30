@@ -272,7 +272,7 @@ void K3b::FileItem::init( const QString& filePath,
         m_id.device = stat->st_dev;
     }
     else {
-        m_size = K3b::filesize( filePath );
+        m_size = QFileInfo(filePath).size();
         m_id.inode = 0;
         m_id.device = 0;
 

@@ -117,7 +117,7 @@ void K3b::ThemeOptionTab::selectionChanged()
 
 void K3b::ThemeOptionTab::slotInstallTheme()
 {
-    QUrl themeURL = KUrlRequesterDialog::getUrl( QString(), this,
+    QUrl themeURL = KUrlRequesterDialog::getUrl( QUrl(), this,
                                                  i18n("Drag or Type Theme URL") );
 
     if( themeURL.url().isEmpty() )

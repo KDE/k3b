@@ -244,7 +244,7 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
         d->audioDoc->setPerformer( parser.cdText().performer() );
         d->audioDoc->writeCdText( !parser.cdText().title().isEmpty() );
 
-        d->decoder = K3b::AudioDecoderFactory::createDecoder( parser.imageFilename() );
+        d->decoder = K3b::AudioDecoderFactory::createDecoder( QUrl::fromLocalFile(parser.imageFilename()) );
         if( d->decoder ) {
             d->decoder->setFilename( parser.imageFilename() );
 

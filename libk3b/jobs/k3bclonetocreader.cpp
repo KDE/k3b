@@ -20,6 +20,7 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 
 class K3b::CloneTocReader::Private
@@ -216,7 +217,7 @@ void K3b::CloneTocReader::readFile()
             }
         }
 
-        if( d->size.rawBytes() != K3b::filesize( imageFileName ) ) {
+        if( d->size.rawBytes() != KIO::filesize_t(QFileInfo(imageFileName).size()) ) {
             qDebug() << "(K3b::CloneTocReader) image file size invalid.";
             return;
         }

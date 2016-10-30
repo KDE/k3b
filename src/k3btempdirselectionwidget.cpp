@@ -68,7 +68,7 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     // choose a default
     setSelectionMode( DIR );
 
-    m_editDirectory->setUrl( k3bcore->globalSettings()->defaultTempPath() );
+    m_editDirectory->setUrl( QUrl::fromLocalFile( k3bcore->globalSettings()->defaultTempPath() ) );
     slotUpdateFreeTempSpace();
 
     // ToolTips
@@ -125,7 +125,7 @@ void K3b::TempDirSelectionWidget::slotUpdateFreeTempSpace()
 
 void K3b::TempDirSelectionWidget::setTempPath( const QString& dir )
 {
-    m_editDirectory->setUrl( dir );
+    m_editDirectory->setUrl( QUrl::fromLocalFile( dir ) );
     slotUpdateFreeTempSpace();
 }
 

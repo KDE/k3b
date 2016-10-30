@@ -431,7 +431,7 @@ void K3b::ImageWritingDialog::init()
         // last written image because that's what most users want
         QString image = c.readPathEntry( "last written image", QString() );
         if( QFile::exists( image ) )
-            d->editImagePath->setUrl( image );
+            d->editImagePath->setUrl( QUrl::fromLocalFile( image ) );
 
         d->comboRecentImages->clear();
     }
@@ -1135,7 +1135,7 @@ void K3b::ImageWritingDialog::loadSettings( const KConfigGroup& c )
     if( !d->imageForced ) {
         QString image = c.readPathEntry( "image path", c.readPathEntry( "last written image", QString() ) );
         if( QFile::exists( image ) )
-            d->editImagePath->setUrl( image );
+            d->editImagePath->setUrl( QUrl::fromLocalFile( image ) );
     }
 
     QString imageType = c.readEntry( "image type", "auto" );
@@ -1219,7 +1219,7 @@ void K3b::ImageWritingDialog::dropEvent( QDropEvent* e )
 {
     QList<QUrl> urls = e->mimeData()->urls();
     if( !urls.isEmpty() ) {
-        d->editImagePath->setUrl( urls.first().toLocalFile() );
+        d->editImagePath->setUrl( urls.first() );
     }
 }
 

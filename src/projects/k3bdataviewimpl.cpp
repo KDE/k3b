@@ -290,7 +290,7 @@ void K3b::DataViewImpl::slotOpen()
     DataItem* item = m_model->itemForIndex( current );
 
     if( !item->isFile() ) {
-        QUrl url = item->localPath();
+        QUrl url = QUrl::fromLocalFile( item->localPath() );
         if( !KRun::isExecutableFile( url,
                                     item->mimeType().name() ) ) {
             KRun::runUrl( url,
@@ -333,7 +333,7 @@ void K3b::DataViewImpl::slotSelectionChanged()
     // check if all selected items can be removed
     foreach(const QModelIndex &index, indexes)
     {
-        if (!index.data(DataProjectModel::CustomFlagsRole).toInt() & DataProjectModel::ItemIsRemovable)
+        if (!(index.data(DataProjectModel::CustomFlagsRole).toInt() & DataProjectModel::ItemIsRemovable))
         {
             remove = false;
             break;

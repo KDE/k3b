@@ -224,7 +224,7 @@ void K3b::VideoCdRippingDialog::slotUpdateFreeSpace()
 
 void K3b::VideoCdRippingDialog::loadSettings( const KConfigGroup& c )
 {
-    m_editDirectory ->setUrl( c.readEntry( "last ripping directory", K3b::defaultTempPath() ) );
+    m_editDirectory ->setUrl( QUrl::fromLocalFile( c.readEntry( "last ripping directory", K3b::defaultTempPath() ) ) );
     m_ignoreExt ->setChecked( c.readEntry( "ignore ext", false ) );
     m_sector2336 ->setChecked( c.readEntry( "sector 2336", false ) );
     m_extractXML ->setChecked( c.readEntry( "extract xml", false ) );

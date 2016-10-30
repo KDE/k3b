@@ -77,7 +77,7 @@ void K3b::MiscOptionTab::readSettings()
                                                                 ( int )K3b::InteractionDialog::LOAD_SAVED_SETTINGS ) );
     m_checkSystemConfig->setChecked( c.readEntry( "check system config", true ) );
 
-    m_editTempDir->setUrl( k3bcore->globalSettings()->defaultTempPath() );
+    m_editTempDir->setUrl( QUrl::fromLocalFile( k3bcore->globalSettings()->defaultTempPath() ) );
 
 //   if( c.readEntry( "Multiple Instances", "smart" ) == "smart" )
 //     m_radioMultipleInstancesSmart->setChecked(true);
@@ -137,7 +137,7 @@ bool K3b::MiscOptionTab::saveSettings()
     }
     
 
-    m_editTempDir->setUrl( fi.absoluteFilePath() );
+    m_editTempDir->setUrl( QUrl::fromLocalFile( fi.absoluteFilePath() ) );
 
     k3bcore->globalSettings()->setDefaultTempPath( m_editTempDir->url().toLocalFile() );
 

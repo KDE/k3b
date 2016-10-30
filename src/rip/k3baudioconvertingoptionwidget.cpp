@@ -210,7 +210,7 @@ QString K3b::AudioConvertingOptionWidget::baseDir() const
 
 void K3b::AudioConvertingOptionWidget::setBaseDir( const QString& path )
 {
-    m_editBaseDir->setUrl( path );
+    m_editBaseDir->setUrl( QUrl::fromLocalFile( path ) );
 }
 
 
@@ -290,7 +290,7 @@ QString K3b::AudioConvertingOptionWidget::extension() const
 
 void K3b::AudioConvertingOptionWidget::loadConfig( const KConfigGroup& c )
 {
-    m_editBaseDir->setUrl( c.readEntry( "last ripping directory", QStandardPaths::writableLocation(QStandardPaths::MusicLocation) ) );
+    m_editBaseDir->setUrl( QUrl::fromLocalFile( c.readEntry( "last ripping directory", QStandardPaths::writableLocation(QStandardPaths::MusicLocation) ) ) );
 
     m_checkSingleFile->setChecked( c.readEntry( "single_file", false ) );
     m_checkWriteCueFile->setChecked( c.readEntry( "write_cue_file", false ) );
