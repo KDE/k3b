@@ -1,3 +1,19 @@
+2.10.0
+======
+Changes:
+ * Deprecated transcode - tried to PR but unmaintained by upstream (BUG: 360170)
+
+Bugfixes:
+ * Fixed compilation on newer ffmpeg/libav - test 57.56.100 (REVIEW: 122569)
+ * Fixed invalid QUrl when burning iso - imageFilesize QUrl and QString
+ filePath wrong convertion issue (BUG: 365089)
+ * Fixed multisession issue - but *NO* Blu-Ray test environment (BUG: 367639)
+ * Fixed crashed when adding a directory to a project - forget to check
+ newName.isEmpty (BUG: 349160)
+ * Fixed can't burn BD50 ISO image - seems not to be a usable image (BUG:
+ 344392)
+ * Fixed from2Byte *NO* checking nullptr issue (BUG: 328529)
+
 2.1
 ====
 Changes:

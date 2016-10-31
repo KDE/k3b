@@ -446,7 +446,7 @@ void K3b::VideoDVDRippingDialog::slotAudioModelChanged( const QModelIndex& topLe
 
 void K3b::VideoDVDRippingDialog::setBaseDir( const QString& path )
 {
-    d->w->m_editBaseDir->setUrl( path );
+    d->w->m_editBaseDir->setUrl(QUrl::fromLocalFile(path));
 }
 
 
@@ -464,7 +464,7 @@ void K3b::VideoDVDRippingDialog::loadSettings( const KConfigGroup& c )
     d->w->m_checkBlankReplace->setChecked( c.readEntry( "replace blanks", false ) );
     d->w->m_editBlankReplace->setText( c.readEntry( "blank replace string", "_" ) );
     d->w->m_comboFilenamePattern->setEditText( c.readEntry( "filename pattern", d->w->m_comboFilenamePattern->itemText(0) ) );
-    d->w->m_editBaseDir->setUrl( c.readPathEntry( "base dir", K3b::defaultTempPath() ) );
+    d->w->m_editBaseDir->setUrl(QUrl::fromLocalFile(c.readPathEntry("base dir", K3b::defaultTempPath())));
 }
 
 
