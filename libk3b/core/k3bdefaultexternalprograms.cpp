@@ -172,13 +172,16 @@ QString K3b::AbstractCdrtoolsProgram::versionIdentifier( const ExternalBin& bin 
 
 
 K3b::CdrecordProgram::CdrecordProgram()
-    : K3b::AbstractCdrtoolsProgram( QLatin1String( "cdrecord" ), QLatin1String("cdrecord") )
+    : K3b::AbstractCdrtoolsProgram( QLatin1String( "cdrecord" ), QLatin1String( "wodim" ) )
 {
 }
 
 
 void K3b::CdrecordProgram::parseFeatures( const QString& output, ExternalBin& bin ) const
 {
+    if( usingCdrkit( bin ) )
+        bin.addFeature( "wodim" );
+
     if( bin.version().suffix().endsWith( "-dvd" ) ) {
         bin.addFeature( "dvd-patch" );
         bin.setVersion( QString(bin.version().versionString()).remove("-dvd") );

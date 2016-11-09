@@ -46,7 +46,8 @@ bool shouldRunSuidRoot( const K3b::ExternalBin* bin )
 
     if( bin->name() == "cdrecord" ) {
         return ( K3b::simpleKernelVersion() < K3b::Version( 2, 6, 8 ) ||
-                 bin->version() >= K3b::Version( 2, 1, 1, "a05" ) );
+                 bin->version() >= K3b::Version( 2, 1, 1, "a05" ) ||
+                 bin->hasFeature( "wodim" ) );
     }
     else if( bin->name() == "cdrdao" ) {
         return true;
