@@ -530,3 +530,34 @@ QString K3b::DvdBooktypeProgram::parseCopyright( const QString& /*output*/, cons
     // fixed Copyright:
     return QLatin1String( "Andy Polyakov <appro@fy.chalmers.se>" );
 }
+
+K3b::AbstractCdrskinProgram::AbstractCdrskinProgram(const QString& program)
+    : SimpleExternalProgram(program)
+{
+}
+
+
+K3b::AbstractCdrskinProgram::~AbstractCdrskinProgram()
+{
+}
+
+QString K3b::AbstractCdrskinProgram::getProgramPath(const QString& dir) const
+{
+    return "";
+}
+
+
+QString K3b::AbstractCdrskinProgram::versionIdentifier(const ExternalBin& bin) const
+{
+    return name();
+}
+
+K3b::CdrskinProgram::CdrskinProgram()
+    : K3b::AbstractCdrskinProgram(QLatin1String("cdrskin"))
+{
+}
+
+void K3b::CdrskinProgram::parseFeatures(const QString& output, ExternalBin& bin) const
+{
+    bin.addFeature("dvd");
+}

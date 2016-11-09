@@ -66,7 +66,8 @@ namespace K3b {
         WritingAppCdrecord = 1,
         WritingAppCdrdao = 2,
         WritingAppGrowisofs = 4,
-        WritingAppDvdRwFormat = 8
+        WritingAppDvdRwFormat = 8,
+        WritingAppCdrskin = 9
     };
     Q_DECLARE_FLAGS( WritingApps, WritingApp )
 

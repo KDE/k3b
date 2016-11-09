@@ -156,6 +156,26 @@ namespace K3b {
         virtual Version parseVersion( const QString& output, const ExternalBin& bin ) const;
         virtual QString parseCopyright( const QString& output, const ExternalBin& bin ) const;
     };
+
+    class LIBK3B_EXPORT AbstractCdrskinProgram : public SimpleExternalProgram
+    {
+    public:
+        AbstractCdrskinProgram(const QString& program);
+        ~AbstractCdrskinProgram();
+
+    protected:
+        virtual QString getProgramPath(const QString& dir) const;
+        virtual QString versionIdentifier(const ExternalBin& bin) const;
+    };
+
+    class LIBK3B_EXPORT CdrskinProgram : public AbstractCdrskinProgram
+    {
+    public:
+        CdrskinProgram();
+
+    protected:
+        virtual void parseFeatures(const QString& output, ExternalBin& bin) const;
+    };
 }
 
 #endif

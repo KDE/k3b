@@ -338,6 +338,8 @@ K3b::WritingApp K3b::writingAppFromString( const QString& s )
         return K3b::WritingAppGrowisofs;
     else if( s.toLower() == "dvd+rw-format" )
         return K3b::WritingAppDvdRwFormat;
+    else if (s.toLower() == "cdrskin")
+        return K3b::WritingAppCdrskin;
     else
         return K3b::WritingAppAuto;
 }
