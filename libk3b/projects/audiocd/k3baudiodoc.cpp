@@ -721,11 +721,13 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
                                 }
                                 else {
                                     qDebug() << "(K3b::AudioDoc) invalid cdtrack source.";
+                                    delete track;
                                     return false;
                                 }
                             }
                             else {
                                 qDebug() << "(K3b::AudioDoc) unknown source type: " << sourceElem.nodeName();
+                                delete track;
                                 return false;
                             }
                         }

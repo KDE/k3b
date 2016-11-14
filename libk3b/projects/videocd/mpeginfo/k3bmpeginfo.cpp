@@ -257,7 +257,9 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
         offset += 4;
         size = GetSize( offset );
         offset += 2;
-        // qDebug() << QString( "offset = %1, size = %2" ).arg( offset ).arg( size );
+#ifdef K3B_DEBUG
+        qDebug() << QString( "offset = %1, size = %2" ).arg( offset ).arg( size );
+#endif
 
         switch ( mark ) {
         case MPEG_SYSTEM_HEADER_CODE:
@@ -760,7 +762,7 @@ void K3b::MpegInfo::ParseVideo ( llong offset, byte marker )
 
     mpeg_info->video[ v_idx ].bitrate = 400 * brate;
 
-    byte mark;
+    byte mark = -1;
     while ( true ) {
         offset = FindNextMarker( offset, &mark );
         if ( mark == MPEG_GOP_CODE )

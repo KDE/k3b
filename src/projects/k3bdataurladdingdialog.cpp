@@ -50,6 +50,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QInputDialog>
+#include <QSharedPointer>
 
 #include <unistd.h>
 
@@ -143,8 +144,8 @@ void K3b::DataUrlAddingDialog::addUrls( const QList<QUrl>& urls,
                                      QWidget* parent )
 {
     if( !urls.isEmpty() ) {
-        K3b::DataUrlAddingDialog* dlg = new K3b::DataUrlAddingDialog( urls, dir, parent );
-        QMetaObject::invokeMethod( dlg, "slotStartAddUrls", Qt::QueuedConnection );
+        QSharedPointer<DataUrlAddingDialog> dlgPtr = QSharedPointer<DataUrlAddingDialog>(new DataUrlAddingDialog( urls, dir, parent ));
+        QMetaObject::invokeMethod( dlgPtr.data(), "slotStartAddUrls", Qt::QueuedConnection );
     }
 }
 
@@ -154,8 +155,8 @@ void K3b::DataUrlAddingDialog::moveItems( const QList<K3b::DataItem*>& items,
                                        QWidget* parent )
 {
     if( !items.isEmpty() ) {
-        DataUrlAddingDialog* dlg = new DataUrlAddingDialog( items, dir, false, parent );
-        QMetaObject::invokeMethod( dlg, "slotStartCopyMoveItems", Qt::QueuedConnection );
+        QSharedPointer<DataUrlAddingDialog> dlgPtr = QSharedPointer<DataUrlAddingDialog>(new DataUrlAddingDialog( items, dir, false, parent ));
+        QMetaObject::invokeMethod( dlgPtr.data(), "slotStartCopyMoveItems", Qt::QueuedConnection );
     }
 }
 
@@ -165,8 +166,8 @@ void K3b::DataUrlAddingDialog::copyItems( const QList<K3b::DataItem*>& items,
                                        QWidget* parent )
 {
     if( !items.isEmpty() ) {
-        DataUrlAddingDialog* dlg = new DataUrlAddingDialog( items, dir, true, parent );
-        QMetaObject::invokeMethod( dlg, "slotStartCopyMoveItems", Qt::QueuedConnection );
+        QSharedPointer<DataUrlAddingDialog> dlgPtr = QSharedPointer<DataUrlAddingDialog>(new DataUrlAddingDialog( items, dir, true, parent ));
+        QMetaObject::invokeMethod( dlgPtr.data(), "slotStartCopyMoveItems", Qt::QueuedConnection );
     }
 }
 

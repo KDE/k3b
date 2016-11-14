@@ -288,6 +288,7 @@ void K3b::MainWindow::initActions()
     // need to have all actions in the mainwindow's actioncollection anyway (or am I just to stupid to
     // see the correct solution?)
 
+    // clang-analyzer wrongly treat KF5's KStandardAction::open as Unix API Improper use of 'open'
     QAction* actionFileOpen = KStandardAction::open( this, SLOT(slotFileOpen()), actionCollection() );
     actionFileOpen->setToolTip( i18n( "Opens an existing project" ) );
     actionFileOpen->setStatusTip( actionFileOpen->toolTip() );

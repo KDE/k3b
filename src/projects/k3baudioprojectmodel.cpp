@@ -632,7 +632,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
 
                 // special case: the source we remove from the track is the last and the track
                 // will be deleted.
-                if( !copyItems && dropTrackAfter == source->track() && dropTrackAfter->numberSources() == 1 )
+                if( !copyItems && dropTrackAfter == source->track() && dropTrackAfter && dropTrackAfter->numberSources() == 1 )
                     dropTrackAfter = dropTrackAfter->prev();
 
                 if( copyItems )

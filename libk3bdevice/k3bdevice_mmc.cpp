@@ -202,9 +202,7 @@ bool K3b::Device::Device::getPerformance( UByteArray& data,
     //        return types. "Defect Status Data" for example might return way more data.
     // FIXME: Since we only use getPerformance for writing speeds and without a proper length
     //        those do not make sense it is better to fail here anyway.
-    if( (dataLen-8) % descLen ||
-        dataLen <= 8 ||
-        dataLen > 2048 ) {
+    if( descLen == 0 || (dataLen-8) % descLen || dataLen <= 8 || dataLen > 2048 ) {
         qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ": GET PERFORMANCE reports bogus dataLen: " << dataLen << endl;
         return false;
@@ -586,7 +584,7 @@ bool K3b::Device::Device::readTocPmaAtip( UByteArray& data, int format, bool tim
     // with these buggy drives.
     // We cannot use this as default since many firmwares fail with a too high data length.
     //
-    if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
+    if( descLen != 0 && ((dataLen-4) % descLen || dataLen < 4+descLen) ) {
         qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": READ TOC/PMA/ATIP invalid length returned: " << dataLen;
         dataLen = 0xFFFF;
     }
@@ -605,7 +603,7 @@ bool K3b::Device::Device::readTocPmaAtip( UByteArray& data, int format, bool tim
     cmd[8] = data.size();
     if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
         dataLen = qMin( dataLen, from2Byte( data.data() ) + 2u );
-        if( (dataLen-4) % descLen || dataLen < 4+descLen ) {
+        if( descLen == 0 || (dataLen-4) % descLen || dataLen < 4+descLen ) {
             // useless length
             data.clear();
             return false;

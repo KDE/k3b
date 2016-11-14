@@ -43,8 +43,10 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
 {
     // cleanup first
     cancel();
-    m_process->deleteLater();
-    m_process = 0;
+    if (m_process) {
+        m_process->deleteLater();
+        m_process = 0;
+    }
     m_tempDir.reset();
     m_canceled = false;
 

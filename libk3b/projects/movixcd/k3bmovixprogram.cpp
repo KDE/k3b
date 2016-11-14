@@ -70,7 +70,7 @@ bool K3b::MovixProgram::scan( const QString& p )
         return false;
     }
 
-    if( bin->version() >= K3b::Version( 0, 9, 0 ) )
+    if( bin && bin->version() >= K3b::Version( 0, 9, 0 ) )
         return scanNewEMovix( bin, path );
     else
         return scanOldEMovix( bin, path );
@@ -106,6 +106,8 @@ bool K3b::MovixProgram::scanOldEMovix( K3b::MovixBin* bin, const QString& path )
     //
     // first check if all necessary directories are present
     //
+    if (bin == Q_NULLPTR)
+        return false;
     QDir dir( bin->movixDataDir() );
     QStringList subdirs = dir.entryList( QDir::Dirs );
     if( !subdirs.contains( "boot-messages" ) ) {

@@ -36,7 +36,7 @@ After that it's all the same:
 
 For debug:
 
-  cmake .. -DCMAKE_INSTALL_PREFIX=/usr    \
+  scan-build -k -v -V cmake .. -DCMAKE_INSTALL_PREFIX=/usr    \
     -DKDE_INSTALL_LIBDIR=lib    \
     -DKDE_INSTALL_LIBEXECDIR=lib    \
     -DKDE_INSTALL_USE_QT_SYS_PATHS=ON   \
@@ -47,7 +47,7 @@ For debug:
 If the cmake run was successful you are presented with a list of configure results that shows
 which optional features are enabled. Now just compile K3b:
 
-  make
+  scan-build -k -v -V make
 
 Now you are ready to install:
 

@@ -300,6 +300,7 @@ void K3b::MediaCopyDialog::slotStartClicked()
                                                     i18n("File Exists"),
                                                     KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )
+                delete dlg;
                 return;
         }
 
@@ -484,16 +485,17 @@ void K3b::MediaCopyDialog::toggleAll()
             }
             else if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_ALL ) {
                 // only auto for DVD+R(W)
-                if( burnDev->writeCapabilities() & (K3b::Device::MEDIA_DVD_R|K3b::Device::MEDIA_DVD_RW) ) {
-                    modes |= K3b::WritingModeSao|K3b::WritingModeRestrictedOverwrite;
-                    if( burnDev->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
-                        modes |= K3b::WritingModeIncrementalSequential;
-                }
+                if (burnDev) {
+                    if( burnDev->writeCapabilities() & (K3b::Device::MEDIA_DVD_R|K3b::Device::MEDIA_DVD_RW) ) {
+                        modes |= K3b::WritingModeSao|K3b::WritingModeRestrictedOverwrite;
+                        if( burnDev->featureCurrent( K3b::Device::FEATURE_INCREMENTAL_STREAMING_WRITABLE ) != 0 )
+                            modes |= K3b::WritingModeIncrementalSequential;
+                    }
 
-                // TODO: once we have layer jump support: this is where it goes
-//               if ( burnDev->supportsWritingMode( K3b::Device::WRITING_MODE_LAYER_JUMP ) ) {
-//                   modes |= K3b::Device::WRITING_MODE_LAYER_JUMP;
-//               }
+                    // TODO: once we have layer jump support: this is where it goes
+                    //if ( burnDev->supportsWritingMode( K3b::Device::WRITING_MODE_LAYER_JUMP ) )
+                    //     modes |= K3b::Device::WRITING_MODE_LAYER_JUMP;
+                }
             }
             else if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_BD_ALL ) {
                 // no modes, only auto

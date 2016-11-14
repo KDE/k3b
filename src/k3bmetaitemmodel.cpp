@@ -180,6 +180,9 @@ namespace {
 
         // all the node mapping is done on the first col, so make sure we use
         // an index on the first col
+        // 
+        // A valid index belongs to a model, and has non-negative row and column numbers
+        // so index.model() is NOT nullptr if index.isValid()
         QModelIndex firstColIndex = index.model()->index(index.row(), 0, index.parent());
         Node* node = findNodeForOriginalIndex( firstColIndex );
         if ( !node ) {
