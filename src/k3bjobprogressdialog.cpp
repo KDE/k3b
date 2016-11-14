@@ -245,8 +245,10 @@ void K3b::JobProgressDialog::setupGUI()
 
     slotThemeChanged();
 
-    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-             this, SLOT(slotThemeChanged()) );
+    if (k3bappcore) {
+        connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+                 this, SLOT(slotThemeChanged()) );
+    }
 }
 
 
@@ -439,7 +441,8 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
     m_labelSubTask->setText("");
     m_labelProcessedSize->setText("");
     m_labelSubProcessedSize->setText("");
-    m_labelTask->setPalette( k3bappcore->themeManager()->currentTheme()->palette() );
+    if (k3bappcore)
+        m_labelTask->setPalette( k3bappcore->themeManager()->currentTheme()->palette() );
     m_logCache.clear();
 
     // disconnect from the former job
@@ -643,6 +646,8 @@ void K3b::JobProgressDialog::blockingInformation( const QString& text,
 
 void K3b::JobProgressDialog::slotThemeChanged()
 {
+    if (k3bappcore == Q_NULLPTR)
+        return;
     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         d->progressHeaderFrame->setPalette( theme->palette() );
         d->headerFrame->setPalette( theme->palette() );

@@ -63,6 +63,8 @@ void K3b::DebuggingOutputCache::clear()
     d->lastMessageCount.clear();
     d->cacheSize = 0;
 
+    if (k3bcore == Q_NULLPTR)
+       return; 
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "K3b Version: %1" ).arg(k3bcore->version()) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "KDE Version: %1" ).arg(KCOREADDONS_VERSION_STRING) );
     addOutput( QLatin1String( "System" ), QString::fromLatin1( "Qt Version:  %1" ).arg(qVersion()) );

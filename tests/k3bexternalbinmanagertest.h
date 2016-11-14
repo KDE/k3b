@@ -13,15 +13,18 @@
 #ifndef K3B_EXTERNAL_BINMANAGER_TEST_H
 #define K3B_EXTERNAL_BINMANAGER_TEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class ExternalBinManagerTest : public QObject
 {
     Q_OBJECT
+
 public:
     ExternalBinManagerTest();
-private slots:
+
+private Q_SLOTS:
     void testBinObject();
+    void testMyBurnJob();
 };
 
 #endif // K3B_EXTERNAL_BINMANAGER_TEST_H

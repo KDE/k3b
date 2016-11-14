@@ -32,7 +32,7 @@
 #include "rip/videodvd/k3bvideodvdrippingview.h"
 #endif
 
-#include <KConfigCore/KConfig>
+#include <KConfigCore/KConfigGroup>
 #include <KNotifications/KNotification>
 #include <KI18n/KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>

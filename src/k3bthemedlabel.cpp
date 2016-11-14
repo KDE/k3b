@@ -14,7 +14,7 @@
 
 #include "k3bthemedlabel.h"
 #include "k3bapplication.h"
-
+#include <QDebug>
 K3b::ThemedLabel::ThemedLabel( QWidget* parent )
     : KSqueezedTextLabel( parent ),
       m_themePixmapCode( -1 )
@@ -22,8 +22,10 @@ K3b::ThemedLabel::ThemedLabel( QWidget* parent )
     slotThemeChanged();
     setTextElideMode( Qt::ElideRight );
 
-    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-             this, SLOT(slotThemeChanged()) );
+    if (k3bappcore) {
+        connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+                 this, SLOT(slotThemeChanged()) );
+    }
 }
 
 
@@ -34,8 +36,10 @@ K3b::ThemedLabel::ThemedLabel( const QString& text, QWidget* parent )
     slotThemeChanged();
     setTextElideMode( Qt::ElideRight );
 
-    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-             this, SLOT(slotThemeChanged()) );
+    if (k3bappcore) {
+        connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+                 this, SLOT(slotThemeChanged()) );
+    }
 }
 
 
@@ -45,8 +49,10 @@ K3b::ThemedLabel::ThemedLabel( K3b::Theme::PixmapType pix, QWidget* parent )
     setThemePixmap( pix );
     setTextElideMode( Qt::ElideRight );
 
-    connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
-             this, SLOT(slotThemeChanged()) );
+    if (k3bappcore) {
+        connect( k3bappcore->themeManager(), SIGNAL(themeChanged()),
+                 this, SLOT(slotThemeChanged()) );
+    }
 }
 
 
@@ -69,6 +75,8 @@ void K3b::ThemedLabel::setThemePixmap( K3b::Theme::PixmapType pix )
 void K3b::ThemedLabel::slotThemeChanged()
 {
     setAutoFillBackground( true );
+    if (k3bappcore == Q_NULLPTR)
+        return;
     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPalette p = palette();
         p.setColor( backgroundRole(), theme->backgroundColor() );

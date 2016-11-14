@@ -236,6 +236,7 @@ target_link_libraries(k3b
     KF5::NotifyConfig
     KF5::Solid
     KF5::XmlGui
+    KF5::ConfigCore
     Qt5::WebKitWidgets
 )
 
