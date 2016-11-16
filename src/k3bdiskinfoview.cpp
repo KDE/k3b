@@ -14,7 +14,6 @@
 
 #include <config-k3b.h>
 
-
 #include "k3bdiskinfoview.h"
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
@@ -33,26 +32,273 @@
 
 #include <QtCore/QDebug>
 #include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QUrl>
+#include <QtCore/QVariant>
 #include <QtGui/QFont>
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
 #include <QtGui/QPalette>
 #include <QtGui/QPixmap>
-#include <QtWebKitWidgets/QWebView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
-#include <QtWidgets/QTextBrowser>
+#include <QtQml/QQmlApplicationEngine>
+#include <QtQml/QQmlContext>
+#include <QtQuickWidgets/QQuickWidget>
 
-namespace {
-    QString sectionHeader( const QString& title ) {
-        return "<h1 class=\"title\">" + title + "</h1>";
+#include "stringtablemodel.h"
+#include "stringgridmodel.h"
+
+#define MAKE_STR(arg) MAKE_STR2(arg)
+#define MAKE_STR2(arg) #arg
+#define MAKE_QML_URL(file) QUrl(QString("file://" MAKE_STR(QML_INSTALL_DIR) "/k3b/" file))
+
+StringTableModel *K3b::DiskInfoView::populateMediumInfoTable(const K3b::Medium& medium)
+{
+    StringTableModel *table = new StringTableModel();
+    
+    table->roles()
+        << "key"
+        << "value";  
+    
+    const K3b::Device::DiskInfo& info = medium.diskInfo();
+    
+    table->newRow()
+        << i18n("Type:")
+        << ( (info.mediaType() == K3b::Device::MEDIA_UNKNOWN) ? i18n("Unknown (probably CD-ROM)") : K3b::Device::mediaTypeString(info.mediaType()) );
+    
+    if( Device::isDvdMedia(info.mediaType()))
+        table->newRow()
+            << i18n("Media ID:")
+            << ( !info.mediaId().isEmpty() ? QString::fromLatin1(info.mediaId()) : i18n("unknown") );
+    
+    table->newRow() 
+        << i18n("Capacity:")
+        << (i18n("%1 min",info.capacity().toString()) + " (" + KIO::convertSize(info.capacity().mode1Bytes()) + ')');
+    
+    if( !info.empty() )
+    {
+        table->newRow() << 
+            i18n("Used Capacity:") << 
+            (i18n("%1 min", medium.actuallyUsedCapacity().toString()) + " (" + KIO::convertSize(medium.actuallyUsedCapacity().mode1Bytes()) + ')');
+    }
+    
+    if( !info.empty() || info.appendable() || ( info.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) )
+    {
+        table->newRow() 
+            << i18n("Remaining:")
+            << (i18n("%1 min", medium.actuallyRemainingSize().toString() ) + " (" + KIO::convertSize(medium.actuallyRemainingSize().mode1Bytes()) + ')');
+    }
+    
+    table->newRow()
+        << i18n("Rewritable:")
+        << ( info.rewritable() ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
+    table->newRow()
+        << i18n("Appendable:")
+        << ( info.appendable() || ( info.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
+    table->newRow()
+        << i18n("Empty:")
+        << ( info.empty() ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
+
+    if( !( info.mediaType() & K3b::Device::MEDIA_CD_ALL ) )
+        table->newRow()
+            << i18nc("Number of layers on an optical medium", "Layers:")
+            << QString::number(info.numLayers());
+
+    if( info.mediaType() == K3b::Device::MEDIA_DVD_PLUS_RW )
+    {
+        table->newRow() << i18n("Background Format:");
+        
+        switch( info.bgFormatState() ) 
+        {
+        case K3b::Device::BG_FORMAT_NONE:
+            table->lastRow() << i18n("not formatted");
+            break;
+        case K3b::Device::BG_FORMAT_INCOMPLETE:
+            table->lastRow() << i18n("incomplete");
+            break;
+        case K3b::Device::BG_FORMAT_IN_PROGRESS:
+            table->lastRow() << i18n("in progress");
+            break;
+        case K3b::Device::BG_FORMAT_COMPLETE:
+            table->lastRow() << i18n("complete");
+            break;
+        default:
+            table->lastRow() << i18n("unknown state");
+        }
     }
 
-    QString tableRow( const QString& s1, const QString& s2 ) {
-        return "<tr><td class=\"infokey\">" + s1 + "</td><td class=\"infovalue\">" + s2 + "</td></tr>";
+    table->newRow()
+        << i18n("Sessions:")
+        << QString::number(info.numSessions());
+
+    if( info.mediaType() & K3b::Device::MEDIA_WRITABLE )
+    {
+        QString speedStr;
+        if( medium.writingSpeeds().isEmpty() ) 
+        {
+            speedStr = '-';
+        }
+        else 
+        {
+            foreach( int speed, medium.writingSpeeds() ) 
+            {
+                if( !speedStr.isEmpty() ) 
+                    speedStr.append( ", " );
+
+                if( K3b::Device::isCdMedia( info.mediaType() ) )
+                    speedStr.append( QString( "%1x (%2 KB/s)" ).arg( speed/K3b::Device::SPEED_FACTOR_CD ).arg( speed ) );
+                else if( K3b::Device::isDvdMedia( info.mediaType() ) )
+                    speedStr.append( QString().sprintf( "%.1fx (%d KB/s)", (double)speed / ( double )K3b::Device::SPEED_FACTOR_DVD, speed ) );
+                else if ( K3b::Device::isBdMedia( info.mediaType() ) )
+                    speedStr.append( QString().sprintf( "%.1fx (%d KB/s)", (double)speed / ( double )K3b::Device::SPEED_FACTOR_BD, speed ) );
+            }
+        }
+
+        table->newRow()
+            << i18n("Supported writing speeds:")
+            << speedStr;
     }
+
+    return table;
 }
 
+StringTableModel *K3b::DiskInfoView::populateFilesystemInfoTable(const K3b::Iso9660SimplePrimaryDescriptor& iso)
+{
+    StringTableModel *table = new StringTableModel();
+
+    table->roles() << "key" << "value";    
+    
+    table->newRow() << i18n("System Id:")       << ( iso.systemId.isEmpty() ? QString("-") : iso.systemId );
+    table->newRow() << i18n("Volume Id:")       << ( iso.volumeId.isEmpty() ? QString("-") : iso.volumeId );
+    table->newRow() << i18n("Volume Set Id:")   << ( iso.volumeSetId.isEmpty() ? QString("-") : iso.volumeSetId );
+    table->newRow() << i18n("Publisher Id:")    << ( iso.publisherId.isEmpty() ? QString("-") : iso.publisherId );
+    table->newRow() << i18n("Preparer Id:")     << ( iso.preparerId.isEmpty() ? QString("-") : iso.preparerId );
+    table->newRow() << i18n("Application Id:")  << ( iso.applicationId.isEmpty() ? QString("-") : iso.applicationId );
+    table->newRow() << i18n("Volume Size:")     << QString("%1 (%2 * %3 = %4)")
+                   .arg(KIO::convertSize(iso.logicalBlockSize*iso.volumeSpaceSize))
+                   .arg(i18nc( "Size of one block, always 2048", "%1 B", iso.logicalBlockSize) )
+                   .arg(i18ncp( "Number of blocks (one block has 2048 bytes)", "1 block", "%1 blocks", iso.volumeSpaceSize) )
+                   .arg(i18np( "1 B", "%1 B", iso.logicalBlockSize*iso.volumeSpaceSize ) );
+                   
+    return table;
+}
+
+StringGridModel *K3b::DiskInfoView::populateTracksTable(const K3b::Medium& medium)
+{
+    StringGridModel *grid = new StringGridModel();
+    
+    *grid
+        << GridItem("<b>"+i18n("Type")+"</b>", 2)
+        << GridItem("<b>"+i18n("Attributes")+"</b>", 1)
+        << GridItem("<b>"+i18n("First-Last Sector")+"</b>", 1)
+        << GridItem("<b>"+i18n("Length")+"</b>", 3);
+
+    int lastSession = 0;
+    
+    // if we have multiple sessions we create a header item for every session
+    if( medium.diskInfo().numSessions() > 1 && medium.toc()[0].session() > 0 ) 
+    {
+        *grid << GridItem(i18n( "Session %1", 1 ), 7);
+        lastSession = 1;
+        return grid;
+    }
+    
+    // create items for the tracks
+    for( int trackIndex = 0; trackIndex < medium.toc().count(); ++trackIndex ) 
+    {
+        K3b::Device::Track track = medium.toc()[trackIndex];
+        if( medium.diskInfo().numSessions() > 1 && track.session() != lastSession ) 
+        {
+            lastSession = track.session();
+            *grid << GridItem(i18n( "Session %1", lastSession ), 7);
+        }
+        
+        *grid << QString::number(trackIndex+1).rightJustified( 2, ' ' );
+        
+        if( track.type() == K3b::Device::Track::TYPE_AUDIO )
+        {
+            *grid << i18n("Audio");
+        } 
+        else 
+        {
+            if( track.mode() == K3b::Device::Track::MODE1 )
+                *grid << i18n("Data/Mode1");
+            else if( track.mode() == K3b::Device::Track::MODE2 )
+                *grid << i18n("Data/Mode2");
+            else if( track.mode() == K3b::Device::Track::XA_FORM1 )
+                *grid << i18n("Data/Mode2 XA Form1");
+            else if( track.mode() == K3b::Device::Track::XA_FORM2 )
+                *grid << i18n("Data/Mode2 XA Form2");
+            else
+                *grid << i18n("Data");
+        }
+        
+        *grid << QString( "%1/%2" )
+             .arg( track.copyPermitted() ? i18n("copy") : i18n("no copy") )
+             .arg( track.type() == K3b::Device::Track::TYPE_AUDIO
+                   ? ( track.preEmphasis() ?  i18n("preemp") : i18n("no preemp") )
+                   : ( track.recordedIncremental() ?  i18n("incremental") : i18n("uninterrupted") ) );
+
+        *grid << QString("%1 - %2")
+             .arg(track.firstSector().lba())
+             .arg(track.lastSector().lba());
+             
+        *grid << QString::number( track.length().lba() ) + " (" + track.length().toString() + ")";
+        
+        *grid << QString( "%1 (%2)" ).arg(track.index0().toString()).arg(track.index0().lba());
+        
+        if( !medium.cdText().isEmpty() )
+        {
+            K3b::Device::TrackCdText text = medium.cdText().track( trackIndex );
+            *grid << text.performer() + " - " + text.title() + " (" + i18n("CD-Text") + ')';
+        }
+        else
+        {
+            KCDDB::TrackInfo info = medium.cddbInfo().track( trackIndex );
+            *grid << info.get( KCDDB::Artist ).toString() + " - " + info.get( KCDDB::Title ).toString();
+        }
+    }
+    
+    return grid;
+}
+
+void K3b::DiskInfoView::populateQmlContext(QQmlContext* context)
+{
+    bool isMediumPresent = medium().diskInfo().diskState() != K3b::Device::STATE_NO_MEDIA;
+    bool isIsoFilesystem = false;
+    bool isTocNotEmpty = false;
+
+    if(isMediumPresent)
+    {    
+        const K3b::Medium& med = medium();          
+        swapProperty("mediumTable", &mediumTable, populateMediumInfoTable(med));
+        
+        isIsoFilesystem = med.content() & K3b::Medium::ContentData;        
+        if(isIsoFilesystem)        
+            swapProperty("filesystemInfoTable", &filesystemInfoTable, populateFilesystemInfoTable(med.iso9660Descriptor()));
+        
+        isTocNotEmpty = !med.toc().isEmpty();
+        if(isTocNotEmpty)
+            swapProperty("tracksGrid", &tracksGrid, populateTracksTable(med));
+    }
+    
+    context->setContextProperty(QString("isMediumPresent"), QVariant::fromValue(isMediumPresent));
+    context->setContextProperty(QString("isIsoFilesystem"), QVariant::fromValue(isIsoFilesystem));
+    context->setContextProperty(QString("isTocNotEmpty"), QVariant::fromValue(isTocNotEmpty)); 
+    
+    context->setContextProperty(QString("noMediumLabel"), QVariant(i18n("No medium present")));
+    context->setContextProperty(QString("mediumLabel"), QVariant(i18n("Medium")));
+    context->setContextProperty(QString("isoLabel"), QVariant(i18n("ISO9660 Filesystem Info")));
+    context->setContextProperty(QString("tracksLabel"), QVariant(i18n("Tracks")));
+}
+
+template<class T> void K3b::DiskInfoView::swapProperty(const char* key, T **itemPtr, T *newItem)
+{
+    m_qmlEngine->rootContext()->setContextProperty(key, newItem);
+    delete *itemPtr;
+    *itemPtr=newItem;
+}
 
 K3b::DiskInfoView::DiskInfoView( QWidget* parent )
     : K3b::MediaContentsView( true,
@@ -61,63 +307,42 @@ K3b::DiskInfoView::DiskInfoView( QWidget* parent )
                               Device::STATE_ALL|Device::STATE_NO_MEDIA|Device::STATE_UNKNOWN,
                               parent )
 {
-    m_infoView = new QWebView( this );
+    m_qmlEngine = new QQmlApplicationEngine();
+    mediumTable = NULL;
+    filesystemInfoTable = NULL;
+    tracksGrid = NULL;
+
+    populateQmlContext(m_qmlEngine->rootContext());
+    
+    m_infoView = new QQuickWidget(m_qmlEngine, this );
+    
+    m_infoView->setSource(MAKE_QML_URL("diskinfo.qml"));
+
+    m_infoView->setMinimumHeight(this->height());
+
+    m_infoView->setResizeMode(QQuickWidget::SizeRootObjectToView);
+
     setMainWidget( m_infoView );
 }
 
-
 K3b::DiskInfoView::~DiskInfoView()
 {
+    delete m_qmlEngine;
+    delete mediumTable;
+    delete filesystemInfoTable;
+    delete tracksGrid;
 }
-
 
 void K3b::DiskInfoView::reloadMedium()
 {
     updateTitle();
+    
+    populateQmlContext(m_infoView->rootContext());
 
-    QString s;
-    if( medium().diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA ) {
-        s = i18n("No medium present");
-    }
-    else {
-        // FIXME: import a css stylesheet from the theme and, more importantly, create a nicer css
-        s = "<head>"
-            "<title></title>"
-            "<style type=\"text/css\">";
-        if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
-            s += QString( ".title { padding:4px; font-size:medium; background-color:%1; color:%2 } " )
-                 .arg(theme->palette().color( QPalette::Background ).name() )
-                 .arg(theme->palette().color( QPalette::Foreground ).name() );
-        }
-        s +=  ".infovalue { font-weight:bold; padding-left:10px; } "
-              ".trackheader { text-align:left; } "
-              ".session { font-style:italic; } "
-              ".cdtext { font-weight:bold; font-style:italic; } "
-              "td { vertical-align:top; } ";
-        s += "</style>"
-             "</head>"
-             "<body>";
-
-        s += sectionHeader( i18n( "Medium" ) );
-        s += createMediaInfoItems( medium() );
-
-        if( medium().content() & K3b::Medium::ContentData ) {
-            s += sectionHeader( i18n("ISO 9660 Filesystem Info") );
-            s += createIso9660InfoItems( medium().iso9660Descriptor() );
-        }
-
-        if( !medium().toc().isEmpty() ) {
-            s += sectionHeader( i18n("Tracks") );
-            s += createTrackItems( medium() );
-        }
-    }
-
-    s += "</body>";
-
-    m_infoView->setHtml( s );
-    qDebug() << s;
+    m_infoView->setMinimumHeight(this->height());
+    
+    m_infoView->update();
 }
-
 
 void K3b::DiskInfoView::updateTitle()
 {
@@ -157,233 +382,3 @@ void K3b::DiskInfoView::updateTitle()
         }
     }
 }
-
-
-namespace {
-    QString trackItem( const K3b::Medium& medium, int trackIndex ) {
-        K3b::Device::Track track = medium.toc()[trackIndex];
-
-        QString s = "<tr>";
-
-        // FIXME: Icons
-
-        // track number
-        s += "<td class=\"tracknumber\">" + QString::number(trackIndex+1).rightJustified( 2, ' ' );
-        s += "</td>";
-
-        // track type
-        s += "<td class=\"tracktype\">(";
-        if( track.type() == K3b::Device::Track::TYPE_AUDIO ) {
-            //    item->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
-            s += i18n("Audio");
-        } else {
-//            item->setPixmap( 0, SmallIcon( "application-x-tar" ) );
-            if( track.mode() == K3b::Device::Track::MODE1 )
-                s += i18n("Data/Mode1");
-            else if( track.mode() == K3b::Device::Track::MODE2 )
-                s += i18n("Data/Mode2");
-            else if( track.mode() == K3b::Device::Track::XA_FORM1 )
-                s += i18n("Data/Mode2 XA Form1");
-            else if( track.mode() == K3b::Device::Track::XA_FORM2 )
-                s += i18n("Data/Mode2 XA Form2");
-            else
-                s += i18n("Data");
-        }
-        s += ")</td>";
-
-        // track attributes
-        s += "<td class=\"trackattributes\">";
-        s += QString( "%1/%2" )
-             .arg( track.copyPermitted() ? i18n("copy") : i18n("no copy") )
-             .arg( track.type() == K3b::Device::Track::TYPE_AUDIO
-                   ? ( track.preEmphasis() ?  i18n("preemp") : i18n("no preemp") )
-                   : ( track.recordedIncremental() ?  i18n("incremental") : i18n("uninterrupted") ) );
-        s += "</td>";
-
-        // track range
-        s += "<td class=\"trackrange\">";
-        s += QString("%1 - %2")
-             .arg(track.firstSector().lba())
-             .arg(track.lastSector().lba());
-        s += "</td>";
-
-        // track length
-        s += "<td class=\"tracklength\">" + QString::number( track.length().lba() ) + " (" + track.length().toString() + ")</td>";
-
-#ifdef K3B_DEBUG
-        s += "<td>";
-        if( track.type() == K3b::Device::Track::TYPE_AUDIO )
-            s += QString( "%1 (%2)" ).arg(track.index0().toString()).arg(track.index0().lba());
-        s += "</td>";
-#endif
-
-        s += "</tr>";
-
-        if( !medium.cdText().isEmpty() ||
-            medium.cddbInfo().isValid() ) {
-            s += "<tr><td></td><td class=\"cdtext\" colspan=\"4\">";
-            if( !medium.cdText().isEmpty() ) {
-                K3b::Device::TrackCdText text = medium.cdText().track( trackIndex );
-                s += text.performer() + " - " + text.title() + " (" + i18n("CD-Text") + ')';
-            }
-            else {
-                KCDDB::TrackInfo info = medium.cddbInfo().track( trackIndex );
-                s += info.get( KCDDB::Artist ).toString() + " - " + info.get( KCDDB::Title ).toString();
-            }
-            s += "</td></tr>";
-        }
-
-        return s;
-    }
-
-    QString sessionItem( int session ) {
-        return "<tr><td class=\"session\" colspan=\"5\">" + i18n( "Session %1", session ) + "</td></tr>";
-    }
-}
-
-QString K3b::DiskInfoView::createTrackItems( const K3b::Medium& medium )
-{
-    QString s = "<table>";
-
-    // table header
-    s += "<tr><th class=\"trackheader\" colspan=\"2\">"
-         + i18n("Type")
-         + "</th><th class=\"trackheader\">"
-         + i18n("Attributes")
-         + "</th><th class=\"trackheader\">"
-         + i18n("First-Last Sector")
-         + "</th><th class=\"trackheader\">"
-         + i18n("Length");
-#ifdef K3B_DEBUG
-    s += "</td></td>Index0";
-#endif
-    s += "</th></tr>";
-
-    int lastSession = 0;
-
-    // if we have multiple sessions we create a header item for every session
-    if( medium.diskInfo().numSessions() > 1 && medium.toc()[0].session() > 0 ) {
-        s += sessionItem( 1 );
-        lastSession = 1;
-    }
-
-    // create items for the tracks
-    for( int index = 0; index < medium.toc().count(); ++index ) {
-        K3b::Device::Track track = medium.toc()[index];
-        if( medium.diskInfo().numSessions() > 1 && track.session() != lastSession ) {
-            lastSession = track.session();
-            s += sessionItem( lastSession );
-        }
-        s += trackItem( medium, index );
-    }
-
-    s += "</table>";
-
-    return s;
-}
-
-
-QString K3b::DiskInfoView::createMediaInfoItems( const K3b::Medium& medium )
-{
-    const K3b::Device::DiskInfo& info = medium.diskInfo();
-
-    QString s = "<table>";
-
-    QString typeStr;
-    if( info.mediaType() != K3b::Device::MEDIA_UNKNOWN )
-        typeStr = K3b::Device::mediaTypeString( info.mediaType() );
-    else
-        typeStr = i18n("Unknown (probably CD-ROM)");
-    s += tableRow( i18n( "Type:" ), typeStr );
-    if( Device::isDvdMedia( info.mediaType() ) )
-        s += tableRow( i18n("Media ID:"), !info.mediaId().isEmpty() ? QString::fromLatin1( info.mediaId() ) : i18n("unknown") );
-    s += tableRow( i18n("Capacity:"), i18n("%1 min",info.capacity().toString()) + " (" + KIO::convertSize(info.capacity().mode1Bytes()) + ')' );
-    if( !info.empty() )
-        s += tableRow( i18n("Used Capacity:"), i18n("%1 min", medium.actuallyUsedCapacity().toString()) + " (" + KIO::convertSize(medium.actuallyUsedCapacity().mode1Bytes()) + ')' );
-    if( !info.empty() ||
-        info.appendable() ||
-        ( info.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) )
-        s += tableRow( i18n("Remaining:"), i18n("%1 min", medium.actuallyRemainingSize().toString() ) + " (" + KIO::convertSize(medium.actuallyRemainingSize().mode1Bytes()) + ')' );
-    s += tableRow( i18n("Rewritable:"), info.rewritable() ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
-    s += tableRow( i18n("Appendable:"), info.appendable() || ( info.mediaType() & ( Device::MEDIA_DVD_PLUS_RW|Device::MEDIA_DVD_RW_OVWR|Device::MEDIA_BD_RE ) ) ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
-    s += tableRow( i18n("Empty:"), info.empty() ? i18nc("Availability", "yes") : i18nc("Availability", "no") );
-    if( !( info.mediaType() & K3b::Device::MEDIA_CD_ALL ) )
-        s += tableRow( i18nc("Number of layers on an optical medium", "Layers:"), QString::number( info.numLayers() ) );
-
-    if( info.mediaType() == K3b::Device::MEDIA_DVD_PLUS_RW ) {
-        QString bgf;
-        switch( info.bgFormatState() ) {
-        case K3b::Device::BG_FORMAT_NONE:
-            bgf = i18n("not formatted");
-            break;
-        case K3b::Device::BG_FORMAT_INCOMPLETE:
-            bgf = i18n("incomplete");
-            break;
-        case K3b::Device::BG_FORMAT_IN_PROGRESS:
-            bgf = i18n("in progress");
-            break;
-        case K3b::Device::BG_FORMAT_COMPLETE:
-            bgf = i18n("complete");
-            break;
-        default:
-            bgf = i18n("unknown state");
-        }
-
-        s += tableRow( i18n("Background Format:"), bgf );
-    }
-
-    s += tableRow( i18n("Sessions:"), QString::number( info.numSessions() ) );
-
-    if( info.mediaType() & K3b::Device::MEDIA_WRITABLE ) {
-        QString speedStr;
-        if( medium.writingSpeeds().isEmpty() ) {
-            speedStr = '-';
-        }
-        else {
-            foreach( int speed, medium.writingSpeeds() ) {
-                if( !speedStr.isEmpty() ) {
-                    speedStr.append( "<br>" );
-                }
-
-                if( K3b::Device::isCdMedia( info.mediaType() ) )
-                    speedStr.append( QString( "%1x (%2 KB/s)" ).arg( speed/K3b::Device::SPEED_FACTOR_CD ).arg( speed ) );
-                else if( K3b::Device::isDvdMedia( info.mediaType() ) )
-                    speedStr.append( QString().sprintf( "%.1fx (%d KB/s)", (double)speed / ( double )K3b::Device::SPEED_FACTOR_DVD, speed ) );
-                else if ( K3b::Device::isBdMedia( info.mediaType() ) )
-                    speedStr.append( QString().sprintf( "%.1fx (%d KB/s)", (double)speed / ( double )K3b::Device::SPEED_FACTOR_BD, speed ) );
-            }
-        }
-
-        s += tableRow( i18n("Supported writing speeds:"), speedStr );
-    }
-
-    s += "</table>";
-
-    return s;
-}
-
-
-QString K3b::DiskInfoView::createIso9660InfoItems( const K3b::Iso9660SimplePrimaryDescriptor& iso )
-{
-    QString s = "<table>";
-
-    s += tableRow( i18n("System Id:"), iso.systemId.isEmpty() ? QString("-") : iso.systemId );
-    s += tableRow( i18n("Volume Id:"), iso.volumeId.isEmpty() ? QString("-") : iso.volumeId );
-    s += tableRow( i18n("Volume Set Id:"), iso.volumeSetId.isEmpty() ? QString("-") : iso.volumeSetId );
-    s += tableRow( i18n("Publisher Id:"), iso.publisherId.isEmpty() ? QString("-") : iso.publisherId );
-    s += tableRow( i18n("Preparer Id:"), iso.preparerId.isEmpty() ? QString("-") : iso.preparerId );
-    s += tableRow( i18n("Application Id:"), iso.applicationId.isEmpty() ? QString("-") : iso.applicationId );
-    s += tableRow( i18n("Volume Size:"),
-                   QString( "%1 (%2 * %3 = %4)" )
-                   .arg(KIO::convertSize(iso.logicalBlockSize*iso.volumeSpaceSize))
-                   .arg(i18nc( "Size of one block, always 2048", "%1 B", iso.logicalBlockSize) )
-                   .arg(i18ncp( "Number of blocks (one block has 2048 bytes)", "1 block", "%1 blocks", iso.volumeSpaceSize) )
-                   .arg(i18np( "1 B", "%1 B", iso.logicalBlockSize*iso.volumeSpaceSize ) ) );
-
-    s += "</table>";
-
-    return s;
-}
-
-
-
