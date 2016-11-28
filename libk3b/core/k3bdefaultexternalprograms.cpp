@@ -37,12 +37,14 @@ void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
     m->addProgram( new K3b::CdrdaoProgram() );
     m->addProgram( new K3b::GrowisofsProgram() );
     m->addProgram( new K3b::DvdformatProgram() );
+    m->addProgram(new K3b::CdrskinProgram());
     //  m->addProgram( new K3b::DvdBooktypeProgram() );
 }
 
 
 void K3b::addTranscodePrograms( K3b::ExternalBinManager* m )
 {
+    /* Deprecated transcode
     static const char* const transcodeTools[] =  { "transcode",
                                              0, // K3b 1.0 only uses the transcode binary
                                              "tcprobe",
@@ -54,6 +56,7 @@ void K3b::addTranscodePrograms( K3b::ExternalBinManager* m )
 
     for( int i = 0; transcodeTools[i]; ++i )
         m->addProgram( new K3b::TranscodeProgram( transcodeTools[i] ) );
+    */
 }
 
 
@@ -531,33 +534,64 @@ QString K3b::DvdBooktypeProgram::parseCopyright( const QString& /*output*/, cons
     return QLatin1String( "Andy Polyakov <appro@fy.chalmers.se>" );
 }
 
-K3b::AbstractCdrskinProgram::AbstractCdrskinProgram(const QString& program)
-    : SimpleExternalProgram(program)
-{
-}
-
-
-K3b::AbstractCdrskinProgram::~AbstractCdrskinProgram()
-{
-}
-
-QString K3b::AbstractCdrskinProgram::getProgramPath(const QString& dir) const
-{
-    return "";
-}
-
-
-QString K3b::AbstractCdrskinProgram::versionIdentifier(const ExternalBin& bin) const
-{
-    return name();
-}
-
 K3b::CdrskinProgram::CdrskinProgram()
-    : K3b::AbstractCdrskinProgram(QLatin1String("cdrskin"))
+    : K3b::SimpleExternalProgram(QLatin1String("cdrskin"))
 {
 }
 
-void K3b::CdrskinProgram::parseFeatures(const QString& output, ExternalBin& bin) const
+bool K3b::CdrskinProgram::scanFeatures(ExternalBin& bin) const
 {
+    KProcess fp;
+    fp.setOutputChannelMode(KProcess::MergedChannels);
+    fp << bin.path() << "write" << "-h";
+
+    if (fp.execute() >= 0) {
+        QByteArray output = fp.readAll();
+
+        if (output.contains("gracetime"))
+            bin.addFeature("gracetime");
+        if (output.contains("-overburn"))
+            bin.addFeature("overburn");
+        if (output.contains("-text"))
+            bin.addFeature("cdtext");
+        if (output.contains("-clone"))
+            bin.addFeature("clone");
+        if (output.contains("-tao"))
+            bin.addFeature("tao");
+
+        if (output.contains("-xamix") ||
+            bin.version() >= K3b::Version(2, 1, -1, "a12"))
+            bin.addFeature("xamix");
+    }
+
+    if (bin.version().suffix().endsWith("-dvd")) {
+        bin.addFeature("dvd-patch");
+        bin.setVersion(QString(bin.version().versionString()).remove("-dvd"));
+    }
+
+    if (bin.version() < K3b::Version(2, 0))
+        bin.addFeature("outdated");
+
+    if (bin.version() >= K3b::Version("1.11a38"))
+        bin.addFeature("plain-atapi");
+    if (bin.version() > K3b::Version("1.11a17"))
+        bin.addFeature("hacked-atapi");
+
+    if (bin.version() >= K3b::Version(2, 1, 1, "a02"))
+        bin.addFeature("short-track-raw");
+
+    if (bin.version() >= K3b::Version(2, 1, -1, "a13"))
+        bin.addFeature("audio-stdin");
+
+    if (bin.version() >= K3b::Version("1.11a02"))
+        bin.addFeature("burnfree");
+    else
+        bin.addFeature("burnproof");
+
+    if (bin.version() >= K3b::Version(2, 1, 1, "a29"))
+        bin.addFeature( "blu-ray" );
+
     bin.addFeature("dvd");
+
+    return SimpleExternalProgram::scanFeatures(bin);
 }

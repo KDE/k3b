@@ -304,6 +304,7 @@ bool K3b::Iso9660ImageWritingJob::prepareWriter()
     d->writer = new MetaWriter( m_device, this );
 
     d->writer->setWritingMode( m_writingMode );
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << writingApp();
     d->writer->setWritingApp( writingApp() );
     d->writer->setSimulate( m_simulate );
     d->writer->setBurnSpeed( m_speed );

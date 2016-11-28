@@ -27,6 +27,8 @@ public:
         : K3b::BurnJob(hdl, parent) 
     {
         qDebug() << "DEBUG:" << __PRETTY_FUNCTION__;
+        const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << cdrecordBin;
     }
     ~MyBurnJob() 
     {
@@ -57,6 +59,7 @@ ExternalBinManagerTest::ExternalBinManagerTest()
 void ExternalBinManagerTest::testBinObject()
 {
     K3b::ExternalBinManager* binManager = new K3b::ExternalBinManager;
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << binManager->foundBin("cdrecord");
     if (binManager->binObject("ooo") && binManager->binObject("ooo")->hasFeature("fff")) {
         qDebug() << __PRETTY_FUNCTION__ << "it *NEVER* happened!";
     }

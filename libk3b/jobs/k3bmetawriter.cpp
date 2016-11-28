@@ -13,6 +13,7 @@
 
 #include "k3bmetawriter.h"
 #include "k3bcdrecordwriter.h"
+#include "k3bcdrskinwriter.h"
 #include "k3bcdrdaowriter.h"
 #include "k3bgrowisofswriter.h"
 #include "k3btocfilewriter.h"
@@ -167,6 +168,9 @@ void K3b::MetaWriter::start()
         break;
     case K3b::WritingAppGrowisofs:
         success = setupGrowisofsob();
+        break;
+    case K3b::WritingAppCdrskin:
+        success = setupCdrskinJob();
         break;
     default:
         Q_ASSERT(false);
@@ -719,6 +723,103 @@ bool K3b::MetaWriter::setupGrowisofsob()
         job->setImageToWrite( d->images.first() );
 
     d->writingJob = job;
+
+    return true;
+}
+
+
+bool K3b::MetaWriter::setupCdrskinJob()
+{
+    K3b::CdrskinWriter* writer = new K3b::CdrskinWriter( burnDevice(), this, this );
+    d->writingJob = writer;
+
+    writer->setWritingMode( d->usedWritingMode );
+    writer->setSimulate( simulate() );
+    writer->setBurnSpeed( burnSpeed() );
+    writer->setMulti( d->multiSession );
+
+    if( d->multiSession &&
+        !d->toc.isEmpty() &&
+        d->images.isEmpty() ) {
+        writer->addArgument("-waiti");
+    }
+
+    if( d->cueFile.isEmpty() ) {
+        bool firstAudioTrack = true;
+        int audioTrackCnt = 0;
+
+        for( int i = 0; i < d->toc.count(); ++i ) {
+            Device::Track track = d->toc[i];
+            QString image;
+            if( d->images.count() )
+                image = d->images[i];
+
+            //
+            // Add a data track
+            //
+            if( track.type() == Device::Track::TYPE_DATA ) {
+                if( track.mode() == Device::Track::MODE1 ) {
+                    writer->addArgument( "-data" );
+                }
+                else {
+                    if( k3bcore->externalBinManager()->binObject("cdrskin") &&
+                        k3bcore->externalBinManager()->binObject("cdrskin")->hasFeature( "xamix" ) )
+                        writer->addArgument( "-xa" );
+                    else
+                        writer->addArgument( "-xa1" );
+                }
+
+                if( image.isEmpty() )
+                    writer->addArgument( QString("-tsize=%1s").arg(track.length().lba()) )->addArgument("-");
+                else
+                    writer->addArgument( image );
+            }
+
+            //
+            // Add an audio track
+            //
+            else {
+                if( firstAudioTrack ) {
+                    firstAudioTrack = false;
+                    writer->addArgument( "-useinfo" );
+
+                    // add raw cdtext data
+                    if( !d->cdText.isEmpty() ) {
+                        writer->setRawCdText( d->cdText.rawPackData() );
+                    }
+
+                    writer->addArgument( "-audio" );
+
+                    // we always pad because although K3b makes sure all tracks' length are multiples of 2352
+                    // it seems that normalize sometimes corrupts these lengths
+                    // FIXME: see K3b::AudioJob for the whole less4secs and zeroPregap handling
+                    writer->addArgument( "-pad" );
+
+                    // Allow tracks shorter than 4 seconds
+                    writer->addArgument( "-shorttrack" );
+                }
+
+                K3b::InfFileWriter infFileWriter;
+                infFileWriter.setTrack( track );
+                infFileWriter.setTrackNumber( ++audioTrackCnt );
+                if( image.isEmpty() )
+                    infFileWriter.setBigEndian( false );
+                if( !infFileWriter.save( d->infFileName( audioTrackCnt ) ) )
+                    return false;
+
+                if( image.isEmpty() ) {
+                    // this is only supported by cdrecord versions >= 2.01a13
+                    writer->addArgument( QFile::encodeName( d->infFileName( audioTrackCnt ) ) );
+                }
+                else {
+                    writer->addArgument( QFile::encodeName( image ) );
+                }
+            }
+        }
+    }
+    else {
+        writer->setCueFile( d->cueFile );
+    }
 
     return true;
 }

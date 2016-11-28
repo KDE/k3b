@@ -79,6 +79,7 @@ namespace K3b {
         bool ensureSettingsIntegrity();
         bool determineUsedAppAndMode();
         bool setupCdrecordJob();
+        bool setupCdrskinJob();
         bool setupCdrdaoJob();
         bool setupGrowisofsob();
         bool startTrackWriting();

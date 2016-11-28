@@ -101,6 +101,7 @@ add_library(k3blib SHARED
     projects/k3bdoc.cpp
     projects/k3bcdrdaowriter.cpp
     projects/k3bcdrecordwriter.cpp
+    projects/k3bcdrskinwriter.cpp
     projects/k3binffilewriter.cpp
     projects/k3btocfilewriter.cpp
     projects/k3bimagefilereader.cpp

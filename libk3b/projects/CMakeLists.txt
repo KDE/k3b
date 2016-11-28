@@ -18,6 +18,7 @@ install( FILES
   k3bgrowisofswriter.h
   k3bcdrdaowriter.h
   k3bcdrecordwriter.h
+  k3bcdrskinwriter.h
   k3binffilewriter.h
   k3btocfilewriter.h
   k3bcuefileparser.h

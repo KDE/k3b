@@ -288,6 +288,13 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
 #endif // CDRECORD_SUID_ROOT_CHECK
 #endif
         }
+
+        if (!k3bcore->externalBinManager()->foundBin("cdrskin")) {
+            problems.append(K3b::SystemProblem(K3b::SystemProblem::CRITICAL, 
+                i18n("Unable to find %1 executable", QString("cdrskin")), 
+                i18n("K3b uses cdrskin to take place of cdrecord."), 
+                i18n("Install the libburn package which contains cdrskin")));
+        }
     }
 
 

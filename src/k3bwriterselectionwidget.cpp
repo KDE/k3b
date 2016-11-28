@@ -530,6 +530,8 @@ void K3b::WriterSelectionWidget::slotRefreshWritingApps()
         m_comboWritingApp->insertItem( K3b::WritingAppGrowisofs, "growisofs" );
     if( i & K3b::WritingAppDvdRwFormat )
         m_comboWritingApp->insertItem( K3b::WritingAppDvdRwFormat, "dvd+rw-format" );
+    if (i & K3b::WritingAppCdrskin)
+        m_comboWritingApp->insertItem(K3b::WritingAppCdrskin, "cdrskin");
 
     m_comboWritingApp->setSelectedValue( lastSelected );
 
