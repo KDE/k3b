@@ -37,6 +37,8 @@ After that it's all the same:
 For debug:
 
   scan-build -k -v -V cmake .. -DCMAKE_INSTALL_PREFIX=/usr    \
+    -DCMAKE_CXX_COMPILER=clang++    \
+    -DECM_ENABLE_SANITIZERS='address;leak;undefined'    \
     -DKDE_INSTALL_LIBDIR=lib    \
     -DKDE_INSTALL_LIBEXECDIR=lib    \
     -DKDE_INSTALL_USE_QT_SYS_PATHS=ON   \

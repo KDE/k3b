@@ -50,6 +50,7 @@ include(KDECMakeSettings)
 include(FeatureSummary)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
+include(ECMEnableSanitizers)
 
 find_package(Qt5 REQUIRED COMPONENTS Core DBus Gui WebKitWidgets)
 find_package(KF5 REQUIRED COMPONENTS Archive Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets

@@ -16,9 +16,10 @@
 #define _K3B_BOOT_ITEM_H_
 
 #include "k3bfileitem.h"
+#include "k3b_export.h"
 
 namespace K3b {
-    class BootItem : public FileItem
+    class LIBK3B_EXPORT BootItem : public FileItem
     {
     public:
         BootItem( const QString& fileName, DataDoc& doc, const QString& k3bName = 0 );

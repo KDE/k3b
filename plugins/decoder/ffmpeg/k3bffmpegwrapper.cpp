@@ -260,7 +260,7 @@ QString K3bFFMpegFile::title() const
     AVDictionaryEntry *ade = av_dict_get( d->formatContext->metadata, "TITLE", NULL, 0 );
     if( ade == NULL )
         return QString();
-    if( ade->value != '\0' )
+    if (strlen(ade->value))
         return QString::fromLocal8Bit( ade->value );
     else
         return QString();
@@ -273,7 +273,7 @@ QString K3bFFMpegFile::author() const
     AVDictionaryEntry *ade = av_dict_get( d->formatContext->metadata, "ARTIST", NULL, 0 );
     if( ade == NULL )
         return QString();
-    if( ade->value != '\0' )
+    if (strlen(ade->value))
         return QString::fromLocal8Bit( ade->value );
     else
         return QString();
@@ -286,7 +286,7 @@ QString K3bFFMpegFile::comment() const
     AVDictionaryEntry *ade = av_dict_get( d->formatContext->metadata, "COMMENT", NULL, 0 );
     if( ade == NULL )
         return QString();
-    if( ade->value != '\0' )
+    if (strlen(ade->value))
         return QString::fromLocal8Bit( ade->value );
     else
         return QString();
