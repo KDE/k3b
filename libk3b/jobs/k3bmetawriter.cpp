@@ -745,7 +745,6 @@ bool K3b::MetaWriter::setupCdrskinJob()
     }
 
     if( d->cueFile.isEmpty() ) {
-        bool firstAudioTrack = true;
         int audioTrackCnt = 0;
 
         for( int i = 0; i < d->toc.count(); ++i ) {
@@ -779,26 +778,6 @@ bool K3b::MetaWriter::setupCdrskinJob()
             // Add an audio track
             //
             else {
-                if( firstAudioTrack ) {
-                    firstAudioTrack = false;
-                    writer->addArgument( "-useinfo" );
-
-                    // add raw cdtext data
-                    if( !d->cdText.isEmpty() ) {
-                        writer->setRawCdText( d->cdText.rawPackData() );
-                    }
-
-                    writer->addArgument( "-audio" );
-
-                    // we always pad because although K3b makes sure all tracks' length are multiples of 2352
-                    // it seems that normalize sometimes corrupts these lengths
-                    // FIXME: see K3b::AudioJob for the whole less4secs and zeroPregap handling
-                    writer->addArgument( "-pad" );
-
-                    // Allow tracks shorter than 4 seconds
-                    writer->addArgument( "-shorttrack" );
-                }
-
                 K3b::InfFileWriter infFileWriter;
                 infFileWriter.setTrack( track );
                 infFileWriter.setTrackNumber( ++audioTrackCnt );
@@ -807,12 +786,11 @@ bool K3b::MetaWriter::setupCdrskinJob()
                 if( !infFileWriter.save( d->infFileName( audioTrackCnt ) ) )
                     return false;
 
-                if( image.isEmpty() ) {
-                    // this is only supported by cdrecord versions >= 2.01a13
-                    writer->addArgument( QFile::encodeName( d->infFileName( audioTrackCnt ) ) );
-                }
-                else {
-                    writer->addArgument( QFile::encodeName( image ) );
+                if (image.isEmpty()) {
+                    // TODO: this is a companion of "-useinfo". Needs to become conditional then.
+                    writer->addArgument(QFile::encodeName(d->infFileName(audioTrackCnt)));
+                } else {
+                    writer->addArgument(QFile::encodeName(image));
                 }
             }
         }

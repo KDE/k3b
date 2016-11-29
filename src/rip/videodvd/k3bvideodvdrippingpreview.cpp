@@ -35,7 +35,10 @@ K3b::VideoDVDRippingPreview::VideoDVDRippingPreview( QObject* parent )
 K3b::VideoDVDRippingPreview::~VideoDVDRippingPreview()
 {
     cancel();
-    m_process->deleteLater();
+    if (m_process) {
+        m_process->deleteLater();
+        m_process = Q_NULLPTR;
+    }
 }
 
 

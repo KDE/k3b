@@ -211,8 +211,11 @@ bool K3b::CdrskinWriter::prepareProcess()
     // display progress
     d->process << "-v";
 
-    if( d->cdrskinBinObject->hasFeature( "gracetime") )
-        d->process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
+    if (d->cdrskinBinObject->hasFeature("gracetime"))
+        d->process << "gracetime=0";  // I am Thomas and i allow gracetime=0. :)
+    // Further cdrskin's gracetime default is 0.
+    // Only with undersized tracks (< 600 KB) the gracetime is at least 15 seconds
+    // in order to let a command line user abort the run.
 
     // Again we assume the device to be set!
     d->process << QString("dev=%1").arg(K3b::externalBinDeviceParameter(burnDevice(), d->cdrskinBinObject));
@@ -226,28 +229,32 @@ bool K3b::CdrskinWriter::prepareProcess()
         d->usedSpeed = burnDevice()->determineMaximalWriteSpeed();
     }
 
-    if( d->usedSpeed != 0 )
-        d->process << QString("speed=%1").arg( formatWritingSpeedFactor( d->usedSpeed, d->burnedMediaType, SpeedFormatInteger ) );
+    // cdrskin accepts special speed values "0" = slowest, "-1" or "any" = fastest.
+    // Default is fastest speed.
+    if (d->usedSpeed != 0) {
+        // TODO: so does need to check formatWritingSpeedFactor?
+        d->process << QString("speed=%1").arg(formatWritingSpeedFactor(d->usedSpeed, d->burnedMediaType, SpeedFormatInteger));
+    }
 
 
-    if ( K3b::Device::isBdMedia( d->burnedMediaType ) ) {
-        if ( !d->cdrskinBinObject->hasFeature( "blu-ray" ) ) {
-            emit infoMessage( i18n( "Cdrskin version %1 does not support Blu-ray writing." ,d->cdrskinBinObject->version() ), MessageError );
-            // FIXME: add a way to fail the whole thing here
+    if (K3b::Device::isBdMedia(d->burnedMediaType)) {
+        if (!d->cdrskinBinObject->hasFeature("blu-ray")) {
+            emit infoMessage(i18n("Cdrskin version %1 does not support Blu-ray writing.", d->cdrskinBinObject->version()), MessageError);
+            // Never mind! bin.addFeature("blu-ray"); when cdrskin' version >= 0.6.2
         }
         d->process << "-sao";
     }
     else if ( K3b::Device::isDvdMedia( d->burnedMediaType ) ) {
-        // cdrskin only supports SAO for DVD
-        d->process << "-sao";
-
-
-#ifdef __GNUC__
-#warning Enable layer jump mode: add it to K3b::WritingMode and to the GUI
-#endif
-        // if( d->writingMode == Device::WRITINGMODE_LAYER_JUMP ) {
-//             d->process << "-driveropts=layerbreak";
-//         }
+        // It supports -tao on all media except fast-blanked DVD-RW and DVD-R DL,
+        // which both support only write type DAO.
+        // On DVD+RW and alike, there is no difference between -sao and -tao.
+        // On DVD-R, -tao chooses Incremental mode which is capable of -multi and
+        // of appending new sessions to existing Incremental sessions.
+        // On DVD+R, -sao emits a command RESERVE TRACK, whereas -tao does not.
+        //
+        // One may omit both -tao and -sao in order to let cdrskin decide on base
+        // of -multi, input source and Medium state which write type to use.
+        d->process << "-sao" << "-tao";
     }
     else if( K3b::Device::isCdMedia( d->burnedMediaType ) ) {
         if( d->writingMode == K3b::WritingModeSao || d->cue ) {
@@ -260,9 +267,12 @@ bool K3b::CdrskinWriter::prepareProcess()
             }
         }
         else if( d->writingMode == K3b::WritingModeRaw ) {
+            /* These write modes are not supported by cdrskin. They need to be made
+             * contitional.
+             * Then what about raw16 and raw96p?
             if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R96R ) )
                 d->process << "-raw96r";
-            else if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R16 ) )
+            else */if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R16 ) )
                 d->process << "-raw16";
             else if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R96P ) )
                 d->process << "-raw96p";
@@ -284,16 +294,11 @@ bool K3b::CdrskinWriter::prepareProcess()
         d->process << "-dummy";
 
     d->usingBurnfree = false;
-    if( k3bcore->globalSettings()->burnfree() ) {
-        if( burnDevice()->burnproof() ) {
-
+    if (k3bcore->globalSettings()->burnfree()) {
+        if (burnDevice()->burnproof()) {
             d->usingBurnfree = true;
-
-            // with cdrskin 1.11a02 burnproof was renamed to burnfree
-            if( d->cdrskinBinObject->hasFeature( "burnproof" ) )
-                d->process << "driveropts=burnproof";
-            else
-                d->process << "driveropts=burnfree";
+            // "burnproof" is accepted as alias of "burnfree".
+            d->process << "driveropts=burnfree";
         }
         else
             emit infoMessage( i18n("Writer does not support buffer underrun free recording (Burnfree)"), MessageWarning );
@@ -315,13 +320,16 @@ bool K3b::CdrskinWriter::prepareProcess()
     if( d->multi )
         d->process << "-multi";
 
-    if( d->formatting ) {
-        switch( d->formattingMode ) {
+    if (d->formatting) {
+        // On DVD-RW, cdrskin "blank=fast" works like "blank=all".
+        // Only "blank=deformat_sequential_quickest" will perform fast blanking
+        // and thus restrict the medium to DAO for the next write run.
+        switch (d->formattingMode) {
             case FormattingComplete:
                 d->process << "blank=all";
                 break;
             case FormattingQuick:
-                d->process << "blank=fast";
+                d->process << "blank=deformat_sequential_quickest";
                 break;
         }
     }
@@ -569,9 +577,10 @@ void K3b::CdrskinWriter::slotStdLine( const QString& line )
     }
 
     //
-    // Cdrskin starts all error and warning messages with it's path
-    // With Debian's script it starts with cdrskin (or /usr/bin/cdrskin or whatever! I hate this script!)
-    //
+    // Cdrecord starts all error and warning messages with it's path
+    // With Debian's script it starts with cdrecord (or /usr/bin/cdrskin or whatever! I hate this script!)
+    // In general one will have to cross check the messages listed here with
+    // the source of cdrskin, whether they appear there.
 
     else if( line.startsWith( "cdrskin" ) ||
              line.startsWith( d->cdrskinBinObject->path() ) ||

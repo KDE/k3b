@@ -44,6 +44,7 @@ void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
 
 void K3b::addTranscodePrograms( K3b::ExternalBinManager* m )
 {
+    Q_UNUSED(m);
     /* Deprecated transcode
     static const char* const transcodeTools[] =  { "transcode",
                                              0, // K3b 1.0 only uses the transcode binary
@@ -543,7 +544,7 @@ bool K3b::CdrskinProgram::scanFeatures(ExternalBin& bin) const
 {
     KProcess fp;
     fp.setOutputChannelMode(KProcess::MergedChannels);
-    fp << bin.path() << "write" << "-h";
+    fp << bin.path() << "-help";
 
     if (fp.execute() >= 0) {
         QByteArray output = fp.readAll();
@@ -559,39 +560,55 @@ bool K3b::CdrskinProgram::scanFeatures(ExternalBin& bin) const
         if (output.contains("-tao"))
             bin.addFeature("tao");
 
-        if (output.contains("-xamix") ||
-            bin.version() >= K3b::Version(2, 1, -1, "a12"))
+        if (output.contains("-xamix") || bin.version() >= K3b::Version(1, 1, 1))
             bin.addFeature("xamix");
     }
 
+#ifdef K3B_DEBUG
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << bin.version(); // 1.4.6 for example
+#endif
+    // TODO: cdrskin -help | grep XXX
+    // Hello Thomas, please help me: the other version number dependent features 
+    // need to be checked what they mean and whether cdrskin supports them.
     if (bin.version().suffix().endsWith("-dvd")) {
         bin.addFeature("dvd-patch");
         bin.setVersion(QString(bin.version().versionString()).remove("-dvd"));
     }
 
-    if (bin.version() < K3b::Version(2, 0))
+    if (bin.version() < K3b::Version(1, 0))
         bin.addFeature("outdated");
 
-    if (bin.version() >= K3b::Version("1.11a38"))
+    if (bin.version() >= K3b::Version(1, 1))
         bin.addFeature("plain-atapi");
-    if (bin.version() > K3b::Version("1.11a17"))
+    if (bin.version() > K3b::Version(1, 1))
         bin.addFeature("hacked-atapi");
 
-    if (bin.version() >= K3b::Version(2, 1, 1, "a02"))
+    if (bin.version() >= K3b::Version(1, 1, 1))
         bin.addFeature("short-track-raw");
 
-    if (bin.version() >= K3b::Version(2, 1, -1, "a13"))
+    if (bin.version() >= K3b::Version(1, 1, 1))
         bin.addFeature("audio-stdin");
 
-    if (bin.version() >= K3b::Version("1.11a02"))
+    if (bin.version() >= K3b::Version(1, 1, 1)) {
+#ifdef K3B_DEBUG
+        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "\"burnfree\" was supported from start (and is default)."
+            "\"burnproof\" is accepted as alias of \"burnfree\".";
+#endif
         bin.addFeature("burnfree");
-    else
+    } else
         bin.addFeature("burnproof");
 
-    if (bin.version() >= K3b::Version(2, 1, 1, "a29"))
-        bin.addFeature( "blu-ray" );
+    if (bin.version() >= K3b::Version(0, 6, 2)) {
+#ifdef K3B_DEBUG
+        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "Blu-ray support was complete in cdrskin-0.6.2, 20 Feb 2009";
+#endif
+        bin.addFeature("blu-ray");
+    }
 
     bin.addFeature("dvd");
+#ifdef K3B_DEBUG
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << bin.features();
+#endif
 
     return SimpleExternalProgram::scanFeatures(bin);
 }
