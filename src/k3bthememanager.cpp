@@ -194,6 +194,9 @@ K3b::ThemeManager::ThemeManager( QObject* parent )
 
 K3b::ThemeManager::~ThemeManager()
 {
+    for (QList<K3b::Theme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it)
+        delete *it;
+    d->themes.clear();
     delete d;
 }
 

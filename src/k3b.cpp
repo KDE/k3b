@@ -210,6 +210,7 @@ public:
     // the funny header
     ThemedHeader* documentHeader;
 
+    KFilePlacesModel* filePlacesModel;
     K3b::UrlNavigator* urlNavigator;
 
     K3b::Doc* lastDoc;
@@ -528,8 +529,8 @@ void K3b::MainWindow::initView()
     upperSplitter->addWidget( d->dirView );
 
     // --- filetreecombobox-toolbar ----------------------------------------------------------------
-	KFilePlacesModel* filePlacesModel = new KFilePlacesModel;
-    d->urlNavigator = new K3b::UrlNavigator( filePlacesModel, this );
+	d->filePlacesModel = new KFilePlacesModel;
+    d->urlNavigator = new K3b::UrlNavigator(d->filePlacesModel, this);
     connect( d->urlNavigator, SIGNAL(activated(QUrl)), d->dirView, SLOT(showUrl(QUrl)) );
     connect( d->urlNavigator, SIGNAL(activated(K3b::Device::Device*)), d->dirView, SLOT(showDevice(K3b::Device::Device*)) );
     connect( d->dirView, SIGNAL(urlEntered(QUrl)), d->urlNavigator, SLOT(setUrl(QUrl)) );

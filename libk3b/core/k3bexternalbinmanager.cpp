@@ -234,6 +234,7 @@ void K3b::ExternalProgram::addBin( K3b::ExternalBin* bin )
 
 void K3b::ExternalProgram::clear()
 {
+    qDeleteAll(d->bins);
     d->bins.clear();
 }
 
