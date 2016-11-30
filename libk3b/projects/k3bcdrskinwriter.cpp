@@ -212,7 +212,7 @@ bool K3b::CdrskinWriter::prepareProcess()
     d->process << "-v";
 
     if (d->cdrskinBinObject->hasFeature("gracetime"))
-        d->process << "gracetime=0";  // I am Thomas and i allow gracetime=0. :)
+        d->process << "gracetime=0";  // quote: I am Thomas and i allow gracetime=0. :)
     // Further cdrskin's gracetime default is 0.
     // Only with undersized tracks (< 600 KB) the gracetime is at least 15 seconds
     // in order to let a command line user abort the run.
@@ -233,6 +233,9 @@ bool K3b::CdrskinWriter::prepareProcess()
     // Default is fastest speed.
     if (d->usedSpeed != 0) {
         // TODO: so does need to check formatWritingSpeedFactor?
+        // Obviously the emulated drive (CDEmu) does not honor the speed wishes issued
+        // by libburn. (It is so fast that the watcher thread of cdrskin misses
+        // several MB between its inquiries.)
         d->process << QString("speed=%1").arg(formatWritingSpeedFactor(d->usedSpeed, d->burnedMediaType, SpeedFormatInteger));
     }
 
@@ -267,16 +270,16 @@ bool K3b::CdrskinWriter::prepareProcess()
             }
         }
         else if( d->writingMode == K3b::WritingModeRaw ) {
-            /* These write modes are not supported by cdrskin. They need to be made
-             * contitional.
-             * Then what about raw16 and raw96p?
-            if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R96R ) )
-                d->process << "-raw96r";
-            else */if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R16 ) )
-                d->process << "-raw16";
-            else if( burnDevice()->supportsWritingMode( K3b::Device::WRITINGMODE_RAW_R96P ) )
-                d->process << "-raw96p";
-            else {
+            // These write modes are not supported by cdrskin. They need to be made
+            // contitional.
+            // cdrskin supports only -audio and -data.
+            // Options -xa1, -xa, -xa2, -mode2 do not lead to error but the payload is
+            // nevertheless written as -data.
+            if (burnDevice()->supportsWritingMode(K3b::Device::WRITINGMODE_RAW_R96R) || 
+                burnDevice()->supportsWritingMode(K3b::Device::WRITINGMODE_RAW_R16)  ||
+                burnDevice()->supportsWritingMode(K3b::Device::WRITINGMODE_RAW_R96P)) {
+                d->process << "-data";
+            } else {
                 emit infoMessage( i18n("Writer does not support raw writing."), MessageWarning );
                 if( d->cdrskinBinObject->hasFeature( "tao" ) )
                     d->process << "-tao";
@@ -290,8 +293,14 @@ bool K3b::CdrskinWriter::prepareProcess()
         // FIXME: add a way to fail the whole thing here
     }
 
-    if( simulate() )
+    if (simulate())
         d->process << "-dummy";
+    // TODO: CDEmu
+#ifdef K3B_DEBUG
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << burnDevice()->description();
+#endif
+    if (burnDevice()->description().contains("Virt"))
+        d->process << "--allow_emulated_drives";
 
     d->usingBurnfree = false;
     if (k3bcore->globalSettings()->burnfree()) {
@@ -329,7 +338,8 @@ bool K3b::CdrskinWriter::prepareProcess()
                 d->process << "blank=all";
                 break;
             case FormattingQuick:
-                d->process << "blank=deformat_sequential_quickest";
+                if (d->burnedMediaType & Device::MEDIA_DVD_PLUS_RW)
+                    d->process << "blank=deformat_sequential_quickest";
                 break;
         }
     }

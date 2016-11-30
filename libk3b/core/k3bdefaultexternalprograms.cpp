@@ -559,9 +559,6 @@ bool K3b::CdrskinProgram::scanFeatures(ExternalBin& bin) const
             bin.addFeature("clone");
         if (output.contains("-tao"))
             bin.addFeature("tao");
-
-        if (output.contains("-xamix") || bin.version() >= K3b::Version(1, 1, 1))
-            bin.addFeature("xamix");
     }
 
 #ifdef K3B_DEBUG
@@ -575,28 +572,11 @@ bool K3b::CdrskinProgram::scanFeatures(ExternalBin& bin) const
         bin.setVersion(QString(bin.version().versionString()).remove("-dvd"));
     }
 
-    if (bin.version() < K3b::Version(1, 0))
-        bin.addFeature("outdated");
+    bin.addFeature("plain-atapi");
+    bin.addFeature("hacked-atapi");
 
-    if (bin.version() >= K3b::Version(1, 1))
-        bin.addFeature("plain-atapi");
-    if (bin.version() > K3b::Version(1, 1))
-        bin.addFeature("hacked-atapi");
-
-    if (bin.version() >= K3b::Version(1, 1, 1))
-        bin.addFeature("short-track-raw");
-
-    if (bin.version() >= K3b::Version(1, 1, 1))
-        bin.addFeature("audio-stdin");
-
-    if (bin.version() >= K3b::Version(1, 1, 1)) {
-#ifdef K3B_DEBUG
-        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "\"burnfree\" was supported from start (and is default)."
-            "\"burnproof\" is accepted as alias of \"burnfree\".";
-#endif
-        bin.addFeature("burnfree");
-    } else
-        bin.addFeature("burnproof");
+    bin.addFeature("burnfree");
+    bin.addFeature("burnproof");
 
     if (bin.version() >= K3b::Version(0, 6, 2)) {
 #ifdef K3B_DEBUG

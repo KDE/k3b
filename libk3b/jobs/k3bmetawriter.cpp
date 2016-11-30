@@ -787,8 +787,7 @@ bool K3b::MetaWriter::setupCdrskinJob()
                     return false;
 
                 if (image.isEmpty()) {
-                    // TODO: this is a companion of "-useinfo". Needs to become conditional then.
-                    writer->addArgument(QFile::encodeName(d->infFileName(audioTrackCnt)));
+                    emit infoMessage(i18n("No version of cdrskin can do this yet."), MessageError);
                 } else {
                     writer->addArgument(QFile::encodeName(image));
                 }
