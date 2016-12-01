@@ -249,6 +249,7 @@ K3b::Device::Device::Device( const Solid::Device& dev )
 #endif
     d = new Private;
     d->solidDevice = dev;
+    // TODO: block device address might not be "stdio:/path"
 #ifndef Q_OS_NETBSD
     d->blockDevice = dev.as<Solid::Block>()->device();
 #else

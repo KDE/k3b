@@ -572,11 +572,14 @@ bool K3b::CdrskinProgram::scanFeatures(ExternalBin& bin) const
         bin.setVersion(QString(bin.version().versionString()).remove("-dvd"));
     }
 
+    // TODO: find . -name "*.cpp" | xargs grep plain-atapi
+    // In src/k3bsystemproblemdialog.cpp there is Check for we have atapi support 
+    // in some way in the kernel
     bin.addFeature("plain-atapi");
+    // The same story
     bin.addFeature("hacked-atapi");
 
     bin.addFeature("burnfree");
-    bin.addFeature("burnproof");
 
     if (bin.version() >= K3b::Version(0, 6, 2)) {
 #ifdef K3B_DEBUG

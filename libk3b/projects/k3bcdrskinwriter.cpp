@@ -257,7 +257,7 @@ bool K3b::CdrskinWriter::prepareProcess()
         //
         // One may omit both -tao and -sao in order to let cdrskin decide on base
         // of -multi, input source and Medium state which write type to use.
-        d->process << "-sao" << "-tao";
+        d->process << "-tao"/* << "-sao"*/;
     }
     else if( K3b::Device::isCdMedia( d->burnedMediaType ) ) {
         if( d->writingMode == K3b::WritingModeSao || d->cue ) {
@@ -275,15 +275,9 @@ bool K3b::CdrskinWriter::prepareProcess()
             // cdrskin supports only -audio and -data.
             // Options -xa1, -xa, -xa2, -mode2 do not lead to error but the payload is
             // nevertheless written as -data.
-            if (burnDevice()->supportsWritingMode(K3b::Device::WRITINGMODE_RAW_R96R) || 
-                burnDevice()->supportsWritingMode(K3b::Device::WRITINGMODE_RAW_R16)  ||
-                burnDevice()->supportsWritingMode(K3b::Device::WRITINGMODE_RAW_R96P)) {
-                d->process << "-data";
-            } else {
-                emit infoMessage( i18n("Writer does not support raw writing."), MessageWarning );
-                if( d->cdrskinBinObject->hasFeature( "tao" ) )
-                    d->process << "-tao";
-            }
+            emit infoMessage(i18n("Writer does not support raw writing."), MessageWarning);
+            if (d->cdrskinBinObject->hasFeature("tao"))
+                d->process << "-tao";
         }
         else if( d->cdrskinBinObject->hasFeature( "tao" ) )
             d->process << "-tao";
@@ -295,12 +289,6 @@ bool K3b::CdrskinWriter::prepareProcess()
 
     if (simulate())
         d->process << "-dummy";
-    // TODO: CDEmu
-#ifdef K3B_DEBUG
-    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << burnDevice()->description();
-#endif
-    if (burnDevice()->description().contains("Virt"))
-        d->process << "--allow_emulated_drives";
 
     d->usingBurnfree = false;
     if (k3bcore->globalSettings()->burnfree()) {
@@ -338,7 +326,7 @@ bool K3b::CdrskinWriter::prepareProcess()
                 d->process << "blank=all";
                 break;
             case FormattingQuick:
-                if (d->burnedMediaType & Device::MEDIA_DVD_PLUS_RW)
+                if (d->burnedMediaType & Device::MEDIA_DVD_RW_SEQ)
                     d->process << "blank=deformat_sequential_quickest";
                 break;
         }
