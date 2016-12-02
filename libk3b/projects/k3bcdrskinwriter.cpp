@@ -257,7 +257,10 @@ bool K3b::CdrskinWriter::prepareProcess()
         //
         // One may omit both -tao and -sao in order to let cdrskin decide on base
         // of -multi, input source and Medium state which write type to use.
-        d->process << "-tao"/* << "-sao"*/;
+#ifdef K3B_DEBUG
+        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "let libburn choose "
+            "the write type according to other parameters and the medium state.";
+#endif
     }
     else if( K3b::Device::isCdMedia( d->burnedMediaType ) ) {
         if( d->writingMode == K3b::WritingModeSao || d->cue ) {
@@ -276,8 +279,6 @@ bool K3b::CdrskinWriter::prepareProcess()
             // Options -xa1, -xa, -xa2, -mode2 do not lead to error but the payload is
             // nevertheless written as -data.
             emit infoMessage(i18n("Writer does not support raw writing."), MessageWarning);
-            if (d->cdrskinBinObject->hasFeature("tao"))
-                d->process << "-tao";
         }
         else if( d->cdrskinBinObject->hasFeature( "tao" ) )
             d->process << "-tao";
