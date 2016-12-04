@@ -66,12 +66,19 @@ qt5_generate_dbus_interface(${CMAKE_SOURCE_DIR}/src/k3baudioprojectinterface.h o
 qt5_add_dbus_adaptor(dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.AudioProject.xml ${CMAKE_SOURCE_DIR}/src/k3baudioprojectinterface.h K3b::AudioProjectInterface k3baudioprojectinterfaceadaptor K3bAudioProjectInterfaceAdaptor)
 qt5_generate_dbus_interface(${CMAKE_SOURCE_DIR}/src/k3bdataprojectinterface.h org.k3b.DataProject.xml)
 qt5_add_dbus_adaptor(dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml ${CMAKE_SOURCE_DIR}/src/k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor)
+
+if(ENABLE_MUSICBRAINZ)
+    set(musicbrainz_sources
+        ${CMAKE_SOURCE_DIR}/src/k3btrm.cpp
+        ${CMAKE_SOURCE_DIR}/src/k3bmusicbrainz.cpp
+        ${CMAKE_SOURCE_DIR}/src/projects/k3bmusicbrainztrackloopupjob.cpp
+        ${CMAKE_SOURCE_DIR}/src/projects/k3bmusicbrainzjob.cpp
+        ${CMAKE_SOURCE_DIR}/src/projects/k3baudiotracktrmlookupdialog.cpp
+    )
+endif()
 add_executable(k3bexternalbinmanagertest 
     k3bexternalbinmanagertest.cpp
     ${CMAKE_SOURCE_DIR}/src/k3bburnprogressdialog.cpp
-    ${CMAKE_SOURCE_DIR}/src/k3btrm.cpp
-    ${CMAKE_SOURCE_DIR}/src/k3bmusicbrainz.cpp
-    ${CMAKE_SOURCE_DIR}/src/projects/k3bmusicbrainztrackloopupjob.cpp
     ${CMAKE_SOURCE_DIR}/src/k3blsofwrapper.cpp
     ${CMAKE_SOURCE_DIR}/src/k3bdebuggingoutputdialog.cpp
     ${CMAKE_SOURCE_DIR}/src/k3bemptydiscwaiter.cpp
@@ -79,7 +86,6 @@ add_executable(k3bexternalbinmanagertest
     ${CMAKE_SOURCE_DIR}/src/k3bdebuggingoutputcache.cpp
     ${CMAKE_SOURCE_DIR}/src/k3blsofwrapperdialog.cpp
     ${CMAKE_SOURCE_DIR}/src/projects/k3baudiotrackwidget.cpp
-    ${CMAKE_SOURCE_DIR}/src/projects/k3bmusicbrainzjob.cpp
     ${CMAKE_SOURCE_DIR}/src/rip/k3bpatternparser.cpp
     ${CMAKE_SOURCE_DIR}/src/rip/k3baudioprojectconvertingjob.cpp
     ${CMAKE_SOURCE_DIR}/src/projects/k3bdatamultisessioncombobox.cpp
@@ -92,7 +98,6 @@ add_executable(k3bexternalbinmanagertest
     ${CMAKE_SOURCE_DIR}/src/projects/k3bdataburndialog.cpp
     ${CMAKE_SOURCE_DIR}/src/projects/k3bvcdtrackkeysdelegate.cpp
     ${CMAKE_SOURCE_DIR}/src/rip/k3baudioprojectconvertingdialog.cpp
-    ${CMAKE_SOURCE_DIR}/src/projects/k3baudiotracktrmlookupdialog.cpp
     ${CMAKE_SOURCE_DIR}/src/projects/k3baudiotrackdialog.cpp
     ${CMAKE_SOURCE_DIR}/src/projects/k3bbootimagemodel.cpp
     ${CMAKE_SOURCE_DIR}/src/projects/k3baudioeditorwidget.cpp
@@ -217,7 +222,8 @@ add_executable(k3bexternalbinmanagertest
     ${CMAKE_SOURCE_DIR}/src/k3bthemedlabel.cpp
     ${CMAKE_SOURCE_DIR}/src/k3bdebuggingoutputfile.cpp
     ${CMAKE_SOURCE_DIR}/src/k3bjobprogressdialog.cpp
-    ${dbus_sources})
+    ${dbus_sources}
+    ${musicbrainz_sources})
 target_include_directories(k3bexternalbinmanagertest PRIVATE
     ${CMAKE_SOURCE_DIR}/libk3b
     ${CMAKE_SOURCE_DIR}/src
