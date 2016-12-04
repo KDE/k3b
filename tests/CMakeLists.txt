@@ -242,7 +242,9 @@ target_link_libraries(k3bexternalbinmanagertest
     KF5::NewStuff
     KF5::NotifyConfig
     KF5::KCMUtils
-    ${MUSICBRAINZ_LIBRARIES}
     k3blib
     k3bdevice)
+if(ENABLE_MUSICBRAINZ)
+    target_link_libraries(k3bexternalbinmanagertest ${MUSICBRAINZ_LIBRARIES})
+endif()
 add_test(k3bexternalbinmanagertest k3bexternalbinmanagertest)
