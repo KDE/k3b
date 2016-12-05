@@ -210,7 +210,9 @@ bool K3b::CdrskinWriter::prepareProcess()
 
     // display progress
     d->process << "-v";
-
+#ifdef K3B_DEBUG
+    d->process << "-V";
+#endif
     if (d->cdrskinBinObject->hasFeature("gracetime"))
         d->process << "gracetime=0";  // quote: I am Thomas and i allow gracetime=0. :)
     // Further cdrskin's gracetime default is 0.
@@ -258,7 +260,8 @@ bool K3b::CdrskinWriter::prepareProcess()
         // One may omit both -tao and -sao in order to let cdrskin decide on base
         // of -multi, input source and Medium state which write type to use.
 #ifdef K3B_DEBUG
-        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "let libburn choose "
+        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "K3B user get *NO* opportunity "
+            "via UI to explicitely choose SAO/DAO""let libburn choose "
             "the write type according to other parameters and the medium state.";
 #endif
     }
@@ -278,7 +281,7 @@ bool K3b::CdrskinWriter::prepareProcess()
             // cdrskin supports only -audio and -data.
             // Options -xa1, -xa, -xa2, -mode2 do not lead to error but the payload is
             // nevertheless written as -data.
-            emit infoMessage(i18n("Writer does not support raw writing."), MessageWarning);
+            emit infoMessage(i18n("Writer does not support raw writing."), MessageError);
         }
         else if( d->cdrskinBinObject->hasFeature( "tao" ) )
             d->process << "-tao";

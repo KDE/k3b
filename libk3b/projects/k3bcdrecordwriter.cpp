@@ -210,7 +210,9 @@ bool K3b::CdrecordWriter::prepareProcess()
 
     // display progress
     d->process << "-v";
-
+#ifdef K3B_DEBUG
+    d->process << "-V";
+#endif
     if( d->cdrecordBinObject->hasFeature( "gracetime") )
         d->process << "gracetime=2";  // 2 is the lowest allowed value (Joerg, why do you do this to us?)
 
