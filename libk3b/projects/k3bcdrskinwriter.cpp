@@ -259,10 +259,13 @@ bool K3b::CdrskinWriter::prepareProcess()
         //
         // One may omit both -tao and -sao in order to let cdrskin decide on base
         // of -multi, input source and Medium state which write type to use.
+        if (burnDevice()->vendor().contains("CDEmu") || burnDevice()->description().contains("Virt"))
+            d->process << "-tao";
 #ifdef K3B_DEBUG
-        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "K3B user get *NO* opportunity "
-            "via UI to explicitely choose SAO/DAO""let libburn choose "
-            "the write type according to other parameters and the medium state.";
+        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "K3B user get *NO* "
+            "opportunity via UI to explicitely choose SAO/DAO" <<
+            "let libburn choose the write type according to other parameters "
+            "and the medium state.";
 #endif
     }
     else if( K3b::Device::isCdMedia( d->burnedMediaType ) ) {
