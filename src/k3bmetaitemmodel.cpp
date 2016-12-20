@@ -169,6 +169,7 @@ namespace {
         return 0;
     }
 
+    static void K3b_ASSERT(bool test) __attribute__((analyzer_noreturn)) { Q_ASSERT(test); }
 
     Node* Node::createNodeForOriginalIndex( const QModelIndex& index )
     {
@@ -176,7 +177,7 @@ namespace {
             return this;
         }
 
-        Q_ASSERT( index.isValid() );
+        K3b_ASSERT(index.isValid());
 
         // all the node mapping is done on the first col, so make sure we use
         // an index on the first col

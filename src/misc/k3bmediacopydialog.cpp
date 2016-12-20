@@ -310,6 +310,7 @@ void K3b::MediaCopyDialog::slotStartClicked()
                                                     i18n("File Exists"),
                                                     KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )
+                delete dlg;
                 return;
         }
 
@@ -373,6 +374,7 @@ void K3b::MediaCopyDialog::slotStartClicked()
     else {
         // do not translate this as it is not intended to be included in the stable version!
         KMessageBox::sorry( this, "Ups", "No copy support for this source media type yet." );
+        delete dlg;
         return;
     }
 
