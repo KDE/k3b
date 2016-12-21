@@ -28,6 +28,12 @@
 
 // IDEA: K3b::MetaItemModel::placeData( int row, int column );
 
+#ifdef __clang__
+#define CLANG_ANALYZER_NORETURN __attribute__((analyzer_noreturn))
+#else
+#define CLANG_ANALYZER_NORETURN
+#endif
+
 namespace {
     class Place;
 
@@ -169,7 +175,7 @@ namespace {
         return 0;
     }
 
-    static void K3b_ASSERT(bool test) __attribute__((analyzer_noreturn)) { Q_ASSERT(test); }
+    static void K3b_ASSERT(bool test) CLANG_ANALYZER_NORETURN { Q_ASSERT(test); }
 
     Node* Node::createNodeForOriginalIndex( const QModelIndex& index )
     {
