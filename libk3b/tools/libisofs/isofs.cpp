@@ -18,6 +18,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "isofs.h"
 #include "rock.h"
@@ -291,25 +292,25 @@ void FreeRR(rr_entry *rrentry) {
 	}
 }
 
-static int str_nappend(char **d,char *s,int n) {
-	int i=0;
+int str_nappend(char **d, char *s, int n) 
+{
+	int i = 0;
 	char *c;
 
-/*	i=strnlen(s,n)+1; */
-	while (i<n && s[i]) i++;
+	while (i < n && s[i]) i++;
 	i++;
-	if (*d) i+=(strlen(*d)+1);
-	c=(char*) malloc(i);
+	if (*d) i += (strlen(*d) + 1);
+	c = (char*) malloc(i);
 	if (!c) return -ENOMEM;
 	if (*d) {
-		strcpy(c,*d);
-		strncat(c,s,n);
+		strcpy(c, *d);
+		strncat(c, s, n);
 
 		free(*d);
 	} else
-		strncpy(c,s,n);
-	c[i-1]=0;
-	*d=c;
+		strncpy(c, s, n);
+	c[i - 1] = 0;
+	*d = c;
 	return 0;
 }
 

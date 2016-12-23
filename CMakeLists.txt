@@ -295,6 +295,11 @@ add_subdirectory( plugins )
 add_subdirectory( doc )
 if(BUILD_TESTING)
     find_package(Qt5Test REQUIRED)
+    find_package(LibFuzzer)
+    set_package_properties(LibFuzzer PROPERTIES
+        PURPOSE "libFuzzer – a library for coverage-guided fuzz testing."
+        URL "http://libfuzzer.info"
+        TYPE OPTIONAL)
     add_subdirectory( tests )
 endif()
 

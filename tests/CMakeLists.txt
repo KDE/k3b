@@ -254,3 +254,14 @@ if(ENABLE_MUSICBRAINZ)
     target_link_libraries(k3bexternalbinmanagertest ${MUSICBRAINZ_LIBRARIES})
 endif()
 add_test(k3bexternalbinmanagertest k3bexternalbinmanagertest)
+
+if(LIBFUZZER_FOUND)
+    add_executable(k3bfuzzertest 
+        k3bfuzzertest.cpp
+        ${CMAKE_SOURCE_DIR}/libk3b/tools/libisofs/isofs.cpp)
+    target_include_directories(k3bfuzzertest PRIVATE
+        ${CMAKE_SOURCE_DIR}/libk3b)
+    target_link_libraries(k3bfuzzertest
+        Qt5::Core
+        ${LIBFUZZER_LIBRARIES})
+endif()

@@ -148,4 +148,6 @@ void FreeBootTable(boot_head *boot);
  */
 int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata);
 
+int str_nappend(char **d, char *s, int n);
+
 #endif
