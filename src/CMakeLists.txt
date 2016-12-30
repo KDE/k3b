@@ -267,7 +267,6 @@ install( FILES  k3b.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
 install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/k3b )
 install( FILES  org.kde.k3b.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )
 install( FILES  ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
-install( FILES  option/k3b-providers.xml DESTINATION ${K3B_DATA_INSTALL_DIR}/pics )
 
 set( SHARED_MIME_INFO_MINIMUM_VERSION "0.23" )
 find_package( SharedMimeInfo REQUIRED )
