@@ -66,17 +66,14 @@ K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )
 {
     m_doc = doc;
 
-    setButtonGui( SAVE_BUTTON,
-                  KStandardGuiItem::close() );
-    setButtonText( SAVE_BUTTON,
-                   i18n("Close"),
-                   i18n("Save Settings and close"),
-                   i18n("Saves the settings to the project and closes the dialog.") );
-    setButtonGui( CANCEL_BUTTON, KStandardGuiItem::cancel() );
-    setButtonText( CANCEL_BUTTON,
-                   i18n("Cancel"),
-                   i18n("Discard all changes and close"),
-                   i18n("Discards all changes made in the dialog and closes it.") );
+    KGuiItem closeItem = KStandardGuiItem::close();
+    closeItem.setToolTip( i18n("Save Settings and close") );
+    closeItem.setWhatsThis( i18n("Saves the settings to the project and closes the dialog.") );
+    setButtonGui( SAVE_BUTTON, closeItem );
+    KGuiItem cancelItem = KStandardGuiItem::cancel();
+    cancelItem.setToolTip( i18n("Discard all changes and close") );
+    cancelItem.setWhatsThis( i18n("Discards all changes made in the dialog and closes it.") );
+    setButtonGui( CANCEL_BUTTON, cancelItem );
 
     m_job = 0;
 }
