@@ -15,6 +15,8 @@
 
 #include <QObject>
 
+#include "k3bapplication.h"
+
 class ExternalBinManagerTest : public QObject
 {
     Q_OBJECT
@@ -25,6 +27,9 @@ public:
 private Q_SLOTS:
     void testBinObject();
     void testMyBurnJob();
+
+private:
+    K3b::Application::Core *m_core;
 };
 
 #endif // K3B_EXTERNAL_BINMANAGER_TEST_H
