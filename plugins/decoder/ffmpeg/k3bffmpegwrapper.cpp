@@ -107,7 +107,7 @@ K3bFFMpegFile::K3bFFMpegFile( const QString& filename )
     d->formatContext = 0;
     d->codec = 0;
 #ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
-#  if LIBAVCODEC_BUILD < AV_VERSION_INT(54,28,0)
+#  if LIBAVCODEC_BUILD < AV_VERSION_INT(55,28,0)
     d->frame = avcodec_alloc_frame();
 #  else
     d->frame = av_frame_alloc();
@@ -123,7 +123,7 @@ K3bFFMpegFile::~K3bFFMpegFile()
 {
     close();
 #ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
-#  if LIBAVCODEC_BUILD < AV_VERSION_INT(54,28,0)
+#  if LIBAVCODEC_BUILD < AV_VERSION_INT(55,28,0)
     av_free(d->frame);
 #  else
     av_frame_free(&d->frame);
