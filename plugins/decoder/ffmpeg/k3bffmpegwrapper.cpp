@@ -258,12 +258,7 @@ QString K3bFFMpegFile::title() const
 {
     // FIXME: is this UTF8 or something??
     AVDictionaryEntry *ade = av_dict_get( d->formatContext->metadata, "TITLE", NULL, 0 );
-    if( ade == NULL )
-        return QString();
-    if (strlen(ade->value))
-        return QString::fromLocal8Bit( ade->value );
-    else
-        return QString();
+    return ade && ade->value[0] != '\0' ? QString::fromLocal8Bit( ade->value ) : QString();
 }
 
 
@@ -271,12 +266,7 @@ QString K3bFFMpegFile::author() const
 {
     // FIXME: is this UTF8 or something??
     AVDictionaryEntry *ade = av_dict_get( d->formatContext->metadata, "ARTIST", NULL, 0 );
-    if( ade == NULL )
-        return QString();
-    if (strlen(ade->value))
-        return QString::fromLocal8Bit( ade->value );
-    else
-        return QString();
+    return ade && ade->value[0] != '\0' ? QString::fromLocal8Bit( ade->value ) : QString();
 }
 
 
@@ -284,12 +274,7 @@ QString K3bFFMpegFile::comment() const
 {
     // FIXME: is this UTF8 or something??
     AVDictionaryEntry *ade = av_dict_get( d->formatContext->metadata, "COMMENT", NULL, 0 );
-    if( ade == NULL )
-        return QString();
-    if (strlen(ade->value))
-        return QString::fromLocal8Bit( ade->value );
-    else
-        return QString();
+    return ade && ade->value[0] != '\0' ? QString::fromLocal8Bit( ade->value ) : QString();
 }
 
 
@@ -377,7 +362,11 @@ int K3bFFMpegFile::fillOutputBuffer()
 #endif
 
         if( d->packetSize <= 0 || len < 0 )
+#if LIBAVCODEC_VERSION_MAJOR >= 56
+            ::av_packet_unref( &d->packet );
+#else
             ::av_free_packet( &d->packet );
+#endif
         if( len < 0 ) {
             qDebug() << "(K3bFFMpegFile) decoding failed for " << m_filename;
             return -1;
