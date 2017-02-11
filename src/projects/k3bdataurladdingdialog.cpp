@@ -50,7 +50,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QInputDialog>
-#include <QSharedPointer>
 
 #include <unistd.h>
 
@@ -144,8 +143,9 @@ void K3b::DataUrlAddingDialog::addUrls( const QList<QUrl>& urls,
                                      QWidget* parent )
 {
     if( !urls.isEmpty() ) {
-        QSharedPointer<DataUrlAddingDialog> dlgPtr = QSharedPointer<DataUrlAddingDialog>(new DataUrlAddingDialog( urls, dir, parent ));
-        QMetaObject::invokeMethod( dlgPtr.data(), "slotStartAddUrls", Qt::QueuedConnection );
+        auto *dlg = new DataUrlAddingDialog( urls, dir, parent );
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        QMetaObject::invokeMethod( dlg, "slotStartAddUrls", Qt::QueuedConnection );
     }
 }
 
@@ -155,8 +155,9 @@ void K3b::DataUrlAddingDialog::moveItems( const QList<K3b::DataItem*>& items,
                                        QWidget* parent )
 {
     if( !items.isEmpty() ) {
-        QSharedPointer<DataUrlAddingDialog> dlgPtr = QSharedPointer<DataUrlAddingDialog>(new DataUrlAddingDialog( items, dir, false, parent ));
-        QMetaObject::invokeMethod( dlgPtr.data(), "slotStartCopyMoveItems", Qt::QueuedConnection );
+        auto *dlg = new DataUrlAddingDialog( items, dir, false, parent );
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        QMetaObject::invokeMethod( dlg, "slotStartCopyMoveItems", Qt::QueuedConnection );
     }
 }
 
@@ -166,8 +167,9 @@ void K3b::DataUrlAddingDialog::copyItems( const QList<K3b::DataItem*>& items,
                                        QWidget* parent )
 {
     if( !items.isEmpty() ) {
-        QSharedPointer<DataUrlAddingDialog> dlgPtr = QSharedPointer<DataUrlAddingDialog>(new DataUrlAddingDialog( items, dir, true, parent ));
-        QMetaObject::invokeMethod( dlgPtr.data(), "slotStartCopyMoveItems", Qt::QueuedConnection );
+        auto *dlg = new DataUrlAddingDialog( items, dir, true, parent );
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        QMetaObject::invokeMethod( dlg, "slotStartCopyMoveItems", Qt::QueuedConnection );
     }
 }
 
