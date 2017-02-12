@@ -46,7 +46,6 @@
 #include <QtWidgets/QToolTip>
 #include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QVBoxLayout>
-#include <QSharedPointer>
 
 #include <taglib/tag.h>
 #include <taglib/fileref.h>
@@ -150,8 +149,7 @@ K3bAudioMetainfoRenamerPluginWidget::K3bAudioMetainfoRenamerPluginWidget( K3b::D
                                         "<em>%n</em> (Track number), and <em>%t</em> (Title) "
                                         "are supported.") );
 
-    QSharedPointer<K3bMimeTypeResolver> typePtr = QSharedPointer<K3bMimeTypeResolver>(new K3bMimeTypeResolver);
-    TagLib::FileRef::addFileTypeResolver(typePtr.data());
+    TagLib::FileRef::addFileTypeResolver( new K3bMimeTypeResolver() );
 }
 
 
