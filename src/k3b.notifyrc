@@ -1,6 +1,7 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[ar]=كي3بي
 Comment[ast]=K3b
 Comment[be]=K3b
 Comment[bg]=K3b
@@ -65,6 +66,7 @@ Comment[zh_TW]=K3b 光碟燒錄軟體
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[ar]=نجحت العمليّة
 Name[bg]=Процесът е успешен
 Name[bs]=Proces uspješan
 Name[ca]=Procés correcte
@@ -125,6 +127,7 @@ Name[x-test]=xxProcess successfulxx
 Name[zh_CN]=处理成功
 Name[zh_TW]=行程成功
 Comment=Process successfully finished
+Comment[ar]=اكتملت العمليّة بنجاح
 Comment[bg]=Процесът завърши успешно
 Comment[bs]=Obrada je uspješno završena
 Comment[ca]=El procés s'ha completat correctament
@@ -186,6 +189,7 @@ Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[ar]=خطأ في العمليّة
 Name[bg]=Грешка при обработка
 Name[bs]=Greška u procesu
 Name[ca]=Error de procés
@@ -246,6 +250,7 @@ Name[x-test]=xxProcess errorxx
 Name[zh_CN]=处理错误
 Name[zh_TW]=行程發生錯誤
 Comment=Process finished with errors
+Comment[ar]=انتهت العمليّة بأخطاء
 Comment[bg]=Процесът завърши с грешки
 Comment[bs]=Proces je zavrsio sa greškama
 Comment[ca]=El procés ha finalitzat amb errors
@@ -310,6 +315,7 @@ Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[ar]=ينتظر وسطًا
 Name[be]=Чакаем носьбіт
 Name[bg]=Изчакване за диск
 Name[bs]=Čekam na disk
@@ -429,6 +435,7 @@ Action=Sound
 
 [Event/Busy]
 Name=Busy
+Name[ar]=مشغول
 Name[bg]=Заето
 Name[bs]=Zauzeto
 Name[ca]=Ocupat
@@ -477,6 +484,7 @@ Name[uk]=Виконується завдання
 Name[x-test]=xxBusyxx
 Name[zh_TW]=忙碌
 Comment=K3b is currently busy and cannot start any other operations
+Comment[ar]=«كي3بي» مشغول حاليًّا ولا يمكن بدء أيّة عمليّة أخرى
 Comment[bg]=В момента K3b работи и не може да извършва други действия
 Comment[bs]=K3b je trenutno zauzet i ne može započeti nijednu drugu radnju
 Comment[ca]=El K3b ara mateix està ocupat i no pot iniciar altres operacions
@@ -524,6 +532,7 @@ Action=Popup
 
 [Event/NoProblemsFound]
 Name=No problems found
+Name[ar]=لم يُعثر على مشاكل
 Name[bg]=Не са открити проблеми
 Name[bs]=Nisu pronađeni problemi
 Name[ca]=No s'ha trobat cap problema
@@ -568,6 +577,7 @@ Name[uk]=Проблем не виявлено
 Name[x-test]=xxNo problems foundxx
 Name[zh_TW]=沒有發現問題
 Comment=No problems found in system configuration
+Comment[ar]=لم يُعثر على مشاكل في ضبط النّظام
 Comment[bg]=Не бяха открити проблеми с настройките на системата
 Comment[bs]=Nisu pronađeni problemi u postavci sistema
 Comment[ca]=No s'han trobat problemes amb la configuració del sistema
@@ -615,6 +625,7 @@ Action=Popup
 
 [Event/MountFailed]
 Name=Mount/unmount failed
+Name[ar]=فشل الضّم/إزالة الضّمّ
 Name[bg]=Грешка при монтиране или демонтиране
 Name[bs]=Montiranje/demontiranje nije uspjelo
 Name[ca]=Ha fallat en muntar/desmuntar
@@ -660,6 +671,7 @@ Name[uk]=Помилка монтування або демонтування
 Name[x-test]=xxMount/unmount failedxx
 Name[zh_TW]=掛載/卸載失敗
 Comment=Medium cannot be mount or unmounted
+Comment[ar]=تعذّر ضم/إزالة ضمّ الوسط
 Comment[bg]=Медията не може да се монтира или демонтира
 Comment[bs]=Sredstvo ne može biti montirano ili demontirano
 Comment[ca]=El suport no es pot muntar o desmuntar

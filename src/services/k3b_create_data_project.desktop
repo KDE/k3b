@@ -8,6 +8,7 @@ ExcludeServiceTypes=application/x-cd-image
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --data %F
 Name=Create file project with K3b
+Name[ar]=أنشئ ملفّ مشروع ب‍«كي3بي»
 Name[bg]=Създаване диск с файлове с K3b
 Name[bs]=Napravi proјekat datoteka K3bom
 Name[ca]=Crea un fitxer de projecte amb el K3b

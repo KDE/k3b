@@ -1,5 +1,6 @@
 [org.kde.k3b.updatepermissions]
 Name=Update device and programs permissions
+Name[ar]=حدّث تصاريح الأجهزة والبرامج
 Name[bg]=Обновяване правата върху устройства и програми
 Name[bs]=Ažurirajte uređaje i programske dozvole
 Name[ca]=Actualitza els permisos dels dispositius i programes
@@ -49,6 +50,7 @@ Name[uk]=Оновлення прав доступу до пристроїв і �
 Name[x-test]=xxUpdate device and programs permissionsxx
 Name[zh_TW]=更新裝置與程式的權限
 Description=Authentication is required to update permissions of devices and programs
+Description[ar]=الاستيثاق مطلوب لتحديث تصاريح الأجهزة والبرامج
 Description[bg]=За обновяване правата върху устройства и програми е нужна автентикация
 Description[bs]=Autentifikacija je potrebna za ažuriranje dozvole uređaja i programa
 Description[ca]=Cal autenticar-se per actualitzar els permisos dels dispositius i els programes
@@ -98,6 +100,7 @@ Policy=auth_admin
 
 [org.kde.k3b.addtogroup]
 Name=Adds current user to a specified group
+Name[ar]=يضيف المستخدم الحاليّ إلى المجموعة المحدّدة
 Name[bs]=Dodaje trenutnog korisnika u određenu grupu
 Name[ca]=Afegeix l'usuari actual a un grup especificat
 Name[ca@valencia]=Afig l'usuari actual a un grup especificat
@@ -140,6 +143,7 @@ Name[uk]=Додавання поточного користувача до вк�
 Name[x-test]=xxAdds current user to a specified groupxx
 Name[zh_TW]=將目前的使用者加到特定的群組
 Description=Authentication is required to add current user to a group
+Description[ar]=الاستيثاق مطلوب لإضافة المستخدم الحاليّ إلى أحد المجموعات
 Description[bs]=Provjera autentičnosti se zahtijeva da se trenutni korisnik doda u grupu
 Description[ca]=Cal autenticar-se per afegir l'usuari actual a un grup
 Description[ca@valencia]=Cal autenticar-se per afegir l'usuari actual a un grup

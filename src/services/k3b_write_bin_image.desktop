@@ -7,6 +7,7 @@ MimeType=application/x-cue;
 [Desktop Action WriteCdImage]
 Exec=k3b --image %F
 Name=Write CD Image with K3b
+Name[ar]=اكتب صورة الاسطوانة ب‍«كي3بي»
 Name[bg]=Запис на CD-образ с K3b
 Name[bs]=Upiši sliku CDa K3bom
 Name[ca]=Escriu una imatge de CD amb el K3b

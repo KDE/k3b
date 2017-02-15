@@ -56,6 +56,7 @@ Name[zh_CN]=K3b Ogg Vorbis 解码器
 Name[zh_TW]=K3b Ogg Vorbis 解碼器
 X-KDE-ServiceTypes=K3b/Plugin
 Comment=Decoding module to decode Ogg Vorbis files
+Comment[ar]=وحدة فكّ ترميز لفكّ ترميز ملفّات Ogg Vorbis
 Comment[bg]=Декодер за файлове във формат Ogg Vorbis
 Comment[bs]=Modul za dekodiranje OGG vorbis datoteka
 Comment[ca]=Mòdul de descodificació per a descodificar fitxers Ogg Vorbis

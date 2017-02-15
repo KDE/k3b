@@ -5,6 +5,7 @@ Exec=k3b --image %U
 Icon=k3b
 Terminal=false
 Name=K3b
+Name[ar]=كي3بي
 Name[ast]=K3b
 Name[be]=K3b
 Name[bg]=K3b

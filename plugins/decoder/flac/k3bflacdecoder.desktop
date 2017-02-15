@@ -55,6 +55,7 @@ Name[x-test]=xxK3b FLAC Decoderxx
 Name[zh_CN]=K3b FLAC 解码器
 Name[zh_TW]=K3b FLAC 解碼器
 Comment=Decoding module to decode FLAC files
+Comment[ar]=وحدة فكّ ترميز لفكّ ترميز ملفّات FLAC
 Comment[bg]=Декодер за FLAC файлове
 Comment[bs]=Modul dekodiranja za dekodiranje FLAC datoteke
 Comment[ca]=Mòdul de descodificació per a descodificar fitxers FLAC

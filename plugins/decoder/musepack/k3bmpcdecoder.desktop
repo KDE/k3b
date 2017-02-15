@@ -53,6 +53,7 @@ Name[x-test]=xxK3b Musepack Decoderxx
 Name[zh_CN]=K3b Musepack 解码器
 Name[zh_TW]=K3b Musepack 解碼器
 Comment=Decoding module to decode Musepack audio files
+Comment[ar]=وحدة فكّ ترميز لفكّ ترميز ملفّات Musepack الصّوتيّة
 Comment[bg]=Декодер за звукови файлове Musepack
 Comment[bs]=Modul za dekodiranje Musepack audio datoteka
 Comment[ca]=Mòdul de descodificació per a descodificar fitxers d'àudio Musepack

@@ -55,6 +55,7 @@ Name[x-test]=xxK3b ??? Decoderxx
 Name[zh_CN]=K3b ??? 解码器
 Name[zh_TW]=K3b ??? 解碼器
 Comment=Decoding module to decode ??? files
+Comment[ar]=وحدة فكّ ترميز لفكّ ترميز ملفّات ؟؟؟
 Comment[bg]=Декодер за ??? файлове
 Comment[bs]=Modul za dekodiranje ??? datoteka
 Comment[ca]=Mòdul de descodificació per a descodificar fitxers ???

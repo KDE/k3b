@@ -16,6 +16,7 @@ deleting=false
 moving=false
 opening=true
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
+Description[ar]=«تابع دخل/خرج كدي» يتيح بنسخ الملفّات من دي‌ڤي‌دي فيديو (مع فكّ التّعمية)
 Description[bg]=kioslave, позволяващ ви да копирате файлове от видео DVD (включително разшифроването)
 Description[bs]=Kioslave koji omogućuje da se datoteka kopira iz Video DVD-a (uključujući i dešifriranje)
 Description[ca]=Un kioslave que permet que es copiïn fitxers des d'un DVD de vídeo (incloent-hi el desencriptatge)
