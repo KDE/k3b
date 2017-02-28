@@ -271,7 +271,7 @@ void K3b::WelcomeWidget::slotThemeChanged()
 
     m_header->setHtml( "<html><body align=\"center\">" + i18n("Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator") + "</body></html>" );
     m_infoText->setHtml( "<html><body align=\"center\">" 
-                         + i18n("K3b %1 Copyright &copy; 1998&ndash;2016 K3b authors",
+                         + i18n("K3b %1 Copyright &copy; 1998&ndash;2017 K3b authors",
                                 KAboutData::applicationData().version())
                          + "</body></html>" );
     setMinimumWidth( 2*MARGIN + qMax(( int )m_header->idealWidth(), m_buttonSize.width()) );

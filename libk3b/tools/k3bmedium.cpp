@@ -502,7 +502,7 @@ QString K3b::Medium::beautifiedVolumeId() const
 QIcon K3b::Medium::icon() const
 {
     if( diskInfo().diskState() == Device::STATE_NO_MEDIA ) {
-        return QIcon::fromTheme( "drive-optical" );
+        return QIcon::fromTheme( "media-optical" );
     }
     else if( diskInfo().diskState() == Device::STATE_EMPTY ) {
         return QIcon::fromTheme( "media-optical-recordable" );

@@ -31,7 +31,7 @@ int main( int argc, char* argv[] )
                                                "to be as simple as possible for novice users while also providing all features "
                                                "an advanced user might need."),
                           KAboutLicense::GPL,
-                          i18n("Copyright © 1998–2016 K3b authors"),
+                          i18n("Copyright © 1998–2017 K3b authors"),
                           QString(),
                           i18n("http://www.k3b.org" ) );
 
