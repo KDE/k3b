@@ -654,7 +654,8 @@ K3b::AudioTrack* K3b::AudioTrack::split( const K3b::Msf& pos )
             splitSource = source;
         }
         else {
-            splitSource = source->split( pos - currentPos );
+            if (source) 
+                splitSource = source->split( pos - currentPos );
         }
 
         // the new track should include all sources from splitSource and below
