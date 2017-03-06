@@ -593,7 +593,7 @@ void K3b::MpegInfo::ParseAudio ( llong offset, byte marker )
     unsigned brate, srate;
     bool mpeg2_5 = false;
 
-    const int a_idx = GetAudioIdx( marker );
+    const unsigned int a_idx = GetAudioIdx( marker );
 
     if ( mpeg_info->audio[ a_idx ].seen )                /* we have it already */
         return ;
