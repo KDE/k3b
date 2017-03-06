@@ -119,17 +119,17 @@ K3b::EmptyDiscWaiter::EmptyDiscWaiter( K3b::Device::Device* device, QWidget* par
     QPushButton* loadButton = buttonBox->addButton( i18n("Load"), QDialogButtonBox::NoRole );
     connect( loadButton, SIGNAL(clicked()), this, SLOT(slotLoad()) );
 
-    QGridLayout* grid = new QGridLayout( this );
-    grid->setContentsMargins( 0, 0, 0, 0 );
+    QScopedPointer<QVBoxLayout> box(new QVBoxLayout(this));
+    QScopedPointer<QHBoxLayout> hbox(new QHBoxLayout(this));
 
-    grid->addWidget( d->pixLabel, 0, 0, 3, 1 );
-    grid->addItem( new QSpacerItem( 20, 1, QSizePolicy::Fixed, QSizePolicy::Fixed ), 0, 1 );
-    grid->addWidget( new QLabel( i18n("Found medium:"), this ), 0, 2 );
-    grid->addWidget( d->labelFoundMedia, 0, 3 );
-    grid->addWidget( d->labelRequest, 1, 2, 1, 2 );
-    grid->addWidget( buttonBox, 2, 0, 4, 1 );
-    grid->setRowStretch( 2, 1 );
-    grid->setColumnStretch( 3, 1 );
+    hbox->addWidget(d->pixLabel);
+    QScopedPointer<QVBoxLayout> vbox(new QVBoxLayout(this));
+    vbox->addWidget(new QLabel(i18n("Found medium:"), this));
+    vbox->addWidget(d->labelFoundMedia);
+    vbox->addWidget(d->labelRequest);
+    hbox->addLayout(vbox.data());
+    box->addLayout(hbox.data());
+    box->addWidget(buttonBox);
     // -----------------------------
 
     connect( k3bappcore->mediaCache(), SIGNAL(mediumChanged(K3b::Device::Device*)),
