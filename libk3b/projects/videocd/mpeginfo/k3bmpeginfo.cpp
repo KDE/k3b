@@ -284,8 +284,8 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
             offset = SkipPacketHeader( offset - 6 );
             ParseAudio( offset, mark );
             // audio packet doesn't begin with 0xFFF
-            int a_idx = GetAudioIdx(mark);
-            if (a_idx != -1 && !mpeg_info->audio[a_idx].seen) {
+            if (GetAudioIdx(mark) != -1 && !mpeg_info->audio[GetAudioIdx(mark)].seen) {
+                int a_idx = GetAudioIdx(mark);
                 while ( ( offset < m_filesize - 10 ) && !mpeg_info->audio[ a_idx ].seen ) {
                     if ( ( GetByte( offset ) == 0xFF ) && ( GetByte( offset + 1 ) & 0xF0 ) == 0xF0 )
                         ParseAudio( offset, mark );
