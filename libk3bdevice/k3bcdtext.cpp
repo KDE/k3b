@@ -856,8 +856,11 @@ QByteArray K3b::Device::CdText::Private::createPackData( int packType, int& pack
         //
         // Copy as many bytes as possible into the pack
         //
-        int copyBytes = qMin( 12-packPos, text.length()-textPos );
-        ::memcpy( reinterpret_cast<char*>(&pack.data[packPos]), &text.data()[textPos], copyBytes );
+        size_t copyBytes = qMin(12 - packPos, text.length() - textPos);
+        if (copyBytes) {
+            ::memcpy(reinterpret_cast<char*>(&pack.data[packPos]),
+                     &text.data()[textPos], copyBytes );
+        }
         textPos += copyBytes;
         packPos += copyBytes;
 
