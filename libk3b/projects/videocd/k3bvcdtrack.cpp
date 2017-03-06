@@ -32,7 +32,8 @@
 K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename )
         : m_pbcnumkeys( true ),
         m_pbcnumkeysuserdefined( false ),
-        m_file( filename )
+        m_file( filename ),
+        mpeg_info(Q_NULLPTR)
 {
     m_parent = parent;
     m_title = QFileInfo( m_file ).completeBaseName();
@@ -53,6 +54,10 @@ K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename 
 
 K3b::VcdTrack::~VcdTrack()
 {
+    if (mpeg_info) {
+        delete mpeg_info;
+        mpeg_info = Q_NULLPTR;
+    }
 }
 
 
