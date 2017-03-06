@@ -284,8 +284,8 @@ llong K3b::MpegInfo::MpegParsePacket ( llong offset )
             offset = SkipPacketHeader( offset - 6 );
             ParseAudio( offset, mark );
             // audio packet doesn't begin with 0xFFF
-            if ( !mpeg_info->audio[ GetAudioIdx( mark ) ].seen ) {
-                int a_idx = GetAudioIdx( mark );
+            int a_idx = GetAudioIdx(mark);
+            if (a_idx != -1 && !mpeg_info->audio[a_idx].seen) {
                 while ( ( offset < m_filesize - 10 ) && !mpeg_info->audio[ a_idx ].seen ) {
                     if ( ( GetByte( offset ) == 0xFF ) && ( GetByte( offset + 1 ) & 0xF0 ) == 0xF0 )
                         ParseAudio( offset, mark );
@@ -593,9 +593,9 @@ void K3b::MpegInfo::ParseAudio ( llong offset, byte marker )
     unsigned brate, srate;
     bool mpeg2_5 = false;
 
-    const unsigned int a_idx = GetAudioIdx(marker);
+    const int a_idx = GetAudioIdx(marker);
 
-    if ( mpeg_info->audio[ a_idx ].seen )                /* we have it already */
+    if (a_idx == -1 || mpeg_info->audio[a_idx].seen)   /* we have it already */
         return ;
 
     if ( ( GetByte( offset ) != 0xFF ) || ( ( GetByte( offset + 1 ) & 0xF0 ) != 0xF0 ) ) {
@@ -716,7 +716,7 @@ void K3b::MpegInfo::ParseVideo ( llong offset, byte marker )
 {
     unsigned long aratio, frate, brate;
 
-    const unsigned int v_idx = GetVideoIdx(marker);
+    const int v_idx = GetVideoIdx(marker);
 
     const double aspect_ratios[ 16 ] = {
         0.0000, 1.0000, 0.6735, 0.7031,
@@ -725,7 +725,7 @@ void K3b::MpegInfo::ParseVideo ( llong offset, byte marker )
         1.1250, 1.1575, 1.2015, 0.0000
     };
 
-    if ( mpeg_info->video[ v_idx ].seen )                /* we have it already */
+    if (v_idx == -1 || mpeg_info->video[v_idx].seen)   /* we have it already */
         return ;
 
     offset = FindNextMarker( offset + 1, MPEG_SEQUENCE_CODE );
