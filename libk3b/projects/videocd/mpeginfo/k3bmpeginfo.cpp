@@ -593,7 +593,7 @@ void K3b::MpegInfo::ParseAudio ( llong offset, byte marker )
     unsigned brate, srate;
     bool mpeg2_5 = false;
 
-    const unsigned int a_idx = GetAudioIdx( marker );
+    const unsigned int a_idx = GetAudioIdx(marker);
 
     if ( mpeg_info->audio[ a_idx ].seen )                /* we have it already */
         return ;
@@ -716,7 +716,7 @@ void K3b::MpegInfo::ParseVideo ( llong offset, byte marker )
 {
     unsigned long aratio, frate, brate;
 
-    const int v_idx = GetVideoIdx( marker );
+    const unsigned int v_idx = GetVideoIdx(marker);
 
     const double aspect_ratios[ 16 ] = {
         0.0000, 1.0000, 0.6735, 0.7031,
