@@ -788,9 +788,9 @@ void K3b::AudioTrack::emitSourceAdded( AudioDataSource* source )
     if ( doc() ) {
         emit doc()->sourceAdded( this, source->sourceIndex() );
         doc()->slotTrackChanged( this );
+    } else {
+        emit sourceAdded( source->sourceIndex() );
     }
-
-    emit sourceAdded( source->sourceIndex() );
 }
 
 

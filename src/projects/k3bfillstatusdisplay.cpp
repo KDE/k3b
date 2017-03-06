@@ -223,7 +223,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     // calculate the over size text
     // ====================================================================================
     QFont overSizeFont(font());
-    overSizeFont.setPointSize( qMax( 8, overSizeFont.pointSize()-4 ) );
+    overSizeFont.setPointSize(qMin(8, overSizeFont.pointSize() - 4));
     overSizeFont.setBold(false);
 
     QRect overSizeTextRect( barRect );
@@ -248,6 +248,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     p.setClipRect( QStyle::visualRect( layoutDirection(), barRect, crect ) );
     p.drawLine( QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerFrom ),
                 QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerTo ) );
+    p.setFont(overSizeFont);
     p.drawText( QStyle::visualRect( layoutDirection(), barRect, docTextRect ),
                 QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), docSizeText );
     p.setFont(overSizeFont);
