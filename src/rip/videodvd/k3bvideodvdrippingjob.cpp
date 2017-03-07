@@ -376,8 +376,10 @@ void K3b::VideoDVDRippingJob::initProgressInfo()
         // of every chapter
         unsigned long long titleClippingFrames = m_dvd[m_titleRipInfos[i].title-1].numChapters() * 200;
 
-        d->titleProgressParts[i] = (double)titleFrames/(double)totalFrames;
-        d->titleClippingProgressParts[i] = (double)titleClippingFrames/(double)totalFrames;
+        if (totalFrames) {
+            d->titleProgressParts[i] = (double)titleFrames/(double)totalFrames;
+            d->titleClippingProgressParts[i] = (double)titleClippingFrames/(double)totalFrames;
+        }
     }
 }
 
