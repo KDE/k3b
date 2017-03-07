@@ -309,7 +309,7 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3b::FileItem* item 
                         newName.append(artist);
                     }
                     else if( d->pattern[i] == 'n' ) {
-                        if( title.isEmpty() )
+                        if (track.isEmpty())
                             return QString();
                         newName.append(track);
                     }
