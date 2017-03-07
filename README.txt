@@ -1,4 +1,4 @@
-K3b Version 2.10
+K3b Version 17.04.0
 
 Thanx for downloading K3b - The CD Kreator
 

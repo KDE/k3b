@@ -1,5 +1,5 @@
-Installing K3b 2.10
--------------------
+Installing K3b 17.04.0
+----------------------
 
 
 What you need to run K3b:
