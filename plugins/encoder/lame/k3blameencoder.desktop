@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=K3b Lame Mp3 Encoder
+Name[cs]=K3b Lame Mp3 převodník
+Name[sv]=K3b Lame MP3-kodare
+Name[x-test]=xxK3b Lame Mp3 Encoderxx
 Comment=Encoding module to encode MPEG1 Layer III (mp3) files
+Comment[cs]=Modul pro kompresi do souborů MPEG1 Layer III (mp3)
+Comment[sv]=Kodningsmodul för att koda MPEG 1 lager III (MP3)-filer
+Comment[x-test]=xxEncoding module to encode MPEG1 Layer III (mp3) filesxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=K3b SoX Audio Encoder
+Name[cs]=K3b SoX audio enkodér
+Name[sv]=K3b SoX-ljudkodare
+Name[x-test]=xxK3b SoX Audio Encoderxx
 Comment=Encoding module to encode many file formats using SoX
+Comment[cs]=Modul pro kompresi do mnoha formátů pomocí SoX
+Comment[sv]=Kodningsmodul för att koda många filformat med användning av SoX
+Comment[x-test]=xxEncoding module to encode many file formats using SoXxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

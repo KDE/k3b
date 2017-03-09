@@ -16,3 +16,6 @@ deleting=false
 moving=false
 opening=true
 Description=A kioslave that allows files to be copied from a Video DVD (including decryption)
+Description[cs]=Kioslave umožňující kopírování video DVD (včetně dešifrování)
+Description[sv]=En I/O-slav som gör det möjligt att kopiera filer från en video-dvd (inklusive avkodning)
+Description[x-test]=xxA kioslave that allows files to be copied from a Video DVD (including decryption)xx

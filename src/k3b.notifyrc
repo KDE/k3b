@@ -1,21 +1,42 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[cs]=K3b
+Comment[sv]=K3b
+Comment[x-test]=xxK3bxx
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[cs]=Proces úspěšný
+Name[sv]=Processen lyckades
+Name[x-test]=xxProcess successfulxx
 Comment=Process successfully finished
+Comment[cs]=Proces úspěšně dokončen
+Comment[sv]=Processen avslutades med lyckat resultat
+Comment[x-test]=xxProcess successfully finishedxx
 Sound=KDE-K3B-Finish-Success.ogg
 Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[cs]=Chyba procesu
+Name[sv]=Processfel
+Name[x-test]=xxProcess errorxx
 Comment=Process finished with errors
+Comment[cs]=Proces ukončen s chybami
+Comment[sv]=Processen avslutades med fel
+Comment[x-test]=xxProcess finished with errorsxx
 Sound=KDE-K3B-Finish-Error.ogg
 Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[cs]=Čeká se na médium
+Name[sv]=Väntar på medium
+Name[x-test]=xxWaiting for mediumxx
 Comment=The user needs to insert a medium
+Comment[cs]=Uživatel musí vložit médium
+Comment[sv]=Användaren måste mata in ett medium
+Comment[x-test]=xxThe user needs to insert a mediumxx
 Sound=KDE-K3B-Insert-Medium.ogg
 Action=Sound

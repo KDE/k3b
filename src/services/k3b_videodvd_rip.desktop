@@ -6,5 +6,8 @@ X-KDE-Priority=TopLevel
 
 [Desktop Action K3bRip]
 Name=Rip Video DVD Titles with K3b
+Name[cs]=Ripovat pomocí K3b titulky video DVD
+Name[sv]=Lagra dvd-titlar med K3b
+Name[x-test]=xxRip Video DVD Titles with K3bxx
 Exec=k3b --videodvdrip %i
 Icon=k3b

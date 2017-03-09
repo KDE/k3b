@@ -2,3 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=K3b/Plugin
 Name=K3b Plugin
+Name[cs]=Modul K3b
+Name[sv]=K3b-insticksprogram
+Name[x-test]=xxK3b Pluginxx

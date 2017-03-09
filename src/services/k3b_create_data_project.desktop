@@ -8,4 +8,7 @@ ExcludeServiceTypes=application/x-iso;
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --data %F
 Name=Create file project with K3b
+Name[cs]=Vytvořit pomocí K3b souborový projekt...
+Name[sv]=Skapa filprojekt med K3b
+Name[x-test]=xxCreate file project with K3bxx
 Icon=k3b

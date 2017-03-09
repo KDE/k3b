@@ -1,9 +1,18 @@
 [Desktop Entry]
 Encoding=UTF-8
 Comment=K3bSetup – modify permission for CD/DVD burning with K3b
+Comment[cs]=K3bSetup - upravit oprávnění pro vypalování CD/DVD s K3b
+Comment[sv]=Ställ in K3b: ändra rättigheter för att bränna cd/dvd med K3b
+Comment[x-test]=xxK3bSetup – modify permission for CD/DVD burning with K3bxx
 Exec=k3bsetup
 Keywords=K3bSetup;k3bsetup;
+Keywords[cs]=K3bSetup;k3bsetup;
+Keywords[sv]=Ställ in K3b,k3bsetup;
+Keywords[x-test]=xxK3bSetupxx;xxk3bsetupxx;
 Name=K3bSetup
+Name[cs]=K3bSetup
+Name[sv]=Ställ in K3b
+Name[x-test]=xxK3bSetupxx
 
 Terminal=false
 Type=Service
@@ -14,6 +23,12 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=system
 X-KDE-System-Settings-Parent-Category-V2=permissions
 X-KDE-Keywords=k3b,k3bsetup,cd,dvd
+X-KDE-Keywords[cs]=k3b,k3bsetup,cd,dvd
+X-KDE-Keywords[sv]=k3b,ställ in k3b,cd,dvd
+X-KDE-Keywords[x-test]=xxk3bxx,xxk3bsetupxx,xxcdxx,xxdvdxx
 Categories=Application;System;X-KDE-System;
 
 GenericName=CD/DVD/BD Burning Setup
+GenericName[cs]=Nastavení vypalování CD/DVD/BD
+GenericName[sv]=Cd, dvd och bd-bränninställning
+GenericName[x-test]=xxCD/DVD/BD Burning Setupxx

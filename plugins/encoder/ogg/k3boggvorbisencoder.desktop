@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Encoder
+Name[cs]=K3b Ogg Vorbis enkodér
+Name[sv]=K3b Ogg Vorbis-kodare
+Name[x-test]=xxK3b Ogg Vorbis Encoderxx
 Comment=Encoding module to encode Ogg Vorbis files
+Comment[cs]=Modul pro kompresi do souborů Ogg Vorbis
+Comment[sv]=Kodningsmodul för att koda Ogg Vorbis-filer
+Comment[x-test]=xxEncoding module to encode Ogg Vorbis filesxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

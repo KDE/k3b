@@ -1,5 +1,8 @@
 [Desktop Entry]
 Name=K3b SoX Audio Encoder Config Module
+Name[cs]=Ovládací modul formátu K3b SoX
+Name[sv]=Inställningsmodul för K3b SoX ljudkodare
+Name[x-test]=xxK3b SoX Audio Encoder Config Modulexx
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3bsoxencoder

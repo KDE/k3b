@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=K3b Audio Metainfo Renamer
+Name[cs]=Přejmenovávač metainformací K3B Audio
+Name[sv]=K3b namnändring av ljud med metainformation
+Name[x-test]=xxK3b Audio Metainfo Renamerxx
 Comment=Plugin to rename audio files in a data project based on the meta info.
+Comment[cs]=Modul pro přejmenování zvukových souborů v datovém projektu podle jejich meta informací.
+Comment[sv]=Insticksprogram för att byta namn på ljudfiler i ett dataprojekt baserat på metainformation.
+Comment[x-test]=xxPlugin to rename audio files in a data project based on the meta info.xx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin
