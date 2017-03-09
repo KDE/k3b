@@ -2,3 +2,10 @@
 Type=ServiceType
 X-KDE-ServiceType=K3b/Plugin
 Name=K3b Plugin
+Name[ca]=Connector K3b
+Name[ca@valencia]=Connector K3b
+Name[cs]=Modul K3b
+Name[pt]='Plugin' do K3b
+Name[sv]=K3b-insticksprogram
+Name[uk]=Додаток K3b
+Name[x-test]=xxK3b Pluginxx

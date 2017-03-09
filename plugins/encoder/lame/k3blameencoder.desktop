@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=K3b Lame MP3 Encoder
+Name[ca]=Codificador MP3 Lame del K3b
+Name[ca@valencia]=Codificador MP3 Lame del K3b
+Name[cs]=K3b Lame MP3 převodník
+Name[pt]=Codificador de MP3 Lame do K3b
+Name[sv]=K3b Lame MP3-kodare
+Name[uk]=Кодувальник Lame MP3 для K3b
+Name[x-test]=xxK3b Lame MP3 Encoderxx
 Comment=Encoding module to encode MPEG1 Layer III (MP3) files
+Comment[ca]=Mòdul de codificació per a codificar fitxers MPEG 1 Layer III (MP3)
+Comment[ca@valencia]=Mòdul de codificació per a codificar fitxers MPEG 1 Layer III (MP3)
+Comment[cs]=Modul pro kompresi do souborů MPEG1 Layer III (MP3)
+Comment[pt]=Módulo de codificação de ficheiros MPEG 1 Layer III (MP3)
+Comment[sv]=Kodningsmodul för att koda MPEG 1 lager III (MP3)-filer
+Comment[uk]=Модуль кодування файлів MPEG1 Layer III (MP3)
+Comment[x-test]=xxEncoding module to encode MPEG1 Layer III (MP3) filesxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=K3b Wave Decoder
+Name[ca]=Descodificador Wave del K3b
+Name[ca@valencia]=Descodificador Wave del K3b
+Name[cs]=Wave dekodér K3b
+Name[pt]=Descodificador de WAVE do K3b
+Name[sv]=K3b Wave-avkodare
+Name[uk]=Декодер Wave для K3b
+Name[x-test]=xxK3b Wave Decoderxx
 Comment=Decoding module to decode wave files
+Comment[ca]=Mòdul de descodificació per a descodificar fitxers wave
+Comment[ca@valencia]=Mòdul de descodificació per a descodificar fitxers wave
+Comment[cs]=Modul pro dekódování souborů wave
+Comment[pt]=Módulo de descodificação de ficheiros WAVE
+Comment[sv]=Avkodningsmodul för att avkoda wave-filer
+Comment[uk]=Модуль декодування файлів wave
+Comment[x-test]=xxDecoding module to decode wave filesxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

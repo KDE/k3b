@@ -1,41 +1,146 @@
 [Global]
 IconName=k3b
 Comment=K3b
+Comment[ca]=K3b
+Comment[ca@valencia]=K3b
+Comment[cs]=K3b
+Comment[pt]=K3b
+Comment[sv]=K3b
+Comment[uk]=K3b
+Comment[x-test]=xxK3bxx
 
 [Event/SuccessfullyFinished]
 Name=Process successful
+Name[ca]=Procés correcte
+Name[ca@valencia]=Procés correcte
+Name[cs]=Proces úspěšný
+Name[pt]=Processo com sucesso
+Name[sv]=Processen lyckades
+Name[uk]=Процес успішний
+Name[x-test]=xxProcess successfulxx
 Comment=Process successfully finished
+Comment[ca]=El procés s'ha completat correctament
+Comment[ca@valencia]=El procés s'ha completat correctament
+Comment[cs]=Proces úspěšně dokončen
+Comment[pt]=O processo terminou com sucesso
+Comment[sv]=Processen avslutades med lyckat resultat
+Comment[uk]=Процес закінчився успішно
+Comment[x-test]=xxProcess successfully finishedxx
 Sound=KDE-K3B-Finish-Success.ogg
 Action=Sound
 
 [Event/FinishedWithError]
 Name=Process error
+Name[ca]=Error de procés
+Name[ca@valencia]=Error de procés
+Name[cs]=Chyba procesu
+Name[pt]=Erro no processo
+Name[sv]=Processfel
+Name[uk]=Помилка процесу
+Name[x-test]=xxProcess errorxx
 Comment=Process finished with errors
+Comment[ca]=El procés ha finalitzat amb errors
+Comment[ca@valencia]=El procés ha finalitzat amb errors
+Comment[cs]=Proces ukončen s chybami
+Comment[pt]=O processo terminou com erros
+Comment[sv]=Processen avslutades med fel
+Comment[uk]=Процес закінчився з помилками
+Comment[x-test]=xxProcess finished with errorsxx
 Sound=KDE-K3B-Finish-Error.ogg
 Action=Sound
 
 [Event/WaitingForMedium]
 Name=Waiting for medium
+Name[ca]=S'està esperant el suport
+Name[ca@valencia]=S'està esperant el suport
+Name[cs]=Čeká se na médium
+Name[pt]=À espera do disco
+Name[sv]=Väntar på medium
+Name[uk]=Очікування носія
+Name[x-test]=xxWaiting for mediumxx
 Comment=The user needs to insert a medium
+Comment[ca]=L'usuari ha d'introduir un suport
+Comment[ca@valencia]=L'usuari ha d'introduir un suport
+Comment[cs]=Uživatel musí vložit médium
+Comment[pt]=O utilizador tem que inserir um disco
+Comment[sv]=Användaren måste mata in ett medium
+Comment[uk]=Користувач повинен вставити носій
+Comment[x-test]=xxThe user needs to insert a mediumxx
 Sound=KDE-K3B-Insert-Medium.ogg
 Action=Sound
 
 [Event/Busy]
 Name=Busy
+Name[ca]=Ocupat
+Name[ca@valencia]=Ocupat
+Name[cs]=Zaneprázdněn
+Name[pt]=Ocupado
+Name[sv]=Upptagen
+Name[uk]=Виконується завдання
+Name[x-test]=xxBusyxx
 Comment=K3b is currently busy and cannot start any other operations
+Comment[ca]=El K3b ara mateix està ocupat i no pot iniciar altres operacions
+Comment[ca@valencia]=El K3b ara mateix està ocupat i no pot iniciar altres operacions
+Comment[cs]=K3b je právě zaneprázdněn a nemůže spouštět žádné další operace
+Comment[pt]=O K3b está ocupado de momento e não pode iniciar outras operações
+Comment[sv]=K3b är upptagen och kan inte starta några andra åtgärder
+Comment[uk]=Зараз програма K3b виконує завдання, тому не може почати ніяку іншу дію
+Comment[x-test]=xxK3b is currently busy and cannot start any other operationsxx
 Action=Popup
 
 [Event/NoProblemsFound]
 Name=No problems found
+Name[ca]=No s'ha trobat cap problema
+Name[ca@valencia]=No s'ha trobat cap problema
+Name[cs]=Nebyl nalezen žádný problém
+Name[pt]=Sem problemas encontrados
+Name[sv]=Inga problem hittades
+Name[uk]=Проблем не виявлено
+Name[x-test]=xxNo problems foundxx
 Comment=No problems found in system configuration
+Comment[ca]=No s'han trobat problemes amb la configuració del sistema
+Comment[ca@valencia]=No s'han trobat problemes amb la configuració del sistema
+Comment[cs]=V nastavení systému nebyl nalezen žádný problém
+Comment[pt]=Não foram encontrados problemas na configuração do sistema
+Comment[sv]=Inga problem hittades i systeminställningarna
+Comment[uk]=В конфігурації системи не виявлено проблем
+Comment[x-test]=xxNo problems found in system configurationxx
 Action=Popup
 
 [Event/MountFailed]
 Name=Mount/unmount failed
+Name[ca]=Ha fallat en muntar/desmuntar
+Name[ca@valencia]=Ha fallat en muntar/desmuntar
+Name[cs]=Připojení/odpojení selhalo
+Name[pt]=A montagem/desmontagem falhou
+Name[sv]=Montering eller avmontering misslyckades
+Name[uk]=Помилка монтування або демонтування
+Name[x-test]=xxMount/unmount failedxx
 Comment=Medium cannot be mount or unmounted
+Comment[ca]=El suport no es pot muntar o desmuntar
+Comment[ca@valencia]=El suport no es pot muntar o desmuntar
+Comment[cs]=Není možné připojit nebo odpojit médium
+Comment[pt]=Não é possível montar ou desmontar o disco
+Comment[sv]=Medium kan inte monteras eller avmonteras
+Comment[uk]=Не вдалося змонтувати або демонтувати носій
+Comment[x-test]=xxMedium cannot be mount or unmountedxx
 Action=Popup
 
 [Event/TrackDataNotFound]
 Name=Track data not found
+Name[ca]=No s'han trobat les dades de la pista
+Name[ca@valencia]=No s'han trobat les dades de la pista
+Name[cs]=Data skladby nebyla nalezena
+Name[pt]=Dados da faixa não encontrados
+Name[sv]=Spårdata hittades inte
+Name[uk]=Не знайдено даних композиції
+Name[x-test]=xxTrack data not foundxx
 Comment=Track information has not been found in the online database
+Comment[ca]=No s'ha trobat la informació de la pista a la base de dades en línia
+Comment[ca@valencia]=No s'ha trobat la informació de la pista a la base de dades en línia
+Comment[cs]=Informace o stopě nebyly v online databázi nalezeny
+Comment[pt]=A informação da faixa não foi encontrada na base de dados 'online'
+Comment[sv]=Spårinformation hittades inte i nätdatabasen
+Comment[uk]=Не вдалося знайти дані композиції у базі даних у інтернеті
+Comment[x-test]=xxTrack information has not been found in the online databasexx
 Action=Popup

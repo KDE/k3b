@@ -1,5 +1,12 @@
 [Desktop Entry]
 Name=K3b Ogg Vorbis Encoder Config Widget
+Name[ca]=Estri de configuració del codificador Ogg Vorbis del K3b
+Name[ca@valencia]=Estri de configuració del codificador Ogg Vorbis del K3b
+Name[cs]=Konfigurační widget K3B kodéru ogg vorbis
+Name[pt]=Item de Configuração do Codificador de Ogg Vorbis do K3b
+Name[sv]=Grafisk inställningskomponent för K3b Ogg Vorbis-kodare
+Name[uk]=Віджет налаштування кодувальника Ogg Vorbis K3b
+Name[x-test]=xxK3b Ogg Vorbis Encoder Config Widgetxx
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3boggvorbisencoder

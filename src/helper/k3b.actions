@@ -1,9 +1,37 @@
 [org.kde.k3b.updatepermissions]
 Name=Update device and programs permissions
+Name[ca]=Actualitza els permisos dels dispositius i programes
+Name[ca@valencia]=Actualitza els permisos dels dispositius i programes
+Name[cs]=Aktualizovat oprávnění zařízení a programů
+Name[pt]=Actualizar as permissões dos dispositivos e dos programas
+Name[sv]=Uppdatera rättigheter för enheter och program
+Name[uk]=Оновлення прав доступу до пристроїв і програм
+Name[x-test]=xxUpdate device and programs permissionsxx
 Description=Authentication is required to update permissions of devices and programs
+Description[ca]=Cal autenticar-se per actualitzar els permisos dels dispositius i els programes
+Description[ca@valencia]=Cal autenticar-se per actualitzar els permisos dels dispositius i els programes
+Description[cs]=Pro aktualizaci oprávnění zařízení a programů je potřeba oprávnění
+Description[pt]=É necessária a autenticação para actualizar as permissões dos dispositivos e dos programas
+Description[sv]=Behörighetskontroll krävs för att uppdatera rättigheter för enheter och program
+Description[uk]=Для оновлення прав доступу до пристроїв та програм слід пройти розпізнавання
+Description[x-test]=xxAuthentication is required to update permissions of devices and programsxx
 Policy=auth_admin
 
 [org.kde.k3b.addtogroup]
 Name=Adds current user to a specified group
+Name[ca]=Afegeix l'usuari actual a un grup especificat
+Name[ca@valencia]=Afig l'usuari actual a un grup especificat
+Name[cs]=Přidá nynějšího uživatele do určené skupiny
+Name[pt]=Adiciona o utilizador actual a um grupo indicado
+Name[sv]=Lägger till aktuell användare i en angiven grupp
+Name[uk]=Додавання поточного користувача до вказаної групи
+Name[x-test]=xxAdds current user to a specified groupxx
 Description=Authentication is required to add current user to a group
+Description[ca]=Cal autenticar-se per afegir l'usuari actual a un grup
+Description[ca@valencia]=Cal autenticar-se per afegir l'usuari actual a un grup
+Description[cs]=Pro přidání současného uživatele do skupiny je potřeba oprávnění
+Description[pt]=É necessária a autenticação para adicionar o utilizador actual a um grupo
+Description[sv]=Behörighetskontroll krävs för att lägga till aktuell användare i en grupp
+Description[uk]=Для додавання поточного користувача до вказаної групи слід пройти розпізнавання
+Description[x-test]=xxAuthentication is required to add current user to a groupxx
 Policy=auth_admin

@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=K3b FLAC Decoder
+Name[ca]=Descodificador FLAC del K3b
+Name[ca@valencia]=Descodificador FLAC del K3b
+Name[cs]=FLAC dekodér K3b
+Name[pt]=Descodificador de FLAC do K3b
+Name[sv]=K3b FLAC-avkodare
+Name[uk]=K3b декодувальник FLAC
+Name[x-test]=xxK3b FLAC Decoderxx
 Comment=Decoding module to decode FLAC files
+Comment[ca]=Mòdul de descodificació per a descodificar fitxers FLAC
+Comment[ca@valencia]=Mòdul de descodificació per a descodificar fitxers FLAC
+Comment[cs]=Modul pro dekódování souborů FLAC
+Comment[pt]=Módulo de descodificação de ficheiros FLAC
+Comment[sv]=Avkodningsmodul för att avkoda FLAC-filer
+Comment[uk]=Модуль декодування для файлів FLAC
+Comment[x-test]=xxDecoding module to decode FLAC filesxx
 Type=Service
 ServiceTypes=K3b/Plugin
 Icon=preferences-plugin

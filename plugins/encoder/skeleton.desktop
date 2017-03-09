@@ -1,6 +1,20 @@
 [Desktop Entry]
 Name=K3b ??? Encoder
+Name[ca]=Codificador ??? del K3b
+Name[ca@valencia]=Codificador ??? del K3b
+Name[cs]=K3b ??? enkodér
+Name[pt]=Codificador ??? do K3b
+Name[sv]=K3b ???-kodare
+Name[uk]=Кодувальник ??? для K3b
+Name[x-test]=xxK3b ??? Encoderxx
 Comment=Encoding module to encode <name> files
+Comment[ca]=Mòdul de codificació per a codificar fitxers <name>
+Comment[ca@valencia]=Mòdul de codificació per a codificar fitxers <name>
+Comment[cs]=Modul pro kompresi do souborů <name>
+Comment[pt]=Módulo de codificação de ficheiros <nome>
+Comment[sv]=Kodningsmodul för att koda <namn>-filer
+Comment[uk]=Модуль кодування файлів <name>
+Comment[x-test]=xxEncoding module to encode <name> filesxx
 Type=Service
 X-KDE-ServiceTypes=K3b/Plugin
 

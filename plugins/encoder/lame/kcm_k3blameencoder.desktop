@@ -1,5 +1,12 @@
 [Desktop Entry]
 Name=K3b Lame MP3 Encoder Config Module
+Name[ca]=Mòdul de configuració del codificador MP3 Lame del K3b
+Name[ca@valencia]=Mòdul de configuració del codificador MP3 Lame del K3b
+Name[cs]=Ovládací modul K3b Lame formátu MP3
+Name[pt]=Módulo de Configuração do Codificador de MP3 Lame do K3b
+Name[sv]=Inställningsmodul för K3b Lame MP3-kodare
+Name[uk]=Модуль налаштування кодувальника Lame MP3 K3b
+Name[x-test]=xxK3b Lame MP3 Encoder Config Modulexx
 Type=Service
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_k3blameencoder
