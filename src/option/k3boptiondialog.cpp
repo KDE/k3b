@@ -143,7 +143,11 @@ void K3b::OptionDialog::setupDevicePage()
     m_deviceOptionTab = new K3b::DeviceOptionTab;
     m_devicePage = addPage( m_deviceOptionTab, i18n("Devices") );
     m_devicePage->setHeader( i18n("Optical Devices") );
-    m_devicePage->setIcon( QIcon::fromTheme( "drive-optical" ) );
+    QIcon icon = QIcon::fromTheme("drive-optical");
+    if (icon.isNull()) {
+        icon = QIcon::fromTheme("media-optical");
+    }
+    m_devicePage->setIcon(icon);
     m_pages.insert( Devices, m_devicePage );
 }
 
@@ -173,7 +177,11 @@ void K3b::OptionDialog::setupPluginPage()
     m_pluginOptionTab = new K3b::PluginOptionTab;
     m_pluginPage = addPage( m_pluginOptionTab, i18n("Plugins") );
     m_pluginPage->setHeader( i18n("K3b Plugin Configuration") );
-    m_pluginPage->setIcon( QIcon::fromTheme( "preferences-plugin" ) );
+    QIcon icon = QIcon::fromTheme("preferences-plugin");
+    if (icon.isNull()) {
+        icon = QIcon::fromTheme("application-x-addon");
+    }
+    m_pluginPage->setIcon(icon);
     m_pages.insert( Plugins, m_pluginPage );
 }
 
