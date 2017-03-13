@@ -115,7 +115,7 @@ bool ThemeModel::removeRows( int row, int count, const QModelIndex& parent )
         beginRemoveRows( parent, row, row+count-1 );
         for( int i = 0; i < count; ++i ) {
             if( row >= 0 && row < m_themeManager->themes().size() ) {
-                Theme* theme = m_themeManager->themes().takeAt( i );
+                QScopedPointer<Theme> theme(m_themeManager->themes().takeAt(row));
                 QString path = theme->path();
 
                 // delete k3b.theme file to avoid it to get loaded
