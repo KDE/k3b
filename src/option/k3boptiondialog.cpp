@@ -68,7 +68,7 @@ K3b::OptionDialog::OptionDialog(QWidget *parent )
 
     // if we don't do this the dialog start really huge
     // because of the label in the device-tab
-    resize( 700, 500 );
+    setFixedSize(700, 582);
 
     connect( this->buttonBox()->button( QDialogButtonBox::Ok ), SIGNAL(clicked()), SLOT(slotOk()) );
     connect( this->buttonBox()->button( QDialogButtonBox::RestoreDefaults ), SIGNAL(clicked()), SLOT(slotDefault()) );
