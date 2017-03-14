@@ -2,6 +2,8 @@
 <component type="desktop">
   <id>org.kde.k3b.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
+  <name>K3b</name>
+  <summary>Disk Burning</summary>
   <description>
     <p>
       K3b was created to be a feature-rich and easy to handle CD burning
@@ -41,7 +43,7 @@
     <ul>
       <li>
         The projects: Projects are created from the file menu and then filled with
-        data to burn.
+        data to burn
       </li>
       <li xml:lang="bs">Projekti: Projekti se stvaraju iz padajućeg menija, a zatim ispune podacima za upis.</li>
       <li xml:lang="ca">Els projectes: Els projectes es creen des del menú de fitxer i s'omplen amb les dades a gravar.</li>
@@ -76,7 +78,7 @@
       <li xml:lang="zh-TW">專案：專案是從檔案選單中建立並填入要燒錄的資料的部份。</li>
       <li>
         The Tools: The tools menu offers different tools like CD copy or DVD
-        formatting.
+        formatting
       </li>
       <li xml:lang="bs">Alati: Meni alati nudi različite alate kao što CD kopiranje ili DVD formatiranje.</li>
       <li xml:lang="ca">Les eines: El menú d'eines ofereix eines diferents com la còpia de CD o el formatat de DVD.</li>
@@ -112,7 +114,7 @@
       <li>
         Context sensitive media actions: When clicking on the Icon representing a
         CD/DVD drive K3b will present its contents and allow some further action.
-        This is for example the way to rip audio CDs.
+        This is for example the way to rip audio CDs
       </li>
       <li xml:lang="bs">Kontekstno osjetljive medijske akcije: Kada kliknete na ikonu koja predstavlja CD / DVD uređaj, K3b će predstaviti njegov sadržaj i omogućiti neku dodatnu akciju. Ovo je, na primer način da čupate audio CD.</li>
       <li xml:lang="ca">Accions de suports sensibles al context: En clicar en la icona que representa una unitat de CD/DVD, el K3b presenta el seu contingut i permet diverses accions. Per exemple, aquesta és la manera d'extreure CD d'àudio.</li>
