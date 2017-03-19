@@ -58,9 +58,17 @@ include(GenerateExportHeader)
 include(ECMInstallIcons)
 include(ECMEnableSanitizers)
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui WebKitWidgets)
+find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
                                      KCMUtils KIO Notifications NewStuff NotifyConfig Service Solid WidgetsAddons XmlGui)
+
+find_package(Qt5WebKitWidgets)
+set_package_properties(Qt5WebKitWidgets PROPERTIES
+    DESCRIPTION "Qt5WebKitWidgets is used for prettier k3bdiskinfoview."
+    TYPE OPTIONAL)
+if(Qt5WebKitWidgets_FOUND)
+    add_definitions(-DHAVE_QT5WEBKITWIDGETS)
+endif()
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 

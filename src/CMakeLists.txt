@@ -237,8 +237,11 @@ target_link_libraries(k3b
     KF5::Solid
     KF5::XmlGui
     KF5::ConfigCore
-    Qt5::WebKitWidgets
 )
+
+if(HAVE_QT5WEBKITWIDGETS)
+    target_link_libraries(k3b Qt5::WebKitWidgets)
+endif()
 
 if(ICONV_FOUND)
     target_include_directories(k3b PRIVATE ${ICONV_INCLUDE_DIR})

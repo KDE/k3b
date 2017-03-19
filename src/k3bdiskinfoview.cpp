@@ -38,7 +38,9 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPalette>
 #include <QtGui/QPixmap>
+#ifdef HAVE_QT5WEBKITWIDGETS
 #include <QtWebKitWidgets/QWebView>
+#endif
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLayout>
 #include <QtWidgets/QTextBrowser>
@@ -61,7 +63,11 @@ K3b::DiskInfoView::DiskInfoView( QWidget* parent )
                               Device::STATE_ALL|Device::STATE_NO_MEDIA|Device::STATE_UNKNOWN,
                               parent )
 {
+#ifdef HAVE_QT5WEBKITWIDGETS
     m_infoView = new QWebView( this );
+#else
+    m_infoView = new QTextBrowser( this );
+#endif
     setMainWidget( m_infoView );
 }
 
