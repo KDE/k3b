@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <name>K3b</name>
   <name xml:lang="ca">K3b</name>
+  <name xml:lang="ca-valencia">K3b</name>
   <name xml:lang="cs">K3b</name>
   <name xml:lang="it">K3b</name>
   <name xml:lang="nl">K3b</name>
@@ -14,6 +15,7 @@
   <name xml:lang="x-test">xxK3bxx</name>
   <summary>Disk Burning</summary>
   <summary xml:lang="ca">Gravació de disc</summary>
+  <summary xml:lang="ca-valencia">Gravació de disc</summary>
   <summary xml:lang="cs">Vypalování médií</summary>
   <summary xml:lang="it">Masterizzazione su disco</summary>
   <summary xml:lang="nl">Schijven branden</summary>
@@ -63,6 +65,7 @@
         data to burn
       </li>
       <li xml:lang="ca">Els projectes: Els projectes es creen des del menú de fitxer i s'omplen amb les dades a gravar</li>
+      <li xml:lang="ca-valencia">Els projectes: Els projectes es creen des del menú de fitxer i s'omplen amb les dades a gravar</li>
       <li xml:lang="cs">Projekty: Projekty jsou vytvořeny z nabídky souboru a poté naplněny daty pro vypálení</li>
       <li xml:lang="it">I progetti: sono creati dal menu File e poi completati dai dati da masterizzare</li>
       <li xml:lang="nl">De projecten: Projecten worden gemaakt uit het menu voor bestanden en daarna gevuld met gegevens on te branden</li>
@@ -75,6 +78,7 @@
         formatting
       </li>
       <li xml:lang="ca">Les eines: El menú d'eines ofereix eines diferents com la còpia de CD o el formatat de DVD</li>
+      <li xml:lang="ca-valencia">Les eines: El menú d'eines ofereix eines diferents com la còpia de CD o el formatat de DVD</li>
       <li xml:lang="cs">Nástroje: Nabídka nástrojů nabízí různé nástroje jako třeba kopírování CD nebo formátování DVD</li>
       <li xml:lang="it">Gli strumenti: questo menu offre diversi strumenti come la copia dei CD o la formattazione dei DVD</li>
       <li xml:lang="nl">De hulpmiddelen: Het menu Hulpmiddelen biedt verschillende hulpmiddelen zoals kopiëren van cd of formattering van een dvd</li>
@@ -88,6 +92,7 @@
         This is for example the way to rip audio CDs
       </li>
       <li xml:lang="ca">Accions de suports sensibles al context: En clicar en la icona que representa una unitat de CD/DVD, el K3b presenta el seu contingut i permet diverses accions. Per exemple, aquesta és la manera d'extreure CD d'àudio</li>
+      <li xml:lang="ca-valencia">Accions de suports sensibles al context: En clicar en la icona que representa una unitat de CD/DVD, el K3b presenta el seu contingut i permet diverses accions. Per exemple, esta és la manera d'extreure CD d'àudio</li>
       <li xml:lang="cs">Činnosti s médii odpovídají situaci: Při kliknutí na ikonu reprezentující mechaniku CD/DVD, vám K3b zobrazí jejich obsah a nabídne nějakou další činnost. Například se takto dají ripovat audio CD</li>
       <li xml:lang="it">Azioni sensibili al contesto: quando si fa clic sull'icona che rappresenta un lettore CD/DVD, K3b presenterà il suo contenuto e consentirà alcune azioni ulteriori. Questo è, ad esempio, il modo di estrarre i CD audio</li>
       <li xml:lang="nl">Context gevoelige mediumacties: bij klikken op het pictogram voor een cd/dvd-apparaat zal K3b zijn inhoud weergeven en enige verdere acties. Dit is bijvoorbeeld de manier om audio-cd's te rippen</li>
