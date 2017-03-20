@@ -19,7 +19,11 @@
 
 #include "k3bmediacontentsview.h"
 
+#ifdef HAVE_QT5WEBKITWIDGETS
 class QWebView;
+#else
+class QTextBrowser;
+#endif
 
 namespace K3b {
 class DiskInfoView : public MediaContentsView
@@ -38,7 +42,11 @@ private:
     QString createIso9660InfoItems( const Iso9660SimplePrimaryDescriptor& iso );
     QString createTrackItems( const Medium& medium );
 
+#ifdef HAVE_QT5WEBKITWIDGETS
     QWebView* m_infoView;
+#else
+    QTextBrowser* m_infoView;
+#endif
 };
 }
 
