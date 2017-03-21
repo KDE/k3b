@@ -239,7 +239,7 @@ target_link_libraries(k3b
     KF5::ConfigCore
 )
 
-if(HAVE_QT5WEBKITWIDGETS)
+if(Qt5WebKitWidgets_FOUND)
     target_link_libraries(k3b Qt5::WebKitWidgets)
 endif()
 
