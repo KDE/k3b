@@ -10,6 +10,7 @@
   <name xml:lang="it">K3b</name>
   <name xml:lang="nl">K3b</name>
   <name xml:lang="pt">K3b</name>
+  <name xml:lang="sl">K3b</name>
   <name xml:lang="sv">K3b</name>
   <name xml:lang="tr">K3b</name>
   <name xml:lang="uk">K3b</name>
@@ -22,6 +23,7 @@
   <summary xml:lang="it">Masterizzazione su disco</summary>
   <summary xml:lang="nl">Schijven branden</summary>
   <summary xml:lang="pt">Gravação de Discos</summary>
+  <summary xml:lang="sl">Zapisovanje nosilcev</summary>
   <summary xml:lang="sv">Skivbränning</summary>
   <summary xml:lang="uk">Запис оптичних дисків</summary>
   <summary xml:lang="x-test">xxDisk Burningxx</summary>
@@ -73,6 +75,7 @@
       <li xml:lang="it">I progetti: sono creati dal menu File e poi completati dai dati da masterizzare</li>
       <li xml:lang="nl">De projecten: Projecten worden gemaakt uit het menu voor bestanden en daarna gevuld met gegevens on te branden</li>
       <li xml:lang="pt">Os projectos: Os projectos são criados a partir do menu de ficheiros e depois preenchidos com os dados a gravar</li>
+      <li xml:lang="sl">Projekti: projekti se ustvarijo iz datotečnega menija in se nato zapolnijo s podatki za zapis</li>
       <li xml:lang="sv">Projekten: Projekt skapas från arkivmenyn och fylls därefter med data att bränna</li>
       <li xml:lang="uk">Проектів: проекти створюються за допомогою меню «Файл», а потім заповнюються даними, які слід записати.</li>
       <li xml:lang="x-test">xxThe projects: Projects are created from the file menu and then filled with data to burnxx</li>
@@ -87,6 +90,7 @@
       <li xml:lang="it">Gli strumenti: questo menu offre diversi strumenti come la copia dei CD o la formattazione dei DVD</li>
       <li xml:lang="nl">De hulpmiddelen: Het menu Hulpmiddelen biedt verschillende hulpmiddelen zoals kopiëren van cd of formattering van een dvd</li>
       <li xml:lang="pt">As ferramentas: O menu de ferramentas oferece diversas funcionalidades como a cópia de CD's ou a formatação de DVD's</li>
+      <li xml:lang="sl">Orodja: meni z orodji ponuja različna orodja kot so kopiranje CD-jev ali formatiranje DVD-jev</li>
       <li xml:lang="sv">Verktygen: Verktygsmenyn erbjuder olika verktyg som cd-kopiering eller dvd-formatering</li>
       <li xml:lang="uk">Інструментів: за допомогою меню «Інструменти» ви можете скористатися різноманітними інструментами, зокрема інструментами копіювання компакт-дисків або форматування DVD.</li>
       <li xml:lang="x-test">xxThe Tools: The tools menu offers different tools like CD copy or DVD formattingxx</li>
@@ -102,6 +106,7 @@
       <li xml:lang="it">Azioni sensibili al contesto: quando si fa clic sull'icona che rappresenta un lettore CD/DVD, K3b presenterà il suo contenuto e consentirà alcune azioni ulteriori. Questo è, ad esempio, il modo di estrarre i CD audio</li>
       <li xml:lang="nl">Context gevoelige mediumacties: bij klikken op het pictogram voor een cd/dvd-apparaat zal K3b zijn inhoud weergeven en enige verdere acties. Dit is bijvoorbeeld de manier om audio-cd's te rippen</li>
       <li xml:lang="pt">Acções dependentes do contexto: Ao carregar no ícone que representa um leitor de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas acções adicionais. Esta é, por exemplo, a forma de extrair músicas de CD's de áudio</li>
+      <li xml:lang="sl">Dejanja odvisna od vsebine: ko kliknete na ikono, ki predstavlja pogon CD/DVD, bo K3b predstavil njeno vsebino in ponudil nadaljnja dejanja. To je na primer način za zajetje zvočnih CD-jev</li>
       <li xml:lang="sv">Sammanhangsberoende mediaåtgärder: Vid ett klick på ikonen som representerar en cd- eller dvd-enhet, visar K3b dess innehåll och tillåter vissa ytterligare åtgärder. Det är exempelvis sättet man lagrar ljud-cd</li>
       <li xml:lang="uk">Дій, що відповідають контексту носія даних: після натискання піктограми пристрою для читання компакт-дисків та DVD K3b показує вміст носія та надає змогу вибрати подальші дії з носієм. За допомогою цих дій можна, наприклад, видобути цифрові дані зі звукового компакт-диска.</li>
       <li xml:lang="x-test">xxContext sensitive media actions: When clicking on the Icon representing a CD/DVD drive K3b will present its contents and allow some further action. This is for example the way to rip audio CDsxx</li>
