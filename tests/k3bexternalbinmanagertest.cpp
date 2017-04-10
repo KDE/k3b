@@ -51,7 +51,7 @@ private:
     }
 };
 
-QTEST_MAIN(ExternalBinManagerTest)
+QTEST_GUILESS_MAIN(ExternalBinManagerTest)
 
 ExternalBinManagerTest::ExternalBinManagerTest()
     : QObject()
