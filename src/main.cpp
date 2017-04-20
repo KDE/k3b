@@ -16,6 +16,9 @@
 #include <KCoreAddons/KAboutData>
 #include <KI18n/KLocalizedString>
 #include <QtCore/QCommandLineParser>
+#ifdef __clang__
+#include <sanitizer/common_interface_defs.h>
+#endif
 
 int main( int argc, char* argv[] )
 {
@@ -129,6 +132,11 @@ int main( int argc, char* argv[] )
     }
 
     app.init( parser );
+
+#ifdef __clang__
+    if (argc > 2)
+        __sanitizer_print_memory_profile(atoi(argv[1]), atoi(argv[2]));
+#endif
 
     return app.exec();
 }
