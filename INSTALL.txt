@@ -74,4 +74,4 @@ See PERMISSIONS on hints how to properly setup the permissions to use K3b withou
 
 Have fun
 Sebastian Trueg (trueg@k3b.org)
-Leslie Zhai (xiangzhai83@gmail.com)
+Leslie Zhai (lesliezhai@kde-china.org)
