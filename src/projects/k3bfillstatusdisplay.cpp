@@ -152,14 +152,18 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     sopb.fontMetrics = fontMetrics();
     sopb.palette = palette();
     sopb.palette.setBrush( QPalette::Highlight, fillBrush );
+    QFont overSizeFont(font());
+    int fontPointSize = qMax(8, overSizeFont.pointSize() - 4);
     sopb.rect = rect();
+    sopb.rect.setY(sopb.rect.y() + fontPointSize);
     sopb.state = isEnabled() ? QStyle::State_Enabled : QStyle::State_None;
     sopb.minimum = 0;
     sopb.maximum = maxValue.totalFrames();
     sopb.progress = docSize.totalFrames();
     style()->drawControl( QStyle::CE_ProgressBar, &sopb, &p );
 
-    const QRect barRect = style()->subElementRect( QStyle::SE_ProgressBarContents, &sopb );
+    QRect barRect = style()->subElementRect(QStyle::SE_ProgressBarContents, &sopb);
+    barRect.setY(rect().y());
 
     // so split width() in maxValue pieces
     double one = (double)barRect.width() / (double)maxValue.totalFrames();
@@ -222,8 +226,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     // calculate the over size text
     // ====================================================================================
-    QFont overSizeFont(font());
-    overSizeFont.setPointSize(qMin(8, overSizeFont.pointSize() - 4));
+    overSizeFont.setPointSize(fontPointSize);
     overSizeFont.setBold(false);
 
     QRect overSizeTextRect( barRect );
@@ -248,7 +251,6 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     p.setClipRect( QStyle::visualRect( layoutDirection(), barRect, crect ) );
     p.drawLine( QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerFrom ),
                 QStyle::visualPos( layoutDirection(), barRect, mediumSizeMarkerTo ) );
-    p.setFont(overSizeFont);
     p.drawText( QStyle::visualRect( layoutDirection(), barRect, docTextRect ),
                 QStyle::visualAlignment( layoutDirection(), Qt::AlignLeft | Qt::AlignVCenter ), docSizeText );
     p.setFont(overSizeFont);
