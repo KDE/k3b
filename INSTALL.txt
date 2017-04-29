@@ -1,4 +1,4 @@
-Installing K3b 17.04.0
+Installing K3b 17.07.0
 ----------------------
 
 
