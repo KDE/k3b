@@ -276,9 +276,9 @@ K3b::DataMultisessionImportDialog::DataMultisessionImportDialog( QWidget* parent
              this, SLOT(updateMedia()) );
     connect( d->sessionView, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
              this, SLOT(slotSelectionChanged()) );
-    connect( d->sessionView, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SIGNAL(okClicked()) );
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-    connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
+    connect(d->sessionView, SIGNAL(itemActivated(QTreeWidgetItem*,int)), SLOT(slotOk()) );
+    connect(d->okButton, SIGNAL(clicked()), this, SLOT(slotOk()));
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(slotCancel()));
 }
 
 
