@@ -94,8 +94,10 @@ void K3b::Application::init( QCommandLineParser* commandLineParser )
     
     processEvents();
     
-    if( splash )
+    if (splash) {
+        splash->hide();
         QMetaObject::invokeMethod( splash, "close", Qt::QueuedConnection );
+    }
 
     qRegisterMetaType<KSharedConfig::Ptr>( "KSharedConfig::Ptr" );
     //

@@ -98,34 +98,8 @@ void K3b::Splash::addInfo( const QString& s )
 }
 
 
-// void K3b::Splash::paintEvent( QPaintEvent* e )
-// {
-//   // first let the window paint the background and the child widget
-//   QWidget::paintEvent( e );
-
-//   // now create the text we want to display
-//   // find the lower left corner and paint it on top of the pixmap
-//   QPainter p( this );
-//   p.setPen( Qt::blue );
-
-//   QFontMetrics fm = p.fontMetrics();
-
-//   QString line1 = QString( "K3b version %1" ).arg(VERSION);
-//   QString line2( "(c) 2001 by Sebastian Trueg" );
-//   QString line3( "licensed under the GPL" );
-
-//   QRect rect1 = fm.boundingRect( line1 );
-//   QRect rect2 = fm.boundingRect( line2 );
-//   QRect rect3 = fm.boundingRect( line3 );
-
-//   int textH = rect1.height() + rect2.height() + rect3.height() + 2 * fm.leading() + 2 + rect2.height() /*hack because the boundingRect method seems not to work properly! :-(*/;
-//   int textW = qMax( rect1.width(), qMax( rect2.width(), rect3.width() ) ) + 2;
-
-//   int startX = 10;
-//   int startY = height() - 10 - textH;
-
-//   p.drawText( startX, startY, textW, textH, 0, QString("%1\n%2\n%3").arg(line1).arg(line2).arg(line3) );
-// }
-
-
-
+void K3b::Splash::hide()
+{
+    QWidget::hide();
+    qApp->processEvents();
+}

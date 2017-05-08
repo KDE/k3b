@@ -35,6 +35,7 @@ public:
 
 public Q_SLOTS:
     void show();
+    void hide();
     void addInfo( const QString& );
 
 protected:
