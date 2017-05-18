@@ -547,15 +547,15 @@ void K3b::JobProgressDialog::slotProgress( int percent )
         setWindowTitle( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
     }
 
-    if( m_timer.isValid() ) {
-	qint64 elapsed = m_timer.elapsed();
-        m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
-            "Elapsed time: %1", QLocale().toString( QTime().addSecs( elapsed ), QLocale::NarrowFormat ) ) );
+    if (m_timer.isValid()) {
+	    qint64 elapsed = m_timer.elapsed();
+        m_labelElapsedTime->setText(i18nc("@info %1 is a duration formatted",
+            "Elapsed time: %1", QTime::fromMSecsSinceStartOfDay(elapsed).toString("hh:mm:ss")));
         // Update "Remaining time" max. each second (1000 ms)
-        if ( elapsed - m_lastProgressUpdateTime > 999 ) {
-            m_labelRemainingTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
-                "Remaining: %1", QLocale().toString( QTime().addSecs(
-                ( d->lastProgress > 0 && d->lastProgress < 100 ) ? elapsed * ( 100 - d->lastProgress) / d->lastProgress : 0 ), QLocale::NarrowFormat ) ) );
+        if (elapsed - m_lastProgressUpdateTime > 999) {
+            m_labelRemainingTime->setText(i18nc("@info %1 is a duration formatted",
+                "Remaining: %1", QTime::fromMSecsSinceStartOfDay(
+                (d->lastProgress > 0 && d->lastProgress < 100) ? elapsed * (100 - d->lastProgress) / d->lastProgress : 0).toString("hh:mm:ss")));
             m_lastProgressUpdateTime = elapsed;
         }
     }
