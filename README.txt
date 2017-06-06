@@ -86,4 +86,4 @@ you like/dislike about the user-interface!
 
 Have fun
 Sebastian Trueg (trueg@k3b.org)
-Leslie Zhai (lesliezhai@kde-china.org)
+Leslie Zhai (lesliezhai@llvm.org.cn)

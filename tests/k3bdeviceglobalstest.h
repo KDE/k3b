@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Leslie Zhai <lesliezhai@kde-china.org>
+ * Copyright (C) 2016 - 2017 Leslie Zhai <lesliezhai@llvm.org.cn>
  *
  * This file is part of the K3b project.
  *
