@@ -259,6 +259,7 @@ bool K3b::GrowisofsWriter::prepareProcess()
         d->gh->reset( burnDevice(), false );
 
     d->burnedMediumType = burnDevice()->mediaType();
+    d->gh->setMediaType(d->burnedMediumType);
 
     //
     // Never use the -dvd-compat parameter with DVD+RW media
@@ -465,9 +466,6 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
                 double speed = line.mid( pos, line.indexOf( 'x', pos ) - pos ).toDouble(&ok);
                 if (ok) {
                     if (d->lastWritingSpeed != speed) {
-#ifdef K3B_DEBUG
-                        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << speed * d->speedMultiplicator() << speed << d->speedMultiplicator();
-#endif
                         emit writeSpeed((int)(speed * d->speedMultiplicator()), d->speedMultiplicator());
                     }
                     d->lastWritingSpeed = speed;

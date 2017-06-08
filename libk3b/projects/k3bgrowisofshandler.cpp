@@ -16,7 +16,6 @@
 #include "k3bjob.h"
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
-#include "k3bdevice.h"
 #include "k3bdevicehandler.h"
 #include "k3b_i18n.h"
 
@@ -37,7 +36,8 @@ public:
 
 
 K3b::GrowisofsHandler::GrowisofsHandler( QObject* parent )
-    : QObject( parent )
+    : QObject( parent ),
+      m_mediaType(Device::MEDIA_DVD_ALL)
 {
     d = new Private;
     reset();
@@ -166,19 +166,16 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
     }
     else if( ( pos = line.indexOf( "Current Write Speed" ) ) > 0 ) {
         // parse write speed
-        // /dev/sr0: "Current Write Speed" is 2.4x1385KBps
+        // /dev/sr0: "Current Write Speed" is 2.4x1385KBps for DVD or 4.1x4496KBps for BD
 
         pos += 24;
         int endPos = line.indexOf( 'x', pos+1 );
         bool ok = true;
         double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
         if (ok) {
-#ifdef K3B_DEBUG
-            qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << speed * double(Device::SPEED_FACTOR_DVD) << speed << double(Device::SPEED_FACTOR_DVD);
-#endif
-            emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)",
-                                   int( speed * double( Device::SPEED_FACTOR_DVD ) )
-                                   ,QLocale::system().toString(speed)), K3b::Job::MessageInfo );
+            emit infoMessage(i18n("Writing speed: %1 KB/s (%2x)",
+                             int(speed * double(m_mediaType == Device::MEDIA_DVD_ALL ? Device::SPEED_FACTOR_DVD : Device::SPEED_FACTOR_BD)),
+                             QLocale::system().toString(speed)), K3b::Job::MessageInfo);
         } else
             qDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
     }
@@ -315,4 +312,7 @@ void K3b::GrowisofsHandler::slotCheckBufferStatusDone( K3b::Device::DeviceHandle
     }
 }
 
-
+void K3b::GrowisofsHandler::setMediaType(Device::MediaType mediaType) 
+{
+    m_mediaType = mediaType;
+}

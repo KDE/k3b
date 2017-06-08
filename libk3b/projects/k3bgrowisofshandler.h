@@ -15,6 +15,8 @@
 #ifndef _K3B_GROWISOFS_HANDLER_H_
 #define _K3B_GROWISOFS_HANDLER_H_
 
+#include "k3bdevice.h"
+
 #include <QtCore/QObject>
 
 namespace K3b {
@@ -49,6 +51,8 @@ namespace K3b {
 
         int error() const { return m_error; }
 
+        void setMediaType(Device::MediaType mediaType);
+
     public Q_SLOTS:
         /**
          * This will basically reset the error type
@@ -82,6 +86,7 @@ namespace K3b {
         int m_error;
         bool m_dao;
         Device::Device* m_device;
+        Device::MediaType m_mediaType;
     };
 }
 
