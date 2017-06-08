@@ -289,7 +289,9 @@ void K3b::MediaCopyDialog::slotStartClicked()
     K3b::BurnJob* burnJob = 0;
 
     if( m_comboCopyMode->currentIndex() == 1 ) {
-
+#ifdef K3B_DEBUG
+        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << m_tempDirSelectionWidget->tempPath();
+#endif
         //
         // check for m_tempDirSelectionWidget->tempPath() and
         // m_tempDirSelectionWidget-tempPath() + ".toc"
