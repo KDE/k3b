@@ -172,11 +172,14 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         int endPos = line.indexOf( 'x', pos+1 );
         bool ok = true;
         double speed = line.mid( pos, endPos-pos ).toDouble(&ok);
-        if( ok )
+        if (ok) {
+#ifdef K3B_DEBUG
+            qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << speed * double(Device::SPEED_FACTOR_DVD) << speed << double(Device::SPEED_FACTOR_DVD);
+#endif
             emit infoMessage( i18n("Writing speed: %1 KB/s (%2x)",
                                    int( speed * double( Device::SPEED_FACTOR_DVD ) )
                                    ,QLocale::system().toString(speed)), K3b::Job::MessageInfo );
-        else
+        } else
             qDebug() << "(K3b::GrowisofsHandler) parsing error: '" << line.mid( pos, endPos-pos ) << "'";
     }
     else if( (pos = line.indexOf( "RBU" )) > 0 ) {

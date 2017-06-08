@@ -463,9 +463,13 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
             if( pos != -1 ) {
                 pos += 1;
                 double speed = line.mid( pos, line.indexOf( 'x', pos ) - pos ).toDouble(&ok);
-                if( ok ) {
-                    if( d->lastWritingSpeed != speed )
-                        emit writeSpeed( (int)(speed*d->speedMultiplicator()), d->speedMultiplicator() );
+                if (ok) {
+                    if (d->lastWritingSpeed != speed) {
+#ifdef K3B_DEBUG
+                        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << speed * d->speedMultiplicator() << speed << d->speedMultiplicator();
+#endif
+                        emit writeSpeed((int)(speed * d->speedMultiplicator()), d->speedMultiplicator());
+                    }
                     d->lastWritingSpeed = speed;
                 }
                 else
