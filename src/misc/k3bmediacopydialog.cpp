@@ -285,7 +285,20 @@ void K3b::MediaCopyDialog::slotStartClicked()
     else {
         dlg = new K3b::BurnProgressDialog( parentWidget() );
     }
-
+    // FIXME: why segfault after close the dlg?
+    //
+    // The original CFG for short is like:
+    //
+    // auto dlg = new K3b::JobProgressDialog;
+    // if (bMightBeTrue)
+    //     return; // Memory-leak
+    // delete dlg;
+    //
+    // For fixing Memory-leak issue changed to :
+    //
+    // auto dlg = new K3b::JobProgressDialog;
+    // dlg->setAttribute(Qt::WA_DeleteOnClose);
+    //
     dlg->setAttribute(Qt::WA_DeleteOnClose);
 
     K3b::BurnJob* burnJob = 0;
@@ -380,7 +393,6 @@ void K3b::MediaCopyDialog::slotStartClicked()
 
     dlg->startJob( burnJob );
 
-    delete dlg;
     delete burnJob;
 
     if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
