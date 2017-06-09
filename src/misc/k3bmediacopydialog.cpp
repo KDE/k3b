@@ -286,12 +286,11 @@ void K3b::MediaCopyDialog::slotStartClicked()
         dlg = new K3b::BurnProgressDialog( parentWidget() );
     }
 
+    dlg->setAttribute(Qt::WA_DeleteOnClose);
+
     K3b::BurnJob* burnJob = 0;
 
     if( m_comboCopyMode->currentIndex() == 1 ) {
-#ifdef K3B_DEBUG
-        qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << m_tempDirSelectionWidget->tempPath();
-#endif
         //
         // check for m_tempDirSelectionWidget->tempPath() and
         // m_tempDirSelectionWidget-tempPath() + ".toc"
@@ -302,7 +301,6 @@ void K3b::MediaCopyDialog::slotStartClicked()
                                                     i18n("File Exists"),
                                                     KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )
-                delete dlg;
                 return;
         }
 
@@ -312,7 +310,6 @@ void K3b::MediaCopyDialog::slotStartClicked()
                                                     i18n("File Exists"),
                                                     KStandardGuiItem::overwrite() )
                 != KMessageBox::Continue )
-                delete dlg;
                 return;
         }
 
@@ -376,7 +373,6 @@ void K3b::MediaCopyDialog::slotStartClicked()
     else {
         // do not translate this as it is not intended to be included in the stable version!
         KMessageBox::sorry( this, "Ups", "No copy support for this source media type yet." );
-        delete dlg;
         return;
     }
 
