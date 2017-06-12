@@ -279,27 +279,11 @@ void K3b::MediaCopyDialog::slotStartClicked()
     K3b::Medium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
 
     K3b::JobProgressDialog* dlg = 0;
-    if( m_checkOnlyCreateImage->isChecked() ) {
-        dlg = new K3b::JobProgressDialog( parentWidget() );
-    }
-    else {
-        dlg = new K3b::BurnProgressDialog( parentWidget() );
-    }
-    // FIXME: why segfault after close the dlg?
-    //
-    // The original CFG for short is like:
-    //
-    // auto dlg = new K3b::JobProgressDialog;
-    // if (bMightBeTrue)
-    //     return; // Memory-leak
-    // delete dlg;
-    //
-    // For fixing Memory-leak issue changed to :
-    //
-    // auto dlg = new K3b::JobProgressDialog;
-    // dlg->setAttribute(Qt::WA_DeleteOnClose);
-    //
-    dlg->setAttribute(Qt::WA_DeleteOnClose);
+    if (m_checkOnlyCreateImage->isChecked())
+        dlg = new K3b::JobProgressDialog(parentWidget());
+    else
+        dlg = new K3b::BurnProgressDialog(parentWidget());
+    dlg->setAttribute(Qt::WA_DeleteOnClose);    // Memory-leak issue fixed!
 
     K3b::BurnJob* burnJob = 0;
 
