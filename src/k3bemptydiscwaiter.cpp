@@ -164,7 +164,8 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates me
     d->blockMediaChange = false;
     d->mediumChanged = 0;
 
-    if( message.isEmpty() )
+    // FIXME: reproducablitity race?
+    if (message.isEmpty())
         d->labelRequest->setText( Medium::mediaRequestString( d->wantedMediaType, d->wantedMediaState, minMediaSize, d->device ) );
     else
         d->labelRequest->setText( message );
