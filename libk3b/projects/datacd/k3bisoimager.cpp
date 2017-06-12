@@ -622,14 +622,13 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
         }
     }
 
-    if( filesGreaterThan2Gb ) {
-        emit infoMessage( i18n("Found files bigger than 2 GB. These files will only be fully accessible if mounted with UDF."),
-                          MessageWarning );
+    if (filesGreaterThan2Gb) {
+        emit infoMessage(i18n("Found files bigger than 2 GB. These files will be fully accessible."),
+                MessageInfo);
 
         // in genisoimage 1.1.3 "they" silently introduced this aweful parameter
-        if ( d->mkisofsBin->hasFeature( "genisoimage" ) && d->mkisofsBin->version() >= K3b::Version( 1, 1, 3 ) ) {
+        if (d->mkisofsBin->hasFeature("genisoimage") && d->mkisofsBin->version() >= K3b::Version(1, 1, 3))
             *m_process << "-allow-limited-size";
-        }
     }
 
     bool udf = m_doc->isoOptions().createUdf();
