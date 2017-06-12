@@ -24,7 +24,7 @@
 #include <QtCore/QLocale>
 #include <QtCore/QRegExp>
 #include <QtCore/QStack>
-
+#include <QDebug>
 
 QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                                           int trackNumber,
@@ -126,6 +126,10 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                     break;
                 case TITLE:
                     s = entry.track( trackNumber-1 ).get( KCDDB::Title ).toString();
+                    s = s.trimmed(); // Remove whitespace from start and the end.
+#ifdef K3B_DEBUG
+                    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << s;
+#endif
                     s.replace( '/', '_' );
                     s.replace( '*', '_' );
                     s.replace( '}', '*' );
