@@ -26,7 +26,7 @@ target_link_libraries(k3bdevice
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "k?FreeBSD")
-    target_link_libraries(k3bdevice cam)
+    target_link_libraries(k3bdevice PRIVATE cam)
 endif()
 
 set_target_properties(k3bdevice PROPERTIES
