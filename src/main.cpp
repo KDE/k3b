@@ -38,6 +38,7 @@ int main( int argc, char* argv[] )
                           QString(),
                           i18n("http://www.k3b.org" ) );
 
+    aboutData.setOrganizationDomain("kde");
     aboutData.addAuthor(i18n("Leslie Zhai"), i18n("Maintainer"), "lesliezhai@llvm.org.cn");
     aboutData.addAuthor(i18n("Michał Małek"),i18n("Maintainer and current lead Developer"), "michalm@jabster.pl");
     aboutData.addAuthor(i18n("Sebastian Trüg"),i18n("Main developer"), "trueg@k3b.org");
