@@ -41,23 +41,20 @@ void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
     //  m->addProgram( new K3b::DvdBooktypeProgram() );
 }
 
-
-void K3b::addTranscodePrograms( K3b::ExternalBinManager* m )
+// TODO: addFFmepgPrograms https://bugs.kde.org/show_bug.cgi?id=381131
+void K3b::addTranscodePrograms(K3b::ExternalBinManager* m)
 {
-    Q_UNUSED(m);
-    /* Deprecated transcode
-    static const char* const transcodeTools[] =  { "transcode",
+    static const char* const transcodeTools[] =  {"transcode",
                                              0, // K3b 1.0 only uses the transcode binary
                                              "tcprobe",
                                              "tccat",
                                              "tcscan",
                                              "tcextract",
                                              "tcdecode",
-                                             0 };
+                                             0};
 
-    for( int i = 0; transcodeTools[i]; ++i )
-        m->addProgram( new K3b::TranscodeProgram( transcodeTools[i] ) );
-    */
+    for (int i = 0; transcodeTools[i]; ++i)
+        m->addProgram(new K3b::TranscodeProgram(transcodeTools[i]));
 }
 
 
