@@ -41,7 +41,8 @@ void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
     //  m->addProgram( new K3b::DvdBooktypeProgram() );
 }
 
-// TODO: addFFmepgPrograms https://bugs.kde.org/show_bug.cgi?id=381131
+// TODO: addFFmpegPrograms
+// https://bugs.kde.org/show_bug.cgi?id=381131
 void K3b::addTranscodePrograms(K3b::ExternalBinManager* m)
 {
     static const char* const transcodeTools[] =  {"transcode",

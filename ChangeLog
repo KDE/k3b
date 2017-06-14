@@ -1,3 +1,18 @@
+17.07.0
+=======
+Changes:
+ * Keep transcode until a replacement is implemented (BUG: 381131)
+
+Bugfixes:
+ * It doesn't need to warn if filesGreaterThan2Gb for new Linux system (BUG:
+ 380067)
+ * Fixed Rip fails to start when using clone mode and target exsists (BUG:
+ 379849)
+ * Added MediaType for GrowisofsHandler (BUG: 380064)
+ * Fixed unnecessary spaces to file names of tracks extracted from audio cd
+ (BUG: 380322)
+ * Set desktop file name explicitely (BUG: 380909)
+
 17.04.0
 =======
 Changes:
