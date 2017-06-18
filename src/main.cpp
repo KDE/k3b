@@ -78,8 +78,8 @@ int main( int argc, char* argv[] )
     aboutData.addCredit(i18n("Heiner Eichmann"),
                         i18n("For his work on the BSD port and some great patches."),
                         "h.eichmann@gmx.de" );
-    aboutData.addCredit(i18n("Adriaan De Groot"),
-                        i18n("For his work on the BSD port."),
+    aboutData.addCredit(i18n("Adriaan de Groot"),
+                        i18n("For his work on the FreeBSD port."),
                         "" );
     aboutData.addCredit(i18n("Thiago Macieira"),
                         i18n("For his help with the many invalid k3b entries on bugs.kde.org."),
