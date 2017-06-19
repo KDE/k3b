@@ -159,14 +159,13 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
 }
 
 
-void K3b::SystemProblemDialog::closeEvent( QCloseEvent* e )
+void K3b::SystemProblemDialog::done(int r)
 {
-    if( m_checkDontShowAgain->isChecked() ) {
-        KConfigGroup grp( KSharedConfig::openConfig(), "General Options" );
-        grp.writeEntry( "check system config", false );
+    if (m_checkDontShowAgain->isChecked()) {
+        KConfigGroup grp(KSharedConfig::openConfig(), "General Options");
+        grp.writeEntry("check system config", false);
     }
-
-    e->accept();
+    QDialog::done(r);
 }
 
 
