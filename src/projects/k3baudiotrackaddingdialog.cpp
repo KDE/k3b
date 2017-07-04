@@ -34,7 +34,7 @@
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
-
+#include <QPushButton>
 
 
 K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const QList<QUrl>& urls,
@@ -68,7 +68,7 @@ K3b::AudioTrackAddingDialog::AudioTrackAddingDialog( const QList<QUrl>& urls,
 
     m_analyserJob = new K3b::AudioFileAnalyzerJob( this, this );
     connect( m_analyserJob, SIGNAL(finished(bool)), this, SLOT(slotAnalysingFinished(bool)) );
-    connect( this, SIGNAL(cancelClicked()), this, SLOT(slotCancelClicked()) );
+    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(slotCancelClicked()));
 }
 
 
