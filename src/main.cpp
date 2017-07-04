@@ -137,7 +137,9 @@ int main( int argc, char* argv[] )
 
 #ifdef __clang__
     if (argc > 2)
+#if LLVM_MAJOR > 5
         __sanitizer_print_memory_profile(atoi(argv[1]), atoi(argv[2]));
+#endif
 #endif
 
     return app.exec();
