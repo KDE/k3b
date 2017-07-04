@@ -100,7 +100,8 @@ public:
           monoBuffer(0),
           decodingBufferPos(0),
           decodingBufferFill(0),
-          valid(true) {
+          valid(true),
+          metaDataCollection(NULL) {
     }
 
     // the current position of the decoder
@@ -118,7 +119,7 @@ public:
 
     K3b::Msf decodingStartPos;
 
-    KFileMetaData::ExtractorCollection metaDataCollection;
+    KFileMetaData::ExtractorCollection *metaDataCollection;
     QMimeDatabase mimeDatabase;
     QMimeType mimeType;
 
@@ -543,6 +544,10 @@ bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
 
 void K3b::AudioDecoder::cleanup()
 {
+    if (d->metaDataCollection) {
+        delete d->metaDataCollection;
+        d->metaDataCollection = NULL;
+    }
 }
 
 
@@ -555,7 +560,9 @@ QString K3b::AudioDecoder::metaInfo( MetaDataField f )
     if( !d->mimeType.isValid() )
     {
         d->mimeType = d->mimeDatabase.mimeTypeForFile( m_fileName );
-        for( KFileMetaData::Extractor* plugin : d->metaDataCollection.fetchExtractors( d->mimeType.name() ) )
+        if (!d->metaDataCollection)
+            d->metaDataCollection = new KFileMetaData::ExtractorCollection;
+        for( KFileMetaData::Extractor* plugin : d->metaDataCollection->fetchExtractors( d->mimeType.name() ) )
         {
             ExtractionResult extractionResult(m_fileName, d->mimeType.name(), d->metaInfoMap);
             plugin->extract(&extractionResult);

@@ -98,7 +98,7 @@ K3b::AudioTrack::~AudioTrack()
 
     // delete all sources
     while( d->firstSource )
-        delete d->firstSource;
+        delete d->firstSource->take();
 
     qDebug() << "finished";
 
