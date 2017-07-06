@@ -1,4 +1,4 @@
-K3b Version 17.07.0
+K3b Version 17.08.0
 
 Thanx for downloading K3b - The CD Kreator
 
@@ -73,6 +73,10 @@ These are the features so far:
    - m3u playlist creation
    - CD-TEXT support
 
+ - DVD ripping with the transcode tools
+   - Support for automatic clipping
+   - DivX/XviD encoding
+
  - Retrieving CD/DVD info and toc
 
  - Powerful default and automatic settings
@@ -81,7 +85,7 @@ These are the features so far:
 See INSTALL for further information
 
 
-Please report bugs (with k3b output!) https://bugs.kde.org/  and tell me what 
+Please report bugs (with k3b output!) https://bugs.kde.org/ and tell me what
 you like/dislike about the user-interface!
 
 Have fun

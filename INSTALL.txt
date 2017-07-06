@@ -1,4 +1,4 @@
-Installing K3b 17.07.0
+Installing K3b 17.08.0
 ----------------------
 
 
@@ -13,6 +13,7 @@ What you need to run K3b:
 
  optional:
   - cdrdao, the other linux cd writing program from Andreas Mueller
+  - the transcode tools for DVD ripping and DivX/XviD encoding from Thomas Oestreich
   - vcdimager >= 0.7 for creating video cds
   - libmad for mp3 decoding
   - ogg-vorbis libraries for encoding and decoding

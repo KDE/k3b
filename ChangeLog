@@ -1,3 +1,8 @@
+17.08.0
+=======
+Bugfixes:
+ * Fix crashes when close an audio cd project (BUG: 381863)
+
 17.07.0
 =======
 Changes:
