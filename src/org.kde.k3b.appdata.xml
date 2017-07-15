@@ -13,6 +13,7 @@
   <name xml:lang="nl">K3b</name>
   <name xml:lang="pl">K3b</name>
   <name xml:lang="pt">K3b</name>
+  <name xml:lang="sk">K3b</name>
   <name xml:lang="sl">K3b</name>
   <name xml:lang="sr">К3б</name>
   <name xml:lang="sr-Latn">K3b</name>
@@ -34,6 +35,7 @@
   <summary xml:lang="nl">Schijven branden</summary>
   <summary xml:lang="pl">Nagrywanie płyt</summary>
   <summary xml:lang="pt">Gravação de Discos</summary>
+  <summary xml:lang="sk">Napaľovanie médií</summary>
   <summary xml:lang="sl">Zapisovanje nosilcev</summary>
   <summary xml:lang="sr">Резање дискова</summary>
   <summary xml:lang="sr-Latn">Rezanje diskova</summary>
@@ -95,6 +97,7 @@
       <li xml:lang="nl">De projecten: Projecten worden gemaakt uit het menu voor bestanden en daarna gevuld met gegevens on te branden</li>
       <li xml:lang="pl">Projekty: Projekty są tworzone z menu plik, a następnie wypełniane danymi do wypalenia</li>
       <li xml:lang="pt">Os projectos: Os projectos são criados a partir do menu de ficheiros e depois preenchidos com os dados a gravar</li>
+      <li xml:lang="sk">Projekty: Projekty sa tvoria z ponuky súbor a potom sa naplnia dátami na napálenie</li>
       <li xml:lang="sl">Projekti: projekti se ustvarijo iz datotečnega menija in se nato zapolnijo s podatki za zapis</li>
       <li xml:lang="sr">Пројекти — праве се кроз мени „Фајл“, а затим попуњавају подацима за резање.</li>
       <li xml:lang="sr-Latn">Projekti — prave se kroz meni „Fajl“, a zatim popunjavaju podacima za rezanje.</li>
@@ -118,6 +121,7 @@
       <li xml:lang="nl">De hulpmiddelen: Het menu Hulpmiddelen biedt verschillende hulpmiddelen zoals kopiëren van cd of formattering van een dvd</li>
       <li xml:lang="pl">Narzędzia: Menu narzędzi dostarcza różnych narzędzi takich jak powielenie CD lub formatowanie DVD</li>
       <li xml:lang="pt">As ferramentas: O menu de ferramentas oferece diversas funcionalidades como a cópia de CD's ou a formatação de DVD's</li>
+      <li xml:lang="sk">Nástroje: Ponuka nástroje poskytuje iné nástroje ako kopírovanie CD alebo formátovanie DVD</li>
       <li xml:lang="sl">Orodja: meni z orodji ponuja različna orodja kot so kopiranje CD-jev ali formatiranje DVD-jev</li>
       <li xml:lang="sr">Алатке — мени „Алатке“ нуди различите алатке, попут копирања ЦД‑а или форматирања ДВД‑а.</li>
       <li xml:lang="sr-Latn">Alatke — meni „Alatke“ nudi različite alatke, poput kopiranja CD‑a ili formatiranja DVD‑a.</li>
@@ -142,6 +146,7 @@
       <li xml:lang="nl">Context gevoelige mediumacties: bij klikken op het pictogram voor een cd/dvd-apparaat zal K3b zijn inhoud weergeven en enige verdere acties. Dit is bijvoorbeeld de manier om audio-cd's te rippen</li>
       <li xml:lang="pl">Działania wrażliwe na stosowany nośnik: Przy naciśnięciu na ikonę przedstawiającą napęd CD/DVD K3b przedstawi jej zawartość i umożliwi podjęcie dalszych działań. Jest to na przykład sposób na zgranie płyt CD z muzyką</li>
       <li xml:lang="pt">Acções dependentes do contexto: Ao carregar no ícone que representa um leitor de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas acções adicionais. Esta é, por exemplo, a forma de extrair músicas de CD's de áudio</li>
+      <li xml:lang="sk">Kontextovo citlivé akcie médií: Pri kliknutí na ikonu reprezentujúcu CD/DVD mechaniku, K3b poskytne jej obsah a umožní ďalšie akcie. Je tu napríklad možnosť ripovať zvukové CD</li>
       <li xml:lang="sl">Dejanja odvisna od vsebine: ko kliknete na ikono, ki predstavlja pogon CD/DVD, bo K3b predstavil njeno vsebino in ponudil nadaljnja dejanja. To je na primer način za zajetje zvočnih CD-jev</li>
       <li xml:lang="sr">Контекстно зависне медијске радње — по клику на иконицу ЦД/ДВД јединице, К3б ће представити њен садржај и понудити даље радње. Овако се, на пример, може чупати са аудио ЦД‑ова.</li>
       <li xml:lang="sr-Latn">Kontekstno zavisne medijske radnje — po kliku na ikonicu CD/DVD jedinice, K3b će predstaviti njen sadržaj i ponuditi dalje radnje. Ovako se, na primer, može čupati sa audio CD‑ova.</li>
