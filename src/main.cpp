@@ -16,6 +16,7 @@
 #include <KCoreAddons/KAboutData>
 #include <KI18n/KLocalizedString>
 #include <QtCore/QCommandLineParser>
+#include <QIcon>
 #ifdef __clang__
 #include <sanitizer/common_interface_defs.h>
 #endif
@@ -101,6 +102,8 @@ int main( int argc, char* argv[] )
                          "jeremy@jeremya.com" );
 
     KAboutData::setApplicationData( aboutData );
+
+    QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("k3b"), app.windowIcon()));
 
     QCommandLineParser* parser = new QCommandLineParser;
     parser->addHelpOption();
