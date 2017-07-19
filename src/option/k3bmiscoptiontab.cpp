@@ -70,7 +70,7 @@ void K3b::MiscOptionTab::readSettings()
 
     m_checkSaveOnExit->setChecked( c.readEntry( "ask_for_saving_changes_on_exit", true ) );
     m_checkShowSplash->setChecked( c.readEntry("Show splash", true) );
-    m_checkShowProgressOSD->setChecked( c.readEntry( "Show progress OSD", true ) );
+    m_checkShowProgressOSD->setChecked(c.readEntry("Show progress OSD", false));
     m_checkHideMainWindowWhileWriting->setChecked( c.readEntry( "hide main window while writing", false ) );
     m_checkKeepDialogsOpen->setChecked( c.readEntry( "keep action dialogs open", false ) );
     m_comboActionDialogSettings->setSelectedValue( c.readEntry( "action dialog startup settings",

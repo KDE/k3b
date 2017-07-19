@@ -475,8 +475,8 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
 
         setWindowTitle( m_job->jobDescription() );
 
-        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "Show progress OSD", true ) ) {
-            KIO::getJobTracker()->registerJob( new KJobBridge( *job ) );
+        if (KConfigGroup(KSharedConfig::openConfig(), "General Options").readEntry("Show progress OSD", false)) {
+            KIO::getJobTracker()->registerJob(new KJobBridge(*job));
         }
     }
 }
