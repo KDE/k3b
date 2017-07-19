@@ -540,11 +540,12 @@ void K3b::JobProgressDialog::slotShowDebuggingOutput()
 
 void K3b::JobProgressDialog::slotProgress( int percent )
 {
-    if( percent > d->lastProgress ) {
+    if (percent > d->lastProgress) {
         d->lastProgress = percent;
-        k3bappcore->k3bMainWindow()->setPlainCaption( QString( "(%1%) %2" ).arg(percent).arg(m_plainCaption) );
+        m_plainCaption.replace(QRegularExpression("\\(.+?\\) "), "");
+        k3bappcore->k3bMainWindow()->setPlainCaption(QString("(%1%) %2").arg(percent).arg(m_plainCaption));
 
-        setWindowTitle( QString( "(%1%) %2" ).arg(percent).arg(m_job->jobDescription()) );
+        setWindowTitle(QString("(%1%) %2").arg(percent).arg(m_job->jobDescription()));
     }
 
     if (m_timer.isValid()) {
