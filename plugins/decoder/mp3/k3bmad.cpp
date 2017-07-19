@@ -259,13 +259,16 @@ void K3bMad::initMad()
 
 void K3bMad::cleanup()
 {
-  if( m_inputFile.isOpen() ) {
-    qDebug() << "(K3bMad) cleanup at offset: "
-	      << "Input file at: " << m_inputFile.pos() << " "
-	      << "Input file size: " << m_inputFile.size() << " "
-	      << "stream pos: "
-	      << ( m_inputFile.pos() - (madStream->bufend - madStream->this_frame + 1) )
-	      << endl;
+  if (m_inputFile.isOpen()) {
+#ifdef K3B_DEBUG
+    if (madStream) {
+      qDebug() << "(K3bMad) cleanup at offset: "
+	        << "Input file at: " << m_inputFile.pos() << " "
+	        << "Input file size: " << m_inputFile.size() << " "
+	        << "stream pos: "
+	        << (m_inputFile.pos() - (madStream->bufend - madStream->this_frame + 1));
+    }
+#endif
     m_inputFile.close();
   }
 
