@@ -24,7 +24,11 @@ static const int INPUT_BUFFER_SIZE = 5*8192;
 
 K3bMad::K3bMad()
   : m_madStructuresInitialized(false),
-    m_bInputError(false)
+    m_bInputError(false),
+    madStream(NULL),
+    madFrame(NULL),
+    madSynth(NULL),
+    madTimer(NULL)
 {
   madStream = new mad_stream;
   madFrame  = new mad_frame;
@@ -43,10 +47,10 @@ K3bMad::~K3bMad()
 {
   cleanup();
 
-  delete madStream;
-  delete madFrame;
-  delete madSynth;
-  delete madTimer;
+  if (madStream) delete madStream; madStream = NULL;
+  if (madFrame) delete madFrame; madFrame = NULL;
+  if (madSynth) delete madSynth; madSynth = NULL;
+  if (madTimer) delete madTimer; madTimer = NULL;
 
   delete [] m_inputBuffer;
 }
@@ -265,10 +269,10 @@ void K3bMad::cleanup()
     m_inputFile.close();
   }
 
-  if( m_madStructuresInitialized ) {
-    mad_frame_finish( madFrame );
-    mad_synth_finish( madSynth );
-    mad_stream_finish( madStream );
+  if (m_madStructuresInitialized && madFrame && madSynth && madStream) {
+    mad_frame_finish(madFrame);
+    mad_synth_finish(madSynth);
+    mad_stream_finish(madStream);
   }
 
   m_madStructuresInitialized = false;
