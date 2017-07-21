@@ -55,6 +55,8 @@ public:
      */
     QString plainTempPath() const;
 
+    void setImageFileLabel(const QString &label);
+
 public Q_SLOTS:
     void setTempPath( const QString& );
     void setSelectionMode( int mode );

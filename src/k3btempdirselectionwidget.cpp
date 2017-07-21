@@ -267,3 +267,7 @@ void K3b::TempDirSelectionWidget::fixTempPath( bool forceNewImageName )
 }
 
 
+void K3b::TempDirSelectionWidget::setImageFileLabel(const QString &label)
+{
+    m_imageFileLabel->setText(label);
+}

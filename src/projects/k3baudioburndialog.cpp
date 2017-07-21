@@ -124,6 +124,13 @@ K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )
              "<p>You will need to seek back from the beginning of the CD to listen to "
              "the first track. Try it, it is quite amusing."
              "<p><b>This feature is only available in DAO mode when writing with cdrdao.") );
+
+    // TODO: AudioDoc doesn't have IsoOptions, so it could NOT create iso image like DataDoc.
+    m_tabWidget->setTabText(1, i18n("Rip Audio"));
+    m_checkCacheImage->setText(i18n("Rip Audio"));
+    m_checkOnlyCreateImage->setText(i18n("Only Rip Audio"));
+    m_imageTipText = i18n("Use the 'Rip Audio' tab to optionally adjust the path of the audio.");
+    m_tempDirSelectionWidget->setImageFileLabel(i18n("Wri&te Rip Audio files to:"));
 }
 
 K3b::AudioBurnDialog::~AudioBurnDialog(){
@@ -132,7 +139,6 @@ K3b::AudioBurnDialog::~AudioBurnDialog(){
 
 void K3b::AudioBurnDialog::slotStartClicked()
 {
-//  static_cast<K3b::AudioView*>(m_doc->view())->player()->stop();
     K3b::ProjectBurnDialog::slotStartClicked();
 }
 

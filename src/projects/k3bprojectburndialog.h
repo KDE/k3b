@@ -169,6 +169,8 @@ namespace K3b {
         QCheckBox* m_checkRemoveBufferFiles;
         QCheckBox* m_checkOnlyCreateImage;
         QSpinBox* m_spinCopies;
+        QTabWidget *m_tabWidget;
+        QString m_imageTipText;
 
     private Q_SLOTS:
         void slotShowImageTip( bool buttonActivated );
@@ -176,7 +178,6 @@ namespace K3b {
     private:
         Doc* m_doc;
         BurnJob* m_job;
-        QTabWidget* m_tabWidget;
     };
 }
 

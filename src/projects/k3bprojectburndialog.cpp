@@ -62,7 +62,8 @@ K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )
                             START_BUTTON,
                             "default " + doc->typeString() + " settings" ),
       m_writerSelectionWidget(0),
-      m_tempDirSelectionWidget(0)
+      m_tempDirSelectionWidget(0),
+      m_imageTipText(i18n("Use the 'Image' tab to optionally adjust the path of the image."))
 {
     m_doc = doc;
 
@@ -294,7 +295,7 @@ void K3b::ProjectBurnDialog::prepareGui()
     grid->setRowStretch( 1, 1 );
     grid->setColumnStretch( 1, 1 );
 
-    QWidget* tempW = new QWidget( m_tabWidget );
+    QWidget *tempW = new QWidget( m_tabWidget );
     grid = new QGridLayout( tempW );
     m_tabWidget->addTab( tempW, i18n("Image") );
     m_tempDirSelectionWidget = new K3b::TempDirSelectionWidget( tempW );
@@ -386,9 +387,9 @@ void K3b::ProjectBurnDialog::loadSettings( const KConfigGroup& c )
 
 void K3b::ProjectBurnDialog::slotShowImageTip( bool buttonActivated )
 {
-    if ( buttonActivated && isVisible() ) {
+    if (buttonActivated && isVisible()) {
         // FIXME: use the tab bar's position
-        QWhatsThis::showText( mapToGlobal( QPoint( rect().center().x(), rect().top() ) ),i18n( "Use the 'Image' tab to optionally adjust the path of the image." ));
+        QWhatsThis::showText(mapToGlobal(QPoint(rect().center().x(), rect().top())), m_imageTipText);
     }
 }
 
