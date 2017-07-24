@@ -68,6 +68,7 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     // choose a default
     setSelectionMode( DIR );
 
+    m_editDirectory->setAcceptMode(QFileDialog::AcceptSave);
     m_editDirectory->setUrl( QUrl::fromLocalFile( k3bcore->globalSettings()->defaultTempPath() ) );
     slotUpdateFreeTempSpace();
 
