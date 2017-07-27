@@ -56,6 +56,8 @@ K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )
                                                               "project dialog):"),
                                                          i18n("One of these sets is loaded once an action dialog is opened. "
                                                               "This setting defines which set it will be.") );
+
+    connect(m_checkSaveOnExit, &QCheckBox::stateChanged, [this]{ Q_EMIT changed(); });
 }
 
 

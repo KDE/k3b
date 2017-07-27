@@ -30,6 +30,9 @@ namespace K3b {
 
         void readSettings();
         bool saveSettings();
+
+Q_SIGNALS:
+        void changed();
     };
 }
 

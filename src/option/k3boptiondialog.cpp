@@ -70,6 +70,7 @@ K3b::OptionDialog::OptionDialog(QWidget *parent )
     // because of the label in the device-tab
     setFixedSize(700, 582);
 
+    buttonBox()->button(QDialogButtonBox::Apply)->setDefault(false);
     connect( this->buttonBox()->button( QDialogButtonBox::Ok ), SIGNAL(clicked()), SLOT(slotOk()) );
     connect( this->buttonBox()->button( QDialogButtonBox::RestoreDefaults ), SIGNAL(clicked()), SLOT(slotDefault()) );
     connect( this->buttonBox()->button( QDialogButtonBox::Apply ), SIGNAL(clicked()), SLOT(slotApply()) );
@@ -131,6 +132,9 @@ void K3b::OptionDialog::slotDefault()
 void K3b::OptionDialog::setupMiscPage()
 {
     m_miscOptionTab = new K3b::MiscOptionTab;
+    connect(m_miscOptionTab, &K3b::MiscOptionTab::changed, [this](){
+        buttonBox()->button(QDialogButtonBox::Apply)->setDefault(true);
+    });
     m_miscPage = addPage( m_miscOptionTab, i18n("Misc") );
     m_miscPage->setHeader( i18n("Miscellaneous Settings") );
     m_miscPage->setIcon( QIcon::fromTheme( "preferences-other" ) );
