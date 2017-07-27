@@ -292,7 +292,7 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
             problems.append(K3b::SystemProblem(K3b::SystemProblem::CRITICAL,
                 i18n("Unable to find %1 executable", QString("cdrskin")),
                 i18n("K3b uses cdrskin in place of cdrecord."),
-                i18n("Install the libburn package which contains cdrskin")));
+                i18n("Install the libburn and cdrskin packages.")));
         }
     }
 
