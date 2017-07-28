@@ -48,7 +48,7 @@ K3b::OptionDialog::OptionDialog(QWidget *parent )
     setFaceType( List );
     setWindowTitle( i18n("Settings") );
 
-    this->setStandardButtons( QDialogButtonBox::Ok | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply );
+    this->setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
 
     setupMiscPage();
     setupDevicePage();
