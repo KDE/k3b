@@ -23,8 +23,10 @@ DeviceGlobalsTest::DeviceGlobalsTest()
 
 void DeviceGlobalsTest::testFrom2Byte()
 {
-    const unsigned char* d = NULL;
+    unsigned char* d = NULL;
     QCOMPARE(K3b::Device::from2Byte(d), (quint16)0);
+    unsigned char buf[1] = { '\0' };
+    QCOMPARE(K3b::Device::from2Byte(buf), (quint16)0);
 }
 
 void DeviceGlobalsTest::testFrom4Byte() 
