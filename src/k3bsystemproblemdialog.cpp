@@ -175,6 +175,9 @@ void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel l
     bool showDeviceSettingsButton = false;
     bool showBinSettingsButton = false;
 
+    if (!readCheckSystemConfig())
+        return;
+
     if( k3bcore->deviceManager()->allDevices().isEmpty() ) {
         problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                            i18n("No optical drive found."),
@@ -711,13 +714,13 @@ QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
 
 bool K3b::SystemProblemDialog::readCheckSystemConfig()
 {
-    KConfigGroup cfgGrp( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "General Options");
 
-    K3b::Version configVersion( cfgGrp.readEntry( "Last system check version", "0.1" ) );
-    if( configVersion < k3bcore->version() )
-        cfgGrp.writeEntry( "check system config", true );
+    K3b::Version configVersion(cfgGrp.readEntry( "Last system check version", "0.1" ));
+    if (configVersion < k3bcore->version())
+        cfgGrp.writeEntry("check system config", true);
 
-    return cfgGrp.readEntry( "check system config", true );
+    return cfgGrp.readEntry("check system config", false);
 }
 
 
