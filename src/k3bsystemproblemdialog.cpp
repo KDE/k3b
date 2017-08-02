@@ -169,13 +169,13 @@ void K3b::SystemProblemDialog::done(int r)
 }
 
 
-void K3b::SystemProblemDialog::checkSystem( QWidget* parent, NotificationLevel level )
+void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel level, bool forceCheck)
 {
     QList<K3b::SystemProblem> problems;
     bool showDeviceSettingsButton = false;
     bool showBinSettingsButton = false;
 
-    if (!readCheckSystemConfig())
+    if (!forceCheck && !readCheckSystemConfig())
         return;
 
     if( k3bcore->deviceManager()->allDevices().isEmpty() ) {

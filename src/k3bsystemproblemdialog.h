@@ -78,7 +78,7 @@ namespace K3b {
          * or K3b is started for the first time.
          */
         static bool readCheckSystemConfig();
-        static void checkSystem( QWidget* parent = 0, NotificationLevel level = NotifyOnlyErrors );
+        static void checkSystem(QWidget* parent = 0, NotificationLevel level = NotifyOnlyErrors, bool forceCheck = false);
 
     protected:
         void done(int) Q_DECL_OVERRIDE;

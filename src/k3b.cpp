@@ -1422,7 +1422,7 @@ void K3b::MainWindow::slotCheckSystem()
 
 void K3b::MainWindow::slotManualCheckSystem()
 {
-    K3b::SystemProblemDialog::checkSystem( this, K3b::SystemProblemDialog::AlwaysNotify );
+    K3b::SystemProblemDialog::checkSystem(this, K3b::SystemProblemDialog::AlwaysNotify, true/* forceCheck */);
 }
 
 
