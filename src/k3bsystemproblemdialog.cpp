@@ -292,9 +292,9 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
         }
 
         if (!k3bcore->externalBinManager()->foundBin("cdrskin")) {
-            problems.append(K3b::SystemProblem(K3b::SystemProblem::CRITICAL,
+            problems.append(K3b::SystemProblem(K3b::SystemProblem::NON_CRITICAL,
                 i18n("Unable to find %1 executable", QString("cdrskin")),
-                i18n("K3b uses cdrskin in place of cdrecord."),
+                i18n("Cdrskin is better for DVD and BD media than cdrecord."),
                 i18n("Install the libburn and cdrskin packages.")));
         }
     }
