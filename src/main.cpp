@@ -17,7 +17,7 @@
 #include <KI18n/KLocalizedString>
 #include <QtCore/QCommandLineParser>
 #include <QIcon>
-#ifdef __clang__
+#if defined(__clang__) && (LLVM_MAJOR > 5)
 #include <sanitizer/common_interface_defs.h>
 #endif
 
