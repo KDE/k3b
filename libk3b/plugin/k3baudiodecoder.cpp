@@ -170,8 +170,10 @@ K3b::AudioDecoder::~AudioDecoder()
     if( d->monoBuffer ) delete [] d->monoBuffer;
 
     delete d->resampleData;
-    if( d->resampleState )
-        src_delete( d->resampleState );
+    if (d->resampleState) {
+        src_delete(d->resampleState);
+        d->resampleState = NULL;
+    }
     delete d;
 }
 
