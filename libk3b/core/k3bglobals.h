@@ -56,9 +56,8 @@ namespace K3b {
         MediaSizeDvd4Gb = 2295104,
         MediaSizeDvd8Gb = 4173824,
 
-        // FIXME: get the proper BD sizes
-        MediaSizeBluRay25Gb = 13107200,
-        MediaSizeBluRay50Gb = 26214400
+        MediaSizeBluRay25Gb = 12219392,
+        MediaSizeBluRay50Gb = 24438784
     };
 
     enum WritingApp {
