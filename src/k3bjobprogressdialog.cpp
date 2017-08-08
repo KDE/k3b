@@ -281,14 +281,15 @@ void K3b::JobProgressDialog::showEvent( QShowEvent* e )
 
 void K3b::JobProgressDialog::closeEvent( QCloseEvent* e )
 {
-    if( m_closeButton->isVisible() ) {
-        QDialog::closeEvent( e );
+    if (m_closeButton->isVisible()) {
+        QDialog::closeEvent(e);
         k3bappcore->k3bMainWindow()->show();
 
-        if( !m_plainCaption.isEmpty() )
-            k3bappcore->k3bMainWindow()->setPlainCaption( m_plainCaption );
-    }
-    else
+        if (!m_plainCaption.isEmpty())
+            k3bappcore->k3bMainWindow()->setPlainCaption(m_plainCaption);
+
+        accept();
+    } else
         e->ignore();
 }
 
