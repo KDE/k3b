@@ -101,30 +101,37 @@ int K3b::VideoDvdImager::writePathSpec()
     //
     // We do this here since K3b::IsoImager::start calls cleanup which deletes the temp files
     //
-    d->tempDir.reset( new QTemporaryDir( "k3bVideoDvdXXXXXX" ) );
-    QDir dir( d->tempDir->path() );
-    qDebug() << "(K3b::VideoDvdImager) creating temp dir: " << dir.path();
-    if( !dir.mkdir( dir.path() ) ) {
-        emit infoMessage( i18n("Unable to create temporary folder '%1'.",dir.path()), MessageError );
+    d->tempDir.reset(new QTemporaryDir(QDir::tempPath() + "/k3bVideoDvdXXXXXX"));
+    if (!d->tempDir->isValid()) {
+        emit infoMessage(xi18n("Unable to create Invalid temporary folder <filename>%1</filename>.",
+                         d->tempDir->path()), MessageError);
         return -1;
     }
 
-    dir.cd( dir.path() );
-    if( !dir.mkdir( "VIDEO_TS" ) ) {
-        emit infoMessage( i18n("Unable to create temporary folder '%1'.",dir.path() + "/VIDEO_TS"), MessageError );
+    const auto videoDir =
+#if QT_VERSION < 0x050900
+        d->tempDir->path() + "/VIDEO_TS";
+#else
+        d->tempDir->filePath("VIDEO_TS");
+#endif
+    if (!QDir().mkpath(videoDir)) {
+        emit infoMessage(xi18n("Unable to create temporary folder <filename>%1</filename>.",
+                         videoDir), MessageError);
         return -1;
     }
 
-    Q_FOREACH( K3b::DataItem* item, d->doc->videoTsDir()->children() ) {
-        if( item->isDir() ) {
-            emit infoMessage( i18n("Found invalid entry in the VIDEO_TS folder (%1).",item->k3bName()), MessageError );
+    Q_FOREACH(const K3b::DataItem* item, d->doc->videoTsDir()->children()) {
+        if (item->isDir()) {
+            emit infoMessage(xi18n("Found invalid entry in the VIDEO_TS folder <filename>%1</filename>.",
+                             item->k3bName()), MessageError);
             return -1;
         }
 
         // convert to upper case names
-        if( ::symlink( QFile::encodeName( item->localPath() ),
-                       QFile::encodeName( dir.path() + "/VIDEO_TS/" + item->k3bName().toUpper() ) ) == -1 ) {
-            emit infoMessage( i18n("Unable to link temporary file in folder %1.", dir.path() ), MessageError );
+        if (::symlink(QFile::encodeName(item->localPath()),
+                      QFile::encodeName(videoDir + "/" + item->k3bName().toUpper())) == -1) {
+            emit infoMessage(xi18n("Unable to link temporary file in folder <filename>%1</filename>.",
+                             d->tempDir->path()), MessageError);
             return -1;
         }
     }
