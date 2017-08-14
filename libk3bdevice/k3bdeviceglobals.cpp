@@ -214,7 +214,7 @@ void K3b::Device::debugBitfield( unsigned char* data, long len )
 
 quint16 K3b::Device::from2Byte(const unsigned char* d)
 {
-    if (d == NULL || strlen((const char *) d) < 2) {
+    if (d == NULL) {
         qWarning() << "Invalid Byte!";
         return 0;
     }
@@ -225,7 +225,7 @@ quint16 K3b::Device::from2Byte(const unsigned char* d)
 
 quint32 K3b::Device::from4Byte(const unsigned char* d)
 {
-    if (d == NULL || strlen((const char *) d) < 4) {
+    if (d == NULL) {
         qWarning() << "Invalid Byte!";
         return 0;
     }

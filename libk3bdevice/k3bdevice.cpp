@@ -3226,21 +3226,23 @@ QList<int> K3b::Device::Device::determineSupportedWriteSpeeds() const
 }
 
 
-bool K3b::Device::Device::getSupportedWriteSpeedsVia2A( QList<int>& list, MediaType mediaType ) const
+bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list, MediaType mediaType) const
 {
     UByteArray data;
-    if( modeSense( data, 0x2A ) ) {
+    if (modeSense(data, 0x2A)) {
         mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
 
-        if( data.size() > 32 ) {
+        // FIXME: why > 32? not bigger than 64?
+        if (data.size() > 32) {
             // we have descriptors
-            unsigned int numDesc = from2Byte( mm->num_wr_speed_des );
+            unsigned int numDesc = from2Byte(mm->num_wr_speed_des);
 
             // Some CDs writer returns the number of bytes that contain
             // the descriptors rather than the number of descriptors
             // Ensure number of descriptors claimed actually fits in the data
             // returned by the mode sense command.
-            if( static_cast<int>( numDesc ) > ((data.size() - 32 - 8) / 4) )
+            // FIXME: why 32 - 8? not minus 9 or 10?
+            if (static_cast<int>(numDesc) > ((data.size() - 32 - 8) / 4))
                 numDesc = (data.size() - 32 - 8) / 4;
 
             cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;
@@ -3249,9 +3251,10 @@ bool K3b::Device::Device::getSupportedWriteSpeedsVia2A( QList<int>& list, MediaT
                      << ":  Number of supported write speeds via 2A: "
                      << numDesc << endl;
 
-
-            for( unsigned int i = 0; i < numDesc; ++i ) {
-                int s = (int)from2Byte( wr[i].wr_speed_supp );
+            // FIXME: if numDesc is wrong, wr[i] might be out-of-bounds, then
+            // from2Byte failed to work.
+            for (unsigned int i = 0; i < numDesc; ++i) {
+                int s = (int)from2Byte(wr[i].wr_speed_supp);
                 //
                 // some DVD writers report CD writing speeds here
                 // If that is the case we cannot rely on the reported speeds
