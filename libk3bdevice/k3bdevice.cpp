@@ -3228,12 +3228,11 @@ QList<int> K3b::Device::Device::determineSupportedWriteSpeeds() const
 
 bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list, MediaType mediaType) const
 {
-    UByteArray data;
+    UByteArray/* QVarLengthArray<unsigned char> */ data;
     if (modeSense(data, 0x2A)) {
         mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
 
-        // FIXME: why > 32? not bigger than 64?
-        if (data.size() > 32) {
+        if (data.size() > 32 + 8/* pageLen? */) {
             // we have descriptors
             unsigned int numDesc = from2Byte(mm->num_wr_speed_des);
 
@@ -3241,7 +3240,6 @@ bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list, MediaTy
             // the descriptors rather than the number of descriptors
             // Ensure number of descriptors claimed actually fits in the data
             // returned by the mode sense command.
-            // FIXME: why 32 - 8? not minus 9 or 10?
             if (static_cast<int>(numDesc) > ((data.size() - 32 - 8) / 4))
                 numDesc = (data.size() - 32 - 8) / 4;
 
@@ -3251,8 +3249,6 @@ bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list, MediaTy
                      << ":  Number of supported write speeds via 2A: "
                      << numDesc << endl;
 
-            // FIXME: if numDesc is wrong, wr[i] might be out-of-bounds, then
-            // from2Byte failed to work.
             for (unsigned int i = 0; i < numDesc; ++i) {
                 int s = (int)from2Byte(wr[i].wr_speed_supp);
                 //
