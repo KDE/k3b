@@ -3226,24 +3226,27 @@ QList<int> K3b::Device::Device::determineSupportedWriteSpeeds() const
 }
 
 
-bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list, MediaType mediaType) const
+bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list,
+                                                    MediaType mediaType) const
 {
     UByteArray/* QVarLengthArray<unsigned char> */ data;
     if (modeSense(data, 0x2A)) {
         mm_cap_page_2A* mm = (mm_cap_page_2A*)&data[8];
 
-        if (data.size() > 32 + 8/* pageLen? */) {
+        // 8 bytes of MODE SENSE(10) header
+        // 32 bytes offset of speed descriptor list in Mode page 2Ah
+        // (MMC-3, table 361. Pages of MMC-1 and MMC-2 are smaller.)
+        if (data.size() > 32 + 8/* replyLen */) {
             // we have descriptors
             unsigned int numDesc = from2Byte(mm->num_wr_speed_des);
 
-            // Some CDs writer returns the number of bytes that contain
-            // the descriptors rather than the number of descriptors
             // Ensure number of descriptors claimed actually fits in the data
             // returned by the mode sense command.
             if (static_cast<int>(numDesc) > ((data.size() - 32 - 8) / 4))
                 numDesc = (data.size() - 32 - 8) / 4;
 
-            cd_wr_speed_performance* wr = (cd_wr_speed_performance*)mm->wr_speed_des;
+            cd_wr_speed_performance* wr =
+                (cd_wr_speed_performance*)mm->wr_speed_des;
 
             qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                      << ":  Number of supported write speeds via 2A: "

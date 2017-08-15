@@ -673,48 +673,48 @@ bool K3b::Device::Device::mechanismStatus( UByteArray& data ) const
 
 
 
-bool K3b::Device::Device::modeSense( UByteArray& pageData, int page ) const
+bool K3b::Device::Device::modeSense(UByteArray& pageData, int page) const
 {
     unsigned char header[2048];
-    ::memset( header, 0, 2048 );
+    ::memset(header, 0, sizeof(header));
 
-    ScsiCommand cmd( this );
+    ScsiCommand cmd(this);
     cmd[0] = MMC_MODE_SENSE;
-    cmd[1] = 0x8;        // Disable Block Descriptors
+    cmd[1] = 0x8;         // Disable Block Descriptors
     cmd[2] = page & 0x3F;
     cmd[8] = 8;
     cmd[9] = 0;           // Necessary to set the proper command length
 
     // first we determine the data length
-    int pageLen = 8;
-    if( cmd.transport( TR_DIR_READ, header, 8 ) == 0 )
-        pageLen = from2Byte( header ) + 2;
-    else
-        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE length det failed.";
-
-    //
+    int replyLen = 8;
+    if (cmd.transport(TR_DIR_READ, header, 8) == 0)
+        replyLen = from2Byte(header) + 2;
+    else {
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() <<
+            ": MODE SENSE length det failed.";
+    }
+    // FIXME: rumor or misnomer?
     // Some buggy firmwares do not return the size of the available data
-    // but the returned data. So we simply use the maximum possible value to be on the safe side
-    // with these buggy drives.
-    // We cannot use this as default since many firmwares fail with a too high data length.
-    //
-    if( pageLen == 8 )
-        pageLen = 0xFFFF;
+    // but the returned data. So we simply use the maximum possible value to be
+    // on the safe side with these buggy drives.
+    // We cannot use this as default since many firmwares fail with a too high
+    // data length.
+    if (replyLen == 8)
+        replyLen = 0xFFFF;
 
     // again with real length
-    pageData.resize( pageLen );
-    ::memset( pageData.data(), 0, pageData.size() );
+    pageData.resize(replyLen);
+    ::memset(pageData.data(), 0, pageData.size());
 
     cmd[7] = pageData.size() >> 8;
     cmd[8] = pageData.size();
-    if( cmd.transport( TR_DIR_READ, pageData.data(), pageData.size() ) == 0 ) {
-        pageData.resize( qMin( pageData.size(), from2Byte( pageData.data() ) + 2 ) );
+    if (cmd.transport(TR_DIR_READ, pageData.data(), pageData.size()) == 0 ) {
+        pageData.resize(qMin(pageData.size(), from2Byte(pageData.data()) + 2));
         return true;
-    }
-    else {
+    } else {
         pageData.clear();
-        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MODE SENSE with real length "
-                 << pageLen << " failed." << endl;
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() <<
+            ": MODE SENSE with real length " << replyLen << " failed." << endl;
         return false;
     }
 }
