@@ -82,18 +82,22 @@ void K3b::DiskInfoView::reloadMedium()
     updateTitle();
 
     QString s;
-    if( medium().diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA ) {
-        s = i18n("No medium present");
-    }
-    else {
-        // FIXME: import a css stylesheet from the theme and, more importantly, create a nicer css
+    K3b::Theme* theme = k3bappcore->themeManager()->currentTheme();
+    if (medium().diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA) {
+        s = QString("<font color=\"%1\">%2</font>").arg(theme ?
+                theme->palette().color(QPalette::Foreground).name() :
+                "green").arg(i18n("No medium present"));
+    } else {
+        // FIXME: import a css stylesheet from the theme and, more importantly,
+        // create a nicer css
+        // We are not designers :)
         s = "<head>"
             "<title></title>"
             "<style type=\"text/css\">";
-        if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
-            s += QString( ".title { padding:4px; font-size:medium; background-color:%1; color:%2 } " )
-                 .arg(theme->palette().color( QPalette::Background ).name() )
-                 .arg(theme->palette().color( QPalette::Foreground ).name() );
+        if (theme) {
+            s += QString(".title { padding:4px; font-size:medium; background-color:%1; color:%2 } ")
+                 .arg(theme->palette().color(QPalette::Background).name())
+                 .arg(theme->palette().color(QPalette::Foreground).name());
         }
         s +=  ".infovalue { font-weight:bold; padding-left:10px; } "
               ".trackheader { text-align:left; } "
@@ -104,24 +108,26 @@ void K3b::DiskInfoView::reloadMedium()
              "</head>"
              "<body>";
 
-        s += sectionHeader( i18n( "Medium" ) );
-        s += createMediaInfoItems( medium() );
+        s += sectionHeader(i18n("Medium"));
+        s += createMediaInfoItems(medium());
 
-        if( medium().content() & K3b::Medium::ContentData ) {
-            s += sectionHeader( i18n("ISO 9660 Filesystem Info") );
-            s += createIso9660InfoItems( medium().iso9660Descriptor() );
+        if (medium().content() & K3b::Medium::ContentData) {
+            s += sectionHeader(i18n("ISO 9660 Filesystem Info"));
+            s += createIso9660InfoItems(medium().iso9660Descriptor());
         }
 
-        if( !medium().toc().isEmpty() ) {
-            s += sectionHeader( i18n("Tracks") );
-            s += createTrackItems( medium() );
+        if (!medium().toc().isEmpty()) {
+            s += sectionHeader(i18n("Tracks"));
+            s += createTrackItems(medium());
         }
     }
 
     s += "</body>";
 
-    m_infoView->setHtml( s );
+    m_infoView->setHtml(s);
+#ifdef K3B_DEBUG
     qDebug() << s;
+#endif
 }
 
 
