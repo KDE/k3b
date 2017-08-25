@@ -36,7 +36,6 @@ namespace K3b {
         void loadSettings( const KConfigGroup& config );
 
     private:
-        ProjectPlugin* m_plugin;
         ProjectPluginGUIBase* m_pluginGui;
     };
 }

@@ -25,8 +25,7 @@ K3b::ProjectPluginDialog::ProjectPluginDialog( K3b::ProjectPlugin* plugin, K3b::
                             QString(),
                             START_BUTTON|CANCEL_BUTTON,
                             START_BUTTON,
-                            plugin->metaObject()->className() ),
-      m_plugin(plugin)
+                            plugin->metaObject()->className() )
 {
     m_pluginGui = plugin->createGUI( doc, this );
     Q_ASSERT( m_pluginGui );
