@@ -63,7 +63,7 @@ KoZipStore::KoZipStore( QWidget* window, const QUrl & _url, const QString & _fil
     else
     {
         m_fileMode = KoStoreBase::RemoteWrite;
-        m_localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+        m_localFileName = "/var/tmp/kozip"; // ### FIXME with KTempFile
     }
 
     m_pZip = new KZip( m_localFileName );

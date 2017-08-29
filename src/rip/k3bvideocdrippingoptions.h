@@ -25,7 +25,7 @@ class VideoCdRippingOptions
         VideoCdRippingOptions()
             :   m_videocdsize( 0 ),
                 m_videocdsource( "/dev/cdrom" ),
-                m_videocddestination( "/tmp" ),
+                m_videocddestination( "/var/tmp" ),
                 m_videocddescription( i18n( "Video CD" ) ),
                 m_videocdripfiles( false ),
                 m_videocdripsegments( false ),
