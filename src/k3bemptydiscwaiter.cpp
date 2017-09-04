@@ -248,6 +248,10 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 //   if( !mediaState.isEmpty() )
 //     mediaState = " (" + mediaState +")";
 
+#ifdef K3B_DEBUG
+    qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << d->wantedMediaType
+             << d->wantedMediaState << d->wantedMinMediaSize;
+#endif
 
     // /////////////////////////////////////////////////////////////
     //
