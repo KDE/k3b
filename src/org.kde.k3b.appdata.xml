@@ -12,6 +12,7 @@
   <name xml:lang="fr">K3b</name>
   <name xml:lang="it">K3b</name>
   <name xml:lang="nl">K3b</name>
+  <name xml:lang="nn">K3b</name>
   <name xml:lang="pl">K3b</name>
   <name xml:lang="pt">K3b</name>
   <name xml:lang="sk">K3b</name>
@@ -35,6 +36,7 @@
   <summary xml:lang="fr">Gravure de disque</summary>
   <summary xml:lang="it">Masterizzazione su disco</summary>
   <summary xml:lang="nl">Schijven branden</summary>
+  <summary xml:lang="nn">Platebrenning</summary>
   <summary xml:lang="pl">Nagrywanie płyt</summary>
   <summary xml:lang="pt">Gravação de Discos</summary>
   <summary xml:lang="sk">Napaľovanie médií</summary>
