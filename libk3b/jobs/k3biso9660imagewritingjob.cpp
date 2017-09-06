@@ -243,6 +243,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     // 7. if writing mode DAO and writing app CDRDAO or CDRECORD: all writable cd types
     // 8. if writing mode WritingModeIncrementalSequential: DVD-R(W)
     // 9. if writing mode WritingModeRestrictedOverwrite: DVD-RW or DVD+RW
+    // 10. if Bug 381074: BD-RE
 
     Device::MediaTypes mt = 0;
     if( m_writingMode == K3b::WritingModeAuto ||
@@ -250,7 +251,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
         if( writingApp() == K3b::WritingAppCdrdao )
             mt = K3b::Device::MEDIA_WRITABLE_CD;
         else if( d->isDvdImage )
-            mt = K3b::Device::MEDIA_WRITABLE_DVD;
+            mt = K3b::Device::MEDIA_WRITABLE_DVD | K3b::Device::MEDIA_WRITABLE_BD;
         else
             mt = K3b::Device::MEDIA_WRITABLE;
     }
@@ -261,9 +262,10 @@ void K3b::Iso9660ImageWritingJob::startWriting()
         mt = K3b::Device::MEDIA_DVD_PLUS_R|K3b::Device::MEDIA_DVD_PLUS_R_DL|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR;
     }
     else {
-        mt = K3b::Device::MEDIA_WRITABLE_DVD;
+        mt = K3b::Device::MEDIA_WRITABLE_DVD | K3b::Device::MEDIA_WRITABLE_BD;
     }
 
+    qDebug() << "Bug 381074: MediaTypes: " << mt;
 
     // wait for the media
     Device::MediaType media = waitForMedium( m_device, K3b::Device::STATE_EMPTY, mt, K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048 );
