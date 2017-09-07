@@ -248,15 +248,6 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 //   if( !mediaState.isEmpty() )
 //     mediaState = " (" + mediaState +")";
 
-    qDebug() << "Bug 381074: wanted: "
-             << __PRETTY_FUNCTION__ << d->wantedMediaType
-             << d->wantedMediaState << d->wantedMinMediaSize.lba();
-
-    qDebug() << "Bug 381074: found: "
-             << __PRETTY_FUNCTION__ << medium.diskInfo().mediaType()
-             << medium.diskInfo().diskState()
-             << medium.actuallyRemainingSize().lba();
-
     // /////////////////////////////////////////////////////////////
     //
     // BD-RE handling

@@ -70,7 +70,7 @@ K3b::BurnJob* K3b::VideoDvdDoc::newBurnJob( K3b::JobHandler* hdl, QObject* paren
 
 K3b::Device::MediaTypes K3b::VideoDvdDoc::supportedMediaTypes() const
 {
-    return K3b::Device::MEDIA_WRITABLE_DVD;
+    return K3b::Device::MEDIA_WRITABLE_DVD | K3b::Device::MEDIA_WRITABLE_BD;
 }
 
 bool K3b::VideoDvdDoc::saveDocumentData(QDomElement*)

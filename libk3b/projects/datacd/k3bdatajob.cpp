@@ -701,12 +701,6 @@ bool K3b::DataJob::waitForBurnMedium()
     // start with all media types supported by the writer
     Device::MediaTypes m  = d->doc->supportedMediaTypes() & d->doc->burner()->writeCapabilities();
 
-    qDebug() << "Bug 381074: supportedMediaTypes: "
-             << d->doc->supportedMediaTypes();
-
-    qDebug() << "Bug 381074: writeCapabilities: "
-             << d->doc->burner()->writeCapabilities();
-
     // if everything goes wrong we are left with no possible media to request
     if ( !m ) {
         emit infoMessage( i18n( "Internal Error: No medium type fits. This project cannot be burned." ), MessageError );

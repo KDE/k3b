@@ -265,8 +265,6 @@ void K3b::Iso9660ImageWritingJob::startWriting()
         mt = K3b::Device::MEDIA_WRITABLE_DVD | K3b::Device::MEDIA_WRITABLE_BD;
     }
 
-    qDebug() << "Bug 381074: MediaTypes: " << mt;
-
     // wait for the media
     Device::MediaType media = waitForMedium( m_device, K3b::Device::STATE_EMPTY, mt, K3b::imageFilesize( QUrl::fromLocalFile(m_imagePath) )/2048 );
     if( media == Device::MEDIA_UNKNOWN ) {
