@@ -31,6 +31,9 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
+#ifdef WITH_NEW_SOLID_JOB
+#include <Solid/Power>
+#endif
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QEvent>
@@ -107,6 +110,11 @@ public:
 
     QList<K3b::Job*> runningJobs;
     QList<K3b::Device::Device*> blockedDevices;
+
+#ifdef WITH_NEW_SOLID_JOB
+    Solid::InhibitionJob *inhibitSleepJob = nullptr;
+    Solid::InhibitionJob *inhibitNoneJob = nullptr;
+#endif
 };
 
 
@@ -234,21 +242,35 @@ void K3b::Core::saveSettings( KSharedConfig::Ptr c )
 }
 
 
-void K3b::Core::registerJob( K3b::Job* job )
+void K3b::Core::registerJob(K3b::Job* job)
 {
-    d->runningJobs.append( job );
-    emit jobStarted( job );
-    if( K3b::BurnJob* bj = dynamic_cast<K3b::BurnJob*>( job ) )
-        emit burnJobStarted( bj );
+    d->runningJobs.append(job);
+    emit jobStarted(job);
+    if (K3b::BurnJob* bj = dynamic_cast<K3b::BurnJob*>(job)) {
+#ifdef WITH_NEW_SOLID_JOB
+        d->inhibitSleepJob = Solid::Power::inhibit(Solid::Power::Sleep,
+                i18n("Inhibiting sleep for disc writing"));
+        if (d->inhibitSleepJob)
+            d->inhibitSleepJob->start();
+#endif
+        emit burnJobStarted(bj);
+    }
 }
 
 
-void K3b::Core::unregisterJob( K3b::Job* job )
+void K3b::Core::unregisterJob(K3b::Job* job)
 {
-    d->runningJobs.removeAll( job );
-    emit jobFinished( job );
-    if( K3b::BurnJob* bj = dynamic_cast<K3b::BurnJob*>( job ) )
-        emit burnJobFinished( bj );
+    d->runningJobs.removeAll(job);
+    emit jobFinished(job);
+    if (K3b::BurnJob* bj = dynamic_cast<K3b::BurnJob*>(job)) {
+#ifdef WITH_NEW_SOLID_JOB
+        d->inhibitNoneJob = Solid::Power::inhibit(Solid::None,
+                i18n("Inhibiting none for disc writing"));
+        if (d->inhibitNoneJob)
+            d->inhibitNoneJob->start();
+#endif
+        emit burnJobFinished(bj);
+    }
 }
 
 

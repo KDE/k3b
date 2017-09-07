@@ -72,6 +72,12 @@ endif()
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
+option(WITH_NEW_SOLID_JOB "WIP: base Job class" Off)
+add_feature_info(Solid::Job WITH_NEW_SOLID_JOB "WIP: Base class for Solid Asynchronous apis")
+if(WITH_NEW_SOLID_JOB)
+    add_definitions(-DWITH_NEW_SOLID_JOB)
+endif()
+
 find_package(Iconv)
 set(HAVE_ICONV "${ICONV_FOUND}")
 
