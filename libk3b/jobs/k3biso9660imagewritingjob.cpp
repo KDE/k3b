@@ -234,34 +234,31 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     emit newSubTask( i18n("Waiting for medium") );
 
     // we wait for the following:
-    // 1. if writing mode auto and writing app auto: all writable media types
-    // 2. if writing mode auto and writing app not growisofs: all writable cd types
-    // 3. if writing mode auto and writing app growisofs: all writable dvd types
-    // 4. if writing mode TAO or RAW: all writable cd types
-    // 5. if writing mode DAO and writing app auto: all writable cd types and DVD-R(W)
-    // 6. if writing mode DAO and writing app GROWISOFS: DVD-R(W)
-    // 7. if writing mode DAO and writing app CDRDAO or CDRECORD: all writable cd types
-    // 8. if writing mode WritingModeIncrementalSequential: DVD-R(W)
-    // 9. if writing mode WritingModeRestrictedOverwrite: DVD-RW or DVD+RW
-    // 10. if Bug 381074: BD-RE
+    // 1. If special CD features are requested: CD types only Special are:
+    // K3b::WritingAppCdrdao , K3b::WritingModeTao , WritingModeRaw
+    // 2. If formatted DVD-RW is requested: formatted DVD-RW only Request is:
+    // K3b::WritingModeRestrictedOverwrite
+    // 3. If image is larger than 900 MiB (d->isDvdImage == true): DVD or BD
+    // types See K3b::Iso9660ImageWritingJob::start()
+    // 4. If image not larger than 900 MiB: All media types
+    // 5. If not decided yet: DVD and BD media types.
 
     Device::MediaTypes mt = 0;
-    if( m_writingMode == K3b::WritingModeAuto ||
-        m_writingMode == K3b::WritingModeSao ) {
-        if( writingApp() == K3b::WritingAppCdrdao )
+    if (m_writingMode == K3b::WritingModeAuto ||
+        m_writingMode == K3b::WritingModeSao) {
+        if (writingApp() == K3b::WritingAppCdrdao)
             mt = K3b::Device::MEDIA_WRITABLE_CD;
-        else if( d->isDvdImage )
+        else if (d->isDvdImage)
             mt = K3b::Device::MEDIA_WRITABLE_DVD | K3b::Device::MEDIA_WRITABLE_BD;
         else
             mt = K3b::Device::MEDIA_WRITABLE;
-    }
-    else if( m_writingMode == K3b::WritingModeTao || m_writingMode == K3b::WritingModeRaw ) {
+    } else if (m_writingMode == K3b::WritingModeTao ||
+               m_writingMode == K3b::WritingModeRaw) {
         mt = K3b::Device::MEDIA_WRITABLE_CD;
-    }
-    else if( m_writingMode == K3b::WritingModeRestrictedOverwrite ) {
-        mt = K3b::Device::MEDIA_DVD_PLUS_R|K3b::Device::MEDIA_DVD_PLUS_R_DL|K3b::Device::MEDIA_DVD_PLUS_RW|K3b::Device::MEDIA_DVD_RW_OVWR;
-    }
-    else {
+    } else if (m_writingMode == K3b::WritingModeRestrictedOverwrite) {
+        mt = /*K3b::Device::MEDIA_DVD_PLUS_R | K3b::Device::MEDIA_DVD_PLUS_R_DL |*/
+             K3b::Device::MEDIA_DVD_PLUS_RW | K3b::Device::MEDIA_DVD_RW_OVWR;
+    } else {
         mt = K3b::Device::MEDIA_WRITABLE_DVD | K3b::Device::MEDIA_WRITABLE_BD;
     }
 
