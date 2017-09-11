@@ -235,7 +235,9 @@ void K3b::Iso9660ImageWritingJob::startWriting()
 
     // we wait for the following:
     // 1. If special CD features are requested: CD types only Special are:
-    // K3b::WritingAppCdrdao , K3b::WritingModeTao , WritingModeRaw
+    // K3b::WritingAppCdrdao with K3b::WritingModeAuto or K3b::WritingModeSao,
+    // any WritingApp with K3b::WritingModeTao,
+    // any WritingApp with K3b::WritingModeRaw
     // 2. If formatted DVD-RW is requested: formatted DVD-RW only Request is:
     // K3b::WritingModeRestrictedOverwrite
     // 3. If image is larger than 900 MiB (d->isDvdImage == true): DVD or BD
