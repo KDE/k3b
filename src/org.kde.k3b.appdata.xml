@@ -25,6 +25,7 @@
   <name xml:lang="tr">K3b</name>
   <name xml:lang="uk">K3b</name>
   <name xml:lang="x-test">xxK3bxx</name>
+  <name xml:lang="zh-CN">K3b</name>
   <summary>Disk Burning</summary>
   <summary xml:lang="ca">Gravació de disc</summary>
   <summary xml:lang="ca-valencia">Gravació de disc</summary>
@@ -48,6 +49,7 @@
   <summary xml:lang="tr">Disk Yazdırma</summary>
   <summary xml:lang="uk">Запис оптичних дисків</summary>
   <summary xml:lang="x-test">xxDisk Burningxx</summary>
+  <summary xml:lang="zh-CN">磁盘刻录</summary>
   <description>
     <p>
       K3b was created to be a feature-rich and easy to handle CD burning
