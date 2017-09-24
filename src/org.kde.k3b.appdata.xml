@@ -9,6 +9,7 @@
   <name xml:lang="de">K3b</name>
   <name xml:lang="en-GB">K3b</name>
   <name xml:lang="es">K3b</name>
+  <name xml:lang="fi">K3b</name>
   <name xml:lang="fr">K3b</name>
   <name xml:lang="gl">K3b</name>
   <name xml:lang="it">K3b</name>
@@ -33,6 +34,7 @@
   <summary xml:lang="de">Brennprogramm</summary>
   <summary xml:lang="en-GB">Disk Burning</summary>
   <summary xml:lang="es">Grabación de discos</summary>
+  <summary xml:lang="fi">Levynkirjoitus</summary>
   <summary xml:lang="fr">Gravure de disque</summary>
   <summary xml:lang="gl">Gravación de disco</summary>
   <summary xml:lang="it">Masterizzazione su disco</summary>
@@ -98,6 +100,7 @@
       <li xml:lang="de">Projekte: Projekte werden im Dateimenü erstellt und dann mit Daten zum Brennen gefüllt</li>
       <li xml:lang="en-GB">The projects: Projects are created from the file menu and then filled with data to burn</li>
       <li xml:lang="es">Los proyectos: los proyectos se crean desde el menú archivo y, a continuación, se cumplimentan con los datos a grabar</li>
+      <li xml:lang="fi">Projektit: Projektit luodaan tiedostovalikosta, jonka jälkeen ne täytetään kirjoitettavalla tiedolla</li>
       <li xml:lang="fr">Les projets : les projets sont créés depuis le menu fichier et remplis avec les données à graver</li>
       <li xml:lang="gl">Os proxectos, que se crean desde o menú de ficheiro e se completan posteriormente con datos para gravar.</li>
       <li xml:lang="it">I progetti: sono creati dal menu File e poi completati dai dati da masterizzare</li>
@@ -124,6 +127,7 @@
       <li xml:lang="de">Extras: Im Menü Extras finden Sie verschiedene Aktionen wie das Kopieren von CDs oder die Formatierung von DVDs</li>
       <li xml:lang="en-GB">The Tools: The tools menu offers different tools like CD copy or DVD formatting</li>
       <li xml:lang="es">Las herramientas: el menú herramientas ofrece diferentes herramientas, como copia de CD o formateo de DVD</li>
+      <li xml:lang="fi">Työkalut: Työkaluvalikosta löytyy työkaluja mm. CD:n kopiointiin tai DVD:n alustukseen</li>
       <li xml:lang="fr">Les outils : Le menu outils offre différente fonctionnalité comme la copie de CD ou le formatage de DVD</li>
       <li xml:lang="gl">As ferramentas. O menú de ferramentas ofrece utilidades con diversas funcións, como as de copiar CD ou formatar DVD.</li>
       <li xml:lang="it">Gli strumenti: questo menu offre diversi strumenti come la copia dei CD o la formattazione dei DVD</li>
@@ -151,6 +155,7 @@
       <li xml:lang="de">Kontextsensitive Aktionen für Medien: Wenn Sie auf das Symbol eines CD-/DVD-Laufwerks klicken, zeigt K3b deren Inhalt und ermöglicht weitere Aktionen, zum Beispiel das Auslesen einer Audio-CD</li>
       <li xml:lang="en-GB">Context sensitive media actions: When clicking on the Icon representing a CD/DVD drive K3b will present its contents and allow some further action. This is for example the way to rip audio CDs</li>
       <li xml:lang="es">Acciones de medios sensibles al contexto: cuando se pulsa sobre un icono que representa una unidad de CD/DVD, K3b presentará su contenido y permitirá algunas acciones adicionales. Esto es, por ejemplo, el modo de extraer CD de audio</li>
+      <li xml:lang="fi">Kontekstisidonnaiset toimenpiteet: Napsautettaessa CD- tai DVD-asemaa esittävää kuvaketta K3b näyttää sen sisällön ja tarjoaa lisätoimenpiteitä. Tämä on esimerkiksi helpoin tapa purkaa ääni-CD:t tiedostoiksi</li>
       <li xml:lang="fr">Des actions sur les médias sensibles au contexte : Quand vous cliquez sur l'icône représentant un lecteur de CD ou DVD, K3b vous présentera son contenu et permettra de nouvelles actions. Ceci est par exemple la méthode pour extraire des CD audio</li>
       <li xml:lang="gl">Accións de recursos segundo o contexto. Ao premer a icona de lector de CD/DVD, K3b presenta o seu contido e permite realizar accións. Por exemplo, así é como se extraen datos de CD de son.</li>
       <li xml:lang="it">Azioni sensibili al contesto: quando si fa clic sull'icona che rappresenta un lettore CD/DVD, K3b presenterà il suo contenuto e consentirà alcune azioni ulteriori. Questo è, ad esempio, il modo di estrarre i CD audio</li>
