@@ -134,8 +134,7 @@ bool K3b::CueFileParser::parseLine( QString line )
     // use cap(1) for the ISRC
     static QRegExp isrcRx( "ISRC\\s(\\w{5,5}\\d{7,7})" );
 
-    // Testplan: larger than 80 bytes
-    static QString cdTextRxStr = "\"?([^\"]{0,1024})\"?";
+    static QString cdTextRxStr = "\"?([^\"]{0,80})\"?";
 
     // use cap(1) for the string
     static QRegExp titleRx( "TITLE\\s" + cdTextRxStr );
