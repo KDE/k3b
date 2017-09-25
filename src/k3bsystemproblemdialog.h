@@ -91,6 +91,7 @@ namespace K3b {
         SystemProblemDialog( const QList<SystemProblem>& problems,
                              bool showDeviceSettingsButton,
                              bool showBinSettingsButton,
+                             bool forceCheck = false,
                              QWidget* parent = 0);
         static int dmaActivated( Device::Device* );
 #ifndef Q_OS_WIN32

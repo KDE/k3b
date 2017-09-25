@@ -87,6 +87,7 @@ K3b::SystemProblem::SystemProblem( Type t,
 K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& problems,
                                                bool showDeviceSettingsButton,
                                                bool showBinSettingsButton,
+                                               bool forceCheck,
                                                QWidget* parent)
     : QDialog( parent )
 {
@@ -113,6 +114,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
     buttonBox->addButton( QDialogButtonBox::Close );
 
     m_checkDontShowAgain = new QCheckBox( i18n("Do not show again"), this );
+    m_checkDontShowAgain->setVisible(!forceCheck);
 
     // setup the problem view
     // ---------------------------------------------------------------------------------------------------
@@ -625,7 +627,7 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
         static K3b::SystemProblemDialog* s_openDlg = 0;
         if( s_openDlg )
             s_openDlg->close();
-        K3b::SystemProblemDialog dlg( problems, showDeviceSettingsButton, showBinSettingsButton, parent );
+        K3b::SystemProblemDialog dlg( problems, showDeviceSettingsButton, showBinSettingsButton, forceCheck, parent );
         s_openDlg = &dlg;
         dlg.exec();
         s_openDlg = 0;
