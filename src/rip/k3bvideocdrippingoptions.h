@@ -17,6 +17,8 @@
 
 #include <KI18n/KLocalizedString>
 #include <QtCore/QString>
+#include <QFileInfo>
+#include <QStandardPaths>
 
 namespace K3b {
 class VideoCdRippingOptions
@@ -25,7 +27,6 @@ class VideoCdRippingOptions
         VideoCdRippingOptions()
             :   m_videocdsize( 0 ),
                 m_videocdsource( "/dev/cdrom" ),
-                m_videocddestination( "/var/tmp" ),
                 m_videocddescription( i18n( "Video CD" ) ),
                 m_videocdripfiles( false ),
                 m_videocdripsegments( false ),
@@ -33,7 +34,13 @@ class VideoCdRippingOptions
                 m_ignoreExt( false ),
                 m_sector2336( false ),
                 m_extractXML( false )
-        {}
+        {
+            m_videocddestination = QStandardPaths::writableLocation(QStandardPaths::MoviesLocation);
+            QFileInfo checkPath(m_videocddestination);
+            if (! checkPath.exists()) {
+                m_videocddestination = QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+            }
+        }
 
         void setVideoCdSize( unsigned long size ) { m_videocdsize = size;}
         void setVideoCdSource( const QString& source ) { m_videocdsource = source;}
