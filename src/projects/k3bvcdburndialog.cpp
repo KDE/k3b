@@ -57,17 +57,21 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     prepareGui();
 
     QString vcdType;
-    switch ( m_vcdDoc->vcdType() ) {
+    switch (m_vcdDoc->vcdType()) {
     case K3b::VcdDoc::VCD11:
-        vcdType = i18n( "Video CD (Version 1.1)" );
+        vcdType = i18n("Video CD (Version 1.1)");
+        break;
     case K3b::VcdDoc::VCD20:
-        vcdType = i18n( "Video CD (Version 2.0)" );
+        vcdType = i18n("Video CD (Version 2.0)");
+        break;
     case K3b::VcdDoc::SVCD10:
-        vcdType = i18n( "Super Video CD" );
+        vcdType = i18n("Super Video CD");
+        break;
     case K3b::VcdDoc::HQVCD:
-        vcdType = i18n( "High-Quality Video CD" );
+        vcdType = i18n("High-Quality Video CD");
+        break;
     default:
-        vcdType = i18n( "Video CD" );
+        vcdType = i18n("Video CD");
     }
 
     setTitle( vcdType, i18np( "1 MPEG (%2)", "%1 MPEGs (%2)",
