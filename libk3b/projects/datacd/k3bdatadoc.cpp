@@ -481,7 +481,7 @@ bool K3b::DataDoc::loadDocumentDataOptions( QDomElement elem )
                 d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::strip );
             else if( e.text() == "extended" )
                 d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::extended );
-            else if( e.text() == "extended" )
+            else if (e.text() == "replace")
                 d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::replace );
             else
                 d->isoOptions.setWhiteSpaceTreatment( K3b::IsoOptions::noChange );
