@@ -1,3 +1,43 @@
+17.11.0
+=======
+Changes:
+ * Hide Show progress OSD by default (BUG: 382347)
+ * There is no IsoOptions for AudioDoc, so it could NOT create iso image like
+   DataDoc (BUG: 260828)
+ * Add readCheckSystemConfig before checkSystem to fix "do not show again" from
+   system configuration problems dialog is not remembered issue, A great patch
+   by Wolfgang Bauer! (BUG: 381368)
+ * Consider to install the libburn and cdrskin packages (BUG: 382754)
+ * Add cancel button for Settings window (BUG: 382775)
+ * Implement enable "apply" button only when some setting is changed
+   (BUG: 382776)
+ * Use vartmp instead of tmp to save temporary files, A patch by Fedora
+   engineer! (BUG: 384117)
+ * Implement preventing from going into suspend/hibernate by system
+   (BUG: 280134)
+ * Hide Do not show again CheckBox for forceCheck (BUG: 384743)
+
+Bugfixes:
+ * Fix missing icon in alt+tab menu and dash for GNOME (BUG: 382122)
+ * Fix Delete audio file from audio cd and mixed mode cd projects sometimes
+   causes crash (BUG: 382468)
+ * Fix JobProgressDialog set duplicated percentage for MainWindow (BUG: 382488)
+ * Fix impossible to save an ISO file to an empty folder on GNOME issue, A
+   patch by Ernestas Kulik! (BUG: 382506)
+ * Fix wrong comparison if there are no descriptors, A patch by Thomas Schmitt!
+   (BUG: 382941)
+ * Fix cannot create DVD video image issue (BUG: 383011)
+ * Fix Blu-ray media sizes in fill widget are incorrect issue, A patch by
+   Henryk Hecht! (BUG: 383211)
+ * Fix "X" button from burning progress window does not work issue
+   (BUG: 383236)
+ * Teach K3B learned to handle BD, A patch by Thomas Schmitt! (BUG: 381074)
+ * Fix text ilegible in darker themes/colour scheme issue (BUG: 383819)
+ * Fix Media type selection for Image burning is partly wrong, comments are
+   very wrong (BUG: 384471)
+ * Fix potential copy-paste issue, switch stmt missing break issue, maybe
+   deteced by coverity, patch by dcb314@hotmail.com! (BUG: 385674, 385676, 385677)
+
 17.08.0
 =======
 Bugfixes:
