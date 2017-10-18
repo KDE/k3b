@@ -265,7 +265,7 @@ void K3b::Core::unregisterJob(K3b::Job* job)
     if (K3b::BurnJob* bj = dynamic_cast<K3b::BurnJob*>(job)) {
 #ifdef WITH_NEW_SOLID_JOB
         d->inhibitNoneJob = Solid::Power::inhibit(Solid::None,
-                i18n("Inhibiting none for disc writing"));
+                i18n("Disable inhibition for disc writing"));
         if (d->inhibitNoneJob)
             d->inhibitNoneJob->start();
 #endif
