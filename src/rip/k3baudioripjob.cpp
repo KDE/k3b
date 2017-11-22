@@ -289,16 +289,16 @@ QIODevice* AudioRipJob::createReader( int trackIndex ) const
 }
 
 
-void AudioRipJob::trackStarted( int trackIndex )
+void AudioRipJob::trackStarted(int trackIndex)
 {
-    if( !cddbEntry().track( trackIndex-1 ).get( KCDDB::Artist ).toString().isEmpty() &&
-        !cddbEntry().track( trackIndex-1 ).get( KCDDB::Title ).toString().isEmpty() )
-        emit newSubTask( i18n( "Ripping track %1 (%2 - %3)",
-                                trackIndex,
-                                cddbEntry().track( trackIndex-1 ).get( KCDDB::Artist ).toString(),
-                                cddbEntry().track( trackIndex-1 ).get( KCDDB::Title ).toString() ) );
-    else
-        emit newSubTask( i18n("Ripping track %1", trackIndex) );
+    if (!cddbEntry().track(trackIndex - 1).get(KCDDB::Artist).toString().isEmpty() &&
+        !cddbEntry().track(trackIndex - 1).get(KCDDB::Title).toString().isEmpty()) {
+        emit newSubTask(i18n("Ripping track %1 (%2 - %3)",
+                        trackIndex,
+                        cddbEntry().track(trackIndex - 1).get(KCDDB::Artist).toString(),
+                        cddbEntry().track(trackIndex - 1).get(KCDDB::Title).toString().trimmed()));
+    } else
+        emit newSubTask(i18n("Ripping track %1", trackIndex));
 }
 
 
