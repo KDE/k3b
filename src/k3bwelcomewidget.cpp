@@ -221,19 +221,17 @@ void K3b::WelcomeWidget::repositionButtons()
 }
 
 
-int K3b::WelcomeWidget::heightForWidth( int width ) const
+int K3b::WelcomeWidget::heightForWidth(int width) const
 {
-    int ow = ( int )m_infoText->idealWidth();
-    m_infoText->setTextWidth( width );
-    int h = ( int )m_infoText->size().height();
-    m_infoText->setTextWidth( ow );
-
+    int ow = (int)m_infoText->idealWidth() + 10;
+    m_infoText->setTextWidth(ow);
+    int h = (int)m_infoText->size().height();
     int cols, rows;
-    calculateButtons( width, m_actions.count(), m_buttonSize.width(), cols, rows );
+    calculateButtons(width, m_actions.count(), m_buttonSize.width(), cols, rows);
     int height = MARGIN +
                  m_header->size().toSize().height() +
                  HEADER_BUTTON_SPACING +
-                 ( ( m_buttonSize.height() + BUTTON_SPACING ) * rows ) + m_buttonMore->height() +
+                 ((m_buttonSize.height() + BUTTON_SPACING) * rows) + m_buttonMore->height() +
                  HEADER_BUTTON_SPACING + h + MARGIN;
     return height;
 }
