@@ -139,10 +139,10 @@ int K3b::ViewColumnAdjuster::columnMargin( int column ) const
 }
 
 
-bool K3b::ViewColumnAdjuster::eventFilter( QObject* watched, QEvent* event )
+bool K3b::ViewColumnAdjuster::eventFilter(QObject* watched, QEvent* event)
 {
-    if ( watched == d->view ) {
-        if ( event->type() == QEvent::Resize ) {
+    if (watched == d->view) {
+        if (event->type() == QEvent::Resize || event->type() == QEvent::UpdateLater) {
             d->_k_adjustColumns();
         }
     }
