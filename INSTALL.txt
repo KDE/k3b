@@ -39,6 +39,7 @@ For debug:
 
   static analyzer:
   scan-build -k -v -V cmake .. -DCMAKE_INSTALL_PREFIX=/usr    \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DKDE_INSTALL_LIBDIR=lib    \
     -DKDE_INSTALL_LIBEXECDIR=lib    \
     -DKDE_INSTALL_USE_QT_SYS_PATHS=ON   \
@@ -49,7 +50,8 @@ For debug:
   dynamic analyzer:
   cmake .. -DCMAKE_INSTALL_PREFIX=/usr    \
     -DCMAKE_CXX_COMPILER=clang++    \
-    -DECM_ENABLE_SANITIZERS='address;leak;undefined'    \
+    -DECM_ENABLE_SANITIZERS='address;undefined'    \
+    -DCMAKE_BUILD_TYPE=Debug \
     -DKDE_INSTALL_LIBDIR=lib    \
     -DKDE_INSTALL_LIBEXECDIR=lib    \
     -DKDE_INSTALL_USE_QT_SYS_PATHS=ON   \
