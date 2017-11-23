@@ -314,7 +314,7 @@ if(BUILD_TESTING)
         PURPOSE "libFuzzer – a library for coverage-guided fuzz testing."
         URL "http://libfuzzer.info"
         TYPE OPTIONAL)
-    add_subdirectory( tests )
+    add_subdirectory(tests)
 endif()
 
 ###################  K3b config summary ################################

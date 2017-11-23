@@ -90,12 +90,11 @@ target_link_libraries(k3bexternalbinmanagertest
 add_test(k3bexternalbinmanagertest k3bexternalbinmanagertest)
 
 if(LIBFUZZER_FOUND)
+    find_package(Threads)
     add_executable(k3bfuzzertest 
-        k3bfuzzertest.cpp
-        ${CMAKE_SOURCE_DIR}/libk3b/tools/libisofs/isofs.cpp)
-    target_include_directories(k3bfuzzertest PRIVATE
-        ${CMAKE_SOURCE_DIR}/libk3b)
+        k3bfuzzertest.cpp)
     target_link_libraries(k3bfuzzertest
         Qt5::Core
-        ${LIBFUZZER_LIBRARIES})
+        ${LIBFUZZER_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT})
 endif()

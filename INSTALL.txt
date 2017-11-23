@@ -47,10 +47,11 @@ For debug:
     -DK3B_ENABLE_PERMISSION_HELPER=ON   \
     -DK3B_DEBUG=ON
 
-  dynamic analyzer:
+  dynamic analyzer and fuzzer:
   cmake .. -DCMAKE_INSTALL_PREFIX=/usr    \
     -DCMAKE_CXX_COMPILER=clang++    \
     -DECM_ENABLE_SANITIZERS='address;undefined'    \
+    -DCMAKE_CXX_FLAGS="-fsanitize-coverage=edge,indirect-calls,8bit-counters,trace-bb,trace-cmp" \
     -DCMAKE_BUILD_TYPE=Debug \
     -DKDE_INSTALL_LIBDIR=lib    \
     -DKDE_INSTALL_LIBEXECDIR=lib    \
