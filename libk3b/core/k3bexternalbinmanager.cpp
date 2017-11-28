@@ -171,6 +171,7 @@ public:
     QString name;
     QStringList userParameters;
     QList<const ExternalBin*> bins;
+    QList<const ExternalBin*> gcBins;
     QString defaultBin;
 };
 
@@ -183,7 +184,8 @@ K3b::ExternalProgram::ExternalProgram( const QString& name )
 
 K3b::ExternalProgram::~ExternalProgram()
 {
-    qDeleteAll( d->bins );
+    qDeleteAll(d->bins);
+    qDeleteAll(d->gcBins);
     delete d;
 }
 
@@ -234,6 +236,7 @@ void K3b::ExternalProgram::addBin( K3b::ExternalBin* bin )
 
 void K3b::ExternalProgram::clear()
 {
+    d->gcBins << d->bins;
     d->bins.clear();
 }
 
