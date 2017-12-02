@@ -278,15 +278,18 @@ QString K3bFFMpegFile::comment() const
 }
 
 
-int K3bFFMpegFile::read( char* buf, int bufLen )
+int K3bFFMpegFile::read(char* buf, int bufLen)
 {
+    if (!buf || !d->outputBufferPos)
+        return -1;
+
     int ret = fillOutputBuffer();
     if (ret <= 0) {
         return ret;
     }
 
     int len = qMin(bufLen, d->outputBufferSize);
-    ::memcpy( buf, d->outputBufferPos, len );
+    ::memcpy(buf, d->outputBufferPos, len);
 
     // TODO: only swap if needed
     for( int i = 0; i < len-1; i+=2 ) {
