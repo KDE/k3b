@@ -14,6 +14,7 @@
   <name xml:lang="fr">K3b</name>
   <name xml:lang="gl">K3b</name>
   <name xml:lang="it">K3b</name>
+  <name xml:lang="ko">K3b</name>
   <name xml:lang="nl">K3b</name>
   <name xml:lang="nn">K3b</name>
   <name xml:lang="pl">K3b</name>
@@ -42,6 +43,7 @@
   <summary xml:lang="fr">Gravure de disque</summary>
   <summary xml:lang="gl">Gravación de disco</summary>
   <summary xml:lang="it">Masterizzazione su disco</summary>
+  <summary xml:lang="ko">디스크 쓰기</summary>
   <summary xml:lang="nl">Schijven branden</summary>
   <summary xml:lang="nn">Platebrenning</summary>
   <summary xml:lang="pl">Nagrywanie płyt</summary>
@@ -111,6 +113,7 @@
       <li xml:lang="fr">Les projets : les projets sont créés depuis le menu fichier et remplis avec les données à graver</li>
       <li xml:lang="gl">Os proxectos, que se crean desde o menú de ficheiro e se completan posteriormente con datos para gravar.</li>
       <li xml:lang="it">I progetti: sono creati dal menu File e poi completati dai dati da masterizzare</li>
+      <li xml:lang="ko">프로젝트: 파일 메뉴에서 만들 수 있으며 기록할 데이터를 파일로 저장합니다</li>
       <li xml:lang="nl">De projecten: Projecten worden gemaakt uit het menu voor bestanden en daarna gevuld met gegevens on te branden</li>
       <li xml:lang="pl">Projekty: Projekty są tworzone z menu plik, a następnie wypełniane danymi do wypalenia</li>
       <li xml:lang="pt">Os projectos: Os projectos são criados a partir do menu de ficheiros e depois preenchidos com os dados a gravar</li>
@@ -141,6 +144,7 @@
       <li xml:lang="fr">Les outils : Le menu outils offre différente fonctionnalité comme la copie de CD ou le formatage de DVD</li>
       <li xml:lang="gl">As ferramentas. O menú de ferramentas ofrece utilidades con diversas funcións, como as de copiar CD ou formatar DVD.</li>
       <li xml:lang="it">Gli strumenti: questo menu offre diversi strumenti come la copia dei CD o la formattazione dei DVD</li>
+      <li xml:lang="ko">도구: 도구 메뉴는 CD 복사와 DVD 포맷과 같은 도구를 제공합니다</li>
       <li xml:lang="nl">De hulpmiddelen: Het menu Hulpmiddelen biedt verschillende hulpmiddelen zoals kopiëren van cd of formattering van een dvd</li>
       <li xml:lang="pl">Narzędzia: Menu narzędzi dostarcza różnych narzędzi takich jak powielenie CD lub formatowanie DVD</li>
       <li xml:lang="pt">As ferramentas: O menu de ferramentas oferece diversas funcionalidades como a cópia de CD's ou a formatação de DVD's</li>
@@ -172,6 +176,7 @@
       <li xml:lang="fr">Des actions sur les médias sensibles au contexte : Quand vous cliquez sur l'icône représentant un lecteur de CD ou DVD, K3b vous présentera son contenu et permettra de nouvelles actions. Ceci est par exemple la méthode pour extraire des CD audio</li>
       <li xml:lang="gl">Accións de recursos segundo o contexto. Ao premer a icona de unidade de CD/DVD, K3b presenta o seu contido e permite realizar accións. Por exemplo, así é como se extraen datos de CD de son.</li>
       <li xml:lang="it">Azioni sensibili al contesto: quando si fa clic sull'icona che rappresenta un lettore CD/DVD, K3b presenterà il suo contenuto e consentirà alcune azioni ulteriori. Questo è, ad esempio, il modo di estrarre i CD audio</li>
+      <li xml:lang="ko">미디어 종류에 따른 동작: CD/DVD 드라이브 아이콘을 누르면 내용과 사용 가능한 동작을 표시합니다. 예를 들어 오디오 CD를 삽입한 경우 음악을 추출할 수 있습니다</li>
       <li xml:lang="nl">Context gevoelige mediumacties: bij klikken op het pictogram voor een cd/dvd-apparaat zal K3b zijn inhoud weergeven en enige verdere acties. Dit is bijvoorbeeld de manier om audio-cd's te rippen</li>
       <li xml:lang="pl">Działania wrażliwe na stosowany nośnik: Przy naciśnięciu na ikonę przedstawiającą napęd CD/DVD K3b przedstawi jej zawartość i umożliwi podjęcie dalszych działań. Jest to na przykład sposób na zgranie płyt CD z muzyką</li>
       <li xml:lang="pt">Acções dependentes do contexto: Ao carregar no ícone que representa um leitor de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas acções adicionais. Esta é, por exemplo, a forma de extrair músicas de CD's de áudio</li>
