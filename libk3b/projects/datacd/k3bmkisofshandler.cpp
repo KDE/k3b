@@ -130,27 +130,37 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
 }
 
 
-int K3b::MkisofsHandler::parseMkisofsProgress( const QString& line )
+int K3b::MkisofsHandler::parseMkisofsProgress(const QString& line)
 {
-    //
     // in multisession mode mkisofs' progress does not start at 0 but at (X+Y)/X
     // where X is the data already on the cd and Y the data to create
     // This is not very dramatic but kind or ugly.
     // We just save the first emitted progress value and to some math ;)
-    //
 
     QString perStr = line;
-    perStr.truncate( perStr.indexOf('%') );
+    perStr.truncate(perStr.indexOf('%'));
+    // FIXME: how to support Inuit or Samaritan Aramaic format or cover all
+    // formats? right now it only support, for example: 0.52 and 0,52
+    QRegExp rx("(\\d+.|,+\\d)");
+    QStringList list;
+    int pos = 0;
     bool ok;
-    double p = perStr.toDouble( &ok );
-    if( !ok ) {
+    while ((pos = rx.indexIn(perStr, pos)) != -1) {
+        list << rx.cap(1);
+        pos += rx.matchedLength();
+    }
+    if (list.size() < 2)
+        return -1;
+    // FIXME: the same story
+    double p = (list[0].replace(',', '.') + list[1]).toDouble(&ok);
+    if (!ok) {
         qDebug() << "(K3b::MkisofsHandler) Parsing did not work for " << perStr;
         return -1;
-    }
-    else {
-        if( d->firstProgressValue < 0 )
+    } else {
+        if (d->firstProgressValue < 0)
             d->firstProgressValue = p;
 
-        return( (int)::ceil( (p - d->firstProgressValue)*100.0/(100.0 - d->firstProgressValue) ) );
+        return((int)::ceil((p - d->firstProgressValue) * 100.0 /
+                    (100.0 - d->firstProgressValue)));
     }
 }
