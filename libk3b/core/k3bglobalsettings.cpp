@@ -17,7 +17,7 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <QtCore/QStandardPaths>
-
+#include <QFileInfo>
 
 K3b::GlobalSettings::GlobalSettings()
     : m_eject(true),
@@ -43,7 +43,13 @@ void K3b::GlobalSettings::readSettings( const KConfigGroup& c )
     m_useManualBufferSize = c.readEntry( "Manual buffer size", false );
     m_bufferSize = c.readEntry( "Fifo buffer", 4 );
     m_force = c.readEntry( "Force unsafe operations", false );
-	m_defaultTempPath = c.readPathEntry( "Temp Dir", QStandardPaths::writableLocation( QStandardPaths::TempLocation ) );
+	m_defaultTempPath = c.readPathEntry("Temp Dir",
+            QStandardPaths::writableLocation(QStandardPaths::MoviesLocation));
+    QFileInfo checkPath(m_defaultTempPath);
+    if (!checkPath.exists()) {
+        m_defaultTempPath =
+            QStandardPaths::writableLocation(QStandardPaths::HomeLocation);
+    }
 }
 
 
