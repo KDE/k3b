@@ -99,11 +99,14 @@ void K3b::DiskInfoView::reloadMedium()
                  .arg(theme->palette().color(QPalette::Background).name())
                  .arg(theme->palette().color(QPalette::Foreground).name());
         }
-        s +=  ".infovalue { font-weight:bold; padding-left:10px; } "
+        s +=  QString(".infovalue { font-weight:bold; padding-left:10px; color:%1; } "
+              ".infokey { color:%2; } "
               ".trackheader { text-align:left; } "
               ".session { font-style:italic; } "
               ".cdtext { font-weight:bold; font-style:italic; } "
-              "td { vertical-align:top; } ";
+              "td { vertical-align:top; } ")
+            .arg(theme->palette().color(QPalette::Foreground).name())
+            .arg(theme->palette().color(QPalette::Foreground).name());
         s += "</style>"
              "</head>"
              "<body>";
