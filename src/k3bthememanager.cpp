@@ -176,6 +176,7 @@ public:
     }
 
     QList<K3b::Theme*> themes;
+    QList<K3b::Theme*> gcThemes;
     K3b::Theme* currentTheme;
     QString currentThemeName;
 
@@ -196,6 +197,7 @@ K3b::ThemeManager::~ThemeManager()
 {
     for (QList<K3b::Theme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it)
         delete *it;
+    qDeleteAll(d->gcThemes);
     d->themes.clear();
     delete d;
 }
@@ -273,8 +275,8 @@ K3b::Theme* K3b::ThemeManager::findTheme( const QString& name ) const
 void K3b::ThemeManager::loadThemes()
 {
     // first we cleanup the loaded themes
-    for( QList<K3b::Theme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
-        delete *it;
+    for (QList<K3b::Theme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it)
+        d->gcThemes << *it;
     d->themes.clear();
 
     QStringList dirs = QStandardPaths::locateAll( QStandardPaths::GenericDataLocation, "k3b/pics", QStandardPaths::LocateDirectory );
