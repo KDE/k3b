@@ -35,6 +35,7 @@ extern "C" {
 }
 
 #include <string.h>
+#include <math.h>
 
 
 #if LIBAVFORMAT_BUILD < 4629
@@ -96,6 +97,8 @@ public:
     ::AVPacket packet;
     quint8* packetData;
     int packetSize;
+    bool isSpacious;
+    int sampleFormat;
 };
 
 
@@ -182,6 +185,11 @@ bool K3bFFMpegFile::open()
         return false;
     }
 
+    d->isSpacious = ::av_sample_fmt_is_planar(
+                 FFMPEG_CODEC(d->formatContext->streams[0])->sample_fmt)
+    && FFMPEG_CODEC(d->formatContext->streams[0])->channels > 1;
+    d->sampleFormat = FFMPEG_CODEC(d->formatContext->streams[0])->sample_fmt;
+
     // dump some debugging info
     ::av_dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
 
@@ -244,8 +252,10 @@ QString K3bFFMpegFile::typeComment() const
         return i18n("Windows Media v1");
     case AV_CODEC_ID_WMAV2:
         return i18n("Windows Media v2");
-    case AV_CODEC_ID_MP3:
-        return i18n("MPEG 1 Layer III");
+    case AV_CODEC_ID_WAVPACK:
+        return i18n("WavPack");
+    case AV_CODEC_ID_APE:
+        return i18n("Monkey's Audio (APE)");
     case AV_CODEC_ID_AAC:
         return i18n("Advanced Audio Coding (AAC)");
     default:
@@ -291,15 +301,16 @@ int K3bFFMpegFile::read(char* buf, int bufLen)
     int len = qMin(bufLen, d->outputBufferSize);
     ::memcpy(buf, d->outputBufferPos, len);
 
-    // TODO: only swap if needed
-    for( int i = 0; i < len-1; i+=2 ) {
-        char a = buf[i];
-        buf[i] = buf[i+1];
-        buf[i+1] = a;
-    }
+    if(d->isSpacious && bufLen > d->outputBufferSize)
+        delete[] d->outputBufferPos; // clean up allocated space
 
-    d->outputBufferPos += len;
+    // TODO: only swap if needed
+    for(int i=0; i<len-1; i+=2)
+        qSwap(buf[i], buf[i+1]); // BE -> LE
+
     d->outputBufferSize -= len;
+    if(d->outputBufferSize > 0)
+        d->outputBufferPos += len;
     return len;
 }
 
@@ -325,7 +336,7 @@ int K3bFFMpegFile::readPacket()
 int K3bFFMpegFile::fillOutputBuffer()
 {
     // decode if the output buffer is empty
-    if( d->outputBufferSize <= 0 ) {
+    while(d->outputBufferSize <= 0) {
 
         // make sure we have data to decode
         if( readPacket() == 0 ) {
@@ -376,25 +387,45 @@ int K3bFFMpegFile::fillOutputBuffer()
         }
 
 #ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
-        if ( gotFrame ) {
-            d->outputBufferSize = ::av_samples_get_buffer_size(
-                NULL,
-                FFMPEG_CODEC(d->formatContext->streams[0])->channels,
-                d->frame->nb_samples,
-                FFMPEG_CODEC(d->formatContext->streams[0])->sample_fmt,
-                1 );
-            d->outputBufferPos = reinterpret_cast<char*>( d->frame->data[0] );
+        if (gotFrame) {
+            int nb_s = d->frame->nb_samples;
+            int nb_ch = 2; // copy only two channels even if there're more
+            d->outputBufferSize = nb_s * nb_ch * 2; // 2 means 2 bytes (16bit)
+            d->outputBufferPos = reinterpret_cast<char*>(
+                d->frame->extended_data[0]);
+            if(d->isSpacious) {
+                d->outputBufferPos = new char[d->outputBufferSize];
+                if(d->sampleFormat == AV_SAMPLE_FMT_FLTP) {
+                    int width = sizeof(float); // sample width of float audio
+                    for(int sample=0; sample<nb_s; sample++) {
+                        for(int ch=0; ch<nb_ch; ch++) {
+                            float val = *(reinterpret_cast<float*>(
+                                d->frame->extended_data[ch] + sample * width));
+                            val = ::abs(val) > 1 ? ::copysign(1.0, val) : val;
+                            int16_t result = static_cast<int16_t>(
+                                val * 32767.0 + 32768.5) - 32768;
+                            ::memcpy(d->outputBufferPos + (sample*nb_ch+ch) * 2,
+                                     &result,
+                                     2); // 2 is sample width of 16 bit audio
+                        }
+                    }
+                } else {
+                    for(int sample=0; sample<nb_s; sample++) {
+                        for(int ch=0; ch<nb_ch; ch++) {
+                            ::memcpy(d->outputBufferPos + (sample*nb_ch+ch) * 2,
+                                     d->frame->extended_data[ch] + sample * 2,
+                                     2); // 16 bit here as well
+                        }
+                    }
+                }
+            }
         }
 #endif
         d->packetSize -= len;
         d->packetData += len;
     }
 
-    // if it is still empty try again
-    if( d->outputBufferSize <= 0 )
-        return fillOutputBuffer();
-    else
-        return d->outputBufferSize;
+    return d->outputBufferSize;
 }
 
 
@@ -453,7 +484,9 @@ K3bFFMpegFile* K3bFFMpegWrapper::open( const QString& filename ) const
         //
         if( file->type() == AV_CODEC_ID_WMAV1 ||
             file->type() == AV_CODEC_ID_WMAV2 ||
-            file->type() == AV_CODEC_ID_AAC )
+            file->type() == AV_CODEC_ID_AAC ||
+            file->type() == AV_CODEC_ID_APE ||
+            file->type() == AV_CODEC_ID_WAVPACK )
 #endif
             return file;
     }
