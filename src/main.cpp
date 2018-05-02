@@ -25,6 +25,8 @@ int main( int argc, char* argv[] )
 {
     K3b::Application app( argc, argv );
 
+    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    
     KAboutData aboutData( "k3b",
                           i18n("K3b"),
                           LIBK3B_VERSION, i18n("<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/>"
