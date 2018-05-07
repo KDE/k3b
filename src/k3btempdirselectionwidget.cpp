@@ -26,6 +26,7 @@
 #include <KIOCore/KDiskFreeSpaceInfo>
 #include <KIOCore/KIO/Global>
 #include <KIOWidgets/KUrlRequester>
+#include <kio_version.h>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QTimer>
@@ -68,7 +69,11 @@ K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     // choose a default
     setSelectionMode( DIR );
 
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 33, 0)
     m_editDirectory->setAcceptMode(QFileDialog::AcceptSave);
+#else
+    m_editDirectory->fileDialog()->setAcceptMode(QFileDialog::AcceptSave);
+#endif
     m_editDirectory->setUrl( QUrl::fromLocalFile( k3bcore->globalSettings()->defaultTempPath() ) );
     slotUpdateFreeTempSpace();
 
