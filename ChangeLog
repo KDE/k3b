@@ -1,3 +1,24 @@
+18.04.0
+=======
+Changes:
+ * Add Foreground color for DiskInfoView's infokey and infovalue (BUG: 389428)
+ * Add UpdateLater event for ViewColumnAdjuster (BUG: 387054)
+ * Add 10px for WelcomeWidget's infoText width (BUG: 387020)
+ * Change default save path to $HOME/Videos or fallback $HOME (BUG: 385367)
+ * Workaround for parsing mkisofs progress when perStr is not digit (BUG:
+ 384750)
+
+Bugfixes:
+ * Fix build with KIO < 5.33, A patch by Wolfgang Bauer!
+ * Fix pixmap scaling on HiDPI screens, A patch by Andrew Crouthamel!
+ * Fix heap-use-after-free issue for ThemeManager (BUG: 390878)
+ * Fix potential null passed to a callee that requires a non-null argument
+ (BUG: 387298)
+ * Fix unnecessary spaces at the end of files names (BUG: 387087)
+ * Fix Memory-leak issue detected by clang analyzer long time ago (BUG: 386983)
+ * K3b FFMpeg Decoder Plugin Enhanced, A patch by Mikołaj Płomieński!
+ (BUG: 386105)
+
 17.11.0
 =======
 Changes:
