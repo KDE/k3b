@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <name>K3b</name>
   <name xml:lang="ar">كي٣بي</name>
+  <name xml:lang="ast">K3b</name>
   <name xml:lang="ca">K3b</name>
   <name xml:lang="ca-valencia">K3b</name>
   <name xml:lang="cs">K3b</name>
@@ -36,6 +37,7 @@
   <name xml:lang="zh-TW">K3b</name>
   <summary>Disk Burning</summary>
   <summary xml:lang="ar">حرق الأقراص</summary>
+  <summary xml:lang="ast">Grabación de discos</summary>
   <summary xml:lang="ca">Gravació de disc</summary>
   <summary xml:lang="ca-valencia">Gravació de disc</summary>
   <summary xml:lang="cs">Vypalování médií</summary>
