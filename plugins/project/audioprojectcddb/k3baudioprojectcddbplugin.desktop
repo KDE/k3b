@@ -44,6 +44,7 @@ Comment[es]=Complemento para consultar información de un servidor CDDB sobre un
 Comment[fi]=Liitännäinen ääniprojektin tietojen kyselemiseksi CDDB-palvelimelta.
 Comment[fr]=Module externe pour demander à un serveur « CDDB » des informations sur un projet audio.
 Comment[gl]=Complemento para lle preguntar sobre a información dun proxecto de son a un servidor de CDDB.
+Comment[id]=Plugin untuk mengqueri sebuah server CDDB untuk informasi tentang audio project.
 Comment[it]=Estensione di interrogazione di un server CDDB per le informazioni su un progetto audio.
 Comment[ko]=CDDB 서버에 오디오 프로젝트의 정보를 조회합니다.
 Comment[nl]=Plugin om op een CDDB-server informatie op te zoeken over een audioproject.

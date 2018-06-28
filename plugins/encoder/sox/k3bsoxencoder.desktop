@@ -74,6 +74,7 @@ Comment[gl]=Módulo de configuración para codificar varios formatos de ficheiro
 Comment[he]=מודול קידוד על מנת לקודד הרבה סוגי קבצים בעזרת SoX
 Comment[hr]=Koderski modul za kodiranje mnogih datotečnih formata pomoću SoX-a
 Comment[hu]=Kódolómodul sokféle fájlformátumba való kódoláshoz (a SoX használatával)
+Comment[id]=Modul encoding untuk mengenkode banyak format file menggunakan SoX
 Comment[it]=Codifica modulare per i molti formati di file che usano SoX
 Comment[ja]=SoX を使ってさまざまなファイルフォーマットをエンコードするモジュール
 Comment[kk]=SoX-ты қолданып көп пішіміндегі файлдарының кодер модулі
