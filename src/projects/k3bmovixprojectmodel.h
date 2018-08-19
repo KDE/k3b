@@ -17,7 +17,7 @@
 #ifndef _K3B_MOVIX_PROJECT_MODEL_H_
 #define _K3B_MOVIX_PROJECT_MODEL_H_
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 
 namespace K3b {
     class MovixDoc;

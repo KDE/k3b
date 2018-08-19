@@ -18,9 +18,9 @@
 
 #include <Solid/Device>
 
-#include <QtCore/QDebug>
-#include <QtDBus/QDBusConnection>
-#include <QtDBus/QDBusInterface>
+#include <QDebug>
+#include <QDBusConnection>
+#include <QDBusInterface>
 
 
 Q_GLOBAL_STATIC( K3b::Device::HalConnection, s_instance )

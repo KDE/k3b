@@ -24,23 +24,23 @@
 #include <KConfigCore/KConfigGroup>
 #include <KCoreAddons/KAboutData>
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KXmlGui/KActionCollection>
 
-#include <QtCore/QMimeData>
-#include <QtCore/QUrl>
-#include <QtGui/QIcon>
-#include <QtGui/QCursor>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QShowEvent>
-#include <QtGui/QTextDocument>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QStyle>
+#include <QMimeData>
+#include <QUrl>
+#include <QIcon>
+#include <QCursor>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QShowEvent>
+#include <QTextDocument>
+#include <QMenu>
+#include <QStyle>
 
 namespace {
 

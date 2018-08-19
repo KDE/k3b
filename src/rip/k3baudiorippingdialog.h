@@ -22,8 +22,8 @@
 
 #include <KCddb/Cdinfo>
 
-#include <QtCore/QList>
-#include <QtCore/QStringList>
+#include <QList>
+#include <QStringList>
 
 class QCheckBox;
 class QSpinBox;

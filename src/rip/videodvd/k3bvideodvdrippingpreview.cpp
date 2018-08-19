@@ -19,9 +19,9 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bdevice.h"
 #include "k3bprocess.h"
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QTemporaryDir>
+#include <QDebug>
+#include <QDir>
+#include <QTemporaryDir>
 
 
 

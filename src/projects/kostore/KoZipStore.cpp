@@ -22,10 +22,10 @@
 #include <KArchive/KZip>
 #include <KIOCore/KIO/StoredTransferJob>
 #include <KJobWidgets/KJobWidgets>
-#include <QtCore/QBuffer>
-#include <QtCore/QByteArray>
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
+#include <QBuffer>
+#include <QByteArray>
+#include <QDebug>
+#include <QUrl>
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {

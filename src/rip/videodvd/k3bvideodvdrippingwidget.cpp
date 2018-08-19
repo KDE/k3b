@@ -20,22 +20,22 @@
 
 #include <KCompletion/KLineEdit>
 #include <KConfigWidgets/KColorScheme>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KDiskFreeSpaceInfo>
 #include <KIOCore/KIO/Global>
 #include <KIOWidgets/KUrlRequester>
 #include <KWidgetsAddons/KUrlLabel>
 
-#include <QtCore/QTimer>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QWhatsThis>
+#include <QTimer>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QWhatsThis>
 
 
 static const int s_mp3Bitrates[] = {

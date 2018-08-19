@@ -24,8 +24,8 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 namespace K3b {
     class AudioDataSource;
@@ -152,7 +152,7 @@ namespace K3b {
         AudioTrack* copy() const;
 
         /**
-         * Split the track at position pos and return the splitted track
+         * Split the track at position pos and return the split track
          * on success.
          * The new track will be moved after this track.
          *

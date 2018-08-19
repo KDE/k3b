@@ -21,10 +21,10 @@
 
 #include "k3bcore.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QMimeData>
-#include <QtCore/QVector>
-#include <QtGui/QIcon>
+#include <QDebug>
+#include <QMimeData>
+#include <QVector>
+#include <QIcon>
 
 // IDEA: K3b::MetaItemModel::placeData( int row, int column );
 

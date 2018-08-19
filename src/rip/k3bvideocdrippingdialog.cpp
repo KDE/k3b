@@ -22,22 +22,22 @@
 
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOWidgets/KUrlRequester>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QToolTip>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QStringList>
+#include <QTimer>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QToolTip>
 
 
 K3b::VideoCdRippingDialog::VideoCdRippingDialog( K3b::VideoCdRippingOptions* options, QWidget* parent )

@@ -27,27 +27,27 @@
 #include "k3bstdguiitems.h"
 
 #include <KConfigWidgets/KStandardAction>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KActionMenu>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KToolBarSpacerAction>
 #include <KXmlGui/KToolBar>
 #include <KXmlGui/KActionCollection>
 
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtGui/QCursor>
-#include <QtGui/QFont>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QTreeWidget>
-#include <QtWidgets/QTreeWidgetItem>
-#include <QtWidgets/QVBoxLayout>
-#include <QtXml/QDomElement>
+#include <QDebug>
+#include <QList>
+#include <QCursor>
+#include <QFont>
+#include <QApplication>
+#include <QAction>
+#include <QHeaderView>
+#include <QMenu>
+#include <QLabel>
+#include <QStyle>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QVBoxLayout>
+#include <QDomElement>
 
 namespace {
 

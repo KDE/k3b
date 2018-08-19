@@ -20,9 +20,9 @@
 
 #include <KConfigCore/KConfig>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QString>
+#include <QFileInfo>
 
 #include <stdio.h>
 #include <sys/types.h>

@@ -21,8 +21,8 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 
-#include <QtCore/QSet>
-#include <QtCore/QStandardPaths>
+#include <QSet>
+#include <QStandardPaths>
 
 
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()

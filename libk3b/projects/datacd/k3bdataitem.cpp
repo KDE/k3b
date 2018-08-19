@@ -17,7 +17,7 @@
 #include "k3bdiritem.h"
 #include "k3bdatadoc.h"
 #include "k3bisooptions.h"
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include <math.h>
 

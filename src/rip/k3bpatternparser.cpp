@@ -18,12 +18,12 @@
 
 #include <KCddb/Cdinfo>
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QDateTime>
-#include <QtCore/QLocale>
-#include <QtCore/QRegExp>
-#include <QtCore/QStack>
+#include <QDateTime>
+#include <QLocale>
+#include <QRegExp>
+#include <QStack>
 #include <QDebug>
 
 QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,

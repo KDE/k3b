@@ -18,9 +18,9 @@
 
 #include "k3bmsf.h"
 
-#include <QtCore/QList>
-#include <QtGui/QMouseEvent>
-#include <QtWidgets/QFrame>
+#include <QList>
+#include <QMouseEvent>
+#include <QFrame>
 
 
 class QPainter;

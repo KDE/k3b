@@ -15,8 +15,8 @@
 #ifndef K3B_PROGRESS_INFO_EVENT_H
 #define K3B_PROGRESS_INFO_EVENT_H
 
-#include <QtCore/QEvent>
-#include <QtCore/QString>
+#include <QEvent>
+#include <QString>
 
 
 namespace K3b {

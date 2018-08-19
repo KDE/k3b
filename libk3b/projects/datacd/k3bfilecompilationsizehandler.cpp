@@ -15,10 +15,10 @@
 #include "k3bfilecompilationsizehandler.h"
 #include "k3bfileitem.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QMap>
-#include <QtCore/QList>
+#include <QDebug>
+#include <QFile>
+#include <QMap>
+#include <QList>
 
 
 // TODO: remove the items from the project if the savedSize differs
@@ -133,7 +133,7 @@ public:
 
     void removeSpecialItem( K3b::DataItem* item ) {
         // special files do not have a corresponding local file
-        // so we just substract their k3bSize
+        // so we just subtract their k3bSize
         if( !specialItems.contains( item ) ) {
             qCritical() << "(K3b::FileCompilationSizeHandler) Special item "
                      << item->k3bName()

@@ -16,7 +16,7 @@
 #define _K3B_MEDIA_SELECTION_DIALOG_H_
 
 #include "k3bmedium.h"
-#include <QtWidgets/QDialog>
+#include <QDialog>
 
 class QPushButton;
 

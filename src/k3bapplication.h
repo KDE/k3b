@@ -19,9 +19,9 @@
 
 #include "k3bcore.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QScopedPointer>
-#include <QtWidgets/QApplication>
+#include <QMap>
+#include <QScopedPointer>
+#include <QApplication>
 
 #define k3bappcore K3b::Application::Core::k3bAppCore()
 

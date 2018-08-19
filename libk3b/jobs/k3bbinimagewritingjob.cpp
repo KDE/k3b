@@ -26,9 +26,9 @@
 #include "k3bdevicehandler.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QFile>
+#include <QTextStream>
 
 
 

@@ -17,7 +17,7 @@
 
 #include "k3bmetaitemmodel.h"
 
-#include <QtCore/QUrl>
+#include <QUrl>
 
 class KFileItem;
 

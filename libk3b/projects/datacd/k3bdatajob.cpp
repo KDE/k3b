@@ -42,13 +42,13 @@
 #include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/Job>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTemporaryFile>
+#include <QDataStream>
+#include <QDateTime>
+#include <QDebug>
+#include <QFile>
+#include <QString>
+#include <QStringList>
+#include <QTemporaryFile>
 
 
 

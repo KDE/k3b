@@ -18,8 +18,8 @@
 #include "k3b_export.h"
 
 #include <KWidgetsAddons/KStandardGuiItem>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QMessageBox>
+#include <QDialog>
+#include <QMessageBox>
 
 class QCloseEvent;
 

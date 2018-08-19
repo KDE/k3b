@@ -15,8 +15,8 @@
 #ifndef _K3B_DEBUGGING_OUTPUT_DIALOG_H_
 #define _K3B_DEBUGGING_OUTPUT_DIALOG_H_
 
-#include <QtCore/QMap>
-#include <QtWidgets/QDialog>
+#include <QMap>
+#include <QDialog>
 
 class QTextEdit;
 

@@ -14,9 +14,9 @@
 
 #include "k3bintmapcombobox.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QHash>
-#include <QtCore/QPair>
+#include <QDebug>
+#include <QHash>
+#include <QPair>
 
 
 class K3b::IntMapComboBox::Private

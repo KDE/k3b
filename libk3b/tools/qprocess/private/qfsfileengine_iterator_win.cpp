@@ -44,8 +44,8 @@
 #include "qfsfileengine_p.h"
 #include "qplatformdefs.h"
 
-#include <QtCore/qvariant.h>
-#include <QtCore/QtCore/QMutex>
+#include <qvariant.h>
+#include <QMutex>
 #include <private/qmutexpool_p.h>
 
 QT_BEGIN_NAMESPACE

@@ -21,26 +21,26 @@
 
 #include <KAuth/KAuth>
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KMessageWidget>
 
-#include <QtCore/QFileInfo>
-#include <QtGui/QColor>
-#include <QtGui/QIcon>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLayout>
-#include <QtCore/QList>
-#include <QtWidgets/QPushButton>
-#include <QtCore/QString>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTreeWidget>
-#include <QtCore/QVariant>
-#include <QtWidgets/QVBoxLayout>
+#include <QFileInfo>
+#include <QColor>
+#include <QIcon>
+#include <QAction>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLayout>
+#include <QList>
+#include <QPushButton>
+#include <QString>
+#include <QToolTip>
+#include <QTreeWidget>
+#include <QVariant>
+#include <QVBoxLayout>
 
 #include <grp.h>
 #include <unistd.h>

@@ -18,7 +18,7 @@
 
 #include "k3bvcddoc.h"
 
-#include <QtCore/QString>
+#include <QString>
 
 class QFile;
 

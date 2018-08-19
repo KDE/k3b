@@ -15,8 +15,8 @@
 
 #include "k3bmad.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <QDebug>
+#include <QFile>
 
 
 static const int INPUT_BUFFER_SIZE = 5*8192;

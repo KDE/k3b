@@ -19,7 +19,7 @@
 
 #include "k3bisoimager.h"
 
-#include <QtCore/QScopedPointer>
+#include <QScopedPointer>
 
 namespace K3b {
     class VideoDvdDoc;

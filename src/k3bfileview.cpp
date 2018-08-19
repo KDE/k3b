@@ -20,25 +20,25 @@
 
 #include <KFileFilterCombo>
 #include <KIOCore/KFileItem>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOWidgets/KDirLister>
 #include <KWidgetsAddons/KActionMenu>
 #include <KWidgetsAddons/KToolBarSpacerAction>
 #include <KXmlGui/KActionCollection>
 #include <KXmlGui/KToolBar>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QUrl>
-#include <QtGui/QIcon>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QProgressBar>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QWidget>
+#include <QDebug>
+#include <QDir>
+#include <QUrl>
+#include <QIcon>
+#include <QAction>
+#include <QHBoxLayout>
+#include <QLayout>
+#include <QLabel>
+#include <QProgressBar>
+#include <QToolButton>
+#include <QVBoxLayout>
+#include <QWidget>
 
 
 class K3b::FileView::Private

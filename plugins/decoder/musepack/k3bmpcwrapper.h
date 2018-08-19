@@ -18,7 +18,7 @@
 
 #include "k3bmpc_config.h"
 
-#include <QtCore/QString>
+#include <QString>
 
 #include "k3bmsf.h"
 

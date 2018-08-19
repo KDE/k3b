@@ -19,7 +19,7 @@
 #include "k3bcore.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 
 K3b::AudioNormalizeJob::AudioNormalizeJob( K3b::JobHandler* hdl, QObject* parent )

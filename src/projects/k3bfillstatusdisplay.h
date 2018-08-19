@@ -17,9 +17,9 @@
 #ifndef K3BFILLSTATUSDISPLAY_H
 #define K3BFILLSTATUSDISPLAY_H
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPaintEvent>
-#include <QtWidgets/QFrame>
+#include <QMouseEvent>
+#include <QPaintEvent>
+#include <QFrame>
 
 class QPaintEvent;
 class QMouseEvent;

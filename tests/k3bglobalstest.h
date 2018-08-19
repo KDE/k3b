@@ -15,7 +15,7 @@
 #ifndef K3B_GLOBALS_TEST_H
 #define K3B_GLOBALS_TEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class GlobalsTest : public QObject
 {

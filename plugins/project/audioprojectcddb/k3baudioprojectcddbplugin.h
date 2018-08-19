@@ -16,8 +16,8 @@
 
 #include "k3bprojectplugin.h"
 
-#include <QtCore/QPointer>
-#include <QtCore/QScopedPointer>
+#include <QPointer>
+#include <QScopedPointer>
 
 namespace K3b {
     class Cddb;

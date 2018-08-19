@@ -17,7 +17,7 @@
 #define K3BHELPER_H
 
 #include <KAuth/KAuthActionReply>
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace K3b {
  

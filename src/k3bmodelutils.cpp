@@ -13,7 +13,7 @@
  */
 
 #include "k3bmodelutils.h"
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 
 namespace K3b
 {

@@ -30,18 +30,18 @@
 
 #include <KConfigCore/KConfig>
 #include <KCoreAddons/KAboutData>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QFile>
-#include <QtCore/QTimer>
-#include <QtCore/QEvent>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QStatusBar>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QHBoxLayout>
+#include <QFile>
+#include <QTimer>
+#include <QEvent>
+#include <QAction>
+#include <QLabel>
+#include <QStatusBar>
+#include <QToolTip>
+#include <QHBoxLayout>
 
 
 

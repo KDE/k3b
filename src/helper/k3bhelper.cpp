@@ -18,10 +18,10 @@
 
 #include <KAuth/KAuthHelperSupport>
 
-#include <QtCore/QFile>
-#include <QtCore/QProcess>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QFile>
+#include <QProcess>
+#include <QString>
+#include <QStringList>
 
 #include <grp.h>
 #include <sys/types.h>

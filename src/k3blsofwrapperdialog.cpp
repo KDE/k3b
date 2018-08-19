@@ -17,15 +17,15 @@
 
 #include "k3bdevice.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QVBoxLayout>
+#include <QDebug>
+#include <QList>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 #include <sys/types.h>
 #include <signal.h>

@@ -33,10 +33,10 @@
 #endif
 
 #include <qglobal.h>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QMutex>
-#include <QtCore/QStringList>
+#include <QDebug>
+#include <QFile>
+#include <QMutex>
+#include <QStringList>
 
 #include <sys/types.h>
 #include <sys/ioctl.h>
@@ -2356,7 +2356,7 @@ K3b::Device::MediaType K3b::Device::Device::mediaType() const
 
         if( m & (MEDIA_UNKNOWN|MEDIA_DVD_ROM|MEDIA_HD_DVD_ROM) ) {
             //
-            // We prefere the mediatype as reported by the media since this way
+            // We prefer the mediatype as reported by the media since this way
             // even ROM drives may report the correct type of writable media.
             //
 
@@ -2383,7 +2383,7 @@ K3b::Device::MediaType K3b::Device::Device::mediaType() const
 
         if( m & (MEDIA_UNKNOWN|MEDIA_BD_ROM) ) {
             //
-            // We prefere the mediatype as reported by the media since this way
+            // We prefer the mediatype as reported by the media since this way
             // even ROM drives may report the correct type of writable media.
             //
 

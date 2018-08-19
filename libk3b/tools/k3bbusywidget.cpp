@@ -14,9 +14,9 @@
 
 #include "k3bbusywidget.h"
 
-#include <QtCore/QTimer>
-#include <QtGui/QPainter>
-#include <QtWidgets/QFrame>
+#include <QTimer>
+#include <QPainter>
+#include <QFrame>
 
 
 K3b::BusyWidget::BusyWidget( QWidget* parent )

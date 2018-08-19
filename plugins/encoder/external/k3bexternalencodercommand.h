@@ -15,8 +15,8 @@
 #ifndef _K3B_EXTERNAL_ENCODER_COMMAND_H_
 #define _K3B_EXTERNAL_ENCODER_COMMAND_H_
 
-#include <QtCore/QList>
-#include <QtCore/QString>
+#include <QList>
+#include <QString>
 
 class K3bExternalEncoderCommand
 {

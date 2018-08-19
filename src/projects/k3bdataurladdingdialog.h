@@ -15,14 +15,14 @@
 #ifndef _K3B_DATA_URL_ADDING_DIALOG_H_
 #define _K3B_DATA_URL_ADDING_DIALOG_H_
 
-#include <QtCore/QUrl>
-#include <QtCore/QDir>
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QPair>
-#include <QtCore/QStringList>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QLabel>
+#include <QUrl>
+#include <QDir>
+#include <QHash>
+#include <QList>
+#include <QPair>
+#include <QStringList>
+#include <QDialog>
+#include <QLabel>
 
 #include <KIOCore/KIO/Global>
 

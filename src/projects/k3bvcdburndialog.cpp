@@ -27,27 +27,27 @@
 #include "k3bvalidators.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTextStream>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTextEdit>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QToolTip>
+#include <QDir>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QTextStream>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QTextEdit>
+#include <QToolButton>
+#include <QToolTip>
 
 K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     : K3b::ProjectBurnDialog( _doc, parent )

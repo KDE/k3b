@@ -26,11 +26,11 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QStack>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QDir>
+#include <QStack>
+#include <QTemporaryFile>
+#include <QTextStream>
 
 
 class K3b::MovixDocPreparer::Private

@@ -19,7 +19,7 @@
 #include "k3bjob.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include <cmath>
 

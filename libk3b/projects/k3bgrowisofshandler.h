@@ -17,7 +17,7 @@
 
 #include "k3bdevice.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace K3b {
     namespace Device {

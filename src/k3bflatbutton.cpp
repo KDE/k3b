@@ -19,13 +19,13 @@
 
 #include <KIconThemes/KIconLoader>
 
-#include <QtCore/QEvent>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QToolTip>
+#include <QEvent>
+#include <QFontMetrics>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QAction>
+#include <QFrame>
+#include <QToolTip>
 
 
 namespace {

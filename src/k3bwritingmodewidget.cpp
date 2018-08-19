@@ -19,9 +19,9 @@
 #include "k3bglobals.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtWidgets/QToolTip>
+#include <QToolTip>
 
 static const KLocalizedString s_autoHelp =
     ki18n("Let K3b select the best-suited mode. This is the recommended selection.");

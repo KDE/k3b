@@ -23,7 +23,7 @@
 #include "k3bisooptions.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 
 K3b::MovixJob::MovixJob( K3b::MovixDoc* doc, K3b::JobHandler* jh, QObject* parent )

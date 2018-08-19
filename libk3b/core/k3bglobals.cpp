@@ -35,12 +35,12 @@
 #include <Solid/StorageAccess>
 #include <Solid/OpticalDrive>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QUrl>
+#include <QDataStream>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QStandardPaths>
+#include <QUrl>
 
 #include <cmath>
 #include <sys/utsname.h>

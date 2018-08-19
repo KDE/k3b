@@ -23,9 +23,9 @@
 
 #include <kcoreaddons_version.h>
 
-#include <QtCore/QDir>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTextStream>
+#include <QDir>
+#include <QStandardPaths>
+#include <QTextStream>
 
 
 namespace

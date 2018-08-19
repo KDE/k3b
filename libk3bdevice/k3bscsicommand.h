@@ -18,7 +18,7 @@
 #include "k3bdevice.h"
 
 #include <qglobal.h>
-#include <QtCore/QString>
+#include <QString>
 
 namespace K3b {
     namespace Device

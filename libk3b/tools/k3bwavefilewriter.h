@@ -18,9 +18,9 @@
 
 #include "k3b_export.h"
 
-#include <QtCore/QDataStream>
-#include <QtCore/QFile>
-#include <QtCore/QString>
+#include <QDataStream>
+#include <QFile>
+#include <QString>
 
 namespace K3b {
     /**

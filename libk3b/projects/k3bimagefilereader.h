@@ -16,7 +16,7 @@
 #define _K3B_IMAGE_FILE_READER_H_
 
 #include "k3b_export.h"
-#include <QtCore/QString>
+#include <QString>
 
 namespace K3b {
     class LIBK3B_EXPORT ImageFileReader

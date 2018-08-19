@@ -15,11 +15,11 @@
 #include "k3bthememodel.h"
 #include "k3bthememanager.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/DeleteJob>
 
-#include <QtCore/QFile>
-#include <QtCore/QUrl>
+#include <QFile>
+#include <QUrl>
 
 namespace K3b {
 

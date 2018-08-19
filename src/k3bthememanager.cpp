@@ -19,13 +19,13 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigWidgets/KColorScheme>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QStringList>
-#include <QtGui/QPixmap>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStandardPaths>
+#include <QStringList>
+#include <QPixmap>
 
 
 K3b::Theme::Theme()

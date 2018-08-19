@@ -15,8 +15,8 @@
 #ifndef K3B_META_ITEM_MODEL_TEST_H
 #define K3B_META_ITEM_MODEL_TEST_H
 
-#include <QtCore/QObject>
-#include <QtCore/QPointer>
+#include <QObject>
+#include <QPointer>
 
 class QStringListModel;
 class QStandardItemModel;

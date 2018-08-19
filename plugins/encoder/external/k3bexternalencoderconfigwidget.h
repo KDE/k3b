@@ -20,8 +20,8 @@
 
 #include "k3bpluginconfigwidget.h"
 
-#include <QtCore/QList>
-#include <QtWidgets/QDialog>
+#include <QList>
+#include <QDialog>
 
 
 class QTreeWidgetItem;

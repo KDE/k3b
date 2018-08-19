@@ -17,8 +17,8 @@
 
 #include "k3bmsf.h"
 
-#include <QtCore/QList>
-#include <QtWidgets/QDialog>
+#include <QList>
+#include <QDialog>
 
 namespace K3b {
     class AudioTrack;

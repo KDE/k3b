@@ -18,7 +18,7 @@
 
 #include "k3bjob.h"
 
-#include <QtCore/QProcess>
+#include <QProcess>
 
 namespace K3b {
 

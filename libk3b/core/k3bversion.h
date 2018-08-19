@@ -18,8 +18,8 @@
 
 #include "k3b_export.h"
 
-#include <QtCore/QSharedDataPointer>
-#include <QtCore/QString>
+#include <QSharedDataPointer>
+#include <QString>
 
 namespace K3b {
     /**

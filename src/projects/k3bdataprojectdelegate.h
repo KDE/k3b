@@ -15,8 +15,8 @@
 #ifndef K3BDATAPROJECTDELEGATE_H
 #define K3BDATAPROJECTDELEGATE_H
 
-#include <QtCore/QMimeDatabase>
-#include <QtWidgets/QStyledItemDelegate>
+#include <QMimeDatabase>
+#include <QStyledItemDelegate>
 
 namespace K3b {
 

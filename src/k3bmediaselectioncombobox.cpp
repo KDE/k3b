@@ -26,13 +26,13 @@
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QDebug>
-#include <QtCore/QMap>
-#include <QtCore/QVector>
-#include <QtCore/QList>
-#include <QtGui/QFont>
+#include <QDebug>
+#include <QMap>
+#include <QVector>
+#include <QList>
+#include <QFont>
 
 Q_DECLARE_METATYPE(K3b::Medium)
 
@@ -302,7 +302,7 @@ void K3b::MediaSelectionComboBox::updateMedia()
                     break;
             }
             if( j == oldDevices.count() ) {
-                // prefere a newly inserted medium over the previously selected
+                // prefer a newly inserted medium over the previously selected
                 setSelectedDevice( d->devices[i] );
                 emit newMedium( d->devices[i] );
             }

@@ -45,10 +45,10 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KNotifications/KNotification>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QCommandLineParser>
-#include <QtCore/QDebug>
+#include <QCommandLineParser>
+#include <QDebug>
 
 
 K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = 0;

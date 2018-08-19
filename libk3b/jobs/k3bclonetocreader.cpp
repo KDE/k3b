@@ -18,9 +18,9 @@
 #include "k3bdeviceglobals.h"
 #include "k3bglobals.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
 
 
 class K3b::CloneTocReader::Private
@@ -199,7 +199,7 @@ void K3b::CloneTocReader::readFile()
                     }
 
                     // start of the leadout = size of the image
-                    // substract 2 seconds since in cdrecord other than in K3b lba 0 = msf 2:00
+                    // subtract 2 seconds since in cdrecord other than in K3b lba 0 = msf 2:00
                     // (the cdrecord way is actually more accurate but we use k3b::Msf for many
                     // things and it is simpler this way.)
                     d->size = K3b::Msf( ft->pmin, ft->psec, ft->pframe ) - K3b::Msf( 0, 2, 0 );

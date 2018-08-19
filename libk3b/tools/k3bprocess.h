@@ -29,7 +29,7 @@ namespace K3b {
      * This is an enhanced K3Process.
      * It splits the stderr output to lines making sure the client gets every line as it
      * was written by the process.
-     * Aditionally one may set raw stdout and stdin handling using the stdin() and stdout() methods
+     * Additionally one may set raw stdout and stdin handling using the stdin() and stdout() methods
      * to get the process' file descriptors.
      * Last but not least Process is able to duplicate stdout making it possible to connect two
      * Processes like used in DataJob to duplicate mkisofs' stdout to the stdin of the writer

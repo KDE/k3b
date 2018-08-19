@@ -22,8 +22,8 @@
 #include "k3bglobals.h"
 #include "k3bjobhandler.h"
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QObject>
+#include <QString>
 
 namespace K3b {
     namespace Device {

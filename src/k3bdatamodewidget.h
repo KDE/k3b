@@ -18,7 +18,7 @@
 
 #include <KConfigCore/KConfigGroup>
 
-#include <QtWidgets/QComboBox>
+#include <QComboBox>
 
 
 namespace K3b {

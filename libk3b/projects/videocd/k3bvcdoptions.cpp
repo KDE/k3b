@@ -19,9 +19,9 @@
 #include "k3b_i18n.h"
 
 #include <KConfigCore/KConfig>
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QStandardPaths>
+#include <QFile>
+#include <QString>
+#include <QStandardPaths>
 
 K3b::VcdOptions::VcdOptions()
     : m_restriction( 0 ),

@@ -17,8 +17,8 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <QDebug>
+#include <QFile>
 
 
 K3B_EXPORT_PLUGIN(k3bwavedecoder, K3bWaveDecoderFactory)

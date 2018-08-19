@@ -13,9 +13,9 @@
  */
 
 #include "k3bdataprojectdelegate.h"
-#include <QtGui/QKeyEvent>
-#include <QtGui/QFocusEvent>
-#include <QtWidgets/QLineEdit>
+#include <QKeyEvent>
+#include <QFocusEvent>
+#include <QLineEdit>
 
 namespace K3b {
 

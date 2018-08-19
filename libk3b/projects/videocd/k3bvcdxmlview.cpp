@@ -19,12 +19,12 @@
 #include "k3bcore.h"
 #include "k3bversion.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTextStream>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
+#include <QDebug>
+#include <QDir>
+#include <QStandardPaths>
+#include <QTextStream>
+#include <QDomDocument>
+#include <QDomElement>
 
 
 class K3b::VcdXmlView::Private

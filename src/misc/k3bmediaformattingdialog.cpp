@@ -31,14 +31,14 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KLocalizedString>
+#include <KMessageBox>
 
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QToolTip>
+#include <QGroupBox>
+#include <QLayout>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QToolTip>
 
 
 

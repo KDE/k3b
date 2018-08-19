@@ -30,7 +30,7 @@
 #include "k3bdeviceglobals.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QFile>
+#include <QFile>
 
 
 class K3b::MetaWriter::Private

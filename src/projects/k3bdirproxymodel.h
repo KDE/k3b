@@ -15,7 +15,7 @@
 #ifndef K3BDIRPROXYMODEL_H
 #define K3BDIRPROXYMODEL_H
 
-#include <QtCore/QSortFilterProxyModel>
+#include <QSortFilterProxyModel>
 
 /**
  * This class is used to show only directories from a specific model.

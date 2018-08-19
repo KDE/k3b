@@ -13,23 +13,21 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
+#include "videodvd.h"
+
 #include <config-k3b.h>
 #include "k3bdevicemanager.h"
 #include "k3bdevice.h"
-#include "k3biso9660.h"
-#include "k3biso9660backend.h"
 #include "videodvd_export.h"
 #include "videodvd_i18n.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
-#include <QtCore/QBitArray>
-#include <QtCore/QLoggingCategory>
+#include <QCoreApplication>
+#include <QDateTime>
+#include <QDebug>
+#include <QBitArray>
+#include <QLoggingCategory>
 
 #include <stdlib.h>
-
-#include "videodvd.h"
 
 namespace
 {

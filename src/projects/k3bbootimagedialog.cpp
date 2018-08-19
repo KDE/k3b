@@ -20,17 +20,17 @@
 #include "k3bbootitem.h"
 #include "k3bintvalidator.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QItemSelectionModel>
-#include <QtCore/QString>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
+#include <QDebug>
+#include <QItemSelectionModel>
+#include <QString>
+#include <QCheckBox>
+#include <QFileDialog>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
 
 
 

@@ -23,8 +23,8 @@
 #include "k3biso9660.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QLinkedList>
+#include <QDebug>
+#include <QLinkedList>
 
 
 namespace {

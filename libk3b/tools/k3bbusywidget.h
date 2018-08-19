@@ -17,7 +17,7 @@
 
 
 #include "k3b_export.h"
-#include <QtWidgets/QFrame>
+#include <QFrame>
 
 class QTimer;
 

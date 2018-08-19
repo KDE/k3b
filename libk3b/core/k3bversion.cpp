@@ -14,9 +14,9 @@
 
 #include "k3bversion.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
-#include <QtCore/QSharedData>
+#include <QDebug>
+#include <QRegExp>
+#include <QSharedData>
 
 namespace {
     /**

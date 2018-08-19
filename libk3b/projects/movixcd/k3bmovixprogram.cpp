@@ -18,10 +18,10 @@
 
 #include <KCoreAddons/KProcess>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QTextStream>
 
 
 K3b::MovixProgram::MovixProgram()

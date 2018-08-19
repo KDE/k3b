@@ -20,8 +20,8 @@
 
 #include <KConfigCore/KSharedConfig>
 
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QLabel>
+#include <QWidget>
+#include <QLabel>
 
 class QLabel;
 

@@ -17,7 +17,7 @@
 #ifndef K3B_DEVICE_OPTIONTAB_H
 #define K3B_DEVICE_OPTIONTAB_H
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 namespace K3b {
     class DeviceWidget;

@@ -15,13 +15,13 @@
 #include "k3bvideodvdtitledelegate.h"
 #include "k3bvideodvdtitlemodel.h"
 
-#include <QtGui/QIcon>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QStyleOptionButton>
-#include <QtWidgets/QStyleOptionViewItemV4>
+#include <QIcon>
+#include <QPainter>
+#include <QPixmap>
+#include <QApplication>
+#include <QStyle>
+#include <QStyleOptionButton>
+#include <QStyleOptionViewItemV4>
 
 namespace K3b {
     

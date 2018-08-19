@@ -19,7 +19,7 @@
 
 #include "k3bview.h"
 
-#include <QtCore/QList>
+#include <QList>
 
 class QAbstractItemModel;
 class QAction;

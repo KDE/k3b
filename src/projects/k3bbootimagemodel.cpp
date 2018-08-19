@@ -15,7 +15,7 @@
 #include "k3bbootimagemodel.h"
 #include "k3bdatadoc.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 namespace K3b {
 

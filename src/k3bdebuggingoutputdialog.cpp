@@ -21,21 +21,21 @@
 #include "k3bversion.h"
 #include "k3bglobals.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KStandardGuiItem>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-#include <QtGui/QClipboard>
-#include <QtGui/QCursor>
-#include <QtGui/QFontDatabase>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTextEdit>
-#include <QtWidgets/QVBoxLayout>
+#include <QFile>
+#include <QTextStream>
+#include <QClipboard>
+#include <QCursor>
+#include <QFontDatabase>
+#include <QApplication>
+#include <QDialogButtonBox>
+#include <QFileDialog>
+#include <QPushButton>
+#include <QTextEdit>
+#include <QVBoxLayout>
 
 
 K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )

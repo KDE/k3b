@@ -16,7 +16,7 @@
 
 #include "k3bprojectplugin.h"
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 
 K3b::ProjectPluginDialog::ProjectPluginDialog( K3b::ProjectPlugin* plugin, K3b::Doc* doc, QWidget* parent )

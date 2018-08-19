@@ -19,8 +19,8 @@
 
 #include "k3b_export.h"
 
-#include <QtCore/QString>
-#include <QtCore/QVector>
+#include <QString>
+#include <QVector>
 
 
 namespace K3b {

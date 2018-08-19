@@ -19,7 +19,7 @@
 
 #include "k3bview.h"
 
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 
 class QAction;
 class QTreeView;

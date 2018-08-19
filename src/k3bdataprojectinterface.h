@@ -19,7 +19,7 @@
 
 #include "k3bprojectinterface.h"
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 
 namespace K3b {

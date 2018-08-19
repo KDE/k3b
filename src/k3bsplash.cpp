@@ -18,15 +18,15 @@
 
 #include <KCoreAddons/KAboutData>
 
-#include <QtCore/QEvent>
-#include <QtCore/QString>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
+#include <QEvent>
+#include <QString>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPixmap>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QLabel>
+#include <QVBoxLayout>
 
 K3b::Splash::Splash( QWidget* parent )
     : QWidget( parent)

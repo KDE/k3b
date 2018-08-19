@@ -18,8 +18,8 @@
 #include "k3bmsf.h"
 #include "k3b_export.h"
 
-#include <QtCore/QIODevice>
-#include <QtCore/QObject>
+#include <QIODevice>
+#include <QObject>
 
 namespace K3b {
     class AudioTrack;
@@ -144,7 +144,7 @@ namespace K3b {
         virtual AudioDataSource* copy() const = 0;
 
         /**
-         * Split the source at position pos and return the splitted source
+         * Split the source at position pos and return the split source
          * on success.
          * The new source will be moved after this source.
          *

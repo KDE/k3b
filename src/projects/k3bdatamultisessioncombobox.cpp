@@ -15,9 +15,9 @@
 #include "k3bdatamultisessioncombobox.h"
 
 #include <KConfigCore/KConfigGroup>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtWidgets/QToolTip>
+#include <QToolTip>
 
 
 static const int s_autoIndex = 0;

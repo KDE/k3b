@@ -19,8 +19,8 @@
 
 
 #include "k3b_export.h"
-#include <QtCore/QList>
-#include <QtWidgets/QDialog>
+#include <QList>
+#include <QDialog>
 
 namespace K3b {
     namespace Device {

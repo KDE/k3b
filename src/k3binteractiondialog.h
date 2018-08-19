@@ -17,10 +17,10 @@
 
 #include <KConfigCore/KConfigGroup>
 
-#include <QtCore/QEvent>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
+#include <QEvent>
+#include <QDialog>
+#include <QGridLayout>
+#include <QLabel>
 
 
 class QGridLayout;

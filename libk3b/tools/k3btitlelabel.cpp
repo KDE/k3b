@@ -15,14 +15,14 @@
 
 #include "k3btitlelabel.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QEvent>
-#include <QtGui/QFont>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QHelpEvent>
-#include <QtGui/QPainter>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QToolTip>
+#include <QDebug>
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QHelpEvent>
+#include <QPainter>
+#include <QStyle>
+#include <QToolTip>
 
 
 class K3b::TitleLabel::Private

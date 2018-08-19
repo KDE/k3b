@@ -16,12 +16,12 @@
 #include "k3bmediumdelegate.h"
 #include "k3bmedium.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QModelIndex>
-#include <QtGui/QPainter>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QStyle>
+#include <QModelIndex>
+#include <QPainter>
+#include <QApplication>
+#include <QStyle>
 
 Q_DECLARE_METATYPE(K3b::Medium)
 

@@ -33,27 +33,27 @@
 #include "k3bmediacache.h"
 #include "k3bfilecompilationsizehandler.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QPoint>
-#include <QtCore/QVariant>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QGridLayout>
+#include <QFile>
+#include <QFileInfo>
+#include <QPoint>
+#include <QVariant>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QToolButton>
+#include <QLayout>
+#include <QToolTip>
+#include <QRadioButton>
+#include <QTabWidget>
+#include <QSpinBox>
+#include <QGridLayout>
 
 #include <KConfigCore/KConfig>
 #include <KCompletion/KComboBox>
 #include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KWidgetsAddons/KMessageBox>
 

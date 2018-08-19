@@ -26,8 +26,8 @@
 
 #include <KCoreAddons/KProcess>
 
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
+#include <QDebug>
+#include <QStringList>
 
 
 K3b::MsInfoFetcher::MsInfoFetcher( K3b::JobHandler* jh, QObject* parent )

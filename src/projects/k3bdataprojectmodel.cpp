@@ -23,12 +23,12 @@
 #include "k3bspecialdataitem.h"
 
 #include <KCoreAddons/KUrlMimeData>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIconThemes/KIconEngine>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QMimeData>
-#include <QtGui/QFont>
+#include <QDataStream>
+#include <QMimeData>
+#include <QFont>
 
 
 class K3b::DataProjectModel::Private

@@ -16,8 +16,8 @@
 #ifndef _K3B_DATA_PROJECT_MODEL_H_
 #define _K3B_DATA_PROJECT_MODEL_H_
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QUrl>
+#include <QAbstractItemModel>
+#include <QUrl>
 
 namespace K3b {
     class DataDoc;

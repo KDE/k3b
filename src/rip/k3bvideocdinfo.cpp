@@ -20,11 +20,11 @@
 #include "k3bexternalbinmanager.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QDebug>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
+#include <QDebug>
+#include <QDomDocument>
+#include <QDomElement>
 
 
 K3b::VideoCdInfo::VideoCdInfo( QObject* parent )

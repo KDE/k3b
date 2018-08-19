@@ -17,14 +17,14 @@
 #include "k3bcuefilewriter.h"
 #include "k3bwavefilewriter.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KCddb/Cdinfo>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QIODevice>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QIODevice>
+#include <QTextStream>
 
 #include <vector>
 #include <algorithm>

@@ -17,12 +17,12 @@
 #include "k3btoc.h"
 #include "k3b_i18n.h"
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QListWidget>
-#include <QtWidgets/QLabel>
+#include <QApplication>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QLabel>
 
 #include <KCddb/Client>
 

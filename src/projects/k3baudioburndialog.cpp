@@ -28,27 +28,27 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QPoint>
-#include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtGui/QShowEvent>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QToolTip>
+#include <QPoint>
+#include <QStringList>
+#include <QVariant>
+#include <QShowEvent>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QTabWidget>
+#include <QToolButton>
+#include <QToolTip>
 
 
 K3b::AudioBurnDialog::AudioBurnDialog(K3b::AudioDoc* _doc, QWidget *parent )

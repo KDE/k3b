@@ -16,8 +16,8 @@
 #ifndef _K3B_SYSTEM_DIALOG_H_
 #define _K3B_SYSTEM_DIALOG_H_
 
-#include <QtCore/QString>
-#include <QtWidgets/QDialog>
+#include <QString>
+#include <QDialog>
 
 class QCheckBox;
 class QCloseEvent;
@@ -52,7 +52,7 @@ namespace K3b {
     /**
      * The SystemProblem checks for problems with the system setup
      * that could prevent K3b from funcioning properly. Examples are
-     * missing external appplications like cdrecord or versions of
+     * missing external applications like cdrecord or versions of
      * external applications that are too old.
      *
      * Usage:

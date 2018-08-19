@@ -15,10 +15,10 @@
 #ifndef _K3B_VIDEODVD_RIPPING_PREVIEW_H_
 #define _K3B_VIDEODVD_RIPPING_PREVIEW_H_
 
-#include <QtCore/QObject>
-#include <QtCore/QProcess>
-#include <QtCore/QScopedPointer>
-#include <QtGui/QImage>
+#include <QObject>
+#include <QProcess>
+#include <QScopedPointer>
+#include <QImage>
 
 #include "k3bvideodvd.h"
 

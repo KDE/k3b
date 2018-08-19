@@ -17,10 +17,10 @@
 #include "k3bprogressinfoevent.h"
 #include "k3bthreadjobcommunicationevent.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QDebug>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QThread>
+#include <QCoreApplication>
+#include <QDebug>
+#include <QSharedPointer>
+#include <QThread>
 
 
 class K3b::ThreadJob::Private

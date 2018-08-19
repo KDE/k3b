@@ -43,7 +43,7 @@
 
 #if defined QPROCESS_DEBUG
 #include <qdebug.h>
-#include <QtCore/QString>
+#include <QString>
 #include <ctype.h>
 #if !defined(Q_OS_WINCE)
 #include <errno.h>
@@ -87,11 +87,11 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 #include "k3bqprocess.h"
 #include "k3bqprocess_p.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QDateTime>
+#include <QByteArray>
+#include <QDateTime>
 #include <qcoreapplication.h>
 #include <qsocketnotifier.h>
-#include <QtCore/QTimer>
+#include <QTimer>
 
 #ifdef Q_WS_WIN
 #include <private/qwineventnotifier_p.h>

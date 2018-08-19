@@ -20,7 +20,7 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
+#include <QDebug>
 
 K3B_EXPORT_PLUGIN(k3b<name>encoder, K3b<name>Encoder)
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_<name>, K3b<name>EncoderConfigWidget )

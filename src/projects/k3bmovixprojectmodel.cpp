@@ -19,12 +19,12 @@
 #include "k3bmovixfileitem.h"
 
 #include <KCoreAddons/KUrlMimeData>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QUrl>
-#include <QtCore/QMimeData>
-#include <QtCore/QDataStream>
-#include <QtGui/QIcon>
+#include <QUrl>
+#include <QMimeData>
+#include <QDataStream>
+#include <QIcon>
 
 namespace K3b {
 

@@ -26,11 +26,11 @@
 
 #include <KConfigCore/KConfig>
 
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
-#include <QtCore/QStringList>
-#include <QtCore/QList>
-#include <QtCore/QIODevice>
+#include <QDebug>
+#include <QRegExp>
+#include <QStringList>
+#include <QList>
+#include <QIODevice>
 
 
 class K3b::ReadcdReader::Private

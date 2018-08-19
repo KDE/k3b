@@ -22,18 +22,18 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtGui/QValidator>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
+#include <QValidator>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QTabWidget>
+#include <QToolTip>
 
 
 K3b::AdvancedOptionTab::AdvancedOptionTab( QWidget* parent )

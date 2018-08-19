@@ -21,19 +21,19 @@
 #include <KCompletion/KLineEdit>
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KDiskFreeSpaceInfo>
 #include <KIOCore/KIO/Global>
 #include <KIOWidgets/KUrlRequester>
 #include <kio_version.h>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QTimer>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QToolTip>
+#include <QFileInfo>
+#include <QTimer>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QToolTip>
 
 
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )

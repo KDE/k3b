@@ -36,20 +36,20 @@
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KSqueezedTextLabel>
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
-#include <QtCore/QUrl>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QProgressBar>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QInputDialog>
+#include <QDir>
+#include <QFileInfo>
+#include <QList>
+#include <QUrl>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QProgressBar>
+#include <QLabel>
+#include <QLayout>
+#include <QInputDialog>
 
 #include <unistd.h>
 

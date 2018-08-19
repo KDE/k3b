@@ -38,16 +38,16 @@
 #include <KIOCore/KIO/DeleteJob>
 #include <KIOCore/KIO/Job>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
-#include <QtCore/QStringList>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTimer>
-#include <QtCore/QVector>
-#include <QtWidgets/QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QStringList>
+#include <QTemporaryFile>
+#include <QTimer>
+#include <QVector>
+#include <QApplication>
 
 #include <KCddb/Client>
 #include <KCddb/Cdinfo>

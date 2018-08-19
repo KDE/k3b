@@ -22,8 +22,8 @@
 #include <KConfigCore/KSharedConfig>
 #include <KXmlGuiWindow>
 
-#include <QtCore/QList>
-#include <QtCore/QUrl>
+#include <QList>
+#include <QUrl>
 
 namespace K3b {
     class Doc;

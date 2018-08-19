@@ -24,10 +24,10 @@
 
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFileInfo>
-#include <QtWidgets/QInputDialog>
-#include <QtXml/QDomElement>
+#include <QDebug>
+#include <QFileInfo>
+#include <QInputDialog>
+#include <QDomElement>
 
 
 K3b::MovixDoc::MovixDoc( QObject* parent )

@@ -23,7 +23,7 @@
 #include "k3bdevice_export.h"
 
 #include <qglobal.h>
-#include <QtCore/QVarLengthArray>
+#include <QVarLengthArray>
 
 #if defined(__FreeBSD_kernel__)
 #undef Q_OS_LINUX
@@ -713,7 +713,7 @@ namespace K3b {
 
         private:
             /**
-             * A Device can only be constructed the the DeviceManager.
+             * A Device can only be constructed by the DeviceManager.
              */
             Device( const Solid::Device& dev );
 

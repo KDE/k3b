@@ -18,7 +18,7 @@
 #include "k3b_export.h"
 #include "k3bjob.h"
 #include "k3bvideodvd.h"
-#include <QtCore/QProcess>
+#include <QProcess>
 
 namespace K3b {
     /**

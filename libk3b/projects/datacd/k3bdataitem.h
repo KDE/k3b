@@ -21,8 +21,8 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QMimeType>
-#include <QtCore/QString>
+#include <QMimeType>
+#include <QString>
 
 namespace K3b {
     class DirItem;

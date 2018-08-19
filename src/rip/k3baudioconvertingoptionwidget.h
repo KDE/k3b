@@ -18,7 +18,7 @@
 #include "ui_base_k3baudiorippingoptionwidget.h"
 
 #include <KIOCore/KIO/Global>
-#include <QtWidgets/QCheckBox>
+#include <QCheckBox>
 
 class KConfigGroup;
 

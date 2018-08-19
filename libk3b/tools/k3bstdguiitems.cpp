@@ -15,11 +15,11 @@
 #include "k3bstdguiitems.h"
 #include "k3b_i18n.h"
 
-#include <QtGui/QPalette>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QToolTip>
+#include <QPalette>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFrame>
+#include <QToolTip>
 
 
 QCheckBox* K3b::StdGuiItems::simulateCheckbox( QWidget* parent )

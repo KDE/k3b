@@ -20,8 +20,8 @@
 #include "k3btrack.h"
 #include "k3bcore.h"
 
-#include <QtCore/QDataStream>
-#include <QtCore/QMimeData>
+#include <QDataStream>
+#include <QMimeData>
 
 
 // FIXME: multiple tracks

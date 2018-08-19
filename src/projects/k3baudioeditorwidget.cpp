@@ -15,17 +15,17 @@
 
 #include "k3baudioeditorwidget.h"
 
-#include <QtCore/QLinkedList>
-#include <QtGui/QCursor>
-#include <QtGui/QHelpEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QPixmap>
-#include <QtGui/QPolygon>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QToolTip>
+#include <QLinkedList>
+#include <QCursor>
+#include <QHelpEvent>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QPolygon>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QFrame>
+#include <QToolTip>
 
 
 
@@ -177,7 +177,7 @@ K3b::AudioEditorWidget::~AudioEditorWidget()
 QSize K3b::AudioEditorWidget::minimumSizeHint() const
 {
     // some fixed height minimum and enough space for a tickmark every minute
-    // But never exceed 2/3 of the the screen width, otherwise it just looks ugly
+    // But never exceed 2/3 of the screen width, otherwise it just looks ugly
     // FIXME: this is still bad for long sources and there might be 60 minutes sources!
 
     int maxWidth = QApplication::desktop()->width()*2/3;

@@ -18,7 +18,7 @@
 #define K3B_AUDIO_PROJECT_CONVERTING_JOB_H
 
 #include "k3bmassaudioencodingjob.h"
-#include <QtCore/QScopedPointer>
+#include <QScopedPointer>
 
 namespace K3b {
 

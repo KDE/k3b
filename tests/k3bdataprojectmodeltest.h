@@ -15,8 +15,8 @@
 #ifndef K3B_DATA_PROJECT_MODEL_TEST_H
 #define K3B_DATA_PROJECT_MODEL_TEST_H
 
-#include <QtCore/QObject>
-#include <QtCore/QPointer>
+#include <QObject>
+#include <QPointer>
 
 namespace K3b { class DataDoc; }
 

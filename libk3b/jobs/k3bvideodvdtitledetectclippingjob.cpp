@@ -20,7 +20,7 @@
 #include "k3bglobals.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 
 static const int s_unrealisticHighClippingValue = 100000;

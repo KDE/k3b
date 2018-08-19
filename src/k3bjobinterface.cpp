@@ -17,8 +17,8 @@
 #include "k3bjobinterfaceadaptor.h"
 #include "k3bjob.h"
 
-#include <QtDBus/QDBusConnection>
-#include <QtCore/QDataStream>
+#include <QDBusConnection>
+#include <QDataStream>
 
 namespace K3b {
 

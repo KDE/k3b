@@ -25,7 +25,7 @@
 #include "k3btoc.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 
 class K3b::AudioCdTrackSource::Private

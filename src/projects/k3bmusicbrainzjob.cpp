@@ -19,10 +19,10 @@
 #include "k3baudiodatasource.h"
 #include "k3bsimplejobhandler.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtWidgets/QInputDialog>
+#include <QInputDialog>
 
 
 class K3b::MusicBrainzJob::Private

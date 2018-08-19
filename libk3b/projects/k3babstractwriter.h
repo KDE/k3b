@@ -20,7 +20,7 @@
 #include "k3bjob.h"
 #include "k3bdevicetypes.h"
 
-#include <QtCore/QDateTime>
+#include <QDateTime>
 
 class QIODevice;
 

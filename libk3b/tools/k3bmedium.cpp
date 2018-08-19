@@ -24,8 +24,8 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QList>
-#include <QtCore/QSharedData>
+#include <QList>
+#include <QSharedData>
 
 #include <KCddb/Cdinfo>
 
@@ -613,7 +613,7 @@ QStringList K3b::Medium::mediaRequestStrings(QList< K3b::Medium > unsuitableMedi
 
             if ( requestedMediaTypes == Device::MEDIA_REWRITABLE ) {
                 if ( desiredMedium.isEmpty() ) {
-                    desiredMedium = i18n("rewritable medium", desiredMedium);
+                    desiredMedium = i18n("rewritable medium");
                 }
                 else {
                     desiredMedium = i18nc("%1 is type of medium (e.g. DVD)", "rewritable %1", desiredMedium);

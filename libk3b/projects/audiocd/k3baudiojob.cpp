@@ -41,8 +41,8 @@
 
 #include <KCoreAddons/KStringHandler>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <QDebug>
+#include <QFile>
 
 
 

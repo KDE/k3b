@@ -37,9 +37,9 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
 
 
 class K3b::DvdCopyJob::Private
@@ -186,7 +186,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             }
         }
 
-        if( m_readerDevice->copyrightProtectionSystemType() == K3b::Device::COPYRIGHT_PROTECTION_CSS ) { // CSS is the the only one we support ATM
+        if( m_readerDevice->copyrightProtectionSystemType() == K3b::Device::COPYRIGHT_PROTECTION_CSS ) { // CSS is the only one we support ATM
             emit infoMessage( i18n("Found encrypted DVD."), MessageWarning );
             // check for libdvdcss
             bool haveLibdvdcss = false;

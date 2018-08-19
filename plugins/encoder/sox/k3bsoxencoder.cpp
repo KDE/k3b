@@ -26,9 +26,9 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
 
 #include <sys/types.h>
 

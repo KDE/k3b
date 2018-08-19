@@ -17,9 +17,9 @@
 
 #include "k3b_export.h"
 
-#include <QtCore/QList>
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QList>
+#include <QObject>
+#include <QStringList>
 
 class QWidget;
 

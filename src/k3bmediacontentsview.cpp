@@ -17,8 +17,8 @@
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
+#include <QLabel>
+#include <QLayout>
 
 
 class K3b::MediaContentsView::Private

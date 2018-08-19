@@ -30,15 +30,15 @@
 #include <KIOCore/KIO/CopyJob>
 #include <KIOCore/KIO/DeleteJob>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QTemporaryFile>
-#include <QtNetwork/QTcpSocket>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
+#include <QTemporaryFile>
+#include <QTcpSocket>
 
 #include <sys/types.h>
 #include <sys/socket.h>

@@ -41,14 +41,14 @@
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
-#include <QtCore/QTimer>
-#include <QtWidgets/QApplication>
-#include <QtXml/QDomElement>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringList>
+#include <QTimer>
+#include <QApplication>
+#include <QDomElement>
 
 #include <string.h>
 #include <stdlib.h>

@@ -28,22 +28,22 @@
 #include <KCompletion/KComboBox>
 #include <KCompletion/KLineEdit>
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOWidgets/KUrlRequester>
 #include <KIOCore/KIO/Global>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QList>
-#include <QtCore/QLocale>
-#include <QtCore/QMap>
-#include <QtCore/QVector>
-#include <QtGui/QFontMetrics>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QStyle>
+#include <QList>
+#include <QLocale>
+#include <QMap>
+#include <QVector>
+#include <QFontMetrics>
+#include <QCheckBox>
+#include <QHBoxLayout>
+#include <QHeaderView>
+#include <QLayout>
+#include <QSpinBox>
+#include <QStyle>
 
 
 namespace {

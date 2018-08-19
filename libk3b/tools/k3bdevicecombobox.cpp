@@ -19,7 +19,7 @@
 #include "k3bcore.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QMap>
+#include <QMap>
 
 
 class K3b::DeviceComboBox::Private

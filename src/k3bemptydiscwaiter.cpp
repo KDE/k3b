@@ -30,22 +30,22 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KNotifications/KNotification>
 #include <KWidgetsAddons/KGuiItem>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QEventLoop>
-#include <QtCore/QTimer>
-#include <QtGui/QFont>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QProgressDialog>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QToolTip>
+#include <QEventLoop>
+#include <QTimer>
+#include <QFont>
+#include <QApplication>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QProgressDialog>
+#include <QPushButton>
+#include <QToolTip>
 
 
 class K3b::EmptyDiscWaiter::Private
@@ -533,7 +533,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
                 K3b::DvdFormattingJob job( this );
                 job.setDevice( d->device );
-                // we prefere the current mode of the media if no special mode has been requested
+                // we prefer the current mode of the media if no special mode has been requested
                 job.setMode( ( (d->wantedMediaType & K3b::Device::MEDIA_DVD_RW_SEQ) &&
                                (d->wantedMediaType & K3b::Device::MEDIA_DVD_RW_OVWR) )
                              ? ( medium.diskInfo().mediaType() == K3b::Device::MEDIA_DVD_RW_OVWR

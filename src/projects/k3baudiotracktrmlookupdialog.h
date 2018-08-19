@@ -15,9 +15,9 @@
 #ifndef _K3B_AUDIOTRACK_TRM_LOOKUP_DIALOG_H_
 #define _K3B_AUDIOTRACK_TRM_LOOKUP_DIALOG_H_
 
-#include <QtCore/QList>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QDialog>
+#include <QList>
+#include <QLabel>
+#include <QDialog>
 
 class QLabel;
 namespace K3b {

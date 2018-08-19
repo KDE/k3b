@@ -15,7 +15,7 @@
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 
 QString K3b::Device::commandString( const unsigned char& command )

@@ -18,9 +18,9 @@
 #include "k3bprogressinfoevent.h"
 #include "k3bthreadjobcommunicationevent.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtCore/QTimer>
+#include <QDebug>
+#include <QList>
+#include <QTimer>
 
 
 static QList<K3b::Thread*> s_threads;

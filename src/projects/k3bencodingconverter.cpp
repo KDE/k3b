@@ -15,7 +15,7 @@
 #include "k3bencodingconverter.h"
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #ifdef HAVE_ICONV
 #include <langinfo.h>

@@ -107,7 +107,7 @@
 				<!-- The optional catalog name. -->
 				<xs:element name="catalog" type="catalogname" minOccurs="0" />
 
-				<!-- The tracks are splitted into sessions. In most cases there will only be one session. -->
+				<!-- The tracks are split into sessions. In most cases there will only be one session. -->
 				<xs:element name="session" maxOccurs="99"> <!-- FIXME: what is the real max here? -->
 					<xs:complexType>
 						<xs:sequence>

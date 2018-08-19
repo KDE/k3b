@@ -14,7 +14,7 @@
 
 #include "k3bthreadjobcommunicationevent.h"
 
-#include <QtCore/QMutex>
+#include <QMutex>
 
 K3b::ThreadJobCommunicationEvent::Data::Data()
     : m_device( 0 ),

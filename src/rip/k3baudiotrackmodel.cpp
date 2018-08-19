@@ -19,12 +19,12 @@
 #include "k3bmedium.h"
 #include "k3bcdtext.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #include <KCddb/Cdinfo>
 
-#include <QtCore/QMimeData>
-#include <QtGui/QFont>
+#include <QMimeData>
+#include <QFont>
 
 Q_DECLARE_METATYPE( K3b::Medium )
 Q_DECLARE_METATYPE( K3b::Msf )

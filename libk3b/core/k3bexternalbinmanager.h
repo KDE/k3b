@@ -19,10 +19,10 @@
 #include "k3b_export.h"
 #include "k3bversion.h"
 
-#include <QtCore/QMap>
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QMap>
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
 class KConfigGroup;
 
@@ -179,7 +179,7 @@ namespace K3b {
         virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
 
         /**
-         * @return the string preceeding the actual version string, used by
+         * @return the string preceding the actual version string, used by
          *         parseVersion() method. Default implementation returns name().
          */
         virtual QString versionIdentifier( const ExternalBin& bin ) const;

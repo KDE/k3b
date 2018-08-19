@@ -18,8 +18,8 @@
 #include "k3btoc.h"
 #include "k3bcdtext.h"
 
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+#include <QStringList>
+#include <QTextStream>
 
 namespace K3b {
     namespace Device {

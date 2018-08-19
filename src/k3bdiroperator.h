@@ -18,7 +18,7 @@
 
 #include <KBookmarks/KBookmarkManager>
 #include <KIOFileWidgets/KDirOperator>
-#include <QtCore/QUrl>
+#include <QUrl>
 
 class KActionMenu;
 class KBookmarkMenu;

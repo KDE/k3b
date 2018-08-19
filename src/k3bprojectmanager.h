@@ -18,8 +18,8 @@
 
 #include "k3bdoc.h"
 
-#include <QtCore/QList>
-#include <QtCore/QObject>
+#include <QList>
+#include <QObject>
 
 
 class QUrl;

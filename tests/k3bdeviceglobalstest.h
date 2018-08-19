@@ -13,7 +13,7 @@
 #ifndef K3B_DEVICE_GLOBALS_TEST_H
 #define K3B_DEVICE_GLOBALS_TEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class DeviceGlobalsTest : public QObject
 {

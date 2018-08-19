@@ -17,7 +17,7 @@
 
 #include "k3bmsf.h"
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 namespace K3b {
     class AudioDataSource;

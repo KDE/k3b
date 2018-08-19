@@ -23,7 +23,7 @@
 #include "k3bcore.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include <unistd.h>
 

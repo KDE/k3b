@@ -23,10 +23,10 @@
 #include "k3bmedium.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 
 
 class K3b::VideoDVDTitleTranscodingJob::Private

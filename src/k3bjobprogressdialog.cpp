@@ -38,27 +38,27 @@
 #include <KCoreAddons/KFormat>
 #include <KNotifications/KNotification>
 #include <KWidgetsAddons/KSqueezedTextLabel>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDateTime>
-#include <QtCore/QString>
-#include <QtGui/QCloseEvent>
-#include <QtGui/QIcon>
-#include <QtGui/QFont>
-#include <QtGui/QKeyEvent>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QProgressBar>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QScrollBar>
-#include <QtWidgets/QTreeWidget>
-#include <QtWidgets/QVBoxLayout>
+#include <QDebug>
+#include <QDateTime>
+#include <QString>
+#include <QCloseEvent>
+#include <QIcon>
+#include <QFont>
+#include <QKeyEvent>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QProgressBar>
+#include <QPushButton>
+#include <QScrollBar>
+#include <QTreeWidget>
+#include <QVBoxLayout>
 
 
 class K3b::JobProgressDialog::Private

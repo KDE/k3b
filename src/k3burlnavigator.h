@@ -16,7 +16,7 @@
 #define _K3B_URL_NAVIGATOR_H_
 
 #include <KIOFileWidgets/KUrlNavigator>
-#include <QtCore/QUrl>
+#include <QUrl>
 
 namespace K3b {
     namespace Device {

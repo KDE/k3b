@@ -17,9 +17,9 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QSharedData>
-#include <QtCore/QTextCodec>
+#include <QDebug>
+#include <QSharedData>
+#include <QTextCodec>
 
 #include <string.h>
 

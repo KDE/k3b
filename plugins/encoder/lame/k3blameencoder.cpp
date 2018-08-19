@@ -22,13 +22,13 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <QtCore/QDebug>
+#include <QDebug>
 #include <QTextCodec>
 
 #include <stdio.h>
 #include <lame/lame.h>
 
-#include <QtCore/QFile>
+#include <QFile>
 
 
 K3B_EXPORT_PLUGIN(k3blameencoder, K3bLameEncoder)

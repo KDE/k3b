@@ -15,7 +15,7 @@
 #ifndef K3B_MODEL_UTILS_TEST_H
 #define K3B_MODEL_UTILS_TEST_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class ModelUtilsTest : public QObject
 {

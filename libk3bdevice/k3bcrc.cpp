@@ -14,7 +14,7 @@
 
 #include "k3bcrc.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 namespace {
     static const quint16 g_x25Table[1<<8] = {

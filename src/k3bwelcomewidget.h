@@ -17,11 +17,11 @@
 #ifndef _K3B_WELCOME_WIDGET_H_
 #define _K3B_WELCOME_WIDGET_H_
 
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtGui/QImage>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QWidget>
+#include <QList>
+#include <QMap>
+#include <QImage>
+#include <QPixmap>
+#include <QWidget>
 
 class KConfigGroup;
 class QDragEnterEvent;

@@ -24,10 +24,10 @@
 
 #include <KXmlGui/KXMLGUIClient>
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QUrl>
-#include <QtWidgets/QWidget>
+#include <QHash>
+#include <QList>
+#include <QUrl>
+#include <QWidget>
 
 class QVBoxLayout;
 class KToolBar;

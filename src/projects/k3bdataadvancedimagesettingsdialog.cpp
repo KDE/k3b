@@ -16,12 +16,12 @@
 #include "k3bdataadvancedimagesettingsdialog.h"
 #include "k3bisooptions.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QRadioButton>
+#include <QDebug>
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QRadioButton>
 
 
 K3b::DataAdvancedImageSettingsDialog::DataAdvancedImageSettingsDialog( QWidget* parent )

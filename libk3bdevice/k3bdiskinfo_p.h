@@ -18,8 +18,8 @@
 #include "k3bmsf.h"
 #include "k3bdeviceglobals.h"
 
-#include <QtCore/QByteArray>
-#include <QtCore/QSharedData>
+#include <QByteArray>
+#include <QSharedData>
 
 namespace K3b {
     namespace Device {

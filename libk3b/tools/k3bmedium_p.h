@@ -22,8 +22,8 @@
 #include "k3bcdtext.h"
 #include "k3biso9660.h"
 
-#include <QtCore/QSharedData>
-#include <QtCore/QList>
+#include <QSharedData>
+#include <QList>
 
 #include <KCddb/Cdinfo>
 

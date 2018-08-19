@@ -14,9 +14,9 @@
 
 #include "k3bactivepipe.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QIODevice>
-#include <QtCore/QThread>
+#include <QDebug>
+#include <QIODevice>
+#include <QThread>
 
 
 class K3b::ActivePipe::Private : public QThread

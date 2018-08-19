@@ -15,7 +15,7 @@
 #include "k3bsignalwaiter.h"
 #include "k3bjob.h"
 
-#include <QtCore/QEventLoop>
+#include <QEventLoop>
 
 class K3b::SignalWaiter::Private
 {

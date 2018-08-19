@@ -20,10 +20,10 @@
 #include "k3bdevicemanager.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtXml/QDomElement>
-#include <QtWidgets/QWidget>
+#include <QDebug>
+#include <QString>
+#include <QDomElement>
+#include <QWidget>
 
 
 K3b::Doc::Doc( QObject* parent )

@@ -18,7 +18,7 @@
 #ifndef K3B_STATUSBAR_MANAGER_H
 #define K3B_STATUSBAR_MANAGER_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 class QLabel;
 class QEvent;

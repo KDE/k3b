@@ -19,11 +19,11 @@
 #include "k3bvcdtrack.h"
 
 #include <KCoreAddons/KUrlMimeData>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QMimeData>
-#include <QtCore/QUrl>
+#include <QDataStream>
+#include <QMimeData>
+#include <QUrl>
 
 namespace K3b {
 

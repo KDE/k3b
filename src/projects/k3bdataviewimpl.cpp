@@ -28,18 +28,18 @@
 #include "k3bviewcolumnadjuster.h"
 #include "k3bvolumenamewidget.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOWidgets/KFileItemDelegate>
 #include <KIOWidgets/KRun>
 #include <KXmlGui/KActionCollection>
 
-#include <QtCore/QSortFilterProxyModel>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QShortcut>
-#include <QtWidgets/QWidgetAction>
+#include <QSortFilterProxyModel>
+#include <QAction>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QInputDialog>
+#include <QShortcut>
+#include <QWidgetAction>
 
 
 namespace {

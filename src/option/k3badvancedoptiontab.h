@@ -16,7 +16,7 @@
 #ifndef K3B_ADVANCED_OPTION_TAB_H
 #define K3B_ADVANCED_OPTION_TAB_H
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 class QCheckBox;
 class QLabel;

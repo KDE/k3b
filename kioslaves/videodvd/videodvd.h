@@ -16,7 +16,10 @@
 #ifndef _videodvd_H_
 #define _videodvd_H_
 
-#include <QtCore/QString>
+#include <QString>
+
+#include "k3biso9660.h"
+#include "k3biso9660backend.h"
 
 #include <KIOCore/KIO/SlaveBase>
 

@@ -18,7 +18,7 @@
 #include "k3bjobhandler.h"
 #include "k3b_export.h"
 
-#include <QtCore/QObject>
+#include <QObject>
 
 
 namespace K3b {

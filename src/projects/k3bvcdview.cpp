@@ -24,16 +24,16 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QItemSelectionModel>
-#include <QtCore/QString>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QTreeView>
+#include <QDebug>
+#include <QItemSelectionModel>
+#include <QString>
+#include <QAction>
+#include <QHeaderView>
+#include <QLayout>
+#include <QTreeView>
 
 K3b::VcdView::VcdView( K3b::VcdDoc* doc, QWidget* parent )
 :

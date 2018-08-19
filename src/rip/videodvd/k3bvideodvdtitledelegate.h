@@ -15,7 +15,7 @@
 #ifndef _K3B_VIDEODVDTITLEDELEGATE_H_
 #define _K3B_VIDEODVDTITLEDELEGATE_H_
 
-#include <QtWidgets/QStyledItemDelegate>
+#include <QStyledItemDelegate>
 
 namespace K3b {
 

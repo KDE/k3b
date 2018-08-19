@@ -21,8 +21,8 @@
 
 #include <KConfigCore/KSharedConfig>
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
+#include <QObject>
+#include <QList>
 
 #define LIBK3B_VERSION K3B_VERSION_STRING
 

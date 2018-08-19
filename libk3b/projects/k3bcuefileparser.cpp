@@ -19,11 +19,11 @@
 #include "k3btrack.h"
 #include "k3bcdtext.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
 
 
 // TODO: add method: usableByCdrecordDirectly()

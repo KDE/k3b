@@ -18,10 +18,10 @@
 
 #include "k3bglobals.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
 
 #ifdef Q_OS_FREEBSD
 #include <sys/param.h>

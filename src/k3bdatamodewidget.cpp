@@ -17,8 +17,8 @@
 #include "k3bglobals.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
-#include <QtWidgets/QToolTip>
+#include <KLocalizedString>
+#include <QToolTip>
 
 static const int s_autoIndex = 0;
 static const int s_mode1Index = 1;

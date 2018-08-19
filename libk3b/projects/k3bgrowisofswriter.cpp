@@ -28,9 +28,9 @@
 #include "k3bdeviceglobals.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
 
 #include <unistd.h>
 

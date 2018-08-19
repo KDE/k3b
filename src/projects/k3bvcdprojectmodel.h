@@ -16,7 +16,7 @@
 #ifndef _K3B_VCD_PROJECT_MODEL_H_
 #define _K3B_VCD_PROJECT_MODEL_H_
 
-#include <QtCore/QAbstractTableModel>
+#include <QAbstractTableModel>
 
 namespace K3b {
     class VcdDoc;

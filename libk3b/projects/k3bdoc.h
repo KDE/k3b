@@ -22,9 +22,9 @@
 #include "k3b_export.h"
 
 #include <KIOCore/KIO/Global>
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QUrl>
+#include <QObject>
+#include <QString>
+#include <QUrl>
 
 class QDomElement;
 namespace K3b {

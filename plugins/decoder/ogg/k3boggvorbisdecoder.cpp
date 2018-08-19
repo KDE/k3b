@@ -17,9 +17,9 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
+#include <QDebug>
+#include <QFile>
+#include <QStringList>
 
 #include <stdio.h>
 #include <stdlib.h>

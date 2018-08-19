@@ -27,18 +27,18 @@
 #include "../k3b.h"
 
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QMap>
-#include <QtGui/QCursor>
-#include <QtGui/QFont>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTreeWidget>
-#include <QtWidgets/QVBoxLayout>
+#include <QMap>
+#include <QCursor>
+#include <QFont>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QTreeWidget>
+#include <QVBoxLayout>
 
 namespace {
     class SessionInfo

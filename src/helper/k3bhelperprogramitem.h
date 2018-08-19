@@ -16,8 +16,8 @@
 #ifndef K3BHELPERPROGRAMITEM_H
 #define K3BHELPERPROGRAMITEM_H
 
-#include <QtCore/QMetaType>
-#include <QtCore/QString>
+#include <QMetaType>
+#include <QString>
 
 namespace K3b {
 

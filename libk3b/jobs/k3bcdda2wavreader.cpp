@@ -21,9 +21,9 @@
 #include "k3bprocess.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
-#include <QtCore/QVector>
+#include <QDebug>
+#include <QRegExp>
+#include <QVector>
 
 
 class K3b::Cdda2wavReader::Private

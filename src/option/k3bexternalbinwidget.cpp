@@ -21,25 +21,25 @@
 #include "config-k3b.h"
 
 #include <KAuth/KAuth>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KEditListWidget>
 
-#include <QtCore/QDebug>
-#include <QtCore/QItemSelectionModel>
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
-#include <QtGui/QCursor>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QVBoxLayout>
+#include <QDebug>
+#include <QItemSelectionModel>
+#include <QMap>
+#include <QStringList>
+#include <QCursor>
+#include <QPixmap>
+#include <QApplication>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QTreeView>
+#include <QVBoxLayout>
 
 #include <grp.h>
 

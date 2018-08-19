@@ -19,9 +19,9 @@
 #include "k3bsimplejobhandler.h"
 #include "k3bglobals.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
 
 
 class K3b::DirSizeJob::Private

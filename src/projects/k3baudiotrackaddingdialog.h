@@ -16,9 +16,9 @@
 #define _K3B_AUDIO_TRACK_ADDING_DIALOG_H_
 
 #include "k3bjobhandler.h"
-#include <QtCore/QUrl>
-#include <QtCore/QStringList>
-#include <QtWidgets/QDialog>
+#include <QUrl>
+#include <QStringList>
+#include <QDialog>
 
 
 class QLabel;

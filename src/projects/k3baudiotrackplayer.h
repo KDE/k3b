@@ -16,8 +16,8 @@
 #ifndef _K3B_AUDIO_TRACK_PLAYER_H_
 #define _K3B_AUDIO_TRACK_PLAYER_H_
 
-#include <QtCore/QObject>
-#include <QtCore/QScopedPointer>
+#include <QObject>
+#include <QScopedPointer>
 #include <QtMultimedia/qaudio.h>
 
 class KActionCollection;

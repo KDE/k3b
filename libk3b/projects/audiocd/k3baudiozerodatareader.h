@@ -17,8 +17,8 @@
 
 #include "k3b_export.h"
 
-#include <QtCore/QIODevice>
-#include <QtCore/QScopedPointer>
+#include <QIODevice>
+#include <QScopedPointer>
 
 
 namespace K3b {

@@ -35,13 +35,13 @@
 #include <KIOCore/KIO/Job>
 #include <KCoreAddons/KStringHandler>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QRegExp>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTemporaryFile>
-#include <QtWidgets/QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QRegExp>
+#include <QStandardPaths>
+#include <QTemporaryFile>
+#include <QApplication>
 
 #include <sys/types.h>
 #include <sys/stat.h>

@@ -19,7 +19,7 @@
 
 
 #include "config-k3b.h"
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 
 class QModelIndex;

@@ -15,8 +15,8 @@
 
 #include "k3bmpcwrapper.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
+#include <QDebug>
+#include <QFile>
 
 
 #ifdef MPC_OLD_API

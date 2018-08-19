@@ -20,22 +20,22 @@
 #include "k3bvalidators.h"
 
 #include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
 #include <KWidgetsAddons/KSqueezedTextLabel>
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QUrl>
-#include <QtGui/QValidator>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
+#include <QFileInfo>
+#include <QUrl>
+#include <QValidator>
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGridLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QToolTip>
 
 
 K3b::DataPropertiesDialog::DataPropertiesDialog( const QList<K3b::DataItem*>& dataItems, QWidget* parent )

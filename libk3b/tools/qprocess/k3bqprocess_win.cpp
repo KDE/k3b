@@ -43,13 +43,13 @@
 #include "k3bqprocess_p.h"
 #include "qwindowspipewriter_p.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QTimer>
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QWaitCondition>
+#include <QDateTime>
+#include <QDir>
+#include <QFileInfo>
+#include <QTimer>
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
 #include <private/qwineventnotifier_p.h>
 #include <private/qthread_p.h>
 #include <qdebug.h>

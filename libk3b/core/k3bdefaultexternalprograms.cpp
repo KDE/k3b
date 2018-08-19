@@ -21,12 +21,12 @@
 
 #include <KCoreAddons/KProcess>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringList>
+#include <QTextStream>
 
 
 void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )

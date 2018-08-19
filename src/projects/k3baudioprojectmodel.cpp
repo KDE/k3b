@@ -23,11 +23,11 @@
 #include "k3baudiotrackaddingdialog.h"
 
 #include <KCoreAddons/KUrlMimeData>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QMimeData>
-#include <QtGui/QIcon>
-#include <QtWidgets/QApplication>
+#include <QMimeData>
+#include <QIcon>
+#include <QApplication>
 
 
 // we have K3b::AudioTracks in the first level and K3b::AudioDataSources in the second level

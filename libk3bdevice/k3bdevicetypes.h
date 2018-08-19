@@ -16,7 +16,7 @@
 #ifndef _K3B_DEVICE_TYPES_H_
 #define _K3B_DEVICE_TYPES_H_
 
-#include <QtCore/QFlags>
+#include <QFlags>
 
 namespace K3b {
     namespace Device {

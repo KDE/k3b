@@ -32,15 +32,15 @@
 #include <KConfigCore/KConfig>
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QString>
-#include <QtCore/QDateTime>
-#include <QtCore/QFile>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTimer>
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
-#include <QtCore/QUrl>
-#include <QtXml/QDomDocument>
+#include <QString>
+#include <QDateTime>
+#include <QFile>
+#include <QTemporaryFile>
+#include <QTimer>
+#include <QDebug>
+#include <QRegExp>
+#include <QUrl>
+#include <QDomDocument>
 
 
 class K3b::VcdJob::Private

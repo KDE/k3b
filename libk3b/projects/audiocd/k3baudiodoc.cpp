@@ -31,14 +31,14 @@
 #include <KConfigCore/KConfig>
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QStringList>
-#include <QtCore/QTextStream>
-#include <QtXml/QDomElement>
+#include <QDataStream>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QStringList>
+#include <QTextStream>
+#include <QDomElement>
 
 
 class K3b::AudioDoc::Private

@@ -24,10 +24,10 @@
 
 #include <KCoreAddons/KRandom>
 
-#include <QtCore/QDebug>
-#include <QtCore/QThread>
-#include <QtCore/QMutex>
-#include <QtCore/QEvent>
+#include <QDebug>
+#include <QThread>
+#include <QMutex>
+#include <QEvent>
 
 #include <KCddb/Client>
 

@@ -21,8 +21,8 @@
 #include "k3bdebuggingoutputcache.h"
 #include "k3bjobhandler.h"
 
-#include <QtCore/QElapsedTimer>
-#include <QtWidgets/QDialog>
+#include <QElapsedTimer>
+#include <QDialog>
 
 class KSqueezedTextLabel;
 class QCloseEvent;

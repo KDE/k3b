@@ -17,7 +17,7 @@
 
 #include "k3bthememanager.h"
 
-#include <QtWidgets/QFrame>
+#include <QFrame>
 
 namespace K3b {
     class TitleLabel;

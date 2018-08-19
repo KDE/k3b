@@ -22,7 +22,7 @@
 
 #include <KCddb/Cdinfo>
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 
 namespace K3b {

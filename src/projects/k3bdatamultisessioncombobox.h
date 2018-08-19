@@ -17,7 +17,7 @@
 
 #include "k3bdatadoc.h"
 
-#include <QtWidgets/QComboBox>
+#include <QComboBox>
 
 class KConfigGroup;
 

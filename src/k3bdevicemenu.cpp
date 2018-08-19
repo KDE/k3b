@@ -25,10 +25,10 @@
 #include "k3bmediacache.h"
 #include "k3bdevicehandler.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KXmlGui/KActionCollection>
-#include <QtGui/QIcon>
-#include <QtWidgets/QAction>
+#include <QIcon>
+#include <QAction>
 
 
 class K3b::DeviceMenu::Private

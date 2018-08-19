@@ -21,10 +21,10 @@
 #ifndef __koStore_h_
 #define __koStore_h_
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QStack>
-#include <QtCore/QLoggingCategory>
+#include <QString>
+#include <QStringList>
+#include <QStack>
+#include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(KOSTORE)
 

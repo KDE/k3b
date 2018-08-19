@@ -15,8 +15,8 @@
 #ifndef _K3B_THREAD_WIDGET_H_
 #define _K3B_THREAD_WIDGET_H_
 
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QObject>
+#include <QHash>
 
 namespace K3b {
     namespace Device {

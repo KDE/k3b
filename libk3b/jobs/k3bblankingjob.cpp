@@ -27,8 +27,8 @@
 #include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/Job>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
+#include <QDebug>
+#include <QString>
 
 
 

@@ -18,8 +18,8 @@
 
 #include "k3b_export.h"
 #include <KCompletion/KComboBox>
-#include <QtGui/QPixmap>
-#include <QtGui/QResizeEvent>
+#include <QPixmap>
+#include <QResizeEvent>
 class QResizeEvent;
 
 

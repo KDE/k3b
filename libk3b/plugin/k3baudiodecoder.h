@@ -18,7 +18,7 @@
 #include "k3bplugin.h"
 #include "k3bmsf.h"
 #include "k3b_export.h"
-#include <QtCore/QUrl>
+#include <QUrl>
 
 
 namespace K3b {
@@ -244,7 +244,7 @@ namespace K3b {
         /**
          * Searching for an audiodecoder for @p filename.
          *
-         * It first searches the single format decoder and the the multiformat decoder.
+         * It first searches the single format decoder and the multiformat decoder.
          *
          * @returns a newly created decoder on success and 0 when no decoder could be found.
          */

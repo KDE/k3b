@@ -18,10 +18,10 @@
 #include "k3bmsf.h"
 #include "k3bthreadjob.h"
 
-#include <QtCore/QHash>
-#include <QtCore/QMultiMap>
-#include <QtCore/QScopedPointer>
-#include <QtCore/QString>
+#include <QHash>
+#include <QMultiMap>
+#include <QScopedPointer>
+#include <QString>
 
 class QIODevice;
 
@@ -89,7 +89,7 @@ namespace K3b {
         
     protected:
         /**
-         * Initializes the job, shows informations etc. Runs just before
+         * Initializes the job, shows information etc. Runs just before
          * actual encoding loop. By default does nothing and returns true.
          * @return true on success, false on failure
          */

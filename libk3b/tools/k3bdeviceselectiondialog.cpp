@@ -21,12 +21,12 @@
 #include "k3bdevicemanager.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QString>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
+#include <QString>
+#include <QComboBox>
+#include <QDialogButtonBox>
+#include <QLayout>
+#include <QLabel>
+#include <QVBoxLayout>
 
 
 class K3b::DeviceSelectionDialog::Private

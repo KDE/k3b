@@ -18,9 +18,9 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackreader.h"
 
-#include <QtCore/QList>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
+#include <QList>
+#include <QMutex>
+#include <QMutexLocker>
 
 namespace K3b {
 

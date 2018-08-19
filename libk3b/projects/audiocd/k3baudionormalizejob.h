@@ -19,8 +19,8 @@
 
 #include "k3bjob.h"
 
-#include <QtCore/QList>
-#include <QtCore/QProcess>
+#include <QList>
+#include <QProcess>
 
 namespace K3b {
     class Process;

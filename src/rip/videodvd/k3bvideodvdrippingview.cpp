@@ -30,25 +30,25 @@
 #include "k3bmodelutils.h"
 
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KToolBarSpacerAction>
 #include <KWidgetsAddons/KUrlLabel>
 #include <KXmlGui/KActionCollection>
 #include <KXmlGui/KToolBar>
 
-#include <QtGui/QCursor>
-#include <QtGui/QGuiApplication>
-#include <QtGui/QDesktopServices>
-#include <QtGui/QKeyEvent>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QStyle>
-#include <QtWidgets/QTreeView>
+#include <QCursor>
+#include <QGuiApplication>
+#include <QDesktopServices>
+#include <QKeyEvent>
+#include <QAction>
+#include <QVBoxLayout>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
+#include <QMenu>
+#include <QStyle>
+#include <QTreeView>
 
 
 namespace mu = K3b::ModelUtils;

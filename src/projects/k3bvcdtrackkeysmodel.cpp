@@ -15,9 +15,9 @@
 #include "k3bvcdtrackkeysmodel.h"
 #include "k3bvcdtrack.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtGui/QIcon>
+#include <QIcon>
 
 Q_DECLARE_METATYPE( K3b::VcdTrack* )
 

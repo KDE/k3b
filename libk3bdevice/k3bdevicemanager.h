@@ -18,9 +18,9 @@
 
 #include "k3bdevice_export.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QObject>
-#include <QtCore/QString>
+#include <QDebug>
+#include <QObject>
+#include <QString>
 
 class KConfigGroup;
 

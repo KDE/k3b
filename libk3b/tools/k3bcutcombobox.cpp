@@ -14,14 +14,14 @@
 
 #include "k3bcutcombobox.h"
 
-#include <QtCore/QEvent>
-#include <QtCore/QStringList>
-#include <QtCore/QRect>
-#include <QtCore/QSize>
-#include <QtGui/QFontMetrics>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QSizePolicy>
-#include <QtWidgets/QStyle>
+#include <QEvent>
+#include <QStringList>
+#include <QRect>
+#include <QSize>
+#include <QFontMetrics>
+#include <QPixmap>
+#include <QSizePolicy>
+#include <QStyle>
 
 
 class K3b::CutComboBox::Private

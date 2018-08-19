@@ -16,7 +16,7 @@
 #define _K3B_CDDA2WAV_READER_H_
 
 #include "k3bjob.h"
-#include <QtCore/QProcess>
+#include <QProcess>
 
 namespace K3b {
     namespace Device {

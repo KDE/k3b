@@ -31,16 +31,16 @@
 #include "k3baudiotrackplayer.h"
 #endif // ENABLE_AUDIO_PLAYER
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KXmlGui/KActionCollection>
 #include <KXmlGui/KToolBar>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QSplitter>
-#include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QTreeView>
+#include <QDebug>
+#include <QAction>
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QTreeView>
 
 K3b::MixedView::MixedView( K3b::MixedDoc* doc, QWidget* parent )
 :

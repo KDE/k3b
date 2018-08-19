@@ -17,16 +17,16 @@
 #include "k3bdatavolumedescdialog.h"
 #include "k3bisooptions.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
+#include <QDebug>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
 
 // indices for the filesystems combobox
 static const int FS_LINUX_ONLY = 0;

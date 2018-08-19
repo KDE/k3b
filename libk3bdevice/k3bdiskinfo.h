@@ -22,7 +22,7 @@
 #include "k3bmsf.h"
 #include "k3bdevice_export.h"
 
-#include <QtCore/QSharedDataPointer>
+#include <QSharedDataPointer>
 
 namespace K3b {
     namespace Device

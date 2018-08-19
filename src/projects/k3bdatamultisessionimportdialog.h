@@ -15,7 +15,7 @@
 #ifndef _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 #define _K3B_DATA_MULTISESSION_IMPORT_DIALOG_H_
 
-#include <QtWidgets/QDialog>
+#include <QDialog>
 
 namespace K3b {
     class DataDoc;

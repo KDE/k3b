@@ -19,7 +19,7 @@
 #include "k3b_export.h"
 #include <KCoreAddons/KPluginFactory>
 #include <KService/KPluginInfo>
-#include <QtCore/QObject>
+#include <QObject>
 
 #define K3B_PLUGIN_SYSTEM_VERSION 5
 

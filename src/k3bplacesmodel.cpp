@@ -27,7 +27,7 @@
 #include <KIOWidgets/KDirLister>
 #include <Solid/StorageAccess>
 
-#include <QtGui/QIcon>
+#include <QIcon>
 
 typedef QMap<KDirModel*, KDirSortFilterProxyModel*> DirModels;
 

@@ -2,6 +2,6 @@
 #define K3B_I18N_H
 
 #define TRANSLATION_DOMAIN "libk3b"
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 #endif // K3B_I18N_H

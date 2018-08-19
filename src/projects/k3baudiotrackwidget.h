@@ -19,7 +19,7 @@
 
 #include "k3bmsf.h"
 
-#include <QtCore/QList>
+#include <QList>
 
 
 namespace K3b {

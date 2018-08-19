@@ -15,7 +15,7 @@
 
 #include "k3btrack.h"
 
-#include <QtCore/QSharedData>
+#include <QSharedData>
 
 class K3b::Device::Track::Private : public QSharedData
 {

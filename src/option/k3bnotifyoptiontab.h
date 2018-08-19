@@ -17,7 +17,7 @@
 #ifndef _K3B_NOTIFY_OPTIONTAB_H_
 #define _K3B_NOTIFY_OPTIONTAB_H_
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 class KNotifyConfigWidget;
 

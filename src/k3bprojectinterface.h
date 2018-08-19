@@ -18,9 +18,9 @@
 #define _K3B_PROJECT_INTERFACE_H_
 
 #include <KIOCore/KIO/Global>
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QString>
+#include <QStringList>
 
 /**
  * Base class for all project interfaces

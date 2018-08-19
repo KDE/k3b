@@ -20,7 +20,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <QtCore/QFile>
+#include <QFile>
 
 #include "k3bdevice.h"
 

@@ -14,8 +14,8 @@
 
 
 #include "k3btoc.h"
-#include <QtCore/QDebug>
-#include <QtCore/QString>
+#include <QDebug>
+#include <QString>
 
 
 

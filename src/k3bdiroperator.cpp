@@ -22,13 +22,13 @@
 
 #include <KBookmarks/KBookmarkMenu>
 #include <KConfigCore/KConfigGroup>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KXmlGui/KActionCollection>
 #include <KWidgetsAddons/KActionMenu>
 
-#include <QtCore/QDir>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenu>
+#include <QDir>
+#include <QAction>
+#include <QMenu>
 
 K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
     : KDirOperator( url, parent )

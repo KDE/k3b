@@ -22,10 +22,10 @@
 
 #include <KCodecs/KCodecs>
 
-#include <QtCore/QCryptographicHash>
-#include <QtCore/QDebug>
-#include <QtCore/QIODevice>
-#include <QtCore/QTimer>
+#include <QCryptographicHash>
+#include <QDebug>
+#include <QIODevice>
+#include <QTimer>
 
 
 class K3b::Md5Job::Private

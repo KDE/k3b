@@ -25,9 +25,9 @@
 
 #include "k3bmedium.h"
 
-#include <QtCore/QMutex>
-#include <QtCore/QObject>
-#include <QtCore/QThread>
+#include <QMutex>
+#include <QObject>
+#include <QThread>
 
 namespace K3b {
     namespace Device {

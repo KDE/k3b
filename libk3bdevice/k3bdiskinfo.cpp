@@ -20,8 +20,8 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
+#include <QDebug>
+#include <QStringList>
 
 
 K3b::Device::DiskInfo::DiskInfo()

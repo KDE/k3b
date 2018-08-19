@@ -17,8 +17,8 @@
 #ifndef K3BDATAPROPERTIESDIALOG_H
 #define K3BDATAPROPERTIESDIALOG_H
 
-#include <QtCore/QList>
-#include <QtWidgets/QDialog>
+#include <QList>
+#include <QDialog>
 
 class KLineEdit;
 class KSqueezedTextLabel;

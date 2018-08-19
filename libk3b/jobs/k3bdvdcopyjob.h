@@ -18,7 +18,7 @@
 
 #include "k3bjob.h"
 #include "k3b_export.h"
-#include <QtCore/QString>
+#include <QString>
 
 
 namespace K3b {

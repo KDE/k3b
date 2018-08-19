@@ -29,16 +29,16 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtGui/QIcon>
-#include <QtWidgets/QFrame>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QVBoxLayout>
+#include <QIcon>
+#include <QFrame>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLayout>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QVBoxLayout>
 
 // TODO: handle the default-settings
 

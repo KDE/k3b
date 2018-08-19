@@ -18,8 +18,8 @@
 
 #include <KConfigCore/KConfigGroup>
 #include <KIOCore/KIO/Global>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLabel>
+#include <QGroupBox>
+#include <QLabel>
 
 class QLabel;
 class KUrlRequester;

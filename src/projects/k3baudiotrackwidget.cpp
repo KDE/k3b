@@ -20,15 +20,15 @@
 #include "k3bvalidators.h"
 #include "k3bcdtextvalidator.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QToolTip>
+#include <QLabel>
+#include <QCheckBox>
+#include <QToolTip>
 
 #include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QTabWidget>
+#include <QDebug>
+#include <QTabWidget>
 
 
 K3b::AudioTrackWidget::AudioTrackWidget( const QList<K3b::AudioTrack*>& tracks,

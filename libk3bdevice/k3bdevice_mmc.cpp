@@ -21,7 +21,7 @@
 #include "k3bdevice.h"
 #include "k3bscsicommand.h"
 #include "k3bdeviceglobals.h"
-#include "QtCore/QDebug"
+#include "QDebug"
 
 #include <string.h>
 

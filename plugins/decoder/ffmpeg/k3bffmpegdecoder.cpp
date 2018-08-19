@@ -18,7 +18,7 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 extern "C" {
 /*

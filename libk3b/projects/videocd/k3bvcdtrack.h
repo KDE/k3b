@@ -21,9 +21,9 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QString>
-#include <QtCore/QFileInfo>
-#include <QtCore/QFile>
+#include <QString>
+#include <QFileInfo>
+#include <QFile>
 
 namespace K3b {
     class LIBK3B_EXPORT VcdTrack

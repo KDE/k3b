@@ -16,7 +16,7 @@
 #ifndef _K3B_AUDIO_TRACK_MODEL_H_
 #define _K3B_AUDIO_TRACK_MODEL_H_
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 
 namespace KCDDB {
     class CDInfo;

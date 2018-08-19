@@ -16,7 +16,7 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
-#include <QtCore/QStandardPaths>
+#include <QStandardPaths>
 #include <QFileInfo>
 
 K3b::GlobalSettings::GlobalSettings()

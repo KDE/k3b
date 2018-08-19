@@ -19,9 +19,9 @@
 #include "k3bmsf.h"
 
 #include <KWidgetsAddons/KGuiItem>
-#include <QtCore/QEvent>
-#include <QtCore/QString>
-#include <QtCore/QWaitCondition>
+#include <QEvent>
+#include <QString>
+#include <QWaitCondition>
 
 namespace K3b {
     namespace Device {

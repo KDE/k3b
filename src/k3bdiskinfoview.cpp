@@ -28,22 +28,22 @@
 #include <KCddb/Cdinfo>
 
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtGui/QFont>
-#include <QtGui/QColor>
-#include <QtGui/QPainter>
-#include <QtGui/QPalette>
-#include <QtGui/QPixmap>
+#include <QDebug>
+#include <QString>
+#include <QFont>
+#include <QColor>
+#include <QPainter>
+#include <QPalette>
+#include <QPixmap>
 #ifdef HAVE_QT5WEBKITWIDGETS
-#include <QtWebKitWidgets/QWebView>
+#include <QWebView>
 #endif
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QTextBrowser>
+#include <QLabel>
+#include <QLayout>
+#include <QTextBrowser>
 
 namespace {
     QString sectionHeader( const QString& title ) {

@@ -19,8 +19,8 @@
 #include <musicbrainz/mb_c.h>
 
 #include <KIOCore/KProtocolManager>
-#include <QtCore/QDebug>
-#include <QtCore/QUrl>
+#include <QDebug>
+#include <QUrl>
 
 
 class K3b::MusicBrainz::Private

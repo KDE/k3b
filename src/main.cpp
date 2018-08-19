@@ -14,8 +14,8 @@
 #include "k3bapplication.h"
 
 #include <KCoreAddons/KAboutData>
-#include <KI18n/KLocalizedString>
-#include <QtCore/QCommandLineParser>
+#include <KLocalizedString>
+#include <QCommandLineParser>
 #include <QIcon>
 #if defined(__clang__) && defined(LLVM_MAJOR) && (LLVM_MAJOR > 5)
 #include <sanitizer/common_interface_defs.h>

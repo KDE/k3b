@@ -18,9 +18,9 @@
 #include <KWidgetsAddons/KToggleAction>
 #include <KXmlGui/KActionCollection>
 
-#include <QtCore/QObject>
-#include <QtGui/QIcon>
-#include <QtWidgets/QAction>
+#include <QObject>
+#include <QIcon>
+#include <QAction>
 
 namespace K3b {
     /**

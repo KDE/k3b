@@ -16,8 +16,8 @@
 
 #include "k3bthemedheader.h"
 
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
+#include <QLabel>
+#include <QVBoxLayout>
 
 
 K3b::ContentsView::ContentsView( bool withHeader,

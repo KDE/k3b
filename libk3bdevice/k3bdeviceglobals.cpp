@@ -17,8 +17,8 @@
 #include "k3bdevice_i18n.h"
 #include "k3bdiskinfo.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QStringList>
+#include <QDebug>
+#include <QStringList>
 
 
 QString K3b::Device::deviceTypeString( int t )

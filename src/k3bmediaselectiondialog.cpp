@@ -17,12 +17,12 @@
 #include "k3bmediacache.h"
 #include "k3bapplication.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QPushButton>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QPushButton>
 
 
 K3b::MediaSelectionDialog::MediaSelectionDialog( QWidget* parent,

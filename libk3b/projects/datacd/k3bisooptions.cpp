@@ -20,7 +20,7 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
-#include <QtCore/QString>
+#include <QString>
 
 
 K3b::IsoOptions::IsoOptions()

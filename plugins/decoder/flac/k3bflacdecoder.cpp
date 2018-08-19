@@ -16,10 +16,10 @@
 #include <config-k3b.h>
 #include <config-flac.h>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QStringList>
+#include <QBuffer>
+#include <QDebug>
+#include <QFile>
+#include <QStringList>
 
 #include <string.h>
 #include <math.h>

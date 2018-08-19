@@ -22,7 +22,7 @@
 #include "k3bversion.h"
 #include "k3bglobals.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <kcoreaddons_version.h>
 
 

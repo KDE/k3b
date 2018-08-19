@@ -16,10 +16,10 @@
 #include "k3bdeviceselectiondialog.h"
 #include "k3bdevice.h"
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QEvent>
-#include <QtCore/QMutex>
-#include <QtCore/QWaitCondition>
+#include <QCoreApplication>
+#include <QEvent>
+#include <QMutex>
+#include <QWaitCondition>
 
 
 class K3b::ThreadWidget::Data

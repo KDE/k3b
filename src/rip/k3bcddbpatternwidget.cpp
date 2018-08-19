@@ -17,16 +17,16 @@
 #include <KConfigCore/KConfigGroup>
 #include <KCompletion/KComboBox>
 #include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KUrlLabel>
 
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
-#include <QtGui/QValidator>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QWhatsThis>
+#include <QDebug>
+#include <QRegExp>
+#include <QValidator>
+#include <QCheckBox>
+#include <QLayout>
+#include <QGridLayout>
+#include <QWhatsThis>
 
 
 K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )

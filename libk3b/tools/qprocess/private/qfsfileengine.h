@@ -42,7 +42,7 @@
 #ifndef QFSFILEENGINE_H
 #define QFSFILEENGINE_H
 
-#include <QtCore/qabstractfileengine.h>
+#include <qabstractfileengine.h>
 #include "k3b_export.h"
 
 #ifndef QT_NO_FSFILEENGINE

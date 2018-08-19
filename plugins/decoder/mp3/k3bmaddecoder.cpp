@@ -29,10 +29,10 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtCore/QFile>
-#include <QtCore/QVector>
+#include <QDebug>
+#include <QString>
+#include <QFile>
+#include <QVector>
 
 #include <stdlib.h>
 #include <cmath>

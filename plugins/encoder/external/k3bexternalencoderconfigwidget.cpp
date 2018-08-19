@@ -20,10 +20,10 @@
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QTreeWidget>
+#include <QDebug>
+#include <QList>
+#include <QCheckBox>
+#include <QTreeWidget>
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bexternalencoder, K3bExternalEncoderSettingsWidget )
 

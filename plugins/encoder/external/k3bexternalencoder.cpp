@@ -23,11 +23,11 @@
 
 #include <KConfigCore/KConfig>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QList>
-#include <QtCore/QRegExp>
-#include <QtCore/QStandardPaths>
+#include <QDebug>
+#include <QFile>
+#include <QList>
+#include <QRegExp>
+#include <QStandardPaths>
 
 #include <sys/types.h>
 

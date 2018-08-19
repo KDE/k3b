@@ -22,12 +22,12 @@
 #include "k3bthemedlabel.h"
 #include "k3bthememanager.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QLocale>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QProgressBar>
+#include <QLocale>
+#include <QGridLayout>
+#include <QLabel>
+#include <QProgressBar>
 
 
 K3b::BurnProgressDialog::BurnProgressDialog( QWidget *parent, bool showSubProgress )

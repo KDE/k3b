@@ -137,7 +137,7 @@ namespace K3b {
         DirItem* bootImageDir();
 
         /**
-         * Create a boot item and also create a boot catalogue file in case none
+         * Create a boot item and also create a boot catalog file in case none
          * exists in the project.
          *
          * Calling this method has the same effect like creating a new BootItem

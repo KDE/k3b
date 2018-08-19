@@ -17,7 +17,7 @@
 
 #include "ui_base_k3bdataimagesettings.h"
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 namespace K3b {
 

@@ -19,20 +19,20 @@
 
 #include <KConfigCore/KConfig>
 #include <KCoreAddons/KProcess>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QList>
-#include <QtCore/QRegExp>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtXml/QDomNode>
+#include <QDateTime>
+#include <QDebug>
+#include <QFile>
+#include <QList>
+#include <QRegExp>
+#include <QString>
+#include <QTimer>
+#include <QUrl>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
 
 
 K3b::VideoCdRip::VideoCdRip( K3b::JobHandler* hdl, K3b::VideoCdRippingOptions* options, QObject* parent )

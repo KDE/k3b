@@ -22,14 +22,14 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 
-#include <QtWidgets/QCheckBox>
-#include <QtCore/QDebug>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSlider>
-#include <QtWidgets/QToolTip>
+#include <QCheckBox>
+#include <QDebug>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QRadioButton>
+#include <QSlider>
+#include <QToolTip>
 
 
 

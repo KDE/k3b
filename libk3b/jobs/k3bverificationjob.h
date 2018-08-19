@@ -17,7 +17,7 @@
 
 #include "k3bjob.h"
 
-#include <QtCore/QByteArray>
+#include <QByteArray>
 
 namespace K3b {
     namespace Device {

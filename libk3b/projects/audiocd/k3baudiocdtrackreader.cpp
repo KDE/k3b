@@ -24,7 +24,7 @@
 #include "k3bthreadwidget.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #ifdef Q_OS_WIN32
 #undef S_OK

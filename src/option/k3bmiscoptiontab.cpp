@@ -25,14 +25,14 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOWidgets/KUrlRequester>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QRadioButton>
+#include <QDir>
+#include <QFileInfo>
+#include <QCheckBox>
+#include <QRadioButton>
 
 
 K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )

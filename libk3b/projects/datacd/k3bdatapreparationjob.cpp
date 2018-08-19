@@ -24,9 +24,9 @@
 
 #include <KCoreAddons/KStringHandler>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
+#include <QFile>
+#include <QFileInfo>
+#include <QList>
 
 namespace {
     QString createItemsString( const QList<K3b::DataItem*>& items, int max )

@@ -15,9 +15,9 @@
 #ifndef K3B_DATA_VIEW_IMPL_H
 #define K3B_DATA_VIEW_IMPL_H
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QObject>
-#include <QtCore/QUrl>
+#include <QAbstractItemModel>
+#include <QObject>
+#include <QUrl>
 
 class KActionCollection;
 class QAction;

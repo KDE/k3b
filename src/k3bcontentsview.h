@@ -17,7 +17,7 @@
 #define _K3B_CONTENTS_VIEW_H_
 
 #include "k3bthememanager.h"
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 namespace K3b {
     class ThemedHeader;

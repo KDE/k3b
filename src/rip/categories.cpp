@@ -8,7 +8,7 @@
 
 #include "categories.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
 KCDDB::Categories::Categories()
 {

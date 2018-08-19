@@ -15,14 +15,14 @@
 
 #include "k3bviewcolumnadjuster.h"
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QDebug>
-#include <QtCore/QEvent>
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QSet>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QHeaderView>
+#include <QAbstractItemModel>
+#include <QDebug>
+#include <QEvent>
+#include <QHash>
+#include <QList>
+#include <QSet>
+#include <QTreeView>
+#include <QHeaderView>
 
 
 class K3b::ViewColumnAdjuster::Private

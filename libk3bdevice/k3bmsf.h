@@ -18,8 +18,8 @@
 
 #include "k3bdevice_export.h"
 #include <KIOCore/KIO/Global>
-#include <QtCore/QDebug>
-#include <QtCore/QSharedDataPointer>
+#include <QDebug>
+#include <QSharedDataPointer>
 
 namespace K3b
 {

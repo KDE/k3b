@@ -15,8 +15,8 @@
 #ifndef _K3B_META_ITEM_MODEL_H_
 #define _K3B_META_ITEM_MODEL_H_
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QUrl>
+#include <QAbstractItemModel>
+#include <QUrl>
 
 class QIcon;
 

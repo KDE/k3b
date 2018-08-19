@@ -15,13 +15,13 @@
 #include "k3bexternalbinmodel.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtGui/QFont>
-#include <QtGui/QPalette>
-#include <QtWidgets/QApplication>
+#include <QHash>
+#include <QList>
+#include <QFont>
+#include <QPalette>
+#include <QApplication>
 
 namespace K3b {
 

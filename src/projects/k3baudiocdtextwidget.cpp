@@ -20,14 +20,14 @@
 #include "k3bcdtextvalidator.h"
 
 #include <KCompletion/KLineEdit>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtGui/QIcon>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QGroupBox>
+#include <QIcon>
+#include <QCheckBox>
+#include <QToolButton>
+#include <QPushButton>
+#include <QLayout>
+#include <QGroupBox>
 
 
 class K3b::AudioCdTextWidget::AllFieldsDialog : public QDialog, public Ui::base_K3bAudioCdTextAllFieldsDialog

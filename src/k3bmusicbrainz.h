@@ -17,8 +17,8 @@
 
 #include <config-k3b.h>
 
-#include <QtCore/QByteArray>
-#include <QtCore/QString>
+#include <QByteArray>
+#include <QString>
 
 
 /**

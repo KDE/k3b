@@ -21,13 +21,13 @@
 
 #include "k3bkprocess_p.h"
 
-#include <QtCore/QStandardPaths>
+#include <QStandardPaths>
 #include <kshell.h>
 #ifdef Q_OS_WIN
 # include <kshell_p.h>
 #endif
 
-#include <QtCore/QFile>
+#include <QFile>
 
 #ifdef Q_OS_WIN
 # include <windows.h>

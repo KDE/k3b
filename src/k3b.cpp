@@ -69,7 +69,7 @@
 #include <KConfigWidgets/KStandardAction>
 #include <KCoreAddons/KAboutData>
 #include <KCoreAddons/KProcess>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/DeleteJob>
 #include <KIOCore/KIO/StatJob>
 #include <KIOCore/KRecentDocument>
@@ -83,24 +83,24 @@
 #include <KXmlGui/KShortcutsDialog>
 
 #include <QtAlgorithms>
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
-#include <QtCore/QMimeDatabase>
-#include <QtCore/QMimeType>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
-#include <QtCore/QUrl>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QSplitter>
-#include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QStatusBar>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QList>
+#include <QMimeDatabase>
+#include <QMimeType>
+#include <QStandardPaths>
+#include <QString>
+#include <QTimer>
+#include <QUrl>
+#include <QAction>
+#include <QFileDialog>
+#include <QGridLayout>
+#include <QLayout>
+#include <QMenuBar>
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QStatusBar>
 
 #include <cstdlib>
 

@@ -18,7 +18,7 @@
 
 #include "k3b_export.h"
 #include "k3bjob.h"
-#include <QtCore/QByteArray>
+#include <QByteArray>
 
 class QIODevice;
 
@@ -50,7 +50,7 @@ namespace K3b {
         /**
          * read from a file.
          *
-         * Be aware that the Md5Job uses FileSplitter to read splitted
+         * Be aware that the Md5Job uses FileSplitter to read split
          * images. In the future this will be changed with the introduction
          * of a setIODevice method.
          */

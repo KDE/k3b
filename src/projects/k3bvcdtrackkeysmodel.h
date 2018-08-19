@@ -15,8 +15,8 @@
 #ifndef K3BVCDTRACKKEYSMODEL_H
 #define K3BVCDTRACKKEYSMODEL_H
 
-#include <QtCore/QAbstractTableModel>
-#include <QtCore/QMap>
+#include <QAbstractTableModel>
+#include <QMap>
 
 
 namespace K3b {

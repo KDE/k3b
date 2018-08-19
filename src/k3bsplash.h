@@ -16,7 +16,7 @@
 #ifndef K3BSPLASH_H
 #define K3BSPLASH_H
 
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 class QLabel;
 class QMouseEvent;

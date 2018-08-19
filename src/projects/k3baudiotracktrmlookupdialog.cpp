@@ -23,19 +23,19 @@
 #include "k3baudiofile.h"
 
 #include <KNotifications/KNotification>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QEventLoop>
-#include <QtCore/QTimer>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QPushButton>
+#include <QDebug>
+#include <QEventLoop>
+#include <QTimer>
+#include <QApplication>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
 
 
 K3b::AudioTrackTRMLookupDialog::AudioTrackTRMLookupDialog( QWidget* parent )

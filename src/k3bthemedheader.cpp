@@ -18,9 +18,9 @@
 #include "k3bapplication.h"
 #include "k3btitlelabel.h"
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
+#include <QApplication>
+#include <QHBoxLayout>
+#include <QLabel>
 
 
 K3b::ThemedHeader::ThemedHeader( QWidget* parent )

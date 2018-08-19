@@ -17,7 +17,7 @@
 
 #include "k3b_export.h"
 #include <KConfigCore/KConfigGroup>
-#include <QtCore/QString>
+#include <QString>
 
 
 namespace K3b {

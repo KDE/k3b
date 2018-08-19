@@ -22,17 +22,17 @@
 #include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
 #include <KConfigWidgets/KColorScheme>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KDiskFreeSpaceInfo>
 #include <KIOWidgets/KUrlRequester>
 #include <KIconThemes/KIconLoader>
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLabel>
-#include <QtCore/QList>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTimer>
-#include <QtWidgets/QToolButton>
+#include <QCheckBox>
+#include <QLabel>
+#include <QList>
+#include <QStandardPaths>
+#include <QTimer>
+#include <QToolButton>
 
 
 
@@ -118,7 +118,7 @@ QString K3b::AudioConvertingOptionWidget::Private::defaultPluginName() const
 
 QString K3b::AudioConvertingOptionWidget::Private::defaultExtension() const
 {
-    // we prefere formats in this order:
+    // we prefer formats in this order:
     // 1. ogg
     // 2. mp3
     // 3. flac

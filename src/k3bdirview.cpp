@@ -34,15 +34,15 @@
 
 #include <KConfigCore/KConfigGroup>
 #include <KNotifications/KNotification>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDir>
-#include <QtCore/QUrl>
-#include <QtCore/QString>
-#include <QtWidgets/QSplitter>
-#include <QtWidgets/QStackedWidget>
-#include <QtWidgets/QVBoxLayout>
+#include <QDir>
+#include <QUrl>
+#include <QString>
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QVBoxLayout>
 
 class K3b::DirView::Private
 {

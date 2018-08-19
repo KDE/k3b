@@ -19,15 +19,15 @@
 
 #include <KConfigCore/KConfig>
 #include <KCompletion/KComboBox>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtCore/QDebug>
-#include <QtCore/QLocale>
-#include <QtCore/QMap>
-#include <QtCore/QStringList>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QSpinBox>
+#include <QDebug>
+#include <QLocale>
+#include <QMap>
+#include <QStringList>
+#include <QCheckBox>
+#include <QLabel>
+#include <QSpinBox>
 
 
 class K3b::MovixOptionsWidget::LanguageSelectionHelper

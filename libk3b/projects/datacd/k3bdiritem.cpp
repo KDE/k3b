@@ -21,8 +21,8 @@
 #include "k3bisooptions.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QMimeDatabase>
+#include <QDebug>
+#include <QMimeDatabase>
 
 
 K3b::DirItem::DirItem(const QString& name, const ItemFlags& flags)
@@ -69,7 +69,7 @@ K3b::DirItem::~DirItem()
 
     // this has to be done after deleting the children
     // because the directory itself has a size of 0 in K3b
-    // and all it's files' sizes have already been substracted
+    // and all it's files' sizes have already been subtracted
     take();
 }
 

@@ -19,7 +19,7 @@
 #include "k3bjob.h"
 #include "k3bdatadoc.h"
 
-#include <QtCore/QFile>
+#include <QFile>
 
 class QString;
 

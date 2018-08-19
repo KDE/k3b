@@ -23,27 +23,27 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtCore/QDebug>
-#include <QtCore/QEvent>
-#include <QtCore/QPoint>
-#include <QtCore/QString>
-#include <QtCore/QTimer>
-#include <QtGui/QFont>
-#include <QtGui/QIcon>
-#include <QtGui/QKeyEvent>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QToolTip>
+#include <QDebug>
+#include <QEvent>
+#include <QPoint>
+#include <QString>
+#include <QTimer>
+#include <QFont>
+#include <QIcon>
+#include <QKeyEvent>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QApplication>
+#include <QLabel>
+#include <QLayout>
+#include <QMenu>
+#include <QPushButton>
+#include <QToolButton>
+#include <QToolTip>
 
 
 K3b::InteractionDialog::InteractionDialog( QWidget* parent,

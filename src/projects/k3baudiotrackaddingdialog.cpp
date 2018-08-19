@@ -24,16 +24,16 @@
 #include "k3bglobals.h"
 #include "k3bcuefileparser.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QThread>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QThread>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QVBoxLayout>
 #include <QPushButton>
 
 
@@ -136,7 +136,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
         K3b::CueFileParser parser( url.toLocalFile() );
         if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
             if ( parser.imageFileType() == QLatin1String( "bin" ) ) {
-                // no need to analyse -> raw audio data
+                // no need to analyze -> raw audio data
                 m_doc->importCueFile( url.toLocalFile(), m_trackAfter, 0 );
                 m_urls.erase( m_urls.begin() );
                 QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );

@@ -27,8 +27,8 @@
 #include "k3bglobalsettings.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
+#include <QDebug>
+#include <QRegExp>
 
 #include <errno.h>
 #include <string.h>

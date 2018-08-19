@@ -1,7 +1,7 @@
 
 #include "k3btestutils.h"
 
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 #include <QtTest/QTest>
 
 Q_DECLARE_METATYPE( QModelIndex )

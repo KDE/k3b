@@ -23,14 +23,14 @@
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSlider>
+#include <QDebug>
+#include <QFile>
+#include <QCheckBox>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSlider>
 
 namespace {
     

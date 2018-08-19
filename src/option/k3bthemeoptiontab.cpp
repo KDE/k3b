@@ -21,7 +21,7 @@
 
 #include <KArchive/KTar>
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KIOCore/KIO/StoredTransferJob>
 #include <KIOWidgets/KUrlRequester>
@@ -29,13 +29,13 @@
 #include <KWidgetsAddons/KMessageBox>
 #include <KNS3/DownloadDialog>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QPointer>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QItemSelectionModel>
-#include <QtWidgets/QLabel>
+#include <QFile>
+#include <QFileInfo>
+#include <QPointer>
+#include <QStandardPaths>
+#include <QTemporaryFile>
+#include <QItemSelectionModel>
+#include <QLabel>
 
 
 K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )

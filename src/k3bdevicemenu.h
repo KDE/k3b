@@ -15,7 +15,7 @@
 #ifndef _K3B_DEVICE_MENU_H_
 #define _K3B_DEVICE_MENU_H_
 
-#include <QtWidgets/QMenu>
+#include <QMenu>
 
 namespace Device {
     class Device;

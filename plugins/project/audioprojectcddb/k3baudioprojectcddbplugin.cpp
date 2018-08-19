@@ -31,9 +31,9 @@
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtWidgets/QProgressDialog>
+#include <QDebug>
+#include <QString>
+#include <QProgressDialog>
 
 #include <KCddb/Cdinfo>
 

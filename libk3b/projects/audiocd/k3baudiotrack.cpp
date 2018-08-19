@@ -24,8 +24,8 @@
 #include "k3bcore.h"
 #include "k3bcdtextvalidator.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
+#include <QDebug>
+#include <QString>
 
 
 

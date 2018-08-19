@@ -16,7 +16,7 @@
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 #include <stdio.h>
 #include <errno.h>

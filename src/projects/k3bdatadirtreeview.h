@@ -16,8 +16,8 @@
 #ifndef K3BDATADIRTREEVIEW_H
 #define K3BDATADIRTREEVIEW_H
 
-#include <QtCore/QUrl>
-#include <QtWidgets/QTreeView>
+#include <QUrl>
+#include <QTreeView>
 
 
 class QItemSelection;

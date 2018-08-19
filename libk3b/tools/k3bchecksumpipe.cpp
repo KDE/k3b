@@ -15,8 +15,8 @@
 #include "k3bchecksumpipe.h"
 
 #include <KCodecs/KCodecs>
-#include <QtCore/QDebug>
-#include <QtCore/QCryptographicHash>
+#include <QDebug>
+#include <QCryptographicHash>
 
 #include <unistd.h>
 

@@ -19,12 +19,12 @@
 #include <KConfigCore/KConfigGroup>
 #include <KCoreAddons/KProcess>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QFile>
-#include <QtCore/QtGlobal>
-#include <QtCore/QRegExp>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+#include <QtGlobal>
+#include <QRegExp>
 
 #ifndef Q_OS_WIN32
 #include <unistd.h>

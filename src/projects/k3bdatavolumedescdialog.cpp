@@ -17,13 +17,13 @@
 #include "k3bisooptions.h"
 #include "k3bvalidators.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QToolButton>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QToolButton>
 
 
 K3b::DataVolumeDescDialog::DataVolumeDescDialog( QWidget* parent )

@@ -17,7 +17,7 @@
 #define _K3B_INT_VALIDATOR_H_
 
 #include "k3b_export.h"
-#include <QtGui/QValidator>
+#include <QValidator>
 class QWidget;
 class QString;
 
@@ -32,7 +32,7 @@ namespace K3b {
     {
     public:
         /**
-         * Constuctor.  Also sets the base value.
+         * Constructor.  Also sets the base value.
          */
         IntValidator ( QWidget * parent );
 

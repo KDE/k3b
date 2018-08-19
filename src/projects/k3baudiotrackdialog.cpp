@@ -18,15 +18,15 @@
 #include "k3bmsf.h"
 #include "k3bmsfedit.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QVBoxLayout>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 
 // TODO: three modes:

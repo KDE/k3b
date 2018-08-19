@@ -20,7 +20,7 @@
 #include "k3babstractwriter.h"
 #include "k3b_export.h"
 
-#include <QtCore/QProcess>
+#include <QProcess>
 
 class QTcpSocket;
 

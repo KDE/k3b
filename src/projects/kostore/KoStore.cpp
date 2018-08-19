@@ -27,16 +27,16 @@
 #include "KoEncryptedStore.h"
 #endif
 
-#include <QtCore/QBuffer>
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QFile>
-#include <QtCore/QIODevice>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QUrl>
+#include <QBuffer>
+#include <QDebug>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+#include <QIODevice>
+#include <QTemporaryFile>
+#include <QUrl>
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/StoredTransferJob>
 #include <KJobWidgets/KJobWidgets>
 #include <KWidgetsAddons/KMessageBox>

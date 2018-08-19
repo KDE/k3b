@@ -15,11 +15,11 @@
 #ifndef _K3B_THEME_MANAGER_H_
 #define _K3B_THEME_MANAGER_H_
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QMap>
-#include <QtGui/QColor>
-#include <QtGui/QPixmap>
+#include <QObject>
+#include <QString>
+#include <QMap>
+#include <QColor>
+#include <QPixmap>
 
 #include <KConfigCore/KConfigGroup>
 

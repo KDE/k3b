@@ -20,7 +20,7 @@
 #include "k3bmsf.h"
 #include "k3btrack.h"
 
-#include <QtCore/QList>
+#include <QList>
 
 namespace K3b {
     namespace Device

@@ -32,9 +32,9 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtCore/QFile>
+#include <QDebug>
+#include <QString>
+#include <QFile>
 
 
 class K3b::Iso9660ImageWritingJob::Private

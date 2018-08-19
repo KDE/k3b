@@ -23,8 +23,8 @@
 #include <KConfigCore/KConfig>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QFileInfo>
-#include <QtXml/QDomElement>
+#include <QFileInfo>
+#include <QDomElement>
 
 
 

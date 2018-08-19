@@ -20,9 +20,9 @@
 
 #include "k3bwidgetshoweffect.h"
 
-#include <QtCore/QTimerEvent>
-#include <QtGui/QPainter>
-#include <QtWidgets/QWidget>
+#include <QTimerEvent>
+#include <QPainter>
+#include <QWidget>
 
 
 K3b::WidgetShowEffect::WidgetShowEffect( QWidget* widget, Effect e )

@@ -17,14 +17,14 @@
 
 #include <KIconThemes/KIconLoader>
 
-#include <QtCore/QSignalMapper>
-#include <QtGui/QCloseEvent>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMessageBox>
-#include <QtWidgets/QPushButton>
+#include <QSignalMapper>
+#include <QCloseEvent>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLayout>
+#include <QMessageBox>
+#include <QPushButton>
 
 
 class K3b::MultiChoiceDialog::Private

@@ -51,7 +51,7 @@
 typedef unsigned char byte;
 typedef long long llong;
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 namespace K3b {
     class video_info

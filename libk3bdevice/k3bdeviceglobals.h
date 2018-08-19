@@ -19,7 +19,7 @@
 #include "k3bmsf.h"
 #include "k3bdevice_export.h"
 #include "k3bdevicetypes.h"
-#include <QtCore/QString>
+#include <QString>
 
 namespace K3b {
     namespace Device

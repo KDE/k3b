@@ -14,7 +14,7 @@
 
 
 #include "k3bwavefilewriter.h"
-#include <QtCore/QDebug>
+#include <QDebug>
 
 K3b::WaveFileWriter::WaveFileWriter()
     : m_outputStream( &m_outputFile )

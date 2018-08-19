@@ -17,8 +17,8 @@
 
 #include "k3bglobals.h"
 
-#include <KI18n/KLocalizedString>
-#include <QtCore/QString>
+#include <KLocalizedString>
+#include <QString>
 
 namespace K3b {
 class VideoCdRippingOptions

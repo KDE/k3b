@@ -19,9 +19,9 @@
 
 #include <KCoreAddons/KProcess>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
+#include <QFile>
+#include <QFileInfo>
+#include <QList>
 
 #include <sys/types.h>
 #include <unistd.h>

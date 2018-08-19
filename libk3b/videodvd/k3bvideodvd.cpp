@@ -22,7 +22,7 @@
 #include "k3bdevice.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QFile>
+#include <QFile>
 
 #include <inttypes.h> // needed by dvdreads headers
 #include <dvdread/dvd_reader.h>

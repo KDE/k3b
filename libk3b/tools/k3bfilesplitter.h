@@ -17,8 +17,8 @@
 
 #include "k3b_export.h"
 
-#include <QtCore/QIODevice>
-#include <QtCore/QString>
+#include <QIODevice>
+#include <QString>
 
 
 namespace K3b {
@@ -28,7 +28,7 @@ namespace K3b {
      * maximum file size.
      *
      * The filename will be changed to include a counter
-     * if the file has to be splitted like so:
+     * if the file has to be split like so:
      *
      * <pre>
      * filename.iso
@@ -77,7 +77,7 @@ namespace K3b {
         virtual bool atEnd() const;
 
         /**
-         * Deletes all the splitted files.
+         * Deletes all the split files.
          * Caution: Does remove all files that fit the naming scheme without any
          * additional checks.
          */

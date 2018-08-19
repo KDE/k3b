@@ -21,7 +21,7 @@
 #include "k3bglobals.h"
 
 #include <KIOCore/KIO/Global>
-#include <QtCore/QString>
+#include <QString>
 
 #include "k3b_export.h"
 

@@ -17,8 +17,8 @@
 #ifndef K3BFILETREEVIEW_H
 #define K3BFILETREEVIEW_H
 
-#include <QtCore/QUrl>
-#include <QtWidgets/QTreeView>
+#include <QUrl>
+#include <QTreeView>
 
 class QPoint;
 

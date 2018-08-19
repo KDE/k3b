@@ -18,7 +18,7 @@
 
 #include "k3b_export.h"
 #include <KCompletion/KComboBox>
-#include <QtCore/QList>
+#include <QList>
 
 namespace K3b {
     namespace Device {

@@ -20,10 +20,10 @@
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QGlobalStatic>
-#include <QtCore/QLibrary>
-#include <QtCore/QPair>
+#include <QFile>
+#include <QGlobalStatic>
+#include <QLibrary>
+#include <QPair>
 
 
 

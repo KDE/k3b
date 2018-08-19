@@ -15,8 +15,8 @@
 #ifndef _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 #define _K3B_AUDIO_TRACK_SPLIT_DIALOG_H_
 
-#include <QtWidgets/QDialog>
-#include <QtCore/QEvent>
+#include <QDialog>
+#include <QEvent>
 
 class QMenu;
 

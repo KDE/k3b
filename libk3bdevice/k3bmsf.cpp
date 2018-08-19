@@ -13,9 +13,9 @@
  */
 
 #include "k3bmsf.h"
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
-#include <QtCore/QSharedData>
+#include <QDebug>
+#include <QRegExp>
+#include <QSharedData>
 
 #include <cmath>
 

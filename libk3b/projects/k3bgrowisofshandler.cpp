@@ -19,9 +19,9 @@
 #include "k3bdevicehandler.h"
 #include "k3b_i18n.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QLocale>
-#include <QtCore/QTimer>
+#include <QDebug>
+#include <QLocale>
+#include <QTimer>
 
 #include <errno.h>
 #include <string.h>

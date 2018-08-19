@@ -23,9 +23,9 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QFile>
-#include <QtCore/QString>
-#include <QtCore/QUrl>
+#include <QFile>
+#include <QString>
+#include <QUrl>
 
 #include <sys/stat.h>
 
@@ -208,7 +208,7 @@ namespace K3b {
 
     /**
      * Calculate the total size of an image file. This also includes
-     * images splitted by a FileSplitter.
+     * images split by a FileSplitter.
      *
      * \returns the total size of the image file at url
      */

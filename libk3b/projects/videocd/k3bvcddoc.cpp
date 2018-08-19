@@ -26,13 +26,13 @@
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTimer>
-#include <QtGui/QImage>
-#include <QtWidgets/QApplication>
-#include <QtXml/QDomElement>
+#include <QDataStream>
+#include <QDebug>
+#include <QFile>
+#include <QTimer>
+#include <QImage>
+#include <QApplication>
+#include <QDomElement>
 
 
 #if 0

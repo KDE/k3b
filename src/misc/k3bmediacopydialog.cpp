@@ -37,27 +37,27 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KGuiItem>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QList>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSizePolicy>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTabWidget>
+#include <QFile>
+#include <QFileInfo>
+#include <QList>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSizePolicy>
+#include <QSpinBox>
+#include <QToolTip>
+#include <QTabWidget>
 
 
 K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )

@@ -22,21 +22,21 @@
 #include "k3bview.h"
 #include "k3bdoc.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIconThemes/KIconLoader>
 #include <KWidgetsAddons/KActionMenu>
 
-#include <QtCore/QDebug>
-#include <QtCore/QMimeData>
-#include <QtCore/QUrl>
-#include <QtGui/QDragMoveEvent>
-#include <QtGui/QIcon>
-#include <QtGui/QDropEvent>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QMouseEvent>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QTabBar>
+#include <QDebug>
+#include <QMimeData>
+#include <QUrl>
+#include <QDragMoveEvent>
+#include <QIcon>
+#include <QDropEvent>
+#include <QDragEnterEvent>
+#include <QMouseEvent>
+#include <QAction>
+#include <QMenu>
+#include <QTabBar>
 
 namespace {
     

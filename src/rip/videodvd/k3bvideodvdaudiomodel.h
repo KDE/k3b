@@ -17,8 +17,8 @@
 
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QList>
+#include <QAbstractItemModel>
+#include <QList>
 
 
 namespace K3b {

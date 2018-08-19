@@ -20,7 +20,7 @@
 #ifdef ENABLE_MUSICBRAINZ
 
 #include "k3bmsf.h"
-#include <QtCore/QByteArray>
+#include <QByteArray>
 
 /**
  * This class is a wrapper around the trm part of libmusicbrainz.

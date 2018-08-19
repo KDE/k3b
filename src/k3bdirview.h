@@ -16,7 +16,7 @@
 #define K3BDIRVIEW_H
 
 #include "k3bmedium.h"
-#include <QtWidgets/QWidget>
+#include <QWidget>
 
 class KConfigGroup;
 class QUrl;

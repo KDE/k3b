@@ -26,15 +26,15 @@
 #include <KService/KServiceTypeTrader>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QSharedPointer>
-#include <QtWidgets/QAbstractButton>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QVBoxLayout>
+#include <QDebug>
+#include <QDir>
+#include <QList>
+#include <QMap>
+#include <QSharedPointer>
+#include <QAbstractButton>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QVBoxLayout>
 
 
 

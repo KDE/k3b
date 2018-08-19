@@ -17,7 +17,7 @@
 
 #include "k3bthreadjob.h"
 #include <KIOCore/KIO/Global>
-#include <QtCore/QUrl>
+#include <QUrl>
 
 #include "k3b_export.h"
 

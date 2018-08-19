@@ -19,8 +19,8 @@
 #include "k3bjobhandler.h"
 #include "k3bdiskinfo.h"
 
-#include <QtGui/QCloseEvent>
-#include <QtWidgets/QDialog>
+#include <QCloseEvent>
+#include <QDialog>
 
 
 /**

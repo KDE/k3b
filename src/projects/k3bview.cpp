@@ -23,14 +23,14 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KXmlGui/KToolBar>
 
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QVBoxLayout>
+#include <QDebug>
+#include <QList>
+#include <QAction>
+#include <QVBoxLayout>
 
 K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
     : QWidget( parent ),

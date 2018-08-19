@@ -23,7 +23,6 @@
 #include "k3bdefaultexternalprograms.h"
 #include "k3bglobals.h"
 #include "k3bversion.h"
-#include "k3bjob.h"
 #include "k3bthreadwidget.h"
 #include "k3bglobalsettings.h"
 #include "k3bpluginmanager.h"
@@ -35,11 +34,11 @@
 #include <Solid/Power>
 #endif
 
-#include <QtCore/QCoreApplication>
-#include <QtCore/QEvent>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
-#include <QtCore/QThread>
+#include <QCoreApplication>
+#include <QEvent>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QThread>
 
 
 static QThread* s_guiThreadHandle = 0;

@@ -38,22 +38,22 @@
 
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/StoredTransferJob>
 #include <KIO/CopyJob>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QTemporaryFile>
-#include <QtCore/QTextStream>
-#include <QtCore/QUrl>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtGui/QCursor>
-#include <QtWidgets/QApplication>
+#include <QDebug>
+#include <QFile>
+#include <QHash>
+#include <QList>
+#include <QTemporaryFile>
+#include <QTextStream>
+#include <QUrl>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QCursor>
+#include <QApplication>
 
 namespace
 {
@@ -137,7 +137,7 @@ void K3b::ProjectManager::addProject( K3b::Doc* doc )
 void K3b::ProjectManager::removeProject( K3b::Doc* docRemove )
 {
     //
-    // QPtrList.findRef seems to be buggy. Everytime we search for the
+    // QPtrList.findRef seems to be buggy. Every time we search for the
     // first added item it is not found!
     //
     Q_FOREACH( K3b::Doc* doc, d->projects ) {
@@ -182,7 +182,7 @@ void K3b::ProjectManager::setActive( K3b::Doc* docActive )
     }
 
     //
-    // QPtrList.findRef seems to be buggy. Everytime we search for the
+    // QPtrList.findRef seems to be buggy. Every time we search for the
     // first added item it is not found!
     //
     Q_FOREACH( K3b::Doc* doc, d->projects ) {

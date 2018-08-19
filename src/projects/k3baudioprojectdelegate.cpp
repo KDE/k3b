@@ -15,9 +15,9 @@
 #include "k3baudioprojectdelegate.h"
 #include "k3baudioprojectmodel.h"
 
-#include <QtGui/QIcon>
-#include <QtGui/QKeyEvent>
-#include <QtWidgets/QAbstractItemView>
+#include <QIcon>
+#include <QKeyEvent>
+#include <QAbstractItemView>
 
 namespace K3b {
 

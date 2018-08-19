@@ -24,28 +24,28 @@
 
 #include <KIconThemes/KIconLoader>
 #include <KIOCore/KIO/Global>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KSqueezedTextLabel>
 
-#include <QtCore/QList>
-#include <QtCore/QUrl>
-#include <QtGui/QPixmap>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFormLayout>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QVBoxLayout>
+#include <QList>
+#include <QUrl>
+#include <QPixmap>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialogButtonBox>
+#include <QFormLayout>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QTreeView>
+#include <QVBoxLayout>
 
 
 namespace {

@@ -18,8 +18,8 @@
 
 #include "k3b_export.h"
 
-#include <QtGui/QResizeEvent>
-#include <QtWidgets/QFrame>
+#include <QResizeEvent>
+#include <QFrame>
 
 class QResizeEvent;
 

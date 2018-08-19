@@ -18,10 +18,10 @@
 
 #include "k3b_export.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QHash>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
+#include <QDateTime>
+#include <QHash>
+#include <QString>
+#include <QStringList>
 
 #include <sys/stat.h>
 #include <sys/types.h>

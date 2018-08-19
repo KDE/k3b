@@ -27,18 +27,18 @@
 #include <KConfigCore/KConfig>
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 
-#include <QtGui/QCursor>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QInputDialog>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QToolTip>
+#include <QCursor>
+#include <QApplication>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QInputDialog>
+#include <QLabel>
+#include <QLayout>
+#include <QToolButton>
+#include <QToolTip>
 
 #include <cstdlib>
 

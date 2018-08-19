@@ -33,13 +33,13 @@
 #include <Solid/GenericInterface>
 #endif
 
-#include <QtCore/QDebug>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QRegExp>
-#include <QtCore/QTemporaryFile>
+#include <QDebug>
+#include <QString>
+#include <QStringList>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QTemporaryFile>
 
 #include <iostream>
 #include <limits.h>

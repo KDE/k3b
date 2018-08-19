@@ -48,10 +48,10 @@
 #include <KIOCore/KIO/DeleteJob>
 #include <KIOCore/KIO/Global>
 
-#include <QtCore/QDataStream>
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QTemporaryFile>
+#include <QDataStream>
+#include <QDebug>
+#include <QFile>
+#include <QTemporaryFile>
 
 
 static QString createNonExistingFilesString( const QList<K3b::AudioFile*>& items, int max )

@@ -20,14 +20,14 @@
 #include "k3bisooptions.h"
 #include <config-k3b.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QMimeDatabase>
-#include <QtCore/QRegExp>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QUrl>
+#include <QDebug>
+#include <QFile>
+#include <QFileInfo>
+#include <QMimeDatabase>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
+#include <QUrl>
 
 #include <errno.h>
 #include <string.h>

@@ -21,12 +21,12 @@
 #include "k3btoc.h"
 #include "k3bmsf.h"
 
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtCore/QGlobalStatic>
-#include <QtCore/QLibrary>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
+#include <QDebug>
+#include <QFile>
+#include <QGlobalStatic>
+#include <QLibrary>
+#include <QMutex>
+#include <QMutexLocker>
 
 #ifdef Q_OS_WIN32
 typedef short int int16_t;

@@ -24,10 +24,10 @@
 #include <KFileMetaData/ExtractorCollection>
 #include <KFileMetaData/Properties>
 
-#include <QtCore/QDebug>
-#include <QtCore/QMap>
-#include <QtCore/QMimeDatabase>
-#include <QtCore/QMimeType>
+#include <QDebug>
+#include <QMap>
+#include <QMimeDatabase>
+#include <QMimeType>
 
 #include <math.h>
 

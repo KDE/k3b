@@ -17,7 +17,7 @@
 
 #include "k3babstractwriter.h"
 
-#include <QtCore/QProcess>
+#include <QProcess>
 
 
 namespace K3b {

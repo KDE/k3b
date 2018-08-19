@@ -18,8 +18,8 @@
 #include "k3bdoc.h"
 #include "k3bplugin.h"
 
-#include <QtCore/QFlags>
-#include <QtGui/QIcon>
+#include <QFlags>
+#include <QIcon>
 
 #include "k3b_export.h"
 

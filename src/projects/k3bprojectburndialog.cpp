@@ -30,28 +30,28 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QString>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QToolTip>
+#include <QDir>
+#include <QString>
+#include <QPushButton>
+#include <QToolTip>
 
 #include <KConfigCore/KConfig>
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KGuiItem>
 #include <KWidgetsAddons/KStandardGuiItem>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QWhatsThis>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QVBoxLayout>
+#include <QDebug>
+#include <QLayout>
+#include <QWhatsThis>
+#include <QCheckBox>
+#include <QTabWidget>
+#include <QGroupBox>
+#include <QSpinBox>
+#include <QLabel>
+#include <QGridLayout>
+#include <QVBoxLayout>
 
 
 K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )

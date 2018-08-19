@@ -17,8 +17,8 @@
 
 #include <KNotifyConfig/KNotifyConfigWidget>
 
-#include <QtCore/QDebug>
-#include <QtWidgets/QHBoxLayout>
+#include <QDebug>
+#include <QHBoxLayout>
 
 
 

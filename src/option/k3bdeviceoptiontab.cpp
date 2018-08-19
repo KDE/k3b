@@ -21,11 +21,11 @@
 
 #include <KConfigCore/KConfigGroup>
 #include <KConfigCore/KSharedConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 
-#include <QtGui/QCursor>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QVBoxLayout>
+#include <QCursor>
+#include <QApplication>
+#include <QVBoxLayout>
 
 
 K3b::DeviceOptionTab::DeviceOptionTab( QWidget* parent )

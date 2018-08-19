@@ -26,18 +26,18 @@
 #include "k3baction.h"
 #include "k3bvolumenamewidget.h"
 
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KWidgetsAddons/KMessageBox>
 #include <KXmlGui/KToolBar>
 
-#include <QtCore/QDebug>
-#include <QtCore/QItemSelectionModel>
-#include <QtCore/QList>
-#include <QtCore/QUrl>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QTreeView>
+#include <QDebug>
+#include <QItemSelectionModel>
+#include <QList>
+#include <QUrl>
+#include <QAction>
+#include <QFileDialog>
+#include <QHeaderView>
+#include <QTreeView>
 
 K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
 :

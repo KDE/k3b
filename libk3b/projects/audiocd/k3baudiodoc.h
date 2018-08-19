@@ -110,7 +110,7 @@ namespace K3b {
         BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 );
 
         /**
-         * returns the new after track, ie. the the last added track or null if
+         * returns the new after track, ie. the last added track or null if
          * the import failed.
          *
          * This is a blocking method.

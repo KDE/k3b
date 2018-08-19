@@ -38,7 +38,7 @@
 #include <KConfigCore/KConfig>
 #include <KConfigWidgets/KStandardAction>
 #include <KIconThemes/KIconLoader>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KNotifications/KNotification>
 #include <KWidgetsAddons/KActionMenu>
 #include <KWidgetsAddons/KMessageBox>
@@ -46,21 +46,21 @@
 #include <KXmlGui/KActionCollection>
 #include <KXmlGui/KToolBar>
 
-#include <QtCore/QDate>
-#include <QtCore/QDebug>
-#include <QtCore/QItemSelectionModel>
-#include <QtCore/QList>
-#include <QtGui/QFont>
-#include <QtGui/QKeyEvent>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QFormLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QMenu>
-#include <QtWidgets/QSpinBox>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QVBoxLayout>
+#include <QDate>
+#include <QDebug>
+#include <QItemSelectionModel>
+#include <QList>
+#include <QFont>
+#include <QKeyEvent>
+#include <QAction>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFormLayout>
+#include <QLabel>
+#include <QMenu>
+#include <QSpinBox>
+#include <QTreeView>
+#include <QVBoxLayout>
 
 #include <KCddb/Genres>
 #include <KCddb/Cdinfo>

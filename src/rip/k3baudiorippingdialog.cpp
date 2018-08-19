@@ -32,34 +32,34 @@
 
 #include <KCompletion/KComboBox>
 #include <KConfigCore/KConfig>
-#include <KI18n/KLocalizedString>
+#include <KLocalizedString>
 #include <KIOCore/KIO/Global>
 #include <KIOWidgets/KUrlRequester>
 #include <KWidgetsAddons/KMessageBox>
 #include <KWidgetsAddons/KUrlLabel>
 
-#include <QtCore/QDebug>
-#include <QtCore/QDir>
-#include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtCore/QPair>
-#include <QtCore/QStringList>
-#include <QtCore/QVariant>
-#include <QtGui/QFont>
-#include <QtGui/QValidator>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLayout>
-#include <QtWidgets/QMessageBox>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QTabWidget>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QToolTip>
-#include <QtWidgets/QTreeWidget>
-#include <QtWidgets/QSpinBox>
+#include <QDebug>
+#include <QDir>
+#include <QHash>
+#include <QList>
+#include <QPair>
+#include <QStringList>
+#include <QVariant>
+#include <QFont>
+#include <QValidator>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QHeaderView>
+#include <QLabel>
+#include <QLayout>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QTabWidget>
+#include <QToolButton>
+#include <QToolTip>
+#include <QTreeWidget>
+#include <QSpinBox>
 
 
 
