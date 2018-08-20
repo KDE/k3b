@@ -15,7 +15,7 @@
 #include "k3bglobalstest.h"
 #include "k3bglobals.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN( GlobalsTest )
 

@@ -15,7 +15,7 @@
 #ifndef K3B_TEST_UTILS_H
 #define K3B_TEST_UTILS_H
 
-#include <QtTest/QSignalSpy>
+#include <QSignalSpy>
 
 class QModelIndex;
 

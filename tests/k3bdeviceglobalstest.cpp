@@ -13,7 +13,7 @@
 #include "k3bdeviceglobalstest.h"
 #include "k3bdeviceglobals.h"
 
-#include <QtTest/QTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN(DeviceGlobalsTest)
 

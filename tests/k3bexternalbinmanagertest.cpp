@@ -10,7 +10,7 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include <QtTest/QTest>
+#include <QTest>
 
 #include "k3bexternalbinmanagertest.h"
 #include "k3bcore.h"

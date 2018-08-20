@@ -16,7 +16,7 @@
 #include "k3bmodelutils.h"
 
 #include <QStandardItemModel>
-#include <QtTest/QTest>
+#include <QTest>
 
 QTEST_GUILESS_MAIN( ModelUtilsTest )
 

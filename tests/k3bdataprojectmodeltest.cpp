@@ -20,8 +20,8 @@
 #include "k3bspecialdataitem.h"
 #include "k3btestutils.h"
 
-#include <QtTest/QSignalSpy>
-#include <QtTest/QTest>
+#include <QSignalSpy>
+#include <QTest>
 
 QTEST_GUILESS_MAIN( DataProjectModelTest )
 

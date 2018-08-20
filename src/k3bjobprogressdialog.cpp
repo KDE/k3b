@@ -543,7 +543,7 @@ void K3b::JobProgressDialog::slotProgress( int percent )
 {
     if (percent > d->lastProgress) {
         d->lastProgress = percent;
-        m_plainCaption.replace(QRegularExpression("\\(.+?\\) "), "");
+        m_plainCaption.remove(QRegularExpression("\\(.+?\\) "));
         k3bappcore->k3bMainWindow()->setPlainCaption(QString("(%1%) %2").arg(percent).arg(m_plainCaption));
 
         setWindowTitle(QString("(%1%) %2").arg(percent).arg(m_job->jobDescription()));

@@ -263,7 +263,7 @@ bool K3b::CdrskinWriter::prepareProcess()
             d->process << "-tao";
 #ifdef K3B_DEBUG
         qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << "K3B user get *NO* "
-            "opportunity via UI to explicitely choose SAO/DAO" <<
+            "opportunity via UI to explicitly choose SAO/DAO" <<
             "let libburn choose the write type according to other parameters "
             "and the medium state.";
 #endif

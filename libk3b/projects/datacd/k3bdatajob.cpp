@@ -25,7 +25,6 @@
 #include "k3bdevicehandler.h"
 #include "k3btoc.h"
 #include "k3btrack.h"
-#include "k3bdevicehandler.h"
 #include "k3bexternalbinmanager.h"
 #include "k3bcdrecordwriter.h"
 #include "k3bcdrdaowriter.h"

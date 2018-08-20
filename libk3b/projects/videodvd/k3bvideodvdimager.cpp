@@ -129,7 +129,7 @@ int K3b::VideoDvdImager::writePathSpec()
 
         // convert to upper case names
         if (::symlink(QFile::encodeName(item->localPath()),
-                      QFile::encodeName(videoDir + "/" + item->k3bName().toUpper())) == -1) {
+                      QFile::encodeName(videoDir + '/' + item->k3bName().toUpper())) == -1) {
             emit infoMessage(xi18n("Unable to link temporary file in folder <filename>%1</filename>.",
                              d->tempDir->path()), MessageError);
             return -1;
