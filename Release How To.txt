@@ -20,13 +20,13 @@ How To Create a K3b Release
 
 6. Upload the tarball to the server (http://sourceforge.net/projects/k3b).
 
-7. Add new version] to the bug tracker (https://bugs.kde.org/editversions.cgi?product=k3b).</li>
+7. Add new version to the bug tracker (https://bugs.kde.org/editversions.cgi?product=k3b).
 
 8. Write release announcement and publish it on k3b.org]. Update download page.
 
 9. Send an announcement email to:
    * k3b@kde.org
-   * kde-extra-gear@kde.org</li>
+   * kde-extra-gear@kde.org
 
 10. Update K3b status on software sites. Following sites needs an update:
     * Sourceforge (http://sourceforge.net/projects/k3b)

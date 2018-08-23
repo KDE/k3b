@@ -13,8 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_DEBUG_OUTPUT_CACHE_H_
-#define _K3B_DEBUG_OUTPUT_CACHE_H_
+#ifndef _K3B_DEBUGING_OUTPUT_CACHE_H_
+#define _K3B_DEBUGING_OUTPUT_CACHE_H_
 
 #include <QMap>
 #include <QString>

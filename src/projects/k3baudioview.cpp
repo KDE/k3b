@@ -16,12 +16,12 @@
  */
 
 #include "k3baudioview.h"
+#include "k3baudioviewimpl.h"
 
 #include "k3bapplication.h"
 #include "k3baudioburndialog.h"
 #include "k3baudiodoc.h"
 #include "k3baudioprojectmodel.h"
-#include "k3baudioviewimpl.h"
 #include "k3bfillstatusdisplay.h"
 #include "k3bpluginmanager.h"
 

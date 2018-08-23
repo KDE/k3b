@@ -14,8 +14,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_AIFF_DECODER_H_
-#define _K3B_AIFF_DECODER_H_
+#ifndef _K3B_LIBSNDFILE_DECODER_H_
+#define _K3B_LIBSNDFILE_DECODER_H_
 
 #include "k3baudiodecoder.h"
 

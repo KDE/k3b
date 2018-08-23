@@ -12,8 +12,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef K3BMASSAUDIOENCODERJOB_H
-#define K3BMASSAUDIOENCODERJOB_H
+#ifndef K3BMASSAUDIOENCODINGJOB_H
+#define K3BMASSAUDIOENCODINGJOB_H
 
 #include "k3bmsf.h"
 #include "k3bthreadjob.h"

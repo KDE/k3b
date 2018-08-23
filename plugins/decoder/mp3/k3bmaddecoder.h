@@ -13,8 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef K3BMP3MODULE_H
-#define K3BMP3MODULE_H
+#ifndef _K3B_MAD_DECODER_H_
+#define _K3B_MAD_DECODER_H_
 
 
 #include "k3baudiodecoder.h"

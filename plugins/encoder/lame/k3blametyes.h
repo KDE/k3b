@@ -13,8 +13,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_LAME_TYPES_H_
-#define _K3B_LAME_TYPES_H_
+#ifndef _K3B_LAME_TYES_H_
+#define _K3B_LAME_TYES_H_
 
 #include "k3bplugin_i18n.h"
 

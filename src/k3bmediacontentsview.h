@@ -13,8 +13,8 @@
  */
 
 
-#ifndef _K3B_MEDIUM_CONTENTS_VIEW_H_
-#define _K3B_MEDIUM_CONTENTS_VIEW_H_
+#ifndef _K3B_MEDIA_CONTENTS_VIEW_H_
+#define _K3B_MEDIA_CONTENTS_VIEW_H_
 
 #include "k3bcontentsview.h"
 #include "k3bthememanager.h"

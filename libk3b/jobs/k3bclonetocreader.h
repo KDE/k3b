@@ -12,8 +12,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#ifndef _K3B_CLONETOC_FILE_PARSER_H_
-#define _K3B_CLONETOC_FILE_PARSER_H_
+#ifndef _K3B_CLONETOC_READER_H_
+#define _K3B_CLONETOC_READER_H_
 
 #include "k3bimagefilereader.h"
 

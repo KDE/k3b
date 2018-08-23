@@ -14,8 +14,8 @@
  */
 
 
-#ifndef K3B_BOOTIMAGEVIEW_H
-#define K3B_BOOTIMAGEVIEW_H
+#ifndef K3B_BOOTIMAGEDIALOG_H
+#define K3B_BOOTIMAGEDIALOG_H
 
 #include "ui_base_k3bbootimagedialog.h"
 

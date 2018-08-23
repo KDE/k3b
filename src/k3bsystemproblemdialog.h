@@ -13,8 +13,8 @@
  */
 
 
-#ifndef _K3B_SYSTEM_DIALOG_H_
-#define _K3B_SYSTEM_DIALOG_H_
+#ifndef _K3B_SYSTEM_PROBLEM_DIALOG_H_
+#define _K3B_SYSTEM_PROBLEM_DIALOG_H_
 
 #include <QString>
 #include <QDialog>

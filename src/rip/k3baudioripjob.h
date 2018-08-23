@@ -14,8 +14,8 @@
  */
 
 
-#ifndef K3B_AUDIO_RIP_THREAD_H
-#define K3B_AUDIO_RIP_THREAD_H
+#ifndef K3B_AUDIO_RIP_JOB_H
+#define K3B_AUDIO_RIP_JOB_H
 
 #include "k3bmassaudioencodingjob.h"
 #include <QScopedPointer>

@@ -14,8 +14,8 @@
  * See the file "COPYING" for the exact licensing terms.
  */
 
-#include "k3bvcdprojectmodel.h"
 #include "k3bvcdview.h"
+#include "k3bvcdprojectmodel.h"
 #include "k3bvcddoc.h"
 #include "k3bvcdburndialog.h"
 #include "k3bvcdtrackdialog.h"

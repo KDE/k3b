@@ -15,8 +15,8 @@
 
 
 
-#ifndef _K3B_DEFAULT_EXTERNAL_BIN_PROGRAMS_H_
-#define _K3B_DEFAULT_EXTERNAL_BIN_PROGRAMS_H_
+#ifndef _K3B_DEFAULT_EXTERNAL_PROGRAMS_H_
+#define _K3B_DEFAULT_EXTERNAL_PROGRAMS_H_
 
 #include "k3bexternalbinmanager.h"
 #include "k3b_export.h"
