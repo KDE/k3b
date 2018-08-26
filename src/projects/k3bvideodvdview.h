@@ -28,7 +28,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VideoDvdView( VideoDvdDoc* doc, QWidget *parent = 0 );
+        explicit VideoDvdView( VideoDvdDoc* doc, QWidget *parent = 0 );
         ~VideoDvdView();
 
     protected:

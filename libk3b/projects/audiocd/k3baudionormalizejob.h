@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioNormalizeJob( JobHandler*, QObject* parent = 0 );
+        explicit AudioNormalizeJob( JobHandler*, QObject* parent = 0 );
         ~AudioNormalizeJob();
 
     public Q_SLOTS:

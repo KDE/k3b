@@ -38,7 +38,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioEncoder( QObject* parent = 0 );
+        explicit AudioEncoder( QObject* parent = 0 );
         virtual ~AudioEncoder();
 
         // TODO: if the following methods are to be activated the config methods in

@@ -26,9 +26,9 @@ class ThemedLabel : public KSqueezedTextLabel
     Q_OBJECT
 
 public:
-    ThemedLabel( QWidget* parent = 0 );
-    ThemedLabel( const QString& text, QWidget* parent = 0 );
-    ThemedLabel( Theme::PixmapType, QWidget* parent = 0 );
+    explicit ThemedLabel( QWidget* parent = 0 );
+    explicit ThemedLabel( const QString& text, QWidget* parent = 0 );
+    explicit ThemedLabel( Theme::PixmapType, QWidget* parent = 0 );
 
 protected:
     bool event( QEvent* event ) override;

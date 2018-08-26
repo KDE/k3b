@@ -31,7 +31,7 @@ namespace K3b {
         Q_CLASSINFO( "D-Bus Interface", "org.k3b.DataProject" )
 
     public:
-        DataProjectInterface( DataDoc* doc, const QString& dbusPath = QString() );
+        explicit DataProjectInterface( DataDoc* doc, const QString& dbusPath = QString() );
 
     public Q_SLOTS:
         /**

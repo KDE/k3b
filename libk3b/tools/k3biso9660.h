@@ -343,7 +343,7 @@ namespace K3b {
          *
          * @param filename is a local path (e.g. "/home/weis/myfile.tgz")
          */
-        Iso9660( const QString& filename );
+        explicit Iso9660( const QString& filename );
 
         /**
          * Special case which always reads the TOC from the specified sector
@@ -354,13 +354,13 @@ namespace K3b {
         /**
          * @param fd open file descriptor
          */
-        Iso9660( int fd );
+        explicit Iso9660( int fd );
 
         /**
          * Directly specify the backend to read from.
          * Iso9660 will take ownership of the backend and delete it.
          */
-        Iso9660( Iso9660Backend* );
+        explicit Iso9660( Iso9660Backend* );
 
         /**
          * If the .iso is still opened, then it will be

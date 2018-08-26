@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MsfEdit( QWidget* parent = 0 );
+        explicit MsfEdit( QWidget* parent = 0 );
         ~MsfEdit();
 
         Msf minimum() const;

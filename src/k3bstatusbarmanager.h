@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        StatusBarManager( MainWindow* parent );
+        explicit StatusBarManager( MainWindow* parent );
         ~StatusBarManager();
 
     public Q_SLOTS:

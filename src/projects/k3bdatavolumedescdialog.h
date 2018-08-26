@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataVolumeDescDialog( QWidget* parent = 0 );
+        explicit DataVolumeDescDialog( QWidget* parent = 0 );
         ~DataVolumeDescDialog();
 
         void load( const IsoOptions& );

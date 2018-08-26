@@ -30,7 +30,7 @@ class Splash : public QWidget
     Q_OBJECT
 
 public:
-    Splash( QWidget* parent = 0 );
+    explicit Splash( QWidget* parent = 0 );
     ~Splash();
 
 public Q_SLOTS:

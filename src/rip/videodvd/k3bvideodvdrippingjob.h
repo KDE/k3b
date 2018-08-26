@@ -39,7 +39,7 @@ namespace K3b {
         class TitleRipInfo {
         public:
             TitleRipInfo();
-            TitleRipInfo( int title,
+            explicit TitleRipInfo( int title,
                           int audioStream = 0,
                           const QString& fn = QString(),
                           int width = 0,  // 0 -> no resize

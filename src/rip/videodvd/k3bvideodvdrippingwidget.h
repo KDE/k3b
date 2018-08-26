@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VideoDVDRippingWidget( QWidget* parent );
+        explicit VideoDVDRippingWidget( QWidget* parent );
         ~VideoDVDRippingWidget();
 
         VideoDVDTitleTranscodingJob::VideoCodec selectedVideoCodec() const;

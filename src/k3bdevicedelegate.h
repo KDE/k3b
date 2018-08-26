@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DeviceDelegate( QObject* parent );
+        explicit DeviceDelegate( QObject* parent );
         ~DeviceDelegate();
 
         QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;

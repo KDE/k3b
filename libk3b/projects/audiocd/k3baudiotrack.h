@@ -44,7 +44,7 @@ namespace K3b {
 
     public:
         AudioTrack();
-        AudioTrack( AudioDoc* parent );
+        explicit AudioTrack( AudioDoc* parent );
         ~AudioTrack();
 
         AudioDoc* doc() const;

@@ -24,7 +24,7 @@ namespace K3b {
     {
     public:
         FileSystemInfo();
-        FileSystemInfo( const QString& path );
+        explicit FileSystemInfo( const QString& path );
         FileSystemInfo( const FileSystemInfo& );
         ~FileSystemInfo();
 

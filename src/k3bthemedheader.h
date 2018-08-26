@@ -30,7 +30,7 @@ class ThemedHeader : public QFrame
     Q_OBJECT
 
 public:
-    ThemedHeader( QWidget* parent = 0 );
+    explicit ThemedHeader( QWidget* parent = 0 );
     ThemedHeader( const QString& title, const QString& subtitle, QWidget* parent = 0 );
     ~ThemedHeader();
 

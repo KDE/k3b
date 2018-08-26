@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DvdFormattingJob( JobHandler*, QObject* parent = 0 );
+        explicit DvdFormattingJob( JobHandler*, QObject* parent = 0 );
         ~DvdFormattingJob();
 
         QString jobDescription() const;

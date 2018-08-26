@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataImageSettingsWidget( QWidget* parent = 0 );
+        explicit DataImageSettingsWidget( QWidget* parent = 0 );
         ~DataImageSettingsWidget();
 
         void load( const IsoOptions& );

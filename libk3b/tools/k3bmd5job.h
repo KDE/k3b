@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Md5Job( JobHandler* jh , QObject* parent = 0 );
+        explicit Md5Job( JobHandler* jh , QObject* parent = 0 );
         ~Md5Job();
 
 		QByteArray hexDigest();

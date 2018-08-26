@@ -43,7 +43,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ProjectBurnDialog( Doc* doc, QWidget *parent=0 );
+        explicit ProjectBurnDialog( Doc* doc, QWidget *parent=0 );
         ~ProjectBurnDialog();
 
         enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };

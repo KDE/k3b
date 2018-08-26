@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        CloneJob( JobHandler*, QObject* parent = 0 );
+        explicit CloneJob( JobHandler*, QObject* parent = 0 );
         ~CloneJob();
 
         virtual Device::Device* writer() const { return m_writerDevice; }

@@ -38,7 +38,7 @@ namespace K3b {
         friend class PluginManager;
 
     public:
-        Plugin( QObject* parent = 0 );
+        explicit Plugin( QObject* parent = 0 );
         virtual ~Plugin();
 
         KPluginInfo pluginInfo() const { return m_pluginInfo; }

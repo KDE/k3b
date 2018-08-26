@@ -276,7 +276,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        BurnJob( JobHandler* hdl, QObject* parent = 0 );
+        explicit BurnJob( JobHandler* hdl, QObject* parent = 0 );
         virtual ~BurnJob();
 
         /**

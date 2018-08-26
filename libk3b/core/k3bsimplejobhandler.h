@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        SimpleJobHandler( QObject* parent = 0 );
+        explicit SimpleJobHandler( QObject* parent = 0 );
         ~SimpleJobHandler();
 
         /*

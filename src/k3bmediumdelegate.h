@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MediumDelegate( QObject* parent );
+        explicit MediumDelegate( QObject* parent );
         ~MediumDelegate();
 
         // FIXME: move this elsewhere

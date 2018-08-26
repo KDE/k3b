@@ -39,7 +39,7 @@ class K3bFLACDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public: 
-    K3bFLACDecoder( QObject* parent = 0  );
+    explicit K3bFLACDecoder( QObject* parent = 0  );
     ~K3bFLACDecoder();
 
     void cleanup();

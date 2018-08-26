@@ -43,7 +43,7 @@ namespace K3b {
 
     public:
         FileSplitter();
-        FileSplitter( const QString& filename );
+        explicit FileSplitter( const QString& filename );
         ~FileSplitter();
 
         /**

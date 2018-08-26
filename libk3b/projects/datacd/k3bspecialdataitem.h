@@ -29,7 +29,7 @@ namespace K3b {
     class SpecialDataItem : public DataItem
     {
     public:
-        SpecialDataItem( KIO::filesize_t size, const QString& k3bName = QString(), const ItemFlags& flags = ItemFlags() )
+        explicit SpecialDataItem( KIO::filesize_t size, const QString& k3bName = QString(), const ItemFlags& flags = ItemFlags() )
             : DataItem( flags | SPECIALFILE ),
               m_size( size ) {
             setK3bName( k3bName );

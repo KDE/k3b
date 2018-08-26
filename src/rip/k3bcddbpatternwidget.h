@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        CddbPatternWidget( QWidget* parent = 0 );
+        explicit CddbPatternWidget( QWidget* parent = 0 );
         ~CddbPatternWidget();
 
         QString filenamePattern() const;

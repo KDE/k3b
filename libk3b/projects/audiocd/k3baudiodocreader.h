@@ -32,7 +32,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioDocReader( AudioDoc& doc, QObject* parent = 0 );
+        explicit AudioDocReader( AudioDoc& doc, QObject* parent = 0 );
         ~AudioDocReader();
 
         AudioTrackReader* currentTrackReader() const;

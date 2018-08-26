@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VideoDVDRippingView( QWidget* parent = 0 );
+        explicit VideoDVDRippingView( QWidget* parent = 0 );
         ~VideoDVDRippingView();
 
         KActionCollection* actionCollection() const;

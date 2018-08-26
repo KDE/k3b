@@ -42,7 +42,7 @@ class K3bLibsndfileDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public:
-    K3bLibsndfileDecoder( QObject* parent = 0  );
+    explicit K3bLibsndfileDecoder( QObject* parent = 0  );
     ~K3bLibsndfileDecoder();
     void cleanup();
     QString fileType() const;

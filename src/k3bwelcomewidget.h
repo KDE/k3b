@@ -42,7 +42,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        WelcomeWidget( MainWindow* mainWindow, QWidget* parent = 0 );
+        explicit WelcomeWidget( MainWindow* mainWindow, QWidget* parent = 0 );
         ~WelcomeWidget();
 
         void loadConfig( const KConfigGroup& c );

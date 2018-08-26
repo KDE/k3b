@@ -73,7 +73,7 @@ class VideoCdInfo : public QObject
         Q_OBJECT
 
     public:
-        VideoCdInfo( QObject* parent = 0 );
+        explicit VideoCdInfo( QObject* parent = 0 );
         ~VideoCdInfo();
 
         /**

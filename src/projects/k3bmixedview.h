@@ -41,7 +41,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MixedView( MixedDoc* doc, QWidget* parent = 0 );
+        explicit MixedView( MixedDoc* doc, QWidget* parent = 0 );
         ~MixedView();
 
     public Q_SLOTS:

@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MsInfoFetcher( JobHandler*, QObject* parent = 0 );
+        explicit MsInfoFetcher( JobHandler*, QObject* parent = 0 );
         ~MsInfoFetcher();
 
         QString msInfo() const { return m_msInfo; }

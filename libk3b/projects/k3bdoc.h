@@ -45,7 +45,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Doc( QObject* = 0 );
+        explicit Doc( QObject* = 0 );
         virtual ~Doc();
 
         enum Type {

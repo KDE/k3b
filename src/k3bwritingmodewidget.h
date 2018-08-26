@@ -32,8 +32,8 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        WritingModeWidget( QWidget* parent = 0 );
-        WritingModeWidget( WritingModes modes, QWidget* parent = 0 );
+        explicit WritingModeWidget( QWidget* parent = 0 );
+        explicit WritingModeWidget( WritingModes modes, QWidget* parent = 0 );
         ~WritingModeWidget();
 
         WritingMode writingMode() const;

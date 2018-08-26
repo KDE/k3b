@@ -88,7 +88,7 @@ namespace K3b {
         class ScsiCommand
         {
         public:
-            ScsiCommand( const Device* );
+            explicit ScsiCommand( const Device* );
             ~ScsiCommand();
 
             /**

@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MixedDoc( QObject* parent = 0 );
+        explicit MixedDoc( QObject* parent = 0 );
         ~MixedDoc();
         
         virtual Type type() const { return MixedProject; }

@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MovixBurnDialog( MovixDoc* doc, QWidget* parent = 0 );
+        explicit MovixBurnDialog( MovixDoc* doc, QWidget* parent = 0 );
         ~MovixBurnDialog();
 
     protected Q_SLOTS:

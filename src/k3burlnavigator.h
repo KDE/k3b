@@ -28,7 +28,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        UrlNavigator( KFilePlacesModel* model, QWidget* parent = 0 );
+        explicit UrlNavigator( KFilePlacesModel* model, QWidget* parent = 0 );
         ~UrlNavigator();
 
     public Q_SLOTS:

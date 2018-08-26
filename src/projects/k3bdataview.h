@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataView( DataDoc* doc, QWidget* parent = 0 );
+        explicit DataView( DataDoc* doc, QWidget* parent = 0 );
         virtual ~DataView();
 
     public Q_SLOTS:

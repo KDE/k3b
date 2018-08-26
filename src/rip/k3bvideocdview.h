@@ -29,7 +29,7 @@ class VideoCdView : public MediaContentsView
         Q_OBJECT
 
     public:
-        VideoCdView( QWidget* parent = 0 );
+        explicit VideoCdView( QWidget* parent = 0 );
         ~VideoCdView();
 
         KActionCollection* actionCollection() const;

@@ -38,7 +38,7 @@ namespace K3b {
         };
         
     public:
-        ThemeModel( ThemeManager* themeManager, QObject* parent = 0 );
+        explicit ThemeModel( ThemeManager* themeManager, QObject* parent = 0 );
         ~ThemeModel();
         
         /**

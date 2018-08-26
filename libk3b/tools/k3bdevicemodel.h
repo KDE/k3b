@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DeviceModel( QObject* parent = 0 );
+        explicit DeviceModel( QObject* parent = 0 );
         ~DeviceModel();
 
         QList<Device::Device*> devices() const;

@@ -32,7 +32,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        IntMapComboBox( QWidget* parent = 0 );
+        explicit IntMapComboBox( QWidget* parent = 0 );
         ~IntMapComboBox();
 
         int selectedValue() const;

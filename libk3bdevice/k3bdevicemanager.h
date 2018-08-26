@@ -53,7 +53,7 @@ namespace K3b {
             /**
              * Creates a new DeviceManager
              */
-            DeviceManager( QObject* parent = 0 );
+            explicit DeviceManager( QObject* parent = 0 );
             virtual ~DeviceManager();
 
             /**

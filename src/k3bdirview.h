@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DirView(FileTreeView* tree, QWidget *parent=0);
+        explicit DirView(FileTreeView* tree, QWidget *parent=0);
         ~DirView();
 
     public Q_SLOTS:

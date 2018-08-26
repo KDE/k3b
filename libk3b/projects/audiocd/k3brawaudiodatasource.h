@@ -29,7 +29,7 @@ namespace K3b {
     {
     public:
         RawAudioDataSource();
-        RawAudioDataSource( const QString& path );
+        explicit RawAudioDataSource( const QString& path );
         RawAudioDataSource( const RawAudioDataSource& );
         ~RawAudioDataSource();
 

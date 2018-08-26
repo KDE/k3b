@@ -33,7 +33,7 @@ class DirOperator : public KDirOperator, public KBookmarkOwner
     Q_OBJECT
 
 public: 
-    DirOperator( const QUrl& urlName = QUrl(), QWidget* parent = 0 );
+    explicit DirOperator( const QUrl& urlName = QUrl(), QWidget* parent = 0 );
     ~DirOperator();
 
     /**

@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioDecoder( QObject* parent = 0 );
+        explicit AudioDecoder( QObject* parent = 0 );
         virtual ~AudioDecoder();
 
         /**
@@ -209,7 +209,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioDecoderFactory( QObject* parent = 0 )
+        explicit AudioDecoderFactory( QObject* parent = 0 )
             : Plugin( parent ) {
         }
 

@@ -38,7 +38,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MediaCopyDialog( QWidget *parent = 0 );
+        explicit MediaCopyDialog( QWidget *parent = 0 );
         ~MediaCopyDialog();
 
         void setReadingDevice( Device::Device* );

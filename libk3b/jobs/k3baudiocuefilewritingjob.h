@@ -32,7 +32,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioCueFileWritingJob( JobHandler*, QObject* parent = 0 );
+        explicit AudioCueFileWritingJob( JobHandler*, QObject* parent = 0 );
         ~AudioCueFileWritingJob();
 
         virtual Device::Device* writer() const;

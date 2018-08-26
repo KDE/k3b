@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DeviceOptionTab( QWidget* = 0 );
+        explicit DeviceOptionTab( QWidget* = 0 );
         ~DeviceOptionTab();
 
         void readDevices();

@@ -26,7 +26,7 @@ class DebuggingOutputDialog : public QDialog
   Q_OBJECT
 
  public:
-  DebuggingOutputDialog( QWidget* parent );
+  explicit DebuggingOutputDialog( QWidget* parent );
 
  public Q_SLOTS:
   void setOutput( const QString& );

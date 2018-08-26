@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MovixView( MovixDoc* doc, QWidget* parent = 0 );
+        explicit MovixView( MovixDoc* doc, QWidget* parent = 0 );
         virtual ~MovixView();
 
     private Q_SLOTS:

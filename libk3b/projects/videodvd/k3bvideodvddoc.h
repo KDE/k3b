@@ -22,7 +22,7 @@ namespace K3b {
     class LIBK3B_EXPORT VideoDvdDoc : public DataDoc
     {
     public:
-        VideoDvdDoc( QObject* parent = 0 );
+        explicit VideoDvdDoc( QObject* parent = 0 );
         virtual ~VideoDvdDoc();
 
         virtual Type type() const { return VideoDvdProject; }

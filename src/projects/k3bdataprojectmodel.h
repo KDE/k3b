@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataProjectModel( DataDoc* doc, QObject* parent = 0 );
+        explicit DataProjectModel( DataDoc* doc, QObject* parent = 0 );
         ~DataProjectModel();
 
         enum Columns {

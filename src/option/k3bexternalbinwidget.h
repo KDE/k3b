@@ -41,7 +41,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ExternalBinWidget( ExternalBinManager* manager, QWidget* parent = 0 );
+        explicit ExternalBinWidget( ExternalBinManager* manager, QWidget* parent = 0 );
         ~ExternalBinWidget();
 
     public Q_SLOTS:

@@ -120,7 +120,7 @@ namespace K3b {
     class MpegInfo
     {
     public:
-        MpegInfo( const char* filename );
+        explicit MpegInfo( const char* filename );
         ~MpegInfo();
         enum mpeg_version { MPEG_VERS_INVALID = 0, MPEG_VERS_MPEG1 = 1, MPEG_VERS_MPEG2 = 2 };
         enum mode { MPEG_STEREO = 1, MPEG_JOINT_STEREO, MPEG_DUAL_CHANNEL, MPEG_SINGLE_CHANNEL };

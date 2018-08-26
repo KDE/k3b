@@ -43,7 +43,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioBurnDialog(AudioDoc* doc, QWidget *parent=0 );
+        explicit AudioBurnDialog(AudioDoc* doc, QWidget *parent=0 );
         ~AudioBurnDialog();
 
     protected:

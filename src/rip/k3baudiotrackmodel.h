@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioTrackModel( QObject* parent = 0 );
+        explicit AudioTrackModel( QObject* parent = 0 );
         ~AudioTrackModel();
 
         enum Columns {

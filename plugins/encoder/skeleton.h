@@ -49,7 +49,7 @@ class K3b<name>EncoderConfigWidget : public K3b::PluginConfigWidget
     Q_OBJECT
 
 public:
-    K3b<name>EncoderConfigWidget( QWidget* parent = 0 );
+    explicit K3b<name>EncoderConfigWidget( QWidget* parent = 0 );
     ~K3b<name>EncoderConfigWidget();
 
     public Q_SLOTS:

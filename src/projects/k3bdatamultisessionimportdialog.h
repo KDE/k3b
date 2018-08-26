@@ -47,7 +47,7 @@ namespace K3b {
         void addMedium( const K3b::Medium& medium );
 
     private:
-        DataMultisessionImportDialog( QWidget* parent );
+        explicit DataMultisessionImportDialog( QWidget* parent );
         ~DataMultisessionImportDialog();
 
         class Private;

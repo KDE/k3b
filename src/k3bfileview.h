@@ -33,7 +33,7 @@ class FileView : public ContentsView
     Q_OBJECT
 
 public:
-    FileView(QWidget *parent=0);
+    explicit FileView(QWidget *parent=0);
     ~FileView();
 
     void setUrl( const QUrl &url, bool forward = true );

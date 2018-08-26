@@ -98,7 +98,7 @@ namespace K3b {
     class LIBK3B_EXPORT TranscodeProgram : public SimpleExternalProgram
     {
     public:
-        TranscodeProgram( const QString& transcodeProgram );
+        explicit TranscodeProgram( const QString& transcodeProgram );
 
         // no user parameters (yet)
         virtual bool supportsUserParameters() const { return false; }
@@ -112,7 +112,7 @@ namespace K3b {
     class LIBK3B_EXPORT VcdbuilderProgram : public SimpleExternalProgram
     {
     public:
-        VcdbuilderProgram( const QString& );
+        explicit VcdbuilderProgram( const QString& );
         
     protected:
         virtual QString versionIdentifier( const ExternalBin& bin ) const;

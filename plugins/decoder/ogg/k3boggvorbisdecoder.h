@@ -44,7 +44,7 @@ class K3bOggVorbisDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public: 
-    K3bOggVorbisDecoder( QObject* parent = 0 );
+    explicit K3bOggVorbisDecoder( QObject* parent = 0 );
     ~K3bOggVorbisDecoder();
 
     void cleanup();

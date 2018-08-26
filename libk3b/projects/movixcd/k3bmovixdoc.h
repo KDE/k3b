@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MovixDoc( QObject* parent = 0 );
+        explicit MovixDoc( QObject* parent = 0 );
         virtual ~MovixDoc();
 
         virtual Type type() const { return MovixProject; }

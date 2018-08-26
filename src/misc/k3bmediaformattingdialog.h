@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MediaFormattingDialog( QWidget* = 0 );
+        explicit MediaFormattingDialog( QWidget* = 0 );
         ~MediaFormattingDialog();
 
     public Q_SLOTS:

@@ -39,7 +39,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AppDeviceManager( QObject* parent = 0 );
+        explicit AppDeviceManager( QObject* parent = 0 );
         ~AppDeviceManager();
 
         Device::Device* currentDevice() const;

@@ -29,7 +29,7 @@ class AudioCdView : public MediaContentsView
     Q_OBJECT
 
 public:
-    AudioCdView( QWidget* parent = 0 );
+    explicit AudioCdView( QWidget* parent = 0 );
     ~AudioCdView();
 
     KActionCollection* actionCollection() const;

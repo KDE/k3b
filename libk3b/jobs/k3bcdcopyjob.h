@@ -38,7 +38,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        CdCopyJob( JobHandler* hdl, QObject* parent = 0 );
+        explicit CdCopyJob( JobHandler* hdl, QObject* parent = 0 );
         ~CdCopyJob();
 
         virtual Device::Device* writer() const { return m_onlyCreateImages ? 0 : m_writerDevice; }

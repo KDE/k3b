@@ -29,7 +29,7 @@ namespace K3b {
         Q_CLASSINFO( "D-Bus Interface", "org.k3b.AudioProject" )
 
     public:
-        AudioProjectInterface( AudioDoc* doc, const QString& dbusPath = QString() );
+        explicit AudioProjectInterface( AudioDoc* doc, const QString& dbusPath = QString() );
 
     public Q_SLOTS:
         int trackCount() const;

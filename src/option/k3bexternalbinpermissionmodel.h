@@ -41,7 +41,7 @@ namespace K3b {
         };
 
     public:
-        ExternalBinPermissionModel(ExternalBinManager const& externalBinManager, QObject* parent = 0);
+        explicit ExternalBinPermissionModel(ExternalBinManager const& externalBinManager, QObject* parent = 0);
         ~ExternalBinPermissionModel();
 
         QList<HelperProgramItem> selectedPrograms() const;

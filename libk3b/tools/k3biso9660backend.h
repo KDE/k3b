@@ -41,7 +41,7 @@ namespace K3b {
     class LIBK3B_EXPORT Iso9660DeviceBackend : public Iso9660Backend
     {
     public:
-        Iso9660DeviceBackend( Device::Device* dev );
+        explicit Iso9660DeviceBackend( Device::Device* dev );
         ~Iso9660DeviceBackend();
 
         bool open();
@@ -57,8 +57,8 @@ namespace K3b {
     class LIBK3B_EXPORT Iso9660FileBackend : public Iso9660Backend
     {
     public:
-        Iso9660FileBackend( const QString& filename );
-        Iso9660FileBackend( int fd );
+        explicit Iso9660FileBackend( const QString& filename );
+        explicit Iso9660FileBackend( int fd );
         ~Iso9660FileBackend();
 
         bool open();
@@ -75,7 +75,7 @@ namespace K3b {
     class LIBK3B_EXPORT Iso9660LibDvdCssBackend : public Iso9660Backend
     {
     public:
-        Iso9660LibDvdCssBackend( Device::Device* );
+        explicit Iso9660LibDvdCssBackend( Device::Device* );
         ~Iso9660LibDvdCssBackend();
 
         bool open();

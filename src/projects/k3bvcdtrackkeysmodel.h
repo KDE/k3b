@@ -39,7 +39,7 @@ public:
     typedef QMap<int, VcdTrack*> Key2Track;
     
 public:
-    VcdTrackKeysModel( int keyCount, QObject* parent = 0 );
+    explicit VcdTrackKeysModel( int keyCount, QObject* parent = 0 );
     ~VcdTrackKeysModel();
     
     int keyCount() const;

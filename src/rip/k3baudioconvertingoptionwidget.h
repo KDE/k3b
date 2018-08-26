@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioConvertingOptionWidget( QWidget* parent );
+        explicit AudioConvertingOptionWidget( QWidget* parent );
         ~AudioConvertingOptionWidget();
 
         void setBaseDir( const QString& path );

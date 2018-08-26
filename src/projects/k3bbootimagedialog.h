@@ -32,7 +32,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        BootImageDialog( DataDoc* doc, QWidget* parent = 0 );
+        explicit BootImageDialog( DataDoc* doc, QWidget* parent = 0 );
         ~BootImageDialog();
 
     private Q_SLOTS:

@@ -39,7 +39,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioTrackTRMLookupDialog( QWidget* parent = 0 );
+        explicit AudioTrackTRMLookupDialog( QWidget* parent = 0 );
         ~AudioTrackTRMLookupDialog();
 
         /**

@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        PlacesModel( QObject* parent = 0 );
+        explicit PlacesModel( QObject* parent = 0 );
         ~PlacesModel();
 
         /**

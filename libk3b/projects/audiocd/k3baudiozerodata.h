@@ -22,7 +22,7 @@ namespace K3b {
     class LIBK3B_EXPORT AudioZeroData : public AudioDataSource
     {
     public:
-        AudioZeroData( const Msf& msf = 150 );
+        explicit AudioZeroData( const Msf& msf = 150 );
         AudioZeroData( const AudioZeroData& );
         ~AudioZeroData();
 

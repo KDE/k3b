@@ -34,7 +34,7 @@ namespace K3b {
         Q_CLASSINFO( "D-Bus Interface", "org.k3b.Project" )
 
     public:
-        ProjectInterface( Doc* doc, const QString& dbusPath = QString() );
+        explicit ProjectInterface( Doc* doc, const QString& dbusPath = QString() );
         ~ProjectInterface();
 
         QString dbusPath() const;

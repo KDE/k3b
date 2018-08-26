@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ReadcdReader( JobHandler*, QObject* parent = 0 );
+        explicit ReadcdReader( JobHandler*, QObject* parent = 0 );
         ~ReadcdReader();
 
         bool active() const;

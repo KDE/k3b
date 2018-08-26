@@ -37,7 +37,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ImageWritingDialog( QWidget* = 0 );
+        explicit ImageWritingDialog( QWidget* = 0 );
         ~ImageWritingDialog();
 
         void setImage( const QUrl& url );

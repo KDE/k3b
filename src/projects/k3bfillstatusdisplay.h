@@ -66,7 +66,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        FillStatusDisplay(Doc* doc, QWidget *parent=0);
+        explicit FillStatusDisplay(Doc* doc, QWidget *parent=0);
         ~FillStatusDisplay();
 
     public Q_SLOTS:

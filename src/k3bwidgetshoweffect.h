@@ -42,7 +42,7 @@ public:
         Slide
     };
 
-    WidgetShowEffect( QWidget* widget, Effect e = Slide );
+    explicit WidgetShowEffect( QWidget* widget, Effect e = Slide );
     ~WidgetShowEffect();
 
     void setEffect( Effect e ) { m_effect = e; }

@@ -36,7 +36,7 @@ namespace K3b {
         };
         
     public:
-        BootImageModel( DataDoc* doc, QObject* parent = 0 );
+        explicit BootImageModel( DataDoc* doc, QObject* parent = 0 );
         ~BootImageModel();
         
         BootItem* bootItemForIndex( const QModelIndex& index ) const;

@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Cdda2wavReader( QObject* parent = 0 );
+        explicit Cdda2wavReader( QObject* parent = 0 );
         ~Cdda2wavReader();
 
         bool active() const;

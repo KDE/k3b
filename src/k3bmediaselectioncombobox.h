@@ -37,7 +37,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MediaSelectionComboBox( QWidget* parent );
+        explicit MediaSelectionComboBox( QWidget* parent );
         virtual ~MediaSelectionComboBox();
 
         /**

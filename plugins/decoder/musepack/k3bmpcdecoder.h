@@ -42,7 +42,7 @@ class K3bMpcDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public:
-    K3bMpcDecoder( QObject* parent = 0 );
+    explicit K3bMpcDecoder( QObject* parent = 0 );
     ~K3bMpcDecoder();
 
     QString fileType() const;

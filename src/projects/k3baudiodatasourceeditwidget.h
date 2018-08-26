@@ -39,7 +39,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioDataSourceEditWidget( QWidget* parent = 0 );
+        explicit AudioDataSourceEditWidget( QWidget* parent = 0 );
         ~AudioDataSourceEditWidget();
 
         K3b::Msf startOffset() const;

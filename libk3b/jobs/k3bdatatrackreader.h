@@ -44,7 +44,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataTrackReader( JobHandler*, QObject* parent = 0 );
+        explicit DataTrackReader( JobHandler*, QObject* parent = 0 );
         ~DataTrackReader();
 
         enum ReadSectorSize {

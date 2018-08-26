@@ -27,7 +27,7 @@ class NotifyOptionTab : public QWidget
   Q_OBJECT
 
  public:
-  NotifyOptionTab( QWidget* parent = 0 );
+  explicit NotifyOptionTab( QWidget* parent = 0 );
   ~NotifyOptionTab();
 
   void readSettings();

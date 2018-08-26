@@ -22,7 +22,7 @@
 class base_K3bOggVorbisEncoderSettingsWidget : public QWidget, public Ui::base_K3bOggVorbisEncoderSettingsWidget
 {
 public:
-    base_K3bOggVorbisEncoderSettingsWidget( QWidget *parent ) : QWidget( parent ) {
+    explicit base_K3bOggVorbisEncoderSettingsWidget( QWidget *parent ) : QWidget( parent ) {
         setupUi( this );
     }
 };
@@ -32,7 +32,7 @@ class K3bOggVorbisEncoderSettingsWidget : public K3b::PluginConfigWidget
     Q_OBJECT
 
 public:
-    K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0, const QVariantList& = QVariantList() );
+    explicit K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0, const QVariantList& = QVariantList() );
     ~K3bOggVorbisEncoderSettingsWidget();
 
 public Q_SLOTS:

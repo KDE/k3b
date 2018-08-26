@@ -43,7 +43,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        JobProgressDialog( QWidget* parent = 0,
+        explicit JobProgressDialog( QWidget* parent = 0,
                            bool showSubProgress = true );
         ~JobProgressDialog();
 

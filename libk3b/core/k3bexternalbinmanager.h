@@ -77,7 +77,7 @@ namespace K3b {
     class LIBK3B_EXPORT ExternalProgram
     {
     public:
-        ExternalProgram( const QString& name );
+        explicit ExternalProgram( const QString& name );
         virtual ~ExternalProgram();
 
         const ExternalBin* defaultBin() const;
@@ -128,7 +128,7 @@ namespace K3b {
     class LIBK3B_EXPORT SimpleExternalProgram : public ExternalProgram
     {
     public:
-        SimpleExternalProgram( const QString& name );
+        explicit SimpleExternalProgram( const QString& name );
         virtual ~SimpleExternalProgram();
 
         virtual bool scan( const QString& path );
@@ -195,7 +195,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ExternalBinManager( QObject* parent = 0 );
+        explicit ExternalBinManager( QObject* parent = 0 );
         ~ExternalBinManager();
 
         void search();

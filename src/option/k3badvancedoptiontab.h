@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AdvancedOptionTab( QWidget* parent = 0 );
+        explicit AdvancedOptionTab( QWidget* parent = 0 );
         ~AdvancedOptionTab();
 
         void saveSettings();

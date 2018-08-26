@@ -36,7 +36,7 @@ class AudioTrackSplitDialog : public QDialog
     Q_OBJECT
 
 public:
-    AudioTrackSplitDialog( AudioTrack*, QWidget* parent = 0 );
+    explicit AudioTrackSplitDialog( AudioTrack*, QWidget* parent = 0 );
     ~AudioTrackSplitDialog();
 
     bool eventFilter( QObject* o, QEvent* e ) override;

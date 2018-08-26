@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        TitleLabel( QWidget* parent = 0 );
+        explicit TitleLabel( QWidget* parent = 0 );
         ~TitleLabel();
 
         QSize sizeHint() const;

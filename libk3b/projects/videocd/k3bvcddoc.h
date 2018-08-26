@@ -37,7 +37,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VcdDoc( QObject* );
+        explicit VcdDoc( QObject* );
         ~VcdDoc();
 
         virtual Type type() const { return VcdProject; }

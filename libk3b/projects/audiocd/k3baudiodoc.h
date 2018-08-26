@@ -45,7 +45,7 @@ namespace K3b {
         friend class AudioFile;
 
     public:
-        AudioDoc( QObject* );
+        explicit AudioDoc( QObject* );
         ~AudioDoc();
 
         virtual Type type() const { return AudioProject; }

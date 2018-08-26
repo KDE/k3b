@@ -51,7 +51,7 @@ class K3bFFMpegFile
   bool seek( const K3b::Msf& );
 
  private:
-  K3bFFMpegFile( const QString& filename );
+  explicit K3bFFMpegFile( const QString& filename );
   int readPacket();
   int fillOutputBuffer();
 

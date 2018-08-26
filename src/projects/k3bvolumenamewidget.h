@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
         
     public:
-        VolumeNameWidget( DataDoc* doc, QWidget* parent = 0 );
+        explicit VolumeNameWidget( DataDoc* doc, QWidget* parent = 0 );
         ~VolumeNameWidget();
         
     protected:

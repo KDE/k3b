@@ -25,7 +25,7 @@ class K3bSoxEncoderConfigWidget : public K3b::PluginConfigWidget, Ui::base_K3bSo
     Q_OBJECT
 
 public:
-    K3bSoxEncoderConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
+    explicit K3bSoxEncoderConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
     ~K3bSoxEncoderConfigWidget();
 
 public Q_SLOTS:

@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MovixOptionsWidget( QWidget* parent = 0 );
+        explicit MovixOptionsWidget( QWidget* parent = 0 );
         ~MovixOptionsWidget();
 
     public Q_SLOTS:

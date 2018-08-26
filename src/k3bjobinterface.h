@@ -30,7 +30,7 @@ namespace K3b {
         Q_CLASSINFO( "D-Bus Interface", "org.k3b.Job" )
 
     public:
-        JobInterface( Job* job );
+        explicit JobInterface( Job* job );
         ~JobInterface();
 
     public Q_SLOTS:

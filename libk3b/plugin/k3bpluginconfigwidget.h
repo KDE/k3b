@@ -53,7 +53,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        PluginConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
+        explicit PluginConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
         virtual ~PluginConfigWidget();
 
         // TODO: find a nice way to get the plugin name for the config groups

@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioCdTextWidget( QWidget* parent = 0 );
+        explicit AudioCdTextWidget( QWidget* parent = 0 );
         ~AudioCdTextWidget();
 
         bool isChecked() const;

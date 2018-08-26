@@ -26,7 +26,7 @@ class CddbOptionTab : public QWidget
     Q_OBJECT
 
 public:
-    CddbOptionTab( QWidget* parent = 0 );
+    explicit CddbOptionTab( QWidget* parent = 0 );
     ~CddbOptionTab();
 
 public Q_SLOTS:

@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioTrackWidget( const QList<AudioTrack*>& tracks,
+        explicit AudioTrackWidget( const QList<AudioTrack*>& tracks,
                           QWidget* parent = 0 );
         ~AudioTrackWidget();
 

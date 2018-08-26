@@ -34,7 +34,7 @@ namespace K3b {
         typedef QList<DataItem*> Children;
 
     public:
-        DirItem( const QString& name, const ItemFlags& flags = ItemFlags() );
+        explicit DirItem( const QString& name, const ItemFlags& flags = ItemFlags() );
 
         /**
          * Default copy constructor. Copies the dir including all children. However, none of the
@@ -149,7 +149,7 @@ namespace K3b {
     class RootItem : public DirItem
     {
     public:
-        RootItem( DataDoc& doc );
+        explicit RootItem( DataDoc& doc );
         ~RootItem();
 
         virtual DataDoc* getDoc() const;

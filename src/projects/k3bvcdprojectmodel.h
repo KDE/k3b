@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VcdProjectModel( VcdDoc* doc, QObject* parent = 0 );
+        explicit VcdProjectModel( VcdDoc* doc, QObject* parent = 0 );
         ~VcdProjectModel();
 
         enum Columns {

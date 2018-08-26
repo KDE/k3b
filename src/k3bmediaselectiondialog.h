@@ -35,7 +35,7 @@ namespace K3b {
         /**
          * Do not use the constructor. Use the static method instead.
          */
-        MediaSelectionDialog( QWidget* parent = 0,
+        explicit MediaSelectionDialog( QWidget* parent = 0,
                               const QString& title = QString(),
                               const QString& text = QString(),
                               bool modal = false );

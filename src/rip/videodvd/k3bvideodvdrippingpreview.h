@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VideoDVDRippingPreview( QObject* parent = 0 );
+        explicit VideoDVDRippingPreview( QObject* parent = 0 );
         ~VideoDVDRippingPreview();
 
         QImage preview() const { return m_preview; }

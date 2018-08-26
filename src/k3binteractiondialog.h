@@ -55,7 +55,7 @@ namespace K3b {
          * @param defaultButton may also be null to deactivate the feature
          * @param configgroup The config group used for the loadSettings and saveSettings methods
          */
-        InteractionDialog( QWidget* parent = 0,
+        explicit InteractionDialog( QWidget* parent = 0,
                            const QString& title = QString(),
                            const QString& subTitle = QString(),
                            int buttonMask = START_BUTTON|CANCEL_BUTTON,

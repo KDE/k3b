@@ -37,7 +37,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ProjectTabWidget( QWidget *parent = 0 );
+        explicit ProjectTabWidget( QWidget *parent = 0 );
         ~ProjectTabWidget();
 
         void addTab( Doc* doc );

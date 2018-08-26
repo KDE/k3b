@@ -26,7 +26,7 @@ class VcdTrack;
 class VcdTrackKeysDelegate : public QStyledItemDelegate
 {
 public:
-    VcdTrackKeysDelegate( QList<VcdTrack*>& tracks, QObject* parent = 0 );
+    explicit VcdTrackKeysDelegate( QList<VcdTrack*>& tracks, QObject* parent = 0 );
     ~VcdTrackKeysDelegate();
     
     virtual QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

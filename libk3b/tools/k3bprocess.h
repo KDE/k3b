@@ -40,7 +40,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Process( QObject* parent = 0 );
+        explicit Process( QObject* parent = 0 );
         ~Process();
 
         /**

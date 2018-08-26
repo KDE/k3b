@@ -37,7 +37,7 @@ namespace K3b {
             WARNING
         };
         
-        SystemProblem( Type type = NON_CRITICAL,
+        explicit SystemProblem( Type type = NON_CRITICAL,
                        const QString& problem = QString(),
                        const QString& details = QString(),
                        const QString& solution = QString() );

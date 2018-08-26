@@ -32,7 +32,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        FileTreeView( QWidget *parent = 0 );
+        explicit FileTreeView( QWidget *parent = 0 );
         ~FileTreeView();
 
         /**

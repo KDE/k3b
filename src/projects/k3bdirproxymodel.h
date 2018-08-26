@@ -30,7 +30,7 @@ class DirProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    DirProxyModel( QObject *parent = 0 );
+    explicit DirProxyModel( QObject *parent = 0 );
     ~DirProxyModel();
 
 protected:

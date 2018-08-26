@@ -36,7 +36,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataBurnDialog(DataDoc*, QWidget *parent=0 );
+        explicit DataBurnDialog(DataDoc*, QWidget *parent=0 );
         ~DataBurnDialog();
 
     protected:

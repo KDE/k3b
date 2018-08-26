@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        BurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true );
+        explicit BurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true );
         ~BurnProgressDialog();
 
         void setJob( Job* );

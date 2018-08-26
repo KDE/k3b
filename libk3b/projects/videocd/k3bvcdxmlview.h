@@ -29,7 +29,7 @@ namespace K3b {
     {
 
     public:
-        VcdXmlView( VcdDoc* doc );
+        explicit VcdXmlView( VcdDoc* doc );
         ~VcdXmlView();
 
         void write( QFile& file );

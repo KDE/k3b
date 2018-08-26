@@ -28,7 +28,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        BlankingJob( JobHandler*, QObject* parent = 0 );
+        explicit BlankingJob( JobHandler*, QObject* parent = 0 );
         ~BlankingJob();
 
         QString jobDescription() const;

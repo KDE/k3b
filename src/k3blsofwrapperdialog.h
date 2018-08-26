@@ -46,7 +46,7 @@ namespace K3b {
         void slotQuitOtherApps();
 
     private:
-        LsofWrapperDialog( QWidget* parent );
+        explicit LsofWrapperDialog( QWidget* parent );
 
         Device::Device* m_device;
         QLabel* m_label;

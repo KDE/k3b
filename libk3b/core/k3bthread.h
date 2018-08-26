@@ -37,7 +37,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Thread( ThreadJob* parent = 0 );
+        explicit Thread( ThreadJob* parent = 0 );
         ~Thread();
 
         void ensureDone();

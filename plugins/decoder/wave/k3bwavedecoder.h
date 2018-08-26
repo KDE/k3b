@@ -40,7 +40,7 @@ class K3bWaveDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public:
-    K3bWaveDecoder( QObject* parent = 0  );
+    explicit K3bWaveDecoder( QObject* parent = 0  );
     ~K3bWaveDecoder();
 
     void cleanup();

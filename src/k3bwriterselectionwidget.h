@@ -43,7 +43,7 @@ namespace K3b {
         /**
          * Creates a writerselectionwidget
          */
-        WriterSelectionWidget( QWidget* parent = 0 );
+        explicit WriterSelectionWidget( QWidget* parent = 0 );
         ~WriterSelectionWidget();
 
         int writerSpeed() const;

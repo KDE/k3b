@@ -27,7 +27,7 @@ class TimeoutWidget : public QWidget
   Q_OBJECT
 
  public:
-  TimeoutWidget( QWidget* parent );
+  explicit TimeoutWidget( QWidget* parent );
   ~TimeoutWidget();
 
   QSize sizeHint() const;

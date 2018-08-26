@@ -27,7 +27,7 @@ namespace K3b {
     class LIBK3B_EXPORT AudioCdTrackReader : public QIODevice
     {
     public:
-        AudioCdTrackReader( AudioCdTrackSource& source, QObject* parent = 0 );
+        explicit AudioCdTrackReader( AudioCdTrackSource& source, QObject* parent = 0 );
         ~AudioCdTrackReader();
 
         virtual bool open( OpenMode mode );

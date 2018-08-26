@@ -39,7 +39,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        PluginManager( QObject* parent = 0 );
+        explicit PluginManager( QObject* parent = 0 );
         ~PluginManager();
 
         /**

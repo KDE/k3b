@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VideoCdRippingDialog( VideoCdRippingOptions* options, QWidget* parent = 0 );
+        explicit VideoCdRippingDialog( VideoCdRippingOptions* options, QWidget* parent = 0 );
         ~VideoCdRippingDialog();
 
     private:

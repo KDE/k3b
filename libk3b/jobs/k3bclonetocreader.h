@@ -29,7 +29,7 @@ namespace K3b {
     class LIBK3B_EXPORT  CloneTocReader : public ImageFileReader
     {
     public:
-        CloneTocReader( const QString& filename = QString() );
+        explicit CloneTocReader( const QString& filename = QString() );
         ~CloneTocReader();
 
         Msf imageSize() const;

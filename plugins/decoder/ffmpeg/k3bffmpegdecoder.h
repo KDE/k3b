@@ -44,7 +44,7 @@ class K3bFFMpegDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public:
-    K3bFFMpegDecoder( QObject* parent = 0  );
+    explicit K3bFFMpegDecoder( QObject* parent = 0  );
     ~K3bFFMpegDecoder();
 
     QString fileType() const;

@@ -32,7 +32,7 @@ class AudioEditorWidget : public QFrame
     Q_OBJECT
 
 public:
-    AudioEditorWidget( QWidget* parent = 0 );
+    explicit AudioEditorWidget( QWidget* parent = 0 );
     ~AudioEditorWidget();
 
     virtual QSize sizeHint() const;

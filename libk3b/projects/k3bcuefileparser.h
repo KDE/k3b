@@ -30,7 +30,7 @@ namespace K3b {
     class LIBK3B_EXPORT CueFileParser : public ImageFileReader
     {
     public:
-        CueFileParser( const QString& filename = QString() );
+        explicit CueFileParser( const QString& filename = QString() );
         ~CueFileParser();
 
         /**

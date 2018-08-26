@@ -31,7 +31,7 @@ class K3bExternalEncoderEditDialog : public QDialog, public Ui::base_K3bExternal
     Q_OBJECT
 
 public:
-    K3bExternalEncoderEditDialog( QWidget* parent );
+    explicit K3bExternalEncoderEditDialog( QWidget* parent );
     ~K3bExternalEncoderEditDialog();
 
     K3bExternalEncoderCommand currentCommand() const;

@@ -108,7 +108,7 @@ namespace K3b {
                                                                  const QString& caption );
 
     private:
-        ThreadJobCommunicationEvent( int type );
+        explicit ThreadJobCommunicationEvent( int type );
 
         int m_type;
         Data* m_data;

@@ -36,7 +36,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        BinImageWritingJob( JobHandler*, QObject* parent = 0 );
+        explicit BinImageWritingJob( JobHandler*, QObject* parent = 0 );
         ~BinImageWritingJob();
 
         virtual Device::Device* writer() const { return m_device; };

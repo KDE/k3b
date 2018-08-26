@@ -29,7 +29,7 @@ namespace K3b {
     {
     public:
         Theme();
-        Theme( QString name );
+        explicit Theme( QString name );
 
         QColor backgroundColor() const;
         QColor foregroundColor() const;
@@ -113,7 +113,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ThemeManager( QObject* parent = 0 );
+        explicit ThemeManager( QObject* parent = 0 );
         ~ThemeManager();
 
         QList<Theme*> themes() const;

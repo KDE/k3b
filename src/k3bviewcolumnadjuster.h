@@ -28,8 +28,8 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ViewColumnAdjuster( QObject* parent = 0 );
-        ViewColumnAdjuster( QTreeView* parent );
+        explicit ViewColumnAdjuster( QObject* parent = 0 );
+        explicit ViewColumnAdjuster( QTreeView* parent );
         ~ViewColumnAdjuster();
 
         /**

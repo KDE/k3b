@@ -42,7 +42,7 @@ namespace K3b {
             /**
              * Use instance() to get the single global object
              */
-            HalConnection( QObject* = 0 );
+            explicit HalConnection( QObject* = 0 );
             ~HalConnection();
 
             /**

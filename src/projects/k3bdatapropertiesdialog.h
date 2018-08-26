@@ -37,7 +37,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataPropertiesDialog( const QList<DataItem*>&, QWidget* parent = 0 );
+        explicit DataPropertiesDialog( const QList<DataItem*>&, QWidget* parent = 0 );
         ~DataPropertiesDialog();
 
     protected Q_SLOTS:

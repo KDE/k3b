@@ -36,7 +36,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DvdBooktypeJob( JobHandler*, QObject* parent = 0 );
+        explicit DvdBooktypeJob( JobHandler*, QObject* parent = 0 );
         ~DvdBooktypeJob();
 
         QString jobDescription() const;

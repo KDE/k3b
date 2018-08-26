@@ -26,7 +26,7 @@ namespace K3b {
     class LIBK3B_EXPORT CharValidator : public QValidator
     {
     public:
-        CharValidator( QObject* parent = 0 );
+        explicit CharValidator( QObject* parent = 0 );
 
         virtual State validateChar( const QChar& ) const = 0;
 
@@ -50,7 +50,7 @@ namespace K3b {
     class LIBK3B_EXPORT Latin1Validator : public CharValidator
     {
     public:
-        Latin1Validator( QObject* parent = 0 );
+        explicit Latin1Validator( QObject* parent = 0 );
 
         virtual State validateChar( const QChar& ) const;
     };
@@ -59,7 +59,7 @@ namespace K3b {
     class LIBK3B_EXPORT AsciiValidator : public Latin1Validator
     {
     public:
-        AsciiValidator( QObject* parent = 0 );
+        explicit AsciiValidator( QObject* parent = 0 );
 
         virtual State validateChar( const QChar& ) const;
     };
@@ -74,7 +74,7 @@ namespace K3b {
     class LIBK3B_EXPORT Validator : public QRegExpValidator
     {
     public:
-        Validator( QObject* parent );
+        explicit Validator( QObject* parent );
         Validator( const QRegExp& rx, QObject* parent );
 
         void setReplaceChar( const QChar& s ) { m_replaceChar = s; }

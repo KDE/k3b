@@ -49,7 +49,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataDoc( QObject* parent = 0 );
+        explicit DataDoc( QObject* parent = 0 );
         virtual ~DataDoc();
 
         virtual Type type() const { return DataProject; }

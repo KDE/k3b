@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        Iso9660ImageWritingJob( JobHandler* );
+        explicit Iso9660ImageWritingJob( JobHandler* );
         ~Iso9660ImageWritingJob();
 
         Device::Device* writer() const { return m_device; }

@@ -82,7 +82,7 @@ namespace K3b {
          *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
          *            by some user input.
          */
-        ProjectPlugin( Type type, bool gui = false, QObject* parent = 0 );
+        explicit ProjectPlugin( Type type, bool gui = false, QObject* parent = 0 );
 
         virtual ~ProjectPlugin() {
         }

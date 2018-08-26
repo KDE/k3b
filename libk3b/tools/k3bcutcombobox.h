@@ -39,8 +39,8 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        CutComboBox( QWidget* parent = 0 );
-        CutComboBox( int method, QWidget* parent = 0 );
+        explicit CutComboBox( QWidget* parent = 0 );
+        explicit CutComboBox( int method, QWidget* parent = 0 );
         virtual ~CutComboBox();
 
         enum Method {
