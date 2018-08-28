@@ -24,6 +24,7 @@
 #include "k3bmsf.h"
 #include "k3bmediacache.h"
 #include "k3baction.h"
+#include "k3bthememanager.h"
 
 #include <KConfigWidgets/KColorScheme>
 #include <KConfigCore/KConfigGroup>
@@ -144,7 +145,10 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
         fillBrush = KColorScheme( colorGroup, KColorScheme::Selection ).background( KColorScheme::NeutralBackground );
     }
 
-    const QPen normalPen = KColorScheme( colorGroup, KColorScheme::Window ).foreground( KColorScheme::NormalText ).color();
+    QPen normalPen = KColorScheme(colorGroup, KColorScheme::Window).foreground(KColorScheme::NormalText).color();
+    if (K3b::Theme* theme = k3bappcore->themeManager()->currentTheme()) {
+        normalPen.setColor(theme->foregroundColor());
+    }
     const QPen fillPen = KColorScheme( colorGroup, KColorScheme::Selection ).foreground( KColorScheme::NormalText ).color();
 
     QStyleOptionProgressBarV2 sopb;
