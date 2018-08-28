@@ -26,7 +26,7 @@
 K3b::IsoOptions::IsoOptions()
     : m_defaultVolumeIDSet(false),
       m_volumeIDSet(false),
-      m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2017 SEBASTIAN TRUEG, MICHAL MALEK AND LESLIE ZHAI") ),
+      m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2018 SEBASTIAN TRUEG, MICHAL MALEK AND LESLIE ZHAI") ),
       m_systemId( K3b::systemName().toUpper() ),
       m_whiteSpaceTreatmentReplaceString( "_" )
 {

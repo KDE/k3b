@@ -37,13 +37,13 @@ int main( int argc, char* argv[] )
                                                "to be as simple as possible for novice users while also providing all features "
                                                "an advanced user might need."),
                           KAboutLicense::GPL,
-                          i18n("Copyright © 1998–2017 K3b authors"),
+                          i18n("Copyright © 1998–2018 K3b authors"),
                           QString(),
                           i18n("http://www.k3b.org" ) );
 
     aboutData.setOrganizationDomain("kde");
     aboutData.setDesktopFileName(QStringLiteral("org.kde.k3b.desktop"));
-    aboutData.addAuthor(i18n("Leslie Zhai"), i18n("Maintainer"), "lesliezhai@llvm.org.cn");
+    aboutData.addAuthor(i18n("Leslie Zhai"), i18n("Maintainer"), "zhaixiang@loongson.cn");
     aboutData.addAuthor(i18n("Michał Małek"),i18n("Maintainer and current lead Developer"), "michalm@jabster.pl");
     aboutData.addAuthor(i18n("Sebastian Trüg"),i18n("Main developer"), "trueg@k3b.org");
     aboutData.addAuthor(i18n("Christian Kvasny"),i18n("Video CD Project and Video CD ripping"), "chris@k3b.org");
