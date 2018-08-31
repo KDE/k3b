@@ -73,7 +73,7 @@ namespace K3b {
             /**
              * \sa setRawPackData
              */
-            CdText( const QByteArray& );
+            explicit CdText( const QByteArray& );
             CdText( const CdText& );
             ~CdText();
 

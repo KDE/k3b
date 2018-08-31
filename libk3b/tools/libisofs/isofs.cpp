@@ -42,7 +42,7 @@ static time_t getisotime(int year,int month,int day,int hour,
 		days = year * 365;
 		if (year > 2)
 			days += (year+1) / 4;
-		for (i = 1; i < month; i++)
+		for (i = 1; i < month; ++i)
 			days += monlen[i-1];
 		if (((year+2) % 4) == 0 && month > 2)
 			days++;
@@ -178,7 +178,7 @@ int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata) 
 			if ( isonum_711(ventry->type) !=1 ) goto err;
 			sum=0;
 			c = (char*) ventry;
-			for (i=0;i<16;i++) { sum += isonum_721(c); c+=2; }
+			for (i=0;i<16;++i) { sum += isonum_721(c); c+=2; }
 			if (sum) goto err;
 			memcpy(&head->ventry,be,0x20);
 			be += 0x20;

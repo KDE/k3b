@@ -297,7 +297,7 @@ qint64 K3bOggVorbisEncoder::encodeInternal( const char* data, qint64 len )
 
     // uninterleave samples
     qint64 i = 0;
-    for( i = 0; i < len/4; i++ ) {
+    for( i = 0; i < len/4; ++i ) {
         buffer[0][i]=( (data[i*4+1]<<8) | (0x00ff&(int)data[i*4]) ) / 32768.f;
         buffer[1][i]=( (data[i*4+3]<<8) | (0x00ff&(int)data[i*4+2]) ) / 32768.f;
     }

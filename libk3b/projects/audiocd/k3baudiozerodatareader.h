@@ -28,7 +28,7 @@ namespace K3b {
     class LIBK3B_EXPORT AudioZeroDataReader : public QIODevice
     {
     public:
-        AudioZeroDataReader( AudioZeroData& source, QObject* parent = 0 );
+        explicit AudioZeroDataReader( AudioZeroData& source, QObject* parent = 0 );
         ~AudioZeroDataReader();
 
         virtual bool open( OpenMode mode );

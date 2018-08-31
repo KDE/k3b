@@ -349,7 +349,7 @@ namespace K3b {
          * Special case which always reads the TOC from the specified sector
          * thus supporting multisession CDs.
          */
-        Iso9660( Device::Device* dev, unsigned int startSector = 0 );
+        explicit Iso9660( Device::Device* dev, unsigned int startSector = 0 );
 
         /**
          * @param fd open file descriptor

@@ -29,7 +29,7 @@ namespace K3b {
     class ProgressInfoEvent : public QEvent
     {
     public:
-        ProgressInfoEvent( int type )
+        explicit ProgressInfoEvent( int type )
             : QEvent( QEvent::User ),
               m_type(type)
         {}

@@ -223,9 +223,9 @@ FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLA
     // Note that in canDecode we made sure that the input is 1-16 bit stereo or mono.
     unsigned samples = frame->header.blocksize;
 
-    for(i=0; i < samples; i++) {
+    for(i=0; i < samples; ++i) {
         // in FLAC channel 0 is left, 1 is right
-        for(j=0; j < this->channels; j++) {
+        for(j=0; j < this->channels; ++j) {
             FLAC__int32 value = (buffer[j][i])<<(16 - frame->header.bits_per_sample);
             internalBuffer->putChar(value >> 8); // msb
             internalBuffer->putChar(value & 0xFF); // lsb

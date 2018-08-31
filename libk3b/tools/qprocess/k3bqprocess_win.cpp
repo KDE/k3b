@@ -341,7 +341,7 @@ static QByteArray qt_create_environment(const QStringList &environment)
         } else
 #endif // UNICODE
         {
-            for (QStringList::ConstIterator it = envStrings.constBegin(); it != envStrings.constEnd(); it++) {
+            for (QStringList::ConstIterator it = envStrings.constBegin(); it != envStrings.constEnd(); ++it) {
                 QByteArray tmp = (*it).toLocal8Bit();
                 uint tmpSize = tmp.length() + 1;
                 envlist.resize(envlist.size() + tmpSize);

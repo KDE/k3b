@@ -34,7 +34,7 @@ namespace K3b {
         /**
          * Constructor.  Also sets the base value.
          */
-        IntValidator ( QWidget * parent );
+        explicit IntValidator ( QWidget * parent );
 
         /**
          * Constructor.  Also sets the minimum, maximum, and numeric base values.

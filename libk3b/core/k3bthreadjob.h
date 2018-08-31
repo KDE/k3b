@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ThreadJob( JobHandler*, QObject* parent = 0 );
+        explicit ThreadJob( JobHandler*, QObject* parent = 0 );
         virtual ~ThreadJob();
 
         /**

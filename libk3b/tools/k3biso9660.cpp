@@ -66,7 +66,7 @@ int K3b::Iso9660::isofs_callback( struct iso_directory_record *idr, void *udata 
     // First extract the raw iso9660 name
     //
     if( !special ) {
-        for( i = 0; i < isonum_711( idr->name_len ); i++ ) {
+        for( i = 0; i < isonum_711( idr->name_len ); ++i ) {
             if( idr->name[i] )
                 isoPath += idr->name[i];
         }

@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioTrackReader( AudioTrack& track, QObject* parent = 0 );
+        explicit AudioTrackReader( AudioTrack& track, QObject* parent = 0 );
         ~AudioTrackReader();
 
         const AudioTrack& track() const;
