@@ -729,11 +729,8 @@ Qt::DropActions K3b::MetaItemModel::supportedDropActions() const
 
 void K3b::MetaItemModel::addSubModel( const QString& name, const QIcon& icon, QAbstractItemModel* model, bool flat )
 {
-    int first = d->places.count(), last = d->places.count();
-
-    if (flat) {
-        last += model->rowCount() - 1;
-    }
+    const int first = rowCount(QModelIndex());
+    const int last = first + (flat ? model->rowCount() - 1 : 0);
 
     if ( first <= last )
         beginInsertRows( QModelIndex(), first, last );
