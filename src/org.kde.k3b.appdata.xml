@@ -226,9 +226,8 @@
       <li xml:lang="zh-TW">依內容而定的媒體動作：當在一個 CD/DVD 碟片圖示上點擊時，K3b 將會視其內容來決定可以執行哪些動作。其中一個例子是擷取音訊 CD。</li>
     </ul>
   </description>
-  <url type="homepage">http://k3b.plainblack.com/</url>
-  <url type="faq">http://k3b.plainblack.com/faq</url>
-  <url type="donation">http://k3b.plainblack.com/donations</url>
+  <url type="homepage">https://www.kde.org/applications/multimedia/k3b/</url>
+  <url type="donation">https://www.kde.org/community/donations/?app=k3b&amp;source=appdata</url>
   <screenshots>
     <screenshot type="default">
       <image>https://www.kde.org/images/screenshots/k3b.png</image>
