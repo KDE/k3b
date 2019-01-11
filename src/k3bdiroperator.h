@@ -66,11 +66,8 @@ public:
 public Q_SLOTS:
     void slotAddFilesToProject();
 
-protected Q_SLOTS:
-    /**
-     * reimplemented from KDirOperator
-     */
-    void activatedMenu( const KFileItem&, const QPoint& );
+private Q_SLOTS:
+    void extendContextMenu( const KFileItem&, QMenu* );
 
 private:
     KBookmarkMenu* m_bmMenu;

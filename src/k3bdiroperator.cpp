@@ -61,6 +61,8 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
 
     connect( this, SIGNAL(fileSelected(KFileItem)),
              this, SLOT(slotAddFilesToProject()) );
+    connect( this, &KDirOperator::contextMenuAboutToShow,
+             this, &DirOperator::extendContextMenu );
 }
 
 
@@ -123,22 +125,13 @@ QUrl K3b::DirOperator::currentUrl() const
 }
 
 
-void K3b::DirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
+void K3b::DirOperator::extendContextMenu( const KFileItem&, QMenu* menu )
 {
-    // both from KDirOperator
-    setupMenu();
-    updateSelectionDependentActions();
-
-    // insert our own actions
-    KActionMenu* dirOpMenu = qobject_cast<KActionMenu*>( actionCollection()->action("popupMenu") );
-    if (!dirOpMenu) {
-        return;
-    }
-    QAction* firstAction = dirOpMenu->menu()->actions().first();
-    dirOpMenu->insertAction( firstAction, actionCollection()->action("add_file_to_project") );
-    dirOpMenu->insertSeparator( firstAction );
-    dirOpMenu->addSeparator();
-    dirOpMenu->addAction( m_bmPopup );
+    QAction* firstAction = menu->actions().first();
+    menu->insertAction( firstAction, actionCollection()->action("add_file_to_project") );
+    menu->insertSeparator( firstAction );
+    menu->addSeparator();
+    menu->addAction( m_bmPopup );
 
     bool hasSelection = !selectedItems().isEmpty();
     /*
@@ -146,8 +139,6 @@ void K3b::DirOperator::activatedMenu( const KFileItem&, const QPoint& pos )
       !view()->selectedItems()->isEmpty();
     */
     actionCollection()->action("add_file_to_project")->setEnabled( hasSelection && k3bappcore->k3bMainWindow()->activeView() != 0 );
-
-    dirOpMenu->menu()->popup( pos );
 }
 
 
