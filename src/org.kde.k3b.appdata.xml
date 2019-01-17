@@ -24,6 +24,7 @@
   <name xml:lang="pl">K3b</name>
   <name xml:lang="pt">K3b</name>
   <name xml:lang="pt-BR">K3b</name>
+  <name xml:lang="ru">K3b</name>
   <name xml:lang="sk">K3b</name>
   <name xml:lang="sl">K3b</name>
   <name xml:lang="sr">К3б</name>
@@ -58,6 +59,7 @@
   <summary xml:lang="pl">Nagrywanie płyt</summary>
   <summary xml:lang="pt">Gravação de Discos</summary>
   <summary xml:lang="pt-BR">Gravação de discos</summary>
+  <summary xml:lang="ru">Запись дисков</summary>
   <summary xml:lang="sk">Napaľovanie médií</summary>
   <summary xml:lang="sl">Zapisovanje nosilcev</summary>
   <summary xml:lang="sr">Резање дискова</summary>
