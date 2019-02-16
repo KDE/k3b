@@ -50,7 +50,7 @@ VolumeNameWidget::VolumeNameWidget( DataDoc* doc, QWidget* parent )
 
     d->volumeNameEdit = new KLineEdit( doc->isoOptions().volumeID(), this );
     d->volumeNameEdit->setValidator( new Latin1Validator( d->volumeNameEdit ) );
-    d->volumeNameEdit->setClearButtonShown( true );
+    d->volumeNameEdit->setClearButtonEnabled( true );
     d->fontChanged( fontMetrics() );
 
     QHBoxLayout* layout = new QHBoxLayout( this );
