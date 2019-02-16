@@ -30,10 +30,10 @@
 #include <unistd.h>
 
 K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename )
-        : m_pbcnumkeys( true ),
+        : mpeg_info(Q_NULLPTR),
+        m_pbcnumkeys( true ),
         m_pbcnumkeysuserdefined( false ),
-        m_file( filename ),
-        mpeg_info(Q_NULLPTR)
+        m_file( filename )
 {
     m_parent = parent;
     m_title = QFileInfo( m_file ).completeBaseName();

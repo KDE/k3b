@@ -91,7 +91,8 @@ class K3b::AudioDecoder::Private
 {
 public:
     Private()
-        : resampleState(0),
+        : metaDataCollection(NULL),
+          resampleState(0),
           resampleData(0),
           inBuffer(0),
           inBufferPos(0),
@@ -100,8 +101,7 @@ public:
           monoBuffer(0),
           decodingBufferPos(0),
           decodingBufferFill(0),
-          valid(true),
-          metaDataCollection(NULL) {
+          valid(true) {
     }
 
     // the current position of the decoder
