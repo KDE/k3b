@@ -1,5 +1,5 @@
 [Protocol]
-exec=kio_videodvd
+exec=kf5/kio/videodvd
 protocol=videodvd
 input=none
 output=filesystem
