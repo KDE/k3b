@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Service
 Actions=CreateK3bAudioProject;
-Encoding=UTF-8
 ServiceTypes=KonqPopupMenu/Plugin
 MimeType=audio/*;
 
