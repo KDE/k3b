@@ -110,7 +110,7 @@ bool KoZipStore::initZipStore( Mode _mode, const QByteArray& appIdentification )
         m_pZip->setCompression( KZip::NoCompression );
         m_pZip->setExtraField( KZip::NoExtraField );
         // Write identification
-        (void)m_pZip->writeFile( "mimetype", "", "",appIdentification.data() , appIdentification.length() );
+        m_pZip->writeFile( "mimetype", appIdentification );
         m_pZip->setCompression( KZip::DeflateCompression );
         // We don't need the extra field in KOffice - so we leave it as "no extra field".
     }
