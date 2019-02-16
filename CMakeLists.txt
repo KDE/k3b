@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 3.0)
 
 project(k3b)
 
-find_package(ECM REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-
 # KDE Application Version, managed by release script
 set (KDE_APPLICATIONS_VERSION_MAJOR "19")
 set (KDE_APPLICATIONS_VERSION_MINOR "03")
@@ -13,6 +10,9 @@ set (KDE_APPLICATIONS_VERSION "${KDE_APPLICATIONS_VERSION_MAJOR}.${KDE_APPLICATI
 
 set (QT_MIN_VERSION "5.5.0")
 set (KF5_MIN_VERSION "5.21.0")
+
+find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 
 ##################  K3b version  ################################
 set(K3B_VERSION_STRING ${KDE_APPLICATIONS_VERSION})
