@@ -10,7 +10,7 @@
 <authorgroup>
 <author>
 <personname>
-    <firstname>This documentation was converted from the KDE UserBase <ulink url=" http://userbase.kde.org/K3b">K3b</ulink> page at 2011-01-20.</firstname>
+    <firstname>This documentation was converted from the KDE UserBase <ulink url=" https://userbase.kde.org/K3b">K3b</ulink> page at 2011-01-20.</firstname>
 <surname></surname>
 </personname>
     </author>
@@ -254,7 +254,7 @@ all modern systems optical devices belongs to a certain user group (&eg; <quote>
 <title>Credits and License</title>
     <para>
 Documentation Copyright see the UserBase     
-<ulink url="http://userbase.kde.org/index.php?title=K3b&amp;action=history">K3b page history</ulink></para>
+<ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history">K3b page history</ulink></para>
     <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;
 </chapter>

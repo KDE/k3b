@@ -39,7 +39,7 @@ int main( int argc, char* argv[] )
                           KAboutLicense::GPL,
                           i18n("Copyright © 1998–2018 K3b authors"),
                           QString(),
-                          i18n("http://www.k3b.org" ) );
+                          i18n("https://www.k3b.org" ) );
 
     aboutData.setOrganizationDomain("kde");
     aboutData.setDesktopFileName(QStringLiteral("org.kde.k3b.desktop"));

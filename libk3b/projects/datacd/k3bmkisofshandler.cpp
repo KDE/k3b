@@ -111,7 +111,7 @@ void K3b::MkisofsHandler::parseMkisofsOutput( const QString& line )
             handleMkisofsInfoMessage( i18n("Encountered an incorrectly encoded filename '%1'",
                                            line.section( QRegExp("[\\(\\)]"), 1, 1 )), K3b::Job::MessageError );
             handleMkisofsInfoMessage( i18n("This may be caused by a system update which changed the local character set."), K3b::Job::MessageError );
-            handleMkisofsInfoMessage( i18n("You may use convmv (http://j3e.de/linux/convmv/) to fix the filename encoding."), K3b::Job::MessageError );
+            handleMkisofsInfoMessage( i18n("You may use convmv (https://j3e.de/linux/convmv/) to fix the filename encoding."), K3b::Job::MessageError );
             d->readError = true;
         }
         else if( line.endsWith( "has not an allowable size." ) ) {

@@ -91,7 +91,7 @@ set_package_properties(Samplerate PROPERTIES
 find_package(KF5Cddb)
 set_package_properties(KF5Cddb PROPERTIES
     DESCRIPTION "KF5 branch for CDDB library"
-    URL "http://projects.kde.org/projects/kde/kdemultimedia/libkcddb"
+    URL "https://commits.kde.org/libkcddb"
     TYPE REQUIRED
     PURPOSE "libkcddb is used to retrieve audio CD meta data from the internet.")
 
@@ -99,7 +99,7 @@ if(K3B_ENABLE_DVD_RIPPING)
     find_package(DvdRead)
     set_package_properties(DvdRead PROPERTIES
         DESCRIPTION "Libdvdread provides a simple foundation for reading DVD video disks."
-        URL "http://www.dtek.chalmers.se/groups/dvd/downloads.shtml"
+        URL "https://www.videolan.org/developers/libdvdnav.html"
         TYPE OPTIONAL)
 
     set(ENABLE_DVD_RIPPING "${DVDREAD_FOUND}")
@@ -109,7 +109,7 @@ if(K3B_ENABLE_TAGLIB)
     find_package(Taglib)
     set_package_properties(Taglib PROPERTIES
         DESCRIPTION "Read and write tags in audio files"
-        URL "http://www.freshmeat.net/projects/taglib"
+        URL "https://taglib.org/"
         TYPE OPTIONAL)
 
     set(ENABLE_TAGLIB "${TAGLIB_FOUND}")
@@ -119,7 +119,7 @@ if(K3B_ENABLE_MUSICBRAINZ)
     find_package(MusicBrainz)
     set_package_properties(MusicBrainz PROPERTIES
         DESCRIPTION "Provide information about the CD, about the artist or about related information"
-        URL "http://musicbrainz.org"
+        URL "https://musicbrainz.org/"
         TYPE OPTIONAL)
 
     set(ENABLE_MUSICBRAINZ "${MUSICBRAINZ_FOUND}")
@@ -129,7 +129,7 @@ if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
     find_package(FFmpeg)
     set_package_properties(FFmpeg PROPERTIES
         PURPOSE "Needed for the K3b FFmpeg decoder plugin which can decode virtually all audio types."
-        URL "http://ffmpeg.org"
+        URL "https://ffmpeg.org/"
         TYPE OPTIONAL)
 
     if(FFMPEG_FOUND)
@@ -195,13 +195,13 @@ if(K3B_BUILD_FLAC_DECODER_PLUGIN)
     find_package(Flac)
     set_package_properties(Flac PROPERTIES
         PURPOSE "Needed for the Flac audio decoder plugin."
-        URL "http://flac.sourceforge.net"
+        URL "https://xiph.org/flac/"
         TYPE OPTIONAL)
 
     find_package(Flac++)
     set_package_properties(Flac++ PROPERTIES
         PURPOSE "Needed for the Flac audio decoder plugin."
-        URL "http://flac.sourceforge.net"
+        URL "https://xiph.org/flac/"
         TYPE OPTIONAL)
 
     if(FLAC_FOUND AND FLAC++_FOUND)
@@ -213,7 +213,7 @@ if(K3B_BUILD_MAD_DECODER_PLUGIN)
     find_package(Mad)
     set_package_properties(Mad PROPERTIES
         PURPOSE "Needed for the mp3 audio decoder plugin."
-        URL "http://www.underbit.com/products/mad"
+        URL "https://www.underbit.com/products/mad"
         TYPE OPTIONAL)
 
     set(BUILD_MAD_DECODER_PLUGIN "${MAD_FOUND}")
@@ -223,7 +223,7 @@ if(K3B_BUILD_MUSE_DECODER_PLUGIN)
     find_package(Muse)
     set_package_properties(Muse PROPERTIES
         PURPOSE "Needed for the Musepack audio decoder plugin"
-        URL "http://www.musepack.net"
+        URL "https://www.musepack.net/"
         TYPE OPTIONAL)
 
     set(BUILD_MUSE_DECODER_PLUGIN "${MUSE_FOUND}")
