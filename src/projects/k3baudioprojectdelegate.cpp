@@ -63,10 +63,9 @@ void AudioProjectDelegate::setPlayingTrack( const QModelIndex& index )
 void AudioProjectDelegate::initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const
 {
     QStyledItemDelegate::initStyleOption( option, index );
-    if( option->version == 4 && index.isValid() && index == m_playingTrack ) {
-        QStyleOptionViewItemV4* optionV4 = static_cast<QStyleOptionViewItemV4*>( option );
-        optionV4->icon = QIcon::fromTheme( "media-playback-start" );
-        optionV4->features |= QStyleOptionViewItemV2::HasDecoration;
+    if( index.isValid() && index == m_playingTrack ) {
+        option->icon = QIcon::fromTheme( "media-playback-start" );
+        option->features |= QStyleOptionViewItem::HasDecoration;
     }
 }
 

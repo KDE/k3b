@@ -130,7 +130,7 @@ void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
         painter->setRenderHint(QPainter::Antialiasing);
 
         // HACK: we erase the branch
-        QStyleOptionViewItemV4 option( optionOrig );
+        QStyleOptionViewItem option( optionOrig );
         option.rect.setLeft( 0 );
         painter->fillRect( option.rect, option.palette.base() );
 
