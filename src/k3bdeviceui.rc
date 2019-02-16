@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="k3b" version="13">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="k3b" version="13">
 <MenuBar>
   <Menu name="device"><text>&amp;Device</text>
 	<Action name ="device_diskinfo" />
@@ -12,4 +12,4 @@
 	<Action name ="device_set_read_speed" />
   </Menu>
 </MenuBar>
-</kpartgui>
+</gui>

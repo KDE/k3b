@@ -92,8 +92,8 @@ K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
     // we only add the additional actions since View already added the default actions
-    setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
-            "<kpartgui name=\"k3bproject\" version=\"1\">"
+    setXML( "<!DOCTYPE gui SYSTEM \"kpartgui.dtd\">"
+            "<gui name=\"k3bproject\" version=\"1\">"
             "<MenuBar>"
             " <Menu name=\"project\"><text>&amp;Project</text>"
             "  <Action name=\"project_data_import_session\"/>"
@@ -101,7 +101,7 @@ K3b::DataView::DataView( K3b::DataDoc* doc, QWidget* parent )
             "  <Action name=\"project_data_edit_boot_images\"/>"
             " </Menu>"
             "</MenuBar>"
-            "</kpartgui>", true );
+            "</gui>", true );
 }
 
 

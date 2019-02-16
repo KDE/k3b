@@ -61,15 +61,15 @@ K3b::View::View( K3b::Doc* pDoc, QWidget *parent )
 
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
-    setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
-            "<kpartgui name=\"k3bproject\" version=\"1\">"
+    setXML( "<!DOCTYPE gui SYSTEM \"kpartgui.dtd\">"
+            "<gui name=\"k3bproject\" version=\"1\">"
             "<MenuBar>"
             " <Menu name=\"project\"><text>&amp;Project</text>"
             "  <Action name=\"project_burn\"/>"
             "  <Action name=\"project_properties\"/>"
             " </Menu>"
             "</MenuBar>"
-            "</kpartgui>", true );
+            "</gui>", true );
 }
 
 K3b::View::~View()

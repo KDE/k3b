@@ -1,5 +1,5 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="k3b" version="15">
+<!DOCTYPE gui SYSTEM "kpartgui.dtd">
+<gui name="k3b" version="15">
 <MenuBar>
     <Menu name="project"><text>&amp;Project</text>
         <Action name="project_add_files" />
@@ -49,4 +49,4 @@
         <Action name="project_clear_project" />
     </enable>
 </State>
-</kpartgui>
+</gui>

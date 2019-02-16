@@ -77,8 +77,8 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
     // this is just for testing (or not?)
     // most likely every project type will have it's rc file in the future
     // we only add the additional actions since View already added the default actions
-    setXML( "<!DOCTYPE kpartgui SYSTEM \"kpartgui.dtd\">"
-            "<kpartgui name=\"k3bproject\" version=\"1\">"
+    setXML( "<!DOCTYPE gui SYSTEM \"kpartgui.dtd\">"
+            "<gui name=\"k3bproject\" version=\"1\">"
             "<MenuBar>"
             " <Menu name=\"project\"><text>&amp;Project</text>"
             "  <Action name=\"project_audio_convert\"/>"
@@ -87,7 +87,7 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
 #endif
             " </Menu>"
             "</MenuBar>"
-            "</kpartgui>", true );
+            "</gui>", true );
 }
 
 K3b::AudioView::~AudioView()
