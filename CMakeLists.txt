@@ -1,6 +1,6 @@
-project(k3b)
+cmake_minimum_required(VERSION 3.0)
 
-cmake_minimum_required(VERSION 2.8.12)
+project(k3b)
 
 find_package(ECM REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
