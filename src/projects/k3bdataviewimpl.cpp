@@ -295,7 +295,8 @@ void K3b::DataViewImpl::slotOpen()
                                     item->mimeType().name() ) ) {
             KRun::runUrl( url,
                         item->mimeType().name(),
-                        m_view );
+                        m_view,
+                        KRun::RunFlags());
         }
         else {
             KRun::displayOpenWithDialog( QList<QUrl>() << url, m_view );
