@@ -52,7 +52,7 @@
 #include <QInputDialog>
 #include <QMenu>
 #include <QStyle>
-#include <QStyleOptionProgressBarV2>
+#include <QStyleOptionProgressBar>
 #include <QToolButton>
 #include <QToolTip>
 #include <QWhatsThis>
@@ -151,7 +151,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     }
     const QPen fillPen = KColorScheme( colorGroup, KColorScheme::Selection ).foreground( KColorScheme::NormalText ).color();
 
-    QStyleOptionProgressBarV2 sopb;
+    QStyleOptionProgressBar sopb;
     sopb.direction = layoutDirection();
     sopb.fontMetrics = fontMetrics();
     sopb.palette = palette();
