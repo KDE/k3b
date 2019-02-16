@@ -43,7 +43,7 @@ namespace K3b {
 
         public:
             explicit CDDBJob( QObject* parent = 0 );
-            ~CDDBJob();
+            ~CDDBJob() override;
 
             /**
              * The medium specified in queryCddb. MediaCache
@@ -69,7 +69,7 @@ namespace K3b {
             static CDDBJob* queryCddb( const Device::Toc& toc );
 
         public Q_SLOTS:
-            void start();
+            void start() override;
 
         private:
             class Private;

@@ -37,7 +37,7 @@ namespace K3b {
 
     public:
         explicit MetaItemModel( QObject* parent = 0 );
-        ~MetaItemModel();
+        ~MetaItemModel() override;
 
         QModelIndex indexForSubModel( QAbstractItemModel* model ) const;
         QAbstractItemModel* subModelForIndex( const QModelIndex& index ) const;
@@ -53,39 +53,39 @@ namespace K3b {
          * Returns the column count for the given index
          * For the root index it always return 1
          */
-        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
 
-        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        virtual QModelIndex parent( const QModelIndex& index ) const;
-        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-        virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
-        virtual bool canFetchMore( const QModelIndex& parent ) const;
-        virtual void fetchMore( const QModelIndex& parent );
-        virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-        virtual QStringList mimeTypes() const;
-        virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
-        virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+        QModelIndex parent( const QModelIndex& index ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+        Qt::ItemFlags flags( const QModelIndex& index ) const override;
+        bool hasChildren( const QModelIndex& parent = QModelIndex() ) const override;
+        bool canFetchMore( const QModelIndex& parent ) const override;
+        void fetchMore( const QModelIndex& parent ) override;
+        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+        QStringList mimeTypes() const override;
+        bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent ) override;
+        bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
 
         /**
          * Can handle lists of indexes from a single submodel. Mixing indexes
          * from different submodels is not supported yet and results in the method
          * returning 0.
          */
-        virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
+        QMimeData* mimeData( const QModelIndexList& indexes ) const override;
 
         /**
          * The default implementation just returns the list of all drop actions
          * supported by any of the submodels.
          */
-        virtual Qt::DropActions supportedDragActions() const;
+        Qt::DropActions supportedDragActions() const override;
 
         /**
          * The default implementation just returns the list of all drop actions
          * supported by any of the submodels.
          */
-        virtual Qt::DropActions supportedDropActions() const;
+        Qt::DropActions supportedDropActions() const override;
 
     public Q_SLOTS:
         /**

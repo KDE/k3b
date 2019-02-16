@@ -50,11 +50,11 @@ namespace K3b {
 
     public:
         explicit VerificationJob( JobHandler*, QObject* parent = 0 );
-        ~VerificationJob();
+        ~VerificationJob() override;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
         void setDevice( Device::Device* dev );
 
         void clear();

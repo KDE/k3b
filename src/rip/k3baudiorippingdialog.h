@@ -47,16 +47,16 @@ namespace K3b {
                             const KCDDB::CDInfo&,
                             const QList<int>&,
                             QWidget *parent = 0 );
-        ~AudioRippingDialog();
+        ~AudioRippingDialog() override;
 
         void setStaticDir( const QString& path );
 
     public Q_SLOTS:
         void refresh();
-        void init();
+        void init() override;
 
     private Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
 
     private:
         Medium m_medium;
@@ -74,8 +74,8 @@ namespace K3b {
         void setupGui();
         void setupContextHelp();
 
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
         class Private;
         Private* d;

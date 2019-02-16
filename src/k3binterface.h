@@ -32,7 +32,7 @@ namespace K3b {
 
     public:
         explicit Interface( MainWindow* main );
-        ~Interface();
+        ~Interface() override;
 
     public Q_SLOTS:
         /**

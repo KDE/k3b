@@ -32,10 +32,10 @@ class DiskInfoView : public MediaContentsView
 
 public:
     explicit DiskInfoView( QWidget* parent = 0 );
-    ~DiskInfoView();
+    ~DiskInfoView() override;
 
 private:
-    void reloadMedium();
+    void reloadMedium() override;
     void updateTitle();
 
     QString createMediaInfoItems( const Medium& medium );

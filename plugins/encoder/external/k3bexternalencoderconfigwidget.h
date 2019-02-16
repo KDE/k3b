@@ -32,7 +32,7 @@ class K3bExternalEncoderEditDialog : public QDialog, public Ui::base_K3bExternal
 
 public:
     explicit K3bExternalEncoderEditDialog( QWidget* parent );
-    ~K3bExternalEncoderEditDialog();
+    ~K3bExternalEncoderEditDialog() override;
 
     K3bExternalEncoderCommand currentCommand() const;
     void setCommand( const K3bExternalEncoderCommand& cmd );
@@ -48,7 +48,7 @@ class K3bExternalEncoderSettingsWidget : public K3b::PluginConfigWidget, public 
 
 public:
     K3bExternalEncoderSettingsWidget( QWidget* parent, const QVariantList& args );
-    ~K3bExternalEncoderSettingsWidget();
+    ~K3bExternalEncoderSettingsWidget() override;
 
 public Q_SLOTS:
     void load() override;

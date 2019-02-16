@@ -31,7 +31,7 @@ namespace K3b {
     {
     public:
         explicit CueFileParser( const QString& filename = QString() );
-        ~CueFileParser();
+        ~CueFileParser() override;
 
         /**
          * CDRDAO does not use this image filename but replaces the extension from the cue file
@@ -50,7 +50,7 @@ namespace K3b {
         QString imageFileType() const;
 
     private:
-        void readFile();
+        void readFile() override;
         bool parseLine( QString line );
         void simplified( QString& s );
         bool findImageFileName( const QString& fileEntry );

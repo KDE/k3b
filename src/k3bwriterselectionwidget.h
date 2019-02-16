@@ -44,7 +44,7 @@ namespace K3b {
          * Creates a writerselectionwidget
          */
         explicit WriterSelectionWidget( QWidget* parent = 0 );
-        ~WriterSelectionWidget();
+        ~WriterSelectionWidget() override;
 
         int writerSpeed() const;
         Device::Device* writerDevice() const;

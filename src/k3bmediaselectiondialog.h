@@ -39,7 +39,7 @@ namespace K3b {
                               const QString& title = QString(),
                               const QString& text = QString(),
                               bool modal = false );
-        ~MediaSelectionDialog();
+        ~MediaSelectionDialog() override;
 
         /**
          * \see MediaSelectionComboBox::setWantedMediumType()

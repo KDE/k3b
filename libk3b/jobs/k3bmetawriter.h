@@ -39,9 +39,9 @@ namespace K3b {
 
     public:
         MetaWriter( Device::Device*, JobHandler* hdl, QObject* parent = 0 );
-        ~MetaWriter();
+        ~MetaWriter() override;
 
-        QIODevice* ioDevice() const;
+        QIODevice* ioDevice() const override;
 
         /**
          * \return The writing app used after starting the job.
@@ -54,8 +54,8 @@ namespace K3b {
         K3b::WritingMode usedWritingMode() const;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         /**
          * Be aware that the toc that is set here is not necessarily the final toc of the medium.

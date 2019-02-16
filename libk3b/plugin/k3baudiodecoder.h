@@ -35,7 +35,7 @@ namespace K3b {
 
     public:
         explicit AudioDecoder( QObject* parent = 0 );
-        virtual ~AudioDecoder();
+        ~AudioDecoder() override;
 
         /**
          * Set the file to decode. Be aware that one cannot rely
@@ -213,12 +213,12 @@ namespace K3b {
             : Plugin( parent ) {
         }
 
-        virtual ~AudioDecoderFactory() {
+        ~AudioDecoderFactory() override {
         }
 
-        QString category() const { return "AudioDecoder"; }
+        QString category() const override { return "AudioDecoder"; }
 
-        QString categoryName() const;
+        QString categoryName() const override;
 
         /**
          * K3b uses this flag to decide which plugins to test first

@@ -31,17 +31,17 @@ namespace K3b {
 
     public:
         explicit MovixBurnDialog( MovixDoc* doc, QWidget* parent = 0 );
-        ~MovixBurnDialog();
+        ~MovixBurnDialog() override;
 
     protected Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
 
     protected:
-        void saveSettingsToProject();
-        void readSettingsFromProject();
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
-        void toggleAll();
+        void saveSettingsToProject() override;
+        void readSettingsFromProject() override;
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
+        void toggleAll() override;
 
     private:
         void setupSettingsPage();

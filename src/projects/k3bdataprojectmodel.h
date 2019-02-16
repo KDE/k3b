@@ -30,7 +30,7 @@ namespace K3b {
 
     public:
         explicit DataProjectModel( DataDoc* doc, QObject* parent = 0 );
-        ~DataProjectModel();
+        ~DataProjectModel() override;
 
         enum Columns {
             FilenameColumn = 0,
@@ -62,20 +62,20 @@ namespace K3b {
         DataItem* itemForIndex( const QModelIndex& index ) const;
         QModelIndex indexForItem( DataItem* item ) const;
 
-        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        virtual QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
-        virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-        virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        virtual QModelIndex parent( const QModelIndex& index ) const;
-        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-        virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
-        virtual Qt::DropActions supportedDropActions() const;
-        virtual QStringList mimeTypes() const;
-        virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
-        virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
-        virtual QModelIndex buddy( const QModelIndex& index ) const;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        QVariant headerData ( int section, Qt::Orientation orientation, int role ) const override;
+        Qt::ItemFlags flags( const QModelIndex& index ) const override;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+        QModelIndex parent( const QModelIndex& index ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+        QMimeData* mimeData( const QModelIndexList& indexes ) const override;
+        Qt::DropActions supportedDropActions() const override;
+        QStringList mimeTypes() const override;
+        bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent ) override;
+        bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
+        QModelIndex buddy( const QModelIndex& index ) const override;
 
     Q_SIGNALS:
         void addUrlsRequested( QList<QUrl> urls, K3b::DirItem* targetDir );

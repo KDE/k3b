@@ -38,7 +38,7 @@ namespace K3b {
 
     public:
         DataDirTreeView( View*, DataDoc*, QWidget* parent );
-        virtual ~DataDirTreeView();
+        ~DataDirTreeView() override;
 
         /**
          * \return The item at position \p pos (local coordinates)

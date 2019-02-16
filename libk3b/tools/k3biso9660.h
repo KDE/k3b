@@ -185,7 +185,7 @@ namespace K3b {
                           const QString& symlink,
                           unsigned int pos = 0,
                           unsigned int size = 0 );
-        ~Iso9660Directory();
+        ~Iso9660Directory() override;
 
         /**
          * Returns a list of sub-entries.
@@ -240,7 +240,7 @@ namespace K3b {
          * Checks whether this entry is a directory.
          * @return true, since this entry is a directory
          */
-        bool isDirectory() const { return true; }
+        bool isDirectory() const override { return true; }
 
     private:
         void expand();
@@ -272,9 +272,9 @@ namespace K3b {
                      const QString& symlink,
                      unsigned int pos,
                      unsigned int size );
-        ~Iso9660File();
+        ~Iso9660File() override;
 
-        bool isFile() const { return true; }
+        bool isFile() const override { return true; }
 
         void setZF( char algo[2], char parms[2], int realsize );
         int realsize() const { return m_realsize; }

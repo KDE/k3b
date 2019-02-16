@@ -35,13 +35,13 @@ namespace K3b {
 
     public:
         IsoImager( DataDoc*, JobHandler*, QObject* parent = 0 );
-        virtual ~IsoImager();
+        ~IsoImager() override;
 
-        virtual bool active() const;
+        bool active() const override;
 
         int size() const { return m_mkisofsPrintSizeResult; }
 
-        virtual bool hasBeenCanceled() const;
+        bool hasBeenCanceled() const override;
 
         QIODevice* ioDevice() const;
 
@@ -50,8 +50,8 @@ namespace K3b {
          * Starts the actual image creation. Always run init()
          * before starting the image creation
          */
-        virtual void start();
-        virtual void cancel();
+        void start() override;
+        void cancel() override;
 
         /**
          * Initialize the image creator. This calculates the image size and performs
@@ -84,8 +84,8 @@ namespace K3b {
         DataDoc* doc() const { return m_doc; }
 
     protected:
-        virtual void handleMkisofsProgress( int );
-        virtual void handleMkisofsInfoMessage( const QString&, int );
+        void handleMkisofsProgress( int ) override;
+        void handleMkisofsInfoMessage( const QString&, int ) override;
 
         virtual bool addMkisofsParameters( bool printSize = false );
 

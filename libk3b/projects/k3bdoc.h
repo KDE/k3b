@@ -46,7 +46,7 @@ namespace K3b {
 
     public:
         explicit Doc( QObject* = 0 );
-        virtual ~Doc();
+        ~Doc() override;
 
         enum Type {
             AudioProject = 0x1,

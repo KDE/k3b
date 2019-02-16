@@ -27,7 +27,7 @@ namespace K3b {
     {
     public:
         MovixFileItem( const QString& fileName, MovixDoc& doc, const QString& k3bName = 0 );
-        virtual ~MovixFileItem();
+        ~MovixFileItem() override;
 
         virtual bool isSubtitle() { return false; }
 
@@ -38,7 +38,7 @@ namespace K3b {
          * reimplemented from DataItem
          * also renames the subTitleItem
          */
-        void setK3bName( const QString& );
+        void setK3bName( const QString& ) override;
 
         /**
          * returnes the name that the subtitle file must have in
@@ -55,9 +55,9 @@ namespace K3b {
     {
     public:
         MovixSubtitleItem( const QString& fileName, MovixDoc& doc, MovixFileItem *parent, const QString& k3bName = 0 );
-        virtual ~MovixSubtitleItem();
+        ~MovixSubtitleItem() override;
 
-        virtual bool isSubtitle() { return true; }
+        bool isSubtitle() override { return true; }
         MovixFileItem *parent() const { return m_parent; }
 
 

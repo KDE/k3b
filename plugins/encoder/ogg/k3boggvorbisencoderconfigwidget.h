@@ -33,12 +33,12 @@ class K3bOggVorbisEncoderSettingsWidget : public K3b::PluginConfigWidget
 
 public:
     explicit K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0, const QVariantList& = QVariantList() );
-    ~K3bOggVorbisEncoderSettingsWidget();
+    ~K3bOggVorbisEncoderSettingsWidget() override;
 
 public Q_SLOTS:
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
+    void load() override;
+    void save() override;
+    void defaults() override;
 
 private Q_SLOTS:
     void slotQualityLevelChanged( int val );

@@ -42,11 +42,11 @@ namespace K3b {
          */
         DirItem( const DirItem& );
 
-        virtual ~DirItem();
+        ~DirItem() override;
 
-        DataItem* copy() const;
+        DataItem* copy() const override;
 
-        DirItem* getDirItem() const;
+        DirItem* getDirItem() const override;
 
         Children const& children() const { return m_children; }
         DirItem* addDataItem( DataItem* item );
@@ -55,7 +55,7 @@ namespace K3b {
         DataItem* takeDataItem( DataItem* item );
         Children takeDataItems( int start, int count );
 
-        DataItem* nextSibling() const;
+        DataItem* nextSibling() const override;
         DataItem* nextChild( DataItem* ) const;
 
         bool alreadyInDirectory( const QString& fileName ) const;
@@ -74,7 +74,7 @@ namespace K3b {
          */
         bool isSubItem( const DataItem* item ) const;
 
-        virtual bool isRemoveable() const;
+        bool isRemoveable() const override;
 
         /**
          * Recursively creates a directory.
@@ -82,14 +82,14 @@ namespace K3b {
         bool mkdir( const QString& dir );
 
         void setLocalPath( const QString& p ) { m_localPath = p; }
-        QString localPath() const { return m_localPath; }
+        QString localPath() const override { return m_localPath; }
 
         QMimeType mimeType() const override;
 
         /**
          * \reimplemented
          */
-        bool writeToCd() const;
+        bool writeToCd() const override;
 
     protected:
         /**
@@ -99,12 +99,12 @@ namespace K3b {
          * between files with the same inode in an iso9660 filesystem.
          * For that one has to use FileCompilationSizeHandler.
          */
-        KIO::filesize_t itemSize( bool followSymlinks ) const;
+        KIO::filesize_t itemSize( bool followSymlinks ) const override;
 
         /*
          * Normally one does not use this method but DataItem::blocks()
          */
-        Msf itemBlocks( bool followSymlinks ) const;
+        Msf itemBlocks( bool followSymlinks ) const override;
 
     private:
         /**
@@ -150,14 +150,14 @@ namespace K3b {
     {
     public:
         explicit RootItem( DataDoc& doc );
-        ~RootItem();
+        ~RootItem() override;
 
-        virtual DataDoc* getDoc() const;
-        virtual QString k3bName() const;
-        virtual void setK3bName( const QString& );
+        DataDoc* getDoc() const override;
+        QString k3bName() const override;
+        void setK3bName( const QString& ) override;
 
-        virtual bool isMoveable() const { return false; }
-        virtual bool isRemoveable() const { return false; }
+        bool isMoveable() const override { return false; }
+        bool isRemoveable() const override { return false; }
 
     private:
         DataDoc& m_doc;

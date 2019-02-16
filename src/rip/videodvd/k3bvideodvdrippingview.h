@@ -28,12 +28,12 @@ namespace K3b {
 
     public:
         explicit VideoDVDRippingView( QWidget* parent = 0 );
-        ~VideoDVDRippingView();
+        ~VideoDVDRippingView() override;
 
         KActionCollection* actionCollection() const;
 
     protected:
-        virtual bool eventFilter( QObject* obj, QEvent* event );
+        bool eventFilter( QObject* obj, QEvent* event ) override;
 
     private Q_SLOTS:
         void slotStartRipping();
@@ -45,9 +45,9 @@ namespace K3b {
         void slotShowFiles();
 
     private:
-        virtual void reloadMedium();
-        virtual void enableInteraction( bool enable );
-        virtual void activate( bool active );
+        void reloadMedium() override;
+        void enableInteraction( bool enable ) override;
+        void activate( bool active ) override;
         void initActions();
         
         class Private;

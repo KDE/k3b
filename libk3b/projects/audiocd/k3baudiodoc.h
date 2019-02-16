@@ -46,21 +46,21 @@ namespace K3b {
 
     public:
         explicit AudioDoc( QObject* );
-        ~AudioDoc();
+        ~AudioDoc() override;
 
-        virtual Type type() const { return AudioProject; }
-        virtual QString typeString() const { return QString::fromLatin1("audio"); }
+        Type type() const override { return AudioProject; }
+        QString typeString() const override { return QString::fromLatin1("audio"); }
 
-        QString name() const;
+        QString name() const override;
 
-        bool newDocument();
+        bool newDocument() override;
 
-        void clear();
+        void clear() override;
 
-        Device::MediaTypes supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const override;
 
         bool hideFirstTrack() const;
-        int numOfTracks() const;
+        int numOfTracks() const override;
 
         bool normalize() const;
 
@@ -79,8 +79,8 @@ namespace K3b {
         AudioFile* createAudioFile( const QUrl& url );
 
         /** get the current size of the project */
-        KIO::filesize_t size() const;
-        Msf length() const;
+        KIO::filesize_t size() const override;
+        Msf length() const override;
 
         // CD-Text
         bool cdText() const;
@@ -107,7 +107,7 @@ namespace K3b {
          */
         Device::Toc toToc() const;
 
-        BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 );
+        BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 ) override;
 
         /**
          * returns the new after track, ie. the last added track or null if
@@ -146,7 +146,7 @@ namespace K3b {
         static bool readPlaylistFile( const QUrl& url, QList<QUrl>& playlist );
 
     public Q_SLOTS:
-        void addUrls( const QList<QUrl>& );
+        void addUrls( const QList<QUrl>& ) override;
         void addTrack( const QUrl&, int );
         void addTracks( const QList<QUrl>&, int );
         /**
@@ -200,9 +200,9 @@ namespace K3b {
 
     protected:
         /** reimplemented from Doc */
-        bool loadDocumentData( QDomElement* );
+        bool loadDocumentData( QDomElement* ) override;
         /** reimplemented from Doc */
-        bool saveDocumentData( QDomElement* );
+        bool saveDocumentData( QDomElement* ) override;
 
     private:
         // the stuff for adding files

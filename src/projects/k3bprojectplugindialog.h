@@ -28,12 +28,12 @@ namespace K3b {
 
     public:
         ProjectPluginDialog( ProjectPlugin*, Doc*, QWidget* );
-        ~ProjectPluginDialog();
+        ~ProjectPluginDialog() override;
 
     protected Q_SLOTS:
-        void slotStartClicked();
-        void saveSettings( KConfigGroup config );
-        void loadSettings( const KConfigGroup& config );
+        void slotStartClicked() override;
+        void saveSettings( KConfigGroup config ) override;
+        void loadSettings( const KConfigGroup& config ) override;
 
     private:
         ProjectPluginGUIBase* m_pluginGui;

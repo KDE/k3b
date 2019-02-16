@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         explicit AdvancedOptionTab( QWidget* parent = 0 );
-        ~AdvancedOptionTab();
+        ~AdvancedOptionTab() override;
 
         void saveSettings();
         void readSettings();

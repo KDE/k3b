@@ -34,19 +34,19 @@ namespace K3b {
 
     public:
         explicit CloneJob( JobHandler*, QObject* parent = 0 );
-        ~CloneJob();
+        ~CloneJob() override;
 
-        virtual Device::Device* writer() const { return m_writerDevice; }
+        Device::Device* writer() const override { return m_writerDevice; }
         Device::Device* readingDevice() const { return m_readerDevice; }
 
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
-        virtual QString jobSource() const;
-        virtual QString jobTarget() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
+        QString jobSource() const override;
+        QString jobTarget() const override;
 
     public Q_SLOTS:
-        virtual void start();
-        virtual void cancel();
+        void start() override;
+        void cancel() override;
 
         void setWriterDevice( K3b::Device::Device* w ) { m_writerDevice = w; }
         void setReaderDevice( K3b::Device::Device* w ) { m_readerDevice = w; }

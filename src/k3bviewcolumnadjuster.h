@@ -30,7 +30,7 @@ namespace K3b {
     public:
         explicit ViewColumnAdjuster( QObject* parent = 0 );
         explicit ViewColumnAdjuster( QTreeView* parent );
-        ~ViewColumnAdjuster();
+        ~ViewColumnAdjuster() override;
 
         /**
          * Takes header into account if not hidden.
@@ -48,7 +48,7 @@ namespace K3b {
         void setColumnMargin( int column, int margin );
         int columnMargin( int column ) const;
 
-        bool eventFilter( QObject* watched, QEvent* event );
+        bool eventFilter( QObject* watched, QEvent* event ) override;
 
     Q_SIGNALS:
         /**

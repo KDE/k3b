@@ -31,17 +31,17 @@ namespace K3b {
         RawAudioDataSource();
         explicit RawAudioDataSource( const QString& path );
         RawAudioDataSource( const RawAudioDataSource& );
-        ~RawAudioDataSource();
+        ~RawAudioDataSource() override;
 
         QString path() const;
 
-        Msf originalLength() const;
+        Msf originalLength() const override;
 
-        QString type() const;
-        QString sourceComment() const;
+        QString type() const override;
+        QString sourceComment() const override;
 
-        AudioDataSource* copy() const;
-        virtual QIODevice* createReader( QObject* parent = 0 );
+        AudioDataSource* copy() const override;
+        QIODevice* createReader( QObject* parent = 0 ) override;
 
     private:
         class Private;

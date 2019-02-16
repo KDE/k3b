@@ -44,22 +44,22 @@ namespace K3b {
 
     public:
         explicit AudioBurnDialog(AudioDoc* doc, QWidget *parent=0 );
-        ~AudioBurnDialog();
+        ~AudioBurnDialog() override;
 
     protected:
-        void saveSettingsToProject();
-        void readSettingsFromProject();
+        void saveSettingsToProject() override;
+        void readSettingsFromProject() override;
 
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
-        void showEvent( QShowEvent* );
-        void toggleAll();
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
+        void showEvent( QShowEvent* ) override;
+        void toggleAll() override;
 
     protected Q_SLOTS:
         /**
          * Reimplemented for internal reasons (shut down the audio player)
          */
-        void slotStartClicked();
+        void slotStartClicked() override;
         void slotCacheImageToggled( bool on );
         void slotNormalizeToggled( bool on );
 

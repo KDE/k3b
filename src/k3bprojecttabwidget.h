@@ -38,7 +38,7 @@ namespace K3b {
 
     public:
         explicit ProjectTabWidget( QWidget *parent = 0 );
-        ~ProjectTabWidget();
+        ~ProjectTabWidget() override;
 
         void addTab( Doc* doc );
         void removeTab( Doc* doc );
@@ -60,7 +60,7 @@ namespace K3b {
          */
         Doc* projectAt( const QPoint& pos ) const;
 
-        bool eventFilter( QObject* o, QEvent* e );
+        bool eventFilter( QObject* o, QEvent* e ) override;
 
     private Q_SLOTS:
         void slotDocChanged( K3b::Doc* );

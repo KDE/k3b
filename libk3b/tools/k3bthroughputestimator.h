@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         explicit ThroughputEstimator( QObject* parent = 0 );
-        ~ThroughputEstimator();
+        ~ThroughputEstimator() override;
 
         int average() const;
 

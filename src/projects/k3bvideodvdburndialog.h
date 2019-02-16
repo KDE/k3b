@@ -30,17 +30,17 @@ namespace K3b {
 
     public:
         explicit VideoDvdBurnDialog( VideoDvdDoc*, QWidget *parent = 0 );
-        ~VideoDvdBurnDialog();
+        ~VideoDvdBurnDialog() override;
 
     protected Q_SLOTS:
-        void slotStartClicked();
-        void saveSettingsToProject();
-        void readSettingsFromProject();
+        void slotStartClicked() override;
+        void saveSettingsToProject() override;
+        void readSettingsFromProject() override;
 
     protected:
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
-        void toggleAll();
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
+        void toggleAll() override;
 
     private:
         DataImageSettingsWidget* m_imageSettingsWidget;

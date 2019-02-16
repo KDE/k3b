@@ -35,7 +35,7 @@ namespace K3b {
 
     public:
         explicit ProjectInterface( Doc* doc, const QString& dbusPath = QString() );
-        ~ProjectInterface();
+        ~ProjectInterface() override;
 
         QString dbusPath() const;
 

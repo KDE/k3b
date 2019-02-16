@@ -32,7 +32,7 @@ namespace K3b {
 
     public:
         explicit MovixDocPreparer( MovixDoc* doc, JobHandler*, QObject* parent = 0 );
-        ~MovixDocPreparer();
+        ~MovixDocPreparer() override;
 
         MovixDoc* doc() const;
 
@@ -43,12 +43,12 @@ namespace K3b {
         /**
          * use createMovixStructures and removeMovixStructures instead.
          */
-        void start();
+        void start() override;
 
         /**
          * Useless since this job works syncronously
          */
-        void cancel();
+        void cancel() override;
 
     private:
         bool writePlaylistFile();

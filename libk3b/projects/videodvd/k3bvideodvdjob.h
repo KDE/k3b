@@ -33,13 +33,13 @@ namespace K3b {
 
     public:
         VideoDvdJob( VideoDvdDoc*, JobHandler*, QObject* parent = 0 );
-        virtual ~VideoDvdJob();
+        ~VideoDvdJob() override;
 
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
     private:
-        void prepareImager();
+        void prepareImager() override;
 
         VideoDvdDoc* m_doc;
     };

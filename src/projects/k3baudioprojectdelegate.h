@@ -27,16 +27,16 @@ namespace K3b {
 
     public:
         explicit AudioProjectDelegate( QAbstractItemView& view, QObject* parent = 0 );
-        ~AudioProjectDelegate();
+        ~AudioProjectDelegate() override;
 
-        virtual QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+        QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
 
     public Q_SLOTS:
         void setPlayingTrack( const QModelIndex& index );
 
     protected:
-        virtual void initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const;
-        virtual bool eventFilter( QObject* obj, QEvent* event );
+        void initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const override;
+        bool eventFilter( QObject* obj, QEvent* event ) override;
 
     private:
         QAbstractItemView& m_view;

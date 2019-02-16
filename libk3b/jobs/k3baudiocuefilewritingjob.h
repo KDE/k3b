@@ -33,20 +33,20 @@ namespace K3b {
 
     public:
         explicit AudioCueFileWritingJob( JobHandler*, QObject* parent = 0 );
-        ~AudioCueFileWritingJob();
+        ~AudioCueFileWritingJob() override;
 
-        virtual Device::Device* writer() const;
+        Device::Device* writer() const override;
 
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
-        virtual QString jobSource() const;
-        virtual QString jobTarget() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
+        QString jobSource() const override;
+        QString jobTarget() const override;
 
         QString cueFile() const;
 
     public Q_SLOTS:
-        virtual void start();
-        virtual void cancel();
+        void start() override;
+        void cancel() override;
 
         void setCueFile( const QString& );
         void setSpeed( int s );

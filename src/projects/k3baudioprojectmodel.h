@@ -30,7 +30,7 @@ namespace K3b {
 
     public:
         AudioProjectModel( AudioDoc* doc, QObject* parent );
-        ~AudioProjectModel();
+        ~AudioProjectModel() override;
 
         enum Columns {
             TrackNumberColumn = 0,
@@ -50,19 +50,19 @@ namespace K3b {
         QModelIndex indexForTrack( const AudioTrack* track ) const;
         QModelIndex indexForSource( AudioDataSource* source ) const;
 
-        int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
-        Qt::ItemFlags flags( const QModelIndex& index ) const;
-        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        QModelIndex parent( const QModelIndex& index ) const;
-        int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-        QMimeData* mimeData( const QModelIndexList& indexes ) const;
-        Qt::DropActions supportedDragActions() const;
-        Qt::DropActions supportedDropActions() const;
-        QStringList mimeTypes() const;
-        bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        QVariant headerData ( int section, Qt::Orientation orientation, int role ) const override;
+        Qt::ItemFlags flags( const QModelIndex& index ) const override;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+        QModelIndex parent( const QModelIndex& index ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+        QMimeData* mimeData( const QModelIndexList& indexes ) const override;
+        Qt::DropActions supportedDragActions() const override;
+        Qt::DropActions supportedDropActions() const override;
+        QStringList mimeTypes() const override;
+        bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent ) override;
 
     private:
         class Private;

@@ -39,7 +39,7 @@ namespace K3b {
 
     public:
         explicit Plugin( QObject* parent = 0 );
-        virtual ~Plugin();
+        ~Plugin() override;
 
         KPluginInfo pluginInfo() const { return m_pluginInfo; }
 

@@ -31,16 +31,16 @@ class VideoCdRip : public Job
 
     public:
         VideoCdRip( JobHandler*, VideoCdRippingOptions* options, QObject* parent = 0 );
-        ~VideoCdRip();
+        ~VideoCdRip() override;
 
         enum { CDROM, BIN_IMAGE, NRG_IMAGE };
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
     private Q_SLOTS:
         void cancelAll();

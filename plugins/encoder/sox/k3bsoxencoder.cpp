@@ -45,7 +45,7 @@ public:
         : K3b::ExternalProgram( "sox" ) {
     }
 
-    bool scan( const QString& p ) {
+    bool scan( const QString& p ) override {
         if( p.isEmpty() )
             return false;
 

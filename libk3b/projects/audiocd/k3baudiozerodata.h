@@ -24,26 +24,26 @@ namespace K3b {
     public:
         explicit AudioZeroData( const Msf& msf = 150 );
         AudioZeroData( const AudioZeroData& );
-        ~AudioZeroData();
+        ~AudioZeroData() override;
 
-        Msf originalLength() const { return m_length; }
+        Msf originalLength() const override { return m_length; }
         void setLength( const Msf& msf );
 
-        QString type() const;
-        QString sourceComment() const;
+        QString type() const override;
+        QString sourceComment() const override;
 
-        AudioDataSource* copy() const;
-        virtual QIODevice* createReader( QObject* parent = 0 );
-
-        /**
-         * Only changes the length
-         */
-        void setStartOffset( const Msf& );
+        AudioDataSource* copy() const override;
+        QIODevice* createReader( QObject* parent = 0 ) override;
 
         /**
          * Only changes the length
          */
-        void setEndOffset( const Msf& );
+        void setStartOffset( const Msf& ) override;
+
+        /**
+         * Only changes the length
+         */
+        void setEndOffset( const Msf& ) override;
 
     private:
         Msf m_length;

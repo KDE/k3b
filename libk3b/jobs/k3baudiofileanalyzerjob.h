@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         AudioFileAnalyzerJob( JobHandler* hdl, QObject* parent );
-        ~AudioFileAnalyzerJob();
+        ~AudioFileAnalyzerJob() override;
 
         /**
          * Set the decoder that does the analyzation.
@@ -40,7 +40,7 @@ namespace K3b {
         AudioDecoder* decoder() const;
 
     private:
-        bool run();
+        bool run() override;
 
         class Private;
         Private* const d;

@@ -35,16 +35,16 @@ namespace K3b {
 
     public:
         explicit BurnProgressDialog( QWidget* parent = 0, bool showSubProgress = true );
-        ~BurnProgressDialog();
+        ~BurnProgressDialog() override;
 
-        void setJob( Job* );
+        void setJob( Job* ) override;
         void setBurnJob( BurnJob* );
 
     protected Q_SLOTS:
         void slotWriteSpeed( int, K3b::Device::SpeedMultiplicator );
         void slotBufferStatus( int );
         void slotDeviceBuffer( int );
-        void slotFinished(bool);
+        void slotFinished(bool) override;
 
     protected:
         ThemedLabel* m_labelWriter;

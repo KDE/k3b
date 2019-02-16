@@ -33,7 +33,7 @@ namespace K3b {
                            const QString& text,
                            QMessageBox::Icon = QMessageBox::Information,
                            QWidget* parent = 0 );
-        ~MultiChoiceDialog();
+        ~MultiChoiceDialog() override;
 
         /**
          * Adds a new button. returns it's number starting at 1.
@@ -56,13 +56,13 @@ namespace K3b {
         /**
          * returnes the number of the clicked button starting at 1.
          */
-        int exec();
+        int exec() override;
 
     private Q_SLOTS:
         void slotButtonClicked( int );
 
     private:
-        void closeEvent( QCloseEvent* );
+        void closeEvent( QCloseEvent* ) override;
 
         class Private;
         Private* d;

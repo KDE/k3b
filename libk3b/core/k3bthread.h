@@ -38,7 +38,7 @@ namespace K3b {
 
     public:
         explicit Thread( ThreadJob* parent = 0 );
-        ~Thread();
+        ~Thread() override;
 
         void ensureDone();
         bool success() const;
@@ -50,7 +50,7 @@ namespace K3b {
         static void waitUntilFinished();
 
     protected:
-        void run();
+        void run() override;
 
     private Q_SLOTS:
         void slotEnsureDoneTimeout();

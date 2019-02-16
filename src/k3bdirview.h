@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         explicit DirView(FileTreeView* tree, QWidget *parent=0);
-        ~DirView();
+        ~DirView() override;
 
     public Q_SLOTS:
         void saveConfig( KConfigGroup grp );

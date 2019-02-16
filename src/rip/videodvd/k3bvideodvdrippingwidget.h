@@ -30,7 +30,7 @@ namespace K3b {
 
     public:
         explicit VideoDVDRippingWidget( QWidget* parent );
-        ~VideoDVDRippingWidget();
+        ~VideoDVDRippingWidget() override;
 
         VideoDVDTitleTranscodingJob::VideoCodec selectedVideoCodec() const;
         VideoDVDTitleTranscodingJob::AudioCodec selectedAudioCodec() const;

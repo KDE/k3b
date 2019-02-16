@@ -51,7 +51,7 @@ namespace {
     class NullSinkChecksumPipe : public K3b::ChecksumPipe
     {
     protected:
-        qint64 writeData( const char* data, qint64 max ) {
+        qint64 writeData( const char* data, qint64 max ) override {
             ChecksumPipe::writeData( data, max );
             return max;
         }

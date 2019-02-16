@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         explicit AudioProjectConvertingDialog( AudioDoc*, QWidget *parent = 0);
-        ~AudioProjectConvertingDialog();
+        ~AudioProjectConvertingDialog() override;
 
         void setBaseDir( const QString& path );
 
@@ -44,11 +44,11 @@ namespace K3b {
         void refresh();
 
     protected:
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
     private Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
 
     private:
         CddbPatternWidget* m_patternWidget;

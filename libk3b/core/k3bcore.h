@@ -63,7 +63,7 @@ namespace K3b {
          * possible. Just make sure to only create one instance.
          */
         explicit Core( QObject* parent = 0 );
-        virtual ~Core();
+        ~Core() override;
 
         QList<Job*> runningJobs() const;
 
@@ -158,7 +158,7 @@ namespace K3b {
 
         virtual Device::DeviceManager* createDeviceManager() const;
 
-        virtual void customEvent( QEvent* e );
+        void customEvent( QEvent* e ) override;
 
     private:
         class Private;

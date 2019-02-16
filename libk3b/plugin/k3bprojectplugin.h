@@ -84,13 +84,13 @@ namespace K3b {
          */
         explicit ProjectPlugin( Type type, bool gui = false, QObject* parent = 0 );
 
-        virtual ~ProjectPlugin() {
+        ~ProjectPlugin() override {
         }
 
         // TODO: maybe we should use something like "ProjectPlugin/AudioCD" based on the type?
-        QString category() const { return "ProjectPlugin"; }
+        QString category() const override { return "ProjectPlugin"; }
 
-        QString categoryName() const;
+        QString categoryName() const override;
 
         /**
          * audio, data, videocd, or videodvd

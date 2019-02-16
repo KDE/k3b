@@ -37,14 +37,14 @@ namespace K3b {
 
     public:
         explicit DataBurnDialog(DataDoc*, QWidget *parent=0 );
-        ~DataBurnDialog();
+        ~DataBurnDialog() override;
 
     protected:
         void setupSettingsTab();
 
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
-        void toggleAll();
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
+        void toggleAll() override;
 
         // --- settings tab ---------------------------
         DataImageSettingsWidget* m_imageSettingsWidget;
@@ -57,9 +57,9 @@ namespace K3b {
         QCheckBox* m_checkVerify;
 
     protected Q_SLOTS:
-        void slotStartClicked();
-        void saveSettingsToProject();
-        void readSettingsFromProject();
+        void slotStartClicked() override;
+        void saveSettingsToProject() override;
+        void readSettingsFromProject() override;
 
         void slotMultiSessionModeChanged();
     };

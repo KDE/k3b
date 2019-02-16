@@ -44,7 +44,7 @@ namespace K3b {
          * @see initMenuBar initToolBar
          */
         MainWindow();
-        ~MainWindow();
+        ~MainWindow() override;
 
         /** opens a file specified by commandline option */
         Doc* openDocument( const QUrl& url = QUrl() );
@@ -119,19 +119,19 @@ namespace K3b {
          * @see KMainWindow#queryClose
          * @see KMainWindow#closeEvent
          */
-        virtual bool queryClose();
+        bool queryClose() override;
 
         /** saves the window properties for each open window during session end to the session config file, including saving the currently
          * opened file by a temporary filename provided by KApplication.
          * @see KMainWindow#saveProperties
          */
-        virtual void saveProperties(KConfigGroup &_cfg);
+        void saveProperties(KConfigGroup &_cfg) override;
 
         /** reads the session config file and restores the application's state including the last opened files and documents by reading the
          * temporary files saved by saveProperties()
          * @see KMainWindow#readProperties
          */
-        virtual void readProperties(const KConfigGroup &_cfg);
+        void readProperties(const KConfigGroup &_cfg) override;
 
         /**
          * checks if doc is modified and asks the user for saving if so.

@@ -30,7 +30,7 @@ namespace K3b {
 
     public:
         explicit MovixOptionsWidget( QWidget* parent = 0 );
-        ~MovixOptionsWidget();
+        ~MovixOptionsWidget() override;
 
     public Q_SLOTS:
         void init( const K3b::MovixBin* );

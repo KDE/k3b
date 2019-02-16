@@ -38,19 +38,19 @@ namespace K3b {
 
     public:
         DataJob( DataDoc*, JobHandler*, QObject* parent = 0 );
-        virtual ~DataJob();
+        ~DataJob() override;
 
         Doc* doc() const;
-        Device::Device* writer() const;
+        Device::Device* writer() const override;
 
-        virtual bool hasBeenCanceled() const;
+        bool hasBeenCanceled() const override;
 
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
     public Q_SLOTS:
-        void cancel();
-        void start();
+        void cancel() override;
+        void start() override;
 
         /**
          * Used to specify a non-default writer.

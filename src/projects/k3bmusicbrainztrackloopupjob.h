@@ -28,7 +28,7 @@ class MusicBrainzTrackLookupJob : public ThreadJob
 
 public:
     MusicBrainzTrackLookupJob( JobHandler* hdl, QObject* parent );
-    ~MusicBrainzTrackLookupJob();
+    ~MusicBrainzTrackLookupJob() override;
 
     void setAudioTrack( AudioTrack* track );
 
@@ -37,7 +37,7 @@ public:
     QString artist( int i ) const;
 
 private:
-    bool run();
+    bool run() override;
 
     class Private;
     Private* const d;

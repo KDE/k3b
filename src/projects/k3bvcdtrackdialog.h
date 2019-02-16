@@ -30,7 +30,7 @@ namespace K3b {
 
     public:
         VcdTrackDialog( VcdDoc* doc, const QList<VcdTrack*>& tracks, QList<VcdTrack*>& selectedTracks, QWidget* parent = 0 );
-        ~VcdTrackDialog();
+        ~VcdTrackDialog() override;
 
     protected Q_SLOTS:
         void accept() override;

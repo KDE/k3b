@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ~ThreadWidget();
+        ~ThreadWidget() override;
 
         static ThreadWidget* instance();
 
@@ -49,7 +49,7 @@ namespace K3b {
         /**
          * communication between the threads
          */
-        void customEvent( QEvent* );
+        void customEvent( QEvent* ) override;
 
     private:
         /**

@@ -51,7 +51,7 @@ namespace K3b {
          * The AudioFile deregisters itself from the doc. If it was the last file
          * to use the decoder the doc will take care of deleting it.
          */
-        ~AudioFile();
+        ~AudioFile() override;
 
         AudioDecoder* decoder() const;
 
@@ -62,16 +62,16 @@ namespace K3b {
         /**
          * The complete length of the file used by this source.
          */
-        Msf originalLength() const;
+        Msf originalLength() const override;
 
-        QString type() const;
-        QString sourceComment() const;
+        QString type() const override;
+        QString sourceComment() const override;
 
-        bool isValid() const;
+        bool isValid() const override;
 
-        AudioDataSource* copy() const;
+        AudioDataSource* copy() const override;
 
-        virtual QIODevice* createReader( QObject* parent = 0 );
+        QIODevice* createReader( QObject* parent = 0 ) override;
 
     private:
         class Private;

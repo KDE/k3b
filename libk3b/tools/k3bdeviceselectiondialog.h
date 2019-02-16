@@ -35,7 +35,7 @@ namespace K3b {
     public:
         explicit DeviceSelectionDialog( QWidget* parent = 0,
                                const QString& text = QString() );
-        ~DeviceSelectionDialog();
+        ~DeviceSelectionDialog() override;
 
         void addDevice( Device::Device* );
         void addDevices( const QList<Device::Device*>& );

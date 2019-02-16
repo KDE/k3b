@@ -30,7 +30,7 @@ Q_OBJECT
 
  public:
   explicit ExternalBinOptionTab( ExternalBinManager* manager, QWidget* = 0 );
-  ~ExternalBinOptionTab();
+  ~ExternalBinOptionTab() override;
 
   void readSettings();
   void saveSettings();

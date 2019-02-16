@@ -44,7 +44,7 @@ namespace K3b {
 
     public:
         explicit ProjectBurnDialog( Doc* doc, QWidget *parent=0 );
-        ~ProjectBurnDialog();
+        ~ProjectBurnDialog() override;
 
         enum resultCode { Canceled = 0, Saved = 1, Burn = 2 };
 
@@ -59,10 +59,10 @@ namespace K3b {
 
     protected Q_SLOTS:
         /** burn */
-        virtual void slotStartClicked();
+        void slotStartClicked() override;
         /** save */
-        virtual void slotSaveClicked();
-        virtual void slotCancelClicked();
+        void slotSaveClicked() override;
+        void slotCancelClicked() override;
 
         /**
          * gets called if the user changed the writer
@@ -95,7 +95,7 @@ namespace K3b {
          *   <li>writing speed</li>
          * </ul>
          */
-        virtual void loadSettings( const KConfigGroup& );
+        void loadSettings( const KConfigGroup& ) override;
 
         /**
          * The default implementation saves the following settings to the KConfig.
@@ -110,7 +110,7 @@ namespace K3b {
          *   <li>writing speed</li>
          * </ul>
          */
-        virtual void saveSettings( KConfigGroup );
+        void saveSettings( KConfigGroup ) override;
 
         /**
          * The default implementation saves the following settings to the doc and may be called
@@ -142,7 +142,7 @@ namespace K3b {
          */
         virtual void readSettingsFromProject();
 
-        virtual void toggleAll();
+        void toggleAll() override;
 
         /**
          * use this to set additionell stuff in the job
@@ -157,7 +157,7 @@ namespace K3b {
          * Call this if you must reimplement it.
          * \reimplemented from InteractionDialog
          */
-        virtual void init();
+        void init() override;
 
         WriterSelectionWidget* m_writerSelectionWidget;
         TempDirSelectionWidget* m_tempDirSelectionWidget;

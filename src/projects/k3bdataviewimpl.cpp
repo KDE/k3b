@@ -55,7 +55,7 @@ public:
     }
 
 protected:
-    virtual QWidget* createWidget( QWidget* parent )
+    QWidget* createWidget( QWidget* parent ) override
     {
         return new K3b::VolumeNameWidget( m_doc, parent );
     }

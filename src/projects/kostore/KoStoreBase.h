@@ -32,7 +32,7 @@ class KoStoreBase : public KoStore
 {
 public:
     KoStoreBase();
-    virtual ~KoStoreBase(void);
+    ~KoStoreBase(void) override;
 public:
     enum FileMode { /*Bad=0,*/ Local=1, RemoteRead, RemoteWrite };
 

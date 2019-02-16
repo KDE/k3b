@@ -54,7 +54,7 @@ namespace K3b {
                             const QString& artist, const QString& title,
                             const QString& cdartist, const QString& cdtitle );
         AudioCdTrackSource( const AudioCdTrackSource& );
-        ~AudioCdTrackSource();
+        ~AudioCdTrackSource() override;
 
         unsigned int discId() const;
         int cdTrackNumber() const;
@@ -64,11 +64,11 @@ namespace K3b {
         QString cdArtist() const;
         QString cdTitle() const;
 
-        Msf originalLength() const;
-        QString type() const;
-        QString sourceComment() const;
-        AudioDataSource* copy() const;
-        virtual QIODevice* createReader( QObject* parent = 0 );
+        Msf originalLength() const override;
+        QString type() const override;
+        QString sourceComment() const override;
+        AudioDataSource* copy() const override;
+        QIODevice* createReader( QObject* parent = 0 ) override;
 
         /**
          * Searches for the corresponding Audio CD and returns the device in which it has

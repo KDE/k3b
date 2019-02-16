@@ -45,7 +45,7 @@ namespace K3b {
 
     private:
         SignalWaiter();
-        ~SignalWaiter();
+        ~SignalWaiter() override;
 
         class Private;
         Private* const d;

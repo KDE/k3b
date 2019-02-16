@@ -35,11 +35,11 @@ public:
       // koffice-1.x behavior compat: a KoStoreDevice is automatically open
       setOpenMode( m_store->mode() == KoStore::Read ? QIODevice::ReadOnly : QIODevice::WriteOnly );
   }
-  ~KoStoreDevice() {}
+  ~KoStoreDevice() override {}
 
-  virtual bool isSequential() const { return true; }
+  bool isSequential() const override { return true; }
 
-  virtual bool open( OpenMode m ) {
+  bool open( OpenMode m ) override {
     setOpenMode(m);
     if ( m & QIODevice::ReadOnly )
       return ( m_store->mode() == KoStore::Read );
@@ -47,17 +47,17 @@ public:
       return ( m_store->mode() == KoStore::Write );
     return false;
   }
-  virtual void close() {}
+  void close() override {}
 
-  qint64 size() const {
+  qint64 size() const override {
     if ( m_store->mode() == KoStore::Read )
       return m_store->size();
     else
       return 0xffffffff;
   }
 
-  virtual qint64 readData( char *data, qint64 maxlen ) { return m_store->read(data, maxlen); }
-  virtual qint64 writeData( const char *data, qint64 len ) { return m_store->write( data, len ); }
+  qint64 readData( char *data, qint64 maxlen ) override { return m_store->read(data, maxlen); }
+  qint64 writeData( const char *data, qint64 len ) override { return m_store->write( data, len ); }
 
 #if 0
   int getch() {
@@ -80,9 +80,9 @@ public:
 #endif
 
   // See QIODevice
-  virtual qint64 pos() const { return m_store->pos(); }
-  virtual bool seek( qint64 pos ) { return m_store->seek(pos); }
-  virtual bool atEnd() const { return m_store->atEnd(); }
+  qint64 pos() const override { return m_store->pos(); }
+  bool seek( qint64 pos ) override { return m_store->seek(pos); }
+  bool atEnd() const override { return m_store->atEnd(); }
 
 protected:
   KoStore * m_store;

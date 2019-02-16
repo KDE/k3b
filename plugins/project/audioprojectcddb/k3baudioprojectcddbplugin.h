@@ -35,11 +35,11 @@ class K3bAudioProjectCddbPlugin : public K3b::ProjectPlugin
 
 public:
     K3bAudioProjectCddbPlugin( QObject* parent, const QVariantList& );
-    ~K3bAudioProjectCddbPlugin();
+    ~K3bAudioProjectCddbPlugin() override;
 
-    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    void activate( K3b::Doc* doc, QWidget* parent );
+    void activate( K3b::Doc* doc, QWidget* parent ) override;
 
 private Q_SLOTS:
     void slotCddbQueryFinished( KJob* );

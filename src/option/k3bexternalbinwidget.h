@@ -42,7 +42,7 @@ namespace K3b {
 
     public:
         explicit ExternalBinWidget( ExternalBinManager* manager, QWidget* parent = 0 );
-        ~ExternalBinWidget();
+        ~ExternalBinWidget() override;
 
     public Q_SLOTS:
         void rescan();

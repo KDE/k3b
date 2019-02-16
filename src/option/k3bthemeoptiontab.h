@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         explicit ThemeOptionTab( QWidget* parent = 0 );
-        ~ThemeOptionTab();
+        ~ThemeOptionTab() override;
 
         void readSettings();
         bool saveSettings();

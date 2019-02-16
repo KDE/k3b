@@ -53,16 +53,16 @@ namespace K3b {
          */
         FileItem( const FileItem& );
 
-        virtual ~FileItem();
+        ~FileItem() override;
 
-        virtual DataItem* copy() const;
+        DataItem* copy() const override;
 
         bool exists() const;
 
         QString absIsoPath();
 
         /** reimplemented from DataItem */
-        QString localPath() const;
+        QString localPath() const override;
 
         /**
          * Identification of the files on the local device.
@@ -83,7 +83,7 @@ namespace K3b {
          */
         Id localId( bool followSymlinks ) const;
 
-        DirItem* getDirItem() const;
+        DirItem* getDirItem() const override;
 
         QString linkDest() const;
 
@@ -91,7 +91,7 @@ namespace K3b {
 
         /** returns true if the item is not a link or
          *  if the link's destination is part of the compilation */
-        bool isValid() const;
+        bool isValid() const override;
 
         DataItem* replaceItemFromOldSession() const { return m_replacedItemFromOldSession; }
         void setReplacedItemFromOldSession( DataItem* item ) { m_replacedItemFromOldSession = item; }
@@ -99,7 +99,7 @@ namespace K3b {
         /**
          * Normally one does not use this method but DataItem::size()
          */
-        KIO::filesize_t itemSize( bool followSymlinks ) const;
+        KIO::filesize_t itemSize( bool followSymlinks ) const override;
         
     private:
         void init( const QString& filePath,

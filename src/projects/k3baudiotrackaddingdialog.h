@@ -41,7 +41,7 @@ namespace K3b {
                                 AudioTrack* parentTrack = 0,
                                 AudioDataSource* afterSource = 0,
                                 QWidget* parent = 0 );
-        ~AudioTrackAddingDialog();
+        ~AudioTrackAddingDialog() override;
 
         /**
          * shows AudioTrackAddingDialog in non-blocking fashion

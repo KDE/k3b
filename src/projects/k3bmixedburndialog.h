@@ -39,9 +39,9 @@ namespace K3b {
         explicit MixedBurnDialog( MixedDoc*, QWidget *parent=0 );
 
     protected:
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
-        void toggleAll();
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
+        void toggleAll() override;
 
         DataImageSettingsWidget* m_imageSettingsWidget;
         AudioCdTextWidget* m_cdtextWidget;
@@ -50,9 +50,9 @@ namespace K3b {
         /**
          * Reimplemented for internal reasons (shut down the audio player)
          */
-        void slotStartClicked();
-        void saveSettingsToProject();
-        void readSettingsFromProject();
+        void slotStartClicked() override;
+        void saveSettingsToProject() override;
+        void readSettingsFromProject() override;
 
         void slotCacheImageToggled( bool on );
         void slotNormalizeToggled( bool on );

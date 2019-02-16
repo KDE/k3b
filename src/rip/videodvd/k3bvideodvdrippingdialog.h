@@ -33,7 +33,7 @@ namespace K3b {
         VideoDVDRippingDialog( const VideoDVD::VideoDVD& dvd,
                                const QList<int>& titles,
                                QWidget* parent = 0 );
-        ~VideoDVDRippingDialog();
+        ~VideoDVDRippingDialog() override;
 
         void setBaseDir( const QString& path );
 
@@ -52,15 +52,15 @@ namespace K3b {
         };
 
     private Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
         void slotUpdateFilenames();
         void slotUpdateFilesizes();
         void slotUpdateVideoSizes();
         void slotAudioModelChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
 
     private:
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
         class Private;
         Private* d;

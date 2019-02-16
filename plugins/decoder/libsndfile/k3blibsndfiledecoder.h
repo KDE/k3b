@@ -25,15 +25,15 @@ class K3bLibsndfileDecoderFactory : public K3b::AudioDecoderFactory
 
 public:
     K3bLibsndfileDecoderFactory( QObject* parent, const QVariantList& args  );
-    ~K3bLibsndfileDecoderFactory();
+    ~K3bLibsndfileDecoderFactory() override;
 
-    bool canDecode( const QUrl& filename );
+    bool canDecode( const QUrl& filename ) override;
 
-    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    bool multiFormatDecoder() const { return true; }
+    bool multiFormatDecoder() const override { return true; }
 
-    K3b::AudioDecoder* createDecoder( QObject* parent = 0 ) const;
+    K3b::AudioDecoder* createDecoder( QObject* parent = 0 ) const override;
 };
 
 
@@ -43,16 +43,16 @@ class K3bLibsndfileDecoder : public K3b::AudioDecoder
 
 public:
     explicit K3bLibsndfileDecoder( QObject* parent = 0  );
-    ~K3bLibsndfileDecoder();
-    void cleanup();
-    QString fileType() const;
+    ~K3bLibsndfileDecoder() override;
+    void cleanup() override;
+    QString fileType() const override;
 
 protected:
-    bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch );
-    bool initDecoderInternal();
-    bool seekInternal( const K3b::Msf& );
+    bool analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch ) override;
+    bool initDecoderInternal() override;
+    bool seekInternal( const K3b::Msf& ) override;
 
-    int decodeInternal( char* _data, int maxLen );
+    int decodeInternal( char* _data, int maxLen ) override;
  
 private:
     bool openFile();

@@ -30,20 +30,20 @@ class AudioProjectConvertingJob : public MassAudioEncodingJob
 
 public:
     AudioProjectConvertingJob( AudioDoc* doc, JobHandler* hdl, QObject* parent );
-    ~AudioProjectConvertingJob();
+    ~AudioProjectConvertingJob() override;
 
-    virtual QString jobDescription() const;
+    QString jobDescription() const override;
 
 private:
-    virtual bool init();
+    bool init() override;
 
-    virtual Msf trackLength( int trackIndex ) const;
+    Msf trackLength( int trackIndex ) const override;
 
-    virtual QIODevice* createReader( int trackIndex ) const;
+    QIODevice* createReader( int trackIndex ) const override;
 
-    virtual void trackStarted( int trackIndex );
+    void trackStarted( int trackIndex ) override;
     
-    virtual void trackFinished( int trackIndex, const QString& filename );
+    void trackFinished( int trackIndex, const QString& filename ) override;
 
 private:
     class Private;

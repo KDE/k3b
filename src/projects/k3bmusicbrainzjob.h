@@ -39,9 +39,9 @@ namespace K3b {
          *        as parent
          */
         explicit MusicBrainzJob( QWidget* parent = 0 );
-        ~MusicBrainzJob();
+        ~MusicBrainzJob() override;
 
-        bool hasBeenCanceled() const;
+        bool hasBeenCanceled() const override;
 
     Q_SIGNALS:
         /**
@@ -54,8 +54,8 @@ namespace K3b {
         void trackFinished( K3b::AudioTrack* track, bool success );
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         void setTracks( const QList<K3b::AudioTrack*>& tracks );
 

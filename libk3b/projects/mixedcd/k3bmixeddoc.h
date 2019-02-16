@@ -31,27 +31,27 @@ namespace K3b {
 
     public:
         explicit MixedDoc( QObject* parent = 0 );
-        ~MixedDoc();
+        ~MixedDoc() override;
         
-        virtual Type type() const { return MixedProject; }
-        virtual QString typeString() const { return QString::fromLatin1("mixed"); }
+        Type type() const override { return MixedProject; }
+        QString typeString() const override { return QString::fromLatin1("mixed"); }
 
-        QString name() const;
+        QString name() const override;
 
-        Device::MediaTypes supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const override;
 
-        bool newDocument();
-        void clear();
+        bool newDocument() override;
+        void clear() override;
 
-        void setModified( bool m = true );
-        bool isModified() const;
+        void setModified( bool m = true ) override;
+        bool isModified() const override;
 
-        KIO::filesize_t size() const;
-        Msf length() const;
+        KIO::filesize_t size() const override;
+        Msf length() const override;
 
-        int numOfTracks() const;
+        int numOfTracks() const override;
 
-        BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 );
+        BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 ) override;
 
         AudioDoc* audioDoc() const { return m_audioDoc; }
         DataDoc* dataDoc() const { return m_dataDoc; }
@@ -62,7 +62,7 @@ namespace K3b {
 
         int mixedType() const { return m_mixedType; }
 
-        void setURL( const QUrl& url );
+        void setURL( const QUrl& url ) override;
 
         /**
          * Represent the structure of the doc as CD Table of Contents.
@@ -76,11 +76,11 @@ namespace K3b {
 
     public Q_SLOTS:
         void setMixedType( MixedType t ) { m_mixedType = t; }
-        void addUrls( const QList<QUrl>& urls );
+        void addUrls( const QList<QUrl>& urls ) override;
 
     protected:
-        bool loadDocumentData( QDomElement* );
-        bool saveDocumentData( QDomElement* );
+        bool loadDocumentData( QDomElement* ) override;
+        bool saveDocumentData( QDomElement* ) override;
 
     private:
         DataDoc* m_dataDoc;

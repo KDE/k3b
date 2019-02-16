@@ -42,11 +42,11 @@ namespace K3b {
 
     public:
         explicit MixedView( MixedDoc* doc, QWidget* parent = 0 );
-        ~MixedView();
+        ~MixedView() override;
 
     public Q_SLOTS:
-        virtual void slotBurn();
-        virtual void addUrls( const QList<QUrl>& urls );
+        void slotBurn() override;
+        void addUrls( const QList<QUrl>& urls ) override;
 
     private Q_SLOTS:
         void slotParentDir();
@@ -58,7 +58,7 @@ namespace K3b {
         /**
          * reimplemented from @ref View
          */
-        virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
 
     private:
         MixedDoc* m_doc;

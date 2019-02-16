@@ -37,7 +37,7 @@ namespace K3b {
 
     public:
         explicit DeviceWidget( Device::DeviceManager*, QWidget *parent = 0 );
-        ~DeviceWidget();
+        ~DeviceWidget() override;
 
     public Q_SLOTS:
         void init();

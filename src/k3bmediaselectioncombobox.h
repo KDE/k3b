@@ -38,7 +38,7 @@ namespace K3b {
 
     public:
         explicit MediaSelectionComboBox( QWidget* parent );
-        virtual ~MediaSelectionComboBox();
+        ~MediaSelectionComboBox() override;
 
         /**
          * Although the widget allows selection of media this

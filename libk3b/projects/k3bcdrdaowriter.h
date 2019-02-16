@@ -38,7 +38,7 @@ namespace K3b {
 
         CdrdaoWriter( Device::Device* dev, JobHandler*,
                       QObject* parent = 0 );
-        ~CdrdaoWriter();
+        ~CdrdaoWriter() override;
 
         /**
          * to be used in chain: addArgument(x)->addArgument(y)
@@ -46,7 +46,7 @@ namespace K3b {
         CdrdaoWriter* addArgument( const QString& );
         Device::Device* sourceDevice() { return m_sourceDevice; };
 
-        bool active() const;
+        bool active() const override;
 
     private:
         void reinitParser();
@@ -55,8 +55,8 @@ namespace K3b {
         void parseCdrdaoError( const QString& line );
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         // options
         // ---------------------

@@ -45,7 +45,7 @@ namespace K3b {
 
     public:
         explicit DataTrackReader( JobHandler*, QObject* parent = 0 );
-        ~DataTrackReader();
+        ~DataTrackReader() override;
 
         enum ReadSectorSize {
             AUTO = K3b::SectorSizeAuto,
@@ -78,7 +78,7 @@ namespace K3b {
         void writeTo( QIODevice* ioDev );
 
     private:
-        bool run();
+        bool run() override;
 
         int read( unsigned char* buffer, unsigned long sector, unsigned int len );
         bool retryRead( unsigned char* buffer, unsigned long startSector, unsigned int len );

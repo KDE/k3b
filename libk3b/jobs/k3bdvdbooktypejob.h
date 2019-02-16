@@ -37,10 +37,10 @@ namespace K3b {
 
     public:
         explicit DvdBooktypeJob( JobHandler*, QObject* parent = 0 );
-        ~DvdBooktypeJob();
+        ~DvdBooktypeJob() override;
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
         /**
          * @list SET_MEDIA_DVD_ROM Change media identification on current media to DVD-ROM.
@@ -60,7 +60,7 @@ namespace K3b {
         };
 
     public Q_SLOTS:
-        void start();
+        void start() override;
 
         /**
          * The devicehandler needs to have a valid NgDiskInfo
@@ -68,7 +68,7 @@ namespace K3b {
          */
         void start( K3b::Device::DeviceHandler* );
 
-        void cancel();
+        void cancel() override;
 
         void setDevice( K3b::Device::Device* );
 

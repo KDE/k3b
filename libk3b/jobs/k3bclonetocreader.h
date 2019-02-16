@@ -30,12 +30,12 @@ namespace K3b {
     {
     public:
         explicit CloneTocReader( const QString& filename = QString() );
-        ~CloneTocReader();
+        ~CloneTocReader() override;
 
         Msf imageSize() const;
 
     protected:
-        void readFile();
+        void readFile() override;
 
         class Private;
         Private* d;

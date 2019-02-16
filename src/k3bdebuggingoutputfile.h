@@ -29,7 +29,7 @@ namespace K3b {
         /**
          * Open the default output file and write some system information.
          */
-        bool open( OpenMode mode = WriteOnly );
+        bool open( OpenMode mode = WriteOnly ) override;
 
     public Q_SLOTS:
         void addOutput( const QString&, const QString& );

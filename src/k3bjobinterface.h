@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         explicit JobInterface( Job* job );
-        ~JobInterface();
+        ~JobInterface() override;
 
     public Q_SLOTS:
         bool jobRunning() const;

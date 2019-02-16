@@ -34,7 +34,7 @@ class FileView : public ContentsView
 
 public:
     explicit FileView(QWidget *parent=0);
-    ~FileView();
+    ~FileView() override;
 
     void setUrl( const QUrl &url, bool forward = true );
     QUrl url();

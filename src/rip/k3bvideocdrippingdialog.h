@@ -34,14 +34,14 @@ namespace K3b {
 
     public:
         explicit VideoCdRippingDialog( VideoCdRippingOptions* options, QWidget* parent = 0 );
-        ~VideoCdRippingDialog();
+        ~VideoCdRippingDialog() override;
 
     private:
         void setupGui();
         void setupContextHelp();
 
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
         TempDirSelectionWidget* m_tempDirSelectionWidget;
 
@@ -58,7 +58,7 @@ namespace K3b {
         unsigned long m_freeSpace;
 
     private Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
 
         void slotUpdateFreeSpace();
         void slotFreeSpace(const QString&, unsigned long, unsigned long, unsigned long);

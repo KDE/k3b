@@ -36,7 +36,7 @@ namespace K3b {
         explicit FlatButton( const QString& text, QWidget* parent = 0 );
         explicit FlatButton( QAction* action, QWidget* parent = 0 );
     
-        ~FlatButton();
+        ~FlatButton() override;
 
         QSize sizeHint() const override;
 

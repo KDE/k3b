@@ -27,7 +27,7 @@ namespace K3b {
 
     public:
         DataMultiSessionParameterJob( DataDoc*, JobHandler*, QObject* parent );
-        ~DataMultiSessionParameterJob();
+        ~DataMultiSessionParameterJob() override;
 
         DataDoc::MultiSessionMode usedMultiSessionMode() const;
         unsigned int previousSessionStart() const;
@@ -35,7 +35,7 @@ namespace K3b {
         bool importPreviousSession() const;
 
     private:
-        bool run();
+        bool run() override;
 
         DataDoc::MultiSessionMode determineMultiSessionModeFromMedium();
         bool setupMultiSessionParameters();

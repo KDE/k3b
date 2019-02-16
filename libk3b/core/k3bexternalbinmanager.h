@@ -129,9 +129,9 @@ namespace K3b {
     {
     public:
         explicit SimpleExternalProgram( const QString& name );
-        virtual ~SimpleExternalProgram();
+        ~SimpleExternalProgram() override;
 
-        virtual bool scan( const QString& path );
+        bool scan( const QString& path ) override;
 
         /**
          * Parses a version starting at \p pos by looking for the first digit
@@ -196,7 +196,7 @@ namespace K3b {
 
     public:
         explicit ExternalBinManager( QObject* parent = 0 );
-        ~ExternalBinManager();
+        ~ExternalBinManager() override;
 
         void search();
 

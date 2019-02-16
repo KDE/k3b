@@ -24,15 +24,15 @@ namespace K3b {
 
     public:
         explicit MediumDelegate( QObject* parent );
-        ~MediumDelegate();
+        ~MediumDelegate() override;
 
         // FIXME: move this elsewhere
         enum CustomRoles {
             MediumRole = 7777
         };
 
-        QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-        void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+        QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
+        void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
     };
 }
 

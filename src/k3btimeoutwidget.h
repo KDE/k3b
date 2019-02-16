@@ -28,10 +28,10 @@ class TimeoutWidget : public QWidget
 
  public:
   explicit TimeoutWidget( QWidget* parent );
-  ~TimeoutWidget();
+  ~TimeoutWidget() override;
 
-  QSize sizeHint() const;
-  QSize minimumSizeHint() const;
+  QSize sizeHint() const override;
+  QSize minimumSizeHint() const override;
 
  public Q_SLOTS:
   void setTimeout( int msecs );
@@ -44,8 +44,8 @@ class TimeoutWidget : public QWidget
   void timeout();
 
  protected:
-  void paintEvent( QPaintEvent* );
-  void resizeEvent( QResizeEvent* );
+  void paintEvent( QPaintEvent* ) override;
+  void resizeEvent( QResizeEvent* ) override;
 
  private Q_SLOTS:
   void timeStep();

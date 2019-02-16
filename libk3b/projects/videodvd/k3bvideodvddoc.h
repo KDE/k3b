@@ -23,21 +23,21 @@ namespace K3b {
     {
     public:
         explicit VideoDvdDoc( QObject* parent = 0 );
-        virtual ~VideoDvdDoc();
+        ~VideoDvdDoc() override;
 
-        virtual Type type() const { return VideoDvdProject; }
-        virtual QString typeString() const { return QString::fromLatin1("video_dvd"); }
+        Type type() const override { return VideoDvdProject; }
+        QString typeString() const override { return QString::fromLatin1("video_dvd"); }
 
-        Device::MediaTypes supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const override;
 
-        virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
+        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent ) override;
 
-        virtual bool newDocument();
+        bool newDocument() override;
 
         DirItem* videoTsDir() const { return m_videoTsDir; }
 
         // TODO: implement load- and saveDocumentData since we do not need all those options
-        bool saveDocumentData(QDomElement*);
+        bool saveDocumentData(QDomElement*) override;
 
     private:
         DirItem* m_videoTsDir;

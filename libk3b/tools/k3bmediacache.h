@@ -54,7 +54,7 @@ namespace K3b {
 
     public:
         explicit MediaCache( QObject* parent = 0 );
-        ~MediaCache();
+        ~MediaCache() override;
 
         /**
          * block a device so it will not be polled. This is used

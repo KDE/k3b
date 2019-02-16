@@ -42,7 +42,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ~DataUrlAddingDialog();
+        ~DataUrlAddingDialog() override;
 
         /**
          * shows DataUrlAddingDialog in non-blocking fashion

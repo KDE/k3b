@@ -33,7 +33,7 @@ namespace K3b {
 
     public:
         explicit BootImageDialog( DataDoc* doc, QWidget* parent = 0 );
-        ~BootImageDialog();
+        ~BootImageDialog() override;
 
     private Q_SLOTS:
         void slotNewBootImage();

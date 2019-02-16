@@ -36,21 +36,21 @@ namespace K3b {
 
     public:
         VideoDvdImager( VideoDvdDoc* doc, JobHandler*, QObject* parent = 0 );
-        virtual ~VideoDvdImager();
+        ~VideoDvdImager() override;
 
     public Q_SLOTS:
-        virtual void start();
-        virtual void init();
-        virtual void calculateSize();
+        void start() override;
+        void init() override;
+        void calculateSize() override;
 
     protected:
-        bool addMkisofsParameters( bool printSize = false );
-        int writePathSpec();
-        void cleanup();
-        int writePathSpecForDir( DirItem* dirItem, QTextStream& stream );
+        bool addMkisofsParameters( bool printSize = false ) override;
+        int writePathSpec() override;
+        void cleanup() override;
+        int writePathSpecForDir( DirItem* dirItem, QTextStream& stream ) override;
 
     protected Q_SLOTS:
-        virtual void slotReceivedStderr( const QString& );
+        void slotReceivedStderr( const QString& ) override;
 
     private:
         void fixVideoDVDSettings();

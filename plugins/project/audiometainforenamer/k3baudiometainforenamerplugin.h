@@ -33,17 +33,17 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3b::ProjectP
 
 public:
     explicit K3bAudioMetainfoRenamerPluginWidget( K3b::DataDoc* doc, QWidget* parent = 0 );
-    ~K3bAudioMetainfoRenamerPluginWidget();
+    ~K3bAudioMetainfoRenamerPluginWidget() override;
 
-    QWidget* qWidget() { return this; }
+    QWidget* qWidget() override { return this; }
 
-    QString title() const;
-    QString subTitle() const;
+    QString title() const override;
+    QString subTitle() const override;
 
-    void readSettings( const KConfigGroup& );
-    void saveSettings( KConfigGroup );
+    void readSettings( const KConfigGroup& ) override;
+    void saveSettings( KConfigGroup ) override;
 
-    void activate();
+    void activate() override;
 
 private Q_SLOTS:
     void slotScanClicked();
@@ -64,11 +64,11 @@ class K3bAudioMetainfoRenamerPlugin : public K3b::ProjectPlugin
 
 public:
     K3bAudioMetainfoRenamerPlugin( QObject* parent, const QVariantList& );
-    ~K3bAudioMetainfoRenamerPlugin();
+    ~K3bAudioMetainfoRenamerPlugin() override;
 
-    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3b::ProjectPluginGUIBase* createGUI( K3b::Doc*, QWidget* = 0 );
+    K3b::ProjectPluginGUIBase* createGUI( K3b::Doc*, QWidget* = 0 ) override;
 };
 
 

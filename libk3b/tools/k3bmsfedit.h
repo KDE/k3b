@@ -30,14 +30,14 @@ namespace K3b {
 
     public:
         explicit MsfEdit( QWidget* parent = 0 );
-        ~MsfEdit();
+        ~MsfEdit() override;
 
         Msf minimum() const;
         Msf maximum() const;
         Msf value() const;
 
-        virtual void stepBy( int steps );
-        virtual QSize sizeHint() const;
+        void stepBy( int steps ) override;
+        QSize sizeHint() const override;
 
     Q_SIGNALS:
         void valueChanged( const K3b::Msf& value );
@@ -48,7 +48,7 @@ namespace K3b {
         void setValue( const K3b::Msf& value );
         
     protected:
-        virtual StepEnabled stepEnabled () const;
+        StepEnabled stepEnabled () const override;
 
     private:
         class Private;

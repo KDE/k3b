@@ -35,15 +35,15 @@ namespace K3b {
 
     public:
         explicit Md5Job( JobHandler* jh , QObject* parent = 0 );
-        ~Md5Job();
+        ~Md5Job() override;
 
 		QByteArray hexDigest();
 		QByteArray base64Digest();
 
     public Q_SLOTS:
-        void start();
+        void start() override;
         void stop();
-        void cancel();
+        void cancel() override;
 
         // FIXME: read from QIODevice and thus add FileSplitter support
 

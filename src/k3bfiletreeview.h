@@ -33,7 +33,7 @@ namespace K3b {
 
     public:
         explicit FileTreeView( QWidget *parent = 0 );
-        ~FileTreeView();
+        ~FileTreeView() override;
 
         /**
          * returns 0 if no device is selected

@@ -48,7 +48,7 @@ namespace K3b {
 
     private:
         explicit DataMultisessionImportDialog( QWidget* parent );
-        ~DataMultisessionImportDialog();
+        ~DataMultisessionImportDialog() override;
 
         class Private;
         Private* const d;

@@ -25,21 +25,21 @@ class K3bOggVorbisEncoder : public K3b::AudioEncoder
 
 public:
     K3bOggVorbisEncoder( QObject* parent, const QVariantList& );
-    ~K3bOggVorbisEncoder();
+    ~K3bOggVorbisEncoder() override;
 
-    virtual QStringList extensions() const { return QStringList("ogg"); }
+    QStringList extensions() const override { return QStringList("ogg"); }
 
-    virtual QString fileTypeComment( const QString& ) const;
+    QString fileTypeComment( const QString& ) const override;
 
-    virtual long long fileSize( const QString&, const K3b::Msf& msf ) const;
+    long long fileSize( const QString&, const K3b::Msf& msf ) const override;
 
-    virtual int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
 private:
     void loadConfig();
-    virtual void finishEncoderInternal();
-    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
-    virtual qint64 encodeInternal( const char* data, qint64 len );
+    void finishEncoderInternal() override;
+    bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData ) override;
+    qint64 encodeInternal( const char* data, qint64 len ) override;
 
     bool writeOggHeaders();
     void cleanup();

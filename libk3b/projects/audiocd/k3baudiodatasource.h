@@ -55,7 +55,7 @@ namespace K3b {
          * Create en identical copy except that the copy will not be in any list.
          */
         AudioDataSource( const AudioDataSource& );
-        virtual ~AudioDataSource();
+        ~AudioDataSource() override;
 
         /**
          * The original length of the source is the maximum data which is available

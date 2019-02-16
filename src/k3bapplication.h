@@ -39,7 +39,7 @@ namespace K3b {
 
     public:
         Application( int& argc, char** argv );
-        ~Application();
+        ~Application() override;
 
         void init( QCommandLineParser* commandLineParser );
 
@@ -68,12 +68,12 @@ namespace K3b {
 
     public:
         Core( QObject* parent );
-        ~Core();
+        ~Core() override;
 
-        Q_INVOKABLE virtual void init();
+        Q_INVOKABLE void init() override;
 
-        Q_INVOKABLE virtual void readSettings( KSharedConfig::Ptr c );
-        Q_INVOKABLE virtual void saveSettings( KSharedConfig::Ptr c );
+        Q_INVOKABLE void readSettings( KSharedConfig::Ptr c ) override;
+        Q_INVOKABLE void saveSettings( KSharedConfig::Ptr c ) override;
 
         AppDeviceManager* appDeviceManager() const;
 
@@ -101,10 +101,10 @@ namespace K3b {
         void busyFinishRequested();
 
     private:
-        virtual Device::DeviceManager* createDeviceManager() const;
+        Device::DeviceManager* createDeviceManager() const override;
 
-        bool internalBlockDevice( Device::Device* );
-        void internalUnblockDevice( Device::Device* );
+        bool internalBlockDevice( Device::Device* ) override;
+        void internalUnblockDevice( Device::Device* ) override;
 
         ThemeManager* m_themeManager;
         MainWindow* m_mainWindow;

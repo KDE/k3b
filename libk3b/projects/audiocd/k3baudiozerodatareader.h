@@ -29,15 +29,15 @@ namespace K3b {
     {
     public:
         explicit AudioZeroDataReader( AudioZeroData& source, QObject* parent = 0 );
-        ~AudioZeroDataReader();
+        ~AudioZeroDataReader() override;
 
-        virtual bool open( OpenMode mode );
-        virtual bool isSequential() const;
-        virtual qint64 size() const;
+        bool open( OpenMode mode ) override;
+        bool isSequential() const override;
+        qint64 size() const override;
 
     protected:
-        virtual qint64 writeData(const char* data, qint64 len);
-        virtual qint64 readData(char* data, qint64 maxlen);
+        qint64 writeData(const char* data, qint64 len) override;
+        qint64 readData(char* data, qint64 maxlen) override;
 
     private:
         class Private;

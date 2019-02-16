@@ -30,18 +30,18 @@ namespace K3b {
 
     public:
         explicit Iso9660ImageWritingJob( JobHandler* );
-        ~Iso9660ImageWritingJob();
+        ~Iso9660ImageWritingJob() override;
 
-        Device::Device* writer() const { return m_device; }
+        Device::Device* writer() const override { return m_device; }
 
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
-        virtual QString jobSource() const;
-        virtual QString jobTarget() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
+        QString jobSource() const override;
+        QString jobTarget() const override;
 
     public Q_SLOTS:
-        void cancel();
-        void start();
+        void cancel() override;
+        void start() override;
 
         void setImagePath( const QString& path ) { m_imagePath = path; }
         void setSpeed( int s ) { m_speed = s; }

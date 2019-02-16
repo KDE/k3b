@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         explicit DataImageSettingsWidget( QWidget* parent = 0 );
-        ~DataImageSettingsWidget();
+        ~DataImageSettingsWidget() override;
 
         void load( const IsoOptions& );
         void save( IsoOptions& );

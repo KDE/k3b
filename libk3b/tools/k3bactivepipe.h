@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         ActivePipe();
-        virtual ~ActivePipe();
+        ~ActivePipe() override;
 
         /**
          * Opens the pipe and thus starts the
@@ -50,7 +50,7 @@ namespace K3b {
         /**
          * Close the pipe
          */
-        virtual void close();
+        void close() override;
 
         /**
          * Read from a QIODevice instead of a file descriptor.
@@ -86,7 +86,7 @@ namespace K3b {
          * The default implementation reads from the file desc
          * set via readFromFd or from in()
          */
-        virtual qint64 readData( char* data, qint64 max );
+        qint64 readData( char* data, qint64 max ) override;
 
         /**
          * Write the data to the sink.
@@ -95,12 +95,12 @@ namespace K3b {
          *
          * Can be reimplememented to further process the data.
          */
-        virtual qint64 writeData( const char* data, qint64 max );
+        qint64 writeData( const char* data, qint64 max ) override;
 
         /**
          * Hidden open method. Use open(bool).
          */
-        bool open( OpenMode mode );
+        bool open( OpenMode mode ) override;
 
     private:
         class Private;

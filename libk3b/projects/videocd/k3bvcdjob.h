@@ -34,21 +34,21 @@ namespace K3b {
 
     public:
         VcdJob( VcdDoc*, JobHandler*, QObject* parent = 0 );
-        ~VcdJob();
+        ~VcdJob() override;
 
         Doc* doc() const;
         VcdDoc* vcdDoc() const
         {
             return m_doc;
         }
-        Device::Device* writer() const;
+        Device::Device* writer() const override;
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
     private Q_SLOTS:
         void cancelAll();

@@ -30,7 +30,7 @@ class AudioCdView : public MediaContentsView
 
 public:
     explicit AudioCdView( QWidget* parent = 0 );
-    ~AudioCdView();
+    ~AudioCdView() override;
 
     KActionCollection* actionCollection() const;
 
@@ -40,7 +40,7 @@ public Q_SLOTS:
     void readCdText();
 
 protected:
-    virtual bool eventFilter( QObject* obj, QEvent* event );
+    bool eventFilter( QObject* obj, QEvent* event ) override;
 
 private Q_SLOTS:
     void slotContextMenu( const QPoint& );
@@ -58,10 +58,10 @@ private Q_SLOTS:
     void slotCddbChanged( K3b::Device::Device* dev );
 
 private:
-    void reloadMedium();
+    void reloadMedium() override;
 
     void initActions();
-    void enableInteraction( bool );
+    void enableInteraction( bool ) override;
     void showBusyLabel( bool );
     void updateTitle();
 

@@ -39,22 +39,22 @@ namespace K3b {
 
     public:
         explicit MediaCopyDialog( QWidget *parent = 0 );
-        ~MediaCopyDialog();
+        ~MediaCopyDialog() override;
 
         void setReadingDevice( Device::Device* );
         Device::Device* readingDevice() const;
 
     private Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
         void updateOverrideDevice();
 
     protected:
-        void toggleAll();
-        void init();
+        void toggleAll() override;
+        void init() override;
 
     private:
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
         KIO::filesize_t neededSize() const;
 

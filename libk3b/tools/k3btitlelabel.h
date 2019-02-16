@@ -30,12 +30,12 @@ namespace K3b {
 
     public:
         explicit TitleLabel( QWidget* parent = 0 );
-        ~TitleLabel();
+        ~TitleLabel() override;
 
-        QSize sizeHint() const;
-        QSize minimumSizeHint() const;
+        QSize sizeHint() const override;
+        QSize minimumSizeHint() const override;
 
-        bool event( QEvent* event );
+        bool event( QEvent* event ) override;
 
     public Q_SLOTS:
         /**
@@ -54,8 +54,8 @@ namespace K3b {
         void setAlignment( Qt::Alignment alignment );
 
     protected:
-        void resizeEvent( QResizeEvent* );
-        void paintEvent( QPaintEvent* );
+        void resizeEvent( QResizeEvent* ) override;
+        void paintEvent( QPaintEvent* ) override;
 
     private:
         void updatePositioning();

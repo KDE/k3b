@@ -33,7 +33,7 @@ namespace K3b {
     class ThreadJobCommunicationEvent : public QEvent
     {
     public:
-        ~ThreadJobCommunicationEvent();
+        ~ThreadJobCommunicationEvent() override;
 
         enum Type {
             WaitForMedium = QEvent::User + 50,

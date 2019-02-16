@@ -43,7 +43,7 @@ public:
     };
 
     explicit WidgetShowEffect( QWidget* widget, Effect e = Slide );
-    ~WidgetShowEffect();
+    ~WidgetShowEffect() override;
 
     void setEffect( Effect e ) { m_effect = e; }
 
@@ -84,7 +84,7 @@ public Q_SLOTS:
     void hide( bool effectOnly = false );
 
 private:
-    void timerEvent( QTimerEvent* );
+    void timerEvent( QTimerEvent* ) override;
   
     /**
      * @short Gradually show widget by dissolving from background

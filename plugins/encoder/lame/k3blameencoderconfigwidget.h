@@ -29,12 +29,12 @@ class K3bLameEncoderSettingsWidget : public K3b::PluginConfigWidget, Ui::K3bLame
 
 public:
     K3bLameEncoderSettingsWidget( QWidget* parent, const QVariantList& args );
-    ~K3bLameEncoderSettingsWidget();
+    ~K3bLameEncoderSettingsWidget() override;
 
 public Q_SLOTS:
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
+    void load() override;
+    void save() override;
+    void defaults() override;
 
 private Q_SLOTS:
     void slotQualityLevelChanged( int val );

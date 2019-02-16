@@ -40,7 +40,7 @@ namespace K3b {
 
     public:
         explicit AppDeviceManager( QObject* parent = 0 );
-        ~AppDeviceManager();
+        ~AppDeviceManager() override;
 
         Device::Device* currentDevice() const;
         void setMediaCache( MediaCache* c );
@@ -61,7 +61,7 @@ namespace K3b {
         /**
          * \reimplemeted for internal reasons. The API is unaffected.
          */
-        void clear();
+        void clear() override;
 
         void setCurrentDevice( K3b::Device::Device* );
 
@@ -93,8 +93,8 @@ namespace K3b {
         /**
          * \reimplemeted for internal reasons. The API is unaffected.
          */
-        virtual Device::Device* addDevice( const Solid::Device& solidDev );
-        virtual void removeDevice( const Solid::Device& solidDev );
+        Device::Device* addDevice( const Solid::Device& solidDev ) override;
+        void removeDevice( const Solid::Device& solidDev ) override;
 
         class Private;
         Private* const d;

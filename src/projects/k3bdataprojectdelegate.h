@@ -25,10 +25,10 @@ namespace K3b {
         Q_OBJECT
     public:
         explicit DataProjectDelegate( QObject* parent = 0 );
-        virtual QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+        QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
 
     protected:
-        virtual bool eventFilter( QObject* obj, QEvent* event );
+        bool eventFilter( QObject* obj, QEvent* event ) override;
 
     private:
         mutable QPersistentModelIndex m_current;

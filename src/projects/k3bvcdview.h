@@ -37,16 +37,16 @@ namespace K3b {
 
         public:
             VcdView( VcdDoc* doc, QWidget* parent );
-            ~VcdView();
+            ~VcdView() override;
 
         private Q_SLOTS:
             void slotSelectionChanged();
-            void slotProperties();
+            void slotProperties() override;
             void slotRemove();
             void slotItemActivated( const QModelIndex& index );
 
         protected:
-            ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+            ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
 
             void init();
 

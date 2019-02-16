@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ~LsofWrapperDialog();
+        ~LsofWrapperDialog() override;
 
         /**
          * Check if other applications are currently using the device and if so

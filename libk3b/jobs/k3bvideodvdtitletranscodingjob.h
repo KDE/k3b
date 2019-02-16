@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         VideoDVDTitleTranscodingJob( JobHandler* hdl, QObject* parent );
-        ~VideoDVDTitleTranscodingJob();
+        ~VideoDVDTitleTranscodingJob() override;
 
         /**
          * The video codecs supported by this job.
@@ -94,8 +94,8 @@ namespace K3b {
         static QString audioCodecDescription( AudioCodec );
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         /**
          * The device containing the Video DVD

@@ -38,7 +38,7 @@ namespace K3b {
 
     public:
         explicit ExternalBinModel( ExternalBinManager* manager, QObject* parent = 0 );
-        ~ExternalBinModel();
+        ~ExternalBinModel() override;
 
         /**
          * Reloads programs from ExternalBinManager and updates the model
@@ -56,15 +56,15 @@ namespace K3b {
         const ExternalBin* binForIndex( const QModelIndex& index ) const;
         QModelIndex indexForBin( const ExternalBin* bin, int column = PathColumn ) const;
 
-        virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        virtual QModelIndex parent( const QModelIndex& index ) const;
-        virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        virtual bool setData( const QModelIndex& index, const QVariant& value, int role );
-        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-        virtual QModelIndex buddy( const QModelIndex& index ) const;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+        QModelIndex parent( const QModelIndex& index ) const override;
+        Qt::ItemFlags flags( const QModelIndex& index ) const override;
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        bool setData( const QModelIndex& index, const QVariant& value, int role ) override;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+        QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
+        QModelIndex buddy( const QModelIndex& index ) const override;
 
     private:
         class Private;

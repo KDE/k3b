@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         explicit ThreadJob( JobHandler*, QObject* parent = 0 );
-        virtual ~ThreadJob();
+        ~ThreadJob() override;
 
         /**
          * \reimplemented from Job
@@ -44,30 +44,30 @@ namespace K3b {
          * \return true if the job has been started and has not yet
          * emitted the finished signal
          */
-        virtual bool active() const;
+        bool active() const override;
 
         /**
          * reimplemented from JobHandler
          */
-        virtual Device::MediaType waitForMedium( Device::Device*,
+        Device::MediaType waitForMedium( Device::Device*,
                                                  Device::MediaStates mediaState = Device::STATE_EMPTY,
                                                  Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                                  const K3b::Msf& minMediaSize = K3b::Msf(),
-                                                 const QString& message = QString() );
+                                                 const QString& message = QString() ) override;
 
         /**
          * reimplemented from JobHandler
          */
-        virtual bool questionYesNo( const QString& text,
+        bool questionYesNo( const QString& text,
                                     const QString& caption = QString(),
                                     const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                                    const KGuiItem& buttonNo = KStandardGuiItem::no() );
+                                    const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
 
         /**
          * reimplemented from JobHandler
          */
-        virtual void blockingInformation( const QString& text,
-                                          const QString& caption = QString() );
+        void blockingInformation( const QString& text,
+                                          const QString& caption = QString() ) override;
 
 
         /**
@@ -87,7 +87,7 @@ namespace K3b {
          *
          * \sa run()
          */
-        virtual void start();
+        void start() override;
 
         /**
          * Cancel the job. The method will give the thread a certain
@@ -95,7 +95,7 @@ namespace K3b {
          *
          * \sa canceled()
          */
-        virtual void cancel();
+        void cancel() override;
 
     protected:
         /**
@@ -122,7 +122,7 @@ namespace K3b {
         void slotThreadFinished();
 
     private:
-        void customEvent( QEvent* );
+        void customEvent( QEvent* ) override;
 
         class Private;
         Private* const d;

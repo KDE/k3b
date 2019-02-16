@@ -33,10 +33,10 @@ class AudioEditorWidget : public QFrame
 
 public:
     explicit AudioEditorWidget( QWidget* parent = 0 );
-    ~AudioEditorWidget();
+    ~AudioEditorWidget() override;
 
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
     /**
      * For now the Editor has only one parameter: the length data.
@@ -171,12 +171,12 @@ Q_SIGNALS:
     void markerRemoved( int identifier );
 
 protected:
-    virtual void paintEvent( QPaintEvent* e );
-    virtual void mousePressEvent( QMouseEvent* e );
-    virtual void mouseReleaseEvent( QMouseEvent* e );
-    virtual void mouseDoubleClickEvent( QMouseEvent* e );
-    virtual void mouseMoveEvent( QMouseEvent* e );
-    virtual bool event( QEvent* e );
+    void paintEvent( QPaintEvent* e ) override;
+    void mousePressEvent( QMouseEvent* e ) override;
+    void mouseReleaseEvent( QMouseEvent* e ) override;
+    void mouseDoubleClickEvent( QMouseEvent* e ) override;
+    void mouseMoveEvent( QMouseEvent* e ) override;
+    bool event( QEvent* e ) override;
 
 private:
     class Range;

@@ -33,7 +33,7 @@ namespace K3b {
 
     public:
         explicit AudioSessionReadingJob( JobHandler*, QObject* parent = 0 );
-        ~AudioSessionReadingJob();
+        ~AudioSessionReadingJob() override;
 
         /**
          * For now this simply reads all the audio tracks at the beginning
@@ -62,11 +62,11 @@ namespace K3b {
         void setNeverSkip( bool b );
 
     public Q_SLOTS:
-        void start();
+        void start() override;
 
     private:
-        void jobFinished( bool );
-        bool run();
+        void jobFinished( bool ) override;
+        bool run() override;
 
         class Private;
         Private* const d;

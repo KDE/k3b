@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         explicit PlacesModel( QObject* parent = 0 );
-        ~PlacesModel();
+        ~PlacesModel() override;
 
         /**
          * Will return an invalid item if the index is not part

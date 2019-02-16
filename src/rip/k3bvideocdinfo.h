@@ -74,7 +74,7 @@ class VideoCdInfo : public QObject
 
     public:
         explicit VideoCdInfo( QObject* parent = 0 );
-        ~VideoCdInfo();
+        ~VideoCdInfo() override;
 
         /**
          * Do NOT call this before queryResult has

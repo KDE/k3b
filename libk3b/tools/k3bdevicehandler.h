@@ -160,7 +160,7 @@ namespace K3b {
              */
             DeviceHandler( Commands command, Device* );
 
-            ~DeviceHandler();
+            ~DeviceHandler() override;
 
             DiskInfo diskInfo() const;
             Toc toc() const;
@@ -194,8 +194,8 @@ namespace K3b {
             void eject();
 
         private:
-            void jobFinished( bool success );
-            bool run();
+            void jobFinished( bool success ) override;
+            bool run() override;
 
             class Private;
             Private* const d;

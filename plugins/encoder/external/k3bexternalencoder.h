@@ -25,30 +25,30 @@ class K3bExternalEncoder : public K3b::AudioEncoder
 
 public:
     K3bExternalEncoder( QObject* parent, const QVariantList& );
-    ~K3bExternalEncoder();
+    ~K3bExternalEncoder() override;
 
-    virtual QStringList extensions() const;
+    QStringList extensions() const override;
 
-    virtual QString fileTypeComment( const QString& ) const;
+    QString fileTypeComment( const QString& ) const override;
 
-    virtual int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
     /**
      * reimplemented since the external program is intended to write the file
      * TODO: allow writing to stdout.
      */
-    virtual bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length, const MetaData& metaData );
-    virtual bool isOpen() const;
-    virtual void closeFile();
+    bool openFile( const QString& ext, const QString& filename, const K3b::Msf& length, const MetaData& metaData ) override;
+    bool isOpen() const override;
+    void closeFile() override;
 
 private Q_SLOTS:
     void slotExternalProgramFinished( int, QProcess::ExitStatus );
     void slotExternalProgramOutput( const QString& line );
 
 private:
-    virtual bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
-    virtual void finishEncoderInternal();
-    virtual qint64 encodeInternal( const char* data, qint64 len );
+    bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData ) override;
+    void finishEncoderInternal() override;
+    qint64 encodeInternal( const char* data, qint64 len ) override;
     bool writeWaveHeader();
 
     class Private;

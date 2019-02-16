@@ -30,7 +30,7 @@ namespace K3b {
 
         public:
             MovixProjectModel( MovixDoc* doc, QObject* parent );
-            ~MovixProjectModel();
+            ~MovixProjectModel() override;
 
             enum Columns {
                 NoColumn = 0,
@@ -50,19 +50,19 @@ namespace K3b {
             MovixSubtitleItem* subtitleForIndex( const QModelIndex& index ) const;
             QModelIndex indexForSubtitle( MovixSubtitleItem* item ) const;
 
-            virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-            virtual QModelIndex parent( const QModelIndex& index ) const;
-            virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-            virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-            virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-            virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-            virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-            virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-            virtual Qt::DropActions supportedDropActions() const;
-            virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
-            virtual QStringList mimeTypes() const;
-            virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
-            virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+            QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+            QModelIndex parent( const QModelIndex& index ) const override;
+            int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+            int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+            QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+            bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+            QVariant headerData( int section, Qt::Orientation orientation, int role ) const override;
+            Qt::ItemFlags flags( const QModelIndex& index ) const override;
+            Qt::DropActions supportedDropActions() const override;
+            QMimeData* mimeData( const QModelIndexList& indexes ) const override;
+            QStringList mimeTypes() const override;
+            bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent ) override;
+            bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
 
     private:
         class Private;

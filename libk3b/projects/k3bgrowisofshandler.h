@@ -37,7 +37,7 @@ namespace K3b {
 
     public:
         explicit GrowisofsHandler( QObject* parent = 0 );
-        ~GrowisofsHandler();
+        ~GrowisofsHandler() override;
 
         enum ErrorType {
             ERROR_UNKNOWN,

@@ -25,12 +25,12 @@ namespace K3b {
 
     public:
         explicit VideoDVDTitleDelegate( QObject* parent = 0 );
-        ~VideoDVDTitleDelegate();
-        virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-        virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+        ~VideoDVDTitleDelegate() override;
+        void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
+        QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
         
     protected:
-        virtual void initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const;
+        void initStyleOption( QStyleOptionViewItem* option, const QModelIndex& index ) const override;
     };
 
 } // namespace K3b

@@ -26,7 +26,7 @@ namespace K3b {
 
     public:
         explicit MiscOptionTab(QWidget *parent=0);
-        ~MiscOptionTab();
+        ~MiscOptionTab() override;
 
         void readSettings();
         bool saveSettings();

@@ -34,10 +34,10 @@ namespace K3b {
         
     public:
         explicit VolumeNameWidget( DataDoc* doc, QWidget* parent = 0 );
-        ~VolumeNameWidget();
+        ~VolumeNameWidget() override;
         
     protected:
-        void changeEvent( QEvent* event );
+        void changeEvent( QEvent* event ) override;
         
     private Q_SLOTS:
         void slotDocChanged();

@@ -34,22 +34,22 @@ namespace K3b {
 
     public:
         explicit DvdFormattingJob( JobHandler*, QObject* parent = 0 );
-        ~DvdFormattingJob();
+        ~DvdFormattingJob() override;
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
-        Device::Device* writer() const;
+        Device::Device* writer() const override;
 
     public Q_SLOTS:
-        void start();
+        void start() override;
 
         /**
          * Use this to force the start of the formatting without checking for a usable medium.
          */
         void start( const K3b::Device::DiskInfo& );
 
-        void cancel();
+        void cancel() override;
 
         void setDevice( K3b::Device::Device* );
 

@@ -26,7 +26,7 @@ namespace K3b {
 
     public:
         explicit CddbPatternWidget( QWidget* parent = 0 );
-        ~CddbPatternWidget();
+        ~CddbPatternWidget() override;
 
         QString filenamePattern() const;
         QString playlistPattern() const;

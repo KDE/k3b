@@ -54,7 +54,7 @@ namespace K3b {
 
     public:
         explicit PluginConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
-        virtual ~PluginConfigWidget();
+        ~PluginConfigWidget() override;
 
         // TODO: find a nice way to get the plugin name for the config groups
 #if 0

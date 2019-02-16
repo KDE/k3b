@@ -88,9 +88,9 @@ namespace K3b {
     public:
         MovixProgram();
 
-        bool scan( const QString& );
+        bool scan( const QString& ) override;
 
-        bool supportsUserParameters() const { return false; }
+        bool supportsUserParameters() const override { return false; }
 
     private:
         bool scanNewEMovix( MovixBin* bin, const QString& );

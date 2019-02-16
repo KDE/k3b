@@ -41,7 +41,7 @@ namespace K3b {
 
     public:
         explicit Process( QObject* parent = 0 );
-        ~Process();
+        ~Process() override;
 
         /**
          * In the future this might also set the nice value
@@ -64,7 +64,7 @@ namespace K3b {
          * Closes the write channel but does not kill the process
          * as QProcess does.
          */
-        void close();
+        void close() override;
 
         /**
          * Starts the process in \p mode and then waits for it

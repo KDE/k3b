@@ -61,7 +61,7 @@ namespace K3b {
                            int buttonMask = START_BUTTON|CANCEL_BUTTON,
                            int defaultButton = START_BUTTON,
                            const QString& configgroup = QString() );
-        virtual ~InteractionDialog();
+        ~InteractionDialog() override;
 
         void setMainWidget( QWidget* w );
         void setTitle( const QString& title, const QString& subTitle = QString() );
@@ -72,7 +72,7 @@ namespace K3b {
          * until close() has been called. This allows to hide the dialog while a progress
          * dialog is shown.
          */
-        int exec();
+        int exec() override;
 
         /**
          * reimplemented to allow initialization after the dialog has been opened.
@@ -90,7 +90,7 @@ namespace K3b {
             CANCEL_BUTTON = 4
         };
 
-        QSize sizeHint() const;
+        QSize sizeHint() const override;
 
         QString configGroup() const { return m_configGroup; }
 
@@ -155,7 +155,7 @@ namespace K3b {
         /**
          * Close the dialog and return from any exec call.
          */
-        void done( int r );
+        void done( int r ) override;
 
     protected Q_SLOTS:
         // FIXME: replace these with protected methods which are called from private slots.
@@ -215,9 +215,9 @@ namespace K3b {
         /**
          * reimplemented from QDialog
          */
-        virtual bool eventFilter( QObject*, QEvent* );
+        bool eventFilter( QObject*, QEvent* ) override;
 
-        void hideEvent( QHideEvent* );
+        void hideEvent( QHideEvent* ) override;
 
     private Q_SLOTS:
         void slotLoadK3bDefaults();

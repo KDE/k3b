@@ -27,12 +27,12 @@ class VcdTrackKeysDelegate : public QStyledItemDelegate
 {
 public:
     explicit VcdTrackKeysDelegate( QList<VcdTrack*>& tracks, QObject* parent = 0 );
-    ~VcdTrackKeysDelegate();
+    ~VcdTrackKeysDelegate() override;
     
-    virtual QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    virtual void setEditorData( QWidget* editor, const QModelIndex& index ) const;
-    virtual void setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const;
-    virtual void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
+    void setEditorData( QWidget* editor, const QModelIndex& index ) const override;
+    void setModelData( QWidget* editor, QAbstractItemModel* model, const QModelIndex& index ) const override;
+    void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
     
 private:
     class Private;

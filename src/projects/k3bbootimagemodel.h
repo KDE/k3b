@@ -37,7 +37,7 @@ namespace K3b {
         
     public:
         explicit BootImageModel( DataDoc* doc, QObject* parent = 0 );
-        ~BootImageModel();
+        ~BootImageModel() override;
         
         BootItem* bootItemForIndex( const QModelIndex& index ) const;
         QModelIndex indexForBootItem( BootItem* bootItem, int column = EmulationTypeColumn ) const;
@@ -45,11 +45,11 @@ namespace K3b {
         void createBootItem( const QString& file, BootItem::ImageType imageType );
         void setImageType( const QModelIndex& index, BootItem::ImageType imageType );
         
-        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-        virtual bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() );
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+        QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
+        bool removeRows( int row, int count, const QModelIndex& parent = QModelIndex() ) override;
         
     private:
         DataDoc* m_doc;

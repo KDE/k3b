@@ -37,18 +37,18 @@ namespace K3b {
 
     public:
         explicit BinImageWritingJob( JobHandler*, QObject* parent = 0 );
-        ~BinImageWritingJob();
+        ~BinImageWritingJob() override;
 
-        virtual Device::Device* writer() const { return m_device; };
+        Device::Device* writer() const override { return m_device; };
 
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
-        virtual QString jobSource() const;
-        virtual QString jobTarget() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
+        QString jobSource() const override;
+        QString jobTarget() const override;
 
     public Q_SLOTS:
-        virtual void start();
-        virtual void cancel();
+        void start() override;
+        void cancel() override;
 
         void setWriter( K3b::Device::Device* dev ) { m_device = dev; }
         void setSimulate( bool b ) { m_simulate = b; }

@@ -64,7 +64,7 @@ namespace {
         // to make gcc shut up
         virtual ~K3bMimeTypeResolver() {}
 
-        TagLib::File* createFile( TagLib::FileName fileName, bool, TagLib::AudioProperties::ReadStyle ) const
+        TagLib::File* createFile( TagLib::FileName fileName, bool, TagLib::AudioProperties::ReadStyle ) const override
         {
             QMimeType mimetype = m_mimeDataBase.mimeTypeForFile( QFile::decodeName( fileName ) );
             if ( mimetype.isValid() ) {

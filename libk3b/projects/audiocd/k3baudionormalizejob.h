@@ -31,11 +31,11 @@ namespace K3b {
 
     public:
         explicit AudioNormalizeJob( JobHandler*, QObject* parent = 0 );
-        ~AudioNormalizeJob();
+        ~AudioNormalizeJob() override;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         void setFilesToNormalize( const QList<QString>& files ) { m_files = files; }
 

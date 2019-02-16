@@ -45,7 +45,7 @@ namespace K3b {
     public:
         explicit JobProgressDialog( QWidget* parent = 0,
                            bool showSubProgress = true );
-        ~JobProgressDialog();
+        ~JobProgressDialog() override;
 
         virtual void setJob( Job* job );
         void setExtraInfo( QWidget *extra );

@@ -28,7 +28,7 @@ namespace K3b {
 
     public:
         explicit DataMultiSessionCombobox( QWidget* parent = 0 );
-        ~DataMultiSessionCombobox();
+        ~DataMultiSessionCombobox() override;
 
         /**
          * returnes DataDoc::multiSessionModes

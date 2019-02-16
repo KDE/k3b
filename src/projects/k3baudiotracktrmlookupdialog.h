@@ -40,7 +40,7 @@ namespace K3b {
 
     public:
         explicit AudioTrackTRMLookupDialog( QWidget* parent = 0 );
-        ~AudioTrackTRMLookupDialog();
+        ~AudioTrackTRMLookupDialog() override;
 
         /**
          * This will show the dialog and start the lookup

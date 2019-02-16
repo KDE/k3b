@@ -54,7 +54,7 @@ Q_SIGNALS:
     void checkingMedium( K3b::Device::Device* dev, const QString& );
 
 protected:
-    void run();
+    void run() override;
 
 private:
     MediaCache::DeviceEntry* m_deviceEntry;

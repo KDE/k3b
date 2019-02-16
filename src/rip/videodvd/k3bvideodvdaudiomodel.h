@@ -44,7 +44,7 @@ namespace K3b {
         
     public:
         VideoDVDAudioModel( const VideoDVD::VideoDVD& dvd, const QList<int>& titles, QObject* parent = 0 );
-        ~VideoDVDAudioModel();
+        ~VideoDVDAudioModel() override;
         
         const VideoDVD::Title* titleForIndex( const QModelIndex& index ) const;
         QModelIndex indexForTitle( const VideoDVD::Title& title, int column = TitleColumn ) const;
@@ -58,14 +58,14 @@ namespace K3b {
         
         int chosenAudio( const VideoDVD::Title& title ) const;
         
-        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual QModelIndex parent( const QModelIndex& child ) const;
-        virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-        virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-        virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+        QModelIndex parent( const QModelIndex& child ) const override;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+        QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
+        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+        Qt::ItemFlags flags( const QModelIndex& index ) const override;
         
     private:
         class Private;

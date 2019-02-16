@@ -34,7 +34,7 @@ namespace K3b {
 
     public:
         explicit SimpleJobHandler( QObject* parent = 0 );
-        ~SimpleJobHandler();
+        ~SimpleJobHandler() override;
 
         /*
          * \return MEDIA_UNKNOWN
@@ -43,20 +43,20 @@ namespace K3b {
                                          K3b::Device::MediaStates mediaState = Device::STATE_EMPTY,
                                          K3b::Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                          const K3b::Msf& minMediaSize = K3b::Msf(),
-                                         const QString& message = QString() );
+                                         const QString& message = QString() ) override;
         /**
          * \return true
          */
         bool questionYesNo( const QString& text,
                             const QString& caption = QString(),
                             const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                            const KGuiItem& buttonNo = KStandardGuiItem::no() );
+                            const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
 
         /**
          * Does nothing
          */
         void blockingInformation( const QString& text,
-                                  const QString& caption = QString() );
+                                  const QString& caption = QString() ) override;
     };
 }
 

@@ -42,12 +42,12 @@ namespace K3b {
     {
     public:
         explicit Iso9660DeviceBackend( Device::Device* dev );
-        ~Iso9660DeviceBackend();
+        ~Iso9660DeviceBackend() override;
 
-        bool open();
-        void close();
-        bool isOpen() const { return m_isOpen; }
-        int read( unsigned int sector, char* data, int len );
+        bool open() override;
+        void close() override;
+        bool isOpen() const override { return m_isOpen; }
+        int read( unsigned int sector, char* data, int len ) override;
 
     private:
         Device::Device* m_device;
@@ -59,12 +59,12 @@ namespace K3b {
     public:
         explicit Iso9660FileBackend( const QString& filename );
         explicit Iso9660FileBackend( int fd );
-        ~Iso9660FileBackend();
+        ~Iso9660FileBackend() override;
 
-        bool open();
-        void close();
-        bool isOpen() const;
-        int read( unsigned int sector, char* data, int len );
+        bool open() override;
+        void close() override;
+        bool isOpen() const override;
+        int read( unsigned int sector, char* data, int len ) override;
 
     private:
         QString m_filename;
@@ -76,12 +76,12 @@ namespace K3b {
     {
     public:
         explicit Iso9660LibDvdCssBackend( Device::Device* );
-        ~Iso9660LibDvdCssBackend();
+        ~Iso9660LibDvdCssBackend() override;
 
-        bool open();
-        void close();
-        bool isOpen() const;
-        int read( unsigned int sector, char* data, int len );
+        bool open() override;
+        void close() override;
+        bool isOpen() const override;
+        int read( unsigned int sector, char* data, int len ) override;
 
     private:
         Device::Device* m_device;

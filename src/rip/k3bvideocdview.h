@@ -30,7 +30,7 @@ class VideoCdView : public MediaContentsView
 
     public:
         explicit VideoCdView( QWidget* parent = 0 );
-        ~VideoCdView();
+        ~VideoCdView() override;
 
         KActionCollection* actionCollection() const;
 
@@ -48,10 +48,10 @@ class VideoCdView : public MediaContentsView
         void slotViewFiles();
 
     private:
-        void reloadMedium();
+        void reloadMedium() override;
         void initActions();
         void updateDisplay();
-        void enableInteraction( bool );
+        void enableInteraction( bool ) override;
         void buildTree( QTreeWidgetItem* parentItem, const QDomElement& parentElement, const QString& pname = QString() );
         
         class Private;

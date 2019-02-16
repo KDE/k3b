@@ -32,7 +32,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        virtual ~AbstractWriter();
+        ~AbstractWriter() override;
 
         Device::Device* burnDevice();
         int burnSpeed() const { return m_burnSpeed; }
@@ -52,7 +52,7 @@ namespace K3b {
          * Will also emit canceled and finished signals.
          * may be called by subclasses.
          */
-        void cancel();
+        void cancel() override;
 
         void setBurnDevice( K3b::Device::Device* dev ) { m_burnDevice = dev; }
         void setBurnSpeed( int s ) { m_burnSpeed = s; }

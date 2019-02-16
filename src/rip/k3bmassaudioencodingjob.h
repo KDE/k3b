@@ -46,7 +46,7 @@ namespace K3b {
 
     public:
         MassAudioEncodingJob( bool bigEndian, JobHandler* jobHandler, QObject* parent );
-        virtual ~MassAudioEncodingJob();
+        ~MassAudioEncodingJob() override;
 
         /**
          * Sets CDDB information for the list of track
@@ -84,8 +84,8 @@ namespace K3b {
          */
         void setWriteCueFile( bool writeCueFile );
         
-        virtual QString jobDetails() const;
-        virtual QString jobTarget() const;
+        QString jobDetails() const override;
+        QString jobTarget() const override;
         
     protected:
         /**
@@ -122,7 +122,7 @@ namespace K3b {
         virtual void trackFinished( int trackIndex, const QString& filename ) = 0;
         
     private:
-        virtual bool run();
+        bool run() override;
         
         /**
          * Reads data from source and encode it to provided filename

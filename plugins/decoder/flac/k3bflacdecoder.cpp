@@ -83,7 +83,7 @@ public:
         }
 
 
-    ~Private() {
+    ~Private() override {
         cleanup();
         delete internalBuffer;
     }
@@ -109,15 +109,15 @@ protected:
     virtual FLAC__SeekableStreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
     virtual FLAC__SeekableStreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
 #else
-    virtual FLAC__StreamDecoderReadStatus read_callback(FLAC__byte buffer[], size_t *bytes);
-    virtual FLAC__StreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset);
-    virtual FLAC__StreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset);
-    virtual FLAC__StreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length);
+    FLAC__StreamDecoderReadStatus read_callback(FLAC__byte buffer[], size_t *bytes) override;
+    FLAC__StreamDecoderSeekStatus seek_callback(FLAC__uint64 absolute_byte_offset) override;
+    FLAC__StreamDecoderTellStatus tell_callback(FLAC__uint64 *absolute_byte_offset) override;
+    FLAC__StreamDecoderLengthStatus length_callback(FLAC__uint64 *stream_length) override;
 #endif
-    virtual bool eof_callback();
-    virtual void error_callback(FLAC__StreamDecoderErrorStatus){};
-    virtual void metadata_callback(const ::FLAC__StreamMetadata *metadata);
-    virtual ::FLAC__StreamDecoderWriteStatus write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[]);
+    bool eof_callback() override;
+    void error_callback(FLAC__StreamDecoderErrorStatus) override{};
+    void metadata_callback(const ::FLAC__StreamMetadata *metadata) override;
+    ::FLAC__StreamDecoderWriteStatus write_callback(const ::FLAC__Frame *frame, const FLAC__int32 * const buffer[]) override;
 };
 
 bool K3bFLACDecoder::Private::seekToFrame(int frame) {

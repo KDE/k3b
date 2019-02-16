@@ -26,7 +26,7 @@ namespace K3b {
 
     public:
         AudioMaxSpeedJob( AudioDoc* doc, JobHandler*, QObject* parent = 0 );
-        ~AudioMaxSpeedJob();
+        ~AudioMaxSpeedJob() override;
 
         /**
          * KB/sec
@@ -35,7 +35,7 @@ namespace K3b {
         int maxSpeed() const;
 
     private:
-        bool run();
+        bool run() override;
 
         class Private;
         Private* const d;

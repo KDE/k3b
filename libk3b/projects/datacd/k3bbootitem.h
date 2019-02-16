@@ -24,11 +24,11 @@ namespace K3b {
     public:
         BootItem( const QString& fileName, DataDoc& doc, const QString& k3bName = 0 );
         BootItem( const BootItem& );
-        ~BootItem();
+        ~BootItem() override;
 
-        DataItem* copy() const;
+        DataItem* copy() const override;
 
-        bool isHideable() const { return false; }
+        bool isHideable() const override { return false; }
 
         enum ImageType { FLOPPY, HARDDISK, NONE };
 

@@ -50,19 +50,19 @@ namespace K3b {
 
     public:
         explicit DataDoc( QObject* parent = 0 );
-        virtual ~DataDoc();
+        ~DataDoc() override;
 
-        virtual Type type() const { return DataProject; }
-        virtual QString typeString() const { return QString::fromLatin1("data"); }
+        Type type() const override { return DataProject; }
+        QString typeString() const override { return QString::fromLatin1("data"); }
 
-        virtual QString name() const;
+        QString name() const override;
 
         /**
          * The spported media types based on the project size
          * and settings (example: if writing mode == TAO we force
          * CD media)
          */
-        virtual Device::MediaTypes supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const override;
 
         enum MultiSessionMode {
             /**
@@ -80,16 +80,16 @@ namespace K3b {
 
         RootItem* root() const;
 
-        virtual bool newDocument();
-        virtual void clear();
+        bool newDocument() override;
+        void clear() override;
 
-        virtual KIO::filesize_t size() const;
+        KIO::filesize_t size() const override;
 
         /**
          * This is used for multisession where size() also returnes the imported session's size
          */
-        virtual KIO::filesize_t burningSize() const;
-        virtual Msf length() const;
+        KIO::filesize_t burningSize() const override;
+        Msf length() const override;
         virtual Msf burningLength() const;
 
         /**
@@ -110,7 +110,7 @@ namespace K3b {
 
         QString treatWhitespace( const QString& );
 
-        virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent = 0 );
+        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent = 0 ) override;
 
         MultiSessionMode multiSessionMode() const;
         void setMultiSessionMode( MultiSessionMode mode );
@@ -207,7 +207,7 @@ namespace K3b {
         QList<DataItem*> findItemByLocalPath( const QString& path ) const;
 
     public Q_SLOTS:
-        virtual void addUrls( const QList<QUrl>& urls );
+        void addUrls( const QList<QUrl>& urls ) override;
 
         /**
          * Add urls syncroneously
@@ -234,9 +234,9 @@ namespace K3b {
 
     protected:
         /** reimplemented from Doc */
-        virtual bool loadDocumentData( QDomElement* root );
+        bool loadDocumentData( QDomElement* root ) override;
         /** reimplemented from Doc */
-        virtual bool saveDocumentData( QDomElement* );
+        bool saveDocumentData( QDomElement* ) override;
 
         void saveDocumentDataOptions( QDomElement& optionsElem );
         void saveDocumentDataHeader( QDomElement& headerElem );

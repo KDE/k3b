@@ -36,13 +36,13 @@ namespace K3b {
 
     public:
         AudioView( AudioDoc* doc, QWidget* parent );
-        ~AudioView();
+        ~AudioView() override;
 
     public Q_SLOTS:
-        virtual void addUrls( const QList<QUrl>& urls );
+        void addUrls( const QList<QUrl>& urls ) override;
 
     protected:
-        virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
 
     private Q_SLOTS:
         void slotPlayerStateChanged();

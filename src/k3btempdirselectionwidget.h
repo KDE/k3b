@@ -35,7 +35,7 @@ class TempDirSelectionWidget : public QGroupBox
 
 public: 
     explicit TempDirSelectionWidget( QWidget *parent = 0 );
-    ~TempDirSelectionWidget();
+    ~TempDirSelectionWidget() override;
 
     /** determines if the selection dialog should ask for a dir or a file */
     enum mode { DIR, FILE };

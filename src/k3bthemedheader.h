@@ -32,7 +32,7 @@ class ThemedHeader : public QFrame
 public:
     explicit ThemedHeader( QWidget* parent = 0 );
     ThemedHeader( const QString& title, const QString& subtitle, QWidget* parent = 0 );
-    ~ThemedHeader();
+    ~ThemedHeader() override;
 
 public Q_SLOTS:
     void setTitle( const QString& title, const QString& subtitle = QString() );

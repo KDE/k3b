@@ -41,13 +41,13 @@ namespace K3b {
               m_size( item.m_size ) {
         }
 
-        virtual ~SpecialDataItem() {
+        ~SpecialDataItem() override {
             // remove this from parentdir
             if( parent() )
                 parent()->takeDataItem( this );
         }
 
-        DataItem* copy() const {
+        DataItem* copy() const override {
             return new SpecialDataItem( *this );
         }
 
@@ -60,7 +60,7 @@ namespace K3b {
         /**
          * Normally one does not use this method but DataItem::size()
          */
-        KIO::filesize_t itemSize( bool ) const { return m_size; }
+        KIO::filesize_t itemSize( bool ) const override { return m_size; }
 
     private:
         QString m_specialType;

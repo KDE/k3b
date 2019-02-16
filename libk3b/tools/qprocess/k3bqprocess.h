@@ -107,7 +107,7 @@ public:
     Q_DECLARE_FLAGS( ProcessFlags, ProcessFlag )
 
     explicit K3bQProcess(QObject *parent = 0);
-    virtual ~K3bQProcess();
+    ~K3bQProcess() override;
 
     void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
     void start(const QString &program, OpenMode mode = ReadWrite);
@@ -144,8 +144,8 @@ public:
     Q_PID pid() const;
 
     bool waitForStarted(int msecs = 30000);
-    bool waitForReadyRead(int msecs = 30000);
-    bool waitForBytesWritten(int msecs = 30000);
+    bool waitForReadyRead(int msecs = 30000) override;
+    bool waitForBytesWritten(int msecs = 30000) override;
     bool waitForFinished(int msecs = 30000);
 
     QByteArray readAllStandardOutput();
@@ -155,12 +155,12 @@ public:
     ::QProcess::ExitStatus exitStatus() const;
 
     // QIODevice
-    qint64 bytesAvailable() const;
-    qint64 bytesToWrite() const;
-    bool isSequential() const;
-    bool canReadLine() const;
-    void close();
-    bool atEnd() const;
+    qint64 bytesAvailable() const override;
+    qint64 bytesToWrite() const override;
+    bool isSequential() const override;
+    bool canReadLine() const override;
+    void close() override;
+    bool atEnd() const override;
 
     bool isReadyWrite() const;
 
@@ -195,8 +195,8 @@ protected:
     virtual void setupChildProcess();
 
     // QIODevice
-    qint64 readData(char *data, qint64 maxlen);
-    qint64 writeData(const char *data, qint64 len);
+    qint64 readData(char *data, qint64 maxlen) override;
+    qint64 writeData(const char *data, qint64 len) override;
 
 private:
     Q_DECLARE_PRIVATE(K3bQProcess)

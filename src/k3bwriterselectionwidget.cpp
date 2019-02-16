@@ -70,19 +70,19 @@ public:
     }
 
 protected:
-    bool showMedium( const K3b::Medium& m ) const {
+    bool showMedium( const K3b::Medium& m ) const override {
         return ( m.device() == m_overrideDevice ||
                  K3b::MediaSelectionComboBox::showMedium( m ) );
     }
 
-    QString mediumString( const K3b::Medium& m ) const {
+    QString mediumString( const K3b::Medium& m ) const override {
         if( m.device() == m_overrideDevice )
             return m_overrideString;
         else
             return K3b::MediaSelectionComboBox::mediumString( m );
     }
 
-    QString mediumToolTip( const K3b::Medium& m ) const {
+    QString mediumToolTip( const K3b::Medium& m ) const override {
         if( m.device() == m_overrideDevice )
             return m_overrideToolTip;
         else {

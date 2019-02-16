@@ -47,12 +47,12 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        virtual ~Job();
+        ~Job() override;
 
         /**
          * \reimplemented from JobHandler
          */
-        bool isJob() const { return true; }
+        bool isJob() const override { return true; }
 
         JobHandler* jobHandler() const;
 
@@ -151,25 +151,25 @@ namespace K3b {
         /**
          * reimplemented from JobHandler
          */
-        virtual Device::MediaType waitForMedium( Device::Device*,
+        Device::MediaType waitForMedium( Device::Device*,
                                                  Device::MediaStates mediaState = Device::STATE_EMPTY,
                                                  Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                                  const K3b::Msf& minMediaSize = K3b::Msf(),
-                                                 const QString& message = QString() );
+                                                 const QString& message = QString() ) override;
 
         /**
          * reimplemented from JobHandler
          */
-        virtual bool questionYesNo( const QString& text,
+        bool questionYesNo( const QString& text,
                                     const QString& caption = QString(),
                                     const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                                    const KGuiItem& buttonNo = KStandardGuiItem::no() );
+                                    const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
 
         /**
          * reimplemented from JobHandler
          */
-        virtual void blockingInformation( const QString& text,
-                                          const QString& caption = QString() );
+        void blockingInformation( const QString& text,
+                                          const QString& caption = QString() ) override;
 
         /**
          * Wait for the job to finish. In case the job is not running
@@ -277,7 +277,7 @@ namespace K3b {
 
     public:
         explicit BurnJob( JobHandler* hdl, QObject* parent = 0 );
-        virtual ~BurnJob();
+        ~BurnJob() override;
 
         /**
          * The writing device used by this job.

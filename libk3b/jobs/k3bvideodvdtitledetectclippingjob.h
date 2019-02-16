@@ -30,7 +30,7 @@ namespace K3b {
 
     public:
         VideoDVDTitleDetectClippingJob( JobHandler* hdl, QObject* parent );
-        ~VideoDVDTitleDetectClippingJob();
+        ~VideoDVDTitleDetectClippingJob() override;
 
         const VideoDVD::VideoDVD& videoDVD() const { return m_dvd; }
         int title() const { return m_titleNumber; }
@@ -57,8 +57,8 @@ namespace K3b {
         int clippingRight() const { return m_clippingRight; }
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         /**
          * The device containing the Video DVD

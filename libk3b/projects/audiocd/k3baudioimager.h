@@ -29,7 +29,7 @@ namespace K3b {
 
     public:
         AudioImager( AudioDoc* doc, AudioJobTempData* tempData, JobHandler* jh, QObject* parent = 0 );
-        ~AudioImager();
+        ~AudioImager() override;
 
         /**
          * The data gets written directly into fd instead of the imagefiles.
@@ -47,7 +47,7 @@ namespace K3b {
         ErrorType lastErrorType() const;
 
     private:
-        bool run();
+        bool run() override;
 
         class Private;
         Private* const d;

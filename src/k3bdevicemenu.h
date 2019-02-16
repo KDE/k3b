@@ -36,7 +36,7 @@ namespace K3b {
 
     public:
         explicit DeviceMenu( QWidget* parent = 0 );
-        ~DeviceMenu();
+        ~DeviceMenu() override;
 
     private:
         class Private;

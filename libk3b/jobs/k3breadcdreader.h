@@ -34,13 +34,13 @@ namespace K3b {
 
     public:
         explicit ReadcdReader( JobHandler*, QObject* parent = 0 );
-        ~ReadcdReader();
+        ~ReadcdReader() override;
 
-        bool active() const;
+        bool active() const override;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         void setReadDevice( K3b::Device::Device* dev ) { m_readDevice = dev; }
 

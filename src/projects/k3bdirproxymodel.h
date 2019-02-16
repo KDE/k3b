@@ -31,7 +31,7 @@ class DirProxyModel : public QSortFilterProxyModel
 
 public:
     explicit DirProxyModel( QObject *parent = 0 );
-    ~DirProxyModel();
+    ~DirProxyModel() override;
 
 protected:
     /**
@@ -39,14 +39,14 @@ protected:
      * which rows to show. In this specific model we only allow directories to
      * be shown.
      */
-    virtual bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const;
+    bool filterAcceptsRow( int source_row, const QModelIndex & source_parent ) const override;
 
     /**
      * Reimplemented method from QSortFilterProxyModel. Prevents from sorting
      * top-level elements. Sorting top-level elements is not desirable in MixedView as
      * we need fixed order of items there (first audio part, second data part)
      */
-    virtual bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
+    bool lessThan( const QModelIndex& left, const QModelIndex& right ) const override;
 };
 }
 

@@ -34,11 +34,11 @@ namespace K3b {
 
     public:
         explicit DataView( DataDoc* doc, QWidget* parent = 0 );
-        virtual ~DataView();
+        ~DataView() override;
 
     public Q_SLOTS:
-        virtual void slotBurn();
-        virtual void addUrls( const QList<QUrl>& urls );
+        void slotBurn() override;
+        void addUrls( const QList<QUrl>& urls ) override;
 
     private Q_SLOTS:
         void slotParentDir();
@@ -46,7 +46,7 @@ namespace K3b {
         void slotSetCurrentRoot( const QModelIndex& index );
 
     protected:
-        virtual ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 );
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
 
     private:
         DataDoc* m_doc;

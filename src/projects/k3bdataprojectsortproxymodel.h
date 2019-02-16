@@ -31,7 +31,7 @@ namespace K3b {
         explicit DataProjectSortProxyModel( QObject* parent = 0 );
 
     protected:
-        virtual bool lessThan(const QModelIndex& left, const QModelIndex& right) const;
+        bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
     };
 
 }

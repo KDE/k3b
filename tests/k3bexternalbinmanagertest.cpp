@@ -31,14 +31,14 @@ public:
         const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
         qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << cdrecordBin;
     }
-    ~MyBurnJob() 
+    ~MyBurnJob() override
     {
         qDebug() << "DEBUG:" << __PRETTY_FUNCTION__;
     }
 
 public Q_SLOTS:
-    virtual void start() { jobStarted(); jobFinished(true); }
-    virtual void cancel() { emit canceled(); }
+    void start() override { jobStarted(); jobFinished(true); }
+    void cancel() override { emit canceled(); }
 
 private:
     bool prepareWriter() 

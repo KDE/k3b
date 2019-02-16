@@ -31,7 +31,7 @@ class Splash : public QWidget
 
 public:
     explicit Splash( QWidget* parent = 0 );
-    ~Splash();
+    ~Splash() override;
 
 public Q_SLOTS:
     void show();
@@ -39,7 +39,7 @@ public Q_SLOTS:
     void addInfo( const QString& );
 
 protected:
-    void mousePressEvent( QMouseEvent* );
+    void mousePressEvent( QMouseEvent* ) override;
     //  void paintEvent( QPaintEvent* );
 
 private:

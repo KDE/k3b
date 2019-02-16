@@ -40,7 +40,7 @@ namespace K3b {
 
     public:
         explicit AudioDataSourceEditWidget( QWidget* parent = 0 );
-        ~AudioDataSourceEditWidget();
+        ~AudioDataSourceEditWidget() override;
 
         K3b::Msf startOffset() const;
 

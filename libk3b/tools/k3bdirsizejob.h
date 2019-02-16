@@ -35,7 +35,7 @@ namespace K3b {
 
     public:
         explicit DirSizeJob( QObject* parent = 0 );
-        ~DirSizeJob();
+        ~DirSizeJob() override;
 
         KIO::filesize_t totalSize() const;
 
@@ -61,7 +61,7 @@ namespace K3b {
         void setFollowSymlinks( bool );
 
     private:
-        bool run();
+        bool run() override;
         bool countDir( const QString& dir );
         bool countFiles( const QStringList& l, const QString& dir );
 

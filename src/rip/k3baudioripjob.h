@@ -33,7 +33,7 @@ namespace K3b {
         
     public:
         AudioRipJob( JobHandler* hdl, QObject* parent );
-        ~AudioRipJob();
+        ~AudioRipJob() override;
 
         // paranoia settings
         void setParanoiaMode( int mode );
@@ -43,28 +43,28 @@ namespace K3b {
 
         void setDevice( Device::Device* device );
 
-        virtual QString jobDescription() const;
-        virtual QString jobSource() const;
+        QString jobDescription() const override;
+        QString jobSource() const override;
 
         class Private;
 
     public Q_SLOTS:
-        virtual void start();
+        void start() override;
 
     private:
-        virtual void jobFinished( bool );
+        void jobFinished( bool ) override;
 
-        virtual bool init();
+        bool init() override;
 
-        virtual void cleanup();
+        void cleanup() override;
 
-        virtual Msf trackLength( int trackIndex ) const;
+        Msf trackLength( int trackIndex ) const override;
 
-        virtual QIODevice* createReader( int trackIndex ) const;
+        QIODevice* createReader( int trackIndex ) const override;
 
-        virtual void trackStarted( int trackIndex );
+        void trackStarted( int trackIndex ) override;
 
-        virtual void trackFinished( int trackIndex, const QString& filename );
+        void trackFinished( int trackIndex, const QString& filename ) override;
 
     private:
         QScopedPointer<Private> d;

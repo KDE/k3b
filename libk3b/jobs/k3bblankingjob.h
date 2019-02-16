@@ -29,18 +29,18 @@ namespace K3b {
 
     public:
         explicit BlankingJob( JobHandler*, QObject* parent = 0 );
-        ~BlankingJob();
+        ~BlankingJob() override;
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
-        Device::Device* writer() const;
+        Device::Device* writer() const override;
 
-        bool hasBeenCanceled() const { return m_canceled; }
+        bool hasBeenCanceled() const override { return m_canceled; }
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
         void setForce( bool f ) { m_force = f; }
         void setDevice( K3b::Device::Device* d );
         void setSpeed( int s ) { m_speed = s; }

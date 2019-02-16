@@ -34,20 +34,20 @@ namespace K3b {
 
     public:
         explicit MediaFormattingDialog( QWidget* = 0 );
-        ~MediaFormattingDialog();
+        ~MediaFormattingDialog() override;
 
     public Q_SLOTS:
         void setDevice( Device::Device* );
 
     protected Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
 
     protected:
-        void toggleAll();
+        void toggleAll() override;
 
     private:
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
         WriterSelectionWidget* m_writerSelectionWidget;
         WritingModeWidget* m_writingModeWidget;

@@ -28,18 +28,18 @@ namespace K3b {
     public:
         explicit SessionImportItem( const Iso9660File* );
         SessionImportItem( const SessionImportItem& );
-        ~SessionImportItem();
+        ~SessionImportItem() override;
 
-        DataItem* copy() const;
+        DataItem* copy() const override;
 
         FileItem* replaceItem() const { return m_replaceItem; }
         void setReplaceItem( FileItem* item ) { m_replaceItem = item; }
 
-        bool isRemoveable() const { return false; }
-        bool isMoveable() const { return false; }
-        bool isRenameable() const { return false; }
-        bool isHideable() const { return false; }
-        bool writeToCd() const { return false; }
+        bool isRemoveable() const override { return false; }
+        bool isMoveable() const override { return false; }
+        bool isRenameable() const override { return false; }
+        bool isHideable() const override { return false; }
+        bool writeToCd() const override { return false; }
 
     private:
         FileItem* m_replaceItem;

@@ -28,7 +28,7 @@ class NotifyOptionTab : public QWidget
 
  public:
   explicit NotifyOptionTab( QWidget* parent = 0 );
-  ~NotifyOptionTab();
+  ~NotifyOptionTab() override;
 
   void readSettings();
   bool saveSettings();

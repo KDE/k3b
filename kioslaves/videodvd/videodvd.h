@@ -35,12 +35,12 @@ class kio_videodvdProtocol : public KIO::SlaveBase
 {
 public:
     kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket);
-    ~kio_videodvdProtocol();
+    ~kio_videodvdProtocol() override;
 
-    void mimetype(const QUrl& url);
-    void stat(const QUrl& url);
-    void get(const QUrl& url);
-    void listDir(const QUrl& url);
+    void mimetype(const QUrl& url) override;
+    void stat(const QUrl& url) override;
+    void get(const QUrl& url) override;
+    void listDir(const QUrl& url) override;
 
 private:
     K3b::Iso9660* openIso( const QUrl&, QString& plainIsoPath );

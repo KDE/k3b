@@ -34,7 +34,7 @@ namespace K3b {
 
     public:
         VideoDVDRippingJob( JobHandler* hdl, QObject* parent );
-        ~VideoDVDRippingJob();
+        ~VideoDVDRippingJob() override;
 
         class TitleRipInfo {
         public:
@@ -61,12 +61,12 @@ namespace K3b {
             int clipRight;
         };
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         void setVideoDVD( const K3b::VideoDVD::VideoDVD& dvd ) { m_dvd = dvd; }
         void setTitles( const QVector<TitleRipInfo>& titles ) { m_titleRipInfos = titles; }

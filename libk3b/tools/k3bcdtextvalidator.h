@@ -25,9 +25,9 @@ namespace K3b {
     {
     public:
         explicit CdTextValidator(QObject *parent = 0);
-        ~CdTextValidator();
+        ~CdTextValidator() override;
 
-        State validate( QString& input, int& pos ) const;
+        State validate( QString& input, int& pos ) const override;
     };
 }
 

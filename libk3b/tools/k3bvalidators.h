@@ -30,12 +30,12 @@ namespace K3b {
 
         virtual State validateChar( const QChar& ) const = 0;
 
-        virtual State validate( QString& s, int& pos ) const;
+        State validate( QString& s, int& pos ) const override;
 
         /**
          * Replaces all invalid chars with the repplace char
          */
-        virtual void fixup( QString& ) const;
+        void fixup( QString& ) const override;
 
         /**
          * Default to '_'
@@ -52,7 +52,7 @@ namespace K3b {
     public:
         explicit Latin1Validator( QObject* parent = 0 );
 
-        virtual State validateChar( const QChar& ) const;
+        State validateChar( const QChar& ) const override;
     };
 
 
@@ -61,7 +61,7 @@ namespace K3b {
     public:
         explicit AsciiValidator( QObject* parent = 0 );
 
-        virtual State validateChar( const QChar& ) const;
+        State validateChar( const QChar& ) const override;
     };
 
 
@@ -80,7 +80,7 @@ namespace K3b {
         void setReplaceChar( const QChar& s ) { m_replaceChar = s; }
         const QChar& replaceChar() const { return m_replaceChar; }
 
-        virtual void fixup( QString& ) const;
+        void fixup( QString& ) const override;
 
     private:
         QChar m_replaceChar;

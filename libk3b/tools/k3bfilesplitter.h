@@ -44,7 +44,7 @@ namespace K3b {
     public:
         FileSplitter();
         explicit FileSplitter( const QString& filename );
-        ~FileSplitter();
+        ~FileSplitter() override;
 
         /**
          * Set the maximum file size. If this is set to 0
@@ -59,22 +59,22 @@ namespace K3b {
 
         void setName( const QString& filename );
 
-        virtual bool open( OpenMode mode );
+        bool open( OpenMode mode ) override;
 
-        virtual void close();
+        void close() override;
 
         virtual void flush();
 
-        virtual qint64 size() const;
+        qint64 size() const override;
 
-        virtual qint64 pos() const;
+        qint64 pos() const override;
 
         /**
          * Not implemented
          */
-        virtual bool seek( qint64 );
+        bool seek( qint64 ) override;
 
-        virtual bool atEnd() const;
+        bool atEnd() const override;
 
         /**
          * Deletes all the split files.
@@ -86,16 +86,16 @@ namespace K3b {
         /**
          * \return \p true if the file is open in writable mode
          */
-        bool waitForBytesWritten( int msecs );
+        bool waitForBytesWritten( int msecs ) override;
 
         /**
          * \return \p true if open and not at end
          */
-        bool waitForReadyRead( int msecs );
+        bool waitForReadyRead( int msecs ) override;
 
     protected:
-        virtual qint64 readData( char *data, qint64 maxlen );
-        virtual qint64 writeData( const char *data, qint64 len );
+        qint64 readData( char *data, qint64 maxlen ) override;
+        qint64 writeData( const char *data, qint64 len ) override;
 
     private:
         class Private;

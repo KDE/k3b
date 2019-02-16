@@ -35,18 +35,18 @@ namespace K3b {
 
     public:
         explicit MovixDoc( QObject* parent = 0 );
-        virtual ~MovixDoc();
+        ~MovixDoc() override;
 
-        virtual Type type() const { return MovixProject; }
-        virtual QString typeString() const { return QString::fromLatin1("movix"); }
+        Type type() const override { return MovixProject; }
+        QString typeString() const override { return QString::fromLatin1("movix"); }
 
-        bool newDocument();
+        bool newDocument() override;
 
         QList<MovixFileItem*> movixFileItems() const { return m_movixFiles; }
 
         int indexOf( MovixFileItem* item );
 
-        virtual BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
+        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent ) override;
 
         // Movix project options managed by MovixOptionWidget
         void setShutdown( bool v ) { m_shutdown = v; }
@@ -102,7 +102,7 @@ namespace K3b {
         void subTitleRemoved();
 
     public Q_SLOTS:
-        void addUrls( const QList<QUrl>& urls );
+        void addUrls( const QList<QUrl>& urls ) override;
         void addUrlsAt( const QList<QUrl>& urls, int pos );
         void addMovixItems( QList<K3b::MovixFileItem*>& items, int pos = -1 );
         void removeMovixItem( K3b::MovixFileItem* item);
@@ -112,9 +112,9 @@ namespace K3b {
 
     protected:
         /** reimplemented from Doc */
-        bool loadDocumentData( QDomElement* root );
+        bool loadDocumentData( QDomElement* root ) override;
         /** reimplemented from Doc */
-        bool saveDocumentData( QDomElement* );
+        bool saveDocumentData( QDomElement* ) override;
 
     private:
         QList<MovixFileItem*> m_movixFiles;

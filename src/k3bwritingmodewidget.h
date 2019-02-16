@@ -34,7 +34,7 @@ namespace K3b {
     public:
         explicit WritingModeWidget( QWidget* parent = 0 );
         explicit WritingModeWidget( WritingModes modes, QWidget* parent = 0 );
-        ~WritingModeWidget();
+        ~WritingModeWidget() override;
 
         WritingMode writingMode() const;
 

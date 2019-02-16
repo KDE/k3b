@@ -76,7 +76,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~K3bKProcess();
+    ~K3bKProcess() override;
 
     /**
      * Set how to handle the output channels of the child process.

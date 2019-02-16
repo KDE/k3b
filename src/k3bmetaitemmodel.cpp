@@ -82,9 +82,9 @@ namespace {
             : m_model( model ) {
         }
 
-        Place* place() const;
-        bool isPlace() const { return true; }
-        QAbstractItemModel* model() const;
+        Place* place() const override;
+        bool isPlace() const override { return true; }
+        QAbstractItemModel* model() const override;
 
         // a name and icon for the place (used for display)
         // FIXME: better use something like placeData(...)

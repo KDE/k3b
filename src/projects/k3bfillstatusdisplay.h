@@ -37,10 +37,10 @@ namespace K3b {
 
     public:
         FillStatusDisplayWidget( Doc* doc, QWidget* parent );
-        ~FillStatusDisplayWidget();
+        ~FillStatusDisplayWidget() override;
 
-        QSize sizeHint() const;
-        QSize minimumSizeHint() const;
+        QSize sizeHint() const override;
+        QSize minimumSizeHint() const override;
 
         const K3b::Msf& cdSize() const;
 
@@ -52,8 +52,8 @@ namespace K3b {
         void contextMenu( const QPoint& );
 
     protected:
-        void mousePressEvent( QMouseEvent* );
-        void paintEvent(QPaintEvent*);
+        void mousePressEvent( QMouseEvent* ) override;
+        void paintEvent(QPaintEvent*) override;
 
     private:
         class Private;
@@ -67,7 +67,7 @@ namespace K3b {
 
     public:
         explicit FillStatusDisplay(Doc* doc, QWidget *parent=0);
-        ~FillStatusDisplay();
+        ~FillStatusDisplay() override;
 
     public Q_SLOTS:
         void showSize();
@@ -98,7 +98,7 @@ namespace K3b {
         void slotSaveUserDefaults();
 
     protected:
-        bool event( QEvent* );
+        bool event( QEvent* ) override;
 
     private:
         class Private;

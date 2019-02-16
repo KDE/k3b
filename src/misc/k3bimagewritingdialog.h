@@ -38,12 +38,12 @@ namespace K3b {
 
     public:
         explicit ImageWritingDialog( QWidget* = 0 );
-        ~ImageWritingDialog();
+        ~ImageWritingDialog() override;
 
         void setImage( const QUrl& url );
 
     protected Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
 
         void slotMd5JobPercent( int );
         void slotMd5JobFinished( bool );
@@ -51,16 +51,16 @@ namespace K3b {
         void slotUpdateImage( const QString& );
 
     protected:
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
         void calculateMd5Sum( const QString& );
-        void dragEnterEvent( QDragEnterEvent* );
-        void dropEvent( QDropEvent* );
+        void dragEnterEvent( QDragEnterEvent* ) override;
+        void dropEvent( QDropEvent* ) override;
 
-        void init();
+        void init() override;
 
-        void toggleAll();
+        void toggleAll() override;
 
     private:
         void setupGui();

@@ -25,7 +25,7 @@ namespace K3b {
 
     public:
         explicit PluginOptionTab( QWidget* parent = 0 );
-        ~PluginOptionTab();
+        ~PluginOptionTab() override;
     };
 }
 

@@ -46,7 +46,7 @@ namespace K3b {
          *
          */
         View( Doc* pDoc, QWidget* parent );
-        virtual ~View();
+        ~View() override;
 
         /**
          * returns a pointer to the document connected to the view

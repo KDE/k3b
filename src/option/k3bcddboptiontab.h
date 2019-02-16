@@ -27,7 +27,7 @@ class CddbOptionTab : public QWidget
 
 public:
     explicit CddbOptionTab( QWidget* parent = 0 );
-    ~CddbOptionTab();
+    ~CddbOptionTab() override;
 
 public Q_SLOTS:
     void readSettings();

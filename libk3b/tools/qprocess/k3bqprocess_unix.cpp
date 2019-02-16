@@ -242,9 +242,9 @@ class K3bQProcessManager : public QThread
     Q_OBJECT
 public:
     K3bQProcessManager();
-    ~K3bQProcessManager();
+    ~K3bQProcessManager() override;
 
-    void run();
+    void run() override;
     void catchDeadChildren();
     void add(pid_t pid, K3bQProcess *process);
     void remove(K3bQProcess *process);

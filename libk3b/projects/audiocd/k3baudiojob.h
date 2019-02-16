@@ -38,17 +38,17 @@ namespace K3b {
 
     public:
         AudioJob( AudioDoc*, JobHandler*, QObject* parent = 0 );
-        ~AudioJob();
+        ~AudioJob() override;
 
         Doc* doc() const;
-        Device::Device* writer() const;
+        Device::Device* writer() const override;
 
-        QString jobDescription() const;
-        QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
 
     public Q_SLOTS:
-        void cancel();
-        void start();
+        void cancel() override;
+        void start() override;
 
     protected Q_SLOTS:
         // writer slots

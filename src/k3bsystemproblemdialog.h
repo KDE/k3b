@@ -81,7 +81,7 @@ namespace K3b {
         static void checkSystem(QWidget* parent = 0, NotificationLevel level = NotifyOnlyErrors, bool forceCheck = false);
 
     protected:
-        void done(int) Q_DECL_OVERRIDE;
+        void done(int) override;
 
     private Q_SLOTS:
         void slotShowDeviceSettings();

@@ -38,21 +38,21 @@ namespace K3b {
 
     public:
         explicit VcdDoc( QObject* );
-        ~VcdDoc();
+        ~VcdDoc() override;
 
-        virtual Type type() const { return VcdProject; }
-        virtual QString typeString() const { return QString::fromLatin1("vcd"); }
+        Type type() const override { return VcdProject; }
+        QString typeString() const override { return QString::fromLatin1("vcd"); }
 
-        Device::MediaTypes supportedMediaTypes() const;
+        Device::MediaTypes supportedMediaTypes() const override;
 
-        QString name() const;
+        QString name() const override;
 
         enum vcdTypes { VCD11, VCD20, SVCD10, HQVCD, NONE};
 
-        bool newDocument();
-        void clear();
+        bool newDocument() override;
+        void clear() override;
 
-        int numOfTracks() const
+        int numOfTracks() const override
         {
             return m_tracks->count();
         }
@@ -77,10 +77,10 @@ namespace K3b {
         }
 
         /** get the current size of the project */
-        KIO::filesize_t size() const;
-        Msf length() const;
+        KIO::filesize_t size() const override;
+        Msf length() const override;
 
-        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent );
+        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent ) override;
         VcdOptions* vcdOptions() const
         {
             return m_vcdOptions;
@@ -100,7 +100,7 @@ namespace K3b {
          * the process is finished and check error()
          * to know about the result.
          **/
-        void addUrls( const QList<QUrl>& );
+        void addUrls( const QList<QUrl>& ) override;
         void addTrack( const QUrl&, uint );
         void addTracks( const QList<QUrl>&, uint );
         /** adds a track without any testing */
@@ -132,9 +132,9 @@ namespace K3b {
 
     protected:
         /** reimplemented from Doc */
-        bool loadDocumentData( QDomElement* root );
+        bool loadDocumentData( QDomElement* root ) override;
         /** reimplemented from Doc */
-        bool saveDocumentData( QDomElement* );
+        bool saveDocumentData( QDomElement* ) override;
 
     private:
         VcdTrack* createTrack( const QUrl& url );

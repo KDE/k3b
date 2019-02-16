@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         explicit AudioTrackModel( QObject* parent = 0 );
-        ~AudioTrackModel();
+        ~AudioTrackModel() override;
 
         enum Columns {
             TrackNumberColumn = 0,
@@ -60,16 +60,16 @@ namespace K3b {
         bool trackChecked( int trackIndex ) const;
         QList<int> checkedTrackIndices() const;
 
-        virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        virtual QVariant headerData ( int section, Qt::Orientation orientation, int role ) const;
-        virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-        virtual QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        virtual QModelIndex parent( const QModelIndex& index ) const;
-        virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-        virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-        virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
-        virtual QStringList mimeTypes() const;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        QVariant headerData ( int section, Qt::Orientation orientation, int role ) const override;
+        Qt::ItemFlags flags( const QModelIndex& index ) const override;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+        QModelIndex parent( const QModelIndex& index ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+        bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+        QMimeData* mimeData( const QModelIndexList& indexes ) const override;
+        QStringList mimeTypes() const override;
 
     public Q_SLOTS:
         void checkAll();

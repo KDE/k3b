@@ -41,12 +41,12 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        ~EmptyDiscWaiter();
+        ~EmptyDiscWaiter() override;
 
         /**
          * the same as waitForEmptyDisc( false );
          */
-        int exec();
+        int exec() override;
 
         /**
          * @reimplemented from JobHandler
@@ -56,7 +56,7 @@ namespace K3b {
                                          Device::MediaStates mediaState = Device::STATE_EMPTY,
                                          Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                          const K3b::Msf& minMediaSize = K3b::Msf(),
-                                         const QString& message = QString() );
+                                         const QString& message = QString() ) override;
 
         /**
          * @reimplemented from JobHandler
@@ -64,13 +64,13 @@ namespace K3b {
         bool questionYesNo( const QString& text,
                             const QString& caption = QString(),
                             const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                            const KGuiItem& buttonNo = KStandardGuiItem::no() );
+                            const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
 
         /**
          * reimplemented from JobHandler
          */
         void blockingInformation( const QString& text,
-                                  const QString& caption = QString() );
+                                  const QString& caption = QString() ) override;
 
         /**
          * Starts the emptydiskwaiter.
@@ -110,7 +110,7 @@ namespace K3b {
         /**
          * Nobody closes this dialog but itself!
          */
-        void closeEvent( QCloseEvent *e ) { e->ignore(); }
+        void closeEvent( QCloseEvent *e ) override { e->ignore(); }
 
     Q_SIGNALS:
         void leaveModality();

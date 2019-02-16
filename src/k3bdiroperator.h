@@ -34,32 +34,32 @@ class DirOperator : public KDirOperator, public KBookmarkOwner
 
 public: 
     explicit DirOperator( const QUrl& urlName = QUrl(), QWidget* parent = 0 );
-    ~DirOperator();
+    ~DirOperator() override;
 
     /**
      * reimplemented from KDirOperator
      */
-    void readConfig( const KConfigGroup& cfg );
+    void readConfig( const KConfigGroup& cfg ) override;
 
     /**
      * reimplemented from KDirOperator
      */
-    void writeConfig( KConfigGroup& grp );
+    void writeConfig( KConfigGroup& grp ) override;
 
     /**
      * reimplemented from KBookmarkOwner
      */
-    void openBookmark(const KBookmark & bm, Qt::MouseButtons mb, Qt::KeyboardModifiers km);
+    void openBookmark(const KBookmark & bm, Qt::MouseButtons mb, Qt::KeyboardModifiers km) override;
 
     /**
      * reimplemented from KBookmarkOwner
      */
-    QString currentTitle() const;
+    QString currentTitle() const override;
 
     /**
      * reimplemented from KBookmarkOwner
      */
-    QUrl currentUrl() const;
+    QUrl currentUrl() const override;
 
     KActionMenu* bookmarkMenu() const { return m_bmPopup; }
 

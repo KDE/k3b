@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        virtual ~ContentsView();
+        ~ContentsView() override;
 
     protected:
         ContentsView( bool withHeader,

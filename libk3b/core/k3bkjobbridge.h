@@ -31,12 +31,12 @@ class LIBK3B_EXPORT KJobBridge : public KJob
 
 public:
     explicit KJobBridge( Job& job );
-    virtual ~KJobBridge();
+    ~KJobBridge() override;
     
-    virtual void start();
+    void start() override;
     
 protected:
-    virtual bool doKill();
+    bool doKill() override;
     
 private Q_SLOTS:
     void slotFinished( bool success );

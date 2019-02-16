@@ -32,7 +32,7 @@ namespace K3b {
 
     public:
         explicit ProjectManager( QObject* parent = 0 );
-        virtual ~ProjectManager();
+        ~ProjectManager() override;
 
         QList<Doc*> projects() const;
 

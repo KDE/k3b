@@ -29,7 +29,7 @@ namespace K3b {
 
     public:
         explicit UrlNavigator( KFilePlacesModel* model, QWidget* parent = 0 );
-        ~UrlNavigator();
+        ~UrlNavigator() override;
 
     public Q_SLOTS:
         void setDevice( K3b::Device::Device* );

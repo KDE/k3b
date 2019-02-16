@@ -29,15 +29,15 @@ namespace K3b {
 
     public:
         explicit BusyWidget( QWidget* parent = 0 );
-        ~BusyWidget();
+        ~BusyWidget() override;
 
         void showBusy( bool b );
 
-        QSize sizeHint() const;
-        QSize minimumSizeHint() const;
+        QSize sizeHint() const override;
+        QSize minimumSizeHint() const override;
 
     protected:
-        void paintEvent( QPaintEvent* );
+        void paintEvent( QPaintEvent* ) override;
 
     private Q_SLOTS:
         void animateBusy();

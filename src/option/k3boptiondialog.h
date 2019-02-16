@@ -55,7 +55,7 @@ class OptionDialog : public KPageDialog
 
 public:
     explicit OptionDialog( QWidget* parent = 0 );
-    ~OptionDialog();
+    ~OptionDialog() override;
 
     enum ConfigPage {
         Misc = 0,

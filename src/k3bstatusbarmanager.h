@@ -35,7 +35,7 @@ namespace K3b {
 
     public:
         explicit StatusBarManager( MainWindow* parent );
-        ~StatusBarManager();
+        ~StatusBarManager() override;
 
     public Q_SLOTS:
         void update();
@@ -47,7 +47,7 @@ namespace K3b {
         void slotUpdateProjectStats();
 
     private:
-        bool eventFilter( QObject* o, QEvent* e );
+        bool eventFilter( QObject* o, QEvent* e ) override;
 
         QLabel* m_labelInfoMessage;
         QLabel* m_pixFreeTemp;

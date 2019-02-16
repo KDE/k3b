@@ -25,25 +25,25 @@ class K3bLameEncoder : public K3b::AudioEncoder
 
 public:
     K3bLameEncoder( QObject* parent, const QVariantList& );
-    ~K3bLameEncoder();
+    ~K3bLameEncoder() override;
 
-    bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length, const MetaData& metaData );
-    bool isOpen() const;
-    void closeFile();
-    QString filename() const;
+    bool openFile( const QString& extension, const QString& filename, const K3b::Msf& length, const MetaData& metaData ) override;
+    bool isOpen() const override;
+    void closeFile() override;
+    QString filename() const override;
 
-    QStringList extensions() const;
+    QStringList extensions() const override;
 
-    QString fileTypeComment( const QString& ) const;
+    QString fileTypeComment( const QString& ) const override;
 
-    long long fileSize( const QString&, const K3b::Msf& msf ) const;
+    long long fileSize( const QString&, const K3b::Msf& msf ) const override;
 
-    int pluginSystemVersion() const { return K3B_PLUGIN_SYSTEM_VERSION; }
+    int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
 private:
-    void finishEncoderInternal();
-    bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData );
-    qint64 encodeInternal( const char* data, qint64 len );
+    void finishEncoderInternal() override;
+    bool initEncoderInternal( const QString& extension, const K3b::Msf& length, const MetaData& metaData ) override;
+    qint64 encodeInternal( const char* data, qint64 len ) override;
 
     class Private;
     Private* d;

@@ -26,12 +26,12 @@ class K3bSoxEncoderConfigWidget : public K3b::PluginConfigWidget, Ui::base_K3bSo
 
 public:
     explicit K3bSoxEncoderConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
-    ~K3bSoxEncoderConfigWidget();
+    ~K3bSoxEncoderConfigWidget() override;
 
 public Q_SLOTS:
-    virtual void load();
-    virtual void save();
-    virtual void defaults();
+    void load() override;
+    void save() override;
+    void defaults() override;
     
 private:
     void setChannels( int channels );

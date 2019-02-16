@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        virtual ~MediaContentsView();
+        ~MediaContentsView() override;
 
         Medium medium() const;
 

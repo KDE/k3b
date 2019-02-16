@@ -32,10 +32,10 @@ namespace K3b {
 
     public:
         DataPreparationJob( DataDoc* doc, JobHandler* hdl, QObject* parent );
-        ~DataPreparationJob();
+        ~DataPreparationJob() override;
 
     private:
-        bool run();
+        bool run() override;
 
         class Private;
         Private* const d;

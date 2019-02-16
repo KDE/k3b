@@ -33,16 +33,16 @@ namespace K3b {
 
     public:
         explicit AudioDocReader( AudioDoc& doc, QObject* parent = 0 );
-        ~AudioDocReader();
+        ~AudioDocReader() override;
 
         AudioTrackReader* currentTrackReader() const;
         bool setCurrentTrack( const AudioTrack& track );
 
-        virtual bool open( OpenMode mode = ReadOnly );
-        virtual void close();
-        virtual bool isSequential() const;
-        virtual qint64 size() const;
-        virtual bool seek( qint64 pos );
+        bool open( OpenMode mode = ReadOnly ) override;
+        void close() override;
+        bool isSequential() const override;
+        qint64 size() const override;
+        bool seek( qint64 pos ) override;
 
     public Q_SLOTS:
         void nextTrack();
@@ -52,8 +52,8 @@ namespace K3b {
         void currentTrackChanged( const K3b::AudioTrack& track );
 
     protected:
-        virtual qint64 writeData( const char* data, qint64 len );
-        virtual qint64 readData( char* data, qint64 maxlen );
+        qint64 writeData( const char* data, qint64 len ) override;
+        qint64 readData( char* data, qint64 maxlen ) override;
 
     private:
         void updatePos();

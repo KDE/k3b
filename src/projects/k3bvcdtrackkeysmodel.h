@@ -40,19 +40,19 @@ public:
     
 public:
     explicit VcdTrackKeysModel( int keyCount, QObject* parent = 0 );
-    ~VcdTrackKeysModel();
+    ~VcdTrackKeysModel() override;
     
     int keyCount() const;
     void setKeys( const Key2Track& keys );
     const Key2Track& keys() const;
     
-    virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    virtual bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
-    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    virtual QModelIndex buddy( const QModelIndex& index ) const;
+    Qt::ItemFlags flags( const QModelIndex& index ) const override;
+    QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+    bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole ) override;
+    int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+    int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
+    QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const override;
+    QModelIndex buddy( const QModelIndex& index ) const override;
     
     static QString trackName( VcdTrack* track );
     static QIcon trackIcon( VcdTrack* track );

@@ -31,7 +31,7 @@ namespace K3b {
 
     public:
         ChecksumPipe();
-        ~ChecksumPipe();
+        ~ChecksumPipe() override;
 
         enum Type {
             MD5
@@ -41,7 +41,7 @@ namespace K3b {
          * \reimplemented
          * Defaults to MD5 checksum
          */
-        bool open( bool closeWhenDone = false );
+        bool open( bool closeWhenDone = false ) override;
 
         /**
          * Opens the pipe and thus starts the
@@ -58,13 +58,13 @@ namespace K3b {
         QByteArray checksum() const;
 
     protected:
-        qint64 writeData( const char* data, qint64 max );
+        qint64 writeData( const char* data, qint64 max ) override;
 
     private:
         /**
          * Hidden open method. Use open(bool).
          */
-        bool open( OpenMode mode );
+        bool open( OpenMode mode ) override;
 
         class Private;
         Private* d;

@@ -31,15 +31,15 @@ namespace K3b {
 
     public:
         explicit MsInfoFetcher( JobHandler*, QObject* parent = 0 );
-        ~MsInfoFetcher();
+        ~MsInfoFetcher() override;
 
         QString msInfo() const { return m_msInfo; }
         int lastSessionStart() const { return m_lastSessionStart; }
         int nextSessionStart() const { return m_nextSessionStart; }
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         void setDevice( K3b::Device::Device* dev ) { m_device = dev; }
 

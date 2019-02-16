@@ -37,9 +37,9 @@ namespace K3b {
     public:
         CdrskinWriter( Device::Device*, JobHandler* hdl,
                         QObject* parent = 0 );
-        ~CdrskinWriter();
+        ~CdrskinWriter() override;
 
-        bool active() const;
+        bool active() const override;
 
         /**
          * to be used in chain: addArgument(x)->addArgument(y)
@@ -53,11 +53,11 @@ namespace K3b {
          */
         qint64 write( const char* data, qint64 maxSize );
 
-        QIODevice* ioDevice() const;
+        QIODevice* ioDevice() const override;
 
     public Q_SLOTS:
-        void start();
-        void cancel();
+        void start() override;
+        void cancel() override;
 
         void setDao( bool b );
         void setWritingMode( WritingMode mode );

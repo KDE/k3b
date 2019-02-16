@@ -30,18 +30,18 @@ namespace K3b {
 
     public:
         explicit DeviceModel( QObject* parent = 0 );
-        ~DeviceModel();
+        ~DeviceModel() override;
 
         QList<Device::Device*> devices() const;
 
         Device::Device* deviceForIndex( const QModelIndex& index ) const;
         QModelIndex indexForDevice( Device::Device* dev ) const;
 
-        int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const;
-        QModelIndex parent( const QModelIndex& index ) const;
-        int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+        int columnCount( const QModelIndex& parent = QModelIndex() ) const override;
+        QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const override;
+        QModelIndex index( int row, int column, const QModelIndex& parent = QModelIndex() ) const override;
+        QModelIndex parent( const QModelIndex& index ) const override;
+        int rowCount( const QModelIndex& parent = QModelIndex() ) const override;
 
         enum DeviceRoles {
             IsDevice = 1000, //**< boolean value only used to check if we have a device item */

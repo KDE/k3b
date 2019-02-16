@@ -32,12 +32,12 @@ namespace K3b {
     {
     public:
         AbstractCdrtoolsProgram( const QString& program, const QString& cdrkitAlternative );
-        ~AbstractCdrtoolsProgram();
+        ~AbstractCdrtoolsProgram() override;
 
     protected:
         bool usingCdrkit( const ExternalBin& bin ) const;
-        virtual QString getProgramPath( const QString& dir ) const;
-        virtual QString versionIdentifier( const ExternalBin& bin ) const;
+        QString getProgramPath( const QString& dir ) const override;
+        QString versionIdentifier( const ExternalBin& bin ) const override;
         
     private:
         class Private;
@@ -50,7 +50,7 @@ namespace K3b {
         CdrecordProgram();
 
     protected:
-        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
+        void parseFeatures( const QString& output, ExternalBin& bin ) const override;
     };
 
 
@@ -60,7 +60,7 @@ namespace K3b {
         MkisofsProgram();
 
     protected:
-        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
+        void parseFeatures( const QString& output, ExternalBin& bin ) const override;
     };
 
 
@@ -70,7 +70,7 @@ namespace K3b {
         ReadcdProgram();
 
     protected:
-        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
+        void parseFeatures( const QString& output, ExternalBin& bin ) const override;
     };
 
 
@@ -80,7 +80,7 @@ namespace K3b {
         Cdda2wavProgram();
 
     protected:
-        virtual void parseFeatures( const QString& output, ExternalBin& bin ) const;
+        void parseFeatures( const QString& output, ExternalBin& bin ) const override;
     };
 
 
@@ -90,8 +90,8 @@ namespace K3b {
         CdrdaoProgram();
 
     protected:
-        virtual QString versionIdentifier( const ExternalBin& bin ) const;
-        virtual bool scanFeatures( ExternalBin& bin ) const;
+        QString versionIdentifier( const ExternalBin& bin ) const override;
+        bool scanFeatures( ExternalBin& bin ) const override;
     };
 
 
@@ -101,11 +101,11 @@ namespace K3b {
         explicit TranscodeProgram( const QString& transcodeProgram );
 
         // no user parameters (yet)
-        virtual bool supportsUserParameters() const { return false; }
+        bool supportsUserParameters() const override { return false; }
 
     protected:
-        virtual QString versionIdentifier( const ExternalBin& bin ) const;
-        virtual bool scanFeatures( ExternalBin& bin ) const;
+        QString versionIdentifier( const ExternalBin& bin ) const override;
+        bool scanFeatures( ExternalBin& bin ) const override;
     };
 
 
@@ -115,7 +115,7 @@ namespace K3b {
         explicit VcdbuilderProgram( const QString& );
         
     protected:
-        virtual QString versionIdentifier( const ExternalBin& bin ) const;
+        QString versionIdentifier( const ExternalBin& bin ) const override;
     };
 
 
@@ -132,7 +132,7 @@ namespace K3b {
         GrowisofsProgram();
 
     protected:
-        virtual bool scanFeatures( ExternalBin& bin ) const;
+        bool scanFeatures( ExternalBin& bin ) const override;
     };
 
 
@@ -142,8 +142,8 @@ namespace K3b {
         DvdformatProgram();
 
     protected:
-        virtual Version parseVersion( const QString& output, const ExternalBin& bin ) const;
-        virtual QString parseCopyright( const QString& output, const ExternalBin& bin ) const;
+        Version parseVersion( const QString& output, const ExternalBin& bin ) const override;
+        QString parseCopyright( const QString& output, const ExternalBin& bin ) const override;
     };
 
 
@@ -153,8 +153,8 @@ namespace K3b {
         DvdBooktypeProgram();
 
     protected:
-        virtual Version parseVersion( const QString& output, const ExternalBin& bin ) const;
-        virtual QString parseCopyright( const QString& output, const ExternalBin& bin ) const;
+        Version parseVersion( const QString& output, const ExternalBin& bin ) const override;
+        QString parseCopyright( const QString& output, const ExternalBin& bin ) const override;
     };
 
     class LIBK3B_EXPORT CdrskinProgram : public SimpleExternalProgram
@@ -163,7 +163,7 @@ namespace K3b {
         CdrskinProgram();
 
     protected:
-        virtual bool scanFeatures(ExternalBin& bin) const;
+        bool scanFeatures(ExternalBin& bin) const override;
     };
 }
 

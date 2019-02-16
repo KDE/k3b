@@ -38,7 +38,7 @@ namespace K3b {
 
     public:
         explicit VcdBurnDialog( VcdDoc* doc, QWidget *parent = 0 );
-        ~VcdBurnDialog();
+        ~VcdBurnDialog() override;
 
         VcdDoc* vcdDoc() const
         {
@@ -49,11 +49,11 @@ namespace K3b {
         void setupAdvancedTab();
         void setupVideoCdTab();
         void setupLabelTab();
-        void saveSettingsToProject();
-        void readSettingsFromProject();
+        void saveSettingsToProject() override;
+        void readSettingsFromProject() override;
 
-        void loadSettings( const KConfigGroup& );
-        void saveSettings( KConfigGroup );
+        void loadSettings( const KConfigGroup& ) override;
+        void saveSettings( KConfigGroup ) override;
 
         // -----------------------------------------------------------
         // the video-cd-tab
@@ -126,10 +126,10 @@ namespace K3b {
         void saveCdiConfig();
         void loadCdiConfig();
         void loadDefaultCdiConfig();
-        void toggleAll();
+        void toggleAll() override;
 
     protected Q_SLOTS:
-        void slotStartClicked();
+        void slotStartClicked() override;
 
         void slotGapsChecked( bool );
         void slotSpinVolumeCount();

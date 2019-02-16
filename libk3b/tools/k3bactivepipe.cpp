@@ -30,7 +30,7 @@ public:
         closeSourceIODevice( false ) {
     }
 
-    void run() {
+    void run() override {
         qDebug() << "(K3b::ActivePipe) writing from" << sourceIODevice << "to" << sinkIODevice;
 
         bytesRead = bytesWritten = 0;

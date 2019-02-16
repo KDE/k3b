@@ -37,7 +37,7 @@ namespace K3b {
 
     public:
         explicit DeviceComboBox( QWidget* parent = 0 );
-        ~DeviceComboBox();
+        ~DeviceComboBox() override;
 
         Device::Device* selectedDevice() const;
 

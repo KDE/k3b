@@ -39,20 +39,20 @@ namespace K3b {
 
     public:
         explicit CdCopyJob( JobHandler* hdl, QObject* parent = 0 );
-        ~CdCopyJob();
+        ~CdCopyJob() override;
 
-        virtual Device::Device* writer() const { return m_onlyCreateImages ? 0 : m_writerDevice; }
+        Device::Device* writer() const override { return m_onlyCreateImages ? 0 : m_writerDevice; }
         Device::Device* reader() const { return m_readerDevice; }
 
-        virtual QString jobDescription() const;
-        virtual QString jobDetails() const;
+        QString jobDescription() const override;
+        QString jobDetails() const override;
         
-        virtual QString jobSource() const;
-        virtual QString jobTarget() const;
+        QString jobSource() const override;
+        QString jobTarget() const override;
 
     public Q_SLOTS:
-        virtual void start();
-        virtual void cancel();
+        void start() override;
+        void cancel() override;
 
     public:
         void setWriterDevice( K3b::Device::Device* dev ) { m_writerDevice = dev; }

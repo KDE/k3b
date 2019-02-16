@@ -40,7 +40,7 @@ namespace K3b {
 
     public:
         explicit PluginManager( QObject* parent = 0 );
-        ~PluginManager();
+        ~PluginManager() override;
 
         /**
          * if group is empty all plugins are returned

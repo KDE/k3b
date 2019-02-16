@@ -39,7 +39,7 @@ namespace K3b {
 
     public:
         explicit AudioEncoder( QObject* parent = 0 );
-        virtual ~AudioEncoder();
+        ~AudioEncoder() override;
 
         // TODO: if the following methods are to be activated the config methods in
         //       PluginConfigWidget also need to be changed since they do not allow
@@ -55,9 +55,9 @@ namespace K3b {
          */
         // virtual void readConfig( KConfig* );
 
-        QString category() const { return "AudioEncoder"; }
+        QString category() const override { return "AudioEncoder"; }
 
-        QString categoryName() const;
+        QString categoryName() const override;
 
         /**
          * This should return the fileextensions supported by the filetype written in the
