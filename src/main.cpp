@@ -108,8 +108,6 @@ int main( int argc, char* argv[] )
     QApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("k3b"), app.windowIcon()));
 
     QCommandLineParser* parser = new QCommandLineParser;
-    parser->addHelpOption();
-    parser->addVersionOption();
     parser->addPositionalArgument( "urls", i18n("file(s) to open"), "[urls...]" );
     parser->addOption( QCommandLineOption( "data", i18n("Create a new data CD project and add all given files") ) );
     parser->addOption( QCommandLineOption( "audiocd", i18n("Create a new audio CD project and add all given files") ) );
