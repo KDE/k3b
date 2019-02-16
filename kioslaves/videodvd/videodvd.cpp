@@ -103,27 +103,27 @@ kio_videodvdProtocol::~kio_videodvdProtocol()
 KIO::UDSEntry kio_videodvdProtocol::createUDSEntry( const K3b::Iso9660Entry* e ) const
 {
     KIO::UDSEntry uds;
-    uds.insert(KIO::UDSEntry::UDS_NAME,e->name());
-    uds.insert(KIO::UDSEntry::UDS_ACCESS, e->permissions());
-    uds.insert(KIO::UDSEntry::UDS_CREATION_TIME, e->date());
-    uds.insert(KIO::UDSEntry::UDS_MODIFICATION_TIME,e->date());
+    uds.fastInsert(KIO::UDSEntry::UDS_NAME,e->name());
+    uds.fastInsert(KIO::UDSEntry::UDS_ACCESS, e->permissions());
+    uds.fastInsert(KIO::UDSEntry::UDS_CREATION_TIME, e->date());
+    uds.fastInsert(KIO::UDSEntry::UDS_MODIFICATION_TIME,e->date());
 
     if( e->isDirectory() )
     {
-        uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
-        uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
+        uds.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+        uds.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
     }
     else
     {
         const K3b::Iso9660File* file = static_cast<const K3b::Iso9660File*>( e );
-        uds.insert(KIO::UDSEntry::UDS_SIZE,file->size());
-        uds.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
+        uds.fastInsert(KIO::UDSEntry::UDS_SIZE,file->size());
+        uds.fastInsert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFREG);
         QString iconName;
         if( e->name().endsWith( "VOB" ) )
             iconName = "video/mpeg";
         else
             iconName = "unknown";
-        uds.insert(KIO::UDSEntry::UDS_MIME_TYPE, iconName);
+        uds.fastInsert(KIO::UDSEntry::UDS_MIME_TYPE, iconName);
     }
 
     return uds;
@@ -276,11 +276,11 @@ void kio_videodvdProtocol::listVideoDVDs()
                 // FIXME: cache the entry for speedup
 
                 UDSEntry uds;
-                uds.insert( KIO::UDSEntry::UDS_NAME,iso.primaryDescriptor().volumeId );
-                uds.insert( KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR );
-                uds.insert( KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory" );
-                uds.insert( KIO::UDSEntry::UDS_ICON_NAME, "media-optical-video" );
-                uds.insert( KIO::UDSEntry::UDS_SIZE, iso.primaryDescriptor().volumeSetSize );
+                uds.fastInsert( KIO::UDSEntry::UDS_NAME,iso.primaryDescriptor().volumeId );
+                uds.fastInsert( KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR );
+                uds.fastInsert( KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory" );
+                uds.fastInsert( KIO::UDSEntry::UDS_ICON_NAME, "media-optical-video" );
+                uds.fastInsert( KIO::UDSEntry::UDS_SIZE, iso.primaryDescriptor().volumeSetSize );
 
                 udsl.append( uds );
                 listEntries( udsl );
@@ -307,9 +307,9 @@ void kio_videodvdProtocol::stat( const QUrl& url )
         // stat the root path
         //
         KIO::UDSEntry uds;
-        uds.insert( KIO::UDSEntry::UDS_NAME, url.path() );
-        uds.insert( KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR );
-        uds.insert( KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory" );
+        uds.fastInsert( KIO::UDSEntry::UDS_NAME, url.path() );
+        uds.fastInsert( KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR );
+        uds.fastInsert( KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory" );
 
         statEntry( uds );
         finished();
