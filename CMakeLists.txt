@@ -8,8 +8,8 @@ set (KDE_APPLICATIONS_VERSION_MINOR "03")
 set (KDE_APPLICATIONS_VERSION_MICRO "70")
 set (KDE_APPLICATIONS_VERSION "${KDE_APPLICATIONS_VERSION_MAJOR}.${KDE_APPLICATIONS_VERSION_MINOR}.${KDE_APPLICATIONS_VERSION_MICRO}")
 
-set (QT_MIN_VERSION "5.5.0")
-set (KF5_MIN_VERSION "5.21.0")
+set (QT_MIN_VERSION "5.8.0")
+set (KF5_MIN_VERSION "5.45.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
@@ -57,6 +57,7 @@ include(FeatureSummary)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 include(ECMEnableSanitizers)
+include(ECMSetupQtPluginMacroNames)
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
@@ -280,6 +281,12 @@ endif()
 
 configure_file(config-k3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-k3b.h)
 include_directories(${CMAKE_BINARY_DIR})
+
+ecm_setup_qtplugin_macro_names(
+    JSON_NONE
+        K3B_EXPORT_PLUGIN
+        K3B_EXPORT_PLUGIN_CONFIG_WIDGET
+)
 
 ##################  K3b apidox ################################
 if(K3B_BUILD_API_DOCS)
