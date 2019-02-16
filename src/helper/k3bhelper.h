@@ -16,7 +16,7 @@
 #ifndef K3BHELPER_H
 #define K3BHELPER_H
 
-#include <KAuth/KAuthActionReply>
+#include <KAuthActionReply>
 #include <QObject>
 
 namespace K3b {

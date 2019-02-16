@@ -17,8 +17,8 @@
 #define _K3B_PLUGIN_H_
 
 #include "k3b_export.h"
-#include <KCoreAddons/KPluginFactory>
-#include <KService/KPluginInfo>
+#include <KPluginFactory>
+#include <KPluginInfo>
 #include <QObject>
 
 #define K3B_PLUGIN_SYSTEM_VERSION 5

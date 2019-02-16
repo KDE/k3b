@@ -18,7 +18,7 @@
 #include "k3bdeviceglobals.h"
 #include "k3bmsf.h"
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QDebug>
 #include <QStringList>

@@ -20,8 +20,8 @@
 #include "k3bmsf.h"
 #include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KWidgetsAddons/KMessageBox>
+#include <KConfig>
+#include <KMessageBox>
 
 #include <QFileInfo>
 #include <QDomElement>

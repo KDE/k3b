@@ -21,7 +21,7 @@
 #include "k3bintvalidator.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QItemSelectionModel>

@@ -22,8 +22,8 @@
 #include "k3bglobals.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KStandardGuiItem>
-#include <KWidgetsAddons/KMessageBox>
+#include <KStandardGuiItem>
+#include <KMessageBox>
 
 #include <QFile>
 #include <QTextStream>

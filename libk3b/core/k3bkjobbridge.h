@@ -17,7 +17,7 @@
 
 #include "k3b_export.h"
 
-#include <KCoreAddons/KJob>
+#include <KJob>
 #include <QScopedPointer>
 
 namespace K3b {

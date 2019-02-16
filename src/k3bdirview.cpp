@@ -32,10 +32,10 @@
 #include "rip/videodvd/k3bvideodvdrippingview.h"
 #endif
 
-#include <KConfigCore/KConfigGroup>
-#include <KNotifications/KNotification>
+#include <KConfigGroup>
+#include <KNotification>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDir>
 #include <QUrl>

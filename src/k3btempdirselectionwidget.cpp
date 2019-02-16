@@ -18,14 +18,14 @@
 #include "k3bcore.h"
 #include "k3bglobalsettings.h"
 
-#include <KCompletion/KLineEdit>
-#include <KConfigWidgets/KColorScheme>
-#include <KConfigCore/KConfig>
+#include <KLineEdit>
+#include <KColorScheme>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOCore/KIO/Global>
-#include <KIOWidgets/KUrlRequester>
+#include <KIconLoader>
+#include <KDiskFreeSpaceInfo>
+#include <KIO/Global>
+#include <KUrlRequester>
 #include <kio_version.h>
 
 #include <QFileInfo>

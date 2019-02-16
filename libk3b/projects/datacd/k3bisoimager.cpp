@@ -29,10 +29,10 @@
 #include "k3bisooptions.h"
 #include "k3b_i18n.h"
 
-#include <KIOCore/KIO/CopyJob>
-#include <KIOCore/KIO/Global>
-#include <KIOCore/KIO/Job>
-#include <KCoreAddons/KStringHandler>
+#include <KIO/CopyJob>
+#include <KIO/Global>
+#include <KIO/Job>
+#include <KStringHandler>
 
 #include <QDebug>
 #include <QDir>

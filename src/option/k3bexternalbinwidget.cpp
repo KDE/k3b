@@ -20,10 +20,10 @@
 #include "k3bexternalbinpermissionmodel.h"
 #include "config-k3b.h"
 
-#include <KAuth/KAuth>
+#include <KAuth>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KEditListWidget>
+#include <KMessageBox>
+#include <KEditListWidget>
 
 #include <QDebug>
 #include <QItemSelectionModel>

@@ -17,8 +17,8 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixprogram.h"
 
-#include <KConfigCore/KConfig>
-#include <KCompletion/KComboBox>
+#include <KConfig>
+#include <KComboBox>
 #include <KLocalizedString>
 
 #include <QDebug>

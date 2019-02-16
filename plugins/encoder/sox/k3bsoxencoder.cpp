@@ -23,8 +23,8 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bplugin_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KSharedConfig>
 
 #include <QDebug>
 #include <QFile>

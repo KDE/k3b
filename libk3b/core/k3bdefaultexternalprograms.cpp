@@ -19,7 +19,7 @@
 #include "k3bglobals.h"
 #include "k3bprocess.h"
 
-#include <KCoreAddons/KProcess>
+#include <KProcess>
 
 #include <QDebug>
 #include <QDir>

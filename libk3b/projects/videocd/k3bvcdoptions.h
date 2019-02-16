@@ -17,7 +17,7 @@
 #define K3B_VCD_OPTIONS_H
 
 #include "k3b_export.h"
-#include <KConfigCore/KConfigGroup>
+#include <KConfigGroup>
 #include <QString>
 
 namespace K3b {

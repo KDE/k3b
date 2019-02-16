@@ -17,7 +17,7 @@
 #ifndef _K3B_PROJECT_INTERFACE_H_
 #define _K3B_PROJECT_INTERFACE_H_
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 #include <QObject>
 #include <QString>
 #include <QStringList>

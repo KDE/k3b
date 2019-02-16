@@ -18,7 +18,7 @@
 #include "k3bdevice.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QList>

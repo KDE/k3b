@@ -27,8 +27,8 @@
 #include "k3bvolumenamewidget.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KToolBar>
+#include <KMessageBox>
+#include <KToolBar>
 
 #include <QDebug>
 #include <QItemSelectionModel>

@@ -15,7 +15,7 @@
 #ifndef _K3B_CDDB_H_
 #define _K3B_CDDB_H_
 
-#include <KCoreAddons/KJob>
+#include <KJob>
 
 #include <KCddb/Kcddb>
 #include <KCddb/Cdinfo>

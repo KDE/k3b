@@ -15,9 +15,9 @@
 
 #include "k3bcddboptiontab.h"
 
-#include <KConfigWidgets/KCModule>
-#include <KService/KService>
-#include <KService/KServiceTypeTrader>
+#include <KCModule>
+#include <KService>
+#include <KServiceTypeTrader>
 #include <KLocalizedString>
 
 #include <QLabel>

@@ -18,8 +18,8 @@
 #include "k3b<name>encoder.h"
 #include "k3bplugin_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KSharedConfig>
 #include <QDebug>
 
 K3B_EXPORT_PLUGIN(k3b<name>encoder, K3b<name>Encoder)

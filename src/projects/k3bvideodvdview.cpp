@@ -19,8 +19,8 @@
 #include "k3bvideodvddoc.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KActionCollection>
+#include <KMessageBox>
+#include <KActionCollection>
 
 #include <QAction>
 

@@ -20,11 +20,11 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KIconThemes/KIconLoader>
+#include <KConfig>
+#include <KSharedConfig>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KStandardGuiItem>
 
 #include <QDebug>
 #include <QEvent>

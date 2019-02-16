@@ -29,8 +29,8 @@
 #include "k3bdevicehandler.h"
 #include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
+#include <KConfig>
+#include <KIO/Global>
 
 #include <QString>
 #include <QDateTime>

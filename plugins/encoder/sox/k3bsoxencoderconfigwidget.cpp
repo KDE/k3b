@@ -16,8 +16,8 @@
 #include "k3bsoxencoderconfigwidget.h"
 #include "k3bsoxencoderdefaults.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bsoxencoder, K3bSoxEncoderConfigWidget )
 

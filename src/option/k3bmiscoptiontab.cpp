@@ -21,13 +21,13 @@
 #include "k3binteractiondialog.h"
 #include "k3bintmapcombobox.h"
 
-#include <KCompletion/KComboBox>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KComboBox>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KMessageBox>
+#include <KUrlRequester>
+#include <KMessageBox>
 
 #include <QDir>
 #include <QFileInfo>

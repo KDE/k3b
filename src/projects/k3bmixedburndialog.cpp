@@ -34,9 +34,9 @@
 #include "k3bcore.h"
 #include "k3bintmapcombobox.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QVariant>

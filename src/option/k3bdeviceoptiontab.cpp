@@ -19,8 +19,8 @@
 #include "k3bglobals.h"
 #include "k3bcore.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
 
 #include <QCursor>

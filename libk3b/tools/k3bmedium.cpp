@@ -22,7 +22,7 @@
 #include "k3biso9660backend.h"
 #include "k3b_i18n.h"
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QList>
 #include <QSharedData>

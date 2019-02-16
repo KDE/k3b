@@ -18,10 +18,10 @@
 #include "k3bstdguiitems.h"
 #include "k3bglobalsettings.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <KCompletion/KLineEdit>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KLineEdit>
 #include <KLocalizedString>
 
 #include <QValidator>

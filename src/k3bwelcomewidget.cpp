@@ -21,11 +21,11 @@
 #include "k3bthememanager.h"
 #include "k3bversion.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KCoreAddons/KAboutData>
-#include <KIconThemes/KIconLoader>
+#include <KConfigGroup>
+#include <KAboutData>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KXmlGui/KActionCollection>
+#include <KActionCollection>
 
 #include <QMimeData>
 #include <QUrl>

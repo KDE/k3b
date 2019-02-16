@@ -33,10 +33,10 @@
 #include "k3bcddb.h"
 #include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
-#include <KIOCore/KIO/DeleteJob>
-#include <KIOCore/KIO/Job>
+#include <KConfig>
+#include <KIO/Global>
+#include <KIO/DeleteJob>
+#include <KIO/Job>
 
 #include <QDebug>
 #include <QDir>

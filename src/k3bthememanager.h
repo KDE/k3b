@@ -21,7 +21,7 @@
 #include <QColor>
 #include <QPixmap>
 
-#include <KConfigCore/KConfigGroup>
+#include <KConfigGroup>
 
 
 namespace K3b {

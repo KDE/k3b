@@ -15,7 +15,7 @@
 #ifndef _K3B_URL_NAVIGATOR_H_
 #define _K3B_URL_NAVIGATOR_H_
 
-#include <KIOFileWidgets/KUrlNavigator>
+#include <KUrlNavigator>
 #include <QUrl>
 
 namespace K3b {

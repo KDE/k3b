@@ -26,10 +26,10 @@
 #include "k3bstdguiitems.h"
 #include "k3bglobalsettings.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIO/Global>
+#include <KMessageBox>
 
 #include <QFileInfo>
 #include <QCheckBox>

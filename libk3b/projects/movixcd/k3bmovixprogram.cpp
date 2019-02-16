@@ -16,7 +16,7 @@
 #include "k3bmovixprogram.h"
 #include "k3b_i18n.h"
 
-#include <KCoreAddons/KProcess>
+#include <KProcess>
 
 #include <QDebug>
 #include <QDir>

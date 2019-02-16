@@ -17,7 +17,7 @@
 #include "k3bisooptions.h"
 #include "k3bvalidators.h"
 
-#include <KCompletion/KLineEdit>
+#include <KLineEdit>
 #include <KLocalizedString>
 
 #include <QEvent>

@@ -18,7 +18,7 @@
 #include "k3bisooptions.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QCheckBox>

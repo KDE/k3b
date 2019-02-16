@@ -19,7 +19,7 @@
 #include "k3bprocess.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 #include <KLocalizedString>
 
 #include <QDebug>

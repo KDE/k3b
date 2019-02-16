@@ -18,7 +18,7 @@
 #include "k3bdevicetypes.h"
 #include "k3bmsf.h"
 
-#include <KWidgetsAddons/KGuiItem>
+#include <KGuiItem>
 #include <QEvent>
 #include <QString>
 #include <QWaitCondition>

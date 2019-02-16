@@ -22,10 +22,10 @@
 #include "k3baudiotrack.h"
 #include "k3baudiofile.h"
 
-#include <KNotifications/KNotification>
+#include <KNotification>
 #include <KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIconLoader>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QEventLoop>

@@ -19,10 +19,10 @@
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 
-#include <KAuth/KAuth>
-#include <KConfigCore/KConfig>
+#include <KAuth>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 #include <KMessageWidget>
 
 #include <QFileInfo>

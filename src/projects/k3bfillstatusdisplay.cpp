@@ -26,12 +26,12 @@
 #include "k3baction.h"
 #include "k3bthememanager.h"
 
-#include <KConfigWidgets/KColorScheme>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KColorScheme>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIO/Global>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QEvent>

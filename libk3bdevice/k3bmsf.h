@@ -17,7 +17,7 @@
 #define _K3B_MSF_H_
 
 #include "k3bdevice_export.h"
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 #include <QDebug>
 #include <QSharedDataPointer>
 

@@ -18,7 +18,7 @@
 
 #include "k3bglobals.h"
 
-#include <KConfigCore/KSharedConfig>
+#include <KSharedConfig>
 
 #include <QWidget>
 #include <QLabel>

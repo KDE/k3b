@@ -19,11 +19,11 @@
 #include "k3bfileitem.h"
 #include "k3bvalidators.h"
 
-#include <KCompletion/KLineEdit>
+#include <KLineEdit>
 #include <KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KSqueezedTextLabel>
+#include <KIconLoader>
+#include <KIO/Global>
+#include <KSqueezedTextLabel>
 
 #include <QFileInfo>
 #include <QUrl>

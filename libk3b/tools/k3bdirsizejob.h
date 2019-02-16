@@ -16,7 +16,7 @@
 #define _K3B_DIR_SIZE_JOB_H_
 
 #include "k3bthreadjob.h"
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 #include <QUrl>
 
 #include "k3b_export.h"

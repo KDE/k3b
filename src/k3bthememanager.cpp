@@ -16,8 +16,8 @@
 
 #include "k3bversion.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KConfigWidgets/KColorScheme>
+#include <KConfigGroup>
+#include <KColorScheme>
 
 #include <QDebug>
 #include <QDir>

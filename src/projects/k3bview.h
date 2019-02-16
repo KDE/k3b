@@ -22,7 +22,7 @@
 #include <config-k3b.h>
 #endif
 
-#include <KXmlGui/KXMLGUIClient>
+#include <KXMLGUIClient>
 
 #include <QHash>
 #include <QList>

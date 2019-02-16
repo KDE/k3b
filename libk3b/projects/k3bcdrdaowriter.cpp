@@ -27,8 +27,8 @@
 #include "k3bglobalsettings.h"
 #include "k3b_i18n.h"
 
-#include <KIOCore/KIO/CopyJob>
-#include <KIOCore/KIO/DeleteJob>
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
 
 #include <QDebug>
 #include <QDir>

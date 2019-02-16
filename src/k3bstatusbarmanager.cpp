@@ -28,11 +28,11 @@
 #include "k3bdiritem.h"
 #include "k3bview.h"
 
-#include <KConfigCore/KConfig>
-#include <KCoreAddons/KAboutData>
+#include <KConfig>
+#include <KAboutData>
 #include <KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
+#include <KIconLoader>
+#include <KIO/Global>
 
 #include <QFile>
 #include <QTimer>

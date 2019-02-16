@@ -17,7 +17,7 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KIconThemes/KIconLoader>
+#include <KIconLoader>
 
 #include <QEvent>
 #include <QFontMetrics>

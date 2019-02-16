@@ -19,7 +19,7 @@
 #include "k3bdataitem.h"
 #include "k3bdiritem.h"
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 namespace K3b {
     /**

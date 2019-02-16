@@ -31,10 +31,10 @@
 #include "k3bcore.h"
 #include "k3bmediacache.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
+#include <KConfig>
+#include <KIO/Global>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QFileInfo>

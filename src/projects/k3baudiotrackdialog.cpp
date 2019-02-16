@@ -19,7 +19,7 @@
 #include "k3bmsfedit.h"
 
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QCheckBox>
 #include <QComboBox>

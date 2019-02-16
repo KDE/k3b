@@ -29,8 +29,8 @@
 #include "k3bwritingmodewidget.h"
 #include "k3bjobprogressdialog.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KSharedConfig>
 #include <KLocalizedString>
 #include <KMessageBox>
 

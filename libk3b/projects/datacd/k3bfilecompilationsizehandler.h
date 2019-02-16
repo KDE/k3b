@@ -16,7 +16,7 @@
 #define _K3B_FILECOMPILATION_SIZE_HANDLER_H_
 
 #include "k3bmsf.h"
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 namespace K3b {
     class DataItem;

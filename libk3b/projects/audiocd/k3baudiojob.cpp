@@ -39,7 +39,7 @@
 #include "k3bglobalsettings.h"
 #include "k3b_i18n.h"
 
-#include <KCoreAddons/KStringHandler>
+#include <KStringHandler>
 
 #include <QDebug>
 #include <QFile>

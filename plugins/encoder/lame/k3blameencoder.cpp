@@ -20,8 +20,8 @@
 #include "k3bcore.h"
 #include <config-k3b.h>
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KSharedConfig>
 #include <QDebug>
 #include <QTextCodec>
 

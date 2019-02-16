@@ -16,7 +16,7 @@
 #include "k3bthememanager.h"
 #include "k3bapplication.h"
 
-#include <KCoreAddons/KAboutData>
+#include <KAboutData>
 
 #include <QEvent>
 #include <QString>

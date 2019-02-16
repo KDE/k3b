@@ -22,7 +22,7 @@
 #include "k3baudiotrack.h"
 #include "k3baudiotrackaddingdialog.h"
 
-#include <KCoreAddons/KUrlMimeData>
+#include <KUrlMimeData>
 #include <KLocalizedString>
 
 #include <QMimeData>

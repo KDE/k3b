@@ -17,9 +17,9 @@
 
 #include "k3bcore.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QSet>
 #include <QStandardPaths>

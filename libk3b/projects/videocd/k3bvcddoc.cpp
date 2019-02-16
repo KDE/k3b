@@ -21,10 +21,10 @@
 #include "k3bmsf.h"
 #include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KConfig>
+#include <KIO/Global>
+#include <KMessageBox>
+#include <KStandardGuiItem>
 
 #include <QDataStream>
 #include <QDebug>

@@ -18,9 +18,9 @@
 #include "k3bcore.h"
 #include "k3bplugin_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QCheckBox>
 #include <QDebug>

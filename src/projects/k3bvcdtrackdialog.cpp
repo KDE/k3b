@@ -22,10 +22,10 @@
 #include "k3bvcdtrackkeysdelegate.h"
 #include "k3bvcdtrackkeysmodel.h"
 
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
+#include <KIconLoader>
+#include <KIO/Global>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KSqueezedTextLabel>
+#include <KSqueezedTextLabel>
 
 #include <QList>
 #include <QUrl>

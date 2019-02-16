@@ -33,18 +33,18 @@
 #include "k3bmediacache.h"
 #include "k3bmodelutils.h"
 
-#include <KCompletion/KComboBox>
-#include <KCompletion/KLineEdit>
-#include <KConfigCore/KConfig>
-#include <KConfigWidgets/KStandardAction>
-#include <KIconThemes/KIconLoader>
+#include <KComboBox>
+#include <KLineEdit>
+#include <KConfig>
+#include <KStandardAction>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KNotifications/KNotification>
-#include <KWidgetsAddons/KActionMenu>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KToolBarSpacerAction>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KToolBar>
+#include <KNotification>
+#include <KActionMenu>
+#include <KMessageBox>
+#include <KToolBarSpacerAction>
+#include <KActionCollection>
+#include <KToolBar>
 
 #include <QDate>
 #include <QDebug>

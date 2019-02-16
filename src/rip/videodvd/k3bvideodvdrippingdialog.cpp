@@ -25,13 +25,13 @@
 #include "k3bvideodvdrippingwidget.h"
 #include "k3bvideodvdtitletranscodingjob.h"
 
-#include <KCompletion/KComboBox>
-#include <KCompletion/KLineEdit>
-#include <KConfigCore/KConfig>
+#include <KComboBox>
+#include <KLineEdit>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOWidgets/KUrlRequester>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
+#include <KUrlRequester>
+#include <KIO/Global>
+#include <KMessageBox>
 
 #include <QList>
 #include <QLocale>

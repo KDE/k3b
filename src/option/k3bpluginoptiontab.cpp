@@ -20,7 +20,7 @@
 
 #include <KLocalizedString>
 #include <KPluginSelector>
-#include <KService/KPluginInfo>
+#include <KPluginInfo>
 
 #include <QDebug>
 #include <QHash>

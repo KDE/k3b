@@ -16,7 +16,7 @@
 #define _K3B_MEDIA_SELECTION_COMBOBOX_H_
 
 #include "k3bmedium.h"
-#include <KCompletion/KComboBox>
+#include <KComboBox>
 #include <QList>
 
 namespace K3b {

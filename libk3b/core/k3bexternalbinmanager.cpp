@@ -16,8 +16,8 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KCoreAddons/KProcess>
+#include <KConfigGroup>
+#include <KProcess>
 
 #include <QDebug>
 #include <QDir>

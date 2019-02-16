@@ -21,10 +21,10 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <KIOFileWidgets/KDirSortFilterProxyModel>
-#include <KIOFileWidgets/KFilePlacesModel>
-#include <KIOWidgets/KDirModel>
-#include <KIOWidgets/KDirLister>
+#include <KDirSortFilterProxyModel>
+#include <KFilePlacesModel>
+#include <KDirModel>
+#include <KDirLister>
 #include <Solid/StorageAccess>
 
 #include <QIcon>

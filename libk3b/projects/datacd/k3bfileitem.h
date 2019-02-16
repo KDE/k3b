@@ -20,7 +20,7 @@
 #include "k3bdataitem.h"
 #include "k3bglobals.h"
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 #include <QString>
 
 #include "k3b_export.h"

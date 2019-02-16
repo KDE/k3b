@@ -19,14 +19,14 @@
 #include "k3bthememanager.h"
 #include "k3bthememodel.h"
 
-#include <KArchive/KTar>
-#include <KConfigCore/KConfig>
+#include <KTar>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KIOCore/KIO/StoredTransferJob>
-#include <KIOWidgets/KUrlRequester>
+#include <KIO/Global>
+#include <KIO/StoredTransferJob>
+#include <KUrlRequester>
 #include <KUrlRequesterDialog>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 #include <KNS3/DownloadDialog>
 
 #include <QFile>

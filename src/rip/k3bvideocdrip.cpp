@@ -17,10 +17,10 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bglobals.h"
 
-#include <KConfigCore/KConfig>
-#include <KCoreAddons/KProcess>
+#include <KConfig>
+#include <KProcess>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QDateTime>
 #include <QDebug>

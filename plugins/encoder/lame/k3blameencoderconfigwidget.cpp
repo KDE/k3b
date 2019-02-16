@@ -18,10 +18,10 @@
 #include "k3blamemanualsettingsdialog.h"
 #include "k3blametyes.h"
 
-#include <KCoreAddons/KAboutData>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KAboutData>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 #include <QDebug>
 #include <QFile>

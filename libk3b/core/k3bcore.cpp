@@ -28,8 +28,8 @@
 #include "k3bpluginmanager.h"
 #include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
+#include <KConfig>
+#include <KConfigGroup>
 #ifdef WITH_NEW_SOLID_JOB
 #include <Solid/Power>
 #endif

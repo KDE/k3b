@@ -26,8 +26,8 @@
 #include "k3b.h"
 
 #include <KLocalizedString>
-#include <KIOCore/KFileItem>
-#include <KWidgetsAddons/KActionMenu>
+#include <KFileItem>
+#include <KActionMenu>
 
 #include <QUrl>
 #include <QAction>

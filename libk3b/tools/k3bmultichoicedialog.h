@@ -17,7 +17,7 @@
 
 #include "k3b_export.h"
 
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KStandardGuiItem>
 #include <QDialog>
 #include <QMessageBox>
 

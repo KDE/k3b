@@ -19,13 +19,13 @@
 #include "k3bapplication.h"
 
 #include <KFileFilterCombo>
-#include <KIOCore/KFileItem>
+#include <KFileItem>
 #include <KLocalizedString>
-#include <KIOWidgets/KDirLister>
-#include <KWidgetsAddons/KActionMenu>
-#include <KWidgetsAddons/KToolBarSpacerAction>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KToolBar>
+#include <KDirLister>
+#include <KActionMenu>
+#include <KToolBarSpacerAction>
+#include <KActionCollection>
+#include <KToolBar>
 
 #include <QDebug>
 #include <QDir>

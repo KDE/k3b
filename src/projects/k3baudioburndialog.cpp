@@ -29,8 +29,8 @@
 #include "k3bexternalbinmanager.h"
 
 #include <KLocalizedString>
-#include <KConfigCore/KConfig>
-#include <KWidgetsAddons/KMessageBox>
+#include <KConfig>
+#include <KMessageBox>
 
 #include <QPoint>
 #include <QStringList>

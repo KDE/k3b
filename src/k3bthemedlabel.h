@@ -17,7 +17,7 @@
 
 #include "k3bthememanager.h"
 
-#include <KWidgetsAddons/KSqueezedTextLabel>
+#include <KSqueezedTextLabel>
 
 namespace K3b {
 

@@ -16,7 +16,7 @@
 #include "k3bhelper.h"
 #include "k3bhelperprogramitem.h"
 
-#include <KAuth/KAuthHelperSupport>
+#include <KAuthHelperSupport>
 
 #include <QFile>
 #include <QProcess>

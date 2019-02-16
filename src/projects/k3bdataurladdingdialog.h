@@ -24,7 +24,7 @@
 #include <QDialog>
 #include <QLabel>
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 class QProgressBar;
 class QLabel;

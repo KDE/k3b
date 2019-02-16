@@ -28,8 +28,8 @@
 #include "k3baudiodecoder.h"
 #include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
-#include <KIOCore/KIO/Global>
+#include <KConfig>
+#include <KIO/Global>
 
 #include <QDataStream>
 #include <QDebug>

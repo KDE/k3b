@@ -24,7 +24,7 @@
 #include <QCheckBox>
 #include <QToolTip>
 
-#include <KCompletion/KLineEdit>
+#include <KLineEdit>
 #include <KLocalizedString>
 
 #include <QDebug>

@@ -15,7 +15,7 @@
 #include "k3bmultichoicedialog.h"
 #include "k3bstdguiitems.h"
 
-#include <KIconThemes/KIconLoader>
+#include <KIconLoader>
 
 #include <QSignalMapper>
 #include <QCloseEvent>

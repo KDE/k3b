@@ -19,9 +19,9 @@
 
 #include "KoZipStore.h"
 
-#include <KArchive/KZip>
-#include <KIOCore/KIO/StoredTransferJob>
-#include <KJobWidgets/KJobWidgets>
+#include <KZip>
+#include <KIO/StoredTransferJob>
+#include <KJobWidgets>
 #include <QBuffer>
 #include <QByteArray>
 #include <QDebug>

@@ -20,7 +20,7 @@
 #include "k3bmsfedit.h"
 
 #include <KLocalizedString>
-#include <KXmlGui/KActionCollection>
+#include <KActionCollection>
 
 #include <QEvent>
 #include <QContextMenuEvent>

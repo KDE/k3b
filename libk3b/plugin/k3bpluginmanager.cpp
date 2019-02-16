@@ -19,12 +19,12 @@
 #include "k3bversion.h"
 #include "k3b_i18n.h"
 
-#include <KCMUtils/KCModuleInfo>
-#include <KCMUtils/KCModuleProxy>
-#include <KService/KPluginInfo>
-#include <KService/KService>
-#include <KService/KServiceTypeTrader>
-#include <KWidgetsAddons/KMessageBox>
+#include <KCModuleInfo>
+#include <KCModuleProxy>
+#include <KPluginInfo>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QDir>

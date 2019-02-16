@@ -21,7 +21,7 @@
 #include "k3bcore.h"
 #include "k3bprocess.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 
 #include <QDebug>
 #include <QFile>

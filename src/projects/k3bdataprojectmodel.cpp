@@ -22,9 +22,9 @@
 #include "k3bisooptions.h"
 #include "k3bspecialdataitem.h"
 
-#include <KCoreAddons/KUrlMimeData>
+#include <KUrlMimeData>
 #include <KLocalizedString>
-#include <KIconThemes/KIconEngine>
+#include <KIconEngine>
 
 #include <QDataStream>
 #include <QMimeData>

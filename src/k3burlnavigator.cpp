@@ -20,7 +20,7 @@
 #include "k3bmediacache.h"
 #include "k3bmedium.h"
 
-#include <KIOCore/KMountPoint>
+#include <KMountPoint>
 #include <QDir>
 
 K3b::UrlNavigator::UrlNavigator( KFilePlacesModel* model, QWidget* parent )

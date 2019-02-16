@@ -36,12 +36,12 @@
 #include <KoStore.h>
 #include <KoStoreDevice.h>
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KSharedConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/StoredTransferJob>
+#include <KIO/StoredTransferJob>
 #include <KIO/CopyJob>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QFile>

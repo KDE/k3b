@@ -34,13 +34,13 @@
 #include "k3bapplication.h"
 #include "k3bmediacache.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KIconThemes/KIconLoader>
+#include <KConfig>
+#include <KSharedConfig>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KGuiItem>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KGuiItem>
+#include <KMessageBox>
+#include <KStandardGuiItem>
 
 #include <QFile>
 #include <QFileInfo>

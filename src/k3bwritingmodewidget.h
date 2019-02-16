@@ -20,7 +20,7 @@
 #include "k3bmedium.h"
 #include "k3bglobals.h"
 
-#include <KConfigCore/KConfigGroup>
+#include <KConfigGroup>
 
 
 /**

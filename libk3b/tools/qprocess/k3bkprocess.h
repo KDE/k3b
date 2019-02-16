@@ -24,7 +24,7 @@
 
 #include "k3bqprocess.h"
 #include "k3b_export.h"
-#include <KCoreAddons/KProcess>
+#include <KProcess>
 
 class K3bKProcessPrivate;
 

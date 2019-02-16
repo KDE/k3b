@@ -18,7 +18,7 @@
 #include "k3bvcddoc.h"
 #include "k3bvcdtrack.h"
 
-#include <KCoreAddons/KUrlMimeData>
+#include <KUrlMimeData>
 #include <KLocalizedString>
 
 #include <QDataStream>

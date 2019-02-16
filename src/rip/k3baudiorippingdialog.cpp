@@ -30,13 +30,13 @@
 #include "k3baudioencoder.h"
 #include "k3bmediacache.h"
 
-#include <KCompletion/KComboBox>
-#include <KConfigCore/KConfig>
+#include <KComboBox>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KUrlLabel>
+#include <KIO/Global>
+#include <KUrlRequester>
+#include <KMessageBox>
+#include <KUrlLabel>
 
 #include <QDebug>
 #include <QDir>

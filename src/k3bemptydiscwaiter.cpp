@@ -26,14 +26,14 @@
 #include "k3bbusywidget.h"
 #include "k3bdvdformattingjob.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <KIconThemes/KIconLoader>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KNotifications/KNotification>
-#include <KWidgetsAddons/KGuiItem>
-#include <KWidgetsAddons/KMessageBox>
+#include <KNotification>
+#include <KGuiItem>
+#include <KMessageBox>
 
 #include <QEventLoop>
 #include <QTimer>

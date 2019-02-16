@@ -26,9 +26,9 @@
 #include "../k3bapplication.h"
 #include "../k3b.h"
 
-#include <KIconThemes/KIconLoader>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QMap>
 #include <QCursor>

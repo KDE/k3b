@@ -15,8 +15,8 @@
 #ifndef _K3B_ACTION_H_
 #define _K3B_ACTION_H_
 
-#include <KWidgetsAddons/KToggleAction>
-#include <KXmlGui/KActionCollection>
+#include <KToggleAction>
+#include <KActionCollection>
 
 #include <QObject>
 #include <QIcon>

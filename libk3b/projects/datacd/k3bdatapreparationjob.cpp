@@ -22,7 +22,7 @@
 #include "k3bglobals.h"
 #include "k3b_i18n.h"
 
-#include <KCoreAddons/KStringHandler>
+#include <KStringHandler>
 
 #include <QFile>
 #include <QFileInfo>

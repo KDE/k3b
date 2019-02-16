@@ -43,10 +43,10 @@
 #include "k3baudiofile.h"
 #include "k3b_i18n.h"
 
-#include <KCoreAddons/KStringHandler>
-#include <KIOCore/KIO/CopyJob>
-#include <KIOCore/KIO/DeleteJob>
-#include <KIOCore/KIO/Global>
+#include <KStringHandler>
+#include <KIO/CopyJob>
+#include <KIO/DeleteJob>
+#include <KIO/Global>
 
 #include <QDataStream>
 #include <QDebug>

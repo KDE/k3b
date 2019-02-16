@@ -14,11 +14,11 @@
 
 #include "k3bcddbpatternwidget.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KCompletion/KComboBox>
-#include <KCompletion/KLineEdit>
+#include <KConfigGroup>
+#include <KComboBox>
+#include <KLineEdit>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KUrlLabel>
+#include <KUrlLabel>
 
 #include <QDebug>
 #include <QRegExp>

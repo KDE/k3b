@@ -42,9 +42,9 @@
 #include "k3bjob.h"
 #include "k3bmediacache.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KNotifications/KNotification>
+#include <KConfig>
+#include <KSharedConfig>
+#include <KNotification>
 #include <KLocalizedString>
 
 #include <QCommandLineParser>

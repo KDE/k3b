@@ -29,9 +29,9 @@
 #include "k3bvolumenamewidget.h"
 
 #include <KLocalizedString>
-#include <KIOWidgets/KFileItemDelegate>
-#include <KIOWidgets/KRun>
-#include <KXmlGui/KActionCollection>
+#include <KFileItemDelegate>
+#include <KRun>
+#include <KActionCollection>
 
 #include <QSortFilterProxyModel>
 #include <QAction>

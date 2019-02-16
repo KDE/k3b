@@ -31,16 +31,16 @@
 #include "k3bversion.h"
 #include "k3bthememanager.h"
 
-#include <KConfigWidgets/KColorScheme>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KCoreAddons/KJobTrackerInterface>
-#include <KCoreAddons/KFormat>
-#include <KNotifications/KNotification>
-#include <KWidgetsAddons/KSqueezedTextLabel>
+#include <KColorScheme>
+#include <KConfig>
+#include <KSharedConfig>
+#include <KJobTrackerInterface>
+#include <KFormat>
+#include <KNotification>
+#include <KSqueezedTextLabel>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIO/Global>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QDateTime>

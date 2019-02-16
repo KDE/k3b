@@ -25,7 +25,7 @@
 #include "k3bcuefileparser.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QDir>

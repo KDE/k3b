@@ -21,7 +21,7 @@
 #include "k3bdevicetypes.h"
 #include "k3b_export.h"
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QFile>
 #include <QString>

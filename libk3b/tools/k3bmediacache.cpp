@@ -22,7 +22,7 @@
 #include "k3bcore.h"
 #include "k3b_i18n.h"
 
-#include <KCoreAddons/KRandom>
+#include <KRandom>
 
 #include <QDebug>
 #include <QThread>

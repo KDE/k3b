@@ -13,7 +13,7 @@
 
 #include "k3bapplication.h"
 
-#include <KCoreAddons/KAboutData>
+#include <KAboutData>
 #include <KLocalizedString>
 #include <QCommandLineParser>
 #include <QIcon>

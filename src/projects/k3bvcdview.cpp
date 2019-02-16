@@ -25,7 +25,7 @@
 #include "k3baction.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QItemSelectionModel>

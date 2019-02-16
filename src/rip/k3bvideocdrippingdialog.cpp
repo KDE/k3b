@@ -20,11 +20,11 @@
 #include "k3bglobals.h"
 #include "k3bstdguiitems.h"
 
-#include <KConfigWidgets/KColorScheme>
-#include <KConfigCore/KConfig>
+#include <KColorScheme>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KMessageBox>
+#include <KUrlRequester>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QDir>

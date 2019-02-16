@@ -18,7 +18,7 @@
 #include "k3bcore.h"
 #include "k3b_i18n.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 #include <QFile>
 #include <QString>
 #include <QStandardPaths>

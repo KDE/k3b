@@ -27,9 +27,9 @@
 
 #include <KCddb/Cdinfo>
 
-#include <KIconThemes/KIconLoader>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QDebug>
 #include <QString>

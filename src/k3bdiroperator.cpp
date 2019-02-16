@@ -20,11 +20,11 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
-#include <KBookmarks/KBookmarkMenu>
-#include <KConfigCore/KConfigGroup>
+#include <KBookmarkMenu>
+#include <KConfigGroup>
 #include <KLocalizedString>
-#include <KXmlGui/KActionCollection>
-#include <KWidgetsAddons/KActionMenu>
+#include <KActionCollection>
+#include <KActionMenu>
 
 #include <QDir>
 #include <QAction>

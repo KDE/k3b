@@ -21,7 +21,7 @@
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
-#include <KIOCore/KIO/SlaveBase>
+#include <KIO/SlaveBase>
 
 class Iso9660Entry;
 class Iso9660;

@@ -16,8 +16,8 @@
 #ifndef K3BTEMPDIRSELECTIONWIDGET_H
 #define K3BTEMPDIRSELECTIONWIDGET_H
 
-#include <KConfigCore/KConfigGroup>
-#include <KIOCore/KIO/Global>
+#include <KConfigGroup>
+#include <KIO/Global>
 #include <QGroupBox>
 #include <QLabel>
 

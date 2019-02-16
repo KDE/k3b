@@ -21,8 +21,8 @@
 
 #include <config-k3b.h>
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <Solid/DeviceNotifier>
 #include <Solid/DeviceInterface>

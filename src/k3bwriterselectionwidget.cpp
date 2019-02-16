@@ -24,11 +24,11 @@
 #include "k3bcore.h"
 #include "k3bintmapcombobox.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QCursor>
 #include <QApplication>

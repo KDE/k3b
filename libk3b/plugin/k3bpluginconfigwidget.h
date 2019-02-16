@@ -18,8 +18,8 @@
 
 #include "k3b_export.h"
 
-#include <KConfigWidgets/KCModule>
-#include <KCoreAddons/KPluginFactory>
+#include <KCModule>
+#include <KPluginFactory>
 
 class KConfigGroup;
 

@@ -28,12 +28,12 @@
 #include "k3bglobals.h"
 #include "k3baudioencoder.h"
 
-#include <KCompletion/KComboBox>
-#include <KConfigCore/KConfig>
+#include <KComboBox>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIO/Global>
+#include <KUrlRequester>
+#include <KMessageBox>
 
 #include <QDebug>
 #include <QDir>

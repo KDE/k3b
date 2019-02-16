@@ -22,7 +22,7 @@
 #include "k3bmsf.h"
 
 #include <KLocalizedString>
-#include <KXmlGui/KActionCollection>
+#include <KActionCollection>
 
 #include <QAudioDeviceInfo>
 #include <QAudioFormat>

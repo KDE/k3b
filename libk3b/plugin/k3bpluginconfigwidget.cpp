@@ -15,8 +15,8 @@
 #include "k3bpluginconfigwidget.h"
 #include "k3bcore.h"
 
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 
 
 // we only use the plugins when loaded into the main application. Thus they do not need

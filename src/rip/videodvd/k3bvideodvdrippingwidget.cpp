@@ -18,13 +18,13 @@
 #include "k3bglobals.h"
 #include "k3bintmapcombobox.h"
 
-#include <KCompletion/KLineEdit>
-#include <KConfigWidgets/KColorScheme>
+#include <KLineEdit>
+#include <KColorScheme>
 #include <KLocalizedString>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOCore/KIO/Global>
-#include <KIOWidgets/KUrlRequester>
-#include <KWidgetsAddons/KUrlLabel>
+#include <KDiskFreeSpaceInfo>
+#include <KIO/Global>
+#include <KUrlRequester>
+#include <KUrlLabel>
 
 #include <QTimer>
 #include <QCheckBox>

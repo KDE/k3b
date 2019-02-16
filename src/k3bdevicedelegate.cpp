@@ -16,8 +16,8 @@
 #include "k3bdevicedelegate.h"
 #include "k3bdevicemodel.h"
 
-#include <KIconThemes/KIconEffect>
-#include <KIconThemes/KIconLoader>
+#include <KIconEffect>
+#include <KIconLoader>
 
 #include <QPainter>
 #include <QApplication>

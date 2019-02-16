@@ -24,8 +24,8 @@
 #include "k3baction.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KToolBar>
+#include <KMessageBox>
+#include <KToolBar>
 
 #include <QDebug>
 #include <QList>

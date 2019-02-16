@@ -37,9 +37,9 @@
 #include <QUrl>
 
 #include <KLocalizedString>
-#include <KIOCore/KIO/StoredTransferJob>
-#include <KJobWidgets/KJobWidgets>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIO/StoredTransferJob>
+#include <KJobWidgets>
+#include <KMessageBox>
 
 #define DefaultFormat KoStore::Zip
 

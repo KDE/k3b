@@ -41,16 +41,16 @@
 #include "k3btrack.h"
 #include "k3bcdtext.h"
 
-#include <KCompletion/KComboBox>
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KSharedConfig>
-#include <KConfigWidgets/KColorScheme>
-#include <KIconThemes/KIconLoader>
-#include <KIOCore/KIO/Global>
+#include <KComboBox>
+#include <KConfig>
+#include <KSharedConfig>
+#include <KColorScheme>
+#include <KIconLoader>
+#include <KIO/Global>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
-#include <KIOWidgets/KUrlRequester>
+#include <KMessageBox>
+#include <KStandardGuiItem>
+#include <KUrlRequester>
 
 #include <QFile>
 #include <QFileInfo>

@@ -38,8 +38,8 @@
 #include "k3bgrowisofswriter.h"
 #include "k3b_i18n.h"
 
-#include <KIOCore/KIO/Global>
-#include <KIOCore/KIO/Job>
+#include <KIO/Global>
+#include <KIO/Job>
 
 #include <QDataStream>
 #include <QDateTime>

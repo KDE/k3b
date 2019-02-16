@@ -29,13 +29,13 @@
 #include "k3bmedium.h"
 #include "k3bmodelutils.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KToolBarSpacerAction>
-#include <KWidgetsAddons/KUrlLabel>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KToolBar>
+#include <KMessageBox>
+#include <KToolBarSpacerAction>
+#include <KUrlLabel>
+#include <KActionCollection>
+#include <KToolBar>
 
 #include <QCursor>
 #include <QGuiApplication>

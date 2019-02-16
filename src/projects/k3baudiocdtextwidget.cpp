@@ -19,7 +19,7 @@
 #include "k3baudiotrack.h"
 #include "k3bcdtextvalidator.h"
 
-#include <KCompletion/KLineEdit>
+#include <KLineEdit>
 #include <KLocalizedString>
 
 #include <QIcon>

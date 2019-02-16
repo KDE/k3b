@@ -16,7 +16,7 @@
 #include "k3bthememanager.h"
 
 #include <KLocalizedString>
-#include <KIOCore/KIO/DeleteJob>
+#include <KIO/DeleteJob>
 
 #include <QFile>
 #include <QUrl>

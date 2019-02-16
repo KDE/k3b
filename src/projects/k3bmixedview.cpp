@@ -32,9 +32,9 @@
 #endif // ENABLE_AUDIO_PLAYER
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KToolBar>
+#include <KMessageBox>
+#include <KActionCollection>
+#include <KToolBar>
 
 #include <QDebug>
 #include <QAction>

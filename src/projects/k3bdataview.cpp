@@ -23,9 +23,9 @@
 #include "k3bdirproxymodel.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KActionCollection>
-#include <KXmlGui/KToolBar>
+#include <KMessageBox>
+#include <KActionCollection>
+#include <KToolBar>
 
 #include <QDebug>
 #include <QUrl>

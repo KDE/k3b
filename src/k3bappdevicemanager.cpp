@@ -24,8 +24,8 @@
 
 #include <KLocalizedString>
 #include <KIO/Job>
-#include <KWidgetsAddons/KMessageBox>
-#include <KXmlGui/KActionCollection>
+#include <KMessageBox>
+#include <KActionCollection>
 #include <Solid/Block>
 #include <Solid/Device>
 #include <Solid/StorageAccess>

@@ -26,11 +26,11 @@
 #include "k3bmsf.h"
 #include "k3b_i18n.h"
 
-#include <KCoreAddons/KProcess>
-#include <KIOCore/KDiskFreeSpaceInfo>
-#include <KIOCore/KIO/Job>
-#include <KIOCore/KIO/StatJob>
-#include <KIOCore/KMountPoint>
+#include <KProcess>
+#include <KDiskFreeSpaceInfo>
+#include <KIO/Job>
+#include <KIO/StatJob>
+#include <KMountPoint>
 #include <Solid/Device>
 #include <Solid/StorageAccess>
 #include <Solid/OpticalDrive>

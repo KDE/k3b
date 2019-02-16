@@ -17,7 +17,7 @@
 
 #include "k3bdevicemanager.h"
 
-#include <KXmlGui/KXMLGUIClient>
+#include <KXMLGUIClient>
 #include <Solid/SolidNamespace>
 
 

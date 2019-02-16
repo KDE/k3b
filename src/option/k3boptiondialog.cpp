@@ -26,9 +26,9 @@
 #include "k3bsystemproblemdialog.h"
 #include "k3bnotifyoptiontab.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KLocalizedString>
 
 #include <QIcon>

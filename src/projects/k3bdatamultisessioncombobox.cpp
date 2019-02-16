@@ -14,7 +14,7 @@
 
 #include "k3bdatamultisessioncombobox.h"
 
-#include <KConfigCore/KConfigGroup>
+#include <KConfigGroup>
 #include <KLocalizedString>
 
 #include <QToolTip>

@@ -33,12 +33,12 @@
 #include "k3bsignalwaiter.h"
 #include "k3bexternalbinmanager.h"
 
-#include <KConfigCore/KConfig>
-#include <KWidgetsAddons/KSqueezedTextLabel>
-#include <KIconThemes/KIconLoader>
+#include <KConfig>
+#include <KSqueezedTextLabel>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KMessageBox>
+#include <KStandardGuiItem>
 
 #include <QDir>
 #include <QFileInfo>

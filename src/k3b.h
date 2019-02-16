@@ -19,7 +19,7 @@
 
 #include "option/k3boptiondialog.h"
 
-#include <KConfigCore/KSharedConfig>
+#include <KSharedConfig>
 #include <KXmlGuiWindow>
 
 #include <QList>

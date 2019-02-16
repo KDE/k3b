@@ -19,7 +19,7 @@
 #include "mpeginfo/k3bmpeginfo.h"
 #include "k3b_export.h"
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QString>
 #include <QFileInfo>

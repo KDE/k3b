@@ -23,8 +23,8 @@
 #include "k3bdoc.h"
 
 #include <KLocalizedString>
-#include <KIconThemes/KIconLoader>
-#include <KWidgetsAddons/KActionMenu>
+#include <KIconLoader>
+#include <KActionMenu>
 
 #include <QDebug>
 #include <QMimeData>

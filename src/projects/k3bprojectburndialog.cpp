@@ -35,12 +35,12 @@
 #include <QPushButton>
 #include <QToolTip>
 
-#include <KConfigCore/KConfig>
-#include <KIconThemes/KIconLoader>
+#include <KConfig>
+#include <KIconLoader>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KGuiItem>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KMessageBox>
+#include <KGuiItem>
+#include <KStandardGuiItem>
 
 #include <QDebug>
 #include <QLayout>

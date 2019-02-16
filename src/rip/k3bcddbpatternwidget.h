@@ -17,7 +17,7 @@
 #define _K3B_CDDB_PATTERN_WIDGET_H_
 
 #include "ui_base_k3bcddbpatternwidget.h"
-#include <KConfigCore/KConfigGroup>
+#include <KConfigGroup>
 
 namespace K3b {
     class CddbPatternWidget : public QWidget, public Ui::base_K3bCddbPatternWidget

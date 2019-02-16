@@ -50,12 +50,12 @@
 #include <QSpinBox>
 #include <QGridLayout>
 
-#include <KConfigCore/KConfig>
-#include <KCompletion/KComboBox>
-#include <KCompletion/KLineEdit>
+#include <KConfig>
+#include <KComboBox>
+#include <KLineEdit>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIO/Global>
+#include <KMessageBox>
 
 
 K3b::DataBurnDialog::DataBurnDialog(K3b::DataDoc* _doc, QWidget *parent )

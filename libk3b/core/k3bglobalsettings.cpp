@@ -14,8 +14,8 @@
 
 #include "k3bglobalsettings.h"
 
-#include <KConfigCore/KConfig>
-#include <KConfigCore/KConfigGroup>
+#include <KConfig>
+#include <KConfigGroup>
 #include <QStandardPaths>
 #include <QFileInfo>
 

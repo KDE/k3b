@@ -26,10 +26,10 @@
 #include "k3bexternalbinmanager.h"
 #include "k3bvalidators.h"
 
-#include <KConfigCore/KConfig>
+#include <KConfig>
 #include <KLocalizedString>
-#include <KIOCore/KIO/Global>
-#include <KWidgetsAddons/KMessageBox>
+#include <KIO/Global>
+#include <KMessageBox>
 
 #include <QDir>
 #include <QFileInfo>

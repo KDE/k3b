@@ -18,7 +18,7 @@
 #include "k3bmovixdoc.h"
 #include "k3bmovixfileitem.h"
 
-#include <KCoreAddons/KUrlMimeData>
+#include <KUrlMimeData>
 #include <KLocalizedString>
 
 #include <QUrl>

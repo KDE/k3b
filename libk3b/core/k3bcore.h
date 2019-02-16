@@ -19,7 +19,7 @@
 #include "k3b_export.h"
 #include "config-k3b.h"
 
-#include <KConfigCore/KSharedConfig>
+#include <KSharedConfig>
 
 #include <QObject>
 #include <QList>

@@ -17,7 +17,7 @@
 #include "k3bdevice.h"
 #include "k3bglobals.h"
 
-#include <KCoreAddons/KProcess>
+#include <KProcess>
 
 #include <QFile>
 #include <QFileInfo>

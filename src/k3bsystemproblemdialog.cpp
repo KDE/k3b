@@ -33,14 +33,14 @@
 #include "k3bthememanager.h"
 #include "k3bcore.h"
 
-#include <KConfigWidgets/KColorScheme>
-#include <KConfigCore/KConfigGroup>
-#include <KConfigCore/KSharedConfig>
-#include <KCoreAddons/KProcess>
-#include <KNotifications/KNotification>
+#include <KColorScheme>
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <KProcess>
+#include <KNotification>
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
-#include <KWidgetsAddons/KStandardGuiItem>
+#include <KMessageBox>
+#include <KStandardGuiItem>
 
 #include <QFileInfo>
 #include <QList>

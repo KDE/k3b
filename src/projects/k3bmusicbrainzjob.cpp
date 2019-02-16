@@ -20,7 +20,7 @@
 #include "k3bsimplejobhandler.h"
 
 #include <KLocalizedString>
-#include <KWidgetsAddons/KMessageBox>
+#include <KMessageBox>
 
 #include <QInputDialog>
 

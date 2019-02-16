@@ -30,7 +30,7 @@
 #include "k3bglobalsettings.h"
 #include "k3b_i18n.h"
 
-#include <KIOCore/KIO/Global>
+#include <KIO/Global>
 
 #include <QDebug>
 #include <QString>
