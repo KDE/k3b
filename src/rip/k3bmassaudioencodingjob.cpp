@@ -418,7 +418,7 @@ bool MassAudioEncodingJob::writePlaylist()
         // Get list of the ripped filenames sorted by track number
         QStringList filenames = d->tracks.keys();
         filenames.removeDuplicates();
-        qSort( filenames.begin(), filenames.end(), SortByTrackNumber( d->tracks ) );
+        std::sort(filenames.begin(), filenames.end(), SortByTrackNumber(d->tracks));
 
         Q_FOREACH( const QString& trackFile, filenames ) {
 

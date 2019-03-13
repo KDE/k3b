@@ -224,7 +224,7 @@ void K3b::ExternalProgram::addBin( K3b::ExternalBin* bin )
 
         // the first bin in the list is always the one used
         // so we default to using the newest one
-        qSort( d->bins.begin(), d->bins.end(), compareVersions );
+        std::sort(d->bins.begin(), d->bins.end(), compareVersions);
 
         const ExternalBin* defBin = defaultBin();
         if ( !defBin || bin->version() > defBin->version() ) {
