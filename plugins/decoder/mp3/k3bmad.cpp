@@ -47,10 +47,10 @@ K3bMad::~K3bMad()
 {
   cleanup();
 
-  if (madStream) delete madStream; madStream = NULL;
-  if (madFrame) delete madFrame; madFrame = NULL;
-  if (madSynth) delete madSynth; madSynth = NULL;
-  if (madTimer) delete madTimer; madTimer = NULL;
+  delete madStream; madStream = NULL;
+  delete madFrame; madFrame = NULL;
+  delete madSynth; madSynth = NULL;
+  delete madTimer; madTimer = NULL;
 
   delete [] m_inputBuffer;
 }
