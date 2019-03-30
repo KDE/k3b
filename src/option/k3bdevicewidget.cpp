@@ -276,16 +276,13 @@ void K3b::DeviceWidget::addUserToGroup()
     action.setArguments(args);
 
     KAuth::ExecuteJob* job = action.execute();
-    connect( job, &KAuth::ExecuteJob::statusChanged, [&](KAuth::Action::AuthStatus status)
+    connect( job, &KAuth::ExecuteJob::result, [this, job]()
     {
-        if( status == KAuth::Action::AuthorizedStatus ||
-            status == KAuth::Action::AuthRequiredStatus ) {
+        if( job->error() == KJob::NoError ) {
             m_messageWidget->removeAction(m_addToGroupAction);
             m_messageWidget->setMessageType(KMessageWidget::Information);
             m_messageWidget->setText(i18n("Please relogin to apply the changes."));
-        } else if( status == KAuth::Action::DeniedStatus ||
-                   status == KAuth::Action::ErrorStatus ||
-                   status == KAuth::Action::InvalidStatus ) {
+        } else {
             m_messageWidget->setMessageType(KMessageWidget::Error);
             m_messageWidget->setText(i18n("Unable to execute the action: %1 (Error code: %2)", job->errorString(), job->error()));
             m_addToGroupAction->setText(i18n("Retry"));

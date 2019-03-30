@@ -249,10 +249,9 @@ void K3b::ExternalBinWidget::slotChangePermissions()
     action.setArguments(args);
 
     KAuth::ExecuteJob* job = action.execute();
-    connect( job, &KAuth::ExecuteJob::statusChanged, [&](KAuth::Action::AuthStatus status)
+    connect( job, &KAuth::ExecuteJob::result, [this, job]()
     {
-        if( status == KAuth::Action::AuthorizedStatus ||
-            status == KAuth::Action::AuthRequiredStatus ) {
+        if( job->error() == KJob::NoError ) {
             // Success!!
             QStringList updated = job->data()["updated"].toStringList();
             QStringList failedToUpdate = job->data()["failedToUpdate"].toStringList();
@@ -264,9 +263,7 @@ void K3b::ExternalBinWidget::slotChangePermissions()
             }
 
             m_permissionModel->update();
-        } else if( status == KAuth::Action::DeniedStatus ||
-                   status == KAuth::Action::ErrorStatus ||
-                   status == KAuth::Action::InvalidStatus ) {
+        } else {
             KMessageBox::error(this, i18n("Unable to execute the action: %1", job->errorString()));
         }
     } );
