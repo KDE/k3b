@@ -263,9 +263,9 @@ void K3b::DeviceWidget::updateDeviceListViews()
     }
 }
 
-#ifdef ENABLE_PERMISSION_HELPER
 void K3b::DeviceWidget::addUserToGroup()
 {
+#ifdef ENABLE_PERMISSION_HELPER
     QVariantMap args;
     args["groupName"] = m_deviceGroup;
     args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_name);
@@ -291,5 +291,5 @@ void K3b::DeviceWidget::addUserToGroup()
             m_addToGroupAction->setText(i18n("Retry"));
         }
     } );
-}
 #endif
+}

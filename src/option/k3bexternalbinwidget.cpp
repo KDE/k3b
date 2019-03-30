@@ -216,15 +216,17 @@ void K3b::ExternalBinWidget::saveSearchPath()
 }
 
 
-#ifdef ENABLE_PERMISSION_HELPER
 void K3b::ExternalBinWidget::slotPermissionModelChanged()
 {
+#ifdef ENABLE_PERMISSION_HELPER
     m_changePermissionsButton->setEnabled(m_permissionModel->changesNeeded());
+#endif
 }
 
 
 void K3b::ExternalBinWidget::slotChangePermissions()
 {
+#ifdef ENABLE_PERMISSION_HELPER
     KAuth::Action action("org.kde.k3b.updatepermissions");
     action.setHelperId("org.kde.k3b");
     action.setParentWidget(this);
@@ -268,7 +270,7 @@ void K3b::ExternalBinWidget::slotChangePermissions()
             KMessageBox::error(this, i18n("Unable to execute the action: %1", job->errorString()));
         }
     } );
-}
 #endif
+}
 
 

@@ -51,10 +51,8 @@ namespace K3b {
 
     private Q_SLOTS:
         void saveSearchPath();
-#ifdef ENABLE_PERMISSION_HELPER
         void slotPermissionModelChanged();
         void slotChangePermissions();
-#endif
 
     private:
         ExternalBinManager* m_manager;

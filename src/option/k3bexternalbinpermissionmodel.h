@@ -63,9 +63,7 @@ namespace K3b {
         QModelIndex buddy( const QModelIndex& index ) const override;
 
     public Q_SLOTS:
-#ifdef ENABLE_PERMISSION_HELPER
         void setBurningGroup( const QString& burningGroup );
-#endif
         void update();
 
     private:

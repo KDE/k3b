@@ -346,9 +346,9 @@ QModelIndex ExternalBinPermissionModel::buddy( const QModelIndex& index ) const
         return index;
 }
 
-#ifdef ENABLE_PERMISSION_HELPER
 void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
 {
+#ifdef ENABLE_PERMISSION_HELPER
     if( burningGroup != d->burningGroup ) {
         beginResetModel();
         d->burningGroup = burningGroup;
@@ -365,8 +365,8 @@ void ExternalBinPermissionModel::setBurningGroup( const QString& burningGroup )
         }
         endResetModel();
     }
-}
 #endif
+}
 
 void ExternalBinPermissionModel::update()
 {

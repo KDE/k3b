@@ -47,9 +47,7 @@ namespace K3b {
 
     private Q_SLOTS:
         void updateDeviceListViews();
-#ifdef ENABLE_PERMISSION_HELPER
         void addUserToGroup();
-#endif
 
     private:
         Device::DeviceManager* m_deviceManager;
