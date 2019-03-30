@@ -270,6 +270,7 @@ void K3b::ExternalBinWidget::slotChangePermissions()
             KMessageBox::error(this, i18n("Unable to execute the action: %1", job->errorString()));
         }
     } );
+    job->start();
 #endif
 }
 

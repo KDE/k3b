@@ -291,5 +291,6 @@ void K3b::DeviceWidget::addUserToGroup()
             m_addToGroupAction->setText(i18n("Retry"));
         }
     } );
+    job->start();
 #endif
 }
