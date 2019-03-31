@@ -44,7 +44,6 @@ For debug:
     -DKDE_INSTALL_LIBEXECDIR=lib    \
     -DKDE_INSTALL_USE_QT_SYS_PATHS=ON   \
     -DK3B_BUILD_API_DOCS=ON \
-    -DK3B_ENABLE_PERMISSION_HELPER=ON   \
     -DK3B_DEBUG=ON
 
   dynamic analyzer and fuzzer:
@@ -57,7 +56,6 @@ For debug:
     -DKDE_INSTALL_LIBEXECDIR=lib    \
     -DKDE_INSTALL_USE_QT_SYS_PATHS=ON   \
     -DK3B_BUILD_API_DOCS=ON \
-    -DK3B_ENABLE_PERMISSION_HELPER=ON   \
     -DK3B_DEBUG=ON
 
 If the cmake run was successful you are presented with a list of configure results that shows

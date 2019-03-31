@@ -111,12 +111,7 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     // setup permissions tab
     // ------------------------------------------------------------
     QWidget* permissionsTab = new QWidget( m_mainTabWidget );
-#ifdef ENABLE_PERMISSION_HELPER
     QLabel* permissionsLabel = new QLabel( i18n("Check the programs whose permissions you want to be changed:"), permissionsTab );
-#else
-    QLabel* permissionsLabel = new QLabel( i18n("The Permissions helper was not enabled during build.\n"
-                                                "Check the programs whose permissions should be changed:"), permissionsTab );
-#endif
     permissionsLabel->setWordWrap( true );
     m_permissionModel = new ExternalBinPermissionModel( *manager, permissionsTab );
     m_permissionView = new QTreeView( permissionsTab );
@@ -124,15 +119,11 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     m_permissionView->setAllColumnsShowFocus( true );
     m_permissionView->setRootIsDecorated( false );
     m_permissionView->header()->setSectionResizeMode( ExternalBinPermissionModel::ProgramColumn, QHeaderView::ResizeToContents );
-#ifdef ENABLE_PERMISSION_HELPER
     m_changePermissionsButton = new QPushButton( QIcon::fromTheme("dialog-password"), i18n( "Change Permissions..." ), this );
-#endif
     QVBoxLayout* permissionsTabLayout = new QVBoxLayout( permissionsTab );
     permissionsTabLayout->addWidget( permissionsLabel );
     permissionsTabLayout->addWidget( m_permissionView );
-#ifdef ENABLE_PERMISSION_HELPER
     permissionsTabLayout->addWidget( m_changePermissionsButton );
-#endif
     m_mainTabWidget->addTab( permissionsTab, i18n("Permissions") );
 
 
@@ -151,17 +142,14 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
 
     m_mainTabWidget->addTab( searchPathTab, i18n("Search Path") );
 
-#ifdef ENABLE_PERMISSION_HELPER
     connect( m_changePermissionsButton, SIGNAL(clicked()), SLOT(slotChangePermissions()) );
     connect( m_permissionModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), SLOT(slotPermissionModelChanged()) );
     connect( m_permissionModel, SIGNAL(modelReset()), SLOT(slotPermissionModelChanged()) );
-#endif
     connect( m_rescanButton, SIGNAL(clicked(bool)), this, SLOT(rescan()) );
 
     qRegisterMetaType<HelperProgramItem>();
     qRegisterMetaTypeStreamOperators<HelperProgramItem>("K3b::HelperProgramItem");
 
-#ifdef ENABLE_PERMISSION_HELPER
     while (::group *g = ::getgrent()) {
         const QString groupName = QString::fromLocal8Bit(g->gr_name);
         if (groupName == "cdrom" ||
@@ -171,7 +159,6 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
         }
     }
     ::endgrent();
-#endif
 }
 
 
@@ -218,15 +205,12 @@ void K3b::ExternalBinWidget::saveSearchPath()
 
 void K3b::ExternalBinWidget::slotPermissionModelChanged()
 {
-#ifdef ENABLE_PERMISSION_HELPER
     m_changePermissionsButton->setEnabled(m_permissionModel->changesNeeded());
-#endif
 }
 
 
 void K3b::ExternalBinWidget::slotChangePermissions()
 {
-#ifdef ENABLE_PERMISSION_HELPER
     KAuth::Action action("org.kde.k3b.updatepermissions");
     action.setHelperId("org.kde.k3b");
     action.setParentWidget(this);
@@ -268,7 +252,6 @@ void K3b::ExternalBinWidget::slotChangePermissions()
         }
     } );
     job->start();
-#endif
 }
 
 

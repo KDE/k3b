@@ -66,9 +66,7 @@ namespace K3b {
         QTreeView* m_permissionView;
         KEditListWidget* m_searchPathBox;
 
-#ifdef ENABLE_PERMISSION_HELPER
         QPushButton* m_changePermissionsButton;
-#endif
         QPushButton* m_rescanButton;
     };
 }

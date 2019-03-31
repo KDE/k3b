@@ -1,7 +1,5 @@
 
-if(ENABLE_PERMISSION_HELPER)
-  add_subdirectory( helper )
-endif(ENABLE_PERMISSION_HELPER)
+add_subdirectory( helper )
 
 add_subdirectory( icons )
 add_subdirectory( pics )

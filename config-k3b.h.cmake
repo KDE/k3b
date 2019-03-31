@@ -20,8 +20,6 @@
 
 #cmakedefine ENABLE_AUDIO_PLAYER
 
-#cmakedefine ENABLE_PERMISSION_HELPER
-
 #cmakedefine HAVE_BYTESWAP_H
 
 #cmakedefine WORDS_BIGENDIAN

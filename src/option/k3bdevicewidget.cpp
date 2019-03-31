@@ -57,9 +57,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     m_messageWidget = new KMessageWidget( this );
     m_messageWidget->hide();
     m_messageWidget->setWordWrap( true );
-#ifdef ENABLE_PERMISSION_HELPER
     m_addToGroupAction = new QAction( QIcon::fromTheme("dialog-password"), QString(), this );
-#endif
 
     // buttons
     // ------------------------------------------------
@@ -96,9 +94,7 @@ K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *p
     // ------------------------------------------------
     connect( buttonRefreshDevices, SIGNAL(clicked()), SIGNAL(refreshButtonClicked()) );
     connect( m_deviceManager, SIGNAL(changed()), SLOT(init()) );
-#ifdef ENABLE_PERMISSION_HELPER
     connect( m_addToGroupAction, SIGNAL(triggered(bool)), SLOT(addUserToGroup()) );
-#endif
     // ------------------------------------------------
 }
 
@@ -247,16 +243,10 @@ void K3b::DeviceWidget::updateDeviceListViews()
 
             if (!groupNames.contains(m_deviceGroup)) {
 		QString messageText = i18n("In order to give K3b full access to the writer device the current user needs be added to a group <em>%1</em>.", m_deviceGroup);
-#ifndef ENABLE_PERMISSION_HELPER
-		messageText += i18n("<br/>The Permission helper that could do this for you was not enabled during build.<br/>"
-                                    "Please rebuild the package with the Permission helper enabled or contact your distribution.");
-#endif
                 m_messageWidget->setMessageType(KMessageWidget::Warning);
                 m_messageWidget->setText(messageText);
-#ifdef ENABLE_PERMISSION_HELPER
                 m_messageWidget->addAction(m_addToGroupAction);
                 m_addToGroupAction->setText(i18n("Add"));
-#endif
                 m_messageWidget->animatedShow();
             }
         }
@@ -265,7 +255,6 @@ void K3b::DeviceWidget::updateDeviceListViews()
 
 void K3b::DeviceWidget::addUserToGroup()
 {
-#ifdef ENABLE_PERMISSION_HELPER
     QVariantMap args;
     args["groupName"] = m_deviceGroup;
     args["userName"] = QString::fromLocal8Bit(getpwuid(getuid())->pw_name);
@@ -289,5 +278,4 @@ void K3b::DeviceWidget::addUserToGroup()
         }
     } );
     job->start();
-#endif
 }

@@ -34,7 +34,6 @@ option(K3B_ENABLE_MUSICBRAINZ "Support for querying metadata about audio tracks 
 option(K3B_ENABLE_DVD_RIPPING "Support for ripping Video DVDs with optional decryption." ON)
 option(K3B_ENABLE_TAGLIB "Support for reading audio file metadata using Taglib." ON)
 option(K3B_BUILD_API_DOCS "Build the API documentation for the K3b libs." OFF)
-option(K3B_ENABLE_PERMISSION_HELPER "Build the permissions helper program" OFF)
 
 # plugin options
 option(K3B_BUILD_FFMPEG_DECODER_PLUGIN "Build FFmpeg decoder plugin" ON)
@@ -271,7 +270,6 @@ set(BUILD_EXTERNAL_ENCODER_PLUGIN "${K3B_BUILD_EXTERNAL_ENCODER_PLUGIN}")
 
 set(ENABLE_HAL_SUPPORT "${K3B_ENABLE_HAL_SUPPORT}")
 set(ENABLE_AUDIO_PLAYER "${QT_QTMULTIMEDIA_FOUND}")
-set(ENABLE_PERMISSION_HELPER "${K3B_ENABLE_PERMISSION_HELPER}")
 
 if(IS_ABSOLUTE ${DATA_INSTALL_DIR})
   set(K3B_DATA_INSTALL_DIR ${DATA_INSTALL_DIR}/k3b)
