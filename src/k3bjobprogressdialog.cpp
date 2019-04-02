@@ -375,8 +375,8 @@ void K3b::JobProgressDialog::slotFinished( bool success )
     // Only show elapsed time at the end of the task
     // setVisible( false ) would move elapsed time one line up ...
     m_labelRemainingTime->setText( "" );
-    m_labelElapsedTime->setText( i18nc( "@info %1 is a duration formatted using QLocale::toString",
-        "Elapsed time: %1", QLocale().toString( QTime().addSecs( m_timer.elapsed() ), QLocale::NarrowFormat ) ) );
+    m_labelElapsedTime->setText(i18nc("@info %1 is a duration formatted",
+        "Elapsed time: %1", QTime::fromMSecsSinceStartOfDay(m_timer.elapsed()).toString("hh:mm:ss")));
     m_timer.invalidate();
 
     if( success ) {
