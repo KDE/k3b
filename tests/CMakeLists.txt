@@ -12,7 +12,7 @@ target_link_libraries(k3bdataprojectmodeltest
     KF5::IconThemes
     KF5::I18n
     k3blib)
-add_test(k3bdataprojectmodeltest k3bdataprojectmodeltest)
+add_test(NAME k3bdataprojectmodeltest COMMAND k3bdataprojectmodeltest)
 
 add_executable(k3bglobalstest k3bglobalstest.cpp)
 target_include_directories(k3bglobalstest PRIVATE
@@ -20,7 +20,7 @@ target_include_directories(k3bglobalstest PRIVATE
 target_link_libraries(k3bglobalstest
     Qt5::Test
     k3blib)
-add_test(k3bglobalstest k3bglobalstest)
+add_test(NAME k3bglobalstest COMMAND k3bglobalstest)
 
 add_executable(k3bmetaitemmodeltest
     k3bmetaitemmodeltest.cpp
@@ -34,7 +34,7 @@ target_link_libraries( k3bmetaitemmodeltest
     Qt5::Gui
     Qt5::Test
     KF5::ConfigCore)
-add_test(k3bmetaitemmodeltest k3bmetaitemmodeltest)
+add_test(NAME k3bmetaitemmodeltest COMMAND k3bmetaitemmodeltest)
 
 add_executable(k3bmodelutilstest
     k3bmodelutilstest.cpp
@@ -45,7 +45,7 @@ target_include_directories(k3bmodelutilstest PRIVATE
 target_link_libraries(k3bmodelutilstest
     Qt5::Gui
     Qt5::Test)
-add_test(k3bmodelutilstest k3bmodelutilstest)
+add_test(NAME k3bmodelutilstest COMMAND k3bmodelutilstest)
 
 add_executable(k3bdeviceglobalstest k3bdeviceglobalstest.cpp)
 target_include_directories(k3bdeviceglobalstest PRIVATE
@@ -54,7 +54,7 @@ target_link_libraries(k3bdeviceglobalstest
     Qt5::Test
     KF5::KIOCore
     k3bdevice)
-add_test(k3bdeviceglobalstest k3bdeviceglobalstest)
+add_test(NAME k3bdeviceglobalstest COMMAND k3bdeviceglobalstest)
 
 qt5_generate_dbus_interface(${CMAKE_SOURCE_DIR}/src/k3bjobinterface.h org.k3b.Job.xml)
 qt5_add_dbus_adaptor(dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Job.xml ${CMAKE_SOURCE_DIR}/src/k3bjobinterface.h K3b::JobInterface k3bjobinterfaceadaptor K3bJobInterfaceAdaptor)
@@ -87,7 +87,7 @@ target_link_libraries(k3bexternalbinmanagertest
     KF5::IconThemes
     k3blib
     k3bdevice)
-add_test(k3bexternalbinmanagertest k3bexternalbinmanagertest)
+add_test(NAME k3bexternalbinmanagertest COMMAND k3bexternalbinmanagertest)
 
 if(LIBFUZZER_FOUND)
     find_package(Threads)
