@@ -31,7 +31,7 @@
         <comment xml:lang="sr@latin">K3bov projekat</comment>
         <comment xml:lang="sv">K3b-projekt</comment>
         <comment xml:lang="tr">K3b projesi</comment>
-        <comment xml:lang="uk">проект K3b</comment>
+        <comment xml:lang="uk">проєкт K3b</comment>
         <comment xml:lang="zh_CN">K3b 工程</comment>
         <comment xml:lang="zh_TW">K3b 專案</comment>
         <glob pattern="*.k3b"/>
