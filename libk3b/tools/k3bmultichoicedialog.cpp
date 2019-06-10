@@ -17,7 +17,6 @@
 
 #include <KIconLoader>
 
-#include <QSignalMapper>
 #include <QCloseEvent>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -31,11 +30,9 @@ class K3b::MultiChoiceDialog::Private
 {
 public:
     Private()
-        : mapper(0),
-          buttonLayout(0) {
+        : buttonLayout(0) {
     }
 
-    QSignalMapper* mapper;
     QList<QPushButton*> buttons;
     QHBoxLayout* buttonLayout;
 
@@ -82,8 +79,6 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     : QDialog( parent )
 {
     d = new Private();
-    d->mapper = new QSignalMapper( this );
-    connect( d->mapper, SIGNAL(mapped(int)), this, SLOT(done(int)) );
 
     setWindowTitle( caption );
 
@@ -127,9 +122,9 @@ int K3b::MultiChoiceDialog::addButton( const KGuiItem& b )
     KGuiItem::assign( button, b );
     d->buttonLayout->addWidget( button );
     d->buttons.append(button);
-    d->mapper->setMapping( button, d->buttons.count() );
-    connect( button, SIGNAL(clicked()), d->mapper, SLOT(map()) );
-    return d->buttons.count();
+    const auto buttonId = d->buttons.count();
+    connect( button, &QAbstractButton::clicked, this, [this, buttonId]() { done(buttonId); } );
+    return buttonId;
 }
 
 
