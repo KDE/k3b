@@ -167,7 +167,7 @@ void K3b::MediaFormattingDialog::toggleAll()
 {
     K3b::Medium medium = k3bappcore->mediaCache()->medium( m_writerSelectionWidget->writerDevice() );
     K3b::WritingModes modes = 0;
-    if ( medium.diskInfo().mediaType() & K3b::Device::MEDIA_DVD_RW ) {
+    if ( medium.diskInfo().mediaType() & (K3b::Device::MEDIA_DVD_RW|K3b::Device::MEDIA_DVD_RW_SEQ|K3b::Device::MEDIA_DVD_RW_OVWR) ) {
         modes |=  K3b::WritingModeIncrementalSequential|K3b::WritingModeRestrictedOverwrite;
     }
     m_writingModeWidget->setSupportedModes( modes );
