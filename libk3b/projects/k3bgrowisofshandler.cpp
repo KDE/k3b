@@ -80,11 +80,6 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         else if( line.startsWith( ":-[ PERFORM OPC failed" ) )
             emit infoMessage( i18n("OPC failed. Please try writing speed 1x."), K3b::Job::MessageError );
 
-        // :-[ attempt -blank=full or re-run with -dvd-compat -dvd-compat to engage DAO ]
-        else if( !m_dao &&
-                 ( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) ) )
-            emit infoMessage( i18n("Please try again with writing mode DAO."), K3b::Job::MessageError );
-
         else if( line.startsWith( ":-[ Failed to change write speed" ) ) {
             m_error = ERROR_SPEED_SET_FAILED;
         }
@@ -106,6 +101,11 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         else if( line.startsWith( ":-( write failed" ) ) {
             m_error = ERROR_WRITE_FAILED;
         }
+
+        // :-( attempt to re-run with -dvd-compat -dvd-compat to engage DAO or apply full blanking procedure
+        else if( !m_dao &&
+                 ( line.contains( "engage DAO" ) || line.contains( "media is not formatted or unsupported" ) ) )
+            emit infoMessage( i18n("Please try again with writing mode DAO."), K3b::Job::MessageError );
 
         else
             emit infoMessage( line, K3b::Job::MessageError );

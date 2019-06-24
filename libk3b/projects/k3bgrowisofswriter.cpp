@@ -114,6 +114,7 @@ K3b::GrowisofsWriter::GrowisofsWriter( K3b::Device::Device* dev, K3b::JobHandler
     d->process.setSuppressEmptyLines(true);
     d->process.setFlags( K3bQProcess::RawStdin );
     connect( &d->process, SIGNAL(stdoutLine(QString)), this, SLOT(slotReceivedStderr(QString)) );
+    connect( &d->process, SIGNAL(stderrLine(QString)), this, SLOT(slotReceivedStderr(QString)) );
     connect( &d->process, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotProcessExited(int,QProcess::ExitStatus)) );
 }
 
@@ -354,7 +355,7 @@ void K3b::GrowisofsWriter::start()
         burnDevice()->close();
         burnDevice()->usageLock();
 
-        if( !d->process.start( KProcess::MergedChannels ) ) {
+        if( !d->process.start( KProcess::SeparateChannels ) ) {
             // something went wrong when starting the program
             // it "should" be the executable
             qDebug() << "(K3b::GrowisofsWriter) could not start " << d->growisofsBin->path();
