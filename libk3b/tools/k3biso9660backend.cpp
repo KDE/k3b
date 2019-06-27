@@ -131,7 +131,7 @@ bool K3b::Iso9660FileBackend::open()
     if( m_fd > 0 )
         return true;
     else {
-        m_fd = ::open( QFile::encodeName( m_filename ), O_RDONLY|O_LARGEFILE );
+        m_fd = ::open( QFile::encodeName( m_filename ), O_RDONLY|O_LARGEFILE|O_CLOEXEC );
         return ( m_fd > 0 );
     }
 }
