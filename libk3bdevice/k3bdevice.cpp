@@ -171,7 +171,7 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
 K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool write )
 {
     K3b::Device::Device::Handle fd = HANDLE_DEFAULT_VALUE;
-    int flags = O_NONBLOCK;
+    int flags = O_NONBLOCK | O_CLOEXEC;
     if( write )
         flags |= O_RDWR;
     else
