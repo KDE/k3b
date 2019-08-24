@@ -17,7 +17,7 @@ configure_file(config-flac.h.cmake config-flac.h )
 
 add_library(k3bflacdecoder MODULE k3bflacdecoder.cpp)
 
-target_include_directories(k3bflacdecoder PRIVATE ${FLAC++_INCLUDE_DIR} ${FLAC_INCLUDE_DIR})
+target_include_directories(k3bflacdecoder PRIVATE ${FLAC++_INCLUDE_DIR} ${FLAC_INCLUDE_DIR} ${TAGLIB_INCLUDES})
 
 target_link_libraries(k3bflacdecoder k3bdevice k3blib KF5::I18n ${FLAC++_LIBRARIES} ${FLAC_LIBRARIES})
 
