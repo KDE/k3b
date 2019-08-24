@@ -29,8 +29,8 @@
 K3B_EXPORT_PLUGIN(k3bflacdecoder, K3bFLACDecoderFactory)
 
 #ifdef ENABLE_TAGLIB
-#include <taglib/tag.h>
-#include <taglib/flacfile.h>
+#include <tag.h>
+#include <flacfile.h>
 #endif
 
 #if !defined FLACPP_API_VERSION_CURRENT || FLACPP_API_VERSION_CURRENT < 6

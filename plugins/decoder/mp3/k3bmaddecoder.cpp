@@ -39,8 +39,8 @@
 #include <cstdlib>
 
 #ifdef ENABLE_TAGLIB
-#include <taglib/tag.h>
-#include <taglib/mpegfile.h>
+#include <tag.h>
+#include <mpegfile.h>
 #endif
 
 

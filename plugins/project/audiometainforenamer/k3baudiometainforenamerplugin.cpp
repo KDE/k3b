@@ -47,12 +47,13 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 
-#include <taglib/tag.h>
-#include <taglib/fileref.h>
-#include <taglib/audioproperties.h>
-#include <taglib/mpegfile.h>
-#include <taglib/vorbisfile.h>
-#include <taglib/oggflacfile.h>
+// Taglib includes
+#include <tag.h>
+#include <fileref.h>
+#include <audioproperties.h>
+#include <mpegfile.h>
+#include <vorbisfile.h>
+#include <oggflacfile.h>
 
 
 K3B_EXPORT_PLUGIN( k3baudiometainforenamerplugin, K3bAudioMetainfoRenamerPlugin )
