@@ -176,7 +176,7 @@ namespace {
             sum += sizes.at( i );
         }
 
-        qFill( sizes, sum / sizes.count() );
+        std::fill( sizes.begin(), sizes.end(), sum / sizes.count() );
         splitter->setSizes( sizes );
     }
 

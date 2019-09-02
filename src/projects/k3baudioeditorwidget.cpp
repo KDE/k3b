@@ -270,7 +270,7 @@ int K3b::AudioEditorWidget::addRange( const K3b::Msf& start, const K3b::Msf& end
         return -1;
 
     Range r( d->idCnt++, start, end, startFixed, endFixed, toolTip,
-             brush.style() != Qt::NoBrush ? brush : palette().background() );
+             brush.style() != Qt::NoBrush ? brush : palette().window() );
     d->ranges.append( r );
 
     // only update the changed range
@@ -402,7 +402,7 @@ void K3b::AudioEditorWidget::setMaxNumberOfMarkers( int i )
 int K3b::AudioEditorWidget::addMarker( const K3b::Msf& pos, bool fixed, const QString& toolTip, const QColor& color )
 {
     if( pos < d->length ) {
-        Marker m( d->idCnt++, pos, fixed, color.isValid() ? color : palette().foreground().color(), toolTip );
+        Marker m( d->idCnt++, pos, fixed, color.isValid() ? color : palette().windowText().color(), toolTip );
         d->markers.append( m );
         return m.id;
     }

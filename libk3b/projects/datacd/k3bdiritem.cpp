@@ -196,7 +196,7 @@ K3b::DirItem::Children K3b::DirItem::takeDataItems( int start, int count )
         }
 
         // filling the gap: move items from after removed range
-        qCopy( m_children.begin()+start+count, m_children.end(),
+        std::copy( m_children.begin()+start+count, m_children.end(),
                m_children.begin()+start );
 
         // remove unused space

@@ -1791,7 +1791,7 @@ int K3bQProcess::exitCode() const
 int K3bQProcess::execute(const QString &program, const QStringList &arguments)
 {
     QProcess process;
-    process.setReadChannelMode(::QProcess::ForwardedChannels);
+    process.setProcessChannelMode(::QProcess::ForwardedChannels);
     process.start(program, arguments);
     process.waitForFinished(-1);
     return process.exitCode();
@@ -1807,7 +1807,7 @@ int K3bQProcess::execute(const QString &program, const QStringList &arguments)
 int K3bQProcess::execute(const QString &program)
 {
     QProcess process;
-    process.setReadChannelMode(::QProcess::ForwardedChannels);
+    process.setProcessChannelMode(::QProcess::ForwardedChannels);
     process.start(program);
     process.waitForFinished(-1);
     return process.exitCode();

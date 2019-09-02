@@ -24,8 +24,8 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QLabel>
+#include <QScreen>
 #include <QVBoxLayout>
 
 K3b::Splash::Splash( QWidget* parent )
@@ -65,8 +65,8 @@ K3b::Splash::Splash( QWidget* parent )
     // Set geometry, with support for Xinerama systems
     QRect r;
     r.setSize(sizeHint());
-    int ps = QApplication::desktop()->primaryScreen();
-    r.moveCenter( QApplication::desktop()->screenGeometry(ps).center() );
+    const QScreen *ps = QGuiApplication::primaryScreen();
+    r.moveCenter( ps->geometry().center() );
     setGeometry(r);
 }
 
