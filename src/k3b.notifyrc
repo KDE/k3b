@@ -1,5 +1,6 @@
 [Global]
 IconName=k3b
+DesktopEntry=org.kde.k3b
 Comment=K3b
 Comment[ar]=كي3بي
 Comment[be]=K3b
