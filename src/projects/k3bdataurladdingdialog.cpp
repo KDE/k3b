@@ -289,7 +289,8 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
                 m_unreadableFiles.append( url.toLocalFile() );
             }
             else if( isFile && (unsigned long long)statBuf.st_size >= 0xFFFFFFFFULL ) {
-                if ( !k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "no-4gb-limit" ) ) {
+                const K3b::ExternalBin *mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
+                if ( !mkisofsBin || !mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
                     valid = false;
                     m_tooBigFiles.append( url.toLocalFile() );
                 }
