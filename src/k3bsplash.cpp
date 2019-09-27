@@ -43,7 +43,7 @@ K3b::Splash::Splash( QWidget* parent )
     setPalette( pal );
 
     QLabel* copyrightLabel = new QLabel( KAboutData::applicationData().copyrightStatement(), this );
-    copyrightLabel->setMargin( 5 );
+    copyrightLabel->setContentsMargins( 5, 5, 5, 5 );
     copyrightLabel->setAlignment( Qt::AlignRight );
 
     QLabel* picLabel = new QLabel( this );
@@ -53,7 +53,7 @@ K3b::Splash::Splash( QWidget* parent )
     }
 
     m_infoBox = new QLabel( this );
-    m_infoBox->setMargin( 5 );
+    m_infoBox->setContentsMargins( 5, 5, 5, 5 );
 
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->setContentsMargins( 0, 0, 0, 0 );
