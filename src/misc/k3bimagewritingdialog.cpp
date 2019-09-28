@@ -625,7 +625,7 @@ void K3b::ImageWritingDialog::setupGui()
                                          "containing an image of an audio CD. The actual audio "
                                          "data can be encoded using any audio format supported "
                                          "by K3b. Audio cue files can also be imported into "
-                                         "K3b audio projects which allows to change the order "
+                                         "K3b audio projects which allows one to change the order "
                                          "and add or remove tracks."
                                          "<p><b>Cdrecord clone images</b><br/>"
                                          "K3b creates a cdrecord clone image of a single-session "

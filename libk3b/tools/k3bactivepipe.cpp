@@ -61,7 +61,7 @@ public:
         }
 
         qDebug() << "Done:"
-                 << ( fail ? QLatin1String( "write failed" ) : QLatin1String( "write succcess" ) )
+                 << ( fail ? QLatin1String( "write failed" ) : QLatin1String( "write success" ) )
                  << ( r != 0 ? QLatin1String( "read failed" ) : QLatin1String( "read success" ) )
                  << "(total bytes read/written:" << bytesRead << "/" << bytesWritten << ")";
     }

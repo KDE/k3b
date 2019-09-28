@@ -69,7 +69,7 @@ namespace K3b {
 
         /**
          * In contract to "normal" dialogs InteractionDialog will not return from exec
-         * until close() has been called. This allows to hide the dialog while a progress
+         * until close() has been called. This allows one to hide the dialog while a progress
          * dialog is shown.
          */
         int exec() override;

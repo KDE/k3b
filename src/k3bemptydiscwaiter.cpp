@@ -514,7 +514,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
                    (d->wantedMediaState & K3b::Device::STATE_EMPTY) &&
                    (medium.diskInfo().diskState() != K3b::Device::STATE_EMPTY) ) ) {
 
-            qDebug() << "------ DVD-RW needs to be formated.";
+            qDebug() << "------ DVD-RW needs to be formatted.";
 
             if( formatWithoutAsking ||
                 KMessageBox::warningContinueCancel( parentWidgetToUse(),
@@ -806,5 +806,3 @@ void K3b::EmptyDiscWaiter::blockingInformation( const QString& text,
 {
     KMessageBox::information( this, text, caption );
 }
-
-

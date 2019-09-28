@@ -45,7 +45,7 @@ static const KLocalizedString s_seqHelp =
     ki18n("Incremental sequential is the default writing mode for DVD-R(W). "
           "It allows multisession DVD-R(W)s. It only applies to DVD-R(W).");
 static const KLocalizedString s_ovwHelp =
-    ki18n("Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM "
+    ki18n("Restricted Overwrite allows one to use a DVD-RW just like a DVD-RAM "
           "or a DVD+RW. The media may just be overwritten. It is not possible "
           "to write multisession DVD-RWs in this mode but K3b uses growisofs "
           "to grow an ISO 9660 filesystem within the first session, thus allowing "

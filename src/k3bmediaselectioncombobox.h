@@ -27,8 +27,8 @@ namespace K3b {
     class Msf;
 
     /**
-     * Combo box which allows to select a media (in comparison
-     * to the DeviceComboBox which allows to select a device.
+     * Combo box which allows one to select a media (in comparison
+     * to the DeviceComboBox which allows one to select a device.
      *
      * This class uses the MediaCache to update it's status.
      */

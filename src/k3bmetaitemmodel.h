@@ -20,7 +20,7 @@
 
 class QIcon;
 
-// TODO: * Have a MetaItemView which allows to set delegates for submodel header painting
+// TODO: * Have a MetaItemView which allows one to set delegates for submodel header painting
 //       * implement something like modelHeaderData() to get data for the root elements
 
 namespace K3b {

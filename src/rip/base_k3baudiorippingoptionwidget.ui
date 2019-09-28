@@ -145,7 +145,7 @@ file will contain all tracks one after the other.
            <string>Write a cuefile</string>
           </property>
           <property name="whatsThis">
-           <string>&lt;p&gt;If this option is checked K3b will create a CDRWIN cue file which allows to easily write a copy of the audio CD on other systems.</string>
+           <string>&lt;p&gt;If this option is checked K3b will create a CDRWIN cue file which allows one to easily write a copy of the audio CD on other systems.</string>
           </property>
           <property name="text">
            <string>Write &amp;cue file</string>

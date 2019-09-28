@@ -120,7 +120,7 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
     m_checkSegmentFolder->setToolTip( i18n( "Add always an empty `/SEGMENT' folder" ) );
     m_checkRelaxedAps->setToolTip( i18n( "This controls whether APS constraints are strict or relaxed. " ) );
     m_checkUpdateScanOffsets->setToolTip( i18n( "This controls whether to update the scan data information contained in the MPEG-2 video streams." ) );
-    m_labelRestriction->setToolTip( i18n( "This element allows to set viewing restrictions which may be interpreted by the playing device." ) );
+    m_labelRestriction->setToolTip( i18n( "This element allows one to set viewing restrictions which may be interpreted by the playing device." ) );
 
     m_checkGaps->setToolTip( i18n( "This option allows customization of Gaps and Margins." ) );
     m_labelPreGapLeadout->setToolTip( i18n( "Used to set the number of empty sectors added before the lead-out area begins." ) );
@@ -229,7 +229,7 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
                                             "<p><b>Most players ignore that value.<b>" ) );
 
     m_checkGaps->setWhatsThis( i18n( "<p>This option allows customization of Gaps and Margins." ) );
-    m_labelPreGapLeadout->setWhatsThis( i18n( "<p>This option allows to set the number of empty sectors added before the lead-out area begins, i.e. the number of post-gap sectors."
+    m_labelPreGapLeadout->setWhatsThis( i18n( "<p>This option allows one to set the number of empty sectors added before the lead-out area begins, i.e. the number of post-gap sectors."
                                               "<p>The ECMA-130 specification requires the last data track before the lead-out to carry a post-gap of at least 150 sectors, which is used as default for this parameter."
                                               "<p>Some operating systems may encounter I/O errors due to read-ahead issues when reading the last MPEG track if this parameter is set too low."
                                               "<p>Allowed value content: [0..300]. Default: 150." ) );

@@ -57,7 +57,7 @@ namespace K3b {
     Q_SIGNALS:
         /**
          * Emitted for each subdirectory that is a parent of a url
-         * passed to expandToUrl This allows to asynchronously open
+         * passed to expandToUrl This allows one to asynchronously open
          * a tree view down to a given directory.
          *
          * \sa KDirModel::expand

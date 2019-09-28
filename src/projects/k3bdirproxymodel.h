@@ -35,7 +35,7 @@ public:
 
 protected:
     /**
-     * This function (reimplemented from QSortFilterProxyModel) allows to decide
+     * This function (reimplemented from QSortFilterProxyModel) allows one to decide
      * which rows to show. In this specific model we only allow directories to
      * be shown.
      */

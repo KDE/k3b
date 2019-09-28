@@ -31,7 +31,7 @@ Q: My writer supports writing at speed X but K3b shows Y as a max.
 A: K3b determined the maximum writing speed the first time you start it. Since the speed reported by the
    writer always depends on the mounted medium this may not be the real max.
    To manually change it open the K3b settings in the device section and click on the value. You will
-   be presented with a spinbox which allows to change the speed.
+   be presented with a spinbox which allows one to change the speed.
 
 
 Q: Writing fails with the following cdrecord message:
