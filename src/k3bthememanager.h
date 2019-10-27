@@ -116,7 +116,7 @@ namespace K3b {
         explicit ThemeManager( QObject* parent = 0 );
         ~ThemeManager() override;
 
-        QList<Theme*> themes() const;
+        QList<Theme*>& themes() const;
 
         /**
          * This is never null. If no theme could be found an empty dummy theme

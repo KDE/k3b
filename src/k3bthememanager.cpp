@@ -203,7 +203,7 @@ K3b::ThemeManager::~ThemeManager()
 }
 
 
-QList<K3b::Theme*> K3b::ThemeManager::themes() const
+QList<K3b::Theme*>& K3b::ThemeManager::themes() const
 {
     return d->themes;
 }
