@@ -164,9 +164,9 @@ K3b::VcdTrackDialog::VcdTrackDialog( K3b::VcdDoc* doc, const QList<K3b::VcdTrack
         d->muxrate->setText( i18n( "%1 bit/s", selectedTrack->muxrate() ) );
 
         if ( selectedTrack->isSegment() )
-            d->labelMimeType->setPixmap( SmallIcon( "image-x-generic", KIconLoader::SizeMedium ) );
+            d->labelMimeType->setPixmap( QIcon::fromTheme("image-x-generic").pixmap(KIconLoader::SizeMedium) );
         else
-            d->labelMimeType->setPixmap( SmallIcon( "video-x-generic", KIconLoader::SizeMedium ) );
+            d->labelMimeType->setPixmap( QIcon::fromTheme("video-x-generic").pixmap(KIconLoader::SizeMedium) );
 
         fillGui();
     }
@@ -307,7 +307,7 @@ void K3b::VcdTrackDialog::fillPbcGui()
     }
 
     // add Event Disabled
-    QPixmap disabledIcon = SmallIcon( "process-stop" );
+    QPixmap disabledIcon = QIcon::fromTheme( "process-stop" ).pixmap( KIconLoader::SizeSmall );
     QString disabledName = i18n( "Event Disabled" );
     d->pbc_previous->addItem( disabledIcon, disabledName );
     d->pbc_next->addItem( disabledIcon, disabledName );

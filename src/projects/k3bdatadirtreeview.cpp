@@ -163,22 +163,22 @@ void K3b::DataDirTreeView::slotDropAnimate()
         else {
             switch(d->animationCounter) {
             case 0:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-cyan" ) );
+                d->animatedDirItem->setPixmap( QIcon::fromTheme( "folder-cyan" ).pixmap( KIconLoader::SizeSmall ) );
                 break;
             case 1:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-green" ) );
+                d->animatedDirItem->setPixmap( QIcon::fromTheme( "folder-green" ).pixmap( KIconLoader::SizeSmall ) );
                 break;
             case 2:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-yellow" ) );
+                d->animatedDirItem->setPixmap( QIcon::fromTheme( "folder-yellow" ).pixmap( KIconLoader::SizeSmall ) );
                 break;
             case 3:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-orange" ) );
+                d->animatedDirItem->setPixmap( QIcon::fromTheme( "folder-orange" ).pixmap( KIconLoader::SizeSmall ) );
                 break;
             case 4:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-red" ) );
+                d->animatedDirItem->setPixmap( QIcon::fromTheme( "folder-red" ).pixmap( KIconLoader::SizeSmall ) );
                 break;
             case 5:
-                d->animatedDirItem->setPixmap( 0, SmallIcon( "folder-violet" ) );
+                d->animatedDirItem->setPixmap( QIcon::fromTheme( "folder-violet" ).pixmap( KIconLoader::SizeSmall ) );
                 break;
             }
 
