@@ -162,7 +162,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
             if( subDir && subDir->entry( "k3b.theme" ) ) {
                 validThemeArchive = true;
 
-                // check for all nessessary pixmaps (this is a little evil hacking)
+                // check for all necessary pixmaps (this is a little evil hacking)
                 for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
                     if( !subDir->entry( K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
                         validThemeArchive = false;

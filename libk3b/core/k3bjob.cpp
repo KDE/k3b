@@ -59,7 +59,7 @@ K3b::Job::~Job()
     // but we do this here for security reasons.
     //
     if( d->active ) {
-        qDebug() << "Finishing job in destuctor! This is NOT good. Fix the job.";
+        qDebug() << "Finishing job in destructor! This is NOT good. Fix the job.";
         jobFinished( false );
     }
 

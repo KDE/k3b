@@ -538,7 +538,7 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
             //
             // cdrecord's output sucks a bit.
             // we get track sizes that differ from the sizes in the progress
-            // info since these are dependant on the writing mode.
+            // info since these are dependent on the writing mode.
             // so we just use the track sizes and do a bit of math...
             //
 

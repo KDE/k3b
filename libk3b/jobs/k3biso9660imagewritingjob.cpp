@@ -118,7 +118,7 @@ void K3b::Iso9660ImageWritingJob::slotWriterJobFinished( bool success )
         if( !m_simulate && m_verifyData ) {
             emit burning(false);
 
-            // allright
+            // alright
             // the writerJob should have emitted the "simulation/writing successful" signal
 
             if( !d->verifyJob ) {

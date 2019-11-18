@@ -108,7 +108,7 @@ namespace K3b {
 
     private:
         /**
-         * this recursivly updates the size of the directories.
+         * this recursively updates the size of the directories.
          * The size of this dir and the parent dir is updated.
          * These values are just used for user information.
          */

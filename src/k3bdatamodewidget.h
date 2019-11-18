@@ -31,7 +31,7 @@ class DataModeWidget : public QComboBox
   ~DataModeWidget() override;
 
   /**
-   * returnes K3b::DataMode
+   * returns K3b::DataMode
    */
   int dataMode() const;
 

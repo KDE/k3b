@@ -381,7 +381,7 @@ void K3b::IsoImager::initVariables()
     d->knownError = false;
 
     // determine symlink handling
-    // follow links superseeds discard all links which superseeds discard broken links
+    // follow links supersedes discard all links which supersedes discard broken links
     // without rockridge we follow the links or discard all
     if( m_doc->isoOptions().followSymbolicLinks() )
         d->usedLinkHandling = Private::FOLLOW;
@@ -621,7 +621,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
         }
     }
 
-    // in genisoimage 1.1.3 "they" silently introduced this aweful parameter
+    // in genisoimage 1.1.3 "they" silently introduced this awful parameter
     if (filesGreaterThan2Gb && d->mkisofsBin->hasFeature("genisoimage") && d->mkisofsBin->version() >= K3b::Version(1, 1, 3)) {
         *m_process << "-allow-limited-size";
         emit infoMessage(i18n("Found files bigger than 2 GB. These files will be fully accessible."),

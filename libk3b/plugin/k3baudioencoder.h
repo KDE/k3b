@@ -75,7 +75,7 @@ namespace K3b {
 
         /**
          * Determine the filesize of the encoded file (~)
-         * default implementation returnes -1 (unknown)
+         * default implementation returns -1 (unknown)
          * First parameter is the extension to be used
          */
         virtual long long fileSize( const QString&, const Msf& ) const { return -1; }
@@ -94,7 +94,7 @@ namespace K3b {
         typedef QHash<MetaDataField, QVariant> MetaData;
 
         /**
-         * The default implementation openes the file for writing with
+         * The default implementation opens the file for writing with
          * writeData. Normally this does not need to be reimplemented.
          * @param extension the filetype to be used.
          * @param filename path to an output file
@@ -108,7 +108,7 @@ namespace K3b {
 
 
         /**
-         * The default implementation returnes true if openFile (default implementation) has been
+         * The default implementation returns true if openFile (default implementation) has been
          * successfully called. Normally this does not need to be reimplemented but it has to be
          * if openFile is reimplemented.
          */
@@ -123,7 +123,7 @@ namespace K3b {
         virtual void closeFile();
 
         /**
-         * The default implementation returnes the filename set in openFile
+         * The default implementation returns the filename set in openFile
          * or QString() if no file has been opened.
          * Normally this does not need to be reimplemented but it has to be
          * if openFile is reimplemented.
@@ -131,7 +131,7 @@ namespace K3b {
         virtual QString filename() const;
 
         /**
-         * Returnes the amount of actually written bytes or -1 if an error
+         * Returns the amount of actually written bytes or -1 if an error
          * occurred.
          *
          * Be aware that the returned amount of written data may very well differ
@@ -153,7 +153,7 @@ namespace K3b {
         bool initEncoder( const QString& extension, const Msf& length, const MetaData& metaData );
 
         /**
-         * Called by the deafult implementation of openFile
+         * Called by the default implementation of openFile
          * This calls finishEncoderInternal.
          */
         void finishEncoder();
@@ -161,7 +161,7 @@ namespace K3b {
         /**
          * Use this to write the data to the file when
          * using the default implementation of openFile
-         * Returnes the number of bytes actually written.
+         * Returns the number of bytes actually written.
          */
         qint64 writeData( const char*, qint64 len );
 

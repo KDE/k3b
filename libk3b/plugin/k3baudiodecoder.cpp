@@ -493,7 +493,7 @@ bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
     // First check if we may do a "perfect seek".
     // We cannot rely on the decoding plugins to seek perfectly. Especially
     // the mp3 decoder does not. But in case we want to split a live recording
-    // it is absolutely nesseccary to perform a perfect seek.
+    // it is absolutely necessary to perform a perfect seek.
     // So if we did not already decode past the seek position and the difference
     // between the current position and the seek position is less than some fixed
     // value we simply decode up to the seek position.

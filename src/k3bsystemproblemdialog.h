@@ -51,7 +51,7 @@ namespace K3b {
 
     /**
      * The SystemProblem checks for problems with the system setup
-     * that could prevent K3b from funcioning properly. Examples are
+     * that could prevent K3b from functioning properly. Examples are
      * missing external applications like cdrecord or versions of
      * external applications that are too old.
      *
@@ -73,7 +73,7 @@ namespace K3b {
 
         /**
          * Determines if the system problem dialog should be shown or not.
-         * It basicaly reads a config entry. But in addition it
+         * It basically reads a config entry. But in addition it
          * always forces the system check if a new version has been installed
          * or K3b is started for the first time.
          */

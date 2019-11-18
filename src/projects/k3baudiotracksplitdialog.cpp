@@ -45,7 +45,7 @@ K3b::AudioTrackSplitDialog::AudioTrackSplitDialog( K3b::AudioTrack* track, QWidg
 
     QVBoxLayout* layout = new QVBoxLayout( this );
 
-    // FIXME: After the string freeze replace the text with a better one explaning how to use this dialog
+    // FIXME: After the string freeze replace the text with a better one explaining how to use this dialog
     layout->addWidget( new QLabel( i18n("Please select the position where the track should be split."),
                                    this ) );
     layout->addWidget( m_editorWidget );

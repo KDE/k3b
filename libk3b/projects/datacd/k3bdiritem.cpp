@@ -271,7 +271,7 @@ K3b::DataItem* K3b::DirItem::findByPath( const QString& p )
     if( pos < 0 )
         return find( path );
     else {
-        // do it recursivly
+        // do it recursively
         K3b::DataItem* item = find( path.left(pos) );
         if( item && item->isDir() )
             return ((K3b::DirItem*)item)->findByPath( path.mid( pos+1 ) );
@@ -284,7 +284,7 @@ K3b::DataItem* K3b::DirItem::findByPath( const QString& p )
 bool K3b::DirItem::mkdir( const QString& dirPath )
 {
     //
-    // An absolut path always starts at the root item
+    // An absolute path always starts at the root item
     //
     if( dirPath[0] == '/' ) {
         if( parent() )

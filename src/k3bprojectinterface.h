@@ -49,7 +49,7 @@ namespace K3b {
         void burn();
 
         /**
-        * Starts the burning immedeately
+        * Starts the burning immediately
         * \return true if the burning could be started. Be aware that the return
         *         value does not say anything about the success of the burning
         *         process.

@@ -95,7 +95,7 @@ extern "C" {
 #endif
 
 //
-// Very evil hacking: force the speed values to be acurate
+// Very evil hacking: force the speed values to be accurate
 // as long as "they" do not introduce other "broken" DVD
 // speeds like 2.4 this works fine
 //
@@ -412,7 +412,7 @@ bool K3b::Device::Device::init( bool bCheckWritingModes )
 
     //
     // Check the supported write modes (WRITINGMODE_TAO, WRITINGMODE_SAO, WRITINGMODE_RAW) by trying to set them
-    // We do this before checking mode page 2A in case some readers allow changin
+    // We do this before checking mode page 2A in case some readers allow changing
     // the write parameter page
     //
     if( bCheckWritingModes )
@@ -787,7 +787,7 @@ int K3b::Device::Device::numSessions() const
     int m = mediaType();
     if( m & MEDIA_CD_ALL ) {
         //
-        // Althought disk_info should get the real value without ide-scsi
+        // Although disk_info should get the real value without ide-scsi
         // I keep getting wrong values (the value is too high. I think the leadout
         // gets counted as session sometimes :()
         //
@@ -3352,7 +3352,7 @@ int K3b::Device::Device::getIndex( unsigned long lba ) const
 
     //
     // The index is found in the Mode-1 Q which occupies at least 9 out of 10 successive CD frames
-    // It can be indentified by ADR == 1
+    // It can be identified by ADR == 1
     //
     // So if the current sector does not provide Mode-1 Q subchannel we try the previous.
     //

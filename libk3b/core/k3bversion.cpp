@@ -220,7 +220,7 @@ int K3b::Version::compareSuffix( const QString& suffix1, const QString& suffix2 
     static QRegExp betaRx( "beta(\\d+)" );
     static QRegExp alphaRx( "a(?:lpha)?(\\d+)" );
 
-    // first we check if one of the suffixes (or both are empty) becasue that case if simple
+    // first we check if one of the suffixes (or both are empty) because that case if simple
     if( suffix1.isEmpty() ) {
         if( suffix2.isEmpty() )
             return 0;

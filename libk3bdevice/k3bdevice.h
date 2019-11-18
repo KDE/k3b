@@ -55,7 +55,7 @@ namespace K3b {
          *
          * Devices are constructed by the DeviceManager.
          *
-         * All methods except for open and close in Device are thread-safe which basicaly means that
+         * All methods except for open and close in Device are thread-safe which basically means that
          * no two commands are sent to the device at the same time.
          */
         // FIXME: all methods are const which makes no sense at all!
@@ -399,7 +399,7 @@ namespace K3b {
             MediaType mediaType() const;
 
             /**
-             * Returnes the list of supported writing speeds as reported by
+             * Returns the list of supported writing speeds as reported by
              * mode page 2Ah.
              *
              * This only works with MMC3 compliant drives.
@@ -407,7 +407,7 @@ namespace K3b {
             QList<int> determineSupportedWriteSpeeds() const;
 
             /**
-             * @returnes the speed in kb/s or 0 on failure.
+             * @returns the speed in kb/s or 0 on failure.
              */
             int determineMaximalWriteSpeed() const;
 

@@ -201,7 +201,7 @@ bool K3b::FileItem::isValid() const
         QString dest = linkDest();
 
         if( dest[0] == '/' )
-            return false;  // absolut links can never be part of the compilation!
+            return false;  // absolute links can never be part of the compilation!
 
         // parse the link
         K3b::DirItem* dir = parent();

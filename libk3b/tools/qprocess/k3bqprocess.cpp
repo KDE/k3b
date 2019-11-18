@@ -192,7 +192,7 @@ void K3bQProcessPrivate::Channel::clear()
     QProcess can merge the two output channels, so that standard
     output and standard error data from the running process both use
     the standard output channel. Call setProcessChannelMode() with
-    MergedChannels before starting the process to activative
+    MergedChannels before starting the process to activate
     this feature. You also have the option of forwarding the output of
     the running process to the calling, main process, by passing
     ForwardedChannels as the argument.

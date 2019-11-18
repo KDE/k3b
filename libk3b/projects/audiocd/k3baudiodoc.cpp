@@ -875,7 +875,7 @@ bool K3b::AudioDoc::saveDocumentData( QDomElement* docElem )
 
         for( K3b::AudioDataSource* source = track->firstSource(); source; source = source->next() ) {
             // TODO: save a source element with a type attribute and start- and endoffset
-            //       then distict between the different source types.
+            //       then distinct between the different source types.
             if( K3b::AudioFile* file = dynamic_cast<K3b::AudioFile*>(source) ) {
                 QDomElement sourceElem = doc.createElement( "file" );
                 sourceElem.setAttribute( "url", file->filename() );

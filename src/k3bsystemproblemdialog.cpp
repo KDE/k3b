@@ -347,7 +347,7 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
                                                         "sessions using a growisofs version older than 7.0." ),
                                                    i18n("Install a more recent version of %1.",QString("growisofs")) ) );
             }
-//            // for now we ignore the suid root bit becasue of the memorylocked issue
+//            // for now we ignore the suid root bit because of the memorylocked issue
 //            else if( !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "suidroot" ) ) {
 //                showBinSettingsButton = true;
 //                problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,

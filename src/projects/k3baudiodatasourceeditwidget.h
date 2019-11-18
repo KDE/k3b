@@ -45,7 +45,7 @@ namespace K3b {
         K3b::Msf startOffset() const;
 
         /**
-         * Highest value (mening to use all the data up to the end of the source)
+         * Highest value (meaning to use all the data up to the end of the source)
          * is source::originalLength().
          *
          * Be aware that this differs from AudioDataSource::endOffset() which

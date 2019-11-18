@@ -31,11 +31,11 @@ namespace K3b {
 
         /**
          * The Device::Devicehandler is a threaded wrapper around Device::Device.
-         * It allows async access to the time comsuming blocking Device::Device methods.
+         * It allows async access to the time consuming blocking Device::Device methods.
          * Since it's a Job it is very easy to handle. Just use one of the methods and
          * connect to the finished signal.
          * Be aware that all methods only return valid values if the corresponding info has
-         * been successfuly requested.
+         * been successfully requested.
          *
          * Be aware that multiple requests in a row (without waiting for the job to finish) will
          * only result in one finished() signal answering the last request.

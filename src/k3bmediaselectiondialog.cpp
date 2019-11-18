@@ -103,7 +103,7 @@ K3b::Device::Device* K3b::MediaSelectionDialog::selectMedium( Device::MediaTypes
 
     // even if no usable medium is inserted the combobox shows the "insert one" message
     // so it's not sufficient to check for just one entry to check if there only is a
-    // single useable medium
+    // single usable medium
     if( ( dlg.selectedDevice() && dlg.m_combo->count() == 1 )
         || dlg.exec() == Accepted ) {
         if( canceled )

@@ -197,7 +197,7 @@ void K3b::AudioEditorWidget::setLength( const K3b::Msf& length )
 {
     d->length = length;
     // TODO: remove markers beyond length
-    // TODO: shorten ranges if nesseccary
+    // TODO: shorten ranges if necessary
     update();
 }
 
@@ -517,7 +517,7 @@ void K3b::AudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
     while( minute*60*75 < d->length ) {
         int newX = msfToPos( minute*60*75 );
 
-        // only draw the mark if we have anough space
+        // only draw the mark if we have enough space
         if( newX - x >= minNeededSpace ) {
             p->drawLine( newX, markerVPos, newX, markerVPos-5 );
             QRect txtRect( newX-(maxMarkerWidth/2),

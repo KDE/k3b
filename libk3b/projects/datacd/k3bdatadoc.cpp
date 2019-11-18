@@ -581,7 +581,7 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
 
         QFileInfo f( urlElem.text() );
 
-        // We canot use exists() here since this always disqualifies broken symlinks
+        // We cannot use exists() here since this always disqualifies broken symlinks
         if( !f.isFile() && !f.isSymLink() )
             d->notFoundFiles.append( urlElem.text() );
 

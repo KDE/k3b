@@ -487,7 +487,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
         tmpfile.remove();
         if ( tmpfile.open() ) {
             //
-            // First check if this is really an xml file beacuse if this is a very big file
+            // First check if this is really an xml file because if this is a very big file
             // the setContent method blocks for a very long time
             //
             char test[5];

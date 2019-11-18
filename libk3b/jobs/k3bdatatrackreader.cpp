@@ -418,7 +418,7 @@ int K3b::DataTrackReader::read( unsigned char* buffer, unsigned long sector, uns
 }
 
 
-// here we read every single sector for itself to find the troubleing ones
+// here we read every single sector for itself to find the troubling ones
 bool K3b::DataTrackReader::retryRead( unsigned char* buffer, unsigned long startSector, unsigned int len )
 {
     emit debuggingOutput( "K3b::DataTrackReader", QString( "Problem while reading. Retrying from sector %1.").arg(startSector) );

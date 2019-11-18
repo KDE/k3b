@@ -113,8 +113,8 @@ QSize K3b::DeviceDelegate::sizeHint( const QStyleOptionViewItem& option, const Q
 {
     if ( index.data( K3b::DeviceModel::IsDevice ).toBool() ) {
         const FontsAndMetrics fam( option.font );
-        // It seems that width-part of size hint is not used anwyay so
-        // we're ommiting here a computation of text's width
+        // It seems that width-part of size hint is not used anyway so
+        // we're omitting here a computation of text's width
         return QSize( 0, fam.margin + fam.mediumFontM.height() + fam.spacing + fam.deviceFontM.height() + fam.margin );
     }
     else {

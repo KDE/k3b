@@ -177,7 +177,7 @@ unsigned long K3bMadDecoder::countFrames()
             d->vbr = true;
 
         //
-        // position in stream: postion in file minus the not yet used buffer
+        // position in stream: position in file minus the not yet used buffer
         //
         unsigned long long seekPos = d->handle->inputPos() -
                                      (d->handle->madStream->bufend - d->handle->madStream->this_frame + 1);

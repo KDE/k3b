@@ -36,7 +36,7 @@ namespace K3b {
      *     descriptor.
      * \li Audio tracks: Rip the track with a 2352 bytes sector size.
      *     In the case of audio tracks the job will not fail if the checksums
-     *     differ becasue audio CD tracks do not contain error correction data.
+     *     differ because audio CD tracks do not contain error correction data.
      *     In this case only a warning will be emitted.
      *
      * Other sector sizes than 2048 bytes for data tracks are not supported yet,

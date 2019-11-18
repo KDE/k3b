@@ -38,7 +38,7 @@ namespace K3b {
     /**
      * Medium represents a medium in K3b.
      *
-     * It is implicetely shared, thus copying is very fast.
+     * It is implicitly shared, thus copying is very fast.
      */
     class LIBK3B_EXPORT Medium
     {
@@ -164,7 +164,7 @@ namespace K3b {
         QString shortString( MediumStringFlags flags = WithContents ) const;
 
         /**
-         * \return A HTML formatted string decribing this medium. This includes the device, the
+         * \return A HTML formatted string describing this medium. This includes the device, the
          *         medium type, the contents type, and some detail information like the number of
          *         tracks.
          *         This string may be used for tooltips or short descriptions.

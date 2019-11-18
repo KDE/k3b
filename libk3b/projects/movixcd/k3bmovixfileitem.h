@@ -41,7 +41,7 @@ namespace K3b {
         void setK3bName( const QString& ) override;
 
         /**
-         * returnes the name that the subtitle file must have in
+         * returns the name that the subtitle file must have in
          * order to work with mplayer
          */
         static QString subTitleFileName( const QString& );

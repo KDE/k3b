@@ -50,7 +50,7 @@ K3b::MovixFileItem::~MovixFileItem()
 
     // remove this from parentdir
     // it is important to do it here and not
-    // rely on the K3b::FileItem destructor becasue
+    // rely on the K3b::FileItem destructor because
     // otherwise the doc is not informed early enough
     if( parent() )
         parent()->takeDataItem( this );

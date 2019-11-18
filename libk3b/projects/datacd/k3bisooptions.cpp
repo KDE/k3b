@@ -175,7 +175,7 @@ K3b::IsoOptions K3b::IsoOptions::load( const KConfigGroup& c, bool loadVolumeDes
     options.setHideTRANS_TBL( c.readEntry( "hide TRANS_TBL", options.hideTRANS_TBL() ) );
 
     //
-    // We need to use the memeber variables here instead of the access methods
+    // We need to use the member variables here instead of the access methods
     // which do not return the actual value of the member variables but the value
     // representing the use in mkisofs (i.e. ISOomitVersionNumbers is also enabled
     // if ISOmaxFilenameLength is enabled.

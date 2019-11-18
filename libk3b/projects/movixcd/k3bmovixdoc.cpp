@@ -150,7 +150,7 @@ void K3b::MovixDoc::moveMovixItem( K3b::MovixFileItem* item, K3b::MovixFileItem*
 
     emit itemsRemoved();
 
-    // if after == 0 lastIndexOf returnes -1
+    // if after == 0 lastIndexOf returns -1
     int pos = m_movixFiles.lastIndexOf( itemAfter ) + 1;
 
     emit itemsAboutToBeInserted( pos, 1 );

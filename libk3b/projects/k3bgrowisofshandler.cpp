@@ -114,7 +114,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         m_error = ERROR_OPC;
     }
     else if( line.contains( "flushing cache" ) ) {
-        // here is where we already should stop queriying the buffer fill
+        // here is where we already should stop querying the buffer fill
         // since the device is only used there so far...
         m_device = 0;
 

@@ -114,7 +114,7 @@ KIO::filesize_t K3b::VcdDoc::size() const
 
 KIO::filesize_t K3b::VcdDoc::ISOsize() const
 {
-    // 136000b for vcd iso reseved
+    // 136000b for vcd iso reserved
     long long iso_size = 136000;
     if ( vcdOptions() ->CdiSupport() ) {
         iso_size += vcdOptions() ->CDIsize();
@@ -270,7 +270,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
             return newTrack;
         }
     } else if ( isImage( url ) ) { // image track
-        // woking on ...
+        // working on ...
         // for future use
         // photoalbum starts here
         // return here the new photoalbum track

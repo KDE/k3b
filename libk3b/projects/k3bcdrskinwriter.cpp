@@ -280,7 +280,7 @@ bool K3b::CdrskinWriter::prepareProcess()
         }
         else if( d->writingMode == K3b::WritingModeRaw ) {
             // These write modes are not supported by cdrskin. They need to be made
-            // contitional.
+            // conditional.
             // cdrskin supports only -audio and -data.
             // Options -xa1, -xa, -xa2, -mode2 do not lead to error but the payload is
             // nevertheless written as -data.
@@ -549,7 +549,7 @@ void K3b::CdrskinWriter::slotStdLine( const QString& line )
             //
             // cdrskin's output sucks a bit.
             // we get track sizes that differ from the sizes in the progress
-            // info since these are dependant on the writing mode.
+            // info since these are dependent on the writing mode.
             // so we just use the track sizes and do a bit of math...
             //
 

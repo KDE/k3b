@@ -145,7 +145,7 @@ namespace K3b {
         void toggleAll() override;
 
         /**
-         * use this to set additionell stuff in the job
+         * use this to set additional stuff in the job
          */
         virtual void prepareJob( BurnJob* ) {};
 

@@ -745,7 +745,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
     //        since that's when we can be sure we never need the session stuff again.
 
     // 1. read all projects from the config
-    // 2. simply open all of themg
+    // 2. simply open all of them
     // 3. reset the saved urls and the modified state
     // 4. delete "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
 

@@ -40,7 +40,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        /** construtor of MainWindow, calls all init functions to create the application.
+        /** constructor of MainWindow, calls all init functions to create the application.
          * @see initMenuBar initToolBar
          */
         MainWindow();
@@ -204,7 +204,7 @@ namespace K3b {
         /** initializes the KActions of the application */
         void initActions();
 
-        /** sets up the statusbar for the main window by initialzing a statuslabel.
+        /** sets up the statusbar for the main window by initializing a statuslabel.
          */
         void initStatusBar();
 

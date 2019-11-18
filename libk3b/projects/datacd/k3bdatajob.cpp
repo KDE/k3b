@@ -577,7 +577,7 @@ void K3b::DataJob::slotVerificationFinished( bool success )
     qDebug();
     d->copiesDone++;
 
-    // reconnect our imager which we deconnected for the verification
+    // reconnect our imager which we disconnected for the verification
     connectImager();
 
     if( k3bcore->globalSettings()->ejectMedia() || d->copiesDone < d->copies )

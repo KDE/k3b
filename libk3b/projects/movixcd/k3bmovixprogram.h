@@ -46,14 +46,14 @@ namespace K3b {
         const QStringList& isolinuxFiles() const { return m_isolinuxFiles; }
 
         /**
-         * returnes empty string if font was not found
+         * returns empty string if font was not found
          *
          * Unused for eMovix versions 0.9.0 and above
          */
         QString subtitleFontDir( const QString& font ) const;
 
         /**
-         * returnes empty string if lang was not found
+         * returns empty string if lang was not found
          *
          * Unused for eMovix versions 0.9.0 and above
          */

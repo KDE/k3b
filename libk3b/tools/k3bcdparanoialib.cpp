@@ -477,7 +477,7 @@ bool K3b::CdparanoiaLib::load()
 
 K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
 {
-    // check if libcdda_interface is avalilable
+    // check if libcdda_interface is available
     if( !s_libInterface->isLoaded() ) {
         s_haveLibCdio = true;
 

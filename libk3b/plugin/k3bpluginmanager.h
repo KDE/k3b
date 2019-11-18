@@ -48,7 +48,7 @@ namespace K3b {
         QList<Plugin*> plugins( const QString& category = QString() ) const;
 
         /**
-         * Returnes a list of the available categories.
+         * Returns a list of the available categories.
          */
         QStringList categories() const;
 

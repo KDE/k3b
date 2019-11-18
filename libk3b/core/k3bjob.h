@@ -220,7 +220,7 @@ namespace K3b {
         void started();
 
         /**
-         * Emitted once the job has been finshed. Never emit this signal directly.
+         * Emitted once the job has been finished. Never emit this signal directly.
          * Use jobFinished() instead, otherwise the job will not be properly deregistered
          */
         void finished( bool success );

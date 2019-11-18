@@ -575,7 +575,7 @@ void K3b::DataUrlAddingDialog::slotCopyMoveItems()
     }
     else {
         //
-        // Let's see if an item with that name alredy exists
+        // Let's see if an item with that name already exists
         //
         if( K3b::DataItem* oldItem = dir->find( item->k3bName() ) ) {
             //

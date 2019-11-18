@@ -34,7 +34,7 @@ namespace K3b {
      *
      * They are title based and thus treat a Video DVD to be a set of titles.
      * Additional Video DVD constructs such as title sets, parts of titles (chapters),
-     * program chanins, or cells are not handled explicitly.
+     * program chains, or cells are not handled explicitly.
      *
      * The usage is very simple. One creates a VideoDVD instance and calls the open()
      * method with a device containing a Video DVD. If the method returns true the

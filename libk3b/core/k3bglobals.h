@@ -179,7 +179,7 @@ namespace K3b {
 
     /**
      * returns the parent dir of a path.
-     * CAUTION: this does only work well with absolut paths.
+     * CAUTION: this does only work well with absolute paths.
      *
      * Example: /usr/share/doc -> /usr/share/
      */

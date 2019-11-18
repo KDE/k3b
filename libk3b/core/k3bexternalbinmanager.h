@@ -98,7 +98,7 @@ namespace K3b {
 
         /**
          * this scans for the program in the given path,
-         * adds the found bin object to the list and returnes true.
+         * adds the found bin object to the list and returns true.
          * if nothing could be found false is returned.
          */
         virtual bool scan( const QString& ) = 0;
@@ -111,7 +111,7 @@ namespace K3b {
 
         /**
          * Builds the path to the program from the \p dir and the \p programName.
-         * On Windows the .exe extension is added autoamtically.
+         * On Windows the .exe extension is added automatically.
          */
         static QString buildProgramPath( const QString& dir, const QString& programName );
 

@@ -212,7 +212,7 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
                                               "<p>Some DVD players need the folder to give a faultless rendition." ) );
 
     m_checkRelaxedAps->setWhatsThis( i18n( "<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD which is suitable to be jumped to directly."
-                                           "<p>APS are required for entry points and scantables. APS have to fulfil the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
+                                           "<p>APS are required for entry points and scantables. APS have to fulfill the requirement to precede every I-frame by a GOP header which shall be preceded by a sequence header in its turn."
                                            "<p>The start codes of these 3 items are required to be contained all in the same MPEG pack/sector, thus forming a so-called access point sector."
                                            "<p>This requirement can be relaxed by enabling the relaxed aps option, i.e. every sector containing an I-frame will be regarded as an APS."
                                            "<p><b>Warning:</b> The sequence header is needed for a playing device to figure out display parameters, such as display resolution and frame rate, relaxing the aps requirement may lead to non-working entry points." ) );
@@ -225,7 +225,7 @@ K3b::VcdBurnDialog::VcdBurnDialog( K3b::VcdDoc* _doc, QWidget *parent )
                                             "<p>The allowed range goes from 0 to 3."
                                             "<ul><li>0 = unrestricted, free to view for all</li>"
                                             "<li>3 = restricted, content not suitable for ages under 18</li></ul>"
-                                            "<p>Actually, the exact meaning is not defined and is player dependant."
+                                            "<p>Actually, the exact meaning is not defined and is player dependent."
                                             "<p><b>Most players ignore that value.<b>" ) );
 
     m_checkGaps->setWhatsThis( i18n( "<p>This option allows customization of Gaps and Margins." ) );

@@ -164,7 +164,7 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates me
     d->blockMediaChange = false;
     d->mediumChanged = 0;
 
-    // FIXME: reproducablitity race?
+    // FIXME: reproducibility race?
     if (message.isEmpty())
         d->labelRequest->setText( Medium::mediaRequestString( d->wantedMediaType, d->wantedMediaState, minMediaSize, d->device ) );
     else
@@ -291,7 +291,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
         }
 
         //
-        // We want a BD-RE not nessessarily empty. No problem, just use this one. Because incomplete and complete
+        // We want a BD-RE not necessarily empty. No problem, just use this one. Because incomplete and complete
         // are handled the same everywhere (isofs is grown).
         //
         else if ( d->wantedMediaState != Device::STATE_EMPTY &&
@@ -391,7 +391,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             }
 
             //
-            // We want a DVD+RW not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
+            // We want a DVD+RW not necessarily empty. No problem, just use this one. Because incomplete and complete
             // are handled the same everywhere (isofs is grown).
             //
             else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ||
@@ -426,7 +426,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
 
         // we format in the following cases:
         // seq. incr. and not empty and empty requested
-        // seq. incr. and restr. overwri. reqested
+        // seq. incr. and restr. overwri. requested
         // restr. ovw. and seq. incr. requested
 
         // we have exactly what was requested (K3b never requests a specific
@@ -487,7 +487,7 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
             }
 
             //
-            // We want a DVD-RW overwrite not nessessarily empty. No problem, just use this one. Becasue incomplete and complete
+            // We want a DVD-RW overwrite not necessarily empty. No problem, just use this one. Because incomplete and complete
             // are handled the same everywhere (isofs is grown).
             //
             else if ( d->wantedMinMediaSize <= medium.actuallyRemainingSize() ||

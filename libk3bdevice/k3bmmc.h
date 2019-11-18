@@ -35,7 +35,7 @@ namespace K3b {
          * State of last session (border)
          *     00b - Empty session
          *     01b - Incomplete session
-         *     10b - Reseverd
+         *     10b - Reserved
          *     11b - Complete session (only possible when disc status is complete)
          */
         typedef struct disc_info {
@@ -263,8 +263,8 @@ namespace K3b {
             unsigned char side_change      : 1; /* Side change capable       */
             unsigned char sw_slot_sel      : 1; /* Load empty slot in changer      */
             unsigned char disk_present_rep : 1; /* Changer supports disk present rep */
-            unsigned char sep_chan_mute    : 1; /* Mute controls each channel separat*/
-            unsigned char sep_chan_vol     : 1; /* Vol controls each channel separat */
+            unsigned char sep_chan_mute    : 1; /* Mute controls each channel separately */
+            unsigned char sep_chan_vol     : 1; /* Vol controls each channel separately */
             unsigned char max_read_speed[2];    /* Max. read speed in KB/s      */
             /* obsolete in MMC-4 */
             unsigned char num_vol_levels[2];    /* # of supported volume levels      */
@@ -344,8 +344,8 @@ namespace K3b {
             unsigned char eject            : 1; /* Ejects disc/cartr with STOP LoEj  */
             unsigned char res_6_4          : 1; /* Reserved        */
             unsigned char loading_type     : 3; /* Loading mechanism type      */
-            unsigned char sep_chan_vol     : 1; /* Vol controls each channel separat */
-            unsigned char sep_chan_mute    : 1; /* Mute controls each channel separat*/
+            unsigned char sep_chan_vol     : 1; /* Vol controls each channel separately */
+            unsigned char sep_chan_mute    : 1; /* Mute controls each channel separately */
             unsigned char disk_present_rep : 1; /* Changer supports disk present rep */
             unsigned char sw_slot_sel      : 1; /* Load empty slot in changer      */
             unsigned char side_change      : 1; /* Side change capable       */

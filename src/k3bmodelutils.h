@@ -26,7 +26,7 @@ namespace ModelUtils
 {
     
     /**
-     * @returns common check state for a specified index list. When indexes has a various check states, Qt::PartiallyChecked is returnd.
+     * @returns common check state for a specified index list. When indexes has a various check states, Qt::PartiallyChecked is returned.
      */
     Qt::CheckState commonCheckState( const QModelIndexList& indexes );
     

@@ -46,7 +46,7 @@ namespace K3b {
         void start() override;
 
         /**
-         * Useless since this job works syncronously
+         * Useless since this job works synchronously
          */
         void cancel() override;
 

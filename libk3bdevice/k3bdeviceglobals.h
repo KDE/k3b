@@ -30,9 +30,9 @@ namespace K3b {
         LIBK3BDEVICE_EXPORT QString writingModeString( int );
         LIBK3BDEVICE_EXPORT QString mediaStateString( int );
         /**
-         * @param simplyfied if true the formatting state of DVD media is left out.
+         * @param simplified if true the formatting state of DVD media is left out.
          */
-        LIBK3BDEVICE_EXPORT QString mediaTypeString( int, bool simplyfied = false );
+        LIBK3BDEVICE_EXPORT QString mediaTypeString( int, bool simplified = false );
         LIBK3BDEVICE_EXPORT void debugBitfield( unsigned char* data, long len );
 
         LIBK3BDEVICE_EXPORT quint16 from2Byte( const unsigned char* );

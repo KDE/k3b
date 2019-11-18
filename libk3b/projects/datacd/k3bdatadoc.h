@@ -58,7 +58,7 @@ namespace K3b {
         QString name() const override;
 
         /**
-         * The spported media types based on the project size
+         * The supported media types based on the project size
          * and settings (example: if writing mode == TAO we force
          * CD media)
          */
@@ -86,7 +86,7 @@ namespace K3b {
         KIO::filesize_t size() const override;
 
         /**
-         * This is used for multisession where size() also returnes the imported session's size
+         * This is used for multisession where size() also returns the imported session's size
          */
         KIO::filesize_t burningSize() const override;
         Msf length() const override;
@@ -210,7 +210,7 @@ namespace K3b {
         void addUrls( const QList<QUrl>& urls ) override;
 
         /**
-         * Add urls syncroneously
+         * Add urls synchronously
          * This method adds files recursively including symlinks, hidden, and system files.
          * If a file already exists the new file's name will be appended a number.
          */
@@ -219,7 +219,7 @@ namespace K3b {
         void clearImportedSession();
 
         /**
-         * Just a convience method to prevent using setIsoOptions for this
+         * Just a convenience method to prevent using setIsoOptions for this
          * often used value.
          */
         void setVolumeID( const QString& );
@@ -256,11 +256,11 @@ namespace K3b {
         void endRemoveItems( DirItem* parent, int start, int end );
 
         /**
-         * load recursivly
+         * load recursively
          */
         bool loadDataItem( QDomElement& e, DirItem* parent );
         /**
-         * save recursivly
+         * save recursively
          */
         void saveDataItem( DataItem* item, QDomDocument* doc, QDomElement* parent );
 

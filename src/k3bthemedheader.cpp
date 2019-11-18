@@ -79,7 +79,7 @@ void K3b::ThemedHeader::setAlignment( Qt::Alignment alignment )
 
 void K3b::ThemedHeader::init()
 {
-    // Hardcode layou direction to LTR to prevent
+    // Hardcode layout direction to LTR to prevent
     // switching places of our left/right pixmaps.
     // Usually our themes aren't designed for this
     setLayoutDirection( Qt::LeftToRight );

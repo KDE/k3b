@@ -385,7 +385,7 @@ bool K3b::CueFileParser::findImageFileName( const QString& dataFile )
 
     m_imageFilenameInCue = true;
 
-    // first try filename as a hole (absolut)
+    // first try filename as a whole (absolute)
     if( QFile::exists( dataFile ) ) {
         setImageFilename( QFileInfo(dataFile).absoluteFilePath() );
         return true;

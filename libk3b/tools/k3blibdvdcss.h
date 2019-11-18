@@ -24,7 +24,7 @@ namespace K3b {
 
 
     /**
-     * Wrapper class for libdvdcss. dynamically openes the library if it
+     * Wrapper class for libdvdcss. dynamically opens the library if it
      * is available on the system.
      */
     class LIBK3B_EXPORT LibDvdCss

@@ -926,7 +926,7 @@ void K3b::CdrdaoWriter::parseCdrdaoMessage()
     if ( msgs < 1 )
         return;
     else if ( msgs > 1) {
-        // move the read-index forward to the beginnig of the most recent message
+        // move the read-index forward to the beginning of the most recent message
         count = ( msgs-1 ) * ( sizeof(msgSync)+d->progressMsgSize );
         m_comSock->seek( count );
         qDebug() << "(K3b::CdrdaoParser) " << msgs-1 << " message(s) skipped";

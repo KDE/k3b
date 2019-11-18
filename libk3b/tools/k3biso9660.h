@@ -42,7 +42,7 @@ namespace K3b {
 
 
     /**
-     * Simplyfied primary descriptor which just contains the fields
+     * Simplified primary descriptor which just contains the fields
      * used by K3b.
      */
     class LIBK3B_EXPORT Iso9660SimplePrimaryDescriptor
@@ -285,12 +285,12 @@ namespace K3b {
         unsigned int size() const { return m_size; }
 
         /**
-         * Returnes the startSector of the file.
+         * Returns the startSector of the file.
          */
         unsigned int startSector() const { return m_startSector; }
 
         /**
-         * Returnes the startOffset of the file in bytes.
+         * Returns the startOffset of the file in bytes.
          */
         unsigned long long startPostion() const { return (unsigned long long)m_startSector * 2048; }
 

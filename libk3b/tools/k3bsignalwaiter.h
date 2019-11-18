@@ -30,13 +30,13 @@ namespace K3b {
 
     public:
         /**
-         * Use this to syncroneously wait for a signal.
+         * Use this to synchronously wait for a signal.
          */
         LIBK3B_EXPORT static void waitForSignal( QObject* o, const char* signal );
 
         /**
-         * Use this to syncroneously wait for a job to finish.
-         * If the job is not running at all this returns immedeately.
+         * Use this to synchronously wait for a job to finish.
+         * If the job is not running at all this returns immediately.
          */
         LIBK3B_EXPORT static void waitForJob( Job* job );
 

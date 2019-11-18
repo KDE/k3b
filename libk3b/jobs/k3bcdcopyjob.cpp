@@ -992,7 +992,7 @@ void K3b::CdCopyJob::slotSessionReaderFinished( bool success )
                 if( !m_onlyCreateImages ) {
                     if( m_readerDevice == m_writerDevice ) {
                         // eject the media (we do this blocking to know if it worked
-                        // becasue if it did not it might happen that k3b overwrites a CD-RW
+                        // because if it did not it might happen that k3b overwrites a CD-RW
                         // source)
                         if( !K3b::eject( m_readerDevice ) ) {
                             blockingInformation( i18n("K3b was unable to eject the source disk. Please do so manually.") );

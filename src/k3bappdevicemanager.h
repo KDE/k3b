@@ -50,7 +50,7 @@ namespace K3b {
 
         /**
          * Emitted when starting to detect the diskinfo. This may be used to show some info
-         * to the user since deteting the diskinfo might take some time.
+         * to the user since detecting the diskinfo might take some time.
          */
         void detectingDiskInfo( K3b::Device::Device* );
 
@@ -59,7 +59,7 @@ namespace K3b {
 
     public Q_SLOTS:
         /**
-         * \reimplemeted for internal reasons. The API is unaffected.
+         * \reimplemented for internal reasons. The API is unaffected.
          */
         void clear() override;
 
@@ -91,7 +91,7 @@ namespace K3b {
 
     private:
         /**
-         * \reimplemeted for internal reasons. The API is unaffected.
+         * \reimplemented for internal reasons. The API is unaffected.
          */
         Device::Device* addDevice( const Solid::Device& solidDev ) override;
         void removeDevice( const Solid::Device& solidDev ) override;

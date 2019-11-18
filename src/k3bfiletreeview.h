@@ -41,7 +41,7 @@ namespace K3b {
         Device::Device* selectedDevice() const;
 
         /**
-         * returnes an empty url if no url is selected
+         * returns an empty url if no url is selected
          */
         QUrl selectedUrl() const;
 

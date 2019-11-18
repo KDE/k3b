@@ -441,7 +441,7 @@ K3b::FileItem* K3b::MovixDocPreparer::createItem( const QString& localPath, cons
     K3b::FileItem* item = new K3b::FileItem( localPath, *d->doc );
     dir->addDataItem( item );
 
-    // remember the item to remove it becasue the dir cannot be removed
+    // remember the item to remove it because the dir cannot be removed
     if( dir == d->doc->root() )
         d->newMovixItems.push( item );
 

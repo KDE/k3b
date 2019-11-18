@@ -33,7 +33,7 @@
 #include "k3bmsfedit.h"
 #include "k3bview.h"
 #include "k3bviewcolumnadjuster.h"
-// this is not here becasue of base_*.ui troubles
+// this is not here because of base_*.ui troubles
 #include "../rip/k3baudioprojectconvertingdialog.h"
 
 #include "config-k3b.h"

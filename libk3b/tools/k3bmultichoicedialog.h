@@ -54,7 +54,7 @@ namespace K3b {
 
     public Q_SLOTS:
         /**
-         * returnes the number of the clicked button starting at 1.
+         * returns the number of the clicked button starting at 1.
          */
         int exec() override;
 

@@ -92,7 +92,7 @@ namespace K3b {
          * The filetype is only used for informational purposes.
          * It is not necessary but highly recommended to implement this method
          * as it enhances usability.
-         * @returne The filetype of the decoded file.
+         * @return The filetype of the decoded file.
          */
         virtual QString fileType() const { return QString(); }
 
@@ -113,7 +113,7 @@ namespace K3b {
         virtual QString technicalInfo( const QString& ) const;
 
         /**
-         * returnes -1 on error, 0 when finished, length of data otherwise
+         * returns -1 on error, 0 when finished, length of data otherwise
          * takes care of padding
          * calls decodeInternal() to actually decode data
          *
@@ -133,7 +133,7 @@ namespace K3b {
          * Seek to the position pos.
          * Decoding is started new. That means that the data will be padded to
          * length() - pos.
-         * returnes true on success;
+         * returns true on success;
          */
         bool seek( const Msf& pos );
 

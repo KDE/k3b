@@ -26,7 +26,7 @@ namespace K3b {
      * This Iterator iterates over the sources in an audio project
      *
      * Be aware that this iterator does not properly update when the doc
-     * changes. A manual update can be issued with first(). This is becasue
+     * changes. A manual update can be issued with first(). This is because
      * an update would either involve slots (this being a QObject) which is
      * too much overhead or the AudioDoc would need to have knowledge of all
      * the iterators which is also overhead that would be overkill.

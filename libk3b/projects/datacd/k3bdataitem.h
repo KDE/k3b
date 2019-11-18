@@ -77,7 +77,7 @@ namespace K3b {
         virtual void setK3bName( const QString& );
 
         /**
-         * returns the path as defined by the k3b-hierachy, NOT starting with a slash
+         * returns the path as defined by the k3b-hierarchy, NOT starting with a slash
          * (since this is used for graft-points!)
          * directories have a trailing "/"
          */
@@ -135,7 +135,7 @@ namespace K3b {
         Msf blocks() const;
 
         /**
-         * \returne the dir of the item (or the item itself if it is a dir)
+         * \return the dir of the item (or the item itself if it is a dir)
          */
         virtual DirItem* getDirItem() const { return parent(); }
 

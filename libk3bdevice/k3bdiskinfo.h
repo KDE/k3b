@@ -30,7 +30,7 @@ namespace K3b {
         class DiskInfoPrivate;
 
         /**
-         * This class is directly accociated to a strcuture from
+         * This class is directly associated to a structure from
          * the MMC draft READ_DISK_INFO.
          * It also holds some additional data.
          * This class' data will be retrieved by K3b::Device::Device.
@@ -51,25 +51,25 @@ namespace K3b {
             DiskInfo& operator=( const DiskInfo& );
 
             /**
-             * Returnes the state of the disk.
+             * Returns the state of the disk.
              * See enum State.
              */
             MediaState diskState() const;
 
             /**
-             * Returnes the state of the last session.
+             * Returns the state of the last session.
              * See enum State.
              */
             MediaState lastSessionState() const;
 
             /**
-             * Returnes the state of the background formatting. This does
+             * Returns the state of the background formatting. This does
              * only make sense for DVD+RW (and MRW which is not yet supported)
              */
             BackGroundFormattingState bgFormatState() const;
 
             /**
-             * returnes true if diskState() == STATE_EMPTY
+             * returns true if diskState() == STATE_EMPTY
              */
             bool empty() const;
 
@@ -80,7 +80,7 @@ namespace K3b {
 
             /**
              * Is this disk appendable
-             * returnes true if diskState() == STATE_INCOMPLETE
+             * returns true if diskState() == STATE_INCOMPLETE
              */
             bool appendable() const;
 
@@ -94,7 +94,7 @@ namespace K3b {
              * This is the current profile of the drive. That means it may differ
              * from drive to drive.
              * -1 means no info.
-             * Mainly interesting for the distiction of DVD-R(W) modes:
+             * Mainly interesting for the distinction of DVD-R(W) modes:
              * Sequential and Restricted Overwrite.
              */
             int currentProfile() const;

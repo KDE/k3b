@@ -120,7 +120,7 @@ namespace K3b {
 
         /**
          * This is never null. If no theme could be found an empty dummy theme
-         * will be returnes which does not contains any pixmaps.
+         * will be returns which does not contains any pixmaps.
          */
         Theme* currentTheme() const;
         Theme* findTheme( const QString& ) const;

@@ -360,7 +360,7 @@ void K3b::AudioJob::slotMaxSpeedJobFinished( bool success )
         emit infoMessage( i18n("Unable to determine maximum speed for some reason. Ignoring."), MessageWarning );
 
     // now start the writing
-    // same code as above. See the commecnts there
+    // same code as above. See the comments there
     if( !prepareWriter() ) {
         cleanupAfterError();
         jobFinished(false);

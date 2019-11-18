@@ -126,7 +126,7 @@ namespace K3b {
          * [empty prefix] > rcX > preX > betaX > alphaX = aX (where X is a number)
          *
          * Every other suffixes are compared alphanumerical.
-         * An empty prefix is always considered newer than an unknown non-emtpy suffix (e.g. not one of the above.)
+         * An empty prefix is always considered newer than an unknown non-empty suffix (e.g. not one of the above.)
          *
          * @return \li -1 if suffix1 is less than suffix2
          *         \li 0 if suffix1 equals suffix2 (be aware that this is not the same as comparing to strings as

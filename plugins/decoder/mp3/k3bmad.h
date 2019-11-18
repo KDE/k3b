@@ -62,7 +62,7 @@ public:
   qint64 inputPos() const;
 
   /**
-   * Current absolut position of the decoder stream.
+   * Current absolute position of the decoder stream.
    */
   qint64 streamPos() const;
   bool inputSeek( qint64 pos );

@@ -294,7 +294,7 @@ void K3b::ThemeManager::loadThemes()
             if( !themeNames.contains( *entryIt ) && QFile::exists( themeDir + "k3b.theme" ) ) {
                 bool themeValid = true;
 
-                // check for all nessessary pixmaps (this is a little evil hacking)
+                // check for all necessary pixmaps (this is a little evil hacking)
                 for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
                     if( !QFile::exists( themeDir + K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
                         qDebug() << "(K3b::ThemeManager) theme misses pixmap: " << K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i );

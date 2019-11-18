@@ -36,7 +36,7 @@
 //    2. Only one track with multiple sources
 //         like the above but with the possibility to edit the sources
 //    3. multiple tracks
-//         do only show cd-text and options (eventuelle index0)
+//         do only show cd-text and options (eventually index0)
 
 
 K3b::AudioTrackDialog::AudioTrackDialog( const QList<K3b::AudioTrack*>& tracks, QWidget *parent )

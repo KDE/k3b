@@ -109,7 +109,7 @@ void K3bExternalEncoder::finishEncoderInternal()
         d->process->closeWriteChannel();
 
         // this is kind of evil...
-        // but we need to be sure the process exited when this method returnes
+        // but we need to be sure the process exited when this method returns
         d->process->waitForFinished(-1);
     }
     d->initialized = false;

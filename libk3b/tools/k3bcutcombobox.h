@@ -31,8 +31,8 @@ namespace K3b {
      * idea to use this for dynamic lists.
      *
      * Be aware that currently only insertItem works.
-     * none of the insertStrList or insertStringList methods are implemeted
-     * yet and also the removeItem methos does not work.
+     * none of the insertStrList or insertStringList methods are implemented
+     * yet and also the removeItem methods does not work.
      */
     class LIBK3B_EXPORT CutComboBox : public KComboBox
     {
@@ -50,17 +50,17 @@ namespace K3b {
 
         /**
          * The method to shorten the text
-         * defaut: CUT
+         * default: CUT
          */
         void setMethod( int );
 
-        /** reimplemeted */
+        /** reimplemented */
         QSize sizeHint() const;
 
-        /** reimplemeted */
+        /** reimplemented */
         QSize minimumSizeHint() const;
 
-        /** reimplemeted */
+        /** reimplemented */
         virtual void setCurrentText( const QString& );
 
         void	insertStringList( const QStringList &, int index=-1 );

@@ -62,7 +62,7 @@ namespace K3b {
         void write( const char* data, int len, Endianess e = BigEndian );
 
         /**
-         * returnes a filedescriptor with the already opened file
+         * returns a filedescriptor with the already opened file
          * or -1 if isOpen() is false
          */
         int fd() const;

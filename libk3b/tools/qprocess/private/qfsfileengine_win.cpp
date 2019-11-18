@@ -1055,7 +1055,7 @@ bool QFSFileEngine::mkdir(const QString &name, bool createParentDirectories) con
     QString dirName = name;
     if (createParentDirectories) {
         dirName = QDir::toNativeSeparators(QDir::cleanPath(dirName));
-        // We spefically search for / so \ would break it..
+        // We specifically search for / so \ would break it..
         int oldslash = -1;
         if (dirName.startsWith(QLatin1String("\\\\"))) {
             // Don't try to create the root path of a UNC path;
@@ -1731,7 +1731,7 @@ QAbstractFileEngine::FileFlags QFSFileEnginePrivate::getPermissions() const
            {
 	//### what to do with permissions if we don't use ntfs or are not on a NT system
 	// for now just add all permissions and what about exe missions ??
-	// also qt_ntfs_permission_lookup is now not set by defualt ... should it ?
+	// also qt_ntfs_permission_lookup is now not set by default ... should it ?
     	ret |= QAbstractFileEngine::ReadOtherPerm | QAbstractFileEngine::ReadGroupPerm
 	    | QAbstractFileEngine::ReadOwnerPerm | QAbstractFileEngine::ReadUserPerm
 	    | QAbstractFileEngine::WriteUserPerm | QAbstractFileEngine::WriteOwnerPerm
