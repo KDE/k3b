@@ -426,7 +426,7 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
         QWidget* widgetAtPos = childAt(e->pos());
         if( widgetAtPos && widgetAtPos->inherits( "K3b::FlatButton" ) ) {
             QMenu pop;
-            removeAction = pop.addAction( SmallIcon("list-remove"), i18n("Remove Button") );
+            removeAction = pop.addAction( QIcon::fromTheme("list-remove"), i18n("Remove Button") );
             if ( addPop.actions().count() > 0 )
                 pop.addMenu( &addPop );
             r = pop.exec( e->globalPos() );

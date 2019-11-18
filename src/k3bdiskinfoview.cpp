@@ -189,10 +189,10 @@ namespace {
         // track type
         s += "<td class=\"tracktype\">(";
         if( track.type() == K3b::Device::Track::TYPE_AUDIO ) {
-            //    item->setPixmap( 0, SmallIcon( "audio-x-generic" ) );
+            //    item->setPixmap( QIcon::fromTheme("audio-x-generic").pixmap(KIconLoader::SizeSmall) );
             s += i18n("Audio");
         } else {
-//            item->setPixmap( 0, SmallIcon( "application-x-tar" ) );
+//            item->setPixmap( QIcon::fromTheme("application-x-tar").pixmap(KIconLoader::SizeSmall) );
             if( track.mode() == K3b::Device::Track::MODE1 )
                 s += i18n("Data/Mode1");
             else if( track.mode() == K3b::Device::Track::MODE2 )

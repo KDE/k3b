@@ -106,7 +106,7 @@ K3b::MediaCopyDialog::MediaCopyDialog( QWidget *parent )
 
     QGroupBox* groupCopies = new QGroupBox( i18n("Copies"), optionTab );
     QLabel* pixLabel = new QLabel( groupCopies );
-    pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
+    pixLabel->setPixmap( QIcon::fromTheme("tools-media-optical-copy").pixmap(KIconLoader::SizeMedium) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
     m_spinCopies->setRange( 1, 999 );

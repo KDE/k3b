@@ -277,7 +277,7 @@ void K3b::ProjectBurnDialog::prepareGui()
 
     QGroupBox* groupCopies = new QGroupBox( i18n("Copies"), w );
     QLabel* pixLabel = new QLabel( groupCopies );
-    pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
+    pixLabel->setPixmap( QIcon::fromTheme("tools-media-optical-copy").pixmap(KIconLoader::SizeMedium) );
     pixLabel->setScaledContents( false );
     m_spinCopies = new QSpinBox( groupCopies );
     m_spinCopies->setRange( 1, 999 );

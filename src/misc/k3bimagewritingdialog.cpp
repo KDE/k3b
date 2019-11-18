@@ -534,7 +534,7 @@ void K3b::ImageWritingDialog::setupGui()
     // copies --------
     QGroupBox* groupCopies = new QGroupBox( i18n("Copies"), optionTab );
     QLabel* pixLabel = new QLabel( groupCopies );
-    pixLabel->setPixmap( SmallIcon( "tools-media-optical-copy", KIconLoader::SizeMedium ) );
+    pixLabel->setPixmap( QIcon::fromTheme("tools-media-optical-copy").pixmap(KIconLoader::SizeMedium) );
     pixLabel->setScaledContents( false );
     d->spinCopies = new QSpinBox( groupCopies );
     d->spinCopies->setMinimum( 1 );

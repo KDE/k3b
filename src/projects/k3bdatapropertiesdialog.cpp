@@ -203,13 +203,13 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
         QFileInfo fileInfo( fileItem->localPath() );
         qDebug() << fileItem->k3bPath() << fileItem->localPath();
         if( fileItem->isSymLink() ) {
-            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType().iconName(), KIconLoader::SizeLarge,
-                                                 KIconLoader::DefaultState, QStringList() << "emblem-symbolic-link" ) );
+            m_labelIcon->setPixmap( KIconLoader::global()->loadIcon( fileItem->mimeType().iconName(), KIconLoader::NoGroup, KIconLoader::SizeLarge,
+                                                 KIconLoader::DefaultState, QStringList() << "emblem-symbolic-link", nullptr, true ) );
             m_labelType->setText( i18n( "Link to %1", fileItem->mimeType().comment() ) );
             m_labelLocalLinkTarget->setText( fileItem->linkDest() );
         }
         else {
-            m_labelIcon->setPixmap( DesktopIcon( fileItem->mimeType().iconName(), KIconLoader::SizeLarge ) );
+            m_labelIcon->setPixmap( QIcon::fromTheme(fileItem->mimeType().iconName()).pixmap(KIconLoader::SizeLarge) );
             m_labelType->setText( fileItem->mimeType().comment() );
             m_labelLocalLinkTargetText->hide();
             m_labelLocalLinkTarget->hide();
@@ -219,7 +219,7 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
         m_labelSize->setText( KIO::convertSize(dataItem->size()) );
     }
     else if( K3b::DirItem* dirItem = dynamic_cast<K3b::DirItem*>(dataItem) ) {
-        m_labelIcon->setPixmap( DesktopIcon( "folder", KIconLoader::SizeLarge ) );
+        m_labelIcon->setPixmap( QIcon::fromTheme("folder").pixmap(KIconLoader::SizeLarge) );
         m_labelType->setText( i18n("Folder") );
         m_labelLocalNameText->hide();
         m_labelLocalName->hide();
@@ -233,7 +233,7 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
                               i18np("and one folder", "and %1 folders", dirItem->numDirs()) + ')' );
     }
     else {
-        m_labelIcon->setPixmap( DesktopIcon("unknown", KIconLoader::SizeLarge) );
+        m_labelIcon->setPixmap( QIcon::fromTheme("unknown").pixmap(KIconLoader::SizeLarge) );
         m_labelType->setText( i18n("Special file") );
         m_labelLocalNameText->hide();
         m_labelLocalName->hide();
@@ -282,7 +282,7 @@ void K3b::DataPropertiesDialog::loadItemProperties( K3b::DataItem* dataItem )
 
 void K3b::DataPropertiesDialog::loadListProperties( const QList<K3b::DataItem*>& items )
 {
-    m_labelIcon->setPixmap( DesktopIcon( "document-multiple", KIconLoader::SizeLarge ) );
+    m_labelIcon->setPixmap( QIcon::fromTheme("document-multiple").pixmap(KIconLoader::SizeLarge) );
 
     int files = 0;
     int folders = 0;

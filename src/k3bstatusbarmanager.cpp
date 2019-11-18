@@ -30,8 +30,8 @@
 
 #include <KConfig>
 #include <KAboutData>
-#include <KLocalizedString>
 #include <KIconLoader>
+#include <KLocalizedString>
 #include <KIO/Global>
 
 #include <QFile>
@@ -53,7 +53,7 @@ K3b::StatusBarManager::StatusBarManager( K3b::MainWindow* parent )
     QWidget* boxFreeTemp = new QWidget( m_mainWindow->statusBar() );
     boxFreeTemp->installEventFilter( this );
     m_pixFreeTemp = new QLabel( boxFreeTemp );
-    m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
+    m_pixFreeTemp->setPixmap( QIcon::fromTheme("folder-green").pixmap(KIconLoader::SizeSmall) );
     m_labelFreeTemp = new QLabel( boxFreeTemp );
 
     QHBoxLayout* boxFreeTempLayout = new QHBoxLayout( boxFreeTemp );
@@ -115,9 +115,9 @@ void K3b::StatusBarManager::update()
 
         // if we have less than 640 MB that is not good
         if( avail < 655360 )
-            m_pixFreeTemp->setPixmap( SmallIcon("folder-red") );
+            m_pixFreeTemp->setPixmap( QIcon::fromTheme("folder-red").pixmap(KIconLoader::SizeSmall) );
         else
-            m_pixFreeTemp->setPixmap( SmallIcon("folder-green") );
+            m_pixFreeTemp->setPixmap( QIcon::fromTheme("folder-green").pixmap(KIconLoader::SizeSmall) );
     } else {
         m_labelFreeTemp->setText(i18n("No info"));
     }
