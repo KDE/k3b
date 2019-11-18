@@ -14,7 +14,7 @@ KCDDB::Categories::Categories()
 {
     // These are only 11 Category values defined by CDDB. See
     //
-    // http://www.freedb.org/modules.php?name=Sections&sop=viewarticle&artid=26
+    // http://www.freedb.org/en/faq.3.html#26
     //
     m_cddb << "blues" << "classical" << "country" <<
             "data" << "folk" << "jazz" << "misc" <<

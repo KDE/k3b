@@ -99,7 +99,7 @@ void K3b::VcdView::init()
                         i18n( "Could not find VcdImager executable. "
                         "To create Video CDs you have to install VcdImager >= 0.7.12. "
                         "You can find this on your distribution’s software repository or download "
-                        "it from http://www.vcdimager.org" ) );
+                        "it from https://www.gnu.org/software/vcdimager/" ) );
     }
 }
 

@@ -19,10 +19,10 @@
 
 extern "C" {
 /*
- Recent versions of FFmepg uses C99 constant macros which are not presebt in C++ standard.
- The macro __STDC_CONSTANT_MACROS allow C++ to use these macros. Altough it's not defined by C++ standard
+ Recent versions of FFmpeg uses C99 constant macros which are not present in C++ standard.
+ The macro __STDC_CONSTANT_MACROS allow C++ to use these macros. Although it's not defined by C++ standard
  it's supported by many implementations.
- See bug 236036 and discussion: http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2010-May/088074.html
+ See bug 236036 and discussion: https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2010-May/095488.html
  */
 #define __STDC_CONSTANT_MACROS
 #ifdef NEWFFMPEGAVCODECPATH
@@ -68,7 +68,7 @@ extern "C" {
 #endif
 
 // Has been deprecated for ages. Now removed. For now do what ffmpeg does
-// http://ffmpeg.org/pipermail/ffmpeg-cvslog/2012-August/053785.html
+// https://ffmpeg.org/pipermail/ffmpeg-cvslog/2012-August/053785.html
 // 192000 = 1 second of 48khz 32bit audio
 #ifndef AVCODEC_MAX_AUDIO_FRAME_SIZE
 #define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000

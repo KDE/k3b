@@ -97,7 +97,7 @@ void K3b::VideoCdRip::vcdxRip()
         qDebug() << "(K3b::VideoCdRip) could not find vcdxrip executable";
         emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxrip") ), K3b::Job::MessageError );
         emit infoMessage( i18n( "To rip Video CDs you have to install VcdImager Version %1." , QString(">= 0.7.12") ), K3b::Job::MessageInfo );
-        emit infoMessage( i18n( "You can find this on your distribution’s software repository or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "You can find this on your distribution’s software repository or download it from https://www.gnu.org/software/vcdimager/" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;

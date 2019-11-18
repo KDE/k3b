@@ -243,7 +243,7 @@ if(K3B_BUILD_LAME_ENCODER_PLUGIN)
     set_package_properties(Lame PROPERTIES
         DESCRIPTION "Lame mp3 encoder"
         PURPOSE "Needed for the lame mpf encoder encoder plugin."
-        URL "http://lame.sourceforge.net"
+        URL "https://lame.sourceforge.io/"
         TYPE OPTIONAL)
 
     set(BUILD_LAME_ENCODER_PLUGIN "${LAME_FOUND}")
@@ -254,7 +254,7 @@ if(K3B_BUILD_OGGVORBIS_DECODER_PLUGIN OR K3B_BUILD_OGGVORBIS_ENCODER_PLUGIN)
     set_package_properties(OggVorbis PROPERTIES
         DESCRIPTION "Ogg Vorbis"
         PURPOSE "Needed for the K3b Ogg Vorbis decoder and encoder plugins."
-        URL "http://www.vorbis.com"
+        URL "https://xiph.org/vorbis/"
         TYPE OPTIONAL)
 
     set(BUILD_OGGVORBIS_DECODER_PLUGIN "${OGGVORBIS_FOUND}")
@@ -296,12 +296,12 @@ if(K3B_BUILD_API_DOCS)
         if(EXISTS ${QT_DOC_DIR}/html)
             set(QTDOCS "${QT_DOC_DIR}/html")
         else()
-            set(QTDOCS "http://doc.trolltech.com/4.5/")
+            set(QTDOCS "https://doc.qt.io/qt-5/")
         endif()
 
         add_custom_target(apidox
             COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-            COMMAND docs/html/installdox -l qt4.tag@${QTDOCS} docs/html/*.html)
+            COMMAND docs/html/installdox -l qt5.tag@${QTDOCS} docs/html/*.html)
     endif()
 endif(K3B_BUILD_API_DOCS)
 
@@ -317,7 +317,7 @@ if(BUILD_TESTING)
     find_package(LibFuzzer)
     set_package_properties(LibFuzzer PROPERTIES
         PURPOSE "libFuzzer – a library for coverage-guided fuzz testing."
-        URL "http://libfuzzer.info"
+        URL "https://llvm.org/docs/LibFuzzer.html"
         TYPE OPTIONAL)
     add_subdirectory(tests)
 endif()

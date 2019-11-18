@@ -424,7 +424,7 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
 
     if( !grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE ) ) {
         // Estimated numbers based on the Vorbis FAQ:
-        // http://www.xiph.org/archives/vorbis-faq/200203/0030.html
+        // https://xiph.org/vorbis/faq/#quality
 
 //     static long vorbis_q_bitrate[] = { 45, 60,  74,  86,  106, 120, 152,
 // 				       183, 207, 239, 309, 440 };

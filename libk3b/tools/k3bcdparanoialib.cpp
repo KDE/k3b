@@ -482,7 +482,7 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
         s_haveLibCdio = true;
 
         // Windows ignores version:
-        // http://qt-project.org/doc/qt-4.8/qlibrary.html#setFileNameAndVersion
+        // https://doc.qt.io/qt-5/qlibrary.html#setFileNameAndVersion
         s_libInterface->setFileNameAndVersion( "cdio_cdda", 2 );
         s_libInterface->setLoadHints( QLibrary::ResolveAllSymbolsHint | QLibrary::ExportExternalSymbolsHint );
 #ifndef Q_OS_WIN32
