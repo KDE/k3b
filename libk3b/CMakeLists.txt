@@ -215,6 +215,7 @@ target_link_libraries(k3blib
         KF5::Solid
         Qt5::Network
         Qt5::Widgets
+        Qt5::Xml
         KF5::Cddb
         samplerate
         ${videodvd_libraries}
