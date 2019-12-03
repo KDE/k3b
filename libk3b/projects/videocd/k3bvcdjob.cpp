@@ -200,7 +200,7 @@ void K3b::VcdJob::vcdxBuild()
         qDebug() << "(K3b::VcdJob) could not find vcdxbuild executable";
         emit infoMessage( i18n( "Could not find %1 executable." , QString("vcdxbuild") ), K3b::Job::MessageError );
         emit infoMessage( i18n( "To create Video CDs you have to install VcdImager version %1." ,QString( ">= 0.7.12") ), K3b::Job::MessageInfo );
-        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "You can find this on your distribution disks or download it from https://www.gnu.org/software/vcdimager" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;
@@ -209,7 +209,7 @@ void K3b::VcdJob::vcdxBuild()
     if ( bin->version() < K3b::Version( "0.7.12" ) ) {
         qDebug() << "(K3b::VcdJob) vcdxbuild executable too old!";
         emit infoMessage( i18n( "%1 executable too old: need version %2 or greater." ,QString( "Vcdxbuild" ),QString( "0.7.12" )), K3b::Job::MessageError );
-        emit infoMessage( i18n( "You can find this on your distribution disks or download it from http://www.vcdimager.org" ), K3b::Job::MessageInfo );
+        emit infoMessage( i18n( "You can find this on your distribution disks or download it from https://www.gnu.org/software/vcdimager" ), K3b::Job::MessageInfo );
         cancelAll();
         jobFinished( false );
         return ;
