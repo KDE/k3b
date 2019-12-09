@@ -211,9 +211,9 @@ bool K3b::LibDvdCss::crackAllKeys()
 
         // first we get the menu vob
         if( title == 0 )
-            filename.sprintf( "VIDEO_TS/VIDEO_TS.VOB" );
+            filename = QLatin1String( "VIDEO_TS/VIDEO_TS.VOB" );
         else
-            filename.sprintf( "VIDEO_TS/VTS_%02d_%d.VOB", title, 0 );
+            filename = QString::asprintf( "VIDEO_TS/VTS_%02d_%d.VOB", title, 0 );
 
         const K3b::Iso9660File* file = dynamic_cast<const K3b::Iso9660File*>( dir->entry( filename ) );
         if( file && file->size() > 0 ) {
@@ -228,7 +228,7 @@ bool K3b::LibDvdCss::crackAllKeys()
             QPair<int,int> p;
             int vob = 1;
             for( ; vob < 100; ++vob ) {
-                filename.sprintf( "VIDEO_TS/VTS_%02d_%d.VOB", title, vob );
+                filename = QString::asprintf( "VIDEO_TS/VTS_%02d_%d.VOB", title, vob );
                 file = dynamic_cast<const K3b::Iso9660File*>( dir->entry( filename ) );
                 if( file ) {
                     if( file->size() % 2048 )

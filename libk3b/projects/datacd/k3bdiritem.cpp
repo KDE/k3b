@@ -499,7 +499,7 @@ void K3b::DirItem::addDataItemImpl( DataItem* item )
 
 
 K3b::RootItem::RootItem( K3b::DataDoc& doc )
-    : K3b::DirItem( "root", 0 ),
+    : K3b::DirItem( "root" ),
       m_doc( doc )
 {
 }

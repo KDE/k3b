@@ -111,7 +111,7 @@ QSize K3b::MsfEdit::sizeHint() const
 
         const QFontMetrics fm(fontMetrics());
         int h = lineEdit()->sizeHint().height();
-        int w = fm.width( lineEdit()->inputMask() );
+        int w = fm.boundingRect( lineEdit()->inputMask() ).width();
         w += 2; // cursor blinking space
 
         QStyleOptionSpinBox opt;

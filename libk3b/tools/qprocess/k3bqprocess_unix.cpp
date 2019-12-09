@@ -41,7 +41,7 @@
 
 //#define QPROCESS_DEBUG
 #include "qdebug.h"
-
+#include <QElapsedTimer>
 #ifndef QT_NO_PROCESS
 
 #if defined QPROCESS_DEBUG
@@ -1002,7 +1002,7 @@ bool K3bQProcessPrivate::waitForReadyRead(int msecs)
     qDebug("K3bQProcessPrivate::waitForReadyRead(%d)", msecs);
 #endif
 
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     stopWatch.start();
 
     forever {
@@ -1078,7 +1078,7 @@ bool K3bQProcessPrivate::waitForBytesWritten(int msecs)
     if (processFlags&K3bQProcess::RawStdin)
         return true;
 
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     stopWatch.start();
 
     while (!writeBuffer.isEmpty()) {
@@ -1145,7 +1145,7 @@ bool K3bQProcessPrivate::waitForFinished(int msecs)
     qDebug("K3bQProcessPrivate::waitForFinished(%d)", msecs);
 #endif
 
-    QTime stopWatch;
+    QElapsedTimer stopWatch;
     stopWatch.start();
 
     forever {

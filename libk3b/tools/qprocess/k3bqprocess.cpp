@@ -40,7 +40,7 @@
 ****************************************************************************/
 
 //#define QPROCESS_DEBUG
-
+#include <QElapsedTimer>
 #if defined QPROCESS_DEBUG
 #include <qdebug.h>
 #include <QString>
@@ -1380,7 +1380,7 @@ bool K3bQProcess::waitForBytesWritten(int msecs)
     if (d->processState == ::QProcess::NotRunning)
         return false;
     if (d->processState == ::QProcess::Starting) {
-        QTime stopWatch;
+        QElapsedTimer stopWatch;
         stopWatch.start();
         bool started = waitForStarted(msecs);
         if (!started)
@@ -1416,7 +1416,7 @@ bool K3bQProcess::waitForFinished(int msecs)
     if (d->processState == ::QProcess::NotRunning)
         return false;
     if (d->processState == ::QProcess::Starting) {
-        QTime stopWatch;
+        QElapsedTimer stopWatch;
         stopWatch.start();
         bool started = waitForStarted(msecs);
         if (!started)

@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <QIODevice>
 #include <QScopedPointer>
+#include <QElapsedTimer>
 
 
 class K3b::AudioMaxSpeedJob::Private
@@ -59,7 +60,7 @@ int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source, QIO
         }
     }
 
-    QTime t;
+    QElapsedTimer t;
     qint64 dataRead = 0;
     qint64 r = 0;
 

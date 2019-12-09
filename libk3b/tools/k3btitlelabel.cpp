@@ -202,7 +202,7 @@ void K3b::TitleLabel::updatePositioning()
     QFontMetrics subTitleFm(f);
 
     d->titleBaseLine = contentsRect().height()/2 + titleFm.height()/2 - titleFm.descent();
-    d->titleLength = titleFm.width( d->title );
+    d->titleLength = titleFm.boundingRect( d->title ).width();
 
     d->subTitleBaseLine = d->titleBaseLine;
 

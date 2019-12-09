@@ -38,7 +38,7 @@ public:
 
 void VolumeNameWidget::Private::fontChanged( const QFontMetrics& fontMetrics )
 {
-    volumeNameEdit->setMaximumWidth( fontMetrics.width('A')*50 );
+    volumeNameEdit->setMaximumWidth( fontMetrics.boundingRect('A').width()*50 );
 }
 
 

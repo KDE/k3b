@@ -215,7 +215,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     // if there is not enough space we just align it left
     // ====================================================================================
     int docSizeTextPos = 0;
-    int docSizeTextLength = fontMetrics().width(docSizeText);
+    int docSizeTextLength = fontMetrics().boundingRect(docSizeText).width();
     if( docSizeTextLength + 5 > crect.width() ) {
         docSizeTextPos = crect.left() + 5; // a little margin
     }
@@ -234,7 +234,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     overSizeFont.setBold(false);
 
     QRect overSizeTextRect( barRect );
-    int overSizeTextLength = QFontMetrics(overSizeFont).width(overSizeText);
+    int overSizeTextLength = QFontMetrics(overSizeFont).boundingRect(overSizeText).width();
     if( overSizeTextLength + 5 > overSizeTextRect.width() - (int)(one*cdSize.totalFrames()) ) {
         // we don't have enough space on the right, so we paint to the left of the line
         overSizeTextRect.setLeft( (int)(one*cdSize.totalFrames()) - overSizeTextLength - 5 );

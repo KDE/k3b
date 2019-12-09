@@ -17,7 +17,7 @@
 
 #include <QDateTime>
 #include <QDebug>
-
+#include <QElapsedTimer>
 
 class K3b::ThroughputEstimator::Private
 {
@@ -26,9 +26,9 @@ public:
         : started(false) {
     }
 
-    QTime firstDataTime;
+    QElapsedTimer firstDataTime;
     unsigned long firstData;
-    QTime lastDataTime;
+    QElapsedTimer lastDataTime;
     unsigned long lastData;
 
     int lastThroughput;

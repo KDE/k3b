@@ -65,13 +65,13 @@ unsigned int K3b::VideoDVD::Time::totalFrames() const
 QString K3b::VideoDVD::Time::toString( bool includeFrames ) const
 {
     if( includeFrames )
-        return QString().sprintf( "%02d:%02d:%02d.%02d",
+        return QString::asprintf( "%02d:%02d:%02d.%02d",
                                   hour(),
                                   minute(),
                                   second(),
                                   frame() );
     else
-        return QString().sprintf( "%02d:%02d:%02d",
+        return QString::asprintf( "%02d:%02d:%02d",
                                   hour(),
                                   minute(),
                                   second() + ( frame() > 0 ? 1 : 0 ) );

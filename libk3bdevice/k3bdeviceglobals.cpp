@@ -204,7 +204,7 @@ void K3b::Device::debugBitfield( unsigned char* data, long len )
 {
     for( int i = 0; i < len; ++i ) {
         QString index, bitString;
-        index.sprintf( "%4i", i );
+        index = QString::asprintf( "%4i", i );
         for( int bp = 7; bp >= 0; --bp )
             bitString[7-bp] = ( data[i] & (1<<bp) ? '1' : '0' );
         qDebug() << index << " - " << bitString << " - " << (int)data[i];

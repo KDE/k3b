@@ -258,7 +258,7 @@ K3b::Device::Device::Device( const Solid::Device& dev )
     else
         d->blockDevice = dev.as<Solid::Block>()->device();
 #endif
-    d->writeModes = 0;
+    d->writeModes = {};
     d->maxWriteSpeed = 0;
     d->maxReadSpeed = 0;
     d->burnfree = false;
@@ -356,7 +356,7 @@ Solid::StorageAccess* K3b::Device::Device::solidStorage() const
 {
      QList<Solid::Device> storages = Solid::Device::listFromType( Solid::DeviceInterface::StorageAccess, d->solidDevice.udi() );
      if( storages.isEmpty() )
-         return 0;
+         return nullptr;
      else
          return storages.first().as<Solid::StorageAccess>();
 }
@@ -370,8 +370,8 @@ bool K3b::Device::Device::init( bool bCheckWritingModes )
     // they all should read CD-ROM.
     //
     d->readCapabilities = MEDIA_CD_ROM;
-    d->writeCapabilities = 0;
-    d->supportedProfiles = 0;
+    d->writeCapabilities = {};
+    d->supportedProfiles = {};
 
     if( !open() )
         return false;
@@ -651,7 +651,7 @@ bool K3b::Device::Device::readsDvd() const
 
 K3b::Device::DeviceTypes K3b::Device::Device::type() const
 {
-    DeviceTypes r = 0;
+    DeviceTypes r = {};
     if( readCapabilities() & MEDIA_CD_ROM )
         r |= DEVICE_CD_ROM;
     if( writeCapabilities() & MEDIA_CD_R )
@@ -3663,7 +3663,7 @@ QByteArray K3b::Device::Device::mediaId( int mediaType ) const
         UByteArray data;
         if( readDvdStructure( data, 0x0E ) ) {
             if( data[4+16] == 3 && data[4+24] == 4 ) {
-                id.sprintf( "%6.6s%-6.6s", data.data()+4+17, data.data()+4+25 );
+                id = QString::asprintf( "%6.6s%-6.6s", data.data()+4+17, data.data()+4+25 );
             }
         }
     }
@@ -3672,7 +3672,7 @@ QByteArray K3b::Device::Device::mediaId( int mediaType ) const
         UByteArray data;
         if( readDvdStructure( data, 0x11 ) ||
             readDvdStructure( data, 0x0 ) ) {
-            id.sprintf( "%8.8s/%3.3s", data.data()+23, data.data()+31 );
+            id = QString::asprintf( "%8.8s/%3.3s", data.data()+23, data.data()+31 );
         }
     }
 
@@ -3680,7 +3680,7 @@ QByteArray K3b::Device::Device::mediaId( int mediaType ) const
         UByteArray data;
         if( readDiscStructure( data, 1, 0 ) ) {
             if( data[4+0] == 'D' && data[4+1] == 'I' )
-                id.sprintf ("%6.6s/%-3.3s", data.data()+4+100, data.data()+4+106 );
+                id = QString::asprintf ("%6.6s/%-3.3s", data.data()+4+100, data.data()+4+106 );
         }
     }
 

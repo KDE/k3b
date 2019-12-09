@@ -144,7 +144,7 @@ void K3b::MsInfoFetcher::slotMediaDetectionFinished( K3b::Device::DeviceHandler*
                 nextSession += 15;
                 nextSession /= 16;
                 nextSession *= 16;
-                m_msInfo.sprintf( "16,%llu", nextSession );
+                m_msInfo = QString::asprintf( "16,%llu", nextSession );
 
                 jobFinished( true );
             }

@@ -475,7 +475,7 @@ void K3b::MediaCopyDialog::toggleAll()
         // selection of the writing mode
         //
         if( burnDev == readDev ) {
-            K3b::WritingModes modes = 0;
+            K3b::WritingModes modes = WritingModeAuto;
             if ( sourceMedium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ) {
                 modes = K3b::WritingModeTao|K3b::WritingModeSao|K3b::WritingModeRaw;
             }

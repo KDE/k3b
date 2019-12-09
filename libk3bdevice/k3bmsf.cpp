@@ -235,9 +235,9 @@ QString K3b::Msf::toString( bool showFrames ) const
     QString str;
 
     if( showFrames )
-        str.sprintf( "%.2i:%.2i:%.2i", d->minutes, d->seconds, d->frames );
+        str = QString::asprintf( "%.2i:%.2i:%.2i", d->minutes, d->seconds, d->frames );
     else
-        str.sprintf( "%.2i:%.2i", d->minutes, d->seconds );
+        str = QString::asprintf( "%.2i:%.2i", d->minutes, d->seconds );
 
     return str;
 }

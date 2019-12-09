@@ -180,7 +180,7 @@ void K3b::DataJob::prepareWriting()
         if( writingApp() == K3b::WritingAppCdrdao ) {
             nextSessionStart += 150;
         }
-        m_isoImager->setMultiSessionInfo( QString().sprintf( "%u,%u",
+        m_isoImager->setMultiSessionInfo( QString::asprintf( "%u,%u",
                                                              d->multiSessionParameterJob->previousSessionStart(),
                                                              nextSessionStart ),
                                           d->multiSessionParameterJob->importPreviousSession() ? d->doc->burner() : 0 );
