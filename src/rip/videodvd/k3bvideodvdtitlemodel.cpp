@@ -192,7 +192,7 @@ void VideoDVDTitleModel::setVideoDVD( const VideoDVD::VideoDVD& dvd )
 
 QList<int> VideoDVDTitleModel::selectedTitles() const
 {
-    return d->selectedTitles.toList();
+    return d->selectedTitles.values();
 }
 
 

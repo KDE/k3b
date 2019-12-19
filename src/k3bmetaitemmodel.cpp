@@ -625,7 +625,7 @@ QStringList K3b::MetaItemModel::mimeTypes() const
     {
         types += it->model()->mimeTypes().toSet();
     }
-    return types.toList();
+    return types.values();
 }
 
 
