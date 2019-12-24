@@ -71,6 +71,8 @@ K3b::IntMapComboBox::IntMapComboBox( QWidget* parent )
              this, SLOT(slotItemHighlighted(int)) );
     connect( this, SIGNAL(activated(int)),
              this, SLOT(slotItemActivated(int)) );
+
+    setSizeAdjustPolicy(QComboBox::AdjustToContents);
 }
 
 
