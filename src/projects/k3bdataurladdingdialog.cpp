@@ -468,12 +468,13 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
                                                       KStandardGuiItem::cancel())  ) {
                 case 2:
                     m_bFolderLinksFollowAll = true;
-                    break;
+                    // fall-through
                 case 1:
                     followLink = true;
                     break;
                 case 4:
                     m_bFolderLinksAddAll = true;
+                    // fall-through
                 case 3:
                     followLink = false;
                     break;
