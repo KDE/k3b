@@ -17,6 +17,7 @@
   <name xml:lang="fi">K3b</name>
   <name xml:lang="fr">K3b</name>
   <name xml:lang="gl">K3b</name>
+  <name xml:lang="ia">K3b</name>
   <name xml:lang="id">K3b</name>
   <name xml:lang="it">K3b</name>
   <name xml:lang="ko">K3b</name>
@@ -54,6 +55,7 @@
   <summary xml:lang="fi">Levynkirjoitus</summary>
   <summary xml:lang="fr">Gravure de disque</summary>
   <summary xml:lang="gl">Gravación de disco</summary>
+  <summary xml:lang="ia">Gravator de disco</summary>
   <summary xml:lang="id">Disk Burning</summary>
   <summary xml:lang="it">Masterizzazione su disco</summary>
   <summary xml:lang="ko">디스크 쓰기</summary>
@@ -249,6 +251,7 @@
     <binary>k3b</binary>
   </provides>
   <releases>
+    <release version="19.12.2" date="2020-02-06"/>
     <release version="19.12.1" date="2020-01-09"/>
     <release version="19.12.0" date="2019-12-12"/>
   </releases>
