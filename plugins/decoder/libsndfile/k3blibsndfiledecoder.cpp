@@ -221,8 +221,7 @@ bool K3bLibsndfileDecoderFactory::canDecode( const QUrl& url )
         qDebug() << "(K3bLibsndfileDecoder) " << sf_strerror(sndfile);
         return false;
     }
-    //we exclude only WAVE as there is another plugin for this
-    else if ( infos.format && ((infos.format & SF_FORMAT_TYPEMASK) != SF_FORMAT_WAV) )  {
+    else if ( infos.format )  {
 
         //retrieve infos (name) about the format:
         SF_FORMAT_INFO format_info;
