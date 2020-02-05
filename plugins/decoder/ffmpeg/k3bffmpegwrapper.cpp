@@ -67,13 +67,6 @@ extern "C" {
 #  define CODEC_ID_MP3 CODEC_ID_MP3LAME
 #endif
 
-// Has been deprecated for ages. Now removed. For now do what ffmpeg does
-// https://ffmpeg.org/pipermail/ffmpeg-cvslog/2012-August/053785.html
-// 192000 = 1 second of 48khz 32bit audio
-#ifndef AVCODEC_MAX_AUDIO_FRAME_SIZE
-#define AVCODEC_MAX_AUDIO_FRAME_SIZE 192000
-#endif
-
 K3bFFMpegWrapper* K3bFFMpegWrapper::s_instance = 0;
 
 
@@ -87,12 +80,7 @@ public:
     K3b::Msf length;
 
     // for decoding. ffmpeg requires 16-byte alignment.
-#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
     ::AVFrame* frame;
-#else
-    char outputBuffer[AVCODEC_MAX_AUDIO_FRAME_SIZE + 15];
-    char* alignedOutputBuffer;
-#endif
     char* outputBufferPos;
     int outputBufferSize;
     ::AVPacket packet;
@@ -110,29 +98,22 @@ K3bFFMpegFile::K3bFFMpegFile( const QString& filename )
     d->formatContext = 0;
     d->codec = 0;
     d->audio_stream = nullptr;
-#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
 #  if LIBAVCODEC_BUILD < AV_VERSION_INT(55,28,1)
     d->frame = avcodec_alloc_frame();
 #  else
     d->frame = av_frame_alloc();
 #  endif
-#else
-    int offset = 0x10 - (reinterpret_cast<intptr_t>(&d->outputBuffer) & 0xf);
-    d->alignedOutputBuffer = &d->outputBuffer[offset];
-#endif
 }
 
 
 K3bFFMpegFile::~K3bFFMpegFile()
 {
     close();
-#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
 #  if LIBAVCODEC_BUILD < AV_VERSION_INT(55,28,1)
     av_free(d->frame);
 #  else
     av_frame_free(&d->frame);
 #  endif
-#endif
     delete d;
 }
 
@@ -357,37 +338,12 @@ int K3bFFMpegFile::fillOutputBuffer()
             return 0;
         }
 
-#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
         int gotFrame = 0;
         int len = ::avcodec_decode_audio4(
-#else
-        d->outputBufferPos = d->alignedOutputBuffer;
-        d->outputBufferSize = AVCODEC_MAX_AUDIO_FRAME_SIZE;
-#  ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO3
-        int len = ::avcodec_decode_audio3(
-#  else
-#    ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO2
-        int len = ::avcodec_decode_audio2(
-#    else
-        int len = ::avcodec_decode_audio(
-#    endif
-#  endif
-#endif
-
             FFMPEG_CODEC(d->audio_stream),
-#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
             d->frame,
             &gotFrame,
             &d->packet );
-#else
-            (short*)d->alignedOutputBuffer,
-            &d->outputBufferSize,
-#  ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO3
-            &d->packet );
-#  else
-            d->packetData, d->packetSize );
-#  endif
-#endif
 
         if( d->packetSize <= 0 || len < 0 )
 #if LIBAVCODEC_VERSION_MAJOR >= 56
@@ -400,7 +356,6 @@ int K3bFFMpegFile::fillOutputBuffer()
             return -1;
         }
 
-#ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
         if (gotFrame) {
             int nb_s = d->frame->nb_samples;
             int nb_ch = 2; // copy only two channels even if there're more
@@ -434,7 +389,6 @@ int K3bFFMpegFile::fillOutputBuffer()
                 }
             }
         }
-#endif
         d->packetSize -= len;
         d->packetData += len;
     }
