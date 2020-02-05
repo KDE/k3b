@@ -82,6 +82,7 @@ class K3bFFMpegFile::Private
 public:
     ::AVFormatContext* formatContext;
     ::AVCodec* codec;
+    ::AVStream *audio_stream;
 
     K3b::Msf length;
 
@@ -108,6 +109,7 @@ K3bFFMpegFile::K3bFFMpegFile( const QString& filename )
     d = new Private;
     d->formatContext = 0;
     d->codec = 0;
+    d->audio_stream = nullptr;
 #ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
 #  if LIBAVCODEC_BUILD < AV_VERSION_INT(55,28,1)
     d->frame = avcodec_alloc_frame();
@@ -150,13 +152,24 @@ bool K3bFFMpegFile::open()
     ::avformat_find_stream_info( d->formatContext, 0 );
 
     // we only handle files containing one audio stream
-    if( d->formatContext->nb_streams != 1 ) {
-        qDebug() << "(K3bFFMpegFile) more than one stream in " << m_filename;
-        return false;
+    if( d->formatContext->nb_streams == 1 ) {
+        d->audio_stream = d->formatContext->streams[0];
+    } else  {
+        for (uint i = 0; i < d->formatContext->nb_streams; ++i) {
+            if (d->formatContext->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
+                if (!d->audio_stream) {
+                    d->audio_stream = d->formatContext->streams[i];
+                } else {
+                    d->audio_stream = nullptr;
+                    qDebug() << "(K3bFFMpegFile) more than one audio stream in " << m_filename;
+                    return false;
+                }
+            }
+        }
     }
 
     // urgh... ugly
-    ::AVCodecContext* codecContext =  FFMPEG_CODEC(d->formatContext->streams[0]);
+    ::AVCodecContext* codecContext =  FFMPEG_CODEC(d->audio_stream);
     if( codecContext->codec_type != AVMEDIA_TYPE_AUDIO)
     {
         qDebug() << "(K3bFFMpegFile) not a simple audio stream: " << m_filename;
@@ -185,10 +198,9 @@ bool K3bFFMpegFile::open()
         return false;
     }
 
-    d->isSpacious = ::av_sample_fmt_is_planar(
-                 FFMPEG_CODEC(d->formatContext->streams[0])->sample_fmt)
-    && FFMPEG_CODEC(d->formatContext->streams[0])->channels > 1;
-    d->sampleFormat = FFMPEG_CODEC(d->formatContext->streams[0])->sample_fmt;
+    d->isSpacious = ::av_sample_fmt_is_planar(FFMPEG_CODEC(d->audio_stream)->sample_fmt)
+                    && FFMPEG_CODEC(d->audio_stream)->channels > 1;
+    d->sampleFormat = FFMPEG_CODEC(d->audio_stream)->sample_fmt;
 
     // dump some debugging info
     ::av_dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
@@ -204,7 +216,7 @@ void K3bFFMpegFile::close()
     d->packetData = 0;
 
     if( d->codec ) {
-        ::avcodec_close( FFMPEG_CODEC(d->formatContext->streams[0]) );
+        ::avcodec_close( FFMPEG_CODEC(d->audio_stream) );
         d->codec = 0;
     }
 
@@ -212,6 +224,8 @@ void K3bFFMpegFile::close()
         ::avformat_close_input( &d->formatContext );
         d->formatContext = 0;
     }
+
+    d->audio_stream = nullptr;
 }
 
 
@@ -223,19 +237,19 @@ K3b::Msf K3bFFMpegFile::length() const
 
 int K3bFFMpegFile::sampleRate() const
 {
-    return FFMPEG_CODEC(d->formatContext->streams[0])->sample_rate;
+    return FFMPEG_CODEC(d->audio_stream)->sample_rate;
 }
 
 
 int K3bFFMpegFile::channels() const
 {
-    return FFMPEG_CODEC(d->formatContext->streams[0])->channels;
+    return FFMPEG_CODEC(d->audio_stream)->channels;
 }
 
 
 int K3bFFMpegFile::type() const
 {
-    return FFMPEG_CODEC(d->formatContext->streams[0])->codec_id;
+    return FFMPEG_CODEC(d->audio_stream)->codec_id;
 }
 
 
@@ -360,7 +374,7 @@ int K3bFFMpegFile::fillOutputBuffer()
 #  endif
 #endif
 
-            FFMPEG_CODEC(d->formatContext->streams[0]),
+            FFMPEG_CODEC(d->audio_stream),
 #ifdef HAVE_FFMPEG_AVCODEC_DECODE_AUDIO4
             d->frame,
             &gotFrame,
