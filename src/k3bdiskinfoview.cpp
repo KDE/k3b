@@ -100,12 +100,16 @@ void K3b::DiskInfoView::reloadMedium()
                  .arg(theme->palette().color(QPalette::Foreground).name());
         }
         s +=  QString(".infovalue { font-weight:bold; padding-left:10px; color:%1; } "
-              ".infokey { color:%2; } "
-              ".trackheader { text-align:left; } "
-              ".session { font-style:italic; } "
-              ".cdtext { font-weight:bold; font-style:italic; } "
+              ".infokey { color:%1; } "
+              ".trackheader { text-align:left; color:%1; } "
+              ".session { font-style:italic; color:%1; } "
+              ".cdtext { font-weight:bold; font-style:italic; color:%1; } "
+              ".tracknumber { color:%1; } "
+              ".tracktype { color:%1; } "
+              ".trackattributes { color:%1; } "
+              ".trackrange { color:%1; } "
+              ".tracklength { color:%1; } "
               "td { vertical-align:top; } ")
-            .arg(theme->palette().color(QPalette::Foreground).name())
             .arg(theme->palette().color(QPalette::Foreground).name());
         s += "</style>"
              "</head>"
