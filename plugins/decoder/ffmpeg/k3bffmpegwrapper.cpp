@@ -167,9 +167,8 @@ bool K3bFFMpegFile::open()
         return false;
     }
 
-    d->isSpacious = ::av_sample_fmt_is_planar(FFMPEG_CODEC(d->audio_stream)->sample_fmt)
-                    && FFMPEG_CODEC(d->audio_stream)->channels > 1;
-    d->sampleFormat = FFMPEG_CODEC(d->audio_stream)->sample_fmt;
+    d->sampleFormat = d->audio_stream->codecpar->format;
+    d->isSpacious = ::av_sample_fmt_is_planar((AVSampleFormat)d->sampleFormat) && d->audio_stream->codecpar->channels > 1;
 
     // dump some debugging info
     ::av_dump_format( d->formatContext, 0, m_filename.toLocal8Bit(), 0 );
@@ -206,19 +205,19 @@ K3b::Msf K3bFFMpegFile::length() const
 
 int K3bFFMpegFile::sampleRate() const
 {
-    return FFMPEG_CODEC(d->audio_stream)->sample_rate;
+    return d->audio_stream->codecpar->sample_rate;
 }
 
 
 int K3bFFMpegFile::channels() const
 {
-    return FFMPEG_CODEC(d->audio_stream)->channels;
+    return d->audio_stream->codecpar->channels;
 }
 
 
 int K3bFFMpegFile::type() const
 {
-    return FFMPEG_CODEC(d->audio_stream)->codec_id;
+    return d->audio_stream->codecpar->codec_id;
 }
 
 
