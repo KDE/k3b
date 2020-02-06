@@ -38,11 +38,7 @@ extern "C" {
 #include <math.h>
 
 
-#if LIBAVFORMAT_BUILD < 4629
-#define FFMPEG_CODEC(s) (&s->codec)
-#else
 #define FFMPEG_CODEC(s) (s->codec)
-#endif
 
 #ifndef HAVE_FFMPEG_AVFORMAT_OPEN_INPUT
 //      this works because the parameters/options are not used
@@ -98,22 +94,14 @@ K3bFFMpegFile::K3bFFMpegFile( const QString& filename )
     d->formatContext = 0;
     d->codec = 0;
     d->audio_stream = nullptr;
-#  if LIBAVCODEC_BUILD < AV_VERSION_INT(55,28,1)
-    d->frame = avcodec_alloc_frame();
-#  else
     d->frame = av_frame_alloc();
-#  endif
 }
 
 
 K3bFFMpegFile::~K3bFFMpegFile()
 {
     close();
-#  if LIBAVCODEC_BUILD < AV_VERSION_INT(55,28,1)
-    av_free(d->frame);
-#  else
     av_frame_free(&d->frame);
-#  endif
     delete d;
 }
 
@@ -236,12 +224,6 @@ int K3bFFMpegFile::type() const
 
 QString K3bFFMpegFile::typeComment() const
 {
-#if LIBAVCODEC_BUILD < AV_VERSION_INT(54,25,0)
-    #define AV_CODEC_ID_WMAV1  CODEC_ID_WMAV1
-    #define AV_CODEC_ID_WMAV2  CODEC_ID_WMAV2
-    #define AV_CODEC_ID_MP3    CODEC_ID_MP3
-    #define AV_CODEC_ID_AAC    CODEC_ID_AAC
-#endif
     switch( type() ) {
     case AV_CODEC_ID_WMAV1:
         return i18n("Windows Media v1");
@@ -346,11 +328,7 @@ int K3bFFMpegFile::fillOutputBuffer()
             &d->packet );
 
         if( d->packetSize <= 0 || len < 0 )
-#if LIBAVCODEC_VERSION_MAJOR >= 56
             ::av_packet_unref( &d->packet );
-#else
-            ::av_free_packet( &d->packet );
-#endif
         if( len < 0 ) {
             qDebug() << "(K3bFFMpegFile) decoding failed for " << m_filename;
             return -1;
@@ -406,11 +384,7 @@ bool K3bFFMpegFile::seek( const K3b::Msf& msf )
     quint64 timestamp = (quint64)(seconds * (double)AV_TIME_BASE);
 
     // FIXME: do we really need the start_time and why?
-#if LIBAVFORMAT_BUILD >= 4619
     return ( ::av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time, 0 ) >= 0 );
-#else
-    return ( ::av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time ) >= 0 );
-#endif
 }
 
 
