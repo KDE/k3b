@@ -118,7 +118,7 @@ bool K3bLibsndfileDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerat
             addTechnicalInfo( i18n("Channels"), QString::number(d->sndinfo.channels) );
             addTechnicalInfo( i18n("Sampling Rate"), i18n("%1 Hz",d->sndinfo.samplerate) );
 
-            frames = (unsigned long)ceil(d->sndinfo.frames / d->sndinfo.samplerate * 75.0);
+            frames = (unsigned long)ceil(75.0 * d->sndinfo.frames / d->sndinfo.samplerate);
             samplerate = d->sndinfo.samplerate;
             ch = d->sndinfo.channels;
 
@@ -160,10 +160,6 @@ int K3bLibsndfileDecoder::decodeInternal( char* data, int maxLen )
     else if( read == 0 ) {
         qDebug() << "(K3bLibsndfileDecoder::decodeInternal) successfully finished decoding.";
         return 0;
-    }
-    else if( read != maxLen ) {
-        qDebug() << "(K3bLibsndfileDecoder::decodeInternal) read:" << read << " expected:" << maxLen;
-        return -1;
     }
     else
         return read;
