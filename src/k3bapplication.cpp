@@ -49,6 +49,7 @@
 
 #include <QCommandLineParser>
 #include <QDebug>
+#include <QTimer>
 
 
 K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = 0;
@@ -91,12 +92,9 @@ void K3b::Application::init( QCommandLineParser* commandLineParser )
     else {
         m_mainWindow->show();
     }
-    
-    processEvents();
-    
+
     if (splash) {
-        splash->hide();
-        QMetaObject::invokeMethod( splash, "close", Qt::QueuedConnection );
+        QTimer::singleShot(0, splash, &QWidget::close);
     }
 
     qRegisterMetaType<KSharedConfig::Ptr>( "KSharedConfig::Ptr" );
