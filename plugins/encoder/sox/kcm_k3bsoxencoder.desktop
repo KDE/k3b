@@ -45,7 +45,6 @@ Name[sv]=Inställningsmodul för K3b SoX ljudkodare
 Name[th]=K3b - มอดูลปรับแต่งตัวเข้ารหัสเสียง SoX
 Name[tr]=K3b SoX Kodlayıcısı Yapılandırma Parçacığı
 Name[uk]=Модуль налаштування аудіокодувальника SoX K3b
-Name[x-test]=xxK3b SoX Audio Encoder Config Modulexx
 Name[zh_CN]=K3b SoX 音频编码器配置模块
 Name[zh_TW]=K3b SoX 音效編碼器設定模組
 Type=Service

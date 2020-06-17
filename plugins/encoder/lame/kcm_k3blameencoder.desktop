@@ -32,7 +32,6 @@ Name[sr@latin]=Modul za podešavanje Lameovog MP3 kodera za K3b
 Name[sv]=Inställningsmodul för K3b Lame MP3-kodare
 Name[tr]=K3b Lame MP3 Şifreleyicisi Yapılandırma Modülü
 Name[uk]=Модуль налаштування кодувальника Lame MP3 K3b
-Name[x-test]=xxK3b Lame MP3 Encoder Config Modulexx
 Name[zh_CN]=K3b Lame MP3 编码器配置部件
 Name[zh_TW]=K3b Lame MP3 編碼器設定模組
 Type=Service
