@@ -12,7 +12,7 @@ set (QT_MIN_VERSION "5.10.0")
 set (KF5_MIN_VERSION "5.56.0")
 
 find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
-set(CMAKE_MODULE_PATH "${ECM_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${ECM_MODULE_PATH}")
 
 ##################  K3b version  ################################
 set(K3B_VERSION_STRING ${RELEASE_SERVICE_VERSION})
