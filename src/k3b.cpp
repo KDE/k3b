@@ -904,8 +904,7 @@ bool K3b::MainWindow::canCloseDocument( K3b::Doc* doc )
                                               KStandardGuiItem::save(),
                                               KStandardGuiItem::dontSave() ) ) {
     case KMessageBox::Yes:
-        if ( !fileSave( doc ) )
-            return false;
+        return fileSave( doc );
     case KMessageBox::No:
         return true;
     default:

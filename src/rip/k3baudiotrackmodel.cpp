@@ -345,6 +345,7 @@ bool K3b::AudioTrackModel::setData( const QModelIndex& index, const QVariant& va
                 emit dataChanged( index, index );
                 return true;
             }
+            break;
 
         case Qt::CheckStateRole:
             setTrackChecked( index.row(), value.toInt() == Qt::Checked );

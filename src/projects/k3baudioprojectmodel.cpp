@@ -269,8 +269,8 @@ QVariant K3b::AudioProjectModel::data( const QModelIndex& index, int role ) cons
             f.setPointSize( f.pointSize() - 2 );
             return f;
         }
-        break;
         }
+        break;
 
     case Qt::ForegroundRole:
         if ( index.column() == FilenameColumn ) {

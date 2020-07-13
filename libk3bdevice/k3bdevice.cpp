@@ -2130,6 +2130,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                     // done.
                     break;
                 }
+                Q_FALLTHROUGH();
 
             default:
             case MEDIA_CD_ROM:
@@ -2153,6 +2154,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                         inf.d->usedCapacity = readToc().length();
                     }
                 }
+                break;
 
             case MEDIA_DVD_ROM: {
                 K3b::Msf readCap;
@@ -2238,6 +2240,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
 
             case MEDIA_DVD_RW_OVWR:
                 inf.d->numSessions = 1;
+                Q_FALLTHROUGH();
             case MEDIA_DVD_RW:
             case MEDIA_DVD_RW_SEQ:
                 // only one track on a DVD-RW media

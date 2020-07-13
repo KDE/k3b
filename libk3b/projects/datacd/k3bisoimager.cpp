@@ -163,7 +163,7 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
 
                         break;
                     }
-                    // otherwise just fall through
+                    Q_FALLTHROUGH();
 
                 default:
                     if( !d->knownError && !mkisofsReadError() ) {

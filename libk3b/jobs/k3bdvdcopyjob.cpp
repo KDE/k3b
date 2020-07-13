@@ -253,6 +253,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                     }
                 }
             }
+            Q_FALLTHROUGH();
         case K3b::Device::MEDIA_DVD_R:
         case K3b::Device::MEDIA_DVD_R_SEQ:
         case K3b::Device::MEDIA_DVD_RW:
