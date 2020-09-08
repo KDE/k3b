@@ -22,12 +22,11 @@
 #include "k3bcore.h"
 #include "k3b_i18n.h"
 
-#include <KRandom>
-
 #include <QDebug>
 #include <QThread>
 #include <QMutex>
 #include <QEvent>
+#include <QRandomGenerator>
 
 #include <KCddb/Client>
 
@@ -188,7 +187,7 @@ int K3b::MediaCache::blockDevice( K3b::Device::Device* dev )
             e->readMutex.lock();
 
             // create (hopefully) unique id
-            e->blockedId = KRandom::random();
+            e->blockedId = QRandomGenerator::global()->bounded(RAND_MAX);
 
             // let the info go
             e->readMutex.unlock();
