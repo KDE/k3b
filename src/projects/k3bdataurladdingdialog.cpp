@@ -39,6 +39,7 @@
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KStandardGuiItem>
+#include <kio/listjob.h>
 
 #include <QDir>
 #include <QFileInfo>
@@ -523,9 +524,15 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
                 dir->addDataItem( newDirItem );
             }
 
-            QDir newDir( absoluteFilePath );
-            foreach( const QString& dir, newDir.entryList( QDir::AllEntries|QDir::Hidden|QDir::System|QDir::NoDotAndDotDot ) ) {
-                m_urlQueue.append( qMakePair( QUrl::fromLocalFile(absoluteFilePath + '/' + dir ), newDirItem ) );
+            KIO::ListJob *lj = KIO::listDir(QUrl::fromLocalFile(absoluteFilePath), KIO::HideProgressInfo);
+            KIO::UDSEntryList list;
+            connect(lj, &KIO::ListJob::entries, this, [&](KIO::Job *, const KIO::UDSEntryList &l) { list = l; });
+            lj->exec();
+            foreach( const KIO::UDSEntry& entry, list ) {
+                const QString fileName = entry.stringValue( KIO::UDSEntry::UDS_NAME );
+                if (fileName != QStringLiteral(".") && fileName != QStringLiteral("..")) {
+                    m_urlQueue.append( qMakePair( QUrl::fromLocalFile(absoluteFilePath + '/' + fileName ), newDirItem ) );
+                }
             }
         }
         else {
