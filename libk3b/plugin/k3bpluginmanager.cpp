@@ -19,7 +19,6 @@
 #include "k3bversion.h"
 #include "k3b_i18n.h"
 
-#include <KCModuleInfo>
 #include <KCModuleProxy>
 #include <KPluginInfo>
 #include <KService>
@@ -139,8 +138,7 @@ KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) con
 {
     foreach( const KService::Ptr& service, plugin->pluginInfo().kcmServices() ) {
         if( !service->noDisplay() ) {
-            KCModuleInfo moduleInfo( service );
-            KCModuleProxy* moduleProxy = new KCModuleProxy( moduleInfo );
+            KCModuleProxy* moduleProxy = new KCModuleProxy( service );
             if( moduleProxy->realModule() ) {
                 return moduleProxy;
             }
