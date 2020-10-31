@@ -794,7 +794,7 @@ void K3b::VcdBurnDialog::saveSettings( KConfigGroup c )
 
 void K3b::VcdBurnDialog::saveCdiConfig()
 {
-    QString dirPath = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/cdi";
+    QString dirPath = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) + "/cdi";
     QDir().mkpath( dirPath );
 
     QString filename = dirPath +  "/cdi_vcd.cfg";
@@ -812,7 +812,7 @@ void K3b::VcdBurnDialog::saveCdiConfig()
 
 void K3b::VcdBurnDialog::loadCdiConfig()
 {
-    QString filename = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/cdi/cdi_vcd.cfg";
+    QString filename = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) + "/cdi/cdi_vcd.cfg";
     if ( QFile::exists( filename ) ) {
         QFile cdi( filename );
         if ( cdi.open( QIODevice::ReadOnly ) ) {

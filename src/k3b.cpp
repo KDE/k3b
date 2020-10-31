@@ -696,7 +696,7 @@ void K3b::MainWindow::saveProperties( KConfigGroup& grp )
     // 4. save the status of every project (modified/saved)
 
     QString saveDir = QString( "%1/sessions/%2/" ).arg(
-                QStandardPaths::writableLocation( QStandardPaths::DataLocation ),
+                QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ),
                 qApp->sessionId() );
     QDir().mkpath(saveDir);
 
@@ -750,7 +750,7 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
     // 4. delete "~/.kde/share/apps/k3b/sessions/" + KApp->sessionId()
 
     QString saveDir = QString( "%1/sessions/%2/" ).arg(
-                QStandardPaths::writableLocation( QStandardPaths::DataLocation ),
+                QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ),
                 qApp->sessionId() );
     QDir().mkpath(saveDir);
 

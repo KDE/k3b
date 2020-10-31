@@ -1031,7 +1031,7 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
     // permissions we create different dummy dirs to be passed to mkisofs
     //
 
-    QString path = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/temp/";
+    QString path = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) + "/temp/";
     QDir().mkpath(path);
     QDir _appDir( path );
 
@@ -1092,7 +1092,7 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
 void K3b::IsoImager::clearDummyDirs()
 {
     QString jobId = qApp->sessionId() + '_' + QString::number( m_sessionNumber );
-    QString path = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/temp/";
+    QString path = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) + "/temp/";
     QDir().mkpath(path);
     QDir appDir( path );
     if( appDir.cd( jobId ) ) {

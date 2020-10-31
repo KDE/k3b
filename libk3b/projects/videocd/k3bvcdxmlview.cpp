@@ -364,7 +364,7 @@ void K3b::VcdXmlView::write( QFile& file )
         d->addFileElement( xmlDoc, elemFolder, QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_text.fnt" ), "CDI_TEXT.FNT" );
         d->addFileElement( xmlDoc, elemFolder, QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_vcd.app" ), "CDI_VCD.APP" );
 
-        QString dirPath = QStandardPaths::writableLocation( QStandardPaths::DataLocation ) + "/cdi";
+        QString dirPath = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation ) + "/cdi";
         QDir().mkpath(dirPath);
         QString usercdicfg = dirPath + "cdi_vcd.cfg";
         if ( QFile::exists( usercdicfg ) )

@@ -32,7 +32,7 @@ namespace
 {
     QString debuggingOutputFilePath()
     {
-        QString dirPath = QStandardPaths::writableLocation( QStandardPaths::DataLocation );
+        QString dirPath = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation );
         QDir().mkpath( dirPath );
         return dirPath + "/lastlog.log";
     }
