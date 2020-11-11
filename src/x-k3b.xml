@@ -3,16 +3,6 @@
     <mime-type type="application/x-k3b">
         <sub-class-of type="application/zip"/>
         <comment>K3b project</comment>
-        <comment xml:lang="fi">K3b-projekti</comment>
-        <comment xml:lang="nl">K3b-project</comment>
-        <comment xml:lang="nn">K3b-prosjekt</comment>
-        <comment xml:lang="pt_BR">Projeto do K3b</comment>
-        <comment xml:lang="sr">К3б‑ов пројекат</comment>
-        <comment xml:lang="sr@ijekavian">К3б‑ов пројекат</comment>
-        <comment xml:lang="sr@ijekavianlatin">K3bov projekat</comment>
-        <comment xml:lang="sr@latin">K3bov projekat</comment>
-        <comment xml:lang="sv">K3b-projekt</comment>
-        <comment xml:lang="uk">проєкт K3b</comment>
         <glob pattern="*.k3b"/>
     </mime-type>
 </mime-info>
