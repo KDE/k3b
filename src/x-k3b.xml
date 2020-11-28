@@ -14,6 +14,7 @@
         <comment xml:lang="nl">K3b-project</comment>
         <comment xml:lang="nn">K3b-prosjekt</comment>
         <comment xml:lang="pl">Projekt K3b</comment>
+        <comment xml:lang="pt_BR">Projeto do K3b</comment>
         <comment xml:lang="sv">K3b-projekt</comment>
         <comment xml:lang="uk">проєкт K3b</comment>
         <glob pattern="*.k3b"/>
