@@ -33,6 +33,7 @@ namespace K3b {
         BurnJob* newBurnJob( JobHandler* hdl, QObject* parent ) override;
 
         bool newDocument() override;
+        void clear() override;
 
         DirItem* videoTsDir() const { return m_videoTsDir; }
 
@@ -40,7 +41,10 @@ namespace K3b {
         bool saveDocumentData(QDomElement*) override;
 
     private:
-        DirItem* m_videoTsDir;
+        void addAudioVideoTsDirs();
+
+        DirItem* m_videoTsDir = nullptr;
+        DirItem* m_audioTsDir = nullptr;
     };
 }
 
