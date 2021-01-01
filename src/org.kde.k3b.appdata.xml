@@ -179,7 +179,7 @@
       <li xml:lang="et">Tööriistad: vastav menüü pakub mitmesuguseid tööriistu, näiteks CD kopeerimiseks või DVD vormindamiseks</li>
       <li xml:lang="eu">Tresnak: Tresnak menuak tresna ezberdinak eskaintzen ditu, tartean CD kopia edo DVD formateatzea</li>
       <li xml:lang="fi">Työkalut: Työkaluvalikosta löytyy työkaluja mm. CD:n kopiointiin tai DVD:n alustukseen</li>
-      <li xml:lang="fr">Les outils : Le menu outils offre différente fonctionnalité comme la copie de CD ou le formatage de DVD</li>
+      <li xml:lang="fr">Les outils : le menu outils offre différente fonctionnalité comme la copie de CD ou le formatage de DVD.</li>
       <li xml:lang="gl">As ferramentas. O menú de ferramentas ofrece utilidades con diversas funcións, como as de copiar CD ou formatar DVD.</li>
       <li xml:lang="ia">Le instrumentos: Le menu de instrumentos offere instrumentos differente como copia de CD o formattation de DVD</li>
       <li xml:lang="id">Tools: Menu alat membawakan alat-alat yang berbeda seperti CD copy atau DVD formatting</li>
@@ -220,7 +220,7 @@
       <li xml:lang="et">Kontekstitundlikud meediatoimingud: CD/DVD-plaati kujutavale ikoonile klõpsates näitab K3b selle sisu ja lubab sooritada mõningaid toiminguid. Nii saab näiteks rippida heli-CD-sid</li>
       <li xml:lang="eu">Testuinguruarekiko sentikorrak diren euskarri ekintzak: CD/DVD gailu bat ordezkatzen duten ikonoetan klik egitean, K3b-k haien edukia aurkeztuko du eta beste ekintza batzuk egiteko aukera emango du. Hau da esaterako audio CDak erauzteko era.</li>
       <li xml:lang="fi">Kontekstisidonnaiset toimenpiteet: Napsautettaessa CD- tai DVD-asemaa esittävää kuvaketta K3b näyttää sen sisällön ja tarjoaa lisätoimenpiteitä. Tämä on esimerkiksi helpoin tapa purkaa ääni-CD:t tiedostoiksi</li>
-      <li xml:lang="fr">Des actions sur les médias sensibles au contexte : Quand vous cliquez sur l'icône représentant un lecteur de CD ou DVD, K3b vous présentera son contenu et permettra de nouvelles actions. Ceci est par exemple la méthode pour extraire des CD audio</li>
+      <li xml:lang="fr">Des actions sur les média sensibles au contexte : quand vous cliquez sur l'icône représentant un lecteur de CD ou DVD, K3b vous présentera son contenu et permettra de nouvelles actions. Ceci est par exemple la méthode pour extraire des CD audio.</li>
       <li xml:lang="gl">Accións de recursos segundo o contexto. Ao premer a icona de unidade de CD/DVD, K3b presenta o seu contido e permite realizar accións. Por exemplo, así é como se extraen datos de CD de son.</li>
       <li xml:lang="ia">Actiones de multimedia sensibile al contexto: Quando on pulsa sur le icone representante un drive de CD/DVD KDE monstrara su contentos e permittera ulterior actiones. Isto es pro exemplo le modo de rippar CDs audio.  </li>
       <li xml:lang="id">Context sensitive media actions: Ketika mengeklik pada Ikon misal sebuah CD/DVD drive K3b akan menampilkan isinya dan memungkinkan beberapa aksi selanjutnya. Ini adalah contoh bagaimana caranya untuk merabit audio CD</li>
