@@ -526,7 +526,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
 
             KIO::ListJob *lj = KIO::listDir(QUrl::fromLocalFile(absoluteFilePath), KIO::HideProgressInfo);
             KIO::UDSEntryList list;
-            connect(lj, &KIO::ListJob::entries, this, [&](KIO::Job *, const KIO::UDSEntryList &l) { list = l; });
+            connect(lj, &KIO::ListJob::entries, this, [&](KIO::Job *, const KIO::UDSEntryList &l) { list.append(l); });
             lj->exec();
             foreach( const KIO::UDSEntry& entry, list ) {
                 const QString fileName = entry.stringValue( KIO::UDSEntry::UDS_NAME );
