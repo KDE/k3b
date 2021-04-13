@@ -118,6 +118,11 @@
        <property name="text">
         <string>Get New Themes...</string>
        </property>
+       <property name="icon">
+        <iconset theme="edit-download">
+         <normaloff/>
+        </iconset>
+       </property>
       </widget>
      </item>
      <item>
@@ -125,12 +130,22 @@
        <property name="text">
         <string>Install New Theme...</string>
        </property>
+       <property name="icon">
+        <iconset theme="document-import">
+         <normaloff/>
+        </iconset>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="m_buttonRemoveTheme">
        <property name="text">
         <string>Remove Theme</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-delete">
+         <normaloff/>
+        </iconset>
        </property>
       </widget>
      </item>
