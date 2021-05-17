@@ -1,7 +1,5 @@
-add_library(k3bexternalencoder MODULE
-    k3bexternalencoder.cpp
-    k3bexternalencodercommand.cpp
-)
+kcoreaddons_add_plugin(k3bexternalencoder SOURCES k3bexternalencoder.cpp k3bexternalencodercommand.cpp INSTALL_NAMESPACE "k3b_plugins")
+kcoreaddons_desktop_to_json(k3bexternalencoder "k3bexternalencoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
 
 target_link_libraries(k3bexternalencoder
     k3bdevice
@@ -26,6 +24,6 @@ target_link_libraries(kcm_k3bexternalencoder
     KF5::I18n
 )
 
-install(TARGETS k3bexternalencoder kcm_k3bexternalencoder DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_k3bexternalencoder DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES k3bexternalencoder.desktop kcm_k3bexternalencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kcm_k3bexternalencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})

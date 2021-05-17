@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <sndfile.h>
 
-K3B_EXPORT_PLUGIN(k3blibsndfiledecoder, K3bLibsndfileDecoderFactory)
+K_PLUGIN_CLASS_WITH_JSON(K3bLibsndfileDecoderFactory, "k3blibsndfiledecoder.json")
 
 class K3bLibsndfileDecoder::Private
 {

@@ -21,7 +21,7 @@
 #include <QFile>
 
 
-K3B_EXPORT_PLUGIN(k3bwavedecoder, K3bWaveDecoderFactory)
+K_PLUGIN_CLASS_WITH_JSON(K3bWaveDecoderFactory, "k3bwavedecoder.json")
 
 static unsigned short le_a_to_u_short( unsigned char* a ) {
     return ((unsigned short)

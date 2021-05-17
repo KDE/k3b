@@ -15,7 +15,8 @@ endif()
 
 configure_file(config-flac.h.cmake config-flac.h )
 
-add_library(k3bflacdecoder MODULE k3bflacdecoder.cpp)
+kcoreaddons_add_plugin(k3bflacdecoder SOURCES k3bflacdecoder.cpp INSTALL_NAMESPACE "k3b_plugins")
+kcoreaddons_desktop_to_json(k3bflacdecoder "k3bflacdecoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
 
 target_include_directories(k3bflacdecoder PRIVATE ${FLAC++_INCLUDE_DIR} ${FLAC_INCLUDE_DIR} ${TAGLIB_INCLUDES})
 
@@ -24,7 +25,3 @@ target_link_libraries(k3bflacdecoder k3bdevice k3blib KF5::I18n ${FLAC++_LIBRARI
 if(ENABLE_TAGLIB)
     target_link_libraries(k3bflacdecoder ${TAGLIB_LIBRARIES})
 endif()
-
-install(TARGETS k3bflacdecoder DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install(FILES  k3bflacdecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})

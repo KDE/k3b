@@ -18,6 +18,7 @@
 
 #include "k3b_export.h"
 #include <KPluginFactory>
+#include <KPluginMetaData>
 #include <KPluginInfo>
 #include <QObject>
 
@@ -41,7 +42,8 @@ namespace K3b {
         explicit Plugin( QObject* parent = 0 );
         ~Plugin() override;
 
-        KPluginInfo pluginInfo() const { return m_pluginInfo; }
+        KPluginInfo pluginInfo() const { return KPluginInfo::fromMetaData(d->metadata); }
+        KPluginMetaData pluginMetaData() const { return d->metadata; }
 
         /**
          * Version of the plugin system this plugin was written for.
@@ -56,7 +58,10 @@ namespace K3b {
         virtual QString categoryName() const = 0;
 
     private:
-        KPluginInfo m_pluginInfo;
+        struct Private {
+            KPluginMetaData metadata;
+        };
+        std::unique_ptr<Private> d=std::unique_ptr<Private>(new Private());
     };
 }
 

@@ -31,7 +31,8 @@
 #include <time.h>
 
 
-K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisEncoder)
+K_PLUGIN_CLASS_WITH_JSON(K3bOggVorbisEncoder, "k3boggvorbisencoder.json")
+
 
 // quality levels -1 to 10 map to 0 to 11
 static const int s_rough_average_quality_level_bitrates[] = {

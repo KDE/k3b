@@ -26,7 +26,7 @@
 #include <vorbis/codec.h>
 #include <vorbis/vorbisfile.h>
 
-K3B_EXPORT_PLUGIN(k3boggvorbisdecoder, K3bOggVorbisDecoderFactory)
+K_PLUGIN_CLASS_WITH_JSON(K3bOggVorbisDecoderFactory, "k3boggvorbisdecoder.json")
 
 class K3bOggVorbisDecoder::Private
 {

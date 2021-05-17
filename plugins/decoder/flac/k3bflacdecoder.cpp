@@ -21,12 +21,13 @@
 #include <QFile>
 #include <QStringList>
 
+#include <kpluginfactory.h>
 #include <string.h>
 #include <math.h>
 #include <FLAC++/metadata.h>
 #include <FLAC++/decoder.h>
 
-K3B_EXPORT_PLUGIN(k3bflacdecoder, K3bFLACDecoderFactory)
+K_PLUGIN_CLASS_WITH_JSON(K3bFLACDecoderFactory, "k3bflacdecoder.json")
 
 #ifdef ENABLE_TAGLIB
 #include <tag.h>

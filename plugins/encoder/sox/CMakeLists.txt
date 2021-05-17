@@ -1,4 +1,5 @@
-add_library(k3bsoxencoder MODULE k3bsoxencoder.cpp)
+kcoreaddons_add_plugin(k3bsoxencoder SOURCES k3bsoxencoder.cpp INSTALL_NAMESPACE "k3b_plugins")
+kcoreaddons_desktop_to_json(k3bsoxencoder "k3bsoxencoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
 
 target_link_libraries(k3bsoxencoder
     k3bdevice
@@ -16,6 +17,6 @@ target_link_libraries(kcm_k3bsoxencoder
     KF5::I18n
 )
 
-install(TARGETS k3bsoxencoder kcm_k3bsoxencoder DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_k3bsoxencoder DESTINATION ${PLUGIN_INSTALL_DIR} )
 
-install(FILES k3bsoxencoder.desktop kcm_k3bsoxencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kcm_k3bsoxencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})

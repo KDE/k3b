@@ -32,7 +32,8 @@
 #include <sys/types.h>
 
 
-K3B_EXPORT_PLUGIN(k3bexternalencoder, K3bExternalEncoder)
+K_PLUGIN_CLASS_WITH_JSON(K3bExternalEncoder, "k3bexternalencoder.json")
+
 
 Q_DECLARE_METATYPE( QProcess::ExitStatus )
 

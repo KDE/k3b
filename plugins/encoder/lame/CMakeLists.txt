@@ -1,4 +1,5 @@
-add_library(k3blameencoder MODULE k3blameencoder.cpp)
+kcoreaddons_add_plugin(k3blameencoder SOURCES k3blameencoder.cpp INSTALL_NAMESPACE "k3b_plugins")
+kcoreaddons_desktop_to_json(k3blameencoder "k3blameencoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
 
 target_link_libraries(k3blameencoder
     k3bdevice
@@ -24,6 +25,6 @@ target_link_libraries(kcm_k3blameencoder
     KF5::I18n
 )
 
-install(TARGETS k3blameencoder kcm_k3blameencoder DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_k3blameencoder DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install(FILES k3blameencoder.desktop kcm_k3blameencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kcm_k3blameencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})

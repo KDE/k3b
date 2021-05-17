@@ -19,7 +19,7 @@
 
 #include <config-k3b.h>
 
-K3B_EXPORT_PLUGIN(k3bmpcdecoder, K3bMpcDecoderFactory)
+K_PLUGIN_CLASS_WITH_JSON(K3bMpcDecoderFactory, "k3bmpcdecoder.json")
 
 K3bMpcDecoderFactory::K3bMpcDecoderFactory( QObject* parent, const QVariantList& )
     : K3b::AudioDecoderFactory( parent )

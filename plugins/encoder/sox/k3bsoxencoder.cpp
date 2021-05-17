@@ -33,7 +33,8 @@
 #include <sys/types.h>
 
 
-K3B_EXPORT_PLUGIN( k3bsoxencoder, K3bSoxEncoder )
+K_PLUGIN_CLASS_WITH_JSON(K3bSoxEncoder , "k3bsoxencoder.json")
+
 
 namespace {
 

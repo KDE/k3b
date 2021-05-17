@@ -1,4 +1,5 @@
-add_library(k3bffmpegdecoder MODULE k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp)
+kcoreaddons_add_plugin(k3bffmpegdecoder SOURCES k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp INSTALL_NAMESPACE "k3b_plugins")
+kcoreaddons_desktop_to_json(k3bffmpegdecoder "k3bffmpegdecoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
 
 if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
     message(STATUS "didn't find new ffmpegcodecpath")
@@ -10,7 +11,3 @@ else()
 endif()
 
 target_link_libraries(k3bffmpegdecoder k3bdevice k3blib KF5::I18n ${FFMPEG_LIBRARIES})
-
-install(TARGETS k3bffmpegdecoder DESTINATION ${PLUGIN_INSTALL_DIR} )
-
-install(FILES k3bffmpegdecoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})

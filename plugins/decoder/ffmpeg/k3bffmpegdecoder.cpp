@@ -37,7 +37,7 @@ extern "C" {
 
 #include <math.h>
 
-K3B_EXPORT_PLUGIN(k3bffmpegdecoder, K3bFFMpegDecoderFactory)
+K_PLUGIN_CLASS_WITH_JSON(K3bFFMpegDecoderFactory, "k3bffmpegdecoder.json")
 
 K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent, const QVariantList& )
     : K3b::AudioDecoderFactory( parent )

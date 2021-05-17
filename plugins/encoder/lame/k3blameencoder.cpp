@@ -31,7 +31,8 @@
 #include <QFile>
 
 
-K3B_EXPORT_PLUGIN(k3blameencoder, K3bLameEncoder)
+K_PLUGIN_CLASS_WITH_JSON(K3bLameEncoder, "k3blameencoder.json")
+
 
 class K3bLameEncoder::Private
 {

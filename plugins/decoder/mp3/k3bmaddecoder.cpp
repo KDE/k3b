@@ -44,8 +44,7 @@
 #endif
 
 
-
-K3B_EXPORT_PLUGIN(k3bmaddecoder, K3bMadDecoderFactory)
+K_PLUGIN_CLASS_WITH_JSON(K3bMadDecoderFactory, "k3bmaddecoder.json")
 
 int K3bMadDecoder::MaxAllowedRecoverableErrors = 10;
 

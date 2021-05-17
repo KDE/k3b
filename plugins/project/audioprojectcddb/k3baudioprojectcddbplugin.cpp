@@ -38,7 +38,8 @@
 #include <KCddb/Cdinfo>
 
 
-K3B_EXPORT_PLUGIN( k3baudioprojectcddbplugin, K3bAudioProjectCddbPlugin )
+K_PLUGIN_CLASS_WITH_JSON(K3bAudioProjectCddbPlugin , "k3baudioprojectcddbplugin.json")
+
 
 
 K3bAudioProjectCddbPlugin::K3bAudioProjectCddbPlugin( QObject* parent, const QVariantList& )

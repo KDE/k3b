@@ -23,6 +23,8 @@
 #include <KPluginInfo>
 #include <KService>
 #include <KServiceTypeTrader>
+#include <KPluginLoader>
+#include <KPluginMetaData>
 #include <KMessageBox>
 
 #include <QDebug>
@@ -40,17 +42,12 @@
 class K3b::PluginManager::Private
 {
 public:
-    Private( K3b::PluginManager* parent )
-        : m_parent( parent ) {
+    Private(){
     }
 
     QList<K3b::Plugin*> plugins;
 
-    void loadPlugin( const KService::Ptr &service );
     KCModuleProxy* getModuleProxy( Plugin* plugin ) const;
-
-private:
-    K3b::PluginManager* m_parent;
 };
 
 
@@ -58,7 +55,7 @@ private:
 
 K3b::PluginManager::PluginManager( QObject* parent )
     : QObject( parent ),
-      d( new Private( this ) )
+      d( new Private() )
 {
 }
 
@@ -94,46 +91,6 @@ QList<K3b::Plugin*> K3b::PluginManager::plugins( const QString& group ) const
     return fl;
 }
 
-
-void K3b::PluginManager::Private::loadPlugin( const KService::Ptr &service )
-{
-    qDebug() << service->name() << service->library();
-    QString err;
-    K3b::Plugin* plugin = service->createInstance<K3b::Plugin>( 0, m_parent, QVariantList(), &err );
-    if ( plugin ) {
-        qDebug() << "Loaded plugin" << service->name();
-        // FIXME: improve this versioning stuff
-        if( plugin->pluginSystemVersion() != K3B_PLUGIN_SYSTEM_VERSION ) {
-            delete plugin;
-            qDebug() << "plugin system does not fit";
-        }
-        else {
-            plugin->m_pluginInfo = KPluginInfo( service );
-            plugins.append( plugin );
-        }
-    }
-    else {
-        qDebug() << "Loading plugin" << service->name() << "failed. Error:" << err;
-    }
-
-
-// 	// make sure to only use the latest version of one plugin
-// 	bool addPlugin = true;
-// 	for( Q3PtrListIterator<K3b::Plugin> it( d->plugins ); *it; ++it ) {
-// 	  if( it.current()->pluginInfo().name() == plugin->pluginInfo().name() ) {
-// 	    if( K3b::Version(it.current()->pluginInfo().version()) < K3b::Version(plugin->pluginInfo().version()) ) {
-// 	      K3b::Plugin* p = it.current();
-// 	      d->plugins.removeRef( p );
-// 	      delete p;
-// 	    }
-// 	    else {
-// 	      addPlugin = false;
-// 	    }
-// 	    break;
-// 	  }
-}
-
-
 KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) const
 {
     foreach( const KService::Ptr& service, plugin->pluginInfo().kcmServices() ) {
@@ -153,10 +110,17 @@ KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) con
 
 void K3b::PluginManager::loadAll()
 {
-    qDebug();
-    KService::List services = KServiceTypeTrader::self()->query( "K3b/Plugin" );
-    Q_FOREACH( const KService::Ptr &service, services ) {
-        d->loadPlugin( service );
+    const QVector<KPluginMetaData> metadataList = KPluginLoader::findPlugins("k3b_plugins");
+    for (const auto &metadata : metadataList) {
+        KPluginLoader loader(metadata.fileName());
+        KPluginFactory *factory = loader.factory();
+        if (auto *plugin = factory->create<K3b::Plugin>()) {
+            plugin->d->metadata = metadata;
+            qDebug() << "Loaded plugin" << metadata.metaDataFileName();
+            d->plugins.append(plugin);
+        } else {
+            qDebug() << "failed to load plugin" << metadata.metaDataFileName();
+        }
     }
 }
 

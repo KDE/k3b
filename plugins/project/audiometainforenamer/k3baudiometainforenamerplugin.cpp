@@ -56,7 +56,8 @@
 #include <oggflacfile.h>
 
 
-K3B_EXPORT_PLUGIN( k3baudiometainforenamerplugin, K3bAudioMetainfoRenamerPlugin )
+K_PLUGIN_CLASS_WITH_JSON(K3bAudioMetainfoRenamerPlugin , "k3baudiometainforenamerplugin.json")
+
 
 namespace {
     class K3bMimeTypeResolver : public TagLib::FileRef::FileTypeResolver
