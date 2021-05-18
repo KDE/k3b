@@ -110,7 +110,7 @@ KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) con
 
 void K3b::PluginManager::loadAll()
 {
-    const QVector<KPluginMetaData> metadataList = KPluginLoader::findPlugins("k3b_plugins");
+    const QVector<KPluginMetaData> metadataList = KPluginLoader::findPlugins("k3b");
     for (const auto &metadata : metadataList) {
         KPluginLoader loader(metadata.fileName());
         KPluginFactory *factory = loader.factory();

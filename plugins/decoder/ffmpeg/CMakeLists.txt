@@ -1,4 +1,4 @@
-kcoreaddons_add_plugin(k3bffmpegdecoder SOURCES k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp INSTALL_NAMESPACE "k3b_plugins")
+kcoreaddons_add_plugin(k3bffmpegdecoder SOURCES k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp INSTALL_NAMESPACE "k3b")
 kcoreaddons_desktop_to_json(k3bffmpegdecoder "k3bffmpegdecoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
 
 if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
