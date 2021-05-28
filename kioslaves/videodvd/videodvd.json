@@ -1,0 +1,26 @@
+{
+    "KDE-KIO-Protocols": {
+        "videodvd": {
+            "Class": ":local",
+            "Icon": "media-optical-video",
+            "copyFromFile": true,
+            "copyToFile": false,
+            "deleting": false,
+            "exec": "kf5/kio/videodvd",
+            "input": "none",
+            "listing": [
+                "Name",
+                "Type",
+                "Size",
+                "Date"
+            ],
+            "makedir": false,
+            "moving": false,
+            "opening": true,
+            "output": "filesystem",
+            "protocol": "videodvd",
+            "reading": true,
+            "writing": false
+        }
+    }
+}

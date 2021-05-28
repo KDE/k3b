@@ -12,6 +12,4 @@ generate_export_header(kio_videodvd
 
 install(TARGETS kio_videodvd DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kio)
 
-install( FILES  videodvd.protocol DESTINATION ${SERVICES_INSTALL_DIR})
-
 install( FILES  videodvd.desktop DESTINATION ${DATA_INSTALL_DIR}/konqsidebartng/virtual_folders/services)

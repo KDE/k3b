@@ -36,6 +36,13 @@ namespace
 
 using namespace KIO;
 
+// Pseudo plugin class to embed meta data
+class KIOPluginForMetaData : public QObject
+{
+    Q_OBJECT
+    Q_PLUGIN_METADATA(IID "org.kde.kio.slave.videodvd" FILE "videodvd.json")
+};
+
 Q_DECLARE_LOGGING_CATEGORY(KIO_VIDEODVD)
 Q_LOGGING_CATEGORY(KIO_VIDEODVD, "kio_videodvd")
 
@@ -375,3 +382,5 @@ void kio_videodvdProtocol::mimetype( const QUrl& url )
         delete iso;
     }
 }
+
+#include "videodvd.moc"
