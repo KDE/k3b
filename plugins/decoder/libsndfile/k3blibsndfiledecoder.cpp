@@ -8,7 +8,6 @@
     SPDX-FileCopyrightText: 1998-2008 Sebastian Trueg <trueg@k3b.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later
-    See the file "COPYING" for the exact licensing terms.
 */
 #include "k3blibsndfiledecoder.h"
 #include "k3bplugin_i18n.h"

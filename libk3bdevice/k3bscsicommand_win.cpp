@@ -12,7 +12,6 @@
     and many others.
 
     SPDX-License-Identifier: GPL-2.0-or-later
-    See the file "COPYING" for the exact licensing terms.
 */
 
 #include "k3bscsicommand.h"

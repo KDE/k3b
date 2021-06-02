@@ -12,7 +12,6 @@
     Dissolve Mask (c) Kicker Authors kickertip.cpp, 2005/08/17
 
     SPDX-License-Identifier: GPL-2.0-or-later
-    See the file "COPYING" for the exact licensing terms.
 */
 
 #include "k3bwidgetshoweffect.h"
