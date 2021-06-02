@@ -6,7 +6,7 @@
 #  SNDFILE_INCLUDE_DIR - the libsndfile include directory
 #  SNDFILE_LIBRARIES - libsndfile libraries to link to
 #
-# Copyright (c) 2008, Sebastian Trueg, <trueg@kde.org>
+# SPDX-FileCopyrightText: 2008 Sebastian Trueg <trueg@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.

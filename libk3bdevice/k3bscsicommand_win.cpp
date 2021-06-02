@@ -1,22 +1,19 @@
 /*
- *
- * k3bscsicommand_win32.cpp
- * Copyright (C) 2007 Jeremy C. Andrus <jeremy@jeremya.com>
- * Copyright (C) 2009 Ralf Habacker <ralf.habacker@freenet.de>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
- *
- * Parts of this file are inspired (and copied) from various source
- * files in the cdrdao project (C) J. Schilling, Andreas Mueller 
- * and many others.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+
+    k3bscsicommand_win32.cpp
+    SPDX-FileCopyrightText: 2007 Jeremy C. Andrus <jeremy@jeremya.com>
+    SPDX-FileCopyrightText: 2009 Ralf Habacker <ralf.habacker@freenet.de>
+
+    This file is part of the K3b project.
+    SPDX-FileCopyrightText: 1998-2007 Sebastian Trueg <trueg@k3b.org>
+
+    Parts of this file are inspired (and copied) from various source
+    files in the cdrdao project (C) J. Schilling, Andreas Mueller
+    and many others.
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+    See the file "COPYING" for the exact licensing terms.
+*/
 
 #include "k3bscsicommand.h"
 #include "k3bdevice.h"

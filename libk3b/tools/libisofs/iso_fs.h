@@ -6,8 +6,8 @@
 #include "bswap.h"
 
 /*
- * The isofs filesystem constants/structures
- */
+    The isofs filesystem constants/structures
+*/
 
 /* This part borrowed from the bsd386 isofs */
 #define ISODCL(from, to) (to - from + 1)

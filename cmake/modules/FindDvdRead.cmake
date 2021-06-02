@@ -6,7 +6,7 @@
 #  DVDREAD_LIBRARIES - Link these to use DvdRead
 #  DVDREAD_DEFINITIONS - Compiler switches required for using DvdRead
 #
-# Copyright (c) 2007, Laurent Montel, <montel@kde.org>
+# SPDX-FileCopyrightText: 2007 Laurent Montel <montel@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.

@@ -1,14 +1,11 @@
 /*
- * Copyright (C) 2016 - 2017 Leslie Zhai <lesliezhai@llvm.org.cn>
- *
- * This file is part of the K3b project.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+    SPDX-FileCopyrightText: 2016-2017 Leslie Zhai <lesliezhai@llvm.org.cn>
+
+    This file is part of the K3b project.
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+    See the file "COPYING" for the exact licensing terms.
+*/
 
 #include <QTest>
 

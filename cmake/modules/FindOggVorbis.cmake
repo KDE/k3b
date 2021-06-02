@@ -10,7 +10,7 @@
 #  VORBISFILE_LIBRARY  - The VorbisFile library
 #  VORBISENC_LIBRARY   - The VorbisEnc library
 
-# Copyright (c) 2006, Richard Laerkaeng, <richard@goteborg.utfors.se>
+# SPDX-FileCopyrightText: 2006 Richard Laerkaeng <richard@goteborg.utfors.se>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
