@@ -6,9 +6,7 @@
 #  TAGLIB_LIBRARIES - The libraries needed to use taglib
 
 # SPDX-FileCopyrightText: 2006 Laurent Montel <montel@kde.org>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
 
 if(NOT TAGLIB_MIN_VERSION)
   set(TAGLIB_MIN_VERSION "1.4")
