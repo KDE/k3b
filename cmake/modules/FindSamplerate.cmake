@@ -5,10 +5,8 @@
 #  SAMPLERATE_INCLUDE_DIR - the Samplerate include directory
 #  SAMPLERATE_LIBRARIES - Link these to use Samplerate
 #  SAMPLERATE_DEFINITIONS - Compiler switches required for using Samplerate
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-#
 # SPDX-FileCopyrightText: 2007 Laurent Montel <montel@kde.org>
+# SPDX-License-Identifier: BSD-3-Clause
 
 if(SAMPLERATE_INCLUDE_DIR AND SAMPLERATE_LIBRARIES)
     # in cache already

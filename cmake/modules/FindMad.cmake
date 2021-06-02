@@ -5,12 +5,9 @@
 #  MAD_INCLUDE_DIR - the Mad include directory
 #  MAD_LIBRARIES - Link these to use Mad
 #  MAD_DEFINITIONS - Compiler switches required for using Mad
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 # SPDX-FileCopyrightText: 2007 Laurent Montel <montel@kde.org>
-#
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if ( MAD_INCLUDE_DIR AND MAD_LIBRARIES )
    # in cache already

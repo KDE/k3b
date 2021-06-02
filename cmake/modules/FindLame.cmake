@@ -5,9 +5,7 @@
 #  LAME_INCLUDE_DIR - the Lame include directory
 #  LAME_LIBRARIES - Link these to use Lame
 #  LAME_DEFINITIONS - Compiler switches required for using Lame
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-#
+# SPDX-License-Identifier: BSD-3-Clause
 
 
 if ( LAME_INCLUDE_DIR AND LAME_LIBRARIES )

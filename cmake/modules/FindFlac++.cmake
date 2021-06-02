@@ -9,9 +9,7 @@
 # conditionally compile version-dependent code
 
 # SPDX-FileCopyrightText: 2008 Laurent Montel <montel@kde.org>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+# SPDX-License-Identifier: BSD-3-Clause
 
 if(FLAC++_INCLUDE_DIR AND FLAC++_LIBRARIES)
     # Already in cache, be silent

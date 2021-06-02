@@ -7,11 +7,7 @@
 #  SNDFILE_LIBRARIES - libsndfile libraries to link to
 #
 # SPDX-FileCopyrightText: 2008 Sebastian Trueg <trueg@kde.org>
-#
-# Redistribution and use is allowed according to the terms of the BSD license.
-# For details see the accompanying COPYING-CMAKE-SCRIPTS file.
-#
-
+# SPDX-License-Identifier: BSD-3-Clause
 
 if ( SNDFILE_INCLUDE_DIR AND SNDFILE_LIBRARIES )
    # in cache already
