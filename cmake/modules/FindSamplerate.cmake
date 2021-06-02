@@ -8,7 +8,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-# Copyright (c) 2007, Laurent Montel, <montel@kde.org>
+# SPDX-FileCopyrightText: 2007 Laurent Montel <montel@kde.org>
 
 if(SAMPLERATE_INCLUDE_DIR AND SAMPLERATE_LIBRARIES)
     # in cache already

@@ -1,16 +1,13 @@
 /*
- *
- * Copyright (C) 2003-2010 Sebastian Trueg <trueg@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2010 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+
+    SPDX-FileCopyrightText: 2003-2010 Sebastian Trueg <trueg@k3b.org>
+
+    This file is part of the K3b project.
+    SPDX-FileCopyrightText: 1998-2010 Sebastian Trueg <trueg@k3b.org>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+    See the file "COPYING" for the exact licensing terms.
+*/
 
 #include "k3bisooptions.h"
 #include "k3bcore.h"
@@ -26,7 +23,7 @@
 K3b::IsoOptions::IsoOptions()
     : m_defaultVolumeIDSet(false),
       m_volumeIDSet(false),
-      m_applicationID( QString("K3B THE CD KREATOR (C) 1998-2018 SEBASTIAN TRUEG, MICHAL MALEK AND LESLIE ZHAI") ),
+      m_applicationID( QString("K3B THE CD KREATOR SPDX-FileCopyrightText: 1998-2018 SEBASTIAN TRUEG MICHAL MALEK AND LESLIE ZHAI") ),
       m_systemId( K3b::systemName().toUpper() ),
       m_whiteSpaceTreatmentReplaceString( "_" )
 {

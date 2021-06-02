@@ -5,7 +5,7 @@
 #  MUSICBRAINZ_LIBRARIES - the required libraries
 #  MUSICBRAINZ_FOUND - true if both of the above have been found
 
-# Copyright (c) 2006,2007 Laurent Montel, <montel@kde.org>
+# SPDX-FileCopyrightText: 2006, 2007 Laurent Montel <montel@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.

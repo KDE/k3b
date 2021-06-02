@@ -1,22 +1,19 @@
 /* 
- *
- * Copyright (C) 2005-2008 Sebastian Trueg <trueg@k3b.org>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2007 Sebastian Trueg <trueg@k3b.org>
- *
- * Based on the effects in popupMessage.cpp 
- * Copyright (C) 2005 by Max Howell <max.howell@methylblue.com>
- *               2005 by Seb Ruiz <me@sebruiz.net>
- *
- * Dissolve Mask (c) Kicker Authors kickertip.cpp, 2005/08/17
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+
+    SPDX-FileCopyrightText: 2005-2008 Sebastian Trueg <trueg@k3b.org>
+
+    This file is part of the K3b project.
+    SPDX-FileCopyrightText: 1998-2007 Sebastian Trueg <trueg@k3b.org>
+
+    Based on the effects in popupMessage.cpp
+    SPDX-FileCopyrightText: 2005 Max Howell <max.howell@methylblue.com>
+    2005 by Seb Ruiz <me@sebruiz.net>
+
+    Dissolve Mask (c) Kicker Authors kickertip.cpp, 2005/08/17
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+    See the file "COPYING" for the exact licensing terms.
+*/
 
 #ifndef _K3B_WIDGET_SHOW_EFFECT_H_
 #define _K3B_WIDGET_SHOW_EFFECT_H_

@@ -1,18 +1,15 @@
 /*
- *
- * Copyright (C) 2005-2007 Sebastian Trueg <trueg@k3b.org>
- *           (C) 2009      Arthur Renato Mello <arthur@mandriva.com>
- *           (C) 2009      Michal Malek <michalm@jabster.pl>
- *
- * This file is part of the K3b project.
- * Copyright (C) 1998-2009 Sebastian Trueg <trueg@k3b.org>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * See the file "COPYING" for the exact licensing terms.
- */
+
+    SPDX-FileCopyrightText: 2005-2007 Sebastian Trueg <trueg@k3b.org>
+    SPDX-FileCopyrightText: 2009 Arthur Renato Mello <arthur@mandriva.com>
+    SPDX-FileCopyrightText: 2009 Michal Malek <michalm@jabster.pl>
+
+    This file is part of the K3b project.
+    SPDX-FileCopyrightText: 1998-2009 Sebastian Trueg <trueg@k3b.org>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+    See the file "COPYING" for the exact licensing terms.
+*/
 
 
 #ifndef _K3B_VIDEO_DVDVIEW_H_
