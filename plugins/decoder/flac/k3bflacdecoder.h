@@ -5,7 +5,6 @@
     SPDX-FileCopyrightText: 2003 John Steele Scott <toojays@toojays.net>
 
     SPDX-License-Identifier: GPL-2.0-or-later
-    See the file "COPYING" for the exact licensing terms.
 */
 
 

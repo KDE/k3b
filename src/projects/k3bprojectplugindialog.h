@@ -6,7 +6,6 @@
     SPDX-FileCopyrightText: 1998-2007 Sebastian Trueg <trueg@k3b.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later
-    See the file "COPYING" for the exact licensing terms.
 */
 
 #ifndef _K3B_PROJECTPLUGIN_DIALOG_H_

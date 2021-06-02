@@ -8,7 +8,6 @@
     SPDX-FileCopyrightText: 2009 Michal Malek <michalm@jabster.pl>
 
     SPDX-License-Identifier: GPL-2.0-or-later
-    See the file "COPYING" for the exact licensing terms.
 */
 
 #ifndef K3BEXTERNALBINPERMISSIONMODEL_H

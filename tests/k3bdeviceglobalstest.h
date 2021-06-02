@@ -4,7 +4,6 @@
     This file is part of the K3b project.
 
     SPDX-License-Identifier: GPL-2.0-or-later
-    See the file "COPYING" for the exact licensing terms.
 */
 
 #ifndef K3B_DEVICE_GLOBALS_TEST_H
