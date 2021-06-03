@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2009 Nokia Corporation and /or its subsidiary(-ies).
     Contact: Qt Software Information (qt-info@nokia.com)
 

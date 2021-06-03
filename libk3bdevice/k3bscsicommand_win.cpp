@@ -1,5 +1,4 @@
 /*
-
     k3bscsicommand_win32.cpp
     SPDX-FileCopyrightText: 2007 Jeremy C. Andrus <jeremy@jeremya.com>
     SPDX-FileCopyrightText: 2009 Ralf Habacker <ralf.habacker@freenet.de>

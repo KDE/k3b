@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2006 Mark Davies <mark@mcs.vuw.ac.nz>
 
     This file is part of the K3b project.

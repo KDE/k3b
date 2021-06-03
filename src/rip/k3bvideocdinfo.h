@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2003 Christian Kvasny <chris@k3b.org>
     SPDX-FileCopyrightText: 2010 Michal Malek <michalm@jabster.pl>
 

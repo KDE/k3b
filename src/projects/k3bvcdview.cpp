@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2003-2004 Christian Kvasny <chris@k3b.org>
     SPDX-FileCopyrightText: 2009 Arthur Renato Mello <arthur@mandriva.com>
     SPDX-FileCopyrightText: 2009-2010 Michal Malek <michalm@jabster.pl>

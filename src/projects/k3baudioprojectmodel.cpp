@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2008 Sebastian Trueg <trueg@k3b.org>
     SPDX-FileCopyrightText: 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
 
