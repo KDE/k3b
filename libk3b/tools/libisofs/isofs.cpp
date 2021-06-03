@@ -1,16 +1,7 @@
 /*
-    	isofs.c  -  libisofs implementation
-    -------------------
-    begin                : Oct 25 2002
-    SPDX-FileCopyrightText: 2002 Szombathelyi Gy �rgy
-    email                : gyurco@users.sourceforge.net
+    SPDX-License-Identifier: GPL-2.0-or-later
+    SPDX-FileCopyrightText: 2002 Szombathelyi Gy �rgy <gyurco@users.sourceforge.net>
 */
-
-/***************************************************************************
- *                                                                         *
- *   SPDX-License-Identifier: GPL-2.0-or-later
- *                                                                         *
- ***************************************************************************/
 
 #include <errno.h>
 #include <stdlib.h>
