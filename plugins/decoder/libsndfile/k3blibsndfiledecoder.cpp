@@ -1,6 +1,5 @@
 /*
 
-
     SPDX-FileCopyrightText: 2004 Matthieu Bedouet <mbedouet@no-log.org>
     SPDX-FileCopyrightText: 2003-2008 Sebastian Trueg <trueg@k3b.org>
 

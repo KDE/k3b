@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
     SPDX-FileCopyrightText: 2010-2011 Michal Malek <michalm@jabster.pl>
 

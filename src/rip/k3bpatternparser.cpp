@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2003-2009 Sebastian Trueg <trueg@k3b.org>
     SPDX-FileCopyrightText: 2004-2005 Jakob Petsovits <jpetso@gmx.at>
 

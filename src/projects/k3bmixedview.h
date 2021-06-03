@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2003-2007 Sebastian Trueg <trueg@k3b.org>
     SPDX-FileCopyrightText: 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
     SPDX-FileCopyrightText: 2009-2010 Michal Malek <michalm@jabster.pl>

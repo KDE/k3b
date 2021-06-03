@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2009-2011 Michal Malek <michalm@jabster.pl>
     SPDX-FileCopyrightText: 2010 Dario Freddi <drf@kde.org>
 

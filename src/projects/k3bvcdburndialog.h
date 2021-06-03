@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2003-2004 Christian Kvasny <chris@k3b.org>
     SPDX-FileCopyrightText: 2008 Sebastian Trueg <trueg@k3b.org>
 

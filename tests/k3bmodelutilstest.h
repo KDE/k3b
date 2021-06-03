@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2011 Michal Malek <michalm@jabster.pl>
 
     This file is part of the K3b project.

@@ -1,5 +1,4 @@
 /*
-
     SPDX-FileCopyrightText: 2005-2008 Sebastian Trueg <trueg@k3b.org>
     SPDX-FileCopyrightText: 2009 Michal Malek <michalm@jabster.pl>
 
