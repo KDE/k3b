@@ -7,7 +7,7 @@
 
     Based on the effects in popupMessage.cpp
     SPDX-FileCopyrightText: 2005 Max Howell <max.howell@methylblue.com>
-    2005 by Seb Ruiz <me@sebruiz.net>
+    SPDX-FileCopyrightText: 2005 Seb Ruiz <me@sebruiz.net>
 
     Dissolve Mask (c) Kicker Authors kickertip.cpp, 2005/08/17
 
