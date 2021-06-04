@@ -1,8 +1,6 @@
 /* 
     SPDX-FileCopyrightText: 2009 Gustavo Pichorim Boiko <gustavo.boiko@kdemail.net>
     SPDX-FileCopyrightText: 2011 Michal Malek <michalm@jabster.pl>
-
-    This file is part of the K3b project.
     SPDX-FileCopyrightText: 1998-2009 Sebastian Trueg <trueg@k3b.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later

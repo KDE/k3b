@@ -1,13 +1,9 @@
 /*
-    SPDX-FileCopyrightText: 2003-2008 Sebastian Trueg <trueg@k3b.org>
     SPDX-FileCopyrightText: 2010-2011 Michal Malek <michalm@jabster.pl>
-
-    This file is part of the K3b project.
-    SPDX-FileCopyrightText: 1998-2007 Sebastian Trueg <trueg@k3b.org>
+    SPDX-FileCopyrightText: 1998-2008 Sebastian Trueg <trueg@k3b.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
-
 
 #ifndef K3B_AUDIO_PROJECT_CONVERTING_JOB_H
 #define K3B_AUDIO_PROJECT_CONVERTING_JOB_H

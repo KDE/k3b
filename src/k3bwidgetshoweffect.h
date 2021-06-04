@@ -1,9 +1,5 @@
-/* 
-
-    SPDX-FileCopyrightText: 2005-2008 Sebastian Trueg <trueg@k3b.org>
-
-    This file is part of the K3b project.
-    SPDX-FileCopyrightText: 1998-2007 Sebastian Trueg <trueg@k3b.org>
+/*
+    SPDX-FileCopyrightText: 1998-2008 Sebastian Trueg <trueg@k3b.org>
 
     Based on the effects in popupMessage.cpp
     SPDX-FileCopyrightText: 2005 Max Howell <max.howell@methylblue.com>
