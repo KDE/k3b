@@ -40,7 +40,7 @@
 #include <KSharedConfig>
 #include <KLocalizedString>
 #include <KIO/StoredTransferJob>
-#include <KIO/CopyJob>
+#include <KIO/FileCopyJob>
 #include <KMessageBox>
 
 #include <QDebug>
@@ -622,7 +622,7 @@ bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
             }
         }
     }
-    KIO::CopyJob *copyJob = KIO::move(QUrl::fromLocalFile(tmpfile.fileName()), url);
+    KIO::FileCopyJob *copyJob = KIO::file_move(QUrl::fromLocalFile(tmpfile.fileName()), url, -1, KIO::Overwrite);
     copyJob->exec();
 
     return success;

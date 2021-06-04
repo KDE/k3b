@@ -1002,21 +1002,12 @@ bool K3b::MainWindow::fileSaveAs( K3b::Doc* doc )
             QUrl url = urls.front();
             KRecentDocument::add( url );
 
-            KIO::StatJob* statJob = KIO::stat(url, KIO::StatJob::DestinationSide, KIO::HideProgressInfo);
-            bool exists = statJob->exec();
-
-            if( !exists ||
-                KMessageBox::warningContinueCancel( this, i18n("Do you want to overwrite %1?", url.toDisplayString() ),
-                                                    i18n("File Exists"), KStandardGuiItem::overwrite() )
-                == KMessageBox::Continue ) {
-
-                if( k3bappcore->projectManager()->saveProject( doc, url ) ) {
-                    d->actionFileOpenRecent->addUrl(url);
-                    return true;
-                }
-                else {
-                    KMessageBox::error (this,i18n("Could not save the current document."), i18n("I/O Error"));
-                }
+            if( k3bappcore->projectManager()->saveProject( doc, url ) ) {
+                d->actionFileOpenRecent->addUrl(url);
+                return true;
+            }
+            else {
+                KMessageBox::error (this,i18n("Could not save the current document."), i18n("I/O Error"));
             }
         }
     }
