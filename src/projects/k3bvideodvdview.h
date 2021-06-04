@@ -2,8 +2,6 @@
     SPDX-FileCopyrightText: 2005-2007 Sebastian Trueg <trueg@k3b.org>
     SPDX-FileCopyrightText: 2009 Arthur Renato Mello <arthur@mandriva.com>
     SPDX-FileCopyrightText: 2009 Michal Malek <michalm@jabster.pl>
-
-    This file is part of the K3b project.
     SPDX-FileCopyrightText: 1998-2009 Sebastian Trueg <trueg@k3b.org>
 
     SPDX-License-Identifier: GPL-2.0-or-later
