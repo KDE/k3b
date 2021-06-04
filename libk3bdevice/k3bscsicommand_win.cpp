@@ -2,8 +2,6 @@
     k3bscsicommand_win32.cpp
     SPDX-FileCopyrightText: 2007 Jeremy C. Andrus <jeremy@jeremya.com>
     SPDX-FileCopyrightText: 2009 Ralf Habacker <ralf.habacker@freenet.de>
-
-    This file is part of the K3b project.
     SPDX-FileCopyrightText: 1998-2007 Sebastian Trueg <trueg@k3b.org>
 
     Parts of this file are inspired (and copied) from various source

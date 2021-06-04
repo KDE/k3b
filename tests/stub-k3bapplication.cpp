@@ -1,8 +1,5 @@
 /*
     SPDX-FileCopyrightText: 2017 Pino Toscano <pino@kde.org>
-
-    This file is part of the K3b project.
-
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
