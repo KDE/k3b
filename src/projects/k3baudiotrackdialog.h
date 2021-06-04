@@ -1,9 +1,5 @@
 /*
-    SPDX-FileCopyrightText: 2003-2009 Sebastian Trueg <trueg@k3b.org>
-
-    This file is part of the K3b project.
     SPDX-FileCopyrightText: 1998-2010 Sebastian Trueg <trueg@k3b.org>
-
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
