@@ -122,9 +122,6 @@
         "Name[x-test]": "xxK3b Libsndfile Decoderxx",
         "Name[zh_CN]": "K3b Libsndfile 解码器",
         "Name[zh_TW]": "K3b Libsndfile 解碼器",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "2.0"
     }
 }

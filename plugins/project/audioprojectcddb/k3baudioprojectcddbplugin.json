@@ -86,9 +86,6 @@
         "Name[x-test]": "xxK3b CDDB Audio Pluginxx",
         "Name[zh_CN]": "K3b CDDB 音频插件",
         "Name[zh_TW]": "K3b CDDB 音效外掛程式",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "0.2"
     }
 }

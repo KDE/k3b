@@ -123,9 +123,6 @@
         "Name[x-test]": "xxK3b FLAC Decoderxx",
         "Name[zh_CN]": "K3b FLAC 解码器",
         "Name[zh_TW]": "K3b FLAC 解碼器",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "3.0"
     }
 }

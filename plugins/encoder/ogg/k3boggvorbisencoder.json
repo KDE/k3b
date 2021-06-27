@@ -122,9 +122,6 @@
         "Name[x-test]": "xxK3b Ogg Vorbis Encoderxx",
         "Name[zh_CN]": "K3b Ogg Vorbis 编码器",
         "Name[zh_TW]": "K3b Ogg Vorbis 編碼器",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "3.0"
     }
 }

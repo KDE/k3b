@@ -121,9 +121,6 @@
         "Name[x-test]": "xxK3b ??? Decoderxx",
         "Name[zh_CN]": "K3b ??? 解码器",
         "Name[zh_TW]": "K3b ??? 解碼器",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "1.0"
     }
 }

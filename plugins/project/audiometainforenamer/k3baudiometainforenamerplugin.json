@@ -114,9 +114,6 @@
         "Name[x-test]": "xxK3b Audio Metainfo Renamerxx",
         "Name[zh_CN]": "K3b 音频元信息重命名器",
         "Name[zh_TW]": "K3b 音效中繼資訊重命名",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "1.1"
     }
 }

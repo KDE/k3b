@@ -120,9 +120,6 @@
         "Name[x-test]": "xxK3b ??? Encoderxx",
         "Name[zh_CN]": "K3b ??? 编码器",
         "Name[zh_TW]": "K3b ??? 編碼器",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "???"
     }
 }

@@ -106,9 +106,6 @@
         "Name[x-test]": "xxK3b FFMpeg Decoderxx",
         "Name[zh_CN]": "K3b FFMpeg 解码器",
         "Name[zh_TW]": "K3b FFMpeg 解碼器",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "4.0"
     }
 }

@@ -121,9 +121,6 @@
         "Name[x-test]": "xxK3b External Audio Encoderxx",
         "Name[zh_CN]": "K3b 扩展音频编码器",
         "Name[zh_TW]": "K3b 外部音效編碼器",
-        "ServiceTypes": [
-            "K3b/Plugin"
-        ],
         "Version": "5.0"
     }
 }
