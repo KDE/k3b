@@ -1,5 +1,7 @@
-kcoreaddons_add_plugin(k3bexternalencoder SOURCES k3bexternalencoder.cpp k3bexternalencodercommand.cpp INSTALL_NAMESPACE "k3b")
-kcoreaddons_desktop_to_json(k3bexternalencoder "k3bexternalencoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
+kcoreaddons_add_plugin(k3bexternalencoder
+    SOURCES k3bexternalencoder.cpp k3bexternalencodercommand.cpp
+    INSTALL_NAMESPACE "k3b"
+    JSON "k3bexternalencoder.json")
 
 target_link_libraries(k3bexternalencoder
     k3bdevice

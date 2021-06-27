@@ -1,5 +1,7 @@
-kcoreaddons_add_plugin(k3blameencoder SOURCES k3blameencoder.cpp INSTALL_NAMESPACE "k3b")
-kcoreaddons_desktop_to_json(k3blameencoder "k3blameencoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
+kcoreaddons_add_plugin(k3blameencoder
+    SOURCES k3blameencoder.cpp
+    INSTALL_NAMESPACE "k3b"
+    JSON "k3blameencoder.json")
 
 target_link_libraries(k3blameencoder
     k3bdevice

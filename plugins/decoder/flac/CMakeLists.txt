@@ -15,8 +15,10 @@ endif()
 
 configure_file(config-flac.h.cmake config-flac.h )
 
-kcoreaddons_add_plugin(k3bflacdecoder SOURCES k3bflacdecoder.cpp INSTALL_NAMESPACE "k3b")
-kcoreaddons_desktop_to_json(k3bflacdecoder "k3bflacdecoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
+kcoreaddons_add_plugin(k3bflacdecoder
+    SOURCES k3bflacdecoder.cpp
+    INSTALL_NAMESPACE "k3b"
+    JSON "k3bflacdecoder.json")
 
 target_include_directories(k3bflacdecoder PRIVATE ${FLAC++_INCLUDE_DIR} ${FLAC_INCLUDE_DIR})
 

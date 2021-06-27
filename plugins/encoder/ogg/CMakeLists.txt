@@ -1,5 +1,7 @@
-kcoreaddons_add_plugin(k3boggvorbisencoder SOURCES k3boggvorbisencoder.cpp INSTALL_NAMESPACE "k3b")
-kcoreaddons_desktop_to_json(k3boggvorbisencoder "k3boggvorbisencoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
+kcoreaddons_add_plugin(k3boggvorbisencoder
+    SOURCES k3boggvorbisencoder.cpp
+    INSTALL_NAMESPACE "k3b"
+    JSON "k3boggvorbisencoder.json")
 
 target_link_libraries(k3boggvorbisencoder
     k3bdevice

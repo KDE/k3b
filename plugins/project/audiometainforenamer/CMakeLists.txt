@@ -1,5 +1,7 @@
-kcoreaddons_add_plugin(k3baudiometainforenamerplugin SOURCES k3baudiometainforenamerplugin.cpp INSTALL_NAMESPACE "k3b")
-kcoreaddons_desktop_to_json(k3baudiometainforenamerplugin "k3baudiometainforenamerplugin.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
+kcoreaddons_add_plugin(k3baudiometainforenamerplugin
+    SOURCES k3baudiometainforenamerplugin.cpp
+    INSTALL_NAMESPACE "k3b"
+    JSON "k3baudiometainforenamerplugin.json")
 
 target_link_libraries(k3baudiometainforenamerplugin
     k3bdevice

@@ -1,5 +1,7 @@
-kcoreaddons_add_plugin(k3bmaddecoder SOURCES k3bmad.cpp k3bmaddecoder.cpp INSTALL_NAMESPACE "k3b")
-kcoreaddons_desktop_to_json(k3bmaddecoder "k3bmaddecoder.desktop" SERVICE_TYPES ${CMAKE_SOURCE_DIR}/libk3b/plugin/k3bplugin.desktop)
+kcoreaddons_add_plugin(k3bmaddecoder
+    SOURCES k3bmad.cpp k3bmaddecoder.cpp
+    INSTALL_NAMESPACE "k3b"
+    JSON "k3bmaddecoder.json")
 
 target_include_directories(k3bmaddecoder PRIVATE ${MAD_INCLUDE_DIR})
 
