@@ -3,7 +3,15 @@
         "Authors": [
             {
                 "Email": "trueg@k3b.org",
-                "Name": "Sebastian Trueg"
+                "Name": "Sebastian Trueg",
+                "Name[ca@valencia]": "Sebastian Trueg",
+                "Name[ca]": "Sebastian Trueg",
+                "Name[de]": "Sebastian Trueg",
+                "Name[nl]": "Sebastian Trueg",
+                "Name[pt]": "Sebastian Trueg",
+                "Name[sv]": "Sebastian Trueg",
+                "Name[uk]": "Sebastian Trueg",
+                "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
         "Category": "AudioEncoder",

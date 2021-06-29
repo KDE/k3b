@@ -3,7 +3,15 @@
         "Authors": [
             {
                 "Email": "toojays@toojays.net",
-                "Name": "John Steele Scott"
+                "Name": "John Steele Scott",
+                "Name[ca@valencia]": "John Steele Scott",
+                "Name[ca]": "John Steele Scott",
+                "Name[de]": "John Steele Scott",
+                "Name[nl]": "John Steele Scott",
+                "Name[pt]": "John Steele Scott",
+                "Name[sv]": "John Steele Scott",
+                "Name[uk]": "John Steele Scott",
+                "Name[x-test]": "xxJohn Steele Scottxx"
             }
         ],
         "Category": "AudioDecoder",

@@ -3,7 +3,15 @@
         "Authors": [
             {
                 "Email": "mbedouet@no-log.org",
-                "Name": "Matthieu Bedouet"
+                "Name": "Matthieu Bedouet",
+                "Name[ca@valencia]": "Matthieu Bedouet",
+                "Name[ca]": "Matthieu Bedouet",
+                "Name[de]": "Matthieu Bedouet",
+                "Name[nl]": "Matthieu Bedouet",
+                "Name[pt]": "Matthieu Bedouet",
+                "Name[sv]": "Matthieu Bedouet",
+                "Name[uk]": "Matthieu Bedouet",
+                "Name[x-test]": "xxMatthieu Bedouetxx"
             }
         ],
         "Category": "AudioDecoder",

@@ -3,7 +3,15 @@
         "Authors": [
             {
                 "Email": "???",
-                "Name": "???"
+                "Name": "???",
+                "Name[ca@valencia]": "???",
+                "Name[ca]": "???",
+                "Name[de]": "???",
+                "Name[nl]": "???",
+                "Name[pt]": "???",
+                "Name[sv]": "???",
+                "Name[uk]": "???",
+                "Name[x-test]": "xx???xx"
             }
         ],
         "Category": "AudioEncoder",
