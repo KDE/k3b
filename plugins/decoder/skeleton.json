@@ -21,7 +21,8 @@
                 "Name[sl]": "???",
                 "Name[sv]": "???",
                 "Name[uk]": "???",
-                "Name[x-test]": "xx???xx"
+                "Name[x-test]": "xx???xx",
+                "Name[zh_CN]": "？？？"
             }
         ],
         "Category": "AudioDecoder",
