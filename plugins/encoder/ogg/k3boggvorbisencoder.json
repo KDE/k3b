@@ -13,6 +13,7 @@
                 "Name[es]": "Sebastian Trueg",
                 "Name[eu]": "Sebastian Trueg",
                 "Name[fr]": "Sebastian Trueg",
+                "Name[ia]": "Sebastian Trueg",
                 "Name[it]": "Sebastian Trueg",
                 "Name[ko]": "Sebastian Trueg",
                 "Name[nl]": "Sebastian Trueg",
@@ -21,7 +22,8 @@
                 "Name[sl]": "Sebastian Trueg",
                 "Name[sv]": "Sebastian Trueg",
                 "Name[uk]": "Sebastian Trueg",
-                "Name[x-test]": "xxSebastian Truegxx"
+                "Name[x-test]": "xxSebastian Truegxx",
+                "Name[zh_CN]": "Sebastian Trueg"
             }
         ],
         "Category": "AudioEncoder",

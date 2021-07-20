@@ -13,6 +13,7 @@
                 "Name[es]": "John Steele Scott",
                 "Name[eu]": "John Steele Scott",
                 "Name[fr]": "John Steele Scott",
+                "Name[ia]": "John Steele Scott",
                 "Name[it]": "John Steele Scott",
                 "Name[ko]": "John Steele Scott",
                 "Name[nl]": "John Steele Scott",
@@ -21,7 +22,8 @@
                 "Name[sl]": "John Steele Scott",
                 "Name[sv]": "John Steele Scott",
                 "Name[uk]": "John Steele Scott",
-                "Name[x-test]": "xxJohn Steele Scottxx"
+                "Name[x-test]": "xxJohn Steele Scottxx",
+                "Name[zh_CN]": "John Steele Scott"
             }
         ],
         "Category": "AudioDecoder",

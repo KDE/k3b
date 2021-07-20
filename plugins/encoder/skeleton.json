@@ -13,6 +13,7 @@
                 "Name[es]": "???",
                 "Name[eu]": "???",
                 "Name[fr]": "???",
+                "Name[ia]": "???",
                 "Name[it]": "???",
                 "Name[ko]": "???",
                 "Name[nl]": "???",
@@ -21,7 +22,8 @@
                 "Name[sl]": "???",
                 "Name[sv]": "???",
                 "Name[uk]": "???",
-                "Name[x-test]": "xx???xx"
+                "Name[x-test]": "xx???xx",
+                "Name[zh_CN]": "？？？"
             }
         ],
         "Category": "AudioEncoder",
