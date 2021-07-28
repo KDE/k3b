@@ -1,7 +1,6 @@
 kcoreaddons_add_plugin(k3bexternalencoder
     SOURCES k3bexternalencoder.cpp k3bexternalencodercommand.cpp
-    INSTALL_NAMESPACE "k3b"
-    JSON "k3bexternalencoder.json")
+    INSTALL_NAMESPACE "k3b")
 
 target_link_libraries(k3bexternalencoder
     k3bdevice

@@ -1,7 +1,6 @@
 kcoreaddons_add_plugin(k3blibsndfiledecoder
     SOURCES k3blibsndfiledecoder.cpp
-    INSTALL_NAMESPACE "k3b"
-    JSON "k3blibsndfiledecoder.json")
+    INSTALL_NAMESPACE "k3b")
 
 target_include_directories(k3blibsndfiledecoder PRIVATE ${SNDFILE_INCLUDE_DIR})
 

@@ -1,7 +1,6 @@
 kcoreaddons_add_plugin(k3boggvorbisencoder
     SOURCES k3boggvorbisencoder.cpp
-    INSTALL_NAMESPACE "k3b"
-    JSON "k3boggvorbisencoder.json")
+    INSTALL_NAMESPACE "k3b")
 
 target_link_libraries(k3boggvorbisencoder
     k3bdevice

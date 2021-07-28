@@ -1,7 +1,6 @@
 kcoreaddons_add_plugin(k3blameencoder
     SOURCES k3blameencoder.cpp
-    INSTALL_NAMESPACE "k3b"
-    JSON "k3blameencoder.json")
+    INSTALL_NAMESPACE "k3b")
 
 target_link_libraries(k3blameencoder
     k3bdevice

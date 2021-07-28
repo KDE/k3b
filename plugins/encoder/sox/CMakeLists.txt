@@ -1,7 +1,6 @@
 kcoreaddons_add_plugin(k3bsoxencoder
     SOURCES k3bsoxencoder.cpp
-    INSTALL_NAMESPACE "k3b"
-    JSON "k3bsoxencoder.json")
+    INSTALL_NAMESPACE "k3b")
 
 target_link_libraries(k3bsoxencoder
     k3bdevice
