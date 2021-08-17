@@ -23,8 +23,9 @@
 
 #include <KLocalizedString>
 #include <KFileItemDelegate>
-#include <KRun>
 #include <KActionCollection>
+#include <KIO/JobUiDelegate>
+#include <KIO/OpenUrlJob>
 
 #include <QSortFilterProxyModel>
 #include <QAction>
@@ -284,16 +285,10 @@ void K3b::DataViewImpl::slotOpen()
 
     if( !item->isFile() ) {
         QUrl url = QUrl::fromLocalFile( item->localPath() );
-        if( !KRun::isExecutableFile( url,
-                                    item->mimeType().name() ) ) {
-            KRun::runUrl( url,
-                        item->mimeType().name(),
-                        m_view,
-                        KRun::RunFlags());
-        }
-        else {
-            KRun::displayOpenWithDialog( QList<QUrl>() << url, m_view );
-        }
+        auto *job = new KIO::OpenUrlJob( url, item->mimeType().name() );
+        job->setRunExecutables( false ); // this is the default, but let's make really sure :)
+        job->setUiDelegate( new KIO::JobUiDelegate( KJobUiDelegate::AutoHandlingEnabled, m_view ) );
+        job->start();
     }
 }
 
