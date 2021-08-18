@@ -14,7 +14,6 @@
 #include <KCModuleProxy>
 #include <KPluginInfo>
 #include <KService>
-#include <KServiceTypeTrader>
 #include <KPluginLoader>
 #include <KPluginMetaData>
 #include <KMessageBox>

@@ -8,8 +8,8 @@
 
 #include <KCModule>
 #include <KService>
-#include <KServiceTypeTrader>
 #include <KLocalizedString>
+#include <KPluginFactory>
 
 #include <QLabel>
 #include <QHBoxLayout>
@@ -22,20 +22,14 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
     layout->setContentsMargins( 0, 0, 0, 0 );
 
     m_cddbKcm = 0;
-    if ( KService::Ptr service = KService::serviceByStorageId( "libkcddb.desktop" ) )
-        m_cddbKcm = service->createInstance<KCModule>( this );
-    if (!m_cddbKcm) {
-        KService::List services = KServiceTypeTrader::self()->query( "KCModule", "[X-KDE-Library] == 'kcm_cddb'" );
-        if ( !services.isEmpty() ) {
-            m_cddbKcm = services.first()->createInstance<KCModule>( this );
-        }
-    }
 
-    if ( m_cddbKcm ) {
+    const auto result = KPluginFactory::instantiatePlugin<KCModule>(KPluginMetaData(QStringLiteral("kcm_cddb")), this);
+
+    if (result) {
+        m_cddbKcm = result.plugin;
         m_cddbKcm->layout()->setContentsMargins( 0, 0, 0, 0 );
         layout->addWidget( m_cddbKcm );
-    }
-    else {
+    } else {
         QLabel* label = new QLabel( i18n( "Unable to load KCDDB configuration module." ), this );
         label->setAlignment( Qt::AlignCenter );
         layout->addWidget( label );
