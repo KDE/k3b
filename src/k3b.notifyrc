@@ -548,7 +548,7 @@ Comment[sv]=K3b är upptagen och kan inte starta några andra åtgärder
 Comment[tr]=K3b şu an meşgul ve herhangi bir işlem başlatamıyor
 Comment[uk]=Зараз програма K3b виконує завдання, тому не може почати ніяку іншу дію
 Comment[x-test]=xxK3b is currently busy and cannot start any other operationsxx
-Comment[zh_CN]=K3b 正忙，无法启动其它操作
+Comment[zh_CN]=K3b 正忙，无法启动其他操作
 Comment[zh_TW]=K3b 正忙碌中，所以無法開始其他操作
 Action=Popup
 
