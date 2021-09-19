@@ -242,7 +242,7 @@
       <li xml:lang="tr">Bağlama duyarlı ortam eylemleri: Bir CD/DVD sürücüsünü temsil eden simgeye tıklarkenK3b, bunların içeriğini gösterir ve duruma göre daha fazla eyleme izin verir. Örneğin bu, ses CD'leri yazma yolu olabilir</li>
       <li xml:lang="uk">Дій, що відповідають контексту носія даних: після натискання піктограми пристрою для читання компакт-дисків та DVD K3b показує вміст носія та надає змогу вибрати подальші дії з носієм. За допомогою цих дій можна, наприклад, видобути цифрові дані зі звукового компакт-диска.</li>
       <li xml:lang="x-test">xxContext sensitive media actions: When clicking on the Icon representing a CD/DVD drive K3b will present its contents and allow some further action. This is for example the way to rip audio CDsxx</li>
-      <li xml:lang="zh-CN">上下文敏感的介质动作：当点击 CD/DVD 驱动器图标时，K3b 会呈现其内容并允许进一步的动作。例如，这可以用来翻录音频 CD</li>
+      <li xml:lang="zh-CN">上下文敏感的介质操作：当点击 CD/DVD 驱动器图标时，K3b 会呈现其内容并允许进一步的操作。例如，这可以用来翻录音频 CD</li>
       <li xml:lang="zh-TW">依內容而定的媒體動作：當在一個 CD/DVD 碟片圖示上點擊時，K3b 將會視其內容來決定可以執行哪些動作。其中一個例子是擷取音訊 CD。</li>
     </ul>
   </description>
