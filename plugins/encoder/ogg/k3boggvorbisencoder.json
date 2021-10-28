@@ -146,5 +146,6 @@
         "Name[zh_CN]": "K3b Ogg Vorbis 编码器",
         "Name[zh_TW]": "K3b Ogg Vorbis 編碼器",
         "Version": "3.0"
-    }
+    },
+    "X-KDE-ConfigModule": "k3b/kcms/kcm_k3boggvorbisencoder"
 }

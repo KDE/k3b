@@ -112,5 +112,6 @@
         "Name[zh_CN]": "K3b Lame MP3 编码器",
         "Name[zh_TW]": "K3b Lame MP3 編碼器",
         "Version": "5.0"
-    }
+    },
+    "X-KDE-ConfigModule": "k3b/kcms/kcm_k3blameencoder"
 }

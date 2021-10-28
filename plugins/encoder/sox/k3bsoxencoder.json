@@ -145,5 +145,6 @@
         "Name[zh_CN]": "K3b SoX 音频编码器",
         "Name[zh_TW]": "K3b SoX 音效編碼器",
         "Version": "3.0"
-    }
+    },
+    "X-KDE-ConfigModule": "k3b/kcms/kcm_k3bsoxencoder"
 }

@@ -13,7 +13,8 @@ ki18n_wrap_ui(ui_sources
     base_k3bexternalencodereditdialog.ui
 )
 
-add_library(kcm_k3bexternalencoder MODULE
+kcoreaddons_add_plugin(kcm_k3bexternalencoder INSTALL_NAMESPACE "k3b/kcms")
+target_sources(kcm_k3bexternalencoder PRIVATE
     k3bexternalencoderconfigwidget.cpp
     k3bexternalencodercommand.cpp
     ${ui_sources}
@@ -24,7 +25,3 @@ target_link_libraries(kcm_k3bexternalencoder
     k3blib
     KF5::I18n
 )
-
-install(TARGETS kcm_k3bexternalencoder DESTINATION ${PLUGIN_INSTALL_DIR})
-
-install(FILES kcm_k3bexternalencoder.desktop DESTINATION ${SERVICES_INSTALL_DIR})
