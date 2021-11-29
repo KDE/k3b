@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: None
+# SPDX-License-Identifier: CC0-1.0
+
+Dependencies:
+- 'on': ['@all']
+  'require':
+    'frameworks/extra-cmake-modules': '@stable'
+    'frameworks/karchive': '@stable'
+    'frameworks/kconfig': '@stable'
+    'frameworks/kcoreaddons': '@stable'
+    'frameworks/kdoctools': '@stable'
+    'frameworks/kfilemetadata': '@stable'
+    'frameworks/ki18n': '@stable'
+    'frameworks/kiconthemes': '@stable'
+    'frameworks/kjobwidgets': '@stable'
+    'frameworks/kcmutils': '@stable'
+    'frameworks/kio': '@stable'
+    'frameworks/knotifications': '@stable'
+    'frameworks/knewstuff': '@stable'
+    'frameworks/knotifyconfig': '@stable'
+    'frameworks/kservice': '@stable'
+    'frameworks/solid': '@stable'
+    'frameworks/kwidgetaddons': '@stable'
+    'frameworks/kxmlgui': '@stable'
+    'multimedia/libkcddb': '@same'
