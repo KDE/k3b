@@ -96,6 +96,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::defaultCommands()
 QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
+    c->reparseConfiguration();
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
     QList<K3bExternalEncoderCommand> commands;
@@ -136,6 +137,7 @@ QList<K3bExternalEncoderCommand> K3bExternalEncoderCommand::readCommands()
 void K3bExternalEncoderCommand::saveCommands( const QList<K3bExternalEncoderCommand>& cmds )
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
+    c->reparseConfiguration();
     c->deleteGroup( "K3bExternalEncoderPlugin" );
     KConfigGroup grp(c,"K3bExternalEncoderPlugin" );
 
