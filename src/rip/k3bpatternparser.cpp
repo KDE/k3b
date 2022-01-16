@@ -154,7 +154,11 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                     break;
                 case ALBUMARTIST:
                     s = entry.get( KCDDB::Artist ).toString();
-                    dir.append( s.isEmpty() ? i18n("unknown") : s );
+                    s.replace( '/', '_' );
+                    s.replace( '*', '_' );
+                    s.replace( '}', '*' );
+                    dir.append( s.isEmpty()
+                                ? i18n("unknown") : s );
                     break;
                 case ALBUMTITLE:
                     s = entry.get( KCDDB::Title ).toString();
