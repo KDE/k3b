@@ -110,9 +110,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                 switch( c ) {
                 case ARTIST:
                     s = entry.track( trackNumber-1 ).get( KCDDB::Artist ).toString();
-                    s.replace( '/', '_' );
-                    s.replace( '*', '_' );
-                    s.replace( '}', '*' );  // for conditional inclusion
+                    replaceControlCharacters( s );
                     dir.append( s.isEmpty()
                                 ? i18n("unknown") + QString(" %1").arg(trackNumber)
                                 : s );
@@ -123,9 +121,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
 #ifdef K3B_DEBUG
                     qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << s;
 #endif
-                    s.replace( '/', '_' );
-                    s.replace( '*', '_' );
-                    s.replace( '}', '*' );
+                    replaceControlCharacters( s );
                     dir.append( s.isEmpty()
                                 ? i18n("Track %1",trackNumber)
                                 : s );
@@ -138,41 +134,31 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                     break;
                 case COMMENT:
                     s = entry.track( trackNumber-1 ).get( KCDDB::Comment ).toString();
-                    s.replace( '/', '_' );
-                    s.replace( '*', '_' );
-                    s.replace( '}', '*' );
+                    replaceControlCharacters( s );
                     dir.append( s );
                     break;
                 case GENRE:
                     s = entry.get( KCDDB::Genre ).toString();
                     if ( s.isEmpty() )
                         s = entry.get( KCDDB::Category ).toString();
-                    s.replace( '/', '_' );
-                    s.replace( '*', '_' );
-                    s.replace( '}', '*' );
+                    replaceControlCharacters( s );
                     dir.append( s );
                     break;
                 case ALBUMARTIST:
                     s = entry.get( KCDDB::Artist ).toString();
-                    s.replace( '/', '_' );
-                    s.replace( '*', '_' );
-                    s.replace( '}', '*' );
+                    replaceControlCharacters( s );
                     dir.append( s.isEmpty()
                                 ? i18n("unknown") : s );
                     break;
                 case ALBUMTITLE:
                     s = entry.get( KCDDB::Title ).toString();
-                    s.replace( '/', '_' );
-                    s.replace( '*', '_' );
-                    s.replace( '}', '*' );
+                    replaceControlCharacters( s );
                     dir.append( s.isEmpty()
                                 ? i18n("unknown") : s );
                     break;
                 case ALBUMCOMMENT:
                     s = entry.get( KCDDB::Comment ).toString();
-                    s.replace( '/', '_' );
-                    s.replace( '*', '_' );
-                    s.replace( '}', '*' );
+                    replaceControlCharacters( s );
                     dir.append( s ); // I think it makes more sense to allow empty comments
                     break;
                 case DATE:
@@ -322,4 +308,11 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
         dir.append( '.' + extension );
 
     return dir;
+}
+
+void K3b::replaceControlCharacters( QString& s )
+{
+    s.replace( '/', '_' );
+    s.replace( '*', '_' );
+    s.replace( '}', '*' );  // for conditional inclusion
 }
