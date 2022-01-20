@@ -21,11 +21,9 @@ What you need to run K3b:
   - the eMovix package
   - TagLib by Scott Wheeler for reading Meta data tags
   - the musepack (or now mpcdec) library for decoding Musepack audio files
-  - the ffmpeg library to decode other audio file formats such as wma
   - the sndfile library to decode audio file formats such as AIFF or VOC
   - the lame library to encode audio files in the mp3 format
   - sox to encode audio files in formats such as AIFF or VOC
-  - a dynamically compiled libffmpeg for wma decoding
   - the musicbrainz library for metadata queries for single audio titles
   - polkit-qt for K3bSetup (tool for changing permissions of programs and devices)
 
