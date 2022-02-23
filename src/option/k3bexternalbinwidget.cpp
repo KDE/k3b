@@ -12,7 +12,13 @@
 #include "k3bexternalbinpermissionmodel.h"
 #include "config-k3b.h"
 
+#include <kauth_version.h>
+#if KAUTH_VERSION >= QT_VERSION_CHECK(5, 92, 0)
+#include <KAuth/Action>
+#include <KAuth/ExecuteJob>
+#else
 #include <KAuth>
+#endif
 #include <KLocalizedString>
 #include <KMessageBox>
 #include <KEditListWidget>
