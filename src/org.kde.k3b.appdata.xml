@@ -58,7 +58,7 @@
   <summary xml:lang="gl">Gravación de disco</summary>
   <summary xml:lang="hu">Lemezíró</summary>
   <summary xml:lang="ia">Gravator de disco</summary>
-  <summary xml:lang="id">Burning Disk</summary>
+  <summary xml:lang="id">Disk Burning</summary>
   <summary xml:lang="it">Masterizzazione su disco</summary>
   <summary xml:lang="ko">디스크 쓰기</summary>
   <summary xml:lang="nl">Schijven branden</summary>
@@ -228,7 +228,7 @@
       <li xml:lang="gl">Accións de recursos segundo o contexto. Ao premer a icona de unidade de CD/DVD, K3b presenta o seu contido e permite realizar accións. Por exemplo, así é como se extraen datos de CD de son.</li>
       <li xml:lang="hu">Környezetérzékeny médiaműveletek: a CD/DVD meghajtót ábrázoló ikonra kattintáskor a K3b meg fogja jeleníteni azok tartalmát, és néhány további műveletet engedélyez. Például ez a módja hang CD beolvasásának</li>
       <li xml:lang="ia">Actiones de multimedia sensibile al contexto: Quando on pulsa sur le icone representante un drive de CD/DVD KDE monstrara su contentos e permittera ulterior actiones. Isto es pro exemplo le modo de rippar CDs audio.  </li>
-      <li xml:lang="id">Aksi media bersensitif konteks: Ketika mengeklik pada Ikon misal sebuah CD/DVD drive K3b akan menampilkan isinya dan memungkinkan beberapa aksi selanjutnya. Ini adalah contoh bagaimana caranya untuk merabit audio CD</li>
+      <li xml:lang="id">Context sensitive media actions: Ketika mengeklik pada Ikon misal sebuah CD/DVD drive K3b akan menampilkan isinya dan memungkinkan beberapa aksi selanjutnya. Ini adalah contoh bagaimana caranya untuk merabit audio CD</li>
       <li xml:lang="it">Azioni sensibili al contesto: quando si fa clic sull'icona che rappresenta un lettore CD/DVD, K3b presenterà il suo contenuto e consentirà alcune azioni ulteriori. Questo è, ad esempio, il modo di estrarre i CD audio</li>
       <li xml:lang="ko">미디어 종류에 따른 동작: CD/DVD 드라이브 아이콘을 누르면 내용과 사용 가능한 동작을 표시합니다. 예를 들어 오디오 CD를 삽입한 경우 음악을 추출할 수 있습니다</li>
       <li xml:lang="nl">Context gevoelige mediumacties: bij klikken op het pictogram voor een cd/dvd-apparaat zal K3b zijn inhoud weergeven en enige verdere acties. Dit is bijvoorbeeld de manier om audio-cd's te rippen</li>
