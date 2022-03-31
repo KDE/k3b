@@ -59,7 +59,7 @@ include(ECMEnableSanitizers)
 include(ECMSetupQtPluginMacroNames)
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
+find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
                                      KCMUtils KIO Notifications NewStuff NotifyConfig Service Solid WidgetsAddons XmlGui)
 
 find_package(Qt5WebKitWidgets)
