@@ -159,7 +159,7 @@ if(K3B_BUILD_MUSE_DECODER_PLUGIN)
         URL "https://www.musepack.net/"
         TYPE OPTIONAL)
 
-    set(BUILD_MUSE_DECODER_PLUGIN "${MUSE_FOUND}")
+    set(BUILD_MUSE_DECODER_PLUGIN "${Muse_FOUND}")
 endif()
 
 if(K3B_BUILD_SNDFILE_DECODER_PLUGIN)

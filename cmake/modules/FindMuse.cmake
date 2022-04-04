@@ -41,7 +41,7 @@ else( MUSE_INCLUDE_DIR AND MUSE_LIBRARIES )
 endif( MUSE_INCLUDE_DIR AND MUSE_LIBRARIES )
 
 include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(MUSE DEFAULT_MSG MUSE_INCLUDE_DIR MUSE_LIBRARIES MPC_HEADER_FILE )
+find_package_handle_standard_args(Muse DEFAULT_MSG MUSE_INCLUDE_DIR MUSE_LIBRARIES MPC_HEADER_FILE )
 
 # show the MUSE_INCLUDE_DIR and MUSE_LIBRARIES variables only in the advanced view
 mark_as_advanced(MUSE_INCLUDE_DIR MUSE_LIBRARIES )
