@@ -225,6 +225,7 @@ target_link_libraries(k3b
     k3blib
     KF5::Cddb
     KF5::Archive
+    KF5::Auth
     KF5::I18n
     KF5::IconThemes
     KF5::JobWidgets
