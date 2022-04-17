@@ -3,7 +3,7 @@ configure_file(k3bmpc_config.h.cmake k3bmpc_config.h)
 
 kcoreaddons_add_plugin(k3bmpcdecoder
     SOURCES k3bmpcdecoder.cpp k3bmpcwrapper.cpp
-    INSTALL_NAMESPACE "k3b")
+    INSTALL_NAMESPACE "k3b_plugins")
 
 target_include_directories(k3bmpcdecoder PRIVATE ${MUSE_INCLUDE_DIR})
 

@@ -17,7 +17,7 @@ configure_file(config-flac.h.cmake config-flac.h )
 
 kcoreaddons_add_plugin(k3bflacdecoder
     SOURCES k3bflacdecoder.cpp
-    INSTALL_NAMESPACE "k3b")
+    INSTALL_NAMESPACE "k3b_plugins")
 
 target_include_directories(k3bflacdecoder PRIVATE ${FLAC++_INCLUDE_DIR} ${FLAC_INCLUDE_DIR})
 

@@ -149,5 +149,5 @@
         "Name[zh_TW]": "K3b 外部音效編碼器",
         "Version": "5.0"
     },
-    "X-KDE-ConfigModule": "k3b/kcms/kcm_k3bexternalencoder"
+    "X-KDE-ConfigModule": "k3b_plugins/kcms/kcm_k3bexternalencoder"
 }

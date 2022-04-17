@@ -1,6 +1,6 @@
 kcoreaddons_add_plugin(k3bmaddecoder
     SOURCES k3bmad.cpp k3bmaddecoder.cpp
-    INSTALL_NAMESPACE "k3b")
+    INSTALL_NAMESPACE "k3b_plugins")
 
 target_include_directories(k3bmaddecoder PRIVATE ${MAD_INCLUDE_DIR})
 
