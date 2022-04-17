@@ -88,7 +88,7 @@
     <p xml:lang="ar">صُنع «كي٣بي» ليكون تطبيق حرق أقراص غنيّ بمزاياه وسهل التّعامل. يتكوّن التّطبيق من ثلاثة أجزاء:</p>
     <p xml:lang="bs">K3b je stvoren da bude aplikacija za prženje CD-ova bogata funkcijama i jednostavna za rukovanje. Sastoji se od tri dela u osnovi:</p>
     <p xml:lang="ca">El K3b es va crear per a ser una aplicació de gravació de CD plena de funcionalitats i fàcil de fer servir. Bàsicament, consisteix en tres parts:</p>
-    <p xml:lang="ca-valencia">K3b es va crear per a ser una aplicació de gravació de CD plena de funcionalitats i fàcil de fer servir. Bàsicament, consisteix en tres parts:</p>
+    <p xml:lang="ca-valencia">K3b es va crear per a ser una aplicació de gravació de CD plena de funcionalitats i fàcil d'utilitzar. Bàsicament, consisteix en tres parts:</p>
     <p xml:lang="cs">K3b bylo vytvořeno jako aplikace se spoustou vlastností a zároveň jednoduchá na používání. Skládá se v podstatě ze tří částí:</p>
     <p xml:lang="da">K3b blev skabt til at være et funktionsrigt og brugervenligt cd-brænderprogram. Det består grundlæggende af tre dele:</p>
     <p xml:lang="de">K3b wurde als CD-Brennprogramm mit vielen Funktionen und einfacher Bedienung entwickelt. Es besteht im wesentlichen aus drei Teilen:</p>
@@ -230,7 +230,7 @@
       <li xml:lang="ia">Actiones de multimedia sensibile al contexto: Quando on pulsa sur le icone representante un drive de CD/DVD KDE monstrara su contentos e permittera ulterior actiones. Isto es pro exemplo le modo de rippar CDs audio.  </li>
       <li xml:lang="id">Context sensitive media actions: Ketika mengeklik pada Ikon misal sebuah CD/DVD drive K3b akan menampilkan isinya dan memungkinkan beberapa aksi selanjutnya. Ini adalah contoh bagaimana caranya untuk merabit audio CD</li>
       <li xml:lang="it">Azioni sensibili al contesto: quando si fa clic sull'icona che rappresenta un lettore CD/DVD, K3b presenterà il suo contenuto e consentirà alcune azioni ulteriori. Questo è, ad esempio, il modo di estrarre i CD audio</li>
-      <li xml:lang="ko">미디어 종류에 따른 동작: CD/DVD 드라이브 아이콘을 누르면 내용과 사용 가능한 동작을 표시합니다. 예를 들어 오디오 CD를 삽입한 경우 음악을 추출할 수 있습니다</li>
+      <li xml:lang="ko">미디어 종류에 따른 동작: CD/DVD 드라이브 아이콘을 클릭하면 내용과 사용 가능한 동작을 표시합니다. 예를 들어 오디오 CD를 삽입한 경우 음악을 추출할 수 있습니다</li>
       <li xml:lang="nl">Context gevoelige mediumacties: bij klikken op het pictogram voor een cd/dvd-apparaat zal K3b zijn inhoud weergeven en enige verdere acties. Dit is bijvoorbeeld de manier om audio-cd's te rippen</li>
       <li xml:lang="nn">Situasjonsavhengige mediehandlingar: Når du trykkjer på eit ikon for ein CD-/DVD-stasjon vil K3b visa innhaldet der og tilby ulike handlingar. Du kan for eksempel henta ut lyden frå lyd-CD-ar.</li>
       <li xml:lang="pl">Działania wrażliwe na stosowany nośnik: Przy naciśnięciu na ikonę przedstawiającą napęd CD/DVD K3b przedstawi jej zawartość i umożliwi podjęcie dalszych działań. Jest to na przykład sposób na zgranie płyt CD z muzyką</li>
