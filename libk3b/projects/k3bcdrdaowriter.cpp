@@ -504,7 +504,7 @@ void K3b::CdrdaoWriter::start()
 
     qDebug() << "***** cdrdao parameters:\n";
     QString s = m_process->joinedArgs();
-    qDebug() << s << flush;
+    qDebug() << s << Qt::flush;
     emit debuggingOutput("cdrdao command:", s);
 
     m_currentTrack = 0;

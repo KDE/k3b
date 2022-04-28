@@ -156,14 +156,14 @@ QString K3b::Device::ScsiCommand::senseKeyToString( int key )
 
 void K3b::Device::ScsiCommand::debugError( int command, int errorCode, int senseKey, int asc, int ascq ) {
     if( m_printErrors ) {
-        qDebug() << "(K3b::Device::ScsiCommand) failed: " << endl
+        qDebug() << "(K3b::Device::ScsiCommand) failed: " << Qt::endl
                  << "                           command:    " << QString("%1 (%2)")
             .arg( K3b::Device::commandString( command ) )
-            .arg( QString::number(command, 16) ) << endl
-                 << "                           errorcode:  " << QString::number(errorCode, 16) << endl
-                 << "                           sense key:  " << senseKeyToString(senseKey) << endl
-                 << "                           asc:        " << QString::number(asc, 16) << endl
-                 << "                           ascq:       " << QString::number(ascq, 16) << endl;
+            .arg( QString::number(command, 16) ) << Qt::endl
+                 << "                           errorcode:  " << QString::number(errorCode, 16) << Qt::endl
+                 << "                           sense key:  " << senseKeyToString(senseKey) << Qt::endl
+                 << "                           asc:        " << QString::number(asc, 16) << Qt::endl
+                 << "                           ascq:       " << QString::number(ascq, 16) << Qt::endl;
     }
 }
 

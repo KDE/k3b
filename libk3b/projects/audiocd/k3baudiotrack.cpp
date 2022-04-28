@@ -530,7 +530,7 @@ void K3b::AudioTrack::merge( K3b::AudioTrack* trackToMerge, K3b::AudioDataSource
     while( trackToMerge->firstSource() ) {
         K3b::AudioDataSource* s = trackToMerge->firstSource();
         qDebug() << "(K3b::AudioTrack::merge) merging source " << s << " from track " << s->track() << " into track "
-                 << this << " after source " << sourceAfter << endl;
+                 << this << " after source " << sourceAfter << Qt::endl;
         s->moveAfter( sourceAfter );
         sourceAfter = s;
     }
@@ -712,10 +712,10 @@ K3b::Device::Track K3b::AudioTrack::toCdTrack() const
 
 void K3b::AudioTrack::debug()
 {
-    qDebug() << "Track " << this << endl
-             << "  Prev: " << d->prev << endl
-             << "  Next: " << d->next << endl
-             << "  Sources:" << endl;
+    qDebug() << "Track " << this << Qt::endl
+             << "  Prev: " << d->prev << Qt::endl
+             << "  Next: " << d->next << Qt::endl
+             << "  Sources:" << Qt::endl;
     K3b::AudioDataSource* s = d->firstSource;
     while( s ) {
         qDebug() << "  " << s << " - Prev: " << s->prev() << " Next: " << s->next();

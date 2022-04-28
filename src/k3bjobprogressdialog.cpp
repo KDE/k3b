@@ -600,7 +600,7 @@ int K3b::JobProgressDialog::startJob( K3b::Job* job )
         new JobInterface( job );
     }
     else if( !m_job ) {
-        qCritical() << "(K3b::JobProgressDialog) null job!" << endl;
+        qCritical() << "(K3b::JobProgressDialog) null job!" << Qt::endl;
         return -1;
     }
 

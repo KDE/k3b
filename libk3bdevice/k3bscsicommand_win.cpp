@@ -60,7 +60,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
     m_device->open( dir == TR_DIR_WRITE );
 
     if( !m_device->isOpen() ) {
-        qDebug() << "(K3bScsiCommand::transport) could not perform Win32 IOCTL on invalid handle value" << endl;
+        qDebug() << "(K3bScsiCommand::transport) could not perform Win32 IOCTL on invalid handle value" << Qt::endl;
         return -1;
     }
 
@@ -89,7 +89,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
 
     // get the sense data on error
     if ( !status ) {
-        qDebug() << "(K3bScsiCommand::transport) ioctl failed: " << GetLastError() << ", returned=" << returned << endl;
+        qDebug() << "(K3bScsiCommand::transport) ioctl failed: " << GetLastError() << ", returned=" << returned << Qt::endl;
         ::memcpy( &(d->m_senseData), d->m_cmd.ucSenseBuf, SENSE_LEN_SPTI );
 
         debugError( d->m_cmd.spt.Cdb[0],

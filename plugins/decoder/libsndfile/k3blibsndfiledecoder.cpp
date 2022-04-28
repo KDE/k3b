@@ -98,7 +98,7 @@ bool K3bLibsndfileDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerat
         // check length of track
         if ( d->sndinfo.frames <= 0 ) {
             qDebug() << "(K3bLibsndfileDecoder::analyseFileInternal) Could not determine length of file "
-                     << filename() << endl;
+                     << filename() << Qt::endl;
             cleanup();
             return false;
         }

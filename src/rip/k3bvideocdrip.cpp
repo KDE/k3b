@@ -154,7 +154,7 @@ void K3b::VideoCdRip::vcdxRip()
     QStringList args = m_process->program();
     args.removeFirst();
     QString s = args.join(" ");
-    qDebug() << s << flush;
+    qDebug() << s << Qt::flush;
     emit debuggingOutput( "vcdxrip command:", s );
 
     emit newTask( i18n( "Extracting" ) );
@@ -211,7 +211,7 @@ void K3b::VideoCdRip::slotParseVcdXRipOutput()
                     m_bytesFinished = pos;
 
                     qDebug() << "(slotParseVcdXRipOutput) overall: " << ((long)overallPos  * 2352)
-			      << ", videocdsize: " << m_videooptions->getVideoCdSize() << endl;
+			      << ", videocdsize: " << m_videooptions->getVideoCdSize() << Qt::endl;
                     double relOverallWritten = ( ( double ) overallPos  * 2352 ) / ( double ) m_videooptions ->getVideoCdSize() ;
                     int newpercent =  ( int ) ( 100 * relOverallWritten );
                     if ( newpercent > m_oldpercent ) {

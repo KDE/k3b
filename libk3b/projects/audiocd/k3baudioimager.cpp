@@ -139,7 +139,7 @@ bool K3b::AudioImager::run()
         if( read < 0 ) {
             emit infoMessage( i18n("Error while decoding track %1.", track->trackNumber()), K3b::Job::MessageError );
             qDebug() << "(K3b::AudioImager::WorkThread) read error on track " << track->trackNumber()
-                     << " at pos " << K3b::Msf(trackRead/2352) << endl;
+                     << " at pos " << K3b::Msf(trackRead/2352) << Qt::endl;
             d->lastError = K3b::AudioImager::ERROR_DECODING_TRACK;
             return false;
         }

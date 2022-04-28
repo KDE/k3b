@@ -217,7 +217,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
 
         qDebug() << "***** sox parameters:";
         QString s = d->process->joinedArgs();
-        qDebug() << s << flush;
+        qDebug() << s << Qt::flush;
 
         return d->process->start( KProcess::MergedChannels );
     }

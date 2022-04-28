@@ -58,7 +58,7 @@ bool K3bOggVorbisDecoder::openOggVorbisFile()
         }
         else if( ov_open( file, &d->oggVorbisFile, 0, 0 ) ) {
             qDebug() << "(K3bOggVorbisDecoder) " << filename()
-                     << " seems not to to be an ogg vorbis file." << endl;
+                     << " seems not to to be an ogg vorbis file." << Qt::endl;
             fclose( file );
             return false;
         }

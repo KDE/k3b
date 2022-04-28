@@ -166,7 +166,7 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
 
 
         qDebug() << "***** external parameters:";
-        qDebug() << params.join( " " ) << flush;
+        qDebug() << params.join( " " ) << Qt::flush;
 
         // set one general error message
         setLastError( i18n("Command failed: %1", params.join( " " ) ) );

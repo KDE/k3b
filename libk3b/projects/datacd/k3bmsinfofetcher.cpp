@@ -99,7 +99,7 @@ void K3b::MsInfoFetcher::getMsInfo()
         QStringList args = m_process->program();
         args.removeFirst();
         QString s = args.join(" ");
-        qDebug() << s << flush;
+        qDebug() << s << Qt::flush;
         emit debuggingOutput( "msinfo command:", s );
 
 

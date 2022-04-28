@@ -412,7 +412,7 @@ void K3b::CdrskinWriter::start()
 
     qDebug() << "***** " << d->cdrskinBinObject->name() << " parameters:\n";
     QString s = d->process.joinedArgs();
-    qDebug() << s << flush;
+    qDebug() << s << Qt::flush;
     emit debuggingOutput( d->cdrskinBinObject->name() + " command:", s);
 
     d->currentTrack = 0;
@@ -552,7 +552,7 @@ void K3b::CdrskinWriter::slotStdLine( const QString& line )
                 size = d->tracks[d->currentTrack-1].size;
             }
             else {
-                qCritical() << "(K3b::CdrskinWriter) Did not parse all tracks sizes!" << endl;
+                qCritical() << "(K3b::CdrskinWriter) Did not parse all tracks sizes!" << Qt::endl;
             }
 
             if( !d->writingStarted ) {

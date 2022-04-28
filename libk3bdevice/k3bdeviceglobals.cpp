@@ -255,11 +255,11 @@ int K3b::Device::determineMaxReadingBufferSize( K3b::Device::Device* dev, const 
     unsigned char buffer[2048*128];
     while( !dev->read10( buffer, 2048*bufferSizeSectors, firstSector.lba(), bufferSizeSectors ) ) {
         qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
-                 << bufferSizeSectors << " too high." << endl;
+                 << bufferSizeSectors << " too high." << Qt::endl;
         bufferSizeSectors--;
     }
     qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
-             << bufferSizeSectors << " is max." << endl;
+             << bufferSizeSectors << " is max." << Qt::endl;
 
     return bufferSizeSectors;
 }

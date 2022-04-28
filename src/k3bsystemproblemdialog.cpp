@@ -602,9 +602,9 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
             qDebug() << " WARNING";
             break;
         }
-        qDebug() << " PROBLEM:  " << p.problem << endl
-                 << " DETAILS:  " << p.details << endl
-                 << " SOLUTION: " << p.solution << endl << endl;
+        qDebug() << " PROBLEM:  " << p.problem << Qt::endl
+                 << " DETAILS:  " << p.details << Qt::endl
+                 << " SOLUTION: " << p.solution << Qt::endl << Qt::endl;
 
     }
     if( problems.isEmpty() ) {

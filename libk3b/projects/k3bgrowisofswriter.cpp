@@ -325,7 +325,7 @@ void K3b::GrowisofsWriter::start()
 
         qDebug() << "***** " << d->growisofsBin->name() << " parameters:\n";
         QString s = d->process.joinedArgs();
-        qDebug() << s << flush;
+        qDebug() << s << Qt::flush;
         emit debuggingOutput( d->growisofsBin->name() + " command:", s);
 
 
@@ -463,7 +463,7 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
                 }
                 else
                     qDebug() << "(K3b::GrowisofsWriter) speed parsing failed: '"
-                             << line.mid( pos, line.indexOf( 'x', pos ) - pos ) << "'" << endl;
+                             << line.mid( pos, line.indexOf( 'x', pos ) - pos ) << "'" << Qt::endl;
             }
             else {
                 d->speedEst->dataWritten( done/1024 );
@@ -471,7 +471,7 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
         }
         else
             qDebug() << "(K3b::GrowisofsWriter) progress parsing failed: '"
-                     << line.mid( pos+1, line.indexOf( '(', pos ) - pos - 1 ).trimmed() << "'" << endl;
+                     << line.mid( pos+1, line.indexOf( '(', pos ) - pos - 1 ).trimmed() << "'" << Qt::endl;
     }
 
     //  else

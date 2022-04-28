@@ -147,7 +147,7 @@ bool K3bMpcWrapper::open( const QString& filename )
 	mpc_demux_get_info( m_decoder, m_info );
 #endif
 	qDebug() << "(K3bMpcWrapper) valid musepack file. " 
-		  << channels() << " Channels and Samplerate: " << samplerate() << endl;
+		  << channels() << " Channels and Samplerate: " << samplerate() << Qt::endl;
 	return true;
       }
 #ifdef MPC_OLD_API

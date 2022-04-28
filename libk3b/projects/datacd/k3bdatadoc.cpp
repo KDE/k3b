@@ -619,7 +619,7 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
                 newDirItem = static_cast<K3b::DirItem*>(item);
             }
             else {
-                qCritical() << "(K3b::DataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << endl;
+                qCritical() << "(K3b::DataDoc) INVALID DOCUMENT: item " << item->k3bPath() << " saved twice" << Qt::endl;
                 return false;
             }
         }

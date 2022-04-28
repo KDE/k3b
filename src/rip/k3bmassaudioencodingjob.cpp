@@ -406,7 +406,7 @@ bool MassAudioEncodingJob::writePlaylist()
         QTextStream t( &f );
 
         // format descriptor
-        t << "#EXTM3U" << endl;
+        t << "#EXTM3U" << Qt::endl;
 
         // Get list of the ripped filenames sorted by track number
         QStringList filenames = d->tracks.keys();
@@ -433,17 +433,17 @@ bool MassAudioEncodingJob::writePlaylist()
             }
 
             if( !artist.toString().isEmpty() && !title.toString().isEmpty() ) {
-                t << artist.toString() << " - " << title.toString() << endl;
+                t << artist.toString() << " - " << title.toString() << Qt::endl;
             }
             else {
-                t << QFileInfo( trackFile ).baseName() << endl;
+                t << QFileInfo( trackFile ).baseName() << Qt::endl;
             }
 
             // filename
             if( d->relativePathInPlaylist )
-                t << playlistDir.relativeFilePath( trackFile ) << endl;
+                t << playlistDir.relativeFilePath( trackFile ) << Qt::endl;
             else
-                t << trackFile << endl;
+                t << trackFile << Qt::endl;
         }
 
         return ( t.status() == QTextStream::Ok );

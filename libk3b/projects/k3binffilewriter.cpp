@@ -50,32 +50,32 @@ bool K3b::InfFileWriter::save( QTextStream& s )
     // ----------------------
     // header
     s << "# Cdrecord-Inf-File written by K3b " << k3bcore->version()
-      << ", " << QDateTime::currentDateTime().toString() << endl
-      << "#" << endl;
+      << ", " << QDateTime::currentDateTime().toString() << Qt::endl
+      << "#" << Qt::endl;
 
-    s << "ISRC=\t\t" << m_isrc << endl;
-    s << "MCN=\t\t" << m_mcn << endl;
+    s << "ISRC=\t\t" << m_isrc << Qt::endl;
+    s << "MCN=\t\t" << m_mcn << Qt::endl;
 
     // CD-Text
-    s << "Albumperformer=\t" << "'" << m_albumPerformer << "'" << endl;
-    s << "Albumtitle=\t" << "'" << m_albumTitle << "'" << endl;
+    s << "Albumperformer=\t" << "'" << m_albumPerformer << "'" << Qt::endl;
+    s << "Albumtitle=\t" << "'" << m_albumTitle << "'" << Qt::endl;
 
-    s << "Performer=\t" << "'" << m_trackPerformer << "'" << endl;
-    s << "Songwriter=\t" << "'" << m_trackSongwriter << "'" << endl;
-    s << "Composer=\t" << "'" << m_trackComposer << "'" << endl;
-    s << "Arranger=\t" << "'" << m_trackArranger << "'" << endl;
-    s << "Message=\t" << "'" << m_trackMessage << "'" << endl;
+    s << "Performer=\t" << "'" << m_trackPerformer << "'" << Qt::endl;
+    s << "Songwriter=\t" << "'" << m_trackSongwriter << "'" << Qt::endl;
+    s << "Composer=\t" << "'" << m_trackComposer << "'" << Qt::endl;
+    s << "Arranger=\t" << "'" << m_trackArranger << "'" << Qt::endl;
+    s << "Message=\t" << "'" << m_trackMessage << "'" << Qt::endl;
 
-    s << "Tracktitle=\t" << "'" << m_trackTitle << "'" << endl;
+    s << "Tracktitle=\t" << "'" << m_trackTitle << "'" << Qt::endl;
 
-    s << "Tracknumber=\t" << m_trackNumber << endl;
+    s << "Tracknumber=\t" << m_trackNumber << Qt::endl;
 
     // track start
-    s << "Trackstart=\t" << m_trackStart.lba() << endl;
+    s << "Trackstart=\t" << m_trackStart.lba() << Qt::endl;
 
     // track length
-    s << "# Tracklength: " << m_trackLength.toString() << endl;
-    s << "Tracklength=\t" << m_trackLength.totalFrames() << ", 0" << endl;
+    s << "# Tracklength: " << m_trackLength.toString() << Qt::endl;
+    s << "Tracklength=\t" << m_trackLength.totalFrames() << ", 0" << Qt::endl;
 
     // pre-emphasis
     s << "Pre-emphasis=\t";
@@ -83,10 +83,10 @@ bool K3b::InfFileWriter::save( QTextStream& s )
         s << "yes";
     else
         s << "no";
-    s << endl;
+    s << Qt::endl;
 
     // channels (always 2)
-    s << "Channels=\t2" << endl;
+    s << "Channels=\t2" << Qt::endl;
 
     // copy-permitted
     // TODO: not sure about this!
@@ -98,7 +98,7 @@ bool K3b::InfFileWriter::save( QTextStream& s )
         s << "yes";
     else
         s << "once";
-    s << endl;
+    s << Qt::endl;
 
     // endianess - wav is little -> onthefly: big, with images: little
     s << "Endianess=\t";
@@ -106,19 +106,19 @@ bool K3b::InfFileWriter::save( QTextStream& s )
         s << "big";
     else
         s << "little";
-    s << endl;
+    s << Qt::endl;
 
     // write indices
     // the current tracks' data contains the pregap of the next track
     // if the pregap has length 0 we need no index 0
     if( m_indices.isEmpty() )
-        s << "Index=\t\t0" << endl;
+        s << "Index=\t\t0" << Qt::endl;
     else {
         for( int i = 0; i < m_indices.count(); ++i )
-            s << "Index=\t\t" << m_indices[i] << endl;
+            s << "Index=\t\t" << m_indices[i] << Qt::endl;
     }
 
-    s << "Index0=\t\t" << m_index0 << endl;
+    s << "Index0=\t\t" << m_index0 << Qt::endl;
 
     return ( s.status() == QTextStream::Ok );
 }

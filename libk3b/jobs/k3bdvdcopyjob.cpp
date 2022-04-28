@@ -186,7 +186,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             if( K3b::LibDvdCss* libcss = K3b::LibDvdCss::create() ) {
                 qDebug() << "(K3b::DvdCopyJob) succeeded.";
                 qDebug() << "(K3b::DvdCopyJob) dvdcss_open(" << m_readerDevice->blockDeviceName() << ") = "
-                          << libcss->open(m_readerDevice) << endl;
+                          << libcss->open(m_readerDevice) << Qt::endl;
                 haveLibdvdcss = true;
 
                 delete libcss;

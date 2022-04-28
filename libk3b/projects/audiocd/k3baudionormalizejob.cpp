@@ -122,7 +122,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
                      << m_currentTrack
                      << " "
                      << m_files.at(m_currentTrack-1)
-                     << endl;
+                     << Qt::endl;
         }
         else {
             emit newTask( i18n("Computing level for track %1 of %2",m_currentTrack,m_files.count()) );
@@ -130,7 +130,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
                      << m_currentTrack
                      << " "
                      << m_files.at(m_currentTrack-1)
-                     << endl;
+                     << Qt::endl;
         }
 
         m_currentTrack++;
@@ -147,7 +147,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
             emit subPercent( p );
         else
             qDebug() << "(K3b::AudioNormalizeJob) subPercent parsing error at pos "
-                     << 19 << " in line '" << line.mid( 19, 3 ) << "'" << endl;
+                     << 19 << " in line '" << line.mid( 19, 3 ) << "'" << Qt::endl;
 
         // batch progress starts at position 50 in version 0.7.6
         p = line.mid( 50, 3 ).toInt(&ok);
@@ -157,7 +157,7 @@ void K3b::AudioNormalizeJob::slotStdLine( const QString& line )
             emit percent( 50 + (int)((double)p/2.0) );
         else
             qDebug() << "(K3b::AudioNormalizeJob) percent parsing error at pos "
-                     << 50 << " in line '" << line.mid( 50, 3 ) << "'" << endl;
+                     << 50 << " in line '" << line.mid( 50, 3 ) << "'" << Qt::endl;
 
     }
 }

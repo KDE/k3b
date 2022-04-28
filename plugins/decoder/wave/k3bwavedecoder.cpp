@@ -103,11 +103,11 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
         le_a_to_u_short(fmt.channels) > 2 ||
         ( le_a_to_u_short(fmt.bits_per_sample) != 16 &&
           le_a_to_u_short(fmt.bits_per_sample) != 8 ) ) {
-        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": wrong format:" << endl
-                 << "                format:      " << le_a_to_u_short(fmt.fmt_tag) << endl
-                 << "                channels:    " << le_a_to_u_short(fmt.channels) << endl
-                 << "                samplerate:  " << le_a_to_u_long(fmt.sample_rate) << endl
-                 << "                bits/sample: " << le_a_to_u_short(fmt.bits_per_sample) << endl;
+        qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": wrong format:" << Qt::endl
+                 << "                format:      " << le_a_to_u_short(fmt.fmt_tag) << Qt::endl
+                 << "                channels:    " << le_a_to_u_short(fmt.channels) << Qt::endl
+                 << "                samplerate:  " << le_a_to_u_long(fmt.sample_rate) << Qt::endl
+                 << "                bits/sample: " << le_a_to_u_short(fmt.bits_per_sample) << Qt::endl;
         return 0;
     }
 
@@ -153,7 +153,7 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
     if( f.pos() + size > (unsigned long)f.size() ) {
         qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": file length " << f.size()
                  << " does not match length from WAVE header " << f.pos() << " + " << size
-                 << " - using actual length." << endl;
+                 << " - using actual length." << Qt::endl;
         size = (f.size() - f.pos());
     }
 

@@ -431,7 +431,7 @@ bool K3bFLACDecoderFactory::canDecode( const QUrl& url )
     // look for a fLaC magic number or ID3 tag header
     if(10 != file.read(buf, 10)) {
         qDebug() << "(K3bFLACDecorder) File " << url.toLocalFile()
-                 << " is too small to be a FLAC file" << endl;
+                 << " is too small to be a FLAC file" << Qt::endl;
         return false;
     }
 
@@ -445,16 +445,16 @@ bool K3bFLACDecoderFactory::canDecode( const QUrl& url )
         pos = ((buf[6]<<21)|(buf[7]<<14)|(buf[8]<<7)|buf[9]) + 10;
 
         qDebug() << "(K3bFLACDecoder) " << url.toLocalFile() << ": seeking to "
-                 << pos << endl;
+                 << pos << Qt::endl;
         if(!file.seek(pos)) {
             qDebug() << "(K3bFLACDecoder) " << url.toLocalFile() << ": couldn't seek to "
-                     << pos << endl;
+                     << pos << Qt::endl;
             return false;
         }else{
             // seek was okay, try and read magic number into buf
             if(4 != file.read(buf, 4)) {
                 qDebug() << "(K3bFLACDecorder) File " << url.toLocalFile()
-                         << " has ID3 tag but naught else!" << endl;
+                         << " has ID3 tag but naught else!" << Qt::endl;
                 return false;
             }
         }
@@ -475,13 +475,13 @@ bool K3bFLACDecoderFactory::canDecode( const QUrl& url )
        (info.get_bits_per_sample() <= 16)) {
         return true;
     } else {
-        qDebug() << "(K3bFLACDecoder) " << url.toLocalFile() << ": wrong format:" << endl
+        qDebug() << "(K3bFLACDecoder) " << url.toLocalFile() << ": wrong format:" << Qt::endl
                  << "                channels:    "
-                 << QString::number(info.get_channels()) << endl
+                 << QString::number(info.get_channels()) << Qt::endl
                  << "                samplerate:  "
-                 << QString::number(info.get_sample_rate()) << endl
+                 << QString::number(info.get_sample_rate()) << Qt::endl
                  << "                bits/sample: "
-                 << QString::number(info.get_bits_per_sample()) << endl;
+                 << QString::number(info.get_bits_per_sample()) << Qt::endl;
         return false;
     }
 }

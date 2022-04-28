@@ -262,25 +262,25 @@ const K3b::VideoDVD::Title& K3b::VideoDVD::VideoDVD::operator[]( unsigned int nu
 
 void K3b::VideoDVD::VideoDVD::debug() const
 {
-    qDebug() << "VideoDVD information:" << endl
-             << "=====================" << endl
-             << "Volume ID: " << volumeIdentifier() << endl << endl;
+    qDebug() << "VideoDVD information:" << Qt::endl
+             << "=====================" << Qt::endl
+             << "Volume ID: " << volumeIdentifier() << Qt::endl << Qt::endl;
 
     for( unsigned int i = 0; i < numTitles(); ++i ) {
-        qDebug() << "Title " << title(i).titleNumber() << " (" << title(i).playbackTime().toString() << ")" << endl
-                 << "   Chapters: " << title(i).numPTTs() << endl
-                 << "   Angles:   " << title(i).numAngles() << endl
-                 << "   VTS,TTN:  " << title(i).titleSet() << "," << title(i).ttn() << endl
-                 << "   Audio Streams:" << endl;
+        qDebug() << "Title " << title(i).titleNumber() << " (" << title(i).playbackTime().toString() << ")" << Qt::endl
+                 << "   Chapters: " << title(i).numPTTs() << Qt::endl
+                 << "   Angles:   " << title(i).numAngles() << Qt::endl
+                 << "   VTS,TTN:  " << title(i).titleSet() << "," << title(i).ttn() << Qt::endl
+                 << "   Audio Streams:" << Qt::endl;
         for( unsigned int j = 0; j < title(i).numAudioStreams(); ++j )
             qDebug() << "      " << title(i).audioStream(j).langCode() << ": "
                      << audioFormatString( title(i).audioStream(j).format() ) << ", "
-                     << audioCodeExtensionString( title(i).audioStream(j).codeExtension() ) << endl;
+                     << audioCodeExtensionString( title(i).audioStream(j).codeExtension() ) << Qt::endl;
         qDebug() << "   SubPicture Streams:";
         for( unsigned int j = 0; j < title(i).numSubPictureStreams(); ++j )
             qDebug() << "      " << title(i).subPictureStream(j).langCode() << ": "
                      << subPictureCodeModeString( title(i).subPictureStream(j).codeMode() ) << ", "
-                     << subPictureCodeExtensionString( title(i).subPictureStream(j).codeExtension() ) << endl;
+                     << subPictureCodeExtensionString( title(i).subPictureStream(j).codeExtension() ) << Qt::endl;
     }
 }
 

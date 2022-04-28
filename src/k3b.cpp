@@ -756,8 +756,8 @@ void K3b::MainWindow::readProperties( const KConfigGroup& grp )
 
     int cnt = grp.readEntry( "Number of projects", 0 );
 /*
-  qDebug() << "(K3b::MainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << endl
-  << "                                read from config group " << c->group() << endl;
+  qDebug() << "(K3b::MainWindow::readProperties) number of projects from last session in " << saveDir << ": " << cnt << Qt::endl
+  << "                                read from config group " << c->group() << Qt::endl;
 */
     for( int i = 1; i <= cnt; ++i ) {
         // in this case the constructor works since we saved as url()

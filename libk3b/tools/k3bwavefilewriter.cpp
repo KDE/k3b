@@ -79,7 +79,7 @@ void K3b::WaveFileWriter::write( const char* data, int len, Endianess e )
         else {
             if( len % 2 > 0 ) {
                 qDebug() << "(K3b::WaveFileWriter) data length ("
-                         << len << ") is not a multiple of 2! Cannot swap bytes." << endl;
+                         << len << ") is not a multiple of 2! Cannot swap bytes." << Qt::endl;
                 return;
             }
 

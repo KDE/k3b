@@ -140,7 +140,7 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::waitForDisc( Device::MediaStates me
                                                           const QString& message )
 {
     if ( d->inLoop ) {
-        qCritical() << "Recursive call detected." << endl;
+        qCritical() << "Recursive call detected." << Qt::endl;
         return Device::MEDIA_UNKNOWN;
     }
 

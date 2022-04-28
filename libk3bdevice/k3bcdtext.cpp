@@ -50,7 +50,7 @@ namespace {
 
     void debugRawTextPackData( const unsigned char* data, int dataLen )
     {
-        qDebug() << endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |";
+        qDebug() << Qt::endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |";
 
         cdtext_pack* pack = (cdtext_pack*)data;
 
@@ -998,25 +998,25 @@ int K3b::Device::CdText::Private::textLengthForPackType( int packType ) const
 void K3b::Device::CdText::debug() const
 {
     // debug the stuff
-    qDebug() << "CD-TEXT data:" << endl
-             << "Global:" << endl
-             << "  Title:      '" << title() << "'" << endl
-             << "  Performer:  '" << performer() << "'" << endl
-             << "  Songwriter: '" << songwriter() << "'" << endl
-             << "  Composer:   '" << composer() << "'" << endl
-             << "  Arranger:   '" << arranger() << "'" << endl
-             << "  Message:    '" << message() << "'" << endl
-             << "  Disc ID:    '" << discId() << "'" << endl
-             << "  Upc Ean:    '" << upcEan() << "'" << endl;
+    qDebug() << "CD-TEXT data:" << Qt::endl
+             << "Global:" << Qt::endl
+             << "  Title:      '" << title() << "'" << Qt::endl
+             << "  Performer:  '" << performer() << "'" << Qt::endl
+             << "  Songwriter: '" << songwriter() << "'" << Qt::endl
+             << "  Composer:   '" << composer() << "'" << Qt::endl
+             << "  Arranger:   '" << arranger() << "'" << Qt::endl
+             << "  Message:    '" << message() << "'" << Qt::endl
+             << "  Disc ID:    '" << discId() << "'" << Qt::endl
+             << "  Upc Ean:    '" << upcEan() << "'" << Qt::endl;
     for( int i = 0; i < count(); ++i ) {
-        qDebug() << "Track " << (i+1) << ":" << endl
-                 << "  Title:      '" << d->tracks[i].title() << "'" << endl
-                 << "  Performer:  '" << d->tracks[i].performer() << "'" << endl
-                 << "  Songwriter: '" << d->tracks[i].songwriter() << "'" << endl
-                 << "  Composer:   '" << d->tracks[i].composer() << "'" << endl
-                 << "  Arranger:   '" << d->tracks[i].arranger() << "'" << endl
-                 << "  Message:    '" << d->tracks[i].message() << "'" << endl
-                 << "  Isrc:       '" << d->tracks[i].isrc() << "'" << endl;
+        qDebug() << "Track " << (i+1) << ":" << Qt::endl
+                 << "  Title:      '" << d->tracks[i].title() << "'" << Qt::endl
+                 << "  Performer:  '" << d->tracks[i].performer() << "'" << Qt::endl
+                 << "  Songwriter: '" << d->tracks[i].songwriter() << "'" << Qt::endl
+                 << "  Composer:   '" << d->tracks[i].composer() << "'" << Qt::endl
+                 << "  Arranger:   '" << d->tracks[i].arranger() << "'" << Qt::endl
+                 << "  Message:    '" << d->tracks[i].message() << "'" << Qt::endl
+                 << "  Isrc:       '" << d->tracks[i].isrc() << "'" << Qt::endl;
     }
 }
 

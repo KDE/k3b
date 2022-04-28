@@ -136,7 +136,7 @@ void K3b::CloneTocReader::readFile()
                         qDebug() << "(K3b::CloneTocReader) invalid track start: "
                                  << (int)ft->pmin << "."
                                  << (int)ft->psec << "."
-                                 << (int)ft->pframe << endl;
+                                 << (int)ft->pframe << Qt::endl;
                         return;
                     }
                 }

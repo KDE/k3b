@@ -139,7 +139,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
                  << "vorbis_encode_init( d->vorbisInfo, 2, 44100, "
                  << (d->bitrateUpper != -1 ? d->bitrateUpper*1000 : -1) << ", "
                  << (d->bitrateNominal != -1 ? d->bitrateNominal*1000 : -1)  << ", "
-                 << (d->bitrateLower != -1 ? d->bitrateLower*1000 : -1) << " );" << endl;
+                 << (d->bitrateLower != -1 ? d->bitrateLower*1000 : -1) << " );" << Qt::endl;
 
         ret = vorbis_encode_init( d->vorbisInfo,
                                   2, // 2 channels: stereo
@@ -156,7 +156,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
 
         qDebug() << "(K3bOggVorbisEncoder) calling: "
                  << "vorbis_encode_init_vbr( d->vorbisInfo, 2, 44100, "
-                 << (float)d->qualityLevel/10.0 << ");" << endl;
+                 << (float)d->qualityLevel/10.0 << ");" << Qt::endl;
 
         ret = vorbis_encode_init_vbr( d->vorbisInfo,
                                       2, // 2 channels: stereo

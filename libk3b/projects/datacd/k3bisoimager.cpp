@@ -265,7 +265,7 @@ void K3b::IsoImager::startSizeCalculation()
 
     qDebug() << "***** mkisofs calculate size parameters:";
     QString s = m_process->joinedArgs();
-    qDebug() << s << endl << flush;
+    qDebug() << s << Qt::endl << Qt::flush;
     emit debuggingOutput("mkisofs calculate size command:", s);
 
     // since output changed during mkisofs version changes we grab both
@@ -430,7 +430,7 @@ void K3b::IsoImager::start()
 
     qDebug() << "***** mkisofs parameters:\n";
     QString s = m_process->joinedArgs();
-    qDebug() << s << endl << flush;
+    qDebug() << s << Qt::endl << Qt::flush;
     emit debuggingOutput("mkisofs command:", s);
 
     if( !m_process->start( KProcess::SeparateChannels ) ) {
@@ -556,7 +556,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
     int volsetSeqNo = m_doc->isoOptions().volumeSetNumber();
     if( volsetSeqNo > volsetSize ) {
         qDebug() << "(K3b::IsoImager) invalid volume set sequence number: " << volsetSeqNo
-                 << " with volume set size: " << volsetSize << endl;
+                 << " with volume set size: " << volsetSize << Qt::endl;
         volsetSeqNo = volsetSize;
     }
     *m_process << "-volset-size" << QString::number(volsetSize);
@@ -857,7 +857,7 @@ bool K3b::IsoImager::writeRRHideFile()
     while( item ) {
         if( item->hideOnRockRidge() ) {
             if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir)
-                s << escapeGraftPoint( item->localPath() ) << endl;
+                s << escapeGraftPoint( item->localPath() ) << Qt::endl;
         }
         item = item->nextSibling();
     }
@@ -878,7 +878,7 @@ bool K3b::IsoImager::writeJolietHideFile()
     while( item ) {
         if( item->hideOnRockRidge() ) {
             if( !item->isDir() )  // hiding directories does not work (all dirs point to the dummy-dir but we could introduce a second hidden dummy dir)
-                s << escapeGraftPoint( item->localPath() ) << endl;
+                s << escapeGraftPoint( item->localPath() ) << Qt::endl;
         }
         item = item->nextSibling();
     }
@@ -904,17 +904,17 @@ bool K3b::IsoImager::writeSortWeightFile()
     while( (item = item->nextSibling()) ) {  // we skip the root here
         if( item->sortWeight() != 0 ) {
             if( m_doc->bootImages().contains( dynamic_cast<K3b::BootItem*>(item) ) ) { // boot-image-backup-hack
-                s << escapeGraftPoint( static_cast<K3b::BootItem*>(item)->tempPath() ) << " " << item->sortWeight() << endl;
+                s << escapeGraftPoint( static_cast<K3b::BootItem*>(item)->tempPath() ) << " " << item->sortWeight() << Qt::endl;
             }
             else if( item->isDir() ) {
                 //
                 // Since we use dummy dirs for all directories in the filesystem and mkisofs uses the local path
                 // for sorting we need to create a different dummy dir for every sort weight value.
                 //
-                s << escapeGraftPoint( dummyDir( static_cast<K3b::DirItem*>(item) ) ) << " " << item->sortWeight() << endl;
+                s << escapeGraftPoint( dummyDir( static_cast<K3b::DirItem*>(item) ) ) << " " << item->sortWeight() << Qt::endl;
             }
             else
-                s << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << endl;
+                s << escapeGraftPoint( item->localPath() ) << " " << item->sortWeight() << Qt::endl;
         }
     }
 

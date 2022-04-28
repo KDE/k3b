@@ -74,7 +74,7 @@ int K3b::AudioMaxSpeedJob::Private::speedTest( K3b::AudioDataSource* source, QIO
     // KB/sec (add 1 millisecond to avoid division by 0)
     int throughput = (dataRead*1000+usedT)/(usedT+1)/1024;
     qDebug() << "(K3b::AudioMaxSpeedJob) throughput: " << throughput
-             << " (" << dataRead << "/" << usedT << ")" << endl;
+             << " (" << dataRead << "/" << usedT << ")" << Qt::endl;
 
 
     return throughput;

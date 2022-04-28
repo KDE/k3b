@@ -240,7 +240,7 @@ void K3b::VcdJob::vcdxBuild()
     // vcdxbuild commandline parameters
     qDebug() << "***** vcdxbuild parameters:";
     QString s = m_process->joinedArgs();
-    qDebug() << s << flush;
+    qDebug() << s << Qt::flush;
     emit debuggingOutput( "vcdxbuild command:", s );
 
     if ( !m_process->start( KProcess::MergedChannels ) ) {

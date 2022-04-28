@@ -741,7 +741,7 @@ bool K3b::DataJob::waitForBurnMedium()
 
                     qDebug() << "(K3b::DataJob) using datamode: "
                              << (d->usedDataMode == K3b::DataMode1 ? "mode1" : "mode2")
-                             << endl;
+                             << Qt::endl;
                 }
             }
             else if( usedMultiSessionMode() == K3b::DataDoc::NONE )

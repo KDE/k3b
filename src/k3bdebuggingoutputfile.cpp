@@ -66,7 +66,7 @@ void K3b::DebuggingOutputFile::addOutput( const QString& app, const QString& msg
         open();
 
     QTextStream s( this );
-    s << "[" << app << "] " << msg << endl;
+    s << "[" << app << "] " << msg << Qt::endl;
     flush();
 }
 

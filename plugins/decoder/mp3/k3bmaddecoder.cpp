@@ -320,7 +320,7 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
     d->handle->inputSeek( d->seekPositions[frame] );
 
     qDebug() << "(K3bMadDecoder) Seeking to frame " << frame << " with "
-             << frameReservoirProtect << " reservoir frames." << endl;
+             << frameReservoirProtect << " reservoir frames." << Qt::endl;
 
     // decode some frames ignoring MAD_ERROR_BADDATAPTR errors
     unsigned int i = 1;
@@ -332,12 +332,12 @@ bool K3bMadDecoder::seekInternal( const K3b::Msf& pos )
                     continue;
                 else if( d->handle->madStream->error != MAD_ERROR_BADDATAPTR ) {
                     qDebug() << "(K3bMadDecoder) Seeking: recoverable mad error ("
-                             << mad_stream_errorstr(d->handle->madStream) << ")" << endl;
+                             << mad_stream_errorstr(d->handle->madStream) << ")" << Qt::endl;
                     continue;
                 }
                 else {
                     qDebug() << "(K3bMadDecoder) Seeking: ignoring ("
-                             << mad_stream_errorstr(d->handle->madStream) << ")" << endl;
+                             << mad_stream_errorstr(d->handle->madStream) << ")" << Qt::endl;
                 }
             }
             else
@@ -507,7 +507,7 @@ bool K3bMadDecoderFactory::canDecode( const QUrl& url )
                 if( ++cnt >= 5 ) {
                     qDebug() << "(K3bMadDecoder) valid mpeg 1 layer " << layer
                              << " file with " << c << " channels and a samplerate of "
-                             << s << endl;
+                             << s << Qt::endl;
                     return ( layer == MAD_LAYER_III );
                 }
             }

@@ -56,7 +56,7 @@ bool K3bMad::open( const QString& filename )
   m_inputFile.setFileName( filename );
 
   if( !m_inputFile.open( QIODevice::ReadOnly ) ) {
-    qCritical() << "(K3bMad) could not open file " << m_inputFile.fileName() << endl;
+    qCritical() << "(K3bMad) could not open file " << m_inputFile.fileName() << Qt::endl;
     return false;
   }
 
@@ -140,7 +140,7 @@ bool K3bMad::skipTag()
   int bufLen = 4096;
   if( m_inputFile.read( buf, bufLen ) < bufLen ) {
     qDebug() << "(K3bMad) unable to read " << bufLen << " bytes from "
-	      << m_inputFile.fileName() << endl;
+	      << m_inputFile.fileName() << Qt::endl;
     return false;
   }
 
@@ -164,7 +164,7 @@ bool K3bMad::skipTag()
     // skip the id3 tag
     if( !m_inputFile.seek(offset) ) {
       qDebug() << "(K3bMad) " << m_inputFile.fileName()
-		<< ": couldn't seek to " << offset << endl;
+		<< ": couldn't seek to " << offset << Qt::endl;
       return false;
     }
   }

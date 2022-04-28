@@ -76,18 +76,18 @@ bool K3b::TocFileWriter::save( QTextStream& t )
         const K3b::Device::Track& hiddenTrack = m_toc[0];
         const K3b::Device::Track& track = m_toc[1];
 
-        t << "// Track number 1 (hidden) and track number 2 (as track 1)" << endl;
-        t << "TRACK AUDIO" << endl;
+        t << "// Track number 1 (hidden) and track number 2 (as track 1)" << Qt::endl;
+        t << "TRACK AUDIO" << Qt::endl;
 
         if( track.copyPermitted() )
-            t << "COPY" << endl;
+            t << "COPY" << Qt::endl;
         else
-            t << "NO COPY" << endl;
+            t << "NO COPY" << Qt::endl;
 
         if( track.preEmphasis() )
-            t << "PRE_EMPHASIS" << endl;
+            t << "PRE_EMPHASIS" << Qt::endl;
         else
-            t << "NO PRE_EMPHASIS" << endl;
+            t << "NO PRE_EMPHASIS" << Qt::endl;
 
         if( !m_cdText.isEmpty() )
             writeTrackCdText( m_cdText[0], t );
@@ -99,8 +99,8 @@ bool K3b::TocFileWriter::save( QTextStream& t )
             t << hiddenTrack.firstSector().toString();
         else
             t << " 0";
-        t << " " << hiddenTrack.length().toString() << endl;
-        t << "START" << endl; // use the whole hidden file as pregap
+        t << " " << hiddenTrack.length().toString() << Qt::endl;
+        t << "START" << Qt::endl; // use the whole hidden file as pregap
 
         // now comes the "real" first track
         t << "AUDIOFILE ";
@@ -114,7 +114,7 @@ bool K3b::TocFileWriter::save( QTextStream& t )
             t << track.length().toString();
         else
             t << track.realAudioLength().toString();
-        t << endl << endl;
+        t << Qt::endl << Qt::endl;
 
         trackIndex+=2;
     }
@@ -146,14 +146,14 @@ void K3b::TocFileWriter::writeHeader( QTextStream& t )
 {
     // little comment
     t << "// TOC-file to use with cdrdao created by K3b " << k3bcore->version()
-      << ", " << QDateTime::currentDateTime().toString() << endl << endl;
+      << ", " << QDateTime::currentDateTime().toString() << Qt::endl << Qt::endl;
 
-    t << "// " << m_toc.count() << " tracks" << endl;
+    t << "// " << m_toc.count() << " tracks" << Qt::endl;
     if( m_toc.back().session() > 0 ) {
-        t << "// " << m_toc.back().session() << " sessions" << endl
-          << "// this is session number " << m_sessionToWrite << endl;
+        t << "// " << m_toc.back().session() << " sessions" << Qt::endl
+          << "// this is session number " << m_sessionToWrite << Qt::endl;
     }
-    t << endl;
+    t << Qt::endl;
 
     // check the cd type
     if( m_toc.contentType() == K3b::Device::AUDIO ) {
@@ -178,7 +178,7 @@ void K3b::TocFileWriter::writeHeader( QTextStream& t )
             t << "CD_ROM";
     }
 
-    t << endl << endl;
+    t << Qt::endl << Qt::endl;
 }
 
 
@@ -186,20 +186,20 @@ void K3b::TocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStr
 {
     const K3b::Device::Track& track = m_toc[index];
 
-    t << "// Track number " << (index+1) << endl;
+    t << "// Track number " << (index+1) << Qt::endl;
 
     if( track.type() == K3b::Device::Track::TYPE_AUDIO ) {
-        t << "TRACK AUDIO" << endl;
+        t << "TRACK AUDIO" << Qt::endl;
 
         if( track.copyPermitted() )
-            t << "COPY" << endl;
+            t << "COPY" << Qt::endl;
         else
-            t << "NO COPY" << endl;
+            t << "NO COPY" << Qt::endl;
 
         if( track.preEmphasis() )
-            t << "PRE_EMPHASIS" << endl;
+            t << "PRE_EMPHASIS" << Qt::endl;
         else
-            t << "NO PRE_EMPHASIS" << endl;
+            t << "NO PRE_EMPHASIS" << Qt::endl;
 
         if( !m_cdText.isEmpty() )
             writeTrackCdText( m_cdText[index], t );
@@ -218,7 +218,7 @@ void K3b::TocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStr
                 //
 
                 t << "PREGAP "
-                  << (track.firstSector()-offset).toString() << endl;
+                  << (track.firstSector()-offset).toString() << Qt::endl;
             }
         }
         else {
@@ -236,8 +236,8 @@ void K3b::TocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStr
                     t << (lastTrack.index0() - offset).toString();
                 t << " "
                   << (lastTrack.length() - lastTrack.index0()).toString()
-                  << endl
-                  << "START" << endl;
+                  << Qt::endl
+                  << "START" << Qt::endl;
             }
         }
 
@@ -255,78 +255,78 @@ void K3b::TocFileWriter::writeTrack( int index, const K3b::Msf& offset, QTextStr
             t << track.length().toString();
         else
             t << track.realAudioLength().toString();
-        t << endl;
+        t << Qt::endl;
     }
     else {
         if( track.mode() == K3b::Device::Track::XA_FORM1 )
-            t << "TRACK MODE2_FORM1" << endl;
+            t << "TRACK MODE2_FORM1" << Qt::endl;
         else if( track.mode() == K3b::Device::Track::XA_FORM2 )
-            t << "TRACK MODE2_FORM2" << endl;
+            t << "TRACK MODE2_FORM2" << Qt::endl;
         else
-            t << "TRACK MODE1" << endl;
+            t << "TRACK MODE1" << Qt::endl;
 
         if( !m_cdText.isEmpty() && !m_toc.contentType() != K3b::Device::DATA ) {
             //
             // insert fake cdtext
             // cdrdao does not work without it and it seems not to do any harm.
             //
-            t << "CD_TEXT {" << endl
-              << "  LANGUAGE 0 {" << endl
-              << "    TITLE " << "\"\"" << endl
-              << "    PERFORMER " << "\"\"" << endl
-              << "    ISRC " << "\"\"" << endl
-              << "    ARRANGER " << "\"\"" << endl
-              << "    SONGWRITER " << "\"\"" << endl
-              << "    COMPOSER " << "\"\"" << endl
-              << "    MESSAGE " << "\"\"" << endl
-              << "  }" << endl
-              << "}" << endl;
+            t << "CD_TEXT {" << Qt::endl
+              << "  LANGUAGE 0 {" << Qt::endl
+              << "    TITLE " << "\"\"" << Qt::endl
+              << "    PERFORMER " << "\"\"" << Qt::endl
+              << "    ISRC " << "\"\"" << Qt::endl
+              << "    ARRANGER " << "\"\"" << Qt::endl
+              << "    SONGWRITER " << "\"\"" << Qt::endl
+              << "    COMPOSER " << "\"\"" << Qt::endl
+              << "    MESSAGE " << "\"\"" << Qt::endl
+              << "  }" << Qt::endl
+              << "}" << Qt::endl;
         }
 
         if( readFromStdin() )
-            t << "DATAFILE \"-\" " << track.length().toString() << endl;
+            t << "DATAFILE \"-\" " << track.length().toString() << Qt::endl;
         else
-            t << "DATAFILE \"" << m_filenames[index] << "\"" << endl;
-        t << endl;
+            t << "DATAFILE \"" << m_filenames[index] << "\"" << Qt::endl;
+        t << Qt::endl;
     }
 
-    t << endl;
+    t << Qt::endl;
 }
 
 
 void K3b::TocFileWriter::writeGlobalCdText( QTextStream& t )
 {
-    t << "CD_TEXT {" << endl;
-    t << "  LANGUAGE_MAP { 0: EN }" << endl;
-    t << "  LANGUAGE 0 {" << endl;
-    t << "    TITLE " << "\"" << m_cdText.title() << "\"" << endl;
-    t << "    PERFORMER " << "\"" << m_cdText.performer() << "\"" << endl;
-    t << "    DISC_ID " << "\"" << m_cdText.discId() << "\"" << endl;
-    t << "    UPC_EAN " << "\"" << m_cdText.upcEan() << "\"" << endl;
-    t << endl;
-    t << "    ARRANGER " << "\"" << m_cdText.arranger() << "\"" << endl;
-    t << "    SONGWRITER " << "\"" << m_cdText.songwriter() << "\"" << endl;
-    t << "    COMPOSER " << "\"" << m_cdText.composer() << "\"" << endl;
-    t << "    MESSAGE " << "\"" << m_cdText.message() << "\"" << endl;
-    t << "  }" << endl;
-    t << "}" << endl;
-    t << endl;
+    t << "CD_TEXT {" << Qt::endl;
+    t << "  LANGUAGE_MAP { 0: EN }" << Qt::endl;
+    t << "  LANGUAGE 0 {" << Qt::endl;
+    t << "    TITLE " << "\"" << m_cdText.title() << "\"" << Qt::endl;
+    t << "    PERFORMER " << "\"" << m_cdText.performer() << "\"" << Qt::endl;
+    t << "    DISC_ID " << "\"" << m_cdText.discId() << "\"" << Qt::endl;
+    t << "    UPC_EAN " << "\"" << m_cdText.upcEan() << "\"" << Qt::endl;
+    t << Qt::endl;
+    t << "    ARRANGER " << "\"" << m_cdText.arranger() << "\"" << Qt::endl;
+    t << "    SONGWRITER " << "\"" << m_cdText.songwriter() << "\"" << Qt::endl;
+    t << "    COMPOSER " << "\"" << m_cdText.composer() << "\"" << Qt::endl;
+    t << "    MESSAGE " << "\"" << m_cdText.message() << "\"" << Qt::endl;
+    t << "  }" << Qt::endl;
+    t << "}" << Qt::endl;
+    t << Qt::endl;
 }
 
 
 void K3b::TocFileWriter::writeTrackCdText( const K3b::Device::TrackCdText& track, QTextStream& t )
 {
-    t << "CD_TEXT {" << endl;
-    t << "  LANGUAGE 0 {" << endl;
-    t << "    TITLE " << "\"" << track.title() << "\"" << endl;
-    t << "    PERFORMER " << "\"" << track.performer() << "\"" << endl;
-    t << "    ISRC " << "\"" << track.isrc() << "\"" << endl;
-    t << "    ARRANGER " << "\"" << track.arranger() << "\"" << endl;
-    t << "    SONGWRITER " << "\"" << track.songwriter() << "\"" << endl;
-    t << "    COMPOSER " << "\"" << track.composer() << "\"" << endl;
-    t << "    MESSAGE " << "\"" << track.message() << "\"" << endl;
-    t << "  }" << endl;
-    t << "}" << endl;
+    t << "CD_TEXT {" << Qt::endl;
+    t << "  LANGUAGE 0 {" << Qt::endl;
+    t << "    TITLE " << "\"" << track.title() << "\"" << Qt::endl;
+    t << "    PERFORMER " << "\"" << track.performer() << "\"" << Qt::endl;
+    t << "    ISRC " << "\"" << track.isrc() << "\"" << Qt::endl;
+    t << "    ARRANGER " << "\"" << track.arranger() << "\"" << Qt::endl;
+    t << "    SONGWRITER " << "\"" << track.songwriter() << "\"" << Qt::endl;
+    t << "    COMPOSER " << "\"" << track.composer() << "\"" << Qt::endl;
+    t << "    MESSAGE " << "\"" << track.message() << "\"" << Qt::endl;
+    t << "  }" << Qt::endl;
+    t << "}" << Qt::endl;
 }
 
 

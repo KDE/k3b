@@ -560,7 +560,7 @@ K3b::CdparanoiaLib* K3b::CdparanoiaLib::create()
 bool K3b::CdparanoiaLib::initParanoia( K3b::Device::Device* dev, const K3b::Device::Toc& toc )
 {
     if( !dev ) {
-        qCritical() << "(K3b::CdparanoiaLib::initParanoia) dev = 0!" << endl;
+        qCritical() << "(K3b::CdparanoiaLib::initParanoia) dev = 0!" << Qt::endl;
         return false;
     }
 
@@ -705,8 +705,8 @@ char* K3b::CdparanoiaLib::read( int* statusCode, unsigned int* track, bool littl
 {
     if( d->currentSector > d->lastSector ) {
         qDebug() << "(K3b::CdparanoiaLib) finished ripping. read "
-                 << (d->currentSector - d->startSector) << " sectors." << endl
-                 << "                   current sector: " << d->currentSector << endl;
+                 << (d->currentSector - d->startSector) << " sectors." << Qt::endl
+                 << "                   current sector: " << d->currentSector << Qt::endl;
         d->status = S_OK;
         if( statusCode )
             *statusCode = d->status;

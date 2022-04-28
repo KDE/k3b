@@ -173,7 +173,7 @@ bool K3b::MovixDocPreparer::writePlaylistFile()
     Q_FOREACH( K3b::MovixFileItem* item, movixFileItems ) {
         s << "/cdrom/";
         s << item->writtenName();
-        s << endl;
+        s << Qt::endl;
     }
 
     d->playlistFile->close();
@@ -198,12 +198,12 @@ bool K3b::MovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath
 
         if(  d->doc->defaultBootLabel() != i18n("default") ) {
             isolinuxConfigOrig.readLine(); // skip first line
-            s << "default " << d->doc->defaultBootLabel()  << endl;
+            s << "default " << d->doc->defaultBootLabel()  << Qt::endl;
         }
 
         QString line = isolinuxConfigOrig.readLine();
         while( !line.isNull() ) {
-            s << line << endl;
+            s << line << Qt::endl;
             line = isolinuxConfigOrig.readLine();
         }
 
@@ -224,20 +224,20 @@ bool K3b::MovixDocPreparer::writeMovixRcFile()
     QTextStream s( d->movixRcFile );
 
     if( !d->doc->additionalMPlayerOptions().isEmpty() )
-        s << "extra-mplayer-options=" << d->doc->additionalMPlayerOptions() << endl;
+        s << "extra-mplayer-options=" << d->doc->additionalMPlayerOptions() << Qt::endl;
     if( !d->doc->unwantedMPlayerOptions().isEmpty() )
-        s << "unwanted-mplayer-options=" << d->doc->unwantedMPlayerOptions() << endl;
-    s << "loop=" << d->doc->loopPlaylist() << endl;
+        s << "unwanted-mplayer-options=" << d->doc->unwantedMPlayerOptions() << Qt::endl;
+    s << "loop=" << d->doc->loopPlaylist() << Qt::endl;
     if( d->doc->shutdown() )
-        s << "shut=y" << endl;
+        s << "shut=y" << Qt::endl;
     if( d->doc->reboot() )
-        s << "reboot=y" << endl;
+        s << "reboot=y" << Qt::endl;
     if( d->doc->ejectDisk() )
-        s << "eject=y" << endl;
+        s << "eject=y" << Qt::endl;
     if( d->doc->randomPlay() )
-        s << "random=y" << endl;
+        s << "random=y" << Qt::endl;
     if( d->doc->noDma() )
-        s << "dma=n" << endl;
+        s << "dma=n" << Qt::endl;
 
     d->movixRcFile->close();
     return true;
@@ -454,7 +454,7 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
         } else if( next->isDir() ) {
             dir = static_cast<K3b::DirItem*>( next );
         } else {
-            qCritical() << "(K3b::MovixDocPreparer) found non-dir item where a dir was needed." << endl;
+            qCritical() << "(K3b::MovixDocPreparer) found non-dir item where a dir was needed." << Qt::endl;
             return 0;
         }
     }

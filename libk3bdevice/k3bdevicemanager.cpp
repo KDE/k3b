@@ -251,19 +251,19 @@ K3b::Device::Device* K3b::Device::DeviceManager::checkDevice( const Solid::Devic
 
 void K3b::Device::DeviceManager::printDevices()
 {
-    qDebug() << "Devices:" << endl
-             << "------------------------------" << endl;
+    qDebug() << "Devices:" << Qt::endl
+             << "------------------------------" << Qt::endl;
     Q_FOREACH( Device* dev, d->allDevices ) {
-        qDebug() << "Blockdevice:    " << dev->blockDeviceName() << endl
-                 << "Vendor:         " << dev->vendor() << endl
-                 << "Description:    " << dev->description() << endl
-                 << "Version:        " << dev->version() << endl
-                 << "Write speed:    " << dev->maxWriteSpeed() << endl
-                 << "Profiles:       " << mediaTypeString( dev->supportedProfiles() ) << endl
-                 << "Read Cap:       " << mediaTypeString( dev->readCapabilities() ) << endl
-                 << "Write Cap:      " << mediaTypeString( dev->writeCapabilities() ) << endl
-                 << "Writing modes:  " << writingModeString( dev->writingModes() ) << endl
-                 << "------------------------------" << endl;
+        qDebug() << "Blockdevice:    " << dev->blockDeviceName() << Qt::endl
+                 << "Vendor:         " << dev->vendor() << Qt::endl
+                 << "Description:    " << dev->description() << Qt::endl
+                 << "Version:        " << dev->version() << Qt::endl
+                 << "Write speed:    " << dev->maxWriteSpeed() << Qt::endl
+                 << "Profiles:       " << mediaTypeString( dev->supportedProfiles() ) << Qt::endl
+                 << "Read Cap:       " << mediaTypeString( dev->readCapabilities() ) << Qt::endl
+                 << "Write Cap:      " << mediaTypeString( dev->writeCapabilities() ) << Qt::endl
+                 << "Writing modes:  " << writingModeString( dev->writingModes() ) << Qt::endl
+                 << "------------------------------" << Qt::endl;
     }
 }
 
@@ -395,7 +395,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::addDevice( K3b::Device::Device*
             // default to max write speed
             qDebug() << "(K3b::Device::DeviceManager) setting current write speed of device "
                      << device->blockDeviceName()
-                     << " to " << device->maxWriteSpeed() << endl;
+                     << " to " << device->maxWriteSpeed();
             device->setCurrentWriteSpeed( device->maxWriteSpeed() );
         }
 

@@ -346,7 +346,7 @@ void K3b::AudioDoc::addSources( K3b::AudioTrack* parent,
 {
     qDebug() << "(K3b::AudioDoc::addSources( " << parent << ", "
              << urls.first().toLocalFile() << ", "
-             << sourceAfter << " )" << endl;
+             << sourceAfter << " )" << Qt::endl;
     QList<QUrl> allUrls = extractUrlList( urls );
     QList<QUrl>::const_iterator end(allUrls.constEnd());
     for( QList<QUrl>::const_iterator it = allUrls.constBegin(); it != end; ++it ) {
@@ -444,7 +444,7 @@ K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const QUrl& url, bool* reuse
     }
     else if( (decoder = K3b::AudioDecoderFactory::createDecoder( url )) ) {
         qDebug() << "(K3b::AudioDoc) using " << decoder->metaObject()->className()
-                 << " for decoding of " << url.toLocalFile() << endl;
+                 << " for decoding of " << url.toLocalFile() << Qt::endl;
 
         decoder->setFilename( url.toLocalFile() );
         *reused = false;
@@ -914,7 +914,7 @@ bool K3b::AudioDoc::saveDocumentData( QDomElement* docElem )
                 sourcesParent.appendChild( sourceElem );
             }
             else {
-                qCritical() << "(K3b::AudioDoc) saving sources other than file or zero not supported yet." << endl;
+                qCritical() << "(K3b::AudioDoc) saving sources other than file or zero not supported yet." << Qt::endl;
                 return false;
             }
         }

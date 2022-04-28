@@ -223,7 +223,7 @@ bool K3b::LibDvdCss::crackAllKeys()
                 file = dynamic_cast<const K3b::Iso9660File*>( dir->entry( filename ) );
                 if( file ) {
                     if( file->size() % 2048 )
-                        qCritical() << "(K3b::LibDvdCss) FILESIZE % 2048 != 0!!!" << endl;
+                        qCritical() << "(K3b::LibDvdCss) FILESIZE % 2048 != 0!!!" << Qt::endl;
                     if( vob == 1 ) {
                         p.first = file->startSector();
                         p.second = file->size() / 2048;

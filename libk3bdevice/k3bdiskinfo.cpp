@@ -163,9 +163,9 @@ K3b::Msf K3b::Device::DiskInfo::firstLayerSize() const
 
 void K3b::Device::DiskInfo::debug() const
 {
-    qDebug() << "DiskInfo:" << endl
-             << "Mediatype:       " << K3b::Device::mediaTypeString( mediaType() ) << endl
-             << "Current Profile: " << K3b::Device::mediaTypeString( currentProfile() ) << endl
+    qDebug() << "DiskInfo:" << Qt::endl
+             << "Mediatype:       " << K3b::Device::mediaTypeString( mediaType() ) << Qt::endl
+             << "Current Profile: " << K3b::Device::mediaTypeString( currentProfile() ) << Qt::endl
              << "Disk state:      " << ( diskState() == K3b::Device::STATE_EMPTY ?
                                          "empty" :
                                          ( diskState() == K3b::Device::STATE_INCOMPLETE ?
@@ -174,24 +174,24 @@ void K3b::Device::DiskInfo::debug() const
                                              "complete" :
                                              ( diskState() == K3b::Device::STATE_NO_MEDIA ?
                                                "no media" :
-                                               "unknown" ) ) ) ) << endl
-             << "Empty:           " << empty() << endl
-             << "Rewritable:      " << rewritable() << endl
-             << "Appendable:      " << appendable() << endl
-             << "Sessions:        " << numSessions() << endl
-             << "Tracks:          " << numTracks() << endl
-             << "Layers:          " << numLayers() << endl
+                                               "unknown" ) ) ) ) << Qt::endl
+             << "Empty:           " << empty() << Qt::endl
+             << "Rewritable:      " << rewritable() << Qt::endl
+             << "Appendable:      " << appendable() << Qt::endl
+             << "Sessions:        " << numSessions() << Qt::endl
+             << "Tracks:          " << numTracks() << Qt::endl
+             << "Layers:          " << numLayers() << Qt::endl
              << "Capacity:        " << capacity()
              << " (LBA " << capacity().lba()
-             << ") (" << capacity().mode1Bytes() << " Bytes)" << endl
+             << ") (" << capacity().mode1Bytes() << " Bytes)" << Qt::endl
 
              << "Remaining size:  " << remainingSize()
              << " (LBA " << remainingSize().lba()
-             << ") (" << remainingSize().mode1Bytes() << " Bytes)" << endl
+             << ") (" << remainingSize().mode1Bytes() << " Bytes)" << Qt::endl
 
              << "Used Size:       " << size()
              << " (LBA " << size().lba()
-             << ") (" << size().mode1Bytes() << " Bytes)" << endl;
+             << ") (" << size().mode1Bytes() << " Bytes)" << Qt::endl;
 
     if( mediaType() == K3b::Device::MEDIA_DVD_PLUS_RW )
         qDebug() << "Bg Format:       " << ( bgFormatState() == BG_FORMAT_NONE ?
@@ -201,7 +201,7 @@ void K3b::Device::DiskInfo::debug() const
                                                ( bgFormatState() == BG_FORMAT_IN_PROGRESS ?
                                                  "in progress" :
                                                  ( bgFormatState() == BG_FORMAT_COMPLETE ?
-                                                   "complete" : "unknown" ) ) ) ) << endl;
+                                                   "complete" : "unknown" ) ) ) ) << Qt::endl;
 }
 
 
@@ -243,9 +243,9 @@ bool K3b::Device::DiskInfo::operator!=( const K3b::Device::DiskInfo& other ) con
 
 // kdbgstream& K3b::Device::operator<<( kdbgstream& s, const K3b::Device::DiskInfo& ngInf )
 // {
-//    s << "DiskInfo:" << endl
-//      << "Mediatype:       " << K3b::Device::mediaTypeString( ngInf.mediaType() ) << endl
-//      << "Current Profile: " << K3b::Device::mediaTypeString( ngInf.currentProfile() ) << endl
+//    s << "DiskInfo:" << Qt::endl
+//      << "Mediatype:       " << K3b::Device::mediaTypeString( ngInf.mediaType() ) << Qt::endl
+//      << "Current Profile: " << K3b::Device::mediaTypeString( ngInf.currentProfile() ) << Qt::endl
 //      << "Disk state:      " << ( ngInf.diskState() == K3b::Device::STATE_EMPTY ?
 // 				 "empty" :
 // 				 ( ngInf.diskState() == K3b::Device::STATE_INCOMPLETE ?
@@ -254,14 +254,14 @@ bool K3b::Device::DiskInfo::operator!=( const K3b::Device::DiskInfo& other ) con
 // 				     "complete" :
 // 				     ( ngInf.diskState() == K3b::Device::STATE_NO_MEDIA ?
 // 				       "no media" :
-// 				       "unknown" ) ) ) ) << endl
-//      << "Empty:           " << ngInf.empty() << endl
-//      << "Rewritable:      " << ngInf.rewritable() << endl
-//      << "Appendable:      " << ngInf.appendable() << endl
-//      << "Sessions:        " << ngInf.numSessions() << endl
-//      << "Tracks:          " << ngInf.numTracks() << endl
-//      << "Size:            " << ngInf.capacity().toString() << endl
-//      << "Remaining size:  " << ngInf.remainingSize().toString() << endl;
+// 				       "unknown" ) ) ) ) << Qt::endl
+//      << "Empty:           " << ngInf.empty() << Qt::endl
+//      << "Rewritable:      " << ngInf.rewritable() << Qt::endl
+//      << "Appendable:      " << ngInf.appendable() << Qt::endl
+//      << "Sessions:        " << ngInf.numSessions() << Qt::endl
+//      << "Tracks:          " << ngInf.numTracks() << Qt::endl
+//      << "Size:            " << ngInf.capacity().toString() << Qt::endl
+//      << "Remaining size:  " << ngInf.remainingSize().toString() << Qt::endl;
 
 //    return s;
 // }

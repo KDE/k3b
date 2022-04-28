@@ -151,7 +151,7 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
 {
     K3b::Device::Device::Handle handle = cam_open_device (name, O_RDWR);
         qDebug() << "(K3b::Device::openDevice) open device " << name
-                 << ((handle)?" succeeded.":" failed.") << endl;
+                 << ((handle)?" succeeded.":" failed.") << Qt::endl;
     return handle;
 }
 #endif
@@ -178,7 +178,7 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
 
     if( fd < 0 ) {
         qDebug() << "(K3b::Device::Device) could not open device "
-                 << name << ( write ? " for writing" : " for reading" ) << endl;
+                 << name << ( write ? " for writing" : " for reading" ) << Qt::endl;
         qDebug() << "                    (" << QString::fromLocal8Bit( ::strerror(errno) ) << ")";
         fd = HANDLE_DEFAULT_VALUE;
 
@@ -223,7 +223,7 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
 
     if (deviceHandle == INVALID_HANDLE_VALUE) {
         int errorCode = GetLastError();
-        qDebug() << "Error opening " << string << "Error:" << errorCode << endl;
+        qDebug() << "Error opening " << string << "Error:" << errorCode << Qt::endl;
         return HANDLE_DEFAULT_VALUE;
     }
 
@@ -379,7 +379,7 @@ bool K3b::Device::Device::init( bool bCheckWritingModes )
     cmd[4] = sizeof(buf);
     cmd[5] = 0;
     if( cmd.transport( TR_DIR_READ, buf, sizeof(buf) ) ) {
-        qCritical() << "(K3b::Device::Device) Unable to do inquiry." << endl;
+        qCritical() << "(K3b::Device::Device) Unable to do inquiry." << Qt::endl;
         close();
         return false;
     }
@@ -901,7 +901,7 @@ K3b::Device::Toc K3b::Device::Device::readToc() const
             }
             else
                 qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                         << "READ CAPACITY for toc failed." << endl;
+                         << "READ CAPACITY for toc failed." << Qt::endl;
         }
     }
 
@@ -1024,7 +1024,7 @@ bool K3b::Device::Device::readFormattedToc( K3b::Device::Toc& toc, int mt ) cons
             }
             else if( data.size() != ( (int)sizeof(toc_track_descriptor) * ((int)data[3]+1) ) + 4 ) {
                 qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": invalid formatted toc data length: "
-                         << (data.size()-2) << endl;
+                         << (data.size()-2) << Qt::endl;
             }
             else {
                 lastTrack = data[3];
@@ -1817,7 +1817,7 @@ int K3b::Device::Device::currentProfile() const
 
     if( cmd.transport( TR_DIR_READ, profileBuf, 8 ) ) {
         qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                 << " GET_CONFIGURATION failed." << endl;
+                 << " GET_CONFIGURATION failed." << Qt::endl;
         return MEDIA_UNKNOWN;
     }
     else {
@@ -1830,7 +1830,7 @@ int K3b::Device::Device::currentProfile() const
         //
         if( profile == 0x00 ) {
             qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                     << " current profile 0. Checking current profile list instead." << endl;
+                     << " current profile 0. Checking current profile list instead." << Qt::endl;
             UByteArray data;
             if( getFeature( data, FEATURE_PROFILE_LIST ) ) {
                 int featureLen( data[11] );
@@ -1993,7 +1993,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
             }
             else {
                 qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                         << " fabricating disk information for a stupid device." << endl;
+                         << " fabricating disk information for a stupid device." << Qt::endl;
                 Toc toc = readToc();
                 if( !toc.isEmpty() ) {
                     inf.d->diskState = STATE_COMPLETE;
@@ -2031,23 +2031,23 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
 
                     qDebug() << "First sec data area: " << sda.toString()
                              << " (LBA " << QString::number(sda.lba())
-                             << ") (" << QString::number(sda.mode1Bytes()) << endl;
+                             << ") (" << QString::number(sda.mode1Bytes()) << Qt::endl;
                     qDebug() << "Last sec data area: " << eda.toString()
                              << " (LBA " << QString::number(eda.lba())
-                             << ") (" << QString::number(eda.mode1Bytes()) << " Bytes)" << endl;
+                             << ") (" << QString::number(eda.mode1Bytes()) << " Bytes)" << Qt::endl;
                     qDebug() << "Last sec layer 1: " << ea0.toString()
                              << " (LBA " << QString::number(ea0.lba())
-                             << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes)" << endl;
+                             << ") (" << QString::number(ea0.mode1Bytes()) << " Bytes)" << Qt::endl;
 
 
                     K3b::Msf da0 = ea0 - sda + 1;
                     K3b::Msf da1 = eda - ea0;
                     qDebug() << "Layer 1 length: " << da0.toString()
                              << " (LBA " << QString::number(da0.lba())
-                             << ") (" << QString::number(da0.mode1Bytes()) << " Bytes)" << endl;
+                             << ") (" << QString::number(da0.mode1Bytes()) << " Bytes)" << Qt::endl;
                     qDebug() << "Layer 2 length: " << da1.toString()
                              << " (LBA " << QString::number(da1.lba())
-                             << ") (" << QString::number(da1.mode1Bytes()) << " Bytes)" << endl;
+                             << ") (" << QString::number(da1.mode1Bytes()) << " Bytes)" << Qt::endl;
 
                     inf.d->numLayers = ((data[6]&0x60) == 0 ? 1 : 2);
 
@@ -2131,7 +2131,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                     K3b::Msf readCap;
                     if( readCapacity( readCap ) ) {
                         qDebug() << "(K3b::Device::Device) READ CAPACITY: " << readCap.toString()
-                                 << " other capacity: " << inf.d->capacity.toString() << endl;
+                                 << " other capacity: " << inf.d->capacity.toString() << Qt::endl;
                         //
                         // READ CAPACITY returns the last written sector
                         // that means the size is actually readCap + 1
@@ -2140,7 +2140,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                     }
                     else {
                         qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                                 << " Falling back to readToc for capacity." << endl;
+                                 << " Falling back to readToc for capacity." << Qt::endl;
                         inf.d->usedCapacity = readToc().length();
                     }
                 }
@@ -2150,7 +2150,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                 K3b::Msf readCap;
                 if( readCapacity( readCap ) ) {
                     qDebug() << "(K3b::Device::Device) READ CAPACITY: " << readCap.toString()
-                             << " other capacity: " << inf.d->capacity.toString() << endl;
+                             << " other capacity: " << inf.d->capacity.toString() << Qt::endl;
                     //
                     // READ CAPACITY returns the last written sector
                     // that means the size is actually readCap + 1
@@ -2167,7 +2167,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                     }
                     else
                         qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                                 << "READ TRACK INFORMATION for DVD-ROM failed." << endl;
+                                 << "READ TRACK INFORMATION for DVD-ROM failed." << Qt::endl;
                 }
 
                 break;
@@ -2223,7 +2223,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                     }
                     else
                         qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                                 << " READ CAPACITY for DVD-R failed." << endl;
+                                 << " READ CAPACITY for DVD-R failed." << Qt::endl;
                 }
 
                 break;
@@ -2265,7 +2265,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                 }
                 else
                     qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                             << " READ FORMAT CAPACITIES for DVD+RW failed." << endl;
+                             << " READ FORMAT CAPACITIES for DVD+RW failed." << Qt::endl;
 
                 break;
             }
@@ -2310,7 +2310,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                 }
                 else
                     qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                             << " READ FORMAT CAPACITIES for BD-RE failed." << endl;
+                             << " READ FORMAT CAPACITIES for BD-RE failed." << Qt::endl;
                 break;
             }
 
@@ -2960,7 +2960,7 @@ void K3b::Device::Device::checkFeatures()
                         break;
                     default:
                         qDebug() << "(K3b::Device::Device) " << blockDeviceName() << " unknown profile: "
-                                 << profile << endl;
+                                 << profile << Qt::endl;
                     }
                 }
 
@@ -3025,12 +3025,12 @@ void K3b::Device::Device::checkWritingModes()
     UByteArray buffer;
 
     if( !modeSense( buffer, 0x05 ) ) {
-        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": modeSense 0x05 failed!" << endl
-                 << "(K3b::Device::Device) " << blockDeviceName() << ": Cannot check write modes." << endl;
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": modeSense 0x05 failed!" << Qt::endl
+                 << "(K3b::Device::Device) " << blockDeviceName() << ": Cannot check write modes." << Qt::endl;
     }
     else if( buffer.size() < 18 ) { // 8 bytes header + 10 bytes used modepage
-        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": Missing modepage 0x05 data." << endl
-                 << "(K3b::Device::Device) " << blockDeviceName() << ": Cannot check write modes." << endl;
+        qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": Missing modepage 0x05 data." << Qt::endl
+                 << "(K3b::Device::Device) " << blockDeviceName() << ": Cannot check write modes." << Qt::endl;
     }
     else {
         qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": buffer.size(): " << buffer.size();
@@ -3195,7 +3195,7 @@ QList<int> K3b::Device::Device::determineSupportedWriteSpeeds() const
                 if( max > 0 ) {
                     while( !ret.isEmpty() && ret.last() > max ) {
                         qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                                 << " writing speed " << ret.last() << " higher than max " << max << endl;
+                                 << " writing speed " << ret.last() << " higher than max " << max << Qt::endl;
                         ret.pop_back();
                     }
                 }
@@ -3243,7 +3243,7 @@ bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list,
 
             qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                      << ":  Number of supported write speeds via 2A: "
-                     << numDesc << endl;
+                     << numDesc << Qt::endl;
 
             for (unsigned int i = 0; i < numDesc; ++i) {
                 int s = (int)from2Byte(wr[i].wr_speed_supp);
@@ -3254,13 +3254,13 @@ bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list,
                 //
                 if( isDvdMedia( mediaType ) && s < 1352 ) {
                     qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                             << " Invalid DVD speed: " << s << " KB/s" << endl;
+                             << " Invalid DVD speed: " << s << " KB/s" << Qt::endl;
                     list.clear();
                     break;
                 }
                 else {
                     qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                             << " : " << s << " KB/s" << endl;
+                             << " : " << s << " KB/s" << Qt::endl;
 
                     if( isDvdMedia( mediaType ) )
                         s = fixupDvdWritingSpeed( s );
@@ -3286,7 +3286,7 @@ bool K3b::Device::Device::getSupportedWriteSpeedsViaGP( QList<int>& list, MediaT
         int numDesc = (data.size() - 8)/16;
         qDebug() << "(K3b::Device::Device) " << blockDeviceName()
                  << ":  Number of supported write speeds via GET PERFORMANCE: "
-                 << numDesc << endl;
+                 << numDesc << Qt::endl;
 
         for( int i = 0; i < numDesc; ++i ) {
             int s = from4Byte( &data[20+i*16] );
@@ -3294,7 +3294,7 @@ bool K3b::Device::Device::getSupportedWriteSpeedsViaGP( QList<int>& list, MediaT
             // Looks as if the code below does not make sense with most drives
 //       if( !( data[4+i*16] & 0x2 ) ) {
 //  qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-//         << " No write speed: " << s << " KB/s" << endl;
+//         << " No write speed: " << s << " KB/s" << Qt::endl;
 //  continue;
 //       }
 
@@ -3303,11 +3303,11 @@ bool K3b::Device::Device::getSupportedWriteSpeedsViaGP( QList<int>& list, MediaT
                 // Does this ever happen?
                 //
                 qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                         << " Invalid DVD speed: " << s << " KB/s" << endl;
+                         << " Invalid DVD speed: " << s << " KB/s" << Qt::endl;
             }
             else {
                 qDebug() << "(K3b::Device::Device) " << blockDeviceName()
-                         << " : " << s << " KB/s" << endl;
+                         << " : " << s << " KB/s" << Qt::endl;
 
                 if( isDvdMedia( mediaType ) )
                     s = fixupDvdWritingSpeed( s );
@@ -3509,7 +3509,7 @@ bool K3b::Device::Device::indexScan( K3b::Device::Toc& toc ) const
 void K3b::Device::Device::searchIndexTransitions( long start, long end, K3b::Device::Track& track ) const
 {
     qDebug() << "(K3b::Device::Device) searching for index transitions between "
-             << start << " and " << end << endl;
+             << start << " and " << end << Qt::endl;
     int startIndex = getIndex( start );
     int endIndex = getIndex( end );
 
@@ -3518,7 +3518,7 @@ void K3b::Device::Device::searchIndexTransitions( long start, long end, K3b::Dev
     }
     else {
         qDebug() << "(K3b::Device::Device) indices: " << start << " - " << startIndex
-                 << " and " << end << " - " << endIndex << endl;
+                 << " and " << end << " - " << endIndex << Qt::endl;
 
         if( startIndex != endIndex ) {
             if( start+1 == end ) {

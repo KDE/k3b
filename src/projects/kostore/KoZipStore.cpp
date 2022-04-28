@@ -18,7 +18,7 @@ KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray 
 {
     qCDebug(KOSTORE) <<"KoZipStore Constructor filename =" << _filename
                     << " mode = " << int(_mode)
-                    << " mimetype = " << appIdentification << endl;
+                    << " mimetype = " << appIdentification << Qt::endl;
 
     m_pZip = new KZip( _filename );
 
@@ -36,7 +36,7 @@ KoZipStore::KoZipStore( QWidget* window, const QUrl & _url, const QString & _fil
     qCDebug(KOSTORE) <<"KoZipStore Constructor url" << _url.toDisplayString( QUrl::PreferLocalFile )
                     << " filename = " << _filename
                     << " mode = " << int(_mode)
-                    << " mimetype = " << appIdentification << endl;
+                    << " mimetype = " << appIdentification << Qt::endl;
 
     m_url = _url;
     m_window = window;
@@ -152,12 +152,12 @@ qint64 KoZipStore::write( const char* _data, qint64 _len )
 
   if ( !m_bIsOpen )
   {
-    qCCritical(KOSTORE) << "KoStore: You must open before writing" << endl;
+    qCCritical(KOSTORE) << "KoStore: You must open before writing" << Qt::endl;
     return 0L;
   }
   if ( m_mode != Write  )
   {
-    qCCritical(KOSTORE) << "KoStore: Can not write to store that is opened for reading" << endl;
+    qCCritical(KOSTORE) << "KoStore: Can not write to store that is opened for reading" << Qt::endl;
     return 0L;
   }
 
@@ -170,7 +170,7 @@ qint64 KoZipStore::write( const char* _data, qint64 _len )
 bool KoZipStore::closeWrite()
 {
     qCDebug(KOSTORE) <<"Wrote file" << m_sName <<" into ZIP archive. size"
-                    << m_iSize << endl;
+                    << m_iSize << Qt::endl;
     return m_pZip->finishWriting( m_iSize );
 #if 0
     if ( !m_pZip->writeFile( m_sName , "user", "group", m_iSize, m_byteArray.data() ) )

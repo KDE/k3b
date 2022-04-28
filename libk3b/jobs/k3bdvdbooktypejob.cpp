@@ -317,7 +317,7 @@ void K3b::DvdBooktypeJob::startBooktypeChange()
 
     qDebug() << "***** dvd+rw-booktype parameters:\n";
     QString s = d->process->joinedArgs();
-    qDebug() << s << endl << flush;
+    qDebug() << s << Qt::endl << Qt::flush;
     emit debuggingOutput( "dvd+rw-booktype command:", s );
 
     if( !d->process->start( KProcess::OnlyStderrChannel ) ) {

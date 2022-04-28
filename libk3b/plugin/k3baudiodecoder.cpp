@@ -308,7 +308,7 @@ int K3b::AudioDecoder::decode( char* _data, int maxLen )
             if( bytesToPad > 0 ) {
                 qDebug() << "(K3b::AudioDecoder) track length: " << lengthToDecode
                          << "; decoded module data: " << d->alreadyDecoded
-                         << "; we need to pad " << bytesToPad << " bytes." << endl;
+                         << "; we need to pad " << bytesToPad << " bytes." << Qt::endl;
 
                 if( DECODING_BUFFER_SIZE < bytesToPad )
                     bytesToPad = DECODING_BUFFER_SIZE;
@@ -329,7 +329,7 @@ int K3b::AudioDecoder::decode( char* _data, int maxLen )
             // check if we decoded too much
             if( d->alreadyDecoded + read > lengthToDecode ) {
                 qDebug() << "(K3b::AudioDecoder) we decoded too much. Cutting output by "
-                         << (read + d->alreadyDecoded - lengthToDecode) << endl;
+                         << (read + d->alreadyDecoded - lengthToDecode) << Qt::endl;
                 read = lengthToDecode - d->alreadyDecoded;
             }
         }
@@ -464,7 +464,7 @@ void K3b::AudioDecoder::from8BitTo16BitBeSigned( char* src, char* dest, int samp
 bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
 {
     qDebug() << "(K3b::AudioDecoder) seek from " << d->currentPos.toString() << " (+" << d->currentPosOffset
-             << ") to " << pos.toString() << endl;
+             << ") to " << pos.toString() << Qt::endl;
 
     if( pos > length() )
         return false;
@@ -493,7 +493,7 @@ bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
         &&
         ( pos - d->currentPos < K3b::Msf(0,10,0) ) ) {  // < 10 seconds is ok
         qDebug() << "(K3b::AudioDecoder) performing perfect seek from " << d->currentPos.toString()
-                 << " to " << pos.toString() << ". :)" << endl;
+                 << " to " << pos.toString() << ". :)" << Qt::endl;
 
         qint64 bytesToDecode = pos.audioBytes() - d->currentPos.audioBytes() - d->currentPosOffset;
         qDebug() << "(K3b::AudioDecoder) seeking " << bytesToDecode << " bytes.";

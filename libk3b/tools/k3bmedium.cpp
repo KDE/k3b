@@ -174,7 +174,7 @@ void K3b::Medium::update()
         d->diskInfo = d->device->diskInfo();
 
         if( d->diskInfo.diskState() != K3b::Device::STATE_NO_MEDIA ) {
-            qDebug() << "found medium: (" << d->device->blockDeviceName() << ')' << endl
+            qDebug() << "found medium: (" << d->device->blockDeviceName() << ')' << Qt::endl
                      << "=====================================================";
             d->diskInfo.debug();
             qDebug() << "=====================================================";

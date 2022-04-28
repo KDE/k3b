@@ -63,17 +63,17 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc& doc, const QStri
         }
         else {
             init( filePath, k3bName, doc, &statBuf, 0 );
-            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << Qt::endl;
         }
     }
     else {
-        qCritical() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+        qCritical() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << Qt::endl;
         if( k3b_stat( QFile::encodeName(filePath), &followedStatBuf ) == 0 ) {
             init( filePath, k3bName, doc, 0, &followedStatBuf );
         }
         else {
             init( filePath, k3bName, doc, 0, 0 );
-            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << endl;
+            qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << Qt::endl;
         }
     }
 }

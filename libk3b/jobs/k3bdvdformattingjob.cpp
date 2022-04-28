@@ -486,7 +486,7 @@ void K3b::DvdFormattingJob::startFormatting( const Device::DiskInfo& diskInfo )
 
         qDebug() << "***** dvd+rw-format parameters:\n";
         QString s = d->process->joinedArgs();
-        qDebug() << s << endl << flush;
+        qDebug() << s << Qt::endl << Qt::flush;
         emit debuggingOutput( "dvd+rw-format command:", s );
 
         if( !d->process->start( KProcess::OnlyStderrChannel ) ) {

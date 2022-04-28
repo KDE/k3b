@@ -366,7 +366,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
     // produce some debugging output
     qDebug() << "***** transcode parameters:\n";
     QString s = d->process->joinedArgs();
-    qDebug() << s << flush;
+    qDebug() << s << Qt::flush;
     emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
     // start the process

@@ -79,11 +79,11 @@ void K3b::Thread::slotEnsureDoneTimeout()
 void K3b::Thread::waitUntilFinished()
 {
     foreach( K3b::Thread* thread, s_threads ) {
-        qDebug() << "Waiting for thread " << thread << endl;
+        qDebug() << "Waiting for thread " << thread << Qt::endl;
         thread->wait();
     }
 
-    qDebug() << "Thread waiting done." << endl;
+    qDebug() << "Thread waiting done." << Qt::endl;
 }
 
 

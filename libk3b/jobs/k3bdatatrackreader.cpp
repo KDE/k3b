@@ -253,11 +253,11 @@ bool K3b::DataTrackReader::run()
     unsigned char* buffer = new unsigned char[d->usedSectorSize*s_bufferSizeSectors];
     while( s_bufferSizeSectors > 0 && read( buffer, d->firstSector.lba(), s_bufferSizeSectors ) < 0 ) {
         qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
-                 << s_bufferSizeSectors << " too high." << endl;
+                 << s_bufferSizeSectors << " too high." << Qt::endl;
         s_bufferSizeSectors /= 2;
     }
     qDebug() << "(K3b::DataTrackReader) determine max read sectors: "
-             << s_bufferSizeSectors << " is max." << endl;
+             << s_bufferSizeSectors << " is max." << Qt::endl;
 
     //    s_bufferSizeSectors = K3b::Device::determineMaxReadingBufferSize( d->device, d->firstSector );
     if( s_bufferSizeSectors <= 0 ) {
@@ -305,7 +305,7 @@ bool K3b::DataTrackReader::run()
         if( d->ioDevice ) {
             if( d->ioDevice->write( reinterpret_cast<char*>(buffer ), readBytes ) != readBytes ) {
                 qDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to dev " << d->ioDevice
-                         << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << endl;
+                         << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << Qt::endl;
                 emit debuggingOutput( "K3b::DataTrackReader",
                                       QString("Error while writing to IO device. Current sector is %2.")
                                       .arg(currentSector.lba()-d->firstSector.lba()) );
@@ -316,7 +316,7 @@ bool K3b::DataTrackReader::run()
         else {
             if( file.write( reinterpret_cast<char*>(buffer), readBytes ) != readBytes ) {
                 qDebug() << "(K3b::DataTrackReader::WorkThread) error while writing to file " << d->imagePath
-                         << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << endl;
+                         << " current sector: " << (currentSector.lba()-d->firstSector.lba()) << Qt::endl;
                 emit debuggingOutput( "K3b::DataTrackReader",
                                       QString("Error while writing to file %1. Current sector is %2.")
                                       .arg(d->imagePath).arg(currentSector.lba()-d->firstSector.lba()) );

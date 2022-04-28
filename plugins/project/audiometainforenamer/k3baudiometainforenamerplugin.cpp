@@ -339,7 +339,7 @@ QString K3bAudioMetainfoRenamerPluginWidget::createNewName( K3b::FileItem* item 
             //
             if( existsOtherItemWithSameName( item, newName + extension ) ) {
                 qDebug() << "(K3bAudioMetainfoRenamerPluginWidget) file with name "
-                         << newName << extension << " already exists" << endl;
+                         << newName << extension << " already exists" << Qt::endl;
                 int i = 1;
                 while( existsOtherItemWithSameName( item, newName + QString( " (%1)").arg(i) + extension ) )
                     i++;

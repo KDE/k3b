@@ -106,11 +106,11 @@ public:
         if( !inodeInfo.items.contains( item ) ) {
             qCritical() << "(K3b::FileCompilationSizeHandler) "
                      << item->localPath()
-                     << " has been removed without being added!" << endl;
+                     << " has been removed without being added!" << Qt::endl;
         }
         else {
             if( item->itemSize(followSymlinks) != inodeInfo.savedSize ) {
-                qCritical() << "(K3b::FileCompilationSizeHandler) savedSize differs!" << endl;
+                qCritical() << "(K3b::FileCompilationSizeHandler) savedSize differs!" << Qt::endl;
             }
 
             inodeInfo.items.removeOne( item );
@@ -128,7 +128,7 @@ public:
         if( !specialItems.contains( item ) ) {
             qCritical() << "(K3b::FileCompilationSizeHandler) Special item "
                      << item->k3bName()
-                     << " has been removed without being added!" << endl;
+                     << " has been removed without being added!" << Qt::endl;
         }
         else {
             specialItems.removeOne( item );

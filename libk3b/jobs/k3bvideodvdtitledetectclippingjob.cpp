@@ -164,7 +164,7 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     // produce some debugging output
     qDebug() << "***** transcode parameters:\n";
     QString s = d->process->joinedArgs();
-    qDebug() << s << flush;
+    qDebug() << s << Qt::flush;
     emit debuggingOutput( d->usedTranscodeBin->name() + " command:", s);
 
     // start the process
