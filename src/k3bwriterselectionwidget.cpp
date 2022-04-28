@@ -494,7 +494,7 @@ void K3b::WriterSelectionWidget::setSupportedWritingApps( K3b::WritingApps i )
 
 void K3b::WriterSelectionWidget::slotRefreshWritingApps()
 {
-    K3b::WritingApps i = 0;
+    K3b::WritingApps i = K3b::WritingApps();
 
     int lastSelected = m_comboWritingApp->selectedValue();
 

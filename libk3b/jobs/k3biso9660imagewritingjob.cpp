@@ -237,7 +237,7 @@ void K3b::Iso9660ImageWritingJob::startWriting()
     // 4. If image not larger than 900 MiB: All media types
     // 5. If not decided yet: DVD and BD media types.
 
-    Device::MediaTypes mt = 0;
+    Device::MediaTypes mt = Device::MediaTypes();
     if (m_writingMode == K3b::WritingModeAuto ||
         m_writingMode == K3b::WritingModeSao) {
         if (writingApp() == K3b::WritingAppCdrdao)

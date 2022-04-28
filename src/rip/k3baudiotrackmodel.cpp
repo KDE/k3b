@@ -238,7 +238,7 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
 
 Qt::ItemFlags K3b::AudioTrackModel::flags( const QModelIndex& index ) const
 {
-    Qt::ItemFlags f = 0;
+    Qt::ItemFlags f = Qt::ItemFlags();
 
     if ( index.isValid() && index.row() >= 0 && index.row() < d->medium.toc().count() &&
          d->medium.toc()[index.row()].type() == K3b::Device::Track::TYPE_AUDIO ) {

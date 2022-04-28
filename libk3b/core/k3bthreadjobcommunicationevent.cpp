@@ -9,8 +9,6 @@
 
 K3b::ThreadJobCommunicationEvent::Data::Data()
     : m_device( 0 ),
-      m_wantedMediaState( 0 ),
-      m_wantedMediaType( 0 ),
       m_result( 0 )
 {
 }

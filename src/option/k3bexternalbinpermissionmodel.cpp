@@ -274,7 +274,7 @@ Qt::ItemFlags ExternalBinPermissionModel::flags( const QModelIndex& index ) cons
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     }
     else
-        return 0;
+        return Qt::ItemFlags();
 }
 
 

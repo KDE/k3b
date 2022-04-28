@@ -111,8 +111,7 @@ class K3b::Device::Device::Private
 {
 public:
     Private()
-        : supportedProfiles(0),
-          deviceHandle(HANDLE_DEFAULT_VALUE),
+        : deviceHandle(HANDLE_DEFAULT_VALUE),
           openedReadWrite(false),
           burnfree(false) {
     }
