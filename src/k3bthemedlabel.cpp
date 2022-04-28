@@ -76,8 +76,9 @@ void K3b::ThemedLabel::slotThemeChanged()
         if( m_themePixmapCode > -1 ) {
             setPixmap( theme->pixmap( (K3b::Theme::PixmapType)m_themePixmapCode ) );
             setScaledContents( false );
-            if ( pixmap() ) {
-                setFixedSize( pixmap()->size() );
+            const QPixmap &pix = pixmap(Qt::ReturnByValue);
+            if ( !pix.isNull() ) {
+                setFixedSize( pix.size() );
             }
         }
     }
