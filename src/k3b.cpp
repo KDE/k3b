@@ -892,10 +892,10 @@ bool K3b::MainWindow::canCloseDocument( K3b::Doc* doc )
         return true;
 
     switch ( KMessageBox::warningYesNoCancel( this,
-                                              i18n("%1 has unsaved data.", doc->URL().fileName() ),
+                                              xi18nc("@info", "Project <resource>%1</resource> has unsaved data.", doc->URL().fileName() ),
                                               i18n("Closing Project"),
                                               KStandardGuiItem::save(),
-                                              KStandardGuiItem::dontSave() ) ) {
+                                              KStandardGuiItem::discard() ) ) {
     case KMessageBox::Yes:
         return fileSave( doc );
     case KMessageBox::No:
