@@ -175,7 +175,7 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
 
     switch( role ) {
     case MediumRole:
-        return qVariantFromValue( d->medium );
+        return QVariant::fromValue( d->medium );
 
     case TrackNumberRole:
         return trackIndex+1;
@@ -190,7 +190,7 @@ QVariant K3b::AudioTrackModel::data( const QModelIndex& index, int role ) const
         return d->getField( KCDDB::Comment, trackIndex );
 
     case LengthRole:
-        return qVariantFromValue( d->medium.toc()[trackIndex].length() );
+        return QVariant::fromValue( d->medium.toc()[trackIndex].length() );
 
     case Qt::DisplayRole:
     case Qt::EditRole:
