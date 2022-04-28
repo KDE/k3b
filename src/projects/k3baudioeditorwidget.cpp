@@ -7,7 +7,7 @@
 
 #include "k3baudioeditorwidget.h"
 
-#include <QLinkedList>
+#include <QList>
 #include <QCursor>
 #include <QHelpEvent>
 #include <QMouseEvent>
@@ -58,7 +58,7 @@ public:
         return id == r.id;
     }
 
-    typedef QLinkedList<Range> List;
+    typedef QList<Range> List;
 };
 
 
@@ -89,7 +89,7 @@ public:
         return id == r.id;
     }
 
-    typedef QLinkedList<Marker> List;
+    typedef QList<Marker> List;
 };
 
 

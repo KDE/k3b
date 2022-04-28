@@ -17,7 +17,7 @@
 #include "k3b_i18n.h"
 
 #include <QDebug>
-#include <QLinkedList>
+#include <QList>
 
 
 namespace {
@@ -39,7 +39,7 @@ namespace {
         mutable K3b::Msf length; // it's a cache, let's make it modifiable
     };
 
-    typedef QLinkedList<TrackEntry> TrackEntries;
+    typedef QList<TrackEntry> TrackEntries;
 
     class NullSinkChecksumPipe : public K3b::ChecksumPipe
     {
