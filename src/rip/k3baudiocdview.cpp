@@ -54,9 +54,9 @@
 #include <QTreeView>
 #include <QVBoxLayout>
 
-#include <KCddb/Genres>
-#include <KCddb/Cdinfo>
-#include <KCddb/Client>
+#include <KCDDB/Genres>
+#include <KCDDB/CDInfo>
+#include <KCDDB/Client>
 #include "categories.h"
 
 namespace mu = K3b::ModelUtils;

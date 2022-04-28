@@ -19,7 +19,7 @@
 #include <QList>
 #include <QSharedData>
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 
 

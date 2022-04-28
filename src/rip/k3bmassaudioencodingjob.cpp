@@ -11,7 +11,7 @@
 #include "k3bwavefilewriter.h"
 
 #include <KLocalizedString>
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 #include <QDebug>
 #include <QDir>

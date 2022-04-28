@@ -39,7 +39,7 @@
 #include <QTabWidget>
 #include <QTreeWidget>
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 
 namespace {

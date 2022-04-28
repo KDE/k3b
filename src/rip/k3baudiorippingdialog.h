@@ -10,7 +10,7 @@
 #include "k3btoc.h"
 #include "k3bmedium.h"
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 #include <QList>
 #include <QStringList>

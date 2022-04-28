@@ -29,7 +29,7 @@
 #include <QString>
 #include <QProgressDialog>
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 
 K_PLUGIN_CLASS_WITH_JSON(K3bAudioProjectCddbPlugin , "k3baudioprojectcddbplugin.json")

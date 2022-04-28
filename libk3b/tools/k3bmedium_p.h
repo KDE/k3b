@@ -16,7 +16,7 @@
 #include <QSharedData>
 #include <QList>
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 
 namespace K3b {

@@ -41,8 +41,8 @@
 #include <QVector>
 #include <QApplication>
 
-#include <KCddb/Client>
-#include <KCddb/Cdinfo>
+#include <KCDDB/Client>
+#include <KCDDB/CDInfo>
 
 
 

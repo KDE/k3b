@@ -10,8 +10,8 @@
 
 #include <KJob>
 
-#include <KCddb/Kcddb>
-#include <KCddb/Cdinfo>
+#include <KCDDB/KCDDB>
+#include <KCDDB/CDInfo>
 
 #include "k3b_export.h"
 

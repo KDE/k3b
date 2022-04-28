@@ -19,7 +19,7 @@
 #include <QEvent>
 #include <QRandomGenerator>
 
-#include <KCddb/Client>
+#include <KCDDB/Client>
 
 
 

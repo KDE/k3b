@@ -13,7 +13,7 @@
 
 #include <KLocalizedString>
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 #include <QMimeData>
 #include <QFont>

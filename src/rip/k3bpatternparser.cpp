@@ -9,7 +9,7 @@
 
 #include "k3bpatternparser.h"
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 #include <KLocalizedString>
 

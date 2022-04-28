@@ -15,7 +15,7 @@
 #include "k3btoc.h"
 #include "k3btrack.h"
 
-#include <KCddb/Cdinfo>
+#include <KCDDB/CDInfo>
 
 #include <KLocalizedString>
 
