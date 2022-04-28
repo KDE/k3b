@@ -184,7 +184,7 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
             m_titles[i].m_audioStreams[j].m_multiChannelExt = titleIfo->vtsi_mat->vts_audio_attr[j].multichannel_extension;
             m_titles[i].m_audioStreams[j].m_channels = titleIfo->vtsi_mat->vts_audio_attr[j].channels+1;
             if( titleIfo->vtsi_mat->vts_audio_attr[j].lang_code>>8 )
-                m_titles[i].m_audioStreams[j].m_langCode.sprintf( "%c%c",
+                m_titles[i].m_audioStreams[j].m_langCode = QString::asprintf( "%c%c",
                                                                   titleIfo->vtsi_mat->vts_audio_attr[j].lang_code>>8,
                                                                   titleIfo->vtsi_mat->vts_audio_attr[j].lang_code & 0xff );
             else
@@ -199,7 +199,7 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
             m_titles[i].m_subPictureStreams[j].m_codeMode = titleIfo->vtsi_mat->vts_subp_attr[j].code_mode;
             m_titles[i].m_subPictureStreams[j].m_codeExtension = titleIfo->vtsi_mat->vts_subp_attr[j].code_extension;
             if( titleIfo->vtsi_mat->vts_subp_attr[j].lang_code>>8 )
-                m_titles[i].m_subPictureStreams[j].m_langCode.sprintf( "%c%c",
+                m_titles[i].m_subPictureStreams[j].m_langCode = QString::asprintf( "%c%c",
                                                                        titleIfo->vtsi_mat->vts_subp_attr[j].lang_code>>8,
                                                                        titleIfo->vtsi_mat->vts_subp_attr[j].lang_code & 0xff );
             else

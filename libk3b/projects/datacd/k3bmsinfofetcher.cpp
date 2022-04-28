@@ -148,7 +148,7 @@ void K3b::MsInfoFetcher::slotMediaDetectionFinished( K3b::Device::DeviceHandler*
         else {
             unsigned int lastSessionStart, nextWritableAdress;
             if( m_device->getNextWritableAdress( lastSessionStart, nextWritableAdress ) ) {
-                m_msInfo.sprintf( "%u,%u", lastSessionStart+16, nextWritableAdress );
+                m_msInfo = QString::asprintf( "%u,%u", lastSessionStart+16, nextWritableAdress );
                 jobFinished( true );
             }
             else {
