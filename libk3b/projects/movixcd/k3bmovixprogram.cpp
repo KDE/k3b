@@ -299,7 +299,7 @@ QStringList K3b::MovixBin::supported( const QString& type ) const
     p.setOutputChannelMode( KProcess::MergedChannels );
     p.start();
     if( p.waitForFinished( -1 ) )
-        return QString(p.readAll()).split( '\n', QString::SkipEmptyParts );
+        return QString(p.readAll()).split( '\n', Qt::SkipEmptyParts );
     else
         return QStringList();
 }
@@ -328,7 +328,7 @@ QStringList K3b::MovixBin::files( const QString& kbd,
 
     p.start();
     if( p.waitForFinished( -1 ) )
-        return QString(p.readAll()).split( '\n', QString::SkipEmptyParts );
+        return QString(p.readAll()).split( '\n', Qt::SkipEmptyParts );
     else
         return QStringList();
 }

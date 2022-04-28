@@ -706,7 +706,7 @@ void K3bQProcessPrivate::startProcess()
     if (!program.contains(QLatin1Char('/'))) {
         const QString pathEnv = QString::fromLocal8Bit(::getenv("PATH"));
         if (!pathEnv.isEmpty()) {
-            QStringList pathEntries = pathEnv.split(QLatin1Char(':'), QString::SkipEmptyParts);
+            QStringList pathEntries = pathEnv.split(QLatin1Char(':'), Qt::SkipEmptyParts);
             if (!pathEntries.isEmpty()) {
                 pathc = pathEntries.size();
                 path = new char *[pathc + 1];

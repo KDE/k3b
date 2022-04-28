@@ -43,7 +43,7 @@ namespace {
             }
         }
 
-        QStringList lines = QString::fromLocal8Bit( buffer ).split( '\n', suppressEmptyLines ? QString::SkipEmptyParts : QString::KeepEmptyParts );
+        QStringList lines = QString::fromLocal8Bit( buffer ).split( '\n', suppressEmptyLines ? Qt::SkipEmptyParts : Qt::KeepEmptyParts );
 
         // in case we suppress empty lines we need to handle the following separately
         // to make sure we join unfinished lines correctly

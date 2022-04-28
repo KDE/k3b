@@ -443,7 +443,7 @@ K3b::FileItem* K3b::MovixDocPreparer::createItem( const QString& localPath, cons
 
 K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
 {
-    QStringList docPathSections = docPath.split( '/', QString::SkipEmptyParts );
+    QStringList docPathSections = docPath.split( '/', Qt::SkipEmptyParts );
     K3b::DirItem* dir = d->doc->root();
     for( QStringList::ConstIterator it = docPathSections.constBegin(); it != docPathSections.constEnd(); ++it ) {
         K3b::DataItem* next = dir->find( *it );

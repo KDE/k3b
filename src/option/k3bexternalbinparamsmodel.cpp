@@ -67,7 +67,7 @@ void ExternalBinParamsModel::save()
 {
     QRegExp reSpace( "\\s" );
     Q_FOREACH( ExternalProgram* program, d->programs ) {
-        QStringList params = d->parameters[ program ].split( reSpace, QString::SkipEmptyParts );
+        QStringList params = d->parameters[ program ].split( reSpace, Qt::SkipEmptyParts );
         program->setUserParameters( params );
     }
 }

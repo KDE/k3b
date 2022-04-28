@@ -620,7 +620,7 @@ void K3b::ExternalBinManager::search()
 #else
     const QChar pathSep = QChar::fromLatin1( ':' );
 #endif
-    const QStringList possiblePaths = QString::fromLatin1( qgetenv( "PATH" ) ).split( pathSep, QString::SkipEmptyParts )
+    const QStringList possiblePaths = QString::fromLatin1( qgetenv( "PATH" ) ).split( pathSep, Qt::SkipEmptyParts )
                                       + d->searchPath;
     foreach( QString p, possiblePaths ) {
         if (p.length() == 0)
