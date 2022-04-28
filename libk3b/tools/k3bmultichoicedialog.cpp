@@ -81,7 +81,7 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
     contents->setContentsMargins( 0, 0, 0, 0 );
 
     QLabel* pixLabel = new QLabel( this );
-    int size = IconSize(KIconLoader::Dialog);
+    int size = KIconLoader::global()->currentSize(KIconLoader::Dialog);
     pixLabel->setPixmap( themedMessageBoxIcon( icon ).pixmap( size, size ) );
     pixLabel->setScaledContents( false );
     QLabel* label = new QLabel( text, this );
