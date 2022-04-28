@@ -163,9 +163,6 @@ public:
 
     bool isReadyWrite() const;
 
-    static int execute(const QString &program, const QStringList &arguments);
-    static int execute(const QString &program);
-
     static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory,
                               qint64 *pid = 0);
     static bool startDetached(const QString &program, const QStringList &arguments);

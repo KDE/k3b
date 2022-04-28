@@ -19,7 +19,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${ECM_MODULE_
 set(K3B_VERSION_STRING ${RELEASE_SERVICE_VERSION})
 
 # increase on BC breakage
-set(K3B_LIB_VERSION_MAJOR 7)
+set(K3B_LIB_VERSION_MAJOR 8)
 
 # increase after adding functionality
 set(K3B_LIB_VERSION_MINOR 0)

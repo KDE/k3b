@@ -1778,42 +1778,6 @@ int K3bQProcess::exitCode() const
 
 /*!
     Starts the program \a program with the arguments \a arguments in a
-    new process, waits for it to finish, and then returns the exit
-    code of the process. Any data the new process writes to the
-    console is forwarded to the calling process.
-
-    The environment and working directory are inherited by the calling
-    process.
-
-    On Windows, arguments that contain spaces are wrapped in quotes.
-*/
-int K3bQProcess::execute(const QString &program, const QStringList &arguments)
-{
-    QProcess process;
-    process.setProcessChannelMode(::QProcess::ForwardedChannels);
-    process.start(program, arguments);
-    process.waitForFinished(-1);
-    return process.exitCode();
-}
-
-/*!
-    \overload
-
-    Starts the program \a program in a new process. \a program is a
-    single string of text containing both the program name and its
-    arguments. The arguments are separated by one or more spaces.
-*/
-int K3bQProcess::execute(const QString &program)
-{
-    QProcess process;
-    process.setProcessChannelMode(::QProcess::ForwardedChannels);
-    process.start(program);
-    process.waitForFinished(-1);
-    return process.exitCode();
-}
-
-/*!
-    Starts the program \a program with the arguments \a arguments in a
     new process, and detaches from it. Returns true on success;
     otherwise returns false. If the calling process exits, the
     detached process will continue to live.
