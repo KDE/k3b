@@ -92,7 +92,6 @@ K3b::DataUrlAddingDialog::DataUrlAddingDialog( DirItem* dir, QWidget* parent )
     setWindowTitle(i18n("Adding files to project '%1'",m_doc->URL().fileName()));
     setAttribute( Qt::WA_DeleteOnClose );
     QGridLayout* grid = new QGridLayout( this );
-    grid->setContentsMargins( 0, 0, 0, 0 );
 
     m_counterLabel = new QLabel( this );
     m_infoLabel = new KSqueezedTextLabel( i18n("Adding files to project '%1'..."
