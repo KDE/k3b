@@ -106,7 +106,7 @@ QSize K3b::FlatButton::sizeHint() const
 {
     // height: pixmap + spacing + font height + frame width
     // width: max( pixmap, text) + frame width
-    return QSize( qMax( iconSize().width(), fontMetrics().width( text() ) ) + ( MARGIN_SIZE + FRAME_WIDTH )*2,
+    return QSize( qMax( iconSize().width(), fontMetrics().horizontalAdvance( text() ) ) + ( MARGIN_SIZE + FRAME_WIDTH )*2,
                   iconSize().height() + fontMetrics().height() + ICON_LABEL_SPACE + ( MARGIN_SIZE + FRAME_HEIGHT )*2 );
 }
 

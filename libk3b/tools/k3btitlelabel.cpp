@@ -199,7 +199,7 @@ void K3b::TitleLabel::updatePositioning()
 
     d->subTitleBaseLine = d->titleBaseLine;
 
-    d->subTitleLength = ( d->subTitle.isEmpty() ? 0 : subTitleFm.width( d->subTitle ) );
+    d->subTitleLength = ( d->subTitle.isEmpty() ? 0 : subTitleFm.horizontalAdvance( d->subTitle ) );
 
     // cut the text to window width
     d->displayTitle = d->title;
@@ -223,8 +223,8 @@ void K3b::TitleLabel::updatePositioning()
             d->displaySubTitle = subTitleFm.elidedText( d->subTitle, Qt::ElideRight, widthAvail/2 );
     }
 
-    d->displayTitleLength = titleFm.width( d->displayTitle );
-    d->displaySubTitleLength = subTitleFm.width( d->displaySubTitle );
+    d->displayTitleLength = titleFm.horizontalAdvance( d->displayTitle );
+    d->displaySubTitleLength = subTitleFm.horizontalAdvance( d->displaySubTitle );
 
 
     //
@@ -243,7 +243,7 @@ void K3b::TitleLabel::updatePositioning()
         cutSubTitle += "...";
     }
 
-    d->cachedMinimumWidth += titleFm.width( cutTitle ) + subTitleFm.width( cutSubTitle );
+    d->cachedMinimumWidth += titleFm.horizontalAdvance( cutTitle ) + subTitleFm.horizontalAdvance( cutSubTitle );
     if( !d->subTitle.isEmpty() )
         d->cachedMinimumWidth += d->spacing;
 

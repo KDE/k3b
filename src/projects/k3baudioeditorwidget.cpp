@@ -173,7 +173,7 @@ QSize K3b::AudioEditorWidget::minimumSizeHint() const
     // FIXME: this is still bad for long sources and there might be 60 minutes sources!
 
     int maxWidth = QApplication::desktop()->width()*2/3;
-    int wantedWidth = 2*d->margin + 2*frameWidth() + (d->length.totalFrames()/75/60 + 1) * fontMetrics().width( "000" );
+    int wantedWidth = 2*d->margin + 2*frameWidth() + (d->length.totalFrames()/75/60 + 1) * fontMetrics().horizontalAdvance( "000" );
     return QSize( qMin( maxWidth, wantedWidth ),
                   2*d->margin + 12 + 6 /*12 for the tickmarks and 6 for the markers */ + fontMetrics().height() + 2*frameWidth() );
 }
@@ -503,7 +503,7 @@ void K3b::AudioEditorWidget::drawAll( QPainter* p, const QRect& drawRect )
     int minute = 1;
     int minuteStep = 1;
     int markerVPos = drawRect.bottom();
-    int maxMarkerWidth = fontMetrics().width( QString::number(d->length.minutes()) );
+    int maxMarkerWidth = fontMetrics().horizontalAdvance( QString::number(d->length.minutes()) );
     int minNeededSpace = maxMarkerWidth + 1;
     int x = 0;
     while( minute*60*75 < d->length ) {
