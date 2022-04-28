@@ -89,7 +89,7 @@ void ExternalBinPermissionModel::Private::buildProgramList()
             programs += it.value()->bins();
         }
     }
-    selectedPrograms = programs.toSet();
+    selectedPrograms = QSet<const ExternalBin *>(programs.begin(), programs.end());
 }
 
 
@@ -363,7 +363,8 @@ void ExternalBinPermissionModel::update()
 {
     beginResetModel();
     d->buildProgramList();
-    d->selectedPrograms.intersect( d->programs.toSet() );
+    d->selectedPrograms.intersect( QSet<const ExternalBin *>(d->programs.begin(), d->programs.end() ));
+
     endResetModel();
 }
 

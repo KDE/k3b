@@ -616,7 +616,8 @@ QStringList K3b::MetaItemModel::mimeTypes() const
     for( QList<Place>::const_iterator it = d->places.constBegin();
         it != d->places.constEnd(); ++it )
     {
-        types += it->model()->mimeTypes().toSet();
+        const QStringList &mimeTypes = it->model()->mimeTypes();
+        types += QSet<QString>(mimeTypes.begin(), mimeTypes.end());
     }
     return types.values();
 }

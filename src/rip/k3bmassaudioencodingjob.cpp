@@ -218,7 +218,9 @@ bool MassAudioEncodingJob::run()
     d->overallBytesToRead = 0;
     d->lengths.clear();
 
-    Q_FOREACH( const QString& filename, d->tracks.keys().toSet() ) {
+    const QStringList tracksKeys = d->tracks.keys();
+    const QSet<QString> fileNames = QSet<QString>(tracksKeys.begin(), tracksKeys.end());
+    Q_FOREACH( const QString& filename, fileNames ) {
         d->lengths.insert( filename, 0 );
         Q_FOREACH( int trackNumber, d->tracks.values( filename ) ) {
             const Msf length = trackLength( trackNumber );
@@ -459,7 +461,9 @@ bool MassAudioEncodingJob::writePlaylist()
 bool MassAudioEncodingJob::writeCueFile()
 {
     bool success = true;
-    Q_FOREACH( const QString& filename, d->tracks.keys().toSet() ) {
+    const QStringList tracksKeys = d->tracks.keys();
+    const QSet<QString> fileNames = QSet<QString>(tracksKeys.begin(), tracksKeys.end());
+    Q_FOREACH( const QString& filename, fileNames ) {
         CueFileWriter cueWriter;
 
         // create a new toc and cd-text
