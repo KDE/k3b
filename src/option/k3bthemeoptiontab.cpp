@@ -48,7 +48,7 @@ K3b::ThemeOptionTab::ThemeOptionTab( QWidget* parent )
              this, SLOT(slotInstallTheme()) );
     connect( m_buttonRemoveTheme, SIGNAL(clicked()),
              this, SLOT(slotRemoveTheme()) );
-    connect(m_buttonGetNewThemes, &KNS3::Button::dialogFinished, this, [this] (const QList<KNS3::Entry> &changedEntries) {
+    connect(m_buttonGetNewThemes, &KNSWidgets::Button::dialogFinished, this, [this] (const QList<KNSCore::Entry> &changedEntries) {
         if (!changedEntries.isEmpty()) {
 	    m_themeModel->reload();
 	}

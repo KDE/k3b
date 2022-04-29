@@ -230,7 +230,7 @@ target_link_libraries(k3b
     KF5::JobWidgets
     KF5::KIOFileWidgets
     KF5::KCMUtils
-    KF5::NewStuff
+    KF5::NewStuffCore KF5::NewStuffWidgets
     KF5::Notifications
     KF5::NotifyConfig
     KF5::Solid

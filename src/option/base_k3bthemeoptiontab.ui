@@ -114,7 +114,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="KNS3::Button" name="m_buttonGetNewThemes">
+      <widget class="KNSWidgets::Button" name="m_buttonGetNewThemes">
        <property name="text">
         <string>Get New Themes...</string>
        </property>
@@ -152,9 +152,9 @@
  <connections/>
  <customwidgets>
   <customwidget>
-   <class>KNS3::Button</class>
+   <class>KNSWidgets::Button</class>
    <extends>QPushButton</extends>
-   <header>KNS3/Button</header>
+   <header>KNSWidgets/Button</header>
   </customwidget>
  </customwidgets>
 </ui>
