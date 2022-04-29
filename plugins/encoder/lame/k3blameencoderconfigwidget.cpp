@@ -107,7 +107,7 @@ void K3bLameEncoderSettingsWidget::slotShowManualSettings()
     else
         updateManualSettingsLabel();
 
-    changed();
+    markAsChanged();
 }
 
 
