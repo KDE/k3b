@@ -43,7 +43,7 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
 
     m_bmPopup = new KActionMenu( QIcon::fromTheme("bookmarks"),i18n("Bookmarks"), this);
     m_bmPopup->setPopupMode( QToolButton::InstantPopup );
-    m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->menu(), actionCollection() );
+    m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->menu() );
 
     (void)K3b::createAction( this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return,
                              this, SLOT(slotAddFilesToProject()),
