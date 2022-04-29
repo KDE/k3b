@@ -460,7 +460,7 @@ QList<K3b::Doc*> K3b::MainWindow::projects() const
 
 void K3b::MainWindow::slotConfigureKeys()
 {
-    KShortcutsDialog::configure( actionCollection(),KShortcutsEditor::LetterShortcutsDisallowed, this );
+    KShortcutsDialog::showDialog( actionCollection(), KShortcutsEditor::LetterShortcutsDisallowed, this );
 }
 
 void K3b::MainWindow::initStatusBar()
