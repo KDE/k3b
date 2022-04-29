@@ -238,7 +238,7 @@ KIO::filesize_t K3b::imageFilesize( const QUrl& url )
     {
         QUrl nextUrl( url );
         nextUrl.setPath(nextUrl.path() + '.' + QString::number(cnt).rightJustified( 3, '0' ));
-        KIO::StatJob* statJob = KIO::stat(nextUrl, KIO::StatJob::SourceSide, KIO::HideProgressInfo);
+        KIO::StatJob* statJob = KIO::statDetails(nextUrl, KIO::StatJob::SourceSide, KIO::StatDefaultDetails, KIO::HideProgressInfo);
         if (statJob->exec())
             size += K3b::filesize(nextUrl);
         else
