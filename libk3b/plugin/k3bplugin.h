@@ -9,7 +9,6 @@
 #include "k3b_export.h"
 #include <KPluginFactory>
 #include <KPluginMetaData>
-#include <KPluginInfo>
 #include <QObject>
 
 #define K3B_PLUGIN_SYSTEM_VERSION 5
@@ -32,7 +31,6 @@ namespace K3b {
         explicit Plugin( QObject* parent = 0 );
         ~Plugin() override;
 
-        KPluginInfo pluginInfo() const { return KPluginInfo::fromMetaData(d->metadata); }
         KPluginMetaData pluginMetaData() const { return d->metadata; }
 
         /**

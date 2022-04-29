@@ -17,6 +17,7 @@
 #include "k3bplugin_i18n.h"
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 #include <QDebug>

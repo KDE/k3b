@@ -14,6 +14,7 @@
 
 #include <KComboBox>
 #include <KConfig>
+#include <KConfigGroup>
 #include <KColorScheme>
 #include <KLocalizedString>
 #include <KDiskFreeSpaceInfo>
@@ -61,7 +62,7 @@ K3b::AudioEncoder* K3b::AudioConvertingOptionWidget::Private::encoderForIndex( i
 QString K3b::AudioConvertingOptionWidget::Private::pluginNameForIndex( int index ) const
 {
     if( AudioEncoder* encoder = encoderForIndex( index ) )
-        return encoder->pluginInfo().pluginName();
+        return encoder->pluginMetaData().pluginId();
     else
         return QString();
 }
@@ -87,7 +88,7 @@ int K3b::AudioConvertingOptionWidget::Private::indexForFileType( const QString& 
     for( int i = 0; i < encoders.size(); ++i ) {
         AudioEncoder* encoder = encoders.at( i );
         if( encoder != 0 &&
-            encoder->pluginInfo().pluginName() == pluginName &&
+            encoder->pluginMetaData().pluginId() == pluginName &&
             extensions.at( i ) == ext ) {
             return i;
         }
@@ -102,7 +103,7 @@ QString K3b::AudioConvertingOptionWidget::Private::defaultPluginName() const
     for( int i = 0; i < extensions.size(); ++i ) {
         AudioEncoder* encoder = encoders.at( i );
         if( extensions.at( i ) == defaultExt && encoder != 0 ) {
-            return encoder->pluginInfo().pluginName();
+            return encoder->pluginMetaData().pluginId();
         }
     }
     return QString();

@@ -12,9 +12,8 @@
 #include "k3b_i18n.h"
 
 #include <KCModuleProxy>
-#include <KPluginInfo>
 #include <KService>
-#include <KPluginLoader>
+#include <KPluginFactory>
 #include <KPluginMetaData>
 #include <KMessageBox>
 
@@ -84,15 +83,15 @@ QList<K3b::Plugin*> K3b::PluginManager::plugins( const QString& group ) const
 
 KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) const
 {
-    foreach( const KService::Ptr& service, plugin->pluginInfo().kcmServices() ) {
-        if( !service->noDisplay() ) {
-            KCModuleProxy* moduleProxy = new KCModuleProxy( service );
-            if( moduleProxy->realModule() ) {
-                return moduleProxy;
-            }
-            else {
-                delete moduleProxy;
-            }
+    const QString kcm = plugin->pluginMetaData().value("X-KDE-ConfigModule");
+    qDebug() << "for plugin" << plugin->pluginMetaData().pluginId() << "KCM" << kcm;
+    if (!kcm.isEmpty()) {
+        KCModuleProxy *moduleProxy = new KCModuleProxy(KPluginMetaData(kcm));
+        if( moduleProxy->realModule() ) {
+            return moduleProxy;
+        }
+        else {
+            delete moduleProxy;
         }
     }
     return 0;
@@ -101,11 +100,11 @@ KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) con
 
 void K3b::PluginManager::loadAll()
 {
-    const QVector<KPluginMetaData> metadataList = KPluginLoader::findPlugins("k3b_plugins");
+    const QVector<KPluginMetaData> metadataList = KPluginMetaData::findPlugins("k3b_plugins");
     for (const auto &metadata : metadataList) {
-        KPluginLoader loader(metadata.fileName());
-        KPluginFactory *factory = loader.factory();
-        if (auto *plugin = factory->create<K3b::Plugin>()) {
+        KPluginFactory::Result<K3b::Plugin> result = KPluginFactory::instantiatePlugin<K3b::Plugin>(metadata);
+        if (result) {
+            K3b::Plugin *plugin = result.plugin;
             plugin->d->metadata = metadata;
             qDebug() << "Loaded plugin" << metadata.metaDataFileName();
             d->plugins.append(plugin);
@@ -132,7 +131,7 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
 {
     if( KCModuleProxy* moduleProxy = d->getModuleProxy( plugin ) ) {
         QDialog dlg( parent );
-        dlg.setWindowTitle( plugin->pluginInfo().name() );
+        dlg.setWindowTitle( plugin->pluginMetaData().name() );
         QVBoxLayout* layout = new QVBoxLayout( &dlg );
         QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, &dlg );
         layout->addWidget( moduleProxy );
@@ -156,7 +155,7 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
         return ret;
     }
     else {
-        KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginInfo().name() ) );
+        KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginMetaData().name() ) );
         return 0;
     }
 }

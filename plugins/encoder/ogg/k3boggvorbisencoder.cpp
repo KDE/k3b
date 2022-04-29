@@ -12,6 +12,7 @@
 #include <config-k3b.h>
 
 #include <KConfig>
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 #include <QDebug>

@@ -11,8 +11,7 @@
 #include "k3bcore.h"
 
 #include <KLocalizedString>
-#include <KPluginSelector>
-#include <KPluginInfo>
+#include <KPluginWidget>
 
 #include <QDebug>
 #include <QHash>
@@ -33,7 +32,7 @@ K3b::PluginOptionTab::PluginOptionTab( QWidget* parent )
                                       "<em>KPart Plugins</em> which embed themselves in the K3b menu structure.</p>" ), this );
     label->setWordWrap( true );
 
-    KPluginSelector* pluginSelector = new KPluginSelector( this );
+    KPluginWidget * pluginSelector = new KPluginWidget( this );
 
     layout->addWidget( label );
     layout->addWidget( pluginSelector );
@@ -47,16 +46,13 @@ K3b::PluginOptionTab::PluginOptionTab( QWidget* parent )
 
     // add all plugins in each category
     foreach( const QString &category, categoryNames.keys() ) {
-        QList<KPluginInfo> plugins;
+        QVector<KPluginMetaData> plugins;
 
         foreach( Plugin* plugin, k3bcore->pluginManager()->plugins( category ) ) {
-            plugins << plugin->pluginInfo();
-            qDebug() << "Adding plugin" << plugin->pluginInfo().name();
+            plugins << plugin->pluginMetaData();
+            qDebug() << "Adding plugin" << plugin->pluginMetaData().pluginId();
         }
-        pluginSelector->addPlugins( plugins,
-                                    KPluginSelector::ReadConfigFile,
-                                    categoryNames[ category ],
-                                    category );
+        pluginSelector->addPlugins( plugins, categoryNames[ category ] );
     }
 }
 

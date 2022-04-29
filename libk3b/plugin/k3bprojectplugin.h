@@ -11,6 +11,7 @@
 #include "k3bdoc.h"
 #include "k3bplugin.h"
 
+#include <KConfigGroup>
 #include <QFlags>
 #include <QIcon>
 
