@@ -19,6 +19,13 @@
 #include <QStack>
 #include <QDebug>
 
+static void replaceControlCharacters( QString& s )
+{
+    s.replace( '/', '_' );
+    s.replace( '*', '_' );
+    s.replace( '}', '*' );  // for conditional inclusion
+}
+
 QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
                                           int trackNumber,
                                           const QString& extension,
@@ -308,11 +315,4 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
         dir.append( '.' + extension );
 
     return dir;
-}
-
-void K3b::replaceControlCharacters( QString& s )
-{
-    s.replace( '/', '_' );
-    s.replace( '*', '_' );
-    s.replace( '}', '*' );  // for conditional inclusion
 }

@@ -42,8 +42,6 @@ namespace K3b {
             EXTENSION = 'e'
         };
     };
-
-    static void replaceControlCharacters(QString& s);
 }
 
 #endif

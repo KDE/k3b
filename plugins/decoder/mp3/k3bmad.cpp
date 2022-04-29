@@ -13,11 +13,11 @@ static const int INPUT_BUFFER_SIZE = 5*8192;
 
 
 K3bMad::K3bMad()
-  : m_madStructuresInitialized(false),
-    madStream(NULL),
+  : madStream(NULL),
     madFrame(NULL),
     madSynth(NULL),
     madTimer(NULL),
+    m_madStructuresInitialized(false),
     m_bInputError(false)
 {
   madStream = new mad_stream;

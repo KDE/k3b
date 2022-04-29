@@ -830,8 +830,8 @@ QByteArray K3b::Device::CdText::Private::createPackData( int packType, int& pack
     int dataFill = 0;
     QByteArray text = encodeCdText( textForPackType( packType, 0 ) );
     int currentTrack = 0;
-    unsigned int textPos = 0;
-    unsigned int packPos = 0;
+    int textPos = 0;
+    int packPos = 0;
 
     //
     // initialize the first pack

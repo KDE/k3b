@@ -790,7 +790,7 @@ int K3b::Device::Device::numSessions() const
     else if ( m & ( MEDIA_DVD_PLUS_RW|MEDIA_DVD_RW_OVWR|MEDIA_BD_RE ) ) {
         // fabricate value
         int e = isEmpty();
-        return ( e == STATE_COMPLETE || e == STATE_COMPLETE ? 1 : 0 );
+        return ( e == STATE_COMPLETE ? 1 : 0 );
     }
     else {
         if( readDiscInformation( data ) ) {
