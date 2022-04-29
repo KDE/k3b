@@ -12,7 +12,6 @@
 #include <KLineEdit>
 #include <KColorScheme>
 #include <KLocalizedString>
-#include <KDiskFreeSpaceInfo>
 #include <KIO/Global>
 #include <KUrlRequester>
 #include <KUrlLabel>
@@ -27,6 +26,7 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QWhatsThis>
+#include <QStorageInfo>
 
 
 static const int s_mp3Bitrates[] = {
@@ -241,10 +241,10 @@ void K3b::VideoDVDRippingWidget::slotUpdateFreeTempSpace()
     const KColorScheme colorScheme( isEnabled() ? QPalette::Normal : QPalette::Disabled, KColorScheme::Window );
     QColor textColor;
 
-    KDiskFreeSpaceInfo free = KDiskFreeSpaceInfo::freeSpaceInfo( path );
+    const QStorageInfo free( path );
     if( free.isValid() ) {
-        m_labelFreeSpace->setText( KIO::convertSizeFromKiB(free.available()/1024) );
-        if( free.available() < m_neededSize )
+        m_labelFreeSpace->setText( KIO::convertSizeFromKiB(free.bytesFree()/1024) );
+        if( free.bytesFree() < m_neededSize )
             textColor = colorScheme.foreground( KColorScheme::NegativeText ).color();
         else
             textColor = colorScheme.foreground( KColorScheme::NormalText ).color();

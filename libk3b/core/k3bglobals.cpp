@@ -19,7 +19,6 @@
 #include "k3b_i18n.h"
 
 #include <KProcess>
-#include <KDiskFreeSpaceInfo>
 #include <KIO/Job>
 #include <KIO/StatJob>
 #include <KMountPoint>
@@ -33,6 +32,7 @@
 #include <QFile>
 #include <QStandardPaths>
 #include <QUrl>
+#include <QStorageInfo>
 
 #include <cmath>
 #include <sys/utsname.h>
@@ -199,10 +199,10 @@ QString K3b::systemName()
 
 bool K3b::kbFreeOnFs( const QString& path, unsigned long& size, unsigned long& avail )
 {
-    KDiskFreeSpaceInfo fs = KDiskFreeSpaceInfo::freeSpaceInfo( path );
+    const QStorageInfo fs(path);
     if ( fs.isValid() ) {
-        size = fs.size()/1024;
-        avail = fs.available()/1024;
+        size = fs.bytesTotal()/1024;
+        avail = fs.bytesFree()/1024;
         return true;
     }
     else {

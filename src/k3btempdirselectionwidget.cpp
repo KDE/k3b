@@ -15,7 +15,6 @@
 #include <KConfig>
 #include <KLocalizedString>
 #include <KIconLoader>
-#include <KDiskFreeSpaceInfo>
 #include <KIO/Global>
 #include <KUrlRequester>
 #include <kio_version.h>
@@ -26,6 +25,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QToolTip>
+#include <QStorageInfo>
 
 
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
@@ -92,8 +92,8 @@ KIO::filesize_t K3b::TempDirSelectionWidget::freeTempSpace() const
     if( !QFile::exists( path ) )
         path.truncate( path.lastIndexOf('/') );
 
-    KDiskFreeSpaceInfo diskFreeSpaceInfo = KDiskFreeSpaceInfo::freeSpaceInfo( path );
-    return diskFreeSpaceInfo.available();
+    const QStorageInfo diskFreeSpaceInfo( path );
+    return diskFreeSpaceInfo.bytesFree();
 }
 
 

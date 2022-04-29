@@ -47,7 +47,7 @@ namespace K3b {
 
     private:
         QTimer* m_freeSpaceUpdateTimer;
-        KIO::filesize_t m_neededSize;
+        qint64 m_neededSize;
 
         QSize m_customVideoSize;
     };

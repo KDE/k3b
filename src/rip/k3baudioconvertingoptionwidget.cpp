@@ -17,7 +17,6 @@
 #include <KConfigGroup>
 #include <KColorScheme>
 #include <KLocalizedString>
-#include <KDiskFreeSpaceInfo>
 #include <KUrlRequester>
 #include <KIconLoader>
 
@@ -27,6 +26,7 @@
 #include <QStandardPaths>
 #include <QTimer>
 #include <QToolButton>
+#include <QStorageInfo>
 
 
 
@@ -38,7 +38,7 @@ public:
 
     QTimer freeSpaceUpdateTimer;
 
-    KIO::filesize_t neededSize;
+    qint64 neededSize;
     
     AudioEncoder* encoderForIndex( int index ) const;
     QString pluginNameForIndex( int index ) const;
@@ -238,11 +238,11 @@ void K3b::AudioConvertingOptionWidget::slotUpdateFreeTempSpace()
 {
     KColorScheme::ForegroundRole textColor;
 
-    KDiskFreeSpaceInfo diskInfo = KDiskFreeSpaceInfo::freeSpaceInfo( m_editBaseDir->url().toLocalFile() );
+    const QStorageInfo diskInfo( m_editBaseDir->url().toLocalFile() );
     if( diskInfo.isValid() ) {
-        m_labelFreeSpace->setText( KIO::convertSize(diskInfo.available()) );
+        m_labelFreeSpace->setText( KIO::convertSize(diskInfo.bytesFree()) );
 
-        if( d->neededSize > diskInfo.available() )
+        if( d->neededSize > diskInfo.bytesFree() )
             textColor = KColorScheme::NegativeText;
         else
             textColor = KColorScheme::NormalText;
