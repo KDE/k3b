@@ -365,7 +365,7 @@ void K3b::MainWindow::initActions()
     actionFileNewMenu->setIcon( QIcon::fromTheme( "document-new" ) );
     actionFileNewMenu->setToolTip(i18n("Creates a new project"));
     actionFileNewMenu->setStatusTip( actionFileNewMenu->toolTip() );
-    actionFileNewMenu->setDelayed( false );
+    actionFileNewMenu->setPopupMode( QToolButton::InstantPopup );
     actionFileNewMenu->addAction( actionFileNewData );
     actionFileNewMenu->addAction( actionFileContinueMultisession );
     actionFileNewMenu->addSeparator();

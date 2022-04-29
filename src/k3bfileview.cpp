@@ -82,7 +82,7 @@ K3b::FileView::FileView(QWidget *parent )
     d->actionShowBookmarks->setCheckable( true );
 
     KActionMenu* actionOptions = new KActionMenu( QIcon::fromTheme("configure"), i18n("Options"), d->toolBox );
-    actionOptions->setDelayed( false );
+    actionOptions->setPopupMode( QToolButton::InstantPopup );
     actionOptions->addAction( d->dirOp->actionCollection()->action("sorting menu") );
     actionOptions->addAction( d->dirOp->actionCollection()->action("view menu") );
     actionOptions->addSeparator();
