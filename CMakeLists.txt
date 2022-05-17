@@ -87,7 +87,7 @@ set_package_properties(Samplerate PROPERTIES
     URL "http://www.mega-nerd.com/SRC"
     TYPE REQUIRED)
 
-find_package(KF5Cddb)
+find_package(KF5Cddb 5.1 REQUIRED)
 set_package_properties(KF5Cddb PROPERTIES
     DESCRIPTION "KF5 branch for CDDB library"
     URL "https://commits.kde.org/libkcddb"
