@@ -131,7 +131,7 @@
       </li>
       <li xml:lang="ar">المشاريع: المشاريع التي تُنشأ من قائمة ”ملفّ“ وثمّ تُملأ بالبيانات للحرق</li>
       <li xml:lang="ca">Els projectes: Els projectes es creen des del menú Fitxer i s'omplen amb les dades a gravar</li>
-      <li xml:lang="ca-valencia">Els projectes: Els projectes es creen des del menú Fitxer i s'omplen amb les dades a gravar</li>
+      <li xml:lang="ca-valencia">Els projectes: Els projectes es creen des del menú Ficher i s'omplen amb les dades que es gravaran</li>
       <li xml:lang="cs">Projekty: Projekty jsou vytvořeny z nabídky souboru a poté naplněny daty pro vypálení</li>
       <li xml:lang="da">Projekterne: Projekter oprettes fra menuen Fil og udfyldes så med data der skal brændes</li>
       <li xml:lang="de">Projekte: Projekte werden im Dateimenü erstellt und dann mit Daten zum Schreiben gefüllt</li>
@@ -214,7 +214,7 @@
       </li>
       <li xml:lang="ar">إجراءات وسائط حسّاسة للسّياق: عند نقر أيقونة ترمز إلى جهاز أسطوانات/دي‌ڤي‌دي، سيعرض «كي٣بي» محتوياته ويتيح إجراءات أخرى. هذه (مثلًا) هي طريقة لتفريغ الأسطوانات الصّوتيّة</li>
       <li xml:lang="ca">Accions de suports sensibles al context: En clicar sobre la icona que representa una unitat de CD/DVD, el K3b presentarà el seu contingut i permetrà diverses accions. Per exemple, aquesta és la manera d'extreure els CD d'àudio</li>
-      <li xml:lang="ca-valencia">Accions de suports sensibles al context: En clicar sobre la icona que representa una unitat de CD/DVD, K3b presentarà el seu contingut i permetrà diverses accions. Per exemple, esta és la manera d'extreure els CD d'àudio</li>
+      <li xml:lang="ca-valencia">Accions de soports sensibles al context: En clicar sobre la icona que representa una unitat de CD/DVD, K3b presentarà el seu contingut i permetrà diverses accions. Per exemple, esta és la manera d'extreure els CD d'àudio</li>
       <li xml:lang="cs">Činnosti s médii odpovídají situaci: Při kliknutí na ikonu reprezentující mechaniku CD/DVD, vám K3b zobrazí jejich obsah a nabídne nějakou další činnost. Například se takto dají ripovat audio CD</li>
       <li xml:lang="da">Kontekstafhængige mediehandlinger: Ved klik på ikonet som repræsenterer et cd-/dvd-drev vil K3b vise dets indhold og give mulighed for yderligere handling. Det er f.eks. sådan man ripper lyd-cd'er</li>
       <li xml:lang="de">Kontextsensitive Aktionen für Medien: Wenn Sie auf das Symbol eines CD-/DVD-Laufwerks klicken, zeigt K3b deren Inhalt und ermöglicht weitere Aktionen, zum Beispiel das Auslesen einer Audio-CD</li>
