@@ -35,7 +35,7 @@
         "Category": "AudioEncoder",
         "Description": "Encoding module to encode MPEG1 Layer III (MP3) files",
         "Description[bs]": "Modul kodiranja za kodiranje MPEG1 Layer III (mp3) datoteka",
-        "Description[ca@valencia]": "Mòdul de codificació per a codificar fichers MPEG 1 Layer III (MP3)",
+        "Description[ca@valencia]": "Mòdul de codificació per a codificar fitxers MPEG 1 Layer III (MP3)",
         "Description[ca]": "Mòdul de codificació per a codificar fitxers MPEG 1 Layer III (MP3)",
         "Description[cs]": "Modul pro kompresi do souborů MPEG1 Layer III (MP3)",
         "Description[da]": "Indkodningsmodul til MPEG 1 Layer III-filer (MP3)",

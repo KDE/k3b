@@ -36,7 +36,7 @@
         "Description": "Plugin to rename audio files in a data project based on the meta info.",
         "Description[bg]": "Приставка за преименуиване на аудои файлове въз основа на мета-информацията.",
         "Description[bs]": "Plugin za preimenovanje audio datoteka u projekt podataka na temelju meta informacija.",
-        "Description[ca@valencia]": "Conector per a canviar de nom fichers d'àudio en un projecte de dades basat en la meta-informació.",
+        "Description[ca@valencia]": "Conector per a canviar de nom fitxers d'àudio en un projecte de dades basat en la meta-informació.",
         "Description[ca]": "Connector per a reanomenar fitxers d'àudio en un projecte de dades basat en la meta-informació.",
         "Description[cs]": "Modul pro přejmenování zvukových souborů v datovém projektu podle jejich meta informací.",
         "Description[da]": "Plugin til at omdøbe lydfiler i et dataprojekt baseret på metainfo.",

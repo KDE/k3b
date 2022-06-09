@@ -37,7 +37,7 @@
         "Description[ar]": "وحدة فكّ ترميز لفكّ ترميز ملفّات الصّوت التي تدعمها libsndfile",
         "Description[bg]": "Декодиране на звукови файлове, поддържани от libsndfile",
         "Description[bs]": "Modul dekodiranja za dekodiranje audio datoteka koje podržava libsndfile",
-        "Description[ca@valencia]": "Mòdul de descodificació per a descodificar fichers d'àudio admesos per la «libsndfile»",
+        "Description[ca@valencia]": "Mòdul de descodificació per a descodificar fitxers d'àudio admesos per la «libsndfile»",
         "Description[ca]": "Mòdul de descodificació per a descodificar fitxers d'àudio admesos per la «libsndfile»",
         "Description[cs]": "Modul pro dekódování audio souborů posporovaných libsndfile",
         "Description[csb]": "Mòdul dekòdërëjący lopczi aùdio wpiséróné przez libsndfile",
