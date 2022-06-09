@@ -36,7 +36,7 @@
         "Description": "Encoding module to encode Ogg Vorbis files",
         "Description[bg]": "Кодиращ модул за Ogg Vorbis файлове",
         "Description[bs]": "Modul za kodiranje OGG vorbis datoteka",
-        "Description[ca@valencia]": "Mòdul de codificació per a codificar fichers Ogg Vorbis",
+        "Description[ca@valencia]": "Mòdul de codificació per a codificar fitxers Ogg Vorbis",
         "Description[ca]": "Mòdul de codificació per a codificar fitxers Ogg Vorbis",
         "Description[cs]": "Modul pro kompresi do souborů Ogg Vorbis",
         "Description[csb]": "Mòdul kòdërëjący lopczi Ogg Vorbis",
