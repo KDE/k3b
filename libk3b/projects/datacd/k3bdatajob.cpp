@@ -689,13 +689,12 @@ bool K3b::DataJob::waitForBurnMedium()
 {
     // start with all media types supported by the writer
     Device::MediaTypes m  = d->doc->supportedMediaTypes() & d->doc->burner()->writeCapabilities();
-
     // if everything goes wrong we are left with no possible media to request
     if ( !m ) {
         emit infoMessage( i18n( "Internal Error: No medium type fits. This project cannot be burned." ), MessageError );
         return false;
     }
-
+    const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
     emit newSubTask( i18n("Waiting for a medium") );
     Device::MediaType foundMedium = waitForMedium( d->doc->burner(),
                                                    usedMultiSessionMode() == K3b::DataDoc::CONTINUE ||
@@ -802,7 +801,7 @@ bool K3b::DataJob::waitForBurnMedium()
         // let's default to cdrecord for the time being (except for special cases below)
         // but prefer growisofs for DVDs
         if ( d->usedWritingApp == K3b::WritingAppAuto ) {
-            if (k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" ))
+            if (cdrecordBin && cdrecordBin->hasFeature( "wodim" ))
                 d->usedWritingApp = K3b::WritingAppGrowisofs;
             else
                 d->usedWritingApp = K3b::WritingAppCdrecord;
@@ -921,15 +920,14 @@ bool K3b::DataJob::waitForBurnMedium()
     else if ( foundMedium & K3b::Device::MEDIA_BD_ALL ) {
         d->usedWritingApp = writingApp();
         if( d->usedWritingApp == K3b::WritingAppAuto ) {
-            if (k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" ))
+            if ( cdrecordBin && cdrecordBin->hasFeature( "wodim" ))
                 d->usedWritingApp = K3b::WritingAppGrowisofs;
             else
                 d->usedWritingApp = K3b::WritingAppCdrecord;
         }
 
         if (d->usedWritingApp == K3b::WritingAppCdrecord &&
-            k3bcore->externalBinManager()->binObject("cdrecord") &&
-            !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature("blu-ray")) {
+            cdrecordBin && !cdrecordBin->hasFeature("blu-ray")) {
             d->usedWritingApp = K3b::WritingAppGrowisofs;
         }
 
@@ -1065,8 +1063,8 @@ bool K3b::DataJob::setupCdrecordJob()
     if( d->usedDataMode == K3b::DataMode1 )
         writer->addArgument( "-data" );
     else {
-        if( k3bcore->externalBinManager()->binObject("cdrecord") &&
-            k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
+        const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+        if( cdrecordBin && cdrecordBin->hasFeature( "xamix" ) )
             writer->addArgument( "-xa" );
         else
             writer->addArgument( "-xa1" );

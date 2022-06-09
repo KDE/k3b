@@ -172,6 +172,8 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
     if (!forceCheck && !readCheckSystemConfig())
         return;
 
+    const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+
     if( k3bcore->deviceManager()->allDevices().isEmpty() ) {
         problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                            i18n("No optical drive found."),
@@ -209,9 +211,9 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
                                                     "cdrecord.") ) );
         }
         else {
-            if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "outdated" ) ) {
+            if( cdrecordBin && cdrecordBin->hasFeature( "outdated" ) ) {
                 problems.append( K3b::SystemProblem( K3b::SystemProblem::NON_CRITICAL,
-                                                   i18n("Used %1 version %2 is outdated",QString("cdrecord"),QString(k3bcore->externalBinManager()->binObject( "cdrecord" )->version())),
+                                                   i18n("Used %1 version %2 is outdated",QString("cdrecord"),QString(cdrecordBin->version())),
                                                    i18n("Although K3b supports all cdrtools versions since "
                                                         "1.10 it is highly recommended to at least use "
                                                         "version 2.0."),
@@ -226,9 +228,9 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
             //
             // Kernel 2.6.16.something seems to introduce another problem which was apparently worked around in cdrecord 2.01.01a05
             //
-            if( K3b::simpleKernelVersion() >= K3b::Version( 2, 6, 8 ) &&
-                k3bcore->externalBinManager()->binObject( "cdrecord" )->version() < K3b::Version( 2, 1, 1, "a05" ) && !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "wodim" ) ) {
-                if( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "suidroot" ) ) {
+            if( K3b::simpleKernelVersion() >= K3b::Version( 2, 6, 8 ) && cdrecordBin &&
+                cdrecordBin->version() < K3b::Version( 2, 1, 1, "a05" ) && !cdrecordBin->hasFeature( "wodim" ) ) {
+                if( cdrecordBin->hasFeature( "suidroot" ) ) {
                     showBinSettingsButton = true;
                     problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
                                                          i18n("%1 will be run with root privileges on kernel >= 2.6.8",QString("cdrecord <= 2.01.01a05")),
@@ -423,12 +425,12 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
 
             if( k3bcore->externalBinManager()->foundBin( "cdrecord" ) ) {
 
-                if( !( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "hacked-atapi" ) &&
+                if( !( cdrecordBin->hasFeature( "hacked-atapi" ) &&
                        K3b::hackedAtapiSupport() ) &&
-                    !( k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "plain-atapi" ) &&
+                    !( cdrecordBin->hasFeature( "plain-atapi" ) &&
                        K3b::plainAtapiSupport() ) ) {
                     problems.append( K3b::SystemProblem( K3b::SystemProblem::CRITICAL,
-                                                       i18n("%1 %2 does not support ATAPI",QString("cdrecord"),k3bcore->externalBinManager()->binObject("cdrecord")->version()),
+                                                       i18n("%1 %2 does not support ATAPI",QString("cdrecord"),cdrecordBin->version()),
                                                        i18n("The configured version of %1 does not "
                                                             "support writing to ATAPI devices without "
                                                             "SCSI emulation and there is at least one writer "

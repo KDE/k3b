@@ -210,9 +210,10 @@ void K3b::AudioBurnDialog::toggleAll()
 
     bool cdrecordOnTheFly = false;
     bool cdrecordCdText = false;
-    if ( k3bcore->externalBinManager()->binObject("cdrecord") ) {
-        cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
-        cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+    const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+    if ( cdrecordBin ) {
+        cdrecordOnTheFly = cdrecordBin->hasFeature( "audio-stdin" );
+        cdrecordCdText = cdrecordBin->hasFeature( "cdtext" );
     }
 
     // cdrdao always knows onthefly and cdtext

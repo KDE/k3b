@@ -833,8 +833,8 @@ void K3b::MixedJob::addDataTrack( K3b::CdrecordWriter* writer )
 {
     // add data track
     if(  m_usedDataMode == K3b::DataMode2 ) {
-        if( k3bcore->externalBinManager()->binObject("cdrecord") &&
-            k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
+        const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+        if( cdrecordBin && cdrecordBin->hasFeature( "xamix" ) )
             writer->addArgument( "-xa" );
         else
             writer->addArgument( "-xa1" );
@@ -1145,17 +1145,15 @@ void K3b::MixedJob::determineWritingMode()
     else
         m_usedDataMode = m_doc->dataDoc()->dataMode();
 
-
+    const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
     // we try to use cdrecord if possible
     bool cdrecordOnTheFly = false;
     bool cdrecordCdText = false;
     bool cdrecordUsable = false;
 
-    if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
-        cdrecordOnTheFly =
-            k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
-        cdrecordCdText =
-            k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+    if( cdrecordBin ) {
+        cdrecordOnTheFly = cdrecordBin->hasFeature( "audio-stdin" );
+        cdrecordCdText = cdrecordBin->hasFeature( "cdtext" );
         cdrecordUsable =
             !( !cdrecordOnTheFly && m_doc->onTheFly() ) &&
             !( m_doc->audioDoc()->cdText() && !cdrecordCdText );
@@ -1227,7 +1225,11 @@ void K3b::MixedJob::determineWritingMode()
         if( m_doc->audioDoc()->cdText() ) {
             if( !cdrecordCdText ) {
                 m_doc->audioDoc()->writeCdText( false );
-                emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",k3bcore->externalBinManager()->binObject("cdrecord")->version()), MessageError );
+                if (cdrecordBin) {
+                    emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",cdrecordBin->version()), MessageError );
+                } else {
+                    emit infoMessage( i18n("Cdrecord couldn't found on your system." ), MessageError );
+                }
             }
             else if( m_usedAudioWritingMode == K3b::WritingModeTao ) {
                 emit infoMessage( i18n("It is not possible to write CD-Text in TAO mode. Try DAO or RAW."), MessageWarning );

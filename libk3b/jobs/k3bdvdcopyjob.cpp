@@ -112,12 +112,12 @@ void K3b::DvdCopyJob::start()
     d->readerRunning = d->writerRunning = false;
 
     emit newTask( i18n("Checking Source Medium") );
-
+    const K3b::ExternalBin* growisofsBin = k3bcore->externalBinManager()->binObject("growisofs");
     if( m_onTheFly &&
-        k3bcore->externalBinManager()->binObject( "growisofs" )->version() < K3b::Version( 5, 12 ) ) {
+        growisofsBin && growisofsBin->version() < K3b::Version( 5, 12 ) ) {
         m_onTheFly = false;
         emit infoMessage( i18n("K3b does not support writing on-the-fly with growisofs %1.",
-                          k3bcore->externalBinManager()->binObject( "growisofs" )->version()), MessageError );
+                          growisofsBin->version()), MessageError );
         emit infoMessage( i18n("Disabling on-the-fly writing."), MessageInfo );
     }
 
@@ -160,16 +160,18 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
     else {
         // first let's determine which application to use
         d->usedWritingApp = writingApp();
+        const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+        const K3b::ExternalBin* growisofsBin = k3bcore->externalBinManager()->binObject("growisofs");
         if ( d->usedWritingApp == K3b::WritingAppAuto ) {
             // prefer growisofs to wodim, which doesn't work all that great for DVDs
             // (and doesn't support BluRay at all)
-            if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" ) )
+            if ( cdrecordBin && cdrecordBin->hasFeature( "wodim" ) )
                 d->usedWritingApp = K3b::WritingAppGrowisofs;
             // otherwise, let's default to cdrecord for the time being
             // FIXME: use growisofs for non-dao and non-auto mode
             else {
                 if ( K3b::Device::isBdMedia( d->sourceDiskInfo.mediaType() ) ) {
-                    if ( k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" ) )
+                    if ( cdrecordBin && cdrecordBin->hasFeature( "blu-ray" ) )
                         d->usedWritingApp = K3b::WritingAppCdrecord;
                     else
                         d->usedWritingApp = K3b::WritingAppGrowisofs;
@@ -236,8 +238,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
                         jobFinished(false);
                         return;
                     }
-                    else if( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
-                             !k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "dual-layer" ) ) {
+                    else if( growisofsBin && !growisofsBin->hasFeature( "dual-layer" ) ) {
                         emit infoMessage( i18n("This growisofs version does not support writing Double Layer DVDs."), MessageError );
                         d->running = false;
                         jobFinished(false);
@@ -266,8 +267,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             // writable space in DAO mode
             // with version >= 5.15 growisofs supports specifying the size of the track
             if( m_writingMode != K3b::WritingModeSao || !m_onTheFly || m_onlyCreateImage ||
-                ( k3bcore->externalBinManager()->binObject( "growisofs" ) &&
-                  k3bcore->externalBinManager()->binObject( "growisofs" )->hasFeature( "daosize" ) ) ||
+                ( growisofsBin && growisofsBin->hasFeature( "daosize" ) ) ||
                 d->usedWritingApp == K3b::WritingAppCdrecord ) {
                 d->lastSector = dh->toc().lastSector();
                 break;

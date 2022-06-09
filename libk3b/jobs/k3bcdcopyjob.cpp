@@ -254,8 +254,8 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         //
         // To copy mode2 data tracks we need cdrecord >= 2.01a12 which introduced the -xa1 and -xamix options
         //
-        if( k3bcore->externalBinManager()->binObject("cdrecord") &&
-            !k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) ) {
+        const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+        if( cdrecordBin && !cdrecordBin->hasFeature( "xamix" ) ) {
             for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
                 if( (*it).type() == K3b::Device::Track::TYPE_DATA &&
                     ( (*it).mode() == K3b::Device::Track::XA_FORM1 ||

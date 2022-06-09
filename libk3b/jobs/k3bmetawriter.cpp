@@ -260,11 +260,12 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
     bool cdrecordBluRay = false;
     bool cdrecordWodim = false;
     bool growisofsBluRay = false;
-    if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
-        cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
-        cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
-        cdrecordBluRay = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "blu-ray" );
-        cdrecordWodim = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "wodim" );
+    const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+    if( cdrecordBin ) {
+        cdrecordOnTheFly = cdrecordBin->hasFeature( "audio-stdin" );
+        cdrecordCdText = cdrecordBin->hasFeature( "cdtext" );
+        cdrecordBluRay = cdrecordBin->hasFeature( "blu-ray" );
+        cdrecordWodim = cdrecordBin->hasFeature( "wodim" );
     }
     if( k3bcore->externalBinManager()->binObject("growisofs") ) {
         growisofsBluRay = k3bcore->externalBinManager()->binObject("growisofs")->hasFeature( "blu-ray" );
@@ -418,7 +419,7 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
                     //
                     if( !burnDevice()->dao() && d->usedWritingApp == K3b::WritingAppCdrecord ) {
                         if( !burnDevice()->supportsRawWriting() &&
-                            ( !less4Sec || k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "short-track-raw" ) ) )
+                            ( !less4Sec || (cdrecordBin && cdrecordBin->hasFeature( "short-track-raw" ) ) ) )
                             d->usedWritingMode = K3b::WritingModeRaw;
                         else
                             d->usedWritingMode = K3b::WritingModeTao;
@@ -574,8 +575,8 @@ bool K3b::MetaWriter::setupCdrecordJob()
                     writer->addArgument( "-data" );
                 }
                 else {
-                    if( k3bcore->externalBinManager()->binObject("cdrecord") &&
-                        k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "xamix" ) )
+                    const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
+                    if( cdrecordBin && cdrecordBin->hasFeature( "xamix" ) )
                         writer->addArgument( "-xa" );
                     else
                         writer->addArgument( "-xa1" );

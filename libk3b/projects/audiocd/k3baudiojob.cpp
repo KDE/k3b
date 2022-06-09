@@ -144,7 +144,7 @@ void K3b::AudioJob::start()
         d->copies = 1;
 
     emit newTask( i18n("Preparing data") );
-
+    const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
     //
     // Check if all files exist
     //
@@ -231,7 +231,7 @@ void K3b::AudioJob::start()
             //
             if( !writer()->dao() && writingApp() == K3b::WritingAppCdrecord ) {
                 if(!writer()->supportsRawWriting() &&
-                   ( !d->less4Sec || k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "short-track-raw" ) ) )
+                   ( !d->less4Sec || ( cdrecordBin && cdrecordBin->hasFeature( "short-track-raw" ) ) ) )
                     m_usedWritingMode = K3b::WritingModeRaw;
                 else
                     m_usedWritingMode = K3b::WritingModeTao;
@@ -251,9 +251,9 @@ void K3b::AudioJob::start()
 
         bool cdrecordOnTheFly = false;
         bool cdrecordCdText = false;
-        if( k3bcore->externalBinManager()->binObject("cdrecord") ) {
-            cdrecordOnTheFly = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "audio-stdin" );
-            cdrecordCdText = k3bcore->externalBinManager()->binObject("cdrecord")->hasFeature( "cdtext" );
+        if( cdrecordBin ) {
+            cdrecordOnTheFly = cdrecordBin->hasFeature( "audio-stdin" );
+            cdrecordCdText = cdrecordBin->hasFeature( "cdtext" );
         }
 
         // determine writing app
@@ -286,7 +286,7 @@ void K3b::AudioJob::start()
             d->useCdText ) {
             if( !cdrecordCdText ) {
                 emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",
-                                       k3bcore->externalBinManager()->binObject("cdrecord")->version()), MessageError );
+                                       cdrecordBin->version()), MessageError );
                 d->useCdText = false;
             }
             else if( m_usedWritingMode == K3b::WritingModeTao ) {
@@ -507,11 +507,11 @@ bool K3b::AudioJob::prepareWriter()
 
         // add all the audio tracks
         writer->addArgument( "-audio" );
-
+        const K3b::ExternalBin* cdrecordBin = k3bcore->externalBinManager()->binObject("cdrecord");
         // we only need to pad in one case. cdrecord < 2.01.01a03 cannot handle shorttrack + raw
         if( d->less4Sec ) {
-            if( m_usedWritingMode == K3b::WritingModeRaw &&
-                !k3bcore->externalBinManager()->binObject( "cdrecord" )->hasFeature( "short-track-raw" ) ) {
+            if( m_usedWritingMode == K3b::WritingModeRaw && ( cdrecordBin &&
+                !cdrecordBin->hasFeature( "short-track-raw" ) ) ) {
                 writer->addArgument( "-pad" );
             }
             else {

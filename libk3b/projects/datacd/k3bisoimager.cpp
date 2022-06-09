@@ -148,8 +148,8 @@ void K3b::IsoImager::slotProcessExited( int exitCode, QProcess::ExitStatus exitS
                     // that contain one or more backslashes
                     // mkisofs 1.14 has the bug, 1.15a40 not
                     // TODO: find out the version that fixed the bug
-                    if( m_containsFilesWithMultibleBackslashes &&
-                        !k3bcore->externalBinManager()->binObject( "mkisofs" )->hasFeature( "backslashed_filenames" ) ) {
+                    if( m_containsFilesWithMultibleBackslashes && d->mkisofsBin &&
+                        !d->mkisofsBin->hasFeature( "backslashed_filenames" ) ) {
                         emit infoMessage( i18n("Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle "
                                                "filenames that contain more than one backslash:"), MessageError );
 
@@ -605,7 +605,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
     }
 
     if ( filesGreaterThan4Gb ) {
-        if ( !d->mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
+        if ( d->mkisofsBin && !d->mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
             emit infoMessage( i18n( "Found files bigger than 4 GB. K3b needs at least %1 to continue." ,
                               QString( "mkisofs >= 2.01.01a33 / genisoimage >= 1.1.4" ) ),
                               MessageError );
@@ -614,7 +614,7 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
     }
 
     // in genisoimage 1.1.3 "they" silently introduced this awful parameter
-    if (filesGreaterThan2Gb && d->mkisofsBin->hasFeature("genisoimage") && d->mkisofsBin->version() >= K3b::Version(1, 1, 3)) {
+    if (filesGreaterThan2Gb && d->mkisofsBin && d->mkisofsBin->hasFeature("genisoimage") && d->mkisofsBin->version() >= K3b::Version(1, 1, 3)) {
         *m_process << "-allow-limited-size";
         emit infoMessage(i18n("Found files bigger than 2 GB. These files will be fully accessible."),
                 MessageInfo);
@@ -710,9 +710,12 @@ bool K3b::IsoImager::addMkisofsParameters( bool printSize )
 
 
     // additional parameters from config
-    const QStringList& params = k3bcore->externalBinManager()->binObject( "mkisofs" )->userParameters();
-    for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
-        *m_process << *it;
+    
+    if ( d->mkisofsBin) {
+        const QStringList& params = d->mkisofsBin->userParameters();
+        for( QStringList::const_iterator it = params.begin(); it != params.end(); ++it )
+            *m_process << *it;
+    }
 
     return true;
 }
