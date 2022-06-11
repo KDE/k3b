@@ -1228,7 +1228,7 @@ void K3b::MixedJob::determineWritingMode()
                 if (cdrecordBin) {
                     emit infoMessage( i18n("Cdrecord %1 does not support CD-Text writing.",cdrecordBin->version()), MessageError );
                 } else {
-                    emit infoMessage( i18n("Cdrecord couldn't found on your system." ), MessageError );
+                    emit infoMessage( i18n("Cdrecord could not be found on your system." ), MessageError );
                 }
             }
             else if( m_usedAudioWritingMode == K3b::WritingModeTao ) {
