@@ -108,6 +108,7 @@ Policy=auth_admin
 [org.kde.k3b.addtogroup]
 Name=Adds current user to a specified group
 Name[ar]=يضيف المستخدم الحاليّ إلى المجموعة المحدّدة
+Name[bg]=Добавяне на текущия потребител към определена група
 Name[bs]=Dodaje trenutnog korisnika u određenu grupu
 Name[ca]=Afegeix l'usuari actual a un grup especificat
 Name[ca@valencia]=Afig l'usuari actual a un grup especificat
@@ -155,6 +156,7 @@ Name[zh_CN]=将当前用户添加到指定的组
 Name[zh_TW]=將目前的使用者加到特定的群組
 Description=Authentication is required to add current user to a group
 Description[ar]=الاستيثاق مطلوب لإضافة المستخدم الحاليّ إلى أحد المجموعات
+Description[bg]=Изисква се удостоверяване на автентичността, за да се добави текущ потребител към група
 Description[bs]=Provjera autentičnosti se zahtijeva da se trenutni korisnik doda u grupu
 Description[ca]=Cal autenticar-se per a afegir l'usuari actual a un grup
 Description[ca@valencia]=Cal autenticar-se per a afegir l'usuari actual a un grup
