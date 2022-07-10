@@ -4,6 +4,7 @@
   <metadata_license>CC0-1.0</metadata_license>
   <name>K3b</name>
   <name xml:lang="ar">كي٣بي</name>
+  <name xml:lang="bg">K3b</name>
   <name xml:lang="ca">K3b</name>
   <name xml:lang="ca-valencia">K3b</name>
   <name xml:lang="cs">K3b</name>
@@ -43,6 +44,7 @@
   <name xml:lang="zh-TW">K3b</name>
   <summary>Disk Burning</summary>
   <summary xml:lang="ar">حرق الأقراص</summary>
+  <summary xml:lang="bg">Запис на дискове</summary>
   <summary xml:lang="ca">Gravació de disc</summary>
   <summary xml:lang="ca-valencia">Gravació de disc</summary>
   <summary xml:lang="cs">Vypalování médií</summary>
@@ -86,6 +88,7 @@
       application. It consists of basically three parts:
     </p>
     <p xml:lang="ar">صُنع «كي٣بي» ليكون تطبيق حرق أقراص غنيّ بمزاياه وسهل التّعامل. يتكوّن التّطبيق من ثلاثة أجزاء:</p>
+    <p xml:lang="bg">K3b е създаден като богата на функции и лесна за управление програма за запис на компактдискове. Приложението се състои основно от три части:</p>
     <p xml:lang="bs">K3b je stvoren da bude aplikacija za prženje CD-ova bogata funkcijama i jednostavna za rukovanje. Sastoji se od tri dela u osnovi:</p>
     <p xml:lang="ca">El K3b es va crear per a ser una aplicació de gravació de CD plena de funcionalitats i fàcil de fer servir. Bàsicament, consisteix en tres parts:</p>
     <p xml:lang="ca-valencia">K3b es va crear per a ser una aplicació de gravació de CD plena de funcionalitats i fàcil d'utilitzar. Bàsicament, consistix en tres parts:</p>
@@ -130,6 +133,7 @@
         data to burn
       </li>
       <li xml:lang="ar">المشاريع: المشاريع التي تُنشأ من قائمة ”ملفّ“ وثمّ تُملأ بالبيانات للحرق</li>
+      <li xml:lang="bg">Проекти: Проектите се създават от файловото меню и след това се запълват с данни за запис</li>
       <li xml:lang="ca">Els projectes: Els projectes es creen des del menú Fitxer i s'omplen amb les dades a gravar</li>
       <li xml:lang="ca-valencia">Els projectes: Els projectes es creen des del menú Fitxer i s'òmpliguen amb les dades que es gravaran</li>
       <li xml:lang="cs">Projekty: Projekty jsou vytvořeny z nabídky souboru a poté naplněny daty pro vypálení</li>
@@ -171,6 +175,7 @@
         formatting
       </li>
       <li xml:lang="ar">الأدوات: توفّر قائمة ”أدوات“ مختلف الأدوات مثل نسخ الأسطوانات أو تهيئة أسطوانات DVD</li>
+      <li xml:lang="bg">Инструменти: Менюто предлага различни инструменти като копиране на CD или форматиране на DVD</li>
       <li xml:lang="ca">Les eines: El menú Eines ofereix diferents eines com la còpia de CD o la formatació de DVD</li>
       <li xml:lang="ca-valencia">Les eines: El menú Eines oferix diferents eines com la còpia de CD o la formatació de DVD</li>
       <li xml:lang="cs">Nástroje: Nabídka nástrojů nabízí různé nástroje jako třeba kopírování CD nebo formátování DVD</li>
@@ -213,6 +218,7 @@
         This is for example the way to rip audio CDs
       </li>
       <li xml:lang="ar">إجراءات وسائط حسّاسة للسّياق: عند نقر أيقونة ترمز إلى جهاز أسطوانات/دي‌ڤي‌دي، سيعرض «كي٣بي» محتوياته ويتيح إجراءات أخرى. هذه (مثلًا) هي طريقة لتفريغ الأسطوانات الصّوتيّة</li>
+      <li xml:lang="bg">Контекстно чувствителни медийни действия: Когато щракнете върху иконата, представляваща CD/DVD устройство, K3b ще представи съдържанието му и ще позволи някои допълнителни действия. Това е например начинът за рипване на аудио компактдискове</li>
       <li xml:lang="ca">Accions de suports sensibles al context: En clicar sobre la icona que representa una unitat de CD/DVD, el K3b presentarà el seu contingut i permetrà diverses accions. Per exemple, aquesta és la manera d'extreure els CD d'àudio</li>
       <li xml:lang="ca-valencia">Accions de suports sensibles al context: En clicar sobre la icona que representa una unitat de CD/DVD, K3b presentarà el seu contingut i permetrà diverses accions. Per exemple, esta és la manera d'extreure els CD d'àudio</li>
       <li xml:lang="cs">Činnosti s médii odpovídají situaci: Při kliknutí na ikonu reprezentující mechaniku CD/DVD, vám K3b zobrazí jejich obsah a nabídne nějakou další činnost. Například se takto dají ripovat audio CD</li>
