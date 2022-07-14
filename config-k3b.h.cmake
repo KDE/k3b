@@ -26,3 +26,5 @@
 
 #cmakedefine HAVE_ICONV
 #cmakedefine ICONV_SECOND_ARGUMENT_IS_CONST
+
+#cmakedefine HAVE_FSTAB_H
