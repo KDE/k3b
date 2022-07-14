@@ -49,7 +49,7 @@
 #include <langinfo.h>
 #endif
 
-#ifndef Q_OS_WIN32
+#ifdef HAVE_FSTAB_H
 #include <fstab.h>
 #endif
 #include <unistd.h>
@@ -388,7 +388,7 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
             dvd_r_dl = true;
     }
 
-#ifndef Q_OS_WIN32
+#ifdef HAVE_FSTAB_H
     // check automounted devices
     QList<K3b::Device::Device*> automountedDevices = checkForAutomounting();
     for( QList<K3b::Device::Device *>::const_iterator it = automountedDevices.constBegin();
@@ -676,7 +676,7 @@ int K3b::SystemProblemDialog::dmaActivated( K3b::Device::Device* dev )
 }
 
 
-#ifndef Q_OS_WIN32
+#ifdef HAVE_FSTAB_H
 QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
 {
     QList<K3b::Device::Device *> l;
