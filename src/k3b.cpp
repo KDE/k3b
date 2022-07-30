@@ -1263,7 +1263,7 @@ void K3b::MainWindow::slotErrorMessage(const QString& message)
 
 void K3b::MainWindow::slotWarningMessage(const QString& message)
 {
-    KMessageBox::sorry( this, message );
+    KMessageBox::error( this, message );
 }
 
 

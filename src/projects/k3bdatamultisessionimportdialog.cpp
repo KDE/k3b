@@ -87,7 +87,7 @@ void K3b::DataMultisessionImportDialog::slotOk()
         K3b::Iso9660 iso( dev );
         if( iso.open() ) {
             if( iso.firstRRDirEntry() == 0 && iso.jolietLevel() > 0 )
-                KMessageBox::sorry( this,
+                KMessageBox::error( this,
                                     i18n("<p>K3b found session containing Joliet information for long filenames "
                                          "but no Rock Ridge extensions."
                                          "<p>The filenames in the imported session will be converted to a restricted "

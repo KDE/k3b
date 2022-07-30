@@ -275,7 +275,7 @@ void K3b::MixedBurnDialog::slotNormalizeToggled( bool on )
     if( on ) {
         // we are not able to normalize in on-the-fly mode
         if( !k3bcore->externalBinManager()->foundBin( "normalize" ) ) {
-            KMessageBox::sorry( this, i18n("<p><b>External program <em>normalize</em> is not installed.</b>"
+            KMessageBox::error( this, i18n("<p><b>External program <em>normalize</em> is not installed.</b>"
                                            "<p>K3b uses <em>normalize</em> (http://normalize.nongnu.org/) "
                                            "to normalize audio tracks. In order to "
                                            "use this functionality, please install it first.") );

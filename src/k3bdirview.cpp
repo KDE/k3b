@@ -190,7 +190,7 @@ void K3b::DirView::showMediumInfo( const K3b::Medium& medium )
             d->videoView->reload( medium );
         }
         else {
-            KMessageBox::sorry( this, i18n("K3b uses vcdxrip from the vcdimager package to rip Video CDs. "
+            KMessageBox::error( this, i18n("K3b uses vcdxrip from the vcdimager package to rip Video CDs. "
                                            "Please make sure it is installed.") );
             k3bappcore->appDeviceManager()->mountDisk( medium.device() );
         }

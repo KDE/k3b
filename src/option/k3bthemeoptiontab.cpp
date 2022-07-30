@@ -140,7 +140,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
         else
             sorryText = i18n("Unable to download the icon theme archive.\n"
                              "Please check that address %1 is correct.",tmpArg);
-        KMessageBox::sorry( this, sorryText );
+        KMessageBox::error( this, sorryText );
         return;
     }
 

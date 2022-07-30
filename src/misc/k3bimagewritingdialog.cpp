@@ -1100,7 +1100,7 @@ void K3b::ImageWritingDialog::slotContextMenuRequested( const QPoint& pos )
                 KMessageBox::information( this, i18n("The MD5 Sum of %1 equals that specified.",d->imagePath()),
                                           i18n("MD5 Sums Equal") );
             else
-                KMessageBox::sorry( this, i18n("The MD5 Sum of %1 differs from that specified.",d->imagePath()),
+                KMessageBox::error( this, i18n("The MD5 Sum of %1 differs from that specified.",d->imagePath()),
                                     i18n("MD5 Sums Differ") );
         }
     }

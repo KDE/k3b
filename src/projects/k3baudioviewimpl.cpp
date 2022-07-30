@@ -351,7 +351,7 @@ void K3b::AudioViewImpl::slotQueryMusicBrainz()
     }
 
     if( tracks.isEmpty() ) {
-        KMessageBox::sorry( m_view, i18n("Please add an audio track.") );
+        KMessageBox::error( m_view, i18n("Please add an audio track.") );
         return;
     }
 
@@ -375,7 +375,7 @@ void K3b::AudioViewImpl::slotQueryMusicBrainzTrack()
     tracksForIndexes( tracks, indexes );
 
     if( tracks.isEmpty() ) {
-        KMessageBox::sorry( m_view, i18n("Please select an audio track.") );
+        KMessageBox::error( m_view, i18n("Please select an audio track.") );
         return;
     }
 

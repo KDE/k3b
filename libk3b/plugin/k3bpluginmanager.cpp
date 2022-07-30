@@ -155,7 +155,7 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
         return ret;
     }
     else {
-        KMessageBox::sorry( parent, i18n("No settings available for plugin %1.", plugin->pluginMetaData().name() ) );
+        KMessageBox::error( parent, i18n("No settings available for plugin %1.", plugin->pluginMetaData().name() ) );
         return 0;
     }
 }

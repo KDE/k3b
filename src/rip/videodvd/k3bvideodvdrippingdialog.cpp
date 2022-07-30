@@ -489,7 +489,7 @@ void K3b::VideoDVDRippingDialog::slotStartClicked()
         for( TitleRipInfos::iterator it = d->titleRipInfos.begin(); it != d->titleRipInfos.end(); ++it ) {
             if( d->dvd[it.value().title-1].numAudioStreams() > 0 &&
                 d->dvd[it.value().title-1].audioStream(it.value().audioStream).format() != K3b::VideoDVD::AUDIO_FORMAT_AC3 ) {
-                KMessageBox::sorry( this, i18n("<p>When using the <em>AC3 pass-through</em> audio codec all selected audio "
+                KMessageBox::error( this, i18n("<p>When using the <em>AC3 pass-through</em> audio codec all selected audio "
                                                "streams need to be in AC3 format. Please select another audio codec or "
                                                "choose AC3 audio streams for all ripped titles."),
                                     i18n("AC3 Pass-through") );

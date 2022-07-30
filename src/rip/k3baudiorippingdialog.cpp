@@ -235,7 +235,7 @@ void K3b::AudioRippingDialog::slotStartClicked()
         }
 
         if( !differ ) {
-            KMessageBox::sorry( this, i18n("Please check the naming pattern. All filenames need to be unique.") );
+            KMessageBox::error( this, i18n("Please check the naming pattern. All filenames need to be unique.") );
             return;
         }
     }

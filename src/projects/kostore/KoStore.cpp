@@ -194,7 +194,7 @@ KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, cons
 #endif
   default:
     qCWarning(KOSTORE) << "Unsupported backend requested for KoStore (QUrl) : " << backend;
-    KMessageBox::sorry( window,
+    KMessageBox::error( window,
         i18n("The directory mode is not supported for remote locations."),
         i18n("KOffice Storage"));
     return 0L;

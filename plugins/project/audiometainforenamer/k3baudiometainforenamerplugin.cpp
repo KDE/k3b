@@ -214,7 +214,7 @@ void K3bAudioMetainfoRenamerPluginWidget::slotScanClicked()
         rootItem->setExpanded(true);
 
         if( d->renamableItems.isEmpty() )
-            KMessageBox::sorry( this, i18n("No renameable files found.") );
+            KMessageBox::error( this, i18n("No renameable files found.") );
     }
 }
 
@@ -262,7 +262,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
 void K3bAudioMetainfoRenamerPluginWidget::activate()
 {
     if( d->renamableItems.isEmpty() ) {
-        KMessageBox::sorry( this, i18n("Please click the Scan button to search for renameable files.") );
+        KMessageBox::error( this, i18n("Please click the Scan button to search for renameable files.") );
     }
     else {
         for( QList< QPair<K3b::FileItem*, QTreeWidgetItem*> >::iterator it = d->renamableItems.begin();

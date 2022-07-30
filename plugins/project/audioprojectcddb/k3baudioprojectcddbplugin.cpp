@@ -61,7 +61,7 @@ void K3bAudioProjectCddbPlugin::activate( K3b::Doc* doc, QWidget* parent )
     m_canceled = false;
 
     if( !m_doc || m_doc->numOfTracks() == 0 ) {
-        KMessageBox::sorry( parent, i18n("Please select a non-empty audio project for a CDDB query.") );
+        KMessageBox::error( parent, i18n("Please select a non-empty audio project for a CDDB query.") );
     }
     else {
         if( !m_progress ) {

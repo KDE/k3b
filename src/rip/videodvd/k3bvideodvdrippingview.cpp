@@ -273,7 +273,7 @@ void K3b::VideoDVDRippingView::reloadMedium()
         bool transcodeUsable = true;
 
         if( !k3bcore ->externalBinManager() ->foundBin( "transcode" ) ) {
-            KMessageBox::sorry( this,
+            KMessageBox::error( this,
                                 i18n("K3b uses transcode to rip Video DVDs. "
                                      "Please make sure it is installed.") );
             transcodeUsable = false;
@@ -287,7 +287,7 @@ void K3b::VideoDVDRippingView::reloadMedium()
                 if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3b::VideoDVDTitleTranscodingJob::AudioCodec)i ) )
                     ++ac;
             if( !ac || !vc ) {
-                KMessageBox::sorry( this,
+                KMessageBox::error( this,
                                     i18n("<p>K3b uses transcode to rip Video DVDs. "
                                          "Your installation of transcode lacks support for any of the "
                                          "codecs supported by K3b."
