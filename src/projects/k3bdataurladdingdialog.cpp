@@ -123,7 +123,7 @@ K3b::DataUrlAddingDialog::~DataUrlAddingDialog()
 
     QString message = resultMessage();
     if( !message.isEmpty() )
-        KMessageBox::detailedSorry( parentWidget(), i18n("Problems while adding files to the project."), message );
+        KMessageBox::detailedError( parentWidget(), i18n("Problems while adding files to the project."), message );
 
     delete m_encodingConverter;
 }

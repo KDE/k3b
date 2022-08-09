@@ -89,7 +89,7 @@ K3b::AudioTrackAddingDialog::~AudioTrackAddingDialog()
                    .arg( m_unsupportedFiles.join( "<br>" ) );
 
     if( !message.isEmpty() )
-        KMessageBox::detailedSorry( parentWidget(), i18n("Problems while adding files to the project."), message );
+        KMessageBox::detailedError( parentWidget(), i18n("Problems while adding files to the project."), message );
 }
 
 
