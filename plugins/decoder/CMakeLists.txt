@@ -6,6 +6,10 @@ if(BUILD_OGGVORBIS_DECODER_PLUGIN)
     add_subdirectory(ogg)
 endif()
 
+if(BUILD_FFMPEG_DECODER_PLUGIN)
+    add_subdirectory(ffmpeg)
+endif()
+
 if(BUILD_FLAC_DECODER_PLUGIN)
     add_subdirectory(flac)
 endif()

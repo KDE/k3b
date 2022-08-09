@@ -1,0 +1,153 @@
+/*
+    SPDX-FileCopyrightText: 1998-2008 Sebastian Trueg <trueg@k3b.org>
+
+    SPDX-License-Identifier: GPL-2.0-or-later
+*/
+
+#include "k3bffmpegdecoder.h"
+#include "k3bffmpegwrapper.h"
+
+#include <config-k3b.h>
+
+#include <QDebug>
+
+extern "C" {
+/*
+ Recent versions of FFmpeg uses C99 constant macros which are not present in C++ standard.
+ The macro __STDC_CONSTANT_MACROS allow C++ to use these macros. Although it's not defined by C++ standard
+ it's supported by many implementations.
+ See bug 236036 and discussion: https://lists.ffmpeg.org/pipermail/ffmpeg-devel/2010-May/095488.html
+ */
+#define __STDC_CONSTANT_MACROS
+#ifdef NEWFFMPEGAVCODECPATH
+#include <libavcodec/avcodec.h>
+#else
+#include <ffmpeg/avcodec.h>
+#endif
+}
+
+#include <math.h>
+
+K_PLUGIN_CLASS_WITH_JSON(K3bFFMpegDecoderFactory, "k3bffmpegdecoder.json")
+
+K3bFFMpegDecoderFactory::K3bFFMpegDecoderFactory( QObject* parent, const QVariantList& )
+    : K3b::AudioDecoderFactory( parent )
+{
+}
+
+
+K3bFFMpegDecoderFactory::~K3bFFMpegDecoderFactory()
+{
+}
+
+
+K3b::AudioDecoder* K3bFFMpegDecoderFactory::createDecoder( QObject* parent ) const
+{
+    return new K3bFFMpegDecoder( parent);
+}
+
+
+bool K3bFFMpegDecoderFactory::canDecode( const QUrl& url )
+{
+    K3bFFMpegFile* file = K3bFFMpegWrapper::instance()->open( url.toLocalFile() );
+    if( file ) {
+        delete file;
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+
+
+
+
+
+K3bFFMpegDecoder::K3bFFMpegDecoder( QObject* parent  )
+    : K3b::AudioDecoder( parent ),
+      m_file(0)
+{
+}
+
+
+K3bFFMpegDecoder::~K3bFFMpegDecoder()
+{
+}
+
+
+QString K3bFFMpegDecoder::fileType() const
+{
+    return m_type;
+}
+
+
+bool K3bFFMpegDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int& ch )
+{
+    m_file = K3bFFMpegWrapper::instance()->open( filename() );
+    if( m_file ) {
+
+        // TODO: call addTechnicalInfo
+
+        addMetaInfo( META_TITLE, m_file->title() );
+        addMetaInfo( META_ARTIST, m_file->author() );
+        addMetaInfo( META_COMMENT, m_file->comment() );
+
+        samplerate = m_file->sampleRate();
+        ch = m_file->channels();
+        m_type = m_file->typeComment();
+        frames = m_file->length();
+
+        // ffmpeg's length information is not reliable at all
+        // so we have to decode the whole file in order to get the correct length
+//     char buffer[10*2048];
+//     int len = 0;
+//     unsigned long long bytes = 0;
+//     while( ( len = m_file->read( buffer, 10*2048 ) ) > 0 )
+//       bytes += len;
+
+//     frames = (unsigned long)ceil((double)bytes/2048.0);
+
+        // cleanup;
+        delete m_file;
+        m_file = 0;
+
+        return true;
+    }
+    else
+        return false;
+}
+
+
+bool K3bFFMpegDecoder::initDecoderInternal()
+{
+    if( !m_file )
+        m_file = K3bFFMpegWrapper::instance()->open( filename() );
+
+    return (m_file != 0);
+}
+
+
+void K3bFFMpegDecoder::cleanup()
+{
+    delete m_file;
+    m_file = 0;
+}
+
+
+bool K3bFFMpegDecoder::seekInternal( const K3b::Msf& msf )
+{
+    if( msf == 0 )
+        return initDecoderInternal();
+    else
+        return m_file->seek( msf );
+}
+
+
+int K3bFFMpegDecoder::decodeInternal( char* _data, int maxLen )
+{
+    return m_file->read( _data, maxLen );
+}
+
+
+#include "k3bffmpegdecoder.moc"

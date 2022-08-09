@@ -37,6 +37,7 @@ option(K3B_ENABLE_TAGLIB "Support for reading audio file metadata using Taglib."
 option(K3B_BUILD_API_DOCS "Build the API documentation for the K3b libs." OFF)
 
 # plugin options
+option(K3B_BUILD_FFMPEG_DECODER_PLUGIN "Build FFmpeg decoder plugin" ON)
 option(K3B_BUILD_OGGVORBIS_DECODER_PLUGIN "Build Ogg-Vorbis decoder plugin" ON)
 option(K3B_BUILD_OGGVORBIS_ENCODER_PLUGIN "Build Ogg-Vorbis encoder plugin" ON)
 option(K3B_BUILD_MAD_DECODER_PLUGIN "Build MAD mp3 decoder plugin" ON)
@@ -123,6 +124,69 @@ if(K3B_ENABLE_MUSICBRAINZ)
 
     set(ENABLE_MUSICBRAINZ "${MUSICBRAINZ_FOUND}")
 endif()
+
+if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
+    find_package(FFmpeg)
+    set_package_properties(FFmpeg PROPERTIES
+        PURPOSE "Needed for the K3b FFmpeg decoder plugin which can decode virtually all audio types."
+        URL "https://ffmpeg.org/"
+        TYPE OPTIONAL)
+
+    if(FFMPEG_FOUND)
+        include(CheckSymbolExists)
+        include(CMakePushCheckState)
+        cmake_push_check_state()
+
+        if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+            # FindKDE4Internal.cmake screws things up
+            set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} -std=c99)
+        endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+
+        if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+            set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${FFMPEG_INCLUDE_DIR_OLD_STYLE})
+            set(FFMPEG_HEADERS ffmpeg/avcodec.h ffmpeg/avformat.h)
+        else(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+            set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
+            set(FFMPEG_HEADERS libavcodec/avcodec.h libavformat/avformat.h)
+            set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -DNEWFFMPEGAVCODECPATH)
+        endif(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+        set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${FFMPEG_LIBRARIES})
+
+        check_symbol_exists(avformat_open_input "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVFORMAT_OPEN_INPUT)
+        check_symbol_exists(av_dump_format "${FFMPEG_HEADERS}" HAVE_FFMPEG_AV_DUMP_FORMAT)
+        check_symbol_exists(avformat_find_stream_info "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVFORMAT_FIND_STREAM_INFO)
+        check_symbol_exists(avformat_close_input "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVFORMAT_CLOSE_INPUT)
+        check_symbol_exists(avcodec_open2 "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVCODEC_OPEN2)
+        include(CheckCSourceCompiles)
+        check_c_source_compiles("
+            #ifdef NEWFFMPEGAVCODECPATH
+            #include <libavcodec/avcodec.h>
+            #else
+            #include <ffmpeg/avcodec.h>
+            #endif
+            int main() { enum AVMediaType t = AVMEDIA_TYPE_UNKNOWN; return 0; }
+            " HAVE_FFMPEG_AVMEDIA_TYPE)
+        check_c_source_compiles("
+            #ifdef NEWFFMPEGAVCODECPATH
+            #include <libavcodec/avcodec.h>
+            #else
+            #include <ffmpeg/avcodec.h>
+            #endif
+            int main() {
+            #if LIBAVCODEC_BUILD >= AV_VERSION_INT(54,25,0)
+            # Not needed here. AV_CODEC_ID_MP3 exists.
+            #else
+            enum CodecID t = CODEC_ID_MP3;
+            #endif
+            return 0;
+            }
+            " HAVE_FFMPEG_CODEC_MP3)
+
+        cmake_pop_check_state()
+    endif(FFMPEG_FOUND)
+
+    set(BUILD_FFMPEG_DECODER_PLUGIN "${FFMPEG_FOUND}")
+endif(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
 
 if(K3B_BUILD_FLAC_DECODER_PLUGIN)
     find_package(Flac)
