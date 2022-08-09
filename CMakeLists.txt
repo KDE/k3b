@@ -126,7 +126,7 @@ if(K3B_ENABLE_MUSICBRAINZ)
 endif()
 
 if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
-    find_package(FFmpeg)
+    find_package(FFmpeg 4.4.0)
     set_package_properties(FFmpeg PROPERTIES
         PURPOSE "Needed for the K3b FFmpeg decoder plugin which can decode virtually all audio types."
         URL "https://ffmpeg.org/"

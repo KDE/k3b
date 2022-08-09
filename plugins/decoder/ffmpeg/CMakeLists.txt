@@ -1,6 +1,6 @@
 kcoreaddons_add_plugin(k3bffmpegdecoder
     SOURCES k3bffmpegdecoder.cpp k3bffmpegwrapper.cpp
-    INSTALL_NAMESPACE "k3b")
+    INSTALL_NAMESPACE "k3b_plugins")
 
 if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
     message(STATUS "didn't find new ffmpegcodecpath")
