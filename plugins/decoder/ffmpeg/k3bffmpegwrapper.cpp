@@ -316,7 +316,7 @@ int K3bFFMpegFile::fillOutputBuffer()
                             );
                         }
                     }
-                } else {
+                } else if ( d->sampleFormat == AV_SAMPLE_FMT_S16P ) {
                     for(int sample = 0; sample < nb_s; sample++) {
                         for(int ch = 0; ch < nb_ch; ch++) {
                             ::memcpy(
@@ -326,7 +326,13 @@ int K3bFFMpegFile::fillOutputBuffer()
                             );
                         }
                     }
+                } else {
+                    qDebug() << "(K3bFFMpegFile) some planar formats are not supported yet";
+                    return -1;
                 }
+            } else {
+                qDebug() << "(K3bFFMpegFile) non planar and monophonic audio support is not implemented";
+                return -1;
             }
         } else {
             // make sure we have data to decode
