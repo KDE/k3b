@@ -10,6 +10,6 @@ install( FILES
   k3bglobalsettings.h
   k3bjobhandler.h
   k3bsimplejobhandler.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel )
 
 

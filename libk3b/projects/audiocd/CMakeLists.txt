@@ -15,5 +15,5 @@ install( FILES
   k3baudiodatasourceiterator.h
   k3brawaudiodatareader.h
   k3brawaudiodatasource.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR}
   COMPONENT Devel )

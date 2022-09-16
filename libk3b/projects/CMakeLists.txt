@@ -23,6 +23,6 @@ install( FILES
   k3btocfilewriter.h
   k3bcuefileparser.h
   k3bimagefilereader.h
-  DESTINATION ${INCLUDE_INSTALL_DIR}
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR}
   COMPONENT Devel )
 

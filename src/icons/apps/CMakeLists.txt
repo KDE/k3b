@@ -8,5 +8,5 @@ ecm_install_icons(
         64-apps-k3b.png
         sc-apps-k3b.svgz
     DESTINATION
-        ${ICON_INSTALL_DIR}
+        ${KDE_INSTALL_ICONDIR}
 )

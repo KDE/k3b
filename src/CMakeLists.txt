@@ -255,7 +255,7 @@ if(ENABLE_MUSICBRAINZ)
     target_link_libraries(k3b ${MUSICBRAINZ_LIBRARIES})
 endif()
 
-install(TARGETS k3b ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS k3b ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/option/k3btheme.knsrc.cmake
                ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc
@@ -263,19 +263,19 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/option/k3btheme.knsrc.cmake
 
 
 ########### install files ###############
-install( PROGRAMS  org.kde.k3b.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( PROGRAMS  org.kde.k3b.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 #install( FILES  k3b-iso.desktop k3b-cue.desktop DESTINATION ${APPLNK_INSTALL_DIR}/.hidden/ )
 install( FILES  k3b.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
-install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/k3b )
+install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/k3b )
 install( FILES  org.kde.k3b.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )
 
 if (${ECM_VERSION} STRGREATER "5.58.0")
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})
 else()
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc DESTINATION ${CONFIG_INSTALL_DIR})
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc DESTINATION ${KDE_INSTALL_CONFDIR})
 endif()
 
 set( SHARED_MIME_INFO_MINIMUM_VERSION "0.23" )
 find_package( SharedMimeInfo REQUIRED )
-install( FILES x-k3b.xml DESTINATION ${XDG_MIME_INSTALL_DIR} )
-update_xdg_mimetypes( ${XDG_MIME_INSTALL_DIR} )
+install( FILES x-k3b.xml DESTINATION ${KDE_INSTALL_MIMEDIR} )
+update_xdg_mimetypes( ${KDE_INSTALL_MIMEDIR} )

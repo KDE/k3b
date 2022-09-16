@@ -4,13 +4,13 @@ install( FILES
   k3b_create_data_project_from_blank_medium.desktop
   k3b_create_audio_cd_from_blank_medium.desktop
   DESTINATION
-  ${DATA_INSTALL_DIR}/solid/actions )
+  ${KDE_INSTALL_DATADIR}/solid/actions )
 
 if(ENABLE_DVD_RIPPING)
   install( FILES
     k3b_videodvd_rip.desktop
     DESTINATION
-    ${DATA_INSTALL_DIR}/solid/actions )
+    ${KDE_INSTALL_DATADIR}/solid/actions )
 endif(ENABLE_DVD_RIPPING)
 
 install( FILES
@@ -20,4 +20,4 @@ install( FILES
   k3b_write_bin_image.desktop
   k3b_write_iso_image.desktop
   DESTINATION
-  ${SERVICES_INSTALL_DIR}/ServiceMenus )
+  ${KDE_INSTALL_KSERVICES5DIR}/ServiceMenus )

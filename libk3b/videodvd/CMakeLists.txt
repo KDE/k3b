@@ -6,5 +6,5 @@ install( FILES
   k3bvideodvdvideostream.h
   k3bvideodvdtime.h
   k3bvideodvdptt.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel)
 

@@ -29,5 +29,5 @@ install( FILES
   k3bmediacache.h
   k3bcddb.h
   k3bprocess.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel)
 

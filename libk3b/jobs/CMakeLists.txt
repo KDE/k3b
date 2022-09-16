@@ -21,7 +21,7 @@ install( FILES
   k3bblankingjob.h
   k3bverificationjob.h
   k3bmetawriter.h
-  DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
+  DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel )
 
 
 #
