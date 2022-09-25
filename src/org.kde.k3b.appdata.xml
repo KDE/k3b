@@ -23,6 +23,7 @@
   <name xml:lang="id">K3b</name>
   <name xml:lang="is">K3b</name>
   <name xml:lang="it">K3b</name>
+  <name xml:lang="ka">K3b</name>
   <name xml:lang="ko">K3b</name>
   <name xml:lang="nl">K3b</name>
   <name xml:lang="nn">K3b</name>
@@ -64,6 +65,7 @@
   <summary xml:lang="id">Disk Burning</summary>
   <summary xml:lang="is">Diskabrennsla</summary>
   <summary xml:lang="it">Masterizzazione su disco</summary>
+  <summary xml:lang="ka">დისკის ამოწვა</summary>
   <summary xml:lang="ko">디스크 쓰기</summary>
   <summary xml:lang="nl">Schijven branden</summary>
   <summary xml:lang="nn">Platebrenning</summary>
