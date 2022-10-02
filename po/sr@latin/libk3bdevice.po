@@ -1,0 +1,289 @@
+# Translation of libk3bdevice.po into Serbian.
+# Slobodan Simic <slsimic@gmail.com>, 2008, 2009, 2010.
+# Chusslove Illich <caslav.ilic@gmx.net>, 2010, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: libk3bdevice\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2019-05-20 03:08+0200\n"
+"PO-Revision-Date: 2012-08-18 10:13+0200\n"
+"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
+"Language: sr@latin\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+"X-Environment: kde, k3b\n"
+
+#: k3bdeviceglobals.cpp:28 k3bdeviceglobals.cpp:151
+#, kde-format
+msgid "CD-R"
+msgstr "CD‑R"
+
+#: k3bdeviceglobals.cpp:30 k3bdeviceglobals.cpp:153
+#, kde-format
+msgid "CD-RW"
+msgstr "CD‑RW"
+
+#: k3bdeviceglobals.cpp:32 k3bdeviceglobals.cpp:149
+#, kde-format
+msgid "CD-ROM"
+msgstr "CD‑ROM"
+
+#: k3bdeviceglobals.cpp:34 k3bdeviceglobals.cpp:118
+#, kde-format
+msgid "DVD-ROM"
+msgstr "DVD‑ROM"
+
+#: k3bdeviceglobals.cpp:36 k3bdeviceglobals.cpp:132
+#, kde-format
+msgid "DVD-RAM"
+msgstr "DVD‑RAM"
+
+#: k3bdeviceglobals.cpp:38 k3bdeviceglobals.cpp:121
+#, kde-format
+msgid "DVD-R"
+msgstr "DVD‑R"
+
+#: k3bdeviceglobals.cpp:40 k3bdeviceglobals.cpp:135
+#, kde-format
+msgid "DVD-RW"
+msgstr "DVD‑RW"
+
+#: k3bdeviceglobals.cpp:42
+#, kde-format
+msgid "DVD-R DL"
+msgstr "DVD‑R DL"
+
+#: k3bdeviceglobals.cpp:44 k3bdeviceglobals.cpp:155
+#, kde-format
+msgid "HD DVD-ROM"
+msgstr "HD DVD‑ROM"
+
+#: k3bdeviceglobals.cpp:46 k3bdeviceglobals.cpp:157
+#, kde-format
+msgid "HD DVD-R"
+msgstr "HD DVD‑R"
+
+#: k3bdeviceglobals.cpp:48 k3bdeviceglobals.cpp:159
+#, kde-format
+msgid "HD DVD-RAM"
+msgstr "HD DVD‑RAM"
+
+#: k3bdeviceglobals.cpp:50 k3bdeviceglobals.cpp:161
+#, kde-format
+msgid "BD-ROM"
+msgstr "BD‑ROM"
+
+#: k3bdeviceglobals.cpp:52 k3bdeviceglobals.cpp:164
+#, kde-format
+msgid "BD-R"
+msgstr "BD‑R"
+
+#: k3bdeviceglobals.cpp:54 k3bdeviceglobals.cpp:172
+#, kde-format
+msgid "BD-RE"
+msgstr "BD‑RE"
+
+#: k3bdeviceglobals.cpp:56 k3bdeviceglobals.cpp:143
+#, kde-format
+msgid "DVD+R"
+msgstr "DVD+R"
+
+#: k3bdeviceglobals.cpp:58 k3bdeviceglobals.cpp:141
+#, kde-format
+msgid "DVD+RW"
+msgstr "DVD+RW"
+
+#: k3bdeviceglobals.cpp:60
+#, kde-format
+msgid "DVD+R DL"
+msgstr "DVD+R DL"
+
+#: k3bdeviceglobals.cpp:63 k3bdeviceglobals.cpp:175 k3bdeviceglobals.cpp:197
+#, kde-format
+msgid "Error"
+msgstr "Greška"
+
+#: k3bdeviceglobals.cpp:73
+#, kde-format
+msgid "SAO"
+msgstr "SAO"
+
+#: k3bdeviceglobals.cpp:75
+#, kde-format
+msgid "TAO"
+msgstr "TAO"
+
+#: k3bdeviceglobals.cpp:77
+#, kde-format
+msgid "RAW"
+msgstr "sirovo"
+
+#: k3bdeviceglobals.cpp:79
+#, kde-format
+msgid "SAO/R96P"
+msgstr "SAO/R96R"
+
+#: k3bdeviceglobals.cpp:81
+#, kde-format
+msgid "SAO/R96R"
+msgstr "SAO/R96P"
+
+#: k3bdeviceglobals.cpp:83
+#, kde-format
+msgid "RAW/R16"
+msgstr "sirovo/R16"
+
+#: k3bdeviceglobals.cpp:85
+#, kde-format
+msgid "RAW/R96P"
+msgstr "sirovo/R96R"
+
+#: k3bdeviceglobals.cpp:87
+#, kde-format
+msgid "RAW/R96R"
+msgstr "sirovo/R96P"
+
+# >> @item writing mode
+#: k3bdeviceglobals.cpp:89
+#, kde-format
+msgid "Incremental Sequential"
+msgstr "rastuće sekvencijalno"
+
+# >> @item writing mode
+#: k3bdeviceglobals.cpp:91
+#, kde-format
+msgid "Restricted Overwrite"
+msgstr "ograničeno prebrisavanje"
+
+# >> @item writing mode
+#: k3bdeviceglobals.cpp:93
+#, kde-format
+msgid "Layer Jump"
+msgstr "skok sloja"
+
+# >> @item writing mode
+#: k3bdeviceglobals.cpp:96
+#, kde-format
+msgid "Random Recording"
+msgstr "nasumično snimanje"
+
+# >> @item writing mode
+#: k3bdeviceglobals.cpp:98
+#, kde-format
+msgid "Sequential Recording"
+msgstr "sekvencijalno snimanje"
+
+# >> @item writing mode
+#: k3bdeviceglobals.cpp:100
+#, kde-format
+msgid "Sequential Recording + POW"
+msgstr "sekvencijalno snimanje + POV"
+
+# >> @item +
+#: k3bdeviceglobals.cpp:103
+#, kde-format
+msgctxt "no writing mode"
+msgid "None"
+msgstr "ništa"
+
+# >> @item +
+#: k3bdeviceglobals.cpp:112
+#, kde-format
+msgctxt "unknown medium type"
+msgid "Unknown"
+msgstr "nepoznat"
+
+# >> @item medium mode
+#: k3bdeviceglobals.cpp:116
+#, kde-format
+msgid "No media"
+msgstr "nema diska"
+
+#: k3bdeviceglobals.cpp:123
+#, kde-format
+msgid "DVD-R Sequential"
+msgstr "DVD‑R sekvencijalni"
+
+#: k3bdeviceglobals.cpp:126
+#, kde-format
+msgid "DVD-R Dual Layer"
+msgstr "DVD‑R dvoslojni"
+
+#: k3bdeviceglobals.cpp:128
+#, kde-format
+msgid "DVD-R Dual Layer Sequential"
+msgstr "DVD‑R dvoslojni sekvencijalni"
+
+#: k3bdeviceglobals.cpp:130
+#, kde-format
+msgid "DVD-R Dual Layer Jump"
+msgstr "DVD‑R dvoslojni skok"
+
+#: k3bdeviceglobals.cpp:137
+#, kde-format
+msgid "DVD-RW Restricted Overwrite"
+msgstr "DVD‑RW ograničeno prebrisavanje"
+
+#: k3bdeviceglobals.cpp:139
+#, kde-format
+msgid "DVD-RW Sequential"
+msgstr "DVD‑RW sekvencijalni"
+
+#: k3bdeviceglobals.cpp:145
+#, kde-format
+msgid "DVD+RW Dual Layer"
+msgstr "DVD+RW dvoslojni"
+
+#: k3bdeviceglobals.cpp:147
+#, kde-format
+msgid "DVD+R Dual Layer"
+msgstr "DVD+R dvoslojni"
+
+#: k3bdeviceglobals.cpp:166
+#, kde-format
+msgid "BD-R Sequential (SRM)"
+msgstr "BD‑R sekvencijalni (SRM)"
+
+#: k3bdeviceglobals.cpp:168
+#, kde-format
+msgid "BD-R Sequential Pseudo Overwrite (SRM+POW)"
+msgstr "BD‑R sekvencijalni pseudo prebrisavanje (SRM+POV)"
+
+#: k3bdeviceglobals.cpp:170
+#, kde-format
+msgid "BD-R Random (RRM)"
+msgstr "BD‑R slučajni (RRM)"
+
+# >> @item +
+#: k3bdeviceglobals.cpp:184
+#, kde-format
+msgctxt "unknown medium state"
+msgid "Unknown"
+msgstr "nepoznato"
+
+#: k3bdeviceglobals.cpp:188
+#, kde-format
+msgid "no medium"
+msgstr "nema diska"
+
+#: k3bdeviceglobals.cpp:190
+#, kde-format
+msgid "complete medium"
+msgstr "završen disk"
+
+#: k3bdeviceglobals.cpp:192
+#, kde-format
+msgid "incomplete medium"
+msgstr "nezavršen disk"
+
+#: k3bdeviceglobals.cpp:194
+#, kde-format
+msgid "empty medium"
+msgstr "prazan disk"

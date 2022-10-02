@@ -1,0 +1,419 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % German "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>Das Handbuch zu &k3b;</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Dieses Handbuch wurde aus der <ulink url=" https://userbase.kde.org/K3b"
+>K3b</ulink
+>-Webseite der &kde;-Userbase vom 20.01.2011 erstellt.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Aktualisiert auf Version 2.0 durch das &kde;-Dokumentationsteam</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>Thomas</firstname
+> <surname
+>Reitelbach</surname
+><affiliation
+><address
+><email
+>tr@erdfunkstelle.de</email
+></address
+></affiliation
+><contrib
+>Deutsche Übersetzung</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-01-06</date>
+    <releaseinfo
+>2.0 (&kde; 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Einleitung</title>
+<para
+>Wenn Sie bereits ein Programm zum Brennen von CDs/DVDs wie zum Beispiel Nero unter Windows benutzt haben, werden Sie mit &k3b; keine Probleme haben. </para>
+<para
+>Mit einer einfachen, aber dennoch leistungsfähigen grafischen Bedienungsoberfläche bietet &k3b; verschiedene Möglichkeiten, eine CD, DVD oder BD (Blue-ray-Disc) zu brennen. Verschiedene Arten von Projekten werden angeboten einschließlich Audio-, Daten- und Video-Projekten für DVD und VCD. Dazu auch weiter beschreibbare (Multi-Session) Mehrfachsitzungen und Medien mit gemischten Modi (Mixed-Mode). Mit &k3b; können Sie außerdem wieder beschreibbare Medium formatieren oder löschen und sowohl Video- wie auch Audiodaten kodieren und dekodieren.  </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Einstellungen beim ersten Start</title>
+<para
+>Wenn Sie &k3b; zum ersten Mal starten, wird möglicherweise in einem Dialog angezeigt, dass keine optischen Laufwerke im System gefunden wurden und Sie daher keine CDs oder DVDs schreiben können. Dann wird die Karteikarte <guilabel
+>Berechtigungen</guilabel
+> auf der Seite <guilabel
+>Programme</guilabel
+> des Einrichtungsdialogs geöffnet, auf der die Berechtigungen geändert werden können. Auf allen modernen Systemen kann eine bestimmte Benutzergruppe wie &eg; <quote
+>cdrom</quote
+> auf optische Laufwerke zugreifen. Ist der aktuelle Benutzer nicht in dieser Gruppe, kann er sich auf dieser Karteikarte in diese Gruppe eintragen.  </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Einrichtung der Benutzerschnittstelle</title>
+<para
+>Beim Start von &k3b; können Sie die drei am häufigsten gebrauchten Funktionen mit einem Mausklick starten: </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Neues Daten-Projekt</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Neue Audio-CD</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Medium kopieren </guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>&k3b; kann erheblich mehr als diese drei genannten Aufgaben ausführen, eine Liste dieser vorhandenen und für Sie möglicherweise nützlichen Funktionen sehen Sie im folgenden Bildschirmfoto. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Möchten Sie für einer dieser zusätzlichen Funktion einen Schnellstartknopf hinzufügen, dann klicken Sie mit der &RMBn; in den leeren Projektbereich unten im Fenster und wählen eine Funktion aus dem Kontextmenü. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>Einstellungen für &k3b;</title>
+<para
+>Bei den meisten Einstellungen können Sie die Voreinstellungen übernehmen. Sie sollten aber zur Seite <guilabel
+>Erweitert</guilabel
+> gehen. Hier können Sie einige wichtige Einstellungen ändern. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Burnfree benutzen</guilabel
+> sollte aktiviert sein, damit wird verhindert, dass der Schreibpuffer leer läuft und das Medium nicht korrekt gebrannt wird. </para
+></listitem>
+<listitem
+><para
+>Wenn die Einstellung <guilabel
+>CD-RWs und DVD-RWs automatisch löschen</guilabel
+> aktiviert ist, wird &k3b; automatisch CD-RWs löschen und DVD-RWs formatieren, wenn diese anstatt eines leeren Mediums vor dem Brennen gefunden werden. </para
+></listitem>
+<listitem
+><para
+>Die Einstellung <guilabel
+>Medium nach dem Brennvorgang nicht auswerfen</guilabel
+> ist besonders dann nützlich, wenn das Laufwerk nicht schnell genug wieder für das Überprüfen geschlossen wird. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Vorbereitung für das Brennen einer CD</title>
+<para
+>Wenn Sie ein neues Projekt starten, überprüfen Sie dass &k3b; das optische Medium richtig als CD oder DVD erkannt hat. In der Statusleiste unten im Fenster wird die Größe des eingelegten Mediums angezeigt. Ist der angezeigte Wert nicht richtig oder Sie benötigen eine andere Größe, klicken Sie mit der &RMBn; darauf und wählen im Kontextmenü den gewünschten Wert. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Wählen Sie jetzt die Daten zum Brennen aus. </para>
+<para
+>In der oberen Hälfte des Fensters befindet sich der <emphasis
+>Quellbereich</emphasis
+>, der wie ein Dateiverwaltungsprogramm funktioniert. Sie können hier normale Dateien von eingebundenen Datenträgern oder Titel von eingelegten Audio-CDs auswählen. Die Namen der Audio-Titel werden automatisch aus den CD-Text-Daten gelesen, wenn Ihr CD-Laufwerk diese Funktion unterstützt. Außerdem werden die Titel aus der <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>-Datenbank gelesen. Unterscheiden sich die Titel in beiden Quellen, erscheint ein Dialog, in dem Sie den richtigen Titel auswählen können. Ist der Titel falsch oder möchten Sie ihn ändern, benutzen Sie die Knöpfe in der Werkzeugleiste, Ihre Änderungen werden zwischengespeichert und zum Hauptarchiv auf <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+> hochgeladen. </para>
+<tip>
+<para
+>Sind alle Stücke vom selben Künstler, dann geben Sie den Namen nur im Feld <guilabel
+>Album-Interpret</guilabel
+> ein und lassen die Einträge für die einzelnen Titelinterpreten leer. Speichern Sie dann die Eingaben in den CDDB-Zwischenspeicher und starten die Abfrage erneut. </para>
+</tip>
+<para
+>Ziehen Sie nun alle Dateien und Ordner in den rechten Teil der unteren Hälfte des Fensters. Links wird dann eine Baumansicht der ausgewählten Dateien angezeigt. Um Dateien oder Ordner aus dem Projekt zu entfernen, wählen Sie einzelne Elemente oder benutzen die &Ctrl;taste für mehrere Elemente in der Liste. Dann verwenden Sie <guilabel
+>Entfernen</guilabel
+> aus dem Kontextmenü. </para>
+<tip>
+<para
+>Möchten Sie Audiodaten komprimieren oder in andere Formate umwandeln, erstellen Sie ein neues Audio-CD-Projekt. Fügen Sie die zu ändernden Dateien zu diesem Projekt hinzu und drücken Sie auf <guilabel
+>Titel konvertieren</guilabel
+>. Dann bleibt der Inhalt der CD, die Sie brennen, unverändert, aber Sie können die umgewandelten Dateien anderweitig benutzen. Achten Sie darauf, eine verlustfreie Umwandlung wie <emphasis
+>wav</emphasis
+> oder <emphasis
+>FLAC</emphasis
+> zu verwenden, sonst ist das Ergebnis wahrscheinlich unbrauchbar. </para>
+</tip>
+<para
+>In der ersten Zeile wird der Titel der CD angezeigt. In den meisten Fällen ist der vorgeschlagene Name in Ordnung. Wenn Sie ihn ändern möchten, öffnen Sie mit der &RMBn; auf den Titel das Kontextmenü und wählen <guilabel
+>Umbenennen</guilabel
+> oder für weitere Einstellungen <guilabel
+>Eigenschaften</guilabel
+>. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Fertigstellung</title>
+<para
+>Jetzt können Sie den Knopf <guilabel
+>Brennen</guilabel
+> drücken. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Auf dem Bildschirmfoto sehen Sie, dass sich keine CD im Laufwerk befindet. Haben Sie ein passendes Medium eingelegt, wird dessen Beschreibung an dieser Stelle angezeigt. </para>
+<para
+>Einige Einstellungen sollten Sie jetzt noch vornehmen. Es wird <emphasis
+>empfohlen</emphasis
+> <guilabel
+>Gebrannte Daten prüfen</guilabel
+> anzukreuzen und dann auf das Symbol <guilabel
+>Speichern</guilabel
+> zu drücken, um dies als eigenen Standard zur späteren Verwendung zu speichern. Bei den modernen heutigen Laufwerken können Sie Brennmodus und Geschwindigkeit auf <guilabel
+>Automatisch</guilabel
+> eingestellt lassen. Möchten Sie später noch weitere Kopien der CD oder DVD brennen, wählen Sie <guilabel
+>Abbild erzeugen</guilabel
+>, dann müssen Sie nicht nochmal alles für das Brennen einstellen. Geben Sie die Anzahl der Kopien ein, die Sie brennen möchten und drücken Sie dann auf <guilabel
+>Brennen</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Brennen einer Audio-CD</title>
+<sect1 id="k3b-audio-support"
+><title
+>Ein Audio-CD-Projekt starten</title>
+<para
+>&k3b; unterstützt eine große Zahl von Audio-Formaten und kann sie automatisch für Sie umwandeln, </para>
+<note
+><para
+>Einige Distributionen stellen getrennte Pakete für diese Funktionen von &k3b; zur Verfügung. &eg; auf Debian- und Ubuntu-Systemen müssen Sie das Paket  libk3b6-extracodecs, auf openSUSE-Systemen heißt das Paket k3b-codecs. Bei einigen Distributionen wie &eg; Mandriva benötigen Sie keine zusätzlichen Pakete.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>Auswahl der Dateien</title>
+<para
+>Es gibt zwei Möglichkeiten, Audio-Dateien für das Brennen auf eine Audio-CD auszuwählen.</para>
+<variablelist>
+<varlistentry>
+<term
+>Mit &k3b;</term>
+<listitem>
+<para
+>Im unteren Bereich des &k3b;-Fensters klicken Sie auf <guilabel
+>Neue Audio-CD</guilabel
+> und wählen dann die Dateien zum Brennen aus. </para>
+<para
+>Alternativ wechseln Sie in der Ordneransicht zum Ordner mit den Audiodateien. Doppelklicken Sie auf eine Audiodatei oder ziehen Sie ausgewählte Audiodateien in den unteren Bereich des Fensters. &k3b; startet dann automatisch ein <guilabel
+>Neues Audioprojekt</guilabel
+> mit diesen Dateien. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Mit dem Dateiverwaltungs-Programm</term>
+<listitem>
+<para
+>Gehen Sie mit &dolphin; oder &konqueror; in den Ordner mit Ihren Musikdateien.</para>
+<para
+>Wählen Sie die zu brennenden Dateien aus und dann <menuchoice
+><guimenu
+>Aktionen</guimenu
+><guimenuitem
+>Audio-CD mit &k3b; erstellen </guimenuitem
+></menuchoice
+> </para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Titel-Informationen des Albums bearbeiten</title>
+<para
+>Sie können die Titel der einzelnen Stücke direkt eingeben oder sie über <acronym
+>CDDB</acronym
+> (ein Onlinedienst für Titel von Musikstücken)  importieren. Klicken Sie dazu zweimal auf das Stück im unteren Bereich des Fensters. </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Brennen der CD</title>
+<para
+>Legen Sie eine leere CD-R oder CD-RW in das CD-Laufwerk und drücken Sie den Knopf <guilabel
+>Brennen</guilabel
+>. Überprüfen Sie dann im nächsten Dialog, ob alle Einstellungen richtig sind und starten dann den Schreibvorgang mit <guilabel
+>Brennen</guilabel
+>. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Danksagungen und Lizenz</title>
+    <para
+>Copyright der Dokumentation: siehe <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>Versionsgeschichte der K3b-Seite</ulink
+></para>
+    <para
+>Deutsche Übersetzung: Thomas Reitelbach <email
+>tr@erdfunkstelle.de</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>

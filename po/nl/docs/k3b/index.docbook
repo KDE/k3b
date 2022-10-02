@@ -1,0 +1,413 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Dutch "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>Het handboek van &k3b;</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Deze documentatie is geconverteerd uit de pagina in de KDE UserBase <ulink url=" https://userbase.kde.org/K3b"
+>K3b</ulink
+> pagina op 2011-01-20.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Bijgewerkt tot 2.0 door het &kde;-documentatieteam</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+&Rinse.Devries;<othercredit role="translator"
+><firstname
+>Antoon</firstname
+><surname
+>Tolboom</surname
+><affiliation
+><address
+><email
+>atolboo@casema.nl</email
+></address
+></affiliation
+><contrib
+>Vertaler/Nalezer</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-01-06</date>
+    <releaseinfo
+>2.0 (&kde; 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Inleiding</title>
+<para
+>Als u een brandprogramma zoals Nero onder Windows hebt gebruikt, dan zal &k3b; heel bekend aanvoelen. </para>
+<para
+>Met een eenvoudig maar krachtig gebruikersinterface levert &k3b; verschillende opties voor het branden van een cd, dvd of bd (blue-ray schijf). Verschillende optische projecten worden ondersteund inclusief, maar niet beperkt tot, audio en gegevens, video projecten voor dvd en vcd, evenals het vermogen om herschrijfbare media te wissen en meer gecompliceerde taken zoals audiovisuele codering en decodering. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Voorinstellingen</title>
+<para
+>Wanneer u &k3b; voor de eerste keer uitvoert, kan &k3b; u informeren dat er geen optische stuurprogramma's voor schrijven zijn gevonden, wat betekent dat u geen optische schijven kunt beschrijven. Geen paniek want &k3b; zal het tabblad <guilabel
+>Rechten</guilabel
+> openen op de pagina <guilabel
+>Programma's</guilabel
+> van de instellingendialoog, waar rechten nu gewijzigd kunnen worden. In alle moderne systemen behoren optische apparaten tot een bepaalde gebruikersgroep (&eg; <quote
+>cdrom</quote
+>). Als de huidige gebruiker niet bij deze group behoort, dan wordt op dit tabblad aangeboden zichzelf aan die groep toe te voegen. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Gebruikersinterface configureren</title>
+<para
+>Bij het starten van &k3b; krijgt u het snelle starten naar de drie meest populaire processen </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Nieuw gegevens-project</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Nieuw audio-cd-project</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Medium kopiëren</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>&k3b; kan echter veel meer dan deze taken, zodat u zou kunnen ontdekken dat sommige van de andere mogelijkheden voor u net zo bruikbaar zijn. Neem een kijkje in deze lijst om de smaak van de andere beschikbare functies te proeven: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Misschien dat een snelle start voor een of meer van deze andere taken bruikbaar voor u zou kunnen zijn en dus biedt &k3b; u dat ook. klik eenvoudig rechts in het venster van het programma en u zult een menu zien voor het toevoegen van knoppen: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>De internals instellen</title>
+<para
+>De meeste van de standaard instellingen kunnen eenvoudig onaangeroerd blijven. Het is echter aanbevolen dat u een kijkje neemt op de pagina <guilabel
+>Geavanceerde instellingen</guilabel
+>. Hier kunt u, indien gewenst, verschillende belangrijke instellingen aanbrengen. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Burnfree gebruiken</guilabel
+> zou ingesteld moeten zijn - het bestuurt het branden en verzekert dat de buffer nooit gevaarlijk laag wordt (wat het aantal keren fout branden vermindert). </para
+></listitem>
+<listitem
+><para
+>U zou kunnen wensen dat herschrijfbare schijven automatisch worden gewist. </para
+></listitem>
+<listitem
+><para
+>De optie <guilabel
+>Medium niet uitwerpen na het schrijfproces</guilabel
+> is waardevol als uw apparaat er een is die niet snel genoeg kan worden gesloten voor <guilabel
+>Verifiëren</guilabel
+> kan gebeuren. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Het branden van een schijf voorbereiden</title>
+<para
+>Bij het starten van een nieuw project zou u zich ervan moeten verzekeren dat &k3b; het juiste optische medium, zoals een cd of dvd heeft gedetecteerd. Op de statusregel onderaan het scherm zou u de grootte van de schijf, zoals die nu is ingesteld, moeten kunnen zien. Als deze niet juist is, of u vereist een andere grootte, klik er dan eenvoudig rechts op en stel de gewenste grootte in uit de gegeven lijst: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Kies nu wat er gebrand moet worden. </para>
+<para
+>De bovenste helft van het scherm is het <emphasis
+>bronpaneel</emphasis
+>; het functioneert als een bestandsbeheerder. U kunt er gewone bestanden kiezen van aangekoppelde volumes of geluidstracks van ingevoerde audio-discs. Namen van geluidstracks worden automatisch gelezen uit CD-Text-gegevens, als uw cd-apparaat het lezen ervan ondersteunt of gegenereerd met <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>; het exacte formaat wordt gecontroleerd door een knop onderaan het paneel. Als de namen onjuist zijn of eenvoudig niet overeenkomen met de beschrijving van de disc, dan kunt u ze bewerken met de knop op de werkbalk. Uw wijzigingen zullen lokaal in de cache gezet worden en ingebracht worden in het hoofdregister op <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>Als de gehele opname is uitgevoerd door dezelfde artiest, laat dan het item trackartiest leeg, en vul de <guilabel
+>Albumartiest</guilabel
+> in, sla op naar CDDB en vraag opnieuw op. </para>
+</tip>
+<para
+>Nu u alle bronnen  bij de hand hebt, kunt u gewoon bestanden en mappen, die u wilt branden, slepen en laten vallen vallen in het grote paneel rechtsonder; dit is het <emphasis
+>modelpaneel</emphasis
+>. Links ziet u een boomstructuur gemaakt worden van de gekozen bestanden. Zouden er enkele bestanden of mappen zijn die u niet wilt branden, dan kunnen deze gemakkelijk uit het project worden verwijderd door ze eenvoudig uit het onderste paneel te verwijderen. Selecteer het te verwijderen bestand (u kunt control-klikken om er meerdere te selecteren), klik rechts en selecteer <guilabel
+>Verwijderen</guilabel
+> uit het contextmenu. </para>
+<tip>
+<para
+>Als het nodig is om geluid te comprimeren, maak dan een nieuw audio-cd-project aan, voeg de te converteren bestanden toe en druk op de knop <guilabel
+>Tracks converteren</guilabel
+>. Dit zal de inhoud van de cd niet wijzigen als u besluit om het te branden; u zult echter in staat zijn om de gecomprimeerde bestanden elders te gebruiken. Controleer of de originele bestanden (<emphasis
+>wav</emphasis
+> of <emphasis
+>FLAC</emphasis
+>) zonder verlies zijn, anders zal het resultaat onbevredigend zijn. </para>
+</tip>
+<para
+>De bovenste regel zal de titel van de schijf worden. In veel gevallen is dit OK, maar als u het wilt wijzigen in iets anders, gebruik dan eenvoudig het contextmenu. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Laatste stappen</title>
+<para
+>U bent nu klaar om de knop <guilabel
+>Branden</guilabel
+> in te drukken. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Op de schermafdruk ziet u dat er geen schijf aanwezig was. Als u de juiste schijf hebt ingevoerd dan zult u een beschrijving ervan zien op die regel. </para>
+<para
+>Er moeten nog steeds een of twee keuzes gemaakt worden. <emphasis
+>Aanbevolen</emphasis
+> is dat u <guilabel
+>Geschreven gegevens verifiëren</guilabel
+> activeert en dan op de knop <guilabel
+>Opslaan</guilabel
+>, onderaan het scherm, klikt, zodat het uw persoonlijke standaard wordt. Voor de meeste moderne apparaten is het veilig om modus en snelheid op <guilabel
+>Auto</guilabel
+> te laten staan. Als u een later nog een kopie van de schijf wilt maken, selecteer dan <guilabel
+>Image aanmaken</guilabel
+>, die voorkomt dat u alles opnieuw moet instellen om opnieuw te branden. Stel het aantal kopieën in dat u wilt branden, daarna, wanneer u tevreden bent, klikt u op <guilabel
+>Branden</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Een audio-cd branden</title>
+<sect1 id="k3b-audio-support"
+><title
+>Een audio-cd-project starten</title>
+<para
+>&k3b; ondersteunt veel audio-formats en kan ze automatisch voor u converteren. </para>
+<note
+><para
+>Sommige distributies splitsen deze mogelijkheden van &k3b; in een separaat pakket, &eg; in Debian en Ubuntu distributies dient u het pakket libk3b6-extracodecs te installeren, in openSUSE is de naam van het pakket k3b-codecs. In sommige distributies (&eg; Mandriva) ins het niet nodig om enige additionele pakketten te installeren.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>De bestanden selecteren</title>
+<para
+>Er zijn twee manieren om audio-bestanden, die u op een audio-cd wilt branden, te selecteren:</para>
+<variablelist>
+<varlistentry>
+<term
+>&k3b; gebruiken</term>
+<listitem>
+<para
+>Klik aan de onderkant van het &k3b; venster op <guilabel
+>Nieuw audio-cd-project</guilabel
+> en selecteer de bestanden die u wilt branden. </para>
+<para
+>Navigeer anders in het mappenpaneel naar de locatie van de audio-bestanden. Dubbelklik op een audio-bestand of sleep en laat de geselecteerde audio-bestanden vallen in het onderste gedeelte van het venster van &k3b;, dit start automatisch een <guilabel
+>Nieuw audio-cd-project</guilabel
+> met deze bestanden. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>De bestandsbeheerder gebruiken</term>
+<listitem>
+<para
+>Ga naar de map met de muziekbestanden in &dolphin; of &konqueror;</para>
+<para
+>Kies de te branden bestanden en selecteer uit het contextmenu <menuchoice
+><guimenu
+>Acties</guimenu
+><guimenuitem
+>Audio-cd aanmaken met &k3b;</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Bewerk de titelinformatie</title>
+<para
+>U kunt de tracks titels geven of deze importeren uit <acronym
+>CDDB</acronym
+> (een online-service voor track-namen). Om dat te doen dubbelklik op de track (onderste helft van het venster). </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Brand de cd</title>
+<para
+>Voer een blanco CD-R of CD-RW schijf in in uw cd-apparaat en klik op <guilabel
+>Branden</guilabel
+>. In de opkomende controledialoog, als u akkoord bent met de instellingen, en wanneer u klaar bent, klikt u op <guilabel
+>Branden</guilabel
+>. De cd zal nu voor u worden gebrand. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Dankbetuigingen en licentie</title>
+    <para
+>Documentatie Copyright zie de UserBase <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>K3b-paginageschiedenis</ulink
+></para>
+    &meld.fouten;&vertaling.rinse;&nagelezen.antoon;&vertaling.freek; &underFDL; </chapter>
+&documentation.index;
+</book>

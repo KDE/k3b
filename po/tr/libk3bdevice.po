@@ -1,0 +1,283 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Translators:
+# Engin Çağatay <engincagatay@yahoo.com>, 2006
+# Gökçen Eraslan <gokcene@anadolu.edu.tr>, 2005
+# Görkem Çetin <gorkem@kde.org>, 2004-2005
+# Ozan Çağlayan <ozan@pardus.org.tr>, 2010
+# obsoleteman <tulliana@gmail.com>, 2007-2009
+# Volkan Gezer <volkangezer@gmail.com>, 2013
+msgid ""
+msgstr ""
+"Project-Id-Version: extragear-multimedia-kde4\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-06-15 00:16+0000\n"
+"PO-Revision-Date: 2014-06-08 13:49+0000\n"
+"Last-Translator: Volkan Gezer <volkangezer@gmail.com>\n"
+"Language-Team: Turkish (http://www.transifex.com/projects/p/extragear-"
+"multimedia-k-tr/language/tr/)\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: k3bdeviceglobals.cpp:18 k3bdeviceglobals.cpp:141
+#, kde-format
+msgid "CD-R"
+msgstr "CD-R"
+
+#: k3bdeviceglobals.cpp:20 k3bdeviceglobals.cpp:143
+#, kde-format
+msgid "CD-RW"
+msgstr "CD-RW"
+
+#: k3bdeviceglobals.cpp:22 k3bdeviceglobals.cpp:139
+#, kde-format
+msgid "CD-ROM"
+msgstr "CD-ROM"
+
+#: k3bdeviceglobals.cpp:24 k3bdeviceglobals.cpp:108
+#, kde-format
+msgid "DVD-ROM"
+msgstr "DVD-ROM"
+
+#: k3bdeviceglobals.cpp:26 k3bdeviceglobals.cpp:122
+#, kde-format
+msgid "DVD-RAM"
+msgstr "DVD-RAM"
+
+#: k3bdeviceglobals.cpp:28 k3bdeviceglobals.cpp:111
+#, kde-format
+msgid "DVD-R"
+msgstr "DVD-R"
+
+#: k3bdeviceglobals.cpp:30 k3bdeviceglobals.cpp:125
+#, kde-format
+msgid "DVD-RW"
+msgstr "DVD-RW"
+
+#: k3bdeviceglobals.cpp:32
+#, kde-format
+msgid "DVD-R DL"
+msgstr "DVD-R Çift Katman"
+
+#: k3bdeviceglobals.cpp:34 k3bdeviceglobals.cpp:145
+#, kde-format
+msgid "HD DVD-ROM"
+msgstr "HD DVD-ROM"
+
+#: k3bdeviceglobals.cpp:36 k3bdeviceglobals.cpp:147
+#, kde-format
+msgid "HD DVD-R"
+msgstr "HD DVD-R"
+
+#: k3bdeviceglobals.cpp:38 k3bdeviceglobals.cpp:149
+#, kde-format
+msgid "HD DVD-RAM"
+msgstr "HD DVD-RAM"
+
+#: k3bdeviceglobals.cpp:40 k3bdeviceglobals.cpp:151
+#, kde-format
+msgid "BD-ROM"
+msgstr "BD-ROM"
+
+#: k3bdeviceglobals.cpp:42 k3bdeviceglobals.cpp:154
+#, kde-format
+msgid "BD-R"
+msgstr "BD-R"
+
+#: k3bdeviceglobals.cpp:44 k3bdeviceglobals.cpp:162
+#, kde-format
+msgid "BD-RE"
+msgstr "BD-RE"
+
+#: k3bdeviceglobals.cpp:46 k3bdeviceglobals.cpp:133
+#, kde-format
+msgid "DVD+R"
+msgstr "DVD+R"
+
+#: k3bdeviceglobals.cpp:48 k3bdeviceglobals.cpp:131
+#, kde-format
+msgid "DVD+RW"
+msgstr "DVD+RW"
+
+#: k3bdeviceglobals.cpp:50
+#, kde-format
+msgid "DVD+R DL"
+msgstr "DVD+R Çift Katman"
+
+#: k3bdeviceglobals.cpp:53 k3bdeviceglobals.cpp:165 k3bdeviceglobals.cpp:187
+#, kde-format
+msgid "Error"
+msgstr "Hata"
+
+#: k3bdeviceglobals.cpp:63
+#, kde-format
+msgid "SAO"
+msgstr "SAO"
+
+#: k3bdeviceglobals.cpp:65
+#, kde-format
+msgid "TAO"
+msgstr "TAO"
+
+#: k3bdeviceglobals.cpp:67
+#, kde-format
+msgid "RAW"
+msgstr "RAW"
+
+#: k3bdeviceglobals.cpp:69
+#, kde-format
+msgid "SAO/R96P"
+msgstr "SAO/R96P"
+
+#: k3bdeviceglobals.cpp:71
+#, kde-format
+msgid "SAO/R96R"
+msgstr "SAO/R96R"
+
+#: k3bdeviceglobals.cpp:73
+#, kde-format
+msgid "RAW/R16"
+msgstr "RAW/R16"
+
+#: k3bdeviceglobals.cpp:75
+#, kde-format
+msgid "RAW/R96P"
+msgstr "RAW/R96P"
+
+#: k3bdeviceglobals.cpp:77
+#, kde-format
+msgid "RAW/R96R"
+msgstr "RAW/R96R"
+
+#: k3bdeviceglobals.cpp:79
+#, kde-format
+msgid "Incremental Sequential"
+msgstr "Artan Sıralı"
+
+#: k3bdeviceglobals.cpp:81
+#, kde-format
+msgid "Restricted Overwrite"
+msgstr "Sınırlı Üzerine Yazma"
+
+#: k3bdeviceglobals.cpp:83
+#, kde-format
+msgid "Layer Jump"
+msgstr "Katman Atlama (Layer Jump)"
+
+#: k3bdeviceglobals.cpp:86
+#, kde-format
+msgid "Random Recording"
+msgstr "Rastgele Kaydetme"
+
+#: k3bdeviceglobals.cpp:88
+#, kde-format
+msgid "Sequential Recording"
+msgstr "Sıralı Kaydetme"
+
+#: k3bdeviceglobals.cpp:90
+#, kde-format
+msgid "Sequential Recording + POW"
+msgstr "Sıralı Kaydetme + POW"
+
+#: k3bdeviceglobals.cpp:93
+#, kde-format
+msgctxt "no writing mode"
+msgid "None"
+msgstr "Hiçbiri"
+
+#: k3bdeviceglobals.cpp:102
+#, kde-format
+msgctxt "unknown medium type"
+msgid "Unknown"
+msgstr "Bilinmeyen"
+
+#: k3bdeviceglobals.cpp:106
+#, kde-format
+msgid "No media"
+msgstr "Ortam yok"
+
+#: k3bdeviceglobals.cpp:113
+#, kde-format
+msgid "DVD-R Sequential"
+msgstr "DVD-R Sıralı"
+
+#: k3bdeviceglobals.cpp:116
+#, kde-format
+msgid "DVD-R Dual Layer"
+msgstr "DVD-R Çift Katman"
+
+#: k3bdeviceglobals.cpp:118
+#, kde-format
+msgid "DVD-R Dual Layer Sequential"
+msgstr "DVD-R Çift Katman Sıralı"
+
+#: k3bdeviceglobals.cpp:120
+#, kde-format
+msgid "DVD-R Dual Layer Jump"
+msgstr "DVD-R Çift Katman Atlama"
+
+#: k3bdeviceglobals.cpp:127
+#, kde-format
+msgid "DVD-RW Restricted Overwrite"
+msgstr "DVD-RW Kısıtlanmış Üzerine Yazma"
+
+#: k3bdeviceglobals.cpp:129
+#, kde-format
+msgid "DVD-RW Sequential"
+msgstr "DVD-RW Sıralı"
+
+#: k3bdeviceglobals.cpp:135
+#, kde-format
+msgid "DVD+RW Dual Layer"
+msgstr "DVD-RW Çift Katman"
+
+#: k3bdeviceglobals.cpp:137
+#, kde-format
+msgid "DVD+R Dual Layer"
+msgstr "DVD-R Çift Katman"
+
+#: k3bdeviceglobals.cpp:156
+#, kde-format
+msgid "BD-R Sequential (SRM)"
+msgstr "DVD-R Sıralı (SRM)"
+
+#: k3bdeviceglobals.cpp:158
+#, kde-format
+msgid "BD-R Sequential Pseudo Overwrite (SRM+POW)"
+msgstr "BD-R Sıralı Pseudo Üzerine Yazma (SRM+POW)"
+
+#: k3bdeviceglobals.cpp:160
+#, kde-format
+msgid "BD-R Random (RRM)"
+msgstr "BD-R Rastgele (RRM)"
+
+#: k3bdeviceglobals.cpp:174
+#, kde-format
+msgctxt "unknown medium state"
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
+#: k3bdeviceglobals.cpp:178
+#, kde-format
+msgid "no medium"
+msgstr "ortam yok"
+
+#: k3bdeviceglobals.cpp:180
+#, kde-format
+msgid "complete medium"
+msgstr "tamamlanmış ortam"
+
+#: k3bdeviceglobals.cpp:182
+#, kde-format
+msgid "incomplete medium"
+msgstr "tamamlanmamış ortam"
+
+#: k3bdeviceglobals.cpp:184
+#, kde-format
+msgid "empty medium"
+msgstr "boş ortam"

@@ -1,0 +1,465 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Spanish "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>El manual de K3b</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Esa documentación se convirtió desde la página de <ulink url=" https://userbase.kde.org/K3b"
+>K3b</ulink
+> de KDE UserBase el 20/01/2011</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Actualizado a 2.0 por el equipo de documentación de &kde;</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>Carlos</firstname
+><surname
+>Mayo Hernández</surname
+> <affiliation
+><address
+><email
+>carlos.mayo@hispalinux.es</email
+></address
+></affiliation
+><contrib
+>Traductor</contrib
+></othercredit
+> <othercredit role="translator"
+><firstname
+>Pedro</firstname
+><surname
+>Suárez Casal</surname
+><affiliation
+><address
+><email
+>pedro.wotan@terra.es</email
+></address
+></affiliation
+><contrib
+>Traductor</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Santiago</firstname
+><surname
+>Fernández Sancho</surname
+><affiliation
+><address
+><email
+>santi@kde-es.org</email
+></address
+></affiliation
+><contrib
+>Traductor</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Javier</firstname
+> <surname
+>Viñal</surname
+> <affiliation
+><address
+><email
+>fjvinal@gmail.com</email
+></address
+> </affiliation
+><contrib
+>Traductor</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-01-06</date>
+    <releaseinfo
+>2.0 (&kde; 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Introducción</title>
+<para
+>Si usted ha utilizado un programa de grabación como Nero bajo Windows, &k3b; le resultará bastante familiar. </para>
+<para
+>Con una sencilla y, con todo potente interfaz gráfica, &k3b; proporciona varias opciones para grabar un CD, DVD o BD (disco Blu-ray). Se admiten varios tipos de proyectos ópticos incluidos (pero no limitados a) proyectos de audio y datos, proyectos de vídeo para DVD y VCD, además de discos multisesión y de modo mixto. &k3b; también dispone de la capacidad de borrar medios regrabables y puede realizar tareas más complicadas como codificación y decodificación audiovisual. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Preconfiguración</title>
+<para
+>Cuando usted ejecute &k3b; por primera vez, encontrará que &k3b; le informa de que no se encuentran dispositivos ópticos, lo que significa que no puede grabar a ningún dispositivo óptico. No hay que ponerse nervioso ya que &k3b; abrirá la pestaña <guilabel
+>Permisos</guilabel
+> en la página <guilabel
+>Programas</guilabel
+> del diálogo de configuración, en la que pueden cambiarse los permisos. En todos los sistemas modernos, los dispositivos ópticos pertenecen a un cierto grupo de usuarios (p. ej. <quote
+>cdrom</quote
+>). Si el usuario actual no pertenece a este grupo, se le ofrece añadirse a sí mismo en esta pestaña. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Configuración de la interfaz de usuario</title>
+<para
+>Al iniciar &k3b; se le ofrecen inicios rápidos a tres de los procesos más populares </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Nuevo proyecto de datos</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Nuevo proyecto de CD de audio</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Copiar medio</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>&k3b; puede ejecutar muchas más que estas tareas y usted puede encontrar que algunas otras posibilidades le son útiles. Eche un vistazo a esta lista para saborear otras posibles funciones: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Quizás un inicio rápido para una o más de esas otras tareas podría ser útil para usted y por lo tanto, &k3b; puede proporcionarlo también. Sencillamente pulse con el botón derecho en el escritorio de la aplicación y verá un menú para añadir botones: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>Configuración de aspectos internos</title>
+<para
+>Muchas de las configuraciones predeterminadas se pueden sencillamente dejar solas. Sin embargo, se recomienda que usted eche un vistazo a la página <guilabel
+>Preferencias avanzadas</guilabel
+>. Aquí usted puede establecer diversas preferencias importantes si es necesario. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Utilizar Burnfree</guilabel
+> debe activarse - controla la grabación, asegurando que la memoria intermedia nunca queda peligrosamente baja (lo que reduce la cantidad de grabaciones defectuosas). </para
+></listitem>
+<listitem
+><para
+>Usted puede querer borrar automáticamente discos regrabables. </para
+></listitem>
+<listitem
+><para
+>La opción <guilabel
+>No expulsar el medio tras finalizar el proceso de grabación</guilabel
+> es inestimable si su dispositivo es uno de los que no se pueden cerrar lo bastante rápido para <guilabel
+>Verificar</guilabel
+> lo que pasa. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Preparación para grabar un disco</title>
+<para
+>Cuando inicie un nuevo proyecto, usted debería asegurarse que &k3b; ha detectado el medio óptico correcto, como un CD o DVD. En la línea de estado, en la parte inferior de la Pantalla usted debería ver el tamaño de disco que está establecido en la actualidad. Si no es correcto o necesita un tamaño distinto, sencillamente pulse sobre el con el botón derecho y establezca el tamaño preferido desde la lista que se proporciona: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Ahora elija lo que se va a grabar. </para>
+<para
+>La mitad superior de la pantalla es el <emphasis
+>panel de orígenes</emphasis
+>; que funciona como un administrador de archivos. Usted puede elegir archivos corrientes desde volúmenes de datos montados o pistas de audio desde CD de audio insertados. Los nombres de las pistas de audio se leen automáticamente desde datos de CD-Text, si su unidad de CD admite leerlas, o se generan usando <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>; el formato exacto se controla mediante un botón en el panel inferior. Si los nombres no son correctos o no coinciden con la descripción del disco, puede editarlos usando el botón de la barra de herramientas. Sus cambios se almacenarán en la caché local y se enviarán al registro global de <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>Si la grabación completa es interpretada por el mismo artista, deje las entradas de artista de la pista en blanco, llene el <guilabel
+>Artista del álbum</guilabel
+>, guarde en CDDB y vuelva a consultar. </para>
+</tip>
+<para
+>Ahora que usted tiene todos sus orígenes a mano, sencillamente arrastre y suelte los archivos y directorios que desea grabar en el gran panel de la parte inferior derecha, este es el <emphasis
+>panel modelo</emphasis
+>. A la izquierda usted verá una vista de árbol formada por los archivos que usted eligió. Podría haber algunos archivos o directorios que usted no quiere grabar, estos se pueden eliminar fácilmente del proyecto sencillamente eliminándolos del panel de abajo. Seleccione el archivo a eliminar (usted puede mantener pulsada la tecla «control» para seleccionar varios), a continuación seleccione <guilabel
+>Eliminar</guilabel
+> del menú de contexto. </para>
+<tip>
+<para
+>Si usted necesita comprimir audio, cree un nuevo proyecto de CD de audio, añada los archivos a convertir y pulse el botón <guilabel
+>Cambiar formato de audio...</guilabel
+>. Esto no afectará a los contenidos del CD si usted decide grabarlo; sin embargo, usted podrá usar los archivos comprimidos en cualquier otro lugar. Asegúrese que los archivos originales son sin pérdidas (<emphasis
+>wav</emphasis
+> o <emphasis
+>FLAC</emphasis
+>), de otro modo los resultados no serán satisfactorios. </para>
+</tip>
+<para
+>La línea superior será el título del disco. En muchos casos esto estará bien, pero si usted quisiera cambiarlo a algo diferente, sencillamente cambie el nombre usando el menú de contexto. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Pasos finales</title>
+<para
+>Ahora usted está listo para pulsar el botón <guilabel
+>Grabar</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Usted verá en mi captura de pantalla que no se encuentra ningún disco. Cuando usted haya insertado el disco apropiado usted verá su descripción en esa línea. </para>
+<para
+>Todavía hay dos elecciones que hacer. Yo podría <emphasis
+>recomendarle</emphasis
+> que active <guilabel
+>Verificar los datos grabados</guilabel
+> y a continuación, pulse sobre el icono <guilabel
+>Guardar</guilabel
+> en la parte inferior de la pantalla, lo que asegura que se convierte en su preferencia predeterminada. En muchos dispositivos modernos es seguro dejar el modo y velocidad como <guilabel
+>Auto</guilabel
+>. Si usted quiere grabar otra copia del disco en una fecha posterior, seleccione <guilabel
+>Crear imagen</guilabel
+>, lo que le ahorrará configurar la grabación de nuevo. Establezca el número de copias que usted quiere grabar, a continuación, cuando esté satisfecho, pulse <guilabel
+>Grabar</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Grabar un CD de audio</title>
+<sect1 id="k3b-audio-support"
+><title
+>Inicio de un proyecto de CD de audio</title>
+<para
+>&k3b; admite un montón de formatos de audio y puede convertirlos automáticamente para usted. </para>
+<note
+><para
+>Algunas distribuciones dividen esta característica de &k3b; en paquetes separados, &eg; en las distribuciones Debian y Ubuntu usted necesita instalar el paquete libk3b6-extracodecs, en openSUSE el nombre del paquete es k3b-codecs. En algunas distribuciones (&eg; Mandriva) usted no necesita instalar ningún paquete adicional.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>Selección de archivos</title>
+<para
+>Hay dos maneras de seleccionar los archivos de audio que usted quiere grabar en un cd de audio:</para>
+<variablelist>
+<varlistentry>
+<term
+>Uso de &k3b;</term>
+<listitem>
+<para
+>En la mitad inferior de la ventana de &k3b; pulse sobre <guilabel
+>Nuevo proyecto de CD de audio </guilabel
+> y seleccione los archivos que usted quiere grabar. </para>
+<para
+>De forma alternativa, navegue por el panel de carpetas hasta la ubicación de los archivos de audio. Al hacer doble clic en un archivo de audio o arrastrar y soltar los archivos de audio seleccionados en la parte inferior de la ventana &k3b; se inicia automáticamente un <guilabel
+>Nuevo proyecto de CD de audio</guilabel
+> con esos archivos. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Uso del gestor de archivos</term>
+<listitem>
+<para
+>Vaya a la carpeta que contiene sus archivos de música en &dolphin; o &konqueror;</para>
+<para
+>Elija los archivos para grabar y seleccione <menuchoice
+><guimenu
+>Acciones</guimenu
+><guimenuitem
+>Crear CD de audio con &k3b;</guimenuitem
+></menuchoice
+> del menú de contexto.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Editar la información de título</title>
+<para
+>Usted puede proporcionar los títulos de pista o importarlos desde <acronym
+>CDDB</acronym
+> (un servicio en línea para nombres de pistas). Para hacerlo haga doble clic sobre la pista (mitad inferior de la pantalla). </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Grabar el CD</title>
+<para
+>Inserte un disco CD-R o CD-RW en blanco en su grabadora de CD y pulse <guilabel
+>Grabar</guilabel
+>. En el próximo diálogo compruebe si le gustan las preferencias y cuando lo haya hecho, pulse sobre <guilabel
+>Grabar</guilabel
+>. El CD se grabará para usted. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Créditos y licencia</title>
+    <para
+>Copyright de la documentación, consulte la <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>página de historia de K3b</ulink
+> en la UserBase</para>
+    <para
+>Traducido por Carlos Mayo Hernández <email
+>carlos.mayo@hispalinux.es</email
+>,Pedro Suárez Casal <email
+>pedro.wotan@terra.es</email
+>,Santiago Fernández Sancho <email
+>santi@kde-es.org</email
+>y Javier Viñal <email
+>fjvinal@gmail.com.</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>

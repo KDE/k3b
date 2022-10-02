@@ -1,0 +1,26 @@
+# translation of kio_videodvd.po to Slovak
+# Michal Sulek <misurel@gmail.com>, 2010.
+msgid ""
+msgstr ""
+"Project-Id-Version: kio_videodvd\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"PO-Revision-Date: 2010-07-12 09:24+0200\n"
+"Last-Translator: Michal Sulek <misurel@gmail.com>\n"
+"Language-Team: Slovak <kde-sk@linux.sk>\n"
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#, kde-format
+msgid "No Video DVD found"
+msgstr "Nenašlo sa žiadne Video DVD"
+
+#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#, kde-format
+msgid "Read error."
+msgstr "Chyba čítania."

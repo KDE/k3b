@@ -1,0 +1,418 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Portuguese "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>O Manual do K3b</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Esta documentação foi convertida a partir da Base de Utilizadores do KDE para o <ulink url=" http://userbase.kde.org/K3b"
+>K3b</ulink
+> a 2011-01-20.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Actualização para o 2.0 pela Equipa de Documentação do &kde;</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>José</firstname
+><surname
+>Pires</surname
+><affiliation
+><address
+><email
+>zepires@gmail.com</email
+></address
+></affiliation
+><contrib
+>Tradução</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-01-06</date>
+    <releaseinfo
+>2.0 (&kde; 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Introdução</title>
+<para
+>Se já tiver usado um programa de gravação, como o Nero para o Windows, o &k3b; ser-lhe-á bastante familiar. </para>
+<para
+>Oferecendo uma interface de utilizador simples, mas poderosa, o &k3b; oferece diversas opções para gravar um CD, DVD ou BD (disco Blu-ray). São suportados diversos tipos de projectos ópticos, incluindo (mas não se limitando) os de dados, áudio e vídeo para DVD's e VCD's, assim como discos multi-sessão e mistos. O &k3b; também tem a capacidade de limpar discos regraváveis e poderá efectuar tarefas mais complicadas, como a codificação e descodificação audiovisual. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Pré-configuração</title>
+<para
+>Quando executar o &k3b; pela primeira vez, poderá descobrir que o &k3b; o irá informar de que não foram encontrados gravadores ópticos, o que significa que não poderá gravar nenhum disco óptico. Não há motivo para pânico, dado que o &k3b; irá abrir a página de <guilabel
+>Permissões</guilabel
+> da página <guilabel
+>Programas</guilabel
+> da janela de configuração, onde poderá então alterar as permissões em questão. Em todos os sistemas recentes, os dispositivos ópticos pertencem a um dado grupo de utilizadores (&eg; <quote
+>cdrom</quote
+>). Se o utilizador actual não pertencer a esse grupo, ser-lhe-á pedido para adicionar o seu utilizador ao grupo nesta página. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Configurar a Interface do Utilizador</title>
+<para
+>Depois do arranque do &k3b;, ser-lhe-ão oferecidos arranques rápidos para os três processos mais conhecidos </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Novo Projecto de Dados</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Novo Projecto de CD de Áudio</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Copiar um Disco</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>O &k3b; pode efectuar muitas mais tarefas que essas, obviamente, e poderá concluir que algumas das outras possibilidades são igualmente úteis para si. Dê uma vista de olhos nesta lista, para ter uma ideia das outras funções disponíveis: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Talvez uma introdução rápida para uma ou mais tarefas dessas fosse útil para si; para isso, o &k3b; também o poderá ajudar. Basta carregar com o botão direito na área de trabalho da aplicação, onde irá ver um menu de adição de botões: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>Configurar as opções internas</title>
+<para
+>A maioria das opções predefinidas poderá ser deixada tal-e-qual. Contudo, recomenda-se que dê uma vista de olhos na página de <guilabel
+>Configuração Avançada</guilabel
+>. Aqui poderá definir diversas opções importantes, caso seja necessário. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+>O <guilabel
+>Usar o Burnfree</guilabel
+> deverá estar configurado - controla o processo de gravação, garantindo que o 'buffer' de dados nunca desce demasiado (o que reduz a quantidade de gravações defeituosas). </para
+></listitem>
+<listitem
+><para
+>Poderá querer limpar automaticamente os discos regraváveis. </para
+></listitem>
+<listitem
+><para
+>A opção <guilabel
+>Não ejectar o disco após o processo de escrita</guilabel
+> é valiosa, caso a sua unidade não consiga fechar rápido o suficiente para ocorrer a <guilabel
+>Verificação</guilabel
+>. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Preparar para gravar um disco</title>
+<para
+>Ao iniciar um projecto novo, deverá garantir que o &k3b; detectou o tipo de disco óptico correcto, como um CD ou DVD. Na barra de estado, no fundo do ecrã, deverá ver o tamanho do disco que está configurado de momento. Se não estiver correcto, ou se necessitar de um tamanho diferente, basta carregar com o botão direito nele e definir o tamanho preferido na lista indicada: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Agora escolha o que deseja gravar. </para>
+<para
+>A parte superior do ecrã é a <emphasis
+>área de origem</emphasis
+>; funciona como um gestor de ficheiros. Poderá escolher ficheiros normais dos volumes de dados montados ou faixas de áudio dos discos de áudio introduzidos. Os nomes das faixas de áudio são lidos automaticamente a partir dos dados do CD-TEXT, caso o seu leitor de CD's permita consultar essa informação, ou são gerados com base no <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>; o formato exacto é controlado por um botão na área inferior. Se os nomes estiverem incorrectos ou simplesmente não corresponderem à descrição do disco, podê-los-á editar com o botão da barra de ferramentas. As suas alterações ficarão numa 'cache' local e serão enviadas para o registo principal no <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>Se o disco completo for gravado pelo mesmo artista, deixe os itens do artista da faixa em branco; preencha o <guilabel
+>Artista do álbum</guilabel
+>, grave no CDDB e volte a pesquisar. </para>
+</tip>
+<para
+>Agora que tem os seus dados de origem à mão, basta arrastar e largar os ficheiros e pastas que deseja gravar na área grande em baixo e à direita; esta é a <emphasis
+>área do modelo</emphasis
+>. À esquerda, irá ver uma estrutura em árvore com os seus ficheiros escolhidos. Se existirem ficheiros ou pastas que não deseja gravar, podê-los-á remover facilmente do projecto, apagando-os no painel que aparece em baixo. Seleccione o ficheiro a remover (poderá usar a tecla Ctrl para seleccionar vários), depois carregue com o botão direito do rato e seleccionar a opção <guilabel
+>Remover</guilabel
+>. </para>
+<tip>
+<para
+>Se precisar de comprimir o áudio, crie um novo projecto de CD de áudio, adicione os ficheiros a converter e carregue no botão <guilabel
+>Converter as Faixas</guilabel
+>. Isto não irá afectar o conteúdo do CD, caso opte por gravá-lo; contudo, será capaz de usar os ficheiros comprimidos noutro lado. Certifique-se que os ficheiros originais não têm perdas (<emphasis
+>WAV</emphasis
+> ou <emphasis
+>FLAC</emphasis
+>), caso contrário o resultado não será satisfatório. </para>
+</tip>
+<para
+>A linha de topo será o título do disco. Na maior parte dos casos, será suficiente, mas se quiser alterar este valor para outro qualquer, basta carregar com o botão direito sobre o título e mudar o seu nome. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Passos Finais</title>
+<para
+>Está pronto agora para carregar no botão <guilabel
+>Gravar</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Irá ver na imagem seguinte que não está nenhum disco presente. Quando tiver introduzido o disco apropriado, irá ver uma descrição do mesmo nessa linha. </para>
+<para
+>Existem ainda uma ou duas opções a fazer. <emphasis
+>Recomenda-se</emphasis
+> que assinale a opção <guilabel
+>Verificar os dados gravados</guilabel
+>, depois carregue no ícone <guilabel
+>Gravar</guilabel
+> na parte inferior do ecrã, garantindo que fica a sua configuração por omissão. Para a maioria das unidades recentes, é seguro deixar o modo e a velocidade como <guilabel
+>Automáticos</guilabel
+>. Se quiser gravar outra cópia do disco posteriormente, seleccione a opção <guilabel
+>Criar uma imagem</guilabel
+>, o que poupará uma nova configuração. Indique o número de cópias que deseja gravar e, quando estiver satisfeito, carregue em <guilabel
+>Gravar</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Gravar um CD de Áudio</title>
+<sect1 id="k3b-audio-support"
+><title
+>Iniciar um Projecto de CD de Áudio</title>
+<para
+>O &k3b; suporta um conjunto de formatos de áudio, tendo a capacidade de os converter automaticamente para si. </para>
+<note
+><para
+>Algumas distribuições dividem esta capacidade do &k3b; num pacote separado, &eg; nas distribuições Debian e Ubuntu, terá de instalar o pacote 'libk3b6-extracodecs', enquanto no openSUSE se chama 'k3b-codecs'. Em algumas distribuições (&eg; Mandriva), não terá de instalar nenhuns pacotes adicionais.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>Seleccionar os ficheiros</title>
+<para
+>Existem duas formas de seleccionar os ficheiros de áudio que deseja gravar num CD de áudio:</para>
+<variablelist>
+<varlistentry>
+<term
+>Usar o &k3b;</term>
+<listitem>
+<para
+>Na parte inferior da janela do &k3b; carregue em <guilabel
+>Novo Projecto de CD de Áudio</guilabel
+> e seleccione os ficheiros que deseja gravar. </para>
+<para
+>Em alternativa, vá para o painel de pastas na localização dos ficheiros de áudio. Faça duplo-click sobre um ficheiro de áudio ou arraste os ficheiros seleccionados para a parte inferior da janela do &k3b;, para iniciar um <guilabel
+>Novo Projecto de CD de Áudio</guilabel
+> com esses ficheiros. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Usar o gestor de ficheiros</term>
+<listitem>
+<para
+>Vá para a pasta que contém os seus ficheiros de música no &dolphin; ou no &konqueror;</para>
+<para
+>Escolha os ficheiros a gravar e seleccione a opção do menu de contexto <menuchoice
+><guimenu
+>Acções</guimenu
+><guimenuitem
+>Criar um CD de Áudio com o &k3b;</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Editar a Informação do Título</title>
+<para
+>Poderá atribuir títulos às faixas ou importá-los a partir do <acronym
+>CDDB</acronym
+> (um serviço 'online' para nomear as faixas). Para tal, faça duplo-click sobre a faixa (parte inferior da janela). </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Gravar o CD</title>
+<para
+>Introduza um disco CD-R ou CD-RW no seu gravador de CD's e carregue em <guilabel
+>Gravar</guilabel
+>. Na janela que aparece, verifique se as predefinições são do seu agrado e, quando terminar, carregue em <guilabel
+>Gravar</guilabel
+>. O CD irá então ser gravado para si. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Créditos e Licença</title>
+    <para
+>Documentação - 'Copyright' ver o <ulink url="http://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>histórico da página do K3b</ulink
+> na Base de Utilizadores</para>
+    <para
+>Tradução de José Nuno Pires <email
+>zepires@gmail.com</email
+></para
+> 
+&underFDL; </chapter>
+&documentation.index;
+</book>

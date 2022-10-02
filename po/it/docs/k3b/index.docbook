@@ -1,0 +1,471 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Italian "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>Manuale di &k3b;</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Questo documento è stato convertito dalla pagina di <ulink url=" https://userbase.kde.org/K3b"
+>K3b</ulink
+> su KDE UserBase, aggiornata al 20/01/2011.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Aggiornamento alla versione 2.0 da parte del Documentation Team di &kde;</firstname
+><surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>Giovanni</firstname
+><surname
+>Venturi</surname
+><affiliation
+><address
+><email
+>jumpyj@tiscali.it</email
+></address
+></affiliation
+><contrib
+>Traduzione dell'interfaccia grafica</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Carlo Maria</firstname
+><surname
+>Laorenza</surname
+><affiliation
+><address
+><email
+>carlo@relazioninet.it</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Daniele</firstname
+><surname
+>Micci</surname
+><affiliation
+><address
+><email
+>daniele.micci@tiscali.it</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+><othercredit role="translator"
+><firstname
+>Vincenzo</firstname
+><surname
+>Reale</surname
+><affiliation
+><address
+><email
+>smart2128vr@gmail.com</email
+></address
+></affiliation
+><contrib
+>Traduzione della documentazione</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>06/01/2012</date>
+    <releaseinfo
+>2.0 (&kde; 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Introduzione</title>
+<para
+>Se hai già usato un programma di masterizzazione come Nero per Windows, &k3b; ti risulterà piuttosto familiare. </para>
+<para
+>Dotato di un'interfaccia semplice ma potente, &k3b; fornisce molteplici opzioni per masterizzare CD, DVD o BD (dischi Blu-ray). Sono supportate varie tipologie di progetti ottici, inclusi (tra gli altri) progetti audio, dati, video per DVD e VCD, così come dischi in multisessione ed in modalità mista. &k3b; possiede anche la capacità di cancellare i media riscrivibili e può eseguire compiti più complessi come la codifica e la decodifica audiovisiva. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Preimpostazioni</title>
+<para
+>Quando esegui lo per la prima volta, &k3b; potrebbe informarti del fatto che non è stato individuato alcun dispositivo di masterizzazione, indicando con ciò che non sarai in grado di scrivere su nessun disco ottico. Non c'è bisogno di allarmarsi: &k3b; aprirà la scheda <guilabel
+>Permessi</guilabel
+> sulla pagina <guilabel
+>Programmi</guilabel
+> della finestra di configurazione, tramite la quale potrai modificare i permessi. In tutti i moderni sistemi i dispositivi ottici appartengono ad un determinato gruppo di utenti (&eg; <quote
+>cdrom</quote
+>). Se l'utente attuale non appartiene a questo gruppo, su questa scheda viene offerta la possibilità di inserirvelo. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Configurazione dell'interfaccia utente</title>
+<para
+>All'avvio di &k3b; ti viene offerto l'accesso rapido alle tre procedure più frequenti </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Nuovo progetto dati</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Nuovo progetto CD audio</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Copia supporto...</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>Ma &k3b; può eseguire molti altri compiti oltre questi, così potresti scoprire che alcune delle altre possibilità sono per te altrettanto utili. Dai un'occhiata a questa lista per un assaggio delle funzionalità disponibili: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Forse un accesso rapido ad uno o più di questi compiti potrebbe essere utile per te, e &k3b; ti consente di averlo. Devi semplicemente fare clic con il pulsante destro del mouse sul desktop dell'applicazione, ed ecco comparire un menu per l'aggiunta di altri pulsanti: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>Configurazione</title>
+<para
+>La maggior parte delle impostazioni predefinite può essere lasciata così com'è. E' comunque raccomandato che tu dia un'occhiata alla pagina delle <guilabel
+>Impostazioni avanzate</guilabel
+>. Qui, se necessario, puoi configurare diverse impostazioni importanti. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Usa Burnfree</guilabel
+> dovrebbe essere attivato - la funzionalità controlla la masterizzazione, assicurando che il buffer non arrivi mai ad essere pericolosamente pieno (questo riduce la quantità di masterizzazioni fallite). </para
+></listitem>
+<listitem
+><para
+>Potresti desiderare di cancellare automaticamente i dischi riscrivibili. </para
+></listitem>
+<listitem
+><para
+>L'opzione <guilabel
+>Non estrarre il supporto dopo il processo di scrittura</guilabel
+> non ha valore se la tua periferica non può essere chiusa abbastanza velocemente perché avvenga la <guilabel
+>Verifica</guilabel
+>. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Preparazione della masterizzazione di un disco</title>
+<para
+>Quando avvii un nuovo progetto dovresti assicurarti che &k3b; abbia individuato correttamente il supporto ottico, come CD o DVD. Nella barra di stato posta nella parte inferiore dello schermo dovresti vedere la dimensione del disco attualmente impostata. Se non è corretta, oppure hai necessità di una dimensione differente, fai semplicemente clic su di essa con il pulsante destro del mouse e seleziona la dimensione desiderata dalla lista che viene visualizzata: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Ora scegli cosa deve essere scritto sul disco. </para>
+<para
+>La metà superiore dello schermo è il <emphasis
+>pannello della sorgente</emphasis
+>; esso funziona come un gestore di file. Puoi scegliere i normali file dai volumi di dati montati oppure le tracce audio da dischi audio inseriti. I nomi delle tracce audio sono letti automaticamente dai dati CD-Text, se il tuo lettore di CD ne supporta la lettura, oppure generati usando <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>; il formato esatto è controllato da un pulsante nel pannello inferiore. Se i nomi non sono corretti o semplicemente non corrispondono alla descrizione del disco, puoi modificarli usando il pulsante sulla barra degli strumenti. Le tue modifiche saranno conservate localmente e inviate al registro principale presso <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>Se l'intera registrazione è eseguita dallo stesso artista, lascia vuoti i campi relativi all'artista della singola traccia, riempi il campo <guilabel
+>Artista album</guilabel
+>, salva su CDDB e ripeti l'interrogazione. </para>
+</tip>
+<para
+>Ora che hai a portata di mano le sorgenti, trascina semplicemente i file e le cartelle che vuoi masterizzare sul grande pannello in basso a destra; questo è il <emphasis
+>pannello del modello</emphasis
+>. Puoi vedere la struttura ad albero dei tuoi file che via via si forma sulla sinistra. Nel caso in cui dovessero esserci file o cartelle che non desideri masterizzare, puoi facilmente rimuoverle dal progetto semplicemente rimuovendole dal pannello in basso. Seleziona il file da rimuovere (puoi fare clic tenendo premuto il tasto Ctrl per una seleziona multipla), quindi scegli <guilabel
+>Rimuovi</guilabel
+> dal menu contestuale. </para>
+<tip>
+<para
+>Se ha necessità di comprimere l'audio, crea un nuovo progetto CD audio, aggiungi i file che devono essere convertiti e premi il pulsante <guilabel
+>Converti tracce</guilabel
+>. Questo non avrà effetto sui contenuti del CD, se deciderai di masterizzarlo; sarai comunque in grado di usare altrove i file compressi. Assicurati che i file originali siano in formato privo di perdite (<emphasis
+>wav</emphasis
+> oppure <emphasis
+>FLAC</emphasis
+>), altrimenti il risultato potrebbe non essere soddisfacente. </para>
+</tip>
+<para
+>La linea in alto sarà il titolo del disco. In molti casi andrà bene, ma se dovessi desiderare cambiarla è sufficiente rinominarla usando il menu contestuale. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Passi conclusivi</title>
+<para
+>Ora sei pronto a premere il pulsante <guilabel
+>Scrivi</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Come vedi dalla mia immagine dello schermo, non era presente alcun disco. Una volta inserito il disco adatto, vedrai una sua descrizione in quella riga. </para>
+<para
+>Ci sono ancora una o due scelte da fare. Ti <emphasis
+>raccomando</emphasis
+> di impostare l'opzione <guilabel
+>Verifica i dati scritti</guilabel
+>, quindi fai clic sull'icona <guilabel
+>Salva</guilabel
+> nella parte inferiore della finestra, per assicurarti che queste diventino le tue opzioni predefinite. Per la maggior parte delle periferiche recenti puoi lasciare su <guilabel
+>Auto</guilabel
+> modalità e velocità di scrittura. Se puoi desiderare masterizzare una nuova copia del disco in un momento successivo seleziona l'opzione <guilabel
+>Crea immagine</guilabel
+>, che ti risparmierà di dover preparare nuovamente la masterizzazione. Imposta il numero di copie che desideri eseguire, quindi, quando sei soddisfatto, fai clic su <guilabel
+>Scrivi</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Scrivere un CD audio</title>
+<sect1 id="k3b-audio-support"
+><title
+>Avvio di un Progetto CD audio</title>
+<para
+>&k3b; supporta molti formati audio e può convertirli automaticamente per te. </para>
+<note
+><para
+>Alcune distribuzioni inseriscono questa funzionalità di &k3b; in un pacchetto separato: &eg; sulle distribuzioni Debian ed Ubuntu devi installare il pacchetto libk3b6-extracodecs, su OpenSUSE il nome del pacchetto è k3b-codecs. In altre distribuzioni (&eg;Mandriva) non hai necessità di installare alcun pacchetto aggiuntivo.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>Selezione dei file</title>
+<para
+>Ci sono due modi di selezionare i file audio che desideri masterizzare su un CD audio:</para>
+<variablelist>
+<varlistentry>
+<term
+>Usando &k3b;</term>
+<listitem>
+<para
+>Nella metà inferiore della finestra di &k3b;, fai clic su <guilabel
+>Nuovo progetto CD audio</guilabel
+> e seleziona i file che desideri masterizzare. </para>
+<para
+>In alternativa naviga nel pannello delle cartelle fino alla cartella in cui si trovano i file audio. Un doppio clic su un file audio oppure trascinare i file audio selezionati nella parte inferiore della finestra di &k3b; farà automaticamente avviare un <guilabel
+>Nuovo progetto CD audio</guilabel
+> con questi file. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Usando il gestore dei file</term>
+<listitem>
+<para
+>Vai fino alla cartella che contiene i tuoi file musicali usando &dolphin; oppure &konqueror;</para>
+<para
+>Scegli i file da masterizzare e seleziona dal menu contestuale <menuchoice
+><guimenu
+>Azioni</guimenu
+><guimenuitem
+>Crea un CD audio con &k3b;</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Modifica il titolo</title>
+<para
+>Puoi inserire i titoli delle tracce oppure importarli da <acronym
+>CDDB</acronym
+> (un servizio in rete che fornisce i nomi delle tracce). Per farlo, fai doppio clic sulla traccia (nella metà inferiore della finestra). </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Scrivere il CD</title>
+<para
+>Inserisci un CD-R vuoto oppure un CD-RW nel tuo masterizzatore e fai clic su <guilabel
+>Scrivi</guilabel
+>. Verifica nella finestra che comparirà se le impostazioni predefinite sono corrette, quindi fai clic su <guilabel
+>Scrivi</guilabel
+>. Il CD verrà ora masterizzato per te. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Riconoscimenti e licenza</title>
+    <para
+>Per i diritti sulla documentazione vedi la <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>pagina storica di K3b</ulink
+> su UserBase.</para>
+    <para
+>Traduzione: Giovanni Venturi<email
+>jumpyj@tiscali.it</email
+></para
+><para
+>Traduzione: Carlo Maria Laorenza<email
+>carlo@relazioninet.it</email
+></para
+><para
+>Daniele Micci<email
+>daniele.micci@tiscali.it</email
+></para
+><para
+>Traduzione: Vincenzo Reale<email
+>smart2128vr@gmail.com</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>

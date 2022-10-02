@@ -1,0 +1,417 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Russian "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>Руководство пользователя по K3b</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Это руководство создано на основе руководства по <ulink url=" https://userbase.kde.org/K3b"
+>K3b</ulink
+> с сайта KDE UserBase по состоянию на 20 января 2011 года.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Обновлено для версии 2.0 Командой документации KDE</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+></firstname
+><surname
+></surname
+><affiliation
+><address
+><email
+>juliette.tux@gmail.com</email
+></address
+></affiliation
+><contrib
+></contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>6 января 2012 г.</date>
+    <releaseinfo
+>2.0 (KDE SC 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Введение</title>
+<para
+>Пользователи, ранее пользовавшиеся программой Nero для ОС Windows, без труда смогут освоиться в программе &k3b;. </para>
+<para
+>Программа &k3b; имеет простой, но функциональный интерфейс, предоставляющий возможность прожига дисков CD, DVD или BD (Blu-ray). Поддерживаются разнообразные варианты создания проектов для оптических носителей, включая аудио и данные, видео-проекты для DVD и VCD, а также создание мультисессионных и смешанных типов дисков. С помощью &k3b; также можно удалять данные с носителей c возможностью многократной перезаписи, а также производить аудиовизуальное кодирование и декодирование. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Предварительная настройка</title>
+<para
+>При первом запуске &k3b; может быть показано сообщение о том, что не найдено ни одного привода и запись дисков невозможна. При наличии установленных в системе приводов, причиной такого поведения могут являться неверно настроенные права доступа. Для изменения прав доступа приложение &k3b; автоматически откроет окно параметров на вкладке <guilabel
+>Права доступа</guilabel
+> раздела <guilabel
+>Программы</guilabel
+>. В современных системах владельцем устройств приводов оптических дисков является специальная группа пользователей, например <quote
+>cdrom</quote
+>. Если учётная запись текущего пользователя не включена в эту группу, приложение предложит добавить её. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Настройка интерфейса пользователя</title>
+<para
+>Сразу после запуска &k3b; предлагается панель со значками для быстрого запуска трёх самых популярных проектов </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Новый проект с данными</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Новый проект Audio CD</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Копирование диска…</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>Однако, &k3b; способен на большее, и, возможно, некоторые другие задачи окажутся также востребованными конкретным пользователем. Взгляните на список других доступных проектов, чтобы оценить возможности программы: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Добавление одной или нескольких из этих задач на панель быстрого запуска может быть удобным, и &k3b; предоставляет такую возможность. Щёлкните правой кнопкой мыши по свободному полю чтобы увидеть меню «Добавить кнопку»: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>Внутренние параметры</title>
+<para
+>Для большинства параметров можно оставить настройку по умолчанию, но в раздел <guilabel
+>Дополнительно</guilabel
+> рекомендуется заглянуть. Здесь размещены некоторые важные параметры, которые пользователь может захотеть поменять. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+>Параметр <guilabel
+>Burnfree</guilabel
+> (защита от опустошения буферной памяти) должен быть отмечен. Он управляет процессом записи, уменьшая количество некачественных прожигов. </para
+></listitem>
+<listitem
+><para
+>Возможно, пользователю понадобится автоматическая очистка перезаписываемых дисков. </para
+></listitem>
+<listitem
+><para
+>Параметр <guilabel
+>Не извлекать диск после завершения записи</guilabel
+> крайне удобен для медленно закрывающихся лотков, из-за чего невозможен запуск <guilabel
+>Проверки</guilabel
+>. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Подготовка к записи диска</title>
+<para
+>Запуская новый проект, необходимо удостовериться, что &k3b; правильно определил диск, например CD или DVD. В строке статуса внизу окна программы можно увидеть объём размещённого в приводе диска. Если он не соответствует действительности, или если пользователю нужно установить другой размер, то в списке, вызываемом щелчком правой кнопкой мыши по строке статуса, можно выбрать нужный размер. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Теперь нужно выбрать необходимые для записи файлы. </para>
+<para
+>Верхняя половина окна программы представляет собой <emphasis
+>панель исходных файлов</emphasis
+>, которая работает как диспетчер файлов. Можно выбрать обычные файлы, расположенные на смонтированных томах с данными, или же аудио-треки с подключенных аудио-дисков. Имена дорожек автоматически считываются из данных CD-Text (если CD-привод поддерживает функцию их чтения), или создаются с помощью <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>. Точный формат контролируется с помощью кнопки на нижней панели. Если имена некорректны или не совпадают с описанием диска, их можно редактировать, используя кнопку на панели инструментов. Изменения будут кешированы локально и затем отправлены в базу данных трек-листов на <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>Если запись была создана только одним исполнителем, не нужно заполнять поле исполнителя для каждой дорожки, заполните поле <guilabel
+>Исполнитель альбома</guilabel
+>, сохраните в CDDB и повторите запрос базы данных. </para>
+</tip>
+<para
+>Теперь, имея под рукой источники файлов, просто перетащите файлы и каталоги, которые нужно записать на диск, на большую панель справа внизу, которая называется <emphasis
+>область шаблона</emphasis
+>. Обратите внимание на дерево выбранных файлов, образующееся слева. Если там есть файлы или каталоги, которые не должны находиться на диске, их можно легко удалить из проекта, удалив с панели внизу. Выделите файл, который необходимо удалить (удерживайте клавишу Ctrl чтобы выбрать более одного файла), затем выберите в контекстном меню пункт <guilabel
+>Удалить</guilabel
+>. </para>
+<tip>
+<para
+>Для сжатия аудио создайте новый проект Audio CD, добавьте файлы, которые необходимо преобразовать, затем  нажмите на кнопку <guilabel
+>Преобразовать дорожки</guilabel
+>. Это не повлияет на содержимое CD, в случае его записи, а полученные сжатые файлы можно будет потом использовать и для других задач. Убедитесь в том, что исходные файлы хранятся в формате без потери данных (<emphasis
+>wav</emphasis
+> или <emphasis
+>FLAC</emphasis
+>), иначе результат будет неудовлетворительным. </para>
+</tip>
+<para
+>Текст в верхней строке автоматически присваивается как название тома. Если пользователю захочется его изменить, это можно сделать из контекстного меню. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Завершающие шаги</title>
+<para
+>Теперь всё готово и можно нажать кнопку <guilabel
+>Записать</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>На снимке экрана можно увидеть, что во время его создания чистый диск отсутствовал. Если вставить чистую болванку, то в этой строке можно будет увидеть его описание. </para>
+<para
+>Остаётся настроить один или два параметра. Мы бы <emphasis
+>рекомендовали</emphasis
+> отметить параметр <guilabel
+>Проверить записанные данные</guilabel
+>, затем нажать кнопку <guilabel
+>Сохранить</guilabel
+> внизу окна, чтобы сохранить текущие параметры как параметры по умолчанию этого конкретного пользователя. Для большинства современных приводов рекомендуется <guilabel
+>Автоматически</guilabel
+> установить режим и скорость записи. Если в будущем вам понадобится сделать ещё одну копию этого диска, выберите параметр <guilabel
+>Создать образ</guilabel
+>, что позволит не воспроизводить этот же проект заново. Выберите количество создаваемых копий, и затем нажимайте кнопку <guilabel
+>Записать</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Прожиг Audio CD</title>
+<sect1 id="k3b-audio-support"
+><title
+>Создание проекта  Audio CD</title>
+<para
+>&k3b; поддерживает множество аудио-форматов и может их автоматически преобразовать. </para>
+<note
+><para
+>В некоторых дистрибутивах этот функционал &k3b; распределён по нескольким пакетам. Например, в Debian и Ubuntu необходимо будет установить пакет libk3b6-extracodecs, а в openSUSE — k3b-codecs. В некоторых других дистрибутивах дополнительные пакеты не нужны.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>Выбор файлов</title>
+<para
+>Выбрать файлы, необходимые для записи на аудио-CD, можно двумя способами:</para>
+<variablelist>
+<varlistentry>
+<term
+>Использование &k3b;</term>
+<listitem>
+<para
+>Щёлкните кнопку <guilabel
+>New Audio CD Project</guilabel
+> в нижней половине окна &k3b; и выберите файлы для записи. </para>
+<para
+>Как вариант, откройте папку, содержащую аудио-файлы, на панели файлов. Сделайте двойной щелчок по аудио-файлу или перетащите его в нижнюю часть окна &k3b;. <guilabel
+>Новый проект Audio CD</guilabel
+> откроется автоматически. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Использование диспетчера файлов</term>
+<listitem>
+<para
+>Перейдите в папку, содержащую музыкальные файлы, в &dolphin; или &konqueror;</para>
+<para
+>Выберите файлы, необходимые для записи и выберите в контекстном меню <menuchoice
+><guimenu
+>Действия</guimenu
+><guimenuitem
+>Создать проект, используя &k3b;</guimenuitem
+></menuchoice
+>.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Изменение информации о названии</title>
+<para
+>Названия дорожек могут быть предоставлены пользователем или их можно импортировать из <acronym
+>CDDB</acronym
+> (он-лайн база данных по музыкальным компакт-дискам). Для этого нужно сделать двойной щелчок по дорожке в нижней половине окна. </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Прожиг CD</title>
+<para
+>Поместите чистый диск CD-R или CD-RW в лоток привода и щёлкните кнопку <guilabel
+>Запись</guilabel
+>. В появившемся диалоговом окне, при желании, отметьте параметр для сохранения текущих параметров для использования их в дальнейшем, затем щёлкните кнопку <guilabel
+>Записать</guilabel
+>. Начнётся запись CD. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Авторские права и лицензия</title>
+    <para
+>Авторские права на документацию смотрите по <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>истории страницы K3b</ulink
+> в KDE UserBase.</para>
+    <para
+>Юлия Дронова<email
+>juliette.tux@gmail.com</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>

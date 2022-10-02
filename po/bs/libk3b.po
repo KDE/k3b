@@ -1,0 +1,4610 @@
+# translation of libk3b.po to Bosnian
+# Copyright (C) 2003, 2004 Free Software Foundation, Inc.
+# Bakir Helić <bh@linux.org.ba>, 2003.
+# Avdija Ahmedhodžić <avdija@narkomanija.ba>, 2004.
+# Vedran Ljubović <vljubovic@smartnet.ba>, 2004.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: libk3b\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-06-12 00:44+0000\n"
+"PO-Revision-Date: 2015-02-25 20:51+0100\n"
+"Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
+"Language-Team: bosanski <bs@li.org>\n"
+"Language: bs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Launchpad-Export-Date: 2015-02-17 06:20+0000\n"
+"X-Generator: Launchpad (build 17341)\n"
+
+#: core/k3bcore.cpp:241
+#, kde-format
+msgid "Inhibiting sleep for disc writing"
+msgstr ""
+
+#: core/k3bcore.cpp:257
+#, kde-format
+msgid "Disable inhibition for disc writing"
+msgstr ""
+
+#: core/k3bglobals.cpp:360
+#, kde-format
+msgid "Auto"
+msgstr "Auto"
+
+#: core/k3bkjobbridge.cpp:98
+#, kde-format
+msgid "Source"
+msgstr "Izvor"
+
+#: core/k3bkjobbridge.cpp:99
+#, kde-format
+msgid "Target"
+msgstr "Cilj"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:107
+#, kde-format
+msgid "Writing Audio Cue File"
+msgstr "Upisujem audio Cue datoteku"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:205
+#, kde-format
+msgid "Analysing the audio file failed. Corrupt file?"
+msgstr "Analiza audio datoteke nije uspjela. Oštećen datoteka?"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:273
+#, kde-format
+msgid "Analysing the audio file"
+msgstr "Analiziram audio datoteku"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:274
+#, kde-format
+msgid "Analysing %1"
+msgstr "Analiziram %1"
+
+#: jobs/k3baudiocuefilewritingjob.cpp:281
+#, kde-format
+msgid "Unable to handle '%1' due to an unsupported format."
+msgstr "Ne mogu da radim sa „%1“ zbog nepodržanog formata."
+
+#: jobs/k3baudiocuefilewritingjob.cpp:286
+#, kde-format
+msgid "No valid audio cue file: '%1'"
+msgstr "Nema ispravnog audio cue datoteke: „%1“"
+
+#: jobs/k3baudiosessionreadingjob.cpp:134
+#, kde-format
+msgid "Could not load libcdparanoia."
+msgstr "Ne mogu da učitam libcdparanoia."
+
+#: jobs/k3baudiosessionreadingjob.cpp:142 jobs/k3bdatatrackreader.cpp:138
+#: jobs/k3bdatatrackreader.cpp:172
+#, kde-format
+msgid "Could not open device %1"
+msgstr "Ne mogu da otvorim uređaj %1"
+
+#: jobs/k3baudiosessionreadingjob.cpp:148
+#, kde-format
+msgid "Error while initializing audio ripping."
+msgstr "Greška pri inicijalizaciji audio čupanja."
+
+#: jobs/k3baudiosessionreadingjob.cpp:201 jobs/k3bdatatrackreader.cpp:229
+#: jobs/k3bdvdcopyjob.cpp:360
+#, kde-format
+msgid "Unable to open '%1' for writing."
+msgstr "Ne mogu da otvorim „%1“ radi upisa."
+
+#: jobs/k3baudiosessionreadingjob.cpp:235
+#, kde-format
+msgid "Unrecoverable error while ripping track %1."
+msgstr "Nepopravljiva greška pri čupanju numere %1."
+
+#: jobs/k3bbinimagewritingjob.cpp:53
+#, kde-format
+msgid "Write Binary Image"
+msgstr "Upiši binarni odraz"
+
+#: jobs/k3bbinimagewritingjob.cpp:181
+#, kde-format
+msgid "One copy successfully created"
+msgid_plural "%1 copies successfully created"
+msgstr[0] "%1 kopija uspješno kreirana"
+msgstr[1] "%1 kopije uspješno kreirane"
+msgstr[2] "%1 kopija uspješno kreirano"
+
+#: jobs/k3bbinimagewritingjob.cpp:197 jobs/k3bcdcopyjob.cpp:1172
+#: jobs/k3bcdcopyjob.cpp:1174 jobs/k3bcdcopyjob.cpp:1177
+#: jobs/k3bcdcopyjob.cpp:1179
+#, kde-format
+msgid "Writing track %1 of %2"
+msgstr "Upisujem stazu %1 od %2"
+
+#: jobs/k3bbinimagewritingjob.cpp:203
+#, kde-format
+msgid "Writing cue/bin Image"
+msgstr "Upisujem cue/bin odraz"
+
+#: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
+#, kde-format
+msgid " - %1 Copy"
+msgid_plural " - %1 Copies"
+msgstr[0] " - %1 kopija"
+msgstr[1] " - %1 kopije"
+msgstr[2] " - %1 kopija"
+
+#: jobs/k3bblankingjob.cpp:65 jobs/k3bblankingjob.cpp:153
+#, kde-format
+msgid "Erasing CD-RW"
+msgstr "Brišem CD‑RV"
+
+#: jobs/k3bblankingjob.cpp:66
+#, kde-format
+msgid "When erasing a CD-RW no progress information is available."
+msgstr "Prilikom brisanja CD‑RV diska nema podataka o napretku."
+
+#: jobs/k3bblankingjob.cpp:106
+#, kde-format
+msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
+msgstr "Ubacite prebrisivi CD u uređaj<p><b>%1 %2 (%3)</b>."
+
+#: jobs/k3bblankingjob.cpp:143
+#, kde-format
+msgid "Blanking error."
+msgstr "Greška u brisanju "
+
+#: jobs/k3bblankingjob.cpp:144
+#, kde-format
+msgid "Sorry, no error handling yet."
+msgstr "Izvinite, još uvijek nema rukovanja greškama."
+
+#: jobs/k3bblankingjob.cpp:160 jobs/k3bdvdformattingjob.cpp:99
+#, kde-format
+msgid "Quick Format"
+msgstr "Brzo formatiranje"
+
+#: jobs/k3bcdcopyjob.cpp:154 jobs/k3bdvdcopyjob.cpp:114
+#, kde-format
+msgid "Checking Source Medium"
+msgstr "Provjeravam izvorni disk"
+
+#: jobs/k3bcdcopyjob.cpp:157 jobs/k3bdvdcopyjob.cpp:124
+#, kde-format
+msgid "Waiting for source medium"
+msgstr "Čekam izvorni disk"
+
+#: jobs/k3bcdcopyjob.cpp:167 jobs/k3bdvdcopyjob.cpp:136
+#, kde-format
+msgid "Checking source medium"
+msgstr "Provjeravam izvorni disk"
+
+#: jobs/k3bcdcopyjob.cpp:195
+#, kde-format
+msgid "K3b does not copy CDs containing multiple data tracks."
+msgstr "K3b ne kopira CD koji sadrži više staza podataka."
+
+#: jobs/k3bcdcopyjob.cpp:199
+#, kde-format
+msgid "Copying Multisession Data CD."
+msgstr "Kopiram višesesijski CD sa podacima."
+
+#: jobs/k3bcdcopyjob.cpp:201
+#, kde-format
+msgid "Copying Data CD."
+msgstr "Kopiram CD sa podacima."
+
+#: jobs/k3bcdcopyjob.cpp:207
+#, kde-format
+msgid "K3b can only copy CD-Extra mixed mode CDs."
+msgstr "K3b može samo da kopira CD-Ekstra u miješanom režimu."
+
+#: jobs/k3bcdcopyjob.cpp:211
+#, kde-format
+msgid "Copying Enhanced Audio CD (CD-Extra)."
+msgstr "Kopiram poboljšani audio CD (CD-Ekstra)."
+
+#: jobs/k3bcdcopyjob.cpp:216
+#, kde-format
+msgid "Copying Audio CD."
+msgstr "Kopiram audio CD."
+
+#: jobs/k3bcdcopyjob.cpp:221
+#, kde-format
+msgid "The source disk is empty."
+msgstr "Izvorni disk je prazan."
+
+#: jobs/k3bcdcopyjob.cpp:263
+#, kde-format
+msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
+msgstr ""
+"K3b-u treba cdrecord 2.01a12 ili noviji da bi kopirao staze podataka u "
+"Režimu2."
+
+#: jobs/k3bcdcopyjob.cpp:275
+#, kde-format
+msgid ""
+"You will only be able to copy the first session in raw writing mode. "
+"Continue anyway?"
+msgstr ""
+"U raw režimu upisa moći ćete da kopirate samo prvu sesiju. Svakako "
+"nastavljate?"
+
+#: jobs/k3bcdcopyjob.cpp:277
+#, kde-format
+msgid "Multisession CD"
+msgstr "Višesesijski CD"
+
+#: jobs/k3bcdcopyjob.cpp:282
+#, kde-format
+msgid "Only copying first session."
+msgstr "Kopiram samo prvu sesiju."
+
+#: jobs/k3bcdcopyjob.cpp:311 jobs/k3bdvdcopyjob.cpp:344
+#, kde-format
+msgid "Unable to determine free space in temporary folder '%1'."
+msgstr "Ne mogu da odredim slobodan prostor u privremenom direktoriju „%1“."
+
+#: jobs/k3bcdcopyjob.cpp:317 jobs/k3bdvdcopyjob.cpp:351
+#, kde-format
+msgid "Not enough space left in temporary folder."
+msgstr "Nema dovoljno prostora u privremenom direktoriju."
+
+#: jobs/k3bcdcopyjob.cpp:326 jobs/k3bdvdcopyjob.cpp:368
+#, kde-format
+msgid "Unmounting source medium"
+msgstr "Demontiram izvorni disk"
+
+#: jobs/k3bcdcopyjob.cpp:355
+#, kde-format
+msgid "Unable to read Table of contents"
+msgstr "Ne mogu da pročitam tabelu sadržaja"
+
+#: jobs/k3bcdcopyjob.cpp:363
+#, kde-format
+msgid "Searching CD-Text"
+msgstr "Tražim CD-tekst"
+
+#: jobs/k3bcdcopyjob.cpp:377
+#, kde-format
+msgid "Found CD-Text (%1 - %2)."
+msgstr "Pronađen je Cd-Text (%1 - %2)."
+
+#: jobs/k3bcdcopyjob.cpp:382
+#, kde-format
+msgid "Found corrupted CD-Text. Ignoring it."
+msgstr "Nađen oštećen CD-tekst. Zanemariću ga."
+
+#: jobs/k3bcdcopyjob.cpp:387
+#, kde-format
+msgid "No CD-Text found."
+msgstr "Nije nađen CD-tekst."
+
+#: jobs/k3bcdcopyjob.cpp:398
+#, kde-format
+msgid "Querying CDDB"
+msgstr "Ispitujem Cddb"
+
+#: jobs/k3bcdcopyjob.cpp:419
+#, kde-format
+msgid "Found CDDB entry (%1 - %2)."
+msgstr "Nađen Cddb unos (%1 - %2)."
+
+#: jobs/k3bcdcopyjob.cpp:442
+#, kde-format
+msgid "No CDDB entry found."
+msgstr "Nema nađenih Cddb unosa."
+
+#: jobs/k3bcdcopyjob.cpp:445
+#, kde-format
+msgid "CDDB error (%1)."
+msgstr "CDDB greška (%1)."
+
+#: jobs/k3bcdcopyjob.cpp:461
+#, kde-format
+msgid ""
+"Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. Which one should be used "
+"to generate the CD-Text on the new CD?"
+msgstr ""
+"Nađen je CD‑tekst (%1 – %2) i CDDB unos (%3 – %4). Koji od njih upotrijebiti "
+"za pravljenje CD‑teksta na novom CD‑u?"
+
+#: jobs/k3bcdcopyjob.cpp:467
+#, kde-format
+msgid "CD-Text"
+msgstr "CD-Tekst"
+
+#: jobs/k3bcdcopyjob.cpp:468
+#, kde-format
+msgid "Use CD-Text data"
+msgstr "Upotrebi CD‑tekst"
+
+#: jobs/k3bcdcopyjob.cpp:469
+#, kde-format
+msgid "Use CDDB entry"
+msgstr "Upotrebi CDDB unos"
+
+#: jobs/k3bcdcopyjob.cpp:475 projects/k3bcdrdaowriter.cpp:519
+#: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
+#: projects/k3bgrowisofswriter.cpp:332
+#, kde-format
+msgid "Preparing write process..."
+msgstr "Pripremam proces upisa..."
+
+#: jobs/k3bcdcopyjob.cpp:534 jobs/k3bcdcopyjob.cpp:580
+#: jobs/k3bdvdcopyjob.cpp:323
+#, kde-format
+msgid "Specified an unusable temporary path. Using default."
+msgstr "Navedena je beskorisna privremena putanja. Koristim podrazumijevanu."
+
+#: jobs/k3bcdcopyjob.cpp:545
+#, kde-format
+msgid "Unable to create temporary folder '%1'."
+msgstr "Ne mogu da napravim privremeni direktorij „%1“."
+
+#: jobs/k3bcdcopyjob.cpp:552
+#, kde-format
+msgid "Using temporary folder %1."
+msgstr "Koristim privremeni direktorij %1."
+
+#: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:318
+#, kde-format
+msgid "Do you want to overwrite %1?"
+msgstr "Hoćete da prebrišete %1?"
+
+#: jobs/k3bcdcopyjob.cpp:576 jobs/k3bdvdcopyjob.cpp:319
+#, kde-format
+msgid "File Exists"
+msgstr "Datoteka postoji"
+
+#: jobs/k3bcdcopyjob.cpp:585 jobs/k3bdvdcopyjob.cpp:328
+#, kde-format
+msgid "Writing image file to %1."
+msgstr "Upisujem datoteku odraza u %1."
+
+#: jobs/k3bcdcopyjob.cpp:601
+#, kde-format
+msgid "Reading Session %1"
+msgstr "Čitam sesiju %1"
+
+#: jobs/k3bcdcopyjob.cpp:603
+#, kde-format
+msgid "Reading Source Medium"
+msgstr "Čitam izvorni disk"
+
+#: jobs/k3bcdcopyjob.cpp:606 jobs/k3bcdcopyjob.cpp:1194
+#, kde-format
+msgid "Reading track %1 of %2"
+msgstr "Čitam stazu %1 od %2"
+
+#: jobs/k3bcdcopyjob.cpp:699
+#, kde-format
+msgid "Simulating Session %1"
+msgstr "Simuliram sesiju %1"
+
+#: jobs/k3bcdcopyjob.cpp:701
+#, kde-format
+msgid "Writing Copy %1 (Session %2)"
+msgstr "Upisujem kopiju %1 (Sesija %2)"
+
+#: jobs/k3bcdcopyjob.cpp:703
+#, kde-format
+msgid "Writing Copy (Session %1)"
+msgstr "Upisujem kopiju (sesija %1)"
+
+#: jobs/k3bcdcopyjob.cpp:707 projects/audiocd/k3baudiojob.cpp:642
+#: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
+#: projects/k3bcdrdaowriter.cpp:579 projects/k3bcdrecordwriter.cpp:441
+#: projects/k3bcdrskinwriter.cpp:453 projects/k3bgrowisofswriter.cpp:357
+#: projects/mixedcd/k3bmixedjob.cpp:1002
+#, kde-format
+msgid "Simulating"
+msgstr "Simuliram"
+
+#: jobs/k3bcdcopyjob.cpp:709 projects/audiocd/k3baudiojob.cpp:644
+#: projects/datacd/k3bdatajob.cpp:429 projects/mixedcd/k3bmixedjob.cpp:1004
+#, kde-format
+msgid "Writing Copy %1"
+msgstr "Upisujem kopiju %1"
+
+#: jobs/k3bcdcopyjob.cpp:711
+#, kde-format
+msgid "Writing Copy"
+msgstr "Upisujem kopiju"
+
+#: jobs/k3bcdcopyjob.cpp:715 jobs/k3bdvdbooktypejob.cpp:104
+#: projects/audiocd/k3baudiojob.cpp:649 projects/mixedcd/k3bmixedjob.cpp:1011
+#, kde-format
+msgid "Waiting for media"
+msgstr "Čekam disk"
+
+#: jobs/k3bcdcopyjob.cpp:854 jobs/k3bmetawriter.cpp:475
+#: projects/audiocd/k3baudiojob.cpp:293
+#, kde-format
+msgid "It is not possible to write CD-Text in TAO mode."
+msgstr "U režimu pisanja TAO nije moguće upisati CD-tekst."
+
+#: jobs/k3bcdcopyjob.cpp:973
+#, kde-format
+msgid "Successfully read session %1."
+msgstr "Uspješno pročitana sesija %1."
+
+#: jobs/k3bcdcopyjob.cpp:975
+#, kde-format
+msgid "Successfully read source disk."
+msgstr "Uspješno pročitan izvorni disk."
+
+#: jobs/k3bcdcopyjob.cpp:990
+#, kde-format
+msgid "K3b was unable to eject the source disk. Please do so manually."
+msgstr "K3b nije mogao da izbaci izvorni disk. Učinite to ručno."
+
+#: jobs/k3bcdcopyjob.cpp:1007
+#, kde-format
+msgid "Error while reading session %1."
+msgstr "Greška pri čitanju sesije %1."
+
+#: jobs/k3bcdcopyjob.cpp:1035 jobs/k3bverificationjob.cpp:101
+#: projects/mixedcd/k3bmixedjob.cpp:519
+#, kde-format
+msgid "Need to reload medium to return to proper state."
+msgstr "Moram da ponovo ubacim disk da bi se vratio u ispravno stanje."
+
+#: jobs/k3bcdcopyjob.cpp:1036
+#, kde-format
+msgid "Reloading the medium"
+msgstr "Ponovo ubacujem disk"
+
+#: jobs/k3bcdcopyjob.cpp:1054 projects/audiocd/k3baudiojob.cpp:411
+#: projects/datacd/k3bdatajob.cpp:520 projects/mixedcd/k3bmixedjob.cpp:533
+#: projects/videocd/k3bvcdjob.cpp:496
+#, kde-format
+msgid "K3b was unable to eject the written disk. Please do so manually."
+msgstr "K3b nije mogao da izbaci izvorni disk. Učinite to ručno."
+
+#: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:261
+#: projects/k3bcdrecordwriter.cpp:728 projects/k3bcdrskinwriter.cpp:741
+#: projects/mixedcd/k3bmixedjob.cpp:554
+#, kde-format
+msgid "Please reload the medium and press 'OK'"
+msgstr "Ponovo učitaj sredstvo i pritisni 'OK'"
+
+#: jobs/k3bcdcopyjob.cpp:1093 jobs/k3bverificationjob.cpp:262
+#, kde-format
+msgid "Failed to reload the medium"
+msgstr "Neuspjelo ponovno ubacivanje diska"
+
+#: jobs/k3bcdcopyjob.cpp:1107 projects/audiocd/k3baudiojob.cpp:687
+#, kde-format
+msgid "Removing temporary files."
+msgstr "Uklanjam privremene datoteke."
+
+#: jobs/k3bcdcopyjob.cpp:1113 jobs/k3bclonejob.cpp:339
+#, kde-format
+msgid "Removing image files."
+msgstr "Uklanjam datoteke odraza."
+
+#: jobs/k3bcdcopyjob.cpp:1202
+#, kde-format
+msgid "Creating CD Image"
+msgstr "Pravim odraz CD-a"
+
+#: jobs/k3bcdcopyjob.cpp:1206
+#, kde-format
+msgid "Simulating CD Copy On-The-Fly"
+msgstr "Simuliram kopiranje CD-a „u letu“"
+
+#: jobs/k3bcdcopyjob.cpp:1208
+#, kde-format
+msgid "Simulating CD Copy"
+msgstr "Simuliram kopiranje CD-a"
+
+#: jobs/k3bcdcopyjob.cpp:1212
+#, kde-format
+msgid "Copying CD On-The-Fly"
+msgstr "Kopiram CD „u letu“"
+
+#: jobs/k3bcdcopyjob.cpp:1214
+#, kde-format
+msgid "Copying CD"
+msgstr "Kopiram CD"
+
+#: jobs/k3bcdcopyjob.cpp:1221 jobs/k3bdvdcopyjob.cpp:955
+#, kde-format
+msgid "Creating 1 copy"
+msgid_plural "Creating %1 copies"
+msgstr[0] "Pravim %1 kopiju"
+msgstr[1] "Pravim %1 kopije"
+msgstr[2] "Pravim %1 kopija"
+
+#: jobs/k3bcdda2wavreader.cpp:88 jobs/k3bclonejob.cpp:81
+#: jobs/k3bdvdbooktypejob.cpp:278 jobs/k3bdvdformattingjob.cpp:455
+#: jobs/k3breadcdreader.cpp:98 projects/datacd/k3bmsinfofetcher.cpp:47
+#: projects/datacd/k3bmsinfofetcher.cpp:83 projects/k3bcdrdaowriter.cpp:440
+#: projects/k3bcdrecordwriter.cpp:193 projects/k3bcdrskinwriter.cpp:194
+#: projects/k3bgrowisofswriter.cpp:134 projects/videocd/k3bvcdjob.cpp:194
+#, kde-format
+msgid "Could not find %1 executable."
+msgstr "Ne mogu da nađem izvršni %1."
+
+#: jobs/k3bcdda2wavreader.cpp:127 jobs/k3bdvdbooktypejob.cpp:326
+#: jobs/k3bdvdformattingjob.cpp:496
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:174
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:376
+#: projects/datacd/k3bisoimager.cpp:298 projects/datacd/k3bisoimager.cpp:440
+#: projects/k3bcdrdaowriter.cpp:548 projects/k3bcdrecordwriter.cpp:433
+#: projects/k3bcdrskinwriter.cpp:445 projects/k3bgrowisofswriter.cpp:352
+#: projects/videocd/k3bvcdjob.cpp:248
+#, kde-format
+msgid "Could not start %1."
+msgstr "Ne mogu da pokrenem %1."
+
+#: jobs/k3bcdda2wavreader.cpp:232 jobs/k3bdvdbooktypejob.cpp:183
+#: jobs/k3bdvdformattingjob.cpp:263
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:271
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:472
+#: projects/audiocd/k3baudionormalizejob.cpp:176
+#: projects/datacd/k3bisoimager.cpp:162 projects/k3bcdrdaowriter.cpp:759
+#: projects/k3bcdrecordwriter.cpp:889 projects/k3bcdrskinwriter.cpp:902
+#: projects/videocd/k3bvcdjob.cpp:348
+#, kde-format
+msgid "%1 returned an unknown error (code %2)."
+msgstr "%1 vrati nepoznatu grešku (kod %2)."
+
+#: jobs/k3bcdda2wavreader.cpp:238 jobs/k3bdvdbooktypejob.cpp:191
+#: jobs/k3bdvdformattingjob.cpp:271
+#: projects/audiocd/k3baudionormalizejob.cpp:188
+#: projects/videocd/k3bvcdjob.cpp:356
+#, kde-format
+msgid "%1 did not exit cleanly."
+msgstr "%1 ne završi kako treba."
+
+#: jobs/k3bclonejob.cpp:87
+#, kde-format
+msgid "Cdrecord version %1 does not have cloning support."
+msgstr "Cdrecord verzije %1 ne podržava kloniranje."
+
+#: jobs/k3bclonejob.cpp:95
+#, kde-format
+msgid "No device set."
+msgstr "Nije određen uređaj."
+
+#: jobs/k3bclonejob.cpp:104
+#, kde-format
+msgid "CD writer %1 (%2) does not support cloning."
+msgstr "CD pisač %1 (%2) ne podržava kloniranje."
+
+#: jobs/k3bclonejob.cpp:137
+#, kde-format
+msgid "Reading clone image"
+msgstr "Čitam klonirani odraz"
+
+#: jobs/k3bclonejob.cpp:218 projects/datacd/k3bdatajob.cpp:458
+#: projects/videocd/k3bvcdjob.cpp:456
+#, kde-format
+msgid "Writing Track %1 of %2"
+msgstr "Upisujem stazu %1 od %2"
+
+#: jobs/k3bclonejob.cpp:235
+#, kde-format
+msgid "Successfully written clone copy %1."
+msgstr "Uspješno upisana klonirana kopija %1."
+
+#: jobs/k3bclonejob.cpp:283
+#, kde-format
+msgid "Successfully read disk."
+msgstr "Uspješno pročitan disk."
+
+#: jobs/k3bclonejob.cpp:295
+#, kde-format
+msgid "Failed to read disk completely in clone mode."
+msgstr "Ne mogu da potpuno isčitam disk u klon režimu."
+
+#: jobs/k3bclonejob.cpp:302
+#, kde-format
+msgid "Error while reading disk."
+msgstr "Greška pri čitanju diska."
+
+#: jobs/k3bclonejob.cpp:328
+#, kde-format
+msgid "Simulating clone copy"
+msgstr "Simuliram klonirano kopiranje"
+
+#: jobs/k3bclonejob.cpp:330
+#, kde-format
+msgid "Writing clone copy %1"
+msgstr "Upisujem kloniranu kopiju %1"
+
+#: jobs/k3bclonejob.cpp:351
+#, kde-format
+msgid "Creating Clone Image"
+msgstr "Pravim klonirani odraz"
+
+#: jobs/k3bclonejob.cpp:354
+#, kde-format
+msgid "Simulating Clone Image"
+msgstr "Simuliram klonirani odraz"
+
+#: jobs/k3bclonejob.cpp:356
+#, kde-format
+msgid "Burning Clone Image"
+msgstr "Narezujem klonirani odraz"
+
+#: jobs/k3bclonejob.cpp:359
+#, kde-format
+msgid "Simulating CD Cloning"
+msgstr "Simuliram kloniranje CD-a"
+
+#: jobs/k3bclonejob.cpp:361
+#, kde-format
+msgid "Cloning CD"
+msgstr "Kloniram CD"
+
+#: jobs/k3bclonejob.cpp:367
+#, kde-format
+msgid "Creating 1 clone copy"
+msgid_plural "Creating %1 clone copies"
+msgstr[0] "Pravim %1 kloniranu kopiju"
+msgstr[1] "Pravim %1 klonirane kopije"
+msgstr[2] "Pravim %1 kloniranih kopija"
+
+#: jobs/k3bdatatrackreader.cpp:167
+#, kde-format
+msgid "Unable to open libdvdcss."
+msgstr "Ne mogu da otvorim libdvdcss."
+
+#: jobs/k3bdatatrackreader.cpp:176
+#, kde-format
+msgid "Retrieving all CSS keys. This might take a while."
+msgstr "Dobavljam sve CSS ključeve. To može i da potraje."
+
+#: jobs/k3bdatatrackreader.cpp:179
+#, kde-format
+msgid "Failed to retrieve all CSS keys."
+msgstr "Nisam uspio da dobavim sve CSS ključeve."
+
+#: jobs/k3bdatatrackreader.cpp:180
+#, kde-format
+msgid "Video DVD decryption failed."
+msgstr "Dešifrovanje video DVD-a nije uspelo."
+
+#: jobs/k3bdatatrackreader.cpp:204
+#, kde-format
+msgid "No support for reading formless Mode2 sectors."
+msgstr "Nema podrške za čitanje sektora Režima2 koji su bez forme."
+
+#: jobs/k3bdatatrackreader.cpp:206
+#, kde-format
+msgid "Unsupported sector type."
+msgstr "Nepodržana vrsta sektora."
+
+#: jobs/k3bdatatrackreader.cpp:213
+#, kde-format
+msgid "Reading with sector size %1."
+msgstr "Čitam sa veličinom sektora %1."
+
+#: jobs/k3bdatatrackreader.cpp:264 jobs/k3bdatatrackreader.cpp:439
+#, kde-format
+msgid "Error while reading sector %1."
+msgstr "Greška pri čitanju sektora %1."
+
+#         translations.
+#: jobs/k3bdatatrackreader.cpp:346
+#, kde-format
+msgid "Ignored %1 erroneous sector."
+msgid_plural "Ignored a total of %1 erroneous sectors."
+msgstr[0] "Ignorisan je %1 sektor sa greškom."
+msgstr[1] "Ignorisana je %1 sektora sa greškom."
+msgstr[2] "Ignorisano je %1 sektora sa greškom."
+
+#: jobs/k3bdatatrackreader.cpp:415
+#, kde-format
+msgid "Problem while reading. Retrying from sector %1."
+msgstr "Problem pri čitanju. Pokušavam ponovo sektor %1."
+
+#: jobs/k3bdatatrackreader.cpp:431
+#, kde-format
+msgid "Ignoring read error in sector %1."
+msgstr "Zanemarujem grešku u čitanju na sektoru %1."
+
+#: jobs/k3bdvdbooktypejob.cpp:75
+#, kde-format
+msgid "Changing DVD Booktype"
+msgstr "Mijenjam knjigotip za DVD"
+
+#: jobs/k3bdvdbooktypejob.cpp:93 jobs/k3bdvdformattingjob.cpp:114
+#, kde-format
+msgid "No device set"
+msgstr "Uređaj nije postavljen"
+
+#: jobs/k3bdvdbooktypejob.cpp:109
+#, kde-format
+msgid ""
+"Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</"
+"b>."
+msgstr "Ubacite prazan DVD+R ili DVD+RW u uređaj<p><b>%1 %2 (%3)</b>."
+
+#: jobs/k3bdvdbooktypejob.cpp:119 jobs/k3bdvdbooktypejob.cpp:120
+#: jobs/k3bdvdformattingjob.cpp:145 jobs/k3bdvdformattingjob.cpp:146
+#: jobs/k3bverificationjob.cpp:228
+#, kde-format
+msgid "Checking medium"
+msgstr "Provjeravam disk"
+
+#: jobs/k3bdvdbooktypejob.cpp:179
+#, kde-format
+msgid "Booktype successfully changed"
+msgstr "Knjigotip uspješno promijenjen"
+
+#: jobs/k3bdvdbooktypejob.cpp:185 jobs/k3bdvdformattingjob.cpp:265
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:274
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:475
+#: projects/audiocd/k3baudionormalizejob.cpp:178
+#: projects/datacd/k3bisoimager.cpp:164 projects/videocd/k3bvcdjob.cpp:350
+#, kde-format
+msgid "Please send me an email with the last output."
+msgstr "Pošaljite mi e-poruku sa posljednjim izlazom."
+
+#: jobs/k3bdvdbooktypejob.cpp:208
+#, kde-format
+msgid "Ejecting DVD..."
+msgstr "Izbacujem DVD..."
+
+#: jobs/k3bdvdbooktypejob.cpp:225
+#, kde-format
+msgid "Unable to eject media."
+msgstr "Ne mogu da izbacim disk."
+
+#: jobs/k3bdvdbooktypejob.cpp:248
+#, kde-format
+msgid "Cannot change booktype on non-empty DVD+R media."
+msgstr "Ne mogu da promijenim knjigotip na nepraznom DVD+R-u."
+
+#: jobs/k3bdvdbooktypejob.cpp:256
+#, kde-format
+msgid "No DVD+R(W) media found."
+msgstr "DVD+R(W) nije nađen."
+
+#: jobs/k3bdvdbooktypejob.cpp:261 jobs/k3bdvdformattingjob.cpp:313
+#, kde-format
+msgid "Unable to determine media state."
+msgstr "Ne mogu da odredim stanje diska."
+
+#: jobs/k3bdvdbooktypejob.cpp:331
+#, kde-format
+msgid "Changing Booktype"
+msgstr "Mijenjam knjigotip"
+
+#: jobs/k3bdvdcopyjob.cpp:119
+#, kde-format
+msgid "K3b does not support writing on-the-fly with growisofs %1."
+msgstr "K3b ne podržava upis „u letu“ sa growisofs %1."
+
+#: jobs/k3bdvdcopyjob.cpp:121
+#, kde-format
+msgid "Disabling on-the-fly writing."
+msgstr "Isključujem upis „u letu“."
+
+#: jobs/k3bdvdcopyjob.cpp:156
+#, kde-format
+msgid "No source medium found."
+msgstr "Nije nađen izvorni disk."
+
+#: jobs/k3bdvdcopyjob.cpp:184
+#, kde-format
+msgid "Found encrypted DVD."
+msgstr "Nađen šifrovan DVD."
+
+#: jobs/k3bdvdcopyjob.cpp:200
+#, kde-format
+msgid "Cannot copy encrypted DVDs."
+msgstr "Ne mogu da kopiram šifrovan DVD."
+
+#: jobs/k3bdvdcopyjob.cpp:236
+#, kde-format
+msgid "The writer does not support writing Double Layer DVDs."
+msgstr "Pisač ne podržava upis dvoslojnih DVD‑ova."
+
+#: jobs/k3bdvdcopyjob.cpp:242
+#, kde-format
+msgid "This growisofs version does not support writing Double Layer DVDs."
+msgstr ""
+"Ovo izdanje <command>growisofs</command> ne podržava upis dvoslojnih DVD‑ova."
+
+#: jobs/k3bdvdcopyjob.cpp:260
+#, kde-format
+msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
+msgstr "K3b ne podržava kopiranje višesesijskih DVD i blurej diskova."
+
+#: jobs/k3bdvdcopyjob.cpp:282
+#, kde-format
+msgid "K3b relies on the size saved in the ISO 9660 header."
+msgstr "K3b se oslanja na veličinu sačuvanu u ISO9660 zaglavlju."
+
+#: jobs/k3bdvdcopyjob.cpp:283
+#, kde-format
+msgid ""
+"This might result in a corrupt copy if the source was mastered with buggy "
+"software."
+msgstr ""
+"Ovo može rezultirati neispravnom kopijom ako je izvor masterovan sa "
+"programom koji je imao greške."
+
+#: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
+#: jobs/k3bverificationjob.cpp:355
+#, kde-format
+msgid "Unable to determine the ISO 9660 filesystem size."
+msgstr "Ne mogu da odredim veličinu ISO9660 datoteka-sistema."
+
+#: jobs/k3bdvdcopyjob.cpp:299
+#, kde-format
+msgid "K3b does not support copying DVD-RAM."
+msgstr "K3b ne podržava kopiranje DVD-RAM-a."
+
+#: jobs/k3bdvdcopyjob.cpp:305
+#, kde-format
+msgid "Unsupported media type."
+msgstr "Nepodržana vrsta medija."
+
+#: jobs/k3bdvdcopyjob.cpp:329
+#, kde-format
+msgid "Reading source medium."
+msgstr "Čitam izvorni disk."
+
+#: jobs/k3bdvdcopyjob.cpp:373
+#, kde-format
+msgid "Creating image"
+msgstr "Pravim odraz"
+
+#: jobs/k3bdvdcopyjob.cpp:379
+#, kde-format
+msgid "Simulating copy"
+msgstr "Simuliram kopiranje"
+
+#: jobs/k3bdvdcopyjob.cpp:381 jobs/k3bdvdcopyjob.cpp:596
+#: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
+#, kde-format
+msgid "Writing copy %1"
+msgstr "Upisujem kopiju %1"
+
+#: jobs/k3bdvdcopyjob.cpp:383 jobs/k3bdvdcopyjob.cpp:598
+#, kde-format
+msgid "Writing copy"
+msgstr "Upisujem kopiju"
+
+#: jobs/k3bdvdcopyjob.cpp:573
+#, kde-format
+msgid "Successfully read source medium."
+msgstr "Uspješno pročitan izvorni disk."
+
+#: jobs/k3bdvdcopyjob.cpp:585
+#, kde-format
+msgid "K3b was unable to eject the source medium. Please do so manually."
+msgstr "K3b nije mogao da izbaci izvorni disk. Učinite to ručno."
+
+#: jobs/k3bdvdcopyjob.cpp:646
+#, kde-format
+msgid "Successfully written copy %1."
+msgstr "Uspješno upisana kopija %1."
+
+#: jobs/k3bdvdcopyjob.cpp:669
+#, kde-format
+msgid "Verifying copy %1"
+msgstr "Provjeravam kopiju %1"
+
+#: jobs/k3bdvdcopyjob.cpp:671
+#, kde-format
+msgid "Verifying copy"
+msgstr "Provjeravam kopiju"
+
+#: jobs/k3bdvdcopyjob.cpp:681 jobs/k3biso9660imagewritingjob.cpp:146
+#, kde-format
+msgid "K3b was unable to eject the written medium. Please do so manually."
+msgstr "K3b nije mogao da izbaci upisani disk. Učinite to ručno."
+
+#: jobs/k3bdvdcopyjob.cpp:790
+#, kde-format
+msgid "Unsupported media type: %1"
+msgstr "Nepodržana vrsta medija: %1"
+
+#: jobs/k3bdvdcopyjob.cpp:816 jobs/k3bdvdcopyjob.cpp:909
+#: projects/datacd/k3bdatajob.cpp:815 projects/datacd/k3bdatajob.cpp:935
+#, kde-format
+msgid ""
+"%1 media do not support write simulation. Do you really want to continue? "
+"The disc will actually be written to."
+msgstr ""
+"%1 diskovi ne podržavaju simulaciju upisa. Želite da nastavite? Disk će "
+"zaista biti upisan."
+
+#: jobs/k3bdvdcopyjob.cpp:819 jobs/k3bdvdcopyjob.cpp:912
+#: projects/datacd/k3bdatajob.cpp:818 projects/datacd/k3bdatajob.cpp:938
+#, kde-format
+msgid "No Simulation with %1"
+msgstr "Nema simulacije sa %1"
+
+#: jobs/k3bdvdcopyjob.cpp:825
+#, kde-format
+msgid "Writing DVD copy"
+msgstr "Upisujem kopiju DVD-a"
+
+#: jobs/k3bdvdcopyjob.cpp:829
+#, kde-format
+msgid "Writing mode ignored when writing DVD+R(W) media."
+msgstr "Režim upisa se ignoriše kad se upisuju DVD+R(W) diskovi."
+
+#: jobs/k3bdvdcopyjob.cpp:831 jobs/k3bdvdcopyjob.cpp:921
+#: jobs/k3bmetawriter.cpp:934 jobs/k3bmetawriter.cpp:943
+#: projects/datacd/k3bdatajob.cpp:840 projects/datacd/k3bdatajob.cpp:961
+#, kde-format
+msgid "Writing %1."
+msgstr "Upisujem %1."
+
+#: jobs/k3bdvdcopyjob.cpp:839 jobs/k3bmetawriter.cpp:512
+#: projects/datacd/k3bdatajob.cpp:848
+#, kde-format
+msgid ""
+"Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
+"really want to continue? The media will actually be written to."
+msgstr ""
+"Vaš pisač (%1 %2) ne podržava simulaciju sa DVD‑R/DVD‑RV diskovima. Želite "
+"da nastavite? Disk će zaista biti upisan."
+
+#: jobs/k3bdvdcopyjob.cpp:844 jobs/k3bmetawriter.cpp:517
+#: projects/datacd/k3bdatajob.cpp:853
+#, kde-format
+msgid "No Simulation with DVD-R(W)"
+msgstr "Nema simulacije sa DVD-R(W)"
+
+#: jobs/k3bdvdcopyjob.cpp:865 jobs/k3bmetawriter.cpp:930
+#: projects/datacd/k3bdatajob.cpp:867
+#, kde-format
+msgid "Writing DVD-RW in restricted overwrite mode."
+msgstr "Upisujem DVD-RW u režimu ograničenog prebrisavanja."
+
+#: jobs/k3bdvdcopyjob.cpp:873
+#, kde-format
+msgid "Writing DVD-RW in DAO mode."
+msgstr "Upisujem DVD-RW u DAO režimu."
+
+#: jobs/k3bdvdcopyjob.cpp:877
+#, kde-format
+msgid "Writing DVD-RW in incremental mode."
+msgstr "Upisujem DVD-RW u rastućem režimu."
+
+#: jobs/k3bdvdcopyjob.cpp:886 jobs/k3bmetawriter.cpp:449
+#: jobs/k3bmetawriter.cpp:498 projects/datacd/k3bdatajob.cpp:908
+#, kde-format
+msgid "Restricted Overwrite is not possible with DVD-R media."
+msgstr "Ograničeno prebrisavanje nije moguće sa DVD-R diskovima."
+
+#: jobs/k3bdvdcopyjob.cpp:891 jobs/k3bmetawriter.cpp:936
+#: projects/datacd/k3bdatajob.cpp:884 projects/datacd/k3bdatajob.cpp:901
+#, kde-format
+msgid "Writing %1 in DAO mode."
+msgstr "Upisujem  u DA%1O režimu."
+
+#: jobs/k3bdvdcopyjob.cpp:895 jobs/k3bmetawriter.cpp:938
+#: projects/datacd/k3bdatajob.cpp:910
+#, kde-format
+msgid "Writing %1 in incremental mode."
+msgstr "Upisujem %1 u rastućem režimu."
+
+#: jobs/k3bdvdcopyjob.cpp:918
+#, kde-format
+msgid "Writing BD copy"
+msgstr "Upisujem kopiju BD‑a"
+
+#: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
+#, kde-format
+msgid "Removed image file %1"
+msgstr "Uklonjen datoteka sa odrazom %1"
+
+#: jobs/k3bdvdcopyjob.cpp:942
+#, kde-format
+msgid "Creating Image"
+msgstr "Pravim odraz"
+
+#: jobs/k3bdvdcopyjob.cpp:946
+#, kde-format
+msgid "Copying DVD or BD On-The-Fly"
+msgstr "Kopiram DVD ili BD u letu"
+
+#: jobs/k3bdvdcopyjob.cpp:948
+#, kde-format
+msgid "Copying DVD or BD"
+msgstr "Kopiram DVD ili BD"
+
+#: jobs/k3bdvdformattingjob.cpp:92
+#, kde-format
+msgid "Formatting disc"
+msgstr "Formatiram disk"
+
+#: jobs/k3bdvdformattingjob.cpp:122 projects/k3bcdrdaowriter.cpp:531
+#: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrskinwriter.cpp:429
+#: projects/k3bgrowisofswriter.cpp:336
+#, kde-format
+msgid "Unmounting medium"
+msgstr "Demontiram disk"
+
+#: jobs/k3bdvdformattingjob.cpp:135
+#, kde-format
+msgid ""
+"Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
+"b>."
+msgstr ""
+"<p>Ubacite prebrisivi DVD ili blurej disk u uređaj<br/><b>%1 %2 (%3)</b></p>."
+
+#: jobs/k3bdvdformattingjob.cpp:253
+#, kde-format
+msgid "Formatting successfully completed"
+msgstr "Formatiranje je uspješno završeno"
+
+#: jobs/k3bdvdformattingjob.cpp:256
+#, kde-format
+msgid "Do not be concerned with the progress stopping before 100%."
+msgstr "Ne budite zabrinuti time što napredak stane prije 100%."
+
+#: jobs/k3bdvdformattingjob.cpp:257
+#, kde-format
+msgid "The formatting will continue in the background during writing."
+msgstr "Formatiranje će se nastaviti u pozadini tokom pisanja."
+
+#: jobs/k3bdvdformattingjob.cpp:282
+#, kde-format
+msgid "Ejecting medium..."
+msgstr "Izbacujem disk..."
+
+#: jobs/k3bdvdformattingjob.cpp:294 projects/k3babstractwriter.cpp:75
+#, kde-format
+msgid "Unable to eject medium."
+msgstr "Ne mogu da izbacim disk."
+
+#: jobs/k3bdvdformattingjob.cpp:334
+#, kde-format
+msgid "Found %1 medium."
+msgstr "Nađen je %1 disk."
+
+#: jobs/k3bdvdformattingjob.cpp:338
+#, kde-format
+msgid "No rewritable DVD or BD medium found. Unable to format."
+msgstr "Nema prebrisivog DVD ili BD diska. Ne mogu da formatiram."
+
+#: jobs/k3bdvdformattingjob.cpp:363 jobs/k3bdvdformattingjob.cpp:413
+#, kde-format
+msgid "No need to format %1 media more than once."
+msgstr "Nema potrebe formatirati %1 više od jednom."
+
+#: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
+#, kde-format
+msgid "It may simply be overwritten."
+msgstr "Može se jednostavno prebrisati."
+
+#: jobs/k3bdvdformattingjob.cpp:368 jobs/k3bdvdformattingjob.cpp:407
+#: jobs/k3bdvdformattingjob.cpp:418
+#, kde-format
+msgid "Forcing formatting anyway."
+msgstr "Ipak forsiram formatiranje."
+
+#: jobs/k3bdvdformattingjob.cpp:369
+#, kde-format
+msgid "It is not recommended to force formatting of %1 media."
+msgstr "Nije preporučljivo prinuditi formatiranje %1 diska."
+
+#: jobs/k3bdvdformattingjob.cpp:371
+#, kde-format
+msgid "After 10-20 reformats the media might become unusable."
+msgstr "Već posle 10-20 formatiranja disk može biti neupotrebljiv."
+
+#: jobs/k3bdvdformattingjob.cpp:380
+#, kde-format
+msgid "Formatting %1 medium"
+msgstr "Formatiram  %1 disk."
+
+#: jobs/k3bdvdformattingjob.cpp:391
+#, kde-format
+msgid "Formatted in %1 mode."
+msgstr "Formatirano u %1 režimu."
+
+#: jobs/k3bdvdformattingjob.cpp:405
+#, kde-format
+msgid "Media is already empty."
+msgstr "Disk je već prazan."
+
+#: jobs/k3bdvdformattingjob.cpp:432
+#, kde-format
+msgid "Formatting DVD-RW in %1 mode."
+msgstr "Formatiram DVD-RW u %1 režimu."
+
+#: jobs/k3bdvdformattingjob.cpp:439
+#, kde-format
+msgid "Unable to determine the current formatting state of the DVD-RW medium."
+msgstr "Ne mogu da odredim trenutno stanje formatiranosti DVD‑RV diska."
+
+#: jobs/k3bdvdformattingjob.cpp:462
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:99
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:135
+#: projects/audiocd/k3baudionormalizejob.cpp:52
+#: projects/datacd/k3bmkisofshandler.cpp:53 projects/k3bcdrdaowriter.cpp:448
+#: projects/k3bcdrecordwriter.cpp:395 projects/k3bcdrskinwriter.cpp:407
+#: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
+#, kde-format
+msgid "Using %1 %2 – Copyright © %3"
+msgstr "Koristi se %1 %2 – Zaštita autorskih prava © %3"
+
+#: jobs/k3bdvdformattingjob.cpp:501
+#, kde-format
+msgid "Formatting"
+msgstr "Formatiranje"
+
+#: jobs/k3biso9660imagewritingjob.cpp:81 projects/audiocd/k3baudiojob.cpp:146
+#: projects/datacd/k3bdatajob.cpp:137 projects/mixedcd/k3bmixedjob.cpp:212
+#, kde-format
+msgid "Preparing data"
+msgstr "Pripremam podatke"
+
+#: jobs/k3biso9660imagewritingjob.cpp:84
+#, kde-format
+msgid "Could not find image %1"
+msgstr "Nisam mogao da nađem odraz %1"
+
+#: jobs/k3biso9660imagewritingjob.cpp:130 projects/datacd/k3bdatajob.cpp:511
+#, kde-format
+msgid "Verifying written data"
+msgstr "Provjeravam upisane podatke"
+
+#: jobs/k3biso9660imagewritingjob.cpp:132
+#, kde-format
+msgid "Verifying written copy %1 of %2"
+msgstr "Upisujem upisanu kopiju %1 od %2"
+
+#: jobs/k3biso9660imagewritingjob.cpp:205
+#, kde-format
+msgid "Writing image"
+msgstr "Upisujem odraz"
+
+#: jobs/k3biso9660imagewritingjob.cpp:207
+#, kde-format
+msgid "Writing copy %1 of %2"
+msgstr "Upisujem kopiju %1 od %2"
+
+#: jobs/k3biso9660imagewritingjob.cpp:226
+#, kde-format
+msgid "Waiting for medium"
+msgstr "Čekam na disk"
+
+#: jobs/k3biso9660imagewritingjob.cpp:333
+#, kde-format
+msgid "Simulating ISO 9660 Image"
+msgstr "Simuliram ISO9660 odraz"
+
+#: jobs/k3biso9660imagewritingjob.cpp:335
+#, kde-format
+msgid "Burning ISO 9660 Image"
+msgstr "Narezujem ISO9660 odraz"
+
+#: jobs/k3bmetawriter.cpp:304 projects/datacd/k3bdatajob.cpp:769
+#: projects/datacd/k3bdatajob.cpp:792
+#, kde-format
+msgid "Cannot write %1 media using %2. Falling back to default application."
+msgstr ""
+"Ne mogu da upišem %1 disk pomoću %2. Vraćam se na podrazumijevani program."
+
+#: jobs/k3bmetawriter.cpp:310
+#, kde-format
+msgid "DVD and Blu-ray tracks can only be written in MODE1."
+msgstr "DVD i blurej staze mogu se upisati samo u režimu 1."
+
+#: jobs/k3bmetawriter.cpp:335
+#, kde-format
+msgid ""
+"Missing Blu-ray support in cdrecord and growisofs. Please update the system."
+msgstr ""
+"<command>cdrecord</command> i <command>growisofs</command> ne podržavaju "
+"blurej. Ažurirajte sistem."
+
+#: jobs/k3bmetawriter.cpp:431 projects/audiocd/k3baudiojob.cpp:243
+#, kde-format
+msgid "Track lengths below 4 seconds violate the Red Book standard."
+msgstr "Dužina numere ispod 4 sekunde narušava standard Crvene knjige."
+
+#: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
+#: projects/mixedcd/k3bmixedjob.cpp:1222
+#, kde-format
+msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
+msgstr "Pisanje u letu sa cdrecord < 2.01a13 nije podržano."
+
+#: jobs/k3bmetawriter.cpp:470 projects/audiocd/k3baudiojob.cpp:288
+#: projects/mixedcd/k3bmixedjob.cpp:1229
+#, kde-format
+msgid "Cdrecord %1 does not support CD-Text writing."
+msgstr "Cdrecord %1 ne podržava upisivanje CD-teksta."
+
+#: jobs/k3bmetawriter.cpp:482 projects/datacd/k3bdatajob.cpp:891
+#, kde-format
+msgid ""
+"Your writer (%1 %2) does not support Incremental Streaming with %3 media. "
+"Multisession will not be possible. Continue anyway?"
+msgstr ""
+"Pisač (%1 %2) ne podržava rastući tok sa %3. Više sesija neće biti moguće. "
+"Da ipak nastavim?"
+
+#: jobs/k3bmetawriter.cpp:487 projects/datacd/k3bdatajob.cpp:896
+#, kde-format
+msgid "No Incremental Streaming"
+msgstr "Bez rastućeg toka"
+
+#: jobs/k3bmetawriter.cpp:503
+#, kde-format
+msgid ""
+"DVD+R(W) media do not support write simulation. Do you really want to "
+"continue? The media will actually be written to."
+msgstr ""
+"DVD+R i DVD+RV diskovi ne podržavaju simulaciju upisa. Želite da nastavite? "
+"Disk će zaista biti upisan."
+
+#: jobs/k3bmetawriter.cpp:506
+#, kde-format
+msgid "No Simulation with DVD+R(W)"
+msgstr "Nema simulacije sa DVD+R(W)"
+
+#: jobs/k3bmetawriter.cpp:532 projects/datacd/k3bdatajob.cpp:1047
+#, kde-format
+msgid "Most writers do not support writing multisession CDs in DAO mode."
+msgstr "Većina pisača ne podržava pisanje višesesijskih CD-ova u režimu DAO."
+
+#: jobs/k3bmetawriter.cpp:785
+#, kde-format
+msgid "No version of cdrskin can do this yet."
+msgstr ""
+
+#: jobs/k3bmetawriter.cpp:890
+#, kde-format
+msgid "Writing CD in Session At Once mode."
+msgstr "Upisujem CD u režimu SAO."
+
+#: jobs/k3bmetawriter.cpp:892
+#, kde-format
+msgid "Writing CD in Track At Once mode."
+msgstr "Upisujem CD u režimu TAO."
+
+#: jobs/k3bmetawriter.cpp:894
+#, kde-format
+msgid "Writing CD in Raw mode."
+msgstr "Upisujem CD u sirovom režimu."
+
+#: jobs/k3bmetawriter.cpp:897
+#, kde-format
+msgid "Appending session to CD"
+msgstr "Pridodajem sesiju na CD"
+
+#: jobs/k3bmetawriter.cpp:904
+#, kde-format
+msgid "Writing rewritable CD in Session At Once mode."
+msgstr "Upisujem prebrisivi CD u režimu SAO."
+
+#: jobs/k3bmetawriter.cpp:906
+#, kde-format
+msgid "Writing rewritable CD in Track At Once mode."
+msgstr "Upisujem prebrisivi CD u režimu TAO."
+
+#: jobs/k3bmetawriter.cpp:908
+#, kde-format
+msgid "Writing rewritable CD in Raw mode."
+msgstr "Upisujem prebrisivi CD u sirovom režimu."
+
+#: jobs/k3bmetawriter.cpp:911
+#, kde-format
+msgid "Appending session to rewritable CD."
+msgstr "Pridodajem sesiju na prebrisivi CD."
+
+#: jobs/k3bmetawriter.cpp:918
+#, kde-format
+msgid "Growing ISO 9660 filesystem on DVD+RW."
+msgstr "Širim datoteku sistem ISO9660 na DVD+RW-u."
+
+#: jobs/k3bmetawriter.cpp:920 projects/datacd/k3bdatajob.cpp:870
+#, kde-format
+msgid "Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."
+msgstr ""
+"Širim datoteku sistem ISO9660 na DVD-RW-u u režimu ograničenog prebrisavanja."
+
+#: jobs/k3bmetawriter.cpp:922
+#, kde-format
+msgid "Appending session to DVD+R."
+msgstr "Pridodajem sesiju na DVD+R."
+
+#: jobs/k3bmetawriter.cpp:924
+#, kde-format
+msgid "Appending session to Double Layer DVD+R."
+msgstr "Pridodajem sesiju na dvoslojni DVD+R."
+
+#: jobs/k3bmetawriter.cpp:926
+#, kde-format
+msgid "Appending session to %1."
+msgstr "Pridodajem sesiju na %1."
+
+#: jobs/k3bmetawriter.cpp:932
+#, kde-format
+msgid "Writing Double Layer DVD+R."
+msgstr "Upisujem dvoslojni DVD+R."
+
+#: jobs/k3breadcdreader.cpp:115
+#, kde-format
+msgid "Using readcd %1 instead of default version for clone support."
+msgstr ""
+"Koristim readcd %1 umjesto podrazumijevane verzije zbog podrške kloniranja."
+
+#: jobs/k3breadcdreader.cpp:122
+#, kde-format
+msgid "Could not find readcd executable with cloning support."
+msgstr "Ne mogu da nađem izvršni datoteku readcd sa podrškom za kloniranje."
+
+#: jobs/k3breadcdreader.cpp:155 jobs/k3breadcdreader.cpp:156
+#, kde-format
+msgid "Writing image to %1."
+msgstr "Upisujem odraz u %1."
+
+#: jobs/k3breadcdreader.cpp:198
+#, kde-format
+msgid "Could not start readcd."
+msgstr "Ne mogu da pokrenem readcd."
+
+#: jobs/k3breadcdreader.cpp:254
+#, kde-format
+msgid "Cannot read source disk."
+msgstr "Ne mogu da iščitam izvorni disk."
+
+#: jobs/k3breadcdreader.cpp:266
+#, kde-format
+msgid "Retrying from sector %1."
+msgstr "Ponovo pokušavam sektor %1."
+
+#: jobs/k3breadcdreader.cpp:281
+#, kde-format
+msgid "Uncorrected error in sector %1"
+msgstr "Neispravljena greška na sektoru %1"
+
+#: jobs/k3breadcdreader.cpp:284
+#, kde-format
+msgid "Corrected error in sector %1"
+msgstr "Ispravljena greška na sektoru %1"
+
+#: jobs/k3breadcdreader.cpp:304
+#, kde-format
+msgid "%1 returned error: %2"
+msgstr "%1 je vratio grešku: %2"
+
+#: jobs/k3breadcdreader.cpp:309
+#, kde-format
+msgid "Readcd exited abnormally."
+msgstr "Readcd nije normalno izašao."
+
+#: jobs/k3bverificationjob.cpp:222 jobs/k3bverificationjob.cpp:278
+#: jobs/k3bverificationjob.cpp:301
+#, kde-format
+msgid "Internal Error: Verification job improperly initialized (%1)"
+msgstr "Interna pogreška: Verifikacija posla nepropisno inicijalizirana (%1)"
+
+#: jobs/k3bverificationjob.cpp:223
+#, kde-format
+msgid "no tracks added"
+msgstr "nisu dodate staze"
+
+#: jobs/k3bverificationjob.cpp:279 jobs/k3bverificationjob.cpp:302
+#, kde-format
+msgid "specified track number '%1' not found on medium"
+msgstr "navedena staza broj „%1“ nije nađena na disku"
+
+#: jobs/k3bverificationjob.cpp:323
+#, kde-format
+msgid "Verifying track %1"
+msgstr "Provjeravam stazu %1"
+
+#: jobs/k3bverificationjob.cpp:391
+#, kde-format
+msgid "Written data in track %1 differs from original."
+msgstr "Upisani podaci u stazi %1 se razlikuju od originala."
+
+#: jobs/k3bverificationjob.cpp:395
+#, kde-format
+msgid "Written data verified."
+msgstr "Upisani podaci su provjereni."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:83
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:119
+#, kde-format
+msgid "%1 executable could not be found."
+msgstr "%1 izvršni datoteka nije nađen."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:89
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:125
+#, kde-format
+msgid "%1 version %2 is too old."
+msgstr "%1 verzija %2 je prestara."
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
+#, kde-format
+msgid "Analysing Title %1 of Video DVD %2"
+msgstr "Analiziram naslov %1 video DVD-a %2"
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:178
+#, kde-format
+msgid "Analysing Chapter %1 of %2"
+msgstr "Analiziram poglavlje %1 od %2"
+
+#: jobs/k3bvideodvdtitledetectclippingjob.cpp:255
+#, kde-format
+msgid ""
+"Ignoring clipping values of last chapter due to its short playback time."
+msgstr ""
+"Zanemarujem vrijednosti odsjecanja posljednjeg poglavlja zbog kratkog "
+"trajanja."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:151
+#, kde-format
+msgid "Unable to create folder '%1'"
+msgstr "Ne mogu da napravim direktorij „%1“"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:157
+#, kde-format
+msgid "Invalid filename: '%1'"
+msgstr "Neispravno ime datoteke: „%1“"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:169
+#, kde-format
+msgid "Transcoding title %1 from Video DVD %2"
+msgstr "Transkodujem naslov %1 sa video DVD-a %2"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:194
+#, kde-format
+msgid "Invalid video codec set: %1"
+msgstr "Neispravan video kodec set: %1"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:217
+#, kde-format
+msgid "Invalid audio codec set: %1"
+msgstr "Neispravan audio kodec set: %1"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:358
+#, kde-format
+msgid "Resizing picture of title %1 to %2x%3"
+msgstr "Mijenjam veličinu slike za %1 u %2x%3"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:381
+#, kde-format
+msgid "Single-pass Encoding"
+msgstr "Kodiranje u jednom prolazu"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:383
+#, kde-format
+msgid "Two-pass Encoding: First Pass"
+msgstr "Kodiranje u dva prolaza: Prvi prolaz"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:385
+#, kde-format
+msgid "Two-pass Encoding: Second Pass"
+msgstr "Kodiranje u dva prolaza: Drugi prolaz"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:409
+#, kde-format
+msgid "Removing incomplete video file '%1'"
+msgstr "Uklanjam nedovršen video datoteka „%1“"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:483
+#, kde-format
+msgid "Execution of %1 failed."
+msgstr "Izvršavanje %1 nije uspelo."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:484
+#, kde-format
+msgid "Please consult the debugging output for details."
+msgstr "Pogledajte ispravljački izlaz za više detalja."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:515
+#, kde-format
+msgid "AC3 (Stereo)"
+msgstr "AC3 (Stereo)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:517
+#, kde-format
+msgid "AC3 (Pass-through)"
+msgstr "AC3 (Prolazni)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:519
+#, kde-format
+msgid "MPEG1 Layer III"
+msgstr "MPEG1 Layer III"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:530
+#, kde-format
+msgid "MPEG4 (FFMPEG)"
+msgstr "MPEG4 (FFMPEG)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:532
+#, kde-format
+msgid "XviD"
+msgstr "XviD"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:543
+#, kde-format
+msgid ""
+"FFmpeg is an open-source project trying to support most video and audio "
+"codecs used these days. Its subproject libavcodec forms the basis for "
+"multimedia players such as xine or mplayer."
+msgstr ""
+"FFmpeg je projekat otvorenog koda koji se trudi da pruži podršku za većinu "
+"današnjih audio i video kodeka. Njegov podprojekat libavcodec čini osnovu za "
+"multimedijalne programe poput xine-a ili mplayer-a."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:547
+#, kde-format
+msgid ""
+"FFmpeg contains an implementation of the MPEG-4 video encoding standard "
+"which produces high quality results."
+msgstr ""
+"FFmpeg sadrži primjenu standarda MPEG-4 video kodiranja koji daje vioko "
+"kvalitetne rezultate."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:550
+#, kde-format
+msgid ""
+"XviD is a free and open source MPEG-4 video codec. XviD was created by a "
+"group of volunteer programmers after the OpenDivX source was closed in July "
+"2001."
+msgstr ""
+"XviD je slobodan MPEG-4 video kodek, otvorenog koda. XviD je napravila grupa "
+"programera volontera, nakon što je OpenDivX kod zatvoren, jula 2001."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:553
+#, kde-format
+msgid ""
+"XviD features MPEG-4 Advanced Profile settings such as b-frames, global and "
+"quarter pixel motion compensation, lumi masking, trellis quantization, and "
+"H.263, MPEG and custom quantization matrices."
+msgstr ""
+"XviD ima podešavanje MPEG-4 naprednog profila kao što su b-frames, globalna "
+"i quarter pixel kompenzacija pokreta, lumi maskiranje, trellis kvantizacija, "
+"i H.263, MPEG i posebne kvantizacione matrice."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:557
+#, kde-format
+msgid ""
+"XviD is a primary competitor of DivX (XviD being DivX spelled backwards). "
+"While DivX is closed source and may only run on Windows, Mac OS and Linux, "
+"XviD is open source and can potentially run on any platform."
+msgstr ""
+"XviD je najveći takmac DivX-a (XviD je DivX od pozadi). Dok je DivX "
+"zatvorenog koda i radi samo na Windows-u, Mac OS-u i Linux-u, XviD je "
+"otvorenog koda i može praktično da radi na bilo kojoj platformi."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:561
+#, kde-format
+msgid "(Description taken from the Wikipedia article)"
+msgstr "(Opis uzet iz Vikipedija članka)"
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:571
+#, kde-format
+msgid ""
+"AC3, better known as Dolby Digital is standardized as ATSC A/52. It contains "
+"up to 6 total channels of sound."
+msgstr ""
+"AC3, bolje poznat kao Dolby Digital je standardizovan kao ATSC A/52. Sadrži "
+"do 6 zvučnih kanala."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:576
+#, kde-format
+msgid ""
+"With this setting K3b will create a two-channel stereo Dolby Digital audio "
+"stream."
+msgstr ""
+"Sa ovim podešavanjima K3b će napraviti dvokanalni Dolby Digital zvučni zapis."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:580
+#, kde-format
+msgid ""
+"With this setting K3b will use the Dolby Digital audio stream from the "
+"source DVD without changing it."
+msgstr ""
+"Sa ovim podešavanjima K3b će koristiti Dolby Digital zvučni zapis sa "
+"izvornog DVD-a bez mijenjanja."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:582
+#, kde-format
+msgid "Use this setting to preserve 5.1 channel sound from the DVD."
+msgstr "Koristite ovo podešavanje da bi ste sačuvali 5.1 zvuk sa DVD-a."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:584
+#, kde-format
+msgid ""
+"MPEG1 Layer III is better known as MP3 and is the most used lossy audio "
+"format."
+msgstr ""
+"MPEG1 Layer III je bolje poznat kao MP3 i najviše je korišćen zvučni format."
+
+#: jobs/k3bvideodvdtitletranscodingjob.cpp:585
+#, kde-format
+msgid ""
+"With this setting K3b will create a two-channel stereo MPEG1 Layer III audio "
+"stream."
+msgstr ""
+"Sa ovim podešavanjem K3b će napraviti dvokanalni MPEG1 Layer III zvučni "
+"zapis."
+
+#: plugin/k3baudiodecoder.cpp:630
+#, kde-format
+msgctxt "plugin type"
+msgid "Audio Decoder"
+msgstr "Zvučni dekoder"
+
+#: plugin/k3baudioencoder.cpp:45
+#, kde-format
+msgctxt "plugin type"
+msgid "Audio Encoder"
+msgstr "Zvučni koder"
+
+#: plugin/k3baudioencoder.cpp:154
+#, kde-format
+msgid "An unknown error occurred."
+msgstr "Desila se nepoznata greška."
+
+#: plugin/k3bpluginmanager.cpp:158
+#, kde-format
+msgid "No settings available for plugin %1."
+msgstr "Podešavanja nisu dostupna za priključak %1."
+
+#: plugin/k3bprojectplugin.cpp:20
+#, kde-format
+msgctxt "plugin type"
+msgid "Project plugin"
+msgstr "Priključak projekta"
+
+#: projects/audiocd/k3baudiocdtrackreader.cpp:60
+#, kde-format
+msgid "Please insert Audio CD %1%2"
+msgstr "Ubacite audio CD %1%2"
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:201
+#, kde-format
+msgid "CD Track"
+msgstr "Numera na CD-u"
+
+#: projects/audiocd/k3baudiocdtracksource.cpp:207
+#, kde-format
+msgid "Track %1 from Audio CD %2"
+msgstr "Numera %1 sa audio CD-a %2"
+
+#: projects/audiocd/k3baudioimager.cpp:86
+#, kde-format
+msgid "Unable to read track %1."
+msgstr "Nemoguće čitati stazu %1."
+
+#: projects/audiocd/k3baudioimager.cpp:102 projects/datacd/k3bdatajob.cpp:206
+#: projects/mixedcd/k3bmixedjob.cpp:1088
+#, kde-format
+msgid "Could not open %1 for writing"
+msgstr "Nisam mogao da otvorim %1 za pisanje"
+
+#: projects/audiocd/k3baudioimager.cpp:140
+#, kde-format
+msgid "Error while decoding track %1."
+msgstr "Greška pri dekodiranju numere %1."
+
+#: projects/audiocd/k3baudiojob.cpp:165
+#: projects/datacd/k3bdatapreparationjob.cpp:174
+#: projects/mixedcd/k3bmixedjob.cpp:178
+#, kde-format
+msgid ""
+"The following files could not be found. Do you want to remove them from the "
+"project and continue without adding them to the image?"
+msgstr ""
+"Sljedeće datoteke se ne mogu naći. Želite li da ih uklonite iz projekta i "
+"nastavite bez njihovog dodavanja u odraz?"
+
+#: projects/audiocd/k3baudiojob.cpp:168
+#: projects/datacd/k3bdatapreparationjob.cpp:138
+#: projects/datacd/k3bdatapreparationjob.cpp:162
+#: projects/datacd/k3bdatapreparationjob.cpp:177
+#: projects/datacd/k3bdatapreparationjob.cpp:199
+#: projects/mixedcd/k3bmixedjob.cpp:181
+#, kde-format
+msgid "Warning"
+msgstr "Upozorenje"
+
+#: projects/audiocd/k3baudiojob.cpp:169
+#: projects/datacd/k3bdatapreparationjob.cpp:178
+#: projects/mixedcd/k3bmixedjob.cpp:182
+#, kde-format
+msgid "Remove missing files and continue"
+msgstr "Ukloni datoteke i nastavi"
+
+#: projects/audiocd/k3baudiojob.cpp:170
+#: projects/datacd/k3bdatapreparationjob.cpp:164
+#: projects/datacd/k3bdatapreparationjob.cpp:179
+#: projects/datacd/k3bdatapreparationjob.cpp:201
+#: projects/mixedcd/k3bmixedjob.cpp:183
+#, kde-format
+msgid "Cancel and go back"
+msgstr "Otkaži i idi nazad"
+
+#: projects/audiocd/k3baudiojob.cpp:188 projects/mixedcd/k3bmixedjob.cpp:201
+#, kde-format
+msgid "Please add files to your project first."
+msgstr "Prvo dodajte datoteke u vaš projekat."
+
+#: projects/audiocd/k3baudiojob.cpp:194
+#, kde-format
+msgid "Unable to write on-the-fly with these audio sources."
+msgstr "Ne mogu da pišem u letu sa ovim audio izvorima."
+
+#: projects/audiocd/k3baudiojob.cpp:303 projects/mixedcd/k3bmixedjob.cpp:236
+#, kde-format
+msgid "Determining maximum writing speed"
+msgstr "Određujem maksimalnu brzinu pisanja"
+
+#: projects/audiocd/k3baudiojob.cpp:338
+#, kde-format
+msgid "Creating image files in %1"
+msgstr "Pravim datoteke odraza u %1"
+
+#: projects/audiocd/k3baudiojob.cpp:339 projects/videocd/k3bvcdjob.cpp:182
+#, kde-format
+msgid "Creating image files"
+msgstr "Pravim datoteke odraza"
+
+#: projects/audiocd/k3baudiojob.cpp:351 projects/mixedcd/k3bmixedjob.cpp:320
+#, kde-format
+msgid "Unable to determine maximum speed for some reason. Ignoring."
+msgstr "Iz nekog razloga ne mogu da odredim maksimalnu brzinu. Ignorišem."
+
+#: projects/audiocd/k3baudiojob.cpp:379 projects/mixedcd/k3bmixedjob.cpp:369
+#, kde-format
+msgid "Writing canceled."
+msgstr "Upisivanje je otkazano."
+
+#: projects/audiocd/k3baudiojob.cpp:441 projects/mixedcd/k3bmixedjob.cpp:568
+#, kde-format
+msgid "Error while decoding audio tracks."
+msgstr "Greška pri dekodiranju audio staza."
+
+#: projects/audiocd/k3baudiojob.cpp:449
+#, kde-format
+msgid "Successfully decoded all tracks."
+msgstr "Sve numere su uspješno dekodiranje."
+
+#: projects/audiocd/k3baudiojob.cpp:473 projects/mixedcd/k3bmixedjob.cpp:608
+#, kde-format
+msgid "Decoding audio track %1 of %2%3"
+msgstr "Dekodiram audio stazu %1 od %2%3"
+
+#: projects/audiocd/k3baudiojob.cpp:491
+#, kde-format
+msgid "I/O Error. Most likely no space left on harddisk."
+msgstr "I/O Greška. Najvjerovatnije nema slobodnog prostora na hard disku."
+
+#: projects/audiocd/k3baudiojob.cpp:540 projects/mixedcd/k3bmixedjob.cpp:628
+#: projects/mixedcd/k3bmixedjob.cpp:669
+#, kde-format
+msgid "I/O Error"
+msgstr "I/O Greška"
+
+#: projects/audiocd/k3baudiojob.cpp:581 projects/mixedcd/k3bmixedjob.cpp:870
+#, kde-format
+msgid "Writing track %1 of %2%3"
+msgstr "Upisujem stazu %1 od %2%3"
+
+#: projects/audiocd/k3baudiojob.cpp:646 projects/datacd/k3bdatajob.cpp:431
+#: projects/k3bcdrdaowriter.cpp:567 projects/k3bcdrecordwriter.cpp:449
+#: projects/k3bcdrskinwriter.cpp:461 projects/k3bgrowisofswriter.cpp:362
+#, kde-format
+msgid "Writing"
+msgstr "Upisujem"
+
+#: projects/audiocd/k3baudiojob.cpp:721 projects/mixedcd/k3bmixedjob.cpp:1267
+#, kde-format
+msgid "Normalizing volume levels"
+msgstr "Normalizujem jačine zvuka"
+
+#: projects/audiocd/k3baudiojob.cpp:838
+#, kde-format
+msgid "Writing Audio CD"
+msgstr "Upisujem audio CD"
+
+#         translations.
+#: projects/audiocd/k3baudiojob.cpp:848
+#, kde-format
+msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
+msgid "1 track (%2 minutes)"
+msgid_plural "%1 tracks (%2 minutes)"
+msgstr[0] "%1 numera (%2 minuta)"
+msgstr[1] "%1 numere  (%2 minuta)"
+msgstr[2] "%1 numera (%2 minuta)"
+
+#: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
+#: projects/videocd/k3bvcdjob.cpp:570 projects/videodvd/k3bvideodvdjob.cpp:58
+#, kde-format
+msgid " - %1 copy"
+msgid_plural " - %1 copies"
+msgstr[0] " - %1 kopija"
+msgstr[1] " - %1 kopije"
+msgstr[2] " - %1 kopija"
+
+#: projects/audiocd/k3baudionormalizejob.cpp:46
+#, kde-format
+msgid "Could not find normalize executable."
+msgstr "Ne mogu naći program hza normalizaciju."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:74
+#, kde-format
+msgid "Could not start normalize."
+msgstr "Ne mogu pokrenuti normalizaciju."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:114
+#, kde-format
+msgid "Track %1 is already normalized."
+msgstr "Numera %1 je već normalizovana."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:120
+#, kde-format
+msgid "Adjusting volume level for track %1 of %2"
+msgstr "Podešavam jačinu zvuka za numeru %1 od %2"
+
+#: projects/audiocd/k3baudionormalizejob.cpp:128
+#, kde-format
+msgid "Computing level for track %1 of %2"
+msgstr "Računam jačinu za numeru %1 od %2"
+
+#: projects/audiocd/k3baudionormalizejob.cpp:171
+#, kde-format
+msgid "Successfully normalized all tracks."
+msgstr "Sve numere su uspješno normalizovane."
+
+#: projects/audiocd/k3baudionormalizejob.cpp:179
+#, kde-format
+msgid "Error while normalizing tracks."
+msgstr "Greška u toku normalizovanja numera."
+
+#: projects/audiocd/k3baudiozerodata.cpp:44
+#, kde-format
+msgid "Silence"
+msgstr "Tišina"
+
+#: projects/audiocd/k3brawaudiodatasource.cpp:65
+#, kde-format
+msgid "Raw Audio CD Image"
+msgstr "Sirovi odraz audio CD‑a"
+
+#: projects/datacd/k3bbootitem.cpp:23
+#, kde-format
+msgid "El Torito Boot image"
+msgstr "Butabilni odraz El Torito"
+
+#: projects/datacd/k3bdatadoc.cpp:1197 projects/videocd/k3bvcddoc.cpp:407
+#, kde-format
+msgid "Could not find the following files:"
+msgstr "Nisam mogao da nađem sljedeće datoteke:"
+
+#: projects/datacd/k3bdatadoc.cpp:1198 projects/videocd/k3bvcddoc.cpp:408
+#, kde-format
+msgid "Not Found"
+msgstr "Nije nađen"
+
+#: projects/datacd/k3bdatadoc.cpp:1203
+#, kde-format
+msgid "No permission to read the following files:"
+msgstr "Nema dozvole za čitanje sljedećih datoteka:"
+
+#: projects/datacd/k3bdatadoc.cpp:1204
+#, kde-format
+msgid "No Read Permission"
+msgstr "Nema dozvole za čitanje"
+
+#: projects/datacd/k3bdatadoc.cpp:1361 projects/datacd/k3bdatadoc.cpp:1374
+#, kde-format
+msgid "From previous session"
+msgstr "Iz prethodne sesije"
+
+#: projects/datacd/k3bdatadoc.cpp:1485
+#, kde-format
+msgid "El Torito boot catalog file"
+msgstr "Datoteka El Torito but-kataloga"
+
+#: projects/datacd/k3bdatadoc.cpp:1486
+#, kde-format
+msgid "Boot catalog"
+msgstr "But-katalog"
+
+#: projects/datacd/k3bdatajob.cpp:213
+#, kde-format
+msgid "Creating image file"
+msgstr "Pravim datoteku odraza"
+
+#: projects/datacd/k3bdatajob.cpp:214
+#, kde-format
+msgid "Track 1 of 1"
+msgstr "Staza 1 od 1"
+
+#: projects/datacd/k3bdatajob.cpp:215
+#, kde-format
+msgid "Creating image file in %1"
+msgstr "Pravim datoteku odraza u %1"
+
+#: projects/datacd/k3bdatajob.cpp:373
+#, kde-format
+msgid "Image successfully created in %1"
+msgstr "Odraz uspješno napravljen u %1"
+
+#: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:92
+#, kde-format
+msgid "Could not open file %1"
+msgstr "Nisam mogao da otvorim datoteku %1"
+
+#: projects/datacd/k3bdatajob.cpp:393
+#, kde-format
+msgid "Error while creating ISO image"
+msgstr "Greška pri pravljenju ISO odraza"
+
+#: projects/datacd/k3bdatajob.cpp:694
+#, kde-format
+msgid "Internal Error: No medium type fits. This project cannot be burned."
+msgstr ""
+"Interna greška: Nema odgovarajućeg diska. Ovaj projekat se ne može narezati."
+
+#: projects/datacd/k3bdatajob.cpp:698
+#, kde-format
+msgid "Waiting for a medium"
+msgstr "Čekam disk"
+
+#: projects/datacd/k3bdatajob.cpp:715
+#, kde-format
+msgid "Writing %1"
+msgstr "Upisujem %1"
+
+#: projects/datacd/k3bdatajob.cpp:732
+#, kde-format
+msgid "Unable to determine the last track's datamode. Using default."
+msgstr ""
+"Ne mogu da odredim režim podataka posljednje trake. Koristim podrazumevano."
+
+#: projects/datacd/k3bdatajob.cpp:826 projects/datacd/k3bdatajob.cpp:946
+#, kde-format
+msgid "Writing mode ignored when writing %1 media."
+msgstr "Režim upisa se ignoriše kada se upisuje %1 disk."
+
+#: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
+#, kde-format
+msgid "Growing ISO 9660 filesystem on %1."
+msgstr "Širim ISO‑9660 datotečni sistem na %1."
+
+#: projects/datacd/k3bdatajob.cpp:971
+#, kde-format
+msgid "Creating Data Image File"
+msgstr "Pravim datoteku odraza sa podacima"
+
+#: projects/datacd/k3bdatajob.cpp:975
+#, kde-format
+msgid "Writing Data Project"
+msgstr "Upisujem projekat sa podacima"
+
+#: projects/datacd/k3bdatajob.cpp:981
+#, kde-format
+msgid "Writing Multisession Project"
+msgstr "Upisujem višesesijski projekat"
+
+#: projects/datacd/k3bdatajob.cpp:995
+#, kde-format
+msgid "ISO 9660 Filesystem (Size: %2) – One copy"
+msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
+msgstr[0] "ISO9660 Filesystem (Veličina: %2) – %1 kopija"
+msgstr[1] "ISO9660 Filesystem (Veličina: %2) – %1 kopije"
+msgstr[2] "ISO9660 Filesystem (Veličina: %2) – %1 kopija"
+
+#: projects/datacd/k3bdatajob.cpp:1000
+#, kde-format
+msgid "ISO 9660 Filesystem (Size: %1)"
+msgstr "Datoteka sistem ISO9660 (veličina: %1)"
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
+#, kde-format
+msgid "Searching for old session"
+msgstr "Tražim staru sesiju"
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:218
+#, kde-format
+msgid ""
+"No medium inserted or an empty medium in %1. Cannot continue multisession "
+"disk."
+msgstr ""
+"Nema ubačenog diska ili je prazan disk u %1. Ne mogu da nastavim "
+"višesesijski disk."
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
+#: projects/datacd/k3bmsinfofetcher.cpp:143
+#, kde-format
+msgid "Could not open ISO 9660 filesystem in %1."
+msgstr "Nisam mogao da otvorim Iso9660 datoteka sistem u %1."
+
+#: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
+#: projects/k3bgrowisofswriter.cpp:197
+#, kde-format
+msgid ""
+"Medium is not of multi-session type and does not contain ISO 9660. Cannot "
+"emulate multi-session on it."
+msgstr ""
+
+#: projects/datacd/k3bdatapreparationjob.cpp:92
+#, kde-format
+msgid "<em>%1</em> renamed to <em>%2</em>"
+msgstr "<em>%1</em> preimenovano u <em>%2</em>"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:132
+#, kde-format
+msgid ""
+"Some filenames need to be shortened due to the %1 char restriction of the "
+"Joliet extensions. If the Joliet extensions are disabled filenames do not "
+"have to be shortened but long filenames will not be available on Windows "
+"systems."
+msgstr ""
+"Neka imena datoteka moraju biti skraćena zbog %1-znakovnog ograničenja u "
+"proširenju Joliet. Ako se Joliet proširenja isključe imena datoteka se ne "
+"moraju skraćivati ali dugačka imena neće biti dostupna na Windows sistemima."
+
+#: projects/datacd/k3bdatapreparationjob.cpp:139
+#, kde-format
+msgid "Shorten Filenames"
+msgstr "Skrati imena datoteka"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:140
+#, kde-format
+msgid "Disable Joliet extensions"
+msgstr "Isključi Joliet proširenja"
+
+# skip-rule: cut
+#: projects/datacd/k3bdatapreparationjob.cpp:157
+#, kde-format
+msgid ""
+"The Joliet extensions (which are needed for long filenames on Windows "
+"systems) restrict the length of the volume descriptor (the name of the "
+"filesystem) to %1 characters. The selected descriptor '%2' is longer than "
+"that. Do you want it to be cut or do you want to go back and change it "
+"manually?"
+msgstr ""
+"Džolijet proširenja (koja su potrebna za duga imena na vindouz sistemima) "
+"ograničavaju dužinu opisa izdanja (ime datotečnog sistema) na %1 znakova. "
+"Izabrani opis „%2“ je duži od toga. Hoćete li da se odsječe ili želite da se "
+"vratite nazad i ručno ga promijenite?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:163
+#, kde-format
+msgid "Cut volume descriptor in the Joliet tree"
+msgstr "Skrati opis izdanja"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:195
+#, kde-format
+msgid ""
+"K3b is not able to follow symbolic links to folders after they have been "
+"added to the project. Do you want to continue without writing the symbolic "
+"links to the image?"
+msgstr ""
+"K3b ne može da isprati simboličke veze do direktorija nakon što se oni "
+"dodaju u projekat. Želite li da nastavite bez upisa simboličkih veza u odraz?"
+
+#: projects/datacd/k3bdatapreparationjob.cpp:200
+#, kde-format
+msgid "Discard symbolic links to folders"
+msgstr "Odbaci simboličke veze do directorija"
+
+#: projects/datacd/k3bisoimager.cpp:153
+#, kde-format
+msgid ""
+"Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
+"contain more than one backslash:"
+msgstr ""
+"Zbog greške u mkisofs <= 1.15a40, K3b ne može da rukuje imenima datoteka "
+"koja sadrže više od jednog obrnutog kroz:"
+
+#: projects/datacd/k3bisoimager.cpp:172 projects/k3bcdrdaowriter.cpp:770
+#: projects/k3bcdrecordwriter.cpp:909 projects/k3bcdrskinwriter.cpp:922
+#, kde-format
+msgid "%1 crashed."
+msgstr "%1 se srušio."
+
+#: projects/datacd/k3bisoimager.cpp:363
+#, kde-format
+msgid "Could not determine size of resulting image file."
+msgstr "Nisam mogao da odredim veličinu rezultujuće datoteke odraza."
+
+#: projects/datacd/k3bisoimager.cpp:516
+#, kde-format
+msgid "No volume id specified. Using default."
+msgstr "Id. diska nije naveden. Koristim podrazumevano."
+
+#: projects/datacd/k3bisoimager.cpp:609
+#, kde-format
+msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
+msgstr "Nađene datoteke veći od 4 GB. K3bu treba najmanje %1 da nastavi."
+
+#: projects/datacd/k3bisoimager.cpp:619
+#, fuzzy, kde-format
+#| msgid ""
+#| "Found files bigger than 2 GB. These files will only be fully accessible "
+#| "if mounted with UDF."
+msgid "Found files bigger than 2 GB. These files will be fully accessible."
+msgstr ""
+"Nađeni su datoteke veći od 2 GB. Te datoteke biće potpuno dostupni samo ako "
+"se montiraju pomoću UDF-a."
+
+#: projects/datacd/k3bisoimager.cpp:625
+#, kde-format
+msgid "Enabling UDF extension."
+msgstr "Uključujem proširenje UDF."
+
+#: projects/datacd/k3bisoimager.cpp:670
+#, kde-format
+msgid "Setting iso level to 3 to support files bigger than 4 GB."
+msgstr "Postavljam ISO nivo na 3 radi podrške datoteka većih od 4 GB."
+
+#: projects/datacd/k3bisoimager.cpp:762
+#, kde-format
+msgid "Could not follow link %1 to non-existing file %2. Skipping..."
+msgstr "Ne mogu da ispratim vezu %1 do nepostojeće datoteke %2. Preskačem..."
+
+#: projects/datacd/k3bisoimager.cpp:766
+#, kde-format
+msgid ""
+"Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
+msgstr ""
+"Ignorišem vezu %1 do direktorija %2. K3b ne može da prati veze do "
+"direktorija."
+
+#: projects/datacd/k3bisoimager.cpp:774
+#, kde-format
+msgid "Could not find file %1. Skipping..."
+msgstr "Nisam mogao da nađem datoteku %1. Preskačem..."
+
+#: projects/datacd/k3bisoimager.cpp:778
+#, kde-format
+msgid "Could not read file %1. Skipping..."
+msgstr "Nisam mogao da pročitam datoteku %1. Preskačem..."
+
+#: projects/datacd/k3bisoimager.cpp:831
+#, kde-format
+msgid "Failed to backup boot image file %1"
+msgstr "Nisam uspio da arhiviram datoteku but odraza %1"
+
+#: projects/datacd/k3bisoimager.cpp:991 projects/datacd/k3bisoimager.cpp:1001
+#: projects/datacd/k3bisoimager.cpp:1008 projects/datacd/k3bisoimager.cpp:1014
+#, kde-format
+msgid "Could not write temporary file"
+msgstr "Nisam mogao da pišem u privremenu datoteku"
+
+#: projects/datacd/k3bisoimager.cpp:995
+#, kde-format
+msgid "No files to be written."
+msgstr "Nema datoteka za upisivanje."
+
+#: projects/datacd/k3bisooptions.cpp:68
+#, kde-format
+msgctxt ""
+"This is the default volume identifier of a data project created by K3b. The "
+"string should not be longer than 16 characters to avoid warnings regarding "
+"Joiliet extensions which induce this restriction."
+msgid "K3b data project"
+msgstr "K3b‑ov projekat podataka"
+
+#: projects/datacd/k3bmkisofshandler.cpp:64
+#, kde-format
+msgid "Mkisofs executable not found."
+msgstr "Izvršni mkisofs nije nađen."
+
+#: projects/datacd/k3bmkisofshandler.cpp:78
+#, kde-format
+msgid "Read error from file '%1'"
+msgstr "Greška u čitanju datoteke „%1“"
+
+#: projects/datacd/k3bmkisofshandler.cpp:83
+#, kde-format
+msgid "Used version of mkisofs does not have large file support."
+msgstr "Korišćena verzija mkisofs nema podršku za velike datoteke."
+
+#: projects/datacd/k3bmkisofshandler.cpp:84
+#, kde-format
+msgid "Files bigger than 2 GB cannot be handled."
+msgstr "Datoteke veći od 2GB se ne mogu koristiti."
+
+#: projects/datacd/k3bmkisofshandler.cpp:88
+#, kde-format
+msgid "No such file or directory '%1'."
+msgstr "Nema takve datoteke ili direktorija '%1'."
+
+#: projects/datacd/k3bmkisofshandler.cpp:102
+#, kde-format
+msgid "Encountered an incorrectly encoded filename '%1'"
+msgstr "Imam neispravno dekodovano ime datoteke „%1“"
+
+#: projects/datacd/k3bmkisofshandler.cpp:104
+#, kde-format
+msgid ""
+"This may be caused by a system update which changed the local character set."
+msgstr ""
+"Ovo može biti prouzrokovano ažuriranjem sistema koje je promijenilo lokalni "
+"skup znakova."
+
+#: projects/datacd/k3bmkisofshandler.cpp:105
+#, fuzzy, kde-format
+#| msgid ""
+#| "You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
+#| "encoding."
+msgid ""
+"You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
+"encoding."
+msgstr ""
+"Možete koristiti convmv (http://j3e.de/linux/convmv/) da sredite kodiranje "
+"imene datoteke."
+
+#: projects/datacd/k3bmkisofshandler.cpp:109
+#, kde-format
+msgid "The boot image has an invalid size."
+msgstr "But odraz ima neispravnu veličinu."
+
+#: projects/datacd/k3bmkisofshandler.cpp:113
+#, kde-format
+msgid "The boot image contains multiple partitions."
+msgstr "Boot slika sadrži više particija"
+
+#: projects/datacd/k3bmkisofshandler.cpp:114
+#, kde-format
+msgid "A hard-disk boot image has to contain a single partition."
+msgstr "But odraz hard diska treba da sadrži jednu particiju."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:43
+#, kde-format
+msgid "Searching previous session"
+msgstr "Tražim prethodnu sesiju"
+
+#: projects/datacd/k3bmsinfofetcher.cpp:155
+#, kde-format
+msgid "Could not determine next writable address."
+msgstr "Nisam mogao da odredim sljedeću upisivu adresu."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:171
+#, kde-format
+msgid "Could not start %1"
+msgstr "Ne mogu da pokrenem %1"
+
+#: projects/datacd/k3bmsinfofetcher.cpp:201
+#, kde-format
+msgid "Could not retrieve multisession information from disk."
+msgstr "Nisam mogao da dobavim višesesijske informacije sa diska."
+
+#: projects/datacd/k3bmsinfofetcher.cpp:202
+#, kde-format
+msgid "The disk is either empty or not appendable."
+msgstr "Disk je ili prazan ili se na njega ne može dodavati."
+
+#: projects/k3babstractwriter.cpp:44
+#, kde-format
+msgid "Unlocking drive..."
+msgstr "Otključavam uređaj..."
+
+#: projects/k3babstractwriter.cpp:58
+#, kde-format
+msgid "Could not unlock drive."
+msgstr "Ne mogu da otključam uređaj."
+
+#: projects/k3babstractwriter.cpp:61
+#, kde-format
+msgid "Ejecting Medium"
+msgstr "Izbacujem disk"
+
+#: projects/k3bcdrdaowriter.cpp:259
+#, kde-format
+msgid "Cdrdao %1 does not support disabling burnfree."
+msgstr "Cdrdao %1 ne podržava isključivanje Burnfree-ja."
+
+#: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:298
+#: projects/k3bcdrskinwriter.cpp:306
+#, kde-format
+msgid "'Force unsafe operations' enabled."
+msgstr "„Forsiraj nesigurne operacije“ je uključeno."
+
+#: projects/k3bcdrdaowriter.cpp:283
+#, kde-format
+msgid "Cdrdao %1 does not support overburning."
+msgstr "Cdrdao %1 ne podržava nadrezanje."
+
+#: projects/k3bcdrdaowriter.cpp:486
+#, kde-format
+msgid "Could not backup tocfile."
+msgstr "Nisam mogao da napravim rezervu datoteke sadržaja."
+
+#: projects/k3bcdrdaowriter.cpp:516
+#, kde-format
+msgid "Preparing read process..."
+msgstr "Pripremam proces čitanja..."
+
+#: projects/k3bcdrdaowriter.cpp:522
+#, kde-format
+msgid "Preparing copy process..."
+msgstr "Pripremam proces kopiranja..."
+
+#: projects/k3bcdrdaowriter.cpp:525
+#, kde-format
+msgid "Preparing blanking process..."
+msgstr "Pripremam proces brisanja..."
+
+#: projects/k3bcdrdaowriter.cpp:559
+#, no-c-format, kde-format
+msgid "Starting DAO simulation at %1x speed..."
+msgstr "Počinjem DAO simulaciju pri brzini %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:566
+#, no-c-format, kde-format
+msgid "Starting DAO writing at %1x speed..."
+msgstr "Počinjem DAO upisivanje pri brzini %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:571
+#, kde-format
+msgid "Starting reading..."
+msgstr "Počinjem čitanje..."
+
+#: projects/k3bcdrdaowriter.cpp:572
+#, kde-format
+msgid "Reading"
+msgstr "Čitam"
+
+#: projects/k3bcdrdaowriter.cpp:578
+#, no-c-format, kde-format
+msgid "Starting simulation copy at %1x speed..."
+msgstr "Počinjem simulirano kopiranje pri brzini %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:584
+#, no-c-format, kde-format
+msgid "Starting copy at %1x speed..."
+msgstr "Počinjem kopiranje pri brzini %1x..."
+
+#: projects/k3bcdrdaowriter.cpp:585
+#, kde-format
+msgid "Copying"
+msgstr "Kopiram"
+
+#: projects/k3bcdrdaowriter.cpp:589
+#, kde-format
+msgid "Starting blanking..."
+msgstr "Počinjem brisanje..."
+
+#: projects/k3bcdrdaowriter.cpp:590
+#, kde-format
+msgid "Blanking"
+msgstr "Brišem"
+
+#: projects/k3bcdrdaowriter.cpp:702
+#, kde-format
+msgid ""
+"Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
+"to restore it from the backup %2."
+msgstr ""
+"Zbog greške u cdrdao toc/cue datoteka %1 je izbrisan. K3b nije mogao da ga "
+"povrati i rezervne kopije %2."
+
+#: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:786
+#: projects/k3bcdrskinwriter.cpp:799 projects/k3bgrowisofswriter.cpp:515
+#, kde-format
+msgid "Simulation successfully completed"
+msgstr "Simulacija je uspješno završena"
+
+#: projects/k3bcdrdaowriter.cpp:736
+#, kde-format
+msgid "Reading successfully completed"
+msgstr "Čitanje je uspješno završeno"
+
+#: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:788
+#: projects/k3bcdrskinwriter.cpp:801 projects/k3bgrowisofswriter.cpp:517
+#, kde-format
+msgid "Writing successfully completed"
+msgstr "Upisivanje je uspješno završeno"
+
+#: projects/k3bcdrdaowriter.cpp:742
+#, kde-format
+msgid "Copying successfully completed"
+msgstr "Kopiranje je uspješno završeno"
+
+#: projects/k3bcdrdaowriter.cpp:745
+#, kde-format
+msgid "Blanking successfully completed"
+msgstr "Brisanje je uspješno završeno"
+
+#: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:792
+#: projects/k3bcdrskinwriter.cpp:805 projects/k3bgrowisofswriter.cpp:510
+#, kde-format
+msgid "Average overall write speed: %1 KB/s (%2x)"
+msgstr "Prosječna ukupna brzina upisa: %1 KB/s (%2x)"
+
+#: projects/k3bcdrdaowriter.cpp:761
+#, kde-format
+msgid "Please include the debugging output in your problem report."
+msgstr "Uključite i ispravljački izlaz u vašem izvještaju o problemu."
+
+# >! When c-format is gone, put %1×.
+#: projects/k3bcdrdaowriter.cpp:787 projects/k3bcdrecordwriter.cpp:666
+#: projects/k3bcdrskinwriter.cpp:679
+#, no-c-format, kde-format
+msgid "Medium or burner does not support writing at %1x speed"
+msgstr "Disk ili pisač ne podržavaju pisanje pri brzini %1x"
+
+#: projects/k3bcdrdaowriter.cpp:789
+#, no-c-format, kde-format
+msgid "Switching down burn speed to %1x"
+msgstr "Smanjujem brzinu rezanja na %1x"
+
+#: projects/k3bcdrdaowriter.cpp:819
+#, kde-format
+msgid "Executing Power calibration"
+msgstr "Izvršavam kalibraciju snage"
+
+#: projects/k3bcdrdaowriter.cpp:823
+#, kde-format
+msgid "Power calibration successful"
+msgstr "Snaga je uspješno kalibrisana"
+
+#: projects/k3bcdrdaowriter.cpp:824
+#, kde-format
+msgid "Preparing burn process..."
+msgstr "Pripremam proces rezanja..."
+
+#: projects/k3bcdrdaowriter.cpp:828
+#, kde-format
+msgid "Flushing cache"
+msgstr "Praznim keš"
+
+#: projects/k3bcdrdaowriter.cpp:832
+#, kde-format
+msgid "Writing CD-Text lead-in..."
+msgstr "Upisujem uvod sa CD-tekstom..."
+
+#: projects/k3bcdrdaowriter.cpp:836
+#, kde-format
+msgid "Turning BURN-Proof on"
+msgstr "Uključujem sigurno rezanje"
+
+#: projects/k3bcdrdaowriter.cpp:844
+#, kde-format
+msgid "Found ISRC code"
+msgstr "Nađen je ISRC kod"
+
+#: projects/k3bcdrdaowriter.cpp:848
+#, kde-format
+msgid "Found pregap: %1"
+msgstr "Nađen je predrazmak: %1"
+
+#: projects/k3bcdrdaowriter.cpp:861
+#, kde-format
+msgid "No cdrdao driver found."
+msgstr "Nije nađen upravljački program za cdrdao."
+
+#: projects/k3bcdrdaowriter.cpp:862
+#, kde-format
+msgid "Please select one manually in the device settings."
+msgstr "Izaberite jedan ručno u podešavanjima uređaja."
+
+#: projects/k3bcdrdaowriter.cpp:863
+#, kde-format
+msgid "For most current drives this would be 'generic-mmc'."
+msgstr "Za većinu trenutnih uređaja to bi bio „generic-mmc“."
+
+#: projects/k3bcdrdaowriter.cpp:872
+#, kde-format
+msgid "Device not ready, waiting."
+msgstr "Uređaj nije spreman, čekam."
+
+#: projects/k3bcdrdaowriter.cpp:876
+#, kde-format
+msgid "Cue sheet not accepted."
+msgstr "CUE list nije prihvaćen."
+
+#: projects/k3bcdrdaowriter.cpp:881 projects/k3bcdrecordwriter.cpp:610
+#: projects/k3bcdrskinwriter.cpp:623
+#, kde-format
+msgid "No valid %1 option: %2"
+msgstr "Nema ispravne %1 opcije: %2"
+
+#: projects/k3bcdrdaowriter.cpp:886 projects/k3bcdrecordwriter.cpp:813
+#: projects/k3bcdrskinwriter.cpp:826 projects/k3bgrowisofshandler.cpp:224
+#: projects/mixedcd/k3bmixedjob.cpp:1030
+#, kde-format
+msgid "Data does not fit on disk."
+msgstr "Podaci ne mogu stati na disk."
+
+#: projects/k3bcdrdaowriter.cpp:888 projects/k3bcdrecordwriter.cpp:815
+#: projects/k3bcdrskinwriter.cpp:828
+#, kde-format
+msgid "Enable overburning in the advanced K3b settings to burn anyway."
+msgstr ""
+"Uključite nadrezanje u naprednim podešavanjima K3b-a da biste ipak rezali."
+
+#: projects/k3bcdrdaowriter.cpp:973
+#, kde-format
+msgid "Writing leadin"
+msgstr "Upisujem uvod"
+
+#: projects/k3bcdrdaowriter.cpp:979
+#, kde-format
+msgid "Writing leadout"
+msgstr "Upisujem izvod"
+
+#: projects/k3bcdrecordwriter.cpp:229
+#, kde-format
+msgid "Cdrecord version %1 does not support Blu-ray writing."
+msgstr "<command>cdrecord</command> %1 ne podržava upisivanje blureja."
+
+#: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
+#, kde-format
+msgid "Writer does not support disk at once (DAO) recording"
+msgstr "Pisač ne podržava snimanje tipa disk-od-jednom (DAO)"
+
+#: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
+#, kde-format
+msgid "Writer does not support raw writing."
+msgstr "Pisač ne podržava sirovo pisanje."
+
+#: projects/k3bcdrecordwriter.cpp:273
+#, kde-format
+msgid "Cdrecord does not support writing %1 media."
+msgstr "<command>cdrecord</command> ne podržava upis %1 medija."
+
+#: projects/k3bcdrecordwriter.cpp:293 projects/k3bcdrskinwriter.cpp:301
+#, kde-format
+msgid "Writer does not support buffer underrun free recording (Burnfree)"
+msgstr "Pisač ne podržava snimanje bez podilaženja bafera (Burnfree)"
+
+#: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
+#, kde-format
+msgid "Failed to write temporary file '%1'"
+msgstr "Ne mogu da upišem privremenu datoteku „%1“"
+
+#: projects/k3bcdrecordwriter.cpp:349
+#, kde-format
+msgid "Cdrecord %1 does not support overburning."
+msgstr "Cdrecord %1 ne podržava nadrezanje."
+
+# >! When c-format is gone, put %1×.
+#: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
+#, no-c-format, kde-format
+msgid "Starting simulation at %1x speed..."
+msgstr "Počinjem simulaciju pri brzini %1x..."
+
+#: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
+#, kde-format
+msgid "Starting %1 simulation at %2x speed..."
+msgstr "Počinjem %1 simulaciju pri brzini %2x..."
+
+# >! When c-format is gone, put %1×.
+#: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
+#, no-c-format, kde-format
+msgid "Starting writing at %1x speed..."
+msgstr "Počinjem upisivanje pri brzini %1x..."
+
+#: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
+#, kde-format
+msgid "Starting %1 writing at %2x speed..."
+msgstr "Počinjem %1 pisanje pri brzini %2x..."
+
+#: projects/k3bcdrecordwriter.cpp:548 projects/k3bcdrskinwriter.cpp:560
+#: projects/k3bgrowisofswriter.cpp:428
+#, kde-format
+msgid "Writing data"
+msgstr "Upisujem podatke"
+
+#: projects/k3bcdrecordwriter.cpp:577 projects/k3bcdrskinwriter.cpp:590
+#, kde-format
+msgid "DAO (Disk At Once) recording not supported with this writer"
+msgstr "Ovaj snimač ne podržava snimanje tipa DAO (disk od-jednom)"
+
+#: projects/k3bcdrecordwriter.cpp:578 projects/k3bcdrskinwriter.cpp:591
+#, kde-format
+msgid "Please choose TAO (Track At Once) and try again"
+msgstr "Izaberite TAO (staza od-jednom) i pokušajte ponovo"
+
+#: projects/k3bcdrecordwriter.cpp:581 projects/k3bcdrskinwriter.cpp:594
+#, kde-format
+msgid "RAW recording not supported with this writer"
+msgstr "Ovaj pisač ne podržava sirovo snimanje"
+
+#: projects/k3bcdrecordwriter.cpp:584 projects/k3bcdrskinwriter.cpp:597
+#, kde-format
+msgid "Input/output error. Not necessarily serious."
+msgstr "Ulazno/izlazna greška. Ne mora biti ozbiljna."
+
+#: projects/k3bcdrecordwriter.cpp:593 projects/k3bcdrskinwriter.cpp:606
+#, kde-format
+msgid "Reloading of medium required"
+msgstr "Potrebno je ponovno ubacivanje diska"
+
+#: projects/k3bcdrecordwriter.cpp:602 projects/k3bcdrskinwriter.cpp:615
+#: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
+#, kde-format
+msgid "Trying to write more than the official disk capacity"
+msgstr "Pokušavam da upišem više od zvaničnog kapaciteta diska"
+
+#: projects/k3bcdrecordwriter.cpp:637 projects/k3bcdrskinwriter.cpp:650
+#, kde-format
+msgid "Only session 1 will be cloned."
+msgstr "Biće klonirana samo sesija 1."
+
+#: projects/k3bcdrecordwriter.cpp:640 projects/k3bcdrskinwriter.cpp:653
+#, kde-format
+msgid "Unable to fixate the disk."
+msgstr "Ne mogu da fiksiram disk."
+
+#: projects/k3bcdrecordwriter.cpp:670 projects/k3bcdrskinwriter.cpp:683
+#, no-c-format, kde-format
+msgid "Switching burn speed up to %1x"
+msgstr "Povećavam brzinu pisanja na %1x"
+
+#: projects/k3bcdrecordwriter.cpp:673 projects/k3bcdrskinwriter.cpp:686
+#, no-c-format, kde-format
+msgid "Switching burn speed down to %1x"
+msgstr "Smanjujem brzinu pisanja na %1x"
+
+#: projects/k3bcdrecordwriter.cpp:685 projects/k3bcdrskinwriter.cpp:698
+#, kde-format
+msgid "Starting disc write"
+msgstr "Pokrećem upisivanje diska"
+
+#: projects/k3bcdrecordwriter.cpp:701 projects/k3bcdrskinwriter.cpp:714
+#: projects/k3bgrowisofshandler.cpp:133
+#, kde-format
+msgid "Closing Session"
+msgstr "Zatvaram sesiju"
+
+#: projects/k3bcdrecordwriter.cpp:705 projects/k3bcdrskinwriter.cpp:718
+#, kde-format
+msgid "Writing Leadin"
+msgstr "Upisujem uvod"
+
+#: projects/k3bcdrecordwriter.cpp:708 projects/k3bcdrskinwriter.cpp:721
+#, kde-format
+msgid "Writing Leadout"
+msgstr "Upisujem izvod"
+
+#: projects/k3bcdrecordwriter.cpp:711 projects/k3bcdrskinwriter.cpp:724
+#, kde-format
+msgid "Writing pregap"
+msgstr "Upisujem predrazmak"
+
+#: projects/k3bcdrecordwriter.cpp:714 projects/k3bcdrskinwriter.cpp:727
+#, kde-format
+msgid "Performing Optimum Power Calibration"
+msgstr "Izvršavam optimalnu kalibraciju snage"
+
+#: projects/k3bcdrecordwriter.cpp:717 projects/k3bcdrskinwriter.cpp:730
+#, kde-format
+msgid "Sending CUE sheet"
+msgstr "Šaljem CUE list"
+
+#: projects/k3bcdrecordwriter.cpp:720 projects/k3bcdrskinwriter.cpp:733
+#, kde-format
+msgid "Enabled Burnfree"
+msgstr "Burnfree uključen"
+
+#: projects/k3bcdrecordwriter.cpp:723 projects/k3bcdrskinwriter.cpp:736
+#, kde-format
+msgid "Disabled Burnfree"
+msgstr "Burnfree isključen"
+
+#: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
+#: projects/mixedcd/k3bmixedjob.cpp:555
+#, kde-format
+msgid "Unable to close the tray"
+msgstr "Ne mogu da zatvorim kasetu"
+
+#: projects/k3bcdrecordwriter.cpp:739 projects/k3bcdrskinwriter.cpp:752
+#, kde-format
+msgid "Burnfree was used once."
+msgid_plural "Burnfree was used %1 times."
+msgstr[0] "Bernfri je upotrebljen %1 put."
+msgstr[1] "Bernfri je upotrebljen %1 puta."
+msgstr[2] "Bernfri je upotrebljen %1 puta."
+
+#: projects/k3bcdrecordwriter.cpp:745 projects/k3bcdrskinwriter.cpp:758
+#, kde-format
+msgid "Buffer was low once."
+msgid_plural "Buffer was low %1 times."
+msgstr[0] "Bafer je bio nisko %1 put."
+msgstr[1] "Bafer je bio nisko %1 puta."
+msgstr[2] "Bafer je bio nisko %1 puta."
+
+#: projects/k3bcdrecordwriter.cpp:784 projects/k3bcdrskinwriter.cpp:797
+#, kde-format
+msgid "Erasing successfully completed"
+msgstr "Brisanje je uspješno završeno"
+
+#: projects/k3bcdrecordwriter.cpp:811 projects/k3bcdrskinwriter.cpp:824
+#: projects/k3bgrowisofshandler.cpp:222
+#, kde-format
+msgid "Data did not fit on disk."
+msgstr "Podaci nisu stali na disk."
+
+#: projects/k3bcdrecordwriter.cpp:822 projects/k3bcdrskinwriter.cpp:835
+#, kde-format
+msgid "%1 could not reserve shared memory segment of requested size."
+msgstr "%1 ne mogade da rezerviše dio dijeljene memorije zahtjevane veličine."
+
+#: projects/k3bcdrecordwriter.cpp:823 projects/k3bcdrskinwriter.cpp:836
+#, kde-format
+msgid "Probably you chose a too large buffer size."
+msgstr "Verovatno ste izabrali preveliku veličinu bafera."
+
+#: projects/k3bcdrecordwriter.cpp:826 projects/k3bcdrskinwriter.cpp:839
+#, kde-format
+msgid "OPC failed. Probably the writer does not like the medium."
+msgstr "OPC nije prošla. Verovatno pisač ne voli ubačeni disk."
+
+#: projects/k3bcdrecordwriter.cpp:829 projects/k3bcdrskinwriter.cpp:842
+#, kde-format
+msgid "Unable to set write speed to %1."
+msgstr "Ne mogu da postavim brzinu pisanja na %1."
+
+#: projects/k3bcdrecordwriter.cpp:830 projects/k3bcdrskinwriter.cpp:843
+#, kde-format
+msgid "Probably this is lower than your writer's lowest writing speed."
+msgstr "Ovo je verovatno niže od najniže brzine pisanja vašeg pisača."
+
+#: projects/k3bcdrecordwriter.cpp:833 projects/k3bcdrskinwriter.cpp:846
+#, kde-format
+msgid "Unable to send CUE sheet."
+msgstr "Ne mogu da pošaljem CUE list."
+
+#: projects/k3bcdrecordwriter.cpp:835 projects/k3bcdrecordwriter.cpp:874
+#: projects/k3bcdrecordwriter.cpp:894 projects/k3bcdrskinwriter.cpp:848
+#: projects/k3bcdrskinwriter.cpp:887 projects/k3bcdrskinwriter.cpp:907
+#, kde-format
+msgid "Sometimes using TAO writing mode solves this issue."
+msgstr "Ponekad se ovaj problem rješava režimom pisanja TAO."
+
+#: projects/k3bcdrecordwriter.cpp:838 projects/k3bcdrskinwriter.cpp:851
+#, kde-format
+msgid "Unable to open new session."
+msgstr "Ne mogu da otvorim novu sesiju."
+
+#: projects/k3bcdrecordwriter.cpp:839 projects/k3bcdrskinwriter.cpp:852
+#, kde-format
+msgid "Probably a problem with the medium."
+msgstr "Verovatno je problem do diska."
+
+#: projects/k3bcdrecordwriter.cpp:842 projects/k3bcdrskinwriter.cpp:855
+#, kde-format
+msgid "The disk might still be readable."
+msgstr "Disk još uvijek može biti čitljiv."
+
+#: projects/k3bcdrecordwriter.cpp:844 projects/k3bcdrskinwriter.cpp:857
+#, kde-format
+msgid "Try DAO writing mode."
+msgstr "Probaj DAO režim upisa."
+
+#: projects/k3bcdrecordwriter.cpp:847 projects/k3bcdrskinwriter.cpp:860
+#, kde-format
+msgid "%1 has no permission to open the device."
+msgstr "%1 nema dozvole da otvori uređaj."
+
+#: projects/k3bcdrecordwriter.cpp:848 projects/k3bcdrskinwriter.cpp:861
+#, kde-format
+msgid "Modify device settings in K3b to solve this problem."
+msgstr "Podesi postavke uređaja u K3b da bi riješio ovaj problem."
+
+#: projects/k3bcdrecordwriter.cpp:851 projects/k3bcdrskinwriter.cpp:864
+#, kde-format
+msgid "Probably a buffer underrun occurred."
+msgstr "Verovatno je došlo do podilaženja bafera."
+
+#: projects/k3bcdrecordwriter.cpp:853 projects/k3bcdrskinwriter.cpp:866
+#, kde-format
+msgid "Please enable Burnfree or choose a lower burning speed."
+msgstr "Uključite Burnfree ili izaberite nižu brzinu rezanja."
+
+#: projects/k3bcdrecordwriter.cpp:855 projects/k3bcdrskinwriter.cpp:868
+#, kde-format
+msgid "Please choose a lower burning speed."
+msgstr "Izaberite nižu brzinu rezanja."
+
+#: projects/k3bcdrecordwriter.cpp:858 projects/k3bcdrskinwriter.cpp:871
+#, kde-format
+msgid "Found a high-speed medium not suitable for the writer being used."
+msgstr "Nađeni visoko-brzinski disk nije pogodan za pisač koji se koristi."
+
+#: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrecordwriter.cpp:863
+#: projects/k3bcdrskinwriter.cpp:872 projects/k3bcdrskinwriter.cpp:876
+#, kde-format
+msgid "Use the 'force unsafe operations' option to ignore this."
+msgstr "Koristite opciju „Forsiraj nesigurne operacije“ za ignorisanje ovoga."
+
+#: projects/k3bcdrecordwriter.cpp:862 projects/k3bcdrskinwriter.cpp:875
+#, kde-format
+msgid "Found a low-speed medium not suitable for the writer being used."
+msgstr "Nađeni nisko-brzinski disk nije pogodan za pisač koji se koristi."
+
+#: projects/k3bcdrecordwriter.cpp:866 projects/k3bcdrskinwriter.cpp:879
+#, kde-format
+msgid "Most likely the burning failed due to low-quality media."
+msgstr "Rezanje verovatno nije uspelo zbog niskog kvaliteta diska."
+
+#: projects/k3bcdrecordwriter.cpp:869 projects/k3bcdrskinwriter.cpp:882
+#, kde-format
+msgid "Another application is blocking the device (most likely automounting)."
+msgstr "Drugi program blokira uređaj (najverovatnije automatsko montiranje)."
+
+#: projects/k3bcdrecordwriter.cpp:872 projects/k3bcdrskinwriter.cpp:885
+#, kde-format
+msgid "A write error occurred."
+msgstr "Desila se greška pri upisu."
+
+#: projects/k3bcdrecordwriter.cpp:877 projects/k3bcdrskinwriter.cpp:890
+#, kde-format
+msgid "Some drives do not support all erase types."
+msgstr "Neki uređaji ne podržavaju sve vrste brisanja."
+
+#: projects/k3bcdrecordwriter.cpp:878 projects/k3bcdrskinwriter.cpp:891
+#, kde-format
+msgid "Try again using 'Complete' erasing."
+msgstr "Pokušajte ponovo uz pomoć „Potpunog“ brisanja."
+
+#: projects/k3bcdrecordwriter.cpp:885
+#, kde-format
+msgid ""
+"Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
+"suid root anymore."
+msgstr ""
+"Od verzije 2.6.8 kernela, cdrecord ne može da koristi SCSI prijenos kada "
+"radi kao suid root."
+
+#: projects/k3bcdrecordwriter.cpp:886 projects/k3bcdrskinwriter.cpp:899
+#, kde-format
+msgid ""
+"You may use K3b::Setup to solve this problem or remove the suid bit manually."
+msgstr ""
+"Upotrijebite K3b‑postavu da riješite ovaj problem, ili sami uklonite sUID."
+
+#: projects/k3bcdrecordwriter.cpp:897
+#, kde-format
+msgid "If you are running an unpatched cdrecord version..."
+msgstr "Ako koristite nezakrpljenu verziju cdrecord-a..."
+
+#: projects/k3bcdrecordwriter.cpp:898 projects/k3bcdrskinwriter.cpp:911
+#, kde-format
+msgid "...and this error also occurs with high quality media..."
+msgstr "...i ova greška se dešava i sa visokokvalitetnim diskovima..."
+
+#: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
+#, kde-format
+msgid "...and the K3b FAQ does not help you..."
+msgstr "...i FAQ K3b-a vam nije od pomoći..."
+
+#: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
+#, kde-format
+msgid "...please include the debugging output in your problem report."
+msgstr "...uključite ispravljački izlaz u vašem izvještaju o problemu."
+
+#: projects/k3bcdrskinwriter.cpp:240
+#, fuzzy, kde-format
+#| msgid "Cdrecord version %1 does not support Blu-ray writing."
+msgid "Cdrskin version %1 does not support Blu-ray writing."
+msgstr "<command>cdrecord</command> %1 ne podržava upisivanje blureja."
+
+#: projects/k3bcdrskinwriter.cpp:286
+#, fuzzy, kde-format
+#| msgid "Cdrecord does not support writing %1 media."
+msgid "Cdrskin does not support writing %1 media."
+msgstr "<command>cdrecord</command> ne podržava upis %1 medija."
+
+#: projects/k3bcdrskinwriter.cpp:361
+#, fuzzy, kde-format
+#| msgid "Cdrdao %1 does not support overburning."
+msgid "Cdrskin %1 does not support overburning."
+msgstr "Cdrdao %1 ne podržava nadrezanje."
+
+#: projects/k3bcdrskinwriter.cpp:898
+#, fuzzy, kde-format
+#| msgid ""
+#| "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when "
+#| "running suid root anymore."
+msgid ""
+"Since kernel version 2.6.8 cdrskin cannot use SCSI transport when running "
+"suid root anymore."
+msgstr ""
+"Od verzije 2.6.8 kernela, cdrecord ne može da koristi SCSI prijenos kada "
+"radi kao suid root."
+
+#: projects/k3bcdrskinwriter.cpp:910
+#, fuzzy, kde-format
+#| msgid "If you are running an unpatched cdrecord version..."
+msgid "If you are running an unpatched cdrskin version..."
+msgstr "Ako koristite nezakrpljenu verziju cdrecord-a..."
+
+#: projects/k3bgrowisofshandler.cpp:72
+#, kde-format
+msgid "OPC failed. Please try writing speed 1x."
+msgstr "OPC nije uspelo. Pokušajte sa brzinom pisanja 1x."
+
+#: projects/k3bgrowisofshandler.cpp:99
+#, kde-format
+msgid "Please try again with writing mode DAO."
+msgstr "Pokušajte ponovo sa režimom pisanja DAO."
+
+#: projects/k3bgrowisofshandler.cpp:113
+#, kde-format
+msgid "Flushing Cache"
+msgstr "Pročišćavam keš"
+
+#: projects/k3bgrowisofshandler.cpp:114
+#, kde-format
+msgid "Flushing the cache may take some time."
+msgstr "Pročišćavanje keša može potrajati."
+
+#: projects/k3bgrowisofshandler.cpp:123
+#, kde-format
+msgid "Closing Track"
+msgstr "Zatvaram stazu"
+
+#: projects/k3bgrowisofshandler.cpp:126
+#, kde-format
+msgid "Closing Disk"
+msgstr "Zatvaram disk"
+
+#: projects/k3bgrowisofshandler.cpp:129
+#, kde-format
+msgid "Updating RMA"
+msgstr "Ažuriram RMA"
+
+#: projects/k3bgrowisofshandler.cpp:130
+#, kde-format
+msgid "Updating RMA..."
+msgstr "Ažuriranje RMA..."
+
+#: projects/k3bgrowisofshandler.cpp:134
+#, kde-format
+msgid "Closing Session..."
+msgstr "Zatvaranje sesije..."
+
+#: projects/k3bgrowisofshandler.cpp:137
+#, kde-format
+msgid "Writing Lead-out"
+msgstr "Upisujem izvod"
+
+#: projects/k3bgrowisofshandler.cpp:138
+#, kde-format
+msgid "Writing the lead-out may take some time."
+msgstr "Upisivanje izvoda može potrajati."
+
+#: projects/k3bgrowisofshandler.cpp:141
+#, kde-format
+msgid "Removing reference to lead-out."
+msgstr "Uklanjam referencu na izvod."
+
+#: projects/k3bgrowisofshandler.cpp:144
+#, kde-format
+msgid "Modifying ISO 9660 volume descriptor"
+msgstr "Mijenjam opis ISO9660 diska"
+
+#: projects/k3bgrowisofshandler.cpp:151
+#, kde-format
+msgid "Writing mode Incremental Streaming not available"
+msgstr "Režim upisa rastućeg toka nije dostupan"
+
+#: projects/k3bgrowisofshandler.cpp:152
+#, kde-format
+msgid "Engaging DAO"
+msgstr "Pokrećem DAO"
+
+#: projects/k3bgrowisofshandler.cpp:164
+#, kde-format
+msgid "Writing speed: %1 KB/s (%2x)"
+msgstr "Brzina pisanja: %1 kB/s (%2x)"
+
+#: projects/k3bgrowisofshandler.cpp:215
+#, kde-format
+msgid "K3b detected a problem with the medium."
+msgstr "K3b je otkrio problem sa diskom."
+
+#: projects/k3bgrowisofshandler.cpp:216
+#, kde-format
+msgid ""
+"Please try another brand of media, preferably one explicitly recommended by "
+"your writer's vendor."
+msgstr ""
+"Pokušajte sa drugom markom diskova, po mogućnosti nekom koju preporučuje "
+"proizvođač vašeg pisača."
+
+#: projects/k3bgrowisofshandler.cpp:217
+#, kde-format
+msgid "Report the problem if it persists anyway."
+msgstr "Prijavite problem ako i dalje bude smetao."
+
+#: projects/k3bgrowisofshandler.cpp:228
+#, kde-format
+msgid "Unable to set writing speed."
+msgstr "Ne mogu da postavi brzinu pisanja."
+
+#: projects/k3bgrowisofshandler.cpp:229
+#, kde-format
+msgid "Please try again with the 'ignore speed' setting."
+msgstr "Pokušajte ponovo uz podešavanje „Ignoriši brzinu“."
+
+#: projects/k3bgrowisofshandler.cpp:233
+#, kde-format
+msgid "Optimum Power Calibration failed."
+msgstr "Optimalna kalibracija snage nije uspjela."
+
+#: projects/k3bgrowisofshandler.cpp:234
+#, kde-format
+msgid ""
+"Try adding '-use-the-force-luke=noopc' to the growisofs user parameters in "
+"the K3b settings."
+msgstr ""
+"Probajte da dodate „-use-the-force-luke=noopc“ u korisničke parametre za "
+"growisofs u K3b podešavanjima."
+
+#: projects/k3bgrowisofshandler.cpp:239
+#, kde-format
+msgid "Unable to allocate software buffer."
+msgstr "Ne mogu da odvojim programski bafer."
+
+#: projects/k3bgrowisofshandler.cpp:240
+#, kde-format
+msgid "This error is caused by the low memorylocked resource limit."
+msgstr ""
+"Ova greška je uzrokovana niskim ograničenjem resursa zaključane memorije."
+
+#: projects/k3bgrowisofshandler.cpp:241
+#, kde-format
+msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
+msgstr "Može biti rešena izdavanjem naredbe „ulimit -l unlimited“..."
+
+#: projects/k3bgrowisofshandler.cpp:242
+#, kde-format
+msgid ""
+"...or by lowering the used software buffer size in the advanced K3b settings."
+msgstr ""
+"...ili smanjenjem veličine zauzetosti programskog bafera u naprednim "
+"podešavanjima K3b-a."
+
+#: projects/k3bgrowisofshandler.cpp:246
+#, kde-format
+msgid "Write error"
+msgstr "Greška upisa"
+
+#: projects/k3bgrowisofshandler.cpp:262
+#, kde-format
+msgid "Fatal error at startup: %1"
+msgstr "Kobna greška pri pokretanju: %1"
+
+#: projects/k3bgrowisofshandler.cpp:270
+#, kde-format
+msgid "Warning at exit: (1)"
+msgstr "Upozorenje pri izlasku: (1)"
+
+#: projects/k3bgrowisofshandler.cpp:271
+#, kde-format
+msgid "Most likely mkisofs failed in some way."
+msgstr "Najverovantije se mkisofs nekako srušila."
+
+#: projects/k3bgrowisofshandler.cpp:274
+#, kde-format
+msgid "Fatal error during recording: %1"
+msgstr "Kobna greška tokom snimanja: %1"
+
+#: projects/k3bgrowisofswriter.cpp:139
+#, kde-format
+msgid "Growisofs version %1 is too old. K3b needs at least version 5.10."
+msgstr "Growisofs verzije %1 je previše star. K3b-u treba bar verzija 5.10."
+
+# skip-rule: feature
+#: projects/k3bgrowisofswriter.cpp:153
+#, kde-format
+msgid ""
+"Growisofs version %1 does not feature a software buffer which may result in "
+"an unstable burn process."
+msgstr ""
+"<command>growisofs</command> verzije %1 ne omogućava softverski bafer, što "
+"može dovesti do nestabilnog rezanja."
+
+#: projects/k3bgrowisofswriter.cpp:212
+#, kde-format
+msgid "Could not open file %1."
+msgstr "Nisam mogao da otvorim datoteku %1."
+
+#: projects/k3bgrowisofswriter.cpp:358
+#, kde-format
+msgid "Starting simulation..."
+msgstr "Pokreni simulaciju..."
+
+#: projects/k3bgrowisofswriter.cpp:363
+#, kde-format
+msgid "Starting disc write..."
+msgstr "Pokrećem upis na disk..."
+
+#: projects/mixedcd/k3bmixedjob.cpp:267
+#, kde-format
+msgid "Creating audio image files in %1"
+msgstr "Pravim datoteke audio odraza u %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:280 projects/mixedcd/k3bmixedjob.cpp:494
+#, kde-format
+msgid "Creating audio image files"
+msgstr "Pravim datoteke audio odraza"
+
+#: projects/mixedcd/k3bmixedjob.cpp:468
+#, kde-format
+msgid "Error while creating ISO image."
+msgstr "Greška pri pravljenju ISO odraza."
+
+#: projects/mixedcd/k3bmixedjob.cpp:483
+#, kde-format
+msgid "ISO image successfully created."
+msgstr "ISO odraz je uspješno napravljen."
+
+#: projects/mixedcd/k3bmixedjob.cpp:584
+#, kde-format
+msgid "Audio images successfully created."
+msgstr "Audio odrazi su uspješno napravljeni."
+
+#: projects/mixedcd/k3bmixedjob.cpp:877
+#, kde-format
+msgid "Writing track %1 of %2 (%3)"
+msgstr "Upisujem stazu %1 od %2 (%3)"
+
+#: projects/mixedcd/k3bmixedjob.cpp:880
+#, kde-format
+msgid "ISO 9660 data"
+msgstr "ISO9660 podaci"
+
+#: projects/mixedcd/k3bmixedjob.cpp:986
+#, kde-format
+msgid "Simulating second session"
+msgstr "Simuliram drugu sesiju"
+
+#: projects/mixedcd/k3bmixedjob.cpp:988
+#, kde-format
+msgid "Writing second session of copy %1"
+msgstr "Upisujem drugu sesiju kopije %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:990
+#, kde-format
+msgid "Writing second session"
+msgstr "Upisujem drugu sesiju"
+
+#: projects/mixedcd/k3bmixedjob.cpp:994
+#, kde-format
+msgid "Simulating first session"
+msgstr "Simuliram prvu sesiju"
+
+#: projects/mixedcd/k3bmixedjob.cpp:996
+#, kde-format
+msgid "Writing first session of copy %1"
+msgstr "Upisujem prvu sesiju kopije %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:998
+#, kde-format
+msgid "Writing first session"
+msgstr "Upisujem prvu sesiju"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1076
+#, kde-format
+msgid "Creating ISO image file"
+msgstr "Pravim datoteku ISO odraza"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1077 projects/mixedcd/k3bmixedjob.cpp:1078
+#, kde-format
+msgid "Creating ISO image in %1"
+msgstr "Pravim ISO odraz u %1"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1118
+#, kde-format
+msgid "Removing buffer files."
+msgstr "Uklanjam baferske datoteke."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1123
+#, kde-format
+msgid "Could not delete file %1."
+msgstr "Nisam mogao da obrišem datoteku %1."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1231
+#, kde-format
+msgid "Cdrecord could not be found on your system."
+msgstr ""
+
+#: projects/mixedcd/k3bmixedjob.cpp:1235
+#, kde-format
+msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
+msgstr "U TAO režimu nije moguće upisati CD-tekst. Pokušajte sa DAO ili RAW."
+
+#: projects/mixedcd/k3bmixedjob.cpp:1332
+#, kde-format
+msgid "Writing Enhanced Audio CD"
+msgstr "Upisujem poboljšani audio CD"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1337
+#, kde-format
+msgid "Writing Mixed Mode CD"
+msgstr "Upisujem CD miješanog režima"
+
+#: projects/mixedcd/k3bmixedjob.cpp:1347
+#, kde-format
+msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
+msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
+msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
+msgstr[0] "%1 staza (%2 minuta audio podataka, %3 ISO‑9660 podataka)"
+msgstr[1] "%1 staze (%2 minuta audio podataka, %3 ISO‑9660 podataka)"
+msgstr[2] "%1 staza (%2 minuta audio podataka, %3 ISO‑9660 podataka)"
+
+#: projects/movixcd/k3bmovixdoc.cpp:82
+#, kde-format
+msgid "Enter New Filename"
+msgstr "Unesite novo ime datoteke"
+
+#: projects/movixcd/k3bmovixdoc.cpp:83
+#, kde-format
+msgid "A file with that name already exists. Please enter a new name:"
+msgstr "Datoteka sa tim imenom već postoji. Unesite novo ime:"
+
+#: projects/movixcd/k3bmovixdoc.cpp:175
+#, kde-format
+msgid ""
+"Could not rename subtitle file. File with requested name %1 already exists."
+msgstr ""
+"Nisam mogao da preimenujem datoteku titla. Datoteka sa zahtijevanim imenom "
+"%1 već postoji."
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:125
+#, kde-format
+msgid "Could not find a valid eMovix installation."
+msgstr "Ne mogu da nađem ispravnu instalaciju eMovix-a."
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:199
+#: projects/movixcd/k3bmovixprogram.cpp:180
+#: projects/movixcd/k3bmovixprogram.cpp:212
+#: projects/movixcd/k3bmovixprogram.cpp:247
+#: projects/movixcd/k3bmovixprogram.cpp:259
+#: projects/movixcd/k3bmovixprogram.cpp:268
+#: projects/movixcd/k3bmovixprogram.cpp:277
+#: projects/movixcd/k3bmovixprogram.cpp:284
+#: projects/movixcd/k3bmovixprogram.cpp:318
+#: projects/movixcd/k3bmovixprogram.cpp:320
+#: projects/movixcd/k3bmovixprogram.cpp:322
+#: projects/movixcd/k3bmovixprogram.cpp:324
+#, kde-format
+msgid "default"
+msgstr "podrazumijevano"
+
+#: projects/movixcd/k3bmovixdocpreparer.cpp:310
+#: projects/movixcd/k3bmovixprogram.cpp:192
+#: projects/movixcd/k3bmovixprogram.cpp:236
+#, kde-format
+msgid "none"
+msgstr "ništa"
+
+#: projects/movixcd/k3bmovixjob.cpp:105
+#, kde-format
+msgid "Writing eMovix Project"
+msgstr "Upisujem emuviks projekat"
+
+#: projects/movixcd/k3bmovixjob.cpp:107
+#, kde-format
+msgid "Writing eMovix Project (%1)"
+msgstr "Upisujem emuviks projekat (%1)"
+
+#: projects/movixcd/k3bmovixjob.cpp:113
+#, kde-format
+msgid "One file (%2) and about 8 MB eMovix data"
+msgid_plural "%1 files (%2) and about 8 MB eMovix data"
+msgstr[0] "%1 datoteka (%2) i oko 8MB eMovix podataka"
+msgstr[1] "%1 datoteke (%2) i oko 8MB eMovix podataka"
+msgstr[2] "%1 datoteka (%2) i oko 8MB eMovix podataka"
+
+#: projects/movixcd/k3bmovixjob.cpp:117
+#, kde-format
+msgid " – One copy"
+msgid_plural " – %1 copies"
+msgstr[0] " – %1 kopija"
+msgstr[1] " – %1 kopije"
+msgstr[2] " – %1 kopija"
+
+#: projects/videocd/k3bvcddoc.cpp:202 projects/videocd/k3bvcddoc.cpp:212
+#, kde-format
+msgid ""
+"K3b will create a %1 image from the given MPEG files, but these files must "
+"already be in %1 format. K3b does not yet resample MPEG files."
+msgstr ""
+"K3b će napraviti %1 odraz od datih MPEG datoteka, ali te datoteke već moraju "
+"biti u formatu %1. K3b još uvijek ne prepakuje MPEG datoteke."
+
+#: projects/videocd/k3bvcddoc.cpp:205
+#, kde-format
+msgid "VCD"
+msgstr "VCD"
+
+#: projects/videocd/k3bvcddoc.cpp:206 projects/videocd/k3bvcddoc.cpp:219
+#: projects/videocd/k3bvcddoc.cpp:248
+#, kde-format
+msgid "Information"
+msgstr "Informacija"
+
+#: projects/videocd/k3bvcddoc.cpp:215
+#, kde-format
+msgid "SVCD"
+msgstr "SVCD"
+
+#: projects/videocd/k3bvcddoc.cpp:217
+#, kde-format
+msgid ""
+"Note: Forcing MPEG2 as VCD is not supported by some standalone DVD players."
+msgstr ""
+"Napomena: Neki zasebni DVD plejeri ne podržavaju forsiranje MPEG2 kao VCD."
+
+#: projects/videocd/k3bvcddoc.cpp:220
+#, kde-format
+msgid "Force VCD"
+msgstr "Nametni VCD"
+
+#: projects/videocd/k3bvcddoc.cpp:221
+#, kde-format
+msgid "Do not force VCD"
+msgstr "Ne nameći VCD"
+
+#: projects/videocd/k3bvcddoc.cpp:234
+#, kde-format
+msgid ""
+"You cannot mix MPEG1 and MPEG2 video files.\n"
+"Please start a new Project for this filetype.\n"
+"Resample not implemented in K3b yet."
+msgstr ""
+"Ne možete miješati MPEG1 i MPEG2 video datoteke.\n"
+"Pokrenite novi projekat za ovaj tip datoteka.\n"
+"Preuzorkovanje još uvijek nije implementirano u K3b."
+
+#: projects/videocd/k3bvcddoc.cpp:235
+#, kde-format
+msgid "Wrong File Type for This Project"
+msgstr "Pogrešan tip datoteke za ovaj projekat"
+
+#: projects/videocd/k3bvcddoc.cpp:246
+#, kde-format
+msgid ""
+"PBC (Playback control) enabled.\n"
+"Video players cannot reach Segments (MPEG Still Pictures) without Playback "
+"control."
+msgstr ""
+"PBC (Kontrola reprodukcije) omogućen.\n"
+"Video plejeri ne mogu dostići  segmente (MPEG Still Slike) bez kontrole "
+"reprodukcije."
+
+#: projects/videocd/k3bvcddoc.cpp:278
+#, kde-format
+msgid "Only MPEG1 and MPEG2 video files are supported.\n"
+msgstr "Podržani su samo MPEG1 i MPEG2 video datoteke.\n"
+
+#: projects/videocd/k3bvcddoc.cpp:279
+#, kde-format
+msgid "Wrong File Format"
+msgstr "Pogrešan format datoteke"
+
+#: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:468
+#, kde-format
+msgid "Removing Binary file %1"
+msgstr "Uklanjam binarnu datoteku %1"
+
+#: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:478
+#, kde-format
+msgid "Removing Cue file %1"
+msgstr "Uklanjam Cue datoteka %1"
+
+#: projects/videocd/k3bvcdjob.cpp:174
+#, kde-format
+msgid "Could not write correct XML file."
+msgstr "Nije moguće pisati korektan XML fajl."
+
+#: projects/videocd/k3bvcdjob.cpp:190
+#, kde-format
+msgid "Creating Cue/Bin files..."
+msgstr "Pravim Cue/Bin datoteke..."
+
+#: projects/videocd/k3bvcdjob.cpp:195
+#, kde-format
+msgid "To create Video CDs you have to install VcdImager version %1."
+msgstr "Da bi kreirali Video CD-ove morate instalirati VcdImager verziju %1."
+
+#: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
+#, fuzzy, kde-format
+#| msgid ""
+#| "You can find this on your distribution disks or download it from http://"
+#| "www.vcdimager.org"
+msgid ""
+"You can find this on your distribution disks or download it from https://www."
+"gnu.org/software/vcdimager"
+msgstr ""
+"Možete ga naći na instalacionim diskovima ili ga preuzeti sa http://www."
+"vcdimager.org"
+
+#: projects/videocd/k3bvcdjob.cpp:204
+#, kde-format
+msgid "%1 executable too old: need version %2 or greater."
+msgstr "Izvršni %1 je previše star; potrebna je verzija %2 ili veća."
+
+#: projects/videocd/k3bvcdjob.cpp:286
+#, kde-format
+msgid "Scanning video file %1 of %2 (%3)"
+msgstr "Skeniram video datoteka %1 od %2 (%3)"
+
+#: projects/videocd/k3bvcdjob.cpp:322
+#, kde-format
+msgid "Creating Image for track %1"
+msgstr "Pravim odraz za stazu %1"
+
+#: projects/videocd/k3bvcdjob.cpp:344
+#, kde-format
+msgid "Cue/Bin files successfully created."
+msgstr "Cue/Bin datoteke su uspješno napravljeni."
+
+#: projects/videocd/k3bvcdjob.cpp:387
+#, kde-format
+msgid "Writing Copy %1 of %2"
+msgstr "Upisujem kopiju %1 od %2"
+
+#: projects/videocd/k3bvcdjob.cpp:513
+#, kde-format
+msgid "One or more BCD fields out of range for %1"
+msgstr "Jedno ili više BCD polja su van opsega za %1"
+
+#: projects/videocd/k3bvcdjob.cpp:516
+#, kde-format
+msgid "From now on, scan information data errors will not be reported anymore"
+msgstr ""
+"Od sada, neće se prijavljivati informacije o greškama u skeniranju podataka"
+
+#: projects/videocd/k3bvcdjob.cpp:517
+#, kde-format
+msgid ""
+"Consider enabling the 'update scan offsets' option, if it is not enabled "
+"already."
+msgstr ""
+"Razmislite da uključite opciju „Ažuriraj pomjeraje skeniranja“, ako već nije "
+"uključena."
+
+#: projects/videocd/k3bvcdjob.cpp:524
+#, kde-format
+msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
+msgstr "APS tačke izgledaju neuređeno (trenutna %1, posljednje viđena %2)"
+
+#: projects/videocd/k3bvcdjob.cpp:525
+#, kde-format
+msgid "Ignoring this aps"
+msgstr "Ignorišem ove APS"
+
+#: projects/videocd/k3bvcdjob.cpp:533
+#, kde-format
+msgid "Bad packet at packet #%1 (stream byte offset %2)"
+msgstr "Loš paket kod paketa #%1 (pomjeraj toka u bajtovima: %2)"
+
+#: projects/videocd/k3bvcdjob.cpp:540
+#, kde-format
+msgid "The remaining byte of the stream will be ignored."
+msgid_plural "The remaining %1 bytes of the stream will be ignored."
+msgstr[0] "Preostali %1 bajt u toku će biti zanemareno."
+msgstr[1] "Preostalih %1 bajta u toku će biti zanemareno."
+msgstr[2] "Preostalih %1 bajtova u toku će biti zanemareno."
+
+#: projects/videocd/k3bvcdjob.cpp:542
+#, kde-format
+msgid "An unknown number of remaining stream bytes will be ignored."
+msgstr "Nepoznati broj preostalih bajtova u tôku biće zanemareno."
+
+#: projects/videocd/k3bvcdjob.cpp:551
+#, kde-format
+msgid "Writing Video CD (Version 1.1)"
+msgstr "Upisujem video CD (verzija 1.1)"
+
+#: projects/videocd/k3bvcdjob.cpp:553
+#, kde-format
+msgid "Writing Video CD (Version 2.0)"
+msgstr "Upisujem video CD (verzija 2.0)"
+
+#: projects/videocd/k3bvcdjob.cpp:555
+#, kde-format
+msgid "Writing Super Video CD"
+msgstr "Upisujem super video CD"
+
+#: projects/videocd/k3bvcdjob.cpp:557
+#, kde-format
+msgid "Writing High-Quality Video CD"
+msgstr "Upisujem video CD visokog kvaliteta"
+
+#: projects/videocd/k3bvcdjob.cpp:559
+#, kde-format
+msgid "Writing Video CD"
+msgstr "Upisujem video CD"
+
+#: projects/videocd/k3bvcdjob.cpp:566
+#, kde-format
+msgid "1 MPEG (%2)"
+msgid_plural "%1 MPEGs (%2)"
+msgstr[0] "%1 MPEG (%2)"
+msgstr[1] "%1 MPEG‑a (%2)"
+msgstr[2] "%1 MPEG‑ova (%2)"
+
+#: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
+#: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
+#: projects/videocd/k3bvcdtrack.cpp:241 projects/videocd/k3bvcdtrack.cpp:269
+#: projects/videocd/k3bvcdtrack.cpp:282 projects/videocd/k3bvcdtrack.cpp:295
+#: projects/videocd/k3bvcdtrack.cpp:308 projects/videocd/k3bvcdtrack.cpp:320
+#: projects/videocd/k3bvcdtrack.cpp:337 projects/videocd/k3bvcdtrack.cpp:359
+#: projects/videocd/k3bvcdtrack.cpp:422
+#, kde-format
+msgid "n/a"
+msgstr "n/d"
+
+#: projects/videocd/k3bvcdtrack.cpp:201 projects/videocd/k3bvcdtrack.cpp:290
+#, kde-format
+msgid "1 bit/s"
+msgid_plural "%1 bits/s"
+msgstr[0] "%1 bit/sek"
+msgstr[1] "%1 bita/sek"
+msgstr[2] "%1 bitova/sek"
+
+#: projects/videocd/k3bvcdtrack.cpp:218
+#, kde-format
+msgid "Component"
+msgstr "Komponenta"
+
+#: projects/videocd/k3bvcdtrack.cpp:234 videodvd/k3bvideodvd.cpp:311
+#: videodvd/k3bvideodvd.cpp:343
+#, kde-format
+msgid "Unspecified"
+msgstr "Nenavedeno"
+
+#: projects/videocd/k3bvcdtrack.cpp:303
+#, kde-format
+msgid "%1 Hz"
+msgstr "%1 Hz"
+
+#: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:332
+#, kde-format
+msgid "original"
+msgstr "original"
+
+#: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:332
+#, kde-format
+msgid "duplicate"
+msgstr "duplikat"
+
+#: projects/videocd/k3bvcdtrack.cpp:346
+#, kde-format
+msgid "Motion Picture"
+msgstr "Pokretna slika"
+
+#: projects/videocd/k3bvcdtrack.cpp:348
+#, kde-format
+msgid "Still Picture"
+msgstr "Nepokretna slika"
+
+#: projects/videocd/k3bvcdtrack.cpp:355
+#, kde-format
+msgid "Layer %1"
+msgstr "Sloj %1"
+
+#: projects/videocd/k3bvcdtrack.cpp:389
+#, kde-format
+msgid "unknown"
+msgstr "nepoznato"
+
+#: projects/videocd/k3bvcdtrack.cpp:390
+#, kde-format
+msgid "invalid"
+msgstr "neispravno"
+
+#: projects/videocd/k3bvcdtrack.cpp:396
+#, kde-format
+msgid "stereo"
+msgstr "stereo"
+
+#: projects/videocd/k3bvcdtrack.cpp:397
+#, kde-format
+msgid "joint stereo"
+msgstr "udruženi stereo"
+
+#: projects/videocd/k3bvcdtrack.cpp:398 projects/videocd/k3bvcdtrack.cpp:403
+#, kde-format
+msgid "dual channel"
+msgstr "dvo-kanalni"
+
+#: projects/videocd/k3bvcdtrack.cpp:399
+#, kde-format
+msgid "single channel"
+msgstr "jedno-kanalni"
+
+#: projects/videocd/k3bvcdtrack.cpp:404
+#, kde-format
+msgid "surround sound"
+msgstr "okružujući zvuk"
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:59
+#, kde-format
+msgid "File %1 is empty."
+msgstr "Datoteka %1 je prazan."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:93
+#, kde-format
+msgid ""
+"This looks like an elementary video stream but a multiplexed program stream "
+"was required."
+msgstr ""
+"Ovo izgleda kao elementarni video tok, a zahtjevan je multipleksiran "
+"programski tok."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:98
+#, kde-format
+msgid ""
+"This looks like an elementary audio stream but a multiplexed program stream "
+"was required."
+msgstr ""
+"Ovo izgleda kao elementarni audio tok, a zahtjevan je multipleksiran "
+"programski tok."
+
+#: projects/videocd/mpeginfo/k3bmpeginfo.cpp:103
+#, kde-format
+msgid ""
+"This looks like a RIFF header but a plain multiplexed program stream was "
+"required."
+msgstr ""
+"Ovo izgleda kao RIFF zaglavlje, a zahtjevan je običan multipleksovan "
+"programski tok."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:97
+#, fuzzy, kde-kuit-format
+#| msgid "Unable to create temporary folder '%1'."
+msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
+msgstr "Ne mogu da napravim privremeni direktorij „%1“."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:109
+#, fuzzy, kde-kuit-format
+#| msgid "Unable to create temporary folder '%1'."
+msgid "Unable to create temporary folder <filename>%1</filename>."
+msgstr "Ne mogu da napravim privremeni direktorij „%1“."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:116
+#, fuzzy, kde-kuit-format
+#| msgid "Found invalid entry in the VIDEO_TS folder (%1)."
+msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
+msgstr "Nađen je neispravan unos u direktorij VIDEO_TS (%1)."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:124
+#, fuzzy, kde-kuit-format
+#| msgid "Unable to link temporary file in folder %1."
+msgid "Unable to link temporary file in folder <filename>%1</filename>."
+msgstr "Ne mogu da povežem privremenu datoteku u direktorij %1."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:198
+#, kde-format
+msgid "The project does not contain all necessary Video DVD files."
+msgstr "Projekat ne sadrži sve neophodne datoteke za video DVD."
+
+#: projects/videodvd/k3bvideodvdimager.cpp:199
+#, kde-format
+msgid ""
+"The resulting DVD will most likely not be playable on a Hifi DVD player."
+msgstr ""
+"Rezultujući DVD najverovatnije neće moći da se pusti na zasebnom DVD uređaju."
+
+#: projects/videodvd/k3bvideodvdjob.cpp:43
+#, kde-format
+msgid "Creating Video DVD Image File"
+msgstr "Pravim datoteku odraza video DVD-a"
+
+#: projects/videodvd/k3bvideodvdjob.cpp:46
+#, kde-format
+msgid "Writing Video DVD"
+msgstr "Upisujem video DVD"
+
+#: projects/videodvd/k3bvideodvdjob.cpp:56
+#, kde-format
+msgid "ISO 9660/Udf Filesystem (Size: %1)"
+msgstr "Datoteka sistem ISO9660/UDF (veličina: %1)"
+
+#: tools/k3bcddb.cpp:37
+#, kde-format
+msgid "Multiple CDDB Entries Found"
+msgstr "Nađeno je više CDDB unosa"
+
+#: tools/k3bcddb.cpp:39
+#, kde-format
+msgid "K3b found multiple or inexact CDDB entries. Please select one."
+msgstr "K3b je pronašao višestruke ili približne CDDB unose. Izaberite jedan."
+
+#: tools/k3bdevicemodel.cpp:132
+#, kde-format
+msgid "Analyzing medium..."
+msgstr "Ispitujem disk..."
+
+#: tools/k3bdeviceselectiondialog.cpp:35
+#, kde-format
+msgid "Device Selection"
+msgstr "Izbor uređaja"
+
+#: tools/k3bdeviceselectiondialog.cpp:39
+#, kde-format
+msgid "Please select a device:"
+msgstr "Izaberite uređaj:"
+
+#: tools/k3bmd5job.cpp:85
+#, kde-format
+msgid "Could not find file %1"
+msgstr "Nisam mogao da nađem datoteku %1"
+
+#: tools/k3bmd5job.cpp:230
+#, kde-format
+msgid "Error while reading from file %1"
+msgstr "Greška prilikom čitanja iz datoteke %1"
+
+#: tools/k3bmediacache.cpp:126 tools/k3bmediacache.cpp:367
+#, kde-format
+msgid "CDDB Lookup"
+msgstr "Pretraga CDDB‑a"
+
+#: tools/k3bmedium.cpp:313
+#, kde-format
+msgid "Audio CD"
+msgstr "Audio CD"
+
+#: tools/k3bmedium.cpp:316
+#, kde-format
+msgid "Mixed CD"
+msgstr "Miješani CD"
+
+#: tools/k3bmedium.cpp:320
+#, kde-format
+msgid "Video DVD"
+msgstr "Video DVD"
+
+#: tools/k3bmedium.cpp:323
+#, kde-format
+msgid "Video CD"
+msgstr "Video CD"
+
+#: tools/k3bmedium.cpp:326
+#, kde-format
+msgid "Appendable Data %1"
+msgstr "Dopunjivi %1 sa podacima"
+
+#: tools/k3bmedium.cpp:329
+#, kde-format
+msgid "Complete Data %1"
+msgstr "Završen %1 sa podacima"
+
+#: tools/k3bmedium.cpp:333
+#, kde-format
+msgid "Empty"
+msgstr "Prazan"
+
+#: tools/k3bmedium.cpp:346
+#, kde-format
+msgid "No medium information"
+msgstr "Nema podataka o disku"
+
+#: tools/k3bmedium.cpp:350
+#, kde-format
+msgid "No medium present"
+msgstr "Nema diska"
+
+#: tools/k3bmedium.cpp:354
+#, kde-format
+msgid "Empty %1 medium"
+msgstr "Prazan %1 disk"
+
+#: tools/k3bmedium.cpp:395
+#, kde-format
+msgid "Appendable %1 medium"
+msgstr "Dopunjiv %1 disk"
+
+#: tools/k3bmedium.cpp:398
+#, kde-format
+msgid "Complete %1 medium"
+msgstr "Završen %1 disk"
+
+#         translations.
+#: tools/k3bmedium.cpp:415
+#, kde-format
+msgid "%2 in %1 track"
+msgid_plural "%2 in %1 tracks"
+msgstr[0] "%2 u %1 zapisu"
+msgstr[1] "%2 u %1 zapisa"
+msgstr[2] "%2 u %1 zapisa"
+
+#: tools/k3bmedium.cpp:419
+#, kde-format
+msgid " and %1 session"
+msgid_plural " and %1 sessions"
+msgstr[0] " i %1 sesiji"
+msgstr[1] " i %1 sesije"
+msgstr[2] " i %1 sesija"
+
+# rewrite-msgid: /Free space/Free/
+#: tools/k3bmedium.cpp:424
+#, kde-format
+msgid "Free space: %1"
+msgstr "Slobodno: %1"
+
+#: tools/k3bmedium.cpp:428
+#, kde-format
+msgid "Capacity: %1"
+msgstr "Kapacitet: %1"
+
+#: tools/k3bmedium.cpp:596
+#, kde-format
+msgctxt ""
+"To be shown when a DVD or Blu-ray is required but another type of medium is "
+"inserted."
+msgid "DVD or Blu-ray"
+msgstr "DVD ili Blu-ray"
+
+#: tools/k3bmedium.cpp:598
+#, kde-format
+msgctxt ""
+"To be shown when a Blu-ray is required but another type of medium is "
+"inserted."
+msgid "Blu-ray"
+msgstr "Blu-Ray"
+
+#: tools/k3bmedium.cpp:600
+#, kde-format
+msgctxt ""
+"To be shown when a CD is required but another type of medium is inserted."
+msgid "CD"
+msgstr "CD"
+
+#: tools/k3bmedium.cpp:602
+#, kde-format
+msgctxt ""
+"To be shown when a DVD is required but another type of medium is inserted."
+msgid "DVD"
+msgstr "DVD"
+
+#: tools/k3bmedium.cpp:604
+#, kde-format
+msgctxt ""
+"To be shown when a DVD-DL is required but another type of medium is inserted."
+msgid "DVD-DL"
+msgstr "DVD-DL"
+
+#: tools/k3bmedium.cpp:608
+#, kde-format
+msgid "rewritable medium"
+msgstr "prepisiv medij"
+
+#: tools/k3bmedium.cpp:611
+#, kde-format
+msgctxt "%1 is type of medium (e.g. DVD)"
+msgid "rewritable %1"
+msgstr "prepisiv %1"
+
+#: tools/k3bmedium.cpp:616
+#, kde-format
+msgctxt ""
+"To be shown when a specific type of medium is required but another type of "
+"medium is inserted."
+msgid "suitable medium"
+msgstr "pogodan medij"
+
+#: tools/k3bmedium.cpp:618
+#, kde-format
+msgid "Medium in %1 is not a %2."
+msgstr "Medij u %1 nije %2."
+
+#: tools/k3bmedium.cpp:623
+#, kde-format
+msgctxt "To be shown when an empty medium is required"
+msgid "empty"
+msgstr "prazno"
+
+#: tools/k3bmedium.cpp:625
+#, kde-format
+msgctxt "To be shown when an empty or appendable medium is required"
+msgid "empty or appendable"
+msgstr "prazno ili proširivo"
+
+#: tools/k3bmedium.cpp:627
+#, kde-format
+msgctxt "To be shown when an non-empty medium is required"
+msgid "non-empty"
+msgstr "nije prazno"
+
+#: tools/k3bmedium.cpp:629
+#, kde-format
+msgctxt "To be shown when the state of the inserted medium is not suitable."
+msgid "suitable"
+msgstr "pogodno"
+
+#: tools/k3bmedium.cpp:631
+#, kde-format
+msgid "Medium in %1 is not %2."
+msgstr "Medij u %1 nije %2."
+
+#: tools/k3bmedium.cpp:634
+#, kde-format
+msgid "Capacity of the medium in %1 is smaller than required."
+msgstr "Kapacitet medija u %1 je manji nego što je potrebno."
+
+#: tools/k3bmedium.cpp:683
+#, kde-format
+msgid "Please insert an empty medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:685
+#, kde-format
+msgid "Please insert an empty medium"
+msgstr "Ubacite prazan disk"
+
+#: tools/k3bmedium.cpp:690
+#, kde-format
+msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan DVD ili blurej disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:692
+#, kde-format
+msgid "Please insert an empty DVD or Blu-ray medium"
+msgstr "Ubacite prazan DVD ili blurej disk"
+
+#: tools/k3bmedium.cpp:696
+#, kde-format
+msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan blurej disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:698
+#, kde-format
+msgid "Please insert an empty Blu-ray medium"
+msgstr "Ubacite prazan blurej disk"
+
+#: tools/k3bmedium.cpp:702
+#, kde-format
+msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan CD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:704
+#, kde-format
+msgid "Please insert an empty CD medium"
+msgstr "Ubacite prazan CD disk"
+
+#: tools/k3bmedium.cpp:708
+#, kde-format
+msgid "Please insert an empty DVD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan DVD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:710
+#, kde-format
+msgid "Please insert an empty DVD medium"
+msgstr "Ubacite prazan DVD disk"
+
+#: tools/k3bmedium.cpp:714
+#, kde-format
+msgid "Please insert an empty DVD-DL medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan dvoslojni DVD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:716
+#, kde-format
+msgid "Please insert an empty DVD-DL medium"
+msgstr "Ubacite prazan dvoslojni DVD disk"
+
+#: tools/k3bmedium.cpp:720
+#, kde-format
+msgid ""
+"Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
+msgstr "<p>Ubacite prazan disk veličine %1 ili veći u uređaj<br/><b>%2</b></p>"
+
+#: tools/k3bmedium.cpp:723
+#, kde-format
+msgid "Please insert an empty medium of size %1 or larger"
+msgstr "Ubacite prazan disk veličine %1 ili veći"
+
+#: tools/k3bmedium.cpp:729
+#, kde-format
+msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan ili dopunjiv disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:731
+#, kde-format
+msgid "Please insert an empty or appendable medium"
+msgstr "Ubacite prazan ili dopunjiv disk"
+
+#: tools/k3bmedium.cpp:735
+#, kde-format
+msgid ""
+"Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
+"%1</b>"
+msgstr ""
+"<p>Ubacite prazan ili dopunjiv DVD ili blurej disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:737
+#, kde-format
+msgid "Please insert an empty or appendable DVD or Blu-ray medium"
+msgstr "Ubacite prazan ili dopunjiv DVD ili blurej disk"
+
+#: tools/k3bmedium.cpp:741
+#, kde-format
+msgid ""
+"Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan ili dopunjiv blurej disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:743
+#, kde-format
+msgid "Please insert an empty or appendable Blu-ray medium"
+msgstr "Ubacite prazan ili dopunjiv blurej disk"
+
+#: tools/k3bmedium.cpp:747
+#, kde-format
+msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan ili dopunjiv CD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:749
+#, kde-format
+msgid "Please insert an empty or appendable CD medium"
+msgstr "Ubacite prazan ili dopunjiv CD disk"
+
+#: tools/k3bmedium.cpp:753
+#, kde-format
+msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prazan ili dopunjiv DVD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:755
+#, kde-format
+msgid "Please insert an empty or appendable DVD medium"
+msgstr "Ubacite prazan ili dopunjiv DVD disk"
+
+#: tools/k3bmedium.cpp:759
+#, kde-format
+msgid ""
+"Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
+msgstr ""
+"<p>Ubacite prazan ili dopunjiv dvoslojni DVD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:761
+#, kde-format
+msgid "Please insert an empty or appendable DVD-DL medium"
+msgstr "Ubacite prazan ili dopunjiv dvoslojni DVD disk"
+
+#: tools/k3bmedium.cpp:767
+#, kde-format
+msgid "Please insert a non-empty medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite neprazan disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:769
+#, kde-format
+msgid "Please insert a non-empty medium"
+msgstr "Ubacite ne‑prazan disk"
+
+#: tools/k3bmedium.cpp:773
+#, kde-format
+msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite neprazan prebrisivi disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:775
+#, kde-format
+msgid "Please insert a non-empty rewritable medium"
+msgstr "Ubacite ne‑prazan prebrisivi disk"
+
+#: tools/k3bmedium.cpp:781
+#, kde-format
+msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite prebrisivi disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:783
+#, kde-format
+msgid "Please insert a rewritable medium"
+msgstr "Ubacite prebrisivi disk"
+
+#: tools/k3bmedium.cpp:789 tools/k3bmedium.cpp:835
+#, kde-format
+msgid "Please insert a suitable medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite odgovarajući disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:791 tools/k3bmedium.cpp:837
+#, kde-format
+msgid "Please insert a suitable medium"
+msgstr "Ubacite odgovarajući disk"
+
+#: tools/k3bmedium.cpp:804
+#, kde-format
+msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite video CD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:806
+#, kde-format
+msgid "Please insert a Video CD medium"
+msgstr "Ubacite video CD disk"
+
+#: tools/k3bmedium.cpp:810
+#, kde-format
+msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite video DVD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:812
+#, kde-format
+msgid "Please insert a Video DVD medium"
+msgstr "Ubacite video DVD disk"
+
+#: tools/k3bmedium.cpp:816
+#, kde-format
+msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite CD disk miješanog režima u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:818
+#, kde-format
+msgid "Please insert a Mixed Mode CD medium"
+msgstr "Ubacite CD disk miješanog režima"
+
+#: tools/k3bmedium.cpp:822
+#, kde-format
+msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite audio CD disk u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:824
+#, kde-format
+msgid "Please insert an Audio CD medium"
+msgstr "Ubacite audio CD disk"
+
+#: tools/k3bmedium.cpp:828
+#, kde-format
+msgid "Please insert a Data medium into drive<p><b>%1</b>"
+msgstr "<p>Ubacite disk sa podacima u uređaj<br/><b>%1</b></p>"
+
+#: tools/k3bmedium.cpp:830
+#, kde-format
+msgid "Please insert a Data medium"
+msgstr "Ubacite disk sa podacima"
+
+#: tools/k3bstdguiitems.cpp:19
+#, kde-format
+msgid "Simulate"
+msgstr "Simuliraj"
+
+#: tools/k3bstdguiitems.cpp:20
+#, kde-format
+msgid ""
+"<p>If this option is checked K3b will perform all writing steps with the "
+"laser turned off.<p>This is useful, for example, to test a higher writing "
+"speed or whether your system is able to write on-the-fly.<p><b>Caution:</b> "
+"DVD+R(W) does not support simulated writing."
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b će izvršiti sve korake pisanja sa "
+"isključenim laserom.<p>Ovo je korisno, na primjer, za probu veće brzine "
+"pisanja ili da li vaš sistem može da piše u letu.<p><b>Oprez:</b> DVD+R(W) "
+"ne podržava simulirano pisanje."
+
+#: tools/k3bstdguiitems.cpp:25
+#, kde-format
+msgid "Only simulate the writing process"
+msgstr "Samo simuliraj proces pisanja"
+
+#: tools/k3bstdguiitems.cpp:31
+#, kde-format
+msgid "Disk at once"
+msgstr "Disk od-jednom"
+
+#: tools/k3bstdguiitems.cpp:32
+#, kde-format
+msgid ""
+"<p>If this option is checked, K3b will write the CD in 'disk at once' mode "
+"as compared to 'track at once' (TAO).<p>It is always recommended to use DAO "
+"where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
+"seconds are only supported in DAO mode."
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b će pisati CD u režimu „disk od-jednom“, "
+"nasuprot režimu „staza od-jednom“ (TAO).<p>Preporučljivo je koristiti DAO "
+"kad god je moguće.<p><b>Oprez:</b> Predrazmaci staza dužine različite od 2 "
+"sekunde podržani su samo u režimu DAO."
+
+#: tools/k3bstdguiitems.cpp:37
+#, kde-format
+msgid "Write in disk at once mode"
+msgstr "Piši u režimu „disk od-jednom“"
+
+#: tools/k3bstdguiitems.cpp:43
+#, kde-format
+msgid "Use Burnfree"
+msgstr "Koristi Burnfree"
+
+#: tools/k3bstdguiitems.cpp:44
+#, kde-format
+msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
+msgstr "Uključi Burnfree (ili Just Link) radi izbjegavanja podilaženja bafera"
+
+#: tools/k3bstdguiitems.cpp:45
+#, kde-format
+msgid ""
+"<p>If this option is checked, K3b enables <em>Burnfree</em> (or <em>Just "
+"Link</em>). This is a feature of the CD writer which avoids buffer underruns."
+"<p>Without <em>burnfree</em>, if the writer cannot get any more data a "
+"buffer underrun would occur, since the writer needs a constant stream of "
+"data to write the CD.<p>With <em>burnfree</em> the writer can <em>mark</em> "
+"the current position of the laser and get back to it when the buffer is "
+"filled again; but, since this means having little data gaps on the CD, <b>it "
+"is highly recommended to always choose an appropriate writing speed to "
+"prevent the usage of burnfree, especially for audio CDs</b> (in the worst "
+"case one would hear the gap).<p><em>Burnfree</em> was formerly known as "
+"<em>Burnproof</em>, but has since been renamed when it became part of the "
+"MMC standard."
+msgstr ""
+"<p>Ako je ova opcija označena, K3b uključuje <em>bernfri</em> (ili "
+"<em>džastlink</em>). To je mogućnost CD pisača kojom se izbjegavaju "
+"pražnjenja bafera.</p><p>Bez <em>bernfrija</em>, ako pisač ne može da dobavi "
+"dovoljno podataka dolazi do pražnjenja bafera, pošto je pisaču potreban "
+"konstantan tok podataka za pisanje CD‑a.</p><p>Sa <em>bernfrijem</em>, pisač "
+"može da <em>označi</em> trenutnu poziciju lasera i da se vrati na nju kada "
+"se bafer ponovo popuni; ali, pošto to proizvodi male praznine između "
+"podataka na CD‑u, <b>preporučljivo je uvijek izabrati odgovarajuću brzinu "
+"rezanja kod koje bernfri nije potreban, posebno za audio CD‑ove</b> (u "
+"najgorem slučaju, praznina bi se čula).</p><p><em>Bernfri</em> je bio ranije "
+"poznat kao <em>bernpruf</em>, ali je preimenovan otkad je postao dio "
+"standarda ⁠MMC.</p>."
+
+#: tools/k3bstdguiitems.cpp:64
+#, kde-format
+msgid "Only create image"
+msgstr "Samo napravi odraz"
+
+#: tools/k3bstdguiitems.cpp:65
+#, kde-format
+msgid ""
+"<p>If this option is checked, K3b will only create an image and not do any "
+"actual writing.<p>The image can later be written to a CD/DVD with most "
+"current writing programs (including K3b of course)."
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b će samo napraviti odraz, neće ništa "
+"zaista upisati.<p>Odraz kasnije može biti upisan na CD/DVD većinom trenutnih "
+"programa za pisanje (uključujući i K3b, naravno)."
+
+#: tools/k3bstdguiitems.cpp:69
+#, kde-format
+msgid "Only create an image"
+msgstr "Samo napravi odraz"
+
+#: tools/k3bstdguiitems.cpp:75
+#, kde-format
+msgid "Create image"
+msgstr "Napravi odraz"
+
+#: tools/k3bstdguiitems.cpp:76
+#, kde-format
+msgid ""
+"<p>If this option is checked, K3b will create an image before writing the "
+"files to the CD/DVD. Otherwise the data will be written <em>on-the-fly</em>, "
+"i.e. no intermediate image will be created.<p><b>Caution:</b> Although "
+"writing on-the-fly should work on most systems, make sure the data is sent "
+"to the writer fast enough."
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b će prvo praviti odraz prije upisa "
+"datoteka na CD/DVD. U suprotnom, podaci će biti upisivani <em>u letu</"
+"em><p><b>Pažnja:</b> Iako bi upis „u letu“ trebalo da radi na većini "
+"sistema, uvjerite se da se podaci šalju pisaču dovoljno brzo."
+
+#: tools/k3bstdguiitems.cpp:81 tools/k3bstdguiitems.cpp:103
+#, kde-format
+msgid "<p>It is recommended to try a simulation first."
+msgstr "<p>Preporučljivo je da prvo probate simulaciju."
+
+#: tools/k3bstdguiitems.cpp:82
+#, kde-format
+msgid "Cache the data to be written on the harddisk"
+msgstr "Podatke koji se upisuju keširaj na hard disku"
+
+#: tools/k3bstdguiitems.cpp:88
+#, kde-format
+msgid "Remove image"
+msgstr "Ukloni odraz"
+
+#: tools/k3bstdguiitems.cpp:89
+#, kde-format
+msgid ""
+"<p>If this option is checked, K3b will remove any created images after the "
+"writing has finished.<p>Uncheck this if you want to keep the images."
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b će ukloniti sve napravljene odraze pošto "
+"se operacija pisanja završi.<p>Isključite ovo ako želite da zadržite odraze."
+
+#: tools/k3bstdguiitems.cpp:92
+#, kde-format
+msgid "Remove images from disk when finished"
+msgstr "Ukloni odraze sa diska po završetku"
+
+#: tools/k3bstdguiitems.cpp:98
+#, kde-format
+msgid "On the fly"
+msgstr "U letu"
+
+#: tools/k3bstdguiitems.cpp:99
+#, kde-format
+msgid ""
+"<p>If this option is checked, K3b will not create an image first but write "
+"the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
+"work on most systems, make sure the data is sent to the writer fast enough."
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b neće prvo praviti odraz, već će "
+"upisivati datoteke direktno na CD/DVD.<p><b>Oprez:</b> Iako bi ovo trebalo "
+"da radi na većini sistema, uvjerite se da se podaci šalju pisaču dovoljno "
+"brzo."
+
+#: tools/k3bstdguiitems.cpp:104
+#, kde-format
+msgid "Write files directly to CD/DVD without creating an image"
+msgstr "Upisuj datoteke direktno na CD/DVD, bez pravljenja odraza"
+
+#: tools/k3bstdguiitems.cpp:110
+#, kde-format
+msgid "Write CD-Text"
+msgstr "Piši CD-tekst"
+
+#: tools/k3bstdguiitems.cpp:111
+#, kde-format
+msgid "Create CD-Text entries"
+msgstr "Pravi CD-tekst unose"
+
+#: tools/k3bstdguiitems.cpp:112
+#, kde-format
+msgid ""
+"<p>If this option is checked K3b uses some otherwise-unused space on the "
+"audio CD to store additional information, such as the artist's name, or the "
+"CD title.<p>CD-Text is an extension to the audio CD standard introduced by "
+"Sony.<p>CD-Text will only be usable on CD players that support this "
+"extension (mostly car CD players).<p>Since a CD-Text-enhanced CD will work "
+"in any CD player it is never a bad idea to enable this (if you specify CD-"
+"Text data.)"
+msgstr ""
+"<p>Ako je ovo izabrano, K3b koristi inače neiskorišćen prostor na audio CD‑u "
+"da upiše dodatne podatke, kao što su izvođač ili naslov CD‑a.</p><p>CD‑tekst "
+"je proširenje standarda audio CD‑a koje je uveo Soni.</p><p>CD‑tekst će biti "
+"upotrebljiv samo na CD uređajima koji podržavaju tu mogućnost (uglavnom CD "
+"uređaji u kolima).</p><p>Pošto će CD sa CD‑tekstom raditi sa svakim CD "
+"uređajem, nikad nije loše uključiti ovo (ako ste naveli podatke za CD‑tekst)."
+"</p>"
+
+#: tools/k3bstdguiitems.cpp:131
+#, kde-format
+msgid "Set the paranoia level for reading audio CDs"
+msgstr "Postavi nivo paranoje za čitanje audio CD-ova"
+
+#: tools/k3bstdguiitems.cpp:132
+#, kde-format
+msgid ""
+"<p>Sets the correction mode for digital audio extraction.<ul><li>0: No "
+"checking, data is copied directly from the drive. <li>1: Perform overlapped "
+"reading to avoid jitter.</li><li>2: Like 1 but with additional checks of the "
+"read audio data.</li><li>3: Like 2 but with additional scratch detection and "
+"repair.</li></ul><p><b>The extraction speed reduces from 0 to 3.</b>"
+msgstr ""
+"<p>Postavlja režim ispravljanja za izvlačenje digitalnog zvuka.<ul><li>0: "
+"Bez provjere, podaci se kopiraju direktno sa uređaja. <li>1: Preklopljeno "
+"čitanje radi izbjegavanja preskakanja.</li><li>2: Kao 1, ali sa dodatnim "
+"provjerama pročitanih audio podataka.</li><li>3: Kao 2, ali sa dodatnim "
+"otkrivanjem i popravkom ogrebotina.</li></ul><p><b>Brzina izvlačenja "
+"smanjuje se od 0 do 3.</b>"
+
+#: tools/k3bstdguiitems.cpp:144
+#, kde-format
+msgid "Start multisession CD"
+msgstr "Pokreni višesesijski CD"
+
+#: tools/k3bstdguiitems.cpp:145
+#, kde-format
+msgid "Do not close the disk to allow additional sessions to be added later"
+msgstr "Ne zatvaraj disk da bi omogućio kasnije dodavanje novih sesija"
+
+#: tools/k3bstdguiitems.cpp:146
+#, kde-format
+msgid ""
+"<p>If this option is checked K3b will not close the CD, and will write a "
+"temporary table of contents.</p><p>This allows further sessions to be "
+"appended to the CD later.</p>"
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b neće zatvoriti CD, i zapisaće privremeni "
+"sadržaj.</p><p>Ovo omogućava da se kasnije CD-u doda još sesija.</p>"
+
+#: tools/k3bstdguiitems.cpp:155
+#, kde-format
+msgid "Normalize volume levels"
+msgstr "Normalizuj jačine zvuka"
+
+#: tools/k3bstdguiitems.cpp:156
+#, kde-format
+msgid "Adjust the volume levels of all tracks"
+msgstr "Podešava nivo jačine za sve numere"
+
+#: tools/k3bstdguiitems.cpp:157
+#, kde-format
+msgid ""
+"<p>If this option is checked K3b will adjust the volume of all tracks to a "
+"standard level. This is useful for things like creating mixes, where "
+"different recording levels on different albums can cause the volume to vary "
+"greatly from song to song.<p><b>Be aware that K3b currently does not support "
+"normalizing when writing on the fly.</b>"
+msgstr ""
+"<p>Ako je ova opcija uključena, K3b će podesiti jačinu zvuka svih numera na "
+"standardan nivo. Ovo je korisno za stvari kao pravljenje miksova, gdje "
+"različiti nivoi snimanja na različitim albumima mogu izazvati da jačina "
+"znatno varira od pjesme do pjesme.<p><b>Pazite da K3b trenutno ne podržava "
+"normalizaciju kada piše u letu.</b>"
+
+#: tools/k3bstdguiitems.cpp:169
+#, kde-format
+msgid "Verify written data"
+msgstr "Provjeri upisane podatke"
+
+#: tools/k3bstdguiitems.cpp:170
+#, kde-format
+msgid "Compare original with written data"
+msgstr "Upoređujem originalne sa upisanim podacima"
+
+#: tools/k3bstdguiitems.cpp:171
+#, kde-format
+msgid ""
+"<p>If this option is checked, then after successfully writing the disk K3b "
+"will compare the original source data with the written data to verify that "
+"the disk has been written correctly."
+msgstr ""
+"<p>Ako je ova opcija uključena, posle uspješnog upisivanja diska K3b će "
+"uporediti originalne izvorne datoteke sa upisanim podacima, da bi potvrdio "
+"da je disk ispravno zapisan."
+
+#: tools/k3bstdguiitems.cpp:181
+#, kde-format
+msgid "Ignore read errors"
+msgstr "Zanemari greške u čitanju"
+
+#: tools/k3bstdguiitems.cpp:182
+#, kde-format
+msgid "Skip unreadable audio sectors"
+msgstr "Preskoči nečitljive audio sektore"
+
+#: tools/k3bstdguiitems.cpp:183
+#, kde-format
+msgid ""
+"<p>If this option is checked and K3b is not able to read an audio sector "
+"from the source CD it will be replaced with zeros on the resulting copy."
+"<p>Since audio CD Player are able to interpolate small errors in the data it "
+"is no problem to let K3b skip unreadable sectors."
+msgstr ""
+"<p>Ako je ova opcija označena i K3b ne može da pročita audio sektor sa "
+"izvornog CD-a on će biti zamijenjen nulama u rezultujućoj kopiji.<p>Pošto "
+"audio CD plejeri mogu da premoste male greške u podacima neće biti problema "
+"ako dozvolite K3b-u da preskoči te sektore."
+
+#: videodvd/k3bvideodvd.cpp:292
+#, kde-format
+msgid "AC3"
+msgstr "AC3"
+
+#: videodvd/k3bvideodvd.cpp:294
+#, kde-format
+msgid "MPEG1"
+msgstr "MPEG1"
+
+#: videodvd/k3bvideodvd.cpp:296
+#, kde-format
+msgid "MPEG2 Extended"
+msgstr "MPEG2 proširen"
+
+#: videodvd/k3bvideodvd.cpp:298
+#, kde-format
+msgid "LPCM"
+msgstr "LPCM"
+
+#: videodvd/k3bvideodvd.cpp:300
+#, kde-format
+msgid "DTS"
+msgstr "DTS"
+
+#: videodvd/k3bvideodvd.cpp:302
+#, kde-format
+msgid "unknown audio format"
+msgstr "nepoznat audio format"
+
+#: videodvd/k3bvideodvd.cpp:313
+#, kde-format
+msgid "Normal"
+msgstr "Normalno"
+
+#: videodvd/k3bvideodvd.cpp:315
+#, kde-format
+msgid "For the visually impaired"
+msgstr "Za osobe sa oštećenim vidom"
+
+#: videodvd/k3bvideodvd.cpp:317
+#, kde-format
+msgid "Director's comments 1"
+msgstr "Komentari reditelja 1"
+
+#: videodvd/k3bvideodvd.cpp:319
+#, kde-format
+msgid "Director's comments 2"
+msgstr "Komentari reditelja 2"
+
+#: videodvd/k3bvideodvd.cpp:321
+#, kde-format
+msgid "unknown audio code extension"
+msgstr "nepoznata ekstenzija audio koda"
+
+#: videodvd/k3bvideodvd.cpp:330
+#, kde-format
+msgid "RLE"
+msgstr "RLE"
+
+#: videodvd/k3bvideodvd.cpp:332
+#, kde-format
+msgid "Extended"
+msgstr "Prošireno"
+
+#: videodvd/k3bvideodvd.cpp:334
+#, kde-format
+msgid "unknown coding mode"
+msgstr "nepoznat režim kodiranja"
+
+#: videodvd/k3bvideodvd.cpp:345
+#, kde-format
+msgid "Caption with normal size characters"
+msgstr "Natpis sa znakovima normalne veličine"
+
+#: videodvd/k3bvideodvd.cpp:347
+#, kde-format
+msgid "Caption with bigger size characters"
+msgstr "Natpis sa većim znakovima"
+
+#: videodvd/k3bvideodvd.cpp:349
+#, kde-format
+msgid "Caption for children"
+msgstr "Natpis za djecu"
+
+#: videodvd/k3bvideodvd.cpp:351
+#, kde-format
+msgid "Closed caption with normal size characters"
+msgstr "Skriveni natpisi sa normalnom veličinom znakova"
+
+#: videodvd/k3bvideodvd.cpp:353
+#, kde-format
+msgid "Closed caption with bigger size characters"
+msgstr "Skriveni natpisi sa većim znakovima"
+
+#: videodvd/k3bvideodvd.cpp:355
+#, kde-format
+msgid "Closed caption for children"
+msgstr "Skriveni natpisi za djecu"
+
+#: videodvd/k3bvideodvd.cpp:357
+#, kde-format
+msgid "Forced caption"
+msgstr "Forsirani natpisi"
+
+#: videodvd/k3bvideodvd.cpp:359
+#, kde-format
+msgid "Director's comments with normal size characters"
+msgstr "Komentari reditelja sa znakovima normalne veličine"
+
+#: videodvd/k3bvideodvd.cpp:361
+#, kde-format
+msgid "Director's comments with bigger size characters"
+msgstr "Komentari reditelja sa velikim znakovima"
+
+#: videodvd/k3bvideodvd.cpp:363
+#, kde-format
+msgid "Director's comments for children"
+msgstr "Komentari reditelja za djecu"
+
+#: videodvd/k3bvideodvd.cpp:365
+#, kde-format
+msgid "unknown code extension"
+msgstr "nepoznata ekstenzija koda"
+
+#~ msgid "Disk successfully erased. Please reload the disk."
+#~ msgstr "Disk je uspješno obrisan. Ponovo ubacite disk."
+
+#~ msgid "K3b was unable to erase the disk."
+#~ msgstr "K3b nije mogao da obriše disk."
+
+#~ msgid "CD-TEXT"
+#~ msgstr "CD‑tekst"

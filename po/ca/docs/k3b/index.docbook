@@ -1,0 +1,401 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Catalan  "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>El manual de &k3b;</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Aquesta documentació s'ha convertit des de la pàgina «<ulink url="https://userbase.kde.org/K3b"
+>K3b</ulink
+>» de KDE UserBase al 20-01-2011.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Actualització a 2.0 per l'equip de documentació del &kde;</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+&traductor.Antoni.Bella; 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>6 de gener de 2012</date>
+    <releaseinfo
+>2.0 (&kde; 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Introducció</title>
+<para
+>Si heu utilitzat un programa de gravació com Nero sota Windows, el &k3b; us resultarà molt familiar. </para>
+<para
+>Amb una interfície gràfica simple, però potent, el &k3b; ofereix diverses opcions per gravar un CD, DVD o BD (disc Blu-ray). S'han implementat diversos tipus de projectes òptics incloent (però no limitats a) d'àudio i de dades, projectes de vídeo per a DVD i VCD, així com discs multisessió i de mode mixt. &k3b; també té la capacitat per esborrar suports re-gravables i pot realitzar tasques més complicades, com ara codificació i descodificació audiovisual. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Configuració prèvia</title>
+<para
+>Quan executeu &k3b; per primera vegada, podeu trobar-vos que us informi que no s'han trobat controladors per a la gravadora òptica, el qual voldrà dir que no sereu capaç d'escriure a cap disc òptic. No hi ha necessitat de pànic, atès que el &k3b; obrirà la pestanya <guilabel
+>Permisos</guilabel
+> sobre la pàgina <guilabel
+>Programes</guilabel
+> del diàleg de configuració, des d'on podreu canviar els permisos. En tots els sistemes moderns els dispositius òptics pertanyen a un determinat grup d'usuaris (&pex;, <quote
+>cdrom</quote
+>). Si l'usuari actual no pertany a aquest grup, se us oferirà afegir-lo en aquesta pestanya. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Configurar la interfície d'usuari</title>
+<para
+>En iniciar &k3b; se us ofereixen els inicis ràpids per als tres processos més populars </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Projecte nou de dades</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Projecte nou de CD d'àudio</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Copia el suport</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>El &k3b; pot realitzar moltes més tasques, tot i que és possible que algunes de les altres possibilitats us resultin tan útils com aquestes. Doneu una ullada a aquesta llista per trobar les altres característiques disponibles: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Potser seria útil una guia d'inici ràpid per a una o més d'aquestes altres tasques i el &k3b; us la pot oferir. Simplement feu clic dret sobre l'aplicació a l'escriptori, i veureu un menú per afegir botons: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>Configurar les qüestions internes</title>
+<para
+>La majoria de les opcions de configuració per omissió, simplement es poden deixar tal qual. Tanmateix, és recomanable que mireu la secció <guilabel
+>Arranjaments avançats</guilabel
+>. Des d'on, si cal, es poden establir diverses opcions importants. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Fes servir el «burnfree»</guilabel
+> hauria d'estar establert. Aquest controla la gravació, assegurant-se que mai es posa la memòria intermèdia en nivells perillosament baixos (el qual redueix la quantitat de gravacions dolentes). </para
+></listitem>
+<listitem
+><para
+>És possible que vulgueu esborrar automàticament els discs re-gravables. </para
+></listitem>
+<listitem
+><para
+>L'opció <guilabel
+>No expulsis el suport després del procés d'escriptura</guilabel
+> té un valor incalculable si la unitat és la que no es pot tancar amb la suficient rapidesa per <guilabel
+>Verificar</guilabel
+> el que passa. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Preparar la gravació d'un disc</title>
+<para
+>En començar un projecte nou, haureu d'assegurar-vos que &k3b; ha detectat el suport òptic correcte, com un CD o DVD. En la línia d'estat a la part inferior de la pantalla s'ha de mostrar la mida del disc actual. Si no és correcta, o requeriu una mida diferent, simplement feu clic dret sobre seu i establiu la mida preferida des de la llista proveïda: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Ara escolliu la que s'ha de cremar. </para>
+<para
+>A la meitat superior de la pantalla hi ha la <emphasis
+>subfinestra de la font</emphasis
+>. Aquest funciona com un gestor de fitxers. Podeu escollir els fitxers comuns des de volums de dades muntats o pistes d'àudio des de discs d'àudio inserits. Els noms de les pistes d'àudio es llegeixen automàticament a partir de dades CD-Text, si el vostre dispositiu de CD suporta la seva lectura, o els genera utilitzant <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>. El format exacte és controlat per un botó a la subfinestra inferior. Si els noms no són correctes o, simplement, no coincideixen amb la descripció del disc, els podeu editar utilitzant el botó de la barra d'eines. Els canvis s'emmagatzemaran localment a la memòria cau i presentaran al registre «master» de <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>Si tot el registre es realitza per al mateix artista, deixeu en blanc les entrades de la pista de l'artista, ompliu l'<guilabel
+>Artista de l'àlbum</guilabel
+>, deseu a CDDB i realitzeu una consulta nova. </para>
+</tip>
+<para
+>Ara que teniu les vostres fonts a mà, simplement arrossegueu i deixeu anar els fitxers i directoris que voleu escriure a la subfinestra gran a la dreta de la part inferior -aquesta és la <emphasis
+>subfinestra de model</emphasis
+>-. Heus aquí un arbre dels fitxers seleccionats a l'esquerra. Hi ha d'haver alguns fitxers o directoris que no voleu cremar, aquests es poden eliminar amb facilitat del projecte simplement eliminant-los de la subfinestra a la part inferior. Seleccioneu el fitxer a eliminar (ho podeu controlar prement la tecla &Ctrl; i fent clic per seleccionar múltiples elements) i llavors escollint <guilabel
+>Elimina</guilabel
+> des del menú contextual. </para>
+<tip>
+<para
+>Si us cal comprimir l'àudio, creeu un projecte nou de CD d'àudio, afegiu-hi els fitxers que voleu convertir i premeu el botó <guilabel
+>Converteix les pistes</guilabel
+>. Això no afectarà el contingut del CD, si decidiu cremar-lo. D'aquesta manera sereu capaç d'utilitzar els fitxers comprimits en altres llocs. Assegureu-vos que els fitxers originals són sense pèrdues (<emphasis
+>wav</emphasis
+> o <emphasis
+>FLAC</emphasis
+>), en cas contrari el resultat no serà satisfactori. </para>
+</tip>
+<para
+>La línia superior serà el títol del disc. En molts casos aquesta estarà bé, però si la voleu canviar a quelcom altre, simplement canvieu el nom utilitzant el menú contextual. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Passos finals</title>
+<para
+>Ara està llest per prémer el botó <guilabel
+>Grava</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Mireu com a la meva captura de pantalla no hi ha present cap disc. Un cop l'inseriu, veureu una descripció del mateix en aquesta línia. </para>
+<para
+>Encara hi ha una o dues decisions a prendre. Jo <emphasis
+>recomano</emphasis
+> que s'estableixi <guilabel
+>Verifica les dades escrites</guilabel
+>, després premeu la icona <guilabel
+>Desa</guilabel
+> a la part inferior de la pantalla, assegurant-vos que es converteix en la vostra opció per omissió. Per a les unitats més modernes és segur deixar el mode i la velocitat a <guilabel
+>Auto</guilabel
+>. Si és possible que vulgueu gravar una altra còpia del disc en una data posterior, seleccioneu <guilabel
+>Crea la imatge</guilabel
+>, aquesta us estalviarà haver de configurar la cremada de nou. Establiu el nombre de còpies que voleu cremar, i després, quan esteu satisfet, premeu <guilabel
+>Grava</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Gravar un CD d'àudio</title>
+<sect1 id="k3b-audio-support"
+><title
+>Iniciar un projecte de CD d'àudio</title>
+<para
+>&k3b; suporta una gran quantitat de formats d'àudio i els pot convertir de forma automàtica. </para>
+<note
+><para
+>Algunes distribucions divideixen aquesta capacitat de &k3b; en un paquet a part, &pex;, a les distribucions Debian i Ubuntu cal instal·lar el paquet de libk3b6-extracodecs, a openSUSE el nom del paquet és k3b-codecs. A algunes distribucions (&pex;, Mandriva) no cal instal·lar cap paquet addicional.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>Seleccionar els fitxers</title>
+<para
+>Hi ha dues maneres de seleccionar els fitxers d'àudio que voleu escriure en un cd d'àudio:</para>
+<variablelist>
+<varlistentry>
+<term
+>Usar &k3b;</term>
+<listitem>
+<para
+>En la meitat inferior de la finestra de &k3b; feu clic a <guilabel
+>Projecte nou de CD d'àudio</guilabel
+> i seleccioneu els fitxers que voleu gravar. </para>
+<para
+>Alternativament navegueu per la subfinestra de carpetes cap a la ubicació dels fitxers d'àudio. Feu doble clic sobre un o arrossegueu i deixeu anar els seleccionats a la part inferior de la finestra de &k3b;, el qual iniciarà automàticament un <guilabel
+>Projecte nou de CD d'àudio</guilabel
+> amb aquests fitxers. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Usar el gestor de fitxers</term>
+<listitem>
+<para
+>Aneu a la carpeta que conté els fitxers de música al &dolphin; o al &konqueror;.</para>
+<para
+>Escolliu els fitxers a gravar i seleccioneu <menuchoice
+><guimenu
+>Accions</guimenu
+><guimenuitem
+>Crea un CD d'àudio amb el &k3b;</guimenuitem
+></menuchoice
+> des del menú contextual.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Editar la informació del títol</title>
+<para
+>Podeu donar els títols de les pistes o importar-los des de <acronym
+>CDDB</acronym
+> (un servei en línia per als noms de les pistes). Per fer-ho, feu doble clic sobre la pista (la meitat inferior de la finestra). </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Gravar el CD</title>
+<para
+>Inseriu un disc CD-R o CD-RW en blanc en la vostra gravadora de CD i feu clic a <guilabel
+>Grava</guilabel
+>. Al proper diàleg marqueu si us agraden les opcions preestablertes i quan feu clic a <guilabel
+>Grava</guilabel
+>. Es gravarà el CD. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Crèdits i llicència</title>
+    <para
+>Copyright de la documentació veure la <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>pàgina historial de «K3b»</ulink
+> d'UserBase.</para>
+    <para
+>Traductor de la documentació: &credits.Antoni.Bella;</para
+> &underFDL; </chapter>
+&documentation.index;
+</book>

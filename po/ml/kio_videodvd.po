@@ -1,0 +1,29 @@
+# Translation of kio_videodvd.po to Malayalam
+# Copyright (C) 2008 This_file_is_part_of_KDE
+# Prasad.S.R <saysprasad@gmail.com>, 2008
+# This file is distributed under the same license as the kio_videodvd package.
+msgid ""
+msgstr ""
+"Project-Id-Version: kio_videodvd trunk\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"PO-Revision-Date: 2008-05-07 18:15+0530\n"
+"Last-Translator: Prasad.S.R <saysprasad@gmail.com>\n"
+"Language-Team: Malayalam <Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|"
+"കമ്പ്യൂട്ടിങ്ങ് <smcdiscuss@googlegroups.com\n"
+"Language: ml\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#, fuzzy, kde-format
+#| msgid "No VideoDVD found"
+msgid "No Video DVD found"
+msgstr "വിഡിയോ ഡിവിഡിയൊന്നും കണ്ടില്ല"
+
+#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#, kde-format
+msgid "Read error."
+msgstr "വായിയ്ക്കുന്നതില്‍ തെറ്റു് പറ്റി."

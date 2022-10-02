@@ -1,0 +1,277 @@
+# translation of libk3bdevice.po to Swedish
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2007, 2009, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: libk3bdevice\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2021-06-15 00:16+0000\n"
+"PO-Revision-Date: 2012-08-15 20:49+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
+"Language: sv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: k3bdeviceglobals.cpp:18 k3bdeviceglobals.cpp:141
+#, kde-format
+msgid "CD-R"
+msgstr "Cd-r"
+
+#: k3bdeviceglobals.cpp:20 k3bdeviceglobals.cpp:143
+#, kde-format
+msgid "CD-RW"
+msgstr "Cd-rw"
+
+#: k3bdeviceglobals.cpp:22 k3bdeviceglobals.cpp:139
+#, kde-format
+msgid "CD-ROM"
+msgstr "Cd-rom"
+
+#: k3bdeviceglobals.cpp:24 k3bdeviceglobals.cpp:108
+#, kde-format
+msgid "DVD-ROM"
+msgstr "Dvd-rom"
+
+#: k3bdeviceglobals.cpp:26 k3bdeviceglobals.cpp:122
+#, kde-format
+msgid "DVD-RAM"
+msgstr "Dvd-ram"
+
+#: k3bdeviceglobals.cpp:28 k3bdeviceglobals.cpp:111
+#, kde-format
+msgid "DVD-R"
+msgstr "Dvd-r"
+
+#: k3bdeviceglobals.cpp:30 k3bdeviceglobals.cpp:125
+#, kde-format
+msgid "DVD-RW"
+msgstr "Dvd-rw"
+
+#: k3bdeviceglobals.cpp:32
+#, kde-format
+msgid "DVD-R DL"
+msgstr "Dvd-r DL"
+
+#: k3bdeviceglobals.cpp:34 k3bdeviceglobals.cpp:145
+#, kde-format
+msgid "HD DVD-ROM"
+msgstr "Hd dvd-rom"
+
+#: k3bdeviceglobals.cpp:36 k3bdeviceglobals.cpp:147
+#, kde-format
+msgid "HD DVD-R"
+msgstr "Hd dvd-r"
+
+#: k3bdeviceglobals.cpp:38 k3bdeviceglobals.cpp:149
+#, kde-format
+msgid "HD DVD-RAM"
+msgstr "Hd dvd-ram"
+
+#: k3bdeviceglobals.cpp:40 k3bdeviceglobals.cpp:151
+#, kde-format
+msgid "BD-ROM"
+msgstr "Bd-rom"
+
+#: k3bdeviceglobals.cpp:42 k3bdeviceglobals.cpp:154
+#, kde-format
+msgid "BD-R"
+msgstr "Bd-r"
+
+#: k3bdeviceglobals.cpp:44 k3bdeviceglobals.cpp:162
+#, kde-format
+msgid "BD-RE"
+msgstr "Bd-re"
+
+#: k3bdeviceglobals.cpp:46 k3bdeviceglobals.cpp:133
+#, kde-format
+msgid "DVD+R"
+msgstr "Dvd+r"
+
+#: k3bdeviceglobals.cpp:48 k3bdeviceglobals.cpp:131
+#, kde-format
+msgid "DVD+RW"
+msgstr "Dvd+rw"
+
+#: k3bdeviceglobals.cpp:50
+#, kde-format
+msgid "DVD+R DL"
+msgstr "Dvd+r DL"
+
+#: k3bdeviceglobals.cpp:53 k3bdeviceglobals.cpp:165 k3bdeviceglobals.cpp:187
+#, kde-format
+msgid "Error"
+msgstr "Fel"
+
+#: k3bdeviceglobals.cpp:63
+#, kde-format
+msgid "SAO"
+msgstr "SAO"
+
+#: k3bdeviceglobals.cpp:65
+#, kde-format
+msgid "TAO"
+msgstr "TAO"
+
+#: k3bdeviceglobals.cpp:67
+#, kde-format
+msgid "RAW"
+msgstr "RAW"
+
+#: k3bdeviceglobals.cpp:69
+#, kde-format
+msgid "SAO/R96P"
+msgstr "SAO/R96P"
+
+#: k3bdeviceglobals.cpp:71
+#, kde-format
+msgid "SAO/R96R"
+msgstr "SAO/R96R"
+
+#: k3bdeviceglobals.cpp:73
+#, kde-format
+msgid "RAW/R16"
+msgstr "RAW/R16"
+
+#: k3bdeviceglobals.cpp:75
+#, kde-format
+msgid "RAW/R96P"
+msgstr "RAW/R96P"
+
+#: k3bdeviceglobals.cpp:77
+#, kde-format
+msgid "RAW/R96R"
+msgstr "RAW/R96R"
+
+#: k3bdeviceglobals.cpp:79
+#, kde-format
+msgid "Incremental Sequential"
+msgstr "Inkrementell sekvensiell"
+
+#: k3bdeviceglobals.cpp:81
+#, kde-format
+msgid "Restricted Overwrite"
+msgstr "Begränsad överskrivning"
+
+#: k3bdeviceglobals.cpp:83
+#, kde-format
+msgid "Layer Jump"
+msgstr "Lagerhopp"
+
+#: k3bdeviceglobals.cpp:86
+#, kde-format
+msgid "Random Recording"
+msgstr "Slumpmässig inspelning"
+
+#: k3bdeviceglobals.cpp:88
+#, kde-format
+msgid "Sequential Recording"
+msgstr "Sekvensiell inspelning"
+
+#: k3bdeviceglobals.cpp:90
+#, kde-format
+msgid "Sequential Recording + POW"
+msgstr "Sekvensiell inspelning + synvinkel"
+
+#: k3bdeviceglobals.cpp:93
+#, kde-format
+msgctxt "no writing mode"
+msgid "None"
+msgstr "Inget"
+
+#: k3bdeviceglobals.cpp:102
+#, kde-format
+msgctxt "unknown medium type"
+msgid "Unknown"
+msgstr "Okänd"
+
+#: k3bdeviceglobals.cpp:106
+#, kde-format
+msgid "No media"
+msgstr "Inget media"
+
+#: k3bdeviceglobals.cpp:113
+#, kde-format
+msgid "DVD-R Sequential"
+msgstr "Dvd-r sekvensiell"
+
+#: k3bdeviceglobals.cpp:116
+#, kde-format
+msgid "DVD-R Dual Layer"
+msgstr "Dvd-r med två lager"
+
+#: k3bdeviceglobals.cpp:118
+#, kde-format
+msgid "DVD-R Dual Layer Sequential"
+msgstr "Dvd-r med två lager sekvensiell"
+
+#: k3bdeviceglobals.cpp:120
+#, kde-format
+msgid "DVD-R Dual Layer Jump"
+msgstr "Dvd-r med två lager och hoppmöjlighet"
+
+#: k3bdeviceglobals.cpp:127
+#, kde-format
+msgid "DVD-RW Restricted Overwrite"
+msgstr "Dvd-rw begränsad överskrivning"
+
+#: k3bdeviceglobals.cpp:129
+#, kde-format
+msgid "DVD-RW Sequential"
+msgstr "Dvd-rw sekvensiell"
+
+#: k3bdeviceglobals.cpp:135
+#, kde-format
+msgid "DVD+RW Dual Layer"
+msgstr "Dvd+rw med två lager"
+
+#: k3bdeviceglobals.cpp:137
+#, kde-format
+msgid "DVD+R Dual Layer"
+msgstr "Dvd+r med två lager"
+
+#: k3bdeviceglobals.cpp:156
+#, kde-format
+msgid "BD-R Sequential (SRM)"
+msgstr "Bd-r sekvensiell (SRM)"
+
+#: k3bdeviceglobals.cpp:158
+#, kde-format
+msgid "BD-R Sequential Pseudo Overwrite (SRM+POW)"
+msgstr "Bd-r sekvensiell pseudo-överskrivning (SRM + POW)"
+
+#: k3bdeviceglobals.cpp:160
+#, kde-format
+msgid "BD-R Random (RRM)"
+msgstr "Bd-r slumpmässig (RRM)"
+
+#: k3bdeviceglobals.cpp:174
+#, kde-format
+msgctxt "unknown medium state"
+msgid "Unknown"
+msgstr "Okänt"
+
+#: k3bdeviceglobals.cpp:178
+#, kde-format
+msgid "no medium"
+msgstr "inget medium"
+
+#: k3bdeviceglobals.cpp:180
+#, kde-format
+msgid "complete medium"
+msgstr "fullständigt medium"
+
+#: k3bdeviceglobals.cpp:182
+#, kde-format
+msgid "incomplete medium"
+msgstr "ofullständigt medium"
+
+#: k3bdeviceglobals.cpp:184
+#, kde-format
+msgid "empty medium"
+msgstr "tomt medium"

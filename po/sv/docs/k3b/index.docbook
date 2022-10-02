@@ -1,0 +1,415 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Swedish "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>Handbok K3b</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>Det här dokumentet är konverterat från KDE:s användarbas <ulink url=" https://userbase.kde.org/K3b"
+>K3b</ulink
+>-sida 2011-01-20.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>Uppdatering till 2.0 av &kde;:s dokumentationsgrupp</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+> <firstname
+>Stefan</firstname
+> <surname
+>Asserhäll</surname
+> <affiliation
+><address
+><email
+>stefan.asserhall@bredband.net</email
+></address
+></affiliation
+> <contrib
+>Översättare</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-01-06</date>
+    <releaseinfo
+>2.0 (&kde; 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>KDE</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>Inledning</title>
+<para
+>Om du har använt ett brännprogram såsom Nero på Windows, kommer &k3b; att kännas rätt bekant. </para>
+<para
+>Med ett enkelt, ändå kraftfullt grafiskt gränssnitt, tillhandahåller &k3b; diverse alternativ för att bränna en cd, dvd eller bd (Blu-ray skiva). Diverse typer av optiska projekt stöds, inklusive (men inte begränsat till) ljud och data, videoprojekt för dvd och vcd, samt skivor med flera sessioner och blandat läge. &k3b; har också möjlighet att radera återskrivbara media och kan utföra mer komplicerade uppgifter som audiovisuell kodning och avkodning. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>Förinställning</title>
+<para
+>När &k3b; körs för första gången, kan det hända att du blir informerad av &k3b; att inga optiska skrivenheter har hittats, vilket betyder att du inte kommer att kunna skriva till några optiska skivor. Det finns ingen anledning till panik, eftersom &k3b; kommer att visa fliken <guilabel
+>Behörigheter</guilabel
+> på sidan <guilabel
+>Program</guilabel
+> i inställningsdialogrutan, där behörigheter nu kan ändras. På alla moderna system hör optiska enheter till en viss användargrupp (t.ex. <quote
+>cdrom</quote
+>). Om den nuvarande användaren inte hör till gruppen, får han ett erbjudande att lägga till sig under den här fliken. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>Anpassa användargränssnittet</title>
+<para
+>När &k3b; startas, erbjuds du snabbstart av de tre mest populära aktiviteterna </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Nytt data-projekt</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Nytt ljud-cd-projekt</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>Kopiera medium</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>&k3b; kan dock utföra mycket mer än dessa uppgifter, och du kan finna att vissa av de andra möjligheterna är precis lika användbara för dig. Ta en titt på den här listan för en försmak av andra tillgängliga funktioner: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Kanske skulle snabbstart av en eller flera av dessa andra uppgifter skulle vara användbart för dig, så &k3b; kan också ge dig det. Högerklicka helt enkelt på programmets skrivbord, så visas en meny för att lägga till knappar. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>Anpassa interna inställningar</title>
+<para
+>De flesta standardinställningarna kan helt enkelt lämnas som de är. Det rekommenderas dock att du tar en titt på sidan <guilabel
+>Avancerade inställningar</guilabel
+>. Här kan du ändra diverse viktiga inställningar, om det behövs. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>Använd brännfri</guilabel
+> ska vara markerat. Det styr bränningen, och försäkrar att buffern aldrig blir farligt tom (vilket minskar antalet dåliga bränningar). </para
+></listitem>
+<listitem
+><para
+>Du kanske vill att återskrivbara skivor ska raderas automatiskt. </para
+></listitem>
+<listitem
+><para
+>Alternativet <guilabel
+>Mata inte ut skivan efter skrivprocessen</guilabel
+> är ovärderligt om enheten inte kan stängas snabbt nog för att <guilabel
+>Verifera</guilabel
+> ska kunna utföras. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>Förbereda att bränna en skiva</title>
+<para
+>Du bör försäkra dig om att &k3b; har detekterat rätt optiskt media, såsom cd eller dvd, när du påbörjar ett nytt projekt. Du bör se storleken på skivan som för närvarande är inställd på statusraden längst ner i fönstret. Om det inte är rätt, eller du behöver en annan storlek, högerklicka helt enkelt på den och ställ in önskad storlek från listan som tillhandahålls. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>Välj nu vad som ska brännas. </para>
+<para
+>Fönstrets övre halva är <emphasis
+>källrutan</emphasis
+>. Den fungerar som en filhanterare. Du kan välja vanliga filer från monterade datavolymer eller ljudspår från inmatade ljudskivor. Namn på ljudspår läses automatiskt från cd-text data, om cd-enheten stöder läsning av den, eller skapas genom att använda <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>. Det exakta formatet bestäms av en knapp i den nedre rutan. Om namnen inte är riktiga, eller helt enkelt inte motsvarar skivans beskrivning, kan de redigeras genom att använda knappen i verktygsraden. Ändringarna lagras lokalt och skickas in till huvudregistret på <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>Om hela skivan är inspelad av samma artist, lämna fälten för spårens artister tomma, fyll i <guilabel
+>Albumartist</guilabel
+>, spara i CDDB och utför förfrågan igen. </para>
+</tip>
+<para
+>Allt som är kvar att göra nu är att välja vad som ska brännas. Den övre delen av fönstret fungerar som en filhanterare. Dra och släpp helt enkelt filerna och katalogerna du vill bränna på den stora rutan längst ner till höger. Till vänster ser du en trädvy skapas av de valda filerna. Skulle det finnas några filer eller kataloger som du inte vill bränna, kan de enkelt tas bort från projektet genom att helt enkelt ta bort dem från rutan längst ner. Markera filen om ska tas bort (du kan klicka med Ctrl nertryckt för att välja flera), och välj därefter <guilabel
+>Ta bort</guilabel
+> i den sammanhangsberoende menyn. </para>
+<tip>
+<para
+>Om du behöver komprimera ljud, skapa ett nytt ljud-cd-projekt, lägg till filerna som ska konverteras och klicka på knappen <guilabel
+>Konvertera spår</guilabel
+>. Det påverkar inte innehållet på cd:n om du bestämmer dig för att bränna den. Dock kommer du att kunna använda de komprimerade filerna på andra ställen. Försäkra dig om att originalfilerna är förlustfria (<emphasis
+>wav</emphasis
+> eller <emphasis
+>FLAC</emphasis
+>), annars blir inte resultatet tillfredsställande. </para>
+</tip>
+<para
+>Den översta raden är skivans titel. I många fall är den utmärkt, men om du vill ändra den till någonting annat, byt helt enkelt namn genom att använda den sammanhangsberoende menyn. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>Slutstegen</title>
+<para
+>Nu är du klar att klicka på knappen <guilabel
+>Bränn</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>På skärmbilden syns att ingen skiva fanns tillgänglig. När en lämplig skiva har matats in, syns beskrivningen av den på raden. </para>
+<para
+>Det finns fortfarande ett eller två val att göra. Jag skulle <emphasis
+>rekommendera</emphasis
+> att du ställer in <guilabel
+>Verifiera skriven data</guilabel
+>, och därefter klickar på ikonen <guilabel
+>Spara</guilabel
+> längst ner i fönstret, vilket försäkrar att det blir ditt personliga förval. Det är säkert att lämna läge och hastighet till <guilabel
+>Automatisk</guilabel
+> för de flesta moderna enheter. Om du vill bränna ytterligare en kopia av skivan vid ett senare tillfälle, välj <guilabel
+>Skapa avbild</guilabel
+>, vilket undviker att behöva återskapa bränningen. Ange antal kopior du vill bränna, och klicka på <guilabel
+>Bränn</guilabel
+> när du är nöjd. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>Bränna en ljud-cd</title>
+<sect1 id="k3b-audio-support"
+><title
+>Starta ett ljud-cd-projekt</title>
+<para
+>&k3b; stöder många ljudformat och kan konvertera dem automatiskt åt dig. </para>
+<note
+><para
+>Vissa distributioner avdelar ett separat paket för den här möjligheten i &k3b;, t.ex. på distributionerna Debian och Ubuntu måste paketet libk3b6-extracodecs installeras, på openSUSE är paketnamnet k3b-codecs. För vissa distributioner (t.ex. Mandriva) behövs inga extra paket installeras.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>Välja filerna</title>
+<para
+>Det finns två sätt att välja ljudfilerna som du vill bränna på en ljud-cd:</para>
+<variablelist>
+<varlistentry>
+<term
+>Använda &k3b;</term>
+<listitem>
+<para
+>I nedre halvan av &k3b;:s fönster, klicka på <guilabel
+>Nytt ljud-cd-projekt</guilabel
+> och välj filerna du vill bränna. </para>
+<para
+>Som alternativ, gå till platsen för ljudfilerna i katalogrutan. Att dubbelklicka på en ljudfil, eller att dra och släppa markerade ljudfiler på den nedre delen av &k3b;:s fönster, startar automatiskt ett <guilabel
+>Nytt ljud-cd-projekt</guilabel
+> med filerna. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>Använda filhanteraren</term>
+<listitem>
+<para
+>Gå till katalogen som innehåller musikfilerna i &dolphin; eller &konqueror;</para>
+<para
+>Välj filerna att bränna och välj <menuchoice
+><guimenu
+>Åtgärder</guimenu
+><guimenuitem
+>Skapa ljud-cd med &k3b;</guimenuitem
+></menuchoice
+> i den sammanhangsberoende menyn.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>Redigera titelinformation</title>
+<para
+>Du kan ge namn åt spåren eller importera dem från <acronym
+>CDDB</acronym
+> (en nättjänst för spårnamn). Dubbelklicka på spåret för att göra det (i fönstrets nedre halva). </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>Bränn cd:n</title>
+<para
+>Mata in en tom cd-r eller cd-rw i cd-brännaren och klicka på <guilabel
+>Bränn</guilabel
+>. Kontrollera att du tycker förinställningarna är bra i dialogrutan som dyker upp, och klicka på <guilabel
+>Bränn</guilabel
+> när du är nöjd. Cd:n bränns nu åt dig. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>Tack till och licens</title>
+    <para
+>Dokumentation Copyright, se användarbasens <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>K3b:s sidhistorik</ulink
+></para>
+    <para
+>Översättning Stefan Asserhäll <email
+>stefan.asserhall@bredband.net</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>
