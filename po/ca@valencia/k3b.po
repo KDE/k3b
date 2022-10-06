@@ -1479,7 +1479,7 @@ msgstr "Crea un projecte nou"
 #: k3b.cpp:381
 #, kde-format
 msgid "&Add Files..."
-msgstr "&Afig fitxers..."
+msgstr "Afi&g fitxers..."
 
 #: k3b.cpp:382
 #, kde-format
@@ -1969,7 +1969,7 @@ msgstr "Punts"
 #: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
-msgstr "&Afig al projecte"
+msgstr "Afi&g al projecte"
 
 #: k3bdirview.cpp:193
 #, kde-format
@@ -4637,7 +4637,7 @@ msgstr "&Mantín oberts els diàlegs d'acció"
 #: option/base_k3bmiscoptiontab.ui:139
 #, kde-format
 msgid "&Default action dialog settings:"
-msgstr "&Configuració predeterminada dels diàlegs d'acció:"
+msgstr "Con&figuració predeterminada dels diàlegs d'acció:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboActionDialogSettings)
 #: option/base_k3bmiscoptiontab.ui:152
@@ -4733,7 +4733,7 @@ msgstr "Mostra els elements avançats de la IGU"
 #: option/k3badvancedoptiontab.cpp:68 rip/categories.cpp:20
 #, kde-format
 msgid "Miscellaneous"
-msgstr "Miscelànea"
+msgstr "Miscel·lània"
 
 #: option/k3badvancedoptiontab.cpp:70
 #, kde-format
@@ -5711,7 +5711,7 @@ msgstr "Intér&pret:"
 #: projects/base_k3baudiotrackwidget.ui:58
 #, kde-format
 msgid "&Arranger:"
-msgstr "&Configuracions:"
+msgstr "Con&figuracions:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:118
