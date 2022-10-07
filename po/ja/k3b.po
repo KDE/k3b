@@ -11271,15 +11271,3 @@ msgstr "anamorph"
 #, kde-format
 msgid "Subpicture"
 msgstr "サブピクチャ"
-
-#~ msgid "%1 has unsaved data."
-#~ msgstr "‘%1’ には未保存のデータがあります。"
-
-#~ msgid "Windows Media v1"
-#~ msgstr "Windows Media v1"
-
-#~ msgid "Windows Media v2"
-#~ msgstr "Windows Media v2"
-
-#~ msgid "Advanced Audio Coding (AAC)"
-#~ msgstr "AAC (Advanced Audio Coding)"
