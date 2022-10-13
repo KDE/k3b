@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-10 00:44+0000\n"
-"PO-Revision-Date: 2022-10-08 12:48+0300\n"
+"PO-Revision-Date: 2022-10-13 02:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1472,12 +1472,12 @@ msgstr "Yeni Video DVD projesi oluşturur"
 #: k3b.cpp:358 k3bdevicemenu.cpp:67
 #, kde-format
 msgid "Continue Multisession Project"
-msgstr "Çoklu Oturum Projesine Devam Et"
+msgstr "Çoklu Oturum Projesini Sürdür"
 
 #: k3b.cpp:359
 #, kde-format
 msgid "Continues multisession project"
-msgstr "Çoklu oturum projesine devam eder"
+msgstr "Çoklu oturum projesini sürdürür"
 
 #: k3b.cpp:364
 #, kde-format
@@ -2555,7 +2555,7 @@ msgstr "Aygıt kullanımda"
 #: k3blsofwrapperdialog.cpp:45
 #, kde-format
 msgid "Continue"
-msgstr "Devam Et"
+msgstr "Sürdür"
 
 #: k3blsofwrapperdialog.cpp:49
 #, kde-format
@@ -2577,7 +2577,7 @@ msgid ""
 "to use the '%3' button."
 msgstr ""
 "<p><b>'%1'</b> aygıtı şu an başka uygulamalar tarafından kullanılıyor. (<em>"
-"%2</em>) <p>Devam etmeden önce diğer uygulamalardan çıkmanız önemle tavsiye "
+"%2</em>) <p>Sürdürmeden önce diğer uygulamalardan çıkmanız önemle tavsiye "
 "edilir. Aksi takdirde K3b aygıta tam olarak erişemez.<p><em>İpucu: Bazen bir "
 "uygulamayı kapatmak anında gerçekleşmez. Bu tür durumlarda '%3' düğmesini "
 "kullanabilirsiniz."
@@ -2680,8 +2680,8 @@ msgstr[1] "%2 içerisinde %1 dosya"
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
-msgstr[0] "bir dizin"
-msgstr[1] "%1 dizin"
+msgstr[0] "bir klasör"
+msgstr[1] "%1 klasör"
 
 #: k3bstatusbarmanager.cpp:184
 #, kde-format
@@ -3257,12 +3257,12 @@ msgstr "Sistem yapılandırmasında bir sorunla karşılaşılmadı."
 #: k3btempdirselectionwidget.cpp:44
 #, kde-format
 msgid "Free space in temporary folder:"
-msgstr "Geçici dizindeki boş alan:"
+msgstr "Geçici klasördeki boş alan:"
 
 #: k3btempdirselectionwidget.cpp:74
 #, kde-format
 msgid "The folder in which to save the image files"
-msgstr "Kalıp dosyalarının kaydedileceği dizin"
+msgstr "Kalıp dosyalarının kaydedileceği klasör"
 
 #: k3btempdirselectionwidget.cpp:78
 #, kde-format
@@ -3271,14 +3271,14 @@ msgid ""
 "<p>Please make sure that it resides on a partition that has enough free "
 "space."
 msgstr ""
-"<p>Bu dizin, K3b tarafından <em>kalıp dosyalarını</em> kaydetmek için "
-"kullanılacaktır.<p>Lütfen bu dizinin bulunduğu disk bölümünde yeterli boş "
+"<p>Bu klasör, K3b tarafından <em>kalıp dosyalarını</em> kaydetmek için "
+"kullanılacaktır.<p>Lütfen bu klasörün bulunduğu disk bölümünde yeterli boş "
 "yer olup olmadığını denetleyin."
 
 #: k3btempdirselectionwidget.cpp:185
 #, kde-format
 msgid "Select Temporary Folder"
-msgstr "Geçici Dizini Seçin"
+msgstr "Geçici KLasörü Seçin"
 
 #: k3btempdirselectionwidget.cpp:187
 #, kde-format
@@ -3288,7 +3288,7 @@ msgstr "Ka&lıp dosyasını buraya yaz:"
 #: k3btempdirselectionwidget.cpp:188
 #, kde-format
 msgid "Temporary Folder"
-msgstr "Geçici Dizin"
+msgstr "Geçici Klasör"
 
 #: k3btempdirselectionwidget.cpp:191
 #, kde-format
@@ -3416,11 +3416,11 @@ msgid ""
 msgstr ""
 "<p>Yazma hızını seçin.<p><b>Otomatik</b><br>Bu seçenek, kullanılan diskin "
 "desteklediği en yüksek hızı kullanır. Çoğunlukla önerilen seçenektir. </"
-"p><p><b>Göz ardı et </b> (Sadece DVD)<br>Bu seçenek, yazma hızını yazıcı "
-"aygıta bırakır. Bu seçeneği, K3b yazma hızını ayarlayamazsa "
-"kullanabilirsiniz.<p>1x, DVD için 1385 KB/s, CD için 175 KB/s ve Blue-ray "
-"için 4496 KB/s anlamına gelir.</p><p>Dikkat:<b> Sisteminizin veriyi tampon "
-"belleği yavaşlatmayacak hızda gönderebileceğinden emin olun."
+"p><p><b>Yok say</b> (Yalnızca DVD)<br>Bu seçenek, yazma hızını yazıcı aygıta "
+"bırakır. Bu seçeneği, K3b yazma hızını ayarlayamazsa kullanabilirsiniz."
+"<p>1x, DVD için 1385 KB/sn, CD için 175 KB/sn ve Blue-ray için 4496 KB/sn "
+"anlamına gelir.</p><p>Dikkat:<b> Sisteminizin veriyi tampon belleği "
+"yavaşlatmayacak hızda gönderebileceğinden emin olun."
 
 #: k3bwriterselectionwidget.cpp:177
 #, kde-format
@@ -4150,9 +4150,9 @@ msgid ""
 "If it has been downloaded make sure the download is complete.</p><p>Only "
 "continue if you know what you are doing.</p>"
 msgstr ""
-"<p>Dosyanın mevcut boyutu, dosya başlığında tanımlı boyutla uyuşmuyor. Eğer "
-"bu dosya internetten indirilmişse indirme işleminin bittiğine emin olun.</p> "
-"<p>Ne yaptığınızdan eminseniz devam edebilirsiniz.</p>"
+"<p>Dosyanın var olan boyutu, dosya başlığında tanımlı boyutla uyuşmuyor. "
+"Eğer bu dosya internetten indirilmişse indirme işleminin bittiğine emin olun."
+"</p> <p>Ne yaptığınızdan eminseniz sürdürebilirsiniz.</p>"
 
 #: misc/k3bimagewritingdialog.cpp:711 option/k3bmiscoptiontab.cpp:122
 #, kde-format
@@ -4385,7 +4385,7 @@ msgid ""
 "There does not seem to be enough free space in the temporary folder. Write "
 "anyway?"
 msgstr ""
-"Geçici dizinde yeteri kadar boş yer yok gibi görünüyor. Yine de yazılsın mı?"
+"Geçici klasörde yeteri kadar boş yer yok gibi görünüyor. Yine de yazılsın mı?"
 
 #: misc/k3bmediacopydialog.cpp:543
 #, kde-format
@@ -4855,10 +4855,10 @@ msgid ""
 "may result in damaged media."
 msgstr ""
 "<p>Eğer bu seçenek seçilirse K3b bazı durumlarda güvenli sayılmayan şekilde "
-"çalışmaya devam edecek.<p>Bu seçenek örneğin cd, dvd ortamının hız "
-"doğrulamasını pasifleştirir. Başka bir deyişle K3b uygulamasını yüksek hızlı "
-"bir cd, dvd yazarken düşük hızlı bir cd yazıcı ile yazdırmaya "
-"zorlayabilirsiniz.<p><b>Uyarı:</b> Bu seçeneği etkinleştirmek cd, dvd "
+"çalışmayı sürdürecek.<p>Bu seçenek; örneğin CD, DVD ortamının hız "
+"doğrulamasını pasifleştirir. Başka bir deyişle, K3b uygulamasını yüksek "
+"hızlı bir CD, DVD yazarken düşük hızlı bir CD yazıcı ile yazdırmaya "
+"zorlayabilirsiniz.<p><b>Uyarı:</b> Bu seçeneği etkinleştirmek, CD ve DVD "
 "disklerinize zarar verebilir."
 
 #: option/k3bcddboptiontab.cpp:33
@@ -5078,7 +5078,7 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:141
 #, kde-format
 msgid "Search Path"
-msgstr "Aranacak Dizinler"
+msgstr "Arama Yolu"
 
 #: option/k3bexternalbinwidget.cpp:244
 #, kde-format
@@ -5141,12 +5141,12 @@ msgstr ""
 #: option/k3bmiscoptiontab.cpp:104
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
-msgstr "%1 dizini yok. Oluşturulsun mu?"
+msgstr "%1 klasörü yok. Oluşturulsun mu?"
 
 #: option/k3bmiscoptiontab.cpp:105
 #, kde-format
 msgid "Create Folder"
-msgstr "Hedef Dizin"
+msgstr "Klasör Oluştur"
 
 #: option/k3bmiscoptiontab.cpp:106
 #, kde-format
@@ -5157,7 +5157,7 @@ msgstr "Oluştur"
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
-msgstr "'%1' dizini oluşturulamadı"
+msgstr "'%1' klasörü oluşturulamadı"
 
 #: option/k3bmiscoptiontab.cpp:120
 #, kde-format
@@ -5165,8 +5165,8 @@ msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
 "the temporary folder."
 msgstr ""
-"Geçici dizin olarak bir dosya belirttiniz. K3b bu dosyanın bulunduğu dizini "
-"geçici dizin olarak kullanacaktır."
+"Geçici klasör olarak bir dosya belirttiniz. K3b bu dosyanın bulunduğu dizini "
+"geçici klasör olarak kullanacaktır."
 
 #: option/k3bmiscoptiontab.cpp:129
 #, kde-format
@@ -5970,7 +5970,7 @@ msgstr "0"
 #: projects/base_k3bbootimagedialog.ui:158
 #, kde-format
 msgid "Boot load segment:"
-msgstr "Önyükleme segmenti:"
+msgstr "Önyükleme bölütü:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3bbootimagedialog.ui:171
@@ -6084,14 +6084,14 @@ msgstr ""
 "<p><b>Değişiklik Yok</b><br>\n"
 "Sembolik bağlar projeye eklenmeleriyle beraber kullanılırlar. \n"
 "\n"
-"<p><b>Bozuk sembolik bağları göz ardı et</b><br>\n"
-"K3b proje içinde bir dosyaya bağlı olmayan tüm sembolik bağları göz ardı "
-"edecek. Buna '/home/myhome/testfile' gibi mutlak yollara bağlı olan tüm "
-"bağlantılar dahildir.\n"
+"<p><b>Bozuk sembolik bağları at</b><br>\n"
+"K3b proje içinde bir dosyaya bağlı olmayan tüm sembolik bağları atacak. "
+"Buna, '/home/myhome/testfile' gibi mutlak yollara bağlı olan tüm bağlantılar "
+"dahildir.\n"
 "\n"
-"<p><b>Tüm sembolik bağları göz ardı et</b><br>\n"
-"K3b projeye eklenmiş olan tüm sembolik bağları göz ardı edecek; bu, sonuç "
-"dosya sisteminin hiç bağlantıya sahip olmayacağı anlamına gelir.\n"
+"<p><b>Tüm sembolik bağları at</b><br>\n"
+"K3b projeye eklenmiş olan tüm sembolik bağları atacak; bu, sonuç dosya "
+"sisteminin hiç bağlantıya sahip olmayacağı anlamına gelir.\n"
 "\n"
 "<p><b>Sembolik bağları takip et</b><br>\n"
 "Projedeki her sembolik bağ işaret ettiği dosyanın içeriğiyle değiştirilecek. "
@@ -6114,13 +6114,13 @@ msgstr "Olduğu gibi bırak"
 #: projects/base_k3bdataimagesettings.ui:114
 #, kde-format
 msgid "Discard broken symlinks"
-msgstr "Kırık sembolik bağları göz ardı et"
+msgstr "Kırık sembolik bağları at"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:119
 #, kde-format
 msgid "Discard all symlinks"
-msgstr "Tüm sembolik bağları göz ardı et"
+msgstr "Tüm sembolik bağları at"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:124
@@ -6474,7 +6474,7 @@ msgstr ""
 "<p>Ek arka plan filmleri kurulabilir. Fakat, bu birkaç fare tıklaması gibi "
 "basit değildir. Arka plan filmleri emovix paylaşılan veri dizininde saklanır "
 "(genelde <i>/usr/share/emovix</i> veya <i>/usr/local/share/emovix</i>),<em> "
-"backgrounds</em> dizini altında. Arka plan eklemek için dosyayı o dizine "
+"backgrounds</em> klasörü altında. Arka plan eklemek için dosyayı o klasöre "
 "kopyalamanız gerekir."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
@@ -7342,10 +7342,10 @@ msgstr ""
 "Proje Başlat</b><br>Çoklu oturumlu bir CD veya DVD başlatır ama disk'i "
 "kapatmaz,-daha sonra başka oturumlar eklenebilmesine izin verir.<p><b>Çoklu "
 "Oturumlu Projeye Devam Et</b><br>Eklenebilir bir veri CD'sine ( <em>Çok "
-"Oturumlu Proje Başlat</em> kipinde oluşturulmuş) yazmaya devam eder, daha "
+"Oturumlu Proje Başlat</em> kipinde oluşturulmuş) yazmayı sürdürür, daha "
 "sonra başka oturumlar eklenebilmesi için diski açık bırakır.<p><b>Çoklu "
-"Oturumlu Projeyi Tamamla/Kapat</b><br>Eklenebilir bir veri CD'sine yazmaya "
-"devam eder (örnek olarak <em>Çoklu Oturumlu Proje Başlat</em> kipinde "
+"Oturumlu Projeyi Tamamla/Kapat</b><br>Eklenebilir bir veri CD'sine yazmayı "
+"sürdürür (örnek olarak <em>Çoklu Oturumlu Proje Başlat</em> kipinde "
 "başlatıldığı gibi), yeni bir oturum ekler, ve diski kapatır.<p><em>DVD+RW ve "
 "DVD-RW diskin üzerine yazma sınırlandırılmışsa K3b çoklu oturum "
 "oluşturmayacak ama yeni veriyi içermesi için dosya sistemini büyütecek.</em>"
@@ -7363,7 +7363,7 @@ msgstr "Çoklu oturumu başlat"
 #: projects/k3bdatamultisessioncombobox.cpp:68
 #, kde-format
 msgid "Continue Multisession"
-msgstr "Çoklu Oturuma Devam Et"
+msgstr "Çoklu Oturumu Sürdür"
 
 #: projects/k3bdatamultisessioncombobox.cpp:69
 #, kde-format
@@ -7526,7 +7526,7 @@ msgid ""
 "managed by hiding README.joliet on RockRidge and README.rr on the Joliet "
 "filesystem.</p>"
 msgstr ""
-"<p>Bu seçenek işaretlendiğinde, dosya veya dizin ( ve tüm içerikleri)  "
+"<p>Bu seçenek işaretlendiğinde, dosya veya klasör ( ve tüm içerikleri)  "
 "Joliet dosyasistemlerinde gizlenecektir.</p><p>Bu, örneğin RockRidge ve  "
 "Joliet için farklı README (BeniOku) dosyalarına sahip olunduğunda, RockRidge "
 "sisteminde  README.joliet dosyasını, ya da tersi, -Joliet sisteminde README."
@@ -7558,7 +7558,7 @@ msgstr "%1 konumuna bağ"
 #: projects/k3bdatapropertiesdialog.cpp:215
 #, kde-format
 msgid "Folder"
-msgstr "Dizin"
+msgstr "Klasör"
 
 #: projects/k3bdatapropertiesdialog.cpp:224
 #, kde-format
@@ -7571,8 +7571,8 @@ msgstr[1] "%1 dosyada"
 #, kde-format
 msgid "and one folder"
 msgid_plural "and %1 folders"
-msgstr[0] "ve 1 dizinde"
-msgstr[1] "ve %1 dizinde"
+msgstr[0] "ve 1 klasörde"
+msgstr[1] "ve %1 klasörde"
 
 #: projects/k3bdatapropertiesdialog.cpp:229
 #, kde-format
@@ -7602,13 +7602,13 @@ msgstr "Dosya Yok"
 #, kde-format
 msgid "One Folder"
 msgid_plural "%1 Folders"
-msgstr[0] "1 Dizin"
-msgstr[1] "%1 Dizin"
+msgstr[0] "1 Klasör"
+msgstr[1] "%1 Klasör"
 
 #: projects/k3bdatapropertiesdialog.cpp:303
 #, kde-format
 msgid "No Folders"
-msgstr "Dizin Yok"
+msgstr "Klasör Yok"
 
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
@@ -7661,7 +7661,7 @@ msgstr "Dosya zaten var"
 #: projects/k3bdataurladdingdialog.cpp:620
 #, kde-format
 msgid "<p>File <em>%1</em> already exists in project folder <em>%2</em>."
-msgstr "<p><em>%1</em> dosyası, <em>%2</em> proje dizininde zaten var."
+msgstr "<p><em>%1</em> dosyası, <em>%2</em> proje klasöründe zaten var."
 
 #: projects/k3bdataurladdingdialog.cpp:390
 #: projects/k3bdataurladdingdialog.cpp:629
@@ -7714,7 +7714,7 @@ msgstr "Yeni dosyayı yeniden adlandır"
 #: projects/k3bdataurladdingdialog.cpp:443
 #, kde-format
 msgid "Adding link to folder"
-msgstr "Dizine bağ yaratılıyor"
+msgstr "Klasöre bağ ekleniyor"
 
 #: projects/k3bdataurladdingdialog.cpp:444
 #, kde-format
@@ -7726,11 +7726,11 @@ msgid ""
 "the option <em>follow symbolic links</em> you may safely ignore this warning "
 "and choose to add the link to the project.</b>"
 msgstr ""
-"<p>'%1', '%2' dizini için bir sembolik bağ. <p>Eğer K3b'nin sembolik bağları "
-"kullanmasını istiyorsanız bunu şimdi yapması daha iyi olacaktır. Zira K3b "
-"proje dosyasına alınan sembolik bağları sistemde takip etmeyi "
+"<p>'%1', '%2' klasörü için bir sembolik bağdır. <p>Eğer K3b'nin sembolik "
+"bağları kullanmasını istiyorsanız bunu şimdi yapması daha iyi olacaktır. "
+"Zira K3b proje dosyasına alınan sembolik bağları sistemde takip etmeyi "
 "beceremeyecektir. <p><b>Eğer <em>Sembolik Bağları Kullan </em> demek gibi "
-"bir niyetiniz yoksa bu uyarıyı göz ardı edebilir ve bağı projeye "
+"bir niyetiniz yoksa bu uyarıyı yok sayabilir ve bağı projeye "
 "ekleyebilirsiniz.</b>"
 
 #: projects/k3bdataurladdingdialog.cpp:455
@@ -7822,12 +7822,12 @@ msgstr "Yazılacak Veri Yok"
 #: projects/k3bdataviewimpl.cpp:105
 #, kde-format
 msgid "New Folder..."
-msgstr "Yeni Dizin..."
+msgstr "Yeni Klasör..."
 
 #: projects/k3bdataviewimpl.cpp:123
 #, kde-format
 msgid "Parent Folder"
-msgstr "Üst Dizin"
+msgstr "Üst Klasör"
 
 #: projects/k3bdataviewimpl.cpp:134
 #, kde-format
@@ -7868,12 +7868,12 @@ msgstr "Çalışılan projenin önyükleme ayarlarını değiştir"
 #: projects/k3bdataviewimpl.cpp:221 projects/k3bdataviewimpl.cpp:225
 #, kde-format
 msgid "New Folder"
-msgstr "Yeni Dizin"
+msgstr "Yeni Klasör"
 
 #: projects/k3bdataviewimpl.cpp:214
 #, kde-format
 msgid "Please insert the name for the new folder:"
-msgstr "Yeni dizin için ad giriniz:"
+msgstr "Yeni klasör için ad girin:"
 
 #: projects/k3bdataviewimpl.cpp:222
 #, kde-format
@@ -7881,7 +7881,7 @@ msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr ""
-"Girdiğiniz adda bir dosya var. Yeni dizin için lütfen başka bir ad giriniz:"
+"Girdiğiniz adda bir dosya var. Yeni klasör için lütfen başka bir ad girin:"
 
 #: projects/k3bdataviewimpl.cpp:373
 #, kde-format
@@ -8064,11 +8064,11 @@ msgid ""
 msgstr ""
 "<p><b>Mavi Kitap CD'si</b><p>K3b, 2 oturumdan oluşan çok oturumlu bir CD "
 "yaratacaktır. İlk oturum tüm ses iz'lerini, ikinci oturum ise mode 2 form 1 "
-"standartındaki veri parçasını içerecektir.<p>Bu kip <em>Mavi Kitap (Blue "
+"standartındaki veri parçasını içerecektir.<p>Bu kip, <em>Mavi Kitap (Blue "
 "Book)</em> adı verilen (bazen <em>Extended Audio CD</em>,  <em>CD-Extra</"
 "em>, veya <em>CD Plus</em> olarak da bilinir) standartlara dayanır. "
 "Sağladığı olanak; Bir HiFi Ses CD çalar, sadece ilk oturumu tanır ve veri "
-"parçasını göz ardı eder.<p>Eğer HiFi Ses CD çalarında çalınabilecek bir CD "
+"parçasını yok sayar.<p>Eğer HiFi Ses CD çalarında çalınabilecek bir CD "
 "yazdırmak isteniyorsa bu kip önerilir.<p>Bazı eski CD-ROMlar, çok oturumlu "
 "diskleri okuyamadıkları için Mavi Kitap CD'lerini de okumakta sorun "
 "yaşayabilirler."
@@ -8244,12 +8244,12 @@ msgstr "Ayarları projeye kaydeder ve yazdırma penceresini kapatır."
 #: projects/k3bprojectburndialog.cpp:67
 #, kde-format
 msgid "Discard all changes and close"
-msgstr "Tüm değişiklikleri göz ardı et ve kapat"
+msgstr "Tüm değişiklikleri yok say ve kapat"
 
 #: projects/k3bprojectburndialog.cpp:68
 #, kde-format
 msgid "Discards all changes made in the dialog and closes it."
-msgstr "Pencerede yapılan tüm değişiklikleri göz ardı eder ve onu kapatır."
+msgstr "Pencerede yapılan tüm değişiklikleri yok sayar ve onu kapatır."
 
 #: projects/k3bprojectburndialog.cpp:140
 #, kde-format
@@ -8269,12 +8269,12 @@ msgstr "Yazma işlemini başlat"
 #: projects/k3bprojectburndialog.cpp:186 rip/k3bvideocdrippingdialog.cpp:142
 #, kde-format
 msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
-msgstr "'%1' kalıp dizini bulunamadı. K3b'nin yaratmasını ister misiniz?"
+msgstr "'%1' kalıp klasörü bulunamadı. K3b'nin oluşturmasını ister misiniz?"
 
 #: projects/k3bprojectburndialog.cpp:189 rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Failed to create folder '%1'."
-msgstr "'%1' dizini oluşturulamadı."
+msgstr "'%1' klasörü oluşturulamadı."
 
 #: projects/k3bprojectburndialog.cpp:249
 #, kde-format
@@ -8387,7 +8387,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:112
 #, kde-format
 msgid "Add always an empty `/SEGMENT' folder"
-msgstr "Her zaman boş bir `/SEGMENT' dizini ekle"
+msgstr "Her zaman boş bir `/SEGMENT' klasörü ekle"
 
 #: projects/k3bvcdburndialog.cpp:113
 #, kde-format
@@ -8500,22 +8500,21 @@ msgstr ""
 "sürüm, önceki 1.1 tanımlamasının sağladığı özelliklere ek olarak aşağıdaki "
 "özellikleri ekledi:<ul><li>Hareketsiz görüntülerden, hareketli resimlerden, "
 "ve/veya sadece sesten oluşan MPEG segmentlerinin oynatılması (<b>SPI</b>)</"
-"li> <li>Not Segment Ögeleri::.</li><li>Etkileşimli çalma denetimi (<b>PBC</"
-"b>)</li> <li>Tarama noktası dizin dosyası (<b>/EXT/SCANDATA.DAT</b>) "
-"kullanarak ilişkili erişimlerin oynatılması</li>Kapalı başlık (Closed "
-"Caption) desteği</li> <li>NTSC ve PAL içeriklerini harmanlama</li></"
-"ul><p>Video CD 1.1 tanımlamasına PAL desteği eklenince, aşağıdaki "
-"çözünürlükler kullanılabilir hale geldi:<ul><li>352 x 240 @ 29.97 Hz (NTSC "
-"SIF).</li><li>352 x 240 @ 23.976 Hz (FILM SIF).</li><li>352 x 288 @ 25 Hz "
-"(PAL SIF).</li></ul> <p>Segment çalma seçenekleri için ise aşağıdaki ses "
-"kodlamaları kullanılabilir hale geldi:<ul><li>Birleşik (Joint) Stereo, "
-"stereo veya 128, 192, 224 veya 384 kbit/sn bit oranında çift kanallı ses "
-"akışları.</li><li>64, 96 veya 192 kbit/sn bit oranında mono ses akışları.</"
-"li></ul><p>Ayrıca yalnızca ses içeren akışlar ve hareketsiz resimler de "
-"desteklenir hale geldi.<p><b>Tek hızlı sürücüler ile uyumluluğun "
-"sağlanabilmesi için çoklanmış (multiplexed) akışların bit oranının 174300 "
-"bayt/sn değerinin (Tek hareketsiz resim ögeleri dışında) altında tutulması "
-"gerektiğini unutmayın.</b>"
+"li> <li>Not Bölüt Ögeleri</li><li>Etkileşimli çalma denetimi (<b>PBC</b>)</"
+"li> <li>Tarama noktası dizin dosyası (<b>/EXT/SCANDATA.DAT</b>) kullanarak "
+"ilişkili erişimlerin oynatılması</li>Kapalı başlık (Closed Caption) desteği</"
+"li> <li>NTSC ve PAL içeriklerini harmanlama</li></ul><p>Video CD 1.1 "
+"tanımlamasına PAL desteği eklenince, aşağıdaki çözünürlükler kullanılabilir "
+"hale geldi:<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ "
+"23.976 Hz (FILM SIF).</li><li>352 x 288 @ 25 Hz (PAL SIF).</li></ul> "
+"<p>Bölüt çalma seçenekleri için ise aşağıdaki ses kodlamaları kullanılabilir "
+"hale geldi:<ul><li>Birleşik (Joint) Stereo, stereo veya 128, 192, 224 veya "
+"384 kbit/sn bit oranında çift kanallı ses akışları.</li><li>64, 96 veya 192 "
+"kbit/sn bit oranında mono ses akışları.</li></ul><p>Ayrıca yalnızca ses "
+"içeren akışlar ve hareketsiz resimler de desteklenir hale geldi.<p><b>Tek "
+"hızlı sürücüler ile uyumluluğun sağlanabilmesi için çoklanmış (multiplexed) "
+"akışların bit oranının 174300 bayt/sn değerinin (Tek hareketsiz resim "
+"ögeleri dışında) altında tutulması gerektiğini unutmayın.</b>"
 
 #: projects/k3bvcdburndialog.cpp:154
 #, kde-format
@@ -8605,7 +8604,7 @@ msgid ""
 "b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</"
 "li></ul>"
 msgstr ""
-"<ul><li>SVCD disklerdeki <b>\"/MPEG2\"</b> dizinlerini (non-compliant) \"/"
+"<ul><li>SVCD disklerdeki <b>\"/MPEG2\"</b> klasörlerini (non-compliant) \"/"
 "MPEGAV\" olarak adlandır. </li><li> Bu, <b>\"/SVCD/ENTRY.SVD\"</b> dosyası "
 "için <b>\"ENTRYVCD\"</b> yerine <b>\"ENTRYSVD\"</b> (geçersiz) imzasını "
 "kullanma olanağı tanır.</li></ul>"
@@ -8683,8 +8682,9 @@ msgid ""
 "<p>Here you can specify that the folder <b>SEGMENT</b> should always be "
 "present.<p>Some DVD players need the folder to give a faultless rendition."
 msgstr ""
-"<p>Bulunması zorunlu olan <b>SEGMENT</b> dizinini burada tanımlayabilirsiniz."
-"<p>Bazı DVD çalarlar, hatasız yorumlama için bu dizine ihtiyaç duyarlar."
+"<p>Bulunması zorunlu olan <b>SEGMENT</b> klasörünü burada "
+"tanımlayabilirsiniz.<p>Bazı DVD çalarlar, hatasız yorumlama için bu klasöre "
+"gereksinim duyarlar."
 
 #: projects/k3bvcdburndialog.cpp:206
 #, kde-format
@@ -8825,7 +8825,7 @@ msgstr "Çalma Denetimi (PBC)"
 #: projects/k3bvcdburndialog.cpp:255
 #, kde-format
 msgid "SEGMENT Folder must always be present"
-msgstr "SEGMENT dizininin oluşturulmasını sağla"
+msgstr "SEGMENT klasörü her zaman olmalı"
 
 #: projects/k3bvcdburndialog.cpp:256
 #, kde-format
@@ -9307,7 +9307,7 @@ msgstr "Video CD END"
 #: projects/k3bvcdtrackkeysmodel.cpp:167
 #, kde-format
 msgid "Segment-%1 - %2"
-msgstr "Segment-%1 - %2"
+msgstr "Bölüt-%1 - %2"
 
 #: projects/k3bvcdtrackkeysmodel.cpp:169
 #, kde-format
@@ -9427,7 +9427,7 @@ msgstr "m&3u çalma listesi yarat"
 #: rip/base_k3baudiorippingoptionwidget.ui:89
 #, kde-format
 msgid "Use relative paths instead of absolute"
-msgstr "D&osyanın tam adresi yerine bulunduğu dizine bağlı adres kullan"
+msgstr "Mutlak yollar yerine göreceli yollar kullan"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:95
@@ -9451,7 +9451,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:98
 #, kde-format
 msgid "&Use relative paths"
-msgstr "Dosya konumlarını dizine &göre yaz"
+msgstr "Göreceli &yollar kullan"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:107
@@ -9511,7 +9511,7 @@ msgstr "Cue dosyası &yaz"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:133
 #, kde-format
 msgid "Target Folder"
-msgstr "Hedef Dizin"
+msgstr "Hedef Klasör"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
@@ -10303,7 +10303,7 @@ msgstr "Video CD Aktarma"
 #: rip/k3bvideocdrippingdialog.cpp:61
 #, kde-format
 msgid "Destination Folder"
-msgstr "Hedef Dizin"
+msgstr "Hedef Klasör"
 
 #: rip/k3bvideocdrippingdialog.cpp:66
 #, kde-format
@@ -10313,7 +10313,7 @@ msgstr "Buraya aktar:"
 #: rip/k3bvideocdrippingdialog.cpp:73
 #, kde-format
 msgid "Free space in folder:"
-msgstr "Dizindeki boş alan:"
+msgstr "Klasördeki boş alan:"
 
 #: rip/k3bvideocdrippingdialog.cpp:79
 #, kde-format
@@ -10343,7 +10343,7 @@ msgstr "Seçilen VCD parçalarının seçilip çıkarılmasını başlatır"
 #: rip/k3bvideocdrippingdialog.cpp:117
 #, kde-format
 msgid "Free space in destination folder: %1"
-msgstr "Hedef dizindeki boş alan: %1"
+msgstr "Hedef klasördeki boş alan: %1"
 
 #: rip/k3bvideocdrippingdialog.cpp:119
 #, kde-format
@@ -10402,7 +10402,7 @@ msgstr ""
 #: rip/k3bvideocdrippingdialog.cpp:161
 #, kde-format
 msgid "Continue although the folder is not empty?"
-msgstr "Bu dizinin boş, buna rağmen devam edilsin mi?"
+msgstr "Bu klasör boş değil, buna rağmen sürdürülsün mü?"
 
 #: rip/k3bvideocdview.cpp:192
 #, kde-format
@@ -10438,7 +10438,7 @@ msgstr "Dosyalar"
 #: rip/k3bvideocdview.cpp:276 rip/k3bvideocdview.cpp:436
 #, kde-format
 msgid "Segments"
-msgstr "Segmentler"
+msgstr "Bölütler"
 
 #: rip/k3bvideocdview.cpp:358
 #, kde-format

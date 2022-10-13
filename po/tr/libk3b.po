@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-06-12 11:00+0300\n"
+"PO-Revision-Date: 2022-10-13 02:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.04.1\n"
+"X-Generator: Lokalize 22.08.1\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -252,12 +252,12 @@ msgstr "Sadece ilk oturum kopyalanıyor."
 #: jobs/k3bcdcopyjob.cpp:311 jobs/k3bdvdcopyjob.cpp:344
 #, kde-format
 msgid "Unable to determine free space in temporary folder '%1'."
-msgstr "'%1' geçici dizinindeki boş alan hesaplanamadı."
+msgstr "'%1' geçici klasöründeki boş alan hesaplanamadı."
 
 #: jobs/k3bcdcopyjob.cpp:317 jobs/k3bdvdcopyjob.cpp:351
 #, kde-format
 msgid "Not enough space left in temporary folder."
-msgstr "Geçici dizinde yeterli alan yok."
+msgstr "Geçici klasörde yeterli alan yok."
 
 #: jobs/k3bcdcopyjob.cpp:326 jobs/k3bdvdcopyjob.cpp:368
 #, kde-format
@@ -344,18 +344,17 @@ msgstr "Yazma işlemi hazırlanıyor..."
 #: jobs/k3bdvdcopyjob.cpp:323
 #, kde-format
 msgid "Specified an unusable temporary path. Using default."
-msgstr ""
-"Kullanılamayacak bir geçici dizin belirtildi. Geçerli dizin kullanılacak."
+msgstr "Kullanılamayacak bir geçici yol belirtildi. Öntanımlı kullanılacak."
 
 #: jobs/k3bcdcopyjob.cpp:545
 #, kde-format
 msgid "Unable to create temporary folder '%1'."
-msgstr "'%1' geçici dizini oluşturulamıyor."
+msgstr "'%1' geçici klasörü oluşturulamıyor."
 
 #: jobs/k3bcdcopyjob.cpp:552
 #, kde-format
 msgid "Using temporary folder %1."
-msgstr "%1 geçici dizini kullanılıyor."
+msgstr "%1 geçici klasörü kullanılıyor."
 
 #: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
@@ -1453,7 +1452,7 @@ msgstr ""
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:151
 #, kde-format
 msgid "Unable to create folder '%1'"
-msgstr "'%1' dizini oluşturulamıyor"
+msgstr "'%1' klasörü oluşturulamıyor"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:157
 #, kde-format
@@ -2093,14 +2092,14 @@ msgid ""
 "added to the project. Do you want to continue without writing the symbolic "
 "links to the image?"
 msgstr ""
-"K3b projeye eklenen dizinlere yapılmış olan sembolik bağları takip etme "
-"yeteneğine sahip değil. Bu sembolik bağları kalıba yazmadan sürdürmekister "
+"K3b, projeye eklenen klasörlere yapılmış olan sembolik bağları takip etme "
+"yeteneğine sahip değil. Bu sembolik bağları kalıba yazmadan sürdürmek ister "
 "misiniz?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:200
 #, kde-format
 msgid "Discard symbolic links to folders"
-msgstr "Dizinlere yapılmış olan sembolik bağlantıları yok say"
+msgstr "Klasörlere olan sembolik bağlantıları yok say"
 
 #: projects/datacd/k3bisoimager.cpp:153
 #, kde-format
@@ -2161,8 +2160,8 @@ msgstr "%1 dosyasından, mevcut olmayan %2 dosyasına gidilemiyor. Atlanıyor...
 msgid ""
 "Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
 msgstr ""
-"%2 dizininden %1 dizinine bağ, yok sayılıyor. K3b, dizinlere yapılan bağları "
-"takip edemez."
+"%2 klasöründen %1 klasörüne olan bağ yok sayılıyor. K3b, klasörlere yapılan "
+"bağları takip edemez."
 
 #: projects/datacd/k3bisoimager.cpp:774
 #, kde-format
@@ -2422,7 +2421,7 @@ msgstr "'Boşluk bırakma işlemi' başarıyla tamamlandı"
 #: projects/k3bcdrskinwriter.cpp:805 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
-msgstr "Ortalama yazma hızı: %1 KB/s (%2x)"
+msgstr "Ortalama yazma hızı: %1 KB/sn (%2x)"
 
 #: projects/k3bcdrdaowriter.cpp:761
 #, kde-format
@@ -2728,7 +2727,7 @@ msgstr "Veri, diske uymadı."
 #: projects/k3bcdrecordwriter.cpp:822 projects/k3bcdrskinwriter.cpp:835
 #, kde-format
 msgid "%1 could not reserve shared memory segment of requested size."
-msgstr "%1, istenilen kadar paylaşılan hafıza segmenti tahsis edemedi."
+msgstr "%1, istenilen kadar paylaşılan bellek bölütü ayıramadı."
 
 #: projects/k3bcdrecordwriter.cpp:823 projects/k3bcdrskinwriter.cpp:836
 #, kde-format
@@ -2994,7 +2993,7 @@ msgstr "DAO devreye giriyor"
 #: projects/k3bgrowisofshandler.cpp:164
 #, kde-format
 msgid "Writing speed: %1 KB/s (%2x)"
-msgstr "Yazma Hızı: %1 KB/s (%2x)"
+msgstr "Yazma Hızı: %1 KB/sn (%2x)"
 
 #: projects/k3bgrowisofshandler.cpp:215
 #, kde-format
@@ -3364,7 +3363,7 @@ msgid ""
 "control."
 msgstr ""
 "PBC (Çalma Denetimi) etkin.\n"
-"Video oynatıcılar, çalma denetimi olmadan Segment'lere (MPEG hareketsiz "
+"Video oynatıcılar, çalma denetimi olmadan bölütlere (MPEG hareketsiz "
 "görüntüleri) erişemezler."
 
 #: projects/videocd/k3bvcddoc.cpp:278
