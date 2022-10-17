@@ -584,7 +584,7 @@ msgstr "La gravadora de CD %1 (%2) no permet fer còpies exactes."
 #: jobs/k3bclonejob.cpp:137
 #, kde-format
 msgid "Reading clone image"
-msgstr "S'està llegint la imatge que cal clonar"
+msgstr "S'està llegint la imatge que s'ha de clonar"
 
 #: jobs/k3bclonejob.cpp:218 projects/datacd/k3bdatajob.cpp:458
 #: projects/videocd/k3bvcdjob.cpp:456
@@ -4003,7 +4003,7 @@ msgstr "Introduïu un suport buit de Blu-ray"
 #: tools/k3bmedium.cpp:702
 #, kde-format
 msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
-msgstr "Introduïu un suport buit de CD a la unitat<p><b>%1</b>"
+msgstr "Introduïu un suport buit de CD en la unitat<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:704
 #, kde-format
@@ -4078,7 +4078,7 @@ msgstr "Introduïu un suport buit o afegible de Blu-ray"
 #: tools/k3bmedium.cpp:747
 #, kde-format
 msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
-msgstr "Introduïu un suport buit o afegible de CD a la unitat<p><b>%1</b>"
+msgstr "Introduïu un suport buit o afegible de CD en la unitat<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:749
 #, kde-format
@@ -4334,7 +4334,7 @@ msgstr "<p>Es recomana intentar primer una simulació."
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
 msgid "Cache the data to be written on the harddisk"
-msgstr "Guarda al cau del disc dur les dades que cal escriure"
+msgstr "Guarda al cau del disc dur les dades que s'hagen d'escriure"
 
 #: tools/k3bstdguiitems.cpp:88
 #, kde-format

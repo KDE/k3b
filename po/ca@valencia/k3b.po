@@ -1258,7 +1258,7 @@ msgstr "Nom antic"
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:142
 #, kde-format
 msgid "Scan for renamable files"
-msgstr "Busca fitxers a canviar de nom"
+msgstr "Busca fitxers que s'han de canviar de nom"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:143
 #, kde-format
@@ -1290,13 +1290,14 @@ msgstr "Especifiqueu un patró vàlid."
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:217
 #, kde-format
 msgid "No renameable files found."
-msgstr "No es troba cap fitxer a canviar de nom."
+msgstr "No s'ha trobat cap fitxer que s'haja de canviar de nom."
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:265
 #, kde-format
 msgid "Please click the Scan button to search for renameable files."
 msgstr ""
-"Per favor, premeu el botó Explora per a buscar els fitxers a canviar de nom."
+"Per favor, premeu el botó Explora per a buscar els fitxers que es canviaran "
+"de nom."
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:279
 #, kde-format
@@ -1697,7 +1698,7 @@ msgstr "S'està creant un projecte nou d'«eMovix»."
 #: k3b.cpp:1291
 #, kde-format
 msgid "Select Files to Add to Project"
-msgstr "Seleccioneu els fitxers a afegir al projecte"
+msgstr "Seleccioneu els fitxers que s'han d'afegir al projecte"
 
 #: k3b.cpp:1293
 #, kde-format
@@ -3535,7 +3536,7 @@ msgstr ""
 #: k3bwritingmodewidget.cpp:94
 #, kde-format
 msgid "Select the writing mode to use"
-msgstr "Seleccioneu el mode d'escriptura que s'utilitzarà"
+msgstr "Seleccioneu el mode d'escriptura que s'ha d'utilitzar"
 
 #: k3bwritingmodewidget.cpp:95
 #, kde-format
@@ -3866,7 +3867,7 @@ msgstr "Primera adaptació a Windows de libk3bdevice."
 #: main.cpp:104
 #, kde-format
 msgid "file(s) to open"
-msgstr "fitxer(s) que s'obrirà"
+msgstr "fitxers que s'han d'obrir"
 
 #: main.cpp:105
 #, kde-format
@@ -4643,7 +4644,7 @@ msgstr "Con&figuració predeterminada dels diàlegs d'acció:"
 #: option/base_k3bmiscoptiontab.ui:152
 #, kde-format
 msgid "Settings to load when opening an action dialog"
-msgstr "Configuració a carregar quan s'inicie un diàleg d'acció"
+msgstr "Configuració que es carregarà quan s'inicie un diàleg d'acció"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonConfigure)
 #: option/base_k3bpluginoptiontab.ui:21
@@ -5993,7 +5994,7 @@ msgstr "Segment de càrrega de l'arrancada:"
 #: projects/base_k3bbootimagedialog.ui:171
 #, kde-format
 msgid "Boot load size:"
-msgstr "Mida de l'arrancada a carregar:"
+msgstr "Mida de l'arrancada que s'ha de carregar:"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonToggleOptions)
 #: projects/base_k3bbootimagedialog.ui:188
@@ -6475,7 +6476,7 @@ msgstr "Fons del reproductor d'àudio:"
 #: projects/base_k3bmovixoptionswidget.ui:154
 #, kde-format
 msgid "Background video to show during audio playback"
-msgstr "Vídeo de fons a mostrar durant la reproducció de l'àudio"
+msgstr "Vídeo de fons que es mostrarà durant la reproducció de l'àudio"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_comboAudioBackground)
 #: projects/base_k3bmovixoptionswidget.ui:159
@@ -7052,7 +7053,7 @@ msgstr "Primer afegiu fitxers al vostre projecte."
 #: projects/k3baudioviewimpl.cpp:443
 #, kde-format
 msgid "No tracks to convert"
-msgstr "No hi ha cap pista a convertir"
+msgstr "No hi ha cap pista que calga convertir"
 
 #: projects/k3bbootimagedialog.cpp:36
 #, kde-format
@@ -7440,7 +7441,7 @@ msgstr "Importar sessió"
 #: projects/k3bdatamultisessionimportdialog.cpp:251
 #, kde-format
 msgid "Please select a session to import."
-msgstr "Seleccioneu una sessió a importar."
+msgstr "Seleccioneu una sessió que s'importarà."
 
 #: projects/k3bdataprojectmodel.cpp:182
 #, kde-format
@@ -9187,9 +9188,9 @@ msgid ""
 "Time in seconds to wait after playback of 'play track' before triggering the "
 "<timeout> action (unless the user triggers some action before time ran up)."
 msgstr ""
-"Temps en segons que cal esperar després de la reproducció de «pista que s'ha "
-"de reproduir» abans d'accionar l'acció <temps espera> (a menys que l'usuari "
-"accione alguna acció abans que s'acabe el temps)."
+"Temps en segons que s'ha d'esperar després de la reproducció de «pista que "
+"s'ha de reproduir» abans d'accionar l'acció <temps espera> (a menys que "
+"l'usuari accione alguna acció abans que s'acabe el temps)."
 
 #: projects/k3bvcdtrackdialog.cpp:304
 #, kde-format
@@ -10592,8 +10593,8 @@ msgstr "Còdec de vídeo:"
 #, kde-format
 msgid "Select the Video codec used to encode the DVD titles"
 msgstr ""
-"Seleccioneu el còdec de vídeo que s'utilitzarà per a codificar les pistes "
-"del DVD"
+"Seleccioneu el còdec de vídeo que s'ha d'utilitzar per a codificar les "
+"pistes del DVD"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
@@ -10606,8 +10607,8 @@ msgstr "Còdec d'àudio:"
 #, kde-format
 msgid "Select the Audio codec used to encode the DVD titles"
 msgstr ""
-"Seleccioneu el còdec d'àudio que s'utilitzarà per a codificar les pistes del "
-"DVD"
+"Seleccioneu el còdec d'àudio que s'ha d'utilitzar per a codificar les pistes "
+"del DVD"
 
 #. i18n: ectx: attribute (title), widget (QWidget, TabPage)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:364
@@ -10872,7 +10873,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
 #, kde-format
 msgid "Please select the titles to rip."
-msgstr "Seleccioneu les pistes que cal extraure."
+msgstr "Seleccioneu les pistes que s'extreuran."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:166
 #, kde-format
