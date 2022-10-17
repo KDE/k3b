@@ -155,7 +155,7 @@ K3b::VerificationJob::VerificationJob( K3b::JobHandler* hdl, QObject* parent )
     : K3b::Job( hdl, parent )
 {
     d = new Private( this );
-    d->currentTrackEntry = d->trackEntries.end();
+    d->currentTrackEntry = d->trackEntries.constEnd();
 }
 
 
@@ -216,7 +216,7 @@ void K3b::VerificationJob::start()
 
     // make sure the job is initialized
     if( !d->trackEntries.isEmpty() ) {
-        d->currentTrackEntry = d->trackEntries.begin();
+        d->currentTrackEntry = d->trackEntries.constBegin();
     }
     else {
         emit infoMessage( i18n( "Internal Error: Verification job improperly initialized (%1)",
@@ -289,7 +289,7 @@ void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         d->totalSectors += d->trackLength( *it );
     }
 
-    Q_ASSERT( d->currentTrackEntry != d->trackEntries.end() );
+    Q_ASSERT( d->currentTrackEntry != d->trackEntries.constEnd() );
 
     if( d->currentTrackEntry->trackNumber >= d->toc.count() ) {
         readTrack();
@@ -307,7 +307,7 @@ void K3b::VerificationJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 
 void K3b::VerificationJob::readTrack()
 {
-    if( d->currentTrackEntry == d->trackEntries.end() ) {
+    if( d->currentTrackEntry == d->trackEntries.constEnd() ) {
         jobFinished(true);
         return;
     }
@@ -395,7 +395,7 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
             emit infoMessage( i18n("Written data verified."), MessageSuccess );
 
             ++d->currentTrackEntry;
-            if( d->currentTrackEntry != d->trackEntries.end() )
+            if( d->currentTrackEntry != d->trackEntries.constEnd() )
                 readTrack();
             else
                 jobFinished(true);
