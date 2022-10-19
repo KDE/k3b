@@ -3,6 +3,7 @@ X-KDE-Solid-Predicate=[[StorageVolume.ignored == false AND OpticalDisc.blank == 
 Actions=K3bAudioCDProject;
 Type=Service
 X-KDE-Priority=TopLevel
+X-KDE-AliasFor=org.kde.k3b
 
 [Desktop Action K3bAudioCDProject]
 Exec=k3b --device %i --audiocd

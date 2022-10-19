@@ -3,6 +3,7 @@ X-KDE-Solid-Predicate=OpticalDisc.availableContent & 'Audio'
 Actions=K3bRip;
 Type=Service
 X-KDE-Priority=TopLevel
+X-KDE-AliasFor=org.kde.k3b
 
 [Desktop Action K3bRip]
 Name=Extract Digital Audio with K3b

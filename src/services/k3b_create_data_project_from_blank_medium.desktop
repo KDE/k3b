@@ -3,6 +3,7 @@ X-KDE-Solid-Predicate=[StorageVolume.ignored == false AND OpticalDisc.blank == t
 Actions=K3bDataProject;
 Type=Service
 X-KDE-Priority=TopLevel
+X-KDE-AliasFor=org.kde.k3b
 
 [Desktop Action K3bDataProject]
 Exec=k3b --device %i --data
