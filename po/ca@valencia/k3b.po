@@ -4032,7 +4032,7 @@ msgstr "Grava la imatge"
 #: misc/k3bimagewritingdialog.cpp:442
 #, kde-format
 msgid "Image to Burn"
-msgstr "Imatge a gravar"
+msgstr "Imatge que s'ha de gravar"
 
 #: misc/k3bimagewritingdialog.cpp:447
 #, kde-format
@@ -4221,7 +4221,7 @@ msgstr "Comprovació de la suma MD5"
 #: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
-msgstr "Introduïu la suma MD5 a comparar:"
+msgstr "Introduïu la suma MD5 que s'ha de comparar:"
 
 #: misc/k3bimagewritingdialog.cpp:1100
 #, kde-format
@@ -7851,7 +7851,7 @@ msgstr ""
 #: projects/k3bview.cpp:82
 #, kde-format
 msgid "No Data to Burn"
-msgstr "Cap dada a gravar"
+msgstr "Cap dada que s'haja de gravar"
 
 #: projects/k3bdataviewimpl.cpp:105
 #, kde-format
@@ -8002,7 +8002,7 @@ msgstr "Mida del DVD"
 #: projects/k3bfillstatusdisplay.cpp:479
 #, kde-format
 msgid "Blu-ray Size"
-msgstr "Mida del Blu-ray"
+msgstr "Mida de Blu-ray"
 
 #: projects/k3bfillstatusdisplay.cpp:510 projects/k3bfillstatusdisplay.cpp:511
 #: projects/k3bfillstatusdisplay.cpp:512
@@ -10015,7 +10015,7 @@ msgstr "Extracció de CD"
 #: rip/k3baudiorippingdialog.cpp:173
 #, kde-format
 msgid "Do not read pregaps"
-msgstr "No lliggues els preintervals"
+msgstr "No lliges els preintervals"
 
 #: rip/k3baudiorippingdialog.cpp:191
 #, kde-format
