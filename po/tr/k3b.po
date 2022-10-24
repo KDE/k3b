@@ -3212,9 +3212,9 @@ msgid ""
 "To properly set the locale charset make sure the LC_* environment variables "
 "are set. Normally the distribution setup tools take care of this."
 msgstr ""
-"Sistem yereli karakter kümesini uygun bir şekilde ayarlamak için LC_* "
-"çevresel değişkenleri kullanılır. Normalde dağıtım ayar araçları bu "
-"yapılandırmayı sizin için gerçekleştirir."
+"Sistem yereli karakter kümesini uygun bir şekilde ayarlamak için LC_* çevre "
+"değişkenleri kullanılır. Normalde dağıtım ayar araçları bu yapılandırmayı "
+"sizin için gerçekleştirir."
 
 #: k3bsystemproblemdialog.cpp:582
 #, kde-format
