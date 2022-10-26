@@ -1275,7 +1275,7 @@ msgstr ""
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:382
 #, kde-format
 msgid "Rename Audio Files"
-msgstr "Canvia el nom els fitxers d'àudio"
+msgstr "Canvia el nom dels fitxers d'àudio"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:166
 #, kde-format
@@ -1307,7 +1307,7 @@ msgstr "Fet."
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:383
 #, kde-format
 msgid "Rename audio files based on their meta info."
-msgstr "Canvia el nom els fitxers d'àudio segons la seua metainformació."
+msgstr "Canvia el nom dels fitxers d'àudio segons la seua metainformació."
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:42
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:68
