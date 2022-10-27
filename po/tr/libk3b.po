@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-10-13 02:27+0300\n"
+"PO-Revision-Date: 2022-10-26 23:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3531,8 +3531,8 @@ msgstr "n/a"
 #, kde-format
 msgid "1 bit/s"
 msgid_plural "%1 bits/s"
-msgstr[0] "%1 bit/s"
-msgstr[1] "%1 bit/s"
+msgstr[0] "%1 bit/sn"
+msgstr[1] "%1 bit/sn"
 
 #: projects/videocd/k3bvcdtrack.cpp:218
 #, kde-format
