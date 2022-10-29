@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-10-26 23:55+0300\n"
+"PO-Revision-Date: 2022-10-28 13:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.1\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -1440,14 +1440,14 @@ msgstr "%2 Video DVD'sinin %1 Başlığı İnceleniyor"
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:178
 #, kde-format
 msgid "Analysing Chapter %1 of %2"
-msgstr "Bölüm %1 / %2 İnceleniyor"
+msgstr "Fasıl %1 / %2 İnceleniyor"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:255
 #, kde-format
 msgid ""
 "Ignoring clipping values of last chapter due to its short playback time."
 msgstr ""
-"Kısa süreli olması nedeniyle son bölümün kırpılmış değerleri ihmal ediliyor."
+"Kısa süreli olması nedeniyle son fasılın kırpılmış değerleri ihmal ediliyor."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:151
 #, kde-format
