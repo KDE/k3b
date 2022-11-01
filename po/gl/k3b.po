@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-06-10 00:44+0000\n"
+"POT-Creation-Date: 2022-11-01 00:46+0000\n"
 "PO-Revision-Date: 2020-01-11 11:22+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -44,6 +44,21 @@ msgstr ""
 "mvillarino@users.sourceforge.net,\n"
 "xosecalvo@gmail.com,\n"
 "mgl.branco@gmail.com"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
+#, kde-format
+msgid "WavPack"
+msgstr "WavPack"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
+#, kde-format
+msgid "Monkey's Audio (APE)"
+msgstr "Monkey's Audio (APE)"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
+#, kde-format
+msgid "Advanced Audio Coding (AAC)"
+msgstr "Codificación avanzada de son (AAC)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
@@ -11118,15 +11133,6 @@ msgstr "Imaxe subposta"
 
 #~ msgid "Windows Media v2"
 #~ msgstr "Windows Media v2"
-
-#~ msgid "WavPack"
-#~ msgstr "WavPack"
-
-#~ msgid "Monkey's Audio (APE)"
-#~ msgstr "Monkey's Audio (APE)"
-
-#~ msgid "Advanced Audio Coding (AAC)"
-#~ msgstr "Codificación avanzada de son (AAC)"
 
 #~ msgctxt "@info %1 is a duration formatted using QLocale::toString"
 #~ msgid "Elapsed time: %1"

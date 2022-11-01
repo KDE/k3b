@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-06-10 00:44+0000\n"
+"POT-Creation-Date: 2022-11-01 00:46+0000\n"
 "PO-Revision-Date: 2011-07-24 22:09+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -30,6 +30,21 @@ msgstr "Marko Dimjašević"
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "marko@dimjasevic.net"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
+#, kde-format
+msgid "WavPack"
+msgstr ""
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
+#, kde-format
+msgid "Monkey's Audio (APE)"
+msgstr ""
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
+#, kde-format
+msgid "Advanced Audio Coding (AAC)"
+msgstr ""
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format

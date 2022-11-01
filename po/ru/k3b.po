@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-06-10 00:44+0000\n"
+"POT-Creation-Date: 2022-11-01 00:46+0000\n"
 "PO-Revision-Date: 2022-07-07 14:53+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -46,6 +46,21 @@ msgstr ""
 "lav@altlinux.ru,shafff@ukr.net,lorwindowser@mail.ru,mok@kde.ru,"
 "darkstar@altlinux.ru,overmind88@gmail.com,avolkov@astralinux.ru,"
 "gammaray@basealt.ru"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
+#, kde-format
+msgid "WavPack"
+msgstr "WavPack"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
+#, kde-format
+msgid "Monkey's Audio (APE)"
+msgstr "Monkey's Audio (APE)"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
+#, kde-format
+msgid "Advanced Audio Coding (AAC)"
+msgstr "Advanced Audio Coding (AAC)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
@@ -11089,15 +11104,6 @@ msgstr "Subpicture"
 
 #~ msgid "Windows Media v2"
 #~ msgstr "Windows Media v2"
-
-#~ msgid "WavPack"
-#~ msgstr "WavPack"
-
-#~ msgid "Monkey's Audio (APE)"
-#~ msgstr "Monkey's Audio (APE)"
-
-#~ msgid "Advanced Audio Coding (AAC)"
-#~ msgstr "Advanced Audio Coding (AAC)"
 
 #, fuzzy
 #~| msgctxt ""

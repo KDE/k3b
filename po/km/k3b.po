@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-06-10 00:44+0000\n"
+"POT-Creation-Date: 2022-11-01 00:46+0000\n"
 "PO-Revision-Date: 2012-06-11 10:20+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -30,6 +30,21 @@ msgid "Your emails"
 msgstr ""
 "khoemsokhem@khmeros.info,​​mornmet@khmeros.info,sutha@khmeros.info,"
 "ratanak@khmeros.info,sophea@khmeros.info"
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
+#, kde-format
+msgid "WavPack"
+msgstr ""
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
+#, kde-format
+msgid "Monkey's Audio (APE)"
+msgstr ""
+
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
+#, kde-format
+msgid "Advanced Audio Coding (AAC)"
+msgstr "Advanced Audio Coding (AAC)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
@@ -11026,9 +11041,6 @@ msgstr "រូបភាព​រង"
 
 #~ msgid "Windows Media v2"
 #~ msgstr "មេឌៀ​វីនដូ​កំណែ ២"
-
-#~ msgid "Advanced Audio Coding (AAC)"
-#~ msgstr "Advanced Audio Coding (AAC)"
 
 #, fuzzy
 #~| msgctxt "@info %1 is a duration formatted using KLocale::formatLocaleTime"
