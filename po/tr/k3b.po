@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-10-28 13:26+0300\n"
+"PO-Revision-Date: 2022-11-01 12:49+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -51,17 +51,17 @@ msgstr ""
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Monkey's Audio (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
-msgstr ""
+msgstr "Advanced Audio Coding (AAC)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
@@ -6565,7 +6565,7 @@ msgstr ""
 "(Çerçeve Tamponu) başlatan yapılandırmaları ifade eder.\n"
 "<p><b>AA</b> etiketleri ile eMovix, videoyu basit ASCII karakterleri "
 "kullanımı ile resimleri metin kipinde göstermesini sağlayan ASCII-Art "
-"kütüphanesine gönderir.\n"
+"kitaplığına gönderir.\n"
 "<p><b>hd</b> etiketi, eMovix'in ortam yerine yerel sabit diskten "
 "önyüklenmesini sağlar. Bu bir eMovix ortamının yanlışlıkla başlatılmasını "
 "önler.\n"
