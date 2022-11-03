@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-05-04 18:41+0100\n"
+"PO-Revision-Date: 2022-11-02 14:02+0000\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -79,7 +79,7 @@ msgstr ""
 "X-POFile-SpellExtra: Bin Micha ek RE JuK Amarok Kab HAL vob MS openSUSE\n"
 "X-POFile-SpellExtra: Packman Zhai Leslie cdrskin libburn Cdrskin WavPack\n"
 "X-POFile-IgnoreConsistency: Layer\n"
-"X-POFile-SpellExtra: APE\n"
+"X-POFile-SpellExtra: APE Monkey\n"
 "X-POFile-IgnoreConsistency: Type\n"
 "X-POFile-IgnoreConsistency: Comment\n"
 "X-POFile-IgnoreConsistency: Name\n"
@@ -98,17 +98,17 @@ msgstr "zepires@gmail.com"
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Áudio Monkey (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
-msgstr ""
+msgstr "Codificação de Áudio Avançada (AAC)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format

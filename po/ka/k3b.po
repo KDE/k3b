@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-09-24 20:01+0200\n"
+"PO-Revision-Date: 2022-11-02 05:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -31,7 +31,7 @@ msgstr "Temuri.doghonadze@gmail.com"
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
@@ -1479,7 +1479,7 @@ msgstr ""
 #: k3b.cpp:446
 #, kde-format
 msgid "System Check"
-msgstr ""
+msgstr "სისტემის შემოწმება"
 
 #: k3b.cpp:447
 #, kde-format
@@ -2217,7 +2217,7 @@ msgstr ""
 #: k3bemptydiscwaiter.cpp:518
 #, kde-format
 msgid "&Format"
-msgstr ""
+msgstr "&ფორმატირება"
 
 #: k3bemptydiscwaiter.cpp:541
 #, kde-format
@@ -3258,7 +3258,7 @@ msgstr ""
 #: k3bwritingmodewidget.cpp:95
 #, kde-format
 msgid "Writing mode"
-msgstr ""
+msgstr "ჩაწერის რეჟიმი"
 
 #: k3bwritingmodewidget.cpp:96
 #, kde-format
@@ -4309,7 +4309,7 @@ msgstr ""
 #: option/base_k3bthemeoptiontab.ui:119
 #, kde-format
 msgid "Get New Themes..."
-msgstr ""
+msgstr "ახალი თემების მიღება..."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
@@ -4754,7 +4754,7 @@ msgstr ""
 #: option/k3boptiondialog.cpp:130
 #, kde-format
 msgid "Miscellaneous Settings"
-msgstr ""
+msgstr "სხვადასხვა პარამეტრები"
 
 #: option/k3boptiondialog.cpp:139
 #, kde-format
@@ -4779,7 +4779,7 @@ msgstr "გაფრთხილებები"
 #: option/k3boptiondialog.cpp:164
 #, kde-format
 msgid "System Notifications"
-msgstr ""
+msgstr "სისტემური შეტყობინებები"
 
 #: option/k3boptiondialog.cpp:173
 #, kde-format
@@ -5529,7 +5529,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:79
 #, kde-format
 msgid "&Custom..."
-msgstr ""
+msgstr "&ხელით..."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupSymlinks)
 #: projects/base_k3bdataimagesettings.ui:75
@@ -6965,7 +6965,7 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:619
 #, kde-format
 msgid "File already exists"
-msgstr ""
+msgstr "ფაილი უკვე არსებობს"
 
 #: projects/k3bdataurladdingdialog.cpp:381
 #: projects/k3bdataurladdingdialog.cpp:620
@@ -7075,7 +7075,7 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:769
 #, kde-format
 msgid "Hidden Files"
-msgstr ""
+msgstr "დამალული ფაილები"
 
 #: projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:785
@@ -7590,8 +7590,8 @@ msgstr "ვიდეო CD"
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 MPEG (%2)"
+msgstr[1] "%1 MPEG-ები (%2)"
 
 #: projects/k3bvcdburndialog.cpp:95 projects/k3bvcdburndialog.cpp:96
 #: projects/k3bvcdburndialog.cpp:97 projects/k3bvcdburndialog.cpp:98
@@ -8254,7 +8254,7 @@ msgstr ""
 #: projects/k3bvcdtrackdialog.cpp:375
 #, kde-format
 msgid "File Info"
-msgstr ""
+msgstr "ფაილის ინფორმაცია"
 
 #: projects/k3bvcdtrackdialog.cpp:387
 #, kde-format
@@ -8309,7 +8309,7 @@ msgstr " წამი"
 #: projects/k3bvcdtrackdialog.cpp:478
 #, kde-format
 msgid "infinite"
-msgstr ""
+msgstr "უსასრულო"
 
 #: projects/k3bvcdtrackdialog.cpp:480
 #, kde-format
@@ -9190,8 +9190,8 @@ msgstr[1] ""
 #, kde-format
 msgid "1 track"
 msgid_plural "%1 tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ტრეკი"
+msgstr[1] "%1 ტრეკი"
 
 #: rip/k3bmassaudioencodingjob.cpp:264
 #, kde-format
@@ -9796,7 +9796,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:79
 #, kde-format
 msgid "Show files"
-msgstr ""
+msgstr "ფაილების ჩვენება"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:80
 #, kde-format

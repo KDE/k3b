@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-09-24 20:01+0200\n"
+"PO-Revision-Date: 2022-11-02 05:49+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -828,7 +828,7 @@ msgstr ""
 #: jobs/k3bdvdcopyjob.cpp:305
 #, kde-format
 msgid "Unsupported media type."
-msgstr ""
+msgstr "მედიის მხარდაუჭერელი ტიპი."
 
 #: jobs/k3bdvdcopyjob.cpp:329
 #, kde-format
@@ -1482,17 +1482,17 @@ msgstr ""
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:519
 #, kde-format
 msgid "MPEG1 Layer III"
-msgstr ""
+msgstr "MPEG1 Layer III"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:530
 #, kde-format
 msgid "MPEG4 (FFMPEG)"
-msgstr ""
+msgstr "MPEG4 (FFMPEG)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:532
 #, kde-format
 msgid "XviD"
-msgstr ""
+msgstr "XviD"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:543
 #, kde-format
@@ -2030,9 +2030,9 @@ msgstr ""
 
 #: projects/datacd/k3bisoimager.cpp:172 projects/k3bcdrdaowriter.cpp:770
 #: projects/k3bcdrecordwriter.cpp:909 projects/k3bcdrskinwriter.cpp:922
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 crashed."
-msgstr ""
+msgstr "%1 ავარიულად გაითიშა."
 
 #: projects/datacd/k3bisoimager.cpp:363
 #, kde-format
@@ -3178,11 +3178,11 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: projects/movixcd/k3bmovixjob.cpp:117
-#, kde-format
+#, fuzzy, kde-format
 msgid " – One copy"
 msgid_plural " – %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " – ერთი ასლი"
+msgstr[1] " – %1 ასლი"
 
 #: projects/videocd/k3bvcddoc.cpp:202 projects/videocd/k3bvcddoc.cpp:212
 #, kde-format
@@ -3205,7 +3205,7 @@ msgstr "ინფორმაცია"
 #: projects/videocd/k3bvcddoc.cpp:215
 #, kde-format
 msgid "SVCD"
-msgstr ""
+msgstr "SVCD"
 
 #: projects/videocd/k3bvcddoc.cpp:217
 #, kde-format
@@ -3216,7 +3216,7 @@ msgstr ""
 #: projects/videocd/k3bvcddoc.cpp:220
 #, kde-format
 msgid "Force VCD"
-msgstr ""
+msgstr "VCD ძალით"
 
 #: projects/videocd/k3bvcddoc.cpp:221
 #, kde-format
@@ -3252,7 +3252,7 @@ msgstr ""
 #: projects/videocd/k3bvcddoc.cpp:279
 #, kde-format
 msgid "Wrong File Format"
-msgstr ""
+msgstr "არასწორი ფაილის ფორმატი"
 
 #: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:468
 #, kde-format
@@ -3384,8 +3384,8 @@ msgstr ""
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 MPEG (%2)"
+msgstr[1] "%1 MPEG-ები (%2)"
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
 #: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
@@ -3402,8 +3402,8 @@ msgstr "n/a"
 #, kde-format
 msgid "1 bit/s"
 msgid_plural "%1 bits/s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ბიტი/წმ"
+msgstr[1] "%1 ბიტი/წმ"
 
 #: projects/videocd/k3bvcdtrack.cpp:218
 #, kde-format
@@ -3424,22 +3424,22 @@ msgstr "%1 ჰც"
 #: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:332
 #, kde-format
 msgid "original"
-msgstr ""
+msgstr "ორიგინალი"
 
 #: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:332
 #, kde-format
 msgid "duplicate"
-msgstr ""
+msgstr "დუბლირება"
 
 #: projects/videocd/k3bvcdtrack.cpp:346
 #, kde-format
 msgid "Motion Picture"
-msgstr ""
+msgstr "მოძრავი სურათი"
 
 #: projects/videocd/k3bvcdtrack.cpp:348
 #, kde-format
 msgid "Still Picture"
-msgstr ""
+msgstr "სურათი"
 
 #: projects/videocd/k3bvcdtrack.cpp:355
 #, kde-format
@@ -3459,22 +3459,22 @@ msgstr "არასწორი"
 #: projects/videocd/k3bvcdtrack.cpp:396
 #, kde-format
 msgid "stereo"
-msgstr ""
+msgstr "სტერეო"
 
 #: projects/videocd/k3bvcdtrack.cpp:397
 #, kde-format
 msgid "joint stereo"
-msgstr ""
+msgstr "გაერთიანებული სტერეო"
 
 #: projects/videocd/k3bvcdtrack.cpp:398 projects/videocd/k3bvcdtrack.cpp:403
 #, kde-format
 msgid "dual channel"
-msgstr ""
+msgstr "ორმაგი არხი"
 
 #: projects/videocd/k3bvcdtrack.cpp:399
 #, kde-format
 msgid "single channel"
-msgstr ""
+msgstr "ერთი არხი"
 
 #: projects/videocd/k3bvcdtrack.cpp:404
 #, kde-format
@@ -3484,7 +3484,7 @@ msgstr ""
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:59
 #, kde-format
 msgid "File %1 is empty."
-msgstr ""
+msgstr "ფაილი %1 ცარიელია."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:93
 #, kde-format
@@ -3576,22 +3576,22 @@ msgstr "მოწყობილობის არჩევანი"
 #: tools/k3bdeviceselectiondialog.cpp:39
 #, kde-format
 msgid "Please select a device:"
-msgstr ""
+msgstr "აირჩიეთ მოწყობილობა:"
 
 #: tools/k3bmd5job.cpp:85
 #, kde-format
 msgid "Could not find file %1"
-msgstr ""
+msgstr "ფაილი ვერ ვიპოვე: %1"
 
 #: tools/k3bmd5job.cpp:230
 #, kde-format
 msgid "Error while reading from file %1"
-msgstr ""
+msgstr "ფაილიდან (%1) წაკითხვის შეცდომა"
 
 #: tools/k3bmediacache.cpp:126 tools/k3bmediacache.cpp:367
 #, kde-format
 msgid "CDDB Lookup"
-msgstr ""
+msgstr "CDDB ძებნა"
 
 #: tools/k3bmedium.cpp:313
 #, kde-format
@@ -3601,7 +3601,7 @@ msgstr "აუდიო CD"
 #: tools/k3bmedium.cpp:316
 #, kde-format
 msgid "Mixed CD"
-msgstr ""
+msgstr "შერეული CD"
 
 #: tools/k3bmedium.cpp:320
 #, kde-format
@@ -3683,7 +3683,7 @@ msgctxt ""
 "To be shown when a DVD or Blu-ray is required but another type of medium is "
 "inserted."
 msgid "DVD or Blu-ray"
-msgstr ""
+msgstr "DVD ან Blu-ray"
 
 #: tools/k3bmedium.cpp:598
 #, kde-format
@@ -3712,18 +3712,18 @@ msgstr "DVD"
 msgctxt ""
 "To be shown when a DVD-DL is required but another type of medium is inserted."
 msgid "DVD-DL"
-msgstr ""
+msgstr "DVD-DL"
 
 #: tools/k3bmedium.cpp:608
 #, kde-format
 msgid "rewritable medium"
-msgstr ""
+msgstr "გადაწერადი დისკი"
 
 #: tools/k3bmedium.cpp:611
 #, kde-format
 msgctxt "%1 is type of medium (e.g. DVD)"
 msgid "rewritable %1"
-msgstr ""
+msgstr "გადაწერადი %1"
 
 #: tools/k3bmedium.cpp:616
 #, kde-format
@@ -4108,7 +4108,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:88
 #, kde-format
 msgid "Remove image"
-msgstr ""
+msgstr "სურათის წაშლა"
 
 #: tools/k3bstdguiitems.cpp:89
 #, kde-format
