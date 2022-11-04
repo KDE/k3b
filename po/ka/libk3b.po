@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-11-02 05:49+0100\n"
+"PO-Revision-Date: 2022-11-03 06:15+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -331,17 +331,17 @@ msgstr ""
 #: jobs/k3bcdcopyjob.cpp:545
 #, kde-format
 msgid "Unable to create temporary folder '%1'."
-msgstr ""
+msgstr "დროებითი საქაღალდის (%1) შექმნის შეცდომა."
 
 #: jobs/k3bcdcopyjob.cpp:552
 #, kde-format
 msgid "Using temporary folder %1."
-msgstr ""
+msgstr "გამოიყენება დროებითი საქაღალდე %1."
 
 #: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
 msgid "Do you want to overwrite %1?"
-msgstr ""
+msgstr "გნებავთ, გადააწეროთ %1-ს?"
 
 #: jobs/k3bcdcopyjob.cpp:576 jobs/k3bdvdcopyjob.cpp:319
 #, kde-format
@@ -351,17 +351,17 @@ msgstr "ფაილი უკვე არსებობს"
 #: jobs/k3bcdcopyjob.cpp:585 jobs/k3bdvdcopyjob.cpp:328
 #, kde-format
 msgid "Writing image file to %1."
-msgstr ""
+msgstr "ასლის ფაილის %1-ზე ჩაწერა."
 
 #: jobs/k3bcdcopyjob.cpp:601
 #, kde-format
 msgid "Reading Session %1"
-msgstr ""
+msgstr "სესიის კითხვა %1"
 
 #: jobs/k3bcdcopyjob.cpp:603
 #, kde-format
 msgid "Reading Source Medium"
-msgstr ""
+msgstr "საწყისი მედიის წაკითხვა"
 
 #: jobs/k3bcdcopyjob.cpp:606 jobs/k3bcdcopyjob.cpp:1194
 #, kde-format
@@ -478,7 +478,7 @@ msgstr "ასლის ფაილების წაშლა."
 #: jobs/k3bcdcopyjob.cpp:1202
 #, kde-format
 msgid "Creating CD Image"
-msgstr ""
+msgstr "CD-ის ასლის შექმნა"
 
 #: jobs/k3bcdcopyjob.cpp:1206
 #, kde-format
@@ -488,7 +488,7 @@ msgstr ""
 #: jobs/k3bcdcopyjob.cpp:1208
 #, kde-format
 msgid "Simulating CD Copy"
-msgstr ""
+msgstr "CD-ის კოპირების სიმულაცია"
 
 #: jobs/k3bcdcopyjob.cpp:1212
 #, kde-format
@@ -504,8 +504,8 @@ msgstr "CD-ის კოპირება"
 #, kde-format
 msgid "Creating 1 copy"
 msgid_plural "Creating %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ასლის შექმნა"
+msgstr[1] "%1 ასლის შექმნა"
 
 #: jobs/k3bcdda2wavreader.cpp:88 jobs/k3bclonejob.cpp:81
 #: jobs/k3bdvdbooktypejob.cpp:278 jobs/k3bdvdformattingjob.cpp:455
@@ -618,24 +618,24 @@ msgstr ""
 #: jobs/k3bclonejob.cpp:356
 #, kde-format
 msgid "Burning Clone Image"
-msgstr ""
+msgstr "კლონი ასლის ამოწვა"
 
 #: jobs/k3bclonejob.cpp:359
 #, kde-format
 msgid "Simulating CD Cloning"
-msgstr ""
+msgstr "CD-ის კლონირების სიმულაცია"
 
 #: jobs/k3bclonejob.cpp:361
 #, kde-format
 msgid "Cloning CD"
-msgstr ""
+msgstr "CD-ის კლონირება"
 
 #: jobs/k3bclonejob.cpp:367
 #, kde-format
 msgid "Creating 1 clone copy"
 msgid_plural "Creating %1 clone copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 კლონი ასლის შექმნა"
+msgstr[1] "%1 კლონი ასლის შექმნა"
 
 #: jobs/k3bdatatrackreader.cpp:167
 #, kde-format
@@ -849,12 +849,12 @@ msgstr ""
 #: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
 #, kde-format
 msgid "Writing copy %1"
-msgstr ""
+msgstr "%1-ე ასლის ჩაწერა"
 
 #: jobs/k3bdvdcopyjob.cpp:383 jobs/k3bdvdcopyjob.cpp:598
 #, kde-format
 msgid "Writing copy"
-msgstr ""
+msgstr "ასლის ჩაწერა"
 
 #: jobs/k3bdvdcopyjob.cpp:573
 #, kde-format
@@ -879,7 +879,7 @@ msgstr ""
 #: jobs/k3bdvdcopyjob.cpp:671
 #, kde-format
 msgid "Verifying copy"
-msgstr ""
+msgstr "ასლის გადამოწმება"
 
 #: jobs/k3bdvdcopyjob.cpp:681 jobs/k3biso9660imagewritingjob.cpp:146
 #, kde-format
@@ -908,7 +908,7 @@ msgstr ""
 #: jobs/k3bdvdcopyjob.cpp:825
 #, kde-format
 msgid "Writing DVD copy"
-msgstr ""
+msgstr "DVD ასლის ჩაწერა"
 
 #: jobs/k3bdvdcopyjob.cpp:829
 #, kde-format
@@ -920,7 +920,7 @@ msgstr ""
 #: projects/datacd/k3bdatajob.cpp:840 projects/datacd/k3bdatajob.cpp:961
 #, kde-format
 msgid "Writing %1."
-msgstr ""
+msgstr "%1-ის ჩაწერა."
 
 #: jobs/k3bdvdcopyjob.cpp:839 jobs/k3bmetawriter.cpp:512
 #: projects/datacd/k3bdatajob.cpp:848
@@ -973,7 +973,7 @@ msgstr ""
 #: jobs/k3bdvdcopyjob.cpp:918
 #, kde-format
 msgid "Writing BD copy"
-msgstr ""
+msgstr "BD ასლის ჩაწერა"
 
 #: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
 #, kde-format
@@ -1005,7 +1005,7 @@ msgstr "დისკის ფორმატირება"
 #: projects/k3bgrowisofswriter.cpp:336
 #, kde-format
 msgid "Unmounting medium"
-msgstr ""
+msgstr "Unmounting საშუალო"
 
 #: jobs/k3bdvdformattingjob.cpp:135
 #, kde-format
@@ -1140,7 +1140,7 @@ msgstr ""
 #: jobs/k3biso9660imagewritingjob.cpp:205
 #, kde-format
 msgid "Writing image"
-msgstr ""
+msgstr "ასლის ჩაწერა"
 
 #: jobs/k3biso9660imagewritingjob.cpp:207
 #, kde-format
@@ -2030,7 +2030,7 @@ msgstr ""
 
 #: projects/datacd/k3bisoimager.cpp:172 projects/k3bcdrdaowriter.cpp:770
 #: projects/k3bcdrecordwriter.cpp:909 projects/k3bcdrskinwriter.cpp:922
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 crashed."
 msgstr "%1 ავარიულად გაითიშა."
 
@@ -3178,7 +3178,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: projects/movixcd/k3bmovixjob.cpp:117
-#, fuzzy, kde-format
+#, kde-format
 msgid " – One copy"
 msgid_plural " – %1 copies"
 msgstr[0] " – ერთი ასლი"
