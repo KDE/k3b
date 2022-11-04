@@ -274,7 +274,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         if( d->numSessions > 1 && m_writingMode == K3b::WritingModeRaw ) {
             if( !questionYesNo( i18n("You will only be able to copy the first session in raw writing mode. "
                                      "Continue anyway?"),
-                                i18n("Multisession CD") ) ) {
+                                i18n("Multisession CD"), KStandardGuiItem::cont(), KStandardGuiItem::cancel() ) ) {
                 finishJob( true, false );
                 return;
             }
@@ -573,7 +573,7 @@ bool K3b::CdCopyJob::prepareImageFiles()
         // we only need a single image file
         if( !fi.isFile() ||
             questionYesNo( i18n("Do you want to overwrite %1?",m_tempPath),
-                           i18n("File Exists") ) ) {
+                           i18n("File Exists"), KStandardGuiItem::overwrite(), KStandardGuiItem::cancel() ) ) {
             if( fi.isDir() )
                 m_tempPath = K3b::findTempFile( "iso", m_tempPath );
             else if( !QFileInfo( m_tempPath.section( '/', 0, -2 ) ).isDir() ) {

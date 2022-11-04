@@ -50,9 +50,9 @@ namespace K3b {
          * reimplemented from JobHandler
          */
         bool questionYesNo( const QString& text,
-                                    const QString& caption = QString(),
-                                    const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                                    const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
+                                    const QString& caption,
+                                    const KGuiItem& buttonYes,
+                                    const KGuiItem& buttonNo ) override;
 
         /**
          * reimplemented from JobHandler

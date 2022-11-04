@@ -41,9 +41,9 @@ namespace K3b {
                                                  const QString& message = QString() ) = 0;
 
         virtual bool questionYesNo( const QString& text,
-                                    const QString& caption = QString(),
-                                    const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                                    const KGuiItem& buttonNo = KStandardGuiItem::no() ) = 0;
+                                    const QString& caption,
+                                    const KGuiItem& buttonYes,
+                                    const KGuiItem& buttonNo ) = 0;
 
         /**
          * Use this if you need the user to do something before the job is able to continue.

@@ -316,7 +316,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
             QFileInfo fi( m_imagePath );
             if( !fi.isFile() ||
                 questionYesNo( i18n("Do you want to overwrite %1?",m_imagePath),
-                               i18n("File Exists") ) ) {
+                               i18n("File Exists"), KStandardGuiItem::overwrite(), KStandardGuiItem::cancel() ) ) {
                 if( fi.isDir() )
                     m_imagePath = K3b::findTempFile( "iso", m_imagePath );
                 else if( !QFileInfo( m_imagePath.section( '/', 0, -2 ) ).isDir() ) {
@@ -816,7 +816,9 @@ bool K3b::DvdCopyJob::waitForDvd()
                 if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                          "Do you really want to continue? The disc will actually be "
                                          "written to.", Device::mediaTypeString(m, true)),
-                                    i18n("No Simulation with %1", Device::mediaTypeString(m, true)) ) ) {
+                                    i18n("No Simulation with %1", Device::mediaTypeString(m, true)),
+                                    KStandardGuiItem::cont(),
+                                    KStandardGuiItem::cancel() ) ) {
                     cancel();
                     return false;
                 }
@@ -841,7 +843,9 @@ bool K3b::DvdCopyJob::waitForDvd()
                                          "written to.",
                                          m_writerDevice->vendor(),
                                          m_writerDevice->description()),
-                                    i18n("No Simulation with DVD-R(W)") ) ) {
+                                    i18n("No Simulation with DVD-R(W)"),
+                                    KStandardGuiItem::cont(),
+                                    KStandardGuiItem::cancel() ) ) {
                     cancel();
                     return false;
                 }
@@ -909,7 +913,9 @@ bool K3b::DvdCopyJob::waitForDvd()
                 if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                          "Do you really want to continue? The disc will actually be "
                                          "written to.", Device::mediaTypeString(m, true)),
-                                    i18n("No Simulation with %1", Device::mediaTypeString(m, true)) ) ) {
+                                    i18n("No Simulation with %1", Device::mediaTypeString(m, true)),
+                                    KStandardGuiItem::cont(),
+                                    KStandardGuiItem::cancel() ) ) {
                     cancel();
                     return false;
                 }

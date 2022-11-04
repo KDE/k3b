@@ -815,7 +815,9 @@ bool K3b::DataJob::waitForBurnMedium()
                 if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                          "Do you really want to continue? The disc will actually be "
                                          "written to.", Device::mediaTypeString(foundMedium, true)),
-                                    i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)) ) ) {
+                                    i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)),
+                                    KStandardGuiItem::cont(),
+                                    KStandardGuiItem::cancel()) ) {
                     return false;
                 }
 
@@ -850,7 +852,9 @@ bool K3b::DataJob::waitForBurnMedium()
                                          "written to.",
                                          d->doc->burner()->vendor(),
                                          d->doc->burner()->description()),
-                                    i18n("No Simulation with DVD-R(W)") ) ) {
+                                    i18n("No Simulation with DVD-R(W)"),
+                                    KStandardGuiItem::cont(),
+                                    KStandardGuiItem::cancel()) ) {
                     return false;
                 }
 
@@ -893,7 +897,9 @@ bool K3b::DataJob::waitForBurnMedium()
                                                  d->doc->burner()->vendor(),
                                                  d->doc->burner()->description(),
                                                  K3b::Device::mediaTypeString(foundMedium, true) ),
-                                            i18n("No Incremental Streaming") ) ) {
+                                            i18n("No Incremental Streaming"),
+                                            KStandardGuiItem::cont(),
+                                            KStandardGuiItem::cancel() ) ) {
                             return false;
                         }
                         else {
@@ -935,7 +941,9 @@ bool K3b::DataJob::waitForBurnMedium()
             if( !questionYesNo( i18n("%1 media do not support write simulation. "
                                      "Do you really want to continue? The disc will actually be "
                                      "written to.", Device::mediaTypeString(foundMedium, true)),
-                                i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)) ) ) {
+                                i18n("No Simulation with %1", Device::mediaTypeString(foundMedium, true)),
+                                KStandardGuiItem::cont(),
+                                KStandardGuiItem::cancel() ) ) {
                 return false;
             }
 

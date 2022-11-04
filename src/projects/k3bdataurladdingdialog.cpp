@@ -456,7 +456,8 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
                                                       KGuiItem(i18n("Always follow links")),
                                                       KGuiItem(i18n("Add link to project")),
                                                       KGuiItem(i18n("Always add links")),
-                                                      KStandardGuiItem::cancel())  ) {
+                                                      KStandardGuiItem::cancel(),
+                                                      KStandardGuiItem::cancel() )  ) {
                 case 2:
                     m_bFolderLinksFollowAll = true;
                     Q_FALLTHROUGH();

@@ -39,9 +39,9 @@ namespace K3b {
          * \return true
          */
         bool questionYesNo( const QString& text,
-                            const QString& caption = QString(),
-                            const KGuiItem& buttonYes = KStandardGuiItem::yes(),
-                            const KGuiItem& buttonNo = KStandardGuiItem::no() ) override;
+                            const QString& caption,
+                            const KGuiItem& buttonYes,
+                            const KGuiItem& buttonNo ) override;
 
         /**
          * Does nothing

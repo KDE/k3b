@@ -34,15 +34,15 @@ namespace K3b {
 
         static int choose( const QString& caption,
                            const QString& text,
-                           QMessageBox::Icon = QMessageBox::Information,
-                           QWidget* parent = 0,
-                           int buttonCount = 2,
-                           const KGuiItem& b1 = KStandardGuiItem::yes(),
-                           const KGuiItem& b2 = KStandardGuiItem::no(),
-                           const KGuiItem& b3 = KStandardGuiItem::no(),
-                           const KGuiItem& b4 = KStandardGuiItem::no(),
-                           const KGuiItem& b5 = KStandardGuiItem::no(),
-                           const KGuiItem& b6 = KStandardGuiItem::no() );
+                           QMessageBox::Icon,
+                           QWidget* parent,
+                           int buttonCount,
+                           const KGuiItem& b1,
+                           const KGuiItem& b2,
+                           const KGuiItem& b3,
+                           const KGuiItem& b4,
+                           const KGuiItem& b5,
+                           const KGuiItem& b6 );
 
     public Q_SLOTS:
         /**

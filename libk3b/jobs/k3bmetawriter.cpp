@@ -484,7 +484,9 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
                                      burnDevice()->vendor(),
                                      burnDevice()->description(),
                                      K3b::Device::mediaTypeString(mediaType, true) ),
-                                i18n("No Incremental Streaming") ) ) {
+                                i18n("No Incremental Streaming"),
+                                KStandardGuiItem::cont(),
+                                KStandardGuiItem::cancel() ) ) {
                 return false;
             }
             else {
@@ -503,7 +505,9 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
             if( !questionYesNo( i18n("DVD+R(W) media do not support write simulation. "
                                      "Do you really want to continue? The media will actually be "
                                      "written to."),
-                                i18n("No Simulation with DVD+R(W)") ) ) {
+                                i18n("No Simulation with DVD+R(W)"),
+                                KStandardGuiItem::cont(),
+                                KStandardGuiItem::cancel()) ) {
                 return false;
             }
         }
@@ -514,7 +518,9 @@ bool K3b::MetaWriter::determineUsedAppAndMode()
                                      "written to.",
                                      burnDevice()->vendor(),
                                      burnDevice()->description()),
-                                i18n("No Simulation with DVD-R(W)") ) ) {
+                                i18n("No Simulation with DVD-R(W)"),
+                                KStandardGuiItem::cont(),
+                                KStandardGuiItem::cancel()) ) {
                 return false;
             }
         }
