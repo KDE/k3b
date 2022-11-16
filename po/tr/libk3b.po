@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-10-28 13:28+0300\n"
+"PO-Revision-Date: 2022-11-15 05:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.08.2\n"
+"X-Generator: Lokalize 22.08.3\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -446,7 +446,7 @@ msgstr "Kaynak disk başarıyla okundu."
 #: jobs/k3bcdcopyjob.cpp:990
 #, kde-format
 msgid "K3b was unable to eject the source disk. Please do so manually."
-msgstr "K3b, kaynak diski çıkartamadı. Lütfen diski çıkartmayı elle deneyin."
+msgstr "K3b, kaynak diski çıkaramadı. Lütfen elle diski çıkarmayı deneyin."
 
 #: jobs/k3bcdcopyjob.cpp:1007
 #, kde-format
@@ -754,12 +754,12 @@ msgstr "Lüften en son çıktıyı bana e-posta ile atın."
 #: jobs/k3bdvdbooktypejob.cpp:208
 #, kde-format
 msgid "Ejecting DVD..."
-msgstr "DVD çıkartılıyor..."
+msgstr "DVD çıkarılıyor..."
 
 #: jobs/k3bdvdbooktypejob.cpp:225
 #, kde-format
 msgid "Unable to eject media."
-msgstr "Medya çıkartılamıyor."
+msgstr "Ortam çıkarılamıyor."
 
 #: jobs/k3bdvdbooktypejob.cpp:248
 #, kde-format
@@ -885,7 +885,7 @@ msgstr "Kaynak ortam başarıyla okundu."
 #: jobs/k3bdvdcopyjob.cpp:585
 #, kde-format
 msgid "K3b was unable to eject the source medium. Please do so manually."
-msgstr "K3b kaynak ortamı çıkartamadı. Lütfen elle deneyin."
+msgstr "K3b kaynak ortamı çıkaramadı. Lütfen elle deneyin."
 
 #: jobs/k3bdvdcopyjob.cpp:646
 #, kde-format
@@ -3040,7 +3040,7 @@ msgstr ""
 #: projects/k3bgrowisofshandler.cpp:239
 #, kde-format
 msgid "Unable to allocate software buffer."
-msgstr "Medya çıkartılamıyor."
+msgstr "Yazılım arabelleği ayrılamıyor."
 
 #: projects/k3bgrowisofshandler.cpp:240
 #, kde-format
@@ -4366,11 +4366,11 @@ msgid ""
 "read audio data.</li><li>3: Like 2 but with additional scratch detection and "
 "repair.</li></ul><p><b>The extraction speed reduces from 0 to 3.</b>"
 msgstr ""
-"<p>Sayısal ses çıkartımı için düzeltme kipini ayarlar. <ul> <li>0: "
-"Denetleme, veri doğrudan diskten kopyalanıyor. <li>1: Bozulmaları engellemek "
-"için çakışma okuması gerçekleştir. </li><li>2: 1.si gibi fakat ses verisi "
-"okumak için fazladan denetleme yap.</li> <li>3: 2.si gibi fakat cızıtrı "
-"tespiti ve tamiri ile</li></ul> <p><b>Çıkartım hızı 0'dan 3'e azaltıyor</b>"
+"<p>Sayısal ses çıkarımı için düzeltme kipini ayarlar. <ul> <li>0: Denetleme, "
+"veri doğrudan diskten kopyalanıyor. <li>1: Bozulmaları engellemek için "
+"çakışma okuması gerçekleştir. </li><li>2: 1.si gibi fakat ses verisi okumak "
+"için fazladan denetleme yap.</li> <li>3: 2.si gibi fakat cızırtı tespiti ve "
+"tamiri ile</li></ul> <p><b>Çıkarım hızı 0'dan 3'e azaltıyor</b>"
 
 #: tools/k3bstdguiitems.cpp:144
 #, kde-format
