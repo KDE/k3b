@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-11-15 05:03+0300\n"
+"PO-Revision-Date: 2022-11-21 21:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -7872,7 +7872,7 @@ msgstr "Önceki oturumdan aktarılan ögeleri kaldır"
 #: projects/k3bdataviewimpl.cpp:149
 #, kde-format
 msgid "&Edit Boot Images..."
-msgstr "Öny&ükleme Kalıplarını Düzenle..."
+msgstr "Önyükleme Kalıplarını Dü&zenle..."
 
 #: projects/k3bdataviewimpl.cpp:150
 #, kde-format
