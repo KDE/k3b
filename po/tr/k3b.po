@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-11-21 21:56+0300\n"
+"PO-Revision-Date: 2022-11-22 16:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3329,7 +3329,7 @@ msgstr "Projenin boyutu:"
 #: k3bui.rc:4
 #, kde-format
 msgid "&Project"
-msgstr "&Proje"
+msgstr "Pro&je"
 
 #. i18n: ectx: Menu (tools)
 #: k3bui.rc:9
