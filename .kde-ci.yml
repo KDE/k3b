@@ -20,6 +20,6 @@ Dependencies:
     'frameworks/knotifyconfig': '@stable'
     'frameworks/kservice': '@stable'
     'frameworks/solid': '@stable'
-    'frameworks/kwidgetaddons': '@stable'
+    'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kxmlgui': '@stable'
     'multimedia/libkcddb': '@same'
