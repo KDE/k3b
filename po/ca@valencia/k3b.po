@@ -7112,7 +7112,7 @@ msgstr ""
 "de disquet. Les imatges de disquet es poden crear extraent-les directament "
 "des d'un disquet de veritat: <pre>dd if=/dev/floppy of=/tmp/floppy.img</pre> "
 "o bé fent servir un dels molts generadors de disquets d'arrancada que es "
-"poden trobar a <a href=\"https://www.google.com/search?q=linux+boot"
+"troben a <a href=\"https://www.google.com/search?q=linux+boot"
 "+floppy&ie=UTF-8&oe=UTF-8\">Internet</a>."
 
 #: projects/k3bbootimagedialog.cpp:111
