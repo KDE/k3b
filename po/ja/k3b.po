@@ -44,7 +44,7 @@ msgstr ""
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
-msgstr ""
+msgstr "AAC (Advanced Audio Coding)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
