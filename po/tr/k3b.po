@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-12-16 22:00+0300\n"
+"PO-Revision-Date: 2022-12-17 19:04+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -5644,7 +5644,7 @@ msgstr "Çeşitli Ayarlar"
 #: projects/base_k3badvanceddataimagesettings.ui:303
 #, kde-format
 msgid "Do not import previous session"
-msgstr "Önceki oturumu içeriye aktarma"
+msgstr "Önceki oturumu içe aktarma"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkDoNotCacheInodes)
 #: projects/base_k3badvanceddataimagesettings.ui:310
@@ -7421,12 +7421,12 @@ msgstr[1] "%1 ses izi"
 #: projects/k3bdatamultisessionimportdialog.cpp:248
 #, kde-format
 msgid "Session Import"
-msgstr "Oturum İçeri Aktar"
+msgstr "Oturum İçe Aktar"
 
 #: projects/k3bdatamultisessionimportdialog.cpp:251
 #, kde-format
 msgid "Please select a session to import."
-msgstr "Lütfen içeri aktarılacak bir oturum seçin."
+msgstr "Lütfen içe aktarılacak bir oturum seçin."
 
 #: projects/k3bdataprojectmodel.cpp:182
 #, kde-format
@@ -10953,15 +10953,15 @@ msgid ""
 "table><p><em>Hint: K3b also accepts slight variations of the long special "
 "strings. One can, for example, leave out the underscores.</em>"
 msgstr ""
-"<p><b>Kalıba bağlı dizgeler:</b><p>Aşağıdaki dizgeler her parça adında "
-"ilgili anlamları ile değiştirileceklerdir.<br><p><table border="
-"\"0\"><tr><td></td><td><em>Anlamı</em></td><td><em>Alternatifler</em></td></"
-"tr><tr><td>%t</td><td>parça numarası</td><td>%{t} veya %{title_number}</td></"
-"tr><tr><td>%i</td><td>hacim kimliği (genellikle Video DVD'sinin adı)</td><td>"
-"%{i} veya %{volume_id}</td></tr><tr><td>%b</td><td>iyileştirilmiş hacim "
-"kimliği</td><td>%{b} veya %{beautified_volume_id}</td></tr><tr><td>%l</"
-"td><td>iki karakter dil kodu</td><td>%{l} veya %{lang_code}</td></tr><tr><td>"
-"%n</td><td>dil adı</td><td>%{n} veya %{lang_name}</td></tr><tr><td>%a</"
+"<p><b>Özel dizgili diziler:</b><p>Aşağıdaki diziler her parça adında ilgili "
+"anlamları ile değiştirileceklerdir.<br><p><table border=\"0\"><tr><td></"
+"td><td><em>Anlamı</em></td><td><em>Alternatifler</em></td></tr><tr><td>%t</"
+"td><td>parça numarası</td><td>%{t} veya %{title_number}</td></tr><tr><td>%i</"
+"td><td>hacim kimliği (genellikle Video DVD'sinin adı)</td><td>%{i} veya "
+"%{volume_id}</td></tr><tr><td>%b</td><td>iyileştirilmiş hacim kimliği</"
+"td><td>%{b} veya %{beautified_volume_id}</td></tr><tr><td>%l</td><td>iki "
+"karakter dil kodu</td><td>%{l} veya %{lang_code}</td></tr><tr><td>%n</"
+"td><td>dil adı</td><td>%{n} veya %{lang_name}</td></tr><tr><td>%a</"
 "td><td>ses biçimi (Video DVD üzerindeki)</td><td>%{a} veya %{audio_format}</"
 "td></tr><tr><td>%c</td><td>ses kanal sayısı (Video DVD üzerindeki)</td><td>"
 "%{c} veya %{channels}</td></tr><tr><td>%v</td><td>özgün video boyutu</td><td>"
@@ -10970,7 +10970,7 @@ msgstr ""
 "%{s} veya %{video_size}</td></tr><tr><td>%r</td><td>özgün videonun en-boy "
 "oranı</td><td>%{r} veya %{aspect_ratio}</td></tr><tr><td>%d</td><td>şimdiki "
 "tarih</td><td>%{d} veya %{date}</td></tr></table><p><em>İpucu: K3b ayrıca "
-"uzun dizgelerin çeşitli değişik yazımlarını da kabul etmektedir. Örneğin alt "
+"uzun dizilerin çeşitli değişik yazımlarını da kabul etmektedir. Örneğin alt "
 "çizgiler yazılmayabilir.</em>"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:331

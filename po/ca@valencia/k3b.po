@@ -6545,7 +6545,7 @@ msgstr "Seleccioneu l'idioma de les pantalles d'ajuda d'eMovix"
 #: projects/base_k3bmovixoptionswidget.ui:202
 #, kde-format
 msgid "Default boot label:"
-msgstr "Etiqueta d'arrancada per defecte:"
+msgstr "Etiqueta d'arrancada predeterminada:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboDefaultBootLabel)
 #: projects/base_k3bmovixoptionswidget.ui:212
@@ -8704,7 +8704,7 @@ msgstr ""
 "<p>Per tal de permetre la reproducció dels Vídeo CD en un reproductor de CD-"
 "i, l'estàndard de Vídeo CD requerix que estiga present un programa "
 "d'aplicació de CD-i.<p>Este programa està dissenyat per:<ul><li>proporcionar "
-"un complet control de la reproducció tal com està definit en el PSD de "
+"un complet control de la reproducció tal com està definit en PSD de "
 "l'estàndard</li><li>ser extremadament senzill d'utilitzar i fàcil d'aprendre "
 "per a l'usuari final</li></ul><p>El programa s'executa en reproductors de CD-"
 "i equipats amb el sistema operatiu CDRTOS 1.1(.1) i un cartutx d'extensió de "
@@ -9195,8 +9195,8 @@ msgstr ""
 "retardada, abans d'executar l'acció indicada per l'usuari o abans de "
 "realitzar un salt immediat. <p>Una vegada completat el nombre de repeticions "
 "indicat, el temps d'<espera> comença a comptar, a menys que s'haja indicat "
-"un temps infinit. <p>Si s'omet este element, el valor que es farà servir per "
-"defecte és «1», és a dir, que la pista es mostrarà una vegada."
+"un temps infinit. <p>Si s'omet este element, el valor que es farà servir de "
+"manera predeterminada és «1», és a dir, que la pista es mostrarà una vegada."
 
 #: projects/k3bvcdtrackdialog.cpp:263
 #, kde-format
@@ -10426,7 +10426,7 @@ msgstr "Espai necessari per a extraure els fitxers"
 #: rip/k3bvideocdrippingdialog.cpp:121
 #, kde-format
 msgid "Ignore extended PSD"
-msgstr "Ignora el PSD ampliat"
+msgstr "Ignora PSD ampliat"
 
 #: rip/k3bvideocdrippingdialog.cpp:122
 #, kde-format
@@ -10434,8 +10434,8 @@ msgid ""
 "<p>Ignore extended PSD (located in the ISO 9660 filesystem under `/EXT/PSD_X."
 "VCD') and use the <em>standard</em> PSD.</p>"
 msgstr ""
-"<p>Ignora el PSD ampliat (localitzat en el sistema de fitxers ISO 9660 "
-"davall «/EXT/PSD_X.VCD») i fes servir el PSD <em>estàndard</em>.</p>"
+"<p>Ignora PSD ampliat (localitzat en el sistema de fitxers ISO 9660 davall «/"
+"EXT/PSD_X.VCD») i fes servir PSD <em>estàndard</em>.</p>"
 
 #: rip/k3bvideocdrippingdialog.cpp:124
 #, kde-format
