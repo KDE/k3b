@@ -34,7 +34,8 @@
                 "Name[tr]": "John Steele Scott",
                 "Name[uk]": "John Steele Scott",
                 "Name[x-test]": "xxJohn Steele Scottxx",
-                "Name[zh_CN]": "John Steele Scott"
+                "Name[zh_CN]": "John Steele Scott",
+                "Name[zh_TW]": "John Steele Scott"
             }
         ],
         "Category": "AudioDecoder",
