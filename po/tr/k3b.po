@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-12-23 21:30+0300\n"
+"PO-Revision-Date: 2022-12-31 17:36+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1874,12 +1874,12 @@ msgstr "Tahmini yazma hızı:"
 #: k3bburnprogressdialog.cpp:49
 #, kde-format
 msgid "Software buffer:"
-msgstr "Yazılım tamponu:"
+msgstr "Yazılım arabelleği:"
 
 #: k3bburnprogressdialog.cpp:50
 #, kde-format
 msgid "Device buffer:"
-msgstr "Aygıt tamponu:"
+msgstr "Aygıt arabelleği:"
 
 #: k3bburnprogressdialog.cpp:87
 #, kde-format
@@ -2855,7 +2855,7 @@ msgstr "cdrtools uygulamasının daha güncel bir sürümünü kurun."
 #, kde-format
 msgid "%1 will be run with root privileges on kernel >= 2.6.8"
 msgstr ""
-"2.6.8 ya da daha yeni çekirdeklerde, %1, yönetici (root) yetkileriyle "
+"2.6.8 veya daha yeni çekirdeklerde %1, yönetici ayrıcalıklarıyla "
 "çalıştırılacak"
 
 #: k3bsystemproblemdialog.cpp:237
@@ -2878,7 +2878,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:247 k3bsystemproblemdialog.cpp:280
 #, kde-format
 msgid "%1 will be run without root privileges"
-msgstr "%1 yönetici (root) hakları olmadan çalıştırılacak"
+msgstr "%1, yönetici ayrıcalıkları olmadan çalıştırılacak"
 
 #: k3bsystemproblemdialog.cpp:248
 #, kde-format
@@ -2889,11 +2889,11 @@ msgid ""
 "burning buffer to be changed, and a lot of user problems can be solved this "
 "way."
 msgstr ""
-"cdrecord uygulamasının yönetici (root) haklarıyla çalışacak şekilde "
-"ayarlanması önerilir çünkü bu şekilde sistem kaynakları daha öncelikli "
-"olarak kullanılır ve yazma işlemi daha sağlıklı tamamlanır. Ayrıca yazma "
-"tampon belleğinin boyutunu düzenlenmesine izin verilir ve bu sayede birçok "
-"kullanıcı problemi çözülebilir."
+"cdrecord uygulamasının yönetici ayrıcalıklarıyla çalışacak biçimde "
+"ayarlanması önerilir; çünkü böylece sistem kaynakları daha öncelikli olarak "
+"kullanılır ve yazma işlemi daha sağlıklı tamamlanır. Ayrıca, yazma "
+"arabelleğinin boyutunu düzenlenmesine izin verilir ve bu sayede birçok "
+"kullanıcı sorunu çözülebilir."
 
 #: k3bsystemproblemdialog.cpp:263 k3bsystemproblemdialog.cpp:271
 #, kde-format
@@ -2911,7 +2911,7 @@ msgid ""
 "It is highly recommended to configure cdrdao to run with root privileges to "
 "increase the overall stability of the burning process."
 msgstr ""
-"cdrdao uygulamasının yönetici (root) haklarıyla kullanılması önerilir. "
+"cdrdao uygulamasının yönetici ayrıcalıklarıyla kullanılması önerilir. "
 "Böylece, yazma işleminin genel tutarlılığını arttırabilirsiniz."
 
 #: k3bsystemproblemdialog.cpp:293
@@ -3434,8 +3434,8 @@ msgstr ""
 "p><p><b>Yok say</b> (Yalnızca DVD)<br>Bu seçenek, yazma hızını yazıcı aygıta "
 "bırakır. Bu seçeneği, K3b yazma hızını ayarlayamazsa kullanabilirsiniz."
 "<p>1x, DVD için 1385 KB/sn, CD için 175 KB/sn ve Blue-ray için 4496 KB/sn "
-"anlamına gelir.</p><p>Dikkat:<b> Sisteminizin veriyi tampon belleği "
-"yavaşlatmayacak hızda gönderebileceğinden emin olun."
+"anlamına gelir.</p><p>Dikkat:<b> Sisteminizin veriyi "
+"arabelleğiyavaşlatmayacak hızda gönderebileceğinden emin olun."
 
 #: k3bwriterselectionwidget.cpp:177
 #, kde-format
@@ -4838,10 +4838,9 @@ msgid ""
 "specified will be used for both CD and DVD burning."
 msgstr ""
 "<p>K3b yazma işlemi sırasında sisteme yüklenme olduğunda verilerde sorun "
-"olmaması için yazılım katmanında tampon bellek kullanır. Bu belleğin ön "
-"tanımlı boyutu CD yazma için %1 MB ve DVD için %2 olarak belirlenmiştir."
-"<p>Bu seçenek tercih edilirse CD ve DVD için aynı bellek tamponu "
-"kullanılacaktır."
+"olmaması için yazılım katmanında arabellek kullanır. Bu belleğin öntanımlı "
+"boyutu CD yazma için %1 MB ve DVD için %2 olarak belirlenmiştir.<p>Bu "
+"seçenek tercih edilirse CD ve DVD için aynı arabellek kullanılacaktır."
 
 #: option/k3badvancedoptiontab.cpp:125
 #, kde-format
@@ -4934,7 +4933,7 @@ msgstr "Okuma Yetenekleri:"
 #: option/k3bdevicewidget.cpp:185
 #, kde-format
 msgid "Buffer Size:"
-msgstr "Tampon Boyutu:"
+msgstr "Arabellek Boyutu:"
 
 #: option/k3bdevicewidget.cpp:195
 #, kde-format
@@ -6562,7 +6561,7 @@ msgstr ""
 "kullanılabilirler. eMovix farklı grafik kartı markaları için TV çıkış "
 "sürücüleri sağlar.\n"
 "<p><b>FB</b> etiketleri farklı ekran çözünürlüklerinde bir Frame Buffer "
-"(Çerçeve Tamponu) başlatan yapılandırmaları ifade eder.\n"
+"(Kare Arabelleği) başlatan yapılandırmaları ifade eder.\n"
 "<p><b>AA</b> etiketleri ile eMovix, videoyu basit ASCII karakterleri "
 "kullanımı ile resimleri metin kipinde göstermesini sağlayan ASCII-Art "
 "kitaplığına gönderir.\n"
