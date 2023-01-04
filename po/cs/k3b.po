@@ -3,7 +3,7 @@
 # Lukáš Tinkl <ltinkl@redhat.com>, 2010, 2011.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
-# Vit Pelcak <vpelcak@suse.cz>, 2021, 2022.
+# Vit Pelcak <vit@pelcak.org>, 2021, 2022.
 #
 msgid ""
 msgstr ""
@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
 "PO-Revision-Date: 2022-05-12 14:50+0200\n"
-"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
+"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -37,17 +37,17 @@ msgstr ""
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Monkey's Audio (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
-msgstr ""
+msgstr "AAC (Advanced Audio Coding)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
