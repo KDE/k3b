@@ -11,9 +11,6 @@
 #include <QString>
 #include <QStringList>
 #include <QStack>
-#include <QLoggingCategory>
-
-Q_DECLARE_LOGGING_CATEGORY(KOSTORE)
 
 class QByteArray;
 class QIODevice;

@@ -6,17 +6,18 @@
 
 #include "KoZipStore.h"
 
+#include "kostore_log.h"
+
 #include <KZip>
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>
 #include <QBuffer>
 #include <QByteArray>
-#include <QDebug>
 #include <QUrl>
 
 KoZipStore::KoZipStore( const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    qCDebug(KOSTORE) <<"KoZipStore Constructor filename =" << _filename
+    qCDebug(K3B_KOSTORE_LOG) <<"KoZipStore Constructor filename =" << _filename
                     << " mode = " << int(_mode)
                     << " mimetype = " << appIdentification << Qt::endl;
 
@@ -33,7 +34,7 @@ KoZipStore::KoZipStore( QIODevice *dev, Mode mode, const QByteArray & appIdentif
 
 KoZipStore::KoZipStore( QWidget* window, const QUrl & _url, const QString & _filename, Mode _mode, const QByteArray & appIdentification )
 {
-    qCDebug(KOSTORE) <<"KoZipStore Constructor url" << _url.toDisplayString( QUrl::PreferLocalFile )
+    qCDebug(K3B_KOSTORE_LOG) <<"KoZipStore Constructor url" << _url.toDisplayString( QUrl::PreferLocalFile )
                     << " filename = " << _filename
                     << " mode = " << int(_mode)
                     << " mimetype = " << appIdentification << Qt::endl;
@@ -59,7 +60,7 @@ KoZipStore::KoZipStore( QWidget* window, const QUrl & _url, const QString & _fil
 
 KoZipStore::~KoZipStore()
 {
-    qCDebug(KOSTORE) <<"KoZipStore::~KoZipStore";
+    qCDebug(K3B_KOSTORE_LOG) <<"KoZipStore::~KoZipStore";
     if ( !m_bFinalized )
         finalize(); // ### no error checking when the app forgot to call finalize itself
     delete m_pZip;
@@ -92,7 +93,7 @@ bool KoZipStore::initZipStore( Mode _mode, const QByteArray& appIdentification )
         good = m_pZip->directory() != 0;
     else if ( good && _mode == Write )
     {
-        //qCDebug(KOSTORE) <<"KoZipStore::init writing mimetype" << appIdentification;
+        //qCDebug(K3B_KOSTORE_LOG) <<"KoZipStore::init writing mimetype" << appIdentification;
 
         m_pZip->setCompression( KZip::NoCompression );
         m_pZip->setExtraField( KZip::NoExtraField );
@@ -127,13 +128,13 @@ bool KoZipStore::openRead( const QString& name )
     const KArchiveEntry * entry = m_pZip->directory()->entry( name );
     if ( entry == 0L )
     {
-        //qCWarning(KOSTORE) << "Unknown filename " << name;
+        //qCWarning(K3B_KOSTORE_LOG) << "Unknown filename " << name;
         //return KIO::ERR_DOES_NOT_EXIST;
         return false;
     }
     if ( entry->isDirectory() )
     {
-        qCWarning(KOSTORE) << name << " is a directory !";
+        qCWarning(K3B_KOSTORE_LOG) << name << " is a directory !";
         //return KIO::ERR_IS_DIRECTORY;
         return false;
     }
@@ -148,16 +149,16 @@ bool KoZipStore::openRead( const QString& name )
 qint64 KoZipStore::write( const char* _data, qint64 _len )
 {
   if ( _len == 0L ) return 0;
-  //qCDebug(KOSTORE) <<"KoZipStore::write" << _len;
+  //qCDebug(K3B_KOSTORE_LOG) <<"KoZipStore::write" << _len;
 
   if ( !m_bIsOpen )
   {
-    qCCritical(KOSTORE) << "KoStore: You must open before writing" << Qt::endl;
+    qCCritical(K3B_KOSTORE_LOG) << "KoStore: You must open before writing" << Qt::endl;
     return 0L;
   }
   if ( m_mode != Write  )
   {
-    qCCritical(KOSTORE) << "KoStore: Can not write to store that is opened for reading" << Qt::endl;
+    qCCritical(K3B_KOSTORE_LOG) << "KoStore: Can not write to store that is opened for reading" << Qt::endl;
     return 0L;
   }
 
@@ -169,7 +170,7 @@ qint64 KoZipStore::write( const char* _data, qint64 _len )
 
 bool KoZipStore::closeWrite()
 {
-    qCDebug(KOSTORE) <<"Wrote file" << m_sName <<" into ZIP archive. size"
+    qCDebug(K3B_KOSTORE_LOG) <<"Wrote file" << m_sName <<" into ZIP archive. size"
                     << m_iSize << Qt::endl;
     return m_pZip->finishWriting( m_iSize );
 #if 0

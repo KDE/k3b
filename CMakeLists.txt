@@ -53,11 +53,13 @@ option(K3B_BUILD_WAVE_DECODER_PLUGIN "Build Wave decoder plugin" ON)
 include(KDEInstallDirs)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(KDECMakeSettings)
+
 include(FeatureSummary)
 include(GenerateExportHeader)
 include(ECMInstallIcons)
 include(ECMEnableSanitizers)
 include(ECMSetupQtPluginMacroNames)
+include(ECMQtDeclareLoggingCategory)
 
 find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
 find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
@@ -319,6 +321,12 @@ if(BUILD_TESTING)
         TYPE OPTIONAL)
     add_subdirectory(tests)
 endif()
+
+ecm_qt_install_logging_categories(
+    EXPORT K3B
+    FILE k3b.categories
+    DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
+)
 
 ki18n_install(po)
 kdoctools_install(po)

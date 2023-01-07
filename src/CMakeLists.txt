@@ -64,6 +64,14 @@ qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.AudioProj
 qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bdataprojectinterface.h org.k3b.DataProject.xml )
 qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor )
 
+ecm_qt_declare_logging_category(log_sources
+    HEADER kostore_log.h
+    IDENTIFIER K3B_KOSTORE_LOG
+    CATEGORY_NAME k3b.kostore
+    DESCRIPTION "k3b KoStore"
+    EXPORT K3B
+)
+
 add_executable(k3b
     k3bwelcomewidget.cpp
     k3bapplication.cpp
@@ -205,6 +213,7 @@ add_executable(k3b
     rip/k3baudioprojectconvertingjob.cpp
     rip/categories.cpp
     rip/k3baudiotrackmodel.cpp
+    ${log_sources}
     ${ui_sources}
     ${audioplayer_sources}
     ${musicbrainz_sources}
