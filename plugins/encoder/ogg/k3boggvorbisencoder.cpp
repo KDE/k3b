@@ -413,7 +413,7 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
     KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
 
-    // the following code is based on the size estimation from the audiocd kioslave
+    // the following code is based on the size estimation from the audiocd KIO worker
     // TODO: reimplement.
 
     if( !grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE ) ) {
