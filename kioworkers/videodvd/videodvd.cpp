@@ -66,7 +66,7 @@ extern "C"
 
 // FIXME: Does it really make sense to use a static device manager? Are all instances
 // of videodvd started in another process?
-K3b::Device::DeviceManager* kio_videodvdProtocol::s_deviceManager = 0;
+K3b::Device::DeviceManager* kio_videodvdProtocol::s_deviceManager = nullptr;
 int kio_videodvdProtocol::s_instanceCnt = 0;
 
 kio_videodvdProtocol::kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket)
@@ -90,7 +90,7 @@ kio_videodvdProtocol::~kio_videodvdProtocol()
     if( s_instanceCnt == 0 )
     {
         delete s_deviceManager;
-        s_deviceManager = 0;
+        s_deviceManager = nullptr;
     }
 }
 
@@ -268,7 +268,7 @@ KIO::WorkerResult kio_videodvdProtocol::listVideoDVDs()
             //
             K3b::Iso9660 iso( new K3b::Iso9660DeviceBackend(dev) );
             iso.setPlainIso9660( true );
-            if( iso.open() && iso.firstIsoDirEntry()->entry( "VIDEO_TS" ) != 0 ) {
+            if( iso.open() && iso.firstIsoDirEntry()->entry( "VIDEO_TS" ) != nullptr ) {
                 // FIXME: cache the entry for speedup
 
                 UDSEntry uds;
