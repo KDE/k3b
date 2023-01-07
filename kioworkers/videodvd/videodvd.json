@@ -6,7 +6,6 @@
             "copyFromFile": true,
             "copyToFile": false,
             "deleting": false,
-            "exec": "kf5/kio/videodvd",
             "input": "none",
             "listing": [
                 "Name",
