@@ -12,31 +12,31 @@
 #include "k3biso9660.h"
 #include "k3biso9660backend.h"
 
-#include <KIO/SlaveBase>
+#include <KIO/WorkerBase>
 
-class Iso9660Entry;
-class Iso9660;
+#include <memory>
+
 namespace K3b {
     namespace Device {
         class DeviceManager;
     }
 }
 
-class kio_videodvdProtocol : public KIO::SlaveBase
+class kio_videodvdProtocol : public KIO::WorkerBase
 {
 public:
     kio_videodvdProtocol(const QByteArray &pool_socket, const QByteArray &app_socket);
     ~kio_videodvdProtocol() override;
 
-    void mimetype(const QUrl& url) override;
-    void stat(const QUrl& url) override;
-    void get(const QUrl& url) override;
-    void listDir(const QUrl& url) override;
+    KIO::WorkerResult mimetype(const QUrl& url) override;
+    KIO::WorkerResult stat(const QUrl& url) override;
+    KIO::WorkerResult get(const QUrl& url) override;
+    KIO::WorkerResult listDir(const QUrl& url) override;
 
 private:
-    K3b::Iso9660* openIso( const QUrl&, QString& plainIsoPath );
+    KIO::WorkerResult openIso( const QUrl& url, std::unique_ptr<K3b::Iso9660>* iso, QString* plainIsoPath );
     KIO::UDSEntry createUDSEntry( const K3b::Iso9660Entry* e ) const;
-    void listVideoDVDs();
+    KIO::WorkerResult listVideoDVDs();
 
     static K3b::Device::DeviceManager* s_deviceManager;
     static int s_instanceCnt;
