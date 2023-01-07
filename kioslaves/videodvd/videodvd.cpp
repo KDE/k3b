@@ -42,6 +42,7 @@ extern "C"
 {
     VIDEODVD_EXPORT int kdemain( int argc, char **argv )
     {
+        QCoreApplication app(argc, argv);
         QCoreApplication::setApplicationName( "kio_videodvd" );
 
         qCDebug(KIO_VIDEODVD) << "*** Starting kio_videodvd ";
