@@ -4,7 +4,7 @@
 # Kouzinopoulos Haris <haris@mpa.gr>, 2005.
 # Spiros Georgaras <sng@hellug.gr>, 2005, 2006, 2007.
 # Toussis Manolis <manolis@koppermind.homelinux.org>, 2005, 2006, 2007, 2008, 2009.
-# Stelios <sstavra@gmail.com>, 2011, 2014, 2017, 2019, 2020.
+# Stelios <sstavra@gmail.com>, 2011, 2014, 2017, 2019, 2020, 2023.
 # Dimitrios Glentadakis <dglent@gmail.com>, 2011, 2013.
 # Antonis Geralis <capoiosct@gmail.com>, 2011.
 msgid ""
@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2020-06-04 20:13+0300\n"
+"PO-Revision-Date: 2023-01-06 17:30+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 18.12.3\n"
+"X-Generator: Lokalize 21.12.3\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -3249,7 +3249,7 @@ msgstr "Αδυναμία διαγραφής του αρχείου %1."
 #: projects/mixedcd/k3bmixedjob.cpp:1231
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "Αδυναμία εύρεσης του cdrecord στο σύστημά σας."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1235
 #, kde-format
