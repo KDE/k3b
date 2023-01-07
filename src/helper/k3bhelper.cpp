@@ -9,11 +9,7 @@
 #include "k3bhelper.h"
 #include "k3bhelperprogramitem.h"
 
-#if KAUTH_VERSION >= QT_VERSION_CHECK(5, 92, 0)
 #include <KAuth/HelperSupport>
-#else
-#include <KAuthHelperSupport>
-#endif
 
 #include <QFile>
 #include <QProcess>

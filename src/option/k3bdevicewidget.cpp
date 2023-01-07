@@ -11,13 +11,8 @@
 #include "k3bdevice.h"
 #include "k3bdeviceglobals.h"
 
-#include <kauth_version.h>
-#if KAUTH_VERSION >= QT_VERSION_CHECK(5, 92, 0)
 #include <KAuth/Action>
 #include <KAuth/ExecuteJob>
-#else
-#include <KAuth>
-#endif
 #include <KConfig>
 #include <KLocalizedString>
 #include <KIO/Global>

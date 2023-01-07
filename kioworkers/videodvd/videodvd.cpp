@@ -12,7 +12,6 @@
 #include "videodvd_export.h"
 #include "videodvd_log.h"
 #include "videodvd_i18n.h"
-#include <kio_version.h>
 
 #include <QCoreApplication>
 #include <QDateTime>
@@ -159,11 +158,8 @@ K3b::Iso9660* kio_videodvdProtocol::openIso( const QUrl& url, QString& plainIsoP
         }
     }
 
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 96, 0)
     error( ERR_WORKER_DEFINED, i18n("No Video DVD found") );
-#else
-    error( ERR_SLAVE_DEFINED, i18n("No Video DVD found") );
-#endif
+
     return 0;
 }
 
@@ -204,11 +200,7 @@ void kio_videodvdProtocol::get(const QUrl& url )
             if( read == 0 )
                 finished();
             else {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 96, 0)
                 error( ERR_WORKER_DEFINED, i18n("Read error.") );
-#else
-                error( ERR_SLAVE_DEFINED, i18n("Read error.") );
-#endif
             }
         }
         else
@@ -299,11 +291,7 @@ void kio_videodvdProtocol::listVideoDVDs()
         finished();
     }
     else {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 96, 0)
         error( ERR_WORKER_DEFINED, i18n("No Video DVD found") );
-#else
-        error( ERR_SLAVE_DEFINED, i18n("No Video DVD found") );
-#endif
     }
 }
 
@@ -384,12 +372,7 @@ void kio_videodvdProtocol::mimetype( const QUrl& url )
                     // FIXME: do we need to emit finished() after emitting the end of data()?
                 }
                 else {
-#if KIO_VERSION >= QT_VERSION_CHECK(5, 96, 0)
                     error( ERR_WORKER_DEFINED, i18n("Read error.") );
-#else
-                    error( ERR_SLAVE_DEFINED, i18n("Read error.") );
-#endif
-
                 }
             }
         }
