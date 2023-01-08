@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-01 00:46+0000\n"
+"POT-Creation-Date: 2023-01-08 00:58+0000\n"
 "PO-Revision-Date: 2022-05-12 14:50+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -3191,17 +3191,17 @@ msgstr "Systém je správně nastaven"
 msgid "No problems found in system configuration."
 msgstr "V nastavení systému nebyl nalezen žádný problém."
 
-#: k3btempdirselectionwidget.cpp:44
+#: k3btempdirselectionwidget.cpp:43
 #, kde-format
 msgid "Free space in temporary folder:"
 msgstr "Volné místo v dočasné složce:"
 
-#: k3btempdirselectionwidget.cpp:74
+#: k3btempdirselectionwidget.cpp:69
 #, kde-format
 msgid "The folder in which to save the image files"
 msgstr "Složka, do které ukládat soubory s obrazy"
 
-#: k3btempdirselectionwidget.cpp:78
+#: k3btempdirselectionwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>This is the folder in which K3b will save the <em>image files</em>."
@@ -3212,37 +3212,37 @@ msgstr ""
 "<p>Ujistěte se prosím, že je umístěn na na diskovém oddíle, na kterém je "
 "dostatek místa."
 
-#: k3btempdirselectionwidget.cpp:185
+#: k3btempdirselectionwidget.cpp:180
 #, kde-format
 msgid "Select Temporary Folder"
 msgstr "Vybrat dočasnou složku"
 
-#: k3btempdirselectionwidget.cpp:187
+#: k3btempdirselectionwidget.cpp:182
 #, kde-format
 msgid "Wri&te image files to:"
 msgstr "Zapsa&t soubory s obrazem do:"
 
-#: k3btempdirselectionwidget.cpp:188
+#: k3btempdirselectionwidget.cpp:183
 #, kde-format
 msgid "Temporary Folder"
 msgstr "Dočasná složka"
 
-#: k3btempdirselectionwidget.cpp:191
+#: k3btempdirselectionwidget.cpp:186
 #, kde-format
 msgid "Select Temporary File"
 msgstr "Vybrat dočasný soubor"
 
-#: k3btempdirselectionwidget.cpp:193
+#: k3btempdirselectionwidget.cpp:188
 #, kde-format
 msgid "Wri&te image file to:"
 msgstr "Zapsa&t soubor s obrazem do:"
 
-#: k3btempdirselectionwidget.cpp:194
+#: k3btempdirselectionwidget.cpp:189
 #, kde-format
 msgid "Temporary File"
 msgstr "Dočasný soubor"
 
-#: k3btempdirselectionwidget.cpp:204
+#: k3btempdirselectionwidget.cpp:199
 #, kde-format
 msgid "Size of project:"
 msgstr "Velikost projektu:"
@@ -4765,87 +4765,87 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "Nelze načíst KCDDB modul pro nastavení."
 
-#: option/k3bdevicewidget.cpp:62 option/k3bexternalbinwidget.cpp:63
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
 #, kde-format
 msgid "Refresh"
 msgstr "Obnovit"
 
-#: option/k3bdevicewidget.cpp:63
+#: option/k3bdevicewidget.cpp:58
 #, kde-format
 msgid "Rescan the devices"
 msgstr "Znovu načíst zařízení"
 
-#: option/k3bdevicewidget.cpp:119
+#: option/k3bdevicewidget.cpp:114
 #, kde-format
 msgid "Writer Drives"
 msgstr "Mechaniky pro zápis"
 
-#: option/k3bdevicewidget.cpp:124
+#: option/k3bdevicewidget.cpp:119
 #, kde-format
 msgid "Read-only Drives"
 msgstr "Mechaniky pouze pro čtení"
 
-#: option/k3bdevicewidget.cpp:140
+#: option/k3bdevicewidget.cpp:135
 #, kde-format
 msgid "System device name:"
 msgstr "Systémový název zařízení:"
 
-#: option/k3bdevicewidget.cpp:146
+#: option/k3bdevicewidget.cpp:141
 #, kde-format
 msgid "Vendor:"
 msgstr "Prodejce:"
 
-#: option/k3bdevicewidget.cpp:152
+#: option/k3bdevicewidget.cpp:147
 #, kde-format
 msgid "Description:"
 msgstr "Popis:"
 
-#: option/k3bdevicewidget.cpp:158
+#: option/k3bdevicewidget.cpp:153
 #, kde-format
 msgid "Firmware:"
 msgstr "Firmware:"
 
-#: option/k3bdevicewidget.cpp:167
+#: option/k3bdevicewidget.cpp:162
 #, kde-format
 msgid "Write Capabilities:"
 msgstr "Schopnosti zápisu:"
 
-#: option/k3bdevicewidget.cpp:174
+#: option/k3bdevicewidget.cpp:169
 #, kde-format
 msgid "Read Capabilities:"
 msgstr "Schopnosti čtení:"
 
-#: option/k3bdevicewidget.cpp:185
+#: option/k3bdevicewidget.cpp:180
 #, kde-format
 msgid "Buffer Size:"
 msgstr "Velikost zásobníku:"
 
-#: option/k3bdevicewidget.cpp:195
+#: option/k3bdevicewidget.cpp:190
 #, kde-format
 msgid "Supports Burnfree:"
 msgstr "Podporuje Burnfree:"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "yes"
 msgstr "ano"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "no"
 msgstr "ne"
 
-#: option/k3bdevicewidget.cpp:202
+#: option/k3bdevicewidget.cpp:197
 #, kde-format
 msgid "Write modes:"
 msgstr "Režimy zápisu:"
 
-#: option/k3bdevicewidget.cpp:213 option/k3bdevicewidget.cpp:218
+#: option/k3bdevicewidget.cpp:208 option/k3bdevicewidget.cpp:213
 #, kde-format
 msgid "none"
 msgstr "nic"
 
-#: option/k3bdevicewidget.cpp:243
+#: option/k3bdevicewidget.cpp:238
 #, kde-format
 msgid ""
 "In order to give K3b full access to the writer device the current user needs "
@@ -4854,23 +4854,23 @@ msgstr ""
 "Abyste povolili K3b plný přístup k zapisovacímu zařízení, je potřeba přidat "
 "současného uživatele do této skupiny<em>%1</em>."
 
-#: option/k3bdevicewidget.cpp:247 projects/k3bdataurladdingdialog.cpp:769
+#: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:785
 #, kde-format
 msgid "Add"
 msgstr "Přidat"
 
-#: option/k3bdevicewidget.cpp:271
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Prosím, pro provedení změn se znovu přihlaste."
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:269
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "Nelze spustit činnost: %1 (Kód chyby: %2)"
 
-#: option/k3bdevicewidget.cpp:275
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr "Zkusit znovu"
@@ -4916,7 +4916,7 @@ msgid "no change"
 msgstr "žádná změna"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:125
+#: option/k3bexternalbinwidget.cpp:120
 #, kde-format
 msgid "Permissions"
 msgstr "Oprávnění"
@@ -4926,7 +4926,7 @@ msgstr "Oprávnění"
 msgid "New permissions"
 msgstr "Nová oprávnění"
 
-#: option/k3bexternalbinwidget.cpp:79
+#: option/k3bexternalbinwidget.cpp:74
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -4937,32 +4937,32 @@ msgstr ""
 "jednu jako <em>výchozí</em>, která pak bude použita při práci. Pokud si "
 "přejete výchozí volbu změnit, zaškrtněte požadovanou verzi v seznamu."
 
-#: option/k3bexternalbinwidget.cpp:87 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "Programy"
 
-#: option/k3bexternalbinwidget.cpp:93
+#: option/k3bexternalbinwidget.cpp:88
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "Uživatelské parametry musí být odděleny mezerou."
 
-#: option/k3bexternalbinwidget.cpp:106
+#: option/k3bexternalbinwidget.cpp:101
 #, kde-format
 msgid "User Parameters"
 msgstr "Uživatelské parametry"
 
-#: option/k3bexternalbinwidget.cpp:112
+#: option/k3bexternalbinwidget.cpp:107
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr "Zaškrtněte programy, jejichž oprávnění si přejete změnit:"
 
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:115
 #, kde-format
 msgid "Change Permissions..."
 msgstr "Změnit oprávnění..."
 
-#: option/k3bexternalbinwidget.cpp:133
+#: option/k3bexternalbinwidget.cpp:128
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -4971,17 +4971,17 @@ msgstr ""
 "<qt><b>Tip:</b> Pokud si přejete K3b přinutit, aby použil jiný než výchozí "
 "název pro spustitelný soubor, zadejte jej v cestě k programům.</qt>"
 
-#: option/k3bexternalbinwidget.cpp:141
+#: option/k3bexternalbinwidget.cpp:136
 #, kde-format
 msgid "Search Path"
 msgstr "Cesty k programům"
 
-#: option/k3bexternalbinwidget.cpp:244
+#: option/k3bexternalbinwidget.cpp:239
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Následující programy nemohly být aktualizovány:"
 
-#: option/k3bexternalbinwidget.cpp:249
+#: option/k3bexternalbinwidget.cpp:244
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Nelze spustit činnost: %1"
@@ -9173,12 +9173,12 @@ msgstr "Otevřít dialog vlastností"
 msgid "Volume Name:"
 msgstr "Název svazku:"
 
-#: projects/kostore/KoStore.cpp:198
+#: projects/kostore/KoStore.cpp:196
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
 msgstr "Vzdálené umístění nepodporuje režim adresářů."
 
-#: projects/kostore/KoStore.cpp:199
+#: projects/kostore/KoStore.cpp:197
 #, kde-format
 msgid "KOffice Storage"
 msgstr "Úložiště KOffice"

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-01 00:46+0000\n"
+"POT-Creation-Date: 2023-01-08 00:58+0000\n"
 "PO-Revision-Date: 2022-07-07 14:53+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -3277,17 +3277,17 @@ msgstr "Система настроена правильно"
 msgid "No problems found in system configuration."
 msgstr "Проблем в системной конфигурации не найдено."
 
-#: k3btempdirselectionwidget.cpp:44
+#: k3btempdirselectionwidget.cpp:43
 #, kde-format
 msgid "Free space in temporary folder:"
 msgstr "Свободное место во временной папке:"
 
-#: k3btempdirselectionwidget.cpp:74
+#: k3btempdirselectionwidget.cpp:69
 #, kde-format
 msgid "The folder in which to save the image files"
 msgstr "Папка для образов дисков"
 
-#: k3btempdirselectionwidget.cpp:78
+#: k3btempdirselectionwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>This is the folder in which K3b will save the <em>image files</em>."
@@ -3297,37 +3297,37 @@ msgstr ""
 "<p>Папка, в которую K3b будет сохранять <em>файлы образов</em>.<p>Убедитесь "
 "в том, что она располагается в разделе, где достаточно свободного места."
 
-#: k3btempdirselectionwidget.cpp:185
+#: k3btempdirselectionwidget.cpp:180
 #, kde-format
 msgid "Select Temporary Folder"
 msgstr "Выбрать папку для временных файлов"
 
-#: k3btempdirselectionwidget.cpp:187
+#: k3btempdirselectionwidget.cpp:182
 #, kde-format
 msgid "Wri&te image files to:"
 msgstr "&Сохранять образы в:"
 
-#: k3btempdirselectionwidget.cpp:188
+#: k3btempdirselectionwidget.cpp:183
 #, kde-format
 msgid "Temporary Folder"
 msgstr "Папка для временных файлов"
 
-#: k3btempdirselectionwidget.cpp:191
+#: k3btempdirselectionwidget.cpp:186
 #, kde-format
 msgid "Select Temporary File"
 msgstr "Выбрать временный файл"
 
-#: k3btempdirselectionwidget.cpp:193
+#: k3btempdirselectionwidget.cpp:188
 #, kde-format
 msgid "Wri&te image file to:"
 msgstr "&Сохранить образ в:"
 
-#: k3btempdirselectionwidget.cpp:194
+#: k3btempdirselectionwidget.cpp:189
 #, kde-format
 msgid "Temporary File"
 msgstr "Временный файл"
 
-#: k3btempdirselectionwidget.cpp:204
+#: k3btempdirselectionwidget.cpp:199
 #, kde-format
 msgid "Size of project:"
 msgstr "Размер проекта:"
@@ -4892,87 +4892,87 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "Не удалось загрузить модуль настройки KCDDB"
 
-#: option/k3bdevicewidget.cpp:62 option/k3bexternalbinwidget.cpp:63
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
 #, kde-format
 msgid "Refresh"
 msgstr "Обновить"
 
-#: option/k3bdevicewidget.cpp:63
+#: option/k3bdevicewidget.cpp:58
 #, kde-format
 msgid "Rescan the devices"
 msgstr "Пересканировать устройства"
 
-#: option/k3bdevicewidget.cpp:119
+#: option/k3bdevicewidget.cpp:114
 #, kde-format
 msgid "Writer Drives"
 msgstr "Пишущие приводы"
 
-#: option/k3bdevicewidget.cpp:124
+#: option/k3bdevicewidget.cpp:119
 #, kde-format
 msgid "Read-only Drives"
 msgstr "Обычные приводы"
 
-#: option/k3bdevicewidget.cpp:140
+#: option/k3bdevicewidget.cpp:135
 #, kde-format
 msgid "System device name:"
 msgstr "Название системного устройства:"
 
-#: option/k3bdevicewidget.cpp:146
+#: option/k3bdevicewidget.cpp:141
 #, kde-format
 msgid "Vendor:"
 msgstr "Поставщик:"
 
-#: option/k3bdevicewidget.cpp:152
+#: option/k3bdevicewidget.cpp:147
 #, kde-format
 msgid "Description:"
 msgstr "Описание:"
 
-#: option/k3bdevicewidget.cpp:158
+#: option/k3bdevicewidget.cpp:153
 #, kde-format
 msgid "Firmware:"
 msgstr "Прошивка:"
 
-#: option/k3bdevicewidget.cpp:167
+#: option/k3bdevicewidget.cpp:162
 #, kde-format
 msgid "Write Capabilities:"
 msgstr "Возможности записи:"
 
-#: option/k3bdevicewidget.cpp:174
+#: option/k3bdevicewidget.cpp:169
 #, kde-format
 msgid "Read Capabilities:"
 msgstr "Возможности чтения:"
 
-#: option/k3bdevicewidget.cpp:185
+#: option/k3bdevicewidget.cpp:180
 #, kde-format
 msgid "Buffer Size:"
 msgstr "Размер буфера:"
 
-#: option/k3bdevicewidget.cpp:195
+#: option/k3bdevicewidget.cpp:190
 #, kde-format
 msgid "Supports Burnfree:"
 msgstr "Поддержка Burnfree:"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "yes"
 msgstr "да"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "no"
 msgstr "нет"
 
-#: option/k3bdevicewidget.cpp:202
+#: option/k3bdevicewidget.cpp:197
 #, kde-format
 msgid "Write modes:"
 msgstr "Режимы записи:"
 
-#: option/k3bdevicewidget.cpp:213 option/k3bdevicewidget.cpp:218
+#: option/k3bdevicewidget.cpp:208 option/k3bdevicewidget.cpp:213
 #, kde-format
 msgid "none"
 msgstr "нет"
 
-#: option/k3bdevicewidget.cpp:243
+#: option/k3bdevicewidget.cpp:238
 #, kde-format
 msgid ""
 "In order to give K3b full access to the writer device the current user needs "
@@ -4981,23 +4981,23 @@ msgstr ""
 "Чтобы предоставить K3b полный доступ к устройству записи, текущий "
 "пользователь должен быть добавлен в группу <em>%1</em>."
 
-#: option/k3bdevicewidget.cpp:247 projects/k3bdataurladdingdialog.cpp:769
+#: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:785
 #, kde-format
 msgid "Add"
 msgstr "Добавить"
 
-#: option/k3bdevicewidget.cpp:271
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Перезапустите учётную запись, чтобы изменения вступили в силу."
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:269
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "Не удалось выполнить действие: %1 (код ошибки: %2)"
 
-#: option/k3bdevicewidget.cpp:275
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr "Повторить"
@@ -5043,7 +5043,7 @@ msgid "no change"
 msgstr "без изменений"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:125
+#: option/k3bexternalbinwidget.cpp:120
 #, kde-format
 msgid "Permissions"
 msgstr "Права доступа"
@@ -5053,7 +5053,7 @@ msgstr "Права доступа"
 msgid "New permissions"
 msgstr "Новые права доступа"
 
-#: option/k3bexternalbinwidget.cpp:79
+#: option/k3bexternalbinwidget.cpp:74
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -5064,32 +5064,32 @@ msgstr ""
 "использования <em>по умолчанию</em>. Вы можете самостоятельно выбрать "
 "желаемую версию программы из списка."
 
-#: option/k3bexternalbinwidget.cpp:87 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "Программы"
 
-#: option/k3bexternalbinwidget.cpp:93
+#: option/k3bexternalbinwidget.cpp:88
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "Параметры должны разделяться пробелами."
 
-#: option/k3bexternalbinwidget.cpp:106
+#: option/k3bexternalbinwidget.cpp:101
 #, kde-format
 msgid "User Parameters"
 msgstr "Пользовательские параметры"
 
-#: option/k3bexternalbinwidget.cpp:112
+#: option/k3bexternalbinwidget.cpp:107
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr "Выберите программы, права доступа к которым следует изменить:"
 
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:115
 #, kde-format
 msgid "Change Permissions..."
 msgstr "Изменить права доступа..."
 
-#: option/k3bexternalbinwidget.cpp:133
+#: option/k3bexternalbinwidget.cpp:128
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -5098,17 +5098,17 @@ msgstr ""
 "<qt><b>Подсказка:</b> чтобы приложение K3b использовало имя исполняемого "
 "файла, отличное от стандартного, укажите его в пути поиска.</qt>"
 
-#: option/k3bexternalbinwidget.cpp:141
+#: option/k3bexternalbinwidget.cpp:136
 #, kde-format
 msgid "Search Path"
 msgstr "Путь для поиска"
 
-#: option/k3bexternalbinwidget.cpp:244
+#: option/k3bexternalbinwidget.cpp:239
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Следующие программы не могут быть обновлены:"
 
-#: option/k3bexternalbinwidget.cpp:249
+#: option/k3bexternalbinwidget.cpp:244
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Не удалось выполнить действие: %1"
@@ -9388,12 +9388,12 @@ msgstr "Открыть свойства"
 msgid "Volume Name:"
 msgstr "Название тома:"
 
-#: projects/kostore/KoStore.cpp:198
+#: projects/kostore/KoStore.cpp:196
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
 msgstr "Режим папки недоступен при указании интернет-адресов."
 
-#: projects/kostore/KoStore.cpp:199
+#: projects/kostore/KoStore.cpp:197
 #, kde-format
 msgid "KOffice Storage"
 msgstr "Хранилище KOffice"

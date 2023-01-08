@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"POT-Creation-Date: 2023-01-08 00:58+0000\n"
 "PO-Revision-Date: 2007-11-26 20:51+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <locale@laka.lv>\n"
@@ -20,13 +20,13 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
-#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#: videodvd.cpp:162 videodvd.cpp:290
 #, fuzzy, kde-format
 #| msgid "No VideoDVD found"
 msgid "No Video DVD found"
 msgstr "Netika atrasts VideoDVD"
 
-#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#: videodvd.cpp:205 videodvd.cpp:373
 #, kde-format
 msgid "Read error."
 msgstr "Lasīšanas kļūda."

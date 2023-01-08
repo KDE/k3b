@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"POT-Creation-Date: 2023-01-08 00:58+0000\n"
 "PO-Revision-Date: 2017-05-16 07:02-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <Kde-l10n-he@kde.org>\n"
@@ -19,12 +19,12 @@ msgstr ""
 "X-Generator: Zanata 3.9.6\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#: videodvd.cpp:162 videodvd.cpp:290
 #, kde-format
 msgid "No Video DVD found"
 msgstr "לא נמצא וידאו DVD"
 
-#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#: videodvd.cpp:205 videodvd.cpp:373
 #, kde-format
 msgid "Read error."
 msgstr "שגיאת קריאה."

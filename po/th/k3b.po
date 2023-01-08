@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-01 00:46+0000\n"
+"POT-Creation-Date: 2023-01-08 00:58+0000\n"
 "PO-Revision-Date: 2010-05-01 20:38+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -3092,17 +3092,17 @@ msgstr "การปรับแต่งค่าระบบอย่างเ
 msgid "No problems found in system configuration."
 msgstr "ไม่พบปัญหาใด ๆ ในการปรับแต่งค่าของระบบ"
 
-#: k3btempdirselectionwidget.cpp:44
+#: k3btempdirselectionwidget.cpp:43
 #, kde-format
 msgid "Free space in temporary folder:"
 msgstr "พื้นที่ว่างในโฟลเดอร์พักข้อมูลชั่วคราว:"
 
-#: k3btempdirselectionwidget.cpp:74
+#: k3btempdirselectionwidget.cpp:69
 #, kde-format
 msgid "The folder in which to save the image files"
 msgstr "โฟลเดอร์ที่จะใช้ในการเก็บแฟ้มอิมเมจ"
 
-#: k3btempdirselectionwidget.cpp:78
+#: k3btempdirselectionwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>This is the folder in which K3b will save the <em>image files</em>."
@@ -3112,37 +3112,37 @@ msgstr ""
 "<p>นี่เป็นโฟลเดอร์ที่ K3b จะใช้ในการบันทึก<em>แฟ้มอิมเมจต่าง ๆ</em> "
 "<p>โปรดตรวจสอบให้แน่ใจว่า เนื้อที่ว่างบนพาร์ทิชันที่มีโฟลเดอร์นี้อยู่นั้น มีเพียงพอหรือไม่"
 
-#: k3btempdirselectionwidget.cpp:185
+#: k3btempdirselectionwidget.cpp:180
 #, kde-format
 msgid "Select Temporary Folder"
 msgstr "เลือกโฟลเดอร์พักข้อมูลชั่วคราว"
 
-#: k3btempdirselectionwidget.cpp:187
+#: k3btempdirselectionwidget.cpp:182
 #, kde-format
 msgid "Wri&te image files to:"
 msgstr "เขียนแฟ้มอิมเม&จต่าง ๆ ไปยัง:"
 
-#: k3btempdirselectionwidget.cpp:188
+#: k3btempdirselectionwidget.cpp:183
 #, kde-format
 msgid "Temporary Folder"
 msgstr "โฟลเดอร์พักข้อมูลชั่วคราว"
 
-#: k3btempdirselectionwidget.cpp:191
+#: k3btempdirselectionwidget.cpp:186
 #, kde-format
 msgid "Select Temporary File"
 msgstr "เลือกแฟ้มข้อมูลชั่วคราว"
 
-#: k3btempdirselectionwidget.cpp:193
+#: k3btempdirselectionwidget.cpp:188
 #, kde-format
 msgid "Wri&te image file to:"
 msgstr "เขียนแฟ้มอิ&มเมจไปยัง:"
 
-#: k3btempdirselectionwidget.cpp:194
+#: k3btempdirselectionwidget.cpp:189
 #, kde-format
 msgid "Temporary File"
 msgstr "แฟ้มข้อมูลชั่วคราว"
 
-#: k3btempdirselectionwidget.cpp:204
+#: k3btempdirselectionwidget.cpp:199
 #, kde-format
 msgid "Size of project:"
 msgstr "ขนาดของโครงงาน:"
@@ -4617,111 +4617,111 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "ไม่สามารถโหลดมอดูล KCDDB ของการปรับแต่งค่าได้"
 
-#: option/k3bdevicewidget.cpp:62 option/k3bexternalbinwidget.cpp:63
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
 #, kde-format
 msgid "Refresh"
 msgstr "ปรับปรุงใหม่"
 
-#: option/k3bdevicewidget.cpp:63
+#: option/k3bdevicewidget.cpp:58
 #, kde-format
 msgid "Rescan the devices"
 msgstr "ตรวจหาอุปกรณ์ต่าง ๆ อีกครั้ง"
 
-#: option/k3bdevicewidget.cpp:119
+#: option/k3bdevicewidget.cpp:114
 #, kde-format
 msgid "Writer Drives"
 msgstr "ไดรฟ์ที่ใช้เป็นตัวเขียนข้อมูล"
 
-#: option/k3bdevicewidget.cpp:124
+#: option/k3bdevicewidget.cpp:119
 #, kde-format
 msgid "Read-only Drives"
 msgstr "ไดรฟ์ที่อ่านได้อย่างเดียว"
 
-#: option/k3bdevicewidget.cpp:140
+#: option/k3bdevicewidget.cpp:135
 #, kde-format
 msgid "System device name:"
 msgstr "ชื่ออุปกรณ์ที่ระบบใช้:"
 
-#: option/k3bdevicewidget.cpp:146
+#: option/k3bdevicewidget.cpp:141
 #, kde-format
 msgid "Vendor:"
 msgstr "ผู้ผลิต:"
 
-#: option/k3bdevicewidget.cpp:152
+#: option/k3bdevicewidget.cpp:147
 #, kde-format
 msgid "Description:"
 msgstr "คำอธิบาย:"
 
-#: option/k3bdevicewidget.cpp:158
+#: option/k3bdevicewidget.cpp:153
 #, kde-format
 msgid "Firmware:"
 msgstr "เฟิร์มแวร์:"
 
-#: option/k3bdevicewidget.cpp:167
+#: option/k3bdevicewidget.cpp:162
 #, kde-format
 msgid "Write Capabilities:"
 msgstr "ความสามารถในการเขียน:"
 
-#: option/k3bdevicewidget.cpp:174
+#: option/k3bdevicewidget.cpp:169
 #, kde-format
 msgid "Read Capabilities:"
 msgstr "ความสามารถในการอ่าน:"
 
-#: option/k3bdevicewidget.cpp:185
+#: option/k3bdevicewidget.cpp:180
 #, kde-format
 msgid "Buffer Size:"
 msgstr "ขนาดบัฟเฟอร์:"
 
-#: option/k3bdevicewidget.cpp:195
+#: option/k3bdevicewidget.cpp:190
 #, kde-format
 msgid "Supports Burnfree:"
 msgstr "รองรับคุณสมบัติ Burnfree:"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "yes"
 msgstr "ใช่"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "no"
 msgstr "ไม่ใช่"
 
-#: option/k3bdevicewidget.cpp:202
+#: option/k3bdevicewidget.cpp:197
 #, kde-format
 msgid "Write modes:"
 msgstr "โหมดต่าง ๆ ของการเขียน:"
 
-#: option/k3bdevicewidget.cpp:213 option/k3bdevicewidget.cpp:218
+#: option/k3bdevicewidget.cpp:208 option/k3bdevicewidget.cpp:213
 #, kde-format
 msgid "none"
 msgstr "ไม่มี"
 
-#: option/k3bdevicewidget.cpp:243
+#: option/k3bdevicewidget.cpp:238
 #, kde-format
 msgid ""
 "In order to give K3b full access to the writer device the current user needs "
 "be added to a group <em>%1</em>."
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:247 projects/k3bdataurladdingdialog.cpp:769
+#: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:785
 #, kde-format
 msgid "Add"
 msgstr "เพิ่ม"
 
-#: option/k3bdevicewidget.cpp:271
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:269
 #, fuzzy, kde-format
 #| msgid "Unable to create folder %1"
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "ไม่สามารถสร้างโฟลเดอร์ %1 ได้"
 
-#: option/k3bdevicewidget.cpp:275
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr ""
@@ -4772,7 +4772,7 @@ msgid "no change"
 msgstr "ไม่เปลี่ยนแปลง"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:125
+#: option/k3bexternalbinwidget.cpp:120
 #, fuzzy, kde-format
 #| msgid "Sessions:"
 msgid "Permissions"
@@ -4784,7 +4784,7 @@ msgstr "จำนวนเซสชัน:"
 msgid "New permissions"
 msgstr "แก้ไขสิทธิ์ที่อนุญาต..."
 
-#: option/k3bexternalbinwidget.cpp:79
+#: option/k3bexternalbinwidget.cpp:74
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -4792,33 +4792,33 @@ msgid ""
 "to change the default, check desired version on the list."
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:87 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "โปรแกรมต่างๆ"
 
-#: option/k3bexternalbinwidget.cpp:93
+#: option/k3bexternalbinwidget.cpp:88
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "พารามิเตอร์ต่าง ๆ ที่ผู้ใช้ระบุ แยกแต่ละตัวด้วยช่องว่าง"
 
-#: option/k3bexternalbinwidget.cpp:106
+#: option/k3bexternalbinwidget.cpp:101
 #, kde-format
 msgid "User Parameters"
 msgstr "พารามิเตอร์ต่าง ๆ ที่ผู้ใช้ระบุ"
 
-#: option/k3bexternalbinwidget.cpp:112
+#: option/k3bexternalbinwidget.cpp:107
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:115
 #, fuzzy, kde-format
 #| msgid "Change Settings..."
 msgid "Change Permissions..."
 msgstr "เปลี่ยนแปลงการตั้งค่าต่าง ๆ ..."
 
-#: option/k3bexternalbinwidget.cpp:133
+#: option/k3bexternalbinwidget.cpp:128
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -4827,17 +4827,17 @@ msgstr ""
 "<qt><b>เคล็ดลับ:</b> เพื่อบังคับให้ K3b ใช้ตัวอื่น ๆ แทนชื่อปริยายของแฟ้มประมวลผลได้ "
 "ที่ระบุมันไว้ในพาธที่ใช้ในการค้นหา</qt>"
 
-#: option/k3bexternalbinwidget.cpp:141
+#: option/k3bexternalbinwidget.cpp:136
 #, kde-format
 msgid "Search Path"
 msgstr "พาธที่ใช้ค้นหา"
 
-#: option/k3bexternalbinwidget.cpp:244
+#: option/k3bexternalbinwidget.cpp:239
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:249
+#: option/k3bexternalbinwidget.cpp:244
 #, fuzzy, kde-format
 #| msgid "Unable to create folder %1"
 msgid "Unable to execute the action: %1"
@@ -8847,12 +8847,12 @@ msgstr "เปิดกล่องคุณสมบัติต่าง ๆ"
 msgid "Volume Name:"
 msgstr "ชื่อของโวลุม:"
 
-#: projects/kostore/KoStore.cpp:198
+#: projects/kostore/KoStore.cpp:196
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
 msgstr "โหมดไดเรกทอรีไม่รองรับการใช้งานตำแหน่งที่ไม่ได้อยู่ภายในระบบ"
 
-#: projects/kostore/KoStore.cpp:199
+#: projects/kostore/KoStore.cpp:197
 #, kde-format
 msgid "KOffice Storage"
 msgstr ""

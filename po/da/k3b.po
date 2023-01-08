@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-11-01 00:46+0000\n"
+"POT-Creation-Date: 2023-01-08 00:58+0000\n"
 "PO-Revision-Date: 2022-08-08 17:34+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -3228,17 +3228,17 @@ msgstr "Systemet er konfigureret korrekt"
 msgid "No problems found in system configuration."
 msgstr "Ingen problemer fundet i systemindstilling."
 
-#: k3btempdirselectionwidget.cpp:44
+#: k3btempdirselectionwidget.cpp:43
 #, kde-format
 msgid "Free space in temporary folder:"
 msgstr "Ledig plads i midlertidig mappe:"
 
-#: k3btempdirselectionwidget.cpp:74
+#: k3btempdirselectionwidget.cpp:69
 #, kde-format
 msgid "The folder in which to save the image files"
 msgstr "Mappen hvori image-filerne skal gemmes"
 
-#: k3btempdirselectionwidget.cpp:78
+#: k3btempdirselectionwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>This is the folder in which K3b will save the <em>image files</em>."
@@ -3248,37 +3248,37 @@ msgstr ""
 "<p>Dette er mappen hvor K3b gemmer <em>image-filer</em>.<p>Sørg for at den "
 "er i en partition som har tilstrækkeligt med ledig plads."
 
-#: k3btempdirselectionwidget.cpp:185
+#: k3btempdirselectionwidget.cpp:180
 #, kde-format
 msgid "Select Temporary Folder"
 msgstr "Vælg midlertidig mappe"
 
-#: k3btempdirselectionwidget.cpp:187
+#: k3btempdirselectionwidget.cpp:182
 #, kde-format
 msgid "Wri&te image files to:"
 msgstr "S&kriv image-filer til:"
 
-#: k3btempdirselectionwidget.cpp:188
+#: k3btempdirselectionwidget.cpp:183
 #, kde-format
 msgid "Temporary Folder"
 msgstr "Midlertidig mappe"
 
-#: k3btempdirselectionwidget.cpp:191
+#: k3btempdirselectionwidget.cpp:186
 #, kde-format
 msgid "Select Temporary File"
 msgstr "Vælg midlertidig fil"
 
-#: k3btempdirselectionwidget.cpp:193
+#: k3btempdirselectionwidget.cpp:188
 #, kde-format
 msgid "Wri&te image file to:"
 msgstr "S&kriv image-fil til:"
 
-#: k3btempdirselectionwidget.cpp:194
+#: k3btempdirselectionwidget.cpp:189
 #, kde-format
 msgid "Temporary File"
 msgstr "Midlertidig fil"
 
-#: k3btempdirselectionwidget.cpp:204
+#: k3btempdirselectionwidget.cpp:199
 #, kde-format
 msgid "Size of project:"
 msgstr "Projektets størrelse:"
@@ -4839,87 +4839,87 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "Kan ikke indlæse konfigurationsmodulet KCDDB."
 
-#: option/k3bdevicewidget.cpp:62 option/k3bexternalbinwidget.cpp:63
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
 #, kde-format
 msgid "Refresh"
 msgstr "Genopfrisk"
 
-#: option/k3bdevicewidget.cpp:63
+#: option/k3bdevicewidget.cpp:58
 #, kde-format
 msgid "Rescan the devices"
 msgstr "Genscan enhederne"
 
-#: option/k3bdevicewidget.cpp:119
+#: option/k3bdevicewidget.cpp:114
 #, kde-format
 msgid "Writer Drives"
 msgstr "Brænderdrev"
 
-#: option/k3bdevicewidget.cpp:124
+#: option/k3bdevicewidget.cpp:119
 #, kde-format
 msgid "Read-only Drives"
 msgstr "Drev der kun kan læse"
 
-#: option/k3bdevicewidget.cpp:140
+#: option/k3bdevicewidget.cpp:135
 #, kde-format
 msgid "System device name:"
 msgstr "System enhedsnavn:"
 
-#: option/k3bdevicewidget.cpp:146
+#: option/k3bdevicewidget.cpp:141
 #, kde-format
 msgid "Vendor:"
 msgstr "Forhandler:"
 
-#: option/k3bdevicewidget.cpp:152
+#: option/k3bdevicewidget.cpp:147
 #, kde-format
 msgid "Description:"
 msgstr "Beskrivelse:"
 
-#: option/k3bdevicewidget.cpp:158
+#: option/k3bdevicewidget.cpp:153
 #, kde-format
 msgid "Firmware:"
 msgstr "Fast program:"
 
-#: option/k3bdevicewidget.cpp:167
+#: option/k3bdevicewidget.cpp:162
 #, kde-format
 msgid "Write Capabilities:"
 msgstr "Brændekapabiliteter:"
 
-#: option/k3bdevicewidget.cpp:174
+#: option/k3bdevicewidget.cpp:169
 #, kde-format
 msgid "Read Capabilities:"
 msgstr "Læsekapabiliteter:"
 
-#: option/k3bdevicewidget.cpp:185
+#: option/k3bdevicewidget.cpp:180
 #, kde-format
 msgid "Buffer Size:"
 msgstr "Bufferstørrelse:"
 
-#: option/k3bdevicewidget.cpp:195
+#: option/k3bdevicewidget.cpp:190
 #, kde-format
 msgid "Supports Burnfree:"
 msgstr "Understøtter Burnfree:"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "yes"
 msgstr "ja"
 
-#: option/k3bdevicewidget.cpp:196
+#: option/k3bdevicewidget.cpp:191
 #, kde-format
 msgid "no"
 msgstr "nej"
 
-#: option/k3bdevicewidget.cpp:202
+#: option/k3bdevicewidget.cpp:197
 #, kde-format
 msgid "Write modes:"
 msgstr "Brændetilstande:"
 
-#: option/k3bdevicewidget.cpp:213 option/k3bdevicewidget.cpp:218
+#: option/k3bdevicewidget.cpp:208 option/k3bdevicewidget.cpp:213
 #, kde-format
 msgid "none"
 msgstr "ingen"
 
-#: option/k3bdevicewidget.cpp:243
+#: option/k3bdevicewidget.cpp:238
 #, kde-format
 msgid ""
 "In order to give K3b full access to the writer device the current user needs "
@@ -4928,23 +4928,23 @@ msgstr ""
 "For at give K3b fuld adgang til brænderenheden skal den aktuelle bruger "
 "føjes til gruppen <em>%1</em>."
 
-#: option/k3bdevicewidget.cpp:247 projects/k3bdataurladdingdialog.cpp:769
+#: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:785
 #, kde-format
 msgid "Add"
 msgstr "Tilføj"
 
-#: option/k3bdevicewidget.cpp:271
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Log ud og ind igen for at anvende ændringerne."
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:269
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "Kan ikke køre handlingen: %1 (fejlkode: %2)"
 
-#: option/k3bdevicewidget.cpp:275
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr "Prøv igen"
@@ -4991,7 +4991,7 @@ msgid "no change"
 msgstr "ingen ændring"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:125
+#: option/k3bexternalbinwidget.cpp:120
 #, kde-format
 msgid "Permissions"
 msgstr "Rettigheder"
@@ -5001,7 +5001,7 @@ msgstr "Rettigheder"
 msgid "New permissions"
 msgstr "Nye rettigheder"
 
-#: option/k3bexternalbinwidget.cpp:79
+#: option/k3bexternalbinwidget.cpp:74
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -5013,32 +5013,32 @@ msgstr ""
 "arbejdet. Hvis du vil ændre standardvalget, skal du markere den ønskede "
 "version i listen."
 
-#: option/k3bexternalbinwidget.cpp:87 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "Programmer"
 
-#: option/k3bexternalbinwidget.cpp:93
+#: option/k3bexternalbinwidget.cpp:88
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "Brugerparametre skal være adskilt af mellemrum."
 
-#: option/k3bexternalbinwidget.cpp:106
+#: option/k3bexternalbinwidget.cpp:101
 #, kde-format
 msgid "User Parameters"
 msgstr "Brugerparametre"
 
-#: option/k3bexternalbinwidget.cpp:112
+#: option/k3bexternalbinwidget.cpp:107
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr "Markér de programmer hvis rettigheder du ønsker skal ændres:"
 
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:115
 #, kde-format
 msgid "Change Permissions..."
 msgstr "Ændr rettigheder..."
 
-#: option/k3bexternalbinwidget.cpp:133
+#: option/k3bexternalbinwidget.cpp:128
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -5047,17 +5047,17 @@ msgstr ""
 "<qt><b>Vink:</b> for at tvinge K3b til at bruge et andet end standardnavnet "
 "på den kørbare angives det i søgestien.</qt>"
 
-#: option/k3bexternalbinwidget.cpp:141
+#: option/k3bexternalbinwidget.cpp:136
 #, kde-format
 msgid "Search Path"
 msgstr "Søgesti"
 
-#: option/k3bexternalbinwidget.cpp:244
+#: option/k3bexternalbinwidget.cpp:239
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Følgende programmer kunne ikke opdateres:"
 
-#: option/k3bexternalbinwidget.cpp:249
+#: option/k3bexternalbinwidget.cpp:244
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Kan ikke køre handlingen: %1"
@@ -9346,12 +9346,12 @@ msgstr "Åbn egenskabsdialogen"
 msgid "Volume Name:"
 msgstr "Volume-navn:"
 
-#: projects/kostore/KoStore.cpp:198
+#: projects/kostore/KoStore.cpp:196
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
 msgstr "Mappetilstand er ikke understøttet for eksterne placeringer."
 
-#: projects/kostore/KoStore.cpp:199
+#: projects/kostore/KoStore.cpp:197
 #, kde-format
 msgid "KOffice Storage"
 msgstr "KOffice Storage"

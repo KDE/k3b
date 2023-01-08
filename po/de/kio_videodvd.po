@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"POT-Creation-Date: 2023-01-08 00:58+0000\n"
 "PO-Revision-Date: 2009-04-23 12:52+0200\n"
 "Last-Translator: Burkhard Lück <lueck@hube-lueck.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -14,12 +14,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#: videodvd.cpp:162 videodvd.cpp:290
 #, kde-format
 msgid "No Video DVD found"
 msgstr "Keine Video-DVD gefunden"
 
-#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#: videodvd.cpp:205 videodvd.cpp:373
 #, kde-format
 msgid "Read error."
 msgstr "Lesefehler."
