@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"POT-Creation-Date: 2023-01-08 02:43+0000\n"
 "PO-Revision-Date: 2008-05-07 18:15+0530\n"
 "Last-Translator: Prasad.S.R <saysprasad@gmail.com>\n"
 "Language-Team: Malayalam <Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#: videodvd.cpp:167 videodvd.cpp:169 videodvd.cpp:305 videodvd.cpp:307
 #, fuzzy, kde-format
 #| msgid "No VideoDVD found"
 msgid "No Video DVD found"
 msgstr "വിഡിയോ ഡിവിഡിയൊന്നും കണ്ടില്ല"
 
-#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#: videodvd.cpp:212 videodvd.cpp:214 videodvd.cpp:386 videodvd.cpp:388
 #, kde-format
 msgid "Read error."
 msgstr "വായിയ്ക്കുന്നതില്‍ തെറ്റു് പറ്റി."

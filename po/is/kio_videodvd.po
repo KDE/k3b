@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"POT-Creation-Date: 2023-01-08 02:43+0000\n"
 "PO-Revision-Date: 2010-04-21 13:23+0000\n"
 "Last-Translator: Sveinn í Felli <sveinki@nett.is>\n"
 "Language-Team: Icelandic <kde-isl@molar.is>\n"
@@ -20,12 +20,12 @@ msgstr ""
 "\n"
 "\n"
 
-#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#: videodvd.cpp:167 videodvd.cpp:169 videodvd.cpp:305 videodvd.cpp:307
 #, kde-format
 msgid "No Video DVD found"
 msgstr "Enginn vídeó DVD fannst"
 
-#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#: videodvd.cpp:212 videodvd.cpp:214 videodvd.cpp:386 videodvd.cpp:388
 #, kde-format
 msgid "Read error."
 msgstr "Lesvilla."

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"POT-Creation-Date: 2023-01-08 02:43+0000\n"
 "PO-Revision-Date: 2009-05-26 15:08+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "X-Generator: KBabel 1.11.4\n"
 "X-Language: km_KH\n"
 
-#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#: videodvd.cpp:167 videodvd.cpp:169 videodvd.cpp:305 videodvd.cpp:307
 #, kde-format
 msgid "No Video DVD found"
 msgstr "រក​មិន​ឃើញ​ឌីវីឌី​វីដេអូ​"
 
-#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#: videodvd.cpp:212 videodvd.cpp:214 videodvd.cpp:386 videodvd.cpp:388
 #, kde-format
 msgid "Read error."
 msgstr "កំហុស​ក្នុង​ការ​អាន"

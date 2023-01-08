@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-07-04 00:44+0000\n"
+"POT-Creation-Date: 2023-01-08 02:43+0000\n"
 "PO-Revision-Date: 2009-08-05 13:44+0900\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: videodvd.cpp:166 videodvd.cpp:168 videodvd.cpp:304 videodvd.cpp:306
+#: videodvd.cpp:167 videodvd.cpp:169 videodvd.cpp:305 videodvd.cpp:307
 #, kde-format
 msgid "No Video DVD found"
 msgstr "비디오 DVD를 찾을 수 없음"
 
-#: videodvd.cpp:211 videodvd.cpp:213 videodvd.cpp:385 videodvd.cpp:387
+#: videodvd.cpp:212 videodvd.cpp:214 videodvd.cpp:386 videodvd.cpp:388
 #, kde-format
 msgid "Read error."
 msgstr "읽기 오류입니다."
