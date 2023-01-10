@@ -328,9 +328,9 @@ bool K3b::AudioDoc::readPlaylistFile( const QUrl& url, QList<QUrl>& playlist )
             QUrl mp3url;
             QFileInfo pathInfo(line);
             if (pathInfo.isRelative())
-                mp3url.setPath( QDir::cleanPath( playlistDirectory.filePath( line ) ) );
+                mp3url = QUrl::fromLocalFile( QDir::cleanPath( playlistDirectory.filePath( line ) ) );
             else
-                mp3url.setPath( line );
+                mp3url = QUrl::fromLocalFile( line );
 
             playlist.append( mp3url );
         }
