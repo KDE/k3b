@@ -518,7 +518,7 @@ msgstr "Configuració"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:40
 #, kde-format
 msgid "Quality Settings"
-msgstr "Configuració de la qualitat"
+msgstr "Configureu la qualitat"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioQualityLevel)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:48
@@ -4549,7 +4549,7 @@ msgstr "Sistema"
 #: option/base_k3bmiscoptiontab.ui:69
 #, kde-format
 msgid "Check system Configuration"
-msgstr "Configuració de la comprovació del sistema"
+msgstr "Configureu la comprovació del sistema"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkSystemConfig)
 #: option/base_k3bmiscoptiontab.ui:72
@@ -4572,7 +4572,7 @@ msgstr "&Comprova la configuració del sistema"
 #: option/base_k3bmiscoptiontab.ui:85
 #, kde-format
 msgid "GUI Settings"
-msgstr "Configuració de la IGU"
+msgstr "Configureu la IGU"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkShowProgressOSD)
 #: option/base_k3bmiscoptiontab.ui:91
@@ -5203,7 +5203,7 @@ msgstr "No teniu permís per a escriure a %1."
 #: option/k3boptiondialog.cpp:130
 #, kde-format
 msgid "Miscellaneous Settings"
-msgstr "Configuració de la miscel·lània"
+msgstr "Configureu la miscel·lània"
 
 #: option/k3boptiondialog.cpp:139
 #, kde-format
@@ -5238,7 +5238,7 @@ msgstr "Connectors"
 #: option/k3boptiondialog.cpp:174
 #, kde-format
 msgid "K3b Plugin Configuration"
-msgstr "Configuració dels connectors de K3b"
+msgstr "Configureu els connectors de K3b"
 
 #: option/k3boptiondialog.cpp:187
 #, kde-format
@@ -5785,7 +5785,7 @@ msgid ""
 msgstr ""
 "<p><b>CD-Text</b>\n"
 "<p>Si esta opció està marcada, K3b emprarà un espai del CD d'àudio, que "
-"d'altra manera quedaria sense utilitzar, per a guardar informació "
+"d'altra manera quedaria sense utilitzar, per que es guardarà informació "
 "addicional, com ara l'artista o el títol del CD.\n"
 "<p>CD-Text és una ampliació de l'estàndard de CD d'àudio introduïda per "
 "Sony.\n"
@@ -6078,7 +6078,7 @@ msgstr "Enllaços simbòlics"
 #: projects/base_k3bdataimagesettings.ui:87
 #, kde-format
 msgid "Symbolic link handling in the project"
-msgstr "Gestió dels enllaços simbòlics en el projecte"
+msgstr "Gestioneu els enllaços simbòlics en el projecte"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:105
@@ -6170,13 +6170,13 @@ msgstr "Seguix els enllaços simbòlics"
 #: projects/base_k3bdataimagesettings.ui:135
 #, kde-format
 msgid "White space handling"
-msgstr "Gestió dels espais en blanc"
+msgstr "Gestioneu els espais en blanc"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:147
 #, kde-format
 msgid "Handling of spaces in filenames"
-msgstr "Gestió dels espais en els noms de fitxer"
+msgstr "Gestioneu els espais en els noms de fitxer"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:160
