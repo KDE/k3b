@@ -12,13 +12,13 @@
 # S.Çağlar Onur <caglar@uludag.org.tr>, 2004.
 # obsoleteman <tulliana@gmail.com>, 2007-2009,2011-2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2017.
-# Emir SARI <emir_sari@icloud.com>, 2022.
+# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-12-11 20:39+0300\n"
+"PO-Revision-Date: 2023-01-18 22:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.0\n"
+"X-Generator: Lokalize 22.12.1\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -206,7 +206,7 @@ msgstr "Veri CD'si Kopyalanıyor."
 #: jobs/k3bcdcopyjob.cpp:207
 #, kde-format
 msgid "K3b can only copy CD-Extra mixed mode CDs."
-msgstr "K3b, sadece CD-Extra karışık kip CD'lerini kopyalayabilir."
+msgstr "K3b, yalnızca CD-Extra karışık kip CD'lerini kopyalayabilir."
 
 #: jobs/k3bcdcopyjob.cpp:211
 #, kde-format
@@ -236,7 +236,7 @@ msgid ""
 "You will only be able to copy the first session in raw writing mode. "
 "Continue anyway?"
 msgstr ""
-"Ham (raw) yazma kipinde sadece ilk oturumu kopyalayabilirsiniz. Yine de "
+"Ham (raw) yazma kipinde yalnızca ilk oturumu kopyalayabilirsiniz. Yine de "
 "sürdürmek ister misiniz?"
 
 #: jobs/k3bcdcopyjob.cpp:277
@@ -247,7 +247,7 @@ msgstr "Çoklu-oturum CD"
 #: jobs/k3bcdcopyjob.cpp:282
 #, kde-format
 msgid "Only copying first session."
-msgstr "Sadece ilk oturum kopyalanıyor."
+msgstr "Yalnızca ilk oturum kopyalanıyor."
 
 #: jobs/k3bcdcopyjob.cpp:311 jobs/k3bdvdcopyjob.cpp:344
 #, kde-format
@@ -1199,7 +1199,7 @@ msgstr "%2 kullanılarak %1 ortamına yazılamaz. Öntanımlı uygulamaya geçil
 #: jobs/k3bmetawriter.cpp:310
 #, kde-format
 msgid "DVD and Blu-ray tracks can only be written in MODE1."
-msgstr "DVD ve Blu-Ray izleri sadece KİP1 ile yazılabilir."
+msgstr "DVD ve Blu-Ray izleri yalnızca KİP1 ile yazılabilir."
 
 #: jobs/k3bmetawriter.cpp:335
 #, kde-format
@@ -1584,7 +1584,7 @@ msgid ""
 "XviD is open source and can potentially run on any platform."
 msgstr ""
 "XviD DivX'in en önemli rakiplerinden biridir (XviD DivX'in tersten "
-"yazılışıdır). DivX kapalı kodlu ve sadece Windows, Mac OS ve Linux'ta "
+"yazılışıdır). DivX kapalı kodlu ve yalnızca Windows, Mac OS ve Linux'ta "
 "çalışabilirken, XviD açık kaynaklı olup teoride tüm platformlarda "
 "çalışabilir."
 
@@ -2630,7 +2630,7 @@ msgstr "Resmi disk kapasitesinden daha fazla yazılmaya çalışılıyor"
 #: projects/k3bcdrecordwriter.cpp:637 projects/k3bcdrskinwriter.cpp:650
 #, kde-format
 msgid "Only session 1 will be cloned."
-msgstr "Sadece oturum 1 klonlanacak."
+msgstr "Yalnızca oturum 1 klonlanacak."
 
 #: projects/k3bcdrecordwriter.cpp:640 projects/k3bcdrskinwriter.cpp:653
 #, kde-format
@@ -3369,7 +3369,7 @@ msgstr ""
 #: projects/videocd/k3bvcddoc.cpp:278
 #, kde-format
 msgid "Only MPEG1 and MPEG2 video files are supported.\n"
-msgstr "Sadece MPEG1 ve MPEG2 video dosyaları desteklenmektedir.\n"
+msgstr "Yalnızca MPEG1 ve MPEG2 video dosyaları desteklenmektedir.\n"
 
 #: projects/videocd/k3bvcddoc.cpp:279
 #, kde-format
@@ -4166,7 +4166,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:25
 #, kde-format
 msgid "Only simulate the writing process"
-msgstr "Sadece yazma sürecini simüle et"
+msgstr "Yalnızca yazma sürecini simüle et"
 
 #: tools/k3bstdguiitems.cpp:31
 #, kde-format
@@ -4184,7 +4184,7 @@ msgstr ""
 "<p>Eğer bu seçenek seçilirse K3b CD'yi 'bir seferde tüm iz' (TAO) "
 "yönteminden ziyade, bir seferde tüm disk' (DAO) yöntemiyle yazacaktır. "
 "<p>Mümkün olduğunca DAO kullanımı tavsiye edilmektedir. <p><b>Uyarı</b>İz ön "
-"aralıkları 2 saniyeden farklı olanlar sadece DAO yöntemi tarafından "
+"aralıkları 2 saniyeden farklı olanlar yalnızca DAO yöntemi tarafından "
 "desteklenmektedir."
 
 #: tools/k3bstdguiitems.cpp:37
@@ -4234,7 +4234,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:64
 #, kde-format
 msgid "Only create image"
-msgstr "Sadece kalıbını yarat"
+msgstr "Yalnızca kalıbını yarat"
 
 #: tools/k3bstdguiitems.cpp:65
 #, kde-format
@@ -4243,14 +4243,14 @@ msgid ""
 "actual writing.<p>The image can later be written to a CD/DVD with most "
 "current writing programs (including K3b of course)."
 msgstr ""
-"<p>Eğer bu seçenek seçilirse K3b sadece bir görüntü oluşturacak ve gerçek "
+"<p>Eğer bu seçenek seçilirse K3b yalnızca bir görüntü oluşturacak ve gerçek "
 "bir yazma işlemi yapmayacaktır. <p>Görüntü daha sonra bir CD/DVD'ye birçok "
 "yazma programı(K3b de dahil tabii ki) kullanılarak yazılablir."
 
 #: tools/k3bstdguiitems.cpp:69
 #, kde-format
 msgid "Only create an image"
-msgstr "Sadece kalıbını yarat"
+msgstr "Yalnızca kalıbını yarat"
 
 #: tools/k3bstdguiitems.cpp:75
 #, kde-format
@@ -4347,8 +4347,8 @@ msgstr ""
 "<p>Eğer bu seçenek seçilirse K3b ses CD ortamlarında kullanılmayan alanları "
 "sanatçı ismi veya CD başlığı gibi bazı ek bilgileri depolamak için kullanır."
 "<p>CD-Text, ses CD standardına Sony tarafından katılan bir eklentidir.<p>CD-"
-"Text sadece bu eklentiyi destekleyen CD oynatıcılarda (daha çok otomobil CD "
-"okuyucuları) kullanılabilir.<p>CD-Text özellikli CD ortamları her CD "
+"Text yalnızca bu eklentiyi destekleyen CD oynatıcılarda (daha çok otomobil "
+"CD okuyucuları) kullanılabilir.<p>CD-Text özellikli CD ortamları her CD "
 "okuyucuda çalışacağından dolayı bu özelliği kullanmak kötü bir fikir "
 "değildir (Eğer CD-Text verisi sağlarsanız.)"
 
