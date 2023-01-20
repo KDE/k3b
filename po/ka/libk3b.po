@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2022-11-03 06:15+0100\n"
+"PO-Revision-Date: 2023-01-19 16:14+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -557,7 +557,7 @@ msgstr ""
 #: jobs/k3bclonejob.cpp:95
 #, kde-format
 msgid "No device set."
-msgstr ""
+msgstr "მოწყობილობა დაყენებული არაა."
 
 #: jobs/k3bclonejob.cpp:104
 #, kde-format
@@ -567,13 +567,13 @@ msgstr ""
 #: jobs/k3bclonejob.cpp:137
 #, kde-format
 msgid "Reading clone image"
-msgstr ""
+msgstr "კლონი ასლის წაკთხვა"
 
 #: jobs/k3bclonejob.cpp:218 projects/datacd/k3bdatajob.cpp:458
 #: projects/videocd/k3bvcdjob.cpp:456
 #, kde-format
 msgid "Writing Track %1 of %2"
-msgstr ""
+msgstr "იწერება ტრეკი %1 %2-დან"
 
 #: jobs/k3bclonejob.cpp:235
 #, kde-format
@@ -1630,7 +1630,7 @@ msgstr ""
 #: projects/mixedcd/k3bmixedjob.cpp:1088
 #, kde-format
 msgid "Could not open %1 for writing"
-msgstr ""
+msgstr "%1-ის ჩასაწერად გახსნის შეცდომა"
 
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
@@ -3119,7 +3119,7 @@ msgstr[1] ""
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
 msgid "Enter New Filename"
-msgstr ""
+msgstr "შეიყვანეთ ახალი ფაილის სახელი"
 
 #: projects/movixcd/k3bmovixdoc.cpp:83
 #, kde-format
