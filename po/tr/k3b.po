@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2023-01-27 20:00+0300\n"
+"PO-Revision-Date: 2023-01-30 00:44+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1627,7 +1627,7 @@ msgstr "Geçerli Projeler"
 #: k3b.cpp:533
 #, kde-format
 msgid "&Location Bar"
-msgstr "&Adres Çubuğu"
+msgstr "&Konum Çubuğu"
 
 #: k3b.cpp:600 k3b.cpp:916 k3b.cpp:930
 #, kde-format
