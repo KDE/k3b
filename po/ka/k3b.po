@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2023-01-18 06:25+0100\n"
+"PO-Revision-Date: 2023-02-03 15:57+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -446,7 +446,7 @@ msgstr "გაფართოება მითითებული არა�
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:74
 #, kde-format
 msgid "Please specify the command line."
-msgstr "მიუთითეთ ბრძანების სტრიქონი"
+msgstr "მიუთითეთ ბრძანების სტრიქონი."
 
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:75
 #, kde-format
@@ -1222,7 +1222,7 @@ msgstr ""
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:68
 #, kde-format
 msgid "Cancel"
-msgstr "_გაუქმება"
+msgstr "გაუქმება"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:69
 #: projects/k3baudioburndialog.cpp:50
@@ -4829,7 +4829,7 @@ msgstr "ავტორი"
 #: option/k3bthememodel.cpp:97
 #, kde-format
 msgid "Comment"
-msgstr "კომე_ნტარი"
+msgstr "კომენტარი"
 
 #: option/k3bthemeoptiontab.cpp:97
 #, kde-format
@@ -7226,7 +7226,7 @@ msgstr "%1 მბ"
 #: projects/k3bfillstatusdisplay.cpp:430
 #, kde-format
 msgid "Custom..."
-msgstr "გა_მართვა..."
+msgstr "ხელით..."
 
 #: projects/k3bfillstatusdisplay.cpp:432
 #, kde-format
