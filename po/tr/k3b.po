@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2023-01-31 01:24+0300\n"
+"PO-Revision-Date: 2023-02-04 11:31+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1124,13 +1124,13 @@ msgstr "Kanallar:"
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:157
 #, kde-format
 msgid "1 (mono)"
-msgstr "1 (mono)"
+msgstr "1 (tek kanallı)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboChannels)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:162
 #, kde-format
 msgid "2 (stereo)"
-msgstr "2 (stereo)"
+msgstr "2 (çift kanallı)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboChannels)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:167
@@ -1148,13 +1148,13 @@ msgstr "Bayt"
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:184
 #, kde-format
 msgid "16-bit Words"
-msgstr "16-bit Words"
+msgstr "16 bit Sözcükler"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSize)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:189
 #, kde-format
 msgid "32-bit Words"
-msgstr "32-bit Words"
+msgstr "32 bit Sözcükler"
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:282
 #, kde-format
