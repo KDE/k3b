@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2023-02-04 11:30+0300\n"
+"PO-Revision-Date: 2023-02-05 12:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -7044,7 +7044,7 @@ msgstr "Dönüştürülecek parça yok"
 #: projects/k3bbootimagedialog.cpp:36
 #, kde-format
 msgid "Boot Images"
-msgstr "Ön yükleme Kalıpları"
+msgstr "Önyükleme Kalıpları"
 
 #: projects/k3bbootimagedialog.cpp:83
 #, kde-format
@@ -7087,7 +7087,7 @@ msgstr ""
 #: projects/k3bbootimagedialog.cpp:111
 #, kde-format
 msgid "No Floppy image selected"
-msgstr "Bir disket görüntüsü seçilmedi"
+msgstr "Bir disket kalıbı seçilmedi"
 
 #: projects/k3bbootimagedialog.cpp:112
 #, kde-format
@@ -7645,9 +7645,9 @@ msgid ""
 "such it can be burned to a medium directly since it already contains a file "
 "system.<br>Are you sure you want to add this file to the project?"
 msgstr ""
-"<p>Projeye eklemekte olduğunuz dosya bir ISO 9660 görüntüsü. Zaten bir dosya "
-"sistemi içerdiği için bu görüntü bir diske doğrudan yazılabilir.<br>Bu "
-"dosyayı projeye eklemek istediğinizden emin misiniz?"
+"<p>Projeye eklemekte olduğunuz dosya bir ISO 9660 kalıbıdır. Zaten bir dosya "
+"sistemi içerdiği için bu kalıp bir diske doğrudan yazılabilir.<br>Bu dosyayı "
+"projeye eklemek istediğinizden emin misiniz?"
 
 #: projects/k3bdataurladdingdialog.cpp:182
 #, kde-format
@@ -7899,7 +7899,7 @@ msgstr ""
 #: projects/k3bdataviewimpl.cpp:373
 #, kde-format
 msgid "Edit Boot Images"
-msgstr "Ön Yükleme Kalıplarını Düzenle"
+msgstr "Önyükleme Kalıplarını Düzenle"
 
 #: projects/k3bfillstatusdisplay.cpp:186
 #, kde-format
@@ -10389,7 +10389,7 @@ msgid ""
 "This indicates to `vcdxrip' to assume a 2336-byte sector mode for image file."
 "</p><b>Note: This option is slated to disappear.</b>"
 msgstr ""
-"<p> Bu seçenek yalnızca BIN biçiminde bir CD disk görüntüsü okunuyorsa işe "
+"<p> Bu seçenek yalnızca BIN biçiminde bir CD disk kalıbı okunuyorsa işe "
 "yarar. Bu seçenek, kalıp dosyası için 'vcdxrip'e 2336-bayt sektör "
 "kullanmasını söyler.</p><b>Not: Bu seçenek pek fazla kullanılmamaktadır.</b>"
 
