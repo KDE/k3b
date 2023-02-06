@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2023-01-19 22:39+0300\n"
+"PO-Revision-Date: 2023-02-05 12:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -2248,17 +2248,17 @@ msgstr ""
 #: projects/datacd/k3bmkisofshandler.cpp:109
 #, kde-format
 msgid "The boot image has an invalid size."
-msgstr "Açılış(boot) görüntüsünün boyutu geçersiz."
+msgstr "Önyükleme kalıbının boyutu geçersiz."
 
 #: projects/datacd/k3bmkisofshandler.cpp:113
 #, kde-format
 msgid "The boot image contains multiple partitions."
-msgstr "Önyükleme görüntüsü çoklu bölüm içeriyor."
+msgstr "Önyükleme kalıbı çoklu bölüm içeriyor."
 
 #: projects/datacd/k3bmkisofshandler.cpp:114
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
-msgstr "Sabit sürücü önyükleme görüntüsü tek bir bölüm içermeli."
+msgstr "Sabit sürücü önyükleme kalıbı tek bir bölüm içermeli."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:43
 #, kde-format
