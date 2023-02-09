@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2023-02-05 12:00+0300\n"
+"PO-Revision-Date: 2023-02-08 14:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -4978,7 +4978,7 @@ msgstr "Ekle"
 #: option/k3bdevicewidget.cpp:271
 #, kde-format
 msgid "Please relogin to apply the changes."
-msgstr "Lütfen değişiklikleri uygulamak için yeniden giriş yapın."
+msgstr "Değişiklikleri uygulamak için yeniden oturum açın."
 
 #: option/k3bdevicewidget.cpp:274
 #, kde-format
