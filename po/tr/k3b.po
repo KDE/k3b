@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2023-02-08 14:24+0300\n"
+"PO-Revision-Date: 2023-02-20 00:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -1306,7 +1306,7 @@ msgstr "Ses Dosyalarını Yeniden Adlandır"
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:166
 #, kde-format
 msgid "Based on meta info"
-msgstr "Meta bilgisine dayalı"
+msgstr "Üst bilgiye dayalı"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:186
 #, kde-format
@@ -6992,7 +6992,7 @@ msgstr "Musicbrainz ile sorgula"
 #: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
 #, kde-format
 msgid "Try to determine meta information over the Internet"
-msgstr "Meta bilgileri Internet üzerinden belirle"
+msgstr "Üst bilgiyi İnternet üzerinden belirle"
 
 #: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:128
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
