@@ -3,14 +3,14 @@
 # Lukáš Tinkl <ltinkl@redhat.com>, 2010, 2011.
 # Vít Pelčák <vit@pelcak.org>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020.
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
-# Vit Pelcak <vit@pelcak.org>, 2021, 2022.
+# Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2022-05-12 14:50+0200\n"
+"PO-Revision-Date: 2023-02-22 16:46+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 22.04.0\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -131,7 +131,7 @@ msgstr "Důraz"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:432
 #, kde-format
 msgid "Copyright"
-msgstr "Copyright"
+msgstr "Autorská práva"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:379
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:434
@@ -605,7 +605,7 @@ msgstr "Označení kódovaného souboru jako chráněného copyrightem."
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:375
 #, kde-format
 msgid "Mark copyrighted"
-msgstr "Označit jako chráněné copyrightem"
+msgstr "Označit jako chráněné autorskými právy"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkOriginal)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:382
@@ -3284,7 +3284,7 @@ msgstr "Vítejte v K3b &ndash; Nástroji pro vypalování CD, DVD a Blu-ray"
 #: k3bwelcomewidget.cpp:264
 #, kde-format
 msgid "K3b %1 Copyright &copy; 1998&ndash;2018 K3b authors"
-msgstr "K3b %1 Copyright &copy; 1998–&ndash;2018, Vývojáři K3b"
+msgstr "K3b %1 Autorská práva &copy; 1998–&ndash;2018, Vývojáři K3b"
 
 #: k3bwelcomewidget.cpp:398
 #, kde-format
@@ -3542,7 +3542,7 @@ msgstr ""
 #: main.cpp:33
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
-msgstr "Copyright © 1998–2018, Vývojáři K3b"
+msgstr "Autorská práva © 1998–2018, Vývojáři K3b"
 
 #: main.cpp:35
 #, kde-format
@@ -6110,7 +6110,7 @@ msgstr "Vy&davatel:"
 #: projects/base_k3bdatavolumedescdialog.ui:97
 #, kde-format
 msgid "Copyright file:"
-msgstr "Soubor s copyrightem:"
+msgstr "Soubor s autorskými právy:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
 #: projects/base_k3bdatavolumedescdialog.ui:121
@@ -9066,7 +9066,7 @@ msgstr "Režim:"
 #: projects/k3bvcdtrackdialog.cpp:594
 #, kde-format
 msgid "Copyright:"
-msgstr "Copyright:"
+msgstr "Autorská práva:"
 
 #: projects/k3bvcdtrackdialog.cpp:633
 #, kde-format
@@ -10026,7 +10026,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:109
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "Používá se %1 %2 - Copyright © %3"
+msgstr "Používá se %1 %2 - Autorská práva © %3"
 
 #: rip/k3bvideocdrip.cpp:160
 #, kde-format
