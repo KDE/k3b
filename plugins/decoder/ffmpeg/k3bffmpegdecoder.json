@@ -77,6 +77,7 @@
         "Description[tr]": "WMA dosyalarının kodlarını çözmek için çözücü modül",
         "Description[uk]": "Модуль для декодування файлів WMA",
         "Description[x-test]": "xxDecoding module to decode WMA filesxx",
+        "Description[zh_CN]": "用于解码 WMA 文件的解码模块",
         "Description[zh_TW]": "解碼 WMA 檔案格式的模組",
         "EnabledByDefault": true,
         "Icon": "preferences-plugin",
@@ -138,6 +139,7 @@
         "Name[tr]": "K3b FFMpeg Çözücüsü",
         "Name[uk]": "K3b декодувальник FFMpeg",
         "Name[x-test]": "xxK3b FFMpeg Decoderxx",
+        "Name[zh_CN]": "K3b FFMpeg 解码器",
         "Name[zh_TW]": "K3b FFMpeg 解碼器",
         "Version": "4.0"
     }
