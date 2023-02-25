@@ -14,9 +14,9 @@
 <author>
 <personname
 ><firstname
->Esta documentação foi convertida a partir da página do <ulink url=" http://userbase.kde.org/K3b"
+>Esta documentação foi convertida da página UserBase KDE <ulink url=" https://userbase.kde.org/K3b"
 >K3b</ulink
-> da Base de Usuários do KDE em 20/01/2011.</firstname
+> página em 20/01/2011.</firstname
 > <surname
 ></surname
 > </personname>
@@ -419,16 +419,15 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 <title
 >Créditos e licença</title>
     <para
->Documentação - 'Copyright' ver o <ulink url="http://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>Documentação com direitos autorais, veja a página UserBase <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
 >histórico da página do K3b</ulink
-> na Base de Usuários</para>
+></para>
     <para
 >Tradução de Marcus Gama <email
 >marcus.gama@gmail.com</email
 > e André Marcelo Alvarenga <email
 >alvarenga@kde.org</email
 ></para
-> 
-&underFDL; </chapter>
+> &underFDL; </chapter>
 &documentation.index;
 </book>

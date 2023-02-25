@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2023-02-15 11:04\n"
+"PO-Revision-Date: 2023-02-24 12:43\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -30,17 +30,17 @@ msgstr "kde-china@kde.org"
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Monkey's Audio (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
-msgstr ""
+msgstr "高级音频编码 (AAC)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
@@ -1590,7 +1590,7 @@ msgstr "无法打开文档。"
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "项目 <resource>%1</resource> 有未保存的数据。"
 
 #: k3b.cpp:896
 #, kde-format
