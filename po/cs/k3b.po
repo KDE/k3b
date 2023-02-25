@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-11-01 00:46+0000\n"
-"PO-Revision-Date: 2023-02-22 16:46+0100\n"
+"PO-Revision-Date: 2023-02-24 11:10+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -599,7 +599,7 @@ msgstr "rychlé kódování"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:372
 #, kde-format
 msgid "Mark the encoded file as being copyrighted."
-msgstr "Označení kódovaného souboru jako chráněného copyrightem."
+msgstr "Označení kódovaného souboru jako chráněného autorským právem."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCopyright)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:375
@@ -6153,7 +6153,7 @@ msgstr "Soubor s abstraktem:"
 #: projects/base_k3bdatavolumedescdialog.ui:228
 #, kde-format
 msgid "Select a copyright file from the project"
-msgstr "Zvolte soubor s copyrightem z projektu"
+msgstr "Zvolte soubor s autorským právem z projektu"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:255
