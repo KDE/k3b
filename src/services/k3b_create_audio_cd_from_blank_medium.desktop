@@ -8,7 +8,7 @@ X-KDE-AliasFor=org.kde.k3b
 [Desktop Action K3bAudioCDProject]
 Exec=k3b --device %i --audiocd
 Name=Create Audio CD with K3b
-Name[ar]=أنشئ اسطوانة صوتيّة ب‍«كي3بي»
+Name[ar]=أنشئ اسطوانة صوتيّة ب‍«كي٣بي»
 Name[bg]=Създаване на звуково CD с K3b...
 Name[bs]=Napravi audio CD K3bom
 Name[ca]=Crea un CD d'àudio amb el K3b
