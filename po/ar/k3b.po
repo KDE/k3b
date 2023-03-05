@@ -1246,7 +1246,7 @@ msgstr ""
 #: k3b.cpp:225
 #, kde-format
 msgid "K3b - The CD and DVD Kreator"
-msgstr "«كي3بي» - منشئ اسطوانات ودي‌ڤي‌دي"
+msgstr "«كي3بي» - منشئ اسطوانات ودي‌في‌دي"
 
 #: k3b.cpp:287
 #, kde-format
@@ -1351,12 +1351,12 @@ msgstr ""
 #: k3b.cpp:352
 #, kde-format
 msgid "New V&ideo DVD Project"
-msgstr "مشروع دي‌ڤي‌دي في&ديو جديد"
+msgstr "مشروع دي‌في‌دي في&ديو جديد"
 
 #: k3b.cpp:353
 #, kde-format
 msgid "Creates a new Video DVD project"
-msgstr "ينشئ مشروع دي‌ڤي‌دي فيديو جديد"
+msgstr "ينشئ مشروع دي‌في‌دي فيديو جديد"
 
 #: k3b.cpp:358 k3bdevicemenu.cpp:67
 #, kde-format
@@ -1451,12 +1451,12 @@ msgstr "استخرج رقميًّا المسارات من اسطوانة صوت�
 #: k3b.cpp:419 k3bdevicemenu.cpp:71
 #, kde-format
 msgid "Rip Video DVD..."
-msgstr "استخرج دي‌ڤي‌دي فيديو…"
+msgstr "استخرج دي‌في‌دي فيديو…"
 
 #: k3b.cpp:420
 #, kde-format
 msgid "Transcode Video DVD titles"
-msgstr "حوّل ترميز عناوين دي‌ڤي‌دي فيديو"
+msgstr "حوّل ترميز عناوين دي‌في‌دي فيديو"
 
 #: k3b.cpp:425 k3bdevicemenu.cpp:72
 #, kde-format
@@ -1577,7 +1577,7 @@ msgstr "ينشئ مشروع اسطوانة بيانات جديد"
 #: k3b.cpp:1149
 #, kde-format
 msgid "Creating new Video DVD Project."
-msgstr "ينشئ مشروع دي‌ڤي‌دي فيديو جديد"
+msgstr "ينشئ مشروع دي‌في‌دي فيديو جديد"
 
 #: k3b.cpp:1159
 #, fuzzy, kde-format
@@ -2616,7 +2616,7 @@ msgstr "مشروع eMovix‏ (%1)"
 #: k3bstatusbarmanager.cpp:216
 #, kde-format
 msgid "Video DVD (%1)"
-msgstr "دي‌ڤي‌دي فيديو (%1)"
+msgstr "دي‌في‌دي فيديو (%1)"
 
 #: k3bsystemproblemdialog.cpp:86 k3bsystemproblemdialog.cpp:90
 #, kde-format
@@ -3141,7 +3141,7 @@ msgstr "إجراءات أخرى..."
 #: k3bwelcomewidget.cpp:262
 #, fuzzy, kde-format
 msgid "Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator"
-msgstr "مرحبًا بك في «كي3بي» &ndash; منشئ الاسطوانات، ودي‌ڤي‌دي وبلو-ري"
+msgstr "مرحبًا بك في «كي3بي» &ndash; منشئ الاسطوانات، ودي‌في‌دي وبلو-ري"
 
 #: k3bwelcomewidget.cpp:264
 #, kde-format
@@ -3423,7 +3423,7 @@ msgstr "Montel Laurent"
 #: main.cpp:43
 #, kde-format
 msgid "Initial port to KDE Platform 4"
-msgstr "النّقل الأوّليّ إلى «منصّة كدي 4»"
+msgstr "النّقل الأوّليّ إلى «منصّة كِيدِي 4»"
 
 #: main.cpp:44
 #, kde-format
@@ -3651,7 +3651,7 @@ msgstr ""
 #: main.cpp:110
 #, fuzzy, kde-format
 msgid "Create a new Video DVD project and add all given files"
-msgstr "أنشئ مشروع دي‌ڤي‌دي فيديو جديد وأضف كلّ الملفات المُعطاة"
+msgstr "أنشئ مشروع دي‌في‌دي فيديو جديد وأضف كلّ الملفات المُعطاة"
 
 #: main.cpp:111
 #, kde-format
@@ -3666,7 +3666,7 @@ msgstr "افتح حواري النسخ، "
 #: main.cpp:113
 #, kde-format
 msgid "Write an image to a CD or DVD"
-msgstr "اكتب صورة إلى اسطوانة أو دي‌ڤي‌دي"
+msgstr "اكتب صورة إلى اسطوانة أو دي‌في‌دي"
 
 #: main.cpp:114
 #, fuzzy, kde-format
@@ -4148,7 +4148,7 @@ msgstr "تهيئة سريعة"
 #: misc/k3bmediaformattingdialog.cpp:80
 #, fuzzy, kde-format
 msgid "Force formatting of empty DVDs"
-msgstr "أجبِر تهيئة دي‌ڤي‌دي الفارغة"
+msgstr "أجبِر تهيئة دي‌في‌دي الفارغة"
 
 #: misc/k3bmediaformattingdialog.cpp:81
 #, kde-format
@@ -4892,7 +4892,7 @@ msgstr "تعليق"
 #: option/k3bthemeoptiontab.cpp:97
 #, kde-format
 msgid "K3b - The CD/DVD Kreator"
-msgstr "«كي3بي» - منشئ الاسطوانات/دي‌ڤي‌دي"
+msgstr "«كي3بي» - منشئ الاسطوانات/دي‌في‌دي"
 
 #: option/k3bthemeoptiontab.cpp:117
 #, kde-format
@@ -7352,7 +7352,7 @@ msgstr "حجم الاسطوانة"
 #: projects/k3bfillstatusdisplay.cpp:473
 #, kde-format
 msgid "DVD Size"
-msgstr "حجم دي‌ڤي‌دي"
+msgstr "حجم دي‌في‌دي"
 
 #: projects/k3bfillstatusdisplay.cpp:479
 #, kde-format
@@ -7381,7 +7381,7 @@ msgid ""
 "<br>This results in 4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 GB."
 msgstr ""
 "<p><b>لماذا يوفّر «كي3بي» 4.4 غ.بايت و8.0 غ.بايت بدل 4.7 و8.5 كما هو مكتوب "
-"على الوسيط؟</b><p>وسيط دي‌ڤي‌دي ذو الطّبقة الواحدة لديه سعة تقارب 4.4 غ.بايت ما "
+"على الوسيط؟</b><p>وسيط دي‌في‌دي ذو الطّبقة الواحدة لديه سعة تقارب 4.4 غ.بايت ما "
 "يساوي 4.4*1024<sup>3</sup> بايت. منتجو الوسائط يحسبونها باستخدام 1000 بدل "
 "1024 لأسباب إعلانيّة.<br>هذا يُنتج 4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 "
 "GB."
@@ -8548,7 +8548,7 @@ msgstr ""
 #: projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
 msgid "Video DVD Project"
-msgstr "مشروع دي‌ڤي‌دي فيديو"
+msgstr "مشروع دي‌في‌دي فيديو"
 
 #: projects/k3bvideodvdview.cpp:52
 #, kde-format
@@ -9689,7 +9689,7 @@ msgstr "مرماز الفيديو:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:330
 #, fuzzy, kde-format
 msgid "Select the Video codec used to encode the DVD titles"
-msgstr "اختر مرماز الفيديو لترميز عناوين دي‌ڤي‌دي"
+msgstr "اختر مرماز الفيديو لترميز عناوين دي‌في‌دي"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
@@ -9977,13 +9977,13 @@ msgid ""
 "<p>Unable to read Video DVD contents: Found encrypted Video DVD.<p>Install "
 "<i>libdvdcss</i> to get Video DVD decryption support."
 msgstr ""
-"<p>تعذّرت قراءة محتويات دي‌ڤي‌دي الفيديو.<p>ثبّت<i>libdvdcss</i> لتحصل على دعم "
-"فكّ تعمية دي‌ڤي‌دي فيديو."
+"<p>تعذّرت قراءة محتويات دي‌في‌دي الفيديو.<p>ثبّت<i>libdvdcss</i> لتحصل على دعم "
+"فكّ تعمية دي‌في‌دي فيديو."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:268
 #, fuzzy, kde-format
 msgid "%1 (Video DVD)"
-msgstr "دي‌ڤي‌دي فيديو (%1)"
+msgstr "دي‌في‌دي فيديو (%1)"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:269
 #, kde-format
@@ -10012,7 +10012,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:304
 #, fuzzy, kde-format
 msgid "Unable to read Video DVD contents."
-msgstr "تعذّرت قراءة محتويات دي‌ڤي‌دي الفيديو."
+msgstr "تعذّرت قراءة محتويات دي‌في‌دي الفيديو."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:343
 #, kde-format
