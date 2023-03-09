@@ -61,10 +61,20 @@ include(ECMInstallIcons)
 include(ECMEnableSanitizers)
 include(ECMSetupQtPluginMacroNames)
 include(ECMQtDeclareLoggingCategory)
+if (QT_MAJOR_VERSION STREQUAL "6")
+    set(QT_REQUIRED_VERSION "6.4.0")
+    set(KF_MIN_VERSION "5.240.0")
+    set(KF_MAJOR_VERSION "6")
+else()
+    set(KF_MAJOR_VERSION "5")
+endif()
 
-find_package(Qt5 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
-find_package(KF5 ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
+find_package(KF${KF_MAJOR_VERSION} ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
                                      KCMUtils KIO Notifications NewStuff NotifyConfig Service Solid WidgetsAddons XmlGui)
+if (QT_MAJOR_VERSION STREQUAL "6")
+    find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core5Compat)
+endif()
 
 find_package(Qt${QT_MAJOR_VERSION}WebEngineWidgets)
 set_package_properties(Qt${QT_MAJOR_VERSION}WebEngineWidgets PROPERTIES
@@ -91,9 +101,15 @@ set_package_properties(Samplerate PROPERTIES
     URL "http://www.mega-nerd.com/SRC"
     TYPE REQUIRED)
 
-find_package(KF5Cddb 5.1 REQUIRED)
-set_package_properties(KF5Cddb PROPERTIES
-    DESCRIPTION "KF5 branch for CDDB library"
+if (KF_MAJOR_VERSION STREQUAL "5")
+    set(KCDDB_TARGET_NAME KF5::Cddb)
+    find_package(KF5Cddb 5.1 REQUIRED)
+else()
+    set(KCDDB_TARGET_NAME KCddb6)
+    find_package(KCddb6 5.1 REQUIRED)
+endif()
+set_package_properties(${KCDDB_TARGET_NAME} PROPERTIES
+    DESCRIPTION "Latest branch for CDDB library"
     URL "https://commits.kde.org/libkcddb"
     TYPE REQUIRED
     PURPOSE "libkcddb is used to retrieve audio CD meta data from the internet.")
@@ -302,7 +318,7 @@ if(K3B_BUILD_API_DOCS)
 
         add_custom_target(apidox
             COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-            COMMAND docs/html/installdox -l qt5.tag@${QTDOCS} docs/html/*.html)
+            COMMAND docs/html/installdox -l qt${QT_MAJOR_VERSION}.tag@${QTDOCS} docs/html/*.html)
     endif()
 endif(K3B_BUILD_API_DOCS)
 
@@ -314,7 +330,7 @@ add_subdirectory( kioworkers )
 add_subdirectory( plugins )
 add_subdirectory( doc )
 if(BUILD_TESTING)
-    find_package(Qt5Test REQUIRED)
+    find_package(Qt${QT_MAJOR_VERSION}Test REQUIRED)
     find_package(LibFuzzer)
     set_package_properties(LibFuzzer PROPERTIES
         PURPOSE "libFuzzer – a library for coverage-guided fuzz testing."

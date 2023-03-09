@@ -1,7 +1,7 @@
 
 add_executable(k3bhelper k3bhelper.cpp k3bhelperprogramitem.cpp)
 
-target_link_libraries(k3bhelper KF5::AuthCore)
+target_link_libraries(k3bhelper KF${KF_MAJOR_VERSION}::AuthCore)
 
 install(TARGETS k3bhelper DESTINATION ${KAUTH_HELPER_INSTALL_DIR})
 

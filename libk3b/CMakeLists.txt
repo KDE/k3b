@@ -201,25 +201,28 @@ target_include_directories(k3blib
 
 target_link_libraries(k3blib
     PUBLIC
-        KF5::Completion
-        KF5::ConfigWidgets
-        KF5::CoreAddons
-        KF5::KIOCore
-        KF5::Service
+        KF${KF_MAJOR_VERSION}::Completion
+        KF${KF_MAJOR_VERSION}::ConfigWidgets
+        KF${KF_MAJOR_VERSION}::CoreAddons
+        KF${KF_MAJOR_VERSION}::KIOCore
+        KF${KF_MAJOR_VERSION}::Service
     PRIVATE
         k3bdevice
-        KF5::FileMetaData
-        KF5::IconThemes
-        KF5::I18n
-        KF5::KCMUtils
-        KF5::Solid
-        Qt5::Network
-        Qt5::Widgets
-        Qt5::Xml
-        KF5::Cddb
+        KF${KF_MAJOR_VERSION}::FileMetaData
+        KF${KF_MAJOR_VERSION}::IconThemes
+        KF${KF_MAJOR_VERSION}::I18n
+        KF${KF_MAJOR_VERSION}::KCMUtils
+        KF${KF_MAJOR_VERSION}::Solid
+        Qt${QT_MAJOR_VERSION}::Network
+        Qt${QT_MAJOR_VERSION}::Widgets
+        Qt${QT_MAJOR_VERSION}::Xml
+        ${KCDDB_TARGET_NAME}
         samplerate
         ${videodvd_libraries}
 )
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(k3blib PRIVATE Qt6::Core5Compat)
+endif()
 
 if(WIN32)
     target_link_libraries(k3blib uuid ole32)

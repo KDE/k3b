@@ -21,7 +21,7 @@ kcoreaddons_add_plugin(k3bflacdecoder
 
 target_include_directories(k3bflacdecoder PRIVATE ${FLAC++_INCLUDE_DIR} ${FLAC_INCLUDE_DIR})
 
-target_link_libraries(k3bflacdecoder k3bdevice k3blib KF5::I18n ${FLAC++_LIBRARIES} ${FLAC_LIBRARIES})
+target_link_libraries(k3bflacdecoder k3bdevice k3blib KF${KF_MAJOR_VERSION}::I18n ${FLAC++_LIBRARIES} ${FLAC_LIBRARIES})
 
 if(ENABLE_TAGLIB)
     target_link_libraries(k3bflacdecoder Taglib::Taglib)

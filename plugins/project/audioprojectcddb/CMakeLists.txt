@@ -5,6 +5,6 @@ kcoreaddons_add_plugin(k3baudioprojectcddbplugin
 target_link_libraries(k3baudioprojectcddbplugin
     k3bdevice
     k3blib
-    KF5::I18n
-    KF5::Cddb
+    KF${KF_MAJOR_VERSION}::I18n
+    ${KCDDB_TARGET_NAME}
 )

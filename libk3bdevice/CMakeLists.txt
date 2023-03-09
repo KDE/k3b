@@ -17,13 +17,16 @@ target_include_directories(k3bdevice PUBLIC .)
 
 target_link_libraries(k3bdevice
     PUBLIC
-        Qt5::Core
+        Qt${QT_MAJOR_VERSION}::Core
     PRIVATE
-        KF5::ConfigCore
-        KF5::I18n
-        KF5::KIOCore
-        KF5::Solid
+        KF${KF_MAJOR_VERSION}::ConfigCore
+        KF${KF_MAJOR_VERSION}::I18n
+        KF${KF_MAJOR_VERSION}::KIOCore
+        KF${KF_MAJOR_VERSION}::Solid
 )
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(k3bdevice PRIVATE Qt6::Core5Compat)
+endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "k?FreeBSD")
     target_link_libraries(k3bdevice PRIVATE cam)

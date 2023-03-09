@@ -5,9 +5,12 @@ kcoreaddons_add_plugin(k3blameencoder
 target_link_libraries(k3blameencoder
     k3bdevice
     k3blib
-    KF5::I18n
+    KF${KF_MAJOR_VERSION}::I18n
     ${LAME_LIBRARIES}
 )
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(k3blameencoder Qt6::Core5Compat)
+endif()
 
 ki18n_wrap_ui(ui_sources
     base_k3blameencodersettingswidget.ui
@@ -24,5 +27,5 @@ target_sources(kcm_k3blameencoder PRIVATE
 target_link_libraries(kcm_k3blameencoder
     k3bdevice
     k3blib
-    KF5::I18n
+    KF${KF_MAJOR_VERSION}::I18n
 )

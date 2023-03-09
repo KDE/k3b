@@ -53,16 +53,16 @@ if(ENABLE_MUSICBRAINZ)
     )
 endif()
 
-qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3binterface.h org.k3b.MainWindow.xml )
-qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.MainWindow.xml k3binterface.h K3b::Interface k3binterfaceadaptor K3bInterfaceAdaptor )
-qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bjobinterface.h org.k3b.Job.xml )
-qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Job.xml k3bjobinterface.h K3b::JobInterface k3bjobinterfaceadaptor K3bJobInterfaceAdaptor )
-qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bprojectinterface.h org.k3b.Project.xml )
-qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Project.xml k3bprojectinterface.h K3b::ProjectInterface k3bprojectinterfaceadaptor K3bProjectInterfaceAdaptor )
-qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3baudioprojectinterface.h org.k3b.AudioProject.xml )
-qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.AudioProject.xml k3baudioprojectinterface.h K3b::AudioProjectInterface k3baudioprojectinterfaceadaptor K3bAudioProjectInterfaceAdaptor )
-qt5_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bdataprojectinterface.h org.k3b.DataProject.xml )
-qt5_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor )
+qt_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3binterface.h org.k3b.MainWindow.xml )
+qt_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.MainWindow.xml k3binterface.h K3b::Interface k3binterfaceadaptor K3bInterfaceAdaptor )
+qt_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bjobinterface.h org.k3b.Job.xml )
+qt_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Job.xml k3bjobinterface.h K3b::JobInterface k3bjobinterfaceadaptor K3bJobInterfaceAdaptor )
+qt_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bprojectinterface.h org.k3b.Project.xml )
+qt_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Project.xml k3bprojectinterface.h K3b::ProjectInterface k3bprojectinterfaceadaptor K3bProjectInterfaceAdaptor )
+qt_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3baudioprojectinterface.h org.k3b.AudioProject.xml )
+qt_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.AudioProject.xml k3baudioprojectinterface.h K3b::AudioProjectInterface k3baudioprojectinterfaceadaptor K3bAudioProjectInterfaceAdaptor )
+qt_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bdataprojectinterface.h org.k3b.DataProject.xml )
+qt_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.DataProject.xml k3bdataprojectinterface.h K3b::DataProjectInterface k3bdataprojectinterfaceadaptor K3bDataProjectInterfaceAdaptor )
 
 ecm_qt_declare_logging_category(log_sources
     HEADER kostore_log.h
@@ -231,21 +231,24 @@ target_include_directories(k3b PRIVATE
 target_link_libraries(k3b
     k3bdevice
     k3blib
-    KF5::Cddb
-    KF5::Archive
-    KF5::AuthCore
-    KF5::I18n
-    KF5::IconThemes
-    KF5::JobWidgets
-    KF5::KIOFileWidgets
-    KF5::KCMUtils
-    KF5::NewStuffCore KF5::NewStuffWidgets
-    KF5::Notifications
-    KF5::NotifyConfig
-    KF5::Solid
-    KF5::XmlGui
-    KF5::ConfigCore
+    ${KCDDB_TARGET_NAME}
+    KF${KF_MAJOR_VERSION}::Archive
+    KF${KF_MAJOR_VERSION}::AuthCore
+    KF${KF_MAJOR_VERSION}::I18n
+    KF${KF_MAJOR_VERSION}::IconThemes
+    KF${KF_MAJOR_VERSION}::JobWidgets
+    KF${KF_MAJOR_VERSION}::KIOFileWidgets
+    KF${KF_MAJOR_VERSION}::KCMUtils
+    KF${KF_MAJOR_VERSION}::NewStuffCore KF${KF_MAJOR_VERSION}::NewStuffWidgets
+    KF${KF_MAJOR_VERSION}::Notifications
+    KF${KF_MAJOR_VERSION}::NotifyConfig
+    KF${KF_MAJOR_VERSION}::Solid
+    KF${KF_MAJOR_VERSION}::XmlGui
+    KF${KF_MAJOR_VERSION}::ConfigCore
 )
+if (QT_MAJOR_VERSION STREQUAL "6")
+    target_link_libraries(k3b Qt6::Core5Compat)
+endif()
 
 if(Qt${QT_MAJOR_VERSION}WebEngineWidgets_FOUND)
     target_link_libraries(k3b Qt${QT_MAJOR_VERSION}::WebEngineWidgets)
@@ -274,8 +277,8 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/option/k3btheme.knsrc.cmake
 ########### install files ###############
 install( PROGRAMS  org.kde.k3b.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 #install( FILES  k3b-iso.desktop k3b-cue.desktop DESTINATION ${APPLNK_INSTALL_DIR}/.hidden/ )
-install( FILES  k3b.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFY5RCDIR} )
-install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/k3b )
+install( FILES  k3b.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR} )
+install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/k3b )
 install( FILES  org.kde.k3b.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})
