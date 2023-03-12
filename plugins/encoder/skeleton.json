@@ -34,7 +34,8 @@
                 "Name[tr]": "???",
                 "Name[uk]": "???",
                 "Name[x-test]": "xx???xx",
-                "Name[zh_CN]": "？？？"
+                "Name[zh_CN]": "？？？",
+                "Name[zh_TW]": "???"
             }
         ],
         "Category": "AudioEncoder",
