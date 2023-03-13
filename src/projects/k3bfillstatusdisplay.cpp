@@ -595,8 +595,8 @@ void K3b::FillStatusDisplay::slotCustomSize()
         defaultCustom = locale.toString(4.4,'g',1) + gbS;
     }
 
-    QRegExp rx( QString("(\\d+\\") + locale.decimalPoint() + "?\\d*)(" + gbS + '|' + mbS + '|' + minS + ")?" );
-    QRegExpValidator validator( rx, this );
+    static const QRegularExpression rx( QString("(\\d+\\") + locale.decimalPoint() + "?\\d*)(" + gbS + '|' + mbS + '|' + minS + ")?" );
+    QRegularExpressionValidator validator( rx, this );
     bool ok;
     QString size = QInputDialog::getText( this,
                                           i18n("Custom Size"),
@@ -610,13 +610,14 @@ void K3b::FillStatusDisplay::slotCustomSize()
     int validatorPos;
     if( ok && validator.validate( size, validatorPos ) ) {
         // determine size
-        if( rx.exactMatch( size ) ) {
-            QString valStr = rx.cap(1);
+        auto match = rx.match( size );
+        if( match.hasMatch() ) {
+            QString valStr = match.captured(1);
             if( valStr.endsWith( locale.decimalPoint() ) )
                 valStr += '0';
             double val = locale.toDouble( valStr, &ok );
             if( ok ) {
-                QString s = rx.cap(2);
+                QString s = match.captured(2);
                 if( s == gbS )
                     val *= 1024*512;
                 else if( s == mbS || (s.isEmpty() && !d->showTime) )

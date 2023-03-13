@@ -62,11 +62,11 @@ namespace K3b {
      * replace character. It only makes sense for QRegExps that simply
      * allow or forbid some characters.
      */
-    class LIBK3B_EXPORT Validator : public QRegExpValidator
+    class LIBK3B_EXPORT Validator : public QRegularExpressionValidator
     {
     public:
         explicit Validator( QObject* parent );
-        Validator( const QRegExp& rx, QObject* parent );
+        Validator( const QRegularExpression& rx, QObject* parent );
 
         void setReplaceChar( const QChar& s ) { m_replaceChar = s; }
         const QChar& replaceChar() const { return m_replaceChar; }
@@ -85,7 +85,7 @@ namespace K3b {
          * replace character. It only makes sense for QRegExps that simply
          * allow or forbid some characters.
          */
-        LIBK3B_EXPORT QString fixup( const QString&, const QRegExp&, const QChar& replaceChar = '_' );
+        LIBK3B_EXPORT QString fixup( const QString&, const QRegularExpression&, const QChar& replaceChar = '_' );
 
         /**
          * Validates an ISRC code of the form "CCOOOYYSSSSS" where:

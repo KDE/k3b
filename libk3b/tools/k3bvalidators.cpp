@@ -6,6 +6,8 @@
 
 #include "k3bvalidators.h"
 
+#include <QRegExp>
+
 #include <ctype.h>
 
 
@@ -73,14 +75,14 @@ QValidator::State K3b::AsciiValidator::validateChar( const QChar& c ) const
 
 
 K3b::Validator::Validator( QObject* parent )
-  : QRegExpValidator( parent ),
+  : QRegularExpressionValidator( parent ),
     m_replaceChar('_')
 {
 }
 
 
-K3b::Validator::Validator( const QRegExp& rx, QObject* parent )
-  : QRegExpValidator( rx, parent ),
+K3b::Validator::Validator( const QRegularExpression& rx, QObject* parent )
+  : QRegularExpressionValidator( rx, parent ),
     m_replaceChar('_')
 {
 }
@@ -89,16 +91,16 @@ K3b::Validator::Validator( const QRegExp& rx, QObject* parent )
 void K3b::Validator::fixup( QString& input ) const
 {
   for( int i = 0; i < input.length(); ++i )
-    if( !regExp().exactMatch( input.mid(i, 1) ) )
+    if( !regularExpression().match( input.mid(i, 1) ).hasMatch() )
       input[i] = m_replaceChar;
 }
 
 
-QString K3b::Validators::fixup( const QString& input, const QRegExp& rx, const QChar& replaceChar )
+QString K3b::Validators::fixup(const QString& input, const QRegularExpression &rx, const QChar& replaceChar )
 {
   QString s;
   for( int i = 0; i < input.length(); ++i )
-    if( rx.exactMatch( input.mid(i, 1) ) )
+    if( rx.match( input.mid(i, 1) ).hasMatch() )
       s += input[i];
     else
       s += replaceChar;
@@ -108,35 +110,39 @@ QString K3b::Validators::fixup( const QString& input, const QRegExp& rx, const Q
 
 K3b::Validator* K3b::Validators::isrcValidator( QObject* parent )
 {
-  return new K3b::Validator( QRegExp("^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$"), parent );
+  static const QRegularExpression rx( "^[A-Z\\d]{2,2}-[A-Z\\d]{3,3}-\\d{2,2}-\\d{5,5}$" );
+  return new K3b::Validator( rx, parent );
 }
 
 
 K3b::Validator* K3b::Validators::iso9660Validator( bool allowEmpty, QObject* parent )
 {
-  if( allowEmpty )
-    return new K3b::Validator( QRegExp( "[^/]*" ), parent );
-  else
-    return new K3b::Validator( QRegExp( "[^/]+" ), parent );
+  if( allowEmpty ) {
+    static const QRegularExpression rx( "[^/]*" );
+    return new K3b::Validator( rx, parent );
+  }
+
+  static const QRegularExpression rx( "[^/]+" );
+  return new K3b::Validator( rx, parent );
 }
 
 
 K3b::Validator* K3b::Validators::iso646Validator( int type, bool AllowLowerCase, QObject* parent )
 {
-  QRegExp rx;
+  QRegularExpression rx;
   switch ( type ) {
   case Iso646_d:
     if ( AllowLowerCase )
-      rx = QRegExp( "[a-zA-Z0-9_]*" );
+      rx = QRegularExpression( "[a-zA-Z0-9_]*" );
     else
-      rx = QRegExp( "[A-Z0-9_]*" );
+      rx = QRegularExpression( "[A-Z0-9_]*" );
     break;
   case Iso646_a:
   default:
     if ( AllowLowerCase )
-      rx = QRegExp( "[a-zA-Z0-9!\"\\s%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?_]*" );
+      rx = QRegularExpression( "[a-zA-Z0-9!\"\\s%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?_]*" );
     else
-      rx = QRegExp( "[A-Z0-9!\"\\s%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?_]*" );
+      rx = QRegularExpression( "[A-Z0-9!\"\\s%&'\\(\\)\\*\\+,\\-\\./:;<=>\\?_]*" );
     break;
   }
 
