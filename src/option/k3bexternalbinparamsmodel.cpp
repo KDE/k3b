@@ -13,7 +13,7 @@
 #include <QFont>
 #include <QHash>
 #include <QList>
-#include <QRegExp>
+#include <QRegularExpression>
 
 namespace K3b {
     
@@ -65,7 +65,7 @@ void ExternalBinParamsModel::reload()
 
 void ExternalBinParamsModel::save()
 {
-    QRegExp reSpace( "\\s" );
+    static const QRegularExpression reSpace( "\\s" );
     Q_FOREACH( ExternalProgram* program, d->programs ) {
         QStringList params = d->parameters[ program ].split( reSpace, Qt::SkipEmptyParts );
         program->setUserParameters( params );

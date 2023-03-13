@@ -20,7 +20,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QList>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStandardPaths>
 
 #include <sys/types.h>
@@ -195,7 +195,8 @@ bool K3bExternalEncoder::initEncoderInternal( const QString& extension, const K3
                 d->initialized = true;
         }
         else {
-            QString commandName = d->cmd.command.section( QRegExp("\\s+"), 0 );
+            static const QRegularExpression rx("\\s+");
+            QString commandName = d->cmd.command.section( rx, 0 );
             if( !QStandardPaths::findExecutable( commandName ).isEmpty() )
                 setLastError( i18n("Could not find program '%1'",commandName) );
 

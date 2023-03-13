@@ -17,7 +17,7 @@
 #include <QFileInfo>
 #include <QFile>
 #include <QtGlobal>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #ifndef Q_OS_WIN32
 #include <unistd.h>
@@ -445,11 +445,13 @@ void K3b::SimpleExternalProgram::parseFeatures( const QString& /*output*/, Exter
 // static
 K3b::Version K3b::SimpleExternalProgram::parseVersionAt( const QString& data, int pos )
 {
-    int sPos = data.indexOf( QRegExp("\\d"), pos );
+    static const QRegularExpression sPosRx("\\d");
+    int sPos = data.indexOf( sPosRx, pos );
     if( sPos < 0 )
         return Version();
 
-    int endPos = data.indexOf( QRegExp("[\\s,]"), sPos + 1 );
+    static const QRegularExpression endPosRx("[\\s,]");
+    int endPos = data.indexOf( endPosRx, sPos + 1 );
     if( endPos < 0 )
         return Version();
 

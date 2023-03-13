@@ -27,7 +27,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QTemporaryFile>
@@ -779,7 +779,8 @@ void K3b::CdrdaoWriter::unknownCdrdaoLine( const QString& line )
     {
         // parse the speed and inform the user if cdrdao switched it down
         int pos = line.indexOf( "at speed" );
-        int po2 = line.indexOf( QRegExp("\\D"), pos + 9 );
+        static const QRegularExpression rx("\\D");
+        int po2 = line.indexOf( rx, pos + 9 );
         int speed = line.mid( pos+9, po2-pos-9 ).toInt();
         if( speed < d->usedSpeed )
         {

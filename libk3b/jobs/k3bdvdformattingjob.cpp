@@ -20,7 +20,7 @@
 #include "k3b_i18n.h"
 
 #include <QDebug>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #include <errno.h>
 #include <string.h>
@@ -214,12 +214,13 @@ void K3b::DvdFormattingJob::slotStderrLine( const QString& line )
     int pos = line.indexOf( "blanking" );
     if( pos < 0 )
         pos = line.indexOf( "formatting" );
+    static const QRegularExpression digitRx("\\d");
     if( pos >= 0 ) {
-        pos = line.indexOf( QRegExp( "\\d" ), pos );
+        pos = line.indexOf( digitRx, pos );
     }
     // parsing for \b\b... stuff
     else if( !line.startsWith('*') ) {
-        pos = line.indexOf( QRegExp( "\\d" ) );
+        pos = line.indexOf( digitRx );
     }
     else if( line.startsWith( ":-(" ) ) {
         if( line.startsWith( ":-( unable to proceed with format" ) ) {
@@ -228,7 +229,8 @@ void K3b::DvdFormattingJob::slotStderrLine( const QString& line )
     }
 
     if( pos >= 0 ) {
-        int endPos = line.indexOf( QRegExp("[^\\d\\.]"), pos ) - 1;
+        static const QRegularExpression endPosRx("[^\\d\\.]");
+        int endPos = line.indexOf( endPosRx, pos ) - 1;
         bool ok;
         int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
         if( ok ) {

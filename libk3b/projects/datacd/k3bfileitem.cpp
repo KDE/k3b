@@ -16,7 +16,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QMimeDatabase>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QUrl>
@@ -198,7 +198,8 @@ bool K3b::FileItem::isValid() const
         // parse the link
         K3b::DirItem* dir = parent();
 
-        QStringList tokens = dest.split( QRegExp("/+") );  // two slashes or more do the same as one does!
+        static const QRegularExpression rx("/+");
+        QStringList tokens = dest.split( rx );  // two slashes or more do the same as one does!
 
         int i = 0;
         while( i < tokens.size() ) {

@@ -7,6 +7,7 @@
 
 #include <QDebug>
 #include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedData>
 
 namespace {
@@ -18,7 +19,8 @@ namespace {
      */
     void splitVersionString( const QString& s, int& num, QString& suffix )
     {
-        int pos = s.indexOf( QRegExp("\\D") );
+        static const QRegularExpression rx("\\D");
+        int pos = s.indexOf( rx );
         if( pos < 0 ) {
             num = s.toInt();
             suffix = "";

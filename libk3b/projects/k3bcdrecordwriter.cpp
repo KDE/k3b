@@ -23,6 +23,7 @@
 #include <QString>
 #include <QStringList>
 #include <QRegExp>
+#include <QRegularExpression>
 #include <QFile>
 #include "k3b_i18n.h"
 
@@ -498,7 +499,8 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
 
                 d->totalTracks = tt;
 
-                int sizeStart = line.indexOf( QRegExp("\\d"), 10 );
+                static const QRegularExpression rx("\\d");
+                int sizeStart = line.indexOf( rx, 10 );
                 int sizeEnd = line.indexOf( "MB", sizeStart );
                 track.size = line.mid( sizeStart, sizeEnd-sizeStart ).toInt(&ok);
 

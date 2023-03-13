@@ -380,8 +380,10 @@ void K3b::VideoDVDRippingDialog::slotUpdateFilenames()
 
     for( TitleRipInfos::iterator it = d->titleRipInfos.begin(); it != d->titleRipInfos.end(); ++it ) {
         QString f = d->fsInfo.fixupPath( d->createFilename( it.value(), d->w->m_comboFilenamePattern->currentText() ) );
-        if( d->w->m_checkBlankReplace->isChecked() )
-            f.replace( QRegExp( "\\s" ), d->w->m_editBlankReplace->text() );
+        if( d->w->m_checkBlankReplace->isChecked() ) {
+            static const QRegularExpression rx( "\\s" );
+            f.replace( rx, d->w->m_editBlankReplace->text() );
+        }
         it.value().filename = baseDir + f;
 
         d->audioModel->setFileName( *it.key(), f );

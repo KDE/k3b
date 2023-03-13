@@ -19,7 +19,7 @@
 #include <KConfig>
 
 #include <QDebug>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QStringList>
 #include <QList>
 #include <QIODevice>
@@ -258,10 +258,11 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
         // parse the sector
         pos += 21;
         bool ok;
-        int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
+        static const QRegularExpression rx("\\D");
+        int problemSector = line.mid( pos, line.indexOf( rx, pos )-pos ).toInt(&ok);
         if( !ok ) {
             qCritical() << "(K3b::ReadcdReader) problemSector parsing error in line: "
-                     << line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << Qt::endl;
+                     << line.mid( pos, line.indexOf( rx, pos )-pos ) << Qt::endl;
         }
         emit infoMessage( i18n("Retrying from sector %1.",problemSector), MessageInfo );
     }
@@ -271,10 +272,11 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
 
         pos += 16;
         bool ok;
-        int problemSector = line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ).toInt(&ok);
+        static const QRegularExpression rx("\\D");
+        int problemSector = line.mid( pos, line.indexOf( rx, pos )-pos ).toInt(&ok);
         if( !ok ) {
             qCritical() << "(K3b::ReadcdReader) problemSector parsing error in line: "
-                     << line.mid( pos, line.indexOf( QRegExp("\\D"), pos )-pos ) << Qt::endl;
+                     << line.mid( pos, line.indexOf( rx, pos )-pos ) << Qt::endl;
         }
 
         if( line.contains( "not corrected") ) {

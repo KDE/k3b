@@ -96,6 +96,7 @@ static QByteArray qt_prettyDebug(const char *data, int len, int maxSize)
 #include <QList>
 #include <QMap>
 #include <QMutex>
+#include <QRegularExpression>
 #include <qsemaphore.h>
 #include <qsocketnotifier.h>
 #include <QThread>
@@ -571,8 +572,8 @@ static char **_q_dupEnvironment(const QStringList &environment, int *envc)
 #endif
     const QString libraryPathString = QLatin1String(libraryPath);
     QStringList env = environment;
-    QStringList matches = env.filter(
-        QRegExp(QLatin1Char('^') + libraryPathString + QLatin1Char('=')));
+    static const QRegularExpression rx(QLatin1Char('^') + libraryPathString + QLatin1Char('='));
+    QStringList matches = env.filter(rx);
     const QString envLibraryPath = QString::fromLocal8Bit(::getenv(libraryPath));
     if (matches.isEmpty() && !envLibraryPath.isEmpty()) {
         QString entry = libraryPathString;

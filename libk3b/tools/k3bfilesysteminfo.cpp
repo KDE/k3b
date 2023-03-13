@@ -12,7 +12,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
+#include <QRegularExpression>
 
 #ifdef Q_OS_FREEBSD
 #include <sys/param.h>
@@ -128,8 +128,10 @@ K3b::FileSystemInfo::FileSystemType K3b::FileSystemInfo::type() const
 QString K3b::FileSystemInfo::fixupPath( const QString& path )
 {
     QString s = K3b::fixupPath( path );
-    if( type() == K3b::FileSystemInfo::FS_FAT )
-        return s.replace( QRegExp("[\"\\?\\*/\\\\[\\]\\|\\=\\:;]"), "_" );
+    if( type() == K3b::FileSystemInfo::FS_FAT ) {
+        static const QRegularExpression rx("[\"\\?\\*/\\\\[\\]\\|\\=\\:;]");
+        return s.replace( rx, "_" );
+    }
     else
         return s;
 }

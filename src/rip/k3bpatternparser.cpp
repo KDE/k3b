@@ -16,6 +16,7 @@
 #include <QDateTime>
 #include <QLocale>
 #include <QRegExp>
+#include <QRegularExpression>
 #include <QStack>
 #include <QDebug>
 
@@ -308,8 +309,10 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
 
     dir.replace( '*', '}' );  // bring the brackets back, if there were any
 
-    if( replace )
-        dir.replace( QRegExp( "\\s" ), replaceString );
+    if( replace ) {
+        static const QRegularExpression rx( "\\s" );
+        dir.replace( rx, replaceString );
+    }
 
     if ( !dir.endsWith( '.' + extension ) )
         dir.append( '.' + extension );
