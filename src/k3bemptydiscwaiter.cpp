@@ -573,12 +573,12 @@ void K3b::EmptyDiscWaiter::slotMediumChanged( K3b::Device::Device* dev )
              medium.diskInfo().rewritable() ) {
 
         if( formatWithoutAsking ||
-            KMessageBox::questionYesNo( parentWidgetToUse(),
-                                        i18n("Found rewritable medium in %1 - %2. "
-                                             "Should it be erased?",d->device->vendor(),d->device->description()),
-                                        i18n("Found Rewritable Disk"),
-                                        KGuiItem(i18n("E&rase"), "tools-media-optical-erase"),
-                                        KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::Yes ) {
+            KMessageBox::questionTwoActions(parentWidgetToUse(),
+                                            i18n("Found rewritable medium in %1 - %2. "
+                                                 "Should it be erased?",d->device->vendor(),d->device->description()),
+                                            i18n("Found Rewritable Disk"),
+                                            KGuiItem(i18n("E&rase"), "tools-media-optical-erase"),
+                                            KGuiItem(i18n("&Eject"), "media-eject") ) == KMessageBox::PrimaryAction ) {
 
 
             prepareErasingDialog();
@@ -784,11 +784,11 @@ bool K3b::EmptyDiscWaiter::questionYesNo( const QString& text,
                                           const KGuiItem& buttonYes,
                                           const KGuiItem& buttonNo )
 {
-    return ( KMessageBox::questionYesNo( parentWidgetToUse(),
-                                         text,
-                                         caption,
-                                         buttonYes,
-                                         buttonNo ) == KMessageBox::Yes );
+    return ( KMessageBox::questionTwoActions( parentWidgetToUse(),
+                                              text,
+                                              caption,
+                                              buttonYes,
+                                              buttonNo ) == KMessageBox::PrimaryAction );
 }
 
 

@@ -98,26 +98,26 @@ void K3b::BootImageDialog::slotNewBootImage()
         if( fsize != 1200*1024 &&
             fsize != 1440*1024 &&
             fsize != 2880*1024 ) {
-            switch( KMessageBox::warningYesNoCancel( this,
-                                                     i18n("<p>The file you selected is not a floppy image (floppy images are "
-                                                          "of size 1200 KB, 1440 KB, or 2880 KB). You may still use boot images "
-                                                          "of other sizes by emulating a harddisk or disabling emulation completely. "
-                                                          "<p>If you are not familiar with terms like 'harddisk emulation' you most "
-                                                          "likely want to use a floppy image here. Floppy images can be created by "
-                                                          "directly extracting them from a real floppy disk:"
-                                                          "<pre>dd if=/dev/floppy of=/tmp/floppy.img</pre>"
-                                                          "or by using one of the many boot floppy generators that can be found on "
-                                                          "<a href=\"https://www.google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the Internet</a>."),
-                                                     i18n("No Floppy image selected"),
-                                                     KGuiItem( i18n("Use harddisk emulation") ),
-                                                     KGuiItem( i18n("Use no emulation") ),
-                                                     KStandardGuiItem::cancel(),
-                                                     QString(),
-                                                     KMessageBox::AllowLink ) ) {
-            case KMessageBox::Yes:
+            switch( KMessageBox::warningTwoActionsCancel( this,
+                                                          i18n("<p>The file you selected is not a floppy image (floppy images are "
+                                                               "of size 1200 KB, 1440 KB, or 2880 KB). You may still use boot images "
+                                                               "of other sizes by emulating a harddisk or disabling emulation completely. "
+                                                               "<p>If you are not familiar with terms like 'harddisk emulation' you most "
+                                                               "likely want to use a floppy image here. Floppy images can be created by "
+                                                               "directly extracting them from a real floppy disk:"
+                                                               "<pre>dd if=/dev/floppy of=/tmp/floppy.img</pre>"
+                                                               "or by using one of the many boot floppy generators that can be found on "
+                                                               "<a href=\"https://www.google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the Internet</a>."),
+                                                          i18n("No Floppy image selected"),
+                                                          KGuiItem( i18n("Use harddisk emulation") ),
+                                                          KGuiItem( i18n("Use no emulation") ),
+                                                          KStandardGuiItem::cancel(),
+                                                          QString(),
+                                                          KMessageBox::AllowLink ) ) {
+            case KMessageBox::PrimaryAction:
                 boottype = K3b::BootItem::HARDDISK;
                 break;
-            case KMessageBox::No:
+            case KMessageBox::SecondaryAction:
                 boottype = K3b::BootItem::NONE;
                 break;
             default:

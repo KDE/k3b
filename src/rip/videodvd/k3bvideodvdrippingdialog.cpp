@@ -508,12 +508,12 @@ void K3b::VideoDVDRippingDialog::slotStartClicked()
     }
 
     if( !filesToOverwrite.isEmpty() )
-        if( KMessageBox::questionYesNoList( this,
-                                            i18n("Do you want to overwrite these files?"),
-                                            filesToOverwrite,
-                                            i18n("Files Exist"),
-                                            KStandardGuiItem::overwrite(),
-                                            KStandardGuiItem::cancel() ) == KMessageBox::No )
+        if( KMessageBox::questionTwoActionsList( this,
+                                                 i18n("Do you want to overwrite these files?"),
+                                                 filesToOverwrite,
+                                                 i18n("Files Exist"),
+                                                 KStandardGuiItem::overwrite(),
+                                                 KStandardGuiItem::cancel() ) == KMessageBox::SecondaryAction )
             return;
 
 

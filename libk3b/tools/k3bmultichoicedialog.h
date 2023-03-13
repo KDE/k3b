@@ -37,12 +37,12 @@ namespace K3b {
                            QMessageBox::Icon = QMessageBox::Information,
                            QWidget* parent = 0,
                            int buttonCount = 2,
-                           const KGuiItem& b1 = KStandardGuiItem::yes(),
-                           const KGuiItem& b2 = KStandardGuiItem::no(),
-                           const KGuiItem& b3 = KStandardGuiItem::no(),
-                           const KGuiItem& b4 = KStandardGuiItem::no(),
-                           const KGuiItem& b5 = KStandardGuiItem::no(),
-                           const KGuiItem& b6 = KStandardGuiItem::no() );
+                           const KGuiItem& b1 = KStandardGuiItem::ok(),
+                           const KGuiItem& b2 = KStandardGuiItem::cancel(),
+                           const KGuiItem& b3 = KStandardGuiItem::cancel(),
+                           const KGuiItem& b4 = KStandardGuiItem::cancel(),
+                           const KGuiItem& b5 = KStandardGuiItem::cancel(),
+                           const KGuiItem& b6 = KStandardGuiItem::cancel() );
 
     public Q_SLOTS:
         /**

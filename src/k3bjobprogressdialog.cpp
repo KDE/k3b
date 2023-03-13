@@ -479,7 +479,11 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
 void K3b::JobProgressDialog::reject()
 {
     if( m_job && m_job->active() ) {
-        if( KMessageBox::questionYesNo( this, i18n("Do you really want to cancel?"), i18n("Cancel Confirmation") ) == KMessageBox::Yes ) {
+        if( KMessageBox::questionTwoActions( this,
+                                             i18n("Do you really want to cancel?"),
+                                             i18n("Cancel Confirmation"),
+                                             KStandardGuiItem::ok(),
+                                             KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction ) {
             if( m_job ) {
                 m_job->cancel();
                 m_closeButton->setEnabled(true);
@@ -624,11 +628,11 @@ bool K3b::JobProgressDialog::questionYesNo( const QString& text,
                                             const KGuiItem& buttonYes,
                                             const KGuiItem& buttonNo )
 {
-    return ( KMessageBox::questionYesNo( this,
-                                         text,
-                                         caption,
-                                         buttonYes,
-                                         buttonNo ) == KMessageBox::Yes );
+    return ( KMessageBox::questionTwoActions( this,
+                                              text,
+                                              caption,
+                                              buttonYes,
+                                              buttonNo ) == KMessageBox::PrimaryAction );
 }
 
 

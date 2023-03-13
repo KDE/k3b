@@ -704,13 +704,13 @@ void K3b::ImageWritingDialog::slotStartClicked()
             K3b::Iso9660 isoFs(d->imageFile);
             if (isoFs.open()) {
                 if (K3b::filesize(QUrl::fromLocalFile(d->imageFile)) < Private::volumeSpaceSize(isoFs)) {
-                    if (KMessageBox::questionYesNo(this,
-                                                   i18n("<p>The actual file size does not match the size declared in the file header. "
-                                                     "If it has been downloaded make sure the download is complete.</p>"
-                                                     "<p>Only continue if you know what you are doing.</p>"),
-                                                   i18n("Warning"),
-                                                   KStandardGuiItem::cont(),
-                                                   KStandardGuiItem::cancel() ) == KMessageBox::No )
+                    if (KMessageBox::questionTwoActions(this,
+                                                        i18n("<p>The actual file size does not match the size declared in the file header. "
+                                                             "If it has been downloaded make sure the download is complete.</p>"
+                                                             "<p>Only continue if you know what you are doing.</p>"),
+                                                        i18n("Warning"),
+                                                        KStandardGuiItem::cont(),
+                                                        KStandardGuiItem::cancel() ) == KMessageBox::SecondaryAction )
                         return;
                 }
             }
@@ -864,9 +864,11 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
 
         // TODO: treat unusable image to opaque
         if (d->foundImageType == IMAGE_UNKNOWN) {
-            if (KMessageBox::questionYesNo(this,
-                                           i18n("Type of image file is not recognizable. Do you want to burn it anyway?"),
-                                           i18n("Unknown image type")) == KMessageBox::Yes) {
+            if (KMessageBox::questionTwoActions(this,
+                                                i18n("Type of image file is not recognizable. Do you want to burn it anyway?"),
+                                                i18n("Unknown image type"),
+                                                KGuiItem(i18n("Burn")),
+                                                KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction) {
                 d->foundImageType = IMAGE_RAW;
                 d->imageFile = path;
             }

@@ -100,11 +100,11 @@ bool K3b::MiscOptionTab::saveSettings()
     }
 
     if( !fi.exists() ) {
-        if( KMessageBox::questionYesNo( this,
-                                        i18n("Folder (%1) does not exist. Create?",tempDir),
-                                        i18n("Create Folder"),
-                                        KGuiItem( i18n("Create") ),
-                                        KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {
+        if( KMessageBox::questionTwoActions( this,
+                                             i18n("Folder (%1) does not exist. Create?",tempDir),
+                                             i18n("Create Folder"),
+                                             KGuiItem( i18n("Create") ),
+                                             KStandardGuiItem::cancel() ) == KMessageBox::PrimaryAction ) {
             if( !QDir().mkpath( fi.absoluteFilePath() ) ) {
                 KMessageBox::error( this, i18n("Unable to create folder %1",tempDir) );
                 return false;

@@ -287,13 +287,13 @@ void K3b::AudioBurnDialog::slotNormalizeToggled( bool on )
             m_checkNormalize->setChecked( false );
         }
         else if( !m_checkCacheImage->isChecked() && !m_checkOnlyCreateImage->isChecked() ) {
-            if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
-                                                      "The external program used for this task only supports normalizing a set "
-                                                      "of audio files."),
-                                           QString(),
-                                           KGuiItem( i18n("Disable normalization") ),
-                                           KGuiItem( i18n("Disable on-the-fly burning") ),
-                                           "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
+            if( KMessageBox::warningTwoActions( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
+                                                           "The external program used for this task only supports normalizing a set "
+                                                           "of audio files."),
+                                                QString(),
+                                                KGuiItem( i18n("Disable normalization") ),
+                                                KGuiItem( i18n("Disable on-the-fly burning") ),
+                                                "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::PrimaryAction )
                 m_checkNormalize->setChecked( false );
             else
                 m_checkCacheImage->setChecked( true );
@@ -306,13 +306,13 @@ void K3b::AudioBurnDialog::slotCacheImageToggled( bool on )
 {
     if( !on ) {
         if( m_checkNormalize->isChecked() ) {
-            if( KMessageBox::warningYesNo( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
-                                                      "The external program used for this task only supports normalizing a set "
-                                                      "of audio files."),
-                                           QString(),
-                                           KGuiItem( i18n("Disable normalization") ),
-                                           KGuiItem( i18n("Disable on-the-fly burning") ),
-                                           "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::Yes )
+            if( KMessageBox::warningTwoActions( this, i18n("<p>K3b is not able to normalize audio tracks when burning on-the-fly. "
+                                                           "The external program used for this task only supports normalizing a set "
+                                                           "of audio files."),
+                                                QString(),
+                                                KGuiItem( i18n("Disable normalization") ),
+                                                KGuiItem( i18n("Disable on-the-fly burning") ),
+                                                "audioProjectNormalizeOrOnTheFly" ) == KMessageBox::PrimaryAction )
                 m_checkNormalize->setChecked( false );
             else
                 m_checkCacheImage->setChecked( true );

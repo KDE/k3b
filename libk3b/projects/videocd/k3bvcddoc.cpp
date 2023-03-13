@@ -208,17 +208,17 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
             } else if ( vcdType() == NONE ) {
                 m_urlAddingTimer->stop();
                 vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )mpegVersion );
-                bool force = KMessageBox::questionYesNo( qApp->activeWindow(),
-                                                         i18n( "K3b will create a %1 image from the given MPEG "
-                                                               "files, but these files must already be in %1 "
-                                                               "format. K3b does not yet resample MPEG files.",
-                                                               i18n( "SVCD" ) )
-                                                         + "\n\n"
-                                                         + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
-                                                                 "some standalone DVD players." ),
-                                                         i18n( "Information" ),
-                                                         KGuiItem( i18n( "Force VCD" ) ),
-                                                         KGuiItem( i18n( "Do not force VCD" ) ) ) == KMessageBox::Yes;
+                bool force = KMessageBox::questionTwoActions(qApp->activeWindow(),
+                                                             i18n( "K3b will create a %1 image from the given MPEG "
+                                                                   "files, but these files must already be in %1 "
+                                                                   "format. K3b does not yet resample MPEG files.",
+                                                                   i18n( "SVCD" ) )
+                                                             + "\n\n"
+                                                             + i18n( "Note: Forcing MPEG2 as VCD is not supported by "
+                                                                     "some standalone DVD players." ),
+                                                             i18n( "Information" ),
+                                                             KGuiItem( i18n( "Force VCD" ) ),
+                                                             KGuiItem( i18n( "Do not force VCD" ) ) ) == KMessageBox::PrimaryAction;
                 if ( force ) {
                     setVcdType( vcdTypes( 1 ) );
                     vcdOptions() ->setAutoDetect( false );

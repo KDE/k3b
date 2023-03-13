@@ -65,8 +65,8 @@ namespace K3b {
          */
         bool questionYesNo( const QString&,
                             const QString& = QString(),
-                            const KGuiItem& = KStandardGuiItem::yes(),
-                            const KGuiItem& = KStandardGuiItem::no() ) override { return false; }
+                            const KGuiItem& = KStandardGuiItem::ok(),
+                            const KGuiItem& = KStandardGuiItem::cancel() ) override { return false; }
 
         /**
          * @reimplemented from JobHandler

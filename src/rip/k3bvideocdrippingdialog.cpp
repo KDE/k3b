@@ -139,8 +139,11 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
     QDir d;
     d.setPath( m_editDirectory ->url().toLocalFile() );
     if( !d.exists() ) {
-        if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().toLocalFile() ) )
-            == KMessageBox::Yes ) {
+        if( KMessageBox::warningTwoActions( this,
+                                            i18n("Image folder '%1' does not exist. Do you want K3b to create it?", m_editDirectory->url().toLocalFile() ),
+                                            i18n("Create folder?"),
+                                            KGuiItem(i18n("Create")),
+                                            KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction ) {
             if( !QDir().mkpath( m_editDirectory->url().toLocalFile() ) ) {
                 KMessageBox::error( this, i18n("Failed to create folder '%1'.", m_editDirectory->url().toLocalFile() ) );
                 return;
@@ -157,10 +160,10 @@ void K3b::VideoCdRippingDialog::slotStartClicked()
     }
 
     if( !filesExists.isEmpty() )
-        if( KMessageBox::questionYesNoList( this,
-                                            i18n("Continue although the folder is not empty?"),
-                                            filesExists,
-                                            i18n("Files Exist"),KStandardGuiItem::cont(),KStandardGuiItem::cancel() ) == KMessageBox::No )
+        if( KMessageBox::questionTwoActionsList( this,
+                                                 i18n("Continue although the folder is not empty?"),
+                                                 filesExists,
+                                                 i18n("Files Exist"),KStandardGuiItem::cont(),KStandardGuiItem::cancel() ) == KMessageBox::SecondaryAction )
             return;
 
     m_videooptions ->setVideoCdIgnoreExt( m_ignoreExt ->isChecked() );

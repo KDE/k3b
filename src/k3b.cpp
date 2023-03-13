@@ -891,14 +891,14 @@ bool K3b::MainWindow::canCloseDocument( K3b::Doc* doc )
     if( !KConfigGroup( config(), "General Options" ).readEntry( "ask_for_saving_changes_on_exit", true ) )
         return true;
 
-    switch ( KMessageBox::warningYesNoCancel( this,
-                                              xi18nc("@info", "Project <resource>%1</resource> has unsaved data.", doc->URL().fileName() ),
-                                              i18n("Closing Project"),
-                                              KStandardGuiItem::save(),
-                                              KStandardGuiItem::discard() ) ) {
-    case KMessageBox::Yes:
+    switch ( KMessageBox::warningTwoActionsCancel( this,
+                                                   xi18nc("@info", "Project <resource>%1</resource> has unsaved data.", doc->URL().fileName() ),
+                                                   i18n("Closing Project"),
+                                                   KStandardGuiItem::save(),
+                                                   KStandardGuiItem::discard() ) ) {
+    case KMessageBox::PrimaryAction:
         return fileSave( doc );
-    case KMessageBox::No:
+    case KMessageBox::SecondaryAction:
         return true;
     default:
         return false;

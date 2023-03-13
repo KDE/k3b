@@ -8,6 +8,7 @@
 
 #include "k3bdevice.h"
 
+#include <KGuiItem>
 #include <KLocalizedString>
 #include <KMessageBox>
 
@@ -96,9 +97,12 @@ void K3b::LsofWrapperDialog::slotQuitOtherApps()
     if( lsof.checkDevice( m_device ) ) {
         const QList<K3b::LsofWrapper::Process>& apps = lsof.usingApplications();
         if( apps.count() > 0 ) {
-            if( KMessageBox::warningYesNo( this,
-                                           i18n("<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>", joinProcessNames(apps))
-                                           ) == KMessageBox::Yes ) {
+            KGuiItem w(i18n("www"));
+            if( KMessageBox::warningTwoActions( this,
+                                                i18n("<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>", joinProcessNames(apps)),
+                                                i18n("Kill the processes?"),
+                                                KGuiItem(i18n("Kill")),
+                                                KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction ) {
                 for( QList<K3b::LsofWrapper::Process>::const_iterator it = apps.begin();
                      it != apps.end(); ++it )
                     ::kill( (*it).pid, SIGTERM );

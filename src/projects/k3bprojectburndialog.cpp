@@ -183,8 +183,11 @@ void K3b::ProjectBurnDialog::slotStartClicked()
             //
             QString tempDir = m_tempDirSelectionWidget->tempDirectory();
             if( !QFile::exists( tempDir ) ) {
-                if( KMessageBox::warningYesNo( this, i18n("Image folder '%1' does not exist. Do you want K3b to create it?", tempDir ) )
-                    == KMessageBox::Yes ) {
+                if( KMessageBox::warningTwoActions( this,
+                                                    i18n("Image folder '%1' does not exist. Do you want K3b to create it?", tempDir ),
+                                                    i18n("Create folder?"),
+                                                    KGuiItem(i18n("Create")),
+                                                    KStandardGuiItem::cancel() ) == KMessageBox::PrimaryAction ) {
                     if( !QDir().mkpath( tempDir ) ) {
                         KMessageBox::error( this, i18n("Failed to create folder '%1'.", tempDir ) );
                         return;

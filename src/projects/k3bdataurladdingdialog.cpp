@@ -174,14 +174,14 @@ void K3b::DataUrlAddingDialog::slotStartAddUrls()
     if( m_urls.count() == 1 ) {
         K3b::Iso9660 isoF( m_urls.first().toLocalFile() );
         if( isoF.open() ) {
-            if( KMessageBox::warningYesNo( parentWidget(),
-                                           i18n("<p>The file you are about to add to the project is an ISO 9660 image. As such "
-                                                "it can be burned to a medium directly since it already contains a file "
-                                                "system.<br>"
-                                                "Are you sure you want to add this file to the project?"),
-                                           i18n("Adding image file to project"),
-                                           KGuiItem(i18n("Add the file to the project"),"list-add"),
-                                           KGuiItem(i18n("Burn the image directly"),"tools-media-optical-burn") ) == KMessageBox::No ) {
+            if( KMessageBox::warningTwoActions( parentWidget(),
+                                                i18n("<p>The file you are about to add to the project is an ISO 9660 image. As such "
+                                                     "it can be burned to a medium directly since it already contains a file "
+                                                     "system.<br>"
+                                                     "Are you sure you want to add this file to the project?"),
+                                                i18n("Adding image file to project"),
+                                                KGuiItem(i18n("Add the file to the project"),"list-add"),
+                                                KGuiItem(i18n("Burn the image directly"),"tools-media-optical-burn") ) == KMessageBox::SecondaryAction ) {
                 k3bappcore->k3bMainWindow()->slotWriteImage( m_urls.first() );
                 reject();
                 return;
@@ -764,9 +764,9 @@ bool K3b::DataUrlAddingDialog::addHiddenFiles()
 {
     if( m_iAddHiddenFiles == 0 ) {
         // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
-        if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
-                                        i18n("Do you also want to add hidden files?"),
-                                        i18n("Hidden Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")) ) == KMessageBox::Yes )
+        if( KMessageBox::questionTwoActions( /*isVisible() ? */this/* : parentWidget()*/,
+                                             i18n("Do you also want to add hidden files?"),
+                                             i18n("Hidden Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")) ) == KMessageBox::PrimaryAction )
             m_iAddHiddenFiles = 1;
         else
             m_iAddHiddenFiles = -1;
@@ -779,10 +779,10 @@ bool K3b::DataUrlAddingDialog::addHiddenFiles()
 bool K3b::DataUrlAddingDialog::addSystemFiles()
 {
     if( m_iAddSystemFiles == 0 ) {
-        if( KMessageBox::questionYesNo( /*isVisible() ? */this/* : parentWidget()*/,
-                                        i18n("Do you also want to add system files "
-                                             "(FIFOs, sockets, device files, and broken symlinks)?"),
-                                        i18n("System Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")) ) == KMessageBox::Yes )
+        if( KMessageBox::questionTwoActions( /*isVisible() ? */this/* : parentWidget()*/,
+                                             i18n("Do you also want to add system files "
+                                                  "(FIFOs, sockets, device files, and broken symlinks)?"),
+                                             i18n("System Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")) ) == KMessageBox::PrimaryAction )
             m_iAddSystemFiles = 1;
         else
             m_iAddSystemFiles = -1;

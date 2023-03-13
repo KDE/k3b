@@ -178,12 +178,12 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 
         // check if there already is a theme by that name
         if( !QFile::exists( themeBasePath + '/' + themeName ) ||
-            KMessageBox::warningYesNo( this,
-                                       i18n("A theme with the name '%1' already exists. Do you want to "
-                                            "overwrite it?", themeName),
-                                       i18n("Theme exists"),
-                                       KStandardGuiItem::overwrite(),
-                                       KStandardGuiItem::cancel() ) == KMessageBox::Yes ) {
+                KMessageBox::warningTwoActions( this,
+                                                i18n("A theme with the name '%1' already exists. Do you want to "
+                                                     "overwrite it?", themeName),
+                                                i18n("Theme exists"),
+                                                KStandardGuiItem::overwrite(),
+                                                KStandardGuiItem::cancel() ) == KMessageBox::PrimaryAction ) {
             // install the theme
             archive.directory()->copyTo( themeBasePath );
         }
