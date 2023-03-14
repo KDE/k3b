@@ -247,8 +247,8 @@ target_link_libraries(k3b
     KF5::ConfigCore
 )
 
-if(Qt5WebKitWidgets_FOUND)
-    target_link_libraries(k3b Qt5::WebKitWidgets)
+if(Qt${QT_MAJOR_VERSION}WebEngineWidgets_FOUND)
+    target_link_libraries(k3b Qt${QT_MAJOR_VERSION}::WebEngineWidgets)
 endif()
 
 if(ICONV_FOUND)

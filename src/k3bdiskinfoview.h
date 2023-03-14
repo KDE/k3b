@@ -11,8 +11,8 @@
 
 #include "k3bmediacontentsview.h"
 
-#ifdef HAVE_QT5WEBKITWIDGETS
-class QWebView;
+#ifdef HAVE_QTWEBENGINEWIDGETS
+class QWebEngineView;
 #else
 class QTextBrowser;
 #endif
@@ -34,8 +34,8 @@ private:
     QString createIso9660InfoItems( const Iso9660SimplePrimaryDescriptor& iso );
     QString createTrackItems( const Medium& medium );
 
-#ifdef HAVE_QT5WEBKITWIDGETS
-    QWebView* m_infoView;
+#ifdef HAVE_QTWEBENGINEWIDGETS
+    QWebEngineView* m_infoView;
 #else
     QTextBrowser* m_infoView;
 #endif

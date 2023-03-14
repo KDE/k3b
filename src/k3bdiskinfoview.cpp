@@ -30,8 +30,8 @@
 #include <QPainter>
 #include <QPalette>
 #include <QPixmap>
-#ifdef HAVE_QT5WEBKITWIDGETS
-#include <QWebView>
+#ifdef HAVE_QTWEBENGINEWIDGETS
+#include <QWebEngineView>
 #endif
 #include <QLabel>
 #include <QLayout>
@@ -55,8 +55,8 @@ K3b::DiskInfoView::DiskInfoView( QWidget* parent )
                               Device::STATE_ALL|Device::STATE_NO_MEDIA|Device::STATE_UNKNOWN,
                               parent )
 {
-#ifdef HAVE_QT5WEBKITWIDGETS
-    m_infoView = new QWebView( this );
+#ifdef HAVE_QTWEBENGINEWIDGETS
+    m_infoView = new QWebEngineView( this );
 #else
     m_infoView = new QTextBrowser( this );
 #endif
