@@ -35,7 +35,7 @@ K3b::BurnProgressDialog::BurnProgressDialog( QWidget *parent, bool showSubProgre
     labelParentWriter->setLineWidth( 1 );
     labelParentWriter->setLayout( new QVBoxLayout() );
     labelParentWriter->layout()->setSpacing(0);
-    labelParentWriter->layout()->setMargin(0);
+    labelParentWriter->layout()->setContentsMargins(0, 0, 0, 0);
 
     m_labelWriter = new K3b::ThemedLabel( labelParentWriter );
     m_labelWriter->setFrameStyle( QFrame::NoFrame );

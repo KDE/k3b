@@ -103,7 +103,7 @@ void K3b::JobProgressDialog::setupGUI()
     headerParentFrame->setLineWidth( 1 );
     headerParentFrame->setLayout( new QVBoxLayout() );
     headerParentFrame->layout()->setSpacing(0);
-    headerParentFrame->layout()->setMargin(0);
+    headerParentFrame->layout()->setContentsMargins(0, 0, 0, 0);
 
     d->headerFrame = new QFrame( headerParentFrame );
     d->headerFrame->setFrameStyle( QFrame::NoFrame );
@@ -156,7 +156,7 @@ void K3b::JobProgressDialog::setupGUI()
     progressHeaderParentFrame->setLineWidth( 1 );
     progressHeaderParentFrame->setLayout( new QVBoxLayout() );
     progressHeaderParentFrame->layout()->setSpacing(0);
-    progressHeaderParentFrame->layout()->setMargin(0);
+    progressHeaderParentFrame->layout()->setContentsMargins(0, 0, 0, 0);
 
     d->progressHeaderFrame = new QFrame( progressHeaderParentFrame );
     d->progressHeaderFrame->setFrameStyle( QFrame::NoFrame );

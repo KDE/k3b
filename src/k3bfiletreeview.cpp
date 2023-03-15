@@ -87,7 +87,7 @@ K3b::FileTreeView::~FileTreeView()
 void K3b::FileTreeView::initActions()
 {
     // those actions are supposed to be used with url items
-    d->urlPopupMenu->addAction( K3b::createAction(this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return,
+    d->urlPopupMenu->addAction( K3b::createAction(this,i18n("&Add to Project"), 0, Qt::SHIFT|Qt::Key_Return,
                                                   this, SLOT(slotAddFilesToProject()),
                                                   d->actionCollection, "add_files_to_project") );
 }

@@ -141,7 +141,9 @@ K3b::ExternalBinWidget::ExternalBinWidget( K3b::ExternalBinManager* manager, QWi
     connect( m_rescanButton, SIGNAL(clicked(bool)), this, SLOT(rescan()) );
 
     qRegisterMetaType<HelperProgramItem>();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qRegisterMetaTypeStreamOperators<HelperProgramItem>("K3b::HelperProgramItem");
+#endif
 
     while (::group *g = ::getgrent()) {
         const QString groupName = QString::fromLocal8Bit(g->gr_name);

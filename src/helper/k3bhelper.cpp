@@ -81,7 +81,9 @@ namespace K3b {
 Helper::Helper()
 {
     qRegisterMetaType<HelperProgramItem>();
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     qRegisterMetaTypeStreamOperators<HelperProgramItem>( "K3b::HelperProgramItem" );
+#endif
 }
 
 KAuth::ActionReply Helper::updatepermissions( QVariantMap args )

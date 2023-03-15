@@ -120,8 +120,7 @@ QSize K3b::MsfEdit::sizeHint() const
         hint += extra;
 
         opt.rect = rect();
-        d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_SpinBox, &opt, hint, this)
-                            .expandedTo(QApplication::globalStrut());
+        d->cachedSizeHint = style()->sizeFromContents(QStyle::CT_SpinBox, &opt, hint, this);
     }
     return d->cachedSizeHint;
 }

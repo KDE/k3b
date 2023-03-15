@@ -695,13 +695,13 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
                                     else if( cdTrackSourceItemElem.nodeName() == "disc_id" )
                                         discid = cdTrackSourceItemElem.text().toUInt( 0, 16 );
                                     else if( cdTrackSourceItemElem.nodeName() == "title" )
-                                        title = cdTrackSourceItemElem.text().toInt();
+                                        title = QString::number(cdTrackSourceItemElem.text().toInt());
                                     else if( cdTrackSourceItemElem.nodeName() == "artist" )
-                                        artist = cdTrackSourceItemElem.text().toInt();
+                                        artist = QString::number(cdTrackSourceItemElem.text().toInt());
                                     else if( cdTrackSourceItemElem.nodeName() == "cdtitle" )
-                                        cdTitle = cdTrackSourceItemElem.text().toInt();
+                                        cdTitle = QString::number(cdTrackSourceItemElem.text().toInt());
                                     else if( cdTrackSourceItemElem.nodeName() == "cdartist" )
-                                        cdArtist = cdTrackSourceItemElem.text().toInt();
+                                        cdArtist = QString::number(cdTrackSourceItemElem.text().toInt());
                                 }
 
                                 if( discid != 0 && titlenum > 0 ) {

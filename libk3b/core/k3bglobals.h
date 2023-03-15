@@ -309,8 +309,8 @@ namespace K3b {
      */
     LIBK3B_EXPORT bool IsOverburnAllowed( const Msf& projectSize, const Msf& capacity, const Msf& usedCapacity );
 
-    QDebug& operator<<( QDebug& dbg, WritingMode );
-    QDebug& operator<<( QDebug& dbg, WritingModes );
+    LIBK3B_EXPORT QDebug& operator<<( QDebug& dbg, WritingMode );
+    LIBK3B_EXPORT QDebug& operator<<( QDebug& dbg, WritingModes );
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(K3b::WritingApps)

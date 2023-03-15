@@ -15,7 +15,7 @@
 #include <QPixmap>
 #include <QPolygon>
 #include <QApplication>
-#include <QDesktopWidget>
+#include <QScreen>
 #include <QFrame>
 #include <QToolTip>
 
@@ -172,8 +172,12 @@ QSize K3b::AudioEditorWidget::minimumSizeHint() const
     // But never exceed 2/3 of the screen width, otherwise it just looks ugly
     // FIXME: this is still bad for long sources and there might be 60 minutes sources!
 
-    int maxWidth = QApplication::desktop()->width()*2/3;
     int wantedWidth = 2*d->margin + 2*frameWidth() + (d->length.totalFrames()/75/60 + 1) * fontMetrics().horizontalAdvance( "000" );
+    int maxWidth = wantedWidth;
+    auto screen = QApplication::primaryScreen();
+    if (screen) {
+        maxWidth = screen->availableSize().width()*2/3;
+    }
     return QSize( qMin( maxWidth, wantedWidth ),
                   2*d->margin + 12 + 6 /*12 for the tickmarks and 6 for the markers */ + fontMetrics().height() + 2*frameWidth() );
 }

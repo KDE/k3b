@@ -7,7 +7,6 @@
 
 #include "k3bchecksumpipe.h"
 
-#include <KCodecs>
 #include <QDebug>
 #include <QCryptographicHash>
 

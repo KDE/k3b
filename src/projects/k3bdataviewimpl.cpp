@@ -26,6 +26,9 @@
 #include <KActionCollection>
 #include <KIO/JobUiDelegate>
 #include <KIO/OpenUrlJob>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <KIO/JobUiDelegateFactory>
+#endif
 
 #include <QSortFilterProxyModel>
 #include <QAction>
@@ -103,7 +106,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     m_columnAdjuster->setColumnMargin( DataProjectModel::SizeColumn, 10 );
 
     m_actionNewDir = new QAction( QIcon::fromTheme( "folder-new" ), i18n("New Folder..."), m_fileView );
-    m_actionNewDir->setShortcut( Qt::CTRL + Qt::Key_N );
+    m_actionNewDir->setShortcut( Qt::CTRL | Qt::Key_N );
     m_actionNewDir->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "new_dir", m_actionNewDir );
     connect( m_actionNewDir, SIGNAL(triggered(bool)), this, SLOT(slotNewDir()) );
@@ -126,7 +129,7 @@ K3b::DataViewImpl::DataViewImpl( View* view, DataDoc* doc, KActionCollection* ac
     actionCollection->addAction( "parent_dir", m_actionParentDir );
 
     m_actionProperties = new QAction( QIcon::fromTheme( "document-properties" ), i18n("Properties"), m_fileView );
-    m_actionProperties->setShortcut( Qt::ALT + Qt::Key_Return );
+    m_actionProperties->setShortcut( Qt::ALT | Qt::Key_Return );
     m_actionProperties->setShortcutContext( Qt::WidgetShortcut );
     actionCollection->addAction( "properties", m_actionProperties );
     connect( m_actionProperties, SIGNAL(triggered(bool)), this, SLOT(slotProperties()) );
@@ -287,7 +290,12 @@ void K3b::DataViewImpl::slotOpen()
         QUrl url = QUrl::fromLocalFile( item->localPath() );
         auto *job = new KIO::OpenUrlJob( url, item->mimeType().name() );
         job->setRunExecutables( false ); // this is the default, but let's make really sure :)
-        job->setUiDelegate( new KIO::JobUiDelegate( KJobUiDelegate::AutoHandlingEnabled, m_view ) );
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        auto uiDelegate = new KIO::JobUiDelegate( KJobUiDelegate::AutoHandlingEnabled, m_view );
+#else
+        auto uiDelegate = KIO::createDefaultJobUiDelegate( KJobUiDelegate::AutoHandlingEnabled, m_view );
+#endif
+        job->setUiDelegate( uiDelegate );
         job->start();
     }
 }

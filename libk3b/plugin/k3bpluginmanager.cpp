@@ -101,10 +101,10 @@ void K3b::PluginManager::loadAll()
         if (result) {
             K3b::Plugin *plugin = result.plugin;
             plugin->d->metadata = metadata;
-            qDebug() << "Loaded plugin" << metadata.metaDataFileName();
+            qDebug() << "Loaded plugin" << metadata.fileName();
             d->plugins.append(plugin);
         } else {
-            qDebug() << "failed to load plugin" << metadata.metaDataFileName();
+            qDebug() << "failed to load plugin" << metadata.fileName();
         }
     }
 }

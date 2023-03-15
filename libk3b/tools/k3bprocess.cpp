@@ -62,7 +62,7 @@ namespace {
         // check if line ends with a newline
         // if not save the last line because it is not finished
         if ( !buffer.isEmpty() ) {
-            QByteRef c = buffer[buffer.length()-1];
+            const auto c = buffer[buffer.length()-1];
             bool hasUnfinishedLine = ( c != '\n' && c != '\r' && QChar( c ) != QChar(46) );  // What is unicode 46?? It is printed as a point
             if( hasUnfinishedLine ) {
                 qDebug() << "(K3b::Process) found unfinished line: '" << lines.last() << "'";

@@ -77,7 +77,7 @@ void K3b::DiskInfoView::reloadMedium()
     K3b::Theme* theme = k3bappcore->themeManager()->currentTheme();
     if (medium().diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA) {
         s = QString("<font color=\"%1\">%2</font>").arg(theme ?
-                theme->palette().color(QPalette::Foreground).name() :
+                theme->palette().color(QPalette::WindowText).name() :
                 "green").arg(i18n("No medium present"));
     } else {
         // FIXME: import a css stylesheet from the theme and, more importantly,
@@ -88,8 +88,8 @@ void K3b::DiskInfoView::reloadMedium()
             "<style type=\"text/css\">";
         if (theme) {
             s += QString(".title { padding:4px; font-size:medium; background-color:%1; color:%2 } ")
-                 .arg(theme->palette().color(QPalette::Background).name())
-                 .arg(theme->palette().color(QPalette::Foreground).name());
+                 .arg(theme->palette().color(QPalette::Window).name())
+                 .arg(theme->palette().color(QPalette::WindowText).name());
         }
         s +=  QString(".infovalue { font-weight:bold; padding-left:10px; color:%1; } "
               ".infokey { color:%1; } "
@@ -102,7 +102,7 @@ void K3b::DiskInfoView::reloadMedium()
               ".trackrange { color:%1; } "
               ".tracklength { color:%1; } "
               "td { vertical-align:top; } ")
-            .arg(theme->palette().color(QPalette::Foreground).name());
+            .arg(theme->palette().color(QPalette::WindowText).name());
         s += "</style>"
              "</head>"
              "<body>";

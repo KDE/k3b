@@ -13,6 +13,8 @@
 #include <QDebug>
 #include <QSharedDataPointer>
 
+class QRegExp;
+
 namespace K3b
 {
     /**

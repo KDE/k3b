@@ -10,8 +10,6 @@
 #include "k3bfilesplitter.h"
 #include "k3b_i18n.h"
 
-#include <KCodecs>
-
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QIODevice>

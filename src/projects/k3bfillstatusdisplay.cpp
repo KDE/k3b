@@ -26,6 +26,7 @@
 #include <KIO/Global>
 #include <KMessageBox>
 
+#include <QActionGroup>
 #include <QDebug>
 #include <QEvent>
 #include <QLocale>

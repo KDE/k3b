@@ -10,6 +10,7 @@
 #include "k3bcore.h"
 #include "k3baction.h"
 
+#include <KBookmarkManager>
 #include <KBookmarkMenu>
 #include <KConfigGroup>
 #include <KLocalizedString>
@@ -83,7 +84,7 @@ void K3b::DirOperator::readConfig( const KConfigGroup& grp )
     // neverending busy cursor when we call setUrl() after setView()
     // so we call it in the right order (see bug 113649)
     setUrl( QUrl::fromLocalFile(lastUrl), true );
-    setView( KFile::Default );
+    setViewMode( KFile::Default );
 
     emit urlEntered( url() );
 }

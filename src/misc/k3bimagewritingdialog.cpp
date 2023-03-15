@@ -441,7 +441,7 @@ void K3b::ImageWritingDialog::setupGui()
     // -----------------------------------------------------------------------
     QGroupBox* groupImageUrl = new QGroupBox( i18n("Image to Burn"), frame );
     d->comboRecentImages = new KComboBox( true, this );
-    d->comboRecentImages->setSizeAdjustPolicy( QComboBox::AdjustToMinimumContentsLength );
+    d->comboRecentImages->setSizeAdjustPolicy( QComboBox::AdjustToMinimumContentsLengthWithIcon );
     d->editImagePath = new KUrlRequester( d->comboRecentImages, groupImageUrl );
     d->editImagePath->setMode( KFile::File|KFile::ExistingOnly );
     d->editImagePath->setWindowTitle( i18n("Choose Image File") );

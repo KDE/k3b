@@ -144,7 +144,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
         //
         if( pattern[i] == '%' && i+1 < pattern.length() ) {
             ++i; // skip the %
-            QChar c = pattern[i];
+            char c = pattern[i].toLatin1();
 
             //
             // first check if we have a long keyword instead of a one-char
@@ -239,7 +239,7 @@ QString K3b::VideoDVDRippingDialog::Private::createFilename( const K3b::VideoDVD
                 }
             }
 
-            switch( c.toLatin1() ) {
+            switch( c ) {
             case PATTERN_TITLE_NUMBER:
                 f.append( QString::number(info.title).rightJustified( 2, '0' ) );
                 break;

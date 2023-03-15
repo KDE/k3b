@@ -10,7 +10,7 @@
 #ifndef K3BDIROPERATOR_H
 #define K3BDIROPERATOR_H
 
-#include <KBookmarkManager>
+#include <KBookmarkOwner>
 #include <KDirOperator>
 #include <QUrl>
 

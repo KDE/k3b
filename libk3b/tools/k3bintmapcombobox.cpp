@@ -115,7 +115,7 @@ bool K3b::IntMapComboBox::insertItem( int value, const QString& text, const QStr
         index = QComboBox::count();
     }
 
-    d->values.insert( index, qMakePair<int, QString>( value, description ) );
+    d->values.insert( index, qMakePair( value, description ) );
     d->buildValueIndexMap();
 
     QComboBox::insertItem( index, text );
