@@ -66,6 +66,7 @@ private Q_SLOTS:
 private:
     KBookmarkMenu* m_bmMenu;
     KActionMenu* m_bmPopup;
+    QAction* m_bmActionAddFileToProject;
 };
 }
 

@@ -56,10 +56,10 @@ K3b::FileView::FileView(QWidget *parent )
     layout->addWidget( d->dirOp, 1 );
 
     // setup actions
-    QAction* actionBack = d->dirOp->actionCollection()->action("back");
-    QAction* actionForward = d->dirOp->actionCollection()->action("forward");
-    QAction* actionUp = d->dirOp->actionCollection()->action("up");
-    QAction* actionReload = d->dirOp->actionCollection()->action("reload");
+    QAction* actionBack = d->dirOp->action(KDirOperator::Back);
+    QAction* actionForward = d->dirOp->action(KDirOperator::Forward);
+    QAction* actionUp = d->dirOp->action(KDirOperator::Up);
+    QAction* actionReload = d->dirOp->action(KDirOperator::Reload);
 
     // create filter selection combobox
     QWidget* filterBox = new QWidget( d->toolBox );
@@ -83,22 +83,22 @@ K3b::FileView::FileView(QWidget *parent )
 
     KActionMenu* actionOptions = new KActionMenu( QIcon::fromTheme("configure"), i18n("Options"), d->toolBox );
     actionOptions->setPopupMode( QToolButton::InstantPopup );
-    actionOptions->addAction( d->dirOp->actionCollection()->action("sorting menu") );
-    actionOptions->addAction( d->dirOp->actionCollection()->action("view menu") );
+    actionOptions->addAction( d->dirOp->action(KDirOperator::SortMenu) );
+    actionOptions->addAction( d->dirOp->action(KDirOperator::ViewModeMenu) );
     actionOptions->addSeparator();
-    actionOptions->addAction( d->dirOp->actionCollection()->action("decoration menu") );
+    actionOptions->addAction( d->dirOp->action(KDirOperator::DecorationMenu) );
     actionOptions->addSeparator();
-    actionOptions->addAction( d->dirOp->actionCollection()->action("show hidden") );
+    actionOptions->addAction( d->dirOp->action(KDirOperator::ShowHiddenFiles) );
     actionOptions->addAction( d->actionShowBookmarks );
-    actionOptions->addAction( d->dirOp->actionCollection()->action("preview") );
+    actionOptions->addAction( d->dirOp->action(KDirOperator::ShowPreview) );
 
     d->toolBox->addAction( actionBack );
     d->toolBox->addAction( actionForward );
     d->toolBox->addAction( actionUp );
     d->toolBox->addAction( actionReload );
     d->toolBox->addSeparator();
-    d->toolBox->addAction( d->dirOp->actionCollection()->action("short view") );
-    d->toolBox->addAction( d->dirOp->actionCollection()->action("detailed view") );
+    d->toolBox->addAction( d->dirOp->action(KDirOperator::ShortView) );
+    d->toolBox->addAction( d->dirOp->action(KDirOperator::DetailedView) );
     d->toolBox->addSeparator();
     d->toolBox->addSeparator();
     d->toolBox->addWidget( filterBox );
@@ -106,7 +106,7 @@ K3b::FileView::FileView(QWidget *parent )
     d->toolBox->addAction( actionOptions );
     d->toolBox->addAction( d->dirOp->bookmarkMenu() );
 
-    if( QAction* action = d->dirOp->actionCollection()->action("show hidden") ) {
+    if( QAction* action = d->dirOp->action(KDirOperator::ShowHiddenFiles) ) {
         action->setShortcut( Qt::ALT + Qt::Key_Period );
         action->setShortcutContext( Qt::ApplicationShortcut );
     }
@@ -120,12 +120,6 @@ K3b::FileView::FileView(QWidget *parent )
 K3b::FileView::~FileView()
 {
     delete d;
-}
-
-
-KActionCollection* K3b::FileView::actionCollection() const
-{
-    return d->dirOp->actionCollection();
 }
 
 

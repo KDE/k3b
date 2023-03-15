@@ -29,8 +29,6 @@ public:
     void setUrl( const QUrl &url, bool forward = true );
     QUrl url();
 
-    KActionCollection* actionCollection() const;
-
     void reload();
 
  Q_SIGNALS:

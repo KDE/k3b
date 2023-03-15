@@ -27,7 +27,7 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
 
     // disable the del-key since we still have a focus problem and users keep
     // deleting files when they want to remove project entries
-    QAction* aTrash = actionCollection()->action("trash");
+    QAction* aTrash = action(KDirOperator::Trash);
     if( aTrash ) {
         aTrash->setShortcut( 0 );
     }
@@ -45,9 +45,9 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
     m_bmPopup->setPopupMode( QToolButton::InstantPopup );
     m_bmMenu = new KBookmarkMenu( bmMan, this, m_bmPopup->menu() );
 
-    (void)K3b::createAction( this,i18n("&Add to Project"), 0, Qt::SHIFT+Qt::Key_Return,
-                             this, SLOT(slotAddFilesToProject()),
-                             actionCollection(), "add_file_to_project");
+    m_bmActionAddFileToProject = K3b::createAction( this,i18n("&Add to Project"), 0, Qt::SHIFT|Qt::Key_Return,
+                                                    this, SLOT(slotAddFilesToProject()),
+                                                    nullptr, "add_file_to_project");
 
     connect( this, SIGNAL(fileSelected(KFileItem)),
              this, SLOT(slotAddFilesToProject()) );
@@ -118,7 +118,7 @@ QUrl K3b::DirOperator::currentUrl() const
 void K3b::DirOperator::extendContextMenu( const KFileItem&, QMenu* menu )
 {
     QAction* firstAction = menu->actions().first();
-    menu->insertAction( firstAction, actionCollection()->action("add_file_to_project") );
+    menu->insertAction( firstAction, m_bmActionAddFileToProject );
     menu->insertSeparator( firstAction );
     menu->addSeparator();
     menu->addAction( m_bmPopup );
@@ -128,7 +128,7 @@ void K3b::DirOperator::extendContextMenu( const KFileItem&, QMenu* menu )
       view() && view()->selectedItems() &&
       !view()->selectedItems()->isEmpty();
     */
-    actionCollection()->action("add_file_to_project")->setEnabled( hasSelection && k3bappcore->k3bMainWindow()->activeView() != 0 );
+    m_bmActionAddFileToProject->setEnabled( hasSelection && k3bappcore->k3bMainWindow()->activeView() != 0 );
 }
 
 
