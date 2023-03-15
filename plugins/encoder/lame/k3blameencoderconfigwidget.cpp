@@ -116,16 +116,16 @@ void K3bLameEncoderSettingsWidget::updateManualSettingsLabel()
     if( m_manualSettingsDialog->m_radioConstantBitrate->isChecked() )
         m_labelManualSettings->setText( i18n("Constant Bitrate: %1 kbps (%2)",
                                              s_lame_bitrates[m_manualSettingsDialog->m_comboConstantBitrate->currentIndex()],
-                                             i18n(s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentIndex()])) );
+                                             s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentIndex()].toString()) );
     else
         m_labelManualSettings->setText( i18n("Variable Bitrate (%1)",
-                                        i18n(s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentIndex()])) );
+                                        s_lame_mode_strings[m_manualSettingsDialog->m_comboMode->currentIndex()].toString()) );
 }
 
 
 void K3bLameEncoderSettingsWidget::slotQualityLevelChanged( int val )
 {
-    m_labelQualityLevel->setText( i18n(s_lame_preset_strings[val]) );
+    m_labelQualityLevel->setText( s_lame_preset_strings[val].toString() );
 }
 
 

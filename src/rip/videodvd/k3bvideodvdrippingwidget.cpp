@@ -11,7 +11,7 @@
 
 #include <KLineEdit>
 #include <KColorScheme>
-#include <KLocalizedString>
+#include <KLazyLocalizedString>
 #include <KIO/Global>
 #include <KUrlRequester>
 #include <KUrlLabel>
@@ -54,11 +54,11 @@ static const int PICTURE_SIZE_320 = 2;
 static const int PICTURE_SIZE_CUSTOM = 3;
 static const int PICTURE_SIZE_MAX = 4;
 
-static const char* s_pictureSizeNames[] = {
-    I18N_NOOP("Keep original dimensions"),
-    I18N_NOOP("640x? (automatic height)"),
-    I18N_NOOP("320x? (automatic height)"),
-    I18N_NOOP("Custom")
+static const KLazyLocalizedString s_pictureSizeNames[] = {
+    kli18n("Keep original dimensions"),
+    kli18n("640x? (automatic height)"),
+    kli18n("320x? (automatic height)"),
+    kli18n("Custom")
 };
 
 
@@ -100,7 +100,7 @@ K3b::VideoDVDRippingWidget::VideoDVDRippingWidget( QWidget* parent )
     }
 
     for( int i = 0; i < PICTURE_SIZE_MAX; ++i ) {
-        m_comboVideoSize->addItem( i18n( s_pictureSizeNames[i] ) );
+        m_comboVideoSize->addItem( s_pictureSizeNames[i].toString() );
     }
 
     slotAudioCodecChanged( m_comboAudioCodec->selectedValue() );
@@ -173,7 +173,7 @@ void K3b::VideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
         m_comboVideoSize->setCurrentIndex( PICTURE_SIZE_320 );
     else {
         m_comboVideoSize->setItemText( PICTURE_SIZE_CUSTOM,
-                                       i18n(s_pictureSizeNames[PICTURE_SIZE_CUSTOM])
+                                       s_pictureSizeNames[PICTURE_SIZE_CUSTOM].toString()
                                        + QString(" (%1x%2)")
                                        .arg(size.width() == 0 ? i18n("auto") : QString::number(size.width()))
                                        .arg(size.height() == 0 ? i18n("auto") : QString::number(size.height())));

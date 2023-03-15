@@ -9,7 +9,7 @@
 #include "k3bdatavolumedescdialog.h"
 #include "k3bisooptions.h"
 
-#include <KLocalizedString>
+#include <KLazyLocalizedString>
 #include <KMessageBox>
 
 #include <QDebug>
@@ -28,12 +28,12 @@ static const int FS_DOS_COMP = 3;
 static const int FS_CUSTOM = 4;
 static const int FS_MAX = 5;
 
-static const char* s_fsPresetNames[] = {
-    I18N_NOOP("Linux/Unix only"),
-    I18N_NOOP("Linux/Unix + Windows"),
-    I18N_NOOP("Very large files (UDF)"),
-    I18N_NOOP("DOS Compatibility"),
-    I18N_NOOP("Custom")
+static const KLocalizedString s_fsPresetNames[] = {
+    kli18n("Linux/Unix only"),
+    kli18n("Linux/Unix + Windows"),
+    kli18n("Very large files (UDF)"),
+    kli18n("DOS Compatibility"),
+    kli18n("Custom")
 };
 
 static bool s_fsPresetsInitialized = false;
@@ -133,7 +133,7 @@ K3b::DataImageSettingsWidget::DataImageSettingsWidget( QWidget* parent )
              this, SLOT(slotSpaceHandlingChanged(int)) );
 
     for( int i = 0; i < FS_MAX; ++i )
-        m_comboFilesystems->addItem( i18n( s_fsPresetNames[i] ) );
+        m_comboFilesystems->addItem( s_fsPresetNames[i].toString() );
 
     if( !s_fsPresetsInitialized )
         initializePresets();
@@ -142,18 +142,18 @@ K3b::DataImageSettingsWidget::DataImageSettingsWidget( QWidget* parent )
         i18n("<p><b>File System Presets</b>"
              "<p>K3b provides the following file system Presets which allow for a quick selection "
              "of the most frequently used settings.")
-        + "<p><b>" + i18n(s_fsPresetNames[0]) + "</b><br>"
+        + "<p><b>" + s_fsPresetNames[0].toString() + "</b><br>"
         + i18n("The file system is optimized for usage on Linux/Unix systems. This mainly means that "
                "it uses the Rock Ridge extensions to provide long filenames, symbolic links, and POSIX "
                "compatible file permissions.")
-        + "<p><b>" + i18n(s_fsPresetNames[1]) + "</b><br>"
+        + "<p><b>" + s_fsPresetNames[1].toString() + "</b><br>"
         + i18n("In addition to the settings for Linux/Unix the file system contains a Joliet tree which "
                "allows for long file names on Windows which does not support the Rock Ridge extensions. "
                "Be aware that the file name length is restricted to 103 characters.")
-        + "<p><b>" + i18n(s_fsPresetNames[2]) + "</b><br>"
+        + "<p><b>" + s_fsPresetNames[2].toString() + "</b><br>"
         + i18n("The file system has additional UDF entries attached to it. This raises the maximal file "
                "size to 4 GB. Be aware that the UDF support in K3b is limited.")
-        + "<p><b>" + i18n(s_fsPresetNames[3]) + "</b><br>"
+        + "<p><b>" + s_fsPresetNames[3].toString() + "</b><br>"
         + i18n("The file system is optimized for compatibility with old systems. That means file names "
                "are restricted to 8.3 characters and no symbolic links or file permissions are supported.") );
 }
@@ -225,7 +225,7 @@ void K3b::DataImageSettingsWidget::slotFilesystemsChanged()
     m_customFsDlg->save( o );
     for( int i = 0; i < FS_CUSTOM; ++i ) {
         if( compareAdvancedOptions( o, s_fsPresets[i] ) ) {
-            qDebug() << "(K3b::DataImageSettingsWidget) found preset settings: " << s_fsPresetNames[i];
+            qDebug() << i18n("(K3b::DataImageSettingsWidget) found preset settings: ") << s_fsPresetNames[i].toString();
             m_comboFilesystems->setCurrentIndex( i );
             break;
         }

@@ -8,6 +8,8 @@
 #ifndef _K3B_LAME_TYES_H_
 #define _K3B_LAME_TYES_H_
 
+#include <KLazyLocalizedString>
+
 #include "k3bplugin_i18n.h"
 
 #include <lame/lame.h>
@@ -63,27 +65,27 @@ const int s_lame_preset_approx_bitrates[] = {
 };
 
 
-const char* const s_lame_preset_strings[] = {
-    I18N_NOOP("Low quality (56 kbps)"),
-    I18N_NOOP("Low quality (90 kbps)"),
+const KLazyLocalizedString s_lame_preset_strings[] = {
+    kli18n("Low quality (56 kbps)"),
+    kli18n("Low quality (90 kbps)"),
 
-    I18N_NOOP("Portable (average 115 kbps)"),
-    I18N_NOOP("Portable (average 130 kbps)"),
-    I18N_NOOP("Portable (average 160 kbps)"),
+    kli18n("Portable (average 115 kbps)"),
+    kli18n("Portable (average 130 kbps)"),
+    kli18n("Portable (average 160 kbps)"),
 
-    I18N_NOOP("HiFi (average 175 kbps)"),
-    I18N_NOOP("HiFi (average 190 kbps)"),
-    I18N_NOOP("HiFi (average 210 kbps)"),
-    I18N_NOOP("HiFi (average 230 kbps)"),
+    kli18n("HiFi (average 175 kbps)"),
+    kli18n("HiFi (average 190 kbps)"),
+    kli18n("HiFi (average 210 kbps)"),
+    kli18n("HiFi (average 230 kbps)"),
 
-    I18N_NOOP("Archiving (320 kbps)"),
+    kli18n("Archiving (320 kbps)"),
 };
 
 
-const char* const s_lame_mode_strings[] = {
-    I18N_NOOP("Stereo"),
-    I18N_NOOP("Joint Stereo"),
-    I18N_NOOP("Mono")
+const KLazyLocalizedString s_lame_mode_strings[] = {
+    kli18n("Stereo"),
+    kli18n("Joint Stereo"),
+    kli18n("Mono")
 };
 
 #endif
