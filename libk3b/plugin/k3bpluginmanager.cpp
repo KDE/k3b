@@ -11,7 +11,8 @@
 #include "k3bversion.h"
 #include "k3b_i18n.h"
 
-#include <KCModuleProxy>
+#include <kcmutils_export.h>
+#include <KCModuleLoader>
 #include <KService>
 #include <KPluginFactory>
 #include <KPluginMetaData>
@@ -37,7 +38,7 @@ public:
 
     QList<K3b::Plugin*> plugins;
 
-    KCModuleProxy* getModuleProxy( Plugin* plugin ) const;
+    KCModule* getModule( Plugin* plugin ) const;
 };
 
 
@@ -81,18 +82,12 @@ QList<K3b::Plugin*> K3b::PluginManager::plugins( const QString& group ) const
     return fl;
 }
 
-KCModuleProxy* K3b::PluginManager::Private::getModuleProxy( Plugin* plugin ) const
+KCModule *K3b::PluginManager::Private::getModule( Plugin* plugin ) const
 {
     const QString kcm = plugin->pluginMetaData().value("X-KDE-ConfigModule");
     qDebug() << "for plugin" << plugin->pluginMetaData().pluginId() << "KCM" << kcm;
     if (!kcm.isEmpty()) {
-        KCModuleProxy *moduleProxy = new KCModuleProxy(KPluginMetaData(kcm));
-        if( moduleProxy->realModule() ) {
-            return moduleProxy;
-        }
-        else {
-            delete moduleProxy;
-        }
+        return KCModuleLoader::loadModule(plugin->pluginMetaData());
     }
     return 0;
 }
@@ -122,19 +117,19 @@ int K3b::PluginManager::pluginSystemVersion() const
 
 bool K3b::PluginManager::hasPluginDialog( Plugin* plugin ) const
 {
-    QSharedPointer<KCModuleProxy> moduleProxy( d->getModuleProxy( plugin ) );
-    return moduleProxy;
+    QSharedPointer<KCModule> module( d->getModule( plugin ) );
+    return !module.isNull();
 }
 
 
 int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
 {
-    if( KCModuleProxy* moduleProxy = d->getModuleProxy( plugin ) ) {
+    if( auto module = d->getModule( plugin ) ) {
         QDialog dlg( parent );
         dlg.setWindowTitle( plugin->pluginMetaData().name() );
         QVBoxLayout* layout = new QVBoxLayout( &dlg );
         QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, &dlg );
-        layout->addWidget( moduleProxy );
+        layout->addWidget( module );
         layout->addWidget( buttonBox );
 
         connect( buttonBox, &QDialogButtonBox::clicked, [&](QAbstractButton *button) {
@@ -142,7 +137,7 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
             {
             case QDialogButtonBox::Ok: dlg.accept(); break;
             case QDialogButtonBox::Cancel: dlg.reject(); break;
-            case QDialogButtonBox::RestoreDefaults: moduleProxy->defaults(); break;
+            case QDialogButtonBox::RestoreDefaults: module->defaults(); break;
             default: break;
             }
         } );
@@ -150,7 +145,7 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
         int ret = dlg.exec();
         if( ret == QDialog::Accepted )
         {
-            moduleProxy->save();
+            module->save();
         }
         return ret;
     }
