@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2007-11-18 00:44+0100\n"
-"Last-Translator: Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>\n"
+"PO-Revision-Date: 2023-03-20 22:31+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -125,13 +125,11 @@ msgid "Writing cue/bin Image"
 msgstr "Skribante cue/bin-bildon"
 
 #: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
-#, fuzzy, kde-format
-#| msgid " - %n copy"
-#| msgid_plural " - %n copies"
+#, kde-format
 msgid " - %1 Copy"
 msgid_plural " - %1 Copies"
-msgstr[0] " - %n kopio"
-msgstr[1] " - %n kopioj"
+msgstr[0] ""
+msgstr[1] ""
 
 #: jobs/k3bblankingjob.cpp:65 jobs/k3bblankingjob.cpp:153
 #, kde-format
@@ -236,10 +234,9 @@ msgid "Only copying first session."
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:311 jobs/k3bdvdcopyjob.cpp:344
-#, fuzzy, kde-format
-#| msgid "Unable to create folder '%1'"
+#, kde-format
 msgid "Unable to determine free space in temporary folder '%1'."
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:317 jobs/k3bdvdcopyjob.cpp:351
 #, kde-format
@@ -252,52 +249,44 @@ msgid "Unmounting source medium"
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:355
-#, fuzzy, kde-format
-#| msgid "Unable to read TOC"
+#, kde-format
 msgid "Unable to read Table of contents"
-msgstr "Ne eblis legi la enhavtabelon"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:363
-#, fuzzy, kde-format
-#| msgid "Searching CD-TEXT"
+#, kde-format
 msgid "Searching CD-Text"
-msgstr "Serĉante KD-Tekston"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:377
-#, fuzzy, kde-format
-#| msgid "Found CD-TEXT (%1 - %2)."
+#, kde-format
 msgid "Found CD-Text (%1 - %2)."
-msgstr "Troviĝis KD-Teksto (%1 - %2)."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:382
-#, fuzzy, kde-format
-#| msgid "Found corrupted CD-TEXT. Ignoring it."
+#, kde-format
 msgid "Found corrupted CD-Text. Ignoring it."
-msgstr "Troviĝis koruptita KD-teksto. Ignorante ĝin."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:387
-#, fuzzy, kde-format
-#| msgid "No CD-TEXT found."
+#, kde-format
 msgid "No CD-Text found."
-msgstr "Ne KD-Teksto troviĝis."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:398
-#, fuzzy, kde-format
-#| msgid "Querying Cddb"
+#, kde-format
 msgid "Querying CDDB"
-msgstr "Petante CDDB"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:419
-#, fuzzy, kde-format
-#| msgid "Found CD-TEXT (%1 - %2)."
+#, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr "Troviĝis KD-Teksto (%1 - %2)."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:442
-#, fuzzy, kde-format
-#| msgid "No entry found"
+#, kde-format
 msgid "No CDDB entry found."
-msgstr "Neniu ero troviĝis"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:445
 #, kde-format
@@ -317,16 +306,14 @@ msgid "CD-Text"
 msgstr "KD-teksto"
 
 #: jobs/k3bcdcopyjob.cpp:468
-#, fuzzy, kde-format
-#| msgid "Use CD-TEXT data"
+#, kde-format
 msgid "Use CD-Text data"
-msgstr "Uzi la KD-Tekstan datumon"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:469
-#, fuzzy, kde-format
-#| msgid "Use Cddb entry"
+#, kde-format
 msgid "Use CDDB entry"
-msgstr "Uzi la CDDB eron"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:475 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
@@ -342,16 +329,14 @@ msgid "Specified an unusable temporary path. Using default."
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:545
-#, fuzzy, kde-format
-#| msgid "Unable to create folder '%1'"
+#, kde-format
 msgid "Unable to create temporary folder '%1'."
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:552
-#, fuzzy, kde-format
-#| msgid "Unable to create folder '%1'"
+#, kde-format
 msgid "Using temporary folder %1."
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
@@ -394,10 +379,9 @@ msgid "Writing Copy %1 (Session %2)"
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:703
-#, fuzzy, kde-format
-#| msgid "Writing Copy %1"
+#, kde-format
 msgid "Writing Copy (Session %1)"
-msgstr "Skribante kopion %1"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:707 projects/audiocd/k3baudiojob.cpp:642
 #: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
@@ -472,16 +456,14 @@ msgstr ""
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:728 projects/k3bcdrskinwriter.cpp:741
 #: projects/mixedcd/k3bmixedjob.cpp:554
-#, fuzzy, kde-format
-#| msgid "Unable to eject medium."
+#, kde-format
 msgid "Please reload the medium and press 'OK'"
-msgstr "Ne eblis elĵeti la ujon."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:1093 jobs/k3bverificationjob.cpp:262
-#, fuzzy, kde-format
-#| msgid "Unable to eject medium."
+#, kde-format
 msgid "Failed to reload the medium"
-msgstr "Ne eblis elĵeti la ujon."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:1107 projects/audiocd/k3baudiojob.cpp:687
 #, kde-format
@@ -806,10 +788,9 @@ msgid "Cannot copy encrypted DVDs."
 msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:236
-#, fuzzy, kde-format
-#| msgid "Most writers do not support writing multisession CDs in DAO mode."
+#, kde-format
 msgid "The writer does not support writing Double Layer DVDs."
-msgstr "Plimultaj skribiloj ne subtenas skribi plursesiajn KD-ojn DAO-mode."
+msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:242
 #, kde-format
@@ -990,10 +971,9 @@ msgid "Writing %1 in incremental mode."
 msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:918
-#, fuzzy, kde-format
-#| msgid "Writing copy"
+#, kde-format
 msgid "Writing BD copy"
-msgstr "Skribante kopiaĵon"
+msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
 #, kde-format
@@ -1006,22 +986,19 @@ msgid "Creating Image"
 msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:946
-#, fuzzy, kde-format
-#| msgid "Copying CD On-The-Fly"
+#, kde-format
 msgid "Copying DVD or BD On-The-Fly"
-msgstr "Kopiante KD dinamike"
+msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:948
-#, fuzzy, kde-format
-#| msgid "Copying CD"
+#, kde-format
 msgid "Copying DVD or BD"
-msgstr "Kopiante KD"
+msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:92
-#, fuzzy, kde-format
-#| msgid "Formatting"
+#, kde-format
 msgid "Formatting disc"
-msgstr "Formatado"
+msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:122 projects/k3bcdrdaowriter.cpp:531
 #: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrskinwriter.cpp:429
@@ -1031,12 +1008,11 @@ msgid "Unmounting medium"
 msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:135
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid ""
 "Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
 "b>."
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:253
 #, kde-format
@@ -1064,10 +1040,9 @@ msgid "Unable to eject medium."
 msgstr "Ne eblis elĵeti la ujon."
 
 #: jobs/k3bdvdformattingjob.cpp:334
-#, fuzzy, kde-format
-#| msgid "Unable to eject medium."
+#, kde-format
 msgid "Found %1 medium."
-msgstr "Ne eblis elĵeti la ujon."
+msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:338
 #, kde-format
@@ -1091,10 +1066,9 @@ msgid "Forcing formatting anyway."
 msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:369
-#, fuzzy, kde-format
-#| msgid "<p>It is recommended to try a simulation first."
+#, kde-format
 msgid "It is not recommended to force formatting of %1 media."
-msgstr "<p>Oni rekomendas provi simuladon unue."
+msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:371
 #, kde-format
@@ -1102,10 +1076,9 @@ msgid "After 10-20 reformats the media might become unusable."
 msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:380
-#, fuzzy, kde-format
-#| msgid "Empty %1 medium"
+#, kde-format
 msgid "Formatting %1 medium"
-msgstr "Malplena %1 ujo"
+msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:391
 #, kde-format
@@ -1134,10 +1107,9 @@ msgstr ""
 #: projects/datacd/k3bmkisofshandler.cpp:53 projects/k3bcdrdaowriter.cpp:448
 #: projects/k3bcdrecordwriter.cpp:395 projects/k3bcdrskinwriter.cpp:407
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
-#, fuzzy, kde-format
-#| msgid "Using %1 %2 - Copyright (C) %3"
+#, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "Uzante %1 %2 - Kopirajto (C) %3"
+msgstr ""
 
 #: jobs/k3bdvdformattingjob.cpp:501
 #, kde-format
@@ -1259,10 +1231,9 @@ msgid "No version of cdrskin can do this yet."
 msgstr ""
 
 #: jobs/k3bmetawriter.cpp:890
-#, fuzzy, kde-format
-#| msgid "Writing Copy %1"
+#, kde-format
 msgid "Writing CD in Session At Once mode."
-msgstr "Skribante kopion %1"
+msgstr ""
 
 #: jobs/k3bmetawriter.cpp:892
 #, kde-format
@@ -1270,10 +1241,9 @@ msgid "Writing CD in Track At Once mode."
 msgstr ""
 
 #: jobs/k3bmetawriter.cpp:894
-#, fuzzy, kde-format
-#| msgid "Writing image to %1."
+#, kde-format
 msgid "Writing CD in Raw mode."
-msgstr "Skribante bildon al %1."
+msgstr ""
 
 #: jobs/k3bmetawriter.cpp:897
 #, kde-format
@@ -1301,16 +1271,14 @@ msgid "Appending session to rewritable CD."
 msgstr ""
 
 #: jobs/k3bmetawriter.cpp:918
-#, fuzzy, kde-format
-#| msgid "Could not open Iso9660 filesystem in %1."
+#, kde-format
 msgid "Growing ISO 9660 filesystem on DVD+RW."
-msgstr "Ne eblis malfermi la ISO9660 dosiersistemon en %1."
+msgstr ""
 
 #: jobs/k3bmetawriter.cpp:920 projects/datacd/k3bdatajob.cpp:870
-#, fuzzy, kde-format
-#| msgid "Could not open Iso9660 filesystem in %1."
+#, kde-format
 msgid "Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."
-msgstr "Ne eblis malfermi la ISO9660 dosiersistemon en %1."
+msgstr ""
 
 #: jobs/k3bmetawriter.cpp:922
 #, kde-format
@@ -1318,10 +1286,9 @@ msgid "Appending session to DVD+R."
 msgstr ""
 
 #: jobs/k3bmetawriter.cpp:924
-#, fuzzy, kde-format
-#| msgid "Writing Double Layer DVD+R."
+#, kde-format
 msgid "Appending session to Double Layer DVD+R."
-msgstr "Skribante dutavolan DVD+R."
+msgstr ""
 
 #: jobs/k3bmetawriter.cpp:926
 #, kde-format
@@ -1458,16 +1425,14 @@ msgid "Transcoding title %1 from Video DVD %2"
 msgstr "Transkodante la titolon %1 el la Video-DVD %2"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:194
-#, fuzzy, kde-format
-#| msgid "Invalid Video codec set: %1"
+#, kde-format
 msgid "Invalid video codec set: %1"
-msgstr "Nevalida videa kodekaro: %1"
+msgstr ""
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:217
-#, fuzzy, kde-format
-#| msgid "Invalid Audio codec set: %1"
+#, kde-format
 msgid "Invalid audio codec set: %1"
-msgstr "Nevalida sona kodekaro: %1"
+msgstr ""
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
@@ -1622,11 +1587,10 @@ msgid ""
 msgstr ""
 
 #: plugin/k3baudiodecoder.cpp:630
-#, fuzzy, kde-format
-#| msgid "Writing Audio CD"
+#, kde-format
 msgctxt "plugin type"
 msgid "Audio Decoder"
-msgstr "Skribante sonan KD"
+msgstr ""
 
 #: plugin/k3baudioencoder.cpp:45
 #, kde-format
@@ -1666,10 +1630,9 @@ msgid "Track %1 from Audio CD %2"
 msgstr ""
 
 #: projects/audiocd/k3baudioimager.cpp:86
-#, fuzzy, kde-format
-#| msgid "Unable to create folder '%1'"
+#, kde-format
 msgid "Unable to read track %1."
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: projects/audiocd/k3baudioimager.cpp:102 projects/datacd/k3bdatajob.cpp:206
 #: projects/mixedcd/k3bmixedjob.cpp:1088
@@ -1768,10 +1731,9 @@ msgid "Decoding audio track %1 of %2%3"
 msgstr ""
 
 #: projects/audiocd/k3baudiojob.cpp:491
-#, fuzzy, kde-format
-#| msgid "IO Error. Most likely no space left on harddisk."
+#, kde-format
 msgid "I/O Error. Most likely no space left on harddisk."
-msgstr "IO eraro. Plej verŝajne, ne estas sufiĉa spaco sur la diskaparato."
+msgstr "I/O-eraro. Plej verŝajne, ne estas sufiĉa spaco sur la diskaparato."
 
 #: projects/audiocd/k3baudiojob.cpp:540 projects/mixedcd/k3bmixedjob.cpp:628
 #: projects/mixedcd/k3bmixedjob.cpp:669
@@ -1811,13 +1773,11 @@ msgstr[1] ""
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
 #: projects/videocd/k3bvcdjob.cpp:570 projects/videodvd/k3bvideodvdjob.cpp:58
-#, fuzzy, kde-format
-#| msgid " - %n copy"
-#| msgid_plural " - %n copies"
+#, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
-msgstr[0] " - %n kopio"
-msgstr[1] " - %n kopioj"
+msgstr[0] ""
+msgstr[1] ""
 
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
@@ -1860,10 +1820,9 @@ msgid "Silence"
 msgstr ""
 
 #: projects/audiocd/k3brawaudiodatasource.cpp:65
-#, fuzzy, kde-format
-#| msgid "Writing Audio CD"
+#, kde-format
 msgid "Raw Audio CD Image"
-msgstr "Skribante sonan KD"
+msgstr ""
 
 #: projects/datacd/k3bbootitem.cpp:23
 #, kde-format
@@ -1961,10 +1920,9 @@ msgid "Writing mode ignored when writing %1 media."
 msgstr ""
 
 #: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
-#, fuzzy, kde-format
-#| msgid "Could not open Iso9660 filesystem in %1."
+#, kde-format
 msgid "Growing ISO 9660 filesystem on %1."
-msgstr "Ne eblis malfermi la ISO9660 dosiersistemon en %1."
+msgstr ""
 
 #: projects/datacd/k3bdatajob.cpp:971
 #, kde-format
@@ -1989,10 +1947,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: projects/datacd/k3bdatajob.cpp:1000
-#, fuzzy, kde-format
-#| msgid "Could not open Iso9660 filesystem in %1."
+#, kde-format
 msgid "ISO 9660 Filesystem (Size: %1)"
-msgstr "Ne eblis malfermi la ISO9660 dosiersistemon en %1."
+msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
 #, kde-format
@@ -2008,10 +1965,9 @@ msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
-#, fuzzy, kde-format
-#| msgid "Could not open Iso9660 filesystem in %1."
+#, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr "Ne eblis malfermi la ISO9660 dosiersistemon en %1."
+msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -2183,10 +2139,9 @@ msgid "Files bigger than 2 GB cannot be handled."
 msgstr ""
 
 #: projects/datacd/k3bmkisofshandler.cpp:88
-#, fuzzy, kde-format
-#| msgid "Could not find directory: %1"
+#, kde-format
 msgid "No such file or directory '%1'."
-msgstr "Ne eblis trovi la dosierujon: %1"
+msgstr ""
 
 #: projects/datacd/k3bmkisofshandler.cpp:102
 #, kde-format
@@ -2232,10 +2187,9 @@ msgid "Could not determine next writable address."
 msgstr ""
 
 #: projects/datacd/k3bmsinfofetcher.cpp:171
-#, fuzzy, kde-format
-#| msgid "Could not start %1."
+#, kde-format
 msgid "Could not start %1"
-msgstr "Ne eblis lanĉi %1."
+msgstr "Ne eblis lanĉi %1"
 
 #: projects/datacd/k3bmsinfofetcher.cpp:201
 #, kde-format
@@ -2253,16 +2207,14 @@ msgid "Unlocking drive..."
 msgstr ""
 
 #: projects/k3babstractwriter.cpp:58
-#, fuzzy, kde-format
-#| msgid "Could not start readcd."
+#, kde-format
 msgid "Could not unlock drive."
-msgstr "Ne eblas lanĉi readcd."
+msgstr ""
 
 #: projects/k3babstractwriter.cpp:61
-#, fuzzy, kde-format
-#| msgid "Ejecting medium..."
+#, kde-format
 msgid "Ejecting Medium"
-msgstr "Elĵetante la ujon..."
+msgstr ""
 
 #: projects/k3bcdrdaowriter.cpp:259
 #, kde-format
@@ -2486,16 +2438,14 @@ msgid "Enable overburning in the advanced K3b settings to burn anyway."
 msgstr ""
 
 #: projects/k3bcdrdaowriter.cpp:973
-#, fuzzy, kde-format
-#| msgid "Writing Leadin"
+#, kde-format
 msgid "Writing leadin"
-msgstr "Skribante la antaŭaĵon"
+msgstr ""
 
 #: projects/k3bcdrdaowriter.cpp:979
-#, fuzzy, kde-format
-#| msgid "Writing Leadout"
+#, kde-format
 msgid "Writing leadout"
-msgstr "Skribante la postaĵon"
+msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
@@ -2523,10 +2473,9 @@ msgid "Writer does not support buffer underrun free recording (Burnfree)"
 msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
-#, fuzzy, kde-format
-#| msgid "Unable to create folder '%1'"
+#, kde-format
 msgid "Failed to write temporary file '%1'"
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:349
 #, kde-format
@@ -2534,10 +2483,9 @@ msgid "Cdrecord %1 does not support overburning."
 msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
-#, fuzzy, no-c-format, kde-format
-#| msgid "Starting simulation copy at %1x speed..."
+#, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr "Komencante la simulan kopiadon je %1x rapideco..."
+msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
@@ -2545,10 +2493,9 @@ msgid "Starting %1 simulation at %2x speed..."
 msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
-#, fuzzy, no-c-format, kde-format
-#| msgid "Starting copy at %1x speed..."
+#, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr "Komencante la kopiadon je %1x rapideco..."
+msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
@@ -2672,13 +2619,11 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: projects/k3bcdrecordwriter.cpp:745 projects/k3bcdrskinwriter.cpp:758
-#, fuzzy, kde-format
-#| msgid "Buffer was low 1 time."
-#| msgid_plural "Buffer was low %n times."
+#, kde-format
 msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
-msgstr[0] "La bufro malpleniĝis 1-foje."
-msgstr[1] "La bufro malpleniĝis %n-foje."
+msgstr[0] ""
+msgstr[1] ""
 
 #: projects/k3bcdrecordwriter.cpp:784 projects/k3bcdrskinwriter.cpp:797
 #, kde-format
@@ -2853,10 +2798,9 @@ msgid "Cdrskin version %1 does not support Blu-ray writing."
 msgstr ""
 
 #: projects/k3bcdrskinwriter.cpp:286
-#, fuzzy, kde-format
-#| msgid "Most writers do not support writing multisession CDs in DAO mode."
+#, kde-format
 msgid "Cdrskin does not support writing %1 media."
-msgstr "Plimultaj skribiloj ne subtenas skribi plursesiajn KD-ojn DAO-mode."
+msgstr ""
 
 #: projects/k3bcdrskinwriter.cpp:361
 #, kde-format
@@ -2911,16 +2855,14 @@ msgid "Updating RMA"
 msgstr "Ĝisdatigante RMA"
 
 #: projects/k3bgrowisofshandler.cpp:130
-#, fuzzy, kde-format
-#| msgid "Updating RMA"
+#, kde-format
 msgid "Updating RMA..."
-msgstr "Ĝisdatigante RMA"
+msgstr "Ĝisdatigante RMA..."
 
 #: projects/k3bgrowisofshandler.cpp:134
-#, fuzzy, kde-format
-#| msgid "Closing Session"
+#, kde-format
 msgid "Closing Session..."
-msgstr "Fermante la sesion"
+msgstr "Fermante Seancon..."
 
 #: projects/k3bgrowisofshandler.cpp:137
 #, kde-format
@@ -3100,10 +3042,9 @@ msgid "Writing track %1 of %2 (%3)"
 msgstr "Skribante trakon %1 el %2 (%3)"
 
 #: projects/mixedcd/k3bmixedjob.cpp:880
-#, fuzzy, kde-format
-#| msgid "ISO9660 data"
+#, kde-format
 msgid "ISO 9660 data"
-msgstr "ISO9660 datumo"
+msgstr "ISO-9660 datumoj"
 
 #: projects/mixedcd/k3bmixedjob.cpp:986
 #, kde-format
@@ -3176,13 +3117,12 @@ msgid "Writing Mixed Mode CD"
 msgstr "Skribante miksmodusan KD"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1347
-#, fuzzy, kde-format
-#| msgid "%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
+#, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
 msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
-msgstr[0] "%1 trakoj (%2 minutoj da sondatumo, %3 da ISO9660 datumo)"
-msgstr[1] "%1 trakoj (%2 minutoj da sondatumo, %3 da ISO9660 datumo)"
+msgstr[0] ""
+msgstr[1] ""
 
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
@@ -3246,13 +3186,11 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: projects/movixcd/k3bmovixjob.cpp:117
-#, fuzzy, kde-format
-#| msgid " - %n copy"
-#| msgid_plural " - %n copies"
+#, kde-format
 msgid " – One copy"
 msgid_plural " – %1 copies"
-msgstr[0] " - %n kopio"
-msgstr[1] " - %n kopioj"
+msgstr[0] ""
+msgstr[1] ""
 
 #: projects/videocd/k3bvcddoc.cpp:202 projects/videocd/k3bvcddoc.cpp:212
 #, kde-format
@@ -3335,16 +3273,14 @@ msgid "Removing Cue file %1"
 msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:174
-#, fuzzy, kde-format
-#| msgid "Could not delete file %1."
+#, kde-format
 msgid "Could not write correct XML file."
-msgstr "Ne eblis forĵeti la dosieron %1."
+msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:190
-#, fuzzy, kde-format
-#| msgid "Creating image files in %1"
+#, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr "Kreante imagdosierojn en %1"
+msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
@@ -3352,22 +3288,16 @@ msgid "To create Video CDs you have to install VcdImager version %1."
 msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"Vi povas trovi tion en viaj distribuaj diskoj aŭ elŝuti ĝin el ttp://www."
-"vcdimager.org"
 
 #: projects/videocd/k3bvcdjob.cpp:204
-#, fuzzy, kde-format
-#| msgid "%1 executable too old! Need version %2 or greater"
+#, kde-format
 msgid "%1 executable too old: need version %2 or greater."
-msgstr "%1 programo tro malnova! Bezonas version %2 aŭ pli"
+msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:286
 #, kde-format
@@ -3586,16 +3516,14 @@ msgid ""
 msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:97
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create folder '%1'"
+#, kde-kuit-format
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:109
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create folder '%1'"
+#, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:116
 #, kde-kuit-format
@@ -3603,10 +3531,9 @@ msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:124
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create folder '%1'"
+#, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
-msgstr "Ne eblas krei la dosierujon '%1'"
+msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:198
 #, kde-format
@@ -3630,10 +3557,9 @@ msgid "Writing Video DVD"
 msgstr ""
 
 #: projects/videodvd/k3bvideodvdjob.cpp:56
-#, fuzzy, kde-format
-#| msgid "Could not open Iso9660 filesystem in %1."
+#, kde-format
 msgid "ISO 9660/Udf Filesystem (Size: %1)"
-msgstr "Ne eblis malfermi la ISO9660 dosiersistemon en %1."
+msgstr ""
 
 #: tools/k3bcddb.cpp:37
 #, kde-format
@@ -3646,10 +3572,9 @@ msgid "K3b found multiple or inexact CDDB entries. Please select one."
 msgstr "K3b trovis plurajn aŭ malekzaktajn CDDB erojn. Bonvolu elekti unu."
 
 #: tools/k3bdevicemodel.cpp:132
-#, fuzzy, kde-format
-#| msgid "Ejecting medium..."
+#, kde-format
 msgid "Analyzing medium..."
-msgstr "Elĵetante la ujon..."
+msgstr ""
 
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
@@ -3712,10 +3637,9 @@ msgid "Empty"
 msgstr "Malplena"
 
 #: tools/k3bmedium.cpp:346
-#, fuzzy, kde-format
-#| msgid "Information"
+#, kde-format
 msgid "No medium information"
-msgstr "Informo"
+msgstr ""
 
 #: tools/k3bmedium.cpp:350
 #, kde-format
@@ -3728,10 +3652,9 @@ msgid "Empty %1 medium"
 msgstr "Malplena %1 ujo"
 
 #: tools/k3bmedium.cpp:395
-#, fuzzy, kde-format
-#| msgid "Unable to eject medium."
+#, kde-format
 msgid "Appendable %1 medium"
-msgstr "Ne eblis elĵeti la ujon."
+msgstr ""
 
 #: tools/k3bmedium.cpp:398
 #, kde-format
@@ -3746,12 +3669,11 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: tools/k3bmedium.cpp:419
-#, fuzzy, kde-format
-#| msgid "No Read Permission"
+#, kde-format
 msgid " and %1 session"
 msgid_plural " and %1 sessions"
-msgstr[0] "Ne rajtas legi"
-msgstr[1] "Ne rajtas legi"
+msgstr[0] ""
+msgstr[1] ""
 
 #: tools/k3bmedium.cpp:424
 #, kde-format
@@ -3787,12 +3709,11 @@ msgid "CD"
 msgstr "KD"
 
 #: tools/k3bmedium.cpp:602
-#, fuzzy, kde-format
-#| msgid "VCD"
+#, kde-format
 msgctxt ""
 "To be shown when a DVD is required but another type of medium is inserted."
 msgid "DVD"
-msgstr "VKD"
+msgstr ""
 
 #: tools/k3bmedium.cpp:604
 #, kde-format
@@ -3802,10 +3723,9 @@ msgid "DVD-DL"
 msgstr ""
 
 #: tools/k3bmedium.cpp:608
-#, fuzzy, kde-format
-#| msgid "Unable to eject medium."
+#, kde-format
 msgid "rewritable medium"
-msgstr "Ne eblis elĵeti la ujon."
+msgstr ""
 
 #: tools/k3bmedium.cpp:611
 #, kde-format
@@ -3814,13 +3734,12 @@ msgid "rewritable %1"
 msgstr ""
 
 #: tools/k3bmedium.cpp:616
-#, fuzzy, kde-format
-#| msgid "Unable to eject medium."
+#, kde-format
 msgctxt ""
 "To be shown when a specific type of medium is required but another type of "
 "medium is inserted."
 msgid "suitable medium"
-msgstr "Ne eblis elĵeti la ujon."
+msgstr ""
 
 #: tools/k3bmedium.cpp:618
 #, kde-format
@@ -3872,28 +3791,24 @@ msgid "Please insert an empty medium"
 msgstr ""
 
 #: tools/k3bmedium.cpp:690
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:692
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:696
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:698
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty Blu-ray medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:702
 #, kde-format
@@ -3901,10 +3816,9 @@ msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
 msgstr ""
 
 #: tools/k3bmedium.cpp:704
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty CD medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:708
 #, kde-format
@@ -3927,17 +3841,15 @@ msgid "Please insert an empty DVD-DL medium"
 msgstr ""
 
 #: tools/k3bmedium.cpp:720
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid ""
 "Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:723
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty medium of size %1 or larger"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:729
 #, kde-format
@@ -3950,31 +3862,27 @@ msgid "Please insert an empty or appendable medium"
 msgstr ""
 
 #: tools/k3bmedium.cpp:735
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid ""
 "Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
 "%1</b>"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:737
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty or appendable DVD or Blu-ray medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:741
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid ""
 "Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:743
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an empty or appendable Blu-ray medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:747
 #, kde-format
@@ -4053,10 +3961,9 @@ msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
 msgstr ""
 
 #: tools/k3bmedium.cpp:806
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert a Video CD medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:810
 #, kde-format
@@ -4064,10 +3971,9 @@ msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
 msgstr ""
 
 #: tools/k3bmedium.cpp:812
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert a Video DVD medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:816
 #, kde-format
@@ -4075,22 +3981,19 @@ msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
 msgstr ""
 
 #: tools/k3bmedium.cpp:818
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert a Mixed Mode CD medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:822
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:824
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert an Audio CD medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bmedium.cpp:828
 #, kde-format
@@ -4098,10 +4001,9 @@ msgid "Please insert a Data medium into drive<p><b>%1</b>"
 msgstr ""
 
 #: tools/k3bmedium.cpp:830
-#, fuzzy, kde-format
-#| msgid "Please insert Audio CD %1%2"
+#, kde-format
 msgid "Please insert a Data medium"
-msgstr "Bonvolu enmeti la sonan KD %1%2"
+msgstr ""
 
 #: tools/k3bstdguiitems.cpp:19
 #, kde-format
@@ -4482,109 +4384,3 @@ msgstr ""
 #, kde-format
 msgid "unknown code extension"
 msgstr ""
-
-#~ msgid "CD-TEXT"
-#~ msgstr "KD-Teksto"
-
-#~ msgid "Checking media..."
-#~ msgstr "Kontrolante la ujon..."
-
-#~ msgid "Checking media"
-#~ msgstr "Kontrolante la ujon"
-
-#~ msgid "Unsupported Format"
-#~ msgstr "Nesubtenata formato"
-
-#~ msgid "Writing DVD+RW."
-#~ msgstr "Skribante DVD+RW."
-
-#~ msgid "Writing DVD+R."
-#~ msgstr "Skribante DVD+R."
-
-#, fuzzy
-#~| msgid "Writing DVD+RW."
-#~ msgid "Formatting DVD±RW"
-#~ msgstr "Skribante DVD+RW."
-
-#~ msgid "Could not connect to host %1"
-#~ msgstr "Ne eblis konekti al la gastiganto %1"
-
-#~ msgid "Found multiple exact matches"
-#~ msgstr "Troviĝis pluraj ekzaktaj kongruaĵoj"
-
-#~ msgid "Found inexact matches"
-#~ msgstr "Troviĝis malekzaktaj kongruaĵoj"
-
-#~ msgid "No match found"
-#~ msgstr "Neniu kongruaĵo troviĝis"
-
-#~ msgid "Error while querying"
-#~ msgstr "Eraro dum la petado"
-
-#~ msgid "Could not read match"
-#~ msgstr "Ne eblis legi la kongruaĵon"
-
-#~ msgid "Searching entry in %1"
-#~ msgstr "Serĉante eron en %1"
-
-#~ msgid "CDDB Database Entry"
-#~ msgstr "CDDB datumbazero"
-
-#~ msgid "Searching %1 on port %2"
-#~ msgstr "Serĉante %1 en pordo %2"
-
-#~ msgid "Host found"
-#~ msgstr "Gastiganto troviĝis"
-
-#~ msgid "Connected"
-#~ msgstr "Konektinta"
-
-#~ msgid "Connection closed"
-#~ msgstr "Konekto malfermiĝis"
-
-#~ msgid "OK, read access"
-#~ msgstr "OK, legatingo"
-
-#~ msgid "Connection refused"
-#~ msgstr "Konekto malakceptitis"
-
-#~ msgid "Handshake successful"
-#~ msgstr "Kvitanco sukcesis"
-
-#~ msgid "Handshake failed"
-#~ msgstr "Kvitanco fiaskis"
-
-#~ msgid "Found exact match"
-#~ msgstr "Troviĝis ekzakta kongruaĵo"
-
-#~ msgid "Connection to %1 refused"
-#~ msgstr "Konekto al %1 malakceptitis"
-
-#~ msgid "Could not find host %1"
-#~ msgstr "Ne eblis trovi la gastiganton %1"
-
-#~ msgid "Error while reading from %1"
-#~ msgstr "Eraro dum legado el %1"
-
-#~ msgid "Found freedb entry."
-#~ msgstr "Troviĝis freedb ero."
-
-#~ msgid "Error while connecting to host."
-#~ msgstr "Eraro dum konektado al la gastiganto."
-
-#~ msgid "Working..."
-#~ msgstr "Laborante..."
-
-#~ msgid "Communication error."
-#~ msgstr "Komunika eraro."
-
-#~ msgid "Internal error: Verification job improperly initialized (%1)"
-#~ msgstr "Interna eraro: kontrolado netaŭge komenciĝis (%1)"
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Pierre-Marie Pédrot"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "pedrotpmx@wanadoo.fr"

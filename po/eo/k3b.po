@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2015-04-07 20:43+0100\n"
-"Last-Translator: Axel Rousseau <axel.rousseau@esperanto-france.org>\n"
+"PO-Revision-Date: 2023-03-20 22:31+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -329,25 +329,7 @@ msgstr "Dosiernomo etendaĵo:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:80
-#, fuzzy, no-c-format, kde-format
-#| msgid ""
-#| "<p><b>Command</b><br>\n"
-#| "Please insert the command used to encode the audio data. The command has "
-#| "to read raw little endian (see <em>Swap Byte Order</em>) 16bit stereo "
-#| "audio frames from stdin.\n"
-#| "<p>The following strings will be replaced by K3b:<br>\n"
-#| "<b>%f</b> - The filename of the resulting file. This is where the command "
-#| "has to write its output to.<br>\n"
-#| "<em>The following refer to metadata stored for example in the ID3 tag of "
-#| "am mp3 file (Be aware that these values might be empty).</em><br>\n"
-#| "<b>%t</b> - Title<br>\n"
-#| "<b>%a</b> - Artist<br>\n"
-#| "<b>%c</b> - Comment<br>\n"
-#| "<b>%n</b> - Track number<br>\n"
-#| "<b>%m</b> - Album Title<br>\n"
-#| "<b>%r</b> - Album Artist<br>\n"
-#| "<b>%x</b> - Album comment<br>\n"
-#| "<b>%y</b> - Release Year"
+#, no-c-format, kde-format
 msgid ""
 "Please insert the command used to encode the audio data. The command has to "
 "read raw little endian (see <em>Swap Byte Order</em>) 16-bit stereo audio "
@@ -366,24 +348,6 @@ msgid ""
 "<b>%x</b> - Album comment<br>\n"
 "<b>%y</b> - Release Year"
 msgstr ""
-"<p><b>Komando</b><br>\n"
-"Bonvolu enmeti la komandon uzotan por kodi la sonan datumon. La komandon "
-"devas legi krudan pezfinan (vidu <em>Inversigi bajtordon</em>) 16-bitan "
-"sterean soneron el stdin.\n"
-"<p>La sekvaj ĉenoj estas anstataŭigotaj per K3b:<br>\n"
-"<b>%f</b> - La dosiernomo de la rezulta dosiero. Tio esta kie la komando "
-"devas skribi ĝian eligon.<br>\n"
-"<em>La sekvaj rilatas al la meta-informo enkonservata ekzemple en la ID3 "
-"etikedo de MP3 dosiero (Atentu, ke tiuj valoroj eble estas malplenaj).</"
-"em><br>\n"
-"<b>%t</b> - Titolo<br>\n"
-"<b>%a</b> - Artisto<br>\n"
-"<b>%c</b> - Komento<br>\n"
-"<b>%n</b> - Traka numero<br>\n"
-"<b>%m</b> - Albuma titolo<br>\n"
-"<b>%r</b> - Albuma artisto<br>\n"
-"<b>%x</b> - Albuma komento<br>\n"
-"<b>%y</b> - Publikiga jaro"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -549,10 +513,9 @@ msgstr "malgranda dosiero"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioManual)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:172
-#, fuzzy, kde-format
-#| msgid "Manual settings:"
+#, kde-format
 msgid "Manua&l settings:"
-msgstr "Manuma agordo:"
+msgstr "&Laŭmana agordo:"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonManualSettings)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:239
@@ -682,17 +645,15 @@ msgstr "Kvalito"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioConstantBitrate)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Constant Bitrate"
+#, kde-format
 msgid "&Constant Bitrate"
-msgstr "Konstanta bitkvanto"
+msgstr "&Konstanta bitkvanto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioVariableBitrate)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:56
-#, fuzzy, kde-format
-#| msgid "Variable Bitrate"
+#, kde-format
 msgid "&Variable Bitrate"
-msgstr "Varianta bitkvanto"
+msgstr "&Varianta bitkvanto"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateMaximum)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:69
@@ -1272,10 +1233,9 @@ msgid "Query CDDB"
 msgstr "Peti CDDB"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:43
-#, fuzzy, kde-format
-#| msgid "Query a cddb entry for the current audio project."
+#, kde-format
 msgid "Query a CDDB entry for the current audio project."
-msgstr "Peti CDDB pri la nuna sona projekto."
+msgstr ""
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:64
 #, kde-format
@@ -1380,10 +1340,9 @@ msgid "New &Mixed Mode CD Project"
 msgstr "Nova &miksmoda KD-a projekto"
 
 #: k3b.cpp:335
-#, fuzzy, kde-format
-#| msgid "Creates a new audio CD project"
+#, kde-format
 msgid "Creates a new mixed audio/data CD project"
-msgstr "Kreas novan sonan KD-an projekton"
+msgstr ""
 
 #: k3b.cpp:340
 #, kde-format
@@ -1556,10 +1515,9 @@ msgid "Current Projects"
 msgstr "Nunaj projektoj"
 
 #: k3b.cpp:533
-#, fuzzy, kde-format
-#| msgid "Location:"
+#, kde-format
 msgid "&Location Bar"
-msgstr "Loko:"
+msgstr ""
 
 #: k3b.cpp:600 k3b.cpp:916 k3b.cpp:930
 #, kde-format
@@ -1588,10 +1546,9 @@ msgid "Open Files"
 msgstr "Malfermi dosierojn"
 
 #: k3b.cpp:921 k3b.cpp:988
-#, fuzzy, kde-format
-#| msgid "*.k3b|K3b Projects"
+#, kde-format
 msgid "K3b Projects (*.k3b)"
-msgstr "*.k3b|K3b Projektoj"
+msgstr ""
 
 #: k3b.cpp:953
 #, kde-format
@@ -1659,10 +1616,9 @@ msgid "Select Files to Add to Project"
 msgstr "Elekti dosierojn aldonendajn al la projekto"
 
 #: k3b.cpp:1293
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files (*)"
-msgstr "*|Ĉiuj dosieroj"
+msgstr "Ĉiuj dosieroj (*)"
 
 #: k3b.cpp:1300
 #, kde-format
@@ -2180,10 +2136,9 @@ msgid "complete"
 msgstr "kompleta"
 
 #: k3bdiskinfoview.cpp:340
-#, fuzzy, kde-format
-#| msgid "unknown"
+#, kde-format
 msgid "unknown state"
-msgstr "nekonata"
+msgstr ""
 
 #: k3bdiskinfoview.cpp:343
 #, kde-format
@@ -2231,10 +2186,9 @@ msgid "Application Id:"
 msgstr "Programa ID:"
 
 #: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
-#, fuzzy, kde-format
-#| msgid "Volume Set Id:"
+#, kde-format
 msgid "Volume Size:"
-msgstr "Volumara ID:"
+msgstr ""
 
 #: k3bdiskinfoview.cpp:390
 #, kde-format
@@ -2320,10 +2274,9 @@ msgid "Found Rewritable Disk"
 msgstr "Trovis reskribeblan diskon"
 
 #: k3bemptydiscwaiter.cpp:580
-#, fuzzy, kde-format
-#| msgid "&Erase"
+#, kde-format
 msgid "E&rase"
-msgstr "F&orviŝi"
+msgstr "Fo&rviŝi"
 
 #: k3bemptydiscwaiter.cpp:588
 #, kde-format
@@ -2376,10 +2329,9 @@ msgid "video/mpeg |MPEG Video Files"
 msgstr "video/mpeg |MPEG videaj dosieroj"
 
 #: k3bfileview.cpp:81
-#, fuzzy, kde-format
-#| msgid "Bookmarks"
+#, kde-format
 msgid "Show Bookmarks"
-msgstr "Legosignoj"
+msgstr ""
 
 #: k3binteractiondialog.cpp:70
 #, kde-format
@@ -2442,16 +2394,13 @@ msgid "Show Debugging Output"
 msgstr "Montri sencimigan eligon"
 
 #: k3bjobprogressdialog.cpp:294 k3bjobprogressdialog.cpp:316
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
-msgstr "%1 el %2"
+msgstr ""
 
 #: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:548
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@info %1 is a duration formatted using KLocale::prettyFormatDuration"
-#| msgid "Elapsed time: %1"
+#, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "Pasinta tempo: %1"
@@ -2492,10 +2441,7 @@ msgid "Cancel Confirmation"
 msgstr "Nuligi la konfirmon"
 
 #: k3bjobprogressdialog.cpp:552
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "@info %1 is a duration formatted using KLocale::prettyFormatDuration"
-#| msgid "Remaining: %1"
+#, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
 msgstr "Restanta: %1"
@@ -2698,10 +2644,9 @@ msgid "Solution"
 msgstr "Solvo"
 
 #: k3bsystemproblemdialog.cpp:179
-#, fuzzy, kde-format
-#| msgid "No usable medium found."
+#, kde-format
 msgid "No optical drive found."
-msgstr "Neniu uzebla ujo trovita."
+msgstr ""
 
 #: k3bsystemproblemdialog.cpp:180
 #, kde-format
@@ -2732,10 +2677,9 @@ msgstr ""
 
 #: k3bsystemproblemdialog.cpp:201 k3bsystemproblemdialog.cpp:262
 #: k3bsystemproblemdialog.cpp:304
-#, fuzzy, kde-format
-#| msgid "Insufficient permissions to read the following files"
+#, kde-format
 msgid "Insufficient permissions for %1 executable: %2"
-msgstr "Nesufiĉaj rajtoj por legi la sekvajn dosierojn"
+msgstr ""
 
 #: k3bsystemproblemdialog.cpp:202 k3bsystemproblemdialog.cpp:209
 #, kde-format
@@ -2800,10 +2744,9 @@ msgstr ""
 
 #: k3bsystemproblemdialog.cpp:240 k3bsystemproblemdialog.cpp:254
 #: k3bsystemproblemdialog.cpp:284
-#, fuzzy, kde-format
-#| msgid "Use K3bSetup to solve this problem."
+#, kde-format
 msgid "Click \"Configure K3b...\" to solve this problem."
-msgstr "Uzu K3bAgordo por solvi tiun problemon."
+msgstr ""
 
 #: k3bsystemproblemdialog.cpp:247 k3bsystemproblemdialog.cpp:280
 #, kde-format
@@ -2852,10 +2795,9 @@ msgid ""
 msgstr ""
 
 #: k3bsystemproblemdialog.cpp:295
-#, fuzzy, kde-format
-#| msgid "Install the cdrdao package."
+#, kde-format
 msgid "Consider to install the libburn and cdrskin packages."
-msgstr "Instalu la cdrdao pakaĵon."
+msgstr ""
 
 #: k3bsystemproblemdialog.cpp:305 k3bsystemproblemdialog.cpp:315
 #, kde-format
@@ -3032,16 +2974,11 @@ msgstr ""
 "okazus problemojn kun %1 - %2"
 
 #: k3bsystemproblemdialog.cpp:494
-#, fuzzy, kde-format
-#| msgid ""
-#| "Make sure you have write access to %1. In case you are not using devfs or "
-#| "udev K3bSetup is able to do this for you."
+#, kde-format
 msgid ""
 "Make sure you have write access to %1. In case you are not using devfs or "
 "udev click \"Modify Permissions...\" and setup permissions by hand."
 msgstr ""
-"Certiĝu, ke vi skribrajtas al %1. Se vi ne uzas devfs aŭ udev, K3bAgordo "
-"povas fari ĝin por vi."
 
 #: k3bsystemproblemdialog.cpp:500
 #, kde-format
@@ -3168,10 +3105,9 @@ msgstr ""
 "kiel bezonata."
 
 #: k3bsystemproblemdialog.cpp:587
-#, fuzzy, kde-format
-#| msgid "The latter can be done via K3bSetup."
+#, kde-format
 msgid "The latter can be done via \"Configure K3b...\"."
-msgstr "La sekva povas fariti per K3bAgordo."
+msgstr ""
 
 #: k3bsystemproblemdialog.cpp:617
 #, kde-format
@@ -3263,10 +3199,9 @@ msgid "Main Toolbar"
 msgstr "Ĉefa ilobreto"
 
 #: k3bwelcomewidget.cpp:79
-#, fuzzy, kde-format
-#| msgid "Further actions..."
+#, kde-format
 msgid "More actions..."
-msgstr "Pliaj agoj..."
+msgstr ""
 
 #: k3bwelcomewidget.cpp:262
 #, kde-format
@@ -3517,10 +3452,9 @@ msgid "Copyright © 1998–2018 K3b authors"
 msgstr ""
 
 #: main.cpp:35
-#, fuzzy, kde-format
-#| msgid "http://www.k3b.org"
+#, kde-format
 msgid "https://www.k3b.org"
-msgstr "http://www.k3b.org"
+msgstr ""
 
 #: main.cpp:39
 #, kde-format
@@ -3548,10 +3482,9 @@ msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
 #: main.cpp:41
-#, fuzzy, kde-format
-#| msgid "Developer"
+#, kde-format
 msgid "Main developer"
-msgstr "Kreinto"
+msgstr ""
 
 #: main.cpp:42
 #, kde-format
@@ -3696,16 +3629,14 @@ msgid "For his work on the BSD port and some great patches."
 msgstr "Pro lia verko pri la BSD-a portaĵo kaj kelkaj bonegaj flikaĵoj."
 
 #: main.cpp:77
-#, fuzzy, kde-format
-#| msgid "Adriaan De Groot"
+#, kde-format
 msgid "Adriaan de Groot"
-msgstr "Adriaan De Groot"
+msgstr ""
 
 #: main.cpp:78
-#, fuzzy, kde-format
-#| msgid "For his work on the BSD port."
+#, kde-format
 msgid "For his work on the FreeBSD port."
-msgstr "Pro lia verko pri la BSD-a portaĵo."
+msgstr ""
 
 #: main.cpp:80
 #, kde-format
@@ -3924,10 +3855,9 @@ msgid "Track"
 msgstr "Trako"
 
 #: misc/k3bimagewritingdialog.cpp:359
-#, fuzzy, kde-format
-#| msgid "Burn CD Image"
+#, kde-format
 msgid "Burn Image"
-msgstr "Enskribi KD-an bildon"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:442
 #, kde-format
@@ -3945,10 +3875,9 @@ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
 msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Imagdosieroj"
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO9660 Image Files"
+#, kde-format
 msgid "*.iso *.ISO|ISO 9660 Image Files"
-msgstr ".iso *.ISO|ISO9660 imagdosieroj"
+msgstr "*.iso *.ISO|ISO9660 imagdosieroj"
 
 #: misc/k3bimagewritingdialog.cpp:452
 #, kde-format
@@ -3971,10 +3900,9 @@ msgid "Auto Detection"
 msgstr "Aŭtomata detekto"
 
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "ISO 9660 Filesystem Info"
+#, kde-format
 msgid "ISO 9660 filesystem image"
-msgstr "ISO9660 dosiersistema informo"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:468
 #, kde-format
@@ -4034,18 +3962,12 @@ msgid ""
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:708
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>This image has an invalid file size.If it has been downloaded make "
-#| "sure the download is complete.<p>Only continue if you know what you are "
-#| "doing."
+#, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
 "If it has been downloaded make sure the download is complete.</p><p>Only "
 "continue if you know what you are doing.</p>"
 msgstr ""
-"<p>Tiu bildo havas nevalidan dosiergrandecon. Se ĝi elŝultitis, certiĝu ke "
-"la elŝulto estas kompleta.<p>Daŭrigu nur se vi scias tion, kion vi faras."
 
 #: misc/k3bimagewritingdialog.cpp:711 option/k3bmiscoptiontab.cpp:122
 #, kde-format
@@ -4058,16 +3980,14 @@ msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:869
-#, fuzzy, kde-format
-#| msgid "unknown"
+#, kde-format
 msgid "Unknown image type"
-msgstr "nekonata"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:878
-#, fuzzy, kde-format
-#| msgid "Failed to create folder '%1'."
+#, kde-format
 msgid "Unable to read image file"
-msgstr "Fiaskis krei dosierujon « %1 »."
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
@@ -4443,17 +4363,12 @@ msgstr "GUI agordo"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkShowProgressOSD)
 #: option/base_k3bmiscoptiontab.ui:91
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will display the progress in an OSD "
-#| "which always stays on top of all other windows."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will display the progress in KDE "
 "notification area. If K3b is run outside KDE environment a separate progress "
 "window may be shown instead.</p>"
 msgstr ""
-"<p>Se tiu opcio estas aktiva, K3b montros la progreson per ekranvidilo kiu "
-"ĉiam staras supre al ĉiuj aliaj fenestroj."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowProgressOSD)
 #: option/base_k3bmiscoptiontab.ui:94
@@ -4569,10 +4484,9 @@ msgstr "Neniu etoso elektita"
 
 #. i18n: ectx: property (text), widget (KNSWidgets::Button, m_buttonGetNewThemes)
 #: option/base_k3bthemeoptiontab.ui:119
-#, fuzzy, kde-format
-#| msgid "Install New Theme..."
+#, kde-format
 msgid "Get New Themes..."
-msgstr "Instali novan etoson..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
@@ -4612,10 +4526,9 @@ msgid "MB"
 msgstr "MB"
 
 #: option/k3badvancedoptiontab.cpp:59
-#, fuzzy, kde-format
-#| msgid "Show Advanced Options"
+#, kde-format
 msgid "Show &advanced GUI elements"
-msgstr "Montri la pliajn opciojn"
+msgstr ""
 
 #: option/k3badvancedoptiontab.cpp:68 rip/categories.cpp:20
 #, kde-format
@@ -4638,12 +4551,11 @@ msgid "Allow burning more than the official media capacities"
 msgstr "Permesi skribi pli, ol la oficiala uja enhaveco"
 
 #: option/k3badvancedoptiontab.cpp:91
-#, fuzzy, kde-format
-#| msgid "Allow to choose between cdrecord and cdrdao"
+#, kde-format
 msgid ""
 "Show advanced GUI elements like allowing to choose between cdrecord and "
 "cdrdao"
-msgstr "Permesi elekti inter cdrecord kaj cdrdao"
+msgstr ""
 
 #: option/k3badvancedoptiontab.cpp:92
 #, kde-format
@@ -4661,12 +4573,7 @@ msgid "Force K3b to continue some operations otherwise deemed as unsafe"
 msgstr "Devigi K3b kontinui operaciojn kiuj alie konsideratas kiel nesekura"
 
 #: option/k3badvancedoptiontab.cpp:96
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b gives the possibility to choose between "
-#| "cdrecord and cdrdao when writing a cd.<p>This may be useful if one of the "
-#| "programs does not support the used writer.<p><b>Be aware that K3b does "
-#| "not support both programs in all project types.</b>"
+#, kde-format
 msgid ""
 "<p>If this option is checked additional GUI elements which allow one to "
 "influence the behavior of K3b are shown. This includes the manual selection "
@@ -4675,24 +4582,9 @@ msgid ""
 "that K3b does not support all possible tools in all project types and "
 "actions.</b>"
 msgstr ""
-"<p>Se tiu opcio estas aktiva, K3b donos al vi la elekton inter cdrecord kaj "
-"cdrdao por skribi KD.<p>Tio povas esti utila, se unu el programoj ne "
-"subtenas la uzatan skribilon.<p><b>Atentu, ke K3b ne subtenas ambaŭ "
-"programojn en ĉiuj projekttipoj.</b>"
 
 #: option/k3badvancedoptiontab.cpp:104
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Each medium has an official maximum capacity which is stored in a read-"
-#| "only area of the medium and is guaranteed by the vendor. However, this "
-#| "official maximum is not always the actual maximum. Many media have an "
-#| "actual total capacity that is slightly larger than the official amount."
-#| "<p>If this option is checked K3b will disable a safety check that "
-#| "prevents burning beyond the offical capacity.<p><b>Caution:</b> Enabling "
-#| "this option can cause failures in the end of the burning process if K3b "
-#| "attempts to write beyond the official capacity. It makes sense to first "
-#| "determine the actual maximum capacity of the media brand with a simulated "
-#| "burn."
+#, kde-format
 msgid ""
 "<p>Each medium has an official maximum capacity which is stored in a read-"
 "only area of the medium and is guaranteed by the vendor. However, this "
@@ -4704,15 +4596,6 @@ msgid ""
 "beyond the official capacity. It makes sense to first determine the actual "
 "maximum capacity of the media brand with a simulated burn."
 msgstr ""
-"Ĉiu ujo havas oficialan maksimuman enhavecon kiu estas skribata en "
-"nurlegebla loko de la ujo, kaj estas garantiita per la vendisto. Tamen, tiu "
-"oficiala maksimumo ne estas ĉiam la vera maksimumo. Multaj ujoj havas veran "
-"enhavecon kiu estas iom pli granda ol la oficiala.<p>Se tiu opcio estas "
-"aktiva, K3b malebligos la sekuran kontrolon kiu preventas skribi pretere de "
-"la oficiala enhaveco.<p><b>Atentu:</b> Malebligi tiun opcion povas okazi "
-"erarojn fine de la skribtasko, kiam K3b provas skribi pretere de la oficiala "
-"enhaveco. Estas saĝe unue determini la veran maksimuman enhavecon de la ujo "
-"per ŝajniga skribo."
 
 #: option/k3badvancedoptiontab.cpp:115
 #, kde-format
@@ -4787,10 +4670,9 @@ msgid "Writer Drives"
 msgstr "Skribeblaj legiloj"
 
 #: option/k3bdevicewidget.cpp:119
-#, fuzzy, kde-format
-#| msgid "Readonly Drives"
+#, kde-format
 msgid "Read-only Drives"
-msgstr "Nurlegeblaj legiloj"
+msgstr "Nur-legeblaj legiloj"
 
 #: option/k3bdevicewidget.cpp:135
 #, kde-format
@@ -4871,10 +4753,9 @@ msgid "Please relogin to apply the changes."
 msgstr ""
 
 #: option/k3bdevicewidget.cpp:269
-#, fuzzy, kde-format
-#| msgid "Unable to create directory %1"
+#, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
-msgstr "Ne eblas krei dosierujon %1"
+msgstr ""
 
 #: option/k3bdevicewidget.cpp:270
 #, kde-format
@@ -4882,10 +4763,9 @@ msgid "Retry"
 msgstr "Reprovi"
 
 #: option/k3bexternalbinmodel.cpp:157
-#, fuzzy, kde-format
-#| msgid " (not found)"
+#, kde-format
 msgid "%1 (not found)"
-msgstr " (ne trovita)"
+msgstr ""
 
 #: option/k3bexternalbinmodel.cpp:230
 #, kde-format
@@ -4898,16 +4778,11 @@ msgid "Features"
 msgstr "Funkcioj"
 
 #: option/k3bexternalbinoptiontab.cpp:28
-#, fuzzy, kde-format
-#| msgid ""
-#| "Specify the paths to the external programs that K3b needs to work "
-#| "properly, or press \"Search\" to let K3b search for the programs."
+#, kde-format
 msgid ""
 "Specify the paths to the external programs that K3b needs to work properly, "
 "or press \"Refresh\" to let K3b search for the programs."
 msgstr ""
-"Specifu la vojojn al la eksteraj programoj kiujn K3b bezonas por funkcii "
-"taŭge, aŭ apogu « Serĉi » por lasi K3b serĉi la programojn."
 
 #: option/k3bexternalbinparamsmodel.cpp:159
 #: option/k3bexternalbinpermissionmodel.cpp:286
@@ -4932,26 +4807,17 @@ msgid "Permissions"
 msgstr "Rajtoj:"
 
 #: option/k3bexternalbinpermissionmodel.cpp:288
-#, fuzzy, kde-format
-#| msgid "&Setup System Permissions..."
+#, kde-format
 msgid "New permissions"
-msgstr "&Agordi sistemrajtojn..."
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If K3b found more than one installed version of a program it will "
-#| "choose one as the <em>default</em> which will be used to do the work. If "
-#| "you want to change the default select the wanted version and press this "
-#| "button."
+#, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
 "one as the <em>default</em>, which will be used to do the work. If you want "
 "to change the default, check desired version on the list."
 msgstr ""
-"<p>Se K3b trovis pli ol unu instalata versio de programo, ĝi elektos unu "
-"kiel <em>defaŭlton</em> kiu estas uzota por fari la laboron. Se vi volas "
-"ŝanĝi la defaŭlton, elektu la volatan version kaj apogu tiun butonon."
 
 #: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
 #, kde-format
@@ -4974,10 +4840,9 @@ msgid "Check the programs whose permissions you want to be changed:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:115
-#, fuzzy, kde-format
-#| msgid "Change Settings..."
+#, kde-format
 msgid "Change Permissions..."
-msgstr "Ŝanĝi la agordon..."
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:128
 #, kde-format
@@ -4999,10 +4864,9 @@ msgid "Following programs could not be updated:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:244
-#, fuzzy, kde-format
-#| msgid "Unable to create directory %1"
+#, kde-format
 msgid "Unable to execute the action: %1"
-msgstr "Ne eblas krei dosierujon %1"
+msgstr ""
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -5098,10 +4962,9 @@ msgid "Devices"
 msgstr "Disponaĵoj"
 
 #: option/k3boptiondialog.cpp:140
-#, fuzzy, kde-format
-#| msgid "Setup Devices"
+#, kde-format
 msgid "Optical Devices"
-msgstr "Agordi disponaĵojn"
+msgstr ""
 
 #: option/k3boptiondialog.cpp:154
 #, kde-format
@@ -5208,16 +5071,11 @@ msgid "Theme exists"
 msgstr "Etoso ekzistas"
 
 #: option/k3bthemeoptiontab.cpp:202
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt>Are you sure you want to remove the <strong>%1</strong> icon theme?"
-#| "<br><br>This will delete the files installed by this theme.</qt>"
+#, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
 "<br><br>This will delete the files installed by this theme.</qt>"
 msgstr ""
-"<qt>Ĉu vi estas certa, ke vi volas forigi la <strong>%1</strong> piktograman "
-"etoson?<br><br>Tio forigos la dosierojn instalitajn per tiu etoso.</qt>"
 
 #: option/k3bthemeoptiontab.cpp:207
 #, kde-format
@@ -5461,24 +5319,21 @@ msgstr "ISO 9660 Nivelo"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel1)
 #: projects/base_k3badvanceddataimagesettings.ui:234
-#, fuzzy, kde-format
-#| msgid "Level 1"
+#, kde-format
 msgid "&Level 1"
-msgstr "Nivelo 1"
+msgstr "Nive&lo 1"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel2)
 #: projects/base_k3badvanceddataimagesettings.ui:241
-#, fuzzy, kde-format
-#| msgid "Level 2"
+#, kde-format
 msgid "Level &2"
-msgstr "Nivelo 2"
+msgstr "Nivelo &2"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel3)
 #: projects/base_k3badvanceddataimagesettings.ui:248
-#, fuzzy, kde-format
-#| msgid "Level 3"
+#, kde-format
 msgid "Level &3"
-msgstr "Nivelo 3"
+msgstr "Nivelo &3"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupRockRidgeSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:258
@@ -5578,10 +5433,9 @@ msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:48
-#, fuzzy, kde-format
-#| msgid "&Performer:"
+#, kde-format
 msgid "Per&former:"
-msgstr "Inter&pretisto"
+msgstr "Inter&pretisto:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:88
@@ -5778,10 +5632,9 @@ msgstr "Imiti 1440/2880-kb disketon"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioFloppy)
 #: projects/base_k3bbootimagedialog.ui:74
-#, fuzzy, kde-format
-#| msgid "Floppy"
+#, kde-format
 msgid "&Floppy"
-msgstr "Disketo"
+msgstr "&Disketo"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:81
@@ -5791,10 +5644,9 @@ msgstr "Imiti diskaparaton"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Harddisk"
+#, kde-format
 msgid "Hardd&isk"
-msgstr "Diskaparato"
+msgstr "D&iskaparato"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioNoEmulation)
 #: projects/base_k3bbootimagedialog.ui:91
@@ -6082,10 +5934,9 @@ msgstr "Bibliografia dosiero:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: projects/base_k3bdatavolumedescdialog.ui:31
-#, fuzzy, kde-format
-#| msgid "Application:"
+#, kde-format
 msgid "Appli&cation:"
-msgstr "Programo:"
+msgstr "Apli&kaĵo:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: projects/base_k3bdatavolumedescdialog.ui:51
@@ -6095,10 +5946,9 @@ msgstr "Volu&mara grandeco:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "&Publisher:"
+#, kde-format
 msgid "Publ&isher:"
-msgstr "&Publikisto"
+msgstr "Eldon&isto:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: projects/base_k3bdatavolumedescdialog.ui:97
@@ -6115,10 +5965,9 @@ msgstr "&Voluma nomo:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:134
-#, fuzzy, kde-format
-#| msgid "V&olume set name:"
+#, kde-format
 msgid "Vo&lume set name:"
-msgstr "V&olumara nomo:"
+msgstr "Vo&lumara nomo:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindBiblio)
 #: projects/base_k3bdatavolumedescdialog.ui:156
@@ -6159,10 +6008,9 @@ msgstr "Volumara &numero:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel5)
 #: projects/base_k3bdatavolumedescdialog.ui:303
-#, fuzzy, kde-format
-#| msgid "System:"
+#, kde-format
 msgid "Sys&tem:"
-msgstr "Sistemo:"
+msgstr "Sis&temo:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: projects/base_k3bmovixoptionswidget.ui:18
@@ -6242,19 +6090,12 @@ msgstr "MPlayer opcioj, kiujn vi volas ke MPlayer certe ne uzos"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, m_editUnwantedMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:89
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>MPlayer options that should be used in any case.\n"
-#| "<p>They have to be separated by spaces:\n"
-#| "<pre>opt1 opt2 opt3</pre>"
+#, kde-format
 msgid ""
 "<p>Here one can specify MPlayer options that should never be used.\n"
 "<p>They have to be separated by spaces:\n"
 "<pre>opt1 opt2 opt3</pre>"
 msgstr ""
-"<p>MPlayer opcioj kiuj devas uzati ĉiukaze.\n"
-"<p>Ilin devas apartati per spacetoj:\n"
-"<pre>opc1 opc2 opc3</pre>"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, m_editAdditionalMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:96
@@ -6532,28 +6373,24 @@ msgstr ""
 "per cdrdao."
 
 #: projects/k3baudioburndialog.cpp:119 projects/k3baudioburndialog.cpp:120
-#, fuzzy, kde-format
-#| msgid "Rip Audio CD..."
+#, kde-format
 msgid "Rip Audio"
-msgstr "Ekstrakti sonan KD-on..."
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:121
-#, fuzzy, kde-format
-#| msgid "Rip Audio CD..."
+#, kde-format
 msgid "Only Rip Audio"
-msgstr "Ekstrakti sonan KD-on..."
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:122
-#, fuzzy, kde-format
-#| msgid "Use the 'Image' tab to optionally adjust the path of the image."
+#, kde-format
 msgid "Use the 'Rip Audio' tab to optionally adjust the path of the audio."
-msgstr "Uzu la 'Bildo' langeton por opcie alĝustigi la vojon de la bildo."
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Wri&te image files to:"
+#, kde-format
 msgid "Wri&te Rip Audio files to:"
-msgstr "S&kribi la imagdosierojn al:"
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:278
 #, kde-format
@@ -6613,8 +6450,7 @@ msgid "Used part of the audio source"
 msgstr "Uzata parto el sona fonto"
 
 #: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:153
-#, fuzzy, kde-format
-#| msgid "No."
+#, kde-format
 msgctxt "audio track number"
 msgid "No."
 msgstr "Ne."
@@ -6795,10 +6631,9 @@ msgid "Edit Source..."
 msgstr "Redakti la fonton..."
 
 #: projects/k3baudioviewimpl.cpp:87
-#, fuzzy, kde-format
-#| msgid "Playing track"
+#, kde-format
 msgid "Play Track"
-msgstr "Legante la trakon"
+msgstr ""
 
 #: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
 #, kde-format
@@ -7003,14 +6838,13 @@ msgid "Custom"
 msgstr "Propra"
 
 #: projects/k3bdataimagesettingswidget.cpp:88
-#, fuzzy, kde-format
-#| msgid "Data Project"
+#, kde-format
 msgctxt ""
 "This is the default volume identifier of a data project created by K3b. The "
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr "Datuma projekto"
+msgstr ""
 
 #: projects/k3bdataimagesettingswidget.cpp:142
 #, kde-format
@@ -7242,10 +7076,9 @@ msgid "Local location:"
 msgstr "Loka loko:"
 
 #: projects/k3bdatapropertiesdialog.cpp:99
-#, fuzzy, kde-format
-#| msgid "Local name:"
+#, kde-format
 msgid "Local link target:"
-msgstr "Loka nomo:"
+msgstr ""
 
 #: projects/k3bdatapropertiesdialog.cpp:120
 #, kde-format
@@ -7339,13 +7172,11 @@ msgid "Special file"
 msgstr "Speciala dosiero"
 
 #: projects/k3bdatapropertiesdialog.cpp:293
-#, fuzzy, kde-format
-#| msgid "1 Item"
-#| msgid_plural "%n Items"
+#, kde-format
 msgid "One Item"
 msgid_plural "%1 Items"
-msgstr[0] "1 ero"
-msgstr[1] "%n eroj"
+msgstr[0] ""
+msgstr[1] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:296
 #, kde-format
@@ -7355,10 +7186,9 @@ msgstr[0] "Unu dosieroj"
 msgstr[1] "%1 dosieroj"
 
 #: projects/k3bdatapropertiesdialog.cpp:298
-#, fuzzy, kde-format
-#| msgid "Files"
+#, kde-format
 msgid "No Files"
-msgstr "Dosieroj"
+msgstr ""
 
 #: projects/k3bdatapropertiesdialog.cpp:301
 #, kde-format
@@ -7368,10 +7198,9 @@ msgstr[0] "Unu dosierujo"
 msgstr[1] "%1 dosierujoj"
 
 #: projects/k3bdatapropertiesdialog.cpp:303
-#, fuzzy, kde-format
-#| msgid "Folders"
+#, kde-format
 msgid "No Folders"
-msgstr "Dosierujoj"
+msgstr ""
 
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
@@ -7578,10 +7407,9 @@ msgid "New Folder..."
 msgstr "Nova Dosierujo"
 
 #: projects/k3bdataviewimpl.cpp:123
-#, fuzzy, kde-format
-#| msgid "Target Folder"
+#, kde-format
 msgid "Parent Folder"
-msgstr "Cela dosierujo"
+msgstr ""
 
 #: projects/k3bdataviewimpl.cpp:134
 #, kde-format
@@ -7653,10 +7481,9 @@ msgid "Capacity exceeded by %1"
 msgstr "Enhaveco pliplenigata de %1"
 
 #: projects/k3bfillstatusdisplay.cpp:375
-#, fuzzy, kde-format
-#| msgid "No medium present"
+#, kde-format
 msgid "Set medium size"
-msgstr "Neniu ujo estanta"
+msgstr ""
 
 #: projects/k3bfillstatusdisplay.cpp:407
 #, kde-format
@@ -7851,16 +7678,14 @@ msgstr ""
 "KD legilojn kiuj provas legi la datumtrakon."
 
 #: projects/k3bmixedview.cpp:49
-#, fuzzy, kde-format
-#| msgid "Auto Detection"
+#, kde-format
 msgid "Audio Section"
-msgstr "Aŭtomata detekto"
+msgstr ""
 
 #: projects/k3bmixedview.cpp:50
-#, fuzzy, kde-format
-#| msgid "Data encoding:"
+#, kde-format
 msgid "Data Section"
-msgstr "Datumkodaĵo:"
+msgstr ""
 
 #: projects/k3bmixedview.cpp:126
 #, kde-format
@@ -7900,14 +7725,12 @@ msgid "default"
 msgstr "norma"
 
 #: projects/k3bmovixprojectmodel.cpp:291
-#, fuzzy, kde-format
-#| msgid " (broken)"
+#, kde-format
 msgid "%1 (broken)"
-msgstr " (rompa)"
+msgstr ""
 
 #: projects/k3bmovixprojectmodel.cpp:308
-#, fuzzy, kde-format
-#| msgid "No."
+#, kde-format
 msgctxt "Movix File Position"
 msgid "No."
 msgstr "Ne."
@@ -8550,8 +8373,7 @@ msgid "&Publisher:"
 msgstr "&Publikisto"
 
 #: projects/k3bvcdprojectmodel.cpp:227
-#, fuzzy, kde-format
-#| msgid "No."
+#, kde-format
 msgctxt "Video CD Track Number"
 msgid "No."
 msgstr "Ne."
@@ -8888,10 +8710,9 @@ msgid "Key"
 msgstr "Klavo"
 
 #: projects/k3bvcdtrackkeysmodel.cpp:165
-#, fuzzy, kde-format
-#| msgid "VideoCD END"
+#, kde-format
 msgid "Video CD END"
-msgstr "Video-KD fino"
+msgstr "Video-KD FINO"
 
 #: projects/k3bvcdtrackkeysmodel.cpp:167
 #, kde-format
@@ -8904,19 +8725,12 @@ msgid "Sequence-%1 - %2"
 msgstr "Sinsekvo-%1 - %2"
 
 #: projects/k3bvcdview.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not find VcdImager executable. To create VideoCD's you must install "
-#| "VcdImager >= 0.7.12. You can find this on your distribution disks or "
-#| "download it from http://www.vcdimager.org"
+#, kde-format
 msgid ""
 "Could not find VcdImager executable. To create Video CDs you have to install "
 "VcdImager >= 0.7.12. You can find this on your distribution’s software "
 "repository or download it from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Ne eblis trovi la VcdImager programon. Por krei Video-KD-on, vi bezonas "
-"instali VcdImager >= 0.7.12. Vi povas trovi ĝin sur via distribuaj diskoj aŭ "
-"elŝuti ĝin el http://www.vcdimager.org"
 
 #: projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
@@ -9048,13 +8862,7 @@ msgstr "Ekstrakti ĉiujn trakojn al unika dosiero"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:114
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will create only one\n"
-#| "audio file no matter how many tracks are ripped. This\n"
-#| "file will contain all tracks one after the other.\n"
-#| "<p>This might be useful to rip a live album or a radio play.\n"
-#| "<p><b>Caution:</b> The file will have the name of the first track."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will create only one\n"
 "audio file no matter how many tracks are ripped. This\n"
@@ -9062,11 +8870,6 @@ msgid ""
 "<p>This might be useful to rip a live album or a radio play.\n"
 "<p><b>Caution:</b> The file will have the name made from playlist pattern."
 msgstr ""
-"<p>Se tiu opcio estas aktiva, K3b kreos sole unu sondosieron, senrilate al "
-"kvanto da ekstraktitaj trakoj. Tiu dosiero\n"
-"enhavos ĉiujn trakojn unu post la alia.\n"
-"<p>Tio povas utili por ekstrakti publikludan albumon aŭ radiofonian verkon.\n"
-"<p><b>Atentu:</b> La dosiero havos la nomo de la unua trako."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:117
@@ -9082,16 +8885,11 @@ msgstr "Skribi cue-dosieron"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:148
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will create a CDRWIN cue file which "
-#| "allows to easily write a copy of the audio CD on other systems."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will create a CDRWIN cue file which allows "
 "one to easily write a copy of the audio CD on other systems."
 msgstr ""
-"<p>Se tiu opcio estas aktiva, K3b kreos KDRWIN cue-dosieron kiu permesas "
-"facile skribi kopion de la sona KD en aliaj sistemoj."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:151
@@ -9220,11 +9018,9 @@ msgid "Rock"
 msgstr "Rock"
 
 #: rip/categories.cpp:21
-#, fuzzy, kde-format
-#| msgid "%n track"
-#| msgid_plural "%n tracks"
+#, kde-format
 msgid "Soundtrack"
-msgstr "%n trako"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:143
 #, kde-format
@@ -9272,16 +9068,14 @@ msgid "Start Ripping"
 msgstr "Komenci ekstrakti"
 
 #: rip/k3baudiocdview.cpp:229
-#, fuzzy, kde-format
-#| msgid "Start the burning process"
+#, kde-format
 msgid "Start audio ripping process"
-msgstr "Starti la skribadon"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:234
-#, fuzzy, kde-format
-#| msgid "Query Cddb"
+#, kde-format
 msgid "Query CD Database"
-msgstr "Peti CDDB"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:235
 #, kde-format
@@ -9289,16 +9083,14 @@ msgid "Look for information on CDDB"
 msgstr ""
 
 #: rip/k3baudiocdview.cpp:240
-#, fuzzy, kde-format
-#| msgid "CD-Text"
+#, kde-format
 msgid "Read CD-Text"
-msgstr "KD-teksto"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:241
-#, fuzzy, kde-format
-#| msgid "No medium information"
+#, kde-format
 msgid "Read CD-Text information"
-msgstr "Neniu uja informo"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:246
 #, kde-format
@@ -9306,16 +9098,14 @@ msgid "Load CD Info"
 msgstr ""
 
 #: rip/k3baudiocdview.cpp:247
-#, fuzzy, kde-format
-#| msgid "No medium information"
+#, kde-format
 msgid "Load track and album information"
-msgstr "Neniu uja informo"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:254
-#, fuzzy, kde-format
-#| msgid "Save Cddb Entry Locally"
+#, kde-format
 msgid "Save CD Info Locally"
-msgstr "Konservi la CCDB-eron loke"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:255
 #, kde-format
@@ -9323,10 +9113,9 @@ msgid "Save track and album information to the local CDDB cache"
 msgstr ""
 
 #: rip/k3baudiocdview.cpp:260
-#, fuzzy, kde-format
-#| msgid "New &Data Project"
+#, kde-format
 msgid "Show Data Part"
-msgstr "Nova &datuma projekto"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:261
 #, kde-format
@@ -9340,10 +9129,9 @@ msgid "Check Track"
 msgstr "Ŝalti trakon"
 
 #: rip/k3baudiocdview.cpp:298 rip/videodvd/k3bvideodvdrippingview.cpp:190
-#, fuzzy, kde-format
-#| msgid "Check Track"
+#, kde-format
 msgid "Check Tracks"
-msgstr "Ŝalti trakon"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:300 rip/k3bvideocdview.cpp:370
 #: rip/videodvd/k3bvideodvdrippingview.cpp:192
@@ -9352,10 +9140,9 @@ msgid "Uncheck Track"
 msgstr "Malŝalti trakon"
 
 #: rip/k3baudiocdview.cpp:300 rip/videodvd/k3bvideodvdrippingview.cpp:192
-#, fuzzy, kde-format
-#| msgid "Uncheck Track"
+#, kde-format
 msgid "Uncheck Tracks"
-msgstr "Malŝalti trakon"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:318 rip/k3bvideocdview.cpp:443
 #, kde-format
@@ -9368,10 +9155,9 @@ msgid "No Tracks Selected"
 msgstr "Neniu trako elektita"
 
 #: rip/k3baudiocdview.cpp:339
-#, fuzzy, kde-format
-#| msgid "Merge Tracks"
+#, kde-format
 msgid "Multiple Tracks"
-msgstr "Kunfandi trakojn"
+msgstr ""
 
 #: rip/k3baudiocdview.cpp:341
 #, kde-format
@@ -9473,10 +9259,9 @@ msgid "Converting Audio Tracks From '%1'"
 msgstr "Konvertante sonajn trakojn el « %1 »"
 
 #: rip/k3baudioprojectconvertingjob.cpp:58
-#, fuzzy, kde-format
-#| msgid "Starting digital audio extraction (ripping)."
+#, kde-format
 msgid "Starting audio conversion."
-msgstr "Komancante ciferecan sonan ekstraktadon."
+msgstr ""
 
 #: rip/k3baudioprojectconvertingjob.cpp:85
 #, kde-format
@@ -9564,10 +9349,9 @@ msgid "CD Ripping"
 msgstr "KD ekstraktado"
 
 #: rip/k3baudiorippingdialog.cpp:173
-#, fuzzy, kde-format
-#| msgid "Don't read pregaps"
+#, kde-format
 msgid "Do not read pregaps"
-msgstr "Ne legi antaŭfosaĵojn"
+msgstr ""
 
 #: rip/k3baudiorippingdialog.cpp:191
 #, kde-format
@@ -9596,14 +9380,7 @@ msgid "Do not read the pregaps at the end of every track"
 msgstr "Ne legi la antaŭfosaĵojn fine de ĉiu trako"
 
 #: rip/k3baudiorippingdialog.cpp:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not rip the audio data in the "
-#| "pregaps. Most audio tracks contain an empty pregap which does not belong "
-#| "to the track itself.</p><p>Although the default behaviour of nearly all "
-#| "ripping software is to include the pregaps for most CDs it makes more "
-#| "sense to ignore them. When creating a K3b audio project you will "
-#| "regenerate these pregaps anyway.</p>"
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not rip the audio data in the pregaps. "
 "Most audio tracks contain an empty pregap which does not belong to the track "
@@ -9612,12 +9389,6 @@ msgid ""
 "In any case, when creating a K3b audio project, the pregaps will be "
 "regenerated.</p>"
 msgstr ""
-"<p>Se tiu opcio estas aktiva, K3b ne ekstraktos la sonan datumon en la "
-"antaŭfosaĵoj. La plimulto de sonaj trakoj enhavas malplenan antaŭfosaĵon kiu "
-"ne apartenas sie al la trako.</p><p>Kvankam la defaŭlta konduto de preskaŭ "
-"ĉiuj ekstraktiloj estas inkludi por plimultaj KD-oj, tamen estas pli logike, "
-"ke oni ignoras ilin. Kreante K3b sonan projekton, vi ĉiel regeneros tiujn.</"
-"p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
@@ -9646,10 +9417,9 @@ msgid "Title"
 msgstr "Titolo"
 
 #: rip/k3baudiotrackmodel.cpp:205
-#, fuzzy, kde-format
-#| msgid "Playing track"
+#, kde-format
 msgid "Data Track"
-msgstr "Legante la trakon"
+msgstr ""
 
 #: rip/k3bcddbpatternwidget.cpp:44
 #, kde-format
@@ -9679,29 +9449,12 @@ msgid "%{albumartist} - %{albumtitle}"
 msgstr "%{albumartist} - %{albumtitle}"
 
 #: rip/k3bcddbpatternwidget.cpp:51
-#, fuzzy, kde-format
-#| msgid "playlists/%{albumartist}/%{albumtitle    }"
+#, kde-format
 msgid "playlists/%{albumartist}/%{albumtitle}"
-msgstr "playlists/%{albumartist}/%{albumtitle    }"
+msgstr "playlists/%{albumartist}/%{albumtitle}"
 
 #: rip/k3bcddbpatternwidget.cpp:118
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><b>Pattern special strings:</b><p>The following strings will be "
-#| "replaced with their respective meaning in every track name.<br><em>Hint:</"
-#| "em> %A differs from %a only on soundtracks or compilations.<p><table "
-#| "border=\"0\"><tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</"
-#| "em></td></tr><tr><td>%a</td><td>artist of the track</td><td>%{a} or "
-#| "%{artist}</td></tr><tr><td>%t</td><td>title of the track</td><td>%{t} or "
-#| "%{title}</td></tr><tr><td>%n</td><td>track number</td><td>%{n} or "
-#| "%{number}</td></tr><tr><td>%y</td><td>year of the CD</td><td>%{y} or "
-#| "%{year}</td></tr><tr><td>%c</td><td>extended track information</td><td>"
-#| "%{c} or %{comment}</td></tr><tr><td>%g</td><td>genre of the CD</td><td>"
-#| "%{g} or %{genre}</td></tr><tr><td>%A</td><td>album artist</td><td>%{A} or "
-#| "%{albumartist}</td></tr><tr><td>%T</td><td>album title</td><td>%{T} or "
-#| "%{albumtitle}</td></tr><tr><td>%C</td><td>extended CD information</td><td>"
-#| "%{C} or %{albumcomment}</td></tr><tr><td>%d</td><td>current date</td><td>"
-#| "%{d} or %{date}</td></tr></table>"
+#, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
 "with their respective meaning in every track name.<br><em>Hint:</em> %A "
@@ -9720,38 +9473,9 @@ msgid ""
 "tr><tr><td>%e</td><td>file extension (if left out, it is added "
 "automatically)</td><td>%{e} or %{ext}</td></tr></table>"
 msgstr ""
-"<p><b>Ŝablonaj specialaj ĉenoj:</b><p>La sekvaj ĉenoj estos anstataŭigitaj "
-"per ilian respondan sencon en ĉiu traknomo.<br><em>Indiko:</em> %A malsamas "
-"el %a nur en sontrakoj aŭ kompilaĵoj.<p><table border=\"0\"><tr><td></"
-"td><td><em>Signifo</em></td><td><em>Alternativoj</em></td></tr><tr><td>%a</"
-"td><td>traka artisto</td><td>%{a} aŭ %{artist}</td></tr><tr><td>%t</"
-"td><td>traka titolo</td><td>%{t} aŭ %{title}</td></tr><tr><td>%n</"
-"td><td>traka numero</td><td>%{n} aŭ %{number}</td></tr><tr><td>%y</td><td>KD-"
-"a jaro</td><td>%{y} aŭ %{year}</td></tr><tr><td>%c</td><td>plia traka "
-"informo</td><td>%{c} aŭ %{comment}</td></tr><tr><td>%g</td><td>KD-a ĝenro</"
-"td><td>%{g} aŭ %{genre}</td></tr><tr><td>%A</td><td>albuma artisto</td><td>"
-"%{A} aŭ %{albumartist}</td></tr><tr><td>%T</td><td>albuma titolo</td><td>"
-"%{T} aŭ %{albumtitle}</td></tr><tr><td>%C</td><td>plia KD-a informo</td><td>"
-"%{C} aŭ %{albumcomment}</td></tr><tr><td>%d</td><td>nuna dato</td><td>%{d} "
-"aŭ %{date}</td></tr></table>"
 
 #: rip/k3bcddbpatternwidget.cpp:144
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><b>Conditional inclusion:</b><p>These patterns make it possible to "
-#| "selectively include texts, depending on the value of CDDB entries. You "
-#| "can choose only to include or exclude texts if one of the entries is "
-#| "empty, or if it has a specific value. Examples:<ul><li>@T{TEXT} includes "
-#| "TEXT if the album title is specified<li>!T{TEXT} includes TEXT if the "
-#| "album title is not specified<li>@C='Soundtrack'{TEXT} includes TEXT if "
-#| "the CD's extended information is named Soundtrack<li>!"
-#| "C='Soundtrack'{TEXT} includes TEXT if the CD's extended information is "
-#| "anything else but Soundtrack<li>It is also possible to include special "
-#| "strings in texts and conditions, e.g. !a='%A'{%a} only includes the "
-#| "title's artist information if it does not differ from the album artist.</"
-#| "ul><p>Conditional includes make use of the same characters as the special "
-#| "strings, which means that the X in @X{...} can be one character out of "
-#| "[atnycgATCd]."
+#, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid ""
@@ -9769,27 +9493,13 @@ msgid ""
 "same characters as the special strings, which means that the X in @X{...} "
 "can be one character out of [atnycgATCd]."
 msgstr ""
-"<p><b>Kondiĉa inkludo:</b><p>Tiuj ŝablonoj ebligas elekte inkludi tekstojn, "
-"laŭ la CDDB-eraj valoroj. Vi povas elekti nur inkludi aŭ malinkludi tekstojn "
-"se unu el eroj estas malplena, aŭ se ĝi havas specialan valoron. Ekzemple:"
-"<ul><li>@T{teksto} inkludas tekston se la albuma titolo estas indikata<li>!"
-"T{teksto} inkludas tekston se la albuma titolo ne estas "
-"indikata<li>@C='Sontrako'{teksto} inkludas tekston se la KD-a plia informo "
-"estas Sontrako<li>!C='Sontrako'{teksto} inkludas tekston se la KD-a plia "
-"informo ne estas Sontrako<li>Ankaŭ oni povas inkludi specialajn ĉenojn en "
-"tekstoj kaj kondiĉoj, ekz. !a='%A'{%a} nur inkludas la titolan artistan "
-"informon se ĝi ne malegalas la albuma artisto.</ul><p>Kondiĉaj inkludoj uzas "
-"la samajn signojn kiel la specialaj ĉenoj, kio signifas ke la X en @X{...} "
-"povas esti unu el la signoj [atnycgATCd]."
 
 #: rip/k3bmassaudioencodingjob.cpp:177
-#, fuzzy, kde-format
-#| msgid "1 track (encoding to %1)"
-#| msgid_plural "%n tracks (encoding to %1)"
+#, kde-format
 msgid "1 track (encoding to %2)"
 msgid_plural "%1 tracks (encoding to %2)"
-msgstr[0] "1 trako (kodante al %1)"
-msgstr[1] "%n trakoj (kodante al %1)"
+msgstr[0] ""
+msgstr[1] ""
 
 #: rip/k3bmassaudioencodingjob.cpp:182
 #, kde-format
@@ -9844,22 +9554,16 @@ msgid "Could not find %1 executable."
 msgstr "Ne eblas trovi la %1 programon."
 
 #: rip/k3bvideocdrip.cpp:92
-#, fuzzy, kde-format
-#| msgid "To rip VideoCD's you must install VcdImager Version %1."
+#, kde-format
 msgid "To rip Video CDs you have to install VcdImager Version %1."
-msgstr "Por ekstrakti Video-KD-ojn, vi devas instali VcdImager, version %1."
+msgstr ""
 
 #: rip/k3bvideocdrip.cpp:93
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Vi povas trovi tion en viaj distribuaj diskoj aŭ elŝuti ĝin el ttp://www."
-"vcdimager.org"
 
 #: rip/k3bvideocdrip.cpp:101
 #, kde-format
@@ -10102,10 +9806,9 @@ msgid "Uncheck All"
 msgstr "Malŝalti ĉion"
 
 #: rip/k3bvideocdview.cpp:378
-#, fuzzy, kde-format
-#| msgid "Hidden Files"
+#, kde-format
 msgid "View Files"
-msgstr "Kaŝitajn dosierojn"
+msgstr ""
 
 #: rip/k3bvideocdview.cpp:379
 #, kde-format
@@ -10360,14 +10063,12 @@ msgid "Video Size"
 msgstr "Videa grandeco"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:272
-#, fuzzy, no-c-format, kde-format
-#| msgid "%nCh"
-#| msgid_plural "%nCh"
+#, no-c-format, kde-format
 msgctxt "Ch is short for Channels"
 msgid "%1Ch"
 msgid_plural "%1Ch"
-msgstr[0] "%nKn"
-msgstr[1] "%nKn"
+msgstr[0] ""
+msgstr[1] ""
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:323
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:353
@@ -10411,10 +10112,9 @@ msgstr[0] "Trakodante 1 titolon al %2/%3"
 msgstr[1] "Trakodante %1 titolojn al %2/%3"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
-#, fuzzy, kde-format
-#| msgid "Successfully ripped title %1"
+#, kde-format
 msgid "Successfully ripped title %1 to '%2'"
-msgstr "Sukcese ekstraktis la titolon %1"
+msgstr ""
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:143
 #, kde-format
@@ -10447,10 +10147,9 @@ msgid "Failed to determine clipping values for title %1"
 msgstr "Fiaskis determini sekciajn valorojn por la titolo %1"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:79
-#, fuzzy, kde-format
-#| msgid "no file"
+#, kde-format
 msgid "Show files"
-msgstr "neniu dosiero"
+msgstr ""
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:80
 #, kde-format
@@ -10534,17 +10233,7 @@ msgid "Open the Video DVD ripping dialog"
 msgstr "Malfermi la Video-DVD-an ekstraktfenestron"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:345
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>You have selected the K3b Video DVD ripping tool.<p>It is intended to "
-#| "<em>rip single titles</em> from a video DVD into a compressed format such "
-#| "as XviD. Menu structures are completely ignored.<p>If you intend to copy "
-#| "the plain Video DVD vob files from the DVD (including decryption) for "
-#| "further processing with another application, please use the following "
-#| "link to access the Video DVD file structure: <a href=\"videodvd:/"
-#| "\">videodvd:/</a><p>If you intend to make a copy of the entire Video DVD "
-#| "including all menus and extras it is recommended to use the K3b DVD Copy "
-#| "tool."
+#, kde-format
 msgid ""
 "<p>Rips single titles from a video DVD into a compressed format such as "
 "XviD. Menu structures are completely ignored.<p>If you intend to copy the "
@@ -10553,14 +10242,6 @@ msgid ""
 "you intend to make a copy of the entire Video DVD including all menus and "
 "extras it is recommended to use the K3b Copy tool."
 msgstr ""
-"<p>Vi elektis la K3b Video-DVD-an ekstraktilon.Ĝi temas <em>ekstrakti "
-"unikajn titolojn</em> el Video-DVD al kunprena formato kvazaŭ XviD. Menuaj "
-"strukturoj komplete ignoratas.<p>Se vi volas kopii la originalajn Video-DVD-"
-"ajn vob dosierojn el la DVD (inklude malkodaĵo) por plia verko per alia "
-"programo, bonvolu uzi la sekvan ligon por atingi la Video-DVD-an "
-"dosierstrukturon: <a href=\"videodvd:/\">videodvd:/</a><p>Se vi volas tute "
-"kopii la Video-DVD, inklude menuojn kaj pliojn, oni rekomandas al vi uzi la "
-"K3b DVD-an kopiilon."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
 #, kde-format
@@ -10584,28 +10265,7 @@ msgid "auto"
 msgstr "aŭto"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:278
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><b>Pattern special strings:</b><p>The following strings will be "
-#| "replaced with their respective meaning in every track name.<br><p><table "
-#| "border=\"0\"><tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</"
-#| "em></td></tr><tr><td>%t</td><td>title number</td><td>%{t} or "
-#| "%{title_number}</td></tr><tr><td>%i</td><td>volume id (mostly the name of "
-#| "the Video DVD)</td><td>%{i} or %{volume_id}</td></tr><tr><td>%b</"
-#| "td><td>beautified volume id</td><td>%{b} or %{beautified_volume_id}</td></"
-#| "tr><tr><td>%l</td><td>two chars language code</td><td>%{l} or %{lang_code}"
-#| "</td></tr><tr><td>%n</td><td>language name</td><td>%{n} or %{lang_name}</"
-#| "td></tr><tr><td>%a</td><td>audio format (on the Video DVD)</td><td>%{a} "
-#| "or %{audio_format}</td></tr><tr><td>%c</td><td>number of audio channels "
-#| "(on the Video DVD)</td><td>%{c} or %{channels}</td></tr><tr><td>%v</"
-#| "td><td>size of the original video</td><td>%{v} or %{orig_video_size}</"
-#| "td></tr><tr><td>%s</td><td>size of the resulting video (<em>Caution: auto-"
-#| "clipping values are not taken into account!</em>)</td><td>%{s} or "
-#| "%{video_size}</td></tr><tr><td>%r</td><td>aspect ratio of the original "
-#| "video</td><td>%{r} or %{aspect_ratio}</td></tr><tr><td>%d</td><td>current "
-#| "date</td><td>%{d} or %{date}</td></tr></table><p><em>Hint: K3b also "
-#| "accepts slight variations of the long special strings. One can, for "
-#| "example, leave out the underscores.</em>"
+#, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
 "with their respective meaning in every track name.<br><p><table border="
@@ -10627,25 +10287,6 @@ msgid ""
 "table><p><em>Hint: K3b also accepts slight variations of the long special "
 "strings. One can, for example, leave out the underscores.</em>"
 msgstr ""
-"<p><b>Ŝablonaj specialaj ĉenoj:</b><p>La sekvaj ĉenoj estos anstataŭgitaj "
-"per ilia responda signifo en ĉiu traknomo.<br><p><table border="
-"\"0\"><tr><td></td><td><em>Signifo</em></td><td><em>Alternativoj</em></td></"
-"tr><tr><td>%t</td><td>Titola numero</td><td>%{t} aŭ %{title_number}</td></"
-"tr><tr><td>%i</td><td>Voluma ID (pliofte nomo de la Video-DVD)</td><td>%{i} "
-"aŭ %{volume_id}</td></tr><tr><td>%b</td><td>beligita voluma ID</td><td>%{b} "
-"aŭ %{beautified_volume_id}</td></tr><tr><td>%l</td><td>dusigna lingvkodo</"
-"td><td>%{l} aŭ %{lang_code}</td></tr><tr><td>%n</td><td>lingva nomo</td><td>"
-"%{n} aŭ %{lang_name}</td></tr><tr><td>%a</td><td>sona formato (en la Video-"
-"DVD)</td><td>%{a} aŭ %{audio_format}</td></tr><tr><td>%c</td><td>nombro da "
-"sonaj kanaloj (en la Video-DVD)</td><td>%{c} aŭ %{channels}</td></tr><tr><td>"
-"%v</td><td>grandeco de la origina video</td><td>%{v} aŭ %{orig_video_size}</"
-"td></tr><tr><td>%s</td><td>grandeco de la rezulta video (<em>Atentu: "
-"aŭtomate sekcitaj valoroj ne konsideratas!</em>)</td><td>%{s} aŭ "
-"%{video_size}</td></tr><tr><td>%r</td><td>proporcio de la origina video</"
-"td><td>%{r} aŭ %{aspect_ratio}</td></tr><tr><td>%d</td><td>nuna dato</td><td>"
-"%{d} aŭ %{date}</td></tr></table><p><em>Indiko: K3b ankaŭ akceptas "
-"malgravajn variaĵojn de la longaj specialaj ĉenoj. Oni povas, ekzemple, "
-"forlasi la substrekon.</em>"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:331
 #, kde-format
@@ -10749,138 +10390,3 @@ msgstr "anamorfa"
 #, kde-format
 msgid "Subpicture"
 msgstr "Subbildo"
-
-#~ msgid "%1 has unsaved data."
-#~ msgstr "%1 enhavas nekonservitan datumon."
-
-#~ msgid "Windows Media v1"
-#~ msgstr "Windows Media v1"
-
-#~ msgid "Windows Media v2"
-#~ msgstr "Windows Media v2"
-
-#, fuzzy
-#~| msgctxt ""
-#~| "@info %1 is a duration formatted using KLocale::prettyFormatDuration"
-#~| msgid "Elapsed time: %1"
-#~ msgctxt "@info %1 is a duration formatted using QLocale::toString"
-#~ msgid "Elapsed time: %1"
-#~ msgstr "Pasinta tempo: %1"
-
-#~ msgid "MPEG 1 Layer III"
-#~ msgstr "MPEG 1 Layer III"
-
-#, fuzzy
-#~| msgid "Install the cdrtools package which contains cdrecord."
-#~ msgid "Install the libburn package which contains cdrskin"
-#~ msgstr "Instalu cdrtools pakaĵon kiu enhavas cdrecord."
-
-#~ msgid "Close"
-#~ msgstr "Fermi"
-
-#~ msgid "Overwrite"
-#~ msgstr "Anstataŭigi"
-
-#, fuzzy
-#~| msgid "M&anual settings:"
-#~ msgid "Manual settings:"
-#~ msgstr "M&anuma agordo:"
-
-#~ msgid "CDDB Options"
-#~ msgstr "CDDB opcioj"
-
-#~ msgid "Local"
-#~ msgstr "Loka"
-
-#~ msgid "Use local CDDB directory"
-#~ msgstr "Uzi lokan CDDB dosierujon"
-
-#~ msgid "Save entries in local directory (the first directory in the list)"
-#~ msgstr "Konservi erojn en loka dosierujo (la unuo en la listo)"
-
-#~ msgid "Directory:"
-#~ msgstr "Dosierujo:"
-
-#~ msgid "Directory"
-#~ msgstr "Dosierujo"
-
-#~ msgid "Move directory down"
-#~ msgstr "Movi dosierujon malsupren"
-
-#~ msgid "Add directory"
-#~ msgstr "Aldoni dosierujon"
-
-#~ msgid "Remove directory"
-#~ msgstr "Forigi dosierujon"
-
-#~ msgid "Move directory up"
-#~ msgstr "Movi dosierujon supren"
-
-#~ msgid "Remote"
-#~ msgstr "Defora"
-
-#~ msgid "Server:"
-#~ msgstr "Servilo:"
-
-#~ msgid "Server"
-#~ msgstr "Servilo"
-
-#~ msgid "Port"
-#~ msgstr "Pordo"
-
-#~ msgid "Port "
-#~ msgstr "Pordo "
-
-#~ msgid "Add server"
-#~ msgstr "Aldoni servilon"
-
-#~ msgid "Remove server"
-#~ msgstr "Defora servilo"
-
-#~ msgid "Move server up"
-#~ msgstr "Movi servilon supren"
-
-#~ msgid "Move server down"
-#~ msgstr "Movi servilon malsupren"
-
-#~ msgid "Enable remote CDDB queries"
-#~ msgstr "Ebligi deforajn CDDB demandojn"
-
-#~ msgid "CGI Path"
-#~ msgstr "CGI vojo"
-
-#~ msgid "~/cddb/cddb.cgi"
-#~ msgstr "~/cddb/cddb.cgi"
-
-#~ msgid "Path:"
-#~ msgstr "Vojo:"
-
-#~ msgid "Manual CGI path"
-#~ msgstr "Manuma CGI vojo"
-
-#~ msgid "Flopp&y"
-#~ msgstr "Di&sketo"
-
-#~ msgid "P&ublisher:"
-#~ msgstr "P&ublikisto:"
-
-#~ msgid "S&ystem:"
-#~ msgstr "S&istemo:"
-
-#~ msgid "&Application:"
-#~ msgstr "&Programo:"
-
-#~ msgid "Query Cddb"
-#~ msgstr "Peti CDDB"
-
-#~ msgid "Cddb error"
-#~ msgstr "CDDB eraro"
-
-#~ msgid "Iso9660 image"
-#~ msgstr "ISO9660 bildo"
-
-#~ msgid "K3bAudioCDTextWidget"
-#~ msgstr "K3bAudioCDTextWidget"
-
-#~ msgid "K3bAudioTrackWidget"
-#~ msgstr "K3bAudioTrackWidget"
