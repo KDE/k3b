@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2023-03-09 13:31+0300\n"
+"PO-Revision-Date: 2023-03-21 15:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -678,39 +678,39 @@ msgstr "Video DVD kod çözme işlemi başarısızlığa uğradı."
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
 msgid "No support for reading formless Mode2 sectors."
-msgstr "Düzensiz Kip2 sektörleri için destek mevcut değil."
+msgstr "Düzensiz Kip2 dilimleri için destek mevcut değil."
 
 #: jobs/k3bdatatrackreader.cpp:206
 #, kde-format
 msgid "Unsupported sector type."
-msgstr "Desteklenmeyen sektör türü."
+msgstr "Desteklenmeyen dilim türü."
 
 #: jobs/k3bdatatrackreader.cpp:213
 #, kde-format
 msgid "Reading with sector size %1."
-msgstr "Sektör boyutu %1 kabul edilerek okunuyor."
+msgstr "Dilim boyutu %1 kabul edilerek okunuyor."
 
 #: jobs/k3bdatatrackreader.cpp:264 jobs/k3bdatatrackreader.cpp:439
 #, kde-format
 msgid "Error while reading sector %1."
-msgstr "Sektör %1 okunurken hata oluştu."
+msgstr "Dilim %1 okunurken hata oluştu."
 
 #: jobs/k3bdatatrackreader.cpp:346
 #, kde-format
 msgid "Ignored %1 erroneous sector."
 msgid_plural "Ignored a total of %1 erroneous sectors."
-msgstr[0] "Toplam %1 hatalı sektör yok sayıldı."
-msgstr[1] "Toplam %1 hatalı sektör yok sayıldı."
+msgstr[0] "Toplam %1 hatalı dilim yok sayıldı."
+msgstr[1] "Toplam %1 hatalı dilim yok sayıldı."
 
 #: jobs/k3bdatatrackreader.cpp:415
 #, kde-format
 msgid "Problem while reading. Retrying from sector %1."
-msgstr "Okuma sırasında sorun oluştu. %1. sektörden tekrar deneniyor."
+msgstr "Okuma sırasında sorun oluştu. %1. dilimden tekrar deneniyor."
 
 #: jobs/k3bdatatrackreader.cpp:431
 #, kde-format
 msgid "Ignoring read error in sector %1."
-msgstr "Sektör %1'deki okuma hatası yok sayılıyor."
+msgstr "Dilim %1'deki okuma hatası yok sayılıyor."
 
 #: jobs/k3bdvdbooktypejob.cpp:75
 #, kde-format
@@ -1367,17 +1367,17 @@ msgstr "Kaynak disk okunamıyor."
 #: jobs/k3breadcdreader.cpp:266
 #, kde-format
 msgid "Retrying from sector %1."
-msgstr "Sektör %1'den tekrar deneniyor."
+msgstr "Dilim %1'den tekrar deneniyor."
 
 #: jobs/k3breadcdreader.cpp:281
 #, kde-format
 msgid "Uncorrected error in sector %1"
-msgstr "Sektör %1'de düzeltilmemiş hata"
+msgstr "Dilim %1'de düzeltilmemiş hata"
 
 #: jobs/k3breadcdreader.cpp:284
 #, kde-format
 msgid "Corrected error in sector %1"
-msgstr "Sektör %1'de düzeltilmiş hata"
+msgstr "Dilim %1'de düzeltilmiş hata"
 
 #: jobs/k3breadcdreader.cpp:304
 #, kde-format
@@ -2253,12 +2253,12 @@ msgstr "Önyükleme kalıbının boyutu geçersiz."
 #: projects/datacd/k3bmkisofshandler.cpp:113
 #, kde-format
 msgid "The boot image contains multiple partitions."
-msgstr "Önyükleme kalıbı çoklu bölüm içeriyor."
+msgstr "Önyükleme kalıbı birden çok bölüntü içeriyor."
 
 #: projects/datacd/k3bmkisofshandler.cpp:114
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
-msgstr "Sabit sürücü önyükleme kalıbı tek bir bölüm içermeli."
+msgstr "Sabit sürücü önyükleme kalıbı tek bir bölüntü içermeli."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:43
 #, kde-format
@@ -4457,9 +4457,9 @@ msgid ""
 "<p>Since audio CD Player are able to interpolate small errors in the data it "
 "is no problem to let K3b skip unreadable sectors."
 msgstr ""
-"<p>Bu seçenek seçilirse ve K3b kaynak CD'den bir ses sektörünü okumayı "
+"<p>Bu seçenek seçilirse ve K3b kaynak CD'den bir ses dilimini okumayı "
 "başaramazsa oluşturulacak kopyada ilgili yerler sıfır ile doldurulur. <p>CD "
-"Okuyucular ufak hataları yuvarlayabildiğinden, okunamayan sektörlerin "
+"Okuyucular ufak hataları yuvarlayabildiğinden, okunamayan dilimlerin "
 "atlanmasına izin vermek zararsızdır."
 
 #: videodvd/k3bvideodvd.cpp:292

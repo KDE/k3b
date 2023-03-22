@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2023-03-14 18:57+0300\n"
+"PO-Revision-Date: 2023-03-21 15:34+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2132,7 +2132,7 @@ msgstr "Özellikler"
 #: k3bdiskinfoview.cpp:265
 #, kde-format
 msgid "First-Last Sector"
-msgstr "İlk-Son Sektör"
+msgstr "İlk-Son Dilim"
 
 #: k3bdiskinfoview.cpp:267 rip/k3baudioprojectconvertingdialog.cpp:118
 #: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:159
@@ -2272,12 +2272,12 @@ msgstr "Sistem Kimliği:"
 #: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:201
 #, kde-format
 msgid "Volume Id:"
-msgstr "Proje adı:"
+msgstr "Disk Bölümü Kimliğiı:"
 
 #: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:209
 #, kde-format
 msgid "Volume Set Id:"
-msgstr "Disk kimliği:"
+msgstr "Disk Bölümü Kümesi Kimliği:"
 
 #: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
 #, kde-format
@@ -2297,7 +2297,7 @@ msgstr "Yazılım Kimliği:"
 #: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
 #, kde-format
 msgid "Volume Size:"
-msgstr "Bölüm Boyutu:"
+msgstr "Disk Bölümü Boyutu:"
 
 #: k3bdiskinfoview.cpp:390
 #, kde-format
@@ -3287,8 +3287,8 @@ msgid ""
 "space."
 msgstr ""
 "<p>Bu klasör, K3b tarafından <em>kalıp dosyalarını</em> kaydetmek için "
-"kullanılacaktır.<p>Lütfen bu klasörün bulunduğu disk bölümünde yeterli boş "
-"yer olup olmadığını denetleyin."
+"kullanılacaktır.<p>Lütfen bu klasörün bulunduğu bölüntüde yeterli boş yer "
+"olup olmadığını denetleyin."
 
 #: k3btempdirselectionwidget.cpp:180
 #, kde-format
@@ -3992,7 +3992,7 @@ msgstr "Dosya Boyutu:"
 #: misc/k3bimagewritingdialog.cpp:178
 #, kde-format
 msgid "%1 (different than declared volume size)"
-msgstr "%1 (Beklenen boyuttan farklı)"
+msgstr "%1 (beyan edilen disk bölümü boyutundan farklı)"
 
 #: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:470
 #, kde-format
@@ -4322,7 +4322,7 @@ msgstr "&Gelişmiş"
 #: misc/k3bmediacopydialog.cpp:204
 #, kde-format
 msgid "Skip unreadable data sectors"
-msgstr "Okunamayan sektörleri atla"
+msgstr "Okunamayan dilimleri atla"
 
 #: misc/k3bmediacopydialog.cpp:205
 #, kde-format
@@ -4343,9 +4343,8 @@ msgid ""
 "corrupted sectors."
 msgstr ""
 "<p>Eğer işaretliyse K3b kaynak sürücünün ECC/EDC hata düzeltme özelliğini "
-"kapatır. Böylece bilerek okunamaz yapılmış sektörler okunabilir. <p>Bu, "
-"bozuk sektör tabanlı kopyalama koruması olan CD'leri çoğaltırken işe "
-"yarayabilir."
+"kapatır. Böylece bilerek okunamaz yapılmış dilimler okunabilir. <p>Bu, bozuk "
+"dilim tabanlı kopyalama koruması olan CD'leri çoğaltırken işe yarayabilir."
 
 #: misc/k3bmediacopydialog.cpp:213
 #, kde-format
@@ -4365,7 +4364,7 @@ msgid ""
 "the source medium it will be replaced with zeros on the resulting copy."
 msgstr ""
 "<p>Eğer işaretliyse K3b oluşturacağı kopyada, kaynak ortamdan okuyamadığı "
-"veri sektörlerinin yerine sıfır yazar."
+"veri dilimlerinin yerine sıfır yazar."
 
 #: misc/k3bmediacopydialog.cpp:221
 #, kde-format
@@ -4390,7 +4389,7 @@ msgid ""
 msgstr ""
 "<p>CD Çoğaltma kipinde, K3b CD'nin ham kopyasını gerçekleştirir. Bu, "
 "içeriklerin ne olduğuna bakılmaksızın CD'nin bit-bit kopyalanması demektir. "
-"Genellikle daha fazla hatalı sektör içerebilecek Video CD ve DVD'lerinin "
+"Genellikle daha fazla hatalı dilim içerebilecek Video CD ve DVD'lerinin "
 "kopyalanmasında kullanılabilir.<p><b>Dikkat:</b> Yalnızca tek oturumlu "
 "CD'ler çoğaltılabilir."
 
@@ -6020,7 +6019,7 @@ msgstr "Veri Kalıbı Ayarları"
 #: projects/base_k3bdataimagesettings.ui:21
 #, kde-format
 msgid "Volume Name"
-msgstr "CD Adı"
+msgstr "Disk Bölümü Adı"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonMoreVolDescFields)
 #: projects/base_k3bdataimagesettings.ui:34
@@ -6231,13 +6230,13 @@ msgstr "_"
 #: projects/k3bdatavolumedescdialog.cpp:24 projects/k3bvcdburndialog.cpp:537
 #, kde-format
 msgid "Volume Descriptor"
-msgstr "Cilt Tanımı"
+msgstr "Disk Bölümü Tanımlayıcısı"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:21
 #, kde-format
 msgid "Bibliographic file:"
-msgstr "Bibliyografik dosya:"
+msgstr "Bibliyografya dosyası:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: projects/base_k3bdatavolumedescdialog.ui:31
@@ -6249,13 +6248,13 @@ msgstr "&Uygulama:"
 #: projects/base_k3bdatavolumedescdialog.ui:51
 #, kde-format
 msgid "Volu&me set size:"
-msgstr "Biri&m kümesi boyutu:"
+msgstr "Disk bölü&mü kümesi boyutu:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:84
 #, kde-format
 msgid "Publ&isher:"
-msgstr "Y&ayınlayan:"
+msgstr "Y&ayımlayan:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: projects/base_k3bdatavolumedescdialog.ui:97
@@ -6268,13 +6267,13 @@ msgstr "Telif hakkı dosyası:"
 #: projects/k3bvcdburndialog.cpp:464
 #, kde-format
 msgid "&Volume name:"
-msgstr "&Cilt adı:"
+msgstr "&Disk bölümü adı:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:134
 #, kde-format
 msgid "Vo&lume set name:"
-msgstr "B&irim kümesi adı:"
+msgstr "Disk bö&lümü kümesi adı:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindBiblio)
 #: projects/base_k3bdatavolumedescdialog.ui:156
@@ -6298,7 +6297,7 @@ msgstr "Projeden bir özet dosya seç"
 #: projects/base_k3bdatavolumedescdialog.ui:202
 #, kde-format
 msgid "Abstract file:"
-msgstr "Ayrı dosya:"
+msgstr "Özet dosya:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindCopyright)
 #: projects/base_k3bdatavolumedescdialog.ui:228
@@ -6311,7 +6310,7 @@ msgstr "Projeden bir telif hakkı dosyası seç"
 #: projects/k3bvcdburndialog.cpp:467
 #, kde-format
 msgid "Volume set &number:"
-msgstr "Cilt/set &numarası:"
+msgstr "Disk bölümü kümesi &numarası:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel5)
 #: projects/base_k3bdatavolumedescdialog.ui:303
@@ -8355,12 +8354,12 @@ msgstr "VCD3.0 Çin parça dönüşümü"
 #: projects/k3bvcdburndialog.cpp:102
 #, kde-format
 msgid "Use 2336 byte sectors for output"
-msgstr "Çıktı için 2336 baytlık sektörler kullan"
+msgstr "Çıktı için 2336 baytlık dilimler kullan"
 
 #: projects/k3bvcdburndialog.cpp:104
 #, kde-format
 msgid "Specify ISO volume label for Video CD"
-msgstr "Video CD'si için ISO cilt etiketi belirtin"
+msgstr "Video CD'si için ISO disk bölümü etiketini belirtin"
 
 #: projects/k3bvcdburndialog.cpp:105
 #, kde-format
@@ -8370,12 +8369,12 @@ msgstr "VideoCD kümesi için albüm ID'si belirleyin"
 #: projects/k3bvcdburndialog.cpp:106
 #, kde-format
 msgid "Specify album set sequence number ( <= volume-count )"
-msgstr "Albüm seti için sıra numarası belirtin (<= cilt-sayısı)"
+msgstr "Albüm kümesi için sıra numarası belirtin (<= disk bölümü sayısı)"
 
 #: projects/k3bvcdburndialog.cpp:107
 #, kde-format
 msgid "Specify number of volumes in album set"
-msgstr "Albüm setindeki cilt sayısını belirleyin"
+msgstr "Albüm kümesindeki disk bölümü sayısını belirleyin"
 
 #: projects/k3bvcdburndialog.cpp:108
 #, kde-format
@@ -8435,8 +8434,7 @@ msgid ""
 "Used to set the number of empty sectors added before the lead-out area "
 "begins."
 msgstr ""
-"Disk sonu alanından önce yerleştirilecek boş sektörlerin sayısında "
-"kullanılan."
+"Disk sonu alanından önce yerleştirilecek boş dilimlerin sayısında kullanılan."
 
 #: projects/k3bvcdburndialog.cpp:119
 #, kde-format
@@ -8713,17 +8711,17 @@ msgid ""
 "display parameters, such as display resolution and frame rate, relaxing the "
 "aps requirement may lead to non-working entry points."
 msgstr ""
-"<p>Erişim Noktası Sektörü APS, VCD/SVCD biçimlerinde atlanarak ulaşılabilen "
-"MPEG video sektörüne verilen addır.<p>APS giriş noktaları ve tarama "
-"tabloları için gereklidir. APS, okuma sırasında öncelenen her GOP "
-"başlığından önce gelen I-frame gereksinimlerini yerine getirmek zorundadır. "
-"<p>Bu 3 birim için başlangıç kodu MPEG sektörü APS olarak bilinen noktaların "
-"belirlenmesi için gereklidir.<p>Bu zorunluluklar Esnek APS özelliği ile "
-"esnetilebilir. Bu, I-frame (anahtar kare) içeren her sektörün APS olarak "
-"kabul edilmesi anlamına gelecektir.<p><b>Dikkat:</b> Oynatma aygıtlarının "
-"çözünürlük, kare hızı gibi çalma özelliklerini belirlemek için sekans "
-"başlıklarına ulaşması gerekir. Esnek APS kullanmak nokta tanımlamalarının "
-"çalışmamasına yol açabilir."
+"<p>Erişim Noktası Dilimü APS, VCD/SVCD biçimlerinde atlanarak ulaşılabilen "
+"MPEG video dilimine verilen addır.<p>APS giriş noktaları ve tarama tabloları "
+"için gereklidir. APS, okuma sırasında öncelenen her GOP başlığından önce "
+"gelen I-frame gereksinimlerini yerine getirmek zorundadır. <p>Bu 3 birim "
+"için başlangıç kodu MPEG dilimi APS olarak bilinen noktaların belirlenmesi "
+"için gereklidir.<p>Bu zorunluluklar Esnek APS özelliği ile esnetilebilir. "
+"Bu, I-frame (anahtar kare) içeren her dilimin APS olarak kabul edilmesi "
+"anlamına gelecektir.<p><b>Dikkat:</b> Oynatma aygıtlarının çözünürlük, kare "
+"hızı gibi çalma özelliklerini belirlemek için sekans başlıklarına ulaşması "
+"gerekir. Esnek APS kullanmak nokta tanımlamalarının çalışmamasına yol "
+"açabilir."
 
 #: projects/k3bvcdburndialog.cpp:212
 #, kde-format
@@ -8773,13 +8771,13 @@ msgid ""
 "ahead issues when reading the last MPEG track if this parameter is set too "
 "low.<p>Allowed value content: [0..300]. Default: 150."
 msgstr ""
-"<p>Bu seçenek disk sonu alanından önce yerleştirilecek boş sektörlerin "
-"sayısının ayarlanmasını sağlar, yazı boşluğu sektörlerinin sayısı."
-"<p>ECMA-130 şartları disk sonu alanından önce bu parametre için öntanımlı "
-"olarak kullanılan en az 150 sektörlük yazı boşluğunu kaldırmak için son "
-"veriye gereksinim duyar.<p>Bazı işletim sistemleri bu parametre çok düşük "
-"olarak ayarlanmışsa son MPEG parçasını okurken okuma sonrası sonuçlara bağlı "
-"olarak I/O hatalarıyla karşılaşabilirler.<p>İzin verilen içerik: [0..300]. "
+"<p>Bu seçenek disk sonu alanından önce yerleştirilecek boş dilimlerin "
+"sayısının ayarlanmasını sağlar, yazı boşluğu dilimlerinin sayısı.<p>ECMA-130 "
+"şartları disk sonu alanından önce bu parametre için öntanımlı olarak "
+"kullanılan en az 150 dilimlük yazı boşluğunu kaldırmak için son veriye "
+"gereksinim duyar.<p>Bazı işletim sistemleri bu parametre çok düşük olarak "
+"ayarlanmışsa son MPEG parçasını okurken okuma sonrası sonuçlara bağlı olarak "
+"I/O hatalarıyla karşılaşabilirler.<p>İzin verilen içerik: [0..300]. "
 "Öntanımlı: 150."
 
 #: projects/k3bvcdburndialog.cpp:229
@@ -8789,9 +8787,9 @@ msgid ""
 "specification requires the pre-gaps to be at least 150 sectors long."
 "<p>Allowed value content: [0..300]. Default: 150."
 msgstr ""
-"<p>Sektörlerdeki tüm parçalar için ayrıntılı olarak parça öncesi boşluğu "
+"<p>Dilimlerdeki tüm parçalar için ayrıntılı olarak parça öncesi boşluğu "
 "ayarlamak için kullanılır.<p>Şartlar parça öncesi boşlukların en az 150 "
-"sektör uzunluğunda olmasını gerektirir.<p>İzin verilen içerik değeri: "
+"dilim uzunluğunda olmasını gerektirir.<p>İzin verilen içerik değeri: "
 "[0..300]. Öntanımlı: 150."
 
 #: projects/k3bvcdburndialog.cpp:233
@@ -8803,9 +8801,9 @@ msgid ""
 "<p>Allowed value content: [0..150]. Default: 30 for Video CD 1.0/1.1/2.0, "
 "otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0."
 msgstr ""
-"Siyah çerçeveler, CD-ROM diskindeki hatalı sektör adresleme sorunlarını "
+"Siyah çerçeveler, CD-ROM diskindeki hatalı dilim adresleme sorunlarını "
 "çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD'ler için "
-"terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 sektör "
+"terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 dilim "
 "uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Öntanımlı: 30, Video "
 "CD 1.0/1.1/2.0 için; aksi takdirde (Super Video CD 1.0 ve HQ-VCD 1.0 için) 0."
 
@@ -8818,9 +8816,9 @@ msgid ""
 "<p>Allowed value content: [0..150]. Default: 45 for Video CD 1.0/1.1/2.0, "
 "otherwise 0."
 msgstr ""
-"<p>Siyah çerçeveler, CD-ROM diskindeki hatalı sektör adresleme sorunlarını "
+"<p>Siyah çerçeveler, CD-ROM diskindeki hatalı dilim adresleme sorunlarını "
 "çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD'ler için "
-"terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 sektör "
+"terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 dilim "
 "uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Öntanımlı: 45, Video "
 "CD 1.0/1.1/2.0 için; aksi takdirde 0."
 
@@ -8917,7 +8915,7 @@ msgstr "Parça %1 yorumlamayı kullan"
 #: projects/k3bvcdburndialog.cpp:419
 #, kde-format
 msgid "Use 2336 byte sectors"
-msgstr "2336 baytlık sektörler kullan"
+msgstr "2336 baytlık dilimler kullan"
 
 #: projects/k3bvcdburndialog.cpp:420
 #, kde-format
@@ -8947,12 +8945,12 @@ msgstr "VideoCD için ISO uygulama kimliği"
 #: projects/k3bvcdburndialog.cpp:465
 #, kde-format
 msgid "Volume &set name:"
-msgstr "Cilt/&Set İsmi:"
+msgstr "Disk bölümü küme&si adı:"
 
 #: projects/k3bvcdburndialog.cpp:466
 #, kde-format
 msgid "Volume set s&ize:"
-msgstr "Cilt/set &boyutu:"
+msgstr "Disk bölümü kümes&i boyutu:"
 
 #: projects/k3bvcdburndialog.cpp:468
 #, kde-format
@@ -9384,7 +9382,7 @@ msgstr "Özellikler penceresini aç"
 #: projects/k3bvolumenamewidget.cpp:50
 #, kde-format
 msgid "Volume Name:"
-msgstr "Cilt İsmi:"
+msgstr "Disk Bölümü Adı:"
 
 #: projects/kostore/KoStore.cpp:196
 #, kde-format
@@ -9992,9 +9990,9 @@ msgid ""
 "data from the cd. After that K3b will either skip the sector if the "
 "<em>Ignore Read Errors</em> option is enabled or stop the process."
 msgstr ""
-"<p>Bu seçenek ses CD'sinde bulunan her sektörün okunması için kaç kere "
+"<p>Bu seçenek ses CD'sinde bulunan her dilimin okunması için kaç kere "
 "deneneceğini belirtir. Bu sayıda denemeden sonra K3b <em>Okuma Hatalarını "
-"Gözardı Et</em> seçeneği işaretliyse bu sektörü okumayıp atlayacak ya da "
+"Gözardı Et</em> seçeneği işaretliyse bu dilimi okumayıp atlayacak ya da "
 "duracaktır."
 
 #: rip/k3baudiorippingdialog.cpp:205
@@ -10286,7 +10284,7 @@ msgstr "%1 işlemi başarıyla kapanmadı."
 #: rip/k3bvideocdrip.cpp:281
 #, kde-format
 msgid "%1 encountered non-form2 sector"
-msgstr "%1 form2 olmayan sektör ile karşılaştı"
+msgstr "%1 form2 olmayan dilim ile karşılaştı"
 
 #: rip/k3bvideocdrip.cpp:282
 #, kde-format
@@ -10341,7 +10339,7 @@ msgstr "/EXT/PSD_X.CVD'yi yok say"
 #: rip/k3bvideocdrippingdialog.cpp:92
 #, kde-format
 msgid "Use 2336 byte sector mode for image file"
-msgstr "Kalıp dosyası için 2336 bayt sektör kullan"
+msgstr "Kalıp dosyası için 2336 bayt dilim kullan"
 
 #: rip/k3bvideocdrippingdialog.cpp:96
 #, kde-format
@@ -10380,7 +10378,7 @@ msgstr ""
 #: rip/k3bvideocdrippingdialog.cpp:124
 #, kde-format
 msgid "Assume a 2336-byte sector mode"
-msgstr "Sektörleri 2336 bayt kabul et"
+msgstr "2336 baytlık bir dilim kipi varsay"
 
 #: rip/k3bvideocdrippingdialog.cpp:125
 #, kde-format
@@ -10390,7 +10388,7 @@ msgid ""
 "</p><b>Note: This option is slated to disappear.</b>"
 msgstr ""
 "<p> Bu seçenek yalnızca BIN biçiminde bir CD disk kalıbı okunuyorsa işe "
-"yarar. Bu seçenek, kalıp dosyası için 'vcdxrip'e 2336-bayt sektör "
+"yarar. Bu seçenek, kalıp dosyası için 'vcdxrip'e 2336-bayt dilim "
 "kullanmasını söyler.</p><b>Not: Bu seçenek pek fazla kullanılmamaktadır.</b>"
 
 #: rip/k3bvideocdrippingdialog.cpp:128
