@@ -286,7 +286,7 @@ void K3b::CloneJob::slotReadingFinished( bool success )
                 jobFinished(true);
             }
             else {
-                if( writer() == readingDevice() )
+                if( writer() == readingDevice() && k3bcore->globalSettings()->ejectMedia() )
                     K3b::Device::eject( writer() );
                 startWriting();
             }
