@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2023-03-14 18:57+0300\n"
+"PO-Revision-Date: 2023-03-21 15:13+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2272,12 +2272,12 @@ msgstr "Sistem Kimliği:"
 #: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:201
 #, kde-format
 msgid "Volume Id:"
-msgstr "Proje adı:"
+msgstr "Disk Bölümü Kimliğiı:"
 
 #: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:209
 #, kde-format
 msgid "Volume Set Id:"
-msgstr "Disk kimliği:"
+msgstr "Disk Bölümü Kümesi Kimliği:"
 
 #: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
 #, kde-format
@@ -2297,7 +2297,7 @@ msgstr "Yazılım Kimliği:"
 #: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
 #, kde-format
 msgid "Volume Size:"
-msgstr "Bölüm Boyutu:"
+msgstr "Disk Bölümü Boyutu:"
 
 #: k3bdiskinfoview.cpp:390
 #, kde-format
@@ -3287,8 +3287,8 @@ msgid ""
 "space."
 msgstr ""
 "<p>Bu klasör, K3b tarafından <em>kalıp dosyalarını</em> kaydetmek için "
-"kullanılacaktır.<p>Lütfen bu klasörün bulunduğu disk bölümünde yeterli boş "
-"yer olup olmadığını denetleyin."
+"kullanılacaktır.<p>Lütfen bu klasörün bulunduğu bölüntüde yeterli boş yer "
+"olup olmadığını denetleyin."
 
 #: k3btempdirselectionwidget.cpp:180
 #, kde-format
@@ -3992,7 +3992,7 @@ msgstr "Dosya Boyutu:"
 #: misc/k3bimagewritingdialog.cpp:178
 #, kde-format
 msgid "%1 (different than declared volume size)"
-msgstr "%1 (Beklenen boyuttan farklı)"
+msgstr "%1 (beyan edilen disk bölümü boyutundan farklı)"
 
 #: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:470
 #, kde-format
@@ -6020,7 +6020,7 @@ msgstr "Veri Kalıbı Ayarları"
 #: projects/base_k3bdataimagesettings.ui:21
 #, kde-format
 msgid "Volume Name"
-msgstr "CD Adı"
+msgstr "Disk Bölümü Adı"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonMoreVolDescFields)
 #: projects/base_k3bdataimagesettings.ui:34
@@ -6231,13 +6231,13 @@ msgstr "_"
 #: projects/k3bdatavolumedescdialog.cpp:24 projects/k3bvcdburndialog.cpp:537
 #, kde-format
 msgid "Volume Descriptor"
-msgstr "Cilt Tanımı"
+msgstr "Disk Bölümü Tanımlayıcısı"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:21
 #, kde-format
 msgid "Bibliographic file:"
-msgstr "Bibliyografik dosya:"
+msgstr "Bibliyografya dosyası:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: projects/base_k3bdatavolumedescdialog.ui:31
@@ -6249,13 +6249,13 @@ msgstr "&Uygulama:"
 #: projects/base_k3bdatavolumedescdialog.ui:51
 #, kde-format
 msgid "Volu&me set size:"
-msgstr "Biri&m kümesi boyutu:"
+msgstr "Disk bölü&mü kümesi boyutu:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:84
 #, kde-format
 msgid "Publ&isher:"
-msgstr "Y&ayınlayan:"
+msgstr "Y&ayımlayan:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: projects/base_k3bdatavolumedescdialog.ui:97
@@ -6268,13 +6268,13 @@ msgstr "Telif hakkı dosyası:"
 #: projects/k3bvcdburndialog.cpp:464
 #, kde-format
 msgid "&Volume name:"
-msgstr "&Cilt adı:"
+msgstr "&Disk bölümü adı:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:134
 #, kde-format
 msgid "Vo&lume set name:"
-msgstr "B&irim kümesi adı:"
+msgstr "Disk bö&lümü kümesi adı:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindBiblio)
 #: projects/base_k3bdatavolumedescdialog.ui:156
@@ -6298,7 +6298,7 @@ msgstr "Projeden bir özet dosya seç"
 #: projects/base_k3bdatavolumedescdialog.ui:202
 #, kde-format
 msgid "Abstract file:"
-msgstr "Ayrı dosya:"
+msgstr "Özet dosya:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindCopyright)
 #: projects/base_k3bdatavolumedescdialog.ui:228
@@ -6311,7 +6311,7 @@ msgstr "Projeden bir telif hakkı dosyası seç"
 #: projects/k3bvcdburndialog.cpp:467
 #, kde-format
 msgid "Volume set &number:"
-msgstr "Cilt/set &numarası:"
+msgstr "Disk bölümü kümesi &numarası:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel5)
 #: projects/base_k3bdatavolumedescdialog.ui:303
@@ -8360,7 +8360,7 @@ msgstr "Çıktı için 2336 baytlık sektörler kullan"
 #: projects/k3bvcdburndialog.cpp:104
 #, kde-format
 msgid "Specify ISO volume label for Video CD"
-msgstr "Video CD'si için ISO cilt etiketi belirtin"
+msgstr "Video CD'si için ISO disk bölümü etiketini belirtin"
 
 #: projects/k3bvcdburndialog.cpp:105
 #, kde-format
@@ -8370,12 +8370,12 @@ msgstr "VideoCD kümesi için albüm ID'si belirleyin"
 #: projects/k3bvcdburndialog.cpp:106
 #, kde-format
 msgid "Specify album set sequence number ( <= volume-count )"
-msgstr "Albüm seti için sıra numarası belirtin (<= cilt-sayısı)"
+msgstr "Albüm kümesi için sıra numarası belirtin (<= disk bölümü sayısı)"
 
 #: projects/k3bvcdburndialog.cpp:107
 #, kde-format
 msgid "Specify number of volumes in album set"
-msgstr "Albüm setindeki cilt sayısını belirleyin"
+msgstr "Albüm kümesindeki disk bölümü sayısını belirleyin"
 
 #: projects/k3bvcdburndialog.cpp:108
 #, kde-format
@@ -8947,12 +8947,12 @@ msgstr "VideoCD için ISO uygulama kimliği"
 #: projects/k3bvcdburndialog.cpp:465
 #, kde-format
 msgid "Volume &set name:"
-msgstr "Cilt/&Set İsmi:"
+msgstr "Disk bölümü küme&si adı:"
 
 #: projects/k3bvcdburndialog.cpp:466
 #, kde-format
 msgid "Volume set s&ize:"
-msgstr "Cilt/set &boyutu:"
+msgstr "Disk bölümü kümes&i boyutu:"
 
 #: projects/k3bvcdburndialog.cpp:468
 #, kde-format
@@ -9384,7 +9384,7 @@ msgstr "Özellikler penceresini aç"
 #: projects/k3bvolumenamewidget.cpp:50
 #, kde-format
 msgid "Volume Name:"
-msgstr "Cilt İsmi:"
+msgstr "Disk Bölümü Adı:"
 
 #: projects/kostore/KoStore.cpp:196
 #, kde-format
