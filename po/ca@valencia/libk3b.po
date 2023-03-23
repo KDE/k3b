@@ -1225,7 +1225,7 @@ msgstr ""
 #, kde-format
 msgid "Track lengths below 4 seconds violate the Red Book standard."
 msgstr ""
-"Les longituds de pista per davall dels 4 segons violen l'estàndard «Red "
+"Les llargàries de pista per davall dels 4 segons violen l'estàndard «Red "
 "Book»."
 
 #: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
