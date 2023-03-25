@@ -43,12 +43,12 @@ namespace {
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3blameencoder, K3bLameEncoderSettingsWidget )
 
 
-K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
-    : K3b::PluginConfigWidget( parent, args )
+K3bLameEncoderSettingsWidget::K3bLameEncoderSettingsWidget( QObject* parent, const KPluginMetaData& metaData, const QVariantList& args )
+    : K3b::PluginConfigWidget( parent, metaData, args )
 {
-    setupUi( this );
+    setupUi( widget() );
 
-    m_manualSettingsDialog = new K3bLameManualSettingsDialog( this );
+    m_manualSettingsDialog = new K3bLameManualSettingsDialog( widget() );
     for( int i = 0; s_lame_bitrates[i]; ++i )
         m_manualSettingsDialog->m_comboMaximumBitrate->addItem( i18n("%1 kbps" , s_lame_bitrates[i]) );
 
@@ -254,7 +254,7 @@ void K3bLameEncoderSettingsWidget::defaults()
     m_spinEncoderQuality->setValue( DEFAULT_ENCODER_QUALITY );
 
     updateManualSettingsLabel();
-    emit changed( true );
+    setNeedsSave( true );
 }
 
 #include "k3blameencoderconfigwidget.moc"

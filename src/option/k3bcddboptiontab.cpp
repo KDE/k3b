@@ -27,8 +27,13 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
 
     if (result) {
         m_cddbKcm = result.plugin;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         m_cddbKcm->layout()->setContentsMargins( 0, 0, 0, 0 );
         layout->addWidget( m_cddbKcm );
+#else
+        m_cddbKcm->widget()->layout()->setContentsMargins( 0, 0, 0, 0 );
+        layout->addWidget( m_cddbKcm->widget() );
+#endif
     } else {
         QLabel* label = new QLabel( i18n( "Unable to load KCDDB configuration module." ), this );
         label->setAlignment( Qt::AlignCenter );

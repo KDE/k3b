@@ -19,7 +19,7 @@ class K3bLameEncoderSettingsWidget : public K3b::PluginConfigWidget, Ui::K3bLame
     Q_OBJECT
 
 public:
-    K3bLameEncoderSettingsWidget( QWidget* parent, const QVariantList& args );
+    K3bLameEncoderSettingsWidget( QObject* parent, const KPluginMetaData& metaData, const QVariantList& args );
     ~K3bLameEncoderSettingsWidget() override;
 
 public Q_SLOTS:

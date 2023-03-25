@@ -23,7 +23,7 @@ class K3bOggVorbisEncoderSettingsWidget : public K3b::PluginConfigWidget
     Q_OBJECT
 
 public:
-    explicit K3bOggVorbisEncoderSettingsWidget( QWidget* parent = 0, const QVariantList& = QVariantList() );
+    explicit K3bOggVorbisEncoderSettingsWidget( QObject* parent, const KPluginMetaData& metaData, const QVariantList& args );
     ~K3bOggVorbisEncoderSettingsWidget() override;
 
 public Q_SLOTS:

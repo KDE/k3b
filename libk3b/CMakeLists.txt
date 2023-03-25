@@ -202,7 +202,6 @@ target_include_directories(k3blib
 target_link_libraries(k3blib
     PUBLIC
         KF${KF_MAJOR_VERSION}::Completion
-        KF${KF_MAJOR_VERSION}::ConfigWidgets
         KF${KF_MAJOR_VERSION}::CoreAddons
         KF${KF_MAJOR_VERSION}::KIOCore
         KF${KF_MAJOR_VERSION}::Service
@@ -211,7 +210,6 @@ target_link_libraries(k3blib
         KF${KF_MAJOR_VERSION}::FileMetaData
         KF${KF_MAJOR_VERSION}::IconThemes
         KF${KF_MAJOR_VERSION}::I18n
-        KF${KF_MAJOR_VERSION}::KCMUtils
         KF${KF_MAJOR_VERSION}::Solid
         Qt${QT_MAJOR_VERSION}::Network
         Qt${QT_MAJOR_VERSION}::Widgets
@@ -221,7 +219,19 @@ target_link_libraries(k3blib
         ${videodvd_libraries}
 )
 if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(k3blib PRIVATE Qt6::Core5Compat)
+    target_link_libraries(k3blib
+        PUBLIC
+            KF6::KCMUtils
+        PRIVATE
+            Qt6::Core5Compat
+    )
+else()
+    target_link_libraries(k3blib
+        PUBLIC
+            KF5::ConfigWidgets
+        PRIVATE
+            KF5::KCMUtils
+    )
 endif()
 
 if(WIN32)

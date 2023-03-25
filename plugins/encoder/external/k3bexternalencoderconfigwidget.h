@@ -38,7 +38,7 @@ class K3bExternalEncoderSettingsWidget : public K3b::PluginConfigWidget, public 
     Q_OBJECT
 
 public:
-    K3bExternalEncoderSettingsWidget( QWidget* parent, const QVariantList& args );
+    K3bExternalEncoderSettingsWidget(  QObject* parent, const KPluginMetaData& metaData, const QVariantList& args );
     ~K3bExternalEncoderSettingsWidget() override;
 
 public Q_SLOTS:

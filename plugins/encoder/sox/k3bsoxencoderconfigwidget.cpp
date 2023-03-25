@@ -13,11 +13,10 @@
 
 K3B_EXPORT_PLUGIN_CONFIG_WIDGET( kcm_k3bsoxencoder, K3bSoxEncoderConfigWidget )
 
-
-K3bSoxEncoderConfigWidget::K3bSoxEncoderConfigWidget( QWidget* parent, const QVariantList& args )
-    : K3b::PluginConfigWidget( parent, args )
+K3bSoxEncoderConfigWidget::K3bSoxEncoderConfigWidget(QObject *parent, const KPluginMetaData& metaData, const QVariantList& args )
+    : K3b::PluginConfigWidget( parent, metaData, args )
 {
-    setupUi( this );
+    setupUi( widget() );
     m_editSamplerate->setValidator( new QIntValidator( m_editSamplerate ) );
     
     connect( m_checkManual, SIGNAL(toggled(bool)), this, SLOT(changed()) );
@@ -66,7 +65,7 @@ void K3bSoxEncoderConfigWidget::defaults()
     m_editSamplerate->setText( QString::number( DEFAULT_SAMPLE_RATE ) );
     setDataEncoding( DEFAULT_DATA_ENCODING );
     setDataSize( DEFAULT_DATA_SIZE );
-    emit changed( true );
+    setNeedsSave( true );
 }
 
 

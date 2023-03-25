@@ -129,7 +129,11 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
         dlg.setWindowTitle( plugin->pluginMetaData().name() );
         QVBoxLayout* layout = new QVBoxLayout( &dlg );
         QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, &dlg );
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         layout->addWidget( module );
+#else
+        layout->addWidget( module->widget() );
+#endif
         layout->addWidget( buttonBox );
 
         connect( buttonBox, &QDialogButtonBox::clicked, [&](QAbstractButton *button) {

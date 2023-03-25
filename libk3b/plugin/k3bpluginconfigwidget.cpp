@@ -11,11 +11,17 @@
 
 // we only use the plugins when loaded into the main application. Thus they do not need
 // their own KComponentData
-K3b::PluginConfigWidget::PluginConfigWidget( QWidget* parent, const QVariantList& args )
-    : KCModule( parent, args )
+K3b::PluginConfigWidget::PluginConfigWidget(QObject *parent, const KPluginMetaData& metaData, const QVariantList& args )
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    : KCModule( qobject_cast<QWidget *>(parent), args )
+{
+    Q_UNUSED(metaData);
+}
+#else
+    : KCModule( parent, metaData, args )
 {
 }
-
+#endif
 
 K3b::PluginConfigWidget::~PluginConfigWidget()
 {

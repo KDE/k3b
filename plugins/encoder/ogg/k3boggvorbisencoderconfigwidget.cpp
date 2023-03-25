@@ -48,10 +48,10 @@ namespace {
 
 } // namespace
 
-K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
-    : K3b::PluginConfigWidget( parent, args )
+K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget(QObject *parent, const KPluginMetaData& metaData, const QVariantList& args )
+    : K3b::PluginConfigWidget( parent, metaData, args )
 {
-    w = new base_K3bOggVorbisEncoderSettingsWidget( this );
+    w = new base_K3bOggVorbisEncoderSettingsWidget( widget() );
 
     QString ttQuality = i18n("Controls the quality of the encoded files.");
     QString wsQuality = i18n("<p>Vorbis' audio quality is not best measured in kilobits per second, "
@@ -72,7 +72,7 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget( QWidget* p
     w->m_slideQualityLevel->setWhatsThis( wsQuality );
 
 
-    QHBoxLayout* lay = new QHBoxLayout( this );
+    QHBoxLayout* lay = new QHBoxLayout( widget() );
     lay->setContentsMargins( 0, 0, 0, 0 );
 
     lay->addWidget( w );
@@ -156,7 +156,7 @@ void K3bOggVorbisEncoderSettingsWidget::defaults()
     w->m_inputBitrateLower->setValue( DEFAULT_BITRATE_LOWER );
     w->m_checkBitrateLower->setChecked( DEFAULT_BITRATE_LOWER != -1 );
     //  w->m_inputSamplerate->setValue( DEFAULT_SAMPLERATE );
-    emit changed( true );
+    setNeedsSave( true );
 }
 
 #include "k3boggvorbisencoderconfigwidget.moc"

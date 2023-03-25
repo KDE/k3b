@@ -45,7 +45,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit PluginConfigWidget( QWidget* parent = 0, const QVariantList& args = QVariantList() );
+        explicit PluginConfigWidget( QObject* parent, const KPluginMetaData& metaData, const QVariantList& args);
         ~PluginConfigWidget() override;
 
         // TODO: find a nice way to get the plugin name for the config groups
@@ -83,6 +83,12 @@ namespace K3b {
          * Save the config
          */
         virtual void saveConfig( KConfigGroup config );
+#endif
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    protected:
+        QWidget* widget() { return this; }
+        void setNeedsSave(bool needs) { emit changed(needs); }
 #endif
     };
 }

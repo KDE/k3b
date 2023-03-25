@@ -88,11 +88,10 @@ void K3bExternalEncoderEditDialog::accept()
 
 
 
-
-K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* parent, const QVariantList& args )
-    : K3b::PluginConfigWidget( parent, args )
+K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget(QObject *parent, const KPluginMetaData& metaData, const QVariantList& args )
+    : K3b::PluginConfigWidget( parent, metaData, args )
 {
-    setupUi( this );
+    setupUi( widget() );
 
     connect( m_viewEncoders, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
              this, SLOT(slotSelectionChanged(QTreeWidgetItem*)) );
@@ -105,7 +104,7 @@ K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget( QWidget* par
     connect( m_buttonRemove, SIGNAL(clicked()),
              this, SLOT(slotRemoveCommand()) );
 
-    m_editDlg = new K3bExternalEncoderEditDialog( this );
+    m_editDlg = new K3bExternalEncoderEditDialog( widget() );
     slotSelectionChanged( 0 );
 }
 
@@ -123,7 +122,7 @@ void K3bExternalEncoderSettingsWidget::slotNewCommand()
     if( m_editDlg->exec() == QDialog::Accepted ) {
         K3bExternalEncoderCommand cmd = m_editDlg->currentCommand();
         createItem( cmd );
-        emit changed( true );
+        setNeedsSave( true );
     }
 }
 
@@ -142,7 +141,7 @@ void K3bExternalEncoderSettingsWidget::slotEditCommand()
         if( m_editDlg->exec() == QDialog::Accepted ) {
             m_commands[item] = m_editDlg->currentCommand();
             fillItem( item, m_editDlg->currentCommand() );
-            emit changed( true );
+            setNeedsSave( true );
         }
     }
 }
@@ -153,7 +152,7 @@ void K3bExternalEncoderSettingsWidget::slotRemoveCommand()
     if( QTreeWidgetItem* item = m_viewEncoders->currentItem() ) {
         m_commands.remove( item );
         delete item;
-        emit changed( true );
+        setNeedsSave( true );
     }
 }
 
@@ -169,7 +168,7 @@ void K3bExternalEncoderSettingsWidget::save()
 {
     qDebug();
     K3bExternalEncoderCommand::saveCommands( m_commands.values() );
-    emit changed( false );
+    setNeedsSave( false );
 }
 
 
@@ -177,7 +176,7 @@ void K3bExternalEncoderSettingsWidget::defaults()
 {
     qDebug();
     fillEncoderView( K3bExternalEncoderCommand::defaultCommands() );
-    emit changed( true );
+    setNeedsSave( true );
 }
 
 
