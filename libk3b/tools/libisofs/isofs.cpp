@@ -152,7 +152,7 @@ int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata) 
 	int i,end=0;
 	unsigned short sum;
 	boot_entry *defcur=NULL,*deflast=NULL;
-	register struct validation_entry *ventry=NULL;
+	struct validation_entry *ventry=NULL;
 
 	head->sections=NULL;
 	head->defentry=NULL;
@@ -525,7 +525,7 @@ int ProcessDir(readfunc *read,int extent,int size,dircallback *callback,void *ud
  */
 int JolietLevel(struct iso_volume_descriptor *ivd) {
 	int ret=0;
-	register struct iso_supplementary_descriptor *isd;
+	struct iso_supplementary_descriptor *isd;
 
 	isd = (struct iso_supplementary_descriptor *) ivd;
 
