@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-06-12 00:44+0000\n"
+"POT-Creation-Date: 2023-04-03 00:45+0000\n"
 "PO-Revision-Date: 2012-03-24 18:50-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -335,7 +335,7 @@ msgid "Use CDDB entry"
 msgstr "CDDB のエントリを使う"
 
 #: jobs/k3bcdcopyjob.cpp:475 projects/k3bcdrdaowriter.cpp:519
-#: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
+#: projects/k3bcdrecordwriter.cpp:414 projects/k3bcdrskinwriter.cpp:426
 #: projects/k3bgrowisofswriter.cpp:332
 #, kde-format
 msgid "Preparing write process..."
@@ -404,8 +404,8 @@ msgstr "コピー (セッション %1) を書き込み"
 
 #: jobs/k3bcdcopyjob.cpp:707 projects/audiocd/k3baudiojob.cpp:642
 #: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
-#: projects/k3bcdrdaowriter.cpp:579 projects/k3bcdrecordwriter.cpp:441
-#: projects/k3bcdrskinwriter.cpp:453 projects/k3bgrowisofswriter.cpp:357
+#: projects/k3bcdrdaowriter.cpp:579 projects/k3bcdrecordwriter.cpp:442
+#: projects/k3bcdrskinwriter.cpp:454 projects/k3bgrowisofswriter.cpp:357
 #: projects/mixedcd/k3bmixedjob.cpp:1002
 #, kde-format
 msgid "Simulating"
@@ -468,14 +468,14 @@ msgstr "メディアをリロード"
 
 #: jobs/k3bcdcopyjob.cpp:1054 projects/audiocd/k3baudiojob.cpp:411
 #: projects/datacd/k3bdatajob.cpp:520 projects/mixedcd/k3bmixedjob.cpp:533
-#: projects/videocd/k3bvcdjob.cpp:496
+#: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
 msgstr ""
 "K3b は書き込んだディスクをイジェクトできませんでした。手動で行ってください。"
 
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:261
-#: projects/k3bcdrecordwriter.cpp:728 projects/k3bcdrskinwriter.cpp:741
+#: projects/k3bcdrecordwriter.cpp:730 projects/k3bcdrskinwriter.cpp:743
 #: projects/mixedcd/k3bmixedjob.cpp:554
 #, kde-format
 msgid "Please reload the medium and press 'OK'"
@@ -529,43 +529,43 @@ msgstr[0] "1 個のコピー作成"
 msgstr[1] "%1 個のコピー作成"
 
 #: jobs/k3bcdda2wavreader.cpp:88 jobs/k3bclonejob.cpp:81
-#: jobs/k3bdvdbooktypejob.cpp:278 jobs/k3bdvdformattingjob.cpp:455
+#: jobs/k3bdvdbooktypejob.cpp:278 jobs/k3bdvdformattingjob.cpp:457
 #: jobs/k3breadcdreader.cpp:98 projects/datacd/k3bmsinfofetcher.cpp:47
 #: projects/datacd/k3bmsinfofetcher.cpp:83 projects/k3bcdrdaowriter.cpp:440
-#: projects/k3bcdrecordwriter.cpp:193 projects/k3bcdrskinwriter.cpp:194
+#: projects/k3bcdrecordwriter.cpp:194 projects/k3bcdrskinwriter.cpp:195
 #: projects/k3bgrowisofswriter.cpp:134 projects/videocd/k3bvcdjob.cpp:194
 #, kde-format
 msgid "Could not find %1 executable."
 msgstr "%1 実行ファイルが見つかりませんでした。"
 
 #: jobs/k3bcdda2wavreader.cpp:127 jobs/k3bdvdbooktypejob.cpp:326
-#: jobs/k3bdvdformattingjob.cpp:496
+#: jobs/k3bdvdformattingjob.cpp:498
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:174
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:376
 #: projects/datacd/k3bisoimager.cpp:298 projects/datacd/k3bisoimager.cpp:440
-#: projects/k3bcdrdaowriter.cpp:548 projects/k3bcdrecordwriter.cpp:433
-#: projects/k3bcdrskinwriter.cpp:445 projects/k3bgrowisofswriter.cpp:352
+#: projects/k3bcdrdaowriter.cpp:548 projects/k3bcdrecordwriter.cpp:434
+#: projects/k3bcdrskinwriter.cpp:446 projects/k3bgrowisofswriter.cpp:352
 #: projects/videocd/k3bvcdjob.cpp:248
 #, kde-format
 msgid "Could not start %1."
 msgstr "%1 を開始できませんでした。"
 
 #: jobs/k3bcdda2wavreader.cpp:232 jobs/k3bdvdbooktypejob.cpp:183
-#: jobs/k3bdvdformattingjob.cpp:263
+#: jobs/k3bdvdformattingjob.cpp:265
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:271
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:472
 #: projects/audiocd/k3baudionormalizejob.cpp:176
 #: projects/datacd/k3bisoimager.cpp:162 projects/k3bcdrdaowriter.cpp:759
-#: projects/k3bcdrecordwriter.cpp:889 projects/k3bcdrskinwriter.cpp:902
-#: projects/videocd/k3bvcdjob.cpp:348
+#: projects/k3bcdrecordwriter.cpp:891 projects/k3bcdrskinwriter.cpp:904
+#: projects/videocd/k3bvcdjob.cpp:349
 #, kde-format
 msgid "%1 returned an unknown error (code %2)."
 msgstr "%1 が不明なエラーを返しました (コード %2)"
 
 #: jobs/k3bcdda2wavreader.cpp:238 jobs/k3bdvdbooktypejob.cpp:191
-#: jobs/k3bdvdformattingjob.cpp:271
+#: jobs/k3bdvdformattingjob.cpp:273
 #: projects/audiocd/k3baudionormalizejob.cpp:188
-#: projects/videocd/k3bvcdjob.cpp:356
+#: projects/videocd/k3bvcdjob.cpp:357
 #, kde-format
 msgid "%1 did not exit cleanly."
 msgstr "%1 は正常に終了しませんでした。"
@@ -591,7 +591,7 @@ msgid "Reading clone image"
 msgstr "クローンイメージを読み込み"
 
 #: jobs/k3bclonejob.cpp:218 projects/datacd/k3bdatajob.cpp:458
-#: projects/videocd/k3bvcdjob.cpp:456
+#: projects/videocd/k3bvcdjob.cpp:457
 #, kde-format
 msgid "Writing Track %1 of %2"
 msgstr "トラック %1 / %2 を書き込み"
@@ -746,11 +746,11 @@ msgstr "メディアをチェック"
 msgid "Booktype successfully changed"
 msgstr "ブックタイプを変更しました"
 
-#: jobs/k3bdvdbooktypejob.cpp:185 jobs/k3bdvdformattingjob.cpp:265
+#: jobs/k3bdvdbooktypejob.cpp:185 jobs/k3bdvdformattingjob.cpp:267
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:274
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:475
 #: projects/audiocd/k3baudionormalizejob.cpp:178
-#: projects/datacd/k3bisoimager.cpp:164 projects/videocd/k3bvcdjob.cpp:350
+#: projects/datacd/k3bisoimager.cpp:164 projects/videocd/k3bvcdjob.cpp:351
 #, kde-format
 msgid "Please send me an email with the last output."
 msgstr "最終出力をメールで送ってください。"
@@ -775,7 +775,7 @@ msgstr "空でない DVD+R メディアのブックタイプは変更できま�
 msgid "No DVD+R(W) media found."
 msgstr "DVD+R(W) メディアが見つかりません。"
 
-#: jobs/k3bdvdbooktypejob.cpp:261 jobs/k3bdvdformattingjob.cpp:313
+#: jobs/k3bdvdbooktypejob.cpp:261 jobs/k3bdvdformattingjob.cpp:315
 #, kde-format
 msgid "Unable to determine media state."
 msgstr "メディアの状態を検出できません。"
@@ -1035,7 +1035,7 @@ msgid "Formatting disc"
 msgstr "ディスクをフォーマットしています"
 
 #: jobs/k3bdvdformattingjob.cpp:122 projects/k3bcdrdaowriter.cpp:531
-#: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrskinwriter.cpp:429
+#: projects/k3bcdrecordwriter.cpp:418 projects/k3bcdrskinwriter.cpp:430
 #: projects/k3bgrowisofswriter.cpp:336
 #, kde-format
 msgid "Unmounting medium"
@@ -1050,106 +1050,106 @@ msgstr ""
 "リライト可能な DVD または Blu-ray メディアを、ドライブに入れてください<p><b>"
 "%1 %2 (%3)</b>"
 
-#: jobs/k3bdvdformattingjob.cpp:253
+#: jobs/k3bdvdformattingjob.cpp:255
 #, kde-format
 msgid "Formatting successfully completed"
 msgstr "フォーマット完了"
 
-#: jobs/k3bdvdformattingjob.cpp:256
+#: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
 msgstr "進捗が 100% になる前に停止しても心配しないでください。"
 
-#: jobs/k3bdvdformattingjob.cpp:257
+#: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
 msgid "The formatting will continue in the background during writing."
 msgstr "書き込み中はバックグラウンドでフォーマットを続けます。"
 
-#: jobs/k3bdvdformattingjob.cpp:282
+#: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
 msgid "Ejecting medium..."
 msgstr "メディアをイジェクト..."
 
-#: jobs/k3bdvdformattingjob.cpp:294 projects/k3babstractwriter.cpp:75
+#: jobs/k3bdvdformattingjob.cpp:296 projects/k3babstractwriter.cpp:75
 #, kde-format
 msgid "Unable to eject medium."
 msgstr "メディアをイジェクトできません。"
 
-#: jobs/k3bdvdformattingjob.cpp:334
+#: jobs/k3bdvdformattingjob.cpp:336
 #, kde-format
 msgid "Found %1 medium."
 msgstr "%1 メディアを検出しました。"
 
-#: jobs/k3bdvdformattingjob.cpp:338
+#: jobs/k3bdvdformattingjob.cpp:340
 #, kde-format
 msgid "No rewritable DVD or BD medium found. Unable to format."
 msgstr ""
 "リライト可能な DVD または BD メディアが見つかりません。フォーマットできませ"
 "ん。"
 
-#: jobs/k3bdvdformattingjob.cpp:363 jobs/k3bdvdformattingjob.cpp:413
+#: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
 #, kde-format
 msgid "No need to format %1 media more than once."
 msgstr "%1 メディアを二回フォーマットする必要はありません。"
 
-#: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
+#: jobs/k3bdvdformattingjob.cpp:367 jobs/k3bdvdformattingjob.cpp:417
 #, kde-format
 msgid "It may simply be overwritten."
 msgstr "上書きされます。"
 
-#: jobs/k3bdvdformattingjob.cpp:368 jobs/k3bdvdformattingjob.cpp:407
-#: jobs/k3bdvdformattingjob.cpp:418
+#: jobs/k3bdvdformattingjob.cpp:370 jobs/k3bdvdformattingjob.cpp:409
+#: jobs/k3bdvdformattingjob.cpp:420
 #, kde-format
 msgid "Forcing formatting anyway."
 msgstr "強制的にフォーマットします。"
 
-#: jobs/k3bdvdformattingjob.cpp:369
+#: jobs/k3bdvdformattingjob.cpp:371
 #, kde-format
 msgid "It is not recommended to force formatting of %1 media."
 msgstr "%1 メディアの強制フォーマットは、お勧めできません。"
 
-#: jobs/k3bdvdformattingjob.cpp:371
+#: jobs/k3bdvdformattingjob.cpp:373
 #, kde-format
 msgid "After 10-20 reformats the media might become unusable."
 msgstr "10-20 回再フォーマットすると使用不能になります。"
 
-#: jobs/k3bdvdformattingjob.cpp:380
+#: jobs/k3bdvdformattingjob.cpp:382
 #, kde-format
 msgid "Formatting %1 medium"
 msgstr "%1 メディアをフォーマットしています"
 
-#: jobs/k3bdvdformattingjob.cpp:391
+#: jobs/k3bdvdformattingjob.cpp:393
 #, kde-format
 msgid "Formatted in %1 mode."
 msgstr "%1 モードでフォーマットしました。"
 
-#: jobs/k3bdvdformattingjob.cpp:405
+#: jobs/k3bdvdformattingjob.cpp:407
 #, kde-format
 msgid "Media is already empty."
 msgstr "メディアは既に空です。"
 
-#: jobs/k3bdvdformattingjob.cpp:432
+#: jobs/k3bdvdformattingjob.cpp:434
 #, kde-format
 msgid "Formatting DVD-RW in %1 mode."
 msgstr "DVD-RW を %1 モードでフォーマット"
 
-#: jobs/k3bdvdformattingjob.cpp:439
+#: jobs/k3bdvdformattingjob.cpp:441
 #, kde-format
 msgid "Unable to determine the current formatting state of the DVD-RW medium."
 msgstr "DVD-RW メディアの現在のフォーマット状態が分かりません。"
 
-#: jobs/k3bdvdformattingjob.cpp:462
+#: jobs/k3bdvdformattingjob.cpp:464
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:99
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:135
 #: projects/audiocd/k3baudionormalizejob.cpp:52
-#: projects/datacd/k3bmkisofshandler.cpp:53 projects/k3bcdrdaowriter.cpp:448
-#: projects/k3bcdrecordwriter.cpp:395 projects/k3bcdrskinwriter.cpp:407
+#: projects/datacd/k3bmkisofshandler.cpp:55 projects/k3bcdrdaowriter.cpp:448
+#: projects/k3bcdrecordwriter.cpp:396 projects/k3bcdrskinwriter.cpp:408
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
 msgstr "%1 %2 を使用 - Copyright (C) %3"
 
-#: jobs/k3bdvdformattingjob.cpp:501
+#: jobs/k3bdvdformattingjob.cpp:503
 #, kde-format
 msgid "Formatting"
 msgstr "フォーマット"
@@ -1377,27 +1377,27 @@ msgstr "readcd を開始できませんでした"
 msgid "Cannot read source disk."
 msgstr "ソースディスクを読み込めません。"
 
-#: jobs/k3breadcdreader.cpp:266
+#: jobs/k3breadcdreader.cpp:267
 #, kde-format
 msgid "Retrying from sector %1."
 msgstr "セクター %1 からリトライ"
 
-#: jobs/k3breadcdreader.cpp:281
+#: jobs/k3breadcdreader.cpp:283
 #, kde-format
 msgid "Uncorrected error in sector %1"
 msgstr "セクター %1 で修正不能なエラー"
 
-#: jobs/k3breadcdreader.cpp:284
+#: jobs/k3breadcdreader.cpp:286
 #, kde-format
 msgid "Corrected error in sector %1"
 msgstr "セクター %1 でエラーを修正"
 
-#: jobs/k3breadcdreader.cpp:304
+#: jobs/k3breadcdreader.cpp:306
 #, kde-format
 msgid "%1 returned error: %2"
 msgstr "%1 はエラーを返しました: %2"
 
-#: jobs/k3breadcdreader.cpp:309
+#: jobs/k3breadcdreader.cpp:311
 #, kde-format
 msgid "Readcd exited abnormally."
 msgstr "readcd は不正終了しました。"
@@ -1673,7 +1673,7 @@ msgstr "オーディオエンコーダ"
 msgid "An unknown error occurred."
 msgstr "不明なエラーが発生しました。"
 
-#: plugin/k3bpluginmanager.cpp:158
+#: plugin/k3bpluginmanager.cpp:157
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "プラグイン “%1” には設定項目はありません。"
@@ -1819,8 +1819,8 @@ msgid "Writing track %1 of %2%3"
 msgstr "トラック %1 of %2%3 を書き込み"
 
 #: projects/audiocd/k3baudiojob.cpp:646 projects/datacd/k3bdatajob.cpp:431
-#: projects/k3bcdrdaowriter.cpp:567 projects/k3bcdrecordwriter.cpp:449
-#: projects/k3bcdrskinwriter.cpp:461 projects/k3bgrowisofswriter.cpp:362
+#: projects/k3bcdrdaowriter.cpp:567 projects/k3bcdrecordwriter.cpp:450
+#: projects/k3bcdrskinwriter.cpp:462 projects/k3bgrowisofswriter.cpp:362
 #, kde-format
 msgid "Writing"
 msgstr "書き込み"
@@ -1844,7 +1844,7 @@ msgstr[0] "1 トラック (%2 分)"
 msgstr[1] "%1 トラック (%2 分)"
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
-#: projects/videocd/k3bvcdjob.cpp:570 projects/videodvd/k3bvideodvdjob.cpp:58
+#: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
 #, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
@@ -1956,7 +1956,7 @@ msgstr "%1 にイメージファイルを作成"
 msgid "Image successfully created in %1"
 msgstr "%1 でイメージファイルを作成しました"
 
-#: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:92
+#: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:90
 #, kde-format
 msgid "Could not open file %1"
 msgstr "ファイル ‘%1’ を開けませんでした"
@@ -2129,7 +2129,7 @@ msgstr ""
 "扱うことができません:"
 
 #: projects/datacd/k3bisoimager.cpp:172 projects/k3bcdrdaowriter.cpp:770
-#: projects/k3bcdrecordwriter.cpp:909 projects/k3bcdrskinwriter.cpp:922
+#: projects/k3bcdrecordwriter.cpp:911 projects/k3bcdrskinwriter.cpp:924
 #, kde-format
 msgid "%1 crashed."
 msgstr "%1 がクラッシュしました。"
@@ -2220,38 +2220,38 @@ msgctxt ""
 msgid "K3b data project"
 msgstr "データプロジェクトを書き込み"
 
-#: projects/datacd/k3bmkisofshandler.cpp:64
+#: projects/datacd/k3bmkisofshandler.cpp:66
 #, kde-format
 msgid "Mkisofs executable not found."
 msgstr "mkisofs の実行ファイルが見つかりません。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:78
+#: projects/datacd/k3bmkisofshandler.cpp:80
 #, kde-format
 msgid "Read error from file '%1'"
 msgstr "ファイル ‘%1’ の読み込みエラー"
 
-#: projects/datacd/k3bmkisofshandler.cpp:83
+#: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
 msgid "Used version of mkisofs does not have large file support."
 msgstr ""
 "使用されているバージョンの mkisofs は、大きなファイルをサポートしていません。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:84
+#: projects/datacd/k3bmkisofshandler.cpp:86
 #, kde-format
 msgid "Files bigger than 2 GB cannot be handled."
 msgstr "2 GB より大きいファイルは扱えません。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:88
+#: projects/datacd/k3bmkisofshandler.cpp:90
 #, kde-format
 msgid "No such file or directory '%1'."
 msgstr "ファイルまたはディレクトリがありません '%1'"
 
-#: projects/datacd/k3bmkisofshandler.cpp:102
+#: projects/datacd/k3bmkisofshandler.cpp:105
 #, kde-format
 msgid "Encountered an incorrectly encoded filename '%1'"
 msgstr "不正にエンコードされたファイル名 ‘%1’ を検出"
 
-#: projects/datacd/k3bmkisofshandler.cpp:104
+#: projects/datacd/k3bmkisofshandler.cpp:107
 #, kde-format
 msgid ""
 "This may be caused by a system update which changed the local character set."
@@ -2259,7 +2259,7 @@ msgstr ""
 "ローカルの文字セットを変更するシステムアップデートを行ったからかもしれませ"
 "ん。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:105
+#: projects/datacd/k3bmkisofshandler.cpp:108
 #, fuzzy, kde-format
 #| msgid ""
 #| "You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
@@ -2271,17 +2271,17 @@ msgstr ""
 "ファイル名を修正するには convmv (http://j3e.de/linux/convmv/) をお使いくださ"
 "い。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:109
+#: projects/datacd/k3bmkisofshandler.cpp:112
 #, kde-format
 msgid "The boot image has an invalid size."
 msgstr "ブートイメージのサイズが無効です。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:113
+#: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
 msgid "The boot image contains multiple partitions."
 msgstr "ブートイメージが複数のパーティションを含んでいます。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:114
+#: projects/datacd/k3bmkisofshandler.cpp:117
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
 msgstr ""
@@ -2333,8 +2333,8 @@ msgstr "メディアを取り出しています"
 msgid "Cdrdao %1 does not support disabling burnfree."
 msgstr "cdrdao %1 は burnfree 無効をサポートしていません。"
 
-#: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:298
-#: projects/k3bcdrskinwriter.cpp:306
+#: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:299
+#: projects/k3bcdrskinwriter.cpp:307
 #, kde-format
 msgid "'Force unsafe operations' enabled."
 msgstr "「安全でない操作を強制する」を有効にしました。"
@@ -2418,8 +2418,8 @@ msgstr ""
 "cdrdao のバグにより toc/cue ファイル ‘%1’ を削除しました。バックアップ ‘%2’ "
 "からは復旧できませんでした。"
 
-#: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:786
-#: projects/k3bcdrskinwriter.cpp:799 projects/k3bgrowisofswriter.cpp:515
+#: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:788
+#: projects/k3bcdrskinwriter.cpp:801 projects/k3bgrowisofswriter.cpp:515
 #, kde-format
 msgid "Simulation successfully completed"
 msgstr "シミュレーション完了"
@@ -2429,8 +2429,8 @@ msgstr "シミュレーション完了"
 msgid "Reading successfully completed"
 msgstr "読み込み完了"
 
-#: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:788
-#: projects/k3bcdrskinwriter.cpp:801 projects/k3bgrowisofswriter.cpp:517
+#: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:790
+#: projects/k3bcdrskinwriter.cpp:803 projects/k3bgrowisofswriter.cpp:517
 #, kde-format
 msgid "Writing successfully completed"
 msgstr "書き込み完了"
@@ -2445,8 +2445,8 @@ msgstr "コピー完了"
 msgid "Blanking successfully completed"
 msgstr "消去完了"
 
-#: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:792
-#: projects/k3bcdrskinwriter.cpp:805 projects/k3bgrowisofswriter.cpp:510
+#: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:794
+#: projects/k3bcdrskinwriter.cpp:807 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
 msgstr "全体の平均書き込み速度: %1 KB/s (%2x)"
@@ -2456,429 +2456,429 @@ msgstr "全体の平均書き込み速度: %1 KB/s (%2x)"
 msgid "Please include the debugging output in your problem report."
 msgstr "不具合報告にデバッグ出力を含めてください。"
 
-#: projects/k3bcdrdaowriter.cpp:787 projects/k3bcdrecordwriter.cpp:666
-#: projects/k3bcdrskinwriter.cpp:679
+#: projects/k3bcdrdaowriter.cpp:788 projects/k3bcdrecordwriter.cpp:668
+#: projects/k3bcdrskinwriter.cpp:681
 #, no-c-format, kde-format
 msgid "Medium or burner does not support writing at %1x speed"
 msgstr "メディアかライターが %1 倍速書き込みをサポートしていません"
 
-#: projects/k3bcdrdaowriter.cpp:789
+#: projects/k3bcdrdaowriter.cpp:790
 #, no-c-format, kde-format
 msgid "Switching down burn speed to %1x"
 msgstr "書き込み速度を %1 に下げる"
 
-#: projects/k3bcdrdaowriter.cpp:819
+#: projects/k3bcdrdaowriter.cpp:820
 #, kde-format
 msgid "Executing Power calibration"
 msgstr "パワー補正を実行"
 
-#: projects/k3bcdrdaowriter.cpp:823
+#: projects/k3bcdrdaowriter.cpp:824
 #, kde-format
 msgid "Power calibration successful"
 msgstr "パワー補正に成功"
 
-#: projects/k3bcdrdaowriter.cpp:824
+#: projects/k3bcdrdaowriter.cpp:825
 #, kde-format
 msgid "Preparing burn process..."
 msgstr "書き込みプロセスを準備..."
 
-#: projects/k3bcdrdaowriter.cpp:828
+#: projects/k3bcdrdaowriter.cpp:829
 #, kde-format
 msgid "Flushing cache"
 msgstr "キャッシュを消去"
 
-#: projects/k3bcdrdaowriter.cpp:832
+#: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
 msgid "Writing CD-Text lead-in..."
 msgstr "CD-Text のリードインを書き込み..."
 
-#: projects/k3bcdrdaowriter.cpp:836
+#: projects/k3bcdrdaowriter.cpp:837
 #, kde-format
 msgid "Turning BURN-Proof on"
 msgstr "BURN-Proof をオンに"
 
-#: projects/k3bcdrdaowriter.cpp:844
+#: projects/k3bcdrdaowriter.cpp:845
 #, kde-format
 msgid "Found ISRC code"
 msgstr "ISRC コードを検出"
 
-#: projects/k3bcdrdaowriter.cpp:848
+#: projects/k3bcdrdaowriter.cpp:849
 #, kde-format
 msgid "Found pregap: %1"
 msgstr "プリギャップを検出: %1"
 
-#: projects/k3bcdrdaowriter.cpp:861
+#: projects/k3bcdrdaowriter.cpp:862
 #, kde-format
 msgid "No cdrdao driver found."
 msgstr "cdrdao ドライバが見つかりません。"
 
-#: projects/k3bcdrdaowriter.cpp:862
+#: projects/k3bcdrdaowriter.cpp:863
 #, kde-format
 msgid "Please select one manually in the device settings."
 msgstr "デバイスの設定で手動で一つ選んでください。"
 
-#: projects/k3bcdrdaowriter.cpp:863
+#: projects/k3bcdrdaowriter.cpp:864
 #, kde-format
 msgid "For most current drives this would be 'generic-mmc'."
 msgstr "現在の多くのドライブでは “generic-mmc” になります。"
 
-#: projects/k3bcdrdaowriter.cpp:872
+#: projects/k3bcdrdaowriter.cpp:873
 #, kde-format
 msgid "Device not ready, waiting."
 msgstr "デバイスの準備ができていません。待機します。"
 
-#: projects/k3bcdrdaowriter.cpp:876
+#: projects/k3bcdrdaowriter.cpp:877
 #, kde-format
 msgid "Cue sheet not accepted."
 msgstr "CUE シートが拒否されました。"
 
-#: projects/k3bcdrdaowriter.cpp:881 projects/k3bcdrecordwriter.cpp:610
-#: projects/k3bcdrskinwriter.cpp:623
+#: projects/k3bcdrdaowriter.cpp:882 projects/k3bcdrecordwriter.cpp:612
+#: projects/k3bcdrskinwriter.cpp:625
 #, kde-format
 msgid "No valid %1 option: %2"
 msgstr "有効な %1 オプションではありません: %2"
 
-#: projects/k3bcdrdaowriter.cpp:886 projects/k3bcdrecordwriter.cpp:813
-#: projects/k3bcdrskinwriter.cpp:826 projects/k3bgrowisofshandler.cpp:224
+#: projects/k3bcdrdaowriter.cpp:887 projects/k3bcdrecordwriter.cpp:815
+#: projects/k3bcdrskinwriter.cpp:828 projects/k3bgrowisofshandler.cpp:224
 #: projects/mixedcd/k3bmixedjob.cpp:1030
 #, kde-format
 msgid "Data does not fit on disk."
 msgstr "データがディスクに収まりません。"
 
-#: projects/k3bcdrdaowriter.cpp:888 projects/k3bcdrecordwriter.cpp:815
-#: projects/k3bcdrskinwriter.cpp:828
+#: projects/k3bcdrdaowriter.cpp:889 projects/k3bcdrecordwriter.cpp:817
+#: projects/k3bcdrskinwriter.cpp:830
 #, kde-format
 msgid "Enable overburning in the advanced K3b settings to burn anyway."
 msgstr ""
 "どうしても書き込む場合は、詳細設定でオーバーバーンを有効にしてください。"
 
-#: projects/k3bcdrdaowriter.cpp:973
+#: projects/k3bcdrdaowriter.cpp:974
 #, fuzzy, kde-format
 #| msgid "Writing leadin "
 msgid "Writing leadin"
 msgstr "リードインを書き込み"
 
-#: projects/k3bcdrdaowriter.cpp:979
+#: projects/k3bcdrdaowriter.cpp:980
 #, fuzzy, kde-format
 #| msgid "Writing leadout "
 msgid "Writing leadout"
 msgstr "リードアウトを書き込み"
 
-#: projects/k3bcdrecordwriter.cpp:229
+#: projects/k3bcdrecordwriter.cpp:230
 #, kde-format
 msgid "Cdrecord version %1 does not support Blu-ray writing."
 msgstr "cdrecord %1 は Blu-ray の書き込みをサポートしていません。"
 
-#: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
+#: projects/k3bcdrecordwriter.cpp:254 projects/k3bcdrskinwriter.cpp:272
 #, kde-format
 msgid "Writer does not support disk at once (DAO) recording"
 msgstr "ライターがディスクアットワンス (DAO) 書き込みをサポートしていません"
 
-#: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
+#: projects/k3bcdrecordwriter.cpp:265 projects/k3bcdrskinwriter.cpp:281
 #, kde-format
 msgid "Writer does not support raw writing."
 msgstr "ライターが raw 書き込みをサポートしていません。"
 
-#: projects/k3bcdrecordwriter.cpp:273
+#: projects/k3bcdrecordwriter.cpp:274
 #, kde-format
 msgid "Cdrecord does not support writing %1 media."
 msgstr "cdrecord は %1 メディアの書き込みをサポートしていません。"
 
-#: projects/k3bcdrecordwriter.cpp:293 projects/k3bcdrskinwriter.cpp:301
+#: projects/k3bcdrecordwriter.cpp:294 projects/k3bcdrskinwriter.cpp:302
 #, kde-format
 msgid "Writer does not support buffer underrun free recording (Burnfree)"
 msgstr "ライターがバッファアンダーラン防止 (Burnfree) をサポートしていません"
 
-#: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
+#: projects/k3bcdrecordwriter.cpp:330 projects/k3bcdrskinwriter.cpp:342
 #, kde-format
 msgid "Failed to write temporary file '%1'"
 msgstr "一時ファイル ‘%1’ に書き込めませんでした"
 
-#: projects/k3bcdrecordwriter.cpp:349
+#: projects/k3bcdrecordwriter.cpp:350
 #, kde-format
 msgid "Cdrecord %1 does not support overburning."
 msgstr "cdrecord %1 はオーバーバーンをサポートしていません。"
 
-#: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
+#: projects/k3bcdrecordwriter.cpp:445 projects/k3bcdrskinwriter.cpp:457
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
 msgstr "シミュレーションを %1 倍速で開始..."
 
-#: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
+#: projects/k3bcdrecordwriter.cpp:447 projects/k3bcdrskinwriter.cpp:459
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
 msgstr "%1 シミュレーションを %2 倍速で開始..."
 
-#: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
+#: projects/k3bcdrecordwriter.cpp:453 projects/k3bcdrskinwriter.cpp:465
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
 msgstr "DAO 書き込みを %1 倍速で開始..."
 
-#: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
+#: projects/k3bcdrecordwriter.cpp:455 projects/k3bcdrskinwriter.cpp:467
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
 msgstr "%1 書き込みを %2x 倍速で開始..."
 
-#: projects/k3bcdrecordwriter.cpp:548 projects/k3bcdrskinwriter.cpp:560
+#: projects/k3bcdrecordwriter.cpp:550 projects/k3bcdrskinwriter.cpp:562
 #: projects/k3bgrowisofswriter.cpp:428
 #, kde-format
 msgid "Writing data"
 msgstr "データを書き込み"
 
-#: projects/k3bcdrecordwriter.cpp:577 projects/k3bcdrskinwriter.cpp:590
+#: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "DAO (Disk At Once) recording not supported with this writer"
 msgstr ""
 "このライターは DAO (ディスクアットワンス) 書き込みをサポートしていません"
 
-#: projects/k3bcdrecordwriter.cpp:578 projects/k3bcdrskinwriter.cpp:591
+#: projects/k3bcdrecordwriter.cpp:580 projects/k3bcdrskinwriter.cpp:593
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
 msgstr "TAO (トラックアットワンス) を選んでやり直してください"
 
-#: projects/k3bcdrecordwriter.cpp:581 projects/k3bcdrskinwriter.cpp:594
+#: projects/k3bcdrecordwriter.cpp:583 projects/k3bcdrskinwriter.cpp:596
 #, kde-format
 msgid "RAW recording not supported with this writer"
 msgstr "このライターは RAW 書き込みをサポートしていません"
 
-#: projects/k3bcdrecordwriter.cpp:584 projects/k3bcdrskinwriter.cpp:597
+#: projects/k3bcdrecordwriter.cpp:586 projects/k3bcdrskinwriter.cpp:599
 #, kde-format
 msgid "Input/output error. Not necessarily serious."
 msgstr "Input/output エラー。必ずしも深刻なものではありません。"
 
-#: projects/k3bcdrecordwriter.cpp:593 projects/k3bcdrskinwriter.cpp:606
+#: projects/k3bcdrecordwriter.cpp:595 projects/k3bcdrskinwriter.cpp:608
 #, kde-format
 msgid "Reloading of medium required"
 msgstr "メディアのリロードが必要です"
 
-#: projects/k3bcdrecordwriter.cpp:602 projects/k3bcdrskinwriter.cpp:615
+#: projects/k3bcdrecordwriter.cpp:604 projects/k3bcdrskinwriter.cpp:617
 #: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
 #, kde-format
 msgid "Trying to write more than the official disk capacity"
 msgstr "ディスクの公式性能を超えて書き込み"
 
-#: projects/k3bcdrecordwriter.cpp:637 projects/k3bcdrskinwriter.cpp:650
+#: projects/k3bcdrecordwriter.cpp:639 projects/k3bcdrskinwriter.cpp:652
 #, kde-format
 msgid "Only session 1 will be cloned."
 msgstr "セッション 1 のみクローンします。"
 
-#: projects/k3bcdrecordwriter.cpp:640 projects/k3bcdrskinwriter.cpp:653
+#: projects/k3bcdrecordwriter.cpp:642 projects/k3bcdrskinwriter.cpp:655
 #, kde-format
 msgid "Unable to fixate the disk."
 msgstr "ディスクを固定できません。"
 
-#: projects/k3bcdrecordwriter.cpp:670 projects/k3bcdrskinwriter.cpp:683
+#: projects/k3bcdrecordwriter.cpp:672 projects/k3bcdrskinwriter.cpp:685
 #, no-c-format, kde-format
 msgid "Switching burn speed up to %1x"
 msgstr "書き込み速度を %1 に上げる"
 
-#: projects/k3bcdrecordwriter.cpp:673 projects/k3bcdrskinwriter.cpp:686
+#: projects/k3bcdrecordwriter.cpp:675 projects/k3bcdrskinwriter.cpp:688
 #, no-c-format, kde-format
 msgid "Switching burn speed down to %1x"
 msgstr "書き込み速度を %1 に下げる"
 
-#: projects/k3bcdrecordwriter.cpp:685 projects/k3bcdrskinwriter.cpp:698
+#: projects/k3bcdrecordwriter.cpp:687 projects/k3bcdrskinwriter.cpp:700
 #, kde-format
 msgid "Starting disc write"
 msgstr "ディスクへの書き込み開始"
 
-#: projects/k3bcdrecordwriter.cpp:701 projects/k3bcdrskinwriter.cpp:714
+#: projects/k3bcdrecordwriter.cpp:703 projects/k3bcdrskinwriter.cpp:716
 #: projects/k3bgrowisofshandler.cpp:133
 #, kde-format
 msgid "Closing Session"
 msgstr "セッションを閉じる"
 
-#: projects/k3bcdrecordwriter.cpp:705 projects/k3bcdrskinwriter.cpp:718
+#: projects/k3bcdrecordwriter.cpp:707 projects/k3bcdrskinwriter.cpp:720
 #, kde-format
 msgid "Writing Leadin"
 msgstr "リードインを書き込み"
 
-#: projects/k3bcdrecordwriter.cpp:708 projects/k3bcdrskinwriter.cpp:721
+#: projects/k3bcdrecordwriter.cpp:710 projects/k3bcdrskinwriter.cpp:723
 #, kde-format
 msgid "Writing Leadout"
 msgstr "リードアウトを書き込み"
 
-#: projects/k3bcdrecordwriter.cpp:711 projects/k3bcdrskinwriter.cpp:724
+#: projects/k3bcdrecordwriter.cpp:713 projects/k3bcdrskinwriter.cpp:726
 #, kde-format
 msgid "Writing pregap"
 msgstr "プリギャップを書き込み"
 
-#: projects/k3bcdrecordwriter.cpp:714 projects/k3bcdrskinwriter.cpp:727
+#: projects/k3bcdrecordwriter.cpp:716 projects/k3bcdrskinwriter.cpp:729
 #, kde-format
 msgid "Performing Optimum Power Calibration"
 msgstr "パワー調整を最適化中"
 
-#: projects/k3bcdrecordwriter.cpp:717 projects/k3bcdrskinwriter.cpp:730
+#: projects/k3bcdrecordwriter.cpp:719 projects/k3bcdrskinwriter.cpp:732
 #, kde-format
 msgid "Sending CUE sheet"
 msgstr "CUE シートを送信"
 
-#: projects/k3bcdrecordwriter.cpp:720 projects/k3bcdrskinwriter.cpp:733
+#: projects/k3bcdrecordwriter.cpp:722 projects/k3bcdrskinwriter.cpp:735
 #, kde-format
 msgid "Enabled Burnfree"
 msgstr "Burnfree を有効に"
 
-#: projects/k3bcdrecordwriter.cpp:723 projects/k3bcdrskinwriter.cpp:736
+#: projects/k3bcdrecordwriter.cpp:725 projects/k3bcdrskinwriter.cpp:738
 #, kde-format
 msgid "Disabled Burnfree"
 msgstr "Burnfree を無効に"
 
-#: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
+#: projects/k3bcdrecordwriter.cpp:731 projects/k3bcdrskinwriter.cpp:744
 #: projects/mixedcd/k3bmixedjob.cpp:555
 #, kde-format
 msgid "Unable to close the tray"
 msgstr "トレイを閉じられません"
 
-#: projects/k3bcdrecordwriter.cpp:739 projects/k3bcdrskinwriter.cpp:752
+#: projects/k3bcdrecordwriter.cpp:741 projects/k3bcdrskinwriter.cpp:754
 #, kde-format
 msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
 msgstr[0] "Burnfree を 1 回使いました。"
 msgstr[1] "Burnfree を %1 回使いました。"
 
-#: projects/k3bcdrecordwriter.cpp:745 projects/k3bcdrskinwriter.cpp:758
+#: projects/k3bcdrecordwriter.cpp:747 projects/k3bcdrskinwriter.cpp:760
 #, kde-format
 msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
 msgstr[0] "バッファアンダーランが 1 回発生しました。"
 msgstr[1] "バッファアンダーランが %1 回発生しました。"
 
-#: projects/k3bcdrecordwriter.cpp:784 projects/k3bcdrskinwriter.cpp:797
+#: projects/k3bcdrecordwriter.cpp:786 projects/k3bcdrskinwriter.cpp:799
 #, kde-format
 msgid "Erasing successfully completed"
 msgstr "消去が正しく完了しました"
 
-#: projects/k3bcdrecordwriter.cpp:811 projects/k3bcdrskinwriter.cpp:824
+#: projects/k3bcdrecordwriter.cpp:813 projects/k3bcdrskinwriter.cpp:826
 #: projects/k3bgrowisofshandler.cpp:222
 #, kde-format
 msgid "Data did not fit on disk."
 msgstr "データがディスクに収まりません。"
 
-#: projects/k3bcdrecordwriter.cpp:822 projects/k3bcdrskinwriter.cpp:835
+#: projects/k3bcdrecordwriter.cpp:824 projects/k3bcdrskinwriter.cpp:837
 #, kde-format
 msgid "%1 could not reserve shared memory segment of requested size."
 msgstr "%1 は要求したサイズの共有メモリを確保できませんでした。"
 
-#: projects/k3bcdrecordwriter.cpp:823 projects/k3bcdrskinwriter.cpp:836
+#: projects/k3bcdrecordwriter.cpp:825 projects/k3bcdrskinwriter.cpp:838
 #, kde-format
 msgid "Probably you chose a too large buffer size."
 msgstr "バッファの指定サイズが大き過ぎるのかもしれません。"
 
-#: projects/k3bcdrecordwriter.cpp:826 projects/k3bcdrskinwriter.cpp:839
+#: projects/k3bcdrecordwriter.cpp:828 projects/k3bcdrskinwriter.cpp:841
 #, kde-format
 msgid "OPC failed. Probably the writer does not like the medium."
 msgstr "OPC 失敗。ライターがメディアをサポートしていないようです。"
 
-#: projects/k3bcdrecordwriter.cpp:829 projects/k3bcdrskinwriter.cpp:842
+#: projects/k3bcdrecordwriter.cpp:831 projects/k3bcdrskinwriter.cpp:844
 #, kde-format
 msgid "Unable to set write speed to %1."
 msgstr "書き込み速度を %1 に設定できません。"
 
-#: projects/k3bcdrecordwriter.cpp:830 projects/k3bcdrskinwriter.cpp:843
+#: projects/k3bcdrecordwriter.cpp:832 projects/k3bcdrskinwriter.cpp:845
 #, kde-format
 msgid "Probably this is lower than your writer's lowest writing speed."
 msgstr "ライターの最低書き込み速度より遅く指定しているかもしれません。"
 
-#: projects/k3bcdrecordwriter.cpp:833 projects/k3bcdrskinwriter.cpp:846
+#: projects/k3bcdrecordwriter.cpp:835 projects/k3bcdrskinwriter.cpp:848
 #, kde-format
 msgid "Unable to send CUE sheet."
 msgstr "CUE シートを送れません。"
 
-#: projects/k3bcdrecordwriter.cpp:835 projects/k3bcdrecordwriter.cpp:874
-#: projects/k3bcdrecordwriter.cpp:894 projects/k3bcdrskinwriter.cpp:848
-#: projects/k3bcdrskinwriter.cpp:887 projects/k3bcdrskinwriter.cpp:907
+#: projects/k3bcdrecordwriter.cpp:837 projects/k3bcdrecordwriter.cpp:876
+#: projects/k3bcdrecordwriter.cpp:896 projects/k3bcdrskinwriter.cpp:850
+#: projects/k3bcdrskinwriter.cpp:889 projects/k3bcdrskinwriter.cpp:909
 #, kde-format
 msgid "Sometimes using TAO writing mode solves this issue."
 msgstr "TAO 書き込みモードを使うと問題を解決できる場合もあります。"
 
-#: projects/k3bcdrecordwriter.cpp:838 projects/k3bcdrskinwriter.cpp:851
+#: projects/k3bcdrecordwriter.cpp:840 projects/k3bcdrskinwriter.cpp:853
 #, kde-format
 msgid "Unable to open new session."
 msgstr "新しいセッションを開けません。"
 
-#: projects/k3bcdrecordwriter.cpp:839 projects/k3bcdrskinwriter.cpp:852
+#: projects/k3bcdrecordwriter.cpp:841 projects/k3bcdrskinwriter.cpp:854
 #, kde-format
 msgid "Probably a problem with the medium."
 msgstr "おそらくメディアの問題です。"
 
-#: projects/k3bcdrecordwriter.cpp:842 projects/k3bcdrskinwriter.cpp:855
+#: projects/k3bcdrecordwriter.cpp:844 projects/k3bcdrskinwriter.cpp:857
 #, kde-format
 msgid "The disk might still be readable."
 msgstr "このディスクはまだ読み込み可能かもしれません。"
 
-#: projects/k3bcdrecordwriter.cpp:844 projects/k3bcdrskinwriter.cpp:857
+#: projects/k3bcdrecordwriter.cpp:846 projects/k3bcdrskinwriter.cpp:859
 #, kde-format
 msgid "Try DAO writing mode."
 msgstr "DAO 書き込みモードを試してください。"
 
-#: projects/k3bcdrecordwriter.cpp:847 projects/k3bcdrskinwriter.cpp:860
+#: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
 #, kde-format
 msgid "%1 has no permission to open the device."
 msgstr "%1 にはデバイスを開く権限がありません。"
 
-#: projects/k3bcdrecordwriter.cpp:848 projects/k3bcdrskinwriter.cpp:861
+#: projects/k3bcdrecordwriter.cpp:850 projects/k3bcdrskinwriter.cpp:863
 #, kde-format
 msgid "Modify device settings in K3b to solve this problem."
 msgstr "K3b 内のデバイス設定を変更し、問題を解決してください。"
 
-#: projects/k3bcdrecordwriter.cpp:851 projects/k3bcdrskinwriter.cpp:864
+#: projects/k3bcdrecordwriter.cpp:853 projects/k3bcdrskinwriter.cpp:866
 #, kde-format
 msgid "Probably a buffer underrun occurred."
 msgstr "バッファアンダーランが生じたのでしょう。"
 
-#: projects/k3bcdrecordwriter.cpp:853 projects/k3bcdrskinwriter.cpp:866
+#: projects/k3bcdrecordwriter.cpp:855 projects/k3bcdrskinwriter.cpp:868
 #, kde-format
 msgid "Please enable Burnfree or choose a lower burning speed."
 msgstr "Burnfree を有効にするか、低速で書き込んでください。"
 
-#: projects/k3bcdrecordwriter.cpp:855 projects/k3bcdrskinwriter.cpp:868
+#: projects/k3bcdrecordwriter.cpp:857 projects/k3bcdrskinwriter.cpp:870
 #, kde-format
 msgid "Please choose a lower burning speed."
 msgstr "より遅い書き込み速度を選んでください。"
 
-#: projects/k3bcdrecordwriter.cpp:858 projects/k3bcdrskinwriter.cpp:871
+#: projects/k3bcdrecordwriter.cpp:860 projects/k3bcdrskinwriter.cpp:873
 #, kde-format
 msgid "Found a high-speed medium not suitable for the writer being used."
 msgstr "ライターに適合しない高速度メディアを検出。"
 
-#: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrecordwriter.cpp:863
-#: projects/k3bcdrskinwriter.cpp:872 projects/k3bcdrskinwriter.cpp:876
+#: projects/k3bcdrecordwriter.cpp:861 projects/k3bcdrecordwriter.cpp:865
+#: projects/k3bcdrskinwriter.cpp:874 projects/k3bcdrskinwriter.cpp:878
 #, kde-format
 msgid "Use the 'force unsafe operations' option to ignore this."
 msgstr "これを無視するために「安全でない操作を強制する」オプションを使用。"
 
-#: projects/k3bcdrecordwriter.cpp:862 projects/k3bcdrskinwriter.cpp:875
+#: projects/k3bcdrecordwriter.cpp:864 projects/k3bcdrskinwriter.cpp:877
 #, kde-format
 msgid "Found a low-speed medium not suitable for the writer being used."
 msgstr "ライターに適合しない低速度メディアを検出。"
 
-#: projects/k3bcdrecordwriter.cpp:866 projects/k3bcdrskinwriter.cpp:879
+#: projects/k3bcdrecordwriter.cpp:868 projects/k3bcdrskinwriter.cpp:881
 #, kde-format
 msgid "Most likely the burning failed due to low-quality media."
 msgstr "低品質なメディアによる書き込みエラーでしょう。"
 
-#: projects/k3bcdrecordwriter.cpp:869 projects/k3bcdrskinwriter.cpp:882
+#: projects/k3bcdrecordwriter.cpp:871 projects/k3bcdrskinwriter.cpp:884
 #, kde-format
 msgid "Another application is blocking the device (most likely automounting)."
 msgstr ""
 "他のアプリケーションがデバイスをブロックしています (おそらく自動マウント中)"
 
-#: projects/k3bcdrecordwriter.cpp:872 projects/k3bcdrskinwriter.cpp:885
+#: projects/k3bcdrecordwriter.cpp:874 projects/k3bcdrskinwriter.cpp:887
 #, kde-format
 msgid "A write error occurred."
 msgstr "書き込みエラー発生。"
 
-#: projects/k3bcdrecordwriter.cpp:877 projects/k3bcdrskinwriter.cpp:890
+#: projects/k3bcdrecordwriter.cpp:879 projects/k3bcdrskinwriter.cpp:892
 #, kde-format
 msgid "Some drives do not support all erase types."
 msgstr "すべての消去モードをサポートしていないドライブもあります。"
 
-#: projects/k3bcdrecordwriter.cpp:878 projects/k3bcdrskinwriter.cpp:891
+#: projects/k3bcdrecordwriter.cpp:880 projects/k3bcdrskinwriter.cpp:893
 #, kde-format
 msgid "Try again using 'Complete' erasing."
 msgstr "「完全」消去モードでやり直してみてください。"
 
-#: projects/k3bcdrecordwriter.cpp:885
+#: projects/k3bcdrecordwriter.cpp:887
 #, kde-format
 msgid ""
 "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
@@ -2887,54 +2887,54 @@ msgstr ""
 "kernel 2.6.8 以降では suid root で cdrecord による SCSI 転送をすることができ"
 "ません。"
 
-#: projects/k3bcdrecordwriter.cpp:886 projects/k3bcdrskinwriter.cpp:899
+#: projects/k3bcdrecordwriter.cpp:888 projects/k3bcdrskinwriter.cpp:901
 #, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr ""
 "K3b::Setup を使って問題を解決するか suid bit を手動で削除してください。"
 
-#: projects/k3bcdrecordwriter.cpp:897
+#: projects/k3bcdrecordwriter.cpp:899
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
 msgstr "パッチを当てていない cdrecord バージョンをお使いなら..."
 
-#: projects/k3bcdrecordwriter.cpp:898 projects/k3bcdrskinwriter.cpp:911
+#: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
 msgstr "...高品質のメディアを使ってもこのエラーが出るのなら..."
 
-#: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
+#: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
 msgstr "...K3b FAQ が助けにならないなら..."
 
-#: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
+#: projects/k3bcdrecordwriter.cpp:902 projects/k3bcdrskinwriter.cpp:915
 #, kde-format
 msgid "...please include the debugging output in your problem report."
 msgstr "...問題の報告にデバッグ出力を添えてください。"
 
-#: projects/k3bcdrskinwriter.cpp:240
+#: projects/k3bcdrskinwriter.cpp:241
 #, fuzzy, kde-format
 #| msgid "Cdrecord version %1 does not support Blu-ray writing."
 msgid "Cdrskin version %1 does not support Blu-ray writing."
 msgstr ""
 "<command>cdrecord</command> %1 は Blu-ray の書き込みをサポートしていません。"
 
-#: projects/k3bcdrskinwriter.cpp:286
+#: projects/k3bcdrskinwriter.cpp:287
 #, fuzzy, kde-format
 #| msgid "Cdrecord does not support writing %1 media."
 msgid "Cdrskin does not support writing %1 media."
 msgstr ""
 "<command>cdrecord</command> は %1 メディアの書き込みをサポートしていません。"
 
-#: projects/k3bcdrskinwriter.cpp:361
+#: projects/k3bcdrskinwriter.cpp:362
 #, fuzzy, kde-format
 #| msgid "Cdrdao %1 does not support overburning."
 msgid "Cdrskin %1 does not support overburning."
 msgstr "<command>cdrdao</command> %1 はオーバーバーンをサポートしていません。"
 
-#: projects/k3bcdrskinwriter.cpp:898
+#: projects/k3bcdrskinwriter.cpp:900
 #, fuzzy, kde-format
 #| msgid ""
 #| "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when "
@@ -2946,7 +2946,7 @@ msgstr ""
 "kernel 2.6.8 以降では suid root で <command>cdrecord</command> による SCSI 転"
 "送をすることができません。"
 
-#: projects/k3bcdrskinwriter.cpp:910
+#: projects/k3bcdrskinwriter.cpp:912
 #, fuzzy, kde-format
 #| msgid "If you are running an unpatched cdrecord version..."
 msgid "If you are running an unpatched cdrskin version..."
@@ -3424,12 +3424,12 @@ msgstr "MPEG1 と MPEG2 の動画ファイルのみをサポートしていま�
 msgid "Wrong File Format"
 msgstr "不正なファイルフォーマット"
 
-#: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:468
+#: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:469
 #, kde-format
 msgid "Removing Binary file %1"
 msgstr "バイナリファイル ‘%1’ を削除"
 
-#: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:478
+#: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format
 msgid "Removing Cue file %1"
 msgstr "Cue ファイル ‘%1’ を削除"
@@ -3469,37 +3469,37 @@ msgstr ""
 msgid "%1 executable too old: need version %2 or greater."
 msgstr "%1 実行ファイルは古すぎます: バージョン %2 以上が必要です。"
 
-#: projects/videocd/k3bvcdjob.cpp:286
+#: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
 msgid "Scanning video file %1 of %2 (%3)"
 msgstr "動画ファイル %1 / %2 (%3) をスキャン"
 
-#: projects/videocd/k3bvcdjob.cpp:322
+#: projects/videocd/k3bvcdjob.cpp:323
 #, kde-format
 msgid "Creating Image for track %1"
 msgstr "トラック %1 のイメージを作成"
 
-#: projects/videocd/k3bvcdjob.cpp:344
+#: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
 msgstr "Cue/Bin ファイルを作成しました。"
 
-#: projects/videocd/k3bvcdjob.cpp:387
+#: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
 msgid "Writing Copy %1 of %2"
 msgstr "コピー %1 / %2 を書き込み"
 
-#: projects/videocd/k3bvcdjob.cpp:513
+#: projects/videocd/k3bvcdjob.cpp:514
 #, kde-format
 msgid "One or more BCD fields out of range for %1"
 msgstr "一つ以上の BCD 欄が %1 の範囲を超えています"
 
-#: projects/videocd/k3bvcdjob.cpp:516
+#: projects/videocd/k3bvcdjob.cpp:517
 #, kde-format
 msgid "From now on, scan information data errors will not be reported anymore"
 msgstr "これ以降はスキャン情報データのエラーを報告しません"
 
-#: projects/videocd/k3bvcdjob.cpp:517
+#: projects/videocd/k3bvcdjob.cpp:518
 #, kde-format
 msgid ""
 "Consider enabling the 'update scan offsets' option, if it is not enabled "
@@ -3508,59 +3508,59 @@ msgstr ""
 "まだ有効にしていない場合は、「スキャンオフセットを更新」を有効にしてみてくだ"
 "さい。"
 
-#: projects/videocd/k3bvcdjob.cpp:524
+#: projects/videocd/k3bvcdjob.cpp:525
 #, kde-format
 msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
 msgstr "APS pts の順序が正しくありません (実際の pts は %1, 最後の pts は %2)"
 
-#: projects/videocd/k3bvcdjob.cpp:525
+#: projects/videocd/k3bvcdjob.cpp:526
 #, kde-format
 msgid "Ignoring this aps"
 msgstr "この APS を無視"
 
-#: projects/videocd/k3bvcdjob.cpp:533
+#: projects/videocd/k3bvcdjob.cpp:534
 #, kde-format
 msgid "Bad packet at packet #%1 (stream byte offset %2)"
 msgstr "パケット #%1 で不正なパケット (stream byte offset %2)"
 
-#: projects/videocd/k3bvcdjob.cpp:540
+#: projects/videocd/k3bvcdjob.cpp:541
 #, kde-format
 msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
 msgstr[0] "残り 1 バイトのストリームを無視します。"
 msgstr[1] "残り %1 バイトのストリームを無視します。"
 
-#: projects/videocd/k3bvcdjob.cpp:542
+#: projects/videocd/k3bvcdjob.cpp:543
 #, kde-format
 msgid "An unknown number of remaining stream bytes will be ignored."
 msgstr "残りバイト数が不明なストリームは無視されます。"
 
-#: projects/videocd/k3bvcdjob.cpp:551
+#: projects/videocd/k3bvcdjob.cpp:552
 #, kde-format
 msgid "Writing Video CD (Version 1.1)"
 msgstr "ビデオ CD (バージョン 1.1) を書き込み"
 
-#: projects/videocd/k3bvcdjob.cpp:553
+#: projects/videocd/k3bvcdjob.cpp:554
 #, kde-format
 msgid "Writing Video CD (Version 2.0)"
 msgstr "ビデオ CD (バージョン 2.0) を書き込み"
 
-#: projects/videocd/k3bvcdjob.cpp:555
+#: projects/videocd/k3bvcdjob.cpp:556
 #, kde-format
 msgid "Writing Super Video CD"
 msgstr "Super ビデオ CD を書き込み"
 
-#: projects/videocd/k3bvcdjob.cpp:557
+#: projects/videocd/k3bvcdjob.cpp:558
 #, kde-format
 msgid "Writing High-Quality Video CD"
 msgstr "High-Quality Video CD を書き込み"
 
-#: projects/videocd/k3bvcdjob.cpp:559
+#: projects/videocd/k3bvcdjob.cpp:560
 #, kde-format
 msgid "Writing Video CD"
 msgstr "ビデオ CD を書き込み"
 
-#: projects/videocd/k3bvcdjob.cpp:566
+#: projects/videocd/k3bvcdjob.cpp:567
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
@@ -3769,12 +3769,12 @@ msgstr "デバイス選択"
 msgid "Please select a device:"
 msgstr "デバイスを選んでください:"
 
-#: tools/k3bmd5job.cpp:85
+#: tools/k3bmd5job.cpp:83
 #, kde-format
 msgid "Could not find file %1"
 msgstr "ファイル ‘%1’ が見つかりませんでした"
 
-#: tools/k3bmd5job.cpp:230
+#: tools/k3bmd5job.cpp:228
 #, kde-format
 msgid "Error while reading from file %1"
 msgstr "ファイル ‘%1’ を読み込み中にエラー"

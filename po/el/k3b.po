@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-08 00:58+0000\n"
+"POT-Creation-Date: 2023-04-03 00:45+0000\n"
 "PO-Revision-Date: 2023-01-06 17:29+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -148,7 +148,7 @@ msgstr "CRC"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:389
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:180
-#: ../plugins/encoder/lame/k3blametyes.h:86
+#: ../plugins/encoder/lame/k3blametyes.h:88
 #, kde-format
 msgid "Mono"
 msgstr "Μονοφωνικό"
@@ -161,7 +161,7 @@ msgstr "Διπλός"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:393
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:175
-#: ../plugins/encoder/lame/k3blametyes.h:85
+#: ../plugins/encoder/lame/k3blametyes.h:87
 #, kde-format
 msgid "Joint Stereo"
 msgstr "Πολυπλεγμένο στερεοφωνικό"
@@ -169,7 +169,7 @@ msgstr "Πολυπλεγμένο στερεοφωνικό"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:395
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:170
-#: ../plugins/encoder/lame/k3blametyes.h:84
+#: ../plugins/encoder/lame/k3blametyes.h:86
 #, kde-format
 msgid "Stereo"
 msgstr "Στερεοφωνικό"
@@ -307,7 +307,7 @@ msgstr "Εντολή"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:111
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -449,12 +449,12 @@ msgstr "Εγγραφή κεφαλίδας Ή&χου"
 msgid "Command failed: %1"
 msgstr "Η εντολή απέτυχε: %1"
 
-#: ../plugins/encoder/external/k3bexternalencoder.cpp:200
+#: ../plugins/encoder/external/k3bexternalencoder.cpp:201
 #, kde-format
 msgid "Could not find program '%1'"
 msgstr "Αδυναμία εύρεσης του προγράμματος '%1'"
 
-#: ../plugins/encoder/external/k3bexternalencoder.cpp:207
+#: ../plugins/encoder/external/k3bexternalencoder.cpp:208
 #, kde-format
 msgid "Invalid command: the command is empty."
 msgstr "Μη έγκυρη εντολή: η εντολή είναι κενή."
@@ -511,7 +511,7 @@ msgstr "Δεν ορίστηκε όνομα αρχείου"
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
-#: projects/k3bprojectburndialog.cpp:256 projects/k3bvcdburndialog.cpp:409
+#: projects/k3bprojectburndialog.cpp:259 projects/k3bvcdburndialog.cpp:409
 #: projects/k3bvcdburndialog.cpp:441 projects/k3bvcdtrackdialog.cpp:445
 #: rip/k3baudioprojectconvertingdialog.cpp:136
 #: rip/k3baudiorippingdialog.cpp:154 rip/k3bvideocdrippingdialog.cpp:90
@@ -562,7 +562,7 @@ msgstr "Αλλαγή ρυθμίσεων..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:967
+#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:969
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -828,53 +828,43 @@ msgstr "Μεταβλητό bitrate (%1)"
 msgid "(Lame) Manual Quality Settings"
 msgstr "Χειροκίνητες ρυθμίσεις ποιότητας"
 
-#: ../plugins/encoder/lame/k3blametyes.h:67
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:69
 msgid "Low quality (56 kbps)"
 msgstr "Χαμηλή ποιότητα (56 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:68
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:70
 msgid "Low quality (90 kbps)"
 msgstr "Χαμηλή ποιότητα (90 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:70
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:72
 msgid "Portable (average 115 kbps)"
 msgstr "Φορητό (μέσος ρυθμός 115 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:71
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:73
 msgid "Portable (average 130 kbps)"
 msgstr "Φορητό (μέσος ρυθμός 130 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:72
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:74
 msgid "Portable (average 160 kbps)"
 msgstr "Φορητό (μέσος ρυθμός 160 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:74
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:76
 msgid "HiFi (average 175 kbps)"
 msgstr "HiFi (μέσος ρυθμός 175 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:75
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:77
 msgid "HiFi (average 190 kbps)"
 msgstr "HiFi (μέσος ρυθμός 190 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:76
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:78
 msgid "HiFi (average 210 kbps)"
 msgstr "HiFi (μέσος ρυθμός 210 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:77
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:79
 msgid "HiFi (average 230 kbps)"
 msgstr "HiFi (μέσος ρυθμός 230 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:79
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:81
 msgid "Archiving (320 kbps)"
 msgstr "Αρχειοθέτηση (320 kbps)"
 
@@ -1984,17 +1974,17 @@ msgstr "Αδυναμία ανοίγματος του αρχείου %1"
 msgid "&Device"
 msgstr "&Συσκευή"
 
-#: k3bdiroperator.cpp:41
+#: k3bdiroperator.cpp:42
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "Σελιδοδείκτες K3b"
 
-#: k3bdiroperator.cpp:44
+#: k3bdiroperator.cpp:45
 #, kde-format
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
-#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:49 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "&Προσθήκη στο έργο"
@@ -2166,8 +2156,8 @@ msgstr "Τύπος:"
 #: rip/k3baudioprojectconvertingdialog.cpp:267
 #: rip/k3baudioprojectconvertingdialog.cpp:306
 #: rip/k3baudiorippingdialog.cpp:348 rip/k3baudiorippingdialog.cpp:403
-#: rip/k3bpatternparser.cpp:122 rip/k3bpatternparser.cpp:158
-#: rip/k3bpatternparser.cpp:164 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
+#: rip/k3bpatternparser.cpp:123 rip/k3bpatternparser.cpp:159
+#: rip/k3bpatternparser.cpp:165 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
 #, kde-format
 msgid "unknown"
 msgstr "άγνωστο"
@@ -2178,9 +2168,9 @@ msgid "Media ID:"
 msgstr "ID μέσου:"
 
 #: k3bdiskinfoview.cpp:311 k3bdiskinfoview.cpp:313 k3bdiskinfoview.cpp:317
-#: projects/k3bfillstatusdisplay.cpp:180 projects/k3bfillstatusdisplay.cpp:188
-#: projects/k3bfillstatusdisplay.cpp:191 projects/k3bfillstatusdisplay.cpp:196
-#: projects/k3bfillstatusdisplay.cpp:852
+#: projects/k3bfillstatusdisplay.cpp:181 projects/k3bfillstatusdisplay.cpp:189
+#: projects/k3bfillstatusdisplay.cpp:192 projects/k3bfillstatusdisplay.cpp:197
+#: projects/k3bfillstatusdisplay.cpp:854
 #, kde-format
 msgid "%1 min"
 msgstr "%1 λεπτά"
@@ -2523,7 +2513,7 @@ msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 από %2"
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:548
+#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
@@ -2554,43 +2544,43 @@ msgstr "Σφάλμα."
 msgid "Finished with errors"
 msgstr "Ολοκληρώθηκε με σφάλματα"
 
-#: k3bjobprogressdialog.cpp:482
+#: k3bjobprogressdialog.cpp:483
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "Επιθυμείτε πραγματικά να ακυρώσετε;"
 
-#: k3bjobprogressdialog.cpp:482
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "Επιβεβαίωση ακύρωσης"
 
-#: k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:556
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
 msgstr "Απομένει: %1"
 
-#: k3blsofwrapperdialog.cpp:38
+#: k3blsofwrapperdialog.cpp:39
 #, kde-format
 msgid "Device in use"
 msgstr "Η συσκευή χρησιμοποιείται"
 
-#: k3blsofwrapperdialog.cpp:45
+#: k3blsofwrapperdialog.cpp:46
 #, kde-format
 msgid "Continue"
 msgstr "Συνέχεια"
 
-#: k3blsofwrapperdialog.cpp:49
+#: k3blsofwrapperdialog.cpp:50
 #, kde-format
 msgid "Quit the other applications"
 msgstr "Τερματίστε τις άλλες εφαρμογές"
 
-#: k3blsofwrapperdialog.cpp:52 k3blsofwrapperdialog.cpp:81
+#: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
 #, kde-format
 msgid "Check again"
 msgstr "Έλεγχος ξανά"
 
-#: k3blsofwrapperdialog.cpp:72
+#: k3blsofwrapperdialog.cpp:73
 #, kde-format
 msgid ""
 "<p>Device <b>'%1'</b> is already in use by other applications (<em>%2</em>)."
@@ -2607,11 +2597,26 @@ msgstr ""
 
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
+msgid "www"
+msgstr ""
+
+#: k3blsofwrapperdialog.cpp:102
+#, kde-format
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
 msgstr ""
 "<p>Θέλετε πραγματικά το K3b να διακόψει τις ακόλουθες διεργασίες: <em>%1</"
 "em>;</p>"
+
+#: k3blsofwrapperdialog.cpp:103
+#, kde-format
+msgid "Kill the processes?"
+msgstr ""
+
+#: k3blsofwrapperdialog.cpp:104
+#, kde-format
+msgid "Kill"
+msgstr ""
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -4133,18 +4138,18 @@ msgid "Plain data image"
 msgstr "Απλή εικόνα δεδομένων"
 
 #: misc/k3bimagewritingdialog.cpp:522 misc/k3bmediacopydialog.cpp:95
-#: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:251
+#: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "Μέθοδος εγγραφής"
 
 #: misc/k3bimagewritingdialog.cpp:528 misc/k3bmediacopydialog.cpp:100
-#: projects/k3bprojectburndialog.cpp:270
+#: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "Αντίγραφα"
 
-#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:989
+#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:991
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
@@ -4219,72 +4224,77 @@ msgstr ""
 msgid "Unknown image type"
 msgstr "Άγνωστος τύπος εικόνας"
 
-#: misc/k3bimagewritingdialog.cpp:878
+#: misc/k3bimagewritingdialog.cpp:870 projects/k3bprojectburndialog.cpp:142
+#, kde-format
+msgid "Burn"
+msgstr "Εγγραφή"
+
+#: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Unable to read image file"
 msgstr "Αδυναμία ανάγνωσης αρχείου εικόνας"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:882
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "Δεν μοιάζει να είναι χρησιμοποιήσιμη εικόνα"
 
-#: misc/k3bimagewritingdialog.cpp:896
+#: misc/k3bimagewritingdialog.cpp:898
 #, kde-format
 msgid "File not found"
 msgstr "Το αρχείο δεν βρέθηκε"
 
-#: misc/k3bimagewritingdialog.cpp:1027
+#: misc/k3bimagewritingdialog.cpp:1029
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "Άθροισμα MD5:"
 
-#: misc/k3bimagewritingdialog.cpp:1067
+#: misc/k3bimagewritingdialog.cpp:1069
 #, kde-format
 msgid "Calculation canceled"
 msgstr "Ο υπολογισμός ακυρώθηκε"
 
-#: misc/k3bimagewritingdialog.cpp:1069
+#: misc/k3bimagewritingdialog.cpp:1071
 #, kde-format
 msgid "Calculation failed"
 msgstr "Ο υπολογισμός απέτυχε"
 
-#: misc/k3bimagewritingdialog.cpp:1085
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "Αντιγραφή του αθροίσματος ελέγχου στο πρόχειρο"
 
-#: misc/k3bimagewritingdialog.cpp:1086
+#: misc/k3bimagewritingdialog.cpp:1088
 #, kde-format
 msgid "Compare checksum..."
 msgstr "Σύγκριση του αθροίσματος ελέγχου..."
 
-#: misc/k3bimagewritingdialog.cpp:1093
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "Έλεγχος αθροίσματος MD5"
 
-#: misc/k3bimagewritingdialog.cpp:1094
+#: misc/k3bimagewritingdialog.cpp:1096
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "Παρακαλώ εισάγετε το άθροισμα MD5 για σύγκριση:"
 
-#: misc/k3bimagewritingdialog.cpp:1100
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "Το άθροισμα MD5 του %1 είναι ίδιο με αυτό που ορίστηκε."
 
-#: misc/k3bimagewritingdialog.cpp:1101
+#: misc/k3bimagewritingdialog.cpp:1103
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "Τα αθροίσματα MD5 είναι ίδια"
 
-#: misc/k3bimagewritingdialog.cpp:1103
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "Το άθροισμα MD5 του %1 διαφέρει από αυτό που ορίστηκε."
 
-#: misc/k3bimagewritingdialog.cpp:1104
+#: misc/k3bimagewritingdialog.cpp:1106
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "Τα αθροίσματα MD5 διαφέρουν"
@@ -4432,7 +4442,7 @@ msgstr ""
 "που περιέχουν εσφαλμένους τομείς.<p><b>Προσοχή:</b> Μόνο τα CD μονής "
 "συνεδρίας μπορούν να κλωνοποιηθούν."
 
-#: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:201
+#: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:204
 #, kde-format
 msgid ""
 "There does not seem to be enough free space in the temporary folder. Write "
@@ -4768,7 +4778,7 @@ msgstr "Εξαναγκασμός μη ασ&φαλών λειτουργιών"
 msgid "&Manual writing buffer size"
 msgstr "&Χειροκίνητο μέγεθος ενδιάμεσης μνήμης εγγραφής"
 
-#: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:584
+#: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:585
 #, kde-format
 msgid "MB"
 msgstr "MB"
@@ -4928,7 +4938,7 @@ msgstr ""
 "<p><b>Προσοχή:</b> Η ενεργοποίηση αυτής της επιλογής μπορεί να οδηγήσει σε "
 "καταστροφή του μέσου."
 
-#: option/k3bcddboptiontab.cpp:33
+#: option/k3bcddboptiontab.cpp:38
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "Αδυναμία φόρτωσης του αρθρώματος διαμόρφωσης του KCDDB."
@@ -5146,12 +5156,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "Διαδρομή αναζήτησης"
 
-#: option/k3bexternalbinwidget.cpp:239
+#: option/k3bexternalbinwidget.cpp:241
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Αδυναμία ενημέρωσης των ακόλουθων προγραμμάτων:"
 
-#: option/k3bexternalbinwidget.cpp:244
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Αδυναμία εκτέλεσης της ενέργειας: %1"
@@ -5220,7 +5230,8 @@ msgstr "Ο φάκελος (%1) δεν υπάρχει. Να δημιουργηθ�
 msgid "Create Folder"
 msgstr "Δημιουργία φακέλου"
 
-#: option/k3bmiscoptiontab.cpp:106
+#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "Δημιουργία"
@@ -7071,7 +7082,7 @@ msgstr "Αναζήτηση Musicbrainz"
 msgid "Try to determine meta information over the Internet"
 msgstr "Προσπάθεια ανάκτησης μεταπληροφοριών μέσω του Διαδικτύου"
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:128
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -7251,28 +7262,23 @@ msgid "Multisession Problem"
 msgstr "Πρόβλημα πολυσυνεδρίας"
 
 #: projects/k3bdataimagesettingswidget.cpp:32
-#, kde-format
 msgid "Linux/Unix only"
 msgstr "Linux/Unix μόνο"
 
 #: projects/k3bdataimagesettingswidget.cpp:33
-#, kde-format
 msgid "Linux/Unix + Windows"
 msgstr "Linux/Unix + Windows"
 
 #: projects/k3bdataimagesettingswidget.cpp:34
-#, kde-format
 msgid "Very large files (UDF)"
 msgstr "Πολύ μεγάλα αρχεία (UDF)"
 
 #: projects/k3bdataimagesettingswidget.cpp:35
-#, kde-format
 msgid "DOS Compatibility"
 msgstr "Συμβατότητα DOS"
 
 #: projects/k3bdataimagesettingswidget.cpp:36
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:61
-#, kde-format
 msgid "Custom"
 msgstr "Προσαρμοσμένο"
 
@@ -7365,6 +7371,11 @@ msgstr "Προσαρμοσμένο (μόνο ISO 9660)"
 #, kde-format
 msgid "Custom (%1)"
 msgstr "Προσαρμοσμένο (%1)"
+
+#: projects/k3bdataimagesettingswidget.cpp:228
+#, kde-format
+msgid "(K3b::DataImageSettingsWidget) found preset settings: "
+msgstr ""
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7799,7 +7810,7 @@ msgid "Always keep the existing file"
 msgstr "Πάντα διατήρηση του υπάρχοντος αρχείου"
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:117
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
 #, kde-format
 msgid "Rename"
 msgstr "Μετονομασία"
@@ -7922,63 +7933,63 @@ msgstr ""
 msgid "No Data to Burn"
 msgstr "Δεν υπάρχουν δεδομένα για εγγραφή"
 
-#: projects/k3bdataviewimpl.cpp:105
+#: projects/k3bdataviewimpl.cpp:108
 #, kde-format
 msgid "New Folder..."
 msgstr "Νέος φάκελος..."
 
-#: projects/k3bdataviewimpl.cpp:123
+#: projects/k3bdataviewimpl.cpp:126
 #, kde-format
 msgid "Parent Folder"
 msgstr "Φάκελος γονέας"
 
-#: projects/k3bdataviewimpl.cpp:134
+#: projects/k3bdataviewimpl.cpp:137
 #, kde-format
 msgid "Open"
 msgstr "Άνοιγμα"
 
-#: projects/k3bdataviewimpl.cpp:138
+#: projects/k3bdataviewimpl.cpp:141
 #, kde-format
 msgid "&Import Session..."
 msgstr "&Εισαγωγή συνεδρίας..."
 
-#: projects/k3bdataviewimpl.cpp:139
+#: projects/k3bdataviewimpl.cpp:142
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr "Εισαγωγή μιας προϋπάρχουσας συνεδρίας στο τρέχον έργο"
 
-#: projects/k3bdataviewimpl.cpp:143
+#: projects/k3bdataviewimpl.cpp:146
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr "&Καθαρισμός εισηγμένης συνεδρίας"
 
-#: projects/k3bdataviewimpl.cpp:144
+#: projects/k3bdataviewimpl.cpp:147
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr "Αφαίρεση των εισηγμένων αντικειμένων από προϋπάρχουσα συνεδρία"
 
-#: projects/k3bdataviewimpl.cpp:149
+#: projects/k3bdataviewimpl.cpp:152
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr "&Επεξεργασία εικόνων boot εκκίνησης συστήματος..."
 
-#: projects/k3bdataviewimpl.cpp:150
+#: projects/k3bdataviewimpl.cpp:153
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr "Τροποποίηση των ρυθμίσεων εκκίνησης του τρέχοντος έργου"
 
-#: projects/k3bdataviewimpl.cpp:213 projects/k3bdataviewimpl.cpp:216
-#: projects/k3bdataviewimpl.cpp:221 projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
+#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
 #, kde-format
 msgid "New Folder"
 msgstr "Νέος φάκελος"
 
-#: projects/k3bdataviewimpl.cpp:214
+#: projects/k3bdataviewimpl.cpp:217
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr "Παρακαλώ δώστε το όνομα για το νέο φάκελο:"
 
-#: projects/k3bdataviewimpl.cpp:222
+#: projects/k3bdataviewimpl.cpp:225
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
@@ -7987,102 +7998,102 @@ msgstr ""
 "Ένα αρχείο με αυτό το όνομα υπάρχει ήδη. Παρακαλώ δώστε το όνομα για τον νέο "
 "φάκελο:"
 
-#: projects/k3bdataviewimpl.cpp:373
+#: projects/k3bdataviewimpl.cpp:381
 #, kde-format
 msgid "Edit Boot Images"
 msgstr "Επεξεργασία boot εικόνων εκκίνησης"
 
-#: projects/k3bfillstatusdisplay.cpp:186
+#: projects/k3bfillstatusdisplay.cpp:187
 #, kde-format
 msgid "Available: %1 of %2"
 msgstr "Διαθέσιμα: %1 από %2"
 
-#: projects/k3bfillstatusdisplay.cpp:194
+#: projects/k3bfillstatusdisplay.cpp:195
 #, kde-format
 msgid "Capacity exceeded by %1"
 msgstr "Υπέρβαση χωρητικότητας κατά %1"
 
-#: projects/k3bfillstatusdisplay.cpp:375
+#: projects/k3bfillstatusdisplay.cpp:376
 #, kde-format
 msgid "Set medium size"
 msgstr "Ορισμός μεγέθους μέσου"
 
-#: projects/k3bfillstatusdisplay.cpp:407
+#: projects/k3bfillstatusdisplay.cpp:408
 #, kde-format
 msgid "Minutes"
 msgstr "Λεπτά"
 
-#: projects/k3bfillstatusdisplay.cpp:409
+#: projects/k3bfillstatusdisplay.cpp:410
 #, kde-format
 msgid "Megabytes"
 msgstr "Megabytes"
 
-#: projects/k3bfillstatusdisplay.cpp:412
+#: projects/k3bfillstatusdisplay.cpp:413
 #, kde-format
 msgid "Automatic Size"
 msgstr "Αυτόματο μέγεθος"
 
-#: projects/k3bfillstatusdisplay.cpp:414 projects/k3bfillstatusdisplay.cpp:416
-#: projects/k3bfillstatusdisplay.cpp:418 projects/k3bfillstatusdisplay.cpp:498
-#: projects/k3bfillstatusdisplay.cpp:499 projects/k3bfillstatusdisplay.cpp:500
+#: projects/k3bfillstatusdisplay.cpp:415 projects/k3bfillstatusdisplay.cpp:417
+#: projects/k3bfillstatusdisplay.cpp:419 projects/k3bfillstatusdisplay.cpp:499
+#: projects/k3bfillstatusdisplay.cpp:500 projects/k3bfillstatusdisplay.cpp:501
 #, kde-format
 msgid "%1 MB"
 msgstr "%1 MB"
 
-#: projects/k3bfillstatusdisplay.cpp:430
+#: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
 msgid "Custom..."
 msgstr "Προσαρμοσμένο..."
 
-#: projects/k3bfillstatusdisplay.cpp:432
+#: projects/k3bfillstatusdisplay.cpp:433
 #, kde-format
 msgid "From Medium..."
 msgstr "Από το μέσο..."
 
-#: projects/k3bfillstatusdisplay.cpp:450
+#: projects/k3bfillstatusdisplay.cpp:451
 #, kde-format
 msgid "User Defaults"
 msgstr "Προκαθορισμένα χρήστη"
 
-#: projects/k3bfillstatusdisplay.cpp:453
+#: projects/k3bfillstatusdisplay.cpp:454
 #, kde-format
 msgid "Save User Defaults"
 msgstr "Αποθήκευση προκαθορισμένων χρήστη"
 
-#: projects/k3bfillstatusdisplay.cpp:457
+#: projects/k3bfillstatusdisplay.cpp:458
 #, kde-format
 msgid "Why 4.4 instead of 4.7?"
 msgstr "Γιατί 4.4 αντί του 4.7;"
 
-#: projects/k3bfillstatusdisplay.cpp:461
+#: projects/k3bfillstatusdisplay.cpp:462
 #, kde-format
 msgid "Show Size In"
 msgstr "Εμφάνιση μεγέθους στο"
 
-#: projects/k3bfillstatusdisplay.cpp:467
+#: projects/k3bfillstatusdisplay.cpp:468
 #, kde-format
 msgid "CD Size"
 msgstr "Μέγεθος CD"
 
-#: projects/k3bfillstatusdisplay.cpp:473
+#: projects/k3bfillstatusdisplay.cpp:474
 #, kde-format
 msgid "DVD Size"
 msgstr "Μέγεθος DVD"
 
-#: projects/k3bfillstatusdisplay.cpp:479
+#: projects/k3bfillstatusdisplay.cpp:480
 #, kde-format
 msgid "Blu-ray Size"
 msgstr "Μέγεθος Blu-ray"
 
-#: projects/k3bfillstatusdisplay.cpp:510 projects/k3bfillstatusdisplay.cpp:511
-#: projects/k3bfillstatusdisplay.cpp:512
+#: projects/k3bfillstatusdisplay.cpp:511 projects/k3bfillstatusdisplay.cpp:512
+#: projects/k3bfillstatusdisplay.cpp:513
 #, kde-format
 msgid "unused"
 msgid_plural "%1 minutes"
 msgstr[0] "αχρησιμοποίητο"
 msgstr[1] "%1 λεπτά"
 
-#: projects/k3bfillstatusdisplay.cpp:570
+#: projects/k3bfillstatusdisplay.cpp:571
 #, kde-format
 msgid ""
 "<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like it "
@@ -8097,22 +8108,22 @@ msgstr ""
 "υπολογίζουν με το 1000 αντί για 1024 για διαφημιστικούς λόγους.<br>Έτσι "
 "βγαίνει το αποτέλεσμα 4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 GB."
 
-#: projects/k3bfillstatusdisplay.cpp:583
+#: projects/k3bfillstatusdisplay.cpp:584
 #, kde-format
 msgid "GB"
 msgstr "GB"
 
-#: projects/k3bfillstatusdisplay.cpp:585
+#: projects/k3bfillstatusdisplay.cpp:586
 #, kde-format
 msgid "min"
 msgstr "λεπτά"
 
-#: projects/k3bfillstatusdisplay.cpp:602
+#: projects/k3bfillstatusdisplay.cpp:603
 #, kde-format
 msgid "Custom Size"
 msgstr "Προσαρμοσμένο μέγεθος"
 
-#: projects/k3bfillstatusdisplay.cpp:603
+#: projects/k3bfillstatusdisplay.cpp:604
 #, kde-format
 msgid ""
 "<p>Please specify the size of the medium. Use suffixes <b>GB</b>,<b>MB</b>, "
@@ -8123,17 +8134,17 @@ msgstr ""
 "<b>GB</b>,<b>MB</b>, και <b>min</b> για <em>gigabytes</em>, <em>megabytes</"
 "em>, και <em>λεπτά</em> αντίστοιχα."
 
-#: projects/k3bfillstatusdisplay.cpp:661
+#: projects/k3bfillstatusdisplay.cpp:663
 #, kde-format
 msgid "Medium is not empty."
 msgstr "Το μέσο δεν είναι κενό."
 
-#: projects/k3bfillstatusdisplay.cpp:664
+#: projects/k3bfillstatusdisplay.cpp:666
 #, kde-format
 msgid "No usable medium found."
 msgstr "Δε βρέθηκε μέσο που να μπορεί να χρησιμοποιηθεί."
 
-#: projects/k3bfillstatusdisplay.cpp:853
+#: projects/k3bfillstatusdisplay.cpp:855
 #, kde-format
 msgid "Right click for media sizes"
 msgstr "Δεξί κλικ για μέγεθος μέσων"
@@ -8362,32 +8373,33 @@ msgstr "Απορρίπτει όλες τις αλλαγές που έγιναν 
 msgid "Start the image creation"
 msgstr "Έναρξη της δημιουργίας της εικόνας"
 
-#: projects/k3bprojectburndialog.cpp:142
-#, kde-format
-msgid "Burn"
-msgstr "Εγγραφή"
-
 #: projects/k3bprojectburndialog.cpp:143
 #, kde-format
 msgid "Start the burning process"
 msgstr "Έναρξη της εγγραφής"
 
-#: projects/k3bprojectburndialog.cpp:186 rip/k3bvideocdrippingdialog.cpp:142
+#: projects/k3bprojectburndialog.cpp:187 rip/k3bvideocdrippingdialog.cpp:143
 #, kde-format
 msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Ο φάκελος εικόνας %1 δεν υπάρχει. Επιθυμείτε τη δημιουργία του;"
 
-#: projects/k3bprojectburndialog.cpp:189 rip/k3bvideocdrippingdialog.cpp:145
+#: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
+#, fuzzy, kde-format
+#| msgid "Create Folder"
+msgid "Create folder?"
+msgstr "Δημιουργία φακέλου"
+
+#: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
 msgid "Failed to create folder '%1'."
 msgstr "Αδυναμία δημιουργίας του φακέλου '%1'."
 
-#: projects/k3bprojectburndialog.cpp:249
+#: projects/k3bprojectburndialog.cpp:252
 #, kde-format
 msgid "Writing"
 msgstr "Εγγραφή"
 
-#: projects/k3bprojectburndialog.cpp:292
+#: projects/k3bprojectburndialog.cpp:295
 #, kde-format
 msgid "Image"
 msgstr "Εικόνα"
@@ -9964,14 +9976,14 @@ msgstr ""
 
 #: rip/k3baudioprojectconvertingdialog.cpp:186
 #: rip/k3baudiorippingdialog.cpp:255
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:510
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
 #, kde-format
 msgid "Do you want to overwrite these files?"
 msgstr "Επιθυμείτε την αντικατάσταση αυτών των αρχείων;"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:188
-#: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:163
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
+#: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:166
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:514
 #, kde-format
 msgid "Files Exist"
 msgstr "Τα αρχεία υπάρχουν"
@@ -10136,7 +10148,7 @@ msgstr "Αρχείο cue"
 msgid "Track%1"
 msgstr "Κομμάτι%1"
 
-#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:50
+#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:51
 #, kde-format
 msgid "Playlist"
 msgstr "Λίστα αναπαραγωγής"
@@ -10157,39 +10169,39 @@ msgstr "Τίτλος"
 msgid "Data Track"
 msgstr "Κομμάτι δεδομένων"
 
-#: rip/k3bcddbpatternwidget.cpp:44
+#: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid "%A - %T/%n - !a='%A'{%a - }%t"
 msgstr "%A - %T/%n - !a='%A'{%a - }%t"
 
-#: rip/k3bcddbpatternwidget.cpp:45
+#: rip/k3bcddbpatternwidget.cpp:46
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
 msgstr "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
 
-#: rip/k3bcddbpatternwidget.cpp:46
+#: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 msgstr "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 
-#: rip/k3bcddbpatternwidget.cpp:47
+#: rip/k3bcddbpatternwidget.cpp:48
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
 msgstr "μουσική/εξαγόμενα-κομμάτια/%a - %t"
 
-#: rip/k3bcddbpatternwidget.cpp:49
+#: rip/k3bcddbpatternwidget.cpp:50
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}"
 msgstr "%{albumartist} - %{albumtitle}"
 
-#: rip/k3bcddbpatternwidget.cpp:51
+#: rip/k3bcddbpatternwidget.cpp:52
 #, kde-format
 msgid "playlists/%{albumartist}/%{albumtitle}"
 msgstr "λίστες/%{albumartist}/%{albumtitle}"
 
-#: rip/k3bcddbpatternwidget.cpp:118
+#: rip/k3bcddbpatternwidget.cpp:119
 #, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
@@ -10227,7 +10239,7 @@ msgstr ""
 "td></tr>ι<tr><td>%e</td><td>επέκταση αρχείου (αν δεν δίνεται, προστίθεται "
 "αυτόματα)</td><td>%{e} or %{ext}</td></tr></table>"
 
-#: rip/k3bcddbpatternwidget.cpp:144
+#: rip/k3bcddbpatternwidget.cpp:145
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
@@ -10301,7 +10313,7 @@ msgstr "Εγγραφή λίστας αναπαραγωγής στο %1."
 msgid "Writing cue file to %1."
 msgstr "Εγγραφή αρχείου cue στο %1."
 
-#: rip/k3bpatternparser.cpp:133
+#: rip/k3bpatternparser.cpp:134
 #, kde-format
 msgid "Track %1"
 msgstr "Κομμάτι %1"
@@ -10526,7 +10538,7 @@ msgstr ""
 "</p><p>Το όνομα αρχείου είναι το ίδιο με το όνομα του video CD, με την "
 "επέκταση .xml. Το προκαθορισμένο είναι VIDEOCD.xml.</p>"
 
-#: rip/k3bvideocdrippingdialog.cpp:161
+#: rip/k3bvideocdrippingdialog.cpp:164
 #, kde-format
 msgid "Continue although the folder is not empty?"
 msgstr "Συνέχεια αν και ο φάκελος δεν είναι κενός;"
@@ -10859,7 +10871,7 @@ msgid_plural "%1 titles from %2"
 msgstr[0] "1 τίτλος από %2"
 msgstr[1] "%1 τίτλοι από %2"
 
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:492
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
 msgid ""
 "<p>When using the <em>AC3 pass-through</em> audio codec all selected audio "
@@ -10871,7 +10883,7 @@ msgstr ""
 "επιλέξτε κάποιον άλλον τύπο συμπίεσης ήχου ή επιλέξτε ροές ήχου AC3 για "
 "όλους τους εξαγόμενους τίτλους."
 
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:495
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:497
 #, kde-format
 msgid "AC3 Pass-through"
 msgstr "AC3 Pass-through"
@@ -11032,17 +11044,14 @@ msgstr ""
 "συνιστάται η χρήση του εργαλείου αντιγραφής του K3b."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
-#, kde-format
 msgid "Keep original dimensions"
 msgstr "Διατήρηση των αρχικών διαστάσεων"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:59
-#, kde-format
 msgid "640x? (automatic height)"
 msgstr "640x; (αυτόματο ύψος)"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:60
-#, kde-format
 msgid "320x? (automatic height)"
 msgstr "320x; (αυτόματο ύψος)"
 

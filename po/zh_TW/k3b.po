@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-08 00:58+0000\n"
+"POT-Creation-Date: 2023-04-03 00:45+0000\n"
 "PO-Revision-Date: 2022-12-30 19:09+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -147,7 +147,7 @@ msgstr "CRC"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:389
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:180
-#: ../plugins/encoder/lame/k3blametyes.h:86
+#: ../plugins/encoder/lame/k3blametyes.h:88
 #, kde-format
 msgid "Mono"
 msgstr "單聲道"
@@ -160,7 +160,7 @@ msgstr "雙"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:393
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:175
-#: ../plugins/encoder/lame/k3blametyes.h:85
+#: ../plugins/encoder/lame/k3blametyes.h:87
 #, kde-format
 msgid "Joint Stereo"
 msgstr "合成立體聲"
@@ -168,7 +168,7 @@ msgstr "合成立體聲"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:395
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:170
-#: ../plugins/encoder/lame/k3blametyes.h:84
+#: ../plugins/encoder/lame/k3blametyes.h:86
 #, kde-format
 msgid "Stereo"
 msgstr "立體聲"
@@ -303,7 +303,7 @@ msgstr "指令"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:111
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -438,12 +438,12 @@ msgstr "寫入音波標頭(&A)"
 msgid "Command failed: %1"
 msgstr "指令失敗：%1"
 
-#: ../plugins/encoder/external/k3bexternalencoder.cpp:200
+#: ../plugins/encoder/external/k3bexternalencoder.cpp:201
 #, kde-format
 msgid "Could not find program '%1'"
 msgstr "找不到程式 '%1'"
 
-#: ../plugins/encoder/external/k3bexternalencoder.cpp:207
+#: ../plugins/encoder/external/k3bexternalencoder.cpp:208
 #, kde-format
 msgid "Invalid command: the command is empty."
 msgstr "不存在的指令：指令是空的。"
@@ -500,7 +500,7 @@ msgstr "沒有指定檔案名稱"
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
-#: projects/k3bprojectburndialog.cpp:256 projects/k3bvcdburndialog.cpp:409
+#: projects/k3bprojectburndialog.cpp:259 projects/k3bvcdburndialog.cpp:409
 #: projects/k3bvcdburndialog.cpp:441 projects/k3bvcdtrackdialog.cpp:445
 #: rip/k3baudioprojectconvertingdialog.cpp:136
 #: rip/k3baudiorippingdialog.cpp:154 rip/k3bvideocdrippingdialog.cpp:90
@@ -551,7 +551,7 @@ msgstr "改變設定..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:967
+#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:969
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -799,53 +799,43 @@ msgstr "變動位元率 (%1)"
 msgid "(Lame) Manual Quality Settings"
 msgstr "(Lame) 手動品質設定值"
 
-#: ../plugins/encoder/lame/k3blametyes.h:67
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:69
 msgid "Low quality (56 kbps)"
 msgstr "低品質 (56 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:68
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:70
 msgid "Low quality (90 kbps)"
 msgstr "低品質 (90 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:70
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:72
 msgid "Portable (average 115 kbps)"
 msgstr "可攜式 (平均 115 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:71
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:73
 msgid "Portable (average 130 kbps)"
 msgstr "可攜式 (平均 130 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:72
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:74
 msgid "Portable (average 160 kbps)"
 msgstr "可攜式 (平均 160 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:74
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:76
 msgid "HiFi (average 175 kbps)"
 msgstr "HiFi (平均 175 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:75
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:77
 msgid "HiFi (average 190 kbps)"
 msgstr "HiFi (平均 190 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:76
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:78
 msgid "HiFi (average 210 kbps)"
 msgstr "HiFi (平均 210 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:77
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:79
 msgid "HiFi (average 230 kbps)"
 msgstr "HiFi (平均 230 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:79
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:81
 msgid "Archiving (320 kbps)"
 msgstr "封存 (320 kbps) "
 
@@ -1930,17 +1920,17 @@ msgstr "無法開啟檔案 %1"
 msgid "&Device"
 msgstr "裝置(&D)"
 
-#: k3bdiroperator.cpp:41
+#: k3bdiroperator.cpp:42
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "K3b 書籤"
 
-#: k3bdiroperator.cpp:44
+#: k3bdiroperator.cpp:45
 #, kde-format
 msgid "Bookmarks"
 msgstr "書籤"
 
-#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:49 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "加到專案(&A)"
@@ -2107,8 +2097,8 @@ msgstr "類型："
 #: rip/k3baudioprojectconvertingdialog.cpp:267
 #: rip/k3baudioprojectconvertingdialog.cpp:306
 #: rip/k3baudiorippingdialog.cpp:348 rip/k3baudiorippingdialog.cpp:403
-#: rip/k3bpatternparser.cpp:122 rip/k3bpatternparser.cpp:158
-#: rip/k3bpatternparser.cpp:164 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
+#: rip/k3bpatternparser.cpp:123 rip/k3bpatternparser.cpp:159
+#: rip/k3bpatternparser.cpp:165 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
 #, kde-format
 msgid "unknown"
 msgstr "未知"
@@ -2119,9 +2109,9 @@ msgid "Media ID:"
 msgstr "媒體 ID："
 
 #: k3bdiskinfoview.cpp:311 k3bdiskinfoview.cpp:313 k3bdiskinfoview.cpp:317
-#: projects/k3bfillstatusdisplay.cpp:180 projects/k3bfillstatusdisplay.cpp:188
-#: projects/k3bfillstatusdisplay.cpp:191 projects/k3bfillstatusdisplay.cpp:196
-#: projects/k3bfillstatusdisplay.cpp:852
+#: projects/k3bfillstatusdisplay.cpp:181 projects/k3bfillstatusdisplay.cpp:189
+#: projects/k3bfillstatusdisplay.cpp:192 projects/k3bfillstatusdisplay.cpp:197
+#: projects/k3bfillstatusdisplay.cpp:854
 #, kde-format
 msgid "%1 min"
 msgstr "%1 分鐘"
@@ -2459,7 +2449,7 @@ msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 之 %2"
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:548
+#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
@@ -2490,43 +2480,43 @@ msgstr "錯誤。"
 msgid "Finished with errors"
 msgstr "完成，但是發生錯誤"
 
-#: k3bjobprogressdialog.cpp:482
+#: k3bjobprogressdialog.cpp:483
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "您真的想要取消嗎？"
 
-#: k3bjobprogressdialog.cpp:482
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "取消確認"
 
-#: k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:556
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
 msgstr "剩餘：%1"
 
-#: k3blsofwrapperdialog.cpp:38
+#: k3blsofwrapperdialog.cpp:39
 #, kde-format
 msgid "Device in use"
 msgstr "使用中的裝置"
 
-#: k3blsofwrapperdialog.cpp:45
+#: k3blsofwrapperdialog.cpp:46
 #, kde-format
 msgid "Continue"
 msgstr "繼續"
 
-#: k3blsofwrapperdialog.cpp:49
+#: k3blsofwrapperdialog.cpp:50
 #, kde-format
 msgid "Quit the other applications"
 msgstr "離開其他程式"
 
-#: k3blsofwrapperdialog.cpp:52 k3blsofwrapperdialog.cpp:81
+#: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
 #, kde-format
 msgid "Check again"
 msgstr "再次檢查"
 
-#: k3blsofwrapperdialog.cpp:72
+#: k3blsofwrapperdialog.cpp:73
 #, kde-format
 msgid ""
 "<p>Device <b>'%1'</b> is already in use by other applications (<em>%2</em>)."
@@ -2541,9 +2531,24 @@ msgstr ""
 
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
+msgid "www"
+msgstr ""
+
+#: k3blsofwrapperdialog.cpp:102
+#, kde-format
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
 msgstr "<p>您真的想要 K3b 關閉下列的程序嗎：<em>%1</em> </p>"
+
+#: k3blsofwrapperdialog.cpp:103
+#, kde-format
+msgid "Kill the processes?"
+msgstr ""
+
+#: k3blsofwrapperdialog.cpp:104
+#, kde-format
+msgid "Kill"
+msgstr ""
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -3969,18 +3974,18 @@ msgid "Plain data image"
 msgstr "純資料映像檔"
 
 #: misc/k3bimagewritingdialog.cpp:522 misc/k3bmediacopydialog.cpp:95
-#: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:251
+#: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "寫入模式"
 
 #: misc/k3bimagewritingdialog.cpp:528 misc/k3bmediacopydialog.cpp:100
-#: projects/k3bprojectburndialog.cpp:270
+#: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "複製品"
 
-#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:989
+#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:991
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
@@ -4046,72 +4051,77 @@ msgstr "映像檔類型無法辨識。您無論如何都想要燒錄嗎？"
 msgid "Unknown image type"
 msgstr "未知的映像檔類型"
 
-#: misc/k3bimagewritingdialog.cpp:878
+#: misc/k3bimagewritingdialog.cpp:870 projects/k3bprojectburndialog.cpp:142
+#, kde-format
+msgid "Burn"
+msgstr "燒錄"
+
+#: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Unable to read image file"
 msgstr "無法讀取映像檔。"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:882
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "似乎不是可用的映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:896
+#: misc/k3bimagewritingdialog.cpp:898
 #, kde-format
 msgid "File not found"
 msgstr "找不到檔案"
 
-#: misc/k3bimagewritingdialog.cpp:1027
+#: misc/k3bimagewritingdialog.cpp:1029
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "MD5 總和："
 
-#: misc/k3bimagewritingdialog.cpp:1067
+#: misc/k3bimagewritingdialog.cpp:1069
 #, kde-format
 msgid "Calculation canceled"
 msgstr "計算已取消"
 
-#: misc/k3bimagewritingdialog.cpp:1069
+#: misc/k3bimagewritingdialog.cpp:1071
 #, kde-format
 msgid "Calculation failed"
 msgstr "計算失敗"
 
-#: misc/k3bimagewritingdialog.cpp:1085
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "複製檢查碼到剪貼簿"
 
-#: misc/k3bimagewritingdialog.cpp:1086
+#: misc/k3bimagewritingdialog.cpp:1088
 #, kde-format
 msgid "Compare checksum..."
 msgstr "比較檢查碼..."
 
-#: misc/k3bimagewritingdialog.cpp:1093
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "MD5 Sum 檢查"
 
-#: misc/k3bimagewritingdialog.cpp:1094
+#: misc/k3bimagewritingdialog.cpp:1096
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "請插入 MD5 Sum 來做比對："
 
-#: misc/k3bimagewritingdialog.cpp:1100
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "%1 的 MD5 Sum 與指定的相等。"
 
-#: misc/k3bimagewritingdialog.cpp:1101
+#: misc/k3bimagewritingdialog.cpp:1103
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "MD5 Sum 相等"
 
-#: misc/k3bimagewritingdialog.cpp:1103
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "%1 的 MD5 Sum 與指定的不同。"
 
-#: misc/k3bimagewritingdialog.cpp:1104
+#: misc/k3bimagewritingdialog.cpp:1106
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "MD5 Sum 不同"
@@ -4251,7 +4261,7 @@ msgstr ""
 "單純地逐個位元複製。它可以被用來複製影像 CD 或是內含錯誤磁區的 CD。<p><b>小"
 "心：</b> 只有單一區段的 CD 可以進行比對複製。"
 
-#: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:201
+#: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:204
 #, kde-format
 msgid ""
 "There does not seem to be enough free space in the temporary folder. Write "
@@ -4572,7 +4582,7 @@ msgstr "強迫不安全的操作(&F)"
 msgid "&Manual writing buffer size"
 msgstr "手動設定燒錄緩衝區大小(&M)"
 
-#: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:584
+#: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:585
 #, kde-format
 msgid "MB"
 msgstr "MB"
@@ -4707,7 +4717,7 @@ msgstr ""
 "用像是媒體燒錄速度確認的檢查。如此一來，您可以強迫 K3b 在低速燒錄器上燒錄高速"
 "媒體。<p><b>小心：</b>啟用此選項可能會導致媒體損壞。"
 
-#: option/k3bcddboptiontab.cpp:33
+#: option/k3bcddboptiontab.cpp:38
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "無法載入 KCDDB 設定模組。"
@@ -4921,12 +4931,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "搜尋路徑"
 
-#: option/k3bexternalbinwidget.cpp:239
+#: option/k3bexternalbinwidget.cpp:241
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "以下的程式無法更新："
 
-#: option/k3bexternalbinwidget.cpp:244
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "無法執行動作：%1"
@@ -4988,7 +4998,8 @@ msgstr "資料夾 (%1) 不存在。要建立它嗎？"
 msgid "Create Folder"
 msgstr "建立資料夾"
 
-#: option/k3bmiscoptiontab.cpp:106
+#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "建立"
@@ -6769,7 +6780,7 @@ msgstr "Musicbrainz 查詢"
 msgid "Try to determine meta information over the Internet"
 msgstr "嘗試從網際網路決定中繼資訊"
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:128
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -6942,28 +6953,23 @@ msgid "Multisession Problem"
 msgstr "多區段功能問題"
 
 #: projects/k3bdataimagesettingswidget.cpp:32
-#, kde-format
 msgid "Linux/Unix only"
 msgstr "僅 Linux/Unix"
 
 #: projects/k3bdataimagesettingswidget.cpp:33
-#, kde-format
 msgid "Linux/Unix + Windows"
 msgstr "Linux/Unix + Windows"
 
 #: projects/k3bdataimagesettingswidget.cpp:34
-#, kde-format
 msgid "Very large files (UDF)"
 msgstr "非常大檔案 (UDF)"
 
 #: projects/k3bdataimagesettingswidget.cpp:35
-#, kde-format
 msgid "DOS Compatibility"
 msgstr "DOS 相容性"
 
 #: projects/k3bdataimagesettingswidget.cpp:36
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:61
-#, kde-format
 msgid "Custom"
 msgstr "自訂"
 
@@ -7051,6 +7057,11 @@ msgstr "自訂（僅 ISO9660）"
 #, kde-format
 msgid "Custom (%1)"
 msgstr "自訂 (%1)"
+
+#: projects/k3bdataimagesettingswidget.cpp:228
+#, kde-format
+msgid "(K3b::DataImageSettingsWidget) found preset settings: "
+msgstr ""
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7458,7 +7469,7 @@ msgid "Always keep the existing file"
 msgstr "永遠保留已存在的檔案。"
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:117
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
 #, kde-format
 msgid "Rename"
 msgstr "重新命名"
@@ -7570,164 +7581,164 @@ msgstr "下列檔案名稱存在無效編碼。您可以使用 convmv 工具來�
 msgid "No Data to Burn"
 msgstr "沒有資料可燒錄"
 
-#: projects/k3bdataviewimpl.cpp:105
+#: projects/k3bdataviewimpl.cpp:108
 #, kde-format
 msgid "New Folder..."
 msgstr "新增資料夾..."
 
-#: projects/k3bdataviewimpl.cpp:123
+#: projects/k3bdataviewimpl.cpp:126
 #, kde-format
 msgid "Parent Folder"
 msgstr "父資料夾"
 
-#: projects/k3bdataviewimpl.cpp:134
+#: projects/k3bdataviewimpl.cpp:137
 #, kde-format
 msgid "Open"
 msgstr "開啟"
 
-#: projects/k3bdataviewimpl.cpp:138
+#: projects/k3bdataviewimpl.cpp:141
 #, kde-format
 msgid "&Import Session..."
 msgstr "匯入工作階段(&I)..."
 
-#: projects/k3bdataviewimpl.cpp:139
+#: projects/k3bdataviewimpl.cpp:142
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr "在現在的專案中匯入先前燒錄過的工作階段"
 
-#: projects/k3bdataviewimpl.cpp:143
+#: projects/k3bdataviewimpl.cpp:146
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr "清除匯入的工作階段(&C)"
 
-#: projects/k3bdataviewimpl.cpp:144
+#: projects/k3bdataviewimpl.cpp:147
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr "移除自前次工作階段所匯入的項目"
 
-#: projects/k3bdataviewimpl.cpp:149
+#: projects/k3bdataviewimpl.cpp:152
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr "編輯開機映像檔(&E)..."
 
-#: projects/k3bdataviewimpl.cpp:150
+#: projects/k3bdataviewimpl.cpp:153
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr "修改現在專案的可開機設定"
 
-#: projects/k3bdataviewimpl.cpp:213 projects/k3bdataviewimpl.cpp:216
-#: projects/k3bdataviewimpl.cpp:221 projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
+#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
 #, kde-format
 msgid "New Folder"
 msgstr "新增資料夾"
 
-#: projects/k3bdataviewimpl.cpp:214
+#: projects/k3bdataviewimpl.cpp:217
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr "請為這個新資料夾輸入名稱："
 
-#: projects/k3bdataviewimpl.cpp:222
+#: projects/k3bdataviewimpl.cpp:225
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr "已經存在名稱相同的檔案。請為這個新資料夾輸入其名稱："
 
-#: projects/k3bdataviewimpl.cpp:373
+#: projects/k3bdataviewimpl.cpp:381
 #, kde-format
 msgid "Edit Boot Images"
 msgstr "編輯開機映像檔"
 
-#: projects/k3bfillstatusdisplay.cpp:186
+#: projects/k3bfillstatusdisplay.cpp:187
 #, kde-format
 msgid "Available: %1 of %2"
 msgstr "可用：%2 之 %1"
 
-#: projects/k3bfillstatusdisplay.cpp:194
+#: projects/k3bfillstatusdisplay.cpp:195
 #, kde-format
 msgid "Capacity exceeded by %1"
 msgstr "容量已超過 %1"
 
-#: projects/k3bfillstatusdisplay.cpp:375
+#: projects/k3bfillstatusdisplay.cpp:376
 #, kde-format
 msgid "Set medium size"
 msgstr "設定媒體大小"
 
-#: projects/k3bfillstatusdisplay.cpp:407
+#: projects/k3bfillstatusdisplay.cpp:408
 #, kde-format
 msgid "Minutes"
 msgstr "分"
 
-#: projects/k3bfillstatusdisplay.cpp:409
+#: projects/k3bfillstatusdisplay.cpp:410
 #, kde-format
 msgid "Megabytes"
 msgstr "Megabytes"
 
-#: projects/k3bfillstatusdisplay.cpp:412
+#: projects/k3bfillstatusdisplay.cpp:413
 #, kde-format
 msgid "Automatic Size"
 msgstr "自動大小"
 
-#: projects/k3bfillstatusdisplay.cpp:414 projects/k3bfillstatusdisplay.cpp:416
-#: projects/k3bfillstatusdisplay.cpp:418 projects/k3bfillstatusdisplay.cpp:498
-#: projects/k3bfillstatusdisplay.cpp:499 projects/k3bfillstatusdisplay.cpp:500
+#: projects/k3bfillstatusdisplay.cpp:415 projects/k3bfillstatusdisplay.cpp:417
+#: projects/k3bfillstatusdisplay.cpp:419 projects/k3bfillstatusdisplay.cpp:499
+#: projects/k3bfillstatusdisplay.cpp:500 projects/k3bfillstatusdisplay.cpp:501
 #, kde-format
 msgid "%1 MB"
 msgstr "%1 MB"
 
-#: projects/k3bfillstatusdisplay.cpp:430
+#: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
 msgid "Custom..."
 msgstr "自訂..."
 
-#: projects/k3bfillstatusdisplay.cpp:432
+#: projects/k3bfillstatusdisplay.cpp:433
 #, kde-format
 msgid "From Medium..."
 msgstr "從媒體…"
 
-#: projects/k3bfillstatusdisplay.cpp:450
+#: projects/k3bfillstatusdisplay.cpp:451
 #, kde-format
 msgid "User Defaults"
 msgstr "使用者預設值"
 
-#: projects/k3bfillstatusdisplay.cpp:453
+#: projects/k3bfillstatusdisplay.cpp:454
 #, kde-format
 msgid "Save User Defaults"
 msgstr "儲存使用者預設值"
 
-#: projects/k3bfillstatusdisplay.cpp:457
+#: projects/k3bfillstatusdisplay.cpp:458
 #, kde-format
 msgid "Why 4.4 instead of 4.7?"
 msgstr "為什麼是 4.4 而不是 4.7?"
 
-#: projects/k3bfillstatusdisplay.cpp:461
+#: projects/k3bfillstatusdisplay.cpp:462
 #, kde-format
 msgid "Show Size In"
 msgstr "顯示大小以..."
 
-#: projects/k3bfillstatusdisplay.cpp:467
+#: projects/k3bfillstatusdisplay.cpp:468
 #, kde-format
 msgid "CD Size"
 msgstr "CD 大小"
 
-#: projects/k3bfillstatusdisplay.cpp:473
+#: projects/k3bfillstatusdisplay.cpp:474
 #, kde-format
 msgid "DVD Size"
 msgstr "DVD 大小"
 
-#: projects/k3bfillstatusdisplay.cpp:479
+#: projects/k3bfillstatusdisplay.cpp:480
 #, kde-format
 msgid "Blu-ray Size"
 msgstr "Blu-ray 大小"
 
-#: projects/k3bfillstatusdisplay.cpp:510 projects/k3bfillstatusdisplay.cpp:511
-#: projects/k3bfillstatusdisplay.cpp:512
+#: projects/k3bfillstatusdisplay.cpp:511 projects/k3bfillstatusdisplay.cpp:512
+#: projects/k3bfillstatusdisplay.cpp:513
 #, kde-format
 msgid "unused"
 msgid_plural "%1 minutes"
 msgstr[0] "%1 分鐘"
 
-#: projects/k3bfillstatusdisplay.cpp:570
+#: projects/k3bfillstatusdisplay.cpp:571
 #, kde-format
 msgid ""
 "<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like it "
@@ -7741,22 +7752,22 @@ msgstr ""
 "製造商只是把 1000 當成 1024 來計算以達到廣告效果。<br/>這就導致 "
 "4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 GB。"
 
-#: projects/k3bfillstatusdisplay.cpp:583
+#: projects/k3bfillstatusdisplay.cpp:584
 #, kde-format
 msgid "GB"
 msgstr "GB"
 
-#: projects/k3bfillstatusdisplay.cpp:585
+#: projects/k3bfillstatusdisplay.cpp:586
 #, kde-format
 msgid "min"
 msgstr "分"
 
-#: projects/k3bfillstatusdisplay.cpp:602
+#: projects/k3bfillstatusdisplay.cpp:603
 #, kde-format
 msgid "Custom Size"
 msgstr "自訂大小"
 
-#: projects/k3bfillstatusdisplay.cpp:603
+#: projects/k3bfillstatusdisplay.cpp:604
 #, kde-format
 msgid ""
 "<p>Please specify the size of the medium. Use suffixes <b>GB</b>,<b>MB</b>, "
@@ -7766,17 +7777,17 @@ msgstr ""
 "<p>請指定這個媒體的大小。使用後綴詞 <b>GB</b>、<b>MB</b>，或 <b>min</b> 以分"
 "別代表 <em>gigabytes</em>、<em>megabytes</em>，或 <em>分鐘</em>。"
 
-#: projects/k3bfillstatusdisplay.cpp:661
+#: projects/k3bfillstatusdisplay.cpp:663
 #, kde-format
 msgid "Medium is not empty."
 msgstr "媒體內容不是空的。"
 
-#: projects/k3bfillstatusdisplay.cpp:664
+#: projects/k3bfillstatusdisplay.cpp:666
 #, kde-format
 msgid "No usable medium found."
 msgstr "找不到可用的媒體。"
 
-#: projects/k3bfillstatusdisplay.cpp:853
+#: projects/k3bfillstatusdisplay.cpp:855
 #, kde-format
 msgid "Right click for media sizes"
 msgstr "點擊右鍵以取得媒體大小"
@@ -7995,32 +8006,33 @@ msgstr "丟棄在對話窗內的所有變更並關閉對話窗。"
 msgid "Start the image creation"
 msgstr "開始建立映像檔"
 
-#: projects/k3bprojectburndialog.cpp:142
-#, kde-format
-msgid "Burn"
-msgstr "燒錄"
-
 #: projects/k3bprojectburndialog.cpp:143
 #, kde-format
 msgid "Start the burning process"
 msgstr "開始燒錄程序"
 
-#: projects/k3bprojectburndialog.cpp:186 rip/k3bvideocdrippingdialog.cpp:142
+#: projects/k3bprojectburndialog.cpp:187 rip/k3bvideocdrippingdialog.cpp:143
 #, kde-format
 msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "映像檔資料夾「%1」並不存在。您想要讓 K3b 建立它嗎？"
 
-#: projects/k3bprojectburndialog.cpp:189 rip/k3bvideocdrippingdialog.cpp:145
+#: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
+#, fuzzy, kde-format
+#| msgid "Create Folder"
+msgid "Create folder?"
+msgstr "建立資料夾"
+
+#: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
 msgid "Failed to create folder '%1'."
 msgstr "無法建立資料夾「%1」。"
 
-#: projects/k3bprojectburndialog.cpp:249
+#: projects/k3bprojectburndialog.cpp:252
 #, kde-format
 msgid "Writing"
 msgstr "正在燒錄中"
 
-#: projects/k3bprojectburndialog.cpp:292
+#: projects/k3bprojectburndialog.cpp:295
 #, kde-format
 msgid "Image"
 msgstr "映像檔"
@@ -9511,14 +9523,14 @@ msgstr "請檢查命名樣式。所有的檔案名稱必須獨一無二。"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:186
 #: rip/k3baudiorippingdialog.cpp:255
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:510
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
 #, kde-format
 msgid "Do you want to overwrite these files?"
 msgstr "您想要覆寫這些檔案嗎?"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:188
-#: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:163
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
+#: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:166
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:514
 #, kde-format
 msgid "Files Exist"
 msgstr "檔案已存在"
@@ -9679,7 +9691,7 @@ msgstr "Cue 檔案"
 msgid "Track%1"
 msgstr "軌道%1"
 
-#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:50
+#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:51
 #, kde-format
 msgid "Playlist"
 msgstr "播放清單"
@@ -9700,39 +9712,39 @@ msgstr "標題"
 msgid "Data Track"
 msgstr "資料軌"
 
-#: rip/k3bcddbpatternwidget.cpp:44
+#: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid "%A - %T/%n - !a='%A'{%a - }%t"
 msgstr "%A - %T/%n - !a='%A'{%a - }%t"
 
-#: rip/k3bcddbpatternwidget.cpp:45
+#: rip/k3bcddbpatternwidget.cpp:46
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
 msgstr "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
 
-#: rip/k3bcddbpatternwidget.cpp:46
+#: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 msgstr "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 
-#: rip/k3bcddbpatternwidget.cpp:47
+#: rip/k3bcddbpatternwidget.cpp:48
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
 msgstr "音樂/擷取的軌道/%a - %t"
 
-#: rip/k3bcddbpatternwidget.cpp:49
+#: rip/k3bcddbpatternwidget.cpp:50
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}"
 msgstr "%{albumartist} - %{albumtitle}"
 
-#: rip/k3bcddbpatternwidget.cpp:51
+#: rip/k3bcddbpatternwidget.cpp:52
 #, kde-format
 msgid "playlists/%{albumartist}/%{albumtitle}"
 msgstr "播放清單/%{albumartist}/%{albumtitle}"
 
-#: rip/k3bcddbpatternwidget.cpp:118
+#: rip/k3bcddbpatternwidget.cpp:119
 #, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
@@ -9767,7 +9779,7 @@ msgstr ""
 "</td></tr><tr><td>%e</td><td>副檔名 (如果省略，它會被自動加入) </td><td>%{e} "
 "or %{ext}</td></tr></table>"
 
-#: rip/k3bcddbpatternwidget.cpp:144
+#: rip/k3bcddbpatternwidget.cpp:145
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
@@ -9833,7 +9845,7 @@ msgstr "寫入播放清單至 %1。"
 msgid "Writing cue file to %1."
 msgstr "寫入 cue 檔案至 %1。"
 
-#: rip/k3bpatternparser.cpp:133
+#: rip/k3bpatternparser.cpp:134
 #, kde-format
 msgid "Track %1"
 msgstr "軌道%1"
@@ -10052,7 +10064,7 @@ msgstr ""
 "段資訊。</p><p>其檔案名稱會與影像 CD 名稱相同，並加上 .xml 的副檔名。預設為 "
 "VIDEOCD.xml。</p>"
 
-#: rip/k3bvideocdrippingdialog.cpp:161
+#: rip/k3bvideocdrippingdialog.cpp:164
 #, kde-format
 msgid "Continue although the folder is not empty?"
 msgstr "儘管資料夾不是空的也要繼續嗎?"
@@ -10371,7 +10383,7 @@ msgid "1 title from %2"
 msgid_plural "%1 titles from %2"
 msgstr[0] "來自 %2 的 %1 個標題"
 
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:492
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
 msgid ""
 "<p>When using the <em>AC3 pass-through</em> audio codec all selected audio "
@@ -10381,7 +10393,7 @@ msgstr ""
 "<p>若要使用 <em>AC3 通透</em> 音效編解碼器，所有選取的音效串流都需要是 AC3 格"
 "式才行。請選擇其他的音效編解碼器，或是為所有擷取的標題選擇 AC3 音效串流。"
 
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:495
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:497
 #, kde-format
 msgid "AC3 Pass-through"
 msgstr "AC3 通透"
@@ -10530,17 +10542,14 @@ msgstr ""
 "具。"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
-#, kde-format
 msgid "Keep original dimensions"
 msgstr "保留原來的維度"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:59
-#, kde-format
 msgid "640x? (automatic height)"
 msgstr "640x? (自動高度)"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:60
-#, kde-format
 msgid "320x? (automatic height)"
 msgstr "320x? (自動高度)"
 

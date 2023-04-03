@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-06-12 00:44+0000\n"
+"POT-Creation-Date: 2023-04-03 00:45+0000\n"
 "PO-Revision-Date: 2022-12-30 19:10+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -319,7 +319,7 @@ msgid "Use CDDB entry"
 msgstr "使用 CDDB 項目"
 
 #: jobs/k3bcdcopyjob.cpp:475 projects/k3bcdrdaowriter.cpp:519
-#: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
+#: projects/k3bcdrecordwriter.cpp:414 projects/k3bcdrskinwriter.cpp:426
 #: projects/k3bgrowisofswriter.cpp:332
 #, kde-format
 msgid "Preparing write process..."
@@ -388,8 +388,8 @@ msgstr "寫入複製本中 (區段 %1) "
 
 #: jobs/k3bcdcopyjob.cpp:707 projects/audiocd/k3baudiojob.cpp:642
 #: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
-#: projects/k3bcdrdaowriter.cpp:579 projects/k3bcdrecordwriter.cpp:441
-#: projects/k3bcdrskinwriter.cpp:453 projects/k3bgrowisofswriter.cpp:357
+#: projects/k3bcdrdaowriter.cpp:579 projects/k3bcdrecordwriter.cpp:442
+#: projects/k3bcdrskinwriter.cpp:454 projects/k3bgrowisofswriter.cpp:357
 #: projects/mixedcd/k3bmixedjob.cpp:1002
 #, kde-format
 msgid "Simulating"
@@ -451,13 +451,13 @@ msgstr "重新載入媒體中"
 
 #: jobs/k3bcdcopyjob.cpp:1054 projects/audiocd/k3baudiojob.cpp:411
 #: projects/datacd/k3bdatajob.cpp:520 projects/mixedcd/k3bmixedjob.cpp:533
-#: projects/videocd/k3bvcdjob.cpp:496
+#: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
 msgstr "K3b 無法退出這個已寫入的碟片。請手動退出。"
 
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:261
-#: projects/k3bcdrecordwriter.cpp:728 projects/k3bcdrskinwriter.cpp:741
+#: projects/k3bcdrecordwriter.cpp:730 projects/k3bcdrskinwriter.cpp:743
 #: projects/mixedcd/k3bmixedjob.cpp:554
 #, kde-format
 msgid "Please reload the medium and press 'OK'"
@@ -510,43 +510,43 @@ msgid_plural "Creating %1 copies"
 msgstr[0] "建立 %1 個複製品中"
 
 #: jobs/k3bcdda2wavreader.cpp:88 jobs/k3bclonejob.cpp:81
-#: jobs/k3bdvdbooktypejob.cpp:278 jobs/k3bdvdformattingjob.cpp:455
+#: jobs/k3bdvdbooktypejob.cpp:278 jobs/k3bdvdformattingjob.cpp:457
 #: jobs/k3breadcdreader.cpp:98 projects/datacd/k3bmsinfofetcher.cpp:47
 #: projects/datacd/k3bmsinfofetcher.cpp:83 projects/k3bcdrdaowriter.cpp:440
-#: projects/k3bcdrecordwriter.cpp:193 projects/k3bcdrskinwriter.cpp:194
+#: projects/k3bcdrecordwriter.cpp:194 projects/k3bcdrskinwriter.cpp:195
 #: projects/k3bgrowisofswriter.cpp:134 projects/videocd/k3bvcdjob.cpp:194
 #, kde-format
 msgid "Could not find %1 executable."
 msgstr "找不到 %1 執行檔。"
 
 #: jobs/k3bcdda2wavreader.cpp:127 jobs/k3bdvdbooktypejob.cpp:326
-#: jobs/k3bdvdformattingjob.cpp:496
+#: jobs/k3bdvdformattingjob.cpp:498
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:174
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:376
 #: projects/datacd/k3bisoimager.cpp:298 projects/datacd/k3bisoimager.cpp:440
-#: projects/k3bcdrdaowriter.cpp:548 projects/k3bcdrecordwriter.cpp:433
-#: projects/k3bcdrskinwriter.cpp:445 projects/k3bgrowisofswriter.cpp:352
+#: projects/k3bcdrdaowriter.cpp:548 projects/k3bcdrecordwriter.cpp:434
+#: projects/k3bcdrskinwriter.cpp:446 projects/k3bgrowisofswriter.cpp:352
 #: projects/videocd/k3bvcdjob.cpp:248
 #, kde-format
 msgid "Could not start %1."
 msgstr "無法啟動 %1。"
 
 #: jobs/k3bcdda2wavreader.cpp:232 jobs/k3bdvdbooktypejob.cpp:183
-#: jobs/k3bdvdformattingjob.cpp:263
+#: jobs/k3bdvdformattingjob.cpp:265
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:271
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:472
 #: projects/audiocd/k3baudionormalizejob.cpp:176
 #: projects/datacd/k3bisoimager.cpp:162 projects/k3bcdrdaowriter.cpp:759
-#: projects/k3bcdrecordwriter.cpp:889 projects/k3bcdrskinwriter.cpp:902
-#: projects/videocd/k3bvcdjob.cpp:348
+#: projects/k3bcdrecordwriter.cpp:891 projects/k3bcdrskinwriter.cpp:904
+#: projects/videocd/k3bvcdjob.cpp:349
 #, kde-format
 msgid "%1 returned an unknown error (code %2)."
 msgstr "%1 回覆了一個未知的錯誤 (代碼 %2) 。"
 
 #: jobs/k3bcdda2wavreader.cpp:238 jobs/k3bdvdbooktypejob.cpp:191
-#: jobs/k3bdvdformattingjob.cpp:271
+#: jobs/k3bdvdformattingjob.cpp:273
 #: projects/audiocd/k3baudionormalizejob.cpp:188
-#: projects/videocd/k3bvcdjob.cpp:356
+#: projects/videocd/k3bvcdjob.cpp:357
 #, kde-format
 msgid "%1 did not exit cleanly."
 msgstr "%1 沒有乾淨地關閉。"
@@ -572,7 +572,7 @@ msgid "Reading clone image"
 msgstr "讀取比對複製映像檔中"
 
 #: jobs/k3bclonejob.cpp:218 projects/datacd/k3bdatajob.cpp:458
-#: projects/videocd/k3bvcdjob.cpp:456
+#: projects/videocd/k3bvcdjob.cpp:457
 #, kde-format
 msgid "Writing Track %1 of %2"
 msgstr "寫入軌道 %2 之 %1 中"
@@ -723,11 +723,11 @@ msgstr "檢查媒體中"
 msgid "Booktype successfully changed"
 msgstr "Booktype 成功地變更"
 
-#: jobs/k3bdvdbooktypejob.cpp:185 jobs/k3bdvdformattingjob.cpp:265
+#: jobs/k3bdvdbooktypejob.cpp:185 jobs/k3bdvdformattingjob.cpp:267
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:274
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:475
 #: projects/audiocd/k3baudionormalizejob.cpp:178
-#: projects/datacd/k3bisoimager.cpp:164 projects/videocd/k3bvcdjob.cpp:350
+#: projects/datacd/k3bisoimager.cpp:164 projects/videocd/k3bvcdjob.cpp:351
 #, kde-format
 msgid "Please send me an email with the last output."
 msgstr "請將最後的輸出結果以電子郵件傳送給我。"
@@ -752,7 +752,7 @@ msgstr "無法對非空白的 DVD+R 媒體更改 Booktype。"
 msgid "No DVD+R(W) media found."
 msgstr "找不到 DVD+R(W) 媒體。"
 
-#: jobs/k3bdvdbooktypejob.cpp:261 jobs/k3bdvdformattingjob.cpp:313
+#: jobs/k3bdvdbooktypejob.cpp:261 jobs/k3bdvdformattingjob.cpp:315
 #, kde-format
 msgid "Unable to determine media state."
 msgstr "無法偵測光碟狀態。"
@@ -1003,7 +1003,7 @@ msgid "Formatting disc"
 msgstr "正在將光碟格式化"
 
 #: jobs/k3bdvdformattingjob.cpp:122 projects/k3bcdrdaowriter.cpp:531
-#: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrskinwriter.cpp:429
+#: projects/k3bcdrecordwriter.cpp:418 projects/k3bcdrskinwriter.cpp:430
 #: projects/k3bgrowisofswriter.cpp:336
 #, kde-format
 msgid "Unmounting medium"
@@ -1016,104 +1016,104 @@ msgid ""
 "b>."
 msgstr "請放入可覆寫 DVD 或 Blu-ray 媒體到光碟機中<p><b>%1 %2 (%3)</b>."
 
-#: jobs/k3bdvdformattingjob.cpp:253
+#: jobs/k3bdvdformattingjob.cpp:255
 #, kde-format
 msgid "Formatting successfully completed"
 msgstr "格式化成功地完成"
 
-#: jobs/k3bdvdformattingjob.cpp:256
+#: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
 msgstr "不要太過顧慮 100% 之前的進度停止。"
 
-#: jobs/k3bdvdformattingjob.cpp:257
+#: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
 msgid "The formatting will continue in the background during writing."
 msgstr "當寫入時會在背景下繼續格式化。"
 
-#: jobs/k3bdvdformattingjob.cpp:282
+#: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
 msgid "Ejecting medium..."
 msgstr "退出光碟片..."
 
-#: jobs/k3bdvdformattingjob.cpp:294 projects/k3babstractwriter.cpp:75
+#: jobs/k3bdvdformattingjob.cpp:296 projects/k3babstractwriter.cpp:75
 #, kde-format
 msgid "Unable to eject medium."
 msgstr "無法退出光碟片。"
 
-#: jobs/k3bdvdformattingjob.cpp:334
+#: jobs/k3bdvdformattingjob.cpp:336
 #, kde-format
 msgid "Found %1 medium."
 msgstr "找到 %1 媒體。"
 
-#: jobs/k3bdvdformattingjob.cpp:338
+#: jobs/k3bdvdformattingjob.cpp:340
 #, kde-format
 msgid "No rewritable DVD or BD medium found. Unable to format."
 msgstr "找不到可複寫的 DVD 或 BD 媒體。無法格式化。"
 
-#: jobs/k3bdvdformattingjob.cpp:363 jobs/k3bdvdformattingjob.cpp:413
+#: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
 #, kde-format
 msgid "No need to format %1 media more than once."
 msgstr "不需要重覆格式化 %1 媒體。"
 
-#: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
+#: jobs/k3bdvdformattingjob.cpp:367 jobs/k3bdvdformattingjob.cpp:417
 #, kde-format
 msgid "It may simply be overwritten."
 msgstr "它可以簡單地覆寫即可。"
 
-#: jobs/k3bdvdformattingjob.cpp:368 jobs/k3bdvdformattingjob.cpp:407
-#: jobs/k3bdvdformattingjob.cpp:418
+#: jobs/k3bdvdformattingjob.cpp:370 jobs/k3bdvdformattingjob.cpp:409
+#: jobs/k3bdvdformattingjob.cpp:420
 #, kde-format
 msgid "Forcing formatting anyway."
 msgstr "強制格式化。"
 
-#: jobs/k3bdvdformattingjob.cpp:369
+#: jobs/k3bdvdformattingjob.cpp:371
 #, kde-format
 msgid "It is not recommended to force formatting of %1 media."
 msgstr "不建議對 %1 媒體強制進行格式化。"
 
-#: jobs/k3bdvdformattingjob.cpp:371
+#: jobs/k3bdvdformattingjob.cpp:373
 #, kde-format
 msgid "After 10-20 reformats the media might become unusable."
 msgstr "碟片可能在 10-20 次的格式化之後就無法再使用了。"
 
-#: jobs/k3bdvdformattingjob.cpp:380
+#: jobs/k3bdvdformattingjob.cpp:382
 #, kde-format
 msgid "Formatting %1 medium"
 msgstr "正在格式化 %1 媒體"
 
-#: jobs/k3bdvdformattingjob.cpp:391
+#: jobs/k3bdvdformattingjob.cpp:393
 #, kde-format
 msgid "Formatted in %1 mode."
 msgstr "以 %1 模式格式化完成。"
 
-#: jobs/k3bdvdformattingjob.cpp:405
+#: jobs/k3bdvdformattingjob.cpp:407
 #, kde-format
 msgid "Media is already empty."
 msgstr "碟片已經是空的."
 
-#: jobs/k3bdvdformattingjob.cpp:432
+#: jobs/k3bdvdformattingjob.cpp:434
 #, kde-format
 msgid "Formatting DVD-RW in %1 mode."
 msgstr "在%1模式下格式化DVD-RW中"
 
-#: jobs/k3bdvdformattingjob.cpp:439
+#: jobs/k3bdvdformattingjob.cpp:441
 #, kde-format
 msgid "Unable to determine the current formatting state of the DVD-RW medium."
 msgstr "無法對這個 DVD-RW 媒體取得現在的格式化狀態。"
 
-#: jobs/k3bdvdformattingjob.cpp:462
+#: jobs/k3bdvdformattingjob.cpp:464
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:99
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:135
 #: projects/audiocd/k3baudionormalizejob.cpp:52
-#: projects/datacd/k3bmkisofshandler.cpp:53 projects/k3bcdrdaowriter.cpp:448
-#: projects/k3bcdrecordwriter.cpp:395 projects/k3bcdrskinwriter.cpp:407
+#: projects/datacd/k3bmkisofshandler.cpp:55 projects/k3bcdrdaowriter.cpp:448
+#: projects/k3bcdrecordwriter.cpp:396 projects/k3bcdrskinwriter.cpp:408
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
 msgstr "使用 %1 %2 – 版權所有 © %3"
 
-#: jobs/k3bdvdformattingjob.cpp:501
+#: jobs/k3bdvdformattingjob.cpp:503
 #, kde-format
 msgid "Formatting"
 msgstr "格式化中"
@@ -1329,27 +1329,27 @@ msgstr "無法啟動 readcd。"
 msgid "Cannot read source disk."
 msgstr "無法讀取來源碟片。"
 
-#: jobs/k3breadcdreader.cpp:266
+#: jobs/k3breadcdreader.cpp:267
 #, kde-format
 msgid "Retrying from sector %1."
 msgstr "重試磁區 %1 中。"
 
-#: jobs/k3breadcdreader.cpp:281
+#: jobs/k3breadcdreader.cpp:283
 #, kde-format
 msgid "Uncorrected error in sector %1"
 msgstr "磁區 %1 內有未校正錯誤"
 
-#: jobs/k3breadcdreader.cpp:284
+#: jobs/k3breadcdreader.cpp:286
 #, kde-format
 msgid "Corrected error in sector %1"
 msgstr "磁區 %1 內有已校正的錯誤"
 
-#: jobs/k3breadcdreader.cpp:304
+#: jobs/k3breadcdreader.cpp:306
 #, kde-format
 msgid "%1 returned error: %2"
 msgstr "%1 傳回錯誤：%2"
 
-#: jobs/k3breadcdreader.cpp:309
+#: jobs/k3breadcdreader.cpp:311
 #, kde-format
 msgid "Readcd exited abnormally."
 msgstr "Readcd 不正常地關閉。"
@@ -1610,7 +1610,7 @@ msgstr "音訊編碼器"
 msgid "An unknown error occurred."
 msgstr "發生未知的錯誤。"
 
-#: plugin/k3bpluginmanager.cpp:158
+#: plugin/k3bpluginmanager.cpp:157
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "外掛程式 %1 沒有可用的設定值。"
@@ -1755,8 +1755,8 @@ msgid "Writing track %1 of %2%3"
 msgstr "寫入軌道 %2%3 之 %1 中"
 
 #: projects/audiocd/k3baudiojob.cpp:646 projects/datacd/k3bdatajob.cpp:431
-#: projects/k3bcdrdaowriter.cpp:567 projects/k3bcdrecordwriter.cpp:449
-#: projects/k3bcdrskinwriter.cpp:461 projects/k3bgrowisofswriter.cpp:362
+#: projects/k3bcdrdaowriter.cpp:567 projects/k3bcdrecordwriter.cpp:450
+#: projects/k3bcdrskinwriter.cpp:462 projects/k3bgrowisofswriter.cpp:362
 #, kde-format
 msgid "Writing"
 msgstr "正在燒錄中"
@@ -1779,7 +1779,7 @@ msgid_plural "%1 tracks (%2 minutes)"
 msgstr[0] "%1 個音軌 (%2 分鐘)"
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
-#: projects/videocd/k3bvcdjob.cpp:570 projects/videodvd/k3bvideodvdjob.cpp:58
+#: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
 #, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
@@ -1890,7 +1890,7 @@ msgstr "在 %1 內建立映像檔"
 msgid "Image successfully created in %1"
 msgstr "已成功在 %1 內建立映像檔"
 
-#: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:92
+#: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:90
 #, kde-format
 msgid "Could not open file %1"
 msgstr "無法開啟檔案 %1"
@@ -2051,7 +2051,7 @@ msgstr ""
 "'\\' 的檔名："
 
 #: projects/datacd/k3bisoimager.cpp:172 projects/k3bcdrdaowriter.cpp:770
-#: projects/k3bcdrecordwriter.cpp:909 projects/k3bcdrskinwriter.cpp:922
+#: projects/k3bcdrecordwriter.cpp:911 projects/k3bcdrskinwriter.cpp:924
 #, kde-format
 msgid "%1 crashed."
 msgstr "%1 當掉了。"
@@ -2132,60 +2132,60 @@ msgctxt ""
 msgid "K3b data project"
 msgstr "K3b 資料專案"
 
-#: projects/datacd/k3bmkisofshandler.cpp:64
+#: projects/datacd/k3bmkisofshandler.cpp:66
 #, kde-format
 msgid "Mkisofs executable not found."
 msgstr "找不到 mkisofs 可執行檔。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:78
+#: projects/datacd/k3bmkisofshandler.cpp:80
 #, kde-format
 msgid "Read error from file '%1'"
 msgstr "讀取檔案「%1」時發生錯誤"
 
-#: projects/datacd/k3bmkisofshandler.cpp:83
+#: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
 msgid "Used version of mkisofs does not have large file support."
 msgstr "使用的 mkisofs 版本不支援大檔案。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:84
+#: projects/datacd/k3bmkisofshandler.cpp:86
 #, kde-format
 msgid "Files bigger than 2 GB cannot be handled."
 msgstr "無法處理大於 2GB 的檔案。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:88
+#: projects/datacd/k3bmkisofshandler.cpp:90
 #, kde-format
 msgid "No such file or directory '%1'."
 msgstr "找不到檔案或目錄 '%1'。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:102
+#: projects/datacd/k3bmkisofshandler.cpp:105
 #, kde-format
 msgid "Encountered an incorrectly encoded filename '%1'"
 msgstr "遭遇到一個不正確編碼的檔名「%1」"
 
-#: projects/datacd/k3bmkisofshandler.cpp:104
+#: projects/datacd/k3bmkisofshandler.cpp:107
 #, kde-format
 msgid ""
 "This may be caused by a system update which changed the local character set."
 msgstr "這可能是由於某次的系統更新更改了本地端的字集。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:105
+#: projects/datacd/k3bmkisofshandler.cpp:108
 #, kde-format
 msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr "您可使用 convmv (https://j3e.de/linux/convmv/) 來修復檔名編碼。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:109
+#: projects/datacd/k3bmkisofshandler.cpp:112
 #, kde-format
 msgid "The boot image has an invalid size."
 msgstr "開機映像檔大小無效。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:113
+#: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
 msgid "The boot image contains multiple partitions."
 msgstr "開機映像檔包含多個分割區。"
 
-#: projects/datacd/k3bmkisofshandler.cpp:114
+#: projects/datacd/k3bmkisofshandler.cpp:117
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
 msgstr "硬碟開機映像檔必須包含單一個分割區。"
@@ -2235,8 +2235,8 @@ msgstr "退出媒體中"
 msgid "Cdrdao %1 does not support disabling burnfree."
 msgstr "Cdrdao %1 不支援停用 Burnfree。"
 
-#: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:298
-#: projects/k3bcdrskinwriter.cpp:306
+#: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:299
+#: projects/k3bcdrskinwriter.cpp:307
 #, kde-format
 msgid "'Force unsafe operations' enabled."
 msgstr "「強迫不安全操作」已啟用。"
@@ -2320,8 +2320,8 @@ msgstr ""
 "由於 cdrdao 內的程式錯誤，toc/cue 檔案 %1 已經被刪除了。K3b 無法從備份 %2 將"
 "它復原。"
 
-#: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:786
-#: projects/k3bcdrskinwriter.cpp:799 projects/k3bgrowisofswriter.cpp:515
+#: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:788
+#: projects/k3bcdrskinwriter.cpp:801 projects/k3bgrowisofswriter.cpp:515
 #, kde-format
 msgid "Simulation successfully completed"
 msgstr "成功完成模擬"
@@ -2331,8 +2331,8 @@ msgstr "成功完成模擬"
 msgid "Reading successfully completed"
 msgstr "成功讀取完成"
 
-#: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:788
-#: projects/k3bcdrskinwriter.cpp:801 projects/k3bgrowisofswriter.cpp:517
+#: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:790
+#: projects/k3bcdrskinwriter.cpp:803 projects/k3bgrowisofswriter.cpp:517
 #, kde-format
 msgid "Writing successfully completed"
 msgstr "成功完成寫入"
@@ -2347,8 +2347,8 @@ msgstr "複製成功完成"
 msgid "Blanking successfully completed"
 msgstr "成功清除完成"
 
-#: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:792
-#: projects/k3bcdrskinwriter.cpp:805 projects/k3bgrowisofswriter.cpp:510
+#: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:794
+#: projects/k3bcdrskinwriter.cpp:807 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
 msgstr "平均整體寫入速度：%1 KB/s (%2x) "
@@ -2358,422 +2358,422 @@ msgstr "平均整體寫入速度：%1 KB/s (%2x) "
 msgid "Please include the debugging output in your problem report."
 msgstr "請在您的問題回報中加入除錯輸出內容。"
 
-#: projects/k3bcdrdaowriter.cpp:787 projects/k3bcdrecordwriter.cpp:666
-#: projects/k3bcdrskinwriter.cpp:679
+#: projects/k3bcdrdaowriter.cpp:788 projects/k3bcdrecordwriter.cpp:668
+#: projects/k3bcdrskinwriter.cpp:681
 #, no-c-format, kde-format
 msgid "Medium or burner does not support writing at %1x speed"
 msgstr "媒體或是燒錄機不支援以 %1x 速度寫入"
 
-#: projects/k3bcdrdaowriter.cpp:789
+#: projects/k3bcdrdaowriter.cpp:790
 #, no-c-format, kde-format
 msgid "Switching down burn speed to %1x"
 msgstr "將燒錄速度降低至 %1x"
 
-#: projects/k3bcdrdaowriter.cpp:819
+#: projects/k3bcdrdaowriter.cpp:820
 #, kde-format
 msgid "Executing Power calibration"
 msgstr "執行功率校正中"
 
-#: projects/k3bcdrdaowriter.cpp:823
+#: projects/k3bcdrdaowriter.cpp:824
 #, kde-format
 msgid "Power calibration successful"
 msgstr "功率校正成功"
 
-#: projects/k3bcdrdaowriter.cpp:824
+#: projects/k3bcdrdaowriter.cpp:825
 #, kde-format
 msgid "Preparing burn process..."
 msgstr "準備燒錄程序中…"
 
-#: projects/k3bcdrdaowriter.cpp:828
+#: projects/k3bcdrdaowriter.cpp:829
 #, kde-format
 msgid "Flushing cache"
 msgstr "清空快取中"
 
-#: projects/k3bcdrdaowriter.cpp:832
+#: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
 msgid "Writing CD-Text lead-in..."
 msgstr "寫入 CD-Text 導入區域中…"
 
-#: projects/k3bcdrdaowriter.cpp:836
+#: projects/k3bcdrdaowriter.cpp:837
 #, kde-format
 msgid "Turning BURN-Proof on"
 msgstr "開啟 BURN-Proof 中"
 
-#: projects/k3bcdrdaowriter.cpp:844
+#: projects/k3bcdrdaowriter.cpp:845
 #, kde-format
 msgid "Found ISRC code"
 msgstr "找到 ISRC 碼"
 
-#: projects/k3bcdrdaowriter.cpp:848
+#: projects/k3bcdrdaowriter.cpp:849
 #, kde-format
 msgid "Found pregap: %1"
 msgstr "找到前置間隙：%1"
 
-#: projects/k3bcdrdaowriter.cpp:861
+#: projects/k3bcdrdaowriter.cpp:862
 #, kde-format
 msgid "No cdrdao driver found."
 msgstr "找不到 cdrdao 驅動程式。"
 
-#: projects/k3bcdrdaowriter.cpp:862
+#: projects/k3bcdrdaowriter.cpp:863
 #, kde-format
 msgid "Please select one manually in the device settings."
 msgstr "請在裝置設定中手動選擇一個。"
 
-#: projects/k3bcdrdaowriter.cpp:863
+#: projects/k3bcdrdaowriter.cpp:864
 #, kde-format
 msgid "For most current drives this would be 'generic-mmc'."
 msgstr "對現在大多數的驅動程式來說會是用「generic-mmc」。"
 
-#: projects/k3bcdrdaowriter.cpp:872
+#: projects/k3bcdrdaowriter.cpp:873
 #, kde-format
 msgid "Device not ready, waiting."
 msgstr "裝置尚未準備好，等待中。"
 
-#: projects/k3bcdrdaowriter.cpp:876
+#: projects/k3bcdrdaowriter.cpp:877
 #, kde-format
 msgid "Cue sheet not accepted."
 msgstr "Cue 表單沒有被接受。"
 
-#: projects/k3bcdrdaowriter.cpp:881 projects/k3bcdrecordwriter.cpp:610
-#: projects/k3bcdrskinwriter.cpp:623
+#: projects/k3bcdrdaowriter.cpp:882 projects/k3bcdrecordwriter.cpp:612
+#: projects/k3bcdrskinwriter.cpp:625
 #, kde-format
 msgid "No valid %1 option: %2"
 msgstr "無效的 %1 選項：%2"
 
-#: projects/k3bcdrdaowriter.cpp:886 projects/k3bcdrecordwriter.cpp:813
-#: projects/k3bcdrskinwriter.cpp:826 projects/k3bgrowisofshandler.cpp:224
+#: projects/k3bcdrdaowriter.cpp:887 projects/k3bcdrecordwriter.cpp:815
+#: projects/k3bcdrskinwriter.cpp:828 projects/k3bgrowisofshandler.cpp:224
 #: projects/mixedcd/k3bmixedjob.cpp:1030
 #, kde-format
 msgid "Data does not fit on disk."
 msgstr "資料與磁碟上的不相稱。"
 
-#: projects/k3bcdrdaowriter.cpp:888 projects/k3bcdrecordwriter.cpp:815
-#: projects/k3bcdrskinwriter.cpp:828
+#: projects/k3bcdrdaowriter.cpp:889 projects/k3bcdrecordwriter.cpp:817
+#: projects/k3bcdrskinwriter.cpp:830
 #, kde-format
 msgid "Enable overburning in the advanced K3b settings to burn anyway."
 msgstr "無論如何要燒錄的話，請在進階 K3b 設定內啟用超燒。"
 
-#: projects/k3bcdrdaowriter.cpp:973
+#: projects/k3bcdrdaowriter.cpp:974
 #, kde-format
 msgid "Writing leadin"
 msgstr "正在寫入導入區域"
 
-#: projects/k3bcdrdaowriter.cpp:979
+#: projects/k3bcdrdaowriter.cpp:980
 #, kde-format
 msgid "Writing leadout"
 msgstr "正在寫入導出區域"
 
-#: projects/k3bcdrecordwriter.cpp:229
+#: projects/k3bcdrecordwriter.cpp:230
 #, kde-format
 msgid "Cdrecord version %1 does not support Blu-ray writing."
 msgstr "Cdrecrd 版本 %1 並不支援寫入 Blu-ray 媒體。"
 
-#: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
+#: projects/k3bcdrecordwriter.cpp:254 projects/k3bcdrskinwriter.cpp:272
 #, kde-format
 msgid "Writer does not support disk at once (DAO) recording"
 msgstr "燒錄機不支援碟片一次燒錄 (DAO) 模式"
 
-#: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
+#: projects/k3bcdrecordwriter.cpp:265 projects/k3bcdrskinwriter.cpp:281
 #, kde-format
 msgid "Writer does not support raw writing."
 msgstr "燒錄機不支援 raw 燒錄模式。"
 
-#: projects/k3bcdrecordwriter.cpp:273
+#: projects/k3bcdrecordwriter.cpp:274
 #, kde-format
 msgid "Cdrecord does not support writing %1 media."
 msgstr "Cdrecord 不支援寫入 %1 媒體。"
 
-#: projects/k3bcdrecordwriter.cpp:293 projects/k3bcdrskinwriter.cpp:301
+#: projects/k3bcdrecordwriter.cpp:294 projects/k3bcdrskinwriter.cpp:302
 #, kde-format
 msgid "Writer does not support buffer underrun free recording (Burnfree)"
 msgstr "燒錄機不支援「避免緩衝區不夠使用燒錄模式」 (Burnfree) "
 
-#: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
+#: projects/k3bcdrecordwriter.cpp:330 projects/k3bcdrskinwriter.cpp:342
 #, kde-format
 msgid "Failed to write temporary file '%1'"
 msgstr "寫入暫存檔「%1」失敗"
 
-#: projects/k3bcdrecordwriter.cpp:349
+#: projects/k3bcdrecordwriter.cpp:350
 #, kde-format
 msgid "Cdrecord %1 does not support overburning."
 msgstr "Cdrecord %1 不支援超燒。"
 
-#: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
+#: projects/k3bcdrecordwriter.cpp:445 projects/k3bcdrskinwriter.cpp:457
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
 msgstr "開始以 %1x 速度模擬中…"
 
-#: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
+#: projects/k3bcdrecordwriter.cpp:447 projects/k3bcdrskinwriter.cpp:459
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
 msgstr "開始以 %2x 速度模擬 %1 中…"
 
-#: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
+#: projects/k3bcdrecordwriter.cpp:453 projects/k3bcdrskinwriter.cpp:465
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
 msgstr "開始以 %1x 速度寫入中…"
 
-#: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
+#: projects/k3bcdrecordwriter.cpp:455 projects/k3bcdrskinwriter.cpp:467
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
 msgstr "開始以 %2x 速度寫入 %1 中…"
 
-#: projects/k3bcdrecordwriter.cpp:548 projects/k3bcdrskinwriter.cpp:560
+#: projects/k3bcdrecordwriter.cpp:550 projects/k3bcdrskinwriter.cpp:562
 #: projects/k3bgrowisofswriter.cpp:428
 #, kde-format
 msgid "Writing data"
 msgstr "寫入資料中"
 
-#: projects/k3bcdrecordwriter.cpp:577 projects/k3bcdrskinwriter.cpp:590
+#: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "DAO (Disk At Once) recording not supported with this writer"
 msgstr "此燒錄機不支援 DAO (碟片一次燒錄) 模式"
 
-#: projects/k3bcdrecordwriter.cpp:578 projects/k3bcdrskinwriter.cpp:591
+#: projects/k3bcdrecordwriter.cpp:580 projects/k3bcdrskinwriter.cpp:593
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
 msgstr "請選擇 TAO (軌道一次燒錄) 接著再試一次"
 
-#: projects/k3bcdrecordwriter.cpp:581 projects/k3bcdrskinwriter.cpp:594
+#: projects/k3bcdrecordwriter.cpp:583 projects/k3bcdrskinwriter.cpp:596
 #, kde-format
 msgid "RAW recording not supported with this writer"
 msgstr "這個燒錄機不支援 RAW 燒錄模式"
 
-#: projects/k3bcdrecordwriter.cpp:584 projects/k3bcdrskinwriter.cpp:597
+#: projects/k3bcdrecordwriter.cpp:586 projects/k3bcdrskinwriter.cpp:599
 #, kde-format
 msgid "Input/output error. Not necessarily serious."
 msgstr "輸入/輸出錯誤。不一定很嚴重。"
 
-#: projects/k3bcdrecordwriter.cpp:593 projects/k3bcdrskinwriter.cpp:606
+#: projects/k3bcdrecordwriter.cpp:595 projects/k3bcdrskinwriter.cpp:608
 #, kde-format
 msgid "Reloading of medium required"
 msgstr "需要重新載入媒體"
 
-#: projects/k3bcdrecordwriter.cpp:602 projects/k3bcdrskinwriter.cpp:615
+#: projects/k3bcdrecordwriter.cpp:604 projects/k3bcdrskinwriter.cpp:617
 #: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
 #, kde-format
 msgid "Trying to write more than the official disk capacity"
 msgstr "嘗試寫入大於官方的碟片容量中"
 
-#: projects/k3bcdrecordwriter.cpp:637 projects/k3bcdrskinwriter.cpp:650
+#: projects/k3bcdrecordwriter.cpp:639 projects/k3bcdrskinwriter.cpp:652
 #, kde-format
 msgid "Only session 1 will be cloned."
 msgstr "只有區段 1 會被對比複製。"
 
-#: projects/k3bcdrecordwriter.cpp:640 projects/k3bcdrskinwriter.cpp:653
+#: projects/k3bcdrecordwriter.cpp:642 projects/k3bcdrskinwriter.cpp:655
 #, kde-format
 msgid "Unable to fixate the disk."
 msgstr "無法檢視碟片。"
 
-#: projects/k3bcdrecordwriter.cpp:670 projects/k3bcdrskinwriter.cpp:683
+#: projects/k3bcdrecordwriter.cpp:672 projects/k3bcdrskinwriter.cpp:685
 #, no-c-format, kde-format
 msgid "Switching burn speed up to %1x"
 msgstr "將燒錄速度提高到 %1x"
 
-#: projects/k3bcdrecordwriter.cpp:673 projects/k3bcdrskinwriter.cpp:686
+#: projects/k3bcdrecordwriter.cpp:675 projects/k3bcdrskinwriter.cpp:688
 #, no-c-format, kde-format
 msgid "Switching burn speed down to %1x"
 msgstr "將燒錄速度降低到 %1x"
 
-#: projects/k3bcdrecordwriter.cpp:685 projects/k3bcdrskinwriter.cpp:698
+#: projects/k3bcdrecordwriter.cpp:687 projects/k3bcdrskinwriter.cpp:700
 #, kde-format
 msgid "Starting disc write"
 msgstr "開始寫入碟片中"
 
-#: projects/k3bcdrecordwriter.cpp:701 projects/k3bcdrskinwriter.cpp:714
+#: projects/k3bcdrecordwriter.cpp:703 projects/k3bcdrskinwriter.cpp:716
 #: projects/k3bgrowisofshandler.cpp:133
 #, kde-format
 msgid "Closing Session"
 msgstr "關閉區段中"
 
-#: projects/k3bcdrecordwriter.cpp:705 projects/k3bcdrskinwriter.cpp:718
+#: projects/k3bcdrecordwriter.cpp:707 projects/k3bcdrskinwriter.cpp:720
 #, kde-format
 msgid "Writing Leadin"
 msgstr "寫入導入區域中"
 
-#: projects/k3bcdrecordwriter.cpp:708 projects/k3bcdrskinwriter.cpp:721
+#: projects/k3bcdrecordwriter.cpp:710 projects/k3bcdrskinwriter.cpp:723
 #, kde-format
 msgid "Writing Leadout"
 msgstr "寫入導出區域中"
 
-#: projects/k3bcdrecordwriter.cpp:711 projects/k3bcdrskinwriter.cpp:724
+#: projects/k3bcdrecordwriter.cpp:713 projects/k3bcdrskinwriter.cpp:726
 #, kde-format
 msgid "Writing pregap"
 msgstr "寫入前置間隙中"
 
-#: projects/k3bcdrecordwriter.cpp:714 projects/k3bcdrskinwriter.cpp:727
+#: projects/k3bcdrecordwriter.cpp:716 projects/k3bcdrskinwriter.cpp:729
 #, kde-format
 msgid "Performing Optimum Power Calibration"
 msgstr "執行最佳化功率校準中"
 
-#: projects/k3bcdrecordwriter.cpp:717 projects/k3bcdrskinwriter.cpp:730
+#: projects/k3bcdrecordwriter.cpp:719 projects/k3bcdrskinwriter.cpp:732
 #, kde-format
 msgid "Sending CUE sheet"
 msgstr "傳送 CUE 表單中"
 
-#: projects/k3bcdrecordwriter.cpp:720 projects/k3bcdrskinwriter.cpp:733
+#: projects/k3bcdrecordwriter.cpp:722 projects/k3bcdrskinwriter.cpp:735
 #, kde-format
 msgid "Enabled Burnfree"
 msgstr "已啟用 Burnfree"
 
-#: projects/k3bcdrecordwriter.cpp:723 projects/k3bcdrskinwriter.cpp:736
+#: projects/k3bcdrecordwriter.cpp:725 projects/k3bcdrskinwriter.cpp:738
 #, kde-format
 msgid "Disabled Burnfree"
 msgstr "已停用 Burnfree"
 
-#: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
+#: projects/k3bcdrecordwriter.cpp:731 projects/k3bcdrskinwriter.cpp:744
 #: projects/mixedcd/k3bmixedjob.cpp:555
 #, kde-format
 msgid "Unable to close the tray"
 msgstr "無法收回碟片托盤"
 
-#: projects/k3bcdrecordwriter.cpp:739 projects/k3bcdrskinwriter.cpp:752
+#: projects/k3bcdrecordwriter.cpp:741 projects/k3bcdrskinwriter.cpp:754
 #, kde-format
 msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
 msgstr[0] "已使用了 %1 次 Burnfree。"
 
-#: projects/k3bcdrecordwriter.cpp:745 projects/k3bcdrskinwriter.cpp:758
+#: projects/k3bcdrecordwriter.cpp:747 projects/k3bcdrskinwriter.cpp:760
 #, kde-format
 msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
 msgstr[0] "%1 次緩衝過少。"
 
-#: projects/k3bcdrecordwriter.cpp:784 projects/k3bcdrskinwriter.cpp:797
+#: projects/k3bcdrecordwriter.cpp:786 projects/k3bcdrskinwriter.cpp:799
 #, kde-format
 msgid "Erasing successfully completed"
 msgstr "抹除成功完成"
 
-#: projects/k3bcdrecordwriter.cpp:811 projects/k3bcdrskinwriter.cpp:824
+#: projects/k3bcdrecordwriter.cpp:813 projects/k3bcdrskinwriter.cpp:826
 #: projects/k3bgrowisofshandler.cpp:222
 #, kde-format
 msgid "Data did not fit on disk."
 msgstr "資料與碟片上的不相稱。"
 
-#: projects/k3bcdrecordwriter.cpp:822 projects/k3bcdrskinwriter.cpp:835
+#: projects/k3bcdrecordwriter.cpp:824 projects/k3bcdrskinwriter.cpp:837
 #, kde-format
 msgid "%1 could not reserve shared memory segment of requested size."
 msgstr "%1 無法保留索求大小的共享記憶體區段。"
 
-#: projects/k3bcdrecordwriter.cpp:823 projects/k3bcdrskinwriter.cpp:836
+#: projects/k3bcdrecordwriter.cpp:825 projects/k3bcdrskinwriter.cpp:838
 #, kde-format
 msgid "Probably you chose a too large buffer size."
 msgstr "可能是您選擇的緩衝大小太大。"
 
-#: projects/k3bcdrecordwriter.cpp:826 projects/k3bcdrskinwriter.cpp:839
+#: projects/k3bcdrecordwriter.cpp:828 projects/k3bcdrskinwriter.cpp:841
 #, kde-format
 msgid "OPC failed. Probably the writer does not like the medium."
 msgstr "OPC 失敗。可能是燒錄機不喜歡這張媒體。"
 
-#: projects/k3bcdrecordwriter.cpp:829 projects/k3bcdrskinwriter.cpp:842
+#: projects/k3bcdrecordwriter.cpp:831 projects/k3bcdrskinwriter.cpp:844
 #, kde-format
 msgid "Unable to set write speed to %1."
 msgstr "無法設置寫入速度為 %1。"
 
-#: projects/k3bcdrecordwriter.cpp:830 projects/k3bcdrskinwriter.cpp:843
+#: projects/k3bcdrecordwriter.cpp:832 projects/k3bcdrskinwriter.cpp:845
 #, kde-format
 msgid "Probably this is lower than your writer's lowest writing speed."
 msgstr "可能是這比您燒錄機的最低寫入速度還要低。"
 
-#: projects/k3bcdrecordwriter.cpp:833 projects/k3bcdrskinwriter.cpp:846
+#: projects/k3bcdrecordwriter.cpp:835 projects/k3bcdrskinwriter.cpp:848
 #, kde-format
 msgid "Unable to send CUE sheet."
 msgstr "無法傳送 CUE 表單。"
 
-#: projects/k3bcdrecordwriter.cpp:835 projects/k3bcdrecordwriter.cpp:874
-#: projects/k3bcdrecordwriter.cpp:894 projects/k3bcdrskinwriter.cpp:848
-#: projects/k3bcdrskinwriter.cpp:887 projects/k3bcdrskinwriter.cpp:907
+#: projects/k3bcdrecordwriter.cpp:837 projects/k3bcdrecordwriter.cpp:876
+#: projects/k3bcdrecordwriter.cpp:896 projects/k3bcdrskinwriter.cpp:850
+#: projects/k3bcdrskinwriter.cpp:889 projects/k3bcdrskinwriter.cpp:909
 #, kde-format
 msgid "Sometimes using TAO writing mode solves this issue."
 msgstr "有時候使用 TAO 寫入模式可以解決這個問題。"
 
-#: projects/k3bcdrecordwriter.cpp:838 projects/k3bcdrskinwriter.cpp:851
+#: projects/k3bcdrecordwriter.cpp:840 projects/k3bcdrskinwriter.cpp:853
 #, kde-format
 msgid "Unable to open new session."
 msgstr "無法開啟新的區段。"
 
-#: projects/k3bcdrecordwriter.cpp:839 projects/k3bcdrskinwriter.cpp:852
+#: projects/k3bcdrecordwriter.cpp:841 projects/k3bcdrskinwriter.cpp:854
 #, kde-format
 msgid "Probably a problem with the medium."
 msgstr "可能是這張媒體有問題。"
 
-#: projects/k3bcdrecordwriter.cpp:842 projects/k3bcdrskinwriter.cpp:855
+#: projects/k3bcdrecordwriter.cpp:844 projects/k3bcdrskinwriter.cpp:857
 #, kde-format
 msgid "The disk might still be readable."
 msgstr "碟片可能還可以讀取。"
 
-#: projects/k3bcdrecordwriter.cpp:844 projects/k3bcdrskinwriter.cpp:857
+#: projects/k3bcdrecordwriter.cpp:846 projects/k3bcdrskinwriter.cpp:859
 #, kde-format
 msgid "Try DAO writing mode."
 msgstr "試試 DAO 寫入模式。"
 
-#: projects/k3bcdrecordwriter.cpp:847 projects/k3bcdrskinwriter.cpp:860
+#: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
 #, kde-format
 msgid "%1 has no permission to open the device."
 msgstr "%1 沒有開啟這個裝置的許可。"
 
-#: projects/k3bcdrecordwriter.cpp:848 projects/k3bcdrskinwriter.cpp:861
+#: projects/k3bcdrecordwriter.cpp:850 projects/k3bcdrskinwriter.cpp:863
 #, kde-format
 msgid "Modify device settings in K3b to solve this problem."
 msgstr "您可以變更 K3b 的裝置設定來解決這個問題。"
 
-#: projects/k3bcdrecordwriter.cpp:851 projects/k3bcdrskinwriter.cpp:864
+#: projects/k3bcdrecordwriter.cpp:853 projects/k3bcdrskinwriter.cpp:866
 #, kde-format
 msgid "Probably a buffer underrun occurred."
 msgstr "可能肇因於緩衝不足(buffer underrun)。"
 
-#: projects/k3bcdrecordwriter.cpp:853 projects/k3bcdrskinwriter.cpp:866
+#: projects/k3bcdrecordwriter.cpp:855 projects/k3bcdrskinwriter.cpp:868
 #, kde-format
 msgid "Please enable Burnfree or choose a lower burning speed."
 msgstr "請開啟Burnfree或選擇低倍速燒錄。"
 
-#: projects/k3bcdrecordwriter.cpp:855 projects/k3bcdrskinwriter.cpp:868
+#: projects/k3bcdrecordwriter.cpp:857 projects/k3bcdrskinwriter.cpp:870
 #, kde-format
 msgid "Please choose a lower burning speed."
 msgstr "請選擇較低的燒錄速度。"
 
-#: projects/k3bcdrecordwriter.cpp:858 projects/k3bcdrskinwriter.cpp:871
+#: projects/k3bcdrecordwriter.cpp:860 projects/k3bcdrskinwriter.cpp:873
 #, kde-format
 msgid "Found a high-speed medium not suitable for the writer being used."
 msgstr "找到高速媒體，但是不適用這個正被使用的燒錄機。"
 
-#: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrecordwriter.cpp:863
-#: projects/k3bcdrskinwriter.cpp:872 projects/k3bcdrskinwriter.cpp:876
+#: projects/k3bcdrecordwriter.cpp:861 projects/k3bcdrecordwriter.cpp:865
+#: projects/k3bcdrskinwriter.cpp:874 projects/k3bcdrskinwriter.cpp:878
 #, kde-format
 msgid "Use the 'force unsafe operations' option to ignore this."
 msgstr "使用「強迫不安全的操作」選項來忽略此問題。"
 
-#: projects/k3bcdrecordwriter.cpp:862 projects/k3bcdrskinwriter.cpp:875
+#: projects/k3bcdrecordwriter.cpp:864 projects/k3bcdrskinwriter.cpp:877
 #, kde-format
 msgid "Found a low-speed medium not suitable for the writer being used."
 msgstr "找到低速媒體，對於正被使用的燒錄機不合適。"
 
-#: projects/k3bcdrecordwriter.cpp:866 projects/k3bcdrskinwriter.cpp:879
+#: projects/k3bcdrecordwriter.cpp:868 projects/k3bcdrskinwriter.cpp:881
 #, kde-format
 msgid "Most likely the burning failed due to low-quality media."
 msgstr "燒錄之所以失敗很有可能是因為媒體品質低落。"
 
-#: projects/k3bcdrecordwriter.cpp:869 projects/k3bcdrskinwriter.cpp:882
+#: projects/k3bcdrecordwriter.cpp:871 projects/k3bcdrskinwriter.cpp:884
 #, kde-format
 msgid "Another application is blocking the device (most likely automounting)."
 msgstr "其他應用程式正佔用這個裝置 (很有可能是自動掛載) 。"
 
-#: projects/k3bcdrecordwriter.cpp:872 projects/k3bcdrskinwriter.cpp:885
+#: projects/k3bcdrecordwriter.cpp:874 projects/k3bcdrskinwriter.cpp:887
 #, kde-format
 msgid "A write error occurred."
 msgstr "寫入發生錯誤。"
 
-#: projects/k3bcdrecordwriter.cpp:877 projects/k3bcdrskinwriter.cpp:890
+#: projects/k3bcdrecordwriter.cpp:879 projects/k3bcdrskinwriter.cpp:892
 #, kde-format
 msgid "Some drives do not support all erase types."
 msgstr "有些裝置不支援所有抹除的類型。"
 
-#: projects/k3bcdrecordwriter.cpp:878 projects/k3bcdrskinwriter.cpp:891
+#: projects/k3bcdrecordwriter.cpp:880 projects/k3bcdrskinwriter.cpp:893
 #, kde-format
 msgid "Try again using 'Complete' erasing."
 msgstr "使用「完整」抹除再試一次。"
 
-#: projects/k3bcdrecordwriter.cpp:885
+#: projects/k3bcdrecordwriter.cpp:887
 #, kde-format
 msgid ""
 "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
@@ -2782,48 +2782,48 @@ msgstr ""
 "從 Linux 核心 2.6.8 起，當執行 suid root 時，cdrecord 無法繼續使用 SCSI 傳輸"
 "了。"
 
-#: projects/k3bcdrecordwriter.cpp:886 projects/k3bcdrskinwriter.cpp:899
+#: projects/k3bcdrecordwriter.cpp:888 projects/k3bcdrskinwriter.cpp:901
 #, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr "您可以使用 K3b::Setup 來解決這個問題，或是手動移除 suid 位元。"
 
-#: projects/k3bcdrecordwriter.cpp:897
+#: projects/k3bcdrecordwriter.cpp:899
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
 msgstr "如果您正在執行未修補過的 cdrecord 版本…"
 
-#: projects/k3bcdrecordwriter.cpp:898 projects/k3bcdrskinwriter.cpp:911
+#: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
 msgstr "…而且這個錯誤也會在高品質的媒體上發生…"
 
-#: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
+#: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
 msgstr "…而且 K3b 的 FAQ (常見問題集) 無法幫助您…"
 
-#: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
+#: projects/k3bcdrecordwriter.cpp:902 projects/k3bcdrskinwriter.cpp:915
 #, kde-format
 msgid "...please include the debugging output in your problem report."
 msgstr "…那麼請在您的問題報告內加入除錯輸出內容。"
 
-#: projects/k3bcdrskinwriter.cpp:240
+#: projects/k3bcdrskinwriter.cpp:241
 #, kde-format
 msgid "Cdrskin version %1 does not support Blu-ray writing."
 msgstr "Cdrskin 版本 %1 並不支援寫入 Blu-ray 媒體。"
 
-#: projects/k3bcdrskinwriter.cpp:286
+#: projects/k3bcdrskinwriter.cpp:287
 #, kde-format
 msgid "Cdrskin does not support writing %1 media."
 msgstr "Cdrskin不支援寫入 %1 媒體。"
 
-#: projects/k3bcdrskinwriter.cpp:361
+#: projects/k3bcdrskinwriter.cpp:362
 #, kde-format
 msgid "Cdrskin %1 does not support overburning."
 msgstr "Cdrskin %1 不支援超燒。"
 
-#: projects/k3bcdrskinwriter.cpp:898
+#: projects/k3bcdrskinwriter.cpp:900
 #, kde-format
 msgid ""
 "Since kernel version 2.6.8 cdrskin cannot use SCSI transport when running "
@@ -2832,7 +2832,7 @@ msgstr ""
 "從 Linux 核心 2.6.8 起，當執行 suid root 時，cdrskin 無法繼續使用 SCSI 傳輸"
 "了。"
 
-#: projects/k3bcdrskinwriter.cpp:910
+#: projects/k3bcdrskinwriter.cpp:912
 #, kde-format
 msgid "If you are running an unpatched cdrskin version..."
 msgstr "如果您正在執行未修補過的 cdrskin 版本…"
@@ -3286,12 +3286,12 @@ msgstr "只支援 MPEG1 與 MPEG2 視訊檔。\n"
 msgid "Wrong File Format"
 msgstr "錯誤的檔案格式"
 
-#: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:468
+#: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:469
 #, kde-format
 msgid "Removing Binary file %1"
 msgstr "移除二進位檔 %1 中"
 
-#: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:478
+#: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format
 msgid "Removing Cue file %1"
 msgstr "移除 Cue 檔 %1 中"
@@ -3324,95 +3324,95 @@ msgstr ""
 msgid "%1 executable too old: need version %2 or greater."
 msgstr "%1 可執行檔太老舊：需要 %2 或以上的版本。"
 
-#: projects/videocd/k3bvcdjob.cpp:286
+#: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
 msgid "Scanning video file %1 of %2 (%3)"
 msgstr "掃描視訊檔 %2 之 %1 中(%3)"
 
-#: projects/videocd/k3bvcdjob.cpp:322
+#: projects/videocd/k3bvcdjob.cpp:323
 #, kde-format
 msgid "Creating Image for track %1"
 msgstr "為軌道 %1 建立映像檔中"
 
-#: projects/videocd/k3bvcdjob.cpp:344
+#: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
 msgstr "已成功地建立 Cue/Bin 檔。"
 
-#: projects/videocd/k3bvcdjob.cpp:387
+#: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
 msgid "Writing Copy %1 of %2"
 msgstr "寫入複製品 %2 之 %1 中"
 
-#: projects/videocd/k3bvcdjob.cpp:513
+#: projects/videocd/k3bvcdjob.cpp:514
 #, kde-format
 msgid "One or more BCD fields out of range for %1"
 msgstr "一個或更多的 BCD 域超過 %1 的範圍"
 
-#: projects/videocd/k3bvcdjob.cpp:516
+#: projects/videocd/k3bvcdjob.cpp:517
 #, kde-format
 msgid "From now on, scan information data errors will not be reported anymore"
 msgstr "從現在開始，不會再報告掃描資訊資料錯誤了"
 
-#: projects/videocd/k3bvcdjob.cpp:517
+#: projects/videocd/k3bvcdjob.cpp:518
 #, kde-format
 msgid ""
 "Consider enabling the 'update scan offsets' option, if it is not enabled "
 "already."
 msgstr "如果「更新掃描位移」選項還沒啟用的話，考慮將它開啟。"
 
-#: projects/videocd/k3bvcdjob.cpp:524
+#: projects/videocd/k3bvcdjob.cpp:525
 #, kde-format
 msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
 msgstr "APS 的 pts 似乎順序錯亂 (實際上的 pts %1，最後看到的 pts %2) "
 
-#: projects/videocd/k3bvcdjob.cpp:525
+#: projects/videocd/k3bvcdjob.cpp:526
 #, kde-format
 msgid "Ignoring this aps"
 msgstr "忽略這個 aps 中"
 
-#: projects/videocd/k3bvcdjob.cpp:533
+#: projects/videocd/k3bvcdjob.cpp:534
 #, kde-format
 msgid "Bad packet at packet #%1 (stream byte offset %2)"
 msgstr "封包 #%1 是不良的封包 (串流位元組位移 %2) "
 
-#: projects/videocd/k3bvcdjob.cpp:540
+#: projects/videocd/k3bvcdjob.cpp:541
 #, kde-format
 msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
 msgstr[0] "剩下的串流的 %1 位元組會被忽略。"
 
-#: projects/videocd/k3bvcdjob.cpp:542
+#: projects/videocd/k3bvcdjob.cpp:543
 #, kde-format
 msgid "An unknown number of remaining stream bytes will be ignored."
 msgstr "剩下的串流的未知數目位元組會被忽略。"
 
-#: projects/videocd/k3bvcdjob.cpp:551
+#: projects/videocd/k3bvcdjob.cpp:552
 #, kde-format
 msgid "Writing Video CD (Version 1.1)"
 msgstr "寫入視訊 CD (版本 1.1) 中"
 
-#: projects/videocd/k3bvcdjob.cpp:553
+#: projects/videocd/k3bvcdjob.cpp:554
 #, kde-format
 msgid "Writing Video CD (Version 2.0)"
 msgstr "寫入視訊 CD (版本 2.0) 中"
 
-#: projects/videocd/k3bvcdjob.cpp:555
+#: projects/videocd/k3bvcdjob.cpp:556
 #, kde-format
 msgid "Writing Super Video CD"
 msgstr "寫入超級視訊 CD 中"
 
-#: projects/videocd/k3bvcdjob.cpp:557
+#: projects/videocd/k3bvcdjob.cpp:558
 #, kde-format
 msgid "Writing High-Quality Video CD"
 msgstr "寫入高品質視訊 CD 中"
 
-#: projects/videocd/k3bvcdjob.cpp:559
+#: projects/videocd/k3bvcdjob.cpp:560
 #, kde-format
 msgid "Writing Video CD"
 msgstr "寫入視訊 CD 中"
 
-#: projects/videocd/k3bvcdjob.cpp:566
+#: projects/videocd/k3bvcdjob.cpp:567
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
@@ -3608,12 +3608,12 @@ msgstr "裝置選取"
 msgid "Please select a device:"
 msgstr "請選擇裝置："
 
-#: tools/k3bmd5job.cpp:85
+#: tools/k3bmd5job.cpp:83
 #, kde-format
 msgid "Could not find file %1"
 msgstr "找不到檔案 %1"
 
-#: tools/k3bmd5job.cpp:230
+#: tools/k3bmd5job.cpp:228
 #, kde-format
 msgid "Error while reading from file %1"
 msgstr "當讀取檔案 %1 時發生錯誤"

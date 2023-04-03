@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-08 00:58+0000\n"
+"POT-Creation-Date: 2023-04-03 00:45+0000\n"
 "PO-Revision-Date: 2019-11-19 12:49+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -144,7 +144,7 @@ msgstr "CRC"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:389
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:180
-#: ../plugins/encoder/lame/k3blametyes.h:86
+#: ../plugins/encoder/lame/k3blametyes.h:88
 #, kde-format
 msgid "Mono"
 msgstr "Mono"
@@ -157,7 +157,7 @@ msgstr "Kahe kanaliga"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:393
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:175
-#: ../plugins/encoder/lame/k3blametyes.h:85
+#: ../plugins/encoder/lame/k3blametyes.h:87
 #, kde-format
 msgid "Joint Stereo"
 msgstr "Liitstereo"
@@ -165,7 +165,7 @@ msgstr "Liitstereo"
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:395
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:170
-#: ../plugins/encoder/lame/k3blametyes.h:84
+#: ../plugins/encoder/lame/k3blametyes.h:86
 #, kde-format
 msgid "Stereo"
 msgstr "Stereo"
@@ -302,7 +302,7 @@ msgstr "Käsk"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:111
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -438,12 +438,12 @@ msgstr "&Wave-päise kirjutamine"
 msgid "Command failed: %1"
 msgstr "Käsk nurjus: %1"
 
-#: ../plugins/encoder/external/k3bexternalencoder.cpp:200
+#: ../plugins/encoder/external/k3bexternalencoder.cpp:201
 #, kde-format
 msgid "Could not find program '%1'"
 msgstr "Programmi '%1' leidmine nurjus"
 
-#: ../plugins/encoder/external/k3bexternalencoder.cpp:207
+#: ../plugins/encoder/external/k3bexternalencoder.cpp:208
 #, kde-format
 msgid "Invalid command: the command is empty."
 msgstr "Vigane käsk: käsk on tühi."
@@ -500,7 +500,7 @@ msgstr "Failinime pole määratud"
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
-#: projects/k3bprojectburndialog.cpp:256 projects/k3bvcdburndialog.cpp:409
+#: projects/k3bprojectburndialog.cpp:259 projects/k3bvcdburndialog.cpp:409
 #: projects/k3bvcdburndialog.cpp:441 projects/k3bvcdtrackdialog.cpp:445
 #: rip/k3baudioprojectconvertingdialog.cpp:136
 #: rip/k3baudiorippingdialog.cpp:154 rip/k3bvideocdrippingdialog.cpp:90
@@ -551,7 +551,7 @@ msgstr "Muuda seadistusi..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:967
+#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:969
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -811,53 +811,43 @@ msgstr "Muutuv bitikiirus (%1)"
 msgid "(Lame) Manual Quality Settings"
 msgstr "(Lame) kvaliteediseadistused"
 
-#: ../plugins/encoder/lame/k3blametyes.h:67
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:69
 msgid "Low quality (56 kbps)"
 msgstr "Madal kvaliteet (56 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:68
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:70
 msgid "Low quality (90 kbps)"
 msgstr "Madal kvaliteet (90 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:70
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:72
 msgid "Portable (average 115 kbps)"
 msgstr "Sobiv (keskmiselt 115 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:71
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:73
 msgid "Portable (average 130 kbps)"
 msgstr "Sobiv (keskmiselt 130 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:72
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:74
 msgid "Portable (average 160 kbps)"
 msgstr "Sobiv (keskmiselt 160 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:74
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:76
 msgid "HiFi (average 175 kbps)"
 msgstr "HiFi (keskmiselt 175 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:75
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:77
 msgid "HiFi (average 190 kbps)"
 msgstr "HiFi (keskmiselt 190 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:76
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:78
 msgid "HiFi (average 210 kbps)"
 msgstr "HiFi (keskmiselt 210 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:77
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:79
 msgid "HiFi (average 230 kbps)"
 msgstr "HiFi (keskmiselt 230 kbps)"
 
-#: ../plugins/encoder/lame/k3blametyes.h:79
-#, kde-format
+#: ../plugins/encoder/lame/k3blametyes.h:81
 msgid "Archiving (320 kbps)"
 msgstr "Arhiveerimine (320 kbps)"
 
@@ -1959,17 +1949,17 @@ msgstr "Faili %1 avamine nurjus"
 msgid "&Device"
 msgstr "Sea&de"
 
-#: k3bdiroperator.cpp:41
+#: k3bdiroperator.cpp:42
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "K3b järjehoidjad"
 
-#: k3bdiroperator.cpp:44
+#: k3bdiroperator.cpp:45
 #, kde-format
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
 
-#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:49 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "Lis&a projekti"
@@ -2139,8 +2129,8 @@ msgstr "Tüüp:"
 #: rip/k3baudioprojectconvertingdialog.cpp:267
 #: rip/k3baudioprojectconvertingdialog.cpp:306
 #: rip/k3baudiorippingdialog.cpp:348 rip/k3baudiorippingdialog.cpp:403
-#: rip/k3bpatternparser.cpp:122 rip/k3bpatternparser.cpp:158
-#: rip/k3bpatternparser.cpp:164 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
+#: rip/k3bpatternparser.cpp:123 rip/k3bpatternparser.cpp:159
+#: rip/k3bpatternparser.cpp:165 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
 #, kde-format
 msgid "unknown"
 msgstr "tundmatu"
@@ -2151,9 +2141,9 @@ msgid "Media ID:"
 msgstr "Andmekandja ID:"
 
 #: k3bdiskinfoview.cpp:311 k3bdiskinfoview.cpp:313 k3bdiskinfoview.cpp:317
-#: projects/k3bfillstatusdisplay.cpp:180 projects/k3bfillstatusdisplay.cpp:188
-#: projects/k3bfillstatusdisplay.cpp:191 projects/k3bfillstatusdisplay.cpp:196
-#: projects/k3bfillstatusdisplay.cpp:852
+#: projects/k3bfillstatusdisplay.cpp:181 projects/k3bfillstatusdisplay.cpp:189
+#: projects/k3bfillstatusdisplay.cpp:192 projects/k3bfillstatusdisplay.cpp:197
+#: projects/k3bfillstatusdisplay.cpp:854
 #, kde-format
 msgid "%1 min"
 msgstr "%1 min"
@@ -2496,7 +2486,7 @@ msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 / %2"
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:548
+#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
@@ -2527,43 +2517,43 @@ msgstr "Viga."
 msgid "Finished with errors"
 msgstr "Lõpetatud vigadega"
 
-#: k3bjobprogressdialog.cpp:482
+#: k3bjobprogressdialog.cpp:483
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "Kas tõesti loobuda?"
 
-#: k3bjobprogressdialog.cpp:482
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "Loobumise kinnitus"
 
-#: k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:556
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
 msgstr "Jäänud: %1"
 
-#: k3blsofwrapperdialog.cpp:38
+#: k3blsofwrapperdialog.cpp:39
 #, kde-format
 msgid "Device in use"
 msgstr "Kasutatav seade"
 
-#: k3blsofwrapperdialog.cpp:45
+#: k3blsofwrapperdialog.cpp:46
 #, kde-format
 msgid "Continue"
 msgstr "Jätka"
 
-#: k3blsofwrapperdialog.cpp:49
+#: k3blsofwrapperdialog.cpp:50
 #, kde-format
 msgid "Quit the other applications"
 msgstr "Lõpeta teiste rakenduste tegevus"
 
-#: k3blsofwrapperdialog.cpp:52 k3blsofwrapperdialog.cpp:81
+#: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
 #, kde-format
 msgid "Check again"
 msgstr "Kontrolli uuesti"
 
-#: k3blsofwrapperdialog.cpp:72
+#: k3blsofwrapperdialog.cpp:73
 #, kde-format
 msgid ""
 "<p>Device <b>'%1'</b> is already in use by other applications (<em>%2</em>)."
@@ -2580,10 +2570,25 @@ msgstr ""
 
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
+msgid "www"
+msgstr ""
+
+#: k3blsofwrapperdialog.cpp:102
+#, kde-format
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
 msgstr ""
 "<p>Kas tõesti soovid, et K3b tapaks järgmised protsessid: <em>%1</em>?</p>"
+
+#: k3blsofwrapperdialog.cpp:103
+#, kde-format
+msgid "Kill the processes?"
+msgstr ""
+
+#: k3blsofwrapperdialog.cpp:104
+#, kde-format
+msgid "Kill"
+msgstr ""
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -4062,18 +4067,18 @@ msgid "Plain data image"
 msgstr "Puhas andmetõmmis"
 
 #: misc/k3bimagewritingdialog.cpp:522 misc/k3bmediacopydialog.cpp:95
-#: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:251
+#: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "Kirjutamisrežiim"
 
 #: misc/k3bimagewritingdialog.cpp:528 misc/k3bmediacopydialog.cpp:100
-#: projects/k3bprojectburndialog.cpp:270
+#: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "Koopiad"
 
-#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:989
+#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:991
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
@@ -4143,72 +4148,77 @@ msgstr "Tõmmisefaili tüüpi ei tunta ära. Kas siiski see kirjutada?"
 msgid "Unknown image type"
 msgstr "Tundmatu tõmmisetüüp"
 
-#: misc/k3bimagewritingdialog.cpp:878
+#: misc/k3bimagewritingdialog.cpp:870 projects/k3bprojectburndialog.cpp:142
+#, kde-format
+msgid "Burn"
+msgstr "Kirjuta"
+
+#: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Unable to read image file"
 msgstr "Tõmmisefaili lugemine nurjus"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:882
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "See ei paista olevat kõlbulik tõmmis"
 
-#: misc/k3bimagewritingdialog.cpp:896
+#: misc/k3bimagewritingdialog.cpp:898
 #, kde-format
 msgid "File not found"
 msgstr "Faili ei leitud"
 
-#: misc/k3bimagewritingdialog.cpp:1027
+#: misc/k3bimagewritingdialog.cpp:1029
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "MD5SUM:"
 
-#: misc/k3bimagewritingdialog.cpp:1067
+#: misc/k3bimagewritingdialog.cpp:1069
 #, kde-format
 msgid "Calculation canceled"
 msgstr "Arvutamine lõpetati"
 
-#: misc/k3bimagewritingdialog.cpp:1069
+#: misc/k3bimagewritingdialog.cpp:1071
 #, kde-format
 msgid "Calculation failed"
 msgstr "Arvutamine nurjus"
 
-#: misc/k3bimagewritingdialog.cpp:1085
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "Kopeeri kontsollsumma lõikepuhvrisse"
 
-#: misc/k3bimagewritingdialog.cpp:1086
+#: misc/k3bimagewritingdialog.cpp:1088
 #, kde-format
 msgid "Compare checksum..."
 msgstr "Võrdle kontrollsummat..."
 
-#: misc/k3bimagewritingdialog.cpp:1093
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "MD5SUM kontroll"
 
-#: misc/k3bimagewritingdialog.cpp:1094
+#: misc/k3bimagewritingdialog.cpp:1096
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "Palun lisa võrreldav MD5SUM:"
 
-#: misc/k3bimagewritingdialog.cpp:1100
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "%1 MD5SUM võrdub määratuga."
 
-#: misc/k3bimagewritingdialog.cpp:1101
+#: misc/k3bimagewritingdialog.cpp:1103
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "MD5SUM on võrdne"
 
-#: misc/k3bimagewritingdialog.cpp:1103
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "%1 MD5SUM erineb määratust."
 
-#: misc/k3bimagewritingdialog.cpp:1104
+#: misc/k3bimagewritingdialog.cpp:1106
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "MD5SUM erineb"
@@ -4351,7 +4361,7 @@ msgstr ""
 "CD-de või vigaseid sektoreid sisaldavate CD-de kopeerimiseks."
 "<p><b>Tähelepanu:</b> Kloonida saab ainult üheseansilisi CD-sid."
 
-#: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:201
+#: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:204
 #, kde-format
 msgid ""
 "There does not seem to be enough free space in the temporary folder. Write "
@@ -4682,7 +4692,7 @@ msgstr "&Ebaturvaliste toimingute pealesundimine"
 msgid "&Manual writing buffer size"
 msgstr "Kirjuta&mispuhvri suurus"
 
-#: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:584
+#: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:585
 #, kde-format
 msgid "MB"
 msgstr "MB"
@@ -4829,7 +4839,7 @@ msgstr ""
 "kiirusega kirjutiga.<p><b>Ettevaatust:</b> sisselülitamine võib anda "
 "tulemuseks vigase andmekandja."
 
-#: option/k3bcddboptiontab.cpp:33
+#: option/k3bcddboptiontab.cpp:38
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "KCDDB seadistamismooduli laadimine nurjus."
@@ -5046,12 +5056,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "Otsingutee"
 
-#: option/k3bexternalbinwidget.cpp:239
+#: option/k3bexternalbinwidget.cpp:241
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Järgmiste programmide uuendamine nurjus:"
 
-#: option/k3bexternalbinwidget.cpp:244
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Toimingu täitmine nurjus: %1"
@@ -5114,7 +5124,8 @@ msgstr "Kataloogi (%1) ei ole olemas. Kas luua see?"
 msgid "Create Folder"
 msgstr "Kataloogi loomine"
 
-#: option/k3bmiscoptiontab.cpp:106
+#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "Loo"
@@ -6927,7 +6938,7 @@ msgstr "MusicBrainzi päring"
 msgid "Try to determine meta information over the Internet"
 msgstr "Püütakse hankida metainfot internetist"
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:128
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -7105,28 +7116,23 @@ msgid "Multisession Problem"
 msgstr "Mitmeseansilisuse probleem"
 
 #: projects/k3bdataimagesettingswidget.cpp:32
-#, kde-format
 msgid "Linux/Unix only"
 msgstr "Ainult Linux/Unix"
 
 #: projects/k3bdataimagesettingswidget.cpp:33
-#, kde-format
 msgid "Linux/Unix + Windows"
 msgstr "Linux/Unix + Windows"
 
 #: projects/k3bdataimagesettingswidget.cpp:34
-#, kde-format
 msgid "Very large files (UDF)"
 msgstr "Väga suured failid (UDF)"
 
 #: projects/k3bdataimagesettingswidget.cpp:35
-#, kde-format
 msgid "DOS Compatibility"
 msgstr "DOS-ühilduvus"
 
 #: projects/k3bdataimagesettingswidget.cpp:36
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:61
-#, kde-format
 msgid "Custom"
 msgstr "Kohandatud"
 
@@ -7217,6 +7223,11 @@ msgstr "Kohandatud (ainult ISO 9660)"
 #, kde-format
 msgid "Custom (%1)"
 msgstr "Kohandatud (%1)"
+
+#: projects/k3bdataimagesettingswidget.cpp:228
+#, kde-format
+msgid "(K3b::DataImageSettingsWidget) found preset settings: "
+msgstr ""
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7641,7 +7652,7 @@ msgid "Always keep the existing file"
 msgstr "Alati säilitatakse olemasolev fail"
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:117
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
 #, kde-format
 msgid "Rename"
 msgstr "Nimeta ümber"
@@ -7758,165 +7769,165 @@ msgstr ""
 msgid "No Data to Burn"
 msgstr "Pole midagi kirjutada"
 
-#: projects/k3bdataviewimpl.cpp:105
+#: projects/k3bdataviewimpl.cpp:108
 #, kde-format
 msgid "New Folder..."
 msgstr "Uus kataloog..."
 
-#: projects/k3bdataviewimpl.cpp:123
+#: projects/k3bdataviewimpl.cpp:126
 #, kde-format
 msgid "Parent Folder"
 msgstr "Eellaskataloog"
 
-#: projects/k3bdataviewimpl.cpp:134
+#: projects/k3bdataviewimpl.cpp:137
 #, kde-format
 msgid "Open"
 msgstr "Ava"
 
-#: projects/k3bdataviewimpl.cpp:138
+#: projects/k3bdataviewimpl.cpp:141
 #, kde-format
 msgid "&Import Session..."
 msgstr "&Impordi seanss..."
 
-#: projects/k3bdataviewimpl.cpp:139
+#: projects/k3bdataviewimpl.cpp:142
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr "Impordib varasema kirjutatud seansis aktiivsesse projekti"
 
-#: projects/k3bdataviewimpl.cpp:143
+#: projects/k3bdataviewimpl.cpp:146
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr "P&uhasta imporditud seanss"
 
-#: projects/k3bdataviewimpl.cpp:144
+#: projects/k3bdataviewimpl.cpp:147
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr "Eemaldab eelmisest seansist imporditud elemendid"
 
-#: projects/k3bdataviewimpl.cpp:149
+#: projects/k3bdataviewimpl.cpp:152
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr "&Redigeeri alglaadimistõmmiseid"
 
-#: projects/k3bdataviewimpl.cpp:150
+#: projects/k3bdataviewimpl.cpp:153
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr "Muudab aktiivse projekti laadeseadistusi"
 
-#: projects/k3bdataviewimpl.cpp:213 projects/k3bdataviewimpl.cpp:216
-#: projects/k3bdataviewimpl.cpp:221 projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
+#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
 #, kde-format
 msgid "New Folder"
 msgstr "Uus kataloog"
 
-#: projects/k3bdataviewimpl.cpp:214
+#: projects/k3bdataviewimpl.cpp:217
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr "Uue kataloogi nimi:"
 
-#: projects/k3bdataviewimpl.cpp:222
+#: projects/k3bdataviewimpl.cpp:225
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr "Sellise nimega fail on juba olemas. Palun anna uue kataloogi nimi:"
 
-#: projects/k3bdataviewimpl.cpp:373
+#: projects/k3bdataviewimpl.cpp:381
 #, kde-format
 msgid "Edit Boot Images"
 msgstr "Alglaadimistõmmiste redigeerimine"
 
-#: projects/k3bfillstatusdisplay.cpp:186
+#: projects/k3bfillstatusdisplay.cpp:187
 #, kde-format
 msgid "Available: %1 of %2"
 msgstr "Saadaval: %1, kokku %2"
 
-#: projects/k3bfillstatusdisplay.cpp:194
+#: projects/k3bfillstatusdisplay.cpp:195
 #, kde-format
 msgid "Capacity exceeded by %1"
 msgstr "Maht on ületatud %1 võrra"
 
-#: projects/k3bfillstatusdisplay.cpp:375
+#: projects/k3bfillstatusdisplay.cpp:376
 #, kde-format
 msgid "Set medium size"
 msgstr "Andmekandja mahu määramine"
 
-#: projects/k3bfillstatusdisplay.cpp:407
+#: projects/k3bfillstatusdisplay.cpp:408
 #, kde-format
 msgid "Minutes"
 msgstr "minutites"
 
-#: projects/k3bfillstatusdisplay.cpp:409
+#: projects/k3bfillstatusdisplay.cpp:410
 #, kde-format
 msgid "Megabytes"
 msgstr "megabaitides"
 
-#: projects/k3bfillstatusdisplay.cpp:412
+#: projects/k3bfillstatusdisplay.cpp:413
 #, kde-format
 msgid "Automatic Size"
 msgstr "Automaatne suurus"
 
-#: projects/k3bfillstatusdisplay.cpp:414 projects/k3bfillstatusdisplay.cpp:416
-#: projects/k3bfillstatusdisplay.cpp:418 projects/k3bfillstatusdisplay.cpp:498
-#: projects/k3bfillstatusdisplay.cpp:499 projects/k3bfillstatusdisplay.cpp:500
+#: projects/k3bfillstatusdisplay.cpp:415 projects/k3bfillstatusdisplay.cpp:417
+#: projects/k3bfillstatusdisplay.cpp:419 projects/k3bfillstatusdisplay.cpp:499
+#: projects/k3bfillstatusdisplay.cpp:500 projects/k3bfillstatusdisplay.cpp:501
 #, kde-format
 msgid "%1 MB"
 msgstr "%1 MB"
 
-#: projects/k3bfillstatusdisplay.cpp:430
+#: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
 msgid "Custom..."
 msgstr "Kohandatud..."
 
-#: projects/k3bfillstatusdisplay.cpp:432
+#: projects/k3bfillstatusdisplay.cpp:433
 #, kde-format
 msgid "From Medium..."
 msgstr "Andmekandjalt..."
 
-#: projects/k3bfillstatusdisplay.cpp:450
+#: projects/k3bfillstatusdisplay.cpp:451
 #, kde-format
 msgid "User Defaults"
 msgstr "Kasutaja vaikeväärtused"
 
-#: projects/k3bfillstatusdisplay.cpp:453
+#: projects/k3bfillstatusdisplay.cpp:454
 #, kde-format
 msgid "Save User Defaults"
 msgstr "Salvesta kasutaja vaikeväärtused"
 
-#: projects/k3bfillstatusdisplay.cpp:457
+#: projects/k3bfillstatusdisplay.cpp:458
 #, kde-format
 msgid "Why 4.4 instead of 4.7?"
 msgstr "Miks 4,4, aga mitte 4,7?"
 
-#: projects/k3bfillstatusdisplay.cpp:461
+#: projects/k3bfillstatusdisplay.cpp:462
 #, kde-format
 msgid "Show Size In"
 msgstr "Suurust näidatakse"
 
-#: projects/k3bfillstatusdisplay.cpp:467
+#: projects/k3bfillstatusdisplay.cpp:468
 #, kde-format
 msgid "CD Size"
 msgstr "CD suurus"
 
-#: projects/k3bfillstatusdisplay.cpp:473
+#: projects/k3bfillstatusdisplay.cpp:474
 #, kde-format
 msgid "DVD Size"
 msgstr "DVD suurus"
 
-#: projects/k3bfillstatusdisplay.cpp:479
+#: projects/k3bfillstatusdisplay.cpp:480
 #, kde-format
 msgid "Blu-ray Size"
 msgstr "Blu-ray suurus"
 
-#: projects/k3bfillstatusdisplay.cpp:510 projects/k3bfillstatusdisplay.cpp:511
-#: projects/k3bfillstatusdisplay.cpp:512
+#: projects/k3bfillstatusdisplay.cpp:511 projects/k3bfillstatusdisplay.cpp:512
+#: projects/k3bfillstatusdisplay.cpp:513
 #, kde-format
 msgid "unused"
 msgid_plural "%1 minutes"
 msgstr[0] "kasutamata"
 msgstr[1] "%1 min"
 
-#: projects/k3bfillstatusdisplay.cpp:570
+#: projects/k3bfillstatusdisplay.cpp:571
 #, kde-format
 msgid ""
 "<p><b>Why does K3b offer 4.4 GB and 8.0 GB instead of 4.7 and 8.5 like it "
@@ -7931,22 +7942,22 @@ msgstr ""
 "reklaami huvides korrutamisel suurust 1000, mitte 1024.<br>Nii saadaksegi "
 "4,4x1024<sup>3</sup>/1000<sup>3</sup> = 4,7 GB."
 
-#: projects/k3bfillstatusdisplay.cpp:583
+#: projects/k3bfillstatusdisplay.cpp:584
 #, kde-format
 msgid "GB"
 msgstr "GB"
 
-#: projects/k3bfillstatusdisplay.cpp:585
+#: projects/k3bfillstatusdisplay.cpp:586
 #, kde-format
 msgid "min"
 msgstr "min"
 
-#: projects/k3bfillstatusdisplay.cpp:602
+#: projects/k3bfillstatusdisplay.cpp:603
 #, kde-format
 msgid "Custom Size"
 msgstr "Kohandatud suurus"
 
-#: projects/k3bfillstatusdisplay.cpp:603
+#: projects/k3bfillstatusdisplay.cpp:604
 #, kde-format
 msgid ""
 "<p>Please specify the size of the medium. Use suffixes <b>GB</b>,<b>MB</b>, "
@@ -7957,17 +7968,17 @@ msgstr ""
 "<b>MB</b> ja <b>min</b> vastavalt <em>gigabaitide</em>, <em>megabaitide</em> "
 "ja <em>minutite</em> jaoks."
 
-#: projects/k3bfillstatusdisplay.cpp:661
+#: projects/k3bfillstatusdisplay.cpp:663
 #, kde-format
 msgid "Medium is not empty."
 msgstr "Andmekandja ei ole tühi."
 
-#: projects/k3bfillstatusdisplay.cpp:664
+#: projects/k3bfillstatusdisplay.cpp:666
 #, kde-format
 msgid "No usable medium found."
 msgstr "Kasutatavat andmekandjat ei leitud."
 
-#: projects/k3bfillstatusdisplay.cpp:853
+#: projects/k3bfillstatusdisplay.cpp:855
 #, kde-format
 msgid "Right click for media sizes"
 msgstr "Paremklõps näitab andmekandja suurust"
@@ -8191,32 +8202,33 @@ msgstr "Tühistab kõik dialoogis tehtud muudatused ja sulgeb selle."
 msgid "Start the image creation"
 msgstr "Alusta tõmmise loomist"
 
-#: projects/k3bprojectburndialog.cpp:142
-#, kde-format
-msgid "Burn"
-msgstr "Kirjuta"
-
 #: projects/k3bprojectburndialog.cpp:143
 #, kde-format
 msgid "Start the burning process"
 msgstr "Alusta kirjutamist"
 
-#: projects/k3bprojectburndialog.cpp:186 rip/k3bvideocdrippingdialog.cpp:142
+#: projects/k3bprojectburndialog.cpp:187 rip/k3bvideocdrippingdialog.cpp:143
 #, kde-format
 msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Tõmmisekataloog '%1' puudub. Kas soovid, et K3b looks selle?"
 
-#: projects/k3bprojectburndialog.cpp:189 rip/k3bvideocdrippingdialog.cpp:145
+#: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
+#, fuzzy, kde-format
+#| msgid "Create Folder"
+msgid "Create folder?"
+msgstr "Kataloogi loomine"
+
+#: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
 msgid "Failed to create folder '%1'."
 msgstr "Kataloogi '%1' loomine nurjus."
 
-#: projects/k3bprojectburndialog.cpp:249
+#: projects/k3bprojectburndialog.cpp:252
 #, kde-format
 msgid "Writing"
 msgstr "Kirjutamine"
 
-#: projects/k3bprojectburndialog.cpp:292
+#: projects/k3bprojectburndialog.cpp:295
 #, kde-format
 msgid "Image"
 msgstr "Tõmmis"
@@ -9759,14 +9771,14 @@ msgstr ""
 
 #: rip/k3baudioprojectconvertingdialog.cpp:186
 #: rip/k3baudiorippingdialog.cpp:255
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:510
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
 #, kde-format
 msgid "Do you want to overwrite these files?"
 msgstr "Kas soovid need failid üle kirjutada?"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:188
-#: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:163
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
+#: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:166
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:514
 #, kde-format
 msgid "Files Exist"
 msgstr "Failid on olemas"
@@ -9929,7 +9941,7 @@ msgstr "CUE fail"
 msgid "Track%1"
 msgstr "Rada%1"
 
-#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:50
+#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:51
 #, kde-format
 msgid "Playlist"
 msgstr "Esitusnimekiri"
@@ -9950,40 +9962,40 @@ msgstr "Pealkiri"
 msgid "Data Track"
 msgstr "Andmerada"
 
-#: rip/k3bcddbpatternwidget.cpp:44
+#: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid "%A - %T/%n - !a='%A'{%a - }%t"
 msgstr "%A - %T/%n - !a='%A'{%a - }%t"
 
-#: rip/k3bcddbpatternwidget.cpp:45
+#: rip/k3bcddbpatternwidget.cpp:46
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
 msgstr ""
 "%{albumiesitaja} - %{albumipealkiri}/%{number} - %{esitaja} - %{pealkiri}"
 
-#: rip/k3bcddbpatternwidget.cpp:46
+#: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 msgstr "%{žanr}/%{albumiesitaja} - %{albumipealkiri}/Rada%{number}"
 
-#: rip/k3bcddbpatternwidget.cpp:47
+#: rip/k3bcddbpatternwidget.cpp:48
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
 msgstr "muusika/ripitud-rajad/%a - %t"
 
-#: rip/k3bcddbpatternwidget.cpp:49
+#: rip/k3bcddbpatternwidget.cpp:50
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}"
 msgstr "%{albumiesitaja} - %{albumipealkiri}"
 
-#: rip/k3bcddbpatternwidget.cpp:51
+#: rip/k3bcddbpatternwidget.cpp:52
 #, kde-format
 msgid "playlists/%{albumartist}/%{albumtitle}"
 msgstr "playlists/%{albumiesitaja}/%{albumipealkiri}"
 
-#: rip/k3bcddbpatternwidget.cpp:118
+#: rip/k3bcddbpatternwidget.cpp:119
 #, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
@@ -10020,7 +10032,7 @@ msgstr ""
 "(kui puudub, lisatakse automaatselt)</td><td>%{e} või %{ext}</td></tr></"
 "table>"
 
-#: rip/k3bcddbpatternwidget.cpp:144
+#: rip/k3bcddbpatternwidget.cpp:145
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
@@ -10092,7 +10104,7 @@ msgstr "Lugude nimekirja kirjutamine asukohta %1."
 msgid "Writing cue file to %1."
 msgstr "CUE faili kirjutamine asukohta %1."
 
-#: rip/k3bpatternparser.cpp:133
+#: rip/k3bpatternparser.cpp:134
 #, kde-format
 msgid "Track %1"
 msgstr "Rada %1"
@@ -10316,7 +10328,7 @@ msgstr ""
 "segmentide kohta.</p><p>Failinimi on sama, mis video CD-l, laiendiks .xml, "
 "vaikimisi VIDEOCD.xml.</p>"
 
-#: rip/k3bvideocdrippingdialog.cpp:161
+#: rip/k3bvideocdrippingdialog.cpp:164
 #, kde-format
 msgid "Continue although the folder is not empty?"
 msgstr "Kas jätkata vaatamata sellele, et kataloog pole tühi?"
@@ -10641,7 +10653,7 @@ msgid_plural "%1 titles from %2"
 msgstr[0] "1 tiitel - %2"
 msgstr[1] "%1 tiitlit - %2"
 
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:492
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
 msgid ""
 "<p>When using the <em>AC3 pass-through</em> audio codec all selected audio "
@@ -10652,7 +10664,7 @@ msgstr ""
 "helirajad olema AC3-vormingus. Palun vali mõni muu audiokoodek või vali "
 "kõigile ripitud tiitlitele AC3 helirada."
 
-#: rip/videodvd/k3bvideodvdrippingdialog.cpp:495
+#: rip/videodvd/k3bvideodvdrippingdialog.cpp:497
 #, kde-format
 msgid "AC3 Pass-through"
 msgstr "AC3 läbilaskerežiim"
@@ -10810,17 +10822,14 @@ msgstr ""
 "tööriista."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
-#, kde-format
 msgid "Keep original dimensions"
 msgstr "Originaalmõõtmete säilitamine"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:59
-#, kde-format
 msgid "640x? (automatic height)"
 msgstr "640x? (automaatne kõrgus)"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:60
-#, kde-format
 msgid "320x? (automatic height)"
 msgstr "320x? (automaatne kõrgus)"
 
