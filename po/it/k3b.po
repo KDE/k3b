@@ -4,14 +4,14 @@
 # Giovanni Venturi <giovanni@kde-it.org>, 2009.
 # Giovanni Venturi <giovanni@ksniffer.org>, 2010.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2022-04-29 18:48+0200\n"
+"PO-Revision-Date: 2023-04-03 16:29+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2586,7 +2586,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2597,12 +2597,12 @@ msgstr "<p>Vuoi davvero che K3b termini i seguenti processi: <em>%1</em>?</p>"
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Interrompere i processi?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Interrompi"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -7327,7 +7327,7 @@ msgstr "Personalizzato (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) trovate configurazioni preimpostate: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -8332,10 +8332,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "La cartella immagine '%1' non esiste. Vuoi che K3b la crei?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Crea cartella"
+msgstr "Crea cartella?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format

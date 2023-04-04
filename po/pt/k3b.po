@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2022-11-02 14:02+0000\n"
+"PO-Revision-Date: 2023-04-03 09:37+0100\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
 "Language: pt\n"
@@ -79,7 +79,7 @@ msgstr ""
 "X-POFile-SpellExtra: Bin Micha ek RE JuK Amarok Kab HAL vob MS openSUSE\n"
 "X-POFile-SpellExtra: Packman Zhai Leslie cdrskin libburn Cdrskin WavPack\n"
 "X-POFile-IgnoreConsistency: Layer\n"
-"X-POFile-SpellExtra: APE Monkey\n"
+"X-POFile-SpellExtra: APE Monkey DataImageSettingsWidget\n"
 "X-POFile-IgnoreConsistency: Type\n"
 "X-POFile-IgnoreConsistency: Comment\n"
 "X-POFile-IgnoreConsistency: Name\n"
@@ -2654,7 +2654,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2666,12 +2666,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Deseja matar os processos?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Matar"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -7397,6 +7397,7 @@ msgstr "Personalizado (%1)"
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
 msgstr ""
+"O (K3b::DataImageSettingsWidget) descobriu as configurações predefinidas: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -8397,10 +8398,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "A pasta de imagens '%1' ainda não existe. Deseja que o K3b a crie?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Criar uma Pasta"
+msgstr "Criar uma pasta?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
