@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2023-02-03 15:57+0100\n"
+"PO-Revision-Date: 2023-04-04 06:48+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -118,7 +118,7 @@ msgstr "ფენა"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:420
 #, kde-format
 msgid "Emphasis"
-msgstr ""
+msgstr "მონიშნული"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:378
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:432
@@ -1500,7 +1500,7 @@ msgstr ""
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "პროექტს <resource>%1</resource> შეუნახავი მონაცემები გააჩნია."
 
 #: k3b.cpp:896
 #, kde-format
@@ -1525,7 +1525,7 @@ msgstr "ფაილის შენახვა..."
 #: k3b.cpp:963 k3b.cpp:1003
 #, kde-format
 msgid "Could not save the current document."
-msgstr ""
+msgstr "მიმდინარე დოკუმენტის შენახვის შეცდომა."
 
 #: k3b.cpp:963 k3b.cpp:1003
 #, kde-format
@@ -1550,17 +1550,17 @@ msgstr "ფაილის დახურვა..."
 #: k3b.cpp:1124
 #, kde-format
 msgid "Creating new Audio CD Project."
-msgstr ""
+msgstr "ახალი Audio CD-ის პროექტის შექმნა."
 
 #: k3b.cpp:1133
 #, kde-format
 msgid "Creating new Data CD Project."
-msgstr ""
+msgstr "ახალი მონაცემების CD-ის პროექტის შექმნა."
 
 #: k3b.cpp:1149
 #, kde-format
 msgid "Creating new Video DVD Project."
-msgstr ""
+msgstr "ახალი Video DVD-ის პროექტის შექმნა."
 
 #: k3b.cpp:1159
 #, kde-format
@@ -1570,17 +1570,17 @@ msgstr ""
 #: k3b.cpp:1168
 #, kde-format
 msgid "Creating new Video CD Project."
-msgstr ""
+msgstr "ახალი იდეო CD-ის პროექტის შექმნა."
 
 #: k3b.cpp:1178
 #, kde-format
 msgid "Creating new eMovix Project."
-msgstr ""
+msgstr "ახალი eMovix-ის პროექტის შექმნა."
 
 #: k3b.cpp:1291
 #, kde-format
 msgid "Select Files to Add to Project"
-msgstr ""
+msgstr "აირჩიეთ პროექტში ჩასამატებელი ფაილები"
 
 #: k3b.cpp:1293
 #, kde-format
@@ -2441,12 +2441,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "მოვკლა პროცესები?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "მოკვლა"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -4687,7 +4687,7 @@ msgstr ""
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
 msgid "Default Settings"
-msgstr ""
+msgstr "ნაგულისხმები პარამეტრები"
 
 #: option/k3bmiscoptiontab.cpp:39
 #, kde-format
@@ -5609,7 +5609,7 @@ msgstr ""
 #: projects/base_k3bdataimagesettings.ui:124
 #, kde-format
 msgid "Follow symlinks"
-msgstr ""
+msgstr "სიმბმულების მიყოლა"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupWhitespace)
 #: projects/base_k3bdataimagesettings.ui:135
@@ -6438,7 +6438,7 @@ msgstr ""
 #: projects/k3bbootimagedialog.cpp:87
 #, kde-format
 msgid "Show Advanced Options"
-msgstr ""
+msgstr "დამატებითი პარამეტრების ჩვენება"
 
 #: projects/k3bbootimagedialog.cpp:94
 #, kde-format
@@ -7552,10 +7552,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr ""
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "საქაღალდის შექმნა"
+msgstr "შევქმნა საქაღალდე?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
@@ -9529,7 +9528,7 @@ msgstr "ვიდეოს ზომა:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:90
 #, kde-format
 msgid "Video Bitrate:"
-msgstr ""
+msgstr "ვიდეოს ბიტური სიჩქარე:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:191
@@ -9549,7 +9548,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:258
 #, kde-format
 msgid "Audio Bitrate:"
-msgstr ""
+msgstr "აუდიოს ბიტური სიჩქარე:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelNoAudioSettings)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:239
@@ -9837,7 +9836,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:247
 #, kde-format
 msgid "Unmounting failed"
-msgstr ""
+msgstr "მიმაგრების მოხსნის შეცდომა"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:257
 #, kde-format
