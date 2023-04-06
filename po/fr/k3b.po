@@ -21,20 +21,21 @@
 # xavier <xavier.besnard@neuf.fr>, 2012, 2020, 2022.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Maxime Corteel <mcorteel@gmail.com>, 2019.
+# Xavier BESNARD <xavier.besnard]neuf.fr>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2022-04-29 21:25+0200\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2023-04-04 16:44+0200\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -2614,7 +2615,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2627,12 +2628,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Tuer les processus ?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Tuer"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -7424,6 +7425,7 @@ msgstr "Personnalisé (%1)"
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
 msgstr ""
+"(K3b::DataImageSettingsWidget) a trouvé une configuration de pré-réglages : "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -8429,10 +8431,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Le dossier « %1 » n'existe pas. Voulez-vous que K3b le crée ?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Créer un dossier"
+msgstr "Créer un dossier ?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
