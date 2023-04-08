@@ -1,12 +1,15 @@
 # translation of k3b.po to esperanto
+# Copyright (C) 2007 Free Software Foundation, Inc.
 # Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>, 2007.
-# TRANSLATOR Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>
+# Axel Rousseau <axel@esperanto-jeunes.org>, 2009.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2023-03-20 22:31+0100\n"
+"PO-Revision-Date: 2023-04-07 14:29+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -19,22 +22,24 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Axel Rousseau"
+msgstr "Pierre-Marie Pédrot,Axel Rousseau,Oliver Kellogg"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "axel.rousseau@esperanto-france.org"
+msgstr ""
+"pedrotpmx@wanadoo.fr,axel.rousseau@esperanto-france.org,okellogg@users."
+"sourceforge.net"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Monkey's Audio (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
 #, kde-format
@@ -262,6 +267,12 @@ msgid ""
 "<p>K3b comes with a selection of predefined external applications that "
 "depends on the installed applications."
 msgstr ""
+"<p>Tiu ĉi dialogo povas esti uzata por agordi eksterajn komandliniajn "
+"aplikaĵojn kiel sonkodigilojn. Tiuj tiam povas esti uzataj de K3b por kodi "
+"sondatumojn (Trakoj de aŭd-KD aŭ la titoloj de sonprojekto) al formatoj kiuj "
+"normale ne estas subtenataj (t.e. neniu kodigilo-kromaĵo ekzistas).\n"
+"<p>K3b venas kun elekto de antaŭdifinitaj eksteraj aplikoj kiuj dependas de "
+"la instalitaj aplikoj."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:32
@@ -348,6 +359,22 @@ msgid ""
 "<b>%x</b> - Album comment<br>\n"
 "<b>%y</b> - Release Year"
 msgstr ""
+"Bonvolu enmeti la komandon uzatan por kodi la sondatumojn. La komando devas "
+"legi krudan malgrandan endian (vidu <em>Interŝanĝi Bajt-Ordon</em>) 16-"
+"bitajn stereoajn sonkadrojn de stdin.\n"
+"<p>La sekvaj ĉenoj estos anstataŭigitaj per K3b:<br>\n"
+"<b>%f</b> - La dosiernomo de la rezulta dosiero. Ĉi tie la komando devas "
+"skribi sian eligon.<br>\n"
+"<em>La jenaj rilatas al metadatenoj konservitaj ekzemple en la ID3-etikedo "
+"de mp3-dosiero (Atentu, ke ĉi tiuj valoroj povus esti malplenaj).</em><br>\n"
+"<b>%t</b> - Titolo<br>\n"
+"<b>%a</b> - Artisto<br>\n"
+"<b>%c</b> - Komento<br>\n"
+"<b>%n</b> - Traknumero<br>\n"
+"<b>%m</b> - Albuma Titolo<br>\n"
+"<b>%r</b> - Albumartisto <br>\n"
+"<b>%x</b> - Albumkomento<br>\n"
+"<b>%y</b> - Eldonjaro"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -561,6 +588,17 @@ msgid ""
 "quality.\n"
 "<p><b>This setting has no influence on the size of the resulting file.</b>"
 msgstr ""
+"<p>Bitfrekvenco estas kompreneble la ĉefa influo sur kvalito. Ju pli alta la "
+"bitfrekvenco, des pli alta la kvalito. Sed por donita bitfrekvenco, ni havas "
+"elekton de algoritmoj por determini la plej bonajn skalfaktorojn kaj huffman-"
+"kodigon (bruoformado).\n"
+"<p>La kvalito pliiĝas de 0 al 9 dum la kodiga rapideco malpliiĝas.\n"
+"<p>9 uzas la plej malrapida kaj plej bona ebla versio de ĉiuj algoritmoj.\n"
+"<p><b>7 estas la rekomendinda agordo</b> dum 4 ankoraŭ produktis racian "
+"kvaliton kun bona rapideco.\n"
+"<p>0 malŝaltas preskaŭ ĉiujn algoritmojn inkluzive de psy-modelo rezultanta "
+"en malbona kvalito.\n"
+"<p><b>Ĉi tiu agordo ne influas la grandecon de la rezulta dosiero.</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:333
@@ -608,6 +646,11 @@ msgid ""
 "strict ISO compatibility. This compatibility might be important for hardware "
 "players."
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, LAME devigos la 7680-bitan limigon sur "
+"totala kadrogrando.<br>\n"
+"Tio rezultigas multajn malŝparitajn bitojn por alta bitrapida kodigado sed "
+"certigos striktan ISO-kongruon. Ĉi tiu kongruo povus esti grava por aparataj "
+"ludantoj."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkISO)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:399
@@ -630,6 +673,10 @@ msgid ""
 "MP3 stream to be detected; however, it takes 16 bits per frame that would "
 "otherwise be used for encoding, thus slightly reducing the sound quality."
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, cikla redunda kontrolo (CRC) kodo estos "
+"aldonita al ĉiu kadro, permesante dissendajn erarojn kiuj povus okazi sur la "
+"MP3-rivereto esti detektitaj; tamen, ĝi bezonas 16 bitojn per kadro kiu alie "
+"estus uzata por kodigo, tiel iomete reduktante la sonkvaliton."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkError)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:412
@@ -717,6 +764,22 @@ msgid ""
 "will be downsampled to mono. The downmix is calculated as the sum of the "
 "left and right channel, attenuated by 6 dB."
 msgstr ""
+"<p>Elektu la kanalreĝimon de la rezulta MP3-dosiero:\n"
+"<p><b>Stereo</b><br>\n"
+"En ĉi tiu reĝimo, la kodilo ne uzas eblajn korelaciojn inter la du "
+"enigkanaloj; ĝi tamen povas negoci la peton de bitoj inter ambaŭ kanaloj, t."
+"e. doni al unu kanalo pli da bitoj se la alia enhavas silenton aŭ bezonas "
+"malpli da bitoj pro pli malalta komplekseco.\n"
+"<p><b>Komuna-Stereo</b><br>\n"
+"En ĉi tiu reĝimo, la kodilo uzos korelaciojn inter ambaŭ kanaloj. La signalo "
+"estos matrico en sumo (\"mezo\"), komputita per L+R, kaj diferenco (\"flanko"
+"\") signalo, komputita per L-R, kaj pli da bitoj estas asignitaj al la meza "
+"kanalo. Ĉi tio efike pliigos la bendolarĝon se la signalo ne havas tro multe "
+"da sterea apartigo, tiel donante signifan gajnon en koda kvalito.\n"
+"<p><b>Mono</b><br>\n"
+"La enigo estos ĉifrita kiel mono signalo. Se ĝi estis stereosignalo, ĝi "
+"estos subspecimenita al mono. La submiksaĵo estas kalkulita kiel la sumo de "
+"la maldekstra kaj dekstra kanalo, malfortigita je 6 dB."
 
 #: ../plugins/encoder/lame/k3blameencoderconfigwidget.cpp:53
 #: ../plugins/encoder/lame/k3blameencoderconfigwidget.cpp:56
@@ -930,6 +993,27 @@ msgid ""
 "good quality. It is usually CPU intensive to work with GSM audio data.</p> "
 "<p><em>Description based on the SoX manpage</em></p>"
 msgstr ""
+"<p>La ekzempla datuma kodado estas signita linia (komplemento de 2), "
+"sensigna linia, u-leĝo (logaritma), A-leĝo (logaritma), ADPCM, IMA_ADPCM, "
+"GSM aŭ Flotkoma.</p>\n"
+"<p><b>U-leĝo</b> (fakte stenografio por mu-leĝo) kaj <b>A-leĝo</b> estas la "
+"usonaj kaj internaciaj normoj por logaritma telefona sonkunpremo. Kiam "
+"nekunpremita u-leĝo havas proksimume la precizecon de 14-bita PCM-aŭdio kaj "
+"A-leĝo havas proksimume la precizecon de 13-bita PCM-aŭdio. A-leĝo kaj u-"
+"leĝo-datumoj foje estas kodigitaj uzante inversigitan pec-ordonon (t.e. MSB "
+"iĝas LSB).<br> <b>ADPCM </b> estas formo de sonkunpremo kiu havas bonan "
+"kompromison inter bona sonkvalito kaj rapida tempo de kodado/malkodado. Ĝi "
+"estas uzata por telefona sonkunpremo kaj lokoj kie plena fideleco ne estas "
+"tiel grava. Se nekunpremite ĝi havas proksimume la precizecon de 16-bita PCM-"
+"aŭdio. Popularaj versioj de ADPCM inkluzivas G.726, MS ADPCM kaj IMA ADPCM. "
+"Ĝi havas malsamajn signifojn en malsamaj dosiertraktiloj. En .wav dosieroj "
+"ĝi reprezentas MS ADPCM dosierojn, en ĉiuj aliaj ĝi signifas G.726 ADPCM. "
+"<br><b>IMA ADPCM</b> estas specifa formo de ADPCM-kunpremado, iomete pli "
+"simpla kaj iomete pli malalta fideleco ol la gusto de Microsoft de ADPCM. "
+"IMA ADPCM ankaŭ nomiĝas DVI ADPCM.<br/> <b>GSM</b> estas normo uzata por "
+"telefona sonkunpremo en eŭropaj landoj kaj akiras popularecon pro sia bona "
+"kvalito. Kutime estas CPU-intensa labori kun GSM-sondatumoj.</p> "
+"<p><em>Priskribo bazita sur la SoX-manpaĝo</em></p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:67
@@ -1225,7 +1309,7 @@ msgstr "Peti CDDB"
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:43
 #, kde-format
 msgid "Query a CDDB entry for the current audio project."
-msgstr ""
+msgstr "Pridemandu CDDB-eniron por la nuna sonprojekto."
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:64
 #, kde-format
@@ -1332,7 +1416,7 @@ msgstr "Nova &miksmoda KD-a projekto"
 #: k3b.cpp:335
 #, kde-format
 msgid "Creates a new mixed audio/data CD project"
-msgstr ""
+msgstr "Kreas novan miksitan aŭd-/datuman KD-projekton"
 
 #: k3b.cpp:340
 #, kde-format
@@ -1482,7 +1566,7 @@ msgstr "Montri dokumentkapon"
 #: k3b.cpp:432
 #, kde-format
 msgid "Shows/hides title header of projects panel"
-msgstr ""
+msgstr "Montras/kaŝas titolkapon de projekto-panelo"
 
 #: k3b.cpp:443
 #, kde-format
@@ -1507,7 +1591,7 @@ msgstr "Nunaj projektoj"
 #: k3b.cpp:533
 #, kde-format
 msgid "&Location Bar"
-msgstr ""
+msgstr "&Loka Trinkejo"
 
 #: k3b.cpp:600 k3b.cpp:916 k3b.cpp:930
 #, kde-format
@@ -1523,7 +1607,7 @@ msgstr "Ne eblas malfermi la dokumenton."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "Projekto <resource>%1</resource> havas nekonservitajn datumojn."
 
 #: k3b.cpp:896
 #, kde-format
@@ -1538,7 +1622,7 @@ msgstr "Malfermi dosierojn"
 #: k3b.cpp:921 k3b.cpp:988
 #, kde-format
 msgid "K3b Projects (*.k3b)"
-msgstr ""
+msgstr "K3b Projektoj (*.k3b)"
 
 #: k3b.cpp:953
 #, kde-format
@@ -2128,7 +2212,7 @@ msgstr "kompleta"
 #: k3bdiskinfoview.cpp:340
 #, kde-format
 msgid "unknown state"
-msgstr ""
+msgstr "nekonata stato"
 
 #: k3bdiskinfoview.cpp:343
 #, kde-format
@@ -2178,7 +2262,7 @@ msgstr "Programa ID:"
 #: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
 #, kde-format
 msgid "Volume Size:"
-msgstr ""
+msgstr "Volumo Grandeco:"
 
 #: k3bdiskinfoview.cpp:390
 #, kde-format
@@ -2321,7 +2405,7 @@ msgstr "video/mpeg |MPEG videaj dosieroj"
 #: k3bfileview.cpp:81
 #, kde-format
 msgid "Show Bookmarks"
-msgstr ""
+msgstr "Montru legosignojn"
 
 #: k3binteractiondialog.cpp:70
 #, kde-format
@@ -2364,6 +2448,8 @@ msgid ""
 "<p>Load a set of settings either from the default K3b settings, settings "
 "saved before, or the last used ones."
 msgstr ""
+"<p> Ŝarĝu aron da agordoj aŭ el la defaŭltaj agordoj de K3b, agordoj "
+"konservitaj antaŭe aŭ la laste uzataj."
 
 #: k3binteractiondialog.cpp:196
 #, kde-format
@@ -2372,6 +2458,9 @@ msgid ""
 "loaded with the <em>Load saved settings</em> button.<p><b>The K3b defaults "
 "are not overwritten by this.</b>"
 msgstr ""
+"<p>Konservas la aktualajn agordojn de la agdialogo.<p>Ĉi tiuj agordoj povas "
+"esti ŝargitaj per la butono <em>Ŝargi konservitajn agordojn</em>.<p><b>La "
+"defaŭltoj de K3b ne estas anstataŭitaj per tio.</b>"
 
 #: k3bjobprogressdialog.cpp:207
 #, kde-format
@@ -2387,7 +2476,7 @@ msgstr "Montri sencimigan eligon"
 #, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
-msgstr ""
+msgstr "%1 el %2"
 
 #: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
 #, kde-format
@@ -2473,7 +2562,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2485,12 +2574,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Ĉu mortigi la procezojn?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Mortigi"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -2651,17 +2740,18 @@ msgstr "Solvo"
 #: k3bsystemproblemdialog.cpp:179
 #, kde-format
 msgid "No optical drive found."
-msgstr ""
+msgstr "Neniu optika disko trovita."
 
 #: k3bsystemproblemdialog.cpp:180
 #, kde-format
 msgid "K3b did not find any optical device in your system."
-msgstr ""
+msgstr "K3b ne trovis optikan aparaton en via sistemo."
 
 #: k3bsystemproblemdialog.cpp:182
 #, kde-format
 msgid "Make sure HAL daemon is running, it is used by K3b for finding devices."
 msgstr ""
+"Certigu, ke HAL-demono funkcias, ĝi estas uzata de K3b por trovi aparatojn."
 
 #: k3bsystemproblemdialog.cpp:190
 #, kde-format
@@ -2684,7 +2774,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:304
 #, kde-format
 msgid "Insufficient permissions for %1 executable: %2"
-msgstr ""
+msgstr "Nesufiĉaj permesoj por %1 rulebla: %2"
 
 #: k3bsystemproblemdialog.cpp:202 k3bsystemproblemdialog.cpp:209
 #, kde-format
@@ -2699,6 +2789,9 @@ msgid ""
 "Permissions. If K3b's default value is set make sure you are member of "
 "\"%1\" group."
 msgstr ""
+"Kontrolu permesojn per Agordoj -> Agordi K3b... -> Programoj -> Permesoj. Se "
+"la defaŭlta valoro de K3b estas fiksita, certigu, ke vi estas membro de "
+"\"%1\" grupo."
 
 #: k3bsystemproblemdialog.cpp:208 k3bsystemproblemdialog.cpp:270
 #: k3bsystemproblemdialog.cpp:292 k3bsystemproblemdialog.cpp:314
@@ -2751,7 +2844,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:284
 #, kde-format
 msgid "Click \"Configure K3b...\" to solve this problem."
-msgstr ""
+msgstr "Alklaku \"Agordu K3b...\" por solvi ĉi tiun problemon."
 
 #: k3bsystemproblemdialog.cpp:247 k3bsystemproblemdialog.cpp:280
 #, kde-format
@@ -2798,11 +2891,13 @@ msgid ""
 "Cdrskin can substitute for cdrecord with data and audio CD, and for "
 "growisofs with DVD and BD."
 msgstr ""
+"Cdrskin povas anstataŭigi cdrecord kun datenoj kaj aŭd-KD, kaj growisofs per "
+"DVD kaj BD."
 
 #: k3bsystemproblemdialog.cpp:295
 #, kde-format
 msgid "Consider to install the libburn and cdrskin packages."
-msgstr ""
+msgstr "Konsideru instali la pakaĵojn libburn kaj cdrskin."
 
 #: k3bsystemproblemdialog.cpp:305 k3bsystemproblemdialog.cpp:315
 #, kde-format
@@ -2984,6 +3079,8 @@ msgid ""
 "Make sure you have write access to %1. In case you are not using devfs or "
 "udev click \"Modify Permissions...\" and setup permissions by hand."
 msgstr ""
+"Certiĝu, ke vi havas skriban aliron al %1. Se vi ne uzas devfs aŭ udev "
+"alklaku \"Modifu Permesojn...\" kaj agordu permesojn permane."
 
 #: k3bsystemproblemdialog.cpp:500
 #, kde-format
@@ -3112,7 +3209,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:587
 #, kde-format
 msgid "The latter can be done via \"Configure K3b...\"."
-msgstr ""
+msgstr "Ĉi-lasta povas esti farita per \"Agordu K3b...\"."
 
 #: k3bsystemproblemdialog.cpp:617
 #, kde-format
@@ -3206,7 +3303,7 @@ msgstr "Ĉefa ilobreto"
 #: k3bwelcomewidget.cpp:79
 #, kde-format
 msgid "More actions..."
-msgstr ""
+msgstr "Pli da agoj..."
 
 #: k3bwelcomewidget.cpp:262
 #, kde-format
@@ -3216,7 +3313,7 @@ msgstr "Bonvenon al K3b - La KD, DVD kaj Blu-ray Kreilo"
 #: k3bwelcomewidget.cpp:264
 #, kde-format
 msgid "K3b %1 Copyright &copy; 1998&ndash;2018 K3b authors"
-msgstr ""
+msgstr "K3b %1 Kopirajto © 1998–2018 K3b-aŭtoroj"
 
 #: k3bwelcomewidget.cpp:398
 #, kde-format
@@ -3354,6 +3451,11 @@ msgid ""
 "writers support DAO.<br>DVD-R(W)s written in DAO provide the best DVD-Video "
 "compatibility."
 msgstr ""
+"<em>Disko tuj</em> aŭ pli ĝuste <em>Sesio Tuj</em>. La lasero neniam estas "
+"malŝaltita dum skribado de la KD aŭ DVD. Ĉi tiu estas la preferata reĝimo "
+"por skribi son-KD-ojn ĉar ĝi permesas pregapojn krom 2 sekundoj. Ne ĉiuj "
+"verkistoj subtenas DAO.<br>DVD-R(W)-oj skribitaj en DAO provizas la plej "
+"bonan kongruon de DVD-Video."
 
 #: k3bwritingmodewidget.cpp:25
 #, kde-format
@@ -3362,6 +3464,9 @@ msgid ""
 "will be turned off after every track.<br>Most CD writers need this mode for "
 "writing multisession CDs."
 msgstr ""
+"<em>Track At Once</em> devus esti subtenata de ĉiu KD-verkisto. La lasero "
+"estos malŝaltita post ĉiu trako.<br>Plej multaj KD-verkistoj bezonas ĉi tiun "
+"reĝimon por verki plursesiajn KD-ojn."
 
 #: k3bwritingmodewidget.cpp:31
 #, kde-format
@@ -3370,6 +3475,9 @@ msgid ""
 "instead of the writer device.<br>Try this if your CD writer fails to write "
 "in DAO and TAO."
 msgstr ""
+"RAW skribreĝimo. La erarkorektaj datumoj estas kreitaj de la programaro "
+"anstataŭ la skribilo.<br>Provu ĉi tion se via KD-skribilo ne sukcesas skribi "
+"en DAO kaj TAO."
 
 #: k3bwritingmodewidget.cpp:35
 #, kde-format
@@ -3377,6 +3485,8 @@ msgid ""
 "Incremental sequential is the default writing mode for DVD-R(W). It allows "
 "multisession DVD-R(W)s. It only applies to DVD-R(W)."
 msgstr ""
+"Krementa sinsekva estas la defaŭlta skribreĝimo por DVD-R(W). Ĝi permesas "
+"multisesian DVD-R(W)-ojn. Ĝi validas nur por DVD-R(W)."
 
 #: k3bwritingmodewidget.cpp:38
 #, kde-format
@@ -3387,6 +3497,11 @@ msgid ""
 "filesystem within the first session, thus allowing new files to be added to "
 "an already burned disk."
 msgstr ""
+"Restricted Overwrite permesas uzi DVD-RW same kiel DVD-RAM aŭ DVD+RW. La "
+"amaskomunikilaro povas nur esti anstataŭita. Ne eblas skribi multisesian DVD-"
+"RW-ojn en tiu ĉi reĝimo sed K3b uzas growisofs por kreskigi ISO 9660 "
+"dosiersistemon ene de la unua sesio, tiel permesante novajn dosierojn esti "
+"aldonitaj al jam bruligita disko."
 
 #: k3bwritingmodewidget.cpp:94
 #, kde-format
@@ -3404,6 +3519,8 @@ msgid ""
 "Be aware that the writing mode is ignored when writing DVD+R(W) and BD-R(E) "
 "since there is only one way to write them."
 msgstr ""
+"Konsciu, ke la skribreĝimo estas ignorita dum verkado de DVD+R(W) kaj BD-"
+"R(E) ĉar ekzistas nur unu maniero skribi ilin."
 
 #: k3bwritingmodewidget.cpp:99
 #, kde-format
@@ -3450,26 +3567,32 @@ msgid ""
 "trying to be as simple as possible for novice users while also providing all "
 "features an advanced user might need."
 msgstr ""
+"<p>K3b estas plenfunkcia KD/DVD/Blu-radia aplikaĵo por bruligi kaj ekstrakti."
+"<br/>Ĝi subtenas diversajn projekttipojn same kiel kopiadon de optikaj "
+"medioj, bruligadon de malsamaj specoj de bildoj kaj ŝiras Aŭdion. KD-oj, "
+"Video-KD-oj kaj Video-DVD-oj.<br/>Ĝia konvena uzantinterfaco estas celita al "
+"ĉiuj spektantaroj, provante esti kiel eble plej simpla por komencantoj kaj "
+"ankaŭ provizante ĉiujn funkciojn, kiujn progresa uzanto povus bezoni."
 
 #: main.cpp:33
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
-msgstr ""
+msgstr "Kopirajto © 1998–2018 K3b-aŭtoroj"
 
 #: main.cpp:35
 #, kde-format
 msgid "https://www.k3b.org"
-msgstr ""
+msgstr "https://www.k3b.org"
 
 #: main.cpp:39
 #, kde-format
 msgid "Leslie Zhai"
-msgstr ""
+msgstr "Leslie Zhai"
 
 #: main.cpp:39
 #, kde-format
 msgid "Maintainer"
-msgstr ""
+msgstr "Prizorganto"
 
 #: main.cpp:40
 #, kde-format
@@ -3636,12 +3759,12 @@ msgstr "Pro lia verko pri la BSD-a portaĵo kaj kelkaj bonegaj flikaĵoj."
 #: main.cpp:77
 #, kde-format
 msgid "Adriaan de Groot"
-msgstr ""
+msgstr "Adrian de Groot"
 
 #: main.cpp:78
 #, kde-format
 msgid "For his work on the FreeBSD port."
-msgstr ""
+msgstr "Por lia laboro pri la haveno FreeBSD."
 
 #: main.cpp:80
 #, kde-format
@@ -3702,7 +3825,7 @@ msgstr "Jeremy C. Andrus"
 #: main.cpp:96
 #, kde-format
 msgid "First Windows port of libk3bdevice."
-msgstr ""
+msgstr "Unua Vindoza haveno de libk3bdevice."
 
 #: main.cpp:104
 #, kde-format
@@ -3815,7 +3938,7 @@ msgstr "Dosiera grandeco:"
 #: misc/k3bimagewritingdialog.cpp:178
 #, kde-format
 msgid "%1 (different than declared volume size)"
-msgstr ""
+msgstr "%1 (malsama ol deklarita volumengrando)"
 
 #: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:470
 #, kde-format
@@ -3862,7 +3985,7 @@ msgstr "Trako"
 #: misc/k3bimagewritingdialog.cpp:359
 #, kde-format
 msgid "Burn Image"
-msgstr ""
+msgstr "Bruligi Bildon"
 
 #: misc/k3bimagewritingdialog.cpp:442
 #, kde-format
@@ -3907,7 +4030,7 @@ msgstr "Aŭtomata detekto"
 #: misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "ISO 9660 filesystem image"
-msgstr ""
+msgstr "ISO 9660 dosiersistemo bildo"
 
 #: misc/k3bimagewritingdialog.cpp:468
 #, kde-format
@@ -3922,7 +4045,7 @@ msgstr "Cdrdao enhavtabela dosiero"
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
 msgid "Plain data image"
-msgstr ""
+msgstr "Simpla datuma bildo"
 
 #: misc/k3bimagewritingdialog.cpp:522 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
@@ -3965,6 +4088,21 @@ msgid ""
 "These images can be reused here.<p><b>Cdrdao TOC files</b><br/>K3b supports "
 "writing cdrdao's own image format, the toc files."
 msgstr ""
+"<p><b>Bildaj tipoj subtenataj de K3b:</p><p><b>Ebena bildo</b><br/>Ebenaj "
+"bildoj estas skribitaj kiel estas al la medio uzante ununuran datumtrakon. "
+"Tipaj simplaj bildoj estas iso-bildoj kiel kreitaj de la datumprojekto de "
+"K3b.<p><b>Kue/bin-bildoj</b><br/>Cue/bin-bildoj konsistas el signaldosiero "
+"priskribanta la enhavtabelon de la komunikilo kaj bilddosiero kiu enhavas la "
+"realajn datumojn. La datumoj estos skribitaj al la komunikilo laŭ la "
+"signaldosiero.<p><b>Audio Cue-bildo</b><br/>Audio-indikilo-bildoj estas "
+"speciala speco de kue/binbildo enhavanta bildon de son-KD. . La realaj "
+"sondatumoj povas esti koditaj per iu ajn sonformato subtenata de K3b. "
+"Sondosieroj ankaŭ povas esti importitaj en K3b-sonprojektojn, kio ebligas "
+"ŝanĝi la ordon kaj aldoni aŭ forigi trakojn.<p><b>Cdrecord-klonaj bildoj</"
+"b><br/>K3b kreas cdrecord-klonbildon de unuopa -session KD kiam oni kopias "
+"KD en klona reĝimo. Ĉi tiuj bildoj estas reuzeblaj ĉi tie.<p><b>Cdrdao TOC-"
+"dosieroj</b><br/>K3b subtenas skribon de la propra bildformato de cdrdao, la "
+"toc-dosieroj."
 
 #: misc/k3bimagewritingdialog.cpp:708
 #, kde-format
@@ -3973,6 +4111,9 @@ msgid ""
 "If it has been downloaded make sure the download is complete.</p><p>Only "
 "continue if you know what you are doing.</p>"
 msgstr ""
+"<p>La reala dosiergrandeco ne kongruas kun la grandeco deklarita en la "
+"dosierkapo. Se ĝi estis elŝutita, certigu, ke la elŝuto estas kompleta.</"
+"p><p>Daŭrigu nur se vi scias, kion vi faras.</p>"
 
 #: misc/k3bimagewritingdialog.cpp:711 option/k3bmiscoptiontab.cpp:122
 #, kde-format
@@ -3982,12 +4123,12 @@ msgstr "Averto"
 #: misc/k3bimagewritingdialog.cpp:868
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
-msgstr ""
+msgstr "Tipo de bilddosiero ne estas rekonebla. Ĉu vi tamen volas bruligi ĝin?"
 
 #: misc/k3bimagewritingdialog.cpp:869
 #, kde-format
 msgid "Unknown image type"
-msgstr ""
+msgstr "Nekonata bildotipo"
 
 #: misc/k3bimagewritingdialog.cpp:870 projects/k3bprojectburndialog.cpp:142
 #, kde-format
@@ -3997,7 +4138,7 @@ msgstr "Enskribi"
 #: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Unable to read image file"
-msgstr ""
+msgstr "Ne eblas legi bilddosieron"
 
 #: misc/k3bimagewritingdialog.cpp:882
 #, kde-format
@@ -4379,12 +4520,15 @@ msgid ""
 "notification area. If K3b is run outside KDE environment a separate progress "
 "window may be shown instead.</p>"
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, K3b montros la progreson en KDE-a sciiga "
+"areo. Se K3b estas rulita ekster KDE-medio, aparta progresfenestro povas "
+"esti montrita anstataŭe.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowProgressOSD)
 #: option/base_k3bmiscoptiontab.ui:94
 #, kde-format
 msgid "Show &progress in notification area"
-msgstr ""
+msgstr "Montru &progreson en sciiga areo"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
 #: option/base_k3bmiscoptiontab.ui:101
@@ -4496,7 +4640,7 @@ msgstr "Neniu etoso elektita"
 #: option/base_k3bthemeoptiontab.ui:119
 #, kde-format
 msgid "Get New Themes..."
-msgstr ""
+msgstr "Akiru Novajn Temojn..."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
@@ -4518,7 +4662,7 @@ msgstr "Enskribo"
 #: option/k3badvancedoptiontab.cpp:52
 #, kde-format
 msgid "Allow &overburning"
-msgstr ""
+msgstr "Permesi &trobruladon"
 
 #: option/k3badvancedoptiontab.cpp:53
 #, kde-format
@@ -4538,7 +4682,7 @@ msgstr "MB"
 #: option/k3badvancedoptiontab.cpp:59
 #, kde-format
 msgid "Show &advanced GUI elements"
-msgstr ""
+msgstr "Montru &altnivelajn GUI-elementojn"
 
 #: option/k3badvancedoptiontab.cpp:68 rip/categories.cpp:20
 #, kde-format
@@ -4566,6 +4710,8 @@ msgid ""
 "Show advanced GUI elements like allowing to choose between cdrecord and "
 "cdrdao"
 msgstr ""
+"Montru altnivelajn GUI-elementojn kiel permesi elekti inter cdrecord kaj "
+"cdrdao"
 
 #: option/k3badvancedoptiontab.cpp:92
 #, kde-format
@@ -4592,6 +4738,11 @@ msgid ""
 "that K3b does not support all possible tools in all project types and "
 "actions.</b>"
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, montriĝas pliaj GUI-elementoj, kiuj "
+"permesas influi la konduton de K3b. Ĉi tio inkluzivas la manan elekton de la "
+"uzata brula ilo. (Elektu inter cdrecord kaj cdrdao dum verkado de KD aŭ "
+"inter cdrecord kaj growisofs dum verkado de DVD/BD.)<p><b>Konsciu, ke K3b ne "
+"subtenas ĉiujn eblajn ilojn en ĉiuj projektotipoj kaj agoj.</b>"
 
 #: option/k3badvancedoptiontab.cpp:104
 #, kde-format
@@ -4606,6 +4757,16 @@ msgid ""
 "beyond the official capacity. It makes sense to first determine the actual "
 "maximum capacity of the media brand with a simulated burn."
 msgstr ""
+"<p>Ĉiu komunikilo havas oficialan maksimuman kapaciton, kiu estas konservita "
+"en nurlegebla areo de la komunikilo kaj estas garantiita de la vendisto. "
+"Tamen, ĉi tiu oficiala maksimumo ne ĉiam estas la reala maksimumo. Multaj "
+"amaskomunikiloj havas realan totalan kapaciton, kiu estas iomete pli granda "
+"ol la oficiala kvanto.<p>Se ĉi tiu opcio estas markita, K3b malŝaltos "
+"sekurecan kontrolon kiu malhelpas bruligi preter la oficiala kapablo."
+"<p><b>Atentu:</b> Ebligi ĉi tiun opcion povas kaŭzi malsukcesojn en la fino "
+"de la bruladprocezo se K3b provas skribi preter la oficiala kapablo. Ĝi "
+"havas sencon unue determini la realan maksimuman kapablon de la "
+"amaskomunikila marko kun ŝajniga brulvundo."
 
 #: option/k3badvancedoptiontab.cpp:115
 #, kde-format
@@ -4662,7 +4823,7 @@ msgstr ""
 #: option/k3bcddboptiontab.cpp:38
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
-msgstr ""
+msgstr "Ne eblas ŝargi KCDDB-agordan modulon."
 
 #: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
 #, kde-format
@@ -4750,6 +4911,8 @@ msgid ""
 "In order to give K3b full access to the writer device the current user needs "
 "be added to a group <em>%1</em>."
 msgstr ""
+"Por doni al K3b plenan aliron al la skribilo, la nuna uzanto devas esti "
+"aldonita al grupo <em>%1</em>."
 
 #: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:785
@@ -4760,12 +4923,12 @@ msgstr "Aldoni"
 #: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
-msgstr ""
+msgstr "Bonvolu reensaluti por apliki la ŝanĝojn."
 
 #: option/k3bdevicewidget.cpp:269
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
-msgstr ""
+msgstr "Ne eblas efektivigi la agon: %1 (Erara kodo: %2)"
 
 #: option/k3bdevicewidget.cpp:270
 #, kde-format
@@ -4775,7 +4938,7 @@ msgstr "Reprovi"
 #: option/k3bexternalbinmodel.cpp:157
 #, kde-format
 msgid "%1 (not found)"
-msgstr ""
+msgstr "%1 (ne trovita)"
 
 #: option/k3bexternalbinmodel.cpp:230
 #, kde-format
@@ -4793,6 +4956,8 @@ msgid ""
 "Specify the paths to the external programs that K3b needs to work properly, "
 "or press \"Refresh\" to let K3b search for the programs."
 msgstr ""
+"Specifu la vojojn al la eksteraj programoj, kiujn K3b bezonas por taŭge "
+"funkcii, aŭ premu \"Refreŝigi\" por lasi K3b serĉi la programojn."
 
 #: option/k3bexternalbinparamsmodel.cpp:159
 #: option/k3bexternalbinpermissionmodel.cpp:286
@@ -4819,7 +4984,7 @@ msgstr "Rajtoj:"
 #: option/k3bexternalbinpermissionmodel.cpp:288
 #, kde-format
 msgid "New permissions"
-msgstr ""
+msgstr "Novaj permesoj"
 
 #: option/k3bexternalbinwidget.cpp:74
 #, kde-format
@@ -4828,6 +4993,9 @@ msgid ""
 "one as the <em>default</em>, which will be used to do the work. If you want "
 "to change the default, check desired version on the list."
 msgstr ""
+"<p>Se K3b trovas pli ol unu instalitan version de programo ĝi elektos unu "
+"kiel la <em>defaŭlta</em>, kiu estos uzata por fari la laboron. Se vi volas "
+"ŝanĝi la defaŭltan, kontrolu deziratan version en la listo."
 
 #: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
 #, kde-format
@@ -4847,12 +5015,12 @@ msgstr "Uzantaj parametroj"
 #: option/k3bexternalbinwidget.cpp:107
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
-msgstr ""
+msgstr "Kontrolu la programojn, kies permesojn vi volas ŝanĝi:"
 
 #: option/k3bexternalbinwidget.cpp:115
 #, kde-format
 msgid "Change Permissions..."
-msgstr ""
+msgstr "Ŝanĝi Permesojn..."
 
 #: option/k3bexternalbinwidget.cpp:128
 #, kde-format
@@ -4871,12 +5039,12 @@ msgstr "Serĉa vojo"
 #: option/k3bexternalbinwidget.cpp:241
 #, kde-format
 msgid "Following programs could not be updated:"
-msgstr ""
+msgstr "Sekvaj programoj ne povus esti ĝisdatigitaj:"
 
 #: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Unable to execute the action: %1"
-msgstr ""
+msgstr "Ne eblas efektivigi la agon: %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -4975,7 +5143,7 @@ msgstr "Disponaĵoj"
 #: option/k3boptiondialog.cpp:140
 #, kde-format
 msgid "Optical Devices"
-msgstr ""
+msgstr "Optikaj Aparatoj"
 
 #: option/k3boptiondialog.cpp:154
 #, kde-format
@@ -5020,7 +5188,7 @@ msgstr "CDDB"
 #: option/k3boptiondialog.cpp:198
 #, kde-format
 msgid "CDDB Audio CD Info Retrieval"
-msgstr ""
+msgstr "CDDB Audio-KD-Informo Reakiro"
 
 #: option/k3boptiondialog.cpp:208
 #, kde-format
@@ -5087,6 +5255,8 @@ msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
 "<br><br>This will delete the files installed by this theme.</qt>"
 msgstr ""
+"<qt>Ĉu vi certas, ke vi volas forigi la <strong>%1</strong>-temon?<br><br>Ĉi "
+"tio forigos la dosierojn instalitajn de ĉi tiu temo.</qt>"
 
 #: option/k3bthemeoptiontab.cpp:207
 #, kde-format
@@ -5121,6 +5291,17 @@ msgid ""
 "<p><b>It is highly recommended to use Rock Ridge extensions on every data CD "
 "or DVD.</b>"
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, K3b generos la rekordojn de System Use "
+"Sharing Protocol (SUSP) specifitaj de la Rock Ridge Interchange Protocol "
+"(IEEE-P1282).\n"
+"<p>Rock Ridge etendas la ISO 9660 dosiersistemon per funkcioj egalaj al la "
+"UNIX-dosiersistemoj (permesoj, simbolaj ligiloj, tre longaj "
+"dosiernomoj, ...). Ĝi uzas ISO-8859 aŭ UTF-16 bazitajn signojn kaj permesas "
+"255 oktetojn.\n"
+"<p>Rock Ridge-etendaĵoj troviĝas ĉe la fino de ĉiu ISO 9660 dosierujo. Ĉi "
+"tio faras la Rock Ridge-arbon proksime kunligita al la ISO 9660-arbo.\n"
+"<p><b>Estas tre rekomendite uzi Rock Ridge-etendaĵojn sur ĉiu datumdisko aŭ "
+"DVD.</b>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkRockRidge)
 #: projects/base_k3badvanceddataimagesettings.ui:33
@@ -5152,6 +5333,19 @@ msgid ""
 "POSIX-like OS that supports Joliet. So <b>never create Joliet-only CDs or "
 "DVDs</b> for that reason."
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, K3b aldonos pliajn Joliet-etendaĵojn al la "
+"ISO 9660-dosiersistemo.\n"
+"<p>Joliet ne estas akceptita sendependa internacia normo kiel ISO 9660 aŭ "
+"Rock Ridge. Ĝi estas ĉefe uzata en Vindozaj sistemoj.\n"
+"<p>Joliet ne permesas ĉiujn signojn, do la Joliet-dosiernomoj ne estas "
+"identaj al la dosiernomoj sur disko (kompare kun Rock Ridge). Joliet havas "
+"dosiernomlonglimon de 64 signoj (sendependa de la signokodigo kaj tipo ekz. "
+"eŭropa kontraŭ japana). Ĉi tio estas maloportuna, ĉar modernaj "
+"dosiersistemoj ĉiuj permesas 255 signojn per vojnoma komponanto.\n"
+"<p>Joliet uzas UTF-16-kodigon.\n"
+"<p><b>Atentu:</b> Escepte de Linukso kaj FreeBSD , ne ekzistas POSIX-simila "
+"OS kiu subtenas Joliet. Do <b>neniam kreu nur KD-ojn aŭ DVD-ojn de Joliet</"
+"b> pro tio."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkJoliet)
 #: projects/base_k3badvanceddataimagesettings.ui:53
@@ -5202,6 +5396,12 @@ msgid ""
 "not make much sense on other file systems; for example, if a user that owns "
 "a file on the CD or DVD does not exist."
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, ĉiuj dosieroj en la rezulta dosiersistemo "
+"havos precize la samajn permesojn kiel la fontdosieroj. (Alie, ĉiuj dosieroj "
+"havos egalajn permesojn kaj estos posedataj de radiko).\n"
+"<p>Ĉi tio estas ĉefe utila por sekurkopioj.<p><b>Atentu:</b> La permesoj "
+"eble ne havas multe da senco ĉe alia dosiersistemoj; ekzemple, se uzanto kiu "
+"posedas dosieron sur la KD aŭ DVD ne ekzistas."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkPreservePermissions)
 #: projects/base_k3badvanceddataimagesettings.ui:87
@@ -5508,6 +5708,16 @@ msgid ""
 "even if the player does not support CD-Text explicitly, enabling it is never "
 "a bad idea (just remember to fill in the CD-Text information)."
 msgstr ""
+"<p><b>KD-Teksto</b>\n"
+"<p>Se ĉi tiu opcio estas markita, K3b uzas iun alie neuzatan spacon sur la "
+"Sondisko por konservi pliajn informojn, kiel la nomo de la artisto aŭ la "
+"titolo de la KD.\n"
+"<p>KD-Text estas etendaĵo al la aŭd-KD-normo enkondukita de Sony.\n"
+"<p>KD-Text nur estos uzebla ĉe KD-ludiloj kiuj subtenas ĉi tiun etendaĵon "
+"(plejparte aŭtajn KD-ludilojn) kaj programaron kiel K3b, kompreneble.\n"
+"<p>Ĉar KD-Text-plibonigita Aŭd-KD funkcios en ajna Hifi KD aŭ DVD-ludilo eĉ "
+"se la ludanto ne subtenas KD-Text eksplicite, ebligi ĝin neniam estas "
+"malbona ideo (nur memoru plenigi la KD-Tekstaj informoj)."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextwidget.ui:45
@@ -5562,6 +5772,12 @@ msgid ""
 "transmission (preemphasis); the receiver will then weaken them accordingly "
 "for playback."
 msgstr ""
+"<p>Preemfazo estas ĉefe uzata en sontraktado. Pli altaj frekvencoj en "
+"sonsignaloj kutime havas pli malaltajn amplitudojn. Ĉi tio povas konduki al "
+"malbona signala kvalito ĉe brua dissendo ĉar la altaj frekvencoj povus "
+"fariĝi tro malfortaj. Por eviti ĉi tiun efikon, altfrekvencoj estas "
+"plifortigitaj antaŭ dissendo (antaŭemfazo); la ricevilo tiam malfortigos "
+"ilin sekve por reludado."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCopyPermitted)
 #: projects/base_k3baudiotrackwidget.ui:180
@@ -5598,6 +5814,20 @@ msgid ""
 "post-gap will most likely be muted and on some burners forced to 2 seconds.</"
 "b>"
 msgstr ""
+"<p>Sur sondisko ĉiu trako (krom la lasta) povas havi post-interspacon.\n"
+"Ĉi tio ne signifas, ke K3b aldonas plian breĉon de silento al la trako. Ĉi "
+"tiu agordo simple influas la ekranon sur Hifi aŭd-KD-ludilo. La parto de "
+"sontrako kiu estas markita kiel post-interspaco estas kalkulata malantaŭen.\n"
+"<p>Ĉi tiu agordo estas negrava por la plej multaj uzantoj ĉar modernaj KD-"
+"bruliloj povas meti arbitrajn sondatumojn en la post-interspacon dum "
+"bruligado en DAO-reĝimo.\n"
+"<p><i>En aliaj KD-brulaj aplikoj la post-interspaco povus esti nomita la "
+"antaŭ-interspaco. La antaŭ-interspaco de trako 2 estas la sama kiel la post-"
+"interspaco de trako 1.\n"
+"<p><b>Ŝanĝi la post-interspacon ne ŝanĝas la longon de la trako.</b>\n"
+"<p><b>Dum skribado en TAO-skriba reĝimo (ne rekomendita por Aŭd-KD-oj) la "
+"post-interspaco plej verŝajne estos silentigita kaj sur iuj bruliloj "
+"devigita al 2 sekundoj.</b>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projects/base_k3bbootimagedialog.ui:26
@@ -6107,6 +6337,9 @@ msgid ""
 "<p>They have to be separated by spaces:\n"
 "<pre>opt1 opt2 opt3</pre>"
 msgstr ""
+"<p>Ĉi tie oni povas specifi MPlayer-opciojn, kiuj neniam estu uzataj.\n"
+"<p>Ili devas esti apartigitaj per spacoj:\n"
+"<pre>opt1 opt2 opt3</pre>"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, m_editAdditionalMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:96
@@ -6182,6 +6415,14 @@ msgid ""
 "emovix</i>) under <em>backgrounds</em>. So to add a background one has to "
 "copy the file to that folder."
 msgstr ""
+"<p><b>Fono de Aŭdludilo</b>\n"
+"<p>Dum sona reprodukto normale la ekrano estus nigra. Tamen, se fona filmo "
+"estis elektita, eMovix montros ĝin dum reproduktado.\n"
+"<p>Pliaj fonfilmoj povas esti instalitaj. Tamen ĉi tio ne estas tiel simpla "
+"kiel kelkaj musklakoj. La fonaj filmoj estas konservitaj en la komuna "
+"datumdosierujo de emovix (plejparte <i>/usr/share/emovix</i> aŭ <i>/usr/"
+"local/share/emovix</i>) sub <em>fonoj</i> em>. Do por aldoni fonon oni devas "
+"kopii la dosieron al tiu dosierujo."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #: projects/base_k3bmovixoptionswidget.ui:169
@@ -6243,6 +6484,25 @@ msgid ""
 "<p>The <b>floppy</b> label makes eMovix boot from the local floppy drive "
 "instead of the medium."
 msgstr ""
+"<p><b>EMovix-Boltetikedoj</b>\n"
+"<p>eMovix provizas diversajn malsamajn lanĉajn agordojn kiuj povas esti "
+"elektitaj ĉe lanĉa tempo per lanĉa etikedo (komparebla al Lilo aŭ Grub). La "
+"multaj malsamaj lanĉaj agordoj ĉefe influas la Videoproduktadon.\n"
+"<p>La <b>defaŭlta</b>, <b>movix</b> aŭ <b>MoviX</b> etikedoj komencas "
+"ĝeneralan videon de Vesa. pelilo.\n"
+"<p>La <b>TV</b>-etikedoj povas esti uzataj por direkti videon al la televida "
+"eligo de la grafika tabulo. eMovix provizas TVout-pelilojn por malsamaj "
+"markoj de grafikaj tabuloj.\n"
+"<p>La <b>FB</b>-etikedoj rilatas al agordoj kiuj lanĉas Frame Buffer-pelilon "
+"en malsamaj ekranrezolucioj.\n"
+"<p>La <b>AA </b> etikedoj igas eMovix eligi la videon per la ASCII-Art-"
+"biblioteko kiu montras la bildon en teksta reĝimo per la uzado de simplaj "
+"ASCII-signoj.\n"
+"<p>La etikedo <b>hd</b> eMovix ekfunkciigas de la loka malmola disko "
+"anstataŭ la mediumo. Ĉi tio povas esti uzata por malhelpi hazardan "
+"ekfunkciigon de eMovix-disketo.\n"
+"<p>La etikedo <b>disketo</b> igas eMovix ekfunkciigi el la loka disketo "
+"anstataŭ la medio."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboKeyboardLayout)
 #: projects/base_k3bmovixoptionswidget.ui:229
@@ -6386,22 +6646,23 @@ msgstr ""
 #: projects/k3baudioburndialog.cpp:119 projects/k3baudioburndialog.cpp:120
 #, kde-format
 msgid "Rip Audio"
-msgstr ""
+msgstr "Rip Audio"
 
 #: projects/k3baudioburndialog.cpp:121
 #, kde-format
 msgid "Only Rip Audio"
-msgstr ""
+msgstr "Nur Rip Audio"
 
 #: projects/k3baudioburndialog.cpp:122
 #, kde-format
 msgid "Use the 'Rip Audio' tab to optionally adjust the path of the audio."
 msgstr ""
+"Uzu la langeton 'Rip Audio' por laŭvole alĝustigi la vojon de la audio."
 
 #: projects/k3baudioburndialog.cpp:123
 #, kde-format
 msgid "Wri&te Rip Audio files to:"
-msgstr ""
+msgstr "Skribu & Rip Sondosierojn al:"
 
 #: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:278
 #, kde-format
@@ -6410,6 +6671,9 @@ msgid ""
 "<em>normalize</em> (http://normalize.nongnu.org/) to normalize audio tracks. "
 "In order to use this functionality, please install it first."
 msgstr ""
+"<p><b>Ekstera programo <em>normalize</em> ne estas instalita.</b><p>K3b uzas "
+"<em>normalize</em> (http://normalize.nongnu.org/) por normaligi sonspurojn. "
+"Por uzi ĉi tiun funkcion, bonvolu unue instali ĝin."
 
 #: projects/k3baudioburndialog.cpp:290 projects/k3baudioburndialog.cpp:309
 #: projects/k3bmixedburndialog.cpp:285 projects/k3bmixedburndialog.cpp:304
@@ -6533,6 +6797,9 @@ msgid ""
 "You may manually convert these audio files to wave using another application "
 "supporting the audio format and then add the wave files to the K3b project."
 msgstr ""
+"Vi povas permane konverti ĉi tiujn sondosierojn al ondo per alia aplikaĵo "
+"subtenanta la sonformaton kaj poste aldoni la onddosierojn al la projekto "
+"K3b."
 
 #: projects/k3baudiotrackaddingdialog.cpp:92
 #: projects/k3bdataurladdingdialog.cpp:126
@@ -6644,7 +6911,7 @@ msgstr "Redakti la fonton..."
 #: projects/k3baudioviewimpl.cpp:87
 #, kde-format
 msgid "Play Track"
-msgstr ""
+msgstr "Ludu Trakon"
 
 #: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
 #, kde-format
@@ -6701,7 +6968,7 @@ msgstr "Bonvolu aldoni dosierojn al via projekto unue."
 #: projects/k3baudioviewimpl.cpp:443
 #, kde-format
 msgid "No tracks to convert"
-msgstr ""
+msgstr "Neniuj trakoj por konverti"
 
 #: projects/k3bbootimagedialog.cpp:36
 #, kde-format
@@ -6736,6 +7003,15 @@ msgid ""
 "\"https://www.google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the "
 "Internet</a>."
 msgstr ""
+"<p>La dosiero, kiun vi elektis, ne estas disketo (disketbildoj havas "
+"grandecon 1200 KB, 1440 KB, aŭ 2880 KB). Vi ankoraŭ povas uzi startbildojn "
+"de aliaj grandecoj per kopiado de malmola disko aŭ tute malŝaltante "
+"kopiadon. <p>Se vi ne konas terminojn kiel 'durdiska emulado', vi plej "
+"verŝajne volas uzi disketon ĉi tie. Disketbildoj povas esti kreitaj rekte "
+"ĉerpante ilin el reala disketo:<pre>dd if=/dev/floppy of=/tmp/floppy.img</"
+"pre>aŭ per uzado de unu el la multaj lanĉaj disketoj kiuj povas esti trovite "
+"ĉe <a href=\"https://www.google.com/search?q=linux+boot"
+"+floppy&ie=UTF-8&oe=UTF-8\">Interreto</a>."
 
 #: projects/k3bbootimagedialog.cpp:111
 #, kde-format
@@ -6850,7 +7126,7 @@ msgctxt ""
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr ""
+msgstr "K3b datumprojekto"
 
 #: projects/k3bdataimagesettingswidget.cpp:142
 #, kde-format
@@ -6859,6 +7135,9 @@ msgid ""
 "Presets which allow for a quick selection of the most frequently used "
 "settings."
 msgstr ""
+"<p><b>Agordoj de Dosiersistemaj</b><p>K3b disponigas la jenajn antaŭdirojn "
+"de dosiersistemoj kiuj permesas rapidan elekton de la plej ofte uzataj "
+"agordoj."
 
 #: projects/k3bdataimagesettingswidget.cpp:146
 #, kde-format
@@ -6867,6 +7146,9 @@ msgid ""
 "means that it uses the Rock Ridge extensions to provide long filenames, "
 "symbolic links, and POSIX compatible file permissions."
 msgstr ""
+"La dosiersistemo estas optimumigita por uzado en Linukso/Uniksaj sistemoj. "
+"Ĉi tio ĉefe signifas, ke ĝi uzas la etendaĵojn de Rock Ridge por provizi "
+"longajn dosiernomojn, simbolajn ligilojn kaj POSIX-kongruajn dosierpermesojn."
 
 #: projects/k3bdataimagesettingswidget.cpp:150
 #, kde-format
@@ -6876,6 +7158,9 @@ msgid ""
 "Rock Ridge extensions. Be aware that the file name length is restricted to "
 "103 characters."
 msgstr ""
+"Krom la agordoj por Linukso/Unikso la dosiersistemo enhavas Joliet-arbon kiu "
+"permesas longajn dosiernomojn en Vindozo kiu ne subtenas la etendaĵojn de "
+"Rock Ridge. Atentu, ke la dosiernomo longo estas limigita al 103 signoj."
 
 #: projects/k3bdataimagesettingswidget.cpp:154
 #, kde-format
@@ -6883,6 +7168,9 @@ msgid ""
 "The file system has additional UDF entries attached to it. This raises the "
 "maximal file size to 4 GB. Be aware that the UDF support in K3b is limited."
 msgstr ""
+"La dosiersistemo havas aldonajn UDF-enskribojn alkroĉitajn al ĝi. Ĉi tio "
+"levas la maksimuman dosiergrandecon al 4 GB. Atentu, ke la UDF-subteno en "
+"K3b estas limigita."
 
 #: projects/k3bdataimagesettingswidget.cpp:157
 #, kde-format
@@ -6891,6 +7179,9 @@ msgid ""
 "file names are restricted to 8.3 characters and no symbolic links or file "
 "permissions are supported."
 msgstr ""
+"La dosiersistemo estas optimumigita por kongruo kun malnovaj sistemoj. Tio "
+"signifas, ke dosiernomoj estas limigitaj al 8.3 signoj kaj neniuj simbolaj "
+"ligiloj aŭ dosierpermesoj estas subtenataj."
 
 #: projects/k3bdataimagesettingswidget.cpp:212
 #, kde-format
@@ -6920,7 +7211,7 @@ msgstr "Propra (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) trovis antaŭdifinitajn agordojn:"
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -6931,6 +7222,11 @@ msgid ""
 "symbolic links are not supported and will always be followed as if the "
 "\"Follow Symbolic Links\" option was enabled."
 msgstr ""
+"<p>Atentu, ke ne rekomendas malŝalti la Etendaĵojn de Rock Ridge. Ne estas "
+"malavantaĝo ebligi Rock Ridge (krom tre malgranda spaco supre) sed multaj "
+"avantaĝoj.<p>Sen Rock Ridge Extensions simbolaj ligiloj ne estas subtenataj "
+"kaj ĉiam estos sekvataj kvazaŭ la \"Sekvu Simbolajn Ligilojn\" opcio estis "
+"ebligita."
 
 #: projects/k3bdataimagesettingswidget.cpp:243
 #, kde-format
@@ -6945,6 +7241,9 @@ msgid ""
 "<p>If you do not intend to use the CD/DVD on a Windows system it is safe to "
 "disable Joliet."
 msgstr ""
+"<p>Atentu, ke sen la etendoj de Joliet Vindozaj sistemoj ne povos montri "
+"longajn dosiernomojn. Vi nur vidos la ISO 9660-dosiernomojn.<p>Se vi ne "
+"intencas uzi la KD/DVD en Vindoza sistemo estas sekure malŝalti Joliet."
 
 #: projects/k3bdataimagesettingswidget.cpp:254
 #, kde-format
@@ -6974,6 +7273,20 @@ msgid ""
 "actually create multiple sessions but grow the file system to include the "
 "new data.</em>"
 msgstr ""
+"<p><b>Multsesia reĝimo</b><p><b>Aŭtomata</b><br>Lasu K3b decidi kiun reĝimon "
+"uzi. La decido estos bazita sur la grandeco de la projekto (ĉu ĝi plenigas "
+"la tutan amaskomunikilaron) kaj la stato de la enmetita amaskomunikilaro "
+"(aldonebla aŭ ne).<p><b>Neniu Multisesio</b><br>Kreu ununuran -session KD aŭ "
+"DVD kaj fermu la diskon.<p><b>Starti Plursesian</b><br>Startu plursesian KD "
+"aŭ DVD, ne fermante la diskon por permesi pliajn sesiojn esti aldonitaj."
+"<p><b> Daŭrigu plursesion</b><br>Daŭrigu aldoneblan datumdiskon (kiel "
+"ekzemple kreita en modo <em>Starti plursesion</em>) kaj aldonu alian sesion "
+"sen fermi la diskon por permesi pliajn sesiojn esti aldonitaj.<p> <b>Finu "
+"Plursesion</b><br>Daŭrigu aldoneblan datumdiskon (kiel ekzemple kreitan en "
+"reĝimo <em>Starti Plursesion</em>), aldonu alian sesion, kaj fermu la diskon."
+"<p><em> En la kazo de DVD+RW kaj DVD-RW limigita anstataŭiga "
+"amaskomunikilaro K3b efektive ne kreos plurajn sesiojn sed kreskos la "
+"dosiersistemon por inkluzivi la novajn datumojn.</em>"
 
 #: projects/k3bdatamultisessioncombobox.cpp:65
 #, kde-format
@@ -7004,6 +7317,11 @@ msgid ""
 "set is based on the ISO 9660 settings in the K3b project. K3b is not able to "
 "display these converted filenames yet."
 msgstr ""
+"<p>K3b trovis seancon enhavantan Joliet-informojn por longaj dosiernomoj sed "
+"neniuj Rock Ridge-etendaĵoj.<p>La dosiernomoj en la importita sesio estos "
+"konvertitaj al limigita signoaro en la nova sesio. Ĉi tiu signaro baziĝas "
+"sur la ISO 9660-agordoj en la K3b-projekto. K3b ankoraŭ ne kapablas montri "
+"ĉi tiujn konvertitajn dosiernomojn."
 
 #: projects/k3bdatamultisessionimportdialog.cpp:96
 #, kde-format
@@ -7089,7 +7407,7 @@ msgstr "Loka loko:"
 #: projects/k3bdatapropertiesdialog.cpp:99
 #, kde-format
 msgid "Local link target:"
-msgstr ""
+msgstr "Loka ligocelo:"
 
 #: projects/k3bdatapropertiesdialog.cpp:120
 #, kde-format
@@ -7130,6 +7448,11 @@ msgid ""
 "Joliet, which can be managed by hiding README.joliet on RockRidge and README."
 "rr on the Joliet filesystem.</p>"
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, la dosiero aŭ dosierujo (kaj ĝia tuta "
+"enhavo) estos kaŝita en la ISO 9660 kaj RockRidge dosiersistemo.</p><p>Ĉi "
+"tio estas utila, ekzemple, por havi malsamajn README-dosierojn por RockRidge "
+"kaj Joliet, kiuj povas esti administritaj kaŝante README.joliet sur "
+"RockRidge kaj README.rr sur la dosiersistemo Joliet.</p>"
 
 #: projects/k3bdatapropertiesdialog.cpp:162
 #, kde-format
@@ -7140,6 +7463,11 @@ msgid ""
 "managed by hiding README.joliet on RockRidge and README.rr on the Joliet "
 "filesystem.</p>"
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, la dosiero aŭ dosierujo (kaj ĝia tuta "
+"enhavo) estos kaŝitaj en la dosiersistemo Joliet.</p><p>Ĉi tio estas utila, "
+"ekzemple, por havi malsamajn README-dosierojn por RockRidge kaj Joliet. , "
+"kiu povas esti administrita kaŝante README.joliet sur RockRidge kaj README."
+"rr sur la dosiersistemo Joliet.</p>"
 
 #: projects/k3bdatapropertiesdialog.cpp:169
 #, kde-format
@@ -7151,6 +7479,13 @@ msgid ""
 "sort the order of the file names that appear in the ISO 9660 folder. It "
 "sorts the order in which the file data is written to the image."
 msgstr ""
+"<p>Ĉi tiu valoro modifas la fizikan ordigon de la dosieroj en la ISO 9660 "
+"dosiersistemo. Pli alta ponderado signifas, ke la dosiero troviĝos pli "
+"proksime al la komenco de la bildo (kaj la disko).<p>Ĉi tiu opcio estas "
+"utila por optimumigi la datuman aranĝon sur komunikilo.<p><b>Atentu:</b> Ĉi "
+"tio ne ordigas la ordon de la dosiernomoj kiuj aperas en la ISO 9660 "
+"dosierujo. Ĝi ordigas la sinsekvon en kiu la dosierdatumoj estas skribitaj "
+"al la bildo."
 
 #: projects/k3bdatapropertiesdialog.cpp:200
 #: projects/k3bmovixprojectmodel.cpp:265
@@ -7187,7 +7522,7 @@ msgstr "Speciala dosiero"
 msgid "One Item"
 msgid_plural "%1 Items"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "%1 elementoj"
 
 #: projects/k3bdatapropertiesdialog.cpp:296
 #, kde-format
@@ -7235,6 +7570,9 @@ msgid ""
 "such it can be burned to a medium directly since it already contains a file "
 "system.<br>Are you sure you want to add this file to the project?"
 msgstr ""
+"<p>La dosiero, kiun vi aldonos al la projekto, estas bildo ISO 9660. Kiel "
+"tia ĝi povas esti bruligita al medio rekte ĉar ĝi jam enhavas dosiersistemon."
+"<br>Ĉu vi certas, ke vi volas aldoni ĉi tiun dosieron al la projekto?"
 
 #: projects/k3bdataurladdingdialog.cpp:182
 #, kde-format
@@ -7326,6 +7664,12 @@ msgid ""
 "the option <em>follow symbolic links</em> you may safely ignore this warning "
 "and choose to add the link to the project.</b>"
 msgstr ""
+"<p>'%1' estas simbola ligilo al dosierujo '%2'.<p>Se vi intencas igi K3b "
+"sekvi simbolajn ligilojn, vi devus konsideri lasi K3b fari tion nun ĉar K3b "
+"ne povos fari tion poste ĉar simbola ligiloj al dosierujoj ene de K3b-"
+"projekto ne povas esti solvitaj.<p><b>Se vi ne intencas ebligi la opcion "
+"<em>sekvi simbolajn ligilojn</em> vi povas sekure ignori ĉi tiun averton kaj "
+"elekti aldoni la ligilon al la projekto.</b>"
 
 #: projects/k3bdataurladdingdialog.cpp:455
 #, kde-format
@@ -7420,7 +7764,7 @@ msgstr "Nova Dosierujo"
 #: projects/k3bdataviewimpl.cpp:126
 #, kde-format
 msgid "Parent Folder"
-msgstr ""
+msgstr "Gepatra Dosierujo"
 
 #: projects/k3bdataviewimpl.cpp:137
 #, kde-format
@@ -7494,7 +7838,7 @@ msgstr "Enhaveco pliplenigata de %1"
 #: projects/k3bfillstatusdisplay.cpp:376
 #, kde-format
 msgid "Set medium size"
-msgstr ""
+msgstr "Agordu mezan grandecon"
 
 #: projects/k3bfillstatusdisplay.cpp:408
 #, kde-format
@@ -7655,6 +7999,15 @@ msgid ""
 "this is the recommended mode.<br>Some older CD-ROMs may have problems "
 "reading a blue book CD since it is a multisession CD."
 msgstr ""
+"<em>KD de Blua libro</em><br>K3b kreos plursesian KD kun 2 sesioj. La unua "
+"sesio enhavos ĉiujn sonspurojn kaj la dua sesio enhavos reĝimo 2 formo 1 "
+"datumtrako.<br>Ĉi tiu reĝimo baziĝas sur la <em>Blua libro</em> normo (ankaŭ "
+"konata kiel <em>Plitendita Audio). KD</em>, <em>KD-Ekstra</em>, aŭ <em>KD "
+"Plus</em>) kaj havas la avantaĝon, ke hifia son-KD-ludilo nur rekonos la "
+"unuan sesion kaj ignoros la duan sesion per la datumtrako.<br>Se la KD estas "
+"intencita por esti uzata en hifi aŭd-KD-ludilo ĉi tiu estas la rekomendinda "
+"reĝimo.<br>Kelkaj pli malnovaj KD-ROM-oj povas havi problemojn legi blulibro-"
+"KD ĉar ĝi estas plursesia KD."
 
 #: projects/k3bmixedburndialog.cpp:109
 #, kde-format
@@ -7691,12 +8044,12 @@ msgstr ""
 #: projects/k3bmixedview.cpp:49
 #, kde-format
 msgid "Audio Section"
-msgstr ""
+msgstr "Aŭdio-Sekcio"
 
 #: projects/k3bmixedview.cpp:50
 #, kde-format
 msgid "Data Section"
-msgstr ""
+msgstr "Sekcio de Datumoj"
 
 #: projects/k3bmixedview.cpp:126
 #, kde-format
@@ -7738,7 +8091,7 @@ msgstr "norma"
 #: projects/k3bmovixprojectmodel.cpp:291
 #, kde-format
 msgid "%1 (broken)"
-msgstr ""
+msgstr "%1 (rompita)"
 
 #: projects/k3bmovixprojectmodel.cpp:308
 #, kde-format
@@ -7847,10 +8200,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "La imaga dosierujo « %1 » ne ekzistas. Ĉu vi volas, ke K3b kreas ĝin?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Krei dosierujon"
+msgstr "Ĉu krei dosierujon?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
@@ -7980,6 +8332,8 @@ msgid ""
 "This controls whether to update the scan data information contained in the "
 "MPEG-2 video streams."
 msgstr ""
+"Ĉi tio kontrolas ĉu ĝisdatigi la skanajn datumojn enhavitajn en la "
+"videofluoj MPEG-2."
 
 #: projects/k3bvcdburndialog.cpp:115
 #, kde-format
@@ -7987,6 +8341,8 @@ msgid ""
 "This element allows one to set viewing restrictions which may be interpreted "
 "by the playing device."
 msgstr ""
+"Ĉi tiu elemento permesas agordi spektadlimigojn, kiuj povas esti "
+"interpretitaj de la ludanta aparato."
 
 #: projects/k3bvcdburndialog.cpp:117
 #, kde-format
@@ -7999,6 +8355,8 @@ msgid ""
 "Used to set the number of empty sectors added before the lead-out area "
 "begins."
 msgstr ""
+"Uzita por agordi la nombron da malplenaj sektoroj aldonitaj antaŭ ol la "
+"elkonduka areo komenciĝas."
 
 #: projects/k3bvcdburndialog.cpp:119
 #, kde-format
@@ -8032,6 +8390,18 @@ msgid ""
 "fixed at 224 kbps with 1 stereo or 2 mono channels.<p><b>It is recommended "
 "to keep the video bit-rate under 1151929.1 bps.</b>"
 msgstr ""
+"<p>Ĉi tio estas la plej baza <b>Video KD</b> specifo devenanta de 1993, kiu "
+"havas la sekvajn karakterizaĵojn:<ul><li>Unu reĝimo2 miksita formo ISO 9660 "
+"trako enhavanta dosiermontrilojn al la informaj areoj. </li><li>Ĝis 98 "
+"multipleks-ed MPEG-1 aŭd-/video-fluoj aŭ KD-DA sonspuroj.</li><li>Ĝis 500 "
+"MPEG-sekvencaj enirpunktoj uzataj kiel ĉapitrodividoj.</li> </ul><p>La "
+"specifo de Video CD postulas, ke la multiplex-ed MPEG-1-fluo havu CBR de "
+"malpli ol 174300 bajtoj (1394400 bitoj) je sekundo por alĝustigi "
+"unurapidecajn KD-ROM-diskojn.<br>La specifo permesas la jenajn du "
+"rezoluciojn:<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ "
+"23.976 Hz (FILM SIF).</li></ul><p>La audiofluo CBR MPEG-1, tavolo II estas "
+"fiksita je 224 kbps kun 1 stereo aŭ 2 monokanaloj.<p><b>Oni rekomendas "
+"konservi la videobitrapidecon sub 1151929.1 bps.</b>"
 
 #: projects/k3bvcdburndialog.cpp:136
 #, kde-format
@@ -8057,6 +8427,26 @@ msgid ""
 "should be kept under 174300 bytes/sec (except for single still picture "
 "items) in order to accommodate single speed drives.</b>"
 msgstr ""
+"<p>Proksimume du jarojn post kiam la specifo de Video CD 1.1 aperis, "
+"plibonigita <b>Video CD 2.0</b> normo estis publikigita en 1995.<p>Ĉi tiu "
+"aldonis la sekvajn erojn al la funkcioj jam disponeblaj en la Video. KD 1.1-"
+"specifo:<ul><li>Subteno por MPEG-segmentaj ludaĵoj (<b>\"SPI\"</b>), "
+"konsistanta el fiksaj bildoj, filmoj kaj/aŭ aŭd-fluoj (nur) estis aldonita.</"
+"li><li>Notu Segmentajn Erojn::.</li><li>Subteno por interaga reprodukta "
+"kontrolo (<b>\"PBC\"</b>) estis aldonita.</li><li>Subteno por ludi rilatan "
+"aliron per disponigado de skanpunkta indeksa dosiero estis aldonita. (<b>\"/"
+"EXT/SCANDATA.DAT\"</b>)</li><li>Subteno por subtitoloj.</li><li>Subteno por "
+"miksi enhavon NTSC kaj PAL.</li> </ul><p>Aldonante PAL-subtenon al la "
+"specifo de Video CD 1.1, la sekvaj rezolucioj fariĝis disponeblaj:"
+"<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ 23.976 Hz (FILM "
+"SIF).</li><li>352 x 288 @ 25 Hz (PAL SIF).</li></ul><p>Por segmentludaj eroj "
+"fariĝis disponeblaj jenaj sonkodigoj:<ul><li>Komunaj stereofluoj, stereo aŭ "
+"dukanalaj sonfluoj je 128, 192, 224 aŭ 384 kbit/sec pecetrapideco.</"
+"li><li>Monumaj audiofluoj je 64, 96 aŭ 192 kbit/sec bit- kurzo.</li></"
+"ul><p>Ankaŭ la ebleco havi nur sonajn fluojn kaj trankvilajn bildojn estis "
+"disponigita.<p><b>La bitorapideco de plurteksaj fluoj estu konservita sub "
+"174300 bajtoj/sek. (krom unuopaj fiksbildaj eroj) por akomodi unurapidecajn "
+"diskojn.</b>"
 
 #: projects/k3bvcdburndialog.cpp:154
 #, kde-format
@@ -8079,6 +8469,22 @@ msgid ""
 "480 @ 29.97 Hz (NTSC 2/3 D-2).</li><li>480 x 576 @ 25 Hz (PAL 2/3 D-2).</"
 "li></ul>"
 msgstr ""
+"<p>Kun la alveno de la DVD-V-amaskomunikilaro, nova VCD-normo devis esti "
+"eldonita por povi resti flank-al-flanke kun teknologio, do la Super Video CD-"
+"specifo viviĝis en 1999.<p>En la mezo de 2000 plena subaro de ĉi tiu "
+"<b>Super Video KD</b>-specifo estis publikigita kiel <b>IEC-62107</b>.<p>Ĉar "
+"la plej rimarkinda ŝanĝo super Video CD 2.0 estas ŝanĝo de MPEG- 1 CBR al "
+"MPEG-2 VBR-kodigo por la videofluo estis farita.<p>La sekvaj novaj funkcioj--"
+"konstruante sur la specifo de Video CD 2.0--estas:<ul><li>Uzo de MPEG-2-"
+"kodigo anstataŭ MPEG -1 por la videofluo.</li><li>Permesita VBR-kodigo de "
+"MPEG-1 audiofluo.</li><li>Pli altaj rezolucioj (vidu sube) por videoflua "
+"rezolucio.</li><li>Supren. al 4 supermetitaj grafikaĵoj kaj teksto (<b>\"OGT"
+"\"</b>) subkanaloj por uzantŝanĝebla subtitolo aperanta aldone al la jam "
+"ekzistanta fermtitola instalaĵo.</li><li>Komandlistoj por kontroli la SVCD-"
+"virtuala maŝino.</li></ul><p>Por la <b>Super Video KD</b>, nur la sekvaj du "
+"rezolucioj estas subtenataj por filmfilmo kaj (malalta rezolucio) fiksbildoj:"
+"<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li><li>480 x 576 @ 25 Hz (PAL "
+"2/3 D-2).</li></ul>"
 
 #: projects/k3bvcdburndialog.cpp:167
 #, kde-format
@@ -8093,6 +8499,15 @@ msgid ""
 "li><li><b>/SVCD/SEARCH.DAT</b> is optional instead of being mandatory.</li></"
 "ul>"
 msgstr ""
+"<p>Ĉi tio estas fakte nur negrava variaĵo difinita en IEC-62107 en la "
+"formato Super Video CD 1.0 por kongruo kun nunaj produktoj en la merkato."
+"<p>Ĝi diferencas de la formato Super Video CD 1.0 en la sekvaj eroj:"
+"<ul><li>La kampo de la sistema profiletikedo en <b>/SVCD/INFO.SVD</b> estas "
+"agordita al <b>1</b> anstataŭ <b>0</b>.</li><li>La sistemo-identigkampa "
+"valoro en <b>/SVCD/INFO.SVD</b> estas agordita al <b>HQ-VCD</b> anstataŭ "
+"<b>SUPERVCD</b>.</li><li><b>/EXT/SCANDATA.DAT</b> estas deviga anstataŭ esti "
+"nedeviga.</li><li><b>/SVCD/SEARCH.DAT</b> estas nedeviga anstataŭ esti "
+"deviga.</li></ul>"
 
 #: projects/k3bvcdburndialog.cpp:174
 #, kde-format
@@ -8104,6 +8519,12 @@ msgid ""
 "must turn Autodetect OFF. This is useful for some standalone DVD players "
 "without SVCD support.</p>"
 msgstr ""
+"<p>Se Aŭtomata detekto estas:</p><ul><li>ACTIVA tiam K3b agos la ĝustan "
+"Video-KD-tipo.</li><li>Malŝaltita tiam la ĝusta Video-KD-tipo devas esti "
+"agordita de la uzanto. </li></ul><p>Se vi ne certas pri la ĝusta tipo de "
+"Video KD, estas plej bone ŝalti Aŭtomatan detekton.</p><p>Se vi volas devigi "
+"la tipon de Video KD, vi devas malŝaltu Aŭtomatan detekton. Ĉi tio estas "
+"utila por iuj memstaraj DVD-ludiloj sen SVCD-subteno.</p>"
 
 #: projects/k3bvcdburndialog.cpp:180
 #, kde-format
@@ -8113,6 +8534,10 @@ msgid ""
 "b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</"
 "li></ul>"
 msgstr ""
+"<ul><li>Alinomu <b>\"/MPEG2\"</b> dosierujon sur SVCD-oj al (nekonforma) \"/"
+"MPEGAV\".</li><li>Ebligas la uzon de la (malrekomendita). ) subskribo <b>"
+"\"ENTRYSVD\"</b> anstataŭ <b>\"ENTRYVCD\"</b> por la dosiero <b>\"/SVCD/"
+"ENTRY.SVD\"</b>.</li></ul>"
 
 #: projects/k3bvcdburndialog.cpp:182
 #, kde-format
@@ -8122,6 +8547,10 @@ msgid ""
 "specification.</li></ul><p><b>The differences are most exposed on SVCDs "
 "containing more than one video track.</b>"
 msgstr ""
+"<ul><li>Ebligas la uzon de la (malrekomendita) ĉina formato <b>\"/SVCD/"
+"TRACKS.SVD\"</b> kiu diferencas de la formato difinita en la <b>IEC-62107</"
+"b> specifo.</li></ul><p><b>La diferencoj estas plej elmontritaj sur SVCD-oj "
+"enhavantaj pli ol unu videotrakon.</b>"
 
 #: projects/k3bvcdburndialog.cpp:185
 #, kde-format
@@ -8130,6 +8559,9 @@ msgid ""
 "media.<p><b>You may want use this option for images longer than 80 minutes</"
 "b>"
 msgstr ""
+"<p>kvankam plej multaj aparatoj havos problemojn kun tia eksterspecifa medio."
+"<p><b>Vi eble volas uzi ĉi tiun opcion por bildoj pli longaj ol 80 minutoj</"
+"b>"
 
 #: projects/k3bvcdburndialog.cpp:188
 #, kde-format
@@ -8141,6 +8573,12 @@ msgid ""
 "end-user</li></ul><p>The program runs on CD-i players equipped with the "
 "CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge."
 msgstr ""
+"<p>Por permesi la ludadon de Video-KD-oj sur KD-i-ludilo, la Video-KD-normo "
+"postulas, ke aplikprogramo de KD-i devas ĉeesti.<p>Ĉi tiu programo estas "
+"desegnita por:<ul><li> havigi plenan reproduktan kontrolon kiel difinite en "
+"la PSD de la normo</li><li>esti ekstreme simpla uzebla kaj facile lernebla "
+"por la finuzanto</li></ul><p>La programo funkcias sur KD-i-ludiloj ekipitaj "
+"per la CDRTOS 1.1(.1) operaciumo kaj Digital Video-etenda kartoĉo."
 
 #: projects/k3bvcdburndialog.cpp:194
 #, kde-format
@@ -8150,6 +8588,10 @@ msgid ""
 "VCD application.<p>You can adapt the color and/or the shape of the cursor "
 "and lots more."
 msgstr ""
+"<p>Agordaj parametroj disponeblaj nur por Video CD 2.0<p>La motoro funkcias "
+"perfekte bone kiam ĝi estas uzata tia.<p>Vi havas la eblon agordi la VCD-"
+"aplikaĵon.<p>Vi povas adapti la koloron kaj/aŭ la formo de la kursoro kaj "
+"multe pli."
 
 #: projects/k3bvcdburndialog.cpp:200 projects/k3bvcdtrackdialog.cpp:255
 #, kde-format
@@ -8159,6 +8601,10 @@ msgid ""
 "possibility of interaction with the user through the remote control or some "
 "other input device available."
 msgstr ""
+"<p>Reprodukta kontrolo, PBC, disponeblas por Video CD 2.0 kaj Super Video CD "
+"1.0-diskoformatoj.<p>PBC ebligas kontrolon de la reprodukto de ludaĵoj kaj "
+"la eblecon de interago kun la uzanto per la teleregilo aŭ iu alia enigo. "
+"disponebla aparato."
 
 #: projects/k3bvcdburndialog.cpp:203
 #, kde-format
@@ -8166,6 +8612,9 @@ msgid ""
 "<p>Here you can specify that the folder <b>SEGMENT</b> should always be "
 "present.<p>Some DVD players need the folder to give a faultless rendition."
 msgstr ""
+"<p>Ĉi tie vi povas specifi, ke la dosierujo <b>SEGMENTO</b> ĉiam estu "
+"ĉeestanta.<p>Kelkaj DVD-ludiloj bezonas la dosierujon por fari senmanka "
+"interpretadon."
 
 #: projects/k3bvcdburndialog.cpp:206
 #, kde-format
@@ -8182,6 +8631,17 @@ msgid ""
 "display parameters, such as display resolution and frame rate, relaxing the "
 "aps requirement may lead to non-working entry points."
 msgstr ""
+"<p>Alirpunkto-Sektoro, APS, estas MPEG-video-sektoro sur la VCD/SVCD, kiu "
+"taŭgas por esti rekte transsaltita.<p>APS estas postulataj por enirpunktoj "
+"kaj skantabloj. APS devas plenumi la postulon antaŭi ĉiun I-kadron per GOP-"
+"kapo, kiu devas esti antaŭita de sekvenco-kapo siavice.<p>La komencaj kodoj "
+"de ĉi tiuj 3 eroj devas esti enhavitaj ĉiuj en la sama MPEG-pako/ sektoro, "
+"tiel formante tiel nomatan alirpunktan sektoron.<p>Tiu postulo povas esti "
+"malstreĉita ebligante la malstreĉitan aps-opcion, t.e. ĉiu sektoro enhavanta "
+"I-kadron estos rigardata kiel APS.<p><b>Averto: </b> La sinsekva kaplinio "
+"estas necesa por ludanta aparato eltrovi ekranajn parametrojn, kiel "
+"ekranrezolucion kaj framfrekvencon, malstreĉigi la aps-postulon povas "
+"konduki al nefunkciantaj enirpunktoj."
 
 #: projects/k3bvcdburndialog.cpp:212
 #, kde-format
@@ -8193,6 +8653,11 @@ msgid ""
 "scan information data can be updated by enabling the update scan offsets "
 "option."
 msgstr ""
+"<p>Laŭ la specifo, estas devige por Super Video KD kodi skanajn informojn en "
+"uzantajn datumblokojn en la bildtavolo de ĉiu intrakodigita bildo.<p>Ĝi "
+"povas esti uzata per ludado de aparatoj por efektivigi rapidan antaŭen kaj "
+"rapide. inversa skanado.<p>La jam ekzistantaj skanaj informoj-datumoj povas "
+"esti ĝisdatigitaj ebligante la opcion de ĝisdatigo de skanaj kompensoj."
 
 #: projects/k3bvcdburndialog.cpp:216
 #, kde-format
@@ -8203,6 +8668,11 @@ msgid ""
 "ul><p>Actually, the exact meaning is not defined and is player dependent."
 "<p><b>Most players ignore that value.<b>"
 msgstr ""
+"<p>Vidado-Limigo povas esti interpretita de la ludanta aparato.<p>La "
+"permesita intervalo iras de 0 al 3.<ul><li>0 = nelimigita, libere rigardebla "
+"por ĉiuj</li><li>3 = limigita , enhavo ne taŭga por aĝoj sub 18 jaroj</li></"
+"ul><p>Efektive, la preciza signifo ne estas difinita kaj dependas de ludanto."
+"<p><b>Plej multaj ludantoj ignoras tiun valoron.<b>"
 
 #: projects/k3bvcdburndialog.cpp:223
 #, kde-format
@@ -8220,6 +8690,14 @@ msgid ""
 "ahead issues when reading the last MPEG track if this parameter is set too "
 "low.<p>Allowed value content: [0..300]. Default: 150."
 msgstr ""
+"<p>Ĉi tiu opcio permesas agordi la nombron da malplenaj sektoroj aldonitaj "
+"antaŭ ol la elkonduka areo komenciĝas, t.e. la nombron da post-interspacaj "
+"sektoroj.<p>La ECMA-130-specifo postulas la lastan datumtrakon antaŭ la "
+"elkonduko. por porti post-interspacon de almenaŭ 150 sektoroj, kiu estas "
+"uzata kiel defaŭlta por ĉi tiu parametro.<p>Kelkaj operaciumoj povas "
+"renkonti I/O-erarojn pro antaŭlegaj problemoj dum legado de la lasta MPEG-"
+"trako se ĉi tiu parametro estas agordita tro malalta.<p>Valora enhavo "
+"permesata: [0..300]. Defaŭlta: 150."
 
 #: projects/k3bvcdburndialog.cpp:229
 #, kde-format
@@ -8228,6 +8706,9 @@ msgid ""
 "specification requires the pre-gaps to be at least 150 sectors long."
 "<p>Allowed value content: [0..300]. Default: 150."
 msgstr ""
+"<p>Uzita por agordi la antaŭ-interspacon por ĉiuj trakoj en sektoroj "
+"tutmonde.<p>La specifo postulas, ke la antaŭ-interspacoj estu almenaŭ 150 "
+"sektoroj.<p>Permesita valorenhavo: [0..300]. Defaŭlta: 150."
 
 #: projects/k3bvcdburndialog.cpp:233
 #, kde-format
@@ -8238,6 +8719,11 @@ msgid ""
 "<p>Allowed value content: [0..150]. Default: 30 for Video CD 1.0/1.1/2.0, "
 "otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0."
 msgstr ""
+"Marĝenoj estas uzataj por kompensi malprecizajn sektor-traktadajn aferojn "
+"sur CD-ROM-amaskomunikilaro. Interese, ili estis forlasitaj por Super Video "
+"KD.<p>Por Video KD 1.0/1.1/2.0 ĉi tiu marĝeno devus esti almenaŭ 15 sektoroj."
+"<p>Permesita valorenhavo: [0..150]. Defaŭlte: 30 por Video CD 1.0/1.1/2.0, "
+"alie (t.e. Super Video CD 1.0 kaj HQ-VCD 1.0) 0."
 
 #: projects/k3bvcdburndialog.cpp:237
 #, kde-format
@@ -8248,6 +8734,11 @@ msgid ""
 "<p>Allowed value content: [0..150]. Default: 45 for Video CD 1.0/1.1/2.0, "
 "otherwise 0."
 msgstr ""
+"<p>Marĝenoj estas uzataj por kompensi neprecizajn sektortraktadajn "
+"problemojn sur KD-ROM-a amaskomunikilaro. Interese, ili estis forlasitaj por "
+"Super Video KD.<p>Por Video KD 1.0/1.1/2.0 ĉi tiu marĝeno devus esti almenaŭ "
+"15 sektoroj.<p>Permesita valorenhavo: [0..150]. Defaŭlte: 45 por Video CD "
+"1.0/1.1/2.0, alie 0."
 
 #: projects/k3bvcdburndialog.cpp:252
 #, kde-format
@@ -8515,6 +9006,8 @@ msgid ""
 "<p>Target to be jumped to on time-out of <wait>.<p>If omitted (and <wait> is "
 "not set to an infinite time) one of the targets is selected at random."
 msgstr ""
+"<p>Celo al saltenda ĉe la tempo de <atendo>.<p>Se ellasita (kaj <atendo> ne "
+"estas agordita al senfina tempo) unu el la celoj estas elektita hazarde."
 
 #: projects/k3bvcdtrackdialog.cpp:253
 #, kde-format
@@ -8524,6 +9017,10 @@ msgid ""
 "setting for a play item consisting of one still picture and no audio is to "
 "loop once and have a delayed reactivity."
 msgstr ""
+"<p>Kiam reagemo estas prokrastita, oni rekomendas, ke la longeco de la "
+"referencita \"ludtrako\" ne estu pli ol 5 sekundoj.<p>La rekomendita agordo "
+"por ludaĵo konsistanta el unu senmova bildo kaj neniu audio estas: buklo "
+"unufoje kaj havi malfruan reagemon."
 
 #: projects/k3bvcdtrackdialog.cpp:257
 #, kde-format
@@ -8549,6 +9046,13 @@ msgid ""
 "is omitted, a default of `1' is used, i.e. the 'play track' will be "
 "displayed once."
 msgstr ""
+"<p>Tempoj por ripeti la reproduktadon de 'ludtrako'.<p>La reagemeca atributo "
+"kontrolas ĉu la reproduktado de 'ludtrako' estas finita, do prokrastita, "
+"antaŭ ol ekzekuti uzantan deĉenigon aŭ tuja salto estas farita.<p> Post kiam "
+"la specifita nombro da ripetoj finiĝis, la <atendo> tempo komencas kalkuli "
+"malantaŭen, krom se agordita al senfina atendotempo.<p>Se ĉi tiu elemento "
+"estas preterlasita, defaŭlta `1' estas uzata, t.e. la 'ludtrako. ' estos "
+"montrita unufoje."
 
 #: projects/k3bvcdtrackdialog.cpp:263
 #, kde-format
@@ -8593,7 +9097,7 @@ msgstr "Uzi la numerajn klavojn"
 #: projects/k3bvcdtrackdialog.cpp:450
 #, kde-format
 msgid "Reactivity delayed to the end of playing track"
-msgstr ""
+msgstr "Reaktiveco prokrastita ĝis la fino de ludado de trako"
 
 #: projects/k3bvcdtrackdialog.cpp:459 projects/k3bvcdtrackkeysmodel.cpp:143
 #, kde-format
@@ -8743,6 +9247,9 @@ msgid ""
 "VcdImager >= 0.7.12. You can find this on your distribution’s software "
 "repository or download it from https://www.gnu.org/software/vcdimager/"
 msgstr ""
+"Ne eblis trovi VcdImager ruleblan. Por krei Video-KD vi devas instali "
+"VcdImager >= 0.7.12. Vi povas trovi ĉi tion en la programara deponejo de via "
+"distribuo aŭ elŝuti ĝin de https://www.gnu.org/software/vcdimager/"
 
 #: projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
@@ -8757,6 +9264,10 @@ msgid ""
 "yet. That means you need to already have the VTS_X_YY.VOB and VTS_X_YY.IFO "
 "files."
 msgstr ""
+"Konsciu, ke vi devas provizi la kompletan Video DVD-dosierstrukturon. K3b "
+"ankoraŭ ne subtenas videotranskodigon kaj preparadon de videoobjektaj "
+"dosieroj. Tio signifas, ke vi devas jam havi la dosierojn VTS_X_YY.VOB kaj "
+"VTS_X_YY.IFO."
 
 #: projects/k3bvideodvdview.cpp:56
 #, kde-format
@@ -8882,6 +9393,11 @@ msgid ""
 "<p>This might be useful to rip a live album or a radio play.\n"
 "<p><b>Caution:</b> The file will have the name made from playlist pattern."
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, K3b kreos nur unu\n"
+"audiodosieron, negrave kiom da trakoj estas ŝiritaj. Ĉi tiu\n"
+"dosiero enhavos ĉiujn trakojn unu post la alia.\n"
+"<p>Ĉi tio povus esti utila por ŝiri koncertalbumon aŭ radioteatraĵon.\n"
+"<p><b>Atentu:</b> La dosiero havos la nomo farita de ludlisto ŝablono."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:117
@@ -8902,6 +9418,8 @@ msgid ""
 "<p>If this option is checked K3b will create a CDRWIN cue file which allows "
 "one to easily write a copy of the audio CD on other systems."
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, K3b kreos CDRWIN-signon-dosieron, kiu "
+"ebligas facile skribi kopion de la son-KD en aliaj sistemoj."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:151
@@ -9007,7 +9525,7 @@ msgstr "Lando"
 #: rip/categories.cpp:20
 #, kde-format
 msgid "Folk"
-msgstr ""
+msgstr "Folk"
 
 #: rip/categories.cpp:20
 #, kde-format
@@ -9060,7 +9578,7 @@ msgstr "Redakti la trakan informon"
 #: rip/k3baudiocdview.cpp:217
 #, kde-format
 msgid "Edit current track information"
-msgstr ""
+msgstr "Redaktu aktualajn informojn pri trako"
 
 #: rip/k3baudiocdview.cpp:222
 #, kde-format
@@ -9082,79 +9600,79 @@ msgstr "Komenci ekstrakti"
 #: rip/k3baudiocdview.cpp:229
 #, kde-format
 msgid "Start audio ripping process"
-msgstr ""
+msgstr "Komencu aŭdan ekstraktan procezon"
 
 #: rip/k3baudiocdview.cpp:234
 #, kde-format
 msgid "Query CD Database"
-msgstr ""
+msgstr "Pridemandu KD-Datumbazon"
 
 #: rip/k3baudiocdview.cpp:235
 #, kde-format
 msgid "Look for information on CDDB"
-msgstr ""
+msgstr "Serĉu informojn pri CDDB"
 
 #: rip/k3baudiocdview.cpp:240
 #, kde-format
 msgid "Read CD-Text"
-msgstr ""
+msgstr "Legu KD-Tekston"
 
 #: rip/k3baudiocdview.cpp:241
 #, kde-format
 msgid "Read CD-Text information"
-msgstr ""
+msgstr "Legu informojn pri KD-Teksto"
 
 #: rip/k3baudiocdview.cpp:246
 #, kde-format
 msgid "Load CD Info"
-msgstr ""
+msgstr "Ŝarĝu KD-Informojn"
 
 #: rip/k3baudiocdview.cpp:247
 #, kde-format
 msgid "Load track and album information"
-msgstr ""
+msgstr "Ŝarĝu informojn pri trako kaj albumo"
 
 #: rip/k3baudiocdview.cpp:254
 #, kde-format
 msgid "Save CD Info Locally"
-msgstr ""
+msgstr "Konservu KD-Informojn Loke"
 
 #: rip/k3baudiocdview.cpp:255
 #, kde-format
 msgid "Save track and album information to the local CDDB cache"
-msgstr ""
+msgstr "Konservu informojn pri trako kaj albumo en la loka CDDB-kaŝmemoro"
 
 #: rip/k3baudiocdview.cpp:260
 #, kde-format
 msgid "Show Data Part"
-msgstr ""
+msgstr "Montri datumparton"
 
 #: rip/k3baudiocdview.cpp:261
 #, kde-format
 msgid "Mounts the data part of CD"
-msgstr ""
+msgstr "Muntas la datumparton de KD"
 
 #: rip/k3baudiocdview.cpp:298 rip/k3bvideocdview.cpp:366
 #: rip/videodvd/k3bvideodvdrippingview.cpp:190
 #, kde-format
 msgid "Check Track"
-msgstr "Ŝalti trakon"
+msgstr "Marki trakon"
 
 #: rip/k3baudiocdview.cpp:298 rip/videodvd/k3bvideodvdrippingview.cpp:190
 #, kde-format
 msgid "Check Tracks"
-msgstr ""
+msgstr "Marki trakojn"
 
 #: rip/k3baudiocdview.cpp:300 rip/k3bvideocdview.cpp:370
 #: rip/videodvd/k3bvideodvdrippingview.cpp:192
 #, kde-format
 msgid "Uncheck Track"
-msgstr "Malŝalti trakon"
+msgstr "Malmarki trakon"
 
 #: rip/k3baudiocdview.cpp:300 rip/videodvd/k3bvideodvdrippingview.cpp:192
 #, kde-format
 msgid "Uncheck Tracks"
-msgstr ""
+msgstr "Malmarki trakojn"
 
 #: rip/k3baudiocdview.cpp:318 rip/k3bvideocdview.cpp:443
 #, kde-format
@@ -9169,7 +9687,7 @@ msgstr "Neniu trako elektita"
 #: rip/k3baudiocdview.cpp:339
 #, kde-format
 msgid "Multiple Tracks"
-msgstr ""
+msgstr "Pluraj Trakoj"
 
 #: rip/k3baudiocdview.cpp:341
 #, kde-format
@@ -9273,7 +9791,7 @@ msgstr "Konvertante sonajn trakojn el « %1 »"
 #: rip/k3baudioprojectconvertingjob.cpp:58
 #, kde-format
 msgid "Starting audio conversion."
-msgstr ""
+msgstr "Komencante sonkonverton."
 
 #: rip/k3baudioprojectconvertingjob.cpp:85
 #, kde-format
@@ -9363,7 +9881,7 @@ msgstr "KD ekstraktado"
 #: rip/k3baudiorippingdialog.cpp:173
 #, kde-format
 msgid "Do not read pregaps"
-msgstr ""
+msgstr "Ne legi antaŭbreĉojn"
 
 #: rip/k3baudiorippingdialog.cpp:191
 #, kde-format
@@ -9401,6 +9919,12 @@ msgid ""
 "In any case, when creating a K3b audio project, the pregaps will be "
 "regenerated.</p>"
 msgstr ""
+"<p>Se ĉi tiu opcio estas markita, K3b ne ŝiros la aŭdajn datumojn en la "
+"pregaps. Plej multaj aŭdspuroj enhavas malplenan pregapaĵon kiu ne apartenas "
+"al la trako mem.</p><p>Kvankam la defaŭlta konduto de preskaŭ ĉiuj "
+"ekstraktaj programoj estas inkluzivi la pregapojn por la plej multaj KD-oj, "
+"estas pli senco ignori ilin. Ĉiukaze, kreante K3b sonprojekton, la pregaps "
+"estos regeneritaj.</p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
@@ -9431,7 +9955,7 @@ msgstr "Titolo"
 #: rip/k3baudiotrackmodel.cpp:205
 #, kde-format
 msgid "Data Track"
-msgstr ""
+msgstr "Datumtrako"
 
 #: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
@@ -9485,6 +10009,22 @@ msgid ""
 "tr><tr><td>%e</td><td>file extension (if left out, it is added "
 "automatically)</td><td>%{e} or %{ext}</td></tr></table>"
 msgstr ""
+"<p><b>Specialaj ĉenoj:</b><p>La sekvaj ĉenoj estos anstataŭigitaj per sia "
+"respektiva signifo en ĉiu trakonomo.<br><em>Konsilo:</em> %A diferencas de "
+"%a nur pri sonmuzikoj aŭ kompilaĵoj.<p><table border=\"0\"><tr><td></"
+"td><td><em>Signifo</em></td><td><em>Alternativoj</em></td></tr><tr><td>%a</"
+"td><td>artisto de la trako</td><td>%{a} aŭ %{artist}</td></tr><tr><td>%t</"
+"td><td>titolo de la trako</td><td>%{t} aŭ %{title}</td></tr><tr><td>%n</"
+"td><td>traknumero</td><td>%{n} aŭ %{number}</td></tr><tr><td>%y</td><td>jaro "
+"de la KD</td><td>%{y} aŭ %{year}</td></tr><tr><td>%c</td><td>plilongigita "
+"trak-informo</td><td>%{c} aŭ %{comment}</td></tr><tr><td>%g</td><td>ĝenro de "
+"la KD</td><td>%{g} aŭ %{genre}</td></tr><tr><td>%A</td><td>albumartisto</"
+"td><td>%{A} aŭ %{albumartist }</td></tr><tr><td>%T</td><td>albuma titolo</"
+"td><td>%{T} aŭ %{albumtitle}</td></tr> <tr><td>%C</td><td>plilongigitaj KD-"
+"informoj</td><td>%{C} aŭ %{albumcomment}</td></tr><tr><td>%d</td><td>nuna "
+"dato</td><td>%{d} aŭ %{date}</td></tr><tr><td>%e</td><td>dosiera etendo (se "
+"forlasita, ĝi estas aldonita aŭtomate)</td><td>%{e} aŭ %{ext}</td></tr></"
+"table>"
 
 #: rip/k3bcddbpatternwidget.cpp:145
 #, kde-format
@@ -9505,13 +10045,26 @@ msgid ""
 "same characters as the special strings, which means that the X in @X{...} "
 "can be one character out of [atnycgATCd]."
 msgstr ""
+"<p><b>Kondiĉa inkludo:</b><p>Ĉi tiuj ŝablonoj ebligas selekteme inkluzivi "
+"tekstojn, depende de la valoro de CDDB-enskriboj. Vi povas elekti nur "
+"inkludi aŭ ekskludi tekstojn se unu el la enskriboj estas malplena, aŭ se ĝi "
+"havas specifan valoron. Ekzemploj:<ul><li>@T{TEKSTO} inkluzivas TEKTON se la "
+"albumtitolo estas specifita<li>!T{TEKSTO} inkluzivas TEKSTON se la "
+"albumtitolo ne estas specifita<li>@C='Soundtrack'{TEXT} inkluzivas TEKSTO se "
+"la plilongigita informo de la KD estas nomita Soundtrack<li>!"
+"C='Soundtrack'{TEKSTO} inkluzivas TEKSTO se la KD etendita informo estas io "
+"alia krom Soundtrack<li>Eblas ankaŭ inkluzivi specialajn kordojn en tekstoj "
+"kaj kondiĉoj, ekz. !a='%A'{%a} nur inkluzivas la artistinformojn de la "
+"titolo se ĝi ne diferencas de la albumartisto.</ul><p>Kondiĉaj inkluzivas "
+"uzi la samajn signojn kiel la specialaj ĉenoj, kio signifas, ke la X en "
+"@X{...} povas esti unu signo el [atnycgATCd]."
 
 #: rip/k3bmassaudioencodingjob.cpp:177
 #, kde-format
 msgid "1 track (encoding to %2)"
 msgid_plural "%1 tracks (encoding to %2)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 trako (kodante al %2)"
+msgstr[1] "%1 trakoj (kodante al %2)"
 
 #: rip/k3bmassaudioencodingjob.cpp:182
 #, kde-format
@@ -9576,6 +10129,8 @@ msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
+"Vi povas trovi ĉi tion en la programara deponejo de via distribuo aŭ elŝuti "
+"ĝin de https://www.gnu.org/software/vcdimager/"
 
 #: rip/k3bvideocdrip.cpp:101
 #, kde-format
@@ -9820,12 +10375,12 @@ msgstr "Malŝalti ĉion"
 #: rip/k3bvideocdview.cpp:378
 #, kde-format
 msgid "View Files"
-msgstr ""
+msgstr "Vidi Dosieroj"
 
 #: rip/k3bvideocdview.cpp:379
 #, kde-format
 msgid "View plain data files"
-msgstr ""
+msgstr "Vidu simplajn datumdosierojn"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:21
@@ -10079,8 +10634,8 @@ msgstr "Videa grandeco"
 msgctxt "Ch is short for Channels"
 msgid "%1Ch"
 msgid_plural "%1Ch"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1Kan"
+msgstr[1] "%1Kan"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:323
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:353
@@ -10126,7 +10681,7 @@ msgstr[1] "Trakodante %1 titolojn al %2/%3"
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
 #, kde-format
 msgid "Successfully ripped title %1 to '%2'"
-msgstr ""
+msgstr "Sukcese ekstraktis titolon %1 al '%2'"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:143
 #, kde-format
@@ -10161,7 +10716,7 @@ msgstr "Fiaskis determini sekciajn valorojn por la titolo %1"
 #: rip/videodvd/k3bvideodvdrippingview.cpp:79
 #, kde-format
 msgid "Show files"
-msgstr ""
+msgstr "Montri dosierojn"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:80
 #, kde-format
@@ -10169,6 +10724,8 @@ msgid ""
 "Shows plain Video DVD vob files from the DVD (including decryption) for "
 "further processing with another application"
 msgstr ""
+"Montras simplajn Video-DVD-vob-dosierojn de la DVD (inkluzive de malĉifrado) "
+"por plua prilaborado per alia aplikaĵo"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
 #, kde-format
@@ -10254,6 +10811,12 @@ msgid ""
 "you intend to make a copy of the entire Video DVD including all menus and "
 "extras it is recommended to use the K3b Copy tool."
 msgstr ""
+"<p>Elŝiras unuopajn titolojn de video DVD en kunpremitan formaton kiel XviD. "
+"Menuaj strukturoj estas tute ignoritaj.<p>Se vi intencas kopii la simplajn "
+"Video-DVD-vob-dosierojn el la DVD (inkluzive de ĉifrado) por plua "
+"prilaborado per alia aplikaĵo, bonvolu uzi la butonon \"Montri dosierojn\"."
+"<p>Se vi intencas por fari kopion de la tuta Video DVD inkluzive de ĉiuj "
+"menuoj kaj ekstraĵoj rekomendas uzi la K3b Kopiilon."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
 msgid "Keep original dimensions"
@@ -10271,7 +10834,7 @@ msgstr "320×? (aŭtomata alto)"
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:179
 #, kde-format
 msgid "auto"
-msgstr "aŭto"
+msgstr "aŭtomata"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:278
 #, kde-format
@@ -10296,6 +10859,25 @@ msgid ""
 "table><p><em>Hint: K3b also accepts slight variations of the long special "
 "strings. One can, for example, leave out the underscores.</em>"
 msgstr ""
+"<p><b>Specialaj ĉenoj de ŝablonoj:</b><p>La sekvaj ĉenoj estos "
+"anstataŭigitaj per sia respektiva signifo en ĉiu trakonomo.<br><p><table "
+"border=\"0\"><tr><td></td><td><em>Signifo</em></td><td><em>Alternativoj</"
+"em></td></tr><tr><td>%t</td><td>titolnumero</td><td>%{t} aŭ %{title_number}</"
+"td></tr><tr><td>%i</td><td>voluma id (plejparte la nomo de la Video DVD)</"
+"td><td>%{i} aŭ %{volume_id}</td></tr><tr><td>%b</td><td>beligita volumo id</"
+"td><td>%{b} aŭ %{beautified_volume_id}</td></tr><tr><td>%l</td><td>du signoj "
+"lingvokodo</td><td>%{l} aŭ %{lang_code}</td></tr><tr><td>%n</td><td>lingva "
+"nomo</td><td>%{n} aŭ %{lang_name }</td></tr><tr><td>%a</td><td>sonformato "
+"(sur la Video DVD)</td><td>%{a} aŭ %{audio_format}</td></tr><tr><td>%c</"
+"td><td>nombro da sonkanaloj (sur la Video-DVD)</td><td>%{c} aŭ %{channels}</"
+"td></tr><tr><td>%v</td><td>grandeco de la originala video</td><td>%{v} aŭ "
+"%{orig_video_size}</td></tr><tr><td>%s</td><td>grandeco de la rezulta video "
+"(<em>Atentu: aŭtomataj tondaj valoroj ne estas konsiderataj.</em>)</td><td>"
+"%{s} aŭ %{video_size}</td></tr><tr><td>%r</td><td>proporcio de la originala "
+"video</td><td>%{r} aŭ %{aspect_ratio}</td></tr><tr><td>%d</td><td>aktuala "
+"dato</td><td>%{d} aŭ %{date}</td></tr></table><p><em>Konsilo: K3b ankaŭ "
+"akceptas etajn variaĵojn de la longaj specialaj kordoj. Oni povas, ekzemple, "
+"ellasi la substrekojn.</em>"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:331
 #, kde-format
