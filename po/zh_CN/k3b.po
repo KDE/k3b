@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2023-03-27 11:58\n"
+"PO-Revision-Date: 2023-04-10 14:10\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -7940,10 +7940,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "图像文件夹“%1”不存在。您想要 K3b 创建它吗？"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "创建文件夹"
+msgstr ""
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
