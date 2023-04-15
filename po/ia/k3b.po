@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2023-04-09 22:23+0200\n"
+"PO-Revision-Date: 2023-04-14 22:58+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -2445,7 +2445,7 @@ msgid ""
 msgstr ""
 
 #: k3blsofwrapperdialog.cpp:100
-#, fuzzy, kde-format
+#, kde-format
 msgid "www"
 msgstr "www"
 
