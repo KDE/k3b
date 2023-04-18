@@ -11,13 +11,13 @@
 # javier Vinal <fjvinal@gmail.com>, 2009, 2010.
 # Javier Viñal <fjvinal@gmail.com>, 2010, 2012, 2013, 2014.
 # Sergio Ahumada <sahumada@texla.cl>, 2015.
-# Víctor Rodrigo Córdoba <vrcordoba@gmail.com>, 2017, 2018, 2019, 2022.
+# Víctor Rodrigo Córdoba <vrcordoba@gmail.com>, 2017, 2018, 2019, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2022-11-05 17:23+0100\n"
+"PO-Revision-Date: 2023-04-15 17:47+0200\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2602,7 +2602,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2614,12 +2614,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "¿Matar los procesos?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Matar"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -7338,6 +7338,7 @@ msgstr "Personalizado (%1)"
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
 msgstr ""
+"(K3b::DataImageSettingsWidget) encontró las preferencias predeterminadas:"
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -8338,10 +8339,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "La carpeta imagen «%1» no existe. ¿Desea qué K3b la cree?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Crear carpeta"
+msgstr "¿Crear carpeta?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
