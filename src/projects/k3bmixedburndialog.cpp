@@ -81,12 +81,18 @@ void K3b::MixedBurnDialog::setupSettingsPage()
 
     QGroupBox* groupDataMode = new QGroupBox( i18n("Datatrack Mode"), w );
     m_dataModeWidget = new K3b::DataModeWidget( groupDataMode );
+    QVBoxLayout* groupDataModeLayout = new QVBoxLayout( groupDataMode );
+    groupDataModeLayout->addWidget( m_dataModeWidget );
 
     QGroupBox* groupNormalize = new QGroupBox( i18n("Misc"), w );
     m_checkNormalize = K3b::StdGuiItems::normalizeCheckBox( groupNormalize );
+    QVBoxLayout* groupNormalizeLayout = new QVBoxLayout( groupNormalize );
+    groupNormalizeLayout->addWidget( m_checkNormalize );
 
     QGroupBox* groupMixedType = new QGroupBox( i18n("Mixed Mode Type"), w );
     m_comboMixedModeType = new K3b::IntMapComboBox( groupMixedType );
+    QVBoxLayout* groupMixedTypeLayout = new QVBoxLayout( groupMixedType );
+    groupMixedTypeLayout->addWidget( m_comboMixedModeType );
 
     m_comboMixedModeType->insertItem( K3b::MixedDoc::DATA_SECOND_SESSION,
                                       i18n("Data in second session (CD-Extra)"),
