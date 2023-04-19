@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:45+0000\n"
+"POT-Creation-Date: 2023-04-19 00:48+0000\n"
 "PO-Revision-Date: 2019-02-10 11:11-0800\n"
 "Last-Translator: A S Alam <alam.yellow@gmail.com>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -4218,8 +4218,8 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: option/base_k3bmiscoptiontab.ui:20 option/k3boptiondialog.cpp:129
-#: projects/k3bdataburndialog.cpp:156 projects/k3bmixedburndialog.cpp:85
-#: projects/k3bmixedburndialog.cpp:128 projects/k3bmovixburndialog.cpp:104
+#: projects/k3bdataburndialog.cpp:156 projects/k3bmixedburndialog.cpp:87
+#: projects/k3bmixedburndialog.cpp:134 projects/k3bmovixburndialog.cpp:104
 #: projects/k3bvcdburndialog.cpp:360
 #, kde-format
 msgid "Misc"
@@ -6288,7 +6288,7 @@ msgstr "ਚੋਣਵੇਂ ਰੂਪ ਵਿੱਚ ਈਮੇਜ਼ ਲਈ ਪਾ�
 msgid "Wri&te Rip Audio files to:"
 msgstr "ਈਮੇਜ਼ ਫਾਇਲਾਂ ਲਿਖੋ(&t):"
 
-#: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:278
+#: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:284
 #, kde-format
 msgid ""
 "<p><b>External program <em>normalize</em> is not installed.</b><p>K3b uses "
@@ -6297,7 +6297,7 @@ msgid ""
 msgstr ""
 
 #: projects/k3baudioburndialog.cpp:290 projects/k3baudioburndialog.cpp:309
-#: projects/k3bmixedburndialog.cpp:285 projects/k3bmixedburndialog.cpp:304
+#: projects/k3bmixedburndialog.cpp:291 projects/k3bmixedburndialog.cpp:310
 #, kde-format
 msgid ""
 "<p>K3b is not able to normalize audio tracks when burning on-the-fly. The "
@@ -6306,13 +6306,13 @@ msgid ""
 msgstr ""
 
 #: projects/k3baudioburndialog.cpp:294 projects/k3baudioburndialog.cpp:313
-#: projects/k3bmixedburndialog.cpp:289 projects/k3bmixedburndialog.cpp:308
+#: projects/k3bmixedburndialog.cpp:295 projects/k3bmixedburndialog.cpp:314
 #, kde-format
 msgid "Disable normalization"
 msgstr "ਨਾਰਮਲਾਈਜ਼ੇਸ਼ਨ ਆਯੋਗ"
 
 #: projects/k3baudioburndialog.cpp:295 projects/k3baudioburndialog.cpp:314
-#: projects/k3bmixedburndialog.cpp:290 projects/k3bmixedburndialog.cpp:309
+#: projects/k3bmixedburndialog.cpp:296 projects/k3bmixedburndialog.cpp:315
 #, kde-format
 msgid "Disable on-the-fly burning"
 msgstr "ਆਨ-ਫਾਇਲ ਲਿਖਣ ਆਯੋਗ"
@@ -7510,17 +7510,17 @@ msgstr "ਮੀਡਿਆ ਅਕਾਰ ਲਈ ਸੱਜਾ ਬਟਨ ਦੱਬੋ"
 msgid "Mixed Project"
 msgstr "ਰਲਵਾਂ ਪਰੋਜੈਕਟ"
 
-#: projects/k3bmixedburndialog.cpp:88
+#: projects/k3bmixedburndialog.cpp:92
 #, kde-format
 msgid "Mixed Mode Type"
 msgstr "ਮਿਕਸਡ ਮੋਡ ਟਾਈਪ"
 
-#: projects/k3bmixedburndialog.cpp:92
+#: projects/k3bmixedburndialog.cpp:98
 #, kde-format
 msgid "Data in second session (CD-Extra)"
 msgstr "ਦੂਜੇ ਸ਼ੈਸ਼ਨ ਵਿੱਚ ਡਾਟਾ (CD-ਹੋਰ)"
 
-#: projects/k3bmixedburndialog.cpp:93
+#: projects/k3bmixedburndialog.cpp:99
 #, kde-format
 msgid ""
 "<em>Blue book CD</em><br>K3b will create a multisession CD with 2 sessions. "
@@ -7534,27 +7534,27 @@ msgid ""
 "reading a blue book CD since it is a multisession CD."
 msgstr ""
 
-#: projects/k3bmixedburndialog.cpp:109
+#: projects/k3bmixedburndialog.cpp:115
 #, kde-format
 msgid "Data in first track"
 msgstr "ਡਾਟਾ ਪਹਿਲੇਂ ਟਰੈਕ 'ਚ"
 
-#: projects/k3bmixedburndialog.cpp:110
+#: projects/k3bmixedburndialog.cpp:116
 #, kde-format
 msgid "K3b will write the data track before all audio tracks."
 msgstr "K3b ਡਾਟਾ ਟਰੈਕਾਂ ਨੂੰ ਸਭ ਆਡੀਓ ਟਰੈਕਾਂ ਤੋਂ ਪਹਿਲਾਂ ਲਿਖੇਗਾ।"
 
-#: projects/k3bmixedburndialog.cpp:113
+#: projects/k3bmixedburndialog.cpp:119
 #, kde-format
 msgid "Data in last track"
 msgstr "ਡਾਟਾ ਆਖਰੀ ਟਰੈਕ 'ਚ"
 
-#: projects/k3bmixedburndialog.cpp:114
+#: projects/k3bmixedburndialog.cpp:120
 #, kde-format
 msgid "K3b will write the data track after all audio tracks."
 msgstr "K3b ਡਾਟਾ ਟਰੈਕ ਨੂੰ ਸਭ ਆਡੀਓ ਟਰੈਕਾਂ ਤੋਂ ਬਾਅਦ ਲਿਖੇਗਾ।"
 
-#: projects/k3bmixedburndialog.cpp:117
+#: projects/k3bmixedburndialog.cpp:123
 #, kde-format
 msgid ""
 "<b>Caution:</b> The last two modes should only be used for CDs that are "

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:45+0000\n"
+"POT-Creation-Date: 2023-04-19 00:48+0000\n"
 "PO-Revision-Date: 2023-04-03 16:29+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -4500,8 +4500,8 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: option/base_k3bmiscoptiontab.ui:20 option/k3boptiondialog.cpp:129
-#: projects/k3bdataburndialog.cpp:156 projects/k3bmixedburndialog.cpp:85
-#: projects/k3bmixedburndialog.cpp:128 projects/k3bmovixburndialog.cpp:104
+#: projects/k3bdataburndialog.cpp:156 projects/k3bmixedburndialog.cpp:87
+#: projects/k3bmixedburndialog.cpp:134 projects/k3bmovixburndialog.cpp:104
 #: projects/k3bvcdburndialog.cpp:360
 #, kde-format
 msgid "Misc"
@@ -6773,7 +6773,7 @@ msgstr ""
 msgid "Wri&te Rip Audio files to:"
 msgstr "Sc&rivi i file audio estratti su:"
 
-#: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:278
+#: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:284
 #, kde-format
 msgid ""
 "<p><b>External program <em>normalize</em> is not installed.</b><p>K3b uses "
@@ -6786,7 +6786,7 @@ msgstr ""
 "installare detta applicazione."
 
 #: projects/k3baudioburndialog.cpp:290 projects/k3baudioburndialog.cpp:309
-#: projects/k3bmixedburndialog.cpp:285 projects/k3bmixedburndialog.cpp:304
+#: projects/k3bmixedburndialog.cpp:291 projects/k3bmixedburndialog.cpp:310
 #, kde-format
 msgid ""
 "<p>K3b is not able to normalize audio tracks when burning on-the-fly. The "
@@ -6798,13 +6798,13 @@ msgstr ""
 "normalizzazione di un insieme di file audio."
 
 #: projects/k3baudioburndialog.cpp:294 projects/k3baudioburndialog.cpp:313
-#: projects/k3bmixedburndialog.cpp:289 projects/k3bmixedburndialog.cpp:308
+#: projects/k3bmixedburndialog.cpp:295 projects/k3bmixedburndialog.cpp:314
 #, kde-format
 msgid "Disable normalization"
 msgstr "Disabilita normalizzazione"
 
 #: projects/k3baudioburndialog.cpp:295 projects/k3baudioburndialog.cpp:314
-#: projects/k3bmixedburndialog.cpp:290 projects/k3bmixedburndialog.cpp:309
+#: projects/k3bmixedburndialog.cpp:296 projects/k3bmixedburndialog.cpp:315
 #, kde-format
 msgid "Disable on-the-fly burning"
 msgstr "Disabilita la scrittura al volo"
@@ -8103,17 +8103,17 @@ msgstr "Clic su tasto destro per le dimensioni del supporto"
 msgid "Mixed Project"
 msgstr "Progetto misto"
 
-#: projects/k3bmixedburndialog.cpp:88
+#: projects/k3bmixedburndialog.cpp:92
 #, kde-format
 msgid "Mixed Mode Type"
 msgstr "Tipo modalità mista"
 
-#: projects/k3bmixedburndialog.cpp:92
+#: projects/k3bmixedburndialog.cpp:98
 #, kde-format
 msgid "Data in second session (CD-Extra)"
 msgstr "Dati nella seconda sessione (CD-Extra)"
 
-#: projects/k3bmixedburndialog.cpp:93
+#: projects/k3bmixedburndialog.cpp:99
 #, kde-format
 msgid ""
 "<em>Blue book CD</em><br>K3b will create a multisession CD with 2 sessions. "
@@ -8137,27 +8137,27 @@ msgstr ""
 "riscontrare problemi nel leggere un CD blue book dal momento che è un CD "
 "multisessione."
 
-#: projects/k3bmixedburndialog.cpp:109
+#: projects/k3bmixedburndialog.cpp:115
 #, kde-format
 msgid "Data in first track"
 msgstr "Dati nella prima traccia"
 
-#: projects/k3bmixedburndialog.cpp:110
+#: projects/k3bmixedburndialog.cpp:116
 #, kde-format
 msgid "K3b will write the data track before all audio tracks."
 msgstr "K3b scriverà la traccia dati prima di tutte le tracce audio."
 
-#: projects/k3bmixedburndialog.cpp:113
+#: projects/k3bmixedburndialog.cpp:119
 #, kde-format
 msgid "Data in last track"
 msgstr "Dati nell'ultima traccia"
 
-#: projects/k3bmixedburndialog.cpp:114
+#: projects/k3bmixedburndialog.cpp:120
 #, kde-format
 msgid "K3b will write the data track after all audio tracks."
 msgstr "K3b scriverà la traccia dati dopo tutte le tracce audio."
 
-#: projects/k3bmixedburndialog.cpp:117
+#: projects/k3bmixedburndialog.cpp:123
 #, kde-format
 msgid ""
 "<b>Caution:</b> The last two modes should only be used for CDs that are "
