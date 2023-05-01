@@ -8,14 +8,14 @@
 # Xosé <xosecalvo@gmail.com>, 2012.
 # Miguel Branco <mgl.branco@gmail.com>, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2013, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2020, 2023.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2020-01-11 11:22+0100\n"
+"PO-Revision-Date: 2023-04-30 12:08+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.3\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -50,6 +50,7 @@ msgstr ""
 msgid "WavPack"
 msgstr "WavPack"
 
+# well-spelled: Monkey's
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
 msgid "Monkey's Audio (APE)"
@@ -582,6 +583,7 @@ msgstr "Avanzado"
 msgid "Encoder Quality"
 msgstr "Calidade do codificador"
 
+# well-spelled: psicoacústico
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_spinEncoderQuality)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:277
 #, kde-format
@@ -790,11 +792,11 @@ msgstr ""
 "precisa menos bits por mor dunha menor complexidade.\n"
 "<p><b>Estéreo combinado</b><br>\n"
 "Neste modo, o codificador emprega as correlacións entre ambas as canles. O "
-"sinal matrizarase nunha suma («media»), calculada por L+R, e nun sinal resta "
-"(«lado»), calculada por L-R, e resérvanse máis bits para a canle media. Isto "
-"aumenta a largura de banda se o sinal non ten demasiada separación no "
-"estéreo, polo tanto, gañarase en calidade de codificación de maneira "
-"significativa.\n"
+"sinal procesarase por matriz nunha suma («media»), calculada por L+R, e nun "
+"sinal resta («lado»), calculada por L-R, e resérvanse máis bits para a canle "
+"media. Isto aumenta a largura de banda se o sinal non ten demasiada "
+"separación no estéreo, polo tanto, gañarase en calidade de codificación de "
+"maneira significativa.\n"
 "<p><b>Mono</b><br>\n"
 "A entrada codifícase como un sinal mono. Se era un sinal estéreo, "
 "converterase a mono. A mestura calcúlase como a suma da canle esquerda e "
@@ -842,17 +844,17 @@ msgstr "Calidade baixa (90 kbps)"
 #: ../plugins/encoder/lame/k3blametyes.h:70
 #, kde-format
 msgid "Portable (average 115 kbps)"
-msgstr "Portábel (115 kbps de media)"
+msgstr "Portátil (115 kbps de media)"
 
 #: ../plugins/encoder/lame/k3blametyes.h:71
 #, kde-format
 msgid "Portable (average 130 kbps)"
-msgstr "Portábel (130 kbps de media)"
+msgstr "Portátil (130 kbps de media)"
 
 #: ../plugins/encoder/lame/k3blametyes.h:72
 #, kde-format
 msgid "Portable (average 160 kbps)"
-msgstr "Portábel (160 kbps de media)"
+msgstr "Portátil (160 kbps de media)"
 
 #: ../plugins/encoder/lame/k3blametyes.h:74
 #, kde-format
@@ -1028,11 +1030,11 @@ msgstr ""
 "lineal sen signo, u-law (logarítmico), A-law (logarítmico), ADPCM, "
 "IMA_ADPCM, GSM, ou número enteiro.</p>\n"
 "<p><b>U-law</b> (realmente unha abreviatura de mu-law) e <b>A-law</b> son os "
-"estándares de EEUU e internacionais para a compresión logarítmica de son "
-"telefónico. Cando está descomprimido, u-law ten aproximadamente a precisión "
-"do son PCM de 14 bits e A-law a do son PCM de 13 bits. Os datos de A-law e u-"
-"law son codificados algunhas veces empregando unha ordenación de bits "
-"invertida (p.ex. MSB vólvese LSB).<br><b>ADPCM </b> é unha forma de "
+"estándares dos Estados Unidos e internacionais para a compresión logarítmica "
+"de son telefónico. Cando está descomprimido, u-law ten aproximadamente a "
+"precisión do son PCM de 14 bits e A-law a do son PCM de 13 bits. Os datos de "
+"A-law e u-law son codificados algunhas veces empregando unha ordenación de "
+"bits invertida (p.ex. MSB vólvese LSB).<br><b>ADPCM </b> é unha forma de "
 "comprensión do son que ten un bo compromiso entre boa calidade de son e "
 "tempo de codificación/descodificación rápido. Emprégase para a comprensión "
 "de son telefónico e en lugares onde a alta calidade non é importante. Cando "
@@ -1040,11 +1042,11 @@ msgstr ""
 "Versións populares de ADPCM inclúen G.726, MS ADPCM, e IMA ADPCM. Ten "
 "distintos significados en distintos xestores dos ficheiros. Nos ficheiros ."
 "wav representa ficheiros MS ADPCM, en todos os outros significa G.726 ADPCM."
-"<br><b>IMA ADPCCM</b> é unha forma específica de compresión ADPCM, "
+"<br><b>IMA ADPCM</b> é unha forma específica de compresión ADPCM, "
 "lixeiramente simple e con menor calidade que o ADPCM de Microsoft. IMA ADPCM "
 "chámase tamén DVI ADPCM.<br><b>GSM</b> é un estándar empregado para a "
 "comprensión de son telefónico nos países europeos e está a gañar "
-"popularidade pola sua boa calidade. Xeralmente fai falla moita CPU cando se "
+"popularidade pola súa boa calidade. Xeralmente fai falla moita CPU cando se "
 "traballa con datos de son GSM.</p><p><em>Descrición baseada na páxina de "
 "manual de SoX</em></p>"
 
@@ -1171,6 +1173,7 @@ msgstr "Amiga 8SVX"
 msgid "AIFF"
 msgstr "AIFF"
 
+# well-spelled: AVR
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:288
 #, kde-format
 msgid "Audio Visual Research"
@@ -1307,7 +1310,7 @@ msgstr "Renomear os ficheiros de son"
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:166
 #, kde-format
 msgid "Based on meta info"
-msgstr "Baseado na metainformación"
+msgstr "Baseado nos metadatos"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:186
 #, kde-format
@@ -1332,7 +1335,7 @@ msgstr "Feito."
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:383
 #, kde-format
 msgid "Rename audio files based on their meta info."
-msgstr "Renomea ficheiros de son baseándose na súa metainformación."
+msgstr "Renomea ficheiros de son baseándose nos seus metadatos."
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:42
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:68
@@ -1367,10 +1370,11 @@ msgstr "Proxecto de son"
 msgid "CDDB error"
 msgstr "Erro de CDDB"
 
+# well-spelled: kreador
 #: k3b.cpp:225
 #, kde-format
 msgid "K3b - The CD and DVD Kreator"
-msgstr "K3b - O Kreador de CD e DVD"
+msgstr "K3b - O kreador de CD e DVD"
 
 #: k3b.cpp:287
 #, kde-format
@@ -1642,7 +1646,7 @@ msgstr "Non se puido abrir o documento."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "O proxecto <resource>%1</resource> ten datos sen gardar."
 
 #: k3b.cpp:896
 #, kde-format
@@ -2284,7 +2288,7 @@ msgstr "Identificador do conxunto de volumes:"
 #: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
 #, kde-format
 msgid "Publisher Id:"
-msgstr "Identificador do publicador:"
+msgstr "Identificador editorial:"
 
 #: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:225
 #, kde-format
@@ -3785,8 +3789,8 @@ msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 msgstr ""
-"Por libsamplerate, que se emprega para a remostraxe xenérica na "
-"infraestrutura descodificadora de son."
+"Para libsamplerate, que se usa para cambiar de maneira xenérica a taxa de "
+"mostras na infraestrutura descodificadora de son."
 
 #: main.cpp:71
 #, kde-format
@@ -4352,8 +4356,8 @@ msgid ""
 msgstr ""
 "<p>Se marca esta opción, K3b desactiva a corrección de erros ECC/EDC da "
 "unidade de orixe. Deste xeito os sectores ilexíbeis poden lerse. <p>Isto "
-"pode ser útil para clonar CD con protección anti-copia baseada en sectores "
-"corrompidos."
+"pode ser útil para clonar CD con protección contra copias baseada en "
+"sectores corrompidos."
 
 #: misc/k3bmediacopydialog.cpp:213
 #, kde-format
@@ -4775,6 +4779,7 @@ msgstr ""
 "Mostrar os elementos avanzados da interface, como permitir escoller entre "
 "«cdrecord» e «cdrdao»."
 
+# well-spelled: RW
 #: option/k3badvancedoptiontab.cpp:92
 #, kde-format
 msgid "Automatically erase CD-RWs and DVD-RWs without asking"
@@ -4831,6 +4836,7 @@ msgstr ""
 "capacidade oficial. É posíbel determinar primeiro a capacidade máxima real "
 "do disco mediante unha copia simulada."
 
+# well-spelled: RW
 #: option/k3badvancedoptiontab.cpp:115
 #, kde-format
 msgid ""
@@ -5357,7 +5363,7 @@ msgid ""
 "or DVD.</b>"
 msgstr ""
 "<p>Se marca esta opción K3b xera os rexistros do protocolo de intercambio do "
-"usp do sistema (SUSP) especificado polo protocolo de intercambio Rock Ridge "
+"uso do sistema (SUSP) especificado polo protocolo de intercambio Rock Ridge "
 "(IEEE-P1282).\n"
 "<p>Rock Ridge amplía o sistema de ficheiros ISO 9660 con funcionalidades "
 "equivalentes aos sistemas de ficheiros UNIX (permisos, ligazóns simbólicas, "
@@ -5827,7 +5833,7 @@ msgstr "&ISRC:"
 #: projects/base_k3baudiotrackwidget.ui:170
 #, kde-format
 msgid "Preemph&asis"
-msgstr "Pre&amplificación"
+msgstr "Énf&ase previo"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPreemphasis)
 #: projects/base_k3baudiotrackwidget.ui:173
@@ -6049,7 +6055,7 @@ msgstr "Sistema de ficheiros"
 #: projects/base_k3bdataimagesettings.ui:56
 #, kde-format
 msgid "File system presets"
-msgstr "Preconfiguración do sistema de ficheiros"
+msgstr "Predefinición do sistema de ficheiros"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonCustomPictureSize)
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonCustomFilesystems)
@@ -6194,7 +6200,7 @@ msgstr ""
 "Se marca esta opción K3b retira todos os espazos dos nomes dos ficheiros."
 "<br>\n"
 "Exemplo: «o meu ficheiro.ext» converterase en «omeuficheiro.ext»\n"
-"<p><b>Retiración mellorada</b><br>\n"
+"<p><b>Retirada mellorada</b><br>\n"
 "Se marca esta opción K3b retira todos os espazos dos nomes dos ficheiros e "
 "pon en maiúscula as letras que fosen despois dun espazo.<br>\n"
 "Exemplo: «o meu ficheiro.ext» converterase en «oMeuFicheiro.ext»\n"
@@ -6418,7 +6424,7 @@ msgstr ""
 "<p>Aquí pode especificar as opcións de MPlayer que está seguro que nunca se "
 "empregarán.\n"
 "<p>Teñen que separarse por espazos:\n"
-"<pre>opc1 opc2 opc3</pre>"
+"<pre>opción1 opción2 opción3</pre>"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, m_editAdditionalMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:96
@@ -6436,7 +6442,7 @@ msgid ""
 msgstr ""
 "<p>As opcións de MPlayer que se deberán empregar en calquera caso.\n"
 "<p>Teñen que separarse por espazos:\n"
-"<pre>opc1 opc2 opc3</pre>"
+"<pre>opción1 opción2 opción3</pre>"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel6)
 #: projects/base_k3bmovixoptionswidget.ui:108
@@ -6722,7 +6728,7 @@ msgstr ""
 "primeiro silencio previo conterá a primeira pista completa. <p>Precisará "
 "rebobinar desde o inicio do CD para escoitar a primeira pista. Próbeo, é "
 "bastante curioso.<p> <b>Esta funcionalidade só está dispoñíbel no modo DAO "
-"cando se grava con «cdrao»."
+"cando se grava con «cdrdao»."
 
 #: projects/k3baudioburndialog.cpp:119 projects/k3baudioburndialog.cpp:120
 #, kde-format
@@ -7005,7 +7011,7 @@ msgstr "Busca en MusicBrainz"
 #: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
 #, kde-format
 msgid "Try to determine meta information over the Internet"
-msgstr "Intentar determinar a metainformación en Internet"
+msgstr "Intentar determinar os metadatos en Internet"
 
 #: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:128
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
@@ -7228,9 +7234,9 @@ msgid ""
 "Presets which allow for a quick selection of the most frequently used "
 "settings."
 msgstr ""
-"<p><b>Preconfiguracións do sistema de ficheiros</b><p>K3b fornece as "
-"seguintes preconfiguracións para o sistema de ficheiros que permiten unha "
-"escolla rápida das configuracións usadas máis frecuentemente."
+"<p><b>Predefinicións do sistema de ficheiros</b><p>K3b fornece as seguintes "
+"predefinicións para o sistema de ficheiros que permiten unha escolla rápida "
+"das configuracións usadas máis frecuentemente."
 
 #: projects/k3bdataimagesettingswidget.cpp:146
 #, kde-format
@@ -8435,7 +8441,7 @@ msgid ""
 "This controls whether to update the scan data information contained in the "
 "MPEG-2 video streams."
 msgstr ""
-"Isto controla se actualizar a información dos datos extraidos contidos nos "
+"Isto controla se actualizar a información dos datos extraídos contidos nos "
 "fluxos de vídeo MPEG-2."
 
 #: projects/k3bvcdburndialog.cpp:115
@@ -8638,6 +8644,7 @@ msgstr ""
 "desactive a detección automática. Isto é útil para lectores DVD "
 "incompatíbeis con SVCD.</p>"
 
+# well-spelled: SVCD
 #: projects/k3bvcdburndialog.cpp:180
 #, kde-format
 msgid ""
@@ -8646,11 +8653,12 @@ msgid ""
 "b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</"
 "li></ul>"
 msgstr ""
-"<ul> <li>Renomear o cartafol<b>«/MPEG2»</b> nos SVCD a (non estándar) "
-"«MPEGAV».</li> <li>Permite empregar unha sinatura <b>«ENTRYSVD»</b> "
+"<ul> <li>Renomear o cartafol<b>«/MPEG2»</b> nos SVCD a (non estándar) «/"
+"MPEGAV».</li> <li>Permite empregar unha sinatura <b>«ENTRYSVD»</b> "
 "(obsoleta) no canto de <b>«ENTRYVCD»</b> para o ficheiro <b>«/SVCD/ENTRY."
 "SVD»</b>.</li></ul>"
 
+# well-spelled: SVCD
 #: projects/k3bvcdburndialog.cpp:182
 #, kde-format
 msgid ""
@@ -8686,8 +8694,8 @@ msgid ""
 "CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge."
 msgstr ""
 "<p>Para permitir a reprodución de CD de vídeo nun reprodutor CD-i, o "
-"estándar de VídeoCD require que estea presente un programa de aplicación de "
-"CD-i. <p>Este programa está deseñado para: <ul> <li>fornecer control de "
+"estándar de CD de vídeo require que estea presente un programa de aplicación "
+"de CD-i. <p>Este programa está deseñado para: <ul> <li>fornecer control de "
 "reprodución completo segundo se define no PSD do estándar</li><li>ser "
 "extremadamente sinxelo de empregar e fácil de aprender para o usuario final</"
 "li></ul><p>O programa execútase en reprodutores equipados co sistema "
@@ -9455,7 +9463,7 @@ msgstr "Configurar o complemento"
 #: rip/base_k3baudiorippingoptionwidget.ui:53
 #, kde-format
 msgid "Create playlist for the ripped files"
-msgstr "Crear unha lista de reprodución para os ficheiros extraidos"
+msgstr "Crear unha lista de reprodución para os ficheiros extraídos"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkCreatePlaylist)
 #: rip/base_k3baudiorippingoptionwidget.ui:58
@@ -9466,7 +9474,7 @@ msgid ""
 "<p>You may use the special strings to give the playlist a unique filename."
 msgstr ""
 "<p>Se marca esta opción K3b crea unha lista de reprodución para os ficheiros "
-"extraidos\n"
+"extraídos\n"
 "que pode empregarse con programas como Amarok ou JuK.\n"
 "<p>Pode empregar cadeas especiais para darlle á lista de reprodución un nome "
 "de ficheiro único."
@@ -9498,8 +9506,8 @@ msgstr ""
 "á súa localización.\n"
 "<p>Por exemplo, se a lista de reprodución se atopa en <em>/home/eu/música</"
 "em>\n"
-"e os ficheiros de son están en <em>/home/eu/música/trance</em>, entón as\n"
-"entradas na lista de reprodución aparecerán como:<em>trance/pista1.ogg</em>."
+"e os ficheiros de son están en <em>/home/eu/música/boa</em>, entón as\n"
+"entradas na lista de reprodución aparecerán como:<em>boa/pista1.ogg</em>."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:98
@@ -9540,7 +9548,7 @@ msgstr "Crear un &só ficheiro"
 #: rip/base_k3baudiorippingoptionwidget.ui:145
 #, kde-format
 msgid "Write a cuefile"
-msgstr "Gravar un ficheiro cue"
+msgstr "Gravar un ficheiro de pistas"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:148
@@ -9736,7 +9744,7 @@ msgstr "Comezar o proceso de extracción de son"
 #: rip/k3baudiocdview.cpp:234
 #, kde-format
 msgid "Query CD Database"
-msgstr "Pesquisar na base de datos de CD"
+msgstr "Consultar a base de datos de CD"
 
 #: rip/k3baudiocdview.cpp:235
 #, kde-format
@@ -10711,7 +10719,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:509
 #, kde-format
 msgid "Resample Audio to &44.1 KHz"
-msgstr "Remostrear o son a &44.1 kHz"
+msgstr "Converter o son a &44.1 kHz"
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:512
@@ -11091,7 +11099,7 @@ msgstr "Sen secuencias de subimaxes"
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:109
 #, kde-format
 msgid "Subpicture Streams"
-msgstr "Secuencias de imaxes subpostas"
+msgstr "Secuencias de subimaxes"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:220
 #, kde-format
@@ -11118,12 +11126,12 @@ msgstr "panorámico"
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:262
 #, kde-format
 msgid "anamorph"
-msgstr "anamórfico"
+msgstr "anamorfo"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:308
 #, kde-format
 msgid "Subpicture"
-msgstr "Imaxe subposta"
+msgstr "Subimaxe"
 
 #~ msgid "%1 has unsaved data."
 #~ msgstr "%1 ten datos sen gardar."

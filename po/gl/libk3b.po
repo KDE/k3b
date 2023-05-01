@@ -1,20 +1,20 @@
 # translation of libk3b.po to galician
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # mvillarino <mvillarino@users.sourceforge.net>, 2007, 2008, 2009.
 # mvillarino <mvillarino@gmail.com>, 2008.
 # Xosé <xosecalvo@gmail.com>, 2012.
 # Miguel Branco <mgl.branco@gmail.com>, 2013.
 # Marce Villarino <mvillarino@kde-espana.org>, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2019-10-19 21:38+0200\n"
+"PO-Revision-Date: 2023-04-30 11:52+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.11.70\n"
+"X-Generator: Lokalize 23.04.0\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -261,7 +261,7 @@ msgstr "Desmontando o disco de orixe"
 #: jobs/k3bcdcopyjob.cpp:355
 #, kde-format
 msgid "Unable to read Table of contents"
-msgstr "Non se pode ler o índice (TOC)"
+msgstr "Non se pode ler o índice"
 
 #: jobs/k3bcdcopyjob.cpp:363
 #, kde-format
@@ -2059,7 +2059,7 @@ msgid ""
 msgstr ""
 "Algúns nomes de ficheiros deberán acurtarse debido á limitación de %1 "
 "caracteres das extensións Joliet. Se as extensións de Joliet están "
-"desactivadas non é necesario acaurtar os nomes dos ficheiros pero os nomes "
+"desactivadas non é necesario acurtar os nomes dos ficheiros pero os nomes "
 "longos non estarán dispoñíbeis en sistemas Windows."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:139
@@ -2328,7 +2328,7 @@ msgstr "Cdrdao %1 non permite o overburning."
 #: projects/k3bcdrdaowriter.cpp:486
 #, kde-format
 msgid "Could not backup tocfile."
-msgstr "Non se puido facer a copia de seguranza do ficheiro co toc."
+msgstr "Non se puido facer a copia de seguranza do ficheiro de índice."
 
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
@@ -2807,7 +2807,7 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:851 projects/k3bcdrskinwriter.cpp:864
 #, kde-format
 msgid "Probably a buffer underrun occurred."
-msgstr "Probabelmente se producise o baleiramento do búfer."
+msgstr "Probabelmente se producise un subdesbordamento do búfer."
 
 #: projects/k3bcdrecordwriter.cpp:853 projects/k3bcdrskinwriter.cpp:866
 #, kde-format
@@ -3221,7 +3221,7 @@ msgstr "Non se puido eliminar o ficheiro %1."
 #: projects/mixedcd/k3bmixedjob.cpp:1231
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "Non se atopou Cdrecord no sistema."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1235
 #, kde-format
@@ -3421,16 +3421,13 @@ msgid "To create Video CDs you have to install VcdImager version %1."
 msgstr "Para crear CD de vídeo hai que instalar a versión %1 de VcdImager."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"Pódeo atopar nos discos da súa distribución ou descargado de http://www."
-"vcdimager.org"
+"Pódeo atopar nos discos da súa distribución ou descargalo de https://www.gnu."
+"org/software/vcdimager"
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
@@ -3536,7 +3533,7 @@ msgstr "Gravando un CD de vídeo"
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
 msgstr[0] "1 MPEG (%2)"
-msgstr[1] "%1 MPEGs (%2)"
+msgstr[1] "%1 MPEG (%2)"
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
 #: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
@@ -4405,8 +4402,8 @@ msgid ""
 "temporary table of contents.</p><p>This allows further sessions to be "
 "appended to the CD later.</p>"
 msgstr ""
-"<p>Se marca esta opción, K3b non pecha o CD e só grava un índice (TOC) "
-"temporal.</p><p>Isto permite engadir máis sesións ao CD máis tarde.</p>"
+"<p>Se marca esta opción, K3b non pecha o CD e só grava un índice temporal.</"
+"p><p>Isto permite engadir máis sesións ao CD máis tarde.</p>"
 
 #: tools/k3bstdguiitems.cpp:155
 #, kde-format
