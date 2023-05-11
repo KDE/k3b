@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-19 00:48+0000\n"
-"PO-Revision-Date: 2023-04-09 23:45+0100\n"
+"PO-Revision-Date: 2023-05-10 20:14+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1591,7 +1591,7 @@ msgstr "Nunaj projektoj"
 #: k3b.cpp:533
 #, kde-format
 msgid "&Location Bar"
-msgstr "&Loka Trinkejo"
+msgstr "&Lokobreto"
 
 #: k3b.cpp:600 k3b.cpp:916 k3b.cpp:930
 #, kde-format
@@ -3632,7 +3632,7 @@ msgstr "Montel Laurent"
 #: main.cpp:43
 #, kde-format
 msgid "Initial port to KDE Platform 4"
-msgstr ""
+msgstr "Komenca portado al KDE  Platform 4"
 
 #: main.cpp:44
 #, kde-format
@@ -3642,7 +3642,7 @@ msgstr "Ralf Habacker"
 #: main.cpp:44
 #, kde-format
 msgid "Windows port"
-msgstr ""
+msgstr "Vindoz-portado"
 
 #: main.cpp:46
 #, kde-format
