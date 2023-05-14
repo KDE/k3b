@@ -8,7 +8,7 @@ ExcludeServiceTypes=application/x-cd-image
 [Desktop Action CreateK3bDataProject]
 Exec=k3b --data %F
 Name=Create data project with K3b
-Name[ar]=أنشئ مشروع بيانات ب‍«كي٣بي»
+Name[ar]=أنشئ مشروع بيانات ب‍«كي3بي»
 Name[bg]=Създаване на проект с данни с K3b
 Name[ca]=Crea un projecte de dades amb el K3b
 Name[ca@valencia]=Crea un projecte de dades amb K3b
