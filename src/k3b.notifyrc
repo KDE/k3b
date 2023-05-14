@@ -2,7 +2,7 @@
 IconName=k3b
 DesktopEntry=org.kde.k3b
 Comment=K3b
-Comment[ar]=كي٣بي
+Comment[ar]=كي3بي
 Comment[be]=K3b
 Comment[bg]=K3b
 Comment[bs]=K3b
@@ -512,7 +512,7 @@ Name[x-test]=xxBusyxx
 Name[zh_CN]=忙碌
 Name[zh_TW]=忙碌
 Comment=K3b is currently busy and cannot start any other operations
-Comment[ar]=«كي٣بي» مشغول حاليًّا ولا يمكن بدء أيّة عمليّة أخرى
+Comment[ar]=«كي3بي» مشغول حاليًّا ولا يمكن بدء أيّة عمليّة أخرى
 Comment[bg]=В момента K3b работи и не може да извършва други действия
 Comment[bs]=K3b je trenutno zauzet i ne može započeti nijednu drugu radnju
 Comment[ca]=El K3b ara mateix està ocupat i no pot iniciar altres operacions
