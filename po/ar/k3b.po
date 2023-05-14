@@ -1773,12 +1773,12 @@ msgstr "آليّ"
 #: k3bdatamodewidget.cpp:24
 #, kde-format
 msgid "Mode1"
-msgstr "وضع١"
+msgstr "وضع1"
 
 #: k3bdatamodewidget.cpp:25
 #, kde-format
 msgid "Mode2"
-msgstr "وضع٢"
+msgstr "وضع2"
 
 #: k3bdatamodewidget.cpp:27
 #, kde-format
@@ -1916,12 +1916,12 @@ msgstr "الصوت"
 #: k3bdiskinfoview.cpp:193
 #, kde-format
 msgid "Data/Mode1"
-msgstr "بيانات/وضع١"
+msgstr "بيانات/وضع1"
 
 #: k3bdiskinfoview.cpp:195
 #, kde-format
 msgid "Data/Mode2"
-msgstr "بيانات/وضع٢"
+msgstr "بيانات/وضع2"
 
 #: k3bdiskinfoview.cpp:197
 #, kde-format
@@ -3352,7 +3352,7 @@ msgstr "متزايد"
 #: main.cpp:24
 #, kde-format
 msgid "K3b"
-msgstr "كي٣بي"
+msgstr "كي3بي"
 
 #: main.cpp:25
 #, kde-format
@@ -5166,19 +5166,19 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:234
 #, kde-format
 msgid "&Level 1"
-msgstr "ال&مستوى ١"
+msgstr "ال&مستوى 1"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel2)
 #: projects/base_k3badvanceddataimagesettings.ui:241
 #, kde-format
 msgid "Level &2"
-msgstr "الم&ستوى ٢"
+msgstr "الم&ستوى 2"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel3)
 #: projects/base_k3badvanceddataimagesettings.ui:248
 #, kde-format
 msgid "Level &3"
-msgstr "المستوى ٣&"
+msgstr "المستوى 3&"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupRockRidgeSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:258
@@ -10145,12 +10145,12 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:220
 #, kde-format
 msgid "MPEG1"
-msgstr "إم بي إي جي١"
+msgstr "إم بي إي جي1"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:220
 #, kde-format
 msgid "MPEG2"
-msgstr "إم بي إي جي٢"
+msgstr "إم بي إي جي2"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:250
 #, kde-format
