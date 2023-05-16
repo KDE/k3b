@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2023-04-02 17:25+0300\n"
+"PO-Revision-Date: 2023-05-15 22:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -936,7 +936,7 @@ msgstr "DVD kopyası yazılıyor"
 #: jobs/k3bdvdcopyjob.cpp:829
 #, kde-format
 msgid "Writing mode ignored when writing DVD+R(W) media."
-msgstr "DVD+R(W) için yazma kipi gözardı edildi."
+msgstr "DVD+R(W) için yazma kipi yok sayıldı."
 
 #: jobs/k3bdvdcopyjob.cpp:831 jobs/k3bdvdcopyjob.cpp:921
 #: jobs/k3bmetawriter.cpp:934 jobs/k3bmetawriter.cpp:943
@@ -1973,7 +1973,7 @@ msgstr "Son parçanın verikipi belirlenemiyor. Öntanımlı olan kullanılıyor
 #: projects/datacd/k3bdatajob.cpp:826 projects/datacd/k3bdatajob.cpp:946
 #, kde-format
 msgid "Writing mode ignored when writing %1 media."
-msgstr "%1 ortamı yazılırken yazma kipi gözardı ediliyor."
+msgstr "%1 ortamı yazılırken yazma kipi yok sayılıyor"
 
 #: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
 #, kde-format

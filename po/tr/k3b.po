@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-08 00:58+0000\n"
-"PO-Revision-Date: 2023-03-21 15:13+0300\n"
+"PO-Revision-Date: 2023-05-15 22:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -10015,8 +10015,8 @@ msgstr ""
 "<p>Bu seçenek işaretliyse K3b önboşluklardaki ses verisini aktarmaz. Birçok "
 "ses parçası kendisine ait olmayan bir önboşluk içerir.</p><p>Neredeyse tüm "
 "ses aktarma yazılımlarının öntanımlı davranışı önboşlukları dahil etmek olsa "
-"da, çoğu CD'de gözardı etmek daha mantıklıdır. K3b ile ses projesi "
-"yaratılırken bu önboşluklar yeniden oluşturulur</p>"
+"da, çoğu CD'de yok saymak daha mantıklıdır. K3b ile ses projesi yaratılırken "
+"bu önboşluklar yeniden oluşturulur</p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
@@ -10331,7 +10331,7 @@ msgstr "Klasördeki boş alan:"
 #: rip/k3bvideocdrippingdialog.cpp:79
 #, kde-format
 msgid "Necessary storage size:"
-msgstr "Gerekli stok boyutu:"
+msgstr "Gerekli depolama boyutu:"
 
 #: rip/k3bvideocdrippingdialog.cpp:91
 #, kde-format
