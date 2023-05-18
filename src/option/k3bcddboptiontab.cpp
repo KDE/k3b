@@ -23,7 +23,7 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
 
     m_cddbKcm = 0;
 
-    const auto result = KPluginFactory::instantiatePlugin<KCModule>(KPluginMetaData(QStringLiteral("kcm_cddb")), this);
+    const auto result = KPluginFactory::instantiatePlugin<KCModule>(KPluginMetaData(QStringLiteral("plasma/kcms/systemsettings_qwidgets/kcm_cddb")), this);
 
     if (result) {
         m_cddbKcm = result.plugin;
