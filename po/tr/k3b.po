@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 02:32+0000\n"
-"PO-Revision-Date: 2023-05-15 22:39+0300\n"
+"PO-Revision-Date: 2023-05-24 01:45+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2775,8 +2775,8 @@ msgstr "K3b sisteminizdeki herhangi bir optik sürücü bulamadı."
 #, kde-format
 msgid "Make sure HAL daemon is running, it is used by K3b for finding devices."
 msgstr ""
-"Aygıtların bulunabilmesi için K3b tarafından kullanılan HAL hizmetinin "
-"çalıştığına emin olun."
+"HAL ardalan sürecinin çalıştığından emin olun, K3b tarafından aygıtları "
+"bulmak için kullanılır."
 
 #: k3bsystemproblemdialog.cpp:190
 #, kde-format
