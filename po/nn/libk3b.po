@@ -3922,8 +3922,8 @@ msgstr ""
 #: tools/k3bmedium.cpp:735
 #, kde-format
 msgid ""
-"Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
-"%1</b>"
+"Please insert an empty or appendable DVD or Blu-ray medium into "
+"drive<p><b>%1</b>"
 msgstr ""
 
 #: tools/k3bmedium.cpp:737

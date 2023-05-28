@@ -3958,11 +3958,11 @@ msgstr "Sett inn et tomt eller tilleggbart medium"
 #: tools/k3bmedium.cpp:735
 #, kde-format
 msgid ""
-"Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
-"%1</b>"
+"Please insert an empty or appendable DVD or Blu-ray medium into "
+"drive<p><b>%1</b>"
 msgstr ""
-"Sett inn et tomt eller tilleggbart DVD- eller Blu-ray-medium i enheten <p><b>"
-"%1</b>"
+"Sett inn et tomt eller tilleggbart DVD- eller Blu-ray-medium i enheten "
+"<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:737
 #, kde-format
