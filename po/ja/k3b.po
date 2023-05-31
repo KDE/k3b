@@ -16,7 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 "X-Generator: KBabel 1.11.4\n"
@@ -103,7 +103,6 @@ msgstr "%1 Hz"
 msgid "1 bit"
 msgid_plural "%1 bits"
 msgstr[0] "%1 ビット"
-msgstr[1] "%1 ビット"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:375
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:402
@@ -2321,15 +2320,13 @@ msgstr "%1 B"
 msgctxt "Number of blocks (one block has 2048 bytes)"
 msgid "1 block"
 msgid_plural "%1 blocks"
-msgstr[0] "1 ブロック"
-msgstr[1] "%1 ブロック"
+msgstr[0] "%1 ブロック"
 
 #: k3bdiskinfoview.cpp:392
 #, kde-format
 msgid "1 B"
 msgid_plural "%1 B"
-msgstr[0] "1 B"
-msgstr[1] "%1 B"
+msgstr[0] "%1 B"
 
 #: k3bemptydiscwaiter.cpp:83
 #, kde-format
@@ -2650,14 +2647,12 @@ msgstr "メディアを選んでください:"
 msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
 msgstr[0] "%1 トラック内に %2"
-msgstr[1] "%1 トラック内に %2"
 
 #: k3bmediumdelegate.cpp:138
 #, kde-format
 msgid " and %1 session"
 msgid_plural " and %1 sessions"
 msgstr[0] "と %1 セッション"
-msgstr[1] "と %1 セッション"
 
 #: k3bmediumdelegate.cpp:151
 #, kde-format
@@ -2718,22 +2713,19 @@ msgstr "情報なし"
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
-msgstr[0] "%2 の 1 ファイル"
-msgstr[1] "%2 の %1 ファイル"
+msgstr[0] "%2 の %1 ファイル"
 
 #: k3bstatusbarmanager.cpp:157
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
-msgstr[0] "1 フォルダ"
-msgstr[1] "%1 フォルダ"
+msgstr[0] "%1 フォルダ"
 
 #: k3bstatusbarmanager.cpp:184
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
-msgstr[0] "オーディオ CD (1 トラック)"
-msgstr[1] "オーディオ CD (%1 トラック)"
+msgstr[0] "オーディオ CD (%1 トラック)"
 
 #: k3bstatusbarmanager.cpp:190
 #, kde-format
@@ -2744,15 +2736,13 @@ msgstr "データプロジェクト (%1)"
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
-msgstr[0] "ミックスモード CD (1 トラックと %2)"
-msgstr[1] "ミックスモード CD (%1 トラックと %2)"
+msgstr[0] "ミックスモード CD (%1 トラックと %2)"
 
 #: k3bstatusbarmanager.cpp:204
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
-msgstr[0] "ビデオ CD (1 トラック)"
-msgstr[1] "ビデオ CD (%1 トラック)"
+msgstr[0] "ビデオ CD (%1 トラック)"
 
 #: k3bstatusbarmanager.cpp:210
 #, kde-format
@@ -2773,8 +2763,7 @@ msgstr "システム設定の問題"
 #, kde-format
 msgid "1 problem"
 msgid_plural "%1 problems"
-msgstr[0] "1 個の問題"
-msgstr[1] "%1 個の問題"
+msgstr[0] "%1 個の問題"
 
 #: k3bsystemproblemdialog.cpp:98
 #, kde-format
@@ -4058,8 +4047,7 @@ msgstr "オーディオ Cue イメージ"
 #, kde-format
 msgid "One track"
 msgid_plural "%1 tracks"
-msgstr[0] "1 トラック"
-msgstr[1] "%1 トラック"
+msgstr[0] "%1 トラック"
 
 #: misc/k3bimagewritingdialog.cpp:323
 #, kde-format
@@ -6809,8 +6797,7 @@ msgstr "再起動(&B)"
 #, kde-format
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
-msgstr[0] "1 トラック (%2 分)"
-msgstr[1] "%1 トラック (%2 分)"
+msgstr[0] "%1 トラック (%2 分)"
 
 #: projects/k3baudioburndialog.cpp:71
 #, kde-format
@@ -7585,8 +7572,7 @@ msgstr "追記可能なメディアを入れてください"
 #, kde-format
 msgid "1 audio track"
 msgid_plural "%1 audio tracks"
-msgstr[0] "1 オーディオトラック"
-msgstr[1] "%1 オーディオトラック"
+msgstr[0] "%1 オーディオトラック"
 
 #: projects/k3bdatamultisessionimportdialog.cpp:248
 #, kde-format
@@ -7763,15 +7749,13 @@ msgstr "フォルダ"
 #, kde-format
 msgid "in one file"
 msgid_plural "in %1 files"
-msgstr[0] "1 個のファイル"
-msgstr[1] "%1 個のファイル"
+msgstr[0] "%1 個のファイル"
 
 #: projects/k3bdatapropertiesdialog.cpp:225
 #, kde-format
 msgid "and one folder"
 msgid_plural "and %1 folders"
-msgstr[0] "と 1 フォルダ"
-msgstr[1] "と %1 フォルダ"
+msgstr[0] "と %1 フォルダ"
 
 #: projects/k3bdatapropertiesdialog.cpp:229
 #, kde-format
@@ -7782,15 +7766,13 @@ msgstr "特殊なファイル"
 #, kde-format
 msgid "One Item"
 msgid_plural "%1 Items"
-msgstr[0] "1 アイテム"
-msgstr[1] "%1 アイテム"
+msgstr[0] "%1 アイテム"
 
 #: projects/k3bdatapropertiesdialog.cpp:296
 #, kde-format
 msgid "One File"
 msgid_plural "%1 Files"
-msgstr[0] "1 ファイル"
-msgstr[1] "%1 ファイル"
+msgstr[0] "%1 ファイル"
 
 #: projects/k3bdatapropertiesdialog.cpp:298
 #, kde-format
@@ -7801,8 +7783,7 @@ msgstr "ファイルがありません"
 #, kde-format
 msgid "One Folder"
 msgid_plural "%1 Folders"
-msgstr[0] "1 フォルダ"
-msgstr[1] "%1 フォルダ"
+msgstr[0] "%1 フォルダ"
 
 #: projects/k3bdatapropertiesdialog.cpp:303
 #, kde-format
@@ -8176,8 +8157,7 @@ msgstr "Blu-Ray のサイズ"
 #, kde-format
 msgid "unused"
 msgid_plural "%1 minutes"
-msgstr[0] "未使用"
-msgstr[1] "%1 分"
+msgstr[0] "%1 分"
 
 #: projects/k3bfillstatusdisplay.cpp:571
 #, kde-format
@@ -8329,8 +8309,7 @@ msgstr "eMovix プロジェクト"
 #, kde-format
 msgid "One file (%2)"
 msgid_plural "%1 files (%2)"
-msgstr[0] "1 個のファイル (%2)"
-msgstr[1] "%1 個のファイル (%2)"
+msgstr[0] "%1 個のファイル (%2)"
 
 #: projects/k3bmovixburndialog.cpp:51
 #, kde-format
@@ -8514,8 +8493,7 @@ msgstr "ビデオ CD"
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] "1 MPEG (%2)"
-msgstr[1] "%1 MPEG (%2)"
+msgstr[0] "%1 MPEG (%2)"
 
 #: projects/k3bvcdburndialog.cpp:95 projects/k3bvcdburndialog.cpp:96
 #: projects/k3bvcdburndialog.cpp:97 projects/k3bvcdburndialog.cpp:98
@@ -9873,8 +9851,7 @@ msgstr "アーティスト情報を検索..."
 #, kde-format
 msgid "1 track (%2)"
 msgid_plural "%1 tracks (%2)"
-msgstr[0] "1 トラック (%2)"
-msgstr[1] "%1 トラック (%2)"
+msgstr[0] "%1 トラック (%2)"
 
 #: rip/k3baudiocdview.cpp:199
 #, kde-format
@@ -10374,15 +10351,13 @@ msgstr ""
 #, kde-format
 msgid "1 track (encoding to %2)"
 msgid_plural "%1 tracks (encoding to %2)"
-msgstr[0] "1 トラック (%2 にエンコード)"
-msgstr[1] "%1 トラック (%2 にエンコード)"
+msgstr[0] "%1 トラック (%2 にエンコード)"
 
 #: rip/k3bmassaudioencodingjob.cpp:182
 #, kde-format
 msgid "1 track"
 msgid_plural "%1 tracks"
-msgstr[0] "1 トラック"
-msgstr[1] "%1 トラック"
+msgstr[0] "%1 トラック"
 
 #: rip/k3bmassaudioencodingjob.cpp:264
 #, kde-format
@@ -10949,7 +10924,6 @@ msgctxt "Ch is short for Channels"
 msgid "%1Ch"
 msgid_plural "%1Ch"
 msgstr[0] "%1Ch"
-msgstr[1] "%1Ch"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:323
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:353
@@ -10961,8 +10935,7 @@ msgstr "ビデオ DVD の吸い出し"
 #, kde-format
 msgid "1 title from %2"
 msgid_plural "%1 titles from %2"
-msgstr[0] "%2 から 1 タイトル"
-msgstr[1] "%2 から %1 タイトル"
+msgstr[0] "%2 から %1 タイトル"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
@@ -10989,8 +10962,7 @@ msgstr "ビデオ DVD タイトルを吸い出し"
 #, kde-format
 msgid "Transcoding 1 title to %2/%3"
 msgid_plural "Transcoding %1 titles to %2/%3"
-msgstr[0] "1 タイトルを %2/%3 にトランスコード"
-msgstr[1] "%1 タイトルを %2/%3 にトランスコード"
+msgstr[0] "%1 タイトルを %2/%3 にトランスコード"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
 #, kde-format
@@ -11086,7 +11058,6 @@ msgstr "%1 (ビデオ DVD)"
 msgid "%1 title"
 msgid_plural "%1 titles"
 msgstr[0] "%1 タイトル"
-msgstr[1] "%1 タイトル"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:277
 #, kde-format
@@ -11279,7 +11250,6 @@ msgstr "MPEG2"
 msgid "%1 chapter"
 msgid_plural "%1 chapters"
 msgstr[0] "%1 チャプター"
-msgstr[1] "%1 チャプター"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:260
 #, kde-format

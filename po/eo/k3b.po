@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-19 00:48+0000\n"
-"PO-Revision-Date: 2023-05-10 20:14+0100\n"
+"PO-Revision-Date: 2023-05-30 22:35+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3612,7 +3612,7 @@ msgstr "Sebastian Trüg"
 #: main.cpp:41
 #, kde-format
 msgid "Main developer"
-msgstr ""
+msgstr "Ĉefevoluisto"
 
 #: main.cpp:42
 #, kde-format
@@ -7521,7 +7521,7 @@ msgstr "Speciala dosiero"
 #, kde-format
 msgid "One Item"
 msgid_plural "%1 Items"
-msgstr[0] ""
+msgstr[0] "Unu elemento"
 msgstr[1] "%1 elementoj"
 
 #: projects/k3bdatapropertiesdialog.cpp:296
@@ -7534,7 +7534,7 @@ msgstr[1] "%1 dosieroj"
 #: projects/k3bdatapropertiesdialog.cpp:298
 #, kde-format
 msgid "No Files"
-msgstr ""
+msgstr "Neniuj Dosieroj"
 
 #: projects/k3bdatapropertiesdialog.cpp:301
 #, kde-format
@@ -7546,7 +7546,7 @@ msgstr[1] "%1 dosierujoj"
 #: projects/k3bdatapropertiesdialog.cpp:303
 #, kde-format
 msgid "No Folders"
-msgstr ""
+msgstr "Neniuj Dosierujoj"
 
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
@@ -9550,7 +9550,7 @@ msgstr "Rock"
 #: rip/categories.cpp:21
 #, kde-format
 msgid "Soundtrack"
-msgstr ""
+msgstr "Sontrako"
 
 #: rip/k3baudiocdview.cpp:143
 #, kde-format
@@ -10121,7 +10121,7 @@ msgstr "Ne eblas trovi la %1 programon."
 #: rip/k3bvideocdrip.cpp:92
 #, kde-format
 msgid "To rip Video CDs you have to install VcdImager Version %1."
-msgstr ""
+msgstr "Por krei Video-KD-ojn vi devas instali VcdImager version %1."
 
 #: rip/k3bvideocdrip.cpp:93
 #, kde-format
