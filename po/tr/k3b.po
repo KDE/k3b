@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-19 00:48+0000\n"
-"PO-Revision-Date: 2023-05-29 12:35+0300\n"
+"PO-Revision-Date: 2023-06-04 01:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.07.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -90,7 +90,7 @@ msgstr "Kanallar"
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:333
 #, kde-format
 msgid "Sampling Rate"
-msgstr "Örnekleme Oranı"
+msgstr "Örnekleme Hızı"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:374
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:391
@@ -126,7 +126,7 @@ msgstr[1] "%1 bitler"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:402
 #, kde-format
 msgid "Bitrate"
-msgstr "Bit Oranı"
+msgstr "Bit Hızı"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:376
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:408
@@ -164,7 +164,7 @@ msgstr "CRC"
 #: ../plugins/encoder/lame/k3blametyes.h:88
 #, kde-format
 msgid "Mono"
-msgstr "Mono"
+msgstr "Tek Kanallı"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:391
 #, kde-format
@@ -177,7 +177,7 @@ msgstr "Çift"
 #: ../plugins/encoder/lame/k3blametyes.h:87
 #, kde-format
 msgid "Joint Stereo"
-msgstr "Birleşik Stereo"
+msgstr "Birleşik Çift Kanallı"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:395
@@ -185,7 +185,7 @@ msgstr "Birleşik Stereo"
 #: ../plugins/encoder/lame/k3blametyes.h:86
 #, kde-format
 msgid "Stereo"
-msgstr "Stereo"
+msgstr "Çift Kanallı"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:404
 #, kde-format
@@ -250,17 +250,17 @@ msgstr "Sürüm"
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:109
 #, kde-format
 msgid "Bitrate Upper"
-msgstr "Daha Yüksek Bit Oranı"
+msgstr "Daha Yüksek Bit Hızı"
 
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:111
 #, kde-format
 msgid "Bitrate Nominal"
-msgstr "Nominal Bit Oranı"
+msgstr "Nominal Bit Hızı"
 
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:113
 #, kde-format
 msgid "Bitrate Lower"
-msgstr "Daha Düşük Bit Oranı"
+msgstr "Daha Düşük Bit Hızı"
 
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:192
 #: ../plugins/encoder/ogg/k3boggvorbisencoder.cpp:407
@@ -607,9 +607,9 @@ msgid ""
 "quality.\n"
 "<p><b>This setting has no influence on the size of the resulting file.</b>"
 msgstr ""
-"<p>Bit oranı elbette kalitenin temel etkenidir. Yüksek bit oranı, yüksek "
-"kalite sağlar. Bununla birlikte tanımlanan bit oranı için çeşitli "
-"algoritmalar içinden en uygun oran ve gürültü dönüştürme içeren kodlama "
+"<p>Bit hızı elbette kalitenin temel etkenidir. Yüksek bit hızı, yüksek "
+"kalite sağlar. Bununla birlikte tanımlanan bit hızı için çeşitli "
+"algoritmalar içinden en uygun hız ve gürültü dönüştürme içeren kodlama "
 "belirlenir.\n"
 "<p>Kalite 0'dan 9'a kadar artarken, kodlama hızı buna bağlı olarak "
 "düşecektir.\n"
@@ -669,7 +669,7 @@ msgid ""
 msgstr ""
 "<p>Eğer bu seçenek işaretlenirse LAME, toplam çerçeve büyüklüğünü 7680 bit "
 "kısıtlamasına zorlayacak.<br>\n"
-"Bu, yüksek bitoranı kodlamaları için bitçok bit'in boşa harcanmasına yol "
+"Bu, yüksek bit hızı kodlamaları için bitçok bit'in boşa harcanmasına yol "
 "açsa da, -mutlak bir ISO uyumluluğunu üvence altına alır. Bu uyumluluk "
 "donanımcılar için önemli olabilir."
 
@@ -715,25 +715,25 @@ msgstr "Kalite"
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:23
 #, kde-format
 msgid "&Constant Bitrate"
-msgstr "&Sabit Bit Oranı"
+msgstr "&Sabit Bit Hızı"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioVariableBitrate)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:56
 #, kde-format
 msgid "&Variable Bitrate"
-msgstr "&Değişken Bit Oranı"
+msgstr "&Değişken Bit Hızı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateMaximum)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:69
 #, kde-format
 msgid "Maximum bitrate:"
-msgstr "En yüksek bit oranı:"
+msgstr "En yüksek bit hızı:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateAverage)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:89
 #, kde-format
 msgid "Average bitrate:"
-msgstr "Ortalama bit oranı:"
+msgstr "Ortalama bit hızı:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_spinVideoBitrate)
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_spinAudioBitrate)
@@ -749,13 +749,13 @@ msgstr " kbps"
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:115
 #, kde-format
 msgid "Minimum bitrate:"
-msgstr "En düşük bit oranı:"
+msgstr "En düşük bit hızı:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:151
 #, kde-format
 msgid "Channel Mode"
-msgstr "Kanal kipi"
+msgstr "Kanal Kipi"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboMode)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:157
@@ -819,12 +819,12 @@ msgstr "%1 kbps"
 #: ../plugins/encoder/lame/k3blameencoderconfigwidget.cpp:117
 #, kde-format
 msgid "Constant Bitrate: %1 kbps (%2)"
-msgstr "Sabit Bit Oranı: %1 kbps (%2)"
+msgstr "Sabit Bit Hızı: %1 kbps (%2)"
 
 #: ../plugins/encoder/lame/k3blameencoderconfigwidget.cpp:121
 #, kde-format
 msgid "Variable Bitrate (%1)"
-msgstr "Değişken Bit Oranı (%1)"
+msgstr "Değişken Bit Hızı (%1)"
 
 #: ../plugins/encoder/lame/k3blamemanualsettingsdialog.cpp:12
 #, kde-format
@@ -921,13 +921,13 @@ msgstr "K&işisel ayarlar:"
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:209
 #, kde-format
 msgid "&Upper bitrate:"
-msgstr "&Yüksek bit oranı:"
+msgstr "&Yüksek bit hızı:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateLower)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:216
 #, kde-format
 msgid "Lower &bitrate:"
-msgstr "&Düşük bit oranı:"
+msgstr "&Düşük bit hızı:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
@@ -943,7 +943,7 @@ msgstr "Kbyte/saniye"
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:292
 #, kde-format
 msgid "&Nominal bitrate:"
-msgstr "N&ominal bit oranı:"
+msgstr "N&ominal bit hızı:"
 
 #: ../plugins/encoder/ogg/k3boggvorbisencoderconfigwidget.cpp:56
 #, kde-format
@@ -964,11 +964,11 @@ msgid ""
 msgstr ""
 "<p>Vorbis kodlayıcısının ses kalitesi saniyedeki kilobit sayısından ziyade "
 "-1 - 10 arasında değer alan <em>kalite</em> değişkeniyle daha iyi ölçülür. "
-"<p>-1 değeri ortalama 45kbps, 5 değeri ortalama 160kbps ve 10 değeri "
-"ortalama 400 kbps oranlarına denk gelmektedir. CD kalitesine çok yakın "
-"kalite elde etmek isteyen kullanıcılar genelde 5, kayıpsız stereo deneyimi "
+"<p>-1 değeri ortalama 45 kbps, 5 değeri ortalama 160 kbps ve 10 değeri "
+"ortalama 400 kbps hızlarına denk gelmektedir. CD kalitesine çok yakın kalite "
+"elde etmek isteyen kullanıcılar genelde 5, kayıpsız çift kanallı deneyimi "
 "yaşamak isteyenler 6 değerini kullanmak isteyebilirler. 3 değeri, yaklaşık "
-"110 kbps bit oranına sahip, 128kbps ile kodlanmış bir MP3 dosyasına göre "
+"110 kbps bit oranına sahip, 128 kbps ile kodlanmış bir MP3 dosyasına göre "
 "biraz daha kaliteli ve düşük boyutlu bir dosya üretir.<p><em>Bu açıklama www."
 "vorbis.com adresindeki SSS (Sıkça Sorulan Sorunlar) bölümünden alınmıştır.</"
 "em>"
@@ -988,7 +988,7 @@ msgstr "Kişisel ayarlar (her dosya türü için kullanılır)"
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:49
 #, kde-format
 msgid "Sample rate:"
-msgstr "Örnekleme oranı:"
+msgstr "Örnekleme hızı:"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:63
@@ -8530,7 +8530,7 @@ msgstr ""
 "23.976 Hz (FILM SIF).</li><li>352 x 288 @ 25 Hz (PAL SIF).</li></ul> "
 "<p>Bölüt çalma seçenekleri için ise aşağıdaki ses kodlamaları kullanılabilir "
 "hale geldi:<ul><li>Birleşik (Joint) Stereo, stereo veya 128, 192, 224 veya "
-"384 kbit/sn bit oranında çift kanallı ses akışları.</li><li>64, 96 veya 192 "
+"384 kbit/sn bit hızında çift kanallı ses akışları.</li><li>64, 96 veya 192 "
 "kbit/sn bit oranında mono ses akışları.</li></ul><p>Ayrıca yalnızca ses "
 "içeren akışlar ve hareketsiz resimler de desteklenir hale geldi.<p><b>Tek "
 "hızlı sürücüler ile uyumluluğun sağlanabilmesi için çoklanmış (multiplexed) "
@@ -9002,13 +9002,13 @@ msgstr "Yüksek Çözünürlük"
 #, kde-format
 msgctxt "Video CD Track Framerate"
 msgid "Framerate"
-msgstr "Kare Oranı"
+msgstr "Kare Hızı"
 
 #: projects/k3bvcdprojectmodel.cpp:240
 #, kde-format
 msgctxt "Video CD Track Muxrate"
 msgid "Muxrate"
-msgstr "Mux Oranı"
+msgstr "Mux Hızı"
 
 #: projects/k3bvcdprojectmodel.cpp:242
 #, kde-format
@@ -9177,7 +9177,7 @@ msgstr "Uzunluk:"
 #: projects/k3bvcdtrackdialog.cpp:388
 #, kde-format
 msgid "Muxrate:"
-msgstr "Mux Oranı:"
+msgstr "Mux Hızı:"
 
 #: projects/k3bvcdtrackdialog.cpp:447
 #, kde-format
@@ -9272,7 +9272,7 @@ msgstr "Sayısal Düğmeler"
 #: projects/k3bvcdtrackdialog.cpp:591 projects/k3bvcdtrackdialog.cpp:632
 #, kde-format
 msgid "Rate:"
-msgstr "Oran:"
+msgstr "Hız:"
 
 #: projects/k3bvcdtrackdialog.cpp:592
 #, kde-format
@@ -10499,19 +10499,19 @@ msgstr "A&yarlar"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:51
 #, kde-format
 msgid "Video Quality"
-msgstr "Görüntü Kalitesi"
+msgstr "Video Kalitesi"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:59
 #, kde-format
 msgid "Video Size:"
-msgstr "Görüntü Boyutu:"
+msgstr "Video Boyutu:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_3)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:90
 #, kde-format
 msgid "Video Bitrate:"
-msgstr "Video Bit oranı:"
+msgstr "Video bit hızı:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox4)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:191
@@ -10523,7 +10523,7 @@ msgstr "Ses Kalitesi"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:204
 #, kde-format
 msgid "Variable &Bitrate"
-msgstr "&Değişken Bit oranı"
+msgstr "&Değişken bit hızı"
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelAudioBitrate)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
@@ -10531,7 +10531,7 @@ msgstr "&Değişken Bit oranı"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:258
 #, kde-format
 msgid "Audio Bitrate:"
-msgstr "Ses bit oranı:"
+msgstr "Ses bit hızı:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelNoAudioSettings)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:239
@@ -10599,9 +10599,9 @@ msgid ""
 msgstr ""
 "<p>Eğer bu seçenek tercih edilirse K3b video başlıklarını iki geçişte "
 "kodlar. İlk geçiş, ikinci geçişte bitlerin dağıtımını geliştirmek için bilgi "
-"toplamak amacıyla kullanılır. Sonuç videosu değişken bit oranı ile yüksek "
+"toplamak amacıyla kullanılır. Sonuç videosu değişken bit hızı ile yüksek "
 "kaliteye sahip olur.\n"
-"<p>Eğer bu seçenek tercih edilmezse K3b sabit bit oranına ve düşük kaliteye "
+"<p>Eğer bu seçenek tercih edilmezse K3b sabit bit hızına ve düşük kaliteye "
 "sahip video dosyaları oluşturacak.\n"
 "<p>2-geçişli kodlama ile kodlama süresi iki katına çıkar."
 
@@ -10615,7 +10615,7 @@ msgstr "&2-geçiş kodlama"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:474
 #, kde-format
 msgid "Alt+2"
-msgstr "Alt+2"
+msgstr "Seçenek+2"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkAutoClipping)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:484
@@ -10655,7 +10655,7 @@ msgstr "Otomatik &Video Kırpma"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:502
 #, kde-format
 msgid "Change the sample rate of the audio stream to 44.1 KHz"
-msgstr "Ses yayınının örnekleme oranını 44.1 KHz olarak değiştir"
+msgstr "Ses yayınının örnekleme hızını 44.1 KHz olarak değiştir"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:506
@@ -10667,10 +10667,10 @@ msgid ""
 "<p>If this option is checked K3b will change the sampling rate of the audio "
 "stream to 44100 Hz."
 msgstr ""
-"<p>Video DVD ses yayınları normalde 48000 Hz örnekleme oranıyla kodlanırlar. "
-"Öte yandan Ses CD'leri 44100 Hz örnekleme oranıyla kodlanırlar.\n"
+"<p>Video DVD ses yayınları normalde 48000 Hz örnekleme hızıyla kodlanırlar. "
+"Öte yandan Ses CD'leri 44100 Hz örnekleme hızıyla kodlanırlar.\n"
 "<p>Eğer bu seçenek tercih edilirse K3b ses yayınının örnekleme oranını 44100 "
-"Hz olarak değiştirecek."
+"Hz olarak değiştirir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:509
@@ -10682,7 +10682,7 @@ msgstr "Sesi 44.1 kHz' örnekle"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:512
 #, kde-format
 msgid "Alt+4"
-msgstr "Alt+4"
+msgstr "Seçenek+4"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkLowPriority)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:522
@@ -10994,7 +10994,7 @@ msgstr ""
 "<p>Lütfen sonuç videosunun genişlik ve yüksekliğini seçin. Eğer değerlerden "
 "biri <em>Otomatik</em> yapılmışsa K3b bu değeri video resminin en boy "
 "oranına bağlı olarak seçecektir.<br>Genişlik ve yüksekliğin aynı anda "
-"ayarlanmasının en boy düzeltme işlemini yapmayacağını ve girdiğiniz "
+"ayarlanmasının en-boy düzeltme işlemini yapmayacağını ve girdiğiniz "
 "değerleri kullanacağını göz önünde bulundurun."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:348
