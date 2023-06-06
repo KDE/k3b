@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 02:32+0000\n"
-"PO-Revision-Date: 2023-04-30 12:08+0200\n"
+"PO-Revision-Date: 2023-06-05 13:46+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -911,10 +911,10 @@ msgstr ""
 "equivale a arredor de 45 kbps, 5 equivale a 160 kbps e 10 a uns 400 kbps. A "
 "maioría da xente que busque unha calidade moi próxima á dun CD, escollerá a "
 "calidade 5, ou para estéreo combinado sen perdas, 6. A opción predeterminada "
-"de calidade 3, que equivale aproximadamente a 110 kbps, dá un tamaño de "
-"ficheiro menor e unha fidelidade maior que unha compresión MP3 a 128 kbps."
-"<p><em>Esta explicación copiouse das respostas a preguntas habituais de www."
-"vorbis.com.</em>"
+"de calidade 3, que equivalea arredor de 110 kbps, dá un tamaño de ficheiro "
+"menor e unha fidelidade maior que unha compresión MP3 a 128 kbps.<p><em>Esta "
+"explicación copiouse das respostas a preguntas habituais de www.vorbis.com.</"
+"em>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioQualityLevel)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:35
@@ -975,13 +975,13 @@ msgid ""
 msgstr ""
 "<p>A calidade do son de Vorbis non se mide correctamente en kilobits por "
 "segundo, senón nunha escala de -1 a 10 chamada <em>calidade</em>. <p>Por "
-"agora, a calidade -1 equivale aproximadamente a 45 kbps, 5 a uns 160 kbps e "
-"10 dá arredor de 400kbps. A maioría da xente que busque unha calidade moi "
-"próxima á dun CD, escollerá a calidade 5, ou para un estéreo combinado sen "
-"perdas, 6. A opción de calidade 3, que equivale aproximadamente a 110 kbps, "
-"dá un tamaño de ficheiro menor e unha fidelidade mellor que unha compresión "
-"MP3 a 128 kbps. <p><em>Esta explicación está baseada na das respostas a "
-"preguntas habituais de www.vorbis.com.</em>"
+"agora, a calidade -1 equivale a arredor de 45 kbps, 5 a uns 160 kbps e 10 dá "
+"arredor de 400kbps. A maioría da xente que busque unha calidade moi próxima "
+"á dun CD, escollerá a calidade 5, ou para un estéreo combinado sen perdas, "
+"6. A opción de calidade 3, que equivale a arredor de 110 kbps, dá un tamaño "
+"de ficheiro menor e unha fidelidade mellor que unha compresión MP3 a 128 "
+"kbps. <p><em>Esta explicación está baseada na das respostas a preguntas "
+"habituais de www.vorbis.com.</em>"
 
 #: ../plugins/encoder/ogg/k3boggvorbisencoderconfigwidget.cpp:105
 #, kde-format
@@ -1031,14 +1031,14 @@ msgstr ""
 "IMA_ADPCM, GSM, ou número enteiro.</p>\n"
 "<p><b>U-law</b> (realmente unha abreviatura de mu-law) e <b>A-law</b> son os "
 "estándares dos Estados Unidos e internacionais para a compresión logarítmica "
-"de son telefónico. Cando está descomprimido, u-law ten aproximadamente a "
-"precisión do son PCM de 14 bits e A-law a do son PCM de 13 bits. Os datos de "
-"A-law e u-law son codificados algunhas veces empregando unha ordenación de "
+"de son telefónico. Cando está descomprimido, u-law unha precisión de son "
+"similar á de PCM de 14 bits e A-law á do son PCM de 13 bits. Os datos de A-"
+"law e u-law son codificados algunhas veces empregando unha ordenación de "
 "bits invertida (p.ex. MSB vólvese LSB).<br><b>ADPCM </b> é unha forma de "
 "comprensión do son que ten un bo compromiso entre boa calidade de son e "
 "tempo de codificación/descodificación rápido. Emprégase para a comprensión "
 "de son telefónico e en lugares onde a alta calidade non é importante. Cando "
-"está descomprimido ten aproximadamente unha precisión de son PCM de 16 bits. "
+"está descomprimido ten unha precisión de son similar á de PCM de 16 bits. "
 "Versións populares de ADPCM inclúen G.726, MS ADPCM, e IMA ADPCM. Ten "
 "distintos significados en distintos xestores dos ficheiros. Nos ficheiros ."
 "wav representa ficheiros MS ADPCM, en todos os outros significa G.726 ADPCM."
@@ -1102,7 +1102,7 @@ msgstr "Número real"
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:113
 #, kde-format
 msgid "14400"
-msgstr "14400"
+msgstr "14.400"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:123
@@ -1297,9 +1297,9 @@ msgid ""
 "special strings <em>%a</em> (Artist), <em>%n</em> (Track number), and <em>"
 "%t</em> (Title) are supported."
 msgstr ""
-"<qt>Isto especifica como se deben renomear os ficheiros. Actualmente só se "
-"admiten as cadeas especiais <em>%a</em> (intérprete), <em>%n</em> (número de "
-"pista), e <em>%t</em> (título)."
+"<qt>Isto especifica como se deben renomear os ficheiros. Só se admiten as "
+"cadeas especiais <em>%a</em> (intérprete), <em>%n</em> (número de pista), e "
+"<em>%t</em> (título)."
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:160
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:382
@@ -2859,7 +2859,7 @@ msgstr "Instalar unha versión máis recentes de cdrtools."
 #: k3bsystemproblemdialog.cpp:236
 #, kde-format
 msgid "%1 will be run with root privileges on kernel >= 2.6.8"
-msgstr "%1 ha executarse con privilexios de root nun kernel >= 2.6.8"
+msgstr "%1 ha executarse con privilexios de root nun kernel ≥ 2.6.8"
 
 #: k3bsystemproblemdialog.cpp:237
 #, kde-format
@@ -3078,7 +3078,7 @@ msgstr ""
 msgid ""
 "Install cdrdao >= 1.1.8 which supports writing to ATAPI devices directly."
 msgstr ""
-"Instale cdrdao >= 1.1.8, que admite a gravación de dispositivos ATAPI "
+"Instale cdrdao ≥ 1.1.8, que admite a gravación de dispositivos ATAPI "
 "directamente."
 
 #: k3bsystemproblemdialog.cpp:477
@@ -3412,8 +3412,8 @@ msgid ""
 "<p>Select the medium that you want to use for burning.<p>In most cases there "
 "will only be one medium available which does not leave much choice."
 msgstr ""
-"<p>Escolla o disco que quere usar para gravar.<p>Na maioría dos casos só "
-"haberá un medio dispoñíbel, o que non deixa moitas escollas."
+"<p>Escolla o disco que quere usar para gravar.<p>Xeralmente só haberá un "
+"medio dispoñíbel, o que non deixa moitas escollas."
 
 #: k3bwriterselectionwidget.cpp:166
 #, kde-format
@@ -4157,10 +4157,10 @@ msgstr ""
 "de datos. As imaxes simples típicas son imaxes iso como as creadas polo "
 "proxecto de datos de K3b.<p> <b>Imaxes CUE e BIN</b><br/> As imaxes CUE e "
 "BIN consisten nun ficheiro CUE que describe o índice do recurso e un "
-"ficheiro de imaxe que contén os datos en si. Os datos escríbense no recurso "
+"ficheiro de imaxe que contén os datos. Os datos escríbense no recurso "
 "segundo o ficheiro CUE.<p> <b>Imaxe CUE de son</b><br/> As imaxes CUE de son "
 "son un tipo especial de imaxes CUE e BIN que conteñen unha imaxe dun CD de "
-"son. Os datos de son en si pódense codificar mediante un formato de son dos "
+"son. Os datos de son pódense codificar mediante un formato de son dos "
 "admitidos por K3b. Os ficheiros CUE de son tamén se poden importar aos "
 "proxectos de son de K3b, o que lle permite cambiar a orde das pistas, así "
 "como engadir ou retirar as pistas.<p> <b>Imaxes clónicas de «cdrecord»</"
@@ -4188,8 +4188,7 @@ msgstr "Aviso"
 #: misc/k3bimagewritingdialog.cpp:868
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
-msgstr ""
-"Non se recoñece o tipo de ficheiro de imaxe. Quere gravalo de todos xeitos?"
+msgstr "Non se recoñece o tipo de ficheiro de imaxe. Quere gravalo aínda así?"
 
 #: misc/k3bimagewritingdialog.cpp:869
 #, kde-format
@@ -4376,8 +4375,8 @@ msgid ""
 "<p>If this option is checked and K3b is not able to read a data sector from "
 "the source medium it will be replaced with zeros on the resulting copy."
 msgstr ""
-"<p>Se marca esta opción e K3b non é capaz de ler un sector de datos do disco "
-"de orixe, substituirase por ceros na copia resultante."
+"<p>Se marca esta opción e K3b non pode ler un sector de datos do disco de "
+"orixe, substituirase por ceros na copia resultante."
 
 #: misc/k3bmediacopydialog.cpp:221
 #, kde-format
@@ -4763,7 +4762,7 @@ msgstr "Non &expulsar o disco despois da gravación"
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
 msgid "Automatically erase CD-RWs and DVD-RWs"
-msgstr "Borrar automaticamente os CD-RWs e DVD-RWs"
+msgstr "Borrar automaticamente os CD-RW e DVD-RW"
 
 #: option/k3badvancedoptiontab.cpp:90
 #, kde-format
@@ -4794,7 +4793,7 @@ msgstr "Non expulsar o disco tras completar a gravación"
 #, kde-format
 msgid "Force K3b to continue some operations otherwise deemed as unsafe"
 msgstr ""
-"Obrigar a K3b a continuar algunhas operacións consideradas como non seguras."
+"Obrigar a K3b a continuar algunhas operacións consideradas non seguras."
 
 #: option/k3badvancedoptiontab.cpp:96
 #, kde-format
@@ -4871,7 +4870,7 @@ msgid ""
 msgstr ""
 "<p>Se marca esta opción, K3b non expulsa o disco cando a gravación remate. "
 "Isto pode axudar no caso de que saia do computador tras comezar a gravación "
-"e non quere que a bandexa do sistema estea aberta todo o tempo.<p> Porén nos "
+"e non quere que a bandexa do sistema estea sempre aberta.<p> Porén nos "
 "sistemas Linux, xusto despois de gravalos, os discos deben cargarse de novo. "
 "En caso contrario o sistema non detectará os cambios e seguirá a tratalos "
 "como discos baleiros."
@@ -5470,9 +5469,9 @@ msgid ""
 "a file on the CD or DVD does not exist."
 msgstr ""
 "<p>Se marca esta opción, todos os ficheiros do sistema de ficheiros "
-"resultante terán exactamente os mesmos permisos que os ficheiros orixinais. "
-"En caso contrario, todos os ficheiros terán os permisos iguais e pertencerán "
-"ao administrador (root).\n"
+"resultante terán os mesmos permisos que os ficheiros orixinais. En caso "
+"contrario, todos os ficheiros terán os permisos iguais e pertencerán ao "
+"administrador (root).\n"
 "<p>Isto é útil para copias de seguranza.<p> <b>Coidado:</b> Os permisos "
 "poden non ter moito sentido noutros sistemas de ficheiros. Por exemplo, se "
 "un usuario dono do ficheiro no CD ou DVD non existe."
@@ -7821,7 +7820,7 @@ msgid ""
 "Do you also want to add system files (FIFOs, sockets, device files, and "
 "broken symlinks)?"
 msgstr ""
-"Quere engadir os ficheiros do sistema (FIFOs, sockets, ficheiros de "
+"Quere engadir os ficheiros do sistema (FIFO, sockets, ficheiros de "
 "dispositivo e ligazóns simbólicas estragadas)?"
 
 #: projects/k3bdataurladdingdialog.cpp:785
@@ -8025,11 +8024,10 @@ msgid ""
 "<br>This results in 4.4*1024<sup>3</sup>/1000<sup>3</sup> = 4.7 GB."
 msgstr ""
 "<p><b>Por que ofrece K3b 4,4 GB e 8,0 GB non canto de 4,7 e 8,5 como di no "
-"disco?</b><p>Un disco DVD de capa única ten unha capacidade de "
-"aproximadamente 4,4 GB, o que é igual a 4,4*1024<sup>3</sup> bytes. Os "
-"fabricantes de discos simplemente calculan con 1000 no canto de 1024 por "
-"motivos publicitarios.<br>Isto dá como resultado 4,4*1024<sup>3</"
-"sup>/1000<sup>3</sup> = 4,7 GB."
+"disco?</b><p>Un disco DVD de capa única ten unha capacidade de arredor de "
+"4,4 GB, o que é igual a 4,4*1024<sup>3</sup> bytes. Os fabricantes de discos "
+"simplemente calculan con 1000 no canto de 1024 por motivos publicitarios."
+"<br>Isto dá como resultado 4,4*1024<sup>3</sup>/1000<sup>3</sup> = 4,7 GB."
 
 #: projects/k3bfillstatusdisplay.cpp:583
 #, kde-format
@@ -8246,7 +8244,7 @@ msgstr "Engadir un ficheiro de subtítulos…"
 #: projects/k3bmovixview.cpp:149
 #, kde-format
 msgid "K3b currently only supports local files."
-msgstr "K3b actualmente só admite ficheiros locais."
+msgstr "K3b só admite ficheiros locais."
 
 #: projects/k3bmusicbrainzjob.cpp:116
 #, kde-format
@@ -8396,7 +8394,7 @@ msgstr "Especifique o identificador do álbum para o conxunto de CD de vídeo"
 #, kde-format
 msgid "Specify album set sequence number ( <= volume-count )"
 msgstr ""
-"Especifique o número de secuencia do conxunto de albumes (<= contador de "
+"Especifique o número de secuencia do conxunto de albumes (≤ contador de "
 "volume )"
 
 #: projects/k3bvcdburndialog.cpp:107
@@ -8507,13 +8505,13 @@ msgstr ""
 "MPEG-1 ou pistas de son CD-DA.</li> <li>Máis de 500 puntos de entradas de "
 "secuencias MPEG empregadas como divisións de capítulos.</li> </ul> <p>A "
 "especificación de CD de vídeo require unha secuencia de MPEG-1 multiplexada "
-"para ter un CBR menor de 174300 bytes (1394400 bits) por segundo para "
+"para ter un CBR menor de 174.300 bytes (1.394.400 bits) por segundo para "
 "acomodar as unidades de CD-ROM de velocidade única.<br> A especificación "
 "permite as seguintes resolucións: <ul> <li>352×240 @ 29.97 Hz (NTSC SIF).</"
 "li> <li>352×240 @ 23.976 Hz (FILM SIF).</li> </ul> <p>A secuencia de son "
 "MPEG-1 en CBR de nivel II está gravada a 224 kbps cunha canle estéreo ou 2 "
 "mono.<p> <b>Recoméndase manter a taxa de bits do vídeo por baixo de "
-"1151929.1 bps.</b>"
+"1.151.929,1 bps.</b>"
 
 #: projects/k3bvcdburndialog.cpp:136
 #, kde-format
@@ -8559,7 +8557,7 @@ msgstr ""
 "<li>Secuencias de son mono a unha taxa de bits de 64, 96 ou 192 kbit/seg.</"
 "li> </ul> <p>Tamén se dá a posibilidade de ter secuencias só de son e imaxes "
 "fixas. <p> <b>A taxa de bits de secuencias multiplexadas deberían manterse "
-"por baixo dos 174300 bits/seg (excepto para elementos de imaxes fixas) para "
+"por baixo dos 174.300 bits/seg (excepto para elementos de imaxes fixas) para "
 "acomodarse ás unidades de velocidade única.</b>"
 
 #: projects/k3bvcdburndialog.cpp:154
@@ -10060,11 +10058,10 @@ msgid ""
 msgstr ""
 "<p>Se marca esta opción K3b non extrae os datos de son nos silencios "
 "previos. A maioría das pistas de son conteñen un silencio previo baleiro que "
-"non pertence á pista en si.</p> <p>Aínda que o comportamento predeterminado "
-"de case todo o software de extracción é incluír os silencios previos na "
-"maioría dos CD ten máis sentido ignoralos. Cando estea a crear un proxecto "
-"de son con K3b, este rexenerará estes silencios previos de todos os xeitos.</"
-"p>"
+"non pertence á pista.</p> <p>Aínda que o comportamento predeterminado de "
+"case todo o software de extracción é incluír os silencios previos na maioría "
+"dos CD ten máis sentido ignoralos. Cando estea a crear un proxecto de son "
+"con K3b, este rexenerará estes silencios previos de todos os xeitos.</p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
@@ -10711,9 +10708,9 @@ msgid ""
 "stream to 44100 Hz."
 msgstr ""
 "<p>O son dos DVD de vídeo normalmente están codificadas cunha taxa de "
-"mostraxe de 48000 Hz. Por outra banda, os CD de son están codificados cunha "
-"taxa de mostraxe de 44100 Hz.\n"
-"<p>Se marca esta opción, K3b cambiará a taxa de mostraxe de son a 44100 Hz."
+"mostraxe de 48.000 Hz. Por outra banda, os CD de son están codificados cunha "
+"taxa de mostraxe de 44.100 Hz.\n"
+"<p>Se marca esta opción, K3b cambiará a taxa de mostraxe de son a 44.100 Hz."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:509

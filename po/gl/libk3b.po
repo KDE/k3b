@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-06-12 00:44+0000\n"
-"PO-Revision-Date: 2023-04-30 11:52+0200\n"
+"PO-Revision-Date: 2023-06-05 13:47+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -2114,7 +2114,7 @@ msgid ""
 "Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
 "contain more than one backslash:"
 msgstr ""
-"Debido a un fallo en mkisofs <= 1.15a40, K3b non pode manexar ficheiros que "
+"Debido a un fallo en mkisofs ≤ 1.15a40, K3b non pode manexar ficheiros que "
 "conteñan máis dunha barra invertida:"
 
 #: projects/datacd/k3bisoimager.cpp:172 projects/k3bcdrdaowriter.cpp:770
@@ -2137,7 +2137,7 @@ msgstr "Non indicou o identificador do volume. Usarase o predeterminado."
 #, kde-format
 msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
 msgstr ""
-"Atopáronse ficheiros maiores de 4GB. K3b precisa polo menos %1 para "
+"Atopáronse ficheiros maiores de 4 GB. K3b precisa polo menos %1 para "
 "continuar."
 
 #: projects/datacd/k3bisoimager.cpp:619
@@ -2155,7 +2155,7 @@ msgstr "Activando a extensión UDF."
 #: projects/datacd/k3bisoimager.cpp:670
 #, kde-format
 msgid "Setting iso level to 3 to support files bigger than 4 GB."
-msgstr "Axustando o nivel iso a 3 para permitir ficheiros de máis de 4GB."
+msgstr "Axustando o nivel iso a 3 para permitir ficheiros de máis de 4 GB."
 
 #: projects/datacd/k3bisoimager.cpp:762
 #, kde-format
@@ -2225,7 +2225,7 @@ msgstr "A versión empregada de mkisofs non permite ficheiros grandes."
 #: projects/datacd/k3bmkisofshandler.cpp:84
 #, kde-format
 msgid "Files bigger than 2 GB cannot be handled."
-msgstr "Non se poden manexar ficheiros maiores de 2GB."
+msgstr "Non se poden manexar ficheiros maiores de 2 GB."
 
 #: projects/datacd/k3bmkisofshandler.cpp:88
 #, kde-format
@@ -4469,11 +4469,10 @@ msgid ""
 "<p>Since audio CD Player are able to interpolate small errors in the data it "
 "is no problem to let K3b skip unreadable sectors."
 msgstr ""
-"<p>Se marca esta opción e K3b non é capaz de ler un sector de son do CD "
-"orixinal, este substituirase por ceros na copia resultante. <p>Xa que os "
-"reprodutores de CD de son son capaces de interpolar pequenos erros nos "
-"datos, non supón ningún problema deixar que o K3b ignore os sectores "
-"ilexíbeis."
+"<p>Se marca esta opción e K3b non pode ler un sector de son do CD orixinal, "
+"este substituirase por ceros na copia resultante. <p>Xa que os reprodutores "
+"de CD de son son capaces de interpolar pequenos erros nos datos, non supón "
+"ningún problema deixar que o K3b ignore os sectores ilexíbeis."
 
 #: videodvd/k3bvideodvd.cpp:292
 #, kde-format
