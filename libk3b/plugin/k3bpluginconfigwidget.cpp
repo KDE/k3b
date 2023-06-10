@@ -18,8 +18,9 @@ K3b::PluginConfigWidget::PluginConfigWidget(QObject *parent, const KPluginMetaDa
     Q_UNUSED(metaData);
 }
 #else
-    : KCModule( parent, metaData, args )
+    : KCModule( parent, metaData )
 {
+    Q_UNUSED(args);
 }
 #endif
 
