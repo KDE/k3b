@@ -12,6 +12,7 @@
   <name xml:lang="de">K3b</name>
   <name xml:lang="el">K3b</name>
   <name xml:lang="en-GB">K3b</name>
+  <name xml:lang="eo">K3b</name>
   <name xml:lang="es">K3b</name>
   <name xml:lang="et">K3b</name>
   <name xml:lang="eu">K3b</name>
@@ -54,6 +55,7 @@
   <summary xml:lang="de">Brennprogramm</summary>
   <summary xml:lang="el">Εγγραφή σε δίσκο</summary>
   <summary xml:lang="en-GB">Disc Burning</summary>
+  <summary xml:lang="eo">Diskregistrado</summary>
   <summary xml:lang="es">Grabación de discos</summary>
   <summary xml:lang="et">Plaadi kirjutamine</summary>
   <summary xml:lang="eu">Disko grabatzea</summary>
