@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 02:32+0000\n"
-"PO-Revision-Date: 2023-05-22 14:04\n"
+"PO-Revision-Date: 2023-06-17 04:14\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2707,7 +2707,7 @@ msgstr "请确定 HAL 守护程序正在运行，K3b 应用此守护程序来查
 #: k3bsystemproblemdialog.cpp:190
 #, kde-format
 msgid "No CD/DVD/BD writer found."
-msgstr "未找到 CD/DVD/BD 刻录机。"
+msgstr "没有找到 CD/DVD/BD 刻录机。"
 
 #: k3bsystemproblemdialog.cpp:191
 #, kde-format
@@ -2717,8 +2717,8 @@ msgid ""
 "features such as audio track extraction, audio transcoding or ISO 9660 image "
 "creation."
 msgstr ""
-"K3b 未找到一个可用于写入的光学设备。因此，您将无法烧录 CD 以及 DVD 介质。不过"
-"您依然可以使用 K3b 的其他特性，如翻录音轨、音频转码以及生成 ISO 9660 镜像。"
+"K3b 没有找到一个可用于写入的光学设备。因此，您将无法烧录 CD 以及 DVD 介质。不"
+"过您依然可以使用 K3b 的其他特性，如翻录音轨、音频转码以及生成 ISO 9660 镜像。"
 
 #: k3bsystemproblemdialog.cpp:201 k3bsystemproblemdialog.cpp:262
 #: k3bsystemproblemdialog.cpp:304
@@ -7269,7 +7269,7 @@ msgstr "特殊文件"
 #, kde-format
 msgid "One Item"
 msgid_plural "%1 Items"
-msgstr[0] "%1 项"
+msgstr[0] "%1 个项目"
 
 #: projects/k3bdatapropertiesdialog.cpp:296
 #, kde-format
