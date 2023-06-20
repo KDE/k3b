@@ -320,12 +320,12 @@ msgstr "CD-Text"
 #: jobs/k3bcdcopyjob.cpp:468
 #, kde-format
 msgid "Use CD-Text data"
-msgstr "Emprega os datos de CD-Text"
+msgstr "Usa os datos de CD-Text"
 
 #: jobs/k3bcdcopyjob.cpp:469
 #, kde-format
 msgid "Use CDDB entry"
-msgstr "Empregar a entrada de CDDB"
+msgstr "Usar a entrada de CDDB"
 
 #: jobs/k3bcdcopyjob.cpp:475 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
@@ -350,7 +350,7 @@ msgstr "Non se pode crear o cartafol temporal «%1»."
 #: jobs/k3bcdcopyjob.cpp:552
 #, kde-format
 msgid "Using temporary folder %1."
-msgstr "Empregando o cartafol temporal %1."
+msgstr "Usando o cartafol temporal %1."
 
 #: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
@@ -1131,7 +1131,7 @@ msgstr "Non se pode determinar o estado actual do formatado do disco DVD-RW."
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "Empregando %1 %2 - © %3"
+msgstr "Usando %1 %2 - © %3"
 
 #: jobs/k3bdvdformattingjob.cpp:501
 #, kde-format
@@ -2185,7 +2185,7 @@ msgstr "Non se puido ler o ficheiro %1. Ignorando…"
 #, kde-format
 msgid "Failed to backup boot image file %1"
 msgstr ""
-"Non se puido facer a copia de seguranza do ficheiro de imaxe de arranque %1"
+"Non se puido facer a copia de seguridade do ficheiro de imaxe de arranque %1"
 
 #: projects/datacd/k3bisoimager.cpp:991 projects/datacd/k3bisoimager.cpp:1001
 #: projects/datacd/k3bisoimager.cpp:1008 projects/datacd/k3bisoimager.cpp:1014
@@ -2251,8 +2251,8 @@ msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr ""
-"Pode empregar convmv (https://j3e.de/linux/convmv/) para corrixir a "
-"codificación do nome do ficheiro."
+"Pode usar convmv (https://j3e.de/linux/convmv/) para corrixir a codificación "
+"do nome do ficheiro."
 
 #: projects/datacd/k3bmkisofshandler.cpp:109
 #, kde-format
@@ -2328,7 +2328,7 @@ msgstr "Cdrdao %1 non permite o overburning."
 #: projects/k3bcdrdaowriter.cpp:486
 #, kde-format
 msgid "Could not backup tocfile."
-msgstr "Non se puido facer a copia de seguranza do ficheiro de índice."
+msgstr "Non se puido facer a copia de seguridade do ficheiro de índice."
 
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
@@ -2397,7 +2397,7 @@ msgid ""
 "to restore it from the backup %2."
 msgstr ""
 "Debido a un fallo en cdrdao eliminouse o ficheiro toc/cue %1. K3b non puido "
-"recuperalo da copia de seguranza %2."
+"recuperalo da copia de seguridade %2."
 
 #: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:786
 #: projects/k3bcdrskinwriter.cpp:799 projects/k3bgrowisofswriter.cpp:515
@@ -2878,8 +2878,8 @@ msgstr ""
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr ""
-"Pode empregar K3b::Setup para resolver este problema ou retirar o bit de "
-"«suid» manualmente."
+"Pode usar K3b::Setup para resolver este problema ou retirar o bit de «suid» "
+"manualmente."
 
 #: projects/k3bcdrecordwriter.cpp:897
 #, kde-format
@@ -3382,7 +3382,7 @@ msgid ""
 "control."
 msgstr ""
 "PBC (Control de reprodución) activados.\n"
-"Os reprodutores de vídeo non poden mostrar segmentos (Imaxes fixas de MPEG) "
+"Os reprodutores de vídeo non poden amosar segmentos (Imaxes fixas de MPEG) "
 "sen control de reprodución."
 
 #: projects/videocd/k3bvcddoc.cpp:278
@@ -4356,7 +4356,7 @@ msgid ""
 "in any CD player it is never a bad idea to enable this (if you specify CD-"
 "Text data.)"
 msgstr ""
-"<p>Se se marca esta opción K3b emprega certo espazo do CD de son, que doutro "
+"<p>Se se marca esta opción K3b usa certo espazo do CD de son, que doutro "
 "xeito non se empregaría, para gardar información adicional, como o artista "
 "ou o título do CD.<p>CD-Text é unha extensión do estándar de son introducida "
 "por Sony.<p>CD-Text só se pode usar en reprodutores de CD que admitan esta "
