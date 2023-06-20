@@ -282,7 +282,7 @@ msgid ""
 "<p>K3b comes with a selection of predefined external applications that "
 "depends on the installed applications."
 msgstr ""
-"<p>Este diálogo pode empregarse para configurar como codificadores de son a "
+"<p>Este diálogo pode usarse para configurar como codificadores de son a "
 "aplicacións externas da liña de ordes. K3b pode usalas para codificar datos "
 "de son (pistas dun CD de son ou os títulos dun proxecto de son) en formatos "
 "que polo xeral non estean admitidos (i.e. que non exista un complemento para "
@@ -612,7 +612,7 @@ msgstr ""
 "codificación de huffman (de forma do ruído).\n"
 "<p>A calidade incrementa de 0 a 9 mentres a velocidade de codificación "
 "diminúe.\n"
-"<p>9 emprega a máis lenta e mellor versión posíbel de todos os algoritmos.\n"
+"<p>9 usa a máis lenta e mellor versión posíbel de todos os algoritmos.\n"
 "<p><b>7 é a opción recomendada</b> mentres 4 aínda produce unha calidade "
 "razoábel a boa velocidade.\n"
 "<p>0 desactiva a maioría dos algoritmos incluíndo o modelo psy, resultando "
@@ -694,9 +694,9 @@ msgid ""
 msgstr ""
 "<p>Se marca esta opción engadirase un código de redundancia cíclica (CRC) a "
 "cada tramo, permitindo detectar os posíbeis erros de transmisión que "
-"poderían producirse nun fluxo MP3; porén, emprega 16 bits por tramo que "
-"doutra maneira deberían empregarse para a codificación, o que reduce "
-"lixeiramente a calidade do son."
+"poderían producirse nun fluxo MP3; porén, usa 16 bits por tramo que doutra "
+"maneira deberían usarse para a codificación, o que reduce lixeiramente a "
+"calidade do son."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkError)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:412
@@ -791,9 +791,9 @@ msgstr ""
 "canles, por exemplo dá a unha canle máis bits se a outra contén silencios ou "
 "precisa menos bits por mor dunha menor complexidade.\n"
 "<p><b>Estéreo combinado</b><br>\n"
-"Neste modo, o codificador emprega as correlacións entre ambas as canles. O "
-"sinal procesarase por matriz nunha suma («media»), calculada por L+R, e nun "
-"sinal resta («lado»), calculada por L-R, e resérvanse máis bits para a canle "
+"Neste modo, o codificador usa as correlacións entre ambas as canles. O sinal "
+"procesarase por matriz nunha suma («media»), calculada por L+R, e nun sinal "
+"resta («lado»), calculada por L-R, e resérvanse máis bits para a canle "
 "media. Isto aumenta a largura de banda se o sinal non ten demasiada "
 "separación no estéreo, polo tanto, gañarase en calidade de codificación de "
 "maneira significativa.\n"
@@ -1023,11 +1023,11 @@ msgstr ""
 "estándares dos Estados Unidos e internacionais para a compresión logarítmica "
 "de son telefónico. Cando está descomprimido, u-law unha precisión de son "
 "similar á de PCM de 14 bits e A-law á do son PCM de 13 bits. Os datos de A-"
-"law e u-law son codificados algunhas veces empregando unha ordenación de "
-"bits invertida (p.ex. MSB vólvese LSB).<br><b>ADPCM </b> é unha forma de "
+"law e u-law son codificados algunhas veces usando unha ordenación de bits "
+"invertida (p.ex. MSB vólvese LSB).<br><b>ADPCM </b> é unha forma de "
 "comprensión do son que ten un bo compromiso entre boa calidade de son e "
-"tempo de codificación/descodificación rápido. Emprégase para a comprensión "
-"de son telefónico e en lugares onde a alta calidade non é importante. Cando "
+"tempo de codificación/descodificación rápido. Úsase para a comprensión de "
+"son telefónico e en lugares onde a alta calidade non é importante. Cando "
 "está descomprimido ten unha precisión de son similar á de PCM de 16 bits. "
 "Versións populares de ADPCM inclúen G.726, MS ADPCM, e IMA ADPCM. Ten "
 "distintos significados en distintos xestores dos ficheiros. Nos ficheiros ."
@@ -1590,7 +1590,7 @@ msgstr "Extraer as pistas dun CD de vídeo"
 #: k3b.cpp:431
 #, kde-format
 msgid "Show Projects Header"
-msgstr "Mostrar a cabeceira dos proxectos"
+msgstr "Amosar a cabeceira dos proxectos"
 
 #: k3b.cpp:432
 #, kde-format
@@ -1797,7 +1797,7 @@ msgstr "Escoller a velocidade de lectura…"
 #: k3bappdevicemanager.cpp:62
 #, kde-format
 msgid "Display generic medium information"
-msgstr "Mostrar información xenérica do disco"
+msgstr "Amosar información xenérica do disco"
 
 #: k3bappdevicemanager.cpp:64
 #, kde-format
@@ -2436,7 +2436,7 @@ msgstr "video/mpeg |Ficheiros de Vídeo MPEG"
 #: k3bfileview.cpp:81
 #, kde-format
 msgid "Show Bookmarks"
-msgstr "Mostrar os marcadores"
+msgstr "Amosar os marcadores"
 
 #: k3binteractiondialog.cpp:70
 #, kde-format
@@ -2502,7 +2502,7 @@ msgstr "Progreso global:"
 #: k3bjobprogressdialog.cpp:229
 #, kde-format
 msgid "Show Debugging Output"
-msgstr "Mostrar a saída de depuración"
+msgstr "Amosar a saída de depuración"
 
 #: k3bjobprogressdialog.cpp:294 k3bjobprogressdialog.cpp:316
 #, kde-format
@@ -2763,7 +2763,7 @@ msgstr "Configurar K3b…"
 #: k3bsystemproblemdialog.cpp:108
 #, kde-format
 msgid "Do not show again"
-msgstr "Non mostrar de novo"
+msgstr "Non amosar de novo"
 
 #: k3bsystemproblemdialog.cpp:144
 #, kde-format
@@ -2784,8 +2784,8 @@ msgstr "K3b non atopou ningún dispositivo óptico no sistema."
 #, kde-format
 msgid "Make sure HAL daemon is running, it is used by K3b for finding devices."
 msgstr ""
-"Asegúrese de que o servizo HAL está a executarse: K3b emprégao para atopar "
-"os dispositivos."
+"Asegúrese de que o servizo HAL está a executarse: K3b úsao para atopar os "
+"dispositivos."
 
 #: k3bsystemproblemdialog.cpp:190
 #, kde-format
@@ -2814,7 +2814,7 @@ msgstr "Permisos insuficientes para o executábel %1: %2"
 #: k3bsystemproblemdialog.cpp:202 k3bsystemproblemdialog.cpp:209
 #, kde-format
 msgid "K3b uses cdrecord to actually write CDs."
-msgstr "K3b emprega cdrecord para escribir os CD."
+msgstr "K3b usa cdrecord para escribir os CD."
 
 #: k3bsystemproblemdialog.cpp:203 k3bsystemproblemdialog.cpp:264
 #: k3bsystemproblemdialog.cpp:308
@@ -2854,7 +2854,7 @@ msgid ""
 "recommended to at least use version 2.0."
 msgstr ""
 "Aínda que K3b admite todas as versións de «cdrtools» desde a 1.10, "
-"recoméndase empregar polo menos a versión 2.0."
+"recoméndase usar polo menos a versión 2.0."
 
 #: k3bsystemproblemdialog.cpp:220
 #, kde-format
@@ -2873,7 +2873,7 @@ msgid ""
 "reasons anymore."
 msgstr ""
 "Desde o kernel Linux 2.6.8, %1 non funcionará con suid root por razóns de "
-"seguranza."
+"seguridade."
 
 #: k3bsystemproblemdialog.cpp:240 k3bsystemproblemdialog.cpp:254
 #: k3bsystemproblemdialog.cpp:284
@@ -2940,8 +2940,8 @@ msgid ""
 "K3b uses growisofs to actually write DVDs. Without growisofs you will not be "
 "able to write DVDs. Make sure to install at least version 5.10."
 msgstr ""
-"K3b emprega «growisofs» para gravar os DVD. Sen «growisofs» non poderá "
-"gravar DVD. Asegúrese de que instala unha versión superior á 5.10."
+"K3b usa «growisofs» para gravar os DVD. Sen «growisofs» non poderá gravar "
+"DVD. Asegúrese de que instala unha versión superior á 5.10."
 
 #: k3bsystemproblemdialog.cpp:318 k3bsystemproblemdialog.cpp:361
 #, kde-format
@@ -2970,7 +2970,7 @@ msgid ""
 "sessions using a growisofs version older than 5.12."
 msgstr ""
 "K3b non poderá copiar DVD sobre a marcha nin gravar DVD+RW de varias sesións "
-"empregando unha versión de «growisofs» anterior á 5.12."
+"usando unha versión de «growisofs» anterior á 5.12."
 
 #: k3bsystemproblemdialog.cpp:339
 #, kde-format
@@ -2985,7 +2985,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:360
 #, kde-format
 msgid "K3b uses dvd+rw-format to format DVD-RWs and DVD+RWs."
-msgstr "K3b emprega o formato dvd+rw para formatar os DVD-RW e DVD+RW."
+msgstr "K3b usa o formato dvd+rw para formatar os DVD-RW e DVD+RW."
 
 #: k3bsystemproblemdialog.cpp:373
 #, kde-format
@@ -3035,8 +3035,7 @@ msgid ""
 "least one writer in your system not configured to use SCSI emulation."
 msgstr ""
 "O núcleo do sistema non permite escribir sen a emulación SCSI pero hai polo "
-"menos unha gravadora no sistema non configurada para empregar a emulación "
-"SCSI."
+"menos unha gravadora no sistema non configurada para usar a emulación SCSI."
 
 #: k3bsystemproblemdialog.cpp:417
 #, kde-format
@@ -3064,7 +3063,7 @@ msgid ""
 msgstr ""
 "A versión configurada de %1 non admite a escritura en dispositivos ATAPI sen "
 "emulación SCSI e hai polo menos unha gravadora no sistema non configurada "
-"para empregar a emulación SCSI."
+"para usar a emulación SCSI."
 
 #: k3bsystemproblemdialog.cpp:439 k3bsystemproblemdialog.cpp:463
 #, kde-format
@@ -3092,7 +3091,7 @@ msgid ""
 "K3b will not be able to write DVD-R Dual Layer media using a growisofs "
 "version older than 6.0."
 msgstr ""
-"K3b non poderá gravar discos DVD-R de capa dupla empregando unha versión de "
+"K3b non poderá gravar discos DVD-R de capa dupla usando unha versión de "
 "growisofs máis antiga que a 6.0."
 
 #: k3bsystemproblemdialog.cpp:479
@@ -3246,7 +3245,7 @@ msgid ""
 "introduces unnecessary security risks."
 msgstr ""
 "Non se recomenda usar K3b coa conta de root. Isto trae problemas "
-"innecesarios de seguranza."
+"innecesarios de seguridade."
 
 #: k3bsystemproblemdialog.cpp:585
 #, kde-format
@@ -3434,10 +3433,10 @@ msgstr ""
 "<p>Escolla a velocidade á que quere gravar.<p> <b>Auto</b> <br> Isto escolle "
 "a velocidade máxima de gravación posíbel co medio empregado. Esta é a "
 "escolla recomendada para a maioría dos medios.</p> <p><b>Ignorar</b> (só "
-"DVD)<br> Isto deixa a escolla da velocidade ao dispositivo de gravación. "
-"Empregue isto se K3b non pode escoller a velocidade de gravación.<p> 1× "
-"refírese a 175 KB/s para CD, 1385 KB/s para DVD, e 4996 KB/s para Blu-ray.</"
-"p> <p><b>Aviso:</b> asegúrese de que o sistema sexa capaz de enviar os datos "
+"DVD)<br> Isto deixa a escolla da velocidade ao dispositivo de gravación. Use "
+"isto se K3b non pode escoller a velocidade de gravación.<p> 1× refírese a "
+"175 KB/s para CD, 1385 KB/s para DVD, e 4996 KB/s para Blu-ray.</p> "
+"<p><b>Aviso:</b> asegúrese de que o sistema sexa capaz de enviar os datos "
 "rápido de abondo para evitar que o búfer quede baleiro."
 
 #: k3bwriterselectionwidget.cpp:177
@@ -3449,7 +3448,7 @@ msgid ""
 "possible that one of the applications does not work as intended with a "
 "certain writer. In this case one may select the application manually."
 msgstr ""
-"<p>K3b emprega as ferramentas de liña de ordes «cdrecord», «growisofs», e "
+"<p>K3b usa as ferramentas de liña de ordes «cdrecord», «growisofs», e "
 "«cdrdao» para gravar CD ou DVD. <p>Normalmente K3b escolle automaticamente a "
 "aplicación máis axeitada para cada tarefa pero nalgúns casos é posíbel que "
 "unha das aplicacións non funcione correctamente con certas gravadoras. Nese "
@@ -3493,8 +3492,7 @@ msgstr "Indicar manualmente a velocidade de gravación"
 #, kde-format
 msgid "Let K3b select the best-suited mode. This is the recommended selection."
 msgstr ""
-"Permitirlle a K3b empregar o modo máis axeitado. Esta é a escolla "
-"recomendada."
+"Permitirlle a K3b usar o modo máis axeitado. Esta é a escolla recomendada."
 
 #: k3bwritingmodewidget.cpp:19
 #, kde-format
@@ -3552,16 +3550,16 @@ msgid ""
 "filesystem within the first session, thus allowing new files to be added to "
 "an already burned disk."
 msgstr ""
-"A sobrescrita restrinxida permítelle empregar un DVD-RW como se fose un DVD-"
-"RAM ou un DVD+RW. O disco poderase sobrescribir. Non é posíbel escribir DVD-"
-"RW de varias sesións neste modo pero K3b emprega «growisofs» para facer "
-"crecer a primeira sesión dun sistema de ficheiros ISO 9660, co cal pódense "
-"engadir novos ficheiros a un disco xa gravado."
+"A sobrescrita restrinxida permítelle usar un DVD-RW como se fose un DVD-RAM "
+"ou un DVD+RW. O disco poderase sobrescribir. Non é posíbel escribir DVD-RW "
+"de varias sesións neste modo pero K3b usa «growisofs» para facer crecer a "
+"primeira sesión dun sistema de ficheiros ISO 9660, co cal pódense engadir "
+"novos ficheiros a un disco xa gravado."
 
 #: k3bwritingmodewidget.cpp:94
 #, kde-format
 msgid "Select the writing mode to use"
-msgstr "Escolla o modo de gravación que empregar"
+msgstr "Escolla o modo de gravación que usar"
 
 #: k3bwritingmodewidget.cpp:95
 #, kde-format
@@ -3969,7 +3967,7 @@ msgstr "Extraer as pistas do CD de vídeo"
 #: main.cpp:118
 #, kde-format
 msgid "Set the GUI language"
-msgstr "Estabelecer o idioma da interface"
+msgstr "Definir o idioma da interface"
 
 #: main.cpp:119
 #, kde-format
@@ -3983,8 +3981,8 @@ msgid ""
 "main purpose is to enable handling of empty media from the KDE Media "
 "Manager.)"
 msgstr ""
-"Estabelecer o dispositivo para usar cos novos proxectos (Esta opción non se "
-"fai efectiva. O seu propósito principal é permitir a xestión de recursos "
+"Definir o dispositivo para usar cos novos proxectos (Esta opción non se fai "
+"efectiva. O seu propósito principal é permitir a xestión de recursos "
 "baleiros desde o Xestor de Medios de KDE)."
 
 #: misc/k3bimagewritingdialog.cpp:164 misc/k3bimagewritingdialog.cpp:244
@@ -4158,8 +4156,8 @@ msgid ""
 "writing cdrdao's own image format, the toc files."
 msgstr ""
 "<p><b>Tipos de imaxes admitidas por K3b:</p> <p><b>Imaxes simples</b><br/> "
-"As imaxes simples escríbense como tal no recurso empregando unha única pista "
-"de datos. As imaxes simples típicas son imaxes iso como as creadas polo "
+"As imaxes simples escríbense como tal no recurso usando unha única pista de "
+"datos. As imaxes simples típicas son imaxes iso como as creadas polo "
 "proxecto de datos de K3b.<p> <b>Imaxes CUE e BIN</b><br/> As imaxes CUE e "
 "BIN consisten nun ficheiro CUE que describe o índice do recurso e un "
 "ficheiro de imaxe que contén os datos. Os datos escríbense no recurso "
@@ -4411,9 +4409,9 @@ msgid ""
 msgstr ""
 "<p>No modo de clonación K3b realiza unha copia en bruto do CD. Isto "
 "significa que o fai sen preocuparse do contido senón que simplemente copia o "
-"CD bit por bit. Isto pode empregarse para copiar CD de vídeo ou CD que "
-"conteñan sectores erróneos. <p><b>Coidado:</b> só poden clonarse os CD dunha "
-"única sesión."
+"CD bit por bit. Isto pode usarse para copiar CD de vídeo ou CD que conteñan "
+"sectores erróneos. <p><b>Coidado:</b> só poden clonarse os CD dunha única "
+"sesión."
 
 #: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:204
 #, kde-format
@@ -4482,12 +4480,12 @@ msgid ""
 "overwrite mode."
 msgstr ""
 "<p>Se marca esta opción, K3b formata un DVD-RW mesmo se estiver baleiro. "
-"Pode empregarse tamén para obrigar a K3b a formatar un DVD+RW, BD-RE ou un "
-"DVD-RW no modo de sobrescrita restrinxida.<p> <b>Coidado:</b> non é "
-"recomendábel formatar un DVD a miúdo, pois pode quedar inutilizado despois "
-"de entre 10 e 20 procedementos de formatación.<p> Os medios DVD+RW e BD-RE "
-"só precisan formatarse unha vez. Despois só precisan sobrescribirse. O mesmo "
-"é aplicábel a DVD-RW no modo de sobrescrita restrinxida."
+"Pode usarse tamén para obrigar a K3b a formatar un DVD+RW, BD-RE ou un DVD-"
+"RW no modo de sobrescrita restrinxida.<p> <b>Coidado:</b> non é recomendábel "
+"formatar un DVD a miúdo, pois pode quedar inutilizado despois de entre 10 e "
+"20 procedementos de formatación.<p> Os medios DVD+RW e BD-RE só precisan "
+"formatarse unha vez. Despois só precisan sobrescribirse. O mesmo é aplicábel "
+"a DVD-RW no modo de sobrescrita restrinxida."
 
 #: misc/k3bmediaformattingdialog.cpp:91
 #, kde-format
@@ -4594,15 +4592,15 @@ msgid ""
 "notification area. If K3b is run outside KDE environment a separate progress "
 "window may be shown instead.</p>"
 msgstr ""
-"<p>Se marca esta opción K3b mostrará o progreso na área de notificación de "
-"KDE. Se executa K3b fóra do ambiente KDE mostrarase unha xanela de progreso "
+"<p>Se marca esta opción K3b amosará o progreso na área de notificación de "
+"KDE. Se executa K3b fóra do ambiente KDE amosarase unha xanela de progreso "
 "independente no seu lugar.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowProgressOSD)
 #: option/base_k3bmiscoptiontab.ui:94
 #, kde-format
 msgid "Show &progress in notification area"
-msgstr "Mostrar o &progreso na área de notificación"
+msgstr "Amosar o &progreso na área de notificación"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
 #: option/base_k3bmiscoptiontab.ui:101
@@ -4617,7 +4615,7 @@ msgid ""
 "<p>If this option is checked K3b will hide the main window while displaying "
 "the progress dialog."
 msgstr ""
-"<p>Se marca esta opción, K3b agocha a xanela principal mentres se mostre o "
+"<p>Se marca esta opción, K3b agocha a xanela principal mentres se amose o "
 "diálogo de progreso."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
@@ -4630,13 +4628,13 @@ msgstr "Agochar a &xanela principal durante a gravación"
 #: option/base_k3bmiscoptiontab.ui:114
 #, kde-format
 msgid "Show the splash screen when K3b starts"
-msgstr "Mostrar a pantalla de benvida no inicio de K3b."
+msgstr "Amosar a pantalla de benvida no inicio de K3b."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowSplash)
 #: option/base_k3bmiscoptiontab.ui:117
 #, kde-format
 msgid "Show splash screen"
-msgstr "Mostrar a pantalla de benvida"
+msgstr "Amosar a pantalla de benvida"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkKeepDialogsOpen)
 #: option/base_k3bmiscoptiontab.ui:124
@@ -4757,7 +4755,7 @@ msgstr "MB"
 #: option/k3badvancedoptiontab.cpp:59
 #, kde-format
 msgid "Show &advanced GUI elements"
-msgstr "&Mostrar os elementos avanzados da interface"
+msgstr "&Amosar os elementos avanzados da interface"
 
 #: option/k3badvancedoptiontab.cpp:68 rip/categories.cpp:20
 #, kde-format
@@ -4785,7 +4783,7 @@ msgid ""
 "Show advanced GUI elements like allowing to choose between cdrecord and "
 "cdrdao"
 msgstr ""
-"Mostrar os elementos avanzados da interface, como permitir escoller entre "
+"Amosar os elementos avanzados da interface, como permitir escoller entre "
 "«cdrecord» e «cdrdao»."
 
 # well-spelled: RW
@@ -4815,7 +4813,7 @@ msgid ""
 "that K3b does not support all possible tools in all project types and "
 "actions.</b>"
 msgstr ""
-"<p>Se marca esta opción móstranse elementos adicionais da interface que lle "
+"<p>Se marca esta opción amósanse elementos adicionais da interface que lle "
 "permiten influenciar o comportamento de K3b. Isto inclúe a selección manual "
 "da ferramenta de gravación (escoller entre «cdrecord» e «cdrdao» cando se "
 "grave un CD ou entre «cdrecord» e «growisofs» cando se grave un DVD/BD).<p> "
@@ -4839,7 +4837,7 @@ msgstr ""
 "só lectura no disco e é garantida polo fabricante. Porén, esta capacidade "
 "máxima oficial non é sempre o máximo real. Moitos discos teñen unha "
 "capacidade real total que é levemente maior que a cantidade oficial. <p>Se "
-"marca esta opción K3b desactiva unha comprobación de seguranza que evita "
+"marca esta opción K3b desactiva unha comprobación de seguridade que evita "
 "gravar máis da capacidade oficial.<p> <b>Aviso:</b> Activar esta opción pode "
 "causar fallos no fin do proceso de gravación se K3b intenta escribir alén da "
 "capacidade oficial. É posíbel determinar primeiro a capacidade máxima real "
@@ -4863,10 +4861,10 @@ msgid ""
 "for CD and %2 MB for DVD burning.<p>If this option is checked the value "
 "specified will be used for both CD and DVD burning."
 msgstr ""
-"<p>K3b emprega un búfer por software durante o proceso de gravación para "
-"evitar ocos na transmisión de datos debido a cargas altas do sistema. Os "
-"tamaños predeterminados son de %1 MB para a gravación de CD e %2 MB para DVD."
-"<p> Se marca esta opción, o valor indicado usarase tanto para CD como DVD."
+"<p>K3b usa un búfer por software durante o proceso de gravación para evitar "
+"ocos na transmisión de datos debido a cargas altas do sistema. Os tamaños "
+"predeterminados son de %1 MB para a gravación de CD e %2 MB para DVD.<p> Se "
+"marca esta opción, o valor indicado usarase tanto para CD como DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
 #, kde-format
@@ -5109,7 +5107,7 @@ msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
 "executable specify it in the search path.</qt>"
 msgstr ""
-"<qt><b>Consello:</b> para facer que K3b empregue outro nome distinto do "
+"<qt><b>Consello:</b> para facer que K3b use outro nome distinto do "
 "predeterminado para o executábel, especifíqueo na ruta da busca.</qt>"
 
 #: option/k3bexternalbinwidget.cpp:136
@@ -5203,8 +5201,8 @@ msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
 "the temporary folder."
 msgstr ""
-"Especificou un ficheiro para o cartafol temporal. K3b empregará a súa ruta "
-"base como cartafol temporal."
+"Especificou un ficheiro para o cartafol temporal. K3b usará a súa ruta base "
+"como cartafol temporal."
 
 #: option/k3bmiscoptiontab.cpp:129
 #, kde-format
@@ -5377,13 +5375,13 @@ msgstr ""
 "(IEEE-P1282).\n"
 "<p>Rock Ridge amplía o sistema de ficheiros ISO 9660 con funcionalidades "
 "equivalentes aos sistemas de ficheiros UNIX (permisos, ligazóns simbólicas, "
-"nomes de ficheiro moi longos, etc.). Emprega caracteres baseados en ISO-8859 "
-"ou UTF-16 e permite 255 octetos.\n"
+"nomes de ficheiro moi longos, etc.). Usa caracteres baseados en ISO-8859 ou "
+"UTF-16 e permite 255 octetos.\n"
 "<p>As extensións Rock Ridge están situados na fin de cada rexistro de "
 "directorio de ISO 9660. Isto fai que a árbore de Rock Ridge se acople "
 "estreitamente á árbore de ISO 9660.\n"
-"<p><b>É moi recomendábel empregar extensións Rock Ridge en todos os CD ou "
-"DVD de datos.</b>"
+"<p><b>É moi recomendábel usar extensións Rock Ridge en todos os CD ou DVD de "
+"datos.</b>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkRockRidge)
 #: projects/base_k3badvanceddataimagesettings.ui:33
@@ -5418,14 +5416,14 @@ msgstr ""
 "<p>Se marca esta opción K3b engade extensións Joliet adicionais ao sistema "
 "de ficheiros ISO 9660.\n"
 "<p>Joliet non é un estándar internacional independente aceptado como ISO "
-"9660 ou Rock Ridge. Emprégase principalmente en sistemas Windows.\n"
+"9660 ou Rock Ridge. Úsase principalmente en sistemas Windows.\n"
 "<p>Joliet non permite todos os caracteres e polo tanto os nomes de ficheiros "
 "non son os mesmos que os nomes de ficheiros no disco duro (comparado con "
 "Rock Ridge). Joliet ten os nomes de ficheiro limitados a 64 caracteres "
 "(independente da codificación e tipo do carácter; por exemplo, europeo ou "
 "xaponés). Isto é unha molestia, todos os sistemas de ficheiros modernos "
 "permiten 255 caracteres por nome de ruta.\n"
-"<p>Joliet emprega a codificación UTF-16.\n"
+"<p>Joliet usa a codificación UTF-16.\n"
 "<p><b>Coidado:</b> coa excepción de Linux e FreeBSD, non hai sistemas "
 "operativos POSIX que admitan Joliet. Polo que <b>nunca cree CD nin DVD só "
 "Joliet</b>."
@@ -5453,7 +5451,7 @@ msgid ""
 msgstr ""
 "<p>Se marca esta opción K3b crea estruturas do sistema de ficheiros UDF "
 "ademais do sistema de ficheiros ISO 9660.\n"
-"<p>O UDF (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>) emprégase "
+"<p>O UDF (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>) úsase "
 "principalmente para DVD."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkUdf)
@@ -5483,7 +5481,7 @@ msgstr ""
 "resultante terán os mesmos permisos que os ficheiros orixinais. En caso "
 "contrario, todos os ficheiros terán os permisos iguais e pertencerán ao "
 "administrador (root).\n"
-"<p>Isto é útil para copias de seguranza.<p> <b>Coidado:</b> Os permisos "
+"<p>Isto é útil para copias de seguridade.<p> <b>Coidado:</b> Os permisos "
 "poden non ter moito sentido noutros sistemas de ficheiros. Por exemplo, se "
 "un usuario dono do ficheiro no CD ou DVD non existe."
 
@@ -5491,7 +5489,7 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:87
 #, kde-format
 msgid "Preserve file permissions (bac&kup)"
-msgstr "Conservar os &permisos dos ficheiros (copia de seguranza)"
+msgstr "Conservar os &permisos dos ficheiros (copia de seguridade)"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:110
@@ -5795,7 +5793,7 @@ msgid ""
 "a bad idea (just remember to fill in the CD-Text information)."
 msgstr ""
 "<p><b>CD-Text</b>\n"
-"<p>Se marca esta opción K3b emprega certo espazo desaproveitado do CD de son "
+"<p>Se marca esta opción K3b usa certo espazo desaproveitado do CD de son "
 "para almacenar información adicional, como o intérprete ou o título do CD. "
 "<p>CD-Text é unha extensión do CD de son estándar introducida por Sony.<p>CD-"
 "Text só servirá nos reprodutores de CD que admitan esta extensión (a maioría "
@@ -5856,7 +5854,7 @@ msgid ""
 "transmission (preemphasis); the receiver will then weaken them accordingly "
 "for playback."
 msgstr ""
-"<p>A preamplificación emprégase normalmente no procesamento de son. As "
+"<p>A preamplificación úsase normalmente no procesamento de son. As "
 "frecuencias máis altas nos sinais de son teñen normalmente amplitudes "
 "menores. Isto pode provocar unha calidade de sinal mala na transmisión "
 "porque as frecuencias máis altas poden chegar a ser febles de máis. Para "
@@ -6023,7 +6021,7 @@ msgstr "Tamaño da carga de arranque:"
 #: projects/base_k3bbootimagedialog.ui:188
 #, kde-format
 msgid "Show Advanced Op&tions"
-msgstr "Mostrar as op&cións avanzadas"
+msgstr "Amosar as op&cións avanzadas"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bbootimagedialog.ui:215
@@ -6123,7 +6121,7 @@ msgstr ""
 "proxecto de K3b.\n"
 "\n"
 "<p><b>Sen cambios</b><br>\n"
-"As ligazóns simbólicas empréganse do xeito en que se engadiron ao proxecto.\n"
+"As ligazóns simbólicas úsanse do xeito en que se engadiron ao proxecto.\n"
 "\n"
 "<p><b>Descartar as ligazóns simbólicas rotas</b><br>\n"
 "K3b descarta todas as ligazóns simbólicas que non sinalen a un ficheiro "
@@ -6397,7 +6395,7 @@ msgstr "Reproducir &aleatoriamente os ficheiros"
 #: projects/base_k3bmovixoptionswidget.ui:69
 #, kde-format
 msgid "Do not use DMA for media access"
-msgstr "Non empregar DMA para acceder ao medio"
+msgstr "Non usar DMA para acceder ao medio"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkNoDma)
 #: projects/base_k3bmovixoptionswidget.ui:72
@@ -6407,7 +6405,7 @@ msgid ""
 "for accessing the drive. This will slow down reading from the CD/DVD but may "
 "be necessary on some systems that do not support DMA.</p>"
 msgstr ""
-"<p>Se marca esta opción o CD ou DVD eMovix resultante non emprega DMA para "
+"<p>Se marca esta opción o CD ou DVD eMovix resultante non usa DMA para "
 "acceder á unidade. Isto fai máis lenta a lectura do CD ou DVD pero podería "
 "ser obrigatorio nalgúns sistemas que non admitan DMA.</p>"
 
@@ -6415,7 +6413,7 @@ msgstr ""
 #: projects/base_k3bmovixoptionswidget.ui:75
 #, kde-format
 msgid "&Do not use DMA"
-msgstr "&Non empregar DMA"
+msgstr "&Non usar DMA"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, m_editUnwantedMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:84
@@ -6432,7 +6430,7 @@ msgid ""
 "<pre>opt1 opt2 opt3</pre>"
 msgstr ""
 "<p>Aquí pode especificar as opcións de MPlayer que está seguro que nunca se "
-"empregarán.\n"
+"usarán.\n"
 "<p>Teñen que separarse por espazos:\n"
 "<pre>opción1 opción2 opción3</pre>"
 
@@ -6450,7 +6448,7 @@ msgid ""
 "<p>They have to be separated by spaces:\n"
 "<pre>opt1 opt2 opt3</pre>"
 msgstr ""
-"<p>As opcións de MPlayer que se deberán empregar en calquera caso.\n"
+"<p>As opcións de MPlayer que se deberán usar en calquera caso.\n"
 "<p>Teñen que separarse por espazos:\n"
 "<pre>opción1 opción2 opción3</pre>"
 
@@ -6495,7 +6493,7 @@ msgstr "Fondo do reprodutor de son:"
 #: projects/base_k3bmovixoptionswidget.ui:154
 #, kde-format
 msgid "Background video to show during audio playback"
-msgstr "Vídeo de fondo que mostrar durante a reprodución de son"
+msgstr "Vídeo de fondo que amosar durante a reprodución de son"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_comboAudioBackground)
 #: projects/base_k3bmovixoptionswidget.ui:159
@@ -6587,7 +6585,7 @@ msgstr ""
 "de vídeo.\n"
 "<p>As <b>predeterminada</b>, <b>movix</b>, ou <b>MoviX</b> inician un "
 "controlador de vídeo xenérico de Vesa.\n"
-"<p>As <p>TV<p> pódense empregar para dirixir vídeo á saída de TV da placa "
+"<p>As <p>TV<p> pódense usar para dirixir vídeo á saída de TV da placa "
 "gráfica. eMovix fornece controladores TVout para distintas marcas de placas "
 "gráficas.\n"
 "<p>As <b>FB</b> refírense a configuracións que inician un controlador de "
@@ -6732,7 +6730,7 @@ msgid ""
 "cdrdao."
 msgstr ""
 "<p>Se marca esta opción, K3b <em>agochará</em> a primeira pista. <p>Un CD de "
-"son estándar emprega silencios previos antes de cada pista no CD. Estes "
+"son estándar usa silencios previos antes de cada pista no CD. Estes "
 "silencios duran dous segundos de maneira predeterminada. No modo DAO é "
 "posíbel ter silencios máis longos que conteñan algo de son. Neste caso o "
 "primeiro silencio previo conterá a primeira pista completa. <p>Precisará "
@@ -6769,8 +6767,8 @@ msgid ""
 "In order to use this functionality, please install it first."
 msgstr ""
 "<p><b>O programa externo <em>normalize</em> non está instalado.</b><p>K3b "
-"emprega a <em>normalize</em> (http://normalize.nongnu.org/) para normalizar "
-"as pistas de son. Para poder empregar esta funcionalidade, instáleo."
+"usa a <em>normalize</em> (http://normalize.nongnu.org/) para normalizar as "
+"pistas de son. Para poder usar esta funcionalidade, instáleo."
 
 #: projects/k3baudioburndialog.cpp:290 projects/k3baudioburndialog.cpp:309
 #: projects/k3bmixedburndialog.cpp:291 projects/k3bmixedburndialog.cpp:310
@@ -6814,7 +6812,7 @@ msgid ""
 "windows to fine-tune your selection."
 msgstr ""
 "Arrastre os limiares da área realzada para definir a parte da fonte de son "
-"que quere incluír na pista do CD de son. Tamén pode empregar as xanelas de "
+"que quere incluír na pista do CD de son. Tamén pode usar as xanelas de "
 "entrada para axustar polo miúdo a escolla."
 
 #: projects/k3baudiodatasourceeditwidget.cpp:92
@@ -6897,9 +6895,9 @@ msgid ""
 "You may manually convert these audio files to wave using another application "
 "supporting the audio format and then add the wave files to the K3b project."
 msgstr ""
-"Pode converter á man estes ficheiros de son a wave empregando outra "
-"aplicación compatíbel con ese formato de son e logo engadir os ficheiros "
-"wave ao proxecto de K3b."
+"Pode converter á man estes ficheiros de son a wave usando outra aplicación "
+"compatíbel con ese formato de son e logo engadir os ficheiros wave ao "
+"proxecto de K3b."
 
 #: projects/k3baudiotrackaddingdialog.cpp:92
 #: projects/k3bdataurladdingdialog.cpp:126
@@ -7083,7 +7081,7 @@ msgstr "Agochar as opcións avanzadas"
 #: projects/k3bbootimagedialog.cpp:87
 #, kde-format
 msgid "Show Advanced Options"
-msgstr "Mostrar as opcións avanzadas"
+msgstr "Amosar as opcións avanzadas"
 
 #: projects/k3bbootimagedialog.cpp:94
 #, kde-format
@@ -7105,14 +7103,14 @@ msgid ""
 "Internet</a>."
 msgstr ""
 "<p>O ficheiro que escolleu non é unha imaxe de disquete (estas son de 1200 "
-"KB, 1440 KB, ou de 2880 KB). Aínda pode empregar imaxes de arranque doutros "
+"KB, 1440 KB, ou de 2880 KB). Aínda pode usar imaxes de arranque doutros "
 "tamaños emulando un disco duro ou desactivando completamente a emulación."
 "<p>Se non está familiarizado co termos como «emulación de disco duro» "
-"posibelmente queira empregar aquí unha imaxe de disquete. As imaxes de "
-"disquete poden crearse directamente extraéndoas dun disquete real:<pre>dd "
-"if=/dev/floppy of=/tmp/floppy.img</pre> ou empregando un dos moitos "
-"xeradores de disquetes de arranque que pode atopar en <a href=\"https://www."
-"google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">Internet</a>."
+"posibelmente queira usar aquí unha imaxe de disquete. As imaxes de disquete "
+"poden crearse directamente extraéndoas dun disquete real:<pre>dd if=/dev/"
+"floppy of=/tmp/floppy.img</pre> ou usando un dos moitos xeradores de "
+"disquetes de arranque que pode atopar en <a href=\"https://www.google.com/"
+"search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">Internet</a>."
 
 #: projects/k3bbootimagedialog.cpp:111
 #, kde-format
@@ -7122,12 +7120,12 @@ msgstr "Non escolleu ningunha imaxe de disquete"
 #: projects/k3bbootimagedialog.cpp:112
 #, kde-format
 msgid "Use harddisk emulation"
-msgstr "Empregar a emulación de disco duro"
+msgstr "Usar a emulación de disco duro"
 
 #: projects/k3bbootimagedialog.cpp:113
 #, kde-format
 msgid "Use no emulation"
-msgstr "Non empregar emulación"
+msgstr "Non usar emulación"
 
 #: projects/k3bbootimagemodel.cpp:74
 #, kde-format
@@ -7251,9 +7249,9 @@ msgid ""
 "symbolic links, and POSIX compatible file permissions."
 msgstr ""
 "O sistema de ficheiros está optimizado para usarse en sistemas Linux/Unix. "
-"Isto significa principalmente que emprega as extensións Rock Ridge para "
-"fornecer nomes longos de ficheiro, ligazóns simbólicas, e permisos de "
-"ficheiro compatíbeis con POSIX."
+"Isto significa principalmente que usa as extensións Rock Ridge para fornecer "
+"nomes longos de ficheiro, ligazóns simbólicas, e permisos de ficheiro "
+"compatíbeis con POSIX."
 
 #: projects/k3bdataimagesettingswidget.cpp:150
 #, kde-format
@@ -7348,10 +7346,9 @@ msgid ""
 "<p>If you do not intend to use the CD/DVD on a Windows system it is safe to "
 "disable Joliet."
 msgstr ""
-"<p>Lembre que sen as extensións Joliet os sistemas Windows non poden mostrar "
+"<p>Lembre que sen as extensións Joliet os sistemas Windows non poden amosar "
 "os nomes longos dos ficheiros. Só verá os nomes ISO 9660. <p>Se non pretende "
-"empregar o CD ou DVD nun sistema Windows pode desactivar Joliet con "
-"seguranza."
+"usar o CD ou DVD nun sistema Windows pode desactivar Joliet con seguridade."
 
 #: projects/k3bdataimagesettingswidget.cpp:254
 #, kde-format
@@ -7382,19 +7379,19 @@ msgid ""
 "new data.</em>"
 msgstr ""
 "<p><b>Modo de varias sesións</b> <p><b>Automático</b><br>Deixa que K3b "
-"decida o modo a empregar. A decisión basearase no tamaño do proxecto (se "
-"cobre o disco completamente) e no estado do disco inserido (entendíbel ou "
-"non).<br> <p><b>Sen varias sesións</b><br>Crea un CD ou DVD dunha sesión e "
-"pecha o disco.<br> <p><b>Comezar con varias sesións</b><br> Inicia un CD ou "
-"DVD con varias sesións, non pechando o disco para permitir engadir máis "
-"sesións.<br> <p><b>Continuar con varias sesións</b><br> Continúa un CD de "
-"datos entendíbel (por exemplo creado co modo <em>Comezar con varias sesións</"
-"em>) e engade outra sesión sen pechar o disco para permitir engadir despois "
-"máis sesións. <p><b>Rematar con varias sesións</b><br> Continúa un CD de "
-"datos aberto (por exemplo creado co modo <em>Comezar con varias sesións</"
-"em>), engade outra sesión, e pecha o disco. <p><em>No caso dos discos DVD+RW "
-"e DVD+RW de sobrescrita restrinxida K3b non creará realmente varias sesións "
-"senón que aumentará o sistema de ficheiros para incluír os novos datos.</em>"
+"decida o modo a usar. A decisión basearase no tamaño do proxecto (se cobre o "
+"disco completamente) e no estado do disco inserido (entendíbel ou non).<br> "
+"<p><b>Sen varias sesións</b><br>Crea un CD ou DVD dunha sesión e pecha o "
+"disco.<br> <p><b>Comezar con varias sesións</b><br> Inicia un CD ou DVD con "
+"varias sesións, non pechando o disco para permitir engadir máis sesións.<br> "
+"<p><b>Continuar con varias sesións</b><br> Continúa un CD de datos "
+"entendíbel (por exemplo creado co modo <em>Comezar con varias sesións</em>) "
+"e engade outra sesión sen pechar o disco para permitir engadir despois máis "
+"sesións. <p><b>Rematar con varias sesións</b><br> Continúa un CD de datos "
+"aberto (por exemplo creado co modo <em>Comezar con varias sesións</em>), "
+"engade outra sesión, e pecha o disco. <p><em>No caso dos discos DVD+RW e DVD"
+"+RW de sobrescrita restrinxida K3b non creará realmente varias sesións senón "
+"que aumentará o sistema de ficheiros para incluír os novos datos.</em>"
 
 #: projects/k3bdatamultisessioncombobox.cpp:65
 #, kde-format
@@ -7429,7 +7426,7 @@ msgstr ""
 "ficheiro pero non as extensións Rock Ridge. <p>Os nomes de ficheiro na "
 "sesión importada converteranse a un conxunto de caracteres restrinxido na "
 "nova sesión. Este conxunto de caracteres está baseado na configuración de "
-"ISO 9660 do proxecto de K3b. K3b non pode mostrar aínda estes nome de "
+"ISO 9660 do proxecto de K3b. K3b non pode amosar aínda estes nome de "
 "ficheiro convertidos."
 
 #: projects/k3bdatamultisessionimportdialog.cpp:96
@@ -8000,7 +7997,7 @@ msgstr "Por que 4.4 no canto de 4.7?"
 #: projects/k3bfillstatusdisplay.cpp:462
 #, kde-format
 msgid "Show Size In"
-msgstr "Mostrar o tamaño en"
+msgstr "Amosar o tamaño en"
 
 #: projects/k3bfillstatusdisplay.cpp:468
 #, kde-format
@@ -8062,8 +8059,8 @@ msgid ""
 "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</"
 "em> respectively."
 msgstr ""
-"<p>Indique o tamaño do disco. Empregue os sufixos <b>GB</b>, <b>MB</b>, e "
-"<b>min</b> para <em>xigabytes</em>, <em>megabytes</em> e <em>minutos</em>, "
+"<p>Indique o tamaño do disco. Use os sufixos <b>GB</b>, <b>MB</b>, e <b>min</"
+"b> para <em>xigabytes</em>, <em>megabytes</em> e <em>minutos</em>, "
 "respectivamente."
 
 #: projects/k3bfillstatusdisplay.cpp:663
@@ -8115,10 +8112,9 @@ msgstr ""
 "em> (tamén coñecido como <em>CD de son estendido</em>, <em>CD-Extra</em>, ou "
 "<em>CD Plus</em>) e ten a vantaxe de que os lectores de CD de alta "
 "fidelidade só recoñecen a primeira sesión e ignoran a segunda sesión coa "
-"pista de datos.<br> Se pensa empregar o CD nun lector de CD dun reprodutor "
-"de alta fidelidade este é o modo recomendado.<br> Algúns CD-ROM antigos "
-"poden ter problemas lendo un CD de Libro Azul xa que é un CD de varias "
-"sesións."
+"pista de datos.<br> Se pensa usar o CD nun lector de CD dun reprodutor de "
+"alta fidelidade este é o modo recomendado.<br> Algúns CD-ROM antigos poden "
+"ter problemas lendo un CD de Libro Azul xa que é un CD de varias sesións."
 
 #: projects/k3bmixedburndialog.cpp:115
 #, kde-format
@@ -8148,7 +8144,7 @@ msgid ""
 "problems with some older hifi audio CD players that try to play the data "
 "track."
 msgstr ""
-"<b>Aviso:</b> Estes dous últimos modos só deben empregarse para CD que sexa "
+"<b>Aviso:</b> Estes dous últimos modos só deben usarse para CD que sexa "
 "improbábel que vaian reproducirse nun lector de CD dun reprodutor de son de "
 "alta fidelidade. <p>Pode implicar problemas con algúns lectores antigos de "
 "CD de reprodutores de son de alta fidelidade que intenten reproducir a pista "
@@ -8389,7 +8385,7 @@ msgstr "Interpretación da pista chinesa VCD3.0"
 #: projects/k3bvcdburndialog.cpp:102
 #, kde-format
 msgid "Use 2336 byte sectors for output"
-msgstr "Empregar sectores de 2336 bytes para a saída"
+msgstr "Usar sectores de 2336 bytes para a saída"
 
 #: projects/k3bvcdburndialog.cpp:104
 #, kde-format
@@ -8473,25 +8469,25 @@ msgid ""
 "Used to set the number of empty sectors added before the lead-out area "
 "begins."
 msgstr ""
-"Emprégueo para escoller a cantidade de sectores baleiros engadidos antes do "
+"Úseo para escoller a cantidade de sectores baleiros engadidos antes do "
 "inicio da área de lead-out."
 
 #: projects/k3bvcdburndialog.cpp:119
 #, kde-format
 msgid "Used to set the track pre-gap for all tracks in sectors globally."
 msgstr ""
-"Emprégueo para escoller globalmente o silencio previo da pista para todas as "
+"Úseo para escoller globalmente o silencio previo da pista para todas as "
 "pistas, en sectores."
 
 #: projects/k3bvcdburndialog.cpp:120
 #, kde-format
 msgid "Sets the front margin for sequence items."
-msgstr "Estabelece a marxe frontal para os elementos da secuencia."
+msgstr "Define a marxe frontal para os elementos da secuencia."
 
 #: projects/k3bvcdburndialog.cpp:121
 #, kde-format
 msgid "Sets the rear margin for sequence items."
-msgstr "Estabelece a marxe posterior para os elementos da secuencia."
+msgstr "Define a marxe posterior para os elementos da secuencia."
 
 #: projects/k3bvcdburndialog.cpp:125
 #, kde-format
@@ -8663,9 +8659,9 @@ msgid ""
 "li></ul>"
 msgstr ""
 "<ul> <li>Renomear o cartafol<b>«/MPEG2»</b> nos SVCD a (non estándar) «/"
-"MPEGAV».</li> <li>Permite empregar unha sinatura <b>«ENTRYSVD»</b> "
-"(obsoleta) no canto de <b>«ENTRYVCD»</b> para o ficheiro <b>«/SVCD/ENTRY."
-"SVD»</b>.</li></ul>"
+"MPEGAV».</li> <li>Permite usar unha sinatura <b>«ENTRYSVD»</b> (obsoleta) no "
+"canto de <b>«ENTRYVCD»</b> para o ficheiro <b>«/SVCD/ENTRY.SVD»</b>.</li></"
+"ul>"
 
 # well-spelled: SVCD
 #: projects/k3bvcdburndialog.cpp:182
@@ -8706,7 +8702,7 @@ msgstr ""
 "estándar de CD de vídeo require que estea presente un programa de aplicación "
 "de CD-i. <p>Este programa está deseñado para: <ul> <li>fornecer control de "
 "reprodución completo segundo se define no PSD do estándar</li><li>ser "
-"extremadamente sinxelo de empregar e fácil de aprender para o usuario final</"
+"extremadamente sinxelo de usar e fácil de aprender para o usuario final</"
 "li></ul><p>O programa execútase en reprodutores equipados co sistema "
 "operativo CDRTOS 1.1(.1) e un cartucho de extensión de vídeo dixital."
 
@@ -8719,9 +8715,9 @@ msgid ""
 "and lots more."
 msgstr ""
 "<p>Os parámetros de configuracións só están dispoñíbeis para CD de vídeo 2.0 "
-"<p>O motor traballa perfectamente ben cando se emprega como é. <p>Ten a "
-"opción de configurar a aplicación de VCD. <p>Pode adaptar a cor , a forma do "
-"cursor e moitas cousas máis."
+"<p>O motor traballa perfectamente ben cando se usa como é. <p>Ten a opción "
+"de configurar a aplicación de VCD. <p>Pode adaptar a cor , a forma do cursor "
+"e moitas cousas máis."
 
 #: projects/k3bvcdburndialog.cpp:200 projects/k3bvcdtrackdialog.cpp:255
 #, kde-format
@@ -8788,10 +8784,10 @@ msgstr ""
 "<p>Segundo a especificación, é obrigatorio que os CD de vídeo separado (S-"
 "Video) codifiquen os datos de varrido extraídos en bloques de datos do "
 "usuario na capa de imaxe de todas as imaxes codificadas internamente. <p> "
-"Isto pode empregarse por dispositivos de reprodución para permitir a "
-"navegación rápida cara a diante e cara atrás.<p> Os datos de varrido xa "
-"existentes pódense actualizar activando a opción «Actualizar os "
-"desprazamentos de varrido»."
+"Isto pode usarse por dispositivos de reprodución para permitir a navegación "
+"rápida cara a diante e cara atrás.<p> Os datos de varrido xa existentes "
+"pódense actualizar activando a opción «Actualizar os desprazamentos de "
+"varrido»."
 
 #: projects/k3bvcdburndialog.cpp:216
 #, kde-format
@@ -8829,7 +8825,7 @@ msgstr ""
 "engadidos antes de que comece a área de «lead-out», é dicir, a cantidade de "
 "sectores despois do silencio. <p>A especificación ECMA-130 require que a "
 "última pista de datos antes do «lead-out» teña un silencio de polo menos 150 "
-"sectores, que se emprega de maneira predeterminada para este parámetro. "
+"sectores, que se usa de maneira predeterminada para este parámetro. "
 "<p>Algúns sistemas operativos poden atoparse con erros de entrada e saída de "
 "datos debido a problemas de lecturas anticipadas cando len a última pista "
 "MPEG se este parámetro é baixo de máis. <p>Os valores permitidos están no "
@@ -8842,8 +8838,8 @@ msgid ""
 "specification requires the pre-gaps to be at least 150 sectors long."
 "<p>Allowed value content: [0..300]. Default: 150."
 msgstr ""
-"<p>Emprégase para escoller globalmente o silencio previo da pista para todas "
-"as pistas, en sectores. <p>A especificación require que os silencios previos "
+"<p>Úsase para escoller globalmente o silencio previo da pista para todas as "
+"pistas, en sectores. <p>A especificación require que os silencios previos "
 "teñan unha duración de polo menos 150 sectores. <p>Os valores permitidos "
 "están no intervalo [0, 300]. O valor predeterminado é 150."
 
@@ -8856,12 +8852,12 @@ msgid ""
 "<p>Allowed value content: [0..150]. Default: 30 for Video CD 1.0/1.1/2.0, "
 "otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0."
 msgstr ""
-"As marxes empréganse para compensar problemas de enderezos inexactos de "
-"sectores en discos CD-ROM. Abandonáronse en favor do CD de vídeo separado (S-"
-"Video). <p>Para o CD de vídeo 1.0, 1.1 e 2.0 estas marxes deben ser de polo "
-"menos 15 sectores. <p>Os valores permitidos están no intervalo [0, 150]. De "
-"maneira predeterminada son 30 para CD de vídeo e 0 para o resto dos casos, "
-"como por exemplo CD de vídeo separado (S-Video) 1.0 e HQ-VCD 1.0."
+"As marxes úsanse para compensar problemas de enderezos inexactos de sectores "
+"en discos CD-ROM. Abandonáronse en favor do CD de vídeo separado (S-Video). "
+"<p>Para o CD de vídeo 1.0, 1.1 e 2.0 estas marxes deben ser de polo menos 15 "
+"sectores. <p>Os valores permitidos están no intervalo [0, 150]. De maneira "
+"predeterminada son 30 para CD de vídeo e 0 para o resto dos casos, como por "
+"exemplo CD de vídeo separado (S-Video) 1.0 e HQ-VCD 1.0."
 
 #: projects/k3bvcdburndialog.cpp:237
 #, kde-format
@@ -8872,7 +8868,7 @@ msgid ""
 "<p>Allowed value content: [0..150]. Default: 45 for Video CD 1.0/1.1/2.0, "
 "otherwise 0."
 msgstr ""
-"<p>As marxes empréganse para compensar problemas de enderezos inexactos de "
+"<p>As marxes úsanse para compensar problemas de enderezos inexactos de "
 "sectores en discos CD-ROM. Abandonáronse en favor do CD de vídeo separado (S-"
 "Video). <p>Para o CD de vídeo 1.0, 1.1 e 2.0 estas marxes deben ser de polo "
 "menos 15 sectores. <p>Os valores permitidos están no intervalo [0, 150]. De "
@@ -8971,7 +8967,7 @@ msgstr "Activar a interpretación da pista %1"
 #: projects/k3bvcdburndialog.cpp:419
 #, kde-format
 msgid "Use 2336 byte sectors"
-msgstr "Empregar sectores de 2336 bytes"
+msgstr "Usar sectores de 2336 bytes"
 
 #: projects/k3bvcdburndialog.cpp:420
 #, kde-format
@@ -9196,7 +9192,7 @@ msgstr ""
 "de repeticións especificadas, o tempo de <espera> comeza a contar, a non ser "
 "que escolla un tempo de espera infinito. <p>De omitir este elemento, "
 "empregarase un predeterminado de 1, é dicir, a «pista de reprodución» "
-"mostrarase unha vez."
+"amosarase unha vez."
 
 #: projects/k3bvcdtrackdialog.cpp:263
 #, kde-format
@@ -9236,7 +9232,7 @@ msgstr "Activar o control de reprodución (para todo o CD)"
 #: projects/k3bvcdtrackdialog.cpp:448
 #, kde-format
 msgid "Use numeric keys"
-msgstr "Empregar as teclas numéricas"
+msgstr "Usar as teclas numéricas"
 
 #: projects/k3bvcdtrackdialog.cpp:450
 #, kde-format
@@ -9484,9 +9480,9 @@ msgid ""
 msgstr ""
 "<p>Se marca esta opción K3b crea unha lista de reprodución para os ficheiros "
 "extraídos\n"
-"que pode empregarse con programas como Amarok ou JuK.\n"
-"<p>Pode empregar cadeas especiais para darlle á lista de reprodución un nome "
-"de ficheiro único."
+"que pode usarse con programas como Amarok ou JuK.\n"
+"<p>Pode usar cadeas especiais para darlle á lista de reprodución un nome de "
+"ficheiro único."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCreatePlaylist)
 #: rip/base_k3baudiorippingoptionwidget.ui:61
@@ -9498,7 +9494,7 @@ msgstr "Crear unha lista de reprodución m&3u"
 #: rip/base_k3baudiorippingoptionwidget.ui:89
 #, kde-format
 msgid "Use relative paths instead of absolute"
-msgstr "Empregar rutas relativas no canto de absolutas"
+msgstr "Usar rutas relativas no canto de absolutas"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:95
@@ -9522,7 +9518,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:98
 #, kde-format
 msgid "&Use relative paths"
-msgstr "&Empregar rutas relativas"
+msgstr "&Usar rutas relativas"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:107
@@ -9793,7 +9789,7 @@ msgstr "Gardar a información da pista e o álbum nunha caché local de CDDB."
 #: rip/k3baudiocdview.cpp:260
 #, kde-format
 msgid "Show Data Part"
-msgstr "Mostrar a parte de datos"
+msgstr "Amosar a parte de datos"
 
 #: rip/k3baudiocdview.cpp:261
 #, kde-format
@@ -10299,7 +10295,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:109
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "Empregando %1 %2 (© %3)"
+msgstr "Usando %1 %2 (© %3)"
 
 #: rip/k3bvideocdrip.cpp:160
 #, kde-format
@@ -10399,7 +10395,7 @@ msgstr "Ignorar /EXT/PSD_X.VCD"
 #: rip/k3bvideocdrippingdialog.cpp:92
 #, kde-format
 msgid "Use 2336 byte sector mode for image file"
-msgstr "Empregar o modo de sectores de 2336 bytes para o ficheiro imaxe"
+msgstr "Usar o modo de sectores de 2336 bytes para o ficheiro imaxe"
 
 #: rip/k3bvideocdrippingdialog.cpp:96
 #, kde-format
@@ -10433,7 +10429,7 @@ msgid ""
 "VCD') and use the <em>standard</em> PSD.</p>"
 msgstr ""
 "<p>Ignorar o PSD ampliado (situado no sistema de ficheiros ISO 9660 baixo «/"
-"EXT/PSD_X.VCD») e empregar o PSD <em>estándar</em>.</p>"
+"EXT/PSD_X.VCD») e usar o PSD <em>estándar</em>.</p>"
 
 #: rip/k3bvideocdrippingdialog.cpp:124
 #, kde-format
@@ -10867,7 +10863,7 @@ msgstr "Non se puideron determinar os valores de recorte do título %1"
 #: rip/videodvd/k3bvideodvdrippingview.cpp:79
 #, kde-format
 msgid "Show files"
-msgstr "Mostrar os ficheiros"
+msgstr "Amosar os ficheiros"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:80
 #, kde-format
@@ -10929,7 +10925,7 @@ msgstr[1] "%1 títulos"
 #, kde-format
 msgid "K3b uses transcode to rip Video DVDs. Please make sure it is installed."
 msgstr ""
-"K3b emprega «transcode» para extraer os DVD de vídeo. Asegúrese de que estea "
+"K3b usa «transcode» para extraer os DVD de vídeo. Asegúrese de que estea "
 "instalado."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:291
@@ -10939,7 +10935,7 @@ msgid ""
 "lacks support for any of the codecs supported by K3b.<p>Please make sure it "
 "is installed properly."
 msgstr ""
-"<p>K3b emprega «transcode» para extraer DVD de vídeo. A instalación de "
+"<p>K3b usa «transcode» para extraer DVD de vídeo. A instalación de "
 "«transcode» non é compatíbel con ningún dos códecs que K3b permite usar. "
 "<p>Asegúrese de que «transcode» estea correctamente instalado."
 
@@ -10966,10 +10962,9 @@ msgstr ""
 "<p>Extrae títulos individuais dun DVD de vídeo nun formato comprimido, como "
 "o XviD. Ignóranse de vez as estruturas de menú.<p>Se pretende copiar os "
 "ficheiros vob do DVD de vídeo tal cal están no DVD (incluíndo o descifrado) "
-"para procesalos posteriormente con outra aplicación, empregue o botón "
-"«Mostrar os ficheiros»<p>Se pretende facer unha copia de todo o DVD de vídeo "
-"incluíndo todos os menús e extras, recoméndase usar a ferramenta Copiar do "
-"K3b."
+"para procesalos posteriormente con outra aplicación, use o botón «Amosar os "
+"ficheiros»<p>Se pretende facer unha copia de todo o DVD de vídeo incluíndo "
+"todos os menús e extras, recoméndase usar a ferramenta Copiar do K3b."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
 msgid "Keep original dimensions"
