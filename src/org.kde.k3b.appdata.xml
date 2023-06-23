@@ -103,6 +103,7 @@
     <p xml:lang="de">K3b wurde als CD-Brennprogramm mit vielen Funktionen und einfacher Bedienung entwickelt. Es besteht im wesentlichen aus drei Teilen:</p>
     <p xml:lang="el">Το K3b δημιουργήθηκε για να είναι μια πλούσια χαρακτηριστικών και εύκολη στη χρήση εφαρμογή εγραφής σε CD. Βασικά αποτελείται από τρία μέρη:</p>
     <p xml:lang="en-GB">K3b was created to be a feature-rich and easy to handle CD burning application. It consists of basically three parts:</p>
+    <p xml:lang="eo">K3b estis kreita por esti riĉa kaj facile uzebla aplikaĵo por bruligado de KD. Ĝi konsistas el esence tri partoj:</p>
     <p xml:lang="es">K3b se creó para ser una aplicación para manejar grabaciones de CD rica en funcionalidades y fácil de usar. Consta básicamente de tres componentes:</p>
     <p xml:lang="et">K3b loodi võimalusterohkeks ja hõlpsasti kasutatavaks CD-de kirjutamise rakenduseks. See koosneb kolmest põhiosast:</p>
     <p xml:lang="eu">K3b eginbidetan aberatsa eta erabiltzeko erraza izango zen CDak erretzeko aplikazio bat izateko sortu zen. Funtsean hiru zati ditu:</p>
@@ -147,6 +148,7 @@
       <li xml:lang="de">Projekte: Projekte werden im Dateimenü erstellt und dann mit Daten zum Schreiben gefüllt</li>
       <li xml:lang="el">Τα έργα: Έργα δημιουργούνται από το μενού Αρχείο και έπειτα γεμίζονται με τα δεδομένα για εγγραφή</li>
       <li xml:lang="en-GB">The projects: Projects are created from the file menu and then filled with data to burn</li>
+      <li xml:lang="eo">La projektoj: Projektoj estas kreitaj el la dosiermenuo kaj poste plenigitaj kun datumoj por bruligi</li>
       <li xml:lang="es">Los proyectos: los proyectos se crean desde el menú archivo y, a continuación, se cumplimentan con los datos a grabar</li>
       <li xml:lang="et">Projektid: neid saab luua menüüst Fail ja seejärel täita andmetega, mida soovid kirjutada</li>
       <li xml:lang="eu">Proiektua: Proiektuak fitxategi menutik sortu eta gero erreko diren datuz betetzen dira</li>
@@ -189,6 +191,7 @@
       <li xml:lang="de">Extras: Im Menü Extras finden Sie verschiedene Aktionen wie das Kopieren von CDs oder die Formatierung von DVDs</li>
       <li xml:lang="el">Τα εργαλεία: Το μενού Εργαλεία προσφέρει διάφορα εργαλεία όπως αντγραφή CD ή φορμάρισμα DVD</li>
       <li xml:lang="en-GB">The Tools: The tools menu offers different tools like CD copy or DVD formatting</li>
+      <li xml:lang="eo">La Iloj: La ila menuo ofertas malsamajn ilojn kiel KD-kopio aŭ DVD-formatado</li>
       <li xml:lang="es">Las herramientas: el menú herramientas ofrece diferentes herramientas, como copia de CD o formateo de DVD</li>
       <li xml:lang="et">Tööriistad: vastav menüü pakub mitmesuguseid tööriistu, näiteks CD kopeerimiseks või DVD vormindamiseks</li>
       <li xml:lang="eu">Tresnak: Tresnak menuak tresna ezberdinak eskaintzen ditu, tartean CD kopia edo DVD formateatzea</li>
@@ -232,6 +235,7 @@
       <li xml:lang="de">Kontextsensitive Aktionen für Medien: Wenn Sie auf das Symbol eines CD-/DVD-Laufwerks klicken, zeigt K3b deren Inhalt und ermöglicht weitere Aktionen, zum Beispiel das Auslesen einer Audio-CD</li>
       <li xml:lang="el">Ενέργειες πολυμέσων με ευαισθησία στο περιεχόμενο: Όταν κάνετε κλικ στο εικονίδιο που αναπαριστά έναν οδηγό CD/DVD, το K3b θα παρουσιάσει τα περιεχόμενά του και θα επιτρέψει κάποιες άλλες ενέργειες. Αυτός είναι για παράδειγμα, ο τρόπος εγγραφής σε CD ήχου</li>
       <li xml:lang="en-GB">Context sensitive media actions: When clicking on the Icon representing a CD/DVD drive K3b will present its contents and allow some further action. This is for example the way to rip audio CDs</li>
+      <li xml:lang="eo">Kuntekst-sentemaj datumportil-agoj: Alklakante la pitkogramon reprezentantan KD/DVD-diskon, K3b prezentos ĝian enhavon kaj permesos plian agon. Ĉi tio estas ekzemple la maniero ŝiri aŭd-KD-ojn</li>
       <li xml:lang="es">Acciones de medios sensibles al contexto: cuando se pulsa sobre un icono que representa una unidad de CD/DVD, K3b presentará su contenido y permitirá algunas acciones adicionales. Esto es, por ejemplo, el modo de extraer CD de audio</li>
       <li xml:lang="et">Kontekstitundlikud meediatoimingud: CD/DVD-plaati kujutavale ikoonile klõpsates näitab K3b selle sisu ja lubab sooritada mõningaid toiminguid. Nii saab näiteks rippida heli-CD-sid</li>
       <li xml:lang="eu">Testuinguruarekiko sentikorrak diren euskarri ekintzak: CD/DVD gailu bat ordezkatzen duten ikonoetan klik egitean, K3b-k haien edukia aurkeztuko du eta beste ekintza batzuk egiteko aukera emango du. Hau da esaterako audio CDak erauzteko era.</li>
