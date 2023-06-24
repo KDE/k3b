@@ -2230,7 +2230,7 @@ msgstr "Non se poden manexar ficheiros maiores de 2 GB."
 #: projects/datacd/k3bmkisofshandler.cpp:90
 #, kde-format
 msgid "No such file or directory '%1'."
-msgstr "Non existe o ficheiro ou directorio «%1»."
+msgstr "Non existe o ficheiro ou cartafol «%1»."
 
 #: projects/datacd/k3bmkisofshandler.cpp:105
 #, kde-format

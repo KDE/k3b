@@ -1595,7 +1595,7 @@ msgstr "Amosar a cabeceira dos proxectos"
 #: k3b.cpp:432
 #, kde-format
 msgid "Shows/hides title header of projects panel"
-msgstr "Mostra ou agocha o título no panel dos proxectos"
+msgstr "Amosa ou agocha o título no panel dos proxectos"
 
 #: k3b.cpp:443
 #, kde-format
@@ -10871,7 +10871,7 @@ msgid ""
 "Shows plain Video DVD vob files from the DVD (including decryption) for "
 "further processing with another application"
 msgstr ""
-"Mostra ficheiros vob de DVD de vídeo simples do DVD (incluído o descifrado) "
+"Amosa ficheiros vob de DVD de vídeo simples do DVD (incluído o descifrado) "
 "para posterior procesamento con outra aplicación"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
