@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 02:32+0000\n"
-"PO-Revision-Date: 2023-02-24 11:10+0100\n"
+"PO-Revision-Date: 2023-06-23 10:48+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1427,12 +1427,12 @@ msgstr "Vytvoří nový projekt Video DVD"
 #: k3b.cpp:358 k3bdevicemenu.cpp:67
 #, kde-format
 msgid "Continue Multisession Project"
-msgstr "Pokračovat v multisession projektu"
+msgstr "Pokračovat v projektu multisezení"
 
 #: k3b.cpp:359
 #, kde-format
 msgid "Continues multisession project"
-msgstr "Pokračuje v multisession projektu"
+msgstr "Pokračuje v projektu multisezení"
 
 #: k3b.cpp:364
 #, kde-format
@@ -1875,7 +1875,7 @@ msgstr ""
 "forma 1'</em>, jelikož však jsou další modely používány vzácně, je snazší "
 "používat zkrácený název <em>režim 2<em>.</p><p><b>Upozornění:</b>Nemíchejte "
 "různé režimy na jednom CD protože některá starší zařízení mohou mít problémy "
-"se čtením CD v režimu 1 o více session."
+"se čtením CD v režimu 1 o více sezení."
 
 #: k3bdebuggingoutputdialog.cpp:36
 #, kde-format
@@ -2058,7 +2058,7 @@ msgstr "CD-Text"
 #: k3bdiskinfoview.cpp:251 projects/k3bdatamultisessionimportdialog.cpp:207
 #, kde-format
 msgid "Session %1"
-msgstr "Session %1"
+msgstr "Sezení %1"
 
 #: k3bdiskinfoview.cpp:261 projects/k3bvcdburndialog.cpp:388
 #: rip/k3baudiorippingdialog.cpp:136
@@ -2199,7 +2199,7 @@ msgstr "Formátování na pozadí:"
 #: k3bdiskinfoview.cpp:346
 #, kde-format
 msgid "Sessions:"
-msgstr "Sessions:"
+msgstr "Sezení:"
 
 #: k3bdiskinfoview.cpp:368
 #, kde-format
@@ -3438,7 +3438,7 @@ msgid ""
 msgstr ""
 "<em>TAO</em> (Track At Once) by měl bát podporován každou vypalovačkou. "
 "Laser bude vypnut s koncem každé stopy.<br />Většina CD vypalovaček "
-"potřebuje tento režim pro zápis CD o více session."
+"potřebuje tento režim pro zápis CD o více sezeních."
 
 #: k3bwritingmodewidget.cpp:31
 #, kde-format
@@ -3458,7 +3458,7 @@ msgid ""
 "multisession DVD-R(W)s. It only applies to DVD-R(W)."
 msgstr ""
 "Výchozí režim zápisu pro DVD-R(W) je 'Sekvenční přírůstkový', který "
-"podporuje DVD-R(W) o více sessions. Vztahuje se pouze na DVD-R(W)."
+"podporuje DVD-R(W) o více sezeních. Vztahuje se pouze na DVD-R(W)."
 
 #: k3bwritingmodewidget.cpp:38
 #, kde-format
@@ -3471,7 +3471,7 @@ msgid ""
 msgstr ""
 "Zákaz přepisu povoluje použití DVD-RW jako DVD-RAM nebo DVD+RW. Médium může "
 "být prostě přepsáno. Není možné zapisovat DVD-RW v tomto režimu, ale K3b "
-"používá growisofs k vytvoření souborového systému ISO 9660 s první session, "
+"používá growisofs k vytvoření souborového systému ISO 9660 s prvního sezení, "
 "navíc povolí přidávání nových souborů na už vypálený disk."
 
 #: k3bwritingmodewidget.cpp:94
@@ -4276,9 +4276,9 @@ msgid ""
 "<p>For Video CDs please use the CD Cloning mode."
 msgstr ""
 "<p>Toto je normální kopírovací režim, doporučený pro většinu typů médií."
-"Umožňuje kopírováni Audio CD, médií o jedné i více session, rozšířených "
-"Audio CD (Audio CD obsahující dodatečnou datovou session).<p>Pro Video CD "
-"použijte prosím CD Klonovací režim."
+"Umožňuje kopírováni Audio CD, médií o jedné i více sezení, rozšířených Audio "
+"CD (Audio CD obsahující dodatečnou datovou sezení).<p>Pro Video CD použijte "
+"prosím CD Klonovací režim."
 
 #: misc/k3bmediacopydialog.cpp:226
 #, kde-format
@@ -6972,12 +6972,12 @@ msgstr "Režim datových stop"
 #: projects/k3bdataburndialog.cpp:147
 #, kde-format
 msgid "Multisession Mode"
-msgstr "Multisession režim"
+msgstr "Režim multisezení"
 
 #: projects/k3bdataburndialog.cpp:185 projects/k3bmovixburndialog.cpp:218
 #, kde-format
 msgid "Most writers do not support writing multisession CDs in DAO mode."
-msgstr "Většina vypalovaček nepodporuje zápis multisession CD v režimu DAO."
+msgstr "Většina vypalovaček nepodporuje zápis multisezení CD v režimu DAO."
 
 #: projects/k3bdataburndialog.cpp:248
 #, kde-format
@@ -6985,12 +6985,12 @@ msgid ""
 "It is not possible to write multisession media in DAO mode. Multisession has "
 "been disabled."
 msgstr ""
-"Na multisession DVD nelze zapisovat v DAO režimu. Multisession byl zakázán."
+"Na multisezení DVD nelze zapisovat v DAO režimu. Multisezení bylo zakázáno."
 
 #: projects/k3bdataburndialog.cpp:250
 #, kde-format
 msgid "Multisession Problem"
-msgstr "Problém multisession"
+msgstr "Problém multisezení"
 
 #: projects/k3bdataimagesettingswidget.cpp:32
 #, kde-format
@@ -7145,7 +7145,7 @@ msgstr "Rozšíření Joliet je vypnuto"
 #: projects/k3bdatamultisessioncombobox.cpp:27
 #, kde-format
 msgid "Select the Multisession Mode for the project."
-msgstr "Zvolit multisession režim pro projekt."
+msgstr "Zvolit pro projekt režim multisezení."
 
 #: projects/k3bdatamultisessioncombobox.cpp:28
 #, kde-format
@@ -7165,41 +7165,41 @@ msgid ""
 "actually create multiple sessions but grow the file system to include the "
 "new data.</em>"
 msgstr ""
-"<p><b>Podpora multisession</b></p><p><b>Automatická</b><br />Nechť K3b "
+"<p><b>Podpora multisezení</b></p><p><b>Automatická</b><br />Nechť K3b "
 "rozhodne sám, který režim použít. Rozhodnutí bude založeno na velikosti "
 "projektu (zda zaplní celé médium) a schopnostech vloženého média (zda "
-"podporuje dodatečný zápis).</p><p><b>Jediná session</b><br />Vytvoří CD/DVD "
-"o jediné session a uzavře disk.</p><p><b>Začít multisession</b><br />Začne "
-"multisession disk ale neuzavře ho, čímž povolí přidání dalších session.</"
+"podporuje dodatečný zápis).</p><p><b>Jediné sezení</b><br />Vytvoří CD/DVD o "
+"jediné sezení a uzavře disk.</p><p><b>Začít multisezení</b><br />Začne disk "
+"multisezení ale neuzavře ho, čímž povolí přidání dalších sezení.</"
 "p><p><b>Pokračovat</b><br />Pokračuje v zápisu na disk (musí podporovat "
 "dodatečný zápis a být vytvořený například pomocí režimu <em>začít "
-"multisession</em>) a přidá další session bez uzavření disku (povolí přidání "
-"dalších sessions).</p><p><b>Zavřít multisession</b><br />Pokračuje v zápisu "
-"na disk (musí podporovat dodatečný zápis a být vytvořený například pomocí "
-"režimu <em>začít multisession</em>) a pak jej uzavře (nepůjde přidat žádné "
-"další sessions).</p><p><em>V režimu omezeného přepisu K3b nebude vytvářet "
-"novou session, nýbrž rozšíří souborový systém disku tak, aby obsahoval nová "
-"data.</em></p>"
+"multisezení</em>) a přidá další sezení bez uzavření disku (povolí přidání "
+"dalších sezení).</p><p><b>Zavřít multisezení</b><br />Pokračuje v zápisu na "
+"disk (musí podporovat dodatečný zápis a být vytvořený například pomocí "
+"režimu <em>začít multisezení</em>) a pak jej uzavře (nepůjde přidat žádné "
+"další sezení).</p><p><em>V režimu omezeného přepisu K3b nebude vytvářet nové "
+"sezení, nýbrž rozšíří souborový systém disku tak, aby obsahoval nová data.</"
+"em></p>"
 
 #: projects/k3bdatamultisessioncombobox.cpp:65
 #, kde-format
 msgid "No Multisession"
-msgstr "Bez multisession"
+msgstr "Bez multisezení"
 
 #: projects/k3bdatamultisessioncombobox.cpp:67
 #, kde-format
 msgid "Start Multisession"
-msgstr "Zahájit multisession"
+msgstr "Zahájit multisezení"
 
 #: projects/k3bdatamultisessioncombobox.cpp:68
 #, kde-format
 msgid "Continue Multisession"
-msgstr "Pokračovat v multisession "
+msgstr "Pokračovat v multisezení"
 
 #: projects/k3bdatamultisessioncombobox.cpp:69
 #, kde-format
 msgid "Finish Multisession"
-msgstr "Dokončit multisession"
+msgstr "Dokončit multisezení"
 
 #: projects/k3bdatamultisessionimportdialog.cpp:91
 #, kde-format
@@ -7210,7 +7210,7 @@ msgid ""
 "set is based on the ISO 9660 settings in the K3b project. K3b is not able to "
 "display these converted filenames yet."
 msgstr ""
-"<p>K3b nalezl session obsahující informace náležící rozšíření Joliet (pro "
+"<p>K3b nalezl sezení obsahující informace náležící rozšíření Joliet (pro "
 "podporu dlouhých názvů souborů, avšak nenašel žádné rozšíření Rock Ridge."
 "<p>Názvy těchto souborů budou omezeny a převedeny na novou znakovou sadu "
 "vycházející z nastavení projektu ISO 9660. K3b zatím není schopen zpracovat "
@@ -7219,7 +7219,7 @@ msgstr ""
 #: projects/k3bdatamultisessionimportdialog.cpp:96
 #, kde-format
 msgid "Session Import Warning"
-msgstr "Varování importu session"
+msgstr "Varování importu sezení"
 
 #: projects/k3bdatamultisessionimportdialog.cpp:156
 #, kde-format
@@ -7237,12 +7237,12 @@ msgstr[2] "%1 zvukových stop"
 #: projects/k3bdatamultisessionimportdialog.cpp:248
 #, kde-format
 msgid "Session Import"
-msgstr "Importovat session"
+msgstr "Importovat sezení"
 
 #: projects/k3bdatamultisessionimportdialog.cpp:251
 #, kde-format
 msgid "Please select a session to import."
-msgstr "Zvolte prosím session k importu."
+msgstr "Zvolte prosím sezení k importu."
 
 #: projects/k3bdataprojectmodel.cpp:182
 #, kde-format
@@ -7671,22 +7671,22 @@ msgstr "Otevřít"
 #: projects/k3bdataviewimpl.cpp:138
 #, kde-format
 msgid "&Import Session..."
-msgstr "&Importovat session..."
+msgstr "&Importovat sezení..."
 
 #: projects/k3bdataviewimpl.cpp:139
 #, kde-format
 msgid "Import a previously burned session into the current project"
-msgstr "Importovat dříve vypálené session do projektu"
+msgstr "Importovat dříve vypálené sezení do projektu"
 
 #: projects/k3bdataviewimpl.cpp:143
 #, kde-format
 msgid "&Clear Imported Session"
-msgstr "V&yčistit importovanou session"
+msgstr "V&yčistit importované sezení"
 
 #: projects/k3bdataviewimpl.cpp:144
 #, kde-format
 msgid "Remove the imported items from a previous session"
-msgstr "Odstranit importované položky z předchozí session"
+msgstr "Odstranit importované položky z předchozího sezení"
 
 #: projects/k3bdataviewimpl.cpp:149
 #, kde-format
@@ -7880,7 +7880,7 @@ msgstr "Typ smíšeného režimu"
 #: projects/k3bmixedburndialog.cpp:98
 #, kde-format
 msgid "Data in second session (CD-Extra)"
-msgstr "Data v druhé session (CD-Extra)"
+msgstr "Data v druhého sezení (CD-Extra)"
 
 #: projects/k3bmixedburndialog.cpp:99
 #, kde-format
@@ -7965,7 +7965,7 @@ msgstr "eMovix"
 #: projects/k3bmovixburndialog.cpp:95
 #, kde-format
 msgid "Multisession"
-msgstr "Multisession"
+msgstr "Multisezení"
 
 #: projects/k3bmovixburndialog.cpp:191
 #, kde-format
@@ -9139,7 +9139,7 @@ msgid ""
 "files."
 msgstr ""
 "Buďte si vědomi, že je třeba poskytnout kompletní souborovou strukturu Video "
-"DVD. K3b zatím nepodporuje transkódování videa a přípravu objektových video "
+"DVD. K3b zatím nepodporuje převod videa a přípravu objektových video "
 "souborů. To znamená že potřebujete mít soubory VTS_X_YY.VOB a VTS_X_YY.IFO "
 "předpřipravené."
 
