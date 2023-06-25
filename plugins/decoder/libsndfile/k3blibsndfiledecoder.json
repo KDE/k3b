@@ -46,7 +46,7 @@
         "Description[bs]": "Modul dekodiranja za dekodiranje audio datoteka koje podržava libsndfile",
         "Description[ca@valencia]": "Mòdul de descodificació per a descodificar fitxers d'àudio admesos per la «libsndfile»",
         "Description[ca]": "Mòdul de descodificació per a descodificar fitxers d'àudio admesos per la «libsndfile»",
-        "Description[cs]": "Modul pro dekódování audio souborů posporovaných libsndfile",
+        "Description[cs]": "Modul pro dekódování audio souborů podporovaných libsndfile",
         "Description[csb]": "Mòdul dekòdërëjący lopczi aùdio wpiséróné przez libsndfile",
         "Description[da]": "Dekodermodul til dekodning af filer som understøttes af libsndfile",
         "Description[de]": "Dekodierungsmodul für Dateien, die von libsndfile unterstützt werden",
