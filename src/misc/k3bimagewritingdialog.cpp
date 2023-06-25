@@ -445,15 +445,15 @@ void K3b::ImageWritingDialog::setupGui()
     d->editImagePath = new KUrlRequester( d->comboRecentImages, groupImageUrl );
     d->editImagePath->setMode( KFile::File|KFile::ExistingOnly );
     d->editImagePath->setWindowTitle( i18n("Choose Image File") );
-    d->editImagePath->setFilter( i18n("*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files")
+    d->editImagePath->setFilter( "*.iso *.toc *.ISO *.TOC *.cue *.CUE|" + i18n("Image Files")
                                 + '\n'
-                                + i18n("*.iso *.ISO|ISO 9660 Image Files")
+                                + "*.iso *.ISO|" + i18n("ISO 9660 Image Files")
                                 + '\n'
-                                + i18n("*.cue *.CUE|Cue Files")
+                                + "*.cue *.CUE|" + i18n("Cue Files")
                                 + '\n'
-                                + i18n("*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images")
+                                + "*.toc *.TOC|" + i18n("Cdrdao TOC Files and Cdrecord Clone Images")
                                 + '\n'
-                                + i18n("*|All Files") );
+                                + "*|" + i18n("All Files") );
     QHBoxLayout* groupImageUrlLayout = new QHBoxLayout( groupImageUrl );
     groupImageUrlLayout->addWidget( d->editImagePath );
 

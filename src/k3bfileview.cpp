@@ -70,12 +70,12 @@ K3b::FileView::FileView(QWidget *parent )
     filterLayout->setContentsMargins( 0, 0, 0, 0 );
 
     d->filterWidget->setEditable( true );
-    QString filter = i18n("*|All Files");
-    filter += '\n' + i18n("audio/x-mp3 audio/x-wav application/x-ogg |Sound Files");
-    filter += '\n' + i18n("audio/x-wav |Wave Sound Files");
-    filter += '\n' + i18n("audio/x-mp3 |MP3 Sound Files");
-    filter += '\n' + i18n("application/x-ogg |Ogg Vorbis Sound Files");
-    filter += '\n' + i18n("video/mpeg |MPEG Video Files");
+    QString filter = "*|" + i18n("All Files");
+    filter += '\n' + "audio/x-mp3 audio/x-wav application/x-ogg|" + i18n("Sound Files");
+    filter += '\n' + "audio/x-wav |" + i18n("Wave Sound Files");
+    filter += '\n' + "audio/x-mp3 |" + i18n("MP3 Sound Files");
+    filter += '\n' + "application/x-ogg |" + i18n("Ogg Vorbis Sound Files");
+    filter += '\n' + "video/mpeg |" + i18n("MPEG Video Files");
     d->filterWidget->setFilter(filter);
 
     d->actionShowBookmarks = new QAction( i18n("Show Bookmarks"), d->toolBox );
