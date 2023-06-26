@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-19 00:48+0000\n"
+"POT-Creation-Date: 2023-06-26 00:49+0000\n"
 "PO-Revision-Date: 2023-06-15 04:07+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -496,7 +496,7 @@ msgstr "沒有指定檔案名稱"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:540 misc/k3bimagewritingdialog.cpp:556
+#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -551,7 +551,7 @@ msgstr "改變設定..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:969
+#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -2204,37 +2204,37 @@ msgstr "區段數："
 msgid "Supported writing speeds:"
 msgstr "支援的寫入速度："
 
-#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:193
+#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:194
 #, kde-format
 msgid "System Id:"
 msgstr "系統 Id："
 
-#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:201
+#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:202
 #, kde-format
 msgid "Volume Id:"
 msgstr "碟片 Id："
 
-#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:209
+#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:210
 #, kde-format
 msgid "Volume Set Id:"
 msgstr "碟片設定 Id："
 
-#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
+#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:218
 #, kde-format
 msgid "Publisher Id:"
 msgstr "發行者 Id："
 
-#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:225
+#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:226
 #, kde-format
 msgid "Preparer Id:"
 msgstr "籌備者 Id："
 
-#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:232
+#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:233
 #, kde-format
 msgid "Application Id:"
 msgstr "應用程式 Id："
 
-#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
+#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:184
 #, kde-format
 msgid "Volume Size:"
 msgstr "容量大小："
@@ -2345,34 +2345,41 @@ msgstr "抹除失敗。"
 msgid "Filter:"
 msgstr "過瀘器："
 
-#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:456
-#, kde-format
-msgid "*|All Files"
+#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
+#: misc/k3bimagewritingdialog.cpp:466
+#, fuzzy, kde-format
+#| msgid "*|All Files"
+msgid "All Files"
 msgstr "*|所有檔案"
 
 #: k3bfileview.cpp:74
-#, kde-format
-msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
-msgstr "audio/x-mp3 audio/x-wav application/x-ogg |音效檔案"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "Sound Files"
+msgstr "找到檔案"
 
 #: k3bfileview.cpp:75
-#, kde-format
-msgid "audio/x-wav |Wave Sound Files"
-msgstr "audio/x-wav |Wave 音效檔案"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "Wave Sound Files"
+msgstr "找到檔案"
 
 #: k3bfileview.cpp:76
-#, kde-format
-msgid "audio/x-mp3 |MP3 Sound Files"
-msgstr "audio/x-mp3 |MP3 音效檔"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "MP3 Sound Files"
+msgstr "找到檔案"
 
 #: k3bfileview.cpp:77
-#, kde-format
-msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, fuzzy, kde-format
+#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+msgid "Ogg Vorbis Sound Files"
 msgstr "application/x-ogg |Ogg Vorbis 音效檔"
 
 #: k3bfileview.cpp:78
-#, kde-format
-msgid "video/mpeg |MPEG Video Files"
+#, fuzzy, kde-format
+#| msgid "video/mpeg |MPEG Video Files"
+msgid "MPEG Video Files"
 msgstr "video/mpeg |MPEG 影像檔"
 
 #: k3bfileview.cpp:81
@@ -3845,158 +3852,162 @@ msgstr ""
 "將裝置設定為可被新專案使用。(此選項沒有什麼效果：它主要的功能是在 KDE 媒體管"
 "理員中啟用對於空白媒體的處理方法。)"
 
-#: misc/k3bimagewritingdialog.cpp:164 misc/k3bimagewritingdialog.cpp:244
-#: misc/k3bimagewritingdialog.cpp:273 misc/k3bimagewritingdialog.cpp:302
+#: misc/k3bimagewritingdialog.cpp:165 misc/k3bimagewritingdialog.cpp:245
+#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:303
 #, kde-format
 msgid "Detected:"
 msgstr "已偵測到："
 
-#: misc/k3bimagewritingdialog.cpp:165
+#: misc/k3bimagewritingdialog.cpp:166
 #, kde-format
 msgid "ISO 9660 image"
 msgstr "ISO9660 映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:174 misc/k3bimagewritingdialog.cpp:251
-#: misc/k3bimagewritingdialog.cpp:280
+#: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
+#: misc/k3bimagewritingdialog.cpp:281
 #, kde-format
 msgid "Filesize:"
 msgstr "檔案大小："
 
-#: misc/k3bimagewritingdialog.cpp:178
+#: misc/k3bimagewritingdialog.cpp:179
 #, kde-format
 msgid "%1 (different than declared volume size)"
 msgstr "%1 (不同於宣告的容量大小)"
 
-#: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:470
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "Cdrecord 比對複製映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:257 misc/k3bimagewritingdialog.cpp:286
+#: misc/k3bimagewritingdialog.cpp:258 misc/k3bimagewritingdialog.cpp:287
 #, kde-format
 msgid "Image file:"
 msgstr "映像檔："
 
-#: misc/k3bimagewritingdialog.cpp:263
+#: misc/k3bimagewritingdialog.cpp:264
 #, kde-format
 msgid "TOC file:"
 msgstr "TOC 檔："
 
-#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:467
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
 #, kde-format
 msgid "Cue/bin image"
 msgstr "Cue/bin 映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:292
+#: misc/k3bimagewritingdialog.cpp:293
 #, kde-format
 msgid "Cue file:"
 msgstr "Cue 檔："
 
-#: misc/k3bimagewritingdialog.cpp:303
+#: misc/k3bimagewritingdialog.cpp:304
 #, kde-format
 msgid "Audio Cue Image"
 msgstr "音訊 Cue 映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:309
+#: misc/k3bimagewritingdialog.cpp:310
 #, kde-format
 msgid "One track"
 msgid_plural "%1 tracks"
 msgstr[0] "%1 個音軌"
 
-#: misc/k3bimagewritingdialog.cpp:323
+#: misc/k3bimagewritingdialog.cpp:324
 #, kde-format
 msgid "Track"
 msgstr "音軌"
 
-#: misc/k3bimagewritingdialog.cpp:359
+#: misc/k3bimagewritingdialog.cpp:360
 #, kde-format
 msgid "Burn Image"
 msgstr "燒錄映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:442
+#: misc/k3bimagewritingdialog.cpp:443
 #, kde-format
 msgid "Image to Burn"
 msgstr "要燒錄的映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:447
+#: misc/k3bimagewritingdialog.cpp:448
 #, kde-format
 msgid "Choose Image File"
 msgstr "選擇映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:448
-#, kde-format
-msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
-msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE｜映像檔"
+#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#, fuzzy, kde-format
+#| msgid "Image file:"
+msgid "Image Files"
+msgstr "映像檔："
 
-#: misc/k3bimagewritingdialog.cpp:450
-#, kde-format
-msgid "*.iso *.ISO|ISO 9660 Image Files"
+#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
+#, fuzzy, kde-format
+#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+msgid "ISO 9660 Image Files"
 msgstr "*.iso *.ISO|ISO9660 映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:452
-#, kde-format
-msgid "*.cue *.CUE|Cue Files"
-msgstr "*.cue *.CUE|Cue 檔"
+#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#, fuzzy, kde-format
+#| msgid "Cue file:"
+msgid "Cue Files"
+msgstr "Cue 檔："
 
-#: misc/k3bimagewritingdialog.cpp:454
-#, kde-format
-msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#, fuzzy, kde-format
+#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "*.toc *.TOC｜Cdrdao TOC 檔和 Cdrecord 比對複製映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
 msgid "Image Type"
 msgstr "映像檔類型"
 
-#: misc/k3bimagewritingdialog.cpp:465
+#: misc/k3bimagewritingdialog.cpp:476
 #, kde-format
 msgid "Auto Detection"
 msgstr "自動偵測"
 
-#: misc/k3bimagewritingdialog.cpp:466
+#: misc/k3bimagewritingdialog.cpp:477
 #, kde-format
 msgid "ISO 9660 filesystem image"
 msgstr "ISO9660 檔案系統映像"
 
-#: misc/k3bimagewritingdialog.cpp:468
+#: misc/k3bimagewritingdialog.cpp:479
 #, kde-format
 msgid "Audio cue file"
 msgstr "音訊 cue 檔案"
 
-#: misc/k3bimagewritingdialog.cpp:469
+#: misc/k3bimagewritingdialog.cpp:480
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "Cdrdao TOC 檔案"
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:482
 #, kde-format
 msgid "Plain data image"
 msgstr "純資料映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:522 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "寫入模式"
 
-#: misc/k3bimagewritingdialog.cpp:528 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "複製品"
 
-#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:991
+#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "映像檔(&I)"
 
-#: misc/k3bimagewritingdialog.cpp:580
+#: misc/k3bimagewritingdialog.cpp:591
 #, kde-format
 msgid "Data mode:"
 msgstr "資料模式："
 
-#: misc/k3bimagewritingdialog.cpp:606
+#: misc/k3bimagewritingdialog.cpp:617
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -4026,7 +4037,7 @@ msgstr ""
 "重複使用。<p><b>Cdrdao TOC 檔案</b><br/>K3b 也支援寫入 cdrdao 所獨用的映像檔"
 "格式，也就是 toc 檔。"
 
-#: misc/k3bimagewritingdialog.cpp:708
+#: misc/k3bimagewritingdialog.cpp:719
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -4036,92 +4047,92 @@ msgstr ""
 "<p>實際的檔案大小無法符合檔案標頭所宣告的大小。如果它已經下載下來，請確認這份"
 "下載是否完全。</p><p>請在於您知道您正要做什麼的情況下繼續。</p>"
 
-#: misc/k3bimagewritingdialog.cpp:711 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr "警告"
 
-#: misc/k3bimagewritingdialog.cpp:868
+#: misc/k3bimagewritingdialog.cpp:879
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr "映像檔類型無法辨識。您無論如何都想要燒錄嗎？"
 
-#: misc/k3bimagewritingdialog.cpp:869
+#: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Unknown image type"
 msgstr "未知的映像檔類型"
 
-#: misc/k3bimagewritingdialog.cpp:870 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "燒錄"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:891
 #, kde-format
 msgid "Unable to read image file"
 msgstr "無法讀取映像檔。"
 
-#: misc/k3bimagewritingdialog.cpp:882
+#: misc/k3bimagewritingdialog.cpp:893
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "似乎不是可用的映像檔"
 
-#: misc/k3bimagewritingdialog.cpp:898
+#: misc/k3bimagewritingdialog.cpp:909
 #, kde-format
 msgid "File not found"
 msgstr "找不到檔案"
 
-#: misc/k3bimagewritingdialog.cpp:1029
+#: misc/k3bimagewritingdialog.cpp:1040
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "MD5 總和："
 
-#: misc/k3bimagewritingdialog.cpp:1069
+#: misc/k3bimagewritingdialog.cpp:1080
 #, kde-format
 msgid "Calculation canceled"
 msgstr "計算已取消"
 
-#: misc/k3bimagewritingdialog.cpp:1071
+#: misc/k3bimagewritingdialog.cpp:1082
 #, kde-format
 msgid "Calculation failed"
 msgstr "計算失敗"
 
-#: misc/k3bimagewritingdialog.cpp:1087
+#: misc/k3bimagewritingdialog.cpp:1098
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "複製檢查碼到剪貼簿"
 
-#: misc/k3bimagewritingdialog.cpp:1088
+#: misc/k3bimagewritingdialog.cpp:1099
 #, kde-format
 msgid "Compare checksum..."
 msgstr "比較檢查碼..."
 
-#: misc/k3bimagewritingdialog.cpp:1095
+#: misc/k3bimagewritingdialog.cpp:1106
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "MD5 Sum 檢查"
 
-#: misc/k3bimagewritingdialog.cpp:1096
+#: misc/k3bimagewritingdialog.cpp:1107
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "請插入 MD5 Sum 來做比對："
 
-#: misc/k3bimagewritingdialog.cpp:1102
+#: misc/k3bimagewritingdialog.cpp:1113
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "%1 的 MD5 Sum 與指定的相等。"
 
-#: misc/k3bimagewritingdialog.cpp:1103
+#: misc/k3bimagewritingdialog.cpp:1114
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "MD5 Sum 相等"
 
-#: misc/k3bimagewritingdialog.cpp:1105
+#: misc/k3bimagewritingdialog.cpp:1116
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "%1 的 MD5 Sum 與指定的不同。"
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1117
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "MD5 Sum 不同"
@@ -10698,6 +10709,21 @@ msgstr "anamorph"
 #, kde-format
 msgid "Subpicture"
 msgstr "子畫面"
+
+#~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
+#~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |音效檔案"
+
+#~ msgid "audio/x-wav |Wave Sound Files"
+#~ msgstr "audio/x-wav |Wave 音效檔案"
+
+#~ msgid "audio/x-mp3 |MP3 Sound Files"
+#~ msgstr "audio/x-mp3 |MP3 音效檔"
+
+#~ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
+#~ msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE｜映像檔"
+
+#~ msgid "*.cue *.CUE|Cue Files"
+#~ msgstr "*.cue *.CUE|Cue 檔"
 
 #~ msgid "%1 has unsaved data."
 #~ msgstr "%1有未儲存的資料"

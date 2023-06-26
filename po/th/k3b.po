@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-19 00:48+0000\n"
+"POT-Creation-Date: 2023-06-26 00:49+0000\n"
 "PO-Revision-Date: 2010-05-01 20:38+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -491,7 +491,7 @@ msgstr "ยังไม่มีการระบุชื่อแฟ้ม"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:540 misc/k3bimagewritingdialog.cpp:556
+#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -547,7 +547,7 @@ msgstr "เปลี่ยนแปลงการตั้งค่าต่า
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:969
+#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -2166,37 +2166,37 @@ msgstr "จำนวนเซสชัน:"
 msgid "Supported writing speeds:"
 msgstr "ความเร็วในการเขียนที่รองรับ:"
 
-#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:193
+#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:194
 #, kde-format
 msgid "System Id:"
 msgstr "ระบบ (ค่าประจำตัว):"
 
-#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:201
+#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:202
 #, kde-format
 msgid "Volume Id:"
 msgstr "โวลุม (ค่าประจำตัว):"
 
-#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:209
+#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:210
 #, kde-format
 msgid "Volume Set Id:"
 msgstr "ชุดโวลุม (ค่าประจำตัว):"
 
-#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
+#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:218
 #, kde-format
 msgid "Publisher Id:"
 msgstr "ผู้จัดทำ (ค่าประจำตัว):"
 
-#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:225
+#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:226
 #, kde-format
 msgid "Preparer Id:"
 msgstr "ผู้เตรียม (ค่าประจำตัว):"
 
-#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:232
+#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:233
 #, kde-format
 msgid "Application Id:"
 msgstr "โปรแกรม (ค่าประจำตัว):"
 
-#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
+#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:184
 #, kde-format
 msgid "Volume Size:"
 msgstr "ขนาดของโวลุม:"
@@ -2307,34 +2307,41 @@ msgstr "การลบล้มเหลว"
 msgid "Filter:"
 msgstr "กรอง:"
 
-#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:456
-#, kde-format
-msgid "*|All Files"
+#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
+#: misc/k3bimagewritingdialog.cpp:466
+#, fuzzy, kde-format
+#| msgid "*|All Files"
+msgid "All Files"
 msgstr "*|แฟ้มทั้งหมด"
 
 #: k3bfileview.cpp:74
-#, kde-format
-msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
-msgstr "audio/x-mp3 audio/x-wav application/x-ogg |แฟ้มเสียงต่าง ๆ"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "Sound Files"
+msgstr "แฟ้มต่าง ๆ ที่ค้นพบ"
 
 #: k3bfileview.cpp:75
-#, kde-format
-msgid "audio/x-wav |Wave Sound Files"
-msgstr "audio/x-wav |แฟ้มเสียงต่าง ๆ ประเภท Wave"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "Wave Sound Files"
+msgstr "แฟ้มต่าง ๆ ที่ค้นพบ"
 
 #: k3bfileview.cpp:76
-#, kde-format
-msgid "audio/x-mp3 |MP3 Sound Files"
-msgstr "audio/x-mp3 |แฟ้มเสียงต่าง ๆ ประเภท MP3"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "MP3 Sound Files"
+msgstr "แฟ้มต่าง ๆ ที่ค้นพบ"
 
 #: k3bfileview.cpp:77
-#, kde-format
-msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, fuzzy, kde-format
+#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+msgid "Ogg Vorbis Sound Files"
 msgstr "application/x-ogg |แฟ้มเสียงต่าง ๆ ประเภท Ogg Vorbis"
 
 #: k3bfileview.cpp:78
-#, kde-format
-msgid "video/mpeg |MPEG Video Files"
+#, fuzzy, kde-format
+#| msgid "video/mpeg |MPEG Video Files"
+msgid "MPEG Video Files"
 msgstr "video/mpeg |แฟ้มวีดิโอต่าง ๆ ประเภท MPEG"
 
 #: k3bfileview.cpp:81
@@ -3785,60 +3792,60 @@ msgstr ""
 "ตั้งอุปกรณ์ที่จะถูกใช้กับโครงงานใหม่ (ตัวเลือกนี้ไม่มีผลใด ๆ: จุดประสงค์หลักของมันคือ "
 "เพื่อให้สามารถจัดการกับแผ่นสื่อเปล่าแทนตัวจัดการสื่อของ KDE)"
 
-#: misc/k3bimagewritingdialog.cpp:164 misc/k3bimagewritingdialog.cpp:244
-#: misc/k3bimagewritingdialog.cpp:273 misc/k3bimagewritingdialog.cpp:302
+#: misc/k3bimagewritingdialog.cpp:165 misc/k3bimagewritingdialog.cpp:245
+#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:303
 #, kde-format
 msgid "Detected:"
 msgstr "ตรวจพบ:"
 
-#: misc/k3bimagewritingdialog.cpp:165
+#: misc/k3bimagewritingdialog.cpp:166
 #, fuzzy, kde-format
 #| msgid "ISO9660 Image"
 msgid "ISO 9660 image"
 msgstr "แฟ้มอิมเมจประเภท ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:174 misc/k3bimagewritingdialog.cpp:251
-#: misc/k3bimagewritingdialog.cpp:280
+#: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
+#: misc/k3bimagewritingdialog.cpp:281
 #, kde-format
 msgid "Filesize:"
 msgstr "ขนาดแฟ้ม:"
 
-#: misc/k3bimagewritingdialog.cpp:178
+#: misc/k3bimagewritingdialog.cpp:179
 #, kde-format
 msgid "%1 (different than declared volume size)"
 msgstr "%1 (แตกต่างจากขนาดโวลุมที่กำหนดไว้)"
 
-#: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:470
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "แฟ้มอิมเมจการโคลนของ Cdrecord"
 
-#: misc/k3bimagewritingdialog.cpp:257 misc/k3bimagewritingdialog.cpp:286
+#: misc/k3bimagewritingdialog.cpp:258 misc/k3bimagewritingdialog.cpp:287
 #, kde-format
 msgid "Image file:"
 msgstr "แฟ้มอิมเมจ:"
 
-#: misc/k3bimagewritingdialog.cpp:263
+#: misc/k3bimagewritingdialog.cpp:264
 #, kde-format
 msgid "TOC file:"
 msgstr "แฟ้ม TOC:"
 
-#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:467
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
 #, kde-format
 msgid "Cue/bin image"
 msgstr "แฟ้มอิมเมจประเภท Cue/bin"
 
-#: misc/k3bimagewritingdialog.cpp:292
+#: misc/k3bimagewritingdialog.cpp:293
 #, kde-format
 msgid "Cue file:"
 msgstr "แฟ้ม Cue:"
 
-#: misc/k3bimagewritingdialog.cpp:303
+#: misc/k3bimagewritingdialog.cpp:304
 #, kde-format
 msgid "Audio Cue Image"
 msgstr "แฟ้มอิมเมจข้อมูลเสียงประเภท Cue"
 
-#: misc/k3bimagewritingdialog.cpp:309
+#: misc/k3bimagewritingdialog.cpp:310
 #, fuzzy, kde-format
 #| msgid "1 track"
 #| msgid_plural "%1 tracks"
@@ -3846,102 +3853,105 @@ msgid "One track"
 msgid_plural "%1 tracks"
 msgstr[0] "%1 แทร็ก"
 
-#: misc/k3bimagewritingdialog.cpp:323
+#: misc/k3bimagewritingdialog.cpp:324
 #, kde-format
 msgid "Track"
 msgstr "แทร็ก"
 
-#: misc/k3bimagewritingdialog.cpp:359
+#: misc/k3bimagewritingdialog.cpp:360
 #, kde-format
 msgid "Burn Image"
 msgstr "เขียนอิมเมจ"
 
-#: misc/k3bimagewritingdialog.cpp:442
+#: misc/k3bimagewritingdialog.cpp:443
 #, kde-format
 msgid "Image to Burn"
 msgstr "แฟ้มอิมเมจที่จะใช้ในการเขียน"
 
-#: misc/k3bimagewritingdialog.cpp:447
+#: misc/k3bimagewritingdialog.cpp:448
 #, kde-format
 msgid "Choose Image File"
 msgstr "เลือกแฟ้มอิมเมจ"
 
-#: misc/k3bimagewritingdialog.cpp:448
-#, kde-format
-msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
-msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|แฟ้มอิมเมจ"
+#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#, fuzzy, kde-format
+#| msgid "Image file:"
+msgid "Image Files"
+msgstr "แฟ้มอิมเมจ:"
 
-#: misc/k3bimagewritingdialog.cpp:450
+#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
 #, fuzzy, kde-format
 #| msgid "*.iso *.ISO|ISO9660 Image Files"
-msgid "*.iso *.ISO|ISO 9660 Image Files"
+msgid "ISO 9660 Image Files"
 msgstr "*.iso *.ISO|แฟ้มอิมเมจประเภท ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:452
-#, kde-format
-msgid "*.cue *.CUE|Cue Files"
-msgstr "*.cue *.CUE|แฟ้ม Cue"
+#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#, fuzzy, kde-format
+#| msgid "Cue file:"
+msgid "Cue Files"
+msgstr "แฟ้ม Cue:"
 
-#: misc/k3bimagewritingdialog.cpp:454
-#, kde-format
-msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#, fuzzy, kde-format
+#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "*.toc *.TOC|แฟ้ม TOC ของ Cdrdao และแฟ้มอิมเมจการโคลนแผ่นของ Cdrecord"
 
-#: misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
 msgid "Image Type"
 msgstr "ชนิดของแฟ้มอิมเมจ"
 
-#: misc/k3bimagewritingdialog.cpp:465
+#: misc/k3bimagewritingdialog.cpp:476
 #, kde-format
 msgid "Auto Detection"
 msgstr "ตรวจสอบอัตโนมัติ"
 
-#: misc/k3bimagewritingdialog.cpp:466
+#: misc/k3bimagewritingdialog.cpp:477
 #, fuzzy, kde-format
 #| msgid "ISO9660 Filesystem"
 msgid "ISO 9660 filesystem image"
 msgstr "ระบบแฟ้มแบบ ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:468
+#: misc/k3bimagewritingdialog.cpp:479
 #, kde-format
 msgid "Audio cue file"
 msgstr "แฟ้ม Cue ของข้อมูลเสียง"
 
-#: misc/k3bimagewritingdialog.cpp:469
+#: misc/k3bimagewritingdialog.cpp:480
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "แฟ้ม TOC ของ Cdrdao"
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:482
 #, kde-format
 msgid "Plain data image"
 msgstr "แฟ้มอิมเมจข้อมูลแบบธรรมดา"
 
-#: misc/k3bimagewritingdialog.cpp:522 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "โหมดการเขียน"
 
-#: misc/k3bimagewritingdialog.cpp:528 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "จำนวนสำเนา"
 
-#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:991
+#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "แฟ้ม&อิมเมจ"
 
-#: misc/k3bimagewritingdialog.cpp:580
+#: misc/k3bimagewritingdialog.cpp:591
 #, kde-format
 msgid "Data mode:"
 msgstr "โหมดข้อมูล:"
 
-#: misc/k3bimagewritingdialog.cpp:606
+#: misc/k3bimagewritingdialog.cpp:617
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -3960,7 +3970,7 @@ msgid ""
 "writing cdrdao's own image format, the toc files."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:708
+#: misc/k3bimagewritingdialog.cpp:719
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -3968,95 +3978,95 @@ msgid ""
 "continue if you know what you are doing.</p>"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:711 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr "คำเตือน"
 
-#: misc/k3bimagewritingdialog.cpp:868
+#: misc/k3bimagewritingdialog.cpp:879
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:869
+#: misc/k3bimagewritingdialog.cpp:880
 #, fuzzy, kde-format
 #| msgid "Unknown file format"
 msgid "Unknown image type"
 msgstr "ไม่รู้จักประเภทของแฟ้ม"
 
-#: misc/k3bimagewritingdialog.cpp:870 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "เขียนลงแผ่น"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:891
 #, fuzzy, kde-format
 #| msgid "Unable to create folder %1"
 msgid "Unable to read image file"
 msgstr "ไม่สามารถสร้างโฟลเดอร์ %1 ได้"
 
-#: misc/k3bimagewritingdialog.cpp:882
+#: misc/k3bimagewritingdialog.cpp:893
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "ดูเหมือนจะเป็นอิมเมจที่ใช้งานไม่ได้"
 
-#: misc/k3bimagewritingdialog.cpp:898
+#: misc/k3bimagewritingdialog.cpp:909
 #, kde-format
 msgid "File not found"
 msgstr "ไม่พบแฟ้ม"
 
-#: misc/k3bimagewritingdialog.cpp:1029
+#: misc/k3bimagewritingdialog.cpp:1040
 #, fuzzy, kde-format
 #| msgid "Md5 Sum:"
 msgid "MD5 Sum:"
 msgstr "ผลการย่อยข้อมูล Md5:"
 
-#: misc/k3bimagewritingdialog.cpp:1069
+#: misc/k3bimagewritingdialog.cpp:1080
 #, kde-format
 msgid "Calculation canceled"
 msgstr "การคำนวณถูกยกเลิก"
 
-#: misc/k3bimagewritingdialog.cpp:1071
+#: misc/k3bimagewritingdialog.cpp:1082
 #, kde-format
 msgid "Calculation failed"
 msgstr "การคำนวณล้มเหลว"
 
-#: misc/k3bimagewritingdialog.cpp:1087
+#: misc/k3bimagewritingdialog.cpp:1098
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "คัดลอกผลรวมการตรวจสอบ (checksum) ไปยังคลิปบอร์ด"
 
-#: misc/k3bimagewritingdialog.cpp:1088
+#: misc/k3bimagewritingdialog.cpp:1099
 #, kde-format
 msgid "Compare checksum..."
 msgstr "เปรียบเทียบผลการตรวจสอบ (checksum)..."
 
-#: misc/k3bimagewritingdialog.cpp:1095
+#: misc/k3bimagewritingdialog.cpp:1106
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "ตรวจกับผลรวมการตรวจสอบ MD5"
 
-#: misc/k3bimagewritingdialog.cpp:1096
+#: misc/k3bimagewritingdialog.cpp:1107
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "โปรดป้อนผลรวมค่า MD5 เพื่อใช้ในการเปรียบเทียบ:"
 
-#: misc/k3bimagewritingdialog.cpp:1102
+#: misc/k3bimagewritingdialog.cpp:1113
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "ผลรวมค่า MD5 ของ %1 มีค่าเท่ากันกับที่ระบุมา"
 
-#: misc/k3bimagewritingdialog.cpp:1103
+#: misc/k3bimagewritingdialog.cpp:1114
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "ผลรวมค่า MD5 มีค่าเท่ากัน"
 
-#: misc/k3bimagewritingdialog.cpp:1105
+#: misc/k3bimagewritingdialog.cpp:1116
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "ผลรวมค่า MD5 ของ %1 แตกต่างจากที่ระบุมา"
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1117
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "ผลรวมค่า MD5 แตกต่างกัน"
@@ -10508,6 +10518,21 @@ msgstr "จอกว้าง"
 #, kde-format
 msgid "Subpicture"
 msgstr "ข้อมูลภาพ"
+
+#~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
+#~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |แฟ้มเสียงต่าง ๆ"
+
+#~ msgid "audio/x-wav |Wave Sound Files"
+#~ msgstr "audio/x-wav |แฟ้มเสียงต่าง ๆ ประเภท Wave"
+
+#~ msgid "audio/x-mp3 |MP3 Sound Files"
+#~ msgstr "audio/x-mp3 |แฟ้มเสียงต่าง ๆ ประเภท MP3"
+
+#~ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
+#~ msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|แฟ้มอิมเมจ"
+
+#~ msgid "*.cue *.CUE|Cue Files"
+#~ msgstr "*.cue *.CUE|แฟ้ม Cue"
 
 #~ msgid "%1 has unsaved data."
 #~ msgstr "%1 มีข้อมูลที่ยังไม่ได้ทำการบันทึกอยู่"

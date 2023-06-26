@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-19 00:48+0000\n"
+"POT-Creation-Date: 2023-06-26 00:49+0000\n"
 "PO-Revision-Date: 2020-04-04 14:41+0000\n"
 "Last-Translator: Sveinn í Felli <sv@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -468,7 +468,7 @@ msgstr "Ekkert skráarheiti tilgreint"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:540 misc/k3bimagewritingdialog.cpp:556
+#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -523,7 +523,7 @@ msgstr "Breyta stillingum..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:586 misc/k3bimagewritingdialog.cpp:969
+#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -2165,37 +2165,37 @@ msgstr "Setur:"
 msgid "Supported writing speeds:"
 msgstr "Studdir skrifhraðar:"
 
-#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:193
+#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:194
 #, kde-format
 msgid "System Id:"
 msgstr "Kerfisauðkenni:"
 
-#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:201
+#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:202
 #, kde-format
 msgid "Volume Id:"
 msgstr "Rýmisauðkenni:"
 
-#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:209
+#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:210
 #, kde-format
 msgid "Volume Set Id:"
 msgstr "Auðkenni á safni:"
 
-#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
+#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:218
 #, kde-format
 msgid "Publisher Id:"
 msgstr "Útgefandi:"
 
-#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:225
+#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:226
 #, kde-format
 msgid "Preparer Id:"
 msgstr "Undirbúningsaðili:"
 
-#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:232
+#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:233
 #, kde-format
 msgid "Application Id:"
 msgstr "Auðkenni forrits:"
 
-#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
+#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:184
 #, kde-format
 msgid "Volume Size:"
 msgstr "Rýmisstærð:"
@@ -2308,34 +2308,41 @@ msgstr "Hreinsun mistókst."
 msgid "Filter:"
 msgstr "Sía:"
 
-#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:456
-#, kde-format
-msgid "*|All Files"
+#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
+#: misc/k3bimagewritingdialog.cpp:466
+#, fuzzy, kde-format
+#| msgid "*|All Files"
+msgid "All Files"
 msgstr "*|Allar skrár"
 
 #: k3bfileview.cpp:74
-#, kde-format
-msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
-msgstr "hljóð/x-mp3 hljóð/x-wav forrit/x-ogg |hljóðskrár"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "Sound Files"
+msgstr "Skrár sem fundust"
 
 #: k3bfileview.cpp:75
-#, kde-format
-msgid "audio/x-wav |Wave Sound Files"
-msgstr "hljóð/x-wav |Wave hljóðskrár"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "Wave Sound Files"
+msgstr "Skrár sem fundust"
 
 #: k3bfileview.cpp:76
-#, kde-format
-msgid "audio/x-mp3 |MP3 Sound Files"
-msgstr "hljóð/x-mp3 |MP3 hljóðskrár"
+#, fuzzy, kde-format
+#| msgid "Found Files"
+msgid "MP3 Sound Files"
+msgstr "Skrár sem fundust"
 
 #: k3bfileview.cpp:77
-#, kde-format
-msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, fuzzy, kde-format
+#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+msgid "Ogg Vorbis Sound Files"
 msgstr "forrit/x-ogg |Ogg Vorbis hljóðskrár"
 
 #: k3bfileview.cpp:78
-#, kde-format
-msgid "video/mpeg |MPEG Video Files"
+#, fuzzy, kde-format
+#| msgid "video/mpeg |MPEG Video Files"
+msgid "MPEG Video Files"
 msgstr "vídeó/mpeg |MPEG vídeóskrár"
 
 #: k3bfileview.cpp:81
@@ -3769,159 +3776,163 @@ msgid ""
 "Manager.)"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:164 misc/k3bimagewritingdialog.cpp:244
-#: misc/k3bimagewritingdialog.cpp:273 misc/k3bimagewritingdialog.cpp:302
+#: misc/k3bimagewritingdialog.cpp:165 misc/k3bimagewritingdialog.cpp:245
+#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:303
 #, kde-format
 msgid "Detected:"
 msgstr "Fundið:"
 
-#: misc/k3bimagewritingdialog.cpp:165
+#: misc/k3bimagewritingdialog.cpp:166
 #, kde-format
 msgid "ISO 9660 image"
 msgstr "ISO-9660 diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:174 misc/k3bimagewritingdialog.cpp:251
-#: misc/k3bimagewritingdialog.cpp:280
+#: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
+#: misc/k3bimagewritingdialog.cpp:281
 #, kde-format
 msgid "Filesize:"
 msgstr "Skráarstærð:"
 
-#: misc/k3bimagewritingdialog.cpp:178
+#: misc/k3bimagewritingdialog.cpp:179
 #, kde-format
 msgid "%1 (different than declared volume size)"
 msgstr "%1 (annað en uppgefin rýmisstærð)"
 
-#: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:470
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "Cdrecord klónuð diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:257 misc/k3bimagewritingdialog.cpp:286
+#: misc/k3bimagewritingdialog.cpp:258 misc/k3bimagewritingdialog.cpp:287
 #, kde-format
 msgid "Image file:"
 msgstr "Diskmyndarskrá:"
 
-#: misc/k3bimagewritingdialog.cpp:263
+#: misc/k3bimagewritingdialog.cpp:264
 #, kde-format
 msgid "TOC file:"
 msgstr "TOC skrá:"
 
-#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:467
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
 #, kde-format
 msgid "Cue/bin image"
 msgstr "Cue/bin diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:292
+#: misc/k3bimagewritingdialog.cpp:293
 #, kde-format
 msgid "Cue file:"
 msgstr "Cue skrá:"
 
-#: misc/k3bimagewritingdialog.cpp:303
+#: misc/k3bimagewritingdialog.cpp:304
 #, kde-format
 msgid "Audio Cue Image"
 msgstr "Hljóð Cue diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:309
+#: misc/k3bimagewritingdialog.cpp:310
 #, kde-format
 msgid "One track"
 msgid_plural "%1 tracks"
 msgstr[0] "Eitt spor"
 msgstr[1] "%1 spor"
 
-#: misc/k3bimagewritingdialog.cpp:323
+#: misc/k3bimagewritingdialog.cpp:324
 #, kde-format
 msgid "Track"
 msgstr "Spor"
 
-#: misc/k3bimagewritingdialog.cpp:359
+#: misc/k3bimagewritingdialog.cpp:360
 #, kde-format
 msgid "Burn Image"
 msgstr "Skrifa diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:442
+#: misc/k3bimagewritingdialog.cpp:443
 #, kde-format
 msgid "Image to Burn"
 msgstr "Diskmynd sem á að brenna"
 
-#: misc/k3bimagewritingdialog.cpp:447
+#: misc/k3bimagewritingdialog.cpp:448
 #, kde-format
 msgid "Choose Image File"
 msgstr "Veldu diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:448
-#, kde-format
-msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
-msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|diskmyndir"
+#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#, fuzzy, kde-format
+#| msgid "Image file:"
+msgid "Image Files"
+msgstr "Diskmyndarskrá:"
 
-#: misc/k3bimagewritingdialog.cpp:450
-#, kde-format
-msgid "*.iso *.ISO|ISO 9660 Image Files"
+#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
+#, fuzzy, kde-format
+#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+msgid "ISO 9660 Image Files"
 msgstr "*.iso *.ISO|ISO-9660 diskmyndir"
 
-#: misc/k3bimagewritingdialog.cpp:452
-#, kde-format
-msgid "*.cue *.CUE|Cue Files"
-msgstr "*.cue *.CUE|Cue skrár"
+#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#, fuzzy, kde-format
+#| msgid "Cue file:"
+msgid "Cue Files"
+msgstr "Cue skrá:"
 
-#: misc/k3bimagewritingdialog.cpp:454
-#, kde-format
-msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#, fuzzy, kde-format
+#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "*.toc *.TOC|Cdrdao TOC skrár og klónaðarar Cdrecord diskmyndir"
 
-#: misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
 msgid "Image Type"
 msgstr "Tegund diskmyndar"
 
-#: misc/k3bimagewritingdialog.cpp:465
+#: misc/k3bimagewritingdialog.cpp:476
 #, kde-format
 msgid "Auto Detection"
 msgstr "Sjálfvirk greining"
 
-#: misc/k3bimagewritingdialog.cpp:466
+#: misc/k3bimagewritingdialog.cpp:477
 #, kde-format
 msgid "ISO 9660 filesystem image"
 msgstr "ISO-9660 skráakerfisupplýsingar"
 
-#: misc/k3bimagewritingdialog.cpp:468
+#: misc/k3bimagewritingdialog.cpp:479
 #, kde-format
 msgid "Audio cue file"
 msgstr "Hljóð Cue diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:469
+#: misc/k3bimagewritingdialog.cpp:480
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "Cdrdao TOC skrá"
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:482
 #, kde-format
 msgid "Plain data image"
 msgstr "Venjuleg gagnadiskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:522 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "Skrifhamur"
 
-#: misc/k3bimagewritingdialog.cpp:528 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "Eintök"
 
-#: misc/k3bimagewritingdialog.cpp:567 misc/k3bimagewritingdialog.cpp:991
+#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "&Diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:580
+#: misc/k3bimagewritingdialog.cpp:591
 #, kde-format
 msgid "Data mode:"
 msgstr "Gagnahamur:"
 
-#: misc/k3bimagewritingdialog.cpp:606
+#: misc/k3bimagewritingdialog.cpp:617
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -3940,7 +3951,7 @@ msgid ""
 "writing cdrdao's own image format, the toc files."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:708
+#: misc/k3bimagewritingdialog.cpp:719
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -3948,92 +3959,92 @@ msgid ""
 "continue if you know what you are doing.</p>"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:711 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr "Aðvörun"
 
-#: misc/k3bimagewritingdialog.cpp:868
+#: misc/k3bimagewritingdialog.cpp:879
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:869
+#: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Unknown image type"
 msgstr "Óþekkt tegund myndar"
 
-#: misc/k3bimagewritingdialog.cpp:870 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "Brenna"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:891
 #, kde-format
 msgid "Unable to read image file"
 msgstr "Gat ekki lesið diskmyndaskrá"
 
-#: misc/k3bimagewritingdialog.cpp:882
+#: misc/k3bimagewritingdialog.cpp:893
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "Virðist ekki vera nothæf diskmynd"
 
-#: misc/k3bimagewritingdialog.cpp:898
+#: misc/k3bimagewritingdialog.cpp:909
 #, kde-format
 msgid "File not found"
 msgstr "Skrá finnst ekki"
 
-#: misc/k3bimagewritingdialog.cpp:1029
+#: misc/k3bimagewritingdialog.cpp:1040
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "MD5-summa:"
 
-#: misc/k3bimagewritingdialog.cpp:1069
+#: misc/k3bimagewritingdialog.cpp:1080
 #, kde-format
 msgid "Calculation canceled"
 msgstr "Hætt við útreikning"
 
-#: misc/k3bimagewritingdialog.cpp:1071
+#: misc/k3bimagewritingdialog.cpp:1082
 #, kde-format
 msgid "Calculation failed"
 msgstr "Útreikningur mistókst"
 
-#: misc/k3bimagewritingdialog.cpp:1087
+#: misc/k3bimagewritingdialog.cpp:1098
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "Afrita gátsummu á klippispjaldið"
 
-#: misc/k3bimagewritingdialog.cpp:1088
+#: misc/k3bimagewritingdialog.cpp:1099
 #, kde-format
 msgid "Compare checksum..."
 msgstr "Ber saman gátsummur..."
 
-#: misc/k3bimagewritingdialog.cpp:1095
+#: misc/k3bimagewritingdialog.cpp:1106
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "Athugun á MD5 summu"
 
-#: misc/k3bimagewritingdialog.cpp:1096
+#: misc/k3bimagewritingdialog.cpp:1107
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "MD5 summan sem á að bera saman við:"
 
-#: misc/k3bimagewritingdialog.cpp:1102
+#: misc/k3bimagewritingdialog.cpp:1113
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "MD5 summa %1 er sama og sú skilgreinda."
 
-#: misc/k3bimagewritingdialog.cpp:1103
+#: misc/k3bimagewritingdialog.cpp:1114
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "MD5 summur stemma"
 
-#: misc/k3bimagewritingdialog.cpp:1105
+#: misc/k3bimagewritingdialog.cpp:1116
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "MD5 summan %1 er ekki sama og sú skilgreinda."
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1117
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "Það eru frávik í MD5 summunum"
@@ -10503,6 +10514,21 @@ msgstr "þjappað (anamorph)"
 #, kde-format
 msgid "Subpicture"
 msgstr "Undirmynd"
+
+#~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
+#~ msgstr "hljóð/x-mp3 hljóð/x-wav forrit/x-ogg |hljóðskrár"
+
+#~ msgid "audio/x-wav |Wave Sound Files"
+#~ msgstr "hljóð/x-wav |Wave hljóðskrár"
+
+#~ msgid "audio/x-mp3 |MP3 Sound Files"
+#~ msgstr "hljóð/x-mp3 |MP3 hljóðskrár"
+
+#~ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
+#~ msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|diskmyndir"
+
+#~ msgid "*.cue *.CUE|Cue Files"
+#~ msgstr "*.cue *.CUE|Cue skrár"
 
 #~ msgid "%1 has unsaved data."
 #~ msgstr "%1 inniheldur óvistuð gögn."
