@@ -9201,9 +9201,8 @@ msgstr ""
 "como tal está demorada, antes de executar a acción de usuario desencadeada "
 "ou efectuarse un salto inmediato. <p>Despois de se completaren a cantidade "
 "de repeticións especificadas, o tempo de <espera> comeza a contar, a non ser "
-"que escolla un tempo de espera infinito. <p>De omitir este elemento, "
-"empregarase un predeterminado de 1, é dicir, a «pista de reprodución» "
-"amosarase unha vez."
+"que escolla un tempo de espera infinito. <p>De omitir este elemento, usarase "
+"un predeterminado de 1, é dicir, a «pista de reprodución» amosarase unha vez."
 
 #: projects/k3bvcdtrackdialog.cpp:263
 #, kde-format

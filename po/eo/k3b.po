@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-05-30 22:35+0100\n"
+"PO-Revision-Date: 2023-06-26 07:00+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -2374,45 +2374,39 @@ msgstr "Filtrilo:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
 msgstr "*|Ĉiuj dosieroj"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Trovis dosierojn"
+msgstr "Sondosieroj"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Trovis dosierojn"
+msgstr "Wave-sondosieroj"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Trovis dosierojn"
+msgstr "MP3-sondosieroj"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis sonaj dosieroj"
+msgstr "Ogg-Vorbis sondosieroj"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG videaj dosieroj"
+msgstr "MPEG videodosieroj"
 
 #: k3bfileview.cpp:81
 #, kde-format
 msgid "Show Bookmarks"
-msgstr "Montru legosignojn"
+msgstr "Montri legosignojn"
 
 #: k3binteractiondialog.cpp:70
 #, kde-format
@@ -2455,7 +2449,7 @@ msgid ""
 "<p>Load a set of settings either from the default K3b settings, settings "
 "saved before, or the last used ones."
 msgstr ""
-"<p> Ŝarĝu aron da agordoj aŭ el la defaŭltaj agordoj de K3b, agordoj "
+"<p> Ŝargi aron da agordoj aŭ el la defaŭltaj agordoj de K3b, agordoj "
 "konservitaj antaŭe aŭ la laste uzataj."
 
 #: k3binteractiondialog.cpp:196
@@ -2775,7 +2769,7 @@ msgid ""
 msgstr ""
 "K3b ne trovis optikan skribilon en via sistemo. Do vi ne eblos enskribi KD-"
 "ojn aŭ DVD-ojn. Tamen, vi ankoraŭ povas aliajn K3b funkciojn, kvazaŭ "
-"sontraka ekstraktado aŭ sona trakodado aŭ ISO9660 imagkreo."
+"sontraka ekstraktado aŭ sona trakodado aŭ ISO9660 kopiokreado."
 
 #: k3bsystemproblemdialog.cpp:201 k3bsystemproblemdialog.cpp:262
 #: k3bsystemproblemdialog.cpp:304
@@ -3236,7 +3230,7 @@ msgstr "Libera spaco en nedaŭra dosierujo:"
 #: k3btempdirselectionwidget.cpp:69
 #, kde-format
 msgid "The folder in which to save the image files"
-msgstr "La dosierujo en kiu konservotas la imagdosieroj"
+msgstr "La dosierujo en kiu konservotas la dosierkopioj"
 
 #: k3btempdirselectionwidget.cpp:73
 #, kde-format
@@ -3245,7 +3239,7 @@ msgid ""
 "<p>Please make sure that it resides on a partition that has enough free "
 "space."
 msgstr ""
-"<p>Tiu estas la dosierujo en kiu K3b konservos la <em>imagdosierojn</em>."
+"<p>Tiu estas la dosierujo en kiu K3b konservos la <em>dosierkopiojn</em>."
 "<p>Bonvolu certiĝi, ke estas en subdiskon kiu enhavas sufiĉe liberan spacon."
 
 #: k3btempdirselectionwidget.cpp:180
@@ -3256,7 +3250,7 @@ msgstr "Elekti nedaŭran dosierujon"
 #: k3btempdirselectionwidget.cpp:182
 #, kde-format
 msgid "Wri&te image files to:"
-msgstr "S&kribi la imagdosierojn al:"
+msgstr "S&kribi la dosierkopiojn al:"
 
 #: k3btempdirselectionwidget.cpp:183
 #, kde-format
@@ -3271,7 +3265,7 @@ msgstr "Elekti nedaŭran dosieron"
 #: k3btempdirselectionwidget.cpp:188
 #, kde-format
 msgid "Wri&te image file to:"
-msgstr "S&kribi la imagdosieron al:"
+msgstr "S&kribi la dosierkopion al:"
 
 #: k3btempdirselectionwidget.cpp:189
 #, kde-format
@@ -3576,7 +3570,7 @@ msgid ""
 msgstr ""
 "<p>K3b estas plenfunkcia KD/DVD/Blu-radia aplikaĵo por bruligi kaj ekstrakti."
 "<br/>Ĝi subtenas diversajn projekttipojn same kiel kopiadon de optikaj "
-"medioj, bruligadon de malsamaj specoj de bildoj kaj ŝiras Aŭdion. KD-oj, "
+"medioj, bruligadon de malsamaj specoj de kopioj kaj ŝiras Aŭdion. KD-oj, "
 "Video-KD-oj kaj Video-DVD-oj.<br/>Ĝia konvena uzantinterfaco estas celita al "
 "ĉiuj spektantaroj, provante esti kiel eble plej simpla por komencantoj kaj "
 "ankaŭ provizante ĉiujn funkciojn, kiujn progresa uzanto povus bezoni."
@@ -3955,7 +3949,7 @@ msgstr "Cdrecord klona dosierkopio"
 #: misc/k3bimagewritingdialog.cpp:258 misc/k3bimagewritingdialog.cpp:287
 #, kde-format
 msgid "Image file:"
-msgstr "Imaga dosiero:"
+msgstr "Dosierkopio:"
 
 #: misc/k3bimagewritingdialog.cpp:264
 #, kde-format
@@ -3992,46 +3986,42 @@ msgstr "Trako"
 #: misc/k3bimagewritingdialog.cpp:360
 #, kde-format
 msgid "Burn Image"
-msgstr "Bruligi Bildon"
+msgstr "Bruligi Dosierkopion"
 
 #: misc/k3bimagewritingdialog.cpp:443
 #, kde-format
 msgid "Image to Burn"
-msgstr "Bildo enskribenda"
+msgstr "Dosierkopio enskribenda"
 
 #: misc/k3bimagewritingdialog.cpp:448
 #, kde-format
 msgid "Choose Image File"
-msgstr "Elektu imagdosieron"
+msgstr "Elekti dosierkopion"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Imaga dosiero:"
+msgstr "Dosierkopioj"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO9660 imagdosieroj"
+msgstr "ISO-9660 dosierkopioj"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
 msgstr "Cue-dosiero:"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao enhavtabelaj dosieroj kaj Cdrecord klonaj bildoj"
+msgstr "Cdrdao enhavtabelaj dosieroj kaj Cdrecord klonaj bildoj"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
 msgid "Image Type"
-msgstr "Imaga tipo"
+msgstr "Kopia tipo"
 
 #: misc/k3bimagewritingdialog.cpp:476
 #, kde-format
@@ -4099,20 +4089,20 @@ msgid ""
 "These images can be reused here.<p><b>Cdrdao TOC files</b><br/>K3b supports "
 "writing cdrdao's own image format, the toc files."
 msgstr ""
-"<p><b>Bildaj tipoj subtenataj de K3b:</p><p><b>Ebena bildo</b><br/>Ebenaj "
-"bildoj estas skribitaj kiel estas al la medio uzante ununuran datumtrakon. "
-"Tipaj simplaj bildoj estas iso-bildoj kiel kreitaj de la datumprojekto de "
-"K3b.<p><b>Kue/bin-bildoj</b><br/>Cue/bin-bildoj konsistas el signaldosiero "
-"priskribanta la enhavtabelon de la komunikilo kaj bilddosiero kiu enhavas la "
+"<p><b>Kopiaj tipoj subtenataj de K3b:</p><p><b>Plata kopio</b><br/>Plataj "
+"kopioj estas skribitaj kiel estas al la medio uzante ununuran datumtrakon. "
+"Tipaj simplaj kopioj estas iso-kopioj kiel kreitaj de la datumprojekto de "
+"K3b.<p><b>Kue/bin-kopioj</b><br/>Cue/bin-kopioj konsistas el signaldosiero "
+"priskribanta la enhavtabelon de la komunikilo kaj kopidosiero kiu enhavas la "
 "realajn datumojn. La datumoj estos skribitaj al la komunikilo laŭ la "
-"signaldosiero.<p><b>Audio Cue-bildo</b><br/>Audio-indikilo-bildoj estas "
-"speciala speco de kue/binbildo enhavanta bildon de son-KD. . La realaj "
+"signaldosiero.<p><b>Audio Cue-kopio</b><br/>Audio-indikilo-kopioj estas "
+"speciala speco de kue/binkopio enhavanta kopion de son-KD. La realaj "
 "sondatumoj povas esti koditaj per iu ajn sonformato subtenata de K3b. "
 "Sondosieroj ankaŭ povas esti importitaj en K3b-sonprojektojn, kio ebligas "
-"ŝanĝi la ordon kaj aldoni aŭ forigi trakojn.<p><b>Cdrecord-klonaj bildoj</"
-"b><br/>K3b kreas cdrecord-klonbildon de unuopa -session KD kiam oni kopias "
-"KD en klona reĝimo. Ĉi tiuj bildoj estas reuzeblaj ĉi tie.<p><b>Cdrdao TOC-"
-"dosieroj</b><br/>K3b subtenas skribon de la propra bildformato de cdrdao, la "
+"ŝanĝi la ordon kaj aldoni aŭ forigi trakojn.<p><b>Cdrecord-klonaj kopioj</"
+"b><br/>K3b kreas cdrecord-klonkopion de unuopa -session KD kiam oni kopias "
+"KD en klona reĝimo. Ĉi tiuj kopioj estas reuzeblaj ĉi tie.<p><b>Cdrdao TOC-"
+"dosieroj</b><br/>K3b subtenas skribon de la propra kopiformato de cdrdao, la "
 "toc-dosieroj."
 
 #: misc/k3bimagewritingdialog.cpp:719
@@ -4134,12 +4124,12 @@ msgstr "Averto"
 #: misc/k3bimagewritingdialog.cpp:879
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
-msgstr "Tipo de bilddosiero ne estas rekonebla. Ĉu vi tamen volas bruligi ĝin?"
+msgstr "Tipo de kopidosiero ne estas rekonebla. Ĉu vi tamen volas bruligi ĝin?"
 
 #: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Unknown image type"
-msgstr "Nekonata bildotipo"
+msgstr "Nekonata kopiotipo"
 
 #: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
 #, kde-format
@@ -4149,12 +4139,12 @@ msgstr "Enskribi"
 #: misc/k3bimagewritingdialog.cpp:891
 #, kde-format
 msgid "Unable to read image file"
-msgstr "Ne eblas legi bilddosieron"
+msgstr "Ne eblas legi kopidosieron"
 
 #: misc/k3bimagewritingdialog.cpp:893
 #, kde-format
 msgid "Seems not to be a usable image"
-msgstr "Ŝajnas, ke tio ne estas uzebla bildo"
+msgstr "Ŝajnas, ke tio ne estas uzebla kopio"
 
 #: misc/k3bimagewritingdialog.cpp:909
 #, kde-format
