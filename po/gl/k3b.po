@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 02:32+0000\n"
-"PO-Revision-Date: 2023-06-17 14:05+0200\n"
+"PO-Revision-Date: 2023-06-27 07:58+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -2426,7 +2426,7 @@ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |Ficheiros de son"
 #: k3bfileview.cpp:75
 #, kde-format
 msgid "audio/x-wav |Wave Sound Files"
-msgstr "son/x-wav |Ficheiros de son wave"
+msgstr "son/x-wav |Ficheiros de son Wave"
 
 #: k3bfileview.cpp:76
 #, kde-format
@@ -2436,12 +2436,12 @@ msgstr "son/x-mp3 |Ficheiros de son MP3"
 #: k3bfileview.cpp:77
 #, kde-format
 msgid "application/x-ogg |Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ficheiros de son Ogg Vorbis"
+msgstr "Ficheiros de son Ogg Vorbis"
 
 #: k3bfileview.cpp:78
 #, kde-format
 msgid "video/mpeg |MPEG Video Files"
-msgstr "video/mpeg |Ficheiros de Vídeo MPEG"
+msgstr "Ficheiros de vídeo MPEG"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -4077,7 +4077,7 @@ msgstr "*.cue *.CUE|Ficheiros cue"
 #: misc/k3bimagewritingdialog.cpp:454
 #, kde-format
 msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Ficheiros TOC de cdrdao e imaxes clonadas de cdrecord"
+msgstr "*.toc *.TOC|Ficheiros de índice de cdrdao e imaxes clon de cdrecord"
 
 #: misc/k3bimagewritingdialog.cpp:460
 #, kde-format
@@ -9189,8 +9189,8 @@ msgid ""
 "<timeout> action (unless the user triggers some action before time ran up)."
 msgstr ""
 "Os segundos que esperar despois da reprodución da «pista de reprodución» "
-"antes de desencadear a acción <tempo-límite> (a non ser que o usuario "
-"desencadee algunha outra acción antes de se esgotar o tempo)."
+"antes de provocar a acción <tempo-límite> (a non ser que a persoa usuaria "
+"provoque algunha outra acción antes de se esgotar o tempo)."
 
 #: projects/k3bvcdtrackdialog.cpp:304
 #, kde-format
@@ -9361,12 +9361,12 @@ msgstr "Fin do CD de vídeo"
 #: projects/k3bvcdtrackkeysmodel.cpp:167
 #, kde-format
 msgid "Segment-%1 - %2"
-msgstr "Segmento-%1 - %2"
+msgstr "Segmento-%1 — %2"
 
 #: projects/k3bvcdtrackkeysmodel.cpp:169
 #, kde-format
 msgid "Sequence-%1 - %2"
-msgstr "Secuencia-%1 - %2"
+msgstr "Secuencia-%1 — %2"
 
 #: projects/k3bvcdview.cpp:92
 #, kde-format
@@ -9431,7 +9431,7 @@ msgstr "Nome do volume:"
 #: projects/kostore/KoStore.cpp:196
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
-msgstr "O modo directorio non está admitido para lugares remotos."
+msgstr "O modo de cartafol non se pode usar con lugares remotos."
 
 #: projects/kostore/KoStore.cpp:197
 #, kde-format
@@ -9450,13 +9450,13 @@ msgstr "Tipo de ficheiro"
 #: rip/base_k3baudiorippingoptionwidget.ui:34
 #, kde-format
 msgid "Configure Plugin"
-msgstr "Configurar o complemento"
+msgstr "Configurar o complemento."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkCreatePlaylist)
 #: rip/base_k3baudiorippingoptionwidget.ui:53
 #, kde-format
 msgid "Create playlist for the ripped files"
-msgstr "Crear unha lista de reprodución para os ficheiros extraídos"
+msgstr "Crear unha lista de reprodución para os ficheiros extraídos."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkCreatePlaylist)
 #: rip/base_k3baudiorippingoptionwidget.ui:58
@@ -9476,13 +9476,13 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:61
 #, kde-format
 msgid "Create m&3u playlist"
-msgstr "Crear unha lista de reprodución m&3u"
+msgstr "Crear unha lista de reprodución m&3u."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:89
 #, kde-format
 msgid "Use relative paths instead of absolute"
-msgstr "Usar rutas relativas no canto de absolutas"
+msgstr "Usar rutas relativas no canto de absolutas."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:95
@@ -9506,13 +9506,13 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:98
 #, kde-format
 msgid "&Use relative paths"
-msgstr "&Usar rutas relativas"
+msgstr "&Usar rutas relativas."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:107
 #, kde-format
 msgid "Rip all tracks to a single file"
-msgstr "Extraer todas as pista nun ficheiro único"
+msgstr "Extraer todas as pista nun ficheiro único."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:114
@@ -9535,13 +9535,13 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:117
 #, kde-format
 msgid "Create si&ngle file"
-msgstr "Crear un &só ficheiro"
+msgstr "Crear un &só ficheiro."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:145
 #, kde-format
 msgid "Write a cuefile"
-msgstr "Gravar un ficheiro de pistas"
+msgstr "Escribir un ficheiro de pistas."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:148
@@ -9557,7 +9557,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:151
 #, kde-format
 msgid "Write &cue file"
-msgstr "Gravar o ficheiro &cue"
+msgstr "Escribir o ficheiro &cue."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1_2)
@@ -9573,7 +9573,7 @@ msgstr "Cartafol de destino"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:139
 #, kde-format
 msgid "Free space in directory:"
-msgstr "Espazo libre no directorio:"
+msgstr "Espazo libre no cartafol:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelFreeSpace)
 #. i18n: ectx: property (text), widget (QLabel, m_labelNeededSpace)
@@ -9623,7 +9623,7 @@ msgstr "Padrón dos ficheiros extraídos:"
 #: rip/base_k3bcddbpatternwidget.ui:80
 #, kde-format
 msgid "Insert your custom pattern here"
-msgstr "Insira aquí o seu padrón personalizado"
+msgstr "Insira aquí o seu padrón personalizado."
 
 #. i18n: ectx: property (text), widget (KUrlLabel, m_specialStringsLabel)
 #: rip/base_k3bcddbpatternwidget.ui:108
@@ -9809,7 +9809,7 @@ msgstr "Desmarcar as pistas"
 #: rip/k3baudiocdview.cpp:318 rip/k3bvideocdview.cpp:443
 #, kde-format
 msgid "Please select the tracks to rip."
-msgstr "Escolla as pistas que desexa extraer."
+msgstr "Escolla as pistas que quere extraer."
 
 #: rip/k3baudiocdview.cpp:319 rip/k3bvideocdview.cpp:443
 #, kde-format
@@ -9927,7 +9927,7 @@ msgstr "Estase a comezar a extracción do son."
 #: rip/k3baudioprojectconvertingjob.cpp:85
 #, kde-format
 msgid "Converting track %1 (%2 - %3)"
-msgstr "Estase a converter a pista %1 (%2 - %3)"
+msgstr "Convertendo a pista %1 (%2 — %3)"
 
 #: rip/k3baudioprojectconvertingjob.cpp:90
 #, kde-format
@@ -9992,7 +9992,7 @@ msgstr "Estase a comezar a extracción do son dixital («ripping»)."
 #: rip/k3baudioripjob.cpp:289
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
-msgstr "Estase a extraer a pista %1 (%2 - %3)"
+msgstr "Extraendo a pista %1 (%2 — %3)"
 
 #: rip/k3baudioripjob.cpp:294
 #, kde-format
@@ -10094,27 +10094,27 @@ msgstr "Pista de datos"
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid "%A - %T/%n - !a='%A'{%a - }%t"
-msgstr "%A - %T/%n - !a='%A'{%a - }%t"
+msgstr "%A — %T/%n — !a='%A'{%a — }%t"
 
 #: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
-msgstr "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
+msgstr "%{albumartist} — %{albumtitle}/%{number} — %{artist} — %{title}"
 
 #: rip/k3bcddbpatternwidget.cpp:46
 #, kde-format
 msgid "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
-msgstr "%{genre}/%{albumartist} - %{albumtitle}/Pista%{number}"
+msgstr "%{genre}/%{albumartist} — %{albumtitle}/Pista%{number}"
 
 #: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
-msgstr "música/pistas-extraídas/%a - %t"
+msgstr "música/pistas-extraídas/%a — %t"
 
 #: rip/k3bcddbpatternwidget.cpp:49
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}"
-msgstr "%{albumartist} - %{albumtitle}"
+msgstr "%{albumartist} — %{albumtitle}"
 
 #: rip/k3bcddbpatternwidget.cpp:51
 #, kde-format
@@ -10181,9 +10181,9 @@ msgstr ""
 "<p><b>Inclusión condicionada:</b> <p>Estes padróns permiten incluír textos "
 "de xeito condicional, dependendo das entradas na CDDB. Pode escoller incluír "
 "ou excluír textos se unha das entradas está baleira, ou se ten un valor "
-"concreto. Exemplos: <ul> <li>«@T{Texto}» inclúe «Texto» de especificarse o "
-"título do álbum. <li>«!T{Texto}» inclúe «Texto» en caso de non especificarse "
-"o título do álbum. <li>«@C='Banda sonora'{Texto}» inclúe «Texto» se a "
+"concreto. Exemplos: <ul> <li>«@T{Texto}» inclúe «Texto» de indicarse o "
+"título do álbum. <li>«!T{Texto}» inclúe «Texto» en caso de non indicarse o "
+"título do álbum. <li>«@C='Banda sonora'{Texto}» inclúe «Texto» se a "
 "información ampliada sobre o CD é «Banda sonora». <li>«!C='Banda "
 "sonora'{Texto}» inclúe «Texto» se a información ampliada sobre o CD non é "
 "«Banda sonora». <li>Tamén é posíbel incluír cadeas especiais nos textos e "
@@ -10240,7 +10240,7 @@ msgstr "Pista %1"
 #: rip/k3bvideocdrip.cpp:52
 #, kde-format
 msgid "Job canceled by user."
-msgstr "Traballo cancelado polo usuario."
+msgstr "Traballo cancelado pola persoa usuaria."
 
 #: rip/k3bvideocdrip.cpp:81
 #, kde-format
@@ -10373,7 +10373,7 @@ msgstr "Espazo libre no cartafol:"
 #: rip/k3bvideocdrippingdialog.cpp:79
 #, kde-format
 msgid "Necessary storage size:"
-msgstr "Tamaño de almacenaxe necesario:"
+msgstr "Tamaño de almacenamento necesario:"
 
 #: rip/k3bvideocdrippingdialog.cpp:91
 #, kde-format
@@ -10558,7 +10558,7 @@ msgstr "Calidade do son"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:204
 #, kde-format
 msgid "Variable &Bitrate"
-msgstr "Taxa de &bits variábel"
+msgstr "Taxa de &bits variábel."
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelAudioBitrate)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
@@ -10588,7 +10588,7 @@ msgstr "Códec de vídeo:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:330
 #, kde-format
 msgid "Select the Video codec used to encode the DVD titles"
-msgstr "Escolla o códec de vídeo usado para codificar os títulos do DVD"
+msgstr "Escolla o códec de vídeo usado para codificar os títulos do DVD."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
@@ -10600,7 +10600,7 @@ msgstr "Códec de son:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:351
 #, kde-format
 msgid "Select the Audio codec used to encode the DVD titles"
-msgstr "Escolla o códec de son usado para codificar os títulos do DVD"
+msgstr "Escolla o códec de son usado para codificar os títulos do DVD."
 
 #. i18n: ectx: attribute (title), widget (QWidget, TabPage)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:364
@@ -10618,7 +10618,7 @@ msgstr "Substituír todos os &espazos por:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:463
 #, kde-format
 msgid "Enable 2-pass encoding"
-msgstr "Activar a codificación en dous pasos"
+msgstr "Activar a codificación en dous pasos."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:468
@@ -10644,7 +10644,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:471
 #, kde-format
 msgid "&2-pass encoding"
-msgstr "Codificación en &dous pasos"
+msgstr "Codificación en &dous pasos."
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:474
@@ -10656,7 +10656,7 @@ msgstr "Alt+D"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:484
 #, kde-format
 msgid "Automatically detect the black borders of the video"
-msgstr "Detectar automaticamente as franxas negras do filme"
+msgstr "Detectar automaticamente as franxas negras do filme."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAutoClipping)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:489
@@ -10684,13 +10684,13 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:492
 #, kde-format
 msgid "Automatic &Video Clipping"
-msgstr "&Recorte automático do vídeo"
+msgstr "&Recorte automático do vídeo."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:502
 #, kde-format
 msgid "Change the sample rate of the audio stream to 44.1 KHz"
-msgstr "Cambiar a taxa de mostraxe do son a 44.1KHz"
+msgstr "Cambiar a taxa de mostraxe do son a 44.1KHz."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:506
@@ -10711,7 +10711,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:509
 #, kde-format
 msgid "Resample Audio to &44.1 KHz"
-msgstr "Converter o son a &44.1 kHz"
+msgstr "Converter o son a &44.1 kHz."
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:512
@@ -10724,7 +10724,8 @@ msgstr "Alt+4"
 #, kde-format
 msgid "Low s&cheduling priority for the video transcoding process"
 msgstr ""
-"Baixar a &prioridade de procesamento do proceso de transcodificación do vídeo"
+"Baixar a &prioridade de procesamento do proceso de transcodificación do "
+"vídeo."
 
 #: rip/videodvd/k3bvideodvdaudiomodel.cpp:149
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:214
@@ -10865,7 +10866,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
 #, kde-format
 msgid "Please select the titles to rip."
-msgstr "Escolla os títulos que desexa extraer."
+msgstr "Escolla os títulos que quere extraer."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:166
 #, kde-format
