@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-04-04 06:48+0200\n"
+"PO-Revision-Date: 2023-06-27 09:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2251,40 +2251,34 @@ msgstr "ფილტრი:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|ყველა ფაილი"
+msgstr "ყველა ფაილი"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "ნაპოვნი ფაილები"
+msgstr "ხმოვანი ფაილები"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "ნაპოვნი ფაილები"
+msgstr "WAV ხმოვანი ფაილები"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "ნაპოვნი ფაილები"
+msgstr "MP3 ხმოვანი ფაილები"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis Sound Files"
+msgstr "Ogg Vorbis ხმოვანი ფაილები"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG Video Files"
+msgstr "MPEG ვიდეო ფაილები"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -3746,22 +3740,19 @@ msgid "Choose Image File"
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "ასლის ფაილი:"
+msgstr "ასლის ფაილები"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "ISO 9660 image"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "ISO 9660 ასლი"
+msgstr "ISO 9660 ასლის ფაილები"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue ფაილი:"
+msgstr "Cue ფაილები"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
 #, kde-format
