@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-20 02:32+0000\n"
-"PO-Revision-Date: 2023-06-23 10:48+0200\n"
+"PO-Revision-Date: 2023-06-28 15:40+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -3984,7 +3984,7 @@ msgstr "*.cue *.CUE|Cue soubory"
 #: misc/k3bimagewritingdialog.cpp:454
 #, kde-format
 msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao TOC soubory a Cdrecord klonované obrazy"
+msgstr "*.toc *.TOC|Soubory Cdrdao TOC a klonované obrazy Cdrecord"
 
 #: misc/k3bimagewritingdialog.cpp:460
 #, kde-format
