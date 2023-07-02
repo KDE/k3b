@@ -2464,10 +2464,9 @@ msgstr "Filtro:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Todos os Ficheiros"
+msgstr "Todos os Ficheiros"
 
 #: k3bfileview.cpp:74
 #, fuzzy, kde-format
@@ -4137,10 +4136,9 @@ msgid "Choose Image File"
 msgstr "Escolha o Ficheiro de Imagem"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Ficheiro de imagem:"
+msgstr "Ficheiros de Imagem"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
 #, fuzzy, kde-format
