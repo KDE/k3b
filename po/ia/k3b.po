@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-04-14 22:58+0200\n"
+"PO-Revision-Date: 2023-07-02 22:04+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.03.90\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2268,40 +2268,34 @@ msgstr "Filtro:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Omne Files"
+msgstr "Omne Files"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Trovate files"
+msgstr "Files de sono"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Trovate files"
+msgstr "Files de sono Wave"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Trovate files"
+msgstr "Files de sono MP3"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "Trovate files"
+msgstr "Files de sono Ogg Vorbis"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "Hidden Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "Files celate"
+msgstr "Files Video MPEG"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -3763,28 +3757,24 @@ msgid "Choose Image File"
 msgstr "Slige file image"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "File image:"
+msgstr "File de image"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660 Files Image"
+msgstr "Files de image ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "File Cue (bastone):"
+msgstr "Files Cue (bastone):"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao TOC Files e images de Cdrecord Clone"
+msgstr "Files TOC de Cdrdao e Images de clonar de Cdrecord"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
@@ -5520,7 +5510,7 @@ msgstr ""
 #: projects/base_k3bbootimagedialog.ui:188
 #, kde-format
 msgid "Show Advanced Op&tions"
-msgstr ""
+msgstr "Monstra op&tiones avantiate"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bbootimagedialog.ui:215
@@ -6468,7 +6458,7 @@ msgstr ""
 #: projects/k3bbootimagedialog.cpp:87
 #, kde-format
 msgid "Show Advanced Options"
-msgstr ""
+msgstr "Monstra optiones avantiate"
 
 #: projects/k3bbootimagedialog.cpp:94
 #, kde-format
@@ -7521,7 +7511,7 @@ msgstr ""
 #: projects/k3bmovixview.cpp:66
 #, kde-format
 msgid "Add Subtitle File..."
-msgstr ""
+msgstr "Adde file de subtitulo..."
 
 #: projects/k3bmovixview.cpp:149
 #, kde-format
