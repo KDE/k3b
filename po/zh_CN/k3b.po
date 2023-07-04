@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-06-17 04:11\n"
+"PO-Revision-Date: 2023-07-03 11:38\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -2342,40 +2342,34 @@ msgstr "过滤器："
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|所有文件"
+msgstr ""
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "找到文件数"
+msgstr ""
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "找到文件数"
+msgstr ""
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "找到文件数"
+msgstr ""
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis 声音文件"
+msgstr ""
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG 视频文件"
+msgstr ""
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -3915,28 +3909,24 @@ msgid "Choose Image File"
 msgstr "选择镜像文件"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "镜像文件："
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660 镜像文件"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue 文件："
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao 目录文件和 Cdrecord 克隆镜像"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
@@ -10487,18 +10477,3 @@ msgstr "无性型"
 #, kde-format
 msgid "Subpicture"
 msgstr "子画面"
-
-#~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
-#~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |声音文件"
-
-#~ msgid "audio/x-wav |Wave Sound Files"
-#~ msgstr "audio/x-wav |波形声音文件"
-
-#~ msgid "audio/x-mp3 |MP3 Sound Files"
-#~ msgstr "audio/x-mp3 |MP3 声音文件"
-
-#~ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
-#~ msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|镜像文件"
-
-#~ msgid "*.cue *.CUE|Cue Files"
-#~ msgstr "*.cue *.CUE|Cue 文件"
