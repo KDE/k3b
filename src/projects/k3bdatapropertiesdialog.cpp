@@ -370,5 +370,4 @@ void K3b::DataPropertiesDialog::accept()
     QDialog::accept();
 }
 
-
-
+#include "moc_k3bdatapropertiesdialog.cpp"

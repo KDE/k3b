@@ -798,5 +798,4 @@ void K3b::AudioTrack::setParent( K3b::AudioDoc* parent )
     d->parent = parent;
 }
 
-
-
+#include "moc_k3baudiotrack.cpp"

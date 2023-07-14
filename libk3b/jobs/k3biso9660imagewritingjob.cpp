@@ -359,5 +359,4 @@ QString K3b::Iso9660ImageWritingJob::jobTarget() const
         return QString ();
 }
 
-
-
+#include "moc_k3biso9660imagewritingjob.cpp"

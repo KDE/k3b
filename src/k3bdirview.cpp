@@ -274,4 +274,4 @@ void K3b::DirView::readConfig( const KConfigGroup &grp )
     d->fileView->readConfig(grp);
 }
 
-
+#include "moc_k3bdirview.cpp"

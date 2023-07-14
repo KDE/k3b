@@ -41,4 +41,4 @@ bool K3b::NotifyOptionTab::saveSettings()
     return true;
 }
 
-
+#include "moc_k3bnotifyoptiontab.cpp"

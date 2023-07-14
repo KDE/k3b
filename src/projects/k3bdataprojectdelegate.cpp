@@ -72,4 +72,4 @@ bool DataProjectDelegate::eventFilter( QObject* object, QEvent* event )
 
 } // namespace K3b
 
-
+#include "moc_k3bdataprojectdelegate.cpp"

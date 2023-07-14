@@ -172,4 +172,4 @@ void K3b::DeviceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& 
     }
 }
 
-
+#include "moc_k3bdevicedelegate.cpp"

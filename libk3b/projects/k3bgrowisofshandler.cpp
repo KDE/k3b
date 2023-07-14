@@ -304,3 +304,5 @@ void K3b::GrowisofsHandler::setMediaType(Device::MediaType mediaType)
 {
     m_mediaType = mediaType;
 }
+
+#include "moc_k3bgrowisofshandler.cpp"

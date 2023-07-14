@@ -470,4 +470,4 @@ bool K3b::DataTrackReader::setErrorRecovery( K3b::Device::Device* dev, int code 
     return success;
 }
 
-
+#include "moc_k3bdatatrackreader.cpp"

@@ -170,4 +170,4 @@ void K3b::VideoDvdBurnDialog::slotStartClicked()
     K3b::ProjectBurnDialog::slotStartClicked();
 }
 
-
+#include "moc_k3bvideodvdburndialog.cpp"

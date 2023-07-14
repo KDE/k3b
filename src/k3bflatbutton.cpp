@@ -151,4 +151,4 @@ void K3b::FlatButton::slotThemeChanged()
     }
 }
 
-
+#include "moc_k3bflatbutton.cpp"

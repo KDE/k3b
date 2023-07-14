@@ -57,5 +57,4 @@ void K3b::VideoDvdView::init()
                               "video_dvd_restrictions" );
 }
 
-
-
+#include "moc_k3bvideodvdview.cpp"

@@ -118,3 +118,5 @@ void K3bAudioProjectCddbPlugin::slotCddbQueryFinished( KJob* job )
 }
 
 #include "k3baudioprojectcddbplugin.moc"
+
+#include "moc_k3baudioprojectcddbplugin.cpp"

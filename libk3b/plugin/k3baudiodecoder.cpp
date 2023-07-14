@@ -630,4 +630,4 @@ QString K3b::AudioDecoderFactory::categoryName() const
     return i18nc( "plugin type", "Audio Decoder" );
 }
 
-
+#include "moc_k3baudiodecoder.cpp"

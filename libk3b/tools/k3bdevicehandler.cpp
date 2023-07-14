@@ -321,4 +321,4 @@ QDebug operator<<( QDebug dbg, K3b::Device::DeviceHandler::Commands commands )
     return dbg.space();
 }
 
-
+#include "moc_k3bdevicehandler.cpp"

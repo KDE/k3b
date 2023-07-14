@@ -58,4 +58,4 @@ void K3b::PluginConfigWidget::saveConfig( KConfigGroup )
 }
 #endif
 
-
+#include "moc_k3bpluginconfigwidget.cpp"

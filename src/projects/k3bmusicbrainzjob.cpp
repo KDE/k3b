@@ -144,4 +144,4 @@ void K3b::MusicBrainzJob::slotMbJobFinished( bool success )
     }
 }
 
-
+#include "moc_k3bmusicbrainzjob.cpp"

@@ -92,4 +92,4 @@ bool K3b::ChecksumPipe::open( OpenMode mode )
     return ActivePipe::open( mode );
 }
 
-
+#include "moc_k3bchecksumpipe.cpp"

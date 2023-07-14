@@ -75,4 +75,4 @@ void K3b::AudioTrackDialog::updateTrackLengthDisplay()
 //   m_displaySize->setText( KIO::convertSize(len.audioBytes()) );
 }
 
-
+#include "moc_k3baudiotrackdialog.cpp"

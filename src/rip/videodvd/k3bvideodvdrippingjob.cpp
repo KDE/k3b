@@ -376,4 +376,4 @@ void K3b::VideoDVDRippingJob::initProgressInfo()
     }
 }
 
-
+#include "moc_k3bvideodvdrippingjob.cpp"

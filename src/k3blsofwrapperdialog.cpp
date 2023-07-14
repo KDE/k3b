@@ -125,4 +125,4 @@ void K3b::LsofWrapperDialog::checkDevice( K3b::Device::Device* dev, QWidget* par
         dlg.exec();
 }
 
-
+#include "moc_k3blsofwrapperdialog.cpp"

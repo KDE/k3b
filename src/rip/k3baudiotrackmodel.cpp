@@ -404,4 +404,4 @@ void K3b::AudioTrackModel::uncheckAll()
     emit dataChanged( index( 0, TrackNumberColumn ), index( d->itemCheckedList.count(), TrackNumberColumn ) );
 }
 
-
+#include "moc_k3baudiotrackmodel.cpp"

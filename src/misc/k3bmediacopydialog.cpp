@@ -626,4 +626,4 @@ KIO::filesize_t K3b::MediaCopyDialog::neededSize() const
         return medium.diskInfo().size().rawBytes();
 }
 
-
+#include "moc_k3bmediacopydialog.cpp"

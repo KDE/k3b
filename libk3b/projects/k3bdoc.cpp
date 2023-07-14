@@ -205,4 +205,4 @@ KIO::filesize_t K3b::Doc::burningSize() const
     return size();
 }
 
-
+#include "moc_k3bdoc.cpp"

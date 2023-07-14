@@ -79,5 +79,4 @@ void K3b::AbstractWriter::slotEjectWhileCancellationFinished( bool success )
     jobFinished( false );
 }
 
-
-
+#include "moc_k3babstractwriter.cpp"

@@ -51,5 +51,4 @@ void K3b::ExternalBinOptionTab::saveSettings()
     m_externalBinWidget->save();
 }
 
-
-
+#include "moc_k3bexternalbinoptiontab.cpp"

@@ -264,3 +264,5 @@ void K3b::TempDirSelectionWidget::setImageFileLabel(const QString &label)
 {
     m_imageFileLabel->setText(label);
 }
+
+#include "moc_k3btempdirselectionwidget.cpp"

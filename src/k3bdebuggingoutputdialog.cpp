@@ -102,4 +102,4 @@ void K3b::DebuggingOutputDialog::slotCopyClicked()
   QApplication::clipboard()->setText( debugView->toPlainText(), QClipboard::Clipboard );
 }
 
-
+#include "moc_k3bdebuggingoutputdialog.cpp"

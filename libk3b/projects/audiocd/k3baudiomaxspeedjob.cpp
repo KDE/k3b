@@ -182,4 +182,4 @@ bool K3b::AudioMaxSpeedJob::run()
     return success;
 }
 
-
+#include "moc_k3baudiomaxspeedjob.cpp"

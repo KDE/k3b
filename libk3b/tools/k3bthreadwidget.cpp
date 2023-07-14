@@ -133,4 +133,4 @@ void K3b::ThreadWidget::customEvent( QEvent* e )
     }
 }
 
-
+#include "moc_k3bthreadwidget.cpp"

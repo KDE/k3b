@@ -114,4 +114,4 @@ void K3b::AudioView::slotPlayerStateChanged()
 #endif // ENABLE_AUDIO_PLAYER
 }
 
-
+#include "moc_k3baudioview.cpp"

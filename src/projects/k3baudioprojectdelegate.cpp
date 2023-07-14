@@ -93,4 +93,4 @@ bool AudioProjectDelegate::eventFilter( QObject* object, QEvent* event )
 
 } // namespace K3b
 
-
+#include "moc_k3baudioprojectdelegate.cpp"

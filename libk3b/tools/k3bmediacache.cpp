@@ -383,3 +383,4 @@ void K3b::MediaCache::resetDevice( K3b::Device::Device* dev )
 }
 
 #include "moc_k3bmediacache.cpp"
+#include "moc_k3bmediacache_p.cpp"

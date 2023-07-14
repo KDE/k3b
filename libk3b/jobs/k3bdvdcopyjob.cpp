@@ -981,4 +981,4 @@ void K3b::DvdCopyJob::setVerifyData( bool b )
     d->verifyData = b;
 }
 
-
+#include "moc_k3bdvdcopyjob.cpp"

@@ -151,3 +151,5 @@ int K3bFFMpegDecoder::decodeInternal( char* _data, int maxLen )
 
 
 #include "k3bffmpegdecoder.moc"
+
+#include "moc_k3bffmpegdecoder.cpp"

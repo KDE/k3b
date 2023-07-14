@@ -249,4 +249,4 @@ void K3b::ExternalBinWidget::slotChangePermissions()
     job->start();
 }
 
-
+#include "moc_k3bexternalbinwidget.cpp"

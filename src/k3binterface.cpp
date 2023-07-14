@@ -206,4 +206,4 @@ bool Interface::blocked() const
 
 } // namespace K3b
 
-
+#include "moc_k3binterface.cpp"

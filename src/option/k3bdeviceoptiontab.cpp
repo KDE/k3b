@@ -62,4 +62,4 @@ void K3b::DeviceOptionTab::slotRefreshButtonClicked()
     QApplication::restoreOverrideCursor();
 }
 
-
+#include "moc_k3bdeviceoptiontab.cpp"

@@ -79,3 +79,5 @@ void ExternalBinManagerTest::testMyBurnJob()
 }
 
 #include "k3bexternalbinmanagertest.moc"
+
+#include "moc_k3bexternalbinmanagertest.cpp"

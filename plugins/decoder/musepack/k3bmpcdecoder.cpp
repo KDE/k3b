@@ -96,3 +96,5 @@ int K3bMpcDecoder::decodeInternal( char* _data, int maxLen )
 
 
 #include "k3bmpcdecoder.moc"
+
+#include "moc_k3bmpcdecoder.cpp"

@@ -19,3 +19,5 @@ QString K3b::ProjectPlugin::categoryName() const
 {
     return i18nc( "plugin type", "Project plugin" );
 }
+
+#include "moc_k3bprojectplugin.cpp"

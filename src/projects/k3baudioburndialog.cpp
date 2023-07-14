@@ -320,4 +320,4 @@ void K3b::AudioBurnDialog::slotCacheImageToggled( bool on )
     }
 }
 
-
+#include "moc_k3baudioburndialog.cpp"

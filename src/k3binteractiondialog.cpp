@@ -532,4 +532,4 @@ void K3b::InteractionDialog::toggleAll()
 {
 }
 
-
+#include "moc_k3binteractiondialog.cpp"

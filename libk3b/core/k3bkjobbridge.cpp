@@ -104,3 +104,5 @@ void KJobBridge::slotNewTask( const QString& task )
 }
 
 } // namespace K3b
+
+#include "moc_k3bkjobbridge.cpp"

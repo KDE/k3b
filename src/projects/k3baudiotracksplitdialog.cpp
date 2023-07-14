@@ -228,4 +228,4 @@ void K3b::AudioTrackSplitDialog::splitTrack( K3b::AudioTrack* track,
     }
 }
 
-
+#include "moc_k3baudiotracksplitdialog.cpp"

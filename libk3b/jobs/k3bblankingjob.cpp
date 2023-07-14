@@ -162,4 +162,4 @@ QString K3b::BlankingJob::jobDetails() const
         return QString();
 }
 
-
+#include "moc_k3bblankingjob.cpp"

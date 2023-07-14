@@ -241,4 +241,4 @@ void K3b::Cdda2wavReader::slotProcessExited( int exitCode, QProcess::ExitStatus 
     }
 }
 
-
+#include "moc_k3bcdda2wavreader.cpp"

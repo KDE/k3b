@@ -331,3 +331,5 @@ void K3b::ThemeManager::loadTheme( const QString& name )
     } else
 	delete t;
 }
+
+#include "moc_k3bthememanager.cpp"

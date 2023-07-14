@@ -210,4 +210,4 @@ void K3b::OptionDialog::setupAdvancedPage()
     m_pages.insert( Advanced, m_advancedPage );
 }
 
-
+#include "moc_k3boptiondialog.cpp"

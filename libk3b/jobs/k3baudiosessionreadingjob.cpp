@@ -239,4 +239,4 @@ bool K3b::AudioSessionReadingJob::run()
     return !writeError && !canceled();
 }
 
-
+#include "moc_k3baudiosessionreadingjob.cpp"

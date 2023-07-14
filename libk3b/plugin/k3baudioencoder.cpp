@@ -156,4 +156,4 @@ QString K3b::AudioEncoder::lastErrorString() const
         return d->lastErrorString;
 }
 
-
+#include "moc_k3baudioencoder.cpp"

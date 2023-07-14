@@ -132,4 +132,4 @@ void ModelUtilsTest::testSetCommonText()
     QCOMPARE( listModel->item( 2 )->text(), QString( "b" ) );
 }
 
-
+#include "moc_k3bmodelutilstest.cpp"

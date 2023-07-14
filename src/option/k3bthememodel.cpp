@@ -128,4 +128,4 @@ bool ThemeModel::removeRows( int row, int count, const QModelIndex& parent )
 
 } // namespace K3b
 
-
+#include "moc_k3bthememodel.cpp"

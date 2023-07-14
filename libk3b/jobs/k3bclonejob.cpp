@@ -387,4 +387,4 @@ QString K3b::CloneJob::jobTarget() const
         return m_imagePath;
 }
 
-
+#include "moc_k3bclonejob.cpp"

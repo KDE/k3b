@@ -441,4 +441,4 @@ void K3b::MediaSelectionComboBox::slotUpdateToolTip( K3b::Device::Device* dev )
     setToolTip( dev ? mediumToolTip( k3bappcore->mediaCache()->medium( dev ) ) : QString() );
 }
 
-
+#include "moc_k3bmediaselectioncombobox.cpp"

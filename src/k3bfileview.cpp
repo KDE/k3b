@@ -170,4 +170,4 @@ void K3b::FileView::readConfig( const KConfigGroup& grp )
     d->actionShowBookmarks->setChecked( d->dirOp->bookmarkMenu()->isVisible() );
 }
 
-
+#include "moc_k3bfileview.cpp"

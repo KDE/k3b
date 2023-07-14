@@ -98,4 +98,4 @@ void AudioProjectConvertingJob::trackFinished( int trackIndex, const QString& /*
 
 } // namespace K3b
 
-
+#include "moc_k3baudioprojectconvertingjob.cpp"

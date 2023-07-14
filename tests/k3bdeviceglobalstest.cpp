@@ -37,3 +37,5 @@ void DeviceGlobalsTest::testFrom4Byte()
     unsigned const char buf2[] = { 0x12, 0x34, 0x56, 0x78 };
     QCOMPARE(K3b::Device::from4Byte(buf2), (quint32)0x12345678);
 }
+
+#include "moc_k3bdeviceglobalstest.cpp"

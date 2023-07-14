@@ -150,4 +150,4 @@ void K3b::IntMapComboBox::addGlobalWhatsThisText( const QString& top, const QStr
     d->updateWhatsThis();
 }
 
-
+#include "moc_k3bintmapcombobox.cpp"

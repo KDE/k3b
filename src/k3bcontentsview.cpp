@@ -77,4 +77,4 @@ void K3b::ContentsView::activate( bool active )
     m_active = active;
 }
 
-
+#include "moc_k3bcontentsview.cpp"

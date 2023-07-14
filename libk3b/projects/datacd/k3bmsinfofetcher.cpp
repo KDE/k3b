@@ -221,5 +221,4 @@ void K3b::MsInfoFetcher::cancel()
         }
 }
 
-
-
+#include "moc_k3bmsinfofetcher.cpp"

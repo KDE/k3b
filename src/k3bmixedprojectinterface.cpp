@@ -24,4 +24,4 @@ MixedProjectInterface::MixedProjectInterface( MixedDoc* doc )
 
 } // namespace K3b
 
-
+#include "moc_k3bmixedprojectinterface.cpp"

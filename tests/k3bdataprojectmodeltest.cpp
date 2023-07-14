@@ -86,4 +86,4 @@ void DataProjectModelTest::testRemove()
     spy.check( model.indexForItem( m_doc->root() ), 3 );
 }
 
-
+#include "moc_k3bdataprojectmodeltest.cpp"

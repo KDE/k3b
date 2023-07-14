@@ -624,4 +624,4 @@ void K3b::ProjectManager::slotProjectChanged( K3b::Doc* doc )
     emit projectChanged( doc );
 }
 
-
+#include "moc_k3bprojectmanager.cpp"

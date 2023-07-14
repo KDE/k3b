@@ -370,3 +370,5 @@ bool K3bWaveDecoderFactory::canDecode( const QUrl& url )
 
 
 #include "k3bwavedecoder.moc"
+
+#include "moc_k3bwavedecoder.cpp"

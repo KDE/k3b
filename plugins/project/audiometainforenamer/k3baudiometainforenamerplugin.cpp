@@ -401,3 +401,5 @@ K3b::ProjectPluginGUIBase* K3bAudioMetainfoRenamerPlugin::createGUI( K3b::Doc* d
 }
 
 #include "k3baudiometainforenamerplugin.moc"
+
+#include "moc_k3baudiometainforenamerplugin.cpp"

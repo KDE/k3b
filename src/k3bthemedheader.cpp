@@ -132,4 +132,4 @@ void K3b::ThemedHeader::slotThemeChanged()
     }
 }
 
-
+#include "moc_k3bthemedheader.cpp"

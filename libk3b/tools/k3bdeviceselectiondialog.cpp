@@ -111,5 +111,4 @@ K3b::Device::Device* K3b::DeviceSelectionDialog::selectWriter( QWidget* parent, 
     return selectDevice( parent, k3bcore->deviceManager()->burningDevices(), text );
 }
 
-
-
+#include "moc_k3bdeviceselectiondialog.cpp"

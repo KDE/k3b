@@ -193,4 +193,4 @@ K3b::WidgetShowEffect* K3b::WidgetShowEffect::hideWidget( QWidget* w, Effect m )
     return e;
 }
 
-
+#include "moc_k3bwidgetshoweffect.cpp"

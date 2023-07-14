@@ -446,4 +446,4 @@ void K3b::Device::DeviceManager::slotSolidDeviceRemoved( const QString& udi )
     }
 }
 
-
+#include "moc_k3bdevicemanager.cpp"

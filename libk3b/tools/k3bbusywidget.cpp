@@ -90,5 +90,4 @@ void K3b::BusyWidget::paintEvent( QPaintEvent*  )
         p.fillRect( pos, (rect.height() - squareSize)/2, squareSize, squareSize, palette().highlight() );
 }
 
-
-
+#include "moc_k3bbusywidget.cpp"

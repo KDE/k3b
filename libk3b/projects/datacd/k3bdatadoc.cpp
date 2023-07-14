@@ -1516,4 +1516,4 @@ K3b::RootItem* K3b::DataDoc::root() const
     return d->root;
 }
 
-
+#include "moc_k3bdatadoc.cpp"

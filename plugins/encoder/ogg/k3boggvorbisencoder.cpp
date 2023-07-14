@@ -437,3 +437,5 @@ long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) c
 }
 
 #include "k3boggvorbisencoder.moc"
+
+#include "moc_k3boggvorbisencoder.cpp"

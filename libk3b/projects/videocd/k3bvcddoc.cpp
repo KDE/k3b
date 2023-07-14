@@ -888,4 +888,4 @@ K3b::Device::MediaTypes K3b::VcdDoc::supportedMediaTypes() const
     return K3b::Device::MEDIA_WRITABLE_CD;
 }
 
-
+#include "moc_k3bvcddoc.cpp"

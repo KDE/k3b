@@ -149,4 +149,4 @@ void K3b::AudioTrackWidget::save()
     }
 }
 
-
+#include "moc_k3baudiotrackwidget.cpp"

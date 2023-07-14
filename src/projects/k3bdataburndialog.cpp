@@ -276,5 +276,4 @@ void K3b::DataBurnDialog::slotMultiSessionModeChanged()
         m_writerSelectionWidget->setWantedMediumState( K3b::Device::STATE_EMPTY|K3b::Device::STATE_INCOMPLETE );
 }
 
-
-
+#include "moc_k3bdataburndialog.cpp"

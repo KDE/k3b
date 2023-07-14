@@ -151,4 +151,4 @@ void K3b::View::addUrls( const QList<QUrl>& urls )
     doc()->addUrls( urls );
 }
 
-
+#include "moc_k3bview.cpp"

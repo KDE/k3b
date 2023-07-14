@@ -214,3 +214,5 @@ void K3b::ThemeOptionTab::slotRemoveTheme()
         readSettings();
     }
 }
+
+#include "moc_k3bthemeoptiontab.cpp"

@@ -339,3 +339,5 @@ long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 }
 
 #include "k3blameencoder.moc"
+
+#include "moc_k3blameencoder.cpp"

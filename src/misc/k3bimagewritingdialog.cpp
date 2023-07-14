@@ -1229,4 +1229,4 @@ void K3b::ImageWritingDialog::dropEvent( QDropEvent* e )
     }
 }
 
-
+#include "moc_k3bimagewritingdialog.cpp"

@@ -139,3 +139,5 @@ QString K3bSoxEncoderConfigWidget::getDataEncoding() const
 }
 
 #include "k3bsoxencoderconfigwidget.moc"
+
+#include "moc_k3bsoxencoderconfigwidget.cpp"

@@ -85,4 +85,4 @@ void K3b::DeviceComboBox::slotActivated( int i )
     emit selectionChanged( d->model->deviceForIndex( d->model->index( i, 0 ) ) );
 }
 
-
+#include "moc_k3bdevicecombobox.cpp"

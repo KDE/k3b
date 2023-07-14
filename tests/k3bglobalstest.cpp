@@ -28,4 +28,4 @@ void GlobalsTest::testRemoveFilenameExtension()
     QCOMPARE( K3b::removeFilenameExtension( "abcd.txt" ), QString( "abcd" ) );
 }
 
-
+#include "moc_k3bglobalstest.cpp"

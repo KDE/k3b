@@ -222,5 +222,4 @@ void K3b::ProjectTabWidget::slotTabCloseRequested( int index )
     }
 }
 
-
-
+#include "moc_k3bprojecttabwidget.cpp"

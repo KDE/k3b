@@ -145,5 +145,4 @@ void K3b::DirOperator::slotAddFilesToProject()
     }
 }
 
-
-
+#include "moc_k3bdiroperator.cpp"

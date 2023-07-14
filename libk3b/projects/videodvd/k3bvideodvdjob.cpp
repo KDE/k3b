@@ -59,4 +59,4 @@ QString K3b::VideoDvdJob::jobDetails() const
                  : QString() ) );
 }
 
-
+#include "moc_k3bvideodvdjob.cpp"

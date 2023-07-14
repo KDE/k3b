@@ -1111,4 +1111,4 @@ QIODevice* K3b::IsoImager::ioDevice() const
     return m_process;
 }
 
-
+#include "moc_k3bisoimager.cpp"

@@ -174,5 +174,4 @@ int K3b::MultiChoiceDialog::choose( const QString& caption,
     return dlg.exec();
 }
 
-
-
+#include "moc_k3bmultichoicedialog.cpp"

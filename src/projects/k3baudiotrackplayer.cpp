@@ -319,4 +319,4 @@ void AudioTrackPlayer::slotStateChanged( QAudio::State state )
 
 } // namespace K3b
 
-
+#include "moc_k3baudiotrackplayer.cpp"

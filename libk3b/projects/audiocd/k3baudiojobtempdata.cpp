@@ -115,5 +115,4 @@ void K3b::AudioJobTempData::cleanup()
         QFile::remove(  d->tocFile );
 }
 
-
-
+#include "moc_k3baudiojobtempdata.cpp"

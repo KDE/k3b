@@ -207,4 +207,4 @@ bool K3b::DataPreparationJob::run()
     return true;
 }
 
-
+#include "moc_k3bdatapreparationjob.cpp"

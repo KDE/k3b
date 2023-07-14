@@ -321,6 +321,4 @@ void K3b::MixedBurnDialog::slotCacheImageToggled( bool on )
     }
 }
 
-
-
-
+#include "moc_k3bmixedburndialog.cpp"

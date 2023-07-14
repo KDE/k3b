@@ -143,4 +143,4 @@ bool K3b::MiscOptionTab::saveSettings()
     return true;
 }
 
-
+#include "moc_k3bmiscoptiontab.cpp"

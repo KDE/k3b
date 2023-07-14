@@ -246,5 +246,4 @@ K3b::Device::MediaTypes K3b::MixedDoc::supportedMediaTypes() const
     return K3b::Device::MEDIA_WRITABLE_CD;
 }
 
-
-
+#include "moc_k3bmixeddoc.cpp"

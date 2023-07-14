@@ -163,4 +163,4 @@ void K3b::DataMultiSessionCombobox::setForceNoMultisession( bool f )
     }
 }
 
-
+#include "moc_k3bdatamultisessioncombobox.cpp"

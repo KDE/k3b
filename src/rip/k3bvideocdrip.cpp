@@ -340,4 +340,4 @@ QString K3b::VideoCdRip::jobDetails() const
     return QString( "(%1)" ).arg ( KIO::convertSize( m_videooptions ->getVideoCdSize() ) );
 }
 
-
+#include "moc_k3bvideocdrip.cpp"

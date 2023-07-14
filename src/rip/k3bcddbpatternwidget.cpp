@@ -164,5 +164,4 @@ void K3b::CddbPatternWidget::slotSeeConditionalInclusion()
                           m_conditionalInclusionLabel );
 }
 
-
-
+#include "moc_k3bcddbpatternwidget.cpp"

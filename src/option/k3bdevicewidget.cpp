@@ -272,3 +272,5 @@ void K3b::DeviceWidget::addUserToGroup()
     } );
     job->start();
 }
+
+#include "moc_k3bdevicewidget.cpp"

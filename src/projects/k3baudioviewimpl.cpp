@@ -549,4 +549,4 @@ void K3b::AudioViewImpl::sourcesForIndexes( QList<AudioDataSource*>& sources,
     }
 }
 
-
+#include "moc_k3baudioviewimpl.cpp"

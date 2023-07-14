@@ -303,4 +303,4 @@ void AudioRipJob::trackFinished( int trackIndex, const QString& filename )
 
 } // namespace K3b
 
-
+#include "moc_k3baudioripjob.cpp"

@@ -853,4 +853,4 @@ QString K3b::AudioJob::jobDetails() const
                  : QString() ) );
 }
 
-
+#include "moc_k3baudiojob.cpp"

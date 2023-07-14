@@ -258,3 +258,5 @@ void K3bLameEncoderSettingsWidget::defaults()
 }
 
 #include "k3blameencoderconfigwidget.moc"
+
+#include "moc_k3blameencoderconfigwidget.cpp"

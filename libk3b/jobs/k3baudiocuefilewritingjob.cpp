@@ -288,4 +288,4 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
     }
 }
 
-
+#include "moc_k3baudiocuefilewritingjob.cpp"

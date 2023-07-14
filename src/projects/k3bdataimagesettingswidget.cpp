@@ -348,4 +348,4 @@ void K3b::DataImageSettingsWidget::save( K3b::IsoOptions& o )
     o.setVolumeID( m_editVolumeName->text() );
 }
 
-
+#include "moc_k3bdataimagesettingswidget.cpp"

@@ -825,4 +825,4 @@ QString K3b::DataUrlAddingDialog::resultMessage() const
     return message;
 }
 
-
+#include "moc_k3bdataurladdingdialog.cpp"

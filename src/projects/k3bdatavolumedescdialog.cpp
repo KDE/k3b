@@ -92,4 +92,4 @@ void K3b::DataVolumeDescDialog::slotVolumeSetSizeChanged( int i )
     m_spinVolumeSetNumber->setMaximum( i );
 }
 
-
+#include "moc_k3bdatavolumedescdialog.cpp"

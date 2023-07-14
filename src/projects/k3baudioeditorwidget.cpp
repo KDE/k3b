@@ -872,5 +872,4 @@ int K3b::AudioEditorWidget::msfToPos( const K3b::Msf& msf ) const
     return frameWidth() + d->margin + qMin( pos, w-1 );
 }
 
-
-
+#include "moc_k3baudioeditorwidget.cpp"

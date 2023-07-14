@@ -1155,4 +1155,4 @@ bool K3b::DataJob::setupGrowisofsJob()
     return true;
 }
 
-
+#include "moc_k3bdatajob.cpp"

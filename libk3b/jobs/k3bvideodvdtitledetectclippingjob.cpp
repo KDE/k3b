@@ -278,4 +278,4 @@ void K3b::VideoDVDTitleDetectClippingJob::slotTranscodeExited( int exitCode, QPr
     }
 }
 
-
+#include "moc_k3bvideodvdtitledetectclippingjob.cpp"

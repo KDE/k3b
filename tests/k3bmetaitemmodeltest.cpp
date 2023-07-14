@@ -254,5 +254,4 @@ void MetaItemModelTest::testDataChanges()
     QCOMPARE( arguments.at( 1 ).value<QModelIndex>(), model.index( 1, 0 ) );
 }
 
-
-
+#include "moc_k3bmetaitemmodeltest.cpp"

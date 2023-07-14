@@ -106,3 +106,5 @@ void K3b<name>EncoderConfigWidget::defaults()
 
 
 #include "k3b<name>encoder.moc"
+
+#include "moc_skeleton.cpp"

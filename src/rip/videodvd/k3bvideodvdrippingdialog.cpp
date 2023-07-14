@@ -561,4 +561,4 @@ void K3b::VideoDVDRippingDialog::slotStartClicked()
     close();
 }
 
-
+#include "moc_k3bvideodvdrippingdialog.cpp"

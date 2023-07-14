@@ -95,3 +95,5 @@ void K3b::Splash::hide()
     QWidget::hide();
     qApp->processEvents();
 }
+
+#include "moc_k3bsplash.cpp"

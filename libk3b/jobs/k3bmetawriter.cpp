@@ -956,4 +956,4 @@ K3b::WritingMode K3b::MetaWriter::usedWritingMode() const
     return d->usedWritingMode;
 }
 
-
+#include "moc_k3bmetawriter.cpp"

@@ -941,4 +941,4 @@ qint64 K3b::CdrskinWriter::write( const char* data, qint64 maxSize )
     return d->process.write( data, maxSize );
 }
 
-
+#include "moc_k3bcdrskinwriter.cpp"

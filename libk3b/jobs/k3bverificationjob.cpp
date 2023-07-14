@@ -406,5 +406,4 @@ void K3b::VerificationJob::slotReaderFinished( bool success )
     }
 }
 
-
-
+#include "moc_k3bverificationjob.cpp"

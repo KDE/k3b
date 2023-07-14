@@ -190,4 +190,4 @@ void K3b::DataDirTreeView::stopDropAnimation()
 }
 #endif
 
-
+#include "moc_k3bdatadirtreeview.cpp"

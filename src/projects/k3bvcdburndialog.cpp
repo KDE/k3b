@@ -986,4 +986,4 @@ void K3b::VcdBurnDialog::toggleAll()
     m_checkRemoveBufferFiles->setDisabled( m_checkOnlyCreateImage->isChecked() );
 }
 
-
+#include "moc_k3bvcdburndialog.cpp"

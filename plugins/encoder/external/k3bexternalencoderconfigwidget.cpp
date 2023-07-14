@@ -211,3 +211,5 @@ void K3bExternalEncoderSettingsWidget::fillEncoderView( const QList<K3bExternalE
 }
 
 #include "k3bexternalencoderconfigwidget.moc"
+
+#include "moc_k3bexternalencoderconfigwidget.cpp"

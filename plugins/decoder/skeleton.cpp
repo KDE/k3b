@@ -86,3 +86,5 @@ int K3b<name>Decoder::decodeInternal( char* _data, int maxLen )
 
 
 #include "k3b<name>decoder.moc"
+
+#include "moc_skeleton.cpp"

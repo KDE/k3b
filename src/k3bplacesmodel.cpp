@@ -183,4 +183,4 @@ void K3b::PlacesModel::slotDevicesChanged( K3b::Device::DeviceManager* dm )
     d->deviceModel->setDevices( dm->allDevices() );
 }
 
-
+#include "moc_k3bplacesmodel.cpp"

@@ -365,5 +365,4 @@ void K3b::VideoDVDRippingView::initActions()
     connect( d->popupMenu, SIGNAL(aboutToShow()), this, SLOT(slotContextMenuAboutToShow()) );
 }
 
-
-
+#include "moc_k3bvideodvdrippingview.cpp"

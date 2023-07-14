@@ -160,3 +160,5 @@ void K3bOggVorbisEncoderSettingsWidget::defaults()
 }
 
 #include "k3boggvorbisencoderconfigwidget.moc"
+
+#include "moc_k3boggvorbisencoderconfigwidget.cpp"

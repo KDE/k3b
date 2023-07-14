@@ -114,4 +114,4 @@ bool K3b::MusicBrainzTrackLookupJob::run()
     return( d->results > 0 );
 }
 
-
+#include "moc_k3bmusicbrainztrackloopupjob.cpp"

@@ -49,4 +49,4 @@ bool K3b::AudioFileAnalyzerJob::run()
     return d->decoder->analyseFile();
 }
 
-
+#include "moc_k3baudiofileanalyzerjob.cpp"

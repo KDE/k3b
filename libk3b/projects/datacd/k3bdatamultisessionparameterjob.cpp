@@ -282,4 +282,4 @@ bool K3b::DataMultiSessionParameterJob::setupMultiSessionParameters()
     return true;
 }
 
-
+#include "moc_k3bdatamultisessionparameterjob.cpp"

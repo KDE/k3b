@@ -44,3 +44,5 @@ bool K3b::DirProxyModel::lessThan( const QModelIndex& left, const QModelIndex& r
         return QSortFilterProxyModel::lessThan( left, right );
     }
 }
+
+#include "moc_k3bdirproxymodel.cpp"

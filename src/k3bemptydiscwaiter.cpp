@@ -797,3 +797,5 @@ void K3b::EmptyDiscWaiter::blockingInformation( const QString& text,
 {
     KMessageBox::information( this, text, caption );
 }
+
+#include "moc_k3bemptydiscwaiter.cpp"

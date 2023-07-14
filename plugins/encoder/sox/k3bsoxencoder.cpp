@@ -340,3 +340,5 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 }
 
 #include "k3bsoxencoder.moc"
+
+#include "moc_k3bsoxencoder.cpp"

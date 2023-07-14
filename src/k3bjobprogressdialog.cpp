@@ -653,4 +653,4 @@ void K3b::JobProgressDialog::slotThemeChanged()
     }
 }
 
-
+#include "moc_k3bjobprogressdialog.cpp"

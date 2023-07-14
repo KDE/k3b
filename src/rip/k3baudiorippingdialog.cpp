@@ -458,4 +458,4 @@ void K3b::AudioRippingDialog::saveSettings( KConfigGroup c )
     m_patternWidget->saveConfig( c );
 }
 
-
+#include "moc_k3baudiorippingdialog.cpp"

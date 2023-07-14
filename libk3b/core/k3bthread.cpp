@@ -86,4 +86,4 @@ void K3b::Thread::waitUntilFinished()
     qDebug() << "Thread waiting done." << Qt::endl;
 }
 
-
+#include "moc_k3bthread.cpp"

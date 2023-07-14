@@ -682,4 +682,4 @@ void K3b::VcdTrackDialog::slotUseKeysToggled( bool checked )
     d->mainTabbed->setTabEnabled( d->mainTabbed->indexOf( d->widgetnumkeys ), checked );
 }
 
-
+#include "moc_k3bvcdtrackdialog.cpp"

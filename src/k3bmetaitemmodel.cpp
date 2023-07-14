@@ -970,4 +970,4 @@ void K3b::MetaItemModel::slotReset()
     endResetModel();
 }
 
-
+#include "moc_k3bmetaitemmodel.cpp"

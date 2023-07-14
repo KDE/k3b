@@ -312,3 +312,5 @@ QString K3bExternalEncoder::fileTypeComment( const QString& ext ) const
 }
 
 #include "k3bexternalencoder.moc"
+
+#include "moc_k3bexternalencoder.cpp"

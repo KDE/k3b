@@ -227,5 +227,4 @@ int K3b::VideoCdInfoResult::foundEntries( int type ) const
     return 0;
 }
 
-
-
+#include "moc_k3bvideocdinfo.cpp"

@@ -487,3 +487,5 @@ bool K3bFLACDecoderFactory::canDecode( const QUrl& url )
 }
 
 #include "k3bflacdecoder.moc"
+
+#include "moc_k3bflacdecoder.cpp"

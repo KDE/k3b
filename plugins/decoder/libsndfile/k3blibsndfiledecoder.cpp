@@ -229,3 +229,5 @@ bool K3bLibsndfileDecoderFactory::canDecode( const QUrl& url )
 }
 
 #include "k3blibsndfiledecoder.moc"
+
+#include "moc_k3blibsndfiledecoder.cpp"

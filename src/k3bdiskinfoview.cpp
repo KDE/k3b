@@ -396,5 +396,4 @@ QString K3b::DiskInfoView::createIso9660InfoItems( const K3b::Iso9660SimplePrima
     return s;
 }
 
-
-
+#include "moc_k3bdiskinfoview.cpp"

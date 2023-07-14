@@ -400,4 +400,4 @@ void K3b::DataViewImpl::slotMoveItemsRequested( QList<K3b::DataItem*> items, K3b
     DataUrlAddingDialog::moveItems( items, targetDir, m_view );
 }
 
-
+#include "moc_k3bdataviewimpl.cpp"

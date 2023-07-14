@@ -233,3 +233,5 @@ bool K3bOggVorbisDecoderFactory::canDecode( const QUrl& url )
 
 
 #include "k3boggvorbisdecoder.moc"
+
+#include "moc_k3boggvorbisdecoder.cpp"

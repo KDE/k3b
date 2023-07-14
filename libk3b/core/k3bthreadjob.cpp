@@ -167,4 +167,4 @@ bool K3b::ThreadJob::wait( unsigned long time )
     return d->thread->wait( time );
 }
 
-
+#include "moc_k3bthreadjob.cpp"

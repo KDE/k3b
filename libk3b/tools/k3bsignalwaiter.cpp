@@ -54,4 +54,4 @@ void K3b::SignalWaiter::slotSignal()
     }
 }
 
-
+#include "moc_k3bsignalwaiter.cpp"

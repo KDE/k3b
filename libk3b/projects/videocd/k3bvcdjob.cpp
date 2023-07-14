@@ -572,4 +572,4 @@ QString K3b::VcdJob::jobDetails() const
                  : QString() ) );
 }
 
-
+#include "moc_k3bvcdjob.cpp"

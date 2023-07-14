@@ -185,5 +185,4 @@ void K3b::MediaFormattingDialog::saveSettings( KConfigGroup c )
     m_writingModeWidget->saveConfig( c );
 }
 
-
-
+#include "moc_k3bmediaformattingdialog.cpp"

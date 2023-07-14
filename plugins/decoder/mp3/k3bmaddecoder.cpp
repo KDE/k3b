@@ -522,3 +522,5 @@ bool K3bMadDecoderFactory::canDecode( const QUrl& url )
 }
 
 #include "k3bmaddecoder.moc"
+
+#include "moc_k3bmaddecoder.cpp"
