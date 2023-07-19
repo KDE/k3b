@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-07-03 11:38\n"
+"PO-Revision-Date: 2023-07-18 11:15\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/k3b/k3b.pot\n"
-"X-Crowdin-File-ID: 5930\n"
+"X-Crowdin-File: /kf5-stable/messages/k3b/k3b.pot\n"
+"X-Crowdin-File-ID: 3016\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2344,12 +2344,12 @@ msgstr "过滤器："
 #: misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "All Files"
-msgstr ""
+msgstr "全部文件"
 
 #: k3bfileview.cpp:74
 #, kde-format
 msgid "Sound Files"
-msgstr ""
+msgstr "音频文件"
 
 #: k3bfileview.cpp:75
 #, kde-format
@@ -2359,17 +2359,17 @@ msgstr ""
 #: k3bfileview.cpp:76
 #, kde-format
 msgid "MP3 Sound Files"
-msgstr ""
+msgstr "MP3 音频文件"
 
 #: k3bfileview.cpp:77
 #, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr ""
+msgstr "Ogg Vorbis 音频文件"
 
 #: k3bfileview.cpp:78
 #, kde-format
 msgid "MPEG Video Files"
-msgstr ""
+msgstr "MPEG 视频文件"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -2529,7 +2529,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2540,12 +2540,12 @@ msgstr "<p>您真的想要 K3b 杀死下列进程吗：<em>%1</em></p>"
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "终止进程？"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "终止"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -3911,7 +3911,7 @@ msgstr "选择镜像文件"
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
 #, kde-format
 msgid "Image Files"
-msgstr ""
+msgstr "图片文件"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
 #, kde-format
@@ -3921,12 +3921,12 @@ msgstr ""
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
 #, kde-format
 msgid "Cue Files"
-msgstr ""
+msgstr "Cue 文件"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
 #, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr ""
+msgstr "Cdrdao 目录文件和 Cdrecord 克隆镜像"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
@@ -6990,7 +6990,7 @@ msgstr "自定义(%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) 找到预设设置： "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7943,7 +7943,7 @@ msgstr "图像文件夹“%1”不存在。您想要 K3b 创建它吗？"
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
 #, kde-format
 msgid "Create folder?"
-msgstr ""
+msgstr "创建文件夹？"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
