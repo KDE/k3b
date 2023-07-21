@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: __kde__extragear-multimedia__k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-26 00:49+0000\n"
+"POT-Creation-Date: 2023-07-21 00:48+0000\n"
 "PO-Revision-Date: 2015-02-25 18:09+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team:  <en@li.org>\n"
@@ -4731,7 +4731,7 @@ msgid "Install New Theme..."
 msgstr "Instaliraj novu temu..."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemoveTheme)
-#: option/base_k3bthemeoptiontab.ui:138
+#: option/base_k3bthemeoptiontab.ui:136
 #, kde-format
 msgid "Remove Theme"
 msgstr "Ukloni Temu"

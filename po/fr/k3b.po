@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-26 00:49+0000\n"
+"POT-Creation-Date: 2023-07-21 00:48+0000\n"
 "PO-Revision-Date: 2023-06-26 21:28+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -4804,7 +4804,7 @@ msgid "Install New Theme..."
 msgstr "Installer un nouveau thème..."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemoveTheme)
-#: option/base_k3bthemeoptiontab.ui:138
+#: option/base_k3bthemeoptiontab.ui:136
 #, kde-format
 msgid "Remove Theme"
 msgstr "Supprimer le thème"
