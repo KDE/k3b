@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-21 00:48+0000\n"
-"PO-Revision-Date: 2023-04-21 23:58+0200\n"
+"PO-Revision-Date: 2023-07-23 23:19+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -263,12 +263,11 @@ msgid ""
 "<p>K3b comes with a selection of predefined external applications that "
 "depends on the installed applications."
 msgstr ""
-"<p>이 대화 상자에서 오디오 인코더 같은 외부 명령행 프로그램을 설정할 수 있습"
-"니다. 이 설정은 K3b에서 오디오 데이터(오디오 CD 트랙이나 오디오 프로젝트의 타"
-"이틀)를 일반적으로 지원하지 않는 형식(즉 인코더가 없는 경우)으로 인코딩할 때 "
-"사용합니다.\n"
-"<p>K3b는 설치된 프로그램을 감지하여 외부 프로그램을 자동으로 설정할 수 있습니"
-"다."
+"<p>이 대화 상자에서 오디오 인코더 같은 외부 명령행 앱을 설정할 수 있습니다. "
+"이 설정은 K3b에서 오디오 데이터(오디오 CD 트랙이나 오디오 프로젝트의 타이틀)"
+"를 일반적으로 지원하지 않는 형식(즉 인코더가 없는 경우)으로 인코딩할 때 사용"
+"합니다.\n"
+"<p>K3b는 설치된 앱을 감지하여 외부 앱을 자동으로 설정할 수 있습니다."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:32
@@ -422,8 +421,8 @@ msgid ""
 "case the encoder application cannot read plain raw audio data."
 msgstr ""
 "<p>이 옵션을 선택하면 K3b에서 웨이브 파일 헤더를 작성합니다. 이 기능은 인코"
-"더 프로그램에서 특정 형식으로 처리되지 않은 오디오 데이터를 제대로 읽지 못할 "
-"때 사용할 수 있습니다."
+"더 앱에서 특정 형식으로 처리되지 않은 오디오 데이터를 제대로 읽지 못할 때 사"
+"용할 수 있습니다."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteWaveHeader)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:129
@@ -1386,7 +1385,7 @@ msgstr "열려 있는 모든 프로젝트 닫기"
 #: k3b.cpp:319
 #, kde-format
 msgid "Quits the application"
-msgstr "프로그램 끝내기"
+msgstr "앱 끝내기"
 
 #: k3b.cpp:322
 #, kde-format
@@ -2260,7 +2259,7 @@ msgstr "담당자 ID:"
 #: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:233
 #, kde-format
 msgid "Application Id:"
-msgstr "프로그램 ID:"
+msgstr "앱 ID:"
 
 #: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:184
 #, kde-format
@@ -2375,40 +2374,34 @@ msgstr "필터:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|모든 파일"
+msgstr "모든 파일"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "검색된 파일"
+msgstr "사운드 파일"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "검색된 파일"
+msgstr "웨이브 사운드 파일"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "검색된 파일"
+msgstr "MP3 사운드 파일"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis 사운드 파일"
+msgstr "Ogg Vorbis 사운드 파일"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG 비디오 파일"
+msgstr "MPEG 비디오 파일"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -2546,7 +2539,7 @@ msgstr "계속"
 #: k3blsofwrapperdialog.cpp:50
 #, kde-format
 msgid "Quit the other applications"
-msgstr "다른 프로그램 끝내기"
+msgstr "다른 앱 끝내기"
 
 #: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
 #, kde-format
@@ -2562,11 +2555,10 @@ msgid ""
 "down an application does not happen instantly. In that case you might have "
 "to use the '%3' button."
 msgstr ""
-"<p><b>'%1'</b> 장치를 다른 프로그램(<em>%2</em>)에서 이미 사용 중입니다. <p>"
-"작업을 계속 진행하기 전에 해당 프로그램을 종료하는 것을 추천합니다. 그렇지 않"
-"으면 K3b가 장치에 완전하게 접근하지 못할 수 있습니다.<p><em>참고: 가끔 프로그"
-"램이 즉각적으로 종료되지 않을 수 있습니다. 이런 경우에는 '%3' 단추를 눌러야 "
-"할 것입니다."
+"<p><b>'%1'</b> 장치를 다른 앱(<em>%2</em>)에서 이미 사용 중입니다. <p>작업을 "
+"계속 진행하기 전에 해당 앱을 종료하는 것을 추천합니다. 그렇지 않으면 K3b가 장"
+"치에 완전하게 접근하지 못할 수 있습니다.<p><em>참고: 가끔 앱이 즉각적으로 종"
+"료되지 않을 수 있습니다. 이런 경우에는 '%3' 단추를 눌러야 할 것입니다."
 
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
@@ -3342,7 +3334,7 @@ msgstr "기록 속도:"
 #: k3bwriterselectionwidget.cpp:127
 #, kde-format
 msgid "Writing app:"
-msgstr "기록 프로그램:"
+msgstr "기록 앱:"
 
 #: k3bwriterselectionwidget.cpp:159
 #, kde-format
@@ -3357,7 +3349,7 @@ msgstr "미디어 굽기 속도"
 #: k3bwriterselectionwidget.cpp:161
 #, kde-format
 msgid "The external application to actually burn the medium"
-msgstr "미디어를 실제로 굽는 외부 프로그램"
+msgstr "미디어를 실제로 굽는 외부 앱"
 
 #: k3bwriterselectionwidget.cpp:163
 #, kde-format
@@ -3397,9 +3389,9 @@ msgid ""
 "certain writer. In this case one may select the application manually."
 msgstr ""
 "<p>K3b는 명령줄 도구인 cdrecord, megisofs, cdrdao를 사용하여 실제로 CD나 DVD"
-"를 작성합니다.<p>보통 매 작업마다 K3b가 가장 적당한 프로그램을 자동으로 선택"
-"하지만, 가끔 몇몇 장치에서는 위의 프로그램 중 하나가 의도한 대로 동작하지 않"
-"을 수 있습니다. 이런 경우에는 사용자가 수동으로 프로그램을 선택해야 합니다."
+"를 작성합니다.<p>보통 매 작업마다 K3b가 가장 적당한 앱을 자동으로 선택하지"
+"만, 가끔 몇몇 장치에서는 위의 앱 중 하나가 의도한 대로 동작하지 않을 수 있습"
+"니다. 이런 경우에는 사용자가 수동으로 앱을 선택해야 합니다."
 
 #: k3bwriterselectionwidget.cpp:262 projects/k3bdataurladdingdialog.cpp:394
 #: projects/k3bdataurladdingdialog.cpp:633
@@ -3565,11 +3557,11 @@ msgid ""
 "trying to be as simple as possible for novice users while also providing all "
 "features an advanced user might need."
 msgstr ""
-"<p>K3b는 CD/DVD/블루레이 기록 및 추출 프로그램입니다.<br/>다양한 프로젝트 형"
-"식, 광학 미디어 복사, 여러 형식의 이미지 기록, 오디오 CD, 비디오 CD, 동영상 "
-"DVD 추출을 지원합니다.<br/>편리한 사용자 인터페이스는 모든 사용자를 대상으로 "
-"하며, 초보자에게는 최대한 간단하면서 고급 사용자에게는 필요한 모든 옵션을 제"
-"공합니다."
+"<p>K3b는 CD/DVD/블루레이 기록 및 추출 앱입니다.<br/>다양한 프로젝트 형식, 광"
+"학 미디어 복사, 여러 형식의 이미지 기록, 오디오 CD, 비디오 CD, 동영상 DVD 추"
+"출을 지원합니다.<br/>편리한 사용자 인터페이스는 모든 사용자를 대상으로 하며, "
+"초보자에게는 최대한 간단하면서 고급 사용자에게는 필요한 모든 옵션을 제공합니"
+"다."
 
 #: main.cpp:33
 #, kde-format
@@ -3993,28 +3985,24 @@ msgid "Choose Image File"
 msgstr "이미지 파일 선택"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "이미지 파일:"
+msgstr "이미지 파일"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660 이미지 파일"
+msgstr "ISO 9660 이미지 파일"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "CUE 파일:"
+msgstr "CUE 파일"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao TOC 파일과 Cdrecord 복제 이미지"
+msgstr "Cdrdao TOC 파일과 Cdrecord 복제 이미지"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
@@ -5812,9 +5800,9 @@ msgstr ""
 "<p>현대적인 CD 기록 장치에서는 DAO 방식으로 기록 시에 트랙 뒷부분 간격에 오디"
 "오 데이터를 임의로 넣을 수 있으므로, 이 설정은 대부분의 사용자에게는 필요 없"
 "습니다.\n"
-"<p><i>다른 CD 기록 프로그램에서는 트랙 뒷부분 간격이 트랙 앞부분 간격으로 불"
-"리기도 합니다. 다시 말하면, 2번 트랙의 뒷부분 간격은 1번 트랙의 앞부분 간격"
-"과 같습니다.\n"
+"<p><i>다른 CD 기록 앱에서는 트랙 뒷부분 간격이 트랙 앞부분 간격으로 불리기도 "
+"합니다. 다시 말하면, 2번 트랙의 뒷부분 간격은 1번 트랙의 앞부분 간격과 같습니"
+"다.\n"
 "<p><b>트랙 뒷부분 간격을 바꾼다고 트랙의 길이가 변하지는 않습니다!</b>\n"
 "<p><b>TAO 방식으로 기록하게 되면(오디오 CD에는 추천하지 않음) 트랙 뒷부분 간"
 "격 부분에서는 음소거가 됩니다. 몇몇 기록 장치에서는 그 길이를 2초로 강제로 정"
@@ -6171,7 +6159,7 @@ msgstr "목록 파일:"
 #: projects/base_k3bdatavolumedescdialog.ui:31
 #, kde-format
 msgid "Appli&cation:"
-msgstr "프로그램(&C):"
+msgstr "앱(&C):"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: projects/base_k3bdatavolumedescdialog.ui:51
@@ -6784,8 +6772,8 @@ msgid ""
 "You may manually convert these audio files to wave using another application "
 "supporting the audio format and then add the wave files to the K3b project."
 msgstr ""
-"다음 오디오 파일은 해당 오디오 형식을 지원하는 프로그램을 통하여 웨이브 파일"
-"로 변환한 다음 K3b 프로젝트에 웨이브 파일로 추가해야 합니다."
+"다음 오디오 파일은 해당 오디오 형식을 지원하는 앱을 통하여 웨이브 파일로 변환"
+"한 다음 K3b 프로젝트에 웨이브 파일로 추가해야 합니다."
 
 #: projects/k3baudiotrackaddingdialog.cpp:92
 #: projects/k3bdataurladdingdialog.cpp:126
@@ -8273,7 +8261,7 @@ msgstr "전체 앨범의 볼륨 수 지정"
 #: projects/k3bvcdburndialog.cpp:108
 #, kde-format
 msgid "Enable CD-i Application Support for Video CD Type 1.1 & 2.0"
-msgstr "비디오 CD 형식 1.1, 2.0의 CD-i 프로그램 지원 활성화"
+msgstr "비디오 CD 형식 1.1, 2.0의 CD-i 애플리케이션 지원 활성화"
 
 #: projects/k3bvcdburndialog.cpp:109
 #, kde-format
@@ -8539,12 +8527,12 @@ msgid ""
 "end-user</li></ul><p>The program runs on CD-i players equipped with the "
 "CDRTOS 1.1(.1) operating system and a Digital Video extension cartridge."
 msgstr ""
-"<p>CD-i 재생기에서 비디오 CD를 재생하려면 CD-i 프로그램이 있어야 한다고 비디"
-"오 CD 표준안에 제시되어 있습니다.<p>이 프로그램은 다음 사항을 지키도록 고안되"
-"어 있습니다:<ul><li>PSD 표준에서 정의된 것처럼 완전한 재생 컨트롤을 제공하도"
-"록 합니다.</l><li>사용자가 쉽게 배우고 사용할 수 있도록 합니다.</li></ul><p>"
-"이 프로그램은 CDRTOS 1.1(.1) 운영체제와 디지털 동영상 확장 카트리지가 갖추어"
-"진 CD-i 재생기에서 실행됩니다."
+"<p>CD-i 재생기에서 비디오 CD를 재생하려면 CD-i 애플리케이션이 있어야 한다고 "
+"비디오 CD 표준안에 제시되어 있습니다.<p>이 애플리케이션은 다음 사항을 지키도"
+"록 고안되어 있습니다:<ul><li>PSD 표준에서 정의된 것처럼 완전한 재생 컨트롤을 "
+"제공하도록 합니다.</l><li>사용자가 쉽게 배우고 사용할 수 있도록 합니다.</"
+"li></ul><p>이 앱은 CDRTOS 1.1(.1) 운영체제와 디지털 동영상 확장 카트리지가 갖"
+"추어진 CD-i 재생기에서 실행됩니다."
 
 #: projects/k3bvcdburndialog.cpp:194
 #, kde-format
@@ -8555,8 +8543,8 @@ msgid ""
 "and lots more."
 msgstr ""
 "<p>설정 인자는 비디오 CD 2.0에서만 사용할 수 있습니다.<p>엔진은 현재 상태로 "
-"사용될 때 잘 동작합니다.<p>여기에 VCD 프로그램을 설정하는 옵션이 있습니다.<p>"
-"커서의 색상과 모양 및 기타 설정을 변경할 수 있습니다."
+"사용될 때 잘 동작합니다.<p>여기에 VCD 애플리케이션을 설정하는 옵션이 있습니"
+"다.<p>커서의 색상과 모양 및 기타 설정을 변경할 수 있습니다."
 
 #: projects/k3bvcdburndialog.cpp:200 projects/k3bvcdtrackdialog.cpp:255
 #, kde-format
@@ -8815,12 +8803,12 @@ msgstr "시스템:"
 #: projects/k3bvcdburndialog.cpp:451
 #, kde-format
 msgid "Application:"
-msgstr "프로그램:"
+msgstr "애플리케이션:"
 
 #: projects/k3bvcdburndialog.cpp:460
 #, kde-format
 msgid "ISO application identifier for Video CD"
-msgstr "비디오 CD의 ISO 프로그램 ID"
+msgstr "비디오 CD의 ISO 애플리케이션 ID"
 
 #: projects/k3bvcdburndialog.cpp:465
 #, kde-format
@@ -10670,8 +10658,8 @@ msgid ""
 "Shows plain Video DVD vob files from the DVD (including decryption) for "
 "further processing with another application"
 msgstr ""
-"다른 프로그램으로 처리할 수 있도록 DVD에 저장된 일반 비디오 DVD VOB 파일 표시"
-"(복호화 포함)"
+"다른 앱으로 처리할 수 있도록 DVD에 저장된 일반 비디오 DVD VOB 파일 표시(복호"
+"화 포함)"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
 #, kde-format
@@ -10757,10 +10745,10 @@ msgid ""
 "extras it is recommended to use the K3b Copy tool."
 msgstr ""
 "<p>비디오 DVD의 단일 타이틀을 XviD와 같은 압축 포맷으로 추출합니다. 메뉴 구조"
-"를 완전히 무시합니다.<p>다른 프로그램에서 사용할 수 있도록 일반 비디오 DVD "
-"VOB 파일을 복사하려면(복호화 포함) \"파일 보기\" 단추를 사용하십시오.<p>메뉴"
-"와 추가 화면이 있는 전체 비디오 DVD를 복사하려면 K3b 복사 도구를 사용하는 것"
-"을 추천합니다."
+"를 완전히 무시합니다.<p>다른 앱에서 사용할 수 있도록 일반 비디오 DVD VOB 파일"
+"을 복사하려면(복호화 포함) \"파일 보기\" 단추를 사용하십시오.<p>메뉴와 추가 "
+"화면이 있는 전체 비디오 DVD를 복사하려면 K3b 복사 도구를 사용하는 것을 추천합"
+"니다."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
 msgid "Keep original dimensions"

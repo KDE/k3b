@@ -1174,7 +1174,7 @@ msgstr "ISO 9660 이미지 기록 중"
 #, kde-format
 msgid "Cannot write %1 media using %2. Falling back to default application."
 msgstr ""
-"%2을(를) 사용하여 %1 미디어를 기록할 수 없습니다. 기본 프로그램을 사용합니다."
+"%2을(를) 사용하여 %1 미디어를 기록할 수 없습니다. 기본 앱을 사용합니다."
 
 #: jobs/k3bmetawriter.cpp:310
 #, kde-format
@@ -2805,8 +2805,7 @@ msgstr "질이 낮은 미디어 때문에 기록이 실패한 것 같습니다."
 #: projects/k3bcdrecordwriter.cpp:871 projects/k3bcdrskinwriter.cpp:884
 #, kde-format
 msgid "Another application is blocking the device (most likely automounting)."
-msgstr ""
-"다른 프로그램에서 이 장치를 막고 있습니다(자동 마운트일 가능성이 있음)."
+msgstr "다른 앱에서 이 장치를 막고 있습니다(자동 마운트일 가능성이 있음)."
 
 #: projects/k3bcdrecordwriter.cpp:874 projects/k3bcdrskinwriter.cpp:887
 #, kde-format
