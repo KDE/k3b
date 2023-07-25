@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-07-23 23:19+0200\n"
+"PO-Revision-Date: 2023-07-24 22:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -1935,7 +1935,7 @@ msgstr "파일이 존재함"
 #: k3bdebuggingoutputdialog.cpp:93
 #, kde-format
 msgid "Could not open file %1"
-msgstr "파일 %1을(를) 열 수 없음"
+msgstr "%1 파일을 열 수 없음"
 
 #. i18n: ectx: Menu (device)
 #: k3bdeviceui.rc:4 k3bui.rc:19
