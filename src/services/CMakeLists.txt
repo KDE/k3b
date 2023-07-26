@@ -20,4 +20,4 @@ install( FILES
   k3b_write_bin_image.desktop
   k3b_write_iso_image.desktop
   DESTINATION
-  ${KDE_INSTALL_KSERVICESDIR}/ServiceMenus )
+  ${KDE_INSTALL_DATADIR}/kio/ServiceMenus )
