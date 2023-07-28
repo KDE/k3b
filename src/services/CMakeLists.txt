@@ -13,11 +13,15 @@ if(ENABLE_DVD_RIPPING)
     ${KDE_INSTALL_DATADIR}/solid/actions )
 endif(ENABLE_DVD_RIPPING)
 
-install( FILES
-  k3b_create_audio_cd.desktop
-  k3b_create_data_project.desktop
-  k3b_create_video_cd.desktop
-  k3b_write_bin_image.desktop
-  k3b_write_iso_image.desktop
-  DESTINATION
-  ${KDE_INSTALL_DATADIR}/kio/servicemenus)
+if (QT_MAJOR_VERSION STREQUAL "5")
+    install( FILES
+      k3b_create_audio_cd.desktop
+      k3b_create_data_project.desktop
+      k3b_create_video_cd.desktop
+      k3b_write_bin_image.desktop
+      k3b_write_iso_image.desktop
+      DESTINATION
+      ${KDE_INSTALL_DATADIR}/kio/servicemenus)
+endif()
+
+
