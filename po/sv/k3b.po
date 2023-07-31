@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Stefan Asserhäll <stefan.asserhall@bredband.net>, 2007, 2008, 2009, 2010.
-# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2022.
+# Stefan Asserhall <stefan.asserhall@bredband.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-21 00:48+0000\n"
-"PO-Revision-Date: 2022-04-30 11:39+0200\n"
+"PO-Revision-Date: 2023-07-25 10:42+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -2378,40 +2378,34 @@ msgstr "Filter:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Alla filer"
+msgstr "Alla filer"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Hittade filer"
+msgstr "Ljudfiler"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Hittade filer"
+msgstr "Wave-ljudfiler"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Hittade filer"
+msgstr "MP3-ljudfiler"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis-ljudfiler"
+msgstr "Ogg Vorbis-ljudfiler"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG-videofiler"
+msgstr "MPEG-videofiler"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -2573,7 +2567,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2585,12 +2579,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Döda processerna?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Döda"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -4034,30 +4028,25 @@ msgid "Choose Image File"
 msgstr "Välj avbildsfil"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Avbildsfil:"
+msgstr "Avbildsfiler"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660-avbildsfiler"
+msgstr "ISO 9660-avbildsfiler"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Indexfil:"
+msgstr "Indexfiler"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr ""
-"*.toc *.TOC|Cdrdao-innehållsförteckningsfiler och cdrecord duplicerade "
-"avbildsfiler"
+"Cdrdao-innehållsförteckningsfiler och Cdrecord duplicerade avbildsfiler"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
@@ -7283,7 +7272,7 @@ msgstr "Eget (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) hittade förinställningar: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -8272,10 +8261,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Avbildskatalogen '%1' finns inte. Vill du att K3b ska skapa den?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Skapa katalog"
+msgstr "Skapa katalog?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
