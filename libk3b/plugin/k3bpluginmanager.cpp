@@ -13,7 +13,6 @@
 
 #include <kcmutils_export.h>
 #include <KCModuleLoader>
-#include <KService>
 #include <KPluginFactory>
 #include <KPluginMetaData>
 #include <KMessageBox>

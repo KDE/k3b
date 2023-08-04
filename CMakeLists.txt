@@ -71,7 +71,7 @@ endif()
 
 find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
 find_package(KF${KF_MAJOR_VERSION} ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
-                                     KCMUtils KIO Notifications NewStuff NotifyConfig Service Solid WidgetsAddons XmlGui)
+                                     KCMUtils KIO Notifications NewStuff NotifyConfig Solid WidgetsAddons XmlGui)
 if (QT_MAJOR_VERSION STREQUAL "6")
     find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core5Compat)
 endif()

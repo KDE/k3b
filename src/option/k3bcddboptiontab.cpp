@@ -7,7 +7,6 @@
 #include "k3bcddboptiontab.h"
 
 #include <KCModule>
-#include <KService>
 #include <KLocalizedString>
 #include <KPluginFactory>
 
