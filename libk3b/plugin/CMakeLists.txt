@@ -8,6 +8,3 @@ install( FILES
   k3bprojectplugin.h
   DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel )
 
-if (QT_MAJOR_VERSION STREQUAL "5")
-    install( FILES k3bplugin.desktop DESTINATION ${KDE_INSTALL_KSERVICETYPES5DIR})
-endif()
