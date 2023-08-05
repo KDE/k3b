@@ -208,7 +208,12 @@ void K3b::ExternalBinWidget::slotChangePermissions()
 {
     KAuth::Action action("org.kde.k3b.updatepermissions");
     action.setHelperId("org.kde.k3b");
+
+#if QT_VERSION_MAJOR == 5
     action.setParentWidget(this);
+#else
+    action.setParentWindow(window()->windowHandle());
+#endif
 
     QVariantMap args;
 
