@@ -13,11 +13,11 @@ if(ENABLE_DVD_RIPPING)
     ${KDE_INSTALL_DATADIR}/solid/actions )
 endif(ENABLE_DVD_RIPPING)
 
-install( FILES
+install(PROGRAMS # They need to be executable to be considered authorized since this is a non-standard location
   k3b_create_audio_cd.desktop
   k3b_create_data_project.desktop
   k3b_create_video_cd.desktop
   k3b_write_bin_image.desktop
   k3b_write_iso_image.desktop
-  DESTINATION
-  ${KDE_INSTALL_KSERVICESDIR}/ServiceMenus )
+  DESTINATION ${KDE_INSTALL_DATADIR}/kio/servicemenus
+  )
