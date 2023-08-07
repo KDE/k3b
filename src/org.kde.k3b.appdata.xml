@@ -276,6 +276,7 @@
   </screenshots>
   <x-updatecontact>k3b@kde.org</x-updatecontact>
   <project_group>KDE</project_group>
+  <content_rating type="oars-1.1"/>
   <provides>
     <binary>k3b</binary>
   </provides>
