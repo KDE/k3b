@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-07-21 00:48+0000\n"
-"PO-Revision-Date: 2023-06-26 09:57+0200\n"
+"PO-Revision-Date: 2023-08-08 16:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 
@@ -3971,6 +3971,7 @@ msgstr "Establix l'idioma de la IGU"
 msgid "Disable the splash screen"
 msgstr "Desactiva la pantalla de presentació"
 
+# skip-rule: punctuation-period-no
 #: main.cpp:120
 #, kde-format
 msgid ""
@@ -5579,6 +5580,7 @@ msgstr ""
 msgid "Allow max length ISO 9660 filenames (37 characters)"
 msgstr "Permetre noms de fitxer ISO 9660 de llargària màxima (37 caràcters)"
 
+# skip-rule: punctuation-period-no
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, m_groupIsoLevel)
 #: projects/base_k3badvanceddataimagesettings.ui:225
 #, kde-format
