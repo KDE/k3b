@@ -38,7 +38,12 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
     QString dirPath = QStandardPaths::writableLocation( QStandardPaths::GenericDataLocation );
     QDir().mkpath( dirPath );
     QString bookmarksFile = dirPath + '/' + QString::fromLatin1("k3b/bookmarks.xml");
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     KBookmarkManager* bmMan = KBookmarkManager::managerForFile( bookmarksFile, "k3b" );
+#else
+    KBookmarkManager* bmMan = KBookmarkManager::managerForFile( bookmarksFile );
+#endif
     bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
     bmMan->setUpdate( true );
 
