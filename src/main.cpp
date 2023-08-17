@@ -17,8 +17,9 @@
 int main( int argc, char* argv[] )
 {
     K3b::Application app( argc, argv );
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
     
     KAboutData aboutData( "k3b",
                           i18n("K3b"),
