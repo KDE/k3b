@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:45+0000\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
 "PO-Revision-Date: 2008-02-02 21:00+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Disable inhibition for disc writing"
 msgstr ""
 
-#: core/k3bglobals.cpp:360
+#: core/k3bglobals.cpp:365
 #, kde-format
 msgid "Auto"
 msgstr "Аўта"

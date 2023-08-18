@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:45+0000\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
 "PO-Revision-Date: 2022-06-14 12:48+0100\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -34,7 +34,7 @@ msgstr "Inhibir suspensión durante la escritura de disco"
 msgid "Disable inhibition for disc writing"
 msgstr "Desactivar inhibición durante la escritura de disco"
 
-#: core/k3bglobals.cpp:360
+#: core/k3bglobals.cpp:365
 #, kde-format
 msgid "Auto"
 msgstr "Auto"

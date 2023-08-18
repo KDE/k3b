@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:45+0000\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
 "PO-Revision-Date: 2022-07-22 15:05+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -28,7 +28,7 @@ msgstr "Inhibiting sleep for disc writing"
 msgid "Disable inhibition for disc writing"
 msgstr "Disable inhibition for disc writing"
 
-#: core/k3bglobals.cpp:360
+#: core/k3bglobals.cpp:365
 #, kde-format
 msgid "Auto"
 msgstr "Auto"

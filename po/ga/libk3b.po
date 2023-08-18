@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia/libk3b.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-03 00:45+0000\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
 "PO-Revision-Date: 2007-11-13 09:20-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Disable inhibition for disc writing"
 msgstr ""
 
-#: core/k3bglobals.cpp:360
+#: core/k3bglobals.cpp:365
 #, kde-format
 msgid "Auto"
 msgstr "Uathoibríoch"

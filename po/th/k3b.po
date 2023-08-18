@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-21 00:48+0000\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
 "PO-Revision-Date: 2010-05-01 20:38+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -1879,17 +1879,17 @@ msgstr "ไม่สามารถเปิดแฟ้ม %1 ได้"
 msgid "&Device"
 msgstr "&อุปกรณ์"
 
-#: k3bdiroperator.cpp:42
+#: k3bdiroperator.cpp:47
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "ที่คั่นหน้าของ K3b"
 
-#: k3bdiroperator.cpp:45
+#: k3bdiroperator.cpp:50
 #, kde-format
 msgid "Bookmarks"
 msgstr "ที่คั่นหน้า"
 
-#: k3bdiroperator.cpp:49 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "เ&พิ่มไปยังโครงงาน"
@@ -3418,12 +3418,12 @@ msgstr "ห้ามเขียนทับ"
 msgid "Incremental"
 msgstr "เขียนเพิ่ม"
 
-#: main.cpp:24
+#: main.cpp:25
 #, kde-format
 msgid "K3b"
 msgstr "K3b"
 
-#: main.cpp:25
+#: main.cpp:26
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3441,166 +3441,166 @@ msgstr ""
 "ในขณะเดียวกันก็ยังคงครอบคลุมความสามารถและคุณสมบัติต่าง ๆ ทั้งหมด "
 "ที่ผู้ใช้งานที่เชี่ยวชาญอาจจะต้องการใช้งานอีกด้วย"
 
-#: main.cpp:33
+#: main.cpp:34
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr ""
 
-#: main.cpp:35
+#: main.cpp:36
 #, fuzzy, kde-format
 #| msgid "http://www.k3b.org"
 msgid "https://www.k3b.org"
 msgstr "http://www.k3b.org"
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Leslie Zhai"
 msgstr ""
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:41
 #, kde-format
 msgid "Michał Małek"
 msgstr "Michał Małek"
 
-#: main.cpp:40
+#: main.cpp:41
 #, fuzzy, kde-format
 #| msgid "Maintainer and Lead Developer"
 msgid "Maintainer and current lead Developer"
 msgstr "ผู้ดูแลและผู้พัฒนาหลัก"
 
-#: main.cpp:41
+#: main.cpp:42
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
-#: main.cpp:41
+#: main.cpp:42
 #, fuzzy, kde-format
 #| msgid "Developer"
 msgid "Main developer"
 msgstr "ผู้พัฒนา"
 
-#: main.cpp:42
+#: main.cpp:43
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "Christian Kvasny"
 
-#: main.cpp:42
+#: main.cpp:43
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr "โครงงานสร้างแผ่นซีดีวีดิโอ และส่วนริพข้อมูลจากแผ่นซีดีวีดิโอ"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr "ผู้เริ่มทำการแปลงโปรแกรมมาเป็นแพลทฟอร์ม KDE 4"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Ralf Habacker"
 msgstr "Ralf Habacker"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Windows port"
 msgstr "ผู้ทำการแปลงไปยังระบบวินโดวส์"
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "Klaus-Dieter Krannich"
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "การผนวกรวม Cdrdao เข้ามา"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "Thomas Froescher"
 
-#: main.cpp:48
+#: main.cpp:49
 #, fuzzy, kde-format
 #| msgid "VideoDVD ripping and video encoding in pre-1.0 versions."
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr "ส่วนริพข้อมูลจากแผ่นดีวีดีวีดิโอ และการเข้ารหัสในรุ่น pre-1.0"
 
-#: main.cpp:50
+#: main.cpp:51
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "Alexis Younes หรือที่รู้จักกันในชื่อ Ayo"
 
-#: main.cpp:51
+#: main.cpp:52
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "สำหรับงานอาร์ทเวิร์กอันยอดเยี่ยม"
 
-#: main.cpp:53
+#: main.cpp:54
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "Christoph Thielecke"
 
-#: main.cpp:54
+#: main.cpp:55
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "สำหรับการทดสอบต่าง ๆ อย่างครอบคลุม และเป็นผู้แปลเป็นภาษาเยอรมันเป็นคนแรก"
 
-#: main.cpp:56
+#: main.cpp:57
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "Andy Polyakov"
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "สำหรับเครื่องมือ dvd+rw-tools อันยอดเยี่ยม และการประสานงานที่เป็นกันเอง"
 
-#: main.cpp:59
+#: main.cpp:60
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "Roberto De Leo"
 
-#: main.cpp:60
+#: main.cpp:61
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "สำหรับแพกเกจ eMovix สุดเจ๋ง และการช่วยเหลือในการทำงานของเขา"
 
-#: main.cpp:62
+#: main.cpp:63
 #, kde-format
 msgid "John Steele Scott"
 msgstr "John Steele Scott"
 
-#: main.cpp:63
+#: main.cpp:64
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "สำหรับส่วนเสริมการถอดรหัสแฟ้มเสียงประเภท flac"
 
-#: main.cpp:65
+#: main.cpp:66
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "György Szombathelyi"
 
-#: main.cpp:66
+#: main.cpp:67
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "สำหรับไลบรารี isofslib ที่มีประโยชน์มาก"
 
-#: main.cpp:68
+#: main.cpp:69
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "Erik de Castro Lopo"
 
-#: main.cpp:69
+#: main.cpp:70
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
@@ -3609,180 +3609,180 @@ msgstr ""
 "สำหรับไลบรารี libsamplerate ที่ใช้กันทั่วไปในการปรับอัตราสุ่มตัวอย่าง "
 "ในเฟรมเวิร์กตัวถอดรหัสเสียง"
 
-#: main.cpp:71
+#: main.cpp:72
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "Jakob Petsovits"
 
-#: main.cpp:72
+#: main.cpp:73
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr "สำหรับรูปแบบเงื่อนไขการริพข้อมูลเสียงที่เยี่ยมยอด"
 
-#: main.cpp:74
+#: main.cpp:75
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "Heiner Eichmann"
 
-#: main.cpp:75
+#: main.cpp:76
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr "สำหรับการทำงานของเขาบน BSD port และแพตช์แก้ไขต่าง ๆ อันยอดเยี่ยม"
 
-#: main.cpp:77
+#: main.cpp:78
 #, fuzzy, kde-format
 #| msgid "Adriaan De Groot"
 msgid "Adriaan de Groot"
 msgstr "Adriaan De Groot"
 
-#: main.cpp:78
+#: main.cpp:79
 #, fuzzy, kde-format
 #| msgid "For his work on the BSD port."
 msgid "For his work on the FreeBSD port."
 msgstr "สำหรับการทำงานของเขาบน BSD port"
 
-#: main.cpp:80
+#: main.cpp:81
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "Thiago Macieira"
 
-#: main.cpp:81
+#: main.cpp:82
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr "สำหรับความช่วยเหลือจากเขาในรายการต่าง ๆ ของ k3b ที่ใช้งานไม่ได้บน bugs.kde.org"
 
-#: main.cpp:83
+#: main.cpp:84
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "Marcel Dierkes"
 
-#: main.cpp:84
+#: main.cpp:85
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr "สำหรับไอคอน K3b สุดเยี่ยม"
 
-#: main.cpp:86
+#: main.cpp:87
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "Christoph Burger-Scheidlin"
 
-#: main.cpp:87
+#: main.cpp:88
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr "สำหรับการช่วยเหลือในการล้างฐานข้อมูลข้อผิดพลาดของ K3b"
 
-#: main.cpp:89
+#: main.cpp:90
 #, kde-format
 msgid "Robert Wadley"
 msgstr "Robert Wadley"
 
-#: main.cpp:90
+#: main.cpp:91
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr "'ร็อบ' ได้สร้างชุดตกแต่งที่สวยงาม และมาพร้อมกับแนวคิดของชุดตกแต่งที่โปร่งแสง"
 
-#: main.cpp:92
+#: main.cpp:93
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "Dmitry Novikov"
 
-#: main.cpp:93
+#: main.cpp:94
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr "สำหรับชุดตกแต่งของ K3b รุ่น 1.0 อันมหัศจรรย์"
 
-#: main.cpp:95
+#: main.cpp:96
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr "Jeremy C. Andrus"
 
-#: main.cpp:96
+#: main.cpp:97
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr "ผู้พอร์ทไลบรารี libk3bdevice ไปยังระบบวินโดวส์เป็นรายแรก"
 
-#: main.cpp:104
+#: main.cpp:105
 #, kde-format
 msgid "file(s) to open"
 msgstr "แฟ้มที่จะเปิด"
 
-#: main.cpp:105
+#: main.cpp:106
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "สร้างโครงงานแผ่นซีดีข้อมูลใหม่และเพิ่มแฟ้มต่าง ๆ ที่ให้ไป"
 
-#: main.cpp:106
+#: main.cpp:107
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "สร้างโครงงานแผ่นซีดีเสียงใหม่และเพิ่มแฟ้มต่าง ๆ ที่ให้ไป"
 
-#: main.cpp:107
+#: main.cpp:108
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "สร้างโครงงานแผ่นซีดีวีดิโอใหม่และเพิ่มแฟ้มต่าง ๆ ที่ให้ไป"
 
-#: main.cpp:108
+#: main.cpp:109
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "สร้างโครงงานแผ่นซีดีโหมดผสมใหม่และเพิ่มแฟ้มต่าง ๆ ที่ให้ไป"
 
-#: main.cpp:109
+#: main.cpp:110
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "สร้างโครงงานแผ่นซีดี eMovix ใหม่และเพิ่มแฟ้มต่าง ๆ ที่ให้ไป"
 
-#: main.cpp:110
+#: main.cpp:111
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "สร้างโครงงานแผ่นดีวีดีวีดิโอใหม่และเพิ่มแฟ้มต่าง ๆ ที่ให้ไป"
 
-#: main.cpp:111
+#: main.cpp:112
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr "เปิดกล่องการเขียนแผ่นของโครงงานให้กับโครงงานปัจจุบัน"
 
-#: main.cpp:112
+#: main.cpp:113
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr "เปิดกล่องคัดลอกแผ่น โดยสามารถเลือกระบุอุปกรณ์ต้นทางได้"
 
-#: main.cpp:113
+#: main.cpp:114
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "เขียนแฟ้มอิมเมจไปยังแผ่นซีดีหรือดีวีดี"
 
-#: main.cpp:114
+#: main.cpp:115
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "ฟอร์แมทแผ่นสื่อที่เขียนซ้ำได้"
 
-#: main.cpp:115
+#: main.cpp:116
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr "แตกข้อมูลแทร็กเสียงดิจิทัลต่าง ๆ (และอาจทำการเข้ารหัสด้วย)"
 
-#: main.cpp:116
+#: main.cpp:117
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr "ริพข้อมูลเรื่องจากแผ่นดีวีดีวีดิโอ (และอาจทำการแปลงข้อมูลด้วย)"
 
-#: main.cpp:117
+#: main.cpp:118
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "ริพข้อมูลแทร็กต่าง ๆ จากแผ่นซีดีวีดิโอ"
 
-#: main.cpp:118
+#: main.cpp:119
 #, kde-format
 msgid "Set the GUI language"
 msgstr "ตั้งค่าภาษาของส่วนติดต่อผู้ใช้"
 
-#: main.cpp:119
+#: main.cpp:120
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "ปิดการแสดงหน้าต่างเริ่มต้นการทำงาน"
 
-#: main.cpp:120
+#: main.cpp:121
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "

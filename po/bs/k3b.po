@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: __kde__extragear-multimedia__k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-21 00:48+0000\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
 "PO-Revision-Date: 2015-02-25 18:09+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team:  <en@li.org>\n"
@@ -1953,17 +1953,17 @@ msgstr "Ne mogu da otvorim datoteku %1"
 msgid "&Device"
 msgstr "&Uređaj"
 
-#: k3bdiroperator.cpp:42
+#: k3bdiroperator.cpp:47
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "K3b zabilješke"
 
-#: k3bdiroperator.cpp:45
+#: k3bdiroperator.cpp:50
 #, kde-format
 msgid "Bookmarks"
 msgstr "Zabilješke"
 
-#: k3bdiroperator.cpp:49 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "&Dodaj projektu"
@@ -3601,12 +3601,12 @@ msgstr "Ograničeno prebrisavanje"
 msgid "Incremental"
 msgstr "Inkrementalni"
 
-#: main.cpp:24
+#: main.cpp:25
 #, kde-format
 msgid "K3b"
 msgstr "K3b"
 
-#: main.cpp:25
+#: main.cpp:26
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3624,164 +3624,164 @@ msgstr ""
 "neiskusne korisnike, a opet pruža sve mogućnosti koje mogu zatrebati "
 "naprednijim korisnicima.</p>."
 
-#: main.cpp:33
+#: main.cpp:34
 #, fuzzy, kde-format
 #| msgid "Copyright © 1998–2010 K3b authors"
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr "Zaštita autorskih prava © 1998–2010 K3b autori"
 
-#: main.cpp:35
+#: main.cpp:36
 #, fuzzy, kde-format
 #| msgid "http://www.k3b.org"
 msgid "https://www.k3b.org"
 msgstr "http://www.k3b.org"
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Leslie Zhai"
 msgstr ""
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:41
 #, kde-format
 msgid "Michał Małek"
 msgstr "Mihal Malek"
 
-#: main.cpp:40
+#: main.cpp:41
 #, kde-format
 msgid "Maintainer and current lead Developer"
 msgstr "Održavatelj i trenutni vodeći razvojni programer"
 
-#: main.cpp:41
+#: main.cpp:42
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "Sebastijan Trig"
 
-#: main.cpp:41
+#: main.cpp:42
 #, kde-format
 msgid "Main developer"
 msgstr "Glavni programer"
 
-#: main.cpp:42
+#: main.cpp:43
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "Kristijan Kvasni"
 
-#: main.cpp:42
+#: main.cpp:43
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr "Video CD projekat i uzimanje sadržaja Video CD"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr "Početni prijenos na KDE‑4"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Ralf Habacker"
 msgstr "Ralf Habaker"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Windows port"
 msgstr "Prijenos na Windows"
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "Klaus-Diter Kranih"
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "Napredna Cdrdao integracija"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "Thomas Froescher"
 
-#: main.cpp:48
+#: main.cpp:49
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr "Video DVD snimanje i video kodiranje u verzijama starijim od 1.0."
 
-#: main.cpp:50
+#: main.cpp:51
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "Alexis Younes zvani Ayo"
 
-#: main.cpp:51
+#: main.cpp:52
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "Za njegovo bombastično remek djelo."
 
-#: main.cpp:53
+#: main.cpp:54
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "Christoph Thielecke"
 
-#: main.cpp:54
+#: main.cpp:55
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "Za intenzivno testiranje i prvi njemački prevod."
 
-#: main.cpp:56
+#: main.cpp:57
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "Andy Polyakov"
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "Za njegove izvrsne DVD+RW alate i dobru saradnju."
 
-#: main.cpp:59
+#: main.cpp:60
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "Roberto De Leo"
 
-#: main.cpp:60
+#: main.cpp:61
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "Za efektan eMovix paket i za njegov uslužan rad."
 
-#: main.cpp:62
+#: main.cpp:63
 #, kde-format
 msgid "John Steele Scott"
 msgstr "John Steele Scott"
 
-#: main.cpp:63
+#: main.cpp:64
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "Za priključaklza flac dekodiranje."
 
-#: main.cpp:65
+#: main.cpp:66
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "György Szombathelyi"
 
-#: main.cpp:66
+#: main.cpp:67
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "Za vrlo koristan isofslib."
 
-#: main.cpp:68
+#: main.cpp:69
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "Erik de Castro Lopo"
 
-#: main.cpp:69
+#: main.cpp:70
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
@@ -3790,180 +3790,180 @@ msgstr ""
 "Za libsamplerate koji se koristi za srodno resampliranjeu frejmworku audio "
 "dekodera."
 
-#: main.cpp:71
+#: main.cpp:72
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "Jakob Pecovic"
 
-#: main.cpp:72
+#: main.cpp:73
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr "Za veoma efektan stil kondicionalnog ripanja-skidanja."
 
-#: main.cpp:74
+#: main.cpp:75
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "Heiner Eichmann"
 
-#: main.cpp:75
+#: main.cpp:76
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr "Za njegov rad na BSD portu i neke sjajne zakrpe."
 
-#: main.cpp:77
+#: main.cpp:78
 #, fuzzy, kde-format
 #| msgid "Adriaan De Groot"
 msgid "Adriaan de Groot"
 msgstr "Adriaan De Groot"
 
-#: main.cpp:78
+#: main.cpp:79
 #, fuzzy, kde-format
 #| msgid "For his work on the BSD port."
 msgid "For his work on the FreeBSD port."
 msgstr "Za njegov rad na BSD portu."
 
-#: main.cpp:80
+#: main.cpp:81
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "Thiago Macieira"
 
-#: main.cpp:81
+#: main.cpp:82
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr "Za njegovu pomoć sa mnogim lošim k3b unosima na bugs.kde.org."
 
-#: main.cpp:83
+#: main.cpp:84
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "Marcel Dierkes"
 
-#: main.cpp:84
+#: main.cpp:85
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr "Za sjajne K3b ikone."
 
-#: main.cpp:86
+#: main.cpp:87
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "Christoph Burger-Scheidlin"
 
-#: main.cpp:87
+#: main.cpp:88
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr "Za njegovu neprekidnu pomoć u čišćenju baze grešaka K3b-a."
 
-#: main.cpp:89
+#: main.cpp:90
 #, kde-format
 msgid "Robert Wadley"
 msgstr "Robert Wadley"
 
-#: main.cpp:90
+#: main.cpp:91
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr "Rob je napravio sjajnu temu i došao na ideju za prozirne teme."
 
-#: main.cpp:92
+#: main.cpp:93
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "Dmitrij Novikov"
 
-#: main.cpp:93
+#: main.cpp:94
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr "Za čudesnu temu za K3b 1.0."
 
-#: main.cpp:95
+#: main.cpp:96
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr "Džeremi Endruz"
 
-#: main.cpp:96
+#: main.cpp:97
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr "Prvi prijenos na Windowa biblioteke libk3bdevice."
 
-#: main.cpp:104
+#: main.cpp:105
 #, kde-format
 msgid "file(s) to open"
 msgstr "datoteka(e) za otvoriti"
 
-#: main.cpp:105
+#: main.cpp:106
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "Kreiraj novi data CD projekt i dodaj sve date datoteke"
 
-#: main.cpp:106
+#: main.cpp:107
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "Kreiraj novi audio CD projekt i dodaj sve date datoteke"
 
-#: main.cpp:107
+#: main.cpp:108
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "Kreiraj novi video CD projekt i dodaj sve date datoteke"
 
-#: main.cpp:108
+#: main.cpp:109
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "Kreiraj novi mixed CD projekt i dodaj sve date datoteke"
 
-#: main.cpp:109
+#: main.cpp:110
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "Kreiraj novi eMovix CD projekt i dodaj sve date datoteke"
 
-#: main.cpp:110
+#: main.cpp:111
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "Kreiraj novi video DVD projekat i dodaj sve date datoteke"
 
-#: main.cpp:111
+#: main.cpp:112
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr "Otvara prozor rezanja za trenutni projekat"
 
-#: main.cpp:112
+#: main.cpp:113
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr "Otvara dijalog kopiranja, opciono navodeći izvorni uređaj"
 
-#: main.cpp:113
+#: main.cpp:114
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "Upis odraza na CD ili DVD"
 
-#: main.cpp:114
+#: main.cpp:115
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "Formatiraj prebrisivi disk"
 
-#: main.cpp:115
+#: main.cpp:116
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr "Digitalno izdvoji audio numere (+kodiranje)"
 
-#: main.cpp:116
+#: main.cpp:117
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr "Dohvati naslove sa video DVD-a (+transkodovanje)"
 
-#: main.cpp:117
+#: main.cpp:118
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "Dohvati staze sa video CD-a"
 
-#: main.cpp:118
+#: main.cpp:119
 #, kde-format
 msgid "Set the GUI language"
 msgstr "Podesi GUI jezik"
 
-#: main.cpp:119
+#: main.cpp:120
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "Isključi uvodni ekran"
 
-#: main.cpp:120
+#: main.cpp:121
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "

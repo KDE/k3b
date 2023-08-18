@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-21 00:48+0000\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
 "PO-Revision-Date: 2009-03-08 13:15+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -1846,17 +1846,17 @@ msgstr "फाइल %1 खोल नइ सकिस"
 msgid "&Device"
 msgstr "उपकरन (&D)"
 
-#: k3bdiroperator.cpp:42
+#: k3bdiroperator.cpp:47
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "के3बी पसंद"
 
-#: k3bdiroperator.cpp:45
+#: k3bdiroperator.cpp:50
 #, kde-format
 msgid "Bookmarks"
 msgstr " निसानी "
 
-#: k3bdiroperator.cpp:49 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "परियोजना मं जोड़व (&A)"
@@ -3362,12 +3362,12 @@ msgstr "सीमित ओवरराइट"
 msgid "Incremental"
 msgstr "इंक्रीमेंटल"
 
-#: main.cpp:24
+#: main.cpp:25
 #, kde-format
 msgid "K3b"
 msgstr "के3बी"
 
-#: main.cpp:25
+#: main.cpp:26
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3378,345 +3378,345 @@ msgid ""
 "features an advanced user might need."
 msgstr ""
 
-#: main.cpp:33
+#: main.cpp:34
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr ""
 
-#: main.cpp:35
+#: main.cpp:36
 #, fuzzy, kde-format
 #| msgid "http://www.k3b.org"
 msgid "https://www.k3b.org"
 msgstr "http://www.k3b.org"
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Leslie Zhai"
 msgstr ""
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:41
 #, kde-format
 msgid "Michał Małek"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:41
 #, fuzzy, kde-format
 #| msgid "Maintainer and Lead Developer"
 msgid "Maintainer and current lead Developer"
 msgstr "मुख्य डेवलपर अउ मेंटेनर"
 
-#: main.cpp:41
+#: main.cpp:42
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "सेबेस्तियन त्रुग"
 
-#: main.cpp:41
+#: main.cpp:42
 #, fuzzy, kde-format
 #| msgid "Maintainer and Lead Developer"
 msgid "Main developer"
 msgstr "मुख्य डेवलपर अउ मेंटेनर"
 
-#: main.cpp:42
+#: main.cpp:43
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "क्रिस्चियन क्वास्ने"
 
-#: main.cpp:42
+#: main.cpp:43
 #, fuzzy, kde-format
 #| msgid "VideoCD Project and VideoCD ripping"
 msgid "Video CD Project and Video CD ripping"
 msgstr "वीडियोसीडी परियोजना अउ वीडियोसीडी रिपिंग"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Montel Laurent"
 msgstr "मोंटेल लारेंट"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr ""
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Ralf Habacker"
 msgstr ""
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Windows port"
 msgstr ""
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "क्लास डाइटर क्रेनिच"
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "उन्नत सीडीआरडीएओ इंटीग्रेसन"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "थामस फ्रोएसहर"
 
-#: main.cpp:48
+#: main.cpp:49
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr ""
 
-#: main.cpp:50
+#: main.cpp:51
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "एलेक्सिस योनेस उर्फ एयो"
 
-#: main.cpp:51
+#: main.cpp:52
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "उसके धुंआधार कलाकारी बर."
 
-#: main.cpp:53
+#: main.cpp:54
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "क्रिस्टोफ थिएलके"
 
-#: main.cpp:54
+#: main.cpp:55
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "व्यापक जांच-पड़ताल अउ जर्मनी मं पहिली अनुवाद बर."
 
-#: main.cpp:56
+#: main.cpp:57
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "एंडी पालीयाकोव"
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "बढ़िया डीवीडी+आरडब्ल्यू-औजार मन अउ सुंदर सहयोग बर."
 
-#: main.cpp:59
+#: main.cpp:60
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "राबर्टो दे लियो"
 
-#: main.cpp:60
+#: main.cpp:61
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "जोरदार ईमूविक्स पैकेज बर अउ ओखर अनुकूल काम मन बर."
 
-#: main.cpp:62
+#: main.cpp:63
 #, kde-format
 msgid "John Steele Scott"
 msgstr "जान स्टील स्काट"
 
-#: main.cpp:63
+#: main.cpp:64
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "एफएलएसी डिकोडिंग प्लगइन बर."
 
-#: main.cpp:65
+#: main.cpp:66
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "गायोर्गी जोमबाथेलेयी"
 
-#: main.cpp:66
+#: main.cpp:67
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "बहुत ही उपयोगी आईएसओएफएसलिब बर."
 
-#: main.cpp:68
+#: main.cpp:69
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "एरिक दे कास्त्रो लोपो"
 
-#: main.cpp:69
+#: main.cpp:70
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 msgstr "लिब सेम्पलरेट बर जऊन कि आडियो डिकोडर फ्रेमवर्क मं जेनेरिक रीसेम्पलिंग बर काम आथे ."
 
-#: main.cpp:71
+#: main.cpp:72
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "जैकब पेत्सोवित्स"
 
-#: main.cpp:72
+#: main.cpp:73
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr ""
 
-#: main.cpp:74
+#: main.cpp:75
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "हेइनर एइचमेन"
 
-#: main.cpp:75
+#: main.cpp:76
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr ""
 
-#: main.cpp:77
+#: main.cpp:78
 #, fuzzy, kde-format
 #| msgid "Adriaan De Groot"
 msgid "Adriaan de Groot"
 msgstr "एड्रियन दे ग्रूत"
 
-#: main.cpp:78
+#: main.cpp:79
 #, kde-format
 msgid "For his work on the FreeBSD port."
 msgstr ""
 
-#: main.cpp:80
+#: main.cpp:81
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "थियागो मासिएरा"
 
-#: main.cpp:81
+#: main.cpp:82
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr ""
 
-#: main.cpp:83
+#: main.cpp:84
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "मार्सल डिर्क्स"
 
-#: main.cpp:84
+#: main.cpp:85
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr ""
 
-#: main.cpp:86
+#: main.cpp:87
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "क्रिस्टोफ बर्गर-सेदलिन"
 
-#: main.cpp:87
+#: main.cpp:88
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr ""
 
-#: main.cpp:89
+#: main.cpp:90
 #, kde-format
 msgid "Robert Wadley"
 msgstr "राबर्ट वाडले"
 
-#: main.cpp:90
+#: main.cpp:91
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr ""
 
-#: main.cpp:92
+#: main.cpp:93
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "दमित्रि नोविकोव"
 
-#: main.cpp:93
+#: main.cpp:94
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr ""
 
-#: main.cpp:95
+#: main.cpp:96
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr ""
 
-#: main.cpp:96
+#: main.cpp:97
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr ""
 
-#: main.cpp:104
+#: main.cpp:105
 #, kde-format
 msgid "file(s) to open"
 msgstr "खोले बर फाइल मन ल"
 
-#: main.cpp:105
+#: main.cpp:106
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "नवा डाटा सीडी परियोजना बनाव अउ सब्बो दे गे फाइल मन ल जोड़व"
 
-#: main.cpp:106
+#: main.cpp:107
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "नवा आडियो सीडी परियोजना बनाव अउ सब्बो दे गे फाइल मन ल जोड़व"
 
-#: main.cpp:107
+#: main.cpp:108
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "नवा वीडियो सीडी परियोजना बनाव अउ सब्बो दे गे फाइल मन ल जोड़व"
 
-#: main.cpp:108
+#: main.cpp:109
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "नवा मिक्स मोड सीडी परियोजना बनाव अउ सब्बो दे गे फाइल मन ल जोड़व"
 
-#: main.cpp:109
+#: main.cpp:110
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "नवा ईमूविक्स सीडी परियोजना बनाव अउ सब्बो दे गे फाइल मन ल जोड़व"
 
-#: main.cpp:110
+#: main.cpp:111
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "नवा वीडियो डीवीडी परियोजना बनाव अउ सब्बो दे गे फाइल मन ल जोड़व"
 
-#: main.cpp:111
+#: main.cpp:112
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr ""
 
-#: main.cpp:112
+#: main.cpp:113
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr ""
 
-#: main.cpp:113
+#: main.cpp:114
 #, fuzzy, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "सीडी-आर(डबल्यू) मं सीडी इमेज लिखव"
 
-#: main.cpp:114
+#: main.cpp:115
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "रीराइटेबल मीडियम ल फार्मेट करव"
 
-#: main.cpp:115
+#: main.cpp:116
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr ""
 
-#: main.cpp:116
+#: main.cpp:117
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr ""
 
-#: main.cpp:117
+#: main.cpp:118
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "वीडियो सीडी ट्रैक्स रिप करव"
 
-#: main.cpp:118
+#: main.cpp:119
 #, kde-format
 msgid "Set the GUI language"
 msgstr "जीयूआई भाखा सेट करव"
 
-#: main.cpp:119
+#: main.cpp:120
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "स्प्लैस स्क्रीन अक्छम करव"
 
-#: main.cpp:120
+#: main.cpp:121
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "

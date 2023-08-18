@@ -14,15 +14,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-21 00:48+0000\n"
-"PO-Revision-Date: 2023-06-15 04:07+0900\n"
+"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"PO-Revision-Date: 2023-08-17 22:23+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
-"Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
+"Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.04.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -1920,17 +1920,17 @@ msgstr "無法開啟檔案 %1"
 msgid "&Device"
 msgstr "裝置(&D)"
 
-#: k3bdiroperator.cpp:42
+#: k3bdiroperator.cpp:47
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "K3b 書籤"
 
-#: k3bdiroperator.cpp:45
+#: k3bdiroperator.cpp:50
 #, kde-format
 msgid "Bookmarks"
 msgstr "書籤"
 
-#: k3bdiroperator.cpp:49 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "加到專案(&A)"
@@ -2347,40 +2347,34 @@ msgstr "過瀘器："
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|所有檔案"
+msgstr "所有檔案"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "找到檔案"
+msgstr "音效檔"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "找到檔案"
+msgstr "Wave 音效檔"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "找到檔案"
+msgstr "MP3 音效檔"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis 音效檔"
+msgstr "Ogg Vorbis 音效檔"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG 影像檔"
+msgstr "MPEG 影像檔"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -3489,12 +3483,12 @@ msgstr "限制的覆寫"
 msgid "Incremental"
 msgstr "遞增模式"
 
-#: main.cpp:24
+#: main.cpp:25
 #, kde-format
 msgid "K3b"
 msgstr "K3b"
 
-#: main.cpp:25
+#: main.cpp:26
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3509,340 +3503,340 @@ msgstr ""
 "像 DVD。<br/>它方便的使用者介面是針對所有的使用者所設計，試著對新手來說盡可能"
 "的簡易，同時對進階使用者來說提供所有可能會需要的功能。"
 
-#: main.cpp:33
+#: main.cpp:34
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr "版權所有 © 1998–2018 K3b 作者群"
 
-#: main.cpp:35
+#: main.cpp:36
 #, kde-format
 msgid "https://www.k3b.org"
 msgstr "https://www.k3b.org"
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Leslie Zhai"
 msgstr "Leslie Zhai"
 
-#: main.cpp:39
+#: main.cpp:40
 #, kde-format
 msgid "Maintainer"
 msgstr "維護者"
 
-#: main.cpp:40
+#: main.cpp:41
 #, kde-format
 msgid "Michał Małek"
 msgstr "Michał Małek"
 
-#: main.cpp:40
+#: main.cpp:41
 #, kde-format
 msgid "Maintainer and current lead Developer"
 msgstr "維護者與目前的首席開發者"
 
-#: main.cpp:41
+#: main.cpp:42
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
-#: main.cpp:41
+#: main.cpp:42
 #, kde-format
 msgid "Main developer"
 msgstr "主要開發者"
 
-#: main.cpp:42
+#: main.cpp:43
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "Christian Kvasny"
 
-#: main.cpp:42
+#: main.cpp:43
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr "影像 CD 專案與影像 CD 擷取"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:43
+#: main.cpp:44
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr "KDE 平台第 4 代的初始移植 "
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Ralf Habacker"
 msgstr "Ralf Habacker"
 
-#: main.cpp:44
+#: main.cpp:45
 #, kde-format
 msgid "Windows port"
 msgstr "Windows 移植"
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "Klaus-Dieter Krannich"
 
-#: main.cpp:46
+#: main.cpp:47
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "進階 Cdrdao 整合"
 
-#: main.cpp:47
+#: main.cpp:48
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "Thomas Froescher"
 
-#: main.cpp:48
+#: main.cpp:49
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr "在 pre-1.0 版本內的影像 DVD 擷取與影像編碼功能。"
 
-#: main.cpp:50
+#: main.cpp:51
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "Alexis Younes aka Ayo"
 
-#: main.cpp:51
+#: main.cpp:52
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "感謝他誇張的藝術風格。"
 
-#: main.cpp:53
+#: main.cpp:54
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "Christoph Thielecke"
 
-#: main.cpp:54
+#: main.cpp:55
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "感謝他的大量測試與第一份德文翻譯"
 
-#: main.cpp:56
+#: main.cpp:57
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "Andy Polyakov"
 
-#: main.cpp:57
+#: main.cpp:58
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "感謝他傑出的dvd+rw-tools與熱心的合作。"
 
-#: main.cpp:59
+#: main.cpp:60
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "Roberto De Leo"
 
-#: main.cpp:60
+#: main.cpp:61
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "感謝他這套酷呆的 eMoviex 軟體，和他在一起工作很輕鬆愉快。"
 
-#: main.cpp:62
+#: main.cpp:63
 #, kde-format
 msgid "John Steele Scott"
 msgstr "John Steele Scott"
 
-#: main.cpp:63
+#: main.cpp:64
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "感謝他的 flac 解碼外掛。"
 
-#: main.cpp:65
+#: main.cpp:66
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "György Szombathelyi"
 
-#: main.cpp:66
+#: main.cpp:67
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "感謝其非常有用的 isolib。"
 
-#: main.cpp:68
+#: main.cpp:69
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "Erik de Castro Lopo"
 
-#: main.cpp:69
+#: main.cpp:70
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 msgstr "感謝其 libsamplerate 用於音效解碼器架構的一般重新取樣。"
 
-#: main.cpp:71
+#: main.cpp:72
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "Jakob Petsovits"
 
-#: main.cpp:72
+#: main.cpp:73
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr "感謝其非常棒的條件音效擷取形式。"
 
-#: main.cpp:74
+#: main.cpp:75
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "Heiner Eichmann"
 
-#: main.cpp:75
+#: main.cpp:76
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr "感謝他在 BSD 移植上的工作與一些極佳的修補檔。"
 
-#: main.cpp:77
+#: main.cpp:78
 #, kde-format
 msgid "Adriaan de Groot"
 msgstr "Adriaan de Groot"
 
-#: main.cpp:78
+#: main.cpp:79
 #, kde-format
 msgid "For his work on the FreeBSD port."
 msgstr "感謝其對於 FreeBSD port 的工作"
 
-#: main.cpp:80
+#: main.cpp:81
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "Thiago Macieira"
 
-#: main.cpp:81
+#: main.cpp:82
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr "感謝其對於 bugs.kde.org 中許多無效的 k3b 項目。"
 
-#: main.cpp:83
+#: main.cpp:84
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "Marcel Dierkes"
 
-#: main.cpp:84
+#: main.cpp:85
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr "感謝其漂亮的 K3b 圖示。"
 
-#: main.cpp:86
+#: main.cpp:87
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "Christoph Burger-Scheidlin"
 
-#: main.cpp:87
+#: main.cpp:88
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr "感謝他永不停歇地協助徹底清理 K3b 的臭蟲資料庫。"
 
-#: main.cpp:89
+#: main.cpp:90
 #, kde-format
 msgid "Robert Wadley"
 msgstr "Robert Wadley"
 
-#: main.cpp:90
+#: main.cpp:91
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr "Rob 建立了一個擁有透明佈景點子的絕妙佈景主題。"
 
-#: main.cpp:92
+#: main.cpp:93
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "Dmitry Novikov"
 
-#: main.cpp:93
+#: main.cpp:94
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr "感謝其令人驚豔的 K3b 1.0 佈景主題。"
 
-#: main.cpp:95
+#: main.cpp:96
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr "Jeremy C. Andrus"
 
-#: main.cpp:96
+#: main.cpp:97
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr "第一代 libk3bdevice 的 Windows 移植"
 
-#: main.cpp:104
+#: main.cpp:105
 #, kde-format
 msgid "file(s) to open"
 msgstr "要開啟的檔案"
 
-#: main.cpp:105
+#: main.cpp:106
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "建立一個新的 Data CD 專案並加入所有給定的檔案"
 
-#: main.cpp:106
+#: main.cpp:107
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "建立一個新的 Audio CD 專案並加入所有給定的檔案"
 
-#: main.cpp:107
+#: main.cpp:108
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "建立一個新的影像 CD 專案並加入所有給定的檔案"
 
-#: main.cpp:108
+#: main.cpp:109
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "建立一個新的混合模式 CD 專案並加入所有給定的檔案"
 
-#: main.cpp:109
+#: main.cpp:110
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "建立一個新的 eMovix CD 專案並加入所有給定的檔案"
 
-#: main.cpp:110
+#: main.cpp:111
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "建立一個新的 Vidio DVD 專案並加入所有提供的檔案"
 
-#: main.cpp:111
+#: main.cpp:112
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr "為目前的專案開啟專案燒錄對話窗"
 
-#: main.cpp:112
+#: main.cpp:113
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr "開啟複製對話框，可選擇指定來源裝置"
 
-#: main.cpp:113
+#: main.cpp:114
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "將映像檔寫入 CD 或 DVD"
 
-#: main.cpp:114
+#: main.cpp:115
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "格式化可複寫媒體"
 
-#: main.cpp:115
+#: main.cpp:116
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr "以數位擷取音軌 (+編碼)"
 
-#: main.cpp:116
+#: main.cpp:117
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr "擷取影像 DVD 標題 (+轉譯)"
 
-#: main.cpp:117
+#: main.cpp:118
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "擷取影像 CD 影音軌"
 
-#: main.cpp:118
+#: main.cpp:119
 #, kde-format
 msgid "Set the GUI language"
 msgstr "設定界面的語言"
 
-#: main.cpp:119
+#: main.cpp:120
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "停用 Splash 畫面"
 
-#: main.cpp:120
+#: main.cpp:121
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "
@@ -3931,28 +3925,24 @@ msgid "Choose Image File"
 msgstr "選擇映像檔"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "映像檔："
+msgstr "映像檔"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO9660 映像檔"
+msgstr "ISO9660 映像檔"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue 檔："
+msgstr "Cue 檔"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC｜Cdrdao TOC 檔和 Cdrecord 比對複製映像檔"
+msgstr "Cdrdao TOC 檔和 Cdrecord 比對複製映像檔"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
