@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-22 00:45+0000\n"
 "PO-Revision-Date: 2010-07-16 23:26+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@gmail.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -1824,7 +1824,7 @@ msgstr "Tidak dapat buka fail %1"
 msgid "&Device"
 msgstr "&Peranti"
 
-#: k3bdiroperator.cpp:47
+#: k3bdiroperator.cpp:44
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr ""

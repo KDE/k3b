@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-22 00:45+0000\n"
 "PO-Revision-Date: 2023-06-26 07:00+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -1944,7 +1944,7 @@ msgstr "Ne eblas malfermi dosieron %1"
 msgid "&Device"
 msgstr "&Disponaĵo"
 
-#: k3bdiroperator.cpp:47
+#: k3bdiroperator.cpp:44
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "K3b legosignoj"

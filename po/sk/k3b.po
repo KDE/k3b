@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-22 00:45+0000\n"
 "PO-Revision-Date: 2022-04-09 20:16+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
@@ -1948,7 +1948,7 @@ msgstr "Nepodarilo sa otvoriť súbor %1"
 msgid "&Device"
 msgstr "Zaria&denie"
 
-#: k3bdiroperator.cpp:47
+#: k3bdiroperator.cpp:44
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "Záložky K3b"

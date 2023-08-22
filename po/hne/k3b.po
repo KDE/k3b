@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-22 00:45+0000\n"
 "PO-Revision-Date: 2009-03-08 13:15+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -1846,7 +1846,7 @@ msgstr "फाइल %1 खोल नइ सकिस"
 msgid "&Device"
 msgstr "उपकरन (&D)"
 
-#: k3bdiroperator.cpp:47
+#: k3bdiroperator.cpp:44
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "के3बी पसंद"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-22 00:45+0000\n"
 "PO-Revision-Date: 2023-06-26 07:24+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -1944,7 +1944,7 @@ msgstr "Ni mogoče odpreti datoteke %1"
 msgid "&Device"
 msgstr "&Naprava"
 
-#: k3bdiroperator.cpp:47
+#: k3bdiroperator.cpp:44
 #, kde-format
 msgid "K3b Bookmarks"
 msgstr "Zaznamki za K3b"
