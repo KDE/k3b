@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:45+0000\n"
+"POT-Creation-Date: 2023-08-24 00:45+0000\n"
 "PO-Revision-Date: 2023-06-27 07:58+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -4999,17 +4999,17 @@ msgstr ""
 msgid "Add"
 msgstr "Engadir"
 
-#: option/k3bdevicewidget.cpp:266
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Reinicie a sesión para aplicar os cambios."
 
-#: option/k3bdevicewidget.cpp:269
+#: option/k3bdevicewidget.cpp:273
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "Non se pode executar a acción: %1 (código do erro: %2)"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:274
 #, kde-format
 msgid "Retry"
 msgstr "Intentar de novo"
@@ -5116,12 +5116,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "Ruta de busca"
 
-#: option/k3bexternalbinwidget.cpp:241
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Non se puideron actualizar os programas seguintes:"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Non se pode executar a acción: %1"

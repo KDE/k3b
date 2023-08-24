@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:45+0000\n"
+"POT-Creation-Date: 2023-08-24 00:45+0000\n"
 "PO-Revision-Date: 2023-08-08 16:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -5000,17 +5000,17 @@ msgstr ""
 msgid "Add"
 msgstr "Afig"
 
-#: option/k3bdevicewidget.cpp:266
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Cal tornar a iniciar la sessió per a aplicar els canvis."
 
-#: option/k3bdevicewidget.cpp:269
+#: option/k3bdevicewidget.cpp:273
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "No s'ha pogut executar l'acció: %1 (Codi d'error: %2)"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:274
 #, kde-format
 msgid "Retry"
 msgstr "Torna-ho a intentar"
@@ -5118,12 +5118,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "Camí de busca"
 
-#: option/k3bexternalbinwidget.cpp:241
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "No s'han pogut actualitzar els següents programes:"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "No s'ha pogut executar l'acció: %1"

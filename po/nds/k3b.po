@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:45+0000\n"
+"POT-Creation-Date: 2023-08-24 00:45+0000\n"
 "PO-Revision-Date: 2014-05-23 19:36+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -5035,18 +5035,18 @@ msgstr ""
 msgid "Add"
 msgstr "Tofögen"
 
-#: option/k3bdevicewidget.cpp:266
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Mell Di bitte nochmaal nieg an, wenn Du de Ännern nu bruken wullt."
 
-#: option/k3bdevicewidget.cpp:269
+#: option/k3bdevicewidget.cpp:273
 #, fuzzy, kde-format
 #| msgid "Unable to execute the action: %1"
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "De Akschoon lett sik nich utföhren: %1"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:274
 #, kde-format
 msgid "Retry"
 msgstr "Nochmaal versöken"
@@ -5152,12 +5152,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "Söökpadd"
 
-#: option/k3bexternalbinwidget.cpp:241
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Disse Programmen laat sik nich opfrischen:"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "De Akschoon lett sik nich utföhren: %1"

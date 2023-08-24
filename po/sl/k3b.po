@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:45+0000\n"
+"POT-Creation-Date: 2023-08-24 00:45+0000\n"
 "PO-Revision-Date: 2023-06-26 07:24+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -4959,17 +4959,17 @@ msgstr ""
 msgid "Add"
 msgstr "Dodaj"
 
-#: option/k3bdevicewidget.cpp:266
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Da uveljavite spremembe se ponovno prijavite."
 
-#: option/k3bdevicewidget.cpp:269
+#: option/k3bdevicewidget.cpp:273
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "Ni bilo mogoče izvesti dejanja: %1 (koda napake: %2)"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:274
 #, kde-format
 msgid "Retry"
 msgstr "Poskusi znova"
@@ -5075,12 +5075,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "Pot za iskanje"
 
-#: option/k3bexternalbinwidget.cpp:241
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Naslednjih programov ni bilo mogoče posodobiti:"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Ni bilo mogoče izvesti dejanja: %1"

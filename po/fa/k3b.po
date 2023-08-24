@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:45+0000\n"
+"POT-Creation-Date: 2023-08-24 00:45+0000\n"
 "PO-Revision-Date: 2014-07-22 16:27+0430\n"
 "Last-Translator: Mohi Mirdamadi <mohi@ubuntu.ir>\n"
 "Language-Team: Farsi (Persian) <kde-i18n-fa@kde.org>\n"
@@ -4572,17 +4572,17 @@ msgstr ""
 msgid "Add"
 msgstr "افزودن"
 
-#: option/k3bdevicewidget.cpp:266
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:269
+#: option/k3bdevicewidget.cpp:273
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:274
 #, fuzzy, kde-format
 msgid "Retry"
 msgstr "تلاش دوباره"
@@ -4681,12 +4681,12 @@ msgstr ""
 msgid "Search Path"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:241
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr ""

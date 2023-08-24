@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:45+0000\n"
+"POT-Creation-Date: 2023-08-24 00:45+0000\n"
 "PO-Revision-Date: 2012-02-02 21:56+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -5048,18 +5048,18 @@ msgstr ""
 msgid "Add"
 msgstr "Pievienot"
 
-#: option/k3bdevicewidget.cpp:266
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Lūdzu, atsakaties un vēlreiz piesakaties, lai pielietotu izmaiņas."
 
-#: option/k3bdevicewidget.cpp:269
+#: option/k3bdevicewidget.cpp:273
 #, fuzzy, kde-format
 #| msgid "Unable to execute the action: %1"
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "Neizdevās izpildīt darbību: %1"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:274
 #, kde-format
 msgid "Retry"
 msgstr "Mēģināt vēlreiz"
@@ -5165,12 +5165,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "Meklēšanas ceļš"
 
-#: option/k3bexternalbinwidget.cpp:241
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Sekojošas programmas neizdevās atjaunināt:"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "Neizdevās izpildīt darbību: %1"

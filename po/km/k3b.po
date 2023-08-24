@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-22 00:45+0000\n"
+"POT-Creation-Date: 2023-08-24 00:45+0000\n"
 "PO-Revision-Date: 2012-06-11 10:20+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -4937,18 +4937,18 @@ msgstr ""
 msgid "Add"
 msgstr "បន្ថែម"
 
-#: option/k3bdevicewidget.cpp:266
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "សូម​ចូល​ម្ដង​ទៀត ដើម្បី​អនុវត្ត​ការ​ផ្លាស់ប្ដូរ ។"
 
-#: option/k3bdevicewidget.cpp:269
+#: option/k3bdevicewidget.cpp:273
 #, fuzzy, kde-format
 #| msgid "Unable to execute the action: %1"
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "មិនអាច​ប្រតិបត្តិ​សកម្មភាព ៖ %1"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:274
 #, kde-format
 msgid "Retry"
 msgstr "ព្យាយាម​ម្ដង​ទៀត"
@@ -5054,12 +5054,12 @@ msgstr ""
 msgid "Search Path"
 msgstr "ផ្លូវ​ស្វែងរក"
 
-#: option/k3bexternalbinwidget.cpp:241
+#: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "កម្មវិធី​ដូច​ខាង​ក្រោម​មិន​អាច​ត្រូវ​បាន​ធ្វើ​បច្ចុប្បន្នភាព​ទេ ៖"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
 msgstr "មិនអាច​ប្រតិបត្តិ​សកម្មភាព ៖ %1"
