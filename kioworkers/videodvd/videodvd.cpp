@@ -16,6 +16,7 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QBitArray>
+#include <QUrl>
 
 #include <stdlib.h>
 
