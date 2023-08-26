@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-08 00:58+0000\n"
+"POT-Creation-Date: 2023-08-26 00:45+0000\n"
 "PO-Revision-Date: 2009-03-22 18:41+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <translation@linux.org.ua>\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: videodvd.cpp:162 videodvd.cpp:290
+#: videodvd.cpp:163 videodvd.cpp:291
 #, kde-format
 msgid "No Video DVD found"
 msgstr "Не знайдено відео-DVD"
 
-#: videodvd.cpp:205 videodvd.cpp:373
+#: videodvd.cpp:206 videodvd.cpp:374
 #, kde-format
 msgid "Read error."
 msgstr "Помилка читання."
