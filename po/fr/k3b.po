@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:45+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2023-06-26 21:28+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -4985,7 +4985,7 @@ msgstr ""
 "graveurs à vitesse lente. <p><b>Attention : </b> L'activation de cette "
 "option peut provoquer un endommagement du média."
 
-#: option/k3bcddboptiontab.cpp:38
+#: option/k3bcddboptiontab.cpp:37
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "Impossible de charger le module de configuration de KCDDB."

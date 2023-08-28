@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:45+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2023-06-27 07:58+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -4899,7 +4899,7 @@ msgstr ""
 "un disco de alta velocidade nunha gravadora lenta.<p> <b>Aviso:</b> marcar "
 "esta opción pode danar os discos."
 
-#: option/k3bcddboptiontab.cpp:38
+#: option/k3bcddboptiontab.cpp:37
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "Non se pode cargar o módulo de configuración de KCDDB."

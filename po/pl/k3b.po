@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:45+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2023-05-13 09:01+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -4929,7 +4929,7 @@ msgstr ""
 "do nagrywania płyt o dużej szybkości w nagrywarce o niskiej szybkości."
 "<p><b>Uwaga:</b> Włączenie tej opcji może spowodować uszkodzenie płyty."
 
-#: option/k3bcddboptiontab.cpp:38
+#: option/k3bcddboptiontab.cpp:37
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "Nie można wczytać modułu ustawień KCDDB."

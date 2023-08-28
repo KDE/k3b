@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:45+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2023-07-03 00:52+0100\n"
 "Last-Translator: Pedro Morais <morais@kde.org>\n"
 "Language-Team: pt <kde-i18n-pt@kde.org>\n"
@@ -4967,7 +4967,7 @@ msgstr ""
 "gravador lento.<p><b>Atenção:</b> Se activar esta opção, poderá resultar num "
 "disco danificado."
 
-#: option/k3bcddboptiontab.cpp:38
+#: option/k3bcddboptiontab.cpp:37
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "Não foi possível carregar o módulo de configuração do KCDDB."

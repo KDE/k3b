@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:45+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2023-06-26 07:00+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -4821,7 +4821,7 @@ msgstr ""
 "ujrapideco. Tiel oni povas devigi K3b enskribi rapidan ujon per malrapida "
 "skribilo.<p><b>Atentu:</b> Ebligi tiun opcion eble kaŭzos koruptecon."
 
-#: option/k3bcddboptiontab.cpp:38
+#: option/k3bcddboptiontab.cpp:37
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "Ne eblas ŝargi KCDDB-agordan modulon."

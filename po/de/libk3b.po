@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2022-06-15 11:18+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -1683,7 +1683,7 @@ msgstr "Audio-Kodierer"
 msgid "An unknown error occurred."
 msgstr "Es ist ein unbekannter Fehler aufgetreten."
 
-#: plugin/k3bpluginmanager.cpp:157
+#: plugin/k3bpluginmanager.cpp:156
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "Für das Modul %1 sind keine Einstellungen verfügbar."

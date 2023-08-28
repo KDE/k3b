@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-24 00:45+0000\n"
-"PO-Revision-Date: 2023-08-02 12:39\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
+"PO-Revision-Date: 2023-08-27 03:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -4695,7 +4695,7 @@ msgstr ""
 "验证检查，可以强制 K3b 在低速刻录高速介质。<p><b>警告：</b>启用此选项可能会导"
 "致媒体损坏。"
 
-#: option/k3bcddboptiontab.cpp:38
+#: option/k3bcddboptiontab.cpp:37
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "无法加载 KCDDB 配置模块。"

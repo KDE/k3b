@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2022-08-25 20:20+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -1600,7 +1600,7 @@ msgstr "Enkoder Audio"
 msgid "An unknown error occurred."
 msgstr "Terjadi sebuah galat yang tak diketahui."
 
-#: plugin/k3bpluginmanager.cpp:157
+#: plugin/k3bpluginmanager.cpp:156
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr ""

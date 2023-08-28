@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-18 00:44+0000\n"
+"POT-Creation-Date: 2023-08-28 00:45+0000\n"
 "PO-Revision-Date: 2023-06-23 10:47+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -1646,7 +1646,7 @@ msgstr "Převodník audia"
 msgid "An unknown error occurred."
 msgstr "Došlo k neznámé chybě."
 
-#: plugin/k3bpluginmanager.cpp:157
+#: plugin/k3bpluginmanager.cpp:156
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "Pro modul %1 nejsou dostupná žádná nastavení."
