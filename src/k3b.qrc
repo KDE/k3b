@@ -1,0 +1,7 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/kxmlgui5/k3b">
+        <file>k3bui.rc</file>
+        <file>k3bdeviceui.rc</file>
+    </qresource>
+</RCC>

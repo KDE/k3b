@@ -219,6 +219,8 @@ add_executable(k3b
     ${musicbrainz_sources}
     ${videodvd_sources}
     ${dbus_sources}
+
+    k3b.qrc
 )
 
 target_include_directories(k3b PRIVATE
@@ -278,7 +280,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/option/k3btheme.knsrc.cmake
 install( PROGRAMS  org.kde.k3b.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 #install( FILES  k3b-iso.desktop k3b-cue.desktop DESTINATION ${APPLNK_INSTALL_DIR}/.hidden/ )
 install( FILES  k3b.notifyrc DESTINATION ${KDE_INSTALL_KNOTIFYRCDIR} )
-install( FILES  k3bui.rc k3bdeviceui.rc DESTINATION ${KDE_INSTALL_KXMLGUIDIR}/k3b )
 install( FILES  org.kde.k3b.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR} )
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc DESTINATION ${KDE_INSTALL_KNSRCDIR})
