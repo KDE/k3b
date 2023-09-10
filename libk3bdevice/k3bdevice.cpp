@@ -1663,7 +1663,21 @@ bool K3b::Device::Device::eject() const
     usageUnlock();
     if ( success )
         return success;
-#elif defined(Q_OS_LINUX)
+#endif
+
+    ScsiCommand cmd( this );
+    cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
+    cmd[5] = 0; // Necessary to set the proper command length
+    cmd.transport( TR_DIR_WRITE );
+
+    cmd[0] = MMC_START_STOP_UNIT;
+    cmd[5] = 0; // Necessary to set the proper command length
+    cmd[4] = 0x2;      // eject medium LoEj = 1, Start = 0
+    if (!cmd.transport( TR_DIR_WRITE )) {
+        return true;
+    }
+
+#if defined(Q_OS_LINUX)
     bool success = false;
     bool needToClose = !isOpen();
 
@@ -1675,19 +1689,10 @@ bool K3b::Device::Device::eject() const
             close();
     }
     usageUnlock();
-    if ( success )
-        return success;
+    return success;
+#else
+    return false;
 #endif
-
-    ScsiCommand cmd( this );
-    cmd[0] = MMC_PREVENT_ALLOW_MEDIUM_REMOVAL;
-    cmd[5] = 0; // Necessary to set the proper command length
-    cmd.transport( TR_DIR_WRITE );
-
-    cmd[0] = MMC_START_STOP_UNIT;
-    cmd[5] = 0; // Necessary to set the proper command length
-    cmd[4] = 0x2;      // eject medium LoEj = 1, Start = 0
-    return !cmd.transport( TR_DIR_WRITE );
 }
 
 
