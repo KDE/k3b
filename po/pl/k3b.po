@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-28 00:45+0000\n"
-"PO-Revision-Date: 2023-05-13 09:01+0200\n"
+"PO-Revision-Date: 2023-09-10 10:55+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -29,7 +29,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 "X-Launchpad-Export-Date: 2011-01-22 17:52+0000\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.04.3\n"
 "n%100>=20) ? 1 : 2);\n"
 
 #, kde-format
@@ -2411,40 +2411,34 @@ msgstr "Filtrowanie:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Wszystkie pliki"
+msgstr "Wszystkie pliki"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Znalezione pliki"
+msgstr "Pliki dźwiękowe"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Znalezione pliki"
+msgstr "Pliki dźwiękowe Wave"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Znalezione pliki"
+msgstr "Pliki dźwiękowe MP3"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Pliki dźwiękowe Ogg Vorbis"
+msgstr "Pliki dźwiękowe Ogg Vorbis"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |Pliki wideo MPEG"
+msgstr "Pliki wideo MPEG"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -4091,28 +4085,24 @@ msgid "Choose Image File"
 msgstr "Wybierz plik z obrazem"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Plik z obrazem:"
+msgstr "Pliki obrazów"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|pliku obrazu ISO 9660"
+msgstr "Pliki obrazów ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Plik Cue:"
+msgstr "Plik Cue"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Pliki TOC Cdrdao i Klonowania Cdrecordem"
+msgstr "Pliki TOC Cdrdao i Klonowania Cdrecordem"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
