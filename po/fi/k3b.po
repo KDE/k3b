@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-28 00:45+0000\n"
-"PO-Revision-Date: 2023-06-27 17:59+0300\n"
+"PO-Revision-Date: 2023-09-04 14:37+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -2383,40 +2383,34 @@ msgstr "Suodatin:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Kaikki tiedostot"
+msgstr "Kaikki tiedostot"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Löydetyt tiedostot"
+msgstr "Äänitiedostot"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Löydetyt tiedostot"
+msgstr "Wav-äänitiedostot"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Löydetyt tiedostot"
+msgstr "MP3-äänitiedostot"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis -äänitiedostot"
+msgstr "Ogg Vorbis -äänitiedostot"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG-videotiedostot"
+msgstr "MPEG-videotiedostot"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -4037,28 +4031,24 @@ msgid "Choose Image File"
 msgstr "Valitse levykuvatiedosto"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Levykuvatiedosto:"
+msgstr "Levykuvatiedostot"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660 -levykuvatiedostot"
+msgstr "ISO 9660 -levykuvatiedostot"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue-tiedosto:"
+msgstr "Cue-tiedostot"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdaon TOC-tiedostot ja Cdrecordin kloonilevykuvat"
+msgstr "Cdrdaon TOC-tiedostot ja Cdrecordin kloonilevykuvat"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
