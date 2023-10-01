@@ -459,7 +459,7 @@ msgstr "Fallou a orde: %1"
 #: ../plugins/encoder/external/k3bexternalencoder.cpp:201
 #, kde-format
 msgid "Could not find program '%1'"
-msgstr "Non se puido atopar o programa «%1»"
+msgstr "Non foi posíbel atopar o programa «%1»"
 
 #: ../plugins/encoder/external/k3bexternalencoder.cpp:208
 #, kde-format
@@ -469,7 +469,7 @@ msgstr "A orde é incorrecta: a orde está baleira."
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:28
 #, kde-format
 msgid "Editing external audio encoder"
-msgstr "Estase a editar o codificador externo de son"
+msgstr "Editando o codificador externo de son"
 
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:64
 #, kde-format
@@ -1625,12 +1625,12 @@ msgstr "Barra de &localización"
 #: k3b.cpp:600 k3b.cpp:916 k3b.cpp:930
 #, kde-format
 msgid "Opening file..."
-msgstr "Estase a abrir o ficheiro…"
+msgstr "Abrindo o ficheiro…"
 
 #: k3b.cpp:628
 #, kde-format
 msgid "Could not open document."
-msgstr "Non se puido abrir o documento."
+msgstr "Non foi posíbel abrir o documento."
 
 #: k3b.cpp:895
 #, kde-kuit-format
@@ -1641,7 +1641,7 @@ msgstr "O proxecto <resource>%1</resource> ten datos sen gardar."
 #: k3b.cpp:896
 #, kde-format
 msgid "Closing Project"
-msgstr "Estase a pechar o proxecto"
+msgstr "Pechando o proxecto"
 
 #: k3b.cpp:919
 #, kde-format
@@ -1656,12 +1656,12 @@ msgstr "Proxectos de K3b (*.k3b)"
 #: k3b.cpp:953
 #, kde-format
 msgid "Saving file..."
-msgstr "Estase a gardar o ficheiro…"
+msgstr "Gardando o ficheiro…"
 
 #: k3b.cpp:963 k3b.cpp:1003
 #, kde-format
 msgid "Could not save the current document."
-msgstr "Non se puido gardar o documento."
+msgstr "Non foi posíbel gardar o documento."
 
 #: k3b.cpp:963 k3b.cpp:1003
 #, kde-format
@@ -1671,7 +1671,7 @@ msgstr "Erro de E/S"
 #: k3b.cpp:980
 #, kde-format
 msgid "Saving file with a new filename..."
-msgstr "Estase a gardar o ficheiro cun nome novo…"
+msgstr "Gardando o ficheiro cun nome novo…"
 
 #: k3b.cpp:988
 #, kde-format
@@ -1681,7 +1681,7 @@ msgstr "Gardar como"
 #: k3b.cpp:1022
 #, kde-format
 msgid "Closing file..."
-msgstr "Estase a pechar o ficheiro…"
+msgstr "Pechando o ficheiro…"
 
 #: k3b.cpp:1124
 #, kde-format
@@ -1965,7 +1965,7 @@ msgstr "O ficheiro xa existe"
 #: k3bdebuggingoutputdialog.cpp:93
 #, kde-format
 msgid "Could not open file %1"
-msgstr "Non se puido abrir o ficheiro %1"
+msgstr "Non foi posíbel abrir o ficheiro %1"
 
 #. i18n: ectx: Menu (device)
 #: k3bdeviceui.rc:4 k3bui.rc:19
@@ -2472,7 +2472,7 @@ msgstr "Cargar as opcións predeterminadas ou gardadas"
 #: k3binteractiondialog.cpp:190
 #, kde-format
 msgid "Save current settings to reuse them later"
-msgstr "Gardar a configuración actual para utilizala de novo noutra ocasión"
+msgstr "Gardar a configuración actual para usala de novo noutra ocasión"
 
 #: k3binteractiondialog.cpp:194
 #, kde-format
@@ -2834,7 +2834,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:359
 #, kde-format
 msgid "Unable to find %1 executable"
-msgstr "Non se pode atopar o executábel %1"
+msgstr "Non é posíbel atopar o executábel %1"
 
 #: k3bsystemproblemdialog.cpp:210
 #, kde-format
@@ -3237,7 +3237,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:582
 #, kde-format
 msgid "Running K3b as root user"
-msgstr "Estase a executar K3b como administrador (root)"
+msgstr "Executando K3b como administrador (root)"
 
 #: k3bsystemproblemdialog.cpp:583
 #, kde-format
@@ -4207,7 +4207,7 @@ msgstr "Gravar"
 #: misc/k3bimagewritingdialog.cpp:891
 #, kde-format
 msgid "Unable to read image file"
-msgstr "Non se pode ler o ficheiro de imaxe."
+msgstr "Non é posíbel ler o ficheiro de imaxe."
 
 #: misc/k3bimagewritingdialog.cpp:893
 #, kde-format
@@ -4879,7 +4879,7 @@ msgid ""
 msgstr ""
 "<p>Se marca esta opción, K3b non expulsa o disco cando a gravación remate. "
 "Isto pode axudar no caso de que saia do computador tras comezar a gravación "
-"e non quere que a bandexa do sistema estea sempre aberta.<p> Porén nos "
+"e non quere que a área de notificación estea sempre aberta.<p> Porén nos "
 "sistemas Linux, xusto despois de gravalos, os discos deben cargarse de novo. "
 "En caso contrario o sistema non detectará os cambios e seguirá a tratalos "
 "como discos baleiros."
@@ -4902,7 +4902,7 @@ msgstr ""
 #: option/k3bcddboptiontab.cpp:37
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
-msgstr "Non se pode cargar o módulo de configuración de KCDDB."
+msgstr "Non é posíbel cargar o módulo de configuración de KCDDB."
 
 #: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
 #, kde-format
@@ -5007,7 +5007,7 @@ msgstr "Reinicie a sesión para aplicar os cambios."
 #: option/k3bdevicewidget.cpp:273
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
-msgstr "Non se pode executar a acción: %1 (código do erro: %2)"
+msgstr "Non é posíbel executar a acción: %1 (código do erro: %2)"
 
 #: option/k3bdevicewidget.cpp:274
 #, kde-format
@@ -5119,12 +5119,12 @@ msgstr "Ruta de busca"
 #: option/k3bexternalbinwidget.cpp:246
 #, kde-format
 msgid "Following programs could not be updated:"
-msgstr "Non se puideron actualizar os programas seguintes:"
+msgstr "Non foi posíbel actualizar os programas seguintes:"
 
 #: option/k3bexternalbinwidget.cpp:251
 #, kde-format
 msgid "Unable to execute the action: %1"
-msgstr "Non se pode executar a acción: %1"
+msgstr "Non é posíbel executar a acción: %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -5194,7 +5194,7 @@ msgstr "Crear"
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
-msgstr "Non se pode crear o cartafol %1"
+msgstr "Non é posíbel crear o cartafol %1"
 
 #: option/k3bmiscoptiontab.cpp:120
 #, kde-format
@@ -5303,7 +5303,7 @@ msgstr "Arrastre ou escriba o URL do tema"
 #: option/k3bthemeoptiontab.cpp:139
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
-msgstr "Non se pode atopar o arquivo do tema de iconas %1."
+msgstr "Non é posíbel atopar o arquivo do tema de iconas %1."
 
 #: option/k3bthemeoptiontab.cpp:141
 #, kde-format
@@ -5311,7 +5311,7 @@ msgid ""
 "Unable to download the icon theme archive.\n"
 "Please check that address %1 is correct."
 msgstr ""
-"Non se pode descargar o arquivo do tema de iconas.\n"
+"Non é posíbel descargar o arquivo do tema de iconas.\n"
 "Comprobe que o enderezo %1 é correcto."
 
 #: option/k3bthemeoptiontab.cpp:173
@@ -5482,15 +5482,15 @@ msgstr ""
 "resultante terán os mesmos permisos que os ficheiros orixinais. En caso "
 "contrario, todos os ficheiros terán os permisos iguais e pertencerán ao "
 "administrador (root).\n"
-"<p>Isto é útil para copias de seguridade.<p> <b>Coidado:</b> Os permisos "
-"poden non ter moito sentido noutros sistemas de ficheiros. Por exemplo, se "
-"un usuario dono do ficheiro no CD ou DVD non existe."
+"<p>Isto é útil para salvagardas.<p> <b>Coidado:</b> Os permisos poden non "
+"ter moito sentido noutros sistemas de ficheiros. Por exemplo, se un usuario "
+"dono do ficheiro no CD ou DVD non existe."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkPreservePermissions)
 #: projects/base_k3badvanceddataimagesettings.ui:87
 #, kde-format
 msgid "Preserve file permissions (bac&kup)"
-msgstr "Conservar os &permisos dos ficheiros (copia de seguridade)"
+msgstr "Conservar os &permisos dos ficheiros (salvagarda)"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:110
@@ -6875,7 +6875,7 @@ msgstr "Non ten permisos de abondo para ler os seguintes ficheiros"
 #: projects/k3bdataurladdingdialog.cpp:804
 #, kde-format
 msgid "Unable to find the following files"
-msgstr "Non se poden atopar os seguintes ficheiros"
+msgstr "Non é posíbel atopar os seguintes ficheiros"
 
 #: projects/k3baudiotrackaddingdialog.cpp:81
 #: projects/k3bdataurladdingdialog.cpp:808
@@ -6887,7 +6887,7 @@ msgstr "Non se admiten os ficheiros que non sexan locais"
 #, kde-format
 msgid "Unable to handle the following files due to an unsupported format"
 msgstr ""
-"Non se poden manexar os seguintes ficheiros por estar nun formato non "
+"Non é posíbel manexar os seguintes ficheiros por estar nun formato non "
 "permitido"
 
 #: projects/k3baudiotrackaddingdialog.cpp:86
@@ -6909,7 +6909,7 @@ msgstr "Ocorreron problemas ao engadir os ficheiros ao proxecto."
 #: projects/k3baudiotrackaddingdialog.cpp:146
 #, kde-format
 msgid "Analysing file '%1'..."
-msgstr "Estase a analizar o ficheiro «%1»…"
+msgstr "Analizando o ficheiro «%1»…"
 
 #: projects/k3baudiotrackdialog.cpp:38
 #, kde-format
@@ -6919,7 +6919,7 @@ msgstr "Propiedades da pista de son"
 #: projects/k3baudiotrackplayer.cpp:78
 #, kde-format
 msgid "Playing track %1: %2 - %3"
-msgstr "Estase a reproducir a pista %1: %2 - %3"
+msgstr "Reproducindo a pista %1: %2 - %3"
 
 #: projects/k3baudiotrackplayer.cpp:139 projects/k3baudiotrackplayer.cpp:140
 #, kde-format
@@ -7662,12 +7662,12 @@ msgstr "Estanse a mover os ficheiros para o proxecto «%1»…"
 #: projects/k3bdataurladdingdialog.cpp:92
 #, kde-format
 msgid "Adding files to project '%1'"
-msgstr "Estase a engadir ficheiros ao proxecto «%1»"
+msgstr "Engadindo ficheiros ao proxecto «%1»"
 
 #: projects/k3bdataurladdingdialog.cpp:97
 #, kde-format
 msgid "Adding files to project '%1'..."
-msgstr "Estase a engadir os ficheiros ao proxecto «%1»…"
+msgstr "Engadindo os ficheiros ao proxecto «%1»…"
 
 #: projects/k3bdataurladdingdialog.cpp:178
 #, kde-format
@@ -7683,7 +7683,7 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:182
 #, kde-format
 msgid "Adding image file to project"
-msgstr "Estase a engadir un ficheiro de imaxe ao proxecto"
+msgstr "Engadindo un ficheiro de imaxe ao proxecto"
 
 #: projects/k3bdataurladdingdialog.cpp:183
 #, kde-format
@@ -7758,7 +7758,7 @@ msgstr "Renomear o novo ficheiro"
 #: projects/k3bdataurladdingdialog.cpp:443
 #, kde-format
 msgid "Adding link to folder"
-msgstr "Estase a engadir unha ligazón a un cartafol"
+msgstr "Engadindo unha ligazón a un cartafol"
 
 #: projects/k3bdataurladdingdialog.cpp:444
 #, kde-format
@@ -8191,7 +8191,7 @@ msgstr "Varias sesións"
 #: projects/k3bmovixburndialog.cpp:191
 #, kde-format
 msgid "Could not find a valid eMovix installation."
-msgstr "Non se puido atopar unha instalación de eMovix correcta."
+msgstr "Non foi posíbel atopar unha instalación de eMovix correcta."
 
 #: projects/k3bmovixoptionswidget.cpp:35 projects/k3bmovixoptionswidget.cpp:47
 #, kde-format
@@ -8262,12 +8262,12 @@ msgstr "Atopáronse varios resultados para a pista %1 (%2). Escolla un."
 #: projects/k3bmusicbrainztrackloopupjob.cpp:71
 #, kde-format
 msgid "Generating fingerprint for track %1."
-msgstr "Estase a xerar a pegada dixital da pista %1."
+msgstr "Xerando a pegada dixital da pista %1."
 
 #: projects/k3bmusicbrainztrackloopupjob.cpp:110
 #, kde-format
 msgid "Querying MusicBrainz for track %1."
-msgstr "Estase a buscar a pista %1 en MusicBrainz."
+msgstr "Buscando a pista %1 en MusicBrainz."
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -8317,12 +8317,12 @@ msgstr "Crear o cartafol?"
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
 msgid "Failed to create folder '%1'."
-msgstr "Non se puido crear o cartafol «%1»."
+msgstr "Non foi posíbel crear o cartafol «%1»."
 
 #: projects/k3bprojectburndialog.cpp:252
 #, kde-format
 msgid "Writing"
-msgstr "Estase a gravar"
+msgstr "Gravando"
 
 #: projects/k3bprojectburndialog.cpp:295
 #, kde-format
@@ -9387,9 +9387,9 @@ msgid ""
 "VcdImager >= 0.7.12. You can find this on your distribution’s software "
 "repository or download it from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Non se puido atopar o executábel «VcdImager». Para crear CD de vídeo ten que "
-"instalar a versión 0.7.12 ou unha versión posterior de «VcdImager». Se non "
-"atopa o programa nos repositorios de software da súa distribución, pode "
+"Non foi posíbel atopar o executábel «VcdImager». Para crear CD de vídeo ten "
+"que instalar a versión 0.7.12 ou unha versión posterior de «VcdImager». Se "
+"non atopa o programa nos repositorios de software da súa distribución, pode "
 "descargalo de https://www.gnu.org/software/vcdimager/"
 
 #: projects/k3bvideodvdburndialog.cpp:37
@@ -9699,7 +9699,7 @@ msgstr "Banda sonora"
 #: rip/k3baudiocdview.cpp:143
 #, kde-format
 msgid "Searching for Artist information..."
-msgstr "Estase a buscar información do intérprete…"
+msgstr "Buscando información do intérprete…"
 
 #: rip/k3baudiocdview.cpp:177 rip/k3baudioprojectconvertingdialog.cpp:97
 #: rip/k3baudiorippingdialog.cpp:115 rip/k3bvideocdview.cpp:350
@@ -9934,7 +9934,7 @@ msgstr "Estanse a converter as pistas de son de «%1»"
 #: rip/k3baudioprojectconvertingjob.cpp:58
 #, kde-format
 msgid "Starting audio conversion."
-msgstr "Estase a comezar a extracción do son."
+msgstr "Comezando a extracción do son."
 
 #: rip/k3baudioprojectconvertingjob.cpp:85
 #, kde-format
@@ -9944,7 +9944,7 @@ msgstr "Convertendo a pista %1 (%2 — %3)"
 #: rip/k3baudioprojectconvertingjob.cpp:90
 #, kde-format
 msgid "Converting track %1"
-msgstr "Estase a converter a pista %1"
+msgstr "Convertendo a pista %1"
 
 #: rip/k3baudioprojectconvertingjob.cpp:96
 #, kde-format
@@ -9974,32 +9974,32 @@ msgstr "Estanse a extraer as pistas de son de «%1»"
 #: rip/k3baudioripjob.cpp:219
 #, kde-format
 msgid "Extracting Digital Audio"
-msgstr "Estase a extraer o son dixital"
+msgstr "Extraendo o son dixital"
 
 #: rip/k3baudioripjob.cpp:226
 #, kde-format
 msgid "Could not load libcdparanoia."
-msgstr "Non se puido cargar libcdparanoia."
+msgstr "Non foi posíbel cargar libcdparanoia."
 
 #: rip/k3baudioripjob.cpp:237
 #, kde-format
 msgid "Reading CD table of contents."
-msgstr "Estase a ler o índice do CD."
+msgstr "Lendo o índice do CD."
 
 #: rip/k3baudioripjob.cpp:241
 #, kde-format
 msgid "Could not open device %1"
-msgstr "Non se puido abrir o dispositivo %1"
+msgstr "Non foi posíbel abrir o dispositivo %1"
 
 #: rip/k3baudioripjob.cpp:254
 #, kde-format
 msgid "Searching index 0 for all tracks"
-msgstr "Estase a buscar o índice 0 para todas as pistas"
+msgstr "Buscando o índice 0 para todas as pistas"
 
 #: rip/k3baudioripjob.cpp:258
 #, kde-format
 msgid "Starting digital audio extraction (ripping)."
-msgstr "Estase a comezar a extracción do son dixital («ripping»)."
+msgstr "Comezando a extracción do son dixital («ripping»)."
 
 #: rip/k3baudioripjob.cpp:289
 #, kde-format
@@ -10009,7 +10009,7 @@ msgstr "Extraendo a pista %1 (%2 — %3)"
 #: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1"
-msgstr "Estase a extraer a pista %1"
+msgstr "Extraendo a pista %1"
 
 #: rip/k3baudioripjob.cpp:300
 #, kde-format
@@ -10227,7 +10227,7 @@ msgstr "Retirouse o ficheiro parcial «%1»."
 #: rip/k3bmassaudioencodingjob.cpp:329 rip/k3bmassaudioencodingjob.cpp:454
 #, kde-format
 msgid "Unable to open '%1' for writing."
-msgstr "Non se pode abrir «%1» para escribir nel."
+msgstr "Non é posíbel abrir «%1» para escribir nel."
 
 #: rip/k3bmassaudioencodingjob.cpp:368
 #, kde-format
@@ -10237,12 +10237,12 @@ msgstr "Erro ao codificar a pista %1."
 #: rip/k3bmassaudioencodingjob.cpp:404
 #, kde-format
 msgid "Writing playlist to %1."
-msgstr "Estase a escribir a lista de reprodución en %1."
+msgstr "Escribindo a lista de reprodución en %1."
 
 #: rip/k3bmassaudioencodingjob.cpp:500
 #, kde-format
 msgid "Writing cue file to %1."
-msgstr "Estase a escribir o ficheiro imaxe en %1."
+msgstr "Escribindo o ficheiro imaxe en %1."
 
 #: rip/k3bpatternparser.cpp:134
 #, kde-format
@@ -10262,7 +10262,7 @@ msgstr "Comprobar os ficheiros"
 #: rip/k3bvideocdrip.cpp:91
 #, kde-format
 msgid "Could not find %1 executable."
-msgstr "Non se puido atopar o executábel %1."
+msgstr "Non foi posíbel atopar o executábel %1."
 
 #: rip/k3bvideocdrip.cpp:92
 #, kde-format
@@ -10300,7 +10300,7 @@ msgstr "Usando %1 %2 (© %3)"
 #: rip/k3bvideocdrip.cpp:160
 #, kde-format
 msgid "Extracting"
-msgstr "Estase a extraer"
+msgstr "Extraendo"
 
 #: rip/k3bvideocdrip.cpp:161
 #, kde-format
@@ -10315,7 +10315,7 @@ msgstr "Extraer ficheiros de %1 en %2."
 #: rip/k3bvideocdrip.cpp:167
 #, kde-format
 msgid "Could not start %1."
-msgstr "Non se puido comezar %1."
+msgstr "Non foi posíbel comezar %1."
 
 #: rip/k3bvideocdrip.cpp:257
 #, kde-format
@@ -10355,12 +10355,12 @@ msgstr "detectáronse ficheiros PBC VCD2.0 ampliado"
 #: rip/k3bvideocdrip.cpp:317 rip/k3bvideocdrip.cpp:335
 #, kde-format
 msgid "Extracting %1"
-msgstr "Estase a extraer %1"
+msgstr "Extraendo %1"
 
 #: rip/k3bvideocdrip.cpp:328
 #, kde-format
 msgid "Extracting %1 to %2"
-msgstr "Estase a extraer %1 en %2"
+msgstr "Extraendo %1 en %2"
 
 #: rip/k3bvideocdrippingdialog.cpp:37
 #, kde-format
@@ -10823,7 +10823,7 @@ msgstr "Estanse a extraer os títulos do DVD de vídeo"
 #, kde-format
 msgid "Transcoding 1 title to %2/%3"
 msgid_plural "Transcoding %1 titles to %2/%3"
-msgstr[0] "Estase a transcodificar 1 título para %2/%3"
+msgstr[0] "Transcodificando 1 título para %2/%3"
 msgstr[1] "Estanse a transcodificar %1 títulos para %2/%3"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
@@ -10834,7 +10834,7 @@ msgstr "Extraeuse satisfactoriamente o título %1 como «%2»"
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:143
 #, kde-format
 msgid "Failed to rip title %1"
-msgstr "Non se puido extraer o título %1"
+msgstr "Non foi posíbel extraer o título %1"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:173
 #, kde-format
@@ -10859,7 +10859,7 @@ msgstr "Os valores de recorte son absurdos. Non se fará ningún recorte."
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:192
 #, kde-format
 msgid "Failed to determine clipping values for title %1"
-msgstr "Non se puideron determinar os valores de recorte do título %1"
+msgstr "Non foi posíbel determinar os valores de recorte do título %1"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:79
 #, kde-format
@@ -10943,7 +10943,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:304
 #, kde-format
 msgid "Unable to read Video DVD contents."
-msgstr "Non se pode ler o contido do DVD de vídeo."
+msgstr "Non é posíbel ler o contido do DVD de vídeo."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:343
 #, kde-format
