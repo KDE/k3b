@@ -9466,7 +9466,7 @@ msgstr "El mode de directori no està permés per a les ubicacions remotes."
 #: projects/kostore/KoStore.cpp:197
 #, kde-format
 msgid "KOffice Storage"
-msgstr "Emmagatzematge del KOffice"
+msgstr "Emmagatzematge de KOffice"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
