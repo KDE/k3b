@@ -5505,7 +5505,7 @@ msgstr "Establix les preferències especials del sistema de fitxers ISO 9660."
 #: projects/base_k3badvanceddataimagesettings.ui:113
 #, kde-format
 msgid "File System Settings"
-msgstr "Configuració del sistema de fitxers"
+msgstr "Configureu el sistema de fitxers"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupIsoSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:134
