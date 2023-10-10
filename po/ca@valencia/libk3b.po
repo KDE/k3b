@@ -26,12 +26,12 @@ msgstr ""
 #: core/k3bcore.cpp:241
 #, kde-format
 msgid "Inhibiting sleep for disc writing"
-msgstr "Inhibix la suspensió per a l'escriptura al disc"
+msgstr "Inhibix la suspensió per a l'escriptura en el disc"
 
 #: core/k3bcore.cpp:257
 #, kde-format
 msgid "Disable inhibition for disc writing"
-msgstr "Desactiva la inhibició per a l'escriptura al disc"
+msgstr "Desactiva la inhibició per a l'escriptura en el disc"
 
 #: core/k3bglobals.cpp:360
 #, kde-format
@@ -2236,7 +2236,7 @@ msgstr "No s'ha trobat l'executable de «mkisofs»."
 #: projects/datacd/k3bmkisofshandler.cpp:80
 #, kde-format
 msgid "Read error from file '%1'"
-msgstr "S'ha produït un error de lectura al fitxer «%1»"
+msgstr "S'ha produït un error de lectura des del fitxer «%1»"
 
 #: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
@@ -3445,7 +3445,7 @@ msgstr "S'està eliminant el fitxer CUE %1"
 #: projects/videocd/k3bvcdjob.cpp:174
 #, kde-format
 msgid "Could not write correct XML file."
-msgstr "No s'ha pogut escriure el fitxer XML correcte."
+msgstr "No s'ha pogut escriure el fitxer en XML correcte."
 
 #: projects/videocd/k3bvcdjob.cpp:190
 #, kde-format
@@ -3769,7 +3769,7 @@ msgstr "S'està analitzant el suport..."
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
 msgid "Device Selection"
-msgstr "Seleccioneu el dispositiu"
+msgstr "Seleccioneu un dispositiu"
 
 #: tools/k3bdeviceselectiondialog.cpp:39
 #, kde-format
