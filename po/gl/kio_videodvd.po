@@ -27,4 +27,4 @@ msgstr "Non se atopou ningún DVD de vídeo"
 #: videodvd.cpp:206 videodvd.cpp:374
 #, kde-format
 msgid "Read error."
-msgstr "Ocorreu un erro de lectura."
+msgstr "Produciuse un erro de lectura."
