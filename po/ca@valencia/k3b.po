@@ -1934,7 +1934,7 @@ msgstr "Guarda a un fitxer"
 #: k3bdebuggingoutputdialog.cpp:50
 #, kde-format
 msgid "Copy to clipboard"
-msgstr "Copia al porta-retalls"
+msgstr "Copia a dins del porta-retalls"
 
 #: k3bdebuggingoutputdialog.cpp:84 misc/k3bmediacopydialog.cpp:290
 #: misc/k3bmediacopydialog.cpp:299 projects/k3bdataburndialog.cpp:170
@@ -7788,7 +7788,7 @@ msgid ""
 "the option <em>follow symbolic links</em> you may safely ignore this warning "
 "and choose to add the link to the project.</b>"
 msgstr ""
-"<p>«%1» és un enllaç simbòlic amb la carpeta «%2». <p>Si preteneu fer que "
+"<p>«%1» és un enllaç simbòlic cap a la carpeta «%2». <p>Si preteneu fer que "
 "K3b seguisca els enllaços simbòlics hauríeu de considerar de deixar-li fer "
 "ara perquè K3b no serà capaç de fer-ho després, ja que els enllaços "
 "simbòlics cap a carpetes dins d'un projecte de K3b no es poden resoldre. "
@@ -7809,7 +7809,7 @@ msgstr "Seguix els enllaços sempre"
 #: projects/k3bdataurladdingdialog.cpp:457
 #, kde-format
 msgid "Add link to project"
-msgstr "Afig un enllaç al projecte"
+msgstr "Afig un enllaç cap al projecte"
 
 #: projects/k3bdataurladdingdialog.cpp:458
 #, kde-format
