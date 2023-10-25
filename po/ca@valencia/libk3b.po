@@ -2132,8 +2132,8 @@ msgid ""
 "Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
 "contain more than one backslash:"
 msgstr ""
-"A causa d'un error a «mkisofs» <= 1.15a40, K3b no és capaç de gestionar noms "
-"de fitxer que contenen més d'una barra inversa:"
+"A causa d'un error en «mkisofs» <= 1.15a40, K3b no és capaç de gestionar "
+"noms de fitxer que contenen més d'una barra inversa:"
 
 #: projects/datacd/k3bisoimager.cpp:172 projects/k3bcdrdaowriter.cpp:770
 #: projects/k3bcdrecordwriter.cpp:911 projects/k3bcdrskinwriter.cpp:924
@@ -3419,8 +3419,8 @@ msgid ""
 "control."
 msgstr ""
 "PBC (control de reproducció) activat.\n"
-"Els reproductors de vídeo no poden arribar als segments (imatges estàtiques "
-"MPEG) sense el control de reproducció."
+"Els reproductors de vídeo no poden arribar fins als segments (imatges "
+"estàtiques MPEG) sense el control de reproducció."
 
 #: projects/videocd/k3bvcddoc.cpp:278
 #, kde-format
