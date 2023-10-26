@@ -18,7 +18,7 @@
 # Nicolas Ternisien <nicolas.ternisien@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012, 2013.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2020, 2022.
+# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023 xavier <xavier.besnard@neuf.fr>
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Maxime Corteel <mcorteel@gmail.com>, 2019.
 # Xavier BESNARD <xavier.besnard@neuf.fr>, 2023.
@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-28 00:45+0000\n"
-"PO-Revision-Date: 2023-06-26 21:28+0200\n"
+"PO-Revision-Date: 2023-10-24 20:09+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -43,7 +43,7 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Geoffray Levasseur, Paul Morin, Simon Depiets, Xavier BESNARD"
+msgstr "Geoffray Levasseur, Paul Morin, Simon Depiets, Xavier Besnard"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
@@ -7426,7 +7426,7 @@ msgstr "Personnalisé (%1)"
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
 msgstr ""
-"(K3b::DataImageSettingsWidget) a trouvé une configuration de pré-réglages : "
+"(K3b::DataImageSettingsWidget) a trouvé une configuration de pré réglages : "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
