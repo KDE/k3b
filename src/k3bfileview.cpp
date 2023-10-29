@@ -70,6 +70,8 @@ K3b::FileView::FileView(QWidget *parent )
     filterLayout->setContentsMargins( 0, 0, 0, 0 );
 
     d->filterWidget->setEditable( true );
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QString filter = "*|" + i18n("All Files");
     filter += '\n' + "audio/x-mp3 audio/x-wav application/x-ogg|" + i18n("Sound Files");
     filter += '\n' + "audio/x-wav |" + i18n("Wave Sound Files");
@@ -77,6 +79,17 @@ K3b::FileView::FileView(QWidget *parent )
     filter += '\n' + "application/x-ogg |" + i18n("Ogg Vorbis Sound Files");
     filter += '\n' + "video/mpeg |" + i18n("MPEG Video Files");
     d->filterWidget->setFilter(filter);
+#else
+    const QList<KFileFilter> filters {
+        KFileFilter(i18n("All Files"), {"*"}, {}),
+        KFileFilter(i18n("Sound Files"), {}, {"audio/x-mp3", "audio/x-wav", "application/x-ogg"}),
+        KFileFilter(i18n("Wave Sound Files"), {}, {"audio/x-wav"}),
+        KFileFilter(i18n("MP3 Sound Files"), {}, {"audio/x-mp3"}),
+        KFileFilter(i18n("Ogg Vorbis Sound Files"), {}, {"application/x-ogg"}),
+        KFileFilter(i18n("MPEG Video Files"), {}, {"video/mpeg"}),
+    };
+    d->filterWidget->setFilters(filters, filters.first());
+#endif
 
     d->actionShowBookmarks = new QAction( i18n("Show Bookmarks"), d->toolBox );
     d->actionShowBookmarks->setCheckable( true );
@@ -137,6 +150,7 @@ QUrl K3b::FileView::url()
 
 void K3b::FileView::slotFilterChanged()
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QString filter = d->filterWidget->currentFilter();
     d->dirOp->clearFilter();
 
@@ -147,6 +161,18 @@ void K3b::FileView::slotFilterChanged()
     }
     else
         d->dirOp->setNameFilter( filter );
+#else
+    const KFileFilter filter = d->filterWidget->currentFilter();
+    d->dirOp->clearFilter();
+
+    if( !filter.mimePatterns().isEmpty() ) {
+        QStringList types = filter.mimePatterns();
+        types.prepend( "inode/directory" );
+        d->dirOp->setMimeFilter( types );
+    }
+    else
+        d->dirOp->setNameFilter( filter.filePatterns().join( QLatin1Char(' ') ) );
+#endif
 
     d->dirOp->rereadDir();
 }
