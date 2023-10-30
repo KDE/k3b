@@ -12,7 +12,7 @@
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012, 2013.
 # Sébastien Renard <renard@kde.org>, 2010.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2020, 2022.
+# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023 xavier <xavier.besnard@neuf.fr>
 # Peter Potrowl <peter.potrowl@gmail.com>, 2017, 2018.
 # Simon Depiets <sdepiets@gmail.com>, 2019.
 msgid ""
@@ -20,15 +20,15 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2022-06-12 20:55+0200\n"
-"Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2023-10-28 15:37+0200\n"
+"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 23.08.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -281,42 +281,42 @@ msgstr "Impossible de lire la table des matières"
 #: jobs/k3bcdcopyjob.cpp:363
 #, kde-format
 msgid "Searching CD-Text"
-msgstr "Recherche CD-Text"
+msgstr "Recherche du programme « CD-Text »"
 
 #: jobs/k3bcdcopyjob.cpp:377
 #, kde-format
 msgid "Found CD-Text (%1 - %2)."
-msgstr "CD-Text trouvé (%1 - %2)."
+msgstr "Programme « CD-Text » trouvé (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:382
 #, kde-format
 msgid "Found corrupted CD-Text. Ignoring it."
-msgstr "CD-Text trouvé mais corrompu. On l'ignore."
+msgstr "Programme « CD-Text » trouvé mais corrompu. Il est ignoré."
 
 #: jobs/k3bcdcopyjob.cpp:387
 #, kde-format
 msgid "No CD-Text found."
-msgstr "Aucun CD-Text n'a été trouvé."
+msgstr "Aucun programme « CD-Text » n'a été trouvé."
 
 #: jobs/k3bcdcopyjob.cpp:398
 #, kde-format
 msgid "Querying CDDB"
-msgstr "Interrogation CDDB"
+msgstr "Interrogation « CDDB »"
 
 #: jobs/k3bcdcopyjob.cpp:419
 #, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr "Une entrée CDDB a été trouvée (%1 - %2)."
+msgstr "Une entrée « CDDB » a été trouvée (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:442
 #, kde-format
 msgid "No CDDB entry found."
-msgstr "Aucune entrée CDDB n'a été trouvée."
+msgstr "Aucune entrée « CDDB » n'a été trouvée."
 
 #: jobs/k3bcdcopyjob.cpp:445
 #, kde-format
 msgid "CDDB error (%1)."
-msgstr "Erreur CDDB (%1)."
+msgstr "Erreur « CDDB » (%1)."
 
 #: jobs/k3bcdcopyjob.cpp:461
 #, kde-format
@@ -324,8 +324,9 @@ msgid ""
 "Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. Which one should be used "
 "to generate the CD-Text on the new CD?"
 msgstr ""
-"Des entrées CD-Text (%1 - %2) et CDDB (%3 - %4) ont été trouvées. Laquelle "
-"doit être utilisée pour générer le CD-Text du nouveau CD ?"
+"Des entrées « CD-Text » (%1 - %2) et « CDDB » (%3 - %4) ont été trouvées. "
+"Laquelle doit être utilisée pour générer l'identifiant « CD-Text » du "
+"nouveau CD ?"
 
 #: jobs/k3bcdcopyjob.cpp:467
 #, kde-format
@@ -335,12 +336,12 @@ msgstr "CD-Text"
 #: jobs/k3bcdcopyjob.cpp:468
 #, kde-format
 msgid "Use CD-Text data"
-msgstr "Utiliser les données du CD-Text"
+msgstr "Utiliser les données « CD-Text »"
 
 #: jobs/k3bcdcopyjob.cpp:469
 #, kde-format
 msgid "Use CDDB entry"
-msgstr "Utiliser l'entrée CDDB"
+msgstr "Utiliser l'entrée « CDDB »"
 
 #: jobs/k3bcdcopyjob.cpp:475 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:414 projects/k3bcdrskinwriter.cpp:426
@@ -1249,7 +1250,7 @@ msgstr ""
 msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
 msgstr ""
 "La gravure « à la volée » n'est pas gérée par le programme « cdrecord » en "
-"version < 2.01a13."
+"version inférieure à 2.01a13."
 
 #: jobs/k3bmetawriter.cpp:470 projects/audiocd/k3baudiojob.cpp:288
 #: projects/mixedcd/k3bmixedjob.cpp:1229
@@ -1272,7 +1273,7 @@ msgstr ""
 #: jobs/k3bmetawriter.cpp:487 projects/datacd/k3bdatajob.cpp:896
 #, kde-format
 msgid "No Incremental Streaming"
-msgstr "Pas de flux incrémentaux"
+msgstr "Aucun flux incrémental"
 
 #: jobs/k3bmetawriter.cpp:503
 #, kde-format
@@ -1298,7 +1299,7 @@ msgstr ""
 #: jobs/k3bmetawriter.cpp:785
 #, kde-format
 msgid "No version of cdrskin can do this yet."
-msgstr "Aucune version de cdrskin ne peut encore faire cela."
+msgstr "Aucune version du logiciel « cdrskin » ne peut encore faire cela."
 
 #: jobs/k3bmetawriter.cpp:890
 #, kde-format
@@ -1424,7 +1425,7 @@ msgstr "Le programme « %1 » a retourné une erreur : %2"
 #: jobs/k3breadcdreader.cpp:311
 #, kde-format
 msgid "Readcd exited abnormally."
-msgstr "Readcd s'est interrompu anormalement."
+msgstr "Le programme « readcd » s'est interrompu anormalement."
 
 #: jobs/k3bverificationjob.cpp:222 jobs/k3bverificationjob.cpp:278
 #: jobs/k3bverificationjob.cpp:301
@@ -1568,7 +1569,7 @@ msgstr "MPEG1 Layer III"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:530
 #, kde-format
 msgid "MPEG4 (FFMPEG)"
-msgstr "MPEG4 (FFMPEG)"
+msgstr "MPEG4 (FFmpeg)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:532
 #, kde-format
@@ -1614,10 +1615,10 @@ msgid ""
 "quarter pixel motion compensation, lumi masking, trellis quantization, and "
 "H.263, MPEG and custom quantization matrices."
 msgstr ""
-"XviD permet la configuration avancée du MEPG-4 tel que les b-frames, la "
-"compensation des pixels de type « quater » et « global », les masques de "
-"« lumi », la quantification de « treillis », le H.263, le MPEG et les "
-"matrices de quantification personnalisées."
+"XviD permet la configuration avancée du code « MPEG4 » tel que les b-frames, "
+"la compensation des pixels de type « quater » et « global », les masques de "
+"« lumi », la quantification de « treillis », les codec « H.263 « et « MPEG » "
+"et les matrices de quantification personnalisées."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:557
 #, kde-format
@@ -2633,7 +2634,7 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:294 projects/k3bcdrskinwriter.cpp:302
 #, kde-format
 msgid "Writer does not support buffer underrun free recording (Burnfree)"
-msgstr "Le graveur ne gère pas la régulation de la mémoire tampon (Burnfree)"
+msgstr "Le graveur ne gère pas la régulation de la mémoire tampon (burnfree)"
 
 #: projects/k3bcdrecordwriter.cpp:330 projects/k3bcdrskinwriter.cpp:342
 #, kde-format
@@ -2768,12 +2769,12 @@ msgstr "Écriture des données au format « CUE »"
 #: projects/k3bcdrecordwriter.cpp:722 projects/k3bcdrskinwriter.cpp:735
 #, kde-format
 msgid "Enabled Burnfree"
-msgstr "Burnfree activé"
+msgstr "Option « burnfree » activée"
 
 #: projects/k3bcdrecordwriter.cpp:725 projects/k3bcdrskinwriter.cpp:738
 #, kde-format
 msgid "Disabled Burnfree"
-msgstr "Burnfree désactivé"
+msgstr "Option « burnfree » désactivée"
 
 #: projects/k3bcdrecordwriter.cpp:731 projects/k3bcdrskinwriter.cpp:744
 #: projects/mixedcd/k3bmixedjob.cpp:555
@@ -3212,8 +3213,8 @@ msgid ""
 "Growisofs version %1 does not feature a software buffer which may result in "
 "an unstable burn process."
 msgstr ""
-"Growisofs version %1 ne possède pas de tampon logiciel ce qui peut conduire "
-"à un processus de gravure instable."
+"Le logiciel « growisofs » en version %1 ne possède aucun tampon logiciel ce "
+"qui peut conduire à un processus de gravure instable."
 
 #: projects/k3bgrowisofswriter.cpp:212
 #, kde-format
@@ -3320,7 +3321,7 @@ msgstr "Impossible de supprimer le fichier « %1 »"
 #, kde-format
 msgid "Cdrecord could not be found on your system."
 msgstr ""
-"Il est impossible de trouver le logiciel « Cdrecord » sur votre système."
+"Il est impossible de trouver le logiciel « cdrecord » sur votre système."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1235
 #, kde-format
@@ -3527,7 +3528,7 @@ msgstr "Création des fichiers au format « CUE / BIN »..."
 #, kde-format
 msgid "To create Video CDs you have to install VcdImager version %1."
 msgstr ""
-"Pour créer des CD vidéo, vous devez installer la version %1 de « Vcdimager »."
+"Pour créer des CD vidéo, vous devez installer la version %1 de « vcdimager »."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
 #, kde-format
@@ -4346,13 +4347,13 @@ msgstr "Graver le disque en mode « disque à disque » (DAO)"
 #: tools/k3bstdguiitems.cpp:43
 #, kde-format
 msgid "Use Burnfree"
-msgstr "Utiliser le « Burnfree »"
+msgstr "Utiliser l'option « burnfree »"
 
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
 msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
 msgstr ""
-"Activer le mode « Burnfree » pour éviter les problèmes liés au vidage de la "
+"Activer l'option « burnfree » pour éviter les problèmes liés au vidage de la "
 "mémoire tampon"
 
 #: tools/k3bstdguiitems.cpp:45
@@ -4371,21 +4372,21 @@ msgid ""
 "<em>Burnproof</em>, but has since been renamed when it became part of the "
 "MMC standard."
 msgstr ""
-"<p>Si cette option est cochée, K3b activera l'option <em>Burnfree</em> (ou "
+"<p>Si cette option est cochée, K3b activera l'option <em>burnfree</em> (ou "
 "pour certains graveurs, l'option <em>Just Link</em>). C'est une "
 "fonctionnalité du graveur qui permet d'éviter les problèmes liés au vidage "
-"de la mémoire tampon. <p>Sans le <em>Burnfree</em>, si le graveur ne reçoit "
-"pas assez de données pendant la gravure, une erreur de vidage de la mémoire "
-"tampon peut se produire car le graveur nécessite un débit constant de "
-"données.<p>Avec le <em>Burnfree</em>, le graveur <em>marque</em> la position "
-"courante du faisceau laser et peut y revenir lorsque le tampon est à nouveau "
-"plein. Cette technique peut cependant produire de petits trous de données "
-"sur le CD. <b>Il est donc grandement recommandé de choisir une vitesse de "
-"gravure adaptée pour éviter l'usage du <em>Burnfree</em>, notamment pour les "
-"CD Audio</b> ; certains pourraient entendre de petits craquement."
-"<p><em>Burnfree</em> était anciennement appelé <em>Burnproof</em>, mais "
-"cette fonctionnalité a été renommée quand elle a été intégrée au standard "
-"MMC."
+"de la mémoire tampon. <p>Sans l'option <em>burnfree</em>, si le graveur ne "
+"reçoit pas assez de données pendant la gravure, une erreur de vidage de la "
+"mémoire tampon peut se produire car le graveur nécessite un débit constant "
+"de données.<p>Avec l'option <em>burnfree</em>, le graveur <em>marque</em> la "
+"position courante du faisceau laser et peut y revenir lorsque le tampon est "
+"à nouveau plein. Cette technique peut cependant produire de petits trous de "
+"données sur le CD. <b>Il est donc grandement recommandé de choisir une "
+"vitesse de gravure adaptée pour éviter l'usage de l'option <em>burnfree</"
+"em>, notamment pour les CD Audio</b> ; certains pourraient entendre de "
+"petits craquement.<p>L'option <em>burnfree</em> était anciennement appelée "
+"<em>burnproof</em>, mais cette fonctionnalité a été renommée quand elle a "
+"été intégrée au standard « MMC »."
 
 #: tools/k3bstdguiitems.cpp:64
 #, kde-format
@@ -4485,12 +4486,12 @@ msgstr "Graver les fichiers sur le CD / DVD sans créer d'image"
 #: tools/k3bstdguiitems.cpp:110
 #, kde-format
 msgid "Write CD-Text"
-msgstr "Graver le CD-Text"
+msgstr "Graver le disque « CD-Text »"
 
 #: tools/k3bstdguiitems.cpp:111
 #, kde-format
 msgid "Create CD-Text entries"
-msgstr "Créer des entrées pour le CD-Text"
+msgstr "Créer des entrées pour le disque « CD-Text »"
 
 #: tools/k3bstdguiitems.cpp:112
 #, kde-format
