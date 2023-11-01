@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-08-28 00:45+0000\n"
-"PO-Revision-Date: 2023-10-24 20:09+0200\n"
+"PO-Revision-Date: 2023-10-30 14:28+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.2\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -60,7 +60,7 @@ msgstr "WavPack"
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr "Monkey's Audio (APE)"
+msgstr "Audio Monkey (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
 #, kde-format
@@ -94,7 +94,7 @@ msgstr "Canaux"
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:333
 #, kde-format
 msgid "Sampling Rate"
-msgstr "Période d'échantillonage"
+msgstr "Période d'échantillonnage"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:374
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:391
@@ -1942,7 +1942,7 @@ msgstr ""
 "adapté.</p> <p><b>Mode 1</b> <br>Il s'agit du mode de gravure <em>original</"
 "em>, décrit dans le standard du <em>Livre jaune</em>. Il est adapté pour les "
 "CD ne contenant que des données.</p> <p><b>Mode 2</b> <br>Pour être exact, "
-"<em>XA Mode 2 Form 1</em>, mais étant donné que les autres modes sont "
+"<em>XA Mode 2 Forme 1</em>, mais étant donné que les autres modes sont "
 "rarement utilisés, il est souvent appelé <em>Mode 2</em>.</p> "
 "<p><b>Attention : </b> n'utilisez pas les deux modes sur un même CD. "
 "Certains vieux lecteurs ont du mal à lire les CD multi-session en mode 1."
@@ -2961,13 +2961,13 @@ msgid ""
 "Cdrskin can substitute for cdrecord with data and audio CD, and for "
 "growisofs with DVD and BD."
 msgstr ""
-"Cdrskin peut remplacer cdrecord pour les données et les CD audio, et "
-"growisofs pour les DVD et BD."
+"Le module « cdrskin » peut remplacer « cdrecord » pour les données et les CD "
+"audio et « growisofs » pour les DVD et BD."
 
 #: k3bsystemproblemdialog.cpp:295
 #, kde-format
 msgid "Consider to install the libburn and cdrskin packages."
-msgstr "Envisagez d'installer les paquets libburn et cdrskin."
+msgstr "Envisagez d'installer les paquets « libburn » et « cdrskin »."
 
 #: k3bsystemproblemdialog.cpp:305 k3bsystemproblemdialog.cpp:315
 #, kde-format
@@ -3484,7 +3484,7 @@ msgstr ""
 "<p>Sélectionnez la vitesse à laquelle vous voulez graver. <p><b>Auto</b> "
 "<br>La vitesse la plus rapide possible pour le média utilisé sera "
 "sélectionnée. Ce choix est recommandé pour la plupart des média.</p> "
-"<p><b>Ignorer</b> (uniquement pour les DVDs)<br>Cette option laisse le choix "
+"<p><b>Ignorer</b> (uniquement pour les DVD)<br>Cette option laisse le choix "
 "de la vitesse au graveur. Utilisez ceci si K3b ne parvient pas à régler la "
 "vitesse de gravure. <p>1x correspond à 175 Ko/s pour un CD, 1385 Ko/s pour "
 "un DVD et 4496 Ko/s pour un Blu-ray.</p> <p><b>Attention : </b> Assurez-vous "
@@ -3572,7 +3572,7 @@ msgid ""
 "will be turned off after every track.<br>Most CD writers need this mode for "
 "writing multisession CDs."
 msgstr ""
-"Le <em>Track At Once</em> est normalement pris en charge par tous les "
+"Le mode <em>Track At Once</em> est normalement pris en charge par tous les "
 "graveurs. Le laser est coupé à la fin de chaque piste. <br>La plupart des "
 "graveurs de CD ne peuvent faire du multi-session que dans ce mode."
 
@@ -3708,7 +3708,7 @@ msgstr "Mainteneur"
 #: main.cpp:41
 #, kde-format
 msgid "Michał Małek"
-msgstr "Michał Małek"
+msgstr "Michal Malek"
 
 #: main.cpp:41
 #, kde-format
@@ -3763,7 +3763,7 @@ msgstr "Klaus-Dieter Krannich"
 #: main.cpp:47
 #, kde-format
 msgid "Advanced Cdrdao integration"
-msgstr "Intégration avancée Cdrdao"
+msgstr "Intégration avancée avec le logiciel « cdrdao »"
 
 #: main.cpp:48
 #, kde-format
@@ -4896,7 +4896,7 @@ msgid ""
 "actions.</b>"
 msgstr ""
 "<p>Si cette option est cochée, des éléments d'interface supplémentaire "
-"permettant d'adapter le comportement de K3b sont affichés. Ceci inclu la "
+"permettant d'adapter le comportement de K3b sont affichés. Ceci inclut la "
 "sélection manuelle du programme utilisé pour la gravure (choix entre "
 "« cdrecord » et « cdrdao » pour la gravure de CD et entre « cdrdao » et "
 "« growisofs » pour la gravure de DVD / BD).<p><b>Soyez avertis que K3b ne "
@@ -5048,7 +5048,7 @@ msgstr "Taille du tampon : "
 #: option/k3bdevicewidget.cpp:190
 #, kde-format
 msgid "Supports Burnfree:"
-msgstr "Gère le « Burnfree »"
+msgstr "Gère le « Burnfree » :"
 
 #: option/k3bdevicewidget.cpp:191
 #, kde-format
@@ -5466,12 +5466,12 @@ msgstr ""
 "<p>Si cette option est activée, K3b générera les enregistrements du « System "
 "Use Sharing Protocol » (SUSP), spécifiés par le protocole d'échange Rock "
 "Ridge (IEEE-P1282).\n"
-"<p>Rock Ridge étend le système de fichiers ISO 9660 en y ajoutant les "
+"<p>Rock Ridge étend le système de fichiers « ISO 9660 » en y ajoutant les "
 "fonctionnalités équivalentes aux systèmes de fichiers UNIX (permissions, "
 "liens symboliques, noms de fichiers très longs...). Il utilise les jeux de "
-"caractères ISO 8859 et UTF-16, et autorise 255 octets.\n"
+"caractères « ISO 8859 » et « UTF-16 » et autorise 255 octets.\n"
 "<p>Les extensions Rock Ridge sont situées à la fin de chaque enregistrement "
-"de dossier ISO 9660. Cela rend les deux arborescences très proches.\n"
+"de dossier « ISO 9660 ». Cela rend les deux arborescences très proches.\n"
 "<p><b>Il est fortement recommandé d'utiliser les extensions Rock Ridge sur "
 "tous les CD et DVD de données.</b>"
 
@@ -5541,10 +5541,10 @@ msgid ""
 "<p>The UDF (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>) is mainly "
 "used for DVDs."
 msgstr ""
-"<p>Si cette option est cochée, K3b créera les structures du système de "
-"fichiers UDF, en plus du système de fichiers ISO 9660.\n"
-"<p>Le format UDF (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>) est "
-"essentiellement utilisé pour les DVD."
+"<p>Si cette option est sélectionnée, K3b créera les structures du système de "
+"fichiers « UDF », en plus du système de fichiers « ISO 9660 ».\n"
+"<p>Le format « UDF » (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>) "
+"est essentiellement utilisé pour les DVD."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkUdf)
 #: projects/base_k3badvanceddataimagesettings.ui:67
@@ -5942,7 +5942,7 @@ msgstr "&ISRC : "
 #: projects/base_k3baudiotrackwidget.ui:170
 #, kde-format
 msgid "Preemph&asis"
-msgstr "Préemph&asage"
+msgstr "Pré-emph&asage"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPreemphasis)
 #: projects/base_k3baudiotrackwidget.ui:173
@@ -5955,12 +5955,12 @@ msgid ""
 "transmission (preemphasis); the receiver will then weaken them accordingly "
 "for playback."
 msgstr ""
-"Le préemphasage est surtout utilisé dans le traitement sonore. Les hautes "
+"Le pré-emphasage est surtout utilisé dans le traitement sonore. Les hautes "
 "fréquences dans le signal audio ont toujours de faibles amplitudes. Cela "
 "peut causer une mauvaise qualité de signale sur les transmissions bruyantes, "
 "parce que les hautes fréquences deviennent trop faibles. Pour éviter cet "
-"effet, les hautes fréquences sont amplifiées avec transmission "
-"(préemphasage) ; le récepteur les affaiblira ensuite convenablement pour les "
+"effet, les hautes fréquences sont amplifiées avec transmission (pré-"
+"emphasage) ; le récepteur les affaiblira ensuite convenablement pour les "
 "lire."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCopyPermitted)
@@ -6685,7 +6685,7 @@ msgid ""
 msgstr ""
 "<p><b>Libellés de démarrage de « eMovix » </b>\n"
 "<p>eMovix fournit différentes options de démarrage qui peuvent être "
-"sélectionnées lors du démarrage via des libellés (comme pour Lilo ou Grub). "
+"sélectionnées lors du démarrage via des libellés (comme pour LILO ou Grub). "
 "Les différentes configurations de démarrage influencent principalement "
 "l'affichage de la vidéo.\n"
 "<p>Les libellés <b>défaut</b>, <b>movix</b>, ou <b>MoviX</b> démarrent avec "
@@ -6694,15 +6694,15 @@ msgstr ""
 "sur la sortie TV des cartes graphiques. eMovix fournit les drivers TVout "
 "pour différents modèles de cartes graphiques.\n"
 "<p>Le libellé <b>FB</b> se réfère à une configuration qui utilise un pilote "
-"Frame Buffer pour différentes résolutions d'écran.\n"
+"« Frame Buffer » pour différentes résolutions d'écran.\n"
 "<p>Le libellé <b>AA</b> permet à eMovix d'afficher la vidéo via la "
-"bibliothèque ASCII-Art qui affiche l'image en mode texte en utilisant de "
+"bibliothèque « ASCII-Art » affichant l'image en mode texte en utilisant de "
 "simples caractères ASCII.\n"
 "<p>Le libellé <b>hd</b> permet à eMovix de démarrer depuis le disque dur "
 "local au lieu d'utiliser le média. Ceci peut être utile pour prévenir le "
-"démarrage accidentel d'un média eMovix.\n"
-"<p>Le libellé <b>floppy</b> permet à eMovix de démarrer depuis le lecteur de "
-"disquette local au lieu d'utiliser le média."
+"démarrage accidentel d'un média « eMovix ».\n"
+"<p>Le libellé <b>floppy</b> permet à « eMovix » de démarrer depuis le "
+"lecteur de disquette local au lieu d'utiliser le média."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboKeyboardLayout)
 #: projects/base_k3bmovixoptionswidget.ui:229
@@ -6954,7 +6954,7 @@ msgstr "Type"
 #, kde-format
 msgctxt "audio track length"
 msgid "Length"
-msgstr "Length"
+msgstr "Longueur"
 
 #: projects/k3baudioprojectmodel.cpp:302 projects/k3bvcdtrackdialog.cpp:383
 #: rip/k3baudiorippingdialog.cpp:133 rip/videodvd/k3bvideodvdaudiomodel.cpp:254
@@ -7669,10 +7669,10 @@ msgid ""
 "rr on the Joliet filesystem.</p>"
 msgstr ""
 "<p>Si cette option est cochée, le fichier ou le dossier (et la totalité de "
-"son contenu) sera caché sur les systèmes de fichiers ISO 9660 et Rock Ridge."
-"</p> <p>Ceci est utile, par exemple, pour avoir plusieurs fichiers LISEZMOI "
-"pour Rock Ridge et Joliet, qui peuvent être gérés en cachant LISEZMOI.joliet "
-"sur Rock Ridge et LISEZMOI.rr sur Joliet.</p>"
+"son contenu) sera caché sur les systèmes de fichiers « ISO 9660 » et Rock "
+"Ridge.</p> <p>Ceci est utile, par exemple, pour avoir plusieurs fichiers "
+"« LISEZMOI » pour Rock Ridge et Joliet, qui peuvent être gérés en cachant "
+"« LISEZMOI.joliet » sur Rock Ridge et « LISEZMOI.rr » sur Joliet.</p>"
 
 #: projects/k3bdatapropertiesdialog.cpp:162
 #, kde-format
@@ -8178,8 +8178,8 @@ msgid ""
 "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</"
 "em> respectively."
 msgstr ""
-"<p>Veuillez indiquer la taille du média. Utilisez les suffixes <b>GB</b>,"
-"<b>MB</b>, et <b>min</b> pour <em>gigaoctets</em>, <em>mégaoctets</em>, et "
+"<p>Veuillez indiquer la taille du média. Utilisez les suffixes <b>Go</b>,"
+"<b>Mo</b>, et <b>min</b> pour <em>gigaoctets</em>, <em>mégaoctets</em>, et "
 "<em>minutes</em> (respectivement)."
 
 #: projects/k3bfillstatusdisplay.cpp:663
@@ -8633,18 +8633,18 @@ msgid ""
 "to keep the video bit-rate under 1151929.1 bps.</b>"
 msgstr ""
 "<p>Il s'agit de la norme <b>CD Vidéo</b> la plus basique, qui date de 1993. "
-"Voici ses caractéristiques : <ul> <li>Une piste ISO 9660 en mode 2 mixé, "
+"Voici ses caractéristiques : <ul> <li>Une piste « ISO 9660 » en mode 2 mixé, "
 "contenant des fichiers pointeurs vers les zones d'information.</li> "
 "<li>Jusqu'à 98 flux audio / vidéo MPEG-1 multiplexés, ou pistes audio CD-DA."
-"</li> <li>Jusqu'à 500 points d'entrée de séquences MPEG, utilisés pour la "
-"division en chapitres.</li></ul> <p>La norme CD Vidéo requiert que le flux "
-"MPEG-1 multiplexé ait un débit constant inférieur à 174 000 octets (1 394 "
-"400 bits) par seconde, afin de fonctionner sur les lecteurs de CD-ROM 1x. "
-"<br>La norme autorise les deux résolutions suivantes : <ul> <li>352 x 240 @ "
-"29.97 Hz (NTSC SIF).</li> <li>352 x 240 @ 23.976 Hz (FILM SIF).</li></ul> "
-"<p>Le flux audio, en MPEG-1 CBR, a un débit de 224 kbps, avec 1 canal stéréo "
-"ou 2 canaux mono. <p><b>Il est recommandé de maintenir le débit vidéo en "
-"dessous de 1 151 929 octets par seconde.</b>"
+"</li> <li>Jusqu'à 500 points d'entrée de séquences « MPEG », utilisés pour "
+"la division en chapitres.</li></ul> <p>La norme CD Vidéo requiert que le "
+"flux « MPEG-1 » multiplexé ait un débit constant inférieur à 174 000 octets "
+"(1 394 400 bits) par seconde, afin de fonctionner sur les lecteurs de CD-ROM "
+"1x. <br>La norme autorise les deux résolutions suivantes : <ul> <li>352 x "
+"240 @ 29.97 Hz (NTSC SIF).</li> <li>352 x 240 @ 23.976 Hz (FILM SIF).</li></"
+"ul> <p>Le flux audio, en « MPEG-1 CBR », a un débit de 224 kbps, avec 1 "
+"canal stéréo ou 2 canaux mono. <p><b>Il est recommandé de maintenir le débit "
+"vidéo en dessous de 1 151 929 octets par seconde.</b>"
 
 # unreviewed-context
 #: projects/k3bvcdburndialog.cpp:136
@@ -9565,7 +9565,7 @@ msgstr ""
 #: projects/kostore/KoStore.cpp:197
 #, kde-format
 msgid "KOffice Storage"
-msgstr "Stockage KOffice"
+msgstr "Enregistrement sous KOffice"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
@@ -11069,8 +11069,8 @@ msgstr[1] "%1 bits"
 #, kde-format
 msgid "K3b uses transcode to rip Video DVDs. Please make sure it is installed."
 msgstr ""
-"K3b utilise transcode pour extraite les DVDs vidéo. Assurez-vous qu'il soit "
-"bien installé."
+"K3b utilise le logiciel « transcode » pour extraite les DVD vidéo. Veuillez "
+"vous qu'il soit bien installé."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:291
 #, kde-format
