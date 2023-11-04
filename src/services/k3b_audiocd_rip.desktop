@@ -65,7 +65,6 @@ Name[sv]=Lagra digitalljud med K3b
 Name[th]=ดูดข้อมูลเสียงแบบดิจิทัลด้วย K3b
 Name[tr]=K3b ile Sayısal Ses Aktar
 Name[uk]=Витягти цифрове аудіо через K3b
-Name[x-test]=xxExtract Digital Audio with K3bxx
 Name[zh_CN]=用 K3b 抓取数字音频
 Name[zh_TW]=用 K3b 解開數位音效
 Exec=k3b --cddarip %i

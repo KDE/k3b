@@ -34,7 +34,6 @@
                 "Name[sv]": "Matthieu Bedouet",
                 "Name[tr]": "Matthieu Bedouet",
                 "Name[uk]": "Matthieu Bedouet",
-                "Name[x-test]": "xxMatthieu Bedouetxx",
                 "Name[zh_CN]": "Matthieu Bedouet",
                 "Name[zh_TW]": "Matthieu Bedouet"
             }
@@ -93,7 +92,6 @@
         "Description[th]": "มอดูลถอดรหัสแฟ้มเสียงต่าง ๆ ที่ libsndfile รองรับ",
         "Description[tr]": "libsndfile destekli ses dosyalarının kodlarını çözen kod çözme modülü",
         "Description[uk]": "Модуль декодування звукових файлів, що підтримується libsndfile",
-        "Description[x-test]": "xxDecoding module to decode audio files supported by libsndfilexx",
         "Description[zh_CN]": "用于解码被 libsndfile 支持的文件的解码模块",
         "Description[zh_TW]": "解碼 libsndfile 支援的音效檔的模組",
         "EnabledByDefault": true,
@@ -155,7 +153,6 @@
         "Name[th]": "K3b - ตัวถอดรหัส Libsndfile",
         "Name[tr]": "K3b Libsndfile Çözücü",
         "Name[uk]": "Декодер Libsndfile для K3b",
-        "Name[x-test]": "xxK3b Libsndfile Decoderxx",
         "Name[zh_CN]": "K3b Libsndfile 解码器",
         "Name[zh_TW]": "K3b Libsndfile 解碼器",
         "Version": "2.0"

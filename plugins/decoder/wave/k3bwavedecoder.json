@@ -34,7 +34,6 @@
                 "Name[sv]": "Sebastian Trueg",
                 "Name[tr]": "Sebastian Trueg",
                 "Name[uk]": "Sebastian Trueg",
-                "Name[x-test]": "xxSebastian Truegxx",
                 "Name[zh_CN]": "Sebastian Trueg",
                 "Name[zh_TW]": "Sebastian Trueg"
             }
@@ -93,7 +92,6 @@
         "Description[th]": "มอดูลถอดรหัสแฟ้มประเภท wave",
         "Description[tr]": "Wav dosyalarının kodlarını çözmek için kod çözme modülü",
         "Description[uk]": "Модуль декодування файлів wave",
-        "Description[x-test]": "xxDecoding module to decode wave filesxx",
         "Description[zh_CN]": "用于解码 WAVE 文件的解码模块",
         "Description[zh_TW]": "解碼 wave 檔案格式的模組",
         "EnabledByDefault": true,
@@ -155,7 +153,6 @@
         "Name[th]": "K3b - ตัวถอดรหัส Wave",
         "Name[tr]": "K3b Wave Çözücü",
         "Name[uk]": "Декодер Wave для K3b",
-        "Name[x-test]": "xxK3b Wave Decoderxx",
         "Name[zh_CN]": "K3b Wave 解码器",
         "Name[zh_TW]": "K3b Wave 解碼器",
         "Version": "4.0"
