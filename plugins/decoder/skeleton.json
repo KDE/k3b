@@ -34,6 +34,7 @@
                 "Name[sv]": "???",
                 "Name[tr]": "???",
                 "Name[uk]": "???",
+                "Name[x-test]": "xx???xx",
                 "Name[zh_CN]": "？？？",
                 "Name[zh_TW]": "???"
             }
@@ -93,6 +94,7 @@
         "Description[th]": "มอดูลถอดรหัสแฟ้มประเภท ???",
         "Description[tr]": "??? dosyalarının kodlarını çözen kod çözme modülü",
         "Description[uk]": "Модуль декодування файлів ???",
+        "Description[x-test]": "xxDecoding module to decode ??? filesxx",
         "Description[zh_CN]": "用于解码 ??? 文件的解码模块",
         "Description[zh_TW]": "解碼 ??? 檔案的模組",
         "Id": "<name>",
@@ -152,6 +154,7 @@
         "Name[th]": "K3b - ตัวถอดรหัส ???",
         "Name[tr]": "K3b ??? Çözücü",
         "Name[uk]": "Декодер ??? для K3b",
+        "Name[x-test]": "xxK3b ??? Decoderxx",
         "Name[zh_CN]": "K3b ??? 解码器",
         "Name[zh_TW]": "K3b ??? 解碼器",
         "Version": "1.0"

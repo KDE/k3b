@@ -34,6 +34,7 @@
                 "Name[sv]": "Sebastian Trueg",
                 "Name[tr]": "Sebastian Trueg",
                 "Name[uk]": "Sebastian Trueg",
+                "Name[x-test]": "xxSebastian Truegxx",
                 "Name[zh_CN]": "Sebastian Trueg",
                 "Name[zh_TW]": "Sebastian Trueg"
             }
@@ -89,6 +90,7 @@
         "Description[th]": "ส่วนเสริมสำหรับการเปลี่ยนชื่อแฟ้มเสียงต่าง ๆ ในโครงงานข้อมูลที่มีการใช้งานข้อมูลกำกับร่วมด้วย",
         "Description[tr]": "Bir veri projesindeki ses dosyalarının bilgilerini yeniden yazabilen bir eklenti.",
         "Description[uk]": "Додаток для перейменування звукових файлів у проєктах даних на основі метаданих.",
+        "Description[x-test]": "xxPlugin to rename audio files in a data project based on the meta info.xx",
         "Description[zh_CN]": "基于元数据重命名数据方案中的音频文件的插件。",
         "Description[zh_TW]": "根據中繼資料來重新命名資料專案中的音效檔的外掛程式。",
         "EnabledByDefault": true,
@@ -146,6 +148,7 @@
         "Name[th]": "K3b - เครื่องมือเปลี่ยนชื่อของข้อมูลกำกับ",
         "Name[tr]": "K3b Ses Bilgileri Yeniden Adlandırıcı",
         "Name[uk]": "Інструмент перейменування за метаданими K3b",
+        "Name[x-test]": "xxK3b Audio Metainfo Renamerxx",
         "Name[zh_CN]": "K3b 音频元信息重命名器",
         "Name[zh_TW]": "K3b 音效中繼資訊重命名",
         "Version": "1.1"

@@ -34,6 +34,7 @@
                 "Name[sv]": "Sebastian Trueg",
                 "Name[tr]": "Sebastian Trueg",
                 "Name[uk]": "Sebastian Trueg",
+                "Name[x-test]": "xxSebastian Truegxx",
                 "Name[zh_CN]": "Sebastian Trueg",
                 "Name[zh_TW]": "Sebastian Trueg"
             }
@@ -91,6 +92,7 @@
         "Description[th]": "มอดูลเข้ารหัสเสียงที่อนุญาตให้มีการระบุคำสั่งในการเข้ารหัส",
         "Description[tr]": "Özel bir şifreleme komutu vermenize izin veren şifreleme modülü",
         "Description[uk]": "Модуль кодування, що дозволяє визначення команди кодування",
+        "Description[x-test]": "xxEncoding module that allows specifying an encoding commandxx",
         "Description[zh_CN]": "允许指定编码命令的编码模块",
         "Description[zh_TW]": "讓您透過指定外部指令的方式做編碼的模組",
         "EnabledByDefault": true,
@@ -152,6 +154,7 @@
         "Name[th]": "K3b - ตัวเข้ารหัสเสียงภายนอก",
         "Name[tr]": "K3b Harici Ses Kodlayıcısı",
         "Name[uk]": "Зовнішній кодувальник аудіо для K3b",
+        "Name[x-test]": "xxK3b External Audio Encoderxx",
         "Name[zh_CN]": "K3b 扩展音频编码器",
         "Name[zh_TW]": "K3b 外部音效編碼器",
         "Version": "5.0"
