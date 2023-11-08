@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:30+0000\n"
+"POT-Creation-Date: 2023-11-08 00:42+0000\n"
 "PO-Revision-Date: 2023-10-21 13:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -371,7 +371,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:84 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr "选项"
@@ -2340,38 +2340,38 @@ msgstr "擦除失败。"
 msgid "Filter:"
 msgstr "过滤器："
 
-#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
+#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "All Files"
 msgstr "全部文件"
 
-#: k3bfileview.cpp:74
+#: k3bfileview.cpp:76 k3bfileview.cpp:85
 #, kde-format
 msgid "Sound Files"
 msgstr "音频文件"
 
-#: k3bfileview.cpp:75
+#: k3bfileview.cpp:77 k3bfileview.cpp:86
 #, kde-format
 msgid "Wave Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:76
+#: k3bfileview.cpp:78 k3bfileview.cpp:87
 #, kde-format
 msgid "MP3 Sound Files"
 msgstr "MP3 音频文件"
 
-#: k3bfileview.cpp:77
+#: k3bfileview.cpp:79 k3bfileview.cpp:88
 #, kde-format
 msgid "Ogg Vorbis Sound Files"
 msgstr "Ogg Vorbis 音频文件"
 
-#: k3bfileview.cpp:78
+#: k3bfileview.cpp:80 k3bfileview.cpp:89
 #, kde-format
 msgid "MPEG Video Files"
 msgstr "MPEG 视频文件"
 
-#: k3bfileview.cpp:81
+#: k3bfileview.cpp:94
 #, kde-format
 msgid "Show Bookmarks"
 msgstr "显示书签"

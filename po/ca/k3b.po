@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-05 12:30+0000\n"
+"POT-Creation-Date: 2023-11-08 00:42+0000\n"
 "PO-Revision-Date: 2023-08-08 16:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -386,7 +386,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:84 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr "Opcions"
@@ -2395,38 +2395,38 @@ msgstr "L'esborrat ha fallat."
 msgid "Filter:"
 msgstr "Filtre:"
 
-#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
+#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "All Files"
 msgstr "Tots els fitxers"
 
-#: k3bfileview.cpp:74
+#: k3bfileview.cpp:76 k3bfileview.cpp:85
 #, kde-format
 msgid "Sound Files"
 msgstr "Fitxers de so"
 
-#: k3bfileview.cpp:75
+#: k3bfileview.cpp:77 k3bfileview.cpp:86
 #, kde-format
 msgid "Wave Sound Files"
 msgstr "Fitxers de so WAV"
 
-#: k3bfileview.cpp:76
+#: k3bfileview.cpp:78 k3bfileview.cpp:87
 #, kde-format
 msgid "MP3 Sound Files"
 msgstr "Fitxers de so MP3"
 
-#: k3bfileview.cpp:77
+#: k3bfileview.cpp:79 k3bfileview.cpp:88
 #, kde-format
 msgid "Ogg Vorbis Sound Files"
 msgstr "Fitxers de so Ogg Vorbis"
 
-#: k3bfileview.cpp:78
+#: k3bfileview.cpp:80 k3bfileview.cpp:89
 #, kde-format
 msgid "MPEG Video Files"
 msgstr "Fitxers de vídeo MPEG"
 
-#: k3bfileview.cpp:81
+#: k3bfileview.cpp:94
 #, kde-format
 msgid "Show Bookmarks"
 msgstr "Mostra els punts"
