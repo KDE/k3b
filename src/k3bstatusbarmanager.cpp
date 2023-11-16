@@ -141,7 +141,11 @@ bool K3b::StatusBarManager::eventFilter( QObject* o, QEvent* e )
         if( o == m_labelFreeTemp->parentWidget() )
             m_mainWindow->showOptionDialog( K3b::OptionDialog::Misc );
         else if( o == m_versionBox )
+#if QT_VERSION_MAJOR >= 6
+            if( QAction* a = m_mainWindow->action( QStringLiteral("help_about_app") ) )
+#else
             if( QAction* a = m_mainWindow->action( "help_about_app" ) )
+#endif
                 a->activate(QAction::Trigger);
     }
 
