@@ -238,7 +238,7 @@ K3b::MainWindow::MainWindow()
              this, SLOT(showDiskInfo(K3b::Device::Device*)) );
 
     // we need the actions for the welcomewidget
-    KConfigGroup grp( config(), "Welcome Widget" );
+    KConfigGroup grp( config(), QStringLiteral("Welcome Widget") );
     d->welcomeWidget->loadConfig( grp );
 
     // fill the tabs action menu
@@ -639,21 +639,21 @@ K3b::Doc* K3b::MainWindow::openDocument(const QUrl& url)
 
 void K3b::MainWindow::saveOptions()
 {
-    KConfigGroup recentGrp(config(),"Recent Files");
+    KConfigGroup recentGrp(config(), QStringLiteral("Recent Files"));
     d->actionFileOpenRecent->saveEntries( recentGrp );
 
-    KConfigGroup grpFileView( config(), "file view" );
+    KConfigGroup grpFileView( config(), QStringLiteral("file view") );
     d->dirView->saveConfig( grpFileView );
 
-    KConfigGroup grpWindows(config(), "main_window_settings");
+    KConfigGroup grpWindows(config(), QStringLiteral("main_window_settings"));
     saveMainWindowSettings( grpWindows );
 
     k3bcore->saveSettings( config() );
 
-    KConfigGroup grp(config(), "Welcome Widget" );
+    KConfigGroup grp(config(), QStringLiteral("Welcome Widget") );
     d->welcomeWidget->saveConfig( grp );
 
-    KConfigGroup grpOption( config(), "General Options" );
+    KConfigGroup grpOption( config(), QStringLiteral("General Options") );
     grpOption.writeEntry( "Show Document Header", d->actionViewDocumentHeader->isChecked() );
     grpOption.writeEntry( "Navigator breadcrumb mode", !d->urlNavigator->isUrlEditable() );
 
@@ -663,18 +663,18 @@ void K3b::MainWindow::saveOptions()
 
 void K3b::MainWindow::readOptions()
 {
-    KConfigGroup grpWindow(config(), "main_window_settings");
+    KConfigGroup grpWindow(config(), QStringLiteral("main_window_settings"));
     applyMainWindowSettings( grpWindow );
     
-    KConfigGroup grp( config(), "General Options" );
+    KConfigGroup grp( config(), QStringLiteral("General Options") );
     d->actionViewDocumentHeader->setChecked( grp.readEntry("Show Document Header", true) );
     d->urlNavigator->setUrlEditable( !grp.readEntry( "Navigator breadcrumb mode", true ) );
 
     // initialize the recent file list
-    KConfigGroup recentGrp(config(), "Recent Files");
+    KConfigGroup recentGrp(config(), QStringLiteral("Recent Files"));
     d->actionFileOpenRecent->loadEntries( recentGrp );
 
-    KConfigGroup grpFileView( config(), "file view" );
+    KConfigGroup grpFileView( config(), QStringLiteral("file view") );
     d->dirView->readConfig( grpFileView );
 
     d->documentHeader->setVisible( d->actionViewDocumentHeader->isChecked() );
@@ -888,7 +888,7 @@ bool K3b::MainWindow::canCloseDocument( K3b::Doc* doc )
     if( !doc->isModified() )
         return true;
 
-    if( !KConfigGroup( config(), "General Options" ).readEntry( "ask_for_saving_changes_on_exit", true ) )
+    if( !KConfigGroup( config(), QStringLiteral("General Options") ).readEntry( "ask_for_saving_changes_on_exit", true ) )
         return true;
 
     switch ( KMessageBox::warningTwoActionsCancel( this,
@@ -1233,7 +1233,7 @@ void K3b::MainWindow::slotCurrentDocChanged()
 
 void K3b::MainWindow::slotEditToolbars()
 {
-    KConfigGroup grp( config(), "main_window_settings" );
+    KConfigGroup grp( config(), QStringLiteral("main_window_settings") );
     saveMainWindowSettings( grp );
     KEditToolBar dlg( factory() );
     connect( &dlg, SIGNAL(newToolbarConfig()), SLOT(slotNewToolBarConfig()) );
@@ -1243,14 +1243,14 @@ void K3b::MainWindow::slotEditToolbars()
 
 void K3b::MainWindow::slotNewToolBarConfig()
 {
-    KConfigGroup grp(config(), "main_window_settings");
+    KConfigGroup grp(config(), QStringLiteral("main_window_settings"));
     applyMainWindowSettings(grp);
 }
 
 
 bool K3b::MainWindow::eject()
 {
-    KConfigGroup c( config(), "General Options" );
+    KConfigGroup c( config(), QStringLiteral("General Options") );
     return !c.readEntry( "No cd eject", false );
 }
 

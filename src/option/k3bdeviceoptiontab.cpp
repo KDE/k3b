@@ -49,7 +49,7 @@ void K3b::DeviceOptionTab::readDevices()
 void K3b::DeviceOptionTab::saveDevices()
 {
     // save the config
-    k3bcore->deviceManager()->saveConfig( KSharedConfig::openConfig()->group( "Devices" ) );
+    k3bcore->deviceManager()->saveConfig( KSharedConfig::openConfig()->group( QStringLiteral("Devices") ) );
 }
 
 

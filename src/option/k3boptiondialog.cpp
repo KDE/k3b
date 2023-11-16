@@ -87,7 +87,7 @@ void K3b::OptionDialog::slotOk()
     if( saveSettings() ) {
         accept();
 
-        KConfigGroup grp( KSharedConfig::openConfig(), "General Options" );
+        KConfigGroup grp( KSharedConfig::openConfig(), QStringLiteral("General Options") );
         if( grp.readEntry( "check system config", true ) )
             K3b::SystemProblemDialog::checkSystem();
     }

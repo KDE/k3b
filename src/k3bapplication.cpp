@@ -61,7 +61,7 @@ void K3b::Application::init( QCommandLineParser* commandLineParser )
 
     m_core = new Core( this );
     
-    KConfigGroup generalOptions( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup generalOptions( KSharedConfig::openConfig(), QStringLiteral("General Options") );
 
     Splash* splash = 0;
     if( !isSessionRestored() ) {
@@ -121,7 +121,7 @@ void K3b::Application::checkSystemConfig()
 
     // write the current version to make sure checks such as SystemProblemDialog::readCheckSystemConfig
     // use a proper value
-    KConfigGroup generalOptions( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup generalOptions( KSharedConfig::openConfig(), QStringLiteral("General Options") );
     generalOptions.writeEntry( "config version", QString(m_core->version()) );
 }
 
@@ -260,14 +260,14 @@ void K3b::Application::Core::init()
 void K3b::Application::Core::readSettings( KSharedConfig::Ptr cnf )
 {
     K3b::Core::readSettings( cnf );
-    m_themeManager->readConfig( cnf->group( "General Options" ) );
+    m_themeManager->readConfig( cnf->group( QStringLiteral("General Options") ) );
 }
 
 
 void K3b::Application::Core::saveSettings( KSharedConfig::Ptr cnf )
 {
     K3b::Core::saveSettings( cnf );
-    m_themeManager->saveConfig( cnf->group( "General Options" ) );
+    m_themeManager->saveConfig( cnf->group( QStringLiteral("General Options") ) );
 }
 
 

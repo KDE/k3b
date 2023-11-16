@@ -758,7 +758,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
 
         delete job;
 
-        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "keep action dialogs open", false ) )
+        if( KConfigGroup( KSharedConfig::openConfig(), QStringLiteral("General Options") ).readEntry( "keep action dialogs open", false ) )
             show();
         else
             close();

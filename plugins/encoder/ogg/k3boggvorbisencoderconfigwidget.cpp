@@ -110,7 +110,7 @@ void K3bOggVorbisEncoderSettingsWidget::load()
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
 
-    KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bOggVorbisEncoderPlugin") );
 
     if( grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE ) )
         w->m_radioManual->setChecked(true);
@@ -131,7 +131,7 @@ void K3bOggVorbisEncoderSettingsWidget::save()
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
 
-    KConfigGroup grp(c,"K3bOggVorbisEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bOggVorbisEncoderPlugin") );
 
     grp.writeEntry( "manual bitrate", w->m_radioManual->isChecked() );
     grp.writeEntry( "quality level", w->m_slideQualityLevel->value() );

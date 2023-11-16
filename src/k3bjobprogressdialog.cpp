@@ -264,7 +264,7 @@ bool K3b::JobProgressDialog::event( QEvent *event )
 void K3b::JobProgressDialog::showEvent( QShowEvent* e )
 {
     if( !e->spontaneous() ) {
-        if( KConfigGroup( KSharedConfig::openConfig(), "General Options" ).readEntry( "hide main window while writing", false ) ) {
+        if( KConfigGroup( KSharedConfig::openConfig(), QStringLiteral("General Options") ).readEntry( "hide main window while writing", false ) ) {
             k3bappcore->k3bMainWindow()->hide();
         }
     }
@@ -469,7 +469,7 @@ void K3b::JobProgressDialog::setJob( K3b::Job* job )
 
         setWindowTitle( m_job->jobDescription() );
 
-        if (KConfigGroup(KSharedConfig::openConfig(), "General Options").readEntry("Show progress OSD", false)) {
+        if (KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("General Options")).readEntry("Show progress OSD", false)) {
             KIO::getJobTracker()->registerJob(new KJobBridge(*job));
         }
     }

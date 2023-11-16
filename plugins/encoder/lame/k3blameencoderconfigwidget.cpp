@@ -134,7 +134,7 @@ void K3bLameEncoderSettingsWidget::load()
     qDebug();
 
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
-    KConfigGroup grp(c, "K3bLameEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bLameEncoderPlugin") );
 
     QString mode = grp.readEntry( "Mode", DEFAULT_MODE );
     m_manualSettingsDialog->m_comboMode->setCurrentIndex( mode2Index( mode ) );
@@ -178,7 +178,7 @@ void K3bLameEncoderSettingsWidget::save()
     qDebug();
 
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
-    KConfigGroup grp(c, "K3bLameEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bLameEncoderPlugin") );
 
     QString mode;
     switch( m_manualSettingsDialog->m_comboMode->currentIndex() ) {

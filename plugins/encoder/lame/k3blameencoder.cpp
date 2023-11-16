@@ -100,7 +100,7 @@ QString K3bLameEncoder::filename() const
 bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length, const MetaData& metaData )
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
-    KConfigGroup grp(c, "K3bLameEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bLameEncoderPlugin") );
 
     d->flags = lame_init();
 
@@ -311,7 +311,7 @@ QString K3bLameEncoder::fileTypeComment( const QString& ) const
 long long K3bLameEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
-    KConfigGroup grp(c, "K3bLameEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bLameEncoderPlugin") );
     int bitrate = 0;
     if( grp.readEntry( "Manual Bitrate Settings", DEFAULT_MANUAL_BITRATE ) ) {
         if( grp.readEntry( "VBR", DEFAULT_VBR ) ) {

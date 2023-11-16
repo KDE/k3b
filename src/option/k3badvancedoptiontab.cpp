@@ -139,7 +139,7 @@ void K3b::AdvancedOptionTab::setupGui()
 
 void K3b::AdvancedOptionTab::readSettings()
 {
-    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup c( KSharedConfig::openConfig(), QStringLiteral("General Options") );
 
     m_checkAutoErasingRewritable->setChecked( c.readEntry( "auto rewritable erasing", false ) );
     m_checkShowForceGuiElements->setChecked( c.readEntry( "Show advanced GUI", false ) );
@@ -156,7 +156,7 @@ void K3b::AdvancedOptionTab::readSettings()
 
 void K3b::AdvancedOptionTab::saveSettings()
 {
-    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup c( KSharedConfig::openConfig(), QStringLiteral("General Options") );
 
     c.writeEntry( "auto rewritable erasing", m_checkAutoErasingRewritable->isChecked() );
     c.writeEntry( "Show advanced GUI", m_checkShowForceGuiElements->isChecked() );

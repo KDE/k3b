@@ -391,7 +391,7 @@ void K3bOggVorbisEncoder::cleanup()
 void K3bOggVorbisEncoder::loadConfig()
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
-    KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bOggVorbisEncoderPlugin") );
 
     d->manualBitrate = grp.readEntry( "manual bitrate", DEFAULT_MANUAL_BITRATE );
     d->qualityLevel = grp.readEntry( "quality level", DEFAULT_QUALITY_LEVEL );
@@ -411,7 +411,7 @@ QString K3bOggVorbisEncoder::fileTypeComment( const QString& ) const
 long long K3bOggVorbisEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
-    KConfigGroup grp(c, "K3bOggVorbisEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bOggVorbisEncoderPlugin") );
 
     // the following code is based on the size estimation from the audiocd KIO worker
     // TODO: reimplement.

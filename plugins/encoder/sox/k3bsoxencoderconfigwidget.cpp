@@ -35,7 +35,7 @@ K3bSoxEncoderConfigWidget::~K3bSoxEncoderConfigWidget()
 void K3bSoxEncoderConfigWidget::load()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup grp( config, "K3bSoxEncoderPlugin" );
+    KConfigGroup grp( config, QStringLiteral("K3bSoxEncoderPlugin") );
 
     m_checkManual->setChecked( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) );
     setChannels( grp.readEntry( "channels", DEFAULT_CHANNELS ) );
@@ -48,7 +48,7 @@ void K3bSoxEncoderConfigWidget::load()
 void K3bSoxEncoderConfigWidget::save()
 {
     KSharedConfig::Ptr config = KSharedConfig::openConfig();
-    KConfigGroup grp( config, "K3bSoxEncoderPlugin" );
+    KConfigGroup grp( config, QStringLiteral("K3bSoxEncoderPlugin") );
 
     grp.writeEntry( "manual settings", m_checkManual->isChecked() );
     grp.writeEntry( "channels", getChannels() );

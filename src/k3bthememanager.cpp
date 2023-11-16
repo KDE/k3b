@@ -319,7 +319,7 @@ void K3b::ThemeManager::loadTheme( const QString& name )
 
         // load the stuff
         KConfig cfg( t->m_path + "/k3b.theme" );
-        KConfigGroup group(&cfg,"");
+        KConfigGroup group(&cfg, QString());
         t->m_author = group.readEntry( "Author" );
         t->m_comment = group.readEntry( "Comment" );
         t->m_version = group.readEntry( "Version" );

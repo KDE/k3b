@@ -187,7 +187,7 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
         *d->process << "-t" << extension;
 
         KSharedConfig::Ptr c = KSharedConfig::openConfig();
-        KConfigGroup grp(c,"K3bSoxEncoderPlugin" );
+        KConfigGroup grp(c, QStringLiteral("K3bSoxEncoderPlugin") );
         if( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) ) {
             *d->process << "-r" << QString::number( grp.readEntry( "samplerate", DEFAULT_SAMPLE_RATE ) )
                         << "-c" << QString::number( grp.readEntry( "channels", DEFAULT_CHANNELS ) );
@@ -325,7 +325,7 @@ long long K3bSoxEncoder::fileSize( const QString&, const K3b::Msf& msf ) const
 {
     // for now we make a rough assumption based on the settings
     KSharedConfig::Ptr c = KSharedConfig::openConfig();
-    KConfigGroup grp(c, "K3bSoxEncoderPlugin" );
+    KConfigGroup grp(c, QStringLiteral("K3bSoxEncoderPlugin") );
     if( grp.readEntry( "manual settings", DEFAULT_MANUAL_SETTINGS ) ) {
         int sr =  grp.readEntry( "samplerate", DEFAULT_SAMPLE_RATE );
         int ch = grp.readEntry( "channels", DEFAULT_CHANNELS );

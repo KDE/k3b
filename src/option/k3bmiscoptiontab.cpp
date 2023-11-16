@@ -60,7 +60,7 @@ K3b::MiscOptionTab::~MiscOptionTab()
 
 void K3b::MiscOptionTab::readSettings()
 {
-    KConfigGroup c = KSharedConfig::openConfig()->group( "General Options" );
+    KConfigGroup c = KSharedConfig::openConfig()->group( QStringLiteral("General Options") );
 
     m_checkSaveOnExit->setChecked( c.readEntry( "ask_for_saving_changes_on_exit", true ) );
     m_checkShowSplash->setChecked( c.readEntry("Show splash", true) );
@@ -82,7 +82,7 @@ void K3b::MiscOptionTab::readSettings()
 
 bool K3b::MiscOptionTab::saveSettings()
 {
-    KConfigGroup c = KSharedConfig::openConfig()->group( "General Options" );
+    KConfigGroup c = KSharedConfig::openConfig()->group( QStringLiteral("General Options") );
 
     c.writeEntry( "ask_for_saving_changes_on_exit", m_checkSaveOnExit->isChecked() );
     c.writeEntry( "Show splash", m_checkShowSplash->isChecked() );

@@ -156,7 +156,7 @@ K3b::SystemProblemDialog::SystemProblemDialog( const QList<K3b::SystemProblem>& 
 void K3b::SystemProblemDialog::done(int r)
 {
     if (m_checkDontShowAgain->isChecked()) {
-        KConfigGroup grp(KSharedConfig::openConfig(), "General Options");
+        KConfigGroup grp(KSharedConfig::openConfig(), QStringLiteral("General Options"));
         grp.writeEntry("check system config", false);
     }
     QDialog::done(r);
@@ -629,7 +629,7 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
     }
 
     // remember which version of K3b checked the system the last time
-    KConfigGroup cfg( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup cfg( KSharedConfig::openConfig(), QStringLiteral("General Options") );
     cfg.writeEntry( "Last system check version", QString(k3bcore->version()) );
 }
 
@@ -712,7 +712,7 @@ QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
 
 bool K3b::SystemProblemDialog::readCheckSystemConfig()
 {
-    KConfigGroup cfgGrp(KSharedConfig::openConfig(), "General Options");
+    KConfigGroup cfgGrp(KSharedConfig::openConfig(), QStringLiteral("General Options"));
 
     K3b::Version configVersion(cfgGrp.readEntry( "Last system check version", "0.1" ));
     if (configVersion < k3bcore->version())

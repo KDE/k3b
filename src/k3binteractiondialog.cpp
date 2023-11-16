@@ -111,7 +111,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
     }
     if( buttonMask & CANCEL_BUTTON ) {
         m_buttonCancel = new QPushButton( buttonBox );
-        KGuiItem::assign( m_buttonCancel, KConfigGroup( KSharedConfig::openConfig(), "General Options" )
+        KGuiItem::assign( m_buttonCancel, KConfigGroup( KSharedConfig::openConfig(), QStringLiteral("General Options") )
                           .readEntry( "keep action dialogs open", false )
                           ? KStandardGuiItem::close()
                           : KStandardGuiItem::cancel() );
@@ -452,7 +452,7 @@ void K3b::InteractionDialog::loadSettings( const KConfigGroup& )
 
 void K3b::InteractionDialog::loadStartupSettings()
 {
-    KConfigGroup c( KSharedConfig::openConfig(), "General Options" );
+    KConfigGroup c( KSharedConfig::openConfig(), QStringLiteral("General Options") );
 
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default

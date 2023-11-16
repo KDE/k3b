@@ -214,20 +214,20 @@ K3b::Device::DeviceManager* K3b::Core::createDeviceManager() const
 
 void K3b::Core::readSettings( KSharedConfig::Ptr c )
 {
-    globalSettings()->readSettings( c->group( "General Options" ) );
-    deviceManager()->readConfig( c->group( "Devices" ) );
-    externalBinManager()->readConfig( c->group( "External Programs" ) );
+    globalSettings()->readSettings( c->group( QStringLiteral("General Options") ) );
+    deviceManager()->readConfig( c->group( QStringLiteral("Devices") ) );
+    externalBinManager()->readConfig( c->group( QStringLiteral("External Programs") ) );
 }
 
 
 void K3b::Core::saveSettings( KSharedConfig::Ptr c )
 {
-    KConfigGroup grp( c, "General Options" );
+    KConfigGroup grp( c, QStringLiteral("General Options") );
     grp.writeEntry( "config version", version().toString() );
 
-    deviceManager()->saveConfig( c->group( "Devices" ) );
-    externalBinManager()->saveConfig( c->group( "External Programs" ) );
-    d->globalSettings->saveSettings( c->group( "General Options" ) );
+    deviceManager()->saveConfig( c->group( QStringLiteral("Devices") ) );
+    externalBinManager()->saveConfig( c->group( QStringLiteral("External Programs") ) );
+    d->globalSettings->saveSettings( c->group( QStringLiteral("General Options") ) );
 }
 
 

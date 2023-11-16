@@ -267,8 +267,8 @@ void K3b::ProjectManager::loadDefaults( K3b::Doc* doc )
 
     // earlier K3b versions loaded the saved settings
     // so that is what we do as a default
-    int i = KConfigGroup( config, "General Options" ).readEntry( "action dialog startup settings",
-                                                                 int(K3b::InteractionDialog::LOAD_SAVED_SETTINGS) );
+    int i = KConfigGroup( config, QStringLiteral("General Options") ).readEntry( "action dialog startup settings",
+                                                                                 int(K3b::InteractionDialog::LOAD_SAVED_SETTINGS) );
     if( i == K3b::InteractionDialog::LOAD_K3B_DEFAULTS )
         return; // the default k3b settings are the ones everyone starts with
     else if( i == K3b::InteractionDialog::LOAD_LAST_SETTINGS )
