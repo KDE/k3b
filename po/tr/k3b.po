@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:42+0000\n"
+"POT-Creation-Date: 2023-11-17 00:41+0000\n"
 "PO-Revision-Date: 2023-08-26 11:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -2690,52 +2690,52 @@ msgstr "Geçici:"
 msgid "No info"
 msgstr "Bilgi yok"
 
-#: k3bstatusbarmanager.cpp:154
+#: k3bstatusbarmanager.cpp:158
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] "%2 içerisinde bir dosya"
 msgstr[1] "%2 içerisinde %1 dosya"
 
-#: k3bstatusbarmanager.cpp:157
+#: k3bstatusbarmanager.cpp:161
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] "bir klasör"
 msgstr[1] "%1 klasör"
 
-#: k3bstatusbarmanager.cpp:184
+#: k3bstatusbarmanager.cpp:188
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] "Ses CD'si (1 parça)"
 msgstr[1] "Ses CD'si (%1 parça)"
 
-#: k3bstatusbarmanager.cpp:190
+#: k3bstatusbarmanager.cpp:194
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "Veri Projesi (%1)"
 
-#: k3bstatusbarmanager.cpp:197
+#: k3bstatusbarmanager.cpp:201
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] "Karışık CD (1 parça ve %2)"
 msgstr[1] "Karışık CD (%1 parça ve %2)"
 
-#: k3bstatusbarmanager.cpp:204
+#: k3bstatusbarmanager.cpp:208
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] "Video CD (1 parça)"
 msgstr[1] "Video CD (%1 parça)"
 
-#: k3bstatusbarmanager.cpp:210
+#: k3bstatusbarmanager.cpp:214
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "eMovix Projesi (%1)"
 
-#: k3bstatusbarmanager.cpp:216
+#: k3bstatusbarmanager.cpp:220
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "Video DVD'si (%1)"

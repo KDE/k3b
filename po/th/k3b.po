@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:42+0000\n"
+"POT-Creation-Date: 2023-11-17 00:41+0000\n"
 "PO-Revision-Date: 2010-05-01 20:38+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -2608,7 +2608,7 @@ msgstr "พื้นที่พักข้อมูลชั่วคราว
 msgid "No info"
 msgstr "ไม่มีข้อมูล"
 
-#: k3bstatusbarmanager.cpp:154
+#: k3bstatusbarmanager.cpp:158
 #, fuzzy, kde-format
 #| msgid "1 file in %2"
 #| msgid_plural "%1 files in %2"
@@ -2616,7 +2616,7 @@ msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] "%1 แฟ้มใน %2"
 
-#: k3bstatusbarmanager.cpp:157
+#: k3bstatusbarmanager.cpp:161
 #, fuzzy, kde-format
 #| msgid "1 folder"
 #| msgid_plural "%1 folders"
@@ -2624,35 +2624,35 @@ msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] "%1 โฟลเดอร์"
 
-#: k3bstatusbarmanager.cpp:184
+#: k3bstatusbarmanager.cpp:188
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] "แผ่นซีดีเสียง (แทร็กเสียง %1 แทร็ก)"
 
-#: k3bstatusbarmanager.cpp:190
+#: k3bstatusbarmanager.cpp:194
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "โครงงานแผ่นข้อมูล (%1)"
 
-#: k3bstatusbarmanager.cpp:197
+#: k3bstatusbarmanager.cpp:201
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] "แผ่นซีดีแบบโหมดผสม (แทร็กเสียง %1 แทร็ก และ %2)"
 
-#: k3bstatusbarmanager.cpp:204
+#: k3bstatusbarmanager.cpp:208
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] "แผ่นซีดีวีดิโอ (จำนวน %1 แทร็ก)"
 
-#: k3bstatusbarmanager.cpp:210
+#: k3bstatusbarmanager.cpp:214
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "โครงงาน eMovix (%1)"
 
-#: k3bstatusbarmanager.cpp:216
+#: k3bstatusbarmanager.cpp:220
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "แผ่นดีวีดีวีดิโอ (%1)"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:42+0000\n"
+"POT-Creation-Date: 2023-11-17 00:41+0000\n"
 "PO-Revision-Date: 2012-02-02 21:56+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -2710,7 +2710,7 @@ msgstr "Pagaidu:"
 msgid "No info"
 msgstr "Nav informācijas"
 
-#: k3bstatusbarmanager.cpp:154
+#: k3bstatusbarmanager.cpp:158
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
@@ -2718,7 +2718,7 @@ msgstr[0] "%1 fails %2"
 msgstr[1] "%1 faili %2"
 msgstr[2] "%1 failu %2"
 
-#: k3bstatusbarmanager.cpp:157
+#: k3bstatusbarmanager.cpp:161
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
@@ -2726,7 +2726,7 @@ msgstr[0] "%1 mape"
 msgstr[1] "%1 mapes"
 msgstr[2] "%1 mapju"
 
-#: k3bstatusbarmanager.cpp:184
+#: k3bstatusbarmanager.cpp:188
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
@@ -2734,12 +2734,12 @@ msgstr[0] "Audio CD (%1 celiņš)"
 msgstr[1] "Audio CD (%1 celiņi)"
 msgstr[2] "Audio CD (%1 celiņu)"
 
-#: k3bstatusbarmanager.cpp:190
+#: k3bstatusbarmanager.cpp:194
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "Datu projekts (%1)"
 
-#: k3bstatusbarmanager.cpp:197
+#: k3bstatusbarmanager.cpp:201
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
@@ -2747,7 +2747,7 @@ msgstr[0] "Jaukts CD (%1 celiņš un %2)"
 msgstr[1] "Jaukts CD (%1 celiņi un %2)"
 msgstr[2] "Jaukts CD (%1 celiņu un %2)"
 
-#: k3bstatusbarmanager.cpp:204
+#: k3bstatusbarmanager.cpp:208
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
@@ -2755,12 +2755,12 @@ msgstr[0] "Video CD (%1 celiņš)"
 msgstr[1] "Video CD (%1 celiņi)"
 msgstr[2] "Video CD (%1 celiņu)"
 
-#: k3bstatusbarmanager.cpp:210
+#: k3bstatusbarmanager.cpp:214
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "eMovix projekts (%1)"
 
-#: k3bstatusbarmanager.cpp:216
+#: k3bstatusbarmanager.cpp:220
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "Video DVD (%1)"

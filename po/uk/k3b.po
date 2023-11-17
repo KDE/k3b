@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:42+0000\n"
+"POT-Creation-Date: 2023-11-17 00:41+0000\n"
 "PO-Revision-Date: 2023-06-26 07:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -2682,7 +2682,7 @@ msgstr "Тимч.:"
 msgid "No info"
 msgstr "Немає даних"
 
-#: k3bstatusbarmanager.cpp:154
+#: k3bstatusbarmanager.cpp:158
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
@@ -2691,7 +2691,7 @@ msgstr[1] "%1 файли у %2"
 msgstr[2] "%1 файлів у %2"
 msgstr[3] "Один файл у %2"
 
-#: k3bstatusbarmanager.cpp:157
+#: k3bstatusbarmanager.cpp:161
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
@@ -2700,7 +2700,7 @@ msgstr[1] "%1 тека"
 msgstr[2] "%1 тека"
 msgstr[3] "одна тека"
 
-#: k3bstatusbarmanager.cpp:184
+#: k3bstatusbarmanager.cpp:188
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
@@ -2709,12 +2709,12 @@ msgstr[1] "Аудіо-КД (%1 доріжки)"
 msgstr[2] "Аудіо-КД (%1 доріжок)"
 msgstr[3] "Аудіо-КД (%1 доріжка)"
 
-#: k3bstatusbarmanager.cpp:190
+#: k3bstatusbarmanager.cpp:194
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "Проєкт запису даних (%1)"
 
-#: k3bstatusbarmanager.cpp:197
+#: k3bstatusbarmanager.cpp:201
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
@@ -2723,7 +2723,7 @@ msgstr[1] "Мішаний КД (%1 доріжки і %2)"
 msgstr[2] "Мішаний КД (%1 доріжок і %2)"
 msgstr[3] "Мішаний КД (%1 доріжка і %2)"
 
-#: k3bstatusbarmanager.cpp:204
+#: k3bstatusbarmanager.cpp:208
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
@@ -2732,12 +2732,12 @@ msgstr[1] "Відео-КД (%1 доріжки)"
 msgstr[2] "Відео-КД (%1 доріжок)"
 msgstr[3] "Відео-КД (%1 доріжка)"
 
-#: k3bstatusbarmanager.cpp:210
+#: k3bstatusbarmanager.cpp:214
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "Проєкт eMovix (%1)"
 
-#: k3bstatusbarmanager.cpp:216
+#: k3bstatusbarmanager.cpp:220
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "Відео-DVD (%1)"

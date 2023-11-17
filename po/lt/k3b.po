@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-08 00:42+0000\n"
+"POT-Creation-Date: 2023-11-17 00:41+0000\n"
 "PO-Revision-Date: 2019-03-17 17:42+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -2600,7 +2600,7 @@ msgstr "Laikina:"
 msgid "No info"
 msgstr "Nėra informacijos"
 
-#: k3bstatusbarmanager.cpp:154
+#: k3bstatusbarmanager.cpp:158
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
@@ -2609,7 +2609,7 @@ msgstr[1] "%1 failai %2"
 msgstr[2] "%1 failų %2"
 msgstr[3] "%1 failas %2"
 
-#: k3bstatusbarmanager.cpp:157
+#: k3bstatusbarmanager.cpp:161
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
@@ -2618,7 +2618,7 @@ msgstr[1] "%1 aplankuose"
 msgstr[2] "%1 aplankų"
 msgstr[3] "%1 aplanke"
 
-#: k3bstatusbarmanager.cpp:184
+#: k3bstatusbarmanager.cpp:188
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
@@ -2627,12 +2627,12 @@ msgstr[1] "Audio CD (%1 takeliai)"
 msgstr[2] "Audio CD (%1 takelių)"
 msgstr[3] "Audio CD (%1 takelis)"
 
-#: k3bstatusbarmanager.cpp:190
+#: k3bstatusbarmanager.cpp:194
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "Duomenų projektas (%1)"
 
-#: k3bstatusbarmanager.cpp:197
+#: k3bstatusbarmanager.cpp:201
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
@@ -2641,7 +2641,7 @@ msgstr[1] "Maišytas CD (%1 takeliai ir %2)"
 msgstr[2] "Maišytas CD (%1 takelių ir %2)"
 msgstr[3] "Maišytas CD (%1 takelis ir %2)"
 
-#: k3bstatusbarmanager.cpp:204
+#: k3bstatusbarmanager.cpp:208
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
@@ -2650,12 +2650,12 @@ msgstr[1] "Video CD (%1 takeliai)"
 msgstr[2] "Video CD (%1 takelių)"
 msgstr[3] "Video CD (%1 takelis)"
 
-#: k3bstatusbarmanager.cpp:210
+#: k3bstatusbarmanager.cpp:214
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "eMovix projektas (%1)"
 
-#: k3bstatusbarmanager.cpp:216
+#: k3bstatusbarmanager.cpp:220
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "Video DVD (%1)"
