@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-28 00:45+0000\n"
+"POT-Creation-Date: 2023-11-17 00:41+0000\n"
 "PO-Revision-Date: 2006-04-03 17:03+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -356,7 +356,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:84 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr ""
@@ -2249,38 +2249,38 @@ msgstr ""
 msgid "Filter:"
 msgstr "Silli:"
 
-#: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
+#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "All Files"
 msgstr ""
 
-#: k3bfileview.cpp:74
+#: k3bfileview.cpp:76 k3bfileview.cpp:85
 #, kde-format
 msgid "Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:75
+#: k3bfileview.cpp:77 k3bfileview.cpp:86
 #, kde-format
 msgid "Wave Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:76
+#: k3bfileview.cpp:78 k3bfileview.cpp:87
 #, kde-format
 msgid "MP3 Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:77
+#: k3bfileview.cpp:79 k3bfileview.cpp:88
 #, kde-format
 msgid "Ogg Vorbis Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:78
+#: k3bfileview.cpp:80 k3bfileview.cpp:89
 #, kde-format
 msgid "MPEG Video Files"
 msgstr ""
 
-#: k3bfileview.cpp:81
+#: k3bfileview.cpp:94
 #, kde-format
 msgid "Show Bookmarks"
 msgstr ""
@@ -2528,52 +2528,52 @@ msgstr ""
 msgid "No info"
 msgstr ""
 
-#: k3bstatusbarmanager.cpp:154
+#: k3bstatusbarmanager.cpp:158
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:157
+#: k3bstatusbarmanager.cpp:161
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:184
+#: k3bstatusbarmanager.cpp:188
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:190
+#: k3bstatusbarmanager.cpp:194
 #, kde-format
 msgid "Data Project (%1)"
 msgstr ""
 
-#: k3bstatusbarmanager.cpp:197
+#: k3bstatusbarmanager.cpp:201
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:204
+#: k3bstatusbarmanager.cpp:208
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:210
+#: k3bstatusbarmanager.cpp:214
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr ""
 
-#: k3bstatusbarmanager.cpp:216
+#: k3bstatusbarmanager.cpp:220
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr ""
