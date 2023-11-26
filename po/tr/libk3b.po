@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2023-05-15 22:40+0300\n"
+"PO-Revision-Date: 2023-11-26 01:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.03.70\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -1477,7 +1477,7 @@ msgstr "Geçersiz ses kodlayıcısı: %1"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
 msgid "Resizing picture of title %1 to %2x%3"
-msgstr "Resim başlığı %1'i %2x%3 olarak yeniden boyutlandırıyor"
+msgstr "Resim başlığı %1'i %2 x %3 olarak yeniden boyutlandırıyor"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:381
 #, kde-format
