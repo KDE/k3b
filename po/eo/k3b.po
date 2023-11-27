@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-17 00:41+0000\n"
-"PO-Revision-Date: 2023-06-26 07:00+0100\n"
+"PO-Revision-Date: 2023-11-26 20:12+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -9048,12 +9048,12 @@ msgid ""
 "displayed once."
 msgstr ""
 "<p>Tempoj por ripeti la reproduktadon de 'ludtrako'.<p>La reagemeca atributo "
-"kontrolas ĉu la reproduktado de 'ludtrako' estas finita, do prokrastita, "
-"antaŭ ol ekzekuti uzantan deĉenigon aŭ tuja salto estas farita.<p> Post kiam "
-"la specifita nombro da ripetoj finiĝis, la <atendo> tempo komencas kalkuli "
-"malantaŭen, krom se agordita al senfina atendotempo.<p>Se ĉi tiu elemento "
-"estas preterlasita, defaŭlta `1' estas uzata, t.e. la 'ludtrako. ' estos "
-"montrita unufoje."
+"mastrumas ĉu la reproduktado de 'ludtrako' estas finita, do prokrastita, "
+"antaŭ ol plenumi uzant-ekigitan agon aŭ tuja salto estas farita.<p> Post "
+"kiam la specifita nombro da ripetoj finiĝis, la <atendo> tempo komencas "
+"kalkuli malantaŭen, krom se agordita al senfina atendotempo.<p>Se ĉi tiu "
+"elemento estas preterlasita, defaŭlta `1' estas uzata, t.e. la 'ludtrako. ' "
+"estos montrita unufoje."
 
 #: projects/k3bvcdtrackdialog.cpp:263
 #, kde-format
@@ -10982,18 +10982,3 @@ msgstr "anamorfa"
 #, kde-format
 msgid "Subpicture"
 msgstr "Subbildo"
-
-#~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
-#~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |Sonaj dosieroj"
-
-#~ msgid "audio/x-wav |Wave Sound Files"
-#~ msgstr "audio/x-wav |Ondaj sonaj dosieroj"
-
-#~ msgid "audio/x-mp3 |MP3 Sound Files"
-#~ msgstr "audio/x-mp3 |MP3 sonaj dosieroj"
-
-#~ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
-#~ msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Imagdosieroj"
-
-#~ msgid "*.cue *.CUE|Cue Files"
-#~ msgstr "*.cue *.CUE|Cue-dosieroj"
