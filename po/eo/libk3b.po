@@ -3686,15 +3686,23 @@ msgid "Capacity: %1"
 msgstr "Enhaveco: %1"
 
 #: tools/k3bmedium.cpp:596
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "To be shown when a Blu-ray is required but another type of medium is "
+#| "¦inserted."
+#| msgid "Blu-ray"
 msgctxt ""
 "To be shown when a DVD or Blu-ray is required but another type of medium is "
 "inserted."
 msgid "DVD or Blu-ray"
-msgstr ""
+msgstr "Bluradio"
 
 #: tools/k3bmedium.cpp:598
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "To be shown when a Blu-ray is required but another type of medium is "
+#| "¦inserted."
+#| msgid "Blu-ray"
 msgctxt ""
 "To be shown when a Blu-ray is required but another type of medium is "
 "inserted."
