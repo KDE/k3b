@@ -85,7 +85,7 @@
 <para
 >Si vous avez déjà utilisé un logiciel de gravure comme Nero sous Windows, &k3b; vous semblera assez familier. </para>
 <para
->À travers son interface graphique simple mais puissante, &k3b; vous propose de nombreuses options pour graver des CD, DVD ou BD (disque Blu-ray). De nombreux types de projets sur disques optiques sont pris en charge, comme les disques audio, les disques de données, les projets vidéo pour les DVD et les VCD, ainsi que le multisession, les disques mixtes et d'autres encore. &k3b; sait aussi effacer les disques réinscriptibles et peut accomplir des tâches plus complexes comme l'encodage audio et vidéo. </para>
+>À travers son interface graphique simple mais puissante, &k3b; vous propose de nombreuses options pour graver des CD, DVD ou BD (disque Blu-ray). De nombreux types de projets sur disques optiques sont pris en charge, comme les disques audio, les disques de données, les projets vidéo pour les DVD et les VCD, ainsi que le multi-session, les disques mixtes et d'autres encore. &k3b; sait aussi effacer les disques réinscriptibles et peut accomplir des tâches plus complexes comme l'encodage audio et vidéo. </para>
 </chapter>
 <!--
 Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
@@ -113,7 +113,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
   -->
 <chapter id="pre-setup"
 ><title
->Préinstallation</title>
+>Pré-installation</title>
 <para
 >Lorsque vous lancerez &k3b; pour la première fois, &k3b; vous informera peut-être qu'aucun périphérique de gravure optique n'a été trouvé, ce qui signifie que vous ne pourrez pas graver de disque optique. Ne paniquez pas, car &k3b; ouvrira l'onglet <guilabel
 >Permissions</guilabel
@@ -349,7 +349,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 >&k3b; gère un grand nombre de formats audio et peut les convertir automatiquement pour vous. </para>
 <note
 ><para
->Certaines distributions séparent cette fonctionnalité de &k3b; dans un paquet distinct. Ainsi, par exemple, dans les distributions Debian et Ubuntu, vous pourriez avoir besoin d'installer le paquet libk3b6-extracodecs. Sous OpenSUSE, le nom du paquet est k3b-codecs. Sous d'autres distributions (par exemple Mandriva), vous n'avez pas besoin d'installer de paquet supplémentaire.</para
+>Certaines distributions séparent cette fonctionnalité de &k3b; dans un paquet distinct. Ainsi, par exemple, dans les distributions Debian et Ubuntu, vous pourriez avoir besoin d'installer le paquet « libk3b6-extracodecs ». Sous OpenSUSE, le nom du paquet est « k3b-codecs ». Sous d'autres distributions (par exemple Mandriva), vous n'avez pas besoin d'installer de paquet supplémentaire.</para
 ></note>
 
 <sect2 id="selecting-files"
