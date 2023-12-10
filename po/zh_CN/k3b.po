@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-11-25 02:33\n"
+"PO-Revision-Date: 2023-12-09 09:30\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -6448,7 +6448,7 @@ msgstr "只翻录音频"
 #: projects/k3baudioburndialog.cpp:122
 #, kde-format
 msgid "Use the 'Rip Audio' tab to optionally adjust the path of the audio."
-msgstr "使用“翻录音频”标签可选地调整音频路径。"
+msgstr "使用“翻录音频”标签页可选地调整音频路径。"
 
 #: projects/k3baudioburndialog.cpp:123
 #, kde-format
@@ -7903,7 +7903,7 @@ msgstr "正在查询音轨 %1 的 MusicBrainz。"
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
 msgid "Use the 'Image' tab to optionally adjust the path of the image."
-msgstr "使用 “图片” 选项卡，可以调整图像的路径。"
+msgstr "使用 “图片” 标签页，可以调整图像的路径。"
 
 #: projects/k3bprojectburndialog.cpp:63
 #, kde-format
