@@ -1,21 +1,21 @@
 # translation of k3b.po to Slovak
 # Richard Fric <Richard.Fric@kdemail.net>, 2007, 2009, 2010.
 # Michal Sulek <misurel@gmail.com>, 2010, 2011.
-# Roman Paholík <wizzardsk@gmail.com>, 2012, 2013, 2014, 2015, 2016, 2017, 2022.
+# SPDX-FileCopyrightText: 2012, 2013, 2014, 2015, 2016, 2017, 2022, 2023 Roman Paholík <wizzardsk@gmail.com>
 # Matej Mrenica <matejm98mthw@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2022-04-09 20:16+0200\n"
+"PO-Revision-Date: 2023-12-10 15:03+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #, kde-format
@@ -2380,10 +2380,9 @@ msgstr "Filter:"
 
 #: k3bfileview.cpp:73 misc/k3bimagewritingdialog.cpp:455
 #: misc/k3bimagewritingdialog.cpp:466
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Všetky súbory"
+msgstr "Všetky súbory"
 
 #: k3bfileview.cpp:74
 #, fuzzy, kde-format
@@ -2575,7 +2574,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:100
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:102
 #, kde-format
@@ -2592,7 +2591,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Zabiť"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -4031,7 +4030,7 @@ msgstr "Vyberte súbor obrazu"
 #, fuzzy, kde-format
 #| msgid "Image file:"
 msgid "Image Files"
-msgstr "Súbor obrazu:"
+msgstr "Súbory obrázkov"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
 #, fuzzy, kde-format
@@ -8259,10 +8258,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Priečinok obrazov '%1' neexistuje. Chcete aby ho K3b vytvoril?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Vytvoriť priečinok"
+msgstr "Vytvoriť priečinok?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
