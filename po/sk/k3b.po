@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-26 00:49+0000\n"
-"PO-Revision-Date: 2023-12-10 15:03+0100\n"
+"PO-Revision-Date: 2023-12-11 17:58+0100\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
@@ -1610,7 +1610,7 @@ msgstr "Dokument sa nepodarilo otvoriť."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "Projekt <resource>%1</resource> má neuložené údaje."
 
 #: k3b.cpp:896
 #, kde-format
@@ -2385,34 +2385,29 @@ msgid "All Files"
 msgstr "Všetky súbory"
 
 #: k3bfileview.cpp:74
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Nájdené súbory"
+msgstr "Zvukové súbory"
 
 #: k3bfileview.cpp:75
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Nájdené súbory"
+msgstr "Zvukové súbory wave"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Nájdené súbory"
+msgstr "Zvukové súbory MP3"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Zvukové súbory Ogg Vorbis"
+msgstr "Zvukové súbory Ogg Vorbis"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |Video súbory MPEG"
+msgstr "Video súbory MPEG"
 
 #: k3bfileview.cpp:81
 #, kde-format
@@ -2586,7 +2581,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Zabiť proces?"
 
 #: k3blsofwrapperdialog.cpp:104
 #, kde-format
@@ -4027,28 +4022,24 @@ msgid "Choose Image File"
 msgstr "Vyberte súbor obrazu"
 
 #: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
 msgstr "Súbory obrázkov"
 
 #: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660 súbory obrazu"
+msgstr "ISO 9660 súbory obrazu"
 
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue súbor:"
+msgstr "Cue súbory"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao TOC súbory a klonované Cdrecord obrazy"
+msgstr "Cdrdao TOC súbory a klonované Cdrecord obrazy"
 
 #: misc/k3bimagewritingdialog.cpp:471
 #, kde-format
@@ -7261,7 +7252,7 @@ msgstr "Vlastné (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) našiel nastavenia predvoľby: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
