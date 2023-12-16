@@ -86,7 +86,7 @@ KCModule *K3b::PluginManager::Private::getModule( Plugin* plugin ) const
     const QString kcm = plugin->pluginMetaData().value("X-KDE-ConfigModule");
     qDebug() << "for plugin" << plugin->pluginMetaData().pluginId() << "KCM" << kcm;
     if (!kcm.isEmpty()) {
-        return KCModuleLoader::loadModule(plugin->pluginMetaData());
+        return KCModuleLoader::loadModule(kcm);
     }
     return 0;
 }
