@@ -4,8 +4,8 @@
 # Nicolas Ternisien <nicolast@libertysurf.fr>, 2004.
 # Yannick Torres <yannick.torres@keliglia.com>, 2005.
 # Yannick Torrès <yannick.torres@keliglia.com>, 2006.
-# Joëlle Cornavin <jcornavi@club-internet.fr>, 2009.
-# xavier <xavier.besnard@neuf.fr>, 2012, 2013.
+# Joëlle Cornavin <jcornavin@club-internet.fr>, 2009.
+# Xavier Besnard <xavier.besnard@kde.org>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3bdevice\n"
