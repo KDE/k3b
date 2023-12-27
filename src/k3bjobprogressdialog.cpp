@@ -33,6 +33,7 @@
 #include <KSqueezedTextLabel>
 #include <KLocalizedString>
 #include <KIO/Global>
+#include <KIO/JobTracker>
 #include <KMessageBox>
 
 #include <QDebug>
