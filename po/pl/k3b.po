@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 00:41+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2023-09-10 10:55+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -2500,64 +2500,64 @@ msgstr ""
 "wczytane za pomocą przycisku <em>Wczytaj zapisane ustawienia</em>."
 "<p><b>Ustawienia te nie zmieniają domyślnych ustawień K3b.</b>"
 
-#: k3bjobprogressdialog.cpp:207
+#: k3bjobprogressdialog.cpp:208
 #, kde-format
 msgid "Overall progress:"
 msgstr "Całkowity postęp:"
 
-#: k3bjobprogressdialog.cpp:229
+#: k3bjobprogressdialog.cpp:230
 #, kde-format
 msgid "Show Debugging Output"
 msgstr "Pokaż wyjście debugowania."
 
-#: k3bjobprogressdialog.cpp:294 k3bjobprogressdialog.cpp:316
+#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
 #, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 z %2"
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "Czas działania: %1"
 
-#: k3bjobprogressdialog.cpp:381
+#: k3bjobprogressdialog.cpp:382
 #, kde-format
 msgid "Success."
 msgstr "Powodzenie."
 
-#: k3bjobprogressdialog.cpp:388
+#: k3bjobprogressdialog.cpp:389
 #, kde-format
 msgid "Successfully finished."
 msgstr "Zakończone pomyślnie."
 
-#: k3bjobprogressdialog.cpp:397
+#: k3bjobprogressdialog.cpp:398
 #, kde-format
 msgid "Canceled."
 msgstr "Zaniechane."
 
-#: k3bjobprogressdialog.cpp:400
+#: k3bjobprogressdialog.cpp:401
 #, kde-format
 msgid "Error."
 msgstr "Błąd."
 
-#: k3bjobprogressdialog.cpp:402
+#: k3bjobprogressdialog.cpp:403
 #, kde-format
 msgid "Finished with errors"
 msgstr "Zakończono z błędami."
 
-#: k3bjobprogressdialog.cpp:483
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "Czy na pewno chcesz zaniechać?"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "Potwierdzenia zaniechania."
 
-#: k3bjobprogressdialog.cpp:556
+#: k3bjobprogressdialog.cpp:557
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"

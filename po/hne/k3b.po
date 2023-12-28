@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 00:41+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2009-03-08 13:15+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -2372,66 +2372,66 @@ msgid ""
 "are not overwritten by this.</b>"
 msgstr ""
 
-#: k3bjobprogressdialog.cpp:207
+#: k3bjobprogressdialog.cpp:208
 #, kde-format
 msgid "Overall progress:"
 msgstr "कुल प्रगति:"
 
-#: k3bjobprogressdialog.cpp:229
+#: k3bjobprogressdialog.cpp:230
 #, kde-format
 msgid "Show Debugging Output"
 msgstr "डिबगिंग आउटपुट देखाव"
 
-#: k3bjobprogressdialog.cpp:294 k3bjobprogressdialog.cpp:316
+#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
 #, fuzzy, kde-format
 #| msgid "%1 of %2 MB"
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%2 मं से %1 मे.बा."
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
 #, fuzzy, kde-format
 #| msgid "Elapsed time"
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "बीता समय"
 
-#: k3bjobprogressdialog.cpp:381
+#: k3bjobprogressdialog.cpp:382
 #, kde-format
 msgid "Success."
 msgstr "सफल."
 
-#: k3bjobprogressdialog.cpp:388
+#: k3bjobprogressdialog.cpp:389
 #, kde-format
 msgid "Successfully finished."
 msgstr "सफलता के साथ पूरा."
 
-#: k3bjobprogressdialog.cpp:397
+#: k3bjobprogressdialog.cpp:398
 #, kde-format
 msgid "Canceled."
 msgstr "खारिज."
 
-#: k3bjobprogressdialog.cpp:400
+#: k3bjobprogressdialog.cpp:401
 #, kde-format
 msgid "Error."
 msgstr "गलती."
 
-#: k3bjobprogressdialog.cpp:402
+#: k3bjobprogressdialog.cpp:403
 #, kde-format
 msgid "Finished with errors"
 msgstr "गलती के साथ पूरा"
 
-#: k3bjobprogressdialog.cpp:483
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "का आप मन सचमुच खारिज करना चाहथो ?"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "खारिज करे के पुस्टि"
 
-#: k3bjobprogressdialog.cpp:556
+#: k3bjobprogressdialog.cpp:557
 #, fuzzy, kde-format
 #| msgid "Remaining:"
 msgctxt "@info %1 is a duration formatted"

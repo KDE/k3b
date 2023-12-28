@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 00:41+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2023-07-24 22:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -2463,64 +2463,64 @@ msgstr ""
 "설정 불러오기</em> 단추를 통해 불러올 수 있습니다.<p><b>이 방법을 사용한다고 "
 "K3b의 기본값이 바뀌지는 않습니다.</b>"
 
-#: k3bjobprogressdialog.cpp:207
+#: k3bjobprogressdialog.cpp:208
 #, kde-format
 msgid "Overall progress:"
 msgstr "전체 진행 상황:"
 
-#: k3bjobprogressdialog.cpp:229
+#: k3bjobprogressdialog.cpp:230
 #, kde-format
 msgid "Show Debugging Output"
 msgstr "디버깅 로그 출력 표시"
 
-#: k3bjobprogressdialog.cpp:294 k3bjobprogressdialog.cpp:316
+#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
 #, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%2 중 %1"
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "경과 시간: %1"
 
-#: k3bjobprogressdialog.cpp:381
+#: k3bjobprogressdialog.cpp:382
 #, kde-format
 msgid "Success."
 msgstr "성공."
 
-#: k3bjobprogressdialog.cpp:388
+#: k3bjobprogressdialog.cpp:389
 #, kde-format
 msgid "Successfully finished."
 msgstr "성공적으로 끝났습니다."
 
-#: k3bjobprogressdialog.cpp:397
+#: k3bjobprogressdialog.cpp:398
 #, kde-format
 msgid "Canceled."
 msgstr "작업이 취소되었습니다."
 
-#: k3bjobprogressdialog.cpp:400
+#: k3bjobprogressdialog.cpp:401
 #, kde-format
 msgid "Error."
 msgstr "작업 중 오류가 발생했습니다."
 
-#: k3bjobprogressdialog.cpp:402
+#: k3bjobprogressdialog.cpp:403
 #, kde-format
 msgid "Finished with errors"
 msgstr "오류가 발생하여 종료됨"
 
-#: k3bjobprogressdialog.cpp:483
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "정말로 취소하시겠습니까?"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "작업 취소 확인"
 
-#: k3bjobprogressdialog.cpp:556
+#: k3bjobprogressdialog.cpp:557
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"

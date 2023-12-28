@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 00:41+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2023-06-26 07:18+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -2480,64 +2480,64 @@ msgstr ""
 "за допомогою кнопки <em>Завантажити збережені параметри</em>.<p><b>Типові "
 "параметри K3b при цьому не перезаписуються.</b>"
 
-#: k3bjobprogressdialog.cpp:207
+#: k3bjobprogressdialog.cpp:208
 #, kde-format
 msgid "Overall progress:"
 msgstr "Загальний поступ:"
 
-#: k3bjobprogressdialog.cpp:229
+#: k3bjobprogressdialog.cpp:230
 #, kde-format
 msgid "Show Debugging Output"
 msgstr "Показувати діагностичну інформацію"
 
-#: k3bjobprogressdialog.cpp:294 k3bjobprogressdialog.cpp:316
+#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
 #, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 з %2"
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "Витрачено часу: %1"
 
-#: k3bjobprogressdialog.cpp:381
+#: k3bjobprogressdialog.cpp:382
 #, kde-format
 msgid "Success."
 msgstr "Успіх."
 
-#: k3bjobprogressdialog.cpp:388
+#: k3bjobprogressdialog.cpp:389
 #, kde-format
 msgid "Successfully finished."
 msgstr "Успішно закінчено."
 
-#: k3bjobprogressdialog.cpp:397
+#: k3bjobprogressdialog.cpp:398
 #, kde-format
 msgid "Canceled."
 msgstr "Припинено."
 
-#: k3bjobprogressdialog.cpp:400
+#: k3bjobprogressdialog.cpp:401
 #, kde-format
 msgid "Error."
 msgstr "Помилка."
 
-#: k3bjobprogressdialog.cpp:402
+#: k3bjobprogressdialog.cpp:403
 #, kde-format
 msgid "Finished with errors"
 msgstr "Процес завершився з помилками"
 
-#: k3bjobprogressdialog.cpp:483
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "Ви дійсно хочете скасувати?"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "Скасувати підтвердження"
 
-#: k3bjobprogressdialog.cpp:556
+#: k3bjobprogressdialog.cpp:557
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"

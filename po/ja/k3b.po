@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 00:41+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2012-03-24 18:06-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -2512,17 +2512,17 @@ msgstr ""
 "「保存した設定を読み込み」ボタンを使って K3b に読み込ませることができます。</"
 "p><p>【注意】 K3b の標準設定はこれによって上書きされません。</p></html>"
 
-#: k3bjobprogressdialog.cpp:207
+#: k3bjobprogressdialog.cpp:208
 #, kde-format
 msgid "Overall progress:"
 msgstr "全体の進行:"
 
-#: k3bjobprogressdialog.cpp:229
+#: k3bjobprogressdialog.cpp:230
 #, kde-format
 msgid "Show Debugging Output"
 msgstr "デバッグ出力を表示"
 
-#: k3bjobprogressdialog.cpp:294 k3bjobprogressdialog.cpp:316
+#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "%1 and %2 are byte sizes formatted via KLocale::formatByteSize"
 #| msgid "%1 of %2"
@@ -2530,7 +2530,7 @@ msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1/%2"
 
-#: k3bjobprogressdialog.cpp:372 k3bjobprogressdialog.cpp:552
+#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info %1 is a duration formatted using KLocale::prettyFormatDuration"
@@ -2539,42 +2539,42 @@ msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "経過時間: %1"
 
-#: k3bjobprogressdialog.cpp:381
+#: k3bjobprogressdialog.cpp:382
 #, kde-format
 msgid "Success."
 msgstr "成功"
 
-#: k3bjobprogressdialog.cpp:388
+#: k3bjobprogressdialog.cpp:389
 #, kde-format
 msgid "Successfully finished."
 msgstr "成功しました"
 
-#: k3bjobprogressdialog.cpp:397
+#: k3bjobprogressdialog.cpp:398
 #, kde-format
 msgid "Canceled."
 msgstr "キャンセルされました"
 
-#: k3bjobprogressdialog.cpp:400
+#: k3bjobprogressdialog.cpp:401
 #, kde-format
 msgid "Error."
 msgstr "エラー"
 
-#: k3bjobprogressdialog.cpp:402
+#: k3bjobprogressdialog.cpp:403
 #, kde-format
 msgid "Finished with errors"
 msgstr "エラーで終了しました"
 
-#: k3bjobprogressdialog.cpp:483
+#: k3bjobprogressdialog.cpp:484
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "キャンセルしますか？"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "キャンセルの確認"
 
-#: k3bjobprogressdialog.cpp:556
+#: k3bjobprogressdialog.cpp:557
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info %1 is a duration formatted using KLocale::prettyFormatDuration"
