@@ -18,7 +18,7 @@
 # Nicolas Ternisien <nicolas.ternisien@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012, 2013.
-# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023 xavier <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023 Xavier Besnard <xavier.besnard@kde.org>
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Maxime Corteel <mcorteel@gmail.com>, 2019.
 # Xavier Besnard <xavier.besnard@kde.org>, 2023.
