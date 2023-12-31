@@ -4233,7 +4233,7 @@ msgstr "El càlcul ha fallat"
 #: misc/k3bimagewritingdialog.cpp:1098
 #, kde-format
 msgid "Copy checksum to clipboard"
-msgstr "Copia la suma de verificació al porta-retalls"
+msgstr "Copia la suma de verificació a dins del porta-retalls"
 
 #: misc/k3bimagewritingdialog.cpp:1099
 #, kde-format
@@ -8576,9 +8576,9 @@ msgstr ""
 "li><li>352 x 240 @ 23,976 Hz (FILM SIF).</li><li>352 x 288 @ 25 Hz (PAL SIF)."
 "</li></ul> <p>Per als elements de reproducció de segments estan disponibles "
 "les següents codificacions d'àudio:<ul><li>Joint estèreo, estèreo o canal "
-"dual de seqüències d'àudio a una taxa de bits de 128, 192, 224 o 384 kbit/"
-"seg.</li><li>Seqüències d'àudio mono a una taxa de bits de 64, 96 o 192 kbit/"
-"seg.</li></ul><p>També s'ha proveït la possibilitat de tan sols tindre "
+"dual de seqüències d'àudio a una taxa de bits de 128, 192, 224 o 384 kbits/"
+"s</li><li>Seqüències d'àudio mono a una taxa de bits de 64, 96 o 192 kbits/"
+"s</li></ul><p>També s'ha proveït la possibilitat de tan sols tindre "
 "seqüències d'àudio i imatges fixes.<p><b>La taxa de bits de seqüències "
 "multiplexades haurà de mantindre's davall els 174300 bytes/seg (a excepció "
 "de per a elements d'imatges estàtiques) per a funcionar en les unitats de "
