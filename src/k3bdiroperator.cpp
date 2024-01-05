@@ -42,10 +42,10 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     KBookmarkManager* bmMan = KBookmarkManager::managerForFile( bookmarksFile, "k3b" );
     bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
+    bmMan->setUpdate( true );
 #else
     KBookmarkManager* bmMan = new KBookmarkManager( bookmarksFile, this );
 #endif
-    bmMan->setUpdate( true );
 
     m_bmPopup = new KActionMenu( QIcon::fromTheme("bookmarks"),i18n("Bookmarks"), this);
     m_bmPopup->setPopupMode( QToolButton::InstantPopup );
