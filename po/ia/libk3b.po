@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the k3b package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2020, 2021.
+# Giovanni Sora <g.sora@tiscali.it>, 2020, 2021, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2021-07-19 22:54+0200\n"
+"PO-Revision-Date: 2024-01-08 12:30+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.04.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -45,7 +45,7 @@ msgstr "Objectivo"
 #: jobs/k3baudiocuefilewritingjob.cpp:107
 #, kde-format
 msgid "Writing Audio Cue File"
-msgstr "Scriber File bastone (Cue) Audio"
+msgstr "Scriber File Indice (Cue) Audio"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:205
 #, kde-format
@@ -70,7 +70,7 @@ msgstr "Incapace a manear \"%1\"  debite a un formato non supportate."
 #: jobs/k3baudiocuefilewritingjob.cpp:286
 #, kde-format
 msgid "No valid audio cue file: '%1'"
-msgstr "Necun valide file bastone: '%1'"
+msgstr "Necun valide file indice: '%1'"
 
 #: jobs/k3baudiosessionreadingjob.cpp:134
 #, kde-format
@@ -121,7 +121,7 @@ msgstr "Scriber tracia %1 de %2"
 #: jobs/k3bbinimagewritingjob.cpp:203
 #, kde-format
 msgid "Writing cue/bin Image"
-msgstr "Scribente image baston (cue)/bin"
+msgstr "Scribente image indice (cue)/bin"
 
 #: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
 #, kde-format
@@ -3270,7 +3270,7 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format
 msgid "Removing Cue file %1"
-msgstr "Removente file bastone %1"
+msgstr "Removente file indice %1"
 
 #: projects/videocd/k3bvcdjob.cpp:174
 #, kde-format
@@ -3280,7 +3280,7 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:190
 #, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr "Creante files de Bastone (Cue)/Bin..."
+msgstr "Creante files de Indice (Cue)/Bin..."
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
@@ -3312,7 +3312,7 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
-msgstr "Files bastone (Cue)/bin create con successo."
+msgstr "Files indice (Cue)/bin create con successo."
 
 #: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format

@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the k3b package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2020, 2021, 2022, 2023.
+# Giovanni Sora <g.sora@tiscali.it>, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-07-27 15:41+0200\n"
+"PO-Revision-Date: 2024-01-08 12:29+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.1\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2355,7 +2355,7 @@ msgstr ""
 #: k3bjobprogressdialog.cpp:208
 #, kde-format
 msgid "Overall progress:"
-msgstr ""
+msgstr "Progresso Global:"
 
 #: k3bjobprogressdialog.cpp:230
 #, kde-format
@@ -3717,17 +3717,17 @@ msgstr "File TOC:"
 #: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
 #, kde-format
 msgid "Cue/bin image"
-msgstr "Image Cue(bastone)/bin"
+msgstr "Image Cue (indice)/bin"
 
 #: misc/k3bimagewritingdialog.cpp:293
 #, kde-format
 msgid "Cue file:"
-msgstr "File Cue (bastone):"
+msgstr "File Cue (indice):"
 
 #: misc/k3bimagewritingdialog.cpp:304
 #, kde-format
 msgid "Audio Cue Image"
-msgstr "Image audio cue (bastone)"
+msgstr "Image audio cue (indice)"
 
 #: misc/k3bimagewritingdialog.cpp:310
 #, kde-format
@@ -3769,7 +3769,7 @@ msgstr "Files de image ISO 9660"
 #: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
 #, kde-format
 msgid "Cue Files"
-msgstr "Files Cue (bastone):"
+msgstr "Files Cue (indice):"
 
 #: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
 #, kde-format
@@ -3794,7 +3794,7 @@ msgstr "Image de systema de file ISO 9660"
 #: misc/k3bimagewritingdialog.cpp:479
 #, kde-format
 msgid "Audio cue file"
-msgstr "File cue (bastone) audio"
+msgstr "File cue (indice) audio"
 
 #: misc/k3bimagewritingdialog.cpp:480
 #, kde-format
@@ -4705,7 +4705,7 @@ msgstr ""
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
 msgid "Default Settings"
-msgstr ""
+msgstr "Preferentias predefinite"
 
 #: option/k3bmiscoptiontab.cpp:39
 #, kde-format
@@ -6381,7 +6381,7 @@ msgstr ""
 #: projects/k3baudioviewimpl.cpp:85
 #, kde-format
 msgid "Edit Source..."
-msgstr ""
+msgstr "Modifica Fonte..."
 
 #: projects/k3baudioviewimpl.cpp:87
 #, kde-format
@@ -9052,12 +9052,12 @@ msgstr ""
 #: rip/k3baudioripjob.cpp:289
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
-msgstr ""
+msgstr "Rippante tracia %1 (%2 - %3)"
 
 #: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1"
-msgstr ""
+msgstr "Rippante tracia %1"
 
 #: rip/k3baudioripjob.cpp:300
 #, kde-format
@@ -9111,7 +9111,7 @@ msgstr ""
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
 msgid "Cue-file"
-msgstr "File Cue (bastone)"
+msgstr "File Cue (indice)"
 
 #: rip/k3baudiorippingdialog.cpp:397
 #, kde-format
