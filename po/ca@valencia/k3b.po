@@ -2463,7 +2463,7 @@ msgstr "Carrega la configuració guardada o predeterminada"
 #: k3binteractiondialog.cpp:190
 #, kde-format
 msgid "Save current settings to reuse them later"
-msgstr "Guarda la configuració actual per a fer-lo servir després"
+msgstr "Guarda la configuració actual per a utilitzar-la després"
 
 #: k3binteractiondialog.cpp:194
 #, kde-format
