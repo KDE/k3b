@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-03 00:45+0000\n"
-"PO-Revision-Date: 2024-01-08 12:25+0100\n"
+"PO-Revision-Date: 2024-01-08 12:26+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -3312,7 +3312,7 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
-msgstr "Files bastone (Cue)/bin create con successo."
+msgstr "Files indice (Cue)/bin create con successo."
 
 #: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
