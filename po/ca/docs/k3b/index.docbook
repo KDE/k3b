@@ -57,7 +57,7 @@
 <para
 >Si heu utilitzat un programa de gravació com Nero sota Windows, el &k3b; us resultarà molt familiar. </para>
 <para
->Amb una interfície gràfica simple, però potent, el &k3b; ofereix diverses opcions per gravar un CD, DVD o BD (disc Blu-ray). S'han implementat diversos tipus de projectes òptics incloent (però no limitats a) d'àudio i de dades, projectes de vídeo per a DVD i VCD, així com discs multisessió i de mode mixt. &k3b; també té la capacitat per esborrar suports re-gravables i pot realitzar tasques més complicades, com ara codificació i descodificació audiovisual. </para>
+>Amb una interfície gràfica simple, però potent, el &k3b; ofereix diverses opcions per a gravar un CD, DVD o BD (disc Blu-ray). S'han implementat diversos tipus de projectes òptics incloent (però no limitats a) d'àudio i de dades, projectes de vídeo per a DVD i VCD, així com discs multisessió i de mode mixt. &k3b; també té la capacitat per a esborrar suports regravables i pot realitzar tasques més complicades, com ara codificació i descodificació audiovisual. </para>
 </chapter>
 <!--
 Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
@@ -137,7 +137,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 ></listitem>
 </itemizedlist>
 <para
->El &k3b; pot realitzar moltes més tasques, tot i que és possible que algunes de les altres possibilitats us resultin tan útils com aquestes. Doneu una ullada a aquesta llista per trobar les altres característiques disponibles: </para>
+>El &k3b; pot realitzar moltes més tasques, tot i que és possible que algunes de les altres possibilitats us resultin tan útils com aquestes. Doneu una ullada a aquesta llista per a trobar les altres característiques disponibles: </para>
 <para>
 <screenshot>
 <screeninfo
@@ -154,7 +154,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 </screenshot>
 </para>
 <para
->Potser seria útil una guia d'inici ràpid per a una o més d'aquestes altres tasques i el &k3b; us la pot oferir. Simplement feu clic dret sobre l'aplicació a l'escriptori, i veureu un menú per afegir botons: </para>
+>Potser seria útil una guia d'inici ràpid per a una o més d'aquestes altres tasques i el &k3b; us la pot oferir. Simplement feu clic dret sobre l'aplicació a l'escriptori, i veureu un menú per a afegir botons: </para>
 <para>
 <screenshot>
 <screeninfo
@@ -208,7 +208,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 ><para
 >L'opció <guilabel
 >No expulsis el suport després del procés d'escriptura</guilabel
-> té un valor incalculable si la unitat és la que no es pot tancar amb la suficient rapidesa per <guilabel
+> té un valor incalculable si la unitat és la que no es pot tancar amb la rapidesa suficient per a <guilabel
 >Verificar</guilabel
 > el que passa. </para
 ></listitem>
@@ -253,7 +253,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 <para
 >Ara que teniu les vostres fonts a mà, simplement arrossegueu i deixeu anar els fitxers i directoris que voleu escriure a la subfinestra gran a la dreta de la part inferior -aquesta és la <emphasis
 >subfinestra de model</emphasis
->-. Heus aquí un arbre dels fitxers seleccionats a l'esquerra. Hi ha d'haver alguns fitxers o directoris que no voleu cremar, aquests es poden eliminar amb facilitat del projecte simplement eliminant-los de la subfinestra a la part inferior. Seleccioneu el fitxer a eliminar (ho podeu controlar prement la tecla &Ctrl; i fent clic per seleccionar múltiples elements) i llavors escollint <guilabel
+>-. Heus aquí un arbre dels fitxers seleccionats a l'esquerra. Hi ha d'haver alguns fitxers o directoris que no voleu cremar, aquests es poden eliminar amb facilitat del projecte simplement eliminant-los de la subfinestra a la part inferior. Seleccioneu el fitxer a eliminar (ho podeu controlar prement la tecla &Ctrl; i fent clic per a seleccionar múltiples elements) i llavors escollint <guilabel
 >Elimina</guilabel
 > des del menú contextual. </para>
 <tip>
@@ -273,7 +273,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 ><title
 >Passos finals</title>
 <para
->Ara està llest per prémer el botó <guilabel
+>Ara està llest per a prémer el botó <guilabel
 >Grava</guilabel
 >. </para>
 <para>
@@ -371,7 +371,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 <para
 >Podeu donar els títols de les pistes o importar-los des de <acronym
 >CDDB</acronym
-> (un servei en línia per als noms de les pistes). Per fer-ho, feu doble clic sobre la pista (la meitat inferior de la finestra). </para>
+> (un servei en línia per als noms de les pistes). Per a fer-ho, feu doble clic sobre la pista (la meitat inferior de la finestra). </para>
 </sect2>
 <sect2 id="burn-the-cd"
 ><title
