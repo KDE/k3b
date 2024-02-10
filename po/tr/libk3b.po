@@ -12,13 +12,13 @@
 # S.Çağlar Onur <caglar@uludag.org.tr>, 2004.
 # obsoleteman <tulliana@gmail.com>, 2007-2009,2011-2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2017.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2023-11-26 01:26+0300\n"
+"PO-Revision-Date: 2024-02-09 19:24+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 24.01.95\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -191,7 +191,7 @@ msgstr "Kaynak ortam kontrol ediliyor"
 #: jobs/k3bcdcopyjob.cpp:195
 #, kde-format
 msgid "K3b does not copy CDs containing multiple data tracks."
-msgstr "K3b, çoklu veri parçaları içeren CD'leri kopyalayamıyor."
+msgstr "K3b, çoklu veri parçaları içeren CD’leri kopyalayamıyor."
 
 #: jobs/k3bcdcopyjob.cpp:199
 #, kde-format
@@ -201,22 +201,22 @@ msgstr "Çoklu-oturum CD kopyalanıyor."
 #: jobs/k3bcdcopyjob.cpp:201
 #, kde-format
 msgid "Copying Data CD."
-msgstr "Veri CD'si Kopyalanıyor."
+msgstr "Veri CD’si Kopyalanıyor."
 
 #: jobs/k3bcdcopyjob.cpp:207
 #, kde-format
 msgid "K3b can only copy CD-Extra mixed mode CDs."
-msgstr "K3b, yalnızca CD-Extra karışık kip CD'lerini kopyalayabilir."
+msgstr "K3b, yalnızca CD-Extra karışık kip CD’lerini kopyalayabilir."
 
 #: jobs/k3bcdcopyjob.cpp:211
 #, kde-format
 msgid "Copying Enhanced Audio CD (CD-Extra)."
-msgstr "Gelişmiş Ses CD'si kopyalanıyor (CD-Extra)."
+msgstr "Gelişmiş Ses CD’si kopyalanıyor (CD-Extra)."
 
 #: jobs/k3bcdcopyjob.cpp:216
 #, kde-format
 msgid "Copying Audio CD."
-msgstr "Ses CD'si Kopyalanıyor."
+msgstr "Ses CD’si Kopyalanıyor."
 
 #: jobs/k3bcdcopyjob.cpp:221
 #, kde-format
@@ -236,8 +236,8 @@ msgid ""
 "You will only be able to copy the first session in raw writing mode. "
 "Continue anyway?"
 msgstr ""
-"Ham (raw) yazma kipinde yalnızca ilk oturumu kopyalayabilirsiniz. Yine de "
-"sürdürmek ister misiniz?"
+"Ham yazma kipinde yalnızca ilk oturumu kopyalayabilirsiniz. Yine de "
+"sürdürülsün mü?"
 
 #: jobs/k3bcdcopyjob.cpp:277
 #, kde-format
@@ -359,17 +359,17 @@ msgstr "%1 geçici klasörü kullanılıyor."
 #: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
 msgid "Do you want to overwrite %1?"
-msgstr "%1'in üstüne yazılmasını ister misiniz?"
+msgstr "%1 üzerine yazılmasını istiyor musunuz?"
 
 #: jobs/k3bcdcopyjob.cpp:576 jobs/k3bdvdcopyjob.cpp:319
 #, kde-format
 msgid "File Exists"
-msgstr "Dosya Mevcut"
+msgstr "Dosya Var"
 
 #: jobs/k3bcdcopyjob.cpp:585 jobs/k3bdvdcopyjob.cpp:328
 #, kde-format
 msgid "Writing image file to %1."
-msgstr "Kalıp dosyası %1'e yazılıyor."
+msgstr "Kalıp dosyası %1 konumuna yazılıyor."
 
 #: jobs/k3bcdcopyjob.cpp:601
 #, kde-format
@@ -389,7 +389,7 @@ msgstr "%1 / %2 Parça okunuyor"
 #: jobs/k3bcdcopyjob.cpp:699
 #, kde-format
 msgid "Simulating Session %1"
-msgstr "Oturum %1'in Simülasyonu Yapılıyor"
+msgstr "%1 oturumu simüle ediliyor"
 
 #: jobs/k3bcdcopyjob.cpp:701
 #, kde-format
@@ -710,7 +710,7 @@ msgstr "Okuma sırasında sorun oluştu. %1. dilimden tekrar deneniyor."
 #: jobs/k3bdatatrackreader.cpp:431
 #, kde-format
 msgid "Ignoring read error in sector %1."
-msgstr "Dilim %1'deki okuma hatası yok sayılıyor."
+msgstr "Dilim %1 üzerindeki okuma hatası yok sayılıyor."
 
 #: jobs/k3bdvdbooktypejob.cpp:75
 #, kde-format
@@ -805,17 +805,17 @@ msgstr "Şifrelenmiş DVD bulundu."
 #: jobs/k3bdvdcopyjob.cpp:200
 #, kde-format
 msgid "Cannot copy encrypted DVDs."
-msgstr "Şifrelenmiş DVD'ler kopyalanamıyor."
+msgstr "Şifrelenmiş DVD’ler kopyalanamıyor."
 
 #: jobs/k3bdvdcopyjob.cpp:236
 #, kde-format
 msgid "The writer does not support writing Double Layer DVDs."
-msgstr "Yazıcı, Çift Katmanlı DVD'lere yazma desteğine sahip değil."
+msgstr "Yazıcı, Çift Katmanlı DVD’lere yazma desteğine sahip değil."
 
 #: jobs/k3bdvdcopyjob.cpp:242
 #, kde-format
 msgid "This growisofs version does not support writing Double Layer DVDs."
-msgstr "Mevcut growisofs sürümü, Çift Katmanlı DVD'lere yazmayı desteklemiyor."
+msgstr "Mevcut growisofs sürümü, Çift Katmanlı DVD’lere yazmayı desteklemiyor."
 
 #: jobs/k3bdvdcopyjob.cpp:260
 #, kde-format
@@ -1234,8 +1234,8 @@ msgid ""
 "Your writer (%1 %2) does not support Incremental Streaming with %3 media. "
 "Multisession will not be possible. Continue anyway?"
 msgstr ""
-"Yazıcınız (%1 %2) %3 ortamında Artan Akışı (Incremental Streaming) "
-"desteklemiyor. Çoklu oturum yapılamayacak. Yine de sürdürmek ister misiniz?"
+"Yazıcınız (%1 %2) %3 ortamında Artımlı Akışı (Incremental Streaming) "
+"desteklemiyor. Çoklu oturum yapılamayacak. Yine de sürdürülsün mü?"
 
 #: jobs/k3bmetawriter.cpp:487 projects/datacd/k3bdatajob.cpp:896
 #, kde-format
@@ -1260,7 +1260,7 @@ msgstr "DVD+R(W) için simülasyon yok"
 #, kde-format
 msgid "Most writers do not support writing multisession CDs in DAO mode."
 msgstr ""
-"Çoğu yazıcı DAO kipinde çoklu-oturum CD'lerinin yazılmasını desteklemez."
+"Çoğu yazıcı DAO kipinde çoklu-oturum CD’lerinin yazılmasını desteklemez."
 
 #: jobs/k3bmetawriter.cpp:785
 #, kde-format
@@ -1352,7 +1352,7 @@ msgstr "Klonlama desteğine sahip readcd çalıştırılabilir dosyası bulunama
 #: jobs/k3breadcdreader.cpp:155 jobs/k3breadcdreader.cpp:156
 #, kde-format
 msgid "Writing image to %1."
-msgstr "Kalıp dosyası %1'e yazılıyor."
+msgstr "Kalıp dosyası %1 konumuna yazılıyor."
 
 #: jobs/k3breadcdreader.cpp:198
 #, kde-format
@@ -1367,17 +1367,17 @@ msgstr "Kaynak disk okunamıyor."
 #: jobs/k3breadcdreader.cpp:267
 #, kde-format
 msgid "Retrying from sector %1."
-msgstr "Dilim %1'den tekrar deneniyor."
+msgstr "Dilim %1 konumundan yeniden deneniyor."
 
 #: jobs/k3breadcdreader.cpp:283
 #, kde-format
 msgid "Uncorrected error in sector %1"
-msgstr "Dilim %1'de düzeltilmemiş hata"
+msgstr "Dilim %1 üzerinde düzeltilmemiş hata"
 
 #: jobs/k3breadcdreader.cpp:286
 #, kde-format
 msgid "Corrected error in sector %1"
-msgstr "Dilim %1'de düzeltilmiş hata"
+msgstr "Dilim %1 üzerinde düzeltilmiş hata"
 
 #: jobs/k3breadcdreader.cpp:306
 #, kde-format
@@ -1435,7 +1435,7 @@ msgstr "%1 Sürüm %2 çok eski."
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
 #, kde-format
 msgid "Analysing Title %1 of Video DVD %2"
-msgstr "%2 Video DVD'sinin %1 Başlığı İnceleniyor"
+msgstr "%2 Video DVD’sinin %1 Başlığı İnceleniyor"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:178
 #, kde-format
@@ -1457,12 +1457,12 @@ msgstr "'%1' klasörü oluşturulamıyor"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:157
 #, kde-format
 msgid "Invalid filename: '%1'"
-msgstr "Geçersiz dosya ismi: '%1'"
+msgstr "Geçersiz dosya adı: '%1'"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:169
 #, kde-format
 msgid "Transcoding title %1 from Video DVD %2"
-msgstr "%2 Vidyo DVD'sinden %1 Parçası çözümleniyor"
+msgstr "%2 Vidyo DVD’sinden %1 Parçası çözümleniyor"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:194
 #, kde-format
@@ -1477,7 +1477,7 @@ msgstr "Geçersiz ses kodlayıcısı: %1"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
 msgid "Resizing picture of title %1 to %2x%3"
-msgstr "Resim başlığı %1'i %2 × %3 olarak yeniden boyutlandırıyor"
+msgstr "%1 parçasının resmi %2 × %3 olarak yeniden boyutlandırıyor"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:381
 #, kde-format
@@ -1497,7 +1497,7 @@ msgstr "Çift-geçiş Kodlama: İkinci Geçiş"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:409
 #, kde-format
 msgid "Removing incomplete video file '%1'"
-msgstr "Tamamlanmamış vidyo dosyasını kaldırıyor: %1"
+msgstr "Tamamlanmamış video dosyası kaldırılıyor: %1"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:483
 #, kde-format
@@ -1670,7 +1670,7 @@ msgstr "Proje eklentisi"
 #: projects/audiocd/k3baudiocdtrackreader.cpp:60
 #, kde-format
 msgid "Please insert Audio CD %1%2"
-msgstr "Lütfen Ses CD'si %1%2 yerleştiriniz"
+msgstr "Lütfen Ses CD’si %1%2 yerleştiriniz"
 
 #: projects/audiocd/k3baudiocdtracksource.cpp:201
 #, kde-format
@@ -1680,7 +1680,7 @@ msgstr "CD Parçası"
 #: projects/audiocd/k3baudiocdtracksource.cpp:207
 #, kde-format
 msgid "Track %1 from Audio CD %2"
-msgstr "%2 Ses CD'sinden %1 Parçası"
+msgstr "%2 Ses CD’sinden %1 Parçası"
 
 #: projects/audiocd/k3baudioimager.cpp:86
 #, kde-format
@@ -1696,7 +1696,7 @@ msgstr "%1, yazılmak için açılamıyor"
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
 msgid "Error while decoding track %1."
-msgstr "Parça %1'in kodu çözülürken hata oluştu."
+msgstr "Parça %1 kodu çözülürken hata oluştu."
 
 #: projects/audiocd/k3baudiojob.cpp:165
 #: projects/datacd/k3bdatapreparationjob.cpp:174
@@ -1707,7 +1707,7 @@ msgid ""
 "project and continue without adding them to the image?"
 msgstr ""
 "Aşağıdaki dosyalar bulunamadı. Bu dosyaları projeden çıkarıp kalıba bu "
-"dosyaları eklemeden sürdürmek ister misiniz?"
+"dosyaları eklemeden sürdürmek istiyor musunuz?"
 
 #: projects/audiocd/k3baudiojob.cpp:168
 #: projects/datacd/k3bdatapreparationjob.cpp:138
@@ -1753,7 +1753,7 @@ msgstr "En yüksek yazma hızı belirleniyor"
 #: projects/audiocd/k3baudiojob.cpp:338
 #, kde-format
 msgid "Creating image files in %1"
-msgstr "Kalıp dosyaları %1'de oluşturuluyor"
+msgstr "Kalıp dosyaları %1 konumunda oluşturuluyor"
 
 #: projects/audiocd/k3baudiojob.cpp:339 projects/videocd/k3bvcdjob.cpp:182
 #, kde-format
@@ -1817,7 +1817,7 @@ msgstr "Ses düzeyleri normalleştiriliyor"
 #: projects/audiocd/k3baudiojob.cpp:838
 #, kde-format
 msgid "Writing Audio CD"
-msgstr "Ses CD'si Yazılıyor"
+msgstr "Ses CD’si Yazılıyor"
 
 #: projects/audiocd/k3baudiojob.cpp:848
 #, kde-format
@@ -1878,7 +1878,7 @@ msgstr "Sessizlik"
 #: projects/audiocd/k3brawaudiodatasource.cpp:65
 #, kde-format
 msgid "Raw Audio CD Image"
-msgstr "Ham Ses CD'si Kalıbı"
+msgstr "Ham Ses CD’si Kalıbı"
 
 #: projects/datacd/k3bbootitem.cpp:23
 #, kde-format
@@ -1928,12 +1928,12 @@ msgstr "Kalıp dosyası hazırlanıyor"
 #: projects/datacd/k3bdatajob.cpp:214
 #, kde-format
 msgid "Track 1 of 1"
-msgstr "1 Parçadan 1'i"
+msgstr "1/1 Parça"
 
 #: projects/datacd/k3bdatajob.cpp:215
 #, kde-format
 msgid "Creating image file in %1"
-msgstr "%1'de Kalıp Dosyası oluşturuluyor"
+msgstr "%1 içinde kalıp dosyası oluşturuluyor"
 
 #: projects/datacd/k3bdatajob.cpp:373
 #, kde-format
@@ -2074,11 +2074,10 @@ msgid ""
 "that. Do you want it to be cut or do you want to go back and change it "
 "manually?"
 msgstr ""
-"Windows sistemlerde uzun dosya ismi desteği için gerekli olan Joilet "
-"eklentileri, etiket tanımlarını  (dosya sistemi ismini) %1 karakter olarak "
-"sınırlamakta. Seçilen %2 tanımlayıcı izin verilen sınırdan daha uzun. İsmin "
-"kısaltılmasını mı istiyor musunuz; yoksa geri dönüp ismi kendiniz mi "
-"değiştirmek istiyorsunuz?"
+"Windows sistemlerde uzun dosya adı desteği için gerekli olan Joilet "
+"eklentileri, etiket tanımlarını (dosya sistemi adını) %1 karakter olarak "
+"sınırlamakta. Seçilen %2 tanımlayıcısı izin verilen sınırdan daha uzun. Adın "
+"kısaltılmasını mı yoksa adı kendiniz mi değiştirmek istiyorsunuz?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:163
 #, kde-format
@@ -2206,7 +2205,7 @@ msgstr "Mkisofs çalıştırılabilir dosyası bulunamadı."
 #: projects/datacd/k3bmkisofshandler.cpp:80
 #, kde-format
 msgid "Read error from file '%1'"
-msgstr "'%1' dosyasından okumada hata"
+msgstr "'%1' dosyasında okuma hatası"
 
 #: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
@@ -2221,12 +2220,12 @@ msgstr "2 GB boyuntundan büyük olan dosyalar yönetilemiyor."
 #: projects/datacd/k3bmkisofshandler.cpp:90
 #, kde-format
 msgid "No such file or directory '%1'."
-msgstr "'%1' dosya ya da dizini bulunamadı."
+msgstr "'%1' dosyası veya dizini bulunamadı."
 
 #: projects/datacd/k3bmkisofshandler.cpp:105
 #, kde-format
 msgid "Encountered an incorrectly encoded filename '%1'"
-msgstr "Yanlış kodlanmış bir dosya ismiyle karşılaşıldı: '%1'"
+msgstr "Yanlış kodlanmış bir dosya adıyla karşılaşıldı: '%1'"
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
 #, kde-format
@@ -3117,7 +3116,7 @@ msgstr "Yazma başlatılıyor..."
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
 msgid "Creating audio image files in %1"
-msgstr "Ses kalıbı dosyaları %1'de oluşturuluyor"
+msgstr "Ses kalıbı dosyaları %1 içinde oluşturuluyor"
 
 #: projects/mixedcd/k3bmixedjob.cpp:280 projects/mixedcd/k3bmixedjob.cpp:494
 #, kde-format
@@ -3157,7 +3156,7 @@ msgstr "Veri oturumu simülasyonu yapılıyor"
 #: projects/mixedcd/k3bmixedjob.cpp:988
 #, kde-format
 msgid "Writing second session of copy %1"
-msgstr "Kopya %1'in ikinci oturumu yazılıyor"
+msgstr "Kopya %1 ikinci oturumu yazılıyor"
 
 #: projects/mixedcd/k3bmixedjob.cpp:990
 #, kde-format
@@ -3172,7 +3171,7 @@ msgstr "İlk oturumun simülasyonu yapılıyor"
 #: projects/mixedcd/k3bmixedjob.cpp:996
 #, kde-format
 msgid "Writing first session of copy %1"
-msgstr "Kopya %1'in ilk oturumu yazılıyor"
+msgstr "Kopya %1 ilk oturumu yazılıyor"
 
 #: projects/mixedcd/k3bmixedjob.cpp:998
 #, kde-format
@@ -3187,7 +3186,7 @@ msgstr "ISO kalıp dosyası oluşturuluyor"
 #: projects/mixedcd/k3bmixedjob.cpp:1077 projects/mixedcd/k3bmixedjob.cpp:1078
 #, kde-format
 msgid "Creating ISO image in %1"
-msgstr "%1'de ISO kalıbı oluşturuluyor"
+msgstr "%1 içinde ISO kalıbı oluşturuluyor"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1118
 #, kde-format
@@ -3212,7 +3211,7 @@ msgstr "TAO kipinde CD-TEXT yazılamıyor. DAO ya da RAW (RAW) deneyin."
 #: projects/mixedcd/k3bmixedjob.cpp:1332
 #, kde-format
 msgid "Writing Enhanced Audio CD"
-msgstr "Gelişmiş Ses CD'si yazılıyor"
+msgstr "Gelişmiş Ses CD’si yazılıyor"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1337
 #, kde-format
@@ -3242,7 +3241,7 @@ msgstr "Bu adda bir dosya zaten var. Lütfen başka bir ad girin:"
 msgid ""
 "Could not rename subtitle file. File with requested name %1 already exists."
 msgstr ""
-"Altyazı dosyasının ismi değiştirilemedi. %1 adında bir dosya zaten var."
+"Altyazı dosyasının adı değiştirilemedi. %1 adında bir dosya halihazırda var."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:125
 #, kde-format
@@ -3332,12 +3331,12 @@ msgstr ""
 #: projects/videocd/k3bvcddoc.cpp:220
 #, kde-format
 msgid "Force VCD"
-msgstr "VCD'yi Zorla"
+msgstr "VCD’yi Zorla"
 
 #: projects/videocd/k3bvcddoc.cpp:221
 #, kde-format
 msgid "Do not force VCD"
-msgstr "VCD'yi Zorlama"
+msgstr "VCD’yi Zorlama"
 
 #: projects/videocd/k3bvcddoc.cpp:234
 #, kde-format
@@ -3408,7 +3407,7 @@ msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"Dağıtım CD'lerinizden bulabilirsiniz ya da https://www.vcdimager.org "
+"Dağıtım CD’lerinizden bulabilirsiniz ya da https://www.vcdimager.org "
 "adresinden indirebilirsiniz"
 
 #: projects/videocd/k3bvcdjob.cpp:204
@@ -3734,7 +3733,7 @@ msgstr "CDDB Taraması"
 #: tools/k3bmedium.cpp:313
 #, kde-format
 msgid "Audio CD"
-msgstr "Ses CD'si"
+msgstr "Ses CD’si"
 
 #: tools/k3bmedium.cpp:316
 #, kde-format
@@ -4181,7 +4180,7 @@ msgid ""
 "where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
 "seconds are only supported in DAO mode."
 msgstr ""
-"<p>Eğer bu seçenek seçilirse K3b CD'yi 'bir seferde tüm iz' (TAO) "
+"<p>Eğer bu seçenek seçilirse K3b CD’yi 'bir seferde tüm iz' (TAO) "
 "yönteminden ziyade, bir seferde tüm disk' (DAO) yöntemiyle yazacaktır. "
 "<p>Mümkün olduğunca DAO kullanımı tavsiye edilmektedir. <p><b>Uyarı</b>İz ön "
 "aralıkları 2 saniyeden farklı olanlar yalnızca DAO yöntemi tarafından "
@@ -4225,7 +4224,7 @@ msgstr ""
 "akışına gereksinim duyar.<p><em>Burnfree</em> ile yazıcı, lazerin mevcut "
 "konumunu <em>işaretleyebilir</em> ve tampon tekrar dolduğunda oraya geri "
 "dönebilir; ancak bu, CD üzerinde ufak veri boşlukları olacağı anlamına "
-"geldiğinden <b>CD yazarken (özellikle ses CD'leri için) uygun bir hız "
+"geldiğinden <b>CD yazarken (özellikle ses CD’leri için) uygun bir hız "
 "seçilerek Burnfree kullanımının önlenmesi tavsiye edilir</b> (En kötü "
 "ihtimalle o veri boşlukları duyulabilir.)<p> Daha önce <em>Burnproof</em> "
 "olarak bilinen bu teknoloji, MMC standardının bir parçası olduktan sonra "
@@ -4244,7 +4243,7 @@ msgid ""
 "current writing programs (including K3b of course)."
 msgstr ""
 "<p>Eğer bu seçenek seçilirse K3b yalnızca bir görüntü oluşturacak ve gerçek "
-"bir yazma işlemi yapmayacaktır. <p>Görüntü daha sonra bir CD/DVD'ye birçok "
+"bir yazma işlemi yapmayacaktır. <p>Görüntü daha sonra bir CD/DVD’ye birçok "
 "yazma programı(K3b de dahil tabii ki) kullanılarak yazılablir."
 
 #: tools/k3bstdguiitems.cpp:69
@@ -4266,7 +4265,7 @@ msgid ""
 "writing on-the-fly should work on most systems, make sure the data is sent "
 "to the writer fast enough."
 msgstr ""
-"<p>Eğer bu seçenek seçilirse K3b, dosyaları CD/DVD'ye yazmadan önce başta "
+"<p>Eğer bu seçenek seçilirse K3b, dosyaları CD/DVD’ye yazmadan önce başta "
 "bir görüntü oluşturacak. Aksi takdirde veri <em>on-the-fly</em> olarak "
 "yazılacak. <p><b>Uyarı:</b>Bu birçok sistemde çalışmasına rağmen, verinin "
 "yazıcıya yeterince hızlı gönderildiğinden emin olun."
@@ -4314,14 +4313,14 @@ msgid ""
 "work on most systems, make sure the data is sent to the writer fast enough."
 msgstr ""
 "<p>Eğer bu seçenek seçilirse K3b başta bir görüntü oluşturmayacak, dosyaları "
-"CD/DVD'ye doğrudan yazacaktır. <p><b>Uyarı:</b>Bu birçok sistemde "
+"CD/DVD’ye doğrudan yazacaktır. <p><b>Uyarı:</b>Bu birçok sistemde "
 "çalışmasına rağmen, verinin yazıcıya yeterince hızlı gönderildiğinden emin "
 "olun."
 
 #: tools/k3bstdguiitems.cpp:104
 #, kde-format
 msgid "Write files directly to CD/DVD without creating an image"
-msgstr "Kalıp oluşturmadan dosyaları direkt olarak CD/DVD'ye yaz"
+msgstr "Kalıp oluşturmadan dosyaları direkt olarak CD/DVD’ye yaz"
 
 #: tools/k3bstdguiitems.cpp:110
 #, kde-format
@@ -4345,7 +4344,7 @@ msgid ""
 "Text data.)"
 msgstr ""
 "<p>Eğer bu seçenek seçilirse K3b ses CD ortamlarında kullanılmayan alanları "
-"sanatçı ismi veya CD başlığı gibi bazı ek bilgileri depolamak için kullanır."
+"sanatçı adı veya CD başlığı gibi bazı ek bilgileri depolamak için kullanır."
 "<p>CD-Text, ses CD standardına Sony tarafından katılan bir eklentidir.<p>CD-"
 "Text yalnızca bu eklentiyi destekleyen CD oynatıcılarda (daha çok otomobil "
 "CD okuyucuları) kullanılabilir.<p>CD-Text özellikli CD ortamları her CD "
@@ -4355,7 +4354,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:131
 #, kde-format
 msgid "Set the paranoia level for reading audio CDs"
-msgstr "Müzik CD'leri için paranoya düzeyi ayarla"
+msgstr "Müzik CD’leri için paranoya düzeyi ayarla"
 
 #: tools/k3bstdguiitems.cpp:132
 #, kde-format
@@ -4375,7 +4374,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:144
 #, kde-format
 msgid "Start multisession CD"
-msgstr "Çoklu-oturum CD'ye başla"
+msgstr "Çoklu-oturum CD’ye başla"
 
 #: tools/k3bstdguiitems.cpp:145
 #, kde-format
@@ -4389,8 +4388,8 @@ msgid ""
 "temporary table of contents.</p><p>This allows further sessions to be "
 "appended to the CD later.</p>"
 msgstr ""
-"<p>Eğer bu seçenek seçilirse K3b CD'yi sonlandırmayacak ve geçici bir "
-"içindekiler tablosu yazacaktır.</p><p>Bu daha sonraki oturumların CD'ye "
+"<p>Eğer bu seçenek seçilirse K3b CD’yi sonlandırmayacak ve geçici bir "
+"içindekiler tablosu yazacaktır.</p><p>Bu daha sonraki oturumların CD’ye "
 "eklenmesine olanak tanır.</p>"
 
 #: tools/k3bstdguiitems.cpp:155
@@ -4457,7 +4456,7 @@ msgid ""
 "<p>Since audio CD Player are able to interpolate small errors in the data it "
 "is no problem to let K3b skip unreadable sectors."
 msgstr ""
-"<p>Bu seçenek seçilirse ve K3b kaynak CD'den bir ses dilimini okumayı "
+"<p>Bu seçenek seçilirse ve K3b kaynak CD’den bir ses dilimini okumayı "
 "başaramazsa oluşturulacak kopyada ilgili yerler sıfır ile doldurulur. <p>CD "
 "Okuyucular ufak hataları yuvarlayabildiğinden, okunamayan dilimlerin "
 "atlanmasına izin vermek zararsızdır."
