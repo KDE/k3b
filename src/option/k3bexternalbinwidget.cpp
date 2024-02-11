@@ -12,7 +12,6 @@
 #include "k3bexternalbinpermissionmodel.h"
 #include "config-k3b.h"
 
-#include <KAuth/Action>
 #include <KAuth/ExecuteJob>
 #include <KLocalizedString>
 #include <KMessageBox>
@@ -248,10 +247,47 @@ void K3b::ExternalBinWidget::slotChangePermissions()
 
             m_permissionModel->update();
         } else {
-            KMessageBox::error(this, i18n("Unable to execute the action: %1", job->errorString()));
+            QString errstr = job->errorString();
+            if (errstr.isEmpty()) {
+                errstr = authErrorString(job->action().status());
+            }
+
+            KMessageBox::error(this, i18n("Unable to execute the action<br/>%1", errstr));
         }
     } );
     job->start();
+}
+
+
+/* static */ QString K3b::ExternalBinWidget::authErrorString(KAuth::Action::AuthStatus status)
+{
+    QString text;
+
+    switch (status) {
+case KAuth::Action::DeniedStatus:
+        text = i18n("Authorization denied");
+        break;
+case KAuth::Action::ErrorStatus:
+        text = i18n("An error occurred");
+        break;
+case KAuth::Action::InvalidStatus:
+        text = i18n("Invalid action");
+        break;
+case KAuth::Action::AuthorizedStatus:
+        text = i18n("Authorization granted");
+        break;
+case KAuth::Action::AuthRequiredStatus:
+        text = i18n("Authentication required");
+        break;
+case KAuth::Action::UserCancelledStatus:
+        text = i18n("User cancelled the authentication");
+        break;
+default:
+        text = i18n("Unknown authorization status %1", status);
+        break;
+    }
+
+    return text;
 }
 
 #include "moc_k3bexternalbinwidget.cpp"

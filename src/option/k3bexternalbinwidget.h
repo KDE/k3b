@@ -9,6 +9,7 @@
 #define K3B_EXTERNAL_BIN_WIDGET_H
 
 
+#include <KAuth/Action>
 #include "config-k3b.h"
 #include <QWidget>
 
@@ -34,6 +35,14 @@ namespace K3b {
     public:
         explicit ExternalBinWidget( ExternalBinManager* manager, QWidget* parent = 0 );
         ~ExternalBinWidget() override;
+
+        /**
+	     * Decode a @c KAuth::Action::AuthStatus into a textual error description.
+	     *
+	     * @param status The status from @c KAuth::Action::status()
+	     * @return the error description
+	     */
+        static QString authErrorString(KAuth::Action::AuthStatus status);
 
     public Q_SLOTS:
         void rescan();
