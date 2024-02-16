@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-11-26 20:12+0100\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"PO-Revision-Date: 2024-02-04 17:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -4826,7 +4826,7 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "Ne eblas ŝargi KCDDB-agordan modulon."
 
-#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:57
 #, kde-format
 msgid "Refresh"
 msgstr "Refreŝigi"
@@ -4977,7 +4977,7 @@ msgid "no change"
 msgstr "neniu ŝanĝo"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:119
 #, kde-format
 msgid "Permissions"
 msgstr "Rajtoj:"
@@ -4987,7 +4987,7 @@ msgstr "Rajtoj:"
 msgid "New permissions"
 msgstr "Novaj permesoj"
 
-#: option/k3bexternalbinwidget.cpp:74
+#: option/k3bexternalbinwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -4998,32 +4998,32 @@ msgstr ""
 "kiel la <em>defaŭlta</em>, kiu estos uzata por fari la laboron. Se vi volas "
 "ŝanĝi la defaŭltan, kontrolu deziratan version en la listo."
 
-#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "Programoj"
 
-#: option/k3bexternalbinwidget.cpp:88
+#: option/k3bexternalbinwidget.cpp:87
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "Uzantaj parametroj devas apartatas per spacetojn."
 
-#: option/k3bexternalbinwidget.cpp:101
+#: option/k3bexternalbinwidget.cpp:100
 #, kde-format
 msgid "User Parameters"
 msgstr "Uzantaj parametroj"
 
-#: option/k3bexternalbinwidget.cpp:107
+#: option/k3bexternalbinwidget.cpp:106
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr "Kontrolu la programojn, kies permesojn vi volas ŝanĝi:"
 
-#: option/k3bexternalbinwidget.cpp:115
+#: option/k3bexternalbinwidget.cpp:114
 #, kde-format
 msgid "Change Permissions..."
 msgstr "Ŝanĝi Permesojn..."
 
-#: option/k3bexternalbinwidget.cpp:128
+#: option/k3bexternalbinwidget.cpp:127
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -5032,20 +5032,57 @@ msgstr ""
 "<qt><b>Indiko:</b> por devigi K3b uzi alian ol la norman nomon por la "
 "ruleblo, specifu ĝin en la serĉvojo.</qt>"
 
-#: option/k3bexternalbinwidget.cpp:136
+#: option/k3bexternalbinwidget.cpp:135
 #, kde-format
 msgid "Search Path"
 msgstr "Serĉa vojo"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:245
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Sekvaj programoj ne povus esti ĝisdatigitaj:"
 
-#: option/k3bexternalbinwidget.cpp:251
-#, kde-format
-msgid "Unable to execute the action: %1"
+#: option/k3bexternalbinwidget.cpp:255
+#, fuzzy, kde-format
+#| msgid "Unable to execute the action: %1"
+msgid "Unable to execute the action<br/>%1"
 msgstr "Ne eblas efektivigi la agon: %1"
+
+#: option/k3bexternalbinwidget.cpp:268
+#, kde-format
+msgid "Authorization denied"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:271
+#, fuzzy, kde-format
+#| msgid "No error correction"
+msgid "An error occurred"
+msgstr "Neniu eraro korektigo"
+
+#: option/k3bexternalbinwidget.cpp:274
+#, kde-format
+msgid "Invalid action"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:277
+#, kde-format
+msgid "Authorization granted"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:280
+#, kde-format
+msgid "Authentication required"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:283
+#, kde-format
+msgid "User cancelled the authentication"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:286
+#, kde-format
+msgid "Unknown authorization status %1"
+msgstr ""
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -6495,7 +6532,7 @@ msgstr ""
 "eligo de la grafika tabulo. eMovix provizas TVout-pelilojn por malsamaj "
 "markoj de grafikaj tabuloj.\n"
 "<p>La <b>FB</b>-etikedoj rilatas al agordoj kiuj lanĉas Frame Buffer-pelilon "
-"en malsamaj ekranrezolucioj.\n"
+"en malsamaj ekrandistingivoj.\n"
 "<p>La <b>AA </b> etikedoj igas eMovix eligi la videon per la ASCII-Art-"
 "biblioteko kiu montras la bildon en teksta reĝimo per la uzado de simplaj "
 "ASCII-signoj.\n"
@@ -8399,7 +8436,7 @@ msgstr ""
 "specifo de Video CD postulas, ke la multiplex-ed MPEG-1-fluo havu CBR de "
 "malpli ol 174300 bajtoj (1394400 bitoj) je sekundo por alĝustigi "
 "unurapidecajn KD-ROM-diskojn.<br>La specifo permesas la jenajn du "
-"rezoluciojn:<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ "
+"distingivojn:<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ "
 "23.976 Hz (FILM SIF).</li></ul><p>La audiofluo CBR MPEG-1, tavolo II estas "
 "fiksita je 224 kbps kun 1 stereo aŭ 2 monokanaloj.<p><b>Oni rekomendas "
 "konservi la videobitrapidecon sub 1151929.1 bps.</b>"
@@ -8438,7 +8475,7 @@ msgstr ""
 "aliron per disponigado de skanpunkta indeksa dosiero estis aldonita. (<b>\"/"
 "EXT/SCANDATA.DAT\"</b>)</li><li>Subteno por subtitoloj.</li><li>Subteno por "
 "miksi enhavon NTSC kaj PAL.</li> </ul><p>Aldonante PAL-subtenon al la "
-"specifo de Video CD 1.1, la sekvaj rezolucioj fariĝis disponeblaj:"
+"specifo de Video CD 1.1, la sekvaj distingivoj fariĝis disponeblaj:"
 "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ 23.976 Hz (FILM "
 "SIF).</li><li>352 x 288 @ 25 Hz (PAL SIF).</li></ul><p>Por segmentludaj eroj "
 "fariĝis disponeblaj jenaj sonkodigoj:<ul><li>Komunaj stereofluoj, stereo aŭ "
@@ -8478,14 +8515,14 @@ msgstr ""
 "MPEG-2 VBR-kodigo por la videofluo estis farita.<p>La sekvaj novaj funkcioj--"
 "konstruante sur la specifo de Video CD 2.0--estas:<ul><li>Uzo de MPEG-2-"
 "kodigo anstataŭ MPEG -1 por la videofluo.</li><li>Permesita VBR-kodigo de "
-"MPEG-1 audiofluo.</li><li>Pli altaj rezolucioj (vidu sube) por videoflua "
-"rezolucio.</li><li>Supren. al 4 supermetitaj grafikaĵoj kaj teksto (<b>\"OGT"
+"MPEG-1 audiofluo.</li><li>Pli altaj distingivoj (vidu sube) por videoflua "
+"distingivo.</li><li>Supren. al 4 supermetitaj grafikaĵoj kaj teksto (<b>\"OGT"
 "\"</b>) subkanaloj por uzantŝanĝebla subtitolo aperanta aldone al la jam "
 "ekzistanta fermtitola instalaĵo.</li><li>Komandlistoj por kontroli la SVCD-"
 "virtuala maŝino.</li></ul><p>Por la <b>Super Video KD</b>, nur la sekvaj du "
-"rezolucioj estas subtenataj por filmfilmo kaj (malalta rezolucio) fiksbildoj:"
-"<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li><li>480 x 576 @ 25 Hz (PAL "
-"2/3 D-2).</li></ul>"
+"distingivoj estas subtenataj por filmfilmo kaj (malalta distingivo) "
+"fiksbildoj:<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li><li>480 x 576 @ "
+"25 Hz (PAL 2/3 D-2).</li></ul>"
 
 #: projects/k3bvcdburndialog.cpp:167
 #, kde-format
@@ -8641,7 +8678,7 @@ msgstr ""
 "malstreĉita ebligante la malstreĉitan aps-opcion, t.e. ĉiu sektoro enhavanta "
 "I-kadron estos rigardata kiel APS.<p><b>Averto: </b> La sinsekva kaplinio "
 "estas necesa por ludanta aparato eltrovi ekranajn parametrojn, kiel "
-"ekranrezolucion kaj framfrekvencon, malstreĉigi la aps-postulon povas "
+"ekrandistingivon kaj framfrekvencon, malstreĉigi la aps-postulon povas "
 "konduki al nefunkciantaj enirpunktoj."
 
 #: projects/k3bvcdburndialog.cpp:212

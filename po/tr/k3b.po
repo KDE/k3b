@@ -20,13 +20,13 @@
 # S.Çağlar Onur <caglar@uludag.org.tr>, 2004-2005.
 # obsoleteman <tulliana@gmail.com>, 2007-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
-# Emir SARI <emir_sari@icloud.com>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-11-26 01:30+0300\n"
+"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"PO-Revision-Date: 2024-02-09 19:03+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.11.70\n"
+"X-Generator: Lokalize 24.01.95\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -286,7 +286,7 @@ msgid ""
 msgstr ""
 "<p>Bu pencere ek komut satırı uygulamalarını ses kodlayıcısı olarak "
 "ayarlamak için kullanılabilir. Bunlar daha sonra K3b tarafından ses "
-"verilerini (Bir ses CD'sinden parçalar veya ses projesinden başlıklar) "
+"verilerini (Bir ses CD’sinden parçalar veya ses projesinden başlıklar) "
 "normalde desteklenmeyen biçimlere kodlamak için kullanılabilir. (örn. "
 "kodlayıcı eklenti yok)\n"
 "<p>K3b kurulu uygulamalara bağlı olan önceden tanımlanmış ek uygulamalar "
@@ -1557,12 +1557,12 @@ msgstr "Ortam kopyalama penceresini aç"
 #: k3b.cpp:413 k3bdevicemenu.cpp:70
 #, kde-format
 msgid "Rip Audio CD..."
-msgstr "Müzik CD'si Aktar..."
+msgstr "Müzik CD’si Aktar..."
 
 #: k3b.cpp:414
 #, kde-format
 msgid "Digitally extract tracks from an audio CD"
-msgstr "Bir ses CD'sinden parçaları sayısal olarak çıkar"
+msgstr "Bir ses CD’sinden parçaları sayısal olarak çıkar"
 
 #: k3b.cpp:419 k3bdevicemenu.cpp:71
 #, kde-format
@@ -1582,7 +1582,7 @@ msgstr "Video CD Aktar..."
 #: k3b.cpp:426
 #, kde-format
 msgid "Extract tracks from a Video CD"
-msgstr "Bir Video CD'den parçaları çıkar"
+msgstr "Bir Video CD’den parçaları çıkar"
 
 #: k3b.cpp:431
 #, kde-format
@@ -1688,7 +1688,7 @@ msgstr ".Yeni bir Ses Projesine başlanıyor."
 #: k3b.cpp:1133
 #, kde-format
 msgid "Creating new Data CD Project."
-msgstr "Yeni Veri CD'si Projesine başlanıyor."
+msgstr "Yeni Veri CD’si Projesine başlanıyor."
 
 #: k3b.cpp:1149
 #, kde-format
@@ -1743,12 +1743,12 @@ msgstr "Projeyi Temizle"
 #: k3b.cpp:1463
 #, kde-format
 msgid "Audio CD Rip"
-msgstr "Müzik CD'si Aktarma"
+msgstr "Müzik CD’si Aktarma"
 
 #: k3b.cpp:1478
 #, kde-format
 msgid "Video DVD Rip"
-msgstr "Video DVD'si Aktarma"
+msgstr "Video DVD’si Aktarma"
 
 #: k3b.cpp:1499
 #, kde-format
@@ -1921,11 +1921,11 @@ msgstr ""
 "<p><b>Veri Kipi</b><p>Veri dosyaları 2 değişik kipte yazılabilir: </"
 "p><p><b>Otomatik</b><br>K3b en uygun veri kipini seçer.</p><p><b>Kip 1</"
 "b><br>Bu kip, <em>Yellow Book</em> standardında belirtilen <em>orijinal</em> "
-"yazma kipidir. Tamamen veri içeren CD'lerin yazılmasında tercih edilir.</"
+"yazma kipidir. Tamamen veri içeren CD’lerin yazılmasında tercih edilir.</"
 "p><p><b>Kip 2</b> <br>Tam adı<em>XA Kip 2 Form 1</em>'dir. Fakat diğer "
 "kipler nadiren kullanıldığı için genelde <em>Kip 2</em> diye bilinir.</"
-"p><p><b>Dikkat edin:</b> Aynı CD'de farklı kipler kullanmayın. Bazı eski "
-"sürücülerle, çok oturumlu Kip 1 CD'lerini okurken problem yaşayabilirsiniz."
+"p><p><b>Dikkat edin:</b> Aynı CD’de farklı kipler kullanmayın. Bazı eski "
+"sürücülerle, çok oturumlu Kip 1 CD’lerini okurken problem yaşayabilirsiniz."
 
 #: k3bdebuggingoutputdialog.cpp:36
 #, kde-format
@@ -1990,7 +1990,7 @@ msgid ""
 "K3b uses vcdxrip from the vcdimager package to rip Video CDs. Please make "
 "sure it is installed."
 msgstr ""
-"K3b Video CD'leri aktarmak için vcdimager paketinden vcdxrip'i kullanır. "
+"K3b Video CD’leri aktarmak için vcdimager paketinden vcdxrip'i kullanır. "
 "Lütfen kurulu olduğundan emin olun."
 
 #: k3bdirview.cpp:227
@@ -2648,7 +2648,7 @@ msgstr "Kapasite: %1"
 #: k3bprojectmanager.cpp:203
 #, kde-format
 msgid "AudioCD%1"
-msgstr "MüzikCD'si%1"
+msgstr "MüzikCD’si%1"
 
 #: k3bprojectmanager.cpp:209
 #, kde-format
@@ -2708,8 +2708,8 @@ msgstr[1] "%1 klasör"
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
-msgstr[0] "Ses CD'si (1 parça)"
-msgstr[1] "Ses CD'si (%1 parça)"
+msgstr[0] "Ses CD’si (1 parça)"
+msgstr[1] "Ses CD’si (%1 parça)"
 
 #: k3bstatusbarmanager.cpp:194
 #, kde-format
@@ -2738,7 +2738,7 @@ msgstr "eMovix Projesi (%1)"
 #: k3bstatusbarmanager.cpp:220
 #, kde-format
 msgid "Video DVD (%1)"
-msgstr "Video DVD'si (%1)"
+msgstr "Video DVD’si (%1)"
 
 #: k3bsystemproblemdialog.cpp:86 k3bsystemproblemdialog.cpp:90
 #, kde-format
@@ -2926,7 +2926,7 @@ msgid ""
 "Cdrskin can substitute for cdrecord with data and audio CD, and for "
 "growisofs with DVD and BD."
 msgstr ""
-"Cdrskin, cdrecord'u veri ve ses CD'si ile ve growisofs'u DVD ve BD ile "
+"Cdrskin, cdrecord'u veri ve ses CD’si ile ve growisofs'u DVD ve BD ile "
 "değiştirebilir."
 
 #: k3bsystemproblemdialog.cpp:295
@@ -3192,7 +3192,7 @@ msgid ""
 "not include MP3 support for legal reasons."
 msgstr ""
 "K3b MP3 çözücü eklentisini yükleyemedi veya bulamadı. Bu, MP3 dosyalarından "
-"ses CD'si yaratamayacağınız anlamına gelmektedir. Çoğu Linux dağıtımı yasal "
+"ses CD’si yaratamayacağınız anlamına gelmektedir. Çoğu Linux dağıtımı yasal "
 "sebeplerden dolayı MP3 desteği içermezler."
 
 #: k3bsystemproblemdialog.cpp:549
@@ -3452,7 +3452,7 @@ msgid ""
 "possible that one of the applications does not work as intended with a "
 "certain writer. In this case one may select the application manually."
 msgstr ""
-"<p>K3b, CD veya DVD'lere yazmak için cdrecord, growisofs ve cdrdao adlı "
+"<p>K3b, CD veya DVD’lere yazmak için cdrecord, growisofs ve cdrdao adlı "
 "komut satırı araçlarını kullanır.<p>Nomalde K3b, her görev için en uygun "
 "aracı seçer fakat bazı durumlarda, uygulamalardan biri, bazı yazıcılarla "
 "çalışırken, beklenen işi istenildiği gibi yerine getiremeyebilir. Böyle "
@@ -3507,9 +3507,9 @@ msgid ""
 "compatibility."
 msgstr ""
 "<em>Diski Tek Seferde (DAO=Disk At Once)</em> ya da daha iyisi <em>Oturumu "
-"Tek Seferde (SAO=Session At Once)</em>. CD veya DVD'ye yazarken lazer "
+"Tek Seferde (SAO=Session At Once)</em>. CD veya DVD’ye yazarken lazer "
 "kesilmeyecektir. 2 saniye dışında boşluk kullanılabildiği için Müzik "
-"CD'lerini yazarken tercih edilir. Tüm disk yazıcıların DAO kipini "
+"CD’lerini yazarken tercih edilir. Tüm disk yazıcıların DAO kipini "
 "desteklemeyebileceğini unutmayın.<br>DVDR(W)'lar en iyi DVD-Video "
 "uyumluluğunu DAO kipinde yazıldığında sağlarlar."
 
@@ -3627,7 +3627,7 @@ msgid ""
 msgstr ""
 "<p>K3b, tam özellikli CD/DVD/Blu-ray yazma ve dönüştürme uygulamasıdır.<br/"
 ">Optik ortam kopyalama, farklı kalıp türleri yazma ve Ses ve Video CD/"
-"DVD'lerini aktarmak gibi birçok proje türünü destekler.<br/>Kullanışlı "
+"DVD’lerini aktarmak gibi birçok proje türünü destekler.<br/>Kullanışlı "
 "kullanıcı arayüzü tüm kullanıcılara hitap etmek üzere acemi kullanıcıların "
 "kullanabileceği kadar yalın ancak bir gelişmiş kullanıcının gereksinimlerini "
 "karşılayacak kadar da özellik sağlamaktadır."
@@ -3896,32 +3896,32 @@ msgstr "açılacak dosya(lar)"
 #: main.cpp:106
 #, kde-format
 msgid "Create a new data CD project and add all given files"
-msgstr "Yeni bir Veri CD'sine başla ve verilen tüm dosyaları ekle"
+msgstr "Yeni bir Veri CD’sine başla ve verilen tüm dosyaları ekle"
 
 #: main.cpp:107
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
-msgstr "Yeni bir Ses CD'sine başla ve verilen tüm dosyaları ekle"
+msgstr "Yeni bir Ses CD’sine başla ve verilen tüm dosyaları ekle"
 
 #: main.cpp:108
 #, kde-format
 msgid "Create a new video CD project and add all given files"
-msgstr "Yeni bir Video CD'sine başla oluştur ve verilen tüm dosyaları ekle"
+msgstr "Yeni bir Video CD’sine başla oluştur ve verilen tüm dosyaları ekle"
 
 #: main.cpp:109
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
-msgstr "Yeni bir Karışık CD'ye başla ve verilen tüm dosyaları ekle"
+msgstr "Yeni bir Karışık CD’ye başla ve verilen tüm dosyaları ekle"
 
 #: main.cpp:110
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
-msgstr "Yeni bir eMovix CD'si başlat ve verilen tüm dosyaları ekle"
+msgstr "Yeni bir eMovix CD’si başlat ve verilen tüm dosyaları ekle"
 
 #: main.cpp:111
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
-msgstr "Yeni bir Video DVD'sine başla ve verilen tüm dosyaları ekle"
+msgstr "Yeni bir Video DVD’sine başla ve verilen tüm dosyaları ekle"
 
 #: main.cpp:112
 #, kde-format
@@ -3936,7 +3936,7 @@ msgstr "CD Kopyalama Penceresini aç, seçimlik olarak kaynak aygıtı göster"
 #: main.cpp:114
 #, kde-format
 msgid "Write an image to a CD or DVD"
-msgstr "Bir kalıbı CD ya da DVD'ye yaz"
+msgstr "Bir kalıbı CD ya da DVD’ye yaz"
 
 #: main.cpp:115
 #, kde-format
@@ -4154,12 +4154,12 @@ msgstr ""
 "kalıplarıdır.<p><b>Cue/bin kalıpları</b><br/> Cue/bin kalıpları, kalıbın "
 "içindeki dosyaları tanımlayan bir cue dosyası ve esas veriyi içeren kalıp "
 "dosyasından oluşurlar. Veri, ortama cue dosyasına sadık kalınarak yazılır. "
-"<p><b>Cue Ses kalıbı</b><br/>Cue ses kalıpları, bir ses CD'sinin kalıbını "
+"<p><b>Cue Ses kalıbı</b><br/>Cue ses kalıpları, bir ses CD’sinin kalıbını "
 "içeren özel cue/bin kalıplarıdır. Ses verisi K3b tarafından desteklenen "
 "herhangi bir biçimde kodlanabilir. Cue ses kalıpları aynı zamanda K3b ses "
 "projesi olarak içe aktarılabilir. Bu kalıba parça eklemeye, çıkarmaya ve "
 "parçaları sıralamaya olanak verir.<p><b> Cdrecord klon kalıpları</b><br/"
-">K3b, bir CD klon kipte kopyalanırken, tek oturumluk CD'nin cdrecord klon "
+">K3b, bir CD klon kipte kopyalanırken, tek oturumluk CD’nin cdrecord klon "
 "kalıbını çıkarır. Bu kalıplar daha sonra yeniden kullanılabilir.<p><b> "
 "Cdrdao TOC dosyaları</b><br/>K3b cdrdaoi projesinin kendi özel kalıp dosyası "
 "olan toc dosyalarının da yazılmasını destekler."
@@ -4343,7 +4343,7 @@ msgstr "Kaynak sürücünün hata düzeltme özelliğini kapat"
 #: misc/k3bmediacopydialog.cpp:206
 #, kde-format
 msgid "Copy CD-Text from the source CD if available."
-msgstr "Mevcutsa kaynak CD'den CD-Text bilgisini kopyala."
+msgstr "Mevcutsa kaynak CD’den CD-Text bilgisini kopyala."
 
 #: misc/k3bmediacopydialog.cpp:208
 #, kde-format
@@ -4355,7 +4355,7 @@ msgid ""
 msgstr ""
 "<p>Eğer işaretliyse K3b kaynak sürücünün ECC/EDC hata düzeltme özelliğini "
 "kapatır. Böylece bilerek okunamaz yapılmış dilimler okunabilir. <p>Bu, bozuk "
-"dilim tabanlı kopyalama koruması olan CD'leri çoğaltırken işe yarayabilir."
+"dilim tabanlı kopyalama koruması olan CD’leri çoğaltırken işe yarayabilir."
 
 #: misc/k3bmediacopydialog.cpp:213
 #, kde-format
@@ -4386,9 +4386,9 @@ msgid ""
 "<p>For Video CDs please use the CD Cloning mode."
 msgstr ""
 "<p>Bu; DVD, Blu-ray ve çoğu CD ortam türü için normal kopyalama kipidir. Ses "
-"CD'lerini, tek ve çok oturumlu Veri Ortamını ve İyileştirilmiş Ses CD'lerini "
-"(ek veri oturumu içeren bir Ses CD'si) kopyalamaya izin verir.<p>Video "
-"CD'leri için lütfen CD Çoğaltma kipini kullanın."
+"CD’lerini, tek ve çok oturumlu Veri Ortamını ve İyileştirilmiş Ses CD’lerini "
+"(ek veri oturumu içeren bir Ses CD’si) kopyalamaya izin verir.<p>Video "
+"CD’leri için lütfen CD Çoğaltma kipini kullanın."
 
 #: misc/k3bmediacopydialog.cpp:226
 #, kde-format
@@ -4398,11 +4398,11 @@ msgid ""
 "used to copy Video CDs or CDs which contain erroneous sectors.<p><b>Caution:"
 "</b> Only single session CDs can be cloned."
 msgstr ""
-"<p>CD Çoğaltma kipinde, K3b CD'nin ham kopyasını gerçekleştirir. Bu, "
-"içeriklerin ne olduğuna bakılmaksızın CD'nin bit-bit kopyalanması demektir. "
-"Genellikle daha fazla hatalı dilim içerebilecek Video CD ve DVD'lerinin "
+"<p>CD Çoğaltma kipinde, K3b CD’nin ham kopyasını gerçekleştirir. Bu, "
+"içeriklerin ne olduğuna bakılmaksızın CD’nin bit-bit kopyalanması demektir. "
+"Genellikle daha fazla hatalı dilim içerebilecek Video CD ve DVD’lerinin "
 "kopyalanmasında kullanılabilir.<p><b>Dikkat:</b> Yalnızca tek oturumlu "
-"CD'ler çoğaltılabilir."
+"CD’ler çoğaltılabilir."
 
 #: misc/k3bmediacopydialog.cpp:263 projects/k3bprojectburndialog.cpp:204
 #, kde-format
@@ -4456,7 +4456,7 @@ msgstr "Hızlı Biçimlendir"
 #: misc/k3bmediaformattingdialog.cpp:80
 #, kde-format
 msgid "Force formatting of empty DVDs"
-msgstr "Boş DVD'leri biçimlendirmeye zorla"
+msgstr "Boş DVD’leri biçimlendirmeye zorla"
 
 #: misc/k3bmediaformattingdialog.cpp:81
 #, kde-format
@@ -4472,7 +4472,7 @@ msgstr ""
 "<p>Eğer bu özellik seçilirse K3b bir DVD-RW'yi boş olsa bile biçimlendirir. "
 "Ayrıca K3b'nin DVD+RW, BD-RE veya yazma sınırlandırmalı DVD-RW'leri "
 "biçimlendirmesini sağlamak için kullanılabilir.<p><b>Dikkat:</b> Bir DVD "
-"10-20 biçimlendirmeden sonra kullanılamaz hale gelebileceği için, DVD'leri "
+"10-20 biçimlendirmeden sonra kullanılamaz hale gelebileceği için, DVD’leri "
 "sıkça biçimlendirmek tavsiye edilmez.<p>DVD+RW ve BD-RE disklerin yalnızca "
 "bir kere biçimlendirilmesi gerekir. Ondan sonra yalnızca üzerine yazılır. "
 "Aynı şey yazma sınırlandırmalı DVD-RW diskler için de geçerlidir."
@@ -4890,7 +4890,7 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "KCDDB yapılandırma modülü yüklenemiyor."
 
-#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:57
 #, kde-format
 msgid "Refresh"
 msgstr "Yenile"
@@ -5042,7 +5042,7 @@ msgid "no change"
 msgstr "değişiklik yok"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:119
 #, kde-format
 msgid "Permissions"
 msgstr "İzinler"
@@ -5052,7 +5052,7 @@ msgstr "İzinler"
 msgid "New permissions"
 msgstr "Yeni izinler"
 
-#: option/k3bexternalbinwidget.cpp:74
+#: option/k3bexternalbinwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -5064,32 +5064,32 @@ msgstr ""
 "üzere kullanılacaktır. Eğer öntanımlı olanı değiştirmek isterseniz listeden "
 "istenen sürümü denetleyin."
 
-#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "Programlar"
 
-#: option/k3bexternalbinwidget.cpp:88
+#: option/k3bexternalbinwidget.cpp:87
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "Kullanıcı parametreleri arasında boşluk bırakılmalı."
 
-#: option/k3bexternalbinwidget.cpp:101
+#: option/k3bexternalbinwidget.cpp:100
 #, kde-format
 msgid "User Parameters"
 msgstr "Kullanıcı Parametreleri"
 
-#: option/k3bexternalbinwidget.cpp:107
+#: option/k3bexternalbinwidget.cpp:106
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr "İzinlerini değiştirmek istediğiniz programları denetleyin:"
 
-#: option/k3bexternalbinwidget.cpp:115
+#: option/k3bexternalbinwidget.cpp:114
 #, kde-format
 msgid "Change Permissions..."
 msgstr "İzinleri Değiştir..."
 
-#: option/k3bexternalbinwidget.cpp:128
+#: option/k3bexternalbinwidget.cpp:127
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -5099,20 +5099,57 @@ msgstr ""
 "uygulamayı bu adla çalıştırabilmesi için uygulamanın adını burada "
 "belirtebilirsiniz.</qt>"
 
-#: option/k3bexternalbinwidget.cpp:136
+#: option/k3bexternalbinwidget.cpp:135
 #, kde-format
 msgid "Search Path"
 msgstr "Arama Yolu"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:245
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Bu uygulamalar güncellenemedi:"
 
-#: option/k3bexternalbinwidget.cpp:251
-#, kde-format
-msgid "Unable to execute the action: %1"
+#: option/k3bexternalbinwidget.cpp:255
+#, fuzzy, kde-format
+#| msgid "Unable to execute the action: %1"
+msgid "Unable to execute the action<br/>%1"
 msgstr "Eylem çalıştırılamadı: %1"
+
+#: option/k3bexternalbinwidget.cpp:268
+#, kde-format
+msgid "Authorization denied"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:271
+#, fuzzy, kde-format
+#| msgid "No error correction"
+msgid "An error occurred"
+msgstr "Hataları düzeltmeye çalışma"
+
+#: option/k3bexternalbinwidget.cpp:274
+#, kde-format
+msgid "Invalid action"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:277
+#, kde-format
+msgid "Authorization granted"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:280
+#, kde-format
+msgid "Authentication required"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:283
+#, kde-format
+msgid "User cancelled the authentication"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:286
+#, kde-format
+msgid "Unknown authorization status %1"
+msgstr ""
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -5151,7 +5188,7 @@ msgid ""
 "the CD Copy dialog or the Audio CD project dialog):"
 msgstr ""
 "K3b, işlem pencerelerinde üç set ayarı yönetebilir (işlem pencereleri CD "
-"Kopyalama penceresini ya da Ses CD'si projesi penceresini de kapsar):"
+"Kopyalama penceresini ya da Ses CD’si projesi penceresini de kapsar):"
 
 #: option/k3bmiscoptiontab.cpp:49
 #, kde-format
@@ -5366,7 +5403,7 @@ msgstr ""
 "ya da UTF-16 temelli karakterler kullanır ve 255 oktete izin verir.\n"
 "<p>Rock Ridge eklentileri her ISO 9660 dizin kaydının sonunda yer alır. Bu "
 "Rock Ridge ağacını ISO 9660 ağacına bağımlı kılar.\n"
-"<p><b>Rock Ridge eklentilerinin, her veri CD veya DVD'sinde kullanılması "
+"<p><b>Rock Ridge eklentilerinin, her veri CD veya DVD’sinde kullanılması "
 "tavsiye edilir.</b>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkRockRidge)
@@ -5412,7 +5449,7 @@ msgstr ""
 "<p>Joliet UTF-16 kodlaması kullanır.\n"
 "<p><b>Dikkat:</b> Linux ve FreeBSD haricinde, Joliet desteği bulunan POSIX "
 "benzeri başka bir işletim sistemi bulunmamaktadır. Bu yüzden <b>yalnızca "
-"Joliet kullanan CD veya DVD'ler oluşturmayın</b>."
+"Joliet kullanan CD veya DVD’ler oluşturmayın</b>."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkJoliet)
 #: projects/base_k3badvanceddataimagesettings.ui:53
@@ -5438,7 +5475,7 @@ msgstr ""
 "<p>Eğer bu seçenek işaretliyse K3b ISO 9660 dosya sistemine ek olarak UDF "
 "dosya sistemi yapıları oluşturur.\n"
 "<p>UDF (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>) genellikle "
-"DVD'ler için kullanılır."
+"DVD’ler için kullanılır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkUdf)
 #: projects/base_k3badvanceddataimagesettings.ui:67
@@ -5777,12 +5814,12 @@ msgid ""
 "a bad idea (just remember to fill in the CD-Text information)."
 msgstr ""
 "<p><b>CD Metni</b>\n"
-"<p>Eğer bu seçenek işaretli ise K3b Ses CD'sinde kullanılmayan boş alanı "
+"<p>Eğer bu seçenek işaretli ise K3b Ses CD’sinde kullanılmayan boş alanı "
 "sanatçı adı veya CD başlığı gibi ek bilgileri kaydetmek için kullanır\n"
 "<p>CD Metni, Sony tarafından başlatılan ses CD standardına bir ektir.\n"
 "<p>CD Metni yalnızca bu uzantıyı destekleyen CD çalarlarda (çoğu araç CD "
 "oynatıcısı) ve tabii ki K3b benzeri yazılımlarda kullanılabilir olacaktır.\n"
-"<p>İyileştirilmiş bir CD Metni Ses CD'si, CD Metni görünür olarak "
+"<p>İyileştirilmiş bir CD Metni Ses CD’si, CD Metni görünür olarak "
 "desteklenmese bile herhangi Hifi CD veya DVD çalarlarda "
 "çalıştırılabileceğinden, etkin bırakmak hiçbir zaman kötü bir fikir olmaz "
 "(yalnızca CD Metni bilgisini doldurmayı unutmayın)."
@@ -5883,7 +5920,7 @@ msgid ""
 "post-gap will most likely be muted and on some burners forced to 2 seconds.</"
 "b>"
 msgstr ""
-"<p>Bir ses CD'sinde, her parça (son parça hariç) bir bitiş boşluğuna sahip "
+"<p>Bir ses CD’sinde, her parça (son parça hariç) bir bitiş boşluğuna sahip "
 "olabilir.\n"
 "Bu, K3b'nin parçaya ek sessizlik boşluğu eklemesi demek değildir. Bu ayar "
 "yalnızca bir Hifi ses CD oynatıcısındaki gösterimi etkiler. Bitiş boşluğu "
@@ -5895,7 +5932,7 @@ msgstr ""
 "adlandırılmış olabilir. 2. parçanın başlangıç boşluğu, 1. parçanın bitiş "
 "boşluğudur.\n"
 "<p><b>Bitiş boşluğunu değiştirmek parçanın uzunluğunu değiştirmez.</b>\n"
-"<p><b>TAO yazma kipinde yazarken (Ses CD'leri için önerilmez), bitiş boşluğu "
+"<p><b>TAO yazma kipinde yazarken (Ses CD’leri için önerilmez), bitiş boşluğu "
 "büyük olasılıkla sessiz olacak ve bazı yazıcılarda da 2 saniyeye "
 "zorlanacaktır.</b>"
 
@@ -6390,8 +6427,8 @@ msgid ""
 "for accessing the drive. This will slow down reading from the CD/DVD but may "
 "be necessary on some systems that do not support DMA.</p>"
 msgstr ""
-"<p>Eğer bu seçenek tercih edilirse,ortaya çıkan eMovix CD/DVD'si, aygıta "
-"erişmek için DMA kullanmayacak. Bu CD/DVD'den okumayı yavaşlatabilir fakat, "
+"<p>Eğer bu seçenek tercih edilirse,ortaya çıkan eMovix CD/DVD’si, aygıta "
+"erişmek için DMA kullanmayacak. Bu CD/DVD’den okumayı yavaşlatabilir fakat, "
 "DMA desteği olmayan sistemler için gerekli olabilir.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkNoDma)
@@ -6715,10 +6752,10 @@ msgid ""
 "cdrdao."
 msgstr ""
 "<p>Bu seçenek işaretlendiğinde, K3b ilk parçayı <em>gizle</em>yecektir."
-"<p>Ses CD'si standart, CD'deki her parçadan önce önboşluğu kullanır. Ön "
+"<p>Ses CD’si standart, CD’deki her parçadan önce önboşluğu kullanır. Ön "
 "tanımlı olarak bunlar, 2 saniye süren sessizliklerdir. DAO kipinde, 2 "
 "saniyeden daha uzun önboşluklar kullanabilmek mümkündür. Bu durumda, ilk "
-"önboşluk, ilk parçanın tamamını içerir.<p>CD'nin başlangıcından, dinlenecek "
+"önboşluk, ilk parçanın tamamını içerir.<p>CD’nin başlangıcından, dinlenecek "
 "ilk parçaya doğru arama yapmaya gereksinim duyacaksınız. Bir deneyin,-"
 "oldukça eğlencelidir.<p><b>Bu özellik, yalnızca DAO kipinde ve cdrdao ile "
 "yazarken olanaklıdır."
@@ -6797,7 +6834,7 @@ msgid ""
 "source you want to include in the Audio CD track. You can also use the input "
 "windows to fine-tune your selection."
 msgstr ""
-"Müzik CD'si parçasında kullanmak istediğiniz bölümü belirlemek için vurgulu "
+"Müzik CD’si parçasında kullanmak istediğiniz bölümü belirlemek için vurgulu "
 "bölümün kenarlarını hareket ettirebilirsiniz. Ayrıca seçiminizi daha ince "
 "ayarla yapmak isterseniz ekleme pencerelerini de kullanabilirsiniz."
 
@@ -7365,10 +7402,10 @@ msgstr ""
 "DVD yaratır ve hemen disk'i yazmaya karşı kapatır.</b><br>Çoklu Oturumlu "
 "Proje Başlat</b><br>Çoklu oturumlu bir CD veya DVD başlatır ama disk'i "
 "kapatmaz,-daha sonra başka oturumlar eklenebilmesine izin verir.<p><b>Çoklu "
-"Oturumlu Projeyi Sürdür</b><br>Eklenebilir bir veri CD'sine ( <em>Çok "
+"Oturumlu Projeyi Sürdür</b><br>Eklenebilir bir veri CD’sine ( <em>Çok "
 "Oturumlu Proje Başlat</em> kipinde oluşturulmuş) yazmayı sürdürür, daha "
 "sonra başka oturumlar eklenebilmesi için diski açık bırakır.<p><b>Çoklu "
-"Oturumlu Projeyi Tamamla/Kapat</b><br>Eklenebilir bir veri CD'sine yazmayı "
+"Oturumlu Projeyi Tamamla/Kapat</b><br>Eklenebilir bir veri CD’sine yazmayı "
 "sürdürür (örnek olarak <em>Çoklu Oturumlu Proje Başlat</em> kipinde "
 "başlatıldığı gibi), yeni bir oturum ekler ve diski kapatır.<p><em>DVD+RW ve "
 "DVD-RW diskin üzerine yazma sınırlandırılmışsa K3b çoklu oturum "
@@ -8086,7 +8123,7 @@ msgid ""
 "this is the recommended mode.<br>Some older CD-ROMs may have problems "
 "reading a blue book CD since it is a multisession CD."
 msgstr ""
-"<p><b>Mavi Kitap CD'si</b><p>K3b, 2 oturumdan oluşan çok oturumlu bir CD "
+"<p><b>Mavi Kitap CD’si</b><p>K3b, 2 oturumdan oluşan çok oturumlu bir CD "
 "yaratacaktır. İlk oturum tüm ses iz'lerini, ikinci oturum ise mode 2 form 1 "
 "standartındaki veri parçasını içerecektir.<p>Bu kip, <em>Mavi Kitap (Blue "
 "Book)</em> adı verilen (bazen <em>Extended Audio CD</em>,  <em>CD-Extra</em> "
@@ -8094,7 +8131,7 @@ msgstr ""
 "olanak; Bir HiFi Ses CD çalar, yalnızca ilk oturumu tanır ve veri parçasını "
 "yok sayar.<p>Eğer HiFi Ses CD çalarında çalınabilecek bir CD yazdırmak "
 "isteniyorsa bu kip önerilir.<p>Bazı eski CD-ROMlar, çok oturumlu diskleri "
-"okuyamadıkları için Mavi Kitap CD'lerini de okumakta sorun yaşayabilirler."
+"okuyamadıkları için Mavi Kitap CD’lerini de okumakta sorun yaşayabilirler."
 
 #: projects/k3bmixedburndialog.cpp:115
 #, kde-format
@@ -8371,7 +8408,7 @@ msgstr "Çıktı için 2336 baytlık dilimler kullan"
 #: projects/k3bvcdburndialog.cpp:104
 #, kde-format
 msgid "Specify ISO volume label for Video CD"
-msgstr "Video CD'si için ISO disk bölümü etiketini belirtin"
+msgstr "Video CD’si için ISO disk bölümü etiketini belirtin"
 
 #: projects/k3bvcdburndialog.cpp:105
 #, kde-format
@@ -8814,7 +8851,7 @@ msgid ""
 "otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0."
 msgstr ""
 "Siyah çerçeveler, CD-ROM diskindeki hatalı dilim adresleme sorunlarını "
-"çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD'ler için "
+"çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD’ler için "
 "terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 dilim "
 "uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Öntanımlı: 30, Video "
 "CD 1.0/1.1/2.0 için; aksi takdirde (Super Video CD 1.0 ve HQ-VCD 1.0 için) 0."
@@ -8829,7 +8866,7 @@ msgid ""
 "otherwise 0."
 msgstr ""
 "<p>Siyah çerçeveler, CD-ROM diskindeki hatalı dilim adresleme sorunlarını "
-"çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD'ler için "
+"çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD’ler için "
 "terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 dilim "
 "uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Öntanımlı: 45, Video "
 "CD 1.0/1.1/2.0 için; aksi takdirde 0."
@@ -9520,7 +9557,7 @@ msgid ""
 "one to easily write a copy of the audio CD on other systems."
 msgstr ""
 "<p>Bu seçenek tercih edildiğidne K3b bir CDRWIN cue dosyası yaratarak, diğer "
-"sistemlerde müzik CD'sinin kopyasının çkarılmsını kolaylaştırır."
+"sistemlerde müzik CD’sinin kopyasının çkarılmsını kolaylaştırır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:151
@@ -9669,7 +9706,7 @@ msgstr[1] "%1 parça (%2)"
 #: rip/k3baudiocdview.cpp:199
 #, kde-format
 msgid "Audio CD"
-msgstr "Ses CD'si"
+msgstr "Ses CD’si"
 
 #: rip/k3baudiocdview.cpp:216
 #, kde-format
@@ -9751,7 +9788,7 @@ msgstr "Veri Kısmını Göster"
 #: rip/k3baudiocdview.cpp:261
 #, kde-format
 msgid "Mounts the data part of CD"
-msgstr "CD'nin veri kısmını bağla"
+msgstr "CD’nin veri kısmını bağla"
 
 #: rip/k3baudiocdview.cpp:298 rip/k3bvideocdview.cpp:366
 #: rip/videodvd/k3bvideodvdrippingview.cpp:190
@@ -10002,7 +10039,7 @@ msgid ""
 "data from the cd. After that K3b will either skip the sector if the "
 "<em>Ignore Read Errors</em> option is enabled or stop the process."
 msgstr ""
-"<p>Bu seçenek ses CD'sinde bulunan her dilimin okunması için kaç kere "
+"<p>Bu seçenek ses CD’sinde bulunan her dilimin okunması için kaç kere "
 "deneneceğini belirtir. Bu sayıda denemeden sonra K3b <em>Okuma Hatalarını "
 "Yok Say</em> seçeneği işaretliyse bu dilimi okumayıp atlayacak veya "
 "duracaktır."
@@ -10025,7 +10062,7 @@ msgstr ""
 "<p>Bu seçenek işaretliyse K3b önboşluklardaki ses verisini aktarmaz. Birçok "
 "ses parçası kendisine ait olmayan bir önboşluk içerir.</p><p>Neredeyse tüm "
 "ses aktarma yazılımlarının öntanımlı davranışı önboşlukları dahil etmek olsa "
-"da, çoğu CD'de yok saymak daha mantıklıdır. K3b ile ses projesi yaratılırken "
+"da, çoğu CD’de yok saymak daha mantıklıdır. K3b ile ses projesi yaratılırken "
 "bu önboşluklar yeniden oluşturulur</p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
@@ -10118,9 +10155,9 @@ msgstr ""
 "tr><tr><td>%a</td><td>parçanın sanatçısı</td><td>%{a} veya %{artist}</td></"
 "tr><tr><td>%t</td><td>parçanın başlığı</td><td>%{t} veya %{title}</td></"
 "tr><tr><td>%n</td><td>parça numarası</td><td>%{n} veya %{number}</td></"
-"tr><tr><td>%y</td><td>CD'nin yılı</td><td>%{y} veya %{year}</td></tr><tr><td>"
+"tr><tr><td>%y</td><td>CD’nin yılı</td><td>%{y} veya %{year}</td></tr><tr><td>"
 "%c</td><td>uzatılmış parça bilgisi</td><td>%{c} veya %{comment}</td></"
-"tr><tr><td>%g</td><td>CD'nin tarzı</td><td>%{g} veya %{genre}</td></"
+"tr><tr><td>%g</td><td>CD’nin tarzı</td><td>%{g} veya %{genre}</td></"
 "tr><tr><td>%A</td><td>albüm sanatçısı</td><td>%{A} veya %{albumartist}</td></"
 "tr><tr><td>%T</td><td>albüm başlığı</td><td>%{T} veya %{albumtitle}</td></"
 "tr><tr><td>%C</td><td>uzatılmış CD bilgisi</td><td>%{C} veya %{albumcomment}"
@@ -10152,8 +10189,8 @@ msgstr ""
 "girdi boş ya da özel bir anlama sahipse siz yalnızca dahil edilip, "
 "edilmeyeceğini seçersiniz. Örnekler:<ul><li>@T{METİN} eğer albüm adı "
 "belirtilmişse METİN'i dahil eder<li>!T{METİN} eğer albüm adı belirtilmemişse "
-"METİN'i dahil eder<li>@C='Soundtrack'{METİN} eğer CD'nin detaylı bilgisi "
-"Film müziği ise METİN'i dahil eder<li>!C='Soundtrack'{METİN} eğer CD'nin "
+"METİN'i dahil eder<li>@C='Soundtrack'{METİN} eğer CD’nin detaylı bilgisi "
+"Film müziği ise METİN'i dahil eder<li>!C='Soundtrack'{METİN} eğer CD’nin "
 "detaylı bilgisi Film müziğinden başka bir şeyse METİN'i dahil eder<li>Özel "
 "dizgileri, koşul ya da metinlere de dahil edebilirsiniz, örneğin !a='%A'{%a} "
 "yalnızca başlıktaki sanatçı bilgisiyle, albümün sanatçısı aynı olduğunda "
@@ -10223,7 +10260,7 @@ msgstr "%1 programı bulunamadı."
 #: rip/k3bvideocdrip.cpp:92
 #, kde-format
 msgid "To rip Video CDs you have to install VcdImager Version %1."
-msgstr "Video CD'lerini aktarmak için VcdImager Sürüm %1 kurulu olmalıdır."
+msgstr "Video CD’lerini aktarmak için VcdImager Sürüm %1 kurulu olmalıdır."
 
 #: rip/k3bvideocdrip.cpp:93
 #, kde-format
@@ -10669,7 +10706,7 @@ msgid ""
 "stream to 44100 Hz."
 msgstr ""
 "<p>Video DVD ses yayınları normalde 48000 Hz örnekleme hızıyla kodlanırlar. "
-"Öte yandan Ses CD'leri 44100 Hz örnekleme hızıyla kodlanırlar.\n"
+"Öte yandan Ses CD’leri 44100 Hz örnekleme hızıyla kodlanırlar.\n"
 "<p>Eğer bu seçenek tercih edilirse K3b ses yayınının örnekleme oranını 44100 "
 "Hz olarak değiştirir."
 
@@ -10823,7 +10860,7 @@ msgid ""
 "Shows plain Video DVD vob files from the DVD (including decryption) for "
 "further processing with another application"
 msgstr ""
-"Başka uygulamayla işleme yapabilmek için DVD'deki düz Video DVD vob "
+"Başka uygulamayla işleme yapabilmek için DVD’deki düz Video DVD vob "
 "dosyalarını gösterir"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
@@ -10875,7 +10912,7 @@ msgstr[1] "%1 başlık"
 #, kde-format
 msgid "K3b uses transcode to rip Video DVDs. Please make sure it is installed."
 msgstr ""
-"K3b Video DVD'leri aktarmak için transcode kullanır. Lütfen kurulu "
+"K3b Video DVD’leri aktarmak için transcode kullanır. Lütfen kurulu "
 "olduğundan emin olun."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:291
@@ -10885,7 +10922,7 @@ msgid ""
 "lacks support for any of the codecs supported by K3b.<p>Please make sure it "
 "is installed properly."
 msgstr ""
-"<p>K3b Video DVD'leri aktarmak için transcode kullanır. Transcode "
+"<p>K3b Video DVD’leri aktarmak için transcode kullanır. Transcode "
 "kurulumunuzun K3b tarafından desteklenen çözücüler için desteği eksik."
 "<p>Lütfen düzgün bir şekilde kurulduğundan emin olun."
 
@@ -10909,11 +10946,11 @@ msgid ""
 "you intend to make a copy of the entire Video DVD including all menus and "
 "extras it is recommended to use the K3b Copy tool."
 msgstr ""
-"<p>Bir video DVD'sinden tekli başlıkları XviD gibi sıkıştırılmış bir biçime "
+"<p>Bir video DVD’sinden tekli başlıkları XviD gibi sıkıştırılmış bir biçime "
 "aktarır. Menü yapıları tamamen yok sayılır.<p>Eğer daha sonradan farklı bir "
-"uygulama ile işlem yapmak üzere düz Video DVD vob dosyalarını DVD'den "
+"uygulama ile işlem yapmak üzere düz Video DVD vob dosyalarını DVD’den "
 "kopyalamayı amaçlıyorsanız (kod çözme dahil), lütfen \"Dosyaları göster\" "
-"düğmesini kullanın.<p>Eğer bir Video DVD'sinin tamamını, menüleri ve tüm "
+"düğmesini kullanın.<p>Eğer bir Video DVD’sinin tamamını, menüleri ve tüm "
 "ekleri dahil kopyalamak istiyorsanız K3b Kopyalama Aracını kullanmanız "
 "şiddetle önerilir."
 
@@ -10962,7 +10999,7 @@ msgstr ""
 "anlamları ile değiştirileceklerdir.<br><p><table border=\"0\"><tr><td></"
 "td><td><em>Anlamı</em></td><td><em>Alternatifler</em></td></tr><tr><td>%t</"
 "td><td>parça numarası</td><td>%{t} veya %{title_number}</td></tr><tr><td>%i</"
-"td><td>hacim kimliği (genellikle Video DVD'sinin adı)</td><td>%{i} veya "
+"td><td>hacim kimliği (genellikle Video DVD’sinin adı)</td><td>%{i} veya "
 "%{volume_id}</td></tr><tr><td>%b</td><td>iyileştirilmiş hacim kimliği</"
 "td><td>%{b} veya %{beautified_volume_id}</td></tr><tr><td>%l</td><td>iki "
 "karakter dil kodu</td><td>%{l} veya %{lang_code}</td></tr><tr><td>%n</"
