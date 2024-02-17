@@ -9,17 +9,17 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-06-26 07:24+0200\n"
+"PO-Revision-Date: 2024-02-16 19:55+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
-"%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100>=3 && n"
+"%100<=4 ? 2 : 3);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5081,46 +5081,44 @@ msgid "Following programs could not be updated:"
 msgstr "Naslednjih programov ni bilo mogoče posodobiti:"
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Ni bilo mogoče izvesti dejanja: %1"
+msgstr "Ni bilo mogoče izvesti dejanja<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Pooblastilo zavrnjeno"
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Brez odpravljanja napak"
+msgstr "Pojavila se je napaka"
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Neveljavna dejavnost"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Pooblastilo podeljeno"
 
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Zahtevana avtentikacija"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Uporabnik je preklical avtentikacijo"
 
 #: option/k3bexternalbinwidget.cpp:286
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Neznano stanje pooblastila: %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
