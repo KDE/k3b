@@ -3,20 +3,20 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2005, 2006, 2007, 2008, 2009.
 # Yasen Pramatarov <yasen@lindeas.com>, 2010, 2011.
-# Mincho Kondarev <mkondarev@yahoo.de>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-06-29 15:11+0200\n"
+"PO-Revision-Date: 2024-02-17 06:56+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -5063,46 +5063,44 @@ msgid "Following programs could not be updated:"
 msgstr "Следните програми не могат да бъдат актуализирани:"
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Невъзможно е да се изпълни действието: %1"
+msgstr "Невъзможно е да се изпълни действието<br/>: %1"
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Отказано упълномощаване"
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Без поправяне на грешките"
+msgstr "Възникна грешка"
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Неправилно действие"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Предоставено упълномощаване"
 
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Изисква се удостоверяване"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Потребителят отмени удостоверяването"
 
 #: option/k3bexternalbinwidget.cpp:286
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Неизвестен статус на упълномощаване %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format

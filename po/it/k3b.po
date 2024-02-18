@@ -4,14 +4,14 @@
 # Giovanni Venturi <giovanni@kde-it.org>, 2009.
 # Giovanni Venturi <giovanni@ksniffer.org>, 2010.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-06-26 18:10+0200\n"
+"PO-Revision-Date: 2024-02-16 23:47+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -5124,46 +5124,44 @@ msgid "Following programs could not be updated:"
 msgstr "Non è stato possibile aggiornare i seguenti programmi:"
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Impossibile eseguire l'azione: %1"
+msgstr "Impossibile eseguire l'azione<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Autorizzazione negata"
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Nessuna correzione di errore"
+msgstr "Si è verificato un errore"
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Azione non valida"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Autorizzazione concessa"
 
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Autenticazione richiesta"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "L'utente ha annullato l'autenticazione"
 
 #: option/k3bexternalbinwidget.cpp:286
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Stato di autorizzazione sconosciuto %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format

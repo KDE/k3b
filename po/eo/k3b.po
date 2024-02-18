@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-02-04 17:21+0100\n"
+"PO-Revision-Date: 2024-02-17 11:46+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -5043,46 +5043,44 @@ msgid "Following programs could not be updated:"
 msgstr "Sekvaj programoj ne povus esti ĝisdatigitaj:"
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Ne eblas efektivigi la agon: %1"
+msgstr "Ne eblas efektivigi la agon<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Rajtigo neita"
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Neniu eraro korektigo"
+msgstr "Eraro okazis"
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Nevalida ago"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Rajtigo koncedita"
 
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Aŭtentigo postulata"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Uzante nuligis la aŭtentigon"
 
 #: option/k3bexternalbinwidget.cpp:286
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Nekonata aŭtentigostato %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format

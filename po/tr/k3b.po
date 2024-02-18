@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-02-09 19:03+0300\n"
+"PO-Revision-Date: 2024-02-17 13:46+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2829,7 +2829,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:359
 #, kde-format
 msgid "Unable to find %1 executable"
-msgstr "%1 çalıştırılabilir dosyası bulunamadı"
+msgstr "%1 yürütülebiliri bulunamadı"
 
 #: k3bsystemproblemdialog.cpp:210
 #, kde-format
@@ -4993,7 +4993,7 @@ msgstr "Değişiklikleri uygulamak için yeniden oturum açın."
 #: option/k3bdevicewidget.cpp:273
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
-msgstr "Eylem çalıştırılamadı: %1 (Hata kodu: %2)"
+msgstr "Eylem yürütülemedi: %1 (Hata kodu: %2)"
 
 #: option/k3bdevicewidget.cpp:274
 #, kde-format
@@ -5110,46 +5110,44 @@ msgid "Following programs could not be updated:"
 msgstr "Bu uygulamalar güncellenemedi:"
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Eylem çalıştırılamadı: %1"
+msgstr "Eylem yürütülemedi<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Yetkilendirme reddedildi"
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Hataları düzeltmeye çalışma"
+msgstr "Bir hata oluştu"
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Geçersiz eylem"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Yetkilendirildi"
 
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Kimlik doğrulama gerekiyor"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Kullanıcı kimlik doğrulamayı iptal etti"
 
 #: option/k3bexternalbinwidget.cpp:286
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Bilinmeyen kimlik doğrulama durumu %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -10255,7 +10253,7 @@ msgstr "Dosyaları denetle"
 #: rip/k3bvideocdrip.cpp:91
 #, kde-format
 msgid "Could not find %1 executable."
-msgstr "%1 programı bulunamadı."
+msgstr "%1 yürütülebiliri bulunamadı."
 
 #: rip/k3bvideocdrip.cpp:92
 #, kde-format
@@ -10274,7 +10272,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:101
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
-msgstr "%1 uygulaması çok eski: %2 ya da daha yeni sürüm gerekiyor."
+msgstr "%1 yürütülebiliri pek eski: %2 ya da daha yeni sürüm gerekiyor."
 
 #: rip/k3bvideocdrip.cpp:102
 #, kde-format
