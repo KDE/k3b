@@ -4,7 +4,7 @@
 # Giovanni Venturi <giovanni@kde-it.org>, 2009.
 # Giovanni Venturi <giovanni@ksniffer.org>, 2010.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 #
 msgid ""
 msgstr ""
