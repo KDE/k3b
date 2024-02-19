@@ -18,7 +18,7 @@
 # Nicolas Ternisien <nicolas.ternisien@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012, 2013.
-# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Maxime Corteel <mcorteel@gmail.com>, 2019.
 # Xavier Besnard <xavier.besnard@kde.org>, 2023.
@@ -27,15 +27,15 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-10-30 14:28+0100\n"
+"PO-Revision-Date: 2024-02-17 10:13+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.4\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -5209,46 +5209,44 @@ msgid "Following programs could not be updated:"
 msgstr "Les programmes suivants ne peuvent être mis à jour :"
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Impossible d'exécuter l'action : %1"
+msgstr "Impossible d'exécuter l'action : <br/> %1"
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Autorisation refusée"
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Aucune correction d'erreur"
+msgstr "Une erreur est survenue."
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Action non valable"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Autorisation accordée"
 
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Autorisation nécessaire"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "L'utilisateur a annulée l'authentification."
 
 #: option/k3bexternalbinwidget.cpp:286
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "État inconnu %1pour l'authentification."
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
