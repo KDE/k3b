@@ -4993,10 +4993,9 @@ msgid "Following programs could not be updated:"
 msgstr "Následující programy nemohly být aktualizovány:"
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Nelze spustit činnost: %1"
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
@@ -5004,15 +5003,14 @@ msgid "Authorization denied"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Bez korekce chyb"
+msgstr "Vyskytla se chyba"
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Neplatná činnost"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
@@ -5022,7 +5020,7 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Je vyžadováno ověření totožnosti"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
