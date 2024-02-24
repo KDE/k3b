@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-01-08 12:29+0100\n"
+"PO-Revision-Date: 2024-02-23 10:50+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -4698,10 +4698,9 @@ msgid "Following programs could not be updated:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to create folder %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Il non pote crear dossier  %1"
+msgstr "Incapace a executar le action<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
