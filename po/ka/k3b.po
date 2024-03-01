@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2023-06-27 09:27+0200\n"
+"PO-Revision-Date: 2024-02-29 03:08+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4691,15 +4691,14 @@ msgid "Authorization denied"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "შეცდომების გასწორების გარეშე"
+msgstr "შეცდომა"
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "არასწორი ქმედება"
 
 #: option/k3bexternalbinwidget.cpp:277
 #, kde-format
@@ -4709,7 +4708,7 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:280
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "საჭიროა ავთენტ"
 
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
@@ -5200,7 +5199,7 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:297
 #, kde-format
 msgid "Misc Settings"
-msgstr ""
+msgstr "სხვა პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkDoNotImportSession)
 #: projects/base_k3badvanceddataimagesettings.ui:303
@@ -5933,7 +5932,7 @@ msgstr "უსასრულობა"
 #: projects/k3bvcdtrackdialog.cpp:468
 #, kde-format
 msgid " time(s)"
-msgstr ""
+msgstr " რამდენჯერ"
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelAudioBackground)
 #: projects/base_k3bmovixoptionswidget.ui:144
@@ -9318,7 +9317,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:160
 #, kde-format
 msgid "Extracting"
-msgstr ""
+msgstr "გაშლა"
 
 #: rip/k3bvideocdrip.cpp:161
 #, kde-format
@@ -9373,7 +9372,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:317 rip/k3bvideocdrip.cpp:335
 #, kde-format
 msgid "Extracting %1"
-msgstr ""
+msgstr "%1-ის გაშლა"
 
 #: rip/k3bvideocdrip.cpp:328
 #, kde-format

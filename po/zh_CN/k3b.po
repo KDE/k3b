@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-02-05 11:40\n"
+"PO-Revision-Date: 2024-02-29 12:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -4473,7 +4473,7 @@ msgstr ""
 #: option/base_k3bmiscoptiontab.ui:130
 #, kde-format
 msgid "&Keep action dialogs open"
-msgstr "操作对话框保持打开(&K)"
+msgstr "保持操作对话框打开(&K)"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
 #: option/base_k3bmiscoptiontab.ui:139
@@ -4914,10 +4914,9 @@ msgid "Following programs could not be updated:"
 msgstr "无法更新下列程序："
 
 #: option/k3bexternalbinwidget.cpp:255
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "无法执行该操作：%1"
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:268
 #, kde-format
@@ -4925,10 +4924,9 @@ msgid "Authorization denied"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:271
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "无错误校正"
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:274
 #, kde-format
