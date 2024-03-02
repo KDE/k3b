@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-02-17 13:46+0300\n"
+"PO-Revision-Date: 2024-03-01 16:08+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1249,7 +1249,7 @@ msgstr "Hata"
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:112
 #, kde-format
 msgid "Rename Pattern"
-msgstr "İfadeyi Yeniden Adlandır"
+msgstr "Dizgiyi Yeniden Adlandır"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:118
 #, kde-format
@@ -1301,7 +1301,7 @@ msgstr "Üst bilgiye dayalı"
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:186
 #, kde-format
 msgid "Please specify a valid pattern."
-msgstr "Lütfen geçerli bir ifade tanımlayın."
+msgstr "Lütfen geçerli bir dizgi tanımlayın."
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:217
 #, kde-format
@@ -3804,7 +3804,7 @@ msgstr "Jakob Petsovits"
 #: main.cpp:73
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
-msgstr "Muhteşem koşullu ses aktarma düzeni için."
+msgstr "Muhteşem koşullu ses aktarma dizgisi için."
 
 #: main.cpp:75
 #, kde-format
@@ -9532,7 +9532,7 @@ msgstr ""
 "dosya ardı ardına tüm parçaları içerecek.\n"
 "<p>Bu, canlı bir albüm veya bir radyo çalma aktarımı için kullanışlı "
 "olabilir.\n"
-"<p><b>Dikkat:</b> Dosya, çalma listesi deseninden oluşturulmuş ada sahip "
+"<p><b>Dikkat:</b> Dosya, çalma listesi dizgisinden oluşturulmuş ada sahip "
 "olacaktır."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkSingleFile)
@@ -9601,19 +9601,19 @@ msgstr "Gereken boş disk alanı:"
 #: rip/base_k3bcddbpatternwidget.ui:14
 #, kde-format
 msgid "Ripping Pattern"
-msgstr "Aktarma Düzeni"
+msgstr "Aktarma Dizgisi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBlankReplace)
 #: rip/base_k3bcddbpatternwidget.ui:22
 #, kde-format
 msgid "Replace all blan&ks with:"
-msgstr "Tüm boş&lukları değiştirmek için kullan:"
+msgstr "Şununla tüm boşlukları değişti&r:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/base_k3bcddbpatternwidget.ui:41
 #, kde-format
 msgid "Playlist pattern:"
-msgstr "Çalma Listesi şablonu:"
+msgstr "Çalma Listesi dizgisi:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_4)
@@ -9621,13 +9621,13 @@ msgstr "Çalma Listesi şablonu:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:372
 #, kde-format
 msgid "Ripped files pattern:"
-msgstr "Aktarılan dosyaların düzeni:"
+msgstr "Aktarılan dosyaların dizgisi:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboFilenamePattern)
 #: rip/base_k3bcddbpatternwidget.ui:80
 #, kde-format
 msgid "Insert your custom pattern here"
-msgstr "Özel şablonunuzu buraya girin"
+msgstr "Özel dizginizi buraya girin"
 
 #. i18n: ectx: property (text), widget (KUrlLabel, m_specialStringsLabel)
 #: rip/base_k3bcddbpatternwidget.ui:108
@@ -9640,7 +9640,7 @@ msgstr "Özel dizileri göster"
 #: rip/base_k3bcddbpatternwidget.ui:118
 #, kde-format
 msgid "About conditional inclusion"
-msgstr "Ara ekleme şartları hakkında"
+msgstr "Koşullu içerme hakkında"
 
 #: rip/categories.cpp:19
 #, kde-format
@@ -9897,7 +9897,7 @@ msgstr "Dosya Adlandırma"
 #, kde-format
 msgid "Please check the naming pattern. All filenames need to be unique."
 msgstr ""
-"Lütfen adlandırma şablonunu denetleyin. Tüm dosya adları birbirinden farklı "
+"Lütfen adlandırma dizgisini denetleyin. Tüm dosya adları birbirinden farklı "
 "olmalıdır."
 
 #: rip/k3baudioprojectconvertingdialog.cpp:186
@@ -10146,7 +10146,7 @@ msgid ""
 "tr><tr><td>%e</td><td>file extension (if left out, it is added "
 "automatically)</td><td>%{e} or %{ext}</td></tr></table>"
 msgstr ""
-"<p><b>Kalıba bağlı diziler:</b><p>Aşağıdaki diziler her parça adında ilgili "
+"<p><b>Dizgiye özel diziler:</b><p>Aşağıdaki diziler her parça adında ilgili "
 "anlamları ile değiştirileceklerdir.<br><em>İpucu:</em> %A ve %a yalnızca ses "
 "parçaları veya albümlerde farklılık göstermektedir.<p><table border="
 "\"0\"><tr><td></td><td><em>Anlamı</em></td><td><em>Alternatifler</em></td></"
@@ -10160,8 +10160,8 @@ msgstr ""
 "tr><tr><td>%T</td><td>albüm başlığı</td><td>%{T} veya %{albumtitle}</td></"
 "tr><tr><td>%C</td><td>uzatılmış CD bilgisi</td><td>%{C} veya %{albumcomment}"
 "</td></tr><tr><td>%d</td><td>geçerli tarih</td><td>%{d} veya %{date}</td></"
-"tr><tr><td>%e</td><td>dosya uzantısı (boş bırakılırsa otomatik eklenir)</"
-"td><td>%{e} veya %{ext}</td></tr></table>"
+"tr><tr><td>%e</td><td>dosya uzantısı (boş bırakılırsa kendiliğinden "
+"eklenir)</td><td>%{e} veya %{ext}</td></tr></table>"
 
 #: rip/k3bcddbpatternwidget.cpp:145
 #, kde-format
@@ -10183,18 +10183,17 @@ msgid ""
 "can be one character out of [atnycgATCd]."
 msgstr ""
 "<p><b>Koşullu kapsama:</b><p>Bu kalıplar, CDDB kayıtlarının değerine bağlı "
-"olarak, seçici bir şekilde metinlerin dahil edilmesine olanak tanır. Eğer "
-"girdi boş ya da özel bir anlama sahipse siz yalnızca dahil edilip, "
-"edilmeyeceğini seçersiniz. Örnekler:<ul><li>@T{METİN} eğer albüm adı "
-"belirtilmişse METİN'i dahil eder<li>!T{METİN} eğer albüm adı belirtilmemişse "
-"METİN'i dahil eder<li>@C='Soundtrack'{METİN} eğer CD’nin detaylı bilgisi "
-"Film müziği ise METİN'i dahil eder<li>!C='Soundtrack'{METİN} eğer CD’nin "
-"detaylı bilgisi Film müziğinden başka bir şeyse METİN'i dahil eder<li>Özel "
-"dizgileri, koşul ya da metinlere de dahil edebilirsiniz, örneğin !a='%A'{%a} "
-"yalnızca başlıktaki sanatçı bilgisiyle, albümün sanatçısı aynı olduğunda "
-"sanatçıyı dahil eder.</ul><p>Koşullu kapsamalar, özel dizgilerle aynı "
-"karakterlerikullanırlar, yani @X(...) ifadesindeki X, [atnycgATCd] "
-"karakterlerinden biri olabilir."
+"olarak, seçici bir şekilde metinlerin içerilmesine olanak tanır. Eğer girdi "
+"boş veya özel bir anlama sahipse siz yalnızca içerilip içerilmeyeceğini "
+"seçersiniz. Örnekler:<ul><li>@T{METİN} eğer albüm adı belirtilmişse METİN'i "
+"içerir<li>!T{METİN} eğer albüm adı belirtilmemişse METİN'i "
+"içerir<li>@C='Soundtrack'{METİN} eğer CD’nin ayrıntılı bilgisi Film müziği "
+"ise METİN'i içerir<li>!C='Soundtrack'{METİN} eğer CD’nin ayrıntılı bilgisi "
+"Film müziğinden başka bir şeyse METİN'i içerir<li>Özel dizgileri, koşul ya "
+"da metinlere de içerebilirsiniz, örneğin !a='%A'{%a} yalnızca başlıktaki "
+"sanatçı bilgisiyle, albümün sanatçısı aynı olduğunda sanatçıyı içerir.</"
+"ul><p>Koşullu kapsamalar, özel dizgilerle aynı karakterleri kullanırlar, "
+"yani @X(...) ifadesindeki X, [atnycgATCd] karakterlerinden biri olabilir."
 
 #: rip/k3bmassaudioencodingjob.cpp:177
 #, kde-format
