@@ -11,7 +11,6 @@
 
 #include <QDebug>
 #include <QSharedData>
-#include <QTextCodec>
 
 #include <string.h>
 
@@ -126,26 +125,7 @@ namespace {
             *illegalChars = false;
 
         // TODO: do this without QT
-        QTextCodec* codec = QTextCodec::codecForName("ISO8859-1");
-        if( codec ) {
-            QByteArray encoded = codec->fromUnicode( s );
-            return encoded;
-        }
-        else {
-            QByteArray r( s.length()+1, 0 );
-
-            for( int i = 0; i < s.length(); ++i ) {
-                if( s[i].toLatin1() == 0 ) { // non-ASCII character
-                    r[i] = ' ';
-                    if( illegalChars )
-                        *illegalChars = true;
-                }
-                else
-                    r[i] = s[i].toLatin1();
-            }
-
-            return r;
-        }
+        return s.toLatin1();
     }
 }
 

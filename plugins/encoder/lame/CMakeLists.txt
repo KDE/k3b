@@ -8,9 +8,6 @@ target_link_libraries(k3blameencoder
     KF${KF_MAJOR_VERSION}::I18n
     ${LAME_LIBRARIES}
 )
-if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(k3blameencoder Qt6::Core5Compat)
-endif()
 
 ki18n_wrap_ui(ui_sources
     base_k3blameencodersettingswidget.ui

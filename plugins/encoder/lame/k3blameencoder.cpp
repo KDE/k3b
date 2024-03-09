@@ -16,7 +16,6 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 #include <QDebug>
-#include <QTextCodec>
 
 #include <stdio.h>
 #include <lame/lame.h>
@@ -224,14 +223,8 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
     id3tag_pad_v2( d->flags );
 
     // let's not use UTF-8 here since I don't know how to tell lame...
-    // FIXME: when we use the codec we only get garbage. Why?
-    QTextCodec* codec = 0;//QTextCodec::codecForName( "ISO8859-1" );
-//  if( !codec )
-//    qDebug() << "(K3bLameEncoder) could not find codec ISO8859-1.";
-
     for( MetaData::const_iterator it = metaData.constBegin(); it != metaData.constEnd(); ++it ) {
-        QByteArray value = codec ? codec->fromUnicode( it.value().toString() ).data()
-                                 : it.value().toString().toLatin1().data();
+        QByteArray value = it.value().toString().toLatin1();
         switch( it.key() ) {
         case META_TRACK_TITLE:
             id3tag_set_title( d->flags, value );
