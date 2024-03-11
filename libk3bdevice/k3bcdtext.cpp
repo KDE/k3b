@@ -119,12 +119,8 @@ namespace {
     }
 
 
-    QByteArray encodeCdText( const QString& s, bool* illegalChars = 0 )
+    QByteArray encodeCdText( const QString& s )
     {
-        if( illegalChars )
-            *illegalChars = false;
-
-        // TODO: do this without QT
         return s.toLatin1();
     }
 }
