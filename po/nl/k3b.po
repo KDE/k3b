@@ -20,7 +20,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-16 01:39+0000\n"
-"PO-Revision-Date: 2024-02-16 11:26+0100\n"
+"PO-Revision-Date: 2024-03-13 11:16+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -9506,7 +9506,7 @@ msgstr "Bestandstype"
 #: rip/base_k3baudiorippingoptionwidget.ui:34
 #, kde-format
 msgid "Configure Plugin"
-msgstr "Plugin instellen"
+msgstr "Plug-in configureren"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkCreatePlaylist)
 #: rip/base_k3baudiorippingoptionwidget.ui:53
