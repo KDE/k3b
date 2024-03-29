@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2023-03-20 22:31+0100\n"
+"PO-Revision-Date: 2024-02-17 13:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -41,7 +41,7 @@ msgstr "Fonto"
 #: core/k3bkjobbridge.cpp:99
 #, kde-format
 msgid "Target"
-msgstr ""
+msgstr "Celo"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:107
 #, kde-format
@@ -1109,7 +1109,7 @@ msgstr ""
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr ""
+msgstr "Uzante %1 %2 - Kopirajto (C) %3"
 
 #: jobs/k3bdvdformattingjob.cpp:503
 #, kde-format
@@ -1150,7 +1150,7 @@ msgstr ""
 #: jobs/k3biso9660imagewritingjob.cpp:226
 #, kde-format
 msgid "Waiting for medium"
-msgstr ""
+msgstr "Atendante datumportilon"
 
 #: jobs/k3biso9660imagewritingjob.cpp:333
 #, kde-format
@@ -1601,7 +1601,7 @@ msgstr ""
 #: plugin/k3baudioencoder.cpp:154
 #, kde-format
 msgid "An unknown error occurred."
-msgstr ""
+msgstr "Nekonata eraro okazis."
 
 #: plugin/k3bpluginmanager.cpp:156
 #, kde-format
@@ -1638,7 +1638,7 @@ msgstr ""
 #: projects/mixedcd/k3bmixedjob.cpp:1088
 #, kde-format
 msgid "Could not open %1 for writing"
-msgstr ""
+msgstr "Ne eblis malfermi %1 por skribado"
 
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
@@ -1739,7 +1739,7 @@ msgstr "I/O-eraro. Plej verŝajne, ne estas sufiĉa spaco sur la diskaparato."
 #: projects/mixedcd/k3bmixedjob.cpp:669
 #, kde-format
 msgid "I/O Error"
-msgstr ""
+msgstr "I/O eraro"
 
 #: projects/audiocd/k3baudiojob.cpp:581 projects/mixedcd/k3bmixedjob.cpp:870
 #, kde-format
@@ -1817,7 +1817,7 @@ msgstr "Eraro dum la normaligo de trakoj."
 #: projects/audiocd/k3baudiozerodata.cpp:44
 #, kde-format
 msgid "Silence"
-msgstr ""
+msgstr "Silento"
 
 #: projects/audiocd/k3brawaudiodatasource.cpp:65
 #, kde-format
@@ -2040,7 +2040,7 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:911 projects/k3bcdrskinwriter.cpp:924
 #, kde-format
 msgid "%1 crashed."
-msgstr ""
+msgstr "%1 paneis."
 
 #: projects/datacd/k3bisoimager.cpp:363
 #, kde-format
@@ -2116,7 +2116,7 @@ msgctxt ""
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr ""
+msgstr "K3b datumprojekto"
 
 #: projects/datacd/k3bmkisofshandler.cpp:66
 #, kde-format
@@ -2999,7 +2999,7 @@ msgstr ""
 #: projects/k3bgrowisofswriter.cpp:212
 #, kde-format
 msgid "Could not open file %1."
-msgstr ""
+msgstr "Ne eblis malfermi dosieron %1."
 
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
@@ -3297,7 +3297,7 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
-msgstr ""
+msgstr "%1 programo tro malnova: bezonas version %2 aŭ pli"
 
 #: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
@@ -3437,7 +3437,7 @@ msgstr "original"
 #: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:332
 #, kde-format
 msgid "duplicate"
-msgstr ""
+msgstr "duobligi"
 
 #: projects/videocd/k3bvcdtrack.cpp:346
 #, kde-format
@@ -3713,7 +3713,7 @@ msgstr "KD"
 msgctxt ""
 "To be shown when a DVD is required but another type of medium is inserted."
 msgid "DVD"
-msgstr ""
+msgstr "DVD"
 
 #: tools/k3bmedium.cpp:604
 #, kde-format
@@ -3762,7 +3762,7 @@ msgstr ""
 #, kde-format
 msgctxt "To be shown when an non-empty medium is required"
 msgid "non-empty"
-msgstr ""
+msgstr "ne-malplena"
 
 #: tools/k3bmedium.cpp:629
 #, kde-format
