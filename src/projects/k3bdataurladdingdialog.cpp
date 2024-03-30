@@ -766,7 +766,8 @@ bool K3b::DataUrlAddingDialog::addHiddenFiles()
         // FIXME: the isVisible() stuff makes the static addUrls method not return (same below)
         if( KMessageBox::questionTwoActions( /*isVisible() ? */this/* : parentWidget()*/,
                                              i18n("Do you also want to add hidden files?"),
-                                             i18n("Hidden Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")) ) == KMessageBox::PrimaryAction )
+                                             i18n("Hidden Files"), KGuiItem(i18n("Add")), KGuiItem(i18n("Do Not Add")),
+                                             "dont_ask_again_add_hidden_files") == KMessageBox::PrimaryAction )
             m_iAddHiddenFiles = 1;
         else
             m_iAddHiddenFiles = -1;
