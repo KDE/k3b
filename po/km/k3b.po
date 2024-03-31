@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-16 01:39+0000\n"
+"POT-Creation-Date: 2024-03-31 01:59+0000\n"
 "PO-Revision-Date: 2012-06-11 10:20+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -4932,7 +4932,7 @@ msgstr ""
 "%1</em> ។"
 
 #: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Add"
 msgstr "បន្ថែម"
@@ -6892,19 +6892,19 @@ msgid "Adding files to project \"%1\"..."
 msgstr "កំពុង​បន្ថែម​ឯកសារ​ទៅ​កាន់​គម្រោង​ \"%1\"..."
 
 #: projects/k3baudiotrackaddingdialog.cpp:73
-#: projects/k3bdataurladdingdialog.cpp:800
+#: projects/k3bdataurladdingdialog.cpp:801
 #, kde-format
 msgid "Insufficient permissions to read the following files"
 msgstr "គ្មាន​សិទ្ធិ​គ្រប់​គ្រាន់​ដើម្បី​អាន​ឯកសារ​ខាង​ក្រោម"
 
 #: projects/k3baudiotrackaddingdialog.cpp:77
-#: projects/k3bdataurladdingdialog.cpp:804
+#: projects/k3bdataurladdingdialog.cpp:805
 #, kde-format
 msgid "Unable to find the following files"
 msgstr "មិន​អាច​រក​ឃើញ​ឯកសារ​ខាង​ក្រោម​"
 
 #: projects/k3baudiotrackaddingdialog.cpp:81
-#: projects/k3bdataurladdingdialog.cpp:808
+#: projects/k3bdataurladdingdialog.cpp:809
 #, kde-format
 msgid "No non-local files supported"
 msgstr "មិន​គាំ​ទ្រ​ឯកសារ​មិន​មែន​ជា​មូល​ដ្ឋាន"
@@ -7851,12 +7851,12 @@ msgid "Hidden Files"
 msgstr "ឯកសារ​ដែល​បាន​លាក់"
 
 #: projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Do Not Add"
 msgstr "កុំ​បន្ថែម"
 
-#: projects/k3bdataurladdingdialog.cpp:783
+#: projects/k3bdataurladdingdialog.cpp:784
 #, kde-format
 msgid ""
 "Do you also want to add system files (FIFOs, sockets, device files, and "
@@ -7864,22 +7864,22 @@ msgid ""
 msgstr ""
 "តើ​អ្នក​ចង់​បន្ថែម​ឯកសារ​ប្រព័ន្ធ​ (FIFOs រន្ធ ឯកសារ​ឧបករណ៍ និង​ symlinks ដែល​ខូច​) ផង​ដែរ​ឬ ?"
 
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "System Files"
 msgstr " ឯកសារ​ប្រព័ន្ធ"
 
-#: projects/k3bdataurladdingdialog.cpp:812
+#: projects/k3bdataurladdingdialog.cpp:813
 #, kde-format
 msgid "To burn files bigger than %1 please use %2"
 msgstr "ដើម្បី​ដុត​ឯកសារ​ដែល​ធំ​ជាង %1 សូម​ប្រើ %2"
 
-#: projects/k3bdataurladdingdialog.cpp:817
+#: projects/k3bdataurladdingdialog.cpp:818
 #, kde-format
 msgid "Some filenames had to be modified due to limitations in mkisofs"
 msgstr "ឈ្មោះ​ឯកសារ​មួយ​ចំនួន​ត្រូវ​តែ​បាន​កែប្រែ ​ដោយសារ​ដែន​កំណត់​នៅ​ក្នុង mkisofs"
 
-#: projects/k3bdataurladdingdialog.cpp:821
+#: projects/k3bdataurladdingdialog.cpp:822
 #, kde-format
 msgid ""
 "The following filenames have an invalid encoding. You may fix this with the "
