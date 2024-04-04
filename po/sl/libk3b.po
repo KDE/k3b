@@ -3,13 +3,13 @@
 #
 # Jure Repinc <jlp@holodeck1.com>, 2010.
 # Andrej Mernik <andrejm@ubuntu.si>, 2012, 2013, 2014, 2015, 2016, 2017, 2018.
-# Matjaž Jeran <matjaz.jeran@amis.net>, 2020, 2022.
+# SPDX-FileCopyrightText: 2020, 2022, 2024 Matjaž Jeran <matjaz.jeran@amis.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2023-04-03 09:11+0200\n"
+"PO-Revision-Date: 2024-04-03 10:08+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
 msgid "Inhibiting sleep for disc writing"
-msgstr "Preprečevanje stanja pripravljenosti med zapisovanjem nosilca"
+msgstr "Preprečevanje stanja spanja za zapisovanje nosilca"
 
 #: core/k3bcore.cpp:257
 #, kde-format
