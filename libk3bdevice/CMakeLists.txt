@@ -24,9 +24,6 @@ target_link_libraries(k3bdevice
         KF${KF_MAJOR_VERSION}::KIOCore
         KF${KF_MAJOR_VERSION}::Solid
 )
-if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(k3bdevice PRIVATE Qt6::Core5Compat)
-endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "k?FreeBSD")
     target_link_libraries(k3bdevice PRIVATE cam)

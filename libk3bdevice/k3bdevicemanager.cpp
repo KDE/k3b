@@ -31,7 +31,6 @@
 #include <QStringList>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
 #include <QTemporaryFile>
 
 #include <iostream>

@@ -13,7 +13,7 @@
 #include <QDebug>
 #include <QSharedDataPointer>
 
-class QRegExp;
+class QRegularExpression;
 
 namespace K3b
 {
@@ -85,7 +85,6 @@ namespace K3b
 
         static Msf fromAudioBytes( qint64 bytes );
 
-        static QRegExp regExp();
 
     private:
         class Private;

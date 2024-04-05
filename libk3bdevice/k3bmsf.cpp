@@ -6,7 +6,7 @@
 
 #include "k3bmsf.h"
 #include <QDebug>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QSharedData>
 
 #include <cmath>
@@ -271,20 +271,6 @@ unsigned long long K3b::Msf::pcmSamples() const
 }
 
 
-QRegExp K3b::Msf::regExp()
-{
-    //
-    // An MSF can have the following formats:
-    // 100        (treated as frames)
-    // 100:23     (minutes:seconds)
-    // 100:23:72  (minutes:seconds:frames)
-    // 100:23.72  (minutes:seconds.frames)
-    //
-    static QRegExp rx( "(\\d+)(?::([0-5]?\\d)(?:[:\\.]((?:[0-6]?\\d)|(?:7[0-4])))?)?" );
-    return rx;
-}
-
-
 K3b::Msf K3b::Msf::fromSeconds( double ms )
 {
     return K3b::Msf( static_cast<int>( ::ceil(ms*75.0) ) );
@@ -302,21 +288,27 @@ K3b::Msf K3b::Msf::fromAudioBytes( qint64 bytes )
 
 K3b::Msf K3b::Msf::fromString( const QString& s, bool* ok )
 {
-    QRegExp rx = regExp();
+    //
+    // An MSF can have the following formats:
+    // 100        (treated as frames)
+    // 100:23     (minutes:seconds)
+    // 100:23:72  (minutes:seconds:frames)
+    // 100:23.72  (minutes:seconds.frames)
+    //
+    static const QRegularExpression rx(QRegularExpression::anchoredPattern( "(\\d+)(?::([0-5]?\\d)(?:[:\\.]((?:[0-6]?\\d)|(?:7[0-4])))?)?" ));
 
     K3b::Msf msf;
-
-    if( rx.exactMatch( s ) ) {
+    if( const auto match = rx.match( s ); match.hasMatch() ) {
         //
         // first number - cap(1)
         // second number - cap(2)
         // third number - cap(3)
         //
-        if( rx.cap(2).isEmpty() ) {
-            msf.d->setValue( 0, 0, rx.cap(1).toInt() );
+        if( match.capturedView(2).isEmpty() ) {
+            msf.d->setValue( 0, 0, match.capturedView(1).toInt() );
         }
         else {
-            msf.d->setValue( rx.cap(1).toInt(), rx.cap(2).toInt(), rx.cap(3).toInt() );
+            msf.d->setValue( match.capturedView(1).toInt(), match.capturedView(2).toInt(), match.capturedView(3).toInt() );
         }
 
         if( ok ) {
