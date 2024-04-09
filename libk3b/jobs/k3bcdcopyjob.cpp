@@ -34,7 +34,6 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
 #include <QStringList>
 #include <QTemporaryFile>
 #include <QTimer>

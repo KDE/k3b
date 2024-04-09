@@ -18,7 +18,6 @@
 #include "k3b_i18n.h"
 
 #include <QDebug>
-#include <QRegExp>
 
 #include <errno.h>
 #include <string.h>

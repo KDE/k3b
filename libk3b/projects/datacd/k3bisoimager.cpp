@@ -29,7 +29,6 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
-#include <QRegExp>
 #include <QStandardPaths>
 #include <QTemporaryFile>
 #include <QApplication>

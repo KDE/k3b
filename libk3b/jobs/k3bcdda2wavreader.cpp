@@ -14,7 +14,7 @@
 #include "k3b_i18n.h"
 
 #include <QDebug>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QVector>
 
 
@@ -169,10 +169,10 @@ void K3b::Cdda2wavReader::slotProcessLine( const QString& line )
 
 
 
-    static QRegExp rx( "T\\d\\d:" );
-    if( rx.exactMatch( line.left(4) ) || line.startsWith( "Leadout" ) ) {
+    static const QRegularExpression rx( QRegularExpression::anchoredPattern( "T\\d\\d:" ) );
+    if( const auto match = rx.match( line.left(4) ); match.hasMatch() || line.startsWith( "Leadout" ) ) {
         int pos = line.indexOf( ' ' );
-        int endpos = line.indexOf( QRegExp( "\\d" ), pos );
+        int endpos = line.indexOf( QRegularExpression( "\\d" ), pos );
         endpos = line.indexOf( ' ', endpos );
         bool ok;
         int offset = line.mid( pos, endpos-pos ).toInt(&ok);

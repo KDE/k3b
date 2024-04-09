@@ -11,7 +11,6 @@
 #include "k3b_i18n.h"
 
 #include <QDebug>
-#include <QRegExp>
 #include <QRegularExpression>
 
 #include <cmath>
@@ -135,17 +134,16 @@ int K3b::MkisofsHandler::parseMkisofsProgress(const QString& line)
     perStr.truncate(perStr.indexOf('%'));
     // FIXME: how to support Inuit or Samaritan Aramaic format or cover all
     // formats? right now it only support, for example: 0.52 and 0,52
-    QRegExp rx("(\\d+.|,+\\d)");
+    static const QRegularExpression rx("(\\d+.|,+\\d)");
     QStringList list;
-    int pos = 0;
-    bool ok;
-    while ((pos = rx.indexIn(perStr, pos)) != -1) {
-        list << rx.cap(1);
-        pos += rx.matchedLength();
+    for (auto it = rx.globalMatch(perStr); it.hasNext();) {
+        const auto match = it.next();
+        list << match.captured(1);
     }
     if (list.size() < 2)
         return -1;
     // FIXME: the same story
+    bool ok;
     double p = (list[0].replace(',', '.') + list[1]).toDouble(&ok);
     if (!ok) {
         qDebug() << "(K3b::MkisofsHandler) Parsing did not work for " << perStr;

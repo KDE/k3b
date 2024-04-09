@@ -15,7 +15,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
-#include <QRegExp>
+#include <QRegularExpression>
 
 
 // TODO: add method: usableByCdrecordDirectly()
@@ -108,30 +108,30 @@ void K3b::CueFileParser::readFile()
 bool K3b::CueFileParser::parseLine( QString line )
 {
     // use cap(1) for the filename
-    static QRegExp fileRx( "FILE\\s\"?([^\"].*[^\"\\s])\"?\\s\"?(.*)\"?" );
+    static const QRegularExpression fileRx( QRegularExpression::anchoredPattern( "FILE\\s\"?([^\"].*[^\"\\s])\"?\\s\"?(.*)\"?" ) );
 
     // use cap(1) for the flags
-    static QRegExp flagsRx( "FLAGS(\\s(DCP|4CH|PRE|SCMS)){1,4}" );
+    static const QRegularExpression flagsRx( QRegularExpression::anchoredPattern( "FLAGS(\\s(DCP|4CH|PRE|SCMS)){1,4}" ) );
 
     // use cap(1) for the tracknumber and cap(2) for the datatype
-    static QRegExp trackRx( "TRACK\\s(\\d{1,2})\\s(AUDIO|CDG|MODE1/2048|MODE1/2352|MODE2/2336|MODE2/2352|CDI/2336|CDI/2352)" );
+    static const QRegularExpression trackRx( QRegularExpression::anchoredPattern( "TRACK\\s(\\d{1,2})\\s(AUDIO|CDG|MODE1/2048|MODE1/2352|MODE2/2336|MODE2/2352|CDI/2336|CDI/2352)" ) );
 
     // use cap(1) for the index number, cap(3) for the minutes, cap(4) for the seconds, cap(5) for the frames,
     // and cap(2) for the MSF value string
-    static QRegExp indexRx( "INDEX\\s(\\d{1,2})\\s((\\d+):([0-5]\\d):((?:[0-6]\\d)|(?:7[0-4])))" );
+    static const QRegularExpression indexRx( QRegularExpression::anchoredPattern( "INDEX\\s(\\d{1,2})\\s((\\d+):([0-5]\\d):((?:[0-6]\\d)|(?:7[0-4])))" ) );
 
     // use cap(1) for the MCN
-    static QRegExp catalogRx( "CATALOG\\s(\\w{13,13})" );
+    static const QRegularExpression catalogRx( QRegularExpression::anchoredPattern( "CATALOG\\s(\\w{13,13})" ) );
 
     // use cap(1) for the ISRC
-    static QRegExp isrcRx( "ISRC\\s(\\w{5,5}\\d{7,7})" );
+    static const QRegularExpression isrcRx( QRegularExpression::anchoredPattern( "ISRC\\s(\\w{5,5}\\d{7,7})" ) );
 
     static QString cdTextRxStr = "\"?([^\"]{0,80})\"?";
 
     // use cap(1) for the string
-    static QRegExp titleRx( "TITLE\\s" + cdTextRxStr );
-    static QRegExp performerRx( "PERFORMER\\s" + cdTextRxStr );
-    static QRegExp songwriterRx( "SONGWRITER\\s" + cdTextRxStr );
+    static const QRegularExpression titleRx( QRegularExpression::anchoredPattern( "TITLE\\s" + cdTextRxStr ) );
+    static const QRegularExpression performerRx( QRegularExpression::anchoredPattern( "PERFORMER\\s" + cdTextRxStr ) );
+    static const QRegularExpression songwriterRx( QRegularExpression::anchoredPattern( "SONGWRITER\\s" + cdTextRxStr ) );
 
 
     // simplify all white spaces except those in filenames and CD-TEXT
@@ -145,9 +145,9 @@ bool K3b::CueFileParser::parseLine( QString line )
     //
     // FILE
     //
-    if( fileRx.exactMatch( line ) ) {
+    if( const auto fileMatch = fileRx.match( line ); fileMatch.hasMatch() ) {
 
-        setValid( findImageFileName( fileRx.cap(1) ) );
+        setValid( findImageFileName( fileMatch.captured(1) ) );
 
         if( d->inFile ) {
             qDebug() << "(K3b::CueFileParser) only one FILE statement allowed.";
@@ -156,7 +156,7 @@ bool K3b::CueFileParser::parseLine( QString line )
         d->inFile = true;
         d->inTrack = false;
         d->haveIndex1 = false;
-        d->imageFileType = fileRx.cap( 2 ).toLower();
+        d->imageFileType = fileMatch.captured( 2 ).toLower();
         return true;
     }
 
@@ -164,7 +164,7 @@ bool K3b::CueFileParser::parseLine( QString line )
     //
     // TRACK
     //
-    else if( trackRx.exactMatch( line ) ) {
+    else if( const auto trackMatch = trackRx.match( line ); trackMatch.hasMatch() ) {
         if( !d->inFile ) {
             qDebug() << "(K3b::CueFileParser) TRACK statement before FILE.";
             return false;
@@ -188,22 +188,22 @@ bool K3b::CueFileParser::parseLine( QString line )
         d->currentParsedTrack++;
 
         // parse the tracktype
-        if( trackRx.cap(2) == "AUDIO" ) {
+        if( trackMatch.captured(2) == "AUDIO" ) {
             d->trackType = K3b::Device::Track::TYPE_AUDIO;
             d->trackMode = K3b::Device::Track::UNKNOWN;
         }
         else {
             d->trackType = K3b::Device::Track::TYPE_DATA;
-            if( trackRx.cap(2).startsWith("MODE1") ) {
+            if( trackMatch.captured(2).startsWith("MODE1") ) {
                 d->trackMode = K3b::Device::Track::MODE1;
-                d->rawData = (trackRx.cap(2) == "MODE1/2352");
+                d->rawData = (trackMatch.captured(2) == "MODE1/2352");
             }
-            else if( trackRx.cap(2).startsWith("MODE2") ) {
+            else if( trackMatch.captured(2).startsWith("MODE2") ) {
                 d->trackMode = K3b::Device::Track::MODE2;
-                d->rawData = (trackRx.cap(2) == "MODE2/2352");
+                d->rawData = (trackMatch.captured(2) == "MODE2/2352");
             }
             else {
-                qDebug() << "(K3b::CueFileParser) unsupported track type: " << trackRx.cap(2);
+                qDebug() << "(K3b::CueFileParser) unsupported track type: " << trackMatch.capturedView(2);
                 return false;
             }
         }
@@ -219,7 +219,7 @@ bool K3b::CueFileParser::parseLine( QString line )
     //
     // FLAGS
     //
-    else if( flagsRx.exactMatch( line ) ) {
+    else if( const auto flagsMatch = flagsRx.match( line ); flagsMatch.hasMatch() ) {
         if( !d->inTrack ) {
             qDebug() << "(K3b::CueFileParser) FLAGS statement without TRACK.";
             return false;
@@ -233,15 +233,15 @@ bool K3b::CueFileParser::parseLine( QString line )
     //
     // INDEX
     //
-    else if( indexRx.exactMatch( line ) ) {
+    else if( const auto indexMatch = indexRx.match( line ); indexMatch.hasMatch() ) {
         if( !d->inTrack ) {
             qDebug() << "(K3b::CueFileParser) INDEX statement without TRACK.";
             return false;
         }
 
-        unsigned int indexNumber = indexRx.cap(1).toInt();
+        unsigned int indexNumber = indexMatch.capturedView(1).toInt();
 
-        K3b::Msf indexStart = K3b::Msf::fromString( indexRx.cap(2) );
+        K3b::Msf indexStart = K3b::Msf::fromString( indexMatch.captured(2) );
 
         if( indexNumber == 0 ) {
             d->index0 = indexStart;
@@ -272,7 +272,7 @@ bool K3b::CueFileParser::parseLine( QString line )
     //
     // CATALOG
     //
-    if( catalogRx.exactMatch( line ) ) {
+    if( const auto catalogMatch = catalogRx.match( line ); catalogMatch.hasMatch() ) {
         // TODO: set the toc's mcn
         return true;
     }
@@ -281,7 +281,7 @@ bool K3b::CueFileParser::parseLine( QString line )
     //
     // ISRC
     //
-    if( isrcRx.exactMatch( line ) ) {
+    if( const auto isrcMatch = isrcRx.match( line ); isrcMatch.hasMatch() ) {
         if( d->inTrack ) {
             // TODO: set the track's ISRC
             return true;
@@ -297,27 +297,27 @@ bool K3b::CueFileParser::parseLine( QString line )
     // CD-TEXT
     // TODO: create K3b::Device::TrackCdText entries
     //
-    else if( titleRx.exactMatch( line ) ) {
+    else if( const auto titleMatch = titleRx.match( line ); titleMatch.hasMatch() ) {
         if( d->inTrack )
-            d->cdText[d->currentParsedTrack-1].setTitle( titleRx.cap(1) );
+            d->cdText[d->currentParsedTrack-1].setTitle( titleMatch.captured(1) );
         else
-            d->cdText.setTitle( titleRx.cap(1) );
+            d->cdText.setTitle( titleMatch.captured(1) );
         return true;
     }
 
-    else if( performerRx.exactMatch( line ) ) {
+    else if( const auto performerMatch = performerRx.match( line ); performerMatch.hasMatch() ) {
         if( d->inTrack )
-            d->cdText[d->currentParsedTrack-1].setPerformer( performerRx.cap(1) );
+            d->cdText[d->currentParsedTrack-1].setPerformer( performerMatch.captured(1) );
         else
-            d->cdText.setPerformer( performerRx.cap(1) );
+            d->cdText.setPerformer( performerMatch.captured(1) );
         return true;
     }
 
-    else if( songwriterRx.exactMatch( line ) ) {
+    else if( const auto songwriterMatch = songwriterRx.match( line ); songwriterMatch.hasMatch() ) {
         if( d->inTrack )
-            d->cdText[d->currentParsedTrack-1].setSongwriter( songwriterRx.cap(1) );
+            d->cdText[d->currentParsedTrack-1].setSongwriter( songwriterMatch.captured(1) );
         else
-            d->cdText.setSongwriter( songwriterRx.cap(1) );
+            d->cdText.setSongwriter( songwriterMatch.captured(1) );
         return true;
     }
 

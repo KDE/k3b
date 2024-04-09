@@ -6,8 +6,6 @@
 
 #include "k3bvalidators.h"
 
-#include <QRegExp>
-
 #include <ctype.h>
 
 

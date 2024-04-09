@@ -22,7 +22,6 @@
 #include <QDebug>
 #include <QString>
 #include <QStringList>
-#include <QRegExp>
 #include <QRegularExpression>
 #include <QFile>
 #include "k3b_i18n.h"
@@ -470,15 +469,15 @@ void K3b::CdrecordWriter::cancel()
 
 void K3b::CdrecordWriter::slotStdLine( const QString& line )
 {
-    static QRegExp s_burnfreeCounterRx( "^BURN\\-Free\\swas\\s(\\d+)\\stimes\\sused" );
-    static QRegExp s_burnfreeCounterRxPredict( "^Total\\sof\\s(\\d+)\\s\\spossible\\sbuffer\\sunderruns\\spredicted" );
+    static const QRegularExpression s_burnfreeCounterRx( "^BURN\\-Free\\swas\\s(\\d+)\\stimes\\sused" );
+    static const QRegularExpression s_burnfreeCounterRxPredict( "^Total\\sof\\s(\\d+)\\s\\spossible\\sbuffer\\sunderruns\\spredicted" );
 
     // tracknumber: cap(1)
     // done: cap(2)
     // complete: cap(3)
     // fifo: cap(4)  (it seems as if some patched cdrecord versions do not emit the fifo info but only the buf... :(
     // buffer: cap(5)
-    static QRegExp s_progressRx( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s(?:\\(fifo\\s*(\\d*)\\%\\)\\s*)?(?:\\[buf\\s*(\\d*)\\%\\])?.*" );
+    static const QRegularExpression s_progressRx( QRegularExpression::anchoredPattern( "Track\\s(\\d\\d)\\:\\s*(\\d*)\\sof\\s*(\\d*)\\sMB\\swritten\\s(?:\\(fifo\\s*(\\d*)\\%\\)\\s*)?(?:\\[buf\\s*(\\d*)\\%\\])?.*" ) );
 
     emit debuggingOutput( d->cdrecordBinObject->name(), line );
 
@@ -517,17 +516,17 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
                          << line.mid( 6, 2 );
         }
 
-        else if( s_progressRx.exactMatch( line ) ) {
+        else if( const auto progressMatch = s_progressRx.match( line ); progressMatch.hasMatch() ) {
             //      int num = s_progressRx.cap(1).toInt();
-            int made = s_progressRx.cap(2).toInt();
-            int size = s_progressRx.cap(3).toInt();
-            int fifo = s_progressRx.cap(4).toInt();
+            int made = progressMatch.capturedView(2).toInt();
+            int size = progressMatch.capturedView(3).toInt();
+            int fifo = progressMatch.capturedView(4).toInt();
 
             emit buffer( fifo );
             d->lastFifoValue = fifo;
 
-            if( s_progressRx.captureCount() > 4 )
-                emit deviceBuffer( s_progressRx.cap(5).toInt() );
+            if( progressMatch.lastCapturedIndex() > 4 )
+                emit deviceBuffer( progressMatch.capturedView(5).toInt() );
 
             //
             // cdrecord's output sucks a bit.
@@ -734,15 +733,15 @@ void K3b::CdrecordWriter::slotStdLine( const QString& line )
         // hopefully this will do it since I have no possibility to test it!
         d->process.write( "\n", 1 );
     }
-    else if( s_burnfreeCounterRx.indexIn( line ) ) {
+    else if( const auto burnfreeCounterMatch = s_burnfreeCounterRx.match( line ); burnfreeCounterMatch.hasMatch() ) {
         bool ok;
-        int num = s_burnfreeCounterRx.cap(1).toInt(&ok);
+        int num = burnfreeCounterMatch.capturedView(1).toInt(&ok);
         if( ok )
             emit infoMessage( i18np("Burnfree was used once.", "Burnfree was used %1 times.", num), MessageInfo );
     }
-    else if( s_burnfreeCounterRxPredict.indexIn( line ) ) {
+    else if( const auto burnfreeCounterPredictMatch = s_burnfreeCounterRxPredict.match( line ); burnfreeCounterPredictMatch.hasMatch() ) {
         bool ok;
-        int num = s_burnfreeCounterRxPredict.cap(1).toInt(&ok);
+        int num = burnfreeCounterPredictMatch.capturedView(1).toInt(&ok);
         if( ok )
             emit infoMessage( i18np("Buffer was low once.", "Buffer was low %1 times.", num), MessageInfo );
     }
