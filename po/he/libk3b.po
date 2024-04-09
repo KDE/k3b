@@ -6,20 +6,21 @@
 # tahmar1900 <tahmar1900@gmail.com>, 2009.
 # Diego Iastrubni <elcuco@kde.org>, 2012.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2017-05-16 07:02-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Hebrew <kde-i18n-he@kde.org>\n"
+"PO-Revision-Date: 2024-04-08 19:16+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -2088,14 +2089,9 @@ msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
 msgstr "נמצאו קבצים גדולים מ - 4GB. היישום K3b צריך לפחות  %1 על מנת להמשיך."
 
 #: projects/datacd/k3bisoimager.cpp:619
-#, fuzzy, kde-format
-#| msgid ""
-#| "Found files bigger than 2 GB. These files will only be fully accessible "
-#| "if mounted with UDF."
+#, kde-format
 msgid "Found files bigger than 2 GB. These files will be fully accessible."
-msgstr ""
-"נמצאו קבצים גדולים מ- 2 ג\"ב. הקבצים האלו יהיו ניתנים לגישה רק אם יעוגנו "
-"בעזרת UDF."
+msgstr "נמצאו קבצים גדולים מ־2 ג״ב. הקבצים האלו יהיו נגישים במלואם."
 
 #: projects/datacd/k3bisoimager.cpp:625
 #, kde-format
@@ -2375,7 +2371,7 @@ msgstr "מחיקה הסתיימה בהצלחה"
 #: projects/k3bcdrskinwriter.cpp:807 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
-msgstr "מהירות כתיבה כוללת: %1 ק\"ב/שניה (%2x)"
+msgstr "מהירות כתיבה ממוצעת כוללת: %1 ק״ב/שנייה (%2x)"
 
 #: projects/k3bcdrdaowriter.cpp:761
 #, kde-format
@@ -2943,7 +2939,7 @@ msgstr "מפעיל DAO"
 #: projects/k3bgrowisofshandler.cpp:164
 #, kde-format
 msgid "Writing speed: %1 KB/s (%2x)"
-msgstr "מהירות כתיבה: %1 ק\"ב/שניה (%2x)"
+msgstr "מהירות כתיבה: %1 ק״ב/שנייה (%2x)"
 
 #: projects/k3bgrowisofshandler.cpp:215
 #, fuzzy, kde-format
@@ -3062,12 +3058,12 @@ msgstr "מתחיל צריבה..."
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
 msgid "Creating audio image files in %1"
-msgstr "יותר תמונת קבצי שמע ב - %1"
+msgstr "נוצרת תמונת קובצי שמע ב־%1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:280 projects/mixedcd/k3bmixedjob.cpp:494
 #, kde-format
 msgid "Creating audio image files"
-msgstr "יותר תמונת קבצי שמע"
+msgstr "נוצרת תמונת קובצי שמע"
 
 #: projects/mixedcd/k3bmixedjob.cpp:468
 #, kde-format
@@ -3097,17 +3093,17 @@ msgstr "מידע ISO9660"
 #: projects/mixedcd/k3bmixedjob.cpp:986
 #, kde-format
 msgid "Simulating second session"
-msgstr "מדמה צריבה שניה"
+msgstr "מדמה צריבה שנייה"
 
 #: projects/mixedcd/k3bmixedjob.cpp:988
 #, kde-format
 msgid "Writing second session of copy %1"
-msgstr "כותב צריבה שניה של עותק %1"
+msgstr "כותב צריבה שנייה של עותק %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:990
 #, kde-format
 msgid "Writing second session"
-msgstr "כותב צריבה שניה"
+msgstr "כותב צריבה שנייה"
 
 #: projects/mixedcd/k3bmixedjob.cpp:994
 #, kde-format
@@ -3333,9 +3329,9 @@ msgid "Could not write correct XML file."
 msgstr "לא יכול לכתוב קובץ XML תקין."
 
 #: projects/videocd/k3bvcdjob.cpp:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr "יוצר קבצי Cue/Bin ..."
+msgstr "נוצרים קובצי Cue/Bin…"
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, fuzzy, kde-format
