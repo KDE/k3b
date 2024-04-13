@@ -139,8 +139,13 @@ bool K3bFFMpegFile::open()
     }
 
     d->sampleFormat = d->codecContext->sample_fmt;
+#if LIBAVCODEC_VERSION_MAJOR < 70
     d->isSpacious = ::av_sample_fmt_is_planar(d->sampleFormat) &&
         d->codecContext->channels > 1;
+#else
+#pragma Unimplemented
+    d->isSpacious = ::av_sample_fmt_is_planar(d->sampleFormat);
+#endif
     d->packet = ::av_packet_alloc();
 
     // dump some debugging info
@@ -185,7 +190,12 @@ int K3bFFMpegFile::sampleRate() const
 
 int K3bFFMpegFile::channels() const
 {
+#if LIBAVCODEC_VERSION_MAJOR < 70
     return d->codecContext->channels;
+#else
+#pragma Unimplemented
+    return 0;
+#endif
 }
 
 
