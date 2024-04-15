@@ -13,7 +13,6 @@
 #include <KUrlLabel>
 
 #include <QDebug>
-#include <QRegExp>
 #include <QValidator>
 #include <QCheckBox>
 #include <QLayout>

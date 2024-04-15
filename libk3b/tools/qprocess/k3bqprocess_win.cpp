@@ -311,13 +311,13 @@ static QByteArray qt_create_environment(const QStringList &environment)
         QStringList envStrings = environment;
 	    int pos = 0;
 	    // add PATH if necessary (for DLL loading)
-        if (envStrings.filter(QRegExp(QLatin1String("^PATH="),Qt::CaseInsensitive)).isEmpty()) {
+        if (envStrings.filter(QRegularExpression(QLatin1String("^PATH="),QRegularExpression::CaseInsensitiveOption)).isEmpty()) {
             QByteArray path = qgetenv("PATH");
             if (!path.isEmpty())
                 envStrings.prepend(QString(QLatin1String("PATH=%1")).arg(QString::fromLocal8Bit(path)));
         }
         // add systemroot if needed
-        if (envStrings.filter(QRegExp(QLatin1String("^SystemRoot="),Qt::CaseInsensitive)).isEmpty()) {
+        if (envStrings.filter(QRegularExpression(QLatin1String("^SystemRoot="),QRegularExpression::CaseInsensitiveOption)).isEmpty()) {
             QByteArray systemRoot = qgetenv("SystemRoot");
             if (!systemRoot.isEmpty())
                 envStrings.prepend(QString(QLatin1String("SystemRoot=%1")).arg(QString::fromLocal8Bit(systemRoot)));

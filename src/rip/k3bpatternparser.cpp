@@ -15,7 +15,6 @@
 
 #include <QDateTime>
 #include <QLocale>
-#include <QRegExp>
 #include <QRegularExpression>
 #include <QStack>
 #include <QDebug>
@@ -199,19 +198,18 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
     QString inclusion;
     bool isIncluded;
 
-    static QRegExp conditionrx( "^[@|!][atyegrmx](?:='.*')?\\{" );
-    conditionrx.setMinimal( true );
+    static const QRegularExpression conditionrx( "^[@|!][atyegrmx](?:='.*')?\\{", QRegularExpression::InvertedGreedinessOption );
 
     for( int i = 0; i < dir.length(); ++i ) {
+        const auto match = conditionrx.match(dir, i, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
 
-        offsetStack.push(
-            conditionrx.indexIn(dir, i, QRegExp::CaretAtOffset) );
+        offsetStack.push( match.capturedStart() );
 
         if( offsetStack.top() == -1 ) {
             offsetStack.pop();
         }
         else {
-            i += conditionrx.matchedLength() - 1;
+            i += match.capturedLength() - 1;
             continue;
         }
 

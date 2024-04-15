@@ -19,7 +19,6 @@
 #include <QDebug>
 #include <QFile>
 #include <QList>
-#include <QRegExp>
 #include <QString>
 #include <QTimer>
 #include <QUrl>

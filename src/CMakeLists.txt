@@ -249,7 +249,7 @@ target_link_libraries(k3b
     KF${KF_MAJOR_VERSION}::ConfigCore
 )
 if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(k3b Qt6::Core5Compat KF6::BookmarksWidgets)
+    target_link_libraries(k3b KF6::BookmarksWidgets)
 endif()
 
 if(Qt${QT_MAJOR_VERSION}WebEngineWidgets_FOUND)

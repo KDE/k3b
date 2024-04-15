@@ -6,7 +6,6 @@
 #include "k3bversion.h"
 
 #include <QDebug>
-#include <QRegExp>
 #include <QRegularExpression>
 #include <QSharedData>
 
@@ -208,10 +207,10 @@ QString K3b::Version::createVersionString( int majorVersion,
 
 int K3b::Version::compareSuffix( const QString& suffix1, const QString& suffix2 )
 {
-    static QRegExp rcRx( "rc(\\d+)" );
-    static QRegExp preRx( "pre(\\d+)" );
-    static QRegExp betaRx( "beta(\\d+)" );
-    static QRegExp alphaRx( "a(?:lpha)?(\\d+)" );
+    static const QRegularExpression rcRx( QRegularExpression::anchoredPattern( "rc(\\d+)" ) );
+    static const QRegularExpression preRx( QRegularExpression::anchoredPattern( "pre(\\d+)" ) );
+    static const QRegularExpression betaRx( QRegularExpression::anchoredPattern( "beta(\\d+)" ) );
+    static const QRegularExpression alphaRx( QRegularExpression::anchoredPattern( "a(?:lpha)?(\\d+)" ) );
 
     // first we check if one of the suffixes (or both are empty) because that case if simple
     if( suffix1.isEmpty() ) {
@@ -224,63 +223,68 @@ int K3b::Version::compareSuffix( const QString& suffix1, const QString& suffix2 
         return -1;
 
     // now search for our special suffixes
-    if( rcRx.exactMatch( suffix1 ) ) {
-        int v1 = rcRx.cap(1).toInt();
+    const auto rcMatch2 = rcRx.match(suffix2);
+    const auto preMatch2 = preRx.match(suffix2);
+    const auto betaMatch2 = betaRx.match(suffix2);
+    const auto alphaMatch2 = alphaRx.match(suffix2);
 
-        if( rcRx.exactMatch( suffix2 ) ) {
-            int v2 = rcRx.cap(1).toInt();
+    if( const auto rcMatch1 = rcRx.match(suffix1); rcMatch1.hasMatch() ) {
+        int v1 = rcMatch1.capturedView(1).toInt();
+
+        if( rcMatch2.hasMatch() ) {
+            int v2 = rcMatch2.capturedView(1).toInt();
             return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
         }
-        else if( preRx.exactMatch( suffix2 ) ||
-                 betaRx.exactMatch( suffix2 ) ||
-                 alphaRx.exactMatch( suffix2 ) )
+        else if( preMatch2.hasMatch() ||
+                 betaMatch2.hasMatch() ||
+                 alphaMatch2.hasMatch() )
             return 1; // rc > than all the others
         else
             return QString::compare( suffix1, suffix2 );
     }
 
-    else if( preRx.exactMatch( suffix1 ) ) {
-        int v1 = preRx.cap(1).toInt();
+    else if( const auto preMatch1 = preRx.match(suffix1); preMatch1.hasMatch() ) {
+        int v1 = preMatch1.capturedView(1).toInt();
 
-        if( rcRx.exactMatch( suffix2 ) ) {
+        if( rcMatch2.hasMatch() ) {
             return -1; // pre is less than rc
         }
-        else if( preRx.exactMatch( suffix2 ) ) {
-            int v2 = preRx.cap(1).toInt();
+        else if( preMatch2.hasMatch() ) {
+            int v2 = preMatch2.capturedView(1).toInt();
             return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
         }
-        else if( betaRx.exactMatch( suffix2 ) ||
-                 alphaRx.exactMatch( suffix2 ) )
+        else if( betaMatch2.hasMatch() ||
+                 alphaMatch2.hasMatch() )
             return 1; // pre is greater than beta or alpha
         else
             return QString::compare( suffix1, suffix2 );
     }
 
-    else if( betaRx.exactMatch( suffix1 ) ) {
-        int v1 = betaRx.cap(1).toInt();
+    else if( const auto betaMatch1 = betaRx.match(suffix1); betaMatch1.hasMatch() ) {
+        int v1 = betaMatch1.capturedView(1).toInt();
 
-        if( rcRx.exactMatch( suffix2 ) ||
-            preRx.exactMatch( suffix2 ) )
+        if( rcMatch2.hasMatch() ||
+            preMatch2.hasMatch() )
             return -1; // beta is less than rc or pre
-        else if( betaRx.exactMatch( suffix2 ) ) {
-            int v2 = betaRx.cap(1).toInt();
+        else if( betaMatch2.hasMatch() ) {
+            int v2 = betaMatch2.capturedView(1).toInt();
             return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
         }
-        else if( alphaRx.exactMatch( suffix2 ) )
+        else if( alphaMatch2.hasMatch() )
             return 1; // beta is greater then alpha
         else
             return QString::compare( suffix1, suffix2 );
     }
 
-    else if( alphaRx.exactMatch( suffix1 ) ) {
-        int v1 = alphaRx.cap(1).toInt();
+    else if( const auto alphaMatch1 = alphaRx.match(suffix1); alphaMatch1.hasMatch() ) {
+        int v1 = alphaMatch1.capturedView(1).toInt();
 
-        if( rcRx.exactMatch( suffix2 ) ||
-            preRx.exactMatch( suffix2 ) ||
-            betaRx.exactMatch( suffix2 ) )
+        if( rcMatch2.hasMatch() ||
+            preMatch2.hasMatch() ||
+            betaMatch2.hasMatch() )
             return -1; // alpha is less than all the others
-        else if( alphaRx.exactMatch( suffix2 ) ) {
-            int v2 = alphaRx.cap(1).toInt();
+        else if( alphaMatch2.hasMatch() ) {
+            int v2 = alphaMatch2.capturedView(1).toInt();
             return ( v1 == v2 ? 0 : ( v1 < v2 ? -1 : 1 ) );
         }
         else

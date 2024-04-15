@@ -26,12 +26,10 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size)
     for (QString line : lines) {
         QString perStr = line;
         perStr.truncate(perStr.indexOf('%'));
-        QRegExp rx("(\\d+.|,+\\d)");
+        QRegularExpression rx("(\\d+.|,+\\d)");
         QStringList list;
-        int pos = 0;
-        while ((pos = rx.indexIn(perStr, pos)) != -1) {
-            list << rx.cap(1);
-            pos += rx.matchedLength();
+        for (auto it = rx.globalMatch(perStr); it.hasNext();) {
+            list << it.next().captured(1);
         }
         if (list.size() > 1)
             qDebug() << "DEBUG:" << __PRETTY_FUNCTION__ << list[0].replace(',', '.') + list[1];

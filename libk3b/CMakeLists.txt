@@ -222,8 +222,6 @@ if (QT_MAJOR_VERSION STREQUAL "6")
     target_link_libraries(k3blib
         PUBLIC
             KF6::KCMUtils
-        PRIVATE
-            Qt6::Core5Compat
     )
 else()
     target_link_libraries(k3blib
