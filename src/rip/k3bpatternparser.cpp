@@ -201,7 +201,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
     static const QRegularExpression conditionrx( "^[@|!][atyegrmx](?:='.*')?\\{", QRegularExpression::InvertedGreedinessOption );
 
     for( int i = 0; i < dir.length(); ++i ) {
-        const auto match = conditionrx.match(dir, i, QRegularExpression::NormalMatch, QRegularExpression::AnchorAtOffsetMatchOption);
+        const auto match = conditionrx.match(QStringView(dir).mid(i));
 
         offsetStack.push( match.capturedStart() );
 
