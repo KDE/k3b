@@ -5,7 +5,7 @@ kcoreaddons_add_plugin(k3boggvorbisencoder
 target_link_libraries(k3boggvorbisencoder
     k3bdevice
     k3blib
-    KF${KF_MAJOR_VERSION}::I18n
+    KF6::I18n
     ${OGGVORBIS_LIBRARIES}
 )
 
@@ -17,6 +17,6 @@ target_sources(kcm_k3boggvorbisencoder PRIVATE k3boggvorbisencoderconfigwidget.c
 target_link_libraries(kcm_k3boggvorbisencoder
     k3bdevice
     k3blib
-    KF${KF_MAJOR_VERSION}::I18n
+    KF6::I18n
     ${OGGVORBIS_LIBRARIES}
 )

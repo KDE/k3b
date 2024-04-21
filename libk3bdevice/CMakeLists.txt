@@ -17,12 +17,12 @@ target_include_directories(k3bdevice PUBLIC .)
 
 target_link_libraries(k3bdevice
     PUBLIC
-        Qt${QT_MAJOR_VERSION}::Core
+        Qt6::Core
     PRIVATE
-        KF${KF_MAJOR_VERSION}::ConfigCore
-        KF${KF_MAJOR_VERSION}::I18n
-        KF${KF_MAJOR_VERSION}::KIOCore
-        KF${KF_MAJOR_VERSION}::Solid
+        KF6::ConfigCore
+        KF6::I18n
+        KF6::KIOCore
+        KF6::Solid
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "k?FreeBSD")

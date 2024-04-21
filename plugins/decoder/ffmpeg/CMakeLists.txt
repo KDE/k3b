@@ -11,4 +11,4 @@ else()
     target_include_directories(k3bffmpegdecoder PRIVATE ${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
 endif()
 
-target_link_libraries(k3bffmpegdecoder k3bdevice k3blib KF${KF_MAJOR_VERSION}::I18n ${FFMPEG_LIBRARIES})
+target_link_libraries(k3bffmpegdecoder k3bdevice k3blib KF6::I18n ${FFMPEG_LIBRARIES})

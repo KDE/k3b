@@ -254,11 +254,7 @@ void K3b::DeviceWidget::addUserToGroup()
 
     KAuth::Action action("org.kde.k3b.addtogroup");
     action.setHelperId("org.kde.k3b");
-#if QT_VERSION_MAJOR == 5
-    action.setParentWidget(this);
-#else
     action.setParentWindow(window()->windowHandle());
-#endif
     action.setArguments(args);
 
     KAuth::ExecuteJob* job = action.execute();

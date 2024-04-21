@@ -84,12 +84,6 @@ namespace K3b {
          */
         virtual void saveConfig( KConfigGroup config );
 #endif
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    protected:
-        QWidget* widget() { return this; }
-        void setNeedsSave(bool needs) { emit changed(needs); }
-#endif
     };
 }
 

@@ -201,36 +201,24 @@ target_include_directories(k3blib
 
 target_link_libraries(k3blib
     PUBLIC
-        KF${KF_MAJOR_VERSION}::Completion
-        KF${KF_MAJOR_VERSION}::CoreAddons
-        KF${KF_MAJOR_VERSION}::KIOCore
-        KF${KF_MAJOR_VERSION}::Service
+        KF6::Completion
+        KF6::CoreAddons
+        KF6::KIOCore
+        KF6::Service
+        KF6::KCMUtils
     PRIVATE
         k3bdevice
-        KF${KF_MAJOR_VERSION}::FileMetaData
-        KF${KF_MAJOR_VERSION}::IconThemes
-        KF${KF_MAJOR_VERSION}::I18n
-        KF${KF_MAJOR_VERSION}::Solid
-        Qt${QT_MAJOR_VERSION}::Network
-        Qt${QT_MAJOR_VERSION}::Widgets
-        Qt${QT_MAJOR_VERSION}::Xml
+        KF6::FileMetaData
+        KF6::IconThemes
+        KF6::I18n
+        KF6::Solid
+        Qt6::Network
+        Qt6::Widgets
+        Qt6::Xml
         ${KCDDB_TARGET_NAME}
         samplerate
         ${videodvd_libraries}
 )
-if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(k3blib
-        PUBLIC
-            KF6::KCMUtils
-    )
-else()
-    target_link_libraries(k3blib
-        PUBLIC
-            KF5::ConfigWidgets
-        PRIVATE
-            KF5::KCMUtils
-    )
-endif()
 
 if(WIN32)
     target_link_libraries(k3blib uuid ole32)

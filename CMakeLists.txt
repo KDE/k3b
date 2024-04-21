@@ -8,12 +8,12 @@ set (RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE
 
 project(k3b VERSION ${RELEASE_SERVICE_VERSION})
 
-set(QT_MIN_VERSION "5.15.2")
-set(KF5_MIN_VERSION "5.96.0")
+set(QT_MIN_VERSION "6.6")
+set(KF_MIN_VERSION "6.1")
 
 set (KDE_COMPILERSETTINGS_LEVEL "5.84")
 
-find_package(ECM ${KF5_MIN_VERSION} REQUIRED NO_MODULE)
+find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${ECM_MODULE_PATH}")
 
 ##################  K3b version  ################################
@@ -61,23 +61,16 @@ include(ECMInstallIcons)
 include(ECMEnableSanitizers)
 include(ECMSetupQtPluginMacroNames)
 include(ECMQtDeclareLoggingCategory)
-if (QT_MAJOR_VERSION STREQUAL "6")
-    set(QT_REQUIRED_VERSION "6.4.0")
-    set(KF_MIN_VERSION "5.240.0")
-    set(KF_MAJOR_VERSION "6")
-else()
-    set(KF_MAJOR_VERSION "5")
-endif()
 
-find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
-find_package(KF${KF_MAJOR_VERSION} ${KF5_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
                                      KCMUtils KIO Notifications NewStuff NotifyConfig Solid WidgetsAddons XmlGui)
 
-find_package(Qt${QT_MAJOR_VERSION}WebEngineWidgets)
-set_package_properties(Qt${QT_MAJOR_VERSION}WebEngineWidgets PROPERTIES
+find_package(Qt6WebEngineWidgets)
+set_package_properties(Qt6WebEngineWidgets PROPERTIES
     DESCRIPTION "QtWebEngineWidgets is used for prettier k3bdiskinfoview."
     TYPE OPTIONAL)
-if(Qt${QT_MAJOR_VERSION}WebEngineWidgets_FOUND)
+if(Qt6WebEngineWidgets_FOUND)
     add_definitions(-DHAVE_QTWEBENGINEWIDGETS)
 endif()
 
@@ -98,13 +91,8 @@ set_package_properties(Samplerate PROPERTIES
     URL "http://www.mega-nerd.com/SRC"
     TYPE REQUIRED)
 
-if (KF_MAJOR_VERSION STREQUAL "5")
-    set(KCDDB_TARGET_NAME KF5::Cddb)
-    find_package(KF5Cddb 5.1 REQUIRED)
-else()
-    set(KCDDB_TARGET_NAME KCddb6)
-    find_package(KCddb6 5.1 REQUIRED)
-endif()
+set(KCDDB_TARGET_NAME KCddb6)
+find_package(KCddb6 5.1 REQUIRED)
 set_package_properties(${KCDDB_TARGET_NAME} PROPERTIES
     DESCRIPTION "Latest branch for CDDB library"
     URL "https://commits.kde.org/libkcddb"
@@ -315,7 +303,7 @@ if(K3B_BUILD_API_DOCS)
 
         add_custom_target(apidox
             COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-            COMMAND docs/html/installdox -l qt${QT_MAJOR_VERSION}.tag@${QTDOCS} docs/html/*.html)
+            COMMAND docs/html/installdox -l qt6.tag@${QTDOCS} docs/html/*.html)
     endif()
 endif(K3B_BUILD_API_DOCS)
 
@@ -327,7 +315,7 @@ add_subdirectory( kioworkers )
 add_subdirectory( plugins )
 add_subdirectory( doc )
 if(BUILD_TESTING)
-    find_package(Qt${QT_MAJOR_VERSION}Test REQUIRED)
+    find_package(Qt6Test REQUIRED)
     find_package(LibFuzzer)
     set_package_properties(LibFuzzer PROPERTIES
         PURPOSE "libFuzzer – a library for coverage-guided fuzz testing."

@@ -82,11 +82,7 @@ bool K3b::FlatButton::event( QEvent *event )
     return QAbstractButton::event(event);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void K3b::FlatButton::enterEvent( QEvent* )
-#else
 void K3b::FlatButton::enterEvent( QEnterEvent* )
-#endif
 {
     setHover(true);
 }

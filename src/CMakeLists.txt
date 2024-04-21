@@ -234,26 +234,24 @@ target_link_libraries(k3b
     k3bdevice
     k3blib
     ${KCDDB_TARGET_NAME}
-    KF${KF_MAJOR_VERSION}::Archive
-    KF${KF_MAJOR_VERSION}::AuthCore
-    KF${KF_MAJOR_VERSION}::I18n
-    KF${KF_MAJOR_VERSION}::IconThemes
-    KF${KF_MAJOR_VERSION}::JobWidgets
-    KF${KF_MAJOR_VERSION}::KIOFileWidgets
-    KF${KF_MAJOR_VERSION}::KCMUtils
-    KF${KF_MAJOR_VERSION}::NewStuffCore KF${KF_MAJOR_VERSION}::NewStuffWidgets
-    KF${KF_MAJOR_VERSION}::Notifications
-    KF${KF_MAJOR_VERSION}::NotifyConfig
-    KF${KF_MAJOR_VERSION}::Solid
-    KF${KF_MAJOR_VERSION}::XmlGui
-    KF${KF_MAJOR_VERSION}::ConfigCore
+    KF6::Archive
+    KF6::AuthCore
+    KF6::I18n
+    KF6::IconThemes
+    KF6::JobWidgets
+    KF6::KIOFileWidgets
+    KF6::KCMUtils
+    KF6::NewStuffCore KF6::NewStuffWidgets
+    KF6::Notifications
+    KF6::NotifyConfig
+    KF6::Solid
+    KF6::XmlGui
+    KF6::ConfigCore
+    KF6::BookmarksWidgets
 )
-if (QT_MAJOR_VERSION STREQUAL "6")
-    target_link_libraries(k3b KF6::BookmarksWidgets)
-endif()
 
-if(Qt${QT_MAJOR_VERSION}WebEngineWidgets_FOUND)
-    target_link_libraries(k3b Qt${QT_MAJOR_VERSION}::WebEngineWidgets)
+if(Qt6WebEngineWidgets_FOUND)
+    target_link_libraries(k3b Qt6::WebEngineWidgets)
 endif()
 
 if(ICONV_FOUND)

@@ -39,13 +39,7 @@ K3b::DirOperator::DirOperator(const QUrl& url, QWidget* parent )
     QDir().mkpath( dirPath );
     QString bookmarksFile = dirPath + '/' + QString::fromLatin1("k3b/bookmarks.xml");
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    KBookmarkManager* bmMan = KBookmarkManager::managerForFile( bookmarksFile, "k3b" );
-    bmMan->setEditorOptions( i18n("K3b Bookmarks"), false );
-    bmMan->setUpdate( true );
-#else
     KBookmarkManager* bmMan = new KBookmarkManager( bookmarksFile, this );
-#endif
 
     m_bmPopup = new KActionMenu( QIcon::fromTheme("bookmarks"),i18n("Bookmarks"), this);
     m_bmPopup->setPopupMode( QToolButton::InstantPopup );

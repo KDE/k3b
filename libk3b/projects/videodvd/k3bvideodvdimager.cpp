@@ -100,11 +100,7 @@ int K3b::VideoDvdImager::writePathSpec()
     }
 
     const auto videoDir =
-#if QT_VERSION < 0x050900
-        d->tempDir->path() + "/VIDEO_TS";
-#else
         d->tempDir->filePath("VIDEO_TS");
-#endif
     if (!QDir().mkpath(videoDir)) {
         emit infoMessage(xi18n("Unable to create temporary folder <filename>%1</filename>.",
                          videoDir), MessageError);

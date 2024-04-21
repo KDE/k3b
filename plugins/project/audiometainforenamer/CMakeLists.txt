@@ -5,6 +5,6 @@ kcoreaddons_add_plugin(k3baudiometainforenamerplugin
 target_link_libraries(k3baudiometainforenamerplugin
     k3bdevice
     k3blib
-    KF${KF_MAJOR_VERSION}::I18n
+    KF6::I18n
     Taglib::Taglib
 )

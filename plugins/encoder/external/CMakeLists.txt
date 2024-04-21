@@ -5,7 +5,7 @@ kcoreaddons_add_plugin(k3bexternalencoder
 target_link_libraries(k3bexternalencoder
     k3bdevice
     k3blib
-    KF${KF_MAJOR_VERSION}::I18n
+    KF6::I18n
 )
 
 ki18n_wrap_ui(ui_sources
@@ -23,5 +23,5 @@ target_sources(kcm_k3bexternalencoder PRIVATE
 target_link_libraries(kcm_k3bexternalencoder
     k3bdevice
     k3blib
-    KF${KF_MAJOR_VERSION}::I18n
+    KF6::I18n
 )

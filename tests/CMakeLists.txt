@@ -8,9 +8,9 @@ target_include_directories(k3bdataprojectmodeltest PRIVATE
     ${CMAKE_SOURCE_DIR}/libk3bdevice
     ${CMAKE_SOURCE_DIR}/src/projects)
 target_link_libraries(k3bdataprojectmodeltest
-    Qt${QT_MAJOR_VERSION}::Test
-    KF${KF_MAJOR_VERSION}::IconThemes
-    KF${KF_MAJOR_VERSION}::I18n
+    Qt6::Test
+    KF6::IconThemes
+    KF6::I18n
     k3blib)
 add_test(NAME k3bdataprojectmodeltest COMMAND k3bdataprojectmodeltest)
 
@@ -18,7 +18,7 @@ add_executable(k3bglobalstest k3bglobalstest.cpp)
 target_include_directories(k3bglobalstest PRIVATE
     ${CMAKE_SOURCE_DIR}/libk3bdevice)
 target_link_libraries(k3bglobalstest
-    Qt${QT_MAJOR_VERSION}::Test
+    Qt6::Test
     k3blib)
 add_test(NAME k3bglobalstest COMMAND k3bglobalstest)
 
@@ -31,9 +31,9 @@ target_include_directories(k3bmetaitemmodeltest PRIVATE
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/projects)
 target_link_libraries( k3bmetaitemmodeltest
-    Qt${QT_MAJOR_VERSION}::Gui
-    Qt${QT_MAJOR_VERSION}::Test
-    KF${KF_MAJOR_VERSION}::ConfigCore)
+    Qt6::Gui
+    Qt6::Test
+    KF6::ConfigCore)
 add_test(NAME k3bmetaitemmodeltest COMMAND k3bmetaitemmodeltest)
 
 add_executable(k3bmodelutilstest
@@ -43,16 +43,16 @@ target_include_directories(k3bmodelutilstest PRIVATE
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/projects)
 target_link_libraries(k3bmodelutilstest
-    Qt${QT_MAJOR_VERSION}::Gui
-    Qt${QT_MAJOR_VERSION}::Test)
+    Qt6::Gui
+    Qt6::Test)
 add_test(NAME k3bmodelutilstest COMMAND k3bmodelutilstest)
 
 add_executable(k3bdeviceglobalstest k3bdeviceglobalstest.cpp)
 target_include_directories(k3bdeviceglobalstest PRIVATE
     ${CMAKE_SOURCE_DIR}/libk3bdevice)
 target_link_libraries(k3bdeviceglobalstest
-    Qt${QT_MAJOR_VERSION}::Test
-    KF${KF_MAJOR_VERSION}::KIOCore
+    Qt6::Test
+    KF6::KIOCore
     k3bdevice)
 add_test(NAME k3bdeviceglobalstest COMMAND k3bdeviceglobalstest)
 
@@ -80,11 +80,11 @@ target_include_directories(k3bexternalbinmanagertest PRIVATE
     ${CMAKE_SOURCE_DIR}/src/helper
     ${CMAKE_BINARY_DIR}/src)
 target_link_libraries(k3bexternalbinmanagertest
-    Qt${QT_MAJOR_VERSION}::Test
-    KF${KF_MAJOR_VERSION}::I18n
-    KF${KF_MAJOR_VERSION}::XmlGui
-    KF${KF_MAJOR_VERSION}::Notifications
-    KF${KF_MAJOR_VERSION}::IconThemes
+    Qt6::Test
+    KF6::I18n
+    KF6::XmlGui
+    KF6::Notifications
+    KF6::IconThemes
     k3blib
     k3bdevice)
 add_test(NAME k3bexternalbinmanagertest COMMAND k3bexternalbinmanagertest)
@@ -94,7 +94,7 @@ if(LIBFUZZER_FOUND)
     add_executable(k3bfuzzertest 
         k3bfuzzertest.cpp)
     target_link_libraries(k3bfuzzertest
-        Qt${QT_MAJOR_VERSION}::Core
+        Qt6::Core
         ${LIBFUZZER_LIBRARIES}
         ${CMAKE_THREAD_LIBS_INIT})
 endif()

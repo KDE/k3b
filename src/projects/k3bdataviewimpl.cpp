@@ -26,9 +26,7 @@
 #include <KActionCollection>
 #include <KIO/JobUiDelegate>
 #include <KIO/OpenUrlJob>
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <KIO/JobUiDelegateFactory>
-#endif
 
 #include <QSortFilterProxyModel>
 #include <QAction>
@@ -290,11 +288,7 @@ void K3b::DataViewImpl::slotOpen()
         QUrl url = QUrl::fromLocalFile( item->localPath() );
         auto *job = new KIO::OpenUrlJob( url, item->mimeType().name() );
         job->setRunExecutables( false ); // this is the default, but let's make really sure :)
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        auto uiDelegate = new KIO::JobUiDelegate( KJobUiDelegate::AutoHandlingEnabled, m_view );
-#else
         auto uiDelegate = KIO::createDefaultJobUiDelegate( KJobUiDelegate::AutoHandlingEnabled, m_view );
-#endif
         job->setUiDelegate( uiDelegate );
         job->start();
     }
