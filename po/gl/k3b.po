@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-14 01:37+0000\n"
+"POT-Creation-Date: 2024-04-22 01:54+0000\n"
 "PO-Revision-Date: 2024-02-27 07:12+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -2153,8 +2153,8 @@ msgstr "Tipo:"
 #: rip/k3baudioprojectconvertingdialog.cpp:267
 #: rip/k3baudioprojectconvertingdialog.cpp:306
 #: rip/k3baudiorippingdialog.cpp:348 rip/k3baudiorippingdialog.cpp:403
-#: rip/k3bpatternparser.cpp:123 rip/k3bpatternparser.cpp:159
-#: rip/k3bpatternparser.cpp:165 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
+#: rip/k3bpatternparser.cpp:122 rip/k3bpatternparser.cpp:158
+#: rip/k3bpatternparser.cpp:164 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
 #, kde-format
 msgid "unknown"
 msgstr "descoñecido"
@@ -10115,7 +10115,7 @@ msgstr "Ficheiro CUE"
 msgid "Track%1"
 msgstr "Pista%1"
 
-#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:51
+#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:50
 #, kde-format
 msgid "Playlist"
 msgstr "Lista de reprodución"
@@ -10136,39 +10136,39 @@ msgstr "Título"
 msgid "Data Track"
 msgstr "Pista de datos"
 
-#: rip/k3bcddbpatternwidget.cpp:45
+#: rip/k3bcddbpatternwidget.cpp:44
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid "%A - %T/%n - !a='%A'{%a - }%t"
 msgstr "%A — %T/%n — !a='%A'{%a — }%t"
 
-#: rip/k3bcddbpatternwidget.cpp:46
+#: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
 msgstr "%{albumartist} — %{albumtitle}/%{number} — %{artist} — %{title}"
 
-#: rip/k3bcddbpatternwidget.cpp:47
+#: rip/k3bcddbpatternwidget.cpp:46
 #, kde-format
 msgid "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 msgstr "%{genre}/%{albumartist} — %{albumtitle}/Pista%{number}"
 
-#: rip/k3bcddbpatternwidget.cpp:48
+#: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
 msgstr "música/pistas-extraídas/%a — %t"
 
-#: rip/k3bcddbpatternwidget.cpp:50
+#: rip/k3bcddbpatternwidget.cpp:49
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}"
 msgstr "%{albumartist} — %{albumtitle}"
 
-#: rip/k3bcddbpatternwidget.cpp:52
+#: rip/k3bcddbpatternwidget.cpp:51
 #, kde-format
 msgid "playlists/%{albumartist}/%{albumtitle}"
 msgstr "listas de reprodución/%{albumartist}/%{albumtitle}"
 
-#: rip/k3bcddbpatternwidget.cpp:119
+#: rip/k3bcddbpatternwidget.cpp:118
 #, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
@@ -10206,7 +10206,7 @@ msgstr ""
 "</tr> <tr> <td>%e</td> <td>Extensión do ficheiro (se non a indica, engádese "
 "automaticamente).</td> <td>%{e} or %{ext}</td> </tr> </table>"
 
-#: rip/k3bcddbpatternwidget.cpp:145
+#: rip/k3bcddbpatternwidget.cpp:144
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
@@ -10279,32 +10279,32 @@ msgstr "Escribindo a lista de reprodución en %1."
 msgid "Writing cue file to %1."
 msgstr "Escribindo o ficheiro imaxe en %1."
 
-#: rip/k3bpatternparser.cpp:134
+#: rip/k3bpatternparser.cpp:133
 #, kde-format
 msgid "Track %1"
 msgstr "Pista %1"
 
-#: rip/k3bvideocdrip.cpp:52
+#: rip/k3bvideocdrip.cpp:51
 #, kde-format
 msgid "Job canceled by user."
 msgstr "Traballo cancelado pola persoa usuaria."
 
-#: rip/k3bvideocdrip.cpp:81
+#: rip/k3bvideocdrip.cpp:80
 #, kde-format
 msgid "Check files"
 msgstr "Comprobar os ficheiros"
 
-#: rip/k3bvideocdrip.cpp:91
+#: rip/k3bvideocdrip.cpp:90
 #, kde-format
 msgid "Could not find %1 executable."
 msgstr "Non foi posíbel atopar o executábel %1."
 
-#: rip/k3bvideocdrip.cpp:92
+#: rip/k3bvideocdrip.cpp:91
 #, kde-format
 msgid "To rip Video CDs you have to install VcdImager Version %1."
 msgstr "Para extraer o CD de vídeo debe instalar a versión %1 de «VcdImager»."
 
-#: rip/k3bvideocdrip.cpp:93
+#: rip/k3bvideocdrip.cpp:92
 #, kde-format
 msgid ""
 "You can find this on your distribution’s software repository or download it "
@@ -10313,12 +10313,12 @@ msgstr ""
 "Pode atopalo no repositorio de software da súa distribución ou descargalo de "
 "https://www.gnu.org/software/vcdimager/"
 
-#: rip/k3bvideocdrip.cpp:101
+#: rip/k3bvideocdrip.cpp:100
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
 msgstr "O executábel de %1 é moi antigo: Precísase a versión %2 ou posterior."
 
-#: rip/k3bvideocdrip.cpp:102
+#: rip/k3bvideocdrip.cpp:101
 #, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from http://www."
@@ -10327,72 +10327,72 @@ msgstr ""
 "Pode atopalo nos discos da súa distribución ou descargalo de http://www."
 "vcdimager.org"
 
-#: rip/k3bvideocdrip.cpp:109
+#: rip/k3bvideocdrip.cpp:108
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
 msgstr "Usando %1 %2 (© %3)"
 
-#: rip/k3bvideocdrip.cpp:160
+#: rip/k3bvideocdrip.cpp:159
 #, kde-format
 msgid "Extracting"
 msgstr "Extraendo"
 
-#: rip/k3bvideocdrip.cpp:161
+#: rip/k3bvideocdrip.cpp:160
 #, kde-format
 msgid "Start extracting."
 msgstr "Comezar a extracción."
 
-#: rip/k3bvideocdrip.cpp:162
+#: rip/k3bvideocdrip.cpp:161
 #, kde-format
 msgid "Extract files from %1 to %2."
 msgstr "Extraer ficheiros de %1 en %2."
 
-#: rip/k3bvideocdrip.cpp:167
+#: rip/k3bvideocdrip.cpp:166
 #, kde-format
 msgid "Could not start %1."
 msgstr "Non foi posíbel comezar %1."
 
-#: rip/k3bvideocdrip.cpp:257
+#: rip/k3bvideocdrip.cpp:256
 #, kde-format
 msgid "Files successfully extracted."
 msgstr "Os ficheiros extraéronse satisfactoriamente."
 
-#: rip/k3bvideocdrip.cpp:260
+#: rip/k3bvideocdrip.cpp:259
 #, kde-format
 msgid "%1 returned an unknown error (code %2)."
 msgstr "%1 devolveu un erro descoñecido (código %2)."
 
-#: rip/k3bvideocdrip.cpp:261
+#: rip/k3bvideocdrip.cpp:260
 #, kde-format
 msgid "Please send me an email with the last output..."
 msgstr "Envíeme un correo electrónico coa última saída…"
 
-#: rip/k3bvideocdrip.cpp:267
+#: rip/k3bvideocdrip.cpp:266
 #, kde-format
 msgid "%1 did not exit cleanly."
 msgstr "%1 non saíu limpamente."
 
-#: rip/k3bvideocdrip.cpp:281
+#: rip/k3bvideocdrip.cpp:280
 #, kde-format
 msgid "%1 encountered non-form2 sector"
 msgstr "%1 atopouse cun sector non form2"
 
-#: rip/k3bvideocdrip.cpp:282
+#: rip/k3bvideocdrip.cpp:281
 #, kde-format
 msgid "leaving loop"
 msgstr "saíndo do ciclo"
 
-#: rip/k3bvideocdrip.cpp:290
+#: rip/k3bvideocdrip.cpp:289
 #, kde-format
 msgid "detected extended VCD2.0 PBC files"
 msgstr "detectáronse ficheiros PBC VCD2.0 ampliado"
 
-#: rip/k3bvideocdrip.cpp:317 rip/k3bvideocdrip.cpp:335
+#: rip/k3bvideocdrip.cpp:316 rip/k3bvideocdrip.cpp:334
 #, kde-format
 msgid "Extracting %1"
 msgstr "Extraendo %1"
 
-#: rip/k3bvideocdrip.cpp:328
+#: rip/k3bvideocdrip.cpp:327
 #, kde-format
 msgid "Extracting %1 to %2"
 msgstr "Extraendo %1 en %2"
