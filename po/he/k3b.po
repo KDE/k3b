@@ -7,20 +7,21 @@
 # Tahmar1900 <tahmar1900@gmail.com>, 2010.
 # Diego Iastrubni <elcuco@kde.org>, 2010, 2012, 2013.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2017-05-16 07:02-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Hebrew <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2024-04-14 01:37+0000\n"
+"PO-Revision-Date: 2024-04-08 19:10+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -32,17 +33,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde-l10n-he@kde.org"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
 #, kde-format
 msgid "WavPack"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "הגדרות שמע/וידאו מתקדמות"
@@ -845,7 +846,7 @@ msgstr "קצב סיביות תחתון:"
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:276
 #, kde-format
 msgid "kbps"
-msgstr "קילו־סיביות לשניה"
+msgstr "קילו־סיביות לשנייה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateNominal)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:292
@@ -2359,10 +2360,10 @@ msgid "Show Debugging Output"
 msgstr "הצג פלט ניפוי שגיאות"
 
 #: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
-msgstr "נכתבו %1 מתוך %2 מ\"ב"
+msgstr "נכתבו %1 מתוך %2 מ״ב"
 
 #: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
 #, kde-format
@@ -4434,7 +4435,7 @@ msgstr "כתיבת גודל חוצץ &ידנית"
 #: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:585
 #, kde-format
 msgid "MB"
-msgstr "מ\"ב"
+msgstr "מ״ב"
 
 #: option/k3badvancedoptiontab.cpp:59
 #, kde-format
@@ -4552,7 +4553,7 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "אינו יכול לטעות את מודול הגדרות של KCDDB."
 
-#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:57
 #, kde-format
 msgid "Refresh"
 msgstr "רענן"
@@ -4640,7 +4641,7 @@ msgid ""
 msgstr ""
 
 #: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Add"
 msgstr "הוסף"
@@ -4699,7 +4700,7 @@ msgid "no change"
 msgstr "ללא שינוי"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:119
 #, fuzzy, kde-format
 msgid "Permissions"
 msgstr "צריבות:"
@@ -4709,7 +4710,7 @@ msgstr "צריבות:"
 msgid "New permissions"
 msgstr "ערוך הרשאות..."
 
-#: option/k3bexternalbinwidget.cpp:74
+#: option/k3bexternalbinwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -4717,32 +4718,32 @@ msgid ""
 "to change the default, check desired version on the list."
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "תכניות"
 
-#: option/k3bexternalbinwidget.cpp:88
+#: option/k3bexternalbinwidget.cpp:87
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "ערכי משתמש חייבים להיות מופרדים על ידי מקש הרווח."
 
-#: option/k3bexternalbinwidget.cpp:101
+#: option/k3bexternalbinwidget.cpp:100
 #, kde-format
 msgid "User Parameters"
 msgstr "ערכי משתמש"
 
-#: option/k3bexternalbinwidget.cpp:107
+#: option/k3bexternalbinwidget.cpp:106
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:115
+#: option/k3bexternalbinwidget.cpp:114
 #, fuzzy, kde-format
 msgid "Change Permissions..."
 msgstr "הגדרות קיצוץ"
 
-#: option/k3bexternalbinwidget.cpp:128
+#: option/k3bexternalbinwidget.cpp:127
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -4751,20 +4752,56 @@ msgstr ""
 "<qt><b>רמז:</b> כדי לכפות על K3b להשתמש בשם אחר מברירת המחדל עבור קובץ בר־"
 "הרצה ציין אותו בנתיב החיפוש.</qt>"
 
-#: option/k3bexternalbinwidget.cpp:136
+#: option/k3bexternalbinwidget.cpp:135
 #, kde-format
 msgid "Search Path"
 msgstr "נתיב חיפוש"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:245
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:251
+#: option/k3bexternalbinwidget.cpp:255
 #, fuzzy, kde-format
-msgid "Unable to execute the action: %1"
+msgid "Unable to execute the action<br/>%1"
 msgstr "אין אפשרות ליצור תיקייה %1"
+
+#: option/k3bexternalbinwidget.cpp:268
+#, kde-format
+msgid "Authorization denied"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:271
+#, fuzzy, kde-format
+#| msgid "No error correction"
+msgid "An error occurred"
+msgstr "אין תיקון שגיאות"
+
+#: option/k3bexternalbinwidget.cpp:274
+#, kde-format
+msgid "Invalid action"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:277
+#, kde-format
+msgid "Authorization granted"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:280
+#, kde-format
+msgid "Authentication required"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:283
+#, kde-format
+msgid "User cancelled the authentication"
+msgstr ""
+
+#: option/k3bexternalbinwidget.cpp:286
+#, kde-format
+msgid "Unknown authorization status %1"
+msgstr ""
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -5506,7 +5543,7 @@ msgstr "סוג אמולציה"
 #: projects/base_k3bbootimagedialog.ui:71
 #, kde-format
 msgid "Emulate a 1440/2880 kb floppy"
-msgstr "דמה כונן תקליטונים של 1440/2880 ק\"ב"
+msgstr "הדמיית כונן תקליטונים של 1440/2880 ק״ב"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioFloppy)
 #: projects/base_k3bbootimagedialog.ui:74
@@ -6323,19 +6360,19 @@ msgid "Adding files to project \"%1\"..."
 msgstr "מוסף קבצים לפרויקט %1..."
 
 #: projects/k3baudiotrackaddingdialog.cpp:73
-#: projects/k3bdataurladdingdialog.cpp:800
+#: projects/k3bdataurladdingdialog.cpp:801
 #, kde-format
 msgid "Insufficient permissions to read the following files"
 msgstr "הרשאות לא מספקות לקריאה של הקבצים הבאים"
 
 #: projects/k3baudiotrackaddingdialog.cpp:77
-#: projects/k3bdataurladdingdialog.cpp:804
+#: projects/k3bdataurladdingdialog.cpp:805
 #, kde-format
 msgid "Unable to find the following files"
 msgstr "אין אפשרות למצוא את הקבצים הבאים"
 
 #: projects/k3baudiotrackaddingdialog.cpp:81
-#: projects/k3bdataurladdingdialog.cpp:808
+#: projects/k3bdataurladdingdialog.cpp:809
 #, kde-format
 msgid "No non-local files supported"
 msgstr "קבצים לא מקומיים לא נתמכים"
@@ -7189,34 +7226,34 @@ msgid "Hidden Files"
 msgstr "קבצים נסתרים"
 
 #: projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Do Not Add"
 msgstr "אל תוסיף"
 
-#: projects/k3bdataurladdingdialog.cpp:783
+#: projects/k3bdataurladdingdialog.cpp:784
 #, kde-format
 msgid ""
 "Do you also want to add system files (FIFOs, sockets, device files, and "
 "broken symlinks)?"
 msgstr ""
 
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "System Files"
 msgstr "קבצי מערכת"
 
-#: projects/k3bdataurladdingdialog.cpp:812
+#: projects/k3bdataurladdingdialog.cpp:813
 #, kde-format
 msgid "To burn files bigger than %1 please use %2"
 msgstr "על מנת לצרוב קבצים יותר גדולים מ - %1 אנא השתמש ב - %2"
 
-#: projects/k3bdataurladdingdialog.cpp:817
+#: projects/k3bdataurladdingdialog.cpp:818
 #, kde-format
 msgid "Some filenames had to be modified due to limitations in mkisofs"
 msgstr "מספר שמות קבצים השתנו בגלל ההגבלות של mkisofs"
 
-#: projects/k3bdataurladdingdialog.cpp:821
+#: projects/k3bdataurladdingdialog.cpp:822
 #, kde-format
 msgid ""
 "The following filenames have an invalid encoding. You may fix this with the "
@@ -7333,7 +7370,7 @@ msgstr "גודל אוטומטי"
 #: projects/k3bfillstatusdisplay.cpp:500 projects/k3bfillstatusdisplay.cpp:501
 #, kde-format
 msgid "%1 MB"
-msgstr "%1 מ\"ב"
+msgstr "%1 מ״ב"
 
 #: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
@@ -8264,7 +8301,7 @@ msgstr "מאפייני רצועת וידאו"
 #: projects/k3bvcdtrackdialog.cpp:157 projects/k3bvcdtrackdialog.cpp:399
 #, kde-format
 msgid "%1 bit/s"
-msgstr "%1 סיביות/שניה"
+msgstr "%1 סיביות/שנייה"
 
 #: projects/k3bvcdtrackdialog.cpp:238
 #, kde-format

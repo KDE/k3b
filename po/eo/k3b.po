@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2024-02-04 17:21+0100\n"
+"POT-Creation-Date: 2024-04-14 01:37+0000\n"
+"PO-Revision-Date: 2024-03-28 08:18+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -31,17 +31,17 @@ msgstr ""
 "pedrotpmx@wanadoo.fr,axel.rousseau@esperanto-france.org,okellogg@users."
 "sourceforge.net"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey's Audio (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Advanced Audio Coding (AAC)"
@@ -2092,7 +2092,7 @@ msgstr "Tipo"
 #: k3bdiskinfoview.cpp:263
 #, kde-format
 msgid "Attributes"
-msgstr "Ecoj"
+msgstr "Atributoj"
 
 #: k3bdiskinfoview.cpp:265
 #, kde-format
@@ -4826,7 +4826,7 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "Ne eblas ŝargi KCDDB-agordan modulon."
 
-#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:57
 #, kde-format
 msgid "Refresh"
 msgstr "Refreŝigi"
@@ -4916,7 +4916,7 @@ msgstr ""
 "aldonita al grupo <em>%1</em>."
 
 #: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Add"
 msgstr "Aldoni"
@@ -4977,7 +4977,7 @@ msgid "no change"
 msgstr "neniu ŝanĝo"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:119
 #, kde-format
 msgid "Permissions"
 msgstr "Rajtoj:"
@@ -4987,7 +4987,7 @@ msgstr "Rajtoj:"
 msgid "New permissions"
 msgstr "Novaj permesoj"
 
-#: option/k3bexternalbinwidget.cpp:74
+#: option/k3bexternalbinwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -4998,32 +4998,32 @@ msgstr ""
 "kiel la <em>defaŭlta</em>, kiu estos uzata por fari la laboron. Se vi volas "
 "ŝanĝi la defaŭltan, kontrolu deziratan version en la listo."
 
-#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "Programoj"
 
-#: option/k3bexternalbinwidget.cpp:88
+#: option/k3bexternalbinwidget.cpp:87
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "Uzantaj parametroj devas apartatas per spacetojn."
 
-#: option/k3bexternalbinwidget.cpp:101
+#: option/k3bexternalbinwidget.cpp:100
 #, kde-format
 msgid "User Parameters"
 msgstr "Uzantaj parametroj"
 
-#: option/k3bexternalbinwidget.cpp:107
+#: option/k3bexternalbinwidget.cpp:106
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr "Kontrolu la programojn, kies permesojn vi volas ŝanĝi:"
 
-#: option/k3bexternalbinwidget.cpp:115
+#: option/k3bexternalbinwidget.cpp:114
 #, kde-format
 msgid "Change Permissions..."
 msgstr "Ŝanĝi Permesojn..."
 
-#: option/k3bexternalbinwidget.cpp:128
+#: option/k3bexternalbinwidget.cpp:127
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -5032,20 +5032,55 @@ msgstr ""
 "<qt><b>Indiko:</b> por devigi K3b uzi alian ol la norman nomon por la "
 "ruleblo, specifu ĝin en la serĉvojo.</qt>"
 
-#: option/k3bexternalbinwidget.cpp:136
+#: option/k3bexternalbinwidget.cpp:135
 #, kde-format
 msgid "Search Path"
 msgstr "Serĉa vojo"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:245
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Sekvaj programoj ne povus esti ĝisdatigitaj:"
 
-#: option/k3bexternalbinwidget.cpp:251
+#: option/k3bexternalbinwidget.cpp:255
 #, kde-format
-msgid "Unable to execute the action: %1"
-msgstr "Ne eblas efektivigi la agon: %1"
+msgid "Unable to execute the action<br/>%1"
+msgstr "Ne eblas efektivigi la agon<br/>%1"
+
+#: option/k3bexternalbinwidget.cpp:268
+#, kde-format
+msgid "Authorization denied"
+msgstr "Rajtigo neita"
+
+#: option/k3bexternalbinwidget.cpp:271
+#, kde-format
+msgid "An error occurred"
+msgstr "Eraro okazis"
+
+#: option/k3bexternalbinwidget.cpp:274
+#, kde-format
+msgid "Invalid action"
+msgstr "Nevalida ago"
+
+#: option/k3bexternalbinwidget.cpp:277
+#, kde-format
+msgid "Authorization granted"
+msgstr "Rajtigo koncedita"
+
+#: option/k3bexternalbinwidget.cpp:280
+#, kde-format
+msgid "Authentication required"
+msgstr "Aŭtentigo postulata"
+
+#: option/k3bexternalbinwidget.cpp:283
+#, kde-format
+msgid "User cancelled the authentication"
+msgstr "Uzante nuligis la aŭtentigon"
+
+#: option/k3bexternalbinwidget.cpp:286
+#, kde-format
+msgid "Unknown authorization status %1"
+msgstr "Nekonata aŭtentigostato %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -6770,19 +6805,19 @@ msgid "Adding files to project \"%1\"..."
 msgstr "Aldonante dosieroj al projekto « %1 »..."
 
 #: projects/k3baudiotrackaddingdialog.cpp:73
-#: projects/k3bdataurladdingdialog.cpp:800
+#: projects/k3bdataurladdingdialog.cpp:801
 #, kde-format
 msgid "Insufficient permissions to read the following files"
 msgstr "Nesufiĉaj rajtoj por legi la sekvajn dosierojn"
 
 #: projects/k3baudiotrackaddingdialog.cpp:77
-#: projects/k3bdataurladdingdialog.cpp:804
+#: projects/k3bdataurladdingdialog.cpp:805
 #, kde-format
 msgid "Unable to find the following files"
 msgstr "Ne eblas trovi la sekvajn dosierojn"
 
 #: projects/k3baudiotrackaddingdialog.cpp:81
-#: projects/k3bdataurladdingdialog.cpp:808
+#: projects/k3bdataurladdingdialog.cpp:809
 #, kde-format
 msgid "No non-local files supported"
 msgstr "Ne nelokaj dosieroj subtenataj"
@@ -7713,12 +7748,12 @@ msgid "Hidden Files"
 msgstr "Kaŝitajn dosierojn"
 
 #: projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Do Not Add"
 msgstr "Ne aldoni"
 
-#: projects/k3bdataurladdingdialog.cpp:783
+#: projects/k3bdataurladdingdialog.cpp:784
 #, kde-format
 msgid ""
 "Do you also want to add system files (FIFOs, sockets, device files, and "
@@ -7727,22 +7762,22 @@ msgstr ""
 "Ĉu vi ankaŭ aldoni la sistemajn dosierojn (FIFOj, kontaktiloj, "
 "disponaĵdosieroj kaj rompaj simbolligoj)?"
 
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "System Files"
 msgstr "Sistemdosieroj"
 
-#: projects/k3bdataurladdingdialog.cpp:812
+#: projects/k3bdataurladdingdialog.cpp:813
 #, kde-format
 msgid "To burn files bigger than %1 please use %2"
 msgstr "Por enskribi dosierojn pli grandajn ol %1, bonvolu uzi %2"
 
-#: projects/k3bdataurladdingdialog.cpp:817
+#: projects/k3bdataurladdingdialog.cpp:818
 #, kde-format
 msgid "Some filenames had to be modified due to limitations in mkisofs"
 msgstr "Kelkaj dosiernomoj devis ŝanĝiti kaŭze de mapliigoj en mkisofs"
 
-#: projects/k3bdataurladdingdialog.cpp:821
+#: projects/k3bdataurladdingdialog.cpp:822
 #, kde-format
 msgid ""
 "The following filenames have an invalid encoding. You may fix this with the "

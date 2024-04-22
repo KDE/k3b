@@ -9,20 +9,20 @@
 # Jeff Huang <s8321414@gmail.com>, 2016.
 # pan93412 <pan93412@gmail.com>, 2018, 2019.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2010.
-# SPDX-FileCopyrightText: 2022, 2023 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-11-29 16:47+0900\n"
+"POT-Creation-Date: 2024-04-14 01:37+0000\n"
+"PO-Revision-Date: 2024-02-29 03:18+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 24.04.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -35,17 +35,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "tryneeds@gmail.com, s8321414@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:202
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:204
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey's Audio (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:206
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "進階音訊編碼 (AAC)"
@@ -4723,7 +4723,7 @@ msgstr ""
 msgid "Unable to load KCDDB configuration module."
 msgstr "無法載入 KCDDB 設定模組。"
 
-#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:58
+#: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:57
 #, kde-format
 msgid "Refresh"
 msgstr "更新"
@@ -4812,7 +4812,7 @@ msgstr ""
 "為了給 K3b 完整存取寫入裝置的權限，目前的使用者必須先加入 <em>%1</em> 群組。"
 
 #: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Add"
 msgstr "增加"
@@ -4873,7 +4873,7 @@ msgid "no change"
 msgstr "沒有改變"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
-#: option/k3bexternalbinwidget.cpp:120
+#: option/k3bexternalbinwidget.cpp:119
 #, kde-format
 msgid "Permissions"
 msgstr "權限"
@@ -4883,7 +4883,7 @@ msgstr "權限"
 msgid "New permissions"
 msgstr "新權限"
 
-#: option/k3bexternalbinwidget.cpp:74
+#: option/k3bexternalbinwidget.cpp:73
 #, kde-format
 msgid ""
 "<p>If K3b finds more than one installed version of a program it will choose "
@@ -4893,32 +4893,32 @@ msgstr ""
 "<p>如果 K3b 發現某程式有超過一個以上的版本，它會選擇其中一個為<em>預設</em>，"
 "將被用來執行工作。如果您想要更改預設值，請在清單中選擇想要的版本。"
 
-#: option/k3bexternalbinwidget.cpp:82 option/k3boptiondialog.cpp:153
+#: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
 msgstr "程式"
 
-#: option/k3bexternalbinwidget.cpp:88
+#: option/k3bexternalbinwidget.cpp:87
 #, kde-format
 msgid "User parameters have to be separated by space."
 msgstr "使用者參數必需用空格來隔開。"
 
-#: option/k3bexternalbinwidget.cpp:101
+#: option/k3bexternalbinwidget.cpp:100
 #, kde-format
 msgid "User Parameters"
 msgstr "使用者參數"
 
-#: option/k3bexternalbinwidget.cpp:107
+#: option/k3bexternalbinwidget.cpp:106
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
 msgstr "請確認您想改變權限的程式："
 
-#: option/k3bexternalbinwidget.cpp:115
+#: option/k3bexternalbinwidget.cpp:114
 #, kde-format
 msgid "Change Permissions..."
 msgstr "改變權限..."
 
-#: option/k3bexternalbinwidget.cpp:128
+#: option/k3bexternalbinwidget.cpp:127
 #, kde-format
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
@@ -4927,20 +4927,55 @@ msgstr ""
 "<qt><b>提示：</b> 要強迫 K3b 為可執行檔使用預設名稱外的名稱請在搜尋路徑內指定"
 "它。</qt>"
 
-#: option/k3bexternalbinwidget.cpp:136
+#: option/k3bexternalbinwidget.cpp:135
 #, kde-format
 msgid "Search Path"
 msgstr "搜尋路徑"
 
-#: option/k3bexternalbinwidget.cpp:246
+#: option/k3bexternalbinwidget.cpp:245
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "以下的程式無法更新："
 
-#: option/k3bexternalbinwidget.cpp:251
+#: option/k3bexternalbinwidget.cpp:255
 #, kde-format
-msgid "Unable to execute the action: %1"
-msgstr "無法執行動作：%1"
+msgid "Unable to execute the action<br/>%1"
+msgstr "無法執行動作<br/>%1"
+
+#: option/k3bexternalbinwidget.cpp:268
+#, kde-format
+msgid "Authorization denied"
+msgstr "授權請求已被回絕"
+
+#: option/k3bexternalbinwidget.cpp:271
+#, kde-format
+msgid "An error occurred"
+msgstr "發生錯誤"
+
+#: option/k3bexternalbinwidget.cpp:274
+#, kde-format
+msgid "Invalid action"
+msgstr "無效動作"
+
+#: option/k3bexternalbinwidget.cpp:277
+#, kde-format
+msgid "Authorization granted"
+msgstr "已授權"
+
+#: option/k3bexternalbinwidget.cpp:280
+#, kde-format
+msgid "Authentication required"
+msgstr "需要身份驗證"
+
+#: option/k3bexternalbinwidget.cpp:283
+#, kde-format
+msgid "User cancelled the authentication"
+msgstr "使用者取消了身份驗證"
+
+#: option/k3bexternalbinwidget.cpp:286
+#, kde-format
+msgid "Unknown authorization status %1"
+msgstr "未知的授權狀態 %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -6628,19 +6663,19 @@ msgid "Adding files to project \"%1\"..."
 msgstr "加入檔案至專案「%1」..."
 
 #: projects/k3baudiotrackaddingdialog.cpp:73
-#: projects/k3bdataurladdingdialog.cpp:800
+#: projects/k3bdataurladdingdialog.cpp:801
 #, kde-format
 msgid "Insufficient permissions to read the following files"
 msgstr "權限不允許讀取以下檔案"
 
 #: projects/k3baudiotrackaddingdialog.cpp:77
-#: projects/k3bdataurladdingdialog.cpp:804
+#: projects/k3bdataurladdingdialog.cpp:805
 #, kde-format
 msgid "Unable to find the following files"
 msgstr "找不到以下檔案"
 
 #: projects/k3baudiotrackaddingdialog.cpp:81
-#: projects/k3bdataurladdingdialog.cpp:808
+#: projects/k3bdataurladdingdialog.cpp:809
 #, kde-format
 msgid "No non-local files supported"
 msgstr "不支援非本地端的檔案"
@@ -7542,34 +7577,34 @@ msgid "Hidden Files"
 msgstr "隱藏檔案"
 
 #: projects/k3bdataurladdingdialog.cpp:769
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Do Not Add"
 msgstr "不要加入"
 
-#: projects/k3bdataurladdingdialog.cpp:783
+#: projects/k3bdataurladdingdialog.cpp:784
 #, kde-format
 msgid ""
 "Do you also want to add system files (FIFOs, sockets, device files, and "
 "broken symlinks)?"
 msgstr "您想要新增系統檔案 (FIFO、socket、裝置檔案，以及失效的符號性連結) 嗎？"
 
-#: projects/k3bdataurladdingdialog.cpp:785
+#: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "System Files"
 msgstr "系統檔案"
 
-#: projects/k3bdataurladdingdialog.cpp:812
+#: projects/k3bdataurladdingdialog.cpp:813
 #, kde-format
 msgid "To burn files bigger than %1 please use %2"
 msgstr "要燒錄比 %1 還大的檔案的話，請使用 %2"
 
-#: projects/k3bdataurladdingdialog.cpp:817
+#: projects/k3bdataurladdingdialog.cpp:818
 #, kde-format
 msgid "Some filenames had to be modified due to limitations in mkisofs"
 msgstr "由於 mkisofs 的限制，有些檔案名稱必須修改"
 
-#: projects/k3bdataurladdingdialog.cpp:821
+#: projects/k3bdataurladdingdialog.cpp:822
 #, kde-format
 msgid ""
 "The following filenames have an invalid encoding. You may fix this with the "
