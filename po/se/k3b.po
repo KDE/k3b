@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-14 01:37+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2006-04-03 17:03+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -293,7 +293,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -356,7 +356,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:87 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr ""
@@ -466,7 +466,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bimagewritingdialog.cpp:555
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -521,7 +521,7 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
+#: misc/k3bimagewritingdialog.cpp:585 misc/k3bimagewritingdialog.cpp:968
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -1153,8 +1153,8 @@ msgstr ""
 #, kde-format
 msgid ""
 "<qt>This specifies how the files should be renamed. Currently only the "
-"special strings <em>%a</em> (Artist), <em>%n</em> (Track number), and "
-"<em>%t</em> (Title) are supported."
+"special strings <em>%a</em> (Artist), <em>%n</em> (Track number), and <em>"
+"%t</em> (Title) are supported."
 msgstr ""
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:160
@@ -1825,15 +1825,10 @@ msgstr ""
 
 #: k3bdiroperator.cpp:44
 #, kde-format
-msgid "K3b Bookmarks"
-msgstr ""
-
-#: k3bdiroperator.cpp:50
-#, kde-format
 msgid "Bookmarks"
 msgstr ""
 
-#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr ""
@@ -1999,8 +1994,8 @@ msgstr "Šládja:"
 #: rip/k3baudioprojectconvertingdialog.cpp:267
 #: rip/k3baudioprojectconvertingdialog.cpp:306
 #: rip/k3baudiorippingdialog.cpp:348 rip/k3baudiorippingdialog.cpp:403
-#: rip/k3bpatternparser.cpp:123 rip/k3bpatternparser.cpp:159
-#: rip/k3bpatternparser.cpp:165 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
+#: rip/k3bpatternparser.cpp:122 rip/k3bpatternparser.cpp:158
+#: rip/k3bpatternparser.cpp:164 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
 #, kde-format
 msgid "unknown"
 msgstr "amas"
@@ -2249,38 +2244,37 @@ msgstr ""
 msgid "Filter:"
 msgstr "Silli:"
 
-#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
-#: misc/k3bimagewritingdialog.cpp:466
+#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
 #, kde-format
 msgid "All Files"
 msgstr ""
 
-#: k3bfileview.cpp:76 k3bfileview.cpp:85
+#: k3bfileview.cpp:76
 #, kde-format
 msgid "Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:77 k3bfileview.cpp:86
+#: k3bfileview.cpp:77
 #, kde-format
 msgid "Wave Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:78 k3bfileview.cpp:87
+#: k3bfileview.cpp:78
 #, kde-format
 msgid "MP3 Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:79 k3bfileview.cpp:88
+#: k3bfileview.cpp:79
 #, kde-format
 msgid "Ogg Vorbis Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:80 k3bfileview.cpp:89
+#: k3bfileview.cpp:80
 #, kde-format
 msgid "MPEG Video Files"
 msgstr ""
 
-#: k3bfileview.cpp:94
+#: k3bfileview.cpp:84
 #, kde-format
 msgid "Show Bookmarks"
 msgstr ""
@@ -2528,52 +2522,52 @@ msgstr ""
 msgid "No info"
 msgstr ""
 
-#: k3bstatusbarmanager.cpp:158
+#: k3bstatusbarmanager.cpp:154
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:161
+#: k3bstatusbarmanager.cpp:157
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:188
+#: k3bstatusbarmanager.cpp:184
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:194
+#: k3bstatusbarmanager.cpp:190
 #, kde-format
 msgid "Data Project (%1)"
 msgstr ""
 
-#: k3bstatusbarmanager.cpp:201
+#: k3bstatusbarmanager.cpp:197
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:208
+#: k3bstatusbarmanager.cpp:204
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: k3bstatusbarmanager.cpp:214
+#: k3bstatusbarmanager.cpp:210
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr ""
 
-#: k3bstatusbarmanager.cpp:220
+#: k3bstatusbarmanager.cpp:216
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr ""
@@ -3249,8 +3243,8 @@ msgstr ""
 #: k3bwritingmodewidget.cpp:38
 #, kde-format
 msgid ""
-"Restricted Overwrite allows one to use a DVD-RW just like a DVD-RAM or a "
-"DVD+RW. The media may just be overwritten. It is not possible to write "
+"Restricted Overwrite allows one to use a DVD-RW just like a DVD-RAM or a DVD"
+"+RW. The media may just be overwritten. It is not possible to write "
 "multisession DVD-RWs in this mode but K3b uses growisofs to grow an ISO 9660 "
 "filesystem within the first session, thus allowing new files to be added to "
 "an already burned disk."
@@ -3303,12 +3297,12 @@ msgstr ""
 msgid "Incremental"
 msgstr ""
 
-#: main.cpp:25
+#: main.cpp:22
 #, kde-format
 msgid "K3b"
 msgstr ""
 
-#: main.cpp:26
+#: main.cpp:23
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3319,340 +3313,340 @@ msgid ""
 "features an advanced user might need."
 msgstr ""
 
-#: main.cpp:34
+#: main.cpp:31
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr ""
 
-#: main.cpp:36
+#: main.cpp:33
 #, kde-format
 msgid "https://www.k3b.org"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Leslie Zhai"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Maintainer"
 msgstr "Máŧasdoalli"
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Michał Małek"
 msgstr ""
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Maintainer and current lead Developer"
 msgstr ""
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr ""
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Main developer"
 msgstr ""
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Christian Kvasny"
 msgstr ""
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr ""
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Montel Laurent"
 msgstr ""
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr ""
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Ralf Habacker"
 msgstr ""
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Windows port"
 msgstr ""
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr ""
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr ""
 
-#: main.cpp:48
+#: main.cpp:45
 #, kde-format
 msgid "Thomas Froescher"
 msgstr ""
 
-#: main.cpp:49
+#: main.cpp:46
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr ""
 
-#: main.cpp:51
+#: main.cpp:48
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr ""
 
-#: main.cpp:52
+#: main.cpp:49
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr ""
 
-#: main.cpp:54
+#: main.cpp:51
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr ""
 
-#: main.cpp:55
+#: main.cpp:52
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr ""
 
-#: main.cpp:57
+#: main.cpp:54
 #, kde-format
 msgid "Andy Polyakov"
 msgstr ""
 
-#: main.cpp:58
+#: main.cpp:55
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr ""
 
-#: main.cpp:60
+#: main.cpp:57
 #, kde-format
 msgid "Roberto De Leo"
 msgstr ""
 
-#: main.cpp:61
+#: main.cpp:58
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr ""
 
-#: main.cpp:63
+#: main.cpp:60
 #, kde-format
 msgid "John Steele Scott"
 msgstr ""
 
-#: main.cpp:64
+#: main.cpp:61
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr ""
 
-#: main.cpp:66
+#: main.cpp:63
 #, kde-format
 msgid "György Szombathelyi"
 msgstr ""
 
-#: main.cpp:67
+#: main.cpp:64
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr ""
 
-#: main.cpp:69
+#: main.cpp:66
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr ""
 
-#: main.cpp:70
+#: main.cpp:67
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 msgstr ""
 
-#: main.cpp:72
+#: main.cpp:69
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr ""
 
-#: main.cpp:73
+#: main.cpp:70
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr ""
 
-#: main.cpp:75
+#: main.cpp:72
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr ""
 
-#: main.cpp:76
+#: main.cpp:73
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr ""
 
-#: main.cpp:78
+#: main.cpp:75
 #, kde-format
 msgid "Adriaan de Groot"
 msgstr ""
 
-#: main.cpp:79
+#: main.cpp:76
 #, kde-format
 msgid "For his work on the FreeBSD port."
 msgstr ""
 
-#: main.cpp:81
+#: main.cpp:78
 #, kde-format
 msgid "Thiago Macieira"
 msgstr ""
 
-#: main.cpp:82
+#: main.cpp:79
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr ""
 
-#: main.cpp:84
+#: main.cpp:81
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr ""
 
-#: main.cpp:85
+#: main.cpp:82
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr ""
 
-#: main.cpp:87
+#: main.cpp:84
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr ""
 
-#: main.cpp:88
+#: main.cpp:85
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr ""
 
-#: main.cpp:90
+#: main.cpp:87
 #, kde-format
 msgid "Robert Wadley"
 msgstr ""
 
-#: main.cpp:91
+#: main.cpp:88
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr ""
 
-#: main.cpp:93
+#: main.cpp:90
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr ""
 
-#: main.cpp:94
+#: main.cpp:91
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr ""
 
-#: main.cpp:96
+#: main.cpp:93
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr ""
 
-#: main.cpp:97
+#: main.cpp:94
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr ""
 
-#: main.cpp:105
+#: main.cpp:102
 #, kde-format
 msgid "file(s) to open"
 msgstr ""
 
-#: main.cpp:106
+#: main.cpp:103
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr ""
 
-#: main.cpp:107
+#: main.cpp:104
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr ""
 
-#: main.cpp:108
+#: main.cpp:105
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr ""
 
-#: main.cpp:109
+#: main.cpp:106
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr ""
 
-#: main.cpp:110
+#: main.cpp:107
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr ""
 
-#: main.cpp:111
+#: main.cpp:108
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr ""
 
-#: main.cpp:112
+#: main.cpp:109
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr ""
 
-#: main.cpp:113
+#: main.cpp:110
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr ""
 
-#: main.cpp:114
+#: main.cpp:111
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr ""
 
-#: main.cpp:115
+#: main.cpp:112
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr ""
 
-#: main.cpp:116
+#: main.cpp:113
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr ""
 
-#: main.cpp:117
+#: main.cpp:114
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr ""
 
-#: main.cpp:118
+#: main.cpp:115
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr ""
 
-#: main.cpp:119
+#: main.cpp:116
 #, kde-format
 msgid "Set the GUI language"
 msgstr ""
 
-#: main.cpp:120
+#: main.cpp:117
 #, kde-format
 msgid "Disable the splash screen"
 msgstr ""
 
-#: main.cpp:121
+#: main.cpp:118
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "
@@ -3682,7 +3676,7 @@ msgstr ""
 msgid "%1 (different than declared volume size)"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr ""
@@ -3697,7 +3691,7 @@ msgstr ""
 msgid "TOC file:"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "Cue/bin image"
 msgstr ""
@@ -3739,80 +3733,80 @@ msgstr ""
 msgid "Choose Image File"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#: misc/k3bimagewritingdialog.cpp:450
 #, kde-format
 msgid "Image Files"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:451
 #, kde-format
 msgid "ISO 9660 Image Files"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#: misc/k3bimagewritingdialog.cpp:452
 #, kde-format
 msgid "Cue Files"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#: misc/k3bimagewritingdialog.cpp:453
 #, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
 msgid "Image Type"
 msgstr "Govvašládja"
 
-#: misc/k3bimagewritingdialog.cpp:476
+#: misc/k3bimagewritingdialog.cpp:464
 #, kde-format
 msgid "Auto Detection"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:477
+#: misc/k3bimagewritingdialog.cpp:465
 #, kde-format
 msgid "ISO 9660 filesystem image"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:479
+#: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
 msgid "Audio cue file"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:480
+#: misc/k3bimagewritingdialog.cpp:468
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:482
+#: misc/k3bimagewritingdialog.cpp:470
 #, kde-format
 msgid "Plain data image"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:521 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:527 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
+#: misc/k3bimagewritingdialog.cpp:566 misc/k3bimagewritingdialog.cpp:990
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "&Govva"
 
-#: misc/k3bimagewritingdialog.cpp:591
+#: misc/k3bimagewritingdialog.cpp:579
 #, kde-format
 msgid "Data mode:"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:617
+#: misc/k3bimagewritingdialog.cpp:605
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -3831,7 +3825,7 @@ msgid ""
 "writing cdrdao's own image format, the toc files."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:719
+#: misc/k3bimagewritingdialog.cpp:707
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -3839,92 +3833,92 @@ msgid ""
 "continue if you know what you are doing.</p>"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:879
+#: misc/k3bimagewritingdialog.cpp:867
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:868
 #, kde-format
 msgid "Unknown image type"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "Boaldde"
 
-#: misc/k3bimagewritingdialog.cpp:891
+#: misc/k3bimagewritingdialog.cpp:879
 #, kde-format
 msgid "Unable to read image file"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:893
+#: misc/k3bimagewritingdialog.cpp:881
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:909
+#: misc/k3bimagewritingdialog.cpp:897
 #, kde-format
 msgid "File not found"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1040
+#: misc/k3bimagewritingdialog.cpp:1028
 #, kde-format
 msgid "MD5 Sum:"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1080
+#: misc/k3bimagewritingdialog.cpp:1068
 #, kde-format
 msgid "Calculation canceled"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1082
+#: misc/k3bimagewritingdialog.cpp:1070
 #, kde-format
 msgid "Calculation failed"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1098
+#: misc/k3bimagewritingdialog.cpp:1086
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1099
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Compare checksum..."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1107
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1113
+#: misc/k3bimagewritingdialog.cpp:1101
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1114
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1116
+#: misc/k3bimagewritingdialog.cpp:1104
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:1117
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr ""
@@ -4468,7 +4462,7 @@ msgid ""
 "may result in damaged media."
 msgstr ""
 
-#: option/k3bcddboptiontab.cpp:37
+#: option/k3bcddboptiontab.cpp:32
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr ""
@@ -4566,17 +4560,17 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:273
+#: option/k3bdevicewidget.cpp:269
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr ""
@@ -4675,47 +4669,47 @@ msgstr ""
 msgid "Search Path"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:245
+#: option/k3bexternalbinwidget.cpp:238
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:255
+#: option/k3bexternalbinwidget.cpp:248
 #, kde-format
 msgid "Unable to execute the action<br/>%1"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:268
+#: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:271
+#: option/k3bexternalbinwidget.cpp:264
 #, kde-format
 msgid "An error occurred"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:274
+#: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:277
+#: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:280
+#: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:283
+#: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:286
+#: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
 msgstr ""
@@ -6417,7 +6411,7 @@ msgstr ""
 msgid "Try to determine meta information over the Internet"
 msgstr ""
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -6493,9 +6487,9 @@ msgid ""
 "familiar with terms like 'harddisk emulation' you most likely want to use a "
 "floppy image here. Floppy images can be created by directly extracting them "
 "from a real floppy disk:<pre>dd if=/dev/floppy of=/tmp/floppy.img</pre>or by "
-"using one of the many boot floppy generators that can be found on <a "
-"href=\"https://www.google.com/search?"
-"q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the Internet</a>."
+"using one of the many boot floppy generators that can be found on <a href="
+"\"https://www.google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the "
+"Internet</a>."
 msgstr ""
 
 #: projects/k3bbootimagedialog.cpp:111
@@ -7063,7 +7057,7 @@ msgid "Always keep the existing file"
 msgstr ""
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:118
 #, kde-format
 msgid "Rename"
 msgstr "Rievdat nama"
@@ -7171,70 +7165,70 @@ msgstr ""
 msgid "No Data to Burn"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:108
+#: projects/k3bdataviewimpl.cpp:106
 #, kde-format
 msgid "New Folder..."
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:126
+#: projects/k3bdataviewimpl.cpp:124
 #, kde-format
 msgid "Parent Folder"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:137
+#: projects/k3bdataviewimpl.cpp:135
 #, kde-format
 msgid "Open"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:141
+#: projects/k3bdataviewimpl.cpp:139
 #, kde-format
 msgid "&Import Session..."
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:142
+#: projects/k3bdataviewimpl.cpp:140
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:146
+#: projects/k3bdataviewimpl.cpp:144
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:147
+#: projects/k3bdataviewimpl.cpp:145
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:152
+#: projects/k3bdataviewimpl.cpp:150
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:153
+#: projects/k3bdataviewimpl.cpp:151
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
-#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
+#: projects/k3bdataviewimpl.cpp:214 projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:222 projects/k3bdataviewimpl.cpp:226
 #, kde-format
 msgid "New Folder"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:215
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:223
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr ""
 
-#: projects/k3bdataviewimpl.cpp:381
+#: projects/k3bdataviewimpl.cpp:375
 #, kde-format
 msgid "Edit Boot Images"
 msgstr ""
@@ -7787,8 +7781,8 @@ msgid ""
 "b>), consisting of still pictures, motion pictures and/or audio (only) "
 "streams was added.</li><li>Note Segment Items::.</li><li>Support for "
 "interactive playback control (<b>\"PBC\"</b>) was added.</li><li>Support for "
-"playing related access by providing a scan point index file was added. "
-"(<b>\"/EXT/SCANDATA.DAT\"</b>)</li><li>Support for closed captions.</"
+"playing related access by providing a scan point index file was added. (<b>"
+"\"/EXT/SCANDATA.DAT\"</b>)</li><li>Support for closed captions.</"
 "li><li>Support for mixing NTSC and PAL content.</li></ul><p>By adding PAL "
 "support to the Video CD 1.1 specification, the following resolutions became "
 "available:<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ "
@@ -7852,10 +7846,10 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:180
 #, kde-format
 msgid ""
-"<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/"
-"MPEGAV\".</li><li>Enables the use of the (deprecated) signature "
-"<b>\"ENTRYSVD\"</b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/"
-"ENTRY.SVD\"</b>.</li></ul>"
+"<ul><li>Rename <b>\"/MPEG2\"</b> folder on SVCDs to (non-compliant) \"/MPEGAV"
+"\".</li><li>Enables the use of the (deprecated) signature <b>\"ENTRYSVD\"</"
+"b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</"
+"li></ul>"
 msgstr ""
 
 #: projects/k3bvcdburndialog.cpp:182
@@ -9138,7 +9132,7 @@ msgstr ""
 msgid "Track%1"
 msgstr ""
 
-#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:51
+#: rip/k3baudiorippingdialog.cpp:418 rip/k3bcddbpatternwidget.cpp:50
 #, kde-format
 msgid "Playlist"
 msgstr "Čuojahanlistu"
@@ -9160,48 +9154,48 @@ msgstr "Namahus"
 msgid "Data Track"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:45
+#: rip/k3bcddbpatternwidget.cpp:44
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid "%A - %T/%n - !a='%A'{%a - }%t"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:46
+#: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:47
+#: rip/k3bcddbpatternwidget.cpp:46
 #, kde-format
 msgid "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:48
+#: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:50
+#: rip/k3bcddbpatternwidget.cpp:49
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:52
+#: rip/k3bcddbpatternwidget.cpp:51
 #, kde-format
 msgid "playlists/%{albumartist}/%{albumtitle}"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:119
+#: rip/k3bcddbpatternwidget.cpp:118
 #, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
 "with their respective meaning in every track name.<br><em>Hint:</em> %A "
-"differs from %a only on soundtracks or compilations.<p><table "
-"border=\"0\"><tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</"
-"em></td></tr><tr><td>%a</td><td>artist of the track</td><td>%{a} or %{artist}"
-"</td></tr><tr><td>%t</td><td>title of the track</td><td>%{t} or %{title}</"
-"td></tr><tr><td>%n</td><td>track number</td><td>%{n} or %{number}</td></"
+"differs from %a only on soundtracks or compilations.<p><table border="
+"\"0\"><tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</em></td></"
+"tr><tr><td>%a</td><td>artist of the track</td><td>%{a} or %{artist}</td></"
+"tr><tr><td>%t</td><td>title of the track</td><td>%{t} or %{title}</td></"
+"tr><tr><td>%n</td><td>track number</td><td>%{n} or %{number}</td></"
 "tr><tr><td>%y</td><td>year of the CD</td><td>%{y} or %{year}</td></"
 "tr><tr><td>%c</td><td>extended track information</td><td>%{c} or %{comment}</"
 "td></tr><tr><td>%g</td><td>genre of the CD</td><td>%{g} or %{genre}</td></"
@@ -9213,7 +9207,7 @@ msgid ""
 "automatically)</td><td>%{e} or %{ext}</td></tr></table>"
 msgstr ""
 
-#: rip/k3bcddbpatternwidget.cpp:145
+#: rip/k3bcddbpatternwidget.cpp:144
 #, kde-format
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
@@ -9272,116 +9266,116 @@ msgstr ""
 msgid "Writing cue file to %1."
 msgstr ""
 
-#: rip/k3bpatternparser.cpp:134
+#: rip/k3bpatternparser.cpp:133
 #, kde-format
 msgid "Track %1"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:52
+#: rip/k3bvideocdrip.cpp:51
 #, kde-format
 msgid "Job canceled by user."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:81
+#: rip/k3bvideocdrip.cpp:80
 #, kde-format
 msgid "Check files"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:91
+#: rip/k3bvideocdrip.cpp:90
 #, kde-format
 msgid "Could not find %1 executable."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:92
+#: rip/k3bvideocdrip.cpp:91
 #, kde-format
 msgid "To rip Video CDs you have to install VcdImager Version %1."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:93
+#: rip/k3bvideocdrip.cpp:92
 #, kde-format
 msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:101
+#: rip/k3bvideocdrip.cpp:100
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:102
+#: rip/k3bvideocdrip.cpp:101
 #, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from http://www."
 "vcdimager.org"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:109
+#: rip/k3bvideocdrip.cpp:108
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:160
+#: rip/k3bvideocdrip.cpp:159
 #, kde-format
 msgid "Extracting"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:161
+#: rip/k3bvideocdrip.cpp:160
 #, kde-format
 msgid "Start extracting."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:162
+#: rip/k3bvideocdrip.cpp:161
 #, kde-format
 msgid "Extract files from %1 to %2."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:167
+#: rip/k3bvideocdrip.cpp:166
 #, kde-format
 msgid "Could not start %1."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:257
+#: rip/k3bvideocdrip.cpp:256
 #, kde-format
 msgid "Files successfully extracted."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:260
+#: rip/k3bvideocdrip.cpp:259
 #, kde-format
 msgid "%1 returned an unknown error (code %2)."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:261
+#: rip/k3bvideocdrip.cpp:260
 #, kde-format
 msgid "Please send me an email with the last output..."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:267
+#: rip/k3bvideocdrip.cpp:266
 #, kde-format
 msgid "%1 did not exit cleanly."
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:281
+#: rip/k3bvideocdrip.cpp:280
 #, kde-format
 msgid "%1 encountered non-form2 sector"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:282
+#: rip/k3bvideocdrip.cpp:281
 #, kde-format
 msgid "leaving loop"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:290
+#: rip/k3bvideocdrip.cpp:289
 #, kde-format
 msgid "detected extended VCD2.0 PBC files"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:317 rip/k3bvideocdrip.cpp:335
+#: rip/k3bvideocdrip.cpp:316 rip/k3bvideocdrip.cpp:334
 #, kde-format
 msgid "Extracting %1"
 msgstr ""
 
-#: rip/k3bvideocdrip.cpp:328
+#: rip/k3bvideocdrip.cpp:327
 #, kde-format
 msgid "Extracting %1 to %2"
 msgstr ""
@@ -9956,19 +9950,19 @@ msgstr ""
 #, kde-format
 msgid ""
 "<p><b>Pattern special strings:</b><p>The following strings will be replaced "
-"with their respective meaning in every track name.<br><p><table "
-"border=\"0\"><tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</"
-"em></td></tr><tr><td>%t</td><td>title number</td><td>%{t} or %{title_number}"
-"</td></tr><tr><td>%i</td><td>volume id (mostly the name of the Video DVD)</"
-"td><td>%{i} or %{volume_id}</td></tr><tr><td>%b</td><td>beautified volume "
-"id</td><td>%{b} or %{beautified_volume_id}</td></tr><tr><td>%l</td><td>two "
-"chars language code</td><td>%{l} or %{lang_code}</td></tr><tr><td>%n</"
+"with their respective meaning in every track name.<br><p><table border="
+"\"0\"><tr><td></td><td><em>Meaning</em></td><td><em>Alternatives</em></td></"
+"tr><tr><td>%t</td><td>title number</td><td>%{t} or %{title_number}</td></"
+"tr><tr><td>%i</td><td>volume id (mostly the name of the Video DVD)</td><td>"
+"%{i} or %{volume_id}</td></tr><tr><td>%b</td><td>beautified volume id</"
+"td><td>%{b} or %{beautified_volume_id}</td></tr><tr><td>%l</td><td>two chars "
+"language code</td><td>%{l} or %{lang_code}</td></tr><tr><td>%n</"
 "td><td>language name</td><td>%{n} or %{lang_name}</td></tr><tr><td>%a</"
 "td><td>audio format (on the Video DVD)</td><td>%{a} or %{audio_format}</td></"
-"tr><tr><td>%c</td><td>number of audio channels (on the Video DVD)</"
-"td><td>%{c} or %{channels}</td></tr><tr><td>%v</td><td>size of the original "
-"video</td><td>%{v} or %{orig_video_size}</td></tr><tr><td>%s</td><td>size of "
-"the resulting video (<em>Caution: auto-clipping values are not taken into "
+"tr><tr><td>%c</td><td>number of audio channels (on the Video DVD)</td><td>"
+"%{c} or %{channels}</td></tr><tr><td>%v</td><td>size of the original video</"
+"td><td>%{v} or %{orig_video_size}</td></tr><tr><td>%s</td><td>size of the "
+"resulting video (<em>Caution: auto-clipping values are not taken into "
 "account.</em>)</td><td>%{s} or %{video_size}</td></tr><tr><td>%r</"
 "td><td>aspect ratio of the original video</td><td>%{r} or %{aspect_ratio}</"
 "td></tr><tr><td>%d</td><td>current date</td><td>%{d} or %{date}</td></tr></"

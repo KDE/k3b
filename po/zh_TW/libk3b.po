@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-15 01:36+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2024-02-27 06:00+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -31,7 +31,7 @@ msgstr "禁止光碟寫入時休眠"
 msgid "Disable inhibition for disc writing"
 msgstr "停用光碟寫入時的休眠"
 
-#: core/k3bglobals.cpp:365
+#: core/k3bglobals.cpp:361
 #, kde-format
 msgid "Auto"
 msgstr "自動"
@@ -1610,7 +1610,7 @@ msgstr "音訊編碼器"
 msgid "An unknown error occurred."
 msgstr "發生未知的錯誤。"
 
-#: plugin/k3bpluginmanager.cpp:156
+#: plugin/k3bpluginmanager.cpp:152
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "外掛程式 %1 沒有可用的設定值。"
@@ -3542,27 +3542,27 @@ msgstr "這看起來像是 RIFF 標頭檔，但要求的是純多路傳輸程式
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
 msgstr "無法建立暫存資料夾 <filename>%1</filename>。"
 
-#: projects/videodvd/k3bvideodvdimager.cpp:109
+#: projects/videodvd/k3bvideodvdimager.cpp:105
 #, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
 msgstr "無法建立暫存資料夾 <filename>%1</filename>。"
 
-#: projects/videodvd/k3bvideodvdimager.cpp:116
+#: projects/videodvd/k3bvideodvdimager.cpp:112
 #, kde-kuit-format
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr "在 VIDEO_TS 資料夾中找到無效的條目 <filename>%1</filename>"
 
-#: projects/videodvd/k3bvideodvdimager.cpp:124
+#: projects/videodvd/k3bvideodvdimager.cpp:120
 #, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
 msgstr "無法在資料夾 <filename>%1</filename> 內連結暫時性檔案。"
 
-#: projects/videodvd/k3bvideodvdimager.cpp:198
+#: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
 msgid "The project does not contain all necessary Video DVD files."
 msgstr "這個專案不包含所有必要的視訊 DVD 檔案。"
 
-#: projects/videodvd/k3bvideodvdimager.cpp:199
+#: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."

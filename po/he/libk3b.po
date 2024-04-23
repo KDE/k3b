@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-15 01:36+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2024-04-08 19:16+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -19,7 +19,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: core/k3bcore.cpp:241
@@ -32,7 +33,7 @@ msgstr ""
 msgid "Disable inhibition for disc writing"
 msgstr ""
 
-#: core/k3bglobals.cpp:365
+#: core/k3bglobals.cpp:361
 #, kde-format
 msgid "Auto"
 msgstr "אוטומטי"
@@ -115,6 +116,8 @@ msgid "One copy successfully created"
 msgid_plural "%1 copies successfully created"
 msgstr[0] "עותק נוצר בהצלחה %1"
 msgstr[1] "%1 עותקים נוצרו בהצלחה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: jobs/k3bbinimagewritingjob.cpp:197 jobs/k3bcdcopyjob.cpp:1171
 #: jobs/k3bcdcopyjob.cpp:1173 jobs/k3bcdcopyjob.cpp:1176
@@ -129,11 +132,13 @@ msgid "Writing cue/bin Image"
 msgstr "כותב תמונת תקליטור מסוג cue/bin"
 
 #: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
-#, kde-format
+#, fuzzy, kde-format
 msgid " - %1 Copy"
 msgid_plural " - %1 Copies"
 msgstr[0] "עותק %1 - "
 msgstr[1] "%1 עותקים - "
+msgstr[2] ""
+msgstr[3] ""
 
 #: jobs/k3bblankingjob.cpp:65 jobs/k3bblankingjob.cpp:153
 #, kde-format
@@ -507,11 +512,13 @@ msgid "Copying CD"
 msgstr "מעתיק תקליטור CD"
 
 #: jobs/k3bcdcopyjob.cpp:1220 jobs/k3bdvdcopyjob.cpp:955
-#, kde-format
+#, fuzzy, kde-format
 msgid "Creating 1 copy"
 msgid_plural "Creating %1 copies"
 msgstr[0] "יוצר עותק 1"
 msgstr[1] "יוצר %1 עותקים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: jobs/k3bcdda2wavreader.cpp:88 jobs/k3bclonejob.cpp:81
 #: jobs/k3bdvdbooktypejob.cpp:277 jobs/k3bdvdformattingjob.cpp:457
@@ -637,11 +644,13 @@ msgid "Cloning CD"
 msgstr "משכפל תקליטור CD"
 
 #: jobs/k3bclonejob.cpp:367
-#, kde-format
+#, fuzzy, kde-format
 msgid "Creating 1 clone copy"
 msgid_plural "Creating %1 clone copies"
 msgstr[0] "יוצר עותק 1"
 msgstr[1] "יותר %1 עותקים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: jobs/k3bdatatrackreader.cpp:167
 #, kde-format
@@ -684,11 +693,13 @@ msgid "Error while reading sector %1."
 msgstr "שגיאה בזמן קריאה מסקטור %1."
 
 #: jobs/k3bdatatrackreader.cpp:346
-#, kde-format
+#, fuzzy, kde-format
 msgid "Ignored %1 erroneous sector."
 msgid_plural "Ignored a total of %1 erroneous sectors."
 msgstr[0] "התעלם מסקטור שגוי %1."
 msgstr[1] "התעלם מ %1 סקטורים שגויים."
+msgstr[2] ""
+msgstr[3] ""
 
 #: jobs/k3bdatatrackreader.cpp:415
 #, kde-format
@@ -1621,7 +1632,7 @@ msgstr ""
 msgid "An unknown error occurred."
 msgstr "אירעה שגיאה לא ידועה."
 
-#: plugin/k3bpluginmanager.cpp:156
+#: plugin/k3bpluginmanager.cpp:152
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "אין הגדרות זמינות לתוסף %1"
@@ -1790,14 +1801,18 @@ msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
 msgstr[0] "רצועה אחת (%2 דקות)"
 msgstr[1] "%1 רצועות (%2 דקות)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
 #: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
-#, kde-format
+#, fuzzy, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
 msgstr[0] "עותק  %1 -"
 msgstr[1] "- %1 עותקים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
@@ -1965,6 +1980,8 @@ msgid "ISO 9660 Filesystem (Size: %2) – One copy"
 msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
 msgstr[0] "מערכת קבצים ISO9660 (גודל: %1)"
 msgstr[1] "מערכת קבצים ISO9660 (גודל: %1)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/datacd/k3bdatajob.cpp:1000
 #, fuzzy, kde-format
@@ -2657,6 +2674,8 @@ msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
 msgstr[0] "היה שימוש ב - Burnfree פעם אחת"
 msgstr[1] "היה שימוש ב - Burnfree %1 פעמים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bcdrecordwriter.cpp:746 projects/k3bcdrskinwriter.cpp:759
 #, fuzzy, kde-format
@@ -2664,6 +2683,8 @@ msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
 msgstr[0] "חוצץ היה נמוך פעם 1"
 msgstr[1] "חוצץ היה נמוך %1 פעמים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bcdrecordwriter.cpp:785 projects/k3bcdrskinwriter.cpp:798
 #, fuzzy, kde-format
@@ -3167,6 +3188,8 @@ msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
 msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
 msgstr[0] "%1 רצועות (%2 דקות נתוני שמע, %3 נתוני ISO9660)"
 msgstr[1] "%1 רצועות (%2 דקות נתוני שמע, %3 נתוני ISO9660)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
@@ -3228,6 +3251,8 @@ msgid "One file (%2) and about 8 MB eMovix data"
 msgid_plural "%1 files (%2) and about 8 MB eMovix data"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/movixcd/k3bmovixjob.cpp:117
 #, fuzzy, kde-format
@@ -3235,6 +3260,8 @@ msgid " – One copy"
 msgid_plural " – %1 copies"
 msgstr[0] "עותק  %1 -"
 msgstr[1] "- %1 עותקים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/videocd/k3bvcddoc.cpp:202 projects/videocd/k3bvcddoc.cpp:212
 #, kde-format
@@ -3414,6 +3441,8 @@ msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
 msgstr[0] "מתעלם מ־%1 הבתים הנשארים של הזרימה."
 msgstr[1] "מתעלם מ־%1 הבתים הנשארים של הזרימה."
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/videocd/k3bvcdjob.cpp:543
 #, fuzzy, kde-format
@@ -3446,11 +3475,13 @@ msgid "Writing Video CD"
 msgstr "כותב תקליטור וידאו (VCD)"
 
 #: projects/videocd/k3bvcdjob.cpp:567
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
 msgstr[0] "MPEG אחד (%2)"
 msgstr[1] "%1 MPEG (%2)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
 #: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
@@ -3469,6 +3500,8 @@ msgid "1 bit/s"
 msgid_plural "%1 bits/s"
 msgstr[0] "%1 סיביות/שניה"
 msgstr[1] "%1 סיביות/שניה"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/videocd/k3bvcdtrack.cpp:218
 #, kde-format
@@ -3577,29 +3610,29 @@ msgstr "זה נראה כמו קובץ עם תחילית RIFF, אבל נדרש כ
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
 msgstr "לא מסוגל ליצור תיקייה זמנית '%1'."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:109
+#: projects/videodvd/k3bvideodvdimager.cpp:105
 #, fuzzy, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
 msgstr "לא מסוגל ליצור תיקייה זמנית '%1'."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:116
+#: projects/videodvd/k3bvideodvdimager.cpp:112
 #, fuzzy, kde-kuit-format
 #| msgid "Found invalid entry in the VIDEO_TS folder (%1)."
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr "נמצאה רשומה לא תקינה בתיקיית VIDEO_TS (%1)."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:124
+#: projects/videodvd/k3bvideodvdimager.cpp:120
 #, fuzzy, kde-kuit-format
 #| msgid "Unable to link temporary file in folder %1."
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
 msgstr "לא יכול לקשר קובץ זמני בתיקייה %1."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:198
+#: projects/videodvd/k3bvideodvdimager.cpp:194
 #, fuzzy, kde-format
 msgid "The project does not contain all necessary Video DVD files."
 msgstr "הפרויקט לא מכיל את כל הקבצים הדרושים ל VideoDVD."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:199
+#: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."
@@ -3726,13 +3759,17 @@ msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
 msgstr[0] "1 ברצועה %2"
 msgstr[1] "%1 ב־ %2 רצועות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: tools/k3bmedium.cpp:419
-#, kde-format
+#, fuzzy, kde-format
 msgid " and %1 session"
 msgid_plural " and %1 sessions"
 msgstr[0] "וצריבה %1"
 msgstr[1] "ו - %1 צריבות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: tools/k3bmedium.cpp:424
 #, kde-format

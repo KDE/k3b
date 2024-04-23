@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-22 01:54+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2019-11-19 12:49+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -302,7 +302,7 @@ msgstr "Käsk"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -380,7 +380,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:87 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr "Valikud"
@@ -496,7 +496,7 @@ msgstr "Failinime pole määratud"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bimagewritingdialog.cpp:555
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -551,7 +551,7 @@ msgstr "Muuda seadistusi..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
+#: misc/k3bimagewritingdialog.cpp:585 misc/k3bimagewritingdialog.cpp:968
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -1951,15 +1951,10 @@ msgstr "Sea&de"
 
 #: k3bdiroperator.cpp:44
 #, kde-format
-msgid "K3b Bookmarks"
-msgstr "K3b järjehoidjad"
-
-#: k3bdiroperator.cpp:50
-#, kde-format
 msgid "Bookmarks"
 msgstr "Järjehoidjad"
 
-#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "Lis&a projekti"
@@ -2380,44 +2375,43 @@ msgstr "Kustutamine nurjus."
 msgid "Filter:"
 msgstr "Filter:"
 
-#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
-#: misc/k3bimagewritingdialog.cpp:466
+#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
 #, fuzzy, kde-format
 #| msgid "*|All Files"
 msgid "All Files"
 msgstr "*|Kõik failid"
 
-#: k3bfileview.cpp:76 k3bfileview.cpp:85
+#: k3bfileview.cpp:76
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "Sound Files"
 msgstr "Leitud failid"
 
-#: k3bfileview.cpp:77 k3bfileview.cpp:86
+#: k3bfileview.cpp:77
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "Wave Sound Files"
 msgstr "Leitud failid"
 
-#: k3bfileview.cpp:78 k3bfileview.cpp:87
+#: k3bfileview.cpp:78
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "MP3 Sound Files"
 msgstr "Leitud failid"
 
-#: k3bfileview.cpp:79 k3bfileview.cpp:88
+#: k3bfileview.cpp:79
 #, fuzzy, kde-format
 #| msgid "application/x-ogg |Ogg Vorbis Sound Files"
 msgid "Ogg Vorbis Sound Files"
 msgstr "application/x-ogg |Ogg Vorbis helifailid"
 
-#: k3bfileview.cpp:80 k3bfileview.cpp:89
+#: k3bfileview.cpp:80
 #, fuzzy, kde-format
 #| msgid "video/mpeg |MPEG Video Files"
 msgid "MPEG Video Files"
 msgstr "video/mpeg |MPEG videofailid"
 
-#: k3bfileview.cpp:94
+#: k3bfileview.cpp:84
 #, kde-format
 msgid "Show Bookmarks"
 msgstr "Järjehoidjate näitamine"
@@ -2676,52 +2670,52 @@ msgstr "Ajutine:"
 msgid "No info"
 msgstr "Info puudub"
 
-#: k3bstatusbarmanager.cpp:158
+#: k3bstatusbarmanager.cpp:154
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] "Üks fail - %2"
 msgstr[1] "%1 faili - %2"
 
-#: k3bstatusbarmanager.cpp:161
+#: k3bstatusbarmanager.cpp:157
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] "üks kataloog"
 msgstr[1] "%1 kataloogi"
 
-#: k3bstatusbarmanager.cpp:188
+#: k3bstatusbarmanager.cpp:184
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] "Audio CD (1 rada)"
 msgstr[1] "Audio CD (%1 rada)"
 
-#: k3bstatusbarmanager.cpp:194
+#: k3bstatusbarmanager.cpp:190
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "Andmeprojekt (%1)"
 
-#: k3bstatusbarmanager.cpp:201
+#: k3bstatusbarmanager.cpp:197
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] "Segarežiimis CD (1 rada ja %2)"
 msgstr[1] "Segarežiimis CD (%1 rada ja %2)"
 
-#: k3bstatusbarmanager.cpp:208
+#: k3bstatusbarmanager.cpp:204
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] "Video CD (1 rada)"
 msgstr[1] "Video CD (%1 rada)"
 
-#: k3bstatusbarmanager.cpp:214
+#: k3bstatusbarmanager.cpp:210
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "eMovixi projekt (%1)"
 
-#: k3bstatusbarmanager.cpp:220
+#: k3bstatusbarmanager.cpp:216
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "Video-DVD (%1)"
@@ -3576,12 +3570,12 @@ msgstr "Piiratud ülekirjutamine"
 msgid "Incremental"
 msgstr "Kasvav"
 
-#: main.cpp:25
+#: main.cpp:22
 #, kde-format
 msgid "K3b"
 msgstr "K3b"
 
-#: main.cpp:26
+#: main.cpp:23
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3598,162 +3592,162 @@ msgstr ""
 "kõigile: see on võimalikult lihtne uutele kasutajatele, kuid sisaldab kõiki "
 "võimalusi, mida võib vajada kogenud kasutaja."
 
-#: main.cpp:34
+#: main.cpp:31
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr "Copyright © 1998–2018: K3b autorid"
 
-#: main.cpp:36
+#: main.cpp:33
 #, kde-format
 msgid "https://www.k3b.org"
 msgstr "https://www.k3b.org"
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Leslie Zhai"
 msgstr "Leslie Zhai"
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Maintainer"
 msgstr "Hooldaja"
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Michał Małek"
 msgstr "Michał Małek"
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Maintainer and current lead Developer"
 msgstr "Hooldaja ja juhtiv arendaja"
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Main developer"
 msgstr "Põhiarendaja"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "Christian Kvasny"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr "Video CD projekt ja video CD rippimine"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr "Esialgne portimine KDE4 platvormile"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Ralf Habacker"
 msgstr "Ralf Habacker"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Windows port"
 msgstr "Windowsi port"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "Klaus-Dieter Krannich"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "Täiustatud Cdrdao lõimimine"
 
-#: main.cpp:48
+#: main.cpp:45
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "Thomas Froescher"
 
-#: main.cpp:49
+#: main.cpp:46
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr "Video DVD rippimine ja video kodeerimine 1.0-eelsetes versioonides."
 
-#: main.cpp:51
+#: main.cpp:48
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "Alexis Younes aka Ayo"
 
-#: main.cpp:52
+#: main.cpp:49
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "Ülekeev kunstianne."
 
-#: main.cpp:54
+#: main.cpp:51
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "Christoph Thielecke"
 
-#: main.cpp:55
+#: main.cpp:52
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "Agar testimine ja esimene tõlge saksa keelde."
 
-#: main.cpp:57
+#: main.cpp:54
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "Andy Polyakov"
 
-#: main.cpp:58
+#: main.cpp:55
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "Suurepärased dvd+rw vahendid ja kena koostöö."
 
-#: main.cpp:60
+#: main.cpp:57
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "Roberto De Leo"
 
-#: main.cpp:61
+#: main.cpp:58
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "Väga lahe eMovix pakett ja selle sobitamine."
 
-#: main.cpp:63
+#: main.cpp:60
 #, kde-format
 msgid "John Steele Scott"
 msgstr "John Steele Scott"
 
-#: main.cpp:64
+#: main.cpp:61
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "Flac dekodeerimise plugin."
 
-#: main.cpp:66
+#: main.cpp:63
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "György Szombathelyi"
 
-#: main.cpp:67
+#: main.cpp:64
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "Äärmiselt kasulik isofslib."
 
-#: main.cpp:69
+#: main.cpp:66
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "Erik de Castro Lopo"
 
-#: main.cpp:70
+#: main.cpp:67
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
@@ -3762,178 +3756,178 @@ msgstr ""
 "Audiodekoodri raamistikus üldiseks diskreetimissageduse muutmiseks kasutatav "
 "libsamplerate."
 
-#: main.cpp:72
+#: main.cpp:69
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "Jakob Petsovits"
 
-#: main.cpp:73
+#: main.cpp:70
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr "Väga lahe audio rippimise tingimuslik muster."
 
-#: main.cpp:75
+#: main.cpp:72
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "Heiner Eichmann"
 
-#: main.cpp:76
+#: main.cpp:73
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr "Panus BSD porti ja mõned väga head paigad."
 
-#: main.cpp:78
+#: main.cpp:75
 #, kde-format
 msgid "Adriaan de Groot"
 msgstr "Adriaan de Groot"
 
-#: main.cpp:79
+#: main.cpp:76
 #, kde-format
 msgid "For his work on the FreeBSD port."
 msgstr "Panus FreeBSD porti."
 
-#: main.cpp:81
+#: main.cpp:78
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "Thiago Macieira"
 
-#: main.cpp:82
+#: main.cpp:79
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr "Abi paljude ekslike K3b vigade tuvastamisel veebilehel bugs.kde.org."
 
-#: main.cpp:84
+#: main.cpp:81
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "Marcel Dierkes"
 
-#: main.cpp:85
+#: main.cpp:82
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr "Imekaunis K3b ikoon."
 
-#: main.cpp:87
+#: main.cpp:84
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "Christoph Burger-Scheidlin"
 
-#: main.cpp:88
+#: main.cpp:85
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr "Väsimatu abi K3b vigade andmebaasi puhastamisel."
 
-#: main.cpp:90
+#: main.cpp:87
 #, kde-format
 msgid "Robert Wadley"
 msgstr "Robert Wadley"
 
-#: main.cpp:91
+#: main.cpp:88
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr "Rob lõi võimsa teema ja käis välja läbipaistvate teemade idee."
 
-#: main.cpp:93
+#: main.cpp:90
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "Dmitry Novikov"
 
-#: main.cpp:94
+#: main.cpp:91
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr "Imeline K3b 1.0 teema."
 
-#: main.cpp:96
+#: main.cpp:93
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr "Jeremy C. Andrus"
 
-#: main.cpp:97
+#: main.cpp:94
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr "libk3bdevice esimene Windowsi port"
 
-#: main.cpp:105
+#: main.cpp:102
 #, kde-format
 msgid "file(s) to open"
 msgstr "avatav fail"
 
-#: main.cpp:106
+#: main.cpp:103
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "Loob uue andme CD projekti ja lisab kõik määratud failid"
 
-#: main.cpp:107
+#: main.cpp:104
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "Loob uue audio CD projekti ja lisab kõik määratud failid"
 
-#: main.cpp:108
+#: main.cpp:105
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "Loob uue video CD projekti ja lisab kõik määratud failid"
 
-#: main.cpp:109
+#: main.cpp:106
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "Loob uue sega-CD projekti ja lisab kõik failid"
 
-#: main.cpp:110
+#: main.cpp:107
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "Loob uue eMovix CD projekti ja lisab kõik määratud failid"
 
-#: main.cpp:111
+#: main.cpp:108
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "Loob uue video DVD projekti ja lisab kõik määratud failid"
 
-#: main.cpp:112
+#: main.cpp:109
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr "Avab aktiivse projekti kirjutamisdialoogi"
 
-#: main.cpp:113
+#: main.cpp:110
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr "Avab kopeerimise dialoogi, lisaks saab määrata lähteseadme"
 
-#: main.cpp:114
+#: main.cpp:111
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "Kirjutab tõmmise CD-le või DVD-le"
 
-#: main.cpp:115
+#: main.cpp:112
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "Korduvkirjutatava andmekandja vormindamine"
 
-#: main.cpp:116
+#: main.cpp:113
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr "Ekstraktib audiorajad digitaalselt (+kodeerimine)"
 
-#: main.cpp:117
+#: main.cpp:114
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr "Ripib video DVD tiitlid (+transkodeerimine)"
 
-#: main.cpp:118
+#: main.cpp:115
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "Ripib video CD rajad"
 
-#: main.cpp:119
+#: main.cpp:116
 #, kde-format
 msgid "Set the GUI language"
 msgstr "Määrab graafilise kasutajaliidese keele"
 
-#: main.cpp:120
+#: main.cpp:117
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "Käivituslogo keelamine"
 
-#: main.cpp:121
+#: main.cpp:118
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "
@@ -3966,7 +3960,7 @@ msgstr "Faili suurus:"
 msgid "%1 (different than declared volume size)"
 msgstr "%1 (erineb formaalsest suurusest)"
 
-#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "Cdrecordi kloontõmmis"
@@ -3981,7 +3975,7 @@ msgstr "Tõmmisefail:"
 msgid "TOC file:"
 msgstr "TOC fail:"
 
-#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "Cue/bin image"
 msgstr "Cue/bin tõmmis"
@@ -4023,84 +4017,84 @@ msgstr "Kirjutatav tõmmis"
 msgid "Choose Image File"
 msgstr "Tõmmisefaili valik"
 
-#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#: misc/k3bimagewritingdialog.cpp:450
 #, fuzzy, kde-format
 #| msgid "Image file:"
 msgid "Image Files"
 msgstr "Tõmmisefail:"
 
-#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:451
 #, fuzzy, kde-format
 #| msgid "*.iso *.ISO|ISO 9660 Image Files"
 msgid "ISO 9660 Image Files"
 msgstr "*.iso *.ISO|ISO 9660 tõmmisefailid"
 
-#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#: misc/k3bimagewritingdialog.cpp:452
 #, fuzzy, kde-format
 #| msgid "Cue file:"
 msgid "Cue Files"
 msgstr "Cue fail:"
 
-#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#: misc/k3bimagewritingdialog.cpp:453
 #, fuzzy, kde-format
 #| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "*.toc *.TOC|Cdrdao sisukorrafailid (TOC) ja cdrecordi kloontõmmised"
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
 msgid "Image Type"
 msgstr "Tõmmise tüüp"
 
-#: misc/k3bimagewritingdialog.cpp:476
+#: misc/k3bimagewritingdialog.cpp:464
 #, kde-format
 msgid "Auto Detection"
 msgstr "Automaatne tuvastamine"
 
-#: misc/k3bimagewritingdialog.cpp:477
+#: misc/k3bimagewritingdialog.cpp:465
 #, kde-format
 msgid "ISO 9660 filesystem image"
 msgstr "ISO 9660 failisüsteem"
 
-#: misc/k3bimagewritingdialog.cpp:479
+#: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
 msgid "Audio cue file"
 msgstr "Audio Cue-fail"
 
-#: misc/k3bimagewritingdialog.cpp:480
+#: misc/k3bimagewritingdialog.cpp:468
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "Cdrdao sisukorrafail (TOC)"
 
-#: misc/k3bimagewritingdialog.cpp:482
+#: misc/k3bimagewritingdialog.cpp:470
 #, kde-format
 msgid "Plain data image"
 msgstr "Puhas andmetõmmis"
 
-#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:521 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "Kirjutamisrežiim"
 
-#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:527 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "Koopiad"
 
-#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
+#: misc/k3bimagewritingdialog.cpp:566 misc/k3bimagewritingdialog.cpp:990
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "Tõmm&is"
 
-#: misc/k3bimagewritingdialog.cpp:591
+#: misc/k3bimagewritingdialog.cpp:579
 #, kde-format
 msgid "Data mode:"
 msgstr "Andmerežiim:"
 
-#: misc/k3bimagewritingdialog.cpp:617
+#: misc/k3bimagewritingdialog.cpp:605
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -4133,7 +4127,7 @@ msgstr ""
 "saab siin uuesti kasutada.<p><b>Cdrdao TOC-failid</b><br/>K3b toetab "
 "kirjutamist cdrdao loomulikus tõmmisevormingus (TOC-failid)."
 
-#: misc/k3bimagewritingdialog.cpp:719
+#: misc/k3bimagewritingdialog.cpp:707
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -4144,92 +4138,92 @@ msgstr ""
 "see on alla laaditud, kontrolli, kas laadimine on ikka täielik.</p><p>Jätka "
 "ainult siis, kui tead väga täpselt, mida teed.</p>"
 
-#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr "Hoiatus"
 
-#: misc/k3bimagewritingdialog.cpp:879
+#: misc/k3bimagewritingdialog.cpp:867
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr "Tõmmisefaili tüüpi ei tunta ära. Kas siiski see kirjutada?"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:868
 #, kde-format
 msgid "Unknown image type"
 msgstr "Tundmatu tõmmisetüüp"
 
-#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "Kirjuta"
 
-#: misc/k3bimagewritingdialog.cpp:891
+#: misc/k3bimagewritingdialog.cpp:879
 #, kde-format
 msgid "Unable to read image file"
 msgstr "Tõmmisefaili lugemine nurjus"
 
-#: misc/k3bimagewritingdialog.cpp:893
+#: misc/k3bimagewritingdialog.cpp:881
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "See ei paista olevat kõlbulik tõmmis"
 
-#: misc/k3bimagewritingdialog.cpp:909
+#: misc/k3bimagewritingdialog.cpp:897
 #, kde-format
 msgid "File not found"
 msgstr "Faili ei leitud"
 
-#: misc/k3bimagewritingdialog.cpp:1040
+#: misc/k3bimagewritingdialog.cpp:1028
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "MD5SUM:"
 
-#: misc/k3bimagewritingdialog.cpp:1080
+#: misc/k3bimagewritingdialog.cpp:1068
 #, kde-format
 msgid "Calculation canceled"
 msgstr "Arvutamine lõpetati"
 
-#: misc/k3bimagewritingdialog.cpp:1082
+#: misc/k3bimagewritingdialog.cpp:1070
 #, kde-format
 msgid "Calculation failed"
 msgstr "Arvutamine nurjus"
 
-#: misc/k3bimagewritingdialog.cpp:1098
+#: misc/k3bimagewritingdialog.cpp:1086
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "Kopeeri kontsollsumma lõikepuhvrisse"
 
-#: misc/k3bimagewritingdialog.cpp:1099
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Compare checksum..."
 msgstr "Võrdle kontrollsummat..."
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "MD5SUM kontroll"
 
-#: misc/k3bimagewritingdialog.cpp:1107
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "Palun lisa võrreldav MD5SUM:"
 
-#: misc/k3bimagewritingdialog.cpp:1113
+#: misc/k3bimagewritingdialog.cpp:1101
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "%1 MD5SUM võrdub määratuga."
 
-#: misc/k3bimagewritingdialog.cpp:1114
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "MD5SUM on võrdne"
 
-#: misc/k3bimagewritingdialog.cpp:1116
+#: misc/k3bimagewritingdialog.cpp:1104
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "%1 MD5SUM erineb määratust."
 
-#: misc/k3bimagewritingdialog.cpp:1117
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "MD5SUM erineb"
@@ -4850,7 +4844,7 @@ msgstr ""
 "kiirusega kirjutiga.<p><b>Ettevaatust:</b> sisselülitamine võib anda "
 "tulemuseks vigase andmekandja."
 
-#: option/k3bcddboptiontab.cpp:37
+#: option/k3bcddboptiontab.cpp:32
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "KCDDB seadistamismooduli laadimine nurjus."
@@ -4950,17 +4944,17 @@ msgstr ""
 msgid "Add"
 msgstr "Lisa"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "Palun logi muudatuste rakendamiseks uuesti sisse."
 
-#: option/k3bdevicewidget.cpp:273
+#: option/k3bdevicewidget.cpp:269
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "Toimingu täitmine nurjus: %1 (veakood: %2)"
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr "Proovi uuesti"
@@ -5067,49 +5061,49 @@ msgstr ""
 msgid "Search Path"
 msgstr "Otsingutee"
 
-#: option/k3bexternalbinwidget.cpp:245
+#: option/k3bexternalbinwidget.cpp:238
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "Järgmiste programmide uuendamine nurjus:"
 
-#: option/k3bexternalbinwidget.cpp:255
+#: option/k3bexternalbinwidget.cpp:248
 #, fuzzy, kde-format
 #| msgid "Unable to execute the action: %1"
 msgid "Unable to execute the action<br/>%1"
 msgstr "Toimingu täitmine nurjus: %1"
 
-#: option/k3bexternalbinwidget.cpp:268
+#: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:271
+#: option/k3bexternalbinwidget.cpp:264
 #, fuzzy, kde-format
 #| msgid "No error correction"
 msgid "An error occurred"
 msgstr "Veakorrektsioonita"
 
-#: option/k3bexternalbinwidget.cpp:274
+#: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:277
+#: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:280
+#: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:283
+#: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:286
+#: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
 msgstr ""
@@ -6986,7 +6980,7 @@ msgstr "MusicBrainzi päring"
 msgid "Try to determine meta information over the Internet"
 msgstr "Püütakse hankida metainfot internetist"
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -7700,7 +7694,7 @@ msgid "Always keep the existing file"
 msgstr "Alati säilitatakse olemasolev fail"
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:118
 #, kde-format
 msgid "Rename"
 msgstr "Nimeta ümber"
@@ -7817,70 +7811,70 @@ msgstr ""
 msgid "No Data to Burn"
 msgstr "Pole midagi kirjutada"
 
-#: projects/k3bdataviewimpl.cpp:108
+#: projects/k3bdataviewimpl.cpp:106
 #, kde-format
 msgid "New Folder..."
 msgstr "Uus kataloog..."
 
-#: projects/k3bdataviewimpl.cpp:126
+#: projects/k3bdataviewimpl.cpp:124
 #, kde-format
 msgid "Parent Folder"
 msgstr "Eellaskataloog"
 
-#: projects/k3bdataviewimpl.cpp:137
+#: projects/k3bdataviewimpl.cpp:135
 #, kde-format
 msgid "Open"
 msgstr "Ava"
 
-#: projects/k3bdataviewimpl.cpp:141
+#: projects/k3bdataviewimpl.cpp:139
 #, kde-format
 msgid "&Import Session..."
 msgstr "&Impordi seanss..."
 
-#: projects/k3bdataviewimpl.cpp:142
+#: projects/k3bdataviewimpl.cpp:140
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr "Impordib varasema kirjutatud seansis aktiivsesse projekti"
 
-#: projects/k3bdataviewimpl.cpp:146
+#: projects/k3bdataviewimpl.cpp:144
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr "P&uhasta imporditud seanss"
 
-#: projects/k3bdataviewimpl.cpp:147
+#: projects/k3bdataviewimpl.cpp:145
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr "Eemaldab eelmisest seansist imporditud elemendid"
 
-#: projects/k3bdataviewimpl.cpp:152
+#: projects/k3bdataviewimpl.cpp:150
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr "&Redigeeri alglaadimistõmmiseid"
 
-#: projects/k3bdataviewimpl.cpp:153
+#: projects/k3bdataviewimpl.cpp:151
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr "Muudab aktiivse projekti laadeseadistusi"
 
-#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
-#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
+#: projects/k3bdataviewimpl.cpp:214 projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:222 projects/k3bdataviewimpl.cpp:226
 #, kde-format
 msgid "New Folder"
 msgstr "Uus kataloog"
 
-#: projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:215
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr "Uue kataloogi nimi:"
 
-#: projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:223
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr "Sellise nimega fail on juba olemas. Palun anna uue kataloogi nimi:"
 
-#: projects/k3bdataviewimpl.cpp:381
+#: projects/k3bdataviewimpl.cpp:375
 #, kde-format
 msgid "Edit Boot Images"
 msgstr "Alglaadimistõmmiste redigeerimine"
@@ -11032,6 +11026,9 @@ msgstr "anamorph"
 #, kde-format
 msgid "Subpicture"
 msgstr "Pildipealis"
+
+#~ msgid "K3b Bookmarks"
+#~ msgstr "K3b järjehoidjad"
 
 #~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
 #~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |Helifailid"

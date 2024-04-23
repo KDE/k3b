@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-22 01:54+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2024-04-21 04:51\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -295,7 +295,7 @@ msgstr "命令"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -371,7 +371,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:87 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr "选项"
@@ -487,7 +487,7 @@ msgstr "未指定文件名"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bimagewritingdialog.cpp:555
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -542,7 +542,7 @@ msgstr "更改设置..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
+#: misc/k3bimagewritingdialog.cpp:585 misc/k3bimagewritingdialog.cpp:968
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -1916,15 +1916,10 @@ msgstr "设备(&D)"
 
 #: k3bdiroperator.cpp:44
 #, kde-format
-msgid "K3b Bookmarks"
-msgstr "K3b 书签"
-
-#: k3bdiroperator.cpp:50
-#, kde-format
 msgid "Bookmarks"
 msgstr "书签"
 
-#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "添加到方案(&A)"
@@ -2340,38 +2335,37 @@ msgstr "擦除失败。"
 msgid "Filter:"
 msgstr "过滤器："
 
-#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
-#: misc/k3bimagewritingdialog.cpp:466
+#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
 #, kde-format
 msgid "All Files"
 msgstr "全部文件"
 
-#: k3bfileview.cpp:76 k3bfileview.cpp:85
+#: k3bfileview.cpp:76
 #, kde-format
 msgid "Sound Files"
 msgstr "音频文件"
 
-#: k3bfileview.cpp:77 k3bfileview.cpp:86
+#: k3bfileview.cpp:77
 #, kde-format
 msgid "Wave Sound Files"
 msgstr ""
 
-#: k3bfileview.cpp:78 k3bfileview.cpp:87
+#: k3bfileview.cpp:78
 #, kde-format
 msgid "MP3 Sound Files"
 msgstr "MP3 音频文件"
 
-#: k3bfileview.cpp:79 k3bfileview.cpp:88
+#: k3bfileview.cpp:79
 #, kde-format
 msgid "Ogg Vorbis Sound Files"
 msgstr "Ogg Vorbis 音频文件"
 
-#: k3bfileview.cpp:80 k3bfileview.cpp:89
+#: k3bfileview.cpp:80
 #, kde-format
 msgid "MPEG Video Files"
 msgstr "MPEG 视频文件"
 
-#: k3bfileview.cpp:94
+#: k3bfileview.cpp:84
 #, kde-format
 msgid "Show Bookmarks"
 msgstr "显示书签"
@@ -2624,47 +2618,47 @@ msgstr "临时："
 msgid "No info"
 msgstr "无信息"
 
-#: k3bstatusbarmanager.cpp:158
+#: k3bstatusbarmanager.cpp:154
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] "%2 中的 %1 个文件"
 
-#: k3bstatusbarmanager.cpp:161
+#: k3bstatusbarmanager.cpp:157
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] "%1 个文件夹"
 
-#: k3bstatusbarmanager.cpp:188
+#: k3bstatusbarmanager.cpp:184
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] "音频 CD (%1 条音轨)"
 
-#: k3bstatusbarmanager.cpp:194
+#: k3bstatusbarmanager.cpp:190
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "数据工程(%1)"
 
-#: k3bstatusbarmanager.cpp:201
+#: k3bstatusbarmanager.cpp:197
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] "混合 CD (%1 条轨道和 %2)"
 
-#: k3bstatusbarmanager.cpp:208
+#: k3bstatusbarmanager.cpp:204
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] "VCD (%1 条轨道)"
 
-#: k3bstatusbarmanager.cpp:214
+#: k3bstatusbarmanager.cpp:210
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "eMovix 项目 (%1)"
 
-#: k3bstatusbarmanager.cpp:220
+#: k3bstatusbarmanager.cpp:216
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "视频 DVD(%1)"
@@ -3467,12 +3461,12 @@ msgstr "限制覆盖"
 msgid "Incremental"
 msgstr "增量"
 
-#: main.cpp:25
+#: main.cpp:22
 #, kde-format
 msgid "K3b"
 msgstr "K3b"
 
-#: main.cpp:26
+#: main.cpp:23
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3487,340 +3481,340 @@ msgstr ""
 "其方便的用户界面是针对所有的用户，试图尽可能让新用户感到简单，同时还提供先进"
 "的用户可能需要的所有功能。"
 
-#: main.cpp:34
+#: main.cpp:31
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr "Copyright © 1998–2018 K3b authors"
 
-#: main.cpp:36
+#: main.cpp:33
 #, kde-format
 msgid "https://www.k3b.org"
 msgstr "https://www.k3b.org"
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Leslie Zhai"
 msgstr "Leslie Zhai"
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Maintainer"
 msgstr "维护者"
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Michał Małek"
 msgstr "Michał Małek"
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Maintainer and current lead Developer"
 msgstr "维护者和首席开发者"
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Main developer"
 msgstr "主要开发人员"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "Christian Kvasny"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr "VCD 项目及 VCD 翻录"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr "初始移植到 KDE 4 平台"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Ralf Habacker"
 msgstr "Ralf Habacker"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Windows port"
 msgstr "Windows 移植"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "Klaus-Dieter Krannich"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "Cdrdao 高级集成"
 
-#: main.cpp:48
+#: main.cpp:45
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "Thomas Froescher"
 
-#: main.cpp:49
+#: main.cpp:46
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr "Pre-1.0 版本的视频 DVD 翻录和视频编码。"
 
-#: main.cpp:51
+#: main.cpp:48
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "Alexis Younes aka Ayo"
 
-#: main.cpp:52
+#: main.cpp:49
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "感谢他夸张的美工。"
 
-#: main.cpp:54
+#: main.cpp:51
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "Christoph Thielecke"
 
-#: main.cpp:55
+#: main.cpp:52
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "感谢他广泛的测试和第一个德语翻译版本。"
 
-#: main.cpp:57
+#: main.cpp:54
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "Andy Polyakov"
 
-#: main.cpp:58
+#: main.cpp:55
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "感谢他杰出的 dvd+rw-tools 以及耐心合作。"
 
-#: main.cpp:60
+#: main.cpp:57
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "Roberto De Leo"
 
-#: main.cpp:61
+#: main.cpp:58
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "非常酷的 eMovix 包和他通融的工作。"
 
-#: main.cpp:63
+#: main.cpp:60
 #, kde-format
 msgid "John Steele Scott"
 msgstr "John Steele Scott"
 
-#: main.cpp:64
+#: main.cpp:61
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "FLAC 解码插件。"
 
-#: main.cpp:66
+#: main.cpp:63
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "György Szombathelyi"
 
-#: main.cpp:67
+#: main.cpp:64
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "非常有用的 isofslib。"
 
-#: main.cpp:69
+#: main.cpp:66
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "Erik de Castro Lopo"
 
-#: main.cpp:70
+#: main.cpp:67
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 msgstr "对于用于在音频解码器框架中的通用的重采样的 libsamplerate 。"
 
-#: main.cpp:72
+#: main.cpp:69
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "Jakob Petsovits"
 
-#: main.cpp:73
+#: main.cpp:70
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr "非常酷的条件音频抓取模式。"
 
-#: main.cpp:75
+#: main.cpp:72
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "Heiner Eichmann"
 
-#: main.cpp:76
+#: main.cpp:73
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr "他的 BSD 移植工作和一些很棒的补丁。"
 
-#: main.cpp:78
+#: main.cpp:75
 #, kde-format
 msgid "Adriaan de Groot"
 msgstr "Adriaan de Groot"
 
-#: main.cpp:79
+#: main.cpp:76
 #, kde-format
 msgid "For his work on the FreeBSD port."
 msgstr "移植到 FreeBSD 的工作。"
 
-#: main.cpp:81
+#: main.cpp:78
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "Thiago Macieira"
 
-#: main.cpp:82
+#: main.cpp:79
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr "对于他在 bugs.kde.org 的许多 k3b 条目。"
 
-#: main.cpp:84
+#: main.cpp:81
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "Marcel Dierkes"
 
-#: main.cpp:85
+#: main.cpp:82
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr "卓越的 K3b 图标美化。"
 
-#: main.cpp:87
+#: main.cpp:84
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "Christoph Burger-Scheidlin"
 
-#: main.cpp:88
+#: main.cpp:85
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr "对于他永不停歇的帮助清理 K3b bug 数据库。"
 
-#: main.cpp:90
+#: main.cpp:87
 #, kde-format
 msgid "Robert Wadley"
 msgstr "Robert Wadley"
 
-#: main.cpp:91
+#: main.cpp:88
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr "Rob 创建了一个伟大的主题和构思清晰的主题。"
 
-#: main.cpp:93
+#: main.cpp:90
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "Dmitry Novikov"
 
-#: main.cpp:94
+#: main.cpp:91
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr "令人惊异的 K3b 1.0 主题。"
 
-#: main.cpp:96
+#: main.cpp:93
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr "Jeremy C. Andrus"
 
-#: main.cpp:97
+#: main.cpp:94
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr "第一个 libk3bdevice 的 Windows 移植。"
 
-#: main.cpp:105
+#: main.cpp:102
 #, kde-format
 msgid "file(s) to open"
 msgstr "要打开的文件"
 
-#: main.cpp:106
+#: main.cpp:103
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "创建新的数据光盘方案并添加所有指定的文件"
 
-#: main.cpp:107
+#: main.cpp:104
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "创建新的音频 CD 方案并添加所有指定的文件"
 
-#: main.cpp:108
+#: main.cpp:105
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "创建新的 VCD 方案并添加所有指定的文件"
 
-#: main.cpp:109
+#: main.cpp:106
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "创建新的混合模式 CD 方案并添加所有指定的文件"
 
-#: main.cpp:110
+#: main.cpp:107
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "创建新的 eMovix CD 方案并添加所有指定的文件"
 
-#: main.cpp:111
+#: main.cpp:108
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "创建新的视频 DVD 方案并添加所有指定的文件"
 
-#: main.cpp:112
+#: main.cpp:109
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr "打开当前方案的刻录对话框"
 
-#: main.cpp:113
+#: main.cpp:110
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr "打开复制对话框，可选地指定源设备"
 
-#: main.cpp:114
+#: main.cpp:111
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "将镜像写入 CD 或 DVD"
 
-#: main.cpp:115
+#: main.cpp:112
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "格式化可擦写介质"
 
-#: main.cpp:116
+#: main.cpp:113
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr "提取数字化音轨 (+编码)"
 
-#: main.cpp:117
+#: main.cpp:114
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr "翻录视频 DVD 标题 (+转码)"
 
-#: main.cpp:118
+#: main.cpp:115
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "提取 VCD 轨道"
 
-#: main.cpp:119
+#: main.cpp:116
 #, kde-format
 msgid "Set the GUI language"
 msgstr "设置界面语言"
 
-#: main.cpp:120
+#: main.cpp:117
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "禁止欢迎画面"
 
-#: main.cpp:121
+#: main.cpp:118
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "
@@ -3852,7 +3846,7 @@ msgstr "文件大小："
 msgid "%1 (different than declared volume size)"
 msgstr "%1 (与声明的体积大小相差)"
 
-#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "Cdrecord 克隆镜像"
@@ -3867,7 +3861,7 @@ msgstr "镜像文件："
 msgid "TOC file:"
 msgstr "TOC 文件："
 
-#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "Cue/bin image"
 msgstr "Cue/Bin 镜像"
@@ -3908,80 +3902,80 @@ msgstr "要刻录的镜像"
 msgid "Choose Image File"
 msgstr "选择镜像文件"
 
-#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#: misc/k3bimagewritingdialog.cpp:450
 #, kde-format
 msgid "Image Files"
 msgstr "图片文件"
 
-#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:451
 #, kde-format
 msgid "ISO 9660 Image Files"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#: misc/k3bimagewritingdialog.cpp:452
 #, kde-format
 msgid "Cue Files"
 msgstr "Cue 文件"
 
-#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#: misc/k3bimagewritingdialog.cpp:453
 #, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "Cdrdao 目录文件和 Cdrecord 克隆镜像"
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
 msgid "Image Type"
 msgstr "镜像类型"
 
-#: misc/k3bimagewritingdialog.cpp:476
+#: misc/k3bimagewritingdialog.cpp:464
 #, kde-format
 msgid "Auto Detection"
 msgstr "自动检测"
 
-#: misc/k3bimagewritingdialog.cpp:477
+#: misc/k3bimagewritingdialog.cpp:465
 #, kde-format
 msgid "ISO 9660 filesystem image"
 msgstr "ISO 9660 文件系统镜像"
 
-#: misc/k3bimagewritingdialog.cpp:479
+#: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
 msgid "Audio cue file"
 msgstr "音频 cue 文件"
 
-#: misc/k3bimagewritingdialog.cpp:480
+#: misc/k3bimagewritingdialog.cpp:468
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "Cdrdao 目录文件"
 
-#: misc/k3bimagewritingdialog.cpp:482
+#: misc/k3bimagewritingdialog.cpp:470
 #, kde-format
 msgid "Plain data image"
 msgstr "普通数据的镜像"
 
-#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:521 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "写入模式"
 
-#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:527 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "份数"
 
-#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
+#: misc/k3bimagewritingdialog.cpp:566 misc/k3bimagewritingdialog.cpp:990
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "镜像(&I)"
 
-#: misc/k3bimagewritingdialog.cpp:591
+#: misc/k3bimagewritingdialog.cpp:579
 #, kde-format
 msgid "Data mode:"
 msgstr "数据模式："
 
-#: misc/k3bimagewritingdialog.cpp:617
+#: misc/k3bimagewritingdialog.cpp:605
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -4010,7 +4004,7 @@ msgstr ""
 "此处重复使用。<p><b>Cdrdao TOC 文件</b><br/>K3b 也支持写入 cdrdao 的镜像格式"
 "——TOC 文件。"
 
-#: misc/k3bimagewritingdialog.cpp:719
+#: misc/k3bimagewritingdialog.cpp:707
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -4020,92 +4014,92 @@ msgstr ""
 "<p>实际文件大小不匹配文件头中大小的声明。如果它已被下载，确保下载完成。</"
 "p><p>继续，如果您知道您在做什么。</p>"
 
-#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr "警告"
 
-#: misc/k3bimagewritingdialog.cpp:879
+#: misc/k3bimagewritingdialog.cpp:867
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr "镜像文件无法识别。您仍然要刻录它吗？"
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:868
 #, kde-format
 msgid "Unknown image type"
 msgstr "未知的镜像类型"
 
-#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "刻录"
 
-#: misc/k3bimagewritingdialog.cpp:891
+#: misc/k3bimagewritingdialog.cpp:879
 #, kde-format
 msgid "Unable to read image file"
 msgstr "无法读取镜像文件"
 
-#: misc/k3bimagewritingdialog.cpp:893
+#: misc/k3bimagewritingdialog.cpp:881
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "似乎不是一个可用的镜像"
 
-#: misc/k3bimagewritingdialog.cpp:909
+#: misc/k3bimagewritingdialog.cpp:897
 #, kde-format
 msgid "File not found"
 msgstr "文件未找到"
 
-#: misc/k3bimagewritingdialog.cpp:1040
+#: misc/k3bimagewritingdialog.cpp:1028
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "MD5 校验和："
 
-#: misc/k3bimagewritingdialog.cpp:1080
+#: misc/k3bimagewritingdialog.cpp:1068
 #, kde-format
 msgid "Calculation canceled"
 msgstr "计算已中止"
 
-#: misc/k3bimagewritingdialog.cpp:1082
+#: misc/k3bimagewritingdialog.cpp:1070
 #, kde-format
 msgid "Calculation failed"
 msgstr "计算失败"
 
-#: misc/k3bimagewritingdialog.cpp:1098
+#: misc/k3bimagewritingdialog.cpp:1086
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "将校验和复制到剪贴板"
 
-#: misc/k3bimagewritingdialog.cpp:1099
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Compare checksum..."
 msgstr "比较校验和..."
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "MD5 校验和检查"
 
-#: misc/k3bimagewritingdialog.cpp:1107
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "请插入要比较的 MD5 校验和："
 
-#: misc/k3bimagewritingdialog.cpp:1113
+#: misc/k3bimagewritingdialog.cpp:1101
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "%1 的 MD5 校验和与指定的值相等。"
 
-#: misc/k3bimagewritingdialog.cpp:1114
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "MD5 校验和相同"
 
-#: misc/k3bimagewritingdialog.cpp:1116
+#: misc/k3bimagewritingdialog.cpp:1104
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "%1 的 MD5 校验和与指定的值不同。"
 
-#: misc/k3bimagewritingdialog.cpp:1117
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "MD5 校验和不同"
@@ -4695,7 +4689,7 @@ msgstr ""
 "验证检查，可以强制 K3b 在低速刻录高速介质。<p><b>警告：</b>启用此选项可能会导"
 "致媒体损坏。"
 
-#: option/k3bcddboptiontab.cpp:37
+#: option/k3bcddboptiontab.cpp:32
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "无法加载 KCDDB 配置模块。"
@@ -4794,17 +4788,17 @@ msgstr ""
 msgid "Add"
 msgstr "添加"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "请重新登录以应用更改。"
 
-#: option/k3bdevicewidget.cpp:273
+#: option/k3bdevicewidget.cpp:269
 #, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "无法执行该操作：%1 (错误代码：%2)"
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr "重试"
@@ -4908,47 +4902,47 @@ msgstr ""
 msgid "Search Path"
 msgstr "搜索路径"
 
-#: option/k3bexternalbinwidget.cpp:245
+#: option/k3bexternalbinwidget.cpp:238
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "无法更新下列程序："
 
-#: option/k3bexternalbinwidget.cpp:255
+#: option/k3bexternalbinwidget.cpp:248
 #, kde-format
 msgid "Unable to execute the action<br/>%1"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:268
+#: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:271
+#: option/k3bexternalbinwidget.cpp:264
 #, kde-format
 msgid "An error occurred"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:274
+#: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:277
+#: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:280
+#: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:283
+#: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:286
+#: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
 msgstr ""
@@ -6746,7 +6740,7 @@ msgstr "Musicbrainz 查阅"
 msgid "Try to determine meta information over the Internet"
 msgstr "尝试通过 Internet 获取元信息"
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -7429,7 +7423,7 @@ msgid "Always keep the existing file"
 msgstr "总是保留现有文件"
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:118
 #, kde-format
 msgid "Rename"
 msgstr "重命名"
@@ -7541,70 +7535,70 @@ msgstr "下列文件名的编码无效。您可以使用 convmv 工具修复这�
 msgid "No Data to Burn"
 msgstr "没有要刻录的数据"
 
-#: projects/k3bdataviewimpl.cpp:108
+#: projects/k3bdataviewimpl.cpp:106
 #, kde-format
 msgid "New Folder..."
 msgstr "新建文件夹..."
 
-#: projects/k3bdataviewimpl.cpp:126
+#: projects/k3bdataviewimpl.cpp:124
 #, kde-format
 msgid "Parent Folder"
 msgstr "上级文件夹"
 
-#: projects/k3bdataviewimpl.cpp:137
+#: projects/k3bdataviewimpl.cpp:135
 #, kde-format
 msgid "Open"
 msgstr "打开"
 
-#: projects/k3bdataviewimpl.cpp:141
+#: projects/k3bdataviewimpl.cpp:139
 #, kde-format
 msgid "&Import Session..."
 msgstr "导入片断(&I)..."
 
-#: projects/k3bdataviewimpl.cpp:142
+#: projects/k3bdataviewimpl.cpp:140
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr "从先前刻录的片断中导入到当前方案"
 
-#: projects/k3bdataviewimpl.cpp:146
+#: projects/k3bdataviewimpl.cpp:144
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr "清除导入的片断(&C)"
 
-#: projects/k3bdataviewimpl.cpp:147
+#: projects/k3bdataviewimpl.cpp:145
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr "从先前的片断中删除导入的项目"
 
-#: projects/k3bdataviewimpl.cpp:152
+#: projects/k3bdataviewimpl.cpp:150
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr "编辑启动镜像(&E)..."
 
-#: projects/k3bdataviewimpl.cpp:153
+#: projects/k3bdataviewimpl.cpp:151
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr "修改当前方案的可启动设置"
 
-#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
-#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
+#: projects/k3bdataviewimpl.cpp:214 projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:222 projects/k3bdataviewimpl.cpp:226
 #, kde-format
 msgid "New Folder"
 msgstr "新建文件夹"
 
-#: projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:215
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr "请输入新建文件夹的名称："
 
-#: projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:223
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr "已经存在该名称的文件，请输入另一个名字给新建的文件夹："
 
-#: projects/k3bdataviewimpl.cpp:381
+#: projects/k3bdataviewimpl.cpp:375
 #, kde-format
 msgid "Edit Boot Images"
 msgstr "编辑启动镜像"
@@ -10512,3 +10506,6 @@ msgstr "无性型"
 #, kde-format
 msgid "Subpicture"
 msgstr "子画面"
+
+#~ msgid "K3b Bookmarks"
+#~ msgstr "K3b 书签"

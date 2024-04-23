@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-15 01:36+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2023-07-24 22:17+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -26,7 +26,7 @@ msgstr "디스크 기록 중 대기 모드 진입 방지 중"
 msgid "Disable inhibition for disc writing"
 msgstr "디스크 기록 중 대기 모드 진입 방지 비활성화"
 
-#: core/k3bglobals.cpp:365
+#: core/k3bglobals.cpp:361
 #, kde-format
 msgid "Auto"
 msgstr "자동"
@@ -1635,7 +1635,7 @@ msgstr "오디오 인코더"
 msgid "An unknown error occurred."
 msgstr "알 수 없는 오류가 발생했습니다."
 
-#: plugin/k3bpluginmanager.cpp:156
+#: plugin/k3bpluginmanager.cpp:152
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "%1 플러그인의 설정이 없습니다."
@@ -3607,28 +3607,28 @@ msgstr "RIFF 헤더 같아 보이지만 다중화된 프로그램 스트림이 �
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
 msgstr "잘못된 임시 폴더 <filename>%1</filename>을(를) 생성할 수 없습니다."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:109
+#: projects/videodvd/k3bvideodvdimager.cpp:105
 #, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
 msgstr "임시 폴더 <filename>%1</filename>을(를) 생성할 수 없습니다."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:116
+#: projects/videodvd/k3bvideodvdimager.cpp:112
 #, kde-kuit-format
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr ""
 "VIDEO_TS 폴더 <filename>%1</filename>에서 유효하지 않은 정보를 찾았습니다."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:124
+#: projects/videodvd/k3bvideodvdimager.cpp:120
 #, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
 msgstr "<filename>%1</filename> 폴더의 임시 파일을 연결할 수 없습니다."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:198
+#: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
 msgid "The project does not contain all necessary Video DVD files."
 msgstr "프로젝트에 필요한 모든 비디오 DVD 파일이 없습니다."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:199
+#: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."

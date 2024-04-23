@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-15 01:36+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2022-06-14 12:48+0100\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -34,7 +34,7 @@ msgstr "Inhibir suspensión durante la escritura de disco"
 msgid "Disable inhibition for disc writing"
 msgstr "Desactivar inhibición durante la escritura de disco"
 
-#: core/k3bglobals.cpp:365
+#: core/k3bglobals.cpp:361
 #, kde-format
 msgid "Auto"
 msgstr "Auto"
@@ -1666,7 +1666,7 @@ msgstr "Codificador de audio"
 msgid "An unknown error occurred."
 msgstr "Ocurrió un error desconocido."
 
-#: plugin/k3bpluginmanager.cpp:156
+#: plugin/k3bpluginmanager.cpp:152
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "No hay preferencias disponibles para el complemento %1."
@@ -3687,29 +3687,29 @@ msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
 msgstr ""
 "No se puede crear la carpeta temporal inválida <filename>%1</filename>."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:109
+#: projects/videodvd/k3bvideodvdimager.cpp:105
 #, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
 msgstr "No se puede crear la carpeta temporal <filename>%1</filename>."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:116
+#: projects/videodvd/k3bvideodvdimager.cpp:112
 #, kde-kuit-format
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr ""
 "Encontrada entrada inválida en la carpeta VIDEO_TS <filename>%1</filename>."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:124
+#: projects/videodvd/k3bvideodvdimager.cpp:120
 #, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
 msgstr ""
 "Imposible de enlazar archivo temporal en la carpeta <filename>%1</filename>."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:198
+#: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
 msgid "The project does not contain all necessary Video DVD files."
 msgstr "El proyecto no contiene todos los archivos necesarios de DVD de vídeo."
 
-#: projects/videodvd/k3bvideodvdimager.cpp:199
+#: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."

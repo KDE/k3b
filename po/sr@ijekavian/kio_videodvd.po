@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kio_videodvd\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2019-05-20 03:08+0200\n"
+"POT-Creation-Date: 2023-11-05 12:30+0000\n"
 "PO-Revision-Date: 2010-03-13 01:03+0100\n"
 "Last-Translator: Slobodan Simic <slsimic@gmail.com>\n"
 "Language-Team: sr <kde-i18n-sr@kde.org>\n"
@@ -22,12 +22,12 @@ msgstr ""
 "X-Text-Markup: kde4\n"
 "X-Environment: kde\n"
 
-#: videodvd.cpp:166 videodvd.cpp:295
+#: videodvd.cpp:163 videodvd.cpp:291
 #, kde-format
 msgid "No Video DVD found"
 msgstr "Није нађен видео ДВД"
 
-#: videodvd.cpp:207 videodvd.cpp:372
+#: videodvd.cpp:206 videodvd.cpp:374
 #, kde-format
 msgid "Read error."
 msgstr "Грешка у читању."

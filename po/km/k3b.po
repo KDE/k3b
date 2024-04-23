@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-22 01:54+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2012-06-11 10:20+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -300,7 +300,7 @@ msgstr "ពាក្យ​បញ្ជា"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -378,7 +378,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:87 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr "ជម្រើស​​"
@@ -494,7 +494,7 @@ msgstr "គ្មាន​ឈ្មោះ​ឯកសារ​បាន​បញ
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bimagewritingdialog.cpp:555
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -550,7 +550,7 @@ msgstr "ផ្លាស់ប្ដូរ​ការ​កំណត់...​"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
+#: misc/k3bimagewritingdialog.cpp:585 misc/k3bimagewritingdialog.cpp:968
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -1955,15 +1955,10 @@ msgstr "ឧបករណ៍​"
 
 #: k3bdiroperator.cpp:44
 #, kde-format
-msgid "K3b Bookmarks"
-msgstr "ចំណាំ​របស់ K3b"
-
-#: k3bdiroperator.cpp:50
-#, kde-format
 msgid "Bookmarks"
 msgstr "ចំណាំ"
 
-#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "បន្ថែម​ទៅ​គម្រោង​"
@@ -2379,44 +2374,43 @@ msgstr "ការ​លុប​បាន​បរាជ័យ​ ។"
 msgid "Filter:"
 msgstr "តម្រង ៖"
 
-#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
-#: misc/k3bimagewritingdialog.cpp:466
+#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
 #, fuzzy, kde-format
 #| msgid "*|All Files"
 msgid "All Files"
 msgstr "*|ឯកសារ​ទាំង​អស់"
 
-#: k3bfileview.cpp:76 k3bfileview.cpp:85
+#: k3bfileview.cpp:76
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "Sound Files"
 msgstr "រក​ឃើញ​ឯកសារ"
 
-#: k3bfileview.cpp:77 k3bfileview.cpp:86
+#: k3bfileview.cpp:77
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "Wave Sound Files"
 msgstr "រក​ឃើញ​ឯកសារ"
 
-#: k3bfileview.cpp:78 k3bfileview.cpp:87
+#: k3bfileview.cpp:78
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "MP3 Sound Files"
 msgstr "រក​ឃើញ​ឯកសារ"
 
-#: k3bfileview.cpp:79 k3bfileview.cpp:88
+#: k3bfileview.cpp:79
 #, fuzzy, kde-format
 #| msgid "application/x-ogg |Ogg Vorbis Sound Files"
 msgid "Ogg Vorbis Sound Files"
 msgstr "កម្មវិធី​/x-ogg |ឯកសារ​សំឡេង Ogg Vorbis"
 
-#: k3bfileview.cpp:80 k3bfileview.cpp:89
+#: k3bfileview.cpp:80
 #, fuzzy, kde-format
 #| msgid "video/mpeg |MPEG Video Files"
 msgid "MPEG Video Files"
 msgstr "វីដេអូ​/mpeg |ឯកសារ​វីដេអូ MPEG"
 
-#: k3bfileview.cpp:94
+#: k3bfileview.cpp:84
 #, kde-format
 msgid "Show Bookmarks"
 msgstr "បង្ហាញ​ចំណាំ"
@@ -2675,47 +2669,47 @@ msgstr "បណ្ដោះ​អាសន្ន​ ៖"
 msgid "No info"
 msgstr "គ្មាន​ព័ត៌មាន​"
 
-#: k3bstatusbarmanager.cpp:158
+#: k3bstatusbarmanager.cpp:154
 #, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] "ឯកសារ %1 នៅ​ក្នុង %2​"
 
-#: k3bstatusbarmanager.cpp:161
+#: k3bstatusbarmanager.cpp:157
 #, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] "ថត %1"
 
-#: k3bstatusbarmanager.cpp:188
+#: k3bstatusbarmanager.cpp:184
 #, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] "ស៊ីឌី​អូឌីយ៉ូ (%1 បទ)"
 
-#: k3bstatusbarmanager.cpp:194
+#: k3bstatusbarmanager.cpp:190
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "គម្រោង​ទិន្នន័យ (%1)"
 
-#: k3bstatusbarmanager.cpp:201
+#: k3bstatusbarmanager.cpp:197
 #, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] "ស៊ីឌី​បានលាយ (បទ %1 និង %2)"
 
-#: k3bstatusbarmanager.cpp:208
+#: k3bstatusbarmanager.cpp:204
 #, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] "ស៊ីឌីវីដេអូ​ (បទ %1)"
 
-#: k3bstatusbarmanager.cpp:214
+#: k3bstatusbarmanager.cpp:210
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "គម្រោង eMovix (%1)"
 
-#: k3bstatusbarmanager.cpp:220
+#: k3bstatusbarmanager.cpp:216
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "ឌីវីឌី​វីដេអូ (%1)"
@@ -3556,12 +3550,12 @@ msgstr "ការ​សរសេរ​ជាន់​លើ​ដែល​មា
 msgid "Incremental"
 msgstr "បន្ថែម"
 
-#: main.cpp:25
+#: main.cpp:22
 #, kde-format
 msgid "K3b"
 msgstr "K3b"
 
-#: main.cpp:26
+#: main.cpp:23
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3576,344 +3570,344 @@ msgstr ""
 "និង​ឌីវីឌី​វីដេអូ ។<br/>ចំណុច​ប្រទាក់​អ្នក​ប្រើ​របស់​វា​មាន​លក្ខណៈ​ស្រួល​ប្រើ និង​​សាមញ្ញ​បំផុត​សម្រាប់​អ្នកប្រើ​ដំបូង​ "
 "ហើយ​វា​ក៏​ផ្ដល់​នូវ​គ្រប់​លក្ខណ​ពិសេស​សម្រាប់​អ្នក​ប្រើ​កម្រិត​ខ្ពស់​ផង​ដែរ ។"
 
-#: main.cpp:34
+#: main.cpp:31
 #, fuzzy, kde-format
 #| msgid "Copyright © 1998–2010 K3b authors"
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr "រក្សា​សិទ្ធិ​ឆ្នាំ​ ១​៩​៩​៨​–២​០​១​០​ ដោយ​អ្នក​និពន្ធ​ K3b"
 
-#: main.cpp:36
+#: main.cpp:33
 #, fuzzy, kde-format
 #| msgid "http://www.k3b.org"
 msgid "https://www.k3b.org"
 msgstr "http://www.k3b.org"
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Leslie Zhai"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Michał Małek"
 msgstr "Michał Małek"
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Maintainer and current lead Developer"
 msgstr "អ្នក​ថែ​ទាំ និង​មេ​ដឹក​នាំ​​អភិវឌ្ឍន៍​បច្ចុប្បន្ន"
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Main developer"
 msgstr "អ្នក​អភិវឌ្ឍន៍​ចម្បង"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "Christian Kvasny"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr "គម្រោង​ស៊ីឌី​វីដេអូ និង​ការ​បម្លែង​ស៊ីឌី​វីដេអូ"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr "ច្រក​ដំបូង​ទៅ​កាន់​ KDE Platform 4"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Ralf Habacker"
 msgstr "Ralf Habacker"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Windows port"
 msgstr "ច្រក​វីនដូរ"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "Klaus-Dieter Krannich"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "ការ​រួម​បញ្ចូល​ Cdrdao កម្រិត​ខ្ពស់"
 
-#: main.cpp:48
+#: main.cpp:45
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "Thomas Froescher"
 
-#: main.cpp:49
+#: main.cpp:46
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr "ការ​បម្លែង​ឌីវីឌី​វីដេអូ និង​ការ​អ៊ិនកូដ​វីដេអូ​ក្នុង​កំណែ​មុន ១.០ ។"
 
-#: main.cpp:51
+#: main.cpp:48
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "Alexis Younes aka Ayo"
 
-#: main.cpp:52
+#: main.cpp:49
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "សម្រាប់​ការងារ​សិល្បៈ​របស់​គាត់"
 
-#: main.cpp:54
+#: main.cpp:51
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "Christoph Thielecke"
 
-#: main.cpp:55
+#: main.cpp:52
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "សាកល្បង និង​បកប្រែ​ជា​ភាសាអាល្លឺម៉ង់​មុន​គេ ។"
 
-#: main.cpp:57
+#: main.cpp:54
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "Andy Polyakov"
 
-#: main.cpp:58
+#: main.cpp:55
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "សម្រាប់​​កម្មវិធី​​ឌីវីឌី+អាន​សរសេរ​ដ៏​អស្ចារ្យ និង​បាន​សហការ​គ្នា​យ៉ាង​ស្អិត​រមួត ។"
 
-#: main.cpp:60
+#: main.cpp:57
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "Roberto De Leo"
 
-#: main.cpp:61
+#: main.cpp:58
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "សម្រាប់​កញ្ចប់​ eMovix ដ៏​ប្រណិត និង​ការងារ​ដ៏​មាន​តម្លៃ​របស់​គាត់ ។"
 
-#: main.cpp:63
+#: main.cpp:60
 #, kde-format
 msgid "John Steele Scott"
 msgstr "John Steele Scott"
 
-#: main.cpp:64
+#: main.cpp:61
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "សម្រាប់​កម្មវិធី​ជំនួយ​ឌិកូដ flac ។"
 
-#: main.cpp:66
+#: main.cpp:63
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "György Szombathelyi"
 
-#: main.cpp:67
+#: main.cpp:64
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "សម្រាប់ isofslib ដ៏​មាន​សារៈសំខាន់​បំផុត ។"
 
-#: main.cpp:69
+#: main.cpp:66
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "Erik de Castro Lopo"
 
-#: main.cpp:70
+#: main.cpp:67
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 msgstr "សម្រាប់​ libsamplerate ដែល​ត្រូវ​បាន​ប្រើ​សម្រាប់​ការ​ប្ដូរ​គុណភាព​ទូទៅ​នៅ​ក្នុង​គម្រោង​​អូឌីយ៉ូ ។"
 
-#: main.cpp:72
+#: main.cpp:69
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "Jakob Petsovits"
 
-#: main.cpp:73
+#: main.cpp:70
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr "សម្រាប់​លំនាំ​បម្លែង​អូឌីយ៉ូ​តាម​លក្ខខណ្ឌ ។"
 
-#: main.cpp:75
+#: main.cpp:72
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "Heiner Eichmann"
 
-#: main.cpp:76
+#: main.cpp:73
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr "សម្រាប់​ការងារ​របស់​គាត់​នៅ​លើ​ច្រក BSD និង​បំណះ​​ចម្បង​មួយ​ចំនួន ។"
 
-#: main.cpp:78
+#: main.cpp:75
 #, fuzzy, kde-format
 #| msgid "Adriaan De Groot"
 msgid "Adriaan de Groot"
 msgstr "Adriaan De Groot"
 
-#: main.cpp:79
+#: main.cpp:76
 #, fuzzy, kde-format
 #| msgid "For his work on the BSD port."
 msgid "For his work on the FreeBSD port."
 msgstr "សម្រាប់​ការងារ​របស់​គាត់​នៅ​លើ​ច្រក BSD ។"
 
-#: main.cpp:81
+#: main.cpp:78
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "Thiago Macieira"
 
-#: main.cpp:82
+#: main.cpp:79
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr "សម្រាប់​ជំនួយ​របស់​គាត់​ជា​មួយ​នឹង​ធាតុ​ k3b ដែល​មិន​ត្រឹមត្រូវ​ជា​ច្រើន​នៅ​លើ bugs.kde.org ។"
 
-#: main.cpp:84
+#: main.cpp:81
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "Marcel Dierkes"
 
-#: main.cpp:85
+#: main.cpp:82
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr "សម្រាប់​រូបតំណាង​​គ្រាប់​ភ្នែក​របស់ K3b ដ៏​ស្អាត ។"
 
-#: main.cpp:87
+#: main.cpp:84
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "Christoph Burger-Scheidlin"
 
-#: main.cpp:88
+#: main.cpp:85
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr "សម្រាប់​ជំនួយ​ក្នុង​ការ​ដោះស្រាយ​មូលដ្ឋាន​ទិន្នន័យ​កំហុស​របស់ K3b ដែល​មិនចេះចប់ ។"
 
-#: main.cpp:90
+#: main.cpp:87
 #, kde-format
 msgid "Robert Wadley"
 msgstr "Robert Wadley"
 
-#: main.cpp:91
+#: main.cpp:88
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr "Rob បាន​បង្កើត​ស្បែក​ដ៏​អស្ចារ្យ ព្រម​ទាំង​មាន​គំនិត​ក្នុង​ការ​បង្កើត​ស្បែក​ថ្លា ។"
 
-#: main.cpp:93
+#: main.cpp:90
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "Dmitry Novikov"
 
-#: main.cpp:94
+#: main.cpp:91
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr "សម្រាប់​ស្បែក​របស់ K3b ១.០ ដ៏​អស្ចារ្យ ។"
 
-#: main.cpp:96
+#: main.cpp:93
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr "Jeremy C. Andrus"
 
-#: main.cpp:97
+#: main.cpp:94
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr "ច្រក​វីនដូ​ដំបូង​របស់​ libk3bdevice ។"
 
-#: main.cpp:105
+#: main.cpp:102
 #, kde-format
 msgid "file(s) to open"
 msgstr "ឯកសារ​ដែល​ត្រូវ​បើក"
 
-#: main.cpp:106
+#: main.cpp:103
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "បង្កើត​គម្រោង​ស៊ីឌី​ទិន្នន័យ​ថ្មី និង​បន្ថែម​ឯកសារ​ដែល​បាន​ផ្ដល់​ទាំងអស់"
 
-#: main.cpp:107
+#: main.cpp:104
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "បង្កើត​គម្រោង​ស៊ីឌី​អូឌីយ៉ូ​ថ្មី និង​បន្ថែម​ឯកសារ​ដែល​បាន​ផ្ដល់​ទាំងអស់"
 
-#: main.cpp:108
+#: main.cpp:105
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "បង្កើត​គម្រោង​វីដេអូ​ស៊ីឌី​ថ្មី និង​បន្ថែម​ឯកសារ​ដែល​បាន​ផ្ដល់​ទាំងអស់"
 
-#: main.cpp:109
+#: main.cpp:106
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "បង្កើត​គម្រោង​ស៊ីឌី​ជា​របៀប​លាយ​គ្នា​ថ្មី និង​បន្ថែម​ឯកសារ​ដែល​បាន​ផ្ដល់​ទាំងអស់"
 
-#: main.cpp:110
+#: main.cpp:107
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "បង្កើត​គម្រោង​ស៊ីឌី eMovix ថ្មី និង​បន្ថែម​ឯកសារ​ដែល​បាន​ផ្ដល់​ទាំងអស់"
 
-#: main.cpp:111
+#: main.cpp:108
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "បង្កើត​គម្រោង​ឌីវីឌី​វីដេអូ​ថ្មី និង​បន្ថែម​ឯកសារ​ដែល​បាន​ផ្ដល់​ទាំងអស់"
 
-#: main.cpp:112
+#: main.cpp:109
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr "បើក​ប្រអប់​ដុត​គម្រោង សម្រាប់​គម្រោង​បច្ចុប្បន្ន"
 
-#: main.cpp:113
+#: main.cpp:110
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr "បើក​ប្រអប់​ចម្លង ដោយ​បញ្ជាក់​ឧបករណ៍​ប្រភព​តាម​បំណង​"
 
-#: main.cpp:114
+#: main.cpp:111
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "សរសេរ​រូបភាព​ទៅ​កាន់​ស៊ីឌី ឬ​ឌីវីឌី"
 
-#: main.cpp:115
+#: main.cpp:112
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "ធ្វើ​ទ្រង់ទ្រាយ​ឧបករណ៍​ផ្ទុក​ដែល​អាច​សរសេរ​ឡើងវិញ​បាន"
 
-#: main.cpp:116
+#: main.cpp:113
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr "ស្រង់​បទ​អូឌីយ៉ូ​ជា​ឌីជីថល​ចេញ (+ ការ​អ៊ិនកូដ)"
 
-#: main.cpp:117
+#: main.cpp:114
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr "បម្លែង​ចំណង​ជើង​ឌីវីឌី​វីដេអូ (+ការ​បម្លែង)"
 
-#: main.cpp:118
+#: main.cpp:115
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "បម្លែង​បទ​ស៊ីឌី​វីដេអូ"
 
-#: main.cpp:119
+#: main.cpp:116
 #, kde-format
 msgid "Set the GUI language"
 msgstr "កំណត់​ភាសា GUI"
 
-#: main.cpp:120
+#: main.cpp:117
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "បិទ​អេក្រង់​ស្វាគមន៍​"
 
-#: main.cpp:121
+#: main.cpp:118
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "
@@ -3946,7 +3940,7 @@ msgstr "ទំហំ​ឯកសារ​ ៖"
 msgid "%1 (different than declared volume size)"
 msgstr "%1 (ខុស​គ្នា​ពី​ទំហំ​ភាគ​ដែល​បាន​បញ្ជាក់​)"
 
-#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "រូបភាព​ក្លូន Cdrecord"
@@ -3961,7 +3955,7 @@ msgstr "ឯកសារ​រូបភាព ​៖"
 msgid "TOC file:"
 msgstr "ឯកសារ TOC ៖"
 
-#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "Cue/bin image"
 msgstr "រូបភាព Cue/bin"
@@ -4002,85 +3996,85 @@ msgstr "រូបភាព​ដែល​ត្រូវ​ដុត"
 msgid "Choose Image File"
 msgstr "ជ្រើស​ឯកសារ​រូបភាព"
 
-#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#: misc/k3bimagewritingdialog.cpp:450
 #, fuzzy, kde-format
 #| msgid "Image file:"
 msgid "Image Files"
 msgstr "ឯកសារ​រូបភាព ​៖"
 
-#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:451
 #, fuzzy, kde-format
 #| msgid "*.iso *.ISO|ISO9660 Image Files"
 msgid "ISO 9660 Image Files"
 msgstr "*.iso *.ISO|​ ឯកសារ​រូបភាព ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#: misc/k3bimagewritingdialog.cpp:452
 #, fuzzy, kde-format
 #| msgid "Cue file:"
 msgid "Cue Files"
 msgstr "ឯកសារ​ Cue ៖"
 
-#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#: misc/k3bimagewritingdialog.cpp:453
 #, fuzzy, kde-format
 #| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "*.toc *.TOC|ឯកសារ Cdrdao TOC និង​រូបភាព​ក្លូន Cdrecord"
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
 msgid "Image Type"
 msgstr "ប្រភេទ​រូបភាព​"
 
-#: misc/k3bimagewritingdialog.cpp:476
+#: misc/k3bimagewritingdialog.cpp:464
 #, kde-format
 msgid "Auto Detection"
 msgstr "រក​ឃើញ​ដោយ​ស្វ័យ​ប្រវត្តិ​"
 
-#: misc/k3bimagewritingdialog.cpp:477
+#: misc/k3bimagewritingdialog.cpp:465
 #, fuzzy, kde-format
 #| msgid "ISO9660 Filesystem Info"
 msgid "ISO 9660 filesystem image"
 msgstr "ព័ត៌មាន​ប្រព័ន្ធ​ឯកសារ ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:479
+#: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
 msgid "Audio cue file"
 msgstr "ឯកសារ cue របស់​អូឌីយ៉ូ"
 
-#: misc/k3bimagewritingdialog.cpp:480
+#: misc/k3bimagewritingdialog.cpp:468
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "ឯកសារ Cdrdao TOC"
 
-#: misc/k3bimagewritingdialog.cpp:482
+#: misc/k3bimagewritingdialog.cpp:470
 #, kde-format
 msgid "Plain data image"
 msgstr "រូបភាព​ទិន្នន័យ​​ធម្មតា"
 
-#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:521 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "របៀប​សរសេរ"
 
-#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:527 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "ចម្លង"
 
-#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
+#: misc/k3bimagewritingdialog.cpp:566 misc/k3bimagewritingdialog.cpp:990
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "រូបភាព"
 
-#: misc/k3bimagewritingdialog.cpp:591
+#: misc/k3bimagewritingdialog.cpp:579
 #, kde-format
 msgid "Data mode:"
 msgstr "របៀប​ទិន្នន័យ​ ៖"
 
-#: misc/k3bimagewritingdialog.cpp:617
+#: misc/k3bimagewritingdialog.cpp:605
 #, fuzzy, kde-format
 #| msgid ""
 #| "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -4125,7 +4119,7 @@ msgstr ""
 "។ រូបភាព​ទាំងនេះ​អាច​ត្រូវ​បាន​ប្រើ​ឡើងវិញ​នៅ​ទីនេះ ។<p><b>ឯកសារ Cdrdao TOC</b><br/>K3b គាំទ្រ​"
 "ការ​សរសេរ​ទ្រង់ទ្រាយ​រូបភាព​ផ្ទាល់ខ្លួន​របស់ cdrdao ដែល​ជា​ឯកសារ toc ។"
 
-#: misc/k3bimagewritingdialog.cpp:719
+#: misc/k3bimagewritingdialog.cpp:707
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -4135,95 +4129,95 @@ msgstr ""
 "<p>ទំហំ​ឯកសារ​ពិត​មិន​ផ្គូផ្គង​នឹង​ទំហំ​ដែល​បាន​បញ្ជាក់​នៅ​ក្នុង​បឋម​កថា​របស់​ឯកសារ​ ។ បើ​វា​ត្រូវ​បាន​ទាញ​យក​ សូម​"
 "ប្រាកដ​ថា​ការ​ទាញ​យក​បាន​បញ្ចប់​ ។</p><p>បន្ត​ បើ​អ្នក​ដឹង​ថា​អ្នក​កំពុង​ធ្វើ​អ្វី ។</p>"
 
-#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr "ព្រមាន"
 
-#: misc/k3bimagewritingdialog.cpp:879
+#: misc/k3bimagewritingdialog.cpp:867
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:868
 #, fuzzy, kde-format
 #| msgid "unknown state"
 msgid "Unknown image type"
 msgstr "មិន​ស្គាល់​ស្ថានភាព"
 
-#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "ដុត"
 
-#: misc/k3bimagewritingdialog.cpp:891
+#: misc/k3bimagewritingdialog.cpp:879
 #, fuzzy, kde-format
 #| msgid "Unable to create folder %1"
 msgid "Unable to read image file"
 msgstr "មិន​អាច​បង្កើត​ថត %1 បានទេ"
 
-#: misc/k3bimagewritingdialog.cpp:893
+#: misc/k3bimagewritingdialog.cpp:881
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "ទំនង​ជា​រូបភាព​មិនអាច​ប្រើបាន"
 
-#: misc/k3bimagewritingdialog.cpp:909
+#: misc/k3bimagewritingdialog.cpp:897
 #, kde-format
 msgid "File not found"
 msgstr "រក​មិន​ឃើញ​ឯកសារ"
 
-#: misc/k3bimagewritingdialog.cpp:1040
+#: misc/k3bimagewritingdialog.cpp:1028
 #, fuzzy, kde-format
 #| msgid "Md5 Sum:"
 msgid "MD5 Sum:"
 msgstr "ផល​បូក Md5 ៖"
 
-#: misc/k3bimagewritingdialog.cpp:1080
+#: misc/k3bimagewritingdialog.cpp:1068
 #, kde-format
 msgid "Calculation canceled"
 msgstr "បាន​បោះ​បង់​ការ​គណនា"
 
-#: misc/k3bimagewritingdialog.cpp:1082
+#: misc/k3bimagewritingdialog.cpp:1070
 #, kde-format
 msgid "Calculation failed"
 msgstr "ការ​គណនា​បាន​បរាជ័យ"
 
-#: misc/k3bimagewritingdialog.cpp:1098
+#: misc/k3bimagewritingdialog.cpp:1086
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "ចម្លង​ឆេកសាំ​ទៅ​ក្ដារ​តម្បៀត​ខ្ទាស់"
 
-#: misc/k3bimagewritingdialog.cpp:1099
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Compare checksum..."
 msgstr "ប្រៀបធៀប​ឆេកសាំ...​"
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "ពិនិត្យ​ផល​បូក MD5"
 
-#: misc/k3bimagewritingdialog.cpp:1107
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "សូម​បញ្ចូល​ផល​បូក MD5 ដើម្បី​ប្រៀបធៀប​ ៖"
 
-#: misc/k3bimagewritingdialog.cpp:1113
+#: misc/k3bimagewritingdialog.cpp:1101
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "ផល​បូក MD5 របស់ %1 ស្មើគ្នា​នឹង​អ្វី​​ដែល​បាន​បញ្ជាក់ ។"
 
-#: misc/k3bimagewritingdialog.cpp:1114
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "ផល​បូក MD5 ស្មើ"
 
-#: misc/k3bimagewritingdialog.cpp:1116
+#: misc/k3bimagewritingdialog.cpp:1104
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "ផល​បូក MD5 របស់ %1 ខុសគ្នា​ពី​អ្វី​ដែល​​បាន​បញ្ជាក់ ។"
 
-#: misc/k3bimagewritingdialog.cpp:1117
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "ផល​បូក MD5 ខុសគ្នា"
@@ -4837,7 +4831,7 @@ msgstr ""
 "ដុត​ឧបករណ៍​ផ្ទុក​ល្បឿន​ខ្ពស់​នៅ​លើ​កម្មវិធី​សរសេរ​​​ល្បឿន​ទាប​ ។<p><b>ប្រយ័ត្ន​ ៖</b> ការ​ធីក​ជម្រើស​នេះ​អាច​ធ្វើ​"
 "ឲ្យ​មេឌៀ​ខូច ។"
 
-#: option/k3bcddboptiontab.cpp:37
+#: option/k3bcddboptiontab.cpp:32
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "មិន​អាច​ផ្ទុក​ម៉ូឌុល​ការ​កំណត់​រចនាសម្ព័ន្ធ KCDDB ។"
@@ -4937,18 +4931,18 @@ msgstr ""
 msgid "Add"
 msgstr "បន្ថែម"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr "សូម​ចូល​ម្ដង​ទៀត ដើម្បី​អនុវត្ត​ការ​ផ្លាស់ប្ដូរ ។"
 
-#: option/k3bdevicewidget.cpp:273
+#: option/k3bdevicewidget.cpp:269
 #, fuzzy, kde-format
 #| msgid "Unable to execute the action: %1"
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "មិនអាច​ប្រតិបត្តិ​សកម្មភាព ៖ %1"
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr "ព្យាយាម​ម្ដង​ទៀត"
@@ -5054,49 +5048,49 @@ msgstr ""
 msgid "Search Path"
 msgstr "ផ្លូវ​ស្វែងរក"
 
-#: option/k3bexternalbinwidget.cpp:245
+#: option/k3bexternalbinwidget.cpp:238
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr "កម្មវិធី​ដូច​ខាង​ក្រោម​មិន​អាច​ត្រូវ​បាន​ធ្វើ​បច្ចុប្បន្នភាព​ទេ ៖"
 
-#: option/k3bexternalbinwidget.cpp:255
+#: option/k3bexternalbinwidget.cpp:248
 #, fuzzy, kde-format
 #| msgid "Unable to execute the action: %1"
 msgid "Unable to execute the action<br/>%1"
 msgstr "មិនអាច​ប្រតិបត្តិ​សកម្មភាព ៖ %1"
 
-#: option/k3bexternalbinwidget.cpp:268
+#: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:271
+#: option/k3bexternalbinwidget.cpp:264
 #, fuzzy, kde-format
 #| msgid "No error correction"
 msgid "An error occurred"
 msgstr "គ្មាន​ការ​កែ​កំហុស"
 
-#: option/k3bexternalbinwidget.cpp:274
+#: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:277
+#: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:280
+#: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:283
+#: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:286
+#: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
 msgstr ""
@@ -7045,7 +7039,7 @@ msgstr "រក​មើល Musicbrainz"
 msgid "Try to determine meta information over the Internet"
 msgstr "ព្យាយាម​កំណត់​ព័ត៌មាន​មេតា​តាម​អ៊ិនធឺណិត"
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -7778,7 +7772,7 @@ msgid "Always keep the existing file"
 msgstr "រក្សាទុក​ឯកសារ​ដែល​មាន​ស្រាប់​ជា​និច្ច"
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:118
 #, kde-format
 msgid "Rename"
 msgstr "ប្ដូរ​ឈ្មោះ"
@@ -7892,70 +7886,70 @@ msgstr "ឈ្មោះ​ឯកសារ​ដូច​ខាង​ក្រោ
 msgid "No Data to Burn"
 msgstr "គ្មាន​ទិន្នន័យ​ត្រូវ​​ដុត​ទេ​"
 
-#: projects/k3bdataviewimpl.cpp:108
+#: projects/k3bdataviewimpl.cpp:106
 #, kde-format
 msgid "New Folder..."
 msgstr "ថត​ថ្មី..."
 
-#: projects/k3bdataviewimpl.cpp:126
+#: projects/k3bdataviewimpl.cpp:124
 #, kde-format
 msgid "Parent Folder"
 msgstr "ថត​មេ"
 
-#: projects/k3bdataviewimpl.cpp:137
+#: projects/k3bdataviewimpl.cpp:135
 #, kde-format
 msgid "Open"
 msgstr "បើក"
 
-#: projects/k3bdataviewimpl.cpp:141
+#: projects/k3bdataviewimpl.cpp:139
 #, kde-format
 msgid "&Import Session..."
 msgstr "នាំ​ចូល​សម័យ​..."
 
-#: projects/k3bdataviewimpl.cpp:142
+#: projects/k3bdataviewimpl.cpp:140
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr "នាំចូល​សម័យ​ដែល​បាន​ដុត​ពីមុន​ទៅ​ក្នុង​គម្រោង​បច្ចុប្បន្ន"
 
-#: projects/k3bdataviewimpl.cpp:146
+#: projects/k3bdataviewimpl.cpp:144
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr "ជម្រះ​សម័យ​ដែល​បាន​នាំ​ចូល​"
 
-#: projects/k3bdataviewimpl.cpp:147
+#: projects/k3bdataviewimpl.cpp:145
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr "យក​ធាតុ​ដែល​បាន​នាំចូល​ពី​សម័យ​មុន"
 
-#: projects/k3bdataviewimpl.cpp:152
+#: projects/k3bdataviewimpl.cpp:150
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr "កែ​សម្រួល​រូបភាព​ចាប់​ផ្ដើម​..."
 
-#: projects/k3bdataviewimpl.cpp:153
+#: projects/k3bdataviewimpl.cpp:151
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr "កែប្រែ​ការ​កំណត់​ដែល​អាច​ចាប់ផ្ដើម​បាន​របស់​គម្រោង​បច្ចុប្បន្ន"
 
-#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
-#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
+#: projects/k3bdataviewimpl.cpp:214 projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:222 projects/k3bdataviewimpl.cpp:226
 #, kde-format
 msgid "New Folder"
 msgstr "ថត​ថ្មី"
 
-#: projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:215
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr "សូម​បញ្ចូល​ឈ្មោះ​សម្រាប់​ថត​ថ្មី  ៖"
 
-#: projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:223
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr "មាន​ឯកសារ​ដែល​មាន​ឈ្មោះ​​​​​​នេះ​​រួច​ហើយ​ ។ សូម​បញ្ចូល​ឈ្មោះ​សម្រាប់​ថត​ថ្មី​ ៖"
 
-#: projects/k3bdataviewimpl.cpp:381
+#: projects/k3bdataviewimpl.cpp:375
 #, kde-format
 msgid "Edit Boot Images"
 msgstr "កែសម្រួល​រូបភាព​ចាប់​ផ្ដើម"
@@ -11088,6 +11082,9 @@ msgstr "anamorph"
 #, kde-format
 msgid "Subpicture"
 msgstr "រូបភាព​រង"
+
+#~ msgid "K3b Bookmarks"
+#~ msgstr "ចំណាំ​របស់ K3b"
 
 #~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
 #~ msgstr "អូឌីយ៉ូ​/x-mp3 អូឌីយ៉ូ​/x-wav កម្ម​វិធី/x-ogg |ឯកសារ​សំឡេង​"

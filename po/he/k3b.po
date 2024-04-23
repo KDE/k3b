@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-22 01:54+0000\n"
+"POT-Creation-Date: 2024-04-23 00:38+0000\n"
 "PO-Revision-Date: 2024-04-08 19:10+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -20,7 +20,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
+"n % 10 == 0) ? 2 : 3));\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
@@ -101,11 +102,13 @@ msgstr "%1 הרץ"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:392
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:336
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 bit"
 msgid_plural "%1 bits"
 msgstr[0] "סיבית אחת"
 msgstr[1] "%1 סיביות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:375
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:402
@@ -298,7 +301,7 @@ msgstr "הערה"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:114
+#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -361,7 +364,7 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:103
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:366
-#: k3bfileview.cpp:97 rip/base_k3baudiorippingoptionwidget.ui:47
+#: k3bfileview.cpp:87 rip/base_k3baudiorippingoptionwidget.ui:47
 #, kde-format
 msgid "Options"
 msgstr "הגדרות"
@@ -471,7 +474,7 @@ msgstr "קובץ תמונה לא נבחר"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:551 misc/k3bimagewritingdialog.cpp:567
+#: misc/k3bimagewritingdialog.cpp:539 misc/k3bimagewritingdialog.cpp:555
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -526,7 +529,7 @@ msgstr "הגדרות קיצוץ"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:597 misc/k3bimagewritingdialog.cpp:980
+#: misc/k3bimagewritingdialog.cpp:585 misc/k3bimagewritingdialog.cpp:968
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -1830,15 +1833,10 @@ msgstr "&התקן"
 
 #: k3bdiroperator.cpp:44
 #, kde-format
-msgid "K3b Bookmarks"
-msgstr "סימניות K3b"
-
-#: k3bdiroperator.cpp:50
-#, kde-format
 msgid "Bookmarks"
 msgstr "סימניות"
 
-#: k3bdiroperator.cpp:54 k3bfiletreeview.cpp:90
+#: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
 #, kde-format
 msgid "&Add to Project"
 msgstr "&הוסף לפרויקט"
@@ -2156,19 +2154,23 @@ msgid "%1 B"
 msgstr "ב %1"
 
 #: k3bdiskinfoview.cpp:391
-#, kde-format
+#, fuzzy, kde-format
 msgctxt "Number of blocks (one block has 2048 bytes)"
 msgid "1 block"
 msgid_plural "%1 blocks"
 msgstr[0] "בלוק 1"
 msgstr[1] "%1 בלוקים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: k3bdiskinfoview.cpp:392
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 B"
 msgid_plural "%1 B"
 msgstr[0] "ב 1"
 msgstr[1] "%1 ב"
+msgstr[2] ""
+msgstr[3] ""
 
 #: k3bemptydiscwaiter.cpp:83
 #, kde-format
@@ -2257,44 +2259,43 @@ msgstr "מחיקה נכשלה."
 msgid "Filter:"
 msgstr "מסנן:"
 
-#: k3bfileview.cpp:75 k3bfileview.cpp:84 misc/k3bimagewritingdialog.cpp:455
-#: misc/k3bimagewritingdialog.cpp:466
+#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
 #, fuzzy, kde-format
 #| msgid "*|All Files"
 msgid "All Files"
 msgstr "*|כל הקבצים"
 
-#: k3bfileview.cpp:76 k3bfileview.cpp:85
+#: k3bfileview.cpp:76
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "Sound Files"
 msgstr "נמצאו קבצים"
 
-#: k3bfileview.cpp:77 k3bfileview.cpp:86
+#: k3bfileview.cpp:77
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "Wave Sound Files"
 msgstr "נמצאו קבצים"
 
-#: k3bfileview.cpp:78 k3bfileview.cpp:87
+#: k3bfileview.cpp:78
 #, fuzzy, kde-format
 #| msgid "Found Files"
 msgid "MP3 Sound Files"
 msgstr "נמצאו קבצים"
 
-#: k3bfileview.cpp:79 k3bfileview.cpp:88
+#: k3bfileview.cpp:79
 #, fuzzy, kde-format
 #| msgid "application/x-ogg |Ogg Vorbis Sound Files"
 msgid "Ogg Vorbis Sound Files"
 msgstr "application/x-ogg |קבצי שמע מסוג Ogg Vorbis"
 
-#: k3bfileview.cpp:80 k3bfileview.cpp:89
+#: k3bfileview.cpp:80
 #, fuzzy, kde-format
 #| msgid "video/mpeg |MPEG Video Files"
 msgid "MPEG Video Files"
 msgstr "video/mpeg |קבצי וידאו מסוג MPEG"
 
-#: k3bfileview.cpp:94
+#: k3bfileview.cpp:84
 #, kde-format
 msgid "Show Bookmarks"
 msgstr "הראה סימניות"
@@ -2479,6 +2480,8 @@ msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
 msgstr[0] "%1 ברצועה אחת"
 msgstr[1] "%1 ב־%2 רצועות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: k3bmediumdelegate.cpp:138
 #, kde-format
@@ -2486,6 +2489,8 @@ msgid " and %1 session"
 msgid_plural " and %1 sessions"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: k3bmediumdelegate.cpp:151
 #, kde-format
@@ -2542,52 +2547,62 @@ msgstr "זמני:"
 msgid "No info"
 msgstr "אין מידע"
 
-#: k3bstatusbarmanager.cpp:158
+#: k3bstatusbarmanager.cpp:154
 #, fuzzy, kde-format
 msgid "One file in %2"
 msgid_plural "%1 files in %2"
 msgstr[0] "קובץ 1 בתוך- %2"
 msgstr[1] "הקבצים %1 בתוך - %2"
+msgstr[2] ""
+msgstr[3] ""
 
-#: k3bstatusbarmanager.cpp:161
+#: k3bstatusbarmanager.cpp:157
 #, fuzzy, kde-format
 msgid "one folder"
 msgid_plural "%1 folders"
 msgstr[0] "תיקייה 1"
 msgstr[1] "%1 תיקיות"
+msgstr[2] ""
+msgstr[3] ""
 
-#: k3bstatusbarmanager.cpp:188
-#, kde-format
+#: k3bstatusbarmanager.cpp:184
+#, fuzzy, kde-format
 msgid "Audio CD (1 track)"
 msgid_plural "Audio CD (%1 tracks)"
 msgstr[0] "תקליטור שמע (רצועה 1)"
 msgstr[1] "תקליטור שמע (%1 רצועות)"
+msgstr[2] ""
+msgstr[3] ""
 
-#: k3bstatusbarmanager.cpp:194
+#: k3bstatusbarmanager.cpp:190
 #, kde-format
 msgid "Data Project (%1)"
 msgstr "פרוייקט נתונים (%1)"
 
-#: k3bstatusbarmanager.cpp:201
-#, kde-format
+#: k3bstatusbarmanager.cpp:197
+#, fuzzy, kde-format
 msgid "Mixed CD (1 track and %2)"
 msgid_plural "Mixed CD (%1 tracks and %2)"
 msgstr[0] "תקליטור CD מערבב (רצועה 1 ו- %2)"
 msgstr[1] "תקליטור CD מערבב (%1 רצועות  ו- %2)"
+msgstr[2] ""
+msgstr[3] ""
 
-#: k3bstatusbarmanager.cpp:208
-#, kde-format
+#: k3bstatusbarmanager.cpp:204
+#, fuzzy, kde-format
 msgid "Video CD (1 track)"
 msgid_plural "Video CD (%1 tracks)"
 msgstr[0] "תקליטור וידאו CD (רצועה 1)"
 msgstr[1] "תקליטור וידאו CD (%1 רצועות)"
+msgstr[2] ""
+msgstr[3] ""
 
-#: k3bstatusbarmanager.cpp:214
+#: k3bstatusbarmanager.cpp:210
 #, kde-format
 msgid "eMovix Project (%1)"
 msgstr "פרוייקט eMovix (%1)"
 
-#: k3bstatusbarmanager.cpp:220
+#: k3bstatusbarmanager.cpp:216
 #, kde-format
 msgid "Video DVD (%1)"
 msgstr "תקליטור וידאו DVD (%1)"
@@ -2598,11 +2613,13 @@ msgid "System Configuration Problems"
 msgstr "בעיות תצורת המערכת"
 
 #: k3bsystemproblemdialog.cpp:91
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 problem"
 msgid_plural "%1 problems"
 msgstr[0] "בעיה 1"
 msgstr[1] "%1 בעיות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: k3bsystemproblemdialog.cpp:98
 #, fuzzy, kde-format
@@ -3363,12 +3380,12 @@ msgstr "שכתוב מוגבל"
 msgid "Incremental"
 msgstr "תוספת (Incremental)"
 
-#: main.cpp:25
+#: main.cpp:22
 #, kde-format
 msgid "K3b"
 msgstr "K3b"
 
-#: main.cpp:26
+#: main.cpp:23
 #, kde-format
 msgid ""
 "<p>K3b is a full-featured CD/DVD/Blu-ray burning and ripping application.<br/"
@@ -3379,163 +3396,163 @@ msgid ""
 "features an advanced user might need."
 msgstr ""
 
-#: main.cpp:34
+#: main.cpp:31
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
 msgstr ""
 
-#: main.cpp:36
+#: main.cpp:33
 #, fuzzy, kde-format
 #| msgid "http://www.k3b.org"
 msgid "https://www.k3b.org"
 msgstr "http://www.k3b.org"
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Leslie Zhai"
 msgstr ""
 
-#: main.cpp:40
+#: main.cpp:37
 #, kde-format
 msgid "Maintainer"
 msgstr ""
 
-#: main.cpp:41
+#: main.cpp:38
 #, kde-format
 msgid "Michał Małek"
 msgstr "Michał Małek"
 
-#: main.cpp:41
+#: main.cpp:38
 #, fuzzy, kde-format
 msgid "Maintainer and current lead Developer"
 msgstr "מתחזק ומפתח ראשי"
 
-#: main.cpp:42
+#: main.cpp:39
 #, kde-format
 msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
-#: main.cpp:42
+#: main.cpp:39
 #, fuzzy, kde-format
 msgid "Main developer"
 msgstr "מפתח"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Christian Kvasny"
 msgstr "Christian Kvasny"
 
-#: main.cpp:43
+#: main.cpp:40
 #, kde-format
 msgid "Video CD Project and Video CD ripping"
 msgstr "פרויקט תקליטור וידאו  וקריעת תקליטורי וידאו"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Montel Laurent"
 msgstr "Montel Laurent"
 
-#: main.cpp:44
+#: main.cpp:41
 #, kde-format
 msgid "Initial port to KDE Platform 4"
 msgstr "הסבה לסביבת KDE 4"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Ralf Habacker"
 msgstr "Ralf Habacker"
 
-#: main.cpp:45
+#: main.cpp:42
 #, kde-format
 msgid "Windows port"
 msgstr "הסבה לחלונות"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Klaus-Dieter Krannich"
 msgstr "Klaus-Dieter Krannich"
 
-#: main.cpp:47
+#: main.cpp:44
 #, kde-format
 msgid "Advanced Cdrdao integration"
 msgstr "שילוב Cdrdao מתקדם"
 
-#: main.cpp:48
+#: main.cpp:45
 #, kde-format
 msgid "Thomas Froescher"
 msgstr "Thomas Froescher"
 
-#: main.cpp:49
+#: main.cpp:46
 #, fuzzy, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
 msgstr "קריעת תקליטורי וידאו DVD וקידוד וידאו בגירסאות ישנות מ - 1.0"
 
-#: main.cpp:51
+#: main.cpp:48
 #, kde-format
 msgid "Alexis Younes aka Ayo"
 msgstr "Alexis Younes aka Ayo"
 
-#: main.cpp:52
+#: main.cpp:49
 #, kde-format
 msgid "For his bombastic artwork."
 msgstr "בשביל העבודה הבומבסטית שלו."
 
-#: main.cpp:54
+#: main.cpp:51
 #, kde-format
 msgid "Christoph Thielecke"
 msgstr "Christoph Thielecke"
 
-#: main.cpp:55
+#: main.cpp:52
 #, kde-format
 msgid "For extensive testing and the first German translation."
 msgstr "עבור בדיקה מקיפה והתרגום הגרמני הראשון"
 
-#: main.cpp:57
+#: main.cpp:54
 #, kde-format
 msgid "Andy Polyakov"
 msgstr "Andy Polyakov"
 
-#: main.cpp:58
+#: main.cpp:55
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
 msgstr "עבור הכלים המצויינים של dvd+rw ושיתוף פעולה טוב"
 
-#: main.cpp:60
+#: main.cpp:57
 #, kde-format
 msgid "Roberto De Leo"
 msgstr "Roberto De Leo"
 
-#: main.cpp:61
+#: main.cpp:58
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
 msgstr "עבור החבילה המגניבה eMovix וההתמדה בעבודה"
 
-#: main.cpp:63
+#: main.cpp:60
 #, kde-format
 msgid "John Steele Scott"
 msgstr "John Steele Scott"
 
-#: main.cpp:64
+#: main.cpp:61
 #, kde-format
 msgid "For the flac decoding plugin."
 msgstr "עבור התוסף המפענח של flac."
 
-#: main.cpp:66
+#: main.cpp:63
 #, kde-format
 msgid "György Szombathelyi"
 msgstr "György Szombathelyi"
 
-#: main.cpp:67
+#: main.cpp:64
 #, kde-format
 msgid "For the very useful isofslib."
 msgstr "For the very useful isofslib."
 
-#: main.cpp:69
+#: main.cpp:66
 #, kde-format
 msgid "Erik de Castro Lopo"
 msgstr "Erik de Castro Lopo"
 
-#: main.cpp:70
+#: main.cpp:67
 #, kde-format
 msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
@@ -3544,180 +3561,180 @@ msgstr ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 
-#: main.cpp:72
+#: main.cpp:69
 #, kde-format
 msgid "Jakob Petsovits"
 msgstr "Jakob Petsovits"
 
-#: main.cpp:73
+#: main.cpp:70
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
 msgstr "For the very cool conditional audio ripping pattern."
 
-#: main.cpp:75
+#: main.cpp:72
 #, kde-format
 msgid "Heiner Eichmann"
 msgstr "Heiner Eichmann"
 
-#: main.cpp:76
+#: main.cpp:73
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
 msgstr "For his work on the BSD port and some great patches."
 
-#: main.cpp:78
+#: main.cpp:75
 #, fuzzy, kde-format
 #| msgid "Adriaan De Groot"
 msgid "Adriaan de Groot"
 msgstr "Adriaan De Groot"
 
-#: main.cpp:79
+#: main.cpp:76
 #, fuzzy, kde-format
 #| msgid "For his work on the BSD port."
 msgid "For his work on the FreeBSD port."
 msgstr "For his work on the BSD port."
 
-#: main.cpp:81
+#: main.cpp:78
 #, kde-format
 msgid "Thiago Macieira"
 msgstr "Thiago Macieira"
 
-#: main.cpp:82
+#: main.cpp:79
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
 msgstr ""
 
-#: main.cpp:84
+#: main.cpp:81
 #, kde-format
 msgid "Marcel Dierkes"
 msgstr "Marcel Dierkes"
 
-#: main.cpp:85
+#: main.cpp:82
 #, kde-format
 msgid "For the great K3b icon eyecandy."
 msgstr "על סמלילים יפים ל־K3b"
 
-#: main.cpp:87
+#: main.cpp:84
 #, kde-format
 msgid "Christoph Burger-Scheidlin"
 msgstr "Christoph Burger-Scheidlin"
 
-#: main.cpp:88
+#: main.cpp:85
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
 msgstr "על עזרתו הבלתי־נלאית בניקוי הבאגים של K3b."
 
-#: main.cpp:90
+#: main.cpp:87
 #, kde-format
 msgid "Robert Wadley"
 msgstr "Robert Wadley"
 
-#: main.cpp:91
+#: main.cpp:88
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
 msgstr ""
 
-#: main.cpp:93
+#: main.cpp:90
 #, kde-format
 msgid "Dmitry Novikov"
 msgstr "Dmitry Novikov"
 
-#: main.cpp:94
+#: main.cpp:91
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
 msgstr ""
 
-#: main.cpp:96
+#: main.cpp:93
 #, kde-format
 msgid "Jeremy C. Andrus"
 msgstr "Jeremy C. Andrus"
 
-#: main.cpp:97
+#: main.cpp:94
 #, kde-format
 msgid "First Windows port of libk3bdevice."
 msgstr "הסבה ראשונה לחלונות של libk3bdevice"
 
-#: main.cpp:105
+#: main.cpp:102
 #, kde-format
 msgid "file(s) to open"
 msgstr "קובץ(ים) לפתיחה"
 
-#: main.cpp:106
+#: main.cpp:103
 #, kde-format
 msgid "Create a new data CD project and add all given files"
 msgstr "צור פרוייקט תקליטור נתונים CD חדש והוסף את כל הקבצים הנתונים"
 
-#: main.cpp:107
+#: main.cpp:104
 #, kde-format
 msgid "Create a new audio CD project and add all given files"
 msgstr "צור פרוייקט תקליטור שמע CD חדש והוסף את כל הקבצים הנתונים"
 
-#: main.cpp:108
+#: main.cpp:105
 #, kde-format
 msgid "Create a new video CD project and add all given files"
 msgstr "צור פרוייקט תקליטור וידאו (VCD) חדש והוסף את כל הקבצים הנתונים"
 
-#: main.cpp:109
+#: main.cpp:106
 #, kde-format
 msgid "Create a new mixed mode CD project and add all given files"
 msgstr "צור פרוייקט תקליטור CD מעורב חדש והוסף את כל הקבצים הנתונים"
 
-#: main.cpp:110
+#: main.cpp:107
 #, kde-format
 msgid "Create a new eMovix CD project and add all given files"
 msgstr "צור פרוייקט תקליטור eMovix - CD חדש והוסף את כל הקבצים הנתונים"
 
-#: main.cpp:111
+#: main.cpp:108
 #, kde-format
 msgid "Create a new Video DVD project and add all given files"
 msgstr "צור פרוייקט תקליטור וידאו DVD חדש והוסף את כל הקבצים הנתונים"
 
-#: main.cpp:112
+#: main.cpp:109
 #, kde-format
 msgid "Open the project burn dialog for the current project"
 msgstr "פתח את חלון דו-שיח הצריבה של עבור הפרוייקט הנוכחי"
 
-#: main.cpp:113
+#: main.cpp:110
 #, kde-format
 msgid "Open the copy dialog, optionally specify the source device"
 msgstr "פתח את חלון דו-שיח העתקה, הוסף את התקן המקור (לא חובה)"
 
-#: main.cpp:114
+#: main.cpp:111
 #, kde-format
 msgid "Write an image to a CD or DVD"
 msgstr "כתוב תמונת לתקליטור CD או DVD"
 
-#: main.cpp:115
+#: main.cpp:112
 #, kde-format
 msgid "Format a rewritable medium"
 msgstr "אתחול מדיה לצריבה רב פעמית"
 
-#: main.cpp:116
+#: main.cpp:113
 #, kde-format
 msgid "Extract Audio tracks digitally (+encoding)"
 msgstr "חלץ קבצי שמע בצורה דיגיטלית (+קידוד)"
 
-#: main.cpp:117
+#: main.cpp:114
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
 msgstr "קרע תקליטור וידאו DVD (+שינוי קידוד)"
 
-#: main.cpp:118
+#: main.cpp:115
 #, kde-format
 msgid "Rip Video CD Tracks"
 msgstr "קרע רצועות וידאו CD"
 
-#: main.cpp:119
+#: main.cpp:116
 #, kde-format
 msgid "Set the GUI language"
 msgstr "הגדר את שפת הממשק הגרפי"
 
-#: main.cpp:120
+#: main.cpp:117
 #, kde-format
 msgid "Disable the splash screen"
 msgstr "בטל מסך פתיחה"
 
-#: main.cpp:121
+#: main.cpp:118
 #, kde-format
 msgid ""
 "Set the device to be used for new projects. (This option has no effect: its "
@@ -3747,7 +3764,7 @@ msgstr "גודל קובץ:"
 msgid "%1 (different than declared volume size)"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:481
+#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "תמונת תקליטור של Cdrecord"
@@ -3762,7 +3779,7 @@ msgstr "קובץ תמונת תקליטור:"
 msgid "TOC file:"
 msgstr "קובץ TOC:"
 
-#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:478
+#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "Cue/bin image"
 msgstr "תמונת תקליטור Cue/Bin"
@@ -3783,6 +3800,8 @@ msgid "One track"
 msgid_plural "%1 tracks"
 msgstr[0] "רצועה 1"
 msgstr[1] "%1 רצועות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: misc/k3bimagewritingdialog.cpp:324
 #, kde-format
@@ -3804,83 +3823,83 @@ msgstr "תמונת תקליטור לצריבה"
 msgid "Choose Image File"
 msgstr "בחר קובץ תמונת תקליטור"
 
-#: misc/k3bimagewritingdialog.cpp:451 misc/k3bimagewritingdialog.cpp:458
+#: misc/k3bimagewritingdialog.cpp:450
 #, fuzzy, kde-format
 #| msgid "Image file:"
 msgid "Image Files"
 msgstr "קובץ תמונת תקליטור:"
 
-#: misc/k3bimagewritingdialog.cpp:452 misc/k3bimagewritingdialog.cpp:460
+#: misc/k3bimagewritingdialog.cpp:451
 #, fuzzy, kde-format
 msgid "ISO 9660 Image Files"
 msgstr "*.iso *.ISO|ISO9660 קבצי תמונת תקליטור"
 
-#: misc/k3bimagewritingdialog.cpp:453 misc/k3bimagewritingdialog.cpp:462
+#: misc/k3bimagewritingdialog.cpp:452
 #, fuzzy, kde-format
 #| msgid "Cue file:"
 msgid "Cue Files"
 msgstr "קובץ Cue:"
 
-#: misc/k3bimagewritingdialog.cpp:454 misc/k3bimagewritingdialog.cpp:464
+#: misc/k3bimagewritingdialog.cpp:453
 #, fuzzy, kde-format
 #| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "*.toc *.TOC|קבצי TOC של Cdrdao וקבצי תמונת תקליטור של Cdrecord"
 
-#: misc/k3bimagewritingdialog.cpp:471
+#: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
 msgid "Image Type"
 msgstr "סוג קובץ תמונת תקליטור"
 
-#: misc/k3bimagewritingdialog.cpp:476
+#: misc/k3bimagewritingdialog.cpp:464
 #, kde-format
 msgid "Auto Detection"
 msgstr "זיהוי אוטומטי"
 
-#: misc/k3bimagewritingdialog.cpp:477
+#: misc/k3bimagewritingdialog.cpp:465
 #, fuzzy, kde-format
 msgid "ISO 9660 filesystem image"
 msgstr "מערכת קבצים ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:479
+#: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
 msgid "Audio cue file"
 msgstr "קובץ Cue של שמע"
 
-#: misc/k3bimagewritingdialog.cpp:480
+#: misc/k3bimagewritingdialog.cpp:468
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "קובץ TOC של Cdrdao"
 
-#: misc/k3bimagewritingdialog.cpp:482
+#: misc/k3bimagewritingdialog.cpp:470
 #, kde-format
 msgid "Plain data image"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:533 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:521 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "מצב כתיבה"
 
-#: misc/k3bimagewritingdialog.cpp:539 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:527 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "עותקים"
 
-#: misc/k3bimagewritingdialog.cpp:578 misc/k3bimagewritingdialog.cpp:1002
+#: misc/k3bimagewritingdialog.cpp:566 misc/k3bimagewritingdialog.cpp:990
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "&קובץ תמונת תקליטור"
 
-#: misc/k3bimagewritingdialog.cpp:591
+#: misc/k3bimagewritingdialog.cpp:579
 #, kde-format
 msgid "Data mode:"
 msgstr "מצב נתונים:"
 
-#: misc/k3bimagewritingdialog.cpp:617
+#: misc/k3bimagewritingdialog.cpp:605
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -3899,7 +3918,7 @@ msgid ""
 "writing cdrdao's own image format, the toc files."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:719
+#: misc/k3bimagewritingdialog.cpp:707
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -3907,92 +3926,92 @@ msgid ""
 "continue if you know what you are doing.</p>"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:722 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid "Warning"
 msgstr "אזהרה"
 
-#: misc/k3bimagewritingdialog.cpp:879
+#: misc/k3bimagewritingdialog.cpp:867
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:880
+#: misc/k3bimagewritingdialog.cpp:868
 #, fuzzy, kde-format
 msgid "Unknown image type"
 msgstr "תבנית קובץ לא ידועה"
 
-#: misc/k3bimagewritingdialog.cpp:881 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "צרוב"
 
-#: misc/k3bimagewritingdialog.cpp:891
+#: misc/k3bimagewritingdialog.cpp:879
 #, fuzzy, kde-format
 msgid "Unable to read image file"
 msgstr "לא הייתה אפשרות ליצור את התיקייה '%1'"
 
-#: misc/k3bimagewritingdialog.cpp:893
+#: misc/k3bimagewritingdialog.cpp:881
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "ניראה שזאת לא תמונת תקליטור תקינה"
 
-#: misc/k3bimagewritingdialog.cpp:909
+#: misc/k3bimagewritingdialog.cpp:897
 #, kde-format
 msgid "File not found"
 msgstr "קובץ לא נמצא"
 
-#: misc/k3bimagewritingdialog.cpp:1040
+#: misc/k3bimagewritingdialog.cpp:1028
 #, fuzzy, kde-format
 msgid "MD5 Sum:"
 msgstr "סכום ביקורת (MD5):"
 
-#: misc/k3bimagewritingdialog.cpp:1080
+#: misc/k3bimagewritingdialog.cpp:1068
 #, kde-format
 msgid "Calculation canceled"
 msgstr "חישוב בוטל"
 
-#: misc/k3bimagewritingdialog.cpp:1082
+#: misc/k3bimagewritingdialog.cpp:1070
 #, kde-format
 msgid "Calculation failed"
 msgstr "חישוב נכשל"
 
-#: misc/k3bimagewritingdialog.cpp:1098
+#: misc/k3bimagewritingdialog.cpp:1086
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "העתק סכום ביקורת ללוח הגזירים"
 
-#: misc/k3bimagewritingdialog.cpp:1099
+#: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Compare checksum..."
 msgstr "השווה סכום ביקורת (MD5)..."
 
-#: misc/k3bimagewritingdialog.cpp:1106
+#: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "בדיקת סכום ביקורת (MD5)"
 
-#: misc/k3bimagewritingdialog.cpp:1107
+#: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "אנא הכנס סכום ביקורת (MD5) לבדיקה"
 
-#: misc/k3bimagewritingdialog.cpp:1113
+#: misc/k3bimagewritingdialog.cpp:1101
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "סכום ביקורת של %1 שווה לסכום שצויין."
 
-#: misc/k3bimagewritingdialog.cpp:1114
+#: misc/k3bimagewritingdialog.cpp:1102
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "סכומי ביקורת (MD5) שווים"
 
-#: misc/k3bimagewritingdialog.cpp:1116
+#: misc/k3bimagewritingdialog.cpp:1104
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "סכום ביקורת (MD5) של %1 שונה מהסכום שצויין."
 
-#: misc/k3bimagewritingdialog.cpp:1117
+#: misc/k3bimagewritingdialog.cpp:1105
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "סכומי ביקורת (MD5) שונים"
@@ -4548,7 +4567,7 @@ msgid ""
 "may result in damaged media."
 msgstr ""
 
-#: option/k3bcddboptiontab.cpp:37
+#: option/k3bcddboptiontab.cpp:32
 #, kde-format
 msgid "Unable to load KCDDB configuration module."
 msgstr "אינו יכול לטעות את מודול הגדרות של KCDDB."
@@ -4646,17 +4665,17 @@ msgstr ""
 msgid "Add"
 msgstr "הוסף"
 
-#: option/k3bdevicewidget.cpp:270
+#: option/k3bdevicewidget.cpp:266
 #, kde-format
 msgid "Please relogin to apply the changes."
 msgstr ""
 
-#: option/k3bdevicewidget.cpp:273
+#: option/k3bdevicewidget.cpp:269
 #, fuzzy, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
 msgstr "אין אפשרות ליצור תיקייה %1"
 
-#: option/k3bdevicewidget.cpp:274
+#: option/k3bdevicewidget.cpp:270
 #, kde-format
 msgid "Retry"
 msgstr ""
@@ -4757,48 +4776,48 @@ msgstr ""
 msgid "Search Path"
 msgstr "נתיב חיפוש"
 
-#: option/k3bexternalbinwidget.cpp:245
+#: option/k3bexternalbinwidget.cpp:238
 #, kde-format
 msgid "Following programs could not be updated:"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:255
+#: option/k3bexternalbinwidget.cpp:248
 #, fuzzy, kde-format
 msgid "Unable to execute the action<br/>%1"
 msgstr "אין אפשרות ליצור תיקייה %1"
 
-#: option/k3bexternalbinwidget.cpp:268
+#: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:271
+#: option/k3bexternalbinwidget.cpp:264
 #, fuzzy, kde-format
 #| msgid "No error correction"
 msgid "An error occurred"
 msgstr "אין תיקון שגיאות"
 
-#: option/k3bexternalbinwidget.cpp:274
+#: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:277
+#: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:280
+#: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:283
+#: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
 msgstr ""
 
-#: option/k3bexternalbinwidget.cpp:286
+#: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
 msgstr ""
@@ -6195,11 +6214,13 @@ msgid "Re&boot"
 msgstr "ה&פעל מחדש"
 
 #: projects/k3baudioburndialog.cpp:51 projects/k3bmixedburndialog.cpp:52
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
 msgstr[0] "רצועה 1 (%2  דקות)"
 msgstr[1] "%1 רצועות (%2 דקות)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3baudioburndialog.cpp:71
 #, kde-format
@@ -6511,7 +6532,7 @@ msgstr "חיפוש ב-Musicbrainz"
 msgid "Try to determine meta information over the Internet"
 msgstr "נסה לקבוע את מידע המטא  מהאינטרנט"
 
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:131
+#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
@@ -6874,11 +6895,13 @@ msgid "Please insert an appendable medium"
 msgstr ""
 
 #: projects/k3bdatamultisessionimportdialog.cpp:203
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 audio track"
 msgid_plural "%1 audio tracks"
 msgstr[0] "רצועת שמע 1"
 msgstr[1] "%1 רצועות שמע"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bdatamultisessionimportdialog.cpp:248
 #, kde-format
@@ -7027,6 +7050,8 @@ msgid "in one file"
 msgid_plural "in %1 files"
 msgstr[0] "בקובץ 1"
 msgstr[1] "ב -%1 קבצים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:225
 #, fuzzy, kde-format
@@ -7034,6 +7059,8 @@ msgid "and one folder"
 msgid_plural "and %1 folders"
 msgstr[0] "ותיקייה אחת"
 msgstr[1] "ו־%1 תיקיות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:229
 #, kde-format
@@ -7046,6 +7073,8 @@ msgid "One Item"
 msgid_plural "%1 Items"
 msgstr[0] "פריט 1"
 msgstr[1] "%1 פריטים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:296
 #, fuzzy, kde-format
@@ -7053,6 +7082,8 @@ msgid "One File"
 msgid_plural "%1 Files"
 msgstr[0] "פתח קבצים"
 msgstr[1] "פתח קבצים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:298
 #, fuzzy, kde-format
@@ -7065,6 +7096,8 @@ msgid "One Folder"
 msgid_plural "%1 Folders"
 msgstr[0] "תיקייה 1"
 msgstr[1] "%1 תיקיות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:303
 #, fuzzy, kde-format
@@ -7158,7 +7191,7 @@ msgid "Always keep the existing file"
 msgstr "שמור תמיד את הקבצים הקיימים"
 
 #: projects/k3bdataurladdingdialog.cpp:400
-#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:120
+#: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:118
 #, kde-format
 msgid "Rename"
 msgstr "שנה שם"
@@ -7267,70 +7300,70 @@ msgstr ""
 msgid "No Data to Burn"
 msgstr "אין מידע לצרוב"
 
-#: projects/k3bdataviewimpl.cpp:108
+#: projects/k3bdataviewimpl.cpp:106
 #, kde-format
 msgid "New Folder..."
 msgstr "תיקייה חדשה..."
 
-#: projects/k3bdataviewimpl.cpp:126
+#: projects/k3bdataviewimpl.cpp:124
 #, kde-format
 msgid "Parent Folder"
 msgstr "תיקיית אב"
 
-#: projects/k3bdataviewimpl.cpp:137
+#: projects/k3bdataviewimpl.cpp:135
 #, kde-format
 msgid "Open"
 msgstr "פתח"
 
-#: projects/k3bdataviewimpl.cpp:141
+#: projects/k3bdataviewimpl.cpp:139
 #, kde-format
 msgid "&Import Session..."
 msgstr "&ייבא צריבה..."
 
-#: projects/k3bdataviewimpl.cpp:142
+#: projects/k3bdataviewimpl.cpp:140
 #, kde-format
 msgid "Import a previously burned session into the current project"
 msgstr "ייבא צריבה קודמת אל הפרוייקט הנוכחי"
 
-#: projects/k3bdataviewimpl.cpp:146
+#: projects/k3bdataviewimpl.cpp:144
 #, kde-format
 msgid "&Clear Imported Session"
 msgstr "&נקה צריבה קודמת"
 
-#: projects/k3bdataviewimpl.cpp:147
+#: projects/k3bdataviewimpl.cpp:145
 #, kde-format
 msgid "Remove the imported items from a previous session"
 msgstr "הסר את הפריטים המיובאים מהצריבה הקודמת"
 
-#: projects/k3bdataviewimpl.cpp:152
+#: projects/k3bdataviewimpl.cpp:150
 #, kde-format
 msgid "&Edit Boot Images..."
 msgstr "&ערוך תמונות אתחול..."
 
-#: projects/k3bdataviewimpl.cpp:153
+#: projects/k3bdataviewimpl.cpp:151
 #, kde-format
 msgid "Modify the bootable settings of the current project"
 msgstr "שנה את ההגדרות האתחול של הפרוייקט הנוכחי"
 
-#: projects/k3bdataviewimpl.cpp:216 projects/k3bdataviewimpl.cpp:219
-#: projects/k3bdataviewimpl.cpp:224 projects/k3bdataviewimpl.cpp:228
+#: projects/k3bdataviewimpl.cpp:214 projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:222 projects/k3bdataviewimpl.cpp:226
 #, kde-format
 msgid "New Folder"
 msgstr "תיקייה חדשה"
 
-#: projects/k3bdataviewimpl.cpp:217
+#: projects/k3bdataviewimpl.cpp:215
 #, kde-format
 msgid "Please insert the name for the new folder:"
 msgstr "אנא הכנס את השם עבור התיקייה החדשה:"
 
-#: projects/k3bdataviewimpl.cpp:225
+#: projects/k3bdataviewimpl.cpp:223
 #, kde-format
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
 msgstr "קובץ עם השם שהכנסת כבר קיים. אנא הכנס את השם עבור התיקייה החדשה:"
 
-#: projects/k3bdataviewimpl.cpp:381
+#: projects/k3bdataviewimpl.cpp:375
 #, kde-format
 msgid "Edit Boot Images"
 msgstr "ערוך תמונות אתחול"
@@ -7419,11 +7452,13 @@ msgstr "גודל Blu-Ray"
 
 #: projects/k3bfillstatusdisplay.cpp:511 projects/k3bfillstatusdisplay.cpp:512
 #: projects/k3bfillstatusdisplay.cpp:513
-#, kde-format
+#, fuzzy, kde-format
 msgid "unused"
 msgid_plural "%1 minutes"
 msgstr[0] "לא בשימוש"
 msgstr[1] "%1 דקות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bfillstatusdisplay.cpp:571
 #, kde-format
@@ -7557,6 +7592,8 @@ msgid "One file (%2)"
 msgid_plural "%1 files (%2)"
 msgstr[0] "קובץ אחד (%2)"
 msgstr[1] "%1 קבצים (%2)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bmovixburndialog.cpp:51
 #, kde-format
@@ -7742,6 +7779,8 @@ msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: projects/k3bvcdburndialog.cpp:95 projects/k3bvcdburndialog.cpp:96
 #: projects/k3bvcdburndialog.cpp:97 projects/k3bvcdburndialog.cpp:98
@@ -8886,11 +8925,13 @@ msgstr "מחפש מידע אודות אומן..."
 
 #: rip/k3baudiocdview.cpp:177 rip/k3baudioprojectconvertingdialog.cpp:97
 #: rip/k3baudiorippingdialog.cpp:115 rip/k3bvideocdview.cpp:350
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 track (%2)"
 msgid_plural "%1 tracks (%2)"
 msgstr[0] "רצועה 1 (%2)"
 msgstr[1] "%1 רצועות (%2)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/k3baudiocdview.cpp:199
 #, kde-format
@@ -9351,18 +9392,22 @@ msgid ""
 msgstr ""
 
 #: rip/k3bmassaudioencodingjob.cpp:177
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 track (encoding to %2)"
 msgid_plural "%1 tracks (encoding to %2)"
 msgstr[0] "רצועה 1 (מקודד אל %2)"
 msgstr[1] "%1 רצועות (מקודד אל %2)"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/k3bmassaudioencodingjob.cpp:182
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 track"
 msgid_plural "%1 tracks"
 msgstr[0] "רצועה 1"
 msgstr[1] "%1 רצועות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/k3bmassaudioencodingjob.cpp:264
 #, kde-format
@@ -9897,12 +9942,14 @@ msgid "Video Size"
 msgstr "גודל וידאו:"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:272
-#, no-c-format, kde-format
+#, fuzzy, no-c-format, kde-format
 msgctxt "Ch is short for Channels"
 msgid "%1Ch"
 msgid_plural "%1Ch"
 msgstr[0] "%1Ch"
 msgstr[1] "%1Ch"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:323
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:353
@@ -9911,11 +9958,13 @@ msgid "Video DVD Ripping"
 msgstr "קריעת תקליטור וידאו DVD"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:354
-#, kde-format
+#, fuzzy, kde-format
 msgid "1 title from %2"
 msgid_plural "%1 titles from %2"
 msgstr[0] "כותר אחד מ - %2"
 msgstr[1] "%1 כותרים מ - %2"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
@@ -9936,11 +9985,13 @@ msgid "Ripping Video DVD Titles"
 msgstr "קורע תקליטור DVD"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:109
-#, kde-format
+#, fuzzy, kde-format
 msgid "Transcoding 1 title to %2/%3"
 msgid_plural "Transcoding %1 titles to %2/%3"
 msgstr[0] "משנה קידוד כותר 1 אל %2/%3"
 msgstr[1] "משנה קידוד כותרות %1 אל %2/%3"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
 #, kde-format
@@ -10028,11 +10079,13 @@ msgid "%1 (Video DVD)"
 msgstr "תקליטור וידאו (DVD)"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:269
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 title"
 msgid_plural "%1 titles"
 msgstr[0] "כותר %1"
 msgstr[1] "%1 כותרות"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:277
 #, kde-format
@@ -10193,11 +10246,13 @@ msgid "MPEG2"
 msgstr "MPEG2"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:250
-#, kde-format
+#, fuzzy, kde-format
 msgid "%1 chapter"
 msgid_plural "%1 chapters"
 msgstr[0] "פרק %1"
 msgstr[1] "%1 פרקים"
+msgstr[2] ""
+msgstr[3] ""
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:260
 #, kde-format
@@ -10213,6 +10268,9 @@ msgstr "חסר צורה"
 #, kde-format
 msgid "Subpicture"
 msgstr "תת תמונה"
+
+#~ msgid "K3b Bookmarks"
+#~ msgstr "סימניות K3b"
 
 #~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
 #~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |קבצי שמע"
