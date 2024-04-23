@@ -43,3 +43,6 @@ Dependencies:
     'frameworks/kwidgetsaddons': '@stable'
     'frameworks/kxmlgui': '@stable'
     'multimedia/libkcddb': '@same'
+
+Options:
+  require-passing-tests-on: ['Linux', 'FreeBSD', 'Windows']
