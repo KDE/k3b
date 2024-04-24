@@ -91,9 +91,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 >Permisos</guilabel
 > sobre la pàgina <guilabel
 >Programes</guilabel
-> del diàleg de configuració, des d'on podreu canviar els permisos. En tots els sistemes moderns els dispositius òptics pertanyen a un determinat grup d'usuaris (&pex;, <quote
->cdrom</quote
->). Si l'usuari actual no pertany a aquest grup, se us oferirà afegir-lo en aquesta pestanya. </para>
+> del diàleg de configuració, des d'on podreu canviar els permisos. En tots els sistemes moderns els dispositius òptics pertanyen a un determinat grup d'usuaris (&pex;, «cdrom»). Si l'usuari actual no pertany a aquest grup, se us oferirà afegir-lo en aquesta pestanya. </para>
 <para>
 <screenshot>
 <screeninfo

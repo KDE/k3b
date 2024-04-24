@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-02-16 11:03+0100\n"
+"PO-Revision-Date: 2024-04-23 14:58+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -6411,8 +6411,7 @@ msgstr "Joc de fonts dels subtítols del MPlayer:"
 #: projects/base_k3bmovixoptionswidget.ui:34
 #, kde-format
 msgid "Select the font to be used to render subtitles"
-msgstr ""
-"Seleccioneu el tipus de lletra que es farà servir per a mostrar els subtítols"
+msgstr "Seleccioneu la lletra que es farà servir per a mostrar els subtítols"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel7)
 #: projects/base_k3bmovixoptionswidget.ui:44
