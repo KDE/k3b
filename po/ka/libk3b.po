@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2023-01-18 06:17+0100\n"
+"PO-Revision-Date: 2024-04-24 15:41+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -98,7 +98,7 @@ msgstr "%1-ის ჩასაწერად გახსნის შეცდ
 #: jobs/k3baudiosessionreadingjob.cpp:235
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
-msgstr ""
+msgstr "რიპვის აღუდგენელი შეცდომა ბილიკისთვის %1."
 
 #: jobs/k3bbinimagewritingjob.cpp:53
 #, kde-format
@@ -144,7 +144,7 @@ msgstr "CD-RW-ის გასუფთავებისას მიმდი�
 #: jobs/k3bblankingjob.cpp:106
 #, kde-format
 msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
-msgstr ""
+msgstr "ჩადეთ გადაწერადი CD მედია ამძრავში <p><b>%1 %2 (%3)</b>."
 
 #: jobs/k3bblankingjob.cpp:143
 #, kde-format
@@ -180,6 +180,8 @@ msgstr "წყაროს დისკის შემოწმება"
 #, kde-format
 msgid "K3b does not copy CDs containing multiple data tracks."
 msgstr ""
+"K3b-ს ერთზე მეტი მონაცემების ბილიკის მქონე CD-ების კოპირების მხარდაჭერა არ "
+"გააჩნია."
 
 #: jobs/k3bcdcopyjob.cpp:198
 #, kde-format
@@ -195,11 +197,12 @@ msgstr "მონაცემების CD-კოპირება."
 #, kde-format
 msgid "K3b can only copy CD-Extra mixed mode CDs."
 msgstr ""
+"K3b-ს, მხოლოდ, CD-extra შერეული რეჟიმის მქონე CD-ების ასლის შექმნა შეუძლია."
 
 #: jobs/k3bcdcopyjob.cpp:210
 #, kde-format
 msgid "Copying Enhanced Audio CD (CD-Extra)."
-msgstr ""
+msgstr "გაფართოებული აუდიო CD-ის (CD-Extra) კოპირება."
 
 #: jobs/k3bcdcopyjob.cpp:215
 #, kde-format
@@ -215,6 +218,8 @@ msgstr "საწყისი დისკი ცარიელია."
 #, kde-format
 msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
 msgstr ""
+"K3b-ს Mode2 მონაცემების ბილიკების დასაკოპირებლად cdrecord 2.01a12 ან უფრო "
+"ახალ სჭირდება."
 
 #: jobs/k3bcdcopyjob.cpp:274
 #, kde-format
@@ -222,6 +227,8 @@ msgid ""
 "You will only be able to copy the first session in raw writing mode. "
 "Continue anyway?"
 msgstr ""
+"დაუმუშავებელი ჩაწერის რეჟიმში, მხოლოდ, პირველი სესიის კოპირება შეგიძლიათ. "
+"მაინც გავაგრძელო?"
 
 #: jobs/k3bcdcopyjob.cpp:276
 #, kde-format
@@ -236,12 +243,12 @@ msgstr "მხოლოდ პირველი სესიის კოპი
 #: jobs/k3bcdcopyjob.cpp:310 jobs/k3bdvdcopyjob.cpp:344
 #, kde-format
 msgid "Unable to determine free space in temporary folder '%1'."
-msgstr ""
+msgstr "დროებით საქაღალდეში '%1' თავისუფალი ადგილის განსაზღვრა შეუძლებელია."
 
 #: jobs/k3bcdcopyjob.cpp:316 jobs/k3bdvdcopyjob.cpp:351
 #, kde-format
 msgid "Not enough space left in temporary folder."
-msgstr ""
+msgstr "თავისუფალი სივრცე დროებით საქაღალდეში საკმარისია არაა."
 
 #: jobs/k3bcdcopyjob.cpp:325 jobs/k3bdvdcopyjob.cpp:368
 #, kde-format
@@ -266,12 +273,12 @@ msgstr "ვიპოვე CD-Text (%1 - %2)."
 #: jobs/k3bcdcopyjob.cpp:381
 #, kde-format
 msgid "Found corrupted CD-Text. Ignoring it."
-msgstr ""
+msgstr "ვიპოვე დაზიანებული CD-Text. გამოტოვება."
 
 #: jobs/k3bcdcopyjob.cpp:386
 #, kde-format
 msgid "No CD-Text found."
-msgstr ""
+msgstr "CD-Text ვერ ვიპოვე."
 
 #: jobs/k3bcdcopyjob.cpp:397
 #, kde-format
@@ -281,7 +288,7 @@ msgstr "CDDB-ის მოთხოვნა"
 #: jobs/k3bcdcopyjob.cpp:418
 #, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr ""
+msgstr "ვიპოვე CDDB ჩანაწერი (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:441
 #, kde-format
@@ -299,6 +306,8 @@ msgid ""
 "Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. Which one should be used "
 "to generate the CD-Text on the new CD?"
 msgstr ""
+"აღმოჩენილია CD-Text (%1 - %2) და CDDB (%3 - %4) ჩანაწერები. რომელი "
+"გამოვიყენო ახალი CD-სთვის CD-Text-ის შესაქმნელად?"
 
 #: jobs/k3bcdcopyjob.cpp:466
 #, kde-format
@@ -326,7 +335,7 @@ msgstr "ჩაწერის პროცესის მომზადებ�
 #: jobs/k3bdvdcopyjob.cpp:323
 #, kde-format
 msgid "Specified an unusable temporary path. Using default."
-msgstr ""
+msgstr "მითითებულია გამოუსადეგარი დროებითი ბილიკი. ვიყენებ ნაგულისხმევს."
 
 #: jobs/k3bcdcopyjob.cpp:544
 #, kde-format
@@ -366,7 +375,7 @@ msgstr "საწყისი მედიის წაკითხვა"
 #: jobs/k3bcdcopyjob.cpp:605 jobs/k3bcdcopyjob.cpp:1193
 #, kde-format
 msgid "Reading track %1 of %2"
-msgstr ""
+msgstr "მიმდინარეობს %1 ბილიკის წაკითხვა %2-დან"
 
 #: jobs/k3bcdcopyjob.cpp:698
 #, kde-format
@@ -413,7 +422,7 @@ msgstr "დისკის მოლოდინი"
 #: projects/audiocd/k3baudiojob.cpp:293
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode."
-msgstr ""
+msgstr "CD-Text_ის ჩაწერა TAO რეჟიმში შეუძლებელია."
 
 #: jobs/k3bcdcopyjob.cpp:972
 #, kde-format
@@ -428,7 +437,7 @@ msgstr "საწყისი დისკის კითხვა წარმ
 #: jobs/k3bcdcopyjob.cpp:989
 #, kde-format
 msgid "K3b was unable to eject the source disk. Please do so manually."
-msgstr ""
+msgstr "K3b-მა წყარო დისკი ვერ გამოიღო. გთხოვთ, გამოიღეთ ის ხელით."
 
 #: jobs/k3bcdcopyjob.cpp:1006
 #, kde-format
@@ -439,7 +448,7 @@ msgstr "%1-ე სესიის წაკითხვის შეცდომ
 #: projects/mixedcd/k3bmixedjob.cpp:519
 #, kde-format
 msgid "Need to reload medium to return to proper state."
-msgstr ""
+msgstr "სწორ მდგომარეობაში დასაბრუნებლად საჭიროა მედიის თავიდან ჩადება."
 
 #: jobs/k3bcdcopyjob.cpp:1035
 #, kde-format
@@ -451,19 +460,19 @@ msgstr "დისკის თავიდან ჩადება"
 #: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
-msgstr ""
+msgstr "K3b-მა ჩაწერილი დისკი ვერ გამოიღო. გთხოვთ, გამოიღეთ ის ხელით."
 
 #: jobs/k3bcdcopyjob.cpp:1091 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
 #: projects/mixedcd/k3bmixedjob.cpp:554
 #, kde-format
 msgid "Please reload the medium and press 'OK'"
-msgstr ""
+msgstr "ჩადეთ მედია თავიდან და დააწექით ღილაკს 'დიახ'"
 
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:262
 #, kde-format
 msgid "Failed to reload the medium"
-msgstr ""
+msgstr "მედიის თავიდან ჩატვირთვა ჩავარდა"
 
 #: jobs/k3bcdcopyjob.cpp:1106 projects/audiocd/k3baudiojob.cpp:687
 #, kde-format
@@ -483,7 +492,7 @@ msgstr "CD-ის ასლის შექმნა"
 #: jobs/k3bcdcopyjob.cpp:1205
 #, kde-format
 msgid "Simulating CD Copy On-The-Fly"
-msgstr ""
+msgstr "CD-ის კოპირების რეალურ დროში სიმულაცია"
 
 #: jobs/k3bcdcopyjob.cpp:1207
 #, kde-format
@@ -493,7 +502,7 @@ msgstr "CD-ის კოპირების სიმულაცია"
 #: jobs/k3bcdcopyjob.cpp:1211
 #, kde-format
 msgid "Copying CD On-The-Fly"
-msgstr ""
+msgstr "CD-ის კოპირება რეალურ დროში"
 
 #: jobs/k3bcdcopyjob.cpp:1213
 #, kde-format
@@ -515,7 +524,7 @@ msgstr[1] "%1 ასლის შექმნა"
 #: projects/k3bgrowisofswriter.cpp:134 projects/videocd/k3bvcdjob.cpp:194
 #, kde-format
 msgid "Could not find %1 executable."
-msgstr ""
+msgstr "%1-ის გამშვები ფაილი ვერ ვიპოვე."
 
 #: jobs/k3bcdda2wavreader.cpp:127 jobs/k3bdvdbooktypejob.cpp:325
 #: jobs/k3bdvdformattingjob.cpp:498
@@ -527,7 +536,7 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:248
 #, kde-format
 msgid "Could not start %1."
-msgstr ""
+msgstr "%1-ის გაშვება შეუძლებელია."
 
 #: jobs/k3bcdda2wavreader.cpp:232 jobs/k3bdvdbooktypejob.cpp:182
 #: jobs/k3bdvdformattingjob.cpp:265
@@ -539,7 +548,7 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:349
 #, kde-format
 msgid "%1 returned an unknown error (code %2)."
-msgstr ""
+msgstr "%1-მა უცნობი შეცდომა დააბრუნა (კოდი %2)."
 
 #: jobs/k3bcdda2wavreader.cpp:238 jobs/k3bdvdbooktypejob.cpp:190
 #: jobs/k3bdvdformattingjob.cpp:273
@@ -547,12 +556,12 @@ msgstr ""
 #: projects/videocd/k3bvcdjob.cpp:357
 #, kde-format
 msgid "%1 did not exit cleanly."
-msgstr ""
+msgstr "%1 უშეცდომოდ არ დასრულებულა."
 
 #: jobs/k3bclonejob.cpp:87
 #, kde-format
 msgid "Cdrecord version %1 does not have cloning support."
-msgstr ""
+msgstr "Cdrecord-ის ვერსიას %1 ასლის შექმნის მხარდაჭერა არ გააჩნია."
 
 #: jobs/k3bclonejob.cpp:95
 #, kde-format
@@ -562,7 +571,7 @@ msgstr "მოწყობილობა დაყენებული არ�
 #: jobs/k3bclonejob.cpp:104
 #, kde-format
 msgid "CD writer %1 (%2) does not support cloning."
-msgstr ""
+msgstr "CD-ის ჩამწერს %1 (%2) ასლის შექმნის მხარდაჭერა არ გააჩნიია."
 
 #: jobs/k3bclonejob.cpp:137
 #, kde-format
@@ -578,42 +587,42 @@ msgstr "იწერება ტრეკი %1 %2-დან"
 #: jobs/k3bclonejob.cpp:235
 #, kde-format
 msgid "Successfully written clone copy %1."
-msgstr ""
+msgstr "კლონ ასლის %1 ჩაწერა წარმატებულია."
 
 #: jobs/k3bclonejob.cpp:283
 #, kde-format
 msgid "Successfully read disk."
-msgstr ""
+msgstr "დისკის კითხვა წარმატებულია."
 
 #: jobs/k3bclonejob.cpp:295
 #, kde-format
 msgid "Failed to read disk completely in clone mode."
-msgstr ""
+msgstr "ასლის შექმნის რეჟიმში დისკის სრულად წაკითხვა ჩავარდა."
 
 #: jobs/k3bclonejob.cpp:302
 #, kde-format
 msgid "Error while reading disk."
-msgstr ""
+msgstr "შეცდომა დისკის კითხვისას."
 
 #: jobs/k3bclonejob.cpp:328
 #, kde-format
 msgid "Simulating clone copy"
-msgstr ""
+msgstr "ზუსტი ასლის შექმნის სიმულაცია"
 
 #: jobs/k3bclonejob.cpp:330
 #, kde-format
 msgid "Writing clone copy %1"
-msgstr ""
+msgstr "ზუსტი ასლის %1 ჩაწერა"
 
 #: jobs/k3bclonejob.cpp:351
 #, kde-format
 msgid "Creating Clone Image"
-msgstr ""
+msgstr "ასლი გამოსახულების შექმნა"
 
 #: jobs/k3bclonejob.cpp:354
 #, kde-format
 msgid "Simulating Clone Image"
-msgstr ""
+msgstr "ასლი გამოსახულების ჩაწერის სიმულაცია"
 
 #: jobs/k3bclonejob.cpp:356
 #, kde-format
@@ -640,88 +649,88 @@ msgstr[1] "%1 კლონი ასლის შექმნა"
 #: jobs/k3bdatatrackreader.cpp:167
 #, kde-format
 msgid "Unable to open libdvdcss."
-msgstr ""
+msgstr "შეცდომა libdvdcss-ის გახსნისას."
 
 #: jobs/k3bdatatrackreader.cpp:176
 #, kde-format
 msgid "Retrieving all CSS keys. This might take a while."
-msgstr ""
+msgstr "ყველა CSS გასაღების მიღება. ამას საკმაო დრო შეიძლება დასჭირდეს."
 
 #: jobs/k3bdatatrackreader.cpp:179
 #, kde-format
 msgid "Failed to retrieve all CSS keys."
-msgstr ""
+msgstr "ყველა CSS გასაღების მიღება ჩავარდა."
 
 #: jobs/k3bdatatrackreader.cpp:180
 #, kde-format
 msgid "Video DVD decryption failed."
-msgstr ""
+msgstr "ვიდეო DVD-ის გაშიფვრა ჩავარდა."
 
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
 msgid "No support for reading formless Mode2 sectors."
-msgstr ""
+msgstr "უფორმო Mode2 სექტორების წაკითხვის მხარდაჭერა არ არსებობს."
 
 #: jobs/k3bdatatrackreader.cpp:206
 #, kde-format
 msgid "Unsupported sector type."
-msgstr ""
+msgstr "მხარდაუჭერელი სექტორის ტიპი."
 
 #: jobs/k3bdatatrackreader.cpp:213
 #, kde-format
 msgid "Reading with sector size %1."
-msgstr ""
+msgstr "წაკითხვა სექტორის ზომით %1."
 
 #: jobs/k3bdatatrackreader.cpp:264 jobs/k3bdatatrackreader.cpp:439
 #, kde-format
 msgid "Error while reading sector %1."
-msgstr ""
+msgstr "შეცდომა სექტორის %1 წაკითხვისას."
 
 #: jobs/k3bdatatrackreader.cpp:346
 #, kde-format
 msgid "Ignored %1 erroneous sector."
 msgid_plural "Ignored a total of %1 erroneous sectors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "გამოტოვებულია %1 შეცდომიანი სექტორი."
+msgstr[1] "გამოტოვებულია სულ %1 შეცდომიანი სექტორი."
 
 #: jobs/k3bdatatrackreader.cpp:415
 #, kde-format
 msgid "Problem while reading. Retrying from sector %1."
-msgstr ""
+msgstr "შეცდომა წაკითხვისას. ვცდი თავიდან, სექტორიდან %1."
 
 #: jobs/k3bdatatrackreader.cpp:431
 #, kde-format
 msgid "Ignoring read error in sector %1."
-msgstr ""
+msgstr "გამოტოვებულია წაკითხვის შეცდომა სექტორში %1."
 
 #: jobs/k3bdvdbooktypejob.cpp:74
 #, kde-format
 msgid "Changing DVD Booktype"
-msgstr ""
+msgstr "DVD Booktype-ის შეცვლა"
 
 #: jobs/k3bdvdbooktypejob.cpp:92 jobs/k3bdvdformattingjob.cpp:114
 #, kde-format
 msgid "No device set"
-msgstr ""
+msgstr "მოწყობილობა დაყენებული არაა"
 
 #: jobs/k3bdvdbooktypejob.cpp:108
 #, kde-format
 msgid ""
 "Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</"
 "b>."
-msgstr ""
+msgstr "ჩადეთ ცარიელი DVD+R ან DVD+RW მედა ამძრავში<p><b>%1 %2 (%3)</b>."
 
 #: jobs/k3bdvdbooktypejob.cpp:118 jobs/k3bdvdbooktypejob.cpp:119
 #: jobs/k3bdvdformattingjob.cpp:145 jobs/k3bdvdformattingjob.cpp:146
 #: jobs/k3bverificationjob.cpp:228
 #, kde-format
 msgid "Checking medium"
-msgstr ""
+msgstr "მედიის შემოწმება"
 
 #: jobs/k3bdvdbooktypejob.cpp:178
 #, kde-format
 msgid "Booktype successfully changed"
-msgstr ""
+msgstr "Booktype წარმატებით შეიცვალა"
 
 #: jobs/k3bdvdbooktypejob.cpp:184 jobs/k3bdvdformattingjob.cpp:267
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:274
@@ -730,82 +739,85 @@ msgstr ""
 #: projects/datacd/k3bisoimager.cpp:163 projects/videocd/k3bvcdjob.cpp:351
 #, kde-format
 msgid "Please send me an email with the last output."
-msgstr ""
+msgstr "მომწერეთ ელფოსტა ბოლო გამოტანილი ინფორმაციით."
 
 #: jobs/k3bdvdbooktypejob.cpp:207
 #, kde-format
 msgid "Ejecting DVD..."
-msgstr ""
+msgstr "DVD-ის გამოღება..."
 
 #: jobs/k3bdvdbooktypejob.cpp:224
 #, kde-format
 msgid "Unable to eject media."
-msgstr ""
+msgstr "მედიის გამოღება შეუძლებელია."
 
 #: jobs/k3bdvdbooktypejob.cpp:247
 #, kde-format
 msgid "Cannot change booktype on non-empty DVD+R media."
-msgstr ""
+msgstr "Booktype-ის შეცვლა არაცარიელ DVD+R მედიაზე შეუძლებელია."
 
 #: jobs/k3bdvdbooktypejob.cpp:255
 #, kde-format
 msgid "No DVD+R(W) media found."
-msgstr ""
+msgstr "DVD+R(W) მედიის გარეშე."
 
 #: jobs/k3bdvdbooktypejob.cpp:260 jobs/k3bdvdformattingjob.cpp:315
 #, kde-format
 msgid "Unable to determine media state."
-msgstr ""
+msgstr "მედიის მდგომარეობის დადგენა შეუძლებელია."
 
 #: jobs/k3bdvdbooktypejob.cpp:330
 #, kde-format
 msgid "Changing Booktype"
-msgstr ""
+msgstr "DVD Booktype-ის შეცვლა"
 
 #: jobs/k3bdvdcopyjob.cpp:119
 #, kde-format
 msgid "K3b does not support writing on-the-fly with growisofs %1."
-msgstr ""
+msgstr "K3b-ს growisofs %1-ით რეალურ დროში ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: jobs/k3bdvdcopyjob.cpp:121
 #, kde-format
 msgid "Disabling on-the-fly writing."
-msgstr ""
+msgstr "რეალურ დროში ჩაწერის გამორთვა."
 
 #: jobs/k3bdvdcopyjob.cpp:156
 #, kde-format
 msgid "No source medium found."
-msgstr ""
+msgstr "წყარი მედია ვერ ვიპოვე."
 
 #: jobs/k3bdvdcopyjob.cpp:184
 #, kde-format
 msgid "Found encrypted DVD."
-msgstr ""
+msgstr "აღმოჩენილია დაშიფრული DVD."
 
 #: jobs/k3bdvdcopyjob.cpp:200
 #, kde-format
 msgid "Cannot copy encrypted DVDs."
-msgstr ""
+msgstr "დაშიფრული DVD-ების კოპირება შეუძლებელია."
 
 #: jobs/k3bdvdcopyjob.cpp:236
 #, kde-format
 msgid "The writer does not support writing Double Layer DVDs."
-msgstr ""
+msgstr "ჩამწერს ორმაგი ფენის მქონე DVD-ების ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: jobs/k3bdvdcopyjob.cpp:242
 #, kde-format
 msgid "This growisofs version does not support writing Double Layer DVDs."
 msgstr ""
+"ამ growisofs-ის ვერსიას ორმაგი ფენის მქონე DVD-ების ჩაწერის მხარდაჭერა არ "
+"გააჩნია."
 
 #: jobs/k3bdvdcopyjob.cpp:260
 #, kde-format
 msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
 msgstr ""
+"K3b-ს მრავალსესიიანი DVD ან Blu-ray დისკების კოპირების მხარდაჭერა არ გააჩნია."
 
 #: jobs/k3bdvdcopyjob.cpp:282
 #, kde-format
 msgid "K3b relies on the size saved in the ISO 9660 header."
-msgstr ""
+msgstr "K3b ეყრდნობა ზომას, რომელიც ISO 9660-ის თავსართშია შენახული."
 
 #: jobs/k3bdvdcopyjob.cpp:283
 #, kde-format
@@ -813,17 +825,19 @@ msgid ""
 "This might result in a corrupt copy if the source was mastered with buggy "
 "software."
 msgstr ""
+"ამან, შეიძლება, დაზიანებულ ასლამდე მიგიყვანოთ, თუ წყარო შეცდომებიანი "
+"პროგრამითაა აგებული."
 
 #: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
 #: jobs/k3bverificationjob.cpp:355
 #, kde-format
 msgid "Unable to determine the ISO 9660 filesystem size."
-msgstr ""
+msgstr "ISO 9660 ფაილური სისტემის ზომის დადგენა შეუძლებელია."
 
 #: jobs/k3bdvdcopyjob.cpp:299
 #, kde-format
 msgid "K3b does not support copying DVD-RAM."
-msgstr ""
+msgstr "K3b-ს DVD-RAM დისკების კოპირების მხარდაჭერა არ გააჩნია."
 
 #: jobs/k3bdvdcopyjob.cpp:305
 #, kde-format
@@ -833,7 +847,7 @@ msgstr "მედიის მხარდაუჭერელი ტიპი.
 #: jobs/k3bdvdcopyjob.cpp:329
 #, kde-format
 msgid "Reading source medium."
-msgstr ""
+msgstr "წყარო მედიის წაკითხვა."
 
 #: jobs/k3bdvdcopyjob.cpp:373
 #, kde-format
@@ -843,7 +857,7 @@ msgstr "ასლის შექმნა"
 #: jobs/k3bdvdcopyjob.cpp:379
 #, kde-format
 msgid "Simulating copy"
-msgstr ""
+msgstr "კოპირების სიმულაცია"
 
 #: jobs/k3bdvdcopyjob.cpp:381 jobs/k3bdvdcopyjob.cpp:596
 #: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
@@ -859,22 +873,22 @@ msgstr "ასლის ჩაწერა"
 #: jobs/k3bdvdcopyjob.cpp:573
 #, kde-format
 msgid "Successfully read source medium."
-msgstr ""
+msgstr "წყარო მედიის წაკითხვა წარმატებით დასრულდა."
 
 #: jobs/k3bdvdcopyjob.cpp:585
 #, kde-format
 msgid "K3b was unable to eject the source medium. Please do so manually."
-msgstr ""
+msgstr "K3b-მა წყარო მედია ვერ ამოიღო. გთხოვთ, ამოიღეთ ის ხელით."
 
 #: jobs/k3bdvdcopyjob.cpp:646
 #, kde-format
 msgid "Successfully written copy %1."
-msgstr ""
+msgstr "წარამატებით ჩაიწერა ასლი %1."
 
 #: jobs/k3bdvdcopyjob.cpp:669
 #, kde-format
 msgid "Verifying copy %1"
-msgstr ""
+msgstr "მიმდინარეობს გადამოწმება ასლისთვის %1"
 
 #: jobs/k3bdvdcopyjob.cpp:671
 #, kde-format
@@ -884,12 +898,12 @@ msgstr "ასლის გადამოწმება"
 #: jobs/k3bdvdcopyjob.cpp:681 jobs/k3biso9660imagewritingjob.cpp:146
 #, kde-format
 msgid "K3b was unable to eject the written medium. Please do so manually."
-msgstr ""
+msgstr "K3b-მა ჩაწერილი მედია ვერ ამოიღო. გთხოვთ, ამოიღეთ ის ხელით."
 
 #: jobs/k3bdvdcopyjob.cpp:790
 #, kde-format
 msgid "Unsupported media type: %1"
-msgstr ""
+msgstr "მხარდაუჭერელი მედიის ტიპი: %1"
 
 #: jobs/k3bdvdcopyjob.cpp:816 jobs/k3bdvdcopyjob.cpp:909
 #: projects/datacd/k3bdatajob.cpp:815 projects/datacd/k3bdatajob.cpp:935
@@ -898,12 +912,14 @@ msgid ""
 "%1 media do not support write simulation. Do you really want to continue? "
 "The disc will actually be written to."
 msgstr ""
+"%1 მედიას ჩაწერის სიმულაციის მხარდაჭერა არ გააჩნია. მართლა გნებავთ "
+"გაგრძელება? დისკი მართლა ჩაიწერება."
 
 #: jobs/k3bdvdcopyjob.cpp:819 jobs/k3bdvdcopyjob.cpp:912
 #: projects/datacd/k3bdatajob.cpp:818 projects/datacd/k3bdatajob.cpp:938
 #, kde-format
 msgid "No Simulation with %1"
-msgstr ""
+msgstr "%1-ით სიმულაცია არ მუშაობს"
 
 #: jobs/k3bdvdcopyjob.cpp:825
 #, kde-format
@@ -913,7 +929,7 @@ msgstr "DVD ასლის ჩაწერა"
 #: jobs/k3bdvdcopyjob.cpp:829
 #, kde-format
 msgid "Writing mode ignored when writing DVD+R(W) media."
-msgstr ""
+msgstr "ჩაწერის რეჟიმი გამოტოვებულია DVD+R(W) მედიის ჩაწერისას."
 
 #: jobs/k3bdvdcopyjob.cpp:831 jobs/k3bdvdcopyjob.cpp:921
 #: jobs/k3bmetawriter.cpp:934 jobs/k3bmetawriter.cpp:943
@@ -929,46 +945,48 @@ msgid ""
 "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
 "really want to continue? The media will actually be written to."
 msgstr ""
+"თქვენს ჩამწერს (%1 %2) DVD-R(W) მედიასთან სიმულაციის მხარდაჭერა არ გააჩნია. "
+"გნებავთ, გააგრძელოთ? მედია მართლა ჩაიწერება."
 
 #: jobs/k3bdvdcopyjob.cpp:844 jobs/k3bmetawriter.cpp:517
 #: projects/datacd/k3bdatajob.cpp:853
 #, kde-format
 msgid "No Simulation with DVD-R(W)"
-msgstr ""
+msgstr "DVD-R(W) სიმულაცია შეუძლებელია"
 
 #: jobs/k3bdvdcopyjob.cpp:865 jobs/k3bmetawriter.cpp:930
 #: projects/datacd/k3bdatajob.cpp:867
 #, kde-format
 msgid "Writing DVD-RW in restricted overwrite mode."
-msgstr ""
+msgstr "DVD-RW-ის ჩაწერა შეზღუდული თავზე გადაწერის რეჟიმში."
 
 #: jobs/k3bdvdcopyjob.cpp:873
 #, kde-format
 msgid "Writing DVD-RW in DAO mode."
-msgstr ""
+msgstr "DVD-RW-ის ჩაწერა DAO რეჟიმში."
 
 #: jobs/k3bdvdcopyjob.cpp:877
 #, kde-format
 msgid "Writing DVD-RW in incremental mode."
-msgstr ""
+msgstr "DVD-RW-ის ჩაწერა ინკრემენტულ რეჟიმში."
 
 #: jobs/k3bdvdcopyjob.cpp:886 jobs/k3bmetawriter.cpp:449
 #: jobs/k3bmetawriter.cpp:498 projects/datacd/k3bdatajob.cpp:908
 #, kde-format
 msgid "Restricted Overwrite is not possible with DVD-R media."
-msgstr ""
+msgstr "შეზღუდული თავზე გადაწერა შეუძლებელია DVD-R მედიით."
 
 #: jobs/k3bdvdcopyjob.cpp:891 jobs/k3bmetawriter.cpp:936
 #: projects/datacd/k3bdatajob.cpp:884 projects/datacd/k3bdatajob.cpp:901
 #, kde-format
 msgid "Writing %1 in DAO mode."
-msgstr ""
+msgstr "%1-ის ჩაწერა DAO რეჟიმში."
 
 #: jobs/k3bdvdcopyjob.cpp:895 jobs/k3bmetawriter.cpp:938
 #: projects/datacd/k3bdatajob.cpp:910
 #, kde-format
 msgid "Writing %1 in incremental mode."
-msgstr ""
+msgstr "%1-ის ჩაწერა ინკრემენტულ რეჟიმში."
 
 #: jobs/k3bdvdcopyjob.cpp:918
 #, kde-format
@@ -978,7 +996,7 @@ msgstr "BD ასლის ჩაწერა"
 #: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
 #, kde-format
 msgid "Removed image file %1"
-msgstr ""
+msgstr "წაიშალა დისკის ასლის ფაილი %1"
 
 #: jobs/k3bdvdcopyjob.cpp:942
 #, kde-format
@@ -988,12 +1006,12 @@ msgstr "ასლის შექმნა"
 #: jobs/k3bdvdcopyjob.cpp:946
 #, kde-format
 msgid "Copying DVD or BD On-The-Fly"
-msgstr ""
+msgstr "DVD-ის ან BD-ის კოპირება რეალურ დროში"
 
 #: jobs/k3bdvdcopyjob.cpp:948
 #, kde-format
 msgid "Copying DVD or BD"
-msgstr ""
+msgstr "DVD-ის ან BD-ის კოპირება"
 
 #: jobs/k3bdvdformattingjob.cpp:92
 #, kde-format
@@ -1012,93 +1030,94 @@ msgstr "Unmounting საშუალო"
 msgid ""
 "Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
 "b>."
-msgstr ""
+msgstr "ჩადეთ გადაწერადი DVD ან Blu-ray დისკი ამძრავში<p><b>%1 %2 (%3)</b>."
 
 #: jobs/k3bdvdformattingjob.cpp:255
 #, kde-format
 msgid "Formatting successfully completed"
-msgstr ""
+msgstr "დაფორმატება წარმატებით დასრულდა"
 
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
-msgstr ""
+msgstr "ყურადღების არმიქცევა, თუ მიმდინარეობა 100%-მდე დასრულდება."
 
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
 msgid "The formatting will continue in the background during writing."
-msgstr ""
+msgstr "დაფორმატება გაგრძელდება ფონზე ჩაწერის დროს."
 
 #: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
 msgid "Ejecting medium..."
-msgstr ""
+msgstr "მედიის გამოღება..."
 
 #: jobs/k3bdvdformattingjob.cpp:296 projects/k3babstractwriter.cpp:75
 #, kde-format
 msgid "Unable to eject medium."
-msgstr ""
+msgstr "მედიის გამოღება შეუძლებელია."
 
 #: jobs/k3bdvdformattingjob.cpp:336
 #, kde-format
 msgid "Found %1 medium."
-msgstr ""
+msgstr "აღმოჩენილია %1 მედია."
 
 #: jobs/k3bdvdformattingjob.cpp:340
 #, kde-format
 msgid "No rewritable DVD or BD medium found. Unable to format."
-msgstr ""
+msgstr "გადაწერადი DVD ან BD დისკი აღმოჩენილი არაა. დაფორმატება შეუძლებელია."
 
 #: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
 #, kde-format
 msgid "No need to format %1 media more than once."
-msgstr ""
+msgstr "%1 დისკის ერთზე მეტჯერ დაფორმატება საჭირო არაა."
 
 #: jobs/k3bdvdformattingjob.cpp:367 jobs/k3bdvdformattingjob.cpp:417
 #, kde-format
 msgid "It may simply be overwritten."
-msgstr ""
+msgstr "მას შეიძლება, უბრალოდ თავზე გადაეწეროს."
 
 #: jobs/k3bdvdformattingjob.cpp:370 jobs/k3bdvdformattingjob.cpp:409
 #: jobs/k3bdvdformattingjob.cpp:420
 #, kde-format
 msgid "Forcing formatting anyway."
-msgstr ""
+msgstr "მაინც დავაფორმატებ."
 
 #: jobs/k3bdvdformattingjob.cpp:371
 #, kde-format
 msgid "It is not recommended to force formatting of %1 media."
-msgstr ""
+msgstr "%1 მედიის ძალით დაფორმატება რეკომენდებული არაა."
 
 #: jobs/k3bdvdformattingjob.cpp:373
 #, kde-format
 msgid "After 10-20 reformats the media might become unusable."
-msgstr ""
+msgstr "10-20 თავიდან დაფორმატების შემდეგ შეიძლება მედია გადასაგდები გაგიხდეთ."
 
 #: jobs/k3bdvdformattingjob.cpp:382
 #, kde-format
 msgid "Formatting %1 medium"
-msgstr ""
+msgstr "%1 მედიის დაფორმატება"
 
 #: jobs/k3bdvdformattingjob.cpp:393
 #, kde-format
 msgid "Formatted in %1 mode."
-msgstr ""
+msgstr "დაფორმატებულა რეჟიმში %1."
 
 #: jobs/k3bdvdformattingjob.cpp:407
 #, kde-format
 msgid "Media is already empty."
-msgstr ""
+msgstr "მედია უკვე ცარიელია."
 
 #: jobs/k3bdvdformattingjob.cpp:434
 #, kde-format
 msgid "Formatting DVD-RW in %1 mode."
-msgstr ""
+msgstr "DVD-RW-ის დაფორმატება რეჟიმში %1."
 
 #: jobs/k3bdvdformattingjob.cpp:441
 #, kde-format
 msgid "Unable to determine the current formatting state of the DVD-RW medium."
 msgstr ""
+"DVD-RW დისკის მიმდინარე დაფორმატების მდგომარეობის განსაზღვრა შეუძლებელია."
 
 #: jobs/k3bdvdformattingjob.cpp:464
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:99
@@ -1109,7 +1128,7 @@ msgstr ""
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr ""
+msgstr "ვიყენებ %1 %2 – საავტორო უფლებები დაცულია © %3"
 
 #: jobs/k3bdvdformattingjob.cpp:503
 #, kde-format
@@ -1120,12 +1139,12 @@ msgstr "ფორმატირება"
 #: projects/datacd/k3bdatajob.cpp:137 projects/mixedcd/k3bmixedjob.cpp:212
 #, kde-format
 msgid "Preparing data"
-msgstr ""
+msgstr "მონაცემების მომზადება"
 
 #: jobs/k3biso9660imagewritingjob.cpp:84
 #, kde-format
 msgid "Could not find image %1"
-msgstr ""
+msgstr "ვერ ვიპოვე დისკის ასლი %1"
 
 #: jobs/k3biso9660imagewritingjob.cpp:130 projects/datacd/k3bdatajob.cpp:511
 #, kde-format
@@ -1135,7 +1154,7 @@ msgstr "ჩაწერილი მონაცემების შემო�
 #: jobs/k3biso9660imagewritingjob.cpp:132
 #, kde-format
 msgid "Verifying written copy %1 of %2"
-msgstr ""
+msgstr "ჩაწერილი ასლის გადამოწმება %1 %2-დან"
 
 #: jobs/k3biso9660imagewritingjob.cpp:205
 #, kde-format
@@ -1145,7 +1164,7 @@ msgstr "ასლის ჩაწერა"
 #: jobs/k3biso9660imagewritingjob.cpp:207
 #, kde-format
 msgid "Writing copy %1 of %2"
-msgstr ""
+msgstr "ასლის ჩაწერა %1 %2-დან"
 
 #: jobs/k3biso9660imagewritingjob.cpp:226
 #, kde-format
@@ -1155,46 +1174,50 @@ msgstr "დისკის მოლოდინი"
 #: jobs/k3biso9660imagewritingjob.cpp:333
 #, kde-format
 msgid "Simulating ISO 9660 Image"
-msgstr ""
+msgstr "ISO 9660 დისკის ასლის სიმულაცია"
 
 #: jobs/k3biso9660imagewritingjob.cpp:335
 #, kde-format
 msgid "Burning ISO 9660 Image"
-msgstr ""
+msgstr "ISO 9660 დისკის ასლის ამოწვა"
 
 #: jobs/k3bmetawriter.cpp:304 projects/datacd/k3bdatajob.cpp:769
 #: projects/datacd/k3bdatajob.cpp:792
 #, kde-format
 msgid "Cannot write %1 media using %2. Falling back to default application."
 msgstr ""
+"%1 დისკის ჩაწერა %2-ის გამოყენებით შეუძლებელია. გადართვა ნაგულისხმევ "
+"აპლიკაციაზე."
 
 #: jobs/k3bmetawriter.cpp:310
 #, kde-format
 msgid "DVD and Blu-ray tracks can only be written in MODE1."
-msgstr ""
+msgstr "DVD და Blu-ray ბილიკებს, მხოლოდ, MODE1 რეჟიმში ჩაწერთ."
 
 #: jobs/k3bmetawriter.cpp:335
 #, kde-format
 msgid ""
 "Missing Blu-ray support in cdrecord and growisofs. Please update the system."
 msgstr ""
+"არ არსებობს Blu-ray-ის მხარდაჭერა cdrecord-ში და growisofs-ში. განაახლეთ "
+"სისტემა."
 
 #: jobs/k3bmetawriter.cpp:431 projects/audiocd/k3baudiojob.cpp:243
 #, kde-format
 msgid "Track lengths below 4 seconds violate the Red Book standard."
-msgstr ""
+msgstr "4 წამზე ნაკლები სიგრძის მქონე ტრეკები Red Book სტანდარტს არღვევენ."
 
 #: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
 #: projects/mixedcd/k3bmixedjob.cpp:1222
 #, kde-format
 msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
-msgstr ""
+msgstr "რეალურ დროში ჩაწერა cdrecord < 2.01a13 მხარდაჭერილი არაა."
 
 #: jobs/k3bmetawriter.cpp:470 projects/audiocd/k3baudiojob.cpp:288
 #: projects/mixedcd/k3bmixedjob.cpp:1229
 #, kde-format
 msgid "Cdrecord %1 does not support CD-Text writing."
-msgstr ""
+msgstr "Cdrecord %1-ს CD-Text-ის ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: jobs/k3bmetawriter.cpp:482 projects/datacd/k3bdatajob.cpp:891
 #, kde-format
@@ -1202,11 +1225,13 @@ msgid ""
 "Your writer (%1 %2) does not support Incremental Streaming with %3 media. "
 "Multisession will not be possible. Continue anyway?"
 msgstr ""
+"თქვენს ჩამწერს (%1 %2) %3 დისკით ინკრემენტული სტრიმინგის მხარდაჭერა არ "
+"გააჩნია. ერთზე მეტი სესიის ქონა შეუძლებელი იქნება. მაინც გავაგრძელო?"
 
 #: jobs/k3bmetawriter.cpp:487 projects/datacd/k3bdatajob.cpp:896
 #, kde-format
 msgid "No Incremental Streaming"
-msgstr ""
+msgstr "ინკრემენტული სტრიმინგის გარეშე"
 
 #: jobs/k3bmetawriter.cpp:503
 #, kde-format
@@ -1214,270 +1239,278 @@ msgid ""
 "DVD+R(W) media do not support write simulation. Do you really want to "
 "continue? The media will actually be written to."
 msgstr ""
+"DVD+R(W) დისკებს ჩაწერის სიმულაციის მხარდაჭერა არ გააჩნია. მართლა გნებავთ, "
+"გააგრძელოთ? დისკი მართლა ჩაიწერება."
 
 #: jobs/k3bmetawriter.cpp:506
 #, kde-format
 msgid "No Simulation with DVD+R(W)"
-msgstr ""
+msgstr "DVD+R(W) სიმულაცია შეუძლებელია"
 
 #: jobs/k3bmetawriter.cpp:532 projects/datacd/k3bdatajob.cpp:1047
 #, kde-format
 msgid "Most writers do not support writing multisession CDs in DAO mode."
 msgstr ""
+"ჩამწერების ძირითად ნაწილს მრავალსესიიანი CD-ების მხარდაჭერა DAO რეჟიმში არ "
+"გააჩნიათ."
 
 #: jobs/k3bmetawriter.cpp:785
 #, kde-format
 msgid "No version of cdrskin can do this yet."
-msgstr ""
+msgstr "ჯერ ეს არ შეუძლია cdrskin-ის არც ერთ ვერსიას."
 
 #: jobs/k3bmetawriter.cpp:890
 #, kde-format
 msgid "Writing CD in Session At Once mode."
-msgstr ""
+msgstr "CD-ის ჩაწერა SAO რეჟიმში."
 
 #: jobs/k3bmetawriter.cpp:892
 #, kde-format
 msgid "Writing CD in Track At Once mode."
-msgstr ""
+msgstr "CD-ის ჩაწერა TAO რეჟიმში."
 
 #: jobs/k3bmetawriter.cpp:894
 #, kde-format
 msgid "Writing CD in Raw mode."
-msgstr ""
+msgstr "CD-ის ჩაწერა დაუმუშავებელ რეჟიმში."
 
 #: jobs/k3bmetawriter.cpp:897
 #, kde-format
 msgid "Appending session to CD"
-msgstr ""
+msgstr "სესიის CD-ის ბოლოში მიწერა"
 
 #: jobs/k3bmetawriter.cpp:904
 #, kde-format
 msgid "Writing rewritable CD in Session At Once mode."
-msgstr ""
+msgstr "გადაწერადი CD-ის ჩაწერა SAO რეჟიმში."
 
 #: jobs/k3bmetawriter.cpp:906
 #, kde-format
 msgid "Writing rewritable CD in Track At Once mode."
-msgstr ""
+msgstr "გადაწერადი CD-ის ჩაწერა TAO რეჟიმში."
 
 #: jobs/k3bmetawriter.cpp:908
 #, kde-format
 msgid "Writing rewritable CD in Raw mode."
-msgstr ""
+msgstr "გადაწერადი CD-ის ჩაწერა დაუმუშავებელ რეჟიმში."
 
 #: jobs/k3bmetawriter.cpp:911
 #, kde-format
 msgid "Appending session to rewritable CD."
-msgstr ""
+msgstr "სესიის გადაწერადი CD-ის ბოლოში მიწერა."
 
 #: jobs/k3bmetawriter.cpp:918
 #, kde-format
 msgid "Growing ISO 9660 filesystem on DVD+RW."
-msgstr ""
+msgstr "ISO 9660 ფაილური სისტემის გაზრდა DVD+RW-ზე."
 
 #: jobs/k3bmetawriter.cpp:920 projects/datacd/k3bdatajob.cpp:870
 #, kde-format
 msgid "Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."
 msgstr ""
+"ISO 9660 ფაილური სისტემის გაზრდა DVD-RW-ზე შეზღუდული თავზე გადაწერის რეჟიმში."
 
 #: jobs/k3bmetawriter.cpp:922
 #, kde-format
 msgid "Appending session to DVD+R."
-msgstr ""
+msgstr "სესიის DVD+R-ის ბოლოში მიწერა."
 
 #: jobs/k3bmetawriter.cpp:924
 #, kde-format
 msgid "Appending session to Double Layer DVD+R."
-msgstr ""
+msgstr "სესიის ორმაგი ფენის მქონე DVD+R-ის ბოლოში მიწერა."
 
 #: jobs/k3bmetawriter.cpp:926
 #, kde-format
 msgid "Appending session to %1."
-msgstr ""
+msgstr "სესიის %1-ის ბოლოში მიწერა."
 
 #: jobs/k3bmetawriter.cpp:932
 #, kde-format
 msgid "Writing Double Layer DVD+R."
-msgstr ""
+msgstr "ორმაგი ფენის მქონე DVD+R-ის ჩაწერა."
 
 #: jobs/k3breadcdreader.cpp:115
 #, kde-format
 msgid "Using readcd %1 instead of default version for clone support."
 msgstr ""
+"დაკლონის მხარდაჭერისთვის ნაგულისხმევი ვერსიის მაგიერ readcd %1-ს გამოვიყენებ."
 
 #: jobs/k3breadcdreader.cpp:122
 #, kde-format
 msgid "Could not find readcd executable with cloning support."
-msgstr ""
+msgstr "ვერ ვიპოვე readcd-ის გამშვები ფაილი დაკლონვის მხარდაჭერით."
 
 #: jobs/k3breadcdreader.cpp:155 jobs/k3breadcdreader.cpp:156
 #, kde-format
 msgid "Writing image to %1."
-msgstr ""
+msgstr "დისკის ასლის ფაილის ჩაწერა %1-ში."
 
 #: jobs/k3breadcdreader.cpp:198
 #, kde-format
 msgid "Could not start readcd."
-msgstr ""
+msgstr "გაშვების შეცდომა პროგრამისთვის readcd."
 
 #: jobs/k3breadcdreader.cpp:254
 #, kde-format
 msgid "Cannot read source disk."
-msgstr ""
+msgstr "წყარო დისკის წაკითხვა შეუძლებელია."
 
 #: jobs/k3breadcdreader.cpp:267
 #, kde-format
 msgid "Retrying from sector %1."
-msgstr ""
+msgstr "ვცდი თავიდან. სექტორი %1."
 
 #: jobs/k3breadcdreader.cpp:283
 #, kde-format
 msgid "Uncorrected error in sector %1"
-msgstr ""
+msgstr "გამოუსწორებელი შეცდომა სექტორში %1"
 
 #: jobs/k3breadcdreader.cpp:286
 #, kde-format
 msgid "Corrected error in sector %1"
-msgstr ""
+msgstr "შესწორებული შეცდომა სექტორში %1"
 
 #: jobs/k3breadcdreader.cpp:306
 #, kde-format
 msgid "%1 returned error: %2"
-msgstr ""
+msgstr "%1-მა დააბრუნა შეცდომა: %2"
 
 #: jobs/k3breadcdreader.cpp:311
 #, kde-format
 msgid "Readcd exited abnormally."
-msgstr ""
+msgstr "Readcd არანორმალურად დასრულდა."
 
 #: jobs/k3bverificationjob.cpp:222 jobs/k3bverificationjob.cpp:278
 #: jobs/k3bverificationjob.cpp:301
 #, kde-format
 msgid "Internal Error: Verification job improperly initialized (%1)"
-msgstr ""
+msgstr "შიდა შეცდომა: გადამოწმების დავალების ინიციალიზაცია არასწორია (%1)"
 
 #: jobs/k3bverificationjob.cpp:223
 #, kde-format
 msgid "no tracks added"
-msgstr ""
+msgstr "ტრეკები არ დამატებულა"
 
 #: jobs/k3bverificationjob.cpp:279 jobs/k3bverificationjob.cpp:302
 #, kde-format
 msgid "specified track number '%1' not found on medium"
-msgstr ""
+msgstr "მითითებული ბილიკის ნომერი '%1' მედიაზე აღმოჩენილი არაა"
 
 #: jobs/k3bverificationjob.cpp:323
 #, kde-format
 msgid "Verifying track %1"
-msgstr ""
+msgstr "ვამოწმებ ბილიკს %1"
 
 #: jobs/k3bverificationjob.cpp:391
 #, kde-format
 msgid "Written data in track %1 differs from original."
-msgstr ""
+msgstr "ჩაწერილი მონაცემები ბილიკზე %1 ორიგინალისგან განსხვავდება."
 
 #: jobs/k3bverificationjob.cpp:395
 #, kde-format
 msgid "Written data verified."
-msgstr ""
+msgstr "ჩაწერილი მონაცემები გადამოწმებულია."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:83
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:119
 #, kde-format
 msgid "%1 executable could not be found."
-msgstr ""
+msgstr "გამშვები ფაილი %1 აღმოჩენილი არაა."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:89
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:125
 #, kde-format
 msgid "%1 version %2 is too old."
-msgstr ""
+msgstr "%1-ის ვერსია %2 ძალიან ძველია."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
 #, kde-format
 msgid "Analysing Title %1 of Video DVD %2"
-msgstr ""
+msgstr "მიმდინარეობს ანალიზი სათაურისთვის %1 ვიდეო DVD-სთვის %2"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:178
 #, kde-format
 msgid "Analysing Chapter %1 of %2"
-msgstr ""
+msgstr "მიმდინარეობს ანალიზი თავისთვის %1 %2-დან"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:255
 #, kde-format
 msgid ""
 "Ignoring clipping values of last chapter due to its short playback time."
 msgstr ""
+"გამოტოვებული იქნება მოკვეთის მნიშვნელობები ბოლო თავისთვის მათი დაკვრის მოკლე "
+"დროის გამო."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:151
 #, kde-format
 msgid "Unable to create folder '%1'"
-msgstr ""
+msgstr "საქაღალდის შექმნის შეცდომა: '%1'"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:157
 #, kde-format
 msgid "Invalid filename: '%1'"
-msgstr ""
+msgstr "არასწორი ფაილის სახელი: '%1'"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:169
 #, kde-format
 msgid "Transcoding title %1 from Video DVD %2"
-msgstr ""
+msgstr "გადაკოდირება სათაურისთვის %1 ვიდეო DVD-დან %2"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:194
 #, kde-format
 msgid "Invalid video codec set: %1"
-msgstr ""
+msgstr "დაყენებულია არასწორი ვიდეოკოდეკი: %1"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:217
 #, kde-format
 msgid "Invalid audio codec set: %1"
-msgstr ""
+msgstr "დაყენებულია არასწორი აუდიოკოდეკი: %1"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
 msgid "Resizing picture of title %1 to %2x%3"
-msgstr ""
+msgstr "ზომის შეცვლა სურათისთვის სათაურიდან %1 %2x%3-ზე"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:381
 #, kde-format
 msgid "Single-pass Encoding"
-msgstr ""
+msgstr "ერთგავლიანი კოდირება"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:383
 #, kde-format
 msgid "Two-pass Encoding: First Pass"
-msgstr ""
+msgstr "ორგავლიანი კოდირება: პირველი გავლა"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:385
 #, kde-format
 msgid "Two-pass Encoding: Second Pass"
-msgstr ""
+msgstr "ორგავლიანი კოდირება: მეორე გავლა"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:409
 #, kde-format
 msgid "Removing incomplete video file '%1'"
-msgstr ""
+msgstr "წაიშლება დაუსრულებელი ვიდეოფაილი '%1'"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:483
 #, kde-format
 msgid "Execution of %1 failed."
-msgstr ""
+msgstr "'%1'-ის შესრულების შეცდომა."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:484
 #, kde-format
 msgid "Please consult the debugging output for details."
-msgstr ""
+msgstr "დეტალებისთვის იხილეთ გამართვის ჟურნალი."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:515
 #, kde-format
 msgid "AC3 (Stereo)"
-msgstr ""
+msgstr "AC3 (სტერეო)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:517
 #, kde-format
 msgid "AC3 (Pass-through)"
-msgstr ""
+msgstr "AC3 (გამჭოლი)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:519
 #, kde-format
@@ -1501,6 +1534,9 @@ msgid ""
 "codecs used these days. Its subproject libavcodec forms the basis for "
 "multimedia players such as xine or mplayer."
 msgstr ""
+"FFmpeg ღია კოდის მქონე პროექტია, რომელიც ცდილობს, ვიდეო და აუდიოკოდეკების "
+"უმრავლესობის მხარდაჭერა ჰქონდეს. მისი ქვეპროექტი libavcodec წარმოადგენს "
+"საფუძველს ისეთი დამკვრელებისთვის, როგორებიცაა xine და mplayer."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:547
 #, kde-format
@@ -1508,6 +1544,8 @@ msgid ""
 "FFmpeg contains an implementation of the MPEG-4 video encoding standard "
 "which produces high quality results."
 msgstr ""
+"FFmpeg შეიცავს MPEG-4 ვიდეო კოდირების სტანდარტის განხორციელებას, რომელიც "
+"მაღალი ხარისხის მქონე შედეგებს იძლევა."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:550
 #, kde-format
@@ -1516,6 +1554,8 @@ msgid ""
 "group of volunteer programmers after the OpenDivX source was closed in July "
 "2001."
 msgstr ""
+"XviD ღია კოდის მქონე უფასო MPEG-4 ვიდეოკოდეკია. XviD შეიქმნა მოხალისეების "
+"ჯგუფის მიერ, როცა OpenDivX-ის კოდი დაიხურა 2001 წლის ივლისში."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:553
 #, kde-format
@@ -1524,6 +1564,9 @@ msgid ""
 "quarter pixel motion compensation, lumi masking, trellis quantization, and "
 "H.263, MPEG and custom quantization matrices."
 msgstr ""
+"XviD-ს აქვს MPEG-4-ის დამატებით პროფილის პარამეტრები, როგორიცაა B-კადრები, "
+"გლობალური და მეოთხედ პიქსელის მოძრაობის კომპენსაცია, ლუმის შენიღბვა, "
+"ტრელისის კვანტიზაცია და H.263, MPEG და მომხმარებლის კვანტიზაციის მატრიცები."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:557
 #, kde-format
@@ -1532,11 +1575,14 @@ msgid ""
 "While DivX is closed source and may only run on Windows, Mac OS and Linux, "
 "XviD is open source and can potentially run on any platform."
 msgstr ""
+"XviD ძირითადი მეტოქეა DivX-სთვის (XviD წარმოადგენს DivX-ს, ოღონდ უკუღმა "
+"დაწერილს). მაშინ, როცა DivX დახურული კოდითაა და, მხოლოდ, Windows-ზე, Mac OS-"
+"ზე და Linux-ზე მუშაობს, XviD ღია კოდითაა და იდეაში ყველა პლატფორმაზე ეშვება."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:561
 #, kde-format
 msgid "(Description taken from the Wikipedia article)"
-msgstr ""
+msgstr "(აღწერა აღებულია ვიკიპედიის სტატიიდან)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:571
 #, kde-format
@@ -1544,13 +1590,15 @@ msgid ""
 "AC3, better known as Dolby Digital is standardized as ATSC A/52. It contains "
 "up to 6 total channels of sound."
 msgstr ""
+"AC3, რომელიც უფრო ცნობილია, როგორც Dolby Digital, სტანდარტიზებულია, როგორც "
+"ATSC A/52. ის ხმის 6-მდე არხს შეიცავს."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:576
 #, kde-format
 msgid ""
 "With this setting K3b will create a two-channel stereo Dolby Digital audio "
 "stream."
-msgstr ""
+msgstr "ამ პარამეტრით K3b ორარხიან სტერეო Dolby Digital აუდიო ნაკადს შექმნის."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:580
 #, kde-format
@@ -1558,11 +1606,13 @@ msgid ""
 "With this setting K3b will use the Dolby Digital audio stream from the "
 "source DVD without changing it."
 msgstr ""
+"ამ პარამეტრით K3b გამოიყენებს Dolby Digital აუდიო ნაკადს წყარო DVD-დან მისი "
+"ცვლილების გარეშე."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:582
 #, kde-format
 msgid "Use this setting to preserve 5.1 channel sound from the DVD."
-msgstr ""
+msgstr "გამოიყენეთ ეს პარამეტრი, რომ შეინარჩუნოთ 5.1 არხიანი ხმა DVD-დან."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:584
 #, kde-format
@@ -1570,25 +1620,27 @@ msgid ""
 "MPEG1 Layer III is better known as MP3 and is the most used lossy audio "
 "format."
 msgstr ""
+"MPEG1 Layer III უფრო ცნობილია, როგორც MP3 და ის ყველაზე გავრცელებული კარგვის "
+"მქონე აუდიოფორმატია."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:585
 #, kde-format
 msgid ""
 "With this setting K3b will create a two-channel stereo MPEG1 Layer III audio "
 "stream."
-msgstr ""
+msgstr "ამ პარამეტრით K3b ორარხიან სტერეო MPEG1 Layer III აუდიონაკადს შექმნის."
 
 #: plugin/k3baudiodecoder.cpp:630
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Decoder"
-msgstr ""
+msgstr "აუდიოდეკოდერი"
 
 #: plugin/k3baudioencoder.cpp:45
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Encoder"
-msgstr ""
+msgstr "აუდიოენკოდერი"
 
 #: plugin/k3baudioencoder.cpp:154
 #, kde-format
@@ -1598,33 +1650,33 @@ msgstr "უცნობი შეცდომა."
 #: plugin/k3bpluginmanager.cpp:152
 #, kde-format
 msgid "No settings available for plugin %1."
-msgstr ""
+msgstr "დამატებისთვის %1 პარამეტრები ხელმისაწვდომი არაა."
 
 #: plugin/k3bprojectplugin.cpp:20
 #, kde-format
 msgctxt "plugin type"
 msgid "Project plugin"
-msgstr ""
+msgstr "პროექტების გაფართოება"
 
 #: projects/audiocd/k3baudiocdtrackreader.cpp:60
 #, kde-format
 msgid "Please insert Audio CD %1%2"
-msgstr ""
+msgstr "ჩადეთ აუდიო CD %1%2"
 
 #: projects/audiocd/k3baudiocdtracksource.cpp:201
 #, kde-format
 msgid "CD Track"
-msgstr ""
+msgstr "CD ტრეკი"
 
 #: projects/audiocd/k3baudiocdtracksource.cpp:207
 #, kde-format
 msgid "Track %1 from Audio CD %2"
-msgstr ""
+msgstr "ბილიკი %1 აუდიო CD-დან %2"
 
 #: projects/audiocd/k3baudioimager.cpp:86
 #, kde-format
 msgid "Unable to read track %1."
-msgstr ""
+msgstr "ვერ წავიკითხე ბილიკი %1."
 
 #: projects/audiocd/k3baudioimager.cpp:102 projects/datacd/k3bdatajob.cpp:206
 #: projects/mixedcd/k3bmixedjob.cpp:1088
@@ -1635,7 +1687,7 @@ msgstr "%1-ის ჩასაწერად გახსნის შეცდ
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
 msgid "Error while decoding track %1."
-msgstr ""
+msgstr "გაშიფვრის შეცდომა ბილიკისთვის %1."
 
 #: projects/audiocd/k3baudiojob.cpp:165
 #: projects/datacd/k3bdatapreparationjob.cpp:174
@@ -1645,6 +1697,8 @@ msgid ""
 "The following files could not be found. Do you want to remove them from the "
 "project and continue without adding them to the image?"
 msgstr ""
+"შემდეგი ფაილები ვერ ვიპოვე. გნებავთ, წაშალოთ ისინი პროექტიდან და გააგრძელოთ "
+"მათი ასლის ფაილში დამატების გარეშე?"
 
 #: projects/audiocd/k3baudiojob.cpp:168
 #: projects/datacd/k3bdatapreparationjob.cpp:138
@@ -1661,7 +1715,7 @@ msgstr "შეტყობინება"
 #: projects/mixedcd/k3bmixedjob.cpp:182
 #, kde-format
 msgid "Remove missing files and continue"
-msgstr ""
+msgstr "ნაკლული ფაილების წაშლა და გაგრძელება"
 
 #: projects/audiocd/k3baudiojob.cpp:170
 #: projects/datacd/k3bdatapreparationjob.cpp:164
@@ -1670,62 +1724,64 @@ msgstr ""
 #: projects/mixedcd/k3bmixedjob.cpp:183
 #, kde-format
 msgid "Cancel and go back"
-msgstr ""
+msgstr "გაუქმება და უკან დაბრუნება"
 
 #: projects/audiocd/k3baudiojob.cpp:188 projects/mixedcd/k3bmixedjob.cpp:201
 #, kde-format
 msgid "Please add files to your project first."
-msgstr ""
+msgstr "ჯერ პროექტში ფაილები ჩაამატეთ."
 
 #: projects/audiocd/k3baudiojob.cpp:194
 #, kde-format
 msgid "Unable to write on-the-fly with these audio sources."
-msgstr ""
+msgstr "ამ აუდიოს წყაროებით რეალურ დროში ჩაწერა შეუძლებელია."
 
 #: projects/audiocd/k3baudiojob.cpp:303 projects/mixedcd/k3bmixedjob.cpp:236
 #, kde-format
 msgid "Determining maximum writing speed"
-msgstr ""
+msgstr "ჩაწერის მაქსიმალური სიჩქარის დადგენა"
 
 #: projects/audiocd/k3baudiojob.cpp:338
 #, kde-format
 msgid "Creating image files in %1"
-msgstr ""
+msgstr "დისკის ასლის ფაილების შექმნა %1-ში"
 
 #: projects/audiocd/k3baudiojob.cpp:339 projects/videocd/k3bvcdjob.cpp:182
 #, kde-format
 msgid "Creating image files"
-msgstr ""
+msgstr "დისკის ასლის ფაილების შექმნა"
 
 #: projects/audiocd/k3baudiojob.cpp:351 projects/mixedcd/k3bmixedjob.cpp:320
 #, kde-format
 msgid "Unable to determine maximum speed for some reason. Ignoring."
 msgstr ""
+"გაურკვეველი მიზეზების გამო მაქსიმალური სიჩქარის დადგენა შეუძლებელია. "
+"გამოტოვება."
 
 #: projects/audiocd/k3baudiojob.cpp:379 projects/mixedcd/k3bmixedjob.cpp:369
 #, kde-format
 msgid "Writing canceled."
-msgstr ""
+msgstr "ჩაწერა გაუქმდა."
 
 #: projects/audiocd/k3baudiojob.cpp:441 projects/mixedcd/k3bmixedjob.cpp:568
 #, kde-format
 msgid "Error while decoding audio tracks."
-msgstr ""
+msgstr "შეცდომა აუდიობილიკების გაშიფვრისას."
 
 #: projects/audiocd/k3baudiojob.cpp:449
 #, kde-format
 msgid "Successfully decoded all tracks."
-msgstr ""
+msgstr "ყველა აუდიობილიკის გაშიფვრა წარმატებით დასრულდა."
 
 #: projects/audiocd/k3baudiojob.cpp:473 projects/mixedcd/k3bmixedjob.cpp:608
 #, kde-format
 msgid "Decoding audio track %1 of %2%3"
-msgstr ""
+msgstr "მიმდინარეობს დეკოდირება ბილიკისთვის %1 %2-დან %3"
 
 #: projects/audiocd/k3baudiojob.cpp:491
 #, kde-format
 msgid "I/O Error. Most likely no space left on harddisk."
-msgstr ""
+msgstr "შეტანა/გამოტანის შეცდომა. ალბათ დისკზე ადგილი აღარ გაქვთ."
 
 #: projects/audiocd/k3baudiojob.cpp:540 projects/mixedcd/k3bmixedjob.cpp:628
 #: projects/mixedcd/k3bmixedjob.cpp:669
@@ -1736,7 +1792,7 @@ msgstr "I/O შეცდომა"
 #: projects/audiocd/k3baudiojob.cpp:581 projects/mixedcd/k3bmixedjob.cpp:870
 #, kde-format
 msgid "Writing track %1 of %2%3"
-msgstr ""
+msgstr "იწერება ტრეკი %1 %2-დან %3"
 
 #: projects/audiocd/k3baudiojob.cpp:646 projects/datacd/k3bdatajob.cpp:431
 #: projects/k3bcdrdaowriter.cpp:567 projects/k3bcdrecordwriter.cpp:449
@@ -1748,63 +1804,63 @@ msgstr "ჩაწერა"
 #: projects/audiocd/k3baudiojob.cpp:721 projects/mixedcd/k3bmixedjob.cpp:1267
 #, kde-format
 msgid "Normalizing volume levels"
-msgstr ""
+msgstr "ხმის დონეების ნორმალიზაცია"
 
 #: projects/audiocd/k3baudiojob.cpp:838
 #, kde-format
 msgid "Writing Audio CD"
-msgstr ""
+msgstr "აუდიო CD-ის ჩაწერა"
 
 #: projects/audiocd/k3baudiojob.cpp:848
 #, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ბილიკი (%2 წუთი)"
+msgstr[1] "%1 ტრეკი (%2 წუთი)"
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
 #: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
 #, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " - %1 ასლი"
+msgstr[1] " - %1 ასლი"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
 msgid "Could not find normalize executable."
-msgstr ""
+msgstr "გამშვები ფაილი 'normalize' ვერ ვიპოვე."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:74
 #, kde-format
 msgid "Could not start normalize."
-msgstr ""
+msgstr "პროგრამის 'normalize' გაშვების შეცდომა."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:114
 #, kde-format
 msgid "Track %1 is already normalized."
-msgstr ""
+msgstr "ტრეკი %1 უკვე ნორმალიზებულია."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:120
 #, kde-format
 msgid "Adjusting volume level for track %1 of %2"
-msgstr ""
+msgstr "ხმის დონის გასწორება ტრეკისთვის %1 %2-დან"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:128
 #, kde-format
 msgid "Computing level for track %1 of %2"
-msgstr ""
+msgstr "დონის გამოთვლა ბილიკისთვის %1 %2-დან"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:171
 #, kde-format
 msgid "Successfully normalized all tracks."
-msgstr ""
+msgstr "აუდობილიკების ნორმალიზაცია წარმატებულია."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:179
 #, kde-format
 msgid "Error while normalizing tracks."
-msgstr ""
+msgstr "შეცდომა ტრეკების ნორმალიზაციისას."
 
 #: projects/audiocd/k3baudiozerodata.cpp:44
 #, kde-format
@@ -1814,17 +1870,17 @@ msgstr "სიჩუმე"
 #: projects/audiocd/k3brawaudiodatasource.cpp:65
 #, kde-format
 msgid "Raw Audio CD Image"
-msgstr ""
+msgstr "დაუმუშავებელი აუდიო CD-ის დისკის ასლის ფაილი"
 
 #: projects/datacd/k3bbootitem.cpp:23
 #, kde-format
 msgid "El Torito Boot image"
-msgstr ""
+msgstr "El Torito-ის ჩატვირთვადი დისკის ასლის ფაილი"
 
 #: projects/datacd/k3bdatadoc.cpp:1197 projects/videocd/k3bvcddoc.cpp:407
 #, kde-format
 msgid "Could not find the following files:"
-msgstr ""
+msgstr "ვერ ვიპოვე შემდეგი ფაილები:"
 
 #: projects/datacd/k3bdatadoc.cpp:1198 projects/videocd/k3bvcddoc.cpp:408
 #, kde-format
@@ -1834,47 +1890,47 @@ msgstr "ნაპოვნი არაა"
 #: projects/datacd/k3bdatadoc.cpp:1203
 #, kde-format
 msgid "No permission to read the following files:"
-msgstr ""
+msgstr "წვდომა აკრძალულია შემდეგი ფაილების წასაკითხად:"
 
 #: projects/datacd/k3bdatadoc.cpp:1204
 #, kde-format
 msgid "No Read Permission"
-msgstr ""
+msgstr "კითხვის წვდომა აკრძალულია"
 
 #: projects/datacd/k3bdatadoc.cpp:1361 projects/datacd/k3bdatadoc.cpp:1374
 #, kde-format
 msgid "From previous session"
-msgstr ""
+msgstr "წინა სესიიდან"
 
 #: projects/datacd/k3bdatadoc.cpp:1485
 #, kde-format
 msgid "El Torito boot catalog file"
-msgstr ""
+msgstr "El Torito-ის ჩატვრთვი კატალოგის ფაილი"
 
 #: projects/datacd/k3bdatadoc.cpp:1486
 #, kde-format
 msgid "Boot catalog"
-msgstr ""
+msgstr "ჩატვირთვის კატალოგი"
 
 #: projects/datacd/k3bdatajob.cpp:213
 #, kde-format
 msgid "Creating image file"
-msgstr ""
+msgstr "დისკის ასლის ფაილის შექმნა"
 
 #: projects/datacd/k3bdatajob.cpp:214
 #, kde-format
 msgid "Track 1 of 1"
-msgstr ""
+msgstr "1 ტრეკი 1-დან"
 
 #: projects/datacd/k3bdatajob.cpp:215
 #, kde-format
 msgid "Creating image file in %1"
-msgstr ""
+msgstr "დისკის ასლის ფაილის შექმნა %1-ში"
 
 #: projects/datacd/k3bdatajob.cpp:373
 #, kde-format
 msgid "Image successfully created in %1"
-msgstr ""
+msgstr "დისკის ასლის ფაილი წარმატებით შეიქმნა %1-ში"
 
 #: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:90
 #, kde-format
@@ -1884,17 +1940,17 @@ msgstr "ფაილის გახსნის შეცდომა: %1"
 #: projects/datacd/k3bdatajob.cpp:393
 #, kde-format
 msgid "Error while creating ISO image"
-msgstr ""
+msgstr "შეცდომა ISO ფაილის შექმნისას"
 
 #: projects/datacd/k3bdatajob.cpp:694
 #, kde-format
 msgid "Internal Error: No medium type fits. This project cannot be burned."
-msgstr ""
+msgstr "შიდა შეცდომა: მედიის ტიპი არ ემთხვევა. პროექტის ამოწვა შეუძლებელია."
 
 #: projects/datacd/k3bdatajob.cpp:698
 #, kde-format
 msgid "Waiting for a medium"
-msgstr ""
+msgstr "მედიის მოლოდინი"
 
 #: projects/datacd/k3bdatajob.cpp:715
 #, kde-format
@@ -1904,49 +1960,49 @@ msgstr "%1-ის ჩაწერა"
 #: projects/datacd/k3bdatajob.cpp:732
 #, kde-format
 msgid "Unable to determine the last track's datamode. Using default."
-msgstr ""
+msgstr "ვერ განვსაზღვრე ბოლო ბილიკის მონაცემების რეჟიმი. ვიყენებ ნაგულისხმევს."
 
 #: projects/datacd/k3bdatajob.cpp:826 projects/datacd/k3bdatajob.cpp:946
 #, kde-format
 msgid "Writing mode ignored when writing %1 media."
-msgstr ""
+msgstr "ჩაწერის რეჟიმი გამოტოვებულია %1 დისკის ჩაწერისას."
 
 #: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
 #, kde-format
 msgid "Growing ISO 9660 filesystem on %1."
-msgstr ""
+msgstr "ISO 9660 ფაილური სისტემის გაზრდა %1-ზე."
 
 #: projects/datacd/k3bdatajob.cpp:971
 #, kde-format
 msgid "Creating Data Image File"
-msgstr ""
+msgstr "მიმდინარეობს მონაცემების დისკის ასლის ფაილის შექმნა"
 
 #: projects/datacd/k3bdatajob.cpp:975
 #, kde-format
 msgid "Writing Data Project"
-msgstr ""
+msgstr "პროექტის მონაცემების ჩაწერა"
 
 #: projects/datacd/k3bdatajob.cpp:981
 #, kde-format
 msgid "Writing Multisession Project"
-msgstr ""
+msgstr "მრავალსესიიანი პროექტის ჩაწერა"
 
 #: projects/datacd/k3bdatajob.cpp:995
 #, kde-format
 msgid "ISO 9660 Filesystem (Size: %2) – One copy"
 msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ISO 9660 ფაილური სისტემა (ზომა: %2) – ერთი ასლი"
+msgstr[1] "ISO 9660 ფაილური სისტემა (ზომა: %2) – %1 ასლი"
 
 #: projects/datacd/k3bdatajob.cpp:1000
 #, kde-format
 msgid "ISO 9660 Filesystem (Size: %1)"
-msgstr ""
+msgstr "ISO 9660 ფაილური სისტემა (ზომა: %1)"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
 #, kde-format
 msgid "Searching for old session"
-msgstr ""
+msgstr "ძველი სესიის ძებნა"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:218
 #, kde-format
@@ -1954,12 +2010,14 @@ msgid ""
 "No medium inserted or an empty medium in %1. Cannot continue multisession "
 "disk."
 msgstr ""
+"მედია ჩადებული არაა, ან მედია %1-ში ცარიელია. მრავალსესიიანი დისკის "
+"გაგრძელება შეუძლებელია."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
 #, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr ""
+msgstr "ISO 9660 ფაილური სისტემის გახსნა %1-ში შეუძლებელია."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -1968,11 +2026,13 @@ msgid ""
 "Medium is not of multi-session type and does not contain ISO 9660. Cannot "
 "emulate multi-session on it."
 msgstr ""
+"მედია მრავალსესიიანი ტიპის არაა და არ შეიცავს ISO 9660-ს. მასზე "
+"მრავალსესიიანობის ემულაცია შეუძლებელია."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:92
 #, kde-format
 msgid "<em>%1</em> renamed to <em>%2</em>"
-msgstr ""
+msgstr "<em>%1</em> გადარქმეულია სახელზე <em>%2</em>"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:132
 #, kde-format
@@ -1982,16 +2042,20 @@ msgid ""
 "have to be shortened but long filenames will not be available on Windows "
 "systems."
 msgstr ""
+"საჭიროა ზოგიერთი ფაილის სახელის შემოკლება, რადგან Joliet გაფართოებას %1 "
+"სიმბოლოს ზღვარი გააჩნია. თუ Joliet-ის გაფართოებები გათიშულია, ფაილის "
+"სახელების შემოკლება აუცილებელი არაა, მაგრამ გრძელი ფაილის სახელები Windows-ზ "
+"ხელმიუწვდომელი იქნება."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:139
 #, kde-format
 msgid "Shorten Filenames"
-msgstr ""
+msgstr "ფაილის სახელების შემოკლება"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:140
 #, kde-format
 msgid "Disable Joliet extensions"
-msgstr ""
+msgstr "Joliet-ის გაფართოებების გათიშვა"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:157
 #, kde-format
@@ -2002,11 +2066,15 @@ msgid ""
 "that. Do you want it to be cut or do you want to go back and change it "
 "manually?"
 msgstr ""
+"Joliet-ის გაფართოებები (რომლებიც საჭიროა გრძელი ფაილის სახელებისთვის Windows "
+"სისტემებზე) ტომის დესტკრპტორის (ფაილური სისტემის სახელის) სიგრძეს %1 "
+"სიმბოლოზე ზღუდავს. არჩეული დესკტრიპტორი '%2' ამაზე დიდია. გნებავთ მისი "
+"წაკვეთა, თუ დაბრუნდებით და ხელით შეცვლით მას?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:163
 #, kde-format
 msgid "Cut volume descriptor in the Joliet tree"
-msgstr ""
+msgstr "ტომის დესკტრიპტორის ამოჭრა Joliet-ის ხეში"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:195
 #, kde-format
@@ -2015,11 +2083,13 @@ msgid ""
 "added to the project. Do you want to continue without writing the symbolic "
 "links to the image?"
 msgstr ""
+"K3b-ს არ შეუძლია, საქაღალდის ბმულებს გაჰყვეს მას შემდეგ, რაც მათ პროექტში "
+"დაამატებთ. გნებავთ გაგრძელება სიმბმულების დისკის ასლის ფაილში ჩაწერის გარეშე?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:200
 #, kde-format
 msgid "Discard symbolic links to folders"
-msgstr ""
+msgstr "საქაღალდის სიმბმულების მოცილება"
 
 #: projects/datacd/k3bisoimager.cpp:152
 #, kde-format
@@ -2027,6 +2097,8 @@ msgid ""
 "Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
 "contain more than one backslash:"
 msgstr ""
+"Mkisofs <= 1.15a40-ში არსებული შეცდომის გამო K3b-ს არ შეუძლია დაამუშაოს "
+"ფაილის სახელი, რომელიც ერთზე მეტი უკუღმა დახრილ ხაზს შეიცავს:"
 
 #: projects/datacd/k3bisoimager.cpp:171 projects/k3bcdrdaowriter.cpp:770
 #: projects/k3bcdrecordwriter.cpp:910 projects/k3bcdrskinwriter.cpp:923
@@ -2037,69 +2109,73 @@ msgstr "%1 ავარიულად გაითიშა."
 #: projects/datacd/k3bisoimager.cpp:362
 #, kde-format
 msgid "Could not determine size of resulting image file."
-msgstr ""
+msgstr "შედეგად მიღებული დისკის ასლის ფაილის ზომის დადგენა შეუძლებელია."
 
 #: projects/datacd/k3bisoimager.cpp:515
 #, kde-format
 msgid "No volume id specified. Using default."
-msgstr ""
+msgstr "ტომის ID მითითებული არაა. ვიყენებ ნაგულისხმევს."
 
 #: projects/datacd/k3bisoimager.cpp:608
 #, kde-format
 msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
 msgstr ""
+"აღმოჩენილია 4გბ-ზე დიდი ფაილები. გასაგრძელებლად K3b-ს, სულ ცოტა, %1 სჭირდება."
 
 #: projects/datacd/k3bisoimager.cpp:618
 #, kde-format
 msgid "Found files bigger than 2 GB. These files will be fully accessible."
-msgstr ""
+msgstr "აღმოჩენილია 2გბ-ზე დიდი ფაილები. ეს ფაილები სრულად წვდომად იქნება."
 
 #: projects/datacd/k3bisoimager.cpp:624
 #, kde-format
 msgid "Enabling UDF extension."
-msgstr ""
+msgstr "ჩაირთვება გაფართოება UDF."
 
 #: projects/datacd/k3bisoimager.cpp:669
 #, kde-format
 msgid "Setting iso level to 3 to support files bigger than 4 GB."
-msgstr ""
+msgstr "ISO-ის დაყენება მესამე დონეზე 4გბ-ზე დიდი ფაილების მხარდასაჭერად."
 
 #: projects/datacd/k3bisoimager.cpp:761
 #, kde-format
 msgid "Could not follow link %1 to non-existing file %2. Skipping..."
 msgstr ""
+"ბმულის %1, რომელიც მიუთითებს არარსებულ ფაილზე %2, მიყოლა შეუძლებელია. "
+"გამოტოვება..."
 
 #: projects/datacd/k3bisoimager.cpp:765
 #, kde-format
 msgid ""
 "Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
 msgstr ""
+"გამოტოვებულია ბმული %1 საქაღალდემდე %2. K3b საქაღალდის ბმულებს ვერ მიჰყვება."
 
 #: projects/datacd/k3bisoimager.cpp:773
 #, kde-format
 msgid "Could not find file %1. Skipping..."
-msgstr ""
+msgstr "ფაილი %1 ვერ ვიპოვე. გამოტოვება..."
 
 #: projects/datacd/k3bisoimager.cpp:777
 #, kde-format
 msgid "Could not read file %1. Skipping..."
-msgstr ""
+msgstr "ფაილი %1 ვერ წავიკითხე. გამოტოვება..."
 
 #: projects/datacd/k3bisoimager.cpp:830
 #, kde-format
 msgid "Failed to backup boot image file %1"
-msgstr ""
+msgstr "ჩატვირთვის დისკის ასლის ფაილის %1 მარქაფი ჩავარდა"
 
 #: projects/datacd/k3bisoimager.cpp:990 projects/datacd/k3bisoimager.cpp:1000
 #: projects/datacd/k3bisoimager.cpp:1007 projects/datacd/k3bisoimager.cpp:1013
 #, kde-format
 msgid "Could not write temporary file"
-msgstr ""
+msgstr "დროებით ფაილის ჩაწერის შეცდომა"
 
 #: projects/datacd/k3bisoimager.cpp:994
 #, kde-format
 msgid "No files to be written."
-msgstr ""
+msgstr "ჩასაწერი ფაილების გარეშე."
 
 #: projects/datacd/k3bisooptions.cpp:68
 #, kde-format
@@ -2108,43 +2184,45 @@ msgctxt ""
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr ""
+msgstr "K3b-ის მონაცემების პროექტი"
 
 #: projects/datacd/k3bmkisofshandler.cpp:65
 #, kde-format
 msgid "Mkisofs executable not found."
-msgstr ""
+msgstr "Mkisofs გამშვები ფაილი ვერ ვიპოვე."
 
 #: projects/datacd/k3bmkisofshandler.cpp:79
 #, kde-format
 msgid "Read error from file '%1'"
-msgstr ""
+msgstr "წაკითხვის შეცდომა ფაილიდან '%1'"
 
 #: projects/datacd/k3bmkisofshandler.cpp:84
 #, kde-format
 msgid "Used version of mkisofs does not have large file support."
-msgstr ""
+msgstr "'mkisofs'-ის გამოყენებულ ვერსიას დიდი ფაილების მხარდაჭერა არ გააჩნია."
 
 #: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
 msgid "Files bigger than 2 GB cannot be handled."
-msgstr ""
+msgstr "2 გბ-ზე დიდი ფაილების დამუშავება შეუძლებელია."
 
 #: projects/datacd/k3bmkisofshandler.cpp:89
 #, kde-format
 msgid "No such file or directory '%1'."
-msgstr ""
+msgstr "ასეთი ფაილი ან საქაღალდე არ არსებობს: '%1'."
 
 #: projects/datacd/k3bmkisofshandler.cpp:104
 #, kde-format
 msgid "Encountered an incorrectly encoded filename '%1'"
-msgstr ""
+msgstr "აღმოჩენილია არასწორად დაშიფრული ფაილის სახელი '%1'"
 
 #: projects/datacd/k3bmkisofshandler.cpp:106
 #, kde-format
 msgid ""
 "This may be caused by a system update which changed the local character set."
 msgstr ""
+"ეს, შეიძლება, სისტემურმა განახლებამ გამოიწვია, რომელმაც ლოკალური სიმბოლოების "
+"ნაკრები შეცვალა."
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
 #, kde-format
@@ -2152,56 +2230,59 @@ msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr ""
+"ფაილის სახელბის კოდირების შესასწორებლად convmv (https://j3e.de/linux/"
+"convmv/) შეგიძლიათ, გამოიყენოთ."
 
 #: projects/datacd/k3bmkisofshandler.cpp:111
 #, kde-format
 msgid "The boot image has an invalid size."
-msgstr ""
+msgstr "ჩატვირთვადი დისკის ასლის ფაილის ზომა არასწორია."
 
 #: projects/datacd/k3bmkisofshandler.cpp:115
 #, kde-format
 msgid "The boot image contains multiple partitions."
-msgstr ""
+msgstr "ჩატვირთვადი დისკის ასლი ფაილი ერთზე მეტ დანაყოფს შეიცავს."
 
 #: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
 msgstr ""
+"მყარი დისკის ჩატვირთვადი დისკის ასლი ფაილი ერთ დანაყოფს უნდა შეიცავდეს."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:43
 #, kde-format
 msgid "Searching previous session"
-msgstr ""
+msgstr "წინა სესიის ძებნა"
 
 #: projects/datacd/k3bmsinfofetcher.cpp:155
 #, kde-format
 msgid "Could not determine next writable address."
-msgstr ""
+msgstr "შემდეგი ჩაწერადი მისამართის განსაზღვრა შეუძლებელია."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:171
 #, kde-format
 msgid "Could not start %1"
-msgstr ""
+msgstr "ვერ გავუშვი %1"
 
 #: projects/datacd/k3bmsinfofetcher.cpp:201
 #, kde-format
 msgid "Could not retrieve multisession information from disk."
-msgstr ""
+msgstr "დისკიდან მრავალსესიიანობის ინფორმაციის მიღება შეუძლებელია."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:202
 #, kde-format
 msgid "The disk is either empty or not appendable."
-msgstr ""
+msgstr "დისკი ან ცარიელია, ან ბოლოში-მიწერადი არაა."
 
 #: projects/k3babstractwriter.cpp:44
 #, kde-format
 msgid "Unlocking drive..."
-msgstr ""
+msgstr "დისკის განბლოკვა..."
 
 #: projects/k3babstractwriter.cpp:58
 #, kde-format
 msgid "Could not unlock drive."
-msgstr ""
+msgstr "დისკის განბლოკვა შეუძლებელია."
 
 #: projects/k3babstractwriter.cpp:61
 #, kde-format
@@ -2211,53 +2292,53 @@ msgstr "დისკის გამოღება"
 #: projects/k3bcdrdaowriter.cpp:259
 #, kde-format
 msgid "Cdrdao %1 does not support disabling burnfree."
-msgstr ""
+msgstr "Cdrdao %1-ს Burnfree-ის გამორთვის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:298
 #: projects/k3bcdrskinwriter.cpp:306
 #, kde-format
 msgid "'Force unsafe operations' enabled."
-msgstr ""
+msgstr "'ნაძალადევი საშიში ოპერაციები' ჩართულია."
 
 #: projects/k3bcdrdaowriter.cpp:283
 #, kde-format
 msgid "Cdrdao %1 does not support overburning."
-msgstr ""
+msgstr "Cdrdao %1 გადავსებით ამოწვის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrdaowriter.cpp:486
 #, kde-format
 msgid "Could not backup tocfile."
-msgstr ""
+msgstr "'tocfile'-ის მარქაფის შეცდომა."
 
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
 msgid "Preparing read process..."
-msgstr ""
+msgstr "წაკითხვის პროცესის მომზადება..."
 
 #: projects/k3bcdrdaowriter.cpp:522
 #, kde-format
 msgid "Preparing copy process..."
-msgstr ""
+msgstr "კოპირების პროცესის მომზადება..."
 
 #: projects/k3bcdrdaowriter.cpp:525
 #, kde-format
 msgid "Preparing blanking process..."
-msgstr ""
+msgstr "დაცარიელების პროცესის მომზადება..."
 
 #: projects/k3bcdrdaowriter.cpp:559
 #, no-c-format, kde-format
 msgid "Starting DAO simulation at %1x speed..."
-msgstr ""
+msgstr "DAO სიმულაციის გაშვება %1x სიჩქარით..."
 
 #: projects/k3bcdrdaowriter.cpp:566
 #, no-c-format, kde-format
 msgid "Starting DAO writing at %1x speed..."
-msgstr ""
+msgstr "DAO ჩაწერის გაშვება %1x სიჩქარით..."
 
 #: projects/k3bcdrdaowriter.cpp:571
 #, kde-format
 msgid "Starting reading..."
-msgstr ""
+msgstr "წაკითხვის დაწყება..."
 
 #: projects/k3bcdrdaowriter.cpp:572
 #, kde-format
@@ -2267,12 +2348,12 @@ msgstr "რედინგი"
 #: projects/k3bcdrdaowriter.cpp:578
 #, no-c-format, kde-format
 msgid "Starting simulation copy at %1x speed..."
-msgstr ""
+msgstr "კოპირების სიმულაციის დაწყება %1x სიჩქარით..."
 
 #: projects/k3bcdrdaowriter.cpp:584
 #, no-c-format, kde-format
 msgid "Starting copy at %1x speed..."
-msgstr ""
+msgstr "კოპირების დაწყება %1x სიჩქარით..."
 
 #: projects/k3bcdrdaowriter.cpp:585
 #, kde-format
@@ -2282,7 +2363,7 @@ msgstr "კოპირება"
 #: projects/k3bcdrdaowriter.cpp:589
 #, kde-format
 msgid "Starting blanking..."
-msgstr ""
+msgstr "დაცარიელების დაწყება..."
 
 #: projects/k3bcdrdaowriter.cpp:590
 #, kde-format
@@ -2295,139 +2376,141 @@ msgid ""
 "Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
 "to restore it from the backup %2."
 msgstr ""
+"შეცდომის გამო, რომელიც cdrdao-ს აქვს, toc/cue faili %1 წაიშალა. K3b-მა ის "
+"მარქაფიდან %2 ვერ აღადგინა."
 
 #: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:787
 #: projects/k3bcdrskinwriter.cpp:800 projects/k3bgrowisofswriter.cpp:515
 #, kde-format
 msgid "Simulation successfully completed"
-msgstr ""
+msgstr "სიმულაცია წარმატებით დასრულდა"
 
 #: projects/k3bcdrdaowriter.cpp:736
 #, kde-format
 msgid "Reading successfully completed"
-msgstr ""
+msgstr "წაკითხვა წარმატებით დასრულდა"
 
 #: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:789
 #: projects/k3bcdrskinwriter.cpp:802 projects/k3bgrowisofswriter.cpp:517
 #, kde-format
 msgid "Writing successfully completed"
-msgstr ""
+msgstr "ჩაწერა წარმატებით დასრულდა"
 
 #: projects/k3bcdrdaowriter.cpp:742
 #, kde-format
 msgid "Copying successfully completed"
-msgstr ""
+msgstr "კოპირება წარმატებით დასრულდა"
 
 #: projects/k3bcdrdaowriter.cpp:745
 #, kde-format
 msgid "Blanking successfully completed"
-msgstr ""
+msgstr "დაცარიელება წარმატებით დასრულდა"
 
 #: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:793
 #: projects/k3bcdrskinwriter.cpp:806 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
-msgstr ""
+msgstr "საშუალო ჯამური ჩაწერის სიჩქარე: %1 კბ/წმ (%2x)"
 
 #: projects/k3bcdrdaowriter.cpp:761
 #, kde-format
 msgid "Please include the debugging output in your problem report."
-msgstr ""
+msgstr "დაურთეთ გამართვის ინფორმაცია თქვენს პრობლემის ანგარიშს."
 
 #: projects/k3bcdrdaowriter.cpp:788 projects/k3bcdrecordwriter.cpp:667
 #: projects/k3bcdrskinwriter.cpp:680
 #, no-c-format, kde-format
 msgid "Medium or burner does not support writing at %1x speed"
-msgstr ""
+msgstr "მედიას ამ ამომწვავს %1x სიჩქარით ჩაწერის მხარდაჭერა არ გააჩნია"
 
 #: projects/k3bcdrdaowriter.cpp:790
 #, no-c-format, kde-format
 msgid "Switching down burn speed to %1x"
-msgstr ""
+msgstr "ამოწვის სიჩქარის დაწევა სიჩქარემდე %1x"
 
 #: projects/k3bcdrdaowriter.cpp:820
 #, kde-format
 msgid "Executing Power calibration"
-msgstr ""
+msgstr "კვების კალიბრაციის შესრულება"
 
 #: projects/k3bcdrdaowriter.cpp:824
 #, kde-format
 msgid "Power calibration successful"
-msgstr ""
+msgstr "კვების კალიბრაცია წარმატებულია"
 
 #: projects/k3bcdrdaowriter.cpp:825
 #, kde-format
 msgid "Preparing burn process..."
-msgstr ""
+msgstr "ამოწვის პროცესის მომზადება..."
 
 #: projects/k3bcdrdaowriter.cpp:829
 #, kde-format
 msgid "Flushing cache"
-msgstr ""
+msgstr "კეშის გასუფთავება"
 
 #: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
 msgid "Writing CD-Text lead-in..."
-msgstr ""
+msgstr "CD-Text შესავლის ჩაწერა..."
 
 #: projects/k3bcdrdaowriter.cpp:837
 #, kde-format
 msgid "Turning BURN-Proof on"
-msgstr ""
+msgstr "BURN-Proof რეჟიმის ჩართვა"
 
 #: projects/k3bcdrdaowriter.cpp:845
 #, kde-format
 msgid "Found ISRC code"
-msgstr ""
+msgstr "აღმოჩენილია ISC კოდი"
 
 #: projects/k3bcdrdaowriter.cpp:849
 #, kde-format
 msgid "Found pregap: %1"
-msgstr ""
+msgstr "აღმოჩენილია პაუზა: %1"
 
 #: projects/k3bcdrdaowriter.cpp:862
 #, kde-format
 msgid "No cdrdao driver found."
-msgstr ""
+msgstr "დრაივერი cdrdao-სთვის აღმოჩენილი არაა."
 
 #: projects/k3bcdrdaowriter.cpp:863
 #, kde-format
 msgid "Please select one manually in the device settings."
-msgstr ""
+msgstr "აირჩიეთ ხელით მოწყობილობის პარამეტრებში."
 
 #: projects/k3bcdrdaowriter.cpp:864
 #, kde-format
 msgid "For most current drives this would be 'generic-mmc'."
-msgstr ""
+msgstr "თანამედროვე ამძრავების უმრავლესობისთვის ეს უნდა იყოს 'generic-mmc'."
 
 #: projects/k3bcdrdaowriter.cpp:873
 #, kde-format
 msgid "Device not ready, waiting."
-msgstr ""
+msgstr "მოწყობილობა მზად არაა. ველოდები."
 
 #: projects/k3bcdrdaowriter.cpp:877
 #, kde-format
 msgid "Cue sheet not accepted."
-msgstr ""
+msgstr "Cue ფურცელი მიღებული არაა."
 
 #: projects/k3bcdrdaowriter.cpp:882 projects/k3bcdrecordwriter.cpp:611
 #: projects/k3bcdrskinwriter.cpp:624
 #, kde-format
 msgid "No valid %1 option: %2"
-msgstr ""
+msgstr "არასწორი %1-ის პარამეტრი: %2"
 
 #: projects/k3bcdrdaowriter.cpp:887 projects/k3bcdrecordwriter.cpp:814
 #: projects/k3bcdrskinwriter.cpp:827 projects/k3bgrowisofshandler.cpp:224
 #: projects/mixedcd/k3bmixedjob.cpp:1030
 #, kde-format
 msgid "Data does not fit on disk."
-msgstr ""
+msgstr "მონაცემები დისკზე არ ეტევა."
 
 #: projects/k3bcdrdaowriter.cpp:889 projects/k3bcdrecordwriter.cpp:816
 #: projects/k3bcdrskinwriter.cpp:829
 #, kde-format
 msgid "Enable overburning in the advanced K3b settings to burn anyway."
-msgstr ""
+msgstr "მაინც ჩასაწერად K3b-ის პარამეტრებში ჩართეთ გადავსებით ჩაწერა."
 
 #: projects/k3bcdrdaowriter.cpp:974
 #, kde-format
@@ -2442,314 +2525,319 @@ msgstr "დასასრულის ჩაწერა"
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
 msgid "Cdrecord version %1 does not support Blu-ray writing."
-msgstr ""
+msgstr "Cdrecord-ის ვერსიას %1 Blu-ray-ის ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
 #, kde-format
 msgid "Writer does not support disk at once (DAO) recording"
-msgstr ""
+msgstr "ჩამწერს DAO ჩაწერის მხარდაჭერა არ გააჩნია"
 
 #: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
 #, kde-format
 msgid "Writer does not support raw writing."
-msgstr ""
+msgstr "ჩამწერს დაუმუშავებლად ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrecordwriter.cpp:273
 #, kde-format
 msgid "Cdrecord does not support writing %1 media."
-msgstr ""
+msgstr "Cdrecord-ს %1 დისკზე ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrecordwriter.cpp:293 projects/k3bcdrskinwriter.cpp:301
 #, kde-format
 msgid "Writer does not support buffer underrun free recording (Burnfree)"
 msgstr ""
+"ჩამწერს ბუფერის არშევსებისგან დაცული ჩაწერს მხარდაჭერა (Burnfree) არ გააჩნია"
 
 #: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
 #, kde-format
 msgid "Failed to write temporary file '%1'"
-msgstr ""
+msgstr "ვერ ჩავწერე დროებითი ფაილი '%1'"
 
 #: projects/k3bcdrecordwriter.cpp:349
 #, kde-format
 msgid "Cdrecord %1 does not support overburning."
-msgstr ""
+msgstr "Cdrecord %1-ს გადავსებით ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr ""
+msgstr "სიმულაციის დაწყება %1x სიჩქარით..."
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
-msgstr ""
+msgstr "%1-ის სიმულაციის დაწყება %2x სიჩქარით..."
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr ""
+msgstr "ჩაწერის გაშვება %1x სიჩქარით..."
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
-msgstr ""
+msgstr "%1-ის ჩაწერის დაწყება %2x სიჩქარით..."
 
 #: projects/k3bcdrecordwriter.cpp:549 projects/k3bcdrskinwriter.cpp:561
 #: projects/k3bgrowisofswriter.cpp:428
 #, kde-format
 msgid "Writing data"
-msgstr ""
+msgstr "მონაცემების ჩაწერა"
 
 #: projects/k3bcdrecordwriter.cpp:578 projects/k3bcdrskinwriter.cpp:591
 #, kde-format
 msgid "DAO (Disk At Once) recording not supported with this writer"
-msgstr ""
+msgstr "DAO ჩაწერის მხარდაჭერა ამ ჩამწერს არ გააჩნია"
 
 #: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
-msgstr ""
+msgstr "აირჩიეთ TAO და თავიდან სცადეთ"
 
 #: projects/k3bcdrecordwriter.cpp:582 projects/k3bcdrskinwriter.cpp:595
 #, kde-format
 msgid "RAW recording not supported with this writer"
-msgstr ""
+msgstr "ამ ჩამწერს დაუმუშავებლად ჩაწერის მხარდაჭერა არ გააჩნია"
 
 #: projects/k3bcdrecordwriter.cpp:585 projects/k3bcdrskinwriter.cpp:598
 #, kde-format
 msgid "Input/output error. Not necessarily serious."
-msgstr ""
+msgstr "შეტანა/გამოტანის შეცდომა, მაგრამ არა საკმარისად სერიოზული."
 
 #: projects/k3bcdrecordwriter.cpp:594 projects/k3bcdrskinwriter.cpp:607
 #, kde-format
 msgid "Reloading of medium required"
-msgstr ""
+msgstr "დისკის თავიდან ჩადება აუცილებელია"
 
 #: projects/k3bcdrecordwriter.cpp:603 projects/k3bcdrskinwriter.cpp:616
 #: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
 #, kde-format
 msgid "Trying to write more than the official disk capacity"
-msgstr ""
+msgstr "ვეცდები ჩავწერო დისკის ოფიციალურ მოცულობაზე მეტი"
 
 #: projects/k3bcdrecordwriter.cpp:638 projects/k3bcdrskinwriter.cpp:651
 #, kde-format
 msgid "Only session 1 will be cloned."
-msgstr ""
+msgstr "დაიკლონება მხოლოდ, სესია 1."
 
 #: projects/k3bcdrecordwriter.cpp:641 projects/k3bcdrskinwriter.cpp:654
 #, kde-format
 msgid "Unable to fixate the disk."
-msgstr ""
+msgstr "დისკის დამაგრება შეუძლებელია."
 
 #: projects/k3bcdrecordwriter.cpp:671 projects/k3bcdrskinwriter.cpp:684
 #, no-c-format, kde-format
 msgid "Switching burn speed up to %1x"
-msgstr ""
+msgstr "ამოწვის სიჩქარის აწევა სიჩქარემდე %1x"
 
 #: projects/k3bcdrecordwriter.cpp:674 projects/k3bcdrskinwriter.cpp:687
 #, no-c-format, kde-format
 msgid "Switching burn speed down to %1x"
-msgstr ""
+msgstr "ამოწვის სიჩქარის დაწევა სიჩქარემდე %1x"
 
 #: projects/k3bcdrecordwriter.cpp:686 projects/k3bcdrskinwriter.cpp:699
 #, kde-format
 msgid "Starting disc write"
-msgstr ""
+msgstr "დისკის ჩაწერის დასაწყისი"
 
 #: projects/k3bcdrecordwriter.cpp:702 projects/k3bcdrskinwriter.cpp:715
 #: projects/k3bgrowisofshandler.cpp:133
 #, kde-format
 msgid "Closing Session"
-msgstr ""
+msgstr "სესიის დახურვა"
 
 #: projects/k3bcdrecordwriter.cpp:706 projects/k3bcdrskinwriter.cpp:719
 #, kde-format
 msgid "Writing Leadin"
-msgstr ""
+msgstr "შესავლის ჩაწერა"
 
 #: projects/k3bcdrecordwriter.cpp:709 projects/k3bcdrskinwriter.cpp:722
 #, kde-format
 msgid "Writing Leadout"
-msgstr ""
+msgstr "დასასრულის ჩაწერა"
 
 #: projects/k3bcdrecordwriter.cpp:712 projects/k3bcdrskinwriter.cpp:725
 #, kde-format
 msgid "Writing pregap"
-msgstr ""
+msgstr "პაუზის ჩაწერა"
 
 #: projects/k3bcdrecordwriter.cpp:715 projects/k3bcdrskinwriter.cpp:728
 #, kde-format
 msgid "Performing Optimum Power Calibration"
-msgstr ""
+msgstr "ოპტიმალური სიმძლავრის კალიბრაციის შესრულება"
 
 #: projects/k3bcdrecordwriter.cpp:718 projects/k3bcdrskinwriter.cpp:731
 #, kde-format
 msgid "Sending CUE sheet"
-msgstr ""
+msgstr "CUE ფურცლის გაგზავნა"
 
 #: projects/k3bcdrecordwriter.cpp:721 projects/k3bcdrskinwriter.cpp:734
 #, kde-format
 msgid "Enabled Burnfree"
-msgstr ""
+msgstr "Burnfree ჩართულია"
 
 #: projects/k3bcdrecordwriter.cpp:724 projects/k3bcdrskinwriter.cpp:737
 #, kde-format
 msgid "Disabled Burnfree"
-msgstr ""
+msgstr "Burnfree გათიშულია"
 
 #: projects/k3bcdrecordwriter.cpp:730 projects/k3bcdrskinwriter.cpp:743
 #: projects/mixedcd/k3bmixedjob.cpp:555
 #, kde-format
 msgid "Unable to close the tray"
-msgstr ""
+msgstr "თაროს დახურვა შეუძლებელია"
 
 #: projects/k3bcdrecordwriter.cpp:740 projects/k3bcdrskinwriter.cpp:753
 #, kde-format
 msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Burnfree ერთხელ იქნა გამოყენებული."
+msgstr[1] "Burnfree %1-ჯერ იქნა გამოყენებული."
 
 #: projects/k3bcdrecordwriter.cpp:746 projects/k3bcdrskinwriter.cpp:759
 #, kde-format
 msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ბუფერი არასაკმარისი ერთხელ იყო."
+msgstr[1] "ბუფერი არასაკმარისი %1-ჯერ იყო."
 
 #: projects/k3bcdrecordwriter.cpp:785 projects/k3bcdrskinwriter.cpp:798
 #, kde-format
 msgid "Erasing successfully completed"
-msgstr ""
+msgstr "წაშლა წარმატებით დასრულდა"
 
 #: projects/k3bcdrecordwriter.cpp:812 projects/k3bcdrskinwriter.cpp:825
 #: projects/k3bgrowisofshandler.cpp:222
 #, kde-format
 msgid "Data did not fit on disk."
-msgstr ""
+msgstr "მონაცემები დისკზე არ დაეტია."
 
 #: projects/k3bcdrecordwriter.cpp:823 projects/k3bcdrskinwriter.cpp:836
 #, kde-format
 msgid "%1 could not reserve shared memory segment of requested size."
 msgstr ""
+"%1-მა მოთხოვნილი ზომის მქონე გაზიარებული მეხსიერების სეგმენტის გამოყოფა ვერ "
+"შეძლო."
 
 #: projects/k3bcdrecordwriter.cpp:824 projects/k3bcdrskinwriter.cpp:837
 #, kde-format
 msgid "Probably you chose a too large buffer size."
-msgstr ""
+msgstr "ალბათ, მეტისმეტად დიდი ბუფერის ზომა მიუთითეთ."
 
 #: projects/k3bcdrecordwriter.cpp:827 projects/k3bcdrskinwriter.cpp:840
 #, kde-format
 msgid "OPC failed. Probably the writer does not like the medium."
-msgstr ""
+msgstr "OPC ჩავარდა. ალბათ, ჩამწერს დისკი არ მოეწონა."
 
 #: projects/k3bcdrecordwriter.cpp:830 projects/k3bcdrskinwriter.cpp:843
 #, kde-format
 msgid "Unable to set write speed to %1."
-msgstr ""
+msgstr "ჩაწერის სიჩქარის %1-ზე დაყენება შეუძლებელია."
 
 #: projects/k3bcdrecordwriter.cpp:831 projects/k3bcdrskinwriter.cpp:844
 #, kde-format
 msgid "Probably this is lower than your writer's lowest writing speed."
-msgstr ""
+msgstr "ეს ალბათ თქვენი ჩამწერის ყველაზე დაბალ სიჩქარეზე მცირეა."
 
 #: projects/k3bcdrecordwriter.cpp:834 projects/k3bcdrskinwriter.cpp:847
 #, kde-format
 msgid "Unable to send CUE sheet."
-msgstr ""
+msgstr "CUE ფურცლის გაგზავნა შეუძლებელია."
 
 #: projects/k3bcdrecordwriter.cpp:836 projects/k3bcdrecordwriter.cpp:875
 #: projects/k3bcdrecordwriter.cpp:895 projects/k3bcdrskinwriter.cpp:849
 #: projects/k3bcdrskinwriter.cpp:888 projects/k3bcdrskinwriter.cpp:908
 #, kde-format
 msgid "Sometimes using TAO writing mode solves this issue."
-msgstr ""
+msgstr "ხანდახან TAO ჩაწერის რეჟიმი ამ პრობლემას შველის."
 
 #: projects/k3bcdrecordwriter.cpp:839 projects/k3bcdrskinwriter.cpp:852
 #, kde-format
 msgid "Unable to open new session."
-msgstr ""
+msgstr "ახალი სესიის გახსნა შეუძლებელია."
 
 #: projects/k3bcdrecordwriter.cpp:840 projects/k3bcdrskinwriter.cpp:853
 #, kde-format
 msgid "Probably a problem with the medium."
-msgstr ""
+msgstr "ალბათ დისკის პრობლემა."
 
 #: projects/k3bcdrecordwriter.cpp:843 projects/k3bcdrskinwriter.cpp:856
 #, kde-format
 msgid "The disk might still be readable."
-msgstr ""
+msgstr "დისკი, შეძლება, ჯერ კიდევ წაკითხვადი იყოს."
 
 #: projects/k3bcdrecordwriter.cpp:845 projects/k3bcdrskinwriter.cpp:858
 #, kde-format
 msgid "Try DAO writing mode."
-msgstr ""
+msgstr "სცადეთ DAO ჩაწერის რეჟიმი."
 
 #: projects/k3bcdrecordwriter.cpp:848 projects/k3bcdrskinwriter.cpp:861
 #, kde-format
 msgid "%1 has no permission to open the device."
-msgstr ""
+msgstr "%1-ს მოწყობილობის გახსნის წვდომა არ გააჩნია."
 
 #: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
 #, kde-format
 msgid "Modify device settings in K3b to solve this problem."
-msgstr ""
+msgstr "შეცვალეთ მოწყობილობის პარამეტრები K3b-ში, რომ ეს პრობლემა გადაწყვიტოთ."
 
 #: projects/k3bcdrecordwriter.cpp:852 projects/k3bcdrskinwriter.cpp:865
 #, kde-format
 msgid "Probably a buffer underrun occurred."
-msgstr ""
+msgstr "ალბათ მოხდა ბუფერის არშევსება."
 
 #: projects/k3bcdrecordwriter.cpp:854 projects/k3bcdrskinwriter.cpp:867
 #, kde-format
 msgid "Please enable Burnfree or choose a lower burning speed."
-msgstr ""
+msgstr "ჩართეთ Burnfree ან აირჩიეთ ჩაწერის უფრო დაბალი სიჩქარე."
 
 #: projects/k3bcdrecordwriter.cpp:856 projects/k3bcdrskinwriter.cpp:869
 #, kde-format
 msgid "Please choose a lower burning speed."
-msgstr ""
+msgstr "აირჩიეთ უფრო დაბალი ამოწვის სიჩქარე."
 
 #: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrskinwriter.cpp:872
 #, kde-format
 msgid "Found a high-speed medium not suitable for the writer being used."
 msgstr ""
+"აღმოჩენილია ჩქაროსნული დისკი, რომელიც გამოყენებულ ჩამწერთან თავსებადი არაა."
 
 #: projects/k3bcdrecordwriter.cpp:860 projects/k3bcdrecordwriter.cpp:864
 #: projects/k3bcdrskinwriter.cpp:873 projects/k3bcdrskinwriter.cpp:877
 #, kde-format
 msgid "Use the 'force unsafe operations' option to ignore this."
-msgstr ""
+msgstr "ამის გამოსატოვებლად ჩართეთ პარამეტრი 'ნაძალადევი სახიფათო ოპერაციები'."
 
 #: projects/k3bcdrecordwriter.cpp:863 projects/k3bcdrskinwriter.cpp:876
 #, kde-format
 msgid "Found a low-speed medium not suitable for the writer being used."
-msgstr ""
+msgstr "აღმოჩენილია ნელი დისკი, რომელიც გამოყენებულ ჩამწერთან თავსებადი არაა."
 
 #: projects/k3bcdrecordwriter.cpp:867 projects/k3bcdrskinwriter.cpp:880
 #, kde-format
 msgid "Most likely the burning failed due to low-quality media."
-msgstr ""
+msgstr "ამოწვა, როგორც ჩანს, მდორე ხარისხის დისკის გამო ჩავარდა."
 
 #: projects/k3bcdrecordwriter.cpp:870 projects/k3bcdrskinwriter.cpp:883
 #, kde-format
 msgid "Another application is blocking the device (most likely automounting)."
 msgstr ""
+"მოწყობილობას სხვა აპლიკაცია ზღუდავს (ყველაზე ხშირად ეს ავტომიმაგრებაა)."
 
 #: projects/k3bcdrecordwriter.cpp:873 projects/k3bcdrskinwriter.cpp:886
 #, kde-format
 msgid "A write error occurred."
-msgstr ""
+msgstr "აღმოჩენილია ჩაწერის შეცდომა."
 
 #: projects/k3bcdrecordwriter.cpp:878 projects/k3bcdrskinwriter.cpp:891
 #, kde-format
 msgid "Some drives do not support all erase types."
-msgstr ""
+msgstr "ზოგიერთ ამძრავს ყველა წაშლის ტიპის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrecordwriter.cpp:879 projects/k3bcdrskinwriter.cpp:892
 #, kde-format
 msgid "Try again using 'Complete' erasing."
-msgstr ""
+msgstr "სცადეთ თავიდან 'სრული' წაშლით."
 
 #: projects/k3bcdrecordwriter.cpp:886
 #, kde-format
@@ -2757,47 +2845,50 @@ msgid ""
 "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
+"ბირთვის 2.6.8 ვერსიიდან დაწყებული cdrecord-ს suid root-ით გაშვებისას SCSI "
+"ტრანსპორტის გამოყენება აღარ შეუძლია."
 
 #: projects/k3bcdrecordwriter.cpp:887 projects/k3bcdrskinwriter.cpp:900
 #, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr ""
+"ამ პრობლემის გადაწყვეტად გამოიყენეთ K3b::Setup ან suid ბიტი ხელით მოაცილეთ."
 
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
-msgstr ""
+msgstr "გაქვთ cdrecord-ის დაუპაჩავი ვერსია..."
 
 #: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
-msgstr ""
+msgstr "...და ამ შეცდომას ასევე ხედავთ ხარისხიანი დისკის გამოყენებისას..."
 
 #: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
-msgstr ""
+msgstr "...და K3b-ის ხდკ ვერ დაგეხმარათ..."
 
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
-msgstr ""
+msgstr "...დაურთეთ გამართვის ინფორმაცია თქვენს პრობლემის ანგარიშს."
 
 #: projects/k3bcdrskinwriter.cpp:240
 #, kde-format
 msgid "Cdrskin version %1 does not support Blu-ray writing."
-msgstr ""
+msgstr "Cdrskin-ის ვერსიას %1 Blu-ray-ის ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrskinwriter.cpp:286
 #, kde-format
 msgid "Cdrskin does not support writing %1 media."
-msgstr ""
+msgstr "Cdrskin-ს %1 დისკის ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrskinwriter.cpp:361
 #, kde-format
 msgid "Cdrskin %1 does not support overburning."
-msgstr ""
+msgstr "Cdrskin %1-ს გადავსებით ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: projects/k3bcdrskinwriter.cpp:899
 #, kde-format
@@ -2805,96 +2896,98 @@ msgid ""
 "Since kernel version 2.6.8 cdrskin cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
+"ბირთვის 2.6.8 ვერსიიდან დაწყებული cdrskin-ს suid root-ით გაშვებისას SCSI "
+"ტრანსპორტის გამოყენება აღარ შეუძლია."
 
 #: projects/k3bcdrskinwriter.cpp:911
 #, kde-format
 msgid "If you are running an unpatched cdrskin version..."
-msgstr ""
+msgstr "გაქვთ cdrsin-ის დაუპაჩავი ვერსია..."
 
 #: projects/k3bgrowisofshandler.cpp:72
 #, kde-format
 msgid "OPC failed. Please try writing speed 1x."
-msgstr ""
+msgstr "OPC ჩავარდა. სცადეთ, ჩაწერის სიჩქარე 1x-ზე დააყენოთ."
 
 #: projects/k3bgrowisofshandler.cpp:99
 #, kde-format
 msgid "Please try again with writing mode DAO."
-msgstr ""
+msgstr "სცადეთ DAO ჩაწერის რეჟიმი."
 
 #: projects/k3bgrowisofshandler.cpp:113
 #, kde-format
 msgid "Flushing Cache"
-msgstr ""
+msgstr "კეშის გასუფთავება"
 
 #: projects/k3bgrowisofshandler.cpp:114
 #, kde-format
 msgid "Flushing the cache may take some time."
-msgstr ""
+msgstr "კეშის მოცილებას რაღაც დრო შეიძლება, დასჭირდეს."
 
 #: projects/k3bgrowisofshandler.cpp:123
 #, kde-format
 msgid "Closing Track"
-msgstr ""
+msgstr "ტრეკის დახურვა"
 
 #: projects/k3bgrowisofshandler.cpp:126
 #, kde-format
 msgid "Closing Disk"
-msgstr ""
+msgstr "დისკის დახურვა"
 
 #: projects/k3bgrowisofshandler.cpp:129
 #, kde-format
 msgid "Updating RMA"
-msgstr ""
+msgstr "RMA-ის განახლება"
 
 #: projects/k3bgrowisofshandler.cpp:130
 #, kde-format
 msgid "Updating RMA..."
-msgstr ""
+msgstr "RMA-ის განახლება..."
 
 #: projects/k3bgrowisofshandler.cpp:134
 #, kde-format
 msgid "Closing Session..."
-msgstr ""
+msgstr "სესიის დახურვა..."
 
 #: projects/k3bgrowisofshandler.cpp:137
 #, kde-format
 msgid "Writing Lead-out"
-msgstr ""
+msgstr "დასასრულის ჩაწერა"
 
 #: projects/k3bgrowisofshandler.cpp:138
 #, kde-format
 msgid "Writing the lead-out may take some time."
-msgstr ""
+msgstr "დასასრულის ჩაწერას რაღაც დრო შეიძლება, დასჭირდეს."
 
 #: projects/k3bgrowisofshandler.cpp:141
 #, kde-format
 msgid "Removing reference to lead-out."
-msgstr ""
+msgstr "დასასრულზე მიმართვის წაშლა."
 
 #: projects/k3bgrowisofshandler.cpp:144
 #, kde-format
 msgid "Modifying ISO 9660 volume descriptor"
-msgstr ""
+msgstr "ISO 9660 ტომის დესკრიპტორის შეცვლა"
 
 #: projects/k3bgrowisofshandler.cpp:151
 #, kde-format
 msgid "Writing mode Incremental Streaming not available"
-msgstr ""
+msgstr "ჩაწერის რეჟიმი ინკრემენტული სტრიმინგი ხელმისაწვდომი არაა"
 
 #: projects/k3bgrowisofshandler.cpp:152
 #, kde-format
 msgid "Engaging DAO"
-msgstr ""
+msgstr "DAO-ის ჩართვა"
 
 #: projects/k3bgrowisofshandler.cpp:164
 #, kde-format
 msgid "Writing speed: %1 KB/s (%2x)"
-msgstr ""
+msgstr "ჩაწერის სიჩქარე: %1 კბ/წმ (%2x)"
 
 #: projects/k3bgrowisofshandler.cpp:215
 #, kde-format
 msgid "K3b detected a problem with the medium."
-msgstr ""
+msgstr "K3b-მა დისკის პრობლემა აღმოაჩინა."
 
 #: projects/k3bgrowisofshandler.cpp:216
 #, kde-format
@@ -2902,26 +2995,28 @@ msgid ""
 "Please try another brand of media, preferably one explicitly recommended by "
 "your writer's vendor."
 msgstr ""
+"სცადეთ დისკის სხვა ბრენდით. სასურველია ბრენდით, რომელიც რეკომენდებულია "
+"ჩამწერის მომწოდებლის მიერ."
 
 #: projects/k3bgrowisofshandler.cpp:217
 #, kde-format
 msgid "Report the problem if it persists anyway."
-msgstr ""
+msgstr "მოგვწერეთ, თუ პრობლემა მაინც არ აღმოიფხვრება."
 
 #: projects/k3bgrowisofshandler.cpp:228
 #, kde-format
 msgid "Unable to set writing speed."
-msgstr ""
+msgstr "ჩაწერის სიჩქარის დაყენება შეუძლებელია."
 
 #: projects/k3bgrowisofshandler.cpp:229
 #, kde-format
 msgid "Please try again with the 'ignore speed' setting."
-msgstr ""
+msgstr "სცადეთ თავიდან 'სიჩქარის გამოტოვების' პარამეტრით."
 
 #: projects/k3bgrowisofshandler.cpp:233
 #, kde-format
 msgid "Optimum Power Calibration failed."
-msgstr ""
+msgstr "ოპტიმალური სიმძლავრის კალიბრაცია ჩავარდა."
 
 #: projects/k3bgrowisofshandler.cpp:234
 #, kde-format
@@ -2929,27 +3024,32 @@ msgid ""
 "Try adding '-use-the-force-luke=noopc' to the growisofs user parameters in "
 "the K3b settings."
 msgstr ""
+"სცადეთ, K3b-ის პარამეტრებში growisofs-ის მომხმარებლის პარამეტრებს '-use-the-"
+"force-luke=noopc' დაამატოთ."
 
 #: projects/k3bgrowisofshandler.cpp:239
 #, kde-format
 msgid "Unable to allocate software buffer."
-msgstr ""
+msgstr "პროგრამული ბუფერის გამოყოფა შეუძლებელია."
 
 #: projects/k3bgrowisofshandler.cpp:240
 #, kde-format
 msgid "This error is caused by the low memorylocked resource limit."
 msgstr ""
+"ეს შემოწმება გამოწვეულია მეტისმეტად მცირე მეხსიერების უმაღლესი საზღვრით."
 
 #: projects/k3bgrowisofshandler.cpp:241
 #, kde-format
 msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
-msgstr ""
+msgstr "ეს შეგიძლიათ მოაგვაროთ ბრძანებით 'ulimit -l unlimited'..."
 
 #: projects/k3bgrowisofshandler.cpp:242
 #, kde-format
 msgid ""
 "...or by lowering the used software buffer size in the advanced K3b settings."
 msgstr ""
+"...ან გამოყენებული პროგრამის ბუფერის ზომის შემცირებით K3b-ის დამატებით "
+"პარამეტრებში."
 
 #: projects/k3bgrowisofshandler.cpp:246
 #, kde-format
@@ -2959,27 +3059,29 @@ msgstr "ჩაწერის შეცდომა"
 #: projects/k3bgrowisofshandler.cpp:262
 #, kde-format
 msgid "Fatal error at startup: %1"
-msgstr ""
+msgstr "ფატალური შეცდომა გაშვებისას: %1"
 
 #: projects/k3bgrowisofshandler.cpp:270
 #, kde-format
 msgid "Warning at exit: (1)"
-msgstr ""
+msgstr "გაფრთხილება გასვლისას: (1)"
 
 #: projects/k3bgrowisofshandler.cpp:271
 #, kde-format
 msgid "Most likely mkisofs failed in some way."
-msgstr ""
+msgstr "როგორც ჩანს, რაღაც მიზეზის გამო mkisofs ჩავარდა."
 
 #: projects/k3bgrowisofshandler.cpp:274
 #, kde-format
 msgid "Fatal error during recording: %1"
-msgstr ""
+msgstr "ფატალური შეცდომა ჩაწერისას: %1"
 
 #: projects/k3bgrowisofswriter.cpp:139
 #, kde-format
 msgid "Growisofs version %1 is too old. K3b needs at least version 5.10."
 msgstr ""
+"Growisofs-ის ვერსია %1 ძალიან ძველია. K3b-ისთვის საჭირო მინიმალური ვერსიაა "
+"5.10."
 
 #: projects/k3bgrowisofswriter.cpp:153
 #, kde-format
@@ -2987,6 +3089,8 @@ msgid ""
 "Growisofs version %1 does not feature a software buffer which may result in "
 "an unstable burn process."
 msgstr ""
+"Growisofs-ის ვერსიას %1 არ აქვს პროგრამული ბუფერი, რამაც არასტაბილური "
+"ამოწვის პროცესი შეიძლება, გამოიწვიოს."
 
 #: projects/k3bgrowisofswriter.cpp:212
 #, kde-format
@@ -2996,92 +3100,92 @@ msgstr "ფაილის გახსნის შეცდომა: %1."
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
 msgid "Starting simulation..."
-msgstr ""
+msgstr "სიმულაციის დაწყება..."
 
 #: projects/k3bgrowisofswriter.cpp:363
 #, kde-format
 msgid "Starting disc write..."
-msgstr ""
+msgstr "დისკის ჩაწერის დაწყება..."
 
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
 msgid "Creating audio image files in %1"
-msgstr ""
+msgstr "აუდიოდისკის ასლის ფაილების შექმნა %1-ში"
 
 #: projects/mixedcd/k3bmixedjob.cpp:280 projects/mixedcd/k3bmixedjob.cpp:494
 #, kde-format
 msgid "Creating audio image files"
-msgstr ""
+msgstr "აუდიოდისკის ასლის ფაილების შექმნა"
 
 #: projects/mixedcd/k3bmixedjob.cpp:468
 #, kde-format
 msgid "Error while creating ISO image."
-msgstr ""
+msgstr "შეცდომა ISO ფაილის შექმნისას."
 
 #: projects/mixedcd/k3bmixedjob.cpp:483
 #, kde-format
 msgid "ISO image successfully created."
-msgstr ""
+msgstr "ISO დისკის ასლის ფაილი წარმატებით შეიქმნა."
 
 #: projects/mixedcd/k3bmixedjob.cpp:584
 #, kde-format
 msgid "Audio images successfully created."
-msgstr ""
+msgstr "ხმოვანი დისკის ასლები წარმატებით შეიქმნა."
 
 #: projects/mixedcd/k3bmixedjob.cpp:877
 #, kde-format
 msgid "Writing track %1 of %2 (%3)"
-msgstr ""
+msgstr "იწერება ტრეკი %1 %2-დან (%3)"
 
 #: projects/mixedcd/k3bmixedjob.cpp:880
 #, kde-format
 msgid "ISO 9660 data"
-msgstr ""
+msgstr "ISO 9660 მონაცემები"
 
 #: projects/mixedcd/k3bmixedjob.cpp:986
 #, kde-format
 msgid "Simulating second session"
-msgstr ""
+msgstr "მეორე სესიის სიმულაცია"
 
 #: projects/mixedcd/k3bmixedjob.cpp:988
 #, kde-format
 msgid "Writing second session of copy %1"
-msgstr ""
+msgstr "მეორე სესიის ჩაწერა ასლისთვის %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:990
 #, kde-format
 msgid "Writing second session"
-msgstr ""
+msgstr "მეორე სესიის ჩაწერა"
 
 #: projects/mixedcd/k3bmixedjob.cpp:994
 #, kde-format
 msgid "Simulating first session"
-msgstr ""
+msgstr "პირველი სესიის სიმულაცია"
 
 #: projects/mixedcd/k3bmixedjob.cpp:996
 #, kde-format
 msgid "Writing first session of copy %1"
-msgstr ""
+msgstr "პირველი სესიის ჩაწერა ასლისთვის %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:998
 #, kde-format
 msgid "Writing first session"
-msgstr ""
+msgstr "პირველი სესიის ჩაწერა"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1076
 #, kde-format
 msgid "Creating ISO image file"
-msgstr ""
+msgstr "ISO დისკის ასლის ფაილის შექმნა"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1077 projects/mixedcd/k3bmixedjob.cpp:1078
 #, kde-format
 msgid "Creating ISO image in %1"
-msgstr ""
+msgstr "ISO დისკის ასლის ფაილის შექმნა %1-ში"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1118
 #, kde-format
 msgid "Removing buffer files."
-msgstr ""
+msgstr "მიმდინარეობს ბუფერის ფაილების წაშლა."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1123
 #, kde-format
@@ -3091,30 +3195,31 @@ msgstr "ფაილ %1-ის წაშლის შეცდომა."
 #: projects/mixedcd/k3bmixedjob.cpp:1231
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "Cdrecord თქვენს სისტემაში აღმოჩენილი არაა."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1235
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
 msgstr ""
+"TAO რეჟიმში CD-Text-ის ჩაწერა შეუძლებელია. სცადეთ DAO ან დაუმუშავებელი."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1332
 #, kde-format
 msgid "Writing Enhanced Audio CD"
-msgstr ""
+msgstr "გაფართოებული აუდიო CD-ის ჩაწერა"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1337
 #, kde-format
 msgid "Writing Mixed Mode CD"
-msgstr ""
+msgstr "შერეული რეჟიმის CD-ის ჩაწერა"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1347
 #, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
 msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ტრეკი (%2 წთ ხმოვან მონაცემები, %3 ISO 9660 მონაცემები)"
+msgstr[1] "%1 ტრეკი (%2 წთ ხმოვან მონაცემები, %3 ISO 9660 მონაცემები)"
 
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
@@ -3124,18 +3229,20 @@ msgstr "შეიყვანეთ ახალი ფაილის სახ
 #: projects/movixcd/k3bmovixdoc.cpp:83
 #, kde-format
 msgid "A file with that name already exists. Please enter a new name:"
-msgstr ""
+msgstr "ფაილი ამ სახელით უკვე არსებობს. შეიყვანეთ ახალი სახელი:"
 
 #: projects/movixcd/k3bmovixdoc.cpp:175
 #, kde-format
 msgid ""
 "Could not rename subtitle file. File with requested name %1 already exists."
 msgstr ""
+"სუბტიტრის ფაილის სახელის გადარქმევა შეუძლებელია. ფაილი მოთხოვნილი სახელით %1 "
+"უკვე არსებობს."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:125
 #, kde-format
 msgid "Could not find a valid eMovix installation."
-msgstr ""
+msgstr "სწორი eMovix-ის ფაილები აღმოჩენილი არაა."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:199
 #: projects/movixcd/k3bmovixprogram.cpp:180
@@ -3158,24 +3265,24 @@ msgstr "ნაგულისხმები"
 #: projects/movixcd/k3bmovixprogram.cpp:236
 #, kde-format
 msgid "none"
-msgstr ""
+msgstr "არა"
 
 #: projects/movixcd/k3bmovixjob.cpp:105
 #, kde-format
 msgid "Writing eMovix Project"
-msgstr ""
+msgstr "მიმდინარეობს eMovix-ის პროექტის ჩაწერა"
 
 #: projects/movixcd/k3bmovixjob.cpp:107
 #, kde-format
 msgid "Writing eMovix Project (%1)"
-msgstr ""
+msgstr "მიმდინარეობს eMovix-ის პროექტის ჩაწერა (%1)"
 
 #: projects/movixcd/k3bmovixjob.cpp:113
 #, kde-format
 msgid "One file (%2) and about 8 MB eMovix data"
 msgid_plural "%1 files (%2) and about 8 MB eMovix data"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ფაილი (%2) და დაახლ. 8 მბ eMovix-ის მონაცემები"
+msgstr[1] "%1 ფაილი (%2) და დაახლ. 8 მბ eMovix-ის მონაცემები"
 
 #: projects/movixcd/k3bmovixjob.cpp:117
 #, kde-format
@@ -3190,6 +3297,9 @@ msgid ""
 "K3b will create a %1 image from the given MPEG files, but these files must "
 "already be in %1 format. K3b does not yet resample MPEG files."
 msgstr ""
+"K3b შექმნის %1 დისკის ასლს მოცემული MPEG ფაილებიდან, მაგრამ ეს ფაილები უკვე "
+"%1 ფორმატში უნდა იყოს. K3b-ს MPEG ფაილების გადაკოდირების მხარდაჭერა ჯერ არ "
+"გააჩნია."
 
 #: projects/videocd/k3bvcddoc.cpp:205
 #, kde-format
@@ -3212,6 +3322,8 @@ msgstr "SVCD"
 msgid ""
 "Note: Forcing MPEG2 as VCD is not supported by some standalone DVD players."
 msgstr ""
+"შენიშვნა: MPEG2-ის ნაძალადევი მითითება VCD-სთვის ზოგიერთი DVD-ის დამკვრელის "
+"მიერ მხარდაჭერილი არაა."
 
 #: projects/videocd/k3bvcddoc.cpp:220
 #, kde-format
@@ -3221,7 +3333,7 @@ msgstr "VCD ძალით"
 #: projects/videocd/k3bvcddoc.cpp:221
 #, kde-format
 msgid "Do not force VCD"
-msgstr ""
+msgstr "VCD ნაძალადევი არ იქნება"
 
 #: projects/videocd/k3bvcddoc.cpp:234
 #, kde-format
@@ -3230,11 +3342,14 @@ msgid ""
 "Please start a new Project for this filetype.\n"
 "Resample not implemented in K3b yet."
 msgstr ""
+"MPEG1 და MPEG2 ვიდეოფაილების შერევა შეუძლებელია.\n"
+"გთხოვთ, დაიწყეთ ახალი პროექტი ამ ფაილის ტიპისთვის.\n"
+"გადაყვანის მხარდაჭერა K3b-ს ჯერ არ გააჩნია."
 
 #: projects/videocd/k3bvcddoc.cpp:235
 #, kde-format
 msgid "Wrong File Type for This Project"
-msgstr ""
+msgstr "რასწორი ფაილის ტიპი ამ პროექტისთვის"
 
 #: projects/videocd/k3bvcddoc.cpp:246
 #, kde-format
@@ -3243,11 +3358,14 @@ msgid ""
 "Video players cannot reach Segments (MPEG Still Pictures) without Playback "
 "control."
 msgstr ""
+"PBC (დაკვრის კონტროლი) ჩართულია.\n"
+"ვიდეოდამკვრელებს არ შეუძლიათ, სეგმენტებს (MPEG-ის სტატიკურ სურათებს) "
+"მიაღწიონ დაკვრის კონტროლის გარეშე."
 
 #: projects/videocd/k3bvcddoc.cpp:278
 #, kde-format
 msgid "Only MPEG1 and MPEG2 video files are supported.\n"
-msgstr ""
+msgstr "მხარდაჭერილია, მხოლოდ, MPEG1 და MPEG2 ვიდეოფაილები.\n"
 
 #: projects/videocd/k3bvcddoc.cpp:279
 #, kde-format
@@ -3257,27 +3375,27 @@ msgstr "არასწორი ფაილის ფორმატი"
 #: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:469
 #, kde-format
 msgid "Removing Binary file %1"
-msgstr ""
+msgstr "წაიშლება ბინარული ფაილი %1"
 
 #: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format
 msgid "Removing Cue file %1"
-msgstr ""
+msgstr "წაიშლება Cue ფაილი %1"
 
 #: projects/videocd/k3bvcdjob.cpp:174
 #, kde-format
 msgid "Could not write correct XML file."
-msgstr ""
+msgstr "სწორი XML ფაილის ჩაწერა შეუძლებელია."
 
 #: projects/videocd/k3bvcdjob.cpp:190
 #, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr ""
+msgstr "Cue/Bin ფაილების შექმნა..."
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
 msgid "To create Video CDs you have to install VcdImager version %1."
-msgstr ""
+msgstr "ვიდეო CD-ების შესაქმნელად VcdImager-ის ვერსია %1 უნდა დააყენოთ."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
 #, kde-format
@@ -3285,41 +3403,45 @@ msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
+"ამის პოვნა თქვენი დისტრიბუტივის დისკებზე შეგიძლიათ. ან გადმოწერეთ ის "
+"ვებგვერდიდან https://www.gnu.org/software/vcdimager"
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
-msgstr ""
+msgstr "გამშვები ფაილი %1 მეტისმეტად ძველია: საჭიროა ვერსია %2 ან უფრო ახალი."
 
 #: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
 msgid "Scanning video file %1 of %2 (%3)"
-msgstr ""
+msgstr "მიმდინარეობს სკანირება ვიდეოფაილისთვის %1 %2-დან (%3)"
 
 #: projects/videocd/k3bvcdjob.cpp:323
 #, kde-format
 msgid "Creating Image for track %1"
-msgstr ""
+msgstr "დისკის ასლის ფაილის შექმნა ტრეკისთვის %1"
 
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
-msgstr ""
+msgstr "Cue/Bin ფაილები წარმატებით შეიქმნა."
 
 #: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
 msgid "Writing Copy %1 of %2"
-msgstr ""
+msgstr "იწერება ასლი %1 %2-დან"
 
 #: projects/videocd/k3bvcdjob.cpp:514
 #, kde-format
 msgid "One or more BCD fields out of range for %1"
-msgstr ""
+msgstr "ერთი ან მეტი BCD ველი %1-სთვის შუალედს გარეთაა"
 
 #: projects/videocd/k3bvcdjob.cpp:517
 #, kde-format
 msgid "From now on, scan information data errors will not be reported anymore"
 msgstr ""
+"ამიერიდან სკანირების ინფორმაციის მონაცემების შეცდომების შესახებ აღარ "
+"გაგაფრთხილებთ"
 
 #: projects/videocd/k3bvcdjob.cpp:518
 #, kde-format
@@ -3327,58 +3449,62 @@ msgid ""
 "Consider enabling the 'update scan offsets' option, if it is not enabled "
 "already."
 msgstr ""
+"იფიქრეთ ჩართოთ 'სკანირების წანაცვლებების განახლების' პარამეტრი, თუ ის უკვე "
+"ჩართული არაა."
 
 #: projects/videocd/k3bvcdjob.cpp:525
 #, kde-format
 msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
 msgstr ""
+"APS-ის pts, როგორც ჩანს, მიმდევრობის გარეთაა (მიმდინარე pts %1, ბოლოს "
+"შემოწმებული pts %2)"
 
 #: projects/videocd/k3bvcdjob.cpp:526
 #, kde-format
 msgid "Ignoring this aps"
-msgstr ""
+msgstr "ამ aps-ის გამოტოვება"
 
 #: projects/videocd/k3bvcdjob.cpp:534
 #, kde-format
 msgid "Bad packet at packet #%1 (stream byte offset %2)"
-msgstr ""
+msgstr "არასწორი პაკეტი პაკეტთან #%1 (ნაკადის ბაიტის წანაცვლება %2)"
 
 #: projects/videocd/k3bvcdjob.cpp:541
 #, kde-format
 msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ნაკადის დარჩენილი ბაიტი გამოტოვებული იქნება."
+msgstr[1] "ნაკადის დარჩენილი %1 ბაიტი გამოტოვებული იქნება."
 
 #: projects/videocd/k3bvcdjob.cpp:543
 #, kde-format
 msgid "An unknown number of remaining stream bytes will be ignored."
-msgstr ""
+msgstr "ნაკადის დარჩენილი უცნობი რაოდენობის ბაიტი გამოტოვებული იქნება."
 
 #: projects/videocd/k3bvcdjob.cpp:552
 #, kde-format
 msgid "Writing Video CD (Version 1.1)"
-msgstr ""
+msgstr "Video CD-ის ჩაწერა (ვერსია 1.1)"
 
 #: projects/videocd/k3bvcdjob.cpp:554
 #, kde-format
 msgid "Writing Video CD (Version 2.0)"
-msgstr ""
+msgstr "Video CD-ის ჩაწერა (ვერსია 2.0)"
 
 #: projects/videocd/k3bvcdjob.cpp:556
 #, kde-format
 msgid "Writing Super Video CD"
-msgstr ""
+msgstr "Super Video CD-ის ჩაწერა"
 
 #: projects/videocd/k3bvcdjob.cpp:558
 #, kde-format
 msgid "Writing High-Quality Video CD"
-msgstr ""
+msgstr "მაღალი ხარისხის Video CD-ის ჩაწერა"
 
 #: projects/videocd/k3bvcdjob.cpp:560
 #, kde-format
 msgid "Writing Video CD"
-msgstr ""
+msgstr "Video CD-ის ჩაწერა"
 
 #: projects/videocd/k3bvcdjob.cpp:567
 #, kde-format
@@ -3449,7 +3575,7 @@ msgstr "ფენა %1"
 #: projects/videocd/k3bvcdtrack.cpp:389
 #, kde-format
 msgid "unknown"
-msgstr ""
+msgstr "უცნობი"
 
 #: projects/videocd/k3bvcdtrack.cpp:390
 #, kde-format
@@ -3479,7 +3605,7 @@ msgstr "ერთი არხი"
 #: projects/videocd/k3bvcdtrack.cpp:404
 #, kde-format
 msgid "surround sound"
-msgstr ""
+msgstr "მომცველი ხმა"
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:59
 #, kde-format
@@ -3492,6 +3618,8 @@ msgid ""
 "This looks like an elementary video stream but a multiplexed program stream "
 "was required."
 msgstr ""
+"ეს ელემენტარულ ვიდეონაკადს წააგავს, მაგრამ საჭიროა მულტიპლექსირებული "
+"პროგრამის ნაკადი."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:98
 #, kde-format
@@ -3499,6 +3627,8 @@ msgid ""
 "This looks like an elementary audio stream but a multiplexed program stream "
 "was required."
 msgstr ""
+"ეს ელემენტარულ აუდიონაკადს წააგავს, მაგრამ საჭიროა მულტიპლექსირებული "
+"პროგრამის ნაკადი."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:103
 #, kde-format
@@ -3506,67 +3636,71 @@ msgid ""
 "This looks like a RIFF header but a plain multiplexed program stream was "
 "required."
 msgstr ""
+"ეს წააგავს RIFF-ის თავსართს, მაგრამ საჭირო იყო უბრალო მულტიპლექსირებული "
+"პროგრამის ნაკადი."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:97
 #, kde-kuit-format
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
-msgstr ""
+msgstr "ვერ შევქმენი არასწორი დროებითი საქაღალდე <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:105
 #, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
-msgstr ""
+msgstr "ვერ შევქმენი დროებითი საქაღალდე <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:112
 #, kde-kuit-format
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr ""
+"აღმოჩენილია არასწორი ჩანაწერი საქაღალდეში VIDEO_TS: <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:120
 #, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
-msgstr ""
+msgstr "ვერ შევქმენ ბმული დროებით ფაილთან საქაღალდეში <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
 msgid "The project does not contain all necessary Video DVD files."
-msgstr ""
+msgstr "პროექტი ყველა საჭირო Video DVD-ის ფაილებს არ შეიცავს."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."
-msgstr ""
+msgstr "შედეგად მიღებული DVD, ალბათ, Hifi DVD დამკვრელზე დაკვრადი არ იქნება."
 
 #: projects/videodvd/k3bvideodvdjob.cpp:43
 #, kde-format
 msgid "Creating Video DVD Image File"
-msgstr ""
+msgstr "Video DVD დისკის ასლის ფაილის შექმნა"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:46
 #, kde-format
 msgid "Writing Video DVD"
-msgstr ""
+msgstr "Video DVD-ის ჩაწერა"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:56
 #, kde-format
 msgid "ISO 9660/Udf Filesystem (Size: %1)"
-msgstr ""
+msgstr "ISO 9660/Udf ფაილური სისტემა (ზომა: %1)"
 
 #: tools/k3bcddb.cpp:37
 #, kde-format
 msgid "Multiple CDDB Entries Found"
-msgstr ""
+msgstr "აღმოჩენილია ერთზე მეტი CDDB ჩანაწერი"
 
 #: tools/k3bcddb.cpp:39
 #, kde-format
 msgid "K3b found multiple or inexact CDDB entries. Please select one."
 msgstr ""
+"K3b-მა ერთზე მეტი ან არაზუსტი CDDB ჩანაწერები იპოვა. აირჩიეთ მხოლოდ ერთი."
 
 #: tools/k3bdevicemodel.cpp:132
 #, kde-format
 msgid "Analyzing medium..."
-msgstr ""
+msgstr "მედიის ანალიზი..."
 
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
@@ -3616,12 +3750,12 @@ msgstr "ვიდეო CD"
 #: tools/k3bmedium.cpp:326
 #, kde-format
 msgid "Appendable Data %1"
-msgstr ""
+msgstr "ბოლოში მიწერადი მონაცემები %1"
 
 #: tools/k3bmedium.cpp:329
 #, kde-format
 msgid "Complete Data %1"
-msgstr ""
+msgstr "სრული მონაცემები %1"
 
 #: tools/k3bmedium.cpp:333
 #, kde-format
@@ -3631,7 +3765,7 @@ msgstr "ცარიელი"
 #: tools/k3bmedium.cpp:346
 #, kde-format
 msgid "No medium information"
-msgstr ""
+msgstr "მედიის ინფორმაციის გარეშე"
 
 #: tools/k3bmedium.cpp:350
 #, kde-format
@@ -3641,24 +3775,24 @@ msgstr "დისკი არ დევს"
 #: tools/k3bmedium.cpp:354
 #, kde-format
 msgid "Empty %1 medium"
-msgstr ""
+msgstr "ცარიელი დისკი %1"
 
 #: tools/k3bmedium.cpp:395
 #, kde-format
 msgid "Appendable %1 medium"
-msgstr ""
+msgstr "ბოლოში მიწერადი %1 დისკი"
 
 #: tools/k3bmedium.cpp:398
 #, kde-format
 msgid "Complete %1 medium"
-msgstr ""
+msgstr "სრული %1 მედია"
 
 #: tools/k3bmedium.cpp:415
 #, kde-format
 msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 %1 ტრეკში"
+msgstr[1] "%2 %1 ტრეკში"
 
 #: tools/k3bmedium.cpp:419
 #, kde-format
@@ -3731,12 +3865,12 @@ msgctxt ""
 "To be shown when a specific type of medium is required but another type of "
 "medium is inserted."
 msgid "suitable medium"
-msgstr ""
+msgstr "შესაბამისი მედია"
 
 #: tools/k3bmedium.cpp:618
 #, kde-format
 msgid "Medium in %1 is not a %2."
-msgstr ""
+msgstr "მედია %1-ში %2 არაა."
 
 #: tools/k3bmedium.cpp:623
 #, kde-format
@@ -3748,110 +3882,110 @@ msgstr "ცარიელია"
 #, kde-format
 msgctxt "To be shown when an empty or appendable medium is required"
 msgid "empty or appendable"
-msgstr ""
+msgstr "ცარიელი ან ბოლოში მიწერადი"
 
 #: tools/k3bmedium.cpp:627
 #, kde-format
 msgctxt "To be shown when an non-empty medium is required"
 msgid "non-empty"
-msgstr ""
+msgstr "არაცარიელი"
 
 #: tools/k3bmedium.cpp:629
 #, kde-format
 msgctxt "To be shown when the state of the inserted medium is not suitable."
 msgid "suitable"
-msgstr ""
+msgstr "შესაბამისი"
 
 #: tools/k3bmedium.cpp:631
 #, kde-format
 msgid "Medium in %1 is not %2."
-msgstr ""
+msgstr "მედია %1-ში %2 არაა."
 
 #: tools/k3bmedium.cpp:634
 #, kde-format
 msgid "Capacity of the medium in %1 is smaller than required."
-msgstr ""
+msgstr "%1-ში ჩადებული დისკის მოცულობა აუცილებელზე მცირეა."
 
 #: tools/k3bmedium.cpp:683
 #, kde-format
 msgid "Please insert an empty medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი დისკი ამძრავში<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:685
 #, kde-format
 msgid "Please insert an empty medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი დისკი"
 
 #: tools/k3bmedium.cpp:690
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი DVD ან Blu-ray დისკი ამძრავში<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:692
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი DVD ან Blu-ray დისკი"
 
 #: tools/k3bmedium.cpp:696
 #, kde-format
 msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი Blu-ray დისკი ამძრავში<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:698
 #, kde-format
 msgid "Please insert an empty Blu-ray medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი Blu-ray დისკი"
 
 #: tools/k3bmedium.cpp:702
 #, kde-format
 msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი CD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:704
 #, kde-format
 msgid "Please insert an empty CD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი CD მედია"
 
 #: tools/k3bmedium.cpp:708
 #, kde-format
 msgid "Please insert an empty DVD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი DVD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:710
 #, kde-format
 msgid "Please insert an empty DVD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი DVD მედია"
 
 #: tools/k3bmedium.cpp:714
 #, kde-format
 msgid "Please insert an empty DVD-DL medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი DVD-DL მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:716
 #, kde-format
 msgid "Please insert an empty DVD-DL medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი DVD-DL მედია"
 
 #: tools/k3bmedium.cpp:720
 #, kde-format
 msgid ""
 "Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ %1 ან უფრო დიდი ზომის მქონე მედია ამძრავში<p><b>%2</b>"
 
 #: tools/k3bmedium.cpp:723
 #, kde-format
 msgid "Please insert an empty medium of size %1 or larger"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ %1 ან უფრო დიდი ზომის მქონე მედია"
 
 #: tools/k3bmedium.cpp:729
 #, kde-format
 msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:731
 #, kde-format
 msgid "Please insert an empty or appendable medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი მედია"
 
 #: tools/k3bmedium.cpp:735
 #, kde-format
@@ -3859,148 +3993,154 @@ msgid ""
 "Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
 "%1</b>"
 msgstr ""
+"გთხოვთ, ჩადეთ ცარიელიან ბოლოში მიწერადი DVD ან Blu-ray დისკი ამძრავში<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:737
 #, kde-format
 msgid "Please insert an empty or appendable DVD or Blu-ray medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელიან ბოლოში მიწერადი DVD ან Blu-ray დისკი"
 
 #: tools/k3bmedium.cpp:741
 #, kde-format
 msgid ""
 "Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
 msgstr ""
+"გთხოვთ, ჩადეთ ცარიელიან ბოლოში მიწერადი Blu-ray დისკი ამძრავში<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:743
 #, kde-format
 msgid "Please insert an empty or appendable Blu-ray medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელიან ბოლოში მიწერადი Blu-ray დისკი"
 
 #: tools/k3bmedium.cpp:747
 #, kde-format
 msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
 msgstr ""
+"გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი CD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:749
 #, kde-format
 msgid "Please insert an empty or appendable CD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი CD მედია"
 
 #: tools/k3bmedium.cpp:753
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
 msgstr ""
+"გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი DVD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:755
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი DVD მედია ამძრავში"
 
 #: tools/k3bmedium.cpp:759
 #, kde-format
 msgid ""
 "Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
 msgstr ""
+"გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი DVD-DL მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:761
 #, kde-format
 msgid "Please insert an empty or appendable DVD-DL medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ცარიელი ან ბოლოში მიწერადი DVD-DL მედია"
 
 #: tools/k3bmedium.cpp:767
 #, kde-format
 msgid "Please insert a non-empty medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ არაცარიელი მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:769
 #, kde-format
 msgid "Please insert a non-empty medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ არაცარიელი მედია"
 
 #: tools/k3bmedium.cpp:773
 #, kde-format
 msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ არაცარიელი გადაწერადი მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:775
 #, kde-format
 msgid "Please insert a non-empty rewritable medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ არაცარიელი გადაწერადი მედია"
 
 #: tools/k3bmedium.cpp:781
 #, kde-format
 msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ გადაწერადი მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:783
 #, kde-format
 msgid "Please insert a rewritable medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ გადაწერადი მედია"
 
 #: tools/k3bmedium.cpp:789 tools/k3bmedium.cpp:835
 #, kde-format
 msgid "Please insert a suitable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ შესაბამისი მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:791 tools/k3bmedium.cpp:837
 #, kde-format
 msgid "Please insert a suitable medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ შესაბამისი მედია"
 
 #: tools/k3bmedium.cpp:804
 #, kde-format
 msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ვიდეო CD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:806
 #, kde-format
 msgid "Please insert a Video CD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ვიდეო CD მედია"
 
 #: tools/k3bmedium.cpp:810
 #, kde-format
 msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ვიდეო DVD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:812
 #, kde-format
 msgid "Please insert a Video DVD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ ვიდეო DVD მედია"
 
 #: tools/k3bmedium.cpp:816
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ შერეული რეჟიმის CD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:818
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ შერეული რეჟიმის CD მედია"
 
 #: tools/k3bmedium.cpp:822
 #, kde-format
 msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ აუდიო CD მედია ამძრავში <p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:824
 #, kde-format
 msgid "Please insert an Audio CD medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ აუდიო CD მედია"
 
 #: tools/k3bmedium.cpp:828
 #, kde-format
 msgid "Please insert a Data medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ მონაცემების დისკი ამძრავში<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:830
 #, kde-format
 msgid "Please insert a Data medium"
-msgstr ""
+msgstr "გთხოვთ, ჩადეთ მონაცემების დისკი"
 
 #: tools/k3bstdguiitems.cpp:19
 #, kde-format
 msgid "Simulate"
-msgstr ""
+msgstr "სიმულაცია"
 
 #: tools/k3bstdguiitems.cpp:20
 #, kde-format
@@ -4014,12 +4154,12 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:25
 #, kde-format
 msgid "Only simulate the writing process"
-msgstr ""
+msgstr "მხოლოდ, ჩაწერის პროცესის სიმულაცია"
 
 #: tools/k3bstdguiitems.cpp:31
 #, kde-format
 msgid "Disk at once"
-msgstr ""
+msgstr "დისკი ერთ ჯერზე"
 
 #: tools/k3bstdguiitems.cpp:32
 #, kde-format
@@ -4033,17 +4173,18 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:37
 #, kde-format
 msgid "Write in disk at once mode"
-msgstr ""
+msgstr "დისკის DAO რეჟიმში ჩაწერა"
 
 #: tools/k3bstdguiitems.cpp:43
 #, kde-format
 msgid "Use Burnfree"
-msgstr ""
+msgstr "Burnfree"
 
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
 msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
 msgstr ""
+"ჩართეთ Burnfree (ან 'უბრალოდ მიბმა'), რომ ბუფერის არშევსება თავიდან აიცილოთ"
 
 #: tools/k3bstdguiitems.cpp:45
 #, kde-format
@@ -4065,7 +4206,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:64
 #, kde-format
 msgid "Only create image"
-msgstr ""
+msgstr "მხოლოდ, დისკის ასლის შექმნა"
 
 #: tools/k3bstdguiitems.cpp:65
 #, kde-format
@@ -4078,7 +4219,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:69
 #, kde-format
 msgid "Only create an image"
-msgstr ""
+msgstr "მხოლოდ, დისკის ასლის შექმნა"
 
 #: tools/k3bstdguiitems.cpp:75
 #, kde-format
@@ -4098,12 +4239,12 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:81 tools/k3bstdguiitems.cpp:103
 #, kde-format
 msgid "<p>It is recommended to try a simulation first."
-msgstr ""
+msgstr "<p>რეკომენდებულია, ჯერ სიმულაცია სცადოთ."
 
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
 msgid "Cache the data to be written on the harddisk"
-msgstr ""
+msgstr "მონაცემების კეშის მყარ დისკზე ჩაწერა"
 
 #: tools/k3bstdguiitems.cpp:88
 #, kde-format
@@ -4120,12 +4261,12 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:92
 #, kde-format
 msgid "Remove images from disk when finished"
-msgstr ""
+msgstr "დასრულებისას დისკიდან დისკის ასლის ფაილების წაშლა"
 
 #: tools/k3bstdguiitems.cpp:98
 #, kde-format
 msgid "On the fly"
-msgstr ""
+msgstr "რეალურ დროში"
 
 #: tools/k3bstdguiitems.cpp:99
 #, kde-format
@@ -4138,17 +4279,17 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:104
 #, kde-format
 msgid "Write files directly to CD/DVD without creating an image"
-msgstr ""
+msgstr "ფაილების პირდაპირ ჩაწერა CD/DVD-ზე დისკის ასლის ფაილის შექმნის გარეშე"
 
 #: tools/k3bstdguiitems.cpp:110
 #, kde-format
 msgid "Write CD-Text"
-msgstr ""
+msgstr "CD-Text-ის ჩაწერა"
 
 #: tools/k3bstdguiitems.cpp:111
 #, kde-format
 msgid "Create CD-Text entries"
-msgstr ""
+msgstr "CD-Text-ის ჩანაწერების შექმნა"
 
 #: tools/k3bstdguiitems.cpp:112
 #, kde-format
@@ -4165,7 +4306,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:131
 #, kde-format
 msgid "Set the paranoia level for reading audio CDs"
-msgstr ""
+msgstr "დააყენე პარანოიის დონე ხმოვანი CD-ების წასაკითხად"
 
 #: tools/k3bstdguiitems.cpp:132
 #, kde-format
@@ -4180,12 +4321,14 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:144
 #, kde-format
 msgid "Start multisession CD"
-msgstr ""
+msgstr "მრავალსესიიანი CD-ის დაწყება"
 
 #: tools/k3bstdguiitems.cpp:145
 #, kde-format
 msgid "Do not close the disk to allow additional sessions to be added later"
 msgstr ""
+"დისკი არ დაიხურება, რათა მოგვიანებით დამატებითი სესიების შექმნის საშუალება "
+"მოგცეთ"
 
 #: tools/k3bstdguiitems.cpp:146
 #, kde-format
@@ -4198,12 +4341,12 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:155
 #, kde-format
 msgid "Normalize volume levels"
-msgstr ""
+msgstr "ხმის დონეების ნორმალიზაცია"
 
 #: tools/k3bstdguiitems.cpp:156
 #, kde-format
 msgid "Adjust the volume levels of all tracks"
-msgstr ""
+msgstr "ყველა ტრეკის ხმის დონის გასწორება"
 
 #: tools/k3bstdguiitems.cpp:157
 #, kde-format
@@ -4218,12 +4361,12 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:169
 #, kde-format
 msgid "Verify written data"
-msgstr ""
+msgstr "ჩაწერილი მონაცემების გადამოწმება"
 
 #: tools/k3bstdguiitems.cpp:170
 #, kde-format
 msgid "Compare original with written data"
-msgstr ""
+msgstr "ჩაწერილი მონაცემების შედარება საწყისთან"
 
 #: tools/k3bstdguiitems.cpp:171
 #, kde-format
@@ -4236,12 +4379,12 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:181
 #, kde-format
 msgid "Ignore read errors"
-msgstr ""
+msgstr "წაკითხვის შეცდომების გამოტოვება"
 
 #: tools/k3bstdguiitems.cpp:182
 #, kde-format
 msgid "Skip unreadable audio sectors"
-msgstr ""
+msgstr "ამოუითხავი აუდიოს სექტორების გამოტოვება"
 
 #: tools/k3bstdguiitems.cpp:183
 #, kde-format
@@ -4255,7 +4398,7 @@ msgstr ""
 #: videodvd/k3bvideodvd.cpp:292
 #, kde-format
 msgid "AC3"
-msgstr ""
+msgstr "AC3"
 
 #: videodvd/k3bvideodvd.cpp:294
 #, kde-format
@@ -4265,12 +4408,12 @@ msgstr "MPEG1"
 #: videodvd/k3bvideodvd.cpp:296
 #, kde-format
 msgid "MPEG2 Extended"
-msgstr ""
+msgstr "MPEG2 Extended"
 
 #: videodvd/k3bvideodvd.cpp:298
 #, kde-format
 msgid "LPCM"
-msgstr ""
+msgstr "LPCM"
 
 #: videodvd/k3bvideodvd.cpp:300
 #, kde-format
@@ -4280,7 +4423,7 @@ msgstr "DTS"
 #: videodvd/k3bvideodvd.cpp:302
 #, kde-format
 msgid "unknown audio format"
-msgstr ""
+msgstr "უცნობი აუდიოფორმატი"
 
 #: videodvd/k3bvideodvd.cpp:313
 #, kde-format
@@ -4290,22 +4433,22 @@ msgstr "ნორმალური"
 #: videodvd/k3bvideodvd.cpp:315
 #, kde-format
 msgid "For the visually impaired"
-msgstr ""
+msgstr "სუსტი მხედველობის მქონეებისთვის"
 
 #: videodvd/k3bvideodvd.cpp:317
 #, kde-format
 msgid "Director's comments 1"
-msgstr ""
+msgstr "რეჟისორის კომენტარები 1"
 
 #: videodvd/k3bvideodvd.cpp:319
 #, kde-format
 msgid "Director's comments 2"
-msgstr ""
+msgstr "რეჟისორის კომენტარები 2"
 
 #: videodvd/k3bvideodvd.cpp:321
 #, kde-format
 msgid "unknown audio code extension"
-msgstr ""
+msgstr "ხმის კოდის უცნობი გაფართოება"
 
 #: videodvd/k3bvideodvd.cpp:330
 #, kde-format
@@ -4320,59 +4463,59 @@ msgstr "გაფართოებული"
 #: videodvd/k3bvideodvd.cpp:334
 #, kde-format
 msgid "unknown coding mode"
-msgstr ""
+msgstr "უცნობი კოდირების რეჟიმი"
 
 #: videodvd/k3bvideodvd.cpp:345
 #, kde-format
 msgid "Caption with normal size characters"
-msgstr ""
+msgstr "წარწერა ნორმალური ზომის სიმბოლოებით"
 
 #: videodvd/k3bvideodvd.cpp:347
 #, kde-format
 msgid "Caption with bigger size characters"
-msgstr ""
+msgstr "წარწერა დიდი ზომის სიმბოლოებით"
 
 #: videodvd/k3bvideodvd.cpp:349
 #, kde-format
 msgid "Caption for children"
-msgstr ""
+msgstr "წარწერა ბავშვებისთვის"
 
 #: videodvd/k3bvideodvd.cpp:351
 #, kde-format
 msgid "Closed caption with normal size characters"
-msgstr ""
+msgstr "დახურული წარწერა ნორმალური ზომის სიმბოლოებით"
 
 #: videodvd/k3bvideodvd.cpp:353
 #, kde-format
 msgid "Closed caption with bigger size characters"
-msgstr ""
+msgstr "დახურული წარწერა დიდი ზომის სიმბოლოებით"
 
 #: videodvd/k3bvideodvd.cpp:355
 #, kde-format
 msgid "Closed caption for children"
-msgstr ""
+msgstr "დახურული წარწერა ბავშვებისთვის"
 
 #: videodvd/k3bvideodvd.cpp:357
 #, kde-format
 msgid "Forced caption"
-msgstr ""
+msgstr "ნაძალადევი წარწერები"
 
 #: videodvd/k3bvideodvd.cpp:359
 #, kde-format
 msgid "Director's comments with normal size characters"
-msgstr ""
+msgstr "რეჟისორის კომენტარები ნორმალური ზომის სიმბოლოებით"
 
 #: videodvd/k3bvideodvd.cpp:361
 #, kde-format
 msgid "Director's comments with bigger size characters"
-msgstr ""
+msgstr "რეჟისორის კომენტარები დიდი ზომის სიმბოლოებით"
 
 #: videodvd/k3bvideodvd.cpp:363
 #, kde-format
 msgid "Director's comments for children"
-msgstr ""
+msgstr "რეჟისორის კომენტარები ბავშვებისთვის"
 
 #: videodvd/k3bvideodvd.cpp:365
 #, kde-format
 msgid "unknown code extension"
-msgstr ""
+msgstr "უცნობი კოდის გაფართოება"

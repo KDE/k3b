@@ -10854,6 +10854,3 @@ msgstr "anamorf"
 #, kde-format
 msgid "Subpicture"
 msgstr "Under-bilde"
-
-#~ msgid "K3b Bookmarks"
-#~ msgstr "K3b-bokmerker"

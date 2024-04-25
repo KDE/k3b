@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-02-29 03:08+0100\n"
+"PO-Revision-Date: 2024-04-24 16:40+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -365,7 +365,7 @@ msgstr "მორგება"
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:109
 #, kde-format
 msgid "Swap the byte order of the input data"
-msgstr ""
+msgstr "ბაიტების რიგის შემობრუნება შეყვანილი მონაცემებისთვის"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkSwapByteOrder)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:113
@@ -574,7 +574,7 @@ msgstr ""
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:375
 #, kde-format
 msgid "Mark copyrighted"
-msgstr ""
+msgstr "დაცულია საავტორო უფლებებით"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkOriginal)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:382
@@ -586,13 +586,13 @@ msgstr ""
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:385
 #, kde-format
 msgid "Mark as original"
-msgstr ""
+msgstr "ორიგინალი"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkISO)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:392
 #, kde-format
 msgid "Enforce strict ISO compliance"
-msgstr ""
+msgstr "მკაცრი ISO კოდირების გამოყენება"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkISO)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:396
@@ -609,13 +609,13 @@ msgstr ""
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:399
 #, kde-format
 msgid "Strict ISO compliance"
-msgstr ""
+msgstr "მკაცრი ISO თავსებადობა"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkError)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:406
 #, kde-format
 msgid "Turn on CRC error protection."
-msgstr ""
+msgstr "CRC შეცდომებისგან დაცვის ჩართვა."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkError)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:409
@@ -915,25 +915,25 @@ msgstr ""
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:67
 #, kde-format
 msgid "Signed Linear"
-msgstr ""
+msgstr "ნიშნიანი წრფივი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:72
 #, kde-format
 msgid "Unsigned Linear"
-msgstr ""
+msgstr "უნიშნო წრფივი"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:77
 #, kde-format
 msgid "u-law (logarithmic)"
-msgstr ""
+msgstr "u-law (ლოგარითმული)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:82
 #, kde-format
 msgid "A-law (logarithmic)"
-msgstr ""
+msgstr "A-law (ლოგარითმული)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:87
@@ -1329,7 +1329,7 @@ msgstr ""
 #: k3b.cpp:347
 #, kde-format
 msgid "Creates a new eMovix project"
-msgstr ""
+msgstr "შექმნის ახალ eMovix-ის პროექტს"
 
 #: k3b.cpp:352
 #, kde-format
@@ -2457,8 +2457,8 @@ msgstr "აირჩიეთ მედია:"
 #, kde-format
 msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 %1 ტრეკში"
+msgstr[1] "%2 %1 ტრეკში"
 
 #: k3bmediumdelegate.cpp:138
 #, kde-format
@@ -3290,7 +3290,7 @@ msgstr "RAW"
 #: k3bwritingmodewidget.cpp:161
 #, kde-format
 msgid "Restricted Overwrite"
-msgstr ""
+msgstr "შეზღუდული თავზე გადაწერა"
 
 #: k3bwritingmodewidget.cpp:163
 #, kde-format
@@ -4682,7 +4682,7 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "ავტორიზაცია აკრძალულია"
 
 #: option/k3bexternalbinwidget.cpp:264
 #, kde-format
@@ -5304,7 +5304,7 @@ msgstr "&შეტყობინება:"
 #: projects/base_k3baudiocdtextwidget.ui:11
 #, kde-format
 msgid "Write CD-Text"
-msgstr ""
+msgstr "CD-Text-ის ჩაწერა"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, m_groupCdText)
 #: projects/base_k3baudiocdtextwidget.ui:27
@@ -6099,8 +6099,8 @@ msgstr ""
 #, kde-format
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ბილიკი (%2 წუთი)"
+msgstr[1] "%1 ტრეკი (%2 წუთი)"
 
 #: projects/k3baudioburndialog.cpp:71
 #, kde-format
@@ -6120,7 +6120,7 @@ msgstr ""
 #: projects/k3baudioburndialog.cpp:83 rip/k3baudiorippingdialog.cpp:172
 #, kde-format
 msgid "Ignore read errors"
-msgstr ""
+msgstr "წაკითხვის შეცდომების გამოტოვება"
 
 #: projects/k3baudioburndialog.cpp:104
 #, kde-format
@@ -6448,7 +6448,7 @@ msgstr "აირჩიეთ აუდიობილიკი."
 #: projects/k3bview.cpp:81
 #, kde-format
 msgid "Please add files to your project first."
-msgstr ""
+msgstr "ჯერ პროექტში ფაილები ჩაამატეთ."
 
 #: projects/k3baudioviewimpl.cpp:443
 #, kde-format
@@ -6560,6 +6560,8 @@ msgstr ""
 #, kde-format
 msgid "Most writers do not support writing multisession CDs in DAO mode."
 msgstr ""
+"ჩამწერების ძირითად ნაწილს მრავალსესიიანი CD-ების მხარდაჭერა DAO რეჟიმში არ "
+"გააჩნიათ."
 
 #: projects/k3bdataburndialog.cpp:248
 #, kde-format
@@ -6601,7 +6603,7 @@ msgctxt ""
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr ""
+msgstr "K3b-ის მონაცემების პროექტი"
 
 #: projects/k3bdataimagesettingswidget.cpp:142
 #, kde-format
@@ -7106,7 +7108,7 @@ msgstr "შეიყვანეთ ახალი ფაილის სახ
 #: projects/k3bdataurladdingdialog.cpp:751
 #, kde-format
 msgid "A file with that name already exists. Please enter a new name:"
-msgstr ""
+msgstr "ფაილი ამ სახელით უკვე არსებობს. შეიყვანეთ ახალი სახელი:"
 
 #: projects/k3bdataurladdingdialog.cpp:768
 #, kde-format
@@ -7463,7 +7465,7 @@ msgstr ""
 #: projects/k3bmovixburndialog.cpp:191
 #, kde-format
 msgid "Could not find a valid eMovix installation."
-msgstr ""
+msgstr "სწორი eMovix-ის ფაილები აღმოჩენილი არაა."
 
 #: projects/k3bmovixoptionswidget.cpp:35 projects/k3bmovixoptionswidget.cpp:47
 #, kde-format
@@ -9015,7 +9017,7 @@ msgstr "აუდიოს დისკიდან კოპირების 
 #: rip/k3baudioripjob.cpp:133
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
-msgstr ""
+msgstr "რიპვის აღუდგენელი შეცდომა ბილიკისთვის %1."
 
 #: rip/k3baudioripjob.cpp:187
 #, kde-format
@@ -9277,7 +9279,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:90
 #, kde-format
 msgid "Could not find %1 executable."
-msgstr ""
+msgstr "%1-ის გამშვები ფაილი ვერ ვიპოვე."
 
 #: rip/k3bvideocdrip.cpp:91
 #, kde-format
@@ -9294,7 +9296,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:100
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
-msgstr ""
+msgstr "გამშვები ფაილი %1 მეტისმეტად ძველია: საჭიროა ვერსია %2 ან უფრო ახალი."
 
 #: rip/k3bvideocdrip.cpp:101
 #, kde-format
@@ -9306,7 +9308,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:108
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr ""
+msgstr "ვიყენებ %1 %2 – საავტორო უფლებები დაცულია © %3"
 
 #: rip/k3bvideocdrip.cpp:159
 #, kde-format
@@ -9326,7 +9328,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:166
 #, kde-format
 msgid "Could not start %1."
-msgstr ""
+msgstr "%1-ის გაშვება შეუძლებელია."
 
 #: rip/k3bvideocdrip.cpp:256
 #, kde-format
@@ -9336,7 +9338,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:259
 #, kde-format
 msgid "%1 returned an unknown error (code %2)."
-msgstr ""
+msgstr "%1-მა უცნობი შეცდომა დააბრუნა (კოდი %2)."
 
 #: rip/k3bvideocdrip.cpp:260
 #, kde-format
@@ -9346,7 +9348,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:266
 #, kde-format
 msgid "%1 did not exit cleanly."
-msgstr ""
+msgstr "%1 უშეცდომოდ არ დასრულებულა."
 
 #: rip/k3bvideocdrip.cpp:280
 #, kde-format

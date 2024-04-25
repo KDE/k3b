@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2022-09-20 11:35+0200\n"
+"PO-Revision-Date: 2024-04-23 10:17+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.3.2\n"
 
 #: k3bdeviceglobals.cpp:18 k3bdeviceglobals.cpp:141
 #, kde-format
@@ -151,32 +151,32 @@ msgstr "RAW/R96R"
 #: k3bdeviceglobals.cpp:79
 #, kde-format
 msgid "Incremental Sequential"
-msgstr ""
+msgstr "Incremental Sequential"
 
 #: k3bdeviceglobals.cpp:81
 #, kde-format
 msgid "Restricted Overwrite"
-msgstr ""
+msgstr "შეზღუდული თავზე გადაწერა"
 
 #: k3bdeviceglobals.cpp:83
 #, kde-format
 msgid "Layer Jump"
-msgstr ""
+msgstr "Layer Jump"
 
 #: k3bdeviceglobals.cpp:86
 #, kde-format
 msgid "Random Recording"
-msgstr ""
+msgstr "შემთხვევითი ჩანაწერი"
 
 #: k3bdeviceglobals.cpp:88
 #, kde-format
 msgid "Sequential Recording"
-msgstr ""
+msgstr "მიმდევრობითი ჩანაწერი"
 
 #: k3bdeviceglobals.cpp:90
 #, kde-format
 msgid "Sequential Recording + POW"
-msgstr ""
+msgstr "მიმდევრობითი ჩანაწერი + POW"
 
 #: k3bdeviceglobals.cpp:93
 #, kde-format
