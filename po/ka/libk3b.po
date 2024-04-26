@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-04-24 15:41+0200\n"
+"PO-Revision-Date: 2024-04-25 10:48+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4150,6 +4150,10 @@ msgid ""
 "speed or whether your system is able to write on-the-fly.<p><b>Caution:</b> "
 "DVD+R(W) does not support simulated writing."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b შეასრულებს ყველა ჩაწერის საფეხურს, ოღონდ "
+"გამორთული ლაზერით.<p>ეს გამოგადგებათ, მაგალითად, რომ დატესტოთ მაღალი ცაწერის "
+"სიჩქარე, ან რომ დარწმუნდეთ, რომ თქვენს სისტემას რეალურ დროში ჩაწერა შეუძლია."
+"<p><b>ფრთხილად:</b> DVD+R(W)-ს სიმულაციური ჩაწერის მხარდაჭერა არ გააჩნია."
 
 #: tools/k3bstdguiitems.cpp:25
 #, kde-format
@@ -4169,6 +4173,10 @@ msgid ""
 "where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
 "seconds are only supported in DAO mode."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b CD-ს DAO რეჟიმში ჩაწერს და არა TAO-ში."
+"<p>რეკომენდებულია გამოიყენოთ DAO, როცა ეს შესაძლებელია.<p><b>ფრთხილად:</b> "
+"ტრეკის შესავლები, რომელიც 2 წამისგან განსხვავდება, მხოლოდ, DAO რეჟიმშია "
+"მხარდაჭერილი."
 
 #: tools/k3bstdguiitems.cpp:37
 #, kde-format
@@ -4215,6 +4223,9 @@ msgid ""
 "actual writing.<p>The image can later be written to a CD/DVD with most "
 "current writing programs (including K3b of course)."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b, მხოლოდ, შექმნის დისკის ასლის ფაილს, ჩაწერა "
+"კი არ მოხდება.<p>დისკის ასლის ფაილი მოგვიანებით შეგიძლიათ ჩაწეროთ CD/DVD-ზე "
+"უახლესი ჩამწერი პროგრამებით (რა თქმა უნდა, იგულისხმება K3b-იც)."
 
 #: tools/k3bstdguiitems.cpp:69
 #, kde-format
@@ -4257,6 +4268,9 @@ msgid ""
 "<p>If this option is checked, K3b will remove any created images after the "
 "writing has finished.<p>Uncheck this if you want to keep the images."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b წაშლის ყველა შექმნილ დისკის ასლი ფაილს, "
+"როცა ჩაწერა დასრულდება.</p>გამორთეთ, თუ გნებავთ, დაიტოვოთ დისკის ასლის "
+"ფაილები."
 
 #: tools/k3bstdguiitems.cpp:92
 #, kde-format
@@ -4275,6 +4289,10 @@ msgid ""
 "the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
 "work on most systems, make sure the data is sent to the writer fast enough."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b დისკის ასლის ფაილის შექმნის მაგიერ ფაილებს "
+"CD/DVD-ზე პირდაპირ ჩაწერს.<p><b>ფრთხილად:</b> მიუხედავად იმისა, რომ ამან "
+"წესით ყველა სისტემაზე უნდა იმუშაოს, დარწმუნდით, რომ მონაცემები ჩამწერამდე "
+"საკმარისად სწრაფად აღწევენ."
 
 #: tools/k3bstdguiitems.cpp:104
 #, kde-format
@@ -4337,6 +4355,9 @@ msgid ""
 "temporary table of contents.</p><p>This allows further sessions to be "
 "appended to the CD later.</p>"
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b არ დახურავს CD-ს და ჩაწერს დროებით სარჩევს."
+"</p><p>ეს ამ CD-ის ბოლოში მონაცემების მოგვიანებით მიწერის საშუალებას მოგცემთ."
+"</p>"
 
 #: tools/k3bstdguiitems.cpp:155
 #, kde-format
@@ -4375,6 +4396,9 @@ msgid ""
 "will compare the original source data with the written data to verify that "
 "the disk has been written correctly."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულა, მაშინ K3b დისკის წარმატებით ჩაწერის შემდეგ "
+"ორიგინალ წყაროს მონაცემებს ჩაწერილ მონაცემებს შეადარებს, რომ გადაამოწმოს, "
+"სწორადაა დისკი ჩაწერილი, თუ არა."
 
 #: tools/k3bstdguiitems.cpp:181
 #, kde-format
@@ -4394,6 +4418,10 @@ msgid ""
 "<p>Since audio CD Player are able to interpolate small errors in the data it "
 "is no problem to let K3b skip unreadable sectors."
 msgstr ""
+"<p> თუ ეს პარამეტრი ჩართულია და K3b-მა ვერ შეძლო წყარო CD-ზე აუდიო-სექტორი "
+"წაეკითხა, ის მიღებულ ასლში ნულებით ჩანაცვლდება.<p>იმის გამო, რომ აუდიო CD-ის "
+"დამკვრელებს შეუძლიათ მონაცემებში არსებული მცირე შეცდომების ატანა, K3b-სთვის "
+"დაზიანებული სექტორების გამოტოვების უფლების მიცემა პრობლემა არაა."
 
 #: videodvd/k3bvideodvd.cpp:292
 #, kde-format

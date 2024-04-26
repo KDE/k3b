@@ -10302,6 +10302,3 @@ msgstr ""
 #, kde-format
 msgid "Subpicture"
 msgstr ""
-
-#~ msgid "K3b Bookmarks"
-#~ msgstr "K3b-bokmerker"
