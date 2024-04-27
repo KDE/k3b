@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-04-25 12:44+0200\n"
+"PO-Revision-Date: 2024-04-26 07:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3414,7 +3414,7 @@ msgstr "Alexis Younes aka Ayo"
 #: main.cpp:49
 #, kde-format
 msgid "For his bombastic artwork."
-msgstr ""
+msgstr "მისი ბომბა ხელოვნების ნიმუშისთვის."
 
 #: main.cpp:51
 #, kde-format
@@ -3424,7 +3424,7 @@ msgstr "ქრისტოფ ზელეცკე"
 #: main.cpp:52
 #, kde-format
 msgid "For extensive testing and the first German translation."
-msgstr ""
+msgstr "ტესტირებისთვის და პირველი გერმანული თარგმანისთვის."
 
 #: main.cpp:54
 #, kde-format
@@ -3434,7 +3434,7 @@ msgstr "Andy Polyakov"
 #: main.cpp:55
 #, kde-format
 msgid "For the great dvd+rw-tools and the nice cooperation."
-msgstr ""
+msgstr "გადასარევი dvd+rw-tools-სთვის და სასიამოვნო საერთო მუშაობისთვის."
 
 #: main.cpp:57
 #, kde-format
@@ -3444,7 +3444,7 @@ msgstr "Roberto De Leo"
 #: main.cpp:58
 #, kde-format
 msgid "For the very cool eMovix package and his accommodating work."
-msgstr ""
+msgstr "ძალიან მაგარი eMovix პაკეტისთვის და მისი მომცველი სამუშაოებისთვის."
 
 #: main.cpp:60
 #, kde-format
@@ -3454,7 +3454,7 @@ msgstr "John Steele Scott"
 #: main.cpp:61
 #, kde-format
 msgid "For the flac decoding plugin."
-msgstr ""
+msgstr "Flac დეკოდერის დამატებისთვის."
 
 #: main.cpp:63
 #, kde-format
@@ -3464,7 +3464,7 @@ msgstr "György Szombathelyi"
 #: main.cpp:64
 #, kde-format
 msgid "For the very useful isofslib."
-msgstr ""
+msgstr "ძალიან სასარგებლო isofslib-სთვის."
 
 #: main.cpp:66
 #, kde-format
@@ -3477,6 +3477,8 @@ msgid ""
 "For libsamplerate which is used for generic resampling in the audio decoder "
 "framework."
 msgstr ""
+"ბიბლიოთეკისთვის libsamplerate, რომელიც რესემპლინგისთვის გამოიყენება აუდიო "
+"დეკოდერის ბიბლიოთეკაში."
 
 #: main.cpp:69
 #, kde-format
@@ -3486,7 +3488,7 @@ msgstr "Jakob Petsovits"
 #: main.cpp:70
 #, kde-format
 msgid "For the very cool conditional audio ripping pattern."
-msgstr ""
+msgstr "ძალიან მაგარი პირობითი ხმის დარიპვის ნიმუშისთვის."
 
 #: main.cpp:72
 #, kde-format
@@ -3496,7 +3498,7 @@ msgstr "Heiner Eichmann"
 #: main.cpp:73
 #, kde-format
 msgid "For his work on the BSD port and some great patches."
-msgstr ""
+msgstr "BSD-ზე გადატანისთვის და გადასარევი პაჩებისთვის."
 
 #: main.cpp:75
 #, kde-format
@@ -3506,7 +3508,7 @@ msgstr "Adriaan de Groot"
 #: main.cpp:76
 #, kde-format
 msgid "For his work on the FreeBSD port."
-msgstr ""
+msgstr "FreeBSD-ზე გადატანაშ დახმარებისთვის."
 
 #: main.cpp:78
 #, kde-format
@@ -3516,7 +3518,7 @@ msgstr "Thiago Macieira"
 #: main.cpp:79
 #, kde-format
 msgid "For his help with the many invalid k3b entries on bugs.kde.org."
-msgstr ""
+msgstr "დახმარებისთვის ბევრი არასწორი K3b-ის ჩანაწერებისთვის bugs.kde.org-ზე."
 
 #: main.cpp:81
 #, kde-format
@@ -3526,7 +3528,7 @@ msgstr "Marcel Dierkes"
 #: main.cpp:82
 #, kde-format
 msgid "For the great K3b icon eyecandy."
-msgstr ""
+msgstr "K3b-ის უსაყვარლესი ხატულასთვის."
 
 #: main.cpp:84
 #, kde-format
