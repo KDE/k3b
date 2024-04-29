@@ -1,32 +1,34 @@
 # translation of libk3b.po to esperanto
-# Copyright (C) YEAR This_file_is_part_of_KDE
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) 2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the k3b package.
 # Pierre-Marie Pédrot <pedrotpmx@wanadoo.fr>, 2007.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-02-17 13:21+0100\n"
+"PO-Revision-Date: 2024-04-28 17:30+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: KBabel 1.11.4\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
 msgid "Inhibiting sleep for disc writing"
-msgstr ""
+msgstr "Malpermesante dormon por diskskribo"
 
 #: core/k3bcore.cpp:257
 #, kde-format
 msgid "Disable inhibition for disc writing"
-msgstr ""
+msgstr "Malŝalti malebligon por diskskribo"
 
 #: core/k3bglobals.cpp:361
 #, kde-format
@@ -103,21 +105,21 @@ msgstr "Neriparebla eraro ekstraktante la trakon %1."
 #: jobs/k3bbinimagewritingjob.cpp:53
 #, kde-format
 msgid "Write Binary Image"
-msgstr ""
+msgstr "Skribi Duuman Bildon"
 
 #: jobs/k3bbinimagewritingjob.cpp:181
 #, kde-format
 msgid "One copy successfully created"
 msgid_plural "%1 copies successfully created"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Sukcese kreis unu kopion"
+msgstr[1] "Sukcese kreis %1 kopiojn"
 
 #: jobs/k3bbinimagewritingjob.cpp:197 jobs/k3bcdcopyjob.cpp:1171
 #: jobs/k3bcdcopyjob.cpp:1173 jobs/k3bcdcopyjob.cpp:1176
 #: jobs/k3bcdcopyjob.cpp:1178
 #, kde-format
 msgid "Writing track %1 of %2"
-msgstr ""
+msgstr "Skribante trakon %1 de %2"
 
 #: jobs/k3bbinimagewritingjob.cpp:203
 #, kde-format
@@ -128,8 +130,8 @@ msgstr "Skribante cue/bin-bildon"
 #, kde-format
 msgid " - %1 Copy"
 msgid_plural " - %1 Copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " - %1 Kopio"
+msgstr[1] " - %1 Kopioj"
 
 #: jobs/k3bblankingjob.cpp:65 jobs/k3bblankingjob.cpp:153
 #, kde-format
@@ -139,17 +141,19 @@ msgstr "Forviŝante KD-RW"
 #: jobs/k3bblankingjob.cpp:66
 #, kde-format
 msgid "When erasing a CD-RW no progress information is available."
-msgstr ""
+msgstr "Dum viŝado de KD-RW neniuj progresinformoj estas disponeblaj."
 
 #: jobs/k3bblankingjob.cpp:106
 #, kde-format
 msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
 msgstr ""
+"Bonvolu enigi reskribiblan KD-datumportilon en la diskingo<p><b>%1 %2 (%3)</"
+"b>."
 
 #: jobs/k3bblankingjob.cpp:143
 #, kde-format
 msgid "Blanking error."
-msgstr ""
+msgstr "Malpleniga eraro."
 
 #: jobs/k3bblankingjob.cpp:144
 #, kde-format
@@ -164,57 +168,58 @@ msgstr "Rapida formatado"
 #: jobs/k3bcdcopyjob.cpp:153 jobs/k3bdvdcopyjob.cpp:114
 #, kde-format
 msgid "Checking Source Medium"
-msgstr ""
+msgstr "Kontrolanta Fontan Datumportilon"
 
 #: jobs/k3bcdcopyjob.cpp:156 jobs/k3bdvdcopyjob.cpp:124
 #, kde-format
 msgid "Waiting for source medium"
-msgstr ""
+msgstr "Atendante fontan datumportilon"
 
 #: jobs/k3bcdcopyjob.cpp:166 jobs/k3bdvdcopyjob.cpp:136
 #, kde-format
 msgid "Checking source medium"
-msgstr ""
+msgstr "Kontrolanta fontan datumportilon"
 
 #: jobs/k3bcdcopyjob.cpp:194
 #, kde-format
 msgid "K3b does not copy CDs containing multiple data tracks."
-msgstr ""
+msgstr "K3b ne kopias KD-ojn enhavantajn plurajn datentrakojn."
 
 #: jobs/k3bcdcopyjob.cpp:198
 #, kde-format
 msgid "Copying Multisession Data CD."
-msgstr ""
+msgstr "Kopiante Multisession Data KD."
 
 #: jobs/k3bcdcopyjob.cpp:200
 #, kde-format
 msgid "Copying Data CD."
-msgstr ""
+msgstr "Kopiado de Datumoj KD."
 
 #: jobs/k3bcdcopyjob.cpp:206
 #, kde-format
 msgid "K3b can only copy CD-Extra mixed mode CDs."
-msgstr ""
+msgstr "K3b povas nur kopii KD-Ekstrajn miksreĝimajn KD-ojn."
 
 #: jobs/k3bcdcopyjob.cpp:210
 #, kde-format
 msgid "Copying Enhanced Audio CD (CD-Extra)."
-msgstr ""
+msgstr "Kopiante Plibonigitan Audio-KD (KD-Ekstra)."
 
 #: jobs/k3bcdcopyjob.cpp:215
 #, kde-format
 msgid "Copying Audio CD."
-msgstr ""
+msgstr "Kopiante Audio-KD."
 
 #: jobs/k3bcdcopyjob.cpp:220
 #, kde-format
 msgid "The source disk is empty."
-msgstr ""
+msgstr "La fontdisko estas malplena."
 
 #: jobs/k3bcdcopyjob.cpp:262
 #, kde-format
 msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
 msgstr ""
+"K3b bezonas cdrecord 2.01a12 aŭ pli novan por kopii datumspurojn de Mode2."
 
 #: jobs/k3bcdcopyjob.cpp:274
 #, kde-format
@@ -222,6 +227,7 @@ msgid ""
 "You will only be able to copy the first session in raw writing mode. "
 "Continue anyway?"
 msgstr ""
+"Vi nur povos kopii la unuan seancon en kruda skribreĝimo. Daŭri ĉiukaze?"
 
 #: jobs/k3bcdcopyjob.cpp:276
 #, kde-format
@@ -231,67 +237,67 @@ msgstr "Plursesio KD"
 #: jobs/k3bcdcopyjob.cpp:281
 #, kde-format
 msgid "Only copying first session."
-msgstr ""
+msgstr "Nur kopiante unua seanco."
 
 #: jobs/k3bcdcopyjob.cpp:310 jobs/k3bdvdcopyjob.cpp:344
 #, kde-format
 msgid "Unable to determine free space in temporary folder '%1'."
-msgstr ""
+msgstr "Ne eblas determini liberan spacon en provizora dosierujo '%1'."
 
 #: jobs/k3bcdcopyjob.cpp:316 jobs/k3bdvdcopyjob.cpp:351
 #, kde-format
 msgid "Not enough space left in temporary folder."
-msgstr ""
+msgstr "Ne restas sufiĉe da spaco en provizora dosierujo."
 
 #: jobs/k3bcdcopyjob.cpp:325 jobs/k3bdvdcopyjob.cpp:368
 #, kde-format
 msgid "Unmounting source medium"
-msgstr ""
+msgstr "Malmuntado de fonta datumportilo"
 
 #: jobs/k3bcdcopyjob.cpp:354
 #, kde-format
 msgid "Unable to read Table of contents"
-msgstr ""
+msgstr "Ne eblas legi enhavtabelon"
 
 #: jobs/k3bcdcopyjob.cpp:362
 #, kde-format
 msgid "Searching CD-Text"
-msgstr ""
+msgstr "Serĉante KD-Tekston"
 
 #: jobs/k3bcdcopyjob.cpp:376
 #, kde-format
 msgid "Found CD-Text (%1 - %2)."
-msgstr ""
+msgstr "Trovita KD-Teksto (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:381
 #, kde-format
 msgid "Found corrupted CD-Text. Ignoring it."
-msgstr ""
+msgstr "Trovis koruptitan KD-Tekston. Ignorante ĝin."
 
 #: jobs/k3bcdcopyjob.cpp:386
 #, kde-format
 msgid "No CD-Text found."
-msgstr ""
+msgstr "Neniu KD-Teksto trovita."
 
 #: jobs/k3bcdcopyjob.cpp:397
 #, kde-format
 msgid "Querying CDDB"
-msgstr ""
+msgstr "Pridemando de CDDB"
 
 #: jobs/k3bcdcopyjob.cpp:418
 #, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr ""
+msgstr "Trovita CDDB-eniro (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:441
 #, kde-format
 msgid "No CDDB entry found."
-msgstr ""
+msgstr "Neniu CDDB-eniro trovita."
 
 #: jobs/k3bcdcopyjob.cpp:444
 #, kde-format
 msgid "CDDB error (%1)."
-msgstr ""
+msgstr "CDDB-eraro (%1)."
 
 #: jobs/k3bcdcopyjob.cpp:460
 #, kde-format
@@ -299,6 +305,8 @@ msgid ""
 "Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. Which one should be used "
 "to generate the CD-Text on the new CD?"
 msgstr ""
+"Trovis KD-Teksto (%1 - %2) kaj CDDB (%3 - %4) eniroj. Kiu estu uzota por "
+"generi la KD-Tekston sur la nova KD?"
 
 #: jobs/k3bcdcopyjob.cpp:466
 #, kde-format
@@ -308,35 +316,35 @@ msgstr "KD-teksto"
 #: jobs/k3bcdcopyjob.cpp:467
 #, kde-format
 msgid "Use CD-Text data"
-msgstr ""
+msgstr "Uzi KD-Tekstajn datumojn"
 
 #: jobs/k3bcdcopyjob.cpp:468
 #, kde-format
 msgid "Use CDDB entry"
-msgstr ""
+msgstr "Uzu CDDB-eniron"
 
 #: jobs/k3bcdcopyjob.cpp:474 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
 #: projects/k3bgrowisofswriter.cpp:332
 #, kde-format
 msgid "Preparing write process..."
-msgstr ""
+msgstr "Preparante skribprocezon..."
 
 #: jobs/k3bcdcopyjob.cpp:533 jobs/k3bcdcopyjob.cpp:579
 #: jobs/k3bdvdcopyjob.cpp:323
 #, kde-format
 msgid "Specified an unusable temporary path. Using default."
-msgstr ""
+msgstr "Specis neuzeblan provizoran vojon. Uzante defaŭlton."
 
 #: jobs/k3bcdcopyjob.cpp:544
 #, kde-format
 msgid "Unable to create temporary folder '%1'."
-msgstr ""
+msgstr "Ne eblas krei provizoran dosierujon '%1'."
 
 #: jobs/k3bcdcopyjob.cpp:551
 #, kde-format
 msgid "Using temporary folder %1."
-msgstr ""
+msgstr "Uzanta provizoran dosierujon %1."
 
 #: jobs/k3bcdcopyjob.cpp:574 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
@@ -351,37 +359,37 @@ msgstr "La dosiero ekzistas"
 #: jobs/k3bcdcopyjob.cpp:584 jobs/k3bdvdcopyjob.cpp:328
 #, kde-format
 msgid "Writing image file to %1."
-msgstr ""
+msgstr "Skribante bilddosieron al %1."
 
 #: jobs/k3bcdcopyjob.cpp:600
 #, kde-format
 msgid "Reading Session %1"
-msgstr ""
+msgstr "Legado de Seanco %1"
 
 #: jobs/k3bcdcopyjob.cpp:602
 #, kde-format
 msgid "Reading Source Medium"
-msgstr ""
+msgstr "Legante Font-Datumportilon"
 
 #: jobs/k3bcdcopyjob.cpp:605 jobs/k3bcdcopyjob.cpp:1193
 #, kde-format
 msgid "Reading track %1 of %2"
-msgstr ""
+msgstr "Leganta trako %1 de %2"
 
 #: jobs/k3bcdcopyjob.cpp:698
 #, kde-format
 msgid "Simulating Session %1"
-msgstr ""
+msgstr "Simulado de Seanco %1"
 
 #: jobs/k3bcdcopyjob.cpp:700
 #, kde-format
 msgid "Writing Copy %1 (Session %2)"
-msgstr ""
+msgstr "Skribante Kopion %1 (Seanco %2)"
 
 #: jobs/k3bcdcopyjob.cpp:702
 #, kde-format
 msgid "Writing Copy (Session %1)"
-msgstr ""
+msgstr "Skriba Kopio (Seanco %1)"
 
 #: jobs/k3bcdcopyjob.cpp:706 projects/audiocd/k3baudiojob.cpp:642
 #: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
@@ -407,78 +415,78 @@ msgstr "Skribante kopion"
 #: projects/audiocd/k3baudiojob.cpp:649 projects/mixedcd/k3bmixedjob.cpp:1011
 #, kde-format
 msgid "Waiting for media"
-msgstr ""
+msgstr "Atendante datumportilon"
 
 #: jobs/k3bcdcopyjob.cpp:853 jobs/k3bmetawriter.cpp:475
 #: projects/audiocd/k3baudiojob.cpp:293
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode."
-msgstr ""
+msgstr "Ne eblas skribi KD-Tekston en TAO-reĝimo."
 
 #: jobs/k3bcdcopyjob.cpp:972
 #, kde-format
 msgid "Successfully read session %1."
-msgstr ""
+msgstr "Sukcese legi la seancon %1."
 
 #: jobs/k3bcdcopyjob.cpp:974
 #, kde-format
 msgid "Successfully read source disk."
-msgstr ""
+msgstr "Sukcese legi fontdiskon."
 
 #: jobs/k3bcdcopyjob.cpp:989
 #, kde-format
 msgid "K3b was unable to eject the source disk. Please do so manually."
-msgstr ""
+msgstr "K3b ne povis elĵeti la fontdiskon. Bonvolu fari tion permane."
 
 #: jobs/k3bcdcopyjob.cpp:1006
 #, kde-format
 msgid "Error while reading session %1."
-msgstr ""
+msgstr "Eraro dum legado de la seanco %1."
 
 #: jobs/k3bcdcopyjob.cpp:1034 jobs/k3bverificationjob.cpp:101
 #: projects/mixedcd/k3bmixedjob.cpp:519
 #, kde-format
 msgid "Need to reload medium to return to proper state."
-msgstr ""
+msgstr "Necesas reŝargi datumportilon por reveni al ĝusta stato."
 
 #: jobs/k3bcdcopyjob.cpp:1035
 #, kde-format
 msgid "Reloading the medium"
-msgstr ""
+msgstr "Reŝargante la datumportilon"
 
 #: jobs/k3bcdcopyjob.cpp:1053 projects/audiocd/k3baudiojob.cpp:411
 #: projects/datacd/k3bdatajob.cpp:520 projects/mixedcd/k3bmixedjob.cpp:533
 #: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
-msgstr ""
+msgstr "K3b ne povis elĵeti la skriban diskon. Bonvolu fari tion permane."
 
 #: jobs/k3bcdcopyjob.cpp:1091 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
 #: projects/mixedcd/k3bmixedjob.cpp:554
 #, kde-format
 msgid "Please reload the medium and press 'OK'"
-msgstr ""
+msgstr "Bonvolu reŝargi la datumportilon kaj premu 'Bone'"
 
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:262
 #, kde-format
 msgid "Failed to reload the medium"
-msgstr ""
+msgstr "Malsukcesis reŝargi la datumportilon"
 
 #: jobs/k3bcdcopyjob.cpp:1106 projects/audiocd/k3baudiojob.cpp:687
 #, kde-format
 msgid "Removing temporary files."
-msgstr ""
+msgstr "Forigante provizorajn dosierojn."
 
 #: jobs/k3bcdcopyjob.cpp:1112 jobs/k3bclonejob.cpp:339
 #, kde-format
 msgid "Removing image files."
-msgstr ""
+msgstr "Forigante bildodosierojn."
 
 #: jobs/k3bcdcopyjob.cpp:1201
 #, kde-format
 msgid "Creating CD Image"
-msgstr ""
+msgstr "Kreante KD-bildon"
 
 #: jobs/k3bcdcopyjob.cpp:1205
 #, kde-format
@@ -552,130 +560,130 @@ msgstr "%1 ne forfiniĝis pure."
 #: jobs/k3bclonejob.cpp:87
 #, kde-format
 msgid "Cdrecord version %1 does not have cloning support."
-msgstr ""
+msgstr "Cdrecord-versio %1 ne havas klonadon."
 
 #: jobs/k3bclonejob.cpp:95
 #, kde-format
 msgid "No device set."
-msgstr ""
+msgstr "Neniu aparato aro."
 
 #: jobs/k3bclonejob.cpp:104
 #, kde-format
 msgid "CD writer %1 (%2) does not support cloning."
-msgstr ""
+msgstr "KD-skribilo %1 (%2) ne subtenas klonadon."
 
 #: jobs/k3bclonejob.cpp:137
 #, kde-format
 msgid "Reading clone image"
-msgstr ""
+msgstr "Legante klonan bildon"
 
 #: jobs/k3bclonejob.cpp:218 projects/datacd/k3bdatajob.cpp:458
 #: projects/videocd/k3bvcdjob.cpp:457
 #, kde-format
 msgid "Writing Track %1 of %2"
-msgstr ""
+msgstr "Skribante Trakon %1 de %2"
 
 #: jobs/k3bclonejob.cpp:235
 #, kde-format
 msgid "Successfully written clone copy %1."
-msgstr ""
+msgstr "Sukcese verkita klonokopio %1."
 
 #: jobs/k3bclonejob.cpp:283
 #, kde-format
 msgid "Successfully read disk."
-msgstr ""
+msgstr "Sukcese legi diskon."
 
 #: jobs/k3bclonejob.cpp:295
 #, kde-format
 msgid "Failed to read disk completely in clone mode."
-msgstr ""
+msgstr "Malsukcesis legi diskon tute en klona reĝimo."
 
 #: jobs/k3bclonejob.cpp:302
 #, kde-format
 msgid "Error while reading disk."
-msgstr ""
+msgstr "Eraro dum legado de disko."
 
 #: jobs/k3bclonejob.cpp:328
 #, kde-format
 msgid "Simulating clone copy"
-msgstr ""
+msgstr "Simulado de klonokopio"
 
 #: jobs/k3bclonejob.cpp:330
 #, kde-format
 msgid "Writing clone copy %1"
-msgstr ""
+msgstr "Skribante klonan kopion %1"
 
 #: jobs/k3bclonejob.cpp:351
 #, kde-format
 msgid "Creating Clone Image"
-msgstr ""
+msgstr "Kreante Klonan Bildon"
 
 #: jobs/k3bclonejob.cpp:354
 #, kde-format
 msgid "Simulating Clone Image"
-msgstr ""
+msgstr "Simulado de Klona Bildo"
 
 #: jobs/k3bclonejob.cpp:356
 #, kde-format
 msgid "Burning Clone Image"
-msgstr ""
+msgstr "Bruliga Klona Bildo"
 
 #: jobs/k3bclonejob.cpp:359
 #, kde-format
 msgid "Simulating CD Cloning"
-msgstr ""
+msgstr "Simulado de KD Klonado"
 
 #: jobs/k3bclonejob.cpp:361
 #, kde-format
 msgid "Cloning CD"
-msgstr ""
+msgstr "Klonado de KD"
 
 #: jobs/k3bclonejob.cpp:367
 #, kde-format
 msgid "Creating 1 clone copy"
 msgid_plural "Creating %1 clone copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kreante 1 klonkopion"
+msgstr[1] "Kreante %1 klonkopiojn"
 
 #: jobs/k3bdatatrackreader.cpp:167
 #, kde-format
 msgid "Unable to open libdvdcss."
-msgstr ""
+msgstr "Ne eblas malfermi libdvdcss."
 
 #: jobs/k3bdatatrackreader.cpp:176
 #, kde-format
 msgid "Retrieving all CSS keys. This might take a while."
-msgstr ""
+msgstr "Prenante ĉiujn CSS-ŝlosilojn. Ĉi tio eble daŭros iom da tempo."
 
 #: jobs/k3bdatatrackreader.cpp:179
 #, kde-format
 msgid "Failed to retrieve all CSS keys."
-msgstr ""
+msgstr "Malsukcesis retrovi ĉiujn CSS-ŝlosilojn."
 
 #: jobs/k3bdatatrackreader.cpp:180
 #, kde-format
 msgid "Video DVD decryption failed."
-msgstr ""
+msgstr "Malĉifrido de Video DVD malsukcesis."
 
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
 msgid "No support for reading formless Mode2 sectors."
-msgstr ""
+msgstr "Neniu subteno por legi senformajn sektorojn Mode2."
 
 #: jobs/k3bdatatrackreader.cpp:206
 #, kde-format
 msgid "Unsupported sector type."
-msgstr ""
+msgstr "Nesubtenata sektortipo."
 
 #: jobs/k3bdatatrackreader.cpp:213
 #, kde-format
 msgid "Reading with sector size %1."
-msgstr ""
+msgstr "Legado kun sektoro grandeco %1."
 
 #: jobs/k3bdatatrackreader.cpp:264 jobs/k3bdatatrackreader.cpp:439
 #, kde-format
 msgid "Error while reading sector %1."
-msgstr ""
+msgstr "Eraro dum legado de sektoro %1."
 
 #: jobs/k3bdatatrackreader.cpp:346
 #, kde-format
@@ -692,17 +700,17 @@ msgstr "Problemo dum legado. Reprovante el la sektoro %1."
 #: jobs/k3bdatatrackreader.cpp:431
 #, kde-format
 msgid "Ignoring read error in sector %1."
-msgstr ""
+msgstr "Ignorante legan eraron en sektoro %1."
 
 #: jobs/k3bdvdbooktypejob.cpp:74
 #, kde-format
 msgid "Changing DVD Booktype"
-msgstr ""
+msgstr "Ŝanĝante DVD-Librotipo"
 
 #: jobs/k3bdvdbooktypejob.cpp:92 jobs/k3bdvdformattingjob.cpp:114
 #, kde-format
 msgid "No device set"
-msgstr ""
+msgstr "Neniu aparato metita"
 
 #: jobs/k3bdvdbooktypejob.cpp:108
 #, kde-format
@@ -710,18 +718,20 @@ msgid ""
 "Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</"
 "b>."
 msgstr ""
+"Bonvolu enmeti malplenan DVD+R aŭ DVD+RW datumportilon en la diskingon<p><b>"
+"%1 %2 (%3)</b>."
 
 #: jobs/k3bdvdbooktypejob.cpp:118 jobs/k3bdvdbooktypejob.cpp:119
 #: jobs/k3bdvdformattingjob.cpp:145 jobs/k3bdvdformattingjob.cpp:146
 #: jobs/k3bverificationjob.cpp:228
 #, kde-format
 msgid "Checking medium"
-msgstr ""
+msgstr "Kontrolanta datumportilon"
 
 #: jobs/k3bdvdbooktypejob.cpp:178
 #, kde-format
 msgid "Booktype successfully changed"
-msgstr ""
+msgstr "Librotipo sukcese ŝanĝiĝis"
 
 #: jobs/k3bdvdbooktypejob.cpp:184 jobs/k3bdvdformattingjob.cpp:267
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:274
@@ -735,32 +745,32 @@ msgstr "Bonvolu sendi al mi retleteron kun la lasta eligo."
 #: jobs/k3bdvdbooktypejob.cpp:207
 #, kde-format
 msgid "Ejecting DVD..."
-msgstr ""
+msgstr "Elĵetante DVD..."
 
 #: jobs/k3bdvdbooktypejob.cpp:224
 #, kde-format
 msgid "Unable to eject media."
-msgstr ""
+msgstr "Ne eblas elĵeti datumportilon."
 
 #: jobs/k3bdvdbooktypejob.cpp:247
 #, kde-format
 msgid "Cannot change booktype on non-empty DVD+R media."
-msgstr ""
+msgstr "Ne povas ŝanĝi librotipo sur nemalplena DVD+R-datumportilo."
 
 #: jobs/k3bdvdbooktypejob.cpp:255
 #, kde-format
 msgid "No DVD+R(W) media found."
-msgstr ""
+msgstr "Neniu DVD+R(W) datumportilo trovita."
 
 #: jobs/k3bdvdbooktypejob.cpp:260 jobs/k3bdvdformattingjob.cpp:315
 #, kde-format
 msgid "Unable to determine media state."
-msgstr ""
+msgstr "Ne eblas determini datumportilan staton."
 
 #: jobs/k3bdvdbooktypejob.cpp:330
 #, kde-format
 msgid "Changing Booktype"
-msgstr ""
+msgstr "Ŝanĝante Librotipo"
 
 #: jobs/k3bdvdcopyjob.cpp:119
 #, kde-format
@@ -780,32 +790,32 @@ msgstr "Neniu fonta ujo troviĝis."
 #: jobs/k3bdvdcopyjob.cpp:184
 #, kde-format
 msgid "Found encrypted DVD."
-msgstr ""
+msgstr "Trovis ĉifritan DVD."
 
 #: jobs/k3bdvdcopyjob.cpp:200
 #, kde-format
 msgid "Cannot copy encrypted DVDs."
-msgstr ""
+msgstr "Ne povas kopii ĉifritajn DVD-ojn."
 
 #: jobs/k3bdvdcopyjob.cpp:236
 #, kde-format
 msgid "The writer does not support writing Double Layer DVDs."
-msgstr ""
+msgstr "La verkilo ne subtenas verki Duoblajn DVD-ojn."
 
 #: jobs/k3bdvdcopyjob.cpp:242
 #, kde-format
 msgid "This growisofs version does not support writing Double Layer DVDs."
-msgstr ""
+msgstr "Ĉi tiu growisofs-versio ne subtenas verki Duoblajn DVD-ojn."
 
 #: jobs/k3bdvdcopyjob.cpp:260
 #, kde-format
 msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
-msgstr ""
+msgstr "K3b ne subtenas kopii plur-seancan DVD aŭ Blu-ray-diskojn."
 
 #: jobs/k3bdvdcopyjob.cpp:282
 #, kde-format
 msgid "K3b relies on the size saved in the ISO 9660 header."
-msgstr ""
+msgstr "K3b dependas de la grandeco konservita en la ISO 9660-kapo."
 
 #: jobs/k3bdvdcopyjob.cpp:283
 #, kde-format
@@ -813,37 +823,39 @@ msgid ""
 "This might result in a corrupt copy if the source was mastered with buggy "
 "software."
 msgstr ""
+"Ĉi tio povus rezultigi koruptan kopion se la fonto estis majstrita per fuŝa "
+"programaro."
 
 #: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
 #: jobs/k3bverificationjob.cpp:355
 #, kde-format
 msgid "Unable to determine the ISO 9660 filesystem size."
-msgstr ""
+msgstr "Ne eblas determini la grandecon de dosiersistemo ISO 9660."
 
 #: jobs/k3bdvdcopyjob.cpp:299
 #, kde-format
 msgid "K3b does not support copying DVD-RAM."
-msgstr ""
+msgstr "K3b ne subtenas kopiadon de DVD-RAM."
 
 #: jobs/k3bdvdcopyjob.cpp:305
 #, kde-format
 msgid "Unsupported media type."
-msgstr ""
+msgstr "Nesubtenata tipo de datumportilo."
 
 #: jobs/k3bdvdcopyjob.cpp:329
 #, kde-format
 msgid "Reading source medium."
-msgstr ""
+msgstr "Legante fontan datumportilon."
 
 #: jobs/k3bdvdcopyjob.cpp:373
 #, kde-format
 msgid "Creating image"
-msgstr ""
+msgstr "Kreante bildon"
 
 #: jobs/k3bdvdcopyjob.cpp:379
 #, kde-format
 msgid "Simulating copy"
-msgstr ""
+msgstr "Simulado de kopio"
 
 #: jobs/k3bdvdcopyjob.cpp:381 jobs/k3bdvdcopyjob.cpp:596
 #: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
@@ -865,31 +877,33 @@ msgstr "Sukcese legis la fontan ujon."
 #, kde-format
 msgid "K3b was unable to eject the source medium. Please do so manually."
 msgstr ""
+"K3b ne povis elĵeti la fontan datumportilon. Bonvolu fari tion permane."
 
 #: jobs/k3bdvdcopyjob.cpp:646
 #, kde-format
 msgid "Successfully written copy %1."
-msgstr ""
+msgstr "Sukcese skribita kopio %1."
 
 #: jobs/k3bdvdcopyjob.cpp:669
 #, kde-format
 msgid "Verifying copy %1"
-msgstr ""
+msgstr "Kontrolanta kopion %1"
 
 #: jobs/k3bdvdcopyjob.cpp:671
 #, kde-format
 msgid "Verifying copy"
-msgstr ""
+msgstr "Kontrolanta kopion"
 
 #: jobs/k3bdvdcopyjob.cpp:681 jobs/k3biso9660imagewritingjob.cpp:146
 #, kde-format
 msgid "K3b was unable to eject the written medium. Please do so manually."
 msgstr ""
+"K3b ne povis elĵeti la skribitan datumportilon. Bonvolu fari tion permane."
 
 #: jobs/k3bdvdcopyjob.cpp:790
 #, kde-format
 msgid "Unsupported media type: %1"
-msgstr ""
+msgstr "Nesubtenata tipo de datumportilo: %1"
 
 #: jobs/k3bdvdcopyjob.cpp:816 jobs/k3bdvdcopyjob.cpp:909
 #: projects/datacd/k3bdatajob.cpp:815 projects/datacd/k3bdatajob.cpp:935
@@ -898,29 +912,31 @@ msgid ""
 "%1 media do not support write simulation. Do you really want to continue? "
 "The disc will actually be written to."
 msgstr ""
+"%1 datumportilo ne subtenas skribsimuladon. Ĉu vi vere volas daŭrigi? La "
+"disko efektive estos skribita al."
 
 #: jobs/k3bdvdcopyjob.cpp:819 jobs/k3bdvdcopyjob.cpp:912
 #: projects/datacd/k3bdatajob.cpp:818 projects/datacd/k3bdatajob.cpp:938
 #, kde-format
 msgid "No Simulation with %1"
-msgstr ""
+msgstr "Neniu Simulado kun %1"
 
 #: jobs/k3bdvdcopyjob.cpp:825
 #, kde-format
 msgid "Writing DVD copy"
-msgstr ""
+msgstr "Skribanta DVD-kopio"
 
 #: jobs/k3bdvdcopyjob.cpp:829
 #, kde-format
 msgid "Writing mode ignored when writing DVD+R(W) media."
-msgstr ""
+msgstr "Skriba reĝimo ignorita dum verkado de DVD+R(W) datumportilo."
 
 #: jobs/k3bdvdcopyjob.cpp:831 jobs/k3bdvdcopyjob.cpp:921
 #: jobs/k3bmetawriter.cpp:934 jobs/k3bmetawriter.cpp:943
 #: projects/datacd/k3bdatajob.cpp:840 projects/datacd/k3bdatajob.cpp:961
 #, kde-format
 msgid "Writing %1."
-msgstr ""
+msgstr "Skribante %1."
 
 #: jobs/k3bdvdcopyjob.cpp:839 jobs/k3bmetawriter.cpp:512
 #: projects/datacd/k3bdatajob.cpp:848
@@ -929,83 +945,85 @@ msgid ""
 "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
 "really want to continue? The media will actually be written to."
 msgstr ""
+"Via verkilo (%1 %2) ne subtenas simuladon kun DVD-R(W) datumportilo. Ĉu vi "
+"vere volas daŭrigi? La datumportilo efektive estos skribita al."
 
 #: jobs/k3bdvdcopyjob.cpp:844 jobs/k3bmetawriter.cpp:517
 #: projects/datacd/k3bdatajob.cpp:853
 #, kde-format
 msgid "No Simulation with DVD-R(W)"
-msgstr ""
+msgstr "Neniu Simulado kun DVD-R(W)"
 
 #: jobs/k3bdvdcopyjob.cpp:865 jobs/k3bmetawriter.cpp:930
 #: projects/datacd/k3bdatajob.cpp:867
 #, kde-format
 msgid "Writing DVD-RW in restricted overwrite mode."
-msgstr ""
+msgstr "Skribante DVD-RW en limigita anstataŭiga reĝimo."
 
 #: jobs/k3bdvdcopyjob.cpp:873
 #, kde-format
 msgid "Writing DVD-RW in DAO mode."
-msgstr ""
+msgstr "Verkado de DVD-RW en DAO-reĝimo."
 
 #: jobs/k3bdvdcopyjob.cpp:877
 #, kde-format
 msgid "Writing DVD-RW in incremental mode."
-msgstr ""
+msgstr "Verkado de DVD-RW en pliiga reĝimo."
 
 #: jobs/k3bdvdcopyjob.cpp:886 jobs/k3bmetawriter.cpp:449
 #: jobs/k3bmetawriter.cpp:498 projects/datacd/k3bdatajob.cpp:908
 #, kde-format
 msgid "Restricted Overwrite is not possible with DVD-R media."
-msgstr ""
+msgstr "Restriktita Overwrite ne eblas kun DVD-R-datumportiloj."
 
 #: jobs/k3bdvdcopyjob.cpp:891 jobs/k3bmetawriter.cpp:936
 #: projects/datacd/k3bdatajob.cpp:884 projects/datacd/k3bdatajob.cpp:901
 #, kde-format
 msgid "Writing %1 in DAO mode."
-msgstr ""
+msgstr "Skribante %1 en DAO-reĝimo."
 
 #: jobs/k3bdvdcopyjob.cpp:895 jobs/k3bmetawriter.cpp:938
 #: projects/datacd/k3bdatajob.cpp:910
 #, kde-format
 msgid "Writing %1 in incremental mode."
-msgstr ""
+msgstr "Skribante %1 en pliiga reĝimo."
 
 #: jobs/k3bdvdcopyjob.cpp:918
 #, kde-format
 msgid "Writing BD copy"
-msgstr ""
+msgstr "Skribanta BD-kopio"
 
 #: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
 #, kde-format
 msgid "Removed image file %1"
-msgstr ""
+msgstr "Forigita bilddosiero %1"
 
 #: jobs/k3bdvdcopyjob.cpp:942
 #, kde-format
 msgid "Creating Image"
-msgstr ""
+msgstr "Kreante Bildon"
 
 #: jobs/k3bdvdcopyjob.cpp:946
 #, kde-format
 msgid "Copying DVD or BD On-The-Fly"
-msgstr ""
+msgstr "Kopiante DVD aŭ BD On-The-Fly"
 
 #: jobs/k3bdvdcopyjob.cpp:948
 #, kde-format
 msgid "Copying DVD or BD"
-msgstr ""
+msgstr "Kopiante DVD aŭ BD"
 
 #: jobs/k3bdvdformattingjob.cpp:92
 #, kde-format
 msgid "Formatting disc"
-msgstr ""
+msgstr "Formatante diskon"
 
 #: jobs/k3bdvdformattingjob.cpp:122 projects/k3bcdrdaowriter.cpp:531
 #: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrskinwriter.cpp:429
 #: projects/k3bgrowisofswriter.cpp:336
 #, kde-format
 msgid "Unmounting medium"
-msgstr ""
+msgstr "Malmuntante datumportilon"
 
 #: jobs/k3bdvdformattingjob.cpp:135
 #, kde-format
@@ -1013,21 +1031,23 @@ msgid ""
 "Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
 "b>."
 msgstr ""
+"Bonvolu enmeti reverkeblan DVD aŭ Blu-ray-datumportilon en la diskingo<p><b>"
+"%1 %2 (%3)</b>."
 
 #: jobs/k3bdvdformattingjob.cpp:255
 #, kde-format
 msgid "Formatting successfully completed"
-msgstr ""
+msgstr "Formatado sukcese finiĝis"
 
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
-msgstr ""
+msgstr "Ne zorgu pri la progreso ĉesanta antaŭ 100%."
 
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
 msgid "The formatting will continue in the background during writing."
-msgstr ""
+msgstr "La formatado daŭros en la fono dum skribo."
 
 #: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
@@ -1042,63 +1062,63 @@ msgstr "Ne eblis elĵeti la ujon."
 #: jobs/k3bdvdformattingjob.cpp:336
 #, kde-format
 msgid "Found %1 medium."
-msgstr ""
+msgstr "Trovis %1 datumportilon."
 
 #: jobs/k3bdvdformattingjob.cpp:340
 #, kde-format
 msgid "No rewritable DVD or BD medium found. Unable to format."
-msgstr ""
+msgstr "Neniu reskribebla DVD- aŭ BD-datumportilo trovita. Ne eblas formati."
 
 #: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
 #, kde-format
 msgid "No need to format %1 media more than once."
-msgstr ""
+msgstr "Ne necesas formati %1 datumportilon pli ol unufoje."
 
 #: jobs/k3bdvdformattingjob.cpp:367 jobs/k3bdvdformattingjob.cpp:417
 #, kde-format
 msgid "It may simply be overwritten."
-msgstr ""
+msgstr "Ĝi povas simple esti anstataŭita."
 
 #: jobs/k3bdvdformattingjob.cpp:370 jobs/k3bdvdformattingjob.cpp:409
 #: jobs/k3bdvdformattingjob.cpp:420
 #, kde-format
 msgid "Forcing formatting anyway."
-msgstr ""
+msgstr "Devigante formatadon ĉiukaze."
 
 #: jobs/k3bdvdformattingjob.cpp:371
 #, kde-format
 msgid "It is not recommended to force formatting of %1 media."
-msgstr ""
+msgstr "Ne rekomendas devigi la formatadon de %1 datumportilo."
 
 #: jobs/k3bdvdformattingjob.cpp:373
 #, kde-format
 msgid "After 10-20 reformats the media might become unusable."
-msgstr ""
+msgstr "Post 10-20 reformatoj la datumportilo eble fariĝos neuzebla."
 
 #: jobs/k3bdvdformattingjob.cpp:382
 #, kde-format
 msgid "Formatting %1 medium"
-msgstr ""
+msgstr "Formatante %1 datumportilon"
 
 #: jobs/k3bdvdformattingjob.cpp:393
 #, kde-format
 msgid "Formatted in %1 mode."
-msgstr ""
+msgstr "Formatis en %1 reĝimo."
 
 #: jobs/k3bdvdformattingjob.cpp:407
 #, kde-format
 msgid "Media is already empty."
-msgstr ""
+msgstr "Datumportilo jam estas malplena."
 
 #: jobs/k3bdvdformattingjob.cpp:434
 #, kde-format
 msgid "Formatting DVD-RW in %1 mode."
-msgstr ""
+msgstr "Formatante DVD-RW en %1 reĝimo."
 
 #: jobs/k3bdvdformattingjob.cpp:441
 #, kde-format
 msgid "Unable to determine the current formatting state of the DVD-RW medium."
-msgstr ""
+msgstr "Ne eblas determini la nunan formatan staton de la DVD-RW-datumportilo."
 
 #: jobs/k3bdvdformattingjob.cpp:464
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:99
@@ -1120,32 +1140,32 @@ msgstr "Formatado"
 #: projects/datacd/k3bdatajob.cpp:137 projects/mixedcd/k3bmixedjob.cpp:212
 #, kde-format
 msgid "Preparing data"
-msgstr ""
+msgstr "Preparado de datumoj"
 
 #: jobs/k3biso9660imagewritingjob.cpp:84
 #, kde-format
 msgid "Could not find image %1"
-msgstr ""
+msgstr "Ne eblis trovi bildon %1"
 
 #: jobs/k3biso9660imagewritingjob.cpp:130 projects/datacd/k3bdatajob.cpp:511
 #, kde-format
 msgid "Verifying written data"
-msgstr ""
+msgstr "Kontrolante skribitajn datumojn"
 
 #: jobs/k3biso9660imagewritingjob.cpp:132
 #, kde-format
 msgid "Verifying written copy %1 of %2"
-msgstr ""
+msgstr "Kontrolante skribitan kopion %1 de %2"
 
 #: jobs/k3biso9660imagewritingjob.cpp:205
 #, kde-format
 msgid "Writing image"
-msgstr ""
+msgstr "Skribanta bildo"
 
 #: jobs/k3biso9660imagewritingjob.cpp:207
 #, kde-format
 msgid "Writing copy %1 of %2"
-msgstr ""
+msgstr "Skribante kopion %1 de %2"
 
 #: jobs/k3biso9660imagewritingjob.cpp:226
 #, kde-format
@@ -1155,46 +1175,48 @@ msgstr "Atendante datumportilon"
 #: jobs/k3biso9660imagewritingjob.cpp:333
 #, kde-format
 msgid "Simulating ISO 9660 Image"
-msgstr ""
+msgstr "Simulante ISO 9660 Bildon"
 
 #: jobs/k3biso9660imagewritingjob.cpp:335
 #, kde-format
 msgid "Burning ISO 9660 Image"
-msgstr ""
+msgstr "Bruligante ISO 9660 Bildon"
 
 #: jobs/k3bmetawriter.cpp:304 projects/datacd/k3bdatajob.cpp:769
 #: projects/datacd/k3bdatajob.cpp:792
 #, kde-format
 msgid "Cannot write %1 media using %2. Falling back to default application."
-msgstr ""
+msgstr "Ne povas skribi %1 datumportilon per %2. Reveni al defaŭlta aplikaĵo."
 
 #: jobs/k3bmetawriter.cpp:310
 #, kde-format
 msgid "DVD and Blu-ray tracks can only be written in MODE1."
-msgstr ""
+msgstr "DVD- kaj Blu-ray-trakoj povas esti verkitaj nur en MODE1."
 
 #: jobs/k3bmetawriter.cpp:335
 #, kde-format
 msgid ""
 "Missing Blu-ray support in cdrecord and growisofs. Please update the system."
 msgstr ""
+"Mankas Blu-ray-subteno en cdrecord kaj growisofs. Bonvolu ĝisdatigi la "
+"sistemon."
 
 #: jobs/k3bmetawriter.cpp:431 projects/audiocd/k3baudiojob.cpp:243
 #, kde-format
 msgid "Track lengths below 4 seconds violate the Red Book standard."
-msgstr ""
+msgstr "Traklongoj sub 4 sekundoj malobservas la Ruĝlibro-normon."
 
 #: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
 #: projects/mixedcd/k3bmixedjob.cpp:1222
 #, kde-format
 msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
-msgstr ""
+msgstr "Surla fluga skribado kun cdrecord < 2.01a13 ne subtenata."
 
 #: jobs/k3bmetawriter.cpp:470 projects/audiocd/k3baudiojob.cpp:288
 #: projects/mixedcd/k3bmixedjob.cpp:1229
 #, kde-format
 msgid "Cdrecord %1 does not support CD-Text writing."
-msgstr ""
+msgstr "Cdrecord %1 ne subtenas KD-Tekstan skribadon."
 
 #: jobs/k3bmetawriter.cpp:482 projects/datacd/k3bdatajob.cpp:891
 #, kde-format
@@ -1202,11 +1224,13 @@ msgid ""
 "Your writer (%1 %2) does not support Incremental Streaming with %3 media. "
 "Multisession will not be possible. Continue anyway?"
 msgstr ""
+"Via verkilo (%1 %2) ne subtenas Krementan Fluadon kun %3 datumportiloj. "
+"Plurseanco ne eblos. Daŭri ĉiukaze?"
 
 #: jobs/k3bmetawriter.cpp:487 projects/datacd/k3bdatajob.cpp:896
 #, kde-format
 msgid "No Incremental Streaming"
-msgstr ""
+msgstr "Neniu Alkrementa Fluado"
 
 #: jobs/k3bmetawriter.cpp:503
 #, kde-format
@@ -1214,11 +1238,13 @@ msgid ""
 "DVD+R(W) media do not support write simulation. Do you really want to "
 "continue? The media will actually be written to."
 msgstr ""
+"DVD+R(W) datumportilo ne subtenas skriba simuladon. Ĉu vi vere volas "
+"daŭrigi? La datumportilo efektive estos skribita al."
 
 #: jobs/k3bmetawriter.cpp:506
 #, kde-format
 msgid "No Simulation with DVD+R(W)"
-msgstr ""
+msgstr "Neniu simulado kun DVD+R(W)"
 
 #: jobs/k3bmetawriter.cpp:532 projects/datacd/k3bdatajob.cpp:1047
 #, kde-format
@@ -1228,72 +1254,73 @@ msgstr "Plimultaj skribiloj ne subtenas skribi plursesiajn KD-ojn DAO-mode."
 #: jobs/k3bmetawriter.cpp:785
 #, kde-format
 msgid "No version of cdrskin can do this yet."
-msgstr ""
+msgstr "Neniu versio de cdrskin ankoraŭ povas fari tion."
 
 #: jobs/k3bmetawriter.cpp:890
 #, kde-format
 msgid "Writing CD in Session At Once mode."
-msgstr ""
+msgstr "Verkado de KD en Session At Once reĝimo."
 
 #: jobs/k3bmetawriter.cpp:892
 #, kde-format
 msgid "Writing CD in Track At Once mode."
-msgstr ""
+msgstr "Skribado de KD en modo Track At Once."
 
 #: jobs/k3bmetawriter.cpp:894
 #, kde-format
 msgid "Writing CD in Raw mode."
-msgstr ""
+msgstr "Skribado de KD en Kruda reĝimo."
 
 #: jobs/k3bmetawriter.cpp:897
 #, kde-format
 msgid "Appending session to CD"
-msgstr ""
+msgstr "Aldonante seancon al KD"
 
 #: jobs/k3bmetawriter.cpp:904
 #, kde-format
 msgid "Writing rewritable CD in Session At Once mode."
-msgstr ""
+msgstr "Skribante reskribiblan KD en Session At Once reĝimo."
 
 #: jobs/k3bmetawriter.cpp:906
 #, kde-format
 msgid "Writing rewritable CD in Track At Once mode."
-msgstr ""
+msgstr "Skribante reskribiblan KD en Track At Once reĝimo."
 
 #: jobs/k3bmetawriter.cpp:908
 #, kde-format
 msgid "Writing rewritable CD in Raw mode."
-msgstr ""
+msgstr "Skribante reskribiblan KD en Kruda reĝimo."
 
 #: jobs/k3bmetawriter.cpp:911
 #, kde-format
 msgid "Appending session to rewritable CD."
-msgstr ""
+msgstr "Aldonante seancon al reverkebla KD."
 
 #: jobs/k3bmetawriter.cpp:918
 #, kde-format
 msgid "Growing ISO 9660 filesystem on DVD+RW."
-msgstr ""
+msgstr "Kreskanta ISO 9660 dosiersistemo sur DVD+RW."
 
 #: jobs/k3bmetawriter.cpp:920 projects/datacd/k3bdatajob.cpp:870
 #, kde-format
 msgid "Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."
 msgstr ""
+"Kreskanta ISO 9660 dosiersistemo sur DVD-RW en limigita anstataŭiga reĝimo."
 
 #: jobs/k3bmetawriter.cpp:922
 #, kde-format
 msgid "Appending session to DVD+R."
-msgstr ""
+msgstr "Aldonante seancon al DVD+R."
 
 #: jobs/k3bmetawriter.cpp:924
 #, kde-format
 msgid "Appending session to Double Layer DVD+R."
-msgstr ""
+msgstr "Aldonante seancon al Duobla Tavolo DVD+R."
 
 #: jobs/k3bmetawriter.cpp:926
 #, kde-format
 msgid "Appending session to %1."
-msgstr ""
+msgstr "Aldono de seanco al %1."
 
 #: jobs/k3bmetawriter.cpp:932
 #, kde-format
@@ -1303,7 +1330,7 @@ msgstr "Skribante dutavolan DVD+R."
 #: jobs/k3breadcdreader.cpp:115
 #, kde-format
 msgid "Using readcd %1 instead of default version for clone support."
-msgstr ""
+msgstr "Uzanta readcd %1 anstataŭ defaŭlta versio por klonsubteno."
 
 #: jobs/k3breadcdreader.cpp:122
 #, kde-format
@@ -1354,27 +1381,27 @@ msgstr "Readcd finis nenorme."
 #: jobs/k3bverificationjob.cpp:301
 #, kde-format
 msgid "Internal Error: Verification job improperly initialized (%1)"
-msgstr ""
+msgstr "Interna Eraro: Konfirma laboro malĝuste pravigita (%1)"
 
 #: jobs/k3bverificationjob.cpp:223
 #, kde-format
 msgid "no tracks added"
-msgstr ""
+msgstr "neniuj spuroj aldonitaj"
 
 #: jobs/k3bverificationjob.cpp:279 jobs/k3bverificationjob.cpp:302
 #, kde-format
 msgid "specified track number '%1' not found on medium"
-msgstr ""
+msgstr "specifita trako numero '%1' ne trovita sur datumportilo"
 
 #: jobs/k3bverificationjob.cpp:323
 #, kde-format
 msgid "Verifying track %1"
-msgstr ""
+msgstr "Kontrolante trakon %1"
 
 #: jobs/k3bverificationjob.cpp:391
 #, kde-format
 msgid "Written data in track %1 differs from original."
-msgstr ""
+msgstr "Skribitaj datumoj en trako %1 diferencas de originalo."
 
 #: jobs/k3bverificationjob.cpp:395
 #, kde-format
@@ -1396,18 +1423,19 @@ msgstr "%1 versio %2 estas tro malnova."
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
 #, kde-format
 msgid "Analysing Title %1 of Video DVD %2"
-msgstr ""
+msgstr "Analizante Titolo %1 de Video DVD %2"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:178
 #, kde-format
 msgid "Analysing Chapter %1 of %2"
-msgstr ""
+msgstr "Analizante ĉapitron %1 de %2"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:255
 #, kde-format
 msgid ""
 "Ignoring clipping values of last chapter due to its short playback time."
 msgstr ""
+"Ignorante tondvalorojn de lasta ĉapitro pro ĝia mallonga reprodukta tempo."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:151
 #, kde-format
@@ -1427,12 +1455,12 @@ msgstr "Transkodante la titolon %1 el la Video-DVD %2"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:194
 #, kde-format
 msgid "Invalid video codec set: %1"
-msgstr ""
+msgstr "Nevalida videokodeko-aro: %1"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:217
 #, kde-format
 msgid "Invalid audio codec set: %1"
-msgstr ""
+msgstr "Nevalida sonkodeko aro: %1"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
@@ -1532,6 +1560,9 @@ msgid ""
 "quarter pixel motion compensation, lumi masking, trellis quantization, and "
 "H.263, MPEG and custom quantization matrices."
 msgstr ""
+"XviD prezentas agordojn de MPEG-4 Advanced Profile kiel b-kadrojn, ĉiean kaj "
+"kvaronrastrumeran movkompenson, lumi-maskadon, trellis-kvantigon, kaj H.263, "
+"MPEG kaj proprajn kvantigajn matricojn."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:557
 #, kde-format
@@ -1540,6 +1571,10 @@ msgid ""
 "While DivX is closed source and may only run on Windows, Mac OS and Linux, "
 "XviD is open source and can potentially run on any platform."
 msgstr ""
+"XviD estas primara konkuranto de DivX (XviD estante DivX literumita "
+"malantaŭen). Dum DivX estas fermita fonto kaj povas funkcii nur en Vindozo, "
+"Mac OS kaj Linukso, XviD estas malfermfonta kaj eble funkcias en ajna "
+"platformo."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:561
 #, kde-format
@@ -1552,6 +1587,8 @@ msgid ""
 "AC3, better known as Dolby Digital is standardized as ATSC A/52. It contains "
 "up to 6 total channels of sound."
 msgstr ""
+"AC3, pli konata kiel Dolby Digital estas normigita kiel ATSC A/52. Ĝi "
+"enhavas ĝis 6 totalajn kanalojn de sono."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:576
 #, kde-format
@@ -1559,6 +1596,7 @@ msgid ""
 "With this setting K3b will create a two-channel stereo Dolby Digital audio "
 "stream."
 msgstr ""
+"Kun ĉi tiu agordo K3b kreos dukanalan stereofon Dolby Digital sonfluon."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:580
 #, kde-format
@@ -1566,6 +1604,8 @@ msgid ""
 "With this setting K3b will use the Dolby Digital audio stream from the "
 "source DVD without changing it."
 msgstr ""
+"Kun ĉi tiu agordo K3b uzos la Dolby Digital sonfluon de la fonta DVD sen "
+"ŝanĝi ĝin."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:582
 #, kde-format
@@ -1578,6 +1618,8 @@ msgid ""
 "MPEG1 Layer III is better known as MP3 and is the most used lossy audio "
 "format."
 msgstr ""
+"MPEG1 Layer III estas pli konata kiel MP3 kaj estas la plej uzata perda "
+"sonformato."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:585
 #, kde-format
@@ -1585,18 +1627,19 @@ msgid ""
 "With this setting K3b will create a two-channel stereo MPEG1 Layer III audio "
 "stream."
 msgstr ""
+"Kun ĉi tiu agordo K3b kreos dukanalan stereofon MPEG1 Layer III sonfluon."
 
 #: plugin/k3baudiodecoder.cpp:630
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Decoder"
-msgstr ""
+msgstr "Aŭdiomalĉifrilo"
 
 #: plugin/k3baudioencoder.cpp:45
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Encoder"
-msgstr ""
+msgstr "Aŭdiokodilo"
 
 #: plugin/k3baudioencoder.cpp:154
 #, kde-format
@@ -1606,13 +1649,13 @@ msgstr "Nekonata eraro okazis."
 #: plugin/k3bpluginmanager.cpp:152
 #, kde-format
 msgid "No settings available for plugin %1."
-msgstr ""
+msgstr "Neniuj agordoj disponeblaj por kromaĵo %1."
 
 #: plugin/k3bprojectplugin.cpp:20
 #, kde-format
 msgctxt "plugin type"
 msgid "Project plugin"
-msgstr ""
+msgstr "Projekta kromaĵo"
 
 #: projects/audiocd/k3baudiocdtrackreader.cpp:60
 #, kde-format
@@ -1627,12 +1670,12 @@ msgstr "KD trako"
 #: projects/audiocd/k3baudiocdtracksource.cpp:207
 #, kde-format
 msgid "Track %1 from Audio CD %2"
-msgstr ""
+msgstr "Trako %1 el Aŭd-KD %2"
 
 #: projects/audiocd/k3baudioimager.cpp:86
 #, kde-format
 msgid "Unable to read track %1."
-msgstr ""
+msgstr "Ne eblas legi trakon %1."
 
 #: projects/audiocd/k3baudioimager.cpp:102 projects/datacd/k3bdatajob.cpp:206
 #: projects/mixedcd/k3bmixedjob.cpp:1088
@@ -1653,6 +1696,8 @@ msgid ""
 "The following files could not be found. Do you want to remove them from the "
 "project and continue without adding them to the image?"
 msgstr ""
+"La sekvaj dosieroj ne estis trovitaj. Ĉu vi volas forigi ilin de la projekto "
+"kaj daŭrigi sen aldoni ilin al la bildo?"
 
 #: projects/audiocd/k3baudiojob.cpp:168
 #: projects/datacd/k3bdatapreparationjob.cpp:138
@@ -1669,7 +1714,7 @@ msgstr "Averto"
 #: projects/mixedcd/k3bmixedjob.cpp:182
 #, kde-format
 msgid "Remove missing files and continue"
-msgstr ""
+msgstr "Forigi mankantajn dosierojn kaj daŭrigi"
 
 #: projects/audiocd/k3baudiojob.cpp:170
 #: projects/datacd/k3bdatapreparationjob.cpp:164
@@ -1678,7 +1723,7 @@ msgstr ""
 #: projects/mixedcd/k3bmixedjob.cpp:183
 #, kde-format
 msgid "Cancel and go back"
-msgstr ""
+msgstr "Nuligi kaj reiri"
 
 #: projects/audiocd/k3baudiojob.cpp:188 projects/mixedcd/k3bmixedjob.cpp:201
 #, kde-format
@@ -1688,12 +1733,12 @@ msgstr "Bonvolu aldoni dosierojn al via projekto unue."
 #: projects/audiocd/k3baudiojob.cpp:194
 #, kde-format
 msgid "Unable to write on-the-fly with these audio sources."
-msgstr ""
+msgstr "Ne eblas skribi tuje per ĉi tiuj sonfontoj."
 
 #: projects/audiocd/k3baudiojob.cpp:303 projects/mixedcd/k3bmixedjob.cpp:236
 #, kde-format
 msgid "Determining maximum writing speed"
-msgstr ""
+msgstr "Determinante maksimuman skribrapidecon"
 
 #: projects/audiocd/k3baudiojob.cpp:338
 #, kde-format
@@ -1703,22 +1748,22 @@ msgstr "Kreante imagdosierojn en %1"
 #: projects/audiocd/k3baudiojob.cpp:339 projects/videocd/k3bvcdjob.cpp:182
 #, kde-format
 msgid "Creating image files"
-msgstr ""
+msgstr "Kreante bilddosierojn"
 
 #: projects/audiocd/k3baudiojob.cpp:351 projects/mixedcd/k3bmixedjob.cpp:320
 #, kde-format
 msgid "Unable to determine maximum speed for some reason. Ignoring."
-msgstr ""
+msgstr "Ne eblas determini maksimuman rapidecon ial. Ignorante."
 
 #: projects/audiocd/k3baudiojob.cpp:379 projects/mixedcd/k3bmixedjob.cpp:369
 #, kde-format
 msgid "Writing canceled."
-msgstr ""
+msgstr "Skribo nuligita."
 
 #: projects/audiocd/k3baudiojob.cpp:441 projects/mixedcd/k3bmixedjob.cpp:568
 #, kde-format
 msgid "Error while decoding audio tracks."
-msgstr ""
+msgstr "Eraro dum malkodado de sonspuroj."
 
 #: projects/audiocd/k3baudiojob.cpp:449
 #, kde-format
@@ -1728,7 +1773,7 @@ msgstr "Sukcese malkodis ĉiujn trakojn."
 #: projects/audiocd/k3baudiojob.cpp:473 projects/mixedcd/k3bmixedjob.cpp:608
 #, kde-format
 msgid "Decoding audio track %1 of %2%3"
-msgstr ""
+msgstr "Malkodi sontrakon %1 de %2%3"
 
 #: projects/audiocd/k3baudiojob.cpp:491
 #, kde-format
@@ -1768,26 +1813,26 @@ msgstr "Skribante sonan KD"
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 trako (%2 minutojn)"
+msgstr[1] "%1 trako (%2 minutojn)"
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
 #: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
 #, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " - %1 kopio"
+msgstr[1] " - %1 kopioj"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
 msgid "Could not find normalize executable."
-msgstr ""
+msgstr "Ne eblis trovi normalize rulebla."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:74
 #, kde-format
 msgid "Could not start normalize."
-msgstr ""
+msgstr "Ne eblis komenci normaligon."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:114
 #, kde-format
@@ -1802,12 +1847,12 @@ msgstr "Alĝustigante la laŭtecan nivelon por trako %1 el %2"
 #: projects/audiocd/k3baudionormalizejob.cpp:128
 #, kde-format
 msgid "Computing level for track %1 of %2"
-msgstr ""
+msgstr "Komputilnivelo por trako %1 de %2"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:171
 #, kde-format
 msgid "Successfully normalized all tracks."
-msgstr ""
+msgstr "Sukcese normaligis ĉiujn trakojn."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:179
 #, kde-format
@@ -1822,12 +1867,12 @@ msgstr "Silento"
 #: projects/audiocd/k3brawaudiodatasource.cpp:65
 #, kde-format
 msgid "Raw Audio CD Image"
-msgstr ""
+msgstr "Kruda Audio KD Bildo"
 
 #: projects/datacd/k3bbootitem.cpp:23
 #, kde-format
 msgid "El Torito Boot image"
-msgstr ""
+msgstr "El Torito Boot-bildo"
 
 #: projects/datacd/k3bdatadoc.cpp:1197 projects/videocd/k3bvcddoc.cpp:407
 #, kde-format
@@ -1857,17 +1902,17 @@ msgstr "El antaŭa sesio"
 #: projects/datacd/k3bdatadoc.cpp:1485
 #, kde-format
 msgid "El Torito boot catalog file"
-msgstr ""
+msgstr "El Torito lanĉa katalogodosiero"
 
 #: projects/datacd/k3bdatadoc.cpp:1486
 #, kde-format
 msgid "Boot catalog"
-msgstr ""
+msgstr "Boot-katalogo"
 
 #: projects/datacd/k3bdatajob.cpp:213
 #, kde-format
 msgid "Creating image file"
-msgstr ""
+msgstr "Kreante bilddosieron"
 
 #: projects/datacd/k3bdatajob.cpp:214
 #, kde-format
@@ -1877,12 +1922,12 @@ msgstr "Trako 1 el 1"
 #: projects/datacd/k3bdatajob.cpp:215
 #, kde-format
 msgid "Creating image file in %1"
-msgstr ""
+msgstr "Kreante bilddosieron en %1"
 
 #: projects/datacd/k3bdatajob.cpp:373
 #, kde-format
 msgid "Image successfully created in %1"
-msgstr ""
+msgstr "Bildo sukcese kreita en %1"
 
 #: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:90
 #, kde-format
@@ -1892,17 +1937,19 @@ msgstr "Ne eblas malfermi dosieron %1"
 #: projects/datacd/k3bdatajob.cpp:393
 #, kde-format
 msgid "Error while creating ISO image"
-msgstr ""
+msgstr "Eraro dum kreado de ISO-bildo"
 
 #: projects/datacd/k3bdatajob.cpp:694
 #, kde-format
 msgid "Internal Error: No medium type fits. This project cannot be burned."
 msgstr ""
+"Interna Eraro: Neniu datumportila tipo taŭgas. Ĉi tiu projekto ne povas esti "
+"bruligita."
 
 #: projects/datacd/k3bdatajob.cpp:698
 #, kde-format
 msgid "Waiting for a medium"
-msgstr ""
+msgstr "Atendante datumportilon"
 
 #: projects/datacd/k3bdatajob.cpp:715
 #, kde-format
@@ -1913,43 +1960,44 @@ msgstr "Skribante %1"
 #, kde-format
 msgid "Unable to determine the last track's datamode. Using default."
 msgstr ""
+"Ne eblas determini la datumreĝimon de la lasta trako. Uzante defaŭlton."
 
 #: projects/datacd/k3bdatajob.cpp:826 projects/datacd/k3bdatajob.cpp:946
 #, kde-format
 msgid "Writing mode ignored when writing %1 media."
-msgstr ""
+msgstr "Skriba reĝimo ignorita dum skribado de %1 datumportilo."
 
 #: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
 #, kde-format
 msgid "Growing ISO 9660 filesystem on %1."
-msgstr ""
+msgstr "Kreskanta ISO 9660 dosiersistemo sur %1."
 
 #: projects/datacd/k3bdatajob.cpp:971
 #, kde-format
 msgid "Creating Data Image File"
-msgstr ""
+msgstr "Kreante Datuman Bildodosieron"
 
 #: projects/datacd/k3bdatajob.cpp:975
 #, kde-format
 msgid "Writing Data Project"
-msgstr ""
+msgstr "Skriba Datuma Projekto"
 
 #: projects/datacd/k3bdatajob.cpp:981
 #, kde-format
 msgid "Writing Multisession Project"
-msgstr ""
+msgstr "Skribanta Multisession Projekto"
 
 #: projects/datacd/k3bdatajob.cpp:995
 #, kde-format
 msgid "ISO 9660 Filesystem (Size: %2) – One copy"
 msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dosiersistemo ISO-9660 (Grandeco: %2) – Unu kopio"
+msgstr[1] "Dosiersistemo ISO-9660 (Grandeco: %2) – %1 kopioj"
 
 #: projects/datacd/k3bdatajob.cpp:1000
 #, kde-format
 msgid "ISO 9660 Filesystem (Size: %1)"
-msgstr ""
+msgstr "ISO 9660 Dosiersistemo (Grandeco: %1)"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
 #, kde-format
@@ -1962,12 +2010,14 @@ msgid ""
 "No medium inserted or an empty medium in %1. Cannot continue multisession "
 "disk."
 msgstr ""
+"Neniu datumportilo enigita aŭ malplena datumportilo en %1. Ne povas daŭrigi "
+"plurseancan diskon."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
 #, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr ""
+msgstr "Ne eblis malfermi ISO 9660 dosiersistemon en %1."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -1976,11 +2026,13 @@ msgid ""
 "Medium is not of multi-session type and does not contain ISO 9660. Cannot "
 "emulate multi-session on it."
 msgstr ""
+"Datumportilo ne estas de plurseanca tipo kaj ne enhavas ISO 9660. Ne eblas "
+"imiti plurseancan sur ĝi."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:92
 #, kde-format
 msgid "<em>%1</em> renamed to <em>%2</em>"
-msgstr ""
+msgstr "<em>%1</em> renomita al <em>%2</em>"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:132
 #, kde-format
@@ -1990,16 +2042,20 @@ msgid ""
 "have to be shortened but long filenames will not be available on Windows "
 "systems."
 msgstr ""
+"Kelkaj dosiernomoj devas esti mallongigitaj pro la %1 char limigo de la "
+"etendoj de Joliet. Se la etendoj de Joliet estas malŝaltitaj, dosiernomoj ne "
+"devas esti mallongigitaj sed longaj dosiernomoj ne estos disponeblaj en "
+"Vindozaj sistemoj."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:139
 #, kde-format
 msgid "Shorten Filenames"
-msgstr ""
+msgstr "Mallongigi Dosiernomojn"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:140
 #, kde-format
 msgid "Disable Joliet extensions"
-msgstr ""
+msgstr "Malebligi Joliet-etendaĵojn"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:157
 #, kde-format
@@ -2010,11 +2066,16 @@ msgid ""
 "that. Do you want it to be cut or do you want to go back and change it "
 "manually?"
 msgstr ""
+"La etendaĵoj Joliet (kiuj estas bezonataj por longaj dosiernomoj en Vindozaj "
+"sistemoj) limigas la longon de la volumpriskribilo (la nomo de la "
+"dosiersistemo) al %1 signoj. La elektita priskribilo '%2' estas pli longa ol "
+"tio. Ĉu vi volas, ke ĝi estu tranĉita aŭ ĉu vi volas reiri kaj ŝanĝi ĝin "
+"permane?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:163
 #, kde-format
 msgid "Cut volume descriptor in the Joliet tree"
-msgstr ""
+msgstr "Tranĉi voluman priskribilon en la Joliet-arbo"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:195
 #, kde-format
@@ -2023,11 +2084,14 @@ msgid ""
 "added to the project. Do you want to continue without writing the symbolic "
 "links to the image?"
 msgstr ""
+"K3b ne povas sekvi simbolajn ligilojn al dosierujoj post kiam ili estis "
+"aldonitaj al la projekto. Ĉu vi volas daŭrigi sen verki la simbolajn "
+"ligilojn al la bildo?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:200
 #, kde-format
 msgid "Discard symbolic links to folders"
-msgstr ""
+msgstr "Forĵeti simbolajn ligilojn al dosierujoj"
 
 #: projects/datacd/k3bisoimager.cpp:152
 #, kde-format
@@ -2035,6 +2099,8 @@ msgid ""
 "Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
 "contain more than one backslash:"
 msgstr ""
+"Pro cimo en mkisofs <= 1.15a40, K3b ne kapablas pritrakti dosiernomojn kiuj "
+"enhavas pli ol unu malantaŭa oblikvo:"
 
 #: projects/datacd/k3bisoimager.cpp:171 projects/k3bcdrdaowriter.cpp:770
 #: projects/k3bcdrecordwriter.cpp:910 projects/k3bcdrskinwriter.cpp:923
@@ -2045,69 +2111,74 @@ msgstr "%1 paneis."
 #: projects/datacd/k3bisoimager.cpp:362
 #, kde-format
 msgid "Could not determine size of resulting image file."
-msgstr ""
+msgstr "Ne eblis determini grandecon de rezulta bilddosiero."
 
 #: projects/datacd/k3bisoimager.cpp:515
 #, kde-format
 msgid "No volume id specified. Using default."
-msgstr ""
+msgstr "Neniu voluma id specifita. Uzante defaŭlton."
 
 #: projects/datacd/k3bisoimager.cpp:608
 #, kde-format
 msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
 msgstr ""
+"Trovis dosierojn pli grandajn ol 4 GB. K3b bezonas almenaŭ %1 por daŭrigi."
 
 #: projects/datacd/k3bisoimager.cpp:618
 #, kde-format
 msgid "Found files bigger than 2 GB. These files will be fully accessible."
 msgstr ""
+"Trovis dosierojn pli grandajn ol 2 GB. Ĉi tiuj dosieroj estos plene "
+"alireblaj."
 
 #: projects/datacd/k3bisoimager.cpp:624
 #, kde-format
 msgid "Enabling UDF extension."
-msgstr ""
+msgstr "Ebligante UDF-etendon."
 
 #: projects/datacd/k3bisoimager.cpp:669
 #, kde-format
 msgid "Setting iso level to 3 to support files bigger than 4 GB."
-msgstr ""
+msgstr "Agordante iso-nivelon al 3 por subteni dosierojn pli grandajn ol 4 GB."
 
 #: projects/datacd/k3bisoimager.cpp:761
 #, kde-format
 msgid "Could not follow link %1 to non-existing file %2. Skipping..."
-msgstr ""
+msgstr "Ne eblis sekvi ligilon %1 al neekzistanta dosiero %2. Saltante..."
 
 #: projects/datacd/k3bisoimager.cpp:765
 #, kde-format
 msgid ""
 "Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
 msgstr ""
+"Ignorante ligilon %1 al dosierujo %2. K3b ne povas sekvi ligilojn al "
+"dosierujoj."
 
 #: projects/datacd/k3bisoimager.cpp:773
 #, kde-format
 msgid "Could not find file %1. Skipping..."
-msgstr ""
+msgstr "Ne eblis trovi dosieron %1. Saltante..."
 
 #: projects/datacd/k3bisoimager.cpp:777
 #, kde-format
 msgid "Could not read file %1. Skipping..."
-msgstr ""
+msgstr "Ne eblis legi dosieron %1. Saltante..."
 
 #: projects/datacd/k3bisoimager.cpp:830
 #, kde-format
 msgid "Failed to backup boot image file %1"
-msgstr ""
+msgstr "Malsukcesis sekurkopii la startbildan dosieron %1"
 
 #: projects/datacd/k3bisoimager.cpp:990 projects/datacd/k3bisoimager.cpp:1000
 #: projects/datacd/k3bisoimager.cpp:1007 projects/datacd/k3bisoimager.cpp:1013
 #, kde-format
 msgid "Could not write temporary file"
-msgstr ""
+msgstr "Ne eblis skribi provizoran dosieron"
 
 #: projects/datacd/k3bisoimager.cpp:994
 #, kde-format
 msgid "No files to be written."
-msgstr ""
+msgstr "Neniuj dosieroj skribendaj."
 
 #: projects/datacd/k3bisooptions.cpp:68
 #, kde-format
@@ -2121,38 +2192,39 @@ msgstr "K3b datumprojekto"
 #: projects/datacd/k3bmkisofshandler.cpp:65
 #, kde-format
 msgid "Mkisofs executable not found."
-msgstr ""
+msgstr "Mkisofs rulebla ne trovita."
 
 #: projects/datacd/k3bmkisofshandler.cpp:79
 #, kde-format
 msgid "Read error from file '%1'"
-msgstr ""
+msgstr "Legi eraron el dosiero '%1'"
 
 #: projects/datacd/k3bmkisofshandler.cpp:84
 #, kde-format
 msgid "Used version of mkisofs does not have large file support."
-msgstr ""
+msgstr "Uzita versio de mkisofs ne havas grandan dosiersubtenon."
 
 #: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
 msgid "Files bigger than 2 GB cannot be handled."
-msgstr ""
+msgstr "Dosieroj pli grandaj ol 2 GB ne povas esti pritraktitaj."
 
 #: projects/datacd/k3bmkisofshandler.cpp:89
 #, kde-format
 msgid "No such file or directory '%1'."
-msgstr ""
+msgstr "Ne tia dosiero aŭ dosierujo '%1'."
 
 #: projects/datacd/k3bmkisofshandler.cpp:104
 #, kde-format
 msgid "Encountered an incorrectly encoded filename '%1'"
-msgstr ""
+msgstr "Trovis malĝuste koditan dosiernomon '%1'"
 
 #: projects/datacd/k3bmkisofshandler.cpp:106
 #, kde-format
 msgid ""
 "This may be caused by a system update which changed the local character set."
 msgstr ""
+"Ĉi tio povas esti kaŭzita de sistema ĝisdatigo kiu ŝanĝis la lokan signaron."
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
 #, kde-format
@@ -2160,31 +2232,33 @@ msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr ""
+"Vi povas uzi convmv (https://j3e.de/linux/convmv/) por ripari la dosiernoman "
+"kodigon."
 
 #: projects/datacd/k3bmkisofshandler.cpp:111
 #, kde-format
 msgid "The boot image has an invalid size."
-msgstr ""
+msgstr "La ekbildo havas nevalidan grandecon."
 
 #: projects/datacd/k3bmkisofshandler.cpp:115
 #, kde-format
 msgid "The boot image contains multiple partitions."
-msgstr ""
+msgstr "La startbildo enhavas plurajn sekciojn."
 
 #: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
-msgstr ""
+msgstr "Malmoldiska lanĉa bitkopio devas enhavi ununuran subdiskon."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:43
 #, kde-format
 msgid "Searching previous session"
-msgstr ""
+msgstr "Serĉante antaŭan seancon"
 
 #: projects/datacd/k3bmsinfofetcher.cpp:155
 #, kde-format
 msgid "Could not determine next writable address."
-msgstr ""
+msgstr "Ne eblis determini la sekvan skribeblan adreson."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:171
 #, kde-format
@@ -2194,73 +2268,73 @@ msgstr "Ne eblis lanĉi %1"
 #: projects/datacd/k3bmsinfofetcher.cpp:201
 #, kde-format
 msgid "Could not retrieve multisession information from disk."
-msgstr ""
+msgstr "Ne eblis reakiri plurseancan informon de disko."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:202
 #, kde-format
 msgid "The disk is either empty or not appendable."
-msgstr ""
+msgstr "La disko estas aŭ malplena aŭ ne aldonebla."
 
 #: projects/k3babstractwriter.cpp:44
 #, kde-format
 msgid "Unlocking drive..."
-msgstr ""
+msgstr "Malŝlosas diskingon..."
 
 #: projects/k3babstractwriter.cpp:58
 #, kde-format
 msgid "Could not unlock drive."
-msgstr ""
+msgstr "Ne eblis malŝlosi stiradon."
 
 #: projects/k3babstractwriter.cpp:61
 #, kde-format
 msgid "Ejecting Medium"
-msgstr ""
+msgstr "Elĵetante Datumportilon"
 
 #: projects/k3bcdrdaowriter.cpp:259
 #, kde-format
 msgid "Cdrdao %1 does not support disabling burnfree."
-msgstr ""
+msgstr "Cdrdao %1 ne subtenas malŝalti burnfree."
 
 #: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:298
 #: projects/k3bcdrskinwriter.cpp:306
 #, kde-format
 msgid "'Force unsafe operations' enabled."
-msgstr ""
+msgstr "'Devigi nesekurajn operaciojn' ebligita."
 
 #: projects/k3bcdrdaowriter.cpp:283
 #, kde-format
 msgid "Cdrdao %1 does not support overburning."
-msgstr ""
+msgstr "Cdrdao %1 ne subtenas trobruladon."
 
 #: projects/k3bcdrdaowriter.cpp:486
 #, kde-format
 msgid "Could not backup tocfile."
-msgstr ""
+msgstr "Ne eblis sekurkopii tocdosiero."
 
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
 msgid "Preparing read process..."
-msgstr ""
+msgstr "Preparante legprocezon..."
 
 #: projects/k3bcdrdaowriter.cpp:522
 #, kde-format
 msgid "Preparing copy process..."
-msgstr ""
+msgstr "Preparante kopiprocezon..."
 
 #: projects/k3bcdrdaowriter.cpp:525
 #, kde-format
 msgid "Preparing blanking process..."
-msgstr ""
+msgstr "Preparante malplenigprocezon..."
 
 #: projects/k3bcdrdaowriter.cpp:559
 #, no-c-format, kde-format
 msgid "Starting DAO simulation at %1x speed..."
-msgstr ""
+msgstr "Komencante DAO-simuladon je %1x rapideco..."
 
 #: projects/k3bcdrdaowriter.cpp:566
 #, no-c-format, kde-format
 msgid "Starting DAO writing at %1x speed..."
-msgstr ""
+msgstr "Komencante DAO-skribon je %1x rapideco..."
 
 #: projects/k3bcdrdaowriter.cpp:571
 #, kde-format
@@ -2295,7 +2369,7 @@ msgstr "Komencante la viŝadon..."
 #: projects/k3bcdrdaowriter.cpp:590
 #, kde-format
 msgid "Blanking"
-msgstr ""
+msgstr "Blankado"
 
 #: projects/k3bcdrdaowriter.cpp:702
 #, kde-format
@@ -2303,120 +2377,122 @@ msgid ""
 "Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
 "to restore it from the backup %2."
 msgstr ""
+"Pro cimo en cdrdao la toc/cue dosiero %1 estis forigita. K3b ne povis "
+"restarigi ĝin de la sekurkopio %2."
 
 #: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:787
 #: projects/k3bcdrskinwriter.cpp:800 projects/k3bgrowisofswriter.cpp:515
 #, kde-format
 msgid "Simulation successfully completed"
-msgstr ""
+msgstr "Simulado sukcese finiĝis"
 
 #: projects/k3bcdrdaowriter.cpp:736
 #, kde-format
 msgid "Reading successfully completed"
-msgstr ""
+msgstr "Legado sukcese finiĝis"
 
 #: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:789
 #: projects/k3bcdrskinwriter.cpp:802 projects/k3bgrowisofswriter.cpp:517
 #, kde-format
 msgid "Writing successfully completed"
-msgstr ""
+msgstr "Skribo sukcese finita"
 
 #: projects/k3bcdrdaowriter.cpp:742
 #, kde-format
 msgid "Copying successfully completed"
-msgstr ""
+msgstr "Kopiado sukcese finiĝis"
 
 #: projects/k3bcdrdaowriter.cpp:745
 #, kde-format
 msgid "Blanking successfully completed"
-msgstr ""
+msgstr "Malplenigo sukcese finiĝis"
 
 #: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:793
 #: projects/k3bcdrskinwriter.cpp:806 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
-msgstr ""
+msgstr "Meza entuta skribrapideco: %1 KB/s (%2x)"
 
 #: projects/k3bcdrdaowriter.cpp:761
 #, kde-format
 msgid "Please include the debugging output in your problem report."
-msgstr ""
+msgstr "Bonvolu inkluzivi la sencimigan eligon en via problemo-raporto."
 
 #: projects/k3bcdrdaowriter.cpp:788 projects/k3bcdrecordwriter.cpp:667
 #: projects/k3bcdrskinwriter.cpp:680
 #, no-c-format, kde-format
 msgid "Medium or burner does not support writing at %1x speed"
-msgstr ""
+msgstr "Datumportilo aŭ brulilo ne subtenas skribadon je %1x rapideco"
 
 #: projects/k3bcdrdaowriter.cpp:790
 #, no-c-format, kde-format
 msgid "Switching down burn speed to %1x"
-msgstr ""
+msgstr "Malaltigante brulrapidecon al %1x"
 
 #: projects/k3bcdrdaowriter.cpp:820
 #, kde-format
 msgid "Executing Power calibration"
-msgstr ""
+msgstr "Efektivigante Potenckalibradon"
 
 #: projects/k3bcdrdaowriter.cpp:824
 #, kde-format
 msgid "Power calibration successful"
-msgstr ""
+msgstr "Potenca kalibrado sukcesa"
 
 #: projects/k3bcdrdaowriter.cpp:825
 #, kde-format
 msgid "Preparing burn process..."
-msgstr ""
+msgstr "Preparante brulprocezon..."
 
 #: projects/k3bcdrdaowriter.cpp:829
 #, kde-format
 msgid "Flushing cache"
-msgstr ""
+msgstr "Elbufrigante kaŝmemoron"
 
 #: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
 msgid "Writing CD-Text lead-in..."
-msgstr ""
+msgstr "Skribante enkondukon de KD-Teksto..."
 
 #: projects/k3bcdrdaowriter.cpp:837
 #, kde-format
 msgid "Turning BURN-Proof on"
-msgstr ""
+msgstr "Enŝaltante BURN-Provon"
 
 #: projects/k3bcdrdaowriter.cpp:845
 #, kde-format
 msgid "Found ISRC code"
-msgstr ""
+msgstr "Trovita ISRC-kodo"
 
 #: projects/k3bcdrdaowriter.cpp:849
 #, kde-format
 msgid "Found pregap: %1"
-msgstr ""
+msgstr "Trovita preparo: %1"
 
 #: projects/k3bcdrdaowriter.cpp:862
 #, kde-format
 msgid "No cdrdao driver found."
-msgstr ""
+msgstr "Neniu cdrdao-pelilo trovita."
 
 #: projects/k3bcdrdaowriter.cpp:863
 #, kde-format
 msgid "Please select one manually in the device settings."
-msgstr ""
+msgstr "Bonvolu elekti unu permane en la aparato-agordoj."
 
 #: projects/k3bcdrdaowriter.cpp:864
 #, kde-format
 msgid "For most current drives this would be 'generic-mmc'."
-msgstr ""
+msgstr "Por la plej multaj nunaj diskingoj ĉi tio estus 'generic-mmc'."
 
 #: projects/k3bcdrdaowriter.cpp:873
 #, kde-format
 msgid "Device not ready, waiting."
-msgstr ""
+msgstr "Aparato ne preta, atendante."
 
 #: projects/k3bcdrdaowriter.cpp:877
 #, kde-format
 msgid "Cue sheet not accepted."
-msgstr ""
+msgstr "Signilfolio ne akceptita."
 
 #: projects/k3bcdrdaowriter.cpp:882 projects/k3bcdrecordwriter.cpp:611
 #: projects/k3bcdrskinwriter.cpp:624
@@ -2429,99 +2505,99 @@ msgstr "Nevalida %1 opcio: %2"
 #: projects/mixedcd/k3bmixedjob.cpp:1030
 #, kde-format
 msgid "Data does not fit on disk."
-msgstr ""
+msgstr "Datumoj ne taŭgas sur disko."
 
 #: projects/k3bcdrdaowriter.cpp:889 projects/k3bcdrecordwriter.cpp:816
 #: projects/k3bcdrskinwriter.cpp:829
 #, kde-format
 msgid "Enable overburning in the advanced K3b settings to burn anyway."
-msgstr ""
+msgstr "Ebligi superbruladon en la altnivelaj K3b-agordoj por bruli ĉiuokaze."
 
 #: projects/k3bcdrdaowriter.cpp:974
 #, kde-format
 msgid "Writing leadin"
-msgstr ""
+msgstr "Skribante gvidin"
 
 #: projects/k3bcdrdaowriter.cpp:980
 #, kde-format
 msgid "Writing leadout"
-msgstr ""
+msgstr "Skriba gvidado"
 
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
 msgid "Cdrecord version %1 does not support Blu-ray writing."
-msgstr ""
+msgstr "Cdrecord-versio %1 ne subtenas Blu-ray skribadon."
 
 #: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
 #, kde-format
 msgid "Writer does not support disk at once (DAO) recording"
-msgstr ""
+msgstr "Verkilo ne subtenas diskon tuj (DAO) registradon"
 
 #: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
 #, kde-format
 msgid "Writer does not support raw writing."
-msgstr ""
+msgstr "Verkilo ne subtenas krudan skribon."
 
 #: projects/k3bcdrecordwriter.cpp:273
 #, kde-format
 msgid "Cdrecord does not support writing %1 media."
-msgstr ""
+msgstr "Cdrecord ne subtenas skribadon de %1 datumportilo."
 
 #: projects/k3bcdrecordwriter.cpp:293 projects/k3bcdrskinwriter.cpp:301
 #, kde-format
 msgid "Writer does not support buffer underrun free recording (Burnfree)"
-msgstr ""
+msgstr "Verkilo ne subtenas sen-bufrosubfluan registradon (Burnfree)"
 
 #: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
 #, kde-format
 msgid "Failed to write temporary file '%1'"
-msgstr ""
+msgstr "Malsukcesis skribi provizoran dosieron '%1'"
 
 #: projects/k3bcdrecordwriter.cpp:349
 #, kde-format
 msgid "Cdrecord %1 does not support overburning."
-msgstr ""
+msgstr "Cdrecord %1 ne subtenas trobruladon."
 
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr ""
+msgstr "Komencante simuladon je %1x rapideco..."
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
-msgstr ""
+msgstr "Komencante %1 simuladon je %2x rapideco..."
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr ""
+msgstr "Komencante skribi je %1x rapideco..."
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
-msgstr ""
+msgstr "Komencante %1 skribadon je %2x rapideco..."
 
 #: projects/k3bcdrecordwriter.cpp:549 projects/k3bcdrskinwriter.cpp:561
 #: projects/k3bgrowisofswriter.cpp:428
 #, kde-format
 msgid "Writing data"
-msgstr ""
+msgstr "Skribado de datumoj"
 
 #: projects/k3bcdrecordwriter.cpp:578 projects/k3bcdrskinwriter.cpp:591
 #, kde-format
 msgid "DAO (Disk At Once) recording not supported with this writer"
-msgstr ""
+msgstr "Registrado de DAO (Disk At Once) ne estas subtenata kun ĉi tiu verkilo"
 
 #: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
-msgstr ""
+msgstr "Bonvolu elekti TAO (Track At Once) kaj provi denove"
 
 #: projects/k3bcdrecordwriter.cpp:582 projects/k3bcdrskinwriter.cpp:595
 #, kde-format
 msgid "RAW recording not supported with this writer"
-msgstr ""
+msgstr "RAW-registrado ne estas subtenata kun ĉi tiu verkilo"
 
 #: projects/k3bcdrecordwriter.cpp:585 projects/k3bcdrskinwriter.cpp:598
 #, kde-format
@@ -2531,13 +2607,13 @@ msgstr "I/O eraro. Malnecese grava."
 #: projects/k3bcdrecordwriter.cpp:594 projects/k3bcdrskinwriter.cpp:607
 #, kde-format
 msgid "Reloading of medium required"
-msgstr ""
+msgstr "Reŝargado de datumportilo necesa"
 
 #: projects/k3bcdrecordwriter.cpp:603 projects/k3bcdrskinwriter.cpp:616
 #: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
 #, kde-format
 msgid "Trying to write more than the official disk capacity"
-msgstr ""
+msgstr "Provante skribi pli ol la oficiala diskkapacito"
 
 #: projects/k3bcdrecordwriter.cpp:638 projects/k3bcdrskinwriter.cpp:651
 #, kde-format
@@ -2547,7 +2623,7 @@ msgstr "Nur sesio 1 klonotas"
 #: projects/k3bcdrecordwriter.cpp:641 projects/k3bcdrskinwriter.cpp:654
 #, kde-format
 msgid "Unable to fixate the disk."
-msgstr ""
+msgstr "Ne eblas fiksi la diskon."
 
 #: projects/k3bcdrecordwriter.cpp:671 projects/k3bcdrskinwriter.cpp:684
 #, no-c-format, kde-format
@@ -2588,100 +2664,102 @@ msgstr "Skribante antaŭfosaĵon"
 #: projects/k3bcdrecordwriter.cpp:715 projects/k3bcdrskinwriter.cpp:728
 #, kde-format
 msgid "Performing Optimum Power Calibration"
-msgstr ""
+msgstr "Farante Optimuman Potencan Kalibradon"
 
 #: projects/k3bcdrecordwriter.cpp:718 projects/k3bcdrskinwriter.cpp:731
 #, kde-format
 msgid "Sending CUE sheet"
-msgstr ""
+msgstr "Sendante CUE-folion"
 
 #: projects/k3bcdrecordwriter.cpp:721 projects/k3bcdrskinwriter.cpp:734
 #, kde-format
 msgid "Enabled Burnfree"
-msgstr ""
+msgstr "Ebligita Burnfree"
 
 #: projects/k3bcdrecordwriter.cpp:724 projects/k3bcdrskinwriter.cpp:737
 #, kde-format
 msgid "Disabled Burnfree"
-msgstr ""
+msgstr "Malŝaltita Burnfree"
 
 #: projects/k3bcdrecordwriter.cpp:730 projects/k3bcdrskinwriter.cpp:743
 #: projects/mixedcd/k3bmixedjob.cpp:555
 #, kde-format
 msgid "Unable to close the tray"
-msgstr ""
+msgstr "Ne eblas fermi la pleton"
 
 #: projects/k3bcdrecordwriter.cpp:740 projects/k3bcdrskinwriter.cpp:753
 #, kde-format
 msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Burnfree estis uzata unu fojon."
+msgstr[1] "Burnfree estis uzata %1 fojojn."
 
 #: projects/k3bcdrecordwriter.cpp:746 projects/k3bcdrskinwriter.cpp:759
 #, kde-format
 msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Bufro estis malalta unu fojon."
+msgstr[1] "Bufro estis malalta %1 fojojn."
 
 #: projects/k3bcdrecordwriter.cpp:785 projects/k3bcdrskinwriter.cpp:798
 #, kde-format
 msgid "Erasing successfully completed"
-msgstr ""
+msgstr "Forigo sukcese finiĝis"
 
 #: projects/k3bcdrecordwriter.cpp:812 projects/k3bcdrskinwriter.cpp:825
 #: projects/k3bgrowisofshandler.cpp:222
 #, kde-format
 msgid "Data did not fit on disk."
-msgstr ""
+msgstr "Datumoj ne konvenis sur disko."
 
 #: projects/k3bcdrecordwriter.cpp:823 projects/k3bcdrskinwriter.cpp:836
 #, kde-format
 msgid "%1 could not reserve shared memory segment of requested size."
-msgstr ""
+msgstr "%1 ne povis rezervi segmenton de komuna memoro de petita grandeco."
 
 #: projects/k3bcdrecordwriter.cpp:824 projects/k3bcdrskinwriter.cpp:837
 #, kde-format
 msgid "Probably you chose a too large buffer size."
-msgstr ""
+msgstr "Verŝajne vi elektis tro grandan bufran grandecon."
 
 #: projects/k3bcdrecordwriter.cpp:827 projects/k3bcdrskinwriter.cpp:840
 #, kde-format
 msgid "OPC failed. Probably the writer does not like the medium."
-msgstr ""
+msgstr "OPC malsukcesis. Verŝajne la verkilo ne ŝatas la datumportilon."
 
 #: projects/k3bcdrecordwriter.cpp:830 projects/k3bcdrskinwriter.cpp:843
 #, kde-format
 msgid "Unable to set write speed to %1."
-msgstr ""
+msgstr "Ne eblas agordi skribrapidecon al %1."
 
 #: projects/k3bcdrecordwriter.cpp:831 projects/k3bcdrskinwriter.cpp:844
 #, kde-format
 msgid "Probably this is lower than your writer's lowest writing speed."
 msgstr ""
+"Verŝajne ĉi tio estas pli malalta ol la plej malalta skribrapideco de via "
+"verkilo."
 
 #: projects/k3bcdrecordwriter.cpp:834 projects/k3bcdrskinwriter.cpp:847
 #, kde-format
 msgid "Unable to send CUE sheet."
-msgstr ""
+msgstr "Ne eblas sendi CUE-folion."
 
 #: projects/k3bcdrecordwriter.cpp:836 projects/k3bcdrecordwriter.cpp:875
 #: projects/k3bcdrecordwriter.cpp:895 projects/k3bcdrskinwriter.cpp:849
 #: projects/k3bcdrskinwriter.cpp:888 projects/k3bcdrskinwriter.cpp:908
 #, kde-format
 msgid "Sometimes using TAO writing mode solves this issue."
-msgstr ""
+msgstr "Kelkfoje uzado de TAO-skriba reĝimo solvas ĉi tiun problemon."
 
 #: projects/k3bcdrecordwriter.cpp:839 projects/k3bcdrskinwriter.cpp:852
 #, kde-format
 msgid "Unable to open new session."
-msgstr ""
+msgstr "Ne eblas malfermi novan seancon."
 
 #: projects/k3bcdrecordwriter.cpp:840 projects/k3bcdrskinwriter.cpp:853
 #, kde-format
 msgid "Probably a problem with the medium."
-msgstr ""
+msgstr "Verŝajne problemo kun la datumportilo."
 
 #: projects/k3bcdrecordwriter.cpp:843 projects/k3bcdrskinwriter.cpp:856
 #, kde-format
@@ -2691,7 +2769,7 @@ msgstr "La disko eblete ankoraŭ estas legebla."
 #: projects/k3bcdrecordwriter.cpp:845 projects/k3bcdrskinwriter.cpp:858
 #, kde-format
 msgid "Try DAO writing mode."
-msgstr ""
+msgstr "Provu DAO-skribi reĝimon."
 
 #: projects/k3bcdrecordwriter.cpp:848 projects/k3bcdrskinwriter.cpp:861
 #, kde-format
@@ -2701,63 +2779,63 @@ msgstr "%1 ne rajtas malfermi la aparaton."
 #: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
 #, kde-format
 msgid "Modify device settings in K3b to solve this problem."
-msgstr ""
+msgstr "Modifi aparatojn en K3b por solvi ĉi tiun problemon."
 
 #: projects/k3bcdrecordwriter.cpp:852 projects/k3bcdrskinwriter.cpp:865
 #, kde-format
 msgid "Probably a buffer underrun occurred."
-msgstr ""
+msgstr "Verŝajne bufro-subpaso okazis."
 
 #: projects/k3bcdrecordwriter.cpp:854 projects/k3bcdrskinwriter.cpp:867
 #, kde-format
 msgid "Please enable Burnfree or choose a lower burning speed."
-msgstr ""
+msgstr "Bonvolu ebligi Burnfree aŭ elekti pli malaltan brulrapidecon."
 
 #: projects/k3bcdrecordwriter.cpp:856 projects/k3bcdrskinwriter.cpp:869
 #, kde-format
 msgid "Please choose a lower burning speed."
-msgstr ""
+msgstr "Bonvolu elekti pli malaltan brulrapidecon."
 
 #: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrskinwriter.cpp:872
 #, kde-format
 msgid "Found a high-speed medium not suitable for the writer being used."
-msgstr ""
+msgstr "Trovis altrapidan datumportilon ne taŭgan por la registrilo uzata."
 
 #: projects/k3bcdrecordwriter.cpp:860 projects/k3bcdrecordwriter.cpp:864
 #: projects/k3bcdrskinwriter.cpp:873 projects/k3bcdrskinwriter.cpp:877
 #, kde-format
 msgid "Use the 'force unsafe operations' option to ignore this."
-msgstr ""
+msgstr "Uzu la elekteblon 'devigi nesekurajn operaciojn' por ignori ĉi tion."
 
 #: projects/k3bcdrecordwriter.cpp:863 projects/k3bcdrskinwriter.cpp:876
 #, kde-format
 msgid "Found a low-speed medium not suitable for the writer being used."
-msgstr ""
+msgstr "Trovis malaltrapidan datumportilon ne taŭgan por la verkilo uzata."
 
 #: projects/k3bcdrecordwriter.cpp:867 projects/k3bcdrskinwriter.cpp:880
 #, kde-format
 msgid "Most likely the burning failed due to low-quality media."
-msgstr ""
+msgstr "Plej verŝajne la brulado malsukcesis pro malaltkvalitaj datumportiloj."
 
 #: projects/k3bcdrecordwriter.cpp:870 projects/k3bcdrskinwriter.cpp:883
 #, kde-format
 msgid "Another application is blocking the device (most likely automounting)."
-msgstr ""
+msgstr "Alia aplikaĵo blokas la aparaton (plej verŝajne aŭtomuntado)."
 
 #: projects/k3bcdrecordwriter.cpp:873 projects/k3bcdrskinwriter.cpp:886
 #, kde-format
 msgid "A write error occurred."
-msgstr ""
+msgstr "Okazis skriberaro."
 
 #: projects/k3bcdrecordwriter.cpp:878 projects/k3bcdrskinwriter.cpp:891
 #, kde-format
 msgid "Some drives do not support all erase types."
-msgstr ""
+msgstr "Iuj diskingoj ne subtenas ĉiujn forviŝtipojn."
 
 #: projects/k3bcdrecordwriter.cpp:879 projects/k3bcdrskinwriter.cpp:892
 #, kde-format
 msgid "Try again using 'Complete' erasing."
-msgstr ""
+msgstr "Provu denove uzante 'Kompletan' forviŝadon."
 
 #: projects/k3bcdrecordwriter.cpp:886
 #, kde-format
@@ -2765,47 +2843,51 @@ msgid ""
 "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
+"Ĉar kernelversio 2.6.8 cdrecord ne plu povas uzi SCSI-transporton dum rulado "
+"de suid root."
 
 #: projects/k3bcdrecordwriter.cpp:887 projects/k3bcdrskinwriter.cpp:900
 #, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr ""
+"Vi povas uzi K3b::Setup por solvi ĉi tiun problemon aŭ forigi la suid biton "
+"permane."
 
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
-msgstr ""
+msgstr "Se vi rulas neflikitan cdrecord-version..."
 
 #: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
-msgstr ""
+msgstr "...kaj ĉi tiu eraro ankaŭ okazas kun altkvalitaj datumportiloj..."
 
 #: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
-msgstr ""
+msgstr "...kaj la Oftaj Demandoj de K3b ne helpas vin..."
 
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
-msgstr ""
+msgstr "...bonvolu inkluzivi la sencimigan eligon en via problemo-raporto."
 
 #: projects/k3bcdrskinwriter.cpp:240
 #, kde-format
 msgid "Cdrskin version %1 does not support Blu-ray writing."
-msgstr ""
+msgstr "Cdrskin versio %1 ne subtenas Blu-ray skribadon."
 
 #: projects/k3bcdrskinwriter.cpp:286
 #, kde-format
 msgid "Cdrskin does not support writing %1 media."
-msgstr ""
+msgstr "Cdrskin ne subtenas skribadon de datumportilo %1."
 
 #: projects/k3bcdrskinwriter.cpp:361
 #, kde-format
 msgid "Cdrskin %1 does not support overburning."
-msgstr ""
+msgstr "Cdrskin %1 ne subtenas trobruladon."
 
 #: projects/k3bcdrskinwriter.cpp:899
 #, kde-format
@@ -2813,11 +2895,13 @@ msgid ""
 "Since kernel version 2.6.8 cdrskin cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
+"Ĉar kernversio 2.6.8 cdrskin ne plu povas uzi SCSI-transporton dum rulado de "
+"suid root."
 
 #: projects/k3bcdrskinwriter.cpp:911
 #, kde-format
 msgid "If you are running an unpatched cdrskin version..."
-msgstr ""
+msgstr "Se vi rulas neflikitan cdrskin-version..."
 
 #: projects/k3bgrowisofshandler.cpp:72
 #, kde-format
@@ -2827,7 +2911,7 @@ msgstr "OPC fiaskis. Bonvolu provi la skribrapidecon 1x."
 #: projects/k3bgrowisofshandler.cpp:99
 #, kde-format
 msgid "Please try again with writing mode DAO."
-msgstr ""
+msgstr "Bonvolu provi denove kun skribreĝimo DAO."
 
 #: projects/k3bgrowisofshandler.cpp:113
 #, kde-format
@@ -2872,37 +2956,37 @@ msgstr "Skribante la postaĵon"
 #: projects/k3bgrowisofshandler.cpp:138
 #, kde-format
 msgid "Writing the lead-out may take some time."
-msgstr ""
+msgstr "Skribi la kondukon povas preni iom da tempo."
 
 #: projects/k3bgrowisofshandler.cpp:141
 #, kde-format
 msgid "Removing reference to lead-out."
-msgstr ""
+msgstr "Forigante referencon al elkonduko."
 
 #: projects/k3bgrowisofshandler.cpp:144
 #, kde-format
 msgid "Modifying ISO 9660 volume descriptor"
-msgstr ""
+msgstr "Modifante ISO 9660-volumpriskribilon"
 
 #: projects/k3bgrowisofshandler.cpp:151
 #, kde-format
 msgid "Writing mode Incremental Streaming not available"
-msgstr ""
+msgstr "Skriba reĝimo Krementa Fluado ne havebla"
 
 #: projects/k3bgrowisofshandler.cpp:152
 #, kde-format
 msgid "Engaging DAO"
-msgstr ""
+msgstr "Engaĝante DAO"
 
 #: projects/k3bgrowisofshandler.cpp:164
 #, kde-format
 msgid "Writing speed: %1 KB/s (%2x)"
-msgstr ""
+msgstr "Skriba rapideco: %1 KB/s (%2x)"
 
 #: projects/k3bgrowisofshandler.cpp:215
 #, kde-format
 msgid "K3b detected a problem with the medium."
-msgstr ""
+msgstr "K3b detektis problemon kun la datumportilo."
 
 #: projects/k3bgrowisofshandler.cpp:216
 #, kde-format
@@ -2910,26 +2994,28 @@ msgid ""
 "Please try another brand of media, preferably one explicitly recommended by "
 "your writer's vendor."
 msgstr ""
+"Bonvolu provi alian markon de datumportiloj, prefere unu eksplicite "
+"rekomenditan de la vendisto de via verkilo."
 
 #: projects/k3bgrowisofshandler.cpp:217
 #, kde-format
 msgid "Report the problem if it persists anyway."
-msgstr ""
+msgstr "Raportu la problemon se ĝi tamen daŭras."
 
 #: projects/k3bgrowisofshandler.cpp:228
 #, kde-format
 msgid "Unable to set writing speed."
-msgstr ""
+msgstr "Ne eblas agordi skribrapidecon."
 
 #: projects/k3bgrowisofshandler.cpp:229
 #, kde-format
 msgid "Please try again with the 'ignore speed' setting."
-msgstr ""
+msgstr "Bonvolu provi denove kun la agordo 'ignori rapido'."
 
 #: projects/k3bgrowisofshandler.cpp:233
 #, kde-format
 msgid "Optimum Power Calibration failed."
-msgstr ""
+msgstr "Optimuma Potenca Kalibrado malsukcesis."
 
 #: projects/k3bgrowisofshandler.cpp:234
 #, kde-format
@@ -2937,27 +3023,30 @@ msgid ""
 "Try adding '-use-the-force-luke=noopc' to the growisofs user parameters in "
 "the K3b settings."
 msgstr ""
+"Provu aldoni '-use-the-force-luke=noopc' al la uzantparametroj de growisofs "
+"en la agordoj de K3b."
 
 #: projects/k3bgrowisofshandler.cpp:239
 #, kde-format
 msgid "Unable to allocate software buffer."
-msgstr ""
+msgstr "Ne eblas asigni programaran bufron."
 
 #: projects/k3bgrowisofshandler.cpp:240
 #, kde-format
 msgid "This error is caused by the low memorylocked resource limit."
-msgstr ""
+msgstr "Ĉi tiu eraro estas kaŭzita de la malalta memorŝlosita rimedlimo."
 
 #: projects/k3bgrowisofshandler.cpp:241
 #, kde-format
 msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
-msgstr ""
+msgstr "Ĝi povas esti solvita per la ordono 'ulimit -l unlimited'..."
 
 #: projects/k3bgrowisofshandler.cpp:242
 #, kde-format
 msgid ""
 "...or by lowering the used software buffer size in the advanced K3b settings."
 msgstr ""
+"...aŭ per malpliigo de la uzata bufrograndeco en la altnivelaj K3b-agordoj."
 
 #: projects/k3bgrowisofshandler.cpp:246
 #, kde-format
@@ -2967,7 +3056,7 @@ msgstr "Skrib-eraro"
 #: projects/k3bgrowisofshandler.cpp:262
 #, kde-format
 msgid "Fatal error at startup: %1"
-msgstr ""
+msgstr "Mortiga eraro ĉe ekfunkciigo: %1"
 
 #: projects/k3bgrowisofshandler.cpp:270
 #, kde-format
@@ -2977,7 +3066,7 @@ msgstr "Averto dum la fino: (1)"
 #: projects/k3bgrowisofshandler.cpp:271
 #, kde-format
 msgid "Most likely mkisofs failed in some way."
-msgstr ""
+msgstr "Plej verŝajne mkisofs iel malsukcesis."
 
 #: projects/k3bgrowisofshandler.cpp:274
 #, kde-format
@@ -2988,6 +3077,7 @@ msgstr "Neriparebla eraro dum la skribado: %1"
 #, kde-format
 msgid "Growisofs version %1 is too old. K3b needs at least version 5.10."
 msgstr ""
+"Growisofs versio %1 estas tro malnova. K3b bezonas almenaŭ version 5.10."
 
 #: projects/k3bgrowisofswriter.cpp:153
 #, kde-format
@@ -2995,6 +3085,8 @@ msgid ""
 "Growisofs version %1 does not feature a software buffer which may result in "
 "an unstable burn process."
 msgstr ""
+"Growisofs-versio %1 ne prezentas programaran bufron kiu povas rezultigi "
+"malstabilan brulprocezon."
 
 #: projects/k3bgrowisofswriter.cpp:212
 #, kde-format
@@ -3004,37 +3096,37 @@ msgstr "Ne eblis malfermi dosieron %1."
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
 msgid "Starting simulation..."
-msgstr ""
+msgstr "Komencante simuladon..."
 
 #: projects/k3bgrowisofswriter.cpp:363
 #, kde-format
 msgid "Starting disc write..."
-msgstr ""
+msgstr "Komencante diskskribon..."
 
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
 msgid "Creating audio image files in %1"
-msgstr ""
+msgstr "Kreante sonbilddosierojn en %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:280 projects/mixedcd/k3bmixedjob.cpp:494
 #, kde-format
 msgid "Creating audio image files"
-msgstr ""
+msgstr "Kreado de sonbildaj dosieroj"
 
 #: projects/mixedcd/k3bmixedjob.cpp:468
 #, kde-format
 msgid "Error while creating ISO image."
-msgstr ""
+msgstr "Eraro dum kreado de ISO-bildo."
 
 #: projects/mixedcd/k3bmixedjob.cpp:483
 #, kde-format
 msgid "ISO image successfully created."
-msgstr ""
+msgstr "ISO-bildo sukcese kreita."
 
 #: projects/mixedcd/k3bmixedjob.cpp:584
 #, kde-format
 msgid "Audio images successfully created."
-msgstr ""
+msgstr "Sonbildoj sukcese kreitaj."
 
 #: projects/mixedcd/k3bmixedjob.cpp:877
 #, kde-format
@@ -3049,47 +3141,47 @@ msgstr "ISO-9660 datumoj"
 #: projects/mixedcd/k3bmixedjob.cpp:986
 #, kde-format
 msgid "Simulating second session"
-msgstr ""
+msgstr "Simulante duan seancon"
 
 #: projects/mixedcd/k3bmixedjob.cpp:988
 #, kde-format
 msgid "Writing second session of copy %1"
-msgstr ""
+msgstr "Skribante duan seancon de kopio %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:990
 #, kde-format
 msgid "Writing second session"
-msgstr ""
+msgstr "Skribante duan seancon"
 
 #: projects/mixedcd/k3bmixedjob.cpp:994
 #, kde-format
 msgid "Simulating first session"
-msgstr ""
+msgstr "Simulado de unua seanco"
 
 #: projects/mixedcd/k3bmixedjob.cpp:996
 #, kde-format
 msgid "Writing first session of copy %1"
-msgstr ""
+msgstr "Skribante unuan seancon de kopio %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:998
 #, kde-format
 msgid "Writing first session"
-msgstr ""
+msgstr "Skribo unua seanco"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1076
 #, kde-format
 msgid "Creating ISO image file"
-msgstr ""
+msgstr "Kreante ISO-bildan dosieron"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1077 projects/mixedcd/k3bmixedjob.cpp:1078
 #, kde-format
 msgid "Creating ISO image in %1"
-msgstr ""
+msgstr "Kreante ISO-bildon en %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1118
 #, kde-format
 msgid "Removing buffer files."
-msgstr ""
+msgstr "Forigante bufrodosierojn."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1123
 #, kde-format
@@ -3099,12 +3191,12 @@ msgstr "Ne eblis forĵeti la dosieron %1."
 #: projects/mixedcd/k3bmixedjob.cpp:1231
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "Cdrecord ne troveblas en via sistemo."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1235
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
-msgstr ""
+msgstr "Ne eblas skribi KD-Tekston en TAO-reĝimo. Provu DAO aŭ RAW."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1332
 #, kde-format
@@ -3121,8 +3213,8 @@ msgstr "Skribante miksmodusan KD"
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
 msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 trako (%2 minutojn aŭddatumoj, %3 datumoj ISO-9660)"
+msgstr[1] "%1 trakoj (%2 minutojn aŭddatumoj, %3 datumoj ISO-9660)"
 
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
@@ -3139,6 +3231,7 @@ msgstr "Samnoma dosiero jam ekzistas. Bonvolu enmeti novan nomon:"
 msgid ""
 "Could not rename subtitle file. File with requested name %1 already exists."
 msgstr ""
+"Ne eblis renomi subtitolan dosieron. Dosiero kun petita nomo %1 jam ekzistas."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:125
 #, kde-format
@@ -3182,15 +3275,15 @@ msgstr "Skribante eMovix projekton (%1)"
 #, kde-format
 msgid "One file (%2) and about 8 MB eMovix data"
 msgid_plural "%1 files (%2) and about 8 MB eMovix data"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Unu dosiero (%2) kaj proksimume 8 MB eMovix-datumoj"
+msgstr[1] "%1 dosieroj (%2) kaj proksimume 8 MB eMovix-datumoj"
 
 #: projects/movixcd/k3bmovixjob.cpp:117
 #, kde-format
 msgid " – One copy"
 msgid_plural " – %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " – Unu kopio"
+msgstr[1] " – %1 kopioj"
 
 #: projects/videocd/k3bvcddoc.cpp:202 projects/videocd/k3bvcddoc.cpp:212
 #, kde-format
@@ -3198,6 +3291,8 @@ msgid ""
 "K3b will create a %1 image from the given MPEG files, but these files must "
 "already be in %1 format. K3b does not yet resample MPEG files."
 msgstr ""
+"K3b kreos %1 bildon el la donitaj MPEG-dosieroj, sed ĉi tiuj dosieroj devas "
+"jam esti en %1-formato. K3b ankoraŭ ne provas MPEG-dosierojn."
 
 #: projects/videocd/k3bvcddoc.cpp:205
 #, kde-format
@@ -3220,6 +3315,7 @@ msgstr "SVKD"
 msgid ""
 "Note: Forcing MPEG2 as VCD is not supported by some standalone DVD players."
 msgstr ""
+"Noto: Devigi MPEG2 kiel VCD ne estas subtenata de iuj memstaraj DVD-ludiloj."
 
 #: projects/videocd/k3bvcddoc.cpp:220
 #, kde-format
@@ -3238,11 +3334,14 @@ msgid ""
 "Please start a new Project for this filetype.\n"
 "Resample not implemented in K3b yet."
 msgstr ""
+"Vi ne povas miksi MPEG1 kaj MPEG2 videodosierojn.\n"
+"Bonvolu komenci novan Projekton por ĉi tiu dosiertipo.\n"
+"Reprova ne efektivigita en K3b ankoraŭ."
 
 #: projects/videocd/k3bvcddoc.cpp:235
 #, kde-format
 msgid "Wrong File Type for This Project"
-msgstr ""
+msgstr "Malĝusta Dosiertipo por Ĉi tiu Projekto"
 
 #: projects/videocd/k3bvcddoc.cpp:246
 #, kde-format
@@ -3251,11 +3350,13 @@ msgid ""
 "Video players cannot reach Segments (MPEG Still Pictures) without Playback "
 "control."
 msgstr ""
+"PBC (Rego de reproduktado) ebligita.\n"
+"Videoludiloj ne povas atingi Segmentojn (MPEG-Fitbildoj) sen reludigo."
 
 #: projects/videocd/k3bvcddoc.cpp:278
 #, kde-format
 msgid "Only MPEG1 and MPEG2 video files are supported.\n"
-msgstr ""
+msgstr "Nur MPEG1 kaj MPEG2 videodosieroj estas subtenataj.\n"
 
 #: projects/videocd/k3bvcddoc.cpp:279
 #, kde-format
@@ -3265,27 +3366,27 @@ msgstr "Malĝusta dosierformato"
 #: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:469
 #, kde-format
 msgid "Removing Binary file %1"
-msgstr ""
+msgstr "Forigante Duuman dosieron %1"
 
 #: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format
 msgid "Removing Cue file %1"
-msgstr ""
+msgstr "Forigante Cue-dosieron %1"
 
 #: projects/videocd/k3bvcdjob.cpp:174
 #, kde-format
 msgid "Could not write correct XML file."
-msgstr ""
+msgstr "Ne eblis skribi ĝustan XML-dosieron."
 
 #: projects/videocd/k3bvcdjob.cpp:190
 #, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr ""
+msgstr "Kreante Cue/Bin dosierojn..."
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
 msgid "To create Video CDs you have to install VcdImager version %1."
-msgstr ""
+msgstr "Por krei Video-KD vi devas instali VcdImager-version %1."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
 #, kde-format
@@ -3293,6 +3394,8 @@ msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
+"Vi povas trovi ĉi tion sur viaj distribuaj diskoj aŭ elŝuti ĝin de https://"
+"www.gnu.org/software/vcdimager"
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
@@ -3302,32 +3405,32 @@ msgstr "%1 programo tro malnova: bezonas version %2 aŭ pli"
 #: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
 msgid "Scanning video file %1 of %2 (%3)"
-msgstr ""
+msgstr "Skanante videodosieron %1 el %2 (%3)"
 
 #: projects/videocd/k3bvcdjob.cpp:323
 #, kde-format
 msgid "Creating Image for track %1"
-msgstr ""
+msgstr "Kreante Bildon por trako %1"
 
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
-msgstr ""
+msgstr "Cue/Bin dosieroj sukcese kreitaj."
 
 #: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
 msgid "Writing Copy %1 of %2"
-msgstr ""
+msgstr "Skribanta Kopio %1 de %2"
 
 #: projects/videocd/k3bvcdjob.cpp:514
 #, kde-format
 msgid "One or more BCD fields out of range for %1"
-msgstr ""
+msgstr "Unu aŭ pluraj BCD-kampoj ekster intervalo por %1"
 
 #: projects/videocd/k3bvcdjob.cpp:517
 #, kde-format
 msgid "From now on, scan information data errors will not be reported anymore"
-msgstr ""
+msgstr "Ekde nun, eraroj pri skanaj informoj ne plu estos raportitaj"
 
 #: projects/videocd/k3bvcdjob.cpp:518
 #, kde-format
@@ -3335,65 +3438,69 @@ msgid ""
 "Consider enabling the 'update scan offsets' option, if it is not enabled "
 "already."
 msgstr ""
+"Konsideru ebligi la elekteblon 'ĝisdatigi skanajn kompensojn', se ĝi ne jam "
+"estas ebligita."
 
 #: projects/videocd/k3bvcdjob.cpp:525
 #, kde-format
 msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
 msgstr ""
+"La punktoj de APS ŝajnas neordaj (faktaj punktoj %1, laste viditaj punktoj "
+"%2)"
 
 #: projects/videocd/k3bvcdjob.cpp:526
 #, kde-format
 msgid "Ignoring this aps"
-msgstr ""
+msgstr "Ignorante ĉi tiun aps"
 
 #: projects/videocd/k3bvcdjob.cpp:534
 #, kde-format
 msgid "Bad packet at packet #%1 (stream byte offset %2)"
-msgstr ""
+msgstr "Malbona pako ĉe pako #%1 (flua bajta kompenso %2)"
 
 #: projects/videocd/k3bvcdjob.cpp:541
 #, kde-format
 msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "La restanta bajto de la fluo estos ignorita."
+msgstr[1] "La restantaj %1 bajtoj de la fluo estos ignoritaj."
 
 #: projects/videocd/k3bvcdjob.cpp:543
 #, kde-format
 msgid "An unknown number of remaining stream bytes will be ignored."
-msgstr ""
+msgstr "Nekonata nombro da ceteraj fluaj bajtoj estos ignorita."
 
 #: projects/videocd/k3bvcdjob.cpp:552
 #, kde-format
 msgid "Writing Video CD (Version 1.1)"
-msgstr ""
+msgstr "Skribado de Video KD (Versio 1.1)"
 
 #: projects/videocd/k3bvcdjob.cpp:554
 #, kde-format
 msgid "Writing Video CD (Version 2.0)"
-msgstr ""
+msgstr "Skribado de Video KD (Versio 2.0)"
 
 #: projects/videocd/k3bvcdjob.cpp:556
 #, kde-format
 msgid "Writing Super Video CD"
-msgstr ""
+msgstr "Skribante Super Video KD"
 
 #: projects/videocd/k3bvcdjob.cpp:558
 #, kde-format
 msgid "Writing High-Quality Video CD"
-msgstr ""
+msgstr "Skribante Altkvalitan Video-KD"
 
 #: projects/videocd/k3bvcdjob.cpp:560
 #, kde-format
 msgid "Writing Video CD"
-msgstr ""
+msgstr "Verkado de Video KD"
 
 #: projects/videocd/k3bvcdjob.cpp:567
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 MPEG (%2)"
+msgstr[1] "%1 MPEGs (%2)"
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
 #: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
@@ -3410,8 +3517,8 @@ msgstr "n/a"
 #, kde-format
 msgid "1 bit/s"
 msgid_plural "%1 bits/s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 bito/s"
+msgstr[1] "%1 bitoj/s"
 
 #: projects/videocd/k3bvcdtrack.cpp:218
 #, kde-format
@@ -3442,12 +3549,12 @@ msgstr "duobligi"
 #: projects/videocd/k3bvcdtrack.cpp:346
 #, kde-format
 msgid "Motion Picture"
-msgstr ""
+msgstr "Filmo"
 
 #: projects/videocd/k3bvcdtrack.cpp:348
 #, kde-format
 msgid "Still Picture"
-msgstr ""
+msgstr "Ankoraŭ Bildo"
 
 #: projects/videocd/k3bvcdtrack.cpp:355
 #, kde-format
@@ -3472,7 +3579,7 @@ msgstr "stereo"
 #: projects/videocd/k3bvcdtrack.cpp:397
 #, kde-format
 msgid "joint stereo"
-msgstr ""
+msgstr "komuna stereo"
 
 #: projects/videocd/k3bvcdtrack.cpp:398 projects/videocd/k3bvcdtrack.cpp:403
 #, kde-format
@@ -3487,12 +3594,12 @@ msgstr "unuobla kanalo"
 #: projects/videocd/k3bvcdtrack.cpp:404
 #, kde-format
 msgid "surround sound"
-msgstr ""
+msgstr "ĉirkaŭa sono"
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:59
 #, kde-format
 msgid "File %1 is empty."
-msgstr ""
+msgstr "Dosiero %1 estas malplena."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:93
 #, kde-format
@@ -3500,6 +3607,8 @@ msgid ""
 "This looks like an elementary video stream but a multiplexed program stream "
 "was required."
 msgstr ""
+"Ĉi tio aspektas kiel elementa videofluo sed multipleksita programfluo estis "
+"postulata."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:98
 #, kde-format
@@ -3507,6 +3616,8 @@ msgid ""
 "This looks like an elementary audio stream but a multiplexed program stream "
 "was required."
 msgstr ""
+"Ĉi tio aspektas kiel elementa aŭdfluo sed multipleksita programfluo estis "
+"postulata."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:103
 #, kde-format
@@ -3514,57 +3625,61 @@ msgid ""
 "This looks like a RIFF header but a plain multiplexed program stream was "
 "required."
 msgstr ""
+"Ĉi tio aspektas kiel RIFF-kapo sed simpla multipleksita programfluo estis "
+"postulata."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:97
 #, kde-kuit-format
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
-msgstr ""
+msgstr "Ne eblas krei Nevalidan provizoran dosierujon <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:105
 #, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
-msgstr ""
+msgstr "Ne eblas krei provizoran dosierujon <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:112
 #, kde-kuit-format
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr ""
+"Trovis nevalidan eniron en la VIDEO_TS-dosierujo <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:120
 #, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
 msgstr ""
+"Ne eblas ligi provizoran dosieron al dosierujo <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
 msgid "The project does not contain all necessary Video DVD files."
-msgstr ""
+msgstr "La projekto ne enhavas ĉiujn necesajn Video DVD-dosierojn."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."
-msgstr ""
+msgstr "La rezulta DVD plej verŝajne ne estos ludebla sur Hifi DVD-ludilo."
 
 #: projects/videodvd/k3bvideodvdjob.cpp:43
 #, kde-format
 msgid "Creating Video DVD Image File"
-msgstr ""
+msgstr "Krei Video-DVD-Bildosiero"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:46
 #, kde-format
 msgid "Writing Video DVD"
-msgstr ""
+msgstr "Skribanta Video DVD"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:56
 #, kde-format
 msgid "ISO 9660/Udf Filesystem (Size: %1)"
-msgstr ""
+msgstr "ISO 9660/Udf Dosiersistemo (Grandeco: %1)"
 
 #: tools/k3bcddb.cpp:37
 #, kde-format
 msgid "Multiple CDDB Entries Found"
-msgstr ""
+msgstr "Multoblaj CDDB-Enskriboj Trovitaj"
 
 #: tools/k3bcddb.cpp:39
 #, kde-format
@@ -3574,7 +3689,7 @@ msgstr "K3b trovis plurajn aŭ malekzaktajn CDDB erojn. Bonvolu elekti unu."
 #: tools/k3bdevicemodel.cpp:132
 #, kde-format
 msgid "Analyzing medium..."
-msgstr ""
+msgstr "Analizante datumportilon..."
 
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
@@ -3584,22 +3699,22 @@ msgstr "Disponaĵa elekto"
 #: tools/k3bdeviceselectiondialog.cpp:39
 #, kde-format
 msgid "Please select a device:"
-msgstr ""
+msgstr "Bonvolu elekti aparaton:"
 
 #: tools/k3bmd5job.cpp:83
 #, kde-format
 msgid "Could not find file %1"
-msgstr ""
+msgstr "Ne eblis trovi dosieron %1"
 
 #: tools/k3bmd5job.cpp:228
 #, kde-format
 msgid "Error while reading from file %1"
-msgstr ""
+msgstr "Eraro dum legado de dosiero %1"
 
 #: tools/k3bmediacache.cpp:126 tools/k3bmediacache.cpp:367
 #, kde-format
 msgid "CDDB Lookup"
-msgstr ""
+msgstr "CDDB Serĉo"
 
 #: tools/k3bmedium.cpp:313
 #, kde-format
@@ -3639,7 +3754,7 @@ msgstr "Malplena"
 #: tools/k3bmedium.cpp:346
 #, kde-format
 msgid "No medium information"
-msgstr ""
+msgstr "Neniu datumportila informo"
 
 #: tools/k3bmedium.cpp:350
 #, kde-format
@@ -3654,7 +3769,7 @@ msgstr "Malplena %1 ujo"
 #: tools/k3bmedium.cpp:395
 #, kde-format
 msgid "Appendable %1 medium"
-msgstr ""
+msgstr "Aldonebla %1 datumportilo"
 
 #: tools/k3bmedium.cpp:398
 #, kde-format
@@ -3665,15 +3780,15 @@ msgstr "Kompleta %1 ujo"
 #, kde-format
 msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 en %1 trako"
+msgstr[1] "%2 en %1 trakoj"
 
 #: tools/k3bmedium.cpp:419
 #, kde-format
 msgid " and %1 session"
 msgid_plural " and %1 sessions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " kaj %1 seanco"
+msgstr[1] " kaj %1 seancoj"
 
 #: tools/k3bmedium.cpp:424
 #, kde-format
@@ -3691,7 +3806,7 @@ msgctxt ""
 "To be shown when a DVD or Blu-ray is required but another type of medium is "
 "inserted."
 msgid "DVD or Blu-ray"
-msgstr ""
+msgstr "DVD aŭ Blu-radio"
 
 #: tools/k3bmedium.cpp:598
 #, kde-format
@@ -3720,18 +3835,18 @@ msgstr "DVD"
 msgctxt ""
 "To be shown when a DVD-DL is required but another type of medium is inserted."
 msgid "DVD-DL"
-msgstr ""
+msgstr "DVD-DL"
 
 #: tools/k3bmedium.cpp:608
 #, kde-format
 msgid "rewritable medium"
-msgstr ""
+msgstr "reskribebla datumportilo"
 
 #: tools/k3bmedium.cpp:611
 #, kde-format
 msgctxt "%1 is type of medium (e.g. DVD)"
 msgid "rewritable %1"
-msgstr ""
+msgstr "reskribebla %1"
 
 #: tools/k3bmedium.cpp:616
 #, kde-format
@@ -3739,12 +3854,12 @@ msgctxt ""
 "To be shown when a specific type of medium is required but another type of "
 "medium is inserted."
 msgid "suitable medium"
-msgstr ""
+msgstr "taŭga datumportilo"
 
 #: tools/k3bmedium.cpp:618
 #, kde-format
 msgid "Medium in %1 is not a %2."
-msgstr ""
+msgstr "Datumportilo en %1 ne estas %2."
 
 #: tools/k3bmedium.cpp:623
 #, kde-format
@@ -3756,7 +3871,7 @@ msgstr "malplena"
 #, kde-format
 msgctxt "To be shown when an empty or appendable medium is required"
 msgid "empty or appendable"
-msgstr ""
+msgstr "malplena aŭ aldonebla"
 
 #: tools/k3bmedium.cpp:627
 #, kde-format
@@ -3768,98 +3883,106 @@ msgstr "ne-malplena"
 #, kde-format
 msgctxt "To be shown when the state of the inserted medium is not suitable."
 msgid "suitable"
-msgstr ""
+msgstr "taŭga"
 
 #: tools/k3bmedium.cpp:631
 #, kde-format
 msgid "Medium in %1 is not %2."
-msgstr ""
+msgstr "Datumportilo en %1 ne estas %2."
 
 #: tools/k3bmedium.cpp:634
 #, kde-format
 msgid "Capacity of the medium in %1 is smaller than required."
-msgstr ""
+msgstr "Kapacito de la datumportilo en %1 estas pli malgranda ol bezonata."
 
 #: tools/k3bmedium.cpp:683
 #, kde-format
 msgid "Please insert an empty medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:685
 #, kde-format
 msgid "Please insert an empty medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan datumportilon"
 
 #: tools/k3bmedium.cpp:690
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan DVD aŭ Blu-ray-datumportilon en la diskingon<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:692
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan DVD aŭ Blu-ray datumportilon"
 
 #: tools/k3bmedium.cpp:696
 #, kde-format
 msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan Blu-ray datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:698
 #, kde-format
 msgid "Please insert an empty Blu-ray medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan Blu-ray datumportilon"
 
 #: tools/k3bmedium.cpp:702
 #, kde-format
 msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan KD-datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:704
 #, kde-format
 msgid "Please insert an empty CD medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan KD-datumportilon"
 
 #: tools/k3bmedium.cpp:708
 #, kde-format
 msgid "Please insert an empty DVD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan DVD-datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:710
 #, kde-format
 msgid "Please insert an empty DVD medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan DVD-datumportilon"
 
 #: tools/k3bmedium.cpp:714
 #, kde-format
 msgid "Please insert an empty DVD-DL medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan DVD-DL-datumportilon en la diskingon<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:716
 #, kde-format
 msgid "Please insert an empty DVD-DL medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan DVD-DL-datumportilon"
 
 #: tools/k3bmedium.cpp:720
 #, kde-format
 msgid ""
 "Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
 msgstr ""
+"Bonvolu enigi malplenan rimedon de grandeco %1 aŭ pli granda en la "
+"diskingo<p><b>%2</b>"
 
 #: tools/k3bmedium.cpp:723
 #, kde-format
 msgid "Please insert an empty medium of size %1 or larger"
-msgstr ""
+msgstr "Bonvolu enigi malplenan rimedon de grandeco %1 aŭ pli granda"
 
 #: tools/k3bmedium.cpp:729
 #, kde-format
 msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan aŭ aldoneblan datumportilon en la diskingon<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:731
 #, kde-format
 msgid "Please insert an empty or appendable medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan aŭ aldoneblan datumportilon"
 
 #: tools/k3bmedium.cpp:735
 #, kde-format
@@ -3867,143 +3990,155 @@ msgid ""
 "Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
 "%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan aŭ aldoneblan DVD aŭ Blu-ray datumportilon en la "
+"diskingon<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:737
 #, kde-format
 msgid "Please insert an empty or appendable DVD or Blu-ray medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan aŭ aldoneblan DVD aŭ Blu-ray datumportilon"
 
 #: tools/k3bmedium.cpp:741
 #, kde-format
 msgid ""
 "Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan aŭ aldoneblan Blu-ray datumportilon en la "
+"diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:743
 #, kde-format
 msgid "Please insert an empty or appendable Blu-ray medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan aŭ aldoneblan Blu-ray datumportilon"
 
 #: tools/k3bmedium.cpp:747
 #, kde-format
 msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan aŭ aldoneblan KD-datumportilon en la diskingo<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:749
 #, kde-format
 msgid "Please insert an empty or appendable CD medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan aŭ aldoneblan KD-datumportilon"
 
 #: tools/k3bmedium.cpp:753
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan aŭ aldoneblan DVD-datumportilon en la diskingo<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:755
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan aŭ aldoneblan DVD-datumportilon"
 
 #: tools/k3bmedium.cpp:759
 #, kde-format
 msgid ""
 "Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti malplenan aŭ aldoneblan DVD-DL-datumportilon en la "
+"diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:761
 #, kde-format
 msgid "Please insert an empty or appendable DVD-DL medium"
-msgstr ""
+msgstr "Bonvolu enmeti malplenan aŭ aldoneblan DVD-DL-datumportilon"
 
 #: tools/k3bmedium.cpp:767
 #, kde-format
 msgid "Please insert a non-empty medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti nemalplenan datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:769
 #, kde-format
 msgid "Please insert a non-empty medium"
-msgstr ""
+msgstr "Bonvolu enigi nemalplenan datumportilon"
 
 #: tools/k3bmedium.cpp:773
 #, kde-format
 msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
 msgstr ""
+"Bonvolu enmeti nemalplenan reskribeblan datumportilon en la diskingo<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:775
 #, kde-format
 msgid "Please insert a non-empty rewritable medium"
-msgstr ""
+msgstr "Bonvolu enmeti nemalplenan reverkeblan datumportilon"
 
 #: tools/k3bmedium.cpp:781
 #, kde-format
 msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti reskribeblan datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:783
 #, kde-format
 msgid "Please insert a rewritable medium"
-msgstr ""
+msgstr "Bonvolu enmeti reskribeblan datumportilon"
 
 #: tools/k3bmedium.cpp:789 tools/k3bmedium.cpp:835
 #, kde-format
 msgid "Please insert a suitable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enigi taŭgan rimedon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:791 tools/k3bmedium.cpp:837
 #, kde-format
 msgid "Please insert a suitable medium"
-msgstr ""
+msgstr "Bonvolu enigi taŭgan rimedon"
 
 #: tools/k3bmedium.cpp:804
 #, kde-format
 msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti Vid-KD-datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:806
 #, kde-format
 msgid "Please insert a Video CD medium"
-msgstr ""
+msgstr "Bonvolu enmeti Vid-KD-datumportilon"
 
 #: tools/k3bmedium.cpp:810
 #, kde-format
 msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti Video-DVD-datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:812
 #, kde-format
 msgid "Please insert a Video DVD medium"
-msgstr ""
+msgstr "Bonvolu enmeti Video-DVD-datumportilon"
 
 #: tools/k3bmedium.cpp:816
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti miksreĝiman KD-datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:818
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium"
-msgstr ""
+msgstr "Bonvolu enmeti Miksreĝiman KD-datumportilon"
 
 #: tools/k3bmedium.cpp:822
 #, kde-format
 msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti Audio-KD-datumportilon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:824
 #, kde-format
 msgid "Please insert an Audio CD medium"
-msgstr ""
+msgstr "Bonvolu enmeti Audio-KD-datumportilon"
 
 #: tools/k3bmedium.cpp:828
 #, kde-format
 msgid "Please insert a Data medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "Bonvolu enmeti Datumon en la diskingo<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:830
 #, kde-format
 msgid "Please insert a Data medium"
-msgstr ""
+msgstr "Bonvolu enmeti Daten-portilon"
 
 #: tools/k3bstdguiitems.cpp:19
 #, kde-format
@@ -4018,6 +4153,10 @@ msgid ""
 "speed or whether your system is able to write on-the-fly.<p><b>Caution:</b> "
 "DVD+R(W) does not support simulated writing."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b plenumos ĉiujn skribajn paŝojn kun "
+"la lasero malŝaltita.<p>Ĉi tio utilas, ekzemple, por testi pli altan "
+"skribrapidecon aŭ ĉu via sistemo kapablas skribi sur la flugo. <p><b>Atentu:"
+"</b> DVD+R(W) ne subtenas ŝajnigan skribadon."
 
 #: tools/k3bstdguiitems.cpp:25
 #, kde-format
@@ -4027,7 +4166,7 @@ msgstr "Nur simuli la skribadon"
 #: tools/k3bstdguiitems.cpp:31
 #, kde-format
 msgid "Disk at once"
-msgstr ""
+msgstr "Disko tuj"
 
 #: tools/k3bstdguiitems.cpp:32
 #, kde-format
@@ -4037,21 +4176,25 @@ msgid ""
 "where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
 "seconds are only supported in DAO mode."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b skribos la KD en \"disko tuj\" "
+"reĝimo kompare kun \"spuro tuj\" (TAO).<p>Estas ĉiam rekomendite uzi DAO kie "
+"eblas.<p><b>Atentu:</b> Spurpregapoj kun longo ol 2 sekundoj estas nur "
+"subtenataj en DAO-reĝimo."
 
 #: tools/k3bstdguiitems.cpp:37
 #, kde-format
 msgid "Write in disk at once mode"
-msgstr ""
+msgstr "Skribu en disko samtempe reĝimo"
 
 #: tools/k3bstdguiitems.cpp:43
 #, kde-format
 msgid "Use Burnfree"
-msgstr ""
+msgstr "Uzi Burnfree"
 
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
 msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
-msgstr ""
+msgstr "Ebligi Burnfree (aŭ Just Link) por eviti bufro-subfluojn"
 
 #: tools/k3bstdguiitems.cpp:45
 #, kde-format
@@ -4069,11 +4212,23 @@ msgid ""
 "<em>Burnproof</em>, but has since been renamed when it became part of the "
 "MMC standard."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b ebligas <em>Burnfree</em> (aŭ "
+"<em>Nur Ligi</em>). Ĉi tio estas trajto de la KD-verkilo, kiu evitas bufro-"
+"subfluojn.<p>Sen <em>burnfree</em>, se la skribisto ne povas ricevi pliajn "
+"datumojn, bufro-subfluo okazus, ĉar la skribilo bezonas konstantan fluon de "
+"datumoj por skribi la KD.<p>Per <em>burnfree</em> la verkilo povas "
+"<em>marki</em> la nunan pozicion de la lasero kaj reveni al ĝi kiam la bufro "
+"estas denove plenigita; sed, ĉar tio signifas havi malgrandajn "
+"datuminterspacojn sur la KD, <b>estas tre rekomendite ĉiam elekti taŭgan "
+"skribrapidecon por malhelpi la uzadon de burnfree, precipe por aŭddiskoj</b> "
+"(en la plej malbona kazo oni aŭdus la breĉo).<p><em>Burnfree</em> antaŭe "
+"estis konata kiel <em>Burnproof</em>, sed poste estis renomita kiam ĝi iĝis "
+"parto de la MMC-normo."
 
 #: tools/k3bstdguiitems.cpp:64
 #, kde-format
 msgid "Only create image"
-msgstr ""
+msgstr "Kreu nur bildon"
 
 #: tools/k3bstdguiitems.cpp:65
 #, kde-format
@@ -4082,6 +4237,9 @@ msgid ""
 "actual writing.<p>The image can later be written to a CD/DVD with most "
 "current writing programs (including K3b of course)."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b kreos nur bildon kaj ne faros "
+"ajnan efektivan skribadon.<p>La bildo povas poste esti skribita al KD/DVD "
+"kun la plej multaj aktualaj skribprogramoj (inkluzive de K3b kompreneble)."
 
 #: tools/k3bstdguiitems.cpp:69
 #, kde-format
@@ -4102,6 +4260,11 @@ msgid ""
 "writing on-the-fly should work on most systems, make sure the data is sent "
 "to the writer fast enough."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b kreos bildon antaŭ skribi la "
+"dosierojn al la KD/DVD. Alie la datumoj estos skribitaj <em>sur-la-muŝe</"
+"em>, t.e. neniu meza bildo estos kreita.<p><b>Atentu:</b> Kvankam skribo "
+"tuja devus funkcii ĉe la plej multaj sistemoj, certigu, ke la datumoj estas "
+"senditaj al la verkilo sufiĉe rapide."
 
 #: tools/k3bstdguiitems.cpp:81 tools/k3bstdguiitems.cpp:103
 #, kde-format
@@ -4111,12 +4274,12 @@ msgstr "<p>Oni rekomendas provi simuladon unue."
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
 msgid "Cache the data to be written on the harddisk"
-msgstr ""
+msgstr "Kaŝmemori la datumojn verkitajn sur la malmola disko"
 
 #: tools/k3bstdguiitems.cpp:88
 #, kde-format
 msgid "Remove image"
-msgstr ""
+msgstr "Forigi bildon"
 
 #: tools/k3bstdguiitems.cpp:89
 #, kde-format
@@ -4124,16 +4287,19 @@ msgid ""
 "<p>If this option is checked, K3b will remove any created images after the "
 "writing has finished.<p>Uncheck this if you want to keep the images."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b forigos ĉiujn kreitajn bildojn "
+"post kiam la skribo finiĝos.<p>Malmarku ĉi tion se vi volas konservi la "
+"bildojn."
 
 #: tools/k3bstdguiitems.cpp:92
 #, kde-format
 msgid "Remove images from disk when finished"
-msgstr ""
+msgstr "Forigi bildojn de disko kiam finite"
 
 #: tools/k3bstdguiitems.cpp:98
 #, kde-format
 msgid "On the fly"
-msgstr ""
+msgstr "Tuja"
 
 #: tools/k3bstdguiitems.cpp:99
 #, kde-format
@@ -4142,11 +4308,15 @@ msgid ""
 "the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
 "work on most systems, make sure the data is sent to the writer fast enough."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b ne kreos bildon unue sed skribos "
+"la dosierojn rekte al la KD/DVD.<p><b>Atentu:</b> Kvankam ĉi tio devus "
+"funkcii ĉe plej multaj sistemoj, certigu, ke la datumoj estas senditaj al la "
+"verkilo sufiĉe rapide."
 
 #: tools/k3bstdguiitems.cpp:104
 #, kde-format
 msgid "Write files directly to CD/DVD without creating an image"
-msgstr ""
+msgstr "Skribi dosierojn rekte al KD/DVD sen krei bildon"
 
 #: tools/k3bstdguiitems.cpp:110
 #, kde-format
@@ -4156,7 +4326,7 @@ msgstr "Skribi KD-tekston"
 #: tools/k3bstdguiitems.cpp:111
 #, kde-format
 msgid "Create CD-Text entries"
-msgstr ""
+msgstr "Krei KD-Tekstajn enskribojn"
 
 #: tools/k3bstdguiitems.cpp:112
 #, kde-format
@@ -4169,11 +4339,18 @@ msgid ""
 "in any CD player it is never a bad idea to enable this (if you specify CD-"
 "Text data.)"
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b uzas iun alie neuzatan spacon sur "
+"la son-KD por konservi pliajn informojn, kiel la nomo de la artisto aŭ la "
+"titolon de la KD.<p>KD-Teksto estas etendaĵo al la normo de aŭd-disko "
+"enkondukita. de Sony.<p>KD-Text nur estos uzebla ĉe KD-ludiloj kiuj subtenas "
+"ĉi tiun etendon (plejparte aŭtaj KD-ludiloj).<p>Ĉar KD-Text-plibonigita KD "
+"funkcios en iu ajn KD-ludilo, ĝi neniam estas malbona ideo. por ebligi ĉi "
+"tion (se vi specifas datumojn pri KD-Teksto.)"
 
 #: tools/k3bstdguiitems.cpp:131
 #, kde-format
 msgid "Set the paranoia level for reading audio CDs"
-msgstr ""
+msgstr "Agordi la nivelon de paranojo por legado de aŭd-KD"
 
 #: tools/k3bstdguiitems.cpp:132
 #, kde-format
@@ -4184,16 +4361,22 @@ msgid ""
 "read audio data.</li><li>3: Like 2 but with additional scratch detection and "
 "repair.</li></ul><p><b>The extraction speed reduces from 0 to 3.</b>"
 msgstr ""
+"<p>Fiktas la korektan reĝimon por cifereca aŭda eltiro.<ul><li>0: Neniu "
+"kontrolo, datumoj estas kopiitaj rekte el la diskingo. <li>1: Efektivigi "
+"interkovritan legadon por eviti tremiĝon.</li><li>2: Kiel 1 sed kun aldonaj "
+"kontroloj de la legitaj sondatenoj.</li><li>3: Kiel 2 sed kun plia "
+"gratdetekto kaj riparo.</ekz> <p><b>La eltira rapido malpliiĝas de 0 al 3.</"
+"b>"
 
 #: tools/k3bstdguiitems.cpp:144
 #, kde-format
 msgid "Start multisession CD"
-msgstr ""
+msgstr "Komenci plurseancan KD"
 
 #: tools/k3bstdguiitems.cpp:145
 #, kde-format
 msgid "Do not close the disk to allow additional sessions to be added later"
-msgstr ""
+msgstr "Ne fermi la diskon por permesi aldonajn seancojn poste aldonotajn"
 
 #: tools/k3bstdguiitems.cpp:146
 #, kde-format
@@ -4202,16 +4385,19 @@ msgid ""
 "temporary table of contents.</p><p>This allows further sessions to be "
 "appended to the CD later.</p>"
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b ne fermos la KD, kaj verkos "
+"provizoran enhavtabelon.</p><p>Tio ebligas pliajn seancojn esti aldonitaj al "
+"la KD poste.</p>"
 
 #: tools/k3bstdguiitems.cpp:155
 #, kde-format
 msgid "Normalize volume levels"
-msgstr ""
+msgstr "Normaligi volumajn nivelojn"
 
 #: tools/k3bstdguiitems.cpp:156
 #, kde-format
 msgid "Adjust the volume levels of all tracks"
-msgstr ""
+msgstr "Alĝustigi la volumenajn nivelojn de ĉiuj trakoj"
 
 #: tools/k3bstdguiitems.cpp:157
 #, kde-format
@@ -4222,16 +4408,21 @@ msgid ""
 "greatly from song to song.<p><b>Be aware that K3b currently does not support "
 "normalizing when writing on the fly.</b>"
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, K3b alĝustigos la volumon de ĉiuj "
+"trakoj al norma nivelo. Ĉi tio estas utila por aferoj kiel krei miksaĵojn, "
+"kie malsamaj registradniveloj en malsamaj albumoj povas kaŭzi la volumenon "
+"multe varii de kanto al kanto.<p><b>Atentu, ke K3b nuntempe ne subtenas "
+"normaligon dum skribo tuja.</b>"
 
 #: tools/k3bstdguiitems.cpp:169
 #, kde-format
 msgid "Verify written data"
-msgstr ""
+msgstr "Konfirmi skribitajn datumojn"
 
 #: tools/k3bstdguiitems.cpp:170
 #, kde-format
 msgid "Compare original with written data"
-msgstr ""
+msgstr "Kompari originalon kun skribitaj datumoj"
 
 #: tools/k3bstdguiitems.cpp:171
 #, kde-format
@@ -4240,6 +4431,9 @@ msgid ""
 "will compare the original source data with the written data to verify that "
 "the disk has been written correctly."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita, tiam post sukcesa skribado de la disko "
+"K3b komparos la originajn fontajn datumojn kun la skribitaj datumoj por "
+"konfirmi, ke la disko estas ĝuste skribita."
 
 #: tools/k3bstdguiitems.cpp:181
 #, kde-format
@@ -4249,7 +4443,7 @@ msgstr "Ignori legadajn erarojn"
 #: tools/k3bstdguiitems.cpp:182
 #, kde-format
 msgid "Skip unreadable audio sectors"
-msgstr ""
+msgstr "Pretersalti nelegeblajn sonsektorojn"
 
 #: tools/k3bstdguiitems.cpp:183
 #, kde-format
@@ -4259,6 +4453,10 @@ msgid ""
 "<p>Since audio CD Player are able to interpolate small errors in the data it "
 "is no problem to let K3b skip unreadable sectors."
 msgstr ""
+"<p>Se ĉi tiu elekteblo estas markita kaj K3b ne kapablas legi aŭdan sektoron "
+"de la fonta KD, ĝi estos anstataŭigita per nuloj sur la rezulta kopio.<p>Ĉar "
+"aŭda KD-Ludilo povas interpoli malgrandajn erarojn en la datumoj, ĝi ne "
+"estas problemo lasi K3b salti nelegeblajn sektorojn."
 
 #: videodvd/k3bvideodvd.cpp:292
 #, kde-format
@@ -4298,22 +4496,22 @@ msgstr "Normala"
 #: videodvd/k3bvideodvd.cpp:315
 #, kde-format
 msgid "For the visually impaired"
-msgstr ""
+msgstr "Por vidhandikapitoj"
 
 #: videodvd/k3bvideodvd.cpp:317
 #, kde-format
 msgid "Director's comments 1"
-msgstr ""
+msgstr "Komentoj de direktoro 1"
 
 #: videodvd/k3bvideodvd.cpp:319
 #, kde-format
 msgid "Director's comments 2"
-msgstr ""
+msgstr "Komentoj de direktoro 2"
 
 #: videodvd/k3bvideodvd.cpp:321
 #, kde-format
 msgid "unknown audio code extension"
-msgstr ""
+msgstr "nekonata sonkoda etendo"
 
 #: videodvd/k3bvideodvd.cpp:330
 #, kde-format
@@ -4333,12 +4531,12 @@ msgstr "nekonata kodmoduso"
 #: videodvd/k3bvideodvd.cpp:345
 #, kde-format
 msgid "Caption with normal size characters"
-msgstr ""
+msgstr "Titolo kun normale grandaj signoj"
 
 #: videodvd/k3bvideodvd.cpp:347
 #, kde-format
 msgid "Caption with bigger size characters"
-msgstr ""
+msgstr "Titolo kun pli grandaj signoj"
 
 #: videodvd/k3bvideodvd.cpp:349
 #, kde-format
@@ -4348,39 +4546,39 @@ msgstr "Apudskribo por knaboj"
 #: videodvd/k3bvideodvd.cpp:351
 #, kde-format
 msgid "Closed caption with normal size characters"
-msgstr ""
+msgstr "Subtitolo kun normale grandaj signoj"
 
 #: videodvd/k3bvideodvd.cpp:353
 #, kde-format
 msgid "Closed caption with bigger size characters"
-msgstr ""
+msgstr "Subtitolo kun pli grandaj signoj"
 
 #: videodvd/k3bvideodvd.cpp:355
 #, kde-format
 msgid "Closed caption for children"
-msgstr ""
+msgstr "Subtitolo por infanoj"
 
 #: videodvd/k3bvideodvd.cpp:357
 #, kde-format
 msgid "Forced caption"
-msgstr ""
+msgstr "Devigita bildoteksto"
 
 #: videodvd/k3bvideodvd.cpp:359
 #, kde-format
 msgid "Director's comments with normal size characters"
-msgstr ""
+msgstr "La komentoj de direktoro kun normale grandaj signoj"
 
 #: videodvd/k3bvideodvd.cpp:361
 #, kde-format
 msgid "Director's comments with bigger size characters"
-msgstr ""
+msgstr "Komentoj de direktoro kun pli grandaj signoj"
 
 #: videodvd/k3bvideodvd.cpp:363
 #, kde-format
 msgid "Director's comments for children"
-msgstr ""
+msgstr "Komentoj de direktoro por infanoj"
 
 #: videodvd/k3bvideodvd.cpp:365
 #, kde-format
 msgid "unknown code extension"
-msgstr ""
+msgstr "nekonata kod-etendo"
