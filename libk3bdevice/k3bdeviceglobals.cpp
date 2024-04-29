@@ -193,10 +193,10 @@ QString K3b::Device::mediaStateString( int state )
 void K3b::Device::debugBitfield( unsigned char* data, long len )
 {
     for( int i = 0; i < len; ++i ) {
-        QString index, bitString;
-        index = QString::asprintf( "%4i", i );
+        const QString index = QString::asprintf( "%4i", i );
+        QString bitString;
         for( int bp = 7; bp >= 0; --bp )
-            bitString[7-bp] = ( data[i] & (1<<bp) ? '1' : '0' );
+            bitString.append( data[i] & (1<<bp) ? '1' : '0' );
         qDebug() << index << " - " << bitString << " - " << (int)data[i];
     }
 }
