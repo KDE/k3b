@@ -396,7 +396,6 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 >Переклад українською: Юрій Чорноіван <email
 >yurchor@ukr.net</email
 ></para
-> 
-&underFDL; </chapter>
+> &underFDL; </chapter>
 &documentation.index;
 </book>
