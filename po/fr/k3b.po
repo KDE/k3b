@@ -27,15 +27,15 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-02-17 10:13+0100\n"
+"PO-Revision-Date: 2024-05-02 15:35+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: fr\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -2890,8 +2890,8 @@ msgstr "Veuillez installer une version plus récente du paquet « cdrtools ».
 #, kde-format
 msgid "%1 will be run with root privileges on kernel >= 2.6.8"
 msgstr ""
-"Le programme « %1 » sera exécuté avec les privilèges du superutilisateur sur "
-"les noyaux version 2.6.8 et postérieures"
+"Le programme « %1 » sera exécuté avec les privilèges du compte "
+"administrateur sur les noyaux version 2.6.8 et postérieures"
 
 #: k3bsystemproblemdialog.cpp:237
 #, kde-format
@@ -2912,7 +2912,8 @@ msgstr "Cliquez sur « Configurer K3b... » pour résoudre ce problème."
 #, kde-format
 msgid "%1 will be run without root privileges"
 msgstr ""
-"Le programme « %1 » sera exécuté sans les privilèges du superutilisateur."
+"Le programme « %1 » sera exécuté sans les privilèges du compte "
+"administrateur."
 
 #: k3bsystemproblemdialog.cpp:248
 #, kde-format
@@ -2924,10 +2925,10 @@ msgid ""
 "way."
 msgstr ""
 "Il est extrêmement recommandé de configurer cdrecord pour qu'il soit exécuté "
-"avec les privilèges du superutilisateur. Il bénéficiera alors d'une priorité "
-"plus haute, ce qui améliorera la stabilité du processus de gravure. Cela "
-"permet également de modifier la taille du tampon utilisé. Un grand nombre de "
-"problèmes ont été résolus de cette façon."
+"avec les privilèges du compte administrateur. Il bénéficiera alors d'une "
+"priorité plus haute, ce qui améliorera la stabilité du processus de gravure. "
+"Cela permet également de modifier la taille du tampon utilisé. Un grand "
+"nombre de problèmes ont été résolus de cette façon."
 
 #: k3bsystemproblemdialog.cpp:263 k3bsystemproblemdialog.cpp:271
 #, kde-format
@@ -2946,8 +2947,8 @@ msgid ""
 "increase the overall stability of the burning process."
 msgstr ""
 "Il est extrêmement recommandé de configurer cdrdao pour qu'il soit exécuté "
-"avec les privilèges du superutilisateur, afin d'améliorer la stabilité du "
-"processus de gravure."
+"avec les privilèges du compte administrateur, afin d'améliorer la stabilité "
+"du processus de gravure."
 
 #: k3bsystemproblemdialog.cpp:293
 #, kde-format
@@ -3184,7 +3185,7 @@ msgstr ""
 #, kde-format
 msgid "Enable DMA temporarily as root with 'hdparm -d 1 %1'."
 msgstr ""
-"Activation temporaire du DMA en tant que superutilisateur avec la commande "
+"Activation temporaire du DMA en mode administrateur avec la commande "
 "« hdparm -d 1 %1 »."
 
 #: k3bsystemproblemdialog.cpp:519
@@ -3278,7 +3279,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:582
 #, kde-format
 msgid "Running K3b as root user"
-msgstr "Exécution de K3b en tant que superutilisateur"
+msgstr "Exécution de K3b en mode administrateur"
 
 #: k3bsystemproblemdialog.cpp:583
 #, kde-format
@@ -3286,8 +3287,8 @@ msgid ""
 "It is not recommended to run K3b under the root user account. This "
 "introduces unnecessary security risks."
 msgstr ""
-"Il n'est pas recommandé d'exécuter K3b avec les droits du superutilisateur. "
-"Ceci introduit des risques qui ne sont pas nécessaires..."
+"Il n'est pas recommandé d'exécuter K3b avec les droits du compte "
+"administrateur. Ceci introduit des risques qui ne sont pas nécessaires..."
 
 #: k3bsystemproblemdialog.cpp:585
 #, kde-format
@@ -5600,7 +5601,7 @@ msgid ""
 msgstr ""
 "<p>Si cette option est activée, tous les fichiers gravés auront exactement "
 "les mêmes droits que les fichiers sources. Sinon, tous les fichiers auront "
-"les mêmes droits, et appartiendront au superutilisateur.\n"
+"les mêmes droits, et appartiendront au compte administrateur.\n"
 "<p>Cette option est utile pour les copies de sauvegarde. <p><b>Attention : </"
 "b> les permissions peuvent ne plus avoir de sens sur d'autres systèmes de "
 "fichiers, par exemple si l'utilisateur possédant un fichier sur le CD ou le "
