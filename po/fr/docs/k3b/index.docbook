@@ -113,7 +113,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
   -->
 <chapter id="pre-setup"
 ><title
->Préinstallation</title>
+>Configuration préliminaire</title>
 <para
 >Lorsque vous lancerez &k3b; pour la première fois, &k3b; vous informera peut-être qu'aucun périphérique de gravure optique n'a été trouvé, ce qui signifie que vous ne pourrez pas graver de disque optique. Ne paniquez pas, car &k3b; ouvrira l'onglet <guilabel
 >Permissions</guilabel

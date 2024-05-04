@@ -12,7 +12,7 @@
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012, 2013.
 # Sébastien Renard <renard@kde.org>, 2010.
-# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Peter Potrowl <peter.potrowl@gmail.com>, 2017, 2018.
 # Simon Depiets <sdepiets@gmail.com>, 2019.
 msgid ""
@@ -20,15 +20,15 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-15 01:36+0000\n"
-"PO-Revision-Date: 2023-10-28 15:37+0200\n"
-"Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"PO-Revision-Date: 2024-04-29 22:42+0200\n"
+"Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
+"Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.5\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -137,7 +137,7 @@ msgstr "Gravure de la piste %1 sur %2"
 #: jobs/k3bbinimagewritingjob.cpp:203
 #, kde-format
 msgid "Writing cue/bin Image"
-msgstr "Gravure de l'image cue/bin"
+msgstr "Gravure de l'image « cue / bin »"
 
 #: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
 #, kde-format
@@ -1569,7 +1569,7 @@ msgstr "MPEG1 Layer III"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:530
 #, kde-format
 msgid "MPEG4 (FFMPEG)"
-msgstr "MPEG4 (FFmpeg)"
+msgstr "MPEG4 (FFMpeg)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:532
 #, kde-format
@@ -1583,10 +1583,10 @@ msgid ""
 "codecs used these days. Its subproject libavcodec forms the basis for "
 "multimedia players such as xine or mplayer."
 msgstr ""
-"FFmpeg est un projet opensource qui a pour but de prendre en charge la "
+"FFMpeg est un projet opensource qui a pour but de prendre en charge la "
 "plupart des codecs audio et vidéo utilisés aujourd'hui. Le sous-projet "
-"libavcodec fournit une solution de base pour les lecteurs multimédia comme "
-"xine ou mplayer."
+"« libavcodec » fournit une solution de base pour les lecteurs multimédia "
+"comme Xine ou MPlayer."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:547
 #, kde-format
@@ -1594,7 +1594,7 @@ msgid ""
 "FFmpeg contains an implementation of the MPEG-4 video encoding standard "
 "which produces high quality results."
 msgstr ""
-"FFmpeg fournit une implémentation de l'encodage MPEG-4 qui produit des "
+"FFMpeg fournit une implémentation de l'encodage MPEG-4 qui produit des "
 "résultats de hautes qualités."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:550
@@ -2960,7 +2960,7 @@ msgid ""
 "suid root anymore."
 msgstr ""
 "Depuis la version 2.6.8 du noyau, « cdrecord » ne peut plus utiliser le "
-"transport SCSI lorsqu'il est lancé avec le « suid » du superutilisateur."
+"transport « SCSI » lorsqu'il est lancé avec le « SUID » de l'administrateur."
 
 #: projects/k3bcdrecordwriter.cpp:887 projects/k3bcdrskinwriter.cpp:900
 #, kde-format
@@ -2968,7 +2968,7 @@ msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr ""
 "Vous devriez utiliser la configuration de K3b (« K3bSetup ») pour résoudre "
-"ce problème ou enlever le bit « suid » manuellement."
+"ce problème ou enlever le bit « SUID » manuellement."
 
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
@@ -3015,8 +3015,9 @@ msgid ""
 "Since kernel version 2.6.8 cdrskin cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
-"Depuis la version 2.6.8 du noyau, cdrskin ne peut plus utiliser le transport "
-"SCSI lorsqu'il est lancé avec le « suid » du superutilisateur."
+"Depuis la version 2.6.8 du noyau, le module « cdrskin » ne peut plus "
+"utiliser le transport « SCSI » lorsqu'il est lancé avec le paramètre "
+"« SUID » de l'administrateur."
 
 #: projects/k3bcdrskinwriter.cpp:911
 #, kde-format
