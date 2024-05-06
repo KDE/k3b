@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-03-28 08:18+0100\n"
+"PO-Revision-Date: 2024-05-05 18:09+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -647,7 +647,7 @@ msgid ""
 "players."
 msgstr ""
 "<p>Se ĉi tiu opcio estas markita, LAME devigos la 7680-bitan limigon sur "
-"totala kadrogrando.<br>\n"
+"suma kadrogrando.<br>\n"
 "Tio rezultigas multajn malŝparitajn bitojn por alta bitrapida kodigado sed "
 "certigos striktan ISO-kongruon. Ĉi tiu kongruo povus esti grava por aparataj "
 "ludantoj."
@@ -673,7 +673,7 @@ msgid ""
 "MP3 stream to be detected; however, it takes 16 bits per frame that would "
 "otherwise be used for encoding, thus slightly reducing the sound quality."
 msgstr ""
-"<p>Se ĉi tiu opcio estas markita, cikla redunda kontrolo (CRC) kodo estos "
+"<p>Se ĉi tiu opcio estas markita, cikla redundokontrolo (CRC) kodo estos "
 "aldonita al ĉiu kadro, permesante dissendajn erarojn kiuj povus okazi sur la "
 "MP3-rivereto esti detektitaj; tamen, ĝi bezonas 16 bitojn per kadro kiu alie "
 "estus uzata por kodigo, tiel iomete reduktante la sonkvaliton."
@@ -860,7 +860,7 @@ msgstr "Dosiera kvalito"
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:29
 #, kde-format
 msgid "Controls the quality of the encoded files"
-msgstr "Kontrolas la kvaliton de la koditajn dosierojn"
+msgstr "Regas la kvaliton de la koditaj dosieroj"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, m_radioQualityLevel)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:32
@@ -927,7 +927,7 @@ msgstr "&Nominala bitkvanto:"
 #: ../plugins/encoder/ogg/k3boggvorbisencoderconfigwidget.cpp:56
 #, kde-format
 msgid "Controls the quality of the encoded files."
-msgstr "Kontrolas la kvaliton de la koditajn dosierojn."
+msgstr "Regas la kvaliton de la koditaj dosieroj."
 
 #: ../plugins/encoder/ogg/k3boggvorbisencoderconfigwidget.cpp:57
 #, kde-format
@@ -1576,7 +1576,7 @@ msgstr "Agordi K3b"
 #: k3b.cpp:446
 #, kde-format
 msgid "System Check"
-msgstr "Sistema kontrolo"
+msgstr "Sistemkontrolo"
 
 #: k3b.cpp:447
 #, kde-format
@@ -3493,8 +3493,8 @@ msgid ""
 "an already burned disk."
 msgstr ""
 "Restricted Overwrite permesas uzi DVD-RW same kiel DVD-RAM aŭ DVD+RW. La "
-"amaskomunikilaro povas nur esti anstataŭita. Ne eblas skribi multisesian DVD-"
-"RW-ojn en tiu ĉi reĝimo sed K3b uzas growisofs por kreskigi ISO 9660 "
+"datumportilo povas nur esti anstataŭita. Ne eblas skribi multisesian DVD-RW-"
+"ojn en tiu ĉi reĝimo sed K3b uzas growisofs por kreskigi ISO 9660 "
 "dosiersistemon ene de la unua sesio, tiel permesante novajn dosierojn esti "
 "aldonitaj al jam bruligita disko."
 
@@ -3759,7 +3759,7 @@ msgstr "Adrian de Groot"
 #: main.cpp:76
 #, kde-format
 msgid "For his work on the FreeBSD port."
-msgstr "Por lia laboro pri la haveno FreeBSD."
+msgstr "Por lia laboro pri la FreeBSD-portado."
 
 #: main.cpp:78
 #, kde-format
@@ -3820,7 +3820,7 @@ msgstr "Jeremy C. Andrus"
 #: main.cpp:94
 #, kde-format
 msgid "First Windows port of libk3bdevice."
-msgstr "Unua Vindoza haveno de libk3bdevice."
+msgstr "Unua Vindoza portado de libk3bdevice."
 
 #: main.cpp:102
 #, kde-format
@@ -4173,7 +4173,7 @@ msgstr "Kompari la kontrolsumon..."
 #: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "MD5 Sum Check"
-msgstr "MD5 suma kontrolo"
+msgstr "MD5-suma kontrolo"
 
 #: misc/k3bimagewritingdialog.cpp:1095
 #, kde-format
@@ -4755,13 +4755,13 @@ msgstr ""
 "<p>Ĉiu komunikilo havas oficialan maksimuman kapaciton, kiu estas konservita "
 "en nurlegebla areo de la komunikilo kaj estas garantiita de la vendisto. "
 "Tamen, ĉi tiu oficiala maksimumo ne ĉiam estas la reala maksimumo. Multaj "
-"amaskomunikiloj havas realan totalan kapaciton, kiu estas iomete pli granda "
-"ol la oficiala kvanto.<p>Se ĉi tiu opcio estas markita, K3b malŝaltos "
-"sekurecan kontrolon kiu malhelpas bruligi preter la oficiala kapablo."
-"<p><b>Atentu:</b> Ebligi ĉi tiun opcion povas kaŭzi malsukcesojn en la fino "
-"de la bruladprocezo se K3b provas skribi preter la oficiala kapablo. Ĝi "
-"havas sencon unue determini la realan maksimuman kapablon de la "
-"amaskomunikila marko kun ŝajniga brulvundo."
+"datumportiloj havas realan suman kapaciton, kiu estas iomete pli granda ol "
+"la oficiala kvanto.<p>Se ĉi tiu opcio estas markita, K3b malŝaltos sekurecan "
+"kontrolon kiu malhelpas bruligi preter la oficiala kapablo.<p><b>Atentu:</b> "
+"Ebligi ĉi tiun opcion povas kaŭzi malsukcesojn en la fino de la "
+"bruladprocezo se K3b provas skribi preter la oficiala kapablo. Ĝi havas "
+"sencon unue determini la realan maksimuman kapablon de la datumportila marko "
+"kun ŝajniga brulvundo."
 
 #: option/k3badvancedoptiontab.cpp:115
 #, kde-format
@@ -5321,7 +5321,7 @@ msgid ""
 "<p><b>It is highly recommended to use Rock Ridge extensions on every data CD "
 "or DVD.</b>"
 msgstr ""
-"<p>Se ĉi tiu opcio estas markita, K3b generos la rekordojn de System Use "
+"<p>Se ĉi tiu opcio estas markita, K3b generos la rikordojn de System Use "
 "Sharing Protocol (SUSP) specifitaj de la Rock Ridge Interchange Protocol "
 "(IEEE-P1282).\n"
 "<p>Rock Ridge etendas la ISO 9660 dosiersistemon per funkcioj egalaj al la "
@@ -6548,7 +6548,7 @@ msgid ""
 "as controlling the media player."
 msgstr ""
 "<p>La klavara aranĝo elektita tie uzatos por la eMovix komandoj, ekz. por "
-"kontroli la mediolegilon."
+"regi la datumportilan legilon."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: projects/base_k3bmovixoptionswidget.ui:248
@@ -7165,7 +7165,7 @@ msgid ""
 "Presets which allow for a quick selection of the most frequently used "
 "settings."
 msgstr ""
-"<p><b>Agordoj de Dosiersistemaj</b><p>K3b disponigas la jenajn antaŭdirojn "
+"<p><b>Agordoj de Dosiersistemaj</b><p>K3b disponigas la jenajn antaŭmetojn "
 "de dosiersistemoj kiuj permesas rapidan elekton de la plej ofte uzataj "
 "agordoj."
 
@@ -7305,18 +7305,18 @@ msgid ""
 msgstr ""
 "<p><b>Multsesia reĝimo</b><p><b>Aŭtomata</b><br>Lasu K3b decidi kiun reĝimon "
 "uzi. La decido estos bazita sur la grandeco de la projekto (ĉu ĝi plenigas "
-"la tutan amaskomunikilaron) kaj la stato de la enmetita amaskomunikilaro "
-"(aldonebla aŭ ne).<p><b>Neniu Multisesio</b><br>Kreu ununuran -session KD aŭ "
-"DVD kaj fermu la diskon.<p><b>Starti Plursesian</b><br>Startu plursesian KD "
-"aŭ DVD, ne fermante la diskon por permesi pliajn sesiojn esti aldonitaj."
-"<p><b> Daŭrigu plursesion</b><br>Daŭrigu aldoneblan datumdiskon (kiel "
-"ekzemple kreita en modo <em>Starti plursesion</em>) kaj aldonu alian sesion "
-"sen fermi la diskon por permesi pliajn sesiojn esti aldonitaj.<p> <b>Finu "
-"Plursesion</b><br>Daŭrigu aldoneblan datumdiskon (kiel ekzemple kreitan en "
-"reĝimo <em>Starti Plursesion</em>), aldonu alian sesion, kaj fermu la diskon."
-"<p><em> En la kazo de DVD+RW kaj DVD-RW limigita anstataŭiga "
-"amaskomunikilaro K3b efektive ne kreos plurajn sesiojn sed kreskos la "
-"dosiersistemon por inkluzivi la novajn datumojn.</em>"
+"la tutan datumportilon) kaj la stato de la enmetita datumportilo (aldonebla "
+"aŭ ne).<p><b>Neniu Multisesio</b><br>Kreu ununuran -session KD aŭ DVD kaj "
+"fermu la diskon.<p><b>Starti Plursesian</b><br>Startu plursesian KD aŭ DVD, "
+"ne fermante la diskon por permesi pliajn sesiojn esti aldonitaj.<p><b> "
+"Daŭrigu plursesion</b><br>Daŭrigu aldoneblan datumdiskon (kiel ekzemple "
+"kreita en modo <em>Starti plursesion</em>) kaj aldonu alian sesion sen fermi "
+"la diskon por permesi pliajn sesiojn esti aldonitaj.<p> <b>Finu Plursesion</"
+"b><br>Daŭrigu aldoneblan datumdiskon (kiel ekzemple kreitan en reĝimo "
+"<em>Starti Plursesion</em>), aldonu alian sesion, kaj fermu la diskon."
+"<p><em>En la kazo de DVD+RW kaj DVD-RW superskribe limigita datumportilo, "
+"K3b efektive ne kreos plurajn sesiojn sed kreskos la dosiersistemon por "
+"inkluzivi la novajn datumojn.</em>"
 
 #: projects/k3bdatamultisessioncombobox.cpp:65
 #, kde-format
@@ -7769,7 +7769,7 @@ msgstr "Por enskribi dosierojn pli grandajn ol %1, bonvolu uzi %2"
 #: projects/k3bdataurladdingdialog.cpp:818
 #, kde-format
 msgid "Some filenames had to be modified due to limitations in mkisofs"
-msgstr "Kelkaj dosiernomoj devis ŝanĝiti kaŭze de mapliigoj en mkisofs"
+msgstr "Kelkaj dosiernomoj devis ŝanĝiti kaŭze de limigoj en mkisofs"
 
 #: projects/k3bdataurladdingdialog.cpp:822
 #, kde-format
@@ -8344,7 +8344,8 @@ msgid ""
 "Playback control, PBC, is available for Video CD 2.0 and Super Video CD 1.0 "
 "disc formats."
 msgstr ""
-"Ludkontrolo uzeblas por la Video-KD 2.0 kaj Super Video-KD 1.0 formatoj."
+"Rego pri ludado, PBC, haveblas por la Video-KD 2.0 kaj Super Video-KD 1.0 "
+"formatoj."
 
 #: projects/k3bvcdburndialog.cpp:112
 #, kde-format
@@ -8354,7 +8355,7 @@ msgstr "Ĉiam aldoni malplenan « /SEGMENT » dosierujon"
 #: projects/k3bvcdburndialog.cpp:113
 #, kde-format
 msgid "This controls whether APS constraints are strict or relaxed. "
-msgstr "Tio kontrolas, ke APS mapliigoj estas striktaj aŭ malstriktaj."
+msgstr "Tio regas, ĉu limigoj de APS estas striktaj aŭ malstriktaj."
 
 #: projects/k3bvcdburndialog.cpp:114
 #, kde-format
@@ -8362,8 +8363,8 @@ msgid ""
 "This controls whether to update the scan data information contained in the "
 "MPEG-2 video streams."
 msgstr ""
-"Ĉi tio kontrolas ĉu ĝisdatigi la skanajn datumojn enhavitajn en la "
-"videofluoj MPEG-2."
+"Ĉi tio regas, ĉu ĝisdatigi la skanajn datumojn enhavitajn en la videofluoj "
+"MPEG-2."
 
 #: projects/k3bvcdburndialog.cpp:115
 #, kde-format
@@ -8421,17 +8422,17 @@ msgid ""
 "to keep the video bit-rate under 1151929.1 bps.</b>"
 msgstr ""
 "<p>Ĉi tio estas la plej baza <b>Video KD</b> specifo devenanta de 1993, kiu "
-"havas la sekvajn karakterizaĵojn:<ul><li>Unu reĝimo2 miksita formo ISO 9660 "
-"trako enhavanta dosiermontrilojn al la informaj areoj. </li><li>Ĝis 98 "
-"multipleks-ed MPEG-1 aŭd-/video-fluoj aŭ KD-DA sonspuroj.</li><li>Ĝis 500 "
-"MPEG-sekvencaj enirpunktoj uzataj kiel ĉapitrodividoj.</li> </ul><p>La "
-"specifo de Video CD postulas, ke la multiplex-ed MPEG-1-fluo havu CBR de "
-"malpli ol 174300 bajtoj (1394400 bitoj) je sekundo por alĝustigi "
-"unurapidecajn KD-ROM-diskojn.<br>La specifo permesas la jenajn du "
-"distingivojn:<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ "
-"23.976 Hz (FILM SIF).</li></ul><p>La audiofluo CBR MPEG-1, tavolo II estas "
-"fiksita je 224 kbps kun 1 stereo aŭ 2 monokanaloj.<p><b>Oni rekomendas "
-"konservi la videobitrapidecon sub 1151929.1 bps.</b>"
+"havas la sekvajn karakterizaĵojn:<ul><li>Unu mode2-miksforma ISO-9660-trako "
+"enhavanta dosiermontrilojn al la informaj areoj. </li><li>Ĝis 98 multipleks-"
+"ed MPEG-1 aŭd-/video-fluoj aŭ KD-DA sonspuroj.</li><li>Ĝis 500 MPEG-"
+"sekvencaj enirpunktoj uzataj kiel ĉapitrodividoj.</li> </ul><p>La specifo de "
+"Video CD postulas, ke la multiplex-ed MPEG-1-fluo havu CBR de malpli ol "
+"174300 bajtoj (1394400 bitoj) je sekundo por alĝustigi unurapidecajn KD-ROM-"
+"diskojn.<br>La specifo permesas la jenajn du distingivojn:<ul><li>352 x 240 "
+"@ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ 23.976 Hz (FILM SIF).</li></"
+"ul><p>La audiofluo CBR MPEG-1, tavolo II estas fiksita je 224 kbps kun 1 "
+"stereo aŭ 2 monokanaloj.<p><b>Oni rekomendas konservi la videobitrapidecon "
+"sub 1151929.1 bps.</b>"
 
 #: projects/k3bvcdburndialog.cpp:136
 #, kde-format
@@ -8462,10 +8463,10 @@ msgstr ""
 "aldonis la sekvajn erojn al la funkcioj jam disponeblaj en la Video. KD 1.1-"
 "specifo:<ul><li>Subteno por MPEG-segmentaj ludaĵoj (<b>\"SPI\"</b>), "
 "konsistanta el fiksaj bildoj, filmoj kaj/aŭ aŭd-fluoj (nur) estis aldonita.</"
-"li><li>Notu Segmentajn Erojn::.</li><li>Subteno por interaga reprodukta "
-"kontrolo (<b>\"PBC\"</b>) estis aldonita.</li><li>Subteno por ludi rilatan "
-"aliron per disponigado de skanpunkta indeksa dosiero estis aldonita. (<b>\"/"
-"EXT/SCANDATA.DAT\"</b>)</li><li>Subteno por subtitoloj.</li><li>Subteno por "
+"li><li>Notu Segmentajn Erojn::.</li><li>Subteno por interaga reprodukta rego "
+"(<b>\"PBC\"</b>) estis aldonita.</li><li>Subteno por ludi rilatan aliron per "
+"disponigado de skanpunkta indeksa dosiero estis aldonita. (<b>\"/EXT/"
+"SCANDATA.DAT\"</b>)</li><li>Subteno por subtitoloj.</li><li>Subteno por "
 "miksi enhavon NTSC kaj PAL.</li> </ul><p>Aldonante PAL-subtenon al la "
 "specifo de Video CD 1.1, la sekvaj distingivoj fariĝis disponeblaj:"
 "<ul><li>352 x 240 @ 29.97 Hz (NTSC SIF).</li><li>352 x 240 @ 23.976 Hz (FILM "
@@ -8499,7 +8500,7 @@ msgid ""
 "480 @ 29.97 Hz (NTSC 2/3 D-2).</li><li>480 x 576 @ 25 Hz (PAL 2/3 D-2).</"
 "li></ul>"
 msgstr ""
-"<p>Kun la alveno de la DVD-V-amaskomunikilaro, nova VCD-normo devis esti "
+"<p>Kun la alveno de la DVD-V-datumportilo, nova VCD-normo devis esti "
 "eldonita por povi resti flank-al-flanke kun teknologio, do la Super Video CD-"
 "specifo viviĝis en 1999.<p>En la mezo de 2000 plena subaro de ĉi tiu "
 "<b>Super Video KD</b>-specifo estis publikigita kiel <b>IEC-62107</b>.<p>Ĉar "
@@ -8510,8 +8511,8 @@ msgstr ""
 "MPEG-1 audiofluo.</li><li>Pli altaj distingivoj (vidu sube) por videoflua "
 "distingivo.</li><li>Supren. al 4 supermetitaj grafikaĵoj kaj teksto (<b>\"OGT"
 "\"</b>) subkanaloj por uzantŝanĝebla subtitolo aperanta aldone al la jam "
-"ekzistanta fermtitola instalaĵo.</li><li>Komandlistoj por kontroli la SVCD-"
-"virtuala maŝino.</li></ul><p>Por la <b>Super Video KD</b>, nur la sekvaj du "
+"ekzistanta fermtitola instalaĵo.</li><li>Komandlistoj por regi la SVCD-"
+"virtualmaŝinon.</li></ul><p>Por la <b>Super Video KD</b>, nur la sekvaj du "
 "distingivoj estas subtenataj por filmfilmo kaj (malalta distingivo) "
 "fiksbildoj:<ul><li>480 x 480 @ 29.97 Hz (NTSC 2/3 D-2).</li><li>480 x 576 @ "
 "25 Hz (PAL 2/3 D-2).</li></ul>"
@@ -8605,10 +8606,10 @@ msgid ""
 msgstr ""
 "<p>Por permesi la ludadon de Video-KD-oj sur KD-i-ludilo, la Video-KD-normo "
 "postulas, ke aplikprogramo de KD-i devas ĉeesti.<p>Ĉi tiu programo estas "
-"desegnita por:<ul><li> havigi plenan reproduktan kontrolon kiel difinite en "
-"la PSD de la normo</li><li>esti ekstreme simpla uzebla kaj facile lernebla "
-"por la finuzanto</li></ul><p>La programo funkcias sur KD-i-ludiloj ekipitaj "
-"per la CDRTOS 1.1(.1) operaciumo kaj Digital Video-etenda kartoĉo."
+"desegnita por:<ul><li> havigi plenan reproduktan regon kiel difinite en la "
+"PSD de la normo</li><li>esti ekstreme simpla uzebla kaj facile lernebla por "
+"la finuzanto</li></ul><p>La programo funkcias sur KD-i-ludiloj ekipitaj per "
+"la CDRTOS 1.1(.1) operaciumo kaj Digital Video-etenda kartoĉo."
 
 #: projects/k3bvcdburndialog.cpp:194
 #, kde-format
@@ -8631,9 +8632,9 @@ msgid ""
 "possibility of interaction with the user through the remote control or some "
 "other input device available."
 msgstr ""
-"<p>Reprodukta kontrolo, PBC, disponeblas por Video CD 2.0 kaj Super Video CD "
-"1.0-diskoformatoj.<p>PBC ebligas kontrolon de la reprodukto de ludaĵoj kaj "
-"la eblecon de interago kun la uzanto per la teleregilo aŭ iu alia enigo. "
+"<p>Reprodukta rego, PBC, disponeblas por Video CD 2.0 kaj Super Video CD 1.0-"
+"diskoformatoj.<p>PBC ebligas regon de la reprodukto de ludaĵoj kaj la "
+"eblecon de interago kun la uzanto per la teleregilo aŭ iu alia enigo. "
 "disponebla aparato."
 
 #: projects/k3bvcdburndialog.cpp:203
@@ -8750,8 +8751,8 @@ msgid ""
 "otherwise (i.e. Super Video CD 1.0 and HQ-VCD 1.0) 0."
 msgstr ""
 "Marĝenoj estas uzataj por kompensi malprecizajn sektor-traktadajn aferojn "
-"sur CD-ROM-amaskomunikilaro. Interese, ili estis forlasitaj por Super Video "
-"KD.<p>Por Video KD 1.0/1.1/2.0 ĉi tiu marĝeno devus esti almenaŭ 15 sektoroj."
+"sur CD-ROM-datumportilo. Interese, ili estis forlasitaj por Super Video KD."
+"<p>Por Video KD 1.0/1.1/2.0 ĉi tiu marĝeno devus esti almenaŭ 15 sektoroj."
 "<p>Permesita valorenhavo: [0..150]. Defaŭlte: 30 por Video CD 1.0/1.1/2.0, "
 "alie (t.e. Super Video CD 1.0 kaj HQ-VCD 1.0) 0."
 
@@ -8765,7 +8766,7 @@ msgid ""
 "otherwise 0."
 msgstr ""
 "<p>Marĝenoj estas uzataj por kompensi neprecizajn sektortraktadajn "
-"problemojn sur KD-ROM-a amaskomunikilaro. Interese, ili estis forlasitaj por "
+"problemojn sur KD-ROM-a datumportilo. Interese, ili estis forlasitaj por "
 "Super Video KD.<p>Por Video KD 1.0/1.1/2.0 ĉi tiu marĝeno devus esti almenaŭ "
 "15 sektoroj.<p>Permesita valorenhavo: [0..150]. Defaŭlte: 45 por Video CD "
 "1.0/1.1/2.0, alie 0."
@@ -8778,7 +8779,7 @@ msgstr "Ĝenerala"
 #: projects/k3bvcdburndialog.cpp:254
 #, kde-format
 msgid "Playback Control (PBC)"
-msgstr "Legkontrolo"
+msgstr "Reprodukta Rego (PBC)"
 
 #: projects/k3bvcdburndialog.cpp:255
 #, kde-format
@@ -9117,7 +9118,7 @@ msgstr "Mikskvanto:"
 #: projects/k3bvcdtrackdialog.cpp:447
 #, kde-format
 msgid "Enable playback control (for the whole CD)"
-msgstr "Ebligi la legkontrolon (por la tuta KD)"
+msgstr "Ebligi la reproduktan regon (por la tuta KD)"
 
 #: projects/k3bvcdtrackdialog.cpp:448
 #, kde-format
@@ -9192,7 +9193,7 @@ msgstr "Defaŭlto:"
 #: projects/k3bvcdtrackdialog.cpp:521
 #, kde-format
 msgid "Playback Control"
-msgstr "Lega kontrolo"
+msgstr "Reprodukta Rego"
 
 #: projects/k3bvcdtrackdialog.cpp:539
 #, kde-format
@@ -9655,12 +9656,12 @@ msgstr "Legu informojn pri KD-Teksto"
 #: rip/k3baudiocdview.cpp:246
 #, kde-format
 msgid "Load CD Info"
-msgstr "Ŝarĝu KD-Informojn"
+msgstr "Ŝargi KD-Informojn"
 
 #: rip/k3baudiocdview.cpp:247
 #, kde-format
 msgid "Load track and album information"
-msgstr "Ŝarĝu informojn pri trako kaj albumo"
+msgstr "Ŝargi informojn pri trako kaj albumo"
 
 #: rip/k3baudiocdview.cpp:254
 #, kde-format
@@ -10141,7 +10142,7 @@ msgstr "Tasko nuligita de la uzanto."
 #: rip/k3bvideocdrip.cpp:80
 #, kde-format
 msgid "Check files"
-msgstr "Kontroli la dosierojn"
+msgstr "Kontroli dosierojn"
 
 #: rip/k3bvideocdrip.cpp:90
 #, kde-format

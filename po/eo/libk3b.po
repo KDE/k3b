@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-04-28 17:30+0100\n"
+"PO-Revision-Date: 2024-05-05 18:09+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1588,7 +1588,7 @@ msgid ""
 "up to 6 total channels of sound."
 msgstr ""
 "AC3, pli konata kiel Dolby Digital estas normigita kiel ATSC A/52. Ĝi "
-"enhavas ĝis 6 totalajn kanalojn de sono."
+"enhavas ĝis entute 6 kanalojn de sono."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:576
 #, kde-format
@@ -1837,7 +1837,7 @@ msgstr "Ne eblis komenci normaligon."
 #: projects/audiocd/k3baudionormalizejob.cpp:114
 #, kde-format
 msgid "Track %1 is already normalized."
-msgstr "La trako %1 jam estas normaligita."
+msgstr "La trako %1 jam estas normigita."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:120
 #, kde-format
@@ -1852,7 +1852,7 @@ msgstr "Komputilnivelo por trako %1 de %2"
 #: projects/audiocd/k3baudionormalizejob.cpp:171
 #, kde-format
 msgid "Successfully normalized all tracks."
-msgstr "Sukcese normaligis ĉiujn trakojn."
+msgstr "Sukcese normigis ĉiujn trakojn."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:179
 #, kde-format
@@ -4392,7 +4392,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:155
 #, kde-format
 msgid "Normalize volume levels"
-msgstr "Normaligi volumajn nivelojn"
+msgstr "Normigi volumajn nivelojn"
 
 #: tools/k3bstdguiitems.cpp:156
 #, kde-format
