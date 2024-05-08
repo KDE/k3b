@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-14 01:37+0000\n"
-"PO-Revision-Date: 2024-04-17 09:44+0200\n"
+"PO-Revision-Date: 2024-04-29 11:00+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5025,7 +5025,7 @@ msgstr "Je vyžadováno ověření totožnosti"
 #: option/k3bexternalbinwidget.cpp:283
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Uživatel zrušil oprávnění"
 
 #: option/k3bexternalbinwidget.cpp:286
 #, kde-format
