@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-02-29 03:18+0900\n"
+"PO-Revision-Date: 2024-05-09 06:40+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -5899,7 +5899,7 @@ msgstr "自訂(&C)..."
 #: projects/base_k3bdataimagesettings.ui:75
 #, kde-format
 msgid "Symbolic Links"
-msgstr "符號性連結"
+msgstr "符號連結"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:87
@@ -5937,27 +5937,27 @@ msgid ""
 "\n"
 "<p><b>Caution:</b> Symbolic links require Rock Ridge extensions."
 msgstr ""
-"<p>如果啟用了 Rock Ridge 擴展的話，K3b 可以建立包含符號性連結的 ISO9660 檔案"
-"系統（預設開啟）。您可以在 K3b 專案內變更符號性連結處理的方式。\n"
+"<p>如果啟用了 Rock Ridge 擴展的話，K3b 可以建立包含符號連結的 ISO9660 檔案系"
+"統（預設開啟）。您可以在 K3b 專案內變更符號連結處理的方式。\n"
 "\n"
 "<p><b>不變更</b><br/>\n"
-"符號性連結和被加入專案內時一樣。\n"
+"符號連結和被加入專案內時一樣。\n"
 "\n"
-"<p><b>丟棄毀壞的符號性連結</b><br/>\n"
-"K3b 會丟棄所有無法指向專案內檔案的符號性連結。那包含了運用像是「/home/myhome/"
+"<p><b>捨棄毀壞的符號連結</b><br/>\n"
+"K3b 會捨棄所有無法指向專案內檔案的符號連結。那包含了運用像是「/home/myhome/"
 "testfile」這種絕對路徑的連結。\n"
 "\n"
-"<p><b>丟棄所有符號性連結</b><br/>\n"
-"K3b 會丟棄所有被加入專案內的符號性連結；代表要套用效果的檔案系統內將不存在任"
-"何連結。\n"
+"<p><b>捨棄所有符號連結</b><br/>\n"
+"K3b 會捨棄所有被加入專案內的符號連結；代表要套用效果的檔案系統內將不存在任何"
+"連結。\n"
 "\n"
-"<p><b>跟隨符號性連結</b><br/>\n"
-"每個專案內的符號性連結將被它所指向的檔案內容 (也就是檔案的複製品) 代替。因"
-"此，要套用效果的檔案系統不會有任何符號性連結。<br/>\n"
+"<p><b>跟隨符號連結</b><br/>\n"
+"每個專案內的符號連結將被它所指向的檔案內容 (也就是檔案的複製品) 代替。因此，"
+"要套用效果的檔案系統不會有任何符號連結。<br/>\n"
 "請注意在停用 Rock Ridge 擴展的情況下 (不建議您這麼作)，由於 ISO9660 不支援符"
-"號性連結，所以會自動使用跟隨符號性連結。\n"
+"號性連結，所以會自動使用跟隨符號連結。\n"
 "\n"
-"<p><b>小心：</b>要讓符號性連結有效就需要啟用 Rock Ridge 擴展。"
+"<p><b>小心：</b>要讓符號連結有效就需要啟用 Rock Ridge 擴展。"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSpaceHandling)
@@ -5971,19 +5971,19 @@ msgstr "沒有改變"
 #: projects/base_k3bdataimagesettings.ui:114
 #, kde-format
 msgid "Discard broken symlinks"
-msgstr "丟棄損壞的符號性連結"
+msgstr "捨棄損壞的符號連結"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:119
 #, kde-format
 msgid "Discard all symlinks"
-msgstr "丟棄所有的符號性連結"
+msgstr "捨棄所有的符號連結"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:124
 #, kde-format
 msgid "Follow symlinks"
-msgstr "跟隨符號性連結"
+msgstr "跟隨符號連結"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupWhitespace)
 #: projects/base_k3bdataimagesettings.ui:135
@@ -7030,7 +7030,7 @@ msgid ""
 "symbolic links, and POSIX compatible file permissions."
 msgstr ""
 "在 Linux/Unix 系統上使用此檔案系統已被最佳化。這主要代表它使用了 Rock Ridge "
-"擴展來提供長檔名、符號性連結，以及 POSIX 相容性檔案權限標示等功能。"
+"擴展來提供長檔名、符號連結，以及 POSIX 相容性檔案權限標示等功能。"
 
 #: projects/k3bdataimagesettingswidget.cpp:150
 #, kde-format
@@ -7061,7 +7061,7 @@ msgid ""
 "permissions are supported."
 msgstr ""
 "此檔案系統為老舊系統的相容性提供最佳化。這代表了檔案名稱限制使用 8.3 字元命名"
-"法，而且沒有符號性連結或是檔案權限功能的支援。"
+"法，而且沒有符號連結或是檔案權限功能的支援。"
 
 #: projects/k3bdataimagesettingswidget.cpp:212
 #, kde-format
@@ -7104,7 +7104,7 @@ msgid ""
 msgstr ""
 "<p>請注意我們並不建議您停用 Rock Ridge 擴展。啟用 Rock Ridge 不會有任何壞處 "
 "(除了會花費非常小的空間外) 反而有一大堆好處。<p>沒有了 Rock Ridge 擴展，符號"
-"性連結就不被支援，並總是進行跟隨，就好像「跟隨符號性連結」選項啟用了一樣。"
+"性連結就不被支援，並總是進行跟隨，就好像「跟隨符號連結」選項啟用了一樣。"
 
 #: projects/k3bdataimagesettingswidget.cpp:243
 #, kde-format
@@ -7525,10 +7525,10 @@ msgid ""
 "the option <em>follow symbolic links</em> you may safely ignore this warning "
 "and choose to add the link to the project.</b>"
 msgstr ""
-"<p>「%1」是資料夾「%2」的符號性連結。<p>如果您想要讓 K3b 跟隨符號性連結的話，"
-"您應該考慮讓 K3b 現在就進行跟隨，因為在這之後 K3b 專案內的資料夾的符號性連結"
-"無法被分析。<p><b>如果您不想啟用<em>跟隨符號性連結</em>這個選項的話，您可以安"
-"心地忽略這個警告，並選擇新增連結到專案內。</b>"
+"<p>「%1」是資料夾「%2」的符號連結。<p>如果您想要讓 K3b 跟隨符號連結的話，您應"
+"該考慮讓 K3b 現在就進行跟隨，因為在這之後 K3b 專案內的資料夾的符號連結無法被"
+"分析。<p><b>如果您不想啟用<em>跟隨符號連結</em>這個選項的話，您可以安心地忽略"
+"這個警告，並選擇新增連結到專案內。</b>"
 
 #: projects/k3bdataurladdingdialog.cpp:455
 #, kde-format
@@ -7581,7 +7581,7 @@ msgstr "不要加入"
 msgid ""
 "Do you also want to add system files (FIFOs, sockets, device files, and "
 "broken symlinks)?"
-msgstr "您想要新增系統檔案 (FIFO、socket、裝置檔案，以及失效的符號性連結) 嗎？"
+msgstr "您想要新增系統檔案 (FIFO、socket、裝置檔案，以及失效的符號連結) 嗎？"
 
 #: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
@@ -8029,7 +8029,7 @@ msgstr "忽略所有變更並關閉"
 #: projects/k3bprojectburndialog.cpp:68
 #, kde-format
 msgid "Discards all changes made in the dialog and closes it."
-msgstr "丟棄在對話窗內的所有變更並關閉對話窗。"
+msgstr "捨棄在對話框內的所有變更並關閉對話窗。"
 
 #: projects/k3bprojectburndialog.cpp:140
 #, kde-format
