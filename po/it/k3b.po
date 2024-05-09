@@ -5,21 +5,22 @@
 # Giovanni Venturi <giovanni@ksniffer.org>, 2010.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2015.
 # Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2024 Paolo Zamponi <feus73@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-14 01:37+0000\n"
-"PO-Revision-Date: 2024-02-16 23:47+0100\n"
-"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
+"PO-Revision-Date: 2024-05-08 17:34+0200\n"
+"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5199,7 +5200,7 @@ msgid ""
 "K3b handles three sets of settings in action dialogs (action dialogs include "
 "the CD Copy dialog or the Audio CD project dialog):"
 msgstr ""
-"K3b gestisce tre tipi di impostazioni nelle finestra d'azione (le finestra "
+"K3b gestisce tre tipi di impostazioni nelle finestre d'azione (le finestre "
 "di azione includono la finestra di copia del CD o la finestra del progetto "
 "CD audio):"
 
