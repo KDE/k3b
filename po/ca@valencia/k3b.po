@@ -316,13 +316,13 @@ msgstr "Elimina"
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:88
 #, kde-format
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonAdd)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:95
 #, kde-format
 msgid "Add..."
-msgstr "Afig..."
+msgstr "Afig…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:18
@@ -406,10 +406,10 @@ msgid ""
 "<p>If the resulting audio file sounds bad it is highly likely that the byte "
 "order is wrong and this option has to be checked."
 msgstr ""
-"<p>Si se selecciona, K3b intercanviarà l'ordre dels bytes de les dades "
+"<p>Si està marcada, K3b intercanviarà l'ordre dels bytes de les dades "
 "d'entrada. Per tant, l'ordre haurà de llegir l'àudio en «big endian».\n"
 "<p>Si el fitxer d'àudio resultant sona malament, és molt probable que "
-"l'ordre dels bytes siga incorrecte, i s'haja de seleccionar esta opció."
+"l'ordre dels bytes siga incorrecte, i s'haja de marcar esta opció."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkSwapByteOrder)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:116
@@ -430,7 +430,7 @@ msgid ""
 "<p>If this option is checked K3b will write a wave header. This is useful in "
 "case the encoder application cannot read plain raw audio data."
 msgstr ""
-"<p>Si se selecciona, K3b escriurà una capçalera WAVE. Açò és útil en cas que "
+"<p>Si està marcada, K3b escriurà una capçalera WAVE. Açò és útil en cas que "
 "el codificador no puga llegir dades d'àudio en brut."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteWaveHeader)
@@ -553,7 +553,7 @@ msgstr "Configuració manua&l:"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:239
 #, kde-format
 msgid "Change Settings..."
-msgstr "Canvia les opcions..."
+msgstr "Canvia les opcions…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
@@ -652,8 +652,8 @@ msgid ""
 "strict ISO compatibility. This compatibility might be important for hardware "
 "players."
 msgstr ""
-"<p>Si se selecciona, LAME imposarà la limitació de 7680 bits en la mida "
-"total del marc.<br>\n"
+"<p>Si està marcada, LAME imposarà la limitació de 7680 bits en la mida total "
+"del marc.<br>\n"
 "Farà que es malbaraten molts bits amb codificacions d'una alta taxa de bits, "
 "però assegurarà una estricta compatibilitat ISO. Esta compatibilitat pot ser "
 "important per als reproductors per maquinari."
@@ -679,10 +679,10 @@ msgid ""
 "MP3 stream to be detected; however, it takes 16 bits per frame that would "
 "otherwise be used for encoding, thus slightly reducing the sound quality."
 msgstr ""
-"<p>Si se selecciona, s'afegirà un codi de comprovació cíclica redundant "
-"(CRC) a cada marc, permetent que es detecten els errors de transmissió en el "
-"flux MP3 que es pogueren produir; tanmateix, calen 16 bits per marc que "
-"d'altra manera es farien servir per a la codificació, la qual cosa reduïx "
+"<p>Si està marcada, s'afegirà un codi de comprovació cíclica redundant (CRC) "
+"a cada marc, permetent que es detecten els errors de transmissió en el flux "
+"MP3 que es pogueren produir; tanmateix, calen 16 bits per marc que d'altra "
+"manera es farien servir per a la codificació, la qual cosa reduïx "
 "lleugerament la qualitat del so."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkError)
@@ -1486,7 +1486,7 @@ msgstr "Crea un projecte nou"
 #: k3b.cpp:381
 #, kde-format
 msgid "&Add Files..."
-msgstr "Afi&g fitxers..."
+msgstr "Afi&g fitxers…"
 
 #: k3b.cpp:382
 #, kde-format
@@ -1506,7 +1506,7 @@ msgstr "Neteja el projecte actual"
 #: k3b.cpp:393 k3bdevicemenu.cpp:69
 #, kde-format
 msgid "&Format/Erase rewritable disk..."
-msgstr "&Formata/esborra un disc regravable..."
+msgstr "&Formata i esborra un disc regravable…"
 
 #: k3b.cpp:394
 #, kde-format
@@ -1521,7 +1521,7 @@ msgstr "Obri el diàleg de formatació/esborrat de discs regravables"
 #: k3b.cpp:400
 #, kde-format
 msgid "&Burn Image..."
-msgstr "&Grava imatge..."
+msgstr "&Grava la imatge…"
 
 #: k3b.cpp:401
 #, kde-format
@@ -1533,7 +1533,7 @@ msgstr ""
 #: k3b.cpp:406 k3bdevicemenu.cpp:68
 #, kde-format
 msgid "Copy &Medium..."
-msgstr "Copia el s&uport..."
+msgstr "Copia el s&uport…"
 
 #: k3b.cpp:407 k3bdebuggingoutputdialog.cpp:50
 #, kde-format
@@ -1548,7 +1548,7 @@ msgstr "Obri el diàleg de còpia"
 #: k3b.cpp:413 k3bdevicemenu.cpp:70
 #, kde-format
 msgid "Rip Audio CD..."
-msgstr "Extrau CD d'àudio..."
+msgstr "Extrau CD d'àudio…"
 
 #: k3b.cpp:414
 #, kde-format
@@ -1558,7 +1558,7 @@ msgstr "Extrau digitalment pistes d'un CD d'àudio"
 #: k3b.cpp:419 k3bdevicemenu.cpp:71
 #, kde-format
 msgid "Rip Video DVD..."
-msgstr "Extrau DVD de vídeo..."
+msgstr "Extrau DVD de vídeo…"
 
 #: k3b.cpp:420
 #, kde-format
@@ -1568,7 +1568,7 @@ msgstr "Transcodifica pistes de DVD de vídeo"
 #: k3b.cpp:425 k3bdevicemenu.cpp:72
 #, kde-format
 msgid "Rip Video CD..."
-msgstr "Extrau CD de vídeo..."
+msgstr "Extrau CD de vídeo…"
 
 #: k3b.cpp:426
 #, kde-format
@@ -1613,7 +1613,7 @@ msgstr "&Barra d'ubicació"
 #: k3b.cpp:600 k3b.cpp:916 k3b.cpp:930
 #, kde-format
 msgid "Opening file..."
-msgstr "S'està obrint el fitxer..."
+msgstr "S'està obrint el fitxer…"
 
 #: k3b.cpp:628
 #, kde-format
@@ -1644,7 +1644,7 @@ msgstr "Projectes de K3b (*.k3b)"
 #: k3b.cpp:953
 #, kde-format
 msgid "Saving file..."
-msgstr "S'està guardant el fitxer..."
+msgstr "S'està guardant el fitxer…"
 
 #: k3b.cpp:963 k3b.cpp:1003
 #, kde-format
@@ -1659,7 +1659,7 @@ msgstr "S'ha produït un error d'E/S"
 #: k3b.cpp:980
 #, kde-format
 msgid "Saving file with a new filename..."
-msgstr "S'està guardant el fitxer amb un nom nou..."
+msgstr "S'està guardant el fitxer amb un nom nou…"
 
 #: k3b.cpp:988
 #, kde-format
@@ -1669,7 +1669,7 @@ msgstr "Anomena i guarda"
 #: k3b.cpp:1022
 #, kde-format
 msgid "Closing file..."
-msgstr "S'està tancant el fitxer..."
+msgstr "S'està tancant el fitxer…"
 
 #: k3b.cpp:1124
 #, kde-format
@@ -1780,7 +1780,7 @@ msgstr "&Carrega"
 #: k3bappdevicemanager.cpp:59
 #, kde-format
 msgid "Set Read Speed..."
-msgstr "Establix la velocitat de lectura..."
+msgstr "Establix la velocitat de lectura…"
 
 #: k3bappdevicemanager.cpp:62
 #, kde-format
@@ -2540,7 +2540,7 @@ msgstr "Segur que voleu cancel·lar?"
 #: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Cancel Confirmation"
-msgstr "Confirmació de la cancel·lació"
+msgstr "Confirmeu la cancel·lació"
 
 #: k3bjobprogressdialog.cpp:557
 #, kde-format
@@ -2749,7 +2749,7 @@ msgstr[1] "%1 problemes"
 #: k3bsystemproblemdialog.cpp:98
 #, kde-format
 msgid "Configure K3b..."
-msgstr "Configura K3b..."
+msgstr "Configura K3b…"
 
 #: k3bsystemproblemdialog.cpp:108
 #, kde-format
@@ -2815,7 +2815,7 @@ msgid ""
 "Permissions. If K3b's default value is set make sure you are member of "
 "\"%1\" group."
 msgstr ""
-"Comproveu els permisos via «Configuració -> Configura K3b... -> Programes -> "
+"Comproveu els permisos via «Configuració -> Configura K3b… -> Programes -> "
 "Permisos». Si està definit el valor predeterminat de K3b, assegureu-vos que "
 "sou membre del grup «%1»."
 
@@ -2870,7 +2870,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:284
 #, kde-format
 msgid "Click \"Configure K3b...\" to solve this problem."
-msgstr "Cliqueu «Configura K3b...» per a solucionar este problema."
+msgstr "Cliqueu «Configura K3b…» per a solucionar este problema."
 
 #: k3bsystemproblemdialog.cpp:247 k3bsystemproblemdialog.cpp:280
 #, kde-format
@@ -3114,7 +3114,7 @@ msgid ""
 "udev click \"Modify Permissions...\" and setup permissions by hand."
 msgstr ""
 "Assegureu-vos que teniu accés d'escriptura a %1. En cas que esteu fent "
-"servir «devfs» o «udev», cliqueu «Modifica els permisos...» i establiu els "
+"servir «devfs» o «udev», cliqueu «Modifica els permisos…» i establiu els "
 "permisos manualment."
 
 #: k3bsystemproblemdialog.cpp:500
@@ -3253,7 +3253,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:587
 #, kde-format
 msgid "The latter can be done via \"Configure K3b...\"."
-msgstr "Açò últim es pot fer via «Configura K3b...»"
+msgstr "Açò últim es pot fer via «Configura K3b…»"
 
 #: k3bsystemproblemdialog.cpp:617
 #, kde-format
@@ -3348,7 +3348,7 @@ msgstr "Barra d'eines principal"
 #: k3bwelcomewidget.cpp:79
 #, kde-format
 msgid "More actions..."
-msgstr "Més accions..."
+msgstr "Més accions…"
 
 #: k3bwelcomewidget.cpp:262
 #, kde-format
@@ -3460,7 +3460,7 @@ msgstr "Ignora"
 #: k3bwriterselectionwidget.cpp:306
 #, kde-format
 msgid "More..."
-msgstr "Més..."
+msgstr "Més…"
 
 #: k3bwriterselectionwidget.cpp:596
 #, kde-format
@@ -3526,9 +3526,9 @@ msgid ""
 "instead of the writer device.<br>Try this if your CD writer fails to write "
 "in DAO and TAO."
 msgstr ""
-"Mode d'escriptura en brut. Les dades per a la correcció d'errors són creades "
-"per programari en comptes de pel dispositiu d'escriptura.<br>Intenteu açò si "
-"la vostra gravadora de CD falla en escriure en DAO i TAO."
+"Mode d'escriptura en brut. Les dades per a l'esmena d'errors són creades per "
+"programari en comptes de pel dispositiu d'escriptura.<br>Intenteu açò si la "
+"vostra gravadora de CD falla en escriure en DAO i TAO."
 
 #: k3bwritingmodewidget.cpp:35
 #, kde-format
@@ -4238,7 +4238,7 @@ msgstr "Copia la suma de verificació a dins del porta-retalls"
 #: misc/k3bimagewritingdialog.cpp:1099
 #, kde-format
 msgid "Compare checksum..."
-msgstr "Compara la suma de verificació..."
+msgstr "Compara la suma de verificació…"
 
 #: misc/k3bimagewritingdialog.cpp:1106
 #, kde-format
@@ -4309,7 +4309,7 @@ msgstr "&Opcions"
 #: misc/k3bmediacopydialog.cpp:158
 #, kde-format
 msgid "No error correction"
-msgstr "Sense correcció d'errors"
+msgstr "Sense esmena d'errors"
 
 #: misc/k3bmediacopydialog.cpp:159 misc/k3bmediacopydialog.cpp:172
 #: projects/k3baudioburndialog.cpp:85 rip/k3baudiorippingdialog.cpp:177
@@ -4343,7 +4343,7 @@ msgstr "Omet els sectors de dades illegibles"
 #: misc/k3bmediacopydialog.cpp:205
 #, kde-format
 msgid "Disable the source drive's error correction"
-msgstr "Desactiva la correcció d'errors en la unitat d'origen"
+msgstr "Desactiva l'esmena d'errors a la unitat d'origen"
 
 #: misc/k3bmediacopydialog.cpp:206
 #, kde-format
@@ -4358,10 +4358,10 @@ msgid ""
 "read.<p>This may be useful for cloning CDs with copy protection based on "
 "corrupted sectors."
 msgstr ""
-"<p>Si se selecciona, K3b desactivarà la correcció d'errors ECC/EDC en la "
-"unitat d'origen. D'esta manera es podran llegir els sectors que són "
-"illegibles de manera intencionada. <p>Açò pot ser útil per a clonar CD "
-"protegits amb sistemes anticòpia basats en sectors corromputs."
+"<p>Si està marcada, K3b desactivarà l'esmena d'errors ECC/EDC en la unitat "
+"d'origen. D'esta manera es podran llegir els sectors que són illegibles de "
+"manera intencionada. <p>Açò pot ser útil per a clonar CD protegits amb "
+"sistemes anticòpia basats en sectors corromputs."
 
 #: misc/k3bmediacopydialog.cpp:213
 #, kde-format
@@ -4370,7 +4370,7 @@ msgid ""
 "Disable it if your CD drive has problems with reading CD-Text or you want to "
 "stick to CDDB info."
 msgstr ""
-"<p>Si se selecciona, K3b buscarà CD-Text en el CD d'origen. Desactiveu-la si "
+"<p>Si està marcada, K3b buscarà CD-Text en el CD d'origen. Desactiveu-la si "
 "el vostre lector de CD té problemes llegint el CD-Text o voleu utilitzar "
 "només la informació CDDB."
 
@@ -4380,7 +4380,7 @@ msgid ""
 "<p>If this option is checked and K3b is not able to read a data sector from "
 "the source medium it will be replaced with zeros on the resulting copy."
 msgstr ""
-"<p>Si se selecciona i K3b no és capaç de llegir un sector del CD/DVD "
+"<p>Si es marca esta opció i K3b no és capaç de llegir un sector del CD/DVD "
 "d'origen, serà substituït amb zeros en la còpia resultant."
 
 #: misc/k3bmediacopydialog.cpp:221
@@ -4478,7 +4478,7 @@ msgid ""
 "just needs to be overwritten. The same applies to DVD-RW in restricted "
 "overwrite mode."
 msgstr ""
-"<p>Si se selecciona, K3b formatarà un DVD-RW fins i tot si este està buit. "
+"<p>Si està marcada, K3b formatarà un DVD-RW fins i tot si este està buit. "
 "També es pot utilitzar per a forçar que K3b formate un DVD+RW,BD-RE o un DVD-"
 "RW en el mode de sobreescriptura restringida.<p><b>Atenció:</b> No es "
 "recomana formatar sovint un DVD, atés que podria tornar-se inusable després "
@@ -4499,7 +4499,7 @@ msgid ""
 "format.<p>Erasing a rewritable medium completely can take a very long time "
 "and some writers perform a full format even if quick format is enabled."
 msgstr ""
-"<p>Si se selecciona, K3b li dirà a la gravadora que realitze una formatació "
+"<p>Si està marcada, K3b li dirà a la gravadora que realitze una formatació "
 "ràpida.<p>L'esborrat complet d'un suport regravable pot tardar molta estona, "
 "i algunes gravadores realitzen una formatació completa fins i tot si la "
 "formatació ràpida està activada."
@@ -4569,7 +4569,7 @@ msgid ""
 "<p>If this option is checked K3b will check the system configuration for any "
 "problems on startup and when the user changes the settings."
 msgstr ""
-"<p>Si se selecciona, K3b comprovarà la configuració del sistema per a si hi "
+"<p>Si està marcada, K3b comprovarà la configuració del sistema per a si hi "
 "ha problemes durant l'inici o quan l'usuari canvie la configuració."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkSystemConfig)
@@ -4592,7 +4592,7 @@ msgid ""
 "notification area. If K3b is run outside KDE environment a separate progress "
 "window may be shown instead.</p>"
 msgstr ""
-"<p>Si se selecciona, K3b mostrarà el progrés en l'àrea de notificacions de "
+"<p>Si està marcada, K3b mostrarà el progrés en l'àrea de notificacions de "
 "KDE. Si K3b s'executa fora d'un entorn KDE, es mostrarà una finestra "
 "separada amb el progrés.</p>"
 
@@ -4615,7 +4615,7 @@ msgid ""
 "<p>If this option is checked K3b will hide the main window while displaying "
 "the progress dialog."
 msgstr ""
-"<p>Si se selecciona, K3b ocultarà la finestra principal mentre es mostra el "
+"<p>Si està marcada, K3b ocultarà la finestra principal mentre es mostra el "
 "diàleg de progrés."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
@@ -4650,9 +4650,9 @@ msgid ""
 "CD Copy dialog after the process has been finished. It will be kept open to "
 "start a new process, for instance, copying another CD."
 msgstr ""
-"<p>Si se selecciona, K3b no tancarà els diàlegs d'acció, com ara el diàleg "
-"de còpia de CD, després d'acabar el procés. Es mantindrà obert per a "
-"començar un procés nou, com ara copiar un altre CD."
+"<p>Si està marcada, K3b no tancarà els diàlegs d'acció, com ara el diàleg de "
+"còpia de CD, després d'acabar el procés. Es mantindrà obert per a començar "
+"un procés nou, com ara copiar un altre CD."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkKeepDialogsOpen)
 #: option/base_k3bmiscoptiontab.ui:130
@@ -4676,7 +4676,7 @@ msgstr "Configuració que es carregarà quan s'inicie un diàleg d'acció"
 #: option/base_k3bpluginoptiontab.ui:21
 #, kde-format
 msgid "Configure..."
-msgstr "Configura..."
+msgstr "Configura…"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: option/base_k3bpluginoptiontab.ui:47 option/k3bpluginoptiontab.cpp:31
@@ -4713,13 +4713,13 @@ msgstr "No s'ha seleccionat cap tema"
 #: option/base_k3bthemeoptiontab.ui:119
 #, kde-format
 msgid "Get New Themes..."
-msgstr "Obtín temes nous..."
+msgstr "Obtín temes nous…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
 #, kde-format
 msgid "Install New Theme..."
-msgstr "Instal·la un tema nou..."
+msgstr "Instal·la un tema nou…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemoveTheme)
 #: option/base_k3bthemeoptiontab.ui:136
@@ -4812,12 +4812,12 @@ msgid ""
 "that K3b does not support all possible tools in all project types and "
 "actions.</b>"
 msgstr ""
-"<p>Si se selecciona esta opció, es mostraran elements addicionals de la IGU "
-"que permeten influir en el comportament de K3b. Açò inclou la selecció "
-"manual de l'eina de gravació utilitzada. (Escollir entre cdrecord i cdrdao "
-"en escriure un CD o entre cdrecord i growisofs en escriure un DVD/"
-"BD)<p><b>Cal tindre present que K3b no implementa totes les possibles eines "
-"en tots els tipus de projectes i accions.</b>"
+"<p>Si està marcada, es mostraran elements addicionals de la IGU que permeten "
+"influir en el comportament de K3b. Açò inclou la selecció manual de l'eina "
+"de gravació utilitzada. (Escollir entre cdrecord i cdrdao en escriure un CD "
+"o entre cdrecord i growisofs en escriure un DVD/BD)<p><b>Cal tindre present "
+"que K3b no implementa totes les possibles eines en tots els tipus de "
+"projectes i accions.</b>"
 
 #: option/k3badvancedoptiontab.cpp:104
 #, kde-format
@@ -4835,12 +4835,12 @@ msgstr ""
 "<p>Cada suport té una capacitat màxima oficial que es troba guardada en una "
 "àrea de només lectura del suport i està garantida pel fabricant. Tanmateix, "
 "esta capacitat oficial no sempre és el màxim real. Molts suports tenen una "
-"capacitat total real una mica superior a l'oficial. <p>Si se selecciona, K3b "
+"capacitat total real una mica superior a l'oficial. <p>Si està marcada, K3b "
 "desactivarà una comprovació de seguretat que evita que s'escriga per damunt "
-"de la capacitat oficial. <p><b>Precaució:</b> seleccionar esta opció pot "
-"provocar errors al final del procés de gravació si K3b intenta escriure més "
-"enllà de la capacitat oficial. És aconsellable determinar abans la capacitat "
-"màxima real del suport amb una gravació simulada."
+"de la capacitat oficial. <p><b>Precaució:</b> marcar esta opció pot provocar "
+"errors al final del procés de gravació si K3b intenta escriure més enllà de "
+"la capacitat oficial. És aconsellable determinar abans la capacitat màxima "
+"real del suport amb una gravació simulada."
 
 #: option/k3badvancedoptiontab.cpp:115
 #, kde-format
@@ -4848,7 +4848,7 @@ msgid ""
 "<p>If this option is checked K3b will automatically erase CD-RWs and format "
 "DVD-RWs if one is found instead of an empty media before writing."
 msgstr ""
-"<p>Si se selecciona, K3b esborrarà automàticament els CD-RW i els formatarà "
+"<p>Si està marcada, K3b esborrarà automàticament els CD-RW i els formatarà "
 "abans de l'escriptura si troba un suport no buit."
 
 #: option/k3badvancedoptiontab.cpp:119
@@ -4862,7 +4862,7 @@ msgstr ""
 "<p>K3b utilitza una memòria intermèdia per programari durant el procés per a "
 "evitar salts en el flux de dades per una elevada càrrega en el sistema. Les "
 "mides predeterminades que es fan servir són %1 MB per a gravar CD, i %2 per "
-"als DVD. <p>Si se selecciona, el valor especificat es farà servir per a "
+"als DVD. <p>Si està marcada, el valor especificat es farà servir per a "
 "gravar tant els CD com els DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
@@ -4875,7 +4875,7 @@ msgid ""
 "Otherwise the system will not detect the changes and still treat it as an "
 "empty medium."
 msgstr ""
-"<p>Si se selecciona, K3b no expulsarà el suport quan acabe el procés de "
+"<p>Si està marcada, K3b no expulsarà el suport quan acabe el procés de "
 "gravació. Açò pot ser útil en cas que hàgeu d'abandonar l'ordinador després "
 "d'iniciar la gravació i no vulgueu deixar la safata oberta tota l'estona. "
 "<p>Tanmateix, als sistemes Linux els suports gravats recentment s'han de "
@@ -4891,11 +4891,11 @@ msgid ""
 "speed medium on a low speed writer.<p><b>Caution:</b> Enabling this option "
 "may result in damaged media."
 msgstr ""
-"<p>Si se selecciona, K3b continuarà en algunes situacions que altrament "
+"<p>Si està marcada, K3b continuarà en algunes situacions que altrament "
 "serien considerades poc segures. <p>Esta opció, per exemple, desactiva la "
 "verificació de la velocitat del suport. D'esta manera, es pot obligar a K3b "
 "a gravar un suport d'alta velocitat en una gravadora lenta. <p><b>Precaució:"
-"</b> seleccionar esta opció pot provocar danys en els suports."
+"</b> marcar esta opció pot provocar danys en els suports."
 
 #: option/k3bcddboptiontab.cpp:37
 #, kde-format
@@ -5099,7 +5099,7 @@ msgstr "Comprova els programes dels quals en voleu canviar els permisos:"
 #: option/k3bexternalbinwidget.cpp:114
 #, kde-format
 msgid "Change Permissions..."
-msgstr "Canvia els permisos..."
+msgstr "Canvia els permisos…"
 
 #: option/k3bexternalbinwidget.cpp:127
 #, kde-format
@@ -5406,12 +5406,12 @@ msgid ""
 "<p><b>It is highly recommended to use Rock Ridge extensions on every data CD "
 "or DVD.</b>"
 msgstr ""
-"<p>Si se selecciona, K3b generarà el protocol del sistema d'intercanvi de "
+"<p>Si està marcada, K3b generarà el protocol del sistema d'intercanvi de "
 "fitxers (SUSP) especificat pel protocol d'intercanvi Rock Ridge (IEEE-"
 "P1282).\n"
 "<p>Rock Ridge estén el sistema de fitxers ISO 9660 amb característiques "
 "iguals a les dels sistemes de fitxers tipus UNIX (permisos, enllaços "
-"simbòlics, noms de fitxer més grans,...). Este utilitza caràcters basats en "
+"simbòlics, noms de fitxer més grans…). Este utilitza caràcters basats en "
 "ISO-8859 o UTF-16 i permet bytes de 255.\n"
 "<p>L'extensió Rock Ridge està localitzada al final de cada registre de "
 "directori ISO 9660. Açò fa que l'arbre Rock Ridge estiga estretament acoblat "
@@ -5449,7 +5449,7 @@ msgid ""
 "POSIX-like OS that supports Joliet. So <b>never create Joliet-only CDs or "
 "DVDs</b> for that reason."
 msgstr ""
-"<p>Si se selecciona, K3b afegirà extensions Joliet addicionals al sistema de "
+"<p>Si està marcada, K3b afegirà extensions Joliet addicionals al sistema de "
 "fitxers ISO 9660.\n"
 "<p>Joliet no és un estàndard acceptat internacionalment com ara l'ISO 9660 o "
 "Rock Ridge. S'utilitza principalment en sistemes Windows.\n"
@@ -5485,7 +5485,7 @@ msgid ""
 "<p>The UDF (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>) is mainly "
 "used for DVDs."
 msgstr ""
-"<p>Si se selecciona, K3b crearà les estructures del sistema de fitxers UDF a "
+"<p>Si està marcada, K3b crearà les estructures del sistema de fitxers UDF a "
 "més de les del sistema de fitxers ISO 9660.\n"
 "<p>L'UDF (<em><b>U</b>niversal <b>D</b>isk <b>F</b>ormat</em>, format "
 "universal per a discs) s'utilitza majoritàriament en els DVD."
@@ -5513,7 +5513,7 @@ msgid ""
 "not make much sense on other file systems; for example, if a user that owns "
 "a file on the CD or DVD does not exist."
 msgstr ""
-"<p>Si se selecciona, tots els fitxers en el CD resultant tindran exactament "
+"<p>Si està marcada, tots els fitxers en el CD resultant tindran exactament "
 "els mateixos permisos que els fitxers d'origen. (En cas contrari, tots els "
 "fitxers tindran els mateixos permisos i seran propietat de root).\n"
 "<p>Açò és útil principalment per a realitzar còpies de seguretat.\n"
@@ -5761,7 +5761,7 @@ msgstr "Copia a totes les pistes"
 #: rip/base_k3baudiorippingoptionwidget.ui:37
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:48
@@ -5830,7 +5830,7 @@ msgid ""
 "a bad idea (just remember to fill in the CD-Text information)."
 msgstr ""
 "<p><b>CD-Text</b>\n"
-"<p>Si se selecciona, K3b emprarà un espai del CD d'àudio, que d'altra manera "
+"<p>Si està marcada, K3b emprarà un espai del CD d'àudio, que d'altra manera "
 "quedaria sense utilitzar, per a guardar informació addicional, com ara "
 "l'artista o el títol del CD.\n"
 "<p>CD-Text és una ampliació de l'estàndard de CD d'àudio introduïda per "
@@ -5851,7 +5851,7 @@ msgstr "Intér&pret:"
 #: projects/base_k3baudiocdtextwidget.ui:126
 #, kde-format
 msgid "More Fiel&ds..."
-msgstr "Més &camps..."
+msgstr "Més &camps…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: projects/base_k3baudiotrackwidget.ui:15
@@ -5970,7 +5970,7 @@ msgstr "Afig una imatge d'arrancada nova"
 #: projects/base_k3bbootimagedialog.ui:39
 #, kde-format
 msgid "&New..."
-msgstr "&Nova..."
+msgstr "&Nova…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, m_buttonDelete)
 #: projects/base_k3bbootimagedialog.ui:46
@@ -6092,7 +6092,7 @@ msgstr "Nom del volum"
 #: projects/base_k3bdataimagesettings.ui:34
 #, kde-format
 msgid "&More fields..."
-msgstr "&Més camps..."
+msgstr "&Més camps…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupFileSystem)
 #: projects/base_k3bdataimagesettings.ui:44
@@ -6112,7 +6112,7 @@ msgstr "Sistemes de fitxers predefinits"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:79
 #, kde-format
 msgid "&Custom..."
-msgstr "&A mida..."
+msgstr "&A mida…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupSymlinks)
 #: projects/base_k3bdataimagesettings.ui:75
@@ -6245,17 +6245,17 @@ msgid ""
 "Example: 'my good file.ext' becomes 'my_good_file.ext'"
 msgstr ""
 "<p><b>Sense cap canvi</b><br>\n"
-"Si se selecciona, K3b deixarà els espais en els noms de fitxer tal com "
+"Si està marcada, K3b deixarà els espais en els noms de fitxer tal com "
 "estiguen.\n"
 "<p><b>Elimina</b><br>\n"
-"Si se selecciona, K3b eliminarà tots els espais dels noms de fitxer.<br>\n"
+"Si està marcada, K3b eliminarà tots els espais dels noms de fitxer.<br>\n"
 "Exemple: «el meu fitxer.ext» es convertix en «elmeufitxer.ext»\n"
 "<p><b>Eliminació ampliada</b><br>\n"
-"Si se selecciona, K3b eliminarà tots els espais dels noms de fitxer i posarà "
+"Si està marcada, K3b eliminarà tots els espais dels noms de fitxer i posarà "
 "en majúscules totes les lletres que vagen després d'un espai.<br>\n"
 "Exemple: «el meu fitxer.ext» es convertix en «elMeuFitxer.ext»\n"
 "<p><b>Substituïx</b><br>\n"
-"Si se selecciona, K3b substituirà els espais en els noms de fitxer amb els "
+"Si està marcada, K3b substituirà els espais en els noms de fitxer amb els "
 "caràcters indicats.<br>\n"
 "Exemple: «el meu fitxer.ext» es convertix en «el_meu_fitxer.ext»"
 
@@ -6425,7 +6425,7 @@ msgid ""
 "<p>If this option is checked the order in which the files are played is "
 "determined randomly every time it is played."
 msgstr ""
-"<p>Si se selecciona, l'ordre en què es reproduïxen els fitxers serà "
+"<p>Si està marcada, l'ordre en què es reproduïxen els fitxers serà "
 "determinada aleatòriament cada vegada que es reproduïsca."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkRandomPlay)
@@ -6448,7 +6448,7 @@ msgid ""
 "for accessing the drive. This will slow down reading from the CD/DVD but may "
 "be necessary on some systems that do not support DMA.</p>"
 msgstr ""
-"<p>Si se selecciona, el CD/DVD eMovix resultant no farà servir DMA per a "
+"<p>Si està marcada, el CD/DVD eMovix resultant no farà servir DMA per a "
 "accedir a la unitat. Açò alentirà la lectura del CD, però pot ser necessari "
 "en alguns sistemes que no permeten l'ús de DMA.</p>"
 
@@ -6678,7 +6678,7 @@ msgid ""
 "<p>If this option is checked the disk will be ejected after MPlayer has "
 "finished."
 msgstr ""
-"<p>Si se selecciona, el disc serà expulsat després que MPlayer haja "
+"<p>Si està marcada, el disc serà expulsat després que MPlayer haja "
 "finalitzat."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkEject)
@@ -6700,7 +6700,7 @@ msgid ""
 "<p>If this option is checked the PC will be shut down after MPlayer has "
 "finished playing."
 msgstr ""
-"<p>Si se selecciona, el PC s'apagarà després que MPlayer haja finalitzat la "
+"<p>Si està marcada, el PC s'apagarà després que MPlayer haja finalitzat la "
 "reproducció."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShutdown)
@@ -6722,7 +6722,7 @@ msgid ""
 "<p>If this option is checked the PC will be rebooted after MPlayer has "
 "finished playing."
 msgstr ""
-"<p>Si se selecciona, el PC es reiniciarà després que MPlayer haja finalitzat "
+"<p>Si està marcada, el PC es reiniciarà després que MPlayer haja finalitzat "
 "la reproducció."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkReboot)
@@ -6775,7 +6775,7 @@ msgid ""
 "amusing.<p><b>This feature is only available in DAO mode when writing with "
 "cdrdao."
 msgstr ""
-"<p>Si se selecciona, K3b <em>amagarà</em> la primera pista.<p>Un CD d'àudio "
+"<p>Si està marcada, K3b <em>amagarà</em> la primera pista.<p>Un CD d'àudio "
 "estàndard utilitza preintervals abans de cada pista del CD. De manera "
 "predeterminada, estos duren 2 segons i són silenciosos. En el mode DAO és "
 "possible tindre preintervals més llargs, que podrien contindre una mica "
@@ -6905,12 +6905,12 @@ msgstr "Nom de fitxer"
 #: projects/k3baudiotrackaddingdialog.cpp:47
 #, kde-format
 msgid "Please be patient..."
-msgstr "Un moment, per favor..."
+msgstr "Un moment, per favor…"
 
 #: projects/k3baudiotrackaddingdialog.cpp:50
 #, kde-format
 msgid "Adding files to project \"%1\"..."
-msgstr "S'estan afegint fitxers al projecte «%1»..."
+msgstr "S'estan afegint fitxers al projecte «%1»…"
 
 #: projects/k3baudiotrackaddingdialog.cpp:73
 #: projects/k3bdataurladdingdialog.cpp:801
@@ -6955,7 +6955,7 @@ msgstr "Problemes mentre s'afegien fitxers al projecte."
 #: projects/k3baudiotrackaddingdialog.cpp:146
 #, kde-format
 msgid "Analysing file '%1'..."
-msgstr "S'està analitzant el fitxer «%1»..."
+msgstr "S'està analitzant el fitxer «%1»…"
 
 #: projects/k3baudiotrackdialog.cpp:38
 #, kde-format
@@ -7031,7 +7031,7 @@ msgstr "La pista %1 no s'ha trobat en la base de dades de MusicBrainz."
 #: projects/k3baudioviewimpl.cpp:77
 #, kde-format
 msgid "Add Silence..."
-msgstr "Afig silenci..."
+msgstr "Afig silenci…"
 
 #: projects/k3baudioviewimpl.cpp:79
 #, kde-format
@@ -7046,12 +7046,12 @@ msgstr "Origen a pista"
 #: projects/k3baudioviewimpl.cpp:83
 #, kde-format
 msgid "Split Track..."
-msgstr "Dividix la pista..."
+msgstr "Dividix la pista…"
 
 #: projects/k3baudioviewimpl.cpp:85
 #, kde-format
 msgid "Edit Source..."
-msgstr "Edita l'origen..."
+msgstr "Edita l'origen…"
 
 #: projects/k3baudioviewimpl.cpp:87
 #, kde-format
@@ -7377,7 +7377,7 @@ msgstr ""
 "Ridge. Activar Rock Ridge no té cap desavantatge (excepte una xicoteta "
 "pèrdua d'espai), però sí molts avantatges. <p>Sense les extensions Rock "
 "Ridge els enllaços simbòlics no estan permesos i sempre se seguiran com si "
-"l'opció «Seguix els enllaços simbòlics» estiguera seleccionada."
+"l'opció «Seguix els enllaços simbòlics» estiguera activada."
 
 #: projects/k3bdataimagesettingswidget.cpp:243
 #, kde-format
@@ -7601,7 +7601,7 @@ msgid ""
 "Joliet, which can be managed by hiding README.joliet on RockRidge and README."
 "rr on the Joliet filesystem.</p>"
 msgstr ""
-"<p>Si se selecciona, el fitxer o carpeta (i els seus continguts) s'ocultaran "
+"<p>Si està marcada, el fitxer o carpeta (i els seus continguts) s'ocultaran "
 "en els sistemes de fitxers ISO 9660 i RockRidge .</p><p>Açò pot ser útil, "
 "per exemple, si teniu diferents fitxers README per a RockRidge i Joliet, els "
 "quals poden ser manejats ocultant el README.joliet en RockRidge i el README."
@@ -7616,7 +7616,7 @@ msgid ""
 "managed by hiding README.joliet on RockRidge and README.rr on the Joliet "
 "filesystem.</p>"
 msgstr ""
-"<p>Si se selecciona, el fitxer o carpeta (i els seus continguts) s'ocultaran "
+"<p>Si està marcada, el fitxer o carpeta (i els seus continguts) s'ocultaran "
 "en el sistema de fitxers Joliet.</p><p>Açò pot ser útil, per exemple, si "
 "teniu diferents fitxers README per a RockRidge i Joliet, els quals poden ser "
 "manejats ocultant el README.joliet en RockRidge i el README.rr en el sistema "
@@ -7704,7 +7704,7 @@ msgstr "Sense carpetes"
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
 msgid "Moving files to project \"%1\"..."
-msgstr "S'estan movent els fitxers al projecte «%1»..."
+msgstr "S'estan movent els fitxers al projecte «%1»…"
 
 #: projects/k3bdataurladdingdialog.cpp:92
 #, kde-format
@@ -7714,7 +7714,7 @@ msgstr "S'estan afegint els fitxers al projecte «%1»"
 #: projects/k3bdataurladdingdialog.cpp:97
 #, kde-format
 msgid "Adding files to project '%1'..."
-msgstr "S'estan afegint fitxers al projecte «%1»..."
+msgstr "S'estan afegint fitxers al projecte «%1»…"
 
 #: projects/k3bdataurladdingdialog.cpp:178
 #, kde-format
@@ -7822,9 +7822,9 @@ msgstr ""
 "K3b seguisca els enllaços simbòlics hauríeu de considerar de deixar-li fer "
 "ara perquè K3b no serà capaç de fer-ho després, ja que els enllaços "
 "simbòlics cap a carpetes dins d'un projecte de K3b no es poden resoldre. "
-"<p><b>Si no teniu pensat seleccionar l'opció <em>Seguix els enllaços "
-"simbòlics</em>, podeu ignorar sense problemes esta advertència i afegir "
-"l'enllaç al projecte.</b>"
+"<p><b>Si no teniu pensat marcar l'opció <em>Seguix els enllaços simbòlics</"
+"em>, podeu ignorar sense problemes esta advertència i afegir l'enllaç al "
+"projecte.</b>"
 
 #: projects/k3bdataurladdingdialog.cpp:455
 #, kde-format
@@ -7916,7 +7916,7 @@ msgstr "Cap dada que s'haja de gravar"
 #: projects/k3bdataviewimpl.cpp:108
 #, kde-format
 msgid "New Folder..."
-msgstr "Carpeta nova..."
+msgstr "Carpeta nova…"
 
 #: projects/k3bdataviewimpl.cpp:126
 #, kde-format
@@ -7931,7 +7931,7 @@ msgstr "Obri"
 #: projects/k3bdataviewimpl.cpp:141
 #, kde-format
 msgid "&Import Session..."
-msgstr "&Importa sessió..."
+msgstr "&Importa la sessió…"
 
 #: projects/k3bdataviewimpl.cpp:142
 #, kde-format
@@ -7951,7 +7951,7 @@ msgstr "Elimina els elements importats d'una sessió anterior"
 #: projects/k3bdataviewimpl.cpp:152
 #, kde-format
 msgid "&Edit Boot Images..."
-msgstr "&Edita les imatges d'arrancada..."
+msgstr "&Edita les imatges d'arrancada…"
 
 #: projects/k3bdataviewimpl.cpp:153
 #, kde-format
@@ -8022,12 +8022,12 @@ msgstr "%1 MB"
 #: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
 msgid "Custom..."
-msgstr "A mida..."
+msgstr "A mida…"
 
 #: projects/k3bfillstatusdisplay.cpp:433
 #, kde-format
 msgid "From Medium..."
-msgstr "Des del suport..."
+msgstr "Des del suport…"
 
 #: projects/k3bfillstatusdisplay.cpp:451
 #, kde-format
@@ -8295,7 +8295,7 @@ msgstr "Elimina fitxer de subtítols"
 #: projects/k3bmovixview.cpp:66
 #, kde-format
 msgid "Add Subtitle File..."
-msgstr "Afig fitxer de subtítols..."
+msgstr "Afig un fitxer de subtítols...…"
 
 #: projects/k3bmovixview.cpp:149
 #, kde-format
@@ -8814,7 +8814,7 @@ msgstr ""
 "ha de ser precedida per una capçalera de seqüència.<p>Els codis d'inici "
 "d'estos 3 elements han d'estar tots en el mateix sector/paquet MPEG, per a "
 "així formar el que s'anomena un sector de punt d'accés.<p>Este requisit es "
-"pot relaxar seleccionant l'opció d'APS relaxat, p. ex., tots els sectors que "
+"pot relaxar marcant l'opció d'APS relaxat, p. ex., tots els sectors que "
 "continguen un I-frame seran considerats com un APS.<p><b>Atenció:</b> la "
 "capçalera de seqüència és necessària perquè un dispositiu de reproducció "
 "sàpia els paràmetres de visualització, com ara la resolució i la taxa de "
@@ -8835,7 +8835,7 @@ msgstr ""
 "en la capa d'imatge de totes les imatges intra-codificades.<p>Pot utilitzar-"
 "se pels dispositius de reproducció per a implementar la busca ràpida cap "
 "avant i cap arrere.<p>Les dades d'informació de l'exploració que ja "
-"existisquen es poden actualitzar seleccionant l'opció «Actualitza els "
+"existisquen es poden actualitzar marcant l'opció «Actualitza els "
 "desplaçaments de l'exploració»."
 
 #: projects/k3bvcdburndialog.cpp:216
@@ -9215,7 +9215,7 @@ msgid ""
 "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9."
 msgstr ""
 "Estes són en realitat pseudo tecles, representant les tecles numèriques 0, "
-"1,..., 9."
+"1, «…», 9."
 
 #: projects/k3bvcdtrackdialog.cpp:258
 #, kde-format
@@ -9528,7 +9528,7 @@ msgid ""
 "which can be used with programs like Amarok or JuK.\n"
 "<p>You may use the special strings to give the playlist a unique filename."
 msgstr ""
-"<p>Si se selecciona, K3b crearà un repertori dels fitxers\n"
+"<p>Si està marcada, K3b crearà un repertori dels fitxers\n"
 "extrets, el qual es podrà utilitzar amb programes com Amarok o JuK.\n"
 "<p>Podreu utilitzar les cadenes especials per a donar al repertori un nom de "
 "fitxer únic."
@@ -9556,7 +9556,7 @@ msgid ""
 "in the\n"
 "playlist will look something like: <em>cool/track1.ogg</em>."
 msgstr ""
-"<p>Si se selecciona, les entrades del repertori hauran de ser relatives a la "
+"<p>Si està marcada, les entrades del repertori hauran de ser relatives a la "
 "seua ubicació.\n"
 "<p>Exemple: si el vostre repertori es troba a <em>/home/usuari/musica</em> "
 "i\n"
@@ -9586,7 +9586,7 @@ msgid ""
 "<p>This might be useful to rip a live album or a radio play.\n"
 "<p><b>Caution:</b> The file will have the name made from playlist pattern."
 msgstr ""
-"<p>Si se selecciona, K3b tan sols crearà\n"
+"<p>Si està marcada, K3b tan sols crearà\n"
 "un fitxer d'àudio independentment de quantes pistes s'hagen\n"
 "extret. Este fitxer contindrà totes les pistes una rere l'altra.\n"
 "<p>Açò pot ser útil per a extraure un àlbum en directe o un\n"
@@ -9612,8 +9612,8 @@ msgid ""
 "<p>If this option is checked K3b will create a CDRWIN cue file which allows "
 "one to easily write a copy of the audio CD on other systems."
 msgstr ""
-"<p>Si se selecciona, K3b crearà un fitxer CUE de «cdrwin» que permet "
-"escriure amb facilitat una còpia del CD d'àudio en altres sistemes."
+"<p>Si està marcada, K3b crearà un fitxer CUE de «cdrwin» que permet escriure "
+"amb facilitat una còpia del CD d'àudio en altres sistemes."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:151
@@ -9749,7 +9749,7 @@ msgstr "Banda sonora"
 #: rip/k3baudiocdview.cpp:143
 #, kde-format
 msgid "Searching for Artist information..."
-msgstr "S'està buscant informació de l'artista..."
+msgstr "S'està buscant informació de l'artista…"
 
 #: rip/k3baudiocdview.cpp:177 rip/k3baudioprojectconvertingdialog.cpp:97
 #: rip/k3baudiorippingdialog.cpp:115 rip/k3bvideocdview.cpp:350
@@ -9767,7 +9767,7 @@ msgstr "CD d'àudio"
 #: rip/k3baudiocdview.cpp:216
 #, kde-format
 msgid "Edit Track Info..."
-msgstr "Edita la informació de la pista..."
+msgstr "Edita la informació de la pista…"
 
 #: rip/k3baudiocdview.cpp:217
 #, kde-format
@@ -9777,7 +9777,7 @@ msgstr "Edita la informació de la pista actual"
 #: rip/k3baudiocdview.cpp:222
 #, kde-format
 msgid "Edit Album Info..."
-msgstr "Edita la informació de l'àlbum..."
+msgstr "Edita la informació de l'àlbum…"
 
 #: rip/k3baudiocdview.cpp:223
 #, kde-format
@@ -10098,8 +10098,7 @@ msgid ""
 msgstr ""
 "<p>Especifica el nombre màxim de reintents per a llegir un sector de dades "
 "d'àudio des del CD. Després d'açò K3b o bé ometrà el sector si l'opció "
-"<em>Ignora els errors de lectura</em> està seleccionada, o bé pararà el "
-"procés."
+"<em>Ignora els errors de lectura</em> està activada, o bé pararà el procés."
 
 #: rip/k3baudiorippingdialog.cpp:205
 #, kde-format
@@ -10116,7 +10115,7 @@ msgid ""
 "In any case, when creating a K3b audio project, the pregaps will be "
 "regenerated.</p>"
 msgstr ""
-"<p>Si se selecciona, K3b no extraurà les dades d'àudio dels preintervals. La "
+"<p>Si està marcada, K3b no extraurà les dades d'àudio dels preintervals. La "
 "majoria de les pistes d'àudio contenen un preinterval buit que no pertany a "
 "la mateixa pista.</p><p>Tot i que el comportament predeterminat de quasi "
 "tots els programes d'extracció és incloure els preintervals, per a la "
@@ -10255,7 +10254,7 @@ msgstr ""
 "a='%A'{%a} només inclou la informació de l'artista del títol si és diferent "
 "de l'artista de l'àlbum.</ul> <p>Les inclusions condicionals fan servir els "
 "mateixos caràcters que les cadenes especials, la qual cosa vol dir que la X "
-"a @X{...} pot ser qualsevol caràcter de [atnycgATCd]."
+"a @X{…} pot ser qualsevol caràcter de [atnycgATCd]."
 
 #: rip/k3bmassaudioencodingjob.cpp:177
 #, kde-format
@@ -10382,7 +10381,7 @@ msgstr "%1 ha retornat un error desconegut (codi %2)."
 #: rip/k3bvideocdrip.cpp:261
 #, kde-format
 msgid "Please send me an email with the last output..."
-msgstr "Envieu-me un correu electrònic amb l'última eixida..."
+msgstr "Envieu-me un correu electrònic amb l'última eixida…"
 
 #: rip/k3bvideocdrip.cpp:267
 #, kde-format
@@ -10704,12 +10703,12 @@ msgid ""
 "bitrate and a lower quality.\n"
 "<p>2-pass encoding results in a doubled encoding time."
 msgstr ""
-"<p>Si se selecciona, K3b codifica les pistes de vídeo en dues passades. La "
+"<p>Si està marcada, K3b codifica les pistes de vídeo en dues passades. La "
 "primera passada s'utilitza per a recol·lectar informació sobre el vídeo per "
 "tal de millorar la distribució dels bits en la segona passada. El vídeo "
 "resultant tindrà una millor qualitat fent servir una taxa de bits variable.\n"
-"<p>Si no se selecciona, K3b crearà fitxers de vídeo amb una taxa de bits "
-"constant i de qualitat més baixa.\n"
+"<p>Si no es marca esta opció, K3b crearà fitxers de vídeo amb una taxa de "
+"bits constant i de qualitat més baixa.\n"
 "<p>La codificació en dues passades tarda el doble que la normal."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkTwoPassEncoding)
@@ -10747,7 +10746,7 @@ msgstr ""
 "<em>Vores negres</em> es referix a les barres negres que es fan servir a "
 "dalt i a baix (i a vegades als costats) del vídeo per a forçar-lo a tindre "
 "una de les relacions d'aspecte admeses per l'estàndard de DVD de vídeo.\n"
-"<p>Si se selecciona, K3b detectarà i eliminarà automàticament estes vores "
+"<p>Si està marcada, K3b detectarà i eliminarà automàticament estes vores "
 "negres del vídeo resultant.\n"
 "<p>Encara que este mètode és molt segur, pot donar problemes si el material "
 "d'origen és excepcionalment curt o fosc."
@@ -10777,8 +10776,8 @@ msgstr ""
 "<p>Els fluxos d'àudio dels DVD de vídeo normalment estan codificats amb una "
 "freqüència de mostratge de 48000 Hz. Els CD d'àudio, en canvi, es codifiquen "
 "amb una freqüència de mostratge de 44100 Hz.\n"
-"<p>Si se selecciona, K3b canviarà la freqüència de mostratge del flux "
-"d'àudio a 44100 Hz."
+"<p>Si està marcada, K3b canviarà la freqüència de mostratge del flux d'àudio "
+"a 44100 Hz."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:509
