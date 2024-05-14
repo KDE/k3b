@@ -3,20 +3,20 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2005, 2006, 2007, 2009.
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2010, 2011.
-# Mincho Kondarev <mkondarev@yahoo.de>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2022-07-02 19:29+0200\n"
+"PO-Revision-Date: 2024-05-13 22:08+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 22.04.2\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: core/k3bcore.cpp:241
@@ -329,7 +329,7 @@ msgstr "Използване на запис в CDDB"
 #: projects/k3bgrowisofswriter.cpp:332
 #, kde-format
 msgid "Preparing write process..."
-msgstr "Подготовка за запис..."
+msgstr "Подготовка за запис…"
 
 #: jobs/k3bcdcopyjob.cpp:533 jobs/k3bcdcopyjob.cpp:579
 #: jobs/k3bdvdcopyjob.cpp:323
@@ -747,7 +747,7 @@ msgstr "Моля, изпратете ми е-поща с последните д
 #: jobs/k3bdvdbooktypejob.cpp:207
 #, kde-format
 msgid "Ejecting DVD..."
-msgstr "Изваждане на диска..."
+msgstr "Изваждане на диска…"
 
 #: jobs/k3bdvdbooktypejob.cpp:224
 #, kde-format
@@ -1052,7 +1052,7 @@ msgstr "Форматирането ще продължи и по време на
 #: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
 msgid "Ejecting medium..."
-msgstr "Изваждане на диска..."
+msgstr "Изваждане на диска…"
 
 #: jobs/k3bdvdformattingjob.cpp:296 projects/k3babstractwriter.cpp:75
 #, kde-format
@@ -2147,7 +2147,7 @@ msgstr "Задаване на ниво 3 за iso, за файлове по-го
 #, kde-format
 msgid "Could not follow link %1 to non-existing file %2. Skipping..."
 msgstr ""
-"Връзка %1 не беше проследена до несъществуващ файл %2. Ще бъде пропусната..."
+"Връзка %1 не беше проследена до несъществуващ файл %2. Ще бъде пропусната…"
 
 #: projects/datacd/k3bisoimager.cpp:765
 #, kde-format
@@ -2160,12 +2160,12 @@ msgstr ""
 #: projects/datacd/k3bisoimager.cpp:773
 #, kde-format
 msgid "Could not find file %1. Skipping..."
-msgstr "Файл %1 не беше намерен. Ще бъде пропуснат..."
+msgstr "Файл %1 не беше намерен. Ще бъде пропуснат…"
 
 #: projects/datacd/k3bisoimager.cpp:777
 #, kde-format
 msgid "Could not read file %1. Skipping..."
-msgstr "Файл %1 не беше намерен. Ще бъде пропуснат..."
+msgstr "Файл %1 не беше намерен. Ще бъде пропуснат…"
 
 #: projects/datacd/k3bisoimager.cpp:830
 #, kde-format
@@ -2281,7 +2281,7 @@ msgstr "Този диск е или празен, или незатворен."
 #: projects/k3babstractwriter.cpp:44
 #, kde-format
 msgid "Unlocking drive..."
-msgstr "Отключване на устройство..."
+msgstr "Отключване на устройство…"
 
 #: projects/k3babstractwriter.cpp:58
 #, kde-format
@@ -2318,32 +2318,32 @@ msgstr "toc файлът не беше съхранен."
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
 msgid "Preparing read process..."
-msgstr "Подготовка за четене..."
+msgstr "Подготовка за четене…"
 
 #: projects/k3bcdrdaowriter.cpp:522
 #, kde-format
 msgid "Preparing copy process..."
-msgstr "Подготовка за копиране..."
+msgstr "Подготовка за копиране…"
 
 #: projects/k3bcdrdaowriter.cpp:525
 #, kde-format
 msgid "Preparing blanking process..."
-msgstr "Подготовка за изтриване..."
+msgstr "Подготовка за изтриване…"
 
 #: projects/k3bcdrdaowriter.cpp:559
 #, no-c-format, kde-format
 msgid "Starting DAO simulation at %1x speed..."
-msgstr "Начало на симулация в режим \"Диск (DAO)\" със скорост %1x..."
+msgstr "Начало на симулация в режим \"Диск (DAO)\" със скорост %1x…"
 
 #: projects/k3bcdrdaowriter.cpp:566
 #, no-c-format, kde-format
 msgid "Starting DAO writing at %1x speed..."
-msgstr "Започва запис в режим \"Диск (DAO)\" със скорост %1x..."
+msgstr "Започва запис в режим \"Диск (DAO)\" със скорост %1x…"
 
 #: projects/k3bcdrdaowriter.cpp:571
 #, kde-format
 msgid "Starting reading..."
-msgstr "Четенето започва..."
+msgstr "Четенето започва…"
 
 #: projects/k3bcdrdaowriter.cpp:572
 #, kde-format
@@ -2353,12 +2353,12 @@ msgstr "Четене"
 #: projects/k3bcdrdaowriter.cpp:578
 #, no-c-format, kde-format
 msgid "Starting simulation copy at %1x speed..."
-msgstr "Започва симулация на копиране със скорост %1x..."
+msgstr "Започва симулация на копиране със скорост %1x…"
 
 #: projects/k3bcdrdaowriter.cpp:584
 #, no-c-format, kde-format
 msgid "Starting copy at %1x speed..."
-msgstr "Започва копиране със скорост %1x..."
+msgstr "Започва копиране със скорост %1x…"
 
 #: projects/k3bcdrdaowriter.cpp:585
 #, kde-format
@@ -2368,7 +2368,7 @@ msgstr "Копиране"
 #: projects/k3bcdrdaowriter.cpp:589
 #, kde-format
 msgid "Starting blanking..."
-msgstr "Изтриването започва..."
+msgstr "Изтриването започва…"
 
 #: projects/k3bcdrdaowriter.cpp:590
 #, kde-format
@@ -2446,7 +2446,7 @@ msgstr "Калибровката на захранването беше успе
 #: projects/k3bcdrdaowriter.cpp:825
 #, kde-format
 msgid "Preparing burn process..."
-msgstr "Подготовка за запис..."
+msgstr "Подготовка за запис…"
 
 #: projects/k3bcdrdaowriter.cpp:829
 #, kde-format
@@ -2456,7 +2456,7 @@ msgstr "Изчистване на кеша"
 #: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
 msgid "Writing CD-Text lead-in..."
-msgstr "Запис на CD-текст lead-in..."
+msgstr "Запис на CD-текст lead-in…"
 
 #: projects/k3bcdrdaowriter.cpp:837
 #, kde-format
@@ -2568,22 +2568,22 @@ msgstr "Cdrecord %1 не поддържа презапис."
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr "Начало на симулация със скорост %1x..."
+msgstr "Начало на симулация със скорост %1x…"
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
-msgstr "Начало на %1 симулация със скорост %2x..."
+msgstr "Начало на %1 симулация със скорост %2x…"
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr "Започва запис със скорост %1x..."
+msgstr "Започва запис със скорост %1x…"
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
-msgstr "Започва запис (%1) със скорост %2x..."
+msgstr "Започва запис (%1) със скорост %2x…"
 
 #: projects/k3bcdrecordwriter.cpp:549 projects/k3bcdrskinwriter.cpp:561
 #: projects/k3bgrowisofswriter.cpp:428
@@ -2870,22 +2870,22 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
-msgstr "Ако използвате добра версия на cdrecord..."
+msgstr "Ако използвате добра версия на cdrecord…"
 
 #: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
-msgstr "...и тази грешка се появява и с висококачествени дискове..."
+msgstr "…и тази грешка се появява и с висококачествени дискове…"
 
 #: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
-msgstr "...и FAQ на K3b не ви помага..."
+msgstr "…и FAQ на K3b не ви помага…"
 
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
-msgstr "...моля, изпратетете съобщение за грешка и прикрепете данните."
+msgstr "…моля, изпратетете съобщение за грешка и прикрепете данните."
 
 #: projects/k3bcdrskinwriter.cpp:240
 #, kde-format
@@ -2913,7 +2913,7 @@ msgstr ""
 #: projects/k3bcdrskinwriter.cpp:911
 #, kde-format
 msgid "If you are running an unpatched cdrskin version..."
-msgstr "Ако използвате  непачната версия на cdrskin..."
+msgstr "Ако използвате  непачната версия на cdrskin…"
 
 #: projects/k3bgrowisofshandler.cpp:72
 #, kde-format
@@ -2953,12 +2953,12 @@ msgstr "Обновяване на RMA"
 #: projects/k3bgrowisofshandler.cpp:130
 #, kde-format
 msgid "Updating RMA..."
-msgstr "Обновяване на RMA..."
+msgstr "Обновяване на RMA…"
 
 #: projects/k3bgrowisofshandler.cpp:134
 #, kde-format
 msgid "Closing Session..."
-msgstr "Затваряне на сесията..."
+msgstr "Затваряне на сесията…"
 
 #: projects/k3bgrowisofshandler.cpp:137
 #, kde-format
@@ -3051,13 +3051,13 @@ msgstr "Грешката е причинена от ограничение в п
 #: projects/k3bgrowisofshandler.cpp:241
 #, kde-format
 msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
-msgstr "Може да бъде разрешен чрез командата \"ulimit -l unlimited\"..."
+msgstr "Може да бъде разрешен чрез командата \"ulimit -l unlimited\"…"
 
 #: projects/k3bgrowisofshandler.cpp:242
 #, kde-format
 msgid ""
 "...or by lowering the used software buffer size in the advanced K3b settings."
-msgstr "... или чрез намаляване големината на буфера (от настройките на K3b)."
+msgstr "… или чрез намаляване големината на буфера (от настройките на K3b)."
 
 #: projects/k3bgrowisofshandler.cpp:246
 #, kde-format
@@ -3106,12 +3106,12 @@ msgstr "Файл %1 не беше отворен."
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
 msgid "Starting simulation..."
-msgstr "Начало на симулацията..."
+msgstr "Начало на симулацията…"
 
 #: projects/k3bgrowisofswriter.cpp:363
 #, kde-format
 msgid "Starting disc write..."
-msgstr "Начало на записа..."
+msgstr "Начало на записа…"
 
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
@@ -3393,7 +3393,7 @@ msgstr "Грешка при запис на правилен файл XML."
 #: projects/videocd/k3bvcdjob.cpp:190
 #, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr "Създаване на Cue/Bin файлове..."
+msgstr "Създаване на Cue/Bin файлове…"
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
@@ -3703,7 +3703,7 @@ msgstr "K3b намери няколко записа в CDDB. Моля, избе
 #: tools/k3bdevicemodel.cpp:132
 #, kde-format
 msgid "Analyzing medium..."
-msgstr "Анализиране на диска..."
+msgstr "Анализиране на диска…"
 
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
