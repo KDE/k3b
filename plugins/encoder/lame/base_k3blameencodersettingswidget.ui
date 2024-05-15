@@ -61,7 +61,7 @@
                </font>
               </property>
               <property name="text">
-               <string comment="KDE::DoNotExtract">textLabel1</string>
+               <string notr="true">textLabel1</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -185,7 +185,7 @@
                </font>
               </property>
               <property name="text">
-               <string comment="KDE::DoNotExtract">textLabel2</string>
+               <string notr="true">textLabel2</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
