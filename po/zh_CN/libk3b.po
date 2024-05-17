@@ -211,7 +211,7 @@ msgstr "源盘为空盘。"
 #: jobs/k3bcdcopyjob.cpp:262
 #, kde-format
 msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
-msgstr "要复制模式2的数据轨，K3b 需要 2.01a12 或更新版本的 cdrecord。"
+msgstr "要复制 Mode2 的数据轨，K3b 需要 2.01a12 或更新版本的 cdrecord。"
 
 #: jobs/k3bcdcopyjob.cpp:274
 #, kde-format
@@ -657,7 +657,7 @@ msgstr "视频 DVD 解密失败。"
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
 msgid "No support for reading formless Mode2 sectors."
-msgstr "不支持读取无格式的模式2扇区。"
+msgstr "不支持读取 Mode2 formless 扇区。"
 
 #: jobs/k3bdatatrackreader.cpp:206
 #, kde-format

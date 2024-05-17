@@ -1845,7 +1845,7 @@ msgstr "模式1"
 #: k3bdatamodewidget.cpp:25
 #, kde-format
 msgid "Mode2"
-msgstr "模式2"
+msgstr "Mode2"
 
 #: k3bdatamodewidget.cpp:27
 #, kde-format
@@ -1989,17 +1989,17 @@ msgstr "数据/模式1"
 #: k3bdiskinfoview.cpp:195
 #, kde-format
 msgid "Data/Mode2"
-msgstr "数据/模式2"
+msgstr "数据/Mode2"
 
 #: k3bdiskinfoview.cpp:197
 #, kde-format
 msgid "Data/Mode2 XA Form1"
-msgstr "数据/模式2 XA Form1"
+msgstr "数据/Mode2 XA Form1"
 
 #: k3bdiskinfoview.cpp:199
 #, kde-format
 msgid "Data/Mode2 XA Form2"
-msgstr "数据/模式2 XA Form2"
+msgstr "数据/Mode2 XA Form2"
 
 #: k3bdiskinfoview.cpp:201 misc/k3bmediacopydialog.cpp:153
 #: rip/categories.cpp:20 rip/k3baudiorippingdialog.cpp:404
