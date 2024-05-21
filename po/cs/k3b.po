@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-04-29 11:00+0200\n"
+"PO-Revision-Date: 2024-05-20 10:12+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -3627,7 +3627,7 @@ msgstr "Thomas Froescher"
 #: main.cpp:46
 #, kde-format
 msgid "Video DVD ripping and video encoding in pre-1.0 versions."
-msgstr "Ripování a nekódování DVD videa ve verzích před 1.0."
+msgstr "Ripování a kódování DVD videa ve verzích před 1.0."
 
 #: main.cpp:48
 #, kde-format
@@ -10004,7 +10004,7 @@ msgstr "Nelze otevřít '%1' pro zápis."
 #: rip/k3bmassaudioencodingjob.cpp:368
 #, kde-format
 msgid "Error while encoding track %1."
-msgstr "Chyba při nekódování stopy %1."
+msgstr "Chyba při kódování stopy %1."
 
 #: rip/k3bmassaudioencodingjob.cpp:404
 #, kde-format
@@ -10372,7 +10372,7 @@ msgstr "Video kodek:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:330
 #, kde-format
 msgid "Select the Video codec used to encode the DVD titles"
-msgstr "Zvolte videokodek použitý pro nekódování DVD titulů"
+msgstr "Zvolte videokodek použitý pro kódování DVD titulů"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
@@ -10384,7 +10384,7 @@ msgstr "Audio kodek:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:351
 #, kde-format
 msgid "Select the Audio codec used to encode the DVD titles"
-msgstr "Zvolte zvukový kodek použitý pro nekódování DVD titulů"
+msgstr "Zvolte zvukový kodek použitý pro kódování DVD titulů"
 
 #. i18n: ectx: attribute (title), widget (QWidget, TabPage)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:364
@@ -10402,7 +10402,7 @@ msgstr "Zaměnit všechna &prázdná místa za:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:463
 #, kde-format
 msgid "Enable 2-pass encoding"
-msgstr "Povolit dvouprůchodové nekódování"
+msgstr "Povolit dvouprůchodové kódování"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:468
@@ -10427,7 +10427,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:471
 #, kde-format
 msgid "&2-pass encoding"
-msgstr "&dvouprůchodové nekódování"
+msgstr "&dvouprůchodové kódování"
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:474
