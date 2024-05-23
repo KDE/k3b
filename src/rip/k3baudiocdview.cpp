@@ -557,6 +557,7 @@ void K3b::AudioCdView::slotCddbChanged( K3b::Device::Device* dev )
     if ( medium().device() == dev ) {
         // we only use the manually edited cddb in the model
         d->trackModel->setCddbInfo( medium().cddbInfo() );
+        updateTitle();
     }
 }
 
