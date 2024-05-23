@@ -228,6 +228,7 @@ void K3b::JobProgressDialog::setupGUI()
     connect( m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
 
     m_showDbgOutButton = buttonBox->addButton( i18n("Show Debugging Output"), QDialogButtonBox::NoRole );
+    m_showDbgOutButton->setIcon(QIcon::fromTheme("tools-report-bug"));
     connect( m_showDbgOutButton, SIGNAL(clicked()), this, SLOT(slotShowDebuggingOutput()) );
 
     m_closeButton = buttonBox->addButton( QDialogButtonBox::Close );
