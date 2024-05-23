@@ -44,13 +44,16 @@ K3b::LsofWrapperDialog::LsofWrapperDialog( QWidget* parent )
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
     QPushButton* continueButton = buttonBox->addButton( i18n("Continue"), QDialogButtonBox::AcceptRole );
+    continueButton->setIcon(QIcon::fromTheme("arrow-right"));
     continueButton->setDefault( true );
     connect( buttonBox, SIGNAL(accepted()), SLOT(accept()) );
 
     QPushButton* quitButton = buttonBox->addButton( i18n("Quit the other applications"), QDialogButtonBox::NoRole );
+    quitButton->setIcon(QIcon::fromTheme("application-exit"));
     connect( quitButton, SIGNAL(clicked()), SLOT(slotQuitOtherApps()) );
 
     QPushButton* checkButton = buttonBox->addButton( i18n("Check again"), QDialogButtonBox::NoRole );
+    checkButton->setIcon(QIcon::fromTheme("view-refresh"));
     connect( checkButton, SIGNAL(clicked()), SLOT(slotCheckDevice()) );
 
     QVBoxLayout* layout = new QVBoxLayout( this );
