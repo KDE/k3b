@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-05-24 00:38+0000\n"
 "PO-Revision-Date: 2024-05-09 06:40+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2438,54 +2438,54 @@ msgstr "整體進度："
 msgid "Show Debugging Output"
 msgstr "顯示除錯輸出"
 
-#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
+#: k3bjobprogressdialog.cpp:296 k3bjobprogressdialog.cpp:318
 #, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 之 %2"
 
-#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
+#: k3bjobprogressdialog.cpp:374 k3bjobprogressdialog.cpp:554
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "經過時間：%1"
 
-#: k3bjobprogressdialog.cpp:382
+#: k3bjobprogressdialog.cpp:383
 #, kde-format
 msgid "Success."
 msgstr "成功。"
 
-#: k3bjobprogressdialog.cpp:389
+#: k3bjobprogressdialog.cpp:390
 #, kde-format
 msgid "Successfully finished."
 msgstr "已成功完成。"
 
-#: k3bjobprogressdialog.cpp:398
+#: k3bjobprogressdialog.cpp:399
 #, kde-format
 msgid "Canceled."
 msgstr "已取消。"
 
-#: k3bjobprogressdialog.cpp:401
+#: k3bjobprogressdialog.cpp:402
 #, kde-format
 msgid "Error."
 msgstr "錯誤。"
 
-#: k3bjobprogressdialog.cpp:403
+#: k3bjobprogressdialog.cpp:404
 #, kde-format
 msgid "Finished with errors"
 msgstr "完成，但是發生錯誤"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "您真的想要取消嗎？"
 
-#: k3bjobprogressdialog.cpp:485
+#: k3bjobprogressdialog.cpp:486
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "取消確認"
 
-#: k3bjobprogressdialog.cpp:557
+#: k3bjobprogressdialog.cpp:558
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
@@ -2501,17 +2501,17 @@ msgstr "裝置使用中"
 msgid "Continue"
 msgstr "繼續"
 
-#: k3blsofwrapperdialog.cpp:50
+#: k3blsofwrapperdialog.cpp:51
 #, kde-format
 msgid "Quit the other applications"
 msgstr "離開其他程式"
 
-#: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
+#: k3blsofwrapperdialog.cpp:55 k3blsofwrapperdialog.cpp:85
 #, kde-format
 msgid "Check again"
 msgstr "再次檢查"
 
-#: k3blsofwrapperdialog.cpp:73
+#: k3blsofwrapperdialog.cpp:76
 #, kde-format
 msgid ""
 "<p>Device <b>'%1'</b> is already in use by other applications (<em>%2</em>)."
@@ -2524,23 +2524,23 @@ msgstr ""
 "之前關閉它們。否則 K3b 無法完全存取此裝置。<p><em>提示：有時候關閉某個應用程"
 "式後，程式並不會立即關閉。在那種情況下，您可能必須使用「%3」鍵。"
 
-#: k3blsofwrapperdialog.cpp:100
+#: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "www"
 msgstr "www"
 
-#: k3blsofwrapperdialog.cpp:102
+#: k3blsofwrapperdialog.cpp:105
 #, kde-format
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
 msgstr "<p>您真的想要 K3b 關閉下列的程序嗎：<em>%1</em> </p>"
 
-#: k3blsofwrapperdialog.cpp:103
+#: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
 msgstr "關閉程序？"
 
-#: k3blsofwrapperdialog.cpp:104
+#: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
 msgstr "強制停止"

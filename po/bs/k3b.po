@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: __kde__extragear-multimedia__k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-05-24 00:38+0000\n"
 "PO-Revision-Date: 2015-02-25 18:09+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team:  <en@li.org>\n"
@@ -2485,7 +2485,7 @@ msgstr "Ukupan napredak:"
 msgid "Show Debugging Output"
 msgstr "Prikaži izlaz za ispravljanje grešaka"
 
-#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
+#: k3bjobprogressdialog.cpp:296 k3bjobprogressdialog.cpp:318
 #, fuzzy, kde-format
 #| msgctxt "%1 and %2 are byte sizes formatted via KLocale::formatByteSize"
 #| msgid "%1 of %2"
@@ -2493,7 +2493,7 @@ msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 od %2"
 
-#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
+#: k3bjobprogressdialog.cpp:374 k3bjobprogressdialog.cpp:554
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info %1 is a duration formatted using KLocale::prettyFormatDuration"
@@ -2502,42 +2502,42 @@ msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "Proteklo vrijeme: %1"
 
-#: k3bjobprogressdialog.cpp:382
+#: k3bjobprogressdialog.cpp:383
 #, kde-format
 msgid "Success."
 msgstr "Uspjeh."
 
-#: k3bjobprogressdialog.cpp:389
+#: k3bjobprogressdialog.cpp:390
 #, kde-format
 msgid "Successfully finished."
 msgstr "Uspješno završeno."
 
-#: k3bjobprogressdialog.cpp:398
+#: k3bjobprogressdialog.cpp:399
 #, kde-format
 msgid "Canceled."
 msgstr "Otkazano."
 
-#: k3bjobprogressdialog.cpp:401
+#: k3bjobprogressdialog.cpp:402
 #, kde-format
 msgid "Error."
 msgstr "Greška."
 
-#: k3bjobprogressdialog.cpp:403
+#: k3bjobprogressdialog.cpp:404
 #, kde-format
 msgid "Finished with errors"
 msgstr "Završeno sa greškama"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "Zaista želite da otkažete?"
 
-#: k3bjobprogressdialog.cpp:485
+#: k3bjobprogressdialog.cpp:486
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "Otkaži potvrđivanje"
 
-#: k3bjobprogressdialog.cpp:557
+#: k3bjobprogressdialog.cpp:558
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@info %1 is a duration formatted using KLocale::prettyFormatDuration"
@@ -2556,17 +2556,17 @@ msgstr "Uređaj se koristi"
 msgid "Continue"
 msgstr "Nastavi"
 
-#: k3blsofwrapperdialog.cpp:50
+#: k3blsofwrapperdialog.cpp:51
 #, kde-format
 msgid "Quit the other applications"
 msgstr "Zatvorite druge programe"
 
-#: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
+#: k3blsofwrapperdialog.cpp:55 k3blsofwrapperdialog.cpp:85
 #, kde-format
 msgid "Check again"
 msgstr "Provjeri ponovo"
 
-#: k3blsofwrapperdialog.cpp:73
+#: k3blsofwrapperdialog.cpp:76
 #, kde-format
 msgid ""
 "<p>Device <b>'%1'</b> is already in use by other applications (<em>%2</em>)."
@@ -2580,24 +2580,24 @@ msgstr ""
 "pristup uređaju.<p><em>Savjet: Ponekad, zatvaranje programa se ne dešava "
 "odmah. U tom slučaju možete da koristite „%3“ dugme."
 
-#: k3blsofwrapperdialog.cpp:100
+#: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "www"
 msgstr ""
 
-#: k3blsofwrapperdialog.cpp:102
+#: k3blsofwrapperdialog.cpp:105
 #, kde-format
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
 msgstr ""
 "<p>Da li zaista želite da K3b uništi sljedeće procese: <em>%1</em>?</p>"
 
-#: k3blsofwrapperdialog.cpp:103
+#: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
 msgstr ""
 
-#: k3blsofwrapperdialog.cpp:104
+#: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
 msgstr ""

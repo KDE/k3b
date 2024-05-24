@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-05-24 00:38+0000\n"
 "PO-Revision-Date: 2017-09-29 16:44+0200\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -2585,55 +2585,55 @@ msgstr "Укупан напредак:"
 msgid "Show Debugging Output"
 msgstr "Прикажи исправљачки излаз"
 
-#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
+#: k3bjobprogressdialog.cpp:296 k3bjobprogressdialog.cpp:318
 #, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 од %2"
 
-#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
+#: k3bjobprogressdialog.cpp:374 k3bjobprogressdialog.cpp:554
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "Протекло вријеме: %1"
 
-#: k3bjobprogressdialog.cpp:382
+#: k3bjobprogressdialog.cpp:383
 #, kde-format
 msgid "Success."
 msgstr "Успјех."
 
-#: k3bjobprogressdialog.cpp:389
+#: k3bjobprogressdialog.cpp:390
 #, kde-format
 msgid "Successfully finished."
 msgstr "Успјешно завршено."
 
-#: k3bjobprogressdialog.cpp:398
+#: k3bjobprogressdialog.cpp:399
 #, kde-format
 msgid "Canceled."
 msgstr "Отказано."
 
-#: k3bjobprogressdialog.cpp:401
+#: k3bjobprogressdialog.cpp:402
 #, kde-format
 msgid "Error."
 msgstr "Грешка."
 
-#: k3bjobprogressdialog.cpp:403
+#: k3bjobprogressdialog.cpp:404
 #, kde-format
 msgid "Finished with errors"
 msgstr "Завршено са грешкама."
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "Желите ли заиста да откажете?"
 
 # >> @title:window
-#: k3bjobprogressdialog.cpp:485
+#: k3bjobprogressdialog.cpp:486
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "Потврда отказивања"
 
-#: k3bjobprogressdialog.cpp:557
+#: k3bjobprogressdialog.cpp:558
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
@@ -2649,17 +2649,17 @@ msgstr "Уређај је у употреби."
 msgid "Continue"
 msgstr "Настави"
 
-#: k3blsofwrapperdialog.cpp:50
+#: k3blsofwrapperdialog.cpp:51
 #, kde-format
 msgid "Quit the other applications"
 msgstr "Напусти друге програме"
 
-#: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
+#: k3blsofwrapperdialog.cpp:55 k3blsofwrapperdialog.cpp:85
 #, kde-format
 msgid "Check again"
 msgstr "Провјери поново"
 
-#: k3blsofwrapperdialog.cpp:73
+#: k3blsofwrapperdialog.cpp:76
 #, kde-format
 msgid ""
 "<p>Device <b>'%1'</b> is already in use by other applications (<em>%2</em>)."
@@ -2674,23 +2674,23 @@ msgstr ""
 "не долази моментално. У том случају можете да употријебите дугме <i>%3</i>.</"
 "em></p>"
 
-#: k3blsofwrapperdialog.cpp:100
+#: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "www"
 msgstr ""
 
-#: k3blsofwrapperdialog.cpp:102
+#: k3blsofwrapperdialog.cpp:105
 #, kde-format
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
 msgstr "<p>Желите ли заиста да К3б укине сљедеће процесе: <em>%1</em>?</p>"
 
-#: k3blsofwrapperdialog.cpp:103
+#: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
 msgstr ""
 
-#: k3blsofwrapperdialog.cpp:104
+#: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
 msgstr ""

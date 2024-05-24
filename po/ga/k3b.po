@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia/k3b.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-05-24 00:38+0000\n"
 "PO-Revision-Date: 2007-11-13 09:20-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -2386,7 +2386,7 @@ msgstr "Dul chun cinn:"
 msgid "Show Debugging Output"
 msgstr "Taispeáin Aschur Dífhabhtaithe"
 
-#: k3bjobprogressdialog.cpp:295 k3bjobprogressdialog.cpp:317
+#: k3bjobprogressdialog.cpp:296 k3bjobprogressdialog.cpp:318
 #, fuzzy, kde-format
 #| msgctxt "%1 and %2 are byte sizes formatted via KLocale::formatByteSize"
 #| msgid "%1 of %2"
@@ -2394,7 +2394,7 @@ msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%1 as %2"
 
-#: k3bjobprogressdialog.cpp:373 k3bjobprogressdialog.cpp:553
+#: k3bjobprogressdialog.cpp:374 k3bjobprogressdialog.cpp:554
 #, fuzzy, kde-format
 #| msgctxt "@info %1 is a duration formatted using KLocale::formatLocaleTime"
 #| msgid "Elapsed time: %1"
@@ -2402,42 +2402,42 @@ msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "Am imithe: %1"
 
-#: k3bjobprogressdialog.cpp:382
+#: k3bjobprogressdialog.cpp:383
 #, kde-format
 msgid "Success."
 msgstr "D'éirigh leis."
 
-#: k3bjobprogressdialog.cpp:389
+#: k3bjobprogressdialog.cpp:390
 #, kde-format
 msgid "Successfully finished."
 msgstr "D'éirigh leis."
 
-#: k3bjobprogressdialog.cpp:398
+#: k3bjobprogressdialog.cpp:399
 #, kde-format
 msgid "Canceled."
 msgstr "Cealaithe."
 
-#: k3bjobprogressdialog.cpp:401
+#: k3bjobprogressdialog.cpp:402
 #, kde-format
 msgid "Error."
 msgstr "Earráid."
 
-#: k3bjobprogressdialog.cpp:403
+#: k3bjobprogressdialog.cpp:404
 #, kde-format
 msgid "Finished with errors"
 msgstr "Críochnaithe le hearráidí"
 
-#: k3bjobprogressdialog.cpp:484
+#: k3bjobprogressdialog.cpp:485
 #, kde-format
 msgid "Do you really want to cancel?"
 msgstr "An bhfuil tú cinnte gur mian leat cealú?"
 
-#: k3bjobprogressdialog.cpp:485
+#: k3bjobprogressdialog.cpp:486
 #, kde-format
 msgid "Cancel Confirmation"
 msgstr "Deimhnigh Cealú"
 
-#: k3bjobprogressdialog.cpp:557
+#: k3bjobprogressdialog.cpp:558
 #, fuzzy, kde-format
 #| msgid "Remaining:"
 msgctxt "@info %1 is a duration formatted"
@@ -2454,17 +2454,17 @@ msgstr "Gléas in úsáid"
 msgid "Continue"
 msgstr "Lean ar aghaidh"
 
-#: k3blsofwrapperdialog.cpp:50
+#: k3blsofwrapperdialog.cpp:51
 #, kde-format
 msgid "Quit the other applications"
 msgstr "Cuir deireadh leis na feidhmchláir eile"
 
-#: k3blsofwrapperdialog.cpp:53 k3blsofwrapperdialog.cpp:82
+#: k3blsofwrapperdialog.cpp:55 k3blsofwrapperdialog.cpp:85
 #, kde-format
 msgid "Check again"
 msgstr "Seiceáil arís"
 
-#: k3blsofwrapperdialog.cpp:73
+#: k3blsofwrapperdialog.cpp:76
 #, kde-format
 msgid ""
 "<p>Device <b>'%1'</b> is already in use by other applications (<em>%2</em>)."
@@ -2474,12 +2474,12 @@ msgid ""
 "to use the '%3' button."
 msgstr ""
 
-#: k3blsofwrapperdialog.cpp:100
+#: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "www"
 msgstr ""
 
-#: k3blsofwrapperdialog.cpp:102
+#: k3blsofwrapperdialog.cpp:105
 #, kde-format
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
@@ -2487,12 +2487,12 @@ msgstr ""
 "<p>An bhfuil tú cinnte gur mian leat go maróidh K3b na próisis seo a leanas: "
 "<em>%1</em>?</p>"
 
-#: k3blsofwrapperdialog.cpp:103
+#: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
 msgstr ""
 
-#: k3blsofwrapperdialog.cpp:104
+#: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
 msgstr ""
