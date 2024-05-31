@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-24 00:38+0000\n"
-"PO-Revision-Date: 2024-05-05 18:09+0100\n"
+"PO-Revision-Date: 2024-05-30 07:49+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -3303,12 +3303,12 @@ msgstr "Pli da agoj..."
 #: k3bwelcomewidget.cpp:262
 #, kde-format
 msgid "Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator"
-msgstr "Bonvenon al K3b - La KD, DVD kaj Blu-ray Kreilo"
+msgstr "Bonvenon al K3b - La Kreilo por KD, DVD kaj Blu-ray"
 
 #: k3bwelcomewidget.cpp:264
 #, kde-format
 msgid "K3b %1 Copyright &copy; 1998&ndash;2018 K3b authors"
-msgstr "K3b %1 Kopirajto © 1998–2018 K3b-aŭtoroj"
+msgstr "K3b %1 Kopirajto &copy; 1998&ndash;2018 K3b-aŭtoroj"
 
 #: k3bwelcomewidget.cpp:398
 #, kde-format
