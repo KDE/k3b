@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-24 00:38+0000\n"
-"PO-Revision-Date: 2024-05-01 06:29+0200\n"
+"PO-Revision-Date: 2024-06-04 06:11+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -539,7 +539,7 @@ msgstr "ენკოდერის ხარისხი"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:277
 #, kde-format
 msgid "Choose the noise shaping & psycho acoustic algorithm."
-msgstr ""
+msgstr "აირჩიეთ ხმაურის შემცირებისა და ფსიქოაკუსტიკური ეფექტების ალგორითმი."
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_spinEncoderQuality)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:285
@@ -1768,7 +1768,7 @@ msgstr "Mode2"
 #: k3bdatamodewidget.cpp:27
 #, kde-format
 msgid "Select the mode for the data-track"
-msgstr ""
+msgstr "აირჩეთ რეჟიმი მონაცემების ტრეკისთვის"
 
 #: k3bdatamodewidget.cpp:28
 #, kde-format
@@ -1841,6 +1841,8 @@ msgid ""
 "K3b uses vcdxrip from the vcdimager package to rip Video CDs. Please make "
 "sure it is installed."
 msgstr ""
+"K3b ვიდეო CD-ების დასარიპად vcdxrip-ს იყენებს vcdimager-ის პაკეტიდან. "
+"დარწმუნდით, რომ ის დაყენებულია."
 
 #: k3bdirview.cpp:227
 #, kde-format
@@ -1850,7 +1852,7 @@ msgstr "მიმაგრების შეცდომა"
 #: k3bdirview.cpp:228
 #, kde-format
 msgid "<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>"
-msgstr ""
+msgstr "<p>K3b-მა ვერ მიამაგრა მედია <b>%1</b> მოწყობილობაში <em>%2 - %3</em>"
 
 #: k3bdirview.cpp:243
 #, kde-format
@@ -1861,7 +1863,7 @@ msgstr "მოხსნის შეცდომა"
 #, kde-format
 msgid ""
 "<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>"
-msgstr ""
+msgstr "<p>K3b-მა ვერ მოხსნა მედია <b>%1</b> მოწყობილობაში <em>%2 - %3</em>"
 
 #: k3bdiskinfoview.cpp:81
 #, kde-format
@@ -2435,6 +2437,7 @@ msgstr "www"
 msgid ""
 "<p>Do you really want K3b to kill the following processes: <em>%1</em>?</p>"
 msgstr ""
+"<p>მართლა გნებავთ, რომ K3b-მა მოკლას შემდეგი პროცესები: <em>%1</em>?</p>"
 
 #: k3blsofwrapperdialog.cpp:106
 #, kde-format
@@ -3198,7 +3201,7 @@ msgstr "მეტი..."
 #: k3bwriterselectionwidget.cpp:596
 #, kde-format
 msgid "Please enter the speed that K3b should use for burning (Example: 16x)."
-msgstr ""
+msgstr "შეიყვანეთ სიჩქარე, რომლითაც K3b-მა დისკზე უნდა ამოწვას (მაგ: 16x)."
 
 #: k3bwriterselectionwidget.cpp:599
 #, kde-format
@@ -3218,6 +3221,7 @@ msgstr "ჩაწერის სიჩქარის ხელით დაყ
 #, kde-format
 msgid "Let K3b select the best-suited mode. This is the recommended selection."
 msgstr ""
+"საუკეთესო რეჟიმის არჩევის მინდობა K3b-სთვის. ეს რეკომენდებული ქმედებაა."
 
 #: k3bwritingmodewidget.cpp:19
 #, kde-format
@@ -3646,12 +3650,12 @@ msgstr "ტრეკების ფიცრული გამოღება 
 #: main.cpp:114
 #, kde-format
 msgid "Rip Video DVD Titles (+transcoding)"
-msgstr ""
+msgstr "ვიდეო DVD-ის განყოფილებების დარიპვა (+გადაყვანა)"
 
 #: main.cpp:115
 #, kde-format
 msgid "Rip Video CD Tracks"
-msgstr ""
+msgstr "ვიდეო CD-ის ტრეკების დარიპვა"
 
 #: main.cpp:116
 #, kde-format
@@ -3691,12 +3695,12 @@ msgstr "ფაილის ზომა:"
 #: misc/k3bimagewritingdialog.cpp:179
 #, kde-format
 msgid "%1 (different than declared volume size)"
-msgstr ""
+msgstr "%1 (განსხვავდება გამოცხადებული ტომის ზომისგან)"
 
 #: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Cdrecord clone image"
-msgstr ""
+msgstr "Cdrecord-ის დისკის ასლის ფაილი"
 
 #: misc/k3bimagewritingdialog.cpp:258 misc/k3bimagewritingdialog.cpp:287
 #, kde-format
@@ -3768,7 +3772,7 @@ msgstr "Cue ფაილები"
 #: misc/k3bimagewritingdialog.cpp:453
 #, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr ""
+msgstr "Cdrdao-ის TOC ფაილები და Cdrecord-ის დისკის ასლის ფაილები"
 
 #: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
@@ -3858,7 +3862,7 @@ msgstr "ყურადღება"
 #: misc/k3bimagewritingdialog.cpp:867
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
-msgstr ""
+msgstr "დისკის ასლის ფაილის ტიპი უცნობია. მაინც გნებავთ მისი ამოწვა?"
 
 #: misc/k3bimagewritingdialog.cpp:868
 #, kde-format
@@ -4068,6 +4072,8 @@ msgid ""
 "There does not seem to be enough free space in the temporary folder. Write "
 "anyway?"
 msgstr ""
+"როგორც ჩასნს, დროებით საქაღალდეში საკმარისი თავისუფალი ადგილი არაა. მაინც "
+"ჩავწერო?"
 
 #: misc/k3bmediacopydialog.cpp:543
 #, kde-format
@@ -4078,6 +4084,7 @@ msgstr "ამოსაწვავად იგივე მოწყობი�
 #, kde-format
 msgid "<qt>Use the same device for burning <i>(Or insert another medium)</i>"
 msgstr ""
+"<qt>იგივე მოწყობილობის გამოყენება ამოსაწვავავდ <i>(ან ჩადეთ სხვა მედია)</i>"
 
 #: misc/k3bmediaformattingdialog.cpp:40
 #, kde-format
@@ -4252,7 +4259,7 @@ msgstr "&მთავარი ფანჯრის დამალვა ჩ�
 #: option/base_k3bmiscoptiontab.ui:114
 #, kde-format
 msgid "Show the splash screen when K3b starts"
-msgstr ""
+msgstr "მისალმების ეკრანის ჩვენება K3b-ის გაშვებისას"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowSplash)
 #: option/base_k3bmiscoptiontab.ui:117
@@ -4264,7 +4271,7 @@ msgstr "მისასალმებელი ეკრანის ჩვე�
 #: option/base_k3bmiscoptiontab.ui:124
 #, kde-format
 msgid "Do not close action dialogs after finishing the process"
-msgstr ""
+msgstr "არ დახურო ქმედების დიალოგები პროცესის დასრულების შემდეგ"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkKeepDialogsOpen)
 #: option/base_k3bmiscoptiontab.ui:127
@@ -4285,13 +4292,13 @@ msgstr "&ქმედების დიალოგების ღიად �
 #: option/base_k3bmiscoptiontab.ui:139
 #, kde-format
 msgid "&Default action dialog settings:"
-msgstr ""
+msgstr "ნაგულისხმევი ქმედების &დიალოგის პარამეტრები:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboActionDialogSettings)
 #: option/base_k3bmiscoptiontab.ui:152
 #, kde-format
 msgid "Settings to load when opening an action dialog"
-msgstr ""
+msgstr "ქმედების დიალოგის გახსნისას ჩასატვირთი პარამეტრები"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonConfigure)
 #: option/base_k3bpluginoptiontab.ui:21
@@ -4353,7 +4360,7 @@ msgstr "ამოწვა"
 #: option/k3badvancedoptiontab.cpp:52
 #, kde-format
 msgid "Allow &overburning"
-msgstr ""
+msgstr "დაშვებულზე მეტის ჩა&წერა"
 
 #: option/k3badvancedoptiontab.cpp:53
 #, kde-format
@@ -4363,7 +4370,7 @@ msgstr "ნაძალადევი საშიში ოპერაცი�
 #: option/k3badvancedoptiontab.cpp:54
 #, kde-format
 msgid "&Manual writing buffer size"
-msgstr ""
+msgstr "ჩაწერის ბუფერის ზომის ხელით &მითითება"
 
 #: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:585
 #, kde-format
@@ -4373,7 +4380,7 @@ msgstr "მბ"
 #: option/k3badvancedoptiontab.cpp:59
 #, kde-format
 msgid "Show &advanced GUI elements"
-msgstr ""
+msgstr "დამატებითი &ინტერფეისის ელემენტების ჩვენება"
 
 #: option/k3badvancedoptiontab.cpp:68 rip/categories.cpp:20
 #, kde-format
@@ -4383,17 +4390,17 @@ msgstr "სხვადასხვა"
 #: option/k3badvancedoptiontab.cpp:70
 #, kde-format
 msgid "Do not &eject medium after write process"
-msgstr ""
+msgstr "&ნუ გამოიღებ მედიას ჩაწერის პროცესის შემდეგ"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
 msgid "Automatically erase CD-RWs and DVD-RWs"
-msgstr ""
+msgstr "CD-RW და DVD-RW დისკების ავტომატური წაშლა"
 
 #: option/k3badvancedoptiontab.cpp:90
 #, kde-format
 msgid "Allow burning more than the official media capacities"
-msgstr ""
+msgstr "ოფიციალური მედიის მოცულობაზე მეტის ჩაწერა"
 
 #: option/k3badvancedoptiontab.cpp:91
 #, kde-format
@@ -4401,21 +4408,24 @@ msgid ""
 "Show advanced GUI elements like allowing to choose between cdrecord and "
 "cdrdao"
 msgstr ""
+"დამატებითი ინტერფეისის ელემენტების ჩვენება, როგორიცაა, ვთქვათ, cdrecord-სა "
+"და cdrdao-ს შორის არჩევანი"
 
 #: option/k3badvancedoptiontab.cpp:92
 #, kde-format
 msgid "Automatically erase CD-RWs and DVD-RWs without asking"
-msgstr ""
+msgstr "CD-RW და DVD-RW დისკების ავტომატური წაშლა კითხვის გარეშე"
 
 #: option/k3badvancedoptiontab.cpp:93
 #, kde-format
 msgid "Do not eject the burn medium after a completed burn process"
-msgstr ""
+msgstr "ნუ გამოიღებ ამომწვარ მედიას ამოწვის პროცესის დასრულების შემდეგ"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
 msgid "Force K3b to continue some operations otherwise deemed as unsafe"
 msgstr ""
+"K3b-ის იძულება, ჩაატაროს ოპერაციები, რომლებიც ჩვეულებრივ საშიშად იყო მიჩნეული"
 
 #: option/k3badvancedoptiontab.cpp:96
 #, kde-format
@@ -4803,6 +4813,8 @@ msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
 "the temporary folder."
 msgstr ""
+"დროებითი საქაღალდისთვის ფაილი მიუთითეთ. K3b ამ ფაილის საბაზისო ბილიკს "
+"გამოყენებს დროებითი ფაილებისთვის."
 
 #: option/k3bmiscoptiontab.cpp:129
 #, kde-format
@@ -4867,7 +4879,7 @@ msgstr "CDDB"
 #: option/k3boptiondialog.cpp:198
 #, kde-format
 msgid "CDDB Audio CD Info Retrieval"
-msgstr ""
+msgstr "წვდომა CDDB-სთან აუდიო CD-ის ინფორმაციისთვის"
 
 #: option/k3boptiondialog.cpp:208
 #, kde-format
@@ -4892,17 +4904,17 @@ msgstr "კომენტარი"
 #: option/k3bthemeoptiontab.cpp:97
 #, kde-format
 msgid "K3b - The CD/DVD Kreator"
-msgstr ""
+msgstr "K3b - CD-ების და DVD-ების ჩაწერის პროგრამა"
 
 #: option/k3bthemeoptiontab.cpp:117
 #, kde-format
 msgid "Drag or Type Theme URL"
-msgstr ""
+msgstr "გადმოათრიეთ ან აკრიფეთ თემის URL"
 
 #: option/k3bthemeoptiontab.cpp:139
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
-msgstr ""
+msgstr "ვერ ვიპოვე ხატულების თემის არქივი %1."
 
 #: option/k3bthemeoptiontab.cpp:141
 #, kde-format
@@ -4910,16 +4922,18 @@ msgid ""
 "Unable to download the icon theme archive.\n"
 "Please check that address %1 is correct."
 msgstr ""
+"ვერ გადმოვწერე ხატულების თემის არქივი.\n"
+"შეამოწმეთ, სწორია თუ არა არქივი %1."
 
 #: option/k3bthemeoptiontab.cpp:173
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
-msgstr ""
+msgstr "ფაილი სწორი K3b-ის თემის არქივი არაა."
 
 #: option/k3bthemeoptiontab.cpp:182
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "თემა სახელით '%1' უკვე არსებობს. გნებავთ, თავზე გადააწეროთ?"
 
 #: option/k3bthemeoptiontab.cpp:184
 #, kde-format
@@ -4932,6 +4946,8 @@ msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
 "<br><br>This will delete the files installed by this theme.</qt>"
 msgstr ""
+"<qt>მართლა გნებავთ წაშალოთ <strong>%1</strong> თემა?<br><br>ეს ამ თემის მიერ "
+"დაყენებულ ფაილებსაც წაშლის.</qt>"
 
 #: option/k3bthemeoptiontab.cpp:207
 #, kde-format
@@ -4948,7 +4964,7 @@ msgstr "ფაილური სისტემები"
 #: projects/base_k3badvanceddataimagesettings.ui:24
 #, kde-format
 msgid "Add Rock Ridge extensions to the file system"
-msgstr ""
+msgstr "ფაილური სისტემისთვის Rock Ridge გაფართოებების დამატება"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkRockRidge)
 #: projects/base_k3badvanceddataimagesettings.ui:30
@@ -4971,13 +4987,13 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:33
 #, kde-format
 msgid "&Generate Rock Ridge extensions"
-msgstr ""
+msgstr "Rock Ridge გაფართოებების &გენერაცია"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkJoliet)
 #: projects/base_k3badvanceddataimagesettings.ui:43
 #, kde-format
 msgid "Add Joliet extensions to the file system"
-msgstr ""
+msgstr "ფაილური სისტემისთვის Joliet გაფართოებების დამატება"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkJoliet)
 #: projects/base_k3badvanceddataimagesettings.ui:50
@@ -5002,13 +5018,13 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:53
 #, kde-format
 msgid "Generate &Joliet extensions"
-msgstr ""
+msgstr "&Joliet გაფართოებების გენერაცია"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkUdf)
 #: projects/base_k3badvanceddataimagesettings.ui:60
 #, kde-format
 msgid "Add UDF structures to the file system"
-msgstr ""
+msgstr "ფაილური სისტემისთვის UDF სტრუქტურების დამატება"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkUdf)
 #: projects/base_k3badvanceddataimagesettings.ui:64
@@ -5024,7 +5040,7 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:67
 #, kde-format
 msgid "Generate &UDF structures"
-msgstr ""
+msgstr "&UDF სტრუქტურები გენერაცია"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: projects/base_k3badvanceddataimagesettings.ui:77
@@ -5048,13 +5064,13 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:87
 #, kde-format
 msgid "Preserve file permissions (bac&kup)"
-msgstr ""
+msgstr "ფაილის წვდომის უფლებების შენარჩუნება (მარ&ქაფი)"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:110
 #, kde-format
 msgid "Set special ISO 9660 Filesystem preferences."
-msgstr ""
+msgstr "სპეციალური პარამეტრების დაყენება ფაილური სისტემისთვის ISO9660."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:113
@@ -5072,67 +5088,74 @@ msgstr "ISO 9660-ის მორგება"
 #: projects/base_k3badvanceddataimagesettings.ui:143
 #, kde-format
 msgid "Force all options below"
-msgstr ""
+msgstr "ყველა ქვედა პარამეტრის ძალით ჩართვა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowUntranslatedFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:146
 #, kde-format
 msgid "Allow untranslated ISO 9660 filenames"
-msgstr ""
+msgstr "უთარგმნელი ფაილის სახელების დაშვება ფაილური სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkOmitTrailingPeriod)
 #: projects/base_k3badvanceddataimagesettings.ui:153
 #, kde-format
 msgid "Omit trailing period in ISO 9660 filenames"
-msgstr ""
+msgstr "ფაილის სახელის ბოლოდან წერტილის მოცილება ფაილური სისტემისთვის ISO9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkOmitVersionNumbers)
 #: projects/base_k3badvanceddataimagesettings.ui:160
 #, kde-format
 msgid "Omit version numbers in ISO 9660 filenames"
 msgstr ""
+"ფაილი სახელებიდან ვერსიის ნომრის მოცილება ფაილურის სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowBeginningPeriod)
 #: projects/base_k3badvanceddataimagesettings.ui:167
 #, kde-format
 msgid "Allow leading period in ISO 9660 filenames"
-msgstr ""
+msgstr "ფაილის სახელის წერტილით დაწყების დაშვება ფაილური სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllow31CharFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:174
 #, kde-format
 msgid "Allow 31 character ISO 9660 filenames"
-msgstr ""
+msgstr "ფაილის სახელში 31 სიმბოლოს დაშვება ფაილური სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowMultiDot)
 #: projects/base_k3badvanceddataimagesettings.ui:181
 #, kde-format
 msgid "Allow multiple dots in ISO 9660 filenames"
 msgstr ""
+"ფაილის სახელში ერთზე მეტი წერტილის დაშვება ფაილური სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowLowercaseCharacters)
 #: projects/base_k3badvanceddataimagesettings.ui:188
 #, kde-format
 msgid "Allow lowercase characters in ISO 9660 filenames"
-msgstr ""
+msgstr "ფაილის სახელებში პატარა ასოების დაშვება ფაილური სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowOther)
 #: projects/base_k3badvanceddataimagesettings.ui:195
 #, kde-format
 msgid "Allow ~ and # in ISO 9660 filenames"
 msgstr ""
+"ფაილის სახელებში ~ და # სიმბოლოების დაშვება ფაილური სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowFullAscii)
 #: projects/base_k3badvanceddataimagesettings.ui:202
 #, kde-format
 msgid "Allow full ASCII charset for ISO 9660 filenames"
 msgstr ""
+"ფაილის სახელებში სრული ASCII სიმბოლოების ნაკრების დაშვება ფაილური "
+"სისტემისთვის ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowMaxLengthFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:209
 #, kde-format
 msgid "Allow max length ISO 9660 filenames (37 characters)"
 msgstr ""
+"მაქს. ზომის მქონე (37 სიმბოლო) ფაილის სახელების დაშვება ფაილური სისტემისთვის "
+"ISO 9660"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, m_groupIsoLevel)
 #: projects/base_k3badvanceddataimagesettings.ui:225
@@ -5204,7 +5227,7 @@ msgstr "Joliet-ის პარამეტრები"
 #: projects/base_k3badvanceddataimagesettings.ui:287
 #, kde-format
 msgid "Allow 103 character Joliet filenames"
-msgstr ""
+msgstr "103 სიმბოლოიანი Joliet ფაილი სახელების დაშვება"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupMiscSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:297
@@ -5216,13 +5239,13 @@ msgstr "სხვა პარამეტრები"
 #: projects/base_k3badvanceddataimagesettings.ui:303
 #, kde-format
 msgid "Do not import previous session"
-msgstr ""
+msgstr "არ შემოიტანო წინა სესია"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkDoNotCacheInodes)
 #: projects/base_k3badvanceddataimagesettings.ui:310
 #, kde-format
 msgid "Do not cache inodes"
-msgstr ""
+msgstr "არ დაკეშო inode-ები"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:18
@@ -5403,13 +5426,13 @@ msgstr "&კოპირება ნებადართულია"
 #: projects/base_k3baudiotrackwidget.ui:189
 #, kde-format
 msgid "Post-Gap:"
-msgstr ""
+msgstr "პაუზა:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::MsfEdit, m_editPostGap)
 #: projects/base_k3baudiotrackwidget.ui:199
 #, kde-format
 msgid "Set the length of the track's post-gap"
-msgstr ""
+msgstr "ტრეკის დასრულების შემდეგ პაუზის სიგრძის დაყენება"
 
 #. i18n: ectx: property (whatsThis), widget (K3b::MsfEdit, m_editPostGap)
 #: projects/base_k3baudiotrackwidget.ui:207
@@ -5499,7 +5522,7 @@ msgstr "ემულაცია არ მოხდება"
 #: projects/base_k3bbootimagedialog.ui:116
 #, kde-format
 msgid "Do not boot from the emulated floppy/harddisk"
-msgstr ""
+msgstr "არ ჩაიტვირთო ემულირებული დისკეტიდან/მყარი დისკიდან"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkNoBoot)
 #: projects/base_k3bbootimagedialog.ui:119
@@ -5525,7 +5548,7 @@ msgstr "0"
 #: projects/base_k3bbootimagedialog.ui:158
 #, kde-format
 msgid "Boot load segment:"
-msgstr ""
+msgstr "ჩატვირთვადი სეგმენტი:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3bbootimagedialog.ui:171
@@ -5599,7 +5622,7 @@ msgstr "სიმბმულები"
 #: projects/base_k3bdataimagesettings.ui:87
 #, kde-format
 msgid "Symbolic link handling in the project"
-msgstr ""
+msgstr "სიმბოლური ბმულების დამუშავება პროექტში"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:105
@@ -5644,13 +5667,13 @@ msgstr "ცვლილებების გარეშე"
 #: projects/base_k3bdataimagesettings.ui:114
 #, kde-format
 msgid "Discard broken symlinks"
-msgstr ""
+msgstr "გაფუჭებული სიმბმულების მოცილება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:119
 #, kde-format
 msgid "Discard all symlinks"
-msgstr ""
+msgstr "ყველა სიმბმულის მოცილება"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:124
@@ -5662,13 +5685,13 @@ msgstr "სიმბმულების მიყოლა"
 #: projects/base_k3bdataimagesettings.ui:135
 #, kde-format
 msgid "White space handling"
-msgstr ""
+msgstr "ჰარეების დამუშავება"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:147
 #, kde-format
 msgid "Handling of spaces in filenames"
-msgstr ""
+msgstr "ჰარეების შემცველი ფაილის სახელების დამუშავება"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:160
@@ -5701,7 +5724,7 @@ msgstr "სტრიპი"
 #: projects/base_k3bdataimagesettings.ui:174
 #, kde-format
 msgid "Extended Strip"
-msgstr ""
+msgstr "გაფართოებული წაშლა"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:179
@@ -5715,7 +5738,7 @@ msgstr "ჩანაცვლება"
 #: projects/base_k3bdataimagesettings.ui:196
 #, kde-format
 msgid "The string to replace spaces with"
-msgstr ""
+msgstr "ჰარეების ჩასანაცვლებელი სტრიქონი"
 
 #. i18n: ectx: property (text), widget (KLineEdit, m_editBlankReplace)
 #. i18n: ectx: property (text), widget (QLineEdit, m_editReplace)
@@ -5749,7 +5772,7 @@ msgstr "&აპლიკაცია:"
 #: projects/base_k3bdatavolumedescdialog.ui:51
 #, kde-format
 msgid "Volu&me set size:"
-msgstr ""
+msgstr "ტომის ზო&მა:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:84
@@ -5774,44 +5797,44 @@ msgstr "&ტომის სახელი:"
 #: projects/base_k3bdatavolumedescdialog.ui:134
 #, kde-format
 msgid "Vo&lume set name:"
-msgstr ""
+msgstr "ტომების ნაკრების სახე&ლი:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindBiblio)
 #: projects/base_k3bdatavolumedescdialog.ui:156
 #, kde-format
 msgid "Select a bibliographic file from the project"
-msgstr ""
+msgstr "აირჩიეთ ბიბლიოგრაფიული ფაილი პროექტიდან"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
 #: projects/base_k3bdatavolumedescdialog.ui:168
 #, kde-format
 msgid "P&reparer:"
-msgstr ""
+msgstr "&ვინ მოამზადა:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindAbstract)
 #: projects/base_k3bdatavolumedescdialog.ui:190
 #, kde-format
 msgid "Select an abstract file from the project"
-msgstr ""
+msgstr "აირჩიეთ ანოტაციების ფაილი პროექტიდან"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: projects/base_k3bdatavolumedescdialog.ui:202
 #, kde-format
 msgid "Abstract file:"
-msgstr ""
+msgstr "ანოტაციების ფაილი:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindCopyright)
 #: projects/base_k3bdatavolumedescdialog.ui:228
 #, kde-format
 msgid "Select a copyright file from the project"
-msgstr ""
+msgstr "აირჩიეთ საავტორო უფლებების ფაილი პროექტიდან"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:255
 #: projects/k3bvcdburndialog.cpp:467
 #, kde-format
 msgid "Volume set &number:"
-msgstr ""
+msgstr "ტომების ნაკრების &ნომერი:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel5)
 #: projects/base_k3bdatavolumedescdialog.ui:303
@@ -5829,25 +5852,25 @@ msgstr "დაკვრის პარამეტრები"
 #: projects/base_k3bmovixoptionswidget.ui:24
 #, kde-format
 msgid "MPlayer subtitle fontset:"
-msgstr ""
+msgstr "MPlayer-ის სუბტიტრის ფონტების ნაკრები:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboSubtitleFontset)
 #: projects/base_k3bmovixoptionswidget.ui:34
 #, kde-format
 msgid "Select the font to be used to render subtitles"
-msgstr ""
+msgstr "აირჩიეთ ფონტი სუბტიტრების რენდერისთვის"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel7)
 #: projects/base_k3bmovixoptionswidget.ui:44
 #, kde-format
 msgid "Unwanted MPlayer options:"
-msgstr ""
+msgstr "არასასურველი MPlayer-ის პარამეტრები:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkRandomPlay)
 #: projects/base_k3bmovixoptionswidget.ui:56
 #, kde-format
 msgid "The files are played in random order"
-msgstr ""
+msgstr "ფაილების დაკვრის მიმდევრობა შემთხვევითია"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkRandomPlay)
 #: projects/base_k3bmovixoptionswidget.ui:59
@@ -5888,7 +5911,7 @@ msgstr "არ გამოიყენო &DMA"
 #: projects/base_k3bmovixoptionswidget.ui:84
 #, kde-format
 msgid "MPlayer options you want to be sure MPlayer will not use"
-msgstr ""
+msgstr "Mplayer-ის პარამეტრები, რომლებიც არ გნებავთ, Mplayer-მა გამოიყენოს"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, m_editUnwantedMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:89
@@ -5924,7 +5947,7 @@ msgstr "MPlayer-ის დამატებითი პარამეტრ�
 #: projects/base_k3bmovixoptionswidget.ui:118
 #, kde-format
 msgid "Loop playlist:"
-msgstr ""
+msgstr "სიის მარყუჟი:"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_spinLoop)
 #: projects/base_k3bmovixoptionswidget.ui:128
@@ -5955,7 +5978,7 @@ msgstr "აუდიოს დამკვრელის ფონი:"
 #: projects/base_k3bmovixoptionswidget.ui:154
 #, kde-format
 msgid "Background video to show during audio playback"
-msgstr ""
+msgstr "ფონური ვიდეო საჩვენებლად აუდიოს დაკვრის მიმდინარეობისას"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_comboAudioBackground)
 #: projects/base_k3bmovixoptionswidget.ui:159
@@ -5987,13 +6010,13 @@ msgstr "კლავიატურის განლაგება:"
 #: projects/base_k3bmovixoptionswidget.ui:185
 #, kde-format
 msgid "eMovix boot message language:"
-msgstr ""
+msgstr "შეტყობინებების ენა eMovix-ის ჩატვირთვისას:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboBootMessageLanguage)
 #: projects/base_k3bmovixoptionswidget.ui:195
 #, kde-format
 msgid "Select the language of the eMovix help screens"
-msgstr ""
+msgstr "აირჩიეთ eMovix-ის დახმარებს ეკრანის ენა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel5)
 #: projects/base_k3bmovixoptionswidget.ui:202
@@ -6005,7 +6028,7 @@ msgstr "ნაგულისხმევი ჩატვირთვის ჭ�
 #: projects/base_k3bmovixoptionswidget.ui:212
 #, kde-format
 msgid "Select the default Linux kernel configuration"
-msgstr ""
+msgstr "აირჩიეთ Linux-ის ბირთვის ნაგულიხმევი კონფიგურაცია"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_comboDefaultBootLabel)
 #: projects/base_k3bmovixoptionswidget.ui:222
@@ -6122,7 +6145,7 @@ msgstr[1] "%1 ტრეკი (%2 წუთი)"
 #: projects/k3baudioburndialog.cpp:71
 #, kde-format
 msgid "Gimmicks"
-msgstr ""
+msgstr "ხრიკები"
 
 #: projects/k3baudioburndialog.cpp:72
 #, kde-format
@@ -6142,7 +6165,7 @@ msgstr "წაკითხვის შეცდომების გამო�
 #: projects/k3baudioburndialog.cpp:104
 #, kde-format
 msgid "Hide the first track in the first pregap"
-msgstr ""
+msgstr "პირველი ტრეკის დამალვა პირველ სიმღერამდე პაუზაში"
 
 #: projects/k3baudioburndialog.cpp:109
 #, kde-format
@@ -6171,11 +6194,12 @@ msgstr "მხოლოდ, აუდიოს დარიპვა"
 #, kde-format
 msgid "Use the 'Rip Audio' tab to optionally adjust the path of the audio."
 msgstr ""
+"გამოიყენეთ 'აუდიოს დარიპვის' ჩანართი, რომ აუდიოს ბილიკი ხელით მიუთითოთ."
 
 #: projects/k3baudioburndialog.cpp:123
 #, kde-format
 msgid "Wri&te Rip Audio files to:"
-msgstr ""
+msgstr "&დარიპული აუდიოფაილების ჩაწერა საქაღალდეში:"
 
 #: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:284
 #, kde-format
@@ -6294,7 +6318,7 @@ msgstr "არალოკალური ფაილები მხარდ�
 #: projects/k3baudiotrackaddingdialog.cpp:85
 #, kde-format
 msgid "Unable to handle the following files due to an unsupported format"
-msgstr ""
+msgstr "შეუძლებელია შემდეგი ფაილების დამუშავება მხარდაუჭერელი ფორმატის გამო"
 
 #: projects/k3baudiotrackaddingdialog.cpp:86
 #, kde-format
@@ -6307,7 +6331,7 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:126
 #, kde-format
 msgid "Problems while adding files to the project."
-msgstr ""
+msgstr "პრობლემები პროექტში ფაილების ჩამატებისას."
 
 #: projects/k3baudiotrackaddingdialog.cpp:146
 #, kde-format
@@ -6357,7 +6381,7 @@ msgstr "აუდიობილიკის გაყოფა"
 #: projects/k3baudiotracksplitdialog.cpp:40
 #, kde-format
 msgid "Please select the position where the track should be split."
-msgstr ""
+msgstr "აირჩიეთ ადგილი, სადაც ტრეკი უნდა გაიყოს."
 
 #: projects/k3baudiotracksplitdialog.cpp:45
 #, kde-format
@@ -6383,7 +6407,7 @@ msgstr "MusicBrainz-ს გამოთხოვა"
 #: projects/k3baudiotracktrmlookupdialog.cpp:116
 #, kde-format
 msgid "Track %1 was not found in the MusicBrainz database."
-msgstr ""
+msgstr "ტრეკი %1 MusicBrainz-ის მონაცემთა ბაზაში აღმოჩენილი არაა."
 
 #: projects/k3baudioviewimpl.cpp:77
 #, kde-format
@@ -6398,7 +6422,7 @@ msgstr "ტრეკების შერწყმა"
 #: projects/k3baudioviewimpl.cpp:81
 #, kde-format
 msgid "Source to Track"
-msgstr ""
+msgstr "წყარო ტრეკამდე"
 
 #: projects/k3baudioviewimpl.cpp:83
 #, kde-format
@@ -6423,7 +6447,7 @@ msgstr "MusicBrainz -ით ძებნა"
 #: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
 #, kde-format
 msgid "Try to determine meta information over the Internet"
-msgstr ""
+msgstr "მეტაინფორმაციის ინტერნეტით დადგენს ცდა"
 
 #: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
@@ -6724,7 +6748,7 @@ msgstr "Joliet გაფართოებები გათიშულია"
 #: projects/k3bdatamultisessioncombobox.cpp:27
 #, kde-format
 msgid "Select the Multisession Mode for the project."
-msgstr ""
+msgstr "აირჩიეთ მრავალსესიიანობის რეჟიმი პროექტისთვის."
 
 #: projects/k3bdatamultisessioncombobox.cpp:28
 #, kde-format
@@ -7031,7 +7055,7 @@ msgstr "ფაილი უკვე არსებობს"
 #: projects/k3bdataurladdingdialog.cpp:620
 #, kde-format
 msgid "<p>File <em>%1</em> already exists in project folder <em>%2</em>."
-msgstr ""
+msgstr "<p>ფაილი <em>%1</em> უკვე არსებობს პროექტის საქაღალდეში <em>%2</em>."
 
 #: projects/k3bdataurladdingdialog.cpp:390
 #: projects/k3bdataurladdingdialog.cpp:629
@@ -7100,7 +7124,7 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:455
 #, kde-format
 msgid "Follow link now"
-msgstr ""
+msgstr "სიმბმულების მიყოლა"
 
 #: projects/k3bdataurladdingdialog.cpp:456
 #, kde-format
@@ -7158,12 +7182,12 @@ msgstr "სისტემური ფაილები"
 #: projects/k3bdataurladdingdialog.cpp:813
 #, kde-format
 msgid "To burn files bigger than %1 please use %2"
-msgstr ""
+msgstr "%1-ზე დიდი ფაილებს ამოსაწვავად გამოიყენეთ %2"
 
 #: projects/k3bdataurladdingdialog.cpp:818
 #, kde-format
 msgid "Some filenames had to be modified due to limitations in mkisofs"
-msgstr ""
+msgstr "საჭიროა ზოგიერთი ფაილის სახელის შეცვლა mkisofs-ის შეზღუდვების გამო"
 
 #: projects/k3bdataurladdingdialog.cpp:822
 #, kde-format
@@ -7171,6 +7195,8 @@ msgid ""
 "The following filenames have an invalid encoding. You may fix this with the "
 "convmv tool"
 msgstr ""
+"შემდეგი ფაილის სახელები არასწორ კოდირებას შეიცავენ. მათი გასწორება convmv "
+"პროგრამით შეგიძლიათ"
 
 #: projects/k3bdataview.cpp:116 projects/k3bmixedview.cpp:127
 #: projects/k3bview.cpp:82
@@ -7201,7 +7227,7 @@ msgstr "&სესიის შემოტანა..."
 #: projects/k3bdataviewimpl.cpp:140
 #, kde-format
 msgid "Import a previously burned session into the current project"
-msgstr ""
+msgstr "უკვე ამომწვარი სესიის შემოტანა მიმდინარე პროექტში"
 
 #: projects/k3bdataviewimpl.cpp:144
 #, kde-format
@@ -7211,7 +7237,7 @@ msgstr "შემოტანილი სესიის &გასუფთა
 #: projects/k3bdataviewimpl.cpp:145
 #, kde-format
 msgid "Remove the imported items from a previous session"
-msgstr ""
+msgstr "წინა სესიიდან შემოტანილი ელემენტების წაშლა"
 
 #: projects/k3bdataviewimpl.cpp:150
 #, kde-format
@@ -7221,7 +7247,7 @@ msgstr "ჩატვირთვადი დისკის ასლის ფ
 #: projects/k3bdataviewimpl.cpp:151
 #, kde-format
 msgid "Modify the bootable settings of the current project"
-msgstr ""
+msgstr "ჩატვირთვადობის პარამეტრების შეცვლა მიმდინარე პროექტისთვის"
 
 #: projects/k3bdataviewimpl.cpp:214 projects/k3bdataviewimpl.cpp:217
 #: projects/k3bdataviewimpl.cpp:222 projects/k3bdataviewimpl.cpp:226
@@ -7232,7 +7258,7 @@ msgstr "ახალი საქაღალდე"
 #: projects/k3bdataviewimpl.cpp:215
 #, kde-format
 msgid "Please insert the name for the new folder:"
-msgstr ""
+msgstr "შეიყვანეთ სახელი ახალი საქაღალდისთვის:"
 
 #: projects/k3bdataviewimpl.cpp:223
 #, kde-format
@@ -7397,7 +7423,7 @@ msgstr "შერეული რეჟიმის ტიპი"
 #: projects/k3bmixedburndialog.cpp:98
 #, kde-format
 msgid "Data in second session (CD-Extra)"
-msgstr ""
+msgstr "მონაცემები მეორე სესიაში (CD-Extra)"
 
 #: projects/k3bmixedburndialog.cpp:99
 #, kde-format
@@ -7553,12 +7579,12 @@ msgstr ""
 #: projects/k3bmusicbrainztrackloopupjob.cpp:71
 #, kde-format
 msgid "Generating fingerprint for track %1."
-msgstr ""
+msgstr "ანაბეჭდს გენერაცია ტრეკისთვის %1."
 
 #: projects/k3bmusicbrainztrackloopupjob.cpp:110
 #, kde-format
 msgid "Querying MusicBrainz for track %1."
-msgstr ""
+msgstr "MusicBrainz-დან ინფორმაციის გამოთხოვა ტრეკისთვის %1."
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -7573,7 +7599,7 @@ msgstr "პარამეტრების შენახვა და და
 #: projects/k3bprojectburndialog.cpp:64
 #, kde-format
 msgid "Saves the settings to the project and closes the dialog."
-msgstr ""
+msgstr "შეინახავს პარამეტრებს პროექტში და დახურავს დიალოგს."
 
 #: projects/k3bprojectburndialog.cpp:67
 #, kde-format
@@ -7707,7 +7733,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:109
 #, kde-format
 msgid "Configuration parameters (only for VCD 2.0)"
-msgstr ""
+msgstr "კონფიგურაციის პარამეტრები (მხოლოდ VCD 2.0-სთვის)"
 
 #: projects/k3bvcdburndialog.cpp:111 projects/k3bvcdtrackdialog.cpp:244
 #, kde-format
@@ -7719,7 +7745,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:112
 #, kde-format
 msgid "Add always an empty `/SEGMENT' folder"
-msgstr ""
+msgstr "ყოველთვის დაემატება ცარიელი საქაღალდე '/SEGMENT'"
 
 #: projects/k3bvcdburndialog.cpp:113
 #, kde-format
@@ -7760,12 +7786,12 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:120
 #, kde-format
 msgid "Sets the front margin for sequence items."
-msgstr ""
+msgstr "აყენებს წინა მინდორს მიმდევრობის ელემენტებისთვის."
 
 #: projects/k3bvcdburndialog.cpp:121
 #, kde-format
 msgid "Sets the rear margin for sequence items."
-msgstr ""
+msgstr "აყენებს უკანა მინდორს მიმდევრობის ელემენტებისთვის."
 
 #: projects/k3bvcdburndialog.cpp:125
 #, kde-format
@@ -8008,57 +8034,57 @@ msgstr "ზოგადი"
 #: projects/k3bvcdburndialog.cpp:254
 #, kde-format
 msgid "Playback Control (PBC)"
-msgstr ""
+msgstr "დაკვრის მართვა (PBC)"
 
 #: projects/k3bvcdburndialog.cpp:255
 #, kde-format
 msgid "SEGMENT Folder must always be present"
-msgstr ""
+msgstr "საქაღალდე SEGMENT ყოველთვის უნდა არსებობდეს"
 
 #: projects/k3bvcdburndialog.cpp:256
 #, kde-format
 msgid "Relaxed aps"
-msgstr ""
+msgstr "რბილი APS"
 
 #: projects/k3bvcdburndialog.cpp:257
 #, kde-format
 msgid "Update scan offsets"
-msgstr ""
+msgstr "სკანირების წანაცვლებების განახლება"
 
 #: projects/k3bvcdburndialog.cpp:266
 #, kde-format
 msgid "Gaps"
-msgstr ""
+msgstr "პაუზები"
 
 #: projects/k3bvcdburndialog.cpp:271
 #, kde-format
 msgid "Customize gaps and margins"
-msgstr ""
+msgstr "პაუზებისა და მინდვრების მორგება"
 
 #: projects/k3bvcdburndialog.cpp:273
 #, kde-format
 msgid "Leadout pre gap (0..300):"
-msgstr ""
+msgstr "პაუზა Leadout-მე (0..300):"
 
 #: projects/k3bvcdburndialog.cpp:278
 #, kde-format
 msgid "Track pre gap (0..300):"
-msgstr ""
+msgstr "პაუზა ტრეკამდე (0..300):"
 
 #: projects/k3bvcdburndialog.cpp:283
 #, kde-format
 msgid "Track front margin (0..150):"
-msgstr ""
+msgstr "საწყისი მინდორი (0..150):"
 
 #: projects/k3bvcdburndialog.cpp:292
 #, kde-format
 msgid "Track rear margin (0..150):"
-msgstr ""
+msgstr "საბოლოო მინდორი (0..150):"
 
 #: projects/k3bvcdburndialog.cpp:365
 #, kde-format
 msgid "Restriction category (0..3):"
-msgstr ""
+msgstr "ასაკის შეზღუდვის კატეგორია (0..3):"
 
 #: projects/k3bvcdburndialog.cpp:389
 #, kde-format
@@ -8073,22 +8099,22 @@ msgstr "Video CD 2.0"
 #: projects/k3bvcdburndialog.cpp:392
 #, kde-format
 msgid "HQ Video CD"
-msgstr ""
+msgstr "HQ Video CD"
 
 #: projects/k3bvcdburndialog.cpp:410
 #, kde-format
 msgid "Autodetect Video CD type"
-msgstr ""
+msgstr "ვიდეოCD-ის ტიპის ავტომატური დადგენა"
 
 #: projects/k3bvcdburndialog.cpp:411
 #, kde-format
 msgid "Enable broken SVCD mode"
-msgstr ""
+msgstr "გაფუჭებული SVCD რეჟიმის ჩართვა"
 
 #: projects/k3bvcdburndialog.cpp:415
 #, kde-format
 msgid "Enable %1 track interpretation"
-msgstr ""
+msgstr "%1 ტრეკის ინტერპრეტაციის ჩართვა"
 
 #: projects/k3bvcdburndialog.cpp:419
 #, kde-format
@@ -8098,12 +8124,12 @@ msgstr "2336 ბაიტიანი სექტორების გამ�
 #: projects/k3bvcdburndialog.cpp:420
 #, kde-format
 msgid "Enable CD-i support"
-msgstr ""
+msgstr "CD-i-ის მხარდაჭერის ჩართვა"
 
 #: projects/k3bvcdburndialog.cpp:429
 #, kde-format
 msgid "Video CD on CD-i"
-msgstr ""
+msgstr "ვიდეოCD CD-i-ზე"
 
 #: projects/k3bvcdburndialog.cpp:450
 #, kde-format
@@ -8118,17 +8144,17 @@ msgstr "აპლიკაცია:"
 #: projects/k3bvcdburndialog.cpp:460
 #, kde-format
 msgid "ISO application identifier for Video CD"
-msgstr ""
+msgstr "ISO აპლიკაციის იდენტიფიკატორი ვიდეო CD-სთვის"
 
 #: projects/k3bvcdburndialog.cpp:465
 #, kde-format
 msgid "Volume &set name:"
-msgstr ""
+msgstr "&ტომების სახელი:"
 
 #: projects/k3bvcdburndialog.cpp:466
 #, kde-format
 msgid "Volume set s&ize:"
-msgstr ""
+msgstr "ტო&მის ზომა:"
 
 #: projects/k3bvcdburndialog.cpp:468
 #, kde-format
@@ -8175,7 +8201,7 @@ msgstr "კადრების სიჩქარე"
 #, kde-format
 msgctxt "Video CD Track Muxrate"
 msgid "Muxrate"
-msgstr ""
+msgstr "მულტიპლექსირების სიხშირე"
 
 #: projects/k3bvcdprojectmodel.cpp:242
 #, kde-format
@@ -8248,7 +8274,7 @@ msgstr ""
 #: projects/k3bvcdtrackdialog.cpp:247
 #, kde-format
 msgid "Numeric keys."
-msgstr ""
+msgstr "ციფრებიაი ღილაკები."
 
 #: projects/k3bvcdtrackdialog.cpp:248
 #, kde-format
@@ -8324,7 +8350,7 @@ msgstr "ხანგრძლივობა:"
 #: projects/k3bvcdtrackdialog.cpp:388
 #, kde-format
 msgid "Muxrate:"
-msgstr ""
+msgstr "მულტიპლექსირების სიხშირე:"
 
 #: projects/k3bvcdtrackdialog.cpp:447
 #, kde-format
@@ -8475,12 +8501,12 @@ msgstr ""
 #: projects/k3bvcdtrackkeysmodel.cpp:167
 #, kde-format
 msgid "Segment-%1 - %2"
-msgstr ""
+msgstr "სეგმენტი-%1 - %2"
 
 #: projects/k3bvcdtrackkeysmodel.cpp:169
 #, kde-format
 msgid "Sequence-%1 - %2"
-msgstr ""
+msgstr "მიმდევრობა-%1 - %2"
 
 #: projects/k3bvcdview.cpp:92
 #, kde-format
@@ -8517,7 +8543,7 @@ msgstr "&ამოწვა"
 #: projects/k3bview.cpp:46
 #, kde-format
 msgid "Open the burn dialog for the current project"
-msgstr ""
+msgstr "ამოწვის დიალოგის გახსნა მიმდინარე პროექტისთვის"
 
 #: projects/k3bview.cpp:47
 #, kde-format
@@ -8527,7 +8553,7 @@ msgstr "&თვისებები"
 #: projects/k3bview.cpp:49
 #, kde-format
 msgid "Open the properties dialog"
-msgstr ""
+msgstr "ვისებების დიალოგის გახსნა"
 
 #: projects/k3bvolumenamewidget.cpp:50
 #, kde-format
@@ -8562,7 +8588,7 @@ msgstr "დამატების გამართვა"
 #: rip/base_k3baudiorippingoptionwidget.ui:53
 #, kde-format
 msgid "Create playlist for the ripped files"
-msgstr ""
+msgstr "დასაკრავი სიის შექმნა დარიპული ფაილებისთვის"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkCreatePlaylist)
 #: rip/base_k3baudiorippingoptionwidget.ui:58
@@ -8583,7 +8609,7 @@ msgstr "M&3U დასაკრავი სიის შექმნა"
 #: rip/base_k3baudiorippingoptionwidget.ui:89
 #, kde-format
 msgid "Use relative paths instead of absolute"
-msgstr ""
+msgstr "ფარდობითი ბილიკების გამოყენება აბსოლუტურის მაგიერ"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:95
@@ -8792,29 +8818,29 @@ msgstr "აუდიო CD"
 #: rip/k3baudiocdview.cpp:216
 #, kde-format
 msgid "Edit Track Info..."
-msgstr ""
+msgstr "ტრეკის ინფორმაციის ჩასწორება..."
 
 #: rip/k3baudiocdview.cpp:217
 #, kde-format
 msgid "Edit current track information"
-msgstr ""
+msgstr "მიმდინარე ტრეკის ინფორმაციის ჩასწორება"
 
 #: rip/k3baudiocdview.cpp:222
 #, kde-format
 msgid "Edit Album Info..."
-msgstr ""
+msgstr "ალბომის ინფორმაციის ჩასწორება..."
 
 #: rip/k3baudiocdview.cpp:223
 #, kde-format
 msgid "Edit album information"
-msgstr ""
+msgstr "ალბომის ინფორმაციის ჩასწორება"
 
 #: rip/k3baudiocdview.cpp:228 rip/k3baudiorippingdialog.cpp:191
 #: rip/k3bvideocdrippingdialog.cpp:106 rip/k3bvideocdview.cpp:374
 #: rip/videodvd/k3bvideodvdrippingview.cpp:342
 #, kde-format
 msgid "Start Ripping"
-msgstr ""
+msgstr "დარიპვის დაწყება"
 
 #: rip/k3baudiocdview.cpp:229
 #, kde-format
@@ -8973,7 +8999,7 @@ msgstr "ფაილის ზომა"
 #: rip/k3baudiorippingdialog.cpp:160
 #, kde-format
 msgid "File Naming"
-msgstr ""
+msgstr "ფაილის სახელის აწყობა"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:169
 #: rip/k3baudiorippingdialog.cpp:238
