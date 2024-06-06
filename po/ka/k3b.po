@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-24 00:38+0000\n"
-"PO-Revision-Date: 2024-06-04 06:11+0200\n"
+"PO-Revision-Date: 2024-06-05 12:14+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3286,7 +3286,7 @@ msgstr ""
 #: k3bwritingmodewidget.cpp:99
 #, kde-format
 msgid "The selection of writing modes depends on the inserted burning medium."
-msgstr ""
+msgstr "ჩაწერის რეჟიმების არჩევანი ჩადებულ ამოსაწვავ მედიაზეა დამოკიდებული."
 
 #: k3bwritingmodewidget.cpp:155
 #, kde-format
@@ -5534,7 +5534,7 @@ msgstr "ჩატვირთვადი დისკის ასლის გ
 #: projects/base_k3bbootimagedialog.ui:126
 #, kde-format
 msgid "Boot-info-table"
-msgstr ""
+msgstr "Boot-info-table"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_editLoadSegment)
 #. i18n: ectx: property (text), widget (QLineEdit, m_editLoadSize)
@@ -8259,17 +8259,17 @@ msgstr ""
 #: projects/k3bvcdtrackdialog.cpp:243
 #, kde-format
 msgid "Delay reactivity of keys."
-msgstr ""
+msgstr "დაყოვნება ღილაკის რეაქციამდე."
 
 #: projects/k3bvcdtrackdialog.cpp:245
 #, kde-format
 msgid "Activate the use of numeric keys."
-msgstr ""
+msgstr "გაააქტიურეთ ციფრებიანი ღილაკების გამოსაყენებლად."
 
 #: projects/k3bvcdtrackdialog.cpp:246
 #, kde-format
 msgid "Overwrite default numeric keys."
-msgstr ""
+msgstr "ნაგულისხმევი ციფრებიანი ღილაკების თავზე გადაწერა."
 
 #: projects/k3bvcdtrackdialog.cpp:247
 #, kde-format
@@ -8355,12 +8355,12 @@ msgstr "მულტიპლექსირების სიხშირე:"
 #: projects/k3bvcdtrackdialog.cpp:447
 #, kde-format
 msgid "Enable playback control (for the whole CD)"
-msgstr ""
+msgstr "დაკვრის მართვის ჩართვა (მთელი CD-სთვის)"
 
 #: projects/k3bvcdtrackdialog.cpp:448
 #, kde-format
 msgid "Use numeric keys"
-msgstr ""
+msgstr "ციფრებიანი ღილაკების გამოყენება"
 
 #: projects/k3bvcdtrackdialog.cpp:450
 #, kde-format
@@ -8400,12 +8400,12 @@ msgstr "უსასრულო"
 #: projects/k3bvcdtrackdialog.cpp:480
 #, kde-format
 msgid "after timeout playing"
-msgstr ""
+msgstr "დაკვრის დროის ამოწურვის შემდეგ"
 
 #: projects/k3bvcdtrackdialog.cpp:495
 #, kde-format
 msgid "Key Pressed Interaction"
-msgstr ""
+msgstr "ქმედება, თუ ღილაკი დაჭერილია"
 
 #: projects/k3bvcdtrackdialog.cpp:497
 #, kde-format
@@ -8435,12 +8435,12 @@ msgstr "დაკვრის კონტროლი"
 #: projects/k3bvcdtrackdialog.cpp:539
 #, kde-format
 msgid "Overwrite default assignment"
-msgstr ""
+msgstr "ნაგულისხმევი მინიჭების თავზე გადაწერა"
 
 #: projects/k3bvcdtrackdialog.cpp:557
 #, kde-format
 msgid "Numeric Keys"
-msgstr ""
+msgstr "ციფრებიანი ღილაკები"
 
 #: projects/k3bvcdtrackdialog.cpp:591 projects/k3bvcdtrackdialog.cpp:632
 #, kde-format
@@ -8450,7 +8450,7 @@ msgstr "შეაფასეთ:"
 #: projects/k3bvcdtrackdialog.cpp:592
 #, kde-format
 msgid "Sampling frequency:"
-msgstr ""
+msgstr "დისკრეტიზაციის სიხშირე:"
 
 #: projects/k3bvcdtrackdialog.cpp:593
 #, kde-format
@@ -8465,7 +8465,7 @@ msgstr "უფლებები:"
 #: projects/k3bvcdtrackdialog.cpp:633
 #, kde-format
 msgid "Chroma format:"
-msgstr ""
+msgstr "ფერადობის ფორმატი:"
 
 #: projects/k3bvcdtrackdialog.cpp:634
 #, kde-format
@@ -8496,7 +8496,7 @@ msgstr "გასაღები"
 #: projects/k3bvcdtrackkeysmodel.cpp:165
 #, kde-format
 msgid "Video CD END"
-msgstr ""
+msgstr "ვიდეო CD-ის დასასრული"
 
 #: projects/k3bvcdtrackkeysmodel.cpp:167
 #, kde-format
@@ -8533,7 +8533,7 @@ msgstr ""
 #: projects/k3bvideodvdview.cpp:56
 #, kde-format
 msgid "K3b Video DVD Restrictions"
-msgstr ""
+msgstr "K3b-ის შეზღუდვები ვიდეოCD-სთან"
 
 #: projects/k3bview.cpp:44
 #, kde-format
@@ -8627,13 +8627,13 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:98
 #, kde-format
 msgid "&Use relative paths"
-msgstr ""
+msgstr "&ფარდობითი ბილიკების გამოყენება"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:107
 #, kde-format
 msgid "Rip all tracks to a single file"
-msgstr ""
+msgstr "ყველა ტრეკის ერთ ფაილში დარიპვა"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:114
@@ -8716,7 +8716,7 @@ msgstr "დარიპვის ნიმუში"
 #: rip/base_k3bcddbpatternwidget.ui:22
 #, kde-format
 msgid "Replace all blan&ks with:"
-msgstr ""
+msgstr "&ყველა ჰარეს ჩანაცვლება სიმბოლოთი:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/base_k3bcddbpatternwidget.ui:41
@@ -8730,13 +8730,13 @@ msgstr "დასაკრავი სიის ნიმუში:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:372
 #, kde-format
 msgid "Ripped files pattern:"
-msgstr ""
+msgstr "დარიპული ფაილის სახელის ნიმუში:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboFilenamePattern)
 #: rip/base_k3bcddbpatternwidget.ui:80
 #, kde-format
 msgid "Insert your custom pattern here"
-msgstr ""
+msgstr "ჩასვით თქვენი ნიმუში აქ"
 
 #. i18n: ectx: property (text), widget (KUrlLabel, m_specialStringsLabel)
 #: rip/base_k3bcddbpatternwidget.ui:108
@@ -8749,7 +8749,7 @@ msgstr "იხილეთ სპეციალური სტრიქონ�
 #: rip/base_k3bcddbpatternwidget.ui:118
 #, kde-format
 msgid "About conditional inclusion"
-msgstr ""
+msgstr "პირობით ჩასმის შესახებ"
 
 #: rip/categories.cpp:19
 #, kde-format
@@ -8800,15 +8800,15 @@ msgstr "საუნდტრეკი"
 #: rip/k3baudiocdview.cpp:143
 #, kde-format
 msgid "Searching for Artist information..."
-msgstr ""
+msgstr "შემსრულებლის ინფორმაციის ძებნა..."
 
 #: rip/k3baudiocdview.cpp:177 rip/k3baudioprojectconvertingdialog.cpp:97
 #: rip/k3baudiorippingdialog.cpp:115 rip/k3bvideocdview.cpp:350
 #, kde-format
 msgid "1 track (%2)"
 msgid_plural "%1 tracks (%2)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ტრეკი (%2)"
+msgstr[1] "%1 ტრეკი (%2)"
 
 #: rip/k3baudiocdview.cpp:199
 #, kde-format
@@ -8845,57 +8845,57 @@ msgstr "დარიპვის დაწყება"
 #: rip/k3baudiocdview.cpp:229
 #, kde-format
 msgid "Start audio ripping process"
-msgstr ""
+msgstr "აუდიოს დარიპვის პროცესის დაწყება"
 
 #: rip/k3baudiocdview.cpp:234
 #, kde-format
 msgid "Query CD Database"
-msgstr ""
+msgstr "მოთხოვნა CD-ის მონაცემთა ბაზაში"
 
 #: rip/k3baudiocdview.cpp:235
 #, kde-format
 msgid "Look for information on CDDB"
-msgstr ""
+msgstr "ინფორმაციის ძებნა CDDB-ში"
 
 #: rip/k3baudiocdview.cpp:240
 #, kde-format
 msgid "Read CD-Text"
-msgstr ""
+msgstr "CD-Text-ის წაკითხვა"
 
 #: rip/k3baudiocdview.cpp:241
 #, kde-format
 msgid "Read CD-Text information"
-msgstr ""
+msgstr "CD-Text ინფორმაციის წაკითხვა"
 
 #: rip/k3baudiocdview.cpp:246
 #, kde-format
 msgid "Load CD Info"
-msgstr ""
+msgstr "CD-ის ინფორმაციის ჩატვირთვა"
 
 #: rip/k3baudiocdview.cpp:247
 #, kde-format
 msgid "Load track and album information"
-msgstr ""
+msgstr "ტრეკისა და ალბომის ინფორმაციის ჩატვირთვა"
 
 #: rip/k3baudiocdview.cpp:254
 #, kde-format
 msgid "Save CD Info Locally"
-msgstr ""
+msgstr "CD-ის ინფორმაციის ლოკალურად შენახვა"
 
 #: rip/k3baudiocdview.cpp:255
 #, kde-format
 msgid "Save track and album information to the local CDDB cache"
-msgstr ""
+msgstr "ტრეკისა და ინფორმაციის შენახვა ლოკალურ CDDB კეშში"
 
 #: rip/k3baudiocdview.cpp:260
 #, kde-format
 msgid "Show Data Part"
-msgstr ""
+msgstr "მონაცემების ნაწილის ჩვენება"
 
 #: rip/k3baudiocdview.cpp:261
 #, kde-format
 msgid "Mounts the data part of CD"
-msgstr ""
+msgstr "მიამაგრებს CD-ის მონაცემების ნაწილს"
 
 #: rip/k3baudiocdview.cpp:298 rip/k3bvideocdview.cpp:366
 #: rip/videodvd/k3bvideodvdrippingview.cpp:190
@@ -8922,7 +8922,7 @@ msgstr "ტრეკების მონიშვნის მოხსნა"
 #: rip/k3baudiocdview.cpp:318 rip/k3bvideocdview.cpp:443
 #, kde-format
 msgid "Please select the tracks to rip."
-msgstr ""
+msgstr "აირჩიეთ დასარიპი ტრეკები."
 
 #: rip/k3baudiocdview.cpp:319 rip/k3bvideocdview.cpp:443
 #, kde-format
@@ -8957,7 +8957,7 @@ msgstr "დამატებითი ინფორმაცია:"
 #: rip/k3baudiocdview.cpp:385
 #, kde-format
 msgid "Album CDDB"
-msgstr ""
+msgstr "ალბომის CDDB"
 
 #: rip/k3baudiocdview.cpp:426
 #, kde-format
@@ -8982,12 +8982,12 @@ msgstr "ტალღა"
 #: rip/k3baudioprojectconvertingdialog.cpp:96
 #, kde-format
 msgid "Audio Project Conversion"
-msgstr ""
+msgstr "აუდიოპროექტის გადაყვანა"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:117
 #, kde-format
 msgid "Filename (relative to base folder)"
-msgstr ""
+msgstr "ფაილი სახელი (საბაზისო საქაღალდესთან ფარდობით)"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:119
 #: rip/k3baudiorippingdialog.cpp:135 rip/videodvd/k3bvideodvdaudiomodel.cpp:253
@@ -9006,13 +9006,14 @@ msgstr "ფაილის სახელის აწყობა"
 #, kde-format
 msgid "Please check the naming pattern. All filenames need to be unique."
 msgstr ""
+"შეამოწმეთ სახელის ნიმუში. საჭიროა, რომ ყველა ფაილის სახელი უნიკალური იყოს."
 
 #: rip/k3baudioprojectconvertingdialog.cpp:186
 #: rip/k3baudiorippingdialog.cpp:255
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
 #, kde-format
 msgid "Do you want to overwrite these files?"
-msgstr ""
+msgstr "გნებავთ ამ ფაილების თავზე გადაწერა?"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:188
 #: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:166
@@ -9025,32 +9026,32 @@ msgstr "ფაილები არსებოობს"
 #: rip/k3baudioprojectconvertingjob.cpp:57
 #, kde-format
 msgid "Converting Audio Tracks"
-msgstr ""
+msgstr "აუდიოტრეკების გადაყვანა"
 
 #: rip/k3baudioprojectconvertingjob.cpp:50
 #, kde-format
 msgid "Converting Audio Tracks From '%1'"
-msgstr ""
+msgstr "აუდიოტრეკების გადაყვანა '%1'-დან"
 
 #: rip/k3baudioprojectconvertingjob.cpp:58
 #, kde-format
 msgid "Starting audio conversion."
-msgstr ""
+msgstr "აუდიოს გადაყვანის დაწყება."
 
 #: rip/k3baudioprojectconvertingjob.cpp:85
 #, kde-format
 msgid "Converting track %1 (%2 - %3)"
-msgstr ""
+msgstr "მიმდინარეობს გადაყვანა ტრეკისთვის %1 (%2 - %3)"
 
 #: rip/k3baudioprojectconvertingjob.cpp:90
 #, kde-format
 msgid "Converting track %1"
-msgstr ""
+msgstr "მიმდინარეობს გადაყვანა ტრეკისთვის %1"
 
 #: rip/k3baudioprojectconvertingjob.cpp:96
 #, kde-format
 msgid "Successfully converted track %1."
-msgstr ""
+msgstr "წარმატებულად იქნა გადაყვანილი ტრეკი %1."
 
 #: rip/k3baudioripjob.cpp:91
 #, kde-format
@@ -9065,17 +9066,17 @@ msgstr "რიპვის აღუდგენელი შეცდომა 
 #: rip/k3baudioripjob.cpp:187
 #, kde-format
 msgid "Ripping Audio Tracks"
-msgstr ""
+msgstr "აუდიოტრეკები დარიპვა"
 
 #: rip/k3baudioripjob.cpp:189
 #, kde-format
 msgid "Ripping Audio Tracks From '%1'"
-msgstr ""
+msgstr "აუდიოტრეკები დარიპვა '%1'-დან"
 
 #: rip/k3baudioripjob.cpp:219
 #, kde-format
 msgid "Extracting Digital Audio"
-msgstr ""
+msgstr "ციფრული აუდიოს გამოღება"
 
 #: rip/k3baudioripjob.cpp:226
 #, kde-format
@@ -9085,7 +9086,7 @@ msgstr "შეცდომა libcdparanoia-ის ჩატვირთვი�
 #: rip/k3baudioripjob.cpp:237
 #, kde-format
 msgid "Reading CD table of contents."
-msgstr ""
+msgstr "CD-ის სარჩევის წაკითხვა."
 
 #: rip/k3baudioripjob.cpp:241
 #, kde-format
@@ -9095,47 +9096,47 @@ msgstr "მოწყობილობის გახსნის შეცდ�
 #: rip/k3baudioripjob.cpp:254
 #, kde-format
 msgid "Searching index 0 for all tracks"
-msgstr ""
+msgstr "ვეძებ ინდექსს 0 ყველა ტრეკისთვის"
 
 #: rip/k3baudioripjob.cpp:258
 #, kde-format
 msgid "Starting digital audio extraction (ripping)."
-msgstr ""
+msgstr "ციფრული აუდიოს გამოღების პროცესის (დარიპვის) დაწყება."
 
 #: rip/k3baudioripjob.cpp:289
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
-msgstr ""
+msgstr "ტრეკის რიპინგი %1 (%2:%3)"
 
 #: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1"
-msgstr ""
+msgstr "ტრეკის რიპინგი %1"
 
 #: rip/k3baudioripjob.cpp:300
 #, kde-format
 msgid "Successfully ripped track %1 to %2."
-msgstr ""
+msgstr "წარმატებულად დაირიპა ტრეკი %1-დან %2-მდე."
 
 #: rip/k3baudiorippingdialog.cpp:114
 #, kde-format
 msgid "CD Ripping"
-msgstr ""
+msgstr "CD-ის დარიპვა"
 
 #: rip/k3baudiorippingdialog.cpp:173
 #, kde-format
 msgid "Do not read pregaps"
-msgstr ""
+msgstr "არ წაიკითხო პაუზები"
 
 #: rip/k3baudiorippingdialog.cpp:191
 #, kde-format
 msgid "Starts copying the selected tracks"
-msgstr ""
+msgstr "მონიშნული ტრეკების კოპირების დაწყება"
 
 #: rip/k3baudiorippingdialog.cpp:200
 #, kde-format
 msgid "Maximal number of read retries"
-msgstr ""
+msgstr "წაკითხვის თავიდან ცდების მაქსიმალური რაოდენობა"
 
 #: rip/k3baudiorippingdialog.cpp:201
 #, kde-format
@@ -9269,8 +9270,8 @@ msgstr ""
 #, kde-format
 msgid "1 track (encoding to %2)"
 msgid_plural "%1 tracks (encoding to %2)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 ტრეკი (კოდირება %2-ში)"
+msgstr[1] "%1 ტრეკი (კოდირება %2-ში)"
 
 #: rip/k3bmassaudioencodingjob.cpp:182
 #, kde-format
@@ -9292,17 +9293,17 @@ msgstr "%1-ის ჩასაწერად გახსნის შეცდ
 #: rip/k3bmassaudioencodingjob.cpp:368
 #, kde-format
 msgid "Error while encoding track %1."
-msgstr ""
+msgstr "შეცდომა კოდირებისას ტრეკისთვის %1."
 
 #: rip/k3bmassaudioencodingjob.cpp:404
 #, kde-format
 msgid "Writing playlist to %1."
-msgstr ""
+msgstr "დასაკრავი სიის ჩაწერა %1-ში."
 
 #: rip/k3bmassaudioencodingjob.cpp:500
 #, kde-format
 msgid "Writing cue file to %1."
-msgstr ""
+msgstr "CUE ფაილის ჩაწერა %1-ში."
 
 #: rip/k3bpatternparser.cpp:133
 #, kde-format
@@ -9312,7 +9313,7 @@ msgstr "ტრეკი %1"
 #: rip/k3bvideocdrip.cpp:51
 #, kde-format
 msgid "Job canceled by user."
-msgstr ""
+msgstr "დავალება გაუქმებულია მომხმარებლის მიერ."
 
 #: rip/k3bvideocdrip.cpp:80
 #, kde-format
@@ -9327,7 +9328,7 @@ msgstr "%1-ის გამშვები ფაილი ვერ ვიპ�
 #: rip/k3bvideocdrip.cpp:91
 #, kde-format
 msgid "To rip Video CDs you have to install VcdImager Version %1."
-msgstr ""
+msgstr "ვიდეო CD-ების დასარიპად VcdImager-ის ვერსია %1 უნდა დააყენოთ."
 
 #: rip/k3bvideocdrip.cpp:92
 #, kde-format
@@ -9335,6 +9336,8 @@ msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
+"ამის პოვნა თქვენი დისტრიბუტივის პროგრამების რეპოზიტორიიდან. ან გადმოწერეთ ის "
+"ვებგვერდიდან https://www.gnu.org/software/vcdimager/"
 
 #: rip/k3bvideocdrip.cpp:100
 #, kde-format
@@ -9347,6 +9350,8 @@ msgid ""
 "You can find this on your distribution disks or download it from http://www."
 "vcdimager.org"
 msgstr ""
+"ამის პოვნა თქვენი დისტრიბუტივის დისკებზე შეგიძლიათ. ან გადმოწერეთ ის "
+"ვებგვერდიდან https://www.vcdimager.org"
 
 #: rip/k3bvideocdrip.cpp:108
 #, kde-format
@@ -9366,7 +9371,7 @@ msgstr "გამოღების დაწყება."
 #: rip/k3bvideocdrip.cpp:161
 #, kde-format
 msgid "Extract files from %1 to %2."
-msgstr ""
+msgstr "ფაილების გაშლა %1-დან %2-მდე."
 
 #: rip/k3bvideocdrip.cpp:166
 #, kde-format
@@ -9376,7 +9381,7 @@ msgstr "%1-ის გაშვება შეუძლებელია."
 #: rip/k3bvideocdrip.cpp:256
 #, kde-format
 msgid "Files successfully extracted."
-msgstr ""
+msgstr "ფაილის გაშლა წარმატებულია."
 
 #: rip/k3bvideocdrip.cpp:259
 #, kde-format
@@ -9386,7 +9391,7 @@ msgstr "%1-მა უცნობი შეცდომა დააბრუნ
 #: rip/k3bvideocdrip.cpp:260
 #, kde-format
 msgid "Please send me an email with the last output..."
-msgstr ""
+msgstr "მომწერეთ ელფოსტა ბოლო გამოტანილი ინფორმაციით..."
 
 #: rip/k3bvideocdrip.cpp:266
 #, kde-format
@@ -9396,12 +9401,12 @@ msgstr "%1 უშეცდომოდ არ დასრულებულა.
 #: rip/k3bvideocdrip.cpp:280
 #, kde-format
 msgid "%1 encountered non-form2 sector"
-msgstr ""
+msgstr "%1-ს არა-form2 სექტორი შეხვდა"
 
 #: rip/k3bvideocdrip.cpp:281
 #, kde-format
 msgid "leaving loop"
-msgstr ""
+msgstr "ციკლიდან გასვლა"
 
 #: rip/k3bvideocdrip.cpp:289
 #, kde-format
@@ -9416,12 +9421,12 @@ msgstr "%1-ის გაშლა"
 #: rip/k3bvideocdrip.cpp:327
 #, kde-format
 msgid "Extracting %1 to %2"
-msgstr ""
+msgstr "%1-ის გაშლა %2-ში"
 
 #: rip/k3bvideocdrippingdialog.cpp:37
 #, kde-format
 msgid "Video CD Ripping"
-msgstr ""
+msgstr "ვიდეოCD-ის დარიპვა"
 
 #: rip/k3bvideocdrippingdialog.cpp:61
 #, kde-format
@@ -9431,7 +9436,7 @@ msgstr "სამიზნე საქაღალდე"
 #: rip/k3bvideocdrippingdialog.cpp:66
 #, kde-format
 msgid "Rip files to:"
-msgstr ""
+msgstr "ფაილების დარიპვა სად:"
 
 #: rip/k3bvideocdrippingdialog.cpp:73
 #, kde-format
@@ -9451,32 +9456,32 @@ msgstr "/EXT/PSD_X.VCD-ის გამოტოვება"
 #: rip/k3bvideocdrippingdialog.cpp:92
 #, kde-format
 msgid "Use 2336 byte sector mode for image file"
-msgstr ""
+msgstr "2336 ბაიტიანი სექტორის რეჟიმის გამოყენება დისკის ასლის ფაილისთვის"
 
 #: rip/k3bvideocdrippingdialog.cpp:96
 #, kde-format
 msgid "Extract XML structure"
-msgstr ""
+msgstr "XML სტრუქტურის გამოღება"
 
 #: rip/k3bvideocdrippingdialog.cpp:106
 #, kde-format
 msgid "Starts extracting the selected VideoCd tracks"
-msgstr ""
+msgstr "დაიწყებს მონიშნული ვიდეოCD-ის ტრეკების გაშლას"
 
 #: rip/k3bvideocdrippingdialog.cpp:117
 #, kde-format
 msgid "Free space in destination folder: %1"
-msgstr ""
+msgstr "თავისუფალი ადგილი სამიზნე საქაღალდეში: %1"
 
 #: rip/k3bvideocdrippingdialog.cpp:119
 #, kde-format
 msgid "Necessary space for extracted files"
-msgstr ""
+msgstr "საკმარისი ადგილი გამოღებული ფაილებისთვის"
 
 #: rip/k3bvideocdrippingdialog.cpp:121
 #, kde-format
 msgid "Ignore extended PSD"
-msgstr ""
+msgstr "გაფართოებული PSD-ის გამოტოვება"
 
 #: rip/k3bvideocdrippingdialog.cpp:122
 #, kde-format
@@ -9488,7 +9493,7 @@ msgstr ""
 #: rip/k3bvideocdrippingdialog.cpp:124
 #, kde-format
 msgid "Assume a 2336-byte sector mode"
-msgstr ""
+msgstr "2336 ბაიტიანი სექტორის რეჟიმის ჩათვლა"
 
 #: rip/k3bvideocdrippingdialog.cpp:125
 #, kde-format
@@ -9501,7 +9506,7 @@ msgstr ""
 #: rip/k3bvideocdrippingdialog.cpp:128
 #, kde-format
 msgid "Create XML description file."
-msgstr ""
+msgstr "XML აღწერის ფაილის შექმნა."
 
 #: rip/k3bvideocdrippingdialog.cpp:129
 #, kde-format
@@ -9516,7 +9521,7 @@ msgstr ""
 #: rip/k3bvideocdrippingdialog.cpp:164
 #, kde-format
 msgid "Continue although the folder is not empty?"
-msgstr ""
+msgstr "გავაგრძელო მიუხედავად იმისა, რომ საქაღალდე თავისუფალი არაა?"
 
 #: rip/k3bvideocdview.cpp:192
 #, kde-format
@@ -9526,22 +9531,22 @@ msgstr "ჩანაწერის სახელი"
 #: rip/k3bvideocdview.cpp:193
 #, kde-format
 msgid "Extracted Name"
-msgstr ""
+msgstr "გაშლილი სახელი"
 
 #: rip/k3bvideocdview.cpp:253 rip/k3bvideocdview.cpp:424
 #, kde-format
 msgid "Video CD MPEG tracks"
-msgstr ""
+msgstr "ვიდეო CD-ის MPEG ტრეკები"
 
 #: rip/k3bvideocdview.cpp:254
 #, kde-format
 msgid "Video CD DATA track"
-msgstr ""
+msgstr "ვიდეო CD-ის DATA ტრეკი"
 
 #: rip/k3bvideocdview.cpp:270
 #, kde-format
 msgid "Sequence-%1"
-msgstr ""
+msgstr "მიმდევრობა-%1"
 
 #: rip/k3bvideocdview.cpp:275 rip/k3bvideocdview.cpp:318
 #: rip/k3bvideocdview.cpp:430
@@ -9572,14 +9577,14 @@ msgstr "ფაილების ნახვა"
 #: rip/k3bvideocdview.cpp:379
 #, kde-format
 msgid "View plain data files"
-msgstr ""
+msgstr "უბრალო მონაცემების ფაილების ნახვა"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:21
 #, kde-format
 msgid ""
 "Please select the audio streams you want to include in every ripped title"
-msgstr ""
+msgstr "აირჩიეთ აუდიონაკადები, რომლებიც გნებავთ, ყველა დარიპულ სათაურში ჩასვათ"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:45
@@ -9615,7 +9620,7 @@ msgstr "აუდიოს ხარისხი"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:204
 #, kde-format
 msgid "Variable &Bitrate"
-msgstr ""
+msgstr "&ცვლადი ბიტური სიხშირე"
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelAudioBitrate)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
@@ -9643,7 +9648,7 @@ msgstr "ვიდეო კოდეკი:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:330
 #, kde-format
 msgid "Select the Video codec used to encode the DVD titles"
-msgstr ""
+msgstr "აირჩიეთ ვიდეოკოდეკი DVD-ის სათაურების დასაკოდირებლად"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
@@ -9655,25 +9660,25 @@ msgstr "აუდიო კოდეკი:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:351
 #, kde-format
 msgid "Select the Audio codec used to encode the DVD titles"
-msgstr ""
+msgstr "აირჩიეთ აუდიოკოდეკი DVD-ის სათაურების დასაკოდირებლად"
 
 #. i18n: ectx: attribute (title), widget (QWidget, TabPage)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:364
 #, kde-format
 msgid "File Namin&g"
-msgstr ""
+msgstr "ფაილის &დასახელება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBlankReplace)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:415
 #, kde-format
 msgid "Replace all &blanks with:"
-msgstr ""
+msgstr "&ყველა ცარიელი ადგილის ჩანაცვლება:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:463
 #, kde-format
 msgid "Enable 2-pass encoding"
-msgstr ""
+msgstr "2-გავლიანი კოდირების ჩართვა"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:468
@@ -9692,7 +9697,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:471
 #, kde-format
 msgid "&2-pass encoding"
-msgstr ""
+msgstr "&2-გავლიანი კოდირება"
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:474
@@ -9704,7 +9709,7 @@ msgstr "Alt+2"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:484
 #, kde-format
 msgid "Automatically detect the black borders of the video"
-msgstr ""
+msgstr "ვიდეოს შავი საზღვრების ავტომატური დადგენა"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAutoClipping)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:489
@@ -9810,14 +9815,14 @@ msgstr[1] "%1არხი"
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:353
 #, kde-format
 msgid "Video DVD Ripping"
-msgstr ""
+msgstr "ვიდეოDVD-ის დარიპვა"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:354
 #, kde-format
 msgid "1 title from %2"
 msgid_plural "%1 titles from %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 სათაური %2-დან"
+msgstr[1] "%1 სათაური %2-დან"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
@@ -9862,12 +9867,12 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:174
 #, kde-format
 msgid "Top: %1, Bottom: %2"
-msgstr ""
+msgstr "ზედა: %1, ქვედა: %2"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:175
 #, kde-format
 msgid "Left: %1, Right: %2"
-msgstr ""
+msgstr "მარცხენა: %1, მარჯვენა: %2"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:182
 #, kde-format
@@ -9894,12 +9899,12 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
 #, kde-format
 msgid "Please select the titles to rip."
-msgstr ""
+msgstr "აირჩიეთ დასარიპი სათაურები."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:166
 #, kde-format
 msgid "No Titles Selected"
-msgstr ""
+msgstr "სათაური მონიშნული არაა"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:242
 #, kde-format
@@ -9923,19 +9928,21 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:268
 #, kde-format
 msgid "%1 (Video DVD)"
-msgstr ""
+msgstr "%1 (ვიდეო DVD)"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:269
 #, kde-format
 msgid "%1 title"
 msgid_plural "%1 titles"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 სათაური"
+msgstr[1] "%1 სათაური"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:277
 #, kde-format
 msgid "K3b uses transcode to rip Video DVDs. Please make sure it is installed."
 msgstr ""
+"K3b ვიდეოDVD-ების დასარიპად transcode-ს იყენებს. დარწმუნდით, რომ ის "
+"დაყენებული გაქვთ."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:291
 #, kde-format
@@ -9948,12 +9955,12 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:304
 #, kde-format
 msgid "Unable to read Video DVD contents."
-msgstr ""
+msgstr "ვიდეოDVD-ის შემცველობის წაკითხვა შეუძლებელია."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:343
 #, kde-format
 msgid "Open the Video DVD ripping dialog"
-msgstr ""
+msgstr "გახსნის ვიდეოDVD-ის დარიპვის დიალოგს"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:345
 #, kde-format
@@ -9972,11 +9979,11 @@ msgstr "საწყისი ზომების შენარჩუნე�
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:59
 msgid "640x? (automatic height)"
-msgstr ""
+msgstr "640x? (ავტომატური სიმაღლე)"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:60
 msgid "320x? (automatic height)"
-msgstr ""
+msgstr "320x? (ავტომატური სიმაღ₾ე)"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:178
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:179
@@ -10011,7 +10018,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:331
 #, kde-format
 msgid "Video Picture Size"
-msgstr ""
+msgstr "ვიდეოს სურათის ზომა"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:333
 #, kde-format
@@ -10089,23 +10096,23 @@ msgstr "MPEG2"
 #, kde-format
 msgid "%1 chapter"
 msgid_plural "%1 chapters"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 თავი"
+msgstr[1] "%1 თავი"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:260
 #, kde-format
 msgid "letterboxed"
-msgstr ""
+msgstr "letterboxed"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:262
 #, kde-format
 msgid "anamorph"
-msgstr ""
+msgstr "anamorph"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:308
 #, kde-format
 msgid "Subpicture"
-msgstr ""
+msgstr "Subpicture"
 
 #~ msgid "K3b Bookmarks"
 #~ msgstr "K3b სანიშნები"
