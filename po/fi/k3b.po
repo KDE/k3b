@@ -7,7 +7,7 @@
 # Mikael Lammentausta <mikael.lammentausta@tekustudent.savonia-amk.fi>, 2006.
 # Mikael Lammentausta <mikael.lammentausta@student.savonia-amk.fi>, 2006.
 # Kim Enkovaara <kim.enkovaara@iki.fi>, 2006.
-# Tommi Nieminen <translator@legisign.org>, 2009, 2010, 2011, 2012, 2014, 2017, 2018, 2020, 2022, 2023.
+# Tommi Nieminen <translator@legisign.org>, 2009, 2010, 2011, 2012, 2014, 2017, 2018, 2020, 2022, 2023, 2024.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Jiri Grönroos <jiri.gronroos+kde@iki.fi>, 2012.
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2012.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-24 00:38+0000\n"
-"PO-Revision-Date: 2023-09-04 14:37+0300\n"
+"PO-Revision-Date: 2024-04-08 20:06+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -5076,46 +5076,44 @@ msgid "Following programs could not be updated:"
 msgstr "Seuraavia ohjelmia ei voitu päivittää:"
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Toiminnon suorittaminen epäonnistui: %1"
+msgstr "Toiminnon suoritus epäonnistui:<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Valtuutus evätty"
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Ei virheenkorjausta"
+msgstr "Tapahtui virhe"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Virheellinen toiminto"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Valtuutus myönnetty"
 
 #: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Tunnistautumista vaaditaan"
 
 #: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Käyttäjä perui tunnistautumisen"
 
 #: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Tuntematon valtuutustila %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
