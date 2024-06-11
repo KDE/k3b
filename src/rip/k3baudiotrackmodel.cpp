@@ -105,6 +105,7 @@ void K3b::AudioTrackModel::setMedium( const K3b::Medium& medium )
 {
     beginResetModel();
     d->medium = medium;
+    d->cddbCache.clear();
     d->itemCheckedList.resize( d->medium.toc().count() );
     for ( int i = 0; i < d->medium.toc().count(); ++i ) {
         if( d->medium.toc()[i].type() == K3b::Device::Track::TYPE_AUDIO )
