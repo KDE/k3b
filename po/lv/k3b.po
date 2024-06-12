@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-24 00:38+0000\n"
+"POT-Creation-Date: 2024-06-12 00:38+0000\n"
 "PO-Revision-Date: 2012-02-02 21:56+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
@@ -2128,7 +2128,7 @@ msgid "First-Last Sector"
 msgstr "Pirmais-pēdējais sektors"
 
 #: k3bdiskinfoview.cpp:267 rip/k3baudioprojectconvertingdialog.cpp:118
-#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:159
+#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:160
 #: rip/k3bvideocdview.cpp:194
 #, kde-format
 msgid "Length"
@@ -6999,7 +6999,7 @@ msgstr ""
 msgid "Used part of the audio source"
 msgstr "Lietota daļa no audio avota"
 
-#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:153
+#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:154
 #, kde-format
 msgctxt "audio track number"
 msgid "No."
@@ -10324,18 +10324,18 @@ msgstr "Celiņš%1"
 msgid "Playlist"
 msgstr "Repertuārs"
 
-#: rip/k3baudiotrackmodel.cpp:155
+#: rip/k3baudiotrackmodel.cpp:156
 #, kde-format
 msgid "Artist"
 msgstr "Mākslinieks"
 
-#: rip/k3baudiotrackmodel.cpp:157
+#: rip/k3baudiotrackmodel.cpp:158
 #, kde-format
 msgctxt "audio track title"
 msgid "Title"
 msgstr "Nosaukums"
 
-#: rip/k3baudiotrackmodel.cpp:205
+#: rip/k3baudiotrackmodel.cpp:206
 #, kde-format
 msgid "Data Track"
 msgstr "Datu celiņš"

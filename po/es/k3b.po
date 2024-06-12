@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-24 00:38+0000\n"
+"POT-Creation-Date: 2024-06-12 00:38+0000\n"
 "PO-Revision-Date: 2024-02-17 20:06+0100\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -2133,7 +2133,7 @@ msgid "First-Last Sector"
 msgstr "Sector primero-último"
 
 #: k3bdiskinfoview.cpp:267 rip/k3baudioprojectconvertingdialog.cpp:118
-#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:159
+#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:160
 #: rip/k3bvideocdview.cpp:194
 #, kde-format
 msgid "Length"
@@ -6872,7 +6872,7 @@ msgstr ""
 msgid "Used part of the audio source"
 msgstr "Parte usada de la fuente de audio"
 
-#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:153
+#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:154
 #, kde-format
 msgctxt "audio track number"
 msgid "No."
@@ -10146,18 +10146,18 @@ msgstr "Pista%1"
 msgid "Playlist"
 msgstr "Lista de reproducción"
 
-#: rip/k3baudiotrackmodel.cpp:155
+#: rip/k3baudiotrackmodel.cpp:156
 #, kde-format
 msgid "Artist"
 msgstr "Artista"
 
-#: rip/k3baudiotrackmodel.cpp:157
+#: rip/k3baudiotrackmodel.cpp:158
 #, kde-format
 msgctxt "audio track title"
 msgid "Title"
 msgstr "Título"
 
-#: rip/k3baudiotrackmodel.cpp:205
+#: rip/k3baudiotrackmodel.cpp:206
 #, kde-format
 msgid "Data Track"
 msgstr "Datos de la pista"

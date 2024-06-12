@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-24 00:38+0000\n"
+"POT-Creation-Date: 2024-06-12 00:38+0000\n"
 "PO-Revision-Date: 2010-09-24 12:25+0530\n"
 "Last-Translator: Rajesh Ranjan <rajesh672@gmail.com>\n"
 "Language-Team: Maithili <bhashaghar@googlegroups.com>\n"
@@ -1994,7 +1994,7 @@ msgid "First-Last Sector"
 msgstr ""
 
 #: k3bdiskinfoview.cpp:267 rip/k3baudioprojectconvertingdialog.cpp:118
-#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:159
+#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:160
 #: rip/k3bvideocdview.cpp:194
 #, kde-format
 msgid "Length"
@@ -6300,7 +6300,7 @@ msgstr ""
 msgid "Used part of the audio source"
 msgstr ""
 
-#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:153
+#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:154
 #, kde-format
 msgctxt "audio track number"
 msgid "No."
@@ -9252,18 +9252,18 @@ msgstr ""
 msgid "Playlist"
 msgstr "गीत-सूची"
 
-#: rip/k3baudiotrackmodel.cpp:155
+#: rip/k3baudiotrackmodel.cpp:156
 #, kde-format
 msgid "Artist"
 msgstr "कलाकार"
 
-#: rip/k3baudiotrackmodel.cpp:157
+#: rip/k3baudiotrackmodel.cpp:158
 #, kde-format
 msgctxt "audio track title"
 msgid "Title"
 msgstr "शीर्षक"
 
-#: rip/k3baudiotrackmodel.cpp:205
+#: rip/k3baudiotrackmodel.cpp:206
 #, fuzzy, kde-format
 #| msgid "Track"
 msgid "Data Track"

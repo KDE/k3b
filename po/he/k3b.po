@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-24 00:38+0000\n"
+"POT-Creation-Date: 2024-06-12 00:38+0000\n"
 "PO-Revision-Date: 2024-04-08 19:10+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -1983,7 +1983,7 @@ msgid "First-Last Sector"
 msgstr "סקטור ראשון-אחרון"
 
 #: k3bdiskinfoview.cpp:267 rip/k3baudioprojectconvertingdialog.cpp:118
-#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:159
+#: rip/k3baudiorippingdialog.cpp:134 rip/k3baudiotrackmodel.cpp:160
 #: rip/k3bvideocdview.cpp:194
 #, kde-format
 msgid "Length"
@@ -6336,7 +6336,7 @@ msgstr ""
 msgid "Used part of the audio source"
 msgstr "חלק משומש של מקור השמע"
 
-#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:153
+#: projects/k3baudioprojectmodel.cpp:292 rip/k3baudiotrackmodel.cpp:154
 #, kde-format
 msgctxt "audio track number"
 msgid "No."
@@ -9302,18 +9302,18 @@ msgstr "רצועה%1"
 msgid "Playlist"
 msgstr "רשימת השמעה"
 
-#: rip/k3baudiotrackmodel.cpp:155
+#: rip/k3baudiotrackmodel.cpp:156
 #, kde-format
 msgid "Artist"
 msgstr "אמן"
 
-#: rip/k3baudiotrackmodel.cpp:157
+#: rip/k3baudiotrackmodel.cpp:158
 #, kde-format
 msgctxt "audio track title"
 msgid "Title"
 msgstr "שם כותר"
 
-#: rip/k3baudiotrackmodel.cpp:205
+#: rip/k3baudiotrackmodel.cpp:206
 #, fuzzy, kde-format
 msgid "Data Track"
 msgstr "מנגן רצועה"
