@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-06-05 12:14+0200\n"
+"PO-Revision-Date: 2024-06-12 06:07+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -8234,12 +8234,12 @@ msgstr "%1 ბიტი/წმ"
 #: projects/k3bvcdtrackdialog.cpp:238
 #, kde-format
 msgid "May also look like | << on the remote control. "
-msgstr ""
+msgstr "ასევე შეიძლება ჰგავდეს | << პულტზე. "
 
 #: projects/k3bvcdtrackdialog.cpp:239
 #, kde-format
 msgid "May also look like >> | on the remote control."
-msgstr ""
+msgstr "ასევე შეიძლება ჰგავდეს >> | პულტზე."
 
 #: projects/k3bvcdtrackdialog.cpp:240
 #, kde-format
@@ -9213,7 +9213,7 @@ msgstr "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
 #: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
-msgstr ""
+msgstr "music/ripped-tracks/%a - %t"
 
 #: rip/k3bcddbpatternwidget.cpp:49
 #, kde-format
@@ -9411,7 +9411,7 @@ msgstr "ციკლიდან გასვლა"
 #: rip/k3bvideocdrip.cpp:289
 #, kde-format
 msgid "detected extended VCD2.0 PBC files"
-msgstr ""
+msgstr "აღმოჩენილია გაფართოებული VCD2.0 PBC ფაილები"
 
 #: rip/k3bvideocdrip.cpp:316 rip/k3bvideocdrip.cpp:334
 #, kde-format
@@ -9752,7 +9752,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:509
 #, kde-format
 msgid "Resample Audio to &44.1 KHz"
-msgstr ""
+msgstr "ხმის რესამპლინგი &44.1 კჰც-მდე"
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:512
