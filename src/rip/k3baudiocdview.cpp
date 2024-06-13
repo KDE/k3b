@@ -109,12 +109,12 @@ K3b::AudioCdView::AudioCdView( QWidget* parent )
     vca->addFixedColumn( AudioTrackModel::LengthColumn );
     vca->setColumnMargin( AudioTrackModel::LengthColumn, 10 );
 
-    connect( d->trackView, SIGNAL(customContextMenuRequested(QPoint)),
-             this, SLOT(slotContextMenu(QPoint)) );
-    connect( d->trackView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-             this, SLOT(slotTrackSelectionChanged()) );
-    connect( k3bcore->mediaCache(), SIGNAL(mediumCddbChanged(K3b::Device::Device*)),
-             this, SLOT(slotCddbChanged(K3b::Device::Device*)) );
+    connect( d->trackView, &QWidget::customContextMenuRequested,
+             this, &AudioCdView::slotContextMenu );
+    connect( d->trackView->selectionModel(), &QItemSelectionModel::selectionChanged,
+             this, &AudioCdView::slotTrackSelectionChanged );
+    connect( k3bcore->mediaCache(), &MediaCache::mediumCddbChanged,
+             this, &AudioCdView::slotCddbChanged );
 
     mainGrid->addWidget( d->toolBox );
     mainGrid->addWidget( d->trackView );
@@ -207,41 +207,41 @@ void K3b::AudioCdView::initActions()
     
     QAction* actionCheckTracks = new QAction( this );
     d->actionCollection->addAction( "check_tracks", actionCheckTracks );
-    connect( actionCheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotCheck()) );
+    connect( actionCheckTracks, &QAction::triggered, this, &AudioCdView::slotCheck );
     
     QAction* actionUncheckTracks = new QAction( this );
     d->actionCollection->addAction( "uncheck_tracks", actionUncheckTracks );
-    connect( actionUncheckTracks, SIGNAL(triggered(bool)), this, SLOT(slotUncheck()) );
+    connect( actionUncheckTracks, &QAction::triggered, this, &AudioCdView::slotUncheck );
     
     QAction* actionEditTrackInfo = new QAction( QIcon::fromTheme( "document-properties" ), i18n("Edit Track Info..."), this );
     actionEditTrackInfo->setToolTip( i18n( "Edit current track information" ) );
     actionEditTrackInfo->setStatusTip( actionEditTrackInfo->toolTip() );
     d->actionCollection->addAction( "edit_track_cddb", actionEditTrackInfo );
-    connect( actionEditTrackInfo, SIGNAL(triggered(bool)), this, SLOT(slotEditTrackCddb()) );
+    connect( actionEditTrackInfo, &QAction::triggered, this, &AudioCdView::slotEditTrackCddb );
     
     QAction* actionEditAlbumInfo = new QAction( QIcon::fromTheme( "help-about" ), i18n("Edit Album Info..."), this );
     actionEditAlbumInfo->setToolTip( i18n( "Edit album information" ) );
     actionEditAlbumInfo->setStatusTip( actionEditAlbumInfo->toolTip() );
     d->actionCollection->addAction( "edit_album_cddb", actionEditAlbumInfo );
-    connect( actionEditAlbumInfo, SIGNAL(triggered(bool)), this, SLOT(slotEditAlbumCddb()) );
+    connect( actionEditAlbumInfo, &QAction::triggered, this, &AudioCdView::slotEditAlbumCddb );
     
     QAction* actionStartRip = new QAction( QIcon::fromTheme( "tools-rip-audio-cd" ), i18n("Start Ripping"), this );
     actionStartRip->setToolTip( i18n( "Start audio ripping process" ) );
     actionStartRip->setStatusTip( actionStartRip->toolTip() );
     d->actionCollection->addAction( "start_rip", actionStartRip );
-    connect( actionStartRip, SIGNAL(triggered(bool)), this, SLOT(startRip()) );
+    connect( actionStartRip, &QAction::triggered, this, &AudioCdView::startRip );
     
     QAction* actionQueryCddb = new QAction( QIcon::fromTheme( "download" ), i18n("Query CD Database"), this );
     actionQueryCddb->setToolTip( i18n( "Look for information on CDDB" ) );
     actionQueryCddb->setStatusTip( actionQueryCddb->toolTip() );
     d->actionCollection->addAction( "query_cddb", actionQueryCddb );
-    connect( actionQueryCddb, SIGNAL(triggered(bool)), this, SLOT(queryCddb()) );
+    connect( actionQueryCddb, &QAction::triggered, this, &AudioCdView::queryCddb );
     
     QAction* actionReadCdText = new QAction( QIcon::fromTheme( "media-optical" ), i18n("Read CD-Text"), this );
     actionReadCdText->setToolTip( i18n( "Read CD-Text information" ) );
     actionReadCdText->setStatusTip( actionReadCdText->toolTip() );
     d->actionCollection->addAction( "read_cd_text", actionReadCdText );
-    connect( actionReadCdText, SIGNAL(triggered(bool)), this, SLOT(readCdText()) );
+    connect( actionReadCdText, &QAction::triggered, this, &AudioCdView::readCdText );
         
     KActionMenu* actionQueryInfo = new KActionMenu( QIcon::fromTheme( "view-refresh" ), i18n("Load CD Info"), this );
     actionQueryInfo->setToolTip( i18n( "Load track and album information" ) );
@@ -249,19 +249,19 @@ void K3b::AudioCdView::initActions()
     actionQueryInfo->addAction( actionQueryCddb );
     actionQueryInfo->addAction( actionReadCdText );
     d->actionCollection->addAction( "load_cd_info", actionQueryInfo );
-    connect( actionQueryInfo, SIGNAL(triggered(bool)), this, SLOT(loadCdInfo()) );
+    connect( actionQueryInfo, &QAction::triggered, this, &AudioCdView::loadCdInfo );
     
     QAction* actionSaveCddb = new QAction( QIcon::fromTheme( "document-save" ), i18n("Save CD Info Locally"), this );
     actionSaveCddb->setToolTip( i18n( "Save track and album information to the local CDDB cache" ) );
     actionSaveCddb->setStatusTip( actionSaveCddb->toolTip() );
     d->actionCollection->addAction( "save_cddb_local", actionSaveCddb );
-    connect( actionSaveCddb, SIGNAL(triggered(bool)), this, SLOT(slotSaveCddbLocally()) );
+    connect( actionSaveCddb, &QAction::triggered, this, &AudioCdView::slotSaveCddbLocally );
     
     QAction* actionShowDataPart = new QAction( QIcon::fromTheme( "media-optical-data" ), i18n("Show Data Part"), this );
     actionShowDataPart->setToolTip( i18n("Mounts the data part of CD") );
     actionShowDataPart->setStatusTip( actionShowDataPart->toolTip() );
     d->actionCollection->addAction( "show_data_part", actionShowDataPart );
-    connect( actionShowDataPart, SIGNAL(triggered(bool)), this, SLOT(slotShowDataPart()) );
+    connect( actionShowDataPart, &QAction::triggered, this, &AudioCdView::slotShowDataPart );
     
     QAction* actionSelectAll = KStandardAction::selectAll( d->trackView, SLOT(selectAll()), actionCollection() );
 
@@ -276,7 +276,7 @@ void K3b::AudioCdView::initActions()
     d->popupMenu->addAction( actionEditAlbumInfo );
     d->popupMenu->addSeparator();
     d->popupMenu->addAction( d->actionCollection->action( "start_rip" ) );
-    connect( d->popupMenu, SIGNAL(aboutToShow()), this, SLOT(slotContextMenuAboutToShow()) );
+    connect( d->popupMenu, &QMenu::aboutToShow, this, &AudioCdView::slotContextMenuAboutToShow );
 }
 
 
@@ -357,8 +357,8 @@ void K3b::AudioCdView::slotEditTrackCddb()
         form->setContentsMargins( 0, 0, 0, 0 );
 
         QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
-        connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
-        connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
+        connect( buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept );
+        connect( buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject );
 
         QVBoxLayout* dlgLayout = new QVBoxLayout( &dialog );
         dlgLayout->addLayout( form );
@@ -430,8 +430,8 @@ void K3b::AudioCdView::slotEditAlbumCddb()
     form->setContentsMargins( 0, 0, 0, 0 );
 
     QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this );
-    connect( buttonBox, SIGNAL(accepted()), &dialog, SLOT(accept()) );
-    connect( buttonBox, SIGNAL(rejected()), &dialog, SLOT(reject()) );
+    connect( buttonBox, &QDialogButtonBox::accepted, &dialog, &QDialog::accept );
+    connect( buttonBox, &QDialogButtonBox::rejected, &dialog, &QDialog::reject );
 
     QVBoxLayout* dlgLayout = new QVBoxLayout( &dialog );
     dlgLayout->addLayout( form );
