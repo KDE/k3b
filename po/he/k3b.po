@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-04-08 19:10+0300\n"
+"PO-Revision-Date: 2024-06-29 08:04+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.05.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -186,7 +186,7 @@ msgstr "VBR"
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:113
 #, kde-format
 msgid "%1 bps"
-msgstr "%1 ס\"ש"
+msgstr "%1 סל״ש"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioNoEmulation)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:423
@@ -198,7 +198,7 @@ msgstr "ללא"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:425
 #, kde-format
 msgid "50/15 ms"
-msgstr "50/15 מ\"ש"
+msgstr "50/15 מ״ש"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:427
 #, kde-format
@@ -311,7 +311,7 @@ msgstr "הסר"
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:88
 #, kde-format
 msgid "Edit..."
-msgstr "ערוך מקור..."
+msgstr "עריכת מקור…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonAdd)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:95
@@ -2145,7 +2145,7 @@ msgstr "מזהה היישום:"
 #: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:184
 #, kde-format
 msgid "Volume Size:"
-msgstr ""
+msgstr "גודל כרך:"
 
 #: k3bdiskinfoview.cpp:390
 #, kde-format
@@ -3749,9 +3749,9 @@ msgid "Detected:"
 msgstr "זוהה:"
 
 #: misc/k3bimagewritingdialog.cpp:166
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 image"
-msgstr "קובץ תמונת תקליטור ISO9660"
+msgstr "דמות ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
 #: misc/k3bimagewritingdialog.cpp:281
@@ -3795,13 +3795,13 @@ msgid "Audio Cue Image"
 msgstr "תמונת תקליטור Cue של שמע"
 
 #: misc/k3bimagewritingdialog.cpp:310
-#, fuzzy, kde-format
+#, kde-format
 msgid "One track"
 msgid_plural "%1 tracks"
-msgstr[0] "רצועה 1"
-msgstr[1] "%1 רצועות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "רצועה"
+msgstr[1] "שתי רצועות"
+msgstr[2] "%1 רצועות"
+msgstr[3] "%1 רצועות"
 
 #: misc/k3bimagewritingdialog.cpp:324
 #, kde-format
@@ -3824,15 +3824,14 @@ msgid "Choose Image File"
 msgstr "בחר קובץ תמונת תקליטור"
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "קובץ תמונת תקליטור:"
+msgstr "קובצי דמות"
 
 #: misc/k3bimagewritingdialog.cpp:451
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO9660 קבצי תמונת תקליטור"
+msgstr "קובצי דמות ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:452
 #, fuzzy, kde-format
@@ -3857,9 +3856,9 @@ msgid "Auto Detection"
 msgstr "זיהוי אוטומטי"
 
 #: misc/k3bimagewritingdialog.cpp:465
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 filesystem image"
-msgstr "מערכת קבצים ISO9660"
+msgstr "דמות מערכת קבצים ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
@@ -3937,9 +3936,9 @@ msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:868
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown image type"
-msgstr "תבנית קובץ לא ידועה"
+msgstr "סוג תמונה לא ידוע"
 
 #: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
@@ -3947,9 +3946,9 @@ msgid "Burn"
 msgstr "צרוב"
 
 #: misc/k3bimagewritingdialog.cpp:879
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to read image file"
-msgstr "לא הייתה אפשרות ליצור את התיקייה '%1'"
+msgstr "לא ניתן לקרוא את קובץ התמונה"
 
 #: misc/k3bimagewritingdialog.cpp:881
 #, kde-format
@@ -3962,7 +3961,7 @@ msgid "File not found"
 msgstr "קובץ לא נמצא"
 
 #: misc/k3bimagewritingdialog.cpp:1028
-#, fuzzy, kde-format
+#, kde-format
 msgid "MD5 Sum:"
 msgstr "סכום ביקורת (MD5):"
 
@@ -5273,19 +5272,19 @@ msgstr "רמה %1"
 #: projects/base_k3badvanceddataimagesettings.ui:258
 #, kde-format
 msgid "Rock Ridge Settings"
-msgstr "הגדרות קיצוץ"
+msgstr "הגדרות Rock Ridge"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCreateTransTbl)
 #: projects/base_k3badvanceddataimagesettings.ui:264
 #, kde-format
 msgid "Create TRANS.TBL files"
-msgstr "צור קבצי TRANS.TBL"
+msgstr "יצירת קובצי TRANS.TBL"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkHideTransTbl)
 #: projects/base_k3badvanceddataimagesettings.ui:271
 #, kde-format
 msgid "Hide TRANS.TBL files in Joliet"
-msgstr "הסתר קבצי TRANS.TBL במערכת הקבצים Joliet"
+msgstr "הסתרת קובצי TRANS.TBL במערכת הקבצים Joliet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupJolietSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:281
@@ -5297,25 +5296,25 @@ msgstr "הגדרות מערכת קבצים Joliet"
 #: projects/base_k3badvanceddataimagesettings.ui:287
 #, kde-format
 msgid "Allow 103 character Joliet filenames"
-msgstr "הרשה 103 תווים בשמות קבצים של מערכת הקבצים Joliet"
+msgstr "להרשות 103 תווים לשמות קבצים במערכת קבצים Joliet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupMiscSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:297
 #, kde-format
 msgid "Misc Settings"
-msgstr "הגדרות"
+msgstr "הגדרות שונות"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkDoNotImportSession)
 #: projects/base_k3badvanceddataimagesettings.ui:303
 #, kde-format
 msgid "Do not import previous session"
-msgstr "אל תייבא מהצריבה קודמת"
+msgstr "לא לייבא מהצריבה קודמת"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkDoNotCacheInodes)
 #: projects/base_k3badvanceddataimagesettings.ui:310
 #, kde-format
 msgid "Do not cache inodes"
-msgstr "אל תכניס inodes למטמון"
+msgstr "לא להכניס inodes למטמון"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:18
@@ -5526,37 +5525,37 @@ msgstr ""
 #: projects/base_k3bbootimagedialog.ui:26
 #, kde-format
 msgid "Boot images:"
-msgstr "תמונת אתחול:"
+msgstr "דמויות טעינה:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, m_buttonNew)
 #: projects/base_k3bbootimagedialog.ui:36
 #, kde-format
 msgid "Add new boot image"
-msgstr "הוסף תמונת אתחול חדשה"
+msgstr "הוספת דמות טעינה חדשה"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonNew)
 #: projects/base_k3bbootimagedialog.ui:39
 #, kde-format
 msgid "&New..."
-msgstr "&חדש..."
+msgstr "&חדש…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, m_buttonDelete)
 #: projects/base_k3bbootimagedialog.ui:46
 #, kde-format
 msgid "Remove selected boot image"
-msgstr "הסר את תמונות האתחול שנבחרו"
+msgstr "הסרת דמות הטעינה שנבחרה"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonDelete)
 #: projects/base_k3bbootimagedialog.ui:49
 #, kde-format
 msgid "&Delete"
-msgstr "&מחק"
+msgstr "מ&חיקה"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupImageType)
 #: projects/base_k3bbootimagedialog.ui:65 projects/k3bbootimagemodel.cpp:113
 #, kde-format
 msgid "Emulation Type"
-msgstr "סוג אמולציה"
+msgstr "סוג הדמייה"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioFloppy)
 #: projects/base_k3bbootimagedialog.ui:71
@@ -5574,7 +5573,7 @@ msgstr "תקליטון"
 #: projects/base_k3bbootimagedialog.ui:81
 #, kde-format
 msgid "Emulate a harddisk"
-msgstr "דמה דיסק קשיח"
+msgstr "הדמיית כונן קשיח"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:84
@@ -5586,25 +5585,25 @@ msgstr "דיסק קשיח"
 #: projects/base_k3bbootimagedialog.ui:91
 #, kde-format
 msgid "No emulation at all"
-msgstr "ללא אמולציה"
+msgstr "ללא הדמיה כלל"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkNoBoot)
 #: projects/base_k3bbootimagedialog.ui:116
 #, kde-format
 msgid "Do not boot from the emulated floppy/harddisk"
-msgstr "אל תאתחל מהדיסק קשיח/תקליטון המדומה"
+msgstr "לא לטעון את המערכת מכונן תקליטונים/קשיח מדומה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkNoBoot)
 #: projects/base_k3bbootimagedialog.ui:119
 #, kde-format
 msgid "No boot image"
-msgstr "ללא תמונת אתחול"
+msgstr "לא תמונת טעינה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkInfoTable)
 #: projects/base_k3bbootimagedialog.ui:126
 #, kde-format
 msgid "Boot-info-table"
-msgstr "טבלה מידע של האתחול"
+msgstr "טבלת פרטי טעינה"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_editLoadSegment)
 #. i18n: ectx: property (text), widget (QLineEdit, m_editLoadSize)
@@ -5618,25 +5617,25 @@ msgstr "0"
 #: projects/base_k3bbootimagedialog.ui:158
 #, kde-format
 msgid "Boot load segment:"
-msgstr "מקטע טעינת האתחול:"
+msgstr "מקטע מטען הטעינה:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3bbootimagedialog.ui:171
 #, kde-format
 msgid "Boot load size:"
-msgstr "גודל טעינת האתחול:"
+msgstr "גודל מטען הטעינה:"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonToggleOptions)
 #: projects/base_k3bbootimagedialog.ui:188
 #, kde-format
 msgid "Show Advanced Op&tions"
-msgstr "הצג &אפשרויות מתקדמות"
+msgstr "הצגת &אפשרויות מתקדמות"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bbootimagedialog.ui:215
 #, kde-format
 msgid "Boot catalog:"
-msgstr "קטלוג אתחול:"
+msgstr "קטלוג טעינה:"
 
 #. i18n: ectx: property (text), widget (QLineEdit, m_editBootCataloge)
 #: projects/base_k3bbootimagedialog.ui:225
@@ -5648,31 +5647,31 @@ msgstr "boot/boot.catalog"
 #: projects/base_k3bdataimagesettings.ui:15
 #, kde-format
 msgid "Data Image Settings"
-msgstr "הגדרות תמונת תקליטור מידע"
+msgstr "הגדרות דמות נתונים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupVolumeName)
 #: projects/base_k3bdataimagesettings.ui:21
 #, kde-format
 msgid "Volume Name"
-msgstr "שם כרך:"
+msgstr "שם כרך"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonMoreVolDescFields)
 #: projects/base_k3bdataimagesettings.ui:34
 #, kde-format
 msgid "&More fields..."
-msgstr "&עוד שדות..."
+msgstr "שדות &נוספים…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupFileSystem)
 #: projects/base_k3bdataimagesettings.ui:44
 #, kde-format
 msgid "File System"
-msgstr "מערכת־קבצים"
+msgstr "מערכת קבצים"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboFilesystems)
 #: projects/base_k3bdataimagesettings.ui:56
 #, kde-format
 msgid "File system presets"
-msgstr "מערכות קבצים"
+msgstr "ערכות מערכות קבצים"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonCustomPictureSize)
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonCustomFilesystems)
@@ -5680,7 +5679,7 @@ msgstr "מערכות קבצים"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:79
 #, kde-format
 msgid "&Custom..."
-msgstr "&התאמה אישית..."
+msgstr "ה&תאמה אישית…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupSymlinks)
 #: projects/base_k3bdataimagesettings.ui:75
@@ -5692,7 +5691,7 @@ msgstr "קישורים סימבוליים"
 #: projects/base_k3bdataimagesettings.ui:87
 #, kde-format
 msgid "Symbolic link handling in the project"
-msgstr "הוסף קישור סימבולי לפרויקט"
+msgstr "הוספת קישור סימבולי למיזם"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:105
@@ -5737,31 +5736,31 @@ msgstr "ללא שינוי"
 #: projects/base_k3bdataimagesettings.ui:114
 #, kde-format
 msgid "Discard broken symlinks"
-msgstr "התעלם מקישורים סימבוליים שבורים"
+msgstr "התעלמות מקישורים סימבוליים קטועים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:119
 #, kde-format
 msgid "Discard all symlinks"
-msgstr "התעלם מכל הקישורים הסימבוליים"
+msgstr "התעלמות מכל הקישורים הסימבוליים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:124
 #, kde-format
 msgid "Follow symlinks"
-msgstr "עקוב אחר קישורים סימבוליים"
+msgstr "מעקב אחר קישורים סימבוליים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupWhitespace)
 #: projects/base_k3bdataimagesettings.ui:135
 #, kde-format
 msgid "White space handling"
-msgstr "טיפול ברווחים לבנים (whitespace)"
+msgstr "טיפול ברווחים (whitespace)"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:147
 #, kde-format
 msgid "Handling of spaces in filenames"
-msgstr "אל תשנה רווחים בשם הקובץ"
+msgstr "לא לשנות רווחים בשמות הקבצים"
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:160
@@ -5788,7 +5787,7 @@ msgstr ""
 #: projects/base_k3bdataimagesettings.ui:169
 #, kde-format
 msgid "Strip"
-msgstr "הפשט רווחים"
+msgstr "הפשטת רווחים"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:174
@@ -6582,22 +6581,22 @@ msgstr ""
 #: projects/k3bbootimagedialog.cpp:36
 #, kde-format
 msgid "Boot Images"
-msgstr "תמונת אתחול"
+msgstr "דמויות טעינה"
 
 #: projects/k3bbootimagedialog.cpp:83
 #, kde-format
 msgid "Hide Advanced Options"
-msgstr "הסתר אפשרויות מתקדמות"
+msgstr "הסתרת אפשרויות מתקדמות"
 
 #: projects/k3bbootimagedialog.cpp:87
 #, kde-format
 msgid "Show Advanced Options"
-msgstr "הצג אפשרויות מתקדמות"
+msgstr "הצגת אפשרויות מתקדמות"
 
 #: projects/k3bbootimagedialog.cpp:94
 #, kde-format
 msgid "Please Choose Boot Image"
-msgstr "אנא בחר תמונת אתחול"
+msgstr "נא לבחור דמות טעינה"
 
 #: projects/k3bbootimagedialog.cpp:102
 #, kde-format
@@ -6616,7 +6615,7 @@ msgstr ""
 #: projects/k3bbootimagedialog.cpp:111
 #, kde-format
 msgid "No Floppy image selected"
-msgstr "קובץ תמונה לא נבחר"
+msgstr "לא נבחר קובץ דמות תקליטון"
 
 #: projects/k3bbootimagedialog.cpp:112
 #, kde-format
@@ -6626,7 +6625,7 @@ msgstr ""
 #: projects/k3bbootimagedialog.cpp:113
 #, kde-format
 msgid "Use no emulation"
-msgstr "מידע DVD"
+msgstr "לא להשתמש בהדמיה"
 
 #: projects/k3bbootimagemodel.cpp:74
 #, kde-format
@@ -6636,7 +6635,7 @@ msgstr "תקליטון"
 #: projects/k3bbootimagemodel.cpp:75
 #, kde-format
 msgid "Harddisk"
-msgstr "דיסק קשיח"
+msgstr "כונן קשיח"
 
 #: projects/k3bbootimagemodel.cpp:114 rip/k3bvideocdview.cpp:195
 #, kde-format
@@ -6651,7 +6650,7 @@ msgstr "נתיב מקומי"
 #: projects/k3bdataadvancedimagesettingsdialog.cpp:25
 #, kde-format
 msgid "Custom Data Project Filesystems"
-msgstr "מערכות קבצים מידע מותאות אישית"
+msgstr "מערכות קבצים למיזמי נתונים מותאמים"
 
 #: projects/k3bdataburndialog.cpp:56 projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
@@ -6703,7 +6702,7 @@ msgstr "לינוקס/יוניקס בלבד"
 
 #: projects/k3bdataimagesettingswidget.cpp:33
 msgid "Linux/Unix + Windows"
-msgstr "לינוקס/יוניקס + חלונות"
+msgstr "לינוקס/יוניקס + Windows"
 
 #: projects/k3bdataimagesettingswidget.cpp:34
 msgid "Very large files (UDF)"
@@ -6711,12 +6710,12 @@ msgstr "קבצים מאוד גדולים (UDF)"
 
 #: projects/k3bdataimagesettingswidget.cpp:35
 msgid "DOS Compatibility"
-msgstr "תאימות DOS"
+msgstr "תאימות ל־DOS"
 
 #: projects/k3bdataimagesettingswidget.cpp:36
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:61
 msgid "Custom"
-msgstr "מותאם אישית"
+msgstr "התאמה אישית"
 
 #: projects/k3bdataimagesettingswidget.cpp:88
 #, fuzzy, kde-format
@@ -6735,7 +6734,7 @@ msgid ""
 "settings."
 msgstr ""
 "<p><b>הגדרות מוכנות מראש</b><p> K3b תומך בהגדרות מוכנות מראש למערכות הקבצים "
-"הבאות אשר מאפשר בחירה מהירה של הגדרות אשר משומשות לעתים קרובות."
+"הבאות שמאפשר בחירה מהירה של הגדרות נפוצות."
 
 #: projects/k3bdataimagesettingswidget.cpp:146
 #, kde-format
@@ -6768,8 +6767,8 @@ msgid ""
 "file names are restricted to 8.3 characters and no symbolic links or file "
 "permissions are supported."
 msgstr ""
-"מערכת הקבצים מיועלת לשימוש עם מערכות ישנות. זה אומר ששמות קבצים מוגבלים ל - "
-"8.3 אורך תווים ואין תמיכה בקישורים סימבלויים או בהרשאות קבצים."
+"מערכת הקבצים ממוטבת לשימוש עם מערכות ישנות. זה אומר ששמות קבצים "
+"מוגבליםלתבנית 8.3 תווים ואין תמיכה בקישורים סימבוליים או בהרשאות קבצים."
 
 #: projects/k3bdataimagesettingswidget.cpp:212
 #, kde-format
@@ -6814,7 +6813,7 @@ msgstr ""
 #: projects/k3bdataimagesettingswidget.cpp:243
 #, kde-format
 msgid "Rock Ridge Extensions Disabled"
-msgstr "הרחבות Rock Ridge מבוטלות"
+msgstr "הרחבות Rock Ridge מושבתות"
 
 #: projects/k3bdataimagesettingswidget.cpp:249
 #, kde-format
@@ -6828,7 +6827,7 @@ msgstr ""
 #: projects/k3bdataimagesettingswidget.cpp:254
 #, kde-format
 msgid "Joliet Extensions Disabled"
-msgstr "הרחבות Joliet מבוטלות"
+msgstr "הרחבות Joliet מושבתות"
 
 #: projects/k3bdatamultisessioncombobox.cpp:27
 #, kde-format
@@ -7130,7 +7129,7 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:182
 #, kde-format
 msgid "Adding image file to project"
-msgstr "מוסיף קבצים לפרויקט"
+msgstr "קובצי דמות נוספים למיזם"
 
 #: projects/k3bdataurladdingdialog.cpp:183
 #, kde-format
@@ -7140,7 +7139,7 @@ msgstr "הוסף את הקובץ לפרוייקט"
 #: projects/k3bdataurladdingdialog.cpp:184
 #, kde-format
 msgid "Burn the image directly"
-msgstr "צרוב את התמונה ישירות"
+msgstr "צריבת הדמות ישירות"
 
 #: projects/k3bdataurladdingdialog.cpp:380
 #: projects/k3bdataurladdingdialog.cpp:619
@@ -7338,7 +7337,7 @@ msgstr "הסר את הפריטים המיובאים מהצריבה הקודמת"
 #: projects/k3bdataviewimpl.cpp:150
 #, kde-format
 msgid "&Edit Boot Images..."
-msgstr "&ערוך תמונות אתחול..."
+msgstr "&עריכת דמויות טעינה…"
 
 #: projects/k3bdataviewimpl.cpp:151
 #, kde-format
@@ -7366,7 +7365,7 @@ msgstr "קובץ עם השם שהכנסת כבר קיים. אנא הכנס את 
 #: projects/k3bdataviewimpl.cpp:375
 #, kde-format
 msgid "Edit Boot Images"
-msgstr "ערוך תמונות אתחול"
+msgstr "עריכת דמויות טעינה"
 
 #: projects/k3bfillstatusdisplay.cpp:187
 #, kde-format
@@ -7689,7 +7688,7 @@ msgstr "שולח שאילתה ל-MusicBrainz עבור רצועה %1."
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
 msgid "Use the 'Image' tab to optionally adjust the path of the image."
-msgstr "השתמש בטאב 'תמונה' על מנת להתאים את נתיב התמונה (לא חובה)"
+msgstr "ניתן להשתמש בלשונית ‚דמות’ כדי לכוון את נתיב הדמות."
 
 #: projects/k3bprojectburndialog.cpp:63
 #, kde-format
@@ -7714,7 +7713,7 @@ msgstr "סוגר את חלון הדו-שיח ולא שומר את השינויי
 #: projects/k3bprojectburndialog.cpp:140
 #, kde-format
 msgid "Start the image creation"
-msgstr "התחל את תהליך יצירת התמונה"
+msgstr "התחלת תהליך יצירת הדמות"
 
 #: projects/k3bprojectburndialog.cpp:143
 #, kde-format
@@ -7724,7 +7723,7 @@ msgstr "התחל את תהליך הצריבה"
 #: projects/k3bprojectburndialog.cpp:187 rip/k3bvideocdrippingdialog.cpp:143
 #, kde-format
 msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
-msgstr "תיקיית התמונות  '%1' אינה קיימת. האם אתה רוצה ש K3b יצור אותה?"
+msgstr "תיקיית הדמויות ‚%1’ אינה קיימת. ש־K3b ייצור אותה?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
 #, fuzzy, kde-format
@@ -7745,7 +7744,7 @@ msgstr "צורב"
 #: projects/k3bprojectburndialog.cpp:295
 #, kde-format
 msgid "Image"
-msgstr "קובץ תמונת תקליטור"
+msgstr "דמות"
 
 #: projects/k3bvcdburndialog.cpp:54
 #, kde-format
@@ -9479,8 +9478,8 @@ msgid ""
 "You can find this on your distribution disks or download it from http://www."
 "vcdimager.org"
 msgstr ""
-"אתה יכול למצוא את זה במנהל החבילות של ההפצה שלך או להוריד מ - http://www."
-"vcdimager.org"
+"אפשר למצוא אותו במנהל החבילות של ההפצה שלך או להוריד מ־http://www.vcdimager."
+"org"
 
 #: rip/k3bvideocdrip.cpp:108
 #, fuzzy, kde-format
@@ -9585,7 +9584,7 @@ msgstr "התעלם מ- EXT/PSD_X.VCD/"
 #: rip/k3bvideocdrippingdialog.cpp:92
 #, kde-format
 msgid "Use 2336 byte sector mode for image file"
-msgstr "השתמש בגודל סקטור של 2336 בתים לקובץ תמונת תקליטור"
+msgstr "להשתמש בגודל מקטע של 2336 בתים לקובץ דמות תקליטור"
 
 #: rip/k3bvideocdrippingdialog.cpp:96
 #, kde-format
@@ -9627,7 +9626,7 @@ msgid "Assume a 2336-byte sector mode"
 msgstr "הנח שגודל הסקטורים של תקליטור הוא 2336 בתים"
 
 #: rip/k3bvideocdrippingdialog.cpp:125
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "<p>This option only makes sense if you are reading from a BIN CD disk image. "
 "This indicates to `vcdxrip' to assume a 2336-byte sector mode for image file."
@@ -10184,14 +10183,14 @@ msgid ""
 msgstr ""
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:348
-#, fuzzy, kde-format
+#, kde-format
 msgid "Width:"
-msgstr "רוחב"
+msgstr "רוחב:"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "Height:"
-msgstr "אורך"
+msgstr "גובה:"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:41
 #, kde-format
