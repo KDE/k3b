@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -26,7 +27,7 @@
         "Description[fr]": "Module de décodage pour des fichiers audio au format « Ogg Vorbis »",
         "Description[ga]": "Modúl ionchódaithe a ionchódaíonn comhaid Ogg Vorbis",
         "Description[gl]": "Módulo de codificación para ficheiros Ogg Vorbis",
-        "Description[he]": "מודול קידוד על מנת לקודד קבצי Ogg Vorbis",
+        "Description[he]": "מודול קידוד קובצי Ogg Vorbis",
         "Description[hne]": "ओग वार्बिस फाइल ल एनकोड करे बर एनकोडिंग माड्यूल",
         "Description[hr]": "Koderski modul za kodiranje Ogg Vorbis datoteka",
         "Description[hu]": "Kódolómodul Ogg Vorbis-fájlok készítéséhez",

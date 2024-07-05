@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -26,7 +27,7 @@
         "Description[fr]": "Module d'encodage permettant de spécifier une commande d'encodage",
         "Description[ga]": "Modúl ionchódaithe a cheadaíonn duit ordú ionchódaithe a roghnú",
         "Description[gl]": "Módulo de codificación que permite especificar unha orde",
-        "Description[he]": "מודול קידוד אשר מאפשר לציין פקודת קידוד ספציפית",
+        "Description[he]": "מודול קידוד שמאפשר לציין פקודת קידוד ספציפית",
         "Description[hr]": "Koderski modul koji omogućuje navođenje kodirajuće naredbe",
         "Description[hu]": "Kódolómodul megadható kódolóparanccsal",
         "Description[ia]": "Modulo de codificar que permitte specificar un commando de codificar",

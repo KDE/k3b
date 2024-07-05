@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -24,6 +25,7 @@
         "Description[fi]": "MPEG1 Layer III (MP3) -tiedostojen pakkausmoduuli",
         "Description[fr]": "Module de décodage pour des fichiers audio au format « MPEG1 Layer III (MP3) »",
         "Description[gl]": "Módulo de codificación para ficheiros MPEG capa III (MP3)",
+        "Description[he]": "מודול קידוד לקובצי MPEG1 שכבה lll‏ (MP3)",
         "Description[hu]": "Kódolómodul MPEG 1 Layer III (MP3)-fájlok készítéséhez",
         "Description[ia]": "Modulo decifrante per decifrar files MPEG 1 Layer III (MP3)",
         "Description[id]": "Modul encoding untuk mengenkode file-file MPEG 1 Layer III (MP3)",
@@ -69,6 +71,7 @@
         "Name[fi]": "K3b:n lame MP3-pakkaaja",
         "Name[fr]": "Encodeur « MP3 Lame » pour K3b",
         "Name[gl]": "Codificador de MP3 Lame para K3b",
+        "Name[he]": "מקודד K3b Lame ל־MP3",
         "Name[hu]": "LAME MP3-kódoló a K3b-hez",
         "Name[ia]": "Codificator Lame MP3 de K3b",
         "Name[id]": "Enkoder Lame MP3 K3b",

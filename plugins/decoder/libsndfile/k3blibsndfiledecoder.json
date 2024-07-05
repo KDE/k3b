@@ -4,6 +4,7 @@
             {
                 "Email": "mbedouet@no-log.org",
                 "Name": "Matthieu Bedouet",
+                "Name[he]": "מתיו בדואה",
                 "Name[x-test]": "xxMatthieu Bedouetxx"
             }
         ],
@@ -27,7 +28,7 @@
         "Description[fr]": "Module de décodage pour des fichiers audio pris en charge par « libsndfile »",
         "Description[ga]": "Modúl díchódaithe a dhíchódaíonn comhaid fhuaime a dtacaíonn libsndfile leo",
         "Description[gl]": "Módulo de descodificación de ficheiros de son admitidos por libsndfile",
-        "Description[he]": "מודול המפענח קבצי שמע הנתמכים על ידי libsndfile",
+        "Description[he]": "מודול לפענוח קובצי שמע הנתמכים על ידי libsndfile",
         "Description[hr]": "Dekoderski modul za dekodiranje audio datoteka koje podržava libsndfile",
         "Description[hu]": "Dekódolómodul a libsndfile által támogatott hangfájlok dekódolásához",
         "Description[ia]": "Modulo decifrante per decifrar filesaudio supportate per libsndfile",

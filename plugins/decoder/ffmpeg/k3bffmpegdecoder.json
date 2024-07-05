@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -25,6 +26,7 @@
         "Description[fi]": "WMA-tiedostojen purkumoduuli",
         "Description[fr]": "Module de décodage pour des fichiers au format « WMA »",
         "Description[gl]": "Módulo de descodificación para descodificar ficheiros WMA",
+        "Description[he]": "מודול לפענוח קובצי WMA",
         "Description[hu]": "Dekódolómodul WMA-fájlok dekódolásához",
         "Description[ia]": "Modulo decifrante per decifrar files WMA",
         "Description[id]": "Modul decoding untuk mendekode file-file WMA",

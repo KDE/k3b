@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -26,7 +27,7 @@
         "Description[fr]": "Module de décodage pour des fichiers audio au format « MPEG 1 Layer III »",
         "Description[ga]": "Modúl díchódaithe a dhíchódaíonn comhaid MPEG 1 Sraith III",
         "Description[gl]": "Módulo de descodificación de ficheiros MPEG 1 capa III",
-        "Description[he]": "מודול המפענח קבצי MPEG 1 שכבה lll ",
+        "Description[he]": "מודול לפענוח קובצי MPEG 1 שכבה lll ",
         "Description[hne]": "एमपीईजी १ लेयर फाइल ल डिकोड करे बर डिकोडिंग माड्यूल",
         "Description[hr]": "Dekoderski modul za dekodiranje MPEG 1 Layer III datoteka",
         "Description[hu]": "Dekódolómodul MPEG 1 Layer III-fájlok dekódolásához",

@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -26,7 +27,7 @@
         "Description[fr]": "Module d'encodage pour encoder de nombreux formats de fichiers utilisant « SoX »",
         "Description[ga]": "Modúl ionchódaithe a ionchódaíonn a lán formáidí comhaid le SoX",
         "Description[gl]": "Módulo de configuración para codificar varios formatos de ficheiro mediante SoX",
-        "Description[he]": "מודול קידוד על מנת לקודד הרבה סוגי קבצים בעזרת SoX",
+        "Description[he]": "מודול לקידוד מגוון סוגי קבצים בעזרת SoX",
         "Description[hr]": "Koderski modul za kodiranje mnogih datotečnih formata pomoću SoX-a",
         "Description[hu]": "Kódolómodul sokféle fájlformátumba való kódoláshoz (a SoX használatával)",
         "Description[ia]": "Modulo decifrante per decifrar multe formatos de files usante SoX",
@@ -85,7 +86,7 @@
         "Name[fr]": "Encodeur audio « SoX » pour K3b",
         "Name[ga]": "Ionchódóir SoX K3b",
         "Name[gl]": "Codificador de son SoX para K3b",
-        "Name[he]": "מקודד קבצי שמע SoX של K3b",
+        "Name[he]": "מקודד קובצי שמע SoX של K3b",
         "Name[hne]": "के३बी साक्स आडियो एनकोडर",
         "Name[hr]": "K3b-ov koder SoX audija",
         "Name[hu]": "SoX-hangkódoló a K3b-hez",

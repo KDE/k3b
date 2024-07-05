@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -27,7 +28,7 @@
         "Description[fr]": "Module de décodage pour des fichiers audio au format « Musepack »",
         "Description[ga]": "Modúl díchódaithe a dhíchódaíonn comhaid Musepack",
         "Description[gl]": "Módulo de descodificación de ficheiros de son Musepack",
-        "Description[he]": "מודול המפענח קבצי שמע Musepack",
+        "Description[he]": "מודול לפענוח קובצי שמע Musepack",
         "Description[hne]": "म्यूजपैक फाइल ल डिकोड करे बर डिकोडिंग माड्यूल",
         "Description[hr]": "Dekoderski modul za dekodiranje Musepack audio datoteka",
         "Description[hu]": "Dekódolómodul Musepack-hangfájlok dekódolásához",

@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[he]": "סבסטיאן טרג",
                 "Name[x-test]": "xxSebastian Truegxx"
             }
         ],
@@ -25,6 +26,7 @@
         "Description[fr]": "Module externe de renommage de fichiers audio dans un projet de données reposant sur les méta-informations.",
         "Description[ga]": "Breiseán a athainmníonn comhaid fhuaime i dtionscadal sonraí, bunaithe ar an mheiteafhaisnéis.",
         "Description[gl]": "Complemento para renomear os ficheiros de son dun proxecto de datos baseándose nos metadatos.",
+        "Description[he]": "תוסף לשינוי שמות קובצי שמע במיזם נתונים על בסיס פרטי העל.",
         "Description[hr]": "Priključak za preimenovanje audio datoteka u podatkovnom projektu na temelju meta-informacija.",
         "Description[hu]": "Adatprojektekben levő hangfájlok metainformációk alapján való átnevezése",
         "Description[ia]": "Plugin per renominar files audio in un projecto de datos basate sur information meta.",
@@ -81,6 +83,7 @@
         "Name[fr]": "Module de renommage de méta-informations audio pour K3b",
         "Name[ga]": "Athainmneoir Meiteafhaisnéise Fuaime K3b",
         "Name[gl]": "Cambiador de nome de metadatos de son de K3b",
+        "Name[he]": "משנה שמות קובצי שמע לפי נתוני על ב־K3b",
         "Name[hu]": "Hang-metainformáció-módosító a K3b-hez",
         "Name[ia]": "Renominator de Audio Metainfo de K3b",
         "Name[id]": "Pengubah nama Metainfo Audio K3b",
