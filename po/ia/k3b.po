@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the k3b package.
 #
-# Giovanni Sora <g.sora@tiscali.it>, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-02-23 10:50+0100\n"
+"PO-Revision-Date: 2024-07-12 16:15+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4704,12 +4704,12 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:264
 #, kde-format
 msgid "An error occurred"
-msgstr ""
+msgstr "Un error occurreva"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Action invalide"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
@@ -4719,7 +4719,7 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Authentication requirite"
 
 #: option/k3bexternalbinwidget.cpp:276
 #, kde-format
@@ -9567,7 +9567,7 @@ msgstr "Prefere&ntias"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:51
 #, kde-format
 msgid "Video Quality"
-msgstr ""
+msgstr "Qualitate de video"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:59
@@ -9585,7 +9585,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:191
 #, kde-format
 msgid "Audio Quality"
-msgstr ""
+msgstr "Qualitate de Audio"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAudioVBR)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:204
@@ -9625,7 +9625,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
 #, kde-format
 msgid "Audio Codec:"
-msgstr ""
+msgstr "Codec Audio:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboAudioCodec)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:351
