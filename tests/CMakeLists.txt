@@ -30,7 +30,7 @@ target_include_directories(k3bmetaitemmodeltest PRIVATE
     ${CMAKE_SOURCE_DIR}/libk3b/core
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/src/projects)
-target_link_libraries( k3bmetaitemmodeltest
+target_link_libraries(k3bmetaitemmodeltest
     Qt6::Gui
     Qt6::Test
     KF6::ConfigCore)
@@ -59,7 +59,7 @@ add_test(NAME k3bdeviceglobalstest COMMAND k3bdeviceglobalstest)
 qt_generate_dbus_interface(${CMAKE_SOURCE_DIR}/src/k3bjobinterface.h org.k3b.Job.xml)
 qt_add_dbus_adaptor(dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Job.xml ${CMAKE_SOURCE_DIR}/src/k3bjobinterface.h K3b::JobInterface k3bjobinterfaceadaptor K3bJobInterfaceAdaptor)
 
-add_executable(k3bexternalbinmanagertest 
+add_executable(k3bexternalbinmanagertest
     k3bexternalbinmanagertest.cpp
     stub-k3bapplication.cpp
     ${CMAKE_SOURCE_DIR}/src/k3bburnprogressdialog.cpp
@@ -91,7 +91,7 @@ add_test(NAME k3bexternalbinmanagertest COMMAND k3bexternalbinmanagertest)
 
 if(LIBFUZZER_FOUND)
     find_package(Threads)
-    add_executable(k3bfuzzertest 
+    add_executable(k3bfuzzertest
         k3bfuzzertest.cpp)
     target_link_libraries(k3bfuzzertest
         Qt6::Core

@@ -4,7 +4,7 @@ set(CMAKE_REQUIRED_LIBRARIES m)
 check_function_exists(lrint HAVE_LRINT)
 check_function_exists(lrintf HAVE_LRINTF)
 
-configure_file(config-libk3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-libk3b.h )
+configure_file(config-libk3b.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-libk3b.h)
 
 add_subdirectory( core )
 add_subdirectory( plugin )
@@ -222,7 +222,7 @@ target_link_libraries(k3blib
 
 if(WIN32)
     target_link_libraries(k3blib uuid ole32)
-endif(WIN32)
+endif()
 
 set_target_properties(k3blib PROPERTIES
     VERSION ${K3B_LIB_VERSION_MAJOR}.${K3B_LIB_VERSION_MINOR}.${K3B_LIB_VERSION_RELEASE}

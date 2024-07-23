@@ -270,8 +270,8 @@ endif()
 install(TARGETS k3b ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/option/k3btheme.knsrc.cmake
-               ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc
-               @ONLY)
+    ${CMAKE_CURRENT_BINARY_DIR}/option/k3btheme.knsrc
+    @ONLY)
 
 
 ########### install files ###############

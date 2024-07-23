@@ -11,7 +11,7 @@ if(ENABLE_DVD_RIPPING)
     k3b_videodvd_rip.desktop
     DESTINATION
     ${KDE_INSTALL_DATADIR}/solid/actions )
-endif(ENABLE_DVD_RIPPING)
+endif()
 
 install(PROGRAMS # They need to be executable to be considered authorized since this is a non-standard location
   k3b_create_audio_cd.desktop

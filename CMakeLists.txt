@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.16)
 
 # KDE Application Version, managed by release script
-set (RELEASE_SERVICE_VERSION_MAJOR "24")
-set (RELEASE_SERVICE_VERSION_MINOR "11")
-set (RELEASE_SERVICE_VERSION_MICRO "70")
-set (RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
+set(RELEASE_SERVICE_VERSION_MAJOR "24")
+set(RELEASE_SERVICE_VERSION_MINOR "11")
+set(RELEASE_SERVICE_VERSION_MICRO "70")
+set(RELEASE_SERVICE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
 
 project(k3b VERSION ${RELEASE_SERVICE_VERSION})
 
 set(QT_MIN_VERSION "6.6")
 set(KF_MIN_VERSION "6.1")
 
-set (KDE_COMPILERSETTINGS_LEVEL "5.84")
+set(KDE_COMPILERSETTINGS_LEVEL "5.84")
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" "${ECM_MODULE_PATH}")
@@ -64,7 +64,7 @@ include(ECMQtDeclareLoggingCategory)
 
 find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
 find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
-                                     KCMUtils KIO Notifications NewStuff NotifyConfig Solid WidgetsAddons XmlGui)
+    KCMUtils KIO Notifications NewStuff NotifyConfig Solid WidgetsAddons XmlGui)
 
 find_package(Qt6WebEngineWidgets)
 set_package_properties(Qt6WebEngineWidgets PROPERTIES
@@ -144,16 +144,16 @@ if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
         if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
             # FindKDE4Internal.cmake screws things up
             set(CMAKE_REQUIRED_FLAGS ${CMAKE_REQUIRED_FLAGS} -std=c99)
-        endif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
+        endif()
 
         if(FFMPEG_INCLUDE_DIR_OLD_STYLE)
             set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${FFMPEG_INCLUDE_DIR_OLD_STYLE})
             set(FFMPEG_HEADERS ffmpeg/avcodec.h ffmpeg/avformat.h)
-        else(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+        else()
             set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${FFMPEG_INCLUDE_DIR} ${FFMPEG_INCLUDE_DIRS})
             set(FFMPEG_HEADERS libavcodec/avcodec.h libavformat/avformat.h)
             set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -DNEWFFMPEGAVCODECPATH)
-        endif(FFMPEG_INCLUDE_DIR_OLD_STYLE)
+        endif()
         set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${FFMPEG_LIBRARIES})
 
         check_symbol_exists(avformat_open_input "${FFMPEG_HEADERS}" HAVE_FFMPEG_AVFORMAT_OPEN_INPUT)
@@ -187,10 +187,10 @@ if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
             " HAVE_FFMPEG_CODEC_MP3)
 
         cmake_pop_check_state()
-    endif(FFMPEG_FOUND)
+    endif()
 
     set(BUILD_FFMPEG_DECODER_PLUGIN "${FFMPEG_FOUND}")
-endif(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
+endif()
 
 if(K3B_BUILD_FLAC_DECODER_PLUGIN)
     find_package(Flac)
@@ -305,7 +305,7 @@ if(K3B_BUILD_API_DOCS)
             COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
             COMMAND docs/html/installdox -l qt6.tag@${QTDOCS} docs/html/*.html)
     endif()
-endif(K3B_BUILD_API_DOCS)
+endif()
 
 ##################  K3b build environment ################################
 add_subdirectory( libk3bdevice )

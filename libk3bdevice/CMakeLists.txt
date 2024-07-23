@@ -40,11 +40,11 @@ generate_export_header(k3bdevice
     EXPORT_FILE_NAME k3bdevice_export.h
 )
 
-install(TARGETS k3bdevice ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS k3bdevice ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/k3bdevice_export.h DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel)
 
-install( FILES
+install(FILES
     k3bdevicemanager.h
     k3bdevice.h
     k3btoc.h

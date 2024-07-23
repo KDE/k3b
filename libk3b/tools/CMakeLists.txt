@@ -1,5 +1,5 @@
 
-install( FILES
+install(FILES
   k3bwavefilewriter.h
   k3bbusywidget.h
   k3bdeviceselectiondialog.h
