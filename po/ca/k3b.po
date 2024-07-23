@@ -11201,6 +11201,3 @@ msgstr "anamòrfic"
 #, kde-format
 msgid "Subpicture"
 msgstr "Subtítols"
-
-#~ msgid "K3b Bookmarks"
-#~ msgstr "Punts del K3b"
