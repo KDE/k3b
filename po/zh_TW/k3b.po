@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-05-09 06:40+0900\n"
+"PO-Revision-Date: 2024-07-23 21:50+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
@@ -6273,7 +6273,7 @@ msgstr "額外的 MPlayer 選項："
 #: projects/base_k3bmovixoptionswidget.ui:118
 #, kde-format
 msgid "Loop playlist:"
-msgstr "重覆播放列表："
+msgstr "重複播放列表："
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_spinLoop)
 #: projects/base_k3bmovixoptionswidget.ui:128
@@ -9973,7 +9973,7 @@ msgstr "%1 遇到 non-form2 磁區"
 #: rip/k3bvideocdrip.cpp:281
 #, kde-format
 msgid "leaving loop"
-msgstr "離開重覆迴圈中"
+msgstr "離開重複迴圈中"
 
 #: rip/k3bvideocdrip.cpp:289
 #, kde-format
