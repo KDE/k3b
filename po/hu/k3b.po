@@ -5,31 +5,31 @@
 # Arpad Biro <biro.arpad gmail>, 2009, 2010.
 # Kristóf Kiszel <ulysses@kubuntu.org>, 2010, 2011, 2012.
 # Balázs Úr <urbalazs@gmail.com>, 2012, 2013, 2014.
-# Kristof Kiszel <kiszel.kristof@gmail.com>, 2021.
+# SPDX-FileCopyrightText: 2021, 2024 Kristof Kiszel <kiszel.kristof@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2021-11-02 08:37+0100\n"
-"Last-Translator: Kristof Kiszel <kiszel.kristof@gmail.com>\n"
+"PO-Revision-Date: 2024-07-31 22:27+0200\n"
+"Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 21.08.3\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Bíró Árpád,Szántó Tamás,Kiszel Kristóf"
+msgstr "Kiszel Kristóf,Bíró Árpád,Szántó Tamás"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "biro.arpad@gmail.com,taszanto@gmail.com,kiszel.kristof@gmail.com"
+msgstr "ulysses@fsf.hu,biro.arpad@gmail.com,taszanto@gmail.com"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
 #, kde-format
@@ -1625,7 +1625,7 @@ msgstr "Nem sikerült megnyitni a dokumentumot."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "A(z) <resource>%1</resource> projekt nem mentett adatokat tartalmaz."
 
 #: k3b.cpp:896
 #, kde-format
@@ -2391,40 +2391,34 @@ msgid "Filter:"
 msgstr "Szűrő:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Minden fájl"
+msgstr "Minden fájl"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Találatok"
+msgstr "Hangfájlok"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Találatok"
+msgstr "Wave-hangfájlok"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Találatok"
+msgstr "MP3-hangfájlok"
 
 #: k3bfileview.cpp:79
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Ogg Vorbis-hangfájlok"
+msgstr "Ogg Vorbis-hangfájlok"
 
 #: k3bfileview.cpp:80
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG-videófájlok"
+msgstr "MPEG-videófájlok"
 
 #: k3bfileview.cpp:84
 #, kde-format
@@ -2588,7 +2582,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:105
 #, kde-format
@@ -2601,12 +2595,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Kilövi a folyamatokat?"
 
 #: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Kilövés"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -4067,28 +4061,24 @@ msgid "Choose Image File"
 msgstr "Képmásfájl kiválasztása"
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Képmásfájl:"
+msgstr "Képfájlok"
 
 #: misc/k3bimagewritingdialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660-képmásfájlok"
+msgstr "ISO 9660-képmásfájlok"
 
 #: misc/k3bimagewritingdialog.cpp:452
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue-fájl:"
+msgstr "Cue-fájlok"
 
 #: misc/k3bimagewritingdialog.cpp:453
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao-TOC-fájlok és Cdrecord-klón-képmások"
+msgstr "Cdrdao-TOC-fájlok és Cdrecord-klón-képmások"
 
 #: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
@@ -5148,46 +5138,44 @@ msgid "Following programs could not be updated:"
 msgstr "A következő programokat nem sikerült frissíteni:"
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Nem sikerült végrehajtani a műveletet: %1"
+msgstr "Nem sikerült végrehajtani a műveletet<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Felhatalmazás megtagadva"
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Hibajavítás nélkül"
+msgstr "Hiba történt"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Érvénytelen művelet"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Felhatalmazás megadva"
 
 #: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Felhatalmazás szükséges"
 
 #: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "A felhasználó megszakította a felhatalmazást"
 
 #: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Ismeretlen felhatalmazási állapot: %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -7394,6 +7382,7 @@ msgstr "Egyedi (%1)"
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
 msgstr ""
+"A (K3b::DataImageSettingsWidget) talált előre beállított beállításokat: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -8399,10 +8388,9 @@ msgstr ""
 "létrehozza azt?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Könyvtár létrehozása"
+msgstr "Mappa létrehozása?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
