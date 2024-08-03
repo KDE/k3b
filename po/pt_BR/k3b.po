@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-07-26 22:45-0300\n"
+"PO-Revision-Date: 2024-08-02 01:21-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -5127,7 +5127,7 @@ msgstr "Não foi possível atualizar os seguintes programas:"
 #: option/k3bexternalbinwidget.cpp:248
 #, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Não foi possível executar a ação<br>%1"
+msgstr "Não foi possível executar a ação<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
