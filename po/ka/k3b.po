@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-06-12 06:07+0200\n"
+"PO-Revision-Date: 2024-08-09 02:54+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -6088,6 +6088,7 @@ msgid ""
 "<p>If this option is checked the disk will be ejected after MPlayer has "
 "finished."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, MPlayer-ის დასრულების შემდეგ დისკს გამოვიღებ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkEject)
 #: projects/base_k3bmovixoptionswidget.ui:260
@@ -6108,6 +6109,7 @@ msgid ""
 "<p>If this option is checked the PC will be shut down after MPlayer has "
 "finished playing."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, PC გამოირთვება, როცა MPlayer დაკვრას დაასრულებს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShutdown)
 #: projects/base_k3bmovixoptionswidget.ui:273
@@ -6128,6 +6130,8 @@ msgid ""
 "<p>If this option is checked the PC will be rebooted after MPlayer has "
 "finished playing."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, PC გადაიტვირთება, როცა MPlayer დაკვრას "
+"დაასრულებს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkReboot)
 #: projects/base_k3bmovixoptionswidget.ui:286
@@ -6714,7 +6718,7 @@ msgstr "ხელით (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) აღმოჩენილია პრესეტის პარამეტრები: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7574,7 +7578,7 @@ msgstr "K3b-ს ამჟამად, მხოლოდ, ლოკალურ
 #: projects/k3bmusicbrainzjob.cpp:116
 #, kde-format
 msgid "Found multiple matches for track %1 (%2). Please select one."
-msgstr ""
+msgstr "აღმოჩენილია ერთზე მეტი დამთხვევა ტრეკისთვის %1 (%2). აირჩიეთ ერთ-ერთი."
 
 #: projects/k3bmusicbrainztrackloopupjob.cpp:71
 #, kde-format
@@ -7590,6 +7594,8 @@ msgstr "MusicBrainz-დან ინფორმაციის გამოთ�
 #, kde-format
 msgid "Use the 'Image' tab to optionally adjust the path of the image."
 msgstr ""
+"გამოიყენეთ 'გამოსახულების' ჩანართი, რომ გამოსახულების ბილიკი ხელით მიუთითოთ "
+"(არასავალდებულო)."
 
 #: projects/k3bprojectburndialog.cpp:63
 #, kde-format
@@ -7729,6 +7735,7 @@ msgstr "მიუთითეთ ტომების რაოდენობ�
 #, kde-format
 msgid "Enable CD-i Application Support for Video CD Type 1.1 & 2.0"
 msgstr ""
+"CD-i აპლიკაციის მხარდაჭერის ჩართვა Video CD Type 1.1-სთვის და 2.0-სთვის"
 
 #: projects/k3bvcdburndialog.cpp:109
 #, kde-format
@@ -8244,12 +8251,12 @@ msgstr "ასევე შეიძლება ჰგავდეს >> | პ�
 #: projects/k3bvcdtrackdialog.cpp:240
 #, kde-format
 msgid "This key may be mapped to the STOP key."
-msgstr ""
+msgstr "ეს ღილაკი შეგიძლიათ, STOP ღილაკს მიაბათ."
 
 #: projects/k3bvcdtrackdialog.cpp:241
 #, kde-format
 msgid "This key is usually mapped to the > or PLAY key."
-msgstr ""
+msgstr "ეს ღილაკი, ჩვეულებრივ, > ან PLAY ღილაკზეა მიბმული."
 
 #: projects/k3bvcdtrackdialog.cpp:242
 #, kde-format
@@ -9729,13 +9736,13 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:492
 #, kde-format
 msgid "Automatic &Video Clipping"
-msgstr ""
+msgstr "&ვიდეოს ავტომატური წაკვეთა"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:502
 #, kde-format
 msgid "Change the sample rate of the audio stream to 44.1 KHz"
-msgstr ""
+msgstr "აუდიონაკადის სემპლების სიხშირის შეცვლა 44.1 კჰც-ზე"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:506
@@ -9840,14 +9847,14 @@ msgstr "გამჭოლი AC3"
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:103
 #, kde-format
 msgid "Ripping Video DVD Titles"
-msgstr ""
+msgstr "VIdeo DVD-ის სათაურების დარიპვა"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:109
 #, kde-format
 msgid "Transcoding 1 title to %2/%3"
 msgid_plural "Transcoding %1 titles to %2/%3"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 სათაურის გადაკოდირება %2/%3-ში"
+msgstr[1] "%1 სათაურის გადაკოდირება %2/%3-ში"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
 #, kde-format
@@ -9857,7 +9864,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:143
 #, kde-format
 msgid "Failed to rip title %1"
-msgstr ""
+msgstr "ჩავარდა დარიპვა სათაურისთვის %1"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:173
 #, kde-format
