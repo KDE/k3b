@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-08-09 02:54+0200\n"
+"PO-Revision-Date: 2024-08-10 06:18+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -396,6 +396,9 @@ msgid ""
 "<p>If this option is checked K3b will write a wave header. This is useful in "
 "case the encoder application cannot read plain raw audio data."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b ჩაწერს Wave-ის თავსართს. ეს სასარგებლოა იმ "
+"შემთხვევაში, თუ ენკოდერის აპლიკაციას დაუმუშავებელი აუდიოს წაკითხვა არ "
+"შეუძლია."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteWaveHeader)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:129
@@ -7776,7 +7779,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:117
 #, kde-format
 msgid "This option allows customization of Gaps and Margins."
-msgstr ""
+msgstr "ეს პარამეტრი გამოტოვებებისა და ზღვრების მორგების საშუალებას გაძლევთ."
 
 #: projects/k3bvcdburndialog.cpp:118
 #, kde-format
