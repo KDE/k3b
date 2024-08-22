@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-05-03 09:31+0200\n"
+"PO-Revision-Date: 2024-08-16 19:06+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -1529,7 +1529,7 @@ msgstr "Effacer le projet courant"
 #: k3b.cpp:393 k3bdevicemenu.cpp:69
 #, kde-format
 msgid "&Format/Erase rewritable disk..."
-msgstr "&Formater/effacer un disque réinscriptible..."
+msgstr "&Formater / effacer un disque réinscriptible..."
 
 #: k3b.cpp:394
 #, kde-format
@@ -3087,7 +3087,7 @@ msgstr ""
 "La meilleure solution à ce problème est d'activer l'émulation SCSI (ide-"
 "scsi) pour tous les périphériques. Vous n'aurez aucun problème en procédant "
 "ainsi. Soyez conscient que vous devriez toujours activer le DMA sur les "
-"périphériques ide-scsi émulés."
+"périphériques « IDE-SCSI » émulés."
 
 #: k3bsystemproblemdialog.cpp:433 k3bsystemproblemdialog.cpp:452
 #, kde-format
@@ -6715,7 +6715,7 @@ msgid ""
 msgstr ""
 "<p><b>Libellés de démarrage de « eMovix » </b>\n"
 "<p>eMovix fournit différentes options de démarrage qui peuvent être "
-"sélectionnées lors du démarrage via des libellés (comme pour LILO ou Grub). "
+"sélectionnées lors du démarrage via des libellés (comme pour LILO ou GRUB). "
 "Les différentes configurations de démarrage influencent principalement "
 "l'affichage de la vidéo.\n"
 "<p>Les libellés <b>défaut</b>, <b>movix</b>, ou <b>MoviX</b> démarrent avec "
@@ -7153,7 +7153,7 @@ msgstr "Lecture de la piste"
 #: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
 #, kde-format
 msgid "Musicbrainz Lookup"
-msgstr "Recherche Musicbrainz"
+msgstr "Recherche MusicBrainz"
 
 #: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
 #, kde-format
