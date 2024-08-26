@@ -1,3 +1,4 @@
+# SPDX-FileCopyrightText: 2010, 2014, 2024 Johannes Obermayr <johannesobermayr@gmx.de>
 # Christoph Thielecke <crissi99@gmx.de>, 2003.
 # Thomas Diehl <thd@kde.org>, 2003, 2004.
 # Sebastian Trüg <trueg@k3b.org>, 2003.
@@ -9,21 +10,20 @@
 # Jannick Kuhr <opensource@kuhr.org>, 2009.
 # Markus Slopianka <markus.s@kdemail.net>, 2009, 2010.
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2009, 2010.
-# Johannes Obermayr <johannesobermayr@gmx.de>, 2010, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2023-07-01 18:35+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2024-08-20 20:19+0200\n"
+"Last-Translator: Johannes Obermayr <johannesobermayr@gmx.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -5131,46 +5131,44 @@ msgid "Following programs could not be updated:"
 msgstr "Die folgenden Programme können nicht aktualisiert werden:"
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Der Aktion „%1“ kann nicht ausgeführt werden"
+msgstr "Die Aktion kann nicht ausgeführt werden<br/> %1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Die Autorisierung wurde abgelehnt"
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Keine Fehlerkorrektur"
+msgstr "Es ist ein Fehler aufgetreten"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Ungültige Aktion"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Die Autorisierung erfolgte"
 
 #: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Eine Autorisierung ist erforderlich"
 
 #: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Die Autorisierung wurde vom Benutzer abgebrochen"
 
 #: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Unbekannter Autorisierungsstatus %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
