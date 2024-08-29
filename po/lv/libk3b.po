@@ -6,31 +6,32 @@
 # Maris Nartiss <maris.kde@gmail.com>, 2007, 2011, 2012.
 # Viesturs Zarins <viesturs.zarins@mii.lu.lv>, 2007, 2008.
 # Einars Sprugis <einars8@gmail.com>, 2011, 2012.
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2012-02-02 21:54+0200\n"
-"Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
-"Language-Team: Latvian\n"
+"PO-Revision-Date: 2024-08-23 16:30+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
+"Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
 msgid "Inhibiting sleep for disc writing"
-msgstr ""
+msgstr "Aptur iesnaudināšanu diska rakstīšanai"
 
 #: core/k3bcore.cpp:257
 #, kde-format
 msgid "Disable inhibition for disc writing"
-msgstr ""
+msgstr "Izslēdz iesnaudināšanu diska rakstīšanai"
 
 #: core/k3bglobals.cpp:361
 #, kde-format
@@ -50,17 +51,17 @@ msgstr "Mērķis"
 #: jobs/k3baudiocuefilewritingjob.cpp:107
 #, kde-format
 msgid "Writing Audio Cue File"
-msgstr "Raksta audio Cue failu"
+msgstr "Raksta audio „Cue“ datni"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:205
 #, kde-format
 msgid "Analysing the audio file failed. Corrupt file?"
-msgstr "Neveiksmīga audio faila analīze. Bojāts fails?"
+msgstr "Neveiksmīga audio datnes analīze. Iespējams, bojāta datne."
 
 #: jobs/k3baudiocuefilewritingjob.cpp:273
 #, kde-format
 msgid "Analysing the audio file"
-msgstr "Analizē audio failu"
+msgstr "Analizē audio datni"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:274
 #, kde-format
@@ -70,17 +71,17 @@ msgstr "Analizē %1"
 #: jobs/k3baudiocuefilewritingjob.cpp:281
 #, kde-format
 msgid "Unable to handle '%1' due to an unsupported format."
-msgstr "Neizdevās apstrādāt '%1', jo tā formāts netiek atbalstīts."
+msgstr "Neizdevās apstrādāt „%1“, jo datnes formāts nav atbalstīts."
 
 #: jobs/k3baudiocuefilewritingjob.cpp:286
 #, kde-format
 msgid "No valid audio cue file: '%1'"
-msgstr "Nav derīgs audio cue fails:'%1'"
+msgstr "Nav derīga audio „cue“ datne:'%1'"
 
 #: jobs/k3baudiosessionreadingjob.cpp:134
 #, kde-format
 msgid "Could not load libcdparanoia."
-msgstr "Neizdevās ielādēt libcdparanoia."
+msgstr "Neizdevās ielādēt „libcdparanoia“."
 
 #: jobs/k3baudiosessionreadingjob.cpp:142 jobs/k3bdatatrackreader.cpp:138
 #: jobs/k3bdatatrackreader.cpp:172
@@ -97,12 +98,12 @@ msgstr "Kļūda inicializējot audio izkopēšanu."
 #: jobs/k3bdvdcopyjob.cpp:360
 #, kde-format
 msgid "Unable to open '%1' for writing."
-msgstr "Neizdevās atvērt rakstīšanai '%1'."
+msgstr "Neizdevās atvērt rakstīšanai „%1“."
 
 #: jobs/k3baudiosessionreadingjob.cpp:235
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
-msgstr "Nelabojama kļūda kopējot %1. celiņu."
+msgstr "Nelabojama kļūda, kopējot %1. celiņu."
 
 #: jobs/k3bbinimagewritingjob.cpp:53
 #, kde-format
@@ -127,7 +128,7 @@ msgstr "Raksta %1. celiņu no %2"
 #: jobs/k3bbinimagewritingjob.cpp:203
 #, kde-format
 msgid "Writing cue/bin Image"
-msgstr "Raksta cue/bin attēlu"
+msgstr "Raksta „cue/bin“ attēlu"
 
 #: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
 #, kde-format
@@ -150,19 +151,17 @@ msgstr "CD-RW dzēšanas laikā nav pieejama nekāda progresa informācija."
 #: jobs/k3bblankingjob.cpp:106
 #, kde-format
 msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
-msgstr ""
-"Lūdzu, ievietojiet pārrakstāmu CD datu nesēju ierīcē<p><b>%1 %2 (%3)</b>."
+msgstr "Ievietojiet diskdzinī pārrakstāmu kompaktdisku<p><b>%1 %2 (%3)</b>."
 
 #: jobs/k3bblankingjob.cpp:143
-#, fuzzy, kde-format
-#| msgid "Blanking error "
+#, kde-format
 msgid "Blanking error."
-msgstr "Tukšošanas kļūda "
+msgstr "Tukšošanas kļūda."
 
 #: jobs/k3bblankingjob.cpp:144
 #, kde-format
 msgid "Sorry, no error handling yet."
-msgstr "Piedodiet, pagaidām nav kļūdu apstrādes."
+msgstr "Atvainojamies, pagaidām kļūdu apstrāde nav pieejama."
 
 #: jobs/k3bblankingjob.cpp:160 jobs/k3bdvdformattingjob.cpp:99
 #, kde-format
@@ -187,7 +186,7 @@ msgstr "Pārbauda avota datu nesēju"
 #: jobs/k3bcdcopyjob.cpp:194
 #, kde-format
 msgid "K3b does not copy CDs containing multiple data tracks."
-msgstr "K3b nekopē CD diskus, kuri satur vairākus datu celiņus."
+msgstr "„K3b“ nekopē CD diskus, kuri satur vairākus datu celiņus."
 
 #: jobs/k3bcdcopyjob.cpp:198
 #, kde-format
@@ -202,12 +201,12 @@ msgstr "Kopē datu CD."
 #: jobs/k3bcdcopyjob.cpp:206
 #, kde-format
 msgid "K3b can only copy CD-Extra mixed mode CDs."
-msgstr "K3b māk kopēt tikai CD-Extra jauktā režīma diskus."
+msgstr "„K3b“ prot kopēt tikai „CD-Extra“ jauktā režīma diskus."
 
 #: jobs/k3bcdcopyjob.cpp:210
 #, kde-format
 msgid "Copying Enhanced Audio CD (CD-Extra)."
-msgstr "Kopē Enhanced Audio CD (CD-Extra)."
+msgstr "Kopē „Enhanced Audio CD“ („CD-Extra“)."
 
 #: jobs/k3bcdcopyjob.cpp:215
 #, kde-format
@@ -223,8 +222,8 @@ msgstr "Avota disks ir tukšs."
 #, kde-format
 msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
 msgstr ""
-"K3b nepieciešams cdrecorder 2.01a12 vai jaunāks, lai kopētu Mode2 datu "
-"celiņus."
+"„K3b“ nepieciešams „cdrecorder“ 2.01a12 vai jaunāka versija, lai kopētu "
+"„Mode2“ datu celiņus."
 
 #: jobs/k3bcdcopyjob.cpp:274
 #, kde-format
@@ -232,7 +231,7 @@ msgid ""
 "You will only be able to copy the first session in raw writing mode. "
 "Continue anyway?"
 msgstr ""
-"Jūs varēsiet pārkopēt tikai pirmo sesiju raw rakstīšanas režīmā. Vai "
+"Jūs varēsiet pārkopēt tikai pirmo sesiju „raw“ rakstīšanas režīmā. Vai "
 "vēlaties turpināt?"
 
 #: jobs/k3bcdcopyjob.cpp:276
@@ -248,7 +247,7 @@ msgstr "Kopē tikai pirmo sesiju."
 #: jobs/k3bcdcopyjob.cpp:310 jobs/k3bdvdcopyjob.cpp:344
 #, kde-format
 msgid "Unable to determine free space in temporary folder '%1'."
-msgstr "Neizdevās noteikt brīvās vietas daudzumu pagaidu mapē '%1'."
+msgstr "Neizdevās noteikt brīvās vietas daudzumu pagaidu mapē „%1“."
 
 #: jobs/k3bcdcopyjob.cpp:316 jobs/k3bdvdcopyjob.cpp:351
 #, kde-format
@@ -258,7 +257,7 @@ msgstr "Pagaidu mapē nav pietiekami daudz brīvas vietas."
 #: jobs/k3bcdcopyjob.cpp:325 jobs/k3bdvdcopyjob.cpp:368
 #, kde-format
 msgid "Unmounting source medium"
-msgstr "Nomontē avota datu nesēju"
+msgstr "Atmontē avota datu nesēju"
 
 #: jobs/k3bcdcopyjob.cpp:354
 #, kde-format
@@ -266,88 +265,75 @@ msgid "Unable to read Table of contents"
 msgstr "Neizdevās nolasīt satura rādītāju"
 
 #: jobs/k3bcdcopyjob.cpp:362
-#, fuzzy, kde-format
-#| msgid "Searching CD-TEXT"
+#, kde-format
 msgid "Searching CD-Text"
-msgstr "Meklē CD-TEXT"
+msgstr "Meklē „CD-Text“"
 
 #: jobs/k3bcdcopyjob.cpp:376
-#, fuzzy, kde-format
-#| msgid "Found CD-TEXT (%1 - %2)."
+#, kde-format
 msgid "Found CD-Text (%1 - %2)."
-msgstr "Atrasts CD-TEXT (%1 - %2)."
+msgstr "Atrasts „CD-Text“ (%1 — %2)."
 
 #: jobs/k3bcdcopyjob.cpp:381
-#, fuzzy, kde-format
-#| msgid "Found corrupted CD-TEXT. Ignoring it."
+#, kde-format
 msgid "Found corrupted CD-Text. Ignoring it."
-msgstr "Atrasts sabojāts CD-TEXT. Tiek ignorēts."
+msgstr "Atrasts sabojāts „CD-Text“. Tiek ignorēts."
 
 #: jobs/k3bcdcopyjob.cpp:386
-#, fuzzy, kde-format
-#| msgid "No CD-TEXT found."
+#, kde-format
 msgid "No CD-Text found."
-msgstr "CD-TEXT netika atrasts."
+msgstr "„CD-Text“ nav atrasts."
 
 #: jobs/k3bcdcopyjob.cpp:397
-#, fuzzy, kde-format
-#| msgid "Querying Cddb"
+#, kde-format
 msgid "Querying CDDB"
-msgstr "Vaicā Cddb"
+msgstr "Vaicā CDDB"
 
 #: jobs/k3bcdcopyjob.cpp:418
-#, fuzzy, kde-format
-#| msgid "Found Cddb entry (%1 - %2)."
+#, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr "Atrasts Cddb ieraksts (%1 - %2)."
+msgstr "Atrasts CDDB ieraksts (%1 — %2)."
 
 #: jobs/k3bcdcopyjob.cpp:441
-#, fuzzy, kde-format
-#| msgid "No Cddb entry found."
+#, kde-format
 msgid "No CDDB entry found."
-msgstr "Nav atrasts neviens Cddb ieraksts."
+msgstr "Nav atrasts neviens CDDB ieraksts."
 
 #: jobs/k3bcdcopyjob.cpp:444
-#, fuzzy, kde-format
-#| msgid "Cddb error (%1)."
+#, kde-format
 msgid "CDDB error (%1)."
-msgstr "Cddb kļūda (%1)."
+msgstr "CDDB kļūda (%1)."
 
 #: jobs/k3bcdcopyjob.cpp:460
-#, fuzzy, kde-format
-#| msgid ""
-#| "Found CD-TEXT (%1 - %2) and Cddb (%3 - %4) entries. Which one should be "
-#| "used to generate the CD-TEXT on the new CD?"
+#, kde-format
 msgid ""
 "Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. Which one should be used "
 "to generate the CD-Text on the new CD?"
 msgstr ""
-"Atrasts CD-TEXT (%1 - %2) un Cddb (%3 - %4) ieraksts. Kuru izmantot jaunā "
-"diska CD-TEXT veidošanai?"
+"Atrasts „CD-Text“ (%1 — %2) un CDDB (%3 — %4) ieraksts. Kuru izmantot jaunā "
+"diska „CD-Text“ veidošanai?"
 
 #: jobs/k3bcdcopyjob.cpp:466
 #, kde-format
 msgid "CD-Text"
-msgstr ""
+msgstr "CD-Text"
 
 #: jobs/k3bcdcopyjob.cpp:467
-#, fuzzy, kde-format
-#| msgid "Use CD-TEXT data"
+#, kde-format
 msgid "Use CD-Text data"
-msgstr "Izmantot CD-TEXT datus"
+msgstr "Izmantot „CD-Text“ datus"
 
 #: jobs/k3bcdcopyjob.cpp:468
-#, fuzzy, kde-format
-#| msgid "Use Cddb entry"
+#, kde-format
 msgid "Use CDDB entry"
-msgstr "Izmantot Cddb ierakstu"
+msgstr "Izmantot CDDB ierakstu"
 
 #: jobs/k3bcdcopyjob.cpp:474 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
 #: projects/k3bgrowisofswriter.cpp:332
 #, kde-format
 msgid "Preparing write process..."
-msgstr "Sagatavojas rakstīšananai..."
+msgstr "Sagatavojas rakstīšanai..."
 
 #: jobs/k3bcdcopyjob.cpp:533 jobs/k3bcdcopyjob.cpp:579
 #: jobs/k3bdvdcopyjob.cpp:323
@@ -358,27 +344,27 @@ msgstr "Norādīts neizmantojams pagaidu mapes ceļš. Izmanto noklusēto."
 #: jobs/k3bcdcopyjob.cpp:544
 #, kde-format
 msgid "Unable to create temporary folder '%1'."
-msgstr "Neizdevās izveidot pagaidu mapi '%1'."
+msgstr "Neizdevās izveidot pagaidu mapi „%1“."
 
 #: jobs/k3bcdcopyjob.cpp:551
 #, kde-format
 msgid "Using temporary folder %1."
-msgstr "Izmanto pagaidu mapi %1."
+msgstr "Izmanto pagaidu mapi „%1“."
 
 #: jobs/k3bcdcopyjob.cpp:574 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
 msgid "Do you want to overwrite %1?"
-msgstr "Vai vēlaties pārrakstīt %1?"
+msgstr "Vai vēlaties pārrakstīt „%1“?"
 
 #: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:319
 #, kde-format
 msgid "File Exists"
-msgstr "Fails eksistē"
+msgstr "Datne pastāv"
 
 #: jobs/k3bcdcopyjob.cpp:584 jobs/k3bdvdcopyjob.cpp:328
 #, kde-format
 msgid "Writing image file to %1."
-msgstr "Raksta attēla failu uz %1."
+msgstr "Raksta attēla datni uz „%1“."
 
 #: jobs/k3bcdcopyjob.cpp:600
 #, kde-format
@@ -417,7 +403,7 @@ msgstr "Raksta kopiju (%1. sesija)"
 #: projects/mixedcd/k3bmixedjob.cpp:1002
 #, kde-format
 msgid "Simulating"
-msgstr "Imitē"
+msgstr "Simulē"
 
 #: jobs/k3bcdcopyjob.cpp:708 projects/audiocd/k3baudiojob.cpp:644
 #: projects/datacd/k3bdatajob.cpp:429 projects/mixedcd/k3bmixedjob.cpp:1004
@@ -440,12 +426,12 @@ msgstr "Gaida datu nesēju"
 #: projects/audiocd/k3baudiojob.cpp:293
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode."
-msgstr "TAO režīmā nevar rakstīt CD-TEXT."
+msgstr "TAO režīmā nevar rakstīt „CD-Text“."
 
 #: jobs/k3bcdcopyjob.cpp:972
 #, kde-format
 msgid "Successfully read session %1."
-msgstr "Veiksmīgi nolasīta sesija%1."
+msgstr "Veiksmīgi nolasīta sesija „%1“."
 
 #: jobs/k3bcdcopyjob.cpp:974
 #, kde-format
@@ -455,12 +441,12 @@ msgstr "Veiksmīgi nolasīts avota disks."
 #: jobs/k3bcdcopyjob.cpp:989
 #, kde-format
 msgid "K3b was unable to eject the source disk. Please do so manually."
-msgstr "K3b neizdevās izgrūst avota disku. Lūdzu, izņemiet disku."
+msgstr "„K3b“ neizdevās izgrūst avota disku. Izņemiet disku."
 
 #: jobs/k3bcdcopyjob.cpp:1006
 #, kde-format
 msgid "Error while reading session %1."
-msgstr "Kļūda lasot sesiju %1."
+msgstr "Kļūda lasot sesiju „%1“."
 
 #: jobs/k3bcdcopyjob.cpp:1034 jobs/k3bverificationjob.cpp:101
 #: projects/mixedcd/k3bmixedjob.cpp:519
@@ -471,36 +457,36 @@ msgstr "Nepieciešams pārlādēt datu nesēju, lai atgrieztos pareizā stāvokl
 #: jobs/k3bcdcopyjob.cpp:1035
 #, kde-format
 msgid "Reloading the medium"
-msgstr "Pārielādē datu nesēju"
+msgstr "Pārlādē datu nesēju"
 
 #: jobs/k3bcdcopyjob.cpp:1053 projects/audiocd/k3baudiojob.cpp:411
 #: projects/datacd/k3bdatajob.cpp:520 projects/mixedcd/k3bmixedjob.cpp:533
 #: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
-msgstr "K3d neizdevās izgrūst ierakstīto disku. Lūdzu, izņemiet to pats."
+msgstr "„K3d“ neizdevās izgrūst ierakstīto disku. Izņemiet to manuāli."
 
 #: jobs/k3bcdcopyjob.cpp:1091 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
 #: projects/mixedcd/k3bmixedjob.cpp:554
 #, kde-format
 msgid "Please reload the medium and press 'OK'"
-msgstr "Lūdzu, pārielādējiet datu nesēju un nospiediet 'labi'"
+msgstr "Pārlādējiet datu nesēju un nospiediet „Labi“"
 
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:262
 #, kde-format
 msgid "Failed to reload the medium"
-msgstr "Neizdevās pārielādēt datu nesēju"
+msgstr "Neizdevās pārlādēt datu nesēju"
 
 #: jobs/k3bcdcopyjob.cpp:1106 projects/audiocd/k3baudiojob.cpp:687
 #, kde-format
 msgid "Removing temporary files."
-msgstr "Dzēš pagaidu failus."
+msgstr "Dzēš pagaidu datnes."
 
 #: jobs/k3bcdcopyjob.cpp:1112 jobs/k3bclonejob.cpp:339
 #, kde-format
 msgid "Removing image files."
-msgstr "Dzēš attēla failus."
+msgstr "Dzēš attēla datnes."
 
 #: jobs/k3bcdcopyjob.cpp:1201
 #, kde-format
@@ -510,12 +496,12 @@ msgstr "Veido CD attēlu"
 #: jobs/k3bcdcopyjob.cpp:1205
 #, kde-format
 msgid "Simulating CD Copy On-The-Fly"
-msgstr "Imitē tūlītējo CD kopēšanu"
+msgstr "Simulē tūlītējo CD kopēšanu"
 
 #: jobs/k3bcdcopyjob.cpp:1207
 #, kde-format
 msgid "Simulating CD Copy"
-msgstr "Imitē CD kopēšanu"
+msgstr "Simulē CD kopēšanu"
 
 #: jobs/k3bcdcopyjob.cpp:1211
 #, kde-format
@@ -543,7 +529,7 @@ msgstr[2] "Veido %1 kopiju"
 #: projects/k3bgrowisofswriter.cpp:134 projects/videocd/k3bvcdjob.cpp:194
 #, kde-format
 msgid "Could not find %1 executable."
-msgstr "Neizdevās atrast izpildfailu %1."
+msgstr "Neizdevās atrast izpilddatni „%1“."
 
 #: jobs/k3bcdda2wavreader.cpp:127 jobs/k3bdvdbooktypejob.cpp:325
 #: jobs/k3bdvdformattingjob.cpp:498
@@ -555,7 +541,7 @@ msgstr "Neizdevās atrast izpildfailu %1."
 #: projects/videocd/k3bvcdjob.cpp:248
 #, kde-format
 msgid "Could not start %1."
-msgstr "Neizdevās sākt %1."
+msgstr "Neizdevās sākt „%1“."
 
 #: jobs/k3bcdda2wavreader.cpp:232 jobs/k3bdvdbooktypejob.cpp:182
 #: jobs/k3bdvdformattingjob.cpp:265
@@ -567,7 +553,7 @@ msgstr "Neizdevās sākt %1."
 #: projects/videocd/k3bvcdjob.cpp:349
 #, kde-format
 msgid "%1 returned an unknown error (code %2)."
-msgstr "%1 atgrieza nezināmu kļūdu (kods %2)."
+msgstr "„%1“ atgrieza nezināmu kļūdu (kods %2)."
 
 #: jobs/k3bcdda2wavreader.cpp:238 jobs/k3bdvdbooktypejob.cpp:190
 #: jobs/k3bdvdformattingjob.cpp:273
@@ -575,12 +561,12 @@ msgstr "%1 atgrieza nezināmu kļūdu (kods %2)."
 #: projects/videocd/k3bvcdjob.cpp:357
 #, kde-format
 msgid "%1 did not exit cleanly."
-msgstr "%1 neizgāja tīri."
+msgstr "„%1“ neizgāja tīri."
 
 #: jobs/k3bclonejob.cpp:87
 #, kde-format
 msgid "Cdrecord version %1 does not have cloning support."
-msgstr "Cdrecord versijā %1 nav klonēšanas atbalsta."
+msgstr "„Cdrecord“ versijā %1 nav klonēšanas atbalsta."
 
 #: jobs/k3bclonejob.cpp:95
 #, kde-format
@@ -590,7 +576,7 @@ msgstr "Nav norādīta ierīce."
 #: jobs/k3bclonejob.cpp:104
 #, kde-format
 msgid "CD writer %1 (%2) does not support cloning."
-msgstr "CD rakstītājs %1 (%2) neatbalsta klonēšanu."
+msgstr "CD rakstītājs „%1“ (%2) neatbalsta klonēšanu."
 
 #: jobs/k3bclonejob.cpp:137
 #, kde-format
@@ -611,7 +597,7 @@ msgstr "Veiksmīgi ierakstīta klona %1. kopija."
 #: jobs/k3bclonejob.cpp:283
 #, kde-format
 msgid "Successfully read disk."
-msgstr "Disks veiksmīgi nolasīts."
+msgstr "Disks ir veiksmīgi nolasīts."
 
 #: jobs/k3bclonejob.cpp:295
 #, kde-format
@@ -621,7 +607,7 @@ msgstr "Neizdevās nolasīt visu disku klona režīmā."
 #: jobs/k3bclonejob.cpp:302
 #, kde-format
 msgid "Error while reading disk."
-msgstr "Kļūda lasot disku."
+msgstr "Kļūda, lasot disku."
 
 #: jobs/k3bclonejob.cpp:328
 #, kde-format
@@ -641,7 +627,7 @@ msgstr "Izveido klona attēlu"
 #: jobs/k3bclonejob.cpp:354
 #, kde-format
 msgid "Simulating Clone Image"
-msgstr "Imitē klona attēlu"
+msgstr "Simulē klona attēlu"
 
 #: jobs/k3bclonejob.cpp:356
 #, kde-format
@@ -669,7 +655,7 @@ msgstr[2] "Veido %1 klonu kopijas"
 #: jobs/k3bdatatrackreader.cpp:167
 #, kde-format
 msgid "Unable to open libdvdcss."
-msgstr "Neizdevās atvērt libdvdcss."
+msgstr "Neizdevās atvērt „libdvdcss“."
 
 #: jobs/k3bdatatrackreader.cpp:176
 #, kde-format
@@ -689,7 +675,7 @@ msgstr "Neizdevās atšifrēt video DVD."
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
 msgid "No support for reading formless Mode2 sectors."
-msgstr "Nav atbalsta neformētu Mode2 sektoru lasīšanai."
+msgstr "Nav atbalsta neformētu „Mode2“ sektoru lasīšanai."
 
 #: jobs/k3bdatatrackreader.cpp:206
 #, kde-format
@@ -762,7 +748,7 @@ msgstr "Grāmatas veids veiksmīgi nomainīts"
 #: projects/datacd/k3bisoimager.cpp:163 projects/videocd/k3bvcdjob.cpp:351
 #, kde-format
 msgid "Please send me an email with the last output."
-msgstr "Lūdzu, atsūtiet man e-pastu ar pēdējo izvadi."
+msgstr "Atsūtiet man e-pastu ar pēdējo izvadi."
 
 #: jobs/k3bdvdbooktypejob.cpp:207
 #, kde-format
@@ -777,7 +763,7 @@ msgstr "Neizdevās izgrūst datu nesēju."
 #: jobs/k3bdvdbooktypejob.cpp:247
 #, kde-format
 msgid "Cannot change booktype on non-empty DVD+R media."
-msgstr "Neizdevās nomainīt grāmatas veidu netukšam DVD+R datu nesējam."
+msgstr "Neizdevās nomainīt grāmatas veidu ne tukšam DVD+R datu nesējam."
 
 #: jobs/k3bdvdbooktypejob.cpp:255
 #, kde-format
@@ -797,7 +783,7 @@ msgstr "Maina grāmatas veidu"
 #: jobs/k3bdvdcopyjob.cpp:119
 #, kde-format
 msgid "K3b does not support writing on-the-fly with growisofs %1."
-msgstr "K3b neatbalsta tūlītējo rakstīšanu ar growisofs %1."
+msgstr "„K3b“ neatbalsta tūlītējo rakstīšanu ar „growisofs“ %1."
 
 #: jobs/k3bdvdcopyjob.cpp:121
 #, kde-format
@@ -827,18 +813,17 @@ msgstr "Rakstītājs neatbalsta divslāņu DVD rakstīšanu."
 #: jobs/k3bdvdcopyjob.cpp:242
 #, kde-format
 msgid "This growisofs version does not support writing Double Layer DVDs."
-msgstr "Šī growisofs versija neatbalsta divslāņu DVD rakstīšanu."
+msgstr "Šī „growisofs“ versija neatbalsta divslāņu DVD rakstīšanu."
 
 #: jobs/k3bdvdcopyjob.cpp:260
 #, kde-format
 msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
-msgstr "K3b neatbalsta daudzsesiju DVD vai Blu-ray disku kopēšanu."
+msgstr "„K3b“ neatbalsta daudzsesiju DVD vai „Blu-ray“ disku kopēšanu."
 
 #: jobs/k3bdvdcopyjob.cpp:282
-#, fuzzy, kde-format
-#| msgid "K3b relies on the size saved in the ISO9660 header."
+#, kde-format
 msgid "K3b relies on the size saved in the ISO 9660 header."
-msgstr "K3b paļaujas uz izmēru, kas saglabāts ISO9660 galvenē."
+msgstr "„K3b“ paļaujas uz izmēru, kas saglabāts ISO 9660 galvenē."
 
 #: jobs/k3bdvdcopyjob.cpp:283
 #, kde-format
@@ -846,19 +831,18 @@ msgid ""
 "This might result in a corrupt copy if the source was mastered with buggy "
 "software."
 msgstr ""
-"Var sanākt bojāta kopija, ja avots tika veidots ar kļūdainu programmatūru."
+"Var sanākt bojāta kopija, ja avots ir veidots ar kļūdainu programmatūru."
 
 #: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
 #: jobs/k3bverificationjob.cpp:355
-#, fuzzy, kde-format
-#| msgid "Unable to determine the ISO9660 filesystem size."
+#, kde-format
 msgid "Unable to determine the ISO 9660 filesystem size."
-msgstr "Neizdevās noteikt ISO9660 failu sistēmas izmēru."
+msgstr "Neizdevās noteikt ISO 9660 datņu sistēmas izmēru."
 
 #: jobs/k3bdvdcopyjob.cpp:299
 #, kde-format
 msgid "K3b does not support copying DVD-RAM."
-msgstr "K3b neatbalsta DVD-RAM kopēšanu."
+msgstr "„K3b“ neatbalsta DVD-RAM kopēšanu."
 
 #: jobs/k3bdvdcopyjob.cpp:305
 #, kde-format
@@ -878,7 +862,7 @@ msgstr "Veido attēlu"
 #: jobs/k3bdvdcopyjob.cpp:379
 #, kde-format
 msgid "Simulating copy"
-msgstr "Imitē kopēšanu"
+msgstr "Simulē kopēšanu"
 
 #: jobs/k3bdvdcopyjob.cpp:381 jobs/k3bdvdcopyjob.cpp:596
 #: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
@@ -899,7 +883,7 @@ msgstr "Avota datu nesējs veiksmīgi nolasīts."
 #: jobs/k3bdvdcopyjob.cpp:585
 #, kde-format
 msgid "K3b was unable to eject the source medium. Please do so manually."
-msgstr "K3b neizdevās izgrūst avota datu nesēju. Lūdzu, izņemiet datu nesēju."
+msgstr "„K3b“ neizdevās izgrūst avota datu nesēju. Izņemiet datu nesēju."
 
 #: jobs/k3bdvdcopyjob.cpp:646
 #, kde-format
@@ -919,8 +903,7 @@ msgstr "Pārbauda kopiju"
 #: jobs/k3bdvdcopyjob.cpp:681 jobs/k3biso9660imagewritingjob.cpp:146
 #, kde-format
 msgid "K3b was unable to eject the written medium. Please do so manually."
-msgstr ""
-"K3b neizdevās izgrūst ierakstīto datu nesēju. Lūdzu, izņemiet datu nesēju."
+msgstr "„K3b“ neizdevās izgrūst ierakstīto datu nesēju. Izņemiet datu nesēju."
 
 #: jobs/k3bdvdcopyjob.cpp:790
 #, kde-format
@@ -934,14 +917,14 @@ msgid ""
 "%1 media do not support write simulation. Do you really want to continue? "
 "The disc will actually be written to."
 msgstr ""
-"%1 datu nesējs neatbalsta rakstīšanas imitāciju. Vai tiešām vēlaties "
-"turpināt? Dati patiesi tiks ierakstīti."
+"%1 datu nesējs neatbalsta rakstīšanas simulāciju. Vai tiešām vēlaties "
+"turpināt? Dati tiks neatgriezeniski ierakstīti."
 
 #: jobs/k3bdvdcopyjob.cpp:819 jobs/k3bdvdcopyjob.cpp:912
 #: projects/datacd/k3bdatajob.cpp:818 projects/datacd/k3bdatajob.cpp:938
 #, kde-format
 msgid "No Simulation with %1"
-msgstr "Nav imitācijas ar %1"
+msgstr "Nav simulācijas ar „%1“"
 
 #: jobs/k3bdvdcopyjob.cpp:825
 #, kde-format
@@ -951,14 +934,14 @@ msgstr "Raksta DVD kopiju"
 #: jobs/k3bdvdcopyjob.cpp:829
 #, kde-format
 msgid "Writing mode ignored when writing DVD+R(W) media."
-msgstr "Rakstīšanas režīms tiek ignorēts, rakstot DVD+R(W) datu nesējos."
+msgstr "Rakstīšanas režīmu ignorē, rakstot DVD+R(W) datu nesējos."
 
 #: jobs/k3bdvdcopyjob.cpp:831 jobs/k3bdvdcopyjob.cpp:921
 #: jobs/k3bmetawriter.cpp:934 jobs/k3bmetawriter.cpp:943
 #: projects/datacd/k3bdatajob.cpp:840 projects/datacd/k3bdatajob.cpp:961
 #, kde-format
 msgid "Writing %1."
-msgstr "Raksta %1."
+msgstr "Raksta „%1“."
 
 #: jobs/k3bdvdcopyjob.cpp:839 jobs/k3bmetawriter.cpp:512
 #: projects/datacd/k3bdatajob.cpp:848
@@ -967,14 +950,14 @@ msgid ""
 "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
 "really want to continue? The media will actually be written to."
 msgstr ""
-"Rakstītājs (%1 %2) neatbalsta imitāciju ar DVD-R(W) datu nesēju. Vai tiešām "
-"vēlaties turpināt? Dati datu nesējā patiesi tiks ierakstīti."
+"Rakstītājs (%1 %2) neatbalsta simulāciju ar DVD-R(W) datu nesēju. Vai tiešām "
+"vēlaties turpināt? Dati datu nesējā tiks ierakstīti."
 
 #: jobs/k3bdvdcopyjob.cpp:844 jobs/k3bmetawriter.cpp:517
 #: projects/datacd/k3bdatajob.cpp:853
 #, kde-format
 msgid "No Simulation with DVD-R(W)"
-msgstr "Nav imitācijas ar DVD-R(W)"
+msgstr "Nav simulācijas ar DVD-R(W)"
 
 #: jobs/k3bdvdcopyjob.cpp:865 jobs/k3bmetawriter.cpp:930
 #: projects/datacd/k3bdatajob.cpp:867
@@ -1018,7 +1001,7 @@ msgstr "Raksta BD kopiju"
 #: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
 #, kde-format
 msgid "Removed image file %1"
-msgstr "Noņemts attēla fails %1"
+msgstr "Noņemta attēla datne %1"
 
 #: jobs/k3bdvdcopyjob.cpp:942
 #, kde-format
@@ -1045,7 +1028,7 @@ msgstr "Formatē disku"
 #: projects/k3bgrowisofswriter.cpp:336
 #, kde-format
 msgid "Unmounting medium"
-msgstr "Nomontē datu nesēju"
+msgstr "Atmontē datu nesēju"
 
 #: jobs/k3bdvdformattingjob.cpp:135
 #, kde-format
@@ -1053,13 +1036,13 @@ msgid ""
 "Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
 "b>."
 msgstr ""
-"Lūdzu, ievietojiet pārrakstāmo DVD vai Blu-ray datu nesēju ierīcē<p><b>%1 %2 "
+"Ievietojiet pārrakstāmo DVD vai „Blu-ray“ datu nesēju ierīcē<p><b>%1 %2 "
 "(%3)</b>."
 
 #: jobs/k3bdvdformattingjob.cpp:255
 #, kde-format
 msgid "Formatting successfully completed"
-msgstr "Formatēšana veiksmīgi pabeigta"
+msgstr "Formatēšana ir veiksmīgi pabeigta"
 
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
@@ -1069,7 +1052,7 @@ msgstr "Nesatraucaties, ja progress apstāsies pirms 100%."
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
 msgid "The formatting will continue in the background during writing."
-msgstr "Ierakstīšanas laikā formatēšana tiks turpināta fonā."
+msgstr "Ierakstīšanas laikā formatēšana turpināsies fonā."
 
 #: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
@@ -1090,13 +1073,13 @@ msgstr "Atrasts %1 datu nesējs."
 #, kde-format
 msgid "No rewritable DVD or BD medium found. Unable to format."
 msgstr ""
-"Netika atrasts neviens pārrakstāms DVD vai BD datu nesējs. Nevar veikt "
-"formatēšanu."
+"Netika atrasts neviens pārrakstāms DVD vai BD datu nesējs. Nav iespējams "
+"formatēt."
 
 #: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
 #, kde-format
 msgid "No need to format %1 media more than once."
-msgstr "Datu nesēju %1 nav nepieciešams formatēt vairāk par vienu reizi."
+msgstr "Datu nesēju „%1“ nav nepieciešams formatēt vairāk par vienu reizi."
 
 #: jobs/k3bdvdformattingjob.cpp:367 jobs/k3bdvdformattingjob.cpp:417
 #, kde-format
@@ -1112,22 +1095,22 @@ msgstr "Veikt piespiedu formatēšanu."
 #: jobs/k3bdvdformattingjob.cpp:371
 #, kde-format
 msgid "It is not recommended to force formatting of %1 media."
-msgstr "Nav ieteicams veikt piespiedu formātēšanu %1 datu nesējiem."
+msgstr "Nav ieteicams veikt piespiedu formatēšanu „%1“ datu nesējam."
 
 #: jobs/k3bdvdformattingjob.cpp:373
 #, kde-format
 msgid "After 10-20 reformats the media might become unusable."
-msgstr "Jau pēc 10-20 formatēšanas reizēm datu nesējs var kļūt nelietojams."
+msgstr "Jau pēc 10—20 formatēšanas reizēm datu nesējs var kļūt nelietojams."
 
 #: jobs/k3bdvdformattingjob.cpp:382
 #, kde-format
 msgid "Formatting %1 medium"
-msgstr "Formatē datu nesēju %1"
+msgstr "Formatē datu nesēju „%1“"
 
 #: jobs/k3bdvdformattingjob.cpp:393
 #, kde-format
 msgid "Formatted in %1 mode."
-msgstr "Formatēts %1 režīmā."
+msgstr "Formatēts „%1“ režīmā."
 
 #: jobs/k3bdvdformattingjob.cpp:407
 #, kde-format
@@ -1137,7 +1120,7 @@ msgstr "Datu nesējs jau ir tukšs."
 #: jobs/k3bdvdformattingjob.cpp:434
 #, kde-format
 msgid "Formatting DVD-RW in %1 mode."
-msgstr "Formatē DVD-RW %1 režīmā."
+msgstr "Formatē DVD-RW „%1“ režīmā."
 
 #: jobs/k3bdvdformattingjob.cpp:441
 #, kde-format
@@ -1197,54 +1180,53 @@ msgid "Waiting for medium"
 msgstr "Gaida datu nesēju"
 
 #: jobs/k3biso9660imagewritingjob.cpp:333
-#, fuzzy, kde-format
-#| msgid "Simulating ISO9660 Image"
+#, kde-format
 msgid "Simulating ISO 9660 Image"
-msgstr "Imitē ISO9660 attēlu"
+msgstr "Simulē ISO 9660 attēlu"
 
 #: jobs/k3biso9660imagewritingjob.cpp:335
-#, fuzzy, kde-format
-#| msgid "Burning ISO9660 Image"
+#, kde-format
 msgid "Burning ISO 9660 Image"
-msgstr "Raksta ISO9660 attēlu"
+msgstr "Raksta ISO 9660 diska attēlu"
 
 #: jobs/k3bmetawriter.cpp:304 projects/datacd/k3bdatajob.cpp:769
 #: projects/datacd/k3bdatajob.cpp:792
 #, kde-format
 msgid "Cannot write %1 media using %2. Falling back to default application."
 msgstr ""
-"Neizdevās rakstīt %1 datu nesēju izmantojot %2. Tiks lietota noklusētā "
-"lietotne."
+"Neizdevās rakstīt „%1“ datu nesēju izmantojot „%2“. Atgriežas pie "
+"noklusējuma programmas."
 
 #: jobs/k3bmetawriter.cpp:310
 #, kde-format
 msgid "DVD and Blu-ray tracks can only be written in MODE1."
-msgstr "DVD vai Blu-ray celiņi var tikt ierakstīti tikai MODE1 režīmā."
+msgstr "DVD vai „Blu-ray“ celiņus var ierakstīt tikai MODE1 režīmā."
 
 #: jobs/k3bmetawriter.cpp:335
 #, kde-format
 msgid ""
 "Missing Blu-ray support in cdrecord and growisofs. Please update the system."
 msgstr ""
-"Trūkstošs Blu-ray atbalsts cdrecord un growisofs lietotnēs. Lūdzu, "
-"atjauniniet sistēmu."
+"Trūkst „Blu-ray“ atbalsts „cdrecord“ un „growisofs“ programmā. Atjauniniet "
+"sistēmu."
 
 #: jobs/k3bmetawriter.cpp:431 projects/audiocd/k3baudiojob.cpp:243
 #, kde-format
 msgid "Track lengths below 4 seconds violate the Red Book standard."
-msgstr "Celiņi, kas īsāki par 4 sekundēm, pārkāpj Red Book standartu."
+msgstr ""
+"Celiņi, kas ir īsāki par četrām sekundēm, pārkāpj „Red Book“ standartu."
 
 #: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
 #: projects/mixedcd/k3bmixedjob.cpp:1222
 #, kde-format
 msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
-msgstr "Tūlītējā ierakstīšana netiek atbalstīta ar cdrecord < 2.01a13."
+msgstr "Tūlītējo ierakstīšanu neatbalsta „cdrecord“ < 2.01a13."
 
 #: jobs/k3bmetawriter.cpp:470 projects/audiocd/k3baudiojob.cpp:288
 #: projects/mixedcd/k3bmixedjob.cpp:1229
 #, kde-format
 msgid "Cdrecord %1 does not support CD-Text writing."
-msgstr "Cdrecorder %1 neatbalsta CD-TEXT rakstīšanu."
+msgstr "„Cdrecorder“ %1 neatbalsta „CD-Text“ rakstīšanu."
 
 #: jobs/k3bmetawriter.cpp:482 projects/datacd/k3bdatajob.cpp:891
 #, kde-format
@@ -1283,22 +1265,22 @@ msgstr ""
 #: jobs/k3bmetawriter.cpp:785
 #, kde-format
 msgid "No version of cdrskin can do this yet."
-msgstr ""
+msgstr "Neviena „cdrskin“ versija to vēl nevar izdarīt."
 
 #: jobs/k3bmetawriter.cpp:890
 #, kde-format
 msgid "Writing CD in Session At Once mode."
-msgstr "Raksta CD Session At Once režīmā."
+msgstr "Raksta CD „Session At Once“ režīmā."
 
 #: jobs/k3bmetawriter.cpp:892
 #, kde-format
 msgid "Writing CD in Track At Once mode."
-msgstr "Raksta CD Track At Once režīmā."
+msgstr "Raksta CD „Track At Once“ režīmā."
 
 #: jobs/k3bmetawriter.cpp:894
 #, kde-format
 msgid "Writing CD in Raw mode."
-msgstr "Raksta CD Raw režīmā."
+msgstr "Raksta CD „Raw“ režīmā."
 
 #: jobs/k3bmetawriter.cpp:897
 #, kde-format
@@ -1308,17 +1290,17 @@ msgstr "Pievieno sesiju CD diskam"
 #: jobs/k3bmetawriter.cpp:904
 #, kde-format
 msgid "Writing rewritable CD in Session At Once mode."
-msgstr "Raksta pārrakstāmo CD Session At Once režīmā."
+msgstr "Raksta pārrakstāmo CD „Session At Once“ režīmā."
 
 #: jobs/k3bmetawriter.cpp:906
 #, kde-format
 msgid "Writing rewritable CD in Track At Once mode."
-msgstr "Raksta pārrakstāmo CD Track At Once režīmā."
+msgstr "Raksta pārrakstāmo CD „Track At Once“ režīmā."
 
 #: jobs/k3bmetawriter.cpp:908
 #, kde-format
 msgid "Writing rewritable CD in Raw mode."
-msgstr "Raksta pārrakstāmo CD Raw režīmā."
+msgstr "Raksta pārrakstāmo CD „Raw“ režīmā."
 
 #: jobs/k3bmetawriter.cpp:911
 #, kde-format
@@ -1326,17 +1308,15 @@ msgid "Appending session to rewritable CD."
 msgstr "Pievieno sesiju pārrakstāmajam CD diskam."
 
 #: jobs/k3bmetawriter.cpp:918
-#, fuzzy, kde-format
-#| msgid "Growing ISO9660 filesystem on DVD+RW."
+#, kde-format
 msgid "Growing ISO 9660 filesystem on DVD+RW."
-msgstr "Veido ISO9660 failu sistēmu uz DVD+RW."
+msgstr "Veido ISO 9660 datņu sistēmu uz DVD+RW."
 
 #: jobs/k3bmetawriter.cpp:920 projects/datacd/k3bdatajob.cpp:870
-#, fuzzy, kde-format
-#| msgid "Growing ISO9660 filesystem on DVD-RW in restricted overwrite mode."
+#, kde-format
 msgid "Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."
 msgstr ""
-"Veido ISO9660 failu sistēmu uz DVD+RW ierobežotās pārrakstīšanas režīmā."
+"Veido ISO 9660 datņu sistēmu uz DVD+RW ierobežotās pārrakstīšanas režīmā."
 
 #: jobs/k3bmetawriter.cpp:922
 #, kde-format
@@ -1361,13 +1341,12 @@ msgstr "Raksta divslāņu DVD+R."
 #: jobs/k3breadcdreader.cpp:115
 #, kde-format
 msgid "Using readcd %1 instead of default version for clone support."
-msgstr ""
-"Klonēšanas atbalstam tiek izmantots readcd %1, nevis noklusētā versija."
+msgstr "Klonēšanas atbalstam izmanto „readcd“ %1, nevis noklusēto versiju."
 
 #: jobs/k3breadcdreader.cpp:122
 #, kde-format
 msgid "Could not find readcd executable with cloning support."
-msgstr "Neizdevās atrast readcd izpildāmo failu ar klonēšanas atbalstu."
+msgstr "Neizdevās atrast „readcd“ izpildāmo datni ar klonēšanas atbalstu."
 
 #: jobs/k3breadcdreader.cpp:155 jobs/k3breadcdreader.cpp:156
 #, kde-format
@@ -1377,7 +1356,7 @@ msgstr "Raksta attēlu uz %1."
 #: jobs/k3breadcdreader.cpp:198
 #, kde-format
 msgid "Could not start readcd."
-msgstr "Neizdevās sākt readcd."
+msgstr "Neizdevās sākt „readcd“."
 
 #: jobs/k3breadcdreader.cpp:254
 #, kde-format
@@ -1407,7 +1386,7 @@ msgstr "%1 atgrieza kļūdu: %2"
 #: jobs/k3breadcdreader.cpp:311
 #, kde-format
 msgid "Readcd exited abnormally."
-msgstr "Readcd beidza darbu nepareizi."
+msgstr "„Readcd“ beidza darbu nepareizi."
 
 #: jobs/k3bverificationjob.cpp:222 jobs/k3bverificationjob.cpp:278
 #: jobs/k3bverificationjob.cpp:301
@@ -1423,7 +1402,7 @@ msgstr "celiņi nav pievienoti"
 #: jobs/k3bverificationjob.cpp:279 jobs/k3bverificationjob.cpp:302
 #, kde-format
 msgid "specified track number '%1' not found on medium"
-msgstr "norādītais celiņa numurs '%1' nav atrasts datu nesējā"
+msgstr "norādītais celiņa numurs „%1“ nav atrasts datu nesējā"
 
 #: jobs/k3bverificationjob.cpp:323
 #, kde-format
@@ -1444,18 +1423,18 @@ msgstr "Ierakstītie dati pārbaudīti."
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:119
 #, kde-format
 msgid "%1 executable could not be found."
-msgstr "Neizdevās atrast izpildfailu %1."
+msgstr "Neizdevās atrast izpilddatni „%1“."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:89
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:125
 #, kde-format
 msgid "%1 version %2 is too old."
-msgstr "%1 versija %2 ir par vecu."
+msgstr "„%1“ versija %2 ir par vecu."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
 #, kde-format
 msgid "Analysing Title %1 of Video DVD %2"
-msgstr "Analizē video DVD %2 nosaukumu %1"
+msgstr "Analizē video DVD „%2“ nosaukumu %1"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:178
 #, kde-format
@@ -1467,18 +1446,17 @@ msgstr "Analizē %1. nodaļu no %2"
 msgid ""
 "Ignoring clipping values of last chapter due to its short playback time."
 msgstr ""
-"Īsā atskaņošanas laika dēļ, pēdējās nodaļas apgriešanas vērtības tiek "
-"ignorētas."
+"Īsās atskaņošanas laika dēļ, pēdējās nodaļas apgriešanas vērtības ignorē."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:151
 #, kde-format
 msgid "Unable to create folder '%1'"
-msgstr "Neizdevās izveidot mapi '%1'"
+msgstr "Neizdevās izveidot mapi „%1“"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:157
 #, kde-format
 msgid "Invalid filename: '%1'"
-msgstr "Nederīgs faila nosaukums: '%1'"
+msgstr "Nederīgs datnes nosaukums: „%1“"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:169
 #, kde-format
@@ -1498,7 +1476,7 @@ msgstr "Iestatīts nederīgs audio kodeks: %1"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
 msgid "Resizing picture of title %1 to %2x%3"
-msgstr "Nosaukuma %1 attēla izmēru maiņa uz %2x%3"
+msgstr "Nosaukuma %1 attēla izmēru maiņa uz %2×%3"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:381
 #, kde-format
@@ -1518,7 +1496,7 @@ msgstr "Divkārtējā kodēšana: otrā kārta"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:409
 #, kde-format
 msgid "Removing incomplete video file '%1'"
-msgstr "Dzēš nepabeigto video failu '%1'"
+msgstr "Dzēš nepabeigto video datni „%1“"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:483
 #, kde-format
@@ -1528,7 +1506,7 @@ msgstr "%1 izpilde neizdevās."
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:484
 #, kde-format
 msgid "Please consult the debugging output for details."
-msgstr "Lai uzzinātu detaļas, apskatiet atkļūdošanas izvadi."
+msgstr "Lai uzzinātu informāciju, apskatiet atkļūdošanas izvadi."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:515
 #, kde-format
@@ -1562,9 +1540,10 @@ msgid ""
 "codecs used these days. Its subproject libavcodec forms the basis for "
 "multimedia players such as xine or mplayer."
 msgstr ""
-"FFmpeg ir atvērtā pirmkoda projekts, kurš mēģina atbalstīt lielāko daļu "
-"mūsdienās izmantojamo video un audio kodeku. Projekta apakšprojekts "
-"libavcodec veido pamatu tādiem multivides atskaņotājiem kā xine vai mplayer."
+"„FFmpeg“ ir atvērtā pirmkoda projekts, kura dalībnieki mēģina atbalstīt "
+"lielāko daļu mūsdienās izmantojamo video un audio kodeku. Projekta "
+"apakšprojekts „libavcodec“ veido pamatu tādiem multivides atskaņotājiem kā "
+"„xine“ un „mplayer“."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:547
 #, kde-format
@@ -1572,8 +1551,8 @@ msgid ""
 "FFmpeg contains an implementation of the MPEG-4 video encoding standard "
 "which produces high quality results."
 msgstr ""
-"FFmpeg satur iestrādātu MPEG-4 video kodēšanas standartu, kas sniedz augstas "
-"kvalitātes rezultātus."
+"„FFmpeg“ satur iestrādātu MPEG-4 video kodēšanas standartu, kas sniedz "
+"augstas kvalitātes rezultātus."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:550
 #, kde-format
@@ -1582,9 +1561,9 @@ msgid ""
 "group of volunteer programmers after the OpenDivX source was closed in July "
 "2001."
 msgstr ""
-"XviD ir bezmaksas un atvērtā pirmkoda MPEG-4 video kodētājs. XviD izveidoja "
-"brīvprātīgo programmētāju grupa pēc OpenDivX pirmkoda aizvēršanas 2001. gada "
-"jūlijā."
+"„XviD“ ir bezmaksas un atvērtā pirmkoda MPEG-4 video kodētājs. „XviD“ "
+"izveidoja brīvprātīgo programmētāju grupa pēc „OpenDivX“ pirmkoda "
+"aizvēršanas 2001. gada jūlijā."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:553
 #, kde-format
@@ -1593,8 +1572,8 @@ msgid ""
 "quarter pixel motion compensation, lumi masking, trellis quantization, and "
 "H.263, MPEG and custom quantization matrices."
 msgstr ""
-"XviD nodrošina MPEG-4 paplašinātā profila iespējas, kā piemēram, b-kadrus, "
-"globālas un ceturdaļas pikseļu kustības kompensācijas, apgaismojuma maskas, "
+"„XviD“ nodrošina MPEG-4 paplašinātā profila iespējas, kā piemēram, b-kadrus, "
+"globālas un ceturtdaļas pikseļu kustības kompensācijas, apgaismojuma maskas, "
 "režģa kvantēšanu un H.263, MPEG un pielāgotas kvantēšanas matricas."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:557
@@ -1604,15 +1583,15 @@ msgid ""
 "While DivX is closed source and may only run on Windows, Mac OS and Linux, "
 "XviD is open source and can potentially run on any platform."
 msgstr ""
-"XviD ir DivX primārais konkurents (XviD ir pretēji uzrakstīts DivX "
-"nosaukums). DivX ir aizvērts un var darboties tikai Windows, Mac OS un Linux "
-"platformās, XviD ir atvērtā pirmkoda projekts, kas nozīmē, ka XviD "
-"potenciāli spēj darboties uz jebkuras platformas."
+"„XviD“ ir „DivX“ primārais konkurents („XviD“ ir pretēji uzrakstīts „DivX“ "
+"nosaukums). „DivX“ ir slēgts un var darboties tikai „Windows“, „Mac OS“ un "
+"„Linux“ platformās, savukārt „XviD“ ir atvērtā pirmkoda projekts, kas "
+"nozīmē, ka „XviD“ potenciāli spēj darboties uz jebkuras platformas."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:561
 #, kde-format
 msgid "(Description taken from the Wikipedia article)"
-msgstr "(Apraksts ņemts no Vikipēdijas raksta)"
+msgstr "(Aprakstam pamatā ir Vikipēdijas raksts)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:571
 #, kde-format
@@ -1620,8 +1599,8 @@ msgid ""
 "AC3, better known as Dolby Digital is standardized as ATSC A/52. It contains "
 "up to 6 total channels of sound."
 msgstr ""
-"AC3, labāk zināms kā Dolby Digital, ir standartizēts kā ATSC A/52. Tas var "
-"saturēt līdz pat 6 skaņu kanāliem."
+"AC3, labāk zināms kā „Dolby Digital“, ir standartizēts kā ATSC A/52. Tas var "
+"saturēt līdz pat sešiem skaņu kanāliem."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:576
 #, kde-format
@@ -1629,7 +1608,7 @@ msgid ""
 "With this setting K3b will create a two-channel stereo Dolby Digital audio "
 "stream."
 msgstr ""
-"Šis iestatījums izveidos divu-kanālu Dolby Digital stereo audio straumi."
+"Šis iestatījums izveidos divu kanālu „Dolby Digital“ stereo audio straumi."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:580
 #, kde-format
@@ -1637,7 +1616,7 @@ msgid ""
 "With this setting K3b will use the Dolby Digital audio stream from the "
 "source DVD without changing it."
 msgstr ""
-"Šis iestatījums, neveicot nekādas izmaiņas, izmantos Dolby Digital audio "
+"Šis iestatījums, neveicot nekādas izmaiņas, izmantos „Dolby Digital“ audio "
 "straumi no DVD avota."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:582
@@ -1651,8 +1630,8 @@ msgid ""
 "MPEG1 Layer III is better known as MP3 and is the most used lossy audio "
 "format."
 msgstr ""
-"MPEG1 Layer III, labāk zināms kā MP3, ir visvairāk izmantotais zudumradošais "
-"audio formāts."
+"„MPEG1 Layer III“, labāk zināms kā MP3, ir visvairāk izmantotais "
+"zudumradošais (lossy“)audio formāts."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:585
 #, kde-format
@@ -1660,7 +1639,7 @@ msgid ""
 "With this setting K3b will create a two-channel stereo MPEG1 Layer III audio "
 "stream."
 msgstr ""
-"Šis iestatījums izveidos divu kanālu MPEG1 Layer III stereo audio straumi."
+"Šis iestatījums izveidos divu kanālu „MPEG1 Layer III“ stereo audio straumi."
 
 #: plugin/k3baudiodecoder.cpp:630
 #, kde-format
@@ -1682,7 +1661,7 @@ msgstr "Radās nezināma kļūda."
 #: plugin/k3bpluginmanager.cpp:152
 #, kde-format
 msgid "No settings available for plugin %1."
-msgstr "Nav pieejami nekādi spraudņa %1 iestatījumi."
+msgstr "Nav pieejami „%1“ spraudņa iestatījumi."
 
 #: plugin/k3bprojectplugin.cpp:20
 #, kde-format
@@ -1693,7 +1672,7 @@ msgstr "Projekta spraudnis"
 #: projects/audiocd/k3baudiocdtrackreader.cpp:60
 #, kde-format
 msgid "Please insert Audio CD %1%2"
-msgstr "Lūdzu, ievietojiet Audio CD %1%2"
+msgstr "Ievietojiet Audio CD %1%2"
 
 #: projects/audiocd/k3baudiocdtracksource.cpp:201
 #, kde-format
@@ -1719,7 +1698,7 @@ msgstr "Neizdevās atvērt %1 rakstīšanai"
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
 msgid "Error while decoding track %1."
-msgstr "Kļūda dekodējot celiņu %1."
+msgstr "Kļūda, dekodējot celiņu %1."
 
 #: projects/audiocd/k3baudiojob.cpp:165
 #: projects/datacd/k3bdatapreparationjob.cpp:174
@@ -1729,8 +1708,8 @@ msgid ""
 "The following files could not be found. Do you want to remove them from the "
 "project and continue without adding them to the image?"
 msgstr ""
-"Neizdevās atrast šos failus. Vai vēlaties tos izņemt no projekta un "
-"turpināt, nepievienojot attēlam?"
+"Neizdevās atrast šīs datnes. Vai vēlaties tās izņemt no projekta un "
+"turpināt, nepievienojot diska attēlam?"
 
 #: projects/audiocd/k3baudiojob.cpp:168
 #: projects/datacd/k3bdatapreparationjob.cpp:138
@@ -1747,7 +1726,7 @@ msgstr "Brīdinājums"
 #: projects/mixedcd/k3bmixedjob.cpp:182
 #, kde-format
 msgid "Remove missing files and continue"
-msgstr "Izņemt trūkstošos failus un turpināt"
+msgstr "Izņemt trūkstošās datnes un turpināt"
 
 #: projects/audiocd/k3baudiojob.cpp:170
 #: projects/datacd/k3bdatapreparationjob.cpp:164
@@ -1761,7 +1740,7 @@ msgstr "Atcelt un atgriezties"
 #: projects/audiocd/k3baudiojob.cpp:188 projects/mixedcd/k3bmixedjob.cpp:201
 #, kde-format
 msgid "Please add files to your project first."
-msgstr "Lūdzu, vispirms pievienojiet projektam failus."
+msgstr "Lūdzu, vispirms projektam pievienojiet datnes."
 
 #: projects/audiocd/k3baudiojob.cpp:194
 #, kde-format
@@ -1776,12 +1755,12 @@ msgstr "Nosaka maksimālo rakstīšanas ātrumu"
 #: projects/audiocd/k3baudiojob.cpp:338
 #, kde-format
 msgid "Creating image files in %1"
-msgstr "Veido attēla failus mapē %1"
+msgstr "Veido attēla datnes mapē „%1“"
 
 #: projects/audiocd/k3baudiojob.cpp:339 projects/videocd/k3bvcdjob.cpp:182
 #, kde-format
 msgid "Creating image files"
-msgstr "Veido attēla failus"
+msgstr "Veido attēla datnes"
 
 #: projects/audiocd/k3baudiojob.cpp:351 projects/mixedcd/k3bmixedjob.cpp:320
 #, kde-format
@@ -1797,7 +1776,7 @@ msgstr "Rakstīšana atcelta."
 #: projects/audiocd/k3baudiojob.cpp:441 projects/mixedcd/k3bmixedjob.cpp:568
 #, kde-format
 msgid "Error while decoding audio tracks."
-msgstr "Kļūda dekodējot audio celiņus."
+msgstr "Kļūda, dekodējot audio celiņus."
 
 #: projects/audiocd/k3baudiojob.cpp:449
 #, kde-format
@@ -1863,7 +1842,7 @@ msgstr[2] " — %1 kopiju"
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
 msgid "Could not find normalize executable."
-msgstr "Neizdevās atrast normalizācijas izpildfailu."
+msgstr "Neizdevās atrast normalizācijas izpilddatni."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:74
 #, kde-format
@@ -1908,12 +1887,12 @@ msgstr "Neapstrādāts Audio CD attēls"
 #: projects/datacd/k3bbootitem.cpp:23
 #, kde-format
 msgid "El Torito Boot image"
-msgstr "El Torito sāknēšanās attēls"
+msgstr "„El Torito“ sāknēšanās attēls"
 
 #: projects/datacd/k3bdatadoc.cpp:1197 projects/videocd/k3bvcddoc.cpp:407
 #, kde-format
 msgid "Could not find the following files:"
-msgstr "Neizdevās atrast šādus failus:"
+msgstr "Neizdevās atrast šādas datnes:"
 
 #: projects/datacd/k3bdatadoc.cpp:1198 projects/videocd/k3bvcddoc.cpp:408
 #, kde-format
@@ -1923,7 +1902,7 @@ msgstr "Nav atrasts"
 #: projects/datacd/k3bdatadoc.cpp:1203
 #, kde-format
 msgid "No permission to read the following files:"
-msgstr "Nav atļaujas lasīt šos failus:"
+msgstr "Nav atļaujas lasīt šīs datnes:"
 
 #: projects/datacd/k3bdatadoc.cpp:1204
 #, kde-format
@@ -1938,7 +1917,7 @@ msgstr "No iepriekšējās sesijas"
 #: projects/datacd/k3bdatadoc.cpp:1485
 #, kde-format
 msgid "El Torito boot catalog file"
-msgstr "El Torito sāknēšanas kataloga fails"
+msgstr "„El Torito“ sāknēšanas kataloga datne"
 
 #: projects/datacd/k3bdatadoc.cpp:1486
 #, kde-format
@@ -1948,32 +1927,32 @@ msgstr "Sāknēšanās katalogs"
 #: projects/datacd/k3bdatajob.cpp:213
 #, kde-format
 msgid "Creating image file"
-msgstr "Veido attēla failu"
+msgstr "Veido attēla datni"
 
 #: projects/datacd/k3bdatajob.cpp:214
 #, kde-format
 msgid "Track 1 of 1"
-msgstr "Celiņš 1 no 1"
+msgstr "Pirmais celiņš no viena"
 
 #: projects/datacd/k3bdatajob.cpp:215
 #, kde-format
 msgid "Creating image file in %1"
-msgstr "Veido attēla failu mapē %1"
+msgstr "Veido attēla datni mapē „%1“"
 
 #: projects/datacd/k3bdatajob.cpp:373
 #, kde-format
 msgid "Image successfully created in %1"
-msgstr "Attēls veiksmīgi izveidots mapē %1"
+msgstr "Attēls veiksmīgi izveidots mapē „%1“"
 
 #: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:90
 #, kde-format
 msgid "Could not open file %1"
-msgstr "Neizdevās atvērt failu %1"
+msgstr "Neizdevās atvērt datni „%1“"
 
 #: projects/datacd/k3bdatajob.cpp:393
 #, kde-format
 msgid "Error while creating ISO image"
-msgstr "Kļūda veidojot ISO attēlu"
+msgstr "Kļūda, veidojot ISO attēlu"
 
 #: projects/datacd/k3bdatajob.cpp:694
 #, kde-format
@@ -1990,13 +1969,12 @@ msgstr "Gaida datu nesēju"
 #: projects/datacd/k3bdatajob.cpp:715
 #, kde-format
 msgid "Writing %1"
-msgstr "Raksta %1"
+msgstr "Raksta „%1“"
 
 #: projects/datacd/k3bdatajob.cpp:732
 #, kde-format
 msgid "Unable to determine the last track's datamode. Using default."
-msgstr ""
-"Neizdevās noteikt pēdējo celiņa datu režīmu. Tiks izmantots noklusētais."
+msgstr "Neizdevās noteikt pēdējo celiņa datu režīmu. Izmantos noklusēto."
 
 #: projects/datacd/k3bdatajob.cpp:826 projects/datacd/k3bdatajob.cpp:946
 #, kde-format
@@ -2004,15 +1982,14 @@ msgid "Writing mode ignored when writing %1 media."
 msgstr "Rakstīšanas režīms tiek ignorēts, rakstot %1 datu nesējos."
 
 #: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
-#, fuzzy, kde-format
-#| msgid "Growing ISO9660 filesystem on %1."
+#, kde-format
 msgid "Growing ISO 9660 filesystem on %1."
-msgstr "Veido ISO9660 failu sistēmu uz %1."
+msgstr "Veido ISO 9660 datņu sistēmu uz „%1“."
 
 #: projects/datacd/k3bdatajob.cpp:971
 #, kde-format
 msgid "Creating Data Image File"
-msgstr "Veido datu attēla failu"
+msgstr "Veido datu attēla datni"
 
 #: projects/datacd/k3bdatajob.cpp:975
 #, kde-format
@@ -2025,20 +2002,17 @@ msgid "Writing Multisession Project"
 msgstr "Raksta daudzsesiju projektu"
 
 #: projects/datacd/k3bdatajob.cpp:995
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem (Size: %2) – One copy"
-#| msgid_plural "ISO9660 Filesystem (Size: %2) – %1 copies"
+#, kde-format
 msgid "ISO 9660 Filesystem (Size: %2) – One copy"
 msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
-msgstr[0] "ISO9660 failu sistēma (izmērs: %2) — %1 kopija"
-msgstr[1] "ISO9660 failu sistēma (izmērs: %2) — %1 kopijas"
-msgstr[2] "ISO9660 failu sistēma (izmērs: %2) — %1 kopiju"
+msgstr[0] "ISO 9660 datņu sistēma (izmērs: %2) — %1 kopija"
+msgstr[1] "ISO 9660 datņu sistēma (izmērs: %2) — %1 kopijas"
+msgstr[2] "ISO 9660 datņu sistēma (izmērs: %2) — %1 kopiju"
 
 #: projects/datacd/k3bdatajob.cpp:1000
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem (Size: %1)"
+#, kde-format
 msgid "ISO 9660 Filesystem (Size: %1)"
-msgstr "ISO9660 failu sistēma (Izmērs: %1)"
+msgstr "ISO 9660 datņu sistēma (izmērs: %1)"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
 #, kde-format
@@ -2051,15 +2025,14 @@ msgid ""
 "No medium inserted or an empty medium in %1. Cannot continue multisession "
 "disk."
 msgstr ""
-"Ierīcē %1 ievietots tukšs datu nesējs vai arī tas nav ievietots vispār. "
+"Ierīcē „%1“ ievietots tukšs datu nesējs vai arī tas nav ievietots vispār. "
 "Nevar turpināt daudzsesiju disku."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
-#, fuzzy, kde-format
-#| msgid "Could not open Iso9660 filesystem in %1."
+#, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr "Neizdevās atvērt Iso9660 failu sistēmu mapē %1."
+msgstr "Neizdevās atvērt ISO 9660 datņu sistēmu mapē „%1“."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -2068,6 +2041,8 @@ msgid ""
 "Medium is not of multi-session type and does not contain ISO 9660. Cannot "
 "emulate multi-session on it."
 msgstr ""
+"Datu nesējs nav vairāku sesiju tipa un nesatur ISO 9660. Uz tā nevar emulēt "
+"vairāku sesiju darbu."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:92
 #, kde-format
@@ -2082,19 +2057,19 @@ msgid ""
 "have to be shortened but long filenames will not be available on Windows "
 "systems."
 msgstr ""
-"Daži failu nosaukumi ir jāsaīsina %1 rakstzīmju ierobežojuma dēļ Joliet "
-"paplašinājumā. Ja Joliet paplašinājums tiks izslēgts, faila nosaukumi nebūs "
-"jāsaīsina, bet garie failu nosaukumi nebūs pieejami Windows sistēmās."
+"Daži datņu nosaukumi ir jāsaīsina „Joliet“ paplašinājuma %1 rakstzīmju "
+"ierobežojuma dēļ. Ja „Joliet“ paplašinājumu izslēgsit, datnes nosaukumi "
+"nebūs jāsaīsina, bet garie datņu nosaukumi nebūs pieejami „Windows“ sistēmās."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:139
 #, kde-format
 msgid "Shorten Filenames"
-msgstr "Saīsināt failu nosaukumus"
+msgstr "Saīsināt datņu nosaukumus"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:140
 #, kde-format
 msgid "Disable Joliet extensions"
-msgstr "Izslēgt Joliet paplašinājumus"
+msgstr "Izslēgt „Joliet“ paplašinājumus"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:157
 #, kde-format
@@ -2105,15 +2080,15 @@ msgid ""
 "that. Do you want it to be cut or do you want to go back and change it "
 "manually?"
 msgstr ""
-"Joliet paplašinājumi, kuri ir nepieciešami garo vārdu atbalstam Windows "
-"sistēmās, ierobežo sējuma deskriptora garumu (failu sistēmas nosaukums) līdz "
-"%1 rakstzīmēm. Izvēlētais deskriptors '%2' ir garāks. Vai vēlaties saīsināt, "
-"vai arī atgriezties un izlabot?"
+"„Joliet“ paplašinājumi, kas ir nepieciešami garo vārdu atbalstam „Windows“ "
+"sistēmās, ierobežo sējuma deskriptora garumu (datņu sistēmas nosaukumu) līdz "
+"%1 rakstzīmēm. Izvēlētais deskriptors „%2“ ir garāks. Vai vēlaties to "
+"apgriezt līdz atļautam garumam, vai arī atgriezties un izlabot manuāli?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:163
 #, kde-format
 msgid "Cut volume descriptor in the Joliet tree"
-msgstr "Saīsināt sējuma deskriptoru Joliet kokā"
+msgstr "Nogriezt sējuma deskriptoru „Joliet“ kokā"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:195
 #, kde-format
@@ -2122,8 +2097,8 @@ msgid ""
 "added to the project. Do you want to continue without writing the symbolic "
 "links to the image?"
 msgstr ""
-"K3b nespēj izsekot mapju simboliskām saitēm pēc to pievienošanas projektam. "
-"Vai vēlaties turpināt, nerakstot simboliskās saites attēlā?"
+"„K3b„ nespēj izsekot mapju simboliskām saitēm pēc to pievienošanas "
+"projektam. Vai vēlaties turpināt, nerakstot simboliskās saites attēlā?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:200
 #, kde-format
@@ -2136,8 +2111,8 @@ msgid ""
 "Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
 "contain more than one backslash:"
 msgstr ""
-"Kļūdas dēļ mkisofs <= 1.15a40, K3b nevar apstrādāt failus, kuru ceļā atrodas "
-"vairāk par vienu otrādo slīpsvītru:"
+"Kļūdas dēļ „mkisofs“ <= 1.15a40, „K3b“ nevar apstrādāt datnes, kuru ceļā "
+"atrodas vairāk par vienu otrādo slīpsvītru:"
 
 #: projects/datacd/k3bisoimager.cpp:171 projects/k3bcdrdaowriter.cpp:770
 #: projects/k3bcdrecordwriter.cpp:910 projects/k3bcdrskinwriter.cpp:923
@@ -2148,29 +2123,26 @@ msgstr "%1 avarēja."
 #: projects/datacd/k3bisoimager.cpp:362
 #, kde-format
 msgid "Could not determine size of resulting image file."
-msgstr "Neizdevās noteikt ierakstāmā attēla faila izmēru."
+msgstr "Neizdevās noteikt ierakstāmā attēla datnes izmēru."
 
 #: projects/datacd/k3bisoimager.cpp:515
 #, kde-format
 msgid "No volume id specified. Using default."
-msgstr "Nav norādīts sējuma identifikātors. Tiek izmantots noklusētais."
+msgstr "Nav norādīts sējuma identifikators. Izmanto noklusējumu."
 
 #: projects/datacd/k3bisoimager.cpp:608
 #, kde-format
 msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
 msgstr ""
-"Atrasti faili, kuri ir lielāki par 4 GB. K3b nepieciešams vismaz %1, lai "
+"Atrastas datnes, kas ir lielākas par 4 GB. „K3b“ nepieciešams vismaz %1, lai "
 "turpinātu."
 
 #: projects/datacd/k3bisoimager.cpp:618
-#, fuzzy, kde-format
-#| msgid ""
-#| "Found files bigger than 2 GB. These files will only be fully accessible "
-#| "if mounted with UDF."
+#, kde-format
 msgid "Found files bigger than 2 GB. These files will be fully accessible."
 msgstr ""
-"Atrasti faili, kuri ir lielāki par 2 GB. Šie faili būs pieejami, tikai tad, "
-"ja montēti ar UDF."
+"Atrastas datnes, kas ir lielākas par 2 GB. Šīs datnes būs pieejamas, tikai "
+"tad, ja montētas ar UDF."
 
 #: projects/datacd/k3bisoimager.cpp:624
 #, kde-format
@@ -2180,103 +2152,102 @@ msgstr "Ieslēdz UDF paplašinājumu."
 #: projects/datacd/k3bisoimager.cpp:669
 #, kde-format
 msgid "Setting iso level to 3 to support files bigger than 4 GB."
-msgstr "Iestata iso līmeni uz 3, lai atbalstītu failus, kas lielāki par 4 GB."
+msgstr ""
+"Iestata „iso“ līmeni uz 3, lai atbalstītu datnes, kas ir lielākas par 4 GB."
 
 #: projects/datacd/k3bisoimager.cpp:761
 #, kde-format
 msgid "Could not follow link %1 to non-existing file %2. Skipping..."
-msgstr "Neizdevās izsekot saiti %1 uz neeksistējošu failu %2. Izlaiž..."
+msgstr "Neizdevās izsekot saitei „%1“ uz neeksistējošu datni „%2“. Izlaiž..."
 
 #: projects/datacd/k3bisoimager.cpp:765
 #, kde-format
 msgid ""
 "Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
-msgstr "Ignorē saiti %1 uz mapi %2. K3b nespēj izsekot mapju saites."
+msgstr ""
+"Ignorē saiti „%1“ uz mapi „%2“. „K3b“ nespēj izsekot saitēm, kas norāda uz "
+"mapēm."
 
 #: projects/datacd/k3bisoimager.cpp:773
 #, kde-format
 msgid "Could not find file %1. Skipping..."
-msgstr "Neizdevās atrast failu %1. Izlaiž to..."
+msgstr "Neizdevās atrast datni „%1“. Izlaiž to..."
 
 #: projects/datacd/k3bisoimager.cpp:777
 #, kde-format
 msgid "Could not read file %1. Skipping..."
-msgstr "Neizdevās nolasīt failu %1. Izlaiž to..."
+msgstr "Neizdevās nolasīt datni „%1“. Izlaiž to..."
 
 #: projects/datacd/k3bisoimager.cpp:830
 #, kde-format
 msgid "Failed to backup boot image file %1"
-msgstr "Neizdevās izveidot rezerves kopiju sāknēšanās attēla failam %1"
+msgstr "Neizdevās izveidot rezerves kopiju sāknēšanās attēla datnei „%1“"
 
 #: projects/datacd/k3bisoimager.cpp:990 projects/datacd/k3bisoimager.cpp:1000
 #: projects/datacd/k3bisoimager.cpp:1007 projects/datacd/k3bisoimager.cpp:1013
 #, kde-format
 msgid "Could not write temporary file"
-msgstr "Neizdevās ierakstīt pagaidu failā"
+msgstr "Neizdevās ierakstīt pagaidu datnē"
 
 #: projects/datacd/k3bisoimager.cpp:994
 #, kde-format
 msgid "No files to be written."
-msgstr "Nav failu, ko rakstīt."
+msgstr "Nav datņu, ko rakstīt."
 
 #: projects/datacd/k3bisooptions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Writing Data Project"
+#, kde-format
 msgctxt ""
 "This is the default volume identifier of a data project created by K3b. The "
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr "Raksta datu projektu"
+msgstr "„K3b“ datu projekts"
 
 #: projects/datacd/k3bmkisofshandler.cpp:65
 #, kde-format
 msgid "Mkisofs executable not found."
-msgstr "Nav atrasts mkisofs izpildfails."
+msgstr "Nav atrasts „mkisofs“ izpilddatne."
 
 #: projects/datacd/k3bmkisofshandler.cpp:79
 #, kde-format
 msgid "Read error from file '%1'"
-msgstr "Kļūda lasot failu '%1'"
+msgstr "Kļūda, lasot datni „%1“"
 
 #: projects/datacd/k3bmkisofshandler.cpp:84
 #, kde-format
 msgid "Used version of mkisofs does not have large file support."
-msgstr "Izmantotā mkisofs versija nesatur lielo failu atbalstu."
+msgstr "Izmantotā „mkisofs“ versija nesatur lielo datņu atbalstu."
 
 #: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
 msgid "Files bigger than 2 GB cannot be handled."
-msgstr "Nevarēs apstrādāt failus, kas lielāki pa 2 GB."
+msgstr "Nevar apstrādāt datnes, kas ir lielākas pa 2 GB."
 
 #: projects/datacd/k3bmkisofshandler.cpp:89
 #, kde-format
 msgid "No such file or directory '%1'."
-msgstr "Nav tādas mapes vai faila: '%1'."
+msgstr "Nav tādas mapes vai datnes: „%1“."
 
 #: projects/datacd/k3bmkisofshandler.cpp:104
 #, kde-format
 msgid "Encountered an incorrectly encoded filename '%1'"
-msgstr "Nepareizi kodēts faila nosaukums \"%1\""
+msgstr "Nepareizi kodēts datnes nosaukums „%1“"
 
 #: projects/datacd/k3bmkisofshandler.cpp:106
 #, kde-format
 msgid ""
 "This may be caused by a system update which changed the local character set."
 msgstr ""
-"To varēja izraisīt sistēmas atjaunināšanaa, kas izmainījusi sistēmas lokālo "
-"rakstzīmju kopu."
+"To varēja izraisīt sistēmas atjaunināšana, kas ir izmainījusi sistēmas "
+"lokālo rakstzīmju kopu."
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
-#, fuzzy, kde-format
-#| msgid ""
-#| "You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
-#| "encoding."
+#, kde-format
 msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr ""
-"Jūs varat izmantot convmv (http://j3e.de/linux/convmv/), lai salabotu failu "
+"Varat izmantot „convmv“ (http://j3e.de/linux/convmv/), lai salabotu datņu "
 "nosaukumu kodējumu."
 
 #: projects/datacd/k3bmkisofshandler.cpp:111
@@ -2287,12 +2258,12 @@ msgstr "Sāknēšanas attēlam ir nederīgs izmērs."
 #: projects/datacd/k3bmkisofshandler.cpp:115
 #, kde-format
 msgid "The boot image contains multiple partitions."
-msgstr "Sāknēšanas attēls satur vairākas partīcijas."
+msgstr "Sāknēšanas attēls satur vairākus nodalījumus."
 
 #: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
-msgstr "Cietā diska sāknēšanas attēlam ir jābūt ar vienu partīciju."
+msgstr "Cietā diska sāknēšanas attēlam ir jābūt ar vienu nodalījumu."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:43
 #, kde-format
@@ -2307,7 +2278,7 @@ msgstr "Neizdevās noteikt nākamo rakstāmo adresi."
 #: projects/datacd/k3bmsinfofetcher.cpp:171
 #, kde-format
 msgid "Could not start %1"
-msgstr "Neizdevās sākt %1"
+msgstr "Neizdevās sākt „%1“"
 
 #: projects/datacd/k3bmsinfofetcher.cpp:201
 #, kde-format
@@ -2317,7 +2288,7 @@ msgstr "Neizdevās no diska iegūt daudzsesiju informāciju."
 #: projects/datacd/k3bmsinfofetcher.cpp:202
 #, kde-format
 msgid "The disk is either empty or not appendable."
-msgstr "Disks ir tukšs vai nepapildināms."
+msgstr "Disks ir tukšs vai nav papildināms."
 
 #: projects/k3babstractwriter.cpp:44
 #, kde-format
@@ -2337,23 +2308,23 @@ msgstr "Izgrūž datu nesēju"
 #: projects/k3bcdrdaowriter.cpp:259
 #, kde-format
 msgid "Cdrdao %1 does not support disabling burnfree."
-msgstr "Cdrdao %1 neatbalsta burnfree atslēgšanu."
+msgstr "„Cdrdao“ %1 neatbalsta „burnfree“ izslēgšanu."
 
 #: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:298
 #: projects/k3bcdrskinwriter.cpp:306
 #, kde-format
 msgid "'Force unsafe operations' enabled."
-msgstr "'Piespiest nedrošas operācijas' ir ieslēgts."
+msgstr "„Piespiest nedrošas operācijas“ ir ieslēgts."
 
 #: projects/k3bcdrdaowriter.cpp:283
 #, kde-format
 msgid "Cdrdao %1 does not support overburning."
-msgstr "Cdrdao %1 neatbalsta pārierakstīšanu."
+msgstr "„Cdrdao“ %1 neatbalsta pārierakstīšanu."
 
 #: projects/k3bcdrdaowriter.cpp:486
 #, kde-format
 msgid "Could not backup tocfile."
-msgstr "Neizdevās izveidot rezerves kopiju tocfile failam."
+msgstr "Neizdevās izveidot rezerves kopiju „tocfile“ datnei."
 
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
@@ -2373,12 +2344,12 @@ msgstr "Gatavojas tukšošanai..."
 #: projects/k3bcdrdaowriter.cpp:559
 #, no-c-format, kde-format
 msgid "Starting DAO simulation at %1x speed..."
-msgstr "Sāk DAO imitāciju ar ātrumu %1x..."
+msgstr "Sāk DAO simulāciju ar ātrumu %1×..."
 
 #: projects/k3bcdrdaowriter.cpp:566
 #, no-c-format, kde-format
 msgid "Starting DAO writing at %1x speed..."
-msgstr "Sāk DAO rakstīšanu ar ātrumu %1x..."
+msgstr "Sāk DAO rakstīšanu ar ātrumu %1×..."
 
 #: projects/k3bcdrdaowriter.cpp:571
 #, kde-format
@@ -2393,12 +2364,12 @@ msgstr "Lasa"
 #: projects/k3bcdrdaowriter.cpp:578
 #, no-c-format, kde-format
 msgid "Starting simulation copy at %1x speed..."
-msgstr "Sāk kopēšanas imitāciju ar %1x ātrumu..."
+msgstr "Sāk kopēšanas simulāciju ar %1× ātrumu..."
 
 #: projects/k3bcdrdaowriter.cpp:584
 #, no-c-format, kde-format
 msgid "Starting copy at %1x speed..."
-msgstr "Sāk kopēšanu ar %1x ātrumu..."
+msgstr "Sāk kopēšanu ar %1× ātrumu..."
 
 #: projects/k3bcdrdaowriter.cpp:585
 #, kde-format
@@ -2421,14 +2392,14 @@ msgid ""
 "Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
 "to restore it from the backup %2."
 msgstr ""
-"Cdrdao kļūdas dēļ, toc/cue fails %1 ir dzēsts. K3b neizdevās to atjaunot no "
-"rezerves kopijas %2."
+"„Cdrdao“ kļūdas dēļ, „toc/cue“ datne „%1“ ir dzēsta. „K3b“ neizdevās to "
+"atjaunot no rezerves kopijas „%2“."
 
 #: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:787
 #: projects/k3bcdrskinwriter.cpp:800 projects/k3bgrowisofswriter.cpp:515
 #, kde-format
 msgid "Simulation successfully completed"
-msgstr "Imitācija veiksmīgi pabeigta"
+msgstr "Simulācija veiksmīgi pabeigta"
 
 #: projects/k3bcdrdaowriter.cpp:736
 #, kde-format
@@ -2455,23 +2426,23 @@ msgstr "Tukšošana veiksmīgi pabeigta"
 #: projects/k3bcdrskinwriter.cpp:806 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
-msgstr "Vidējais rakstīšanas ātrums: %1 KB/s (%2x)"
+msgstr "Vidējais rakstīšanas ātrums: %1 KB/s (%2×)"
 
 #: projects/k3bcdrdaowriter.cpp:761
 #, kde-format
 msgid "Please include the debugging output in your problem report."
-msgstr "Lūdzu, iekļaujiet atkļūdošanas izvadi savā problēmas aprakstā."
+msgstr "Lūdzu, savā problēmas aprakstā iekļaujiet atkļūdošanas izvadi."
 
 #: projects/k3bcdrdaowriter.cpp:788 projects/k3bcdrecordwriter.cpp:667
 #: projects/k3bcdrskinwriter.cpp:680
 #, no-c-format, kde-format
 msgid "Medium or burner does not support writing at %1x speed"
-msgstr "Datu nesējs vai rakstītājs neatbalsta rakstīšanu ar %1x ātrumu"
+msgstr "Datu nesējs vai rakstītājs neatbalsta rakstīšanu ar %1× ātrumu"
 
 #: projects/k3bcdrdaowriter.cpp:790
 #, no-c-format, kde-format
 msgid "Switching down burn speed to %1x"
-msgstr "Samazina rakstīšanas ātrumu uz %1x"
+msgstr "Samazina rakstīšanas ātrumu uz %1×"
 
 #: projects/k3bcdrdaowriter.cpp:820
 #, kde-format
@@ -2481,7 +2452,7 @@ msgstr "Veic enerģijas kalibrēšanu"
 #: projects/k3bcdrdaowriter.cpp:824
 #, kde-format
 msgid "Power calibration successful"
-msgstr "Enerģijas kalibrēšana veiksmīga"
+msgstr "Enerģijas kalibrēšana veikta"
 
 #: projects/k3bcdrdaowriter.cpp:825
 #, kde-format
@@ -2496,12 +2467,12 @@ msgstr "Iztukšo kešatmiņu"
 #: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
 msgid "Writing CD-Text lead-in..."
-msgstr "Raksta CD-TEXT ievadapgabalu..."
+msgstr "Raksta „CD-Text“ ievadapgabalu..."
 
 #: projects/k3bcdrdaowriter.cpp:837
 #, kde-format
 msgid "Turning BURN-Proof on"
-msgstr "Ieslēdz BURN-Proof"
+msgstr "Ieslēdz „BURN-Proof“"
 
 #: projects/k3bcdrdaowriter.cpp:845
 #, kde-format
@@ -2516,17 +2487,17 @@ msgstr "Atrasta starplaiks: %1"
 #: projects/k3bcdrdaowriter.cpp:862
 #, kde-format
 msgid "No cdrdao driver found."
-msgstr "Nav atrasts cdrdao draiveris."
+msgstr "Nav atrasts „cdrdao“ draiveris."
 
 #: projects/k3bcdrdaowriter.cpp:863
 #, kde-format
 msgid "Please select one manually in the device settings."
-msgstr "Lūdzu, manuāli norādiet to ierīces iestatījumos."
+msgstr "Norādiet to manuāli ierīces iestatījumos."
 
 #: projects/k3bcdrdaowriter.cpp:864
 #, kde-format
 msgid "For most current drives this would be 'generic-mmc'."
-msgstr "Lielākai daļai pašreizējo ierīču der 'generic-mmc'."
+msgstr "Lielākai daļai pašreizējo ierīču der „generic-mmc“."
 
 #: projects/k3bcdrdaowriter.cpp:873
 #, kde-format
@@ -2536,7 +2507,7 @@ msgstr "Ierīce nav gatava, gaida."
 #: projects/k3bcdrdaowriter.cpp:877
 #, kde-format
 msgid "Cue sheet not accepted."
-msgstr "Cue lapa nav pieņemta."
+msgstr "„Cue“ lapa nav pieņemta."
 
 #: projects/k3bcdrdaowriter.cpp:882 projects/k3bcdrecordwriter.cpp:611
 #: projects/k3bcdrskinwriter.cpp:624
@@ -2556,25 +2527,23 @@ msgstr "Dati neietilpst diskā."
 #, kde-format
 msgid "Enable overburning in the advanced K3b settings to burn anyway."
 msgstr ""
-"Aktivizējiet pārierakstīšanu paplašinātajos K3b iestatījumos, lai veiktu "
+"Aktivizējiet pārierakstīšanu paplašinātajos „K3b“ iestatījumos, lai veiktu "
 "rakstīšanu."
 
 #: projects/k3bcdrdaowriter.cpp:974
-#, fuzzy, kde-format
-#| msgid "Writing leadin "
+#, kde-format
 msgid "Writing leadin"
-msgstr "Raksta ievadapgabalu "
+msgstr "Raksta ievadapgabalu"
 
 #: projects/k3bcdrdaowriter.cpp:980
-#, fuzzy, kde-format
-#| msgid "Writing leadout "
+#, kde-format
 msgid "Writing leadout"
-msgstr "Raksta izvadapgabalu "
+msgstr "Raksta izvadapgabalu"
 
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
 msgid "Cdrecord version %1 does not support Blu-ray writing."
-msgstr "Cdrecord versija %1 neatbalsta Blu-ray rakstīšanu."
+msgstr "„Cdrecord“ versija %1 neatbalsta „Blu-ray“ rakstīšanu."
 
 #: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
 #, kde-format
@@ -2584,47 +2553,48 @@ msgstr "Rakstītājs neatbalsta disku uzreiz (DAO) rakstīšanu"
 #: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
 #, kde-format
 msgid "Writer does not support raw writing."
-msgstr "Rakstītājs neatbalsta raw rakstīšanu."
+msgstr "Rakstītājs neatbalsta „raw“ rakstīšanu."
 
 #: projects/k3bcdrecordwriter.cpp:273
 #, kde-format
 msgid "Cdrecord does not support writing %1 media."
-msgstr "Cdrecord neatbalsta rakstīšanu %1 datu nesējā."
+msgstr "„Cdrecord“ neatbalsta rakstīšanu „%1“ datu nesējā."
 
 #: projects/k3bcdrecordwriter.cpp:293 projects/k3bcdrskinwriter.cpp:301
 #, kde-format
 msgid "Writer does not support buffer underrun free recording (Burnfree)"
-msgstr "Rakstītājs neatbalsta bufera iztukšošanās brīvo rakstīšanu (Burnfree)"
+msgstr ""
+"Rakstītājs neatbalsta bufera iztukšošanās brīvo rakstīšanu („Burnfree“)"
 
 #: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
 #, kde-format
 msgid "Failed to write temporary file '%1'"
-msgstr "Neizdevās ierakstīt pagaidu failā '%1'"
+msgstr "Neizdevās ierakstīt pagaidu datnē „%1“"
 
 #: projects/k3bcdrecordwriter.cpp:349
 #, kde-format
 msgid "Cdrecord %1 does not support overburning."
-msgstr "Cdrecord %1 neatbalsta pārierakstīšanu."
+msgstr "„Cdrecord“ %1 neatbalsta pārierakstīšanu."
 
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr "Sāk imitāciju ar %1x ātrumu..."
+msgstr "Sāk imitāciju ar %1× ātrumu..."
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
-msgstr "Sāk %1 imitāciju ar %2x ātrumu..."
+msgstr "Sāk %1 simulāciju ar %2× ātrumu..."
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr "Sāk rakstīšanu ar %1x ātrumu..."
+msgstr "Sāk rakstīšanu ar %1× ātrumu..."
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
-msgstr "Sāk %1 rakstīšanu ar %2x ātrumu..."
+msgstr "Sāk %1 rakstīšanu ar %2× ātrumu..."
 
 #: projects/k3bcdrecordwriter.cpp:549 projects/k3bcdrskinwriter.cpp:561
 #: projects/k3bgrowisofswriter.cpp:428
@@ -2640,7 +2610,7 @@ msgstr "Nav atbalsta DAO (disku uzreiz) ierakstīšanai ar šo rakstītāju"
 #: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
-msgstr "Lūdzu, izvēlieties TAO (celiņu uzreiz) un mēģiniet atkal"
+msgstr "Izvēlieties TAO (celiņu uzreiz) un mēģiniet atkal"
 
 #: projects/k3bcdrecordwriter.cpp:582 projects/k3bcdrskinwriter.cpp:595
 #, kde-format
@@ -2676,12 +2646,12 @@ msgstr "Neizdevās nofiksēt disku."
 #: projects/k3bcdrecordwriter.cpp:671 projects/k3bcdrskinwriter.cpp:684
 #, no-c-format, kde-format
 msgid "Switching burn speed up to %1x"
-msgstr "Palielina rakstīšanas ātrumu uz %1x"
+msgstr "Palielina rakstīšanas ātrumu uz %1×"
 
 #: projects/k3bcdrecordwriter.cpp:674 projects/k3bcdrskinwriter.cpp:687
 #, no-c-format, kde-format
 msgid "Switching burn speed down to %1x"
-msgstr "Samazina rakstīšanas ātrumu uz %1x"
+msgstr "Samazina rakstīšanas ātrumu uz %1×"
 
 #: projects/k3bcdrecordwriter.cpp:686 projects/k3bcdrskinwriter.cpp:699
 #, kde-format
@@ -2722,12 +2692,12 @@ msgstr "Sūta CUE lapu"
 #: projects/k3bcdrecordwriter.cpp:721 projects/k3bcdrskinwriter.cpp:734
 #, kde-format
 msgid "Enabled Burnfree"
-msgstr "Ieslēgts Burnfree"
+msgstr "Ieslēgts „Burnfree“"
 
 #: projects/k3bcdrecordwriter.cpp:724 projects/k3bcdrskinwriter.cpp:737
 #, kde-format
 msgid "Disabled Burnfree"
-msgstr "Atslēgts Burnfree"
+msgstr "Atslēgts „Burnfree“"
 
 #: projects/k3bcdrecordwriter.cpp:730 projects/k3bcdrskinwriter.cpp:743
 #: projects/mixedcd/k3bmixedjob.cpp:555
@@ -2739,9 +2709,9 @@ msgstr "Neizdevās ievilkt diska turētāju"
 #, kde-format
 msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
-msgstr[0] "Burnfree tika izmantots %1 reizi."
-msgstr[1] "Burnfree tika izmantots %1 reizes."
-msgstr[2] "Burnfree tika izmantots %1 reižu."
+msgstr[0] "„Burnfree“ tika izmantots %1 reizi."
+msgstr[1] "„Burnfree“ tika izmantots %1 reizes."
+msgstr[2] "„Burnfree“ tika izmantots %1 reižu."
 
 #: projects/k3bcdrecordwriter.cpp:746 projects/k3bcdrskinwriter.cpp:759
 #, kde-format
@@ -2770,7 +2740,7 @@ msgstr "%1 nevarēja rezervēt koplietotās atmiņas segmentu pieprasītajā izm
 #: projects/k3bcdrecordwriter.cpp:824 projects/k3bcdrskinwriter.cpp:837
 #, kde-format
 msgid "Probably you chose a too large buffer size."
-msgstr "Iespējams, esat izvēlējies pārāk lielu bufera izmēru."
+msgstr "Iespējams, izvēlējāties pārāk lielu bufera izmēru."
 
 #: projects/k3bcdrecordwriter.cpp:827 projects/k3bcdrskinwriter.cpp:840
 #, kde-format
@@ -2828,7 +2798,7 @@ msgstr "%1 nav atļauju atvērt ierīci."
 #: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
 #, kde-format
 msgid "Modify device settings in K3b to solve this problem."
-msgstr "Izmainiet ierīces iestatījumus K3b, lai risinātu šo problēmu."
+msgstr "Izmainiet ierīces iestatījumus „K3b“, lai risinātu šo problēmu."
 
 #: projects/k3bcdrecordwriter.cpp:852 projects/k3bcdrskinwriter.cpp:865
 #, kde-format
@@ -2838,12 +2808,12 @@ msgstr "Iespējams, notika bufera iztukšošanās."
 #: projects/k3bcdrecordwriter.cpp:854 projects/k3bcdrskinwriter.cpp:867
 #, kde-format
 msgid "Please enable Burnfree or choose a lower burning speed."
-msgstr "Lūdzu, ieslēdziet Burnfree vai izvēlieties zemāku rakstīšanas ātrumu."
+msgstr "Ieslēdziet „Burnfree“ vai izvēlieties zemāku rakstīšanas ātrumu."
 
 #: projects/k3bcdrecordwriter.cpp:856 projects/k3bcdrskinwriter.cpp:869
 #, kde-format
 msgid "Please choose a lower burning speed."
-msgstr "Lūdzu, izvēlieties zemāku rakstīšanas ātrumu."
+msgstr "Izvēlieties zemāku rakstīšanas ātrumu."
 
 #: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrskinwriter.cpp:872
 #, kde-format
@@ -2855,7 +2825,7 @@ msgstr ""
 #: projects/k3bcdrskinwriter.cpp:873 projects/k3bcdrskinwriter.cpp:877
 #, kde-format
 msgid "Use the 'force unsafe operations' option to ignore this."
-msgstr "Izmantojiet 'piespiest nedrošas operācijas', lai apietu šo."
+msgstr "Izmantojiet „piespiest nedrošas operācijas“, lai apietu šo."
 
 #: projects/k3bcdrecordwriter.cpp:863 projects/k3bcdrskinwriter.cpp:876
 #, kde-format
@@ -2885,7 +2855,7 @@ msgstr "Dažas ierīces neatbalsta visus dzēšanas veidus."
 #: projects/k3bcdrecordwriter.cpp:879 projects/k3bcdrskinwriter.cpp:892
 #, kde-format
 msgid "Try again using 'Complete' erasing."
-msgstr "Mēģiniet vēlreiz, izmantojot 'Pilno' dzēšanu."
+msgstr "Mēģiniet vēlreiz, izmantojot „Pilno“ dzēšanu."
 
 #: projects/k3bcdrecordwriter.cpp:886
 #, kde-format
@@ -2893,21 +2863,21 @@ msgid ""
 "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
-"Kopš kodola versijas 2.6.8 cdrecorder nevar izmantot SCSI transportu, "
-"darbojoties suid root režīmā."
+"Kopš kodola versijas 2.6.8 „cdrecorder“ nevar izmantot SCSI transportu, "
+"darbojoties „suid root“ režīmā."
 
 #: projects/k3bcdrecordwriter.cpp:887 projects/k3bcdrskinwriter.cpp:900
 #, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr ""
-"Problēmas atrisināšanai, jūs varat izmantot K3b::Setup vai arī paši noņemiet "
-"suid bitu."
+"Problēmas atrisināšanai, varat izmantot „K3b::Setup“ vai arī manuāli "
+"noņemiet „suid“ bitu."
 
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
-msgstr "Ja jūs izmantojat neatjaunotu cdrecorder versiju..."
+msgstr "Ja izmantojat neatjaunotu „cdrecorder“ versiju..."
 
 #: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
 #, kde-format
@@ -2917,53 +2887,46 @@ msgstr "...un šī kļūda rodas arī ar augstas kvalitātes datu nesējiem..."
 #: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
-msgstr "...un, ja K3b FAQ nepalīdz,..."
+msgstr "...un, ja „K3b“ BUJ nepalīdz,..."
 
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
-msgstr "...lūdzu, iekļaujiet atkļūdošanas izvadu savā problēmas ziņojumā."
+msgstr "...lūdzu, savā problēmas ziņojumā iekļaujiet atkļūdošanas izvadi."
 
 #: projects/k3bcdrskinwriter.cpp:240
-#, fuzzy, kde-format
-#| msgid "Cdrecord version %1 does not support Blu-ray writing."
+#, kde-format
 msgid "Cdrskin version %1 does not support Blu-ray writing."
-msgstr "Cdrecord versija %1 neatbalsta Blu-ray rakstīšanu."
+msgstr "„Cdrskin“ versija %1 neatbalsta „Blu-ray“ rakstīšanu."
 
 #: projects/k3bcdrskinwriter.cpp:286
-#, fuzzy, kde-format
-#| msgid "Cdrecord does not support writing %1 media."
+#, kde-format
 msgid "Cdrskin does not support writing %1 media."
-msgstr "Cdrecord neatbalsta rakstīšanu %1 datu nesējā."
+msgstr "„Cdrskin“ neatbalsta rakstīšanu „%1“ datu nesējā."
 
 #: projects/k3bcdrskinwriter.cpp:361
-#, fuzzy, kde-format
-#| msgid "Cdrdao %1 does not support overburning."
+#, kde-format
 msgid "Cdrskin %1 does not support overburning."
-msgstr "Cdrdao %1 neatbalsta pārierakstīšanu."
+msgstr "„Cdrskin“ %1 neatbalsta pārierakstīšanu."
 
 #: projects/k3bcdrskinwriter.cpp:899
-#, fuzzy, kde-format
-#| msgid ""
-#| "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when "
-#| "running suid root anymore."
+#, kde-format
 msgid ""
 "Since kernel version 2.6.8 cdrskin cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
-"Kopš kodola versijas 2.6.8 cdrecorder nevar izmantot SCSI transportu, "
-"darbojoties suid root režīmā."
+"Kopš kodola versijas 2.6.8 „cdrskin“ nevar izmantot SCSI transportu, "
+"darbojoties „suid root“ režīmā."
 
 #: projects/k3bcdrskinwriter.cpp:911
-#, fuzzy, kde-format
-#| msgid "If you are running an unpatched cdrecord version..."
+#, kde-format
 msgid "If you are running an unpatched cdrskin version..."
-msgstr "Ja jūs izmantojat neatjaunotu cdrecorder versiju..."
+msgstr "Ja izmantojat neatjaunotu cdrskin versiju..."
 
 #: projects/k3bgrowisofshandler.cpp:72
 #, kde-format
 msgid "OPC failed. Please try writing speed 1x."
-msgstr "OPC neizdevās. Lūdzu, izmēģiniet rakstīšanas ātrumu 1x."
+msgstr "OPC neizdevās. Mēģiniet rakstīšanas ātrumu 1×."
 
 #: projects/k3bgrowisofshandler.cpp:99
 #, kde-format
@@ -3021,10 +2984,9 @@ msgid "Removing reference to lead-out."
 msgstr "Noņem norādes uz izvadapgabalu."
 
 #: projects/k3bgrowisofshandler.cpp:144
-#, fuzzy, kde-format
-#| msgid "Modifying ISO9660 volume descriptor"
+#, kde-format
 msgid "Modifying ISO 9660 volume descriptor"
-msgstr "Maina ISO9660 sējuma aprakstu"
+msgstr "Maina ISO 9660 sējuma aprakstu"
 
 #: projects/k3bgrowisofshandler.cpp:151
 #, kde-format
@@ -3052,8 +3014,8 @@ msgid ""
 "Please try another brand of media, preferably one explicitly recommended by "
 "your writer's vendor."
 msgstr ""
-"Lūdzu, mēģiniet cita ražotāja datu nesējus; vēlams to, kuru rekomendē jūsu "
-"rakstītāja ražotājs."
+"Mēģiniet cita ražotāja datu nesējus. Vēlams to, kuru rekomendē jūsu "
+"diskdziņa ražotājs."
 
 #: projects/k3bgrowisofshandler.cpp:217
 #, kde-format
@@ -3068,7 +3030,7 @@ msgstr "Neizdevās iestatīt rakstīšanas ātrumu."
 #: projects/k3bgrowisofshandler.cpp:229
 #, kde-format
 msgid "Please try again with the 'ignore speed' setting."
-msgstr "Lūdzu, mēģiniet atkal ar ieslēgtu 'Ignorēt ātrumu' iestatījumu."
+msgstr "Mēģiniet atkal ar ieslēgtu „Ignorēt ātrumu“ iestatījumu."
 
 #: projects/k3bgrowisofshandler.cpp:233
 #, kde-format
@@ -3081,8 +3043,8 @@ msgid ""
 "Try adding '-use-the-force-luke=noopc' to the growisofs user parameters in "
 "the K3b settings."
 msgstr ""
-"Mēģiniet pievienot '-use-the-force-luke=noopc' growisofs lietotāja "
-"parametros, kuri atrodas K3b iestatījumos."
+"Mēģiniet pievienot „-use-the-force-luke=noopc“ „growisofs“ lietotāja "
+"parametros, kas atrodas „K3b“ iestatījumos."
 
 #: projects/k3bgrowisofshandler.cpp:239
 #, kde-format
@@ -3092,19 +3054,19 @@ msgstr "Neizdevās iedalīt programmatūras buferi."
 #: projects/k3bgrowisofshandler.cpp:240
 #, kde-format
 msgid "This error is caused by the low memorylocked resource limit."
-msgstr "Šo kļūdu izraisa zems memorylocked resursa limits."
+msgstr "Šo kļūdu izraisa zems „memorylocked“ resursa limits."
 
 #: projects/k3bgrowisofshandler.cpp:241
 #, kde-format
 msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
-msgstr "To var atrisināt, izpildot komandu 'ulimit -l unlimited'..."
+msgstr "To var atrisināt, izpildot komandu „ulimit -l unlimited“..."
 
 #: projects/k3bgrowisofshandler.cpp:242
 #, kde-format
 msgid ""
 "...or by lowering the used software buffer size in the advanced K3b settings."
 msgstr ""
-"...vai arī samaziniet izmantojamo programmatūras bufera izmēru K3b "
+"...vai arī samaziniet izmantojamo programmatūras bufera izmēru „K3b“ "
 "iestatījumos."
 
 #: projects/k3bgrowisofshandler.cpp:246
@@ -3115,17 +3077,17 @@ msgstr "Rakstīšanas kļūda"
 #: projects/k3bgrowisofshandler.cpp:262
 #, kde-format
 msgid "Fatal error at startup: %1"
-msgstr "Fatāla kļūda uzsākot: %1"
+msgstr "Fatāla kļūda, uzsākot: %1"
 
 #: projects/k3bgrowisofshandler.cpp:270
 #, kde-format
 msgid "Warning at exit: (1)"
-msgstr "Brīdinājums beidzot: (1)"
+msgstr "Brīdinājums pabeidzot: (1)"
 
 #: projects/k3bgrowisofshandler.cpp:271
 #, kde-format
 msgid "Most likely mkisofs failed in some way."
-msgstr "Visdrīzāk, mkisofs nepareizi izgāja."
+msgstr "Visdrīzāk, „mkisofs“ nepareizi izgāja."
 
 #: projects/k3bgrowisofshandler.cpp:274
 #, kde-format
@@ -3135,7 +3097,8 @@ msgstr "Fatāla kļūda ierakstīšanas laikā: %1"
 #: projects/k3bgrowisofswriter.cpp:139
 #, kde-format
 msgid "Growisofs version %1 is too old. K3b needs at least version 5.10."
-msgstr "Growisofs versija%1 ir par vecu. K3b nepieciešama vismaz versija 5.10."
+msgstr ""
+"„Growisofs“ versija%1 ir par vecu. „K3b“ nepieciešama vismaz versija 5.10."
 
 #: projects/k3bgrowisofswriter.cpp:153
 #, kde-format
@@ -3143,18 +3106,18 @@ msgid ""
 "Growisofs version %1 does not feature a software buffer which may result in "
 "an unstable burn process."
 msgstr ""
-"Growisofs versija %1 neatbalsta programmatūras buferi, kā rezultātā var "
+"„Growisofs“ versija %1 neatbalsta programmatūras buferi, kā rezultātā var "
 "pazemināties ierakstīšanas procesa stabilitāte."
 
 #: projects/k3bgrowisofswriter.cpp:212
 #, kde-format
 msgid "Could not open file %1."
-msgstr "Neizdevās atvērt failu %1."
+msgstr "Neizdevās atvērt datni „%1“."
 
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
 msgid "Starting simulation..."
-msgstr "Sāk imitāciju..."
+msgstr "Sāk simulāciju..."
 
 #: projects/k3bgrowisofswriter.cpp:363
 #, kde-format
@@ -3164,43 +3127,42 @@ msgstr "Sāk rakstīšanu diskā..."
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
 msgid "Creating audio image files in %1"
-msgstr "Veido audio attēla failu mapē %1"
+msgstr "Veido audio attēla datņu mapē „%1“"
 
 #: projects/mixedcd/k3bmixedjob.cpp:280 projects/mixedcd/k3bmixedjob.cpp:494
 #, kde-format
 msgid "Creating audio image files"
-msgstr "Veido audio attēla failus"
+msgstr "Veido audio attēla datnes"
 
 #: projects/mixedcd/k3bmixedjob.cpp:468
 #, kde-format
 msgid "Error while creating ISO image."
-msgstr "Kļūda veidojot ISO attēlu."
+msgstr "Kļūda, veidojot ISO attēlu."
 
 #: projects/mixedcd/k3bmixedjob.cpp:483
 #, kde-format
 msgid "ISO image successfully created."
-msgstr "ISO attēls veiksmīgi izveidots."
+msgstr "ISO attēls ir veiksmīgi izveidots."
 
 #: projects/mixedcd/k3bmixedjob.cpp:584
 #, kde-format
 msgid "Audio images successfully created."
-msgstr "Audio attēls veiksmīgi izveidots."
+msgstr "Audio attēls ir veiksmīgi izveidots."
 
 #: projects/mixedcd/k3bmixedjob.cpp:877
 #, kde-format
 msgid "Writing track %1 of %2 (%3)"
-msgstr "Raksta %1 celiņu no %2 (%3)"
+msgstr "Raksta %1. celiņu no %2 (%3)"
 
 #: projects/mixedcd/k3bmixedjob.cpp:880
-#, fuzzy, kde-format
-#| msgid "ISO9660 data"
+#, kde-format
 msgid "ISO 9660 data"
-msgstr "ISO9660 dati"
+msgstr "ISO 9660 dati"
 
 #: projects/mixedcd/k3bmixedjob.cpp:986
 #, kde-format
 msgid "Simulating second session"
-msgstr "Imitē otro sesiju"
+msgstr "Simulē otro sesiju"
 
 #: projects/mixedcd/k3bmixedjob.cpp:988
 #, kde-format
@@ -3215,7 +3177,7 @@ msgstr "Raksta otro sesiju"
 #: projects/mixedcd/k3bmixedjob.cpp:994
 #, kde-format
 msgid "Simulating first session"
-msgstr "Imitē pirmo sesiju"
+msgstr "Simulē pirmo sesiju"
 
 #: projects/mixedcd/k3bmixedjob.cpp:996
 #, kde-format
@@ -3230,37 +3192,37 @@ msgstr "Raksta pirmo sesiju"
 #: projects/mixedcd/k3bmixedjob.cpp:1076
 #, kde-format
 msgid "Creating ISO image file"
-msgstr "Veido ISO attēla failu"
+msgstr "Veido ISO attēla datni"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1077 projects/mixedcd/k3bmixedjob.cpp:1078
 #, kde-format
 msgid "Creating ISO image in %1"
-msgstr "Veido ISO attēlu mapē %1"
+msgstr "Veido ISO attēlu mapē „%1“"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1118
 #, kde-format
 msgid "Removing buffer files."
-msgstr "Dzēš bufera failus."
+msgstr "Dzēš bufera datnes."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1123
 #, kde-format
 msgid "Could not delete file %1."
-msgstr "Neizdevās izdzēst failu %1."
+msgstr "Neizdevās izdzēst datni „%1“."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1231
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "Sistēmā neatrada ieinstalētu „cdrecord“."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1235
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
-msgstr "TAO režīmā nav iespējams rakstīt CD-TEXT. Mēģiniet DAO vai RAW."
+msgstr "TAO režīmā nav iespējams rakstīt „CD-Text“. Mēģiniet DAO vai RAW."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1332
 #, kde-format
 msgid "Writing Enhanced Audio CD"
-msgstr "Raksta Enhanced Audio CD"
+msgstr "Raksta „Enhanced Audio CD“"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1337
 #, kde-format
@@ -3268,39 +3230,36 @@ msgid "Writing Mixed Mode CD"
 msgstr "Raksta jauktā režīma CD"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1347
-#, fuzzy, kde-format
-#| msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
-#| msgid "1 track (%2 minutes audio data, %3 ISO9660 data)"
-#| msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO9660 data)"
+#, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
 msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
-msgstr[0] "%1 celiņš (%2 minūtes audio datu, %3 ISO9660 datu)"
-msgstr[1] "%1 celiņi (%2 minūtes audio datu, %3 ISO9660 datu)"
-msgstr[2] "%1 celiņu (%2 minūtes audio datu, %3 ISO9660 datu)"
+msgstr[0] "%1 celiņš (%2 minūtes audio datu, %3 ISO 9660 datu)"
+msgstr[1] "%1 celiņi (%2 minūtes audio datu, %3 ISO 9660 datu)"
+msgstr[2] "%1 celiņu (%2 minūtes audio datu, %3 ISO 9660 datu)"
 
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
 msgid "Enter New Filename"
-msgstr "Ievadiet jaunu faila nosaukumu"
+msgstr "Ievadiet jaunu datnes nosaukumu"
 
 #: projects/movixcd/k3bmovixdoc.cpp:83
 #, kde-format
 msgid "A file with that name already exists. Please enter a new name:"
-msgstr "Fails ar tādu nosaukumu jau eksistē. Lūdzu, ievadiet jaunu nosaukumu:"
+msgstr "Datne ar tādu nosaukumu jau pastāv. Lūdzu, ievadiet jaunu nosaukumu:"
 
 #: projects/movixcd/k3bmovixdoc.cpp:175
 #, kde-format
 msgid ""
 "Could not rename subtitle file. File with requested name %1 already exists."
 msgstr ""
-"Neizdevās pārdēvēt subtitru failu. Fails ar pieprasīto nosaukumu %1 jau "
-"eksistē."
+"Neizdevās pārdēvēt subtitru datni. Datne ar pieprasīto nosaukumu „%1“ jau "
+"pastāv."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:125
 #, kde-format
 msgid "Could not find a valid eMovix installation."
-msgstr "Neizdevās atrast derīgu eMovix instalāciju."
+msgstr "Neizdevās atrast derīgu „eMovix“ instalāciju."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:199
 #: projects/movixcd/k3bmovixprogram.cpp:180
@@ -3328,20 +3287,20 @@ msgstr "nekas"
 #: projects/movixcd/k3bmovixjob.cpp:105
 #, kde-format
 msgid "Writing eMovix Project"
-msgstr "Raksta eMovix projektu"
+msgstr "Raksta „eMovix“ projektu"
 
 #: projects/movixcd/k3bmovixjob.cpp:107
 #, kde-format
 msgid "Writing eMovix Project (%1)"
-msgstr "Raksta eMovix projektu (%1)"
+msgstr "Raksta „eMovix“ projektu (%1)"
 
 #: projects/movixcd/k3bmovixjob.cpp:113
 #, kde-format
 msgid "One file (%2) and about 8 MB eMovix data"
 msgid_plural "%1 files (%2) and about 8 MB eMovix data"
-msgstr[0] "%1 fails (%2) un aptuveni 8 MB eMovix datu"
-msgstr[1] "%1 faili (%2) un aptuveni 8 MB eMovix datu"
-msgstr[2] "%1 failu (%2) un aptuveni 8 MB eMovix datu"
+msgstr[0] "%1 datne (%2) un aptuveni 8 MB „eMovix“ datu"
+msgstr[1] "%1 datnes (%2) un aptuveni 8 MB „eMovix“ datu"
+msgstr[2] "%1 datņu (%2) un aptuveni 8 MB „eMovix“ datu"
 
 #: projects/movixcd/k3bmovixjob.cpp:117
 #, kde-format
@@ -3357,8 +3316,8 @@ msgid ""
 "K3b will create a %1 image from the given MPEG files, but these files must "
 "already be in %1 format. K3b does not yet resample MPEG files."
 msgstr ""
-"K3b izveidos %1 attēlu no dotajiem MPEG failiem, bet failiem jau jābūt %1 "
-"formātā. K3b pagaidām nepārveido MPEG failus."
+"„K3b“ izveidos %1 attēlu no dotajām MPEG datnēm, bet datnēm jau jābūt %1 "
+"formātā. „K3b“ pagaidām nepārveido MPEG datnes."
 
 #: projects/videocd/k3bvcddoc.cpp:205
 #, kde-format
@@ -3399,14 +3358,14 @@ msgid ""
 "Please start a new Project for this filetype.\n"
 "Resample not implemented in K3b yet."
 msgstr ""
-"Jūs nevarat jaukt kopā MPEG1 un MPEG2 video failus.\n"
-"Lūdzu, sāciet jaunu projektu šim failu tipam.\n"
-"K3b pagaidām nepārveido video failus."
+"Jūs nevarat jaukt kopā MPEG1 un MPEG2 video datnes.\n"
+"Lūdzu, sāciet jaunu projektu šim datņu tipam.\n"
+"„K3b“ pagaidām nepārveido video datnes."
 
 #: projects/videocd/k3bvcddoc.cpp:235
 #, kde-format
 msgid "Wrong File Type for This Project"
-msgstr "Nepareizs faila tips šim projektam"
+msgstr "Nepareizs datnes tips šim projektam"
 
 #: projects/videocd/k3bvcddoc.cpp:246
 #, kde-format
@@ -3415,68 +3374,63 @@ msgid ""
 "Video players cannot reach Segments (MPEG Still Pictures) without Playback "
 "control."
 msgstr ""
-"Ieslēgta atskaņošanas kontrole.\n"
+"Ieslēgta atskaņošanas kontrole (PBC).\n"
 "Video atskaņotāji nevar sasniegt segmentus (MPEG attēlus) bez atskaņošanas "
 "kontroles."
 
 #: projects/videocd/k3bvcddoc.cpp:278
 #, kde-format
 msgid "Only MPEG1 and MPEG2 video files are supported.\n"
-msgstr "Tiek atbalstīti tikai MPEG1 un MPEG2 video faili.\n"
+msgstr "Atbalsta tikai MPEG1 un MPEG2 video datnes.\n"
 
 #: projects/videocd/k3bvcddoc.cpp:279
 #, kde-format
 msgid "Wrong File Format"
-msgstr "Nepareizs faila formāts"
+msgstr "Nepareizs datnes formāts"
 
 #: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:469
 #, kde-format
 msgid "Removing Binary file %1"
-msgstr "Dzēš bināru failu %1"
+msgstr "Dzēš bināru datni  „%1“"
 
 #: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format
 msgid "Removing Cue file %1"
-msgstr "Dzēš cue failu %1"
+msgstr "Dzēš „cue“ datni „%1“"
 
 #: projects/videocd/k3bvcdjob.cpp:174
 #, kde-format
 msgid "Could not write correct XML file."
-msgstr "Neizdevās uzrakstīt korektu XML failu."
+msgstr "Neizdevās rakstīt korektu XML datni."
 
 #: projects/videocd/k3bvcdjob.cpp:190
-#, fuzzy, kde-format
-#| msgid "Creating Cue/Bin files ..."
+#, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr "Veido cue/bin fails..."
+msgstr "Veido „Cue/Bin“ datnes..."
 
 #: projects/videocd/k3bvcdjob.cpp:195
-#, fuzzy, kde-format
-#| msgid "To create Video CDs you have to install VcdImager Version %1."
+#, kde-format
 msgid "To create Video CDs you have to install VcdImager version %1."
-msgstr "Lai izveidotu Video CD, jums nepieciešama VcdImager versija %1."
+msgstr "Lai izveidotu video CD, jums nepieciešama „VcdImager“ versija %1."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"Varat to atrast savā distributīvā vai lejupielādēt no http://www.vcdimager."
-"org"
+"Varat to atrast savā distributīvā vai lejupielādēt no https://www.gnu.org/"
+"software/vcdimager"
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
-msgstr "%1 izpildfails ir pārāk vecs: nepieciešama versija %2 vai augstāka."
+msgstr "„%1“ izpilddatne ir pārāk veca: nepieciešama versija %2 vai augstāka."
 
 #: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
 msgid "Scanning video file %1 of %2 (%3)"
-msgstr "Skenē %1. video failu no %2 (%3)"
+msgstr "Skenē %1. video datni no %2 (%3)"
 
 #: projects/videocd/k3bvcdjob.cpp:323
 #, kde-format
@@ -3486,7 +3440,7 @@ msgstr "Veido attēlu %1. celiņam"
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
-msgstr "Cue/Bin faili veiksmīgi izveidoti."
+msgstr "„Cue/Bin“ datnes ir veiksmīgi izveidotas."
 
 #: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
@@ -3510,7 +3464,7 @@ msgid ""
 "Consider enabling the 'update scan offsets' option, if it is not enabled "
 "already."
 msgstr ""
-"Apsveriet iespēju ieslēgt opciju 'Atjaunināt skenēšanas nobīdes', ja tā nav "
+"Apsveriet iespēju ieslēgt opciju „Atjaunināt skenēšanas nobīdes“, ja tā nav "
 "ieslēgta."
 
 #: projects/videocd/k3bvcdjob.cpp:525
@@ -3534,29 +3488,29 @@ msgstr "Slikta pakete pie #%1 (straumes bitu nobīde %2)"
 #, kde-format
 msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
-msgstr[0] "Palikušais %1 straumes bits tiek ignorēts."
-msgstr[1] "Palikušie %1 straumes biti tiek ignorēti."
-msgstr[2] "Palikušie %1 straumes biti tiek ignorēti."
+msgstr[0] "Palikušo %1 straumes bitu ignorē."
+msgstr[1] "Palikušos %1 straumes bitus ignorē."
+msgstr[2] "Palikušos %1 straumes bitus ignorē."
 
 #: projects/videocd/k3bvcdjob.cpp:543
 #, kde-format
 msgid "An unknown number of remaining stream bytes will be ignored."
-msgstr "Nezināms skaits palikušo straumes bitu tiks ignorēti."
+msgstr "Nezināmu skaitu palikušo straumes bitu ignorēs."
 
 #: projects/videocd/k3bvcdjob.cpp:552
 #, kde-format
 msgid "Writing Video CD (Version 1.1)"
-msgstr "Raksta video CD (Versija 1.1)"
+msgstr "Raksta video CD (versija 1.1)"
 
 #: projects/videocd/k3bvcdjob.cpp:554
 #, kde-format
 msgid "Writing Video CD (Version 2.0)"
-msgstr "Raksta video CD (Versija 2.0)"
+msgstr "Raksta video CD (versija 2.0)"
 
 #: projects/videocd/k3bvcdjob.cpp:556
 #, kde-format
 msgid "Writing Super Video CD"
-msgstr "Raksta Super Video CD"
+msgstr "Raksta „Super Video CD“"
 
 #: projects/videocd/k3bvcdjob.cpp:558
 #, kde-format
@@ -3674,7 +3628,7 @@ msgstr "aptverošā skaņa"
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:59
 #, kde-format
 msgid "File %1 is empty."
-msgstr "Fails %1 ir tukšs."
+msgstr "Datne „%1“ ir tukšs."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:93
 #, kde-format
@@ -3683,7 +3637,7 @@ msgid ""
 "was required."
 msgstr ""
 "Izskatās pēc vienkāršas video straumes, bet nepieciešama multipleksēta "
-"programas straume."
+"programmas straume."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:98
 #, kde-format
@@ -3692,7 +3646,7 @@ msgid ""
 "was required."
 msgstr ""
 "Izskatās pēc vienkāršas audio straumes, bet nepieciešama multipleksēta "
-"programas straume."
+"programmas straume."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:103
 #, kde-format
@@ -3701,48 +3655,44 @@ msgid ""
 "required."
 msgstr ""
 "Izskatās pēc vienkāršas RIFF galvenes straumes, bet nepieciešama vienkārša "
-"multipleksēta programas straume."
+"multipleksēta programmas straume."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:97
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create temporary folder '%1'."
+#, kde-kuit-format
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
-msgstr "Neizdevās izveidot pagaidu mapi '%1'."
+msgstr "Nespēj izveidot, nederīga pagaidu datne <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:105
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create temporary folder '%1'."
+#, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
-msgstr "Neizdevās izveidot pagaidu mapi '%1'."
+msgstr "Nespēj izveidot pagaidu datni <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:112
-#, fuzzy, kde-kuit-format
-#| msgid "Found invalid entry in the VIDEO_TS folder (%1)."
+#, kde-kuit-format
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
-msgstr "VIDEO_TS mapē (%1) atrasts nederīgs ieraksts."
+msgstr "VIDEO_TS mapē <filename>%1</filename> atrasts nederīgs ieraksts."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:120
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to link temporary file in folder %1."
+#, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
-msgstr "Neizdevās izveidot mapē %1 saiti uz pagaidu mapi."
+msgstr "Neizdevās izveidot mapē <filename>%1</filename> saiti uz pagaidu mapi."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
 msgid "The project does not contain all necessary Video DVD files."
-msgstr "Projekts nesatur visus nepieciešamos Video DVD failus."
+msgstr "Projekts nesatur visus nepieciešamos Video DVD datnes."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."
 msgstr ""
-"Ierakstītais DVD, visdrīzāk, nebūs atskaņojams uz Hifi DVD atskaņotāja."
+"Ierakstītais DVD, visdrīzāk, nebūs atskaņojams uz „Hifi DVD“ atskaņotāja."
 
 #: projects/videodvd/k3bvideodvdjob.cpp:43
 #, kde-format
 msgid "Creating Video DVD Image File"
-msgstr "Veido video DVD attēla failu"
+msgstr "Veido video DVD attēla datni"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:46
 #, kde-format
@@ -3750,10 +3700,9 @@ msgid "Writing Video DVD"
 msgstr "Raksta video DVD"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:56
-#, fuzzy, kde-format
-#| msgid "ISO9660/Udf Filesystem (Size: %1)"
+#, kde-format
 msgid "ISO 9660/Udf Filesystem (Size: %1)"
-msgstr "ISO9660/Udf failu sistēma (izmērs: %1)"
+msgstr "ISO 9660/Udf datņu sistēma (izmērs: %1)"
 
 #: tools/k3bcddb.cpp:37
 #, kde-format
@@ -3764,7 +3713,7 @@ msgstr "Atrasti vairāki CDDB ieraksti"
 #, kde-format
 msgid "K3b found multiple or inexact CDDB entries. Please select one."
 msgstr ""
-"K3b atrada vairākus vai neprecīzus CDDB ierakstus. Lūdzu, izvēlieties vienu."
+"„K3b“ atrada vairākus vai neprecīzus CDDB ierakstus. Izvēlieties vienu."
 
 #: tools/k3bdevicemodel.cpp:132
 #, kde-format
@@ -3779,17 +3728,17 @@ msgstr "Ierīces izvēle"
 #: tools/k3bdeviceselectiondialog.cpp:39
 #, kde-format
 msgid "Please select a device:"
-msgstr "Lūdzu, izvēlieties ierīci:"
+msgstr "Izvēlieties ierīci:"
 
 #: tools/k3bmd5job.cpp:83
 #, kde-format
 msgid "Could not find file %1"
-msgstr "Neizdevās atrast failu %1"
+msgstr "Neizdevās atrast datni „%1“"
 
 #: tools/k3bmd5job.cpp:228
 #, kde-format
 msgid "Error while reading from file %1"
-msgstr "Kļūda lasot no faila %1"
+msgstr "Kļūda lasot no datnes „%1“"
 
 #: tools/k3bmediacache.cpp:126 tools/k3bmediacache.cpp:367
 #, kde-format
@@ -3819,12 +3768,12 @@ msgstr "Video CD"
 #: tools/k3bmedium.cpp:326
 #, kde-format
 msgid "Appendable Data %1"
-msgstr "Pievienojami dati %1"
+msgstr "Pievienojami dati „%1“"
 
 #: tools/k3bmedium.cpp:329
 #, kde-format
 msgid "Complete Data %1"
-msgstr "Pabeigti dati %1"
+msgstr "Pabeigti dati „%1“"
 
 #: tools/k3bmedium.cpp:333
 #, kde-format
@@ -3888,7 +3837,7 @@ msgctxt ""
 "To be shown when a DVD or Blu-ray is required but another type of medium is "
 "inserted."
 msgid "DVD or Blu-ray"
-msgstr ""
+msgstr "DVD vai „Blu-ray“"
 
 #: tools/k3bmedium.cpp:598
 #, kde-format
@@ -3896,177 +3845,168 @@ msgctxt ""
 "To be shown when a Blu-ray is required but another type of medium is "
 "inserted."
 msgid "Blu-ray"
-msgstr ""
+msgstr "Blu-ray"
 
 #: tools/k3bmedium.cpp:600
-#, fuzzy, kde-format
-#| msgid "VCD"
+#, kde-format
 msgctxt ""
 "To be shown when a CD is required but another type of medium is inserted."
 msgid "CD"
-msgstr "VCD"
+msgstr "CD"
 
 #: tools/k3bmedium.cpp:602
-#, fuzzy, kde-format
-#| msgid "VCD"
+#, kde-format
 msgctxt ""
 "To be shown when a DVD is required but another type of medium is inserted."
 msgid "DVD"
-msgstr "VCD"
+msgstr "DVD"
 
 #: tools/k3bmedium.cpp:604
 #, kde-format
 msgctxt ""
 "To be shown when a DVD-DL is required but another type of medium is inserted."
 msgid "DVD-DL"
-msgstr ""
+msgstr "DVD-DL"
 
 #: tools/k3bmedium.cpp:608
-#, fuzzy, kde-format
-#| msgid "Please insert a rewritable medium"
+#, kde-format
 msgid "rewritable medium"
-msgstr "Lūdzu, ievietojiet pārrakstāmu datu nesēju"
+msgstr "pārrakstāms datu nesējs"
 
 #: tools/k3bmedium.cpp:611
 #, kde-format
 msgctxt "%1 is type of medium (e.g. DVD)"
 msgid "rewritable %1"
-msgstr ""
+msgstr "pārrakstāms %1"
 
 #: tools/k3bmedium.cpp:616
-#, fuzzy, kde-format
-#| msgid "Please insert a suitable medium"
+#, kde-format
 msgctxt ""
 "To be shown when a specific type of medium is required but another type of "
 "medium is inserted."
 msgid "suitable medium"
-msgstr "Lūdzu, ievietojiet piemērotu datu nesēju"
+msgstr "piemērots datu nesējs"
 
 #: tools/k3bmedium.cpp:618
 #, kde-format
 msgid "Medium in %1 is not a %2."
-msgstr ""
+msgstr "%1 datu nesējs nav %2."
 
 #: tools/k3bmedium.cpp:623
-#, fuzzy, kde-format
-#| msgid "Empty"
+#, kde-format
 msgctxt "To be shown when an empty medium is required"
 msgid "empty"
-msgstr "Tukšs"
+msgstr "tukšs"
 
 #: tools/k3bmedium.cpp:625
-#, fuzzy, kde-format
-#| msgid "Please insert an empty or appendable medium"
+#, kde-format
 msgctxt "To be shown when an empty or appendable medium is required"
 msgid "empty or appendable"
-msgstr "Lūdzu, ievietojiet tukšu vai papildināmu datu nesēju"
+msgstr "tukšs vai papildināms"
 
 #: tools/k3bmedium.cpp:627
 #, kde-format
 msgctxt "To be shown when an non-empty medium is required"
 msgid "non-empty"
-msgstr ""
+msgstr "nav tukšs"
 
 #: tools/k3bmedium.cpp:629
 #, kde-format
 msgctxt "To be shown when the state of the inserted medium is not suitable."
 msgid "suitable"
-msgstr ""
+msgstr "piemērots"
 
 #: tools/k3bmedium.cpp:631
 #, kde-format
 msgid "Medium in %1 is not %2."
-msgstr ""
+msgstr "„%1“ datu nesējs nav %2."
 
 #: tools/k3bmedium.cpp:634
 #, kde-format
 msgid "Capacity of the medium in %1 is smaller than required."
-msgstr ""
+msgstr "„%1“ datu nesēja ietilpība ir mazāka par nepieciešamo."
 
 #: tools/k3bmedium.cpp:683
 #, kde-format
 msgid "Please insert an empty medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet tukšu datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:685
 #, kde-format
 msgid "Please insert an empty medium"
-msgstr "Lūdzu, ievietojiet tukšu datu nesēju"
+msgstr "Ievietojiet tukšu datu nesēju"
 
 #: tools/k3bmedium.cpp:690
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
-msgstr ""
-"Lūdzu, ievietojiet tukšu DVD vai Blu-ray datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu DVD vai „Blu-ray“ datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:692
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium"
-msgstr "Lūdzu, ievietojiet tukšu DVD vai Blu-ray datu nesēju"
+msgstr "Ievietojiet tukšu DVD vai „Blu-ray“ datu nesēju"
 
 #: tools/k3bmedium.cpp:696
 #, kde-format
 msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet tukšu Blu-ray datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu „Blu-ray“ datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:698
 #, kde-format
 msgid "Please insert an empty Blu-ray medium"
-msgstr "Lūdzu, ievietojiet tukšu Blu-ray datu nesēju"
+msgstr "Ievietojiet tukšu „Blu-ray“ datu nesēju"
 
 #: tools/k3bmedium.cpp:702
 #, kde-format
 msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet tukšu CD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu CD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:704
 #, kde-format
 msgid "Please insert an empty CD medium"
-msgstr "Lūdzu, ievietojiet tukšu CD datu nesēju"
+msgstr "Ievietojiet tukšu CD datu nesēju"
 
 #: tools/k3bmedium.cpp:708
 #, kde-format
 msgid "Please insert an empty DVD medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet tukšu DVD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu DVD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:710
 #, kde-format
 msgid "Please insert an empty DVD medium"
-msgstr "Lūdzu, ievietojiet tukšu DVD datu nesēju"
+msgstr "Ievietojiet tukšu DVD datu nesēju"
 
 #: tools/k3bmedium.cpp:714
 #, kde-format
 msgid "Please insert an empty DVD-DL medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet tukšu DVD-DL datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu DVD-DL datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:716
 #, kde-format
 msgid "Please insert an empty DVD-DL medium"
-msgstr "Lūdzu, ievietojiet tukšu DVD-DL datu nesēju"
+msgstr "Ievietojiet tukšu DVD-DL datu nesēju"
 
 #: tools/k3bmedium.cpp:720
 #, kde-format
 msgid ""
 "Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
 msgstr ""
-"Lūdzu, ievietojiet tukšu datu nesēju, ar izmēru %1 vai lielāku, ierīcē<p><b>"
-"%2</b>"
+"Ievietojiet tukšu datu nesēju, ar izmēru %1 vai lielāku, ierīcē<p><b>%2</b>"
 
 #: tools/k3bmedium.cpp:723
 #, kde-format
 msgid "Please insert an empty medium of size %1 or larger"
-msgstr "Lūdzu, ievietojiet tukšu datu nesēju, ar izmēru %1 vai lielāku"
+msgstr "Ievietojiet tukšu datu nesēju, ar izmēru %1 vai lielāku"
 
 #: tools/k3bmedium.cpp:729
 #, kde-format
 msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
-msgstr ""
-"Lūdzu, ievietojiet tukšu vai papildināmu datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu vai papildināmu datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:731
 #, kde-format
 msgid "Please insert an empty or appendable medium"
-msgstr "Lūdzu, ievietojiet tukšu vai papildināmu datu nesēju"
+msgstr "Ievietojiet tukšu vai papildināmu datu nesēju"
 
 #: tools/k3bmedium.cpp:735
 #, kde-format
@@ -4074,156 +4014,152 @@ msgid ""
 "Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
 "%1</b>"
 msgstr ""
-"Lūdzu, ievietojiet tukšu vai papildināmu DVD vai Blu-ray datu nesēju "
-"ierīcē<p><b>%1</b>"
+"Ievietojiet tukšu vai papildināmu DVD vai „Blu-ray“ datu nesēju ierīcē<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:737
 #, kde-format
 msgid "Please insert an empty or appendable DVD or Blu-ray medium"
-msgstr "Lūdzu, ievietojiet tukšu vai papildināmu DVD vai Blu-ray datu nesēju"
+msgstr "Ievietojiet tukšu vai papildināmu DVD vai „Blu-ray“ datu nesēju"
 
 #: tools/k3bmedium.cpp:741
 #, kde-format
 msgid ""
 "Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
 msgstr ""
-"Lūdzu, ievietojiet tukšu vai papildināmu Blu-ray datu nesēju ierīcē<p><b>%1</"
-"b>"
+"Ievietojiet tukšu vai papildināmu „Blu-ray“ datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:743
 #, kde-format
 msgid "Please insert an empty or appendable Blu-ray medium"
-msgstr "Lūdzu, ievietojiet tukšu vai papildināmu Blu-ray datu nesēju"
+msgstr "Ievietojiet tukšu vai papildināmu „Blu-ray“ datu nesēju"
 
 #: tools/k3bmedium.cpp:747
 #, kde-format
 msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
-msgstr ""
-"Lūdzu, ievietojiet tukšu vai papildināmu CD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu vai papildināmu CD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:749
 #, kde-format
 msgid "Please insert an empty or appendable CD medium"
-msgstr "Lūdzu, ievietojiet tukšu vai papildināmu CD datu nesēju"
+msgstr "Ievietojiet tukšu vai papildināmu CD datu nesēju"
 
 #: tools/k3bmedium.cpp:753
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
-msgstr ""
-"Lūdzu, ievietojiet tukšu vai papildināmu DVD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet tukšu vai papildināmu DVD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:755
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium"
-msgstr "Lūdzu, ievietojiet tukšu vai papildināmu DVD datu nesēju"
+msgstr "Ievietojiet tukšu vai papildināmu DVD datu nesēju"
 
 #: tools/k3bmedium.cpp:759
 #, kde-format
 msgid ""
 "Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
 msgstr ""
-"Lūdzu, ievietojiet tukšu vai papildināmu DVD-DL datu nesēju ierīcē<p><b>%1</"
-"b>"
+"Ievietojiet tukšu vai papildināmu DVD-DL datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:761
 #, kde-format
 msgid "Please insert an empty or appendable DVD-DL medium"
-msgstr "Lūdzu, ievietojiet tukšu vai papildināmu DVD-DL datu nesēju"
+msgstr "Ievietojiet tukšu vai papildināmu DVD-DL datu nesēju"
 
 #: tools/k3bmedium.cpp:767
 #, kde-format
 msgid "Please insert a non-empty medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet netukšu datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet ne tukšu datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:769
 #, kde-format
 msgid "Please insert a non-empty medium"
-msgstr "Lūdzu, ievietojiet netukšu datu nesēju"
+msgstr "Ievietojiet ne tukšu datu nesēju"
 
 #: tools/k3bmedium.cpp:773
 #, kde-format
 msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet netukšu pārrakstāmu datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet ne tukšu pārrakstāmu datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:775
 #, kde-format
 msgid "Please insert a non-empty rewritable medium"
-msgstr "Lūdzu, ievietojiet netukšu pārrakstāmu datu nesēju"
+msgstr "Ievietojiet ne tukšu pārrakstāmu datu nesēju"
 
 #: tools/k3bmedium.cpp:781
 #, kde-format
 msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet pārrakstāmu datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet pārrakstāmu datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:783
 #, kde-format
 msgid "Please insert a rewritable medium"
-msgstr "Lūdzu, ievietojiet pārrakstāmu datu nesēju"
+msgstr "Ievietojiet pārrakstāmu datu nesēju"
 
 #: tools/k3bmedium.cpp:789 tools/k3bmedium.cpp:835
 #, kde-format
 msgid "Please insert a suitable medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet piemērotu datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet piemērotu datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:791 tools/k3bmedium.cpp:837
 #, kde-format
 msgid "Please insert a suitable medium"
-msgstr "Lūdzu, ievietojiet piemērotu datu nesēju"
+msgstr "Ievietojiet piemērotu datu nesēju"
 
 #: tools/k3bmedium.cpp:804
 #, kde-format
 msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet Video CD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet video CD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:806
 #, kde-format
 msgid "Please insert a Video CD medium"
-msgstr "Lūdzu, ievietojiet Video CD datu nesēju"
+msgstr "Ievietojiet Video CD datu nesēju"
 
 #: tools/k3bmedium.cpp:810
 #, kde-format
 msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet Video CD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet video CD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:812
 #, kde-format
 msgid "Please insert a Video DVD medium"
-msgstr "Lūdzu, ievietojiet Video CD datu nesēju"
+msgstr "Ievietojiet Video CD datu nesēju"
 
 #: tools/k3bmedium.cpp:816
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet jaukto CD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet jaukto CD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:818
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium"
-msgstr "Lūdzu, ievietojiet jaukto CD datu nesēju"
+msgstr "Ievietojiet jaukto CD datu nesēju"
 
 #: tools/k3bmedium.cpp:822
 #, kde-format
 msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet Audio CD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet audio CD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:824
 #, kde-format
 msgid "Please insert an Audio CD medium"
-msgstr "Lūdzu, ievietojiet Audio CD datu nesēju"
+msgstr "Ievietojiet audio CD datu nesēju"
 
 #: tools/k3bmedium.cpp:828
 #, kde-format
 msgid "Please insert a Data medium into drive<p><b>%1</b>"
-msgstr "Lūdzu, ievietojiet datu CD datu nesēju ierīcē<p><b>%1</b>"
+msgstr "Ievietojiet datu CD datu nesēju ierīcē<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:830
 #, kde-format
 msgid "Please insert a Data medium"
-msgstr "Lūdzu, ievietojiet datu CD datu nesēju"
+msgstr "Ievietojiet datu CD datu nesēju"
 
 #: tools/k3bstdguiitems.cpp:19
 #, kde-format
 msgid "Simulate"
-msgstr "Imitēt"
+msgstr "Simulēt"
 
 #: tools/k3bstdguiitems.cpp:20
 #, kde-format
@@ -4233,15 +4169,15 @@ msgid ""
 "speed or whether your system is able to write on-the-fly.<p><b>Caution:</b> "
 "DVD+R(W) does not support simulated writing."
 msgstr ""
-"<p>Ieslēdzot šo iespēju, K3b veiks visus rakstīšanas soļus ar atslēgtu "
+"<p>Ieslēdzot šo iespēju, „K3b“ veiks visus rakstīšanas soļus ar izslēgtu "
 "lāzeri.<p>Tas ir noderīgi, ja vēlaties pārbaudīt lielākus rakstīšanas "
 "ātrumus, vai sistēmas spēju rakstīt tūlītēji.<p><b>Uzmanību:</b> DVD+R(W) "
-"neatbalsta rakstīšanas imitēšanu."
+"neatbalsta rakstīšanas simulēšanu."
 
 #: tools/k3bstdguiitems.cpp:25
 #, kde-format
 msgid "Only simulate the writing process"
-msgstr "Imitēt tikai rakstīšanas procesu"
+msgstr "Simulēt tikai rakstīšanas procesu"
 
 #: tools/k3bstdguiitems.cpp:31
 #, kde-format
@@ -4256,10 +4192,10 @@ msgid ""
 "where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
 "seconds are only supported in DAO mode."
 msgstr ""
-"<p>Ieslēdzot šo opciju, K3b rakstīs CD \"disku uzreiz\" režīmā nevis "
-"\"celiņu uzreiz\" (TAO).<p>Kad vien iespējams, ir ieteicams izmantot DAO."
-"<p><b>Uzmanību:</b> celiņa starplaiks no 2 sekundēm atšķirīgā garumā tiek "
-"atbalstīts tikai DAO režīmā."
+"<p>Ieslēdzot šo opciju, „K3b“ rakstīs CD „disku uzreiz“ režīmā nevis „celiņu "
+"uzreiz“ (TAO).<p>Kad vien iespējams, ir ieteicams izmantot DAO."
+"<p><b>Uzmanību:</b> celiņa starplaiks no divām sekundēm atšķirīgā garumā "
+"tiek atbalstīts tikai DAO režīmā."
 
 #: tools/k3bstdguiitems.cpp:37
 #, kde-format
@@ -4269,13 +4205,13 @@ msgstr "Rakstīt disku uzreiz režīmā"
 #: tools/k3bstdguiitems.cpp:43
 #, kde-format
 msgid "Use Burnfree"
-msgstr "Izmantot Burnfree"
+msgstr "Izmantot „Burnfree“"
 
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
 msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
 msgstr ""
-"Ieslēgt Burnfree (vai Just Link), lai izvairītos no bufera iztukšošanās"
+"Ieslēgt „Burnfree“ (vai „Just Link“), lai izvairītos no bufera iztukšošanās"
 
 #: tools/k3bstdguiitems.cpp:45
 #, kde-format
@@ -4293,17 +4229,17 @@ msgid ""
 "<em>Burnproof</em>, but has since been renamed when it became part of the "
 "MMC standard."
 msgstr ""
-"<p>Ieslēdzot šo opciju, K3b ieslēdz<em>Burnfree</em> (vai <em>Just Link</"
+"<p>Ieslēdzot šo opciju, „K3b“ ieslēdz<em>Burnfree</em> (vai <em>Just Link</"
 "em>). Tā ir CD rakstītāja iespēja izvairīties no bufera iztukšošanās.<p>Bez "
 "<em>burnfree</em>, ja rakstītājs vairs nevar iegūt datus, notiks "
 "iztukšošanās, jo rakstītājam ir nepieciešama nepārtraukta rakstāmo datu "
 "straume.<p>Ar <em>burnfree</em> rakstītājs var <em>atzīmēt</em> pašreizējo "
 "lāzera pozīciju un atgriezties atpakaļ, kad buferis atkal ir aizpildīts. "
 "Bet, to lietojot, rodas nelielas atstarpes uz diska,<b>tāpēc vienmēr ir ļoti "
-"iesakāms izvēlēties pareizu rakstīšanas ātrumu, lai izvairītos no burnfree "
+"iesakāms izvēlēties pareizu rakstīšanas ātrumu, lai izvairītos no „burnfree“ "
 "lietošanas, it īpaši ar audio CD</b> (sliktākajā gadījumā būs dzirdama "
 "atstarpe).<p><em>Burnfree</em> iepriekš bija pazīstams kā <em>Burnproff</"
-"em>, bet tika pārdēvāts, kad kļuva par MMC standartu."
+"em>, bet tika pārdēvēts, kad kļuva par MMC standartu."
 
 #: tools/k3bstdguiitems.cpp:64
 #, kde-format
@@ -4317,9 +4253,9 @@ msgid ""
 "actual writing.<p>The image can later be written to a CD/DVD with most "
 "current writing programs (including K3b of course)."
 msgstr ""
-"<p>Ieslēdzot šo iespēju, K3b tikai izveidos attēlu un neveiks rakstīšanu."
-"<p>Attēlu vēlāk var ierakstīt uz CD/DVD ar rakstīšanas programmu (protams, "
-"ieskaitot arī K3b)."
+"<p>Ieslēdzot šo iespēju, „K3b“ tikai izveidos attēlu, bet neveiks rakstīšanu."
+"<p>Attēlu vēlāk var ierakstīt CD/DVD diskā ar rakstīšanas programmu "
+"(protams, ieskaitot arī „K3b“)."
 
 #: tools/k3bstdguiitems.cpp:69
 #, kde-format
@@ -4340,15 +4276,16 @@ msgid ""
 "writing on-the-fly should work on most systems, make sure the data is sent "
 "to the writer fast enough."
 msgstr ""
-"<p>Ja ieslēgta šī opcija, K3b izveidos attēlu, pirms rakstīs failus uz CD/"
-"DVD. Pretējā gadījumā dati tiks rakstīti <em>tūlītēji</em> , t.i., netiks "
-"veids starpattēls.<p><b>Uzmanību:</b> lai arī tūlītējā rakstīšana strādā ar "
-"vairumu sistēmu, pārliecinieties, ka dati rakstītājam tiek sūtīti gana ātri."
+"<p>Ja ir ieslēgta šī opcija, „K3b“ izveidos attēlu, pirms rakstīs datnes uz "
+"CD/DVD diska. Pretējā gadījumā datus rakstīs <em>tūlītēji</em> , proti, "
+"netiks veids starpattēls.<p><b>Uzmanību:</b> lai arī tūlītējā rakstīšana "
+"strādā ar vairumu sistēmu, pārliecinieties, ka sistēma datus rakstītājam "
+"sūta gana ātri."
 
 #: tools/k3bstdguiitems.cpp:81 tools/k3bstdguiitems.cpp:103
 #, kde-format
 msgid "<p>It is recommended to try a simulation first."
-msgstr "<p>Ieteicams sākumā izmēģināt imitāciju."
+msgstr "<p>Ieteicams sākumā izmēģināt simulāciju."
 
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
@@ -4366,7 +4303,7 @@ msgid ""
 "<p>If this option is checked, K3b will remove any created images after the "
 "writing has finished.<p>Uncheck this if you want to keep the images."
 msgstr ""
-"<p>Ieslēdzot šo iespēju, K3b automātiski dzēsīs izveidoto attēlu, kad "
+"<p>Ieslēdzot šo iespēju, „K3b“ automātiski dzēsīs izveidoto attēlu, kad "
 "rakstīšana būs pabeigta.<p>Neatzīmējiet, ja vēlaties paturēt attēlu."
 
 #: tools/k3bstdguiitems.cpp:92
@@ -4386,37 +4323,27 @@ msgid ""
 "the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
 "work on most systems, make sure the data is sent to the writer fast enough."
 msgstr ""
-"<p>Ja ieslēgta šī opcija, K3b neveidos attēlu, bet rakstīs failus tieši uz "
-"CD/DVD.<p><b>Uzmanību:</b> lai arī tam jāstrādā ar vairumu sistēmu, "
+"<p>Ja ieslēgta šī opcija, „K3b“ neveidos attēlu, bet rakstīs datnes tieši CD/"
+"DVD diskā.<p><b>Uzmanību:</b> lai arī tam jāstrādā ar vairumu sistēmu, "
 "pārliecinieties, ka dati rakstītājam tiek sūtīti gana ātri."
 
 #: tools/k3bstdguiitems.cpp:104
 #, kde-format
 msgid "Write files directly to CD/DVD without creating an image"
-msgstr "Rakstīt failus tiešo uz CD/DVD, bez attēla veidošanas"
+msgstr "Rakstīt datnes tieši CD/DVD diskā bez attēla veidošanas"
 
 #: tools/k3bstdguiitems.cpp:110
-#, fuzzy, kde-format
-#| msgid "Write CD-TEXT"
+#, kde-format
 msgid "Write CD-Text"
-msgstr "Rakstīt CD-TEXT"
+msgstr "Rakstīt „CD-Text“"
 
 #: tools/k3bstdguiitems.cpp:111
-#, fuzzy, kde-format
-#| msgid "Create CD-TEXT entries"
+#, kde-format
 msgid "Create CD-Text entries"
-msgstr "Izveidot CD-TEXT ierakstus"
+msgstr "Izveidot „CD-Text“ ierakstus"
 
 #: tools/k3bstdguiitems.cpp:112
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b uses some otherwise-unused space on the "
-#| "audio CD to store additional information, such as the artist's name, or "
-#| "the CD title.<p>CD-TEXT is an extension to the audio CD standard "
-#| "introduced by Sony.<p>CD-TEXT will only be usable on CD players that "
-#| "support this extension (mostly car CD players).<p>Since a CD-TEXT-"
-#| "enhanced CD will work in any CD player it is never a bad idea to enable "
-#| "this (if you specify CD-TEXT data.)"
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b uses some otherwise-unused space on the "
 "audio CD to store additional information, such as the artist's name, or the "
@@ -4426,13 +4353,13 @@ msgid ""
 "in any CD player it is never a bad idea to enable this (if you specify CD-"
 "Text data.)"
 msgstr ""
-"<p>Ja atzīmēta šī opcija, K3b izmantos nelielu, parasti nelietotu, vietu uz "
-"audio CD, lai saglabātu papildu informāciju, piemēram, par mākslinieku vai "
-"CD nosaukumu.<p>CD-TEXT ir paplašinājums audio CD standartam, ko ieviesa "
-"Sony.<p>CD-TEXT būs pieejams tikai uz tiem audio atskaņotājiem, kuri "
-"atbalsta šo paplašinājumu (galvenokārt automagnetolas).<p>CD-TEXT uzlabotie "
-"audio CD darbosies uz jebkura CD atskaņotāja, tāpēc šo iespēju var droši "
-"ieslēgt (ja ir norādīti CD-TEXT dati)."
+"<p>Ja ir atzīmēta šī opcija, „K3b“ izmantos nelielu, parasti nelietotu, "
+"vietu uz audio CD, lai saglabātu papildu informāciju, piemēram, par "
+"mākslinieku vai CD nosaukumu.<p>„CD-Text“ ir paplašinājums audio CD "
+"standartam, ko ieviesa „Sony“.<p>„CD-Text“ būs pieejams tikai uz tiem audio "
+"atskaņotājiem, kuri atbalsta šo paplašinājumu (galvenokārt automagnetolas)."
+"<p>„CD-Text“ uzlabotie audio CD darbosies uz jebkura CD atskaņotāja, tāpēc "
+"šo iespēju var droši ieslēgt (ja ir norādīti „CD-Text“ dati)."
 
 #: tools/k3bstdguiitems.cpp:131
 #, kde-format
@@ -4472,7 +4399,7 @@ msgid ""
 "temporary table of contents.</p><p>This allows further sessions to be "
 "appended to the CD later.</p>"
 msgstr ""
-"<p>Ieslēdzot šo iespēju, K3b neaizvērs CD un ierakstīs pagaidu satura "
+"<p>Ieslēdzot šo iespēju, „K3b“ neaizvērs CD un ierakstīs pagaidu satura "
 "rādītāju.</p><p>Tas ļaus vēlāk pievienot diskam papildu sesijas.</p>"
 
 #: tools/k3bstdguiitems.cpp:155
@@ -4494,10 +4421,11 @@ msgid ""
 "greatly from song to song.<p><b>Be aware that K3b currently does not support "
 "normalizing when writing on the fly.</b>"
 msgstr ""
-"<p>Ieslēdzot šo iespēju, K3b pielāgos skaļumu visiem celiņiem uz standarta "
+"<p>Ieslēdzot šo iespēju, „K3b“ pielāgos skaļumu visiem celiņiem uz standarta "
 "līmeni. Tas ir noderīgi, ja veidojat jauktu albumu ar audio no dažādiem "
 "albumiem, kur skaļums starp dziesmām var jūtami svārstīties.<p><b>Ņemiet "
-"vērā, ka pagaidām K3b neatbalsta normalizāciju rakstot uz diska tūlītēji.</b>"
+"vērā, ka pagaidām „K3b“ neatbalsta normalizāciju rakstot uz diska tūlītēji.</"
+"b>"
 
 #: tools/k3bstdguiitems.cpp:169
 #, kde-format
@@ -4516,7 +4444,7 @@ msgid ""
 "will compare the original source data with the written data to verify that "
 "the disk has been written correctly."
 msgstr ""
-"<p>Ieslēdzot šo iespēju, pēc veiksmīgas ierakstīšanas K3b salīdzinās "
+"<p>Ieslēdzot šo iespēju, pēc veiksmīgas ierakstīšanas „K3b“ salīdzinās "
 "oriģinālā avota datus ar ierakstītajiem datiem, lai pārbaudītu, vai disks "
 "ierakstīts pareizi."
 
@@ -4538,9 +4466,10 @@ msgid ""
 "<p>Since audio CD Player are able to interpolate small errors in the data it "
 "is no problem to let K3b skip unreadable sectors."
 msgstr ""
-"<p>Ieslēdzot šo iespēju, K3b, nespējot nolasīt audio sektoru no avota CD, to "
-"aizvietos ar nullēm. <p>Audio CD atskaņotāji ir spējīgi izlīdzināt mazas "
-"kļūdas datos un nenolasāmo datu izlaišana nerada atskaņošanas problēmas."
+"<p>Ieslēdzot šo iespēju, „K3b“, nespējot nolasīt audio sektoru no avota "
+"kompaktdiska, to aizvietos ar nullēm. <p>Audio kompaktdisku atskaņotāji ir "
+"spējīgi izlīdzināt mazas kļūdas datos un nenolasāmo datu izlaišana nerada "
+"atskaņošanas problēmas."
 
 #: videodvd/k3bvideodvd.cpp:292
 #, kde-format

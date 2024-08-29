@@ -6,19 +6,20 @@
 # Maris Nartiss <maris.kde@gmail.com>, 2007.
 # Viesturs Zarins <viesturs.zarins@mii.lu.lv>, 2008.
 # Einars Sprugis <einars8@gmail.com>, 2012.
+# SPDX-FileCopyrightText: 2024 Toms Trasuns <toms.trasuns@posteo.net>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3bdevice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2012-01-25 14:30+0200\n"
-"Last-Translator: Einars Sprugis <einars8@gmail.com>\n"
+"PO-Revision-Date: 2024-08-23 16:31+0300\n"
+"Last-Translator: Toms Trasuns <toms.trasuns@posteo.net>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
 "Language: lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
 "2);\n"
 
@@ -183,15 +184,13 @@ msgid "Sequential Recording + POW"
 msgstr "Secīga ierakstīšana + POW"
 
 #: k3bdeviceglobals.cpp:93
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "no writing mode"
 msgid "None"
 msgstr "Nekas"
 
 #: k3bdeviceglobals.cpp:102
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "unknown medium type"
 msgid "Unknown"
 msgstr "Nezināms"
@@ -257,8 +256,7 @@ msgid "BD-R Random (RRM)"
 msgstr "BD-R jaukta (RRM)"
 
 #: k3bdeviceglobals.cpp:174
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "unknown medium state"
 msgid "Unknown"
 msgstr "Nezināms"
