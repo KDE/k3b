@@ -10,6 +10,7 @@
 # Jannick Kuhr <opensource@kuhr.org>, 2009.
 # Markus Slopianka <markus.s@kdemail.net>, 2009, 2010.
 # Panagiotis Papadopoulos <pano_90@gmx.net>, 2009, 2010.
+# SPDX-FileCopyrightText: 2024 Frank Steinmetzger <dev-kde@felsenfleischer.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
@@ -5133,7 +5134,7 @@ msgstr "Die folgenden Programme können nicht aktualisiert werden:"
 #: option/k3bexternalbinwidget.cpp:248
 #, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Die Aktion kann nicht ausgeführt werden<br/> %1"
+msgstr "Die folgende Aktion kann nicht ausgeführt werden:<br/> %1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
@@ -8391,7 +8392,7 @@ msgstr "Der Ordner „%1“ lässt sich nicht erzeugen."
 #: projects/k3bprojectburndialog.cpp:252
 #, kde-format
 msgid "Writing"
-msgstr "Wird geschrieben"
+msgstr "Schreiben"
 
 #: projects/k3bprojectburndialog.cpp:295
 #, kde-format
