@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-08-14 00:32+0330\n"
+"PO-Revision-Date: 2024-09-06 22:32+0330\n"
 "Last-Translator: Mohi Mirdamadi <mohi.pub@gmail.com>\n"
 "Language-Team: fa\n"
 "Language: fa\n"
@@ -4174,7 +4174,7 @@ msgstr ""
 #: option/base_k3bmiscoptiontab.ui:63
 #, kde-format
 msgid "System"
-msgstr "سیستم"
+msgstr "سامانه"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSystemConfig)
 #: option/base_k3bmiscoptiontab.ui:69
@@ -5564,7 +5564,7 @@ msgstr ""
 #: projects/base_k3bdataimagesettings.ui:44
 #, fuzzy, kde-format
 msgid "File System"
-msgstr "سیستم &پرونده:‌"
+msgstr "سامانه &پرونده:‌"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboFilesystems)
 #: projects/base_k3bdataimagesettings.ui:56
@@ -5808,7 +5808,7 @@ msgstr ""
 #: projects/base_k3bdatavolumedescdialog.ui:303
 #, fuzzy, kde-format
 msgid "Sys&tem:"
-msgstr "سیستم"
+msgstr "سامانه"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: projects/base_k3bmovixoptionswidget.ui:18
@@ -6552,7 +6552,7 @@ msgstr ""
 #: projects/k3bmovixburndialog.cpp:55 projects/k3bvideodvdburndialog.cpp:50
 #, kde-format
 msgid "Filesystem"
-msgstr "سیستم پرونده‌ها"
+msgstr "سامانه پرونده‌ها"
 
 #: projects/k3bdataburndialog.cpp:142 projects/k3bmixedburndialog.cpp:82
 #: projects/k3bmovixburndialog.cpp:90
@@ -8099,7 +8099,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:450
 #, fuzzy, kde-format
 msgid "System:"
-msgstr "سیستم"
+msgstr "سامانه"
 
 #: projects/k3bvcdburndialog.cpp:451
 #, fuzzy, kde-format
