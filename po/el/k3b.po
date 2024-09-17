@@ -1464,7 +1464,7 @@ msgstr "Δημιουργία ενός νέου έργου eMovix"
 #: k3b.cpp:352
 #, kde-format
 msgid "New V&ideo DVD Project"
-msgstr "Νέο β&ίντεο DVD"
+msgstr "Νέο &βίντεο DVD"
 
 #: k3b.cpp:353
 #, kde-format

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-12 00:38+0000\n"
-"PO-Revision-Date: 2024-08-20 15:07+0200\n"
+"PO-Revision-Date: 2024-09-03 08:48+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 24.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -508,7 +508,7 @@ msgstr "Nastavení kvality"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:48
 #, kde-format
 msgid "Preset:"
-msgstr "Předvolby:"
+msgstr "Přednastavení:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
@@ -7070,8 +7070,8 @@ msgid ""
 "Presets which allow for a quick selection of the most frequently used "
 "settings."
 msgstr ""
-"<p><b>Předvolby souborového systému</b><p>K3b poskytuje následující "
-"předvolby, které umožňují rychlý výběr často používaných nastavení."
+"<p><b>Přednastavení souborového systému</b><p>K3b poskytuje následující "
+"přednastavení, které umožňují rychlý výběr často používaných nastavení."
 
 #: projects/k3bdataimagesettingswidget.cpp:146
 #, kde-format
