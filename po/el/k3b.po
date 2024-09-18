@@ -2402,10 +2402,9 @@ msgid "Filter:"
 msgstr "Φίλτρο:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Όλα τα αρχεία"
+msgstr "Όλα τα αρχεία"
 
 #: k3bfileview.cpp:76
 #, fuzzy, kde-format
@@ -8426,10 +8425,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Ο φάκελος εικόνας %1 δεν υπάρχει. Επιθυμείτε τη δημιουργία του;"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Δημιουργία φακέλου"
+msgstr "Δημιουργία φακέλου;"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
