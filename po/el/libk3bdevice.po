@@ -4,20 +4,21 @@
 # Toussis Manolis <manolis@koppermind.homelinux.org>, 2005, 2006.
 # Stelios <sstavra@gmail.com>, 2011.
 # Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# SPDX-FileCopyrightText: 2024 Antonis Geralis <capoiosct@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3bdevice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-05 12:30+0000\n"
-"PO-Revision-Date: 2012-09-02 07:58+0200\n"
-"Last-Translator: Dimitrios Glentadakis <dglent@gmail.com>\n"
+"PO-Revision-Date: 2024-09-20 13:32+0300\n"
+"Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 24.08.1\n"
 
 #: k3bdeviceglobals.cpp:18 k3bdeviceglobals.cpp:141
 #, kde-format
@@ -260,7 +261,7 @@ msgstr "Άγνωστη"
 #: k3bdeviceglobals.cpp:178
 #, kde-format
 msgid "no medium"
-msgstr "Χωρίς μέσο"
+msgstr "χωρίς μέσο"
 
 #: k3bdeviceglobals.cpp:180
 #, kde-format
