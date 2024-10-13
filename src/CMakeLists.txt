@@ -43,16 +43,6 @@ if(ENABLE_DVD_RIPPING)
     ki18n_wrap_ui(ui_sources rip/videodvd/base_k3bvideodvdrippingwidget.ui)
 endif()
 
-if(ENABLE_MUSICBRAINZ)
-    set(musicbrainz_sources
-        k3btrm.cpp
-        k3bmusicbrainz.cpp
-        projects/k3bmusicbrainzjob.cpp
-        projects/k3bmusicbrainztrackloopupjob.cpp
-        projects/k3baudiotracktrmlookupdialog.cpp
-    )
-endif()
-
 qt_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3binterface.h org.k3b.MainWindow.xml )
 qt_add_dbus_adaptor( dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.MainWindow.xml k3binterface.h K3b::Interface k3binterfaceadaptor K3bInterfaceAdaptor )
 qt_generate_dbus_interface( ${CMAKE_CURRENT_SOURCE_DIR}/k3bjobinterface.h org.k3b.Job.xml )
@@ -216,7 +206,6 @@ add_executable(k3b
     ${log_sources}
     ${ui_sources}
     ${audioplayer_sources}
-    ${musicbrainz_sources}
     ${videodvd_sources}
     ${dbus_sources}
 
@@ -261,10 +250,6 @@ endif()
 
 if(ENABLE_AUDIO_PLAYER)
     target_link_libraries(k3b Qt5::Multimedia)
-endif()
-
-if(ENABLE_MUSICBRAINZ)
-    target_link_libraries(k3b ${MUSICBRAINZ_LIBRARIES})
 endif()
 
 install(TARGETS k3b ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

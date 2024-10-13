@@ -53,8 +53,6 @@ namespace K3b {
         void slotEditSource();
         void slotTrackProperties();
         void slotPlayTrack();
-        void slotQueryMusicBrainz();
-        void slotQueryMusicBrainzTrack();
         void slotSelectionChanged();
         void slotAudioConversion();
         void slotAdjustColumns();
@@ -83,8 +81,6 @@ namespace K3b {
         QAction* m_actionSplitTrack;
         QAction* m_actionEditSource;
         QAction* m_actionPlayTrack;
-        QAction* m_actionQueryMusicBrainz;
-        QAction* m_actionQueryMusicBrainzTrack;
         QAction* m_actionProperties;
         QAction* m_actionRemove;
         QAction* m_conversionAction;

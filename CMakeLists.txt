@@ -32,7 +32,6 @@ option(K3B_DEBUG "K3b additional debugging support" OFF)
 if(K3B_DEBUG)
     add_definitions(-g)
 endif()
-option(K3B_ENABLE_MUSICBRAINZ "Support for querying metadata about audio tracks from Musicbrainz." ON)
 option(K3B_ENABLE_DVD_RIPPING "Support for ripping Video DVDs with optional decryption." ON)
 option(K3B_ENABLE_TAGLIB "Support for reading audio file metadata using Taglib." ON)
 option(K3B_BUILD_API_DOCS "Build the API documentation for the K3b libs." OFF)
@@ -117,16 +116,6 @@ if(K3B_ENABLE_TAGLIB)
         TYPE OPTIONAL)
 
     set(ENABLE_TAGLIB "${TAGLIB_FOUND}")
-endif()
-
-if(K3B_ENABLE_MUSICBRAINZ)
-    find_package(MusicBrainz)
-    set_package_properties(MusicBrainz PROPERTIES
-        DESCRIPTION "Provide information about the CD, about the artist or about related information"
-        URL "https://musicbrainz.org/"
-        TYPE OPTIONAL)
-
-    set(ENABLE_MUSICBRAINZ "${MUSICBRAINZ_FOUND}")
 endif()
 
 if(K3B_BUILD_FFMPEG_DECODER_PLUGIN)
