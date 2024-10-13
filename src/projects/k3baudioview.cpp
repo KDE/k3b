@@ -48,7 +48,6 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
     fillStatusDisplay()->showTime();
 
     toolBox()->addAction( actionCollection()->action( "project_audio_convert" ) );
-    toolBox()->addAction( actionCollection()->action( "project_audio_musicbrainz" ) );
     toolBox()->addSeparator();
 
     toolBox()->addActions( createPluginsActions( m_doc->type() ) );
@@ -75,9 +74,6 @@ K3b::AudioView::AudioView( K3b::AudioDoc* doc, QWidget* parent )
             "<MenuBar>"
             " <Menu name=\"project\"><text>&amp;Project</text>"
             "  <Action name=\"project_audio_convert\"/>"
-#ifdef ENABLE_MUSICBRAINZ
-            "  <Action name=\"project_audio_musicbrainz\"/>"
-#endif
             " </Menu>"
             "</MenuBar>"
             "</gui>", true );

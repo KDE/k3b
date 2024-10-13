@@ -4,8 +4,6 @@
 
 #cmakedefine ENABLE_DVD_RIPPING
 
-#cmakedefine ENABLE_MUSICBRAINZ
-
 #cmakedefine ENABLE_TAGLIB
 
 #cmakedefine HAVE_SYS_VFS_H

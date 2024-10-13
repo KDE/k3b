@@ -3,7 +3,6 @@ ecm_install_icons(
         128-actions-tools-rip-audio-cd.png
         128-actions-tools-rip-video-cd.png
         128-actions-tools-rip-video-dvd.png
-        16-actions-musicbrainz.png
         16-actions-tools-rip-audio-cd.png
         16-actions-tools-rip-video-cd.png
         16-actions-tools-rip-video-dvd.png
@@ -16,7 +15,6 @@ ecm_install_icons(
         48-actions-tools-rip-audio-cd.png
         48-actions-tools-rip-video-cd.png
         48-actions-tools-rip-video-dvd.png
-        64-actions-musicbrainz.png
         64-actions-tools-rip-audio-cd.png
         64-actions-tools-rip-video-cd.png
         64-actions-tools-rip-video-dvd.png
