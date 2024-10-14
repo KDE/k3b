@@ -203,7 +203,7 @@ QString K3b::PatternParser::parsePattern( const KCDDB::CDInfo& entry,
     for( int i = 0; i < dir.length(); ++i ) {
         const auto match = conditionrx.match(QStringView(dir).mid(i));
 
-        offsetStack.push( match.capturedStart() );
+        offsetStack.push( match.hasMatch() ? i : -1 );
 
         if( offsetStack.top() == -1 ) {
             offsetStack.pop();
