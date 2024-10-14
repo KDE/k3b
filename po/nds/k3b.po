@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2014-05-23 19:36+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -299,7 +299,7 @@ msgstr "Befehl"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
+#: projects/k3baudioviewimpl.cpp:90 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -1340,7 +1340,6 @@ msgstr "Afbreken"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:69
 #: projects/k3baudioburndialog.cpp:50
-#: projects/k3baudiotracktrmlookupdialog.cpp:115
 #, kde-format
 msgid "Audio Project"
 msgstr "Klangprojekt"
@@ -7126,100 +7125,69 @@ msgstr "Hier delen"
 msgid "Remove part"
 msgstr "Deel wegdoon"
 
-#: projects/k3baudiotracktrmlookupdialog.cpp:37
-#: projects/k3bmusicbrainzjob.cpp:115
-#, kde-format
-msgid "MusicBrainz Query"
-msgstr "MusicBrainz-Anfraag"
-
-#: projects/k3baudiotracktrmlookupdialog.cpp:116
-#, kde-format
-msgid "Track %1 was not found in the MusicBrainz database."
-msgstr "Titel \"%1\" lett sik in de MusicBrainz-Datenbank nich finnen."
-
-#: projects/k3baudioviewimpl.cpp:77
+#: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
 msgstr "Still tofögen..."
 
-#: projects/k3baudioviewimpl.cpp:79
+#: projects/k3baudioviewimpl.cpp:78
 #, kde-format
 msgid "Merge Tracks"
 msgstr "Titeln tosamenföhren"
 
-#: projects/k3baudioviewimpl.cpp:81
+#: projects/k3baudioviewimpl.cpp:80
 #, kde-format
 msgid "Source to Track"
 msgstr "Titelborn"
 
-#: projects/k3baudioviewimpl.cpp:83
+#: projects/k3baudioviewimpl.cpp:82
 #, kde-format
 msgid "Split Track..."
 msgstr "Titel opdelen"
 
-#: projects/k3baudioviewimpl.cpp:85
+#: projects/k3baudioviewimpl.cpp:84
 #, kde-format
 msgid "Edit Source..."
 msgstr "Born bewerken..."
 
-#: projects/k3baudioviewimpl.cpp:87
+#: projects/k3baudioviewimpl.cpp:86
 #, kde-format
 msgid "Play Track"
 msgstr "Titel afspelen"
 
-#: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
-#, kde-format
-msgid "Musicbrainz Lookup"
-msgstr "MusicBrainz-Söök"
-
-#: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
-#, kde-format
-msgid "Try to determine meta information over the Internet"
-msgstr "Versöken, Metainformatschonen ut dat Internet to halen"
-
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
+#: projects/k3baudioviewimpl.cpp:88 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
 msgstr "Egenschappen"
 
-#: projects/k3baudioviewimpl.cpp:100
+#: projects/k3baudioviewimpl.cpp:93
 #, kde-format
 msgid "Convert Tracks"
 msgstr "Titeln wanneln"
 
-#: projects/k3baudioviewimpl.cpp:193
+#: projects/k3baudioviewimpl.cpp:177
 #, kde-format
 msgid "Add Silence"
 msgstr "Still tofögen"
 
-#: projects/k3baudioviewimpl.cpp:197
+#: projects/k3baudioviewimpl.cpp:181
 #, kde-format
 msgid "Length of silence:"
 msgstr "Längde vun de Still:"
 
-#: projects/k3baudioviewimpl.cpp:294
+#: projects/k3baudioviewimpl.cpp:278
 #, kde-format
 msgid "Edit Audio Track Source"
 msgstr "Klangtitel-Born bewerken"
 
-#: projects/k3baudioviewimpl.cpp:354
-#, kde-format
-msgid "Please add an audio track."
-msgstr "Bitte en Klangtitel tofögen"
-
-#: projects/k3baudioviewimpl.cpp:378
-#, kde-format
-msgid "Please select an audio track."
-msgstr "Bitte en Klangtitel utsöken"
-
-#: projects/k3baudioviewimpl.cpp:442 projects/k3bdataview.cpp:115
+#: projects/k3baudioviewimpl.cpp:377 projects/k3bdataview.cpp:115
 #: projects/k3bview.cpp:81
 #, kde-format
 msgid "Please add files to your project first."
 msgstr "Bitte toeerst Dateien na't Projekt tofögen."
 
-#: projects/k3baudioviewimpl.cpp:443
+#: projects/k3baudioviewimpl.cpp:378
 #, kde-format
 msgid "No tracks to convert"
 msgstr "Keen Dateien för't Wanneln"
@@ -8442,21 +8410,6 @@ msgstr "Ünnertiteldatei tofögen..."
 #, kde-format
 msgid "K3b currently only supports local files."
 msgstr "Opstunns ünnerstütt K3b bloots lokale Dateien."
-
-#: projects/k3bmusicbrainzjob.cpp:116
-#, kde-format
-msgid "Found multiple matches for track %1 (%2). Please select one."
-msgstr "En Reeg Övereenstimmen för Titel %1 (%2) funnen. Bitte söök een ut."
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:71
-#, kde-format
-msgid "Generating fingerprint for track %1."
-msgstr "Fingerafdruck för Titel \"%1\" warrt opstellt."
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:110
-#, kde-format
-msgid "Querying MusicBrainz for track %1."
-msgstr "MusicBrainz-Anfraag för Stück \"%1\" löppt."
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -11341,6 +11294,33 @@ msgstr "smallpramst"
 #, kde-format
 msgid "Subpicture"
 msgstr "Ünnertitel"
+
+#~ msgid "MusicBrainz Query"
+#~ msgstr "MusicBrainz-Anfraag"
+
+#~ msgid "Track %1 was not found in the MusicBrainz database."
+#~ msgstr "Titel \"%1\" lett sik in de MusicBrainz-Datenbank nich finnen."
+
+#~ msgid "Musicbrainz Lookup"
+#~ msgstr "MusicBrainz-Söök"
+
+#~ msgid "Try to determine meta information over the Internet"
+#~ msgstr "Versöken, Metainformatschonen ut dat Internet to halen"
+
+#~ msgid "Please add an audio track."
+#~ msgstr "Bitte en Klangtitel tofögen"
+
+#~ msgid "Please select an audio track."
+#~ msgstr "Bitte en Klangtitel utsöken"
+
+#~ msgid "Found multiple matches for track %1 (%2). Please select one."
+#~ msgstr "En Reeg Övereenstimmen för Titel %1 (%2) funnen. Bitte söök een ut."
+
+#~ msgid "Generating fingerprint for track %1."
+#~ msgstr "Fingerafdruck för Titel \"%1\" warrt opstellt."
+
+#~ msgid "Querying MusicBrainz for track %1."
+#~ msgstr "MusicBrainz-Anfraag för Stück \"%1\" löppt."
 
 #~ msgid "K3b Bookmarks"
 #~ msgstr "K3b-Leestekens"

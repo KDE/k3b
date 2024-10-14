@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2012-12-03 21:25+0100\n"
 "Last-Translator: Bjørn Steensrud <bjornst@skogkatt.homelinux.org>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -314,7 +314,7 @@ msgstr "Kommando"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
+#: projects/k3baudioviewimpl.cpp:90 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -1322,7 +1322,6 @@ msgstr "Avbryt"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:69
 #: projects/k3baudioburndialog.cpp:50
-#: projects/k3baudiotracktrmlookupdialog.cpp:115
 #, kde-format
 msgid "Audio Project"
 msgstr "Lydprosjekt"
@@ -6824,100 +6823,69 @@ msgstr "Del her"
 msgid "Remove part"
 msgstr "Fjern del"
 
-#: projects/k3baudiotracktrmlookupdialog.cpp:37
-#: projects/k3bmusicbrainzjob.cpp:115
-#, kde-format
-msgid "MusicBrainz Query"
-msgstr "MusicBrainz spørring"
-
-#: projects/k3baudiotracktrmlookupdialog.cpp:116
-#, kde-format
-msgid "Track %1 was not found in the MusicBrainz database."
-msgstr "Sporet %1 ble ikke funnet i MusicBrainz databasen."
-
-#: projects/k3baudioviewimpl.cpp:77
+#: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
 msgstr "Legg til stillhet …"
 
-#: projects/k3baudioviewimpl.cpp:79
+#: projects/k3baudioviewimpl.cpp:78
 #, kde-format
 msgid "Merge Tracks"
 msgstr "Slå sammen spor"
 
-#: projects/k3baudioviewimpl.cpp:81
+#: projects/k3baudioviewimpl.cpp:80
 #, kde-format
 msgid "Source to Track"
 msgstr "Kilden til sporet"
 
-#: projects/k3baudioviewimpl.cpp:83
+#: projects/k3baudioviewimpl.cpp:82
 #, kde-format
 msgid "Split Track..."
 msgstr "Del spor …"
 
-#: projects/k3baudioviewimpl.cpp:85
+#: projects/k3baudioviewimpl.cpp:84
 #, kde-format
 msgid "Edit Source..."
 msgstr "Rediger kilde …"
 
-#: projects/k3baudioviewimpl.cpp:87
+#: projects/k3baudioviewimpl.cpp:86
 #, kde-format
 msgid "Play Track"
 msgstr "Spill av spor"
 
-#: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
-#, kde-format
-msgid "Musicbrainz Lookup"
-msgstr "Finn i MusicBrainz"
-
-#: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
-#, kde-format
-msgid "Try to determine meta information over the Internet"
-msgstr "Prøver å bestemme meta-informasjon over Internett"
-
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
+#: projects/k3baudioviewimpl.cpp:88 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: projects/k3baudioviewimpl.cpp:100
+#: projects/k3baudioviewimpl.cpp:93
 #, kde-format
 msgid "Convert Tracks"
 msgstr "Konverter spor"
 
-#: projects/k3baudioviewimpl.cpp:193
+#: projects/k3baudioviewimpl.cpp:177
 #, kde-format
 msgid "Add Silence"
 msgstr "Legg til stillhet"
 
-#: projects/k3baudioviewimpl.cpp:197
+#: projects/k3baudioviewimpl.cpp:181
 #, kde-format
 msgid "Length of silence:"
 msgstr "Lengde stillhet:"
 
-#: projects/k3baudioviewimpl.cpp:294
+#: projects/k3baudioviewimpl.cpp:278
 #, kde-format
 msgid "Edit Audio Track Source"
 msgstr "Rediger lydsporkilde"
 
-#: projects/k3baudioviewimpl.cpp:354
-#, kde-format
-msgid "Please add an audio track."
-msgstr "Legg til et lydspor."
-
-#: projects/k3baudioviewimpl.cpp:378
-#, kde-format
-msgid "Please select an audio track."
-msgstr "Velg et lydspor."
-
-#: projects/k3baudioviewimpl.cpp:442 projects/k3bdataview.cpp:115
+#: projects/k3baudioviewimpl.cpp:377 projects/k3bdataview.cpp:115
 #: projects/k3bview.cpp:81
 #, kde-format
 msgid "Please add files to your project first."
 msgstr "Vennligst legg til filer til prosjektet ditt først."
 
-#: projects/k3baudioviewimpl.cpp:443
+#: projects/k3baudioviewimpl.cpp:378
 #, kde-format
 msgid "No tracks to convert"
 msgstr "Ingen spor å gjøre om"
@@ -8066,21 +8034,6 @@ msgstr "Legg til undertekstfil …"
 #, kde-format
 msgid "K3b currently only supports local files."
 msgstr "K3b støtter for øyeblikket bare lokale filer."
-
-#: projects/k3bmusicbrainzjob.cpp:116
-#, kde-format
-msgid "Found multiple matches for track %1 (%2). Please select one."
-msgstr "Fant flere treff for spor %1 (%2). Velg ett av dem."
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:71
-#, kde-format
-msgid "Generating fingerprint for track %1."
-msgstr "Lager fingeravtrykk for spor %1"
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:110
-#, kde-format
-msgid "Querying MusicBrainz for track %1."
-msgstr "Spør MusicBrainz om spor %1."
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -10854,3 +10807,30 @@ msgstr "anamorf"
 #, kde-format
 msgid "Subpicture"
 msgstr "Under-bilde"
+
+#~ msgid "MusicBrainz Query"
+#~ msgstr "MusicBrainz spørring"
+
+#~ msgid "Track %1 was not found in the MusicBrainz database."
+#~ msgstr "Sporet %1 ble ikke funnet i MusicBrainz databasen."
+
+#~ msgid "Musicbrainz Lookup"
+#~ msgstr "Finn i MusicBrainz"
+
+#~ msgid "Try to determine meta information over the Internet"
+#~ msgstr "Prøver å bestemme meta-informasjon over Internett"
+
+#~ msgid "Please add an audio track."
+#~ msgstr "Legg til et lydspor."
+
+#~ msgid "Please select an audio track."
+#~ msgstr "Velg et lydspor."
+
+#~ msgid "Found multiple matches for track %1 (%2). Please select one."
+#~ msgstr "Fant flere treff for spor %1 (%2). Velg ett av dem."
+
+#~ msgid "Generating fingerprint for track %1."
+#~ msgstr "Lager fingeravtrykk for spor %1"
+
+#~ msgid "Querying MusicBrainz for track %1."
+#~ msgstr "Spør MusicBrainz om spor %1."

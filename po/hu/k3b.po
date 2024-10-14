@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 00:38+0000\n"
 "PO-Revision-Date: 2024-07-31 22:27+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -302,7 +302,7 @@ msgstr "Parancs"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
+#: projects/k3baudioviewimpl.cpp:90 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -1337,7 +1337,6 @@ msgstr "Megszakítás"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:69
 #: projects/k3baudioburndialog.cpp:50
-#: projects/k3baudiotracktrmlookupdialog.cpp:115
 #, kde-format
 msgid "Audio Project"
 msgstr "Hangprojekt"
@@ -7038,100 +7037,69 @@ msgstr "Szétbontás itt"
 msgid "Remove part"
 msgstr "Rész eltávolítása"
 
-#: projects/k3baudiotracktrmlookupdialog.cpp:37
-#: projects/k3bmusicbrainzjob.cpp:115
-#, kde-format
-msgid "MusicBrainz Query"
-msgstr "MusicBrainz-lekérdezés"
-
-#: projects/k3baudiotracktrmlookupdialog.cpp:116
-#, kde-format
-msgid "Track %1 was not found in the MusicBrainz database."
-msgstr "A(z) %1. sáv nem található a MusicBrainz-adatbázisban."
-
-#: projects/k3baudioviewimpl.cpp:77
+#: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
 msgstr "Csend hozzáadása..."
 
-#: projects/k3baudioviewimpl.cpp:79
+#: projects/k3baudioviewimpl.cpp:78
 #, kde-format
 msgid "Merge Tracks"
 msgstr "Sávok összefűzése"
 
-#: projects/k3baudioviewimpl.cpp:81
+#: projects/k3baudioviewimpl.cpp:80
 #, kde-format
 msgid "Source to Track"
 msgstr "Forrást sávvá"
 
-#: projects/k3baudioviewimpl.cpp:83
+#: projects/k3baudioviewimpl.cpp:82
 #, kde-format
 msgid "Split Track..."
 msgstr "Sáv szétbontása..."
 
-#: projects/k3baudioviewimpl.cpp:85
+#: projects/k3baudioviewimpl.cpp:84
 #, kde-format
 msgid "Edit Source..."
 msgstr "Forrás szerkesztése..."
 
-#: projects/k3baudioviewimpl.cpp:87
+#: projects/k3baudioviewimpl.cpp:86
 #, kde-format
 msgid "Play Track"
 msgstr "Sáv lejátszása"
 
-#: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
-#, kde-format
-msgid "Musicbrainz Lookup"
-msgstr "MusicBrainz-keresés"
-
-#: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
-#, kde-format
-msgid "Try to determine meta information over the Internet"
-msgstr "Metaadatok meghatározása az internet segítségével"
-
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
+#: projects/k3baudioviewimpl.cpp:88 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
 msgstr "Tulajdonságok"
 
-#: projects/k3baudioviewimpl.cpp:100
+#: projects/k3baudioviewimpl.cpp:93
 #, kde-format
 msgid "Convert Tracks"
 msgstr "Sávok átalakítása"
 
-#: projects/k3baudioviewimpl.cpp:193
+#: projects/k3baudioviewimpl.cpp:177
 #, kde-format
 msgid "Add Silence"
 msgstr "Csend hozzáadása"
 
-#: projects/k3baudioviewimpl.cpp:197
+#: projects/k3baudioviewimpl.cpp:181
 #, kde-format
 msgid "Length of silence:"
 msgstr "A csend hossza:"
 
-#: projects/k3baudioviewimpl.cpp:294
+#: projects/k3baudioviewimpl.cpp:278
 #, kde-format
 msgid "Edit Audio Track Source"
 msgstr "A hangsáv forrásának szerkesztése"
 
-#: projects/k3baudioviewimpl.cpp:354
-#, kde-format
-msgid "Please add an audio track."
-msgstr "Adjon hozzá egy hangsávot."
-
-#: projects/k3baudioviewimpl.cpp:378
-#, kde-format
-msgid "Please select an audio track."
-msgstr "Válasszon ki egy hangsávot."
-
-#: projects/k3baudioviewimpl.cpp:442 projects/k3bdataview.cpp:115
+#: projects/k3baudioviewimpl.cpp:377 projects/k3bdataview.cpp:115
 #: projects/k3bview.cpp:81
 #, kde-format
 msgid "Please add files to your project first."
 msgstr "Először adjon hozzá fájlokat a projekthez."
 
-#: projects/k3baudioviewimpl.cpp:443
+#: projects/k3baudioviewimpl.cpp:378
 #, kde-format
 msgid "No tracks to convert"
 msgstr "Nincs átalakítható sáv"
@@ -8327,21 +8295,6 @@ msgstr "Feliratfájl hozzáadása..."
 #, kde-format
 msgid "K3b currently only supports local files."
 msgstr "Csak helyi fájlokat lehet használni."
-
-#: projects/k3bmusicbrainzjob.cpp:116
-#, kde-format
-msgid "Found multiple matches for track %1 (%2). Please select one."
-msgstr "Több találat van a(z) %1. sávra (%2). Válasszon közülük egyet."
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:71
-#, kde-format
-msgid "Generating fingerprint for track %1."
-msgstr "Ujjlenyomat létrehozása a(z) %1. sávhoz."
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:110
-#, kde-format
-msgid "Querying MusicBrainz for track %1."
-msgstr "A(z) %1. sáv lekérdezése a MusicBrainz-ben"
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -11207,6 +11160,33 @@ msgstr "anamorph (szélesvásznú)"
 #, kde-format
 msgid "Subpicture"
 msgstr "Alkép"
+
+#~ msgid "MusicBrainz Query"
+#~ msgstr "MusicBrainz-lekérdezés"
+
+#~ msgid "Track %1 was not found in the MusicBrainz database."
+#~ msgstr "A(z) %1. sáv nem található a MusicBrainz-adatbázisban."
+
+#~ msgid "Musicbrainz Lookup"
+#~ msgstr "MusicBrainz-keresés"
+
+#~ msgid "Try to determine meta information over the Internet"
+#~ msgstr "Metaadatok meghatározása az internet segítségével"
+
+#~ msgid "Please add an audio track."
+#~ msgstr "Adjon hozzá egy hangsávot."
+
+#~ msgid "Please select an audio track."
+#~ msgstr "Válasszon ki egy hangsávot."
+
+#~ msgid "Found multiple matches for track %1 (%2). Please select one."
+#~ msgstr "Több találat van a(z) %1. sávra (%2). Válasszon közülük egyet."
+
+#~ msgid "Generating fingerprint for track %1."
+#~ msgstr "Ujjlenyomat létrehozása a(z) %1. sávhoz."
+
+#~ msgid "Querying MusicBrainz for track %1."
+#~ msgstr "A(z) %1. sáv lekérdezése a MusicBrainz-ben"
 
 #~ msgid "K3b Bookmarks"
 #~ msgstr "K3b-könyvjelzők"
