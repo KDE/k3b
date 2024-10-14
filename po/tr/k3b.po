@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 02:26+0000\n"
 "PO-Revision-Date: 2024-05-11 01:07+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -320,7 +320,7 @@ msgstr "Komut"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
+#: projects/k3baudioviewimpl.cpp:90 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -1349,7 +1349,6 @@ msgstr "İptal"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:69
 #: projects/k3baudioburndialog.cpp:50
-#: projects/k3baudiotracktrmlookupdialog.cpp:115
 #, kde-format
 msgid "Audio Project"
 msgstr "Ses Projesi"
@@ -6983,100 +6982,69 @@ msgstr "Buradan böl"
 msgid "Remove part"
 msgstr "Parçayı sil"
 
-#: projects/k3baudiotracktrmlookupdialog.cpp:37
-#: projects/k3bmusicbrainzjob.cpp:115
-#, kde-format
-msgid "MusicBrainz Query"
-msgstr "MusicBrainz Sorgusu"
-
-#: projects/k3baudiotracktrmlookupdialog.cpp:116
-#, kde-format
-msgid "Track %1 was not found in the MusicBrainz database."
-msgstr "Parça %1 MusicBrainz veritabanında bulunamadı."
-
-#: projects/k3baudioviewimpl.cpp:77
+#: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
 msgstr "Sessizlik Ekle..."
 
-#: projects/k3baudioviewimpl.cpp:79
+#: projects/k3baudioviewimpl.cpp:78
 #, kde-format
 msgid "Merge Tracks"
 msgstr "Parçaları Birleştir"
 
-#: projects/k3baudioviewimpl.cpp:81
+#: projects/k3baudioviewimpl.cpp:80
 #, kde-format
 msgid "Source to Track"
 msgstr "Parça Kaynağı"
 
-#: projects/k3baudioviewimpl.cpp:83
+#: projects/k3baudioviewimpl.cpp:82
 #, kde-format
 msgid "Split Track..."
 msgstr "Parçayı Böl..."
 
-#: projects/k3baudioviewimpl.cpp:85
+#: projects/k3baudioviewimpl.cpp:84
 #, kde-format
 msgid "Edit Source..."
 msgstr "Kaynağı Düzenle..."
 
-#: projects/k3baudioviewimpl.cpp:87
+#: projects/k3baudioviewimpl.cpp:86
 #, kde-format
 msgid "Play Track"
 msgstr "Parçayı Çal"
 
-#: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
-#, kde-format
-msgid "Musicbrainz Lookup"
-msgstr "Musicbrainz ile sorgula"
-
-#: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
-#, kde-format
-msgid "Try to determine meta information over the Internet"
-msgstr "Üst bilgiyi İnternet üzerinden belirle"
-
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
+#: projects/k3baudioviewimpl.cpp:88 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
 msgstr "Özellikler"
 
-#: projects/k3baudioviewimpl.cpp:100
+#: projects/k3baudioviewimpl.cpp:93
 #, kde-format
 msgid "Convert Tracks"
 msgstr "Parçaları Dönüştür"
 
-#: projects/k3baudioviewimpl.cpp:193
+#: projects/k3baudioviewimpl.cpp:177
 #, kde-format
 msgid "Add Silence"
 msgstr "Sessizlik Ekle"
 
-#: projects/k3baudioviewimpl.cpp:197
+#: projects/k3baudioviewimpl.cpp:181
 #, kde-format
 msgid "Length of silence:"
 msgstr "Sessizliğin uzunluğu:"
 
-#: projects/k3baudioviewimpl.cpp:294
+#: projects/k3baudioviewimpl.cpp:278
 #, kde-format
 msgid "Edit Audio Track Source"
 msgstr "Ses Parçası kaynağını düzenle"
 
-#: projects/k3baudioviewimpl.cpp:354
-#, kde-format
-msgid "Please add an audio track."
-msgstr "Lütfen bir ses parçası ekleyin."
-
-#: projects/k3baudioviewimpl.cpp:378
-#, kde-format
-msgid "Please select an audio track."
-msgstr "Bir ses parçası seçin."
-
-#: projects/k3baudioviewimpl.cpp:442 projects/k3bdataview.cpp:115
+#: projects/k3baudioviewimpl.cpp:377 projects/k3bdataview.cpp:115
 #: projects/k3bview.cpp:81
 #, kde-format
 msgid "Please add files to your project first."
 msgstr "Lütfen önce projenize dosya ekleyin."
 
-#: projects/k3baudioviewimpl.cpp:443
+#: projects/k3baudioviewimpl.cpp:378
 #, kde-format
 msgid "No tracks to convert"
 msgstr "Dönüştürülecek parça yok"
@@ -8259,22 +8227,6 @@ msgstr "Altyazı Dosyası Ekle..."
 #, kde-format
 msgid "K3b currently only supports local files."
 msgstr "K3b şu anda yalnızca yerel dosyaları destekliyor."
-
-#: projects/k3bmusicbrainzjob.cpp:116
-#, kde-format
-msgid "Found multiple matches for track %1 (%2). Please select one."
-msgstr ""
-"Parça %1 (%2) için birden fazla eşleşen kayıt bulundu. Lütfen birini seçin."
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:71
-#, kde-format
-msgid "Generating fingerprint for track %1."
-msgstr "Parça %1 için parmak izi üretiliyor."
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:110
-#, kde-format
-msgid "Querying MusicBrainz for track %1."
-msgstr "Parça %1 için MusicBrainz sorgulanıyor."
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -11109,6 +11061,35 @@ msgstr "Sinemaskop görünüm (anamorphic)"
 #, kde-format
 msgid "Subpicture"
 msgstr "Alt resim"
+
+#~ msgid "MusicBrainz Query"
+#~ msgstr "MusicBrainz Sorgusu"
+
+#~ msgid "Track %1 was not found in the MusicBrainz database."
+#~ msgstr "Parça %1 MusicBrainz veritabanında bulunamadı."
+
+#~ msgid "Musicbrainz Lookup"
+#~ msgstr "Musicbrainz ile sorgula"
+
+#~ msgid "Try to determine meta information over the Internet"
+#~ msgstr "Üst bilgiyi İnternet üzerinden belirle"
+
+#~ msgid "Please add an audio track."
+#~ msgstr "Lütfen bir ses parçası ekleyin."
+
+#~ msgid "Please select an audio track."
+#~ msgstr "Bir ses parçası seçin."
+
+#~ msgid "Found multiple matches for track %1 (%2). Please select one."
+#~ msgstr ""
+#~ "Parça %1 (%2) için birden fazla eşleşen kayıt bulundu. Lütfen birini "
+#~ "seçin."
+
+#~ msgid "Generating fingerprint for track %1."
+#~ msgstr "Parça %1 için parmak izi üretiliyor."
+
+#~ msgid "Querying MusicBrainz for track %1."
+#~ msgstr "Parça %1 için MusicBrainz sorgulanıyor."
 
 #~ msgid "K3b Bookmarks"
 #~ msgstr "K3B Yer İmleri"

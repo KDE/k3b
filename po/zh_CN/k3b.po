@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-12 00:38+0000\n"
+"POT-Creation-Date: 2024-10-14 02:26+0000\n"
 "PO-Revision-Date: 2024-04-23 19:24\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -295,7 +295,7 @@ msgstr "命令"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
-#: projects/k3baudioviewimpl.cpp:97 projects/k3bdataviewimpl.cpp:112
+#: projects/k3baudioviewimpl.cpp:90 projects/k3bdataviewimpl.cpp:112
 #: projects/k3bmovixview.cpp:60 projects/k3bvcdview.cpp:57
 #, kde-format
 msgid "Remove"
@@ -1296,7 +1296,6 @@ msgstr "取消"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:69
 #: projects/k3baudioburndialog.cpp:50
-#: projects/k3baudiotracktrmlookupdialog.cpp:115
 #, kde-format
 msgid "Audio Project"
 msgstr "音频方案"
@@ -6689,100 +6688,69 @@ msgstr "在此拆分"
 msgid "Remove part"
 msgstr "移除部分"
 
-#: projects/k3baudiotracktrmlookupdialog.cpp:37
-#: projects/k3bmusicbrainzjob.cpp:115
-#, kde-format
-msgid "MusicBrainz Query"
-msgstr "MusicBrainz 查询"
-
-#: projects/k3baudiotracktrmlookupdialog.cpp:116
-#, kde-format
-msgid "Track %1 was not found in the MusicBrainz database."
-msgstr "音轨 %1 没有在 MusicBrainz 数据库中找到。"
-
-#: projects/k3baudioviewimpl.cpp:77
+#: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
 msgstr "添加静音..."
 
-#: projects/k3baudioviewimpl.cpp:79
+#: projects/k3baudioviewimpl.cpp:78
 #, kde-format
 msgid "Merge Tracks"
 msgstr "合并音轨"
 
-#: projects/k3baudioviewimpl.cpp:81
+#: projects/k3baudioviewimpl.cpp:80
 #, kde-format
 msgid "Source to Track"
 msgstr "源到轨道"
 
-#: projects/k3baudioviewimpl.cpp:83
+#: projects/k3baudioviewimpl.cpp:82
 #, kde-format
 msgid "Split Track..."
 msgstr "拆分音轨..."
 
-#: projects/k3baudioviewimpl.cpp:85
+#: projects/k3baudioviewimpl.cpp:84
 #, kde-format
 msgid "Edit Source..."
 msgstr "编辑源..."
 
-#: projects/k3baudioviewimpl.cpp:87
+#: projects/k3baudioviewimpl.cpp:86
 #, kde-format
 msgid "Play Track"
 msgstr "播放音轨"
 
-#: projects/k3baudioviewimpl.cpp:89 projects/k3baudioviewimpl.cpp:92
-#, kde-format
-msgid "Musicbrainz Lookup"
-msgstr "Musicbrainz 查阅"
-
-#: projects/k3baudioviewimpl.cpp:91 projects/k3baudioviewimpl.cpp:94
-#, kde-format
-msgid "Try to determine meta information over the Internet"
-msgstr "尝试通过 Internet 获取元信息"
-
-#: projects/k3baudioviewimpl.cpp:95 projects/k3bdataviewimpl.cpp:129
+#: projects/k3baudioviewimpl.cpp:88 projects/k3bdataviewimpl.cpp:129
 #: projects/k3bmovixview.cpp:57 projects/k3bvcdview.cpp:53
 #, kde-format
 msgid "Properties"
 msgstr "属性"
 
-#: projects/k3baudioviewimpl.cpp:100
+#: projects/k3baudioviewimpl.cpp:93
 #, kde-format
 msgid "Convert Tracks"
 msgstr "转换音频"
 
-#: projects/k3baudioviewimpl.cpp:193
+#: projects/k3baudioviewimpl.cpp:177
 #, kde-format
 msgid "Add Silence"
 msgstr "添加静音"
 
-#: projects/k3baudioviewimpl.cpp:197
+#: projects/k3baudioviewimpl.cpp:181
 #, kde-format
 msgid "Length of silence:"
 msgstr "静音长度："
 
-#: projects/k3baudioviewimpl.cpp:294
+#: projects/k3baudioviewimpl.cpp:278
 #, kde-format
 msgid "Edit Audio Track Source"
 msgstr "编辑音轨源"
 
-#: projects/k3baudioviewimpl.cpp:354
-#, kde-format
-msgid "Please add an audio track."
-msgstr "请添加音轨。"
-
-#: projects/k3baudioviewimpl.cpp:378
-#, kde-format
-msgid "Please select an audio track."
-msgstr "请选择音轨。"
-
-#: projects/k3baudioviewimpl.cpp:442 projects/k3bdataview.cpp:115
+#: projects/k3baudioviewimpl.cpp:377 projects/k3bdataview.cpp:115
 #: projects/k3bview.cpp:81
 #, kde-format
 msgid "Please add files to your project first."
 msgstr "请先向您的方案中添加文件。"
 
-#: projects/k3baudioviewimpl.cpp:443
+#: projects/k3baudioviewimpl.cpp:378
 #, kde-format
 msgid "No tracks to convert"
 msgstr "没有要转换的音轨"
@@ -7913,21 +7881,6 @@ msgstr "添加字幕文件..."
 #, kde-format
 msgid "K3b currently only supports local files."
 msgstr "K3b 目前只支持本地文件。"
-
-#: projects/k3bmusicbrainzjob.cpp:116
-#, kde-format
-msgid "Found multiple matches for track %1 (%2). Please select one."
-msgstr "找到多个匹配的轨道 %1 (%2) 。请选择一个。"
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:71
-#, kde-format
-msgid "Generating fingerprint for track %1."
-msgstr "正在生成音轨 %1 的指纹。"
-
-#: projects/k3bmusicbrainztrackloopupjob.cpp:110
-#, kde-format
-msgid "Querying MusicBrainz for track %1."
-msgstr "正在查询音轨 %1 的 MusicBrainz。"
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -10506,3 +10459,30 @@ msgstr "无性型"
 #, kde-format
 msgid "Subpicture"
 msgstr "子画面"
+
+#~ msgid "MusicBrainz Query"
+#~ msgstr "MusicBrainz 查询"
+
+#~ msgid "Track %1 was not found in the MusicBrainz database."
+#~ msgstr "音轨 %1 没有在 MusicBrainz 数据库中找到。"
+
+#~ msgid "Musicbrainz Lookup"
+#~ msgstr "Musicbrainz 查阅"
+
+#~ msgid "Try to determine meta information over the Internet"
+#~ msgstr "尝试通过 Internet 获取元信息"
+
+#~ msgid "Please add an audio track."
+#~ msgstr "请添加音轨。"
+
+#~ msgid "Please select an audio track."
+#~ msgstr "请选择音轨。"
+
+#~ msgid "Found multiple matches for track %1 (%2). Please select one."
+#~ msgstr "找到多个匹配的轨道 %1 (%2) 。请选择一个。"
+
+#~ msgid "Generating fingerprint for track %1."
+#~ msgstr "正在生成音轨 %1 的指纹。"
+
+#~ msgid "Querying MusicBrainz for track %1."
+#~ msgstr "正在查询音轨 %1 的 MusicBrainz。"
