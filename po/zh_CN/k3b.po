@@ -10459,30 +10459,3 @@ msgstr "无性型"
 #, kde-format
 msgid "Subpicture"
 msgstr "子画面"
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "MusicBrainz 查询"
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "音轨 %1 没有在 MusicBrainz 数据库中找到。"
-
-#~ msgid "Musicbrainz Lookup"
-#~ msgstr "Musicbrainz 查阅"
-
-#~ msgid "Try to determine meta information over the Internet"
-#~ msgstr "尝试通过 Internet 获取元信息"
-
-#~ msgid "Please add an audio track."
-#~ msgstr "请添加音轨。"
-
-#~ msgid "Please select an audio track."
-#~ msgstr "请选择音轨。"
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr "找到多个匹配的轨道 %1 (%2) 。请选择一个。"
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "正在生成音轨 %1 的指纹。"
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "正在查询音轨 %1 的 MusicBrainz。"
