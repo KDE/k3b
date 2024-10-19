@@ -10845,32 +10845,3 @@ msgstr "anamorfní širokoúhlost"
 #, kde-format
 msgid "Subpicture"
 msgstr "Subpicture"
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "Dotaz na MusicBrainz"
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "Stopa %1 nebyla nalezena v databázi MusicBrainz."
-
-#~ msgid "Musicbrainz Lookup"
-#~ msgstr "Vyhledat na MusicBrainz"
-
-#~ msgid "Try to determine meta information over the Internet"
-#~ msgstr "Pokusit se zjistit meta informace přes internetu"
-
-#~ msgid "Please add an audio track."
-#~ msgstr "Prosím, přidejte audio stopu."
-
-#~ msgid "Please select an audio track."
-#~ msgstr "Zvolte prosím audio stopu."
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr ""
-#~ "Nalezeno více odpovídajících záznamů pro stopu %1 (%2). Prosím vyberte "
-#~ "jeden."
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "Generuje se otisk stopy %1."
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "Dotazuji se databáze MusicBrainz na stopu %1."
