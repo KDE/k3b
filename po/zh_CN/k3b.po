@@ -10300,7 +10300,7 @@ msgstr ""
 "<p>将视频 DVD 中单一标题转换为例如 XviD 的压缩格式 。目录结构被完全忽略。<p>"
 "如果你打算从 DVD复制纯视频 DVD 的 vob 文件并用其他应用程序作进一步处理 (包括"
 "解密) ，请使用 \"显示文件\"按钮。<p>如果你打算制作一个包括所有的目录和额外的"
-"东西的整个视频 DVD 拷贝，建议使用 K3b 的复制工具。"
+"东西的整个视频 DVD 副本，建议使用 K3b 的复制工具。"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
 msgid "Keep original dimensions"
