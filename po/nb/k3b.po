@@ -10807,30 +10807,3 @@ msgstr "anamorf"
 #, kde-format
 msgid "Subpicture"
 msgstr "Under-bilde"
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "MusicBrainz spørring"
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "Sporet %1 ble ikke funnet i MusicBrainz databasen."
-
-#~ msgid "Musicbrainz Lookup"
-#~ msgstr "Finn i MusicBrainz"
-
-#~ msgid "Try to determine meta information over the Internet"
-#~ msgstr "Prøver å bestemme meta-informasjon over Internett"
-
-#~ msgid "Please add an audio track."
-#~ msgstr "Legg til et lydspor."
-
-#~ msgid "Please select an audio track."
-#~ msgstr "Velg et lydspor."
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr "Fant flere treff for spor %1 (%2). Velg ett av dem."
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "Lager fingeravtrykk for spor %1"
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "Spør MusicBrainz om spor %1."

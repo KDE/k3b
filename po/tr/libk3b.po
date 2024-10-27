@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-02-09 19:24+0300\n"
+"PO-Revision-Date: 2024-10-27 00:56+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.95\n"
+"X-Generator: Lokalize 24.11.70\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -943,7 +943,7 @@ msgstr "DVD+R(W) için yazma kipi yok sayıldı."
 #: projects/datacd/k3bdatajob.cpp:840 projects/datacd/k3bdatajob.cpp:961
 #, kde-format
 msgid "Writing %1."
-msgstr "%1 yazılıyor."
+msgstr "%1 yazılıyor…"
 
 #: jobs/k3bdvdcopyjob.cpp:839 jobs/k3bmetawriter.cpp:512
 #: projects/datacd/k3bdatajob.cpp:848
@@ -970,7 +970,7 @@ msgstr "DVD-R(W)'a sınırlandırılmış üzerine yazma kipinde yazılıyor."
 #: jobs/k3bdvdcopyjob.cpp:873
 #, kde-format
 msgid "Writing DVD-RW in DAO mode."
-msgstr "DVD-RW DAO kipinde yazılıyor."
+msgstr "DVD-RW DAO kipinde yazılıyor…"
 
 #: jobs/k3bdvdcopyjob.cpp:877
 #, kde-format
@@ -1541,9 +1541,9 @@ msgid ""
 "codecs used these days. Its subproject libavcodec forms the basis for "
 "multimedia players such as xine or mplayer."
 msgstr ""
-"FFmpeg birçok ses ve video çözücüsü destekleyen açık kaynaklı bir projedir. "
-"libavcodec altprojesi xine veya mplayer gibi oynatıcıların temelini "
-"oluşturur."
+"FFmpeg birçok ses ve video çözücüsünü destekleyen açık kaynaklı bir "
+"projedir. libavcodec altprojesi xine veya mplayer gibi oynatıcıların "
+"temelini oluşturur."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:547
 #, kde-format
@@ -1643,13 +1643,13 @@ msgstr "K3b, bu ayarla iki kanallı, stereo, MPEG1 Katman III ses oluşturur."
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Decoder"
-msgstr "Ses Çözücü"
+msgstr "Ses Çözücüsü"
 
 #: plugin/k3baudioencoder.cpp:45
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Encoder"
-msgstr "Ses Kodlayıcı"
+msgstr "Ses Kodlayıcısı"
 
 #: plugin/k3baudioencoder.cpp:154
 #, kde-format
@@ -1691,7 +1691,7 @@ msgstr "%1 izi okunamadı."
 #: projects/mixedcd/k3bmixedjob.cpp:1088
 #, kde-format
 msgid "Could not open %1 for writing"
-msgstr "%1, yazılmak için açılamıyor"
+msgstr "%1, yazılmak için açılamıyor."
 
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
@@ -1807,7 +1807,7 @@ msgstr "%1 / %2%3 parça yazılıyor"
 #: projects/k3bcdrskinwriter.cpp:461 projects/k3bgrowisofswriter.cpp:362
 #, kde-format
 msgid "Writing"
-msgstr "Yazılıyor"
+msgstr "Yazılıyor…"
 
 #: projects/audiocd/k3baudiojob.cpp:721 projects/mixedcd/k3bmixedjob.cpp:1267
 #, kde-format
@@ -1817,7 +1817,7 @@ msgstr "Ses düzeyleri normalleştiriliyor"
 #: projects/audiocd/k3baudiojob.cpp:838
 #, kde-format
 msgid "Writing Audio CD"
-msgstr "Ses CD’si Yazılıyor"
+msgstr "Ses CD’si yazılıyor…"
 
 #: projects/audiocd/k3baudiojob.cpp:848
 #, kde-format
@@ -2175,7 +2175,7 @@ msgstr "%1 dosyası okunamıyor. Esgeçiliyor..."
 #: projects/datacd/k3bisoimager.cpp:830
 #, kde-format
 msgid "Failed to backup boot image file %1"
-msgstr "Önyükleme kalıp dosyası %1 için yedek alınamıyor"
+msgstr "Önyükleme kalıp dosyası %1 için yedek alınamıyor."
 
 #: projects/datacd/k3bisoimager.cpp:990 projects/datacd/k3bisoimager.cpp:1000
 #: projects/datacd/k3bisoimager.cpp:1007 projects/datacd/k3bisoimager.cpp:1013
@@ -2368,7 +2368,7 @@ msgstr "Kopyalama %1x hızında başlatılıyor..."
 #: projects/k3bcdrdaowriter.cpp:585
 #, kde-format
 msgid "Copying"
-msgstr "Kopyalanıyor"
+msgstr "Kopyalanıyor…"
 
 #: projects/k3bcdrdaowriter.cpp:589
 #, kde-format
@@ -2541,7 +2541,7 @@ msgstr "Cdrecord sürüm %1 Blu-ray yazmayı desteklemiyor."
 #: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
 #, kde-format
 msgid "Writer does not support disk at once (DAO) recording"
-msgstr "Yazıcı disk at once (DAO) kaydını desteklemiyor"
+msgstr "Yazıcı disk at once (DAO) kaydını desteklemiyor."
 
 #: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
 #, kde-format
@@ -2618,13 +2618,13 @@ msgstr "Giriş/çıkış hatası. Yeterince önemli değil."
 #: projects/k3bcdrecordwriter.cpp:594 projects/k3bcdrskinwriter.cpp:607
 #, kde-format
 msgid "Reloading of medium required"
-msgstr "Ortamın yeniden okunması gerekiyor"
+msgstr "Ortamın yeniden okunması gerekiyor."
 
 #: projects/k3bcdrecordwriter.cpp:603 projects/k3bcdrskinwriter.cpp:616
 #: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
 #, kde-format
 msgid "Trying to write more than the official disk capacity"
-msgstr "Resmi disk kapasitesinden daha fazla yazılmaya çalışılıyor"
+msgstr "Resmi disk kapasitesinden daha fazla yazılmaya çalışılıyor…"
 
 #: projects/k3bcdrecordwriter.cpp:638 projects/k3bcdrskinwriter.cpp:651
 #, kde-format
@@ -2649,38 +2649,38 @@ msgstr "Yazma hızı %1x'e düşürülüyor"
 #: projects/k3bcdrecordwriter.cpp:686 projects/k3bcdrskinwriter.cpp:699
 #, kde-format
 msgid "Starting disc write"
-msgstr "Yazma başlatılıyor"
+msgstr "Yazma başlatılıyor…"
 
 #: projects/k3bcdrecordwriter.cpp:702 projects/k3bcdrskinwriter.cpp:715
 #: projects/k3bgrowisofshandler.cpp:133
 #, kde-format
 msgid "Closing Session"
-msgstr "Oturum Kapatılıyor"
+msgstr "Oturum kapatılıyor…"
 
 #: projects/k3bcdrecordwriter.cpp:706 projects/k3bcdrskinwriter.cpp:719
 #, kde-format
 msgid "Writing Leadin"
-msgstr "Leadin Yazılıyor"
+msgstr "Lead-in yazılıyor…"
 
 #: projects/k3bcdrecordwriter.cpp:709 projects/k3bcdrskinwriter.cpp:722
 #, kde-format
 msgid "Writing Leadout"
-msgstr "Leadout Yazılıyor"
+msgstr "Lead-out yazılıyor…"
 
 #: projects/k3bcdrecordwriter.cpp:712 projects/k3bcdrskinwriter.cpp:725
 #, kde-format
 msgid "Writing pregap"
-msgstr "Ön aralık yazılıyor"
+msgstr "Ön aralık yazılıyor…"
 
 #: projects/k3bcdrecordwriter.cpp:715 projects/k3bcdrskinwriter.cpp:728
 #, kde-format
 msgid "Performing Optimum Power Calibration"
-msgstr "En Uygun Güç Kalibrasyonu Uygulanıyor"
+msgstr "En uygun güç kalibrasyonu uygulanıyor…"
 
 #: projects/k3bcdrecordwriter.cpp:718 projects/k3bcdrskinwriter.cpp:731
 #, kde-format
 msgid "Sending CUE sheet"
-msgstr "CUE sayfası gönderiliyor"
+msgstr "CUE sayfası gönderiliyor…"
 
 #: projects/k3bcdrecordwriter.cpp:721 projects/k3bcdrskinwriter.cpp:734
 #, kde-format
@@ -2696,7 +2696,7 @@ msgstr "Burnfree Kapalı"
 #: projects/mixedcd/k3bmixedjob.cpp:555
 #, kde-format
 msgid "Unable to close the tray"
-msgstr "Tepsi kapatılamıyor"
+msgstr "Tepsi kapatılamıyor."
 
 #: projects/k3bcdrecordwriter.cpp:740 projects/k3bcdrskinwriter.cpp:753
 #, kde-format
@@ -2831,7 +2831,7 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:870 projects/k3bcdrskinwriter.cpp:883
 #, kde-format
 msgid "Another application is blocking the device (most likely automounting)."
-msgstr "Başka bir uygulama aygıtı engelliyor (muhtemelen automounting)."
+msgstr "Başka bir uygulama aygıtı engelliyor (büyük olasılıkla automounting)."
 
 #: projects/k3bcdrecordwriter.cpp:873 projects/k3bcdrskinwriter.cpp:886
 #, kde-format
@@ -2947,7 +2947,7 @@ msgstr "CD Kapatılıyor"
 #: projects/k3bgrowisofshandler.cpp:129
 #, kde-format
 msgid "Updating RMA"
-msgstr "RMA güncelleniyor"
+msgstr "RMA güncelleniyor…"
 
 #: projects/k3bgrowisofshandler.cpp:130
 #, kde-format
@@ -2987,7 +2987,7 @@ msgstr "Artan Akış (Incremental Streaming) yok"
 #: projects/k3bgrowisofshandler.cpp:152
 #, kde-format
 msgid "Engaging DAO"
-msgstr "DAO devreye giriyor"
+msgstr "DAO devreye giriyor…"
 
 #: projects/k3bgrowisofshandler.cpp:164
 #, kde-format
@@ -3425,7 +3425,7 @@ msgstr "%1 / %2 (%3) video dosyası taranıyor"
 #: projects/videocd/k3bvcdjob.cpp:323
 #, kde-format
 msgid "Creating Image for track %1"
-msgstr "Parça %1 için Kalıp oluşturuluyor"
+msgstr "Parça %1 için kalıp oluşturuluyor…"
 
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
@@ -3677,12 +3677,12 @@ msgstr ""
 #: projects/videodvd/k3bvideodvdjob.cpp:43
 #, kde-format
 msgid "Creating Video DVD Image File"
-msgstr "Video DVD Kalıp dosyası oluşturuluyor"
+msgstr "Video DVD kalıp dosyası oluşturuluyor…"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:46
 #, kde-format
 msgid "Writing Video DVD"
-msgstr "Video DVD Yazılıyor"
+msgstr "Video DVD yazılıyor"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:56
 #, kde-format
@@ -4425,7 +4425,7 @@ msgstr "Yazılan veriyi kontrol et"
 #: tools/k3bstdguiitems.cpp:170
 #, kde-format
 msgid "Compare original with written data"
-msgstr "Yazılan veri doğrulanıyor"
+msgstr "Yazılan veri doğrulanıyor…"
 
 #: tools/k3bstdguiitems.cpp:171
 #, kde-format

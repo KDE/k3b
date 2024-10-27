@@ -10254,24 +10254,3 @@ msgstr ""
 #, kde-format
 msgid "Subpicture"
 msgstr ""
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "MusicBrainz spørring"
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "Sporet %1 vart ikkje funnet i MusicBrainz sin database."
-
-#~ msgid "Musicbrainz Lookup"
-#~ msgstr "Finn i MusicBrainz"
-
-#~ msgid "Please select an audio track."
-#~ msgstr "Vel eit lydspor."
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr "Fant fleire treff for spor %1 (%2). Vel ein av dei."
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "Lagar fingeravtrykk for spor %1"
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "Spør MusicBrainz etter spor %1."
