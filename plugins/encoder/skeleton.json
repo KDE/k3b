@@ -95,7 +95,7 @@
         "Description[sr]": "Модул за кодирање <име> фајлова",
         "Description[sv]": "Kodningsmodul för att koda <namn>-filer",
         "Description[th]": "มอดูลเข้ารหัสแฟ้มประเภท <name>",
-        "Description[tr]": "<name> dosyalarını kodlamak için kodlayıcı modülü",
+        "Description[tr]": "<ad> dosyalarını kodlamak için kodlayıcı modülü",
         "Description[uk]": "Модуль кодування файлів <name>",
         "Description[x-test]": "xxEncoding module to encode <name> filesxx",
         "Description[zh_CN]": "用于编码 <name> 文件的编码模块",
