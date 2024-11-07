@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 02:26+0000\n"
-"PO-Revision-Date: 2024-05-30 19:17+0200\n"
+"PO-Revision-Date: 2024-11-06 23:59+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 24.11.70\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -440,7 +440,7 @@ msgstr "Командата беше неуспешна: %1"
 #: ../plugins/encoder/external/k3bexternalencoder.cpp:201
 #, kde-format
 msgid "Could not find program '%1'"
-msgstr "Програмата \"%1\" не беше намерена"
+msgstr "Програмата „%1“ не беше намерена"
 
 #: ../plugins/encoder/external/k3bexternalencoder.cpp:208
 #, kde-format
@@ -2552,7 +2552,7 @@ msgstr ""
 "<p>Устройство <b>%1</b> се използва от други програми (<em>%2</em>)."
 "<p>Горещо се препоръчва да ги затворите преди да продължите, иначе K3b може "
 "да няма пълен достъп до него.<p><em>Съвет: понякога програмата не се "
-"изключва веднага. В такъв случай можете да използвате бутона \"%3\"."
+"изключва веднага. В такъв случай можете да използвате бутона „%3“."
 
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
@@ -2786,7 +2786,7 @@ msgid ""
 msgstr ""
 "Проверете разрешенията чрез настройки -> Конфигуриране на K3b… -> Програми -"
 ">Разрешения. Ако е зададена стойността на K3b по подразбиране, уверете се, "
-"че сте член нагрупа \"%1\"."
+"че сте член нагрупа „%1“."
 
 #: k3bsystemproblemdialog.cpp:208 k3bsystemproblemdialog.cpp:270
 #: k3bsystemproblemdialog.cpp:292 k3bsystemproblemdialog.cpp:314
@@ -5165,7 +5165,7 @@ msgstr "Създаване"
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
-msgstr "Папката \"%1\" не може да бъде създадена"
+msgstr "Папката „%1“ не може да бъде създадена"
 
 #: option/k3bmiscoptiontab.cpp:120
 #, kde-format
@@ -5293,7 +5293,7 @@ msgstr "Този файл не е валиден архив за теми в K3b
 #: option/k3bthemeoptiontab.cpp:182
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
-msgstr "Вече има файл с име \"%1\". Искате ли да бъде презаписан?"
+msgstr "Вече има файл с име „%1“. Искате ли да бъде презаписан?"
 
 #: option/k3bthemeoptiontab.cpp:184
 #, kde-format
@@ -6820,7 +6820,7 @@ msgstr "Моля, имайте търпение…"
 #: projects/k3baudiotrackaddingdialog.cpp:50
 #, kde-format
 msgid "Adding files to project \"%1\"..."
-msgstr "Добавяне на файлове към проекта \"%1\"…"
+msgstr "Добавяне на файлове към проекта „%1“…"
 
 #: projects/k3baudiotrackaddingdialog.cpp:73
 #: projects/k3bdataurladdingdialog.cpp:801
@@ -6863,7 +6863,7 @@ msgstr "Проблеми при добавяне на файлове към пр
 #: projects/k3baudiotrackaddingdialog.cpp:146
 #, kde-format
 msgid "Analysing file '%1'..."
-msgstr "Анализиране на файл \"%1\"…"
+msgstr "Анализиране на файл „%1“…"
 
 #: projects/k3baudiotrackdialog.cpp:38
 #, kde-format
@@ -7576,17 +7576,17 @@ msgstr "Няма папки"
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
 msgid "Moving files to project \"%1\"..."
-msgstr "Преместване на файлове към проекта \"%1\"…"
+msgstr "Преместване на файлове към проекта „%1“…"
 
 #: projects/k3bdataurladdingdialog.cpp:92
 #, kde-format
 msgid "Adding files to project '%1'"
-msgstr "Добавяне на файлове към проект \"%1\""
+msgstr "Добавяне на файлове към проект „%1“"
 
 #: projects/k3bdataurladdingdialog.cpp:97
 #, kde-format
 msgid "Adding files to project '%1'..."
-msgstr "Добавяне на файлове към проект \"%1\"…"
+msgstr "Добавяне на файлове към проект „%1“…"
 
 #: projects/k3bdataurladdingdialog.cpp:178
 #, kde-format
@@ -7689,13 +7689,12 @@ msgid ""
 "the option <em>follow symbolic links</em> you may safely ignore this warning "
 "and choose to add the link to the project.</b>"
 msgstr ""
-"<p>\"%1\" е символна връзка към папка \"%2\".<p>Ако имате намерение да "
-"настроите K3b да проследява символните връзки, трябва своевременно да го "
-"направите. Това няма да е възможно по-късно поради факта, че символните "
-"връзки към папките в проект на K3b не могат да бъдат възстановени.<p><b>Ако "
-"не смятате да включвате опцията <em>проследяване на символните връзки</em>, "
-"можете да пренебрегнете това предупреждение и да добавите връзка към проекта."
-"</b>"
+"<p>„%1“ е символна връзка към папка „%2“.<p>Ако имате намерение да настроите "
+"K3b да проследява символните връзки, трябва своевременно да го направите. "
+"Това няма да е възможно по-късно поради факта, че символните връзки към "
+"папките в проект на K3b не могат да бъдат възстановени.<p><b>Ако не смятате "
+"да включвате опцията <em>проследяване на символните връзки</em>, можете да "
+"пренебрегнете това предупреждение и да добавите връзка към проекта.</b>"
 
 #: projects/k3bdataurladdingdialog.cpp:455
 #, kde-format
@@ -8211,7 +8210,7 @@ msgstr "Запис"
 #: projects/k3bprojectburndialog.cpp:187 rip/k3bvideocdrippingdialog.cpp:143
 #, kde-format
 msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
-msgstr "Папката с образи \"%1\" не съществува. Искате ли K3b да я създаде?"
+msgstr "Папката с образи „%1“ не съществува. Искате ли K3b да я създаде?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
 #, kde-format
@@ -8221,7 +8220,7 @@ msgstr "Да се създаде ли папка?"
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
 msgid "Failed to create folder '%1'."
-msgstr "Грешка при създаване на папка \"%1\"."
+msgstr "Грешка при създаване на папка „%1“."
 
 #: projects/k3bprojectburndialog.cpp:252
 #, kde-format
@@ -9799,7 +9798,7 @@ msgstr "Конвертиране на аудио записи"
 #: rip/k3baudioprojectconvertingjob.cpp:50
 #, kde-format
 msgid "Converting Audio Tracks From '%1'"
-msgstr "Конвертиране на аудио записи от \"%1\""
+msgstr "Конвертиране на аудио записи от „%1“"
 
 #: rip/k3baudioprojectconvertingjob.cpp:58
 #, kde-format
@@ -9839,7 +9838,7 @@ msgstr "Извличане на аудио записи"
 #: rip/k3baudioripjob.cpp:189
 #, kde-format
 msgid "Ripping Audio Tracks From '%1'"
-msgstr "Извличане на записи от \"%1\""
+msgstr "Извличане на записи от „%1“"
 
 #: rip/k3baudioripjob.cpp:219
 #, kde-format
@@ -10086,7 +10085,7 @@ msgstr[1] "%1 записа"
 #: rip/k3bmassaudioencodingjob.cpp:264
 #, kde-format
 msgid "Removed partial file '%1'."
-msgstr "Премахване на незавършения файл \"%1\"."
+msgstr "Премахване на незавършения файл „%1“."
 
 #: rip/k3bmassaudioencodingjob.cpp:329 rip/k3bmassaudioencodingjob.cpp:454
 #, kde-format
@@ -10692,12 +10691,12 @@ msgstr[1] "Транскодиране на %1 заглавия в %2/%3"
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
 #, kde-format
 msgid "Successfully ripped title %1 to '%2'"
-msgstr "Заглавието %1 беше извлечено успешно в \"%2\""
+msgstr "Заглавието %1 беше извлечено успешно в „%2“"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:143
 #, kde-format
 msgid "Failed to rip title %1"
-msgstr "Извличането на заглавие \"%1\" беше неуспешно"
+msgstr "Извличането на заглавие „%1“ беше неуспешно"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:173
 #, kde-format
@@ -10754,7 +10753,7 @@ msgid ""
 "K3b was unable to unmount device '%1' containing medium '%2'. Video DVD "
 "ripping will not work if the device is mounted. Please unmount manually."
 msgstr ""
-"K3b не можа да демонтира устройство \"%1\" в който е \"%2\". Извличането на "
+"K3b не можа да демонтира устройство „%1“ в който е „%2“. Извличането на "
 "видео DVD не работи ако устройството е монтирано. Моля, демонтирайте го "
 "ръчно."
 
