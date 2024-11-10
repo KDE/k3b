@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/k3b/kio_videodvd.pot\n"
-"X-Crowdin-File-ID: 53448\n"
+"X-Crowdin-File: /kf6-stable/messages/k3b/kio_videodvd.pot\n"
+"X-Crowdin-File-ID: 54768\n"
 
 #: videodvd.cpp:163 videodvd.cpp:291
 #, kde-format
