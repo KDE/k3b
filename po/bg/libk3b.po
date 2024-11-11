@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-23 00:38+0000\n"
-"PO-Revision-Date: 2024-05-30 19:57+0200\n"
+"PO-Revision-Date: 2024-11-10 14:21+0100\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 24.11.70\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: core/k3bcore.cpp:241
@@ -1668,7 +1668,7 @@ msgstr "Моля, поставете аудио CD %1%2"
 #: projects/audiocd/k3baudiocdtracksource.cpp:201
 #, kde-format
 msgid "CD Track"
-msgstr "Заапис от CD"
+msgstr "Запис от CD"
 
 #: projects/audiocd/k3baudiocdtracksource.cpp:207
 #, kde-format
@@ -1948,7 +1948,7 @@ msgstr "Грешка при създаване на ISO образ"
 #, kde-format
 msgid "Internal Error: No medium type fits. This project cannot be burned."
 msgstr ""
-"Вътрешна грешка: видът на диска не съвпада. ЗАписът не може да бъде направен."
+"Вътрешна грешка: видът на диска не съвпада. Записът не може да бъде направен."
 
 #: projects/datacd/k3bdatajob.cpp:698
 #, kde-format
@@ -2692,7 +2692,7 @@ msgstr "Burnfree е изключен"
 #: projects/mixedcd/k3bmixedjob.cpp:555
 #, kde-format
 msgid "Unable to close the tray"
-msgstr "Треят не може да бъде затворен"
+msgstr "Устройството не може да бъде затворено"
 
 #: projects/k3bcdrecordwriter.cpp:740 projects/k3bcdrskinwriter.cpp:753
 #, kde-format
@@ -2885,7 +2885,7 @@ msgstr "…и FAQ на K3b не ви помага…"
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
-msgstr "…моля, изпратетете съобщение за грешка и прикрепете данните."
+msgstr "…моля, изпратете съобщение за грешка и прикрепете данните."
 
 #: projects/k3bcdrskinwriter.cpp:240
 #, kde-format
@@ -3693,7 +3693,7 @@ msgstr "Файлова система ISO9660/Udf (Големина: %1)"
 #: tools/k3bcddb.cpp:37
 #, kde-format
 msgid "Multiple CDDB Entries Found"
-msgstr "Намрени са няколко записа в CDDB"
+msgstr "Намерени са няколко записа в CDDB"
 
 #: tools/k3bcddb.cpp:39
 #, kde-format
@@ -4155,7 +4155,7 @@ msgid ""
 "DVD+R(W) does not support simulated writing."
 msgstr ""
 "<p>Ако е включена тази опция, K3b ще изпълни всички етапи на записа с "
-"изключен лазер.<p>Изпозлва се за тестване на записа при по-висока скорост "
+"изключен лазер.<p>Използва се за тестване на записа при по-висока скорост "
 "или при \"Бърз запис\".<p><b>Внимание:</b>За DVD+R(W) няма симулация."
 
 #: tools/k3bstdguiitems.cpp:25
