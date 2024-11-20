@@ -130,6 +130,7 @@ int K3b::PluginManager::execPluginDialog( Plugin* plugin, QWidget* parent )
         QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::RestoreDefaults, &dlg );
         layout->addWidget( module->widget() );
         layout->addWidget( buttonBox );
+        module->load();
 
         connect( buttonBox, &QDialogButtonBox::clicked, [&](QAbstractButton *button) {
             switch( buttonBox->standardButton( button ) )
