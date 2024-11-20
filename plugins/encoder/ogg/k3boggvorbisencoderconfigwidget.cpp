@@ -80,7 +80,7 @@ K3bOggVorbisEncoderSettingsWidget::K3bOggVorbisEncoderSettingsWidget(QObject *pa
     connect( w->m_slideQualityLevel, SIGNAL(valueChanged(int)),
              this, SLOT(slotQualityLevelChanged(int)) );
 
-    slotQualityLevelChanged( 4 );
+    slotQualityLevelChanged( w->m_slideQualityLevel->value() );
 
     connect( w->m_radioQualityLevel, SIGNAL(toggled(bool)), this, SLOT(changed()) );
     connect( w->m_slideQualityLevel, SIGNAL(valueChanged(int)), this, SLOT(changed()) );
