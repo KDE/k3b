@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-11-28 00:39+0000\n"
 "PO-Revision-Date: 2023-01-06 17:30+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -1674,7 +1674,7 @@ msgstr "Κωδικοποιητής ήχου"
 msgid "An unknown error occurred."
 msgstr "Συνέβη ένα άγνωστο σφάλμα."
 
-#: plugin/k3bpluginmanager.cpp:152
+#: plugin/k3bpluginmanager.cpp:153
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "Δεν υπάρχουν διαθέσιμες ρυθμίσεις για το πρόσθετο %1."
