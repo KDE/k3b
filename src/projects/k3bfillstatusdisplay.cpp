@@ -154,7 +154,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     int fontPointSize = qMax(8, overSizeFont.pointSize() - 4);
     sopb.rect = rect();
     sopb.rect.setY(sopb.rect.y() + fontPointSize);
-    sopb.state = isEnabled() ? QStyle::State_Enabled : QStyle::State_None;
+    sopb.state = QStyle::State_Horizontal | (isEnabled() ? QStyle::State_Enabled : QStyle::State_None);
     sopb.minimum = 0;
     sopb.maximum = maxValue.totalFrames();
     sopb.progress = docSize.totalFrames();
