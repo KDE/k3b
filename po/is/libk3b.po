@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-11-28 02:28+0000\n"
 "PO-Revision-Date: 2022-09-21 16:21+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -1625,7 +1625,7 @@ msgstr "Hljóðkóðari"
 msgid "An unknown error occurred."
 msgstr "Óþekkt villa kom upp."
 
-#: plugin/k3bpluginmanager.cpp:152
+#: plugin/k3bpluginmanager.cpp:153
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "Engar stillingar fáanlegar fyrir íforritið %1."

@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-11-28 02:28+0000\n"
 "PO-Revision-Date: 2024-10-27 00:58+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -1652,7 +1652,7 @@ msgstr "Ses Kodlayıcısı"
 msgid "An unknown error occurred."
 msgstr "Bilinmeyen bir hata oluştu."
 
-#: plugin/k3bpluginmanager.cpp:152
+#: plugin/k3bpluginmanager.cpp:153
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "%1 eklentisi için ayarlama seçeneği yok."

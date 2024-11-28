@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-11-28 02:28+0000\n"
 "PO-Revision-Date: 2024-05-06 16:09+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -1705,7 +1705,7 @@ msgstr "Encodeur audio"
 msgid "An unknown error occurred."
 msgstr "Une erreur inconnue est survenue."
 
-#: plugin/k3bpluginmanager.cpp:152
+#: plugin/k3bpluginmanager.cpp:153
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "Aucune configuration n'est disponible pour le module externe %1."

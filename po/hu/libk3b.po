@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-23 00:38+0000\n"
+"POT-Creation-Date: 2024-11-28 02:28+0000\n"
 "PO-Revision-Date: 2024-07-31 22:22+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -1670,7 +1670,7 @@ msgstr "Hangkódoló"
 msgid "An unknown error occurred."
 msgstr "Ismeretlen hiba történt."
 
-#: plugin/k3bpluginmanager.cpp:152
+#: plugin/k3bpluginmanager.cpp:153
 #, kde-format
 msgid "No settings available for plugin %1."
 msgstr "Nincs módosítható beállítás a(z) \"%1\" modulnál."
