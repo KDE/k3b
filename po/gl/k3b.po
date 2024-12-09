@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-02-27 07:12+0100\n"
+"PO-Revision-Date: 2024-12-08 16:05+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1866,7 +1866,7 @@ msgstr "Velocidade de gravación estimada:"
 #: k3bburnprogressdialog.cpp:49
 #, kde-format
 msgid "Software buffer:"
-msgstr "Búfer por software:"
+msgstr "Búfer lóxico:"
 
 #: k3bburnprogressdialog.cpp:50
 #, kde-format
@@ -3191,7 +3191,7 @@ msgstr ""
 "Para activar a compatibilidade con MP3, instale a biblioteca MAD de "
 "descodificación de MP3 xunto co complemento de K3b para descodificar MP3 "
 "mediante MAD (pode que xa estea instalado, pero non funcional por carecer de "
-"«libmad»). Algunhas distribucións de software permiten instalar a "
+"«libmad»). Algunhas distribucións de programas permiten instalar a "
 "compatibilidade con MP3 mediante unha ferramenta de actualización por "
 "Internet."
 
@@ -3225,7 +3225,7 @@ msgstr ""
 "Para definir correctamente o conxunto de caracteres da configuración "
 "rexional asegúrese de que as variábeis de contorno «LC_*» estean "
 "correctamente definidas. Normalmente as ferramentas de configuración da "
-"distribución de software que usa encárganse disto."
+"distribución de programas que usa encárganse disto."
 
 #: k3bsystemproblemdialog.cpp:582
 #, kde-format
@@ -3522,7 +3522,7 @@ msgid ""
 "in DAO and TAO."
 msgstr ""
 "Modo de gravación RAW. Os datos de corrección de erros están creados polo "
-"software no canto de polo dispositivo de gravación.<br>Intente isto se a súa "
+"programa no canto de polo dispositivo de gravación.<br>Intente isto se a súa "
 "gravadora de CD non pode gravar en DAO e TAO."
 
 #: k3bwritingmodewidget.cpp:35
@@ -4855,8 +4855,8 @@ msgid ""
 "for CD and %2 MB for DVD burning.<p>If this option is checked the value "
 "specified will be used for both CD and DVD burning."
 msgstr ""
-"<p>K3b usa un búfer por software durante o proceso de gravación para evitar "
-"ocos na transmisión de datos debido a cargas altas do sistema. Os tamaños "
+"<p>K3b usa un búfer lóxico durante o proceso de gravación para evitar ocos "
+"na transmisión de datos debido a cargas altas do sistema. Os tamaños "
 "predeterminados son de %1 MB para a gravación de CD e %2 MB para DVD.<p> Se "
 "marca esta opción, o valor indicado usarase tanto para CD como DVD."
 
@@ -5826,9 +5826,10 @@ msgstr ""
 "para almacenar información adicional, como o intérprete ou o título do CD. "
 "<p>CD-Text é unha extensión do CD de son estándar introducida por Sony.<p>CD-"
 "Text só servirá nos reprodutores de CD que admitan esta extensión (a maioría "
-"dos reprodutores de CD dos coches).<p> Xa que un CD sen CD-Text funciona de "
-"todos os xeitos en calquera reprodutor de CD, nunca é mala idea activalo "
-"(pero lembre cubrir os datos de CD-Text)."
+"dos reprodutores de CD dos coches) e programas como K3b, por suposto.\n"
+"<p> Xa que un CD sen CD-Text funciona de todos os xeitos en calquera "
+"reprodutor de CD, nunca é mala idea activalo (pero lembre cubrir os datos de "
+"CD-Text)."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextwidget.ui:45
@@ -10048,9 +10049,10 @@ msgstr ""
 "<p>Se marca esta opción K3b non extrae os datos de son nos silencios "
 "previos. A maioría das pistas de son conteñen un silencio previo baleiro que "
 "non pertence á pista.</p> <p>Aínda que o comportamento predeterminado de "
-"case todo o software de extracción é incluír os silencios previos na maioría "
-"dos CD ten máis sentido ignoralos. Cando estea a crear un proxecto de son "
-"con K3b, este rexenerará estes silencios previos de todos os xeitos.</p>"
+"case todos os programas de extracción é incluír os silencios previos na "
+"maioría dos CD ten máis sentido ignoralos. Cando estea a crear un proxecto "
+"de son con K3b, este rexenerará estes silencios previos de todos os xeitos.</"
+"p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
@@ -10257,8 +10259,8 @@ msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Pode atopalo no repositorio de software da súa distribución ou descargalo de "
-"https://www.gnu.org/software/vcdimager/"
+"Pode atopalo no repositorio de programas da súa distribución ou descargalo "
+"de https://www.gnu.org/software/vcdimager/"
 
 #: rip/k3bvideocdrip.cpp:100
 #, kde-format
