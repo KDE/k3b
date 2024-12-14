@@ -1,0 +1,27 @@
+# Sanskrit translations for k3b package.
+# Copyright (C) 2024 This file is copyright:
+# This file is distributed under the same license as the k3b package.
+# Kali <EMAIL@ADDRESS>, 2024.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: k3b\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2023-11-05 12:30+0000\n"
+"PO-Revision-Date: 2024-12-13 19:10+0530\n"
+"Last-Translator: Kali <EMAIL@ADDRESS>\n"
+"Language-Team: Sanskrit\n"
+"Language: sa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: videodvd.cpp:163 videodvd.cpp:291
+#, kde-format
+msgid "No Video DVD found"
+msgstr "कोऽपि Video DVD न प्राप्तः"
+
+#: videodvd.cpp:206 videodvd.cpp:374
+#, kde-format
+msgid "Read error."
+msgstr "पठनदोषः ।"
