@@ -34,6 +34,7 @@
   <name xml:lang="pt">K3b</name>
   <name xml:lang="pt-BR">K3b</name>
   <name xml:lang="ru">K3b</name>
+  <name xml:lang="sa">K3b</name>
   <name xml:lang="sk">K3b</name>
   <name xml:lang="sl">K3b</name>
   <name xml:lang="sr">К3б</name>
@@ -78,6 +79,7 @@
   <summary xml:lang="pt">Gravação de Discos</summary>
   <summary xml:lang="pt-BR">Gravação de discos</summary>
   <summary xml:lang="ru">Запись дисков</summary>
+  <summary xml:lang="sa">डिस्क दहनम्</summary>
   <summary xml:lang="sk">Napaľovanie médií</summary>
   <summary xml:lang="sl">Zapisovanje nosilcev</summary>
   <summary xml:lang="sr">Резање дискова</summary>
@@ -126,6 +128,7 @@
     <p xml:lang="pt">O K3b foi criado para ser uma aplicação de gravação de CD's completa e fácil de usar. Consiste basicamente em três partes:</p>
     <p xml:lang="pt-BR">O K3b foi criado para ser um aplicativo para gravação de CDs completo e fácil de usar. Ele consiste basicamente em três partes:</p>
     <p xml:lang="ru">K3b является полнофункциональным и простым в использовании приложением для записи дисков. Интерфейс приложения разделён на три основных раздела:</p>
+    <p xml:lang="sa">K3b इति विशेषता-समृद्धं, सुलभं च CD-दहन-अनुप्रयोगं भवितुं निर्मितम् । अस्य मूलतः त्रयः भागाः सन्ति- १.</p>
     <p xml:lang="sk">K3b bol vytvorený na to, aby bola bohatá na funkcie a jednoduchá na používanie aplikácia na napaľovanie. Skladá sa z troch častí:</p>
     <p xml:lang="sl">K3b je bil ustvarjen kot program za peko CD-jev, ki naj bi bil zmogljiv in hkrati enostaven za uporabo. Sestavljen je iz treh delov:</p>
     <p xml:lang="sr">К3б је замишљен као свеобухватан програм за резање ЦД‑ова, лак за употребу. Састоји се од три дела:</p>
@@ -172,6 +175,7 @@
       <li xml:lang="pt">Os projectos: Os projectos são criados a partir do menu de ficheiros e depois preenchidos com os dados a gravar</li>
       <li xml:lang="pt-BR">Projetos: Os projetos são criados a partir do menu Arquivo e depois preenchidos com os dados a gravar</li>
       <li xml:lang="ru">Проекты: для создания проекта служит меню «Файл», после чего новый проект следует наполнить данными, которые будут записаны на диск;</li>
+      <li xml:lang="sa">परियोजनाः : परियोजनाः सञ्चिकामेनूतः निर्मीयन्ते ततः दहनार्थं दत्तांशैः पूरिताः भवन्ति</li>
       <li xml:lang="sk">Projekty: Projekty sa tvoria z ponuky súbor a potom sa naplnia dátami na napálenie.</li>
       <li xml:lang="sl">Projekti: projekti se ustvarijo iz datotečnega menija in se nato zapolnijo s podatki za zapis</li>
       <li xml:lang="sr">Пројекти — праве се кроз мени „Фајл“, а затим попуњавају подацима за резање.</li>
@@ -217,6 +221,7 @@
       <li xml:lang="pt">As ferramentas: O menu de ferramentas oferece diversas funcionalidades como a cópia de CD's ou a formatação de DVD's</li>
       <li xml:lang="pt-BR">Ferramentas: O menu Ferramentas oferece diversas opções, como a cópia de CD ou a formatação de DVD</li>
       <li xml:lang="ru">Инструменты: в этом меню содержатся различные инструменты, такие как копирование дисков или форматирование DVD;</li>
+      <li xml:lang="sa">Tools: tools मेन्यू CD copy अथवा DVD formatting इत्यादीनि भिन्नानि साधनानि प्रदाति</li>
       <li xml:lang="sk">Nástroje: Ponuka nástroje poskytuje iné nástroje ako kopírovanie CD alebo formátovanie DVD.</li>
       <li xml:lang="sl">Orodja: meni z orodji ponuja različna orodja kot so kopiranje CD-jev ali formatiranje DVD-jev</li>
       <li xml:lang="sr">Алатке — мени „Алатке“ нуди различите алатке, попут копирања ЦД‑а или форматирања ДВД‑а.</li>
@@ -263,6 +268,7 @@
       <li xml:lang="pt">Acções dependentes do contexto: Ao carregar no ícone que representa um leitor de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas acções adicionais. Esta é, por exemplo, a forma de extrair músicas de CD's de áudio</li>
       <li xml:lang="pt-BR">Ações que dependem do contexto: Ao clicar no ícone que representa uma unidade de CD/DVD, o K3b irá apresentar o seu conteúdo e permitir algumas ações adicionais. Esta é, por exemplo, a forma de extrair músicas de CDs de áudio</li>
       <li xml:lang="ru">Различные действия в контекстном меню, зависящие от типа данных: при нажатии на значок CD или DVD привода приложение покажет его содержимое и предложит различные действия. На изображении показано создание образа звукового диска.</li>
+      <li xml:lang="sa">सन्दर्भसंवेदनशीलमाध्यमक्रियाः: यदा CD/DVD ड्राइवस्य प्रतिनिधित्वं कुर्वन् Icon इत्यत्र क्लिक् क्रियते तदा K3b तस्य सामग्रीं प्रस्तुतं करिष्यति तथा च किञ्चित् अधिकं कार्यं अनुमन्यते। एषः उदाहरणार्थं श्रव्य-सीडी-विच्छेदनस्य मार्गः अस्ति</li>
       <li xml:lang="sk">Kontextovo citlivé akcie médií: Pri kliknutí na ikonu reprezentujúcu CD/DVD mechaniku, K3b poskytne jej obsah a umožní ďalšie akcie. Je tu napríklad možnosť ripovať zvukové CD.</li>
       <li xml:lang="sl">Dejanja odvisna od vsebine: ko kliknete na ikono, ki predstavlja pogon CD/DVD, bo K3b predstavil njeno vsebino in ponudil nadaljnja dejanja. To je na primer način za zajetje zvočnih CD-jev</li>
       <li xml:lang="sr">Контекстно зависне медијске радње — по клику на иконицу ЦД/ДВД јединице, К3б ће представити њен садржај и понудити даље радње. Овако се, на пример, може чупати са аудио ЦД‑ова.</li>
