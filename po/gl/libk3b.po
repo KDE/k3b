@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 02:28+0000\n"
-"PO-Revision-Date: 2024-12-08 15:19+0100\n"
+"PO-Revision-Date: 2024-12-16 00:38+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.08.3\n"
+"X-Generator: Lokalize 24.12.0\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -2466,7 +2466,7 @@ msgstr "Preparando o proceso de gravación…"
 #: projects/k3bcdrdaowriter.cpp:829
 #, kde-format
 msgid "Flushing cache"
-msgstr "Borrando a caché"
+msgstr "Baleirando a caché"
 
 #: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
@@ -2716,6 +2716,7 @@ msgid_plural "Burnfree was used %1 times."
 msgstr[0] "Burnfree utilizouse unha vez."
 msgstr[1] "Burnfree utilizouse %1 veces."
 
+# skip-rule: trasno-empty2_reverse
 #: projects/k3bcdrecordwriter.cpp:746 projects/k3bcdrskinwriter.cpp:759
 #, kde-format
 msgid "Buffer was low once."
@@ -2943,12 +2944,12 @@ msgstr "Inténteo de novo no modo de gravación DAO."
 #: projects/k3bgrowisofshandler.cpp:113
 #, kde-format
 msgid "Flushing Cache"
-msgstr "Borrando a caché"
+msgstr "Baleirando a caché"
 
 #: projects/k3bgrowisofshandler.cpp:114
 #, kde-format
 msgid "Flushing the cache may take some time."
-msgstr "Borrar a caché pode demorar un tempo."
+msgstr "Baleirar a caché pode demorar un tempo."
 
 #: projects/k3bgrowisofshandler.cpp:123
 #, kde-format
@@ -4110,7 +4111,7 @@ msgstr "Insira un disco axeitado"
 #: tools/k3bmedium.cpp:804
 #, kde-format
 msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
-msgstr "Insira un CD de vídeo baleiro na unidade<p><b>%1</b>"
+msgstr "Insira un CD de vídeo na unidade<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:806
 #, kde-format
@@ -4208,6 +4209,7 @@ msgstr "Grava o disco no modo «disk at once»"
 msgid "Use Burnfree"
 msgstr "Usar Burnfree"
 
+# skip-rule: trasno-empty2_reverse
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
 msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
@@ -4381,7 +4383,7 @@ msgstr ""
 "Sen comprobacións, os datos son copiados directamente desde a unidade. "
 "<li>1: Executa unha lectura con sobreexposición para evitar os saltos.</"
 "li><li>2: Como 1 pero con algunhas comprobacións adicionais dos datos lidos."
-"</li><li>3: Como 2 pero con detección e corrección adicional dos baleiros.</"
+"</li><li>3: Como 2 pero con detección e corrección adicional dos riscos.</"
 "li></ul><p><b>A velocidade da extracción redúcese entre 0 e 3.</b>"
 
 #: tools/k3bstdguiitems.cpp:144
