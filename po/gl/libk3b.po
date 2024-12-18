@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2024-12-16 00:38+0100\n"
+"PO-Revision-Date: 2024-12-16 22:35+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2761,6 +2761,7 @@ msgstr "Non é posíbel axustar a velocidade de escritura a %1."
 msgid "Probably this is lower than your writer's lowest writing speed."
 msgstr "Probabelmente é máis baixa que a velocidade mínima do gravador."
 
+# skip-rule: trasno-file_reverse
 #: projects/k3bcdrecordwriter.cpp:834 projects/k3bcdrskinwriter.cpp:847
 #, kde-format
 msgid "Unable to send CUE sheet."
@@ -4448,9 +4449,8 @@ msgid ""
 "will compare the original source data with the written data to verify that "
 "the disk has been written correctly."
 msgstr ""
-"<p>Se marca esta opción, despois dunha gravación satisfactoria o K3b compara "
-"os valores das sumas MD5 de todos os ficheiros gravados cos orixinais para "
-"comprobar que a gravación fose correcta."
+"<p>Se marca esta opción, tras gravar o disco, K3b comparará os datos "
+"orixinais cos escritos para verificar que o disco se escribiu correctamente."
 
 #: tools/k3bstdguiitems.cpp:181
 #, kde-format
