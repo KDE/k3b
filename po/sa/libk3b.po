@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2024-12-14 01:44+0530\n"
+"PO-Revision-Date: 2024-12-20 22:01+0530\n"
 "Last-Translator: kali <skkalwar999@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -387,7 +387,7 @@ msgstr "लेखन प्रतिलिपिः %1 (सत्रः %2) ."
 #: jobs/k3bcdcopyjob.cpp:702
 #, kde-format
 msgid "Writing Copy (Session %1)"
-msgstr "लेखन प्रतिलिपिः (सत्रः %1) २."
+msgstr "लेखन प्रतिलिपिः (सत्रः %1)"
 
 #: jobs/k3bcdcopyjob.cpp:706 projects/audiocd/k3baudiojob.cpp:642
 #: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
@@ -1493,12 +1493,12 @@ msgstr "विस्तरेण कृपया त्रुटिनिवा�
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:515
 #, kde-format
 msgid "AC3 (Stereo)"
-msgstr "एसी३ (स्टीरियो) ९."
+msgstr "एसी३ (स्टीरियो)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:517
 #, kde-format
 msgid "AC3 (Pass-through)"
-msgstr "एसी३ (पास्-थ्रू) ९."
+msgstr "एसी३ (पास्-थ्रू)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:519
 #, kde-format
@@ -1508,7 +1508,7 @@ msgstr "MPEG1 तृतीय स्तर"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:530
 #, kde-format
 msgid "MPEG4 (FFMPEG)"
-msgstr "MPEG4 (FFMPEG) ९."
+msgstr "MPEG4 (FFMPEG)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:532
 #, kde-format
@@ -1805,8 +1805,8 @@ msgstr "ऑडियो सीडी लेखनम्"
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
-msgstr[0] "१ पटलः (%2 मिनिट्) २."
-msgstr[1] "%1 पटलाः (%2 मिनिट्) २."
+msgstr[0] "१ पटलः (%2 मिनिट्)"
+msgstr[1] "%1 पटलाः (%2 मिनिट्)"
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
 #: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
@@ -3454,12 +3454,12 @@ msgstr "अवशिष्टानां धाराबाइट्-सङ्�
 #: projects/videocd/k3bvcdjob.cpp:552
 #, kde-format
 msgid "Writing Video CD (Version 1.1)"
-msgstr "विडियो सीडी लेखनम् (संस्करणम् १.१) २."
+msgstr "विडियो सीडी लेखनम् (संस्करणम् १.१)"
 
 #: projects/videocd/k3bvcdjob.cpp:554
 #, kde-format
 msgid "Writing Video CD (Version 2.0)"
-msgstr "विडियो सीडी लेखनम् (संस्करणम् २.०) २."
+msgstr "विडियो सीडी लेखनम् (संस्करणम् २.०)"
 
 #: projects/videocd/k3bvcdjob.cpp:556
 #, kde-format
@@ -3480,7 +3480,7 @@ msgstr "विडियो सीडी लेखनम्"
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] "१ एमपीईजी (%2) २."
+msgstr[0] "१ एमपीईजी (%2)"
 msgstr[1] "%1 MPEGs (%2) 1.1."
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
