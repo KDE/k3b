@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-12-24 20:39+0530\n"
+"PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
 "Language: sa\n"
@@ -7408,7 +7408,7 @@ msgstr "%1 इत्यस्य लिङ्क्"
 #: projects/k3bdatapropertiesdialog.cpp:215
 #, kde-format
 msgid "Folder"
-msgstr "फोल्डर"
+msgstr "समुच्चय"
 
 #: projects/k3bdatapropertiesdialog.cpp:224
 #, kde-format
@@ -7458,7 +7458,7 @@ msgstr[1] "%1 पुटम्"
 #: projects/k3bdatapropertiesdialog.cpp:303
 #, kde-format
 msgid "No Folders"
-msgstr "न फोल्डर्स्"
+msgstr "न समुच्चयस्"
 
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
@@ -7564,7 +7564,7 @@ msgstr "नूतनसञ्चिकायाः नाम परिवर्�
 #: projects/k3bdataurladdingdialog.cpp:443
 #, kde-format
 msgid "Adding link to folder"
-msgstr "फोल्डर् मध्ये लिङ्क् योजयित्वा"
+msgstr "समुच्चय मध्ये लिङ्क् योजयित्वा"
 
 #: projects/k3bdataurladdingdialog.cpp:444
 #, kde-format
@@ -8419,7 +8419,7 @@ msgid ""
 "b> instead of <b>\"ENTRYVCD\"</b> for the file <b>\"/SVCD/ENTRY.SVD\"</b>.</"
 "li></ul>"
 msgstr ""
-"<ul><li>SVCDs इत्यत्र <b>&quot;/MPEG2&quot;</b> फोल्डर् इत्यस्य नामकरणं (अ-अनुरूपं) "
+"<ul><li>SVCDs इत्यत्र <b>&quot;/MPEG2&quot;</b> समुच्चय इत्यस्य नामकरणं (अ-अनुरूपं) "
 "&quot;/MPEGAV&quot; इति कृत्वा ।</li><li> <b>&quot;/SVCD/ENTRY.SVD&quot;</b> "
 "सञ्चिकायाः कृते <b>&quot;ENTRYVCD&quot;</b> इत्यस्य स्थाने (अप्रचलितस्य) हस्ताक्षरस्य "
 "<b>&quot;ENTRYSVD&quot;</b> इत्यस्य उपयोगं सक्षमं करोति ।</li></ul>"
