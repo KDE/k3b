@@ -8,14 +8,14 @@
 # Xosé <xosecalvo@gmail.com>, 2012.
 # Miguel Branco <mgl.branco@gmail.com>, 2013.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2013, 2015, 2017.
-# SPDX-FileCopyrightText: 2024 Adrián Chaves (Gallaecio)
+# SPDX-FileCopyrightText: 2024, 2025 Adrián Chaves (Gallaecio)
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-12-19 23:12+0100\n"
+"PO-Revision-Date: 2025-01-06 12:53+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -787,9 +787,9 @@ msgstr ""
 "<p>Escolla o modo da canle do ficheiro MP3 resultante:\n"
 "<p><b>Estéreo</b><br>\n"
 "Neste modo, o codificador non fai uso das correlacións potenciais entre as "
-"dúas canles de saída; pode, porén, negociar a demanda de bits entre ambas as "
-"canles, por exemplo dá a unha canle máis bits se a outra contén silencios ou "
-"precisa menos bits por mor dunha menor complexidade.\n"
+"dúas canles de entrada; pode, porén, negociar a demanda de bits entre ambas "
+"as canles, por exemplo dá a unha canle máis bits se a outra contén silencios "
+"ou precisa menos bits por mor dunha menor complexidade.\n"
 "<p><b>Estéreo combinado</b><br>\n"
 "Neste modo, o codificador usa as correlacións entre ambas as canles. O sinal "
 "procesarase por matriz nunha suma («media»), calculada por L+R, e nun sinal "
