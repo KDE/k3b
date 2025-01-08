@@ -1,14 +1,14 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Safa Alfulaij <safa1996alfulaij@gmail.com>, 2017.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Zayed Al-Saidi <zayed.alsaidi@gmail.com>
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-05-09 11:50+0400\n"
+"PO-Revision-Date: 2025-01-07 18:37+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -81,7 +82,7 @@ msgid "Sample Size"
 msgstr "حجم العينة"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:381
-#, fuzzy, kde-format
+#, kde-format
 msgid "Vendor"
 msgstr "البائع"
 
@@ -108,13 +109,13 @@ msgstr[5] "%1 بتّ"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:375
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:402
-#, fuzzy, kde-format
+#, kde-format
 msgid "Bitrate"
-msgstr "معدل البت"
+msgstr "معدّل بِتّ"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:376
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:408
-#, fuzzy, kde-format
+#, kde-format
 msgid "Layer"
 msgstr "الطبقة"
 
@@ -126,13 +127,13 @@ msgstr "تشديد"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:378
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:432
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copyright"
 msgstr "حقوق النسخ"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:379
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:434
-#, fuzzy, kde-format
+#, kde-format
 msgid "Original"
 msgstr "الأصلي"
 
@@ -146,9 +147,9 @@ msgstr ""
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:389
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:180
 #: ../plugins/encoder/lame/k3blametyes.h:88
-#, fuzzy, kde-format
+#, kde-format
 msgid "Mono"
-msgstr "مونو"
+msgstr "أحادي"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:391
 #, kde-format
@@ -159,7 +160,7 @@ msgstr "المثنى"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:393
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:175
 #: ../plugins/encoder/lame/k3blametyes.h:87
-#, fuzzy, kde-format
+#, kde-format
 msgid "Joint Stereo"
 msgstr "مفصل الستيرٍٍِِيو"
 
@@ -167,9 +168,9 @@ msgstr "مفصل الستيرٍٍِِيو"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:395
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:170
 #: ../plugins/encoder/lame/k3blametyes.h:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Stereo"
-msgstr "ستيرٍٍِِيو"
+msgstr "مجسمي"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:404
 #, kde-format
@@ -192,9 +193,9 @@ msgid "None"
 msgstr "بلا"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:425
-#, fuzzy, kde-format
+#, kde-format
 msgid "50/15 ms"
-msgstr " مث"
+msgstr "50/15  م‌ث"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:427
 #, kde-format
@@ -202,7 +203,7 @@ msgid "CCITT J.17"
 msgstr ""
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:429
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unknown"
 msgstr "مجهول"
 
@@ -216,7 +217,7 @@ msgstr "نعم"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:433
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:435
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:437
-#, fuzzy, kde-format
+#, kde-format
 msgid "No"
 msgstr "لا"
 
@@ -227,7 +228,7 @@ msgstr ""
 
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:105
 #: option/k3bexternalbinmodel.cpp:231 option/k3bthememodel.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid "Version"
 msgstr "الإصدارة"
 
@@ -1959,9 +1960,9 @@ msgid "CD-Text"
 msgstr "تشغيل نص"
 
 #: k3bdiskinfoview.cpp:251 projects/k3bdatamultisessionimportdialog.cpp:207
-#, fuzzy, kde-format
+#, kde-format
 msgid "Session %1"
-msgstr "جلسة"
+msgstr "جلسة %1"
 
 #: k3bdiskinfoview.cpp:261 projects/k3bvcdburndialog.cpp:388
 #: rip/k3baudiorippingdialog.cpp:136
@@ -2261,10 +2262,9 @@ msgid "Filter:"
 msgstr "المرشّح:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|كلّ الملفات"
+msgstr "كلّ الملفّات"
 
 #: k3bfileview.cpp:76
 #, fuzzy, kde-format
@@ -2462,7 +2462,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "اقتل"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -3793,10 +3793,9 @@ msgid "Choose Image File"
 msgstr "اختر ملفّ صورة"
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "ملفّ الصّورة:"
+msgstr "ملفّات الصّور"
 
 #: misc/k3bimagewritingdialog.cpp:451
 #, fuzzy, kde-format
@@ -4747,12 +4746,12 @@ msgstr "تعذّر تنفيذ الإجراء: %1"
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "رفض التخويل"
 
 #: option/k3bexternalbinwidget.cpp:264
 #, kde-format
 msgid "An error occurred"
-msgstr ""
+msgstr "حدث خطأ"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
@@ -4767,7 +4766,7 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "الاستيثاق مطلوب"
 
 #: option/k3bexternalbinwidget.cpp:276
 #, kde-format
@@ -5875,7 +5874,7 @@ msgstr "النّظام:"
 #: projects/base_k3bmovixoptionswidget.ui:18
 #, kde-format
 msgid "Playback Settings"
-msgstr ""
+msgstr "إعدادات التشغيل"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bmovixoptionswidget.ui:24
@@ -8052,9 +8051,9 @@ msgid ""
 msgstr ""
 
 #: projects/k3bvcdburndialog.cpp:252
-#, fuzzy, kde-format
+#, kde-format
 msgid "Generic"
-msgstr "شامل"
+msgstr "عامّ"
 
 #: projects/k3bvcdburndialog.cpp:254
 #, kde-format
@@ -8509,7 +8508,7 @@ msgstr "دقة عالية"
 
 #: projects/k3bvcdtrackdialog.cpp:638
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:304
-#, fuzzy, kde-format
+#, kde-format
 msgid "Video"
 msgstr "فيديو"
 
@@ -9745,9 +9744,9 @@ msgstr ""
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:474
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alt+2"
-msgstr "Alt"
+msgstr "Alt+2"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkAutoClipping)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:484
@@ -9800,9 +9799,9 @@ msgstr ""
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:512
-#, fuzzy, kde-format
+#, kde-format
 msgid "Alt+4"
-msgstr "Alt"
+msgstr "Alt+4"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkLowPriority)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:522
@@ -9838,7 +9837,7 @@ msgstr "غير مدعوم"
 #: rip/videodvd/k3bvideodvdaudiomodel.cpp:251
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:76
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:300
-#, fuzzy, kde-format
+#, kde-format
 msgid "Title"
 msgstr "العنوان"
 
@@ -10128,7 +10127,7 @@ msgstr "RLE"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:92
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:117
-#, fuzzy, kde-format
+#, kde-format
 msgid "Extended"
 msgstr "ممتد"
 
