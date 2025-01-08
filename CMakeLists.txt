@@ -28,6 +28,7 @@ set(K3B_LIB_VERSION_RELEASE 0)
 
 
 ##################  K3b options #################################
+option(K3B_DOC "Whether to build the documentation" ON)
 option(K3B_DEBUG "K3b additional debugging support" OFF)
 if(K3B_DEBUG)
     add_definitions(-g)
@@ -62,8 +63,16 @@ include(ECMSetupQtPluginMacroNames)
 include(ECMQtDeclareLoggingCategory)
 
 find_package(Qt6 ${QT_MIN_VERSION} REQUIRED COMPONENTS Core DBus Gui)
-find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons DocTools FileMetaData I18n IconThemes JobWidgets
+find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS Archive Auth Config CoreAddons FileMetaData I18n IconThemes JobWidgets
     KCMUtils KIO Notifications NewStuff NotifyConfig Solid WidgetsAddons XmlGui)
+
+if(K3B_DOC)
+  find_package(KF6DocTools ${KF_MIN_VERSION})
+  set_package_properties(KF6DocTools PROPERTIES
+    DESCRIPTION "Tools to generate documentation"
+    TYPE REQUIRED
+  )
+endif()
 
 find_package(Qt6WebEngineWidgets)
 set_package_properties(Qt6WebEngineWidgets PROPERTIES
@@ -302,7 +311,6 @@ add_subdirectory( libk3b )
 add_subdirectory( src )
 add_subdirectory( kioworkers )
 add_subdirectory( plugins )
-add_subdirectory( doc )
 if(BUILD_TESTING)
     find_package(Qt6Test REQUIRED)
     find_package(LibFuzzer)
@@ -319,8 +327,12 @@ ecm_qt_install_logging_categories(
     DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
 )
 
+if(K3B_DOC)
+    add_subdirectory(doc)
+    kdoctools_install(po)
+endif()
+
 ki18n_install(po)
-kdoctools_install(po)
 
 ###################  K3b config summary ################################
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
