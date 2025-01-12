@@ -20,13 +20,13 @@
 # S.Çağlar Onur <caglar@uludag.org.tr>, 2004-2005.
 # obsoleteman <tulliana@gmail.com>, 2007-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
-# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-10-27 01:29+0300\n"
+"PO-Revision-Date: 2025-01-11 17:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.11.70\n"
+"X-Generator: Lokalize 25.03.70\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -8010,7 +8010,7 @@ msgstr ""
 "<p><b>K3b neden disk üzerinde 4,7 ve 8,5 GB yazarken, bunlar yerine 4,4 GB "
 "ve 8,0 GB yazmayı önerir?</b><p>Tek katmanlı DVD ortamı, yaklaşık olarak 4,4 "
 "GB tutar (4,4 × 1024<sup>3</sup> ) bayt. Disk üreticileri kapasite "
-"hesaplarken 1024 yerine reklamcılık gereği 1000 kullanırlar.<br>Bunun "
+"hesaplarken 1024 yerine reklâmcılık gereği 1000 kullanırlar.<br>Bunun "
 "sonucu= 4,4 × 1024<sup>3</sup>/1000<sup>3</sup> = 4,7 GB."
 
 #: projects/k3bfillstatusdisplay.cpp:584
