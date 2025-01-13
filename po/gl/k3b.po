@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-01-06 12:53+0100\n"
+"PO-Revision-Date: 2025-01-12 17:04+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -2158,7 +2158,7 @@ msgstr "descoñecido"
 #: k3bdiskinfoview.cpp:310
 #, kde-format
 msgid "Media ID:"
-msgstr "Identificación do disco:"
+msgstr "Identificador do disco:"
 
 #: k3bdiskinfoview.cpp:311 k3bdiskinfoview.cpp:313 k3bdiskinfoview.cpp:317
 #: projects/k3bfillstatusdisplay.cpp:181 projects/k3bfillstatusdisplay.cpp:189
@@ -9429,7 +9429,7 @@ msgstr "Nome do volume:"
 #: projects/kostore/KoStore.cpp:196
 #, kde-format
 msgid "The directory mode is not supported for remote locations."
-msgstr "O modo de cartafol non se pode usar con lugares remotos."
+msgstr "Non se permite usar o modo de cartafol con lugares remotos."
 
 #: projects/kostore/KoStore.cpp:197
 #, kde-format
