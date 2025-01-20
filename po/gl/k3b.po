@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-01-12 17:04+0100\n"
+"PO-Revision-Date: 2025-01-19 12:58+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -4903,7 +4903,7 @@ msgstr "Non é posíbel cargar o módulo de configuración de KCDDB."
 #: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:57
 #, kde-format
 msgid "Refresh"
-msgstr "Anovar"
+msgstr "Actualizar"
 
 #: option/k3bdevicewidget.cpp:58
 #, kde-format
