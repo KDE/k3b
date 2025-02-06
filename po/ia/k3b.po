@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the k3b package.
 #
-# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024 Giovanni Sora <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024, 2025 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-12-18 19:26+0100\n"
+"PO-Revision-Date: 2025-02-05 10:33+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -4698,7 +4698,7 @@ msgstr "Incapace a executar le action<br/>%1"
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Autorisation negate"
 
 #: option/k3bexternalbinwidget.cpp:264
 #, kde-format
@@ -6378,7 +6378,7 @@ msgstr "Remove parte"
 #: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
-msgstr ""
+msgstr "Adde silentio"
 
 #: projects/k3baudioviewimpl.cpp:78
 #, kde-format
@@ -6419,7 +6419,7 @@ msgstr ""
 #: projects/k3baudioviewimpl.cpp:177
 #, kde-format
 msgid "Add Silence"
-msgstr ""
+msgstr "Adde silentio"
 
 #: projects/k3baudioviewimpl.cpp:181
 #, kde-format
