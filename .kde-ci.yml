@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 Dependencies:
-- 'on': ['Linux/Qt6', 'FreeBSD/Qt6']
+- 'on': ['@all']
   'require':
     'frameworks/extra-cmake-modules': '@latest-qt6'
     'frameworks/karchive': '@latest-kf6'
@@ -21,27 +21,6 @@ Dependencies:
     'frameworks/solid': '@latest-kf6'
     'frameworks/kwidgetsaddons': '@latest-kf6'
     'frameworks/kxmlgui': '@latest-kf6'
-    'multimedia/libkcddb': '@same'
-
-- 'on': ['Linux/Qt5', 'FreeBSD/Qt5']
-  'require':
-    'frameworks/extra-cmake-modules': '@stable'
-    'frameworks/karchive': '@stable'
-    'frameworks/kconfig': '@stable'
-    'frameworks/kcoreaddons': '@stable'
-    'frameworks/kdoctools': '@stable'
-    'frameworks/kfilemetadata': '@stable'
-    'frameworks/ki18n': '@stable'
-    'frameworks/kiconthemes': '@stable'
-    'frameworks/kjobwidgets': '@stable'
-    'frameworks/kcmutils': '@stable'
-    'frameworks/kio': '@stable'
-    'frameworks/knotifications': '@stable'
-    'frameworks/knewstuff': '@stable'
-    'frameworks/knotifyconfig': '@stable'
-    'frameworks/solid': '@stable'
-    'frameworks/kwidgetsaddons': '@stable'
-    'frameworks/kxmlgui': '@stable'
     'multimedia/libkcddb': '@same'
 
 Options:
