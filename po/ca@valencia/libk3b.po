@@ -2973,7 +2973,7 @@ msgstr "Ha fallat el calibratge. Proveu la velocitat de gravació 1x."
 #: projects/k3bgrowisofshandler.cpp:99
 #, kde-format
 msgid "Please try again with writing mode DAO."
-msgstr "Torneu-ho a provar en mode d'escriptura DAO."
+msgstr "Torneu-ho a provar en el mode d'escriptura DAO."
 
 #: projects/k3bgrowisofshandler.cpp:113
 #, kde-format
@@ -3114,7 +3114,7 @@ msgstr ""
 #: projects/k3bgrowisofshandler.cpp:246
 #, kde-format
 msgid "Write error"
-msgstr "S'ha produït un error d'escriptura"
+msgstr "S'ha produït un error mentre s'escrivia"
 
 #: projects/k3bgrowisofshandler.cpp:262
 #, kde-format
@@ -3784,7 +3784,7 @@ msgstr "No s'ha pogut trobar el fitxer %1"
 #: tools/k3bmd5job.cpp:228
 #, kde-format
 msgid "Error while reading from file %1"
-msgstr "Error mentre es llegia del fitxer %1"
+msgstr "S'ha produït un error mentre es llegia del fitxer %1"
 
 #: tools/k3bmediacache.cpp:126 tools/k3bmediacache.cpp:367
 #, kde-format
