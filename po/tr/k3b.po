@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-01-11 17:11+0300\n"
+"PO-Revision-Date: 2025-02-17 19:39+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2001,7 +2001,7 @@ msgstr "<p>K3b <em>%2 — %3</em> aygıtındaki <b>%1</b> diskini bağlayamadı"
 #: k3bdirview.cpp:243
 #, kde-format
 msgid "Unmount Failed"
-msgstr "Disk Ayrılamadı"
+msgstr "Bağlantı Kesilemedi"
 
 #: k3bdirview.cpp:244
 #, kde-format
@@ -3136,7 +3136,7 @@ msgid ""
 "cause."
 msgstr ""
 "Yeni CD/DVD/BD aygıtlarının çoğunda DMA özelliği etkin olduğunda okuma/yazma "
-"performansı artar. Eğer yazma hızı çok düşükse DMA kapalı olabilir."
+"başarımı artar. Eğer yazma hızı çok düşükse DMA kapalı olabilir."
 
 #: k3bsystemproblemdialog.cpp:504
 #, kde-format
