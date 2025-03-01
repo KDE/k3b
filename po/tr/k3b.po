@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-02-17 19:39+0300\n"
+"PO-Revision-Date: 2025-02-27 21:06+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2151,7 +2151,7 @@ msgstr "bilinmeyen"
 #: k3bdiskinfoview.cpp:310
 #, kde-format
 msgid "Media ID:"
-msgstr "Ortam No:"
+msgstr "Ortam kimliği:"
 
 #: k3bdiskinfoview.cpp:311 k3bdiskinfoview.cpp:313 k3bdiskinfoview.cpp:317
 #: projects/k3bfillstatusdisplay.cpp:181 projects/k3bfillstatusdisplay.cpp:189
@@ -2159,17 +2159,17 @@ msgstr "Ortam No:"
 #: projects/k3bfillstatusdisplay.cpp:854
 #, kde-format
 msgid "%1 min"
-msgstr "%1 dk"
+msgstr "%1 dak"
 
 #: k3bdiskinfoview.cpp:311
 #, kde-format
 msgid "Capacity:"
-msgstr "Kapasite:"
+msgstr "Sığa:"
 
 #: k3bdiskinfoview.cpp:313
 #, kde-format
 msgid "Used Capacity:"
-msgstr "Kullanılan kapasite:"
+msgstr "Kullanılan sığa:"
 
 #: k3bdiskinfoview.cpp:317
 #, kde-format
@@ -4757,7 +4757,7 @@ msgstr "CD-RW ve DVD-RW diskleri kendiliğinden sil"
 #: option/k3badvancedoptiontab.cpp:90
 #, kde-format
 msgid "Allow burning more than the official media capacities"
-msgstr "Resmi disk kapasitesinin üzerinde yazmaya izin ver"
+msgstr "Resmi disk sığasının üzerinde yazmaya izin ver"
 
 #: option/k3badvancedoptiontab.cpp:91
 #, kde-format
@@ -4813,14 +4813,14 @@ msgid ""
 "maximum capacity of the media brand with a simulated burn."
 msgstr ""
 "<p>Her ortam, sağlayıcı tarafından ortamın saltokunur bir alanına depolanmış "
-"resmi bir azami sığaya sahiptir. Ancak bu resmi azami değer her zaman asıl "
-"azami değer değildir. Çoğu ortam türü resmi değerden daha büyük bir toplam "
-"kapasiteye sahiptir.<p>Eğer bu seçenek işaretlenirse K3b resmi kapasitenin "
-"ötesine yazmayı önleyecek bir güvenlik denetimini devre dışı bırakacaktır."
-"<p><b>Dikkat:</b> Bu seçeneği etkinleştirmek ile, K3b resmi kapasitenin "
-"ötesine yazmayı denerse yazdırma işlemi sonunda sorunlar oluşabilir. İlk "
-"olarak ortamda bir sahte yazma işlemi yaparak asıl azami kapasitesini yazmak "
-"faydalı olabilir."
+"resmi bir en yüksek sığaya sahiptir. Ancak bu resmi en yüksek değer her "
+"zaman asıl en yüksek değer değildir. Çoğu ortam türü resmi değerden daha "
+"büyük bir toplam sığaya sahiptir.<p>Eğer bu seçenek işaretlenirse K3b resmi "
+"sığanın ötesine yazmayı önleyecek bir güvenlik denetimini devre dışı "
+"bırakacaktır.<p><b>Dikkat:</b> Bu seçenek etkinleştirildiğinde, K3b resmi "
+"sığanın ötesine yazmayı denerse yazdırma işlemi sonunda sorunlar oluşabilir. "
+"İlk olarak ortamda bir sahte yazma işlemi yaparak asıl en yüksek sığasını "
+"yazmak yararlı olabilir."
 
 #: option/k3badvancedoptiontab.cpp:115
 #, kde-format
@@ -7916,7 +7916,7 @@ msgstr "Boş: %1 / %2"
 #: projects/k3bfillstatusdisplay.cpp:195
 #, kde-format
 msgid "Capacity exceeded by %1"
-msgstr "Kapasite: %1"
+msgstr "Sığa %1 kadar aşıldı"
 
 #: projects/k3bfillstatusdisplay.cpp:376
 #, kde-format
