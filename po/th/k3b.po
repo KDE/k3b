@@ -2,20 +2,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Thanomsub Noppaburana <donga.nb@gmail.com>, 2009, 2010.
+# SPDX-FileCopyrightText: 2025 Pongsakorn S. <kde@xerusion.me>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2010-05-01 20:38+0700\n"
-"Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
-"Language-Team: Thai <thai-l10n@googlegroups.com>\n"
+"PO-Revision-Date: 2025-03-03 20:07+0700\n"
+"Last-Translator: Pongsakorn S. <kde@xerusion.me>\n"
+"Language-Team: Thai\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 1.0\n"
+"X-Generator: Lokalize 24.12.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3673,7 +3674,7 @@ msgstr "Robert Wadley"
 #, kde-format
 msgid ""
 "Rob created a great theme and came up with the idea for transparent themes."
-msgstr "'ร็อบ' ได้สร้างชุดตกแต่งที่สวยงาม และมาพร้อมกับแนวคิดของชุดตกแต่งที่โปร่งแสง"
+msgstr "'ร็อบ' ได้สร้างธีมที่สวยงาม และมาพร้อมกับแนวคิดของธีมที่โปร่งแสง"
 
 #: main.cpp:90
 #, kde-format
@@ -3683,7 +3684,7 @@ msgstr "Dmitry Novikov"
 #: main.cpp:91
 #, kde-format
 msgid "For the amazing K3b 1.0 theme."
-msgstr "สำหรับชุดตกแต่งของ K3b รุ่น 1.0 อันมหัศจรรย์"
+msgstr "สำหรับธีมของ K3b รุ่น 1.0 อันมหัศจรรย์"
 
 #: main.cpp:93
 #, kde-format
@@ -4453,7 +4454,7 @@ msgstr ""
 #: option/base_k3bthemeoptiontab.ui:21
 #, kde-format
 msgid "Theme Selection"
-msgstr "การเลือกชุดตกแต่ง"
+msgstr "การเลือกธีม"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox5)
 #: option/base_k3bthemeoptiontab.ui:37
@@ -4466,26 +4467,26 @@ msgstr "ภาพตัวอย่าง"
 #: option/base_k3bthemeoptiontab.ui:70
 #, kde-format
 msgid "No theme selected"
-msgstr "ยังไม่มีการเลือกชุดตกแต่งใด ๆ"
+msgstr "ยังไม่มีการเลือกธีมใด ๆ"
 
 #. i18n: ectx: property (text), widget (KNSWidgets::Button, m_buttonGetNewThemes)
 #: option/base_k3bthemeoptiontab.ui:119
 #, fuzzy, kde-format
 #| msgid "Install New Theme..."
 msgid "Get New Themes..."
-msgstr "ติดตั้งชุดตกแต่งใหม่..."
+msgstr "ติดตั้งธีมใหม่..."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
 #, kde-format
 msgid "Install New Theme..."
-msgstr "ติดตั้งชุดตกแต่งใหม่..."
+msgstr "ติดตั้งธีมใหม่..."
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemoveTheme)
 #: option/base_k3bthemeoptiontab.ui:136
 #, kde-format
 msgid "Remove Theme"
-msgstr "ลบชุดตกแต่งออก"
+msgstr "ลบธีมออก"
 
 #: option/k3badvancedoptiontab.cpp:48
 #, kde-format
@@ -5019,12 +5020,12 @@ msgstr "ปรับแต่งส่วนเสริมของ K3b"
 #: option/k3boptiondialog.cpp:187
 #, kde-format
 msgid "Themes"
-msgstr "ชุดตกแต่ง"
+msgstr "ธีม"
 
 #: option/k3boptiondialog.cpp:188
 #, kde-format
 msgid "K3b GUI Themes"
-msgstr "ชุดตกแต่งส่วนติดต่อผู้ใช้แบบกราฟิกของ K3b"
+msgstr "ธีมส่วนติดต่อผู้ใช้แบบกราฟิกของ K3b"
 
 #: option/k3boptiondialog.cpp:197
 #, kde-format
@@ -5044,7 +5045,7 @@ msgstr "ตั้งค่าขั้นสูงต่าง ๆ"
 #: option/k3bthememodel.cpp:94
 #, kde-format
 msgid "Theme"
-msgstr "ชุดตกแต่ง"
+msgstr "ธีม"
 
 #: option/k3bthememodel.cpp:95
 #, kde-format
@@ -5064,7 +5065,7 @@ msgstr "K3b - เครื่องมือสร้างแผ่นซีด
 #: option/k3bthemeoptiontab.cpp:117
 #, kde-format
 msgid "Drag or Type Theme URL"
-msgstr "ลากหรือพิมพ์ที่อยู่ URL ของชุดตกแต่ง"
+msgstr "ลากหรือพิมพ์ที่อยู่ URL ของธีม"
 
 #: option/k3bthemeoptiontab.cpp:139
 #, kde-format
@@ -5083,17 +5084,17 @@ msgstr ""
 #: option/k3bthemeoptiontab.cpp:173
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
-msgstr "แฟ้มไม่ใช่แฟ้มชุดตกแต่งของ K3b ที่ถูกต้อง"
+msgstr "แฟ้มไม่ใช่แฟ้มธีมของ K3b ที่ถูกต้อง"
 
 #: option/k3bthemeoptiontab.cpp:182
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
-msgstr "มีชุดตกแต่งที่ชื่อ '%1' อยู่ก่อนแล้ว คุณต้องการจะเขียนทับมันหรือไม่ ?"
+msgstr "มีธีมที่ชื่อ '%1' อยู่ก่อนแล้ว คุณต้องการจะเขียนทับมันหรือไม่ ?"
 
 #: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "Theme exists"
-msgstr "มีชุดตกแต่งอยู่ก่อนแล้ว"
+msgstr "มีธีมอยู่ก่อนแล้ว"
 
 #: option/k3bthemeoptiontab.cpp:202
 #, kde-format
@@ -5101,8 +5102,8 @@ msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
 "<br><br>This will delete the files installed by this theme.</qt>"
 msgstr ""
-"<qt>คุณต้องการจะลบชุดตกแต่ง <strong>%1</strong> จริงหรือไม่ ?"
-"<br><br>หากใช่จะเป็นการลบแฟ้มต่าง ๆ ที่ถูกติดตั้งไว้โดยชุดตกแต่งนี้</qt>"
+"<qt>คุณต้องการจะลบธีม <strong>%1</strong> จริงหรือไม่ ?"
+"<br><br>หากใช่จะเป็นการลบแฟ้มต่าง ๆ ที่ถูกติดตั้งไว้โดยธีมนี้</qt>"
 
 #: option/k3bthemeoptiontab.cpp:207
 #, kde-format
