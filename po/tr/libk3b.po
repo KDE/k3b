@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2025-02-27 21:06+0300\n"
+"PO-Revision-Date: 2025-03-04 12:38+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -705,7 +705,7 @@ msgstr[1] "Toplam %1 hatalı dilim yok sayıldı."
 #: jobs/k3bdatatrackreader.cpp:415
 #, kde-format
 msgid "Problem while reading. Retrying from sector %1."
-msgstr "Okuma sırasında sorun oluştu. %1. dilimden tekrar deneniyor…"
+msgstr "Okuma sırasında sorun oluştu. %1. dilimden yeniden deneniyor…"
 
 #: jobs/k3bdatatrackreader.cpp:431
 #, kde-format
@@ -2600,7 +2600,7 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
-msgstr "Lütfe TAO (Track At Once) kipini seçin ve tekrar deneyin"
+msgstr "Lütfe TAO (Track At Once) kipini seçin ve yeniden deneyin"
 
 #: projects/k3bcdrecordwriter.cpp:582 projects/k3bcdrskinwriter.cpp:595
 #, kde-format
@@ -3856,7 +3856,7 @@ msgstr "yeniden yazılabilir ortam"
 #, kde-format
 msgctxt "%1 is type of medium (e.g. DVD)"
 msgid "rewritable %1"
-msgstr "tekrar yazılabilir %1"
+msgstr "yeniden yazılabilir %1"
 
 #: tools/k3bmedium.cpp:616
 #, kde-format
