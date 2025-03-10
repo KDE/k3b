@@ -11152,35 +11152,3 @@ msgstr "anamòrfic"
 #, kde-format
 msgid "Subpicture"
 msgstr "Subtítols"
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "Consulta MusicBrainz"
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "La pista %1 no s'ha trobat a la base de dades de MusicBrainz."
-
-#~ msgid "Musicbrainz Lookup"
-#~ msgstr "Cerca a Musicbrainz"
-
-#~ msgid "Try to determine meta information over the Internet"
-#~ msgstr "Intenta determinar la metainformació a través d'Internet"
-
-#~ msgid "Please add an audio track."
-#~ msgstr "Afegiu una pista d'àudio."
-
-#~ msgid "Please select an audio track."
-#~ msgstr "Seleccioneu una pista d'àudio."
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr ""
-#~ "S'ha trobat més d'una coincidència per a la pista %1 (%2). Seleccioneu-ne "
-#~ "una, si us plau."
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "S'està generant l'empremta per a la pista %1."
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "Consultant MusicBrainz per a la pista %1."
-
-#~ msgid "K3b Bookmarks"
-#~ msgstr "Punts del K3b"
