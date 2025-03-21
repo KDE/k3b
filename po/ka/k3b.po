@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-08-10 06:18+0200\n"
+"PO-Revision-Date: 2025-03-20 08:57+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2825,7 +2825,7 @@ msgstr ""
 msgid ""
 "Replace the automounting entries in /etc/fstab with old-fashioned ones or "
 "use a user-space mounting solution like pmount or ivman."
-msgstr ""
+msgstr "/etc/fstab -ში ავტომონტირების სტრიქონების ძველებურებით ჩანაცვლება."
 
 #: k3bsystemproblemdialog.cpp:412
 #, kde-format
@@ -3165,7 +3165,7 @@ msgstr "გარე აპლიკაცია დისკის რეალ
 msgid ""
 "<p>Select the medium that you want to use for burning.<p>In most cases there "
 "will only be one medium available which does not leave much choice."
-msgstr ""
+msgstr "<p> ამორჩევა -სკენ -თვის ჩაწერა<p> არჩევანი."
 
 #: k3bwriterselectionwidget.cpp:166
 #, kde-format
@@ -3234,6 +3234,8 @@ msgid ""
 "writers support DAO.<br>DVD-R(W)s written in DAO provide the best DVD-Video "
 "compatibility."
 msgstr ""
+"<em></em> ან<em> სესია</em> ტოლია არასდროს გამორთულია CD ან DVD ტოლია "
+"არჩეული -სკენ წამები არა ყველა DAO<br> -ში DAO DVD ვიდეო."
 
 #: k3bwritingmodewidget.cpp:25
 #, kde-format
@@ -3241,7 +3243,7 @@ msgid ""
 "<em>Track At Once</em> should be supported by every CD writer. The laser "
 "will be turned off after every track.<br>Most CD writers need this mode for "
 "writing multisession CDs."
-msgstr ""
+msgstr "<em> ჩანაწერი</em> CD გამორთულია<br> CD -თვის."
 
 #: k3bwritingmodewidget.cpp:31
 #, kde-format
@@ -7147,7 +7149,7 @@ msgstr "არ დაამატოთ"
 msgid ""
 "Do you also want to add system files (FIFOs, sockets, device files, and "
 "broken symlinks)?"
-msgstr ""
+msgstr "-სკენ და?"
 
 #: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
@@ -7720,7 +7722,7 @@ msgstr ""
 msgid ""
 "This controls whether to update the scan data information contained in the "
 "MPEG-2 video streams."
-msgstr ""
+msgstr "-სკენ განახლება ინფორმაცია -ში."
 
 #: projects/k3bvcdburndialog.cpp:115
 #, kde-format
@@ -7933,6 +7935,8 @@ msgid ""
 "scan information data can be updated by enabling the update scan offsets "
 "option."
 msgstr ""
+"<p> -სკენ ტოლია -თვის სუპერი ვიდეო -სკენ ინფორმაცია -ში ყველა<p> იკვრება -"
+"თვის<p> ინფორმაცია განახლება."
 
 #: projects/k3bvcdburndialog.cpp:216
 #, kde-format
@@ -8328,7 +8332,7 @@ msgstr "ციფრებიანი ღილაკების გამო�
 #: projects/k3bvcdtrackdialog.cpp:450
 #, kde-format
 msgid "Reactivity delayed to the end of playing track"
-msgstr ""
+msgstr "-სკენ იკვრება"
 
 #: projects/k3bvcdtrackdialog.cpp:459 projects/k3bvcdtrackkeysmodel.cpp:143
 #, kde-format
@@ -8491,7 +8495,7 @@ msgid ""
 "does not support video transcoding and preparation of video object files "
 "yet. That means you need to already have the VTS_X_YY.VOB and VTS_X_YY.IFO "
 "files."
-msgstr ""
+msgstr "-სკენ სრული ვიდეო DVD K3b და -სკენ X წწ და X წწ."
 
 #: projects/k3bvideodvdview.cpp:56
 #, kde-format
@@ -9108,6 +9112,8 @@ msgid ""
 "data from the cd. After that K3b will either skip the sector if the "
 "<em>Ignore Read Errors</em> option is enabled or stop the process."
 msgstr ""
+"<p> -სკენ a cd შემდეგ K3b<em> იგნორირება წაკითხვა შეცდომები</em> ტოლია "
+"ჩართული ან."
 
 #: rip/k3baudiorippingdialog.cpp:205
 #, kde-format
