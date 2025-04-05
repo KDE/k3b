@@ -267,7 +267,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 <para
 >La moitié haute de l'écran est le <emphasis
 >panneau source</emphasis
-> ; il fonctionne comme un explorateur de fichiers. Vous pouvez choisir des fichiers classiques depuis les partitions montées ou encore des pistes audio d'un CD inséré dans le lecteur. Les noms des pistes audio sont lus automatiquement depuis les données CD-Text, si votre lecteur de CD gère leur lecture, ou générés depuis <ulink url="http://libcddb.sourceforge.net/"
+> ; il fonctionne comme un explorateur de fichiers. Vous pouvez choisir des fichiers classiques depuis les partitions montées ou encore des pistes audio d'un CD inséré dans le lecteur. Les noms des pistes audio sont lus automatiquement depuis les données « CD-Text », si votre lecteur de CD gère leur lecture, ou générés depuis <ulink url="http://libcddb.sourceforge.net/"
 >CDDB</ulink
 > ; le format exact est contrôlé par un bouton présent dans le panneau inférieur. Si les noms sont incorrects ou ne correspondent pas à la description du disque, vous pouvez les modifier en utilisant le bouton de la barre d'outils. Vos modifications seront mises en cache localement et soumises au registre principal sur <ulink url="http://www.freedb.org/"
 >FreeDB</ulink
