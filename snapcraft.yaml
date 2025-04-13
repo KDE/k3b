@@ -20,6 +20,9 @@ apps:
       - optical-drive
       - system-backup
       - mount-observe
+      - browser-support
+    environment:
+      QTWEBENGINE_DISABLE_SANDBOX: 1
 slots:
   session-dbus-interface:
     interface: dbus
