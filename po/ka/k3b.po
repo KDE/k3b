@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-03-20 08:57+0100\n"
+"PO-Revision-Date: 2025-04-13 05:13+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -1933,12 +1933,12 @@ msgstr "კოპირების გარეშე"
 #: k3bdiskinfoview.cpp:210
 #, kde-format
 msgid "preemp"
-msgstr ""
+msgstr "წინასწარი გაძლიერება"
 
 #: k3bdiskinfoview.cpp:210
 #, kde-format
 msgid "no preemp"
-msgstr ""
+msgstr "წინასწარი გაძლიერების გარეშე"
 
 #: k3bdiskinfoview.cpp:211
 #, kde-format
@@ -2703,6 +2703,8 @@ msgid ""
 "Since Linux kernel 2.6.8 %1 will not work when run suid root for security "
 "reasons anymore."
 msgstr ""
+"უსაფრთხოების მიზეზების გამო, Linux-ის ბირთვის ვერსიის 2.6.8 შემდეგ %1 არ "
+"იმუშავებს, როცა suid root-ით გაუშვებთ."
 
 #: k3bsystemproblemdialog.cpp:240 k3bsystemproblemdialog.cpp:254
 #: k3bsystemproblemdialog.cpp:284
@@ -5406,7 +5408,7 @@ msgstr "&ISRC:"
 #: projects/base_k3baudiotrackwidget.ui:170
 #, kde-format
 msgid "Preemph&asis"
-msgstr ""
+msgstr "წინა&სწარი გაძლიერება"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPreemphasis)
 #: projects/base_k3baudiotrackwidget.ui:173
@@ -7715,7 +7717,7 @@ msgstr "ყოველთვის დაემატება ცარიე�
 #: projects/k3bvcdburndialog.cpp:113
 #, kde-format
 msgid "This controls whether APS constraints are strict or relaxed. "
-msgstr ""
+msgstr "ეს აკონტროლებს, APS-ის შეზღუდვები მკაცრია, თუ არა. "
 
 #: projects/k3bvcdburndialog.cpp:114
 #, kde-format
@@ -7747,6 +7749,8 @@ msgstr ""
 #, kde-format
 msgid "Used to set the track pre-gap for all tracks in sectors globally."
 msgstr ""
+"გამოიყენება ტრეკების წინასწარი გაძლიერების დასაყენებლად ყველა ტრეკისთვის "
+"სექტორში, გლობალურად."
 
 #: projects/k3bvcdburndialog.cpp:120
 #, kde-format
@@ -7952,6 +7956,7 @@ msgstr ""
 #, kde-format
 msgid "<p>This option allows customization of Gaps and Margins."
 msgstr ""
+"<p>ეს პარამეტრი გამოტოვებებისა და ზღვრების დაყენების საშუალებას გაძლევთ."
 
 #: projects/k3bvcdburndialog.cpp:224
 #, kde-format
@@ -8221,7 +8226,7 @@ msgstr "ეს ღილაკი, ჩვეულებრივ, > ან PLAY
 #: projects/k3bvcdtrackdialog.cpp:242
 #, kde-format
 msgid "Target to be jumped to on time-out of <wait>."
-msgstr ""
+msgstr "გადახტომის სამიზნე ვადის <wait> ამოწურვის შემდეგ."
 
 #: projects/k3bvcdtrackdialog.cpp:243
 #, kde-format
@@ -8246,12 +8251,12 @@ msgstr "ციფრებიაი ღილაკები."
 #: projects/k3bvcdtrackdialog.cpp:248
 #, kde-format
 msgid "Times to repeat the playback of 'play track'."
-msgstr ""
+msgstr "რამდენჯერ გამეორდება დასაკრავი ტრეკის დაკვრა."
 
 #: projects/k3bvcdtrackdialog.cpp:249
 #, kde-format
 msgid "Time in seconds to wait after playback of 'play track'."
-msgstr ""
+msgstr "დრო წამებში, რომელიც უნდა მოვითმინო 'დასაკრავი ტრეკის' დაკვრის შემდეგ."
 
 #: projects/k3bvcdtrackdialog.cpp:251
 #, kde-format
@@ -8274,11 +8279,15 @@ msgstr ""
 msgid ""
 "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9."
 msgstr ""
+"ეს ნამდვილი ფსევდოღილაკებია, რომლებიც წარმოადგენენ ციფრების ღილაკებს 0, "
+"1, ... , 9."
 
 #: projects/k3bvcdtrackdialog.cpp:258
 #, kde-format
 msgid "<p>If numeric keys enabled, you can overwrite the default settings."
 msgstr ""
+"<p>თუ ციფრებიანი ღილაკები ჩართულია, შეგიძლიათ, ნაგულისხმევ პარამეტრებს თავზე "
+"გადააწეროთ."
 
 #: projects/k3bvcdtrackdialog.cpp:259
 #, kde-format
@@ -9118,7 +9127,7 @@ msgstr ""
 #: rip/k3baudiorippingdialog.cpp:205
 #, kde-format
 msgid "Do not read the pregaps at the end of every track"
-msgstr ""
+msgstr "არ გაიმეორო წინასწარი გამოტოვებები ყოველი ტრეკის ბოლოში"
 
 #: rip/k3baudiorippingdialog.cpp:206
 #, kde-format
@@ -9733,7 +9742,7 @@ msgstr "Alt+4"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:522
 #, kde-format
 msgid "Low s&cheduling priority for the video transcoding process"
-msgstr ""
+msgstr "დაბალი პრიორიტეტი ტრანსკოდირების პრო&ცესისთვის"
 
 #: rip/videodvd/k3bvideodvdaudiomodel.cpp:149
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:214
@@ -9821,7 +9830,7 @@ msgstr[1] "%1 სათაურის გადაკოდირება %2/%
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:138
 #, kde-format
 msgid "Successfully ripped title %1 to '%2'"
-msgstr ""
+msgstr "წარმატებით დაირიპა ტრეკები %1-დან '%2'-მდე"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:143
 #, kde-format
@@ -9831,7 +9840,7 @@ msgstr "ჩავარდა დარიპვა სათაურისთ�
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:173
 #, kde-format
 msgid "Determined clipping values for title %1"
-msgstr ""
+msgstr "განსაზღვრული ამოჭრის მნიშვნელობები განყოფილებისთვის %1"
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:174
 #, kde-format
@@ -9846,12 +9855,12 @@ msgstr "მარცხენა: %1, მარჯვენა: %2"
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:182
 #, kde-format
 msgid "Insane clipping values. No clipping will be done at all."
-msgstr ""
+msgstr "არარეალური ამოჭრის პარამეტრები. ამოჭრა საერთოდ არ მოხდება."
 
 #: rip/videodvd/k3bvideodvdrippingjob.cpp:192
 #, kde-format
 msgid "Failed to determine clipping values for title %1"
-msgstr ""
+msgstr "ამოჭრის მნიშვნელობების დადგენა შეუძლებელია განყოფილებისთვის %1"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:79
 #, kde-format
