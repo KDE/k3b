@@ -16,11 +16,15 @@ apps:
     command: usr/bin/k3b
     plugs:
       - audio-record
+      - browser-support
+      - desktop
+      - desktop-legacy
       - home
       - optical-drive
-      - system-backup
       - mount-observe
-      - browser-support
+      - system-backup
+      - udisks2
+      - unity7
     environment:
       QTWEBENGINE_DISABLE_SANDBOX: 1
 slots:
@@ -76,11 +80,38 @@ parts:
       - usr/share/metainfo/org.kde.k3b.appdata.xml
     plugin: cmake
     build-packages:
-      - libsamplerate0-dev
+      - libavformat-dev
+      - libdvdread-dev
+      - libflac++-dev
+      - libflac-dev
+      - libfuzzer-14-dev
+      - libkcddb6-dev
       - libmad0-dev
+      - libmp3lame-dev
+      - libmpcdec-dev
+      - libmusicbrainz5-dev
+      - libsamplerate0-dev
+      - libsndfile1-dev
+      - libtag1-dev
+      - libvorbis-dev
     stage-packages:
-      - libsamplerate0
-      - libmad0
+      #- kde-config-cddb
+      - cdparanoia
+      - cdrdao
+      - cdrskin
+      - dvd+rw-tools
+      - genisoimage
+      - growisofs
+      - libavformat60
+      - libdvdread8t64
+      - libflac++10
+      - libneon27t64-gnutls
+      - libmusicbrainz5cc2v5
+      - normalize-audio
+      - sox
+      - udisks2
+      - vcdimager
+      - wodim
     source: .
     source-type: local
     cmake-parameters:
