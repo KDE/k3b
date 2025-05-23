@@ -18,7 +18,7 @@
 # Nicolas Ternisien <nicolas.ternisien@gmail.com>, 2008.
 # Sébastien Renard <Sebastien.Renard@digitalfox.org>, 2008.
 # Geoffray Levasseur <geoffray.levasseurbrandin@numericable.fr>, 2010, 2011, 2012, 2013.
-# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2012, 2020, 2022, 2023, 2024, 2025 Xavier Besnard <xavier.besnard@kde.org>
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019.
 # Maxime Corteel <mcorteel@gmail.com>, 2019.
 # Xavier Besnard <xavier.besnard@kde.org>, 2023.
@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2024-08-16 19:06+0200\n"
+"PO-Revision-Date: 2025-05-21 15:34+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -35,7 +35,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.04.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -442,7 +442,7 @@ msgstr "Ordre &des octets Swap"
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:123
 #, kde-format
 msgid "Create a wave header for the input data"
-msgstr "Crée un en-tête wave pour les données entrantes"
+msgstr "Crée un en-tête « Wave » pour les données entrantes"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkWriteWaveHeader)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:126
@@ -804,9 +804,9 @@ msgstr ""
 "contient un blanc ou un signal de faible complexité.\n"
 "<p><b>Stéréo jointe</b> <br>\n"
 "Dans ce mode, l'encodeur utilise les corrélations entre les deux canaux. Le "
-"signal est placé dans une matrice contenant la somme (mid), obtenue par G+D, "
-"et la différence (side), obtenue par G-D. Plus de bits seront alloués au "
-"canal « mid ». Ce procédé permet d'augmenter la bande passante s'il n'y a "
+"signal est placé dans une matrice contenant la somme (médian), obtenue par G"
+"+D, et la différence (side), obtenue par G-D. Plus de bits seront alloués au "
+"canal « médian ». Ce procédé permet d'augmenter la bande passante s'il n'y a "
 "pas beaucoup de différences entre les deux canaux d'entrée. La qualité "
 "d'encodage est alors supérieure.\n"
 "<p><b>Mono</b> <br>\n"
@@ -1034,21 +1034,22 @@ msgstr ""
 "ou en virgule flottante.</p>\n"
 "<p><b>U-law</b> (diminutif de mu-law) et <b>A-law</b> sont les standards "
 "américains et internationaux pour la compression logarithmique du son "
-"téléphonique. Non compressé, u-law a une précision semblable au PCM 14 bits "
-"(et 13 bits pour A-law). Les données A-law et u-law sont parfois encodées en "
-"inversant l'ordre des bits (par exemple, MSB devient LSB). <br><b>ADPCM </b> "
-"est une forme de compression du son qui offre un bon compromis entre qualité "
-"sonore et vitesse d'encodage / décodage. Il est utilisé pour la compression "
-"du son téléphonique et lorsque la fidélité du son n'est pas une priorité. "
-"Non compressé, il a une précision semblable au PCM 16 bits. Les versions les "
-"plus utilisées de l'ADPCM sont les fichiers G.726, MS ADPCM et IMA ADPCM. "
-"Dans les autres cas, il s'agit de G.726 ADPCM. <br><b>IM ADPCM</b> est une "
-"forme particulière d'ADPCM. Elle est plus simple que la version de "
-"Microsoft, mais la fidélité du son est inférieure. IMA ADPCM est également "
-"appelé DVI ADPCM. <br><b>GSM</b> est un standard utilisé pour le son des "
-"téléphones dans les pays européens. Sa grande qualité le rend de plus en "
-"plus utilisé. Il nécessite une puissance de calcul importante.</p> "
-"<p><em>Description fondée sur la page de manuel de SoX.</em></p>"
+"téléphonique. Sans compression, u-law possède une précision semblable au PCM "
+"14 bits (Et 13 bits pour A-law). Les données « A-law » et « u-law » sont "
+"parfois encodées en inversant l'ordre des bits (par exemple, MSB devient "
+"LSB). <br><b>ADPCM </b> est une forme de compression du son qui offre un bon "
+"compromis entre qualité sonore et vitesse d'encodage / décodage. Il est "
+"utilisé pour la compression du son téléphonique et lorsque la fidélité du "
+"son n'est pas une priorité. Sans compression, il possède une précision "
+"semblable au PCM 16 bits. Les versions les plus utilisées de l'ADPCM sont "
+"les fichiers G.726, MS ADPCM et IMA ADPCM. Dans les autres cas, il s'agit de "
+"G.726 ADPCM. <br><b>IM ADPCM</b> est une forme particulière pour ADPCM. Elle "
+"est plus simple que la version de Microsoft, mais la fidélité du son est "
+"inférieure. IMA ADPCM est également appelé DVI ADPCM. <br><b>GSM</b> est un "
+"standard utilisé pour le son des téléphones dans les pays européens. Sa "
+"grande qualité le rend de plus en plus utilisé. Il nécessite une puissance "
+"de calcul importante.</p> <p><em>Description fondée sur la page de manuel de "
+"SoX.</em></p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:67
@@ -4811,7 +4812,7 @@ msgstr "Graver"
 #: option/k3badvancedoptiontab.cpp:52
 #, kde-format
 msgid "Allow &overburning"
-msgstr "Autoriser l'&overburning"
+msgstr "Aut&oriser l'overburning"
 
 #: option/k3badvancedoptiontab.cpp:53
 #, kde-format
@@ -7208,7 +7209,7 @@ msgid ""
 "\"https://www.google.com/search?q=linux+boot+floppy&ie=UTF-8&oe=UTF-8\">the "
 "Internet</a>."
 msgstr ""
-"<p>Le fichier sélectionné n'est pas une image de disquette (les images de "
+"<p>Le fichier sélectionné n'est pas une image de disquette (Les images de "
 "disquettes ont une taille de 1200 Ko, 1440 Ko ou 2880 Ko). Vous devriez "
 "pouvoir utiliser d'autres tailles en émulant un disque dur ou en désactivant "
 "complètement l'émulation. <p>Si vous n'êtes pas familier avec des termes "
@@ -7379,9 +7380,9 @@ msgid ""
 "The file system has additional UDF entries attached to it. This raises the "
 "maximal file size to 4 GB. Be aware that the UDF support in K3b is limited."
 msgstr ""
-"Le système de fichiers a des entrées UDF d'attacher en plus. Cela permet une "
-"taille de fichier maximale de 4 Go. Attention, la prise en charge d'UDF dans "
-"K3b est limitée."
+"Le système de fichiers possède des entrées « UDF » intégrées. Cela permet "
+"une taille de fichier maximale de 4 Go. Attention, la prise en charge du "
+"format « UDF » dans K3b est limitée."
 
 #: projects/k3bdataimagesettingswidget.cpp:157
 #, kde-format
@@ -8858,19 +8859,19 @@ msgid ""
 "display parameters, such as display resolution and frame rate, relaxing the "
 "aps requirement may lead to non-working entry points."
 msgstr ""
-"<p>Un secteur de point d'accès (APS) est un secteur de vidéo MPEG du VCD / "
-"SVCD vers lequel il est possible de « sauter » directement. <p>Les APS sont "
-"requis pour les points d'entrées et les tables de scan. Ils doivent faire "
-"précéder chaque I-frame par un en-tête GOP, lequel doit lui-même être "
-"précédé par un en-tête de séquence. <p>Les codes de démarrage de ces 3 "
-"éléments doivent se trouver dans le même pack / secteur MPEG, et forment "
-"ainsi un secteur de point d'accès. <p>Cette nécessité peut être assouplie en "
-"activant l'option « APS assouplis ». Chaque secteur contenant une I-frame "
-"sera alors considéré comme un APS. <p><b>Attention : </b> les lecteurs ont "
-"besoin de l'en-tête de séquence pour obtenir les paramètres d'affichage, "
-"comme la résolution et le nombre d'images par seconde. Avec les APS "
-"assouplis, il est possible que certains points d'entrée ne fonctionnent pas "
-"correctement."
+"<p>Un secteur de point d'accès « APS » (Access Point Sector) est un secteur "
+"de vidéo « MPEG » du VCD / SVCD vers lequel il est possible de « sauter » "
+"directement. <p>Les APS sont requis pour les points d'entrées et les tables "
+"de scan. Ils doivent faire précéder chaque I-frame par un en-tête « GOP », "
+"lequel doit lui-même être précédé par un en-tête de séquence. <p>Les codes "
+"de démarrage de ces 3 éléments doivent se trouver dans le même pack / "
+"secteur « MPEG » et forment ainsi un secteur de point d'accès. <p>Cette "
+"nécessité peut être assouplie en activant l'option « APS assouplis ». Chaque "
+"secteur contenant une I-frame sera alors considéré comme un APS. "
+"<p><b>Attention : </b> les lecteurs ont besoin de l'en-tête de séquence pour "
+"obtenir les paramètres d'affichage, comme la résolution et le nombre "
+"d'images par seconde. Avec les APS assouplis, il est possible que certains "
+"points d'entrée ne fonctionnent pas correctement."
 
 #: projects/k3bvcdburndialog.cpp:212
 #, kde-format
@@ -10824,7 +10825,7 @@ msgstr "Coupure automatique de la &vidéo"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:502
 #, kde-format
 msgid "Change the sample rate of the audio stream to 44.1 KHz"
-msgstr "Modifier l'échantillonage du flux audio en 44.1 KHz"
+msgstr "Modifier l'échantillonnage du flux audio en 44.1 KHz"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:506
@@ -10839,8 +10840,8 @@ msgstr ""
 "<p>Les flux audio des DVD vidéo sont normalement encodés avec un "
 "échantillonnage de 48000 Hz. D'un autre côté, les CD audio sont encodés avec "
 "un échantillonnage de 44100 Hz.\n"
-"<p>Si cette option est activée, K3b modifiera l'échantillonage du flux audio "
-"en 44100 Hz."
+"<p>Si cette option est activée, K3b modifiera l'échantillonnage du flux "
+"audio en 44100 Hz."
 
 # unreviewed-context
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAudioResampling)
@@ -10928,7 +10929,7 @@ msgid ""
 msgstr ""
 "<p>Lors de l'utilisation du codec audio <em>AC3 pass-through</em>, tous les "
 "flux audio sélectionnés doivent être au format AC3. Sélectionnez un autre "
-"codec audio ou choisissez l'AC3 pour tous les titres."
+"codec audio ou sélectionnez le mode « AC3 » pour tous les titres."
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:497
 #, kde-format
