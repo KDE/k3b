@@ -1769,7 +1769,7 @@ msgstr "No es pot escriure al vol amb estos orígens d'àudio."
 #: projects/audiocd/k3baudiojob.cpp:303 projects/mixedcd/k3bmixedjob.cpp:236
 #, kde-format
 msgid "Determining maximum writing speed"
-msgstr "S'està determinant la màxima velocitat d'escriptura"
+msgstr "S'està determinant la velocitat màxima d'escriptura"
 
 #: projects/audiocd/k3baudiojob.cpp:338
 #, kde-format
