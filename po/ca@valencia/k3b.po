@@ -575,7 +575,7 @@ msgstr "Qualitat del codificador"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:277
 #, kde-format
 msgid "Choose the noise shaping & psycho acoustic algorithm."
-msgstr "Escolliu l'algorisme psicoacústic i de forma de soroll."
+msgstr "Trieu l'algorisme psicoacústic i de forma de soroll."
 
 #. i18n: ectx: property (whatsThis), widget (QSpinBox, m_spinEncoderQuality)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:285
@@ -2863,7 +2863,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:284
 #, kde-format
 msgid "Click \"Configure K3b...\" to solve this problem."
-msgstr "Cliqueu «Configura K3b…» per a solucionar este problema."
+msgstr "Cliqueu damunt «Configura K3b…» per a solucionar este problema."
 
 #: k3bsystemproblemdialog.cpp:247 k3bsystemproblemdialog.cpp:280
 #, kde-format
@@ -3107,8 +3107,8 @@ msgid ""
 "udev click \"Modify Permissions...\" and setup permissions by hand."
 msgstr ""
 "Assegureu-vos que teniu accés d'escriptura a %1. En cas que esteu fent "
-"servir «devfs» o «udev», cliqueu «Modifica els permisos…» i establiu els "
-"permisos manualment."
+"servir «devfs» o «udev», cliqueu damunt «Modifica els permisos…» i establiu "
+"els permisos manualment."
 
 #: k3bsystemproblemdialog.cpp:500
 #, kde-format
@@ -3205,7 +3205,7 @@ msgid ""
 msgstr ""
 "El joc de caràcters de configuració regional («locale») del vostre sistema "
 "(és a dir, el joc de caràcters emprat per a codificar noms de fitxer) és "
-"ANSI_X3.4-1968. És altament improbable que açò haja estat intencionat. "
+"ANSI_X3.4-1968. És altament improbable que açò haja sigut intencionat. "
 "Segurament el vostre joc de caràcters de configuració regional ni tan sols "
 "està definit. Un valor incorrecte donarà problemes a l'hora de crear "
 "projectes de dades."
@@ -3386,7 +3386,7 @@ msgstr "Aplicació d'escriptura:"
 #: k3bwriterselectionwidget.cpp:159
 #, kde-format
 msgid "The medium that will be used for burning"
-msgstr "El suport que es farà servir per a gravar"
+msgstr "El suport que s'utilitzarà per a gravar"
 
 #: k3bwriterselectionwidget.cpp:160
 #, kde-format
@@ -4052,7 +4052,7 @@ msgstr "Imatge que s'ha de gravar"
 #: misc/k3bimagewritingdialog.cpp:448
 #, kde-format
 msgid "Choose Image File"
-msgstr "Trieu fitxer d'imatge"
+msgstr "Trieu un fitxer d'imatge"
 
 #: misc/k3bimagewritingdialog.cpp:450
 #, kde-format
@@ -6396,7 +6396,7 @@ msgstr "Joc de fonts dels subtítols de MPlayer:"
 #: projects/base_k3bmovixoptionswidget.ui:34
 #, kde-format
 msgid "Select the font to be used to render subtitles"
-msgstr "Seleccioneu la lletra que es farà servir per a mostrar els subtítols"
+msgstr "Seleccioneu la lletra que s'utilitzarà per a mostrar els subtítols"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel7)
 #: projects/base_k3bmovixoptionswidget.ui:44
@@ -7094,7 +7094,7 @@ msgstr "Mostra les opcions avançades"
 #: projects/k3bbootimagedialog.cpp:94
 #, kde-format
 msgid "Please Choose Boot Image"
-msgstr "Escolliu la imatge d'arrancada"
+msgstr "Trieu la imatge d'arrancada"
 
 #: projects/k3bbootimagedialog.cpp:102
 #, kde-format
@@ -8087,7 +8087,7 @@ msgstr "No s'ha trobat cap suport utilitzable."
 #: projects/k3bfillstatusdisplay.cpp:855
 #, kde-format
 msgid "Right click for media sizes"
-msgstr "Dretcliqueu per a veure les mides dels suports"
+msgstr "Cliqueu amb el botó dret per a veure les mides dels suports"
 
 #: projects/k3bmixedburndialog.cpp:52
 #, kde-format
@@ -9185,7 +9185,7 @@ msgstr ""
 "retardada, abans d'executar l'acció indicada per l'usuari o abans de "
 "realitzar un salt immediat. <p>Una vegada completat el nombre de repeticions "
 "indicat, el temps d'<espera> comença a comptar, a menys que s'haja indicat "
-"un temps infinit. <p>Si s'omet este element, el valor que es farà servir de "
+"un temps infinit. <p>Si s'omet este element, el valor que s'utilitzarà de "
 "manera predeterminada és «1», és a dir, que la pista es mostrarà una vegada."
 
 #: projects/k3bvcdtrackdialog.cpp:263
@@ -9211,7 +9211,7 @@ msgstr "Informació del fitxer"
 #: projects/k3bvcdtrackdialog.cpp:387
 #, kde-format
 msgid "Length:"
-msgstr "Longitud:"
+msgstr "Llargària:"
 
 #: projects/k3bvcdtrackdialog.cpp:388
 #, kde-format
