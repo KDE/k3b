@@ -156,7 +156,7 @@ parts:
       - ffmpeg-2404
     override-prime: |
       set -eux
-      for snap in "core24" "kf6-core24" "ffmpg-2404"; do
+      for snap in "core24" "kf6-core24" "ffmpeg-2404"; do
           cd "/snap/$snap/current" && find . -type f,l -exec rm -rf "${CRAFT_PRIME}/{}" \;
       done
 
