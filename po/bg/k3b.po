@@ -10994,31 +10994,3 @@ msgstr "16:9"
 #, kde-format
 msgid "Subpicture"
 msgstr "Вторична картина"
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "Справка в MusicBrainz "
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "Запис %1 не беше намерен в базата данни на MusicBrainz."
-
-#~ msgid "Musicbrainz Lookup"
-#~ msgstr "Търсене в Musicbrainz"
-
-#~ msgid "Try to determine meta information over the Internet"
-#~ msgstr "Опит за разпознаване на мета информацията в Интернет"
-
-#~ msgid "Please add an audio track."
-#~ msgstr "Добавете звуков запис."
-
-#~ msgid "Please select an audio track."
-#~ msgstr "Моля, маркирайте аудио запис."
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr ""
-#~ "Намерени са няколко съвпадения за запис %1 (%2). Моля, изберете едно."
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "Създаване на \"пръстов отпечатък\" за запис %1. "
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "Справка за запис %1 в MusicBrainz."
