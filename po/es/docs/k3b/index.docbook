@@ -315,7 +315,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 <tip>
 <para
 >Si usted necesita comprimir audio, cree un nuevo proyecto de CD de audio, añada los archivos a convertir y pulse el botón <guilabel
->Cambiar formato de audio...</guilabel
+>Cambiar formato de audio…</guilabel
 >. Esto no afectará a los contenidos del CD si usted decide grabarlo; sin embargo, usted podrá usar los archivos comprimidos en cualquier otro lugar. Asegúrese que los archivos originales son sin pérdidas (<emphasis
 >wav</emphasis
 > o <emphasis
