@@ -19,6 +19,7 @@
   <name xml:lang="fi">K3b</name>
   <name xml:lang="fr">K3b</name>
   <name xml:lang="gl">K3b</name>
+  <name xml:lang="he">K3b</name>
   <name xml:lang="hu">K3b</name>
   <name xml:lang="ia">K3b</name>
   <name xml:lang="id">K3b</name>
@@ -64,6 +65,7 @@
   <summary xml:lang="fi">Levynkirjoitus</summary>
   <summary xml:lang="fr">Gravure de disque</summary>
   <summary xml:lang="gl">Gravación de disco</summary>
+  <summary xml:lang="he">צריבת דיסקים</summary>
   <summary xml:lang="hu">Lemezíró</summary>
   <summary xml:lang="ia">Gravator de disco</summary>
   <summary xml:lang="id">Disk Burning</summary>
@@ -162,6 +164,7 @@
       <li xml:lang="fi">Projektit: Projektit luodaan tiedostovalikosta, jonka jälkeen ne täytetään kirjoitettavalla tiedolla</li>
       <li xml:lang="fr">Les projets : les projets sont créés depuis le menu fichier et remplis avec les données à graver</li>
       <li xml:lang="gl">Os proxectos, que se crean desde o menú de ficheiro e se completan posteriormente con datos para gravar.</li>
+      <li xml:lang="he">המיזמים: אפשר ליצור מיזמים דרך תפריט קובץ ואז צריך למלא בהם נתונים לצריבה</li>
       <li xml:lang="hu">A projektek: a projektek a fájlmenüből hozhatók létre, majd tölthetők fel adatokkal az íráshoz</li>
       <li xml:lang="ia">Le projectos: Projectos es create ex le menu de file e postea reimplite con datos de gravar </li>
       <li xml:lang="id">Projects: Projek yang diciptakan dari menu file dan kemudian diisi dengan data untuk di-burn</li>
@@ -208,6 +211,7 @@
       <li xml:lang="fi">Työkalut: Työkaluvalikosta löytyy työkaluja mm. CD:n kopiointiin tai DVD:n alustukseen</li>
       <li xml:lang="fr">Les outils : le menu outils offre différente fonctionnalité comme la copie de CD ou le formatage de DVD.</li>
       <li xml:lang="gl">As ferramentas. O menú de ferramentas ofrece utilidades con diversas funcións, como as de copiar CD ou formatar DVD.</li>
+      <li xml:lang="he">הכלים: תפריט הכלים מציע מגוון כלים כגון העתקת תקליטורים או הפקת DVD</li>
       <li xml:lang="hu">Az eszközök: az eszközök menü különböző eszközöket kínál, úgymint CD-másolás vagy DVD-formázás</li>
       <li xml:lang="ia">Le instrumentos: Le menu de instrumentos offere instrumentos differente como copia de CD o formattation de DVD</li>
       <li xml:lang="id">Tools: Menu alat membawakan alat-alat yang berbeda seperti CD copy atau DVD formatting</li>
