@@ -2289,7 +2289,7 @@ msgstr "სანიშნეების ჩვენება"
 #: k3binteractiondialog.cpp:70
 #, kde-format
 msgid "Load default settings"
-msgstr "ნაგულისხმები პარამეტრების ჩატვირთვა"
+msgstr "ნაგულისხმევი პარამეტრების ჩატვირთვა"
 
 #: k3binteractiondialog.cpp:71
 #, kde-format
@@ -2314,7 +2314,7 @@ msgstr "დავალების გაშვება"
 #: k3binteractiondialog.cpp:189
 #, kde-format
 msgid "Load default or saved settings"
-msgstr "ნაგულისხმები ან შენახული პარამეტრების ჩატვირთვა"
+msgstr "ნაგულისხმევი ან შენახული პარამეტრების ჩატვირთვა"
 
 #: k3binteractiondialog.cpp:190
 #, kde-format
@@ -4750,7 +4750,7 @@ msgstr "უცნობი ავტორიზაციის სტატუ�
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
 msgid "Default Settings"
-msgstr "ნაგულისხმები პარამეტრები"
+msgstr "ნაგულისხმევი პარამეტრები"
 
 #: option/k3bmiscoptiontab.cpp:39
 #, kde-format
@@ -7492,7 +7492,7 @@ msgstr "სწორი eMovix-ის ფაილები აღმოჩე�
 #: projects/k3bmovixoptionswidget.cpp:35 projects/k3bmovixoptionswidget.cpp:47
 #, kde-format
 msgid "default"
-msgstr "ნაგულისხმები"
+msgstr "ნაგულისხმევი"
 
 #: projects/k3bmovixprojectmodel.cpp:291
 #, kde-format
@@ -8401,7 +8401,7 @@ msgstr "დაბრუნება:"
 #: projects/k3bvcdtrackdialog.cpp:500
 #, kde-format
 msgid "Default:"
-msgstr "ნაგულისხმები:"
+msgstr "ნაგულისხმევი:"
 
 #: projects/k3bvcdtrackdialog.cpp:521
 #, kde-format
