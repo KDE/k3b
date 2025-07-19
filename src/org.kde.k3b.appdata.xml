@@ -65,7 +65,7 @@
   <summary xml:lang="fi">Levynkirjoitus</summary>
   <summary xml:lang="fr">Gravure de disque</summary>
   <summary xml:lang="gl">Gravación de disco</summary>
-  <summary xml:lang="he">צריבת דיסקים</summary>
+  <summary xml:lang="he">צריבת תקליטורים</summary>
   <summary xml:lang="hu">Lemezíró</summary>
   <summary xml:lang="ia">Gravator de disco</summary>
   <summary xml:lang="id">Disk Burning</summary>
@@ -116,6 +116,7 @@
     <p xml:lang="fi">K3b on rakennettu monipuoliseksi ja helppokäyttöiseksi CD-polttosovellukseksi. Se koostuu ennen kaikkea kolmesta osasta:</p>
     <p xml:lang="fr">K3b a été créé comme une application de gravure de CD riche en fonctionnalité et facile à prendre en main. Il est simplement constitué de trois parties :</p>
     <p xml:lang="gl">K3b creouse para ser unha aplicación de gravar CD chea de funcionalidades e fácil de usar. Consiste basicamente en tres partes:</p>
+    <p xml:lang="he">K3b נוצר כדי להיות יישום צריבת תקליטורים עשיר ביכולות וקל לתפעול. הוא מורכב משלושה חלקים בסיסיים.</p>
     <p xml:lang="hu">A K3b azért jött létre, hogy egy funkció-gazdag és könnyen kezelhető CD-író alkalmazás legyen. Alapvetően három részből áll:</p>
     <p xml:lang="ia">K3b esseva create per esser un application de gravar ric in characteristicas e facile de manear. Illo consiste fundamentalmente de tres partes:</p>
     <p xml:lang="id">K3b telah diciptakan untuk menjadi sebuah aplikasi yang kaya-fitur dan mudah untuk menangani pemburningan CD. Yang terdiri dari tiga bagian:</p>
@@ -259,6 +260,7 @@
       <li xml:lang="fi">Kontekstisidonnaiset toimenpiteet: Napsautettaessa CD- tai DVD-asemaa esittävää kuvaketta K3b näyttää sen sisällön ja tarjoaa lisätoimenpiteitä. Tämä on esimerkiksi helpoin tapa purkaa ääni-CD:t tiedostoiksi</li>
       <li xml:lang="fr">Des actions sur les média sensibles au contexte : quand vous cliquez sur l'icône représentant un lecteur de CD ou DVD, K3b vous présentera son contenu et permettra de nouvelles actions. Ceci est par exemple la méthode pour extraire des CD audio.</li>
       <li xml:lang="gl">Accións de recursos segundo o contexto. Ao premer a icona de unidade de CD/DVD, K3b presenta o seu contido e permite realizar accións. Por exemplo, así é como se extraen datos de CD de son.</li>
+      <li xml:lang="he">פעולות תלויות הקשר: בלחיצה על הסמל שמייצג כונן תקליטורים/DVD‏ K3b יציג את התוכן שלו ויאפשר פעולות נוספות. זו למשל הדרך לקרוע תקליטורי שמע</li>
       <li xml:lang="hu">Környezetérzékeny médiaműveletek: a CD/DVD meghajtót ábrázoló ikonra kattintáskor a K3b meg fogja jeleníteni azok tartalmát, és néhány további műveletet engedélyez. Például ez a módja hang CD beolvasásának</li>
       <li xml:lang="ia">Actiones de multimedia sensibile al contexto: Quando on pulsa sur le icone representante un drive de CD/DVD KDE monstrara su contentos e permittera ulterior actiones. Isto es pro exemplo le modo de rippar CDs audio.  </li>
       <li xml:lang="id">Context sensitive media actions: Ketika mengeklik pada Ikon misal sebuah CD/DVD drive K3b akan menampilkan isinya dan memungkinkan beberapa aksi selanjutnya. Ini adalah contoh bagaimana caranya untuk merabit audio CD</li>
