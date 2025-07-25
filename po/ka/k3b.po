@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-04-12 03:34+0200\n"
+"PO-Revision-Date: 2025-07-24 07:00+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.6\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2686,6 +2686,8 @@ msgid ""
 "Although K3b supports all cdrtools versions since 1.10 it is highly "
 "recommended to at least use version 2.0."
 msgstr ""
+"მიუხედავად იმისა, რომ K3b-ს აქვს 1.10-ის შემდეგ cdrtools-ის ყველა ვერსიის "
+"მხარდაჭერა, ჩვენ მაინც გირჩევთ, სულ ცოტა, 2.0 გამოიყენოთ."
 
 #: k3bsystemproblemdialog.cpp:220
 #, kde-format
@@ -2743,6 +2745,8 @@ msgid ""
 "It is highly recommended to configure cdrdao to run with root privileges to "
 "increase the overall stability of the burning process."
 msgstr ""
+"რეკომენდებულია, რომ cdrdao გაუშვათ root-ის პრივილეგიებით, რომ გაზარდოთ "
+"ამოწვის პროცესის ზოგადი სტაბილურობა."
 
 #: k3bsystemproblemdialog.cpp:293
 #, kde-format
@@ -2750,6 +2754,8 @@ msgid ""
 "Cdrskin can substitute for cdrecord with data and audio CD, and for "
 "growisofs with DVD and BD."
 msgstr ""
+"Cdrskin-ს შეუძლია, ჩაანაცვლოს cdrecord მონაცემების და აუდიო CD-ებისთვის და "
+"growisofs DVD-სთვის და BD-სთვის."
 
 #: k3bsystemproblemdialog.cpp:295
 #, kde-format
@@ -2762,6 +2768,8 @@ msgid ""
 "K3b uses growisofs to actually write DVDs. Without growisofs you will not be "
 "able to write DVDs. Make sure to install at least version 5.10."
 msgstr ""
+"K3b იყენებს growisofs-ს DVD-ების ჩასაწერად. growisofs-ის გარეშე DVD-ებს ვერ "
+"ჩაწერთ. დარწმუნდით, რომ დააყენეთ მინიმუმ ვერსია 5.10."
 
 #: k3bsystemproblemdialog.cpp:318 k3bsystemproblemdialog.cpp:361
 #, kde-format
@@ -2774,6 +2782,8 @@ msgid ""
 "K3b needs at least growisofs version 5.10 to write DVDs. All older versions "
 "will not work and K3b will refuse to use them."
 msgstr ""
+"K3b-ს growisofs-ის 5.10 ვერსია, ან უფრო ახალი სჭირდება DVD-ების ჩასაწერად. "
+"ყველა უფრო ძველი ვერსია არ იმუშავებს და K3b უარს იტყვის მათ გამოყენებაზე."
 
 #: k3bsystemproblemdialog.cpp:326 k3bsystemproblemdialog.cpp:334
 #: k3bsystemproblemdialog.cpp:342 k3bsystemproblemdialog.cpp:375
@@ -2787,6 +2797,8 @@ msgid ""
 "K3b will not be able to copy DVDs on-the-fly or write a DVD+RW in multiple "
 "sessions using a growisofs version older than 5.12."
 msgstr ""
+"K3b ვერ დააკოპირებს DVD-ებს შუალედური ფაილის გარეშე და ვერ ჩაწერს DVD+RW-ებს "
+"მრავალი სესიით, თუ growisofs-ის ვერსია 5.12-ზე ძველია."
 
 #: k3bsystemproblemdialog.cpp:339
 #, kde-format
@@ -2795,6 +2807,8 @@ msgid ""
 "able to write a DVD+RW in multiple sessions using a growisofs version older "
 "than 7.0."
 msgstr ""
+"რეკომენდებულია, გამოიყენოთ growisofs 7.0, ან უფრო ახალი. K3b ვერ ჩაწერს DVD"
+"+RW-ს მრავალი სესიით, თუ growisofs 7.0-ზე ძველი იქნება."
 
 #: k3bsystemproblemdialog.cpp:360
 #, kde-format
@@ -2808,6 +2822,8 @@ msgid ""
 "K3b needs at least mkisofs version 1.14. Older versions may introduce "
 "problems when creating data projects."
 msgstr ""
+"K3b-ს სჭირდება mkisofs-ის ვერსია მინიმუმ 1.14. უფრო ძველმა ვერსიებმა "
+"მონაცემების პროექტების შექმნისას, შეიძლება, პრობლემები შექმნას."
 
 #: k3bsystemproblemdialog.cpp:397
 #, kde-format
@@ -2821,6 +2837,9 @@ msgid ""
 "rewriting might fail. There is no need to report this as a bug or feature "
 "wish; it is not possible to solve this problem from within K3b."
 msgstr ""
+"K3b-ს არ შეუძლია ავტომიმაგრებადი მოწყობილობების მოხსნა. ამიტომ, DVD+RW-ის "
+"თავიდან ჩაწერა, შეიძლება, ჩავარდეს. არაა საჭირო ამ ფაქტის შეცდომის სახით "
+"მოწერა. ამ პრობლემას ჩვენ K3b-ის შიგნიდან ვერ აღმოვფხვრით."
 
 #: k3bsystemproblemdialog.cpp:403
 #, kde-format
@@ -2840,6 +2859,9 @@ msgid ""
 "Your kernel does not support writing without SCSI emulation but there is at "
 "least one writer in your system not configured to use SCSI emulation."
 msgstr ""
+"თქვენს ბირთვს არ აქვს ჩაწერის მხარდაჭერა SCSI-ის ემულაციის გარეშე, მაგრამ "
+"თქვენს სისტემაში არსებობს, სულ ცოტა, ერთი ჩამწერი, რომელიც არაა მორგებული "
+"SCSI-ის ემულაციით."
 
 #: k3bsystemproblemdialog.cpp:417
 #, kde-format
@@ -3002,6 +3024,8 @@ msgid ""
 "It is not recommended to run K3b under the root user account. This "
 "introduces unnecessary security risks."
 msgstr ""
+"K3b-ის გაშვება root მომხმარებლით რეკომენდებული არაა. ამან, შეიძლება, "
+"არასაჭირო უსაფრთხოების რისკები მოიტანოს."
 
 #: k3bsystemproblemdialog.cpp:585
 #, kde-format
@@ -3009,6 +3033,8 @@ msgid ""
 "Run K3b from a proper user account and setup the device and external tool "
 "permissions appropriately."
 msgstr ""
+"გაუშვით K3b სათანადო მომხმარებლის ანგარიშით და სათანადოდ მოირგეთ "
+"მოწყობილობისა და გარე პროგრამის წვდომები."
 
 #: k3bsystemproblemdialog.cpp:587
 #, kde-format
