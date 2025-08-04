@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-06-28 17:25+0400\n"
+"PO-Revision-Date: 2025-08-03 12:32+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1134,7 +1134,7 @@ msgstr "نمط إعادة التسمية"
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:118
 #, kde-format
 msgid "Scan"
-msgstr "امسح"
+msgstr "امحُ"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:123
 #, kde-format
@@ -1385,7 +1385,7 @@ msgstr "ام&سح المشروع"
 #: k3b.cpp:388
 #, kde-format
 msgid "Clear the current project"
-msgstr "امسح المشروع الحاليّ"
+msgstr "امحُ المشروع الحاليّ"
 
 #: k3b.cpp:393 k3bdevicemenu.cpp:69
 #, fuzzy, kde-format
@@ -1611,7 +1611,7 @@ msgstr "أتريد حقًّا مسح المشروع الحاليّ؟"
 #: k3b.cpp:1438
 #, kde-format
 msgid "Clear Project"
-msgstr "امسح المشروع"
+msgstr "امحُ المشروع"
 
 #: k3b.cpp:1463
 #, kde-format
@@ -2753,7 +2753,7 @@ msgstr "انقر \"اضبط «كي3بي»...\" لحلّ المشكلة."
 #: k3bsystemproblemdialog.cpp:247 k3bsystemproblemdialog.cpp:280
 #, kde-format
 msgid "%1 will be run without root privileges"
-msgstr "%1 سيُشغّل بدون اميازات الجذر"
+msgstr "%1 سيُشغّل دون امتيازات الجذر"
 
 #: k3bsystemproblemdialog.cpp:248
 #, kde-format
@@ -4128,7 +4128,7 @@ msgstr ""
 #: misc/k3bmediaformattingdialog.cpp:40
 #, kde-format
 msgid "Format and Erase"
-msgstr "هيّئ وامسح"
+msgstr "هيّئ وامحُ"
 
 #: misc/k3bmediaformattingdialog.cpp:41
 #, kde-format
