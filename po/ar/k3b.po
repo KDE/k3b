@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-08-03 12:32+0400\n"
+"PO-Revision-Date: 2025-08-04 18:36+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1380,7 +1380,7 @@ msgstr "أضف ملفّات إلى المشروع الحاليّ"
 #: k3b.cpp:387
 #, kde-format
 msgid "&Clear Project"
-msgstr "ام&سح المشروع"
+msgstr "ام&حُ المشروع"
 
 #: k3b.cpp:388
 #, kde-format
@@ -2303,7 +2303,7 @@ msgstr "أظهر العلامات"
 #: k3binteractiondialog.cpp:70
 #, kde-format
 msgid "Load default settings"
-msgstr "حمّل الإعدادات الافتراضيّة"
+msgstr "حمّل الإعدادات المبدئيّة"
 
 #: k3binteractiondialog.cpp:71
 #, kde-format
@@ -2328,7 +2328,7 @@ msgstr "ابدأ المهمّة"
 #: k3binteractiondialog.cpp:189
 #, kde-format
 msgid "Load default or saved settings"
-msgstr "حمّل الإعدادات الافتراضيّة أو المحفوظة"
+msgstr "حمّل الإعدادات المبدئيّة أو المحفوظة"
 
 #: k3binteractiondialog.cpp:190
 #, kde-format
@@ -3386,7 +3386,7 @@ msgstr "Leslie Zhai"
 #: main.cpp:37
 #, kde-format
 msgid "Maintainer"
-msgstr "المصين"
+msgstr "الصائن"
 
 #: main.cpp:38
 #, kde-format
@@ -4210,7 +4210,7 @@ msgstr "ا&سأل عن حفظ المشاريع عند الخروج"
 #: option/base_k3bmiscoptiontab.ui:38
 #, kde-format
 msgid "Default Temporary Directory:"
-msgstr "المجلّد المؤقّت الافتراضيّ:"
+msgstr "المجلّد المؤقّت المبدئيّ:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, m_editTempDir)
 #: option/base_k3bmiscoptiontab.ui:48
@@ -4272,7 +4272,7 @@ msgstr ""
 #: option/base_k3bmiscoptiontab.ui:94
 #, kde-format
 msgid "Show &progress in notification area"
-msgstr "أظهر التّ&قدّم في منطقة الإخطارات"
+msgstr "أظهر التّ&قدّم في منطقة الإشعارات"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
 #: option/base_k3bmiscoptiontab.ui:101
@@ -4781,7 +4781,7 @@ msgstr ""
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
 msgid "Default Settings"
-msgstr "الإعدادات الافتراضية"
+msgstr "الإعدادات المبدئية"
 
 #: option/k3bmiscoptiontab.cpp:39
 #, kde-format
@@ -4879,12 +4879,12 @@ msgstr "أعدّ البرامج الخارجيّة"
 #: option/k3boptiondialog.cpp:163
 #, kde-format
 msgid "Notifications"
-msgstr "الإخطارات"
+msgstr "الإشعارات"
 
 #: option/k3boptiondialog.cpp:164
 #, kde-format
 msgid "System Notifications"
-msgstr "إخطارات النّظام"
+msgstr "إشعارات النّظام"
 
 #: option/k3boptiondialog.cpp:173
 #, kde-format
@@ -7253,7 +7253,7 @@ msgstr "استورد جلسة حُرقت مسبقًا إلى المشروع ال
 #: projects/k3bdataviewimpl.cpp:144
 #, kde-format
 msgid "&Clear Imported Session"
-msgstr "ام&سح الجلسة المستوردة"
+msgstr "ام&حُ الجلسة المستوردة"
 
 #: projects/k3bdataviewimpl.cpp:145
 #, kde-format
@@ -7343,7 +7343,7 @@ msgstr "من الوسط..."
 #: projects/k3bfillstatusdisplay.cpp:451
 #, kde-format
 msgid "User Defaults"
-msgstr "افتراضيّات المستخدم"
+msgstr "مبدئيّات المستخدم"
 
 #: projects/k3bfillstatusdisplay.cpp:454
 #, kde-format
@@ -10048,7 +10048,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:179
 #, kde-format
 msgid "auto"
-msgstr "تلقائي"
+msgstr "آليّ"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:278
 #, kde-format
