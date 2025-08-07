@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-08-02 20:55+0300\n"
+"PO-Revision-Date: 2025-08-06 09:05+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -1169,7 +1169,7 @@ msgstr ""
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:382
 #, kde-format
 msgid "Rename Audio Files"
-msgstr "שנה שמות קבצי שמע"
+msgstr "שינוי שמות קובצי שמע"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:166
 #, kde-format
@@ -7102,7 +7102,7 @@ msgstr "קובצי דמות נוספים למיזם"
 #: projects/k3bdataurladdingdialog.cpp:183
 #, kde-format
 msgid "Add the file to the project"
-msgstr "הוסף את הקובץ לפרוייקט"
+msgstr "הוספת הקובץ למיזם"
 
 #: projects/k3bdataurladdingdialog.cpp:184
 #, kde-format
@@ -7119,60 +7119,60 @@ msgstr "קובץ כבר קיים"
 #: projects/k3bdataurladdingdialog.cpp:620
 #, kde-format
 msgid "<p>File <em>%1</em> already exists in project folder <em>%2</em>."
-msgstr "<p>הקובץ <em>%1</em> כבר קיים בתיקיית הפרויקט <em>%2</em>."
+msgstr "<p>הקובץ <em>%1</em> כבר קיים בתיקיית המיזם <em>%2</em>."
 
 #: projects/k3bdataurladdingdialog.cpp:390
 #: projects/k3bdataurladdingdialog.cpp:629
 #, kde-format
 msgid "Replace the existing file"
-msgstr "החלף את הקובץ הקיים"
+msgstr "החלפת הקובץ הקיים"
 
 #: projects/k3bdataurladdingdialog.cpp:391
 #: projects/k3bdataurladdingdialog.cpp:630
 #, kde-format
 msgid "Replace All"
-msgstr "החלף הכל"
+msgstr "החלפה של הכול"
 
 #: projects/k3bdataurladdingdialog.cpp:393
 #: projects/k3bdataurladdingdialog.cpp:632
 #, kde-format
 msgid "Always replace existing files"
-msgstr "החלף תמיד את הקבצים הקיימים"
+msgstr "תמיד להחליף את הקבצים הקיימים"
 
 #: projects/k3bdataurladdingdialog.cpp:396
 #: projects/k3bdataurladdingdialog.cpp:635
 #, kde-format
 msgid "Keep the existing file"
-msgstr "שמור את הקבצים הקיימים"
+msgstr "שמירת הקבצים הקיימים"
 
 #: projects/k3bdataurladdingdialog.cpp:397
 #: projects/k3bdataurladdingdialog.cpp:636
 #, kde-format
 msgid "Ignore All"
-msgstr "התעלם מהכל"
+msgstr "להתעלם מהכול"
 
 #: projects/k3bdataurladdingdialog.cpp:399
 #: projects/k3bdataurladdingdialog.cpp:638
 #, kde-format
 msgid "Always keep the existing file"
-msgstr "שמור תמיד את הקבצים הקיימים"
+msgstr "תמיד לשמור את הקבצים הקיימים"
 
 #: projects/k3bdataurladdingdialog.cpp:400
 #: projects/k3bdataurladdingdialog.cpp:639 projects/k3bdataviewimpl.cpp:118
 #, kde-format
 msgid "Rename"
-msgstr "שנה שם"
+msgstr "שינוי שם"
 
 #: projects/k3bdataurladdingdialog.cpp:402
 #: projects/k3bdataurladdingdialog.cpp:641
 #, kde-format
 msgid "Rename the new file"
-msgstr "שנה את שם הקובץ החדש"
+msgstr "שינוי שם הקובץ החדש"
 
 #: projects/k3bdataurladdingdialog.cpp:443
 #, kde-format
 msgid "Adding link to folder"
-msgstr "מוסיף קישור לתיקייה"
+msgstr "הוספת קישור לתיקייה"
 
 #: projects/k3bdataurladdingdialog.cpp:444
 #, kde-format
@@ -7188,48 +7188,48 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:455
 #, kde-format
 msgid "Follow link now"
-msgstr "עקוב אחרי הקישור עכשיו"
+msgstr "מעקב אחר הקישור כעת"
 
 #: projects/k3bdataurladdingdialog.cpp:456
 #, kde-format
 msgid "Always follow links"
-msgstr "עקוב אחר קישורים "
+msgstr "תמיד לעקוב אחר קישורים"
 
 #: projects/k3bdataurladdingdialog.cpp:457
 #, kde-format
 msgid "Add link to project"
-msgstr "הוסף קישור לפרויקט"
+msgstr "הוספת קישור למיזם"
 
 #: projects/k3bdataurladdingdialog.cpp:458
 #, kde-format
 msgid "Always add links"
-msgstr "תמיד הוסף קישורים"
+msgstr "תמיד להוסיף קישורים"
 
 #: projects/k3bdataurladdingdialog.cpp:750
 #, kde-format
 msgid "Enter New Filename"
-msgstr "הכנס שם קובץ חדש"
+msgstr "נא למלא שם לקובץ החדש"
 
 #: projects/k3bdataurladdingdialog.cpp:751
 #, kde-format
 msgid "A file with that name already exists. Please enter a new name:"
-msgstr "קובץ בעל שם זהה כבר קיים. אנא הכנס שם חדש:"
+msgstr "כבר קיים קובץ בשם הזה. נא למלא שם חדש:"
 
 #: projects/k3bdataurladdingdialog.cpp:768
 #, kde-format
 msgid "Do you also want to add hidden files?"
-msgstr "האם ברצונך גם להוסיף קבצים נסתרים?"
+msgstr "להוסיף גם קבצים מוסתרים?"
 
 #: projects/k3bdataurladdingdialog.cpp:769
 #, kde-format
 msgid "Hidden Files"
-msgstr "קבצים נסתרים"
+msgstr "קבצים מוסתרים"
 
 #: projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "Do Not Add"
-msgstr "אל תוסיף"
+msgstr "לא להוסיף"
 
 #: projects/k3bdataurladdingdialog.cpp:784
 #, kde-format
@@ -7241,12 +7241,12 @@ msgstr ""
 #: projects/k3bdataurladdingdialog.cpp:786
 #, kde-format
 msgid "System Files"
-msgstr "קבצי מערכת"
+msgstr "קובצי מערכת"
 
 #: projects/k3bdataurladdingdialog.cpp:813
 #, kde-format
 msgid "To burn files bigger than %1 please use %2"
-msgstr "על מנת לצרוב קבצים יותר גדולים מ - %1 אנא השתמש ב - %2"
+msgstr "כדי לצרוב קבצים יותר גדולים מ־%1 נא להשתמש ב־%2"
 
 #: projects/k3bdataurladdingdialog.cpp:818
 #, kde-format
@@ -7259,48 +7259,48 @@ msgid ""
 "The following filenames have an invalid encoding. You may fix this with the "
 "convmv tool"
 msgstr ""
-"שמות הקבצים הבאים מכילים קידוד לא תקין. הינך יכול לתקן זאת בעזרת הכלי convmv"
+"שמות הקבצים הבאים מכילים קידוד לא תקין. אפשר לתקן את זה בעזרת הכלי convmv"
 
 #: projects/k3bdataview.cpp:116 projects/k3bmixedview.cpp:127
 #: projects/k3bview.cpp:82
 #, kde-format
 msgid "No Data to Burn"
-msgstr "אין מידע לצרוב"
+msgstr "אין נתונים לצריבה"
 
 #: projects/k3bdataviewimpl.cpp:106
 #, kde-format
 msgid "New Folder..."
-msgstr "תיקייה חדשה..."
+msgstr "תיקייה חדשה…"
 
 #: projects/k3bdataviewimpl.cpp:124
 #, kde-format
 msgid "Parent Folder"
-msgstr "תיקיית אב"
+msgstr "תיקיית הורה"
 
 #: projects/k3bdataviewimpl.cpp:135
 #, kde-format
 msgid "Open"
-msgstr "פתח"
+msgstr "פתיחה"
 
 #: projects/k3bdataviewimpl.cpp:139
-#, kde-format
+#, fuzzy, kde-format
 msgid "&Import Session..."
 msgstr "&ייבא צריבה..."
 
 #: projects/k3bdataviewimpl.cpp:140
 #, kde-format
 msgid "Import a previously burned session into the current project"
-msgstr "ייבא צריבה קודמת אל הפרוייקט הנוכחי"
+msgstr "ייבוא צריבה קודמת למיזם הנוכחי"
 
 #: projects/k3bdataviewimpl.cpp:144
-#, kde-format
+#, fuzzy, kde-format
 msgid "&Clear Imported Session"
 msgstr "&נקה צריבה קודמת"
 
 #: projects/k3bdataviewimpl.cpp:145
 #, kde-format
 msgid "Remove the imported items from a previous session"
-msgstr "הסר את הפריטים המיובאים מהצריבה הקודמת"
+msgstr "הסרת הפריטים המיובאים מצריבה קודמת"
 
 #: projects/k3bdataviewimpl.cpp:150
 #, kde-format
@@ -7310,7 +7310,7 @@ msgstr "&עריכת דמויות טעינה…"
 #: projects/k3bdataviewimpl.cpp:151
 #, kde-format
 msgid "Modify the bootable settings of the current project"
-msgstr "שנה את ההגדרות האתחול של הפרוייקט הנוכחי"
+msgstr "שינוי ההגדרות האתחול של המיזם הנוכחי"
 
 #: projects/k3bdataviewimpl.cpp:214 projects/k3bdataviewimpl.cpp:217
 #: projects/k3bdataviewimpl.cpp:222 projects/k3bdataviewimpl.cpp:226
@@ -7321,7 +7321,7 @@ msgstr "תיקייה חדשה"
 #: projects/k3bdataviewimpl.cpp:215
 #, kde-format
 msgid "Please insert the name for the new folder:"
-msgstr "אנא הכנס את השם עבור התיקייה החדשה:"
+msgstr "נא למלא שם לתיקייה החדשה:"
 
 #: projects/k3bdataviewimpl.cpp:223
 #, kde-format
@@ -7338,12 +7338,12 @@ msgstr "עריכת דמויות טעינה"
 #: projects/k3bfillstatusdisplay.cpp:187
 #, kde-format
 msgid "Available: %1 of %2"
-msgstr "זמין %1 מתוך %2"
+msgstr "זמין: %1 מתוך %2"
 
 #: projects/k3bfillstatusdisplay.cpp:195
 #, kde-format
 msgid "Capacity exceeded by %1"
-msgstr "חריגת קיבולת ב - %1"
+msgstr "חריגת קיבולת ב־%1"
 
 #: projects/k3bfillstatusdisplay.cpp:376
 #, fuzzy, kde-format
@@ -7358,7 +7358,7 @@ msgstr "דקות"
 #: projects/k3bfillstatusdisplay.cpp:410
 #, kde-format
 msgid "Megabytes"
-msgstr "מגה־בייטים"
+msgstr "מגה בתים"
 
 #: projects/k3bfillstatusdisplay.cpp:413
 #, kde-format
@@ -7375,12 +7375,12 @@ msgstr "%1 מ״ב"
 #: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
 msgid "Custom..."
-msgstr "התאמה אישית..."
+msgstr "התאמה אישית…"
 
 #: projects/k3bfillstatusdisplay.cpp:433
 #, kde-format
 msgid "From Medium..."
-msgstr "מתוך מדיה..."
+msgstr "מאמצעי אחסון…"
 
 #: projects/k3bfillstatusdisplay.cpp:451
 #, kde-format
@@ -7390,7 +7390,7 @@ msgstr "ברירות המחדל של המשתמש"
 #: projects/k3bfillstatusdisplay.cpp:454
 #, kde-format
 msgid "Save User Defaults"
-msgstr "שמור את הגדרות ברירת המחדל של המשתמש"
+msgstr "שמירת ברירות המחדל של המשתמש"
 
 #: projects/k3bfillstatusdisplay.cpp:458
 #, kde-format
@@ -7400,7 +7400,7 @@ msgstr "למה 4.4 במקום 4.7?"
 #: projects/k3bfillstatusdisplay.cpp:462
 #, kde-format
 msgid "Show Size In"
-msgstr "הצג גודל ב-"
+msgstr "הצגת גודל ב־"
 
 #: projects/k3bfillstatusdisplay.cpp:468
 #, kde-format
@@ -7440,12 +7440,12 @@ msgstr ""
 #: projects/k3bfillstatusdisplay.cpp:584
 #, kde-format
 msgid "GB"
-msgstr "GB"
+msgstr "ג״ב"
 
 #: projects/k3bfillstatusdisplay.cpp:586
 #, kde-format
 msgid "min"
-msgstr "דקות"
+msgstr "דק׳"
 
 #: projects/k3bfillstatusdisplay.cpp:603
 #, kde-format
@@ -7463,30 +7463,30 @@ msgstr ""
 #: projects/k3bfillstatusdisplay.cpp:663
 #, kde-format
 msgid "Medium is not empty."
-msgstr "התקליטור אינו ריק."
+msgstr "אמצעי האחסון אינו ריק."
 
 #: projects/k3bfillstatusdisplay.cpp:666
 #, kde-format
 msgid "No usable medium found."
-msgstr "לא נמצא תקליטור"
+msgstr "לא נמצא אמצעי אחסון שמיש."
 
 #: projects/k3bfillstatusdisplay.cpp:855
-#, kde-format
+#, fuzzy, kde-format
 msgid "Right click for media sizes"
 msgstr "מקש עכבר ימני על מנת לראות גודל תקליטורים"
 
 #: projects/k3bmixedburndialog.cpp:52
 #, kde-format
 msgid "Mixed Project"
-msgstr "פרויקט מעורב"
+msgstr "מיזם מעורב"
 
 #: projects/k3bmixedburndialog.cpp:92
 #, kde-format
 msgid "Mixed Mode Type"
-msgstr "מצב מעורב"
+msgstr "סוג מצב מעורב"
 
 #: projects/k3bmixedburndialog.cpp:98
-#, kde-format
+#, fuzzy, kde-format
 msgid "Data in second session (CD-Extra)"
 msgstr "מידע בצריבה קודמת על אותו דיסק (CD-EXTRA)"
 
@@ -7507,22 +7507,22 @@ msgstr ""
 #: projects/k3bmixedburndialog.cpp:115
 #, kde-format
 msgid "Data in first track"
-msgstr "המידע ברצועה הראשונה"
+msgstr "הנתונים ברצועה הראשונה"
 
 #: projects/k3bmixedburndialog.cpp:116
 #, kde-format
 msgid "K3b will write the data track before all audio tracks."
-msgstr "K3b יכתוב את קבצי המידע לפני כל קבצי השמע."
+msgstr "K3b יכתוב את רצועת הנתונים לפני כל רצועות השמע."
 
 #: projects/k3bmixedburndialog.cpp:119
 #, kde-format
 msgid "Data in last track"
-msgstr "המידע ברצועה האחרונה"
+msgstr "הנתונים ברצועה האחרונה"
 
 #: projects/k3bmixedburndialog.cpp:120
 #, kde-format
 msgid "K3b will write the data track after all audio tracks."
-msgstr "K3b יכתוב את קבצי המידע אחרי כל קבצי השמע."
+msgstr "K3b יכתוב את רצועת הנתונים אחרי כל רצועות השמע."
 
 #: projects/k3bmixedburndialog.cpp:123
 #, kde-format
@@ -7546,12 +7546,12 @@ msgstr ""
 #: projects/k3bmixedview.cpp:126
 #, kde-format
 msgid "Please add files and audio titles to your project first."
-msgstr "אנא, הוסף קודם קבצים וכותרות שמע לפרויקט שלך."
+msgstr "נא להוסיף קבצים וכותרות שמע למיזם שלך תחילה."
 
 #: projects/k3bmovixburndialog.cpp:47
 #, kde-format
 msgid "eMovix Project"
-msgstr "פרויקט eMovix"
+msgstr "מיזם eMovix"
 
 #: projects/k3bmovixburndialog.cpp:48
 #, fuzzy, kde-format
@@ -7570,12 +7570,12 @@ msgstr "eMovix"
 #: projects/k3bmovixburndialog.cpp:95
 #, kde-format
 msgid "Multisession"
-msgstr "רב־צריבות"
+msgstr "ריבוי צריבות"
 
 #: projects/k3bmovixburndialog.cpp:191
 #, kde-format
 msgid "Could not find a valid eMovix installation."
-msgstr "לא הייתה אפשרות למצוא התקנה תקינה של eMovix."
+msgstr "לא ניתן למצוא התקנה תקפה של eMovix."
 
 #: projects/k3bmovixoptionswidget.cpp:35 projects/k3bmovixoptionswidget.cpp:47
 #, kde-format
@@ -7591,7 +7591,7 @@ msgstr " (שבור)"
 #, kde-format
 msgctxt "Movix File Position"
 msgid "No."
-msgstr "לא."
+msgstr "מס׳"
 
 #: projects/k3bmovixprojectmodel.cpp:310
 #, kde-format
@@ -7626,17 +7626,17 @@ msgstr "קישור"
 #: projects/k3bmovixview.cpp:63
 #, kde-format
 msgid "Remove Subtitle File"
-msgstr "הסר קובץ כתוביות"
+msgstr "הסרת קובץ כתוביות"
 
 #: projects/k3bmovixview.cpp:66
 #, kde-format
 msgid "Add Subtitle File..."
-msgstr "הוסף קובץ כתוביות..."
+msgstr "הוספת קובץ כתוביות…"
 
 #: projects/k3bmovixview.cpp:149
 #, kde-format
 msgid "K3b currently only supports local files."
-msgstr "היישום K3b כרגע תומך רק בקבצים מקומיים."
+msgstr "היישום K3b תומך כרגע רק בקבצים מקומיים."
 
 #: projects/k3bprojectburndialog.cpp:58
 #, kde-format
@@ -7646,22 +7646,22 @@ msgstr "ניתן להשתמש בלשונית ‚דמות’ כדי לכוון א
 #: projects/k3bprojectburndialog.cpp:63
 #, kde-format
 msgid "Save Settings and close"
-msgstr "שמור הגדרות וסגור"
+msgstr "שמירת הגדרות וסגירה"
 
 #: projects/k3bprojectburndialog.cpp:64
 #, kde-format
 msgid "Saves the settings to the project and closes the dialog."
-msgstr "שומר את ההגדרות של הפרויקט וסוגר את תיבת הדו־שיח."
+msgstr "שמירת ההגדרות של המיזם וסגירת החלונית."
 
 #: projects/k3bprojectburndialog.cpp:67
 #, kde-format
 msgid "Discard all changes and close"
-msgstr "התעלם מכל השינויים וסגור."
+msgstr "התעלמות מכל השינויים ולסגור"
 
 #: projects/k3bprojectburndialog.cpp:68
 #, kde-format
 msgid "Discards all changes made in the dialog and closes it."
-msgstr "סוגר את חלון הדו-שיח ולא שומר את השינויים."
+msgstr "התעלמות מכל השינויים שבוצעו בחלונית ולסגור אותה."
 
 #: projects/k3bprojectburndialog.cpp:140
 #, kde-format
@@ -7671,7 +7671,7 @@ msgstr "התחלת תהליך יצירת הדמות"
 #: projects/k3bprojectburndialog.cpp:143
 #, kde-format
 msgid "Start the burning process"
-msgstr "התחל את תהליך הצריבה"
+msgstr "התחלת תהליך הצריבה"
 
 #: projects/k3bprojectburndialog.cpp:187 rip/k3bvideocdrippingdialog.cpp:143
 #, kde-format
@@ -7687,12 +7687,12 @@ msgstr "צור תיקייה"
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
 msgid "Failed to create folder '%1'."
-msgstr "לא הייתה אפשרות ליצור את התיקייה '%1'."
+msgstr "יצירת התיקייה ‚%1’ נכשלה."
 
 #: projects/k3bprojectburndialog.cpp:252
 #, kde-format
 msgid "Writing"
-msgstr "צורב"
+msgstr "צריבה"
 
 #: projects/k3bprojectburndialog.cpp:295
 #, kde-format
@@ -7738,17 +7738,17 @@ msgstr[3] ""
 #: projects/k3bvcdburndialog.cpp:97 projects/k3bvcdburndialog.cpp:98
 #, kde-format
 msgid "Select Video CD type %1"
-msgstr "בחר סוג תקליטור וידאו %1"
+msgstr "בחירת סוג תקליטור וידאו %1"
 
 #: projects/k3bvcdburndialog.cpp:99
 #, kde-format
 msgid "Automatic video type recognition."
-msgstr "זיהוי אוטומטי של סוג הוידאו."
+msgstr "זיהוי אוטומטי של סוג הווידאו."
 
 #: projects/k3bvcdburndialog.cpp:100
 #, kde-format
 msgid "Non-compliant compatibility mode for broken devices"
-msgstr "מצב תאימות עבור התקנים שבורים"
+msgstr "מצב תאימות בלתי תואם למכשירים פגומים"
 
 #: projects/k3bvcdburndialog.cpp:101
 #, kde-format
@@ -7758,12 +7758,12 @@ msgstr "פירוש רצועות סיניות בעזרת VCD3.0"
 #: projects/k3bvcdburndialog.cpp:102
 #, kde-format
 msgid "Use 2336 byte sectors for output"
-msgstr "השתמש בסקטורים באורך 2336 בתים בפלט"
+msgstr "להשתמש במגזרים באורך 2336 בתים לפלט"
 
 #: projects/k3bvcdburndialog.cpp:104
 #, kde-format
 msgid "Specify ISO volume label for Video CD"
-msgstr "ציין תווית כרך ISO עבור תקליטור וידאו (VCD)"
+msgstr "ציון תווית כרך ISO עבור תקליטור וידאו (VCD)"
 
 #: projects/k3bvcdburndialog.cpp:105
 #, fuzzy, kde-format
@@ -7773,12 +7773,12 @@ msgstr "ציין מזהה כותר עבור קבוצת תקליטורי וידא
 #: projects/k3bvcdburndialog.cpp:106
 #, kde-format
 msgid "Specify album set sequence number ( <= volume-count )"
-msgstr "ציין מספרי סידוריים של קבוצת הכותרים ( <= מונה כרכים )"
+msgstr "ציון מספרים סידוריים של קבוצת הכותרים ( <= כמות בכרכים )"
 
 #: projects/k3bvcdburndialog.cpp:107
 #, kde-format
 msgid "Specify number of volumes in album set"
-msgstr "ציין את מספר הכרכים בקבוצה הכותרים"
+msgstr "ציון מספר הכרכים בקבוצת האלבומים"
 
 #: projects/k3bvcdburndialog.cpp:108
 #, fuzzy, kde-format
@@ -7788,7 +7788,7 @@ msgstr "אפשר תמיכה ביישומים של CD-i עבור תקליטורי
 #: projects/k3bvcdburndialog.cpp:109
 #, kde-format
 msgid "Configuration parameters (only for VCD 2.0)"
-msgstr "פרמטרי הגדרות (רק עבור VCD גרסה 2.0)"
+msgstr "משתני הגדרות (רק עבור VCD גרסה 2.0)"
 
 #: projects/k3bvcdburndialog.cpp:111 projects/k3bvcdtrackdialog.cpp:244
 #, kde-format
@@ -8816,13 +8816,13 @@ msgstr "הכנס את התבנית המותאמת אישית כאן"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:403
 #, kde-format
 msgid "See special strings"
-msgstr "ראה מחרוזות מיוחדות"
+msgstr "ר׳ מחרוזות מיוחדות"
 
 #. i18n: ectx: property (text), widget (KUrlLabel, m_conditionalInclusionLabel)
 #: rip/base_k3bcddbpatternwidget.ui:118
 #, kde-format
 msgid "About conditional inclusion"
-msgstr "אודות הכללה מותנת"
+msgstr "על הכללה מותנית"
 
 #: rip/categories.cpp:19
 #, kde-format
@@ -8832,13 +8832,13 @@ msgstr "בלוז"
 #: rip/categories.cpp:19
 #, kde-format
 msgid "Classical"
-msgstr "קלאסי"
+msgstr "קלסי"
 
 #: rip/categories.cpp:19
 #, kde-format
 msgctxt "music genre"
 msgid "Country"
-msgstr "קאונטרי"
+msgstr "קאנטרי"
 
 #: rip/categories.cpp:20
 #, kde-format
@@ -8848,12 +8848,12 @@ msgstr "פולקה"
 #: rip/categories.cpp:20
 #, kde-format
 msgid "Jazz"
-msgstr "ג'אז"
+msgstr "ג׳אז"
 
 #: rip/categories.cpp:21
 #, kde-format
 msgid "New Age"
-msgstr "ניו אייג'"
+msgstr "ניו אייג׳"
 
 #: rip/categories.cpp:21
 #, kde-format
@@ -9057,7 +9057,7 @@ msgstr "Wave"
 #: rip/k3baudioprojectconvertingdialog.cpp:96
 #, kde-format
 msgid "Audio Project Conversion"
-msgstr "המרת פרויקט שמע"
+msgstr "המרת מיזם שמע"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:117
 #, kde-format
@@ -9074,20 +9074,20 @@ msgstr "גודל הקובץ"
 #: rip/k3baudiorippingdialog.cpp:160
 #, kde-format
 msgid "File Naming"
-msgstr "נתינת שמות לקובץ"
+msgstr "מתן שמות לקבצים"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:169
 #: rip/k3baudiorippingdialog.cpp:238
 #, kde-format
 msgid "Please check the naming pattern. All filenames need to be unique."
-msgstr "אנא בדוק את תבנית השמות. כל הקבצים אמורים להיות יחודיים."
+msgstr "נא לבדוק את תבנית השמות. כל הקבצים אמורים להיות יחודיים."
 
 #: rip/k3baudioprojectconvertingdialog.cpp:186
 #: rip/k3baudiorippingdialog.cpp:255
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:512
 #, kde-format
 msgid "Do you want to overwrite these files?"
-msgstr "האם ברצונך לשכתב קבצים אלו?"
+msgstr "לשכתב על הקבצים האלו?"
 
 #: rip/k3baudioprojectconvertingdialog.cpp:188
 #: rip/k3baudiorippingdialog.cpp:257 rip/k3bvideocdrippingdialog.cpp:166

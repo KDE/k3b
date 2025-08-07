@@ -6,13 +6,13 @@
 # tahmar1900 <tahmar1900@gmail.com>, 2009.
 # Diego Iastrubni <elcuco@kde.org>, 2012.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2024-08-10 22:54+0300\n"
+"PO-Revision-Date: 2025-08-06 09:06+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 25.04.3\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -1625,7 +1625,7 @@ msgstr "תקליטור שמע (CD)"
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Encoder"
-msgstr ""
+msgstr "מקודד שמע"
 
 #: plugin/k3baudioencoder.cpp:154
 #, kde-format
@@ -1641,7 +1641,7 @@ msgstr "אין הגדרות זמינות לתוסף %1"
 #, kde-format
 msgctxt "plugin type"
 msgid "Project plugin"
-msgstr ""
+msgstr "תוסף מיזמים"
 
 #: projects/audiocd/k3baudiocdtrackreader.cpp:60
 #, kde-format
@@ -1795,24 +1795,24 @@ msgid "Writing Audio CD"
 msgstr "כותב תקליטור שמע"
 
 #: projects/audiocd/k3baudiojob.cpp:848
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
 msgstr[0] "רצועה אחת (%2 דקות)"
-msgstr[1] "%1 רצועות (%2 דקות)"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[1] "שתי רצועות (%2 דקות)"
+msgstr[2] "%1 רצועות (%2 דקות)"
+msgstr[3] "%1 רצועות (%2 דקות)"
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
 #: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
-msgstr[0] "עותק  %1 -"
-msgstr[1] "- %1 עותקים"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] " - עותק אחד"
+msgstr[1] " - שני עותקים"
+msgstr[2] " - %1 עותקים"
+msgstr[3] " - %1 עותקים"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
@@ -1975,13 +1975,13 @@ msgid "Writing Multisession Project"
 msgstr "כותב פרוייקט מרובה צריבות"
 
 #: projects/datacd/k3bdatajob.cpp:995
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 Filesystem (Size: %2) – One copy"
 msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
-msgstr[0] "מערכת קבצים ISO9660 (גודל: %1)"
-msgstr[1] "מערכת קבצים ISO9660 (גודל: %1)"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "מערכת קבצים ISO9660 (גודל: %2) - עותק אחד"
+msgstr[1] "מערכת קבצים ISO9660 (גודל: %2) - שני עותקים"
+msgstr[2] "מערכת קבצים ISO9660 (גודל: %2) - %1 עותקים"
+msgstr[3] "מערכת קבצים ISO9660 (גודל: %2) - %1 עותקים"
 
 #: projects/datacd/k3bdatajob.cpp:1000
 #, fuzzy, kde-format
@@ -1999,6 +1999,8 @@ msgid ""
 "No medium inserted or an empty medium in %1. Cannot continue multisession "
 "disk."
 msgstr ""
+"לא הוכנס אמצעי אחסון או שיש אמצעי אחסון ריק ב־%1. אי אפשר להמשיך להכין "
+"תקליטור ריבוי צריבות"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
@@ -3396,7 +3398,7 @@ msgstr "יוצר קובץ תמונה לרצועה %1"
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
-msgstr "קבצי Cue/Bin נוצרו בהצלחה."
+msgstr "קובצי Cue/Bin נוצרו בהצלחה."
 
 #: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
