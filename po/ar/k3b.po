@@ -4680,12 +4680,12 @@ msgstr "لا تغيير"
 #: option/k3bexternalbinwidget.cpp:119
 #, kde-format
 msgid "Permissions"
-msgstr "التّصاريح"
+msgstr "الأذونات"
 
 #: option/k3bexternalbinpermissionmodel.cpp:288
 #, kde-format
 msgid "New permissions"
-msgstr "التّصاريح الجديدة"
+msgstr "الأذونات الجديدة"
 
 #: option/k3bexternalbinwidget.cpp:73
 #, kde-format
@@ -6332,7 +6332,7 @@ msgstr "يضيف الملفّات إلى المشروع ”%1“..."
 #: projects/k3bdataurladdingdialog.cpp:801
 #, kde-format
 msgid "Insufficient permissions to read the following files"
-msgstr "التّصاريح غير كافية لقراءة الملفّات الآتية"
+msgstr "الأذونات غير كافية لقراءة الملفّات الآتية"
 
 #: projects/k3baudiotrackaddingdialog.cpp:77
 #: projects/k3bdataurladdingdialog.cpp:805
