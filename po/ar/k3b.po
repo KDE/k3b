@@ -4968,7 +4968,7 @@ msgstr "الملفّ ليس أرشيف سمات «كي3بي» صالح."
 #: option/k3bthemeoptiontab.cpp:182
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
-msgstr "هناك سمة بالاسم ’%1‘ بالفعل. أتريد الكتابة فوقها؟"
+msgstr "هناك سمة بالاسم ’%1‘ فعلًا. أتريد الكتابة فوقها؟"
 
 #: option/k3bthemeoptiontab.cpp:184
 #, fuzzy, kde-format
@@ -7072,7 +7072,7 @@ msgstr "احرق الصّورة مباشرةً"
 #: projects/k3bdataurladdingdialog.cpp:619
 #, kde-format
 msgid "File already exists"
-msgstr "الملفّ موجود بالفعل"
+msgstr "الملفّ موجود فعلًا"
 
 #: projects/k3bdataurladdingdialog.cpp:381
 #: projects/k3bdataurladdingdialog.cpp:620
@@ -7172,7 +7172,7 @@ msgstr "أدخل اسم الملفّ الجديد"
 #: projects/k3bdataurladdingdialog.cpp:751
 #, kde-format
 msgid "A file with that name already exists. Please enter a new name:"
-msgstr "هناك ملفّ بذاك الاسم بالفعل. رجاء أدخل اسمًا جديدًا:"
+msgstr "هناك ملفّ بذاك الاسم فعلًا. رجاء أدخل اسمًا جديدًا:"
 
 #: projects/k3bdataurladdingdialog.cpp:768
 #, kde-format
@@ -7286,7 +7286,7 @@ msgstr "رجاء أدخل أسم المجلّد الجديد:"
 msgid ""
 "A file with that name already exists. Please insert the name for the new "
 "folder:"
-msgstr "هناك ملفّ بذاك الاسم بالفعل. رجاء أدخل أسم المجلّد الجديد:"
+msgstr "هناك ملفّ بذاك الاسم فعلًا. رجاء أدخل أسم المجلّد الجديد:"
 
 #: projects/k3bdataviewimpl.cpp:375
 #, kde-format
