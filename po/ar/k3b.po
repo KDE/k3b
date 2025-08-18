@@ -3174,7 +3174,7 @@ msgstr "وسط الحرق"
 #: k3bwriterselectionwidget.cpp:121
 #, kde-format
 msgid "Speed:"
-msgstr "السّرعة:"
+msgstr "السرعة:"
 
 #: k3bwriterselectionwidget.cpp:127
 #, kde-format
