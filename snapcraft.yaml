@@ -108,6 +108,7 @@ parts:
       - libflac++10
       - libneon27t64-gnutls
       - libmusicbrainz5cc2v5
+      - libpulse0
       - normalize-audio
       - sox
       - udisks2
