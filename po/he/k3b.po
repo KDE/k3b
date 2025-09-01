@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-08-06 09:05+0300\n"
+"PO-Revision-Date: 2025-08-31 07:36+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1261,57 +1261,57 @@ msgstr "שומר את הפרויקט הנוכחי לקישור חדש"
 #: k3b.cpp:302
 #, kde-format
 msgid "Save All"
-msgstr "שמור הכל"
+msgstr "שמירה של הכול"
 
 #: k3b.cpp:303
 #, kde-format
 msgid "Saves all open projects"
-msgstr "שומר את כל הפרוייקטים הפתוחים"
+msgstr "שמירת כל המיזמים הפתוחים"
 
 #: k3b.cpp:309
 #, kde-format
 msgid "Closes the current project"
-msgstr "סוגר את הפרויקט הנוכחי"
+msgstr "סגירת המיזם הנוכחי"
 
 #: k3b.cpp:312
 #, kde-format
 msgid "Close All"
-msgstr "סגור הכל"
+msgstr "סגירה של הכול"
 
 #: k3b.cpp:313
 #, kde-format
 msgid "Closes all open projects"
-msgstr "סוגר את כל הפרוייקטים הפתוחים"
+msgstr "סגירת כל המיזמים הפתוחים"
 
 #: k3b.cpp:319
 #, kde-format
 msgid "Quits the application"
-msgstr "יוצא מהיישום"
+msgstr "יציאה מהיישום"
 
 #: k3b.cpp:322
 #, kde-format
 msgid "New &Audio CD Project"
-msgstr "פרויקט תקליטור &שמע חדש"
+msgstr "מיזם תקליטור &שמע חדש"
 
 #: k3b.cpp:323
 #, kde-format
 msgid "Creates a new audio CD project"
-msgstr "יוצר פרויקט תקליטור שמע CD חדש"
+msgstr "יצירת מיזם תקליטור שמע CD חדש"
 
 #: k3b.cpp:328
 #, kde-format
 msgid "New &Data Project"
-msgstr "פרוייקט צריבת &נתונים חדש"
+msgstr "מיזם צריבת &נתונים חדש"
 
 #: k3b.cpp:329
 #, kde-format
 msgid "Creates a new data project"
-msgstr "יוצר פרוייקט נתונים חדש"
+msgstr "יצירת מיזם נתונים חדש"
 
 #: k3b.cpp:334
 #, kde-format
 msgid "New &Mixed Mode CD Project"
-msgstr "פרויקט תקליטור מצב מ&עורב חדש"
+msgstr "מיזם תקליטור מצב מ&עורב חדש"
 
 #: k3b.cpp:335
 #, fuzzy, kde-format
@@ -1321,27 +1321,27 @@ msgstr "יוצר פרויקט תקליטור שמע CD חדש"
 #: k3b.cpp:340
 #, kde-format
 msgid "New &Video CD Project"
-msgstr "פרויקט תקליטור &וידאו (VCD) חדש"
+msgstr "מיזם תקליטור &וידאו (VCD) חדש"
 
 #: k3b.cpp:341
 #, kde-format
 msgid "Creates a new Video CD project"
-msgstr "יוצר פרויקט תקליטור וידאו (VCD) חדש"
+msgstr "יצירת מיזם תקליטור וידאו (VCD) חדש"
 
 #: k3b.cpp:346
 #, kde-format
 msgid "New &eMovix Project"
-msgstr "פרוייקט &eMovix חדש"
+msgstr "מיזם &eMovix חדש"
 
 #: k3b.cpp:347
 #, kde-format
 msgid "Creates a new eMovix project"
-msgstr "יוצר פרוייקט eMovix חדש"
+msgstr "יצירת מיזם eMovix חדש"
 
 #: k3b.cpp:352
 #, kde-format
 msgid "New V&ideo DVD Project"
-msgstr "פרויקט תקליטור &וידאו (DVD) חדש"
+msgstr "מיזם תקליטור &וידאו (DVD) חדש"
 
 #: k3b.cpp:353
 #, fuzzy, kde-format
@@ -1351,7 +1351,7 @@ msgstr "יוצר פרויקט תקליטור וידאו (VCD) חדש"
 #: k3b.cpp:358 k3bdevicemenu.cpp:67
 #, kde-format
 msgid "Continue Multisession Project"
-msgstr "המשך פרוייקט ריבוי צריבות"
+msgstr "המשך מיזם ריבוי צריבות"
 
 #: k3b.cpp:359
 #, fuzzy, kde-format
@@ -1361,32 +1361,32 @@ msgstr "המשך פרוייקט ריבוי צריבות"
 #: k3b.cpp:364
 #, kde-format
 msgid "&New Project"
-msgstr "&פרויקט חדש"
+msgstr "מי&זם חדש"
 
 #: k3b.cpp:366
 #, kde-format
 msgid "Creates a new project"
-msgstr "יוצר פרויקט חדש"
+msgstr "יצירת מיזם חדש"
 
 #: k3b.cpp:381
 #, kde-format
 msgid "&Add Files..."
-msgstr "&הוסף קבצים..."
+msgstr "הוס&פת קבצים…"
 
 #: k3b.cpp:382
 #, kde-format
 msgid "Add files to the current project"
-msgstr "הוסף קבצים לפרוייקט הנוכחי"
+msgstr "הוספת קבצים למיזם הנוכחי"
 
 #: k3b.cpp:387
 #, kde-format
 msgid "&Clear Project"
-msgstr "&נקה פרויקט"
+msgstr "&פינוי מיזם"
 
 #: k3b.cpp:388
 #, kde-format
 msgid "Clear the current project"
-msgstr "נקה את הפרוייקט הנוכחי"
+msgstr "פינוי תוכן המיזם הנוכחי"
 
 #: k3b.cpp:393 k3bdevicemenu.cpp:69
 #, kde-format
