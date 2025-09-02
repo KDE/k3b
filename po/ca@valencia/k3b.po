@@ -747,7 +747,7 @@ msgstr "Mode de canal"
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:157
 #, kde-format
 msgid "Select the channel mode."
-msgstr "Seleccioneu el mode de canal."
+msgstr "Trieu el mode de canal."
 
 #. i18n: ectx: property (whatsThis), widget (QComboBox, m_comboMode)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:166
@@ -771,7 +771,7 @@ msgid ""
 "will be downsampled to mono. The downmix is calculated as the sum of the "
 "left and right channel, attenuated by 6 dB."
 msgstr ""
-"<p>Seleccioneu el mode de canal del fitxer MP3 resultant:\n"
+"<p>Trieu el mode de canal del fitxer MP3 resultant:\n"
 "<p><b>Estèreo</b> <br>\n"
 "En este mode, el codificador no utilitza cap mena de correlació potencial "
 "entre els dos canals d'entrada; tanmateix, pot negociar la demanda de bits "
@@ -1329,7 +1329,7 @@ msgstr "Consulta una entrada CDDB del projecte d'àudio actual."
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:64
 #, kde-format
 msgid "Please select a non-empty audio project for a CDDB query."
-msgstr "Seleccioneu un projecte d'àudio no buit per a fer una consulta CDDB."
+msgstr "Trieu un projecte d'àudio no buit per a fer una consulta CDDB."
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:68
 #, kde-format
@@ -1703,7 +1703,7 @@ msgstr "S'està creant un projecte nou d'«eMovix»."
 #: k3b.cpp:1291
 #, kde-format
 msgid "Select Files to Add to Project"
-msgstr "Seleccioneu els fitxers que s'han d'afegir al projecte"
+msgstr "Trieu els fitxers que s'han d'afegir al projecte"
 
 #: k3b.cpp:1293
 #, kde-format
@@ -1895,7 +1895,7 @@ msgstr "Mode2"
 #: k3bdatamodewidget.cpp:27
 #, kde-format
 msgid "Select the mode for the data-track"
-msgstr "Seleccioneu el mode per a la pista de dades"
+msgstr "Trieu el mode per a la pista de dades"
 
 #: k3bdatamodewidget.cpp:28
 #, kde-format
@@ -2601,12 +2601,12 @@ msgstr "Mata"
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
 msgid "Medium Selection"
-msgstr "Seleccioneu el suport"
+msgstr "Trieu el suport"
 
 #: k3bmediaselectiondialog.cpp:30
 #, kde-format
 msgid "Please select a medium:"
-msgstr "Seleccioneu un suport:"
+msgstr "Trieu un suport:"
 
 #: k3bmediumdelegate.cpp:134
 #, kde-format
@@ -3061,8 +3061,8 @@ msgid ""
 msgstr ""
 "La solució millor i més recomanada és activar l'IDE-SCSI (emulació SCSI) per "
 "a tots els dispositius de gravació: d'esta manera no tindreu cap problema; o "
-"bé podeu instal·lar (o seleccionar com a opció predeterminada) una versió "
-"més recent de %1."
+"bé podeu instal·lar (o triar com a opció predeterminada) una versió més "
+"recent de %1."
 
 #: k3bsystemproblemdialog.cpp:461
 #, kde-format
@@ -3282,7 +3282,7 @@ msgstr ""
 #: k3btempdirselectionwidget.cpp:180
 #, kde-format
 msgid "Select Temporary Folder"
-msgstr "Selecciona carpeta temporal"
+msgstr "Tria una carpeta temporal"
 
 #: k3btempdirselectionwidget.cpp:182
 #, kde-format
@@ -3297,7 +3297,7 @@ msgstr "Carpeta temporal"
 #: k3btempdirselectionwidget.cpp:186
 #, kde-format
 msgid "Select Temporary File"
-msgstr "Selecciona fitxer temporal"
+msgstr "Tria un fitxer temporal"
 
 #: k3btempdirselectionwidget.cpp:188
 #, kde-format
@@ -3404,9 +3404,9 @@ msgid ""
 "<p>Select the medium that you want to use for burning.<p>In most cases there "
 "will only be one medium available which does not leave much choice."
 msgstr ""
-"<p>Seleccioneu el suport que voleu emprar per a gravar.<p>En la majoria de "
-"casos tan sols hi haurà un suport disponible, la qual cosa no deixa gaires "
-"opcions possibles."
+"<p>Trieu el suport que voleu emprar per a gravar.<p>En la majoria de casos "
+"tan sols hi haurà un suport disponible, la qual cosa no deixa gaires opcions "
+"possibles."
 
 #: k3bwriterselectionwidget.cpp:166
 #, kde-format
@@ -3419,15 +3419,15 @@ msgid ""
 "for DVD, and 4496 KB/s for Blu-ray.</p><p><b>Caution:</b> Make sure your "
 "system is able to send the data fast enough to prevent buffer underruns."
 msgstr ""
-"<p>Seleccioneu la velocitat a la qual voleu gravar. <p><b>Automàtic</"
-"b><br>Açò triarà la velocitat màxima d'escriptura possible amb el suport "
-"emprat. Esta és l'opció recomanada per a la majoria de suports.</p> "
-"<p><b>Ignora</b> (només DVD)<br>Açò deixarà que siga la gravadora qui trie "
-"la velocitat. Feu-ho servir si K3b no és capaç d'establir la velocitat de "
-"gravació. <p>1x es referix a 175 kB/s per als CD, 1385 kB/s per als DVD, i "
-"4496 kB/s per als Blu-ray.</p> <p><b>Atenció:</b> assegureu-vos que el "
-"vostre sistema pot enviar les dades prou ràpides per a evitar la "
-"insuficiència de dades en la memòria intermèdia."
+"<p>Trieu la velocitat a la qual voleu gravar. <p><b>Automàtic</b><br>Açò "
+"triarà la velocitat màxima d'escriptura possible amb el suport emprat. Esta "
+"és l'opció recomanada per a la majoria de suports.</p> <p><b>Ignora</b> "
+"(només DVD)<br>Açò deixarà que siga la gravadora qui trie la velocitat. Feu-"
+"ho servir si K3b no és capaç d'establir la velocitat de gravació. <p>1x es "
+"referix a 175 kB/s per als CD, 1385 kB/s per als DVD, i 4496 kB/s per als "
+"Blu-ray.</p> <p><b>Atenció:</b> assegureu-vos que el vostre sistema pot "
+"enviar les dades prou ràpides per a evitar la insuficiència de dades en la "
+"memòria intermèdia."
 
 #: k3bwriterselectionwidget.cpp:177
 #, kde-format
@@ -3550,7 +3550,7 @@ msgstr ""
 #: k3bwritingmodewidget.cpp:94
 #, kde-format
 msgid "Select the writing mode to use"
-msgstr "Seleccioneu el mode d'escriptura que s'ha d'utilitzar"
+msgstr "Trieu el mode d'escriptura que s'ha d'utilitzar"
 
 #: k3bwritingmodewidget.cpp:95
 #, kde-format
@@ -4687,7 +4687,7 @@ msgstr ""
 #: option/base_k3bthemeoptiontab.ui:21
 #, kde-format
 msgid "Theme Selection"
-msgstr "Seleccioneu el tema"
+msgstr "Trieu el tema"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox5)
 #: option/base_k3bthemeoptiontab.ui:37
@@ -5065,9 +5065,8 @@ msgid ""
 "to change the default, check desired version on the list."
 msgstr ""
 "<p>Si K3b troba més d'una versió instal·lada d'un programa, en triarà una "
-"com la <em>per defecte</em>, la qual es farà servir per a realitzar la "
-"faena. Si voleu canviar-la, seleccioneu la versió desitjada i premeu este "
-"botó."
+"com la <em>predeterminada</em>, la qual es farà servir per a realitzar la "
+"faena. Si voleu canviar-la, trieu la versió desitjada i premeu este botó."
 
 #: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
 #, kde-format
@@ -6341,7 +6340,7 @@ msgstr "Nom del conjunt del vo&lum:"
 #: projects/base_k3bdatavolumedescdialog.ui:156
 #, kde-format
 msgid "Select a bibliographic file from the project"
-msgstr "Seleccioneu un fitxer bibliogràfic des del projecte"
+msgstr "Trieu un fitxer bibliogràfic des del projecte"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel4)
 #: projects/base_k3bdatavolumedescdialog.ui:168
@@ -6353,7 +6352,7 @@ msgstr "P&reparador:"
 #: projects/base_k3bdatavolumedescdialog.ui:190
 #, kde-format
 msgid "Select an abstract file from the project"
-msgstr "Seleccioneu un fitxer de resum des del projecte"
+msgstr "Trieu un fitxer de resum des del projecte"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: projects/base_k3bdatavolumedescdialog.ui:202
@@ -6365,7 +6364,7 @@ msgstr "Fitxer de resum:"
 #: projects/base_k3bdatavolumedescdialog.ui:228
 #, kde-format
 msgid "Select a copyright file from the project"
-msgstr "Seleccioneu un fitxer de copyright des del projecte"
+msgstr "Trieu un fitxer de copyright des del projecte"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:255
@@ -6396,7 +6395,7 @@ msgstr "Joc de fonts dels subtítols de MPlayer:"
 #: projects/base_k3bmovixoptionswidget.ui:34
 #, kde-format
 msgid "Select the font to be used to render subtitles"
-msgstr "Seleccioneu la lletra que s'utilitzarà per a mostrar els subtítols"
+msgstr "Trieu la lletra que s'utilitzarà per a mostrar els subtítols"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel7)
 #: projects/base_k3bmovixoptionswidget.ui:44
@@ -6575,7 +6574,7 @@ msgstr "Idioma del missatge d'arrancada d'eMovix:"
 #: projects/base_k3bmovixoptionswidget.ui:195
 #, kde-format
 msgid "Select the language of the eMovix help screens"
-msgstr "Seleccioneu l'idioma de les pantalles d'ajuda d'eMovix"
+msgstr "Trieu l'idioma de les pantalles d'ajuda d'eMovix"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel5)
 #: projects/base_k3bmovixoptionswidget.ui:202
@@ -6587,7 +6586,7 @@ msgstr "Etiqueta d'arrancada predeterminada:"
 #: projects/base_k3bmovixoptionswidget.ui:212
 #, kde-format
 msgid "Select the default Linux kernel configuration"
-msgstr "Selecciona la configuració predeterminada del nucli de Linux"
+msgstr "Tria la configuració predeterminada del nucli de Linux"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_comboDefaultBootLabel)
 #: projects/base_k3bmovixoptionswidget.ui:222
@@ -6639,7 +6638,7 @@ msgstr ""
 #: projects/base_k3bmovixoptionswidget.ui:229
 #, kde-format
 msgid "Select the layout of the keyboard"
-msgstr "Seleccioneu la disposició del teclat"
+msgstr "Trieu la disposició del teclat"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_comboKeyboardLayout)
 #: projects/base_k3bmovixoptionswidget.ui:232
@@ -6992,7 +6991,7 @@ msgstr "Dividix la pista d'àudio"
 #: projects/k3baudiotracksplitdialog.cpp:40
 #, kde-format
 msgid "Please select the position where the track should be split."
-msgstr "Seleccioneu la posició on s'hauria de dividir la pista."
+msgstr "Trieu la posició on s'hauria de dividir la pista."
 
 #: projects/k3baudiotracksplitdialog.cpp:45
 #, kde-format
@@ -7366,7 +7365,7 @@ msgstr "Extensions Joliet desactivades"
 #: projects/k3bdatamultisessioncombobox.cpp:27
 #, kde-format
 msgid "Select the Multisession Mode for the project."
-msgstr "Selecciona el mode de multisessió del projecte."
+msgstr "Tria el mode de multisessió del projecte."
 
 #: projects/k3bdatamultisessioncombobox.cpp:28
 #, kde-format
@@ -7462,7 +7461,7 @@ msgstr "Importar sessió"
 #: projects/k3bdatamultisessionimportdialog.cpp:251
 #, kde-format
 msgid "Please select a session to import."
-msgstr "Seleccioneu una sessió que s'importarà."
+msgstr "Trieu una sessió que s'importarà."
 
 #: projects/k3bdataprojectmodel.cpp:182
 #, kde-format
@@ -8205,7 +8204,7 @@ msgstr "No s'ha pogut trobar una instal·lació d'«eMovix» vàlida."
 #: projects/k3bmovixoptionswidget.cpp:35 projects/k3bmovixoptionswidget.cpp:47
 #, kde-format
 msgid "default"
-msgstr "per defecte"
+msgstr "predeterminat"
 
 #: projects/k3bmovixprojectmodel.cpp:291
 #, kde-format
@@ -8360,7 +8359,7 @@ msgstr[1] "%1 MPEG (%2)"
 #: projects/k3bvcdburndialog.cpp:97 projects/k3bvcdburndialog.cpp:98
 #, kde-format
 msgid "Select Video CD type %1"
-msgstr "Seleccioneu el tipus de CD de vídeo %1"
+msgstr "Trieu el tipus de CD de vídeo %1"
 
 #: projects/k3bvcdburndialog.cpp:99
 #, kde-format
@@ -9816,7 +9815,7 @@ msgstr "Desmarca les pistes"
 #: rip/k3baudiocdview.cpp:318 rip/k3bvideocdview.cpp:443
 #, kde-format
 msgid "Please select the tracks to rip."
-msgstr "Seleccioneu les pistes a extraure."
+msgstr "Trieu les pistes a extraure."
 
 #: rip/k3baudiocdview.cpp:319 rip/k3bvideocdview.cpp:443
 #, kde-format
@@ -10531,8 +10530,7 @@ msgstr "Visualitza fitxers de dades en pla"
 #, kde-format
 msgid ""
 "Please select the audio streams you want to include in every ripped title"
-msgstr ""
-"Seleccioneu els fluxos d'àudio que vulgueu incloure a cada pista extreta"
+msgstr "Trieu els fluxos d'àudio que vulgueu incloure a cada pista extreta"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:45
@@ -10600,8 +10598,8 @@ msgstr "Còdec de vídeo:"
 #, kde-format
 msgid "Select the Video codec used to encode the DVD titles"
 msgstr ""
-"Seleccioneu el còdec de vídeo que s'ha d'utilitzar per a codificar les "
-"pistes del DVD"
+"Trieu el còdec de vídeo que s'ha d'utilitzar per a codificar les pistes del "
+"DVD"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
@@ -10614,8 +10612,8 @@ msgstr "Còdec d'àudio:"
 #, kde-format
 msgid "Select the Audio codec used to encode the DVD titles"
 msgstr ""
-"Seleccioneu el còdec d'àudio que s'ha d'utilitzar per a codificar les pistes "
-"del DVD"
+"Trieu el còdec d'àudio que s'ha d'utilitzar per a codificar les pistes del "
+"DVD"
 
 #. i18n: ectx: attribute (title), widget (QWidget, TabPage)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:364
@@ -10807,8 +10805,8 @@ msgid ""
 "choose AC3 audio streams for all ripped titles."
 msgstr ""
 "<p>Quan s'utilitza el còdec d'àudio <em>AC3 curtcircuitat</em> cal que tots "
-"els fluxos d'àudio seleccionats estiguen en format AC3. Seleccioneu un altre "
-"còdec d'àudio, o bé trieu fluxos d'àudio AC3 per a totes les pistes extretes."
+"els fluxos d'àudio seleccionats estiguen en format AC3. Trieu un altre còdec "
+"d'àudio, o bé trieu fluxos d'àudio AC3 per a totes les pistes extretes."
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:497
 #, kde-format
@@ -10879,7 +10877,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
 #, kde-format
 msgid "Please select the titles to rip."
-msgstr "Seleccioneu les pistes que s'extreuran."
+msgstr "Trieu les pistes que s'han d'extraure."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:166
 #, kde-format
@@ -11044,11 +11042,11 @@ msgid ""
 "height to fixed values will result in no aspect ratio correction being "
 "performed."
 msgstr ""
-"<p>Seleccioneu l'amplària i l'alçària del vídeo resultant. Si un valor "
-"s'establix a <em>Automàtic</em>, K3b triarà el seu valor segons la relació "
-"d'aspecte de la imatge del vídeo. <br>Cal tindre present que establir tant "
-"l'amplària com l'alçària a valors fixos farà que no es realitze cap mena de "
-"correcció en la relació d'aspecte."
+"<p>Trieu l'amplària i l'alçària del vídeo resultant. Si un valor s'establix "
+"a <em>Automàtic</em>, K3b triarà el seu valor segons la relació d'aspecte de "
+"la imatge del vídeo. <br>Cal tindre present que establir tant l'amplària com "
+"l'alçària a valors fixos farà que no es realitze cap mena de correcció en la "
+"relació d'aspecte."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:348
 #, kde-format

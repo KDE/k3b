@@ -2520,7 +2520,7 @@ msgstr "No s'ha trobat cap controlador de «cdrdao»."
 #: projects/k3bcdrdaowriter.cpp:863
 #, kde-format
 msgid "Please select one manually in the device settings."
-msgstr "Seleccioneu-ne un manualment en la configuració de dispositius."
+msgstr "Trieu-ne un manualment en la configuració de dispositius."
 
 #: projects/k3bcdrdaowriter.cpp:864
 #, kde-format
@@ -2641,7 +2641,7 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
-msgstr "Seleccioneu TAO (una pista alhora) i torneu-ho a provar"
+msgstr "Trieu TAO (una pista alhora) i torneu-ho a provar"
 
 #: projects/k3bcdrecordwriter.cpp:582 projects/k3bcdrskinwriter.cpp:595
 #, kde-format
@@ -2848,7 +2848,7 @@ msgstr "Activeu «Burnfree» o trieu una velocitat de gravació més baixa."
 #: projects/k3bcdrecordwriter.cpp:856 projects/k3bcdrskinwriter.cpp:869
 #, kde-format
 msgid "Please choose a lower burning speed."
-msgstr "Seleccioneu una velocitat de gravació més baixa."
+msgstr "Trieu una velocitat de gravació més baixa."
 
 #: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrskinwriter.cpp:872
 #, kde-format
@@ -3319,7 +3319,7 @@ msgstr "No s'ha pogut trobar una instal·lació vàlida d'eMovix."
 #: projects/movixcd/k3bmovixprogram.cpp:324
 #, kde-format
 msgid "default"
-msgstr "per defecte"
+msgstr "predeterminat"
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:310
 #: projects/movixcd/k3bmovixprogram.cpp:192
@@ -3758,8 +3758,7 @@ msgstr "S'han trobat múltiples entrades CDDB"
 #: tools/k3bcddb.cpp:39
 #, kde-format
 msgid "K3b found multiple or inexact CDDB entries. Please select one."
-msgstr ""
-"K3b ha trobat entrades CDDB duplicades o inexactes. Seleccioneu-ne una."
+msgstr "K3b ha trobat entrades CDDB duplicades o inexactes. Trieu-ne una."
 
 #: tools/k3bdevicemodel.cpp:132
 #, kde-format
@@ -3769,12 +3768,12 @@ msgstr "S'està analitzant el suport…"
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
 msgid "Device Selection"
-msgstr "Seleccioneu un dispositiu"
+msgstr "Trieu un dispositiu"
 
 #: tools/k3bdeviceselectiondialog.cpp:39
 #, kde-format
 msgid "Please select a device:"
-msgstr "Seleccioneu un dispositiu:"
+msgstr "Trieu un dispositiu:"
 
 #: tools/k3bmd5job.cpp:83
 #, kde-format
