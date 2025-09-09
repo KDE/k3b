@@ -38,7 +38,6 @@
                 "Name[sv]": "Sebastian Trueg",
                 "Name[tr]": "Sebastian Trueg",
                 "Name[uk]": "Sebastian Trueg",
-                "Name[x-test]": "xxSebastian Truegxx",
                 "Name[zh_CN]": "Sebastian Trueg",
                 "Name[zh_TW]": "Sebastian Trueg"
             }
@@ -86,7 +85,6 @@
         "Description[sv]": "Insticksprogram för att hämta information om ett ljudprojekt från en CDDB-server.",
         "Description[tr]": "Bir ses projesi için CDDB sunucusundan bilgi sorgulama eklentisi.",
         "Description[uk]": "Додаток для опитування сервера CDDB щодо даних про аудіо-проєкт.",
-        "Description[x-test]": "xxPlugin to query a CDDB server for information about an audio project.xx",
         "Description[zh_CN]": "从 CDDB 服务器查询有关音频项目信息的插件。",
         "Description[zh_TW]": "到 CDDB 伺服器查詢音效專案的資訊的外掛程式。",
         "EnabledByDefault": true,
@@ -135,7 +133,6 @@
         "Name[sv]": "K3b CDDB-ljudinsticksprogram",
         "Name[tr]": "K3b CDDB Ses Eklentisi",
         "Name[uk]": "Додаток для роботи з CDDB у K3b",
-        "Name[x-test]": "xxK3b CDDB Audio Pluginxx",
         "Name[zh_CN]": "K3b CDDB 音频插件",
         "Name[zh_TW]": "K3b CDDB 音效外掛程式",
         "Version": "0.2"

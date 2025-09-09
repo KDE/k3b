@@ -38,7 +38,6 @@
                 "Name[sv]": "???",
                 "Name[tr]": "???",
                 "Name[uk]": "???",
-                "Name[x-test]": "xx???xx",
                 "Name[zh_CN]": "？？？",
                 "Name[zh_TW]": "???"
             }
@@ -99,7 +98,6 @@
         "Description[th]": "มอดูลเข้ารหัสแฟ้มประเภท <name>",
         "Description[tr]": "<ad> dosyalarını kodlamak için kodlayıcı modülü",
         "Description[uk]": "Модуль кодування файлів <name>",
-        "Description[x-test]": "xxEncoding module to encode <name> filesxx",
         "Description[zh_CN]": "用于编码 <name> 文件的编码模块",
         "Description[zh_TW]": "編碼 <名稱> 檔案的模組",
         "Id": "k3b<name>encoder",
@@ -161,7 +159,6 @@
         "Name[th]": "K3b - ตัวเข้ารหัส ???",
         "Name[tr]": "K3b ??? Şifreleyicisi",
         "Name[uk]": "Кодувальник ??? для K3b",
-        "Name[x-test]": "xxK3b ??? Encoderxx",
         "Name[zh_CN]": "K3b ??? 编码器",
         "Name[zh_TW]": "K3b ??? 編碼器",
         "Version": "???"
