@@ -45,7 +45,6 @@
   <name xml:lang="sv">K3b</name>
   <name xml:lang="tr">K3b</name>
   <name xml:lang="uk">K3b</name>
-  <name xml:lang="x-test">xxK3bxx</name>
   <name xml:lang="zh-CN">K3b</name>
   <name xml:lang="zh-TW">K3b</name>
   <summary>Disk Burning</summary>
@@ -91,7 +90,6 @@
   <summary xml:lang="sv">Skivbränning</summary>
   <summary xml:lang="tr">Disk Yazma</summary>
   <summary xml:lang="uk">Запис оптичних дисків</summary>
-  <summary xml:lang="x-test">xxDisk Burningxx</summary>
   <summary xml:lang="zh-CN">磁盘刻录</summary>
   <summary xml:lang="zh-TW">磁碟燒入</summary>
   <description>
@@ -141,7 +139,6 @@
     <p xml:lang="sv">K3b skapades för att vara ett funktionsrikt och lätthanterligt program för cd-bränning. Det består i huvudsak av tre delar:</p>
     <p xml:lang="tr">K3b, zengin özelliklere sahip ve kullanımı kolay bir CD yazma uygulaması olmak üzere tasarlandı. Temelde üç kısımdan oluşur:</p>
     <p xml:lang="uk">K3b є повноцінним комплектом програм для спрощення запису компакт-дисків та DVD. Він складається, в основному, з трьох частин:</p>
-    <p xml:lang="x-test">xxK3b was created to be a feature-rich and easy to handle CD burning application. It consists of basically three parts:xx</p>
     <p xml:lang="zh-CN">K3b 被创造为一个全功能的，易于使用的 CD 刻录程序。它由三个基本部分组成：</p>
     <p xml:lang="zh-TW">K3b 是一個功能豐富且易於使用的 CD 燒錄程式。其基本上包含了三個部份：</p>
     <ul>
@@ -189,7 +186,6 @@
       <li xml:lang="sv">Projekten: Projekt skapas från arkivmenyn och fylls därefter med data att bränna</li>
       <li xml:lang="tr">Projeler: Projeler, dosya menüsünden oluşturulur ve sonra da yazılacak verilerle doldurulur.</li>
       <li xml:lang="uk">Проєктів: проєкти створюються за допомогою меню «Файл», а потім заповнюються даними, які слід записати.</li>
-      <li xml:lang="x-test">xxThe projects: Projects are created from the file menu and then filled with data to burnxx</li>
       <li xml:lang="zh-CN">项目：项目可以从文件菜单创建，然后填入数据刻录</li>
       <li xml:lang="zh-TW">專案：專案是從檔案選單中建立並填入要燒錄的資料的部份。</li>
       <li>
@@ -236,7 +232,6 @@
       <li xml:lang="sv">Verktygen: Verktygsmenyn erbjuder olika verktyg som cd-kopiering eller dvd-formatering</li>
       <li xml:lang="tr">Araçlar: Araçlar menüsü, CD kopyalama veya DVD biçimlendirme gibi farklı araçlar sunar.</li>
       <li xml:lang="uk">Інструментів: за допомогою меню «Інструменти» ви можете скористатися різноманітними інструментами, зокрема інструментами копіювання компакт-дисків або форматування DVD.</li>
-      <li xml:lang="x-test">xxThe Tools: The tools menu offers different tools like CD copy or DVD formattingxx</li>
       <li xml:lang="zh-CN">工具: 工具菜单中提供不同的工具，像是 CD 复制或 DVD 格式化</li>
       <li xml:lang="zh-TW">工具：工具選單提供了許多不同的工具，像是 CD 複製與 DVD格式化。</li>
       <li>
@@ -284,7 +279,6 @@
       <li xml:lang="sv">Sammanhangsberoende mediaåtgärder: Vid ett klick på ikonen som representerar en cd- eller dvd-enhet, visar K3b dess innehåll och tillåter vissa ytterligare åtgärder. Det är exempelvis sättet man lagrar ljud-cd</li>
       <li xml:lang="tr">Bağlama duyarlı ortam eylemleri: Bir CD/DVD sürücüsünü temsil eden simgeye tıklarken K3b, bunların içeriğini gösterir ve duruma göre daha fazla eyleme izin verir. Örneğin bu, ses CD’lerini aktarmak için örnek yol olabilir.</li>
       <li xml:lang="uk">Дій, що відповідають контексту носія даних: після натискання піктограми пристрою для читання компакт-дисків та DVD K3b показує вміст носія та надає змогу вибрати подальші дії з носієм. За допомогою цих дій можна, наприклад, видобути цифрові дані зі звукового компакт-диска.</li>
-      <li xml:lang="x-test">xxContext sensitive media actions: When clicking on the Icon representing a CD/DVD drive K3b will present its contents and allow some further action. This is for example the way to rip audio CDsxx</li>
       <li xml:lang="zh-CN">上下文敏感的介质操作：当点击 CD/DVD 驱动器图标时，K3b 会呈现其内容并允许进一步的操作。例如，这可以用来翻录音频 CD</li>
       <li xml:lang="zh-TW">依內容而定的媒體動作：當在一個 CD/DVD 碟片圖示上點擊時，K3b 將會視其內容來決定可以執行哪些動作。其中一個例子是擷取音訊 CD。</li>
     </ul>
