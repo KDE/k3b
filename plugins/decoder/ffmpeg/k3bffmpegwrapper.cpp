@@ -161,7 +161,11 @@ void K3bFFMpegFile::close()
     ::av_packet_free(&d->packet);
 
     if( d->codec ) {
+#if LIBAVCODEC_VERSION_MAJOR >= 60
+        ::avcodec_free_context(&d->codecContext);
+#else
         ::avcodec_close(d->codecContext);
+#endif
         d->codec = nullptr;
         ::avcodec_free_context(&d->codecContext);
         d->codecContext = nullptr;
