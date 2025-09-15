@@ -6,6 +6,7 @@ Dependencies:
   'require':
     'frameworks/extra-cmake-modules': '@latest-qt6'
     'frameworks/karchive': '@latest-kf6'
+    'frameworks/kauth': '@latest-kf6'
     'frameworks/kconfig': '@latest-kf6'
     'frameworks/kcoreaddons': '@latest-kf6'
     'frameworks/kdoctools': '@latest-kf6'
