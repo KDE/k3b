@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-09-17 02:31+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -27,17 +27,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "WavPack"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr ""

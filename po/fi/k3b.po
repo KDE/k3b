@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-09-17 02:31+0000\n"
 "PO-Revision-Date: 2024-04-08 20:06+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -36,17 +36,17 @@ msgid "Your emails"
 msgstr ""
 "translator@legisign.org,lamikae@dnainternet.net,teemu.rytilahti@kde-fi.org"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey’s Audio (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Advanced Audio Coding (AAC)"

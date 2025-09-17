@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-09-17 02:31+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -29,17 +29,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "skkalwar999@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack इति"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "वानरस्य श्रव्यः (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "उन्नत श्रव्य कोडिंग् (AAC) 1.1."

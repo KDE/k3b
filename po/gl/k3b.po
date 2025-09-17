@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
+"POT-Creation-Date: 2025-09-17 02:31+0000\n"
 "PO-Revision-Date: 2025-01-26 19:44+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -45,18 +45,18 @@ msgstr ""
 "xosecalvo@gmail.com,\n"
 "mgl.branco@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
 # well-spelled: Monkey's
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey's Audio (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Codificación avanzada de son (AAC)"
