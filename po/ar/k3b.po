@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-10-14 00:38+0000\n"
-"PO-Revision-Date: 2025-08-09 13:55+0400\n"
+"POT-Creation-Date: 2025-09-17 00:42+0000\n"
+"PO-Revision-Date: 2025-09-16 20:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -29,17 +29,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "safa1996alfulaij@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:212
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "WavPack"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:214
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr ""
@@ -175,7 +175,7 @@ msgstr "مجسمي"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:404
 #, kde-format
 msgid "VBR"
-msgstr ""
+msgstr "التّردّد: 0 هرتز"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:406
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:109
@@ -183,7 +183,7 @@ msgstr ""
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:113
 #, kde-format
 msgid "%1 bps"
-msgstr ""
+msgstr "%1 ب.ب.ث"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioNoEmulation)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:423
@@ -200,7 +200,7 @@ msgstr "50/15  م‌ث"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:427
 #, kde-format
 msgid "CCITT J.17"
-msgstr ""
+msgstr "CCITT J.17"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:429
 #, kde-format
@@ -946,17 +946,17 @@ msgstr ""
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:87
 #, kde-format
 msgid "ADPCM"
-msgstr ""
+msgstr "ADPCM"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:92
 #, kde-format
 msgid "IMA_ADPCM"
-msgstr ""
+msgstr "IMA_ADPCM"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "GSM"
 msgstr "GSM"
 
@@ -970,7 +970,7 @@ msgstr "نقطة عائمة"
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:113
 #, kde-format
 msgid "14400"
-msgstr ""
+msgstr "14400"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:123
@@ -1029,7 +1029,7 @@ msgstr ""
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:282
 #, kde-format
 msgid "Sun AU"
-msgstr ""
+msgstr "Sun AU"
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:284
 #, kde-format
@@ -1047,14 +1047,14 @@ msgid "Audio Visual Research"
 msgstr ""
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:290
-#, fuzzy, kde-format
+#, kde-format
 msgid "CD-R"
 msgstr "CD-R"
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:292
 #, kde-format
 msgid "CVS"
-msgstr ""
+msgstr "CVS"
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:294
 #, kde-format
@@ -8727,7 +8727,7 @@ msgstr "المساحة الحرّة في الدّليل:"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:175
 #, kde-format
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
@@ -8846,9 +8846,9 @@ msgstr[4] "%1 مسارًا (%2)"
 msgstr[5] "%1 مسار (%2)"
 
 #: rip/k3baudiocdview.cpp:199
-#, fuzzy, kde-format
+#, kde-format
 msgid "Audio CD"
-msgstr "قرص صوتي"
+msgstr "CD صوتي"
 
 #: rip/k3baudiocdview.cpp:216
 #, kde-format
