@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 02:31+0000\n"
-"PO-Revision-Date: 2025-08-31 07:36+0300\n"
+"PO-Revision-Date: 2025-09-17 14:45+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -419,7 +419,7 @@ msgstr "פקודה נכשלה: %1"
 #: ../plugins/encoder/external/k3bexternalencoder.cpp:201
 #, kde-format
 msgid "Could not find program '%1'"
-msgstr "לא הייתה אפשרות למצוא תוסף פלט שמע '%1'"
+msgstr "לא ניתן למצוא את התוכנית ‚%1’"
 
 #: ../plugins/encoder/external/k3bexternalencoder.cpp:208
 #, kde-format
@@ -459,12 +459,12 @@ msgstr "אנא ציין פקודה."
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:75
 #, kde-format
 msgid "No command line specified"
-msgstr "שורת פקודה לא צויינה"
+msgstr "שורת פקודות לא צוינה"
 
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:80
 #, no-c-format, kde-format
 msgid "Please add the output filename (%f) to the command line."
-msgstr "אנא הוסף את שם הקובץ ליצירה  (%f) לשורת הפקודה."
+msgstr "נא להוסיף את שם הקובץ ליצירה (‎%f) לשורת הפקודות."
 
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:81
 #, kde-format
@@ -1801,7 +1801,7 @@ msgstr "שמור לקובץ"
 #: k3bdebuggingoutputdialog.cpp:50
 #, kde-format
 msgid "Copy to clipboard"
-msgstr "העתק ללוח העריכה"
+msgstr "העתקה ללוח הגזירים"
 
 #: k3bdebuggingoutputdialog.cpp:84 misc/k3bmediacopydialog.cpp:290
 #: misc/k3bmediacopydialog.cpp:299 projects/k3bdataburndialog.cpp:170
@@ -2905,8 +2905,8 @@ msgid ""
 "without SCSI emulation and there is at least one writer in your system not "
 "configured to use SCSI emulation."
 msgstr ""
-"הגירסה המוגדרת של %1 אינה תומכת בכתיבה להתקני ATAPI ללא אמולציית SCSI ויש "
-"לפחות התקן אחד במערכת שלך אשר מוגדר לשימומש עם  אמולציית SCSI."
+"הגרסה המוגדרת של %1 אינה תומכת בכתיבה להתקני ATAPI ללא הדמיית SCSI ויש לפחות "
+"התקן צריבה אחד במערכת שלך שאינו מוגדר להשתמש בהדמיית SCSI."
 
 #: k3bsystemproblemdialog.cpp:439 k3bsystemproblemdialog.cpp:463
 #, kde-format
@@ -2915,9 +2915,9 @@ msgid ""
 "all writer devices: this way you will not have any problems; or, you can "
 "install (or select as the default) a more recent version of %1."
 msgstr ""
-"האפשרות הכי טוב ומומלצת היא להשתמש ב -  ide-scsi (אמלוציית SCSI) עבור כל "
-"ההתקנים. בצורה הזאת לא יהיו לך יותר בעיות. או שאתה יכול להתקין (או לבחור "
-"כברירת מחדל) גירסה יותר חדשה של %1."
+"האפשרות הטובה והמומלצת ביותר היא להשתמש ב־ide-scsi (הדמיית SCSI) עבור כל "
+"ההתקנים. בצורה הזאת לא תופענה יותר בעיות. או שניתן יכול להתקין (או לבחור "
+"כברירת מחדל) גרסה עדכנית יותר של %1."
 
 #: k3bsystemproblemdialog.cpp:461
 #, kde-format
@@ -2930,8 +2930,7 @@ msgstr "התקן cdrdao >= 1.1.8 אשר תומך בכתיבה להתקני ATAPI
 msgid ""
 "K3b will not be able to write DVD-R Dual Layer media using a growisofs "
 "version older than 6.0."
-msgstr ""
-"היישום k3b אינו מסוגל לצרוב DVD+R דו-שכבתי עם גירסת growisofs ישנה מ 6.0"
+msgstr "היישום K3b לא יכול לצרוב DVD-R דו־שכבתי בעזרת גרסת growisofs טרום 6.0."
 
 #: k3bsystemproblemdialog.cpp:479
 #, kde-format

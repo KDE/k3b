@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2025-08-06 09:06+0300\n"
+"PO-Revision-Date: 2025-09-17 15:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.04.3\n"
+"X-Generator: Poedit 3.6\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -1416,7 +1416,7 @@ msgstr "%1 לא נמצא קובץ בר־ריצה של Mkisofs."
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:125
 #, kde-format
 msgid "%1 version %2 is too old."
-msgstr "גירסה %1, %2 יותר מידי ישן."
+msgstr "%1 בגרסה %2 היא ישנה מדי."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
 #, kde-format
@@ -1616,10 +1616,10 @@ msgid ""
 msgstr "עם האפשרות הזאת K3b יצור שמע זרימה בשני ערוצי סטריאו MPEG1 שכבה lll."
 
 #: plugin/k3baudiodecoder.cpp:630
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "plugin type"
 msgid "Audio Decoder"
-msgstr "תקליטור שמע (CD)"
+msgstr "מפענח שמע"
 
 #: plugin/k3baudioencoder.cpp:45
 #, kde-format
@@ -1659,9 +1659,9 @@ msgid "Track %1 from Audio CD %2"
 msgstr "רצועה %1 מתקליטור שמע %2"
 
 #: projects/audiocd/k3baudioimager.cpp:86
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to read track %1."
-msgstr "לא יכול לסרוק בתוך רצועה %1."
+msgstr "לא ניתן לקרוא את הרצועה %1."
 
 #: projects/audiocd/k3baudioimager.cpp:102 projects/datacd/k3bdatajob.cpp:206
 #: projects/mixedcd/k3bmixedjob.cpp:1088
@@ -1762,13 +1762,13 @@ msgid "Decoding audio track %1 of %2%3"
 msgstr "מפענח רצועת שמע %1 מתוך %2%3"
 
 #: projects/audiocd/k3baudiojob.cpp:491
-#, fuzzy, kde-format
+#, kde-format
 msgid "I/O Error. Most likely no space left on harddisk."
-msgstr "שגיאת IO (קלט/פלט). קרוב לוודאי לא נישאר מקום פנוי על הדיסק הקשיח."
+msgstr "שגיאת קלט/פלט. כנראה כיוון שלא נשאר מקום פנוי בכונן הקשיח."
 
 #: projects/audiocd/k3baudiojob.cpp:540 projects/mixedcd/k3bmixedjob.cpp:628
 #: projects/mixedcd/k3bmixedjob.cpp:669
-#, fuzzy, kde-format
+#, kde-format
 msgid "I/O Error"
 msgstr "שגיאת קלט/פלט"
 
@@ -1855,9 +1855,9 @@ msgid "Silence"
 msgstr "הדממה"
 
 #: projects/audiocd/k3brawaudiodatasource.cpp:65
-#, fuzzy, kde-format
+#, kde-format
 msgid "Raw Audio CD Image"
-msgstr "יוצר תמונת תקליטור CD"
+msgstr "דמות תקליטור שמע גולמית"
 
 #: projects/datacd/k3bbootitem.cpp:23
 #, kde-format
@@ -1984,9 +1984,9 @@ msgstr[2] "מערכת קבצים ISO9660 (גודל: %2) - %1 עותקים"
 msgstr[3] "מערכת קבצים ISO9660 (גודל: %2) - %1 עותקים"
 
 #: projects/datacd/k3bdatajob.cpp:1000
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 Filesystem (Size: %1)"
-msgstr "מערכת קבצים ISO9660 (גודל: %1)"
+msgstr "מערכת קבצים מסוג ISO 9660 (גודל: %1)"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
 #, kde-format
@@ -2004,9 +2004,9 @@ msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr "לא יכול לפתוח את מערכת הקבצים iso9660  ב - %1."
+msgstr "לא ניתן לפתוח מערכת קבצים מסוג ISO 9660 עם %1."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -2160,13 +2160,13 @@ msgid "No files to be written."
 msgstr "אין קבצים לכתיבה."
 
 #: projects/datacd/k3bisooptions.cpp:68
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "This is the default volume identifier of a data project created by K3b. The "
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr "פרוייקט צריבת נתונים של K3b"
+msgstr "מיזם נתונים של K3b"
 
 #: projects/datacd/k3bmkisofshandler.cpp:65
 #, kde-format
@@ -2181,7 +2181,7 @@ msgstr "שגיאה בקריאה מקובץ \"%1\""
 #: projects/datacd/k3bmkisofshandler.cpp:84
 #, kde-format
 msgid "Used version of mkisofs does not have large file support."
-msgstr "אין תמיכה בקבצים גדולים בגירסת ה־mkisofs המשומשת."
+msgstr "אין תמיכה בקבצים גדולים בגרסת ה־mkisofs שבשימוש."
 
 #: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
@@ -2189,9 +2189,9 @@ msgid "Files bigger than 2 GB cannot be handled."
 msgstr "אין יכולת להשתמש בקבצים גדולים יותר מ - 2GB."
 
 #: projects/datacd/k3bmkisofshandler.cpp:89
-#, fuzzy, kde-format
+#, kde-format
 msgid "No such file or directory '%1'."
-msgstr "שגיאה בזמן קריאה מסקטור %1."
+msgstr "אין קובץ או תיקייה בשם ‚%1’."
 
 #: projects/datacd/k3bmkisofshandler.cpp:104
 #, kde-format
@@ -2205,14 +2205,13 @@ msgid ""
 msgstr "זה יכול להיות בגלל שדרוג מערכת אשר שינה את קידוד המערכת."
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
-#, fuzzy, kde-format
-#| msgid ""
-#| "You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
-#| "encoding."
+#, kde-format
 msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
-msgstr "אתה יכול להשתמש ב convmv על מנת לתקן את הקידוד של שם הקובץ."
+msgstr ""
+"אפשר להשתמש ב־convmv‏ (https://j3e.de/linux/convmv/‎) כדי לתקן את קידוד שם "
+"הקובץ."
 
 #: projects/datacd/k3bmkisofshandler.cpp:111
 #, kde-format
@@ -2220,9 +2219,9 @@ msgid "The boot image has an invalid size."
 msgstr ""
 
 #: projects/datacd/k3bmkisofshandler.cpp:115
-#, fuzzy, kde-format
+#, kde-format
 msgid "The boot image contains multiple partitions."
-msgstr "קובץ תמונת האתחול מכיל יותר ממחיצה אחת..."
+msgstr "דמות הטעינה מכילה מגוון מחיצות."
 
 #: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
@@ -2260,14 +2259,14 @@ msgid "Unlocking drive..."
 msgstr "פותח נעילה של כונן..."
 
 #: projects/k3babstractwriter.cpp:58
-#, fuzzy, kde-format
+#, kde-format
 msgid "Could not unlock drive."
-msgstr "לא מסוגל לפתוח נעילה של כונן התקליטורים."
+msgstr "לא ניתן לפתוח את נעילת הכונן."
 
 #: projects/k3babstractwriter.cpp:61
-#, fuzzy, kde-format
+#, kde-format
 msgid "Ejecting Medium"
-msgstr "מוציא את המדיה..."
+msgstr "אמצעי האחסון נשלף"
 
 #: projects/k3bcdrdaowriter.cpp:259
 #, kde-format
@@ -2507,7 +2506,7 @@ msgstr "כותב Leadout"
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
 msgid "Cdrecord version %1 does not support Blu-ray writing."
-msgstr "גירסה %1 של Cdrecord אינה תומכת בכתיבה ל Blue-ray"
+msgstr "גרסה %1 של Cdrecord אינה תומכת בכתיבה ל־Blu-ray."
 
 #: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
 #, kde-format
@@ -2542,9 +2541,9 @@ msgid "Cdrecord %1 does not support overburning."
 msgstr "התכנית Cdrecord %1 לא תומכת בצריבה מעל הקיבולת (overburning)."
 
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr "מתחיל הדמיה %1 במהירות %2x..."
+msgstr "מתחילה הדמיה במהירות %1×…"
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
@@ -2552,9 +2551,9 @@ msgid "Starting %1 simulation at %2x speed..."
 msgstr "מתחיל הדמיה %1 במהירות %2x..."
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr "מתחיל צריבה %1 במהירות %2x..."
+msgstr "מתחילה צריבה במהירות %1×…"
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
@@ -2689,9 +2688,9 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: projects/k3bcdrecordwriter.cpp:785 projects/k3bcdrskinwriter.cpp:798
-#, fuzzy, kde-format
+#, kde-format
 msgid "Erasing successfully completed"
-msgstr "הכתיבה הסתיימה בהצלחה"
+msgstr "המחיקה הסתיימה בהצלחה"
 
 #: projects/k3bcdrecordwriter.cpp:812 projects/k3bcdrskinwriter.cpp:825
 #: projects/k3bgrowisofshandler.cpp:222
@@ -2762,9 +2761,9 @@ msgid "%1 has no permission to open the device."
 msgstr "ל-%1 אין הרשאה לפתוח את ההתקן."
 
 #: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
-#, fuzzy, kde-format
+#, kde-format
 msgid "Modify device settings in K3b to solve this problem."
-msgstr "אתה יכול להשתמש ב-K3bsetup2 על מנת לפתור את הבעיה."
+msgstr "אפשר לשנות את הגדרות ההתקן ב־K3b כדי לפתור את הבעיה הזאת."
 
 #: projects/k3bcdrecordwriter.cpp:852 projects/k3bcdrskinwriter.cpp:865
 #, kde-format
@@ -2830,11 +2829,11 @@ msgid ""
 msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:887 projects/k3bcdrskinwriter.cpp:900
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
 msgstr ""
-"אתה יכול להשתמש ב-K3bsetup2 על מנת לפתור את הבעיה או להסיר את סיבית ה-suid "
+"אפשר להשתמש ב־K3b::Setup על מנת לפתור את הבעיה או להסיר את סיבית ה־suid "
 "ידנית."
 
 #: projects/k3bcdrecordwriter.cpp:898
@@ -2858,9 +2857,9 @@ msgid "...please include the debugging output in your problem report."
 msgstr "...אנא כלול את פלט ניפוי השגיאות בדוח הבעיות."
 
 #: projects/k3bcdrskinwriter.cpp:240
-#, fuzzy, kde-format
+#, kde-format
 msgid "Cdrskin version %1 does not support Blu-ray writing."
-msgstr "גירסה %1 של Cdrecord אינה תומכת בכתיבה ל Blue-ray"
+msgstr "גרסה %1 של Cdrskin אינה תומכת בכתיבה ל־Blu-ray."
 
 #: projects/k3bcdrskinwriter.cpp:286
 #, fuzzy, kde-format
