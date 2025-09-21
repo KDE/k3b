@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2025-09-16 20:26+0400\n"
+"PO-Revision-Date: 2025-09-20 19:33+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -15,18 +15,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 "X-Generator: Lokalize 23.08.5\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
 msgid "Inhibiting sleep for disc writing"
-msgstr ""
+msgstr "منع التعليق من أجل كتابة القرص"
 
 #: core/k3bcore.cpp:257
 #, kde-format
 msgid "Disable inhibition for disc writing"
-msgstr ""
+msgstr "عطّل منع التعليق من أجل كتابة القرص"
 
 #: core/k3bglobals.cpp:361
 #, kde-format
@@ -46,32 +46,32 @@ msgstr "الهدف"
 #: jobs/k3baudiocuefilewritingjob.cpp:107
 #, kde-format
 msgid "Writing Audio Cue File"
-msgstr ""
+msgstr "كتابة ملف إشارة صوتية"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:205
 #, kde-format
 msgid "Analysing the audio file failed. Corrupt file?"
-msgstr ""
+msgstr "فشل تحليل الملف الصوتي. هل الملف تالف؟"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:273
 #, kde-format
 msgid "Analysing the audio file"
-msgstr ""
+msgstr "تحليل الملف الصوتي"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:274
 #, kde-format
 msgid "Analysing %1"
-msgstr ""
+msgstr "تحليل %1"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:281
 #, kde-format
 msgid "Unable to handle '%1' due to an unsupported format."
-msgstr ""
+msgstr "غير قادر على التعامل مع '%1' بسبب التنسيق غير متاح."
 
 #: jobs/k3baudiocuefilewritingjob.cpp:286
 #, kde-format
 msgid "No valid audio cue file: '%1'"
-msgstr ""
+msgstr "لا يوجد ملف إشارة صوتية صالح: '%1'"
 
 #: jobs/k3baudiosessionreadingjob.cpp:134
 #, kde-format
@@ -87,7 +87,7 @@ msgstr "تعذّر فتح الجهاز %1"
 #: jobs/k3baudiosessionreadingjob.cpp:148
 #, kde-format
 msgid "Error while initializing audio ripping."
-msgstr ""
+msgstr "خطأ أثناء تهيئة نسخ الصوت."
 
 #: jobs/k3baudiosessionreadingjob.cpp:201 jobs/k3bdatatrackreader.cpp:229
 #: jobs/k3bdvdcopyjob.cpp:360
@@ -98,38 +98,46 @@ msgstr "تعذّر فتح %1 للكتابة."
 #: jobs/k3baudiosessionreadingjob.cpp:235
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
-msgstr ""
+msgstr "خطأ غير قابل للاسترداد أثناء نسخ المسار %1."
 
 #: jobs/k3bbinimagewritingjob.cpp:53
 #, kde-format
 msgid "Write Binary Image"
-msgstr ""
+msgstr "اكتب صورة ثنائية"
 
 #: jobs/k3bbinimagewritingjob.cpp:181
 #, kde-format
 msgid "One copy successfully created"
 msgid_plural "%1 copies successfully created"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لم تنشئ أي نسخة"
+msgstr[1] "أُنشئت نسخة واحدة بنجاح"
+msgstr[2] "أُنشئت نسختان بنجاح"
+msgstr[3] "أُنشئت %1 نسخ بنجاح"
+msgstr[4] "أُنشئت %1 نسخة بنجاح"
+msgstr[5] "أُنشئت %1 نسخة بنجاح"
 
 #: jobs/k3bbinimagewritingjob.cpp:197 jobs/k3bcdcopyjob.cpp:1171
 #: jobs/k3bcdcopyjob.cpp:1173 jobs/k3bcdcopyjob.cpp:1176
 #: jobs/k3bcdcopyjob.cpp:1178
 #, kde-format
 msgid "Writing track %1 of %2"
-msgstr ""
+msgstr "كتابة المسار %1 من %2"
 
 #: jobs/k3bbinimagewritingjob.cpp:203
 #, kde-format
 msgid "Writing cue/bin Image"
-msgstr ""
+msgstr "كتابة صورة cue/bin"
 
 #: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
 #, kde-format
 msgid " - %1 Copy"
 msgid_plural " - %1 Copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " - لا توجد نسخ"
+msgstr[1] " - نسخة واحدة"
+msgstr[2] " - نسختان"
+msgstr[3] " - %1 نسخ"
+msgstr[4] " - %1 نسخة"
+msgstr[5] " - %1 نسخة"
 
 #: jobs/k3bblankingjob.cpp:65 jobs/k3bblankingjob.cpp:153
 #, kde-format
@@ -139,22 +147,23 @@ msgstr "يمسح CD-RW"
 #: jobs/k3bblankingjob.cpp:66
 #, kde-format
 msgid "When erasing a CD-RW no progress information is available."
-msgstr ""
+msgstr "عند مسح قرص CD-RW لا تتوفر معلومات تقدم."
 
 #: jobs/k3bblankingjob.cpp:106
 #, kde-format
 msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
 msgstr ""
+"الرجاء إدخال قرص CD قابل لإعادة الكتابة في محرك الأقراص<p><b>%1 %2 (%3)</b>."
 
 #: jobs/k3bblankingjob.cpp:143
 #, kde-format
 msgid "Blanking error."
-msgstr ""
+msgstr "خطأ في المسح."
 
 #: jobs/k3bblankingjob.cpp:144
 #, kde-format
 msgid "Sorry, no error handling yet."
-msgstr ""
+msgstr "آسف، لا يوجد معالجة للأخطاء بعد."
 
 #: jobs/k3bblankingjob.cpp:160 jobs/k3bdvdformattingjob.cpp:99
 #, kde-format
@@ -164,57 +173,57 @@ msgstr "تهيئة سريعة"
 #: jobs/k3bcdcopyjob.cpp:153 jobs/k3bdvdcopyjob.cpp:114
 #, kde-format
 msgid "Checking Source Medium"
-msgstr ""
+msgstr "فحص القرص المصدر"
 
 #: jobs/k3bcdcopyjob.cpp:156 jobs/k3bdvdcopyjob.cpp:124
 #, kde-format
 msgid "Waiting for source medium"
-msgstr ""
+msgstr "انتظار القرص المصدر"
 
 #: jobs/k3bcdcopyjob.cpp:166 jobs/k3bdvdcopyjob.cpp:136
 #, kde-format
 msgid "Checking source medium"
-msgstr ""
+msgstr "فحص القرص المصدر"
 
 #: jobs/k3bcdcopyjob.cpp:194
 #, kde-format
 msgid "K3b does not copy CDs containing multiple data tracks."
-msgstr ""
+msgstr "كي3بي لا ينسخ الأقراص المدمجة التي تحتوي على مسارات بيانات متعددة."
 
 #: jobs/k3bcdcopyjob.cpp:198
 #, kde-format
 msgid "Copying Multisession Data CD."
-msgstr ""
+msgstr "نسخ قرص بيانات متعدد الجلسات."
 
 #: jobs/k3bcdcopyjob.cpp:200
 #, kde-format
 msgid "Copying Data CD."
-msgstr ""
+msgstr "نسخ قرص بيانات."
 
 #: jobs/k3bcdcopyjob.cpp:206
 #, kde-format
 msgid "K3b can only copy CD-Extra mixed mode CDs."
-msgstr ""
+msgstr "كي3بي لا يمكنه نسخ إلا أقراص CD-Extra ذات الوضع المختلط."
 
 #: jobs/k3bcdcopyjob.cpp:210
 #, kde-format
 msgid "Copying Enhanced Audio CD (CD-Extra)."
-msgstr ""
+msgstr "نسخ قرص صوتي محسن (CD-Extra)."
 
 #: jobs/k3bcdcopyjob.cpp:215
 #, kde-format
 msgid "Copying Audio CD."
-msgstr ""
+msgstr "نسخ قرص صوتي."
 
 #: jobs/k3bcdcopyjob.cpp:220
 #, kde-format
 msgid "The source disk is empty."
-msgstr ""
+msgstr "القرص المصدر فارغ."
 
 #: jobs/k3bcdcopyjob.cpp:262
 #, kde-format
 msgid "K3b needs cdrecord 2.01a12 or newer to copy Mode2 data tracks."
-msgstr ""
+msgstr "يحتاج كي3بي إلى cdrecord 2.01a12 أو أحدث لنسخ مسارات بيانات Mode2."
 
 #: jobs/k3bcdcopyjob.cpp:274
 #, kde-format
@@ -222,76 +231,77 @@ msgid ""
 "You will only be able to copy the first session in raw writing mode. "
 "Continue anyway?"
 msgstr ""
+"سوف تستطيع نسخ الجلسة الأولى فقط في وضع الكتابة الخام. أكمل على أي حال؟"
 
 #: jobs/k3bcdcopyjob.cpp:276
 #, kde-format
 msgid "Multisession CD"
-msgstr ""
+msgstr "قرص متعدد الجلسات"
 
 #: jobs/k3bcdcopyjob.cpp:281
 #, kde-format
 msgid "Only copying first session."
-msgstr ""
+msgstr "نسخ الجلسة الأولى فقط."
 
 #: jobs/k3bcdcopyjob.cpp:310 jobs/k3bdvdcopyjob.cpp:344
 #, kde-format
 msgid "Unable to determine free space in temporary folder '%1'."
-msgstr ""
+msgstr "غير قادر على تحديد المساحة الحرة في المجلد المؤقت '%1'."
 
 #: jobs/k3bcdcopyjob.cpp:316 jobs/k3bdvdcopyjob.cpp:351
 #, kde-format
 msgid "Not enough space left in temporary folder."
-msgstr ""
+msgstr "لا يوجد مساحة كافية متبقية في المجلد المؤقت."
 
 #: jobs/k3bcdcopyjob.cpp:325 jobs/k3bdvdcopyjob.cpp:368
 #, kde-format
 msgid "Unmounting source medium"
-msgstr ""
+msgstr "إلغاء تحميل القرص المصدر"
 
 #: jobs/k3bcdcopyjob.cpp:354
 #, kde-format
 msgid "Unable to read Table of contents"
-msgstr ""
+msgstr "غير قادر على قراءة جدول المحتويات"
 
 #: jobs/k3bcdcopyjob.cpp:362
 #, kde-format
 msgid "Searching CD-Text"
-msgstr ""
+msgstr "البحث عن CD-Text"
 
 #: jobs/k3bcdcopyjob.cpp:376
 #, kde-format
 msgid "Found CD-Text (%1 - %2)."
-msgstr ""
+msgstr "عُثر على CD-Text (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:381
 #, kde-format
 msgid "Found corrupted CD-Text. Ignoring it."
-msgstr ""
+msgstr "عُثر على CD-Text تالف. تجاهله."
 
 #: jobs/k3bcdcopyjob.cpp:386
 #, kde-format
 msgid "No CD-Text found."
-msgstr ""
+msgstr "لا يوجد CD-Text."
 
 #: jobs/k3bcdcopyjob.cpp:397
 #, kde-format
 msgid "Querying CDDB"
-msgstr ""
+msgstr "الاستعلام عن CDDB"
 
 #: jobs/k3bcdcopyjob.cpp:418
 #, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr ""
+msgstr "عُثر على إدخال CDDB (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:441
 #, kde-format
 msgid "No CDDB entry found."
-msgstr ""
+msgstr "لا يوجد إدخال CDDB."
 
 #: jobs/k3bcdcopyjob.cpp:444
 #, kde-format
 msgid "CDDB error (%1)."
-msgstr ""
+msgstr "خطأ في CDDB (%1)."
 
 #: jobs/k3bcdcopyjob.cpp:460
 #, kde-format
@@ -299,44 +309,46 @@ msgid ""
 "Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. Which one should be used "
 "to generate the CD-Text on the new CD?"
 msgstr ""
+"عُثر على إدخالات CD-Text (%1 - %2) وCDDB (%3 - %4). أي منهما ينبغي استخدامه "
+"لإنشاء CD-Text على القرص الجديد؟"
 
 #: jobs/k3bcdcopyjob.cpp:466
 #, kde-format
 msgid "CD-Text"
-msgstr ""
+msgstr "CD-Text"
 
 #: jobs/k3bcdcopyjob.cpp:467
 #, kde-format
 msgid "Use CD-Text data"
-msgstr ""
+msgstr "استخدم بيانات CD-Text"
 
 #: jobs/k3bcdcopyjob.cpp:468
 #, kde-format
 msgid "Use CDDB entry"
-msgstr ""
+msgstr "استخدم إدخال CDDB"
 
 #: jobs/k3bcdcopyjob.cpp:474 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
 #: projects/k3bgrowisofswriter.cpp:332
 #, kde-format
 msgid "Preparing write process..."
-msgstr ""
+msgstr "إعداد عملية الكتابة..."
 
 #: jobs/k3bcdcopyjob.cpp:533 jobs/k3bcdcopyjob.cpp:579
 #: jobs/k3bdvdcopyjob.cpp:323
 #, kde-format
 msgid "Specified an unusable temporary path. Using default."
-msgstr ""
+msgstr "حُدد مسار مؤقت غير صالح للاستخدام. استخدام الافتراضي."
 
 #: jobs/k3bcdcopyjob.cpp:544
 #, kde-format
 msgid "Unable to create temporary folder '%1'."
-msgstr ""
+msgstr "غير قادر على إنشاء المجلد المؤقت '%1'."
 
 #: jobs/k3bcdcopyjob.cpp:551
 #, kde-format
 msgid "Using temporary folder %1."
-msgstr ""
+msgstr "استخدام المجلد المؤقت %1."
 
 #: jobs/k3bcdcopyjob.cpp:574 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
@@ -351,37 +363,37 @@ msgstr "الملف موجود"
 #: jobs/k3bcdcopyjob.cpp:584 jobs/k3bdvdcopyjob.cpp:328
 #, kde-format
 msgid "Writing image file to %1."
-msgstr ""
+msgstr "كتابة ملف الصورة إلى %1."
 
 #: jobs/k3bcdcopyjob.cpp:600
 #, kde-format
 msgid "Reading Session %1"
-msgstr ""
+msgstr "قراءة الجلسة %1"
 
 #: jobs/k3bcdcopyjob.cpp:602
 #, kde-format
 msgid "Reading Source Medium"
-msgstr ""
+msgstr "قراءة القرص المصدر"
 
 #: jobs/k3bcdcopyjob.cpp:605 jobs/k3bcdcopyjob.cpp:1193
 #, kde-format
 msgid "Reading track %1 of %2"
-msgstr ""
+msgstr "قراءة المسار %1 من %2"
 
 #: jobs/k3bcdcopyjob.cpp:698
 #, kde-format
 msgid "Simulating Session %1"
-msgstr ""
+msgstr "محاكاة الجلسة %1"
 
 #: jobs/k3bcdcopyjob.cpp:700
 #, kde-format
 msgid "Writing Copy %1 (Session %2)"
-msgstr ""
+msgstr "كتابة النسخة %1 (الجلسة %2)"
 
 #: jobs/k3bcdcopyjob.cpp:702
 #, kde-format
 msgid "Writing Copy (Session %1)"
-msgstr ""
+msgstr "كتابة النسخة (الجلسة %1)"
 
 #: jobs/k3bcdcopyjob.cpp:706 projects/audiocd/k3baudiojob.cpp:642
 #: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
@@ -390,122 +402,126 @@ msgstr ""
 #: projects/mixedcd/k3bmixedjob.cpp:1002
 #, kde-format
 msgid "Simulating"
-msgstr ""
+msgstr "محاكاة"
 
 #: jobs/k3bcdcopyjob.cpp:708 projects/audiocd/k3baudiojob.cpp:644
 #: projects/datacd/k3bdatajob.cpp:429 projects/mixedcd/k3bmixedjob.cpp:1004
 #, kde-format
 msgid "Writing Copy %1"
-msgstr ""
+msgstr "كتابة النسخة %1"
 
 #: jobs/k3bcdcopyjob.cpp:710
 #, kde-format
 msgid "Writing Copy"
-msgstr ""
+msgstr "كتابة النسخة"
 
 #: jobs/k3bcdcopyjob.cpp:714 jobs/k3bdvdbooktypejob.cpp:103
 #: projects/audiocd/k3baudiojob.cpp:649 projects/mixedcd/k3bmixedjob.cpp:1011
 #, kde-format
 msgid "Waiting for media"
-msgstr ""
+msgstr "انتظار القرص"
 
 #: jobs/k3bcdcopyjob.cpp:853 jobs/k3bmetawriter.cpp:475
 #: projects/audiocd/k3baudiojob.cpp:293
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode."
-msgstr ""
+msgstr "لا يمكن كتابة CD-Text في وضع TAO."
 
 #: jobs/k3bcdcopyjob.cpp:972
 #, kde-format
 msgid "Successfully read session %1."
-msgstr ""
+msgstr "قُرئت الجلسة %1 بنجاح."
 
 #: jobs/k3bcdcopyjob.cpp:974
 #, kde-format
 msgid "Successfully read source disk."
-msgstr ""
+msgstr "قُرئ القرص المصدر بنجاح."
 
 #: jobs/k3bcdcopyjob.cpp:989
 #, kde-format
 msgid "K3b was unable to eject the source disk. Please do so manually."
-msgstr ""
+msgstr "كي3بي لم يستطع إخراج القرص المصدر. يرجى إخراجه يدوياً."
 
 #: jobs/k3bcdcopyjob.cpp:1006
 #, kde-format
 msgid "Error while reading session %1."
-msgstr ""
+msgstr "خطأ أثناء قراءة الجلسة %1."
 
 #: jobs/k3bcdcopyjob.cpp:1034 jobs/k3bverificationjob.cpp:101
 #: projects/mixedcd/k3bmixedjob.cpp:519
 #, kde-format
 msgid "Need to reload medium to return to proper state."
-msgstr ""
+msgstr "يلزم إعادة تحميل القرص للعودة إلى الحالة الصحيحة."
 
 #: jobs/k3bcdcopyjob.cpp:1035
 #, kde-format
 msgid "Reloading the medium"
-msgstr ""
+msgstr "إعادة تحميل القرص"
 
 #: jobs/k3bcdcopyjob.cpp:1053 projects/audiocd/k3baudiojob.cpp:411
 #: projects/datacd/k3bdatajob.cpp:520 projects/mixedcd/k3bmixedjob.cpp:533
 #: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
-msgstr ""
+msgstr "كي3بي لم يستطع إخراج القرص المكتوب. يرجى إخراجه يدوياً."
 
 #: jobs/k3bcdcopyjob.cpp:1091 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
 #: projects/mixedcd/k3bmixedjob.cpp:554
 #, kde-format
 msgid "Please reload the medium and press 'OK'"
-msgstr ""
+msgstr "يرجى إعادة تحميل القرص والضغط على 'موافق'"
 
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:262
 #, kde-format
 msgid "Failed to reload the medium"
-msgstr ""
+msgstr "فشل إعادة تحميل القرص"
 
 #: jobs/k3bcdcopyjob.cpp:1106 projects/audiocd/k3baudiojob.cpp:687
 #, kde-format
 msgid "Removing temporary files."
-msgstr ""
+msgstr "إزالة الملفات المؤقتة."
 
 #: jobs/k3bcdcopyjob.cpp:1112 jobs/k3bclonejob.cpp:339
 #, kde-format
 msgid "Removing image files."
-msgstr ""
+msgstr "إزالة ملفات الصورة."
 
 #: jobs/k3bcdcopyjob.cpp:1201
 #, kde-format
 msgid "Creating CD Image"
-msgstr ""
+msgstr "إنشاء صورة قرص"
 
 #: jobs/k3bcdcopyjob.cpp:1205
 #, kde-format
 msgid "Simulating CD Copy On-The-Fly"
-msgstr ""
+msgstr "محاكاة نسخ القرص الفوري"
 
 #: jobs/k3bcdcopyjob.cpp:1207
 #, kde-format
 msgid "Simulating CD Copy"
-msgstr ""
+msgstr "محاكاة نسخ القرص"
 
 #: jobs/k3bcdcopyjob.cpp:1211
 #, kde-format
 msgid "Copying CD On-The-Fly"
-msgstr ""
+msgstr "نسخ القرص الفوري"
 
 #: jobs/k3bcdcopyjob.cpp:1213
 #, kde-format
 msgid "Copying CD"
-msgstr ""
+msgstr "نسخ القرص"
 
 #: jobs/k3bcdcopyjob.cpp:1220 jobs/k3bdvdcopyjob.cpp:955
 #, kde-format
 msgid "Creating 1 copy"
 msgid_plural "Creating %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لم ينشئ أي نسخة"
+msgstr[1] "إنشاء نسخة واحدة"
+msgstr[2] "إنشاء نسختين"
+msgstr[3] "إنشاء %1 نسخة"
+msgstr[4] "إنشاء %1 نسخة"
+msgstr[5] "إنشاء %1 نسخة"
 
 #: jobs/k3bcdda2wavreader.cpp:88 jobs/k3bclonejob.cpp:81
 #: jobs/k3bdvdbooktypejob.cpp:277 jobs/k3bdvdformattingjob.cpp:457
@@ -547,162 +563,170 @@ msgstr "أرجع %1 خطأ مجهولًا (الرّمز %2)"
 #: projects/videocd/k3bvcdjob.cpp:357
 #, kde-format
 msgid "%1 did not exit cleanly."
-msgstr ""
+msgstr "لم يخرج %1 بشكل سليم."
 
 #: jobs/k3bclonejob.cpp:87
 #, kde-format
 msgid "Cdrecord version %1 does not have cloning support."
-msgstr ""
+msgstr "إصدار cdrecord %1 لا يدعم الاستنساخ."
 
 #: jobs/k3bclonejob.cpp:95
 #, kde-format
 msgid "No device set."
-msgstr ""
+msgstr "لا يوجد جهاز محدد."
 
 #: jobs/k3bclonejob.cpp:104
 #, kde-format
 msgid "CD writer %1 (%2) does not support cloning."
-msgstr ""
+msgstr "ناسخ الأقراص %1 (%2) لا يدعم الاستنساخ."
 
 #: jobs/k3bclonejob.cpp:137
 #, kde-format
 msgid "Reading clone image"
-msgstr ""
+msgstr "قراءة صورة الاستنساخ"
 
 #: jobs/k3bclonejob.cpp:218 projects/datacd/k3bdatajob.cpp:458
 #: projects/videocd/k3bvcdjob.cpp:457
 #, kde-format
 msgid "Writing Track %1 of %2"
-msgstr ""
+msgstr "كتابة المسار %1 من %2"
 
 #: jobs/k3bclonejob.cpp:235
 #, kde-format
 msgid "Successfully written clone copy %1."
-msgstr ""
+msgstr "كُتبت نسخة الاستنساخ %1 بنجاح."
 
 #: jobs/k3bclonejob.cpp:283
 #, kde-format
 msgid "Successfully read disk."
-msgstr ""
+msgstr "قُرئ القرص بنجاح."
 
 #: jobs/k3bclonejob.cpp:295
 #, kde-format
 msgid "Failed to read disk completely in clone mode."
-msgstr ""
+msgstr "فشل قراءة القرص بالكامل في وضع الاستنساخ."
 
 #: jobs/k3bclonejob.cpp:302
 #, kde-format
 msgid "Error while reading disk."
-msgstr ""
+msgstr "خطأ أثناء قراءة القرص."
 
 #: jobs/k3bclonejob.cpp:328
 #, kde-format
 msgid "Simulating clone copy"
-msgstr ""
+msgstr "محاكاة نسخة الاستنساخ"
 
 #: jobs/k3bclonejob.cpp:330
 #, kde-format
 msgid "Writing clone copy %1"
-msgstr ""
+msgstr "كتابة نسخة الاستنساخ %1"
 
 #: jobs/k3bclonejob.cpp:351
 #, kde-format
 msgid "Creating Clone Image"
-msgstr ""
+msgstr "إنشاء صورة استنساخ"
 
 #: jobs/k3bclonejob.cpp:354
 #, kde-format
 msgid "Simulating Clone Image"
-msgstr ""
+msgstr "محاكاة صورة الاستنساخ"
 
 #: jobs/k3bclonejob.cpp:356
 #, kde-format
 msgid "Burning Clone Image"
-msgstr ""
+msgstr "نسخ صورة الاستنساخ"
 
 #: jobs/k3bclonejob.cpp:359
 #, kde-format
 msgid "Simulating CD Cloning"
-msgstr ""
+msgstr "محاكاة استنساخ القرص"
 
 #: jobs/k3bclonejob.cpp:361
 #, kde-format
 msgid "Cloning CD"
-msgstr ""
+msgstr "استنساخ القرص"
 
 #: jobs/k3bclonejob.cpp:367
 #, kde-format
 msgid "Creating 1 clone copy"
 msgid_plural "Creating %1 clone copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لم ينشئ أي نسخ"
+msgstr[1] "إنشاء نسخة استنساخ واحدة"
+msgstr[2] "إنشاء نسختي استنساخ"
+msgstr[3] "إنشاء %1 نسخ استنساخ"
+msgstr[4] "إنشاء %1 نسخة استنساخ"
+msgstr[5] "إنشاء %1 نسخة استنساخ"
 
 #: jobs/k3bdatatrackreader.cpp:167
 #, kde-format
 msgid "Unable to open libdvdcss."
-msgstr ""
+msgstr "غير قادر على فتح libdvdcss."
 
 #: jobs/k3bdatatrackreader.cpp:176
 #, kde-format
 msgid "Retrieving all CSS keys. This might take a while."
-msgstr ""
+msgstr "استعادة كل مفاتيح CSS. قد يستغرق هذا بعض الوقت."
 
 #: jobs/k3bdatatrackreader.cpp:179
 #, kde-format
 msgid "Failed to retrieve all CSS keys."
-msgstr ""
+msgstr "فشل استعادة كل مفاتيح CSS."
 
 #: jobs/k3bdatatrackreader.cpp:180
 #, kde-format
 msgid "Video DVD decryption failed."
-msgstr ""
+msgstr "فشل فك تعمية فيديو دي في دي."
 
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
 msgid "No support for reading formless Mode2 sectors."
-msgstr ""
+msgstr "لا يوجد دعم لقراءة قطاعات Mode2 بدون تنسيق."
 
 #: jobs/k3bdatatrackreader.cpp:206
 #, kde-format
 msgid "Unsupported sector type."
-msgstr ""
+msgstr "نوع قطاع غير متاح."
 
 #: jobs/k3bdatatrackreader.cpp:213
 #, kde-format
 msgid "Reading with sector size %1."
-msgstr ""
+msgstr "قراءة بحجم قطاع %1."
 
 #: jobs/k3bdatatrackreader.cpp:264 jobs/k3bdatatrackreader.cpp:439
 #, kde-format
 msgid "Error while reading sector %1."
-msgstr ""
+msgstr "خطأ أثناء قراءة القطاع %1."
 
 #: jobs/k3bdatatrackreader.cpp:346
 #, kde-format
 msgid "Ignored %1 erroneous sector."
 msgid_plural "Ignored a total of %1 erroneous sectors."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لا توجد قطاعات تالفة."
+msgstr[1] "تجاهل قطاع خاطئ واحد."
+msgstr[2] "تجاهل قطاعين خاطئين."
+msgstr[3] "تجاهل %1 قطاعات خاطئة."
+msgstr[4] "تجاهل %1 قطاعًا خاطئًا."
+msgstr[5] "تجاهل %1 قطاع خاطئ."
 
 #: jobs/k3bdatatrackreader.cpp:415
 #, kde-format
 msgid "Problem while reading. Retrying from sector %1."
-msgstr ""
+msgstr "مشكلة أثناء القراءة. إعادة المحاولة من القطاع %1."
 
 #: jobs/k3bdatatrackreader.cpp:431
 #, kde-format
 msgid "Ignoring read error in sector %1."
-msgstr ""
+msgstr "تجاهل خطأ القراءة في القطاع %1."
 
 #: jobs/k3bdvdbooktypejob.cpp:74
 #, kde-format
 msgid "Changing DVD Booktype"
-msgstr ""
+msgstr "تغيير نوع كتابة دي في دي"
 
 #: jobs/k3bdvdbooktypejob.cpp:92 jobs/k3bdvdformattingjob.cpp:114
 #, kde-format
 msgid "No device set"
-msgstr ""
+msgstr "لا يوجد جهاز محدد"
 
 #: jobs/k3bdvdbooktypejob.cpp:108
 #, kde-format
@@ -710,18 +734,20 @@ msgid ""
 "Please insert an empty DVD+R or a DVD+RW medium into drive<p><b>%1 %2 (%3)</"
 "b>."
 msgstr ""
+"الرجاء إدخال قرص DVD+R فارغ أو قرص DVD+RW في محرك الأقراص<p><b>%1 %2 (%3)</"
+"b>."
 
 #: jobs/k3bdvdbooktypejob.cpp:118 jobs/k3bdvdbooktypejob.cpp:119
 #: jobs/k3bdvdformattingjob.cpp:145 jobs/k3bdvdformattingjob.cpp:146
 #: jobs/k3bverificationjob.cpp:228
 #, kde-format
 msgid "Checking medium"
-msgstr ""
+msgstr "فحص القرص"
 
 #: jobs/k3bdvdbooktypejob.cpp:178
 #, kde-format
 msgid "Booktype successfully changed"
-msgstr ""
+msgstr "غُير نوع الكتابة بنجاح"
 
 #: jobs/k3bdvdbooktypejob.cpp:184 jobs/k3bdvdformattingjob.cpp:267
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:274
@@ -735,161 +761,161 @@ msgstr "الرجاء أرسل لي بريدًا إلكترونيًّا بآخر 
 #: jobs/k3bdvdbooktypejob.cpp:207
 #, kde-format
 msgid "Ejecting DVD..."
-msgstr ""
+msgstr "إخراج دي في دي..."
 
 #: jobs/k3bdvdbooktypejob.cpp:224
 #, kde-format
 msgid "Unable to eject media."
-msgstr ""
+msgstr "غير قادر على إخراج القرص."
 
 #: jobs/k3bdvdbooktypejob.cpp:247
 #, kde-format
 msgid "Cannot change booktype on non-empty DVD+R media."
-msgstr ""
+msgstr "لا يمكن تغيير نوع الكتابة على أقراص DVD+R غير الفارغة."
 
 #: jobs/k3bdvdbooktypejob.cpp:255
 #, kde-format
 msgid "No DVD+R(W) media found."
-msgstr ""
+msgstr "لم يُعثر على قرص DVD+R(W)."
 
 #: jobs/k3bdvdbooktypejob.cpp:260 jobs/k3bdvdformattingjob.cpp:315
 #, kde-format
 msgid "Unable to determine media state."
-msgstr ""
+msgstr "غير قادر على تحديد حالة القرص."
 
 #: jobs/k3bdvdbooktypejob.cpp:330
 #, kde-format
 msgid "Changing Booktype"
-msgstr ""
+msgstr "تغيير نوع الكتابة"
 
 #: jobs/k3bdvdcopyjob.cpp:119
 #, kde-format
 msgid "K3b does not support writing on-the-fly with growisofs %1."
-msgstr ""
+msgstr "كي3بي لا يدعم الكتابة الفورية باستخدام growisofs %1."
 
 #: jobs/k3bdvdcopyjob.cpp:121
 #, kde-format
 msgid "Disabling on-the-fly writing."
-msgstr ""
+msgstr "تعطيل الكتابة الفورية."
 
 #: jobs/k3bdvdcopyjob.cpp:156
 #, kde-format
 msgid "No source medium found."
-msgstr ""
+msgstr "لم يُعثر على قرص مصدر."
 
 #: jobs/k3bdvdcopyjob.cpp:184
 #, kde-format
 msgid "Found encrypted DVD."
-msgstr ""
+msgstr "عُثر على دي في دي مشفر."
 
 #: jobs/k3bdvdcopyjob.cpp:200
 #, kde-format
 msgid "Cannot copy encrypted DVDs."
-msgstr ""
+msgstr "لا يمكن نسخ أقراص دي في دي المشفرة."
 
 #: jobs/k3bdvdcopyjob.cpp:236
 #, kde-format
 msgid "The writer does not support writing Double Layer DVDs."
-msgstr ""
+msgstr "الناسخ لا يدعم كتابة أقراص دي في دي مزدوجة الطبقة."
 
 #: jobs/k3bdvdcopyjob.cpp:242
 #, kde-format
 msgid "This growisofs version does not support writing Double Layer DVDs."
-msgstr ""
+msgstr "إصدار growisofs هذا لا يدعم كتابة أقراص دي في دي مزدوجة الطبقة."
 
 #: jobs/k3bdvdcopyjob.cpp:260
 #, kde-format
 msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
-msgstr ""
+msgstr "كي3بي لا يدعم نسخ أقراص دي في دي أو بلو-راي متعددة الجلسات."
 
 #: jobs/k3bdvdcopyjob.cpp:282
 #, kde-format
 msgid "K3b relies on the size saved in the ISO 9660 header."
-msgstr ""
+msgstr "كي3بي يعتمد على الحجم المحفوظ في رأس ISO 9660."
 
 #: jobs/k3bdvdcopyjob.cpp:283
 #, kde-format
 msgid ""
 "This might result in a corrupt copy if the source was mastered with buggy "
 "software."
-msgstr ""
+msgstr "قد ينتج عن هذا نسخة تالفة إذا كان المصدر قد أُعد ببرنامج به أخطاء."
 
 #: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
 #: jobs/k3bverificationjob.cpp:355
 #, kde-format
 msgid "Unable to determine the ISO 9660 filesystem size."
-msgstr ""
+msgstr "غير قادر على تحديد حجم نظام ملفات ISO 9660."
 
 #: jobs/k3bdvdcopyjob.cpp:299
 #, kde-format
 msgid "K3b does not support copying DVD-RAM."
-msgstr ""
+msgstr "كي3بي لا يدعم نسخ أقراص DVD-RAM."
 
 #: jobs/k3bdvdcopyjob.cpp:305
 #, kde-format
 msgid "Unsupported media type."
-msgstr ""
+msgstr "نوع قرص غير مدعوم."
 
 #: jobs/k3bdvdcopyjob.cpp:329
 #, kde-format
 msgid "Reading source medium."
-msgstr ""
+msgstr "قراءة القرص المصدر."
 
 #: jobs/k3bdvdcopyjob.cpp:373
 #, kde-format
 msgid "Creating image"
-msgstr ""
+msgstr "إنشاء صورة"
 
 #: jobs/k3bdvdcopyjob.cpp:379
 #, kde-format
 msgid "Simulating copy"
-msgstr ""
+msgstr "محاكاة النسخ"
 
 #: jobs/k3bdvdcopyjob.cpp:381 jobs/k3bdvdcopyjob.cpp:596
 #: jobs/k3bdvdcopyjob.cpp:686 jobs/k3bdvdcopyjob.cpp:746
 #, kde-format
 msgid "Writing copy %1"
-msgstr ""
+msgstr "كتابة النسخة %1"
 
 #: jobs/k3bdvdcopyjob.cpp:383 jobs/k3bdvdcopyjob.cpp:598
 #, kde-format
 msgid "Writing copy"
-msgstr ""
+msgstr "كتابة النسخة"
 
 #: jobs/k3bdvdcopyjob.cpp:573
 #, kde-format
 msgid "Successfully read source medium."
-msgstr ""
+msgstr "قُرئ القرص المصدر بنجاح."
 
 #: jobs/k3bdvdcopyjob.cpp:585
 #, kde-format
 msgid "K3b was unable to eject the source medium. Please do so manually."
-msgstr ""
+msgstr "كي3بي لم يستطع إخراج القرص المصدر. يرجى إخراجه يدوياً."
 
 #: jobs/k3bdvdcopyjob.cpp:646
 #, kde-format
 msgid "Successfully written copy %1."
-msgstr ""
+msgstr "كُتبت النسخة %1 بنجاح."
 
 #: jobs/k3bdvdcopyjob.cpp:669
 #, kde-format
 msgid "Verifying copy %1"
-msgstr ""
+msgstr "فحص النسخة %1"
 
 #: jobs/k3bdvdcopyjob.cpp:671
 #, kde-format
 msgid "Verifying copy"
-msgstr ""
+msgstr "فحص النسخة"
 
 #: jobs/k3bdvdcopyjob.cpp:681 jobs/k3biso9660imagewritingjob.cpp:146
 #, kde-format
 msgid "K3b was unable to eject the written medium. Please do so manually."
-msgstr ""
+msgstr "كي3بي لم يستطع إخراج القرص المكتوب. يرجى إخراجه يدوياً."
 
 #: jobs/k3bdvdcopyjob.cpp:790
 #, kde-format
 msgid "Unsupported media type: %1"
-msgstr ""
+msgstr "نوع القرص غير مدعوم: %1"
 
 #: jobs/k3bdvdcopyjob.cpp:816 jobs/k3bdvdcopyjob.cpp:909
 #: projects/datacd/k3bdatajob.cpp:815 projects/datacd/k3bdatajob.cpp:935
@@ -898,22 +924,24 @@ msgid ""
 "%1 media do not support write simulation. Do you really want to continue? "
 "The disc will actually be written to."
 msgstr ""
+"لا تدعم أقراص %1 محاكاة الكتابة. هل تريد حقاً المتابعة؟ القرص سوف يُكتب عليه "
+"بالفعل."
 
 #: jobs/k3bdvdcopyjob.cpp:819 jobs/k3bdvdcopyjob.cpp:912
 #: projects/datacd/k3bdatajob.cpp:818 projects/datacd/k3bdatajob.cpp:938
 #, kde-format
 msgid "No Simulation with %1"
-msgstr ""
+msgstr "لا يوجد محاكاة مع %1"
 
 #: jobs/k3bdvdcopyjob.cpp:825
 #, kde-format
 msgid "Writing DVD copy"
-msgstr ""
+msgstr "كتابة نسخة دي في دي"
 
 #: jobs/k3bdvdcopyjob.cpp:829
 #, kde-format
 msgid "Writing mode ignored when writing DVD+R(W) media."
-msgstr ""
+msgstr "تُجاهل وضع الكتابة عند الكتابة على أقراص DVD+R(W)."
 
 #: jobs/k3bdvdcopyjob.cpp:831 jobs/k3bdvdcopyjob.cpp:921
 #: jobs/k3bmetawriter.cpp:934 jobs/k3bmetawriter.cpp:943
@@ -929,83 +957,85 @@ msgid ""
 "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
 "really want to continue? The media will actually be written to."
 msgstr ""
+"الناسخ (%1 %2) لا يدعم المحاكاة مع أقراص DVD-R(W). هل تريد حقاً المتابعة؟ سوف "
+"يُكتب على القرص بالفعل."
 
 #: jobs/k3bdvdcopyjob.cpp:844 jobs/k3bmetawriter.cpp:517
 #: projects/datacd/k3bdatajob.cpp:853
 #, kde-format
 msgid "No Simulation with DVD-R(W)"
-msgstr ""
+msgstr "لا يوجد محاكاة مع DVD-R(W)"
 
 #: jobs/k3bdvdcopyjob.cpp:865 jobs/k3bmetawriter.cpp:930
 #: projects/datacd/k3bdatajob.cpp:867
 #, kde-format
 msgid "Writing DVD-RW in restricted overwrite mode."
-msgstr ""
+msgstr "كتابة DVD-RW في وضع الكتابة فوق القديم المقيدة."
 
 #: jobs/k3bdvdcopyjob.cpp:873
 #, kde-format
 msgid "Writing DVD-RW in DAO mode."
-msgstr ""
+msgstr "كتابة DVD-RW في وضع DAO."
 
 #: jobs/k3bdvdcopyjob.cpp:877
 #, kde-format
 msgid "Writing DVD-RW in incremental mode."
-msgstr ""
+msgstr "كتابة DVD-RW في الوضع المتزايد."
 
 #: jobs/k3bdvdcopyjob.cpp:886 jobs/k3bmetawriter.cpp:449
 #: jobs/k3bmetawriter.cpp:498 projects/datacd/k3bdatajob.cpp:908
 #, kde-format
 msgid "Restricted Overwrite is not possible with DVD-R media."
-msgstr ""
+msgstr "الكتابة فوق القديم المقيدة ليست ممكنة مع أقراص DVD-R."
 
 #: jobs/k3bdvdcopyjob.cpp:891 jobs/k3bmetawriter.cpp:936
 #: projects/datacd/k3bdatajob.cpp:884 projects/datacd/k3bdatajob.cpp:901
 #, kde-format
 msgid "Writing %1 in DAO mode."
-msgstr ""
+msgstr "كتابة %1 في وضع DAO."
 
 #: jobs/k3bdvdcopyjob.cpp:895 jobs/k3bmetawriter.cpp:938
 #: projects/datacd/k3bdatajob.cpp:910
 #, kde-format
 msgid "Writing %1 in incremental mode."
-msgstr ""
+msgstr "كتابة %1 في الوضع المتزايد."
 
 #: jobs/k3bdvdcopyjob.cpp:918
 #, kde-format
 msgid "Writing BD copy"
-msgstr ""
+msgstr "كتابة نسخة بلو-راي"
 
 #: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
 #, kde-format
 msgid "Removed image file %1"
-msgstr ""
+msgstr "أُزيل ملف الصورة %1"
 
 #: jobs/k3bdvdcopyjob.cpp:942
 #, kde-format
 msgid "Creating Image"
-msgstr ""
+msgstr "إنشاء صورة"
 
 #: jobs/k3bdvdcopyjob.cpp:946
 #, kde-format
 msgid "Copying DVD or BD On-The-Fly"
-msgstr ""
+msgstr "نسخ دي في دي أو بلو-راي الفوري"
 
 #: jobs/k3bdvdcopyjob.cpp:948
 #, kde-format
 msgid "Copying DVD or BD"
-msgstr ""
+msgstr "نسخ دي في دي أو بلو-راي"
 
 #: jobs/k3bdvdformattingjob.cpp:92
 #, kde-format
 msgid "Formatting disc"
-msgstr ""
+msgstr "تهيئة القرص"
 
 #: jobs/k3bdvdformattingjob.cpp:122 projects/k3bcdrdaowriter.cpp:531
 #: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrskinwriter.cpp:429
 #: projects/k3bgrowisofswriter.cpp:336
 #, kde-format
 msgid "Unmounting medium"
-msgstr ""
+msgstr "إلغاء تحميل القرص"
 
 #: jobs/k3bdvdformattingjob.cpp:135
 #, kde-format
@@ -1013,92 +1043,95 @@ msgid ""
 "Please insert a rewritable DVD or Blu-ray medium into drive<p><b>%1 %2 (%3)</"
 "b>."
 msgstr ""
+"الرجاء إدخال قرص DVD أو بلو-راي قابل لإعادة الكتابة في محرك الأقراص<p><b>%1 "
+"%2 (%3)</b>."
 
 #: jobs/k3bdvdformattingjob.cpp:255
 #, kde-format
 msgid "Formatting successfully completed"
-msgstr ""
+msgstr "اُكتملت التهيئة بنجاح"
 
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
-msgstr ""
+msgstr "لا تقلق من توقف التقدم قبل الوصول إلى 100%."
 
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
 msgid "The formatting will continue in the background during writing."
-msgstr ""
+msgstr "سوف تستمر التهيئة في الخلفية أثناء الكتابة."
 
 #: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
 msgid "Ejecting medium..."
-msgstr ""
+msgstr "إخراج القرص..."
 
 #: jobs/k3bdvdformattingjob.cpp:296 projects/k3babstractwriter.cpp:75
 #, kde-format
 msgid "Unable to eject medium."
-msgstr ""
+msgstr "غير قادر على إخراج القرص."
 
 #: jobs/k3bdvdformattingjob.cpp:336
 #, kde-format
 msgid "Found %1 medium."
-msgstr ""
+msgstr "عُثر على قرص %1."
 
 #: jobs/k3bdvdformattingjob.cpp:340
 #, kde-format
 msgid "No rewritable DVD or BD medium found. Unable to format."
 msgstr ""
+"لم يُعثر على قرص DVD أو بلو-راي قابل لإعادة الكتابة. غير قادر على التهيئة."
 
 #: jobs/k3bdvdformattingjob.cpp:365 jobs/k3bdvdformattingjob.cpp:415
 #, kde-format
 msgid "No need to format %1 media more than once."
-msgstr ""
+msgstr "لا حاجة لتهيئة أقراص %1 أكثر من مرة."
 
 #: jobs/k3bdvdformattingjob.cpp:367 jobs/k3bdvdformattingjob.cpp:417
 #, kde-format
 msgid "It may simply be overwritten."
-msgstr ""
+msgstr "قد يُكتب فوقه ببساطة."
 
 #: jobs/k3bdvdformattingjob.cpp:370 jobs/k3bdvdformattingjob.cpp:409
 #: jobs/k3bdvdformattingjob.cpp:420
 #, kde-format
 msgid "Forcing formatting anyway."
-msgstr ""
+msgstr "إجبار التهيئة على أي حال."
 
 #: jobs/k3bdvdformattingjob.cpp:371
 #, kde-format
 msgid "It is not recommended to force formatting of %1 media."
-msgstr ""
+msgstr "لا يُنصح بإجبار تهيئة أقراص %1."
 
 #: jobs/k3bdvdformattingjob.cpp:373
 #, kde-format
 msgid "After 10-20 reformats the media might become unusable."
-msgstr ""
+msgstr "بعد 10-20 عملية إعادة تهيئة قد يصبح القرص غير قابل للاستخدام."
 
 #: jobs/k3bdvdformattingjob.cpp:382
 #, kde-format
 msgid "Formatting %1 medium"
-msgstr ""
+msgstr "تهيئة القرص %1"
 
 #: jobs/k3bdvdformattingjob.cpp:393
 #, kde-format
 msgid "Formatted in %1 mode."
-msgstr ""
+msgstr "هيئة في وضع %1."
 
 #: jobs/k3bdvdformattingjob.cpp:407
 #, kde-format
 msgid "Media is already empty."
-msgstr ""
+msgstr "القرص فارغ بالفعل."
 
 #: jobs/k3bdvdformattingjob.cpp:434
 #, kde-format
 msgid "Formatting DVD-RW in %1 mode."
-msgstr ""
+msgstr "تهيئة DVD-RW في وضع %1."
 
 #: jobs/k3bdvdformattingjob.cpp:441
 #, kde-format
 msgid "Unable to determine the current formatting state of the DVD-RW medium."
-msgstr ""
+msgstr "غير قادر على تحديد حالة التهيئة الحالية للقرص DVD-RW."
 
 #: jobs/k3bdvdformattingjob.cpp:464
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:99
@@ -1120,32 +1153,32 @@ msgstr "تهيئة"
 #: projects/datacd/k3bdatajob.cpp:137 projects/mixedcd/k3bmixedjob.cpp:212
 #, kde-format
 msgid "Preparing data"
-msgstr ""
+msgstr "إعداد البيانات"
 
 #: jobs/k3biso9660imagewritingjob.cpp:84
 #, kde-format
 msgid "Could not find image %1"
-msgstr ""
+msgstr "لم يُعثر على الصورة %1"
 
 #: jobs/k3biso9660imagewritingjob.cpp:130 projects/datacd/k3bdatajob.cpp:511
 #, kde-format
 msgid "Verifying written data"
-msgstr ""
+msgstr "فحص البيانات المكتوبة"
 
 #: jobs/k3biso9660imagewritingjob.cpp:132
 #, kde-format
 msgid "Verifying written copy %1 of %2"
-msgstr ""
+msgstr "فحص النسخة المكتوبة %1 من %2"
 
 #: jobs/k3biso9660imagewritingjob.cpp:205
 #, kde-format
 msgid "Writing image"
-msgstr ""
+msgstr "كتابة الصورة"
 
 #: jobs/k3biso9660imagewritingjob.cpp:207
 #, kde-format
 msgid "Writing copy %1 of %2"
-msgstr ""
+msgstr "كتابة النسخة %1 من %2"
 
 #: jobs/k3biso9660imagewritingjob.cpp:226
 #, kde-format
@@ -1155,46 +1188,46 @@ msgstr "ينتظر وسطًا"
 #: jobs/k3biso9660imagewritingjob.cpp:333
 #, kde-format
 msgid "Simulating ISO 9660 Image"
-msgstr ""
+msgstr "محاكاة صورة ISO 9660"
 
 #: jobs/k3biso9660imagewritingjob.cpp:335
 #, kde-format
 msgid "Burning ISO 9660 Image"
-msgstr ""
+msgstr "نسخ صورة ISO 9660"
 
 #: jobs/k3bmetawriter.cpp:304 projects/datacd/k3bdatajob.cpp:769
 #: projects/datacd/k3bdatajob.cpp:792
 #, kde-format
 msgid "Cannot write %1 media using %2. Falling back to default application."
-msgstr ""
+msgstr "لا يمكن كتابة أقراص %1 باستخدام %2. العودة إلى التطبيق الافتراضي."
 
 #: jobs/k3bmetawriter.cpp:310
 #, kde-format
 msgid "DVD and Blu-ray tracks can only be written in MODE1."
-msgstr ""
+msgstr "مسارات دي في دي وبلو-راي لا يمكن كتابتها إلا في وضع MODE1."
 
 #: jobs/k3bmetawriter.cpp:335
 #, kde-format
 msgid ""
 "Missing Blu-ray support in cdrecord and growisofs. Please update the system."
-msgstr ""
+msgstr "دعم بلو-راي مفقود في cdrecord وgrowisofs. يرجى تحديث النظام."
 
 #: jobs/k3bmetawriter.cpp:431 projects/audiocd/k3baudiojob.cpp:243
 #, kde-format
 msgid "Track lengths below 4 seconds violate the Red Book standard."
-msgstr ""
+msgstr "أطوال المسارات التي تقل عن 4 ثوانٍ تنتهك معيار Red Book."
 
 #: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
 #: projects/mixedcd/k3bmixedjob.cpp:1222
 #, kde-format
 msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
-msgstr ""
+msgstr "الكتابة الفورية مع cdrecord < 2.01a13 غير مدعومة."
 
 #: jobs/k3bmetawriter.cpp:470 projects/audiocd/k3baudiojob.cpp:288
 #: projects/mixedcd/k3bmixedjob.cpp:1229
 #, kde-format
 msgid "Cdrecord %1 does not support CD-Text writing."
-msgstr ""
+msgstr "Cdrecord %1 لا يدعم كتابة CD-Text."
 
 #: jobs/k3bmetawriter.cpp:482 projects/datacd/k3bdatajob.cpp:891
 #, kde-format
@@ -1202,11 +1235,13 @@ msgid ""
 "Your writer (%1 %2) does not support Incremental Streaming with %3 media. "
 "Multisession will not be possible. Continue anyway?"
 msgstr ""
+"الناسخ (%1 %2) لا يدعم التدفق المتزايد مع أقراص %3. لن تكون الجلسات المتعددة "
+"ممكنة. أكمل على أي حال؟"
 
 #: jobs/k3bmetawriter.cpp:487 projects/datacd/k3bdatajob.cpp:896
 #, kde-format
 msgid "No Incremental Streaming"
-msgstr ""
+msgstr "لا يوجد تدفق متزايد"
 
 #: jobs/k3bmetawriter.cpp:503
 #, kde-format
@@ -1214,11 +1249,13 @@ msgid ""
 "DVD+R(W) media do not support write simulation. Do you really want to "
 "continue? The media will actually be written to."
 msgstr ""
+"لا تدعم أقراص DVD+R(W) محاكاة الكتابة. هل تريد حقاً المتابعة؟ سوف يُكتب على "
+"القرص بالفعل."
 
 #: jobs/k3bmetawriter.cpp:506
 #, kde-format
 msgid "No Simulation with DVD+R(W)"
-msgstr ""
+msgstr "لا يوجد محاكاة مع DVD+R(W)"
 
 #: jobs/k3bmetawriter.cpp:532 projects/datacd/k3bdatajob.cpp:1047
 #, kde-format
@@ -1228,186 +1265,187 @@ msgstr "لا تدعم أغلب الكاتبات كتابة الاسطوانات 
 #: jobs/k3bmetawriter.cpp:785
 #, kde-format
 msgid "No version of cdrskin can do this yet."
-msgstr ""
+msgstr "لا يوجد إصدار من cdrskin يمكنه فعل هذا بعد."
 
 #: jobs/k3bmetawriter.cpp:890
 #, kde-format
 msgid "Writing CD in Session At Once mode."
-msgstr ""
+msgstr "كتابة القرص في وضع Session At Once."
 
 #: jobs/k3bmetawriter.cpp:892
 #, kde-format
 msgid "Writing CD in Track At Once mode."
-msgstr ""
+msgstr "كتابة القرص في وضع Track At Once."
 
 #: jobs/k3bmetawriter.cpp:894
 #, kde-format
 msgid "Writing CD in Raw mode."
-msgstr ""
+msgstr "كتابة القرص في الوضع الخام."
 
 #: jobs/k3bmetawriter.cpp:897
 #, kde-format
 msgid "Appending session to CD"
-msgstr ""
+msgstr "إلحاق جلسة إلى القرص"
 
 #: jobs/k3bmetawriter.cpp:904
 #, kde-format
 msgid "Writing rewritable CD in Session At Once mode."
-msgstr ""
+msgstr "كتابة قرص CD قابل لإعادة الكتابة في وضع Session At Once."
 
 #: jobs/k3bmetawriter.cpp:906
 #, kde-format
 msgid "Writing rewritable CD in Track At Once mode."
-msgstr ""
+msgstr "كتابة قرص CD قابل لإعادة الكتابة في وضع Track At Once."
 
 #: jobs/k3bmetawriter.cpp:908
 #, kde-format
 msgid "Writing rewritable CD in Raw mode."
-msgstr ""
+msgstr "كتابة قرص CD قابل لإعادة الكتابة في الوضع الخام."
 
 #: jobs/k3bmetawriter.cpp:911
 #, kde-format
 msgid "Appending session to rewritable CD."
-msgstr ""
+msgstr "إلحاق جلسة إلى قرص CD قابل لإعادة الكتابة."
 
 #: jobs/k3bmetawriter.cpp:918
 #, kde-format
 msgid "Growing ISO 9660 filesystem on DVD+RW."
-msgstr ""
+msgstr "زيادة نظام ملفات ISO 9660 على DVD+RW."
 
 #: jobs/k3bmetawriter.cpp:920 projects/datacd/k3bdatajob.cpp:870
 #, kde-format
 msgid "Growing ISO 9660 filesystem on DVD-RW in restricted overwrite mode."
 msgstr ""
+"زيادة نظام ملفات ISO 9660 على DVD-RW في وضع الكتابة فوق القديم المقيدة."
 
 #: jobs/k3bmetawriter.cpp:922
 #, kde-format
 msgid "Appending session to DVD+R."
-msgstr ""
+msgstr "إلحاق جلسة إلى DVD+R."
 
 #: jobs/k3bmetawriter.cpp:924
 #, kde-format
 msgid "Appending session to Double Layer DVD+R."
-msgstr ""
+msgstr "إلحاق جلسة إلى DVD+R مزدوج الطبقة."
 
 #: jobs/k3bmetawriter.cpp:926
 #, kde-format
 msgid "Appending session to %1."
-msgstr ""
+msgstr "إلحاق جلسة إلى %1."
 
 #: jobs/k3bmetawriter.cpp:932
 #, kde-format
 msgid "Writing Double Layer DVD+R."
-msgstr ""
+msgstr "كتابة DVD+R مزدوج الطبقة."
 
 #: jobs/k3breadcdreader.cpp:115
 #, kde-format
 msgid "Using readcd %1 instead of default version for clone support."
-msgstr ""
+msgstr "استخدام readcd %1 بدلاً من الإصدار الافتراضي لدعم الاستنساخ."
 
 #: jobs/k3breadcdreader.cpp:122
 #, kde-format
 msgid "Could not find readcd executable with cloning support."
-msgstr ""
+msgstr "لم يُعثر على ملف readcd التنفيذي مع دعم الاستنساخ."
 
 #: jobs/k3breadcdreader.cpp:155 jobs/k3breadcdreader.cpp:156
 #, kde-format
 msgid "Writing image to %1."
-msgstr ""
+msgstr "كتابة الصورة إلى %1."
 
 #: jobs/k3breadcdreader.cpp:198
 #, kde-format
 msgid "Could not start readcd."
-msgstr ""
+msgstr "لم يتمكن من بدء readcd."
 
 #: jobs/k3breadcdreader.cpp:254
 #, kde-format
 msgid "Cannot read source disk."
-msgstr ""
+msgstr "لا يمكن قراءة القرص المصدر."
 
 #: jobs/k3breadcdreader.cpp:267
 #, kde-format
 msgid "Retrying from sector %1."
-msgstr ""
+msgstr "إعادة المحاولة من القطاع %1."
 
 #: jobs/k3breadcdreader.cpp:283
 #, kde-format
 msgid "Uncorrected error in sector %1"
-msgstr ""
+msgstr "خطأ غير مصحح في القطاع %1"
 
 #: jobs/k3breadcdreader.cpp:286
 #, kde-format
 msgid "Corrected error in sector %1"
-msgstr ""
+msgstr "خطأ مصحح في القطاع %1"
 
 #: jobs/k3breadcdreader.cpp:306
 #, kde-format
 msgid "%1 returned error: %2"
-msgstr ""
+msgstr "أرجع %1 خطأ: %2"
 
 #: jobs/k3breadcdreader.cpp:311
 #, kde-format
 msgid "Readcd exited abnormally."
-msgstr ""
+msgstr "خرج readcd بشكل غير طبيعي."
 
 #: jobs/k3bverificationjob.cpp:222 jobs/k3bverificationjob.cpp:278
 #: jobs/k3bverificationjob.cpp:301
 #, kde-format
 msgid "Internal Error: Verification job improperly initialized (%1)"
-msgstr ""
+msgstr "خطأ داخلي: مهمة الفحص لم تُهيأ بشكل صحيح (%1)"
 
 #: jobs/k3bverificationjob.cpp:223
 #, kde-format
 msgid "no tracks added"
-msgstr ""
+msgstr "لم يُضف أي مسارات"
 
 #: jobs/k3bverificationjob.cpp:279 jobs/k3bverificationjob.cpp:302
 #, kde-format
 msgid "specified track number '%1' not found on medium"
-msgstr ""
+msgstr "رقم المسار المحدد '%1' لم يُعثر عليه على القرص"
 
 #: jobs/k3bverificationjob.cpp:323
 #, kde-format
 msgid "Verifying track %1"
-msgstr ""
+msgstr "فحص المسار %1"
 
 #: jobs/k3bverificationjob.cpp:391
 #, kde-format
 msgid "Written data in track %1 differs from original."
-msgstr ""
+msgstr "البيانات المكتوبة في المسار %1 تختلف عن الأصلية."
 
 #: jobs/k3bverificationjob.cpp:395
 #, kde-format
 msgid "Written data verified."
-msgstr ""
+msgstr "اُختبرت البيانات المكتوبة."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:83
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:119
 #, kde-format
 msgid "%1 executable could not be found."
-msgstr ""
+msgstr "لم يُعثر على ملف %1 التنفيذي."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:89
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:125
 #, kde-format
 msgid "%1 version %2 is too old."
-msgstr ""
+msgstr "إصدار %1 %2 قديم جداً."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
 #, kde-format
 msgid "Analysing Title %1 of Video DVD %2"
-msgstr ""
+msgstr "تحليل العنوان %1 من فيديو دي في دي %2"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:178
 #, kde-format
 msgid "Analysing Chapter %1 of %2"
-msgstr ""
+msgstr "تحليل الفصل %1 من %2"
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:255
 #, kde-format
 msgid ""
 "Ignoring clipping values of last chapter due to its short playback time."
-msgstr ""
+msgstr "تجاهل قيم القص للفصل الأخير بسبب وقت تشغيله القصير."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:151
 #, kde-format
@@ -1417,67 +1455,67 @@ msgstr "تعذّر إنشاء المجلّد ’%1‘"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:157
 #, kde-format
 msgid "Invalid filename: '%1'"
-msgstr ""
+msgstr "اسم ملف غير صالح: '%1'"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:169
 #, kde-format
 msgid "Transcoding title %1 from Video DVD %2"
-msgstr ""
+msgstr "تحويل العنوان %1 من فيديو دي في دي %2"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:194
 #, kde-format
 msgid "Invalid video codec set: %1"
-msgstr ""
+msgstr "مجموعة ترميز فيديو غير صالحة: %1"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:217
 #, kde-format
 msgid "Invalid audio codec set: %1"
-msgstr ""
+msgstr "مجموعة ترميز صوتي غير صالحة: %1"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
 msgid "Resizing picture of title %1 to %2x%3"
-msgstr ""
+msgstr "تغيير حجم صورة العنوان %1 إلى %2x%3"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:381
 #, kde-format
 msgid "Single-pass Encoding"
-msgstr ""
+msgstr "ترميز بمرور واحد"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:383
 #, kde-format
 msgid "Two-pass Encoding: First Pass"
-msgstr ""
+msgstr "ترميز بمرورين: المرور الأول"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:385
 #, kde-format
 msgid "Two-pass Encoding: Second Pass"
-msgstr ""
+msgstr "ترميز بمرورين: المرور الثاني"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:409
 #, kde-format
 msgid "Removing incomplete video file '%1'"
-msgstr ""
+msgstr "إزالة ملف الفيديو غير المكتمل '%1'"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:483
 #, kde-format
 msgid "Execution of %1 failed."
-msgstr ""
+msgstr "فشل تنفيذ %1."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:484
 #, kde-format
 msgid "Please consult the debugging output for details."
-msgstr ""
+msgstr "الرجاء مراجعة مخرجات التنقيح للحصول على التفاصيل."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:515
 #, kde-format
 msgid "AC3 (Stereo)"
-msgstr ""
+msgstr "AC3 (مجسمي)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:517
 #, kde-format
 msgid "AC3 (Pass-through)"
-msgstr ""
+msgstr "AC3 (المرور من خلال)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:519
 #, kde-format
@@ -1487,12 +1525,12 @@ msgstr "إم بي إي جي الطبقة III"
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:530
 #, kde-format
 msgid "MPEG4 (FFMPEG)"
-msgstr ""
+msgstr "MPEG4 (إف إف إم بي إي جي)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:532
 #, kde-format
 msgid "XviD"
-msgstr ""
+msgstr "اكسفيد"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:543
 #, kde-format
@@ -1501,6 +1539,9 @@ msgid ""
 "codecs used these days. Its subproject libavcodec forms the basis for "
 "multimedia players such as xine or mplayer."
 msgstr ""
+"إف إف إم بي إي جي مشروع مفتوح المصدر يحاول دعم معظم ترميزات الفيديو والصوت "
+"المستخدمة حاليا. مشروعه الفرعي لي بأفكودك يشكل الأساس لمشغلات الوسائط "
+"المتعددة مثل زين أو إمبلاير."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:547
 #, kde-format
@@ -1508,6 +1549,8 @@ msgid ""
 "FFmpeg contains an implementation of the MPEG-4 video encoding standard "
 "which produces high quality results."
 msgstr ""
+"إف إف إم بي إي جي يحتوي على تطبيق لمعيار ترميز الفيديو إم بي إي جي-4 الذي "
+"ينتج عنه نتائج عالية الجودة."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:550
 #, kde-format
@@ -1516,6 +1559,9 @@ msgid ""
 "group of volunteer programmers after the OpenDivX source was closed in July "
 "2001."
 msgstr ""
+"اكسفيد هو برنامج ترميز فيديو إم بي إي جي-4 مجاني ومفتوح المصدر. أُنشأ اكسفيد "
+"من قبل مجموعة من المبرمجين المتطوعين بعد إغلاق مصدر أوبن ديف إكس في يوليو "
+"2001."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:553
 #, kde-format
@@ -1524,6 +1570,9 @@ msgid ""
 "quarter pixel motion compensation, lumi masking, trellis quantization, and "
 "H.263, MPEG and custom quantization matrices."
 msgstr ""
+"يتميز اكسفيد بإعدادات ملف تعريف إم بي إي جي-4 المتقدمة مثل الإطارات بي، "
+"وتعويض الحركة على مستوى البكسل الكامل والربع، وإخفاء الإضاءة، والتمثيل الكمي "
+"للتريليس، و H.263، وإم بي إي جي ومصفوفات التمثيل الكمي المخصصة."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:557
 #, kde-format
@@ -1532,11 +1581,14 @@ msgid ""
 "While DivX is closed source and may only run on Windows, Mac OS and Linux, "
 "XviD is open source and can potentially run on any platform."
 msgstr ""
+"اكسفيد هو منافس أساسي لـ ديف إكس (اكسفيد هو ديف إكس معكوسًا). بينما ديف إكس "
+"هو مصدر مغلق ويمكن تشغيله فقط على ويندوز، ماك أو إس ولينكس، اكسفيد هو مفتوح "
+"المصدر ويمكن تشغيله على أي منصة."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:561
 #, kde-format
 msgid "(Description taken from the Wikipedia article)"
-msgstr ""
+msgstr "(الوصف مأخوذ من مقال ويكيبيديا)"
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:571
 #, kde-format
@@ -1544,13 +1596,15 @@ msgid ""
 "AC3, better known as Dolby Digital is standardized as ATSC A/52. It contains "
 "up to 6 total channels of sound."
 msgstr ""
+"AC3، المعروف باسم دولبي ديجيتال، هو معيار ATSC A/52. يحتوي على ما يصل إلى 6 "
+"قنوات صوتية."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:576
 #, kde-format
 msgid ""
 "With this setting K3b will create a two-channel stereo Dolby Digital audio "
 "stream."
-msgstr ""
+msgstr "بهذا الإعداد سيقوم كي3بي بإنشاء تدفق صوتي دولبي ديجيتال مجسمي بقناتين."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:580
 #, kde-format
@@ -1558,18 +1612,20 @@ msgid ""
 "With this setting K3b will use the Dolby Digital audio stream from the "
 "source DVD without changing it."
 msgstr ""
+"بهذا الإعداد سيقوم كي3بي باستخدام تدفق الصوت دولبي ديجيتال من قرص DVD المصدر "
+"دون تغييره."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:582
 #, kde-format
 msgid "Use this setting to preserve 5.1 channel sound from the DVD."
-msgstr ""
+msgstr "استخدم هذا الإعداد للحفاظ على الصوت 5.1 قناة من قرص DVD."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:584
 #, kde-format
 msgid ""
 "MPEG1 Layer III is better known as MP3 and is the most used lossy audio "
 "format."
-msgstr ""
+msgstr "MPEG1 Layer III معروف أكثر باسم MP3 وهو أكثر تنسيق صوتي ضائع استخدامًا."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:585
 #, kde-format
@@ -1577,6 +1633,7 @@ msgid ""
 "With this setting K3b will create a two-channel stereo MPEG1 Layer III audio "
 "stream."
 msgstr ""
+"بهذا الإعداد سيقوم كي3بي بإنشاء تدفق صوتي MPEG1 Layer III مجسمي بقناتين."
 
 #: plugin/k3baudiodecoder.cpp:630
 #, kde-format
@@ -1588,7 +1645,7 @@ msgstr "وحدة فك ترميز الصوت"
 #, kde-format
 msgctxt "plugin type"
 msgid "Audio Encoder"
-msgstr ""
+msgstr "مرماز صوتي"
 
 #: plugin/k3baudioencoder.cpp:154
 #, kde-format
@@ -1598,7 +1655,7 @@ msgstr "حدث خطأ مجهول"
 #: plugin/k3bpluginmanager.cpp:153
 #, kde-format
 msgid "No settings available for plugin %1."
-msgstr ""
+msgstr "لا توجد إعدادات متاحة للملحق %1."
 
 #: plugin/k3bprojectplugin.cpp:20
 #, kde-format
@@ -1609,7 +1666,7 @@ msgstr "ملحقة المشروع"
 #: projects/audiocd/k3baudiocdtrackreader.cpp:60
 #, kde-format
 msgid "Please insert Audio CD %1%2"
-msgstr ""
+msgstr "أدخل القرص الصوتي %1%2"
 
 #: projects/audiocd/k3baudiocdtracksource.cpp:201
 #, kde-format
@@ -1619,12 +1676,12 @@ msgstr "مسار السي دي"
 #: projects/audiocd/k3baudiocdtracksource.cpp:207
 #, kde-format
 msgid "Track %1 from Audio CD %2"
-msgstr ""
+msgstr "المسار %1 من القرص الصوتي %2"
 
 #: projects/audiocd/k3baudioimager.cpp:86
 #, kde-format
 msgid "Unable to read track %1."
-msgstr ""
+msgstr "غير قادر على قراءة المسار %1."
 
 #: projects/audiocd/k3baudioimager.cpp:102 projects/datacd/k3bdatajob.cpp:206
 #: projects/mixedcd/k3bmixedjob.cpp:1088
@@ -1635,7 +1692,7 @@ msgstr "تعذر فتح %1 للكتابة"
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
 msgid "Error while decoding track %1."
-msgstr ""
+msgstr "خطأ أثناء فك ترميز المسار %1."
 
 #: projects/audiocd/k3baudiojob.cpp:165
 #: projects/datacd/k3bdatapreparationjob.cpp:174
@@ -1645,6 +1702,8 @@ msgid ""
 "The following files could not be found. Do you want to remove them from the "
 "project and continue without adding them to the image?"
 msgstr ""
+"لا يمكن العثور على الملفات التالية. هل تريد إزالتها من المشروع والمتابعة دون "
+"إضافتها إلى الصورة؟"
 
 #: projects/audiocd/k3baudiojob.cpp:168
 #: projects/datacd/k3bdatapreparationjob.cpp:138
@@ -1661,7 +1720,7 @@ msgstr "تحذير"
 #: projects/mixedcd/k3bmixedjob.cpp:182
 #, kde-format
 msgid "Remove missing files and continue"
-msgstr ""
+msgstr "أزل الملفات المفقودة واستمر"
 
 #: projects/audiocd/k3baudiojob.cpp:170
 #: projects/datacd/k3bdatapreparationjob.cpp:164
@@ -1670,7 +1729,7 @@ msgstr ""
 #: projects/mixedcd/k3bmixedjob.cpp:183
 #, kde-format
 msgid "Cancel and go back"
-msgstr ""
+msgstr "أَلغ وعد"
 
 #: projects/audiocd/k3baudiojob.cpp:188 projects/mixedcd/k3bmixedjob.cpp:201
 #, kde-format
@@ -1680,52 +1739,53 @@ msgstr "رجاء أضف ملفّات إلى مشروعك أوّلًا."
 #: projects/audiocd/k3baudiojob.cpp:194
 #, kde-format
 msgid "Unable to write on-the-fly with these audio sources."
-msgstr ""
+msgstr "غير قادر على الكتابة أثناء الطيران مع مصادر الصوت هذه."
 
 #: projects/audiocd/k3baudiojob.cpp:303 projects/mixedcd/k3bmixedjob.cpp:236
 #, kde-format
 msgid "Determining maximum writing speed"
-msgstr ""
+msgstr "حَدِّد أقصى سرعة كتابة"
 
 #: projects/audiocd/k3baudiojob.cpp:338
 #, kde-format
 msgid "Creating image files in %1"
-msgstr ""
+msgstr "أنشئ ملفات الصور في %1"
 
 #: projects/audiocd/k3baudiojob.cpp:339 projects/videocd/k3bvcdjob.cpp:182
 #, kde-format
 msgid "Creating image files"
-msgstr ""
+msgstr "أنشئ ملفات الصور"
 
 #: projects/audiocd/k3baudiojob.cpp:351 projects/mixedcd/k3bmixedjob.cpp:320
 #, kde-format
 msgid "Unable to determine maximum speed for some reason. Ignoring."
-msgstr ""
+msgstr "غير قادر على تحديد السرعة القصوى لسبب ما. تجاهلها."
 
 #: projects/audiocd/k3baudiojob.cpp:379 projects/mixedcd/k3bmixedjob.cpp:369
 #, kde-format
 msgid "Writing canceled."
-msgstr ""
+msgstr "الكتابة ألغيت."
 
 #: projects/audiocd/k3baudiojob.cpp:441 projects/mixedcd/k3bmixedjob.cpp:568
 #, kde-format
 msgid "Error while decoding audio tracks."
-msgstr ""
+msgstr "خطأ أثناء فك ترميز المسارات الصوتية."
 
 #: projects/audiocd/k3baudiojob.cpp:449
 #, kde-format
 msgid "Successfully decoded all tracks."
-msgstr ""
+msgstr "فك ترميز جميع المسارات بنجاح."
 
 #: projects/audiocd/k3baudiojob.cpp:473 projects/mixedcd/k3bmixedjob.cpp:608
 #, kde-format
 msgid "Decoding audio track %1 of %2%3"
-msgstr ""
+msgstr "فك ترميز المسار الصوتي %1 من %2%3"
 
 #: projects/audiocd/k3baudiojob.cpp:491
 #, kde-format
 msgid "I/O Error. Most likely no space left on harddisk."
 msgstr ""
+"خطأ في الإدخال/الإخراج. على الأرجح لا يوجد مساحة متبقية على القرص الصلب."
 
 #: projects/audiocd/k3baudiojob.cpp:540 projects/mixedcd/k3bmixedjob.cpp:628
 #: projects/mixedcd/k3bmixedjob.cpp:669
@@ -1736,7 +1796,7 @@ msgstr "خطأ د/خ"
 #: projects/audiocd/k3baudiojob.cpp:581 projects/mixedcd/k3bmixedjob.cpp:870
 #, kde-format
 msgid "Writing track %1 of %2%3"
-msgstr ""
+msgstr "كتابة المسار %1 من %2%3"
 
 #: projects/audiocd/k3baudiojob.cpp:646 projects/datacd/k3bdatajob.cpp:431
 #: projects/k3bcdrdaowriter.cpp:567 projects/k3bcdrecordwriter.cpp:449
@@ -1748,63 +1808,71 @@ msgstr "يكتب"
 #: projects/audiocd/k3baudiojob.cpp:721 projects/mixedcd/k3bmixedjob.cpp:1267
 #, kde-format
 msgid "Normalizing volume levels"
-msgstr ""
+msgstr "تطبيع مستويات الصوت"
 
 #: projects/audiocd/k3baudiojob.cpp:838
 #, kde-format
 msgid "Writing Audio CD"
-msgstr ""
+msgstr "كتابة قرص صوتي"
 
 #: projects/audiocd/k3baudiojob.cpp:848
 #, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes)"
 msgid_plural "%1 tracks (%2 minutes)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 مسارات (%2 دقيقة)"
+msgstr[1] "مسار واحد (%2 دقيقة)"
+msgstr[2] "مساران (%2 دقيقة)"
+msgstr[3] "%1 مسارات (%2 دقيقة)"
+msgstr[4] "%1 مسارًا (%2 دقيقة)"
+msgstr[5] "%1 مسار (%2 دقيقة)"
 
 #: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
 #: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
 #, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " - نسخة %1"
+msgstr[1] " - نسخة واحدة"
+msgstr[2] " - نسختان"
+msgstr[3] " - %1 نسخ"
+msgstr[4] " - %1 نسخة"
+msgstr[5] " - %1 نسخة"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
 msgid "Could not find normalize executable."
-msgstr ""
+msgstr "لا يمكن العثور على ملف normalize القابل للتنفيذ."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:74
 #, kde-format
 msgid "Could not start normalize."
-msgstr ""
+msgstr "لا يمكن بدء normalize."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:114
 #, kde-format
 msgid "Track %1 is already normalized."
-msgstr ""
+msgstr "المسار %1 مساوى بالفعل."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:120
 #, kde-format
 msgid "Adjusting volume level for track %1 of %2"
-msgstr ""
+msgstr "ضبط مستوى الصوت للمسار %1 من %2"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:128
 #, kde-format
 msgid "Computing level for track %1 of %2"
-msgstr ""
+msgstr "حساب المستوى للمسار %1 من %2"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:171
 #, kde-format
 msgid "Successfully normalized all tracks."
-msgstr ""
+msgstr "طُبِّعت جميع المسارات بنجاح."
 
 #: projects/audiocd/k3baudionormalizejob.cpp:179
 #, kde-format
 msgid "Error while normalizing tracks."
-msgstr ""
+msgstr "خطأ أثناء تطبيع المسارات."
 
 #: projects/audiocd/k3baudiozerodata.cpp:44
 #, kde-format
@@ -1814,17 +1882,17 @@ msgstr "الصمت"
 #: projects/audiocd/k3brawaudiodatasource.cpp:65
 #, kde-format
 msgid "Raw Audio CD Image"
-msgstr ""
+msgstr "صورة قرص صوتي خام"
 
 #: projects/datacd/k3bbootitem.cpp:23
 #, kde-format
 msgid "El Torito Boot image"
-msgstr ""
+msgstr "صورة إقلاع El Torito"
 
 #: projects/datacd/k3bdatadoc.cpp:1197 projects/videocd/k3bvcddoc.cpp:407
 #, kde-format
 msgid "Could not find the following files:"
-msgstr ""
+msgstr "لا يمكن العثور على الملفات التالية:"
 
 #: projects/datacd/k3bdatadoc.cpp:1198 projects/videocd/k3bvcddoc.cpp:408
 #, kde-format
@@ -1834,47 +1902,47 @@ msgstr "غير موجود"
 #: projects/datacd/k3bdatadoc.cpp:1203
 #, kde-format
 msgid "No permission to read the following files:"
-msgstr ""
+msgstr "لا يوجد إذن لقراءة الملفات التالية:"
 
 #: projects/datacd/k3bdatadoc.cpp:1204
 #, kde-format
 msgid "No Read Permission"
-msgstr ""
+msgstr "لا يوجد إذن قراءة"
 
 #: projects/datacd/k3bdatadoc.cpp:1361 projects/datacd/k3bdatadoc.cpp:1374
 #, kde-format
 msgid "From previous session"
-msgstr ""
+msgstr "من الجلسة السابقة"
 
 #: projects/datacd/k3bdatadoc.cpp:1485
 #, kde-format
 msgid "El Torito boot catalog file"
-msgstr ""
+msgstr "ملف كتالوج إقلاع El Torito"
 
 #: projects/datacd/k3bdatadoc.cpp:1486
 #, kde-format
 msgid "Boot catalog"
-msgstr ""
+msgstr "كتالوج الإقلاع"
 
 #: projects/datacd/k3bdatajob.cpp:213
 #, kde-format
 msgid "Creating image file"
-msgstr ""
+msgstr "إنشاء ملف الصورة"
 
 #: projects/datacd/k3bdatajob.cpp:214
 #, kde-format
 msgid "Track 1 of 1"
-msgstr ""
+msgstr "المسار 1 من 1"
 
 #: projects/datacd/k3bdatajob.cpp:215
 #, kde-format
 msgid "Creating image file in %1"
-msgstr ""
+msgstr "إنشاء ملف الصورة في %1"
 
 #: projects/datacd/k3bdatajob.cpp:373
 #, kde-format
 msgid "Image successfully created in %1"
-msgstr ""
+msgstr "أُنشئت الصورة بنجاح في %1"
 
 #: projects/datacd/k3bdatajob.cpp:380 tools/k3bmd5job.cpp:90
 #, kde-format
@@ -1884,17 +1952,17 @@ msgstr "تعذر فتح الملف %1"
 #: projects/datacd/k3bdatajob.cpp:393
 #, kde-format
 msgid "Error while creating ISO image"
-msgstr ""
+msgstr "خطأ أثناء إنشاء صورة ISO"
 
 #: projects/datacd/k3bdatajob.cpp:694
 #, kde-format
 msgid "Internal Error: No medium type fits. This project cannot be burned."
-msgstr ""
+msgstr "خطأ داخلي: لا يوجد نوع وسيط مناسب. لا يمكن نسخ هذا المشروع."
 
 #: projects/datacd/k3bdatajob.cpp:698
 #, kde-format
 msgid "Waiting for a medium"
-msgstr ""
+msgstr "انتظر وسيطًا"
 
 #: projects/datacd/k3bdatajob.cpp:715
 #, kde-format
@@ -1904,49 +1972,53 @@ msgstr "يكتب %1"
 #: projects/datacd/k3bdatajob.cpp:732
 #, kde-format
 msgid "Unable to determine the last track's datamode. Using default."
-msgstr ""
+msgstr "غير قادر على تحديد وضع بيانات المسار الأخير. استخدام الافتراضي."
 
 #: projects/datacd/k3bdatajob.cpp:826 projects/datacd/k3bdatajob.cpp:946
 #, kde-format
 msgid "Writing mode ignored when writing %1 media."
-msgstr ""
+msgstr "وضع الكتابة مُتجاهَل عند كتابة وسائط %1."
 
 #: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
 #, kde-format
 msgid "Growing ISO 9660 filesystem on %1."
-msgstr ""
+msgstr "تنمية نظام الملفات ISO 9660 على %1."
 
 #: projects/datacd/k3bdatajob.cpp:971
 #, kde-format
 msgid "Creating Data Image File"
-msgstr ""
+msgstr "إنشاء ملف صورة البيانات"
 
 #: projects/datacd/k3bdatajob.cpp:975
 #, kde-format
 msgid "Writing Data Project"
-msgstr ""
+msgstr "كتابة مشروع البيانات"
 
 #: projects/datacd/k3bdatajob.cpp:981
 #, kde-format
 msgid "Writing Multisession Project"
-msgstr ""
+msgstr "كتابة مشروع متعدد الجلسات"
 
 #: projects/datacd/k3bdatajob.cpp:995
 #, kde-format
 msgid "ISO 9660 Filesystem (Size: %2) – One copy"
 msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "نظام الملفات ISO 9660 (الحجم: %2) – %1 نسخة"
+msgstr[1] "نظام الملفات ISO 9660 (الحجم: %2) – نسخة واحدة"
+msgstr[2] "نظام الملفات ISO 9660 (الحجم: %2) – نسختان"
+msgstr[3] "نظام الملفات ISO 9660 (الحجم: %2) – %1 نسخ"
+msgstr[4] "نظام الملفات ISO 9660 (الحجم: %2) – %1 نسخة"
+msgstr[5] "نظام الملفات ISO 9660 (الحجم: %2) – %1 نسخة"
 
 #: projects/datacd/k3bdatajob.cpp:1000
 #, kde-format
 msgid "ISO 9660 Filesystem (Size: %1)"
-msgstr ""
+msgstr "نظام الملفات ISO 9660 (الحجم: %1)"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
 #, kde-format
 msgid "Searching for old session"
-msgstr ""
+msgstr "البحث عن جلسة قديمة"
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:218
 #, kde-format
@@ -1954,12 +2026,14 @@ msgid ""
 "No medium inserted or an empty medium in %1. Cannot continue multisession "
 "disk."
 msgstr ""
+"لا يوجد وسيط مدخل أو وسيط فارغ في %1. لا يمكن المتابعة على القرص متعدد "
+"الجلسات."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
 #, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr ""
+msgstr "لا يمكن فتح نظام الملفات ISO 9660 في %1."
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -1968,11 +2042,13 @@ msgid ""
 "Medium is not of multi-session type and does not contain ISO 9660. Cannot "
 "emulate multi-session on it."
 msgstr ""
+"الوسيط ليس من النوع متعدد الجلسات ولا يحتوي على ISO 9660. لا يمكن محاكاة "
+"الجلسات المتعددة عليه."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:92
 #, kde-format
 msgid "<em>%1</em> renamed to <em>%2</em>"
-msgstr ""
+msgstr "أُعيد تسمية <em>%1</em> إلى <em>%2</em>"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:132
 #, kde-format
@@ -1982,16 +2058,19 @@ msgid ""
 "have to be shortened but long filenames will not be available on Windows "
 "systems."
 msgstr ""
+"يجب تقصير بعض أسماء الملفات بسبب تقييد %1 حرفًا في ملحقات جولييت. إذا عُطِّلت "
+"ملحقات جولييت، فلن تضطر لتقصير أسماء الملفات ولكن لن تتوفر الأسماء الطويلة "
+"على أنظمة ويندوز."
 
 #: projects/datacd/k3bdatapreparationjob.cpp:139
 #, kde-format
 msgid "Shorten Filenames"
-msgstr ""
+msgstr "قصّر أسماء الملفات"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:140
 #, kde-format
 msgid "Disable Joliet extensions"
-msgstr ""
+msgstr "عطّل ملحقات جولييت"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:157
 #, kde-format
@@ -2002,11 +2081,14 @@ msgid ""
 "that. Do you want it to be cut or do you want to go back and change it "
 "manually?"
 msgstr ""
+"ملحقات جولييت (اللازمة لأسماء الملفات الطويلة على أنظمة ويندوز) تقيد طول "
+"واصف الحجم (اسم نظام الملفات) بـ %1 حرفًا. الواصف المختار '%2' أطول من ذلك. "
+"هل تريد قصه أم تريد العودة وتغييره يدويًا؟"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:163
 #, kde-format
 msgid "Cut volume descriptor in the Joliet tree"
-msgstr ""
+msgstr "قص واصف الحجم في شجرة جولييت"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:195
 #, kde-format
@@ -2015,11 +2097,13 @@ msgid ""
 "added to the project. Do you want to continue without writing the symbolic "
 "links to the image?"
 msgstr ""
+"كي3بي غير قادر على تتبع الروابط الرمزية إلى المجلدات بعد إضافتها للمشروع. هل "
+"تريد الاستمرار دون كتابة الروابط الرمزية إلى الصورة؟"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:200
 #, kde-format
 msgid "Discard symbolic links to folders"
-msgstr ""
+msgstr "تجاهل الروابط الرمزية إلى المجلدات"
 
 #: projects/datacd/k3bisoimager.cpp:152
 #, kde-format
@@ -2027,6 +2111,8 @@ msgid ""
 "Due to a bug in mkisofs <= 1.15a40, K3b is unable to handle filenames that "
 "contain more than one backslash:"
 msgstr ""
+"بسبب خطأ في mkisofs <= 1.15a40، كي3بي غير قادر على التعامل مع أسماء الملفات "
+"التي تحتوي على أكثر من خط مائل عكسي:"
 
 #: projects/datacd/k3bisoimager.cpp:171 projects/k3bcdrdaowriter.cpp:770
 #: projects/k3bcdrecordwriter.cpp:910 projects/k3bcdrskinwriter.cpp:923
@@ -2037,69 +2123,72 @@ msgstr "انهار %1."
 #: projects/datacd/k3bisoimager.cpp:362
 #, kde-format
 msgid "Could not determine size of resulting image file."
-msgstr ""
+msgstr "لا يمكن تحديد حجم ملف الصورة الناتج."
 
 #: projects/datacd/k3bisoimager.cpp:515
 #, kde-format
 msgid "No volume id specified. Using default."
-msgstr ""
+msgstr "لم يتم تحديد معرف حجم. استخدام الافتراضي."
 
 #: projects/datacd/k3bisoimager.cpp:608
 #, kde-format
 msgid "Found files bigger than 4 GB. K3b needs at least %1 to continue."
 msgstr ""
+"عُثر على ملفات أكبر من 4 جيجابايت. كي3بي يحتاج إلى %1 على الأقل للمتابعة."
 
 #: projects/datacd/k3bisoimager.cpp:618
 #, kde-format
 msgid "Found files bigger than 2 GB. These files will be fully accessible."
 msgstr ""
+"عُثر على ملفات أكبر من 2 جيجابايت. هذه الملفات ستكون قابلة للوصول بشكل كامل."
 
 #: projects/datacd/k3bisoimager.cpp:624
 #, kde-format
 msgid "Enabling UDF extension."
-msgstr ""
+msgstr "تمكين ملحق UDF."
 
 #: projects/datacd/k3bisoimager.cpp:669
 #, kde-format
 msgid "Setting iso level to 3 to support files bigger than 4 GB."
-msgstr ""
+msgstr "ضبط مستوى الأيزو على 3 لدعم الملفات الأكبر من 4 جيجابايت."
 
 #: projects/datacd/k3bisoimager.cpp:761
 #, kde-format
 msgid "Could not follow link %1 to non-existing file %2. Skipping..."
-msgstr ""
+msgstr "لا يمكن تتبع الرابط %1 إلى ملف غير موجود %2. تجاهله..."
 
 #: projects/datacd/k3bisoimager.cpp:765
 #, kde-format
 msgid ""
 "Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
 msgstr ""
+"تجاهل الرابط %1 إلى المجلد %2. كي3بي غير قادر على تتبع الروابط إلى المجلدات."
 
 #: projects/datacd/k3bisoimager.cpp:773
 #, kde-format
 msgid "Could not find file %1. Skipping..."
-msgstr ""
+msgstr "لا يمكن العثور على الملف %1. تجاهله..."
 
 #: projects/datacd/k3bisoimager.cpp:777
 #, kde-format
 msgid "Could not read file %1. Skipping..."
-msgstr ""
+msgstr "لا يمكن قراءة الملف %1. تجاهله..."
 
 #: projects/datacd/k3bisoimager.cpp:830
 #, kde-format
 msgid "Failed to backup boot image file %1"
-msgstr ""
+msgstr "فشل في نسخ ملف صورة الإقلاع %1 احتياطيًا"
 
 #: projects/datacd/k3bisoimager.cpp:990 projects/datacd/k3bisoimager.cpp:1000
 #: projects/datacd/k3bisoimager.cpp:1007 projects/datacd/k3bisoimager.cpp:1013
 #, kde-format
 msgid "Could not write temporary file"
-msgstr ""
+msgstr "لا يمكن كتابة الملف المؤقت"
 
 #: projects/datacd/k3bisoimager.cpp:994
 #, kde-format
 msgid "No files to be written."
-msgstr ""
+msgstr "لا توجد ملفات للكتابة."
 
 #: projects/datacd/k3bisooptions.cpp:68
 #, kde-format
@@ -2108,43 +2197,43 @@ msgctxt ""
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr ""
+msgstr "مشروع بيانات كي3بي"
 
 #: projects/datacd/k3bmkisofshandler.cpp:65
 #, kde-format
 msgid "Mkisofs executable not found."
-msgstr ""
+msgstr "ملف mkisofs القابل للتنفيذ غير موجود."
 
 #: projects/datacd/k3bmkisofshandler.cpp:79
 #, kde-format
 msgid "Read error from file '%1'"
-msgstr ""
+msgstr "خطأ في القراءة من الملف '%1'"
 
 #: projects/datacd/k3bmkisofshandler.cpp:84
 #, kde-format
 msgid "Used version of mkisofs does not have large file support."
-msgstr ""
+msgstr "الإصدار المستخدم من mkisofs لا يدعم الملفات الكبيرة."
 
 #: projects/datacd/k3bmkisofshandler.cpp:85
 #, kde-format
 msgid "Files bigger than 2 GB cannot be handled."
-msgstr ""
+msgstr "لا يمكن التعامل مع الملفات الأكبر من 2 جيجابايت."
 
 #: projects/datacd/k3bmkisofshandler.cpp:89
 #, kde-format
 msgid "No such file or directory '%1'."
-msgstr ""
+msgstr "لا يوجد ملف أو دليل بهذا الاسم '%1'."
 
 #: projects/datacd/k3bmkisofshandler.cpp:104
 #, kde-format
 msgid "Encountered an incorrectly encoded filename '%1'"
-msgstr ""
+msgstr "صادفنا اسم ملف مشفر بشكل غير صحيح '%1'"
 
 #: projects/datacd/k3bmkisofshandler.cpp:106
 #, kde-format
 msgid ""
 "This may be caused by a system update which changed the local character set."
-msgstr ""
+msgstr "قد يكون هذا بسبب تحديث النظام الذي غير مجموعة الأحرف المحلية."
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
 #, kde-format
@@ -2152,31 +2241,32 @@ msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr ""
+"يمكنك استخدام convmv (https://j3e.de/linux/convmv/) لإصلاح ترميز اسم الملف."
 
 #: projects/datacd/k3bmkisofshandler.cpp:111
 #, kde-format
 msgid "The boot image has an invalid size."
-msgstr ""
+msgstr "صورة الإقلاع لديها حجم غير صالح."
 
 #: projects/datacd/k3bmkisofshandler.cpp:115
 #, kde-format
 msgid "The boot image contains multiple partitions."
-msgstr ""
+msgstr "صورة الإقلاع تحتوي على أقسام متعددة."
 
 #: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
-msgstr ""
+msgstr "صورة إقلاع القرص الصلب يجب أن تحتوي على قسم واحد."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:43
 #, kde-format
 msgid "Searching previous session"
-msgstr ""
+msgstr "البحث عن الجلسة السابقة"
 
 #: projects/datacd/k3bmsinfofetcher.cpp:155
 #, kde-format
 msgid "Could not determine next writable address."
-msgstr ""
+msgstr "لا يمكن تحديد العنوان التالي القابل للكتابة."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:171
 #, kde-format
@@ -2186,78 +2276,78 @@ msgstr "تعذّر بدء %1."
 #: projects/datacd/k3bmsinfofetcher.cpp:201
 #, kde-format
 msgid "Could not retrieve multisession information from disk."
-msgstr ""
+msgstr "لا يمكن استرداد معلومات الجلسات المتعددة من القرص."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:202
 #, kde-format
 msgid "The disk is either empty or not appendable."
-msgstr ""
+msgstr "القرص إما فارغ أو لا يمكن إضافة بيانات إليه."
 
 #: projects/k3babstractwriter.cpp:44
 #, kde-format
 msgid "Unlocking drive..."
-msgstr ""
+msgstr "فك قفل المشغل..."
 
 #: projects/k3babstractwriter.cpp:58
 #, kde-format
 msgid "Could not unlock drive."
-msgstr ""
+msgstr "لا يمكن فك قفل المشغل."
 
 #: projects/k3babstractwriter.cpp:61
 #, kde-format
 msgid "Ejecting Medium"
-msgstr ""
+msgstr "إخراج الوسيط"
 
 #: projects/k3bcdrdaowriter.cpp:259
 #, kde-format
 msgid "Cdrdao %1 does not support disabling burnfree."
-msgstr ""
+msgstr "Cdrdao %1 لا يدعم تعطيل burnfree."
 
 #: projects/k3bcdrdaowriter.cpp:264 projects/k3bcdrecordwriter.cpp:298
 #: projects/k3bcdrskinwriter.cpp:306
 #, kde-format
 msgid "'Force unsafe operations' enabled."
-msgstr ""
+msgstr "فُعِّل «إجبار العمليات غير الآمنة»."
 
 #: projects/k3bcdrdaowriter.cpp:283
 #, kde-format
 msgid "Cdrdao %1 does not support overburning."
-msgstr ""
+msgstr "Cdrdao %1 لا يدعم overburning."
 
 #: projects/k3bcdrdaowriter.cpp:486
 #, kde-format
 msgid "Could not backup tocfile."
-msgstr ""
+msgstr "لا يمكن نسخ ملف toc احتياطيًا."
 
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
 msgid "Preparing read process..."
-msgstr ""
+msgstr "تحضير عملية القراءة..."
 
 #: projects/k3bcdrdaowriter.cpp:522
 #, kde-format
 msgid "Preparing copy process..."
-msgstr ""
+msgstr "تحضير عملية النسخ..."
 
 #: projects/k3bcdrdaowriter.cpp:525
 #, kde-format
 msgid "Preparing blanking process..."
-msgstr ""
+msgstr "تحضير عملية المسح..."
 
 #: projects/k3bcdrdaowriter.cpp:559
 #, no-c-format, kde-format
 msgid "Starting DAO simulation at %1x speed..."
-msgstr ""
+msgstr "بدء محاكاة DAO بسرعة %1x..."
 
 #: projects/k3bcdrdaowriter.cpp:566
 #, no-c-format, kde-format
 msgid "Starting DAO writing at %1x speed..."
-msgstr ""
+msgstr "بدء كتابة DAO بسرعة %1x..."
 
 #: projects/k3bcdrdaowriter.cpp:571
 #, kde-format
 msgid "Starting reading..."
-msgstr ""
+msgstr "بدء القراءة..."
 
 #: projects/k3bcdrdaowriter.cpp:572
 #, kde-format
@@ -2267,12 +2357,12 @@ msgstr "يقرأ"
 #: projects/k3bcdrdaowriter.cpp:578
 #, no-c-format, kde-format
 msgid "Starting simulation copy at %1x speed..."
-msgstr ""
+msgstr "بدء محاكاة النسخ بسرعة %1x..."
 
 #: projects/k3bcdrdaowriter.cpp:584
 #, no-c-format, kde-format
 msgid "Starting copy at %1x speed..."
-msgstr ""
+msgstr "بدء النسخ بسرعة %1x..."
 
 #: projects/k3bcdrdaowriter.cpp:585
 #, kde-format
@@ -2282,12 +2372,12 @@ msgstr "ينسخ"
 #: projects/k3bcdrdaowriter.cpp:589
 #, kde-format
 msgid "Starting blanking..."
-msgstr ""
+msgstr "بدء المسح..."
 
 #: projects/k3bcdrdaowriter.cpp:590
 #, kde-format
 msgid "Blanking"
-msgstr ""
+msgstr "مسح"
 
 #: projects/k3bcdrdaowriter.cpp:702
 #, kde-format
@@ -2295,461 +2385,471 @@ msgid ""
 "Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
 "to restore it from the backup %2."
 msgstr ""
+"بسبب خطأ في cdrdao، حُذف ملف toc/cue %1. كي3بي لم يستطع استعادته من النسخة "
+"الاحتياطية %2."
 
 #: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:787
 #: projects/k3bcdrskinwriter.cpp:800 projects/k3bgrowisofswriter.cpp:515
 #, kde-format
 msgid "Simulation successfully completed"
-msgstr ""
+msgstr "أُنجزت المحاكاة بنجاح"
 
 #: projects/k3bcdrdaowriter.cpp:736
 #, kde-format
 msgid "Reading successfully completed"
-msgstr ""
+msgstr "أُنجزت القراءة بنجاح"
 
 #: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:789
 #: projects/k3bcdrskinwriter.cpp:802 projects/k3bgrowisofswriter.cpp:517
 #, kde-format
 msgid "Writing successfully completed"
-msgstr ""
+msgstr "أُنجزت الكتابة بنجاح"
 
 #: projects/k3bcdrdaowriter.cpp:742
 #, kde-format
 msgid "Copying successfully completed"
-msgstr ""
+msgstr "أُنجز النسخ بنجاح"
 
 #: projects/k3bcdrdaowriter.cpp:745
 #, kde-format
 msgid "Blanking successfully completed"
-msgstr ""
+msgstr "أُنجز المسح بنجاح"
 
 #: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:793
 #: projects/k3bcdrskinwriter.cpp:806 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
-msgstr ""
+msgstr "متوسط سرعة الكتابة الإجمالية: %1 كيلوبايت/ثانية (%2x)"
 
 #: projects/k3bcdrdaowriter.cpp:761
 #, kde-format
 msgid "Please include the debugging output in your problem report."
-msgstr ""
+msgstr "أَدرِج إخراج التصحيح في تقرير المشكلة الخاص بك."
 
 #: projects/k3bcdrdaowriter.cpp:788 projects/k3bcdrecordwriter.cpp:667
 #: projects/k3bcdrskinwriter.cpp:680
 #, no-c-format, kde-format
 msgid "Medium or burner does not support writing at %1x speed"
-msgstr ""
+msgstr "الوسيط أو الناسخ لا يدعم الكتابة بسرعة %1x"
 
 #: projects/k3bcdrdaowriter.cpp:790
 #, no-c-format, kde-format
 msgid "Switching down burn speed to %1x"
-msgstr ""
+msgstr "تحويل سرعة النسخ إلى %1x"
 
 #: projects/k3bcdrdaowriter.cpp:820
 #, kde-format
 msgid "Executing Power calibration"
-msgstr ""
+msgstr "تنفيذ معايرة الطاقة"
 
 #: projects/k3bcdrdaowriter.cpp:824
 #, kde-format
 msgid "Power calibration successful"
-msgstr ""
+msgstr "معايرة الطاقة ناجحة"
 
 #: projects/k3bcdrdaowriter.cpp:825
 #, kde-format
 msgid "Preparing burn process..."
-msgstr ""
+msgstr "تحضير عملية النسخ..."
 
 #: projects/k3bcdrdaowriter.cpp:829
 #, kde-format
 msgid "Flushing cache"
-msgstr ""
+msgstr "تفريغ الذاكرة المؤقتة"
 
 #: projects/k3bcdrdaowriter.cpp:833
 #, kde-format
 msgid "Writing CD-Text lead-in..."
-msgstr ""
+msgstr "كتابة مقدمة CD-Text..."
 
 #: projects/k3bcdrdaowriter.cpp:837
 #, kde-format
 msgid "Turning BURN-Proof on"
-msgstr ""
+msgstr "تشغيل BURN-Proof"
 
 #: projects/k3bcdrdaowriter.cpp:845
 #, kde-format
 msgid "Found ISRC code"
-msgstr ""
+msgstr "عُثر على رمز ISRC"
 
 #: projects/k3bcdrdaowriter.cpp:849
 #, kde-format
 msgid "Found pregap: %1"
-msgstr ""
+msgstr "عُثر على الفجوة السابقة: %1"
 
 #: projects/k3bcdrdaowriter.cpp:862
 #, kde-format
 msgid "No cdrdao driver found."
-msgstr ""
+msgstr "لا يوجد تعريف cdrdao."
 
 #: projects/k3bcdrdaowriter.cpp:863
 #, kde-format
 msgid "Please select one manually in the device settings."
-msgstr ""
+msgstr "اختر واحدًا يدويًا في إعدادات الجهاز."
 
 #: projects/k3bcdrdaowriter.cpp:864
 #, kde-format
 msgid "For most current drives this would be 'generic-mmc'."
-msgstr ""
+msgstr "لمعظم المشغلات الحالية سيكون هذا 'generic-mmc'."
 
 #: projects/k3bcdrdaowriter.cpp:873
 #, kde-format
 msgid "Device not ready, waiting."
-msgstr ""
+msgstr "الجهاز ليس جاهزًا، انتظر."
 
 #: projects/k3bcdrdaowriter.cpp:877
 #, kde-format
 msgid "Cue sheet not accepted."
-msgstr ""
+msgstr "ورقة الكيو غير مقبولة."
 
 #: projects/k3bcdrdaowriter.cpp:882 projects/k3bcdrecordwriter.cpp:611
 #: projects/k3bcdrskinwriter.cpp:624
 #, kde-format
 msgid "No valid %1 option: %2"
-msgstr ""
+msgstr "لا يوجد خيار %1 صالح: %2"
 
 #: projects/k3bcdrdaowriter.cpp:887 projects/k3bcdrecordwriter.cpp:814
 #: projects/k3bcdrskinwriter.cpp:827 projects/k3bgrowisofshandler.cpp:224
 #: projects/mixedcd/k3bmixedjob.cpp:1030
 #, kde-format
 msgid "Data does not fit on disk."
-msgstr ""
+msgstr "البيانات لا تتسع على القرص."
 
 #: projects/k3bcdrdaowriter.cpp:889 projects/k3bcdrecordwriter.cpp:816
 #: projects/k3bcdrskinwriter.cpp:829
 #, kde-format
 msgid "Enable overburning in the advanced K3b settings to burn anyway."
-msgstr ""
+msgstr "مكن overburning في إعدادات كي3بي المتقدمة للنسخ على أي حال."
 
 #: projects/k3bcdrdaowriter.cpp:974
 #, kde-format
 msgid "Writing leadin"
-msgstr ""
+msgstr "كتابة مقدمة"
 
 #: projects/k3bcdrdaowriter.cpp:980
 #, kde-format
 msgid "Writing leadout"
-msgstr ""
+msgstr "كتابة خاتمة"
 
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
 msgid "Cdrecord version %1 does not support Blu-ray writing."
-msgstr ""
+msgstr "إصدار Cdrecord %1 لا يتيح كتابة بلو-راي."
 
 #: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
 #, kde-format
 msgid "Writer does not support disk at once (DAO) recording"
-msgstr ""
+msgstr "الناسخ لا يتيح التسجيل القرص دفعة واحدة (DAO)"
 
 #: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
 #, kde-format
 msgid "Writer does not support raw writing."
-msgstr ""
+msgstr "الناسخ لا يتيح الكتابة الخام."
 
 #: projects/k3bcdrecordwriter.cpp:273
 #, kde-format
 msgid "Cdrecord does not support writing %1 media."
-msgstr ""
+msgstr "Cdrecord لا يتيح كتابة وسائط %1."
 
 #: projects/k3bcdrecordwriter.cpp:293 projects/k3bcdrskinwriter.cpp:301
 #, kde-format
 msgid "Writer does not support buffer underrun free recording (Burnfree)"
-msgstr ""
+msgstr "الناسخ لا يتيح التسجيل الخالي من تجاوز سعة المخزن المؤقت (Burnfree)"
 
 #: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
 #, kde-format
 msgid "Failed to write temporary file '%1'"
-msgstr ""
+msgstr "فشل في كتابة الملف المؤقت '%1'"
 
 #: projects/k3bcdrecordwriter.cpp:349
 #, kde-format
 msgid "Cdrecord %1 does not support overburning."
-msgstr ""
+msgstr "Cdrecord %1 لا يتيح overburning."
 
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr ""
+msgstr "بدء المحاكاة بسرعة %1×..."
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
-msgstr ""
+msgstr "بدء محاكاة %1 بسرعة %2×..."
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr ""
+msgstr "بدء الكتابة بسرعة %1×..."
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
-msgstr ""
+msgstr "بدء كتابة %1 بسرعة %2×..."
 
 #: projects/k3bcdrecordwriter.cpp:549 projects/k3bcdrskinwriter.cpp:561
 #: projects/k3bgrowisofswriter.cpp:428
 #, kde-format
 msgid "Writing data"
-msgstr ""
+msgstr "كتابة البيانات"
 
 #: projects/k3bcdrecordwriter.cpp:578 projects/k3bcdrskinwriter.cpp:591
 #, kde-format
 msgid "DAO (Disk At Once) recording not supported with this writer"
-msgstr ""
+msgstr "التسجيل قرص دفعة واحدة (DAO) غير متاح مع هذا الناسخ"
 
 #: projects/k3bcdrecordwriter.cpp:579 projects/k3bcdrskinwriter.cpp:592
 #, kde-format
 msgid "Please choose TAO (Track At Once) and try again"
-msgstr ""
+msgstr "اختر TAO (مسار دفعة واحدة) وحاول مرة أخرى"
 
 #: projects/k3bcdrecordwriter.cpp:582 projects/k3bcdrskinwriter.cpp:595
 #, kde-format
 msgid "RAW recording not supported with this writer"
-msgstr ""
+msgstr "التسجيل الخام (RAW) غير متاح مع هذا الناسخ"
 
 #: projects/k3bcdrecordwriter.cpp:585 projects/k3bcdrskinwriter.cpp:598
 #, kde-format
 msgid "Input/output error. Not necessarily serious."
-msgstr ""
+msgstr "خطأ في الإدخال/الإخراج. ليس خطيرًا بالضرورة."
 
 #: projects/k3bcdrecordwriter.cpp:594 projects/k3bcdrskinwriter.cpp:607
 #, kde-format
 msgid "Reloading of medium required"
-msgstr ""
+msgstr "إعادة تحميل الوسيط مطلوبة"
 
 #: projects/k3bcdrecordwriter.cpp:603 projects/k3bcdrskinwriter.cpp:616
 #: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
 #, kde-format
 msgid "Trying to write more than the official disk capacity"
-msgstr ""
+msgstr "محاولة كتابة أكثر من السعة الرسمية للقرص"
 
 #: projects/k3bcdrecordwriter.cpp:638 projects/k3bcdrskinwriter.cpp:651
 #, kde-format
 msgid "Only session 1 will be cloned."
-msgstr ""
+msgstr "سيُنسخ فقط الجلسة 1."
 
 #: projects/k3bcdrecordwriter.cpp:641 projects/k3bcdrskinwriter.cpp:654
 #, kde-format
 msgid "Unable to fixate the disk."
-msgstr ""
+msgstr "غير قادر على تثبيت القرص."
 
 #: projects/k3bcdrecordwriter.cpp:671 projects/k3bcdrskinwriter.cpp:684
 #, no-c-format, kde-format
 msgid "Switching burn speed up to %1x"
-msgstr ""
+msgstr "زيادة سرعة النسخ إلى %1×"
 
 #: projects/k3bcdrecordwriter.cpp:674 projects/k3bcdrskinwriter.cpp:687
 #, no-c-format, kde-format
 msgid "Switching burn speed down to %1x"
-msgstr ""
+msgstr "خفض سرعة النسخ إلى %1×"
 
 #: projects/k3bcdrecordwriter.cpp:686 projects/k3bcdrskinwriter.cpp:699
 #, kde-format
 msgid "Starting disc write"
-msgstr ""
+msgstr "بدء كتابة القرص"
 
 #: projects/k3bcdrecordwriter.cpp:702 projects/k3bcdrskinwriter.cpp:715
 #: projects/k3bgrowisofshandler.cpp:133
 #, kde-format
 msgid "Closing Session"
-msgstr ""
+msgstr "إغلاق الجلسة"
 
 #: projects/k3bcdrecordwriter.cpp:706 projects/k3bcdrskinwriter.cpp:719
 #, kde-format
 msgid "Writing Leadin"
-msgstr ""
+msgstr "كتابة المقدمة"
 
 #: projects/k3bcdrecordwriter.cpp:709 projects/k3bcdrskinwriter.cpp:722
 #, kde-format
 msgid "Writing Leadout"
-msgstr ""
+msgstr "كتابة الخاتمة"
 
 #: projects/k3bcdrecordwriter.cpp:712 projects/k3bcdrskinwriter.cpp:725
 #, kde-format
 msgid "Writing pregap"
-msgstr ""
+msgstr "كتابة الفجوة السابقة"
 
 #: projects/k3bcdrecordwriter.cpp:715 projects/k3bcdrskinwriter.cpp:728
 #, kde-format
 msgid "Performing Optimum Power Calibration"
-msgstr ""
+msgstr "تنفيذ معايرة الطاقة المثلى"
 
 #: projects/k3bcdrecordwriter.cpp:718 projects/k3bcdrskinwriter.cpp:731
 #, kde-format
 msgid "Sending CUE sheet"
-msgstr ""
+msgstr "إرسال ورقة الكيو"
 
 #: projects/k3bcdrecordwriter.cpp:721 projects/k3bcdrskinwriter.cpp:734
 #, kde-format
 msgid "Enabled Burnfree"
-msgstr ""
+msgstr "فُعِّل Burnfree"
 
 #: projects/k3bcdrecordwriter.cpp:724 projects/k3bcdrskinwriter.cpp:737
 #, kde-format
 msgid "Disabled Burnfree"
-msgstr ""
+msgstr "عُطِّل Burnfree"
 
 #: projects/k3bcdrecordwriter.cpp:730 projects/k3bcdrskinwriter.cpp:743
 #: projects/mixedcd/k3bmixedjob.cpp:555
 #, kde-format
 msgid "Unable to close the tray"
-msgstr ""
+msgstr "غير قادر على إغلاق الدرج"
 
 #: projects/k3bcdrecordwriter.cpp:740 projects/k3bcdrskinwriter.cpp:753
 #, kde-format
 msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لم يستُخدم Burnfree."
+msgstr[1] "استُخدم Burnfree مرة واحدة."
+msgstr[2] "استُخدم Burnfree مرتين."
+msgstr[3] "استُخدم Burnfree %1 مرات."
+msgstr[4] "استُخدم Burnfree %1 مرة."
+msgstr[5] "استُخدم Burnfree %1 مرة."
 
 #: projects/k3bcdrecordwriter.cpp:746 projects/k3bcdrskinwriter.cpp:759
 #, kde-format
 msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لم ينخفض المخزن المؤقت."
+msgstr[1] "المخزن المؤقت كان منخفضًا مرة واحدة."
+msgstr[2] "المخزن المؤقت كان منخفضًا مرتين."
+msgstr[3] "المخزن المؤقت كان منخفضًا %1 مرات."
+msgstr[4] "المخزن المؤقت كان منخفضًا %1 مرة."
+msgstr[5] "المخزن المؤقت كان منخفضًا %1 مرة."
 
 #: projects/k3bcdrecordwriter.cpp:785 projects/k3bcdrskinwriter.cpp:798
 #, kde-format
 msgid "Erasing successfully completed"
-msgstr ""
+msgstr "أُنجز المسح بنجاح"
 
 #: projects/k3bcdrecordwriter.cpp:812 projects/k3bcdrskinwriter.cpp:825
 #: projects/k3bgrowisofshandler.cpp:222
 #, kde-format
 msgid "Data did not fit on disk."
-msgstr ""
+msgstr "البيانات لم تتسع على القرص."
 
 #: projects/k3bcdrecordwriter.cpp:823 projects/k3bcdrskinwriter.cpp:836
 #, kde-format
 msgid "%1 could not reserve shared memory segment of requested size."
-msgstr ""
+msgstr "لا يمكن لـ %1 حجز جزء من الذاكرة المشتركة بالحجم المطلوب."
 
 #: projects/k3bcdrecordwriter.cpp:824 projects/k3bcdrskinwriter.cpp:837
 #, kde-format
 msgid "Probably you chose a too large buffer size."
-msgstr ""
+msgstr "ربما اخترت حجم مخزن مؤقت كبيرًا جدًا."
 
 #: projects/k3bcdrecordwriter.cpp:827 projects/k3bcdrskinwriter.cpp:840
 #, kde-format
 msgid "OPC failed. Probably the writer does not like the medium."
-msgstr ""
+msgstr "فشلت OPC. ربما لا يعجب الناسخ الوسيط."
 
 #: projects/k3bcdrecordwriter.cpp:830 projects/k3bcdrskinwriter.cpp:843
 #, kde-format
 msgid "Unable to set write speed to %1."
-msgstr ""
+msgstr "غير قادر على ضبط سرعة الكتابة على %1."
 
 #: projects/k3bcdrecordwriter.cpp:831 projects/k3bcdrskinwriter.cpp:844
 #, kde-format
 msgid "Probably this is lower than your writer's lowest writing speed."
-msgstr ""
+msgstr "ربما هذا أقل من أدنى سرعة كتابة لناسخك."
 
 #: projects/k3bcdrecordwriter.cpp:834 projects/k3bcdrskinwriter.cpp:847
 #, kde-format
 msgid "Unable to send CUE sheet."
-msgstr ""
+msgstr "غير قادر على إرسال ورقة الكيو."
 
 #: projects/k3bcdrecordwriter.cpp:836 projects/k3bcdrecordwriter.cpp:875
 #: projects/k3bcdrecordwriter.cpp:895 projects/k3bcdrskinwriter.cpp:849
 #: projects/k3bcdrskinwriter.cpp:888 projects/k3bcdrskinwriter.cpp:908
 #, kde-format
 msgid "Sometimes using TAO writing mode solves this issue."
-msgstr ""
+msgstr "أحيانًا استخدام وضع الكتابة TAO يحل هذه المشكلة."
 
 #: projects/k3bcdrecordwriter.cpp:839 projects/k3bcdrskinwriter.cpp:852
 #, kde-format
 msgid "Unable to open new session."
-msgstr ""
+msgstr "غير قادر على فتح جلسة جديدة."
 
 #: projects/k3bcdrecordwriter.cpp:840 projects/k3bcdrskinwriter.cpp:853
 #, kde-format
 msgid "Probably a problem with the medium."
-msgstr ""
+msgstr "ربما مشكلة في الوسيط."
 
 #: projects/k3bcdrecordwriter.cpp:843 projects/k3bcdrskinwriter.cpp:856
 #, kde-format
 msgid "The disk might still be readable."
-msgstr ""
+msgstr "قد لا يزال القرص قابلًا للقراءة."
 
 #: projects/k3bcdrecordwriter.cpp:845 projects/k3bcdrskinwriter.cpp:858
 #, kde-format
 msgid "Try DAO writing mode."
-msgstr ""
+msgstr "جَرِّب وضع الكتابة DAO."
 
 #: projects/k3bcdrecordwriter.cpp:848 projects/k3bcdrskinwriter.cpp:861
 #, kde-format
 msgid "%1 has no permission to open the device."
-msgstr ""
+msgstr "ليس لدى %1 إذن لفتح الجهاز."
 
 #: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
 #, kde-format
 msgid "Modify device settings in K3b to solve this problem."
-msgstr ""
+msgstr "عَدِّل إعدادات الجهاز في كي3بي لحل هذه المشكلة."
 
 #: projects/k3bcdrecordwriter.cpp:852 projects/k3bcdrskinwriter.cpp:865
 #, kde-format
 msgid "Probably a buffer underrun occurred."
-msgstr ""
+msgstr "ربما حدث تجاوز سعة المخزن المؤقت."
 
 #: projects/k3bcdrecordwriter.cpp:854 projects/k3bcdrskinwriter.cpp:867
 #, kde-format
 msgid "Please enable Burnfree or choose a lower burning speed."
-msgstr ""
+msgstr "مكن Burnfree أو اختر سرعة نسخ أقل."
 
 #: projects/k3bcdrecordwriter.cpp:856 projects/k3bcdrskinwriter.cpp:869
 #, kde-format
 msgid "Please choose a lower burning speed."
-msgstr ""
+msgstr "اختر سرعة نسخ أقل."
 
 #: projects/k3bcdrecordwriter.cpp:859 projects/k3bcdrskinwriter.cpp:872
 #, kde-format
 msgid "Found a high-speed medium not suitable for the writer being used."
-msgstr ""
+msgstr "عُثر على وسيط عالي السرعة غير مناسب للناسخ المستخدم."
 
 #: projects/k3bcdrecordwriter.cpp:860 projects/k3bcdrecordwriter.cpp:864
 #: projects/k3bcdrskinwriter.cpp:873 projects/k3bcdrskinwriter.cpp:877
 #, kde-format
 msgid "Use the 'force unsafe operations' option to ignore this."
-msgstr ""
+msgstr "استخدم خيار 'إجبار العمليات غير الآمنة' لتجاهل هذا."
 
 #: projects/k3bcdrecordwriter.cpp:863 projects/k3bcdrskinwriter.cpp:876
 #, kde-format
 msgid "Found a low-speed medium not suitable for the writer being used."
-msgstr ""
+msgstr "عُثر على وسيط منخفض السرعة غير مناسب للناسخ المستخدم."
 
 #: projects/k3bcdrecordwriter.cpp:867 projects/k3bcdrskinwriter.cpp:880
 #, kde-format
 msgid "Most likely the burning failed due to low-quality media."
-msgstr ""
+msgstr "على الأرجح فشل النسخ بسبب وسائط منخفضة الجودة."
 
 #: projects/k3bcdrecordwriter.cpp:870 projects/k3bcdrskinwriter.cpp:883
 #, kde-format
 msgid "Another application is blocking the device (most likely automounting)."
-msgstr ""
+msgstr "تطبيق آخر يمنع الجهاز (على الأرجح التثبيت التلقائي)."
 
 #: projects/k3bcdrecordwriter.cpp:873 projects/k3bcdrskinwriter.cpp:886
 #, kde-format
 msgid "A write error occurred."
-msgstr ""
+msgstr "حدث خطأ في الكتابة."
 
 #: projects/k3bcdrecordwriter.cpp:878 projects/k3bcdrskinwriter.cpp:891
 #, kde-format
 msgid "Some drives do not support all erase types."
-msgstr ""
+msgstr "بعض المشغلات لا تدعم جميع أنواع المسح."
 
 #: projects/k3bcdrecordwriter.cpp:879 projects/k3bcdrskinwriter.cpp:892
 #, kde-format
 msgid "Try again using 'Complete' erasing."
-msgstr ""
+msgstr "حاول مرة أخرى باستخدام المسح 'الكامل'."
 
 #: projects/k3bcdrecordwriter.cpp:886
 #, kde-format
@@ -2757,47 +2857,49 @@ msgid ""
 "Since kernel version 2.6.8 cdrecord cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
+"منذ إصدار النواة 2.6.8، لا يمكن لـ cdrecord استخدام نقل SCSI عند تشغيل suid "
+"root بعد الآن."
 
 #: projects/k3bcdrecordwriter.cpp:887 projects/k3bcdrskinwriter.cpp:900
 #, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
-msgstr ""
+msgstr "يمكنك استخدام K3b::Setup لحل هذه المشكلة أو إزالة بت suid يدويًا."
 
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
-msgstr ""
+msgstr "إذا كنت تستخدم إصدار cdrecord غير مصحح..."
 
 #: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
-msgstr ""
+msgstr "...وحدث هذا الخطأ أيضًا مع وسائط عالية الجودة..."
 
 #: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
-msgstr ""
+msgstr "...والأسئلة المتكررة لـ كي3بي لا تساعدك..."
 
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
-msgstr ""
+msgstr "...أدرج إخراج التصحيح في تقرير المشكلة الخاص بك."
 
 #: projects/k3bcdrskinwriter.cpp:240
 #, kde-format
 msgid "Cdrskin version %1 does not support Blu-ray writing."
-msgstr ""
+msgstr "إصدار Cdrskin %1 لا يدعم كتابة بلو-راي."
 
 #: projects/k3bcdrskinwriter.cpp:286
 #, kde-format
 msgid "Cdrskin does not support writing %1 media."
-msgstr ""
+msgstr "Cdrskin لا يدعم كتابة وسائط %1."
 
 #: projects/k3bcdrskinwriter.cpp:361
 #, kde-format
 msgid "Cdrskin %1 does not support overburning."
-msgstr ""
+msgstr "Cdrskin %1 لا يدعم overburning."
 
 #: projects/k3bcdrskinwriter.cpp:899
 #, kde-format
@@ -2805,123 +2907,125 @@ msgid ""
 "Since kernel version 2.6.8 cdrskin cannot use SCSI transport when running "
 "suid root anymore."
 msgstr ""
+"منذ إصدار النواة 2.6.8، لا يمكن لـ cdrskin استخدام نقل SCSI عند تشغيل suid "
+"root بعد الآن."
 
 #: projects/k3bcdrskinwriter.cpp:911
 #, kde-format
 msgid "If you are running an unpatched cdrskin version..."
-msgstr ""
+msgstr "إذا كنت تستخدم إصدار cdrskin غير مصحح..."
 
 #: projects/k3bgrowisofshandler.cpp:72
 #, kde-format
 msgid "OPC failed. Please try writing speed 1x."
-msgstr ""
+msgstr "فشلت OPC. جَرِّب سرعة كتابة 1x."
 
 #: projects/k3bgrowisofshandler.cpp:99
 #, kde-format
 msgid "Please try again with writing mode DAO."
-msgstr ""
+msgstr "حاول مرة أخرى باستخدام وضع الكتابة DAO."
 
 #: projects/k3bgrowisofshandler.cpp:113
 #, kde-format
 msgid "Flushing Cache"
-msgstr ""
+msgstr "تفريغ الذاكرة المؤقتة"
 
 #: projects/k3bgrowisofshandler.cpp:114
 #, kde-format
 msgid "Flushing the cache may take some time."
-msgstr ""
+msgstr "تفريغ الذاكرة المؤقتة قد يستغرق بعض الوقت."
 
 #: projects/k3bgrowisofshandler.cpp:123
 #, kde-format
 msgid "Closing Track"
-msgstr ""
+msgstr "إغلاق المسار"
 
 #: projects/k3bgrowisofshandler.cpp:126
 #, kde-format
 msgid "Closing Disk"
-msgstr ""
+msgstr "إغلاق القرص"
 
 #: projects/k3bgrowisofshandler.cpp:129
 #, kde-format
 msgid "Updating RMA"
-msgstr ""
+msgstr "تحديث RMA"
 
 #: projects/k3bgrowisofshandler.cpp:130
 #, kde-format
 msgid "Updating RMA..."
-msgstr ""
+msgstr "تحديث RMA..."
 
 #: projects/k3bgrowisofshandler.cpp:134
 #, kde-format
 msgid "Closing Session..."
-msgstr ""
+msgstr "إغلاق الجلسة..."
 
 #: projects/k3bgrowisofshandler.cpp:137
 #, kde-format
 msgid "Writing Lead-out"
-msgstr ""
+msgstr "كتابة الخاتمة"
 
 #: projects/k3bgrowisofshandler.cpp:138
 #, kde-format
 msgid "Writing the lead-out may take some time."
-msgstr ""
+msgstr "كتابة الخاتمة قد تستغرق بعض الوقت."
 
 #: projects/k3bgrowisofshandler.cpp:141
 #, kde-format
 msgid "Removing reference to lead-out."
-msgstr ""
+msgstr "إزالة الإشارة إلى الخاتمة."
 
 #: projects/k3bgrowisofshandler.cpp:144
 #, kde-format
 msgid "Modifying ISO 9660 volume descriptor"
-msgstr ""
+msgstr "تعديل واصف حجم ISO 9660"
 
 #: projects/k3bgrowisofshandler.cpp:151
 #, kde-format
 msgid "Writing mode Incremental Streaming not available"
-msgstr ""
+msgstr "وضع الكتابة بالتدفق الإضافي غير متاح"
 
 #: projects/k3bgrowisofshandler.cpp:152
 #, kde-format
 msgid "Engaging DAO"
-msgstr ""
+msgstr "تفعيل DAO"
 
 #: projects/k3bgrowisofshandler.cpp:164
 #, kde-format
 msgid "Writing speed: %1 KB/s (%2x)"
-msgstr ""
+msgstr "سرعة الكتابة: %1 كيلوبايت/ثانية (%2x)"
 
 #: projects/k3bgrowisofshandler.cpp:215
 #, kde-format
 msgid "K3b detected a problem with the medium."
-msgstr ""
+msgstr "كي3بي اكتشف مشكلة في الوسيط."
 
 #: projects/k3bgrowisofshandler.cpp:216
 #, kde-format
 msgid ""
 "Please try another brand of media, preferably one explicitly recommended by "
 "your writer's vendor."
-msgstr ""
+msgstr "جَرِّب ماركة وسائط أخرى، ويفضل واحدة موصى بها صراحةً من قبل بائع ناسخك."
 
 #: projects/k3bgrowisofshandler.cpp:217
 #, kde-format
 msgid "Report the problem if it persists anyway."
-msgstr ""
+msgstr "أبلغ عن المشكلة إذا استمرت."
 
 #: projects/k3bgrowisofshandler.cpp:228
 #, kde-format
 msgid "Unable to set writing speed."
-msgstr ""
+msgstr "غير قادر على ضبط سرعة الكتابة."
 
 #: projects/k3bgrowisofshandler.cpp:229
 #, kde-format
 msgid "Please try again with the 'ignore speed' setting."
-msgstr ""
+msgstr "حاول مرة أخرى باستخدام إعداد 'تجاهل السرعة'."
 
 #: projects/k3bgrowisofshandler.cpp:233
 #, kde-format
 msgid "Optimum Power Calibration failed."
-msgstr ""
+msgstr "فشلت معايرة الطاقة المثلى."
 
 #: projects/k3bgrowisofshandler.cpp:234
 #, kde-format
@@ -2929,27 +3033,31 @@ msgid ""
 "Try adding '-use-the-force-luke=noopc' to the growisofs user parameters in "
 "the K3b settings."
 msgstr ""
+"حاول إضافة '-use-the-force-luke=noopc' إلى معلمات المستخدم growisofs في "
+"إعدادات K3b."
 
 #: projects/k3bgrowisofshandler.cpp:239
 #, kde-format
 msgid "Unable to allocate software buffer."
-msgstr ""
+msgstr "لا يمكن تخصيص مخزن مؤقت للبرنامج."
 
 #: projects/k3bgrowisofshandler.cpp:240
 #, kde-format
 msgid "This error is caused by the low memorylocked resource limit."
-msgstr ""
+msgstr "سبب هذا الخطأ هو انخفاض حد مورد الذاكرة المقفلة."
 
 #: projects/k3bgrowisofshandler.cpp:241
 #, kde-format
 msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
-msgstr ""
+msgstr "يمكن حلها عن طريق إصدار الأمر 'ulimit -l unlimited'..."
 
 #: projects/k3bgrowisofshandler.cpp:242
 #, kde-format
 msgid ""
 "...or by lowering the used software buffer size in the advanced K3b settings."
 msgstr ""
+"...أو عن طريق خفض حجم المخزن المؤقت للبرنامج المستخدم في إعدادات K3b "
+"المتقدمة."
 
 #: projects/k3bgrowisofshandler.cpp:246
 #, kde-format
@@ -2959,27 +3067,27 @@ msgstr "خطأ كتابة"
 #: projects/k3bgrowisofshandler.cpp:262
 #, kde-format
 msgid "Fatal error at startup: %1"
-msgstr ""
+msgstr "خطأ فادح عند بدء التشغيل: %1"
 
 #: projects/k3bgrowisofshandler.cpp:270
 #, kde-format
 msgid "Warning at exit: (1)"
-msgstr ""
+msgstr "تحذير عند الخروج: (1)"
 
 #: projects/k3bgrowisofshandler.cpp:271
 #, kde-format
 msgid "Most likely mkisofs failed in some way."
-msgstr ""
+msgstr "على الأرجح، فشل mkisofs بطريقة ما."
 
 #: projects/k3bgrowisofshandler.cpp:274
 #, kde-format
 msgid "Fatal error during recording: %1"
-msgstr ""
+msgstr "خطأ فادح أثناء التسجيل: %1"
 
 #: projects/k3bgrowisofswriter.cpp:139
 #, kde-format
 msgid "Growisofs version %1 is too old. K3b needs at least version 5.10."
-msgstr ""
+msgstr "إصدار Growisofs %1 قديم جدًا. كي3بي يحتاج إلى الإصدار 5.10 على الأقل."
 
 #: projects/k3bgrowisofswriter.cpp:153
 #, kde-format
@@ -2987,6 +3095,8 @@ msgid ""
 "Growisofs version %1 does not feature a software buffer which may result in "
 "an unstable burn process."
 msgstr ""
+"إصدار Growisofs %1 لا يتميز بمخزن مؤقت للبرنامج مما قد يؤدي إلى عملية حرق "
+"غير مستقرة."
 
 #: projects/k3bgrowisofswriter.cpp:212
 #, kde-format
@@ -2996,92 +3106,92 @@ msgstr "لم أتمكن من فتح الملف %1"
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
 msgid "Starting simulation..."
-msgstr ""
+msgstr "بدء المحاكاة..."
 
 #: projects/k3bgrowisofswriter.cpp:363
 #, kde-format
 msgid "Starting disc write..."
-msgstr ""
+msgstr "بدء كتابة القرص..."
 
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
 msgid "Creating audio image files in %1"
-msgstr ""
+msgstr "إنشاء ملفات صور صوتية في %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:280 projects/mixedcd/k3bmixedjob.cpp:494
 #, kde-format
 msgid "Creating audio image files"
-msgstr ""
+msgstr "إنشاء ملفات صور صوتية"
 
 #: projects/mixedcd/k3bmixedjob.cpp:468
 #, kde-format
 msgid "Error while creating ISO image."
-msgstr ""
+msgstr "خطأ أثناء إنشاء صورة ISO."
 
 #: projects/mixedcd/k3bmixedjob.cpp:483
 #, kde-format
 msgid "ISO image successfully created."
-msgstr ""
+msgstr "صورة ISO أنشئت بنجاح."
 
 #: projects/mixedcd/k3bmixedjob.cpp:584
 #, kde-format
 msgid "Audio images successfully created."
-msgstr ""
+msgstr "الصور الصوتية أنشئت بنجاح."
 
 #: projects/mixedcd/k3bmixedjob.cpp:877
 #, kde-format
 msgid "Writing track %1 of %2 (%3)"
-msgstr ""
+msgstr "كتابة المسار %1 من %2 (%3)"
 
 #: projects/mixedcd/k3bmixedjob.cpp:880
 #, kde-format
 msgid "ISO 9660 data"
-msgstr ""
+msgstr "بيانات ISO 9660"
 
 #: projects/mixedcd/k3bmixedjob.cpp:986
 #, kde-format
 msgid "Simulating second session"
-msgstr ""
+msgstr "محاكاة الجلسة الثانية"
 
 #: projects/mixedcd/k3bmixedjob.cpp:988
 #, kde-format
 msgid "Writing second session of copy %1"
-msgstr ""
+msgstr "كتابة الجلسة الثانية من النسخة %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:990
 #, kde-format
 msgid "Writing second session"
-msgstr ""
+msgstr "كتابة الجلسة الثانية"
 
 #: projects/mixedcd/k3bmixedjob.cpp:994
 #, kde-format
 msgid "Simulating first session"
-msgstr ""
+msgstr "محاكاة الجلسة الأولى"
 
 #: projects/mixedcd/k3bmixedjob.cpp:996
 #, kde-format
 msgid "Writing first session of copy %1"
-msgstr ""
+msgstr "كتابة الجلسة الأولى من النسخة %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:998
 #, kde-format
 msgid "Writing first session"
-msgstr ""
+msgstr "كتابة الجلسة الأولى"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1076
 #, kde-format
 msgid "Creating ISO image file"
-msgstr ""
+msgstr "إنشاء ملف صورة ISO"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1077 projects/mixedcd/k3bmixedjob.cpp:1078
 #, kde-format
 msgid "Creating ISO image in %1"
-msgstr ""
+msgstr "إنشاء صورة ISO في %1"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1118
 #, kde-format
 msgid "Removing buffer files."
-msgstr ""
+msgstr "إزالة ملفات المخزن المؤقت."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1123
 #, kde-format
@@ -3091,30 +3201,34 @@ msgstr "تعذّر حذف الملفّ %1."
 #: projects/mixedcd/k3bmixedjob.cpp:1231
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "تعذّر إيجاد 'Cdrecord' على نظامك."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1235
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
-msgstr ""
+msgstr "لا يمكن كتابة نص قرص مدمج (CD-Text) في وضع TAO. حاول DAO أو RAW."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1332
 #, kde-format
 msgid "Writing Enhanced Audio CD"
-msgstr ""
+msgstr "كتابة قرص صوتي مدمج محسّن (Enhanced Audio CD)"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1337
 #, kde-format
 msgid "Writing Mixed Mode CD"
-msgstr ""
+msgstr "كتابة قرص مدمج بوضع مختلط (Mixed Mode CD)"
 
 #: projects/mixedcd/k3bmixedjob.cpp:1347
 #, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
 msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لا توجد مسارات (%2 دقائق بيانات صوتية، %3 بيانات ISO 9660)"
+msgstr[1] "مسار واحد (%2 دقائق بيانات صوتية، %3 بيانات ISO 9660)"
+msgstr[2] "مساران (%2 دقائق بيانات صوتية، %3 بيانات ISO 9660)"
+msgstr[3] "%1 مسارات (%2 دقائق بيانات صوتية، %3 بيانات ISO 9660)"
+msgstr[4] "%1 مسارًا (%2 دقائق بيانات صوتية، %3 بيانات ISO 9660)"
+msgstr[5] "%1 مسار (%2 دقائق بيانات صوتية، %3 بيانات ISO 9660)"
 
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
@@ -3130,7 +3244,7 @@ msgstr "هناك ملفّ بذاك الاسم فعلًا. رجاء أدخل اس
 #, kde-format
 msgid ""
 "Could not rename subtitle file. File with requested name %1 already exists."
-msgstr ""
+msgstr "تعذر إعادة تسمية ملف الترجمة. يوجد بالفعل ملف بالاسم المطلوب %1."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:125
 #, kde-format
@@ -3163,26 +3277,34 @@ msgstr "لا شيء"
 #: projects/movixcd/k3bmovixjob.cpp:105
 #, kde-format
 msgid "Writing eMovix Project"
-msgstr ""
+msgstr "كتابة مشروع eMovix"
 
 #: projects/movixcd/k3bmovixjob.cpp:107
 #, kde-format
 msgid "Writing eMovix Project (%1)"
-msgstr ""
+msgstr "كتابة مشروع eMovix (%1)"
 
 #: projects/movixcd/k3bmovixjob.cpp:113
 #, kde-format
 msgid "One file (%2) and about 8 MB eMovix data"
 msgid_plural "%1 files (%2) and about 8 MB eMovix data"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 ملف (%2) وحوالي 8 ميغابايت من بيانات eMovix"
+msgstr[1] "ملف واحد (%2) وحوالي 8 ميغابايت من بيانات eMovix"
+msgstr[2] "ملفان (%2) وحوالي 8 ميغابايت من بيانات eMovix"
+msgstr[3] "%1 ملفات (%2) وحوالي 8 ميغابايت من بيانات eMovix"
+msgstr[4] "%1 ملفًا (%2) وحوالي 8 ميغابايت من بيانات eMovix"
+msgstr[5] "%1 ملف (%2) وحوالي 8 ميغابايت من بيانات eMovix"
 
 #: projects/movixcd/k3bmovixjob.cpp:117
 #, kde-format
 msgid " – One copy"
 msgid_plural " – %1 copies"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " – لا توجد نسخ"
+msgstr[1] " – نسخة واحدة"
+msgstr[2] " – نسختان"
+msgstr[3] " – %1 نسخ"
+msgstr[4] " – %1 نسخة"
+msgstr[5] " – %1 نسخة"
 
 #: projects/videocd/k3bvcddoc.cpp:202 projects/videocd/k3bvcddoc.cpp:212
 #, kde-format
@@ -3190,6 +3312,8 @@ msgid ""
 "K3b will create a %1 image from the given MPEG files, but these files must "
 "already be in %1 format. K3b does not yet resample MPEG files."
 msgstr ""
+"كي3بي سيُنشئ صورة %1 من ملفات MPEG المعطاة، لكن يجب أن تكون هذه الملفات "
+"بالفعل بتنسيق %1. كي3بي لا يعيد أخذ عينات لملفات MPEG بعد."
 
 #: projects/videocd/k3bvcddoc.cpp:205
 #, kde-format
@@ -3205,23 +3329,23 @@ msgstr "معلومات"
 #: projects/videocd/k3bvcddoc.cpp:215
 #, kde-format
 msgid "SVCD"
-msgstr ""
+msgstr "SVCD"
 
 #: projects/videocd/k3bvcddoc.cpp:217
 #, kde-format
 msgid ""
 "Note: Forcing MPEG2 as VCD is not supported by some standalone DVD players."
-msgstr ""
+msgstr "ملاحظة: فرض MPEG2 كـ VCD لا تدعمه بعض مشغلات DVD المستقلة."
 
 #: projects/videocd/k3bvcddoc.cpp:220
 #, kde-format
 msgid "Force VCD"
-msgstr ""
+msgstr "فرض VCD"
 
 #: projects/videocd/k3bvcddoc.cpp:221
 #, kde-format
 msgid "Do not force VCD"
-msgstr ""
+msgstr "لا تفرض VCD"
 
 #: projects/videocd/k3bvcddoc.cpp:234
 #, kde-format
@@ -3230,11 +3354,14 @@ msgid ""
 "Please start a new Project for this filetype.\n"
 "Resample not implemented in K3b yet."
 msgstr ""
+"لا يمكنك خلط ملفات الفيديو MPEG1 و MPEG2.\n"
+" ابدأ مشروعًا جديدًا لنوع الملف هذا.\n"
+" إعادة أخذ العينات لم تنفذ في كي3بي بعد."
 
 #: projects/videocd/k3bvcddoc.cpp:235
 #, kde-format
 msgid "Wrong File Type for This Project"
-msgstr ""
+msgstr "نوع الملف الخاطئ لهذا المشروع"
 
 #: projects/videocd/k3bvcddoc.cpp:246
 #, kde-format
@@ -3243,41 +3370,44 @@ msgid ""
 "Video players cannot reach Segments (MPEG Still Pictures) without Playback "
 "control."
 msgstr ""
+"تمكين PBC (التحكم في التشغيل).\n"
+" لا يمكن لمشغلات الفيديو الوصول إلى المقاطع (صور MPEG الثابتة) بدون التحكم "
+"في التشغيل."
 
 #: projects/videocd/k3bvcddoc.cpp:278
 #, kde-format
 msgid "Only MPEG1 and MPEG2 video files are supported.\n"
-msgstr ""
+msgstr "فقط ملفات الفيديو MPEG1 و MPEG2 مدعومة.\n"
 
 #: projects/videocd/k3bvcddoc.cpp:279
 #, kde-format
 msgid "Wrong File Format"
-msgstr ""
+msgstr "تنسيق الملف خاطئ"
 
 #: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:469
 #, kde-format
 msgid "Removing Binary file %1"
-msgstr ""
+msgstr "إزالة الملف الثنائي %1"
 
 #: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format
 msgid "Removing Cue file %1"
-msgstr ""
+msgstr "إزالة ملف Cue %1"
 
 #: projects/videocd/k3bvcdjob.cpp:174
 #, kde-format
 msgid "Could not write correct XML file."
-msgstr ""
+msgstr "لم يمكن كتابة ملف XML الصحيح."
 
 #: projects/videocd/k3bvcdjob.cpp:190
 #, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr ""
+msgstr "إنشاء ملفات Cue/Bin..."
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
 msgid "To create Video CDs you have to install VcdImager version %1."
-msgstr ""
+msgstr "لإنشاء أقراص فيديو مدمجة، يجب تثبيت VcdImager الإصدار %1."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
 #, kde-format
@@ -3285,6 +3415,8 @@ msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
+"يمكنك إيجاد هذا على أقراص التوزيع الخاصة بك أو تنزيله من https://www.gnu.org/"
+"software/vcdimager"
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
@@ -3294,98 +3426,107 @@ msgstr "التّنفيذيّ %1 قديم جدًّا: الإصدارة %2 فأع�
 #: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
 msgid "Scanning video file %1 of %2 (%3)"
-msgstr ""
+msgstr "فحص ملف الفيديو %1 من %2 (%3)"
 
 #: projects/videocd/k3bvcdjob.cpp:323
 #, kde-format
 msgid "Creating Image for track %1"
-msgstr ""
+msgstr "إنشاء صورة للمسار %1"
 
 #: projects/videocd/k3bvcdjob.cpp:345
 #, kde-format
 msgid "Cue/Bin files successfully created."
-msgstr ""
+msgstr "ملفات Cue/Bin أنشئت بنجاح."
 
 #: projects/videocd/k3bvcdjob.cpp:388
 #, kde-format
 msgid "Writing Copy %1 of %2"
-msgstr ""
+msgstr "كتابة النسخة %1 من %2"
 
 #: projects/videocd/k3bvcdjob.cpp:514
 #, kde-format
 msgid "One or more BCD fields out of range for %1"
-msgstr ""
+msgstr "حقل أو أكثر من حقول BCD خارج النطاق لـ %1"
 
 #: projects/videocd/k3bvcdjob.cpp:517
 #, kde-format
 msgid "From now on, scan information data errors will not be reported anymore"
-msgstr ""
+msgstr "من الآن فصاعدًا، لن يتم الإبلاغ عن أخطاء بيانات معلومات الفحص بعد الآن"
 
 #: projects/videocd/k3bvcdjob.cpp:518
 #, kde-format
 msgid ""
 "Consider enabling the 'update scan offsets' option, if it is not enabled "
 "already."
-msgstr ""
+msgstr "اعتبر تمكين خيار 'تحديث إزاحات الفحص'، إذا لم يكن ممكنًا بالفعل."
 
 #: projects/videocd/k3bvcdjob.cpp:525
 #, kde-format
 msgid "APS' pts seems out of order (actual pts %1, last seen pts %2)"
 msgstr ""
+"يبدو أن نقاط زمن APS (PTS) غير مرتبة (PTS الفعلية %1، آخر PTS شوهدت %2)"
 
 #: projects/videocd/k3bvcdjob.cpp:526
 #, kde-format
 msgid "Ignoring this aps"
-msgstr ""
+msgstr "تجاهل هذه الـ APS"
 
 #: projects/videocd/k3bvcdjob.cpp:534
 #, kde-format
 msgid "Bad packet at packet #%1 (stream byte offset %2)"
-msgstr ""
+msgstr "حزمة سيئة في الحزمة #%1 (إزاحة بايت التدفق %2)"
 
 #: projects/videocd/k3bvcdjob.cpp:541
 #, kde-format
 msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "سيُتجاهل البايت المتبقي من التدفق."
+msgstr[1] "سيُتجاهل %1 بايت المتبقية من التدفق."
+msgstr[2] "سيُتجاهل %1 بايت المتبقية من التدفق."
+msgstr[3] "سيُتجاهل %1 بايت المتبقية من التدفق."
+msgstr[4] "سيُتجاهل %1 بايت المتبقية من التدفق."
+msgstr[5] "سيُتجاهل %1 بايت المتبقية من التدفق."
 
 #: projects/videocd/k3bvcdjob.cpp:543
 #, kde-format
 msgid "An unknown number of remaining stream bytes will be ignored."
-msgstr ""
+msgstr "سيُتجاهل عدد غير معروف من بايتات التدفق المتبقية."
 
 #: projects/videocd/k3bvcdjob.cpp:552
 #, kde-format
 msgid "Writing Video CD (Version 1.1)"
-msgstr ""
+msgstr "كتابة قرص فيديو مدمج (إصدار 1.1)"
 
 #: projects/videocd/k3bvcdjob.cpp:554
 #, kde-format
 msgid "Writing Video CD (Version 2.0)"
-msgstr ""
+msgstr "كتابة قرص فيديو مدمج (إصدار 2.0)"
 
 #: projects/videocd/k3bvcdjob.cpp:556
 #, kde-format
 msgid "Writing Super Video CD"
-msgstr ""
+msgstr "كتابة قرص فيديو مدمج ممتاز (Super Video CD)"
 
 #: projects/videocd/k3bvcdjob.cpp:558
 #, kde-format
 msgid "Writing High-Quality Video CD"
-msgstr ""
+msgstr "كتابة قرص فيديو مدمج بجودة عالية"
 
 #: projects/videocd/k3bvcdjob.cpp:560
 #, kde-format
 msgid "Writing Video CD"
-msgstr ""
+msgstr "كتابة قرص فيديو مدمج"
 
 #: projects/videocd/k3bvcdjob.cpp:567
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 MPEG (%2)"
+msgstr[1] "1 MPEG (%2)"
+msgstr[2] "2 MPEGs (%2)"
+msgstr[3] "%1 MPEGs (%2)"
+msgstr[4] "%1 MPEGs (%2)"
+msgstr[5] "%1 MPEGs (%2)"
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
 #: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
@@ -3402,8 +3543,12 @@ msgstr "غ/م"
 #, kde-format
 msgid "1 bit/s"
 msgid_plural "%1 bits/s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%1 بت/ث"
+msgstr[1] "1 بت/ث"
+msgstr[2] "%1 بت/ث"
+msgstr[3] "%1 بت/ث"
+msgstr[4] "%1 بت/ث"
+msgstr[5] "%1 بت/ث"
 
 #: projects/videocd/k3bvcdtrack.cpp:218
 #, kde-format
@@ -3491,87 +3636,88 @@ msgstr "الملفّ %1 فارغ."
 msgid ""
 "This looks like an elementary video stream but a multiplexed program stream "
 "was required."
-msgstr ""
+msgstr "يبدو هذا تدفق فيديو أساسيًا لكن التدفق المطلوب هو تدفق برنامج مجمّع."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:98
 #, kde-format
 msgid ""
 "This looks like an elementary audio stream but a multiplexed program stream "
 "was required."
-msgstr ""
+msgstr "يبدو هذا تدفق صوت أساسيًا لكن التدفق المطلوب هو تدفق برنامج مجمّع."
 
 #: projects/videocd/mpeginfo/k3bmpeginfo.cpp:103
 #, kde-format
 msgid ""
 "This looks like a RIFF header but a plain multiplexed program stream was "
 "required."
-msgstr ""
+msgstr "يبدو هذا ترويسة RIFF لكن التدفق المطلوب هو تدفق برنامج مجمّع عادي."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:97
 #, kde-kuit-format
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
-msgstr ""
+msgstr "لا يمكن إنشاء مجلد مؤقت غير صالح <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:105
 #, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
-msgstr ""
+msgstr "لا يمكن إنشاء مجلد مؤقت <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:112
 #, kde-kuit-format
 msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
-msgstr ""
+msgstr "عثر على إدخال غير صالح في مجلد VIDEO_TS <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:120
 #, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
-msgstr ""
+msgstr "لا يمكن ربط ملف مؤقت في مجلد <filename>%1</filename>."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
 msgid "The project does not contain all necessary Video DVD files."
-msgstr ""
+msgstr "المشروع لا يحتوي على جميع ملفات فيديو دي في دي الضرورية."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."
 msgstr ""
+"على الأرجح، لن يكون قرص الـ DVD الناتج قابلاً للتشغيل على مشغل DVD Hi-Fi."
 
 #: projects/videodvd/k3bvideodvdjob.cpp:43
 #, kde-format
 msgid "Creating Video DVD Image File"
-msgstr ""
+msgstr "إنشاء ملف صورة فيديو دي في دي"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:46
 #, kde-format
 msgid "Writing Video DVD"
-msgstr ""
+msgstr "كتابة فيديو دي في دي"
 
 #: projects/videodvd/k3bvideodvdjob.cpp:56
 #, kde-format
 msgid "ISO 9660/Udf Filesystem (Size: %1)"
-msgstr ""
+msgstr "نظام ملفات ISO 9660/Udf (الحجم: %1)"
 
 #: tools/k3bcddb.cpp:37
 #, kde-format
 msgid "Multiple CDDB Entries Found"
-msgstr ""
+msgstr "عثر على عدة إدخالات CDDB"
 
 #: tools/k3bcddb.cpp:39
 #, kde-format
 msgid "K3b found multiple or inexact CDDB entries. Please select one."
-msgstr ""
+msgstr "وجد كي3بي عدة إدخالات CDDB أو إدخالات غير دقيقة. رجاءً، اختر واحدًا."
 
 #: tools/k3bdevicemodel.cpp:132
 #, kde-format
 msgid "Analyzing medium..."
-msgstr ""
+msgstr "تحليل الوسيط..."
 
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
 msgid "Device Selection"
-msgstr ""
+msgstr "اختيار الجهاز"
 
 #: tools/k3bdeviceselectiondialog.cpp:39
 #, kde-format
@@ -3581,17 +3727,17 @@ msgstr "يرجى اختيار جهاز:"
 #: tools/k3bmd5job.cpp:83
 #, kde-format
 msgid "Could not find file %1"
-msgstr ""
+msgstr "لم يمكن إيجاد الملف %1"
 
 #: tools/k3bmd5job.cpp:228
 #, kde-format
 msgid "Error while reading from file %1"
-msgstr ""
+msgstr "خطأ أثناء القراءة من الملف %1"
 
 #: tools/k3bmediacache.cpp:126 tools/k3bmediacache.cpp:367
 #, kde-format
 msgid "CDDB Lookup"
-msgstr ""
+msgstr "بحث CDDB"
 
 #: tools/k3bmedium.cpp:313
 #, kde-format
@@ -3616,12 +3762,12 @@ msgstr "CD فيديو"
 #: tools/k3bmedium.cpp:326
 #, kde-format
 msgid "Appendable Data %1"
-msgstr ""
+msgstr "بيانات قابلة للإضافة %1"
 
 #: tools/k3bmedium.cpp:329
 #, kde-format
 msgid "Complete Data %1"
-msgstr ""
+msgstr "بيانات كاملة %1"
 
 #: tools/k3bmedium.cpp:333
 #, kde-format
@@ -3631,7 +3777,7 @@ msgstr "فارغ"
 #: tools/k3bmedium.cpp:346
 #, kde-format
 msgid "No medium information"
-msgstr ""
+msgstr "لا توجد معلومات عن الوسيط"
 
 #: tools/k3bmedium.cpp:350
 #, kde-format
@@ -3646,7 +3792,7 @@ msgstr "وسيط %1 فارغ"
 #: tools/k3bmedium.cpp:395
 #, kde-format
 msgid "Appendable %1 medium"
-msgstr ""
+msgstr "وسيط %1 قابل للإضافة"
 
 #: tools/k3bmedium.cpp:398
 #, kde-format
@@ -3657,15 +3803,23 @@ msgstr "وسيط %1 مكتمل"
 #, kde-format
 msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%2 في %1 مسارات"
+msgstr[1] "%2 في مسار واحد"
+msgstr[2] "%2 في مسارين"
+msgstr[3] "%2 في %1 مسارات"
+msgstr[4] "%2 في %1 مسارًا"
+msgstr[5] "%2 في %1 مسار"
 
 #: tools/k3bmedium.cpp:419
 #, kde-format
 msgid " and %1 session"
 msgid_plural " and %1 sessions"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] " "
+msgstr[1] " وجلسة واحدة"
+msgstr[2] " وجلستين"
+msgstr[3] " و%1 جلسات"
+msgstr[4] " و%1 جلسة"
+msgstr[5] " و%1 جلسة"
 
 #: tools/k3bmedium.cpp:424
 #, kde-format
@@ -3683,7 +3837,7 @@ msgctxt ""
 "To be shown when a DVD or Blu-ray is required but another type of medium is "
 "inserted."
 msgid "DVD or Blu-ray"
-msgstr ""
+msgstr "دي في دي أو بلو-راي"
 
 #: tools/k3bmedium.cpp:598
 #, kde-format
@@ -3717,7 +3871,7 @@ msgstr "DVD+DL"
 #: tools/k3bmedium.cpp:608
 #, kde-format
 msgid "rewritable medium"
-msgstr ""
+msgstr "وسيط قابل لإعادة الكتابة"
 
 #: tools/k3bmedium.cpp:611
 #, kde-format
@@ -3731,12 +3885,12 @@ msgctxt ""
 "To be shown when a specific type of medium is required but another type of "
 "medium is inserted."
 msgid "suitable medium"
-msgstr ""
+msgstr "وسيط مناسب"
 
 #: tools/k3bmedium.cpp:618
 #, kde-format
 msgid "Medium in %1 is not a %2."
-msgstr ""
+msgstr "الوسيط في %1 ليس %2."
 
 #: tools/k3bmedium.cpp:623
 #, kde-format
@@ -3748,7 +3902,7 @@ msgstr "فارغ"
 #, kde-format
 msgctxt "To be shown when an empty or appendable medium is required"
 msgid "empty or appendable"
-msgstr ""
+msgstr "فارغ أو قابل للإضافة"
 
 #: tools/k3bmedium.cpp:627
 #, kde-format
@@ -3760,98 +3914,98 @@ msgstr "ليس فارغا"
 #, kde-format
 msgctxt "To be shown when the state of the inserted medium is not suitable."
 msgid "suitable"
-msgstr ""
+msgstr "مناسب"
 
 #: tools/k3bmedium.cpp:631
 #, kde-format
 msgid "Medium in %1 is not %2."
-msgstr ""
+msgstr "الوسيط في %1 ليس %2."
 
 #: tools/k3bmedium.cpp:634
 #, kde-format
 msgid "Capacity of the medium in %1 is smaller than required."
-msgstr ""
+msgstr "سعة الوسيط في %1 أصغر من المطلوب."
 
 #: tools/k3bmedium.cpp:683
 #, kde-format
 msgid "Please insert an empty medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا فارغًا في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:685
 #, kde-format
 msgid "Please insert an empty medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا فارغًا"
 
 #: tools/k3bmedium.cpp:690
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:692
 #, kde-format
 msgid "Please insert an empty DVD or Blu-ray medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا"
 
 #: tools/k3bmedium.cpp:696
 #, kde-format
 msgid "Please insert an empty Blu-ray medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط Blu-ray فارغًا في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:698
 #, kde-format
 msgid "Please insert an empty Blu-ray medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط Blu-ray فارغًا"
 
 #: tools/k3bmedium.cpp:702
 #, kde-format
 msgid "Please insert an empty CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط CD فارغًا في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:704
 #, kde-format
 msgid "Please insert an empty CD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط CD فارغًا"
 
 #: tools/k3bmedium.cpp:708
 #, kde-format
 msgid "Please insert an empty DVD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD فارغًا في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:710
 #, kde-format
 msgid "Please insert an empty DVD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD فارغًا"
 
 #: tools/k3bmedium.cpp:714
 #, kde-format
 msgid "Please insert an empty DVD-DL medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD-DL فارغًا في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:716
 #, kde-format
 msgid "Please insert an empty DVD-DL medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD-DL فارغًا"
 
 #: tools/k3bmedium.cpp:720
 #, kde-format
 msgid ""
 "Please insert an empty medium of size %1 or larger into drive<p><b>%2</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا فارغًا بحجم %1 أو أكبر في محرك الأقراص<p><b>%2</b>"
 
 #: tools/k3bmedium.cpp:723
 #, kde-format
 msgid "Please insert an empty medium of size %1 or larger"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا فارغًا بحجم %1 أو أكبر"
 
 #: tools/k3bmedium.cpp:729
 #, kde-format
 msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:731
 #, kde-format
 msgid "Please insert an empty or appendable medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا فارغًا أو قابلاً للإضافة"
 
 #: tools/k3bmedium.cpp:735
 #, kde-format
@@ -3859,143 +4013,150 @@ msgid ""
 "Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
 "%1</b>"
 msgstr ""
+"رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>"
+"%1</b>"
 
 #: tools/k3bmedium.cpp:737
 #, kde-format
 msgid "Please insert an empty or appendable DVD or Blu-ray medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا أو قابلاً للإضافة"
 
 #: tools/k3bmedium.cpp:741
 #, kde-format
 msgid ""
 "Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
 msgstr ""
+"رجاءً، أدخل وسيط Blu-ray فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:743
 #, kde-format
 msgid "Please insert an empty or appendable Blu-ray medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط Blu-ray فارغًا أو قابلاً للإضافة"
 
 #: tools/k3bmedium.cpp:747
 #, kde-format
 msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط CD فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:749
 #, kde-format
 msgid "Please insert an empty or appendable CD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط CD فارغًا أو قابلاً للإضافة"
 
 #: tools/k3bmedium.cpp:753
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:755
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD فارغًا أو قابلاً للإضافة"
 
 #: tools/k3bmedium.cpp:759
 #, kde-format
 msgid ""
 "Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
 msgstr ""
+"رجاءً، أدخل وسيط DVD-DL فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:761
 #, kde-format
 msgid "Please insert an empty or appendable DVD-DL medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط DVD-DL فارغًا أو قابلاً للإضافة"
 
 #: tools/k3bmedium.cpp:767
 #, kde-format
 msgid "Please insert a non-empty medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا غير فارغ في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:769
 #, kde-format
 msgid "Please insert a non-empty medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا غير فارغ"
 
 #: tools/k3bmedium.cpp:773
 #, kde-format
 msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
 msgstr ""
+"رجاءً، أدخل وسيطًا غير فارغ وقابلاً لإعادة الكتابة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:775
 #, kde-format
 msgid "Please insert a non-empty rewritable medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا غير فارغ وقابلاً لإعادة الكتابة"
 
 #: tools/k3bmedium.cpp:781
 #, kde-format
 msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا قابلاً لإعادة الكتابة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:783
 #, kde-format
 msgid "Please insert a rewritable medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا قابلاً لإعادة الكتابة"
 
 #: tools/k3bmedium.cpp:789 tools/k3bmedium.cpp:835
 #, kde-format
 msgid "Please insert a suitable medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا مناسبًا في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:791 tools/k3bmedium.cpp:837
 #, kde-format
 msgid "Please insert a suitable medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيطًا مناسبًا"
 
 #: tools/k3bmedium.cpp:804
 #, kde-format
 msgid "Please insert a Video CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط قرص فيديو مدمج (Video CD) في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:806
 #, kde-format
 msgid "Please insert a Video CD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط قرص فيديو مدمج (Video CD)"
 
 #: tools/k3bmedium.cpp:810
 #, kde-format
 msgid "Please insert a Video DVD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط فيديو دي في دي في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:812
 #, kde-format
 msgid "Please insert a Video DVD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط فيديو دي في دي"
 
 #: tools/k3bmedium.cpp:816
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium into drive<p><b>%1</b>"
 msgstr ""
+"رجاءً، أدخل وسيط قرص مدمج بوضع مختلط (Mixed Mode CD) في محرك الأقراص<p><b>%1</"
+"b>"
 
 #: tools/k3bmedium.cpp:818
 #, kde-format
 msgid "Please insert a Mixed Mode CD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط قرص مدمج بوضع مختلط (Mixed Mode CD)"
 
 #: tools/k3bmedium.cpp:822
 #, kde-format
 msgid "Please insert an Audio CD medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط قرص صوتي مدمج (Audio CD) في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:824
 #, kde-format
 msgid "Please insert an Audio CD medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط قرص صوتي مدمج (Audio CD)"
 
 #: tools/k3bmedium.cpp:828
 #, kde-format
 msgid "Please insert a Data medium into drive<p><b>%1</b>"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط بيانات في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:830
 #, kde-format
 msgid "Please insert a Data medium"
-msgstr ""
+msgstr "رجاءً، أدخل وسيط بيانات"
 
 #: tools/k3bstdguiitems.cpp:19
 #, kde-format
@@ -4010,16 +4171,20 @@ msgid ""
 "speed or whether your system is able to write on-the-fly.<p><b>Caution:</b> "
 "DVD+R(W) does not support simulated writing."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيقوم كي3بي بجميع خطوات الكتابة مع إطفاء الليزر."
+"<p>هذا مفيد، على سبيل المثال، لاختبار سرعة كتابة أعلى أو ما إذا كان نظامك "
+"قادرًا على الكتابة أثناء التنقل.<p><b>تحذير:</b> DVD+R(W) لا يدعم الكتابة "
+"المحاكاة."
 
 #: tools/k3bstdguiitems.cpp:25
 #, kde-format
 msgid "Only simulate the writing process"
-msgstr ""
+msgstr "محاكاة عملية الكتابة فقط"
 
 #: tools/k3bstdguiitems.cpp:31
 #, kde-format
 msgid "Disk at once"
-msgstr ""
+msgstr "القرص دفعة واحدة (Disk at once)"
 
 #: tools/k3bstdguiitems.cpp:32
 #, kde-format
@@ -4029,21 +4194,25 @@ msgid ""
 "where possible.<p><b>Caution:</b> Track pregaps with a length other than 2 "
 "seconds are only supported in DAO mode."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيكتب كي3بي القرص المدمج في وضع 'القرص دفعة واحدة' "
+"بالمقارنة مع 'المسار دفعة واحدة' (TAO).<p>يوصى دائمًا باستخدام DAO حيثما أمكن."
+"<p><b>تحذير:</b> فجوات المسارات ذات الطول المختلف عن ثانيتين مدعومة فقط في "
+"وضع DAO."
 
 #: tools/k3bstdguiitems.cpp:37
 #, kde-format
 msgid "Write in disk at once mode"
-msgstr ""
+msgstr "الكتابة في وضع القرص دفعة واحدة"
 
 #: tools/k3bstdguiitems.cpp:43
 #, kde-format
 msgid "Use Burnfree"
-msgstr ""
+msgstr "استخدام Burnfree"
 
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
 msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
-msgstr ""
+msgstr "مكّن Burnfree (أو Just Link) لتجنب نقص المخزن المؤقت"
 
 #: tools/k3bstdguiitems.cpp:45
 #, kde-format
@@ -4061,11 +4230,22 @@ msgid ""
 "<em>Burnproof</em>, but has since been renamed when it became part of the "
 "MMC standard."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيقوم كي3بي بتمكين <em>Burnfree</em> (أو <em>Just "
+"Link</em>). هذه ميزة في ناسخ الأقراص المدمجة (CD) التي تتجنب نقص المخزن "
+"المؤقت.<p>بدون <em>burnfree</em>، إذا لم يتمكن الناسخ من الحصول على المزيد "
+"من البيانات، فسيحدث نقص في المخزن المؤقت، حيث أن الناسخ يحتاج إلى تدفق مستمر "
+"من البيانات لكتابة القرص المدمج.<p>مع <em>burnfree</em>، يمكن للناسخ أن "
+"<em>يؤشر</em> الموضع الحالي لليزر والعودة إليه عندما يمتلئ المخزن المؤقت مرة "
+"أخرى؛ ولكن، بما أن هذا يعني وجود فجوات صغيرة في البيانات على القرص المدمج، "
+"<b>فإننا نوصي بشدة باختيار سرعة كتابة مناسبة لمنع استخدام burnfree، خاصة "
+"للأقراص الصوتية المدمجة</b> (في أسوأ الأحوال، قد يسمع المرء الفجوة)."
+"<p><em>Burnfree</em> كان معروفًا سابقًا باسم <em>Burnproof</em>، ولكن أعيد "
+"تسميته منذ أن أصبح جزءًا من معيار MMC."
 
 #: tools/k3bstdguiitems.cpp:64
 #, kde-format
 msgid "Only create image"
-msgstr ""
+msgstr "إنشاء صورة فقط"
 
 #: tools/k3bstdguiitems.cpp:65
 #, kde-format
@@ -4074,16 +4254,19 @@ msgid ""
 "actual writing.<p>The image can later be written to a CD/DVD with most "
 "current writing programs (including K3b of course)."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيقوم كي3بي بإنشاء صورة فقط ولن يقوم بأي كتابة "
+"فعلية.<p>يمكن كتابة الصورة لاحقًا على قرص مدمج/دي في دي باستخدام معظم برامج "
+"الكتابة الحالية (بما في ذلك كي3بي بالطبع)."
 
 #: tools/k3bstdguiitems.cpp:69
 #, kde-format
 msgid "Only create an image"
-msgstr ""
+msgstr "إنشاء صورة فقط"
 
 #: tools/k3bstdguiitems.cpp:75
 #, kde-format
 msgid "Create image"
-msgstr ""
+msgstr "إنشاء صورة"
 
 #: tools/k3bstdguiitems.cpp:76
 #, kde-format
@@ -4094,16 +4277,20 @@ msgid ""
 "writing on-the-fly should work on most systems, make sure the data is sent "
 "to the writer fast enough."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيقوم كي3بي بإنشاء صورة قبل كتابة الملفات على القرص "
+"المدمج/دي في دي. وإلا، ستكتب البيانات <em>أثناء التنقل</em>، أي لن تنشأ صورة "
+"وسيطة.<p><b>تحذير:</b> على الرغم من أن الكتابة أثناء التنقل يجب أن تعمل على "
+"معظم الأنظمة، تأكد من إرسال البيانات إلى الناسخ بالسرعة الكافية."
 
 #: tools/k3bstdguiitems.cpp:81 tools/k3bstdguiitems.cpp:103
 #, kde-format
 msgid "<p>It is recommended to try a simulation first."
-msgstr ""
+msgstr "<p>يوصى بتجربة المحاكاة أولاً."
 
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
 msgid "Cache the data to be written on the harddisk"
-msgstr ""
+msgstr "تخزين البيانات المراد كتابتها على القرص الصلب"
 
 #: tools/k3bstdguiitems.cpp:88
 #, kde-format
@@ -4116,16 +4303,18 @@ msgid ""
 "<p>If this option is checked, K3b will remove any created images after the "
 "writing has finished.<p>Uncheck this if you want to keep the images."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيقوم كي3بي بإزالة أي صور أنشئت بعد انتهاء الكتابة."
+"<p>ألغ اختيار هذا إذا كنت تريد الاحتفاظ بالصور."
 
 #: tools/k3bstdguiitems.cpp:92
 #, kde-format
 msgid "Remove images from disk when finished"
-msgstr ""
+msgstr "إزالة الصور من القرص عند الانتهاء"
 
 #: tools/k3bstdguiitems.cpp:98
 #, kde-format
 msgid "On the fly"
-msgstr ""
+msgstr "أثناء التنقل"
 
 #: tools/k3bstdguiitems.cpp:99
 #, kde-format
@@ -4134,21 +4323,24 @@ msgid ""
 "the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
 "work on most systems, make sure the data is sent to the writer fast enough."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، لن يقوم كي3بي بإنشاء صورة أولاً ولكنه سيكتب الملفات "
+"مباشرةً على القرص المدمج/دي في دي.<p><b>تحذير:</b> على الرغم من أن هذا يجب أن "
+"يعمل على معظم الأنظمة، تأكد من إرسال البيانات إلى الناسخ بالسرعة الكافية."
 
 #: tools/k3bstdguiitems.cpp:104
 #, kde-format
 msgid "Write files directly to CD/DVD without creating an image"
-msgstr ""
+msgstr "كتابة الملفات مباشرةً على القرص المدمج/دي في دي دون إنشاء صورة"
 
 #: tools/k3bstdguiitems.cpp:110
 #, kde-format
 msgid "Write CD-Text"
-msgstr ""
+msgstr "كتابة نص القرص المدمج"
 
 #: tools/k3bstdguiitems.cpp:111
 #, kde-format
 msgid "Create CD-Text entries"
-msgstr ""
+msgstr "إنشاء إدخالات نص القرص المدمج"
 
 #: tools/k3bstdguiitems.cpp:112
 #, kde-format
@@ -4161,11 +4353,18 @@ msgid ""
 "in any CD player it is never a bad idea to enable this (if you specify CD-"
 "Text data.)"
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيستخدم كي3بي بعض المساحة غير المستخدمة في القرص "
+"الصوتي المدمج لتخزين معلومات إضافية، مثل اسم الفنان، أو عنوان القرص المدمج."
+"<p>نص القرص المدمج (CD-Text) هو امتداد لمعيار القرص الصوتي المدمج الذي قدمته "
+"شركة سوني.<p>لن يكون نص القرص المدمج قابلاً للاستخدام إلا على مشغلات الأقراص "
+"المدمجة التي تدعم هذا الامتداد (خاصة مشغلات الأقراص المدمجة في السيارات)."
+"<p>بما أن القرص المدمج المعزز بنص القرص المدمج سيعمل في أي مشغل أقراص مدمجة، "
+"فليس من السيء أبدًا تمكينه (إذا حددت بيانات نص القرص المدمج)."
 
 #: tools/k3bstdguiitems.cpp:131
 #, kde-format
 msgid "Set the paranoia level for reading audio CDs"
-msgstr ""
+msgstr "تعيين مستوى 'البرانويا' لقراءة الأقراص الصوتية المدمجة"
 
 #: tools/k3bstdguiitems.cpp:132
 #, kde-format
@@ -4176,16 +4375,21 @@ msgid ""
 "read audio data.</li><li>3: Like 2 but with additional scratch detection and "
 "repair.</li></ul><p><b>The extraction speed reduces from 0 to 3.</b>"
 msgstr ""
+"<p>يعين وضع التصحيح لاستخراج الصوت الرقمي.<ul><li>0: لا يوجد فحص، البيانات "
+"تنسخ مباشرة من محرك الأقراص. <li>1: إجراء قراءة متداخلة لتجنب التموج.</"
+"li><li>2: مثل 1 ولكن مع فحوصات إضافية للبيانات الصوتية المقروءة.</li><li>3: "
+"مثل 2 ولكن مع كشف وإصلاح الخدوش الإضافي.</li></ul><p><b>تخفض سرعة الاستخراج "
+"من 0 إلى 3.</b>"
 
 #: tools/k3bstdguiitems.cpp:144
 #, kde-format
 msgid "Start multisession CD"
-msgstr ""
+msgstr "بدء قرص مدمج متعدد الجلسات"
 
 #: tools/k3bstdguiitems.cpp:145
 #, kde-format
 msgid "Do not close the disk to allow additional sessions to be added later"
-msgstr ""
+msgstr "لا تغلق القرص للسماح بإضافة جلسات إضافية لاحقًا"
 
 #: tools/k3bstdguiitems.cpp:146
 #, kde-format
@@ -4194,16 +4398,18 @@ msgid ""
 "temporary table of contents.</p><p>This allows further sessions to be "
 "appended to the CD later.</p>"
 msgstr ""
+"<p>إذا اخترت هذا الخيار، لن يقوم كي3بي بإغلاق القرص المدمج، وسيكتب جدول "
+"محتويات مؤقتًا.</p><p>يسمح هذا بإضافة جلسات أخرى إلى القرص المدمج لاحقًا.</p>"
 
 #: tools/k3bstdguiitems.cpp:155
 #, kde-format
 msgid "Normalize volume levels"
-msgstr ""
+msgstr "تطبيع مستويات الصوت"
 
 #: tools/k3bstdguiitems.cpp:156
 #, kde-format
 msgid "Adjust the volume levels of all tracks"
-msgstr ""
+msgstr "ضبط مستويات الصوت لجميع المسارات"
 
 #: tools/k3bstdguiitems.cpp:157
 #, kde-format
@@ -4214,16 +4420,21 @@ msgid ""
 "greatly from song to song.<p><b>Be aware that K3b currently does not support "
 "normalizing when writing on the fly.</b>"
 msgstr ""
+"<p>إذا اخترت هذا الخيار، سيقوم كي3بي بضبط مستوى الصوت لجميع المسارات إلى "
+"مستوى قياسي. هذا مفيد لأشياء مثل إنشاء المزيجات، حيث يمكن أن تسبب مستويات "
+"التسجيل المختلفة على ألبومات مختلفة في اختلاف الصوت بشكل كبير من أغنية لأخرى."
+"<p><b>كن على علم بأن كي3بي لا يدعم حاليًا التطبيع عند الكتابة أثناء التنقل.</"
+"b>"
 
 #: tools/k3bstdguiitems.cpp:169
 #, kde-format
 msgid "Verify written data"
-msgstr ""
+msgstr "تحقق من البيانات المكتوبة"
 
 #: tools/k3bstdguiitems.cpp:170
 #, kde-format
 msgid "Compare original with written data"
-msgstr ""
+msgstr "قارن البيانات الأصلية مع البيانات المكتوبة"
 
 #: tools/k3bstdguiitems.cpp:171
 #, kde-format
@@ -4232,6 +4443,8 @@ msgid ""
 "will compare the original source data with the written data to verify that "
 "the disk has been written correctly."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، فبعد كتابة القرص بنجاح سيقوم كي3بي بمقارنة البيانات "
+"المصدر الأصلية مع البيانات المكتوبة للتحقق من أن القرص كتب بشكل صحيح."
 
 #: tools/k3bstdguiitems.cpp:181
 #, kde-format
@@ -4241,7 +4454,7 @@ msgstr "تجاهل أخطاء القراءة"
 #: tools/k3bstdguiitems.cpp:182
 #, kde-format
 msgid "Skip unreadable audio sectors"
-msgstr ""
+msgstr "تخطي قطاعات الصوت غير القابلة للقراءة"
 
 #: tools/k3bstdguiitems.cpp:183
 #, kde-format
@@ -4251,6 +4464,10 @@ msgid ""
 "<p>Since audio CD Player are able to interpolate small errors in the data it "
 "is no problem to let K3b skip unreadable sectors."
 msgstr ""
+"<p>إذا اخترت هذا الخيار، ولم يستطع كي3بي قراءة قطاع صوت من القرص المدمج "
+"المصدر فسيتم استبداله بأصفار في النسخة الناتجة.<p>بما أن مشغلات الأقراص "
+"الصوتية المدمجة قادرة على استيفاء الأخطاء الصغيرة في البيانات، فلا مشكلة في "
+"ترك كي3بي يتخطى القطاعات غير القابلة للقراءة."
 
 #: videodvd/k3bvideodvd.cpp:292
 #, kde-format
@@ -4280,7 +4497,7 @@ msgstr "DTS"
 #: videodvd/k3bvideodvd.cpp:302
 #, kde-format
 msgid "unknown audio format"
-msgstr ""
+msgstr "تنسيق صوت غير معروف"
 
 #: videodvd/k3bvideodvd.cpp:313
 #, kde-format
@@ -4290,22 +4507,22 @@ msgstr "عادي"
 #: videodvd/k3bvideodvd.cpp:315
 #, kde-format
 msgid "For the visually impaired"
-msgstr ""
+msgstr "لضعاف البصر"
 
 #: videodvd/k3bvideodvd.cpp:317
 #, kde-format
 msgid "Director's comments 1"
-msgstr ""
+msgstr "تعليقات المخرج 1"
 
 #: videodvd/k3bvideodvd.cpp:319
 #, kde-format
 msgid "Director's comments 2"
-msgstr ""
+msgstr "تعليقات المخرج 2"
 
 #: videodvd/k3bvideodvd.cpp:321
 #, kde-format
 msgid "unknown audio code extension"
-msgstr ""
+msgstr "امتداد كود صوتي غير معروف"
 
 #: videodvd/k3bvideodvd.cpp:330
 #, kde-format
@@ -4320,59 +4537,59 @@ msgstr "ممتد"
 #: videodvd/k3bvideodvd.cpp:334
 #, kde-format
 msgid "unknown coding mode"
-msgstr ""
+msgstr "وضع ترميز غير معروف"
 
 #: videodvd/k3bvideodvd.cpp:345
 #, kde-format
 msgid "Caption with normal size characters"
-msgstr ""
+msgstr "تعليق مع أحرف بحجم عادي"
 
 #: videodvd/k3bvideodvd.cpp:347
 #, kde-format
 msgid "Caption with bigger size characters"
-msgstr ""
+msgstr "تعليق مع أحرف بحجم أكبر"
 
 #: videodvd/k3bvideodvd.cpp:349
 #, kde-format
 msgid "Caption for children"
-msgstr ""
+msgstr "تعليق للأطفال"
 
 #: videodvd/k3bvideodvd.cpp:351
 #, kde-format
 msgid "Closed caption with normal size characters"
-msgstr ""
+msgstr "تعليق مغلق مع أحرف بحجم عادي"
 
 #: videodvd/k3bvideodvd.cpp:353
 #, kde-format
 msgid "Closed caption with bigger size characters"
-msgstr ""
+msgstr "تعليق مغلق مع أحرف بحجم أكبر"
 
 #: videodvd/k3bvideodvd.cpp:355
 #, kde-format
 msgid "Closed caption for children"
-msgstr ""
+msgstr "تعليق مغلق للأطفال"
 
 #: videodvd/k3bvideodvd.cpp:357
 #, kde-format
 msgid "Forced caption"
-msgstr ""
+msgstr "تعليق إجباري"
 
 #: videodvd/k3bvideodvd.cpp:359
 #, kde-format
 msgid "Director's comments with normal size characters"
-msgstr ""
+msgstr "تعليقات المخرج مع أحرف بحجم عادي"
 
 #: videodvd/k3bvideodvd.cpp:361
 #, kde-format
 msgid "Director's comments with bigger size characters"
-msgstr ""
+msgstr "تعليقات المخرج مع أحرف بحجم أكبر"
 
 #: videodvd/k3bvideodvd.cpp:363
 #, kde-format
 msgid "Director's comments for children"
-msgstr ""
+msgstr "تعليقات المخرج للأطفال"
 
 #: videodvd/k3bvideodvd.cpp:365
 #, kde-format
 msgid "unknown code extension"
-msgstr ""
+msgstr "امتداد كود غير معروف"
