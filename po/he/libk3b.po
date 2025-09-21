@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2025-09-17 15:30+0300\n"
+"PO-Revision-Date: 2025-09-20 14:53+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Poedit 3.6\n"
+"X-Generator: Lokalize 25.08.0\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -621,12 +621,12 @@ msgstr "כותב לעותק שכפול %1"
 #: jobs/k3bclonejob.cpp:351
 #, kde-format
 msgid "Creating Clone Image"
-msgstr "יוצר תמונת שכפול"
+msgstr "נוצרת תמונת שכפול"
 
 #: jobs/k3bclonejob.cpp:354
 #, kde-format
 msgid "Simulating Clone Image"
-msgstr "מבצע הדמיית שכפול תמונת תקליטור"
+msgstr "מתבצעת הדמיית שכפול דמות תקליטור"
 
 #: jobs/k3bclonejob.cpp:356
 #, kde-format
@@ -636,12 +636,12 @@ msgstr "צורב תמונת תקליטור משוכפלת"
 #: jobs/k3bclonejob.cpp:359
 #, kde-format
 msgid "Simulating CD Cloning"
-msgstr "מבצע הדמיה לשכפול תקליטור CD"
+msgstr "מתבצעת הדמיה לשכפול תקליטור CD"
 
 #: jobs/k3bclonejob.cpp:361
 #, kde-format
 msgid "Cloning CD"
-msgstr "משכפל תקליטור CD"
+msgstr "תקליטור CD משוכפל"
 
 #: jobs/k3bclonejob.cpp:367
 #, fuzzy, kde-format
@@ -655,22 +655,22 @@ msgstr[3] ""
 #: jobs/k3bdatatrackreader.cpp:167
 #, kde-format
 msgid "Unable to open libdvdcss."
-msgstr "לא יכול לפתוח את libdvdcss."
+msgstr "לא ניתן לפתוח את libdvdcss."
 
 #: jobs/k3bdatatrackreader.cpp:176
 #, kde-format
 msgid "Retrieving all CSS keys. This might take a while."
-msgstr "מאחזר את כל מפתחות ה-CSS. זה עשוי לקחת זמן מה."
+msgstr "כל מפתחות ה־CSS מתקבלים. זה עשוי לקחת זמן מה."
 
 #: jobs/k3bdatatrackreader.cpp:179
 #, kde-format
 msgid "Failed to retrieve all CSS keys."
-msgstr "כישלון באחזור כל מפתחות ה-CSS."
+msgstr "משיכת כל מפתחות ה־CSS נכשלה."
 
 #: jobs/k3bdatatrackreader.cpp:180
 #, kde-format
 msgid "Video DVD decryption failed."
-msgstr "פיענוח וידאו DVD נכשל"
+msgstr "פענוח וידאו DVD נכשל."
 
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
@@ -1667,12 +1667,12 @@ msgstr "לא ניתן לקרוא את הרצועה %1."
 #: projects/mixedcd/k3bmixedjob.cpp:1088
 #, kde-format
 msgid "Could not open %1 for writing"
-msgstr "לא יכול לפתוח את %1 לכתיבה"
+msgstr "לא ניתן לפתוח את %1 לכתיבה"
 
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
 msgid "Error while decoding track %1."
-msgstr "שגיאה בזמן פיענוח רצועה %1."
+msgstr "שגיאה בפענוח רצועה %1."
 
 #: projects/audiocd/k3baudiojob.cpp:165
 #: projects/datacd/k3bdatapreparationjob.cpp:174
