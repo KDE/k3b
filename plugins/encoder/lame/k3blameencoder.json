@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[ar]": "سيباستيان تروغ",
                 "Name[bg]": "Sebastian Trueg",
                 "Name[ca@valencia]": "Sebastian Trueg",
                 "Name[ca]": "Sebastian Trueg",
@@ -44,6 +45,7 @@
         ],
         "Category": "AudioEncoder",
         "Description": "Encoding module to encode MPEG1 Layer III (MP3) files",
+        "Description[ar]": "وحدة ترميز لترميز ملفّات MPEG1 Layer III (MP3)",
         "Description[bg]": "Кодиращ модул за MPEG1 Layer III (mp3) файлове",
         "Description[bs]": "Modul kodiranja za kodiranje MPEG1 Layer III (mp3) datoteka",
         "Description[ca@valencia]": "Mòdul de codificació per a codificar fitxers MPEG 1 Layer III (MP3)",
@@ -92,6 +94,7 @@
         "Id": "k3blameencoder",
         "License": "GPL",
         "Name": "K3b Lame MP3 Encoder",
+        "Name[ar]": "كي3بي: مرمّز Lame MP3",
         "Name[bg]": "Lame Mp3 кодиране за K3b",
         "Name[bs]": "Lame Mp3 koder za K3b",
         "Name[ca@valencia]": "Codificador MP3 Lame de K3b",

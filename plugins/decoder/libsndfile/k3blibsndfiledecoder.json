@@ -4,6 +4,7 @@
             {
                 "Email": "mbedouet@no-log.org",
                 "Name": "Matthieu Bedouet",
+                "Name[ar]": "ماثيو بيدوت",
                 "Name[bg]": "Matthieu Bedouet",
                 "Name[ca@valencia]": "Matthieu Bedouet",
                 "Name[ca]": "Matthieu Bedouet",
@@ -105,6 +106,7 @@
         "Id": "k3blibsndfiledecoder",
         "License": "GPL",
         "Name": "K3b Libsndfile Decoder",
+        "Name[ar]": "كي3بي: مفكّك ترميز Libsndfile",
         "Name[bg]": "Libsndfile декодер за K3b",
         "Name[bs]": "K3b Libsndfile Dekoder",
         "Name[ca@valencia]": "Descodificador Libsndfile de K3b",
