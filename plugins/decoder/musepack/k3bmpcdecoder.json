@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[ar]": "سيباستيان تروغ",
                 "Name[bg]": "Sebastian Trueg",
                 "Name[ca@valencia]": "Sebastian Trueg",
                 "Name[ca]": "Sebastian Trueg",
@@ -106,6 +107,7 @@
         "Id": "k3bmpcdecoder",
         "License": "GPL",
         "Name": "K3b Musepack Decoder",
+        "Name[ar]": "كي3بي: مفكّك ترميز Musepack",
         "Name[bg]": "Musepack декодер за K3b",
         "Name[bs]": "Musepack dekoder za K3b",
         "Name[ca@valencia]": "Descodificador Musepack de K3b",

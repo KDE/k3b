@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[ar]": "سيباستيان تروغ",
                 "Name[bg]": "Sebastian Trueg",
                 "Name[ca@valencia]": "Sebastian Trueg",
                 "Name[ca]": "Sebastian Trueg",
@@ -92,6 +93,7 @@
         "Id": "k3bffmpegdecoder",
         "License": "GPL",
         "Name": "K3b FFMpeg Decoder",
+        "Name[ar]": "كي3بي: مفكّك ترميز FFMpeg",
         "Name[bg]": "Декодер K3b FFMpeg",
         "Name[bs]": "K3b FFMpeg Dekoder",
         "Name[ca@valencia]": "Descodificador FFmpeg de K3b",

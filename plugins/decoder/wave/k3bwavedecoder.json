@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[ar]": "سيباستيان تروغ",
                 "Name[bg]": "Sebastian Trueg",
                 "Name[ca@valencia]": "Sebastian Trueg",
                 "Name[ca]": "Sebastian Trueg",
@@ -44,6 +45,7 @@
         ],
         "Category": "AudioDecoder",
         "Description": "Decoding module to decode wave files",
+        "Description[ar]": "وحدة فكّ ترميز لفكّ ترميز ملفّات wave",
         "Description[bg]": "Декодер за wave файлове",
         "Description[bs]": "Modul dekodiranja za dekodiranje WAVE datoteke",
         "Description[ca@valencia]": "Mòdul de descodificació per a descodificar fitxers wave",
@@ -105,6 +107,7 @@
         "Id": "k3bwavedecoder",
         "License": "GPL",
         "Name": "K3b Wave Decoder",
+        "Name[ar]": "كي3بي: مفكّك ترميز Wave",
         "Name[bg]": "Wave декодер за K3b",
         "Name[bs]": "Wave dekoder za K3b",
         "Name[ca@valencia]": "Descodificador Wave de K3b",

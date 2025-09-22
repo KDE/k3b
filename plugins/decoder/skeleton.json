@@ -4,6 +4,7 @@
             {
                 "Email": "???",
                 "Name": "???",
+                "Name[ar]": "؟؟؟",
                 "Name[bg]": "???",
                 "Name[ca@valencia]": "???",
                 "Name[ca]": "???",
@@ -104,6 +105,7 @@
         "Id": "<name>",
         "License": "???",
         "Name": "K3b ??? Decoder",
+        "Name[ar]": "كي3بي: مفكّك ترميز ؟؟؟",
         "Name[bg]": "??? декодер (K3b)",
         "Name[bs]": "??? Dekoder za K3b",
         "Name[ca@valencia]": "Descodificador ??? de K3b",

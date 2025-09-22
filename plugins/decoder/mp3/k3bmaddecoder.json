@@ -4,6 +4,7 @@
             {
                 "Email": "trueg@k3b.org",
                 "Name": "Sebastian Trueg",
+                "Name[ar]": "سيباستيان تروغ",
                 "Name[bg]": "Sebastian Trueg",
                 "Name[ca@valencia]": "Sebastian Trueg",
                 "Name[ca]": "Sebastian Trueg",
@@ -44,6 +45,7 @@
         ],
         "Category": "AudioDecoder",
         "Description": "Decoding module to decode MPEG 1 Layer III files",
+        "Description[ar]": "وحدة فكّ ترميز لفكّ ترميز ملفّات MPEG 1 Layer III",
         "Description[bg]": "Декодер за MPEG 1 Layer III файлове",
         "Description[bs]": "Modul za dekodiranje MPEG‑1 datoteka sloja 3 (MP3)",
         "Description[ca@valencia]": "Mòdul de descodificació per a descodificar fitxers MPEG 1 Layer III",
@@ -105,6 +107,7 @@
         "Id": "k3bmaddecoder",
         "License": "GPL",
         "Name": "K3b MAD Decoder",
+        "Name[ar]": "كي3بي: مفكّك ترميز MAD",
         "Name[bg]": "MAD декодер за K3b",
         "Name[bs]": "K3b MAD Dekoder",
         "Name[ca@valencia]": "Descodificador MAD de K3b",
