@@ -71,7 +71,7 @@ public:
                 pos += 15;
             }
             else if ( ( pos = out.indexOf( "sox:      SoX_ng v" ) ) >= 0 ) {
-                pos += 17;
+                pos += 18;
             }
             else if ( ( pos = out.indexOf( "sox: SoX v" ) ) >= 0 ) {
                 pos += 10;
