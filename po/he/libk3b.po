@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2025-09-20 14:53+0300\n"
+"PO-Revision-Date: 2025-10-05 12:33+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -906,7 +906,7 @@ msgstr "K3b לא הצליח להוציא את עותק התקליטור, אנא 
 #: jobs/k3bdvdcopyjob.cpp:790
 #, kde-format
 msgid "Unsupported media type: %1"
-msgstr "סוג מדייה לא נתמחת:  %1"
+msgstr "סוג מדיה לא נתמך: %1"
 
 #: jobs/k3bdvdcopyjob.cpp:816 jobs/k3bdvdcopyjob.cpp:909
 #: projects/datacd/k3bdatajob.cpp:815 projects/datacd/k3bdatajob.cpp:935
@@ -2819,7 +2819,7 @@ msgstr "לא כל הצורבים תומכים בכל מצבי המחיקה."
 #: projects/k3bcdrecordwriter.cpp:879 projects/k3bcdrskinwriter.cpp:892
 #, kde-format
 msgid "Try again using 'Complete' erasing."
-msgstr "נסה עוד פעם עם מחיקה 'מלאה'"
+msgstr "נא לנסות עוד פעם עם מחיקה ‚מלאה’."
 
 #: projects/k3bcdrecordwriter.cpp:886
 #, kde-format
@@ -2839,22 +2839,22 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
-msgstr "אם אתה מריץ גרסה לא מוטלאת של cdrecord..."
+msgstr "אם רצה אצלך גרסה של cdrecord ללא טלאים…"
 
 #: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
-msgstr "...ותקלה זאת מתרחשת עם מדיה באיכות גבוהה..."
+msgstr "…והשגיאה הזאת מתרחשת גם עם מדיה באיכות גבוהה…"
 
 #: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
-msgstr "..וה-FAQ לא עוזר לך..."
+msgstr "…והשו״ת של K3B לא עוזר לך…"
 
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
-msgstr "...אנא כלול את פלט ניפוי השגיאות בדוח הבעיות."
+msgstr "…נא לכלול את פלט ניפוי השגיאות בדוח התקלה."
 
 #: projects/k3bcdrskinwriter.cpp:240
 #, kde-format
@@ -3256,13 +3256,13 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: projects/movixcd/k3bmovixjob.cpp:117
-#, fuzzy, kde-format
+#, kde-format
 msgid " – One copy"
 msgid_plural " – %1 copies"
-msgstr[0] "עותק  %1 -"
-msgstr[1] "- %1 עותקים"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "עותק אחד -"
+msgstr[1] "- שני עותקים"
+msgstr[2] " – %1 עותקים"
+msgstr[3] " – %1 עותקים"
 
 #: projects/videocd/k3bvcddoc.cpp:202 projects/videocd/k3bvcddoc.cpp:212
 #, kde-format
@@ -3270,8 +3270,8 @@ msgid ""
 "K3b will create a %1 image from the given MPEG files, but these files must "
 "already be in %1 format. K3b does not yet resample MPEG files."
 msgstr ""
-"היישום K3b יצור תמונת תקליטור %1 מקבצי MPEG הנתונים, אבל קבצים אלו חייבים "
-"כבר להיות בתבנית  %1. היישום K3b עדיין לא תומך בדגימה של קבצי MPEG."
+"היישום K3b ייצור תמונת תקליטור %1 מקובצי ה־MPEG שסופקו, אבל קבצים אלו חייבים "
+"כבר להיות בתסדיר %1. היישום K3b עדיין לא תומך בדגימה מחדש של קובצי MPEG."
 
 #: projects/videocd/k3bvcddoc.cpp:205
 #, kde-format

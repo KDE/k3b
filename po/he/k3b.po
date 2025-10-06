@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 02:31+0000\n"
-"PO-Revision-Date: 2025-09-17 14:45+0300\n"
+"PO-Revision-Date: 2025-10-05 12:34+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.0\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1587,7 +1587,7 @@ msgstr "יוצר פרוייקט eMovix חדש."
 #: k3b.cpp:1291
 #, kde-format
 msgid "Select Files to Add to Project"
-msgstr "בחר קבצים על מנת  להוסיף לפרויקט"
+msgstr "נא לבחור קבצים להוספה למיזם"
 
 #: k3b.cpp:1293
 #, fuzzy, kde-format
@@ -6734,8 +6734,8 @@ msgid ""
 "file names are restricted to 8.3 characters and no symbolic links or file "
 "permissions are supported."
 msgstr ""
-"מערכת הקבצים ממוטבת לשימוש עם מערכות ישנות. זה אומר ששמות קבצים "
-"מוגבליםלתבנית 8.3 תווים ואין תמיכה בקישורים סימבוליים או בהרשאות קבצים."
+"מערכת הקבצים ממוטבת לשימוש במערכות ישנות. זה אומר ששמות קבצים מוגבלים לתבנית "
+"8.3 תווים ואין תמיכה בקישורים סמליים או בהרשאות קבצים."
 
 #: projects/k3bdataimagesettingswidget.cpp:212
 #, kde-format
@@ -8296,7 +8296,7 @@ msgstr "%1 סיביות/שנייה"
 #: projects/k3bvcdtrackdialog.cpp:238
 #, kde-format
 msgid "May also look like | << on the remote control. "
-msgstr "עשוי להראות כמו  >> | על השלט רחוק."
+msgstr "עשוי להראות כמו >> | על השלט רחוק."
 
 #: projects/k3bvcdtrackdialog.cpp:239
 #, kde-format
