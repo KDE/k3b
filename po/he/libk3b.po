@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2025-10-05 12:33+0300\n"
+"PO-Revision-Date: 2025-10-07 11:44+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -41,12 +41,12 @@ msgstr "אוטומטי"
 #: core/k3bkjobbridge.cpp:98
 #, kde-format
 msgid "Source"
-msgstr ""
+msgstr "מקור"
 
 #: core/k3bkjobbridge.cpp:99
 #, kde-format
 msgid "Target"
-msgstr ""
+msgstr "יעד"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:107
 #, kde-format
@@ -132,13 +132,13 @@ msgid "Writing cue/bin Image"
 msgstr "כותב תמונת תקליטור מסוג cue/bin"
 
 #: jobs/k3bbinimagewritingjob.cpp:205 jobs/k3biso9660imagewritingjob.cpp:337
-#, fuzzy, kde-format
+#, kde-format
 msgid " - %1 Copy"
 msgid_plural " - %1 Copies"
-msgstr[0] "עותק %1 - "
-msgstr[1] "%1 עותקים - "
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "עותק - "
+msgstr[1] " - שני עותקים"
+msgstr[2] " - %1 עותקים"
+msgstr[3] " - %1 עותקים"
 
 #: jobs/k3bblankingjob.cpp:65 jobs/k3bblankingjob.cpp:153
 #, kde-format
