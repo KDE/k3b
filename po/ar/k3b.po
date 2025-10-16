@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 00:42+0000\n"
-"PO-Revision-Date: 2025-09-20 19:12+0400\n"
+"PO-Revision-Date: 2025-10-15 17:47+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -5587,7 +5587,7 @@ msgstr "الم&ستوى 2"
 #: projects/base_k3badvanceddataimagesettings.ui:248
 #, kde-format
 msgid "Level &3"
-msgstr "المستوى 3&"
+msgstr "المس&توى 3"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupRockRidgeSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:258
@@ -5728,7 +5728,7 @@ msgstr "معرّف ال&قرص:"
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:210
 #, kde-format
 msgid "Messa&ge:"
-msgstr "الرّسال&ة:"
+msgstr "الرّ&سالة:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupCdText)
 #: projects/base_k3baudiocdtextwidget.ui:11
@@ -9907,7 +9907,8 @@ msgstr ""
 "المسبقة. تحتوي معظم المسارات الصوتية على فجوة مسبقة فارغة لا تنتمي إلى "
 "المسار نفسه.</p><p>على الرغم من أن السلوك المبدئي لجميع برامج النسخ تقريبًا "
 "هو تضمين الفجوات المسبقة لمعظم الأقراص المدمجة، فإنه من المنطقي أكثر "
-"تجاهلها. على أي حال، عند إنشاء مشروع صوتي لـ كي3بي، ستُعاد الفجوات المسبقة."
+"تجاهلها. على أي حال، عند إنشاء مشروع صوتي لـ كي3بي، ستُعاد الفجوات المسبقة.</"
+"p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
