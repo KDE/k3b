@@ -1,9 +1,9 @@
 # Translation of libk3bdevice.po to Catalan
 # Copyright (C) 2004-2012 This_file_is_part_of_KDE
 #
-# Albert Astals Cid <aacid@kde.org>, 2004, 2005.
-# Marc Coll Carrillo <marcoll@ya.com>, 2006, 2008.
-# Josep M. Ferrer <txemaq@gmail.com>, 2009, 2012.
+# SPDX-FileCopyrightText: 2004, 2005 Albert Astals Cid <aacid@kde.org>
+# SPDX-FileCopyrightText: 2006, 2008 Marc Coll Carrillo <marcoll@ya.com>
+# SPDX-FileCopyrightText: 2009, 2012 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
