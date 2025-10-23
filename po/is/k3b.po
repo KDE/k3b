@@ -3,22 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Arnar Leosson <leosson@frisurf.no>, 2005.
 # Arnar Leósson <leosson@frisurf.no>, 2006.
-# Sveinn í Felli <sveinki@nett.is>, 2008, 2009, 2010, 2011, 2012, 2015, 2018, 2020.
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2015, 2018, 2020, 2025 Sveinn í Felli <sveinki@nett.is>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-09-17 00:42+0000\n"
-"PO-Revision-Date: 2020-04-04 14:41+0000\n"
-"Last-Translator: Sveinn í Felli <sv@fellsnet.is>\n"
-"Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2025-10-22 09:56+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
+"Language-Team: Icelandic\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=n != 1;\n"
 "\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2303,40 +2303,34 @@ msgid "Filter:"
 msgstr "Sía:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Allar skrár"
+msgstr "Allar skrár"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Skrár sem fundust"
+msgstr "Hljóðskrár"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Skrár sem fundust"
+msgstr "Wave-hljóðskrár"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Skrár sem fundust"
+msgstr "MP3-hljóðskrár"
 
 #: k3bfileview.cpp:79
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "forrit/x-ogg |Ogg Vorbis hljóðskrár"
+msgstr "Ogg Vorbis hljóðskrár"
 
 #: k3bfileview.cpp:80
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "vídeó/mpeg |MPEG vídeóskrár"
+msgstr "MPEG-vídeóskrár"
 
 #: k3bfileview.cpp:84
 #, kde-format
@@ -2489,7 +2483,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:105
 #, kde-format
@@ -2500,12 +2494,12 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Slátra ferlunum?"
 
 #: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Slátra"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -3849,28 +3843,24 @@ msgid "Choose Image File"
 msgstr "Veldu diskmynd"
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Diskmyndarskrá:"
+msgstr "Diskmyndarskrár"
 
 #: misc/k3bimagewritingdialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO-9660 diskmyndir"
+msgstr "ISO-9660 diskmyndir"
 
 #: misc/k3bimagewritingdialog.cpp:452
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue skrá:"
+msgstr "Cue-skrár"
 
 #: misc/k3bimagewritingdialog.cpp:453
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao TOC skrár og klónaðarar Cdrecord diskmyndir"
+msgstr "Cdrdao TOC-skrár og klónaðar Cdrecord-diskmyndir"
 
 #: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
@@ -4839,10 +4829,9 @@ msgid "Following programs could not be updated:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Tókst ekki að keyra aðgerðina: %1"
+msgstr "Tókst ekki að keyra aðgerðina<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
@@ -7793,10 +7782,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Myndamappan '%1'  er ekki til. Viltu að K3b búi hana til?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Búa til möppu"
+msgstr "Búa til möppu?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
