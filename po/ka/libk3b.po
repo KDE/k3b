@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2024-05-01 06:31+0200\n"
+"PO-Revision-Date: 2025-11-02 00:48+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.8\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -4210,6 +4210,18 @@ msgid ""
 "<em>Burnproof</em>, but has since been renamed when it became part of the "
 "MMC standard."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b ჩართავს <em>Burnree-ს</em> (ან <em>Just "
+"Link-ს</em>). ეს CD-ზე ჩამწერის ფუნქციაა, რომელიც ბუფერის არშევსებას იცილებს "
+"თავიდან.<p><em>burnfree</em>-ის გარეშე, თუ ჩამწერს ბუფერში მონაცემები არ "
+"ექნება, მოხდება ბუფერის არშევსება, რადგან ჩამწერს მონაცემების მუდმივი ნაკადი "
+"სჭირდება CD-ზე ჩასაწერად.<p><em>burnfree</em>-ით ჩამწერს შეუძლია, "
+"<em>დანიშნოს</em> ლაზერის მიმდინარე მდებარეობა და დაუბრუნდეს მას, როცა "
+"ბუფერი შეივსება, მაგრამ ეს ასევე ნიშნავს, რომ CD-ზე მცირე ხარვეზები "
+"იარსებებს, <b>რეკომენდებულია, რომ ყოველთვის აირჩიოთ შესაბამისი ჩაწერის "
+"სიჩქარე, რომ თავიდან აიცილოთ burnfree-ის გამოყენების საჭიროება. ეს "
+"განსაკუთრებით აუდიოCD-ებს ეხება</b> (ყველაზე ცუდ შემთხვევაში პაუზას გაიგებთ)."
+"<p><em>burnfree</em>-ს ადრე <em>burnproof</em> ერქვა, მაგრამ მას სახელი "
+"გადაერქვა, როცა ის MMC სტანდარტის ნაწილი გახდა."
 
 #: tools/k3bstdguiitems.cpp:64
 #, kde-format
@@ -4325,6 +4337,14 @@ msgid ""
 "in any CD player it is never a bad idea to enable this (if you specify CD-"
 "Text data.)"
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b გამოიყენებს აუდიოCD-ის ადგილს, რომელიც სხვა "
+"შემთხვევაში განკუთვნილია ისეთი დამატებითი ინფორმაციის შესანახად, როგორიცაა "
+"შემსრულებლის სახელი, ან CD-ის სახელი.<p>CD-Text აუდიოCD-ის სტანდარტის "
+"გაფართოებაა, რომელიც Sony-მა გამოიგონა.<p>CD-Text მხოლოდ მაშინაა სასარგებლო, "
+"თუ გაქვთ CD-ების დამკვრელი, რომელსაც ამ გაფართოების მხარდაჭერა გააჩნიათ "
+"(ძირითადად მანქანის CD-ის დამკვრელები).<p>იმის გამო, რომ CD-Text-ის შემცველი "
+"CD მაინც იმუშავებს ნებისმიერ დამკვრელზე, მისი ჩართვა ცუდი იდეა არაა (რა თქმა "
+"უნდა, თუ გაქვთ მითითებული CD-Text-ის მონაცემები.)"
 
 #: tools/k3bstdguiitems.cpp:131
 #, kde-format
@@ -4340,6 +4360,12 @@ msgid ""
 "read audio data.</li><li>3: Like 2 but with additional scratch detection and "
 "repair.</li></ul><p><b>The extraction speed reduces from 0 to 3.</b>"
 msgstr ""
+"<p>აყენებს კორექციის რეჟიმის ციფრული ხმის ამოღებისთვის.<ul><li>0: შემოწმების "
+"გარეშე. მონაცემები პირდაპირ კოპირდება დისკიდან. <li>1: მოხდება გადაფარული "
+"წაკითხვა თრთოლვის თავიდან ასაცილებლად.</li><li>2: პირველის მსგავსად, მაგრამ "
+"დამატებითი შემოწმებებით წაკითხული აუდიომონაცემებისთვის.</li><li>3: მეორის "
+"მსგავსად, მაგრამ დამატებითი შემოწმებებით ნაკაწრების აღმოსაჩენად და "
+"შესაკეთებლად.<li></ul><p><b>ამოღების სიჩქარე მცირდება 0-დან 3-მდე.</b>"
 
 #: tools/k3bstdguiitems.cpp:144
 #, kde-format
@@ -4383,6 +4409,12 @@ msgid ""
 "greatly from song to song.<p><b>Be aware that K3b currently does not support "
 "normalizing when writing on the fly.</b>"
 msgstr ""
+"<p>თუ ეს პარამეტრი მონიშნულია, K3b დაარეგულირებს ყველა ტრეკის მოცულობას "
+"სტანდარტულ დონეზე. ეს სასარგებლოა ისეთი საკითხებისთვის, როგორიცაა მიქსების "
+"შექმნა, სადაც სხვადასხვა ალბომზე ჩაწერის სხვადასხვა დონემ შეიძლება "
+"გამოიწვიოს ხმის მნიშვნელოვნად განსხვავება სიმღერიდან სიმღერამდე."
+"<p><b>გაითვალისწინეთ, რომ K3b ამჟამად არ უჭერს მხარს ნორმალიზებას ფრენის "
+"დროს წერისას.</b>"
 
 #: tools/k3bstdguiitems.cpp:169
 #, kde-format
