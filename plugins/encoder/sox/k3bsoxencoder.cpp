@@ -175,14 +175,18 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
                  this, SLOT(slotSoxOutputLine(QString)) );
 
         // input settings
-        *d->process << soxBin->path()
-                    << "-t" << "raw"    // raw samples
-                    << "-r" << "44100"  // samplerate
-                    << "-s";            // signed linear
-        if ( soxBin->version() >= K3b::Version( 13, 0, 0 ) )
+        *d->process << soxBin->path() << "-t" << "raw" // raw samples
+                    << "-r" << "44100";                // samplerate
+        if (soxBin->version() >= K3b::Version(14, 0, 0)) {
+          *d->process << "-e" << "signed-integer";
+          *d->process << "-b" << "16";
+        } else {
+          *d->process << "-s"; // signed linear
+          if (soxBin->version() >= K3b::Version(13, 0, 0))
             *d->process << "-2";
-        else
-            *d->process << "-w";        // 16-bit words
+          else
+            *d->process << "-w"; // 16-bit words
+        }
         *d->process << "-c" << "2"      // stereo
                     << "-";             // read from stdin
 
@@ -196,25 +200,52 @@ bool K3bSoxEncoder::initEncoderInternal( const QString& extension, const K3b::Ms
                         << "-c" << QString::number( grp.readEntry( "channels", DEFAULT_CHANNELS ) );
 
             int size = grp.readEntry( "data size", DEFAULT_DATA_SIZE );
-            *d->process << ( size == 8 ? QString("-b") : ( size == 32 ? QString("-l") : QString("-w") ) );
+            if (soxBin->version() >= K3b::Version(14, 0, 0)) {
+              *d->process << "-b" << QString::number(size);
+            } else {
+              *d->process << (size == 8 ? QString("-b")
+                                        : (size == 32 ? QString("-l")
+                                                      : QString("-w")));
+            }
 
-            QString encoding = grp.readEntry( "data encoding", DEFAULT_DATA_ENCODING );
-            if( encoding == "unsigned" )
+            const QString encoding =
+                grp.readEntry("data encoding", DEFAULT_DATA_ENCODING);
+            if (soxBin->version() >= K3b::Version(14, 0, 0)) {
+              if (encoding == "unsigned")
+                *d->process << "-e" << "unsigned-integer";
+              else if (encoding == "u-law")
+                *d->process << "-e" << "u-law";
+              else if (encoding == "A-law")
+                *d->process << "-e" << "a-law";
+              else if (encoding == "ADPCM")
+                *d->process << "-e" << "ms-adpcm";
+              else if (encoding == "IMA_ADPCM")
+                *d->process << "-e" << "ima-adpcm";
+              else if (encoding == "GSM")
+                *d->process << "-e" << "gsm-full-rate";
+              else if (encoding == "Floating-point")
+                *d->process << "-e" << "floating-point";
+              else
+                *d->process << "-e" << "signed-integer";
+
+            } else {
+              if (encoding == "unsigned")
                 *d->process << "-u";
-            else if( encoding == "u-law" )
+              else if (encoding == "u-law")
                 *d->process << "-U";
-            else if( encoding == "A-law" )
+              else if (encoding == "A-law")
                 *d->process << "-A";
-            else if( encoding == "ADPCM" )
+              else if (encoding == "ADPCM")
                 *d->process << "-a";
-            else if( encoding == "IMA_ADPCM" )
+              else if (encoding == "IMA_ADPCM")
                 *d->process << "-i";
-            else if( encoding == "GSM" )
+              else if (encoding == "GSM")
                 *d->process << "-g";
-            else if( encoding == "Floating-point" )
+              else if (encoding == "Floating-point")
                 *d->process << "-f";
-            else
+              else
                 *d->process << "-s";
+            }
         }
 
         *d->process << d->fileName;
