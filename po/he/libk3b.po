@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-11-28 00:39+0000\n"
-"PO-Revision-Date: 2025-10-07 11:44+0300\n"
+"PO-Revision-Date: 2025-11-02 14:33+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.08.2\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -295,14 +295,14 @@ msgid "Found CDDB entry (%1 - %2)."
 msgstr "נמצאה ב-CDDB רשומה (%1 - %2)."
 
 #: jobs/k3bcdcopyjob.cpp:441
-#, fuzzy, kde-format
+#, kde-format
 msgid "No CDDB entry found."
 msgstr "לא נמצאה רשומת CDDB."
 
 #: jobs/k3bcdcopyjob.cpp:444
-#, fuzzy, kde-format
+#, kde-format
 msgid "CDDB error (%1)."
-msgstr "שגיאה (%1) ב-CDDB."
+msgstr "שגיאת CDDB‏ (%1)."
 
 #: jobs/k3bcdcopyjob.cpp:460
 #, kde-format
@@ -317,14 +317,14 @@ msgid "CD-Text"
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:467
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use CD-Text data"
-msgstr "השתמש במידע CD-TEXT"
+msgstr "להשתמש בנתוני CD-Text"
 
 #: jobs/k3bcdcopyjob.cpp:468
-#, fuzzy, kde-format
+#, kde-format
 msgid "Use CDDB entry"
-msgstr "השתמש בערך Cddb"
+msgstr "להשתמש ברשומת CDDB"
 
 #: jobs/k3bcdcopyjob.cpp:474 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
@@ -340,9 +340,9 @@ msgid "Specified an unusable temporary path. Using default."
 msgstr "צוין נתיב זמני לא שמיש. משתמש בברירת המחדל."
 
 #: jobs/k3bcdcopyjob.cpp:544
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to create temporary folder '%1'."
-msgstr "לא מסוגל ליצור תיקייה זמנית '%1'."
+msgstr "לא ניתן ליצור את התיקייה הזמנית ‚%1’."
 
 #: jobs/k3bcdcopyjob.cpp:551
 #, fuzzy, kde-format
@@ -467,14 +467,14 @@ msgstr "היישום K3b לא הצליח למחוק את הדיסק."
 #: jobs/k3bcdcopyjob.cpp:1091 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
 #: projects/mixedcd/k3bmixedjob.cpp:554
-#, fuzzy, kde-format
+#, kde-format
 msgid "Please reload the medium and press 'OK'"
-msgstr "אנא טען מחדש את המדיה ולחץ על אישור"
+msgstr "נא לטעון מחדש את אמצעי האחסון וללחוץ על ‚אישור’"
 
 #: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:262
-#, fuzzy, kde-format
+#, kde-format
 msgid "Failed to reload the medium"
-msgstr "טוען מחדש את המדיה"
+msgstr "טעינת אמצעי האחסון מחדש נכשלה"
 
 #: jobs/k3bcdcopyjob.cpp:1106 projects/audiocd/k3baudiojob.cpp:687
 #, kde-format
@@ -805,14 +805,14 @@ msgid "Cannot copy encrypted DVDs."
 msgstr "לא מסוגל להעתיק תקליטורי DVD מקודדים."
 
 #: jobs/k3bdvdcopyjob.cpp:236
-#, fuzzy, kde-format
+#, kde-format
 msgid "The writer does not support writing Double Layer DVDs."
-msgstr "הצורב לא תומך בצריבת תקליטורי DVD מסוג שכבה כפולה."
+msgstr "הצורב לא תומך בצריבת תקליטורי DVD עם שכבה כפולה."
 
 #: jobs/k3bdvdcopyjob.cpp:242
-#, fuzzy, kde-format
+#, kde-format
 msgid "This growisofs version does not support writing Double Layer DVDs."
-msgstr "הצורב לא תומך בצריבת תקליטורי DVD מסוג שכבה כפולה."
+msgstr "גרסת ה־growisofs לא תומכת בצריבת תקליטורי DVD עם שכבה כפולה."
 
 #: jobs/k3bdvdcopyjob.cpp:260
 #, kde-format
@@ -820,9 +820,9 @@ msgid "K3b does not support copying multi-session DVD or Blu-ray disks."
 msgstr "K3b לא תומך בהעתקת מצב רב-צבירות בתקליטורים - DVD או ב - Blue-ray."
 
 #: jobs/k3bdvdcopyjob.cpp:282
-#, fuzzy, kde-format
+#, kde-format
 msgid "K3b relies on the size saved in the ISO 9660 header."
-msgstr "היישום K3b סומך על הגודל הנשמר בראשית של ISO9660."
+msgstr "היישום K3b מסתמך על הגודל שנשמר בכותרת ה־ISO 9660."
 
 #: jobs/k3bdvdcopyjob.cpp:283
 #, kde-format
@@ -833,9 +833,9 @@ msgstr "זה עשוי להביא לעותק פגום אם המקור הופק ע
 
 #: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
 #: jobs/k3bverificationjob.cpp:355
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to determine the ISO 9660 filesystem size."
-msgstr "לא מסוגל לקבוע את גודל מערכת הקבצים ISO9660."
+msgstr "לא ניתן לקבוע את גודל מערכת הקבצים מסוג ISO 9660."
 
 #: jobs/k3bdvdcopyjob.cpp:299
 #, kde-format
@@ -920,9 +920,9 @@ msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:819 jobs/k3bdvdcopyjob.cpp:912
 #: projects/datacd/k3bdatajob.cpp:818 projects/datacd/k3bdatajob.cpp:938
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Simulation with %1"
-msgstr "הדמיה לא עובדת עם תקליטורי (DVD+R(W"
+msgstr "אין הדמיה עם %1"
 
 #: jobs/k3bdvdcopyjob.cpp:825
 #, kde-format
@@ -943,13 +943,13 @@ msgstr "כותב %1"
 
 #: jobs/k3bdvdcopyjob.cpp:839 jobs/k3bmetawriter.cpp:512
 #: projects/datacd/k3bdatajob.cpp:848
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
 "really want to continue? The media will actually be written to."
 msgstr ""
-"הצורב שלך (%1 %2) לא תומך בהדמית צריבה על מדיות (DVD-R(W. האם אתה באמת רוצה "
-"להמשיך? המדיה תיצרב על אמת."
+"הצורב שלך (%1 %2) לא תומך בהדמייה עם אמצעי אחסון מסוג DVD-R(W). להמשיך? "
+"תתבצע כתיבה לאמצעי האחסון."
 
 #: jobs/k3bdvdcopyjob.cpp:844 jobs/k3bmetawriter.cpp:517
 #: projects/datacd/k3bdatajob.cpp:853
@@ -992,9 +992,9 @@ msgid "Writing %1 in incremental mode."
 msgstr "כותב %1 במצב מתווסף (incremental)."
 
 #: jobs/k3bdvdcopyjob.cpp:918
-#, fuzzy, kde-format
+#, kde-format
 msgid "Writing BD copy"
-msgstr "כותב העתק תקליטור DVD"
+msgstr "עותק BD נצרב"
 
 #: jobs/k3bdvdcopyjob.cpp:934 projects/datacd/k3bdatajob.cpp:1017
 #, kde-format
@@ -1007,19 +1007,19 @@ msgid "Creating Image"
 msgstr "יוצר תמונה"
 
 #: jobs/k3bdvdcopyjob.cpp:946
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copying DVD or BD On-The-Fly"
-msgstr "מעתיק DVD/BD בזמן אמת (On-The-Fly)"
+msgstr "‏DVD/BD מועתקים בזמן אמת (On-The-Fly)"
 
 #: jobs/k3bdvdcopyjob.cpp:948
-#, fuzzy, kde-format
+#, kde-format
 msgid "Copying DVD or BD"
-msgstr "מעתיק DVD/BD"
+msgstr "‏DVD או BD מועתקים"
 
 #: jobs/k3bdvdformattingjob.cpp:92
-#, fuzzy, kde-format
+#, kde-format
 msgid "Formatting disc"
-msgstr "מאתחל"
+msgstr "אמצעי האחסון מפורמט"
 
 #: jobs/k3bdvdformattingjob.cpp:122 projects/k3bcdrdaowriter.cpp:531
 #: projects/k3bcdrecordwriter.cpp:417 projects/k3bcdrskinwriter.cpp:429
@@ -1061,9 +1061,9 @@ msgid "Unable to eject medium."
 msgstr "אינו מסוגל להוציא את המדיה."
 
 #: jobs/k3bdvdformattingjob.cpp:336
-#, fuzzy, kde-format
+#, kde-format
 msgid "Found %1 medium."
-msgstr "נמצאה מדיה %1."
+msgstr "נמצא אמצעי אחסון מסוג %1."
 
 #: jobs/k3bdvdformattingjob.cpp:340
 #, fuzzy, kde-format
@@ -1087,14 +1087,14 @@ msgid "Forcing formatting anyway."
 msgstr "כופה אתחול בכל מקרה."
 
 #: jobs/k3bdvdformattingjob.cpp:371
-#, fuzzy, kde-format
+#, kde-format
 msgid "It is not recommended to force formatting of %1 media."
-msgstr "לא מומלץ לכפות אתחול של מדיה מסוג DVD+RW."
+msgstr "לא מומלץ לכפות פרמוט על אמצעי אחסון מסוג %1."
 
 #: jobs/k3bdvdformattingjob.cpp:373
-#, fuzzy, kde-format
+#, kde-format
 msgid "After 10-20 reformats the media might become unusable."
-msgstr "כבר אחרי 10-20 אתחולים מחדש המדיה עשויה להיות לא שימושית."
+msgstr "לאחר 10‏-20 פרמוטים מחדש אמצעי האחסון עלול להפוך לבלתי שמיש."
 
 #: jobs/k3bdvdformattingjob.cpp:382
 #, fuzzy, kde-format
@@ -1128,9 +1128,9 @@ msgstr "לא מסוגל לקבוע את מצב האתחול הנוכחי של מ
 #: projects/datacd/k3bmkisofshandler.cpp:54 projects/k3bcdrdaowriter.cpp:448
 #: projects/k3bcdrecordwriter.cpp:395 projects/k3bcdrskinwriter.cpp:407
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
-#, fuzzy, kde-format
+#, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "משתמש ב %1 %2 - הזכויות של %3"
+msgstr "נעשה שימוש ב־%1 %2 – כל הזכויות שמורות © ל־%3"
 
 #: jobs/k3bdvdformattingjob.cpp:503
 #, kde-format
@@ -1174,14 +1174,14 @@ msgid "Waiting for medium"
 msgstr "ממתין למדיה"
 
 #: jobs/k3biso9660imagewritingjob.cpp:333
-#, fuzzy, kde-format
+#, kde-format
 msgid "Simulating ISO 9660 Image"
-msgstr "מדמה צריבת תמונת תקליטור ISO9660"
+msgstr "נערכת הדמיית דמות ISO 9660"
 
 #: jobs/k3biso9660imagewritingjob.cpp:335
-#, fuzzy, kde-format
+#, kde-format
 msgid "Burning ISO 9660 Image"
-msgstr "צורב תמונת תקליטור ISO9660"
+msgstr "נצרבת דמות ISO 9660"
 
 #: jobs/k3bmetawriter.cpp:304 projects/datacd/k3bdatajob.cpp:769
 #: projects/datacd/k3bdatajob.cpp:792
@@ -1201,9 +1201,9 @@ msgid ""
 msgstr ""
 
 #: jobs/k3bmetawriter.cpp:431 projects/audiocd/k3baudiojob.cpp:243
-#, fuzzy, kde-format
+#, kde-format
 msgid "Track lengths below 4 seconds violate the Red Book standard."
-msgstr "אורך רצועה מתחת ל- 4 שניות סותר את הסטנדרטים של הספר האדום."
+msgstr "אורך רצועה מתחת ל־4 שניות מפר את התקנים של הספר האדום."
 
 #: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
 #: projects/mixedcd/k3bmixedjob.cpp:1222
