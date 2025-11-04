@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-17 00:42+0000\n"
+"POT-Creation-Date: 2025-11-04 00:41+0000\n"
 "PO-Revision-Date: 2025-05-21 15:34+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -387,7 +387,7 @@ msgstr ""
 "Veuillez insérer la commande à utiliser pour encoder les données audio. La "
 "commande doit être capable de lire les frames audio 16 bit stéréo (voir "
 "<em>l'ordre de permutation des octets</em>) depuis stdin.\n"
-"<p>Les chaînes suivantes seront remplacées par K3b : <br>\n"
+"<p>Les chaines suivantes seront remplacées par K3b : <br>\n"
 "<b>%f</b> - Le nom du fichier du fichier résultant. Ce sera dans ce fichier "
 "que la commande écrira sa sortie.<br>\n"
 "<em>Ce qui suit se réfère aux méta-données stockées, par exemple, dans la "
@@ -1159,102 +1159,102 @@ msgstr "mots de 16 bits"
 msgid "32-bit Words"
 msgstr "mots de 32 bits"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:282
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:285
 #, kde-format
 msgid "Sun AU"
 msgstr "Sun AU"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:284
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:287
 #, kde-format
 msgid "Amiga 8SVX"
 msgstr "Amiga 8SVX"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:286
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:289
 #, kde-format
 msgid "AIFF"
 msgstr "AIFF"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:288
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:291
 #, kde-format
 msgid "Audio Visual Research"
 msgstr "Recherche audio-visuelle"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:290
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:293
 #, kde-format
 msgid "CD-R"
 msgstr "CD-R"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:292
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:295
 #, kde-format
 msgid "CVS"
 msgstr "CVS"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:294
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:297
 #, kde-format
 msgid "Text Data"
 msgstr "Données texte"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:296
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:299
 #, kde-format
 msgid "GSM Speech"
 msgstr "GSM Speech"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:298
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:301
 #, kde-format
 msgid "Macintosh HCOM"
 msgstr "Macintosh HCOM"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:300
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:303
 #, kde-format
 msgid "Maud (Amiga)"
 msgstr "Maud (Amiga)"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:302
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:305
 #, kde-format
 msgid "IRCAM"
 msgstr "IRCAM"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:304
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:307
 #, kde-format
 msgid "SPHERE"
 msgstr "SPHERE"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:306
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:309
 #, kde-format
 msgid "Turtle Beach SampleVision"
 msgstr "Turtle Beach SampleVision"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:308
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:311
 #, kde-format
 msgid "Yamaha TX-16W"
 msgstr "Yamaha TX-16W"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:310
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:313
 #, kde-format
 msgid "VMS"
 msgstr "VMS"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:312
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:315
 #, kde-format
 msgid "Sound Blaster VOC"
 msgstr "Sound Blaster VOC"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:314
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:317
 #, kde-format
 msgid "Wave (SoX)"
 msgstr "Wave (SoX)"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:316
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:319
 #, kde-format
 msgid "Psion 8-bit A-law"
 msgstr "Psion 8-bits A-law"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:318
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:321
 #, kde-format
 msgid "Raw"
 msgstr "Raw"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:320 k3b.cpp:628
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:323 k3b.cpp:628
 #, kde-format
 msgid "Error"
 msgstr "Erreur"
@@ -1297,7 +1297,7 @@ msgid ""
 "%t</em> (Title) are supported."
 msgstr ""
 "<qt>Ceci spécifie comment les fichiers devraient être renommés. "
-"Actuellement, seules les chaînes spéciales <em>%a</em> (artiste), <em>%n</"
+"Actuellement, seules les chaines spéciales <em>%a</em> (artiste), <em>%n</"
 "em> (numéro de la piste) et <em>%t</em> (titre) sont gérées."
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:160
@@ -1540,7 +1540,7 @@ msgstr "Format"
 #, kde-format
 msgid "Open the rewritable disk formatting/erasing dialog"
 msgstr ""
-"Ouvrir la boîte de dialogue de formatage/effacement d'un média réinscriptible"
+"Ouvrir la boite de dialogue de formatage/effacement d'un média réinscriptible"
 
 #: k3b.cpp:400
 #, kde-format
@@ -1567,7 +1567,7 @@ msgstr "Copier"
 #: k3b.cpp:408 k3bdevicemenu.cpp:74
 #, kde-format
 msgid "Open the media copy dialog"
-msgstr "Ouvrir la boîte de dialogue de copie de média"
+msgstr "Ouvrir la boite de dialogue de copie de média"
 
 #: k3b.cpp:413 k3bdevicemenu.cpp:70
 #, kde-format
@@ -4620,7 +4620,7 @@ msgstr ""
 "enregistrera des fichiers temporaires comme des images au format « ISO » ou "
 "et des fichiers audio décodés.\n"
 "<p>Sachez que la sélection d'un dossier temporaire peut aussi être faite "
-"dans les boîtes de dialogue de gravure de tous les types de projet."
+"dans les boites de dialogue de gravure de tous les types de projet."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #: option/base_k3bmiscoptiontab.ui:63
@@ -4680,7 +4680,7 @@ msgstr "Afficher la &progression dans la zone de notification"
 #, kde-format
 msgid "Hide the main window while displaying the progress window"
 msgstr ""
-"Cacher la fenêtre principale lors de l'affichage de la boîte de dialogue de "
+"Cacher la fenêtre principale lors de l'affichage de la boite de dialogue de "
 "progression"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
@@ -4691,7 +4691,7 @@ msgid ""
 "the progress dialog."
 msgstr ""
 "<p> Si cette option est activée, K3b cachera la fenêtre principale de "
-"l'application pendant l'affichage de la boîte de dialogue de progression des "
+"l'application pendant l'affichage de la boite de dialogue de progression des "
 "tâches."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
@@ -4726,8 +4726,8 @@ msgid ""
 "CD Copy dialog after the process has been finished. It will be kept open to "
 "start a new process, for instance, copying another CD."
 msgstr ""
-"<p>Si cette option est cochée, K3b ne fermera pas les boîtes de dialogue "
-"d'actions tels que la boîte de dialogue de copie d'un CD, une fois le "
+"<p>Si cette option est cochée, K3b ne fermera pas les boites de dialogue "
+"d'actions tels que la boite de dialogue de copie d'un CD, une fois le "
 "processus terminé. Il la conservera ouverte afin de commencer directement un "
 "nouveau processus, comme une nouvelle copie de CD."
 
@@ -6374,7 +6374,7 @@ msgstr "Remplacer"
 #: projects/base_k3bdataimagesettings.ui:196
 #, kde-format
 msgid "The string to replace spaces with"
-msgstr "La chaîne avec laquelle remplacer les espaces"
+msgstr "La chaine avec laquelle remplacer les espaces"
 
 #. i18n: ectx: property (text), widget (KLineEdit, m_editBlankReplace)
 #. i18n: ectx: property (text), widget (QLineEdit, m_editReplace)
@@ -9579,7 +9579,7 @@ msgid ""
 msgstr ""
 "<p>Si cette option est activée, K3b créera une liste de lecture des fichiers "
 "issus de l'extraction qui pourra être utilisée avec des programmes comme "
-"« Amarok » ou « JuK ».<p>Vous pouvez utiliser les chaînes spéciales pour "
+"« Amarok » ou « JuK ».<p>Vous pouvez utiliser les chaines spéciales pour "
 "donner un nom de fichier unique à la liste de lecture."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCreatePlaylist)
@@ -9741,7 +9741,7 @@ msgstr "Insérez votre format personnel ici"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:403
 #, kde-format
 msgid "See special strings"
-msgstr "Voir les chaînes spéciales"
+msgstr "Voir les chaines spéciales"
 
 #. i18n: ectx: property (text), widget (KUrlLabel, m_conditionalInclusionLabel)
 #: rip/base_k3bcddbpatternwidget.ui:118
@@ -10265,7 +10265,7 @@ msgid ""
 "tr><tr><td>%e</td><td>file extension (if left out, it is added "
 "automatically)</td><td>%{e} or %{ext}</td></tr></table>"
 msgstr ""
-"<p><b>Chaînes spéciales des motifs :</b><p>Les chaînes suivantes seront "
+"<p><b>Chaînes spéciales des motifs :</b><p>Les chaines suivantes seront "
 "remplacées par leur valeur respective dans chaque nom de piste. "
 "<br><em>Astuce : </em> %A et %a ne sont différents que pour les bandes "
 "originales et les compilations. <p><table border=\"0\"><tr><td></"
@@ -10311,10 +10311,10 @@ msgstr ""
 "inclut « TEXTE » si l'information étendue du CD est « Bande originale »,<li> "
 "« !C='Bande originale'{TEXTE} » inclut « TEXTE » si l'information étendue du "
 "CD n'est pas « Bande originale ».<li>Il est également possible d'inclure des "
-"chaînes spéciales dans les textes et les conditions, par exemple « !"
+"chaines spéciales dans les textes et les conditions, par exemple « !"
 "a='%A'{%a} » n'inclura le nom de l'artiste de la piste que s'il diffère de "
 "l'artiste de l'album.</ul> <p>Les inclusions conditionnelles permettent "
-"d'utiliser les mêmes caractères que les chaînes spéciales, ce qui signifie "
+"d'utiliser les mêmes caractères que les chaines spéciales, ce qui signifie "
 "que le X dans « @X{...} » peut être n'importe quel caractère parmi "
 "[atnycgATCd]."
 
@@ -10566,7 +10566,7 @@ msgstr ""
 "<p>Cette option n'est utile que si la source est une image disque au format "
 "BIN. Elle indique à « vcdxrip » de supposer que les secteurs du fichier "
 "image ont une taille de 2336 octets.</p><b>Remarque : cette option va "
-"disparaître prochainement.</b>"
+"disparaitre prochainement.</b>"
 
 #: rip/k3bvideocdrippingdialog.cpp:128
 #, kde-format
@@ -11073,7 +11073,7 @@ msgstr "Impossible de lire le contenu du DVD."
 #: rip/videodvd/k3bvideodvdrippingview.cpp:343
 #, kde-format
 msgid "Open the Video DVD ripping dialog"
-msgstr "Ouvrir la boîte de dialogue pour l'extraction de DVD"
+msgstr "Ouvrir la boite de dialogue pour l'extraction de DVD"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:345
 #, kde-format
@@ -11134,7 +11134,7 @@ msgid ""
 "table><p><em>Hint: K3b also accepts slight variations of the long special "
 "strings. One can, for example, leave out the underscores.</em>"
 msgstr ""
-"<p><b>Chaînes spéciales des motifs :</b><p>Les chaînes suivantes seront "
+"<p><b>Chaînes spéciales des motifs :</b><p>Les chaines suivantes seront "
 "remplacées par leur valeur respective dans chaque nom de piste.<br><p><table "
 "border=\"0\"><tr><td></td><td><em>Signification</em></"
 "td><td><em>Alternatives</em></td></tr><tr><td>%t</td><td>Numéro du titre</"
@@ -11153,7 +11153,7 @@ msgstr ""
 "td><td>Aspect du ratio de la vidéo originale</td><td>%{r} ou %{aspect_ratio}"
 "</td></tr><tr><td>%d</td><td>Date courante</td><td>%{d} ou %{date}</td></"
 "tr></table><p><em>Astuce : K3b accepte également de légères variations dans "
-"la longueur des chaînes spéciales. On peut, par exemple, exclure les "
+"la longueur des chaines spéciales. On peut, par exemple, exclure les "
 "underscores.</em>"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:331

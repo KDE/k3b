@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-09-17 00:42+0000\n"
+"POT-Creation-Date: 2025-11-04 00:41+0000\n"
 "PO-Revision-Date: 2019-11-19 12:49+0200\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -1126,102 +1126,102 @@ msgstr "16-bitised sõnad"
 msgid "32-bit Words"
 msgstr "32-bitised sõnad"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:282
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:285
 #, kde-format
 msgid "Sun AU"
 msgstr "Sun AU"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:284
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:287
 #, kde-format
 msgid "Amiga 8SVX"
 msgstr "Amiga 8SVX"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:286
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:289
 #, kde-format
 msgid "AIFF"
 msgstr "AIFF"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:288
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:291
 #, kde-format
 msgid "Audio Visual Research"
 msgstr "Audio Visual Research"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:290
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:293
 #, kde-format
 msgid "CD-R"
 msgstr "CD-R"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:292
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:295
 #, kde-format
 msgid "CVS"
 msgstr "CVS"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:294
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:297
 #, kde-format
 msgid "Text Data"
 msgstr "Tekstiandmed"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:296
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:299
 #, kde-format
 msgid "GSM Speech"
 msgstr "GSM Speech"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:298
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:301
 #, kde-format
 msgid "Macintosh HCOM"
 msgstr "Macintosh HCOM"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:300
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:303
 #, kde-format
 msgid "Maud (Amiga)"
 msgstr "Maud (Amiga)"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:302
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:305
 #, kde-format
 msgid "IRCAM"
 msgstr "IRCAM"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:304
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:307
 #, kde-format
 msgid "SPHERE"
 msgstr "SPHERE"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:306
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:309
 #, kde-format
 msgid "Turtle Beach SampleVision"
 msgstr "Turtle Beach SampleVision"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:308
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:311
 #, kde-format
 msgid "Yamaha TX-16W"
 msgstr "Yamaha TX-16W"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:310
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:313
 #, kde-format
 msgid "VMS"
 msgstr "VMS"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:312
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:315
 #, kde-format
 msgid "Sound Blaster VOC"
 msgstr "Sound Blaster VOC"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:314
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:317
 #, kde-format
 msgid "Wave (SoX)"
 msgstr "Wave (SoX)"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:316
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:319
 #, kde-format
 msgid "Psion 8-bit A-law"
 msgstr "Psion 8-bit A-law"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:318
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:321
 #, kde-format
 msgid "Raw"
 msgstr "Toorandmed"
 
-#: ../plugins/encoder/sox/k3bsoxencoder.cpp:320 k3b.cpp:628
+#: ../plugins/encoder/sox/k3bsoxencoder.cpp:323 k3b.cpp:628
 #, kde-format
 msgid "Error"
 msgstr "Viga"
