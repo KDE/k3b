@@ -119,7 +119,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 >Permissions</guilabel
 > de la page <guilabel
 >Programmes</guilabel
-> de la boîte de dialogue de configuration où les permissions peuvent être modifiées. Sur tous les systèmes modernes, les périphériques optiques appartiennent à un certain groupe utilisateur (par exemple : <quote
+> de la boite de dialogue de configuration où les permissions peuvent être modifiées. Sur tous les systèmes modernes, les périphériques optiques appartiennent à un certain groupe utilisateur (par exemple : <quote
 >cdrom</quote
 >). Si l'utilisateur courant n'appartient pas à ce groupe, l'onglet lui proposera d'y être ajouté. </para>
 <para>
@@ -182,7 +182,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 </screenshot>
 </para>
 <para
->Un démarrage rapide de l'une de ces tâches vous serait peut-être utile et &k3b; vous le permet également. Faites simplement un clic droit sur le bureau de l'application et vous verrez apparaître un menu pour ajouter des boutons :  </para>
+>Un démarrage rapide de l'une de ces tâches vous serait peut-être utile et &k3b; vous le permet également. Faites simplement un clic droit sur le bureau de l'application et vous verrez apparaitre un menu pour ajouter des boutons :  </para>
 <para>
 <screenshot>
 <screeninfo
