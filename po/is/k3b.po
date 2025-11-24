@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2025-10-22 09:56+0000\n"
+"PO-Revision-Date: 2025-11-23 17:34+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -4839,15 +4839,14 @@ msgid "Authorization denied"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Engin villuleiðrétting"
+msgstr "Villa kom upp"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Ógild aðgerð"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
@@ -6974,8 +6973,8 @@ msgstr ""
 #, kde-format
 msgid "1 audio track"
 msgid_plural "%1 audio tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 hljóðspor"
+msgstr[1] "%1 hljóðspor"
 
 #: projects/k3bdatamultisessionimportdialog.cpp:248
 #, kde-format
@@ -7918,15 +7917,13 @@ msgstr ""
 "vídeóstraumunum."
 
 #: projects/k3bvcdburndialog.cpp:115
-#, fuzzy, kde-format
-#| msgid ""
-#| "This element allows to set viewing restrictions which may be interpreted "
-#| "by the playing device."
+#, kde-format
 msgid ""
 "This element allows one to set viewing restrictions which may be interpreted "
 "by the playing device."
 msgstr ""
-"Hér er hægt að setja inn hömlur á skoðun sem afspilunartækið gæti fylgt."
+"Hér er hægt að setja inn hömlur á áhorfi sem afspilunartækið gæti mögulega "
+"fylgt."
 
 #: projects/k3bvcdburndialog.cpp:117
 #, kde-format
@@ -8214,13 +8211,7 @@ msgstr ""
 "option."
 
 #: projects/k3bvcdburndialog.cpp:216
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Viewing Restriction may be interpreted by the playing device.<p>The "
-#| "allowed range goes from 0 to 3.<ul><li>0 = unrestricted, free to view for "
-#| "all</li><li>3 = restricted, content not suitable for ages under 18</li></"
-#| "ul><p>Actually, the exact meaning is not defined and is player dependant."
-#| "<p><b>Most players ignore that value.<b>"
+#, kde-format
 msgid ""
 "<p>Viewing Restriction may be interpreted by the playing device.<p>The "
 "allowed range goes from 0 to 3.<ul><li>0 = unrestricted, free to view for "
@@ -8228,10 +8219,10 @@ msgid ""
 "ul><p>Actually, the exact meaning is not defined and is player dependent."
 "<p><b>Most players ignore that value.<b>"
 msgstr ""
-"<p>Afspilunartækið getur kannski notast við skoðunartakmörk. <p>Leyfilegt "
+"<p>Afspilunartækið getur kannski notast við áhorfstakmörk. <p>Leyfilegt "
 "gildi er frá 0 til 3.<ul><li>0 = engar hömlur, allir geta skoðað</li><li>3 = "
-"hömlur, innihaldið er ekki ætlað fyrir yngri en 18 ára</li></ul><p>Reyndar "
-"er nákvæma túlkunin ekki skilgreind og háð spilaranum. <p><b>Flestir spilara "
+"hömlur, efnið er ekki ætlað fyrir yngri en 18 ára</li></ul><p>Reyndar er "
+"nákvæm túlkun ekki skilgreind og er háð spilaranum. <p><b>Flestir spilarar "
 "hunsa gildið.<b>"
 
 #: projects/k3bvcdburndialog.cpp:223
@@ -8787,19 +8778,16 @@ msgid "Sequence-%1 - %2"
 msgstr "Runa-%1 - %2"
 
 #: projects/k3bvcdview.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not find VcdImager executable. To create Video CDs you have to "
-#| "install VcdImager >= 0.7.12. You can find this on your distribution’s "
-#| "software repository or download it from http://www.vcdimager.org"
+#, kde-format
 msgid ""
 "Could not find VcdImager executable. To create Video CDs you have to install "
 "VcdImager >= 0.7.12. You can find this on your distribution’s software "
 "repository or download it from https://www.gnu.org/software/vcdimager/"
 msgstr ""
 "Fann ekki VcdImager keyrsluskrána. Til að útbúa CD-mynddisk þarftu að setja "
-"innVcdImager útgáfu 0.7.12 eða nýrri. Þú getur fundið það í hugbúnaðarsöfnum "
-"stýrikerfisdreifingarinnar þinnar, eða náð í það af http://www.vcdimager.org"
+"upp VcdImager útgáfu 0.7.12 eða nýrri. Þú getur fundið það í "
+"hugbúnaðarsöfnum stýrikerfisdreifingarinnar þinnar eða náð í það af https://"
+"www.gnu.org/software/vcdimager/"
 
 #: projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
@@ -8963,15 +8951,12 @@ msgstr "Skrifa cue skrá"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:148
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will create a CDRWIN cue file which "
-#| "allows to easily write a copy of the audio CD on other systems."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will create a CDRWIN cue file which allows "
 "one to easily write a copy of the audio CD on other systems."
 msgstr ""
-"<p>Ef þetta er valið mun K3b búa til CDRWIN cue skrá sem auðveldar brennslu "
+"<p>Ef þetta er valið mun K3b búa til CDRWIN cue-skrá sem auðveldar brennslu "
 "af afriti af hljóðdisknum á öðrum kerfum."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteCueFile)
@@ -9622,8 +9607,8 @@ msgstr[1] ""
 #, kde-format
 msgid "1 track"
 msgid_plural "%1 tracks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 spor"
+msgstr[1] "%1 spor"
 
 #: rip/k3bmassaudioencodingjob.cpp:264
 #, kde-format
@@ -9676,16 +9661,13 @@ msgid "To rip Video CDs you have to install VcdImager Version %1."
 msgstr "Til að afrita CD-mynddiska þarftu að setja inn VcdImager útgáfu %1."
 
 #: rip/k3bvideocdrip.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution’s software repository or download "
-#| "it from http://www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Þú getur fundið það í hugbúnaðarsöfnum stýrikerfisdreifingarinnar þinnar, "
-"eða náð í það af http://www.vcdimager.org"
+"Þú getur fundið það í hugbúnaðarsöfnum stýrikerfisdreifingarinnar þinnar eða "
+"náð í það af https://www.gnu.org/software/vcdimager/"
 
 #: rip/k3bvideocdrip.cpp:100
 #, kde-format
@@ -10179,8 +10161,8 @@ msgstr "DVD myndskráaafritun (ripp)"
 #, kde-format
 msgid "1 title from %2"
 msgid_plural "%1 titles from %2"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "1 titill frá %2"
+msgstr[1] "%1 titlar frá %2"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
