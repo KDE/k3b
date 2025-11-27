@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2025-11-23 17:34+0000\n"
+"PO-Revision-Date: 2025-11-26 10:08+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -7289,17 +7289,17 @@ msgstr "Fylgja tengli núna"
 #: projects/k3bdataurladdingdialog.cpp:456
 #, kde-format
 msgid "Always follow links"
-msgstr ""
+msgstr "Alltaf fylgja tenglum"
 
 #: projects/k3bdataurladdingdialog.cpp:457
 #, kde-format
 msgid "Add link to project"
-msgstr ""
+msgstr "Bæta við tengli á verkefni"
 
 #: projects/k3bdataurladdingdialog.cpp:458
 #, kde-format
 msgid "Always add links"
-msgstr ""
+msgstr "Alltaf bæta við tenglum"
 
 #: projects/k3bdataurladdingdialog.cpp:750
 #, kde-format
@@ -7446,7 +7446,7 @@ msgstr "Diskur yfirfylltur um %1"
 #: projects/k3bfillstatusdisplay.cpp:376
 #, kde-format
 msgid "Set medium size"
-msgstr ""
+msgstr "Veldu stærð miðils"
 
 #: projects/k3bfillstatusdisplay.cpp:408
 #, kde-format
@@ -8883,7 +8883,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:61
 #, kde-format
 msgid "Create m&3u playlist"
-msgstr ""
+msgstr "Búa til m&3u-spilunarlista"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:89
@@ -8913,7 +8913,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:98
 #, kde-format
 msgid "&Use relative paths"
-msgstr ""
+msgstr "N&ota afstæðar slóðir"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:107
@@ -8941,7 +8941,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:117
 #, kde-format
 msgid "Create si&ngle file"
-msgstr ""
+msgstr "Búa til sta&ka skrá"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:145
@@ -8963,7 +8963,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:151
 #, kde-format
 msgid "Write &cue file"
-msgstr ""
+msgstr "Skrifa &cue-skrá"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1_2)
