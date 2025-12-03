@@ -9950,7 +9950,7 @@ msgstr "La pista %1 s'ha convertit correctament."
 #: rip/k3baudioripjob.cpp:91
 #, kde-format
 msgid "Error while initializing audio ripping."
-msgstr "S'ha produït un error mentre s'inicialitzava l'extracció d'àudio."
+msgstr "S'ha produït un error mentre es restablia l'extracció d'àudio."
 
 #: rip/k3baudioripjob.cpp:133
 #, kde-format
