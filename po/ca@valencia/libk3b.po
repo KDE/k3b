@@ -92,7 +92,7 @@ msgstr "No s'ha pogut obrir el dispositiu %1"
 #: jobs/k3baudiosessionreadingjob.cpp:148
 #, kde-format
 msgid "Error while initializing audio ripping."
-msgstr "S'ha produït un error mentre s'inicialitzava l'extracció d'àudio."
+msgstr "S'ha produït un error mentre es restablia l'extracció d'àudio."
 
 #: jobs/k3baudiosessionreadingjob.cpp:201 jobs/k3bdatatrackreader.cpp:229
 #: jobs/k3bdvdcopyjob.cpp:360
@@ -2598,7 +2598,7 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:329 projects/k3bcdrskinwriter.cpp:341
 #, kde-format
 msgid "Failed to write temporary file '%1'"
-msgstr "No s'ha pogut escriure el fitxer temporal «%1»"
+msgstr "Ha fallat mentre s'escrivia el fitxer temporal «%1»"
 
 #: projects/k3bcdrecordwriter.cpp:349
 #, kde-format
@@ -3783,7 +3783,7 @@ msgstr "No s'ha pogut trobar el fitxer %1"
 #: tools/k3bmd5job.cpp:228
 #, kde-format
 msgid "Error while reading from file %1"
-msgstr "S'ha produït un error mentre es llegia del fitxer %1"
+msgstr "S'ha produït un error mentre es llegia des del fitxer %1"
 
 #: tools/k3bmediacache.cpp:126 tools/k3bmediacache.cpp:367
 #, kde-format
