@@ -48,7 +48,7 @@
         "Description[ar]": "ملحق لاستعلام خادم CDDB عن معلومات بخصوص مشروع صوتي.",
         "Description[bg]": "Приставка за търсене на информация в CDDB за аудио проект.",
         "Description[bs]": "Priključak za upite CDDB serveru radi podataka o audio projektu.",
-        "Description[ca@valencia]": "Connector per a consultar un servidor CDDB informació quant a un projecte d'àudio.",
+        "Description[ca@valencia]": "Connector per a consultar un servidor de la CDDB per a informació quant a un projecte d'àudio.",
         "Description[ca]": "Connector per a consultar un servidor CDDB informació quant a un projecte d'àudio.",
         "Description[cs]": "Modul pro dotazování CDDB serveru na informaci o audio projektu.",
         "Description[da]": "Plugin til at forespørge en CDDB-server om information om et lydprojekt.",
