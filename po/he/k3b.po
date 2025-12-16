@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2025-10-05 12:34+0300\n"
+"PO-Revision-Date: 2025-12-14 22:45+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -37,12 +37,12 @@ msgstr "kde-l10n-he@kde.org"
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Monkey's Audio (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
@@ -272,6 +272,11 @@ msgid ""
 "<p>K3b comes with a selection of predefined external applications that "
 "depends on the installed applications."
 msgstr ""
+"<p>החלונית הזאת משמשת להגדרת יישומי שורת פקודות חיצוניים כמקודדי שמע. "
+"יישומים אלו יכולים לשמש את K3b לקידוד נתוני שמע (רצועות מתקליטור שמע או "
+"כותרים ממיזם שמע) לתסדירים שאינם נתמכים בדרך כלל (כלומר, לא קיים תוסף "
+"מקודד).\n"
+"<p>K3b מגיע עם מבחר יישומים חיצוניים מוגדרים מראש שתלויים ביישומים המותקנים."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:32
