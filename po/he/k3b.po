@@ -37,17 +37,17 @@ msgstr "kde-l10n-he@kde.org"
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Monkey's Audio (APE)"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
-msgstr "הגדרות שמע/וידאו מתקדמות"
+msgstr "Advanced Audio Coding (AAC)"
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
@@ -243,7 +243,7 @@ msgstr "קצב סיביות עליון"
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:111
 #, kde-format
 msgid "Bitrate Nominal"
-msgstr "קצב הסיביות בפועל"
+msgstr "קצב סיביות נקוב"
 
 #: ../plugins/decoder/ogg/k3boggvorbisdecoder.cpp:113
 #, kde-format
@@ -272,12 +272,17 @@ msgid ""
 "<p>K3b comes with a selection of predefined external applications that "
 "depends on the installed applications."
 msgstr ""
+"<p>החלונית הזאת משמשת להגדרת יישומי שורת פקודות חיצוניים כמקודדי שמע. "
+"יישומים אלו יכולים לשמש את K3b לקידוד נתוני שמע (רצועות מתקליטור שמע או "
+"כותרים ממיזם שמע) לתסדירים שאינם נתמכים בדרך כלל (כלומר, לא קיים תוסף "
+"מקודד).\n"
+"<p>K3b מגיע עם מבחר יישומים חיצוניים מוגדרים מראש שתלויים ביישומים המותקנים."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:32
 #, kde-format
 msgid "Configured Encoders"
-msgstr "הגדר תוסף"
+msgstr "מקודדים מוגדרים"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, m_viewEncoders)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:45
@@ -289,7 +294,7 @@ msgstr "שם"
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:50
 #, kde-format
 msgid "Extension"
-msgstr "סיומת:"
+msgstr "סיומת"
 
 #. i18n: ectx: property (text), widget (QTreeWidget, m_viewEncoders)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -297,7 +302,7 @@ msgstr "סיומת:"
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:57
 #, kde-format
 msgid "Command"
-msgstr "הערה"
+msgstr "פקודה"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemove)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:81
@@ -8111,7 +8116,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:257
 #, kde-format
 msgid "Update scan offsets"
-msgstr "עדכן הפרשי סריקה"
+msgstr "עדכון הפרשי סריקה"
 
 #: projects/k3bvcdburndialog.cpp:266
 #, kde-format
@@ -8126,7 +8131,7 @@ msgstr "הגדרות מותאמות אישית של המרווחים והשול�
 #: projects/k3bvcdburndialog.cpp:273
 #, kde-format
 msgid "Leadout pre gap (0..300):"
-msgstr "קדם־מרווח של Leadout (בין 0..300):"
+msgstr "קדם־מרווח של Leadout (סגיר) (בין 0..300):"
 
 #: projects/k3bvcdburndialog.cpp:278
 #, kde-format
