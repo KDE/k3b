@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2025-11-26 10:08+0000\n"
+"PO-Revision-Date: 2025-12-28 14:32+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -4545,7 +4545,7 @@ msgid "Force K3b to continue some operations otherwise deemed as unsafe"
 msgstr ""
 
 #: option/k3badvancedoptiontab.cpp:96
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<p>If this option is checked additional GUI elements which allow one to "
 "influence the behavior of K3b are shown. This includes the manual selection "
@@ -8231,15 +8231,7 @@ msgid "<p>This option allows customization of Gaps and Margins."
 msgstr "<p>Þessi valkostur leyfir sérsníðingu af bilum og spássíum."
 
 #: projects/k3bvcdburndialog.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>This option allows to set the number of empty sectors added before the "
-#| "lead-out area begins, i.e. the number of post-gap sectors.<p>The ECMA-130 "
-#| "specification requires the last data track before the lead-out to carry a "
-#| "post-gap of at least 150 sectors, which is used as default for this "
-#| "parameter.<p>Some operating systems may encounter I/O errors due to read-"
-#| "ahead issues when reading the last MPEG track if this parameter is set "
-#| "too low.<p>Allowed value content: [0..300]. Default: 150."
+#, kde-format
 msgid ""
 "<p>This option allows one to set the number of empty sectors added before "
 "the lead-out area begins, i.e. the number of post-gap sectors.<p>The "
@@ -8249,13 +8241,6 @@ msgid ""
 "ahead issues when reading the last MPEG track if this parameter is set too "
 "low.<p>Allowed value content: [0..300]. Default: 150."
 msgstr ""
-"<p>This option allows to set the number of empty sectors added before the "
-"lead-out area begins, i.e. the number of post-gap sectors.<p>The ECMA-130 "
-"specification requires the last data track before the lead-out to carry a "
-"post-gap of at least 150 sectors, which is used as default for this "
-"parameter.<p>Some operating systems may encounter I/O errors due to read-"
-"ahead issues when reading the last MPEG track if this parameter is set too "
-"low.<p>Allowed value content: [0..300]. Default: 150."
 
 #: projects/k3bvcdburndialog.cpp:229
 #, kde-format
