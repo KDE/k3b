@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2025-10-05 12:34+0300\n"
+"PO-Revision-Date: 2025-12-30 11:33+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.12.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -8229,64 +8229,64 @@ msgid "&Publisher:"
 msgstr "מ&פיץ:"
 
 #: projects/k3bvcdprojectmodel.cpp:227
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Number"
 msgid "No."
-msgstr "לא."
+msgstr "מס׳"
 
 #: projects/k3bvcdprojectmodel.cpp:229
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Title"
 msgid "Title"
-msgstr "שם כותר"
+msgstr "כותרת"
 
 #: projects/k3bvcdprojectmodel.cpp:231
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Type (ie. MPEG1)"
 msgid "Type"
 msgstr "סוג"
 
 #: projects/k3bvcdprojectmodel.cpp:233
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Resolution"
 msgid "Resolution"
-msgstr "אבחנה"
+msgstr "רזולוציה"
 
 #: projects/k3bvcdprojectmodel.cpp:236
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track High Resolution"
 msgid "High Resolution"
-msgstr "רב אבחנה"
+msgstr "רזולוציה גבוהה"
 
 #: projects/k3bvcdprojectmodel.cpp:238
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Framerate"
 msgid "Framerate"
-msgstr "קצב מסגרות"
+msgstr "קצב תמוניות"
 
 #: projects/k3bvcdprojectmodel.cpp:240
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Muxrate"
 msgid "Muxrate"
 msgstr "קצב ריבוב"
 
 #: projects/k3bvcdprojectmodel.cpp:242
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Duration"
 msgid "Duration"
-msgstr "משך זמן"
+msgstr "משך"
 
 #: projects/k3bvcdprojectmodel.cpp:244
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track File Size"
 msgid "File Size"
-msgstr "גודל הקובץ"
+msgstr "גודל קובץ"
 
 #: projects/k3bvcdprojectmodel.cpp:246
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Video CD Track Filename"
 msgid "Filename"
-msgstr "שם הקובץ"
+msgstr "שם קובץ"
 
 #: projects/k3bvcdtrackdialog.cpp:141
 #, kde-format
@@ -8895,9 +8895,9 @@ msgid "Audio CD"
 msgstr "תקליטור שמע"
 
 #: rip/k3baudiocdview.cpp:216
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Track Info..."
-msgstr "ערוך מידע cddb של הרצועה"
+msgstr "עריכת פרטי רצועה…"
 
 #: rip/k3baudiocdview.cpp:217
 #, kde-format
@@ -8905,9 +8905,9 @@ msgid "Edit current track information"
 msgstr ""
 
 #: rip/k3baudiocdview.cpp:222
-#, fuzzy, kde-format
+#, kde-format
 msgid "Edit Album Info..."
-msgstr "ערוך מידע cddb של האלבום"
+msgstr "עריכת פרטי אלבום…"
 
 #: rip/k3baudiocdview.cpp:223
 #, fuzzy, kde-format
@@ -8983,9 +8983,9 @@ msgid "Check Track"
 msgstr "בחר רצועה"
 
 #: rip/k3baudiocdview.cpp:298 rip/videodvd/k3bvideodvdrippingview.cpp:190
-#, fuzzy, kde-format
+#, kde-format
 msgid "Check Tracks"
-msgstr "בחר רצועה"
+msgstr "סימון רצועות"
 
 #: rip/k3baudiocdview.cpp:300 rip/k3bvideocdview.cpp:370
 #: rip/videodvd/k3bvideodvdrippingview.cpp:192
@@ -8994,9 +8994,9 @@ msgid "Uncheck Track"
 msgstr "בטל בחירת רצועה"
 
 #: rip/k3baudiocdview.cpp:300 rip/videodvd/k3bvideodvdrippingview.cpp:192
-#, fuzzy, kde-format
+#, kde-format
 msgid "Uncheck Tracks"
-msgstr "בטל בחירת רצועה"
+msgstr "ביטול סימון רצועות"
 
 #: rip/k3baudiocdview.cpp:318 rip/k3bvideocdview.cpp:443
 #, kde-format
@@ -9009,9 +9009,9 @@ msgid "No Tracks Selected"
 msgstr "שום רצועה לא נבחרה"
 
 #: rip/k3baudiocdview.cpp:339
-#, fuzzy, kde-format
+#, kde-format
 msgid "Multiple Tracks"
-msgstr "מזג רצועות"
+msgstr "מגוון רצועות"
 
 #: rip/k3baudiocdview.cpp:341
 #, kde-format
