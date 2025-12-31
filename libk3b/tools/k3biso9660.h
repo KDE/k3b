@@ -423,6 +423,13 @@ namespace K3b {
 
         void debugEntry( const Iso9660Entry*, int depth ) const;
 
+        /**
+         * @returns true if the current directory entry is part of a
+         *          Joliet supplementary volume descriptor
+         *          false otherwise
+         */
+        bool isDirentFromJoliet() const;
+
         int m_joliet;
 
         // only used for creation
