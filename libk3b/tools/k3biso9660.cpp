@@ -91,7 +91,7 @@ int K3b::Iso9660::isofs_callback( struct iso_directory_record *idr, void *udata 
         group=iso->dirent->group();
         if (idr->flags[0] & 2) access |= S_IFDIR; else access |= S_IFREG;
         if (!special) {
-            if( !iso->plainIso9660() && iso->jolietLevel() ) {
+            if( !iso->plainIso9660() && iso->isDirentFromJoliet() ) {
                 for (i=0;i<(isonum_711(idr->name_len)-1);i+=2) {
                     QChar ch( be2me_16(*reinterpret_cast<ushort *>(&(idr->name[i]))) );
                     if (ch==';') break;
@@ -862,6 +862,12 @@ void K3b::Iso9660::debugEntry( const K3b::Iso9660Entry* entry, int depth ) const
             debugEntry( dir->entry( *it ), depth+1 );
         }
     }
+}
+
+
+bool K3b::Iso9660::isDirentFromJoliet() const
+{
+    return d->jolietDirs.contains( dirent );
 }
 
 
