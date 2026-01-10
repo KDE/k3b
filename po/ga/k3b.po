@@ -2,14 +2,15 @@
 # Copyright (C) 2009 This_file_is_part_of_KDE
 # This file is distributed under the same license as the k3b package.
 # Kevin Scannell <kscanne@gmail.com>, 2009.
+# SPDX-FileCopyrightText: 2026 Charlotte <altronic25@protonmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia/k3b.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2007-11-13 09:20-0500\n"
-"Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
-"Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2026-01-05 22:27+0000\n"
+"Last-Translator: Charlotte <altronic25@protonmail.com>\n"
+"Language-Team: Irish\n"
 "Language: ga\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,12 +21,12 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Kevin Scannell"
+msgstr "Kevin Scannell,Charlotte"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "kscanne@gmail.com"
+msgstr "kscanne@gmail.com,altronic25@protonmail.com"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
@@ -4929,12 +4930,12 @@ msgstr "Socraigh Ríomhchláir Sheachtracha"
 #: option/k3boptiondialog.cpp:163
 #, kde-format
 msgid "Notifications"
-msgstr "Fógairt"
+msgstr "Fógraí"
 
 #: option/k3boptiondialog.cpp:164
 #, kde-format
 msgid "System Notifications"
-msgstr "Fógairt an Chórais"
+msgstr "Fógraí an Chórais"
 
 #: option/k3boptiondialog.cpp:173
 #, kde-format
