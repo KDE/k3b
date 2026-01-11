@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2025-10-22 03:38+0200\n"
+"PO-Revision-Date: 2026-01-10 10:44+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -7942,6 +7942,8 @@ msgid ""
 "<p>Here you can specify that the folder <b>SEGMENT</b> should always be "
 "present.<p>Some DVD players need the folder to give a faultless rendition."
 msgstr ""
+"<p>აქ შეგიძლიათ, მიუთითოთ, რომ საქაღალდე <b>SEGMENT</b> ყოველთვის უნდა "
+"არსებობდეს.<p>ზოგიერთ DVD-ის დამკვრელს ეს საქაღალდე მუშაობისთვის სჭირდება."
 
 #: projects/k3bvcdburndialog.cpp:206
 #, kde-format
@@ -8521,6 +8523,10 @@ msgid ""
 "VcdImager >= 0.7.12. You can find this on your distribution’s software "
 "repository or download it from https://www.gnu.org/software/vcdimager/"
 msgstr ""
+"VcdImager-ის გამშვები ფაილი ვერ ვიპოვე. ვიდეოCD-ების შესაქმნელად უნდა "
+"დააყენოთ VcdImager >= 0.7.12. ის შეგიძლიათ, თქვენი დისტრიბუტივის პროგრამების "
+"რეპოზიტორიაში იპოვოთ, ან გადმოწერეთ ბმულიდან https://www.gnu.org/software/"
+"vcdimager/"
 
 #: projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
@@ -8671,6 +8677,8 @@ msgid ""
 "<p>If this option is checked K3b will create a CDRWIN cue file which allows "
 "one to easily write a copy of the audio CD on other systems."
 msgstr ""
+"<p>თუ ეს პარამეტრი ჩართულია, K3b შექმნის CDRWIN cue ფაილს, რომელიც "
+"საშუალებას გაძლევთ, ადვილად ჩაწეროთ აუდიოCD-ის ასლი სხვა სისტემებზე."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:151
@@ -9497,6 +9505,8 @@ msgid ""
 "<p>Ignore extended PSD (located in the ISO 9660 filesystem under `/EXT/PSD_X."
 "VCD') and use the <em>standard</em> PSD.</p>"
 msgstr ""
+"<p>გაფართოებული PSD-ის (მოთავსებულია ISO 9660 ფაილურ სისტემაში ფაილში `/EXT/"
+"PSD_X.VCD') გამოტოვება და <em>სტანდარტული</em> PSD-ის გამოყენება.</p>"
 
 #: rip/k3bvideocdrippingdialog.cpp:124
 #, kde-format
@@ -9645,6 +9655,9 @@ msgid ""
 "<p>No Audio Quality settings available for <em>AC3 pass-through</em>. The "
 "audio stream from the Video DVD is used without any changes.</p>"
 msgstr ""
+"<p><em>AC3 pass-through</em>-ისთვის აუდიოს ხარისხის პარამეტრები "
+"ხელმისაწვდომი არაა. აუდიონაკადი Video DVD-დან ცვლილებების გარეშე გამოიყენება."
+"</p>"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:320
@@ -9903,6 +9916,8 @@ msgid ""
 "Shows plain Video DVD vob files from the DVD (including decryption) for "
 "further processing with another application"
 msgstr ""
+"აჩვენებს უბრალო Video DVD-ის vob ფაილებს DVD-დან (გაშიფვრის ჩათვლით) მისი "
+"სხვა აპლიკაციით დასამუშავებლად"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:165
 #, kde-format
@@ -9920,6 +9935,8 @@ msgid ""
 "K3b was unable to unmount device '%1' containing medium '%2'. Video DVD "
 "ripping will not work if the device is mounted. Please unmount manually."
 msgstr ""
+"K3b-მა ვერ მოხსნა მოწყობილობა '%1', რომელიც შეიცავს მედიას '%2'. Video DVD-"
+"ის დარიპვა არ იმუშავებს, თუ მოწყობილობა მიმაგრებულია. მოხსენით ის ხელით."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:247
 #, kde-format
@@ -9932,6 +9949,8 @@ msgid ""
 "<p>Unable to read Video DVD contents: Found encrypted Video DVD.<p>Install "
 "<i>libdvdcss</i> to get Video DVD decryption support."
 msgstr ""
+"<p>Video DVD-ის შემცველობის წაკთხვა შეუძლებელია: Video DVD დაშიფრულია."
+"<p>Video DVD-ის გაშიფვრის მხარდაჭერისთვის დააყენეთ <i>libdvdcss</i>."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:268
 #, kde-format
@@ -9959,6 +9978,9 @@ msgid ""
 "lacks support for any of the codecs supported by K3b.<p>Please make sure it "
 "is installed properly."
 msgstr ""
+"<p>K3b Video DVD-ების დასარიპად transcode-ს იყენებს. transcode-ის თქვენს "
+"ვარიანტს K3b-ის მიერ მხარდაჭერილი კოდეკების მხარდაჭერა არ გააჩნია."
+"<p>დარწმუნდით, რომ ის სწორად დააყენეთ."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:304
 #, kde-format
