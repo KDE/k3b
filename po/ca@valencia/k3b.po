@@ -6698,7 +6698,7 @@ msgstr ""
 #: projects/base_k3bmovixoptionswidget.ui:273
 #, kde-format
 msgid "Sh&utdown"
-msgstr "At&ura"
+msgstr "&Para"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkReboot)
 #: projects/base_k3bmovixoptionswidget.ui:280
@@ -8124,7 +8124,7 @@ msgstr ""
 "només reconeixerà la primera sessió i ignorarà la segona amb la pista de "
 "dades.<p>Si este CD se pensa utilitzar en un reproductor d'alta fidelitat de "
 "CD, este és el mode recomanat.<p>Alguns CD-ROM antics poden tindre problemes "
-"en llegir un CD «Blue Book», ja que és un CD multisessió."
+"mentre es llig un CD «Blue Book», ja que és un CD multisessió."
 
 #: projects/k3bmixedburndialog.cpp:115
 #, kde-format
@@ -9955,7 +9955,7 @@ msgstr "S'ha produït un error mentre es restablia l'extracció d'àudio."
 #: rip/k3baudioripjob.cpp:133
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
-msgstr "Error irrecuperable mentre s'extragué la pista %1."
+msgstr "Error irrecuperable mentre s'extreia la pista %1."
 
 #: rip/k3baudioripjob.cpp:187
 #, kde-format
