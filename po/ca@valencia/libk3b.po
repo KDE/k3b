@@ -103,7 +103,7 @@ msgstr "No s'ha pogut obrir «%1» per a escriptura."
 #: jobs/k3baudiosessionreadingjob.cpp:235
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
-msgstr "Error irrecuperable mentre s'extragué la pista %1."
+msgstr "Error irrecuperable mentre s'extreia la pista %1."
 
 #: jobs/k3bbinimagewritingjob.cpp:53
 #, kde-format
