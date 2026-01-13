@@ -226,6 +226,7 @@ void K3b::JobProgressDialog::setupGUI()
     QDialogButtonBox* buttonBox = new QDialogButtonBox( this );
     m_cancelButton = buttonBox->addButton( QDialogButtonBox::Cancel );
     connect( m_cancelButton, SIGNAL(clicked()), this, SLOT(reject()) );
+    m_cancelButton->setText(i18nc("@action:button to stop the operation", "Stop"));
 
     m_showDbgOutButton = buttonBox->addButton( i18n("Show Debugging Output"), QDialogButtonBox::NoRole );
     m_showDbgOutButton->setIcon(QIcon::fromTheme("tools-report-bug"));
@@ -482,10 +483,12 @@ void K3b::JobProgressDialog::reject()
 {
     if( m_job && m_job->active() ) {
         if( KMessageBox::questionTwoActions( this,
-                                             i18n("Do you really want to cancel?"),
-                                             i18n("Cancel Confirmation"),
-                                             KStandardGuiItem::ok(),
-                                             KStandardGuiItem::cancel()) == KMessageBox::PrimaryAction ) {
+                                             i18n("Do you really want to stop the current operation in progress?"),
+                                             i18n("Confirm Stop Operation"),
+                                             KGuiItem(i18nc("@action:button to stop the operation", "Stop operation"),
+                                                      KStandardGuiItem::cancel().icon()),
+                                             KGuiItem(i18nc("@action:button to continue the operation", "Continue operation"),
+                                                      KStandardGuiItem::cont().icon())) == KMessageBox::PrimaryAction ) {
             if( m_job ) {
                 m_job->cancel();
                 m_closeButton->setEnabled(true);
