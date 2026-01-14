@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-01-14 00:43+0000\n"
 "PO-Revision-Date: 2013-03-28 14:37+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -2335,59 +2335,78 @@ msgstr ""
 msgid "Overall progress:"
 msgstr ""
 
-#: k3bjobprogressdialog.cpp:230
+#: k3bjobprogressdialog.cpp:229
+#, fuzzy, kde-format
+#| msgid "Stop"
+msgctxt "@action:button to stop the operation"
+msgid "Stop"
+msgstr "थांबा"
+
+#: k3bjobprogressdialog.cpp:231
 #, kde-format
 msgid "Show Debugging Output"
 msgstr ""
 
-#: k3bjobprogressdialog.cpp:296 k3bjobprogressdialog.cpp:318
+#: k3bjobprogressdialog.cpp:297 k3bjobprogressdialog.cpp:319
 #, fuzzy, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "चा"
 
-#: k3bjobprogressdialog.cpp:374 k3bjobprogressdialog.cpp:554
+#: k3bjobprogressdialog.cpp:375 k3bjobprogressdialog.cpp:557
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr ""
 
-#: k3bjobprogressdialog.cpp:383
+#: k3bjobprogressdialog.cpp:384
 #, fuzzy, kde-format
 msgid "Success."
 msgstr "यश"
 
-#: k3bjobprogressdialog.cpp:390
+#: k3bjobprogressdialog.cpp:391
 #, kde-format
 msgid "Successfully finished."
 msgstr ""
 
-#: k3bjobprogressdialog.cpp:399
+#: k3bjobprogressdialog.cpp:400
 #, kde-format
 msgid "Canceled."
 msgstr "रद्द केले."
 
-#: k3bjobprogressdialog.cpp:402
+#: k3bjobprogressdialog.cpp:403
 #, kde-format
 msgid "Error."
 msgstr "त्रुटी."
 
-#: k3bjobprogressdialog.cpp:404
+#: k3bjobprogressdialog.cpp:405
 #, kde-format
 msgid "Finished with errors"
 msgstr ""
 
-#: k3bjobprogressdialog.cpp:485
-#, kde-format
-msgid "Do you really want to cancel?"
-msgstr ""
-
 #: k3bjobprogressdialog.cpp:486
 #, kde-format
-msgid "Cancel Confirmation"
+msgid "Do you really want to stop the current operation in progress?"
 msgstr ""
 
-#: k3bjobprogressdialog.cpp:558
+#: k3bjobprogressdialog.cpp:487
+#, kde-format
+msgid "Confirm Stop Operation"
+msgstr ""
+
+#: k3bjobprogressdialog.cpp:488
+#, kde-format
+msgctxt "@action:button to stop the operation"
+msgid "Stop operation"
+msgstr ""
+
+#: k3bjobprogressdialog.cpp:490
+#, fuzzy, kde-format
+msgctxt "@action:button to continue the operation"
+msgid "Continue operation"
+msgstr "चालू ठेवा"
+
+#: k3bjobprogressdialog.cpp:561
 #, fuzzy, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-01-14 00:43+0000\n"
 "PO-Revision-Date: 2019-02-10 11:11-0800\n"
 "Last-Translator: A S Alam <alam.yellow@gmail.com>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -2352,59 +2352,80 @@ msgstr ""
 msgid "Overall progress:"
 msgstr "ਕੁੱਲ ਤਰੱਕੀ:"
 
-#: k3bjobprogressdialog.cpp:230
+#: k3bjobprogressdialog.cpp:229
+#, fuzzy, kde-format
+#| msgid "Stop"
+msgctxt "@action:button to stop the operation"
+msgid "Stop"
+msgstr "ਰੋਕੋ"
+
+#: k3bjobprogressdialog.cpp:231
 #, kde-format
 msgid "Show Debugging Output"
 msgstr "ਡੀਬੱਗ ਆਉਟਪੁੱਟ ਵੇਖਾਓ"
 
-#: k3bjobprogressdialog.cpp:296 k3bjobprogressdialog.cpp:318
+#: k3bjobprogressdialog.cpp:297 k3bjobprogressdialog.cpp:319
 #, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
 msgstr "%2 ਵਿੱਚੋਂ %1"
 
-#: k3bjobprogressdialog.cpp:374 k3bjobprogressdialog.cpp:554
+#: k3bjobprogressdialog.cpp:375 k3bjobprogressdialog.cpp:557
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
 msgstr "ਲੱਗਾ ਸਮਾਂ: %1"
 
-#: k3bjobprogressdialog.cpp:383
+#: k3bjobprogressdialog.cpp:384
 #, kde-format
 msgid "Success."
 msgstr "ਸਫਲ ਹੈ।"
 
-#: k3bjobprogressdialog.cpp:390
+#: k3bjobprogressdialog.cpp:391
 #, kde-format
 msgid "Successfully finished."
 msgstr "ਸਫਲਤਾਪੂਰਕ ਸਮਾਪਤ।"
 
-#: k3bjobprogressdialog.cpp:399
+#: k3bjobprogressdialog.cpp:400
 #, kde-format
 msgid "Canceled."
 msgstr "ਰੱਦ ਕੀਤਾ।"
 
-#: k3bjobprogressdialog.cpp:402
+#: k3bjobprogressdialog.cpp:403
 #, kde-format
 msgid "Error."
 msgstr "ਗਲਤੀ ਹੈ।"
 
-#: k3bjobprogressdialog.cpp:404
+#: k3bjobprogressdialog.cpp:405
 #, kde-format
 msgid "Finished with errors"
 msgstr "ਗਲਤੀ ਨਾਲ ਸਮਾਪਤ"
 
-#: k3bjobprogressdialog.cpp:485
-#, kde-format
-msgid "Do you really want to cancel?"
-msgstr "ਕੀ ਤੁਸੀਂ ਰੱਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
-
 #: k3bjobprogressdialog.cpp:486
-#, kde-format
-msgid "Cancel Confirmation"
-msgstr "ਰੱਦ ਕਰਨ ਦੀ ਪੁਸ਼ਟੀ"
+#, fuzzy, kde-format
+#| msgid "Do you really want to clear the current project?"
+msgid "Do you really want to stop the current operation in progress?"
+msgstr "ਕੀ ਤੁਸੀਂ ਮੌਜੂਦਾ ਪਰੋਜੈਕਟ ਸਾਫ਼ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: k3bjobprogressdialog.cpp:558
+#: k3bjobprogressdialog.cpp:487
+#, kde-format
+msgid "Confirm Stop Operation"
+msgstr ""
+
+#: k3bjobprogressdialog.cpp:488
+#, kde-format
+msgctxt "@action:button to stop the operation"
+msgid "Stop operation"
+msgstr ""
+
+#: k3bjobprogressdialog.cpp:490
+#, fuzzy, kde-format
+#| msgid "Continue Multisession "
+msgctxt "@action:button to continue the operation"
+msgid "Continue operation"
+msgstr "ਮਲਟੀ-ਸ਼ੈਸ਼ਨ ਜਾਰੀ ਰੱਖੋ"
+
+#: k3bjobprogressdialog.cpp:561
 #, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
@@ -10236,6 +10257,12 @@ msgstr "anamorph"
 #, kde-format
 msgid "Subpicture"
 msgstr "ਸਬ-ਤਸਵੀਰ"
+
+#~ msgid "Do you really want to cancel?"
+#~ msgstr "ਕੀ ਤੁਸੀਂ ਰੱਦ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ?"
+
+#~ msgid "Cancel Confirmation"
+#~ msgstr "ਰੱਦ ਕਰਨ ਦੀ ਪੁਸ਼ਟੀ"
 
 #~ msgid "MusicBrainz Query"
 #~ msgstr "MusicBrainz ਸੰਪਰਕ"
