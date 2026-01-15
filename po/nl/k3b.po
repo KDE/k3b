@@ -11,7 +11,7 @@
 # Tom Albers <tomalbers@kde.nl>, 2004.
 # Bram Schoenmakers <bramschoenmakers@kde.nl>, 2004, 2006.
 # Kristof Bal <kristof.bal@gmail.com>, 2008, 2009.
-# SPDX-FileCopyrightText: 2008, 2024 Freek de Kruijf <freek@opensuse.org>
+# SPDX-FileCopyrightText: 2008, 2024, 2026 Freek de Kruijf <freek@opensuse.org>
 # Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2009.
 # Antoon Tolboom <atolboo@gmail.com>, 2009, 2010.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2022, 2023.
@@ -20,14 +20,14 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2024-07-27 10:12+0200\n"
+"PO-Revision-Date: 2026-01-14 16:53+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 25.12.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -35,7 +35,7 @@ msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
 msgstr ""
 "Ronald J.J. van Caulil,Rinse de Vries,Roel Koelewijn,Jo Vermeulen, Ruurd "
-"Pels,Kristof Bal,Freek de Kruijf - t/m 2024"
+"Pels,Kristof Bal,Freek de Kruijf - t/m 2026"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
