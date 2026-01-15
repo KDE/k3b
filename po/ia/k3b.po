@@ -1,13 +1,13 @@
 # Copyright (C) 2024 This file is copyright:
 # This file is distributed under the same license as the k3b package.
 #
-# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024 Giovanni Sora <g.sora@tiscali.it>
+# SPDX-FileCopyrightText: 2020, 2021, 2022, 2023, 2024, 2026 Giovanni Sora <g.sora@tiscali.it>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2024-12-18 17:52+0100\n"
+"PO-Revision-Date: 2026-01-14 11:30+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1615,7 +1615,7 @@ msgstr "Nulle projecto active"
 #: k3b.cpp:1437
 #, kde-format
 msgid "Do you really want to clear the current project?"
-msgstr "Tu vermente cole clarar le projeto currente?"
+msgstr "Tu vermente vole clarar le projecto currente?"
 
 #: k3b.cpp:1438
 #, kde-format
@@ -2351,8 +2351,7 @@ msgid "Overall progress:"
 msgstr "Progresso Global:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Stoppa"
@@ -2400,10 +2399,9 @@ msgid "Finished with errors"
 msgstr ""
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Tu vermente cole clarar le projeto currente?"
+msgstr "Tu vermente vole stoppar le operation currente in execution?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
@@ -2417,11 +2415,10 @@ msgid "Stop operation"
 msgstr ""
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Continua"
+msgstr "Continua operation"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format

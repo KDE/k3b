@@ -20,14 +20,14 @@
 # S.Çağlar Onur <caglar@uludag.org.tr>, 2004-2005.
 # obsoleteman <tulliana@gmail.com>, 2007-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2025-12-23 11:49+0300\n"
-"Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
+"PO-Revision-Date: 2026-01-14 19:13+0300\n"
+"Last-Translator: Emir SARI <emir_sari@îcloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -2490,11 +2490,10 @@ msgid "Overall progress:"
 msgstr "Tüm işlem:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
-msgstr "Dur"
+msgstr "Durdur"
 
 #: k3bjobprogressdialog.cpp:231
 #, kde-format
@@ -2539,28 +2538,26 @@ msgid "Finished with errors"
 msgstr "Bazı hatalarla tamamlandı"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Gerçekten geçerli projeyi silmek istiyor musunuz?"
+msgstr "Sürmekte olan işlemi durdurmayı gerçekten istiyor musunuz?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Durdurma İşlemini Onayla"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "İşlemi Durdur"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Çoklu Oturumu Sürdür"
+msgstr "İşlemi Sürdür"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format

@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2024-02-16 19:55+0100\n"
+"PO-Revision-Date: 2026-01-14 07:04+0100\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.8\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2469,8 +2469,7 @@ msgid "Overall progress:"
 msgstr "Skupni napredek:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Zaustavi"
@@ -2518,28 +2517,26 @@ msgid "Finished with errors"
 msgstr "Zaključeno z napakami"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Ali res želite počistiti trenutni projekt?"
+msgstr "Ali res želite ustaviti trenutno operacijo, ki je v teku?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Potrdi zaustavitev delovanja"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Ustavitev delovanja"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Nadaljuj večsejni nosilec"
+msgstr "Nadaljuj operacijo"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format

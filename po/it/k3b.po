@@ -4,7 +4,7 @@
 # Giovanni Venturi <giovanni@kde-it.org>, 2009.
 # Giovanni Venturi <giovanni@ksniffer.org>, 2010.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2015.
-# Luigi Toscano <luigi.toscano@tiscali.it>, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2026 Luigi Toscano <luigi.toscano@tiscali.it>
 # SPDX-FileCopyrightText: 2024 Paolo Zamponi <feus73@gmail.com>
 #
 msgid ""
@@ -12,15 +12,15 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2024-05-08 17:34+0200\n"
-"Last-Translator: Paolo Zamponi <feus73@gmail.com>\n"
+"PO-Revision-Date: 2026-01-14 22:35+0100\n"
+"Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2486,8 +2486,7 @@ msgid "Overall progress:"
 msgstr "Avanzamento totale:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Ferma"
@@ -2535,28 +2534,26 @@ msgid "Finished with errors"
 msgstr "Terminato con errori"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Vuoi davvero cancellare il progetto attuale?"
+msgstr "Vuoi davvero interrompere l'operazione in corso?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Conferma l'interruzione dell'operazione"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Interrompi operazione"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Continua multisessione"
+msgstr "Continua operazione"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
