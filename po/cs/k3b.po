@@ -10866,9 +10866,3 @@ msgstr "anamorfní širokoúhlost"
 #, kde-format
 msgid "Subpicture"
 msgstr "Subpicture"
-
-#~ msgid "Do you really want to cancel?"
-#~ msgstr "Přejete si to opravdu zrušit?"
-
-#~ msgid "Cancel Confirmation"
-#~ msgstr "Zrušit potvrzení"

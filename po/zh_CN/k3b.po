@@ -2428,11 +2428,10 @@ msgid "Overall progress:"
 msgstr "总进度："
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
-msgstr "停止"
+msgstr ""
 
 #: k3bjobprogressdialog.cpp:231
 #, kde-format
@@ -2477,10 +2476,9 @@ msgid "Finished with errors"
 msgstr "有错误完成。"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "您真的要清除当前方案吗？"
+msgstr ""
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
@@ -2494,11 +2492,10 @@ msgid "Stop operation"
 msgstr ""
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "继续多片断"
+msgstr ""
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
@@ -10480,9 +10477,3 @@ msgstr "无性型"
 #, kde-format
 msgid "Subpicture"
 msgstr "子画面"
-
-#~ msgid "Do you really want to cancel?"
-#~ msgstr "您真的想要取消吗？"
-
-#~ msgid "Cancel Confirmation"
-#~ msgstr "取消确认"

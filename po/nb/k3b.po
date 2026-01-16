@@ -10828,9 +10828,3 @@ msgstr "anamorf"
 #, kde-format
 msgid "Subpicture"
 msgstr "Under-bilde"
-
-#~ msgid "Do you really want to cancel?"
-#~ msgstr "Er du sikker på at du vil avbryte?"
-
-#~ msgid "Cancel Confirmation"
-#~ msgstr "Avbruddsbekreftelse"
