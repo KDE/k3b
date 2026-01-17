@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2026-01-14 11:30+0100\n"
+"PO-Revision-Date: 2026-01-16 11:36+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -472,7 +472,7 @@ msgstr "Nulle linea de commando specificate"
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:80
 #, no-c-format, kde-format
 msgid "Please add the output filename (%f) to the command line."
-msgstr "Pro favor tu adde nmine de file de exito (%f) al linea de commando."
+msgstr "Pro favor tu adde nomine de file de exito (%f) al linea de commando."
 
 #: ../plugins/encoder/external/k3bexternalencoderconfigwidget.cpp:81
 #, kde-format
