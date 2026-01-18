@@ -1,5 +1,5 @@
 # Spanish translations for k3b.po package.
-# Copyright (C) 2007-2025 This file is copyright:
+# Copyright (C) 2007-2026 This file is copyright:
 # This file is distributed under the same license as the k3b package.
 #
 # SPDX-FileCopyrightText: 2007, 2009, 2014, 2015, 2016, 2017, 2019 Eloy Cuadra <ecuadra@eloihr.net>
@@ -8,13 +8,13 @@
 # SPDX-FileCopyrightText: 2008 Danilo Vasquez Simonetti <danilo.vasquez@gmail.com>
 # SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014 Javier Viñal <fjvinal@gmail.com>
 # SPDX-FileCopyrightText: 2015 Sergio Ahumada <sahumada@texla.cl>
-# SPDX-FileCopyrightText: 2017, 2018, 2019, 2022, 2023, 2024, 2025 Víctor Rodrigo Córdoba <vrcordoba@gmail.com>
+# SPDX-FileCopyrightText: 2017, 2018, 2019, 2022, 2023, 2024, 2025, 2026 Víctor Rodrigo Córdoba <vrcordoba@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2025-06-09 01:57+0100\n"
+"PO-Revision-Date: 2026-01-18 00:15+0100\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2498,8 +2498,7 @@ msgid "Overall progress:"
 msgstr "Progreso total:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Detener"
@@ -2547,28 +2546,26 @@ msgid "Finished with errors"
 msgstr "Terminó con errores"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "¿Realmente desea borrar el proyecto actual?"
+msgstr "¿Realmente desea detener la operación en progreso?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Confirmar detención"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Detener operación"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Continuar multisesión"
+msgstr "Continuar con operación"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
@@ -11168,9 +11165,3 @@ msgstr "anamórfico"
 #, kde-format
 msgid "Subpicture"
 msgstr "Gráfico sobreimpreso"
-
-#~ msgid "Do you really want to cancel?"
-#~ msgstr "¿Realmente desea cancelar?"
-
-#~ msgid "Cancel Confirmation"
-#~ msgstr "Confirmación de la cancelación"
