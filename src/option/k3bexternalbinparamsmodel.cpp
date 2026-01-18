@@ -78,7 +78,7 @@ ExternalProgram* ExternalBinParamsModel::programForIndex( const QModelIndex& ind
     if( index.isValid() && index.row() >= 0 && index.row() < d->programs.size() )
         return d->programs.at( index.row() );
     else
-        return 0;
+        return nullptr;
 }
 
 

@@ -16,7 +16,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit PluginOptionTab( QWidget* parent = 0 );
+        explicit PluginOptionTab( QWidget* parent = nullptr );
         ~PluginOptionTab() override;
     };
 }

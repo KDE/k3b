@@ -16,7 +16,7 @@ class NotifyOptionTab : public QWidget
   Q_OBJECT
 
  public:
-  explicit NotifyOptionTab( QWidget* parent = 0 );
+  explicit NotifyOptionTab( QWidget* parent = nullptr );
   ~NotifyOptionTab() override;
 
   void readSettings();

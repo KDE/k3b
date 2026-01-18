@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit ThemeOptionTab( QWidget* parent = 0 );
+        explicit ThemeOptionTab( QWidget* parent = nullptr );
         ~ThemeOptionTab() override;
 
         void readSettings();

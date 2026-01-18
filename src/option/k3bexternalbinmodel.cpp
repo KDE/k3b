@@ -71,11 +71,11 @@ void ExternalBinModel::save()
 
 ExternalProgram* ExternalBinModel::programForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.internalPointer() == 0 &&
+    if( index.isValid() && index.internalPointer() == nullptr &&
         index.row() >= 0 && index.row() < d->programs.size() )
         return d->programs.at( index.row() );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -94,7 +94,7 @@ const ExternalBin* ExternalBinModel::binForIndex( const QModelIndex& index ) con
     if( index.isValid() && index.internalId() != 0 )
         return static_cast<const ExternalBin*>( index.internalPointer() );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -131,7 +131,7 @@ QModelIndex ExternalBinModel::parent( const QModelIndex& index ) const
 
 Qt::ItemFlags ExternalBinModel::flags( const QModelIndex& index ) const
 {
-    if( programForIndex( index ) != 0 )
+    if( programForIndex( index ) != nullptr )
     {
         return Qt::ItemIsEnabled;
     }
@@ -239,7 +239,7 @@ QVariant ExternalBinModel::headerData( int section, Qt::Orientation orientation,
 
 QModelIndex ExternalBinModel::buddy( const QModelIndex& index ) const
 {
-    if( binForIndex( index ) != 0 )
+    if( binForIndex( index ) != nullptr )
         return ExternalBinModel::index( index.row(), PathColumn, index.parent() );
     else
         return index;

@@ -20,7 +20,7 @@ K3b::CddbOptionTab::CddbOptionTab( QWidget* parent )
     QHBoxLayout* layout = new QHBoxLayout( this );
     layout->setContentsMargins( 0, 0, 0, 0 );
 
-    m_cddbKcm = 0;
+    m_cddbKcm = nullptr;
 
     const auto result = KPluginFactory::instantiatePlugin<KCModule>(KPluginMetaData(QStringLiteral("plasma/kcms/systemsettings_qwidgets/kcm_cddb")), this);
 

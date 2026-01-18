@@ -43,8 +43,8 @@
 K3b::DeviceWidget::DeviceWidget( K3b::Device::DeviceManager* manager, QWidget *parent )
     : QWidget( parent ),
       m_deviceManager( manager ),
-      m_writerParentViewItem( 0 ),
-      m_readerParentViewItem( 0 )
+      m_writerParentViewItem( nullptr ),
+      m_readerParentViewItem( nullptr )
 {
     // message widget
     m_messageWidget = new KMessageWidget( this );
@@ -224,7 +224,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
         m_deviceGroup = fileInfo.group();
 
         if( m_deviceGroup != "root" ) {
-            QVector<gid_t> gids(::getgroups(0, 0));
+            QVector<gid_t> gids(::getgroups(0, nullptr));
             ::getgroups(gids.size(), gids.data());
 
             QSet<QString> groupNames;

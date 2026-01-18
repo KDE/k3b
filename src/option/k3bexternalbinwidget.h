@@ -33,7 +33,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit ExternalBinWidget( ExternalBinManager* manager, QWidget* parent = 0 );
+        explicit ExternalBinWidget( ExternalBinManager* manager, QWidget* parent = nullptr );
         ~ExternalBinWidget() override;
 
         /**
