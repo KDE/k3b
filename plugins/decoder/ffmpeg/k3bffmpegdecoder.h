@@ -26,7 +26,7 @@ public:
 
     bool multiFormatDecoder() const override { return true; }
 
-    K3b::AudioDecoder* createDecoder( QObject* parent = 0  ) const override;
+    K3b::AudioDecoder* createDecoder( QObject* parent = nullptr  ) const override;
 };
 
 
@@ -35,7 +35,7 @@ class K3bFFMpegDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public:
-    explicit K3bFFMpegDecoder( QObject* parent = 0  );
+    explicit K3bFFMpegDecoder( QObject* parent = nullptr  );
     ~K3bFFMpegDecoder() override;
 
     QString fileType() const override;

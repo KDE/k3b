@@ -20,14 +20,14 @@ class K3bMadDecoderFactory : public K3b::AudioDecoderFactory
     Q_OBJECT
 
 public:
-    explicit K3bMadDecoderFactory( QObject* parent = 0, const QVariantList& args = QVariantList() );
+    explicit K3bMadDecoderFactory( QObject* parent = nullptr, const QVariantList& args = QVariantList() );
     ~K3bMadDecoderFactory() override;
 
     bool canDecode( const QUrl& filename ) override;
 
     int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3b::AudioDecoder* createDecoder( QObject* parent = 0 ) const override;
+    K3b::AudioDecoder* createDecoder( QObject* parent = nullptr ) const override;
 };
 
 
@@ -36,7 +36,7 @@ class K3bMadDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public:
-    explicit K3bMadDecoder( QObject* parent = 0 );
+    explicit K3bMadDecoder( QObject* parent = nullptr );
     ~K3bMadDecoder() override;
 
     QString metaInfo( MetaDataField ) override;

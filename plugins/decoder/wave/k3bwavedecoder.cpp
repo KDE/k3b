@@ -35,7 +35,7 @@ static unsigned long le_a_to_u_long( unsigned char* a ) {
  * Otherwise 0 is returned.
  * leave file seek pointer past WAV header.
  */
-static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* channels = 0, int* samplesize = 0 )
+static unsigned long identifyWaveFile( QFile& f, int* samplerate = nullptr, int* channels = nullptr, int* samplesize = nullptr )
 {
     typedef struct {
         unsigned char	ckid[4];
@@ -164,7 +164,7 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
 class K3bWaveDecoder::Private {
 public:
     Private()
-        : buffer(0),
+        : buffer(nullptr),
           bufferSize(0) {
     }
 

@@ -66,7 +66,7 @@ bool K3bFFMpegDecoderFactory::canDecode( const QUrl& url )
 
 K3bFFMpegDecoder::K3bFFMpegDecoder( QObject* parent  )
     : K3b::AudioDecoder( parent ),
-      m_file(0)
+      m_file(nullptr)
 {
 }
 
@@ -110,7 +110,7 @@ bool K3bFFMpegDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, i
 
         // cleanup;
         delete m_file;
-        m_file = 0;
+        m_file = nullptr;
 
         return true;
     }
@@ -124,14 +124,14 @@ bool K3bFFMpegDecoder::initDecoderInternal()
     if( !m_file )
         m_file = K3bFFMpegWrapper::instance()->open( filename() );
 
-    return (m_file != 0);
+    return (m_file != nullptr);
 }
 
 
 void K3bFFMpegDecoder::cleanup()
 {
     delete m_file;
-    m_file = 0;
+    m_file = nullptr;
 }
 
 

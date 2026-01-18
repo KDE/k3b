@@ -79,14 +79,14 @@ bool K3bMad::fillStreamBuffer()
   /* The input bucket must be filled if it becomes empty or if
    * it's the first execution of the loop.
    */
-  if( madStream->buffer == 0 || madStream->error == MAD_ERROR_BUFLEN ) {
+  if( madStream->buffer == nullptr || madStream->error == MAD_ERROR_BUFLEN ) {
     if( eof() )
       return false;
 
     long readSize, remaining;
     unsigned char* readStart;
 
-    if( madStream->next_frame != 0 ) {
+    if( madStream->next_frame != nullptr ) {
       remaining = madStream->bufend - madStream->next_frame;
       memmove( m_inputBuffer, madStream->next_frame, remaining );
       readStart = m_inputBuffer + remaining;

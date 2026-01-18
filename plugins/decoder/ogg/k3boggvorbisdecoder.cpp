@@ -23,8 +23,8 @@ class K3bOggVorbisDecoder::Private
 {
 public:
     Private()
-        : vInfo(0),
-          vComment(0),
+        : vInfo(nullptr),
+          vComment(nullptr),
           isOpen(false) {
     }
 
@@ -56,7 +56,7 @@ bool K3bOggVorbisDecoder::openOggVorbisFile()
             qDebug() << "(K3bOggVorbisDecoder) Could not open file " << filename();
             return false;
         }
-        else if( ov_open( file, &d->oggVorbisFile, 0, 0 ) ) {
+        else if( ov_open( file, &d->oggVorbisFile, nullptr, 0 ) ) {
             qDebug() << "(K3bOggVorbisDecoder) " << filename()
                      << " seems not to to be an ogg vorbis file." << Qt::endl;
             fclose( file );
@@ -176,8 +176,8 @@ void K3bOggVorbisDecoder::cleanup()
     if( d->isOpen )
         ov_clear( &d->oggVorbisFile );
     d->isOpen = false;
-    d->vComment = 0;
-    d->vInfo = 0;
+    d->vComment = nullptr;
+    d->vInfo = nullptr;
 }
 
 
@@ -220,7 +220,7 @@ bool K3bOggVorbisDecoderFactory::canDecode( const QUrl& url )
 
     OggVorbis_File of;
 
-    if( ov_open( file, &of, 0, 0 ) ) {
+    if( ov_open( file, &of, nullptr, 0 ) ) {
         fclose( file );
         qDebug() << "(K3bOggVorbisDecoder) not an Ogg-Vorbis file: " << url.toLocalFile();
         return false;

@@ -79,14 +79,14 @@ bool K3bFFMpegFile::open()
     close();
 
     // open the file
-    int err = ::avformat_open_input( &d->formatContext, m_filename.toLocal8Bit(), 0, 0 );
+    int err = ::avformat_open_input( &d->formatContext, m_filename.toLocal8Bit(), nullptr, nullptr );
     if( err < 0 ) {
         qDebug() << "(K3bFFMpegFile) unable to open " << m_filename << " with error " << err;
         return false;
     }
 
     // analyze the streams
-    ::avformat_find_stream_info( d->formatContext, 0 );
+    ::avformat_find_stream_info( d->formatContext, nullptr );
 
     // we only handle files containing one audio stream
     if( d->formatContext->nb_streams == 1 ) {
@@ -124,7 +124,7 @@ bool K3bFFMpegFile::open()
 
     // open the codec on our context
     qDebug() << "(K3bFFMpegFile) found codec for " << m_filename;
-    if( ::avcodec_open2( d->codecContext, d->codec, 0 ) < 0 ) {
+    if( ::avcodec_open2( d->codecContext, d->codec, nullptr ) < 0 ) {
         qDebug() << "(K3bFFMpegDecoderFactory) could not open codec.";
         return false;
     }

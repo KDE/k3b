@@ -53,7 +53,7 @@ public:
         if( !QFile::exists( path ) )
             return false;
 
-        K3b::ExternalBin* bin = 0;
+        K3b::ExternalBin* bin = nullptr;
 
         // probe version
         KProcess vp;
@@ -107,11 +107,11 @@ public:
 K3bSoxEncoder::K3bSoxEncoder( QObject* parent, const QVariantList& )
     : K3b::AudioEncoder( parent )
 {
-    if( k3bcore->externalBinManager()->program( "sox" ) == 0 )
+    if( k3bcore->externalBinManager()->program( "sox" ) == nullptr )
         k3bcore->externalBinManager()->addProgram( new SoxProgram() );
 
     d = new Private();
-    d->process = 0;
+    d->process = nullptr;
 }
 
 

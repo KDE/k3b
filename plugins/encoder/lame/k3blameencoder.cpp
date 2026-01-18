@@ -30,8 +30,8 @@ class K3bLameEncoder::Private
 {
 public:
     Private()
-        : flags(0),
-          fid(0) {
+        : flags(nullptr),
+          fid(nullptr) {
     }
 
     lame_global_flags* flags;
@@ -75,7 +75,7 @@ bool K3bLameEncoder::openFile( const QString& extension, const QString& filename
 
 bool K3bLameEncoder::isOpen() const
 {
-    return ( d->fid != 0 );
+    return ( d->fid != nullptr );
 }
 
 
@@ -84,7 +84,7 @@ void K3bLameEncoder::closeFile()
     if( isOpen() ) {
         finishEncoder();
         ::fclose( d->fid );
-        d->fid = 0;
+        d->fid = nullptr;
         d->filename.truncate(0);
     }
 }
@@ -103,7 +103,7 @@ bool K3bLameEncoder::initEncoderInternal( const QString&, const K3b::Msf& length
 
     d->flags = lame_init();
 
-    if( d->flags == 0 ) {
+    if( d->flags == nullptr ) {
         qDebug() << "(K3bLameEncoder) lame_init failed.";
         return false;
     }
@@ -285,7 +285,7 @@ void K3bLameEncoder::finishEncoderInternal()
     lame_mp3_tags_fid( d->flags, d->fid );
 
     lame_close( d->flags );
-    d->flags = 0;
+    d->flags = nullptr;
 }
 
 

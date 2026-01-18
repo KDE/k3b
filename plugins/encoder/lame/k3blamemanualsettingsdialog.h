@@ -13,7 +13,7 @@
 class K3bLameManualSettingsDialog : public QDialog, public Ui::K3bManualBitrateSettingsDialog
 {
 public:
-    explicit K3bLameManualSettingsDialog( QWidget* parent = 0 );
+    explicit K3bLameManualSettingsDialog( QWidget* parent = nullptr );
     ~K3bLameManualSettingsDialog() override;
 };
 

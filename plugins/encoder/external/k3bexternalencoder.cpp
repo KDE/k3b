@@ -81,7 +81,7 @@ K3bExternalEncoder::K3bExternalEncoder( QObject* parent, const QVariantList& )
     : K3b::AudioEncoder( parent ),
       d( new Private() )
 {
-    d->process = 0;
+    d->process = nullptr;
     d->initialized = false;
 
     qRegisterMetaType<QProcess::ExitStatus>();

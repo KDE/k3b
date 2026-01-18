@@ -22,7 +22,7 @@ public:
 
     int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3b::AudioDecoder* createDecoder( QObject* parent = 0 ) const override;
+    K3b::AudioDecoder* createDecoder( QObject* parent = nullptr ) const override;
 };
 
 
@@ -31,7 +31,7 @@ class K3bWaveDecoder : public K3b::AudioDecoder
     Q_OBJECT
 
 public:
-    explicit K3bWaveDecoder( QObject* parent = 0  );
+    explicit K3bWaveDecoder( QObject* parent = nullptr  );
     ~K3bWaveDecoder() override;
 
     void cleanup() override;
