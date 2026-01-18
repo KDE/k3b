@@ -271,14 +271,14 @@ void K3b::MediaCopyDialog::slotStartClicked()
     K3b::Medium sourceMedium = k3bappcore->mediaCache()->medium( readDev );
     K3b::Medium burnMedium = k3bappcore->mediaCache()->medium( burnDev );
 
-    K3b::JobProgressDialog* dlg = 0;
+    K3b::JobProgressDialog* dlg = nullptr;
     if (m_checkOnlyCreateImage->isChecked())
         dlg = new K3b::JobProgressDialog(parentWidget());
     else
         dlg = new K3b::BurnProgressDialog(parentWidget());
     dlg->setAttribute(Qt::WA_DeleteOnClose);    // Memory-leak issue fixed!
 
-    K3b::BurnJob* burnJob = 0;
+    K3b::BurnJob* burnJob = nullptr;
 
     if( m_comboCopyMode->currentIndex() == 1 ) {
         //
@@ -535,14 +535,14 @@ void K3b::MediaCopyDialog::toggleAll()
 void K3b::MediaCopyDialog::updateOverrideDevice()
 {
     if( !m_checkCacheImage->isChecked() ) {
-        m_writerSelectionWidget->setOverrideDevice( 0 );
+        m_writerSelectionWidget->setOverrideDevice( nullptr );
         m_writerSelectionWidget->setIgnoreDevice( m_comboSourceDevice->selectedDevice() );
     }
     else {
         m_writerSelectionWidget->setOverrideDevice( m_comboSourceDevice->selectedDevice(),
                                                     i18n("Use the same device for burning"),
                                                     i18n("<qt>Use the same device for burning <i>(Or insert another medium)</i>") );
-        m_writerSelectionWidget->setIgnoreDevice( 0 );
+        m_writerSelectionWidget->setIgnoreDevice( nullptr );
     }
 }
 

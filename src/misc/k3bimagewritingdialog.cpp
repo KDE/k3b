@@ -92,7 +92,7 @@ class K3b::ImageWritingDialog::Private
 {
 public:
     Private()
-        : md5SumItem(0),
+        : md5SumItem( nullptr ),
           haveMd5Sum( false ),
           foundImageType( IMAGE_UNKNOWN ),
           imageForced( false ) {
@@ -373,7 +373,7 @@ K3b::ImageWritingDialog::ImageWritingDialog( QWidget* parent )
 
     setupGui();
 
-    d->md5Job = new K3b::Md5Job( 0, this );
+    d->md5Job = new K3b::Md5Job( nullptr, this );
     connect( d->md5Job, SIGNAL(finished(bool)),
              this, SLOT(slotMd5JobFinished(bool)) );
     connect( d->md5Job, SIGNAL(percent(int)),
@@ -646,7 +646,7 @@ void K3b::ImageWritingDialog::slotStartClicked()
     K3b::BurnProgressDialog dlg( parentWidget() );
 
     // create the job
-    K3b::BurnJob* job = 0;
+    K3b::BurnJob* job = nullptr;
     switch( d->currentImageType() ) {
     case IMAGE_CDRECORD_CLONE:
     {
@@ -764,7 +764,7 @@ void K3b::ImageWritingDialog::slotUpdateImage( const QString& )
     d->md5Job->cancel();
     d->infoView->clear();
     //d->infoView->header()->resizeSection( 0, 20 );
-    d->md5SumItem = 0;
+    d->md5SumItem = nullptr;
     d->foundImageType = IMAGE_UNKNOWN;
     d->tocFile.truncate(0);
     d->imageFile.truncate(0);
@@ -1073,7 +1073,7 @@ void K3b::ImageWritingDialog::slotMd5JobFinished( bool success )
     }
 
     // Hide progress bar
-    d->infoView->setItemWidget( d->md5SumItem, 1, 0 );
+    d->infoView->setItemWidget( d->md5SumItem, 1, nullptr );
 }
 
 
