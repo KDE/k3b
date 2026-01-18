@@ -199,7 +199,7 @@ void K3b::DataViewImpl::slotCurrentRootChanged( const QModelIndex& newRoot )
 void K3b::DataViewImpl::slotNewDir()
 {
     const QModelIndex parent = m_sortModel->mapToSource( m_fileView->rootIndex() );
-    DirItem* parentDir = 0;
+    DirItem* parentDir = nullptr;
 
     if (parent.isValid())
         parentDir = dynamic_cast<DirItem*>( m_model->itemForIndex( parent ) );

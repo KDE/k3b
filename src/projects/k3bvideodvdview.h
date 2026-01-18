@@ -21,11 +21,11 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit VideoDvdView( VideoDvdDoc* doc, QWidget *parent = 0 );
+        explicit VideoDvdView( VideoDvdDoc* doc, QWidget *parent = nullptr );
         ~VideoDvdView() override;
 
     protected:
-        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = nullptr ) override;
 
         void init();
 

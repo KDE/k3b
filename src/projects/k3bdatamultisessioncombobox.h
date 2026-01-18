@@ -20,7 +20,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DataMultiSessionCombobox( QWidget* parent = 0 );
+        explicit DataMultiSessionCombobox( QWidget* parent = nullptr );
         ~DataMultiSessionCombobox() override;
 
         /**

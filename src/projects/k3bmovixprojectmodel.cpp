@@ -117,12 +117,12 @@ MovixDoc* MovixProjectModel::project() const
 
 MovixFileItem* MovixProjectModel::itemForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.internalPointer() != 0 ) {
+    if( index.isValid() && index.internalPointer() != nullptr ) {
         MovixFileItem* item = static_cast<MovixFileItem*>( index.internalPointer() );
         if( !item->isSubtitle() )
             return item;
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -130,7 +130,7 @@ QModelIndex MovixProjectModel::indexForItem( MovixFileItem* item ) const
 {
     if( item && !item->isSubtitle() ) {
         int row = d->project->indexOf( item );
-        if( row >= 0 && item != 0 )
+        if( row >= 0 && item != nullptr )
             return createIndex( row, NoColumn, item );
     }
     return QModelIndex();
@@ -139,13 +139,13 @@ QModelIndex MovixProjectModel::indexForItem( MovixFileItem* item ) const
 
 MovixSubtitleItem* MovixProjectModel::subtitleForIndex( const QModelIndex& index ) const
 {
-    if( index.isValid() && index.internalPointer() != 0 ) {
+    if( index.isValid() && index.internalPointer() != nullptr ) {
         MovixFileItem* item = static_cast<MovixFileItem*>( index.internalPointer() );
         if( item->isSubtitle() ) {
             return dynamic_cast<MovixSubtitleItem*>( item );
         }
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -173,7 +173,7 @@ QModelIndex MovixProjectModel::index( int row, int column, const QModelIndex& pa
     else {
         // if the parent is valid, we are returning a subtitle item
         MovixFileItem* item = itemForIndex( parent );
-        if( row == 0 && parent.column() == NoColumn && item != 0 && item->subTitleItem() != 0 )
+        if( row == 0 && parent.column() == NoColumn && item != nullptr && item->subTitleItem() != nullptr )
             return createIndex( row, column, item->subTitleItem() );
         else
             return QModelIndex();
@@ -187,7 +187,7 @@ QModelIndex MovixProjectModel::parent( const QModelIndex& index ) const
         // if it really is a subtitle, the parent is the movix item
         MovixFileItem* item = sub->parent();
         const int row = d->project->indexOf( item );
-        if( item != 0 && row >= 0 )
+        if( item != nullptr && row >= 0 )
             return createIndex( row, NoColumn, item );
     }
     return QModelIndex();
@@ -198,7 +198,7 @@ int MovixProjectModel::rowCount( const QModelIndex& parent ) const
 {
     if( parent.isValid() ) {
         MovixFileItem* item = itemForIndex(parent);
-        if( item && item->subTitleItem() != 0 && parent.column() == NoColumn )
+        if( item && item->subTitleItem() != nullptr && parent.column() == NoColumn )
             return 1;
         else
             return 0;
@@ -426,7 +426,7 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction acti
 
             int index = d->project->indexOf(itemForIndex(parent));
             if(index == 0)
-                prev = 0;
+                prev = nullptr;
             else
                 prev = d->project->movixFileItems().at(index - 1);
         }

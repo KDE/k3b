@@ -19,7 +19,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioProjectDelegate( QAbstractItemView& view, QObject* parent = 0 );
+        explicit AudioProjectDelegate( QAbstractItemView& view, QObject* parent = nullptr );
         ~AudioProjectDelegate() override;
 
         QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;

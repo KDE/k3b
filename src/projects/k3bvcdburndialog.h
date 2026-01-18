@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit VcdBurnDialog( VcdDoc* doc, QWidget *parent = 0 );
+        explicit VcdBurnDialog( VcdDoc* doc, QWidget *parent = nullptr );
         ~VcdBurnDialog() override;
 
         VcdDoc* vcdDoc() const

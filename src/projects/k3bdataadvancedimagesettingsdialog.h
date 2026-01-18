@@ -19,7 +19,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DataAdvancedImageSettingsDialog( QWidget* parent = 0 );
+        explicit DataAdvancedImageSettingsDialog( QWidget* parent = nullptr );
         ~DataAdvancedImageSettingsDialog() override;
 
         void load( const IsoOptions& options );

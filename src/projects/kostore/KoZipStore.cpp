@@ -86,11 +86,11 @@ KoZipStore::~KoZipStore()
 bool KoZipStore::initZipStore( Mode _mode, const QByteArray& appIdentification )
 {
     KoStore::init( _mode );
-    m_currentDir = 0;
+    m_currentDir = nullptr;
     bool good = m_pZip->open( _mode == Write ? QIODevice::WriteOnly : QIODevice::ReadOnly );
 
     if ( good && _mode == Read )
-        good = m_pZip->directory() != 0;
+        good = m_pZip->directory() != nullptr;
     else if ( good && _mode == Write )
     {
         //qCDebug(K3B_KOSTORE_LOG) <<"KoZipStore::init writing mimetype" << appIdentification;
@@ -119,14 +119,14 @@ bool KoZipStore::openWrite( const QString& name )
     m_stream->open( QIODevice::WriteOnly );
     return true;
 #endif
-    m_stream = 0L; // Don't use!
+    m_stream = nullptr; // Don't use!
     return m_pZip->prepareWriting( name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0 );
 }
 
 bool KoZipStore::openRead( const QString& name )
 {
     const KArchiveEntry * entry = m_pZip->directory()->entry( name );
-    if ( entry == 0L )
+    if ( entry == nullptr )
     {
         //qCWarning(K3B_KOSTORE_LOG) << "Unknown filename " << name;
         //return KIO::ERR_DOES_NOT_EXIST;
@@ -191,7 +191,7 @@ bool KoZipStore::enterRelativeDirectory( const QString& dirName )
         const KArchiveEntry *entry = m_currentDir->entry( dirName );
         if ( entry && entry->isDirectory() ) {
             m_currentDir = dynamic_cast<const KArchiveDirectory*>( entry );
-            return m_currentDir != 0;
+            return m_currentDir != nullptr;
         }
         return false;
     }
@@ -203,12 +203,12 @@ bool KoZipStore::enterAbsoluteDirectory( const QString& path )
 {
     if ( path.isEmpty() )
     {
-        m_currentDir = 0;
+        m_currentDir = nullptr;
         return true;
     }
     m_currentDir = dynamic_cast<const KArchiveDirectory*>( m_pZip->directory()->entry( path ) );
     Q_ASSERT( m_currentDir );
-    return m_currentDir != 0;
+    return m_currentDir != nullptr;
 }
 
 bool KoZipStore::fileExists( const QString& absPath ) const

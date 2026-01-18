@@ -21,7 +21,7 @@ namespace K3b {
     class DataProjectSortProxyModel : public QSortFilterProxyModel
     {
     public:
-        explicit DataProjectSortProxyModel( QObject* parent = 0 );
+        explicit DataProjectSortProxyModel( QObject* parent = nullptr );
 
     protected:
         bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;

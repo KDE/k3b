@@ -122,11 +122,11 @@ void K3b::VcdTrackDialog::Private::setPbcTrack( K3b::VcdTrack* selected, QComboB
         tracks.at( currentIndex ) ->addToRevRefList( selected );
     }
     else if( currentIndex == count ) {
-        selected->setPbcTrack( which, 0 );
+        selected->setPbcTrack( which, nullptr );
         selected->setPbcNonTrack( which, VcdTrack::DISABLED );
     }
     else {
-        selected->setPbcTrack( which, 0 );
+        selected->setPbcTrack( which, nullptr );
         selected->setPbcNonTrack( which, VcdTrack::VIDEOEND );
     }
 
@@ -309,8 +309,8 @@ void K3b::VcdTrackDialog::fillPbcGui()
     d->comboAfterTimeout->addItem( disabledIcon, disabledName );
 
     // add VideoCD End
-    QString endName = VcdTrackKeysModel::trackName( 0 );
-    QIcon endIcon = VcdTrackKeysModel::trackIcon( 0 );
+    QString endName = VcdTrackKeysModel::trackName( nullptr );
+    QIcon endIcon = VcdTrackKeysModel::trackIcon( nullptr );
     d->pbc_previous->addItem( endIcon, endName );
     d->pbc_next->addItem( endIcon, endName );
     d->pbc_return->addItem( endIcon, endName );

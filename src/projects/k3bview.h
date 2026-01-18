@@ -74,7 +74,7 @@ namespace K3b {
         /**
          * Protected since the BurnDialog is not part of the API.
          */
-        virtual ProjectBurnDialog* newBurnDialog( QWidget* = 0) = 0;
+        virtual ProjectBurnDialog* newBurnDialog( QWidget* = nullptr) = 0;
 
         /**
          * Call this to get the projectplugin actions.

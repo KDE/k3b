@@ -98,7 +98,7 @@ K3b::DirItem* K3b::DataDirTreeView::selectedDir() const
 //         return d->model->itemForIndex( indices.first() )->getDirItem();
 //     }
     else {
-        return 0;
+        return nullptr;
     }
 }
 

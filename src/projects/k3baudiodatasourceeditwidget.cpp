@@ -19,7 +19,7 @@
 
 K3b::AudioDataSourceEditWidget::AudioDataSourceEditWidget( QWidget* parent )
     : QWidget( parent ),
-      m_source(0)
+      m_source(nullptr)
 {
     m_editor = new K3b::AudioEditorWidget( this );
     m_editStartOffset = new K3b::MsfEdit( this );

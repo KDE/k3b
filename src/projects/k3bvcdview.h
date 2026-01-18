@@ -39,7 +39,7 @@ namespace K3b {
             void slotItemActivated( const QModelIndex& index );
 
         protected:
-            ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
+            ProjectBurnDialog* newBurnDialog( QWidget* parent = nullptr ) override;
 
             void init();
 

@@ -50,13 +50,13 @@ QWidget* VcdTrackKeysDelegate::createEditor( QWidget* parent, const QStyleOption
                 QVariant::fromValue( track ) );
         }
         combobox->addItem(
-            VcdTrackKeysModel::trackIcon( 0 ),
-            VcdTrackKeysModel::trackName( 0 ),
-            QVariant::fromValue<VcdTrack*>( 0 ) );
+            VcdTrackKeysModel::trackIcon( nullptr ),
+            VcdTrackKeysModel::trackName( nullptr ),
+            QVariant::fromValue<VcdTrack*>( nullptr ) );
         return combobox;
     }
     else {
-        return 0;
+        return nullptr;
     }
 }
 

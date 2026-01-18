@@ -86,7 +86,7 @@ KoStore* KoStore::createStore( const QString& fileName, Mode mode, const QByteAr
 #endif
   default:
     qCWarning(K3B_KOSTORE_LOG) << "Unsupported backend requested for KoStore : " << backend;
-    return 0L;
+    return nullptr;
   }
 }
 
@@ -129,7 +129,7 @@ KoStore* KoStore::createStore( QIODevice *device, Mode mode, const QByteArray & 
 #endif
   default:
     qCWarning(K3B_KOSTORE_LOG) << "Unsupported backend requested for KoStore : " << backend;
-    return 0L;
+    return nullptr;
   }
 }
 
@@ -195,7 +195,7 @@ KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, cons
     KMessageBox::error( window,
         i18n("The directory mode is not supported for remote locations."),
         i18n("KOffice Storage"));
-    return 0L;
+    return nullptr;
   }
 }
 
@@ -212,7 +212,7 @@ bool KoStore::init( Mode _mode )
 {
   m_bIsOpen = false;
   m_mode = _mode;
-  m_stream = 0;
+  m_stream = nullptr;
   m_bFinalized = false;
 
   // Assume new style names.
@@ -293,7 +293,7 @@ bool KoStore::close()
   bool ret = m_mode == Write ? closeWrite() : closeRead();
 
   delete m_stream;
-  m_stream = 0L;
+  m_stream = nullptr;
   m_bIsOpen = false;
   return ret;
 }

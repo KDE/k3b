@@ -24,7 +24,7 @@ class DirProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 
 public:
-    explicit DirProxyModel( QObject *parent = 0 );
+    explicit DirProxyModel( QObject *parent = nullptr );
     ~DirProxyModel() override;
 
 protected:

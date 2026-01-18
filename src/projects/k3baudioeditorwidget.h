@@ -24,7 +24,7 @@ class AudioEditorWidget : public QFrame
     Q_OBJECT
 
 public:
-    explicit AudioEditorWidget( QWidget* parent = 0 );
+    explicit AudioEditorWidget( QWidget* parent = nullptr );
     ~AudioEditorWidget() override;
 
     QSize sizeHint() const override;
@@ -61,7 +61,7 @@ public:
      * \return The ranges identifier if an edge could be found or 0 if there is no
      * range edge at the position.
      */
-    int findRangeEdge( int pos, bool* end = 0 ) const;
+    int findRangeEdge( int pos, bool* end = nullptr ) const;
 
     /**
      * @returns false if the range does not exist or end was bigger than start.
@@ -191,7 +191,7 @@ private:
     Range* getRange( int i ) const;
     Marker* getMarker( int i ) const;
     Range* findRange( const QPoint& p ) const;
-    Range* findRangeEdge( const QPoint& p, bool* end = 0 ) const;
+    Range* findRangeEdge( const QPoint& p, bool* end = nullptr ) const;
     Marker* findMarker( const QPoint& p ) const;
 };
 }

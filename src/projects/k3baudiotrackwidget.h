@@ -25,7 +25,7 @@ namespace K3b {
 
     public:
         explicit AudioTrackWidget( const QList<AudioTrack*>& tracks,
-                          QWidget* parent = 0 );
+                          QWidget* parent = nullptr );
         ~AudioTrackWidget() override;
 
     public Q_SLOTS:

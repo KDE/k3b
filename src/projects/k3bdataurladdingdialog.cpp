@@ -332,7 +332,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
     if( newName.isEmpty() )
         newName = '1';
 
-    K3b::DirItem* newDirItem = 0;
+    K3b::DirItem* newDirItem = nullptr;
 
     //
     // The source is valid. Now check if the project already contains a file with that name

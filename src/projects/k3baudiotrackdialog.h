@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioTrackDialog( const QList<AudioTrack*>&, QWidget *parent=0);
+        explicit AudioTrackDialog( const QList<AudioTrack*>&, QWidget *parent = nullptr);
         ~AudioTrackDialog() override;
 
     protected Q_SLOTS:

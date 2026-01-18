@@ -63,7 +63,7 @@ K3b::MovixView::MovixView( K3b::MovixDoc* doc, QWidget* parent )
     m_actionRemoveSubTitle = K3b::createAction( this, i18n( "Remove Subtitle File" ), "edit-delete",
                                                 0, this, SLOT(slotRemoveSubTitleItems()),
                                                 actionCollection(), "movix_remove_subtitle_item" );
-    m_actionAddSubTitle = K3b::createAction( this, i18n("Add Subtitle File..."), 0,
+    m_actionAddSubTitle = K3b::createAction( this, i18n("Add Subtitle File..."), nullptr,
                                              0, this, SLOT(slotAddSubTitleFile()),
                                              actionCollection(), "movix_add_subtitle" );
 
@@ -117,7 +117,7 @@ void K3b::MovixView::slotRemoveSubTitleItems()
     if ( !selection.count() )
         return;
 
-    K3b::MovixFileItem *item = 0;
+    K3b::MovixFileItem *item = nullptr;
     Q_FOREACH( const QModelIndex& index, selection ) {
         item = m_model->itemForIndex(index);
         if (item)
@@ -132,7 +132,7 @@ void K3b::MovixView::slotAddSubTitleFile()
     if( !selection.count() )
         return;
 
-    MovixFileItem *item = 0;
+    MovixFileItem *item = nullptr;
     foreach( const QModelIndex& index, selection )
     {
         item = m_model->itemForIndex(index);
@@ -146,7 +146,7 @@ void K3b::MovixView::slotAddSubTitleFile()
             if( url.isLocalFile() )
                 m_doc->addSubTitleItem( item, url );
             else
-                KMessageBox::error( 0, i18n("K3b currently only supports local files.") );
+                KMessageBox::error( nullptr, i18n("K3b currently only supports local files.") );
         }
     }
 }

@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DataView( DataDoc* doc, QWidget* parent = 0 );
+        explicit DataView( DataDoc* doc, QWidget* parent = nullptr );
         ~DataView() override;
 
     public Q_SLOTS:
@@ -38,7 +38,7 @@ namespace K3b {
         void slotSetCurrentRoot( const QModelIndex& index );
 
     protected:
-        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = nullptr ) override;
 
     private:
         DataDoc* m_doc;

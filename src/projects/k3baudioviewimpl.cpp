@@ -56,7 +56,7 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
 #ifdef ENABLE_AUDIO_PLAYER
     m_player( new AudioTrackPlayer( doc, actionCollection, this ) ),
 #else
-    m_player( 0 ),
+    m_player( nullptr ),
 #endif // ENABLE_AUDIO_PLAYER
     m_columnAdjuster( new ViewColumnAdjuster( this ) ),
     m_updatingColumnWidths( false )
@@ -73,15 +73,15 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
 
     m_columnAdjuster->setView( m_trackView );
 
-    m_actionAddSilence = createAction( m_view, i18n("Add Silence..."), 0, 0, this, SLOT(slotAddSilence()),
+    m_actionAddSilence = createAction( m_view, i18n("Add Silence..."), nullptr, 0, this, SLOT(slotAddSilence()),
                                        actionCollection, "track_add_silence" );
-    m_actionMergeTracks = createAction( m_view, i18n("Merge Tracks"), 0, 0, this, SLOT(slotMergeTracks()),
+    m_actionMergeTracks = createAction( m_view, i18n("Merge Tracks"), nullptr, 0, this, SLOT(slotMergeTracks()),
                                         actionCollection, "track_merge" );
-    m_actionSplitSource = createAction( m_view, i18n("Source to Track"), 0, 0, this, SLOT(slotSplitSource()),
+    m_actionSplitSource = createAction( m_view, i18n("Source to Track"), nullptr, 0, this, SLOT(slotSplitSource()),
                                         actionCollection, "source_split" );
-    m_actionSplitTrack = createAction( m_view, i18n("Split Track..."), 0, 0, this, SLOT(slotSplitTrack()),
+    m_actionSplitTrack = createAction( m_view, i18n("Split Track..."), nullptr, 0, this, SLOT(slotSplitTrack()),
                                        actionCollection, "track_split" );
-    m_actionEditSource = createAction( m_view, i18n("Edit Source..."), 0, 0, this, SLOT(slotEditSource()),
+    m_actionEditSource = createAction( m_view, i18n("Edit Source..."), nullptr, 0, this, SLOT(slotEditSource()),
                                        actionCollection, "edit_source" );
     m_actionPlayTrack = createAction( m_view, i18n("Play Track"), "media-playback-start", 0, this, SLOT(slotPlayTrack()),
                                       actionCollection, "track_play" );
@@ -125,7 +125,7 @@ K3b::AudioViewImpl::AudioViewImpl( View* view, AudioDoc* doc, KActionCollection*
 
 void K3b::AudioViewImpl::addUrls( const QList<QUrl>& urls )
 {
-    AudioTrackAddingDialog::addUrls( urls, m_doc, 0, 0, 0, m_view );
+    AudioTrackAddingDialog::addUrls( urls, m_doc, nullptr, nullptr, nullptr, m_view );
 }
 
 
@@ -267,7 +267,7 @@ void K3b::AudioViewImpl::slotEditSource()
     tracksForIndexes( tracks, indexes );
     sourcesForIndexes( sources, indexes );
 
-    AudioDataSource* source = 0;
+    AudioDataSource* source = nullptr;
     if( !sources.isEmpty() && tracks.isEmpty() )
         source = sources.first();
     else if( !tracks.isEmpty() && sources.isEmpty() )
@@ -339,7 +339,7 @@ void K3b::AudioViewImpl::slotSelectionChanged()
         int numTracks = tracks.count();
         int numSources = sources.count();
 
-        if( m_actionPlayTrack != 0 ) {
+        if( m_actionPlayTrack != nullptr ) {
             m_actionPlayTrack->setVisible( numTracks >= 1 );
         }
         m_actionRemove->setVisible( numTracks + numSources );

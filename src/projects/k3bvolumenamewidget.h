@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
         
     public:
-        explicit VolumeNameWidget( DataDoc* doc, QWidget* parent = 0 );
+        explicit VolumeNameWidget( DataDoc* doc, QWidget* parent = nullptr );
         ~VolumeNameWidget() override;
         
     protected:

@@ -19,7 +19,7 @@ class VcdTrack;
 class VcdTrackKeysDelegate : public QStyledItemDelegate
 {
 public:
-    explicit VcdTrackKeysDelegate( QList<VcdTrack*>& tracks, QObject* parent = 0 );
+    explicit VcdTrackKeysDelegate( QList<VcdTrack*>& tracks, QObject* parent = nullptr );
     ~VcdTrackKeysDelegate() override;
     
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
