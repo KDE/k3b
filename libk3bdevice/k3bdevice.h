@@ -281,7 +281,7 @@ namespace K3b {
              *
              * \sa readCdText
              */
-            QByteArray readRawCdText( bool* success = 0 ) const;
+            QByteArray readRawCdText( bool* success = nullptr ) const;
 
             /**
              * Read the CD-TEXT of an audio or mixed-mode CD.
@@ -379,7 +379,7 @@ namespace K3b {
              * @param currentMax If not 0 this will be filled with the Current/Maximum Format Type.
              */
             bool readFormatCapacity( int wantedFormat, K3b::Msf& result,
-                                     K3b::Msf* currentMax = 0, int* currentMaxFormat = 0 ) const;
+                                     K3b::Msf* currentMax = nullptr, int* currentMaxFormat = nullptr ) const;
 
             /**
              * Determine the type of the currently mounted medium

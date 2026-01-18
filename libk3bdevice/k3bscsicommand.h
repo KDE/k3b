@@ -111,7 +111,7 @@ namespace K3b {
              *         combined into the lower 32 bit of an integer in the order used above.
              */
             int transport( TransportDirection dir = TR_DIR_NONE,
-                           void* = 0,
+                           void* = nullptr,
                            size_t len = 0 );
 
         private:
