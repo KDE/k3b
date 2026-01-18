@@ -33,7 +33,7 @@ class K3b::MediaSelectionComboBox::Private
 {
 public:
     Private()
-        : ignoreDevice( 0 ) {
+        : ignoreDevice( nullptr ) {
     }
 
     QMap<K3b::Device::Device*, int> deviceIndexMap;
@@ -100,7 +100,7 @@ K3b::Device::Device* K3b::MediaSelectionComboBox::selectedDevice() const
         currentIndex() >= 0 )
         return d->devices[currentIndex()];
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -273,9 +273,9 @@ void K3b::MediaSelectionComboBox::updateMedia()
     //
     if( d->devices.isEmpty() ) {
         showNoMediumMessage();
-        if( selected != 0 ) {
+        if( selected != nullptr ) {
             // inform that we have no medium at all
-            emit selectionChanged( 0 );
+            emit selectionChanged( nullptr );
         }
     }
     else if( selected && d->deviceIndexMap.contains( selected ) ) {

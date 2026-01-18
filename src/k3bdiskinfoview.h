@@ -23,7 +23,7 @@ class DiskInfoView : public MediaContentsView
     Q_OBJECT
 
 public:
-    explicit DiskInfoView( QWidget* parent = 0 );
+    explicit DiskInfoView( QWidget* parent = nullptr );
     ~DiskInfoView() override;
 
 private:

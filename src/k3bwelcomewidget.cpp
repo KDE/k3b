@@ -55,7 +55,7 @@ const char* s_allActions[] = {
     "tools_cdda_rip",
     "tools_videocd_rip",
     "tools_videodvd_rip",
-    0
+    nullptr
 };
 
 const int MARGIN = 20;
@@ -397,7 +397,7 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
         QMenu addPop;
         addPop.setTitle( i18n("Add Button") );
 
-        QAction* firstAction = 0;
+        QAction* firstAction = nullptr;
         for ( int i = 0; s_allActions[i]; ++i ) {
             if ( s_allActions[i][0] != '_' ) {
                 QAction* a = m_mainWindow->actionCollection()->action( s_allActions[i] );
@@ -412,8 +412,8 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
 
         // menu identifiers in QT are always < 0 (when automatically generated)
         // and unique throughout the entire application!
-        QAction *r = 0;
-        QAction *removeAction = 0;
+        QAction *r = nullptr;
+        QAction *removeAction = nullptr;
 
         QWidget* widgetAtPos = childAt(e->pos());
         if( widgetAtPos && widgetAtPos->inherits( "K3b::FlatButton" ) ) {
@@ -428,7 +428,7 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
             r = addPop.exec( e->globalPos() );
         }
 
-        if( r != 0 ) {
+        if( r != nullptr ) {
             if( r == removeAction )
                 removeButton( static_cast<K3b::FlatButton*>(widgetAtPos) );
             else

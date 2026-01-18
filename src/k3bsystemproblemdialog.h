@@ -69,7 +69,7 @@ namespace K3b {
          * or K3b is started for the first time.
          */
         static bool readCheckSystemConfig();
-        static void checkSystem(QWidget* parent = 0, NotificationLevel level = NotifyOnlyErrors, bool forceCheck = false);
+        static void checkSystem(QWidget* parent = nullptr, NotificationLevel level = NotifyOnlyErrors, bool forceCheck = false);
 
     protected:
         void done(int) override;
@@ -83,7 +83,7 @@ namespace K3b {
                              bool showDeviceSettingsButton,
                              bool showBinSettingsButton,
                              bool forceCheck = false,
-                             QWidget* parent = 0);
+                             QWidget* parent = nullptr);
         static int dmaActivated( Device::Device* );
 #ifndef Q_OS_WIN32
         static QList<Device::Device*> checkForAutomounting();

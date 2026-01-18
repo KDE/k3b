@@ -13,8 +13,8 @@
 K3b::ContentsView::ContentsView( bool withHeader,
                                  QWidget* parent )
     : QWidget( parent ),
-      m_header(0),
-      m_centerWidget(0),
+      m_header(nullptr),
+      m_centerWidget(nullptr),
       m_active(false)
 {
     if( withHeader ) {

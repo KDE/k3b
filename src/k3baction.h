@@ -20,12 +20,12 @@ namespace K3b {
     QAction* createAction( QObject* parent,
                            const QString& text, const QString& icon, const
                            QKeySequence& shortcut, QObject* receiver, const char* slot,
-                           KActionCollection* actionCollection = 0,
+                           KActionCollection* actionCollection = nullptr,
                            const QString& actionName = QString() );
     KToggleAction* createToggleAction( QObject* parent,
                                        const QString& text, const QString& icon, const
                                        QKeySequence& shortcut, QObject* receiver, const char* slot,
-                                       KActionCollection* actionCollection = 0,
+                                       KActionCollection* actionCollection = nullptr,
                                        const QString& actionName = QString() );
 }
 

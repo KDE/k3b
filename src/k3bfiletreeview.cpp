@@ -31,7 +31,7 @@ class K3b::FileTreeView::Private
 {
 public:
     Private()
-        : deviceManager(0) {
+        : deviceManager(nullptr) {
     }
 
     K3b::Device::DeviceManager* deviceManager;
@@ -87,7 +87,7 @@ K3b::FileTreeView::~FileTreeView()
 void K3b::FileTreeView::initActions()
 {
     // those actions are supposed to be used with url items
-    d->urlPopupMenu->addAction( K3b::createAction(this,i18n("&Add to Project"), 0, Qt::SHIFT|Qt::Key_Return,
+    d->urlPopupMenu->addAction( K3b::createAction(this,i18n("&Add to Project"), nullptr, Qt::SHIFT|Qt::Key_Return,
                                                   this, SLOT(slotAddFilesToProject()),
                                                   d->actionCollection, "add_files_to_project") );
 }
@@ -181,7 +181,7 @@ void K3b::FileTreeView::slotContextMenu( const QPoint& pos )
     if ( !item.isNull() )
     {
         // enable/disable the "add to project" action
-        d->actionCollection->action("add_files_to_project")->setEnabled(k3bappcore->k3bMainWindow()->activeView() != 0);
+        d->actionCollection->action("add_files_to_project")->setEnabled(k3bappcore->k3bMainWindow()->activeView() != nullptr);
 
         // and shows the menu
         d->urlPopupMenu->menu()->exec( mapToGlobal( pos ) );

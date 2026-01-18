@@ -78,7 +78,7 @@ K3b::JobProgressDialog::JobProgressDialog( QWidget* parent,
         m_progressSubPercent->hide();
     }
 
-    m_job = 0;
+    m_job = nullptr;
 }
 
 

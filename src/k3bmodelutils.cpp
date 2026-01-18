@@ -32,7 +32,7 @@ namespace ModelUtils
     
     void toggleCommonCheckState( QAbstractItemModel* model, const QModelIndexList& indexes )
     {
-        if ( model != 0 ) {
+        if ( model != nullptr ) {
             Qt::CheckState commonState = commonCheckState( indexes );
             if ( commonState == Qt::Checked )
                 commonState = Qt::Unchecked;
@@ -60,7 +60,7 @@ namespace ModelUtils
     
     void setCommonText( QAbstractItemModel* model, const QModelIndexList& indexes, const QString& value, int role )
     {
-        if ( model != 0 ) {
+        if ( model != nullptr ) {
             Q_FOREACH( QModelIndex index, indexes ) {
                 if( !value.isEmpty() || indexes.size() == 1 )
                     model->setData( index, value, role );

@@ -45,7 +45,7 @@ class K3b::WriterSelectionWidget::MediaSelectionComboBox : public K3b::MediaSele
 public:
     MediaSelectionComboBox( QWidget* parent )
         : K3b::MediaSelectionComboBox( parent ),
-          m_overrideDevice( 0 ) {
+          m_overrideDevice( nullptr ) {
     }
 
     void setOverrideDevice( K3b::Device::Device* dev, const QString& s, const QString& t ) {
@@ -318,7 +318,7 @@ void K3b::WriterSelectionWidget::slotRefreshWriterSpeeds()
             setSpeed( d->lastSetSpeed );
     }
 
-    m_comboSpeed->setEnabled( writerDevice() != 0 );
+    m_comboSpeed->setEnabled( writerDevice() != nullptr );
 }
 
 
@@ -525,7 +525,7 @@ void K3b::WriterSelectionWidget::slotRefreshWritingApps()
 
     m_comboWritingApp->setSelectedValue( lastSelected );
 
-    m_comboWritingApp->setEnabled( writerDevice() != 0 );
+    m_comboWritingApp->setEnabled( writerDevice() != nullptr );
 }
 
 

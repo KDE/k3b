@@ -30,7 +30,7 @@ namespace K3b {
          *
          * If the device is not in use this method simply returns.
          */
-        static void checkDevice( Device::Device* dev, QWidget* parent = 0 );
+        static void checkDevice( Device::Device* dev, QWidget* parent = nullptr );
 
     private Q_SLOTS:
         bool slotCheckDevice();

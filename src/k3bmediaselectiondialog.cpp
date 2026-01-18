@@ -78,7 +78,7 @@ K3b::Device::Device* K3b::MediaSelectionDialog::selectedDevice() const
 
 void K3b::MediaSelectionDialog::slotSelectionChanged( K3b::Device::Device* dev )
 {
-    m_okButton->setEnabled( dev != 0 );
+    m_okButton->setEnabled( dev != nullptr );
 }
 
 
@@ -106,7 +106,7 @@ K3b::Device::Device* K3b::MediaSelectionDialog::selectMedium( Device::MediaTypes
     else {
         if( canceled )
             *canceled = true;
-        return 0;
+        return nullptr;
     }
 }
 

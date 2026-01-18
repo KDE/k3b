@@ -36,7 +36,7 @@ namespace {
     {
     public:
         ProjectData()
-            : doc(0),
+            : doc(nullptr),
             modified(false) {
         }
 
@@ -101,7 +101,7 @@ void K3b::ProjectTabWidget::addTab( Doc* doc )
 
 void K3b::ProjectTabWidget::removeTab( Doc* doc )
 {
-    if( doc != 0 ) {
+    if( doc != nullptr ) {
         QTabWidget::removeTab( indexOf( doc->view() ) );
     }
 }
@@ -109,7 +109,7 @@ void K3b::ProjectTabWidget::removeTab( Doc* doc )
 
 void K3b::ProjectTabWidget::setCurrentTab( Doc* doc )
 {
-    if( doc != 0 ) {
+    if( doc != nullptr ) {
         setCurrentWidget( doc->view() );
         doc->view()->setFocus();
     }
@@ -122,7 +122,7 @@ K3b::Doc* K3b::ProjectTabWidget::currentTab() const
     if( K3b::View* view = qobject_cast<K3b::View*>(widget) )
         return view->doc();
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -141,7 +141,7 @@ K3b::Doc* K3b::ProjectTabWidget::projectAt( const QPoint& pos ) const
         if(View* view = qobject_cast<View*>(w) )
             return view->doc();
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -171,7 +171,7 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
 
         else if( e->type() == QEvent::DragMove ) {
             QDragMoveEvent* de = static_cast<QDragMoveEvent*>(e);
-            de->setAccepted( projectAt(de->pos()) != 0 );
+            de->setAccepted( projectAt(de->pos()) != nullptr );
             return true;
         }
 

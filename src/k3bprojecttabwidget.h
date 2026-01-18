@@ -28,7 +28,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit ProjectTabWidget( QWidget *parent = 0 );
+        explicit ProjectTabWidget( QWidget *parent = nullptr );
         ~ProjectTabWidget() override;
 
         void addTab( Doc* doc );

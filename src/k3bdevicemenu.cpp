@@ -142,7 +142,7 @@ void K3b::DeviceMenu::Private::_k_ripVideoDVD()
 
 void K3b::DeviceMenu::Private::_k_continueMultisession()
 {
-    K3b::DataMultisessionImportDialog::importSession( 0, qApp->activeWindow() );
+    K3b::DataMultisessionImportDialog::importSession( nullptr, qApp->activeWindow() );
 }
 
 

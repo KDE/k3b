@@ -90,7 +90,7 @@ K3b::Device::Device* K3b::PlacesModel::deviceForIndex( const QModelIndex& index 
     if ( qobject_cast<K3b::DeviceModel*>( subModelForIndex( index ) ) == d->deviceModel ) {
         return d->deviceModel->deviceForIndex( mapToSubModel( index ) );
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -129,7 +129,7 @@ void K3b::PlacesModel::expandToUrl( const QUrl& url )
 
     // search for the best suited place that contains this URL
     int maxDepth = 0;
-    KDirModel* modelToExpand = 0;
+    KDirModel* modelToExpand = nullptr;
 
     for( DirModels::iterator it = d->dirModels.begin(); it != d->dirModels.end(); ++it ) {
         KDirModel* model = it.key();

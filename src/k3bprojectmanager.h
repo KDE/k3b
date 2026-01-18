@@ -21,7 +21,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit ProjectManager( QObject* parent = 0 );
+        explicit ProjectManager( QObject* parent = nullptr );
         ~ProjectManager() override;
 
         QList<Doc*> projects() const;

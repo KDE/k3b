@@ -87,7 +87,7 @@ void K3b::WritingModeWidget::init()
 {
     d = new Private();
     d->q = this;
-    d->device = 0;
+    d->device = nullptr;
 
     connect( this, SIGNAL(valueChanged(int)), this, SLOT(_k_writingModeChanged(int)) );
 

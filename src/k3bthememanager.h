@@ -105,7 +105,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit ThemeManager( QObject* parent = 0 );
+        explicit ThemeManager( QObject* parent = nullptr );
         ~ThemeManager() override;
 
         QList<Theme*>& themes() const;

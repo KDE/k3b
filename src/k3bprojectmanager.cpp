@@ -84,7 +84,7 @@ K3b::ProjectManager::ProjectManager( QObject* parent )
     : QObject( parent )
 {
     d = new Private();
-    d->activeProject = 0;
+    d->activeProject = nullptr;
 
     d->audioUntitledCount = 0;
     d->dataUntitledCount = 0;
@@ -153,7 +153,7 @@ K3b::Doc* K3b::ProjectManager::findByUrl( const QUrl& url )
         if( doc->URL() == url )
             return doc;
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -166,8 +166,8 @@ bool K3b::ProjectManager::isEmpty() const
 void K3b::ProjectManager::setActive( K3b::Doc* docActive )
 {
     if( !docActive ) {
-        d->activeProject = 0L;
-        emit activeProjectChanged( 0L );
+        d->activeProject = nullptr;
+        emit activeProjectChanged( nullptr );
         return;
     }
 
@@ -194,7 +194,7 @@ K3b::Doc* K3b::ProjectManager::createEmptyProject( K3b::Doc::Type type )
 {
     qDebug() << type;
 
-    K3b::Doc* doc = 0;
+    K3b::Doc* doc = nullptr;
     QString fileName;
 
     switch( type ) {
@@ -486,14 +486,14 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
                 if( ::strncmp( test, "<?xml", 5 ) ) {
                     qDebug() << "(K3b::Doc) " << url.toLocalFile() << " seems to be no xml file.";
                     QApplication::restoreOverrideCursor();
-                    return 0;
+                    return nullptr;
                 }
                 tmpfile.reset();
             }
             else {
                 qDebug() << "(K3b::Doc) could not read from file.";
                 QApplication::restoreOverrideCursor();
-                return 0;
+                return nullptr;
             }
             if( xmlDoc.setContent( &tmpfile ) )
                 success = true;
@@ -505,7 +505,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     if( !success ) {
         qDebug() << "(K3b::Doc) could not open file " << url.toLocalFile();
         QApplication::restoreOverrideCursor();
-        return 0;
+        return nullptr;
     }
 
     // check the documents DOCTYPE
@@ -529,7 +529,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     } else {
         qDebug() << "(K3b::Doc) unknown doc type: " << xmlDoc.doctype().name();
         QApplication::restoreOverrideCursor();
-        return 0;
+        return nullptr;
     }
 
     // we do not know yet if we will be able to actually open the project, so don't inform others yet
@@ -555,7 +555,7 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     }
     else {
         delete newDoc;
-        newDoc = 0;
+        newDoc = nullptr;
     }
 
     QApplication::restoreOverrideCursor();

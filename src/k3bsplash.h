@@ -23,7 +23,7 @@ class Splash : public QWidget
     Q_OBJECT
 
 public:
-    explicit Splash( QWidget* parent = 0 );
+    explicit Splash( QWidget* parent = nullptr );
     ~Splash() override;
 
 public Q_SLOTS:

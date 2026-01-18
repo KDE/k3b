@@ -183,8 +183,8 @@ namespace K3b {
         void slotCheckSystemTimed();
 
     private:
-        bool fileSave( Doc* doc = 0 );
-        bool fileSaveAs( Doc* doc = 0 );
+        bool fileSave( Doc* doc = nullptr );
+        bool fileSaveAs( Doc* doc = nullptr );
         void closeProject( Doc* );
 
         /** save general Options like all bar positions and status as well as the geometry and the recent file list to the configuration

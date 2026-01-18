@@ -76,7 +76,7 @@ void ProjectInterface::burn()
 bool ProjectInterface::directBurn()
 {
     if( m_doc->burner() ) {
-        JobProgressDialog* dlg = 0;
+        JobProgressDialog* dlg = nullptr;
         if( m_doc->onlyCreateImages() )
             dlg = new JobProgressDialog( m_doc->view() );
         else

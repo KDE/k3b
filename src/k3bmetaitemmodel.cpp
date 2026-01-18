@@ -35,8 +35,8 @@ namespace {
     class Node {
     public:
         Node()
-            : parent( 0 ),
-              m_place( 0 ) {
+            : parent( nullptr ),
+              m_place( nullptr ) {
 
         }
 
@@ -167,7 +167,7 @@ namespace {
                 return node;
         }
 
-        return 0;
+        return nullptr;
     }
 
     static void K3b_ASSERT(bool test) CLANG_ANALYZER_NORETURN { Q_ASSERT(test); }
@@ -228,7 +228,7 @@ public:
                 return &place;
             }
         }
-        return 0;
+        return nullptr;
     }
 
     void updatePlaceRows() {
@@ -272,7 +272,7 @@ public:
             }
         }
 
-        return 0;
+        return nullptr;
     }
 
     int getRootNodeRow(Node *node)
@@ -310,7 +310,7 @@ public:
         if( index.isValid() && index.model() == q )
             return static_cast<Node*>(index.internalPointer());
         else
-            return 0;
+            return nullptr;
     }
 
     /**
@@ -359,7 +359,7 @@ QAbstractItemModel* K3b::MetaItemModel::subModelForIndex( const QModelIndex& ind
     if( Node* node = d->nodeForIndex( index ) )
         return node->model();
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -692,14 +692,14 @@ QMimeData* K3b::MetaItemModel::mimeData( const QModelIndexList& indexes ) const
             QModelIndex sourceIndex = mapToSubModel( *it );
             if ( !origIndexes.isEmpty() && sourceIndex.model() != origIndexes.first().model() ) {
                 qDebug() << "cannot handle indexes from different submodels yet.";
-                return 0;
+                return nullptr;
             }
             origIndexes.append( sourceIndex );
         }
         return origIndexes.first().model()->mimeData( origIndexes );
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -809,7 +809,7 @@ void K3b::MetaItemModel::removeSubModel( QAbstractItemModel* model )
 void K3b::MetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& parent, int start, int end )
 {
     Place* place = d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) );
-    Q_ASSERT( place != 0 );
+    Q_ASSERT( place != nullptr );
 
     QModelIndex newParent;
     int targetStart = start, targetEnd = end;
@@ -863,7 +863,7 @@ void K3b::MetaItemModel::slotRowsAboutToBeInserted( const QModelIndex& parent, i
 void K3b::MetaItemModel::slotRowsInserted( const QModelIndex& parent, int start, int end )
 {
     Place* place = d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) );
-    Q_ASSERT( place != 0 );
+    Q_ASSERT( place != nullptr );
 
     Node* parentNode;
     if( parent.isValid() )
@@ -874,7 +874,7 @@ void K3b::MetaItemModel::slotRowsInserted( const QModelIndex& parent, int start,
     // updating original indexes in newly created nodes
     for( int i = start; i <= end; ++i) {
         Node* child = parentNode->children.at( i );
-        Q_ASSERT( child != 0 );
+        Q_ASSERT( child != nullptr );
         child->originalModelIndex = parentNode->model()->index( i, 0, parent );
     }
 
@@ -887,7 +887,7 @@ void K3b::MetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& parent, in
     //qDebug();
 
     Place* place = d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) );
-    Q_ASSERT( place != 0 );
+    Q_ASSERT( place != nullptr );
 
     QModelIndex newParent;
     int targetStart = start, targetEnd = end;
@@ -932,7 +932,7 @@ void K3b::MetaItemModel::slotRowsAboutToBeRemoved( const QModelIndex& parent, in
 void K3b::MetaItemModel::slotRowsRemoved( const QModelIndex&, int, int )
 {
     Place* place = d->placeForModel( qobject_cast<QAbstractItemModel*>( sender() ) );
-    Q_ASSERT( place != 0 );
+    Q_ASSERT( place != nullptr );
 
     if ( place->flat ) {
         d->updatePlaceRows();

@@ -21,7 +21,7 @@ namespace K3b {
 
     protected:
         ContentsView( bool withHeader,
-                      QWidget* parent = 0 );
+                      QWidget* parent = nullptr );
 
         QWidget* mainWidget();
         void setMainWidget( QWidget* );
