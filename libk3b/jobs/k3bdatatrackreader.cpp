@@ -54,9 +54,9 @@ K3b::DataTrackReader::Private::Private()
     : ignoreReadErrors(false),
       noCorrection(false),
       retries(10),
-      device(0),
-      ioDevice(0),
-      libcss(0)
+      device(nullptr),
+      ioDevice(nullptr),
+      libcss(nullptr)
 {
 }
 
@@ -122,7 +122,7 @@ void K3b::DataTrackReader::writeTo( QIODevice* ioDev )
 void K3b::DataTrackReader::setImagePath( const QString& p )
 {
     d->imagePath = p;
-    d->ioDevice = 0;
+    d->ioDevice = nullptr;
 }
 
 

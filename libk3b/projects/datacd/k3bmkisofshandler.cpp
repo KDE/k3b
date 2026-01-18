@@ -29,7 +29,7 @@ public:
 K3b::MkisofsHandler::MkisofsHandler()
 {
     d = new Private;
-    d->mkisofsBin = 0;
+    d->mkisofsBin = nullptr;
 }
 
 

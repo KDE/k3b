@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        IsoImager( DataDoc*, JobHandler*, QObject* parent = 0 );
+        IsoImager( DataDoc*, JobHandler*, QObject* parent = nullptr );
         ~IsoImager() override;
 
         bool active() const override;
@@ -67,7 +67,7 @@ namespace K3b {
          * If dev == 0 IsoImager will ignore the data in the previous session.
          * This is usable for CD-Extra.
          */
-        void setMultiSessionInfo( const QString&, Device::Device* dev = 0 );
+        void setMultiSessionInfo( const QString&, Device::Device* dev = nullptr );
 
         QString multiSessionInfo() const;
         Device::Device* multiSessionImportDevice() const;

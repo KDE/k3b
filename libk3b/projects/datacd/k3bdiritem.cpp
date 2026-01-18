@@ -157,7 +157,7 @@ K3b::DataItem* K3b::DirItem::takeDataItem( K3b::DataItem* item )
         takeDataItems( i, 1 );
         return item;
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -179,7 +179,7 @@ K3b::DirItem::Children K3b::DirItem::takeDataItems( int start, int count )
             else
                 updateFiles( -1, 0 );
 
-            item->setParentDir( 0 );
+            item->setParentDir( nullptr );
 
             // unset OLD_SESSION flag if it was the last child from previous sessions
             updateOldSessionFlag();
@@ -228,7 +228,7 @@ K3b::DataItem* K3b::DirItem::nextChild( K3b::DataItem* prev ) const
     // search for prev in children
     int index = m_children.lastIndexOf( prev );
     if( index < 0 || index+1 == m_children.count() ) {
-        return 0;
+        return nullptr;
     }
     else
         return m_children[index+1];
@@ -237,7 +237,7 @@ K3b::DataItem* K3b::DirItem::nextChild( K3b::DataItem* prev ) const
 
 bool K3b::DirItem::alreadyInDirectory( const QString& filename ) const
 {
-    return (find( filename ) != 0);
+    return (find( filename ) != nullptr);
 }
 
 
@@ -247,7 +247,7 @@ K3b::DataItem* K3b::DirItem::find( const QString& filename ) const
         if( item->k3bName() == filename )
             return item;
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -268,7 +268,7 @@ K3b::DataItem* K3b::DirItem::findByPath( const QString& p )
         if( item && item->isDir() )
             return ((K3b::DirItem*)item)->findByPath( path.mid( pos+1 ) );
         else
-            return 0;
+            return nullptr;
     }
 }
 
@@ -334,7 +334,7 @@ K3b::Msf K3b::DirItem::itemBlocks( bool followSymlinks ) const
 
 bool K3b::DirItem::isSubItem( const DataItem* item ) const
 {
-    for( const DirItem* dir = dynamic_cast<const DirItem*>(item); dir != 0; dir = dir->parent() ) {
+    for( const DirItem* dir = dynamic_cast<const DirItem*>(item); dir != nullptr; dir = dir->parent() ) {
         if( dir == this ) {
             return true;
         }

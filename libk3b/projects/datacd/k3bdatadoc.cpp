@@ -53,11 +53,11 @@ public:
     Private()
     :
         oldSessionSize( 0 ),
-        root( 0 ),
+        root( nullptr ),
         dataMode( 0 ),
         verifyData( false ),
         importedSession( -1 ),
-        bootCataloge( 0 ),
+        bootCataloge( nullptr ),
         bExistingItemsReplaceAll( false ),
         bExistingItemsIgnoreAll( false ),
         needToCutFilenames( false )
@@ -145,7 +145,7 @@ void K3b::DataDoc::clear()
     clearImportedSession();
     d->importedSession = -1;
     d->oldSessionSize = 0;
-    d->bootCataloge = 0;
+    d->bootCataloge = nullptr;
     if( d->root ) {
         while( !d->root->children().isEmpty() )
             removeItem( d->root->children().first() );
@@ -208,7 +208,7 @@ void K3b::DataDoc::addUrlsToDir( const QList<QUrl>& l, K3b::DirItem* dir )
         if( k3bname.isEmpty() )
             k3bname = '1';
 
-        K3b::DirItem* newDirItem = 0;
+        K3b::DirItem* newDirItem = nullptr;
 
         // rename the new item if an item with that name already exists
         int cnt = 0;
@@ -268,13 +268,13 @@ bool K3b::DataDoc::nameAlreadyInDir( const QString& name, K3b::DirItem* dir )
     if( !dir )
         return false;
     else
-        return ( dir->find( name ) != 0 );
+        return ( dir->find( name ) != nullptr );
 }
 
 
 K3b::DirItem* K3b::DataDoc::addEmptyDir( const QString& name, K3b::DirItem* parent )
 {
-    if( parent != 0 ) {
+    if( parent != nullptr ) {
         K3b::DirItem* item = new K3b::DirItem( name );
         parent->addDataItem( item );
 
@@ -282,7 +282,7 @@ K3b::DirItem* K3b::DataDoc::addEmptyDir( const QString& name, K3b::DirItem* pare
 
         return item;
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -365,7 +365,7 @@ bool K3b::DataDoc::loadDocumentData( QDomElement* rootElem )
         return false;
     }
 
-    if( d->root == 0 )
+    if( d->root == nullptr )
         d->root = new K3b::RootItem( *this );
 
     QDomNodeList filesList = nodes.item(3).childNodes();
@@ -562,7 +562,7 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
     if( !parent )
         return false;
 
-    K3b::DataItem* newItem = 0;
+    K3b::DataItem* newItem = nullptr;
 
     if( elem.nodeName() == "file" ) {
         QDomElement urlElem = elem.firstChild().toElement();
@@ -613,7 +613,7 @@ bool K3b::DataDoc::loadDataItem( QDomElement& elem, K3b::DirItem* parent )
     }
     else if( elem.nodeName() == "directory" ) {
         // This is for the VideoDVD project which already contains the *_TS folders
-        K3b::DirItem* newDirItem = 0;
+        K3b::DirItem* newDirItem = nullptr;
         if( K3b::DataItem* item = parent->find( elem.attributeNode( "name" ).value() ) ) {
             if( item->isDir() ) {
                 newDirItem = static_cast<K3b::DirItem*>(item);
@@ -994,7 +994,7 @@ void K3b::DataDoc::beginRemoveItems( DirItem* parent, int start, int end )
             d->bootImages.removeAll( static_cast<K3b::BootItem*>( item ) );
             if( d->bootImages.isEmpty() ) {
                 delete d->bootCataloge;
-                d->bootCataloge = 0;
+                d->bootCataloge = nullptr;
             }
         }
     }
@@ -1297,8 +1297,8 @@ bool K3b::DataDoc::importSession( K3b::Device::Device* device, int session )
         }
 
         // import some former settings
-        d->isoOptions.setCreateRockRidge( iso.firstRRDirEntry() != 0 );
-        d->isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != 0 );
+        d->isoOptions.setCreateRockRidge( iso.firstRRDirEntry() != nullptr );
+        d->isoOptions.setCreateJoliet( iso.firstJolietDirEntry() != nullptr );
         d->isoOptions.setVolumeID( iso.primaryDescriptor().volumeId );
         // TODO: also import some other pd fields
 
@@ -1341,7 +1341,7 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
         if( const K3b::Iso9660Entry* entry = importDir->entry( *it ) ) {
             K3b::DataItem* oldItem = parent->find( entry->name() );
             if( entry->isDirectory() ) {
-                K3b::DirItem* dir = 0;
+                K3b::DirItem* dir = nullptr;
                 if( oldItem && oldItem->isDir() ) {
                     dir = (K3b::DirItem*)oldItem;
                 }

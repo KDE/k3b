@@ -37,7 +37,7 @@ public:
 
 
 K3b::Device::DeviceHandler::DeviceHandler( Device* dev, QObject* parent )
-    : K3b::ThreadJob( 0, parent ),
+    : K3b::ThreadJob( nullptr, parent ),
       d( new Private( false ) )
 {
     d->dev = dev;
@@ -45,14 +45,14 @@ K3b::Device::DeviceHandler::DeviceHandler( Device* dev, QObject* parent )
 
 
 K3b::Device::DeviceHandler::DeviceHandler( QObject* parent )
-    : K3b::ThreadJob( 0, parent ),
+    : K3b::ThreadJob( nullptr, parent ),
       d( new Private( false ) )
 {
 }
 
 
 K3b::Device::DeviceHandler::DeviceHandler( Commands command, Device* dev )
-    : K3b::ThreadJob( 0, 0 ),
+    : K3b::ThreadJob( nullptr, nullptr ),
       d( new Private( false ) )
 {
     d->dev = dev;

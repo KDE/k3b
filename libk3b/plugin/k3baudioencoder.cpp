@@ -16,7 +16,7 @@ class K3b::AudioEncoder::Private
 {
 public:
     Private()
-        : outputFile(0) {
+        : outputFile(nullptr) {
     }
 
     QFile* outputFile;
@@ -78,7 +78,7 @@ void K3b::AudioEncoder::closeFile()
         if( d->outputFile->isOpen() )
             d->outputFile->close();
         delete d->outputFile;
-        d->outputFile = 0;
+        d->outputFile = nullptr;
         d->outputFilename = QString();
     }
 }

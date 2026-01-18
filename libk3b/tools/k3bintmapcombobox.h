@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit IntMapComboBox( QWidget* parent = 0 );
+        explicit IntMapComboBox( QWidget* parent = nullptr );
         ~IntMapComboBox() override;
 
         int selectedValue() const;

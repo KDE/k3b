@@ -24,7 +24,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit Md5Job( JobHandler* jh , QObject* parent = 0 );
+        explicit Md5Job( JobHandler* jh , QObject* parent = nullptr );
         ~Md5Job() override;
 
 		QByteArray hexDigest();

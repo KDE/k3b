@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MovixDoc( QObject* parent = 0 );
+        explicit MovixDoc( QObject* parent = nullptr );
         ~MovixDoc() override;
 
         Type type() const override { return MovixProject; }

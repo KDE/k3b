@@ -105,7 +105,7 @@ public:
     };
     Q_DECLARE_FLAGS( ProcessFlags, ProcessFlag )
 
-    explicit K3bQProcess(QObject *parent = 0);
+    explicit K3bQProcess(QObject *parent = nullptr);
     ~K3bQProcess() override;
 
     void start(const QString &program, const QStringList &arguments, OpenMode mode = ReadWrite);
@@ -164,7 +164,7 @@ public:
     bool isReadyWrite() const;
 
     static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory,
-                              qint64 *pid = 0);
+                              qint64 *pid = nullptr);
     static bool startDetached(const QString &program, const QStringList &arguments);
     static bool startDetached(const QString &program);
 

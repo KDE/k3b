@@ -62,7 +62,7 @@ namespace K3b {
 
         AudioDataSource* copy() const override;
 
-        QIODevice* createReader( QObject* parent = 0 ) override;
+        QIODevice* createReader( QObject* parent = nullptr ) override;
 
     private:
         class Private;

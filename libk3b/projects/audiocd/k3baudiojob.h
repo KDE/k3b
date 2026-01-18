@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioJob( AudioDoc*, JobHandler*, QObject* parent = 0 );
+        AudioJob( AudioDoc*, JobHandler*, QObject* parent = nullptr );
         ~AudioJob() override;
 
         Doc* doc() const;

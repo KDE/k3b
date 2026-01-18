@@ -19,7 +19,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit BlankingJob( JobHandler*, QObject* parent = 0 );
+        explicit BlankingJob( JobHandler*, QObject* parent = nullptr );
         ~BlankingJob() override;
 
         QString jobDescription() const override;

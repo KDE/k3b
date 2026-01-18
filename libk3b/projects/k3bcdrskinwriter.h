@@ -30,7 +30,7 @@ namespace K3b {
 
     public:
         CdrskinWriter( Device::Device*, JobHandler* hdl,
-                        QObject* parent = 0 );
+                        QObject* parent = nullptr );
         ~CdrskinWriter() override;
 
         bool active() const override;

@@ -27,13 +27,13 @@
 
 K3b::BinImageWritingJob::BinImageWritingJob( K3b::JobHandler* hdl, QObject* parent )
     : K3b::BurnJob( hdl, parent ),
-      m_device(0),
+      m_device(nullptr),
       m_simulate(false),
       m_noFix(false),
       m_tocFile(),
       m_speed(2),
       m_copies(1),
-      m_writer(0)
+      m_writer(nullptr)
 {
 }
 

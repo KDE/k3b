@@ -23,8 +23,8 @@
 
 K3b::MsInfoFetcher::MsInfoFetcher( K3b::JobHandler* jh, QObject* parent )
     : K3b::Job( jh, parent ),
-      m_process(0),
-      m_device(0),
+      m_process(nullptr),
+      m_device(nullptr),
       m_dvd(false)
 {
 }
@@ -49,7 +49,7 @@ void K3b::MsInfoFetcher::start()
         return;
     }
 
-    if( m_device == 0 ) {
+    if( m_device == nullptr ) {
         qDebug() << "(K3b::MsInfoFetcher) internal error: No device set!";
         jobFinished(false);
         return;
@@ -72,7 +72,7 @@ void K3b::MsInfoFetcher::getMsInfo()
     delete m_process;
     m_process = new Process(this);
 
-    const K3b::ExternalBin* bin = 0;
+    const K3b::ExternalBin* bin = nullptr;
     if( m_dvd ) {
         // already handled
     }

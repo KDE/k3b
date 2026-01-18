@@ -72,7 +72,7 @@ class K3b::MixedJob::Private
 {
 public:
     Private()
-        : maxSpeedJob(0) {
+        : maxSpeedJob(nullptr) {
     }
 
 
@@ -91,7 +91,7 @@ public:
 K3b::MixedJob::MixedJob( K3b::MixedDoc* doc, K3b::JobHandler* hdl, QObject* parent )
     : K3b::BurnJob( hdl, parent ),
       m_doc( doc ),
-      m_normalizeJob(0)
+      m_normalizeJob(nullptr)
 {
     d = new Private;
 
@@ -115,8 +115,8 @@ K3b::MixedJob::MixedJob( K3b::MixedDoc* doc, K3b::JobHandler* hdl, QObject* pare
     connect( m_msInfoFetcher, SIGNAL(finished(bool)), this, SLOT(slotMsInfoFetched(bool)) );
     connect( m_msInfoFetcher, SIGNAL(infoMessage(QString,int)), this, SIGNAL(infoMessage(QString,int)) );
 
-    m_writer = 0;
-    m_tocFile = 0;
+    m_writer = nullptr;
+    m_tocFile = nullptr;
 }
 
 
@@ -130,7 +130,7 @@ K3b::MixedJob::~MixedJob()
 K3b::Device::Device* K3b::MixedJob::writer() const
 {
     if( m_doc->onlyCreateImages() )
-        return 0;
+        return nullptr;
     else
         return m_doc->burner();
 }
@@ -618,7 +618,7 @@ void K3b::MixedJob::slotAudioDecoderNextTrack( int t, int tt )
 bool K3b::MixedJob::prepareWriter()
 {
     delete m_writer;
-    m_writer = 0;
+    m_writer = nullptr;
 
     if( ( m_currentAction == WRITING_ISO_IMAGE && m_usedDataWritingApp == K3b::WritingAppCdrecord ) ||
         ( m_currentAction == WRITING_AUDIO_IMAGE && m_usedAudioWritingApp == K3b::WritingAppCdrecord ) )  {
@@ -851,7 +851,7 @@ void K3b::MixedJob::addDataTrack( K3b::CdrecordWriter* writer )
 
 void K3b::MixedJob::slotWriterNextTrack( int t, int )
 {
-    K3b::AudioTrack* track = 0;
+    K3b::AudioTrack* track = nullptr;
 
     if( m_doc->mixedType() == K3b::MixedDoc::DATA_FIRST_TRACK ) {
         if( t > 1 )
@@ -1101,7 +1101,7 @@ void K3b::MixedJob::cleanupAfterError()
         m_writer->cancel();
 
     delete m_tocFile;
-    m_tocFile = 0;
+    m_tocFile = nullptr;
 
     // remove the temp files
     removeBufferFiles();

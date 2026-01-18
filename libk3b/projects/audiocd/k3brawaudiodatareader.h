@@ -20,7 +20,7 @@ namespace K3b {
     class LIBK3B_EXPORT RawAudioDataReader : public QIODevice
     {
     public:
-        explicit RawAudioDataReader( RawAudioDataSource& source, QObject* parent = 0 );
+        explicit RawAudioDataReader( RawAudioDataSource& source, QObject* parent = nullptr );
         ~RawAudioDataReader() override;
 
         bool open( OpenMode mode ) override;

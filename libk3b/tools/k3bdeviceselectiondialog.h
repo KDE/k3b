@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DeviceSelectionDialog( QWidget* parent = 0,
+        explicit DeviceSelectionDialog( QWidget* parent = nullptr,
                                const QString& text = QString() );
         ~DeviceSelectionDialog() override;
 

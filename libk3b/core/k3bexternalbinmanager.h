@@ -188,7 +188,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit ExternalBinManager( QObject* parent = 0 );
+        explicit ExternalBinManager( QObject* parent = nullptr );
         ~ExternalBinManager() override;
 
         void search();

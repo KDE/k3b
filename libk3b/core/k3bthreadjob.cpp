@@ -18,7 +18,7 @@ class K3b::ThreadJob::Private
 {
 public:
     Private()
-        : thread( 0 ),
+        : thread( nullptr ),
           running( false ),
           canceled( false ) {
     }

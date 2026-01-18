@@ -100,7 +100,7 @@ namespace K3b {
          */
         Device::Toc toToc() const;
 
-        BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 ) override;
+        BurnJob* newBurnJob( JobHandler*, QObject* parent = nullptr ) override;
 
         /**
          * returns the new after track, ie. the last added track or null if
@@ -114,7 +114,7 @@ namespace K3b {
          *
          * BE AWARE THAT THE DECODER HAS TO FIT THE AUDIO FILE IN THE CUE.
          */
-        AudioTrack* importCueFile( const QString& cuefile, AudioTrack* after, AudioDecoder* decoder = 0 );
+        AudioTrack* importCueFile( const QString& cuefile, AudioTrack* after, AudioDecoder* decoder = nullptr );
 
         /**
          * Create a decoder for a specific url. If another AudioFileSource with this
@@ -127,7 +127,7 @@ namespace K3b {
          * \param reused If not null this variable is set to true if the decoder is already in
          *               use and AudioDecoder::analyseFile() does not have to be called anymore.
          */
-        AudioDecoder* getDecoderForUrl( const QUrl& url, bool* reused = 0 );
+        AudioDecoder* getDecoderForUrl( const QUrl& url, bool* reused = nullptr );
 
         /**
          * Transforms given url list into flat file list.
@@ -149,7 +149,7 @@ namespace K3b {
          */
         void addTrack( AudioTrack* track, int position = 0 );
 
-        void addSources( AudioTrack* parent, const QList<QUrl>& urls, AudioDataSource* sourceAfter = 0 );
+        void addSources( AudioTrack* parent, const QList<QUrl>& urls, AudioDataSource* sourceAfter = nullptr );
 
         void removeTrack( AudioTrack* );
         void moveTrack( AudioTrack* track, AudioTrack* after );

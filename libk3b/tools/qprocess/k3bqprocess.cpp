@@ -106,18 +106,18 @@ void K3bQProcessPrivate::Channel::clear()
     case PipeSource:
         Q_ASSERT(process);
         process->stdinChannel.type = Normal;
-        process->stdinChannel.process = 0;
+        process->stdinChannel.process = nullptr;
         break;
     case PipeSink:
         Q_ASSERT(process);
         process->stdoutChannel.type = Normal;
-        process->stdoutChannel.process = 0;
+        process->stdoutChannel.process = nullptr;
         break;
     }
 
     type = Normal;
     file.clear();
-    process = 0;
+    process = nullptr;
 }
 
 /*!
@@ -415,10 +415,10 @@ K3bQProcessPrivate::K3bQProcessPrivate()
     sequenceNumber = 0;
     exitCode = 0;
     exitStatus = ::QProcess::NormalExit;
-    startupSocketNotifier = 0;
-    deathNotifier = 0;
-    notifier = 0;
-    pipeWriter = 0;
+    startupSocketNotifier = nullptr;
+    deathNotifier = nullptr;
+    notifier = nullptr;
+    pipeWriter = nullptr;
     childStartedPipe[0] = INVALID_Q_PIPE;
     childStartedPipe[1] = INVALID_Q_PIPE;
     deathPipe[0] = INVALID_Q_PIPE;
@@ -476,31 +476,31 @@ void K3bQProcessPrivate::cleanup()
     if (stdoutChannel.notifier) {
         stdoutChannel.notifier->setEnabled(false);
         delete stdoutChannel.notifier;
-        stdoutChannel.notifier = 0;
+        stdoutChannel.notifier = nullptr;
     }
     if (stderrChannel.notifier) {
         stderrChannel.notifier->setEnabled(false);
         delete stderrChannel.notifier;
-        stderrChannel.notifier = 0;
+        stderrChannel.notifier = nullptr;
     }
     if (stdinChannel.notifier) {
         stdinChannel.notifier->setEnabled(false);
         delete stdinChannel.notifier;
-        stdinChannel.notifier = 0;
+        stdinChannel.notifier = nullptr;
     }
     if (startupSocketNotifier) {
         startupSocketNotifier->setEnabled(false);
         delete startupSocketNotifier;
-        startupSocketNotifier = 0;
+        startupSocketNotifier = nullptr;
     }
     if (deathNotifier) {
         deathNotifier->setEnabled(false);
         delete deathNotifier;
-        deathNotifier = 0;
+        deathNotifier = nullptr;
     }
     if (notifier) {
         delete notifier;
-        notifier = 0;
+        notifier = nullptr;
     }
     destroyPipe(stdoutChannel.pipe);
     destroyPipe(stderrChannel.pipe);
@@ -806,7 +806,7 @@ void K3bQProcessPrivate::closeWriteChannel()
         stdinChannel.notifier->setEnabled(false);
         if (stdinChannel.notifier) {
             delete stdinChannel.notifier;
-            stdinChannel.notifier = 0;
+            stdinChannel.notifier = nullptr;
         }
     }
 #ifdef Q_OS_WIN

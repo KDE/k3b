@@ -110,7 +110,7 @@ AudioTrackReader* AudioDocReader::currentTrackReader() const
     if( d->current >=0 && d->current < d->readers.size() )
         return d->readers.at( d->current );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -133,7 +133,7 @@ bool AudioDocReader::open( QIODevice::OpenMode mode )
 {
     if( !mode.testFlag( QIODevice::WriteOnly ) && d->readers.empty() && d->doc.numOfTracks() > 0 ) {
 
-        for( AudioTrack* track = d->doc.firstTrack(); track != 0; track = track->next() ) {
+        for( AudioTrack* track = d->doc.firstTrack(); track != nullptr; track = track->next() ) {
             d->readers.push_back( new AudioTrackReader( *track ) );
             if( !d->readers.back()->open( mode ) ) {
                 close();

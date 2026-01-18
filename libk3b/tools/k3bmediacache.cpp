@@ -353,7 +353,7 @@ K3b::MediaCache::DeviceEntry* K3b::MediaCache::findDeviceEntry( K3b::Device::Dev
     if( it != d->deviceMap.end() )
         return it.value();
     else
-        return 0;
+        return nullptr;
 }
 
 

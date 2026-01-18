@@ -82,14 +82,14 @@ class K3b::AudioDecoder::Private
 public:
     Private()
         : metaDataCollection(NULL),
-          resampleState(0),
-          resampleData(0),
-          inBuffer(0),
-          inBufferPos(0),
+          resampleState(nullptr),
+          resampleData(nullptr),
+          inBuffer(nullptr),
+          inBufferPos(nullptr),
           inBufferFill(0),
-          outBuffer(0),
-          monoBuffer(0),
-          decodingBufferPos(0),
+          outBuffer(nullptr),
+          monoBuffer(nullptr),
+          decodingBufferPos(nullptr),
           decodingBufferFill(0),
           valid(true) {
     }
@@ -225,7 +225,7 @@ bool K3b::AudioDecoder::initDecoder()
     d->currentPos = 0;
     d->currentPosOffset = 0;
     d->decodingBufferFill = 0;
-    d->decodingBufferPos = 0;
+    d->decodingBufferPos = nullptr;
     d->decodingStartPos = 0;
     d->inBufferFill = 0;
 
@@ -358,7 +358,7 @@ int K3b::AudioDecoder::decode( char* _data, int maxLen )
 int K3b::AudioDecoder::resample( char* data, int maxLen )
 {
     if( !d->resampleState ) {
-        d->resampleState = src_new( SRC_SINC_MEDIUM_QUALITY, d->channels, 0 );
+        d->resampleState = src_new( SRC_SINC_MEDIUM_QUALITY, d->channels, nullptr );
         if( !d->resampleState ) {
             qDebug() << "(K3b::AudioDecoder) unable to initialize resampler.";
             return -1;
@@ -621,7 +621,7 @@ K3b::AudioDecoder* K3b::AudioDecoderFactory::createDecoder( const QUrl& url )
     qDebug() << "(K3b::AudioDecoderFactory::createDecoder( " << url.toLocalFile() << " ) no success";
 
     // nothing found
-    return 0;
+    return nullptr;
 }
 
 

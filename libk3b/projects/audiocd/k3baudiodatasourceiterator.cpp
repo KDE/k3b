@@ -55,7 +55,7 @@ K3b::AudioDataSource* K3b::AudioDataSourceIterator::first()
     if( m_currentTrack )
         m_currentSource = m_currentTrack->firstSource();
     else
-        m_currentSource = 0;
+        m_currentSource = nullptr;
 
     return m_currentSource;
 }

@@ -65,7 +65,7 @@ namespace K3b {
         /**
          * If the string starts with 0x it's assumed to be a hex number.
          */
-        static int toInt( const QString&, bool* ok = 0 );
+        static int toInt( const QString&, bool* ok = nullptr );
 
     private:
         int m_min;

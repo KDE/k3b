@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioDecoder( QObject* parent = 0 );
+        explicit AudioDecoder( QObject* parent = nullptr );
         ~AudioDecoder() override;
 
         /**
@@ -201,7 +201,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioDecoderFactory( QObject* parent = 0 )
+        explicit AudioDecoderFactory( QObject* parent = nullptr )
             : Plugin( parent ) {
         }
 
@@ -231,7 +231,7 @@ namespace K3b {
          */
         virtual bool canDecode( const QUrl& filename ) = 0;
 
-        virtual AudioDecoder* createDecoder( QObject* parent = 0 ) const = 0;
+        virtual AudioDecoder* createDecoder( QObject* parent = nullptr ) const = 0;
 
         /**
          * Searching for an audiodecoder for @p filename.

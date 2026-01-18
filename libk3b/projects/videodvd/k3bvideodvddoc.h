@@ -13,7 +13,7 @@ namespace K3b {
     class LIBK3B_EXPORT VideoDvdDoc : public DataDoc
     {
     public:
-        explicit VideoDvdDoc( QObject* parent = 0 );
+        explicit VideoDvdDoc( QObject* parent = nullptr );
         ~VideoDvdDoc() override;
 
         Type type() const override { return VideoDvdProject; }

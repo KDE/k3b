@@ -38,7 +38,7 @@ public:
           layerBreak(0),
           hideFirstTrack(false),
           supportedWritingMedia(Device::MEDIA_WRITABLE),
-          writingJob(0) {
+          writingJob(nullptr) {
     }
 
     // member vars set via setXXX methods
@@ -130,7 +130,7 @@ QIODevice* K3b::MetaWriter::ioDevice() const
     if( d->writingJob )
         return d->writingJob->ioDevice();
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -150,7 +150,7 @@ void K3b::MetaWriter::start()
     }
 
     delete d->writingJob;
-    d->writingJob = 0;
+    d->writingJob = nullptr;
 
     bool success = true;
     switch( d->usedWritingApp ) {

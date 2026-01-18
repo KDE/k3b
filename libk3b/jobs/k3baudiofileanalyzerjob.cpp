@@ -17,7 +17,7 @@ K3b::AudioFileAnalyzerJob::AudioFileAnalyzerJob( K3b::JobHandler* hdl, QObject* 
     : K3b::ThreadJob( hdl, parent ),
       d( new Private() )
 {
-    d->decoder = 0;
+    d->decoder = nullptr;
 }
 
 

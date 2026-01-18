@@ -21,7 +21,7 @@
 K3b::Doc::Doc( QObject* parent )
     : QObject( parent ),
       m_modified(false),
-      m_view(0)
+      m_view(nullptr)
 {
     connect( this, SIGNAL(changed()), this, SLOT(slotChanged()) );
 }
@@ -95,7 +95,7 @@ bool K3b::Doc::newDocument()
     setModified( false );
 
     m_copies = 1;
-    m_burner = 0;
+    m_burner = nullptr;
     m_onTheFly = true;
     m_speed = 0;  // Auto
     m_onlyCreateImages = false;

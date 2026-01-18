@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VideoDvdImager( VideoDvdDoc* doc, JobHandler*, QObject* parent = 0 );
+        VideoDvdImager( VideoDvdDoc* doc, JobHandler*, QObject* parent = nullptr );
         ~VideoDvdImager() override;
 
     public Q_SLOTS:

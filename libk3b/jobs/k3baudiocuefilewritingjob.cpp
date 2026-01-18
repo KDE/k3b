@@ -27,11 +27,11 @@ class K3b::AudioCueFileWritingJob::Private
 {
 public:
     Private()
-        : device( 0 ),
-          audioDoc( 0 ),
-          audioJob( 0 ),
-          decoder( 0 ),
-          analyserJob( 0 ) {
+        : device( nullptr ),
+          audioDoc( nullptr ),
+          audioJob( nullptr ),
+          decoder( nullptr ),
+          analyserJob( nullptr ) {
     }
 
     K3b::Device::Device* device;
@@ -225,7 +225,7 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
     while( d->audioDoc->firstTrack() )
         delete d->audioDoc->firstTrack()->take();
 
-    d->decoder = 0;
+    d->decoder = nullptr;
 
     K3b::CueFileParser parser( d->cueFile );
     if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
@@ -241,8 +241,8 @@ void K3b::AudioCueFileWritingJob::importCueInProject()
         if( d->decoder ) {
             d->decoder->setFilename( parser.imageFilename() );
 
-            K3b::AudioTrack* after = 0;
-            K3b::AudioFile* newFile = 0;
+            K3b::AudioTrack* after = nullptr;
+            K3b::AudioFile* newFile = nullptr;
             unsigned int i = 0;
             for( K3b::Device::Toc::const_iterator it = parser.toc().constBegin();
                  it != parser.toc().constEnd(); ++it ) {

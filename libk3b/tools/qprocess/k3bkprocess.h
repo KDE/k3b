@@ -58,7 +58,7 @@ public:
     /**
      * Constructor
      */
-    explicit K3bKProcess(QObject *parent = 0);
+    explicit K3bKProcess(QObject *parent = nullptr);
 
     /**
      * Destructor

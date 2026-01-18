@@ -46,7 +46,7 @@ K3b::Device::Device* K3b::DeviceComboBox::selectedDevice() const
         return d->model->deviceForIndex( d->model->index( index, 0 ) );
     }
     else {
-        return 0;
+        return nullptr;
     }
 }
 

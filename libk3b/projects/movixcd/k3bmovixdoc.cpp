@@ -172,7 +172,7 @@ void K3b::MovixDoc::addSubTitleItem( K3b::MovixFileItem* item, const QUrl& url )
     QString name = K3b::MovixFileItem::subTitleFileName( item->k3bName() );
 
     if( nameAlreadyInDir( name, root() ) ) {
-        KMessageBox::error( 0, i18n("Could not rename subtitle file. File with requested name %1 already exists.",name) );
+        KMessageBox::error( nullptr, i18n("Could not rename subtitle file. File with requested name %1 already exists.",name) );
         return;
     }
 
@@ -194,7 +194,7 @@ void K3b::MovixDoc::removeSubTitleItem( K3b::MovixFileItem* item )
         emit subTitleAboutToBeRemoved( item );
 
         delete item->subTitleItem();
-        item->setSubTitleItem(0);
+        item->setSubTitleItem(nullptr);
 
         emit subTitleRemoved();
 

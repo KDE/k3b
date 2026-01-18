@@ -24,7 +24,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit SimpleJobHandler( QObject* parent = 0 );
+        explicit SimpleJobHandler( QObject* parent = nullptr );
         ~SimpleJobHandler() override;
 
         /*

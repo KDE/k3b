@@ -37,7 +37,7 @@ class K3b::CdrskinWriter::Private
 {
 public:
     Private()
-        : cdTextFile(0) {
+        : cdTextFile(nullptr) {
     }
 
     const ExternalBin* cdrskinBinObject;
@@ -775,7 +775,7 @@ void K3b::CdrskinWriter::slotProcessExited( int exitCode, QProcess::ExitStatus e
 {
     // remove temporary cdtext file
     delete d->cdTextFile;
-    d->cdTextFile = 0;
+    d->cdTextFile = nullptr;
 
     // release the device within this process
     burnDevice()->usageUnlock();

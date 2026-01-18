@@ -15,7 +15,7 @@ namespace K3b {
     class LIBK3B_EXPORT CdTextValidator : public Latin1Validator
     {
     public:
-        explicit CdTextValidator(QObject *parent = 0);
+        explicit CdTextValidator(QObject *parent = nullptr);
         ~CdTextValidator() override;
 
         State validate( QString& input, int& pos ) const override;

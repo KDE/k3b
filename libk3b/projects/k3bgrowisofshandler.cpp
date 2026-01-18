@@ -107,7 +107,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
     else if( line.contains( "flushing cache" ) ) {
         // here is where we already should stop querying the buffer fill
         // since the device is only used there so far...
-        m_device = 0;
+        m_device = nullptr;
 
         emit flushingCache();
         emit newSubTask( i18n("Flushing Cache")  );

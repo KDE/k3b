@@ -47,7 +47,7 @@ K3b::VideoDVDTitleDetectClippingJob::VideoDVDTitleDetectClippingJob( K3b::JobHan
       m_lowPriority( true )
 {
     d = new Private;
-    d->process = 0;
+    d->process = nullptr;
 }
 
 

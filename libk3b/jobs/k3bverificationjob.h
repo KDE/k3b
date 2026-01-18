@@ -39,7 +39,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit VerificationJob( JobHandler*, QObject* parent = 0 );
+        explicit VerificationJob( JobHandler*, QObject* parent = nullptr );
         ~VerificationJob() override;
 
     public Q_SLOTS:

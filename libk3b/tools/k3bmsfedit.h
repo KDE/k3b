@@ -21,7 +21,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MsfEdit( QWidget* parent = 0 );
+        explicit MsfEdit( QWidget* parent = nullptr );
         ~MsfEdit() override;
 
         Msf minimum() const;

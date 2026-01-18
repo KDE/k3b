@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MovixJob( MovixDoc* doc, JobHandler*, QObject* parent = 0 );
+        MovixJob( MovixDoc* doc, JobHandler*, QObject* parent = nullptr );
         ~MovixJob() override;
 
         Doc* doc() const;

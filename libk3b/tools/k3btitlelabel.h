@@ -19,7 +19,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit TitleLabel( QWidget* parent = 0 );
+        explicit TitleLabel( QWidget* parent = nullptr );
         ~TitleLabel() override;
 
         QSize sizeHint() const override;

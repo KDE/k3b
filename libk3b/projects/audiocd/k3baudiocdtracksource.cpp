@@ -86,7 +86,7 @@ K3b::AudioCdTrackSource::AudioCdTrackSource( unsigned int discid, const K3b::Msf
     d->title = title;
     d->cdArtist = cdArtist;
     d->cdTitle = cdTitle;
-    d->lastUsedDevice = 0;
+    d->lastUsedDevice = nullptr;
     d->initialized = false;
 }
 
@@ -164,7 +164,7 @@ K3b::Device::Device* K3b::AudioCdTrackSource::searchForAudioCD() const
 
     qDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD) failed.";
 
-    return 0;
+    return nullptr;
 }
 
 

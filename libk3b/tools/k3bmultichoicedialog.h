@@ -24,7 +24,7 @@ namespace K3b {
         MultiChoiceDialog( const QString& caption,
                            const QString& text,
                            QMessageBox::Icon = QMessageBox::Information,
-                           QWidget* parent = 0 );
+                           QWidget* parent = nullptr );
         ~MultiChoiceDialog() override;
 
         /**
@@ -35,7 +35,7 @@ namespace K3b {
         static int choose( const QString& caption,
                            const QString& text,
                            QMessageBox::Icon = QMessageBox::Information,
-                           QWidget* parent = 0,
+                           QWidget* parent = nullptr,
                            int buttonCount = 2,
                            const KGuiItem& b1 = KStandardGuiItem::ok(),
                            const KGuiItem& b2 = KStandardGuiItem::cancel(),

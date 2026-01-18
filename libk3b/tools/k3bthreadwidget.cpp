@@ -43,7 +43,7 @@ private:
 };
 
 
-K3b::ThreadWidget* K3b::ThreadWidget::s_instance = 0;
+K3b::ThreadWidget* K3b::ThreadWidget::s_instance = nullptr;
 
 
 K3b::ThreadWidget::ThreadWidget()
@@ -57,7 +57,7 @@ K3b::ThreadWidget::ThreadWidget()
 K3b::ThreadWidget::~ThreadWidget()
 {
     qDeleteAll( m_dataMap );
-    s_instance = 0;
+    s_instance = nullptr;
 }
 
 
@@ -66,7 +66,7 @@ int K3b::ThreadWidget::getNewId()
     // create new data
     Data* data = new Data;
     data->id = m_idCounter++;
-    data->data = 0;
+    data->data = nullptr;
     m_dataMap.insert( data->id, data );
     return data->id;
 }

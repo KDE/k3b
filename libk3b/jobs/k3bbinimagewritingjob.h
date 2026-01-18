@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit BinImageWritingJob( JobHandler*, QObject* parent = 0 );
+        explicit BinImageWritingJob( JobHandler*, QObject* parent = nullptr );
         ~BinImageWritingJob() override;
 
         Device::Device* writer() const override { return m_device; };

@@ -29,7 +29,7 @@ namespace K3b {
         enum SubMode { None, RW, RW_RAW };
 
         CdrdaoWriter( Device::Device* dev, JobHandler*,
-                      QObject* parent = 0 );
+                      QObject* parent = nullptr );
         ~CdrdaoWriter() override;
 
         /**

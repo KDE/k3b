@@ -26,10 +26,10 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DvdCopyJob( JobHandler* hdl, QObject* parent = 0 );
+        explicit DvdCopyJob( JobHandler* hdl, QObject* parent = nullptr );
         ~DvdCopyJob() override;
 
-        Device::Device* writer() const override { return m_onlyCreateImage ? 0 : m_writerDevice; }
+        Device::Device* writer() const override { return m_onlyCreateImage ? nullptr : m_writerDevice; }
         Device::Device* readingDevice() const { return m_readerDevice; }
 
         QString jobDescription() const override;

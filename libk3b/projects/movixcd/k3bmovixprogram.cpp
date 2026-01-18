@@ -35,7 +35,7 @@ bool K3b::MovixProgram::scan( const QString& p )
     if( !QFile::exists( path + "movix-version" ) )
         return false;
 
-    K3b::MovixBin* bin = 0;
+    K3b::MovixBin* bin = nullptr;
 
     //
     // probe version and data dir

@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VideoDvdJob( VideoDvdDoc*, JobHandler*, QObject* parent = 0 );
+        VideoDvdJob( VideoDvdDoc*, JobHandler*, QObject* parent = nullptr );
         ~VideoDvdJob() override;
 
         QString jobDescription() const override;

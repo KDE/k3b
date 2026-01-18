@@ -445,7 +445,7 @@ bool K3b::isMounted( K3b::Device::Device* dev )
     if( !dev )
         return false;
     else
-        return( KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() ).data() != 0 );
+        return( KMountPoint::currentMountPoints().findByDevice( dev->blockDeviceName() ).data() != nullptr );
 }
 
 

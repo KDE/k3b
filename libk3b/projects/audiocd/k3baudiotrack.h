@@ -114,7 +114,7 @@ namespace K3b {
         /**
          * Merge @p trackToMerge into this one.
          */
-        void merge( AudioTrack* trackToMerge, AudioDataSource* sourceAfter = 0 );
+        void merge( AudioTrack* trackToMerge, AudioDataSource* sourceAfter = nullptr );
 
         AudioTrack* prev() const;
         AudioTrack* next() const;
@@ -156,7 +156,7 @@ namespace K3b {
         /**
          * Create reader associated with the track
          */
-        virtual QIODevice* createReader( QObject* parent = 0 );
+        virtual QIODevice* createReader( QObject* parent = nullptr );
 
         /**
          * Is this track in a list

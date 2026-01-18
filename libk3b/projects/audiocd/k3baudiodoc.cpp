@@ -39,8 +39,8 @@ class K3b::AudioDoc::Private
 public:
     Private()
     :
-        firstTrack( 0 ),
-        lastTrack( 0 ),
+        firstTrack( nullptr ),
+        lastTrack( nullptr ),
         cdTextValidator( new K3b::CdTextValidator() )
     {
     }
@@ -385,9 +385,9 @@ K3b::AudioTrack* K3b::AudioDoc::importCueFile( const QString& cuefile, K3b::Audi
         bool reused = true;
         if( !decoder && !isBin )
             if ( !( decoder = getDecoderForUrl( QUrl::fromLocalFile(parser.imageFilename()), &reused ) ) )
-                return 0;
+                return nullptr;
 
-        AudioDataSource* source = 0;
+        AudioDataSource* source = nullptr;
         int i = 0;
         foreach( const K3b::Device::Track& track, parser.toc() ) {
             if ( isBin ) {
@@ -429,13 +429,13 @@ K3b::AudioTrack* K3b::AudioDoc::importCueFile( const QString& cuefile, K3b::Audi
         return after;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
 K3b::AudioDecoder* K3b::AudioDoc::getDecoderForUrl( const QUrl& url, bool* reused )
 {
-    K3b::AudioDecoder* decoder = 0;
+    K3b::AudioDecoder* decoder = nullptr;
 
     // check if we already have a proper decoder
     if( d->decoderPresenceMap.contains( url.toLocalFile() ) ) {
@@ -458,7 +458,7 @@ K3b::AudioFile* K3b::AudioDoc::createAudioFile( const QUrl& url )
 {
     if( !QFile::exists( url.toLocalFile() ) ) {
         qDebug() << "(K3b::AudioDoc) could not find file " << url.toLocalFile();
-        return 0;
+        return nullptr;
     }
 
     bool reused;
@@ -470,7 +470,7 @@ K3b::AudioFile* K3b::AudioDoc::createAudioFile( const QUrl& url )
     }
     else {
         qDebug() << "(K3b::AudioDoc) unknown file type in file " << url.toLocalFile();
-        return 0;
+        return nullptr;
     }
 }
 
@@ -484,7 +484,7 @@ K3b::AudioTrack* K3b::AudioDoc::createTrack( const QUrl& url )
         return newTrack;
     }
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -506,7 +506,7 @@ K3b::AudioTrack* K3b::AudioDoc::getTrack( int trackNum )
         ++i;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -693,7 +693,7 @@ bool K3b::AudioDoc::loadDocumentData( QDomElement* root )
                                     if( cdTrackSourceItemElem.nodeName() == "title_number" )
                                         titlenum = cdTrackSourceItemElem.text().toInt();
                                     else if( cdTrackSourceItemElem.nodeName() == "disc_id" )
-                                        discid = cdTrackSourceItemElem.text().toUInt( 0, 16 );
+                                        discid = cdTrackSourceItemElem.text().toUInt( nullptr, 16 );
                                     else if( cdTrackSourceItemElem.nodeName() == "title" )
                                         title = QString::number(cdTrackSourceItemElem.text().toInt());
                                     else if( cdTrackSourceItemElem.nodeName() == "artist" )
@@ -859,7 +859,7 @@ bool K3b::AudioDoc::saveDocumentData( QDomElement* docElem )
     // -------------------------------------------------------------
     QDomElement contentsElem = doc.createElement( "contents" );
 
-    for( K3b::AudioTrack* track = firstTrack(); track != 0; track = track->next() ) {
+    for( K3b::AudioTrack* track = firstTrack(); track != nullptr; track = track->next() ) {
 
         QDomElement trackElem = doc.createElement( "track" );
 

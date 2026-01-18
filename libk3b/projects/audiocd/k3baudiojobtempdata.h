@@ -19,7 +19,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioJobTempData( AudioDoc* doc, QObject* parent = 0 );
+        explicit AudioJobTempData( AudioDoc* doc, QObject* parent = nullptr );
         ~AudioJobTempData() override;
 
         QString bufferFileName( int track );

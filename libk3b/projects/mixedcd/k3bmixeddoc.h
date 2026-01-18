@@ -21,7 +21,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MixedDoc( QObject* parent = 0 );
+        explicit MixedDoc( QObject* parent = nullptr );
         ~MixedDoc() override;
         
         Type type() const override { return MixedProject; }
@@ -42,7 +42,7 @@ namespace K3b {
 
         int numOfTracks() const override;
 
-        BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 ) override;
+        BurnJob* newBurnJob( JobHandler*, QObject* parent = nullptr ) override;
 
         AudioDoc* audioDoc() const { return m_audioDoc; }
         DataDoc* dataDoc() const { return m_dataDoc; }

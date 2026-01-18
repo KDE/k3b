@@ -141,8 +141,8 @@ namespace K3b {
             };
             Q_DECLARE_FLAGS( Commands, Command )
 
-            DeviceHandler( Device*, QObject* parent = 0 );
-            DeviceHandler( QObject* parent = 0 );
+            DeviceHandler( Device*, QObject* parent = nullptr );
+            DeviceHandler( QObject* parent = nullptr );
 
             /**
              * This constructor is used by the global "quick" methods and should not be used

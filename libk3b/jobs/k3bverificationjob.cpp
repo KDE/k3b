@@ -56,8 +56,8 @@ class K3b::VerificationJob::Private
 {
 public:
     Private( VerificationJob* job )
-        : device(0),
-          dataTrackReader(0),
+        : device(nullptr),
+          dataTrackReader(nullptr),
           q(job){
     }
 

@@ -24,7 +24,7 @@
 
 
 K3b::MediumPrivate::MediumPrivate()
-    : device( 0 ),
+    : device( nullptr ),
       content( K3b::Medium::ContentNone )
 {
 }
@@ -64,7 +64,7 @@ K3b::Medium& K3b::Medium::operator=( const K3b::Medium& other )
 
 bool K3b::Medium::isValid() const
 {
-    return d->device != 0;
+    return d->device != nullptr;
 }
 
 
@@ -264,7 +264,7 @@ void K3b::Medium::analyseContent()
             if( const Iso9660Directory* firstDirEntry = iso.firstIsoDirEntry() ) {
                 if( Device::isDvdMedia( diskInfo().mediaType() ) ) {
                     // Every VideoDVD needs to have a VIDEO_TS.IFO file
-                    if( firstDirEntry->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != 0 )
+                    if( firstDirEntry->entry( "VIDEO_TS/VIDEO_TS.IFO" ) != nullptr )
                         d->content |= ContentVideoDVD;
                 }
                 else {
@@ -273,7 +273,7 @@ void K3b::Medium::analyseContent()
                     // check for VCD
                     const K3b::Iso9660Entry* vcdEntry = firstDirEntry->entry( "VCD/INFO.VCD" );
                     const K3b::Iso9660Entry* svcdEntry = firstDirEntry->entry( "SVCD/INFO.SVD" );
-                    const K3b::Iso9660File* vcdInfoFile = 0;
+                    const K3b::Iso9660File* vcdInfoFile = nullptr;
                     if( vcdEntry ) {
                         qDebug() << "(K3b::Medium) found vcd entry.";
                         if( vcdEntry->isFile() )

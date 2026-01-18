@@ -33,9 +33,9 @@ public:
         : formattingMode(FormattingComplete),
           force(false),
           mode(WritingModeAuto),
-          device(0),
-          process(0),
-          dvdFormatBin(0),
+          device(nullptr),
+          process(nullptr),
+          dvdFormatBin(nullptr),
           lastProgressValue(0),
           running(false),
           forceNoEject(false) {

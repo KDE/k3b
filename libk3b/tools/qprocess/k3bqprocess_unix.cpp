@@ -197,7 +197,7 @@ static int qt_native_select(fd_set *fdread, fd_set *fdwrite, int timeout)
 
     int ret;
     do {
-        ret = select(FD_SETSIZE, fdread, fdwrite, 0, timeout < 0 ? 0 : &tv);
+        ret = select(FD_SETSIZE, fdread, fdwrite, nullptr, timeout < 0 ? nullptr : &tv);
     } while (ret < 0 && (errno == EINTR));
     return ret;
 }
@@ -216,7 +216,7 @@ static int qt_timeout_value(int msecs, int elapsed)
 }
 
 static int qt_qprocess_deadChild_pipe[2];
-static void (*qt_sa_old_sigchld_handler)(int) = 0;
+static void (*qt_sa_old_sigchld_handler)(int) = nullptr;
 static void qt_sa_sigchld_handler(int signum)
 {
     qt_native_write(qt_qprocess_deadChild_pipe[1], "", 1);
@@ -310,7 +310,7 @@ K3bQProcessManager::~K3bQProcessManager()
     action.sa_flags = SA_NOCLDSTOP;
     qt_native_sigaction(SIGCHLD, &action, &oldAction);
     if (oldAction.sa_handler != qt_sa_sigchld_handler) {
-        qt_native_sigaction(SIGCHLD, &oldAction, 0);
+        qt_native_sigaction(SIGCHLD, &oldAction, nullptr);
     }
 }
 
@@ -328,7 +328,7 @@ void K3bQProcessManager::run()
         // block forever, or until activity is detected on the dead child
         // pipe. the only other peers are the SIGCHLD signal handler, and the
         // K3bQProcessManager destructor.
-        int nselect = select(qt_qprocess_deadChild_pipe[0] + 1, &readset, 0, 0, 0);
+        int nselect = select(qt_qprocess_deadChild_pipe[0] + 1, &readset, nullptr, nullptr, nullptr);
         if (nselect < 0) {
             if (errno == EINTR)
                 continue;
@@ -583,7 +583,7 @@ static char **_q_dupEnvironment(const QStringList &environment, int *envc)
     }
 
     char **envp = new char *[env.count() + 1];
-    envp[env.count()] = 0;
+    envp[env.count()] = nullptr;
 
     for (int j = 0; j < env.count(); ++j) {
         QString item = env.at(j);
@@ -648,7 +648,7 @@ void K3bQProcessPrivate::startProcess()
     // Create argument list with right number of elements, and set the final
     // one to 0.
     char **argv = new char *[arguments.count() + 2];
-    argv[arguments.count() + 1] = 0;
+    argv[arguments.count() + 1] = nullptr;
 
     // Encode the program name.
     QByteArray encodedProgramName = QFile::encodeName(program);
@@ -693,7 +693,7 @@ void K3bQProcessPrivate::startProcess()
     char **envp = _q_dupEnvironment(environment, &envc);
 
     // Encode the working directory if it's non-empty, otherwise just pass 0.
-    const char *workingDirPtr = 0;
+    const char *workingDirPtr = nullptr;
     QByteArray encodedWorkingDirectory;
     if (!workingDirectory.isEmpty()) {
         encodedWorkingDirectory = QFile::encodeName(workingDirectory);
@@ -702,7 +702,7 @@ void K3bQProcessPrivate::startProcess()
 
     // If the program does not specify a path, generate a list of possible
     // locations for the binary using the PATH environment variable.
-    char **path = 0;
+    char **path = nullptr;
     int pathc = 0;
     if (!program.contains(QLatin1Char('/'))) {
         const QString pathEnv = QString::fromLocal8Bit(::getenv("PATH"));
@@ -711,7 +711,7 @@ void K3bQProcessPrivate::startProcess()
             if (!pathEntries.isEmpty()) {
                 pathc = pathEntries.size();
                 path = new char *[pathc + 1];
-                path[pathc] = 0;
+                path[pathc] = nullptr;
 
                 for (int k = 0; k < pathEntries.size(); ++k) {
                     QByteArray tmp = QFile::encodeName(pathEntries.at(k));
@@ -866,7 +866,7 @@ bool K3bQProcessPrivate::processStarted()
     if (startupSocketNotifier) {
         startupSocketNotifier->setEnabled(false);
         startupSocketNotifier->deleteLater();
-        startupSocketNotifier = 0;
+        startupSocketNotifier = nullptr;
     }
     qt_native_close(childStartedPipe[0]);
     childStartedPipe[0] = -1;
@@ -929,7 +929,7 @@ static void qt_ignore_sigpipe()
         struct sigaction noaction;
         memset(&noaction, 0, sizeof(noaction));
         noaction.sa_handler = SIG_IGN;
-        qt_native_sigaction(SIGPIPE, &noaction, 0);
+        qt_native_sigaction(SIGPIPE, &noaction, nullptr);
     }
 }
 
@@ -977,7 +977,7 @@ bool K3bQProcessPrivate::waitForStarted(int msecs)
     FD_SET(childStartedPipe[0], &fds);
     int ret;
     do {
-        ret = qt_native_select(&fds, 0, msecs);
+        ret = qt_native_select(&fds, nullptr, msecs);
     } while (ret < 0 && errno == EINTR);
     if (ret == 0) {
         processError = ::QProcess::Timedout;
@@ -1211,7 +1211,7 @@ bool K3bQProcessPrivate::waitForWrite(int msecs)
 
     int ret;
     do {
-        ret = qt_native_select(0, &fdwrite, msecs < 0 ? 0 : msecs) == 1;
+        ret = qt_native_select(nullptr, &fdwrite, msecs < 0 ? 0 : msecs) == 1;
     } while (ret < 0 && errno == EINTR);
     return ret == 1;
 }
@@ -1276,7 +1276,7 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
         struct sigaction noaction;
         memset(&noaction, 0, sizeof(noaction));
         noaction.sa_handler = SIG_IGN;
-        qt_native_sigaction(SIGPIPE, &noaction, 0);
+        qt_native_sigaction(SIGPIPE, &noaction, nullptr);
 
         ::setsid();
 
@@ -1299,7 +1299,7 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
                 argv[i + 1] = ::strdup(arguments.at(i).toLocal8Bit().constData());
 #endif
             }
-            argv[arguments.size() + 1] = 0;
+            argv[arguments.size() + 1] = nullptr;
 
             if (!program.contains(QLatin1Char('/'))) {
                 const QString path = QString::fromLocal8Bit(::getenv("PATH"));
@@ -1322,7 +1322,7 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
             struct sigaction noaction;
             memset(&noaction, 0, sizeof(noaction));
             noaction.sa_handler = SIG_IGN;
-            qt_native_sigaction(SIGPIPE, &noaction, 0);
+            qt_native_sigaction(SIGPIPE, &noaction, nullptr);
 
             // '\1' means execv failed
             char c = '\1';
@@ -1333,7 +1333,7 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
             struct sigaction noaction;
             memset(&noaction, 0, sizeof(noaction));
             noaction.sa_handler = SIG_IGN;
-            qt_native_sigaction(SIGPIPE, &noaction, 0);
+            qt_native_sigaction(SIGPIPE, &noaction, nullptr);
 
             // '\2' means internal error
             char c = '\2';

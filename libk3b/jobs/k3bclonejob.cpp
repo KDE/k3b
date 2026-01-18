@@ -38,10 +38,10 @@ public:
 
 K3b::CloneJob::CloneJob( K3b::JobHandler* hdl, QObject* parent )
     : K3b::BurnJob( hdl, parent ),
-      m_writerDevice(0),
-      m_readerDevice(0),
-      m_writerJob(0),
-      m_readcdReader(0),
+      m_writerDevice(nullptr),
+      m_readerDevice(nullptr),
+      m_writerJob(nullptr),
+      m_readcdReader(nullptr),
       m_removeImageFiles(false),
       m_canceled(false),
       m_running(false),

@@ -32,7 +32,7 @@ K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename 
     m_title = QFileInfo( m_file ).completeBaseName();
     
     Q_FOREACH( PbcTracks playback, trackPlaybackValues() ) {
-        m_pbctrackmap.insert( playback, 0L );
+        m_pbctrackmap.insert( playback, nullptr );
         m_pbcnontrackmap.insert( playback, DISABLED );
         m_pbcusrdefmap.insert( playback, false );
     }
@@ -139,7 +139,7 @@ void K3b::VcdTrack::setUserDefined( PbcTracks which, bool ud )
 K3b::VcdTrack* K3b::VcdTrack::getPbcTrack( PbcTracks which )
 {
     if ( m_pbctrackmap.find( which ) == m_pbctrackmap.end() )
-        return 0;
+        return nullptr;
     else
         return m_pbctrackmap[ which ];
 }

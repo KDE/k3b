@@ -29,14 +29,14 @@ class K3b::MovixDocPreparer::Private
 {
 public:
     Private()
-        : doc(0),
-          playlistFile(0),
-          isolinuxConfigFile(0),
-          movixRcFile(0),
-          isolinuxDir(0),
-          movixDir(0),
-          mplayerDir(0),
-          playlistFileItem(0),
+        : doc(nullptr),
+          playlistFile(nullptr),
+          isolinuxConfigFile(nullptr),
+          movixRcFile(nullptr),
+          isolinuxDir(nullptr),
+          movixDir(nullptr),
+          mplayerDir(nullptr),
+          playlistFileItem(nullptr),
           structuresCreated(false) {
     }
 
@@ -138,10 +138,10 @@ void K3b::MovixDocPreparer::removeMovixStructures()
     delete d->mplayerDir;
     delete d->playlistFileItem;
 
-    d->movixDir = 0;
-    d->isolinuxDir = 0;
-    d->mplayerDir = 0;
-    d->playlistFileItem = 0;
+    d->movixDir = nullptr;
+    d->isolinuxDir = nullptr;
+    d->mplayerDir = nullptr;
+    d->playlistFileItem = nullptr;
 
     while( !d->newMovixItems.empty() ) {
         delete d->newMovixItems.pop();
@@ -152,9 +152,9 @@ void K3b::MovixDocPreparer::removeMovixStructures()
     delete d->isolinuxConfigFile;
     delete d->movixRcFile;
 
-    d->playlistFile = 0;
-    d->isolinuxConfigFile = 0;
-    d->movixRcFile = 0;
+    d->playlistFile = nullptr;
+    d->isolinuxConfigFile = nullptr;
+    d->movixRcFile = nullptr;
 
     d->structuresCreated = false;
 }
@@ -455,7 +455,7 @@ K3b::DirItem* K3b::MovixDocPreparer::createDir( const QString& docPath )
             dir = static_cast<K3b::DirItem*>( next );
         } else {
             qCritical() << "(K3b::MovixDocPreparer) found non-dir item where a dir was needed." << Qt::endl;
-            return 0;
+            return nullptr;
         }
     }
 

@@ -16,7 +16,7 @@ namespace K3b {
 
 SessionImportItem::SessionImportItem( const Iso9660File* isoF )
     : SpecialDataItem( isoF->size(), isoF->name(), OLD_SESSION ),
-      m_replaceItem(0)
+      m_replaceItem(nullptr)
 {
 }
 
@@ -31,7 +31,7 @@ SessionImportItem::SessionImportItem( const SessionImportItem& item )
 SessionImportItem::~SessionImportItem()
 {
     if( m_replaceItem )
-        m_replaceItem->setReplacedItemFromOldSession(0);
+        m_replaceItem->setReplacedItemFromOldSession(nullptr);
 
     // remove this from parentdir
     if( parent() )

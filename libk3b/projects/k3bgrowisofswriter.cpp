@@ -32,7 +32,7 @@ public:
         : writingMode( K3b::WritingModeAuto ),
           closeDvd(false),
           multiSession(false),
-          growisofsBin( 0 ),
+          growisofsBin(nullptr),
           trackSize(-1),
           layerBreak(0) {
     }

@@ -20,7 +20,7 @@ namespace K3b {
     class LIBK3B_EXPORT AudioCdTrackReader : public QIODevice
     {
     public:
-        explicit AudioCdTrackReader( AudioCdTrackSource& source, QObject* parent = 0 );
+        explicit AudioCdTrackReader( AudioCdTrackSource& source, QObject* parent = nullptr );
         ~AudioCdTrackReader() override;
 
         bool open( OpenMode mode ) override;

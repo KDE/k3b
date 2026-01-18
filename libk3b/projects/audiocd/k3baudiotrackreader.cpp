@@ -111,7 +111,7 @@ bool AudioTrackReader::open( QIODevice::OpenMode mode )
 {
     if( !mode.testFlag( QIODevice::WriteOnly ) && d->readers.empty() && d->track.numberSources() > 0 ) {
 
-        for( AudioDataSource* source = d->track.firstSource(); source != 0; source = source->next() ) {
+        for( AudioDataSource* source = d->track.firstSource(); source != nullptr; source = source->next() ) {
             d->readers.push_back( source->createReader() );
             if( !d->readers.back()->open( mode ) ) {
                 d->readers.clear();
