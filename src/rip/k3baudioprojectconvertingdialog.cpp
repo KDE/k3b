@@ -196,18 +196,18 @@ void K3b::AudioProjectConvertingDialog::slotStartClicked()
     if( m_optionWidget->createSingleFile() && !d->filenames.isEmpty() ) {
         // Since QMultiMap stores multiple values "from most recently to least recently inserted"
         // we will add it in reverse order to rip in ascending order
-        for( AudioTrack* track = m_doc->lastTrack(); track != 0; track = track->prev() )
+        for( AudioTrack* track = m_doc->lastTrack(); track != nullptr; track = track->prev() )
             tracksToRip.insert( d->filenames.front(), track->trackNumber() );
     }
     else {
-        for( AudioTrack* track = m_doc->firstTrack(); track != 0; track = track->next() )
+        for( AudioTrack* track = m_doc->firstTrack(); track != nullptr; track = track->next() )
             tracksToRip.insert( d->filenames[ track->trackNumber()-1 ], track->trackNumber() );
     }
 
     K3b::AudioEncoder* encoder = m_optionWidget->encoder();
 
     K3b::JobProgressDialog progressDialog( parentWidget() );
-    K3b::AudioProjectConvertingJob job( m_doc, &progressDialog, 0 );
+    K3b::AudioProjectConvertingJob job( m_doc, &progressDialog, nullptr );
     job.setCddbEntry( createCddbEntryFromDoc( m_doc ) );
     job.setTrackList( tracksToRip );
     job.setEncoder( encoder );
@@ -245,7 +245,7 @@ void K3b::AudioProjectConvertingDialog::refresh()
     if( m_optionWidget->createSingleFile() ) {
         QString filename;
         long long filesize = 0;
-        if( m_optionWidget->encoder() == 0 ) {
+        if( m_optionWidget->encoder() == nullptr ) {
             filesize = m_doc->length().audioBytes() + 44;
         }
         else {
@@ -282,9 +282,9 @@ void K3b::AudioProjectConvertingDialog::refresh()
     }
     else {
         d->filenames.resize( m_doc->numOfTracks() );
-        for( AudioTrack* track = m_doc->firstTrack(); track != 0; track = track->next() ) {
+        for( AudioTrack* track = m_doc->firstTrack(); track != nullptr; track = track->next() ) {
             long long filesize = 0;
-            if( m_optionWidget->encoder() == 0 ) {
+            if( m_optionWidget->encoder() == nullptr ) {
                 filesize = track->length().audioBytes() + 44;
             }
             else {

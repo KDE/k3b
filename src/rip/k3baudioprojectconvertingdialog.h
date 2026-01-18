@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioProjectConvertingDialog( AudioDoc*, QWidget *parent = 0);
+        explicit AudioProjectConvertingDialog( AudioDoc*, QWidget *parent = nullptr);
         ~AudioProjectConvertingDialog() override;
 
         void setBaseDir( const QString& path );

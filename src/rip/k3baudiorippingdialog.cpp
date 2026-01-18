@@ -71,7 +71,7 @@ public:
 
 
 K3b::AudioRippingDialog::Private::Private()
-    : viewTracks( 0 )
+    : viewTracks( nullptr )
 {
 }
 
@@ -325,7 +325,7 @@ void K3b::AudioRippingDialog::refresh()
         QString filename;
         QString extension;
         long long fileSize = 0;
-        if( m_optionWidget->encoder() == 0 ) {
+        if( m_optionWidget->encoder() == nullptr ) {
             extension = "wav";
             fileSize = length * 2352 + 44;
         }
@@ -368,7 +368,7 @@ void K3b::AudioRippingDialog::refresh()
             K3b::Msf trackLength = ( m_checkUseIndex0->isChecked()
                                      ? toc[trackIndex].realAudioLength()
                                      : toc[trackIndex].length() );
-            if( m_optionWidget->encoder() == 0 ) {
+            if( m_optionWidget->encoder() == nullptr ) {
                 extension = "wav";
                 fileSize = trackLength.audioBytes() + 44;
             }

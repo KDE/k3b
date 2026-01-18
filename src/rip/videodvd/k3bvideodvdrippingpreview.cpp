@@ -19,7 +19,7 @@
 
 K3b::VideoDVDRippingPreview::VideoDVDRippingPreview( QObject* parent )
     : QObject( parent ),
-      m_process( 0 )
+      m_process( nullptr )
 {
 }
 
@@ -40,7 +40,7 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
     cancel();
     if (m_process) {
         m_process->deleteLater();
-        m_process = 0;
+        m_process = nullptr;
     }
     m_tempDir.reset();
     m_canceled = false;
@@ -92,7 +92,7 @@ void K3b::VideoDVDRippingPreview::generatePreview( const K3b::VideoDVD::VideoDVD
         // it "should" be the executable
         qDebug() << "(K3b::VideoDVDRippingPreview) Could not start transcode.";
         m_process->deleteLater();
-        m_process = 0;
+        m_process = nullptr;
         m_tempDir.reset();
         emit previewDone( false );
     }
@@ -125,7 +125,7 @@ void K3b::VideoDVDRippingPreview::slotTranscodeFinished( int, QProcess::ExitStat
 
     // clean up
     m_process->deleteLater();
-    m_process = 0;
+    m_process = nullptr;
 
     qDebug() << "Preview done:" << success;
 

@@ -17,7 +17,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit VideoDVDTitleDelegate( QObject* parent = 0 );
+        explicit VideoDVDTitleDelegate( QObject* parent = nullptr );
         ~VideoDVDTitleDelegate() override;
         void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
         QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const override;

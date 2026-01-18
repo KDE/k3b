@@ -36,7 +36,7 @@ namespace K3b {
         AudioRippingDialog( const Medium&,
                             const KCDDB::CDInfo&,
                             const QList<int>&,
-                            QWidget *parent = 0 );
+                            QWidget *parent = nullptr );
         ~AudioRippingDialog() override;
 
         void setStaticDir( const QString& path );

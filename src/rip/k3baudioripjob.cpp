@@ -29,8 +29,8 @@ public:
     Private()
         : paranoiaRetries(5),
           neverSkip(false),
-          paranoiaLib(0),
-          device(0),
+          paranoiaLib(nullptr),
+          device(nullptr),
           useIndex0(false) {
     }
     int paranoiaMode;
@@ -51,7 +51,7 @@ namespace {
 class AudioCdReader : public QIODevice
 {
 public:
-    AudioCdReader( int trackIndex, AudioRipJob::Private* priv, QObject* parent = 0 );
+    AudioCdReader( int trackIndex, AudioRipJob::Private* priv, QObject* parent = nullptr );
     bool open( OpenMode mode ) override;
     bool isSequential() const override;
     qint64 size() const override;
@@ -121,7 +121,7 @@ qint64 AudioCdReader::readData( char* data, qint64 /*maxlen*/ )
     int status = 0;
     char* buf = d->paranoiaLib->read( &status );
     if( status == CdparanoiaLib::S_OK ) {
-        if( buf == 0 ) {
+        if( buf == nullptr ) {
             return -1;
         }
         else {

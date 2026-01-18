@@ -66,7 +66,7 @@ class VideoCdInfo : public QObject
         Q_OBJECT
 
     public:
-        explicit VideoCdInfo( QObject* parent = 0 );
+        explicit VideoCdInfo( QObject* parent = nullptr );
         ~VideoCdInfo() override;
 
         /**

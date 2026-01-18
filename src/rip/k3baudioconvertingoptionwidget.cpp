@@ -55,7 +55,7 @@ K3b::AudioEncoder* K3b::AudioConvertingOptionWidget::Private::encoderForIndex( i
     if( index >= 0 && index < encoders.size() )
         return encoders.at( index );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -87,7 +87,7 @@ int K3b::AudioConvertingOptionWidget::Private::indexForFileType( const QString& 
     
     for( int i = 0; i < encoders.size(); ++i ) {
         AudioEncoder* encoder = encoders.at( i );
-        if( encoder != 0 &&
+        if( encoder != nullptr &&
             encoder->pluginMetaData().pluginId() == pluginName &&
             extensions.at( i ) == ext ) {
             return i;
@@ -102,7 +102,7 @@ QString K3b::AudioConvertingOptionWidget::Private::defaultPluginName() const
     QString defaultExt = defaultExtension();
     for( int i = 0; i < extensions.size(); ++i ) {
         AudioEncoder* encoder = encoders.at( i );
-        if( extensions.at( i ) == defaultExt && encoder != 0 ) {
+        if( extensions.at( i ) == defaultExt && encoder != nullptr ) {
             return encoder->pluginMetaData().pluginId();
         }
     }
@@ -166,7 +166,7 @@ K3b::AudioConvertingOptionWidget::AudioConvertingOptionWidget( QWidget* parent )
     // FIXME: see if sox and the sox encoder are installed and if so do not put the internal wave
     //        writer in the list of encoders.
     m_comboFileType->addItem( i18n("Wave") );
-    d->encoders.append( 0 );
+    d->encoders.append( nullptr );
     d->extensions.append( "wav" );
 
     // check the available encoding plugins
