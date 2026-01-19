@@ -393,7 +393,7 @@ void K3b::VideoDVDRippingDialog::slotUpdateFilenames()
 
 void K3b::VideoDVDRippingDialog::slotUpdateFilesizes()
 {
-    double bitrate = (double)d->w->m_spinVideoBitrate->value();
+    double bitrate = double(d->w->m_spinVideoBitrate->value());
     KIO::filesize_t overallSize = 0ULL;
 
     // update file sizes
@@ -402,11 +402,11 @@ void K3b::VideoDVDRippingDialog::slotUpdateFilesizes()
         double sec = d->dvd[it.value().title-1].playbackTime().totalSeconds();
 
         // estimate the filesize
-        KIO::filesize_t size = (KIO::filesize_t)( sec * bitrate * 1000.0 / 8.0 );
+        KIO::filesize_t size = KIO::filesize_t( sec * bitrate * 1000.0 / 8.0 );
 
         // add audio stream size
         // FIXME: consider AC3 passthrough
-        size += (KIO::filesize_t)( sec * d->w->selectedAudioBitrate() / 8.0 * 1024.0 );
+        size += KIO::filesize_t( sec * d->w->selectedAudioBitrate() / 8.0 * 1024.0 );
 
         d->audioModel->setFileSize( *it.key(), size );
 

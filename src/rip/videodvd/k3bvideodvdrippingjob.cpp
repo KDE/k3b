@@ -176,9 +176,9 @@ void K3b::VideoDVDRippingJob::slotDetectClippingJobFinished( bool success )
 
             // let's see if the clipping values make sense
             if( m_detectClippingJob->clippingTop() + m_detectClippingJob->clippingBottom()
-                >= (int)m_dvd[d->currentTitleInfoIndex].videoStream().pictureHeight() ||
+                >= int(m_dvd[d->currentTitleInfoIndex].videoStream().pictureHeight()) ||
                 m_detectClippingJob->clippingLeft() + m_detectClippingJob->clippingRight()
-                >= (int)m_dvd[d->currentTitleInfoIndex].videoStream().pictureWidth() ) {
+                >= int(m_dvd[d->currentTitleInfoIndex].videoStream().pictureWidth()) ) {
                 emit infoMessage( i18n("Insane clipping values. No clipping will be done at all."), MessageWarning );
             }
             else {
@@ -256,9 +256,9 @@ void K3b::VideoDVDRippingJob::slotTranscodingProgress( int p )
         doneParts += d->titleClippingProgressParts[d->currentTitleInfoIndex];
 
     // and the current thing
-    doneParts += (double)p/100.0*d->titleProgressParts[d->currentTitleInfoIndex];
+    doneParts += double(p)/100.0*d->titleProgressParts[d->currentTitleInfoIndex];
 
-    emit percent( (int)( 100.0*doneParts ) );
+    emit percent( int( 100.0*doneParts ) );
 }
 
 
@@ -272,9 +272,9 @@ void K3b::VideoDVDRippingJob::slotDetectClippingProgress( int p )
     }
 
     // and the current thing
-    doneParts += (double)p/100.0*d->titleClippingProgressParts[d->currentTitleInfoIndex];
+    doneParts += double(p)/100.0*d->titleClippingProgressParts[d->currentTitleInfoIndex];
 
-    emit percent( (int)( 100.0*doneParts ) );
+    emit percent( int( 100.0*doneParts ) );
 }
 
 
@@ -370,8 +370,8 @@ void K3b::VideoDVDRippingJob::initProgressInfo()
         unsigned long long titleClippingFrames = m_dvd[m_titleRipInfos[i].title-1].numChapters() * 200;
 
         if (totalFrames) {
-            d->titleProgressParts[i] = (double)titleFrames/(double)totalFrames;
-            d->titleClippingProgressParts[i] = (double)titleClippingFrames/(double)totalFrames;
+            d->titleProgressParts[i] = double(titleFrames)/double(totalFrames);
+            d->titleClippingProgressParts[i] = double(titleClippingFrames)/double(totalFrames);
         }
     }
 }

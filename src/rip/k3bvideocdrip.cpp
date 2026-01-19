@@ -204,15 +204,15 @@ void K3b::VideoCdRip::slotParseVcdXRipOutput()
                 const unsigned long long size = el.attribute( "size" ).toLong() - m_subPosition;
 
                 if ( oper == "extract" ) {
-                    emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
+                    emit subPercent( int( 100.0 * double(pos) / double(size) ) );
                     emit processedSubSize( ( pos * 2352 ) / 1024 / 1024 , ( size * 2352 ) / 1024 / 1024 );
 
                     m_bytesFinished = pos;
 
-                    qDebug() << "(slotParseVcdXRipOutput) overall: " << ((long)overallPos  * 2352)
+                    qDebug() << "(slotParseVcdXRipOutput) overall: " << (long(overallPos) * 2352)
 			      << ", videocdsize: " << m_videooptions->getVideoCdSize() << Qt::endl;
-                    double relOverallWritten = ( ( double ) overallPos  * 2352 ) / ( double ) m_videooptions ->getVideoCdSize() ;
-                    int newpercent =  ( int ) ( 100 * relOverallWritten );
+                    double relOverallWritten = ( double(overallPos)  * 2352 ) / double(m_videooptions ->getVideoCdSize());
+                    int newpercent =  int( 100 * relOverallWritten );
                     if ( newpercent > m_oldpercent ) {
                         emit percent(  newpercent );
                         m_oldpercent = newpercent;
@@ -302,8 +302,8 @@ void K3b::VideoCdRip::parseInformation( QString text )
                 // extracting item0001.mpg... (start lsn 225, 1 segments)
                 int end = text.indexOf(  ',', index );
                 int overallPos = text.mid( index + 11, end - index - 11 ).trimmed().toLong();
-                double relOverallWritten = ( ( double ) overallPos  * 2352 ) / ( double ) m_videooptions ->getVideoCdSize()  ;
-                int newpercent =  ( int ) ( 100 * relOverallWritten );
+                double relOverallWritten = ( double(overallPos)  * 2352 ) / double(m_videooptions ->getVideoCdSize());
+                int newpercent =  int( 100 * relOverallWritten );
                 if ( newpercent > m_oldpercent ) {
                     emit percent(  newpercent );
                     m_oldpercent = newpercent;

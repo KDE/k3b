@@ -184,7 +184,7 @@ void K3b::VideoDVDRippingWidget::setSelectedPictureSize( const QSize& size )
 
 void K3b::VideoDVDRippingWidget::setSelectedVideoCodec( K3b::VideoDVDTitleTranscodingJob::VideoCodec codec )
 {
-    m_comboVideoCodec->setSelectedValue( (int)codec );
+    m_comboVideoCodec->setSelectedValue( int(codec) );
 }
 
 
@@ -196,8 +196,8 @@ K3b::VideoDVDTitleTranscodingJob::AudioCodec K3b::VideoDVDRippingWidget::selecte
 
 void K3b::VideoDVDRippingWidget::setSelectedAudioCodec( K3b::VideoDVDTitleTranscodingJob::AudioCodec codec )
 {
-    m_comboAudioCodec->setSelectedValue( (int)codec );
-    slotAudioCodecChanged( (int)codec );
+    m_comboAudioCodec->setSelectedValue( int(codec) );
+    slotAudioCodecChanged( int(codec) );
 }
 
 
