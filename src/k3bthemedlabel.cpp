@@ -66,7 +66,7 @@ void K3b::ThemedLabel::setThemePixmap( K3b::Theme::PixmapType pix )
 void K3b::ThemedLabel::slotThemeChanged()
 {
     setAutoFillBackground( true );
-    if (k3bappcore == Q_NULLPTR)
+    if (k3bappcore == nullptr)
         return;
     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         QPalette p = palette();

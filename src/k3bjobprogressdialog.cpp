@@ -650,7 +650,7 @@ void K3b::JobProgressDialog::blockingInformation( const QString& text,
 
 void K3b::JobProgressDialog::slotThemeChanged()
 {
-    if (k3bappcore == Q_NULLPTR)
+    if (k3bappcore == nullptr)
         return;
     if( K3b::Theme* theme = k3bappcore->themeManager()->currentTheme() ) {
         d->progressHeaderFrame->setPalette( theme->palette() );

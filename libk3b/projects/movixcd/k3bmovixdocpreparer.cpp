@@ -249,7 +249,7 @@ bool K3b::MovixDocPreparer::addMovixFiles()
     // first of all we create the directories
     d->isolinuxDir = new K3b::DirItem( "isolinux" );
     d->movixDir = new K3b::DirItem( "movix" );
-    if (d->doc == Q_NULLPTR)
+    if (d->doc == nullptr)
         return false;
     d->doc->root()->addDataItem( d->isolinuxDir );
     d->doc->root()->addDataItem( d->movixDir );
@@ -356,7 +356,7 @@ bool K3b::MovixDocPreparer::addMovixFilesNew()
     // 3. add movixrc and movix.list files
     // 4. set weights for isolinux files
 
-    if (d->doc == Q_NULLPTR)
+    if (d->doc == nullptr)
         return false;
     // FIXME: use the settings from the doc
     const QStringList files = d->eMovixBin->files( d->doc->keyboardLayout(),

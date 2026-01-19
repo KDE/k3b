@@ -23,7 +23,7 @@
 #include <unistd.h>
 
 K3b::VcdTrack::VcdTrack( QList<K3b::VcdTrack*>* parent, const QString& filename )
-        : mpeg_info(Q_NULLPTR),
+        : mpeg_info(nullptr),
         m_pbcnumkeys( true ),
         m_pbcnumkeysuserdefined( false ),
         m_file( filename )

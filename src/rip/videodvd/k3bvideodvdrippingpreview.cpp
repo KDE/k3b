@@ -29,7 +29,7 @@ K3b::VideoDVDRippingPreview::~VideoDVDRippingPreview()
     cancel();
     if (m_process) {
         m_process->deleteLater();
-        m_process = Q_NULLPTR;
+        m_process = nullptr;
     }
 }
 
