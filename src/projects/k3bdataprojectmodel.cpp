@@ -370,7 +370,7 @@ QMimeData* K3b::DataProjectModel::mimeData( const QModelIndexList& indexes ) con
     QByteArray itemData;
     QDataStream itemDataStream( &itemData, QIODevice::WriteOnly );
     foreach( K3b::DataItem* item, items ) {
-        itemDataStream << ( qint64 )item;
+        itemDataStream << qint64(item);
     }
     mime->setData( "application/x-k3bdataitem", itemData );
 

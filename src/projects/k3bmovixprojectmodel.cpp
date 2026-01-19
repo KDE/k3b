@@ -379,7 +379,7 @@ QMimeData* MovixProjectModel::mimeData( const QModelIndexList& indexes ) const
     QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
 
     Q_FOREACH( MovixFileItem* item, items ) {
-        trackDataStream << ( qint64 )item;
+        trackDataStream << qint64(item);
     }
 
     mime->setData( "application/x-k3bmovixfileitem", trackData );

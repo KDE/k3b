@@ -164,10 +164,10 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
     barRect.setY(rect().y());
 
     // so split width() in maxValue pieces
-    double one = (double)barRect.width() / (double)maxValue.totalFrames();
+    double one = double(barRect.width()) / double(maxValue.totalFrames());
 
     QRect crect( barRect );
-    crect.setWidth( (int)(one*(double)docSize.totalFrames()) );
+    crect.setWidth( int(one*double(docSize.totalFrames())) );
 
     // ====================================================================================
     // Now the colored bar is painted
@@ -200,7 +200,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     // calculate the medium size marker
     // ====================================================================================
-    int mediumSizeMarkerPos = barRect.left() + (int)(one*cdSize.lba());
+    int mediumSizeMarkerPos = barRect.left() + int(one*cdSize.lba());
     QPoint mediumSizeMarkerFrom( mediumSizeMarkerPos, barRect.bottom() );
     QPoint mediumSizeMarkerTo( mediumSizeMarkerPos, barRect.top() + barRect.height()/2 );
     // ====================================================================================
@@ -229,9 +229,9 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
 
     QRect overSizeTextRect( barRect );
     int overSizeTextLength = QFontMetrics(overSizeFont).boundingRect(overSizeText).width();
-    if( overSizeTextLength + 5 > overSizeTextRect.width() - (int)(one*cdSize.totalFrames()) ) {
+    if( overSizeTextLength + 5 > overSizeTextRect.width() - int(one*cdSize.totalFrames()) ) {
         // we don't have enough space on the right, so we paint to the left of the line
-        overSizeTextRect.setLeft( (int)(one*cdSize.totalFrames()) - overSizeTextLength - 5 );
+        overSizeTextRect.setLeft( int(one*cdSize.totalFrames()) - overSizeTextLength - 5 );
     }
     else {
         overSizeTextRect.setLeft( mediumSizeMarkerPos + 5 );
@@ -745,7 +745,7 @@ void K3b::FillStatusDisplay::slotMediumChanged( K3b::Device::Device* )
 
                 // We use a 10% margin to allow the user to fine-tune project sizes
                 // However, if we have a bigger medium we always use that
-                if ( ( double )d->doc->size() <= ( double )( medium.diskInfo().capacity().mode1Bytes() ) * 1.1 ) {
+                if ( double(d->doc->size()) <= double( medium.diskInfo().capacity().mode1Bytes() ) * 1.1 ) {
 
                     // first usable medium
                     if( !autoSelectedMedium.isValid() ) {

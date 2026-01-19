@@ -362,7 +362,7 @@ qint64 KoStore::write( const char* _data, qint64 _len )
   }
 
   int nwritten = m_stream->write( _data, _len );
-  Q_ASSERT( nwritten == (int)_len );
+  Q_ASSERT( nwritten == int(_len) );
   m_iSize += nwritten;
 
   return nwritten;

@@ -440,7 +440,7 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
         QByteArray trackData;
         QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
         foreach( K3b::AudioTrack* track, tracks ) {
-            trackDataStream << ( qint64 )track;
+            trackDataStream << qint64(track);
         }
         mime->setData( "application/x-k3baudiotrack", trackData );
     }
@@ -448,7 +448,7 @@ QMimeData* K3b::AudioProjectModel::mimeData( const QModelIndexList& indexes ) co
         QByteArray sourceData;
         QDataStream sourceDataStream( &sourceData, QIODevice::WriteOnly );
         foreach( K3b::AudioDataSource* source, sources ) {
-            sourceDataStream << ( qint64 )source;
+            sourceDataStream << qint64(source);
         }
         mime->setData( "application/x-k3baudiodatasource", sourceData );
     }

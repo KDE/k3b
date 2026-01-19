@@ -312,7 +312,7 @@ QMimeData* VcdProjectModel::mimeData( const QModelIndexList& indexes ) const
     QDataStream trackDataStream( &trackData, QIODevice::WriteOnly );
 
     foreach( VcdTrack* track, tracks ) {
-        trackDataStream << ( qint64 )track;
+        trackDataStream << qint64(track);
     }
 
     mime->setData( "application/x-k3bvcdtrack", trackData );

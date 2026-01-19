@@ -860,7 +860,7 @@ K3b::Msf K3b::AudioEditorWidget::posToMsf( int p ) const
 {
     int w = contentsRect().width() - 2*d->margin;
     int x = qMin( p-frameWidth()-d->margin, w );
-    return ( (int)((double)(d->length.lba()-1) / (double)w * (double)x) );
+    return ( int(double(d->length.lba()-1) / double(w) * double(x)) );
 }
 
 
@@ -868,7 +868,7 @@ K3b::Msf K3b::AudioEditorWidget::posToMsf( int p ) const
 int K3b::AudioEditorWidget::msfToPos( const K3b::Msf& msf ) const
 {
     int w = contentsRect().width() - 2*d->margin;
-    int pos = (int)((double)w / (double)(d->length.lba()-1) * (double)msf.lba());
+    int pos = int(double(w) / double(d->length.lba()-1) * double(msf.lba()) );
     return frameWidth() + d->margin + qMin( pos, w-1 );
 }
 
