@@ -51,7 +51,7 @@ namespace {
     {
         qDebug() << Qt::endl << " id1    | id2    | id3    | charps | blockn | dbcc | data           | crc |";
 
-        cdtext_pack* pack = (cdtext_pack*)data;
+        const cdtext_pack* pack = reinterpret_cast<const cdtext_pack *>(data);
 
         for( int i = 0; i < dataLen/18; ++i ) {
             QString s;
@@ -587,8 +587,7 @@ void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
     else if( len-r > 0 ) {
         debugRawTextPackData( &data[r], len-r );
 
-        cdtext_pack* pack = (cdtext_pack*)&data[r];
-
+        cdtext_pack* pack = const_cast<cdtext_pack *>(reinterpret_cast<const cdtext_pack *>(&data[r]));
 
         for( int i = 0; i < (len-r)/18; ++i ) {
 
@@ -619,17 +618,17 @@ void K3b::Device::CdText::setRawPackData( const unsigned char* data, int len )
             // data may contain multiple \0. In that case after every \0 the track number increases 1
             //
 
-            char* nullPos = (char*)pack[i].data - 1;
+            char* nullPos = reinterpret_cast<char *>(pack[i].data) - 1;
 
             int trackNo = pack[i].id2;
 
             while( nullPos ) {
-                char* nextNullPos = (char*)::memchr( nullPos+1, '\0', 11 - (nullPos - (char*)pack[i].data) );
+                char* nextNullPos = static_cast<char *>(::memchr( nullPos+1, '\0', 11 - (nullPos - reinterpret_cast<char *>(pack[i].data)) ));
                 QString txtstr;
                 if( nextNullPos ) // take all chars up to the next null
-                    txtstr = QString::fromLatin1( (char*)nullPos+1, nextNullPos - nullPos - 1 );
+                    txtstr = QString::fromLatin1( static_cast<char *>(nullPos)+1, nextNullPos - nullPos - 1 );
                 else // take all chars to the end of the pack data (12 bytes)
-                    txtstr = QString::fromLatin1( (char*)nullPos+1, 11 - (nullPos - (char*)pack[i].data) );
+                    txtstr = QString::fromLatin1( static_cast<char *>(nullPos)+1, 11 - (nullPos - reinterpret_cast<char *>(pack[i].data)) );
 
                 //
                 // a tab character means to use the same as for the previous track
@@ -1030,7 +1029,7 @@ bool K3b::Device::CdText::checkCrc( const unsigned char* data, int len )
         // TODO: what if the crc field is not used? All zeros?
 
         for( int i = 0; i < (len-r)/18; ++i ) {
-            cdtext_pack* pack = (cdtext_pack*)&data[r];
+            cdtext_pack* pack = const_cast<cdtext_pack *>(reinterpret_cast<const cdtext_pack *>(&data[r]));
 
             //
             // For some reason all crc bits are inverted.
@@ -1038,7 +1037,7 @@ bool K3b::Device::CdText::checkCrc( const unsigned char* data, int len )
             pack[i].crc[0] ^= 0xff;
             pack[i].crc[1] ^= 0xff;
 
-            int crc = calcX25( reinterpret_cast<unsigned char*>(&pack[i]), 18 );
+            int crc = calcX25( reinterpret_cast<unsigned char *>(&pack[i]), 18 );
 
             pack[i].crc[0] ^= 0xff;
             pack[i].crc[1] ^= 0xff;

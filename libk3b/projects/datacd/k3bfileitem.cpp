@@ -220,7 +220,7 @@ bool K3b::FileItem::isValid() const
 
                 if( d->isDir() ) {
                     // change directory
-                    dir = (K3b::DirItem*)d;
+                    dir = static_cast<K3b::DirItem *>(d);
                 }
                 else {
                     if( i+1 != tokens.size() )

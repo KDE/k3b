@@ -175,7 +175,7 @@ K3b::DirItem::Children K3b::DirItem::takeDataItems( int start, int count )
             DataItem* item = m_children.at( start+i );
             updateSize( item, true );
             if( item->isDir() )
-                updateFiles( -1*((DirItem*)item)->numFiles(), -1*((DirItem*)item)->numDirs()-1 );
+                updateFiles( -1*static_cast<DirItem *>(item)->numFiles(), -1*static_cast<DirItem *>(item)->numDirs()-1 );
             else
                 updateFiles( -1, 0 );
 
@@ -266,7 +266,7 @@ K3b::DataItem* K3b::DirItem::findByPath( const QString& p )
         // do it recursively
         K3b::DataItem* item = find( path.left(pos) );
         if( item && item->isDir() )
-            return ((K3b::DirItem*)item)->findByPath( path.mid( pos+1 ) );
+            return (static_cast<K3b::DirItem *>(item)->findByPath( path.mid( pos+1 ) ) );
         else
             return 0;
     }
@@ -477,7 +477,7 @@ void K3b::DirItem::addDataItemImpl( DataItem* item )
     m_children.append( item );
     updateSize( item, false );
     if( item->isDir() )
-        updateFiles( ((DirItem*)item)->numFiles(), ((DirItem*)item)->numDirs()+1 );
+        updateFiles( static_cast<DirItem *>(item)->numFiles(), static_cast<DirItem *>(item)->numDirs()+1 );
     else
         updateFiles( 1, 0 );
 

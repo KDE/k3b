@@ -271,7 +271,7 @@ void K3b::VideoCdView::reloadMedium()
         } else {
             K3b::Msf length( ( *it ).length() );
             d->videocddatasize += length.mode2Form1Bytes();
-            ( ( VideoTrackViewCheckItem* ) d->contentList[ 1 ] ) ->updateData( length );
+            static_cast<VideoTrackViewCheckItem *>(d->contentList[ 1 ])->updateData( length );
             ( void ) new VideoTrackViewCheckItem( d->contentList[ 1 ], i18n( "Files" ) );
             ( void ) new VideoTrackViewCheckItem( d->contentList[ 1 ], i18n( "Segments" ) );
         }
@@ -279,7 +279,7 @@ void K3b::VideoCdView::reloadMedium()
         index++;
     }
 
-    ( ( VideoTrackViewCheckItem* ) d->contentList[ 0 ] ) ->updateData( sequenceSize, true );
+    static_cast<VideoTrackViewCheckItem *>(d->contentList[ 0 ])->updateData( sequenceSize, true );
 
     d->videooptions ->setVideoCdSource( device()->blockDeviceName() );
 

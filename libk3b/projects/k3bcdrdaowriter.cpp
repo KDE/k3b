@@ -952,7 +952,7 @@ void K3b::CdrdaoWriter::parseCdrdaoMessage()
 
         // read one message (the message size changed in cdrdao 1.1.8)
         ::memset( &d->newMsg, 0, d->progressMsgSize );
-        int size = m_comSock->read( (char*)&d->newMsg, d->progressMsgSize);
+        int size = m_comSock->read( reinterpret_cast<char *>(&d->newMsg), d->progressMsgSize);
         if( size == -1 ) {
             qDebug() << "(K3b::CdrdaoParser) read error";
             return;

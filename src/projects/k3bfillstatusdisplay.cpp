@@ -846,7 +846,7 @@ void K3b::FillStatusDisplay::slotDocChanged()
 bool K3b::FillStatusDisplay::event( QEvent* event )
 {
     if ( event->type() == QEvent::ToolTip ) {
-        QHelpEvent* he = ( QHelpEvent* )event;
+        QHelpEvent* he = static_cast<QHelpEvent *>(event);
 
         QToolTip::showText( he->globalPos(),
                             KIO::convertSize( d->doc->size() ) +

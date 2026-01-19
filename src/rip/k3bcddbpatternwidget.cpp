@@ -26,7 +26,7 @@ K3b::CddbPatternWidget::CddbPatternWidget( QWidget* parent )
     setupUi( this );
 
     // fix the layout
-    ((QGridLayout*)layout())->setRowStretch( 4, 1 );
+    static_cast<QGridLayout *>(layout())->setRowStretch( 4, 1 );
 
     // setup validators
     // there can never be one of the following characters in both dir and filename:

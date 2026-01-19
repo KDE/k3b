@@ -554,7 +554,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
         while ( !trackDataStream.atEnd() ) {
             qint64 p;
             trackDataStream >> p;
-            tracks << ( K3b::AudioTrack* )p;
+            tracks << reinterpret_cast<K3b::AudioTrack *>(p);
         }
 
         QByteArray sourceData = data->data( "application/x-k3baudiosource" );
@@ -562,7 +562,7 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
         while ( !sourceDataStream.atEnd() ) {
             qint64 p;
             sourceDataStream >> p;
-            sources << ( K3b::AudioDataSource* )p;
+            sources << reinterpret_cast<K3b::AudioDataSource *>(p);
         }
 
         //

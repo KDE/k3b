@@ -261,9 +261,9 @@ qint64 K3bLameEncoder::encodeInternal( const char* data, qint64 len )
 {
     // FIXME: we may have to swap data here
     int size = lame_encode_buffer_interleaved( d->flags,
-                                               (short int*)data,
+                                               reinterpret_cast<short int *>(const_cast<char *>(data)),
                                                len/4,
-                                               (unsigned char*)d->buffer,
+                                               reinterpret_cast<unsigned char *>(d->buffer),
                                                8000 );
     if( size < 0 ) {
         qDebug() << "(K3bLameEncoder) lame_encode_buffer_interleaved failed.";
@@ -277,7 +277,7 @@ qint64 K3bLameEncoder::encodeInternal( const char* data, qint64 len )
 void K3bLameEncoder::finishEncoderInternal()
 {
     int size = lame_encode_flush( d->flags,
-                                  (unsigned char*)d->buffer,
+                                  reinterpret_cast<unsigned char *>(d->buffer),
                                   8000 );
     if( size > 0 )
         ::fwrite( d->buffer, 1, size, d->fid );

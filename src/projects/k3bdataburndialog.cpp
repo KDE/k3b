@@ -93,41 +93,40 @@ K3b::DataBurnDialog::~DataBurnDialog(){
 void K3b::DataBurnDialog::saveSettingsToProject()
 {
     K3b::ProjectBurnDialog::saveSettingsToProject();
+    K3b::DataDoc *dd = static_cast<K3b::DataDoc *>(doc());
 
     // save iso image settings
-    K3b::IsoOptions o = ((K3b::DataDoc*)doc())->isoOptions();
+    K3b::IsoOptions o = dd->isoOptions();
     m_imageSettingsWidget->save( o );
-    ((K3b::DataDoc*)doc())->setIsoOptions( o );
+    dd->setIsoOptions( o );
 
     // save image file path
-    ((K3b::DataDoc*)doc())->setTempDir( m_tempDirSelectionWidget->tempPath() );
+    dd->setTempDir( m_tempDirSelectionWidget->tempPath() );
 
     // save multisession settings
-    ((K3b::DataDoc*)doc())->setMultiSessionMode( m_comboMultisession->multiSessionMode() );
+    dd->setMultiSessionMode( m_comboMultisession->multiSessionMode() );
 
-    ((K3b::DataDoc*)doc())->setDataMode( m_dataModeWidget->dataMode() );
-
-    ((K3b::DataDoc*)doc())->setVerifyData( m_checkVerify->isChecked() );
+    dd->setDataMode( m_dataModeWidget->dataMode() );
+    dd->setVerifyData( m_checkVerify->isChecked() );
 }
 
 
 void K3b::DataBurnDialog::readSettingsFromProject()
 {
     K3b::ProjectBurnDialog::readSettingsFromProject();
+    const K3b::DataDoc *dd = static_cast<K3b::DataDoc *>(doc());
 
     // read multisession
-    m_comboMultisession->setMultiSessionMode( ((K3b::DataDoc*)doc())->multiSessionMode() );
+    m_comboMultisession->setMultiSessionMode( dd->multiSessionMode() );
 
-    if( !doc()->tempDir().isEmpty() )
-        m_tempDirSelectionWidget->setTempPath( doc()->tempDir() );
+    if( !dd->tempDir().isEmpty() )
+        m_tempDirSelectionWidget->setTempPath( dd->tempDir() );
     else
-        m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + doc()->name() + ".iso" );
+        m_tempDirSelectionWidget->setTempPath( K3b::defaultTempPath() + dd->name() + ".iso" );
 
-    m_checkVerify->setChecked( ((K3b::DataDoc*)doc())->verifyData() );
-
-    m_imageSettingsWidget->load( ((K3b::DataDoc*)doc())->isoOptions() );
-
-    m_dataModeWidget->setDataMode( ((K3b::DataDoc*)doc())->dataMode() );
+    m_checkVerify->setChecked( dd->verifyData() );
+    m_imageSettingsWidget->load( dd->isoOptions() );
+    m_dataModeWidget->setDataMode( dd->dataMode() );
 
     toggleAll();
     slotMultiSessionModeChanged();

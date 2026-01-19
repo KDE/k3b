@@ -91,7 +91,7 @@ void K3b::CloneTocReader::readFile()
             unsigned char last; // last session
         };
 
-        struct tocheader* th = (struct tocheader*)buffer;
+        struct tocheader* th = reinterpret_cast<struct tocheader *>(buffer);
         int dataLen = K3b::Device::from2Byte( th->len ) + 2;  // the len field does not include it's own length
 
         if( th->first != 1 ) {
@@ -121,7 +121,7 @@ void K3b::CloneTocReader::readFile()
         };
 
         for( int i = 4; i < dataLen; i += 11) {
-            struct ftrackdesc* ft = (struct ftrackdesc*)&buffer[i];
+            struct ftrackdesc* ft = reinterpret_cast<struct ftrackdesc *>(&buffer[i]);
 
             if( ft->sess_number != 1 ) {
                 qDebug() << "(K3b::CloneTocReader} session number != 1";

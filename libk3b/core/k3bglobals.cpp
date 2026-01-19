@@ -402,7 +402,7 @@ qint16 K3b::fromLe16( char* data )
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     return swapByteOrder( *((qint16*)data) );
 #else
-    return *((qint16*)data);
+    return *(reinterpret_cast<qint16 *>(data));
 #endif
 }
 
@@ -412,7 +412,7 @@ qint32 K3b::fromLe32( char* data )
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     return swapByteOrder( *((qint32*)data) );
 #else
-    return *((qint32*)data);
+    return *(reinterpret_cast<qint32 *>(data));
 #endif
 }
 
@@ -422,7 +422,7 @@ qint64 K3b::fromLe64( char* data )
 #ifdef WORDS_BIGENDIAN // __BYTE_ORDER == __BIG_ENDIAN
     return swapByteOrder( *((qint64*)data) );
 #else
-    return *((qint64*)data);
+    return *(reinterpret_cast<qint64 *>(data));
 #endif
 }
 

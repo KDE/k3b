@@ -110,7 +110,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
         d->sgIo.interface_id= 'S';
         d->sgIo.mx_sb_len = sizeof( struct request_sense );
         d->sgIo.cmdp      = d->cmd.cmd;
-        d->sgIo.sbp       = (unsigned char*)&d->sense;
+        d->sgIo.sbp       = reinterpret_cast<unsigned char *>(&d->sense);
         d->sgIo.flags     = SG_FLAG_LUN_INHIBIT|SG_FLAG_DIRECT_IO;
         d->sgIo.dxferp    = data;
         d->sgIo.dxfer_len = len;
@@ -129,7 +129,7 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
     }
     else {
 #endif
-        d->cmd.buffer = (unsigned char*)data;
+        d->cmd.buffer = static_cast<unsigned char *>(data);
         d->cmd.buflen = len;
         if( dir == TR_DIR_READ )
             d->cmd.data_direction = CGC_DATA_READ;

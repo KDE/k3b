@@ -218,7 +218,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     qDebug() << "(K3bExternalEncoder) writing wave header";
 
     // write the RIFF thing
-    if( d->process->write( (const char*) s_riffHeader, 4 ) != 4 ) {
+    if( d->process->write( reinterpret_cast<const char *>(s_riffHeader), 4 ) != 4 ) {
         qDebug() << "(K3bExternalEncoder) failed to write riff header.";
         return false;
     }
@@ -239,7 +239,7 @@ bool K3bExternalEncoder::writeWaveHeader()
     }
 
     // write static part of the header
-    if( d->process->write( (const char*) s_riffHeader + 8, 32 ) != 32 ) {
+    if( d->process->write( reinterpret_cast<const char *>(s_riffHeader) + 8, 32 ) != 32 ) {
         qDebug() << "(K3bExternalEncoder) failed to write wave header.";
         return false;
     }

@@ -33,7 +33,7 @@
 KoStore::Backend KoStore::determineBackend( QIODevice* dev )
 {
     unsigned char buf[5];
-    if ( dev->read( (char *)buf, 4 ) < 4 )
+    if ( dev->read( reinterpret_cast<char *>(buf), 4 ) < 4 )
       return DefaultFormat; // will create a "bad" store (bad()==true)
     //if ( buf[0] == 0037 && buf[1] == 0213 ) // gzip -> tar.gz
       //return Tar;

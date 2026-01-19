@@ -114,7 +114,7 @@ void K3b::WaveFileWriter::writeEmptyHeader()
             0x00, 0x00, 0x00, 0x00  // 40 byteCount
         };
 
-    m_outputStream.writeRawData( (const char*) riffHeader, 44 );
+    m_outputStream.writeRawData( reinterpret_cast<const char *>(riffHeader), 44 );
 }
 
 

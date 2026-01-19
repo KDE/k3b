@@ -270,8 +270,8 @@ bool K3bOggVorbisEncoder::writeOggHeaders()
     //
     QByteArray data;
     while( ogg_stream_flush( d->oggStream, d->oggPage ) ) {
-        writeData( (char*)d->oggPage->header, d->oggPage->header_len );
-        writeData( (char*)d->oggPage->body, d->oggPage->body_len );
+        writeData( reinterpret_cast<char *>(d->oggPage->header), d->oggPage->header_len );
+        writeData( reinterpret_cast<char *>(d->oggPage->body), d->oggPage->body_len );
     }
 
     d->headersWritten = true;
@@ -322,8 +322,8 @@ long K3bOggVorbisEncoder::flushVorbis()
 
             // write out pages (if any)
             while( ogg_stream_pageout( d->oggStream, d->oggPage ) ) {
-                writeData( (char*)d->oggPage->header, d->oggPage->header_len );
-                writeData( (char*)d->oggPage->body, d->oggPage->body_len );
+                writeData( reinterpret_cast<char *>(d->oggPage->header), d->oggPage->header_len );
+                writeData( reinterpret_cast<char *>(d->oggPage->body), d->oggPage->body_len );
 
                 writtenData += ( d->oggPage->header_len + d->oggPage->body_len );
             }

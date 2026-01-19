@@ -93,7 +93,7 @@ int K3b::Iso9660::isofs_callback( struct iso_directory_record *idr, void *udata 
         if (!special) {
             if( !iso->plainIso9660() && iso->jolietLevel() ) {
                 for (i=0;i<(isonum_711(idr->name_len)-1);i+=2) {
-                    QChar ch( be2me_16(*((ushort*)&(idr->name[i]))) );
+                    QChar ch( be2me_16(*reinterpret_cast<ushort *>(&(idr->name[i]))) );
                     if (ch==';') break;
                     path+=ch;
                 }
@@ -558,16 +558,16 @@ void K3b::Iso9660::addBoot(struct el_torito_boot_descriptor* bootdesc)
         be=boot.defentry;
         while (be) {
             size=BootImageSize(&K3b::Iso9660::read_callback,
-                               isonum_711(((struct default_entry*) be->data)->media),
-                               isonum_731(((struct default_entry*) be->data)->start),
-                               isonum_721(((struct default_entry*) be->data)->seccount),
+                               isonum_711((reinterpret_cast<struct default_entry *>(be->data))->media),
+                               isonum_731((reinterpret_cast<struct default_entry *>(be->data))->start),
+                               isonum_721((reinterpret_cast<struct default_entry *>(be->data))->seccount),
                                this);
             path="Default Image";
             if (i>1) path += " (" + QString::number(i) + ')';
             entry=new K3b::Iso9660File( this, path, path, dirent->permissions() & ~S_IFDIR,
                                       dirent->date(), dirent->adate(), dirent->cdate(),
                                       dirent->user(), dirent->group(), QString(),
-                                      isonum_731(((struct default_entry*) be->data)->start), size<<9 );
+                                      isonum_731((reinterpret_cast<struct default_entry *>(be->data))->start), size<<9 );
             dirent->addEntry(entry);
             be=be->next;
             i++;
@@ -656,7 +656,7 @@ bool K3b::Iso9660::open()
         switch (isonum_711(desc->data.type)) {
         case ISO_VD_BOOT:
 
-            bootdesc=(struct el_torito_boot_descriptor*) &(desc->data);
+            bootdesc = reinterpret_cast<struct el_torito_boot_descriptor *>(&(desc->data));
             if( !memcmp( EL_TORITO_ID, bootdesc->system_id, ISODCL(8,39) ) ) {
                 path="El Torito Boot";
                 if( c_b > 1 )
@@ -672,12 +672,12 @@ bool K3b::Iso9660::open()
             break;
 
         case ISO_VD_PRIMARY:
-            createSimplePrimaryDesc( (struct iso_primary_descriptor*)&desc->data );
+            createSimplePrimaryDesc( reinterpret_cast<struct iso_primary_descriptor *>(&desc->data) );
             // fall through
         case ISO_VD_SUPPLEMENTARY:
         {
-            struct iso_primary_descriptor* primaryDesc = (struct iso_primary_descriptor*)&desc->data;
-            struct iso_directory_record* idr = (struct iso_directory_record*)&primaryDesc->root_directory_record;
+            struct iso_primary_descriptor* primaryDesc = reinterpret_cast<struct iso_primary_descriptor *>(&desc->data);
+            struct iso_directory_record* idr = reinterpret_cast<struct iso_directory_record *>(&primaryDesc->root_directory_record);
 
             m_joliet = JolietLevel(&desc->data);
 

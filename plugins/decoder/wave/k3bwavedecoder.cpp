@@ -66,36 +66,36 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
 
 
     // read riff chunk
-    if( f.read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+    if( f.read( reinterpret_cast<char *>(&chunk), sizeof(chunk) ) != sizeof(chunk) ) {
         qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
         return 0;
     }
-    if( qstrncmp( (char*)chunk.ckid, WAV_RIFF_MAGIC, 4 ) ) {
+    if( qstrncmp( reinterpret_cast<char *>(chunk.ckid), WAV_RIFF_MAGIC, 4 ) ) {
         qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": not a RIFF file.";
         return 0;
     }
 
     // read wave chunk
-    if( f.read( (char*)&riff, sizeof(riff) ) != sizeof(riff) ) {
+    if( f.read( reinterpret_cast<char *>(&riff), sizeof(riff) ) != sizeof(riff) ) {
         qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
         return 0;
     }
-    if( qstrncmp( (char*)riff.wave, WAV_WAVE_MAGIC, 4 ) ) {
+    if( qstrncmp( reinterpret_cast<char *>(riff.wave), WAV_WAVE_MAGIC, 4 ) ) {
         qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": not a WAVE file.";
         return 0;
     }
 
 
     // read fmt chunk
-    if( f.read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+    if( f.read( reinterpret_cast<char *>(&chunk), sizeof(chunk) ) != sizeof(chunk) ) {
         qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
         return 0;
     }
-    if( qstrncmp( (char*)chunk.ckid, WAV_FMT_MAGIC, 4 ) ) {
+    if( qstrncmp( reinterpret_cast<char *>(chunk.ckid), WAV_FMT_MAGIC, 4 ) ) {
         qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": could not find format chunk.";
         return 0;
     }
-    if( f.read( (char*)&fmt, sizeof(fmt) ) != sizeof(fmt) ) {
+    if( f.read( reinterpret_cast<char *>(&fmt), sizeof(fmt) ) != sizeof(fmt) ) {
         qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
         return 0;
     }
@@ -131,14 +131,14 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
     // find data chunk
     bool foundData = false;
     while( !foundData ) {
-        if( f.read( (char*)&chunk, sizeof(chunk) ) != sizeof(chunk) ) {
+        if( f.read( reinterpret_cast<char *>(&chunk), sizeof(chunk) ) != sizeof(chunk) ) {
             qDebug() << "(K3bWaveDecoder) unable to read from " << f.fileName();
             return 0;
         }
 
         // skip chunk data of unknown chunk
-        if( qstrncmp( (char*)chunk.ckid, WAV_DATA_MAGIC, 4 ) ) {
-            qDebug() << "(K3bWaveDecoder) skipping chunk: " << (char*)chunk.ckid;
+        if( qstrncmp( reinterpret_cast<char *>(chunk.ckid), WAV_DATA_MAGIC, 4 ) ) {
+            qDebug() << "(K3bWaveDecoder) skipping chunk: " << reinterpret_cast<char *>(chunk.ckid);
             if( !f.seek( f.pos() + le_a_to_u_long(chunk.cksize) ) ) {
                 qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": could not seek in file.";
                 return 0;

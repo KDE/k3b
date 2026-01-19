@@ -1343,7 +1343,7 @@ void K3b::DataDoc::createSessionImportItems( const K3b::Iso9660Directory* import
             if( entry->isDirectory() ) {
                 K3b::DirItem* dir = 0;
                 if( oldItem && oldItem->isDir() ) {
-                    dir = (K3b::DirItem*)oldItem;
+                    dir = static_cast<K3b::DirItem *>(oldItem);
                 }
                 else {
                     // we overwrite without warning!
@@ -1390,7 +1390,7 @@ void K3b::DataDoc::clearImportedSession()
         K3b::DataItem* item = d->oldSession.takeFirst();
 
         if( item->isDir() ) {
-            K3b::DirItem* dir = (K3b::DirItem*)item;
+            K3b::DirItem* dir = static_cast<K3b::DirItem *>(item);
             if( dir->numDirs() + dir->numFiles() == 0 ) {
                 // this imported dir is not needed anymore
                 // since it is empty

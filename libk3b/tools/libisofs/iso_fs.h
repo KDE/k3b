@@ -176,7 +176,7 @@ __inline unsigned int isonum_733(char *p);
 /* 8 bit numbers */
 __inline unsigned char isonum_711(char *p)
 {
-	return *(unsigned char *)p;
+	return *reinterpret_cast<unsigned char *>(p);
 }
 __inline char isonum_712(char *p)
 {
@@ -186,33 +186,33 @@ __inline char isonum_712(char *p)
 /* 16 bit numbers */
 __inline unsigned short isonum_721(char *p)
 {
-	return le2me_16(*(unsigned short *)p);
+	return le2me_16(*reinterpret_cast<unsigned short *>(p));
 }
 __inline unsigned short isonum_722(char *p)
 {
-	return be2me_16(*(unsigned short *)p);
+	return be2me_16(*reinterpret_cast<unsigned short *>(p));
 }
 __inline unsigned short isonum_723(char *p)
 {
 	/* Ignore bigendian datum due to broken mastering programs */
-	return le2me_16(*(unsigned short *)p);
+	return le2me_16(*reinterpret_cast<unsigned short *>(p));
 }
 
 /* 32 bit numbers */
 __inline unsigned int isonum_731(char *p)
 {
-	return le2me_32(*(unsigned int *)p);
+	return le2me_32(*reinterpret_cast<unsigned int *>(p));
 }
 
 __inline unsigned int isonum_732(char *p)
 {
-	return be2me_32(*(unsigned int *)p);
+	return be2me_32(*reinterpret_cast<unsigned int *>(p));
 }
 
 __inline unsigned int isonum_733(char *p)
 {
 	/* Ignore bigendian datum due to broken mastering programs */
-	return le2me_32(*(unsigned int *)p);
+	return le2me_32(*reinterpret_cast<unsigned int *>(p));
 }
 
 #endif /*_ISOFS_H*/

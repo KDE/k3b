@@ -254,7 +254,7 @@ void K3b::TitleLabel::updatePositioning()
 bool K3b::TitleLabel::event( QEvent* event )
 {
     if ( event->type() == QEvent::ToolTip ) {
-        QHelpEvent* he = ( QHelpEvent* )event;
+        QHelpEvent* he = static_cast<QHelpEvent *>(event);
         QPoint pos = he->pos();
 
         const QRect rect = contentsRect().adjusted( d->margin, d->margin, -d->margin, -d->margin );

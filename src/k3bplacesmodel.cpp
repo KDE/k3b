@@ -172,7 +172,7 @@ void K3b::PlacesModel::addPlace( const QString& name, const QIcon& icon, const Q
 void K3b::PlacesModel::slotExpand( const QModelIndex& index )
 {
     qDebug() << index;
-    KDirModel* model = ( KDirModel* )index.model();
+    KDirModel* model = const_cast<KDirModel *>(qobject_cast<const KDirModel *>(index.model()));
     emit expand( mapFromSubModel( d->dirModels[model]->mapFromSource( index ) ) );
 }
 

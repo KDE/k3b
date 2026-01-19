@@ -881,7 +881,7 @@ qint64 K3bQProcessPrivate::bytesAvailableFromStdout() const
 {
     size_t nbytes = 0;
     qint64 available = 0;
-    if (::ioctl(stdoutChannel.pipe[0], FIONREAD, (char *) &nbytes) >= 0)
+    if (::ioctl(stdoutChannel.pipe[0], FIONREAD, reinterpret_cast<char *>(&nbytes)) >= 0)
         available = qint64(nbytes);
 #if defined (QPROCESS_DEBUG)
     qDebug("K3bQProcessPrivate::bytesAvailableFromStdout() == %lld", available);
@@ -893,7 +893,7 @@ qint64 K3bQProcessPrivate::bytesAvailableFromStderr() const
 {
     size_t nbytes = 0;
     qint64 available = 0;
-    if (::ioctl(stderrChannel.pipe[0], FIONREAD, (char *) &nbytes) >= 0)
+    if (::ioctl(stderrChannel.pipe[0], FIONREAD, reinterpret_cast<char *>(&nbytes)) >= 0)
         available = qint64(nbytes);
 #if defined (QPROCESS_DEBUG)
     qDebug("K3bQProcessPrivate::bytesAvailableFromStderr() == %lld", available);
@@ -1341,7 +1341,7 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
         }
 
         qt_native_close(startedPipe[1]);
-        qt_native_write(pidPipe[1], (const char *)&doubleForkPid, sizeof(pid_t));
+        qt_native_write(pidPipe[1], reinterpret_cast<const char *>(&doubleForkPid), sizeof(pid_t));
         qt_native_chdir("/");
         ::_exit(1);
     }
@@ -1364,7 +1364,7 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
     bool success = (startResult != -1 && reply == '\0');
     if (success && pid) {
         pid_t actualPid = 0;
-        if (qt_native_read(pidPipe[0], (char *)&actualPid, sizeof(pid_t)) == sizeof(pid_t)) {
+        if (qt_native_read(pidPipe[0], reinterpret_cast<char *>(&actualPid), sizeof(pid_t)) == sizeof(pid_t)) {
             *pid = actualPid;
         } else {
             *pid = 0;

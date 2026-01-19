@@ -228,12 +228,12 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
     foreach( K3b::DataItem* item, dir->children() ) {
         if( item->isFile() ) {
             if( item->isRenameable() ) {
-                QString newName = createNewName( (K3b::FileItem*)item );
+                QString newName = createNewName( static_cast<K3b::FileItem *>(item) );
                 if( !newName.isEmpty() ) {
                     QTreeWidgetItem* fileViewItem = new QTreeWidgetItem( viewRoot, QStringList() << newName << item->k3bName() );
                     fileViewItem->setCheckState( 0, Qt::Checked );
                     fileViewItem->setIcon( 0, QIcon::fromTheme( item->mimeType().iconName() ) );
-                    d->renamableItems.append( qMakePair( (K3b::FileItem*)item, fileViewItem ) );
+                    d->renamableItems.append( qMakePair( static_cast<K3b::FileItem *>(item), fileViewItem ) );
                 }
             }
 
@@ -247,7 +247,7 @@ void K3bAudioMetainfoRenamerPluginWidget::scanDir( K3b::DirItem* dir, QTreeWidge
         }
         else if( item->isDir() ) {
             // create dir item
-            K3b::DirItem* dirItem = static_cast<K3b::DirItem*>( item );
+            K3b::DirItem* dirItem = static_cast<K3b::DirItem *>( item );
             if ( !dirItem->children().isEmpty() ) {
                 QTreeWidgetItem* dirViewItem = new QTreeWidgetItem( viewRoot, QStringList() << item->k3bName() );
                 dirViewItem->setIcon( 0, QIcon::fromTheme( "folder" ) );

@@ -424,7 +424,7 @@ bool K3b::DataProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction 
         while ( !itemDataStream.atEnd() ) {
             qint64 p;
             itemDataStream >> p;
-            items << ( K3b::DataItem* )p;
+            items << reinterpret_cast<K3b::DataItem *>(p);
         }
         // always move the items, no copy from within the views
         emit moveItemsRequested( items, dir );

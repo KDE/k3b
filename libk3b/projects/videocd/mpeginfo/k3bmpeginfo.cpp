@@ -367,7 +367,7 @@ llong K3b::MpegInfo::GetNBytes( llong offset, int n )
     llong nbytes = 0;
     n--;
     for ( int i = 0; i < n; i++ )
-        ( ( char* ) & nbytes ) [ n - i ] = GetByte( offset + i );
+        (reinterpret_cast<char *> (&nbytes))[ n - i ] = GetByte( offset + i );
 
     return nbytes;
 

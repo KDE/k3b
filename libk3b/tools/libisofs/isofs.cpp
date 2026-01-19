@@ -139,7 +139,7 @@ int BootImageSize(readfunc*,int media,sector_t,int len,void*) {
 static boot_entry *CreateBootEntry(char *be) {
 	boot_entry *entry;
 
-	entry = (boot_entry*) malloc(sizeof(boot_entry));
+	entry = reinterpret_cast<boot_entry *>(malloc(sizeof(boot_entry)));
 	if (!entry) return NULL;
 	memset(entry, 0, sizeof(boot_entry));
 	memcpy(entry->data,be,0x20);
@@ -157,15 +157,15 @@ int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata) 
 	head->sections=NULL;
 	head->defentry=NULL;
 	while (1) {
-		be = (char*) &buf;
+		be = static_cast<char *>(buf);
 		if ( read(be, sector, 1, udata) != 1 ) goto err;
 
 		/* first entry needs to be a validation entry */
 		if (!ventry) {
-			ventry=(struct validation_entry *) be;
+			ventry = reinterpret_cast<struct validation_entry *>(be);
 			if ( isonum_711(ventry->type) !=1 ) goto err;
 			sum=0;
-			c = (char*) ventry;
+			c = reinterpret_cast<char *>(ventry);
 			for (i=0;i<16;++i) { sum += isonum_721(c); c+=2; }
 			if (sum) goto err;
 			memcpy(&head->ventry,be,0x20);
@@ -216,7 +216,7 @@ iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata) {
 	iso_vol_desc *first=NULL,*current=NULL,*prev=NULL;
 
 	for (i=0;i<100;i++) {
-		if (read( (char*) &buf, sector+i+16, 1, udata) != 1 ) {
+		if (read( reinterpret_cast<char *>(&buf), sector+i+16, 1, udata) != 1 ) {
 			FreeISO9660(first);
 			return NULL;
 		}
@@ -226,7 +226,7 @@ iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata) {
 				case ISO_VD_BOOT:
 				case ISO_VD_PRIMARY:
 				case ISO_VD_SUPPLEMENTARY:
-					current=(iso_vol_desc*) malloc(sizeof(iso_vol_desc));
+					current = reinterpret_cast<iso_vol_desc *>(malloc(sizeof(iso_vol_desc)));
 					if (!current) {
 						FreeISO9660(first);
 						return NULL;
@@ -243,7 +243,7 @@ iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata) {
 					return first;
 					break;
 			}
-		} else if (!memcmp(HS_STANDARD_ID,(struct hs_volume_descriptor*) &buf,5)) {
+		} else if (!memcmp(HS_STANDARD_ID, reinterpret_cast<struct hs_volume_descriptor *>(&buf) ,5)) {
 			/* High Sierra format not supported (yet) */
 		}
 	}
@@ -288,7 +288,7 @@ int str_nappend(char **d, char *s, int n)
 	while (i < n && s[i]) i++;
 	i++;
 	if (*d) i += (strlen(*d) + 1);
-	c = (char*) malloc(i);
+	c = static_cast<char *>(malloc(i));
 	if (!c) return -ENOMEM;
 	if (*d) {
 		strcpy(c, *d);
@@ -308,7 +308,7 @@ static int str_append(char **d, const char *s) {
 
 	i=strlen(s)+1;
 	if (*d) i+=(strlen(*d)+1);
-	c=(char*) malloc(i);
+	c = static_cast<char *>(malloc(i));
 	if (!c) return -ENOMEM;
 	if (*d) {
 		strcpy(c,*d);
@@ -336,8 +336,8 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 	suspoffs=33+isonum_711(idr->name_len);
 	if (!(isonum_711(idr->name_len) & 1)) suspoffs++;
 	susplen=isonum_711(idr->length)-suspoffs;
-	r= & (((char*) idr)[suspoffs]);
-	rr = (struct rock_ridge*) r;
+	r= &((reinterpret_cast<char *>(idr))[suspoffs]);
+	rr = reinterpret_cast<struct rock_ridge *>(r);
 
 	memset(rrentry,0,sizeof(rr_entry));
 	rrentry->len = sizeof(rr_entry);
@@ -380,7 +380,7 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 		} else if (rr->signature[0]=='S' && rr->signature[1]=='L' &&
 			isonum_711(&rr->len)>7) {
 			i = isonum_711(&rr->len)-5;
-			c = (char*) rr;
+			c = reinterpret_cast<char *>(rr);
 			c += 5;
 			while (i>0) {
 				switch(c[0] & ~1) {
@@ -416,7 +416,7 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 
 			i = isonum_711(&rr->len)-5;
 			f = rr->u.TF.flags;
-			c = (char*) rr;
+			c = reinterpret_cast<char *>(rr);
 			c += 5;
 
 			while (i >= rrtlen(f)) {
@@ -463,7 +463,7 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 
 		susplen -= isonum_711(&rr->len);
 		r += isonum_711(&rr->len);
-		rr = (struct rock_ridge*) r;
+		rr = reinterpret_cast<struct rock_ridge *>(r);
 	}
 
 	return ret;
@@ -486,7 +486,7 @@ int ProcessDir(readfunc *read,int extent,int size,dircallback *callback,void *ud
 		siz=size;
 	}
 
-	buf=(char*) malloc(siz);
+	buf = static_cast<char *>(malloc(siz));
 	if (!buf) return -ENOMEM;
 	if (read(buf,extent,siz>>11,udata)!=siz>>11) {
 		free(buf);
@@ -494,13 +494,13 @@ int ProcessDir(readfunc *read,int extent,int size,dircallback *callback,void *ud
 	}
 
 	while (size>0) {
-		idr=(struct iso_directory_record*) &buf[pos];
+		idr = reinterpret_cast<struct iso_directory_record *>(&buf[pos]);
 		if (isonum_711(idr->length)==0) {
 			size-=(2048 - (pos & 0x7ff));
 			if (size<=2) break;
-			pos+=0x800;
-			pos&=0xfffff800;
-			idr=(struct iso_directory_record*) &buf[pos];
+			pos += 0x800;
+			pos &= 0xfffff800;
+			idr = reinterpret_cast<struct iso_directory_record *>(&buf[pos]);
 		}
 		pos+=isonum_711(idr->length);
 		pos+=isonum_711(idr->ext_attr_length);
@@ -528,7 +528,7 @@ int JolietLevel(struct iso_volume_descriptor *ivd) {
 	int ret=0;
 	struct iso_supplementary_descriptor *isd;
 
-	isd = (struct iso_supplementary_descriptor *) ivd;
+	isd = reinterpret_cast<struct iso_supplementary_descriptor *>(ivd);
 
 	if (isonum_711(ivd->type)==ISO_VD_SUPPLEMENTARY) {
 		if (isd->escape[0]==0x25 &&

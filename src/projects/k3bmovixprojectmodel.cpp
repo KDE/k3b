@@ -412,7 +412,7 @@ bool MovixProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction acti
         {
             qint64 p;
             itemDataStream >> p;
-            items << ( MovixFileItem* )p;
+            items << reinterpret_cast<MovixFileItem *>(p);
         }
 
         MovixFileItem *prev;

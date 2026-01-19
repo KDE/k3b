@@ -138,7 +138,7 @@ FLAC__SeekableStreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLA
 }
 #else
 FLAC__StreamDecoderReadStatus K3bFLACDecoder::Private::read_callback(FLAC__byte buffer[],                                                                             size_t *bytes) {
-    long retval =  file->read((char *)buffer, (*bytes));
+    long retval =  file->read(reinterpret_cast<char *>(buffer), (*bytes));
     if(-1 == retval) {
         return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
     } else {
@@ -208,7 +208,7 @@ void K3bFLACDecoder::Private::metadata_callback(const FLAC__StreamMetadata *meta
         minBlocksize = metadata->data.stream_info.min_blocksize;
         break;
     case FLAC__METADATA_TYPE_VORBIS_COMMENT:
-        comments = new FLAC::Metadata::VorbisComment((FLAC__StreamMetadata *)metadata, true);
+        comments = new FLAC::Metadata::VorbisComment(const_cast<FLAC__StreamMetadata *>(metadata), true);
         break;
     default:
         break;
@@ -380,7 +380,7 @@ QString K3bFLACDecoder::technicalInfo( const QString& info ) const
     if( d->comments != 0 ) {
         if( info == i18n("Vendor") )
 #ifdef FLAC_NEWER_THAN_1_1_1
-            return QString::fromUtf8((char*)d->comments->get_vendor_string());
+            return QString::fromUtf8(reinterpret_cast<const char *>(d->comments->get_vendor_string()));
 #else
         return QString::fromUtf8(d->comments->get_vendor_string().get_field());
 #endif

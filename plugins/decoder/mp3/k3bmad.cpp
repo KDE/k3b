@@ -99,7 +99,7 @@ bool K3bMad::fillStreamBuffer()
     }
 
     // Fill-in the buffer.
-    qint64 result = m_inputFile.read( (char*)readStart, readSize );
+    qint64 result = m_inputFile.read( reinterpret_cast<char *>(readStart), readSize );
     if( result < 0 ) {
       qDebug() << "(K3bMad) read error on bitstream)";
       m_bInputError = true;

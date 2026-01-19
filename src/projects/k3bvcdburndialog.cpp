@@ -613,7 +613,7 @@ void K3b::VcdBurnDialog::readSettingsFromProject()
     m_checkVCD30interpretation->setEnabled( false );
 
     // read vcdType
-    switch ( ( ( K3b::VcdDoc* ) doc() ) ->vcdType() ) {
+    switch ( static_cast<K3b::VcdDoc *>(doc())->vcdType() ) {
     case K3b::VcdDoc::VCD11:
         m_radioVcd11->setChecked( true );
         break;
