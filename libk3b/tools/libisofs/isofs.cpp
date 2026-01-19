@@ -321,8 +321,9 @@ static int str_append(char **d, const char *s) {
 	return 0;
 }
 
-#define rrtlen(c) (((unsigned char) c & 0x80) ? 17 : 7)
-#define rrctime(f,c) ((unsigned char) f & 0x80) ? isodate_84261(c,0) : isodate_915(c,0)
+#define rrtlen(c) ((static_cast<unsigned char>(c) & 0x80) ? 17 : 7)
+#define rrctime(f,c) ((static_cast<unsigned char>(f) & 0x80) ? isodate_84261(c,0) : isodate_915(c,0))
+
 /**
  * Parses the System Use area and fills rr_entry with values
  */
@@ -401,13 +402,13 @@ int ParseRR(struct iso_directory_record *idr, rr_entry *rrentry) {
 					}
 				}
 
-				if ((unsigned char)c[1]>0) {
-					if (str_nappend(&rrentry->sl,c+2,(unsigned char)c[1])) {
+				if (static_cast<unsigned char>(c[1])>0) {
+					if (str_nappend(&rrentry->sl,c+2,static_cast<unsigned char>(c[1]))) {
 						FreeRR(rrentry); return -ENOMEM;
 					}
 				}
-			 	i -= ((unsigned char)c[1] + 2);
-				c += ((unsigned char)c[1] + 2);
+				i -= (static_cast<unsigned char>(c[1]) + 2);
+				c += (static_cast<unsigned char>(c[1]) + 2);
 			}
 			ret++;
 		} else if (rr->signature[0]=='T' && rr->signature[1]=='F' &&

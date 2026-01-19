@@ -38,8 +38,8 @@
 #define MPEG_VIDEO_E1_CODE       (uchar(0xe1)) /* lowres still */
 #define MPEG_VIDEO_E2_CODE       (uchar(0xe2)) /* hires still */
 
-#define FLOAT_0x10000 double((unsigned long)1 << 16)
-#define STD_SYSTEM_CLOCK_FREQ (unsigned long)90000
+#define FLOAT_0x10000            double(static_cast<unsigned long>(1) << 16)
+#define STD_SYSTEM_CLOCK_FREQ    static_cast<unsigned long>(90000)
 
 typedef unsigned char byte;
 typedef long long llong;

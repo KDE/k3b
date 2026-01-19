@@ -16,13 +16,13 @@
 K_PLUGIN_CLASS_WITH_JSON(K3bWaveDecoderFactory, "k3bwavedecoder.json")
 
 static unsigned short le_a_to_u_short( unsigned char* a ) {
-    return ((unsigned short)
+    return (static_cast<unsigned short>
             ((a[0]       & 0xFF) |
              (a[1] << 8  & 0xFF00)) );
 }
 
 static unsigned long le_a_to_u_long( unsigned char* a ) {
-    return ((unsigned long)
+    return (static_cast<unsigned long>
             ((a[0]       & 0xFF) |
              (a[1] << 8  & 0xFF00) |
              (a[2] << 16 & 0xFF0000) |
@@ -150,7 +150,7 @@ static unsigned long identifyWaveFile( QFile& f, int* samplerate = 0, int* chann
 
     // found data chunk
     unsigned long size = le_a_to_u_long(chunk.cksize);
-    if( f.pos() + size > (unsigned long)f.size() ) {
+    if( f.pos() + size > static_cast<unsigned long>(f.size()) ) {
         qDebug() << "(K3bWaveDecoder) " << f.fileName() << ": file length " << f.size()
                  << " does not match length from WAVE header " << f.pos() << " + " << size
                  << " - using actual length." << Qt::endl;

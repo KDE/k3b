@@ -195,7 +195,7 @@ void K3b::FillStatusDisplayWidget::paintEvent( QPaintEvent* )
         overSizeText = i18n("Capacity exceeded by %1",
                             d->showTime
                             ? i18n("%1 min", (d->doc->length() - cdSize ).toString(false))
-                            : KIO::convertSize( (long long)d->doc->size() - cdSize.mode1Bytes() ) );
+                            : KIO::convertSize( static_cast<long long>(d->doc->size()) - cdSize.mode1Bytes() ) );
     // ====================================================================================
 
     // calculate the medium size marker

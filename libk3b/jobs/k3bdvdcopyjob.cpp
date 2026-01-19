@@ -284,7 +284,7 @@ void K3b::DvdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
 
             K3b::Iso9660 isoF( m_readerDevice, 0 );
             if( isoF.open() ) {
-                d->lastSector = ((long long)isoF.primaryDescriptor().logicalBlockSize*isoF.primaryDescriptor().volumeSpaceSize)/2048LL - 1;
+                d->lastSector = (static_cast<long long>(isoF.primaryDescriptor().logicalBlockSize)*isoF.primaryDescriptor().volumeSpaceSize)/2048LL - 1;
             }
             else {
                 emit infoMessage( i18n("Unable to determine the ISO 9660 filesystem size."), MessageError );

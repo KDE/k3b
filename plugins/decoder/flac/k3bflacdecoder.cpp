@@ -260,7 +260,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
 {
     cleanup();
 
-    frames = (unsigned long)ceil((d->samples * 75.0)/d->rate);
+    frames = static_cast<unsigned long>(ceil((d->samples * 75.0)/d->rate));
     samplerate = d->rate;
     ch = d->channels;
 

@@ -145,7 +145,7 @@ bool K3bMad::skipTag()
   }
 
   if( ( buf[0] == 'I' && buf[1] == 'D' && buf[2] == '3' ) &&
-      ( (unsigned short)buf[3] < 0xff && (unsigned short)buf[4] < 0xff ) ) {
+      ( static_cast<unsigned short>(buf[3]) < 0xff && static_cast<unsigned short>(buf[4]) < 0xff ) ) {
     // do we have a footer?
     bool footer = (buf[5] & 0x10);
 

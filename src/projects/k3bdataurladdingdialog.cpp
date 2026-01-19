@@ -279,7 +279,7 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
                 valid = false;
                 m_unreadableFiles.append( url.toLocalFile() );
             }
-            else if( isFile && (unsigned long long)statBuf.st_size >= 0xFFFFFFFFULL ) {
+            else if( isFile && static_cast<unsigned long long>(statBuf.st_size) >= 0xFFFFFFFFULL ) {
                 const K3b::ExternalBin *mkisofsBin = k3bcore->externalBinManager()->binObject( "mkisofs" );
                 if ( !mkisofsBin || !mkisofsBin->hasFeature( "no-4gb-limit" ) ) {
                     valid = false;

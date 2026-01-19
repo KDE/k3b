@@ -288,8 +288,9 @@ void K3b::ThemeManager::loadThemes()
 
                 // check for all necessary pixmaps (this is a little evil hacking)
                 for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
-                    if( !QFile::exists( themeDir + K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
-                        qDebug() << "(K3b::ThemeManager) theme misses pixmap: " << K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i );
+                    const QString pixFile = K3b::Theme::filenameForPixmapType(static_cast<K3b::Theme::PixmapType>(i));
+                    if( !QFile::exists( themeDir + pixFile ) ) {
+                        qDebug() << "theme misses pixmap: " << pixFile;
                         themeValid = false;
                         break;
                     }

@@ -282,7 +282,7 @@ namespace K3b {
         /**
          * Returns the startOffset of the file in bytes.
          */
-        unsigned long long startPostion() const { return (unsigned long long)m_startSector * 2048; }
+        unsigned long long startPostion() const { return static_cast<unsigned long long>(m_startSector) * 2048; }
 
         /**
          * @param pos offset in bytes
