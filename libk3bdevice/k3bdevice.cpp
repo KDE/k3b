@@ -794,7 +794,7 @@ int K3b::Device::Device::numSessions() const
     }
     else {
         if( readDiscInformation( data ) ) {
-            ret = (int)( data[9]<<8 | data[4] );
+            ret = int( data[9]<<8 | data[4] );
 
             // do only count complete sessions
             if( (data[2]>>2) != 3 )
@@ -998,7 +998,7 @@ bool K3b::Device::Device::readFormattedToc( K3b::Device::Toc& toc, int mt ) cons
         // response (fabricated TOC). Thus, we use readDiscInformation for DVD media to get the proper number of tracks
         //
         if( readDiscInformation( data ) ) {
-            lastTrack = (int)( data[11]<<8 | data[6] );
+            lastTrack = int( data[11]<<8 | data[6] );
 
             if( readTrackInformation( data, 1, lastTrack ) ) {
                 track_info_t* trackInfo = (track_info_t*)data.data();
@@ -1021,7 +1021,7 @@ bool K3b::Device::Device::readFormattedToc( K3b::Device::Toc& toc, int mt ) cons
             if( data.size() < 4 ) {
                 qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": formatted toc data too small.";
             }
-            else if( data.size() != ( (int)sizeof(toc_track_descriptor) * ((int)data[3]+1) ) + 4 ) {
+            else if( data.size() != ( int(sizeof(toc_track_descriptor)) * int(data[3]+1) ) + 4 ) {
                 qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": invalid formatted toc data length: "
                          << (data.size()-2) << Qt::endl;
             }
@@ -1083,7 +1083,7 @@ bool K3b::Device::Device::readFormattedToc( K3b::Device::Toc& toc, int mt ) cons
                 toc[i].setFreeBlocks( from4Byte( trackInfo->free_blocks ) );
             }
 
-            toc[i].setSession( (int)((trackInfo->session_number_m<<8 & 0xf0) |
+            toc[i].setSession( int((trackInfo->session_number_m<<8 & 0xf0) |
                                      (trackInfo->session_number_l & 0x0f)) );  //FIXME: is this BCD?
 
             int control = trackInfo->track_mode;
@@ -1154,20 +1154,20 @@ bool K3b::Device::Device::readRawToc( K3b::Device::Toc& toc ) const
                 // debug the raw toc data
                 //
                 qDebug() << "Session |  ADR   | CONTROL|  TNO   | POINT  |  Min   |  Sec   | Frame  |  Zero  |  PMIN  |  PSEC  | PFRAME |";
-                for( int i = 0; i < (data.size()-4)/(int)sizeof(toc_raw_track_descriptor); ++i ) {
+                for( int i = 0; i < (data.size()-4)/int(sizeof(toc_raw_track_descriptor)); ++i ) {
                     QString s;
-                    s += QString( " %1 |" ).arg( (int)tr[i].session_number, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].adr, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].control, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].tno, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].point, 6, 16 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].min, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].sec, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].frame, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].zero, 6, 16 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].p_min, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].p_sec, 6 );
-                    s += QString( " %1 |" ).arg( (int)tr[i].p_frame, 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].session_number), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].adr), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].control), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].tno), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].point), 6, 16 );
+                    s += QString( " %1 |" ).arg( int(tr[i].min), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].sec), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].frame), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].zero), 6, 16 );
+                    s += QString( " %1 |" ).arg( int(tr[i].p_min), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].p_sec), 6 );
+                    s += QString( " %1 |" ).arg( int(tr[i].p_frame), 6 );
                     qDebug() << s;
                 }
 
@@ -1181,7 +1181,7 @@ bool K3b::Device::Device::readRawToc( K3b::Device::Toc& toc ) const
 
                 K3b::Msf sessionLeadOut;
 
-                for( unsigned int i = 0; i < (data.size()-4)/(unsigned int)sizeof(toc_raw_track_descriptor); ++i ) {
+                for( unsigned i = 0; i < (data.size()-4)/unsigned(sizeof(toc_raw_track_descriptor)); ++i ) {
                     if( tr[i].adr == 1 && tr[i].point <= 0x63 ) {
                         // track
                         Track track;
@@ -1260,7 +1260,7 @@ int K3b::Device::Device::rawTocDataWithBcdValues( const UByteArray& data ) const
     // in most cases this will already tell us if a drive does not provide bcd numbers
     // (which should be all newer MMC drives)
     //
-    for( unsigned int i = 0; i < (data.size()-4)/(unsigned int)sizeof(toc_raw_track_descriptor); ++i ) {
+    for( unsigned i = 0; i < (data.size()-4)/unsigned(sizeof(toc_raw_track_descriptor)); ++i ) {
         if( tr[i].adr == 1 && tr[i].point <= 0xa2) {
             if( !K3b::Device::isValidBcd(tr[i].p_min) ||
                 !K3b::Device::isValidBcd(tr[i].p_sec) ||
@@ -1271,8 +1271,8 @@ int K3b::Device::Device::rawTocDataWithBcdValues( const UByteArray& data ) const
 
             // we only need to check sec and frame since min needs to be <= 99
             // and bcd values are never bigger than 99.
-            else if( (int)K3b::Device::fromBcd(tr[i].p_sec) >= 60 ||
-                     (int)K3b::Device::fromBcd(tr[i].p_frame) >= 75 ) {
+            else if( int(K3b::Device::fromBcd(tr[i].p_sec)) >= 60 ||
+                     int(K3b::Device::fromBcd(tr[i].p_frame)) >= 75 ) {
                 notBcd = true;
                 break;
             }
@@ -1284,11 +1284,11 @@ int K3b::Device::Device::rawTocDataWithBcdValues( const UByteArray& data ) const
     // all values are valid bcd values but we still don't know for sure if they are really
     // used as bcd. So we also check the HEX values.
     //
-    for( unsigned int i = 0; i < (data.size()-4)/(unsigned int)sizeof(toc_raw_track_descriptor); ++i ) {
+    for( unsigned i = 0; i < (data.size()-4)/unsigned(sizeof(toc_raw_track_descriptor)); ++i ) {
         if( tr[i].adr == 1 && tr[i].point <= 0xa2 ) {
-            if( (int)tr[i].p_min > 99 ||
-                (int)tr[i].p_sec >= 60 ||
-                (int)tr[i].p_frame >= 75 ) {
+            if( int(tr[i].p_min) > 99 ||
+                int(tr[i].p_sec) >= 60 ||
+                int(tr[i].p_frame) >= 75 ) {
                 notHex = true;
                 break;
             }
@@ -1303,7 +1303,7 @@ int K3b::Device::Device::rawTocDataWithBcdValues( const UByteArray& data ) const
         K3b::Msf sessionLeadOutHex, sessionLeadOutBcd;
         K3b::Msf lastTrackHex, lastTrackBcd;
 
-        for( unsigned int i = 0; i < (data.size()-4)/(unsigned int)sizeof(toc_raw_track_descriptor); ++i ) {
+        for( unsigned i = 0; i < (data.size()-4)/unsigned(sizeof(toc_raw_track_descriptor)); ++i ) {
 
             if( tr[i].adr == 1 ) {
                 if( tr[i].point < 0x64 ) {
@@ -1351,13 +1351,13 @@ int K3b::Device::Device::rawTocDataWithBcdValues( const UByteArray& data ) const
         //
         K3b::Device::Toc formattedToc;
         if( readFormattedToc( formattedToc, MEDIA_CD_ROM ) ) {
-            for( unsigned int i = 0; i < (data.size()-4)/(unsigned int)sizeof(toc_raw_track_descriptor); ++i ) {
+            for( unsigned i = 0; i < (data.size()-4)/unsigned(sizeof(toc_raw_track_descriptor)); ++i ) {
                 if( tr[i].adr == 1 && tr[i].point < 0x64 ) {
-                    unsigned int track = (int)tr[i].point;
+                    unsigned int track = int(tr[i].point);
 
                     // FIXME: do bcd drive also encode the track number in bcd? If so test it, too.
 
-                    if( ( int )track > formattedToc.count() ) {
+                    if( int(track) > formattedToc.count() ) {
                         notHex = true;
                         break;
                     }
@@ -1573,7 +1573,7 @@ bool K3b::Device::Device::fixupToc( K3b::Device::Toc& toc ) const
             // data[8-11] - start address of first track in last session
             //
 
-            toc[(unsigned int)data[6]-2].setLastSector( from4Byte( &data[8] ) - 11400 - 1 );
+            toc[unsigned(data[6])-2].setLastSector( from4Byte( &data[8] ) - 11400 - 1 );
 
             success = true;
         }
@@ -2283,7 +2283,7 @@ K3b::Device::DiskInfo K3b::Device::Device::diskInfo() const
                 // or the next writable address of the last open track
                 //
                 if( readDiscInformation( data ) ) {
-                    int lastTrack = (int)( data[11]<<8 | data[6] );
+                    int lastTrack = int( data[11]<<8 | data[6] );
 
                     if( readTrackInformation( data, 1, lastTrack ) ) {
 
@@ -3250,7 +3250,7 @@ bool K3b::Device::Device::getSupportedWriteSpeedsVia2A(QList<int>& list,
                      << numDesc << Qt::endl;
 
             for (unsigned int i = 0; i < numDesc; ++i) {
-                int s = (int)from2Byte(wr[i].wr_speed_supp);
+                int s = int(from2Byte(wr[i].wr_speed_supp));
                 //
                 // some DVD writers report CD writing speeds here
                 // If that is the case we cannot rely on the reported speeds

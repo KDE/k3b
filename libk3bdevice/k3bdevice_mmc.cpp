@@ -63,7 +63,7 @@ bool K3b::Device::Device::getFeature( UByteArray& data, unsigned int feature ) c
     cmd[7] = data.size() >> 8;
     cmd[8] = data.size();
     if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
-        data.resize( qMin( data.size(), (int)from4Byte( data.data() ) + 4 ) );
+        data.resize( qMin( data.size(), int(from4Byte( data.data() )) + 4 ) );
         return true;
     }
     else {
@@ -206,7 +206,7 @@ bool K3b::Device::Device::getPerformance( UByteArray& data,
     cmd[8] = numDesc>>8;
     cmd[9] = numDesc;
     if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
-        data.resize( qMin( data.size(), (int)from4Byte( data.data() ) + 4 ) );
+        data.resize( qMin( data.size(), int(from4Byte( data.data() )) + 4 ) );
 
         if( data.size() > 8 ) {
             return true;
@@ -641,7 +641,7 @@ bool K3b::Device::Device::mechanismStatus( UByteArray& data ) const
         dataLen = 0xFFFF;
 
     qDebug() << "(K3b::Device::Device) " << blockDeviceName() << ": MECHANISM STATUS "
-             << (int)header[5] << " slots." << Qt::endl;
+             << int(header[5]) << " slots." << Qt::endl;
 
     // again with real length
     data.resize( dataLen );
@@ -650,7 +650,7 @@ bool K3b::Device::Device::mechanismStatus( UByteArray& data ) const
     cmd[8] = data.size() >> 8;
     cmd[9] = data.size();
     if( cmd.transport( TR_DIR_READ, data.data(), data.size() ) == 0 ) {
-        data.resize( qMin( data.size(), (int)from4Byte( &data[6] ) + 8 ) );
+        data.resize( qMin( data.size(), int( from4Byte( &data[6] )) + 8 ) );
         return true;
     }
     else {
@@ -772,12 +772,12 @@ bool K3b::Device::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
         unsigned int realLength = buffer[3] + 4;
 
         qDebug() << "(K3b::Device::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: Current/Max "
-                 << (int)(buffer[8]&0x3) << " " << from4Byte( &buffer[4] ) << Qt::endl;
+                 << int(buffer[8] & 0x3) << " " << from4Byte( &buffer[4] ) << Qt::endl;
 
         if( currentMax )
             *currentMax = from4Byte( &buffer[4] );
         if( currentMaxFormat )
-            *currentMaxFormat = (int)(buffer[8]&0x3);
+            *currentMaxFormat = int(buffer[8] & 0x3);
 
         //
         // Descriptor Type:
@@ -787,16 +787,16 @@ bool K3b::Device::Device::readFormatCapacity( int wantedFormat, K3b::Msf& r,
         // 3 - No media present
         //
         for( unsigned int i = 12; i < realLength-4; i+=8 ) {
-            int format = (int)((buffer[i+4]>>2)&0x3f);
+            int format = int((buffer[i+4]>>2) & 0x3f);
             qDebug() << "(K3b::Device::Device) " << blockDeviceName() << " READ FORMAT CAPACITY: "
                      << format << " " << from4Byte( &buffer[i] )
-                     << " " << (int)( (buffer[i+5] << 16 & 0xFF0000) |
+                     << " " << int( (buffer[i+5] << 16 & 0xFF0000) |
                                       (buffer[i+6] << 8  & 0xFF00) |
                                       (buffer[i+7]       & 0xFF) ) << Qt::endl;
 
             if( format == wantedFormat ) {
                 // found the descriptor
-                r = qMax( (int)from4Byte( &buffer[i] ), r.lba() );
+                r = qMax( int(from4Byte( &buffer[i] )), r.lba() );
                 success = true;
             }
         }

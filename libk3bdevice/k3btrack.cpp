@@ -293,5 +293,5 @@ QDebug operator<<( QDebug s, const K3b::Device::Track& track )
 uint qHash( const K3b::Device::Track& key )
 {
     // this is a dummy implementation to make it compile on windows
-	return qHash((long)&key);
+    return qHash(long(&key));
 }

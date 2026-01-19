@@ -102,7 +102,7 @@ namespace {
 
 
         // append the pack to data
-        if( data.size() < dataFill + ( int )sizeof(cdtext_pack) )
+        if( data.size() < dataFill + int(sizeof(cdtext_pack)) )
             data.resize( dataFill + sizeof(cdtext_pack) );
 
         ::memcpy( &data.data()[dataFill], reinterpret_cast<char*>( pack ), sizeof(cdtext_pack) );

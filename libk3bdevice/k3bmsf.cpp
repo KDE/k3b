@@ -237,31 +237,31 @@ QString K3b::Msf::toString( bool showFrames ) const
 
 KIO::filesize_t K3b::Msf::mode1Bytes() const
 {
-    return (KIO::filesize_t)2048 * ( (KIO::filesize_t)lba() );
+    return (KIO::filesize_t(2048) * KIO::filesize_t(lba()) );
 }
 
 
 KIO::filesize_t K3b::Msf::mode2Form1Bytes() const
 {
-    return (KIO::filesize_t)2048 * ( (KIO::filesize_t)lba() );
+    return (KIO::filesize_t(2048) * KIO::filesize_t(lba()) );
 }
 
 
 KIO::filesize_t K3b::Msf::mode2Form2Bytes() const
 {
-    return (KIO::filesize_t)2324 * ( (KIO::filesize_t)lba() );
+    return (KIO::filesize_t(2324) * KIO::filesize_t(lba()) );
 }
 
 
 KIO::filesize_t K3b::Msf::audioBytes() const
 {
-    return (KIO::filesize_t)2352 * ( (KIO::filesize_t)lba() );
+    return (KIO::filesize_t(2352) * KIO::filesize_t(lba()) );
 }
 
 
 KIO::filesize_t K3b::Msf::rawBytes() const
 {
-    return (KIO::filesize_t)2448 * ( (KIO::filesize_t)lba() );
+    return (KIO::filesize_t(2448) * KIO::filesize_t(lba()) );
 }
 
 
