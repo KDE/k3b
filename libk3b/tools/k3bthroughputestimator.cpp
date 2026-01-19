@@ -45,7 +45,7 @@ int K3b::ThroughputEstimator::average() const
 {
     int msecs = d->firstDataTime.msecsTo( d->lastDataTime );
     if( msecs > 0 )
-        return (int)( 1000.0*(double)(d->lastData - d->firstData)/(double)msecs);
+        return int( 1000.0*double(d->lastData - d->firstData)/double(msecs) );
     else
         return 0;
 }
@@ -75,7 +75,7 @@ void K3b::ThroughputEstimator::dataWritten( unsigned long data )
         if( msecs > 500 ) {
             d->lastData = data;
             d->lastDataTime.start();
-            int t = (int)(1000.0*(double)diff/(double)msecs);
+            int t = int(1000.0*double(diff)/double(msecs) );
             if( t != d->lastThroughput ) {
                 d->lastThroughput = t;
                 emit throughput( t );

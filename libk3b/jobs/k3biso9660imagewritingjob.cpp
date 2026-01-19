@@ -184,7 +184,7 @@ void K3b::Iso9660ImageWritingJob::slotVerificationFinished( bool success )
 
 void K3b::Iso9660ImageWritingJob::slotVerificationProgress( int p )
 {
-    emit percent( (int)(100.0 / (double)m_copies * ( (double)(d->currentCopy-1) + 0.5 + (double)p/200.0 )) );
+    emit percent( int(100.0 / double(m_copies) * ( double(d->currentCopy-1) + 0.5 + double(p)/200.0 )) );
 }
 
 
@@ -193,9 +193,9 @@ void K3b::Iso9660ImageWritingJob::slotWriterPercent( int p )
     emit subPercent( p );
 
     if( m_verifyData )
-        emit percent( (int)(100.0 / (double)m_copies * ( (double)(d->currentCopy-1) + ((double)p/200.0) )) );
+        emit percent( int(100.0 / double(m_copies) * ( double(d->currentCopy-1) + (double(p)/200.0) )) );
     else
-        emit percent( (int)(100.0 / (double)m_copies * ( (double)(d->currentCopy-1) + ((double)p/100.0) )) );
+        emit percent( int(100.0 / double(m_copies) * ( double(d->currentCopy-1) + (double(p)/100.0) )) );
 }
 
 

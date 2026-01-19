@@ -49,7 +49,7 @@ K3b::VcdTrack::~VcdTrack()
 {
     if (mpeg_info) {
         delete mpeg_info;
-        mpeg_info = Q_NULLPTR;
+        mpeg_info = nullptr;
     }
 }
 
@@ -425,8 +425,8 @@ QString K3b::VcdTrack::audio_type2str( unsigned int version, unsigned int audio_
 // convert a time in second to HH:mm:ss notation
 QString K3b::VcdTrack::SecsToHMS( double duration )
 {
-    byte hours = ( byte ) ( duration / 3600 );
-    byte mins = ( byte ) ( ( duration / 60 ) - ( hours * 60 ) );
+    byte hours = byte( duration / 3600 );
+    byte mins = byte( ( duration / 60 ) - ( hours * 60 ) );
     float secs = duration - 60 * mins - 3600 * hours;
     if ( hours != 0 ) {
         return QString( "%1:" ).arg( hours ).rightJustified( 3, ' ' ) + QString( "%1:" ).arg( mins ).rightJustified( 3, '0' ) + QString::number( secs, 'f', 2 );

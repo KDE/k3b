@@ -360,7 +360,7 @@ QString K3b::writingModeString( K3b::WritingModes modes )
     if( modes == WritingModeAuto )
         return i18n("Auto");
     else
-        return K3b::Device::writingModeString( ( int )modes );
+        return K3b::Device::writingModeString( int(modes) );
 }
 
 
@@ -592,7 +592,7 @@ QString K3b::formatWritingSpeedFactor( int speed, K3b::Device::MediaType mediaTy
     if ( mediaType & K3b::Device::MEDIA_DVD_ALL &&
          normalizedSpeed%speedFactor > 0 &&
          speedFormat != SpeedFormatInteger ) {
-         return QString::number( ( float )normalizedSpeed/( float )speedFactor, 'f', 1 );
+        return QString::number( float(normalizedSpeed)/float(speedFactor), 'f', 1 );
     }
     else {
         return QString::number( normalizedSpeed/speedFactor );
@@ -621,5 +621,5 @@ QDebug& K3b::operator<<( QDebug& dbg, K3b::WritingMode mode )
 
 QDebug& K3b::operator<<( QDebug& dbg, K3b::WritingModes modes )
 {
-    return dbg << K3b::Device::WritingModes( ( int )modes );
+    return dbg << K3b::Device::WritingModes( int(modes) );
 }

@@ -134,9 +134,9 @@ void K3b::CloneTocReader::readFile()
                     // check track starttime
                     if( ft->psec > 60 || ft->pframe > 75 ) {
                         qDebug() << "(K3b::CloneTocReader) invalid track start: "
-                                 << (int)ft->pmin << "."
-                                 << (int)ft->psec << "."
-                                 << (int)ft->pframe << Qt::endl;
+                                 << int(ft->pmin) << "."
+                                 << int(ft->psec) << "."
+                                 << int(ft->pframe) << Qt::endl;
                         return;
                     }
                 }

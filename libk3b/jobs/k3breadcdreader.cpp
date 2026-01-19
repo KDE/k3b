@@ -234,7 +234,7 @@ void K3b::ReadcdReader::slotStderrLine( const QString& line )
         if( d->firstSector < d->lastSector )
             currentReadBlock -= d->firstSector.lba();
         if( ok ) {
-            int p = (int)(100.0 * (double)currentReadBlock / (double)d->blocksToRead);
+            int p = int(100.0 * double(currentReadBlock) / double(d->blocksToRead) );
             if( p > d->lastProgress ) {
                 emit percent( p );
                 d->lastProgress = p;

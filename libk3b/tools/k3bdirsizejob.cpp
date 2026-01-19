@@ -144,7 +144,7 @@ bool K3b::DirSizeJob::countFiles( const QStringList& l, const QString& dir )
         }
         else if( !S_ISLNK( s.st_mode ) ) {
             ++d->totalFiles;
-            d->totalSize += (KIO::filesize_t)s.st_size;
+            d->totalSize += KIO::filesize_t(s.st_size);
         }
     }
 

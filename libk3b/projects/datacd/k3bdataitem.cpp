@@ -133,7 +133,7 @@ K3b::Msf K3b::DataItem::blocks() const
 
 K3b::Msf K3b::DataItem::itemBlocks( bool followSymbolicLinks ) const
 {
-    return (long)::ceil( (double)itemSize( followSymbolicLinks ) / 2048.0 );
+    return long(::ceil( double(itemSize( followSymbolicLinks )) / 2048.0 ));
 }
 
 

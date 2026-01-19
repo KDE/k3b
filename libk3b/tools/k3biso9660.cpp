@@ -221,7 +221,7 @@ int K3b::Iso9660File::read( unsigned int pos, char* data, int maxlen ) const
         bufferLen += (2048-(bufferLen%2048));
 
     // we need to buffer if we changed the startSec or need a bigger buffer
-    if( startSecOffset || bufferLen > (unsigned int)maxlen ) {
+    if( startSecOffset || bufferLen > unsigned(maxlen) ) {
         buffered = true;
         buffer = new char[bufferLen];
     }

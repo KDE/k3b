@@ -40,7 +40,7 @@ unsigned int K3b::VideoDVD::VideoStream::realPictureWidth() const
     aspectRatio = 4.0/3.0;
   else
     aspectRatio = 16.0/9.0;
-  return (int)(aspectRatio * (double)realPictureHeight());
+  return int(aspectRatio * double(realPictureHeight()));
 }
 
 

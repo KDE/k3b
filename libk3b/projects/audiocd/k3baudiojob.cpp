@@ -600,7 +600,7 @@ void K3b::AudioJob::slotWriterJobPercent( int p )
         tasksDone+=1.0;
     }
 
-    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+    emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
 }
 
 
@@ -622,7 +622,7 @@ void K3b::AudioJob::slotAudioDecoderPercent( int p )
             totalTasks+=1.0;
         }
 
-        emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+        emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
     }
 }
 
@@ -752,7 +752,7 @@ void K3b::AudioJob::slotNormalizeProgress( int p )
     double totalTasks = d->copies+2.0;
     double tasksDone = 1; // the decoding has been finished
 
-    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+    emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
 }
 
 

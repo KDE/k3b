@@ -882,7 +882,7 @@ qint64 K3bQProcessPrivate::bytesAvailableFromStdout() const
     size_t nbytes = 0;
     qint64 available = 0;
     if (::ioctl(stdoutChannel.pipe[0], FIONREAD, (char *) &nbytes) >= 0)
-        available = (qint64) nbytes;
+        available = qint64(nbytes);
 #if defined (QPROCESS_DEBUG)
     qDebug("K3bQProcessPrivate::bytesAvailableFromStdout() == %lld", available);
 #endif
@@ -894,7 +894,7 @@ qint64 K3bQProcessPrivate::bytesAvailableFromStderr() const
     size_t nbytes = 0;
     qint64 available = 0;
     if (::ioctl(stderrChannel.pipe[0], FIONREAD, (char *) &nbytes) >= 0)
-        available = (qint64) nbytes;
+        available = qint64(nbytes);
 #if defined (QPROCESS_DEBUG)
     qDebug("K3bQProcessPrivate::bytesAvailableFromStderr() == %lld", available);
 #endif

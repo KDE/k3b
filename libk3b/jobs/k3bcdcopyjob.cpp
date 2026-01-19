@@ -190,7 +190,7 @@ void K3b::CdCopyJob::slotDiskInfoReady( K3b::Device::DeviceHandler* dh )
         case K3b::Device::DATA:
             // check if every track is in it's own session
             // only then we copy the cd
-            if( (int)dh->toc().count() != dh->diskInfo().numSessions() ) {
+            if( int(dh->toc().count()) != dh->diskInfo().numSessions() ) {
                 emit infoMessage( i18n("K3b does not copy CDs containing multiple data tracks."), MessageError );
                 canCopy = false;
             }
@@ -1030,7 +1030,7 @@ void K3b::CdCopyJob::slotWriterFinished( bool success )
             d->currentReadSession++;
 
             // many drives need to reload the medium to return to a proper state
-            if ( m_writerDevice->diskInfo().numSessions() < ( int )d->currentWrittenSession ) {
+            if ( m_writerDevice->diskInfo().numSessions() < int(d->currentWrittenSession) ) {
                 emit infoMessage( i18n( "Need to reload medium to return to proper state." ), MessageInfo );
                 emit newSubTask( i18n("Reloading the medium") );
                 connect( K3b::Device::reload( m_writerDevice ), SIGNAL(finished(K3b::Device::DeviceHandler*)),
@@ -1126,10 +1126,10 @@ void K3b::CdCopyJob::slotReaderProgress( int p )
 {
     if( !m_onTheFly || m_onlyCreateImages ) {
         int bigParts = ( m_onlyCreateImages ? 1 : (m_simulate ? 2 : m_copies + 1 ) );
-        double done = (double)p * (double)d->sessionSizes[d->currentReadSession-1] / 100.0;
+        double done = double(p) * double(d->sessionSizes[d->currentReadSession-1]) / 100.0;
         for( int i = 0; i < d->currentReadSession-1; ++i )
-            done += (double)d->sessionSizes[i];
-        emit percent( (int)(100.0*done/(double)d->overallSize/(double)bigParts) );
+            done += double(d->sessionSizes[i]);
+        emit percent( int(100.0*done/double(d->overallSize)/double(bigParts) ));
 
         if( d->dataReaderRunning )
             emit subPercent(p);

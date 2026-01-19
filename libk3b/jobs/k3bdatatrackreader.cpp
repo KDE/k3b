@@ -217,7 +217,7 @@ bool K3b::DataTrackReader::run()
                           .arg( d->lastSector.lba() )
                           .arg( d->usedSectorSize )
                           .arg( d->lastSector.lba() - d->firstSector.lba() + 1 )
-                          .arg( quint64(d->usedSectorSize) * (quint64)(d->lastSector.lba() - d->firstSector.lba() + 1) ) );
+                          .arg( quint64(d->usedSectorSize) * quint64(d->lastSector.lba() - d->firstSector.lba() + 1) ) );
 
     QFile file;
     if( !d->ioDevice ) {
@@ -361,7 +361,7 @@ bool K3b::DataTrackReader::run()
     emit debuggingOutput( "K3b::DataTrackReader",
                           QString("Read a total of %1 sectors (%2 bytes)")
                           .arg(totalReadSectors.lba())
-                          .arg((quint64)totalReadSectors.lba()*(quint64)d->usedSectorSize) );
+                          .arg(quint64(totalReadSectors.lba()) * quint64(d->usedSectorSize) ) );
 
     return( !canceled() && !writeError && !readError );
 }

@@ -13,32 +13,32 @@
 // #define BUFFERSIZE   16384
 #define BUFFERSIZE   65536
 
-#define MPEG_START_CODE_PATTERN  ((ulong) 0x00000100)
-#define MPEG_START_CODE_MASK     ((ulong) 0xffffff00)
+#define MPEG_START_CODE_PATTERN  (ulong(0x00000100))
+#define MPEG_START_CODE_MASK     (ulong(0xffffff00))
 
-#define MPEG_PICTURE_CODE        ((ulong) 0x00000100)
+#define MPEG_PICTURE_CODE        (ulong(0x00000100))
 /* [...slice codes... 0x1a7] */
 
-#define MPEG_USER_CODE           ((uchar) 0xb2)
-#define MPEG_SEQUENCE_CODE       ((uchar) 0xb3)
-#define MPEG_EXT_CODE            ((uchar) 0xb5)
-#define MPEG_SEQ_END_CODE        ((uchar) 0xb7)
-#define MPEG_GOP_CODE            ((uchar) 0xb8)
-#define MPEG_PROGRAM_END_CODE    ((uchar) 0xb9)
-#define MPEG_PACK_HEADER_CODE    ((uchar) 0xba)
-#define MPEG_SYSTEM_HEADER_CODE  ((uchar) 0xbb)
-#define MPEG_PRIVATE_1_CODE      ((uchar) 0xbd)
-#define MPEG_PAD_CODE            ((uchar) 0xbe)
+#define MPEG_USER_CODE           (uchar(0xb2))
+#define MPEG_SEQUENCE_CODE       (uchar(0xb3))
+#define MPEG_EXT_CODE            (uchar(0xb5))
+#define MPEG_SEQ_END_CODE        (uchar(0xb7))
+#define MPEG_GOP_CODE            (uchar(0xb8))
+#define MPEG_PROGRAM_END_CODE    (uchar(0xb9))
+#define MPEG_PACK_HEADER_CODE    (uchar(0xba))
+#define MPEG_SYSTEM_HEADER_CODE  (uchar(0xbb))
+#define MPEG_PRIVATE_1_CODE      (uchar(0xbd))
+#define MPEG_PAD_CODE            (uchar(0xbe))
 
-#define MPEG_AUDIO_C0_CODE       ((uchar) 0xc0) /* default */
-#define MPEG_AUDIO_C1_CODE       ((uchar) 0xc1) /* 2nd audio stream id (dual channel) */
-#define MPEG_AUDIO_C2_CODE       ((uchar) 0xc2) /* 3rd audio stream id (surround sound) */
+#define MPEG_AUDIO_C0_CODE       (uchar(0xc0)) /* default */
+#define MPEG_AUDIO_C1_CODE       (uchar(0xc1)) /* 2nd audio stream id (dual channel) */
+#define MPEG_AUDIO_C2_CODE       (uchar(0xc2)) /* 3rd audio stream id (surround sound) */
 
-#define MPEG_VIDEO_E0_CODE       ((uchar) 0xe0) /* motion */
-#define MPEG_VIDEO_E1_CODE       ((uchar) 0xe1) /* lowres still */
-#define MPEG_VIDEO_E2_CODE       ((uchar) 0xe2) /* hires still */
+#define MPEG_VIDEO_E0_CODE       (uchar(0xe0)) /* motion */
+#define MPEG_VIDEO_E1_CODE       (uchar(0xe1)) /* lowres still */
+#define MPEG_VIDEO_E2_CODE       (uchar(0xe2)) /* hires still */
 
-#define FLOAT_0x10000 (double)((unsigned long)1 << 16)
+#define FLOAT_0x10000 double((unsigned long)1 << 16)
 #define STD_SYSTEM_CLOCK_FREQ (unsigned long)90000
 
 typedef unsigned char byte;

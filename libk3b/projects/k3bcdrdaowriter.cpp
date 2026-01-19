@@ -748,7 +748,7 @@ void K3b::CdrdaoWriter::slotProcessExited( int exitCode, QProcess::ExitStatus ex
 
             if( m_command == WRITE || m_command == COPY ) {
                 int s = d->speedEst->average();
-                emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs((double)s/150.0, 0, 'g', 2).toString(), MessageInfo );
+                emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)").subs(s).subs(double(s)/150.0, 0, 'g', 2).toString(), MessageInfo );
             }
 
             jobFinished( true );
@@ -995,7 +995,7 @@ void K3b::CdrdaoWriter::parseCdrdaoMessage()
 
             emit buffer(d->newMsg.bufferFillRate);
 
-            if( d->progressMsgSize == (unsigned int)sizeof(ProgressMsg2) )
+            if( d->progressMsgSize == unsigned(sizeof(ProgressMsg2)) )
                 emit deviceBuffer( d->newMsg.writerFillRate );
 
             ::memcpy( &d->oldMsg, &d->newMsg, d->progressMsgSize );

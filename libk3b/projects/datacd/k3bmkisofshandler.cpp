@@ -152,7 +152,7 @@ int K3b::MkisofsHandler::parseMkisofsProgress(const QString& line)
         if (d->firstProgressValue < 0)
             d->firstProgressValue = p;
 
-        return((int)::ceil((p - d->firstProgressValue) * 100.0 /
-                    (100.0 - d->firstProgressValue)));
+        return(int(::ceil((p - d->firstProgressValue) * 100.0 /
+                           (100.0 - d->firstProgressValue))));
     }
 }

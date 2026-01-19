@@ -515,7 +515,7 @@ void K3b::MixedJob::slotWriterFinished( bool success )
 
     if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION && m_currentAction == WRITING_AUDIO_IMAGE ) {
         // many drives need to reload the medium to return to a proper state
-        if ( ( int )m_doc->burner()->readToc().count() < m_doc->numOfTracks()-1 ) {
+        if ( int(m_doc->burner()->readToc().count()) < m_doc->numOfTracks()-1 ) {
             emit infoMessage( i18n( "Need to reload medium to return to proper state." ), MessageInfo );
             connect( K3b::Device::reload( m_doc->burner() ),
                      SIGNAL(finished(K3b::Device::DeviceHandler*)),
@@ -902,20 +902,20 @@ void K3b::MixedJob::slotWriterJobPercent( int p )
             else if( !m_doc->onTheFly() )
                 tasksDone += m_audioDocPartOfProcess;
 
-            p = (int)((double)p*m_audioDocPartOfProcess);
+            p = int(double(p)*m_audioDocPartOfProcess);
         }
         else {
             // all images have been created
             if( !m_doc->onTheFly() )
                 tasksDone += 1.0;
 
-            p = (int)(100.0*m_audioDocPartOfProcess + (double)p*(1.0-m_audioDocPartOfProcess));
+            p = int(100.0*m_audioDocPartOfProcess + double(p)*(1.0-m_audioDocPartOfProcess));
         }
     }
     else if( !m_doc->onTheFly() )
         tasksDone += 1.0;
 
-    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+    emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
 }
 
 
@@ -928,11 +928,11 @@ void K3b::MixedJob::slotAudioDecoderPercent( int p )
             totalTasks+=1.0;
 
         if( m_doc->mixedType() == K3b::MixedDoc::DATA_SECOND_SESSION )
-            p = (int)((double)p*m_audioDocPartOfProcess);
+            p = int(double(p)*m_audioDocPartOfProcess);
         else
-            p = (int)(100.0*(1.0-m_audioDocPartOfProcess) + (double)p*m_audioDocPartOfProcess);
+            p = int(100.0*(1.0-m_audioDocPartOfProcess) + double(p)*m_audioDocPartOfProcess);
 
-        emit percent( (int)((double)p / totalTasks) );
+        emit percent( int(double(p) / totalTasks) );
     }
 }
 
@@ -963,16 +963,16 @@ void K3b::MixedJob::slotIsoImagerPercent( int p )
             tasksDone += m_audioDocPartOfProcess;
 
             // the audio decoder finished (which is part of this task in terms of progress)
-            p = (int)(100.0*m_audioDocPartOfProcess + (double)p*(1.0-m_audioDocPartOfProcess));
+            p = int(100.0*m_audioDocPartOfProcess + double(p)*(1.0-m_audioDocPartOfProcess));
 
-            emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+            emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
         }
         else {
             double totalTasks = d->copies+1.0;
             if( m_doc->audioDoc()->normalize() )
                 totalTasks+=1.0;
 
-            emit percent( (int)((double)(p*(1.0-m_audioDocPartOfProcess)) / totalTasks) );
+            emit percent( int(double(p*(1.0-m_audioDocPartOfProcess)) / totalTasks) );
         }
     }
 }
@@ -1306,7 +1306,7 @@ void K3b::MixedJob::slotNormalizeProgress( int p )
         tasksDone = 1.0;
     }
 
-    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+    emit percent( int((100.0*tasksDone + double(p) / totalTasks)) );
 }
 
 
@@ -1320,8 +1320,8 @@ void K3b::MixedJob::prepareProgressInformation()
 {
     // calculate percentage of audio and data
     // this is also used in on-the-fly mode
-    double ds = (double)m_doc->dataDoc()->length().totalFrames();
-    double as = (double)m_doc->audioDoc()->length().totalFrames();
+    double ds = double(m_doc->dataDoc()->length().totalFrames());
+    double as = double(m_doc->audioDoc()->length().totalFrames());
     m_audioDocPartOfProcess = as/(ds+as);
 }
 

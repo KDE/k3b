@@ -337,7 +337,7 @@ int K3bKProcess::startDetached()
     qint64 pid;
     if (!K3bQProcess::startDetached(d->prog, d->args, workingDirectory(), &pid))
         return 0;
-    return (int) pid;
+    return int(pid);
 }
 
 // static
@@ -346,7 +346,7 @@ int K3bKProcess::startDetached(const QString &exe, const QStringList &args)
     qint64 pid;
     if (!K3bQProcess::startDetached(exe, args, QString(), &pid))
         return 0;
-    return (int) pid;
+    return int(pid);
 }
 
 // static
@@ -360,7 +360,7 @@ int K3bKProcess::startDetached(const QStringList &argv)
 int K3bKProcess::pid() const
 {
 #ifdef Q_OS_UNIX
-    return (int) K3bQProcess::pid();
+    return int(K3bQProcess::pid());
 #else
     return K3bQProcess::pid() ? K3bQProcess::pid()->dwProcessId : 0;
 #endif

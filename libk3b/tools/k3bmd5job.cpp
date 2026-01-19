@@ -201,7 +201,7 @@ void K3b::Md5Job::slotUpdate()
                 // Only the last sector may not be used completely.
                 //
                 qint64 sector = d->readData/2048;
-                qint64 sectorCnt = qMax( readSize/2048, ( qint64 )1 );
+                qint64 sectorCnt = qMax( readSize/2048, qint64(1) );
                 read = -1;
                 if( d->device->read10( reinterpret_cast<unsigned char*>(d->data),
                                        sectorCnt*2048,
@@ -241,9 +241,9 @@ void K3b::Md5Job::slotUpdate()
 				d->md5.addData( d->data, read );
                 int progress = 0;
                 if( d->isoFile || !d->filename.isEmpty() )
-                    progress = (int)((double)d->readData * 100.0 / (double)d->imageSize);
+                    progress = int(double(d->readData) * 100.0 / double(d->imageSize) );
                 else if( d->maxSize > 0 )
-                    progress = (int)((double)d->readData * 100.0 / (double)d->maxSize);
+                    progress = int(double(d->readData) * 100.0 / double(d->maxSize) );
 
                 if( progress != d->lastProgress ) {
                     d->lastProgress = progress;

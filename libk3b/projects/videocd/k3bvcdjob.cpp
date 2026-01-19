@@ -293,20 +293,20 @@ void K3b::VcdJob::slotParseVcdxBuildOutput( const QString& line )
                     } else
                         firstTrack = false;
                 }
-                emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
+                emit subPercent( int( 100.0 * double(pos) / double(size) ) );
                 emit processedSubSize( pos / 1024 / 1024, size / 1024 / 1024 );
 
                 // this is the first of three processes.
-                double relOverallWritten = ( ( double ) m_bytesFinishedTracks + ( double ) pos ) / ( double ) doc() ->size();
-                emit percent( ( int ) ( m_createimageonlypercent * relOverallWritten ) );
+                double relOverallWritten = ( double(m_bytesFinishedTracks) + double(pos) ) / double(doc() ->size());
+                emit percent( int( m_createimageonlypercent * relOverallWritten ) );
 
                 m_bytesFinished = pos;
                 m_stage = stageScan;
 
             } else if ( oper == "write" ) {
-                emit subPercent( ( int ) ( 100.0 * ( double ) pos / ( double ) size ) );
+                emit subPercent( int( 100.0 * double(pos) / double(size) ) );
                 emit processedSubSize( ( pos * 2048 ) / 1024 / 1024, ( size * 2048 ) / 1024 / 1024 );
-                emit percent( ( int ) ( m_createimageonlypercent + ( m_createimageonlypercent * ( double ) pos / ( double ) size ) ) );
+                emit percent( int( m_createimageonlypercent + ( m_createimageonlypercent * double(pos) / double(size) ) ) );
 
                 m_stage = stageWrite;
             } else {
@@ -444,7 +444,7 @@ bool K3b::VcdJob::prepareWriterJob()
 
 void K3b::VcdJob::slotWriterJobPercent( int p )
 {
-    emit percent( ( int ) ( ( m_createimageonlypercent * ( m_currentcopy + 1 ) ) + p / ( m_doc->copies() + 2 ) ) );
+    emit percent( int( ( m_createimageonlypercent * ( m_currentcopy + 1 ) ) + p / ( m_doc->copies() + 2 ) ) );
 }
 
 void K3b::VcdJob::slotProcessedSize( int cs, int ts )

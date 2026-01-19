@@ -232,7 +232,7 @@ void K3b::DvdFormattingJob::slotStderrLine( const QString& line )
         static const QRegularExpression endPosRx("[^\\d\\.]");
         int endPos = line.indexOf( endPosRx, pos ) - 1;
         bool ok;
-        int progress = (int)(line.mid( pos, endPos - pos ).toDouble(&ok));
+        int progress = int(line.mid( pos, endPos - pos ).toDouble(&ok));
         if( ok ) {
             d->lastProgressValue = progress;
             emit percent( progress );

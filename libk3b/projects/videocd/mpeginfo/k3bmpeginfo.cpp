@@ -683,7 +683,7 @@ void K3b::MpegInfo::ParseAudio ( llong offset, byte marker )
     srate = ( GetByte( offset + 2 ) & 0x0f ) >> 2;
 
     mpeg_info->audio[ a_idx ].bitrate = 1024 * bit_rates[ mpeg_info->audio[ a_idx ].layer ][ brate ];
-    mpeg_info->audio[ a_idx ].byterate = ( float ) ( mpeg_info->audio[ a_idx ].bitrate / 8.0 );
+    mpeg_info->audio[ a_idx ].byterate = float( mpeg_info->audio[ a_idx ].bitrate / 8.0 );
     mpeg_info->audio[ a_idx ].sampfreq = sampling_rates[ mpeg_info->audio[ a_idx ].version ][ srate ];
 
     // Audio mode
@@ -803,9 +803,9 @@ double K3b::MpegInfo::ReadTS( llong offset )
     low4Bytes |= GetByte( offset + 4 ) >> 1;
 
 
-    TS = ( double ) ( highbit * FLOAT_0x10000 * FLOAT_0x10000 );
-    TS += ( double ) ( low4Bytes );
-    TS /= ( double ) ( STD_SYSTEM_CLOCK_FREQ );
+    TS = double( highbit * FLOAT_0x10000 * FLOAT_0x10000 );
+    TS += double( low4Bytes );
+    TS /= double( STD_SYSTEM_CLOCK_FREQ );
 
     return TS;
 }
@@ -830,12 +830,12 @@ double K3b::MpegInfo::ReadTSMpeg2( llong offset )
     sys_clock_ref = ( GetByte( offset + 4 ) & 0x3 ) << 7;
     sys_clock_ref |= ( GetByte( offset + 5 ) >> 1 );
 
-    TS = ( double ) ( highbit * FLOAT_0x10000 * FLOAT_0x10000 );
-    TS += ( double ) ( low4Bytes );
+    TS = double( highbit * FLOAT_0x10000 * FLOAT_0x10000 );
+    TS += double( low4Bytes );
     if ( sys_clock_ref == 0 )
-        TS /= ( double ) ( STD_SYSTEM_CLOCK_FREQ );
+        TS /= double( STD_SYSTEM_CLOCK_FREQ );
     else {
-        TS /= ( double ) ( 27000000 / sys_clock_ref );
+        TS /= double( 27000000 / sys_clock_ref );
     }
 
     return TS;

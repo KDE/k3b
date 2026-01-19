@@ -191,7 +191,7 @@ bool K3b::AudioSessionReadingJob::run()
                 if( !d->waveFileWriter )
                     d->waveFileWriter = new K3b::WaveFileWriter();
 
-                if( d->filenames.count() < ( int )currentTrack ) {
+                if( d->filenames.count() < int(currentTrack) ) {
                     qDebug() << "(K3b::AudioSessionCopyJob) not enough image filenames given: " << currentTrack;
                     writeError = true;
                     break;

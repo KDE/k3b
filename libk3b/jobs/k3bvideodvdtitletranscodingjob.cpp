@@ -243,7 +243,7 @@ void K3b::VideoDVDTitleTranscodingJob::startTranscode( int pass )
         *d->process << "--log_no_color";
 
     // we only need 100 steps, but to make sure we use 150
-    int progressRate = qMax( 1, ( int )m_dvd[m_titleNumber-1].playbackTime().totalFrames()/150 );
+    int progressRate = qMax( 1, int(m_dvd[m_titleNumber-1].playbackTime().totalFrames())/150 );
     if ( d->usedTranscodeBin->version().simplify() >= K3b::Version( 1, 1, 0 ) )
         *d->process << "--progress_meter" << "2" << "--progress_rate" << QString::number(progressRate);
     else
@@ -596,7 +596,7 @@ bool K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3b::VideoD
         bin = k3bcore->externalBinManager()->binObject("transcode");
     if( !bin )
         return false;
-    return bin->hasFeature( QString::fromLatin1( s_codecFeatures[(int)codec] ) );
+    return bin->hasFeature( QString::fromLatin1( s_codecFeatures[int(codec)] ) );
 }
 
 
@@ -607,7 +607,7 @@ bool K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( K3b::VideoD
         bin = k3bcore->externalBinManager()->binObject("transcode");
     if( !bin )
         return false;
-    return bin->hasFeature( QString::fromLatin1( s_codecFeatures[(int)codec] ) );
+    return bin->hasFeature( QString::fromLatin1( s_codecFeatures[int(codec)] ) );
 }
 
 #include "moc_k3bvideodvdtitletranscodingjob.cpp"

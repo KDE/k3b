@@ -374,7 +374,7 @@ int K3b::AudioDecoder::resample( char* data, int maxLen )
     d->resampleData->data_out = d->outBuffer;
     d->resampleData->input_frames = d->inBufferFill/d->channels;
     d->resampleData->output_frames = maxLen/2/2;  // in case of mono files we need the space anyway
-    d->resampleData->src_ratio = 44100.0/(double)d->samplerate;
+    d->resampleData->src_ratio = 44100.0/double(d->samplerate);
     if( d->inBufferFill == 0 )
         d->resampleData->end_of_input = 1;  // this should force libsamplerate to output the last frames
     else
@@ -499,7 +499,7 @@ bool K3b::AudioDecoder::seek( const K3b::Msf& pos )
         qDebug() << "(K3b::AudioDecoder) seeking " << bytesToDecode << " bytes.";
         char buffi[10*2352];
         while( bytesToDecode > 0 ) {
-            int read = decode( buffi, qMin(( qint64 )( 10*2352 ), bytesToDecode) );
+            int read = decode( buffi, qMin( qint64( 10*2352 ), bytesToDecode) );
             if( read <= 0 )
                 return false;
 

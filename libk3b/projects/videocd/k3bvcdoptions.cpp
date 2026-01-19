@@ -93,7 +93,7 @@ void K3b::VcdOptions::save( KConfigGroup c )
     c.writeEntry( "FrontMarginTrack", m_frontmargintrack );
     c.writeEntry( "RearMarginTrack", m_rearmargintrack );
     c.writeEntry( "UseGaps", m_usegaps );
-    c.writeEntry( "MPEG Version", ( int )m_mpegversion );
+    c.writeEntry( "MPEG Version", int(m_mpegversion) );
 }
 
 
@@ -123,7 +123,7 @@ K3b::VcdOptions K3b::VcdOptions::load( const KConfigGroup& c )
     options.setFrontMarginTrack( c.readEntry( "FrontMarginTrack", options.FrontMarginTrack() ) );
     options.setRearMarginTrack( c.readEntry( "RearMarginTrack", options.RearMarginTrack() ) );
     options.setUseGaps( c.readEntry( "UseGaps", options.UseGaps() ) );
-    options.setMpegVersion( ( MPEGVersion )c.readEntry( "MPEG Version", ( int )options.mpegVersion() ) );
+    options.setMpegVersion( MPEGVersion(c.readEntry( "MPEG Version", int(options.mpegVersion()) ) ) );
     return options;
 }
 

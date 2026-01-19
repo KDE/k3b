@@ -45,7 +45,7 @@ K3b::AudioJobTempData::~AudioJobTempData()
 
 QString K3b::AudioJobTempData::bufferFileName( int track )
 {
-    if( (int)d->bufferFiles.count() < track )
+    if( int(d->bufferFiles.count()) < track )
         prepareTempFileNames();
     return d->bufferFiles.at(track-1);
 }
@@ -66,7 +66,7 @@ QString K3b::AudioJobTempData::tocFileName()
 
 QString K3b::AudioJobTempData::infFileName( int track )
 {
-    if( (int)d->infFiles.count() < track )
+    if( int(d->infFiles.count()) < track )
         prepareTempFileNames();
     return d->infFiles.at( track - 1 );
 }

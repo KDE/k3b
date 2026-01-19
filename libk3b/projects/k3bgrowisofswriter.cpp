@@ -438,16 +438,16 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
         done -= d->firstSizeFromOutput;
         d->overallSizeFromOutput -= d->firstSizeFromOutput;
         if( ok ) {
-            int p = (int)(100 * done / d->overallSizeFromOutput);
+            int p = int(100 * done / d->overallSizeFromOutput);
             if( p > d->lastProgress ) {
                 emit percent( p );
                 emit subPercent( p );
                 d->lastProgress = p;
             }
-            if( (unsigned int)(done/1024/1024) > d->lastProgressed ) {
-                d->lastProgressed = (unsigned int)(done/1024/1024);
-                emit processedSize( d->lastProgressed, (int)(d->overallSizeFromOutput/1024/1024)  );
-                emit processedSubSize( d->lastProgressed, (int)(d->overallSizeFromOutput/1024/1024)  );
+            if( unsigned(done/1024/1024) > d->lastProgressed ) {
+                d->lastProgressed = unsigned(done/1024/1024);
+                emit processedSize( d->lastProgressed, int(d->overallSizeFromOutput/1024/1024)  );
+                emit processedSubSize( d->lastProgressed, int(d->overallSizeFromOutput/1024/1024)  );
             }
 
             // try parsing write speed (since growisofs 5.11)
@@ -457,7 +457,7 @@ void K3b::GrowisofsWriter::slotReceivedStderr( const QString& line )
                 double speed = line.mid( pos, line.indexOf( 'x', pos ) - pos ).toDouble(&ok);
                 if (ok) {
                     if (d->lastWritingSpeed != speed) {
-                        emit writeSpeed((int)(speed * d->speedMultiplicator()), d->speedMultiplicator());
+                        emit writeSpeed(int(speed * d->speedMultiplicator()), d->speedMultiplicator());
                     }
                     d->lastWritingSpeed = speed;
                 }
@@ -509,7 +509,7 @@ void K3b::GrowisofsWriter::slotProcessExited( int exitCode, QProcess::ExitStatus
         if( s > 0 )
             emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)")
                               .subs( s )
-                              .subs( ( double )s/( double )d->speedMultiplicator(), 0, 'g', 2 ).toString(), MessageInfo );
+                              .subs( double(s) / double(d->speedMultiplicator()), 0, 'g', 2 ).toString(), MessageInfo );
 
         if( simulate() )
             emit infoMessage( i18n("Simulation successfully completed"), K3b::Job::MessageSuccess );

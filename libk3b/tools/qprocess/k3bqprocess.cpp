@@ -837,7 +837,7 @@ qint64 K3bQProcessPrivate::readData( char *data, qint64 maxlen, QProcess::Proces
 #endif
                 return -1;
             }
-            *data = (char) c;
+            *data = char(c);
 #if defined QPROCESS_DEBUG
             qDebug("QProcess::readData(%p \"%s\", %d) == 1",
                    data, qt_prettyDebug(data, 1, maxlen).constData(), 1);
@@ -845,7 +845,7 @@ qint64 K3bQProcessPrivate::readData( char *data, qint64 maxlen, QProcess::Proces
             return 1;
         }
 
-        qint64 bytesToRead = qint64(qMin(readBuffer->size(), (int)maxlen));
+        qint64 bytesToRead = qint64(qMin(readBuffer->size(), int(maxlen)));
         qint64 readSoFar = 0;
         while (readSoFar < bytesToRead) {
             const char *ptr = readBuffer->readPointer();

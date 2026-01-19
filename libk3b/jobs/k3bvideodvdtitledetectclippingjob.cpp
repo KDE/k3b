@@ -117,9 +117,9 @@ void K3b::VideoDVDTitleDetectClippingJob::startTranscode( int chapter )
     // use the whole chapter
     //
     if( d->totalChapters == 1 )
-        d->currentFrames = qMin( 3000, qMax( 1, ( int )m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
+        d->currentFrames = qMin( 3000, qMax( 1, int(m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames()) ) );
     else
-        d->currentFrames = qMin( 200, qMax( 1, ( int )m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames() ) );
+        d->currentFrames = qMin( 200, qMax( 1, int(m_dvd[m_titleNumber-1][d->currentChapter-1].playbackTime().totalFrames()) ) );
 
     //
     // prepare the process
@@ -209,11 +209,11 @@ void K3b::VideoDVDTitleDetectClippingJob::slotTranscodeStderr( const QString& li
                     emit subPercent( progress );
                 }
 
-                double part = 100.0 / (double)d->totalChapters;
+                double part = 100.0 / double(d->totalChapters);
 
-                progress = (int)( ( (double)(d->currentChapter-1) * part )
-                                  + ( (double)progress / (double)d->totalChapters )
-                                  + 0.5 );
+                progress = int( ( double(d->currentChapter-1) * part )
+                                + ( double(progress) / double(d->totalChapters) )
+                                + 0.5 );
 
                 if( progress > d->lastProgress ) {
                     d->lastProgress = progress;

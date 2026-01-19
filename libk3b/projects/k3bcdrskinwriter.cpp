@@ -548,8 +548,8 @@ void K3b::CdrskinWriter::slotStdLine( const QString& line )
             //
 
             if( d->tracks.count() > d->currentTrack-1 && size > 0 ) {
-                double convV = (double)d->tracks[d->currentTrack-1].size/(double)size;
-                made = (int)((double)made * convV);
+                double convV = double(d->tracks[d->currentTrack-1].size)/double(size);
+                made = int(double(made) * convV);
                 size = d->tracks[d->currentTrack-1].size;
             }
             else {
@@ -804,7 +804,7 @@ void K3b::CdrskinWriter::slotProcessExited( int exitCode, QProcess::ExitStatus e
             if( !d->formatting ) {
                 int s = d->speedEst->average();
                 emit infoMessage( ki18n("Average overall write speed: %1 KB/s (%2x)" )
-                                  .subs( s ).subs( ( double )s/( double )d->usedSpeedFactor, 0, 'g', 2 ).toString(),
+                                  .subs( s ).subs( double(s)/ double(d->usedSpeedFactor), 0, 'g', 2 ).toString(),
                                   MessageInfo );
             }
 

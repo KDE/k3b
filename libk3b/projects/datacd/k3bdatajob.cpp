@@ -331,7 +331,7 @@ void K3b::DataJob::slotIsoImagerPercent( int p )
         }
 
         emit subPercent( p );
-        emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+        emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
     }
 }
 
@@ -449,7 +449,7 @@ void K3b::DataJob::slotWriterJobPercent( int p )
         tasksDone+=1.0;
     }
 
-    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+    emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
 }
 
 
@@ -558,7 +558,7 @@ void K3b::DataJob::slotVerificationProgress( int p )
         tasksDone+=1.0;
     }
 
-    emit percent( (int)((100.0*tasksDone + (double)p) / totalTasks) );
+    emit percent( int((100.0*tasksDone + double(p)) / totalTasks) );
 }
 
 

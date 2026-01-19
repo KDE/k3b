@@ -208,9 +208,9 @@ bool K3b::LibDvdCss::crackAllKeys()
 
         const K3b::Iso9660File* file = dynamic_cast<const K3b::Iso9660File*>( dir->entry( filename ) );
         if( file && file->size() > 0 ) {
-            d->titleOffsets.append( qMakePair( (int)file->startSector(), (int)(file->size() / 2048U) ) );
+            d->titleOffsets.append( qMakePair( int(file->startSector()), int(file->size() / 2048U) ) );
             qDebug() << "(K3b::LibDvdCss) Get key for /" << filename << " at " << file->startSector();
-            if( seek( (int)file->startSector(), DVDCSS_SEEK_KEY ) < 0 ) {
+            if( seek( int(file->startSector()), DVDCSS_SEEK_KEY ) < 0 ) {
                 qDebug() << "(K3b::LibDvdCss) failed to crash key for " << filename << " at " << file->startSector();
             }
         }
@@ -228,7 +228,7 @@ bool K3b::LibDvdCss::crackAllKeys()
                         p.first = file->startSector();
                         p.second = file->size() / 2048;
                         qDebug() << "(K3b::LibDvdCss) Get key for /" << filename << " at " << file->startSector();
-                        if( seek( (int)file->startSector(), DVDCSS_SEEK_KEY ) < 0 ) {
+                        if( seek( int(file->startSector()), DVDCSS_SEEK_KEY ) < 0 ) {
                             qDebug() << "(K3b::LibDvdCss) failed to crash key for " << filename << " at " << file->startSector();
                         }
                     }

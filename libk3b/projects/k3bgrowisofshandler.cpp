@@ -177,7 +177,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         bool ok = true;
         double val = line.mid( pos, endPos-pos ).toDouble( &ok );
         if( ok ) {
-            int newBuffer = (int)(val+0.5);
+            int newBuffer = int(val+0.5);
             if( newBuffer != d->lastBuffer ) {
                 d->lastBuffer = newBuffer;
                 emit buffer( newBuffer );
@@ -190,7 +190,7 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
                 pos += 4;
                 val = line.mid( pos, endPos-pos ).toDouble( &ok );
                 if( ok ) {
-                    int newBuffer = (int)(val+0.5);
+                    int newBuffer = int(val+0.5);
                     if( newBuffer != d->lastDeviceBuffer ) {
                         d->lastDeviceBuffer = newBuffer;
                         emit deviceBuffer( newBuffer );

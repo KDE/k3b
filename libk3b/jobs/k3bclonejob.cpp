@@ -207,9 +207,9 @@ void K3b::CloneJob::cancel()
 void K3b::CloneJob::slotWriterPercent( int p )
 {
     if( m_onlyBurnExistingImage )
-        emit percent( (int)((double)(d->doneCopies)*100.0/(double)(m_copies) + (double)p/(double)(m_copies)) );
+        emit percent( int(double(d->doneCopies)*100.0/double(m_copies) + double(p)/double(m_copies)) );
     else
-        emit percent( (int)((double)(1+d->doneCopies)*100.0/(double)(1+m_copies) + (double)p/(double)(1+m_copies)) );
+        emit percent( int(double(1+d->doneCopies)*100.0/double(1+m_copies) + double(p)/double(1+m_copies)) );
 }
 
 
@@ -259,7 +259,7 @@ void K3b::CloneJob::slotWriterFinished( bool success )
 
 void K3b::CloneJob::slotReadingPercent( int p )
 {
-    emit percent( m_onlyCreateImage ? p : (int)((double)p/(double)(1+m_copies)) );
+    emit percent( m_onlyCreateImage ? p : int(double(p)/double(1+m_copies)) );
 }
 
 
