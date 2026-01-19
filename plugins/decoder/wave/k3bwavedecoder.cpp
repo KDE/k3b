@@ -198,7 +198,7 @@ int K3bWaveDecoder::decodeInternal( char* _data, int maxLen )
 {
     int read = 0;
 
-    maxLen = qMin( maxLen, (int)(d->size - d->alreadyRead) );
+    maxLen = qMin( maxLen, int(d->size - d->alreadyRead) );
 
     if( d->sampleSize == 16 ) {
         read = d->file.read( _data, maxLen );
@@ -248,7 +248,7 @@ bool K3bWaveDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
         //
         unsigned long size = d->size;
         if( d->sampleRate != 44100 )
-            size = (int)((double)size * 44100.0 / (double)d->sampleRate);
+            size = int(double(size) * 44100.0 / double(d->sampleRate));
 
         if( d->sampleSize == 8 )
             size *= 2;

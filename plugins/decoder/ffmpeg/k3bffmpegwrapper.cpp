@@ -370,8 +370,8 @@ bool K3bFFMpegFile::seek( const K3b::Msf& msf )
 {
     d->outputBufferSize = 0;
 
-    double seconds = (double)msf.totalFrames()/75.0;
-    quint64 timestamp = (quint64)(seconds * (double)AV_TIME_BASE);
+    double seconds = double(msf.totalFrames())/75.0;
+    quint64 timestamp = quint64(seconds * double(AV_TIME_BASE));
 
     // FIXME: do we really need the start_time and why?
     return ( ::av_seek_frame( d->formatContext, -1, timestamp + d->formatContext->start_time, 0 ) >= 0 );

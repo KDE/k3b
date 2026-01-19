@@ -180,8 +180,8 @@ unsigned long K3bMadDecoder::countFrames()
 
     if( !d->handle->inputError() && !error ) {
         // we need the length of the track to be multiple of frames (1/75 second)
-        float seconds = (float)d->handle->madTimer->seconds +
-                        (float)d->handle->madTimer->fraction/(float)MAD_TIMER_RESOLUTION;
+        float seconds = float(d->handle->madTimer->seconds) +
+                        float(d->handle->madTimer->fraction)/float(MAD_TIMER_RESOLUTION);
         frames = (unsigned long)ceil(seconds * 75.0);
         qDebug() << "(K3bMadDecoder) length of track " << seconds;
     }

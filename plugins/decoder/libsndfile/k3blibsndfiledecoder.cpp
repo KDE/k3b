@@ -141,7 +141,7 @@ int K3bLibsndfileDecoder::decodeInternal( char* data, int maxLen )
         d->bufferSize = maxLen/2;
     }
 
-    int read = (int) sf_read_float(d->sndfile, d->buffer,d->bufferSize) ;
+    int read = int(sf_read_float(d->sndfile, d->buffer,d->bufferSize));
     fromFloatTo16BitBeSigned( d->buffer, data, read );
     read = read * 2;
 

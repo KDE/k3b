@@ -157,12 +157,12 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
 
         qDebug() << "(K3bOggVorbisEncoder) calling: "
                  << "vorbis_encode_init_vbr( d->vorbisInfo, 2, 44100, "
-                 << (float)d->qualityLevel/10.0 << ");" << Qt::endl;
+                 << float(d->qualityLevel)/10.0 << ");" << Qt::endl;
 
         ret = vorbis_encode_init_vbr( d->vorbisInfo,
                                       2, // 2 channels: stereo
                                       44100,
-                                      (float)d->qualityLevel/10.0 );
+                                      float(d->qualityLevel)/10.0 );
     }
 
     if( ret ) {
@@ -292,8 +292,8 @@ qint64 K3bOggVorbisEncoder::encodeInternal( const char* data, qint64 len )
     // uninterleave samples
     qint64 i = 0;
     for( i = 0; i < len/4; ++i ) {
-        buffer[0][i]=( (data[i*4+1]<<8) | (0x00ff&(int)data[i*4]) ) / 32768.f;
-        buffer[1][i]=( (data[i*4+3]<<8) | (0x00ff&(int)data[i*4+2]) ) / 32768.f;
+        buffer[0][i]=( (data[i*4+1]<<8) | (0x00ff & int(data[i*4])) ) / 32768.f;
+        buffer[1][i]=( (data[i*4+3]<<8) | (0x00ff & int(data[i*4+2])) ) / 32768.f;
     }
 
     // tell the library how much we actually submitted
