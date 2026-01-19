@@ -100,7 +100,7 @@ K3b::Device::MediaType K3b::ThreadJob::waitForMedium( K3b::Device::Device* devic
     QSharedPointer<K3b::ThreadJobCommunicationEvent::Data> data( event->data() );
     QCoreApplication::postEvent( this, event );
     data->wait();
-    return (Device::MediaType)data->intResult();
+    return static_cast<Device::MediaType>(data->intResult());
 }
 
 

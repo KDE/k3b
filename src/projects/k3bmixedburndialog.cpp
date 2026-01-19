@@ -147,7 +147,7 @@ void K3b::MixedBurnDialog::saveSettingsToProject()
 {
     K3b::ProjectBurnDialog::saveSettingsToProject();
 
-    m_doc->setMixedType( (K3b::MixedDoc::MixedType)m_comboMixedModeType->selectedValue() );
+    m_doc->setMixedType( static_cast<K3b::MixedDoc::MixedType>(m_comboMixedModeType->selectedValue()) );
 
     m_cdtextWidget->save( m_doc->audioDoc() );
 

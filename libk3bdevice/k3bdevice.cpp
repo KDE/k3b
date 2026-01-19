@@ -2349,7 +2349,7 @@ K3b::Device::MediaType K3b::Device::Device::mediaType() const
 
         int p = currentProfile();
         if ( p != -1 )
-            m = ( MediaType )p;
+            m = static_cast<MediaType>(p);
 
         if( m & (MEDIA_UNKNOWN|MEDIA_DVD_ROM|MEDIA_HD_DVD_ROM) ) {
             //

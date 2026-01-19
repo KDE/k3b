@@ -85,14 +85,14 @@ K3b::VideoDVDRippingWidget::VideoDVDRippingWidget( QWidget* parent )
 
 
     for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i ) {
-        K3b::VideoDVDTitleTranscodingJob::VideoCodec codec( (K3b::VideoDVDTitleTranscodingJob::VideoCodec)i );
+        K3b::VideoDVDTitleTranscodingJob::VideoCodec codec( static_cast<K3b::VideoDVDTitleTranscodingJob::VideoCodec>(i) );
         if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
             m_comboVideoCodec->insertItem( i,
                                            K3b::VideoDVDTitleTranscodingJob::videoCodecString( codec ),
                                            K3b::VideoDVDTitleTranscodingJob::videoCodecDescription( codec ) );
     }
     for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i ) {
-        K3b::VideoDVDTitleTranscodingJob::AudioCodec codec( (K3b::VideoDVDTitleTranscodingJob::AudioCodec)i );
+        K3b::VideoDVDTitleTranscodingJob::AudioCodec codec( static_cast<K3b::VideoDVDTitleTranscodingJob::AudioCodec>(i) );
         if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( codec ) )
             m_comboAudioCodec->insertItem( i,
                                            K3b::VideoDVDTitleTranscodingJob::audioCodecString( codec ),
@@ -143,7 +143,7 @@ K3b::VideoDVDRippingWidget::~VideoDVDRippingWidget()
 
 K3b::VideoDVDTitleTranscodingJob::VideoCodec K3b::VideoDVDRippingWidget::selectedVideoCodec() const
 {
-    return (K3b::VideoDVDTitleTranscodingJob::VideoCodec)m_comboVideoCodec->selectedValue();
+    return static_cast<K3b::VideoDVDTitleTranscodingJob::VideoCodec>(m_comboVideoCodec->selectedValue());
 }
 
 
@@ -190,7 +190,7 @@ void K3b::VideoDVDRippingWidget::setSelectedVideoCodec( K3b::VideoDVDTitleTransc
 
 K3b::VideoDVDTitleTranscodingJob::AudioCodec K3b::VideoDVDRippingWidget::selectedAudioCodec() const
 {
-    return (K3b::VideoDVDTitleTranscodingJob::AudioCodec)m_comboAudioCodec->selectedValue();
+    return static_cast<K3b::VideoDVDTitleTranscodingJob::AudioCodec>(m_comboAudioCodec->selectedValue());
 }
 
 

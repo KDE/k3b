@@ -281,10 +281,10 @@ void K3b::VideoDVDRippingView::reloadMedium()
         else {
             int vc = 0, ac = 0;
             for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::VIDEO_CODEC_NUM_ENTRIES; ++i )
-                if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3b::VideoDVDTitleTranscodingJob::VideoCodec)i ) )
+                if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( static_cast<K3b::VideoDVDTitleTranscodingJob::VideoCodec>(i) ) )
                     ++vc;
             for( int i = 0; i < K3b::VideoDVDTitleTranscodingJob::AUDIO_CODEC_NUM_ENTRIES; ++i )
-                if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( (K3b::VideoDVDTitleTranscodingJob::AudioCodec)i ) )
+                if( K3b::VideoDVDTitleTranscodingJob::transcodeBinaryHasSupportFor( static_cast<K3b::VideoDVDTitleTranscodingJob::AudioCodec>(i) ) )
                     ++ac;
             if( !ac || !vc ) {
                 KMessageBox::error( this,

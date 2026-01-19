@@ -197,7 +197,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
                 m_urlAddingTimer->stop();
                 setVcdType( vcdTypes( mpegVersion ) );
                 // FIXME: properly convert the mpeg version
-                vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )mpegVersion );
+                vcdOptions() ->setMpegVersion( static_cast<K3b::VcdOptions::MPEGVersion>(mpegVersion) );
                 KMessageBox::information( qApp->activeWindow(),
                                           i18n( "K3b will create a %1 image from the given MPEG "
                                                 "files, but these files must already be in %1 "
@@ -207,7 +207,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
                 m_urlAddingTimer->start( 0 );
             } else if ( vcdType() == NONE ) {
                 m_urlAddingTimer->stop();
-                vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )mpegVersion );
+                vcdOptions() ->setMpegVersion( static_cast<K3b::VcdOptions::MPEGVersion>(mpegVersion) );
                 bool force = KMessageBox::questionTwoActions(qApp->activeWindow(),
                                                              i18n( "K3b will create a %1 image from the given MPEG "
                                                                    "files, but these files must already be in %1 "
@@ -587,7 +587,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         else if ( name == "vcdType" )
             setVcdType( vcdTypes( item.toElement().text().toInt() ) );
         else if ( name == "mpegVersion" )
-            vcdOptions() ->setMpegVersion( ( K3b::VcdOptions::MPEGVersion )item.toElement().text().toInt() );
+            vcdOptions() ->setMpegVersion( static_cast<K3b::VcdOptions::MPEGVersion>(item.toElement().text().toInt()) );
         else if ( name == "PreGapLeadout" )
             vcdOptions() ->setPreGapLeadout( item.toElement().text().toInt() );
         else if ( name == "PreGapTrack" )

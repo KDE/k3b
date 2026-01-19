@@ -110,7 +110,7 @@ void K3bKProcess::setOutputChannelMode(KProcess::OutputChannelMode mode)
         connect(this, SIGNAL(readyReadStandardOutput()), SLOT(_k_forwardStdout()));
         break;
     default:
-        K3bQProcess::setProcessChannelMode((QProcess::ProcessChannelMode)mode);
+        K3bQProcess::setProcessChannelMode(static_cast<QProcess::ProcessChannelMode>(mode));
         return;
     }
     K3bQProcess::setProcessChannelMode(QProcess::SeparateChannels);

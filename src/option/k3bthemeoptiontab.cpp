@@ -160,7 +160,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 
                 // check for all necessary pixmaps (this is a little evil hacking)
                 for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
-                    if( !subDir->entry( K3b::Theme::filenameForPixmapType( (K3b::Theme::PixmapType)i ) ) ) {
+                    if( !subDir->entry( K3b::Theme::filenameForPixmapType( static_cast<K3b::Theme::PixmapType>(i) ) ) ) {
                         validThemeArchive = false;
                         break;
                     }

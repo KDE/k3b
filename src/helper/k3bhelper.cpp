@@ -137,7 +137,7 @@ KAuth::ActionReply Helper::addtogroup( QVariantMap args )
         reply = KAuth::ActionReply::SuccessReply();
     } else {
         reply = KAuth::ActionReply::HelperErrorReply();
-        reply.setErrorCode( (KAuth::ActionReply::Error) errorCode );
+        reply.setErrorCode( static_cast<KAuth::ActionReply::Error>(errorCode) );
         reply.setErrorDescription( QString( "gpasswd --add " + userName + ' ' + groupName + " : " + QString::fromLocal8Bit( gpasswd.readAllStandardError().data() ) ) );
     }
 

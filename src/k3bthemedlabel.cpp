@@ -74,7 +74,7 @@ void K3b::ThemedLabel::slotThemeChanged()
         p.setColor( foregroundRole(), theme->foregroundColor() );
         setPalette( p );
         if( m_themePixmapCode > -1 ) {
-            setPixmap( theme->pixmap( (K3b::Theme::PixmapType)m_themePixmapCode ) );
+            setPixmap( theme->pixmap( static_cast<K3b::Theme::PixmapType>(m_themePixmapCode) ) );
             setScaledContents( false );
             const QPixmap &pix = pixmap(Qt::ReturnByValue);
             if ( !pix.isNull() ) {

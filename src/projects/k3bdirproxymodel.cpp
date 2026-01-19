@@ -31,7 +31,7 @@ bool K3b::DirProxyModel::filterAcceptsRow( int source_row, const QModelIndex & s
     DataProjectModel::ItemType type = DataProjectModel::FileItemType;
 
     if (data.isValid())
-        type = (DataProjectModel::ItemType) index.data( DataProjectModel::ItemTypeRole ).toInt();
+        type = static_cast<DataProjectModel::ItemType>(index.data( DataProjectModel::ItemTypeRole ).toInt());
 
     return (type == DataProjectModel::DirItemType);
 }

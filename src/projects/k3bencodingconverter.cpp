@@ -55,7 +55,7 @@ bool K3b::EncodingConverter::encodedLocally( const QByteArray& s )
     char* out = utf8Encoded.data();
     size_t inSize = s.length();
     size_t outSize = utf8Encoded.size();
-    return( (size_t)-1 != ::iconv( d->ic, &in, &inSize, &out, &outSize ) );
+    return( static_cast<size_t>(-1) != ::iconv( d->ic, &in, &inSize, &out, &outSize ) );
 #else
     return true;
 #endif
