@@ -397,19 +397,19 @@ K3b::CdparanoiaLib::~CdparanoiaLib()
 
 bool K3b::CdparanoiaLib::load()
 {
-    cdda_cdda_identify = (cdrom_drive* (*) (const char*, int, char**))s_libInterface->resolve( CDDA_IDENTIFY );
-    cdda_cdda_open = (int (*) (cdrom_drive*))s_libInterface->resolve( CDDA_OPEN );
-    cdda_cdda_close = (int (*) (cdrom_drive*))s_libInterface->resolve( CDDA_CLOSE );
-    cdda_cdda_track_firstsector = (long (*)(cdrom_drive*, int))s_libInterface->resolve( CDDA_TRACK_FIRSTSECTOR );
-    cdda_cdda_track_lastsector = (long (*)(cdrom_drive*, int))s_libInterface->resolve( CDDA_TRACK_LASTSECTOR );
-    cdda_cdda_verbose_set = (void (*)(cdrom_drive *d,int err_action, int mes_action))s_libInterface->resolve( CDDA_VERBOSE_SET );
-    cdda_cdda_disc_firstsector = (long (*)(cdrom_drive *d))s_libInterface->resolve( CDDA_DISC_FIRSTSECTOR );
+    cdda_cdda_identify = reinterpret_cast<cdrom_drive* (*) (const char*, int, char**)>(s_libInterface->resolve( CDDA_IDENTIFY ));
+    cdda_cdda_open = reinterpret_cast<int (*) (cdrom_drive*)>(s_libInterface->resolve( CDDA_OPEN ));
+    cdda_cdda_close = reinterpret_cast<int (*) (cdrom_drive*)>(s_libInterface->resolve( CDDA_CLOSE ));
+    cdda_cdda_track_firstsector = reinterpret_cast<long (*)(cdrom_drive*, int)>(s_libInterface->resolve( CDDA_TRACK_FIRSTSECTOR ));
+    cdda_cdda_track_lastsector = reinterpret_cast<long (*)(cdrom_drive*, int)>(s_libInterface->resolve( CDDA_TRACK_LASTSECTOR ));
+    cdda_cdda_verbose_set = reinterpret_cast<void (*)(cdrom_drive *d,int err_action, int mes_action)>(s_libInterface->resolve( CDDA_VERBOSE_SET ));
+    cdda_cdda_disc_firstsector = reinterpret_cast<long (*)(cdrom_drive *d)>(s_libInterface->resolve( CDDA_DISC_FIRSTSECTOR ));
 
-    cdda_paranoia_init = (cdrom_paranoia* (*)(cdrom_drive*))s_libParanoia->resolve( PARANOIA_INIT );
-    cdda_paranoia_free = (void (*)(cdrom_paranoia *p))s_libParanoia->resolve( PARANOIA_FREE );
-    cdda_paranoia_modeset = (void (*)(cdrom_paranoia *p, int mode))s_libParanoia->resolve( PARANOIA_MODESET );
-    cdda_paranoia_read_limited = (int16_t* (*)(cdrom_paranoia *p, void(*callback)(long,int), int))s_libParanoia->resolve( PARANOIA_READ_LIMITED );
-    cdda_paranoia_seek = (long (*)(cdrom_paranoia *p,long seek,int mode))s_libParanoia->resolve( PARANOIA_SEEK );
+    cdda_paranoia_init = reinterpret_cast<cdrom_paranoia* (*)(cdrom_drive*)>(s_libParanoia->resolve( PARANOIA_INIT ));
+    cdda_paranoia_free = reinterpret_cast<void (*)(cdrom_paranoia *p)>(s_libParanoia->resolve( PARANOIA_FREE ));
+    cdda_paranoia_modeset = reinterpret_cast<void (*)(cdrom_paranoia *p, int mode)>(s_libParanoia->resolve( PARANOIA_MODESET ));
+    cdda_paranoia_read_limited = reinterpret_cast<int16_t* (*)(cdrom_paranoia *p, void(*callback)(long,int), int)>(s_libParanoia->resolve( PARANOIA_READ_LIMITED ));
+    cdda_paranoia_seek = reinterpret_cast<long (*)(cdrom_paranoia *p,long seek,int mode)>(s_libParanoia->resolve( PARANOIA_SEEK ));
 
     // check if all symbols could be resoled
     if( cdda_cdda_identify == 0 ) {

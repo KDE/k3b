@@ -267,10 +267,10 @@ K3b::LibDvdCss* K3b::LibDvdCss::create()
         s_libDvdCss->setLoadHints( QLibrary::ExportExternalSymbolsHint );
 
         if( s_libDvdCss->load() ) {
-            k3b_dvdcss_open = (dvdcss_t (*)(char*))s_libDvdCss->resolve( "dvdcss_open" );
-            k3b_dvdcss_close = (int (*)( dvdcss_t ))s_libDvdCss->resolve( "dvdcss_close" );
-            k3b_dvdcss_seek = (int (*)( dvdcss_t, int, int ))s_libDvdCss->resolve( "dvdcss_seek" );
-            k3b_dvdcss_read = (int (*)( dvdcss_t, void*, int, int ))s_libDvdCss->resolve( "dvdcss_read" );
+            k3b_dvdcss_open = reinterpret_cast<dvdcss_t (*)(char*)>(s_libDvdCss->resolve( "dvdcss_open" ));
+            k3b_dvdcss_close = reinterpret_cast<int (*)( dvdcss_t )>(s_libDvdCss->resolve( "dvdcss_close" ));
+            k3b_dvdcss_seek = reinterpret_cast<int (*)( dvdcss_t, int, int )>(s_libDvdCss->resolve( "dvdcss_seek" ));
+            k3b_dvdcss_read = reinterpret_cast<int (*)( dvdcss_t, void*, int, int )>(s_libDvdCss->resolve( "dvdcss_read" ));
 
             if( !k3b_dvdcss_open || !k3b_dvdcss_close || !k3b_dvdcss_seek || !k3b_dvdcss_read ) {
                 qDebug() << "(K3b::LibDvdCss) unable to resolve libdvdcss.";
