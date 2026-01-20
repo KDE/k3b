@@ -16,7 +16,10 @@
 #include <QLayout>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QStyle>
 
+// TODO: this could be replaced by KMessageBox::createKMessageBox()
+// with a custom QDialogButtonBox.
 
 class K3b::MultiChoiceDialog::Private
 {
@@ -30,38 +33,6 @@ public:
 
     bool buttonClicked;
 };
-
-
-// from kmessagebox.cpp
-static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
-{
-    QString icon_name;
-
-    switch (icon) {
-    case QMessageBox::NoIcon:
-        return QIcon();
-        break;
-    case QMessageBox::Information:
-        icon_name = "dialog-information";
-        break;
-    case QMessageBox::Warning:
-        icon_name = "dialog-warning";
-        break;
-    case QMessageBox::Critical:
-        icon_name = "dialog-error";
-        break;
-    default:
-        break;
-    }
-
-    QIcon ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DefaultState, QStringList(), nullptr, true);
-
-    if (ret.isNull()) {
-        return QMessageBox::standardIcon(icon);
-    } else {
-        return ret;
-    }
-}
 
 
 K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
@@ -82,8 +53,38 @@ K3b::MultiChoiceDialog::MultiChoiceDialog( const QString& caption,
 
     QLabel* pixLabel = new QLabel( this );
     int size = KIconLoader::global()->currentSize(KIconLoader::Dialog);
-    pixLabel->setPixmap( themedMessageBoxIcon( icon ).pixmap( size, size ) );
+
+    // Originally implemented as themedMessageBoxIcon() which in turn
+    // was originally copied from KMessageBox::createKMessageBox().
+    // In KF6 that now only uses QStyle::standardIcon() instead of
+    // hardcoded icon names.
+    //
+    // In this application MultiChoiceDialog is only used (3 times) by
+    // DataUrlAddingDialog which always uses QMessageBox::Warning.
+    QStyle::StandardPixmap stdpix = QStyle::SP_CustomBase;
+
+    switch (icon) {
+    case QMessageBox::NoIcon:
+        break;
+    case QMessageBox::Information:
+        stdpix = QStyle::SP_MessageBoxInformation;
+        break;
+    case QMessageBox::Warning:
+        stdpix = QStyle::SP_MessageBoxWarning;
+        break;
+    case QMessageBox::Critical:
+        stdpix = QStyle::SP_MessageBoxCritical;
+        break;
+    case QMessageBox::Question:
+        stdpix = QStyle::SP_MessageBoxQuestion;
+        break;
+    }
+
+    if (stdpix != QStyle::SP_CustomBase) {
+        pixLabel->setPixmap( style()->standardIcon( stdpix ).pixmap( size, size ) );
+    }
     pixLabel->setScaledContents( false );
+
     QLabel* label = new QLabel( text, this );
     label->setWordWrap( true );
     contents->addWidget( pixLabel, 0 );
