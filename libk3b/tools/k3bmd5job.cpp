@@ -238,7 +238,7 @@ void K3b::Md5Job::slotUpdate()
             }
             else {
                 d->readData += read;
-				d->md5.addData( d->data, read );
+                d->md5.addData( QByteArrayView(d->data, read) );
                 int progress = 0;
                 if( d->isoFile || !d->filename.isEmpty() )
                     progress = int(double(d->readData) * 100.0 / double(d->imageSize) );

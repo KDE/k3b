@@ -23,7 +23,7 @@ public:
     void update( const char* in, qint64 len ) {
         switch( checksumType ) {
         case MD5:
-			md5.addData( in, len );
+            md5.addData( QByteArrayView(in, len) );
             break;
         }
     }
