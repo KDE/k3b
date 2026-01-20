@@ -10273,6 +10273,3 @@ msgstr ""
 #, kde-format
 msgid "Subpicture"
 msgstr ""
-
-#~ msgid "Do you really want to cancel?"
-#~ msgstr "Vil du verkeleg avbryta?"
