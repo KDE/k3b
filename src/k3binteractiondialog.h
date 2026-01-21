@@ -236,7 +236,7 @@ namespace K3b {
         QToolButton* m_buttonLoadSettings;
         QToolButton* m_buttonSaveSettings;
 
-        QGridLayout* mainGrid;
+        QGridLayout* m_mainGrid;
         int m_defaultButton;
         QString m_configGroup;
 

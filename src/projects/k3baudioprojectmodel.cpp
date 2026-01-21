@@ -545,7 +545,6 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     //
     QList<K3b::AudioTrack*> tracks;
     QList<K3b::AudioDataSource*> sources;
-    QList<QUrl> urls;
     if ( data->hasFormat( "application/x-k3baudiotrack" ) ||
          data->hasFormat( "application/x-k3baudiodatasource" )) {
 

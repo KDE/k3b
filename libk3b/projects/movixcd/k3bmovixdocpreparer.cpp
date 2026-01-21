@@ -316,8 +316,7 @@ bool K3b::MovixDocPreparer::addMovixFiles()
         if( fontType.isDir() ) {
             K3b::DirItem* fontDir = new K3b::DirItem( "font" );
             d->mplayerDir->addDataItem( fontDir );
-            QDir dir( fontPath );
-            QStringList fontFiles = dir.entryList( QDir::Files );
+            QStringList fontFiles = QDir(fontPath).entryList( QDir::Files );
             for( QStringList::const_iterator it = fontFiles.constBegin();
                  it != fontFiles.constEnd(); ++it ) {
                 fontDir->addDataItem( new K3b::FileItem( fontPath + '/' + *it, *d->doc ) );

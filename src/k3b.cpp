@@ -1096,9 +1096,9 @@ void K3b::MainWindow::slotStatusMsg(const QString &text)
 
 void K3b::MainWindow::slotSettingsConfigure()
 {
-    K3b::OptionDialog d( this );
+    K3b::OptionDialog dlg( this );
 
-    d.exec();
+    dlg.exec();
 
     // emit a changed signal every time since we do not know if the user selected
     // "apply" and "cancel" or "ok"
@@ -1108,10 +1108,10 @@ void K3b::MainWindow::slotSettingsConfigure()
 
 void K3b::MainWindow::showOptionDialog( K3b::OptionDialog::ConfigPage index )
 {
-    K3b::OptionDialog d( this);
-    d.setCurrentPage( index );
+    K3b::OptionDialog dlg( this);
+    dlg.setCurrentPage( index );
 
-    d.exec();
+    dlg.exec();
 
     // emit a changed signal every time since we do not know if the user selected
     // "apply" and "cancel" or "ok"
@@ -1269,16 +1269,16 @@ void K3b::MainWindow::slotWarningMessage(const QString& message)
 
 void K3b::MainWindow::slotWriteImage()
 {
-    K3b::ImageWritingDialog d( this );
-    d.exec();
+    K3b::ImageWritingDialog dlg( this );
+    dlg.exec();
 }
 
 
 void K3b::MainWindow::slotWriteImage( const QUrl& url )
 {
-    K3b::ImageWritingDialog d( this );
-    d.setImage( url );
-    d.exec();
+    K3b::ImageWritingDialog dlg( this );
+    dlg.setImage( url );
+    dlg.exec();
 }
 
 
@@ -1303,9 +1303,9 @@ void K3b::MainWindow::slotProjectAddFiles()
 
 void K3b::MainWindow::formatMedium( K3b::Device::Device* dev )
 {
-    K3b::MediaFormattingDialog d( this );
-    d.setDevice( dev );
-    d.exec();
+    K3b::MediaFormattingDialog dlg( this );
+    dlg.setDevice( dev );
+    dlg.exec();
 }
 
 
@@ -1317,9 +1317,9 @@ void K3b::MainWindow::slotFormatMedium()
 
 void K3b::MainWindow::mediaCopy( K3b::Device::Device* dev )
 {
-    K3b::MediaCopyDialog d( this );
-    d.setReadingDevice( dev );
-    d.exec();
+    K3b::MediaCopyDialog dlg( this );
+    dlg.setReadingDevice( dev );
+    dlg.exec();
 }
 
 

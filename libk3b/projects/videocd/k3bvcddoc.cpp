@@ -661,17 +661,17 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
         bool pbctrack;
         for ( int trackId = 0; trackId < trackNodes.length(); trackId++ ) {
             QDomElement trackElem = trackNodes.item( trackId ).toElement();
-            QDomNodeList trackNodes = trackElem.childNodes();
-            for ( int i = 0; i < trackNodes.length(); i++ ) {
-                QDomElement trackElem = trackNodes.item( i ).toElement();
-                QString name = trackElem.tagName();
+            QDomNodeList trackChildNodes = trackElem.childNodes();
+            for ( int i = 0; i < trackChildNodes.length(); i++ ) {
+                QDomElement trackChildElem = trackChildNodes.item( i ).toElement();
+                QString name = trackChildElem.tagName();
                 if ( name.contains( "pbc" ) ) {
-                    if ( trackElem.hasAttribute ( "type" ) ) {
-                        type = static_cast<VcdTrack::PbcTracks>( trackElem.attribute ( "type" ).toInt() );
-                        if ( trackElem.hasAttribute ( "pbctrack" ) ) {
-                            pbctrack = ( trackElem.attribute ( "pbctrack" ) == "yes" );
-                            if ( trackElem.hasAttribute ( "val" ) ) {
-                                val = static_cast<VcdTrack::PbcTypes>( trackElem.attribute ( "val" ).toInt() );
+                    if ( trackChildElem.hasAttribute ( "type" ) ) {
+                        type = static_cast<VcdTrack::PbcTracks>( trackChildElem.attribute ( "type" ).toInt() );
+                        if ( trackChildElem.hasAttribute ( "pbctrack" ) ) {
+                            pbctrack = ( trackChildElem.attribute ( "pbctrack" ) == "yes" );
+                            if ( trackChildElem.hasAttribute ( "val" ) ) {
+                                val = static_cast<VcdTrack::PbcTypes>( trackChildElem.attribute ( "val" ).toInt() );
                                 K3b::VcdTrack* track = m_tracks->at( trackId );
                                 K3b::VcdTrack* pbcTrack = m_tracks->at( val );
                                 if ( pbctrack ) {
@@ -687,13 +687,13 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
                         }
                     }
                 } else if ( name.contains( "numkeys" ) ) {
-                    if ( trackElem.hasAttribute ( "key" ) ) {
-                        int key = trackElem.attribute ( "key" ).toInt();
-                        if ( trackElem.hasAttribute ( "val" ) ) {
-                            int val = trackElem.attribute ( "val" ).toInt() - 1;
+                    if ( trackChildElem.hasAttribute ( "key" ) ) {
+                        int key = trackChildElem.attribute ( "key" ).toInt();
+                        if ( trackChildElem.hasAttribute ( "val" ) ) {
+                            int trackChildVal = trackChildElem.attribute ( "val" ).toInt() - 1;
                             K3b::VcdTrack* track = m_tracks->at( trackId );
-                            if ( val >= 0 ) {
-                                K3b::VcdTrack * numkeyTrack = m_tracks->at( val );
+                            if ( trackChildVal >= 0 ) {
+                                K3b::VcdTrack * numkeyTrack = m_tracks->at( trackChildVal );
                                 track->setDefinedNumKey( key, numkeyTrack );
                             } else {
                                 track->setDefinedNumKey( key, nullptr );

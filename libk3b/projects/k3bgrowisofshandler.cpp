@@ -177,10 +177,10 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
         bool ok = true;
         double val = line.mid( pos, endPos-pos ).toDouble( &ok );
         if( ok ) {
-            int newBuffer = int(val+0.5);
-            if( newBuffer != d->lastBuffer ) {
-                d->lastBuffer = newBuffer;
-                emit buffer( newBuffer );
+            int newBuffer1 = int(val+0.5);
+            if( newBuffer1 != d->lastBuffer ) {
+                d->lastBuffer = newBuffer1;
+                emit buffer( newBuffer1 );
             }
 
             // device buffer for growisofs >= 7.0
@@ -190,10 +190,10 @@ void K3b::GrowisofsHandler::handleLine( const QString& line )
                 pos += 4;
                 val = line.mid( pos, endPos-pos ).toDouble( &ok );
                 if( ok ) {
-                    int newBuffer = int(val+0.5);
-                    if( newBuffer != d->lastDeviceBuffer ) {
-                        d->lastDeviceBuffer = newBuffer;
-                        emit deviceBuffer( newBuffer );
+                    int newBuffer2 = int(val+0.5);
+                    if( newBuffer2 != d->lastDeviceBuffer ) {
+                        d->lastDeviceBuffer = newBuffer2;
+                        emit deviceBuffer( newBuffer2 );
                     }
                 }
             }

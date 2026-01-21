@@ -25,13 +25,12 @@ class VideoCdInfoResultEntry
         VideoCdInfoResultEntry() : name(), id()
         {}
 
-        VideoCdInfoResultEntry( const QString& name, const QString& id )
-                : name( name ), id( id )
+        VideoCdInfoResultEntry( const QString& pName, const QString& pId )
+                : name( pName ), id( pId )
         {}
 
         QString name;
         QString id;
-
         long size;
 };
 

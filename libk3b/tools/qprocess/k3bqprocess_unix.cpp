@@ -1231,15 +1231,15 @@ bool K3bQProcessPrivate::waitForDeadChild()
     qt_native_read(deathPipe[0], &c, 1);
 
     // check if our process is dead
-    int exitStatus;
+    int exitStat;
     pid_t waitResult = 0;
     do {
-        waitResult = waitpid(pid_t(pid), &exitStatus, WNOHANG);
+        waitResult = waitpid(pid_t(pid), &exitStat, WNOHANG);
     } while ((waitResult == -1 && errno == EINTR));
     if (waitResult > 0) {
         processManager()->remove(q);
-        crashed = !WIFEXITED(exitStatus);
-        exitCode = WEXITSTATUS(exitStatus);
+        crashed = !WIFEXITED(exitStat);
+        exitCode = WEXITSTATUS(exitStat);
 #if defined QPROCESS_DEBUG
         qDebug() << "K3bQProcessPrivate::waitForDeadChild() dead with exitCode"
                  << exitCode << ", crashed?" << crashed;
@@ -1273,10 +1273,10 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
 
     pid_t childPid = qt_fork();
     if (childPid == 0) {
-        struct sigaction noaction;
-        memset(&noaction, 0, sizeof(noaction));
-        noaction.sa_handler = SIG_IGN;
-        qt_native_sigaction(SIGPIPE, &noaction, nullptr);
+        struct sigaction noaction1;
+        memset(&noaction1, 0, sizeof(noaction1));
+        noaction1.sa_handler = SIG_IGN;
+        qt_native_sigaction(SIGPIPE, &noaction1, nullptr);
 
         ::setsid();
 
@@ -1319,10 +1319,10 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
                 qt_native_execv(argv[0], argv);
             }
 
-            struct sigaction noaction;
-            memset(&noaction, 0, sizeof(noaction));
-            noaction.sa_handler = SIG_IGN;
-            qt_native_sigaction(SIGPIPE, &noaction, nullptr);
+            struct sigaction noaction2;
+            memset(&noaction2, 0, sizeof(noaction2));
+            noaction2.sa_handler = SIG_IGN;
+            qt_native_sigaction(SIGPIPE, &noaction2, nullptr);
 
             // '\1' means execv failed
             char c = '\1';
@@ -1330,10 +1330,10 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
             qt_native_close(startedPipe[1]);
             ::_exit(1);
         } else if (doubleForkPid == -1) {
-            struct sigaction noaction;
-            memset(&noaction, 0, sizeof(noaction));
-            noaction.sa_handler = SIG_IGN;
-            qt_native_sigaction(SIGPIPE, &noaction, nullptr);
+            struct sigaction noaction3;
+            memset(&noaction3, 0, sizeof(noaction3));
+            noaction3.sa_handler = SIG_IGN;
+            qt_native_sigaction(SIGPIPE, &noaction3, nullptr);
 
             // '\2' means internal error
             char c = '\2';

@@ -518,14 +518,14 @@ void K3b::VideoDVDRippingDialog::slotStartClicked()
 
 
     QSize videoSize = d->w->selectedPictureSize();
-    int i = 0;
+    int titleIndex = 0;
     QVector<K3b::VideoDVDRippingJob::TitleRipInfo> titles( d->titleRipInfos.count() );
     for( TitleRipInfos::const_iterator it = d->titleRipInfos.constBegin(); it != d->titleRipInfos.constEnd(); ++it ) {
-        titles[i] = it.value();
-        titles[i].videoBitrate = 0; // use the global bitrate set below
-        titles[i].width = videoSize.width();
-        titles[i].height = videoSize.height();
-        ++i;
+        titles[titleIndex] = it.value();
+        titles[titleIndex].videoBitrate = 0; // use the global bitrate set below
+        titles[titleIndex].width = videoSize.width();
+        titles[titleIndex].height = videoSize.height();
+        ++titleIndex;
     }
 
     // sort the titles which come from a map and are thus not sorted properly

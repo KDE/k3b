@@ -239,7 +239,7 @@ void K3b::ImageWritingDialog::Private::createIso9660InfoItems( K3b::Iso9660* iso
 }
 
 
-void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& tocFile, const QString& imageFile )
+void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& tcFile, const QString& imgFile )
 {
     QTreeWidgetItem* isoRootItem = new QTreeWidgetItem( infoView );
     isoRootItem->setText( 0, i18n("Detected:") );
@@ -250,25 +250,25 @@ void K3b::ImageWritingDialog::Private::createCdrecordCloneItems( const QString& 
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
-    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imageFile)) ) );
+    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imgFile)) ) );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 
     item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Image file:") );
-    item->setText( 1, imageFile );
+    item->setText( 1, imgFile );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 
     item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("TOC file:") );
-    item->setText( 1, tocFile );
+    item->setText( 1, tcFile );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 }
 
 
-void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile, const QString& imageFile )
+void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile, const QString& imgFile )
 {
     QTreeWidgetItem* isoRootItem = new QTreeWidgetItem( infoView );
     isoRootItem->setText( 0, i18n("Detected:") );
@@ -279,13 +279,13 @@ void K3b::ImageWritingDialog::Private::createCueBinItems( const QString& cueFile
 
     QTreeWidgetItem* item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Filesize:") );
-    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imageFile)) ) );
+    item->setText( 1, KIO::convertSize( K3b::filesize(QUrl::fromLocalFile(imgFile)) ) );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 
     item = new QTreeWidgetItem( infoView );
     item->setText( 0, i18n("Image file:") );
-    item->setText( 1, imageFile );
+    item->setText( 1, imgFile );
     item->setForeground( 0, infoTextColor );
     item->setTextAlignment( 0, Qt::AlignRight );
 

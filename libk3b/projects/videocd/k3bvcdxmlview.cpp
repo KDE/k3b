@@ -32,7 +32,7 @@ public:
     void setNumkeyBSN( QDomDocument& , QDomElement&, VcdTrack* );
     void setNumkeySEL( QDomDocument& , QDomElement&, VcdTrack* );
     
-    VcdDoc* doc;
+    VcdDoc* vcdDoc;
     QString xmlstring;
     int startkey;
 };
@@ -96,30 +96,31 @@ void K3b::VcdXmlView::Private::doPbc( QDomDocument& doc, QDomElement& parent, K3
         QDomElement elemPbcSelectionPNRDT;
 
         if ( track->getPbcTrack( pbc ) ) {
-            int index = track->getPbcTrack( pbc ) ->index();
-            QString ref = ( track->getPbcTrack( pbc ) ->isSegment() ) ? "segment" : "sequence";
+            int index = track->getPbcTrack( pbc )->index();
+            const QString trackRef = ( track->getPbcTrack( pbc ) ->isSegment() ) ? "segment" : "sequence";
+            const QString trackString = QString( "select-%1-%2" ).arg( trackRef ).arg( QString::number( index ).rightJustified( 3, '0' ) );
 
             switch ( pbc ) {
             case K3b::VcdTrack::PREVIOUS:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "prev" );
-                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                elemPbcSelectionPNRDT.setAttribute( "ref", trackString );
                 break;
             case K3b::VcdTrack::NEXT:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "next" );
-                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                elemPbcSelectionPNRDT.setAttribute( "ref", trackString );
                 break;
             case K3b::VcdTrack::RETURN:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "return" );
-                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                elemPbcSelectionPNRDT.setAttribute( "ref", trackString );
                 break;
             case K3b::VcdTrack::DEFAULT:
                 elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "default" );
-                elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                elemPbcSelectionPNRDT.setAttribute( "ref", trackString );
                 break;
             case K3b::VcdTrack::AFTERTIMEOUT:
                 if ( track->getWaitTime() >= 0 ) {
                     elemPbcSelectionPNRDT = addSubElement( doc, elemSelection, "timeout" );
-                    elemPbcSelectionPNRDT.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( index ).rightJustified( 3, '0' ) ) );
+                    elemPbcSelectionPNRDT.setAttribute( "ref", trackString );
                 }
                 break;
             }
@@ -211,9 +212,9 @@ void K3b::VcdXmlView::Private::setNumkeySEL( QDomDocument& doc, QDomElement& par
                 }
 
                 if ( trackIt.value() ) {
-                    QString ref = ( trackIt.value() ->isSegment() ) ? "segment" : "sequence";
+                    QString trackRef = ( trackIt.value() ->isSegment() ) ? "segment" : "sequence";
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
-                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( ref ).arg( QString::number( trackIt.value() ->index() ).rightJustified( 3, '0' ) ) );
+                    elemPbcSelectionNumKeySEL.setAttribute( "ref", QString( "select-%1-%2" ).arg( trackRef ).arg( QString::number( trackIt.value() ->index() ).rightJustified( 3, '0' ) ) );
                     addComment( doc, parent, QString( "key %1 -> %2" ).arg( trackIt.key() ).arg( trackIt.value() ->absolutePath() ) );
                 } else {
                     elemPbcSelectionNumKeySEL = addSubElement( doc, parent, "select" );
@@ -233,7 +234,7 @@ void K3b::VcdXmlView::Private::setNumkeySEL( QDomDocument& doc, QDomElement& par
 K3b::VcdXmlView::VcdXmlView( K3b::VcdDoc* pDoc )
     : d( new Private )
 {
-    d->doc = pDoc;
+    d->vcdDoc = pDoc;
 }
 
 K3b::VcdXmlView::~VcdXmlView()
@@ -251,14 +252,14 @@ void K3b::VcdXmlView::write( QFile& file )
     // create root element
     QDomElement root = xmlDoc.createElement( "videocd" );
     root.setAttribute( "xmlns", "http://www.gnu.org/software/vcdimager/1.0/" );
-    root.setAttribute( "class", d->doc->vcdOptions() ->vcdClass() );
-    root.setAttribute( "version", d->doc->vcdOptions() ->vcdVersion() );
+    root.setAttribute( "class", d->vcdDoc->vcdOptions() ->vcdClass() );
+    root.setAttribute( "version", d->vcdDoc->vcdOptions() ->vcdVersion() );
     xmlDoc.appendChild( root );
 
     // create option elements
 
     // Broken SVCD mode - NonCompliantMode
-    if ( d->doc->vcdOptions() ->NonCompliantMode() ) {
+    if ( d->vcdDoc->vcdOptions() ->NonCompliantMode() ) {
         QDomElement elemOption;
         elemOption = d->addSubElement( xmlDoc, root, "option" );
         elemOption.setAttribute( "name", "svcd vcd30 mpegav" );
@@ -270,7 +271,7 @@ void K3b::VcdXmlView::write( QFile& file )
     }
 
     // VCD3.0 track interpretation
-    if ( d->doc->vcdOptions() ->VCD30interpretation() ) {
+    if ( d->vcdDoc->vcdOptions() ->VCD30interpretation() ) {
         QDomElement elemOption;
         elemOption = d->addSubElement( xmlDoc, root, "option" );
         elemOption.setAttribute( "name", "svcd vcd30 tracksvd" );
@@ -278,7 +279,7 @@ void K3b::VcdXmlView::write( QFile& file )
     }
 
     // Relaxed aps
-    if ( d->doc->vcdOptions() ->RelaxedAps() ) {
+    if ( d->vcdDoc->vcdOptions() ->RelaxedAps() ) {
         QDomElement elemOption;
         elemOption = d->addSubElement( xmlDoc, root, "option" );
         elemOption.setAttribute( "name", "relaxed aps" );
@@ -286,7 +287,7 @@ void K3b::VcdXmlView::write( QFile& file )
     }
 
     // Update scan offsets
-    if ( d->doc->vcdOptions() ->UpdateScanOffsets() ) {
+    if ( d->vcdDoc->vcdOptions() ->UpdateScanOffsets() ) {
         QDomElement elemOption;
         elemOption = d->addSubElement( xmlDoc, root, "option" );
         elemOption.setAttribute( "name", "update scan offsets" );
@@ -295,61 +296,61 @@ void K3b::VcdXmlView::write( QFile& file )
     }
 
     // Gaps & Margins
-    if ( d->doc->vcdOptions() ->UseGaps() ) {
+    if ( d->vcdDoc->vcdOptions() ->UseGaps() ) {
         QDomElement elemOption;
         elemOption = d->addSubElement( xmlDoc, root, "option" );
         elemOption.setAttribute( "name", "leadout pregap" );
-        elemOption.setAttribute( "value", d->doc->vcdOptions() ->PreGapLeadout() );
+        elemOption.setAttribute( "value", d->vcdDoc->vcdOptions() ->PreGapLeadout() );
 
         elemOption = d->addSubElement( xmlDoc, root, "option" );
         elemOption.setAttribute( "name", "track pregap" );
-        elemOption.setAttribute( "value", d->doc->vcdOptions() ->PreGapTrack() );
+        elemOption.setAttribute( "value", d->vcdDoc->vcdOptions() ->PreGapTrack() );
 
-        if ( d->doc->vcdOptions() ->vcdClass() == "vcd" ) {
+        if ( d->vcdDoc->vcdOptions() ->vcdClass() == "vcd" ) {
             elemOption = d->addSubElement( xmlDoc, root, "option" );
             elemOption.setAttribute( "name", "track front margin" );
-            elemOption.setAttribute( "value", d->doc->vcdOptions() ->FrontMarginTrack() );
+            elemOption.setAttribute( "value", d->vcdDoc->vcdOptions() ->FrontMarginTrack() );
 
             elemOption = d->addSubElement( xmlDoc, root, "option" );
             elemOption.setAttribute( "name", "track rear margin" );
-            elemOption.setAttribute( "value", d->doc->vcdOptions() ->RearMarginTrack() );
+            elemOption.setAttribute( "value", d->vcdDoc->vcdOptions() ->RearMarginTrack() );
         } else {
             elemOption = d->addSubElement( xmlDoc, root, "option" );
             elemOption.setAttribute( "name", "track front margin" );
-            elemOption.setAttribute( "value", d->doc->vcdOptions() ->FrontMarginTrackSVCD() );
+            elemOption.setAttribute( "value", d->vcdDoc->vcdOptions() ->FrontMarginTrackSVCD() );
 
             elemOption = d->addSubElement( xmlDoc, root, "option" );
             elemOption.setAttribute( "name", "track rear margin" );
-            elemOption.setAttribute( "value", d->doc->vcdOptions() ->RearMarginTrackSVCD() );
+            elemOption.setAttribute( "value", d->vcdDoc->vcdOptions() ->RearMarginTrackSVCD() );
         }
 
     }
 
     // create info element
     QDomElement elemInfo = d->addSubElement( xmlDoc, root, "info" );
-    d->addSubElement( xmlDoc, elemInfo, "album-id", d->doc->vcdOptions() ->albumId().toUpper() );
-    d->addSubElement( xmlDoc, elemInfo, "volume-count", d->doc->vcdOptions() ->volumeCount() );
-    d->addSubElement( xmlDoc, elemInfo, "volume-number", d->doc->vcdOptions() ->volumeNumber() );
-    d->addSubElement( xmlDoc, elemInfo, "restriction", d->doc->vcdOptions() ->Restriction() );
+    d->addSubElement( xmlDoc, elemInfo, "album-id", d->vcdDoc->vcdOptions() ->albumId().toUpper() );
+    d->addSubElement( xmlDoc, elemInfo, "volume-count", d->vcdDoc->vcdOptions() ->volumeCount() );
+    d->addSubElement( xmlDoc, elemInfo, "volume-number", d->vcdDoc->vcdOptions() ->volumeNumber() );
+    d->addSubElement( xmlDoc, elemInfo, "restriction", d->vcdDoc->vcdOptions() ->Restriction() );
 
     // create pvd element
     QDomElement elemPvd = d->addSubElement( xmlDoc, root, "pvd" );
-    d->addSubElement( xmlDoc, elemPvd, "volume-id", d->doc->vcdOptions() ->volumeId().toUpper() );
-    d->addSubElement( xmlDoc, elemPvd, "system-id", d->doc->vcdOptions() ->systemId() );
-    d->addSubElement( xmlDoc, elemPvd, "application-id", d->doc->vcdOptions() ->applicationId() );
+    d->addSubElement( xmlDoc, elemPvd, "volume-id", d->vcdDoc->vcdOptions() ->volumeId().toUpper() );
+    d->addSubElement( xmlDoc, elemPvd, "system-id", d->vcdDoc->vcdOptions() ->systemId() );
+    d->addSubElement( xmlDoc, elemPvd, "application-id", d->vcdDoc->vcdOptions() ->applicationId() );
     d->addSubElement( xmlDoc, elemPvd, "preparer-id", QString( "K3b - Version %1" ).arg( k3bcore->version() ).toUpper() );
-    d->addSubElement( xmlDoc, elemPvd, "publisher-id", d->doc->vcdOptions() ->publisher().toUpper() );
+    d->addSubElement( xmlDoc, elemPvd, "publisher-id", d->vcdDoc->vcdOptions() ->publisher().toUpper() );
 
 
     // create filesystem element
     QDomElement elemFileSystem = d->addSubElement( xmlDoc, root, "filesystem" );
 
     // SEGMENT folder, some standalone DVD-Player need this
-    if ( !d->doc->vcdOptions() ->haveSegments() && d->doc->vcdOptions() ->SegmentFolder() )
+    if ( !d->vcdDoc->vcdOptions() ->haveSegments() && d->vcdDoc->vcdOptions() ->SegmentFolder() )
         d->addFolderElement( xmlDoc, elemFileSystem, "SEGMENT" );
 
     // create cdi element
-    if ( d->doc->vcdOptions() ->CdiSupport() ) {
+    if ( d->vcdDoc->vcdOptions() ->CdiSupport() ) {
         QDomElement elemFolder = d->addFolderElement( xmlDoc, elemFileSystem, "CDI" );
 
         d->addFileElement( xmlDoc, elemFolder, QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/cdi/cdi_imag.rtf" ), "CDI_IMAG.RTF", true );
@@ -374,15 +375,15 @@ void K3b::VcdXmlView::write( QFile& file )
     QDomElement elemsegmentItem;
 
     // if we have segments, elemsegmentItems must be before any sequence in xml file order
-    if ( d->doc->vcdOptions()->haveSegments()  )
+    if ( d->vcdDoc->vcdOptions()->haveSegments()  )
         elemsegmentItems = d->addSubElement( xmlDoc, root, "segment-items" );
 
     // sequence must always available ...
     elemsequenceItems = d->addSubElement( xmlDoc, root, "sequence-items" );
     // if we have no sequence (photo (s)vcd) we must add a dummy sequence they inform the user to turn on pbc on there videoplayer
-    if ( !d->doc->vcdOptions()->haveSequence() )  {
+    if ( !d->vcdDoc->vcdOptions()->haveSequence() )  {
         QString filename;
-        if  ( d->doc->vcdOptions()->mpegVersion() == 1 )
+        if  ( d->vcdDoc->vcdOptions()->mpegVersion() == 1 )
             filename = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/extra/k3bphotovcd.mpg" );
         else
             filename = QStandardPaths::locate( QStandardPaths::GenericDataLocation, "k3b/extra/k3bphotosvcd.mpg" );
@@ -401,7 +402,7 @@ void K3b::VcdXmlView::write( QFile& file )
     QDomElement elemPbc;
 
     // Add Tracks to XML
-    Q_FOREACH( K3b::VcdTrack* track,  *d->doc->tracks() ) {
+    Q_FOREACH( K3b::VcdTrack* track,  *d->vcdDoc->tracks() ) {
         if ( !track ->isSegment() ) {
             QString seqId = QString::number( track ->index() ).rightJustified( 3, '0' );
 
@@ -422,8 +423,8 @@ void K3b::VcdXmlView::write( QFile& file )
 
         }
     }
-    Q_FOREACH( K3b::VcdTrack* track,  *d->doc->tracks() ) {
-        if ( d->doc->vcdOptions() ->PbcEnabled() ) {
+    Q_FOREACH( K3b::VcdTrack* track,  *d->vcdDoc->tracks() ) {
+        if ( d->vcdDoc->vcdOptions() ->PbcEnabled() ) {
             if ( elemPbc.isNull() )
                 elemPbc = d->addSubElement( xmlDoc, root, "pbc" );
 

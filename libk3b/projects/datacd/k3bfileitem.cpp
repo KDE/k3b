@@ -214,13 +214,13 @@ bool K3b::FileItem::isValid() const
             }
             else {
                 // search for the item in dir
-                K3b::DataItem* d = dir->find( tokens[i] );
-                if( d == nullptr )
+                K3b::DataItem* dataItem = dir->find( tokens[i] );
+                if( dataItem == nullptr )
                     return false;
 
-                if( d->isDir() ) {
+                if( dataItem->isDir() ) {
                     // change directory
-                    dir = static_cast<K3b::DirItem *>(d);
+                    dir = static_cast<K3b::DirItem *>(dataItem);
                 }
                 else {
                     if( i+1 != tokens.size() )

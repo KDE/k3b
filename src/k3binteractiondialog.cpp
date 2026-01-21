@@ -51,12 +51,12 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
 {
     installEventFilter( this );
 
-    mainGrid = new QGridLayout( this );
+    m_mainGrid = new QGridLayout( this );
 
     // header
     // ---------------------------------------------------------------------------------------------------
     m_dialogHeader = new K3b::ThemedHeader( this );
-    mainGrid->addWidget( m_dialogHeader, 0, 0, 1, 3 );
+    m_mainGrid->addWidget( m_dialogHeader, 0, 0, 1, 3 );
 
 
     // settings buttons
@@ -77,11 +77,11 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
         m_buttonSaveSettings->setIcon( QIcon::fromTheme( "document-save" ) );
         layout2->addWidget( m_buttonSaveSettings );
 
-        mainGrid->addLayout( layout2, 2, 0 );
+        m_mainGrid->addLayout( layout2, 2, 0 );
     }
 
     QSpacerItem* spacer = new QSpacerItem( 10, 10, QSizePolicy::Expanding, QSizePolicy::Minimum );
-    mainGrid->addItem( spacer, 2, 1 );
+    m_mainGrid->addItem( spacer, 2, 1 );
 
     // action buttons
     // ---------------------------------------------------------------------------------------------------
@@ -121,8 +121,8 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
         m_buttonCancel = nullptr;
     }
 
-    mainGrid->addWidget( buttonBox, 2, 2 );
-    mainGrid->setRowStretch( 1, 1 );
+    m_mainGrid->addWidget( buttonBox, 2, 2 );
+    m_mainGrid->setRowStretch( 1, 1 );
 
     setTitle( title, subTitle );
 
@@ -212,7 +212,7 @@ void K3b::InteractionDialog::setTitle( const QString& title, const QString& subT
 void K3b::InteractionDialog::setMainWidget( QWidget* w )
 {
     w->setParent( this );
-    mainGrid->addWidget( w, 1, 0, 1, 3 );
+    m_mainGrid->addWidget( w, 1, 0, 1, 3 );
     m_mainWidget = w;
 }
 

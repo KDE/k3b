@@ -39,15 +39,15 @@ public:
         }
     }
 
-    QString buildFileName( int counter ) {
-        if( counter > 0 )
-            return filename + '.' + QString::number(counter).rightJustified( 3, '0' );
+    QString buildFileName( int c ) {
+        if( c > 0 )
+            return filename + '.' + QString::number(c).rightJustified( 3, '0' );
         else
             return filename;
     }
 
-    qint64 partFileSize( int counter ) {
-        QFileInfo fi( buildFileName( counter ) );
+    qint64 partFileSize( int c ) {
+        QFileInfo fi( buildFileName( c ) );
         if ( fi.exists() )
             return fi.size();
         else
@@ -66,9 +66,9 @@ public:
         return openFile( ++counter );
     }
 
-    bool openFile( int counter ) {
+    bool openFile( int c ) {
         file.close();
-        file.setFileName( buildFileName( counter ) );
+        file.setFileName( buildFileName( c ) );
         currentFilePos = 0;
         if( file.open( m_splitter->openMode() ) ) {
             return true;

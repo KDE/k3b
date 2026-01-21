@@ -300,8 +300,8 @@ void K3b::VideoCdRip::parseInformation( QString text )
             else {
                 // found segment here we can get only the start lsn :)
                 // extracting item0001.mpg... (start lsn 225, 1 segments)
-                int end = text.indexOf(  ',', index );
-                int overallPos = text.mid( index + 11, end - index - 11 ).trimmed().toLong();
+                int endIndex = text.indexOf(  ',', index );
+                int overallPos = text.mid( index + 11, endIndex - index - 11 ).trimmed().toLong();
                 double relOverallWritten = ( double(overallPos)  * 2352 ) / double(m_videooptions ->getVideoCdSize());
                 int newpercent =  int( 100 * relOverallWritten );
                 if ( newpercent > m_oldpercent ) {

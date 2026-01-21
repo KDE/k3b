@@ -31,7 +31,7 @@ public:
     ~TempDirSelectionWidget() override;
 
     /** determines if the selection dialog should ask for a dir or a file */
-    enum mode { DIR, FILE };
+    enum Mode { DIR, FILE };
 
     int selectionMode() const { return m_mode; }
 

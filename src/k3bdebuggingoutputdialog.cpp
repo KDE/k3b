@@ -64,12 +64,12 @@ K3b::DebuggingOutputDialog::DebuggingOutputDialog( QWidget* parent )
 }
 
 
-void K3b::DebuggingOutputDialog::setOutput( const QString& data )
+void K3b::DebuggingOutputDialog::setOutput( const QString& text )
 {
   // the following may take some time
   QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 
-  debugView->setText( data );
+  debugView->setText( text );
 
   QApplication::restoreOverrideCursor();
 }

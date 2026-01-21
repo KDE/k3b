@@ -195,8 +195,7 @@ void K3b::DataDoc::addUrlsToDir( const QList<QUrl>& l, K3b::DirItem* dir )
 
     QList<QUrl> urls = K3b::convertToLocalUrls(l);
 
-    for( QList<QUrl>::ConstIterator it = urls.constBegin(); it != urls.constEnd(); ++it ) {
-        const QUrl& url = *it;
+    for (const QUrl &url : std::as_const(urls)) {
         QFileInfo f( url.toLocalFile() );
         QString k3bname = f.absoluteFilePath().section( '/', -1 );
 
@@ -248,8 +247,10 @@ void K3b::DataDoc::addUrlsToDir( const QList<QUrl>& l, K3b::DirItem* dir )
             // recursively add all the files in the directory
             QStringList dlist = QDir( f.absoluteFilePath() ).entryList( QDir::AllEntries|QDir::System|QDir::Hidden|QDir::NoDotAndDotDot );
             QList<QUrl> newUrls;
-            for( QStringList::ConstIterator it = dlist.constBegin(); it != dlist.constEnd(); ++it )
-                newUrls.append( QUrl::fromLocalFile( f.absoluteFilePath() + '/' + *it ) );
+            for (const QString &newDir : std::as_const(dlist)) {
+                newUrls.append( QUrl::fromLocalFile( f.absoluteFilePath() + '/' + newDir ) );
+            }
+
             addUrlsToDir( newUrls, newDirItem );
         }
         else if( f.isSymLink() || f.isFile() ) {
@@ -925,8 +926,8 @@ void K3b::DataDoc::saveDataItem( K3b::DataItem* item, QDomDocument* doc, QDomEle
         if( item->sortWeight() != 0 )
             topElem.setAttribute( "sort_weight", QString::number(item->sortWeight()) );
 
-        Q_FOREACH( K3b::DataItem* item, dirItem->children() ) {
-            saveDataItem( item, doc, &topElem );
+        Q_FOREACH( K3b::DataItem* childItem, dirItem->children() ) {
+            saveDataItem( childItem, doc, &topElem );
         }
 
         parent->appendChild( topElem );
@@ -1397,8 +1398,8 @@ void K3b::DataDoc::clearImportedSession()
                 delete item;
             }
             else {
-                Q_FOREACH( K3b::DataItem* item, dir->children() ) {
-                    if( !d->oldSession.contains( item ) ) {
+                Q_FOREACH( K3b::DataItem* childItem, dir->children() ) {
+                    if( !d->oldSession.contains( childItem ) ) {
                         // now the dir becomes a totally normal dir
                         dir->setRemoveable(true);
                         dir->setRenameable(true);

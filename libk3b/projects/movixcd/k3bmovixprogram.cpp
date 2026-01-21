@@ -143,8 +143,8 @@ bool K3b::MovixProgram::scanOldEMovix( K3b::MovixBin* bin, const QString& path )
     // fallback: to be compatible with 0.8.0rc2 we just add all files in the movix directory
     //
     if( bin->m_movixFiles.isEmpty() ) {
-        QDir dir( bin->movixDataDir() + "/movix" );
-        bin->m_movixFiles = dir.entryList(QDir::Files);
+        QDir movixDir( bin->movixDataDir() + "/movix" );
+        bin->m_movixFiles = movixDir.entryList(QDir::Files);
     }
 
     //

@@ -551,20 +551,22 @@ bool K3b::CdCopyJob::prepareImageFiles()
         emit infoMessage( i18n("Using temporary folder %1.",m_tempPath), MessageInfo );
 
         // create temp filenames
-        int i = 1;
+        int trackIndex = 1;
         for( K3b::Device::Toc::const_iterator it = d->toc.constBegin(); it != d->toc.constEnd(); ++it ) {
+            const QString trackString = QString::number(trackIndex).rightJustified(2, '0');
+            ++trackIndex;
+
             if( (*it).type() == K3b::Device::Track::TYPE_AUDIO ) {
-                d->imageNames.append( m_tempPath + QString("Track%1.wav").arg(QString::number(i).rightJustified(2, '0')) );
-                d->infNames.append( m_tempPath + QString("Track%1.inf").arg(QString::number(i).rightJustified(2, '0')) );
+                d->imageNames.append( m_tempPath + QString("Track%1.wav").arg(trackString));
+                d->infNames.append( m_tempPath + QString("Track%1.inf").arg(trackString) );
             }
             else
-                d->imageNames.append( m_tempPath + QString("Track%1.iso").arg(QString::number(i).rightJustified(2, '0')) );
-            ++i;
+                d->imageNames.append( m_tempPath + QString("Track%1.iso").arg(trackString) );
         }
 
         qDebug() << "(K3b::CdCopyJob) created image filenames:";
-        for( int i = 0; i < d->imageNames.count(); ++i )
-            qDebug() << "(K3b::CdCopyJob) " << d->imageNames[i];
+        for( int nameIndex = 0; nameIndex < d->imageNames.count(); ++nameIndex )
+            qDebug() << "(K3b::CdCopyJob) " << d->imageNames[nameIndex];
 
         return true;
     }

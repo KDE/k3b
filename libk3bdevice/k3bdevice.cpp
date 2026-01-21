@@ -2725,8 +2725,8 @@ void K3b::Device::Device::checkFeatures()
                 cmd[3] = FEATURE_BD_PSEUDO_OVERWRITE;
                 cmd[8] = 8+8;
                 if( !cmd.transport( TR_DIR_READ, header, 8+8 ) ) {
-                    unsigned int len = from4Byte( header );
-                    if( len >= 4+8 ) {
+                    unsigned int len1 = from4Byte( header );
+                    if( len1 >= 4+8 ) {
                         d->writeCapabilities |= MEDIA_BD_R_SRM_POW;
                         d->writeModes |= WRITINGMODE_SRM_POW;
                     }
@@ -2736,8 +2736,8 @@ void K3b::Device::Device::checkFeatures()
                 cmd[3] = FEATURE_RANDOM_WRITABLE;
                 cmd[8] = 8+16;
                 if( !cmd.transport( TR_DIR_READ, header, 8+16 ) ) {
-                    unsigned int len = from4Byte( header );
-                    if( len >= 4+16 ) {
+                    unsigned int len2 = from4Byte( header );
+                    if( len2 >= 4+16 ) {
                         d->writeCapabilities |= MEDIA_BD_R_RRM;
                         d->writeModes |= WRITINGMODE_RRM;
                     }

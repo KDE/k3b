@@ -218,9 +218,9 @@ void K3bFLACDecoder::Private::metadata_callback(const FLAC__StreamMetadata *meta
 FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLAC__Frame *frame, const FLAC__int32 * const buffer[]) {
     unsigned i, j;
     // Note that in canDecode we made sure that the input is 1-16 bit stereo or mono.
-    unsigned samples = frame->header.blocksize;
+    const unsigned sampleCount = frame->header.blocksize;
 
-    for(i=0; i < samples; ++i) {
+    for(i=0; i < sampleCount; ++i) {
         // in FLAC channel 0 is left, 1 is right
         for(j=0; j < this->channels; ++j) {
             FLAC__int32 value = (buffer[j][i])<<(16 - frame->header.bits_per_sample);

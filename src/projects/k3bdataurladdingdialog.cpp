@@ -531,8 +531,8 @@ void K3b::DataUrlAddingDialog::slotAddUrls()
     }
 
     if( m_urlQueue.isEmpty() ) {
-        Q_FOREACH( DirItem* dir, m_newItems.keys() ) {
-            dir->addDataItems( m_newItems[ dir ] );
+        Q_FOREACH( DirItem* newDir, m_newItems.keys() ) {
+            newDir->addDataItems( m_newItems[ newDir ] );
         }
         m_dirSizeJob->cancel();
         m_progressWidget->setMaximum( 100 );

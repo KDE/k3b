@@ -171,9 +171,10 @@ const K3b::VideoCdInfoResult& K3b::VideoCdInfo::result() const
     return m_Result;
 }
 
-const K3b::VideoCdInfoResultEntry& K3b::VideoCdInfoResult::entry( int number, int type ) const
+const K3b::VideoCdInfoResultEntry& K3b::VideoCdInfoResult::entry( int number, int pType ) const
 {
-    switch ( type ) {
+// TODO: could use QList::value() with a default value
+    switch ( pType ) {
         case K3b::VideoCdInfoResult::FILE:
             if ( number >= m_fileEntry.count() )
                 return m_emptyEntry;
@@ -195,9 +196,9 @@ const K3b::VideoCdInfoResultEntry& K3b::VideoCdInfoResult::entry( int number, in
 }
 
 
-void K3b::VideoCdInfoResult::addEntry( const K3b::VideoCdInfoResultEntry& entry, int type )
+void K3b::VideoCdInfoResult::addEntry( const K3b::VideoCdInfoResultEntry& entry, int pType )
 {
-    switch ( type ) {
+    switch ( pType ) {
         case K3b::VideoCdInfoResult::FILE:
             m_fileEntry.append( entry );
             break;
@@ -212,9 +213,9 @@ void K3b::VideoCdInfoResult::addEntry( const K3b::VideoCdInfoResultEntry& entry,
     }
 }
 
-int K3b::VideoCdInfoResult::foundEntries( int type ) const
+int K3b::VideoCdInfoResult::foundEntries( int pType ) const
 {
-    switch ( type ) {
+    switch ( pType ) {
         case K3b::VideoCdInfoResult::FILE:
             return m_fileEntry.count();
         case K3b::VideoCdInfoResult::SEGMENT:

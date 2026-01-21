@@ -48,8 +48,8 @@ public:
 bool K3b::AudioCdTrackSource::Private::searchForAudioCD( K3b::Device::Device* dev ) const
 {
     qDebug() << "(K3b::AudioCdTrackSource::searchForAudioCD(" << dev->description() << ")";
-    K3b::Device::Toc toc = dev->readToc();
-    return ( toc.discId() == discId );
+    K3b::Device::Toc t = dev->readToc();
+    return ( t.discId() == discId );
 }
 
 
