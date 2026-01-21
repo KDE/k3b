@@ -143,7 +143,9 @@ bool K3bFFMpegFile::open()
     d->isSpacious = ::av_sample_fmt_is_planar(d->sampleFormat) &&
         d->codecContext->channels > 1;
 #else
-#pragma Unimplemented
+#ifdef __GNUC__
+#warning Unimplemented for libavcodec version >= 61
+#endif
     d->isSpacious = ::av_sample_fmt_is_planar(d->sampleFormat);
 #endif
     d->packet = ::av_packet_alloc();
@@ -197,7 +199,9 @@ int K3bFFMpegFile::channels() const
 #if LIBAVCODEC_VERSION_MAJOR < 61
     return d->codecContext->channels;
 #else
-#pragma Unimplemented
+#ifdef __GNUC__
+#warning Unimplemented for libavcodec version >= 61
+#endif
     return 0;
 #endif
 }
