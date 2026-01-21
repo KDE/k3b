@@ -113,7 +113,7 @@ QSize K3b::FillStatusDisplayWidget::minimumSizeHint() const
 void K3b::FillStatusDisplayWidget::mousePressEvent( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton )
-        emit contextMenu( e->globalPos() );
+        emit contextMenu( e->globalPosition().toPoint() );
 }
 
 

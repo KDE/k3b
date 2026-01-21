@@ -421,11 +421,11 @@ void K3b::WelcomeWidget::mousePressEvent ( QMouseEvent* e )
             removeAction = pop.addAction( QIcon::fromTheme("list-remove"), i18n("Remove Button") );
             if ( addPop.actions().count() > 0 )
                 pop.addMenu( &addPop );
-            r = pop.exec( e->globalPos() );
+            r = pop.exec( e->globalPosition().toPoint() );
         }
         else {
             addPop.insertSection( firstAction, addPop.title() );
-            r = addPop.exec( e->globalPos() );
+            r = addPop.exec( e->globalPosition().toPoint() );
         }
 
         if( r != nullptr ) {

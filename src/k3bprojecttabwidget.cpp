@@ -151,12 +151,12 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
         if( e->type() == QEvent::MouseButtonPress ) {
             QMouseEvent* me = static_cast<QMouseEvent*>(e);
             if( me->button() == Qt::RightButton ) {
-                if( projectAt( me->pos() ) ) {
-                    int tabPos = tabBar()->tabAt(me->pos());
+                if( projectAt( me->position().toPoint() ) ) {
+                    int tabPos = tabBar()->tabAt(me->position().toPoint());
                     if(tabPos!=-1){
                         setCurrentIndex(tabPos);
                         // show the popup menu
-                        d->projectActionMenu->menu()->exec( me->globalPos() );
+                        d->projectActionMenu->menu()->exec( me->globalPosition().toPoint() );
                     }
                 }
                 return true;
@@ -171,14 +171,14 @@ bool K3b::ProjectTabWidget::eventFilter( QObject* o, QEvent* e )
 
         else if( e->type() == QEvent::DragMove ) {
             QDragMoveEvent* de = static_cast<QDragMoveEvent*>(e);
-            de->setAccepted( projectAt(de->pos()) != nullptr );
+            de->setAccepted( projectAt(de->position().toPoint()) != nullptr );
             return true;
         }
 
         else if( e->type() == QEvent::Drop ) {
             QDropEvent* de = static_cast<QDropEvent*>(e);
             if( de->mimeData()->hasUrls() ) {
-                if( Doc* doc = projectAt( de->pos() ) ) {
+                if( Doc* doc = projectAt( de->position().toPoint() ) ) {
                     QList<QUrl> urls;
                     Q_FOREACH( const QUrl& url, de->mimeData()->urls() ) {
                         urls.append( url );
