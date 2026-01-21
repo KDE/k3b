@@ -151,8 +151,7 @@ KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, cons
     KJobWidgets::setWindow( transferJob, window );
     bool downloaded = true;
     QObject::connect( transferJob, &KJob::result, [&](KJob*) {
-      if( transferJob->error() != KJob::NoError ) {
-        tmpFile.open();
+      if ( ( transferJob->error() != KJob::NoError ) && tmpFile.open() ) {
         tmpFile.write( transferJob->data() );
         tmpFile.close();
       } else {

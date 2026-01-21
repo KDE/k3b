@@ -115,7 +115,6 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 {
     QUrl themeURL = KUrlRequesterDialog::getUrl( QUrl(), this,
                                                  i18n("Drag or Type Theme URL") );
-
     if( themeURL.url().isEmpty() )
         return;
 
@@ -123,8 +122,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
     KIO::StoredTransferJob* transferJob = KIO::storedGet( themeURL );
     bool transferJobSucceed = true;
     connect( transferJob, &KJob::result, [&](KJob*) {
-        if( transferJob->error() != KJob::NoError ) {
-            themeTmpFile.open();
+        if ( ( transferJob->error() != KJob::NoError ) && themeTmpFile.open() ) {
             themeTmpFile.write( transferJob->data() );
             themeTmpFile.close();
         } else {
@@ -146,23 +144,24 @@ void K3b::ThemeOptionTab::slotInstallTheme()
 
     // check if the archive contains a dir with a k3b.theme file
     QString themeName;
-    KTar archive( &themeTmpFile );
-    archive.open(QIODevice::ReadOnly);
-    const KArchiveDirectory* themeDir = archive.directory();
-    QStringList entries = themeDir->entries();
     bool validThemeArchive = false;
-    if( entries.count() > 0 ) {
-        if( themeDir->entry(entries.first())->isDirectory() ) {
-            const KArchiveDirectory* subDir = dynamic_cast<const KArchiveDirectory*>( themeDir->entry(entries.first()) );
-            themeName = subDir->name();
-            if( subDir && subDir->entry( "k3b.theme" ) ) {
-                validThemeArchive = true;
+    KTar archive( &themeTmpFile );
+    if ( archive.open(QIODevice::ReadOnly) ) {
+        const KArchiveDirectory* themeDir = archive.directory();
+        QStringList entries = themeDir->entries();
+        if( entries.count() > 0 ) {
+            if( themeDir->entry(entries.first())->isDirectory() ) {
+                const KArchiveDirectory* subDir = dynamic_cast<const KArchiveDirectory*>( themeDir->entry(entries.first()) );
+                themeName = subDir->name();
+                if( subDir && subDir->entry( "k3b.theme" ) ) {
+                    validThemeArchive = true;
 
-                // check for all necessary pixmaps (this is a little evil hacking)
-                for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
-                    if( !subDir->entry( K3b::Theme::filenameForPixmapType( static_cast<K3b::Theme::PixmapType>(i) ) ) ) {
-                        validThemeArchive = false;
-                        break;
+                    // check for all necessary pixmaps (this is a little evil hacking)
+                    for( int i = 0; i <= K3b::Theme::WELCOME_BG; ++i ) {
+                        if( !subDir->entry( K3b::Theme::filenameForPixmapType( static_cast<K3b::Theme::PixmapType>(i) ) ) ) {
+                            validThemeArchive = false;
+                            break;
+                        }
                     }
                 }
             }

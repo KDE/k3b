@@ -649,7 +649,7 @@ bool K3b::CdrdaoWriter::cueSheet()
                 return false;
 
             QTemporaryFile tempF;
-            tempF.open();
+            if ( !tempF.open() ) return false;
             QString tempFile = tempF.fileName();
             tempF.remove();
 

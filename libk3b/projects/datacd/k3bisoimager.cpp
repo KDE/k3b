@@ -819,7 +819,7 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
         // create temp file
         QTemporaryFile temp;
         temp.setAutoRemove( false );
-        temp.open();
+        if ( !temp.open() ) return;
         QString tempPath = temp.fileName();
         temp.remove();
 
@@ -851,7 +851,7 @@ bool K3b::IsoImager::writeRRHideFile()
 {
     delete m_rrHideFile;
     m_rrHideFile = new QTemporaryFile();
-    m_rrHideFile->open();
+    if ( !m_rrHideFile->open() ) return false;
 
     QTextStream s( m_rrHideFile );
 
@@ -872,7 +872,7 @@ bool K3b::IsoImager::writeJolietHideFile()
 {
     delete m_jolietHideFile;
     m_jolietHideFile = new QTemporaryFile();
-    m_jolietHideFile->open();
+    if ( !m_jolietHideFile->open() ) return false;
 
     QTextStream s( m_jolietHideFile );
 
@@ -893,7 +893,7 @@ bool K3b::IsoImager::writeSortWeightFile()
 {
     delete m_sortWeightFile;
     m_sortWeightFile = new QTemporaryFile();
-    m_sortWeightFile->open();
+    if ( !m_sortWeightFile->open() ) return false;
 
     QTextStream s( m_sortWeightFile );
 

@@ -792,7 +792,8 @@ bool K3b::CdCopyJob::writeNextSession()
                     // cdrecord only checks this
                     QTemporaryFile tmp( "XXXXXX.inf" );
                     tmp.setAutoRemove( false );
-                    tmp.open();
+                    if ( !tmp.open() ) return false;
+
                     d->infNames.append( tmp.fileName() );
                     QTextStream stream( &tmp );
                     bool success = d->infFileWriter->save( stream );

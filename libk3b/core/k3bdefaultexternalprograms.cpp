@@ -113,7 +113,11 @@ static QString& debianWeirdnessHack( QString& path )
         if( QFileInfo( path ).size() < 1024 ) {
             qDebug() << "Debian Wrapper script size fits. Checking file.";
             QFile f( path );
-            f.open( QIODevice::ReadOnly );
+            if ( !f.open( QIODevice::ReadOnly ) ) {
+                qWarning() << "Cannot read Debian wrapper script file";
+                return path;
+            }
+
             QString s = QTextStream( &f ).readAll();
             if( s.contains( "cdrecord.mmap" ) && s.contains( "cdrecord.shm" ) ) {
                 qDebug() << "Found Debian Wrapper script.";

@@ -1092,7 +1092,7 @@ bool K3b::DataJob::setupCdrdaoJob()
     // now write the tocfile
     if( d->tocFile ) delete d->tocFile;
     d->tocFile = new QTemporaryFile( "XXXXXX.toc" );
-    d->tocFile->open();
+    if ( !d->tocFile->open() ) return false;
 
     QTextStream s( d->tocFile );
     if( d->usedDataMode == K3b::DataMode1 ) {

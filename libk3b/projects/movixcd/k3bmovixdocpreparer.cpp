@@ -164,7 +164,7 @@ bool K3b::MovixDocPreparer::writePlaylistFile()
 {
     delete d->playlistFile;
     d->playlistFile = new QTemporaryFile();
-    d->playlistFile->open();
+    if ( !d->playlistFile->open() ) return false;
 
     QTextStream s( d->playlistFile );
 
@@ -185,7 +185,7 @@ bool K3b::MovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath
 {
     delete d->isolinuxConfigFile;
     d->isolinuxConfigFile = new QTemporaryFile();
-    d->isolinuxConfigFile->open();
+    if ( !d->isolinuxConfigFile->open() ) return false;
 
     QTextStream s( d->isolinuxConfigFile );
 
@@ -219,7 +219,7 @@ bool K3b::MovixDocPreparer::writeMovixRcFile()
 {
     delete d->movixRcFile;
     d->movixRcFile = new QTemporaryFile();
-    d->movixRcFile->open();
+    if ( !d->movixRcFile->open() ) return false;
 
     QTextStream s( d->movixRcFile );
 

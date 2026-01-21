@@ -444,9 +444,13 @@ K3b::Doc* K3b::ProjectManager::openProject( const QUrl& url )
     QTemporaryFile tmpfile;
     tmpfile.setAutoRemove(false);
     KIO::StoredTransferJob* transferJob = KIO::storedGet( url );
-    if (!transferJob->exec())
-        return NULL;
-    tmpfile.open();
+    if (!transferJob->exec() || !tmpfile.open() )
+    {
+        qWarning() << "(K3b::Doc) transferJob failed for" << url;
+        QApplication::restoreOverrideCursor();
+        return nullptr;
+    }
+
     tmpfile.write(transferJob->data());
     tmpfile.close();
 
@@ -568,7 +572,10 @@ bool K3b::ProjectManager::saveProject( K3b::Doc* doc, const QUrl& url )
 {
     QTemporaryFile tmpfile;
     tmpfile.setAutoRemove(false);
-    tmpfile.open();
+    if ( !tmpfile.open() ) {
+        qWarning() << "(K3b::ProjectManager) Cannot create temporary file";
+        return false;
+    }
 
     bool success = false;
 
