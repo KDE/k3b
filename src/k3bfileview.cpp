@@ -110,7 +110,7 @@ K3b::FileView::FileView(QWidget *parent )
     d->toolBox->addAction( d->dirOp->bookmarkMenu() );
 
     if( QAction* action = d->dirOp->action(KDirOperator::ShowHiddenFiles) ) {
-        action->setShortcut( Qt::ALT + Qt::Key_Period );
+        action->setShortcut( Qt::ALT|Qt::Key_Period );
         action->setShortcutContext( Qt::ApplicationShortcut );
     }
 
