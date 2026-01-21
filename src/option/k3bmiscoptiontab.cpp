@@ -49,7 +49,7 @@ K3b::MiscOptionTab::MiscOptionTab(QWidget *parent )
                                                          i18n("One of these sets is loaded once an action dialog is opened. "
                                                               "This setting defines which set it will be.") );
 
-    connect(m_checkSaveOnExit, &QCheckBox::stateChanged, [this]{ Q_EMIT changed(); });
+    connect(m_checkSaveOnExit, &QCheckBox::checkStateChanged, this, &K3b::MiscOptionTab::changed);
 }
 
 
@@ -62,6 +62,8 @@ void K3b::MiscOptionTab::readSettings()
 {
     KConfigGroup c = KSharedConfig::openConfig()->group( QStringLiteral("General Options") );
 
+    // TODO: block signals so that changed() is not emitted
+    // either here or in the parent dialogue
     m_checkSaveOnExit->setChecked( c.readEntry( "ask_for_saving_changes_on_exit", true ) );
     m_checkShowSplash->setChecked( c.readEntry("Show splash", true) );
     m_checkShowProgressOSD->setChecked(c.readEntry("Show progress OSD", false));
