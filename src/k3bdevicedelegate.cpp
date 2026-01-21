@@ -40,13 +40,8 @@ namespace {
             }
 
             if ( option.state & QStyle::State_MouseOver ) {
-                KIconEffect *effect = KIconLoader::global()->iconEffect();
-
                 // Note that in KIconLoader terminology, active = hover.
-                // ### We're assuming that the icon group is desktop/filemanager, since this
-                //     is KFileItemDelegate.
-                if (effect->hasEffect(KIconLoader::Desktop, KIconLoader::ActiveState))
-                    return effect->apply(pixmap, KIconLoader::Desktop, KIconLoader::ActiveState);
+                KIconEffect::toActive(pixmap);
             }
         }
 
