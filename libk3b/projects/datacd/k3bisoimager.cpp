@@ -1062,7 +1062,6 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
         }
     }
 
-
     if( !_appDir.cd( name ) ) {
 
         qDebug() << "(K3b::IsoImager) creating dummy dir: " << _appDir.absolutePath() << "/" << name;
@@ -1071,11 +1070,14 @@ QString K3b::IsoImager::dummyDir( K3b::DirItem* dir )
         _appDir.cd( name );
 
         if( perm ) {
-            ::chmod( QFile::encodeName( _appDir.absolutePath() ), statBuf.st_mode );
-            ::chown( QFile::encodeName( _appDir.absolutePath() ), statBuf.st_uid, statBuf.st_gid );
+            const QByteArray dirName = QFile::encodeName(_appDir.absolutePath());
+            bool success = true;
+            success = success && (::chmod( dirName, statBuf.st_mode )==0);
+            success = success && (::chown( dirName, statBuf.st_uid, statBuf.st_gid )==0);
             struct utimbuf tb;
             tb.actime = tb.modtime = statBuf.st_mtime;
-            ::utime( QFile::encodeName( _appDir.absolutePath() ), &tb );
+            success = success && (::utime( dirName, &tb )==0);
+            if (!success) qWarning() << "Error setting permissions on" << dirName;
         }
     }
 

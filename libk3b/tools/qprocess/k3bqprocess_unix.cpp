@@ -266,7 +266,7 @@ K3bQProcessManager::K3bQProcessManager()
     // initialize the dead child pipe and make it non-blocking. in the
     // extremely unlikely event that the pipe fills up, we do not under any
     // circumstances want to block.
-    ::pipe(qt_qprocess_deadChild_pipe);
+    if (::pipe(qt_qprocess_deadChild_pipe)!=0) qWarning() << "Error creating pipe";
     ::fcntl(qt_qprocess_deadChild_pipe[0], F_SETFD, FD_CLOEXEC);
     ::fcntl(qt_qprocess_deadChild_pipe[1], F_SETFD, FD_CLOEXEC);
     ::fcntl(qt_qprocess_deadChild_pipe[0], F_SETFL,
@@ -1266,10 +1266,11 @@ bool K3bQProcessPrivate::startDetached(const QString &program, const QStringList
 
     // To catch the startup of the child
     int startedPipe[2];
-    ::pipe(startedPipe);
+    if (::pipe(startedPipe)!=0) qWarning() << "Error creating startedPipe";
+
     // To communicate the pid of the child
     int pidPipe[2];
-    ::pipe(pidPipe);
+    if (::pipe(pidPipe)!=0) qWarning() << "Error creating pidPipe";
 
     pid_t childPid = qt_fork();
     if (childPid == 0) {

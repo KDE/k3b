@@ -225,7 +225,7 @@ void K3b::DeviceWidget::updateDeviceListViews()
 
         if( m_deviceGroup != "root" ) {
             QVector<gid_t> gids(::getgroups(0, nullptr));
-            ::getgroups(gids.size(), gids.data());
+            if (::getgroups(gids.size(), gids.data())<0) qWarning() << "Error getting groups";
 
             QSet<QString> groupNames;
             Q_FOREACH( gid_t gid, gids ) {
