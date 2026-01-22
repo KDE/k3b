@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2026-01-16 11:36+0100\n"
+"PO-Revision-Date: 2026-01-21 12:46+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
 "Language: ia\n"
@@ -1859,7 +1859,7 @@ msgstr ""
 #: k3bdirview.cpp:227
 #, kde-format
 msgid "Mount Failed"
-msgstr ""
+msgstr "Falleva montar"
 
 #: k3bdirview.cpp:228
 #, kde-format
@@ -1869,7 +1869,7 @@ msgstr ""
 #: k3bdirview.cpp:243
 #, kde-format
 msgid "Unmount Failed"
-msgstr ""
+msgstr "Falleva dismontar"
 
 #: k3bdirview.cpp:244
 #, kde-format
@@ -3697,7 +3697,7 @@ msgstr "Relevate:"
 #: misc/k3bimagewritingdialog.cpp:166
 #, kde-format
 msgid "ISO 9660 image"
-msgstr ""
+msgstr "Imagine ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
 #: misc/k3bimagewritingdialog.cpp:281
@@ -3880,7 +3880,7 @@ msgstr ""
 #: misc/k3bimagewritingdialog.cpp:868
 #, kde-format
 msgid "Unknown image type"
-msgstr ""
+msgstr "typo de imagine incognoscite "
 
 #: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
@@ -4716,7 +4716,7 @@ msgstr "Incapace a executar le action<br/>%1"
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Autorisation negate"
 
 #: option/k3bexternalbinwidget.cpp:264
 #, kde-format
@@ -6396,7 +6396,7 @@ msgstr "Remove parte"
 #: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
-msgstr ""
+msgstr "Adde silentio..."
 
 #: projects/k3baudioviewimpl.cpp:78
 #, kde-format
@@ -6437,7 +6437,7 @@ msgstr ""
 #: projects/k3baudioviewimpl.cpp:177
 #, kde-format
 msgid "Add Silence"
-msgstr ""
+msgstr "Adde silentio"
 
 #: projects/k3baudioviewimpl.cpp:181
 #, kde-format
@@ -8643,7 +8643,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:175
 #, kde-format
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
@@ -9584,7 +9584,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:320
 #, kde-format
 msgid "Video Codec:"
-msgstr ""
+msgstr "Codec Video:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboVideoCodec)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:330
