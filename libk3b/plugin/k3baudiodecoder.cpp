@@ -81,7 +81,7 @@ class K3b::AudioDecoder::Private
 {
 public:
     Private()
-        : metaDataCollection(NULL),
+        : metaDataCollection(nullptr),
           resampleState(nullptr),
           resampleData(nullptr),
           inBuffer(nullptr),
@@ -162,7 +162,7 @@ K3b::AudioDecoder::~AudioDecoder()
     delete d->resampleData;
     if (d->resampleState) {
         src_delete(d->resampleState);
-        d->resampleState = NULL;
+        d->resampleState = nullptr;
     }
     delete d;
 }
@@ -538,7 +538,7 @@ void K3b::AudioDecoder::cleanup()
 {
     if (d->metaDataCollection) {
         delete d->metaDataCollection;
-        d->metaDataCollection = NULL;
+        d->metaDataCollection = nullptr;
     }
 }
 

@@ -72,7 +72,7 @@ static void qt_create_pipe(Q_PIPE *pipe, bool in)
     // DuplicateHandle() call).
 
 #if !defined(Q_OS_WINCE)
-    SECURITY_ATTRIBUTES secAtt = { sizeof( SECURITY_ATTRIBUTES ), NULL, TRUE };
+    SECURITY_ATTRIBUTES secAtt = { sizeof( SECURITY_ATTRIBUTES ), nullptr, TRUE };
 
     HANDLE tmpHandle;
     if (in) {                   // stdin
@@ -117,7 +117,7 @@ bool K3bQProcessPrivate::createChannel(Channel &channel)
         return true;
     } else if (channel.type == Channel::Redirect) {
         // we're redirecting the channel to/from a file
-        SECURITY_ATTRIBUTES secAtt = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE };
+        SECURITY_ATTRIBUTES secAtt = { sizeof(SECURITY_ATTRIBUTES), nullptr, TRUE };
 
         if (&channel == &stdinChannel) {
             // try to open in read-only mode
@@ -130,7 +130,7 @@ bool K3bQProcessPrivate::createChannel(Channel &channel)
                                 &secAtt,
                                 OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL,
-                                NULL);
+                                nullptr);
             }, {
                 channel.pipe[0] =
                     CreateFileA(QFSFileEnginePrivate::win95Name(channel.file),
@@ -139,7 +139,7 @@ bool K3bQProcessPrivate::createChannel(Channel &channel)
                                 &secAtt,
                                 OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL,
-                                NULL);
+                                nullptr);
             });
             if (channel.pipe[0] != INVALID_Q_PIPE)
                 return true;
@@ -162,7 +162,7 @@ bool K3bQProcessPrivate::createChannel(Channel &channel)
                                 &secAtt,
                                 creation,
                                 FILE_ATTRIBUTE_NORMAL,
-                                NULL);
+                                nullptr);
             }, {
                 channel.pipe[1] =
                     CreateFileA(QFSFileEnginePrivate::win95Name(channel.file),
@@ -171,11 +171,11 @@ bool K3bQProcessPrivate::createChannel(Channel &channel)
                                 &secAtt,
                                 creation,
                                 FILE_ATTRIBUTE_NORMAL,
-                                NULL);
+                                nullptr);
             });
             if (channel.pipe[1] != INVALID_Q_PIPE) {
                 if (channel.append) {
-                    SetFilePointer(channel.pipe[1], 0, NULL, FILE_END);
+                    SetFilePointer(channel.pipe[1], 0, nullptr, FILE_END);
                 }
                 return true;
             }

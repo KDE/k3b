@@ -206,19 +206,19 @@ K3b::Device::Device::Handle K3b::Device::openDevice( const char* name, bool writ
     deviceHandle = CreateFileA(string,
         GENERIC_READ | GENERIC_WRITE , // at least inquiry needs write access
         FILE_SHARE_READ | (write ? FILE_SHARE_WRITE : 0),
-        NULL,
+        nullptr,
         OPEN_EXISTING,
         0,
-        NULL);
+        nullptr);
 
     if( deviceHandle == INVALID_HANDLE_VALUE )
         deviceHandle = CreateFileA(string,
             GENERIC_READ,
             FILE_SHARE_READ,
-            NULL,
+            nullptr,
             OPEN_EXISTING,
             0,
-            NULL);
+            nullptr);
 
     if (deviceHandle == INVALID_HANDLE_VALUE) {
         int errorCode = GetLastError();

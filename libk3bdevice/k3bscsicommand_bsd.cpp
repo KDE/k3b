@@ -126,7 +126,7 @@ int K3b::Device::ScsiCommand::Private::transport( const Device* device, Transpor
     else
         direction |= (dir & TR_DIR_READ) ? CAM_DIR_IN : CAM_DIR_OUT;
 
-    cam_fill_csio( &(ccb.csio), 1, NULL, direction, MSG_SIMPLE_Q_TAG, (uint8_t*)data, len, sizeof(ccb.csio.sense_data), ccb.csio.cdb_len, 30*1000 );
+    cam_fill_csio( &(ccb.csio), 1, nullptr, direction, MSG_SIMPLE_Q_TAG, (uint8_t*)data, len, sizeof(ccb.csio.sense_data), ccb.csio.cdb_len, 30*1000 );
     int ret = cam_send_ccb( device->handle(), &ccb );
     if( ret < 0 ) {
         qCritical() << "(K3b::Device::ScsiCommand) transport cam_send_ccb failed: ret = " << ret

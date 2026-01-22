@@ -13,10 +13,10 @@ static const int INPUT_BUFFER_SIZE = 5*8192;
 
 
 K3bMad::K3bMad()
-  : madStream(NULL),
-    madFrame(NULL),
-    madSynth(NULL),
-    madTimer(NULL),
+  : madStream(nullptr),
+    madFrame(nullptr),
+    madSynth(nullptr),
+    madTimer(nullptr),
     m_madStructuresInitialized(false),
     m_bInputError(false)
 {
@@ -37,10 +37,10 @@ K3bMad::~K3bMad()
 {
   cleanup();
 
-  delete madStream; madStream = NULL;
-  delete madFrame; madFrame = NULL;
-  delete madSynth; madSynth = NULL;
-  delete madTimer; madTimer = NULL;
+  delete madStream; madStream = nullptr;
+  delete madFrame; madFrame = nullptr;
+  delete madSynth; madSynth = nullptr;
+  delete madTimer; madTimer = nullptr;
 
   delete [] m_inputBuffer;
 }
