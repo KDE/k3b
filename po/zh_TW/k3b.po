@@ -9,20 +9,20 @@
 # Jeff Huang <s8321414@gmail.com>, 2016.
 # pan93412 <pan93412@gmail.com>, 2018, 2019.
 # Frank Weng (a.k.a. Franklin) <franklin at goodhorse dot idv dot tw>, 2010.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025 Kisaragi Hiu <mail@kisaragi-hiu.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Kisaragi Hiu <mail@kisaragi-hiu.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2025-04-07 15:41+0900\n"
+"PO-Revision-Date: 2026-01-23 05:00+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.12.3\n"
+"X-Generator: Lokalize 25.11.70\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #, kde-format
@@ -2433,8 +2433,7 @@ msgid "Overall progress:"
 msgstr "整體進度："
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "停止"
@@ -2482,28 +2481,26 @@ msgid "Finished with errors"
 msgstr "完成，但是發生錯誤"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "您確定要清除目前的專案?"
+msgstr "您確定要停止目前進行中的操作嗎？"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "確定停止操作"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "停止操作"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "接續多區段"
+msgstr "繼續作業"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
