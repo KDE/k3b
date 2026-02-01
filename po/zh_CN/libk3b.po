@@ -25,7 +25,7 @@ msgstr "在写入光盘时防止系统睡眠"
 #: core/k3bcore.cpp:257
 #, kde-format
 msgid "Disable inhibition for disc writing"
-msgstr "禁用光盘写入抑制"
+msgstr "禁用阻止光盘写入"
 
 #: core/k3bglobals.cpp:361
 #, kde-format
