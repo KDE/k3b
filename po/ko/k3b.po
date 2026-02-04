@@ -1,6 +1,6 @@
 # Translation of k3b.po to Korean.
 #
-# SPDX-FileCopyrightText: 2008, 2013, 2015, 2019, 2020, 2021, 2022, 2023, 2024 Shinjo Park <kde@peremen.name>
+# SPDX-FileCopyrightText: 2008, 2013, 2015, 2019, 2020, 2021, 2022, 2023, 2024, 2026 Shinjo Park <kde@peremen.name>
 # Sang-kyun Noh <freesky80@nate.com>, 2007.
 # JungHee Lee <daemul72@gmail.com>, 2019, 2020.
 msgid ""
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 25.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
