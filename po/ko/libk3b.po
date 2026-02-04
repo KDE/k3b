@@ -2232,7 +2232,7 @@ msgstr "부트 이미지에 파티션이 여러 개 있습니다."
 #: projects/datacd/k3bmkisofshandler.cpp:116
 #, kde-format
 msgid "A hard-disk boot image has to contain a single partition."
-msgstr "하드디스크 부트 이미지 파일에는 단 하나의 파티션만 있어야 합니다."
+msgstr "하드 디스크 부트 이미지 파일에는 단 하나의 파티션만 있어야 합니다."
 
 #: projects/datacd/k3bmsinfofetcher.cpp:43
 #, kde-format
@@ -4241,7 +4241,7 @@ msgstr "<p>우선 모의 기록을 시도해 보시기를 권장합니다."
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
 msgid "Cache the data to be written on the harddisk"
-msgstr "기록할 데이터를 하드디스크에 캐시"
+msgstr "기록할 데이터를 하드 디스크에 캐시"
 
 #: tools/k3bstdguiitems.cpp:88
 #, kde-format
