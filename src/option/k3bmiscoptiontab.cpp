@@ -68,7 +68,7 @@ void K3b::MiscOptionTab::readSettings()
     m_checkHideMainWindowWhileWriting->setChecked( c.readEntry( "hide main window while writing", false ) );
     m_checkKeepDialogsOpen->setChecked( c.readEntry( "keep action dialogs open", false ) );
     m_comboActionDialogSettings->setSelectedValue( c.readEntry( "action dialog startup settings",
-                                                                ( int )K3b::InteractionDialog::LOAD_SAVED_SETTINGS ) );
+                                                                int(K3b::InteractionDialog::LOAD_SAVED_SETTINGS) ) );
     m_checkSystemConfig->setChecked( c.readEntry( "check system config", true ) );
 
     m_editTempDir->setUrl( QUrl::fromLocalFile( k3bcore->globalSettings()->defaultTempPath() ) );

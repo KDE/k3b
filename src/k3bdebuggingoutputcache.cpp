@@ -92,7 +92,7 @@ void K3b::DebuggingOutputCache::addOutput( const QString& group, const QString& 
 
         d->cacheSize += line.length();
         if ( d->cacheSize > s_maxCache &&
-            d->cacheSize - ( int )line.length() <= s_maxCache ) {
+             (d->cacheSize - int(line.length())) <= s_maxCache ) {
             d->groups[defaultGroup()].append( "=== K3b debugging output cache overflow ===\n" );
         }
         else if ( d->cacheSize <= s_maxCache ) {

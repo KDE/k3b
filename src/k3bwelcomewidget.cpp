@@ -179,10 +179,10 @@ void K3b::WelcomeWidget::repositionButtons()
     calculateButtons( width(), m_actions.count(), m_buttonSize.width(), m_cols, m_rows );
 
     int availHor = width() - 2*MARGIN;
-    int availVert = height() - MARGIN - HEADER_BUTTON_SPACING - ( int )m_header->size().height() - HEADER_BUTTON_SPACING;
-    availVert -= ( int )m_infoText->size().height() - HEADER_BUTTON_SPACING;
+    int availVert = height() - MARGIN - HEADER_BUTTON_SPACING - int(m_header->size().height()) - HEADER_BUTTON_SPACING;
+    availVert -= int(m_infoText->size().height()) - HEADER_BUTTON_SPACING;
     int leftMargin = MARGIN + (availHor - (m_buttonSize.width()+BUTTON_SPACING)*m_cols)/2;
-    int topOffset = ( int )m_header->size().height() + MARGIN + ( availVert - (m_buttonSize.height()+BUTTON_SPACING)*m_rows - m_buttonMore->height() )/2;
+    int topOffset = int(m_header->size().height()) + MARGIN + ( availVert - (m_buttonSize.height()+BUTTON_SPACING)*m_rows - m_buttonMore->height() )/2;
 
     int row = 0;
     int col = 0;
@@ -215,9 +215,9 @@ void K3b::WelcomeWidget::repositionButtons()
 
 int K3b::WelcomeWidget::heightForWidth(int width) const
 {
-    int ow = (int)m_infoText->idealWidth() + 10;
+    int ow = int(m_infoText->idealWidth()) + 10;
     m_infoText->setTextWidth(ow);
-    int h = (int)m_infoText->size().height();
+    int h = int(m_infoText->size().height());
     int cols, rows;
     calculateButtons(width, m_actions.count(), m_buttonSize.width(), cols, rows);
     int height = MARGIN +
@@ -264,7 +264,7 @@ void K3b::WelcomeWidget::slotThemeChanged()
                          + i18n("K3b %1 Copyright &copy; 1998&ndash;2018 K3b authors",
                                 KAboutData::applicationData().version())
                          + "</body></html>" );
-    setMinimumWidth( 2*MARGIN + qMax(( int )m_header->idealWidth(), m_buttonSize.width()) );
+    setMinimumWidth( 2*MARGIN + qMax( int(m_header->idealWidth()), m_buttonSize.width()) );
     updateBgPix();
     update();
 }
@@ -309,7 +309,7 @@ void K3b::WelcomeWidget::paintEvent( QPaintEvent* )
         p.drawTiledPixmap( rect(), m_bgPixmap );
 
         // rect around the header
-        QRect rect( 10, 10, qMax( ( int )m_header->idealWidth() + MARGIN, width() - MARGIN ), ( int )m_header->size().height() + MARGIN );
+        QRect rect( 10, 10, qMax( int(m_header->idealWidth()) + MARGIN, width() - MARGIN ), int(m_header->size().height()) + MARGIN );
         p.fillRect( rect, theme->backgroundColor() );
         p.drawRect( rect );
 
@@ -318,7 +318,7 @@ void K3b::WelcomeWidget::paintEvent( QPaintEvent* )
 
         // draw the header text
         int pos = MARGIN;
-        pos += qMax( (width()-2*MARGIN-( int )m_header->idealWidth())/2, 0 );
+        pos += qMax( (width()-2*MARGIN-int(m_header->idealWidth()))/2, 0 );
         p.save();
         p.translate( pos, MARGIN );
         m_header->drawContents( &p );
@@ -326,7 +326,7 @@ void K3b::WelcomeWidget::paintEvent( QPaintEvent* )
 
         // draw the info box
         //    int boxWidth = MARGIN + m_infoText->widthUsed();
-        int boxHeight = 10 + ( int )m_infoText->size().height();
+        int boxHeight = 10 + int(m_infoText->size().height());
         QRect infoBoxRect( 10/*qMax( (width()-MARGIN-m_infoText->widthUsed())/2, 10 )*/,
                            height()-10-boxHeight,
                            width()-MARGIN/*boxWidth*/,

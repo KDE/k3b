@@ -121,7 +121,7 @@ void K3b::BurnProgressDialog::slotDeviceBuffer( int b )
 
 void K3b::BurnProgressDialog::slotWriteSpeed( int s, K3b::Device::SpeedMultiplicator multiplicator )
 {
-    m_labelWritingSpeed->setText( QString("%1 KB/s (%2x)").arg(s).arg(QLocale::system().toString((double)s/(double)multiplicator,'g',2)) );
+    m_labelWritingSpeed->setText( QString("%1 KB/s (%2x)").arg(s).arg(QLocale::system().toString(double(s)/double(multiplicator),'g',2)) );
 }
 
 #include "moc_k3bburnprogressdialog.cpp"

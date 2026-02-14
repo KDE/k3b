@@ -81,7 +81,7 @@ bool K3b::LsofWrapper::checkDevice( K3b::Device::Device* dev )
             qDebug() << "(K3b::LsofWrapper) matched: app: " << app << " pid: " << pid;
 
             // we don't care about ourselves using the device ;)
-            if( pid != (int)::getpid() )
+            if( pid != int(::getpid()) )
                 d->apps.append( createProcess( app, pid ) );
 
             ++it;

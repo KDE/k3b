@@ -30,7 +30,7 @@ bool updateDevicePermissions( ::group* g, const QString& device )
         if( ::chmod( QFile::encodeName(device), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
             success = false;
 
-        if( ::chown( QFile::encodeName(device), (gid_t)-1, g->gr_gid ) )
+        if( ::chown( QFile::encodeName(device), gid_t(-1), g->gr_gid ) )
             success = false;
     }
     else {
@@ -44,8 +44,8 @@ bool updateDevicePermissions( ::group* g, const QString& device )
 bool updateProgramPermissions( ::group* g, const QString& path, bool suid )
 {
     bool success = true;
-    if( g != 0 ) {
-        if( ::chown( QFile::encodeName(path), (gid_t)0, g->gr_gid ) )
+    if( g != nullptr ) {
+        if( ::chown( QFile::encodeName(path), gid_t(0), g->gr_gid ) )
             success = false;
 
         int perm = 0;

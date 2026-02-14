@@ -359,9 +359,9 @@ QString K3b::DiskInfoView::createMediaInfoItems( const K3b::Medium& medium )
                 if( K3b::Device::isCdMedia( info.mediaType() ) )
                     speedStr.append( QString( "%1x (%2 KB/s)" ).arg( speed/K3b::Device::SPEED_FACTOR_CD ).arg( speed ) );
                 else if( K3b::Device::isDvdMedia( info.mediaType() ) )
-                    speedStr.append( QString::asprintf( "%.1fx (%d KB/s)", (double)speed / ( double )K3b::Device::SPEED_FACTOR_DVD, speed ) );
+                    speedStr.append( QString::asprintf( "%.1fx (%d KB/s)", double(speed) / double(K3b::Device::SPEED_FACTOR_DVD), speed ) );
                 else if ( K3b::Device::isBdMedia( info.mediaType() ) )
-                    speedStr.append( QString::asprintf( "%.1fx (%d KB/s)", (double)speed / ( double )K3b::Device::SPEED_FACTOR_BD, speed ) );
+                    speedStr.append( QString::asprintf( "%.1fx (%d KB/s)", double(speed) / double(K3b::Device::SPEED_FACTOR_BD), speed ) );
             }
         }
 

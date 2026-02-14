@@ -619,7 +619,7 @@ KIO::filesize_t K3b::MediaCopyDialog::neededSize() const
     if( medium.diskInfo().diskState() == K3b::Device::STATE_NO_MEDIA )
         return 0;
     else if( medium.diskInfo().mediaType() & (K3b::Device::MEDIA_DVD_RW_OVWR|K3b::Device::MEDIA_DVD_PLUS_RW) )
-        return (KIO::filesize_t)medium.iso9660Descriptor().volumeSpaceSize * (KIO::filesize_t)2048;
+        return KIO::filesize_t(medium.iso9660Descriptor().volumeSpaceSize) * KIO::filesize_t(2048);
     else if ( m_comboCopyMode->currentIndex() == 0 )
         return medium.diskInfo().size().mode1Bytes();
     else

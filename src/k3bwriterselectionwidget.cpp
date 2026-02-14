@@ -287,7 +287,7 @@ void K3b::WriterSelectionWidget::slotRefreshWriterSpeeds()
                     insertSpeedItem( i*x1Speed );
                     // a little hack to handle the stupid 2.4x DVD speed
                     if( i == 2 && x1Speed == K3b::Device::SPEED_FACTOR_DVD )
-                        insertSpeedItem( (int)(2.4*( double )K3b::Device::SPEED_FACTOR_DVD) );
+                        insertSpeedItem( int(2.4*double(K3b::Device::SPEED_FACTOR_DVD)) );
                 }
             }
             else {
@@ -420,7 +420,7 @@ void K3b::WriterSelectionWidget::setSpeed( int s )
 
 void K3b::WriterSelectionWidget::setWritingApp( K3b::WritingApp app )
 {
-    m_comboWritingApp->setSelectedValue( ( int )app );
+    m_comboWritingApp->setSelectedValue( int(app) );
 }
 
 

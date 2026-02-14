@@ -429,7 +429,7 @@ QVariant K3b::MetaItemModel::data( const QModelIndex& index, int role ) const
                 return node->place()->icon;
 
             case DataProjectModel::ItemTypeRole:
-                return (int) DataProjectModel::DirItemType;
+                return int(DataProjectModel::DirItemType);
 
             default:
                 return QVariant();

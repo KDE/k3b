@@ -295,11 +295,11 @@ void K3b::JobProgressDialog::slotProcessedSize( int processed, int size )
 //#if KDE_IS_VERSION( 4, 3, 80 )
     m_labelProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
                                           "%1 of %2",
-                                          KFormat().formatByteSize( ( double )( ( qulonglong )processed*1024ULL*1024ULL ),
+                                          KFormat().formatByteSize( double( qulonglong(processed)*1024ULL*1024ULL ),
                                                                     1,
                                                                     KFormat::DefaultBinaryDialect,
                                                                     KFormat::UnitMegaByte ),
-                                          KFormat().formatByteSize( ( double )( ( qulonglong )size*1024ULL*1024ULL ),
+                                          KFormat().formatByteSize( double( qulonglong(size)*1024ULL*1024ULL ),
                                                                     1,
                                                                     KFormat::DefaultBinaryDialect,
                                                                     KFormat::UnitMegaByte ) ) );
@@ -317,11 +317,11 @@ void K3b::JobProgressDialog::slotProcessedSubSize( int processedTrackSize, int t
 //#if KDE_IS_VERSION( 4, 3, 80 )
     m_labelSubProcessedSize->setText( i18nc( "%1 and %2 are byte sizes formatted via KFormat::formatByteSize",
                                              "%1 of %2",
-                                             KFormat().formatByteSize( ( double )( ( qulonglong )processedTrackSize*1024ULL*1024ULL ),
+                                             KFormat().formatByteSize( double( qulonglong(processedTrackSize)*1024ULL*1024ULL ),
                                                                        1,
                                                                        KFormat::DefaultBinaryDialect,
                                                                        KFormat::UnitMegaByte ),
-                                             KFormat().formatByteSize( ( double )( ( qulonglong )trackSize*1024ULL*1024ULL ),
+                                             KFormat().formatByteSize( double( qulonglong(trackSize)*1024ULL*1024ULL ),
                                                                        1,
                                                                        KFormat::DefaultBinaryDialect,
                                                                        KFormat::UnitMegaByte ) ) );
