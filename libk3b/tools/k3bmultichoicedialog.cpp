@@ -22,7 +22,7 @@ class K3b::MultiChoiceDialog::Private
 {
 public:
     Private()
-        : buttonLayout(0) {
+        : buttonLayout(nullptr) {
     }
 
     QList<QPushButton*> buttons;
@@ -54,7 +54,7 @@ static QIcon themedMessageBoxIcon(QMessageBox::Icon icon)
         break;
     }
 
-    QIcon ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DefaultState, QStringList(), 0, true);
+    QIcon ret = KIconLoader::global()->loadIcon(icon_name, KIconLoader::NoGroup, KIconLoader::SizeLarge, KIconLoader::DefaultState, QStringList(), nullptr, true);
 
     if (ret.isNull()) {
         return QMessageBox::standardIcon(icon);

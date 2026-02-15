@@ -20,7 +20,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit VcdProjectModel( VcdDoc* doc, QObject* parent = 0 );
+        explicit VcdProjectModel( VcdDoc* doc, QObject* parent = nullptr );
         ~VcdProjectModel() override;
 
         enum Columns {

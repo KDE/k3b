@@ -29,7 +29,7 @@ BootItem* BootImageModel::bootItemForIndex( const QModelIndex& index ) const
     if( index.isValid() && index.row() >= 0 && index.row() < m_doc->bootImages().size() )
         return m_doc->bootImages().at( index.row() );
     else
-        return 0;
+        return nullptr;
 }
 
 

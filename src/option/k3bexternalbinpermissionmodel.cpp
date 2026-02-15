@@ -195,13 +195,13 @@ const ExternalBin* ExternalBinPermissionModel::programForIndex( const QModelInde
     if( index.isValid() )
         return static_cast<const ExternalBin*>( index.internalPointer() );
     else
-        return 0;
+        return nullptr;
 }
 
 
 QModelIndex ExternalBinPermissionModel::indexForProgram( const ExternalBin* program ) const
 {
-    if( program != 0 && !d->programs.isEmpty() ) {
+    if( program != nullptr && !d->programs.isEmpty() ) {
         int row = d->programs.indexOf( program );
         return createIndex( row, 0, const_cast<ExternalBin*>( program ) );
     }
@@ -298,7 +298,7 @@ QModelIndex ExternalBinPermissionModel::index( int row, int column, const QModel
 {
     if( hasIndex(row, column, parent) && !parent.isValid() ) {
         const ExternalBin* program = d->programs.at( row );
-        if( program != 0 )
+        if( program != nullptr )
             return createIndex( row, column, const_cast<ExternalBin*>( program ) );
         else
             return QModelIndex();
@@ -333,7 +333,7 @@ int ExternalBinPermissionModel::columnCount( const QModelIndex& parent ) const
 
 QModelIndex ExternalBinPermissionModel::buddy( const QModelIndex& index ) const
 {
-    if( programForIndex( index ) != 0 )
+    if( programForIndex( index ) != nullptr )
         return ExternalBinPermissionModel::index( index.row(), ProgramColumn, index.parent() );
     else
         return index;

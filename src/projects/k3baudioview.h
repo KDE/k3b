@@ -35,7 +35,7 @@ namespace K3b {
         void addUrls( const QList<QUrl>& urls ) override;
 
     protected:
-        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = nullptr ) override;
 
     private Q_SLOTS:
         void slotPlayerStateChanged();

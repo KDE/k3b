@@ -115,7 +115,7 @@ public:
           idCnt(1),
           mouseAt(true),
           draggingRangeEnd(false),
-          draggedMarker(0),
+          draggedMarker(nullptr),
           margin(5) {
     }
 
@@ -582,7 +582,7 @@ void K3b::AudioEditorWidget::fixupOverlappingRanges( int rangeId )
     Range* r = getRange( rangeId );
     Range::List::iterator range = d->ranges.begin();
 
-    while( r != 0 && range != d->ranges.end() ) {
+    while( r != nullptr && range != d->ranges.end() ) {
         if( range->id != rangeId ) {
 
             // remove the range if it is covered completely
@@ -631,7 +631,7 @@ void K3b::AudioEditorWidget::fixupOverlappingRanges( int rangeId )
 void K3b::AudioEditorWidget::mousePressEvent( QMouseEvent* e )
 {
     d->draggedRangeId = 0;
-    d->draggedMarker = 0;
+    d->draggedMarker = nullptr;
 
     bool end;
     if( Range* r = findRangeEdge( e->pos(), &end ) ) {
@@ -667,7 +667,7 @@ void K3b::AudioEditorWidget::mouseReleaseEvent( QMouseEvent* e )
     }
 
     d->draggedRangeId = 0;
-    d->draggedMarker = 0;
+    d->draggedMarker = nullptr;
     d->movedRangeId = 0;
 
     QFrame::mouseReleaseEvent(e);
@@ -780,7 +780,7 @@ K3b::AudioEditorWidget::Range* K3b::AudioEditorWidget::getRange( int i ) const
         if( (*it).id == i )
             return &( *it );
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -797,7 +797,7 @@ K3b::AudioEditorWidget::Range* K3b::AudioEditorWidget::findRange( const QPoint& 
             return &range;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -826,7 +826,7 @@ K3b::AudioEditorWidget::Range* K3b::AudioEditorWidget::findRangeEdge( const QPoi
             return &range;
         }
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -836,7 +836,7 @@ K3b::AudioEditorWidget::Marker* K3b::AudioEditorWidget::getMarker( int i ) const
         if( (*it).id == i )
             return &( *it );
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -851,7 +851,7 @@ K3b::AudioEditorWidget::Marker* K3b::AudioEditorWidget::findMarker( const QPoint
             return &marker;
     }
 
-    return 0;
+    return nullptr;
 }
 
 

@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MediaFormattingDialog( QWidget* = 0 );
+        explicit MediaFormattingDialog( QWidget* = nullptr );
         ~MediaFormattingDialog() override;
 
     public Q_SLOTS:

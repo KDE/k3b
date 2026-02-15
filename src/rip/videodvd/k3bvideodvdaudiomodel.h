@@ -36,7 +36,7 @@ namespace K3b {
         };
         
     public:
-        VideoDVDAudioModel( const VideoDVD::VideoDVD& dvd, const QList<int>& titles, QObject* parent = 0 );
+        VideoDVDAudioModel( const VideoDVD::VideoDVD& dvd, const QList<int>& titles, QObject* parent = nullptr );
         ~VideoDVDAudioModel() override;
         
         const VideoDVD::Title* titleForIndex( const QModelIndex& index ) const;

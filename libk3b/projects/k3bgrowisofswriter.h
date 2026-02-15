@@ -21,7 +21,7 @@ namespace K3b {
 
     public:
         GrowisofsWriter( Device::Device*, JobHandler*,
-                         QObject* parent = 0 );
+                         QObject* parent = nullptr );
         ~GrowisofsWriter() override;
 
         bool active() const override;

@@ -619,13 +619,13 @@ void K3b::SystemProblemDialog::checkSystem(QWidget* parent, NotificationLevel le
         }
     }
     else {
-        static K3b::SystemProblemDialog* s_openDlg = 0;
+        static K3b::SystemProblemDialog* s_openDlg = nullptr;
         if( s_openDlg )
             s_openDlg->close();
         K3b::SystemProblemDialog dlg( problems, showDeviceSettingsButton, showBinSettingsButton, forceCheck, parent );
         s_openDlg = &dlg;
         dlg.exec();
-        s_openDlg = 0;
+        s_openDlg = nullptr;
     }
 
     // remember which version of K3b checked the system the last time
@@ -682,7 +682,7 @@ QList<K3b::Device::Device*> K3b::SystemProblemDialog::checkForAutomounting()
     QList<K3b::Device::Device *> l;
     ::setfsent();
 
-    struct fstab * mountInfo = 0;
+    struct fstab * mountInfo = nullptr;
     while( (mountInfo = ::getfsent()) )
     {
         // check if the entry corresponds to a device

@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit GrowisofsHandler( QObject* parent = 0 );
+        explicit GrowisofsHandler( QObject* parent = nullptr );
         ~GrowisofsHandler() override;
 
         enum ErrorType {
@@ -48,7 +48,7 @@ namespace K3b {
          * This will basically reset the error type
          * @param dao was growisofs called with DAO?
          */
-        void reset( K3b::Device::Device* = 0, bool dao = false );
+        void reset( K3b::Device::Device* = nullptr, bool dao = false );
 
         void handleStart();
         void handleLine( const QString& );

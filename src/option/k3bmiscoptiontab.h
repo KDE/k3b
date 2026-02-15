@@ -17,7 +17,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MiscOptionTab(QWidget *parent=0);
+        explicit MiscOptionTab(QWidget *parent = nullptr);
         ~MiscOptionTab() override;
 
         void readSettings();

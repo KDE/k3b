@@ -91,7 +91,7 @@ public:
             // if you add "= 4" here, increase the number of bits below
         };
 
-        Channel() : process(0), notifier(0), type(Normal), closed(false), append(false)
+        Channel() : process(nullptr), notifier(nullptr), type(Normal), closed(false), append(false)
         {
             pipe[0] = INVALID_Q_PIPE;
             pipe[1] = INVALID_Q_PIPE;
@@ -199,7 +199,7 @@ public:
 #endif
 
     static bool startDetached(const QString &program, const QStringList &arguments, const QString &workingDirectory = QString(),
-                              qint64 *pid = 0);
+                              qint64 *pid = nullptr);
 
     int exitCode;
     ::QProcess::ExitStatus exitStatus;

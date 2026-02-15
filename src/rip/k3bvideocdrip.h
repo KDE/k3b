@@ -23,7 +23,7 @@ class VideoCdRip : public Job
         Q_OBJECT
 
     public:
-        VideoCdRip( JobHandler*, VideoCdRippingOptions* options, QObject* parent = 0 );
+        VideoCdRip( JobHandler*, VideoCdRippingOptions* options, QObject* parent = nullptr );
         ~VideoCdRip() override;
 
         enum { CDROM, BIN_IMAGE, NRG_IMAGE };

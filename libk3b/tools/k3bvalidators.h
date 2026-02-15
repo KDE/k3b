@@ -17,7 +17,7 @@ namespace K3b {
     class LIBK3B_EXPORT CharValidator : public QValidator
     {
     public:
-        explicit CharValidator( QObject* parent = 0 );
+        explicit CharValidator( QObject* parent = nullptr );
 
         virtual State validateChar( const QChar& ) const = 0;
 
@@ -41,7 +41,7 @@ namespace K3b {
     class LIBK3B_EXPORT Latin1Validator : public CharValidator
     {
     public:
-        explicit Latin1Validator( QObject* parent = 0 );
+        explicit Latin1Validator( QObject* parent = nullptr );
 
         State validateChar( const QChar& ) const override;
     };
@@ -50,7 +50,7 @@ namespace K3b {
     class LIBK3B_EXPORT AsciiValidator : public Latin1Validator
     {
     public:
-        explicit AsciiValidator( QObject* parent = 0 );
+        explicit AsciiValidator( QObject* parent = nullptr );
 
         State validateChar( const QChar& ) const override;
     };
@@ -96,13 +96,13 @@ namespace K3b {
          * <li>S: serial number (digits)</li>
          * </ul>
          */
-        LIBK3B_EXPORT Validator* isrcValidator( QObject* parent = 0 );
+        LIBK3B_EXPORT Validator* isrcValidator( QObject* parent = nullptr );
 
         /**
          * This needs to be replaced by something better in the future...
          * Even the name sucks!
          */
-        LIBK3B_EXPORT Validator* iso9660Validator( bool allowEmpty = true, QObject* parent = 0 );
+        LIBK3B_EXPORT Validator* iso9660Validator( bool allowEmpty = true, QObject* parent = nullptr );
 
         /**
          * (1) d-characters are: A-Z, 0-9, _ (see ISO-9660:1988, Annex A, Table 15)
@@ -116,7 +116,7 @@ namespace K3b {
 
         LIBK3B_EXPORT Validator* iso646Validator( int type = Iso646_a,
                                                   bool AllowLowerCase = false,
-                                                  QObject* parent = 0 );
+                                                  QObject* parent = nullptr );
     }
 }
 

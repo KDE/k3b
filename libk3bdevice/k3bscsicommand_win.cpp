@@ -75,14 +75,14 @@ int K3b::Device::ScsiCommand::transport( TransportDirection dir,
     d->m_cmd.spt.SenseInfoLength    = SENSE_LEN_SPTI;
     d->m_cmd.spt.DataTransferLength = len;
     d->m_cmd.spt.TimeOutValue       = 2;
-    d->m_cmd.spt.DataBuffer         = len ? data : NULL;
+    d->m_cmd.spt.DataBuffer         = len ? data : nullptr;
     d->m_cmd.spt.SenseInfoOffset    = offsetof(SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER, ucSenseBuf);
 
     status = DeviceIoControl( m_device->handle(),
                 IOCTL_SCSI_PASS_THROUGH_DIRECT,
                 &(d->m_cmd), sizeof(SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER),
                 &(d->m_cmd), sizeof(SCSI_PASS_THROUGH_DIRECT_WITH_BUFFER),
-                &returned, NULL);
+                &returned, nullptr);
 
     if( needToClose )
         m_device->close();

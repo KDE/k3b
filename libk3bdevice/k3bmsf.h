@@ -75,7 +75,7 @@ namespace K3b
          * \li 100:23:57 - treated as 100 minutes, 23 seconds, and 57 frames
          * \li 100:23.57 - treated as 100 minutes, 23 seconds, and 57 frames
          */
-        static Msf fromString( const QString&, bool* ok = 0 );
+        static Msf fromString( const QString&, bool* ok = nullptr );
 
         /**
          * @param ms seconds

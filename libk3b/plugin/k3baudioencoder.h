@@ -30,7 +30,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioEncoder( QObject* parent = 0 );
+        explicit AudioEncoder( QObject* parent = nullptr );
         ~AudioEncoder() override;
 
         // TODO: if the following methods are to be activated the config methods in

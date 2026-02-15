@@ -107,7 +107,8 @@ void FreeBootTable(boot_head *boot) {
 		free(be);
 		be=next;
 	}
-	boot->defentry=NULL;
+
+	boot->defentry=nullptr;
 }
 
 int BootImageSize(readfunc*,int media,sector_t,int len,void*) {
@@ -140,7 +141,7 @@ static boot_entry *CreateBootEntry(char *be) {
 	boot_entry *entry;
 
 	entry = reinterpret_cast<boot_entry *>(malloc(sizeof(boot_entry)));
-	if (!entry) return NULL;
+	if (!entry) return nullptr;
 	memset(entry, 0, sizeof(boot_entry));
 	memcpy(entry->data,be,0x20);
 	return entry;
@@ -151,11 +152,11 @@ int ReadBootTable(readfunc *read,sector_t sector, boot_head *head, void *udata) 
 	char buf[2048], *c, *be;
 	int i,end=0;
 	unsigned short sum;
-	boot_entry *defcur=NULL,*deflast=NULL;
-	struct validation_entry *ventry=NULL;
+	boot_entry *defcur=nullptr,*deflast=nullptr;
+	struct validation_entry *ventry=nullptr;
 
-	head->sections=NULL;
-	head->defentry=NULL;
+	head->sections=nullptr;
+	head->defentry=nullptr;
 	while (1) {
 		be = static_cast<char *>(buf);
 		if ( read(be, sector, 1, udata) != 1 ) goto err;
@@ -213,12 +214,12 @@ iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata) {
 
 	int i;
 	struct iso_volume_descriptor buf;
-	iso_vol_desc *first=NULL,*current=NULL,*prev=NULL;
+	iso_vol_desc *first=nullptr,*current=nullptr,*prev=nullptr;
 
 	for (i=0;i<100;i++) {
 		if (read( reinterpret_cast<char *>(&buf), sector+i+16, 1, udata) != 1 ) {
 			FreeISO9660(first);
-			return NULL;
+			return nullptr;
 		}
 		if (!memcmp(ISO_STANDARD_ID,&buf.id,5)) {
 			switch ( isonum_711(&buf.type[0]) ) {
@@ -229,10 +230,10 @@ iso_vol_desc *ReadISO9660(readfunc *read,sector_t sector,void *udata) {
 					current = reinterpret_cast<iso_vol_desc *>(malloc(sizeof(iso_vol_desc)));
 					if (!current) {
 						FreeISO9660(first);
-						return NULL;
+						return nullptr;
 					}
 					current->prev=prev;
-					current->next=NULL;
+					current->next=nullptr;
 					if (prev) prev->next=current;
 					memcpy(&(current->data),&buf,2048);
 					if (!first) first=current;
@@ -272,11 +273,11 @@ void FreeISO9660(iso_vol_desc *data) {
 void FreeRR(rr_entry *rrentry) {
 	if (rrentry->name) {
 		free(rrentry->name);
-		rrentry->name=NULL;
+		rrentry->name=nullptr;
 	}
 	if (rrentry->sl) {
 		free(rrentry->sl);
-		rrentry->sl = NULL;
+		rrentry->sl = nullptr;
 	}
 }
 
@@ -811,7 +812,7 @@ int main(int argc, char *argv[]) {
 		return -1;
 	}
 
-	desc=ReadISO9660(&readf,sector,NULL);
+	desc=ReadISO9660(&readf,sector,nullptr);
 	if (!desc) {
 		printf("No volume descriptors\n");
 		return -1;
@@ -828,7 +829,7 @@ int main(int argc, char *argv[]) {
 				dumpboot(bootdesc);
 				if ( !memcmp(EL_TORITO_ID,bootdesc->system_id,ISODCL(8,39)) ) {
 
-					if (ReadBootTable(&readf,isonum_731(bootdesc->boot_catalog),&boot,NULL)) {
+					if (ReadBootTable(&readf,isonum_731(bootdesc->boot_catalog),&boot,nullptr)) {
 						printf("Boot Catalog Error\n");
 					} else {
 						dumpbootcat(&boot);
@@ -846,7 +847,7 @@ int main(int argc, char *argv[]) {
 				dumpdesc((struct iso_primary_descriptor*) &desc->data);
 				printf("\n\n--------------- Directory structure: -------------------\n\n");
 				dirs=0;files=0;
-				mycallb( &( ((struct iso_primary_descriptor*) &desc->data)->root_directory_record), NULL );
+				mycallb( &( ((struct iso_primary_descriptor*) &desc->data)->root_directory_record), nullptr );
 				printf("\nnumber of directories: %d\n",dirs);
 				printf("\nnumber of files: %d\n",files);
 				break;

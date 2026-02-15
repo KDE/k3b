@@ -46,9 +46,9 @@ class K3bMadDecoder::MadDecoderPrivate
 {
 public:
     MadDecoderPrivate()
-        : outputBuffer(0),
-          outputPointer(0),
-          outputBufferEnd(0) {
+        : outputBuffer(nullptr),
+          outputPointer(nullptr),
+          outputBufferEnd(nullptr) {
         mad_header_init( &firstHeader );
     }
 

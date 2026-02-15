@@ -29,7 +29,7 @@
 
 K3b::TempDirSelectionWidget::TempDirSelectionWidget( QWidget *parent )
     : QGroupBox( parent ),
-      m_labelCdSize(0),
+      m_labelCdSize(nullptr),
       m_requestedSize(0),
       m_defaultImageFileName( "k3b_image.iso" )
 {

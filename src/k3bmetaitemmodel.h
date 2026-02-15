@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MetaItemModel( QObject* parent = 0 );
+        explicit MetaItemModel( QObject* parent = nullptr );
         ~MetaItemModel() override;
 
         QModelIndex indexForSubModel( QAbstractItemModel* model ) const;

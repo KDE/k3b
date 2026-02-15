@@ -41,7 +41,7 @@ Theme* ThemeModel::themeForIndex( const QModelIndex& index ) const
     if( index.isValid() && index.row() >= 0 && index.row() < m_themeManager->themes().size() )
         return m_themeManager->themes().at( index.row() );
     else
-        return 0;
+        return nullptr;
 }
 
 

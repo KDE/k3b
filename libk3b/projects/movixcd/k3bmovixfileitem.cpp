@@ -29,7 +29,7 @@ K3b::MovixFileItem::MovixFileItem( const QString& fileName,
                                    K3b::MovixDoc& doc,
                                    const QString& k3bName )
     : K3b::FileItem( fileName, doc, k3bName ),
-      m_subTitleItem(0)
+      m_subTitleItem(nullptr)
 {
 }
 
@@ -38,7 +38,7 @@ K3b::MovixFileItem::~MovixFileItem()
 {
     if( m_subTitleItem ) {
         delete m_subTitleItem;
-        m_subTitleItem = 0;
+        m_subTitleItem = nullptr;
     }
 
     // remove this from parentdir

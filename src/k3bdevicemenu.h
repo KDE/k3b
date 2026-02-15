@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DeviceMenu( QWidget* parent = 0 );
+        explicit DeviceMenu( QWidget* parent = nullptr );
         ~DeviceMenu() override;
 
     private:

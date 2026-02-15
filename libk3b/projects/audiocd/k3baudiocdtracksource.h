@@ -38,7 +38,7 @@ namespace K3b {
                             int cdTrackNumber,
                             const QString& artist, const QString& title,
                             const QString& cdartist, const QString& cdtitle,
-                            Device::Device* dev = 0 );
+                            Device::Device* dev = nullptr );
 
         /**
          * Constructor to create sources when loading from a project file without toc information
@@ -61,7 +61,7 @@ namespace K3b {
         QString type() const override;
         QString sourceComment() const override;
         AudioDataSource* copy() const override;
-        QIODevice* createReader( QObject* parent = 0 ) override;
+        QIODevice* createReader( QObject* parent = nullptr ) override;
 
         /**
          * Searches for the corresponding Audio CD and returns the device in which it has

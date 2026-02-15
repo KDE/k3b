@@ -217,10 +217,10 @@ public:
 };
 
 K3b::MainWindow::MainWindow()
-    : KXmlGuiWindow(0),
+    : KXmlGuiWindow(nullptr),
       d( new Private )
 {
-    d->lastDoc = 0;
+    d->lastDoc = nullptr;
 
     setPlainCaption( i18n("K3b - The CD and DVD Kreator") );
 
@@ -541,7 +541,7 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
     qDebug();
 
     // create the proper K3b::View (maybe we should put this into some other class like K3b::ProjectManager)
-    K3b::View* view = 0;
+    K3b::View* view = nullptr;
     switch( doc->type() ) {
     case K3b::Doc::AudioProject:
         view = new K3b::AudioView( static_cast<K3b::AudioDoc*>(doc), d->documentTab );
@@ -568,7 +568,7 @@ void K3b::MainWindow::createClient( K3b::Doc* doc )
         break;
     }
 
-    if( view != 0 ) {
+    if( view != nullptr ) {
         doc->setView( view );
         view->setWindowTitle( doc->URL().fileName() );
 
@@ -585,7 +585,7 @@ K3b::View* K3b::MainWindow::activeView() const
     if( Doc* doc = activeDoc() )
         return qobject_cast<View*>( doc->view() );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -604,7 +604,7 @@ K3b::Doc* K3b::MainWindow::openDocument(const QUrl& url)
     //
     if( isDiscImage( url ) ) {
         slotWriteImage( url );
-        return 0;
+        return nullptr;
     }
     else {
         // see if it's an audio cue file
@@ -624,9 +624,9 @@ K3b::Doc* K3b::MainWindow::openDocument(const QUrl& url)
 
             doc = k3bappcore->projectManager()->openProject( url );
 
-            if( doc == 0 ) {
+            if( doc == nullptr ) {
                 KMessageBox::error (this,i18n("Could not open document."), i18n("Error"));
-                return 0;
+                return nullptr;
             }
 
             d->actionFileOpenRecent->addUrl(url);
@@ -952,11 +952,11 @@ bool K3b::MainWindow::fileSave( K3b::Doc* doc )
 {
     slotStatusMsg(i18n("Saving file..."));
 
-    if( doc == 0 ) {
+    if( doc == nullptr ) {
         doc = activeDoc();
     }
 
-    if( doc != 0 ) {
+    if( doc != nullptr ) {
         if( !doc->isSaved() )
             return fileSaveAs( doc );
         else if( !k3bappcore->projectManager()->saveProject( doc, doc->URL()) )
@@ -1049,7 +1049,7 @@ void K3b::MainWindow::closeProject( K3b::Doc* doc )
     if( factory() ) {
         if( d->lastDoc == doc ) {
             factory()->removeClient( static_cast<K3b::View*>(d->lastDoc->view()) );
-            d->lastDoc = 0;
+            d->lastDoc = nullptr;
         }
     }
 
@@ -1140,7 +1140,7 @@ K3b::Doc* K3b::MainWindow::slotNewDataDoc()
 
 K3b::Doc* K3b::MainWindow::slotContinueMultisession()
 {
-    return K3b::DataMultisessionImportDialog::importSession( 0, this );
+    return K3b::DataMultisessionImportDialog::importSession( nullptr, this );
 }
 
 
@@ -1215,7 +1215,7 @@ void K3b::MainWindow::slotCurrentDocChanged()
             qDebug() << "(K3b::MainWindow) ERROR: could not get KXMLGUIFactory instance.";
     }
     else
-        k3bappcore->projectManager()->setActive( 0L );
+        k3bappcore->projectManager()->setActive( nullptr );
 
     if( k3bappcore->projectManager()->isEmpty() ) {
         slotStateChanged( "state_project_active", KXMLGUIClient::StateReverse );
@@ -1311,7 +1311,7 @@ void K3b::MainWindow::formatMedium( K3b::Device::Device* dev )
 
 void K3b::MainWindow::slotFormatMedium()
 {
-    formatMedium( 0 );
+    formatMedium( nullptr );
 }
 
 
@@ -1325,7 +1325,7 @@ void K3b::MainWindow::mediaCopy( K3b::Device::Device* dev )
 
 void K3b::MainWindow::slotMediaCopy()
 {
-    mediaCopy( 0 );
+    mediaCopy( nullptr );
 }
 
 
@@ -1448,7 +1448,7 @@ void K3b::MainWindow::slotClearProject()
 
 void K3b::MainWindow::slotCddaRip()
 {
-    cddaRip( 0 );
+    cddaRip( nullptr );
 }
 
 
@@ -1484,7 +1484,7 @@ void K3b::MainWindow::videoDvdRip( K3b::Device::Device* dev )
 
 void K3b::MainWindow::slotVideoDvdRip()
 {
-    videoDvdRip( 0 );
+    videoDvdRip( nullptr );
 }
 
 
@@ -1505,7 +1505,7 @@ void K3b::MainWindow::videoCdRip( K3b::Device::Device* dev )
 
 void K3b::MainWindow::slotVideoCdRip()
 {
-    videoCdRip( 0 );
+    videoCdRip( nullptr );
 }
 
 

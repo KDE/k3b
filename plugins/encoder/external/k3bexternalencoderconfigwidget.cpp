@@ -105,7 +105,7 @@ K3bExternalEncoderSettingsWidget::K3bExternalEncoderSettingsWidget(QObject *pare
              this, SLOT(slotRemoveCommand()) );
 
     m_editDlg = new K3bExternalEncoderEditDialog( widget() );
-    slotSelectionChanged( 0 );
+    slotSelectionChanged( nullptr );
 }
 
 
@@ -129,8 +129,8 @@ void K3bExternalEncoderSettingsWidget::slotNewCommand()
 
 void K3bExternalEncoderSettingsWidget::slotSelectionChanged( QTreeWidgetItem* current )
 {
-    m_buttonRemove->setEnabled( current != 0 );
-    m_buttonEdit->setEnabled( current != 0 );
+    m_buttonRemove->setEnabled( current != nullptr );
+    m_buttonEdit->setEnabled( current != nullptr );
 }
 
 

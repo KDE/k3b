@@ -49,7 +49,7 @@ bool K3b::operator>( const K3b::FileItem::Id& id1, const K3b::FileItem::Id& id2 
 
 K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc& doc, const QString& k3bName, const ItemFlags& flags )
     : K3b::DataItem( flags | FILE ),
-      m_replacedItemFromOldSession(0),
+      m_replacedItemFromOldSession(nullptr),
       m_localPath(filePath)
 {
     k3b_struct_stat statBuf;
@@ -62,17 +62,17 @@ K3b::FileItem::FileItem( const QString& filePath, K3b::DataDoc& doc, const QStri
             init( filePath, k3bName, doc, &statBuf, &followedStatBuf );
         }
         else {
-            init( filePath, k3bName, doc, &statBuf, 0 );
+            init( filePath, k3bName, doc, &statBuf, nullptr );
             qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << Qt::endl;
         }
     }
     else {
         qCritical() << "(KFileItem) lstat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << Qt::endl;
         if( k3b_stat( QFile::encodeName(filePath), &followedStatBuf ) == 0 ) {
-            init( filePath, k3bName, doc, 0, &followedStatBuf );
+            init( filePath, k3bName, doc, nullptr, &followedStatBuf );
         }
         else {
-            init( filePath, k3bName, doc, 0, 0 );
+            init( filePath, k3bName, doc, nullptr, nullptr );
             qCritical() << "(KFileItem) stat failed: " << QString::fromLocal8Bit( ::strerror(errno) ) << Qt::endl;
         }
     }
@@ -83,7 +83,7 @@ K3b::FileItem::FileItem( const k3b_struct_stat* stat,
                           const k3b_struct_stat* followedStat,
                           const QString& filePath, K3b::DataDoc& doc, const QString& k3bName, const ItemFlags& flags )
     : K3b::DataItem( flags | FILE ),
-      m_replacedItemFromOldSession(0),
+      m_replacedItemFromOldSession(nullptr),
       m_localPath(filePath)
 {
     init( filePath, k3bName, doc, stat, followedStat );
@@ -92,7 +92,7 @@ K3b::FileItem::FileItem( const k3b_struct_stat* stat,
 
 K3b::FileItem::FileItem( const K3b::FileItem& item )
     : K3b::DataItem( item ),
-      m_replacedItemFromOldSession(0),
+      m_replacedItemFromOldSession(nullptr),
       m_size( item.m_size ),
       m_sizeFollowed( item.m_sizeFollowed ),
       m_id( item.m_id ),
@@ -209,13 +209,13 @@ bool K3b::FileItem::isValid() const
             else if( tokens[i] == ".." ) {
                 // change the directory
                 dir = dir->parent();
-                if( dir == 0 )
+                if( dir == nullptr )
                     return false;
             }
             else {
                 // search for the item in dir
                 K3b::DataItem* d = dir->find( tokens[i] );
-                if( d == 0 )
+                if( d == nullptr )
                     return false;
 
                 if( d->isDir() ) {
@@ -252,7 +252,7 @@ void K3b::FileItem::init( const QString& filePath,
     else
         m_k3bName = k3bName;
 
-    if( stat != 0 ) {
+    if( stat != nullptr ) {
         m_size = (KIO::filesize_t)stat->st_size;
         if( S_ISLNK(stat->st_mode) )
             setFlags( flags() | SYMLINK );
@@ -276,12 +276,12 @@ void K3b::FileItem::init( const QString& filePath,
     }
 
     if( isSymLink() ) {
-        if( QFile::exists( K3b::resolveLink( filePath ) ) && followedStat != 0 ) {
+        if( QFile::exists( K3b::resolveLink( filePath ) ) && followedStat != nullptr ) {
             m_sizeFollowed = (KIO::filesize_t)followedStat->st_size;
             m_idFollowed.inode = followedStat->st_ino;
             m_idFollowed.device = followedStat->st_dev;
         }
-        else if( followedStat == 0 ) {
+        else if( followedStat == nullptr ) {
             m_sizeFollowed = m_size;
             m_idFollowed.inode = 0;
             m_idFollowed.device = 0;

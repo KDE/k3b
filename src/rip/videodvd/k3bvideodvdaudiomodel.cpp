@@ -74,7 +74,7 @@ const VideoDVD::Title* VideoDVDAudioModel::titleForIndex( const QModelIndex& ind
         if( title >= 0 && title < static_cast<int>( d->dvd.numTitles() ) )
             return &d->dvd[ title ];
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -93,7 +93,7 @@ const VideoDVD::AudioStream* VideoDVDAudioModel::audioForIndex( const QModelInde
     if( index.isValid() && index.internalPointer() )
         return static_cast<VideoDVD::AudioStream*>( index.internalPointer() );
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -277,9 +277,9 @@ bool VideoDVDAudioModel::setData( const QModelIndex& index, const QVariant& valu
 
 Qt::ItemFlags VideoDVDAudioModel::flags( const QModelIndex& index ) const
 {
-    if( audioForIndex( index ) != 0 )
+    if( audioForIndex( index ) != nullptr )
         return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsUserCheckable;
-    else if( titleForIndex( index ) != 0 )
+    else if( titleForIndex( index ) != nullptr )
         return Qt::ItemIsEnabled;
     else
         return Qt::NoItemFlags;

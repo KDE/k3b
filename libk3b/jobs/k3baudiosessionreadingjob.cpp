@@ -39,9 +39,9 @@ public:
 
 
 K3b::AudioSessionReadingJob::Private::Private()
-    : ioDev( 0 ),
-      paranoia(0),
-      waveFileWriter(0),
+    : ioDev(nullptr ),
+      paranoia(nullptr),
+      waveFileWriter(nullptr),
       paranoiaMode(0),
       retries(50),
       neverSkip(false)
@@ -90,7 +90,7 @@ void K3b::AudioSessionReadingJob::writeTo( QIODevice* ioDev )
 void K3b::AudioSessionReadingJob::setImageNames( const QStringList& l )
 {
     d->filenames = l;
-    d->ioDev = 0;
+    d->ioDev = nullptr;
 }
 
 
@@ -165,7 +165,7 @@ bool K3b::AudioSessionReadingJob::run()
     unsigned int lastTotalPercent = 0;
     bool newTrack = true;
     int status = 0;
-    char* buffer = 0;
+    char* buffer = nullptr;
     while( !canceled() && (buffer = d->paranoia->read( &status, &trackNum, !d->ioDev /*when writing to a wav be want little endian */ )) ) {
 
         if( currentTrack != trackNum ) {

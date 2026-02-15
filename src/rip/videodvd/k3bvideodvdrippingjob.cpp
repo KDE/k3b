@@ -86,9 +86,9 @@ K3b::VideoDVDRippingJob::VideoDVDRippingJob( K3b::JobHandler* hdl, QObject* pare
                    SIGNAL(newSubTask(QString)),
                    SLOT(slotTranscodingProgress(int)),
                    SIGNAL(subPercent(int)),
-                   0,
-                   0 );
-    m_detectClippingJob = 0;
+                   nullptr,
+                   nullptr );
+    m_detectClippingJob = nullptr;
 }
 
 
@@ -231,8 +231,8 @@ void K3b::VideoDVDRippingJob::startDetectClipping( int ripInfoIndex )
                        SIGNAL(newSubTask(QString)),
                        SLOT(slotDetectClippingProgress(int)),
                        SIGNAL(subPercent(int)),
-                       0,
-                       0 );
+                       nullptr,
+                       nullptr );
     }
 
     m_detectClippingJob->setVideoDVD( m_dvd );

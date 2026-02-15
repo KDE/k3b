@@ -14,7 +14,7 @@
 
 K3b::AudioNormalizeJob::AudioNormalizeJob( K3b::JobHandler* hdl, QObject* parent )
     : K3b::Job( hdl, parent ),
-      m_process(0)
+      m_process(nullptr)
 {
 }
 

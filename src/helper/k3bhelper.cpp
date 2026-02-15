@@ -26,7 +26,7 @@ namespace {
 bool updateDevicePermissions( ::group* g, const QString& device )
 {
     bool success = true;
-    if( g != 0 ) {
+    if( g != nullptr ) {
         if( ::chmod( QFile::encodeName(device), S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP ) )
             success = false;
 
@@ -89,7 +89,7 @@ KAuth::ActionReply Helper::updatepermissions( QVariantMap args )
     QStringList devices = args["devices"].toStringList();
     QVariantList programs = args["programs"].value<QVariantList>();
         
-    ::group* g = 0;
+    ::group* g = nullptr;
     if( !burningGroup.isEmpty() ) {
         g = ::getgrnam( burningGroup.toLocal8Bit() );
     }

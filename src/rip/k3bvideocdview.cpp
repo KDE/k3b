@@ -216,9 +216,9 @@ K3b::VideoCdView::VideoCdView( QWidget* parent )
     d->toolBox->addAction( new KToolBarSpacerAction( d->toolBox ) );
     d->toolBox->addWidget( d->labelLength );
 
-    slotTrackSelectionChanged( 0, 0 );
+    slotTrackSelectionChanged( nullptr, nullptr );
 
-    d->videocdinfo = 0L;
+    d->videocdinfo = nullptr;
     d->videooptions = new K3b::VideoCdRippingOptions();
 
     d->contentList.clear();
@@ -402,8 +402,8 @@ void K3b::VideoCdView::slotContextMenu( const QPoint& pos )
 
 void K3b::VideoCdView::slotTrackSelectionChanged( QTreeWidgetItem* current, QTreeWidgetItem* /*previous*/ )
 {
-    actionCollection() ->action( "check_track" ) ->setEnabled( current != 0 );
-    actionCollection() ->action( "decheck_track" ) ->setEnabled( current != 0 );
+    actionCollection() ->action( "check_track" ) ->setEnabled( current != nullptr );
+    actionCollection() ->action( "decheck_track" ) ->setEnabled( current != nullptr );
 }
 
 
@@ -504,12 +504,12 @@ void K3b::VideoCdView::enableInteraction( bool b )
 
 void K3b::VideoCdView::buildTree( QTreeWidgetItem* parentItem, const QDomElement& parentElement, const QString& pname )
 {
-    VideoTrackViewItem * thisItem = 0;
+    VideoTrackViewItem * thisItem = nullptr;
     QDomNode node = parentElement.firstChild();
 
     while ( !node.isNull() ) {
         if ( (node.isElement() && node.nodeName() == "folder") || node.nodeName() == "file" ) {
-            if ( parentItem == 0 )
+            if ( parentItem == nullptr )
                 thisItem = new VideoTrackViewItem( d->trackView, thisItem );
             else
                 thisItem = new VideoTrackViewItem( parentItem, thisItem );
@@ -524,7 +524,7 @@ void K3b::VideoCdView::buildTree( QTreeWidgetItem* parentItem, const QDomElement
                 buildTree( thisItem, node.toElement(), pname );
             }
         } else if ( (node.isElement() && node.nodeName() == "segment-item") || node.nodeName() == "sequence-item" ) {
-            if ( parentItem == 0 )
+            if ( parentItem == nullptr )
                 thisItem = new VideoTrackViewItem( d->trackView, thisItem );
             else
                 thisItem = new VideoTrackViewItem( parentItem, thisItem );

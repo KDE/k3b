@@ -26,7 +26,7 @@ namespace K3b {
 
     public:
         CdrecordWriter( Device::Device*, JobHandler* hdl,
-                        QObject* parent = 0 );
+                        QObject* parent = nullptr );
         ~CdrecordWriter() override;
 
         bool active() const override;

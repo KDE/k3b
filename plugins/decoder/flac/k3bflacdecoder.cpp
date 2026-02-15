@@ -63,7 +63,7 @@ public:
         file->close();
         finish();
         delete comments;
-        comments = 0;
+        comments = nullptr;
     }
 
     Private(QFile* f)
@@ -72,7 +72,7 @@ public:
 #else
           : FLAC::Decoder::Stream(),
 #endif
-            comments(0) {
+            comments(nullptr) {
             internalBuffer = new QBuffer();
             internalBuffer->open(QIODevice::ReadWrite);
 
@@ -237,7 +237,7 @@ FLAC__StreamDecoderWriteStatus K3bFLACDecoder::Private::write_callback(const FLA
 K3bFLACDecoder::K3bFLACDecoder( QObject* parent  )
     : K3b::AudioDecoder( parent)
 {
-    d = 0;
+    d = nullptr;
 }
 
 
@@ -265,7 +265,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
     ch = d->channels;
 
     // add meta info
-    if( d->comments != 0 ) {
+    if( d->comments != nullptr ) {
         qDebug() << "(K3bFLACDecoder) unpacking Vorbis tags";
         for( unsigned int i = 0; i < d->comments->get_num_comments(); ++i ) {
             QString key = QString::fromUtf8( d->comments->get_comment(i).get_field_name(),
@@ -282,7 +282,7 @@ bool K3bFLACDecoder::analyseFileInternal( K3b::Msf& frames, int& samplerate, int
         }
     }
 #ifdef ENABLE_TAGLIB
-    if ((d->comments == 0) || (d->comments->get_num_comments() == 0)) {
+    if ((d->comments == nullptr) || (d->comments->get_num_comments() == 0)) {
         // no Vorbis comments, check for ID3 tags
         qDebug() << "(K3bFLACDecoder) using taglib to read tag";
         TagLib::FLAC::File f( QFile::encodeName(filename()) );
@@ -377,7 +377,7 @@ QStringList K3bFLACDecoder::supportedTechnicalInfos() const
 
 QString K3bFLACDecoder::technicalInfo( const QString& info ) const
 {
-    if( d->comments != 0 ) {
+    if( d->comments != nullptr ) {
         if( info == i18n("Vendor") )
 #ifdef FLAC_NEWER_THAN_1_1_1
             return QString::fromUtf8(reinterpret_cast<const char *>(d->comments->get_vendor_string()));

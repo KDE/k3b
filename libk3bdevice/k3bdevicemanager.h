@@ -43,7 +43,7 @@ namespace K3b {
             /**
              * Creates a new DeviceManager
              */
-            explicit DeviceManager( QObject* parent = 0 );
+            explicit DeviceManager( QObject* parent = nullptr );
             ~DeviceManager() override;
 
             /**

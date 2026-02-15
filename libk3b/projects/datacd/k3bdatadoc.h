@@ -42,7 +42,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DataDoc( QObject* parent = 0 );
+        explicit DataDoc( QObject* parent = nullptr );
         ~DataDoc() override;
 
         Type type() const override { return DataProject; }
@@ -103,7 +103,7 @@ namespace K3b {
 
         QString treatWhitespace( const QString& );
 
-        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent = 0 ) override;
+        BurnJob* newBurnJob( JobHandler* hdl, QObject* parent = nullptr ) override;
 
         MultiSessionMode multiSessionMode() const;
         void setMultiSessionMode( MultiSessionMode mode );
@@ -139,7 +139,7 @@ namespace K3b {
          * \return The new boot item on success or 0 in case a file with the same
          *         name already exists.
          */
-        BootItem* createBootItem( const QString& filename, DirItem* bootDir = 0 );
+        BootItem* createBootItem( const QString& filename, DirItem* bootDir = nullptr );
 
         /**
          * Create a new boot catalog item.

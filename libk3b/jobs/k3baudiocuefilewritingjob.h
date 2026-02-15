@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioCueFileWritingJob( JobHandler*, QObject* parent = 0 );
+        explicit AudioCueFileWritingJob( JobHandler*, QObject* parent = nullptr );
         ~AudioCueFileWritingJob() override;
 
         Device::Device* writer() const override;

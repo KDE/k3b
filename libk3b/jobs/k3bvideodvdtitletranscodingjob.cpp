@@ -93,7 +93,7 @@ K3b::VideoDVDTitleTranscodingJob::VideoDVDTitleTranscodingJob( K3b::JobHandler* 
       m_lowPriority( true )
 {
     d = new Private;
-    d->process = 0;
+    d->process = nullptr;
 }
 
 

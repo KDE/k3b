@@ -76,7 +76,7 @@ namespace K3b {
          *            @p activate() will not be used. A plugin has a GUI if it's functionality is started
          *            by some user input.
          */
-        explicit ProjectPlugin( Type type, bool gui = false, QObject* parent = 0 );
+        explicit ProjectPlugin( Type type, bool gui = false, QObject* parent = nullptr );
 
         ~ProjectPlugin() override {
         }
@@ -112,7 +112,7 @@ namespace K3b {
          *            this will be the doc to work on. It should
          *            be dynamically casted to the needed project type.
          */
-        virtual ProjectPluginGUIBase* createGUI( Doc* doc, QWidget* = 0 ) { Q_UNUSED(doc); return 0; }
+        virtual ProjectPluginGUIBase* createGUI( Doc* doc, QWidget* = nullptr ) { Q_UNUSED(doc); return nullptr; }
 
         /**
          * This is where the action happens.

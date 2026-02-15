@@ -46,7 +46,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MediaCache( QObject* parent = 0 );
+        explicit MediaCache( QObject* parent = nullptr );
         ~MediaCache() override;
 
         /**

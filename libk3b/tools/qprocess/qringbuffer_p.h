@@ -70,7 +70,7 @@ public:
     }
 
     inline const char *readPointer() const {
-        return buffers.isEmpty() ? 0 : (buffers.first().constData() + head);
+        return buffers.isEmpty() ? nullptr : (buffers.first().constData() + head);
     }
 
     inline void free(int bytes) {
@@ -277,7 +277,7 @@ public:
     }
 
     inline int skip(int length) {
-        return read(0, length);
+        return read(nullptr, length);
     }
 
     inline int readLine(char *data, int maxLength) {

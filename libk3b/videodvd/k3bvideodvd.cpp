@@ -60,7 +60,7 @@ namespace {
 
 
 K3b::VideoDVD::VideoDVD::VideoDVD() :
- m_device( 0 )
+ m_device( nullptr )
 {
 }
 
@@ -72,13 +72,13 @@ K3b::VideoDVD::VideoDVD::~VideoDVD()
 
 bool K3b::VideoDVD::VideoDVD::valid() const
 {
-    return ( m_device != 0 );
+    return ( m_device != nullptr );
 }
 
 
 bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
 {
-    m_device = 0;
+    m_device = nullptr;
     m_titles.clear();
 
     //
@@ -94,10 +94,10 @@ bool K3b::VideoDVD::VideoDVD::open( K3b::Device::Device* dev )
     // Read volume id
     //
     char v[33];
-    if( DVDUDFVolumeInfo( dvdReaderT, v, 32, 0, 0 ) == 0 ) {
+    if( DVDUDFVolumeInfo( dvdReaderT, v, 32, nullptr, 0 ) == 0 ) {
         m_volumeIdentifier = QString::fromLatin1( v, 31 );
     }
-    else if ( DVDISOVolumeInfo( dvdReaderT, v, 33, 0, 0 ) == 0 ) {
+    else if ( DVDISOVolumeInfo( dvdReaderT, v, 33, nullptr, 0 ) ==  0 ) {
         m_volumeIdentifier = QString::fromLatin1( v, 32 );
     }
     else {

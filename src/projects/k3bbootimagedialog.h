@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit BootImageDialog( DataDoc* doc, QWidget* parent = 0 );
+        explicit BootImageDialog( DataDoc* doc, QWidget* parent = nullptr );
         ~BootImageDialog() override;
 
     private Q_SLOTS:

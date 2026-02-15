@@ -20,7 +20,7 @@ class VideoDVDTitleModel : public QAbstractTableModel
     Q_OBJECT
 
 public:
-    explicit VideoDVDTitleModel( QObject* parent = 0 );
+    explicit VideoDVDTitleModel( QObject* parent = nullptr );
     ~VideoDVDTitleModel() override;
 
     enum Columns {

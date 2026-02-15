@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit CloneJob( JobHandler*, QObject* parent = 0 );
+        explicit CloneJob( JobHandler*, QObject* parent = nullptr );
         ~CloneJob() override;
 
         Device::Device* writer() const override { return m_writerDevice; }

@@ -28,7 +28,7 @@ namespace K3b {
         friend class PluginManager;
 
     public:
-        explicit Plugin( QObject* parent = 0 );
+        explicit Plugin( QObject* parent = nullptr );
         ~Plugin() override;
 
         KPluginMetaData pluginMetaData() const { return d->metadata; }

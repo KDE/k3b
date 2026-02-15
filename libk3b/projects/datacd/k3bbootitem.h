@@ -14,7 +14,7 @@ namespace K3b {
     class LIBK3B_EXPORT BootItem : public FileItem
     {
     public:
-        BootItem( const QString& fileName, DataDoc& doc, const QString& k3bName = 0 );
+        BootItem( const QString& fileName, DataDoc& doc, const QString& k3bName = QString() );
         BootItem( const BootItem& );
         ~BootItem() override;
 

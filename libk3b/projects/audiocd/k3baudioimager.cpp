@@ -26,7 +26,7 @@ class K3b::AudioImager::Private
 {
 public:
     Private()
-        : ioDev(0) {
+        : ioDev(nullptr) {
     }
 
     QIODevice* ioDev;
@@ -74,7 +74,7 @@ bool K3b::AudioImager::run()
     qint64 totalRead = 0;
     char buffer[2352 * 10];
 
-    for( AudioTrack* track = d->doc->firstTrack(); track != 0; track = track->next() ) {
+    for( AudioTrack* track = d->doc->firstTrack(); track != nullptr; track = track->next() ) {
 
         emit nextTrack( track->trackNumber(), d->doc->numOfTracks() );
 

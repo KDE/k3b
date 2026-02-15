@@ -23,9 +23,9 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit FlatButton( QWidget* parent = 0 );
-        explicit FlatButton( const QString& text, QWidget* parent = 0 );
-        explicit FlatButton( QAction* action, QWidget* parent = 0 );
+        explicit FlatButton( QWidget* parent = nullptr );
+        explicit FlatButton( const QString& text, QWidget* parent = nullptr );
+        explicit FlatButton( QAction* action, QWidget* parent = nullptr );
     
         ~FlatButton() override;
 

@@ -33,7 +33,7 @@ K3b::VideoCdRip::VideoCdRip( K3b::JobHandler* hdl, K3b::VideoCdRippingOptions* o
     m_subPosition ( 0 ),
     m_videooptions( options ),
     m_canceled( false ),
-    m_process( 0 )
+    m_process( nullptr )
 {}
 
 

@@ -21,7 +21,7 @@ class K3b::ViewColumnAdjuster::Private
 {
 public:
     Private( ViewColumnAdjuster* parent )
-        : view( 0 ),
+        : view( nullptr ),
           q( parent ) {
     }
 

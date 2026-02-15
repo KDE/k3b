@@ -31,7 +31,7 @@ namespace K3b {
         };
         
     public:
-        explicit ThemeModel( ThemeManager* themeManager, QObject* parent = 0 );
+        explicit ThemeModel( ThemeManager* themeManager, QObject* parent = nullptr );
         ~ThemeModel() override;
         
         /**

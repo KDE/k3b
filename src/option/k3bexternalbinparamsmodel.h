@@ -28,7 +28,7 @@ namespace K3b {
         };
         
     public:
-        explicit ExternalBinParamsModel( ExternalBinManager* manager, QObject* parent = 0 );
+        explicit ExternalBinParamsModel( ExternalBinManager* manager, QObject* parent = nullptr );
         ~ExternalBinParamsModel() override;
         
         /**

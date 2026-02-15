@@ -74,8 +74,8 @@ public:
         bigEndian( be ),
         overallBytesRead( 0 ),
         overallBytesToRead( 0 ),
-        encoder( 0 ),
-        waveFileWriter( 0 ),
+        encoder( nullptr ),
+        waveFileWriter( nullptr ),
         relativePathInPlaylist( false ),
         writeCueFile( false )
     {

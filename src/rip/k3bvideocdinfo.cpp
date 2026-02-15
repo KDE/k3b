@@ -23,7 +23,7 @@
 K3b::VideoCdInfo::VideoCdInfo( QObject* parent )
     : QObject( parent )
 {
-    m_process = 0L;
+    m_process = nullptr;
     m_isXml = false;
 }
 

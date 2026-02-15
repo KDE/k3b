@@ -29,8 +29,8 @@ class K3b::ReadcdReader::Private
 {
 public:
     Private()
-        : process(0),
-          ioDevToWriteTo(0),
+        : process(nullptr),
+          ioDevToWriteTo(nullptr),
           canceled(false) {
     }
 

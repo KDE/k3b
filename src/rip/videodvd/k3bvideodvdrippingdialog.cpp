@@ -120,7 +120,7 @@ class K3b::VideoDVDRippingDialog::Private
 {
 public:
     Private( const K3b::VideoDVD::VideoDVD& d )
-        : dvd( d ), w( 0 ), audioModel( 0 ) {}
+        : dvd( d ), w( nullptr ), audioModel( nullptr ) {}
 
     VideoDVD::VideoDVD dvd;
     VideoDVDRippingWidget* w;

@@ -27,7 +27,7 @@ class AudioTrackSplitDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AudioTrackSplitDialog( AudioTrack*, QWidget* parent = 0 );
+    explicit AudioTrackSplitDialog( AudioTrack*, QWidget* parent = nullptr );
     ~AudioTrackSplitDialog() override;
 
     bool eventFilter( QObject* o, QEvent* e ) override;
@@ -35,7 +35,7 @@ public:
     /**
      * if this method returns true val is filled with the user selected value.
      */
-    static void splitTrack( AudioTrack* track, QWidget* parent = 0 );
+    static void splitTrack( AudioTrack* track, QWidget* parent = nullptr );
 
 private Q_SLOTS:
     void slotRangeModified( int, const K3b::Msf& start, const K3b::Msf& );

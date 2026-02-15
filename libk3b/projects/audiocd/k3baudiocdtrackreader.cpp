@@ -32,7 +32,7 @@ public:
     :
         source( s ),
         initialized( false ),
-        cdParanoiaLib( 0 )
+        cdParanoiaLib( nullptr )
     {
     }
 
@@ -159,9 +159,9 @@ qint64 AudioCdTrackReader::readData( char* data, qint64 /*maxlen*/ )
 {
     if( d->cdParanoiaLib && d->initialized ) {
         int status = 0;
-        char* buf = d->cdParanoiaLib->read( &status, 0, false /* big endian */ );
+        char* buf = d->cdParanoiaLib->read( &status, nullptr, false /* big endian */ );
         if( status == CdparanoiaLib::S_OK ) {
-            if( buf == 0 ) {
+            if( buf == nullptr ) {
                 // done
                 d->closeParanoia();
                 return -1;

@@ -35,7 +35,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit Doc( QObject* = 0 );
+        explicit Doc( QObject* = nullptr );
         ~Doc() override;
 
         enum Type {
@@ -148,7 +148,7 @@ namespace K3b {
          * easier this way since you don't need to distinguish between the different
          * project types.
          */
-        virtual BurnJob* newBurnJob( JobHandler*, QObject* parent = 0 ) = 0;
+        virtual BurnJob* newBurnJob( JobHandler*, QObject* parent = nullptr ) = 0;
 
         WritingApp writingApp() const { return m_writingApp; }
         void setWritingApp( WritingApp a ) { m_writingApp = a; }

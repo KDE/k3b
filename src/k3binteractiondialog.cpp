@@ -43,7 +43,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
                                            int defaultButton,
                                            const QString& configGroup )
     : QDialog( parent ),
-      m_mainWidget(0),
+      m_mainWidget(nullptr),
       m_defaultButton(defaultButton),
       m_configGroup(configGroup),
       m_inToggleMode(false),
@@ -107,7 +107,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
         buttonBox->addButton( m_buttonSave, QDialogButtonBox::ApplyRole );
     }
     else {
-        m_buttonSave = 0;
+        m_buttonSave = nullptr;
     }
     if( buttonMask & CANCEL_BUTTON ) {
         m_buttonCancel = new QPushButton( buttonBox );
@@ -118,7 +118,7 @@ K3b::InteractionDialog::InteractionDialog( QWidget* parent,
         buttonBox->addButton( m_buttonCancel, QDialogButtonBox::RejectRole );
     }
     else {
-        m_buttonCancel = 0;
+        m_buttonCancel = nullptr;
     }
 
     mainGrid->addWidget( buttonBox, 2, 2 );
@@ -358,7 +358,7 @@ QPushButton* K3b::InteractionDialog::getButton( int button )
     case CANCEL_BUTTON:
         return m_buttonCancel;
     default:
-        return 0;
+        return nullptr;
     }
 }
 

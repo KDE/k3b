@@ -13,10 +13,10 @@ static const int INPUT_BUFFER_SIZE = 5*8192;
 
 
 K3bMad::K3bMad()
-  : madStream(NULL),
-    madFrame(NULL),
-    madSynth(NULL),
-    madTimer(NULL),
+  : madStream(nullptr),
+    madFrame(nullptr),
+    madSynth(nullptr),
+    madTimer(nullptr),
     m_madStructuresInitialized(false),
     m_bInputError(false)
 {
@@ -37,10 +37,10 @@ K3bMad::~K3bMad()
 {
   cleanup();
 
-  delete madStream; madStream = NULL;
-  delete madFrame; madFrame = NULL;
-  delete madSynth; madSynth = NULL;
-  delete madTimer; madTimer = NULL;
+  delete madStream; madStream = nullptr;
+  delete madFrame; madFrame = nullptr;
+  delete madSynth; madSynth = nullptr;
+  delete madTimer; madTimer = nullptr;
 
   delete [] m_inputBuffer;
 }
@@ -79,14 +79,14 @@ bool K3bMad::fillStreamBuffer()
   /* The input bucket must be filled if it becomes empty or if
    * it's the first execution of the loop.
    */
-  if( madStream->buffer == 0 || madStream->error == MAD_ERROR_BUFLEN ) {
+  if( madStream->buffer == nullptr || madStream->error == MAD_ERROR_BUFLEN ) {
     if( eof() )
       return false;
 
     long readSize, remaining;
     unsigned char* readStart;
 
-    if( madStream->next_frame != 0 ) {
+    if( madStream->next_frame != nullptr ) {
       remaining = madStream->bufend - madStream->next_frame;
       memmove( m_inputBuffer, madStream->next_frame, remaining );
       readStart = m_inputBuffer + remaining;

@@ -35,7 +35,7 @@ bool K3b::MovixProgram::scan( const QString& p )
     if( !QFile::exists( path + "movix-version" ) )
         return false;
 
-    K3b::MovixBin* bin = 0;
+    K3b::MovixBin* bin = nullptr;
 
     //
     // probe version and data dir
@@ -98,7 +98,7 @@ bool K3b::MovixProgram::scanOldEMovix( K3b::MovixBin* bin, const QString& path )
     //
     // first check if all necessary directories are present
     //
-    if (bin == Q_NULLPTR)
+    if (bin == nullptr)
         return false;
     QDir dir( bin->movixDataDir() );
     QStringList subdirs = dir.entryList( QDir::Dirs );

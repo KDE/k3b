@@ -72,7 +72,7 @@ namespace {
                     return new TagLib::Ogg::FLAC::File(fileName);
             }
 
-            return 0;
+            return nullptr;
         }
 
     private:
@@ -397,7 +397,7 @@ K3b::ProjectPluginGUIBase* K3bAudioMetainfoRenamerPlugin::createGUI( K3b::Doc* d
     else if( K3b::MixedDoc* mixedDoc = dynamic_cast<K3b::MixedDoc*>( doc ) )
         return new K3bAudioMetainfoRenamerPluginWidget( mixedDoc->dataDoc(), parent );
     else
-        return 0;
+        return nullptr;
 }
 
 #include "k3baudiometainforenamerplugin.moc"

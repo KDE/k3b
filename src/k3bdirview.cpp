@@ -89,7 +89,7 @@ K3b::DirView::DirView( K3b::FileTreeView* treeView, QWidget* parent )
     }
     else {
         d->viewStack    = new QStackedWidget( this );
-        d->mainSplitter = 0;
+        d->mainSplitter = nullptr;
         layout->addWidget( d->viewStack );
     }
 

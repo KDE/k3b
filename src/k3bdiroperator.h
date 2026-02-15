@@ -27,7 +27,7 @@ class DirOperator : public KDirOperator, public KBookmarkOwner
     Q_OBJECT
 
 public: 
-    explicit DirOperator( const QUrl& urlName = QUrl(), QWidget* parent = 0 );
+    explicit DirOperator( const QUrl& urlName = QUrl(), QWidget* parent = nullptr );
     ~DirOperator() override;
 
     /**

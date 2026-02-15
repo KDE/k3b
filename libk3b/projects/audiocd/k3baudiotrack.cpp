@@ -25,15 +25,15 @@
 class K3b::AudioTrack::Private
 {
 public:
-    Private( AudioDoc* p = 0 )
+    Private( AudioDoc* p = nullptr )
     :
       parent(p),
       copy(false),
       preEmp(false),
       index0Offset(150),
-      prev(0),
-      next(0),
-      firstSource(0),
+      prev(nullptr),
+      next(nullptr),
+      firstSource(nullptr),
       currentlyDeleting(false) {
         cdTextValidator = new K3b::CdTextValidator();
     }
@@ -238,7 +238,7 @@ K3b::AudioDataSource* K3b::AudioTrack::lastSource() const
 bool K3b::AudioTrack::inList() const
 {
     if( doc() )
-        return ( doc()->firstTrack() == this || d->prev != 0 );
+        return ( doc()->firstTrack() == this || d->prev != nullptr );
     else
         return false;
 }
@@ -380,13 +380,13 @@ K3b::AudioTrack* K3b::AudioTrack::take()
         if( d->next )
             d->next->d->prev = d->prev;
 
-        d->prev = d->next = 0;
+        d->prev = d->next = nullptr;
 
         // remove from doc
         if( doc() )
             doc()->slotTrackRemoved( position );
 
-        d->parent = 0;
+        d->parent = nullptr;
     }
 
     return this;
@@ -641,7 +641,7 @@ K3b::AudioTrack* K3b::AudioTrack::split( const K3b::Msf& pos )
             source = source->next();
         }
 
-        K3b::AudioDataSource* splitSource = 0;
+        K3b::AudioDataSource* splitSource = nullptr;
         if( currentPos > 0 && currentPos == pos ) {
             // no need to split a source
             splitSource = source;
@@ -667,7 +667,7 @@ K3b::AudioTrack* K3b::AudioTrack::split( const K3b::Msf& pos )
         return splitTrack;
     }
     else
-        return 0;
+        return nullptr;
 }
 
 

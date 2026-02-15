@@ -31,10 +31,10 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit CdCopyJob( JobHandler* hdl, QObject* parent = 0 );
+        explicit CdCopyJob( JobHandler* hdl, QObject* parent = nullptr );
         ~CdCopyJob() override;
 
-        Device::Device* writer() const override { return m_onlyCreateImages ? 0 : m_writerDevice; }
+        Device::Device* writer() const override { return m_onlyCreateImages ? nullptr : m_writerDevice; }
         Device::Device* reader() const { return m_readerDevice; }
 
         QString jobDescription() const override;

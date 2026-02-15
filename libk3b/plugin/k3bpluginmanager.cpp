@@ -88,7 +88,7 @@ KCModule *K3b::PluginManager::Private::getModule( Plugin* plugin ) const
     if (!kcm.isEmpty()) {
         return KCModuleLoader::loadModule(kcm);
     }
-    return 0;
+    return nullptr;
 }
 
 

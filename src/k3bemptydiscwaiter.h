@@ -75,7 +75,7 @@ namespace K3b {
                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,
                                        const K3b::Msf& minMediaSize = K3b::Msf(),
                                        const QString& message = QString(),
-                                       QWidget* parent = 0 );
+                                       QWidget* parent = nullptr );
 
     protected Q_SLOTS:
         void slotCancel();
@@ -90,7 +90,7 @@ namespace K3b {
         /**
          * Use the static wait methods.
          */
-        explicit EmptyDiscWaiter( Device::Device* device, QWidget* parent = 0 );
+        explicit EmptyDiscWaiter( Device::Device* device, QWidget* parent = nullptr );
 
         Device::MediaType waitForDisc( Device::MediaStates mediaState = Device::STATE_EMPTY,
                                        Device::MediaTypes mediaType = Device::MEDIA_WRITABLE_CD,

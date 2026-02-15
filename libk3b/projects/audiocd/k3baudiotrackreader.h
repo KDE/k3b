@@ -22,7 +22,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioTrackReader( AudioTrack& track, QObject* parent = 0 );
+        explicit AudioTrackReader( AudioTrack& track, QObject* parent = nullptr );
         ~AudioTrackReader() override;
 
         const AudioTrack& track() const;

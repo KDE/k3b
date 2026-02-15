@@ -16,7 +16,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioMaxSpeedJob( AudioDoc* doc, JobHandler*, QObject* parent = 0 );
+        AudioMaxSpeedJob( AudioDoc* doc, JobHandler*, QObject* parent = nullptr );
         ~AudioMaxSpeedJob() override;
 
         /**

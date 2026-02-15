@@ -44,7 +44,7 @@
 #include <QTimer>
 
 
-K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = 0;
+K3b::Application::Core* K3b::Application::Core::s_k3bAppCore = nullptr;
 
 
 K3b::Application::Application( int& argc, char** argv )
@@ -63,13 +63,13 @@ void K3b::Application::init( QCommandLineParser* commandLineParser )
     
     KConfigGroup generalOptions( KSharedConfig::openConfig(), QStringLiteral("General Options") );
 
-    Splash* splash = 0;
+    Splash* splash = nullptr;
     if( !isSessionRestored() ) {
         if( generalOptions.readEntry("Show splash", true) && !m_cmdLine->isSet( "nosplash" ) ) {
             // we need the correct splash pic
             m_core->m_themeManager->readConfig( generalOptions );
 
-            splash = new Splash( 0 );
+            splash = new Splash( nullptr );
             splash->show();
         }
     }
@@ -140,7 +140,7 @@ void K3b::Application::processCmdLineArgs()
         return;
     }
 
-    Doc* doc = 0;
+    Doc* doc = nullptr;
     if( m_cmdLine->isSet( "data" ) ) {
         doc = m_mainWindow->slotNewDataDoc();
     }

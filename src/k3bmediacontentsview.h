@@ -81,7 +81,7 @@ namespace K3b {
                            int mediumContent,
                            int mediumTypes,
                            int mediumState,
-                           QWidget* parent = 0 );
+                           QWidget* parent = nullptr );
 
         /**
          * Changes the medium without reloading the contents.

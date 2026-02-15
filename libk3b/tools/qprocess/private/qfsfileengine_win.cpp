@@ -524,7 +524,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
     if (openMode & QIODevice::WriteOnly)
         accessRights |= GENERIC_WRITE;
 
-    SECURITY_ATTRIBUTES securityAtts = { sizeof(SECURITY_ATTRIBUTES), NULL, FALSE };
+    SECURITY_ATTRIBUTES securityAtts = { sizeof(SECURITY_ATTRIBUTES), nullptr, FALSE };
 
     // WriteOnly can create files, ReadOnly cannot.
     DWORD creationDisp = (openMode & QIODevice::WriteOnly)
@@ -538,7 +538,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
                                  &securityAtts,
                                  creationDisp,
                                  FILE_ATTRIBUTE_NORMAL,
-                                 NULL);
+                                 nullptr);
     }, {
         fileHandle = CreateFileA(nativeFilePath.constData(),
                                  accessRights,
@@ -546,7 +546,7 @@ bool QFSFileEnginePrivate::nativeOpen(QIODevice::OpenMode openMode)
                                  &securityAtts,
                                  creationDisp,
                                  FILE_ATTRIBUTE_NORMAL,
-                                 NULL);
+                                 nullptr);
     });
 
     // Bail out on error.
@@ -707,7 +707,7 @@ qint64 QFSFileEnginePrivate::nativePos() const
     QFSFileEnginePrivate::resolveLibs();
     if (!ptrSetFilePointerEx) {
 #endif
-        DWORD newFilePointer = SetFilePointer(fileHandle, 0, NULL, FILE_CURRENT);
+        DWORD newFilePointer = SetFilePointer(fileHandle, 0, nullptr, FILE_CURRENT);
         if (newFilePointer == 0xFFFFFFFF) {
             thatQ->setError(QFile::UnspecifiedError, qt_error_string());
             return 0;
@@ -752,7 +752,7 @@ bool QFSFileEnginePrivate::nativeSeek(qint64 pos)
     if (!ptrSetFilePointerEx) {
 #endif
         LONG seekToPos = LONG(pos); // <- lossy
-        DWORD newFilePointer = SetFilePointer(fileHandle, seekToPos, NULL, FILE_BEGIN);
+        DWORD newFilePointer = SetFilePointer(fileHandle, seekToPos, nullptr, FILE_BEGIN);
         if (newFilePointer == 0xFFFFFFFF) {
             thatQ->setError(QFile::UnspecifiedError, qt_error_string());
             return false;
@@ -808,7 +808,7 @@ qint64 QFSFileEnginePrivate::nativeRead(char *data, qint64 maxlen)
     do {
         DWORD blockSize = qMin<DWORD>(bytesToRead, maxBlockSize);
         DWORD bytesRead;
-        if (!ReadFile(fileHandle, data + totalRead, blockSize, &bytesRead, NULL)) {
+        if (!ReadFile(fileHandle, data + totalRead, blockSize, &bytesRead, nullptr)) {
             if (totalRead == 0) {
                 // Note: only return failure if the first ReadFile fails.
                 q->setError(QFile::ReadError, qt_error_string());
@@ -870,7 +870,7 @@ qint64 QFSFileEnginePrivate::nativeWrite(const char *data, qint64 len)
     do {
         DWORD blockSize = qMin<DWORD>(bytesToWrite, maxBlockSize);
         DWORD bytesWritten;
-        if (!WriteFile(fileHandle, data + totalWritten, blockSize, &bytesWritten, NULL)) {
+        if (!WriteFile(fileHandle, data + totalWritten, blockSize, &bytesWritten, nullptr)) {
             if (totalWritten == 0) {
                 // Note: Only return error if the first WriteFile failed.
                 q->setError(QFile::WriteError, qt_error_string());
@@ -1230,7 +1230,7 @@ QString QFSFileEngine::homePath()
 			if (ok) {
 				DWORD dwBufferSize = 0;
 				// First call, to determine size of the strings (with '\0').
-				ok = ::ptrGetUserProfileDirectoryW(token, NULL, &dwBufferSize);
+				ok = ::ptrGetUserProfileDirectoryW(token, nullptr, &dwBufferSize);
 				if (!ok && dwBufferSize != 0) {		// We got the required buffer size
 					wchar_t *userDirectory = new wchar_t[dwBufferSize];
 					// Second call, now we can fill the allocated buffer.
@@ -1460,13 +1460,13 @@ static QString readLink(const QString &link)
         WIN32_FIND_DATA wfd;
         TCHAR szGotPath[MAX_PATH];
         // Get pointer to the IShellLink interface.
-        hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+        hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
                                     IID_IShellLink, (LPVOID *)&psl);
 
         if(hres == CO_E_NOTINITIALIZED) { // COM was not initialized
             neededCoInit = true;
-            CoInitialize(NULL);
-            hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+            CoInitialize(nullptr);
+            hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
                                         IID_IShellLink, (LPVOID *)&psl);
         }
         if(SUCCEEDED(hres)) {    // Get pointer to the IPersistFile interface.
@@ -1494,13 +1494,13 @@ static QString readLink(const QString &link)
         char szGotPath[MAX_PATH];
         // Get pointer to the IShellLink interface.
 
-        hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+        hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
                                     IID_IShellLinkA, (LPVOID *)&psl);
 
         if(hres == CO_E_NOTINITIALIZED) { // COM was not initialized
             neededCoInit = true;
-            CoInitialize(NULL);
-            hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
+            CoInitialize(nullptr);
+            hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
                                         IID_IShellLinkA, (LPVOID *)&psl);
         }
         if(SUCCEEDED(hres)) {    // Get pointer to the IPersistFile interface.
@@ -1565,11 +1565,11 @@ bool QFSFileEngine::link(const QString &newName)
         IShellLink *psl;
         bool neededCoInit = false;
 
-        hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
+        hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
         if(hres == CO_E_NOTINITIALIZED) { // COM was not initialized
                 neededCoInit = true;
-                CoInitialize(NULL);
-                hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
+                CoInitialize(nullptr);
+                hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
         }
         if (SUCCEEDED(hres)) {
             hres = psl->SetPath((wchar_t *)fileName(AbsoluteName).replace(QLatin1Char('/'), QLatin1Char('\\')).utf16());
@@ -1598,11 +1598,11 @@ bool QFSFileEngine::link(const QString &newName)
         IShellLinkA *psl;
         bool neededCoInit = false;
 
-        hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
+        hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
         if(hres == CO_E_NOTINITIALIZED) { // COM was not initialized
             neededCoInit = true;
-            CoInitialize(NULL);
-            hres = CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
+            CoInitialize(nullptr);
+            hres = CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER, IID_IShellLink, (void **)&psl);
         }
         if (SUCCEEDED(hres)) {
             currentPath();
@@ -1941,15 +1941,15 @@ QString QFSFileEngine::owner(FileOwner own) const
 	if(ptrGetNamedSecurityInfoW && ptrLookupAccountSidW) {
 	    if(ptrGetNamedSecurityInfoW((wchar_t*)d->filePath.utf16(), SE_FILE_OBJECT,
 					 own == OwnerGroup ? GROUP_SECURITY_INFORMATION : OWNER_SECURITY_INFORMATION,
-					 NULL, &pOwner, NULL, NULL, &pSD) == ERROR_SUCCESS) {
+					 nullptr, &pOwner, nullptr, nullptr, &pSD) == ERROR_SUCCESS) {
 		DWORD lowner = 0, ldomain = 0;
 		SID_NAME_USE use;
 		// First call, to determine size of the strings (with '\0').
-		ptrLookupAccountSidW(NULL, pOwner, NULL, &lowner, NULL, &ldomain, (SID_NAME_USE*)&use);
+		ptrLookupAccountSidW(nullptr, pOwner, nullptr, &lowner, nullptr, &ldomain, (SID_NAME_USE*)&use);
 		wchar_t *owner = new wchar_t[lowner];
 		wchar_t *domain = new wchar_t[ldomain];
 		// Second call, size is without '\0'
-		if(ptrLookupAccountSidW(NULL, pOwner, (LPWSTR)owner, &lowner,
+		if(ptrLookupAccountSidW(nullptr, pOwner, (LPWSTR)owner, &lowner,
 					 (LPWSTR)domain, &ldomain, (SID_NAME_USE*)&use)) {
 		    name = QString::fromUtf16((ushort*)owner);
 		}
@@ -2136,10 +2136,10 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size,
         fileMapHandle = CreateFileForMappingW((TCHAR *)nativeFilePath.constData(),
                 GENERIC_READ | (openMode & QIODevice::WriteOnly ? GENERIC_WRITE : 0),
                 0,
-                NULL,
+                nullptr,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL);
+                nullptr);
     }
     handle = fileMapHandle;
     #endif
@@ -2157,7 +2157,7 @@ uchar *QFSFileEnginePrivate::map(qint64 offset, qint64 size,
     mapHandle = ::CreateFileMappingA(handle, 0, protection,
              0, 0, 0);
     });
-    if (mapHandle == NULL) {
+    if (mapHandle == nullptr) {
         q->setError(QFile::PermissionsError, qt_error_string());
 #ifdef Q_USE_DEPRECATED_MAP_API
         mapHandleClose();

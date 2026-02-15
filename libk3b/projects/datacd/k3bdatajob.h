@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        DataJob( DataDoc*, JobHandler*, QObject* parent = 0 );
+        DataJob( DataDoc*, JobHandler*, QObject* parent = nullptr );
         ~DataJob() override;
 
         Doc* doc() const;

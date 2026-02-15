@@ -31,7 +31,7 @@
 #include <QThread>
 
 
-static QThread* s_guiThreadHandle = 0;
+static QThread* s_guiThreadHandle = nullptr;
 
 // We cannot use QWaitCondition here since the event might be handled faster
 // than the thread starts the waiting
@@ -83,11 +83,11 @@ class K3b::Core::Private {
 public:
     Private()
         : version( LIBK3B_VERSION ),
-          mediaCache(0),
-          deviceManager(0),
-          externalBinManager(0),
-          pluginManager(0),
-          globalSettings(0) {
+          mediaCache(nullptr),
+          deviceManager(nullptr),
+          externalBinManager(nullptr),
+          pluginManager(nullptr),
+          globalSettings(nullptr) {
     }
 
     K3b::Version version;
@@ -108,7 +108,7 @@ public:
 
 
 
-K3b::Core* K3b::Core::s_k3bCore = 0;
+K3b::Core* K3b::Core::s_k3bCore = nullptr;
 
 
 
@@ -131,7 +131,7 @@ K3b::Core::Core( QObject* parent )
 
 K3b::Core::~Core()
 {
-    s_k3bCore = 0;
+    s_k3bCore = nullptr;
 
     delete d->globalSettings;
     delete d;
@@ -297,7 +297,7 @@ void K3b::Core::unblockDevice( K3b::Device::Device* dev )
     }
     else {
         DeviceBlockingEventDoneCondition w;
-        QCoreApplication::postEvent( this, new DeviceBlockingEvent( false, dev, &w, 0 ) );
+        QCoreApplication::postEvent( this, new DeviceBlockingEvent( false, dev, &w, nullptr ) );
         w.wait();
     }
 }

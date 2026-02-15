@@ -60,7 +60,7 @@ namespace K3b {
         void delRefToUs();
         void delRefFromUs();
 
-        void setPbcTrack( PbcTracks which, VcdTrack* pbctrack = 0L );
+        void setPbcTrack( PbcTracks which, VcdTrack* pbctrack = nullptr );
         void setPbcNonTrack( PbcTracks which, PbcTypes type );
         void setUserDefined( PbcTracks, bool );
         void setPlayTime( int t )

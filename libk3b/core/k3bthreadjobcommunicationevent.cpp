@@ -8,7 +8,7 @@
 #include <QMutex>
 
 K3b::ThreadJobCommunicationEvent::Data::Data()
-    : m_device( 0 ),
+    : m_device( nullptr ),
       m_result( 0 )
 {
 }

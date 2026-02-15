@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit ThreadJob( JobHandler*, QObject* parent = 0 );
+        explicit ThreadJob( JobHandler*, QObject* parent = nullptr );
         ~ThreadJob() override;
 
         /**

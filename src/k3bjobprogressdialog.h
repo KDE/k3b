@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit JobProgressDialog( QWidget* parent = 0,
+        explicit JobProgressDialog( QWidget* parent = nullptr,
                            bool showSubProgress = true );
         ~JobProgressDialog() override;
 
@@ -46,7 +46,7 @@ namespace K3b {
          * if job == 0 the job set with setJob
          * Use instead of exec()
          */
-        int startJob( Job* job = 0 );
+        int startJob( Job* job = nullptr );
 
         QSize sizeHint() const override;
 

@@ -34,7 +34,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MixedView( MixedDoc* doc, QWidget* parent = 0 );
+        explicit MixedView( MixedDoc* doc, QWidget* parent = nullptr );
         ~MixedView() override;
 
     public Q_SLOTS:
@@ -51,7 +51,7 @@ namespace K3b {
         /**
          * reimplemented from @ref View
          */
-        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = nullptr ) override;
 
     private:
         MixedDoc* m_doc;

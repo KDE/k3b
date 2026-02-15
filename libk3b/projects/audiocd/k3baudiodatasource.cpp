@@ -10,18 +10,18 @@
 
 K3b::AudioDataSource::AudioDataSource()
     : QObject(),
-      m_track(0),
-      m_prev(0),
-      m_next(0)
+      m_track(nullptr),
+      m_prev(nullptr),
+      m_next(nullptr)
 {
 }
 
 
 K3b::AudioDataSource::AudioDataSource( const K3b::AudioDataSource& source )
     : QObject(),
-      m_track( 0 ),
-      m_prev( 0 ),
-      m_next( 0 ),
+      m_track( nullptr ),
+      m_prev( nullptr ),
+      m_next( nullptr ),
       m_startOffset( source.m_startOffset ),
       m_endOffset( source.m_endOffset )
 {
@@ -39,7 +39,7 @@ K3b::AudioDoc* K3b::AudioDataSource::doc() const
     if( m_track )
         return m_track->doc();
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -60,8 +60,8 @@ K3b::AudioDataSource* K3b::AudioDataSource::take()
         // source, or a source accessing a deleted track
         m_track->emitSourceRemoved(this);
 
-        m_prev = m_next = 0;
-        m_track = 0;
+        m_prev = m_next = nullptr;
+        m_track = nullptr;
     }
 
     return this;
@@ -153,7 +153,7 @@ K3b::AudioDataSource* K3b::AudioDataSource::split( const K3b::Msf& pos )
         return s;
     }
     else
-        return 0;
+        return nullptr;
 }
 
 

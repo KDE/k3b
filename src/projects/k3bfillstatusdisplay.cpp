@@ -405,30 +405,30 @@ void K3b::FillStatusDisplay::setupPopupMenu()
     // we use a nother popup for the dvd sizes
     d->popup = new QMenu( this );
 
-    d->actionShowMinutes = K3b::createToggleAction( this, i18n("Minutes"), 0, 0, this, SLOT(showTime()),
+    d->actionShowMinutes = K3b::createToggleAction( this, i18n("Minutes"), nullptr, 0, this, SLOT(showTime()),
                                                     d->actionCollection, "fillstatus_show_minutes" );
-    d->actionShowMegs = K3b::createToggleAction( this, i18n("Megabytes"), 0, 0, this, SLOT(showSize()),
+    d->actionShowMegs = K3b::createToggleAction( this, i18n("Megabytes"), nullptr, 0, this, SLOT(showSize()),
                                                  d->actionCollection, "fillstatus_show_megabytes" );
 
-    d->actionAuto = K3b::createToggleAction( this, i18n("Automatic Size"), 0, 0, this, SLOT(slotAutoSize()),
+    d->actionAuto = K3b::createToggleAction( this, i18n("Automatic Size"), nullptr, 0, this, SLOT(slotAutoSize()),
                                              d->actionCollection, "fillstatus_auto" );
-    d->action74Min = K3b::createToggleAction( this, i18n("%1 MB",650), 0, 0, this, SLOT(slot74Minutes()),
+    d->action74Min = K3b::createToggleAction( this, i18n("%1 MB",650), nullptr, 0, this, SLOT(slot74Minutes()),
                                               d->actionCollection, "fillstatus_74minutes" );
-    d->action80Min = K3b::createToggleAction( this, i18n("%1 MB",700), 0, 0, this, SLOT(slot80Minutes()),
+    d->action80Min = K3b::createToggleAction( this, i18n("%1 MB",700), nullptr, 0, this, SLOT(slot80Minutes()),
                                               d->actionCollection, "fillstatus_80minutes" );
-    d->action100Min = K3b::createToggleAction( this, i18n("%1 MB",880), 0, 0, this, SLOT(slot100Minutes()),
+    d->action100Min = K3b::createToggleAction( this, i18n("%1 MB",880), nullptr, 0, this, SLOT(slot100Minutes()),
                                                d->actionCollection, "fillstatus_100minutes" );
-    d->actionDvd4_7GB = K3b::createToggleAction( this, KIO::convertSizeFromKiB((int)(4.4*1024.0*1024.0)), 0, 0, this, SLOT(slotDvd4_7GB()),
+    d->actionDvd4_7GB = K3b::createToggleAction( this, KIO::convertSizeFromKiB((int)(4.4*1024.0*1024.0)), nullptr, 0, this, SLOT(slotDvd4_7GB()),
                                                  d->actionCollection, "fillstatus_dvd_4_7gb" );
     d->actionDvdDoubleLayer = K3b::createToggleAction( this, KIO::convertSizeFromKiB((int)(8.0*1024.0*1024.0)),
-                                                       0, 0, this, SLOT(slotDvdDoubleLayer()),
+                                                       nullptr, 0, this, SLOT(slotDvdDoubleLayer()),
                                                        d->actionCollection, "fillstatus_dvd_double_layer" );
-    d->actionBD25 = K3b::createToggleAction( this, KIO::convertSize(K3b::Msf(K3b::MediaSizeBluRay25Gb).mode1Bytes()), 0, 0, this, SLOT(slotBD25()),
+    d->actionBD25 = K3b::createToggleAction( this, KIO::convertSize(K3b::Msf(K3b::MediaSizeBluRay25Gb).mode1Bytes()), nullptr, 0, this, SLOT(slotBD25()),
                                              d->actionCollection, "fillstatus_bd_25" );
-    d->actionBD50 = K3b::createToggleAction( this, KIO::convertSize(K3b::Msf(K3b::MediaSizeBluRay50Gb).mode1Bytes()), 0, 0, this, SLOT(slotBD50()),
+    d->actionBD50 = K3b::createToggleAction( this, KIO::convertSize(K3b::Msf(K3b::MediaSizeBluRay50Gb).mode1Bytes()), nullptr, 0, this, SLOT(slotBD50()),
                                              d->actionCollection, "fillstatus_bd_50" );
 
-    d->actionCustomSize = K3b::createAction( this, i18n("Custom..."), 0, 0, this, SLOT(slotCustomSize()),
+    d->actionCustomSize = K3b::createAction( this, i18n("Custom..."), nullptr, 0, this, SLOT(slotCustomSize()),
                                              d->actionCollection, "fillstatus_custom_size" );
     d->actionDetermineSize = K3b::createAction( this, i18n("From Medium..."), "media-optical", 0,
                                                 this, SLOT(slotDetermineSize()),
@@ -519,7 +519,7 @@ void K3b::FillStatusDisplay::showTime()
 
 void K3b::FillStatusDisplay::slotAutoSize()
 {
-    slotMediumChanged( 0 );
+    slotMediumChanged( nullptr );
 }
 
 
@@ -716,7 +716,7 @@ void K3b::FillStatusDisplay::slotLoadUserDefaults()
     }
 
     if( size == 0 ) {
-        slotMediumChanged( 0 );
+        slotMediumChanged( nullptr );
     }
     else {
         d->displayWidget->setCdSize( size );
@@ -824,7 +824,7 @@ void K3b::FillStatusDisplay::slotUpdateDisplay()
         //
         // also update the medium list in case the docs size exceeds the capacity
         //
-        slotMediumChanged( 0 );
+        slotMediumChanged( nullptr );
     }
     else {
         d->displayWidget->update();

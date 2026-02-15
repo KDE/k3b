@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        VcdJob( VcdDoc*, JobHandler*, QObject* parent = 0 );
+        VcdJob( VcdDoc*, JobHandler*, QObject* parent = nullptr );
         ~VcdJob() override;
 
         Doc* doc() const;

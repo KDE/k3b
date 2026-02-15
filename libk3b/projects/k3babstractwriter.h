@@ -34,7 +34,7 @@ namespace K3b {
          * for example the cdrecordwriter returns the stdin fd which can be
          * connected to the stdout fd of mkisofs in the isoimager
          */
-        virtual QIODevice* ioDevice() const { return 0; }
+        virtual QIODevice* ioDevice() const { return nullptr; }
 
     public Q_SLOTS:
         /**
@@ -64,7 +64,7 @@ namespace K3b {
 
     protected:
         AbstractWriter( Device::Device* dev, JobHandler* hdl,
-                        QObject* parent = 0 );
+                        QObject* parent = nullptr );
 
         bool wasSourceUnreadable() const { return m_sourceUnreadable; }
 

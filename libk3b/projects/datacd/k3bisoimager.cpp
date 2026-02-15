@@ -64,15 +64,15 @@ public:
 
 K3b::IsoImager::IsoImager( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent )
     : K3b::Job( hdl, parent ),
-      m_pathSpecFile(0),
-      m_rrHideFile(0),
-      m_jolietHideFile(0),
-      m_sortWeightFile(0),
-      m_process( 0 ),
+      m_pathSpecFile(nullptr),
+      m_rrHideFile(nullptr),
+      m_jolietHideFile(nullptr),
+      m_sortWeightFile(nullptr),
+      m_process(nullptr),
       m_doc( doc ),
       m_noDeepDirectoryRelocation( false ),
       m_importSession( false ),
-      m_device(0),
+      m_device(nullptr),
       m_mkisofsPrintSizeResult( 0 )
 {
     d = new Private();
@@ -191,7 +191,7 @@ void K3b::IsoImager::cleanup()
         QFile::remove( *it );
     m_tempFiles.clear();
 
-    m_pathSpecFile = m_jolietHideFile = m_rrHideFile = m_sortWeightFile = 0;
+    m_pathSpecFile = m_jolietHideFile = m_rrHideFile = m_sortWeightFile = nullptr;
 
     clearDummyDirs();
 }

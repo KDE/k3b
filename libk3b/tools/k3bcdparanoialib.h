@@ -109,7 +109,7 @@ namespace K3b {
          * \return The read sector data or 0 if all data within the specified range
          *         has been read or an error has occurred.
          */
-        char* read( int* statusCode = 0, unsigned int* track = 0, bool littleEndian = true );
+        char* read( int* statusCode = nullptr, unsigned int* track = nullptr, bool littleEndian = true );
 
         /**
          * This only is valid after a call to read()

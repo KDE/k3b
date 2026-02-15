@@ -29,7 +29,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit PluginManager( QObject* parent = 0 );
+        explicit PluginManager( QObject* parent = nullptr );
         ~PluginManager() override;
 
         /**
@@ -49,7 +49,7 @@ namespace K3b {
     public Q_SLOTS:
         void loadAll();
 
-        int execPluginDialog( Plugin* plugin, QWidget* parent = 0 );
+        int execPluginDialog( Plugin* plugin, QWidget* parent = nullptr );
 
     private:
         class Private;

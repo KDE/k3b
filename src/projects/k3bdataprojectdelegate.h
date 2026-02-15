@@ -17,7 +17,7 @@ namespace K3b {
     {
         Q_OBJECT
     public:
-        explicit DataProjectDelegate( QObject* parent = 0 );
+        explicit DataProjectDelegate( QObject* parent = nullptr );
         QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const override;
 
     protected:

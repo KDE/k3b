@@ -162,7 +162,7 @@ int K3b::Iso9660FileBackend::read( unsigned int sector, char* data, int len )
 
 K3b::Iso9660LibDvdCssBackend::Iso9660LibDvdCssBackend( K3b::Device::Device* dev )
     : m_device( dev ),
-      m_libDvdCss( 0 )
+      m_libDvdCss( nullptr )
 {
 }
 
@@ -191,21 +191,21 @@ bool K3b::Iso9660LibDvdCssBackend::open()
             qDebug() << "(K3b::Iso9660LibDvdCssBackend) failed to open libdvdcss.";
     }
 
-    return ( m_libDvdCss != 0 );
+    return ( m_libDvdCss != nullptr );
 }
 
 
 void K3b::Iso9660LibDvdCssBackend::close()
 {
     delete m_libDvdCss;
-    m_libDvdCss = 0;
+    m_libDvdCss = nullptr;
 }
 
 
 
 bool K3b::Iso9660LibDvdCssBackend::isOpen() const
 {
-    return ( m_libDvdCss != 0 );
+    return ( m_libDvdCss != nullptr );
 }
 
 

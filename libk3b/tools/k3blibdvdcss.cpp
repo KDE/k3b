@@ -37,7 +37,7 @@ class K3b::LibDvdCss::Private
 {
 public:
     Private()
-        :dvd(0) {
+        :dvd(nullptr) {
     }
 
     dvdcss_t dvd;
@@ -67,7 +67,7 @@ bool K3b::LibDvdCss::open( K3b::Device::Device* dev )
     d->dvd = k3b_dvdcss_open( const_cast<char*>( QFile::encodeName(dev->blockDeviceName()).data() ) );
     d->currentSector = 0;
     d->currentSectorInTitle = false;
-    return ( d->dvd != 0 );
+    return ( d->dvd != nullptr );
 }
 
 
@@ -75,7 +75,7 @@ void K3b::LibDvdCss::close()
 {
     if( d->dvd )
         k3b_dvdcss_close( d->dvd );
-    d->dvd = 0;
+    d->dvd = nullptr;
 }
 
 
@@ -275,12 +275,12 @@ K3b::LibDvdCss* K3b::LibDvdCss::create()
             if( !k3b_dvdcss_open || !k3b_dvdcss_close || !k3b_dvdcss_seek || !k3b_dvdcss_read ) {
                 qDebug() << "(K3b::LibDvdCss) unable to resolve libdvdcss.";
                 s_libDvdCss->unload();
-                return 0;
+                return nullptr;
             }
         }
         else {
             qDebug() << "(K3b::LibDvdCss) unable to load libdvdcss.";
-            return 0;
+            return nullptr;
         }
     }
 

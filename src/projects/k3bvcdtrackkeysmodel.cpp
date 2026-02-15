@@ -161,7 +161,7 @@ QModelIndex VcdTrackKeysModel::buddy( const QModelIndex& index ) const
 
 QString VcdTrackKeysModel::trackName( VcdTrack* track )
 {
-    if( track == 0 )
+    if( track == nullptr )
         return i18n( "Video CD END" );
     else if( track->isSegment() )
         return i18n( "Segment-%1 - %2" , QString::number( track->index() + 1 ).rightJustified( 3, '0' ) , track->title() );
@@ -172,7 +172,7 @@ QString VcdTrackKeysModel::trackName( VcdTrack* track )
 
 QIcon VcdTrackKeysModel::trackIcon( VcdTrack* track )
 {
-    if( track == 0 )
+    if( track == nullptr )
         return QIcon::fromTheme( "media-optical-video" );
     else if( track->isSegment() )
         return QIcon::fromTheme( "image-x-generic" );

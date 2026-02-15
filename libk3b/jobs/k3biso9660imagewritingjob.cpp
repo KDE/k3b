@@ -49,15 +49,15 @@ K3b::Iso9660ImageWritingJob::Iso9660ImageWritingJob( K3b::JobHandler* hdl )
     : K3b::BurnJob( hdl ),
       m_writingMode(K3b::WritingModeAuto),
       m_simulate(false),
-      m_device(0),
+      m_device(nullptr),
       m_noFix(false),
       m_speed(2),
       m_dataMode(K3b::DataModeAuto),
       m_copies(1)
 {
     d = new Private;
-    d->verifyJob = 0;
-    d->writer = 0;
+    d->verifyJob = nullptr;
+    d->writer = nullptr;
 }
 
 

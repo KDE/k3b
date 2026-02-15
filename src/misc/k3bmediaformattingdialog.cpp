@@ -118,7 +118,7 @@ void K3b::MediaFormattingDialog::slotStartClicked()
 
     K3b::JobProgressDialog dlg( parentWidget(), false );
 
-    K3b::Job* theJob = 0;
+    K3b::Job* theJob = nullptr;
 
     if( medium.diskInfo().mediaType() & K3b::Device::MEDIA_CD_ALL ) {
         K3b::BlankingJob* job = new K3b::BlankingJob( &dlg, this );
@@ -164,7 +164,7 @@ void K3b::MediaFormattingDialog::toggleAll()
         modes |=  K3b::WritingModeIncrementalSequential|K3b::WritingModeRestrictedOverwrite;
     }
     m_writingModeWidget->setSupportedModes( modes );
-    setButtonEnabled( START_BUTTON, m_writerSelectionWidget->writerDevice() != 0 );
+    setButtonEnabled( START_BUTTON, m_writerSelectionWidget->writerDevice() != nullptr );
 }
 
 

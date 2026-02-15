@@ -27,7 +27,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MixedBurnDialog( MixedDoc*, QWidget *parent=0 );
+        explicit MixedBurnDialog( MixedDoc*, QWidget *parent = nullptr );
 
     protected:
         void loadSettings( const KConfigGroup& ) override;

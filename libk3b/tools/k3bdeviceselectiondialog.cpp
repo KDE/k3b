@@ -84,7 +84,7 @@ K3b::Device::Device* K3b::DeviceSelectionDialog::selectDevice( QWidget* parent,
                                                            const QString& text )
 {
     if( devices.isEmpty() )
-        return 0;
+        return nullptr;
     if( devices.count() == 1 )
         return devices[0];
 
@@ -94,7 +94,7 @@ K3b::Device::Device* K3b::DeviceSelectionDialog::selectDevice( QWidget* parent,
     if( dlg.exec() == Accepted )
         return dlg.selectedDevice();
     else
-        return 0;
+        return nullptr;
 }
 
 K3b::Device::Device* K3b::DeviceSelectionDialog::selectDevice( QWidget* parent,

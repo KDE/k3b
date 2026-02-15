@@ -19,7 +19,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        AudioImager( AudioDoc* doc, AudioJobTempData* tempData, JobHandler* jh, QObject* parent = 0 );
+        AudioImager( AudioDoc* doc, AudioJobTempData* tempData, JobHandler* jh, QObject* parent = nullptr );
         ~AudioImager() override;
 
         /**

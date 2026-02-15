@@ -20,7 +20,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit BusyWidget( QWidget* parent = 0 );
+        explicit BusyWidget( QWidget* parent = nullptr );
         ~BusyWidget() override;
 
         void showBusy( bool b );

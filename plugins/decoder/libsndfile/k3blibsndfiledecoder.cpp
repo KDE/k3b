@@ -25,9 +25,9 @@ class K3bLibsndfileDecoder::Private
 public:
     Private():
         isOpen(false),
-        buffer(0),
+        buffer(nullptr),
         bufferSize(0) {
-        format_info.name = 0;
+        format_info.name = nullptr;
     }
 
     SNDFILE *sndfile;

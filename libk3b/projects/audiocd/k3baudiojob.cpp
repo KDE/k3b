@@ -84,8 +84,8 @@ public:
 K3b::AudioJob::AudioJob( K3b::AudioDoc* doc, K3b::JobHandler* hdl, QObject* parent )
     : K3b::BurnJob( hdl, parent ),
       m_doc( doc ),
-      m_normalizeJob(0),
-      m_maxSpeedJob(0)
+      m_normalizeJob(nullptr),
+      m_maxSpeedJob(nullptr)
 {
     d = new Private;
 
@@ -102,7 +102,7 @@ K3b::AudioJob::AudioJob( K3b::AudioDoc* doc, K3b::JobHandler* hdl, QObject* pare
     connect( m_audioImager, SIGNAL(nextTrack(int,int)),
              this, SLOT(slotAudioDecoderNextTrack(int,int)) );
 
-    m_writer = 0;
+    m_writer = nullptr;
 }
 
 
@@ -115,7 +115,7 @@ K3b::AudioJob::~AudioJob()
 K3b::Device::Device* K3b::AudioJob::writer() const
 {
     if( m_doc->onlyCreateImages() )
-        return 0; // no writer needed -> no blocking on K3b::BurnJob
+        return nullptr; // no writer needed -> no blocking on K3b::BurnJob
     else
         return m_doc->burner();
 }
@@ -211,7 +211,7 @@ void K3b::AudioJob::start()
         d->less4Sec = false;
         track = m_doc->firstTrack();
         while( track ) {
-            if( track->postGap() == 0 && track->next() != 0 ) // the last track's postgap is always 0
+            if( track->postGap() == 0 && track->next() != nullptr ) // the last track's postgap is always 0
                 d->zeroPregap = true;
 
             if( track->length() < K3b::Msf( 0, 4, 0 ) )

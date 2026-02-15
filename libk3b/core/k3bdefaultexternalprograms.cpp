@@ -60,7 +60,7 @@ void K3b::addVcdimagerPrograms( K3b::ExternalBinManager* m )
     static const char* const vcdTools[] =  { "vcdxbuild",
                                        "vcdxminfo",
                                        "vcdxrip",
-                                       0 };
+                                       nullptr };
 
     for( int i = 0; vcdTools[i]; ++i )
         m->addProgram( new K3b::VcdbuilderProgram( vcdTools[i] ) );

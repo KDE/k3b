@@ -32,7 +32,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MetaWriter( Device::Device*, JobHandler* hdl, QObject* parent = 0 );
+        MetaWriter( Device::Device*, JobHandler* hdl, QObject* parent = nullptr );
         ~MetaWriter() override;
 
         QIODevice* ioDevice() const override;

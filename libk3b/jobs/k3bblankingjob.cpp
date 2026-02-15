@@ -25,9 +25,9 @@
 
 K3b::BlankingJob::BlankingJob( K3b::JobHandler* hdl, QObject* parent )
     : K3b::BurnJob( hdl, parent ),
-      m_writerJob(0),
+      m_writerJob(nullptr),
       m_force(true),
-      m_device(0),
+      m_device(nullptr),
       m_speed(0),
       m_mode(FormattingQuick),
       m_writingApp(WritingAppAuto),
@@ -57,7 +57,7 @@ void K3b::BlankingJob::setDevice( K3b::Device::Device* dev )
 
 void K3b::BlankingJob::start()
 {
-    if( m_device == 0 )
+    if( m_device == nullptr )
         return;
 
     jobStarted();

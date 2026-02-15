@@ -21,10 +21,10 @@ class K3b::Md5Job::Private
 public:
     Private()
 		: md5(QCryptographicHash::Md5),
-		  ioDevice(0),
+		  ioDevice(nullptr),
           finished(true),
-          data(0),
-          isoFile(0),
+          data(nullptr),
+          isoFile(nullptr),
           maxSize(0),
           lastProgress(0) {
     }
@@ -127,18 +127,18 @@ void K3b::Md5Job::cancel()
 void K3b::Md5Job::setFile( const QString& filename )
 {
     d->filename = filename;
-    d->isoFile = 0;
-    d->ioDevice = 0;
-    d->device = 0;
+    d->isoFile = nullptr;
+    d->ioDevice = nullptr;
+    d->device = nullptr;
 }
 
 
 void K3b::Md5Job::setFile( const K3b::Iso9660File* file )
 {
     d->isoFile = file;
-    d->ioDevice = 0;
+    d->ioDevice = nullptr;
     d->filename.truncate(0);
-    d->device = 0;
+    d->device = nullptr;
 }
 
 
@@ -146,17 +146,17 @@ void K3b::Md5Job::setIODevice( QIODevice* dev )
 {
     d->ioDevice = dev;
     d->filename.truncate(0);
-    d->isoFile = 0;
-    d->device = 0;
+    d->isoFile = nullptr;
+    d->device = nullptr;
 }
 
 
 void K3b::Md5Job::setDevice( K3b::Device::Device* dev )
 {
     d->device = dev;
-    d->ioDevice = 0;
+    d->ioDevice = nullptr;
     d->filename.truncate(0);
-    d->isoFile = 0;
+    d->isoFile = nullptr;
 }
 
 

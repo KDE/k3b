@@ -28,10 +28,10 @@ namespace K3b {
     public:
         AudioTrackAddingDialog( const QList<QUrl>& urls,
                                 AudioDoc* doc,
-                                AudioTrack* afterTrack = 0,
-                                AudioTrack* parentTrack = 0,
-                                AudioDataSource* afterSource = 0,
-                                QWidget* parent = 0 );
+                                AudioTrack* afterTrack = nullptr,
+                                AudioTrack* parentTrack = nullptr,
+                                AudioDataSource* afterSource = nullptr,
+                                QWidget* parent = nullptr );
         ~AudioTrackAddingDialog() override;
 
         /**
@@ -40,10 +40,10 @@ namespace K3b {
          */
         static void addUrls( const QList<QUrl>& urls,
                             AudioDoc* doc,
-                            AudioTrack* afterTrack = 0,
-                            AudioTrack* parentTrack = 0,
-                            AudioDataSource* afterSource = 0,
-                            QWidget* parent = 0 );
+                            AudioTrack* afterTrack = nullptr,
+                            AudioTrack* parentTrack = nullptr,
+                            AudioDataSource* afterSource = nullptr,
+                            QWidget* parent = nullptr );
 
     private Q_SLOTS:
         void slotAddUrls();

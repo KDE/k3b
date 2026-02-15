@@ -41,10 +41,10 @@ public:
         : doneCopies(0),
           running(false),
           canceled(false),
-          writerJob(0),
-          readcdReader(0),
-          dataTrackReader(0),
-          verificationJob(0),
+          writerJob(nullptr),
+          readcdReader(nullptr),
+          dataTrackReader(nullptr),
+          verificationJob(nullptr),
           usedWritingMode(K3b::WritingModeAuto),
           verifyData(false) {
         outPipe.readFrom( &imageFile, true );
@@ -80,8 +80,8 @@ public:
 
 K3b::DvdCopyJob::DvdCopyJob( K3b::JobHandler* hdl, QObject* parent )
     : K3b::BurnJob( hdl, parent ),
-      m_writerDevice(0),
-      m_readerDevice(0),
+      m_writerDevice(nullptr),
+      m_readerDevice(nullptr),
       m_onTheFly(false),
       m_removeImageFiles(false),
       m_simulate(false),

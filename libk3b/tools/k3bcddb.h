@@ -35,7 +35,7 @@ namespace K3b {
             Q_OBJECT
 
         public:
-            explicit CDDBJob( QObject* parent = 0 );
+            explicit CDDBJob( QObject* parent = nullptr );
             ~CDDBJob() override;
 
             /**

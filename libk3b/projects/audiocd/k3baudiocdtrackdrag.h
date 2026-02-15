@@ -24,7 +24,7 @@ namespace K3b {
         AudioCdTrackDrag( const Device::Toc& toc,
                           const QList<int>& trackNumbers,
                           const KCDDB::CDInfo& cddb,
-                          Device::Device* lastDev = 0 );
+                          Device::Device* lastDev = nullptr );
 
         Device::Toc toc() const { return m_toc; }
         QList<int> trackNumbers() const { return m_trackNumbers; }

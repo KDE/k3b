@@ -17,7 +17,7 @@ class DataModeWidget : public QComboBox
   Q_OBJECT
 
  public:
-  explicit DataModeWidget( QWidget* parent = 0 );
+  explicit DataModeWidget( QWidget* parent = nullptr );
   ~DataModeWidget() override;
 
   /**

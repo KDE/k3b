@@ -181,15 +181,15 @@ namespace K3b {
         static QString mediaRequestString( Device::MediaTypes requestedMediaTypes,
                                            Device::MediaStates requestedMediaStates,
                                            const K3b::Msf& requestedSize = Msf(),
-                                           Device::Device* dev = 0 );
+                                           Device::Device* dev = nullptr );
 
         static QStringList mediaRequestStrings( QList<K3b::Medium> unsuitableMediums,
                                                 Device::MediaTypes requestedMediaTypes,
                                                 Device::MediaStates requestedMediaStates,
                                                 const K3b::Msf& requestedSize = Msf(),
-                                                Device::Device* dev = 0 );
+                                                Device::Device* dev = nullptr );
 
-        static QString mediaRequestString( MediumContents content, Device::Device* dev = 0 );
+        static QString mediaRequestString( MediumContents content, Device::Device* dev = nullptr );
 
     private:
         void analyseContent();

@@ -43,7 +43,7 @@ class K3b::EmptyDiscWaiter::Private
 {
 public:
     Private()
-        : erasingInfoDialog(0) {
+        : erasingInfoDialog(nullptr) {
         dialogVisible = false;
         inLoop = false;
         mediumChanged = 0;
@@ -732,7 +732,7 @@ K3b::Device::MediaType K3b::EmptyDiscWaiter::wait( K3b::Device::Device* device,
                                                    const QString& message,
                                                    QWidget* parent )
 {
-    if( device != 0 ) {
+    if( device != nullptr ) {
         K3b::EmptyDiscWaiter d( device, parent ? parent : qApp->activeWindow() );
         return d.waitForDisc( mediaState, mediaType, minMediaSize, message );
     }

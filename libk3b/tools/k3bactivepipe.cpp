@@ -17,8 +17,8 @@ class K3b::ActivePipe::Private : public QThread
 public:
     Private( K3b::ActivePipe* pipe ) :
         m_pipe( pipe ),
-        sourceIODevice(0),
-        sinkIODevice(0),
+        sourceIODevice(nullptr),
+        sinkIODevice(nullptr),
         closeSinkIODevice( false ),
         closeSourceIODevice( false ) {
     }

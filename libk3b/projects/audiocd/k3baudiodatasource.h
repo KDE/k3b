@@ -146,7 +146,7 @@ namespace K3b {
         /**
          * Create reader associated with the source
          */
-        virtual QIODevice* createReader( QObject* parent = 0 ) = 0;
+        virtual QIODevice* createReader( QObject* parent = nullptr ) = 0;
 
     Q_SIGNALS:
         void changed();

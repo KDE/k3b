@@ -38,7 +38,7 @@ byte forced_sequence_header = 0;
 K3b::VcdDoc::VcdDoc( QObject* parent )
     : K3b::Doc( parent )
 {
-    m_tracks = 0L;
+    m_tracks = nullptr;
     m_vcdOptions = new K3b::VcdOptions();
 
     m_vcdType = NONE;
@@ -235,7 +235,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
                                     i18n( "Wrong File Type for This Project" ) );
 
                 delete Mpeg;
-                return 0;
+                return nullptr;
             }
 
             K3b::VcdTrack* newTrack = new K3b::VcdTrack( m_tracks, url.toLocalFile() );
@@ -279,7 +279,7 @@ K3b::VcdTrack* K3b::VcdDoc::createTrack( const QUrl& url )
                         i18n( "Wrong File Format" ) );
 
 
-    return 0;
+    return nullptr;
 }
 
 void K3b::VcdDoc::addTrack( const QUrl& url, uint position )
@@ -377,7 +377,7 @@ void K3b::VcdDoc::moveTrack( K3b::VcdTrack* track, K3b::VcdTrack* before )
 
     emit removedVCDTracks();
 
-    if( before != 0 ) {
+    if( before != nullptr ) {
         int pos = m_tracks->lastIndexOf( before );
         emit aboutToAddVCDTracks(pos, 1);
         m_tracks->insert( pos, track );
@@ -458,7 +458,7 @@ void K3b::VcdDoc::setPbcTracks()
                     if ( track->getPbcTrack( pbc ) )
                         track->getPbcTrack( pbc ) ->delFromRevRefList( track );
 
-                    K3b::VcdTrack* t = 0L;
+                    K3b::VcdTrack* t = nullptr;
                     int index = track->index();
 
                     // we are the last track
@@ -696,7 +696,7 @@ bool K3b::VcdDoc::loadDocumentData( QDomElement* root )
                                 K3b::VcdTrack * numkeyTrack = m_tracks->at( val );
                                 track->setDefinedNumKey( key, numkeyTrack );
                             } else {
-                                track->setDefinedNumKey( key, 0L );
+                                track->setDefinedNumKey( key, nullptr );
                             }
                         }
                     }

@@ -37,7 +37,7 @@ namespace {
     public:
         SessionInfo()
             : sessionNumber( 0 ),
-              device( 0 ) {}
+              device( nullptr ) {}
 
         SessionInfo( int num, K3b::Device::Device* dev )
             : sessionNumber( num ),
@@ -86,7 +86,7 @@ void K3b::DataMultisessionImportDialog::slotOk()
         //
         K3b::Iso9660 iso( dev );
         if( iso.open() ) {
-            if( iso.firstRRDirEntry() == 0 && iso.jolietLevel() > 0 )
+            if( iso.firstRRDirEntry() == nullptr && iso.jolietLevel() > 0 )
                 KMessageBox::error( this,
                                     i18n("<p>K3b found session containing Joliet information for long filenames "
                                          "but no Rock Ridge extensions."
@@ -177,7 +177,7 @@ void K3b::DataMultisessionImportDialog::addMedium( const K3b::Medium& medium )
     mediumItem->setIcon( 0, QIcon::fromTheme("media-optical-recordable") );
 
     const K3b::Device::Toc& toc = medium.toc();
-    QTreeWidgetItem* sessionItem = 0;
+    QTreeWidgetItem* sessionItem = nullptr;
     int lastSession = 0;
     for ( K3b::Device::Toc::const_iterator it = toc.begin(); it != toc.end(); ++it ) {
         const K3b::Device::Track& track = *it;

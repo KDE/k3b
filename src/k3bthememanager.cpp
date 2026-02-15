@@ -260,7 +260,7 @@ K3b::Theme* K3b::ThemeManager::findTheme( const QString& name ) const
     for( QList<K3b::Theme*>::ConstIterator it = d->themes.constBegin(); it != d->themes.constEnd(); ++it )
         if( (*it)->name() == name )
             return *it;
-    return 0;
+    return nullptr;
 }
 
 

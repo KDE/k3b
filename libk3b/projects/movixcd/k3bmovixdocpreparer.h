@@ -22,7 +22,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MovixDocPreparer( MovixDoc* doc, JobHandler*, QObject* parent = 0 );
+        explicit MovixDocPreparer( MovixDoc* doc, JobHandler*, QObject* parent = nullptr );
         ~MovixDocPreparer() override;
 
         MovixDoc* doc() const;

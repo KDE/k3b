@@ -28,7 +28,7 @@ namespace K3b {
         /**
          * Do not use the constructor. Use the static method instead.
          */
-        explicit MediaSelectionDialog( QWidget* parent = 0,
+        explicit MediaSelectionDialog( QWidget* parent = nullptr,
                               const QString& title = QString(),
                               const QString& text = QString(),
                               bool modal = false );
@@ -58,10 +58,10 @@ namespace K3b {
         static Device::Device* selectMedium( Device::MediaTypes type,
                                              Device::MediaStates state,
                                              Medium::MediumContents content = Medium::ContentAll,
-                                             QWidget* parent = 0,
+                                             QWidget* parent = nullptr,
                                              const QString& title = QString(),
                                              const QString& text = QString(),
-                                             bool* canceled = 0 );
+                                             bool* canceled = nullptr );
 
     private Q_SLOTS:
         void slotSelectionChanged( K3b::Device::Device* );

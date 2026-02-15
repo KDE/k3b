@@ -19,7 +19,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit VideoDvdBurnDialog( VideoDvdDoc*, QWidget *parent = 0 );
+        explicit VideoDvdBurnDialog( VideoDvdDoc*, QWidget *parent = nullptr );
         ~VideoDvdBurnDialog() override;
 
     protected Q_SLOTS:

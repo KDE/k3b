@@ -20,7 +20,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MsInfoFetcher( JobHandler*, QObject* parent = 0 );
+        explicit MsInfoFetcher( JobHandler*, QObject* parent = nullptr );
         ~MsInfoFetcher() override;
 
         QString msInfo() const { return m_msInfo; }

@@ -28,7 +28,7 @@ class K3b::DataProjectModel::Private
 {
 public:
     Private( DataProjectModel* parent )
-        : project( 0 ),
+        : project( nullptr ),
           q( parent ) {
     }
 
@@ -57,7 +57,7 @@ K3b::DataItem* K3b::DataProjectModel::Private::getChild( K3b::DirItem* dir, int 
         return children[offset];
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -145,7 +145,7 @@ K3b::DataItem* K3b::DataProjectModel::itemForIndex( const QModelIndex& index ) c
         return static_cast<K3b::DataItem*>( index.internalPointer() );
     }
     else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -319,7 +319,7 @@ int K3b::DataProjectModel::rowCount( const QModelIndex& parent ) const
     if ( parent.isValid() ) {
         K3b::DataItem* item = itemForIndex( parent );
         K3b::DirItem* dir = dynamic_cast<K3b::DirItem*>( item );
-        if ( dir != 0 && parent.column() == 0 ) {
+        if ( dir != nullptr && parent.column() == 0 ) {
             return( dir->children().count() );
         }
         else {

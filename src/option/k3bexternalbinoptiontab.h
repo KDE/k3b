@@ -19,7 +19,7 @@ class ExternalBinOptionTab : public QWidget
 Q_OBJECT
 
  public:
-  explicit ExternalBinOptionTab( ExternalBinManager* manager, QWidget* = 0 );
+  explicit ExternalBinOptionTab( ExternalBinManager* manager, QWidget* = nullptr );
   ~ExternalBinOptionTab() override;
 
   void readSettings();

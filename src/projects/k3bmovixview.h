@@ -28,7 +28,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit MovixView( MovixDoc* doc, QWidget* parent = 0 );
+        explicit MovixView( MovixDoc* doc, QWidget* parent = nullptr );
         ~MovixView() override;
 
     private Q_SLOTS:
@@ -39,7 +39,7 @@ namespace K3b {
         void slotRemove();
 
     protected:
-        ProjectBurnDialog* newBurnDialog( QWidget* parent = 0 ) override;
+        ProjectBurnDialog* newBurnDialog( QWidget* parent = nullptr ) override;
 
     private:
         MovixDoc* m_doc;

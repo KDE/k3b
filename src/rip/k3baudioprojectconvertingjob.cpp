@@ -74,7 +74,7 @@ QIODevice* AudioProjectConvertingJob::createReader( int trackIndex ) const
     if( AudioTrack* track = d->doc->getTrack( trackIndex ) )
         return new AudioTrackReader( *track );
     else
-        return 0;
+        return nullptr;
 }
 
 

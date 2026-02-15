@@ -21,12 +21,12 @@ static const double frame_rates[ 16 ] =
 };
 
 K3b::MpegInfo::MpegInfo( const char* filename )
-    : m_mpegfile( 0 ),
+    : m_mpegfile( nullptr ),
       m_filename( filename ),
       m_done( false ),
       m_buffstart( 0 ),
       m_buffend( 0 ),
-      m_buffer( 0 ),
+      m_buffer( nullptr ),
       m_initial_TS( 0.0 )
 {
 
@@ -34,7 +34,7 @@ K3b::MpegInfo::MpegInfo( const char* filename )
 
     m_mpegfile = fopen( filename, "rb" );
 
-    if ( m_mpegfile == 0 ) {
+    if ( m_mpegfile == nullptr ) {
         qDebug() << QString( "Unable to open %1" ).arg( m_filename );
         return ;
     }

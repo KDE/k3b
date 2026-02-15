@@ -22,7 +22,7 @@ public:
 
 
 K3b::DataItem::DataItem( const ItemFlags& flags )
-    : m_parentDir(0),
+    : m_parentDir(nullptr),
       m_sortWeight(0),
       m_bHideOnRockRidge(false),
       m_bHideOnJoliet(false),
@@ -40,7 +40,7 @@ K3b::DataItem::DataItem( const ItemFlags& flags )
 K3b::DataItem::DataItem( const K3b::DataItem& item )
     : m_k3bName( item.m_k3bName ),
       m_extraInfo( item.m_extraInfo ),
-      m_parentDir( 0 ),
+      m_parentDir( nullptr ),
       m_sortWeight( item.m_sortWeight ),
       m_bHideOnRockRidge( item.m_bHideOnRockRidge ),
       m_bHideOnJoliet( item.m_bHideOnJoliet ),
@@ -164,7 +164,7 @@ void K3b::DataItem::setK3bName( const QString& name ) {
 
 K3b::DataDoc* K3b::DataItem::getDoc() const
 {
-    return m_parentDir ? m_parentDir->getDoc() : 0;
+    return m_parentDir ? m_parentDir->getDoc() : nullptr;
 }
 
 
@@ -229,7 +229,7 @@ K3b::DataItem* K3b::DataItem::nextSibling() const
         parentItem = item->parent();
     }
 
-    return 0;
+    return nullptr;
 }
 
 

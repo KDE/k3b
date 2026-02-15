@@ -25,7 +25,7 @@ namespace K3b {
     public:
         VideoDVDRippingDialog( const VideoDVD::VideoDVD& dvd,
                                const QList<int>& titles,
-                               QWidget* parent = 0 );
+                               QWidget* parent = nullptr );
         ~VideoDVDRippingDialog() override;
 
         void setBaseDir( const QString& path );

@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit FileTreeView( QWidget *parent = 0 );
+        explicit FileTreeView( QWidget *parent = nullptr );
         ~FileTreeView() override;
 
         /**

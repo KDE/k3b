@@ -34,7 +34,7 @@ public:
 
 K3b::AudioCdTextWidget::AudioCdTextWidget( QWidget* parent )
     : QWidget( parent ),
-      m_doc(0)
+      m_doc(nullptr)
 {
     setupUi( this );
 

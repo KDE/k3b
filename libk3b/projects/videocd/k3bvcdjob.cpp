@@ -47,14 +47,14 @@ K3b::VcdJob::VcdJob( K3b::VcdDoc* doc, K3b::JobHandler* jh, QObject* parent )
     : K3b::BurnJob( jh, parent ),
       d( new Private )
 {
-    d->xmlFile = 0;
+    d->xmlFile = nullptr;
 
     m_doc = doc;
     m_doc->setCopies( m_doc->dummy() || m_doc->onlyCreateImages() ? 1 : m_doc->copies() );
-    m_process = 0;
+    m_process = nullptr;
     m_currentWrittenTrackNumber = 0;
     m_bytesFinishedTracks = 0;
-    m_writerJob = 0;
+    m_writerJob = nullptr;
     // m_createimageonlypercent = 33.3;
     m_createimageonlypercent = 100 / ( m_doc->copies() + 2 );
     m_currentcopy = 1;
@@ -82,7 +82,7 @@ K3b::Doc* K3b::VcdJob::doc() const
 K3b::Device::Device* K3b::VcdJob::writer() const
 {
     if( doc()->onlyCreateImages() )
-        return 0;
+        return nullptr;
     else
         return doc() ->burner();
 }
@@ -362,7 +362,7 @@ void K3b::VcdJob::slotVcdxBuildFinished( int exitCode, QProcess::ExitStatus exit
 
     //remove xml-file
     delete d->xmlFile;
-    d->xmlFile = 0;
+    d->xmlFile = nullptr;
 
     qDebug() << QString( "(K3b::VcdJob) create only image: %1" ).arg( vcdDoc() ->onlyCreateImages() );
     if ( !vcdDoc() ->onlyCreateImages() )

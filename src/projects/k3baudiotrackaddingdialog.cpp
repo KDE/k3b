@@ -130,7 +130,7 @@ void K3b::AudioTrackAddingDialog::slotAddUrls()
         if( parser.isValid() && parser.toc().contentType() == K3b::Device::AUDIO ) {
             if ( parser.imageFileType() == QLatin1String( "bin" ) ) {
                 // no need to analyze -> raw audio data
-                m_doc->importCueFile( url.toLocalFile(), m_trackAfter, 0 );
+                m_doc->importCueFile( url.toLocalFile(), m_trackAfter, nullptr );
                 m_urls.erase( m_urls.begin() );
                 QMetaObject::invokeMethod( this, "slotAddUrls", Qt::QueuedConnection );
                 return;

@@ -46,8 +46,8 @@ class K3b::DataJob::Private
 public:
     Private()
         : usedWritingApp(K3b::WritingAppAuto),
-          verificationJob( 0 ),
-          pipe( 0 ) {
+          verificationJob( nullptr ),
+          pipe( nullptr ) {
     }
 
     K3b::DataDoc* doc;
@@ -87,9 +87,9 @@ K3b::DataJob::DataJob( K3b::DataDoc* doc, K3b::JobHandler* hdl, QObject* parent 
                    SIGNAL(newSubTask(QString)) );
 
     d->doc = doc;
-    m_writerJob = 0;
-    d->tocFile = 0;
-    m_isoImager = 0;
+    m_writerJob = nullptr;
+    d->tocFile = nullptr;
+    m_isoImager = nullptr;
 }
 
 
@@ -111,7 +111,7 @@ K3b::Doc* K3b::DataJob::doc() const
 K3b::Device::Device* K3b::DataJob::writer() const
 {
     if( doc()->onlyCreateImages() )
-        return 0; // no writer needed -> no blocking on K3b::BurnJob
+        return nullptr; // no writer needed -> no blocking on K3b::BurnJob
     else
         return doc()->burner();
 }
@@ -173,10 +173,10 @@ void K3b::DataJob::prepareWriting()
         m_isoImager->setMultiSessionInfo( QString::asprintf( "%u,%u",
                                                              d->multiSessionParameterJob->previousSessionStart(),
                                                              nextSessionStart ),
-                                          d->multiSessionParameterJob->importPreviousSession() ? d->doc->burner() : 0 );
+                                          d->multiSessionParameterJob->importPreviousSession() ? d->doc->burner() : nullptr );
     }
     else {
-        m_isoImager->setMultiSessionInfo( QString(), 0 );
+        m_isoImager->setMultiSessionInfo( QString(), nullptr );
     }
 
     d->initializingImager = true;
@@ -656,7 +656,7 @@ bool K3b::DataJob::prepareWriterJob()
     qDebug();
     if( m_writerJob ) {
         delete m_writerJob;
-        m_writerJob = 0;
+        m_writerJob = nullptr;
     }
 
     // if we append a new session we asked for an appendable cd already
@@ -1020,7 +1020,7 @@ void K3b::DataJob::cleanup()
 
     if( d->tocFile ) {
         delete d->tocFile;
-        d->tocFile = 0;
+        d->tocFile = nullptr;
     }
 }
 

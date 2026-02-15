@@ -40,13 +40,13 @@ namespace K3b {
          * (doesn't wait till dialog is closed)
          */
         static void addUrls( const QList<QUrl>& urls, DirItem* dir,
-                            QWidget* parent = 0 );
+                            QWidget* parent = nullptr );
 
         static void moveItems( const QList<DataItem*>& items, DirItem* dir,
-                              QWidget* parent = 0 );
+                              QWidget* parent = nullptr );
 
         static void copyItems( const QList<DataItem*>& items, DirItem* dir,
-                              QWidget* parent = 0 );
+                              QWidget* parent = nullptr );
 
     private Q_SLOTS:
         void slotStartAddUrls();
@@ -58,8 +58,8 @@ namespace K3b {
         void updateProgress();
 
     private:
-        DataUrlAddingDialog( const QList<QUrl>& urls, DirItem* dir, QWidget* parent = 0 );
-        DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent = 0 );
+        DataUrlAddingDialog( const QList<QUrl>& urls, DirItem* dir, QWidget* parent = nullptr );
+        DataUrlAddingDialog( const QList<DataItem*>& items, DirItem* dir, bool copy, QWidget* parent = nullptr );
         DataUrlAddingDialog( DirItem* dir, QWidget* parent );
         bool getNewName( const QString& oldName, DirItem* dir, QString& newName );
         bool addHiddenFiles();

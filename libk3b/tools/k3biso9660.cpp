@@ -37,7 +37,7 @@ int K3b::Iso9660::isofs_callback( struct iso_directory_record *idr, void *udata 
     int time,cdate,adate;
     rr_entry rr;
     bool special=false;
-    K3b::Iso9660Entry *entry=0;
+    K3b::Iso9660Entry *entry = nullptr;
     //K3b::Iso9660Entry *oldentry=0;
     char z_algo[2],z_params[2];
     int z_size=0;
@@ -348,7 +348,7 @@ QStringList K3b::Iso9660Directory::iso9660Entries() const
 K3b::Iso9660Entry* K3b::Iso9660Directory::entry( const QString& n )
 {
     if( n.isEmpty() )
-        return 0;
+        return nullptr;
 
     expand();
 
@@ -375,7 +375,7 @@ K3b::Iso9660Entry* K3b::Iso9660Directory::entry( const QString& n )
 
         K3b::Iso9660Entry* e = m_entries[ left ];
         if ( !e || !e->isDirectory() )
-            return 0;
+            return nullptr;
         return static_cast<K3b::Iso9660Directory*>(e)->entry( right );
     }
 
@@ -386,7 +386,7 @@ K3b::Iso9660Entry* K3b::Iso9660Directory::entry( const QString& n )
 K3b::Iso9660Entry* K3b::Iso9660Directory::iso9660Entry( const QString& n )
 {
     if( n.isEmpty() )
-        return 0;
+        return nullptr;
 
     expand();
 
@@ -413,7 +413,7 @@ K3b::Iso9660Entry* K3b::Iso9660Directory::iso9660Entry( const QString& n )
 
         K3b::Iso9660Entry* e = m_iso9660Entries[ left ];
         if ( !e || !e->isDirectory() )
-            return 0;
+            return nullptr;
         return static_cast<K3b::Iso9660Directory*>(e)->iso9660Entry( right );
     }
 
@@ -447,12 +447,12 @@ class K3b::Iso9660::Private
 {
 public:
     Private()
-        : cdDevice(0),
+        : cdDevice(nullptr),
           fd(-1),
           isOpen(false),
           startSector(0),
           plainIso9660(false),
-          backend(0) {
+          backend(nullptr) {
     }
 
     QList<K3b::Iso9660Directory*> elToritoDirs;
@@ -774,7 +774,7 @@ const K3b::Iso9660Directory* K3b::Iso9660::firstJolietDirEntry() const
     if ( !d->jolietDirs.isEmpty() )
         return d->jolietDirs.first();
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -783,7 +783,7 @@ const K3b::Iso9660Directory* K3b::Iso9660::firstIsoDirEntry() const
     if ( !d->isoDirs.isEmpty() )
         return d->isoDirs.first();
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -792,7 +792,7 @@ const K3b::Iso9660Directory* K3b::Iso9660::firstElToritoEntry() const
     if ( !d->elToritoDirs.isEmpty() )
         return d->elToritoDirs.first();
     else
-        return 0;
+        return nullptr;
 }
 
 
@@ -801,7 +801,7 @@ const K3b::Iso9660Directory* K3b::Iso9660::firstRRDirEntry() const
     if ( !d->rrDirs.isEmpty() )
         return d->rrDirs.first();
     else
-        return 0;
+        return nullptr;
 }
 
 

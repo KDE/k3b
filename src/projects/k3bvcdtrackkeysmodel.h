@@ -32,7 +32,7 @@ public:
     typedef QMap<int, VcdTrack*> Key2Track;
     
 public:
-    explicit VcdTrackKeysModel( int keyCount, QObject* parent = 0 );
+    explicit VcdTrackKeysModel( int keyCount, QObject* parent = nullptr );
     ~VcdTrackKeysModel() override;
     
     int keyCount() const;

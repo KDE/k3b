@@ -186,7 +186,7 @@ K3b::ExternalProgram::~ExternalProgram()
 const K3b::ExternalBin* K3b::ExternalProgram::mostRecentBin() const
 {
     if ( d->bins.isEmpty() ) {
-        return 0;
+        return nullptr;
     }
     else {
         return d->bins.first();
@@ -205,7 +205,7 @@ const K3b::ExternalBin* K3b::ExternalProgram::defaultBin() const
                 return *it;
             }
         }
-        return 0;
+        return nullptr;
     }
 }
 
@@ -556,7 +556,7 @@ bool K3b::ExternalBinManager::foundBin( const QString& name )
     if( d->programs.constFind( name ) == d->programs.constEnd() )
         return false;
     else
-        return (d->programs[name]->defaultBin() != 0);
+        return (d->programs[name]->defaultBin() != nullptr);
 }
 
 
@@ -565,7 +565,7 @@ QString K3b::ExternalBinManager::binPath( const QString& name )
     if( d->programs.constFind( name ) == d->programs.constEnd() )
         return Private::noPath;
 
-    if( d->programs[name]->defaultBin() != 0 )
+    if( d->programs[name]->defaultBin() != nullptr )
         return d->programs[name]->defaultBin()->path();
     else
         return Private::noPath;
@@ -575,7 +575,7 @@ QString K3b::ExternalBinManager::binPath( const QString& name )
 const K3b::ExternalBin* K3b::ExternalBinManager::binObject( const QString& name )
 {
     if( d->programs.constFind( name ) == d->programs.constEnd() )
-        return 0;
+        return nullptr;
 
     return d->programs[name]->defaultBin();
 }
@@ -586,7 +586,7 @@ QString K3b::ExternalBinManager::binNeedGroup( const QString& name )
     if( d->programs.constFind( name ) == d->programs.constEnd() )
         return QString();
 
-    if( d->programs[name]->defaultBin() != 0 )
+    if( d->programs[name]->defaultBin() != nullptr )
         return d->programs[name]->defaultBin()->needGroup();
 
     return QString();
@@ -644,7 +644,7 @@ void K3b::ExternalBinManager::search()
 K3b::ExternalProgram* K3b::ExternalBinManager::program( const QString& name ) const
 {
     if( d->programs.constFind( name ) == d->programs.constEnd() )
-        return 0;
+        return nullptr;
     else
         return d->programs[name];
 }
@@ -666,7 +666,7 @@ void K3b::ExternalBinManager::loadDefaultSearchPath()
                                                 "/usr/local/sbin/",
                                                 "/sbin",
 #endif
-                                                0 };
+                                                nullptr };
 
     d->searchPath.clear();
     for( int i = 0; defaultSearchPaths[i]; ++i ) {
@@ -703,7 +703,7 @@ const K3b::ExternalBin* K3b::ExternalBinManager::mostRecentBinObject( const QStr
     if( K3b::ExternalProgram* p = program( name ) )
         return p->mostRecentBin();
     else
-        return 0;
+        return nullptr;
 }
 
 #include "moc_k3bexternalbinmanager.cpp"

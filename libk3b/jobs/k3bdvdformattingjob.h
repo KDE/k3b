@@ -23,7 +23,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DvdFormattingJob( JobHandler*, QObject* parent = 0 );
+        explicit DvdFormattingJob( JobHandler*, QObject* parent = nullptr );
         ~DvdFormattingJob() override;
 
         QString jobDescription() const override;

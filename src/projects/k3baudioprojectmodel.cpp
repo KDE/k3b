@@ -143,7 +143,7 @@ K3b::AudioTrack* K3b::AudioProjectModel::trackForIndex( const QModelIndex& index
              return track;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -161,7 +161,7 @@ K3b::AudioDataSource* K3b::AudioProjectModel::sourceForIndex( const QModelIndex&
              return source;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -365,7 +365,7 @@ int K3b::AudioProjectModel::rowCount( const QModelIndex& parent ) const
 {
     if ( parent.isValid() ) {
         K3b::AudioTrack* track = trackForIndex( parent );
-        if ( track != 0 && parent.column() == 0 ) {
+        if ( track != nullptr && parent.column() == 0 ) {
             // first level
             return track->numberSources();
         }
@@ -515,9 +515,9 @@ bool K3b::AudioProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction
     if ( action == Qt::IgnoreAction )
         return true;
 
-    K3b::AudioTrack* dropTrackParent = 0;
-    K3b::AudioTrack* dropTrackAfter = 0;
-    K3b::AudioDataSource* dropSourceAfter = 0;
+    K3b::AudioTrack* dropTrackParent = nullptr;
+    K3b::AudioTrack* dropTrackAfter = nullptr;
+    K3b::AudioDataSource* dropSourceAfter = nullptr;
     if ( K3b::AudioTrack* track = trackForIndex( parent ) ) {
         if ( row >= 0 ) {
             dropTrackParent = track;

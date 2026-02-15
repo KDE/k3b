@@ -22,7 +22,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioTrackModel( QObject* parent = 0 );
+        explicit AudioTrackModel( QObject* parent = nullptr );
         ~AudioTrackModel() override;
 
         enum Columns {

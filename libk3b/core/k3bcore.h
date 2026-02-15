@@ -52,7 +52,7 @@ namespace K3b {
          * Although Core is a singleton it's constructor is not private to make inheritance
          * possible. Just make sure to only create one instance.
          */
-        explicit Core( QObject* parent = 0 );
+        explicit Core( QObject* parent = nullptr );
         ~Core() override;
 
         QList<Job*> runningJobs() const;

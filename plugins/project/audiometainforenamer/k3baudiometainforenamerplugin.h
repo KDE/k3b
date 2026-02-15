@@ -23,7 +23,7 @@ class K3bAudioMetainfoRenamerPluginWidget : public QWidget, public K3b::ProjectP
     Q_OBJECT
 
 public:
-    explicit K3bAudioMetainfoRenamerPluginWidget( K3b::DataDoc* doc, QWidget* parent = 0 );
+    explicit K3bAudioMetainfoRenamerPluginWidget( K3b::DataDoc* doc, QWidget* parent = nullptr );
     ~K3bAudioMetainfoRenamerPluginWidget() override;
 
     QWidget* qWidget() override { return this; }
@@ -59,7 +59,7 @@ public:
 
     int pluginSystemVersion() const override { return K3B_PLUGIN_SYSTEM_VERSION; }
 
-    K3b::ProjectPluginGUIBase* createGUI( K3b::Doc*, QWidget* = 0 ) override;
+    K3b::ProjectPluginGUIBase* createGUI( K3b::Doc*, QWidget* = nullptr ) override;
 };
 
 

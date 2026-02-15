@@ -71,12 +71,12 @@ namespace K3b {
         /**
          * \param bin If 0 the default binary from Core will be used
          */
-        static bool transcodeBinaryHasSupportFor( VideoCodec codec, const ExternalBin* bin = 0 );
+        static bool transcodeBinaryHasSupportFor( VideoCodec codec, const ExternalBin* bin = nullptr );
 
         /**
          * \param bin If 0 the default binary from Core will be used
          */
-        static bool transcodeBinaryHasSupportFor( AudioCodec codec, const ExternalBin* bin = 0 );
+        static bool transcodeBinaryHasSupportFor( AudioCodec codec, const ExternalBin* bin = nullptr );
 
         static QString videoCodecString( VideoCodec );
         static QString audioCodecString( AudioCodec );

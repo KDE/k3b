@@ -27,9 +27,9 @@ class K3b::DvdBooktypeJob::Private
 {
 public:
     Private()
-        : device(0),
-          process(0),
-          dvdBooktypeBin(0),
+        : device(nullptr),
+          process(nullptr),
+          dvdBooktypeBin(nullptr),
           running(false),
           forceNoEject(false) {
     }

@@ -62,7 +62,7 @@ K3b::BootImageDialog::BootImageDialog( K3b::DataDoc* doc, QWidget* parent )
     m_editLoadSize->setValidator( v );
 
     showAdvancedOptions( false );
-    loadBootItemSettings(0);
+    loadBootItemSettings(nullptr);
 }
 
 K3b::BootImageDialog::~BootImageDialog()

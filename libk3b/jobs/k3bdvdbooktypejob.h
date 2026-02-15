@@ -26,7 +26,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DvdBooktypeJob( JobHandler*, QObject* parent = 0 );
+        explicit DvdBooktypeJob( JobHandler*, QObject* parent = nullptr );
         ~DvdBooktypeJob() override;
 
         QString jobDescription() const override;

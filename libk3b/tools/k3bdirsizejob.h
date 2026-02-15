@@ -25,7 +25,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit DirSizeJob( QObject* parent = 0 );
+        explicit DirSizeJob( QObject* parent = nullptr );
         ~DirSizeJob() override;
 
         KIO::filesize_t totalSize() const;

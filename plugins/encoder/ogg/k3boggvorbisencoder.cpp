@@ -74,13 +74,13 @@ public:
           bitrateNominal(-1),
           bitrateLower(-1),
           //      sampleRate(44100),
-          oggStream(0),
-          oggPage(0),
-          oggPacket(0),
-          vorbisInfo(0),
-          vorbisComment(0),
-          vorbisDspState(0),
-          vorbisBlock(0),
+          oggStream(nullptr),
+          oggPage(nullptr),
+          oggPacket(nullptr),
+          vorbisInfo(nullptr),
+          vorbisComment(nullptr),
+          vorbisDspState(nullptr),
+          vorbisBlock(nullptr),
           headersWritten(false) {
     }
 
@@ -188,7 +188,7 @@ bool K3bOggVorbisEncoder::initEncoderInternal( const QString&, const K3b::Msf& /
     // pick a random serial number; that way we can more likely build
     // chained streams just by concatenation
     d->oggStream = new ogg_stream_state;
-    srand( time(0) );
+    srand( time(nullptr) );
     ogg_stream_init( d->oggStream, rand() );
 
     // Set meta data
@@ -312,7 +312,7 @@ long K3bOggVorbisEncoder::flushVorbis()
     while( vorbis_analysis_blockout( d->vorbisDspState, d->vorbisBlock ) == 1 ) {
 
         // analysis
-        vorbis_analysis( d->vorbisBlock, 0 );
+        vorbis_analysis( d->vorbisBlock, nullptr );
         vorbis_bitrate_addblock( d->vorbisBlock );
 
         while( vorbis_bitrate_flushpacket( d->vorbisDspState, d->oggPacket ) ) {
@@ -350,38 +350,38 @@ void K3bOggVorbisEncoder::cleanup()
     if( d->oggStream ) {
         ogg_stream_clear( d->oggStream );
         delete d->oggStream;
-        d->oggStream = 0;
+        d->oggStream = nullptr;
     }
     if( d->vorbisBlock ) {
         vorbis_block_clear( d->vorbisBlock );
         delete d->vorbisBlock;
-        d->vorbisBlock = 0;
+        d->vorbisBlock = nullptr;
     }
     if( d->vorbisDspState ) {
         vorbis_dsp_clear( d->vorbisDspState );
         delete d->vorbisDspState;
-        d->vorbisDspState = 0;
+        d->vorbisDspState = nullptr;
     }
     if( d->vorbisComment ) {
         vorbis_comment_clear( d->vorbisComment );
         delete d->vorbisComment;
-        d->vorbisComment = 0;
+        d->vorbisComment = nullptr;
     }
     if( d->vorbisInfo ) {
         vorbis_info_clear( d->vorbisInfo );
         delete d->vorbisInfo;
-        d->vorbisInfo = 0;
+        d->vorbisInfo = nullptr;
     }
 
     // ogg_page and ogg_packet structs always point to storage in
     // libvorbis.  They're never freed or manipulated directly
     if( d->oggPage ) {
         delete d->oggPage;
-        d->oggPage = 0;
+        d->oggPage = nullptr;
     }
     if( d->oggPacket ) {
         delete d->oggPacket;
-        d->oggPacket = 0;
+        d->oggPacket = nullptr;
     }
 
     d->headersWritten = false;

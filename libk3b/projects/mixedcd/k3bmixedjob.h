@@ -31,7 +31,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        MixedJob( MixedDoc*, JobHandler*, QObject* parent = 0 );
+        MixedJob( MixedDoc*, JobHandler*, QObject* parent = nullptr );
         ~MixedJob() override;
 
         Doc* doc() const;

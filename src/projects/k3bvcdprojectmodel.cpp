@@ -25,7 +25,7 @@ class VcdProjectModel::Private
 {
     public:
         Private( VcdProjectModel* parent )
-            : doc( 0 ),
+            : doc( nullptr ),
             q( parent ) { }
 
         VcdDoc* doc;
@@ -89,13 +89,13 @@ VcdTrack* VcdProjectModel::trackForIndex( const QModelIndex& index ) const
     if( index.isValid() && index.row() >= 0 && index.row() < d->doc->numOfTracks() )
         return d->doc->at( index.row() );
     else
-        return 0;
+        return nullptr;
 }
 
 
 QModelIndex VcdProjectModel::indexForTrack( VcdTrack* track, int column ) const
 {
-    if( track != 0 && column >= 0 && column < NumColumns )
+    if( track != nullptr && column >= 0 && column < NumColumns )
         return createIndex( track->index(), column, track );
     else
         return QModelIndex();
@@ -344,7 +344,7 @@ bool VcdProjectModel::dropMimeData( const QMimeData* data, Qt::DropAction action
         if( row >= 0 && row < d->doc->numOfTracks() )
             before = d->doc->at( row );
         else
-            before = 0;
+            before = nullptr;
 
         QByteArray trackData = data->data( "application/x-k3bvcdtrack" );
         QDataStream trackDataStream( trackData );

@@ -152,7 +152,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::findDevice( const QString& devi
 {
     if( devicename.isEmpty() ) {
         qDebug() << "(K3b::Device::DeviceManager) request for empty device!";
-        return 0;
+        return nullptr;
     }
 
     foreach( Device* dev, d->allDevices ) {
@@ -160,7 +160,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::findDevice( const QString& devi
             return dev;
     }
 
-    return 0;
+    return nullptr;
 }
 
 
@@ -170,7 +170,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::findDeviceByUdi( const QString&
         if ( dev->solidDevice().udi() == udi )
             return dev;
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -243,7 +243,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::checkDevice( const Solid::Devic
         return addDevice( dev );
     }
     else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -358,7 +358,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::addDevice( const Solid::Device&
         else
             qDebug() << "(K3b::Device::DeviceManager) dev " << blockDevice->device()  << " already found";
     }
-    return 0;
+    return nullptr;
 }
 
 
@@ -369,7 +369,7 @@ K3b::Device::Device* K3b::Device::DeviceManager::addDevice( K3b::Device::Device*
     if( !device->init() ) {
         qDebug() << "Could not initialize device " << devicename;
         delete device;
-        return 0;
+        return nullptr;
     }
 
     if( device ) {

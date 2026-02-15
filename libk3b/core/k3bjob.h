@@ -227,7 +227,7 @@ namespace K3b {
          * \see runningSubJobs()
          * \see numRunningSubJobs()
          */
-        Job( JobHandler* hdl, QObject* parent = 0 );
+        Job( JobHandler* hdl, QObject* parent = nullptr );
 
         /**
          * Call this in start() to properly register the job and emit the started() signal.
@@ -268,13 +268,13 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit BurnJob( JobHandler* hdl, QObject* parent = 0 );
+        explicit BurnJob( JobHandler* hdl, QObject* parent = nullptr );
         ~BurnJob() override;
 
         /**
          * The writing device used by this job.
          */
-        virtual Device::Device* writer() const { return 0; }
+        virtual Device::Device* writer() const { return nullptr; }
 
         /**
          * use WritingApp

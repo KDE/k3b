@@ -19,7 +19,7 @@
 
 // FIXME: multiple tracks
 K3b::AudioCdTrackDrag::AudioCdTrackDrag()
-    : m_device( 0 )
+    : m_device( nullptr )
 {
 }
 

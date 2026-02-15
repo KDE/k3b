@@ -51,12 +51,12 @@ public:
     Private()
         : canceled(false),
           running(false),
-          readcdReader(0),
-          dataTrackReader(0),
-          audioSessionReader(0),
-          cdrecordWriter(0),
-          infFileWriter(0),
-          cddb(0) {
+          readcdReader(nullptr),
+          dataTrackReader(nullptr),
+          audioSessionReader(nullptr),
+          cdrecordWriter(nullptr),
+          infFileWriter(nullptr),
+          cddb(nullptr) {
     }
 
     bool canceled;
@@ -654,7 +654,7 @@ void K3b::CdCopyJob::readNextSession()
         else
             d->dataTrackReader->setSectorSize( K3b::DataTrackReader::AUTO );
 
-        K3b::Device::Track* track = 0;
+        K3b::Device::Track* track = nullptr;
         int dataTrackIndex = 0;
         if( d->toc.contentType() == K3b::Device::MIXED ) {
             track = &d->toc[d->toc.count()-1];
@@ -882,7 +882,7 @@ bool K3b::CdCopyJob::writeNextSession()
         //
         // Data Session
         //
-        K3b::Device::Track* track = 0;
+        K3b::Device::Track* track = nullptr;
         int dataTrackIndex = 0;
         if( d->toc.contentType() == K3b::Device::MIXED ) {
             track = &d->toc[d->toc.count()-1];

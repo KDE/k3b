@@ -22,7 +22,7 @@ namespace K3b {
         Q_OBJECT
 
     public:
-        explicit AudioSessionReadingJob( JobHandler*, QObject* parent = 0 );
+        explicit AudioSessionReadingJob( JobHandler*, QObject* parent = nullptr );
         ~AudioSessionReadingJob() override;
 
         /**

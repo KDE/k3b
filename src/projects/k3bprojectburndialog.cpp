@@ -53,8 +53,8 @@ K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )
                             START_BUTTON|SAVE_BUTTON|CANCEL_BUTTON,
                             START_BUTTON,
                             "default " + doc->typeString() + " settings" ),
-      m_writerSelectionWidget(0),
-      m_tempDirSelectionWidget(0),
+      m_writerSelectionWidget(nullptr),
+      m_tempDirSelectionWidget(nullptr),
       m_imageTipText(i18n("Use the 'Image' tab to optionally adjust the path of the image."))
 {
     m_doc = doc;
@@ -68,7 +68,7 @@ K3b::ProjectBurnDialog::ProjectBurnDialog( K3b::Doc* doc, QWidget *parent )
     cancelItem.setWhatsThis( i18n("Discards all changes made in the dialog and closes it.") );
     setButtonGui( CANCEL_BUTTON, cancelItem );
 
-    m_job = 0;
+    m_job = nullptr;
 }
 
 
@@ -146,7 +146,7 @@ void K3b::ProjectBurnDialog::toggleAll()
 
 int K3b::ProjectBurnDialog::execBurnDialog( bool burn )
 {
-    if( burn && m_job == 0 ) {
+    if( burn && m_job == nullptr ) {
         setButtonShown( START_BUTTON, true );
         setDefaultButton( START_BUTTON );
     }
@@ -208,7 +208,7 @@ void K3b::ProjectBurnDialog::slotStartClicked()
         }
     }
 
-    K3b::JobProgressDialog* dlg = 0;
+    K3b::JobProgressDialog* dlg = nullptr;
     if( m_checkOnlyCreateImage && m_checkOnlyCreateImage->isChecked() )
         dlg = new K3b::JobProgressDialog( parentWidget() );
     else
@@ -227,7 +227,7 @@ void K3b::ProjectBurnDialog::slotStartClicked()
     qDebug() << "(K3b::ProjectBurnDialog) job done. cleaning up.";
 
     delete m_job;
-    m_job = 0;
+    m_job = nullptr;
     delete dlg;
 
     done( Burn );
