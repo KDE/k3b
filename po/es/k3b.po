@@ -1,5 +1,5 @@
 # Spanish translations for k3b.po package.
-# Copyright (C) 2007-2025 This file is copyright:
+# Copyright (C) 2007-2026 This file is copyright:
 # This file is distributed under the same license as the k3b package.
 #
 # SPDX-FileCopyrightText: 2007, 2009, 2014, 2015, 2016, 2017, 2019 Eloy Cuadra <ecuadra@eloihr.net>
@@ -8,13 +8,13 @@
 # SPDX-FileCopyrightText: 2008 Danilo Vasquez Simonetti <danilo.vasquez@gmail.com>
 # SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014 Javier Viñal <fjvinal@gmail.com>
 # SPDX-FileCopyrightText: 2015 Sergio Ahumada <sahumada@texla.cl>
-# SPDX-FileCopyrightText: 2017, 2018, 2019, 2022, 2023, 2024, 2025 Víctor Rodrigo Córdoba <vrcordoba@gmail.com>
+# SPDX-FileCopyrightText: 2017, 2018, 2019, 2022, 2023, 2024, 2025, 2026 Víctor Rodrigo Córdoba <vrcordoba@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 14:40+0000\n"
-"PO-Revision-Date: 2025-06-09 01:57+0100\n"
+"PO-Revision-Date: 2026-02-15 11:19+0100\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -3388,7 +3388,7 @@ msgstr "Velocidad:"
 #: k3bwriterselectionwidget.cpp:127
 #, kde-format
 msgid "Writing app:"
-msgstr "Escribiendo app:"
+msgstr "Aplicación de escritura:"
 
 #: k3bwriterselectionwidget.cpp:159
 #, kde-format
