@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-01-14 00:43+0000\n"
-"PO-Revision-Date: 2026-01-18 00:15+0100\n"
+"PO-Revision-Date: 2026-02-15 11:21+0100\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -3406,7 +3406,7 @@ msgstr "Velocidad:"
 #: k3bwriterselectionwidget.cpp:127
 #, kde-format
 msgid "Writing app:"
-msgstr "Escribiendo app:"
+msgstr "Aplicación de escritura:"
 
 #: k3bwriterselectionwidget.cpp:159
 #, kde-format
