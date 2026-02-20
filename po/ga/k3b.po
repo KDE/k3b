@@ -271,10 +271,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:32
-#, fuzzy, kde-format
-#| msgid "Configure Plugin"
+#, kde-format
 msgid "Configured Encoders"
-msgstr "Cumraigh Breiseán"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QTreeWidget, m_viewEncoders)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:45
@@ -485,10 +484,9 @@ msgstr "Socruithe"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:40
-#, fuzzy, kde-format
-#| msgid "Default Settings"
+#, kde-format
 msgid "Quality Settings"
-msgstr "Réamhshocruithe"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioQualityLevel)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:48
@@ -501,33 +499,29 @@ msgstr "Réamhshocraithe:"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:105
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:348
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:120
-#, fuzzy, kde-format
-#| msgid "Video Quality"
+#, kde-format
 msgid "high quality"
-msgstr "Cáilíocht an Fhíseáin"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #. i18n: ectx: property (text), widget (QLabel, textLabel3_2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:123
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:138
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "small file"
-msgstr "Comhad íomhá:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioManual)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:172
-#, fuzzy, kde-format
-#| msgid "Default Settings"
+#, kde-format
 msgid "Manua&l settings:"
-msgstr "Réamhshocruithe"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonManualSettings)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:239
-#, fuzzy, kde-format
-#| msgid "Saved Settings"
+#, kde-format
 msgid "Change Settings..."
-msgstr "Socruithe Sábháilte"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
@@ -541,10 +535,9 @@ msgstr "Casta"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:271
-#, fuzzy, kde-format
-#| msgid "Video Quality"
+#, kde-format
 msgid "Encoder Quality"
-msgstr "Cáilíocht an Fhíseáin"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_spinEncoderQuality)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:277
@@ -583,10 +576,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCopyright)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:375
-#, fuzzy, kde-format
-#| msgid "Copyright"
+#, kde-format
 msgid "Mark copyrighted"
-msgstr "Cóipcheart"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkOriginal)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:382
@@ -625,10 +617,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkError)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:406
-#, fuzzy, kde-format
-#| msgid "Error protection"
+#, kde-format
 msgid "Turn on CRC error protection."
-msgstr "Cosaint ar earráidí"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkError)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:409
@@ -654,17 +645,15 @@ msgstr "Cáilíocht"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioConstantBitrate)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Constant Bitrate"
+#, kde-format
 msgid "&Constant Bitrate"
-msgstr "Ráta Tairiseach Giotán"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioVariableBitrate)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:56
-#, fuzzy, kde-format
-#| msgid "Variable Bitrate"
+#, kde-format
 msgid "&Variable Bitrate"
-msgstr "Ráta Inathraithe Giotán"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateMaximum)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:69
@@ -674,10 +663,9 @@ msgstr "Uasráta giotán:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateAverage)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:89
-#, fuzzy, kde-format
-#| msgid "Maximum bitrate:"
+#, kde-format
 msgid "Average bitrate:"
-msgstr "Uasráta giotán:"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_spinVideoBitrate)
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_spinAudioBitrate)
@@ -691,17 +679,15 @@ msgstr " kbps"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateMinimum)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:115
-#, fuzzy, kde-format
-#| msgid "Maximum bitrate:"
+#, kde-format
 msgid "Minimum bitrate:"
-msgstr "Uasráta giotán:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:151
-#, fuzzy, kde-format
-#| msgid "Channels"
+#, kde-format
 msgid "Channel Mode"
-msgstr "Cainéil"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboMode)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:157
@@ -803,10 +789,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:21
-#, fuzzy, kde-format
-#| msgid "Video Quality"
+#, kde-format
 msgid "File Quality"
-msgstr "Cáilíocht an Fhíseáin"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioQualityLevel)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:29
@@ -830,31 +815,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioQualityLevel)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:35
-#, fuzzy, kde-format
-#| msgid "Quality"
+#, kde-format
 msgid "&Quality level:"
-msgstr "Cáilíocht"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioManual)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:169
-#, fuzzy, kde-format
-#| msgid "Default Settings"
+#, kde-format
 msgid "M&anual settings:"
-msgstr "Réamhshocruithe"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateUpper)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:209
-#, fuzzy, kde-format
-#| msgid "Video Bitrate:"
+#, kde-format
 msgid "&Upper bitrate:"
-msgstr "Ráta Giotán an Fhíseáin:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateLower)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:216
-#, fuzzy, kde-format
-#| msgid "Video Bitrate:"
+#, kde-format
 msgid "Lower &bitrate:"
-msgstr "Ráta Giotán an Fhíseáin:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
@@ -868,10 +849,9 @@ msgstr "kbss"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateNominal)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:292
-#, fuzzy, kde-format
-#| msgid "Maximum bitrate:"
+#, kde-format
 msgid "&Nominal bitrate:"
-msgstr "Uasráta giotán:"
+msgstr ""
 
 #: ../plugins/encoder/ogg/k3boggvorbisencoderconfigwidget.cpp:56
 #, kde-format
@@ -991,17 +971,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:123
-#, fuzzy, kde-format
-#| msgid "Data mode:"
+#, kde-format
 msgid "Data size:"
-msgstr "Mód sonraí:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:133
-#, fuzzy, kde-format
-#| msgid "Data Section"
+#, kde-format
 msgid "Data encoding:"
-msgstr "Rannán Sonraí"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:143
@@ -1017,10 +995,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboChannels)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:162
-#, fuzzy, kde-format
-#| msgid "Stereo"
+#, kde-format
 msgid "2 (stereo)"
-msgstr "Steirió"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboChannels)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:167
@@ -1127,10 +1104,9 @@ msgid "Sound Blaster VOC"
 msgstr "Sound Blaster VOC"
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:317
-#, fuzzy, kde-format
-#| msgid "Wave (Sox)"
+#, kde-format
 msgid "Wave (SoX)"
-msgstr "Wave (Sox)"
+msgstr ""
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:319
 #, kde-format
@@ -1249,10 +1225,9 @@ msgid "Audio Project"
 msgstr "Tionscadal Fuaime"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:110
-#, fuzzy, kde-format
-#| msgid "Cddb error"
+#, kde-format
 msgid "CDDB error"
-msgstr "Earráid CDDB"
+msgstr ""
 
 #: k3b.cpp:225
 #, kde-format
@@ -1275,10 +1250,9 @@ msgid "Saves the current project"
 msgstr "Sábháil an tionscadal reatha"
 
 #: k3b.cpp:299
-#, fuzzy, kde-format
-#| msgid "Saves the current project to a new url"
+#, kde-format
 msgid "Saves the current project to a new URL"
-msgstr "Sábháil an tionscadal reatha ag URL nua"
+msgstr ""
 
 #: k3b.cpp:302
 #, kde-format
@@ -1543,10 +1517,9 @@ msgid "Open Files"
 msgstr "Oscail Comhaid"
 
 #: k3b.cpp:921 k3b.cpp:988
-#, fuzzy, kde-format
-#| msgid "*.k3b|K3b Projects"
+#, kde-format
 msgid "K3b Projects (*.k3b)"
-msgstr "*.k3b|Tionscadail K3b"
+msgstr ""
 
 #: k3b.cpp:953
 #, kde-format
@@ -1614,10 +1587,9 @@ msgid "Select Files to Add to Project"
 msgstr "Roghnaigh Comhaid le cur leis an tionscadal"
 
 #: k3b.cpp:1293
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files (*)"
-msgstr "*|Gach Comhad"
+msgstr ""
 
 #: k3b.cpp:1300
 #, kde-format
@@ -1904,10 +1876,9 @@ msgid "Medium"
 msgstr "Measartha"
 
 #: k3bdiskinfoview.cpp:114
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem Info"
+#, kde-format
 msgid "ISO 9660 Filesystem Info"
-msgstr "Eolas faoin chóras comhad ISO9660"
+msgstr ""
 
 #: k3bdiskinfoview.cpp:119
 #, kde-format
@@ -2286,40 +2257,34 @@ msgid "Filter:"
 msgstr "Scagaire:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|Gach Comhad"
+msgstr ""
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "No Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Gan Chomhad"
+msgstr ""
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "audio/x-wav |Wave Sound Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "audio/x-wav |Comhaid Fhuaime .wav"
+msgstr ""
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "audio/x-mp3 |MP3 Sound Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "audio/x-mp3 |Comhaid Fhuaime MP3"
+msgstr ""
 
 #: k3bfileview.cpp:79
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Comhaid Fhuaime Ogg Vorbis"
+msgstr ""
 
 #: k3bfileview.cpp:80
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |Comhaid Fhíse MPEG"
+msgstr ""
 
 #: k3bfileview.cpp:84
 #, kde-format
@@ -2387,20 +2352,16 @@ msgid "Show Debugging Output"
 msgstr "Taispeáin Aschur Dífhabhtaithe"
 
 #: k3bjobprogressdialog.cpp:296 k3bjobprogressdialog.cpp:318
-#, fuzzy, kde-format
-#| msgctxt "%1 and %2 are byte sizes formatted via KLocale::formatByteSize"
-#| msgid "%1 of %2"
+#, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
-msgstr "%1 as %2"
+msgstr ""
 
 #: k3bjobprogressdialog.cpp:374 k3bjobprogressdialog.cpp:554
-#, fuzzy, kde-format
-#| msgctxt "@info %1 is a duration formatted using KLocale::formatLocaleTime"
-#| msgid "Elapsed time: %1"
+#, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Elapsed time: %1"
-msgstr "Am imithe: %1"
+msgstr ""
 
 #: k3bjobprogressdialog.cpp:383
 #, kde-format
@@ -2438,11 +2399,10 @@ msgid "Cancel Confirmation"
 msgstr "Deimhnigh Cealú"
 
 #: k3bjobprogressdialog.cpp:558
-#, fuzzy, kde-format
-#| msgid "Remaining:"
+#, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
-msgstr "Fágtha:"
+msgstr ""
 
 #: k3blsofwrapperdialog.cpp:39
 #, kde-format
@@ -2708,10 +2668,9 @@ msgstr ""
 
 #: k3bsystemproblemdialog.cpp:201 k3bsystemproblemdialog.cpp:262
 #: k3bsystemproblemdialog.cpp:304
-#, fuzzy, kde-format
-#| msgid "Insufficient permissions to read the following files"
+#, kde-format
 msgid "Insufficient permissions for %1 executable: %2"
-msgstr "Níl go leor ceadanna agat leis na comhaid seo a leanas a léamh"
+msgstr ""
 
 #: k3bsystemproblemdialog.cpp:202 k3bsystemproblemdialog.cpp:209
 #, kde-format
@@ -3173,10 +3132,9 @@ msgid "Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator"
 msgstr ""
 
 #: k3bwelcomewidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "Copyright © 1998–2010 K3b authors"
+#, kde-format
 msgid "K3b %1 Copyright &copy; 1998&ndash;2018 K3b authors"
-msgstr "© 1998–2010 Údair K3b"
+msgstr ""
 
 #: k3bwelcomewidget.cpp:398
 #, kde-format
@@ -3394,16 +3352,14 @@ msgid ""
 msgstr ""
 
 #: main.cpp:31
-#, fuzzy, kde-format
-#| msgid "Copyright © 1998–2010 K3b authors"
+#, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
-msgstr "© 1998–2010 Údair K3b"
+msgstr ""
 
 #: main.cpp:33
-#, fuzzy, kde-format
-#| msgid "http://www.k3b.org"
+#, kde-format
 msgid "https://www.k3b.org"
-msgstr "http://www.k3b.org"
+msgstr ""
 
 #: main.cpp:37
 #, kde-format
@@ -3578,16 +3534,14 @@ msgid "For his work on the BSD port and some great patches."
 msgstr ""
 
 #: main.cpp:75
-#, fuzzy, kde-format
-#| msgid "Adriaan De Groot"
+#, kde-format
 msgid "Adriaan de Groot"
-msgstr "Adriaan De Groot"
+msgstr ""
 
 #: main.cpp:76
-#, fuzzy, kde-format
-#| msgid "For his work on the BSD port."
+#, kde-format
 msgid "For his work on the FreeBSD port."
-msgstr "As a obair ar an leagan BSD."
+msgstr ""
 
 #: main.cpp:78
 #, kde-format
@@ -3754,10 +3708,9 @@ msgid "Detected:"
 msgstr "Braite:"
 
 #: misc/k3bimagewritingdialog.cpp:166
-#, fuzzy, kde-format
-#| msgid "ISO9660 Image"
+#, kde-format
 msgid "ISO 9660 image"
-msgstr "Íomhá ISO9660"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
 #: misc/k3bimagewritingdialog.cpp:281
@@ -3831,29 +3784,24 @@ msgid "Choose Image File"
 msgstr "Roghnaigh Comhad Íomhá"
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Comhad íomhá:"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|Comhaid Íomhá ISO9660"
+msgstr ""
 
-# unclear from the source whether it's Comhaid Oscailte
 #: misc/k3bimagewritingdialog.cpp:452
-#, fuzzy, kde-format
-#| msgid "Open Files"
+#, kde-format
 msgid "Cue Files"
-msgstr "Oscail Comhaid"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:453
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Comhaid TOC Cdrdao agus Íomhánna Clónála Cdrecord"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
@@ -3866,10 +3814,9 @@ msgid "Auto Detection"
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:465
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem Info"
+#, kde-format
 msgid "ISO 9660 filesystem image"
-msgstr "Eolas faoin chóras comhad ISO9660"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
@@ -3947,10 +3894,9 @@ msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:868
-#, fuzzy, kde-format
-#| msgid "Unknown Disk Type"
+#, kde-format
 msgid "Unknown image type"
-msgstr "Cineál Anaithnid Diosca"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
 #, kde-format
@@ -3958,10 +3904,9 @@ msgid "Burn"
 msgstr "Dóigh"
 
 #: misc/k3bimagewritingdialog.cpp:879
-#, fuzzy, kde-format
-#| msgid "Unable to create folder %1"
+#, kde-format
 msgid "Unable to read image file"
-msgstr "Ní féidir fillteán %1 a chruthú"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:881
 #, kde-format
@@ -4250,10 +4195,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: option/base_k3bmiscoptiontab.ui:38
-#, fuzzy, kde-format
-#| msgid "Temporary Directory"
+#, kde-format
 msgid "Default Temporary Directory:"
-msgstr "Comhadlann Shealadach"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, m_editTempDir)
 #: option/base_k3bmiscoptiontab.ui:48
@@ -4278,10 +4222,9 @@ msgstr "Córas"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSystemConfig)
 #: option/base_k3bmiscoptiontab.ui:69
-#, fuzzy, kde-format
-#| msgid "Checks system configuration"
+#, kde-format
 msgid "Check system Configuration"
-msgstr "Seiceálann sé seo cumraíocht an chórais"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkSystemConfig)
 #: option/base_k3bmiscoptiontab.ui:72
@@ -4293,10 +4236,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkSystemConfig)
 #: option/base_k3bmiscoptiontab.ui:75
-#, fuzzy, kde-format
-#| msgid "Checks system configuration"
+#, kde-format
 msgid "&Check system configuration"
-msgstr "Seiceálann sé seo cumraíocht an chórais"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: option/base_k3bmiscoptiontab.ui:85
@@ -4341,10 +4283,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkShowSplash)
 #: option/base_k3bmiscoptiontab.ui:114
-#, fuzzy, kde-format
-#| msgid "Show splash screen"
+#, kde-format
 msgid "Show the splash screen when K3b starts"
-msgstr "Taispeáin an splancscáileán"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowSplash)
 #: option/base_k3bmiscoptiontab.ui:117
@@ -4375,10 +4316,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
 #: option/base_k3bmiscoptiontab.ui:139
-#, fuzzy, kde-format
-#| msgid "Default Settings"
+#, kde-format
 msgid "&Default action dialog settings:"
-msgstr "Réamhshocruithe"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboActionDialogSettings)
 #: option/base_k3bmiscoptiontab.ui:152
@@ -4422,10 +4362,9 @@ msgstr "Níor roghnaíodh aon téama"
 
 #. i18n: ectx: property (text), widget (KNSWidgets::Button, m_buttonGetNewThemes)
 #: option/base_k3bthemeoptiontab.ui:119
-#, fuzzy, kde-format
-#| msgid "Install New Theme..."
+#, kde-format
 msgid "Get New Themes..."
-msgstr "Suiteáil Téama Nua..."
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
@@ -4788,10 +4727,9 @@ msgid "Following programs could not be updated:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to create folder %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Ní féidir fillteán %1 a chruthú"
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
@@ -4799,10 +4737,9 @@ msgid "Authorization denied"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Gan cheartú earráidí"
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
@@ -5038,10 +4975,9 @@ msgstr "Scrios"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: projects/base_k3badvanceddataimagesettings.ui:18
-#, fuzzy, kde-format
-#| msgid "File System"
+#, kde-format
 msgid "File Systems"
-msgstr "Córas Comhad"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkRockRidge)
 #: projects/base_k3badvanceddataimagesettings.ui:24
@@ -5099,10 +5035,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkJoliet)
 #: projects/base_k3badvanceddataimagesettings.ui:53
-#, fuzzy, kde-format
-#| msgid "Filename extension:"
+#, kde-format
 msgid "Generate &Joliet extensions"
-msgstr "Iarmhír ainm comhaid:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkUdf)
 #: projects/base_k3badvanceddataimagesettings.ui:60
@@ -5122,10 +5057,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkUdf)
 #: projects/base_k3badvanceddataimagesettings.ui:67
-#, fuzzy, kde-format
-#| msgid "Extract XML structure"
+#, kde-format
 msgid "Generate &UDF structures"
-msgstr "Bain an struchtúr XML amach"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: projects/base_k3badvanceddataimagesettings.ui:77
@@ -5153,24 +5087,21 @@ msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:110
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem Info"
+#, kde-format
 msgid "Set special ISO 9660 Filesystem preferences."
-msgstr "Eolas faoin chóras comhad ISO9660"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:113
-#, fuzzy, kde-format
-#| msgid "File System"
+#, kde-format
 msgid "File System Settings"
-msgstr "Córas Comhad"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupIsoSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:134
-#, fuzzy, kde-format
-#| msgid "ISO9660 Settings"
+#, kde-format
 msgid "ISO 9660 Settings"
-msgstr "Socruithe ISO9660"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAllowUntranslatedFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:143
@@ -5258,38 +5189,33 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupIsoLevel)
 #: projects/base_k3badvanceddataimagesettings.ui:228
-#, fuzzy, kde-format
-#| msgid "ISO9660 Level"
+#, kde-format
 msgid "ISO 9660 Level"
-msgstr "Leibhéal ISO9660"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel1)
 #: projects/base_k3badvanceddataimagesettings.ui:234
-#, fuzzy, kde-format
-#| msgid "Level 1"
+#, kde-format
 msgid "&Level 1"
-msgstr "Leibhéal 1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel2)
 #: projects/base_k3badvanceddataimagesettings.ui:241
-#, fuzzy, kde-format
-#| msgid "Level 2"
+#, kde-format
 msgid "Level &2"
-msgstr "Leibhéal 2"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel3)
 #: projects/base_k3badvanceddataimagesettings.ui:248
-#, fuzzy, kde-format
-#| msgid "Level 3"
+#, kde-format
 msgid "Level &3"
-msgstr "Leibhéal 3"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupRockRidgeSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:258
-#, fuzzy, kde-format
-#| msgid "Misc Settings"
+#, kde-format
 msgid "Rock Ridge Settings"
-msgstr "Socruithe Éagsúla"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkCreateTransTbl)
 #: projects/base_k3badvanceddataimagesettings.ui:264
@@ -5305,10 +5231,9 @@ msgstr "Folaigh comhaid TRANS.TBL i Joliet"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupJolietSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:281
-#, fuzzy, kde-format
-#| msgid "Misc Settings"
+#, kde-format
 msgid "Joliet Settings"
-msgstr "Socruithe Éagsúla"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkJolietLong)
 #: projects/base_k3badvanceddataimagesettings.ui:287
@@ -5384,10 +5309,9 @@ msgstr "..."
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:48
-#, fuzzy, kde-format
-#| msgid "Performer"
+#, kde-format
 msgid "Per&former:"
-msgstr "Seinnteoir"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:88
@@ -5399,10 +5323,9 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:118
 #: projects/base_k3baudiotrackwidget.ui:26
-#, fuzzy, kde-format
-#| msgid "Songwriter"
+#, kde-format
 msgid "So&ngwriter:"
-msgstr "Scríbhneoir"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel5)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:148
@@ -5425,17 +5348,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel8)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:210
-#, fuzzy, kde-format
-#| msgid "&Message:"
+#, kde-format
 msgid "Messa&ge:"
-msgstr "&Teachtaireacht:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupCdText)
 #: projects/base_k3baudiocdtextwidget.ui:11
-#, fuzzy, kde-format
-#| msgid "Read CD-Text"
+#, kde-format
 msgid "Write CD-Text"
-msgstr "Léigh CD-Text"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, m_groupCdText)
 #: projects/base_k3baudiocdtextwidget.ui:27
@@ -5455,24 +5376,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextwidget.ui:45
-#, fuzzy, kde-format
-#| msgid "Performer"
+#, kde-format
 msgid "Perf&ormer:"
-msgstr "Seinnteoir"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonMoreFields)
 #: projects/base_k3baudiocdtextwidget.ui:126
-#, fuzzy, kde-format
-#| msgid "More actions..."
+#, kde-format
 msgid "More Fiel&ds..."
-msgstr "Tuilleadh gníomhartha..."
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: projects/base_k3baudiotrackwidget.ui:15
-#, fuzzy, kde-format
-#| msgid "CD-Text"
+#, kde-format
 msgid "C&D-Text"
-msgstr "CD-Text"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel8)
 #: projects/base_k3baudiotrackwidget.ui:84
@@ -5482,10 +5400,9 @@ msgstr "&Teachtaireacht:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiotrackwidget.ui:100
-#, fuzzy, kde-format
-#| msgid "Performer"
+#, kde-format
 msgid "&Performer:"
-msgstr "Seinnteoir"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel6)
 #: projects/base_k3baudiotrackwidget.ui:113
@@ -5495,10 +5412,9 @@ msgstr "&ISRC:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkPreemphasis)
 #: projects/base_k3baudiotrackwidget.ui:170
-#, fuzzy, kde-format
-#| msgid "Emphasis"
+#, kde-format
 msgid "Preemph&asis"
-msgstr "Béim"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPreemphasis)
 #: projects/base_k3baudiotrackwidget.ui:173
@@ -5550,10 +5466,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: projects/base_k3bbootimagedialog.ui:26
-#, fuzzy, kde-format
-#| msgid "Boot Images"
+#, kde-format
 msgid "Boot images:"
-msgstr "Íomhánna Tosaithe"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, m_buttonNew)
 #: projects/base_k3bbootimagedialog.ui:36
@@ -5593,10 +5508,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioFloppy)
 #: projects/base_k3bbootimagedialog.ui:74
-#, fuzzy, kde-format
-#| msgid "Floppy"
+#, kde-format
 msgid "&Floppy"
-msgstr "Diosca Flapach"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:81
@@ -5612,10 +5526,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioNoEmulation)
 #: projects/base_k3bbootimagedialog.ui:91
-#, fuzzy, kde-format
-#| msgid "Use no emulation"
+#, kde-format
 msgid "No emulation at all"
-msgstr "Ná húsáid aithris"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkNoBoot)
 #: projects/base_k3bbootimagedialog.ui:116
@@ -5625,10 +5538,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkNoBoot)
 #: projects/base_k3bbootimagedialog.ui:119
-#, fuzzy, kde-format
-#| msgid "Boot Images"
+#, kde-format
 msgid "No boot image"
-msgstr "Íomhánna Tosaithe"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkInfoTable)
 #: projects/base_k3bbootimagedialog.ui:126
@@ -5658,10 +5570,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonToggleOptions)
 #: projects/base_k3bbootimagedialog.ui:188
-#, fuzzy, kde-format
-#| msgid "Show Advanced Options"
+#, kde-format
 msgid "Show Advanced Op&tions"
-msgstr "Taispeáin Ardroghanna"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bbootimagedialog.ui:215
@@ -5677,24 +5588,21 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, base_K3bDataImageSettings)
 #: projects/base_k3bdataimagesettings.ui:15
-#, fuzzy, kde-format
-#| msgid "Last Used Settings"
+#, kde-format
 msgid "Data Image Settings"
-msgstr "Socruithe Is Déanaí"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupVolumeName)
 #: projects/base_k3bdataimagesettings.ui:21
-#, fuzzy, kde-format
-#| msgid "Volume Name:"
+#, kde-format
 msgid "Volume Name"
-msgstr "Ainm Imleabhair:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonMoreVolDescFields)
 #: projects/base_k3bdataimagesettings.ui:34
-#, fuzzy, kde-format
-#| msgid "More actions..."
+#, kde-format
 msgid "&More fields..."
-msgstr "Tuilleadh gníomhartha..."
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupFileSystem)
 #: projects/base_k3bdataimagesettings.ui:44
@@ -5704,10 +5612,9 @@ msgstr "Córas Comhad"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, m_comboFilesystems)
 #: projects/base_k3bdataimagesettings.ui:56
-#, fuzzy, kde-format
-#| msgid "Filesystem"
+#, kde-format
 msgid "File system presets"
-msgstr "Córas comhad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonCustomPictureSize)
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonCustomFilesystems)
@@ -5782,10 +5689,9 @@ msgstr "Ná coinnigh aon nasc siombalach"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSymlinkHandling)
 #: projects/base_k3bdataimagesettings.ui:124
-#, fuzzy, kde-format
-#| msgid "Discard all symlinks"
+#, kde-format
 msgid "Follow symlinks"
-msgstr "Ná coinnigh aon nasc siombalach"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupWhitespace)
 #: projects/base_k3bdataimagesettings.ui:135
@@ -5828,10 +5734,9 @@ msgstr "Struipeáil"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:174
-#, fuzzy, kde-format
-#| msgid "Extended"
+#, kde-format
 msgid "Extended Strip"
-msgstr "Breisithe"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:179
@@ -5871,31 +5776,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: projects/base_k3bdatavolumedescdialog.ui:31
-#, fuzzy, kde-format
-#| msgid "Application:"
+#, kde-format
 msgid "Appli&cation:"
-msgstr "Feidhmchlár:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: projects/base_k3bdatavolumedescdialog.ui:51
-#, fuzzy, kde-format
-#| msgid "Volume Size:"
+#, kde-format
 msgid "Volu&me set size:"
-msgstr "Méid an Imleabhair:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Publisher Id:"
+#, kde-format
 msgid "Publ&isher:"
-msgstr "Aitheantas an fhoilsitheora:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: projects/base_k3bdatavolumedescdialog.ui:97
-#, fuzzy, kde-format
-#| msgid "Copyright:"
+#, kde-format
 msgid "Copyright file:"
-msgstr "Cóipcheart:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel1)
 #: projects/base_k3bdatavolumedescdialog.ui:121
@@ -5906,10 +5807,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:134
-#, fuzzy, kde-format
-#| msgid "Volume Name:"
+#, kde-format
 msgid "Vo&lume set name:"
-msgstr "Ainm Imleabhair:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindBiblio)
 #: projects/base_k3bdatavolumedescdialog.ui:156
@@ -5925,10 +5825,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindAbstract)
 #: projects/base_k3bdatavolumedescdialog.ui:190
-#, fuzzy, kde-format
-#| msgid "Select Files to Add to Project"
+#, kde-format
 msgid "Select an abstract file from the project"
-msgstr "Roghnaigh Comhaid le cur leis an tionscadal"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: projects/base_k3bdatavolumedescdialog.ui:202
@@ -5938,10 +5837,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindCopyright)
 #: projects/base_k3bdatavolumedescdialog.ui:228
-#, fuzzy, kde-format
-#| msgid "Select Files to Add to Project"
+#, kde-format
 msgid "Select a copyright file from the project"
-msgstr "Roghnaigh Comhaid le cur leis an tionscadal"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:255
@@ -5952,17 +5850,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel5)
 #: projects/base_k3bdatavolumedescdialog.ui:303
-#, fuzzy, kde-format
-#| msgid "System:"
+#, kde-format
 msgid "Sys&tem:"
-msgstr "Córas:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: projects/base_k3bmovixoptionswidget.ui:18
-#, fuzzy, kde-format
-#| msgid "Misc Settings"
+#, kde-format
 msgid "Playback Settings"
-msgstr "Socruithe Éagsúla"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3bmovixoptionswidget.ui:24
@@ -6061,10 +5957,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3bmovixoptionswidget.ui:118
-#, fuzzy, kde-format
-#| msgid "Playlist"
+#, kde-format
 msgid "Loop playlist:"
-msgstr "Seinmliosta"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, m_spinLoop)
 #: projects/base_k3bmovixoptionswidget.ui:128
@@ -6074,10 +5969,9 @@ msgstr ""
 
 #. i18n: ectx: property (specialValueText), widget (QSpinBox, m_spinLoop)
 #: projects/base_k3bmovixoptionswidget.ui:131
-#, fuzzy, kde-format
-#| msgid "infinite"
+#, kde-format
 msgid "infinity"
-msgstr "éigríochta"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, m_spinLoop)
 #: projects/base_k3bmovixoptionswidget.ui:134
@@ -6209,10 +6103,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkEject)
 #: projects/base_k3bmovixoptionswidget.ui:260
-#, fuzzy, kde-format
-#| msgid "E&ject"
+#, kde-format
 msgid "E&ject disk"
-msgstr "Dí&chuir"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkShutdown)
 #: projects/base_k3bmovixoptionswidget.ui:267
@@ -6303,16 +6196,14 @@ msgid ""
 msgstr ""
 
 #: projects/k3baudioburndialog.cpp:119 projects/k3baudioburndialog.cpp:120
-#, fuzzy, kde-format
-#| msgid "Rip Audio CD..."
+#, kde-format
 msgid "Rip Audio"
-msgstr "Srac Dlúthdhiosca Fuaime..."
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:121
-#, fuzzy, kde-format
-#| msgid "Rip Audio CD..."
+#, kde-format
 msgid "Only Rip Audio"
-msgstr "Srac Dlúthdhiosca Fuaime..."
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:122
 #, kde-format
@@ -6320,10 +6211,9 @@ msgid "Use the 'Rip Audio' tab to optionally adjust the path of the audio."
 msgstr ""
 
 #: projects/k3baudioburndialog.cpp:123
-#, fuzzy, kde-format
-#| msgid "Rip files to:"
+#, kde-format
 msgid "Wri&te Rip Audio files to:"
-msgstr "Srac comhaid go:"
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:284
 #, kde-format
@@ -6872,16 +6762,14 @@ msgid "Start Multisession"
 msgstr ""
 
 #: projects/k3bdatamultisessioncombobox.cpp:68
-#, fuzzy, kde-format
-#| msgid "Multisession"
+#, kde-format
 msgid "Continue Multisession"
-msgstr "Il-seisiún"
+msgstr ""
 
 #: projects/k3bdatamultisessioncombobox.cpp:69
-#, fuzzy, kde-format
-#| msgid "Multisession"
+#, kde-format
 msgid "Finish Multisession"
-msgstr "Il-seisiún"
+msgstr ""
 
 #: projects/k3bdatamultisessionimportdialog.cpp:91
 #, kde-format
@@ -7730,10 +7618,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "Níl fillteán íomhá '%1' ann. An bhfuil fonn ort go gcruthóidh K3b é?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Cruthaigh Fillteán"
+msgstr ""
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
@@ -8617,17 +8504,12 @@ msgid "Sequence-%1 - %2"
 msgstr ""
 
 #: projects/k3bvcdview.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution’s software repository or download "
-#| "it from http://www.vcdimager.org"
+#, kde-format
 msgid ""
 "Could not find VcdImager executable. To create Video CDs you have to install "
 "VcdImager >= 0.7.12. You can find this on your distribution’s software "
 "repository or download it from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Tá an pacáiste seo ar fáil ó stórlann bogearraí do dháileadh Linux, nó is "
-"féidir é a íosluchtú ó http://www.vcdimager.org/"
 
 #: projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
@@ -8744,10 +8626,9 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:107
-#, fuzzy, kde-format
-#| msgid "Ripping to single file '%1'."
+#, kde-format
 msgid "Rip all tracks to a single file"
-msgstr "Sracadh go comhad aonair '%1'."
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:114
@@ -8762,17 +8643,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:117
-#, fuzzy, kde-format
-#| msgid "Create XML description file."
+#, kde-format
 msgid "Create si&ngle file"
-msgstr "Cruthaigh comhad cur síos XML."
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:145
-#, fuzzy, kde-format
-#| msgid "Writing cue file to %1."
+#, kde-format
 msgid "Write a cuefile"
-msgstr "Ciúchomhad á scríobh i %1."
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:148
@@ -8784,10 +8663,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:151
-#, fuzzy, kde-format
-#| msgid "Writing cue file to %1."
+#, kde-format
 msgid "Write &cue file"
-msgstr "Ciúchomhad á scríobh i %1."
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1_2)
@@ -8825,10 +8703,9 @@ msgstr ""
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, base_K3bCddbPatternWidget)
 #: rip/base_k3bcddbpatternwidget.ui:14
-#, fuzzy, kde-format
-#| msgid "Ripping track %1"
+#, kde-format
 msgid "Ripping Pattern"
-msgstr "Rian %1 á sracadh"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBlankReplace)
 #: rip/base_k3bcddbpatternwidget.ui:22
@@ -8846,10 +8723,9 @@ msgstr "Patrún seinmliosta:"
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_4)
 #: rip/base_k3bcddbpatternwidget.ui:64
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:372
-#, fuzzy, kde-format
-#| msgid "Rip files to:"
+#, kde-format
 msgid "Ripped files pattern:"
-msgstr "Srac comhaid go:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboFilenamePattern)
 #: rip/base_k3bcddbpatternwidget.ui:80
@@ -9342,10 +9218,9 @@ msgid "%{albumartist} - %{albumtitle}"
 msgstr "%{albumartist} - %{albumtitle}"
 
 #: rip/k3bcddbpatternwidget.cpp:51
-#, fuzzy, kde-format
-#| msgid "playlists/%{albumartist}/%{albumtitle    }"
+#, kde-format
 msgid "playlists/%{albumartist}/%{albumtitle}"
-msgstr "seinmliostaí/%{albumartist}/%{albumtitle    }"
+msgstr ""
 
 #: rip/k3bcddbpatternwidget.cpp:118
 #, kde-format
@@ -9461,16 +9336,11 @@ msgstr ""
 "shuiteáil."
 
 #: rip/k3bvideocdrip.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution’s software repository or download "
-#| "it from http://www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Tá an pacáiste seo ar fáil ó stórlann bogearraí do dháileadh Linux, nó is "
-"féidir é a íosluchtú ó http://www.vcdimager.org/"
 
 #: rip/k3bvideocdrip.cpp:100
 #, kde-format
@@ -9751,10 +9621,9 @@ msgstr "Cáilíocht na Fuaime"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAudioVBR)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:204
-#, fuzzy, kde-format
-#| msgid "Variable Bitrate"
+#, kde-format
 msgid "Variable &Bitrate"
-msgstr "Ráta Inathraithe Giotán"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, m_labelAudioBitrate)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_3)
@@ -9774,10 +9643,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:320
-#, fuzzy, kde-format
-#| msgid "Video CD"
+#, kde-format
 msgid "Video Codec:"
-msgstr "Dlúthdhiosca Físe"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboVideoCodec)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:330
@@ -9787,10 +9655,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
-#, fuzzy, kde-format
-#| msgid "Audio Project"
+#, kde-format
 msgid "Audio Codec:"
-msgstr "Tionscadal Fuaime"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboAudioCodec)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:351
@@ -9800,10 +9667,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, TabPage)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:364
-#, fuzzy, kde-format
-#| msgid "File Naming"
+#, kde-format
 msgid "File Namin&g"
-msgstr "Ainmniú Comhad"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBlankReplace)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:415
@@ -9864,10 +9730,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAutoClipping)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:492
-#, fuzzy, kde-format
-#| msgid "Video CD Ripping"
+#, kde-format
 msgid "Automatic &Video Clipping"
-msgstr "Sracadh Dlúthdhiosca Físe"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:502
@@ -10264,637 +10129,3 @@ msgstr "anamorfach"
 #, kde-format
 msgid "Subpicture"
 msgstr "Fophictiúr"
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "Iarratas MusicBrainz"
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "Níor aimsíodh amhrán %1 sa bhunachar sonraí MusicBrainz."
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr ""
-#~ "Aimsíodh il-amhráin comhoiriúnach d'amhrán %1 (%2). Roghnaigh ceann acu."
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "Méarlorg á ghiniúint le haghaidh amhrán %1."
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "MusicBrainz á chuardach le haghaidh amhrán %1."
-
-#~ msgid "K3b Bookmarks"
-#~ msgstr "Leabharmharcanna K3b"
-
-#~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
-#~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |Comhaid Fhuaime"
-
-#~ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
-#~ msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Comhaid Íomhá"
-
-#~ msgid "*.cue *.CUE|Cue Files"
-#~ msgstr "*.cue *.CUE|Ciúchomhaid"
-
-#~ msgid "%1 has unsaved data."
-#~ msgstr "Tá sonraí gan sábháil ag %1."
-
-#~ msgid "Windows Media v1"
-#~ msgstr "Windows Media v1"
-
-#~ msgid "Windows Media v2"
-#~ msgstr "Windows Media v2"
-
-#, fuzzy
-#~| msgctxt "@info %1 is a duration formatted using KLocale::formatLocaleTime"
-#~| msgid "Elapsed time: %1"
-#~ msgctxt "@info %1 is a duration formatted using QLocale::toString"
-#~ msgid "Elapsed time: %1"
-#~ msgstr "Am imithe: %1"
-
-#~ msgid "MPEG 1 Layer III"
-#~ msgstr "MPEG 1 Layer III"
-
-#~ msgid "Close"
-#~ msgstr "Dún"
-
-#~ msgid "Overwrite"
-#~ msgstr "Forscríobh"
-
-#, fuzzy
-#~| msgid "Default Settings"
-#~ msgid "Manual settings:"
-#~ msgstr "Réamhshocruithe"
-
-#, fuzzy
-#~| msgid "Options"
-#~ msgid "CDDB Options"
-#~ msgstr "Roghanna"
-
-#~ msgid "Local"
-#~ msgstr "Logánta"
-
-#, fuzzy
-#~| msgid "and 1 directory"
-#~| msgid_plural "and %1 directories"
-#~ msgid "Use local CDDB directory"
-#~ msgstr "agus comhadlann amháin"
-
-#~ msgid "Directory:"
-#~ msgstr "Comhadlann:"
-
-#~ msgid "Directory"
-#~ msgstr "Comhadlann"
-
-#, fuzzy
-#~| msgid "New Directory"
-#~ msgid "Move directory down"
-#~ msgstr "Comhadlann Nua"
-
-#, fuzzy
-#~| msgid "and 1 directory"
-#~| msgid_plural "and %1 directories"
-#~ msgid "Add directory"
-#~ msgstr "agus comhadlann amháin"
-
-#, fuzzy
-#~| msgid "New Directory"
-#~ msgid "Remove directory"
-#~ msgstr "Comhadlann Nua"
-
-#, fuzzy
-#~| msgid "New Directory"
-#~ msgid "Move directory up"
-#~ msgstr "Comhadlann Nua"
-
-#~ msgid "Remote"
-#~ msgstr "Cianda"
-
-#~ msgid "Server:"
-#~ msgstr "Freastalaí:"
-
-#~ msgid "Server"
-#~ msgstr "Freastalaí"
-
-# #-#-#-#-#  tmp.AUuzcl9132 (qt/kdeqt.po)  #-#-#-#-#
-# #-#-#-#-#  kdeprint4.po (kdelibs)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kcmkamera.po (kdegraphics/kcmkamera.po)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  korn.po (kdepim/korn.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kdepimwizards.po (kdepim/kdepimwizards.po)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  knu.po (kdenonbeta/knu.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kopennap.po (kdenonbeta/kopennap.po)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kchat.po (kdeextragear-1/kchat.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  knetworksettings.po (kdenonbeta/knetworksettings.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.vnxAun9134 (qt/kdeqt.po)  #-#-#-#-#
-# #-#-#-#-#  tmp.AUuzcl9132 (qt/kdeqt.po)  #-#-#-#-#
-# #-#-#-#-#  kdeprint4.po (kdelibs)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kcmkamera.po (kdegraphics/kcmkamera.po)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  korn.po (kdepim/korn.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kdepimwizards.po (kdepim/kdepimwizards.po)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  knu.po (kdenonbeta/knu.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kopennap.po (kdenonbeta/kopennap.po)  #-#-#-#-#
-# #-#-#-#-#  tmp.XXXXK5LpVx (PACKAGE VERSION)  #-#-#-#-#
-# #-#-#-#-#  temp2.po (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.XXXXMZ2Xhi (yudit 2.7.6)  #-#-#-#-#
-# #-#-#-#-#  OOo-temp.po (yudit 2.7.6)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  kchat.po (kdeextragear-1/kchat.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  knetworksettings.po (kdenonbeta/knetworksettings.po)  #-#-#-#-#
-# OK as is
-# #-#-#-#-#  tmp.fKGjQj9133 (playground-sysadmin/ktorrent.po)  #-#-#-#-#
-# OK as is
-#~ msgid "Port"
-#~ msgstr "Port"
-
-#~ msgid "Port "
-#~ msgstr "Port "
-
-#, fuzzy
-#~| msgid "Server"
-#~ msgid "Add server"
-#~ msgstr "Freastalaí"
-
-#, fuzzy
-#~| msgid "Remove Theme"
-#~ msgid "Remove server"
-#~ msgstr "Bain Téama"
-
-#, fuzzy
-#~| msgid "Remove Theme"
-#~ msgid "Move server up"
-#~ msgstr "Bain Téama"
-
-#, fuzzy
-#~| msgid "New Directory"
-#~ msgid "Move server down"
-#~ msgstr "Comhadlann Nua"
-
-#, fuzzy
-#~| msgid "Path"
-#~ msgid "CGI Path"
-#~ msgstr "Conair"
-
-#~ msgid "Path:"
-#~ msgstr "Conair:"
-
-#, fuzzy
-#~| msgid "Path"
-#~ msgid "Manual CGI path"
-#~ msgstr "Conair"
-
-#, fuzzy
-#~| msgid "Floppy"
-#~ msgid "Flopp&y"
-#~ msgstr "Diosca Flapach"
-
-#, fuzzy
-#~| msgid "System:"
-#~ msgid "S&ystem:"
-#~ msgstr "Córas:"
-
-#~ msgid "&Application:"
-#~ msgstr "&Feidhmchlár:"
-
-#~ msgid "Iso9660 image"
-#~ msgstr "Íomhá Iso9660"
-
-#~ msgctxt "@info %1 is a duration formatted using KLocale::formatLocaleTime"
-#~ msgid "Remaining time: %1"
-#~ msgstr "Am fágtha: %1"
-
-#~ msgid "Lock Panels"
-#~ msgstr "Cuir Painéil Faoi Ghlas"
-
-#~ msgid "Projects"
-#~ msgstr "Tionscadail"
-
-#~ msgid "Folders"
-#~ msgstr "Fillteáin"
-
-#~ msgid "Contents"
-#~ msgstr "Inneachar"
-
-#~ msgid "Panels"
-#~ msgstr "Painéil"
-
-#~ msgid "Unable to start K3b::Setup."
-#~ msgstr "Ní féidir K3b::Setup a thosú."
-
-#~ msgid "&Search"
-#~ msgstr "&Cuardach"
-
-#~ msgid "CD/DVD/BD Drives"
-#~ msgstr "Tiomántáin CD/DVD/BD"
-
-#~ msgid "Hide OSD"
-#~ msgstr "Folaigh OSD"
-
-#~ msgid "Use CDDB"
-#~ msgstr "Úsáid CDDB"
-
-#~ msgid "Keep Open"
-#~ msgstr "Coinnigh Oscailte"
-
-#~ msgid "Creating GUI..."
-#~ msgstr "Comhéadan grafach á chruthú..."
-
-#~ msgid "Ready."
-#~ msgstr "Réidh."
-
-#~ msgid "textLabel1"
-#~ msgstr "lipéad1"
-
-#~ msgid "textLabel2"
-#~ msgstr "lipéad2"
-
-#~ msgid "Play/Pause"
-#~ msgstr "Seinn/Sos"
-
-#~ msgid "Prev"
-#~ msgstr "Roimhe Seo"
-
-#~ msgid "%1 track"
-#~ msgid_plural "%1 tracks"
-#~ msgstr[0] "%1 amhrán"
-#~ msgstr[1] "%1 amhrán"
-#~ msgstr[2] "%1 amhrán"
-#~ msgstr[3] "%1 n-amhrán"
-#~ msgstr[4] "%1 amhrán"
-
-#~ msgid "1 File"
-#~ msgid_plural "%1 Files"
-#~ msgstr[0] "1 Chomhad"
-#~ msgstr[1] "%1 Chomhad"
-#~ msgstr[2] "%1 Chomhad"
-#~ msgstr[3] "%1 gComhad"
-#~ msgstr[4] "%1 Comhad"
-
-#~ msgid "1 Folder"
-#~ msgid_plural "%1 Folders"
-#~ msgstr[0] "1 Fhillteán"
-#~ msgstr[1] "%1 Fhillteán"
-#~ msgstr[2] "%1 Fhillteán"
-#~ msgstr[3] "%1 bhFillteán"
-#~ msgstr[4] "%1 Fillteán"
-
-#~ msgctxt "symbolic link target"
-#~ msgid "Link"
-#~ msgstr "Nasc"
-
-# look like numbers in source code
-#~ msgctxt "VideoCD Track Number"
-#~ msgid "No."
-#~ msgstr "Uimh."
-
-#~ msgctxt "VideoCD Track Title"
-#~ msgid "Title"
-#~ msgstr "Teideal"
-
-#~ msgctxt "VideoCD Track Type (ie. MPEG1)"
-#~ msgid "Type"
-#~ msgstr "Cineál"
-
-#~ msgctxt "VideoCD Track Resolution"
-#~ msgid "Resolution"
-#~ msgstr "Taifeach"
-
-#~ msgctxt "VideoCD Track High Resolution"
-#~ msgid "High Resolution"
-#~ msgstr "Ardtaifeach"
-
-#~ msgctxt "VideoCD Track Framerate"
-#~ msgid "Framerate"
-#~ msgstr "Ráta Fráma"
-
-#~ msgctxt "VideoCD Track Duration"
-#~ msgid "Duration"
-#~ msgstr "Aga"
-
-#~ msgctxt "VideoCD Track File Size"
-#~ msgid "File Size"
-#~ msgstr "Méid Comhaid"
-
-#~ msgctxt "VideoCD Track Filename"
-#~ msgid "Filename"
-#~ msgstr "Ainm comhaid"
-
-#~ msgid "Set Default"
-#~ msgstr "Socraigh mar Réamhshocrú"
-
-#~ msgid "Clear List"
-#~ msgstr "Glan Liosta"
-
-#~ msgid "stopped"
-#~ msgstr "stoptha"
-
-#~ msgid "1 Day"
-#~ msgid_plural "%1 Days"
-#~ msgstr[0] "Lá amháin"
-#~ msgstr[1] "%1 Lá"
-#~ msgstr[2] "%1 Lá"
-#~ msgstr[3] "%1 Lá"
-#~ msgstr[4] "%1 Lá"
-
-#~ msgid "Remaining"
-#~ msgstr "Fágtha"
-
-#~ msgid "<p><b>Title %1 (%2)</b><br>%3"
-#~ msgstr "<p><b>Teideal %1 (%2)</b><br>%3"
-
-#~ msgid "CD Tasks"
-#~ msgstr "Tascanna Dlúthdhiosca"
-
-#~ msgid "DVD Tasks"
-#~ msgstr "Tascanna DVD"
-
-#~ msgid "Dese&lect All"
-#~ msgstr "Díroghnaigh Ui&le"
-
-#~ msgid "Select Track"
-#~ msgstr "Roghnaigh Rian"
-
-#~ msgid "Deselect Track"
-#~ msgstr "Díroghnaigh Rian"
-
-#~ msgid "Video DVD ripping"
-#~ msgstr "Sracadh DVD Físe"
-
-#~ msgid "Open DVD Copy Dialog"
-#~ msgstr "Oscail Dialóg Chóipeála DVD"
-
-#~ msgid "Mount CD"
-#~ msgstr "Feistigh Dlúthdhiosca"
-
-#~ msgid "Show Video Tracks"
-#~ msgstr "Taispeáin Rianta Físe"
-
-#~ msgid "Show Audio Tracks"
-#~ msgstr "Taispeáin Rianta Fuaime"
-
-#~ msgid "Message"
-#~ msgstr "Teachtaireacht"
-
-#~ msgid "Query cddb"
-#~ msgstr "Iarratas cddb"
-
-#~ msgid "Successfully ripped to %1."
-#~ msgstr "D'éirigh le sracadh go %1."
-
-#~ msgid "Successfully ripped track %1."
-#~ msgstr "D'éirigh le sracadh rian %1"
-
-#~ msgid "Tools"
-#~ msgstr "Uirlisí"
-
-#~ msgid "First Run"
-#~ msgstr "An Chéad Úsáid"
-
-#~ msgid "gb"
-#~ msgstr "GB"
-
-#~ msgid "mb"
-#~ msgstr "MB"
-
-#~ msgid "Directories"
-#~ msgstr "Comhadlanna"
-
-#~ msgid "Create Directory"
-#~ msgstr "Cruthaigh Comhadlann"
-
-#~ msgid "New Directory..."
-#~ msgstr "Comhadlann Nua..."
-
-#~ msgid ""
-#~ "Create a new eMovix CD project and add all given files (DEPRECATED. Use --"
-#~ "emovix)"
-#~ msgstr ""
-#~ "Cruthaigh tionscadal nua dlúthdhiosca eMovix agus cuir gach comhad "
-#~ "sonraithe leis (I LÉIG. Úsáid --emovix)"
-
-#~ msgid ""
-#~ "Create a new data DVD project and add all given files (DEPRECATED. Use --"
-#~ "data)"
-#~ msgstr ""
-#~ "Cruthaigh tionscadal nua DVD sonraí agus cuir gach comhad sonraithe leis "
-#~ "(I LÉIG. Úsáid --data)"
-
-#~ msgid ""
-#~ "Create a new eMovix DVD project and add all given files (DEPRECATED. Use "
-#~ "--emovix)"
-#~ msgstr ""
-#~ "Cruthaigh tionscadal nua DVD eMovix agus cuir gach comhad sonraithe leis "
-#~ "(I LÉIG. Úsáid --emovix)"
-
-#~ msgid "Clear"
-#~ msgstr "Glan"
-
-#~ msgid "Quickstart"
-#~ msgstr "Mearthosú"
-
-#~ msgid "Show Directories"
-#~ msgstr "Taispeáin Comhadlanna"
-
-#~ msgid "Home"
-#~ msgstr "Baile"
-
-#~ msgid "Root"
-#~ msgstr "Fréamh"
-
-#~ msgid "Cdrecord Clone Image"
-#~ msgstr "Íomhá Chlónála Cdrecord"
-
-#~ msgid "A CD and DVD burning application"
-#~ msgstr "Feidhmchlár dóite dlúthdhioscaí agus DVDanna"
-
-#~ msgid "a %1 medium"
-#~ msgstr "Meán %1"
-
-#~ msgid "a Video CD medium"
-#~ msgstr "Meán Dlúthdhiosca Físe"
-
-#~ msgid "a Video DVD medium"
-#~ msgstr "Meán DVD Físe"
-
-#~ msgid "a Mixed Mode CD medium"
-#~ msgstr "Meán Dlúthdhiosca Il-mhóid"
-
-#~ msgid "an Audio CD medium"
-#~ msgstr "Meán Dlúthdhiosca Fuaime"
-
-#~ msgid "a Data medium"
-#~ msgstr "Meán sonraí"
-
-#~ msgid "a Data CD or DVD medium"
-#~ msgstr "Meán Dlúthdhiosca nó DVD Sonraí"
-
-#~ msgid "a Data CD medium"
-#~ msgstr "Meán Dlúthdhiosca Sonraí"
-
-#~ msgid "a Data DVD medium"
-#~ msgstr "Meán DVD Sonraí"
-
-#~ msgid "a Data Blu-ray medium"
-#~ msgstr "Meán Blu-ray Sonraí"
-
-#~ msgid "an empty medium"
-#~ msgstr "meán folamh"
-
-#~ msgid "writable"
-#~ msgstr "inscríofa"
-
-#~ msgid "CD or DVD"
-#~ msgstr "Dlúthdhiosca nó DVD"
-
-#~ msgid "CD"
-#~ msgstr "Dlúthdhiosca"
-
-#~ msgid "DVD"
-#~ msgstr "DVD"
-
-#~ msgid "Blu-ray"
-#~ msgstr "Blu-ray"
-
-#~ msgid "DVD%1R(W) or BD-R(E)"
-#~ msgstr "DVD%1R(W) or BD-R(E)"
-
-#~ msgid "DVD-ROM"
-#~ msgstr "DVD-ROM"
-
-#~ msgid "CD-ROM"
-#~ msgstr "CD-ROM"
-
-#~ msgid "Please insert %1..."
-#~ msgstr "Ionsáigh %1..."
-
-#~ msgid "&Discard"
-#~ msgstr "&Ná Sábháil"
-
-#~ msgid "Port to kde4"
-#~ msgstr "Leagan kde4"
-
-#~ msgid "Error!"
-#~ msgstr "Earráid!"
-
-#~ msgid "root"
-#~ msgstr "fréamh"
-
-#~ msgid "From previous session"
-#~ msgstr "Ón seisiún roimhe seo"
-
-#~ msgid "Link"
-#~ msgstr "Nasc"
-
-#~ msgid "Check the tracks that should be ripped"
-#~ msgstr "Ticeáil na rianta le sracadh"
-
-#~ msgid "Burn CD Image"
-#~ msgstr "Dóigh Íomhá Dhlúthdhiosca"
-
-#~ msgid "&Burn DVD ISO Image..."
-#~ msgstr "&Dóigh Íomhá ISO DVD..."
-
-#~ msgid "Write an Iso9660 image to DVD"
-#~ msgstr "Scríobh íomhá ISO9660 ar DVD"
-
-#~ msgid "Go"
-#~ msgstr "Téigh"
-
-#~ msgid "%1 (%2)"
-#~ msgstr "%1 (%2)"
-
-#~ msgid "CD-TEXT (excerpt)"
-#~ msgstr "CD-TEXT (sliocht)"
-
-#~ msgid "Composer"
-#~ msgstr "Cumadóir"
-
-#~ msgid "CD:"
-#~ msgstr "Dlúthdhiosca:"
-
-#~ msgid "Cdrdao driver:"
-#~ msgstr "Tiománaí Cdrdao:"
-
-#~ msgid "Add Device..."
-#~ msgstr "Cuir Gléas Leis..."
-
-#~ msgid "Interface type:"
-#~ msgstr "Cineál comhéadain:"
-
-#~ msgid "Generic SCSI"
-#~ msgstr "SCSI Ginearálta"
-
-#~ msgid "ATAPI"
-#~ msgstr "ATAPI"
-
-#~ msgid "Location of New Drive"
-#~ msgstr "Suíomh an Tiomántáin Nua"
-
-#~ msgid "Description"
-#~ msgstr "Cur Síos"
-
-#~ msgid "License"
-#~ msgstr "Ceadúnas"
-
-#~ msgid "Confi&gure..."
-#~ msgstr "Cumrai&gh..."
-
-#~ msgid "Project View"
-#~ msgstr "Amharc Tionscadail"
-
-#~ msgid "Sidepanel"
-#~ msgstr "Painéal Taoibh"
