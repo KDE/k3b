@@ -110,9 +110,6 @@ msgid "One copy successfully created"
 msgid_plural "%1 copies successfully created"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: jobs/k3bbinimagewritingjob.cpp:197 jobs/k3bcdcopyjob.cpp:1171
 #: jobs/k3bcdcopyjob.cpp:1173 jobs/k3bcdcopyjob.cpp:1176
@@ -259,28 +256,24 @@ msgid "Unable to read Table of contents"
 msgstr "Ní féidir clár na n-ábhar a léamh"
 
 #: jobs/k3bcdcopyjob.cpp:362
-#, fuzzy, kde-format
-#| msgid "Searching CD-TEXT"
+#, kde-format
 msgid "Searching CD-Text"
-msgstr "CD-TEXT á chuardach"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:376
-#, fuzzy, kde-format
-#| msgid "Found CD-TEXT (%1 - %2)."
+#, kde-format
 msgid "Found CD-Text (%1 - %2)."
-msgstr "Aimsíodh CD-TEXT (%1 - %2)."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:381
-#, fuzzy, kde-format
-#| msgid "Found corrupted CD-TEXT. Ignoring it."
+#, kde-format
 msgid "Found corrupted CD-Text. Ignoring it."
-msgstr "Aimsíodh CD-TEXT truaillithe. Ag déanamh neamhairde de."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:386
-#, fuzzy, kde-format
-#| msgid "No CD-TEXT found."
+#, kde-format
 msgid "No CD-Text found."
-msgstr "Níor aimsíodh aon CD-TEXT."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:397
 #, kde-format
@@ -288,22 +281,19 @@ msgid "Querying CDDB"
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:418
-#, fuzzy, kde-format
-#| msgid "Found Cddb entry (%1 - %2)."
+#, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr "Aimsíodh iontráil Cddb (%1 - %2)."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:441
-#, fuzzy, kde-format
-#| msgid "No Cddb entry found."
+#, kde-format
 msgid "No CDDB entry found."
-msgstr "Níor aimsíodh aon iontráil Cddb."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:444
-#, fuzzy, kde-format
-#| msgid "Cddb error (%1)."
+#, kde-format
 msgid "CDDB error (%1)."
-msgstr "Earráid Cddb (%1)."
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:460
 #, kde-format
@@ -323,10 +313,9 @@ msgid "Use CD-Text data"
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:468
-#, fuzzy, kde-format
-#| msgid "CDDB Database Entry"
+#, kde-format
 msgid "Use CDDB entry"
-msgstr "Iontráil Bhunachair Sonraí CDDB"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:474 projects/k3bcdrdaowriter.cpp:519
 #: projects/k3bcdrecordwriter.cpp:413 projects/k3bcdrskinwriter.cpp:425
@@ -702,9 +691,6 @@ msgid "Ignored %1 erroneous sector."
 msgid_plural "Ignored a total of %1 erroneous sectors."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: jobs/k3bdatatrackreader.cpp:415
 #, kde-format
@@ -838,10 +824,9 @@ msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
 #: jobs/k3bverificationjob.cpp:355
-#, fuzzy, kde-format
-#| msgid "Unable to determine media state."
+#, kde-format
 msgid "Unable to determine the ISO 9660 filesystem size."
-msgstr "Ní féidir staid na meán a dhéanamh amach."
+msgstr ""
 
 #: jobs/k3bdvdcopyjob.cpp:299
 #, kde-format
@@ -1177,16 +1162,14 @@ msgid "Waiting for medium"
 msgstr "Ag feitheamh leis an meán"
 
 #: jobs/k3biso9660imagewritingjob.cpp:333
-#, fuzzy, kde-format
-#| msgid "Simulating ISO9660 Image"
+#, kde-format
 msgid "Simulating ISO 9660 Image"
-msgstr "Íomhá ISO9660 á hInsamhladh"
+msgstr ""
 
 #: jobs/k3biso9660imagewritingjob.cpp:335
-#, fuzzy, kde-format
-#| msgid "Burning ISO9660 Image"
+#, kde-format
 msgid "Burning ISO 9660 Image"
-msgstr "Íomhá ISO9660 á Dó"
+msgstr ""
 
 #: jobs/k3bmetawriter.cpp:304 projects/datacd/k3bdatajob.cpp:769
 #: projects/datacd/k3bdatajob.cpp:792
@@ -1944,10 +1927,9 @@ msgid "Writing mode ignored when writing %1 media."
 msgstr ""
 
 #: projects/datacd/k3bdatajob.cpp:838 projects/datacd/k3bdatajob.cpp:959
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem (Size: %1)"
+#, kde-format
 msgid "Growing ISO 9660 filesystem on %1."
-msgstr "Córas comhad ISO9660 (Méid: %1)"
+msgstr ""
 
 #: projects/datacd/k3bdatajob.cpp:971
 #, kde-format
@@ -1965,22 +1947,16 @@ msgid "Writing Multisession Project"
 msgstr "Tionscadal Ilseisiúin á Scríobh"
 
 #: projects/datacd/k3bdatajob.cpp:995
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem (Size: %2) – One copy"
-#| msgid_plural "ISO9660 Filesystem (Size: %2) – %1 copies"
+#, kde-format
 msgid "ISO 9660 Filesystem (Size: %2) – One copy"
 msgid_plural "ISO 9660 Filesystem (Size: %2) – %1 copies"
-msgstr[0] "Córas comhad ISO9660 (Méid: %2) - Cóip amháin"
-msgstr[1] "Córas comhad ISO9660 (Méid: %2) - %1 chóip"
-msgstr[2] "Córas comhad ISO9660 (Méid: %2) - %1 chóip"
-msgstr[3] "Córas comhad ISO9660 (Méid: %2) - %1 gcóip"
-msgstr[4] "Córas comhad ISO9660 (Méid: %2) - %1 cóip"
+msgstr[0] ""
+msgstr[1] ""
 
 #: projects/datacd/k3bdatajob.cpp:1000
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem (Size: %1)"
+#, kde-format
 msgid "ISO 9660 Filesystem (Size: %1)"
-msgstr "Córas comhad ISO9660 (Méid: %1)"
+msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:80
 #, kde-format
@@ -1996,10 +1972,9 @@ msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
-#, fuzzy, kde-format
-#| msgid "Could not open file %1."
+#, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr "Níorbh fhéidir comhad %1 a oscailt."
+msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -2142,14 +2117,13 @@ msgid "No files to be written."
 msgstr ""
 
 #: projects/datacd/k3bisooptions.cpp:68
-#, fuzzy, kde-format
-#| msgid "Writing Data Project"
+#, kde-format
 msgctxt ""
 "This is the default volume identifier of a data project created by K3b. The "
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr "Tionscadal Sonraí á Scríobh"
+msgstr ""
 
 #: projects/datacd/k3bmkisofshandler.cpp:65
 #, kde-format
@@ -2471,16 +2445,14 @@ msgid "Enable overburning in the advanced K3b settings to burn anyway."
 msgstr ""
 
 #: projects/k3bcdrdaowriter.cpp:974
-#, fuzzy, kde-format
-#| msgid "Writing data"
+#, kde-format
 msgid "Writing leadin"
-msgstr "Sonraí á scríobh"
+msgstr ""
 
 #: projects/k3bcdrdaowriter.cpp:980
-#, fuzzy, kde-format
-#| msgid "Writing data"
+#, kde-format
 msgid "Writing leadout"
-msgstr "Sonraí á scríobh"
+msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
@@ -2652,9 +2624,6 @@ msgid "Burnfree was used once."
 msgid_plural "Burnfree was used %1 times."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: projects/k3bcdrecordwriter.cpp:746 projects/k3bcdrskinwriter.cpp:759
 #, kde-format
@@ -2662,9 +2631,6 @@ msgid "Buffer was low once."
 msgid_plural "Buffer was low %1 times."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: projects/k3bcdrecordwriter.cpp:785 projects/k3bcdrskinwriter.cpp:798
 #, kde-format
@@ -3083,10 +3049,9 @@ msgid "Writing track %1 of %2 (%3)"
 msgstr "Rian %1 as %2 (%3) á scríobh"
 
 #: projects/mixedcd/k3bmixedjob.cpp:880
-#, fuzzy, kde-format
-#| msgid "ISO9660 data"
+#, kde-format
 msgid "ISO 9660 data"
-msgstr "Sonraí ISO9660"
+msgstr ""
 
 #: projects/mixedcd/k3bmixedjob.cpp:986
 #, kde-format
@@ -3165,9 +3130,6 @@ msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
 msgid_plural "%1 tracks (%2 minutes audio data, %3 ISO 9660 data)"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: projects/movixcd/k3bmovixdoc.cpp:82
 #, kde-format
@@ -3329,10 +3291,9 @@ msgid "Could not write correct XML file."
 msgstr "Níorbh fhéidir comhad ceart XML a scríobh."
 
 #: projects/videocd/k3bvcdjob.cpp:190
-#, fuzzy, kde-format
-#| msgid "Creating image file"
+#, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr "Comhad íomhá á chruthú"
+msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
@@ -3340,16 +3301,11 @@ msgid "To create Video CDs you have to install VcdImager version %1."
 msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"Tá an pacáiste seo ar fáil ar do chuid dioscaí dáilte, nó is féidir é a "
-"íosluchtú ó http://www.vcdimager.org/"
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
@@ -3414,9 +3370,6 @@ msgid "The remaining byte of the stream will be ignored."
 msgid_plural "The remaining %1 bytes of the stream will be ignored."
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: projects/videocd/k3bvcdjob.cpp:543
 #, kde-format
@@ -3454,9 +3407,6 @@ msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
 #: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
@@ -3582,16 +3532,14 @@ msgid ""
 msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:97
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create temporary folder '%1'."
+#, kde-kuit-format
 msgid "Unable to create Invalid temporary folder <filename>%1</filename>."
-msgstr "Níorbh fhéidir fillteán sealadach '%1' a chruthú."
+msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:105
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create temporary folder '%1'."
+#, kde-kuit-format
 msgid "Unable to create temporary folder <filename>%1</filename>."
-msgstr "Níorbh fhéidir fillteán sealadach '%1' a chruthú."
+msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:112
 #, kde-kuit-format
@@ -3599,10 +3547,9 @@ msgid "Found invalid entry in the VIDEO_TS folder <filename>%1</filename>."
 msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:120
-#, fuzzy, kde-kuit-format
-#| msgid "Unable to create temporary folder '%1'."
+#, kde-kuit-format
 msgid "Unable to link temporary file in folder <filename>%1</filename>."
-msgstr "Níorbh fhéidir fillteán sealadach '%1' a chruthú."
+msgstr ""
 
 #: projects/videodvd/k3bvideodvdimager.cpp:194
 #, kde-format
@@ -3626,10 +3573,9 @@ msgid "Writing Video DVD"
 msgstr ""
 
 #: projects/videodvd/k3bvideodvdjob.cpp:56
-#, fuzzy, kde-format
-#| msgid "ISO9660 Filesystem (Size: %1)"
+#, kde-format
 msgid "ISO 9660/Udf Filesystem (Size: %1)"
-msgstr "Córas comhad ISO9660 (Méid: %1)"
+msgstr ""
 
 #: tools/k3bcddb.cpp:37
 #, kde-format
@@ -3738,9 +3684,6 @@ msgid "%2 in %1 track"
 msgid_plural "%2 in %1 tracks"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: tools/k3bmedium.cpp:419
 #, kde-format
@@ -3748,9 +3691,6 @@ msgid " and %1 session"
 msgid_plural " and %1 sessions"
 msgstr[0] ""
 msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
 
 #: tools/k3bmedium.cpp:424
 #, kde-format
@@ -3779,20 +3719,18 @@ msgid "Blu-ray"
 msgstr ""
 
 #: tools/k3bmedium.cpp:600
-#, fuzzy, kde-format
-#| msgid "VCD"
+#, kde-format
 msgctxt ""
 "To be shown when a CD is required but another type of medium is inserted."
 msgid "CD"
-msgstr "VCD"
+msgstr ""
 
 #: tools/k3bmedium.cpp:602
-#, fuzzy, kde-format
-#| msgid "VCD"
+#, kde-format
 msgctxt ""
 "To be shown when a DVD is required but another type of medium is inserted."
 msgid "DVD"
-msgstr "VCD"
+msgstr ""
 
 #: tools/k3bmedium.cpp:604
 #, kde-format
@@ -3826,11 +3764,10 @@ msgid "Medium in %1 is not a %2."
 msgstr ""
 
 #: tools/k3bmedium.cpp:623
-#, fuzzy, kde-format
-#| msgid "Empty"
+#, kde-format
 msgctxt "To be shown when an empty medium is required"
 msgid "empty"
-msgstr "Folamh"
+msgstr ""
 
 #: tools/k3bmedium.cpp:625
 #, kde-format
@@ -4230,16 +4167,14 @@ msgid "Write files directly to CD/DVD without creating an image"
 msgstr ""
 
 #: tools/k3bstdguiitems.cpp:110
-#, fuzzy, kde-format
-#| msgid "Write CD-TEXT"
+#, kde-format
 msgid "Write CD-Text"
-msgstr "Scríobh CD-TEXT"
+msgstr ""
 
 #: tools/k3bstdguiitems.cpp:111
-#, fuzzy, kde-format
-#| msgid "Create CD-TEXT entries"
+#, kde-format
 msgid "Create CD-Text entries"
-msgstr "Cruthaigh iontrálacha CD-TEXT"
+msgstr ""
 
 #: tools/k3bstdguiitems.cpp:112
 #, kde-format
@@ -4467,118 +4402,3 @@ msgstr ""
 #, kde-format
 msgid "unknown code extension"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Successfully read disk."
-#~ msgid "Disk successfully erased. Please reload the disk."
-#~ msgstr "D'éirigh le léamh an diosca."
-
-#~ msgid "K3b was unable to erase the disk."
-#~ msgstr "Níorbh fhéidir le K3b an diosca a léirscriosadh."
-
-#~ msgid "CD-TEXT"
-#~ msgstr "CD-TEXT"
-
-#~ msgid "Checking media..."
-#~ msgstr "Meáin á seiceáil..."
-
-#~ msgid "Checking media"
-#~ msgstr "Meáin á seiceáil"
-
-#~ msgid "Unsupported Format"
-#~ msgstr "Formáid nach dtacaítear leis"
-
-#~ msgid "Writing DVD+RW."
-#~ msgstr "DVD+RW á scríobh."
-
-#~ msgid "Writing DVD+R."
-#~ msgstr "DVD+R á scríobh."
-
-#~ msgid "Formatting DVD±RW"
-#~ msgstr "DVD±RW á fhormáidiú"
-
-#~ msgid "Formatting DVD+RW"
-#~ msgstr "DVD+RW á fhormáidiú"
-
-#~ msgid "Configure plugin %1"
-#~ msgstr "Breiseán %1 á chumrú"
-
-#~ msgid "%1 (Mixed CD)"
-#~ msgstr "%1 (Dlúthdhiosca Measctha)"
-
-#~ msgid "Ejecting CD"
-#~ msgstr "Dlúthdhiosca á dhíchur"
-
-#~ msgid "Formatting DVD%1RW"
-#~ msgstr "DVD%1RW á fhormáidiú"
-
-#~ msgid "Could not connect to host %1"
-#~ msgstr "Níorbh fhéidir ceangal le hóstríomhaire %1"
-
-#~ msgid "Found multiple exact matches"
-#~ msgstr "Aimsíodh roinnt iontrálacha comhoiriúnacha"
-
-#~ msgid "Found inexact matches"
-#~ msgstr "Aimsíodh roinnt iontrálacha atá beagnach comhoiriúnach"
-
-#~ msgid "No match found"
-#~ msgstr "Níor aimsíodh aon rud"
-
-#~ msgid "Error while querying"
-#~ msgstr "Earráid le linn cuardaigh"
-
-#~ msgid "Could not read match"
-#~ msgstr "Níorbh fhéidir an iontráil chomhoiriúnach a léamh"
-
-#~ msgid "Searching entry in %1"
-#~ msgstr "Iontráil á cuardach i %1"
-
-#~ msgid "Searching %1 on port %2"
-#~ msgstr "%1 á chuardach ar phort %2"
-
-#~ msgid "Host found"
-#~ msgstr "Aimsíodh óstríomhaire"
-
-#~ msgid "Connected"
-#~ msgstr "Ceangailte"
-
-#~ msgid "Connection closed"
-#~ msgstr "Ceangal dúnta"
-
-#~ msgid "Connection refused"
-#~ msgstr "Ceangal diúltaithe"
-
-#~ msgid "Handshake successful"
-#~ msgstr "D'éirigh le cumarsáid thionscantach"
-
-#~ msgid "Handshake failed"
-#~ msgstr "Theip ar chumarsáid thionscantach"
-
-#~ msgid "Found exact match"
-#~ msgstr "Aimsíodh iontráil chomhoiriúnach"
-
-#~ msgid "Connection to %1 refused"
-#~ msgstr "Diúltaíodh ceangal le %1"
-
-#~ msgid "Could not find host %1"
-#~ msgstr "Óstríomhaire %1 gan aimsiú"
-
-#~ msgid "Error while reading from %1"
-#~ msgstr "Earráid agus %1 á léamh"
-
-#~ msgid "Found freedb entry."
-#~ msgstr "Aimsíodh iontráil freedb."
-
-#~ msgid "Working..."
-#~ msgstr "Oibriú..."
-
-#~ msgid "Communication error."
-#~ msgstr "Earráid chumarsáide."
-
-#~ msgctxt "NAME OF TRANSLATORS"
-#~ msgid "Your names"
-#~ msgstr "Kevin Scannell"
-
-#~ msgctxt "EMAIL OF TRANSLATORS"
-#~ msgid "Your emails"
-#~ msgstr "kscanne@gmail.com"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-01-14 00:43+0000\n"
+"POT-Creation-Date: 2026-02-20 00:44+0000\n"
 "PO-Revision-Date: 2026-01-20 20:44+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -1920,7 +1920,7 @@ msgid "Copy to clipboard"
 msgstr "Kopiera till klippbordet"
 
 #: k3bdebuggingoutputdialog.cpp:84 misc/k3bmediacopydialog.cpp:290
-#: misc/k3bmediacopydialog.cpp:299 projects/k3bdataburndialog.cpp:170
+#: misc/k3bmediacopydialog.cpp:299 projects/k3bdataburndialog.cpp:169
 #: projects/k3bmovixburndialog.cpp:207 projects/k3bvcdburndialog.cpp:546
 #: projects/k3bvideodvdburndialog.cpp:159
 #, kde-format
@@ -1928,7 +1928,7 @@ msgid "Do you want to overwrite %1?"
 msgstr "Vill du skriva över %1?"
 
 #: k3bdebuggingoutputdialog.cpp:85 misc/k3bmediacopydialog.cpp:291
-#: misc/k3bmediacopydialog.cpp:300 projects/k3bdataburndialog.cpp:171
+#: misc/k3bmediacopydialog.cpp:300 projects/k3bdataburndialog.cpp:170
 #: projects/k3bmovixburndialog.cpp:208 projects/k3bvcdburndialog.cpp:547
 #: projects/k3bvideodvdburndialog.cpp:160
 #, kde-format
@@ -4481,7 +4481,7 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: option/base_k3bmiscoptiontab.ui:20 option/k3boptiondialog.cpp:129
-#: projects/k3bdataburndialog.cpp:156 projects/k3bmixedburndialog.cpp:87
+#: projects/k3bdataburndialog.cpp:155 projects/k3bmixedburndialog.cpp:87
 #: projects/k3bmixedburndialog.cpp:134 projects/k3bmovixburndialog.cpp:104
 #: projects/k3bvcdburndialog.cpp:360
 #, kde-format
@@ -7141,25 +7141,25 @@ msgstr "Dataprojekt"
 msgid "Filesystem"
 msgstr "Filsystem"
 
-#: projects/k3bdataburndialog.cpp:142 projects/k3bmixedburndialog.cpp:82
+#: projects/k3bdataburndialog.cpp:141 projects/k3bmixedburndialog.cpp:82
 #: projects/k3bmovixburndialog.cpp:90
 #, kde-format
 msgid "Datatrack Mode"
 msgstr "Dataspårläge"
 
-#: projects/k3bdataburndialog.cpp:147
+#: projects/k3bdataburndialog.cpp:146
 #, kde-format
 msgid "Multisession Mode"
 msgstr "Flersessionsläge"
 
-#: projects/k3bdataburndialog.cpp:185 projects/k3bmovixburndialog.cpp:218
+#: projects/k3bdataburndialog.cpp:184 projects/k3bmovixburndialog.cpp:218
 #, kde-format
 msgid "Most writers do not support writing multisession CDs in DAO mode."
 msgstr ""
 "De flesta brännare stöder inte att skriva flersessions-cd med läget disk-at-"
 "once."
 
-#: projects/k3bdataburndialog.cpp:248
+#: projects/k3bdataburndialog.cpp:247
 #, kde-format
 msgid ""
 "It is not possible to write multisession media in DAO mode. Multisession has "
@@ -7168,7 +7168,7 @@ msgstr ""
 "Det är inte möjligt att skriva flersessionsmedia med läget disk-at-once. "
 "Flersession har inaktiverats."
 
-#: projects/k3bdataburndialog.cpp:250
+#: projects/k3bdataburndialog.cpp:249
 #, kde-format
 msgid "Multisession Problem"
 msgstr "Flersessionsproblem"
