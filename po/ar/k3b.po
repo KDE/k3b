@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-20 00:44+0000\n"
-"PO-Revision-Date: 2026-01-15 09:01+0400\n"
+"PO-Revision-Date: 2026-02-26 12:34+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -1729,12 +1729,12 @@ msgstr "معلومات الو&سائط"
 #: k3bappdevicemanager.cpp:47
 #, kde-format
 msgid "&Unmount"
-msgstr "أزل ال&ضمّ"
+msgstr "&فك التوصل"
 
 #: k3bappdevicemanager.cpp:49
 #, kde-format
 msgid "&Mount"
-msgstr "&ضمّ"
+msgstr "&صِل"
 
 #: k3bappdevicemanager.cpp:51 k3bemptydiscwaiter.cpp:274
 #: k3bemptydiscwaiter.cpp:369 k3bemptydiscwaiter.cpp:455
@@ -1765,12 +1765,12 @@ msgstr "اعرض معلومات وسيط عامّة"
 #: k3bappdevicemanager.cpp:64
 #, kde-format
 msgid "Unmount the medium"
-msgstr "أزل ضمّ الوسط"
+msgstr "فك وصل الوسط"
 
 #: k3bappdevicemanager.cpp:66
 #, kde-format
 msgid "Mount the medium"
-msgstr "ضمّ الوسط"
+msgstr "صِل الوسط"
 
 #: k3bappdevicemanager.cpp:68
 #, kde-format
@@ -1802,7 +1802,7 @@ msgid ""
 "on K3b since it will change the reading speed again when copying CDs or DVDs."
 msgstr ""
 "<p>رجاءً أدخل سرعة القراءة المُفضّلة لـ <b>%1</b>. ستُستخدم هذه السّرعة للوسيط "
-"المضموم حاليًّا.<p>هذا مفيد خاصّة لإبطاء محرك الأقراص عند مشاهدة الأفلام التي "
+"الموصول حاليًّا.<p>هذا مفيد خاصّة لإبطاء محرك الأقراص عند مشاهدة الأفلام التي "
 "تُقرأ مباشرةً من محرك الأقراص ويكون صوت الدّوران مزعجًا.<p>انتبه إلى أنّ هذا لا "
 "يؤثّر على «كي3بي» لأنّه سيغيّر سرعة القراءة مجدّدًا عند نسخ الأقراص المدمجة أو "
 "أقراص DVD."
@@ -1962,7 +1962,7 @@ msgstr "فشل الضّمّ"
 #: k3bdirview.cpp:228
 #, kde-format
 msgid "<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>"
-msgstr "<p>تعذّر على «كي3بي» ضمّ الوسيط <b>%1</b> في الجهاز <em>%2 - %3</em>"
+msgstr "<p>تعذّر على «كي3بي» وصل الوسيط <b>%1</b> في الجهاز <em>%2 - %3</em>"
 
 #: k3bdirview.cpp:243
 #, kde-format
@@ -1973,8 +1973,7 @@ msgstr "فشلت إزالة الضّمّ"
 #, kde-format
 msgid ""
 "<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>"
-msgstr ""
-"<p>تعذّر على «كي3بي» إزالة ضمّ الوسيط <b>%1</b> في الجهاز <em>%2 - %3</em>"
+msgstr "<p>تعذّر على «كي3بي» فك وصل الوسيط <b>%1</b> في الجهاز <em>%2 - %3</em>"
 
 #: k3bdiskinfoview.cpp:81
 #, kde-format
@@ -3002,7 +3001,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:397
 #, kde-format
 msgid "Device %1 - %2 is automounted."
-msgstr "الجهاز %1 - %2 مضموم آليًّا."
+msgstr "الجهاز %1 - %2 موصول آليًّا."
 
 #: k3bsystemproblemdialog.cpp:399
 #, kde-format
@@ -10755,7 +10754,7 @@ msgid ""
 "ripping will not work if the device is mounted. Please unmount manually."
 msgstr ""
 "تعذر على كي3بي فك تعليق الجهاز '%1' الذي يحوي على الوسيط '%2'. لن يعمل نسخ "
-"دي في دي الفيديو إذا ضُم الجهاز. رجاء فك الضم يدويًا."
+"دي في دي الفيديو إذا ضُم الجهاز. رجاء فك الوصل يدويًا."
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:247
 #, kde-format
