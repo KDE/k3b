@@ -1,38 +1,38 @@
 # Translation for k3b.po to Euskara/Basque (eu).
-# Copyright (C) 2005-2024 This file is copyright:
+# Copyright (C) 2005-2026 This file is copyright:
 # This file is distributed under the same license as the k3b package.
-# SPDX-FileCopyrightText: 2024 KDE euskaratzeko proiektuko arduraduna <xalba@ni.eus>
+# SPDX-FileCopyrightText: 2024, 2026 KDE euskaratzeko proiektuaren arduraduna <xalba@ni.eus>
 #
 # Translators:
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2005.
 # marcos <marcos@euskalgnu.org>, 2007.
 # Julen Landa Alustiza <julen@mundurat.net>, 2009.
 # Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>, 2009, 2011.
-# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2012, 2018, 2019, 2020, 2022, 2023, 2024.
+# Iñigo Salvador Azurmendi <xalba@ni.eus>, 2012, 2018, 2019, 2020, 2022, 2023, 2024, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-20 00:44+0000\n"
-"PO-Revision-Date: 2024-08-30 18:12+0200\n"
+"PO-Revision-Date: 2026-03-01 11:55+0100\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.08.0\n"
+"X-Generator: Lokalize 25.12.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Julen Landa,Iñaki Larrañaga Murgoitio,Iñigo Salvador Azurmendi"
+msgstr "Iñigo Salvador Azurmendi,Iñaki Larrañaga Murgoitio,Julen Landa"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "julen@mundurat.net,dooteo@euskalgnu.org,xalba@ni.eus"
+msgstr "xalba@ni.eus,dooteo@euskalgnu.org,julen@mundurat.net"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
 #, kde-format
@@ -1723,7 +1723,7 @@ msgstr "Ez dago proiektu aktiborik"
 #: k3b.cpp:1437
 #, kde-format
 msgid "Do you really want to clear the current project?"
-msgstr "Benetan garbitu nahi duzu uneko proiektua?"
+msgstr "Uneko proiektua benetan garbitu nahi duzu?"
 
 #: k3b.cpp:1438
 #, kde-format
@@ -2482,8 +2482,7 @@ msgid "Overall progress:"
 msgstr "Aurrerapen orokorra:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Gelditu"
@@ -2531,28 +2530,26 @@ msgid "Finished with errors"
 msgstr "Erroreekin amaitu da"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Benetan garbitu nahi duzu uneko proiektua?"
+msgstr "Martxan dagoen uneko eragiketa benetan gelditu nahi duzu?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Baieztatu Gelditu eragiketa"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Gelditu eragiketa"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Jarraitu saio-anitzarekin"
+msgstr "Jarraitu eragiketarekin"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
