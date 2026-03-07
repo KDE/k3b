@@ -649,7 +649,10 @@ bool K3b::CdrdaoWriter::cueSheet()
                 return false;
 
             QTemporaryFile tempF;
-            if ( !tempF.open() ) return false;
+            if ( !tempF.open() ) {
+                qWarning() << "Creating temporary cue sheet file failed";
+                return false;
+            }
             QString tempFile = tempF.fileName();
             tempF.remove();
 

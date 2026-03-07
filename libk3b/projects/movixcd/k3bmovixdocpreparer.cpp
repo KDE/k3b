@@ -164,7 +164,10 @@ bool K3b::MovixDocPreparer::writePlaylistFile()
 {
     delete d->playlistFile;
     d->playlistFile = new QTemporaryFile();
-    if ( !d->playlistFile->open() ) return false;
+    if ( !d->playlistFile->open() ) {
+        qWarning() << "Creating temporary playlist file failed";
+        return false;
+    }
 
     QTextStream s( d->playlistFile );
 
@@ -185,7 +188,10 @@ bool K3b::MovixDocPreparer::writeIsolinuxConfigFile( const QString& originalPath
 {
     delete d->isolinuxConfigFile;
     d->isolinuxConfigFile = new QTemporaryFile();
-    if ( !d->isolinuxConfigFile->open() ) return false;
+    if ( !d->isolinuxConfigFile->open() ) {
+        qWarning() << "Creating temporary Isolinux config file failed";
+        return false;
+    }
 
     QTextStream s( d->isolinuxConfigFile );
 
@@ -219,7 +225,10 @@ bool K3b::MovixDocPreparer::writeMovixRcFile()
 {
     delete d->movixRcFile;
     d->movixRcFile = new QTemporaryFile();
-    if ( !d->movixRcFile->open() ) return false;
+    if ( !d->movixRcFile->open() ) {
+        qWarning() << "Creating temporary Movix RC file failed";
+        return false;
+    }
 
     QTextStream s( d->movixRcFile );
 

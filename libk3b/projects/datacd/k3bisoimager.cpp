@@ -732,6 +732,7 @@ int K3b::IsoImager::writePathSpec()
         return writePathSpecForDir( m_doc->root(), s );
     }
     else {
+        qWarning() << "Creating temporary path spec file failed";
         return -1;
     }
 }
@@ -819,7 +820,10 @@ void K3b::IsoImager::writePathSpecForFile( K3b::FileItem* item, QTextStream& str
         // create temp file
         QTemporaryFile temp;
         temp.setAutoRemove( false );
-        if ( !temp.open() ) return;
+        if ( !temp.open() ) {
+            qWarning() << "Creating temporary boot image file failed";
+            return;
+        }
         QString tempPath = temp.fileName();
         temp.remove();
 
@@ -851,7 +855,10 @@ bool K3b::IsoImager::writeRRHideFile()
 {
     delete m_rrHideFile;
     m_rrHideFile = new QTemporaryFile();
-    if ( !m_rrHideFile->open() ) return false;
+    if ( !m_rrHideFile->open() ) {
+        qWarning() << "Creating temporary RR hide file failed";
+        return false;
+    }
 
     QTextStream s( m_rrHideFile );
 
@@ -872,7 +879,10 @@ bool K3b::IsoImager::writeJolietHideFile()
 {
     delete m_jolietHideFile;
     m_jolietHideFile = new QTemporaryFile();
-    if ( !m_jolietHideFile->open() ) return false;
+    if ( !m_jolietHideFile->open() ) {
+        qWarning() << "Creating temporary Joliet hide file failed";
+        return false;
+    }
 
     QTextStream s( m_jolietHideFile );
 
@@ -893,7 +903,10 @@ bool K3b::IsoImager::writeSortWeightFile()
 {
     delete m_sortWeightFile;
     m_sortWeightFile = new QTemporaryFile();
-    if ( !m_sortWeightFile->open() ) return false;
+    if ( !m_sortWeightFile->open() ) {
+        qWarning() << "Creating temporary sort weight file failed";
+        return false;
+    }
 
     QTextStream s( m_sortWeightFile );
 

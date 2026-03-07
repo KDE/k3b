@@ -731,7 +731,10 @@ bool K3b::MixedJob::writeTocFile()
 
     delete m_tocFile;
     m_tocFile = new QTemporaryFile( "XXXXXX.toc" );
-    if ( !m_tocFile->open() ) return false;
+    if ( !m_tocFile->open() ) {
+        qWarning() << "Creating temporary .toc file failed";
+        return false;
+    }
 
     // write the toc-file
     QTextStream s( m_tocFile );

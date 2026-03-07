@@ -155,6 +155,7 @@ KoStore* KoStore::createStore( QWidget* window, const QUrl& url, Mode mode, cons
         tmpFile.write( transferJob->data() );
         tmpFile.close();
       } else {
+        qCWarning(K3B_KOSTORE_LOG) << "Creating store failed";
         downloaded = false;
       }
     } );

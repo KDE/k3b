@@ -126,6 +126,7 @@ void K3b::ThemeOptionTab::slotInstallTheme()
             themeTmpFile.write( transferJob->data() );
             themeTmpFile.close();
         } else {
+            qWarning() << "Theme transfer job failed";
             transferJobSucceed = false;
         }
     } );
@@ -166,6 +167,8 @@ void K3b::ThemeOptionTab::slotInstallTheme()
                 }
             }
         }
+    } else {
+        qWarning() << "Reading theme archive failed";
     }
 
     if( !validThemeArchive ) {
