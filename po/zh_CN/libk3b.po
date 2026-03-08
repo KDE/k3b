@@ -4206,7 +4206,7 @@ msgstr ""
 "者 CD 标题。<p>CD-TEXT 是对索尼公司首创的音频 CD 标准的扩充。<p>CD-TEXT 只会"
 "在支持这种扩充的 CD 机(大多数车载 CD 机)上才有用。<p>因为带有 CD-TEXT 增强的 "
 "CD 仍然可以在任何 CD 机中播放，启用此选项不会有什么坏处(当然您需要指定要写入"
-"的文字信息)。"
+"的文本信息)。"
 
 #: tools/k3bstdguiitems.cpp:131
 #, kde-format
