@@ -990,7 +990,7 @@ msgid ""
 "good quality. It is usually CPU intensive to work with GSM audio data.</p> "
 "<p><em>Description based on the SoX manpage</em></p>"
 msgstr ""
-"<p>ترميز بيانات العيّنة هو خطّي موقّع (مكمّل 2)، خطّي غير موقّع، قانون-u "
+"<p>ترميز بيانات العيّنة هو خطّي موقع (مكمّل 2)، خطّي غير موقع، قانون-u "
 "(لوغاريتميّ)، قانون-A (لوغاريتميّ)، ADPCM، IMA_ADPCM، GSM، أو فاصلة عائمة.</"
 "p>\n"
 "<p><b>القانون-U</b> (هو اختصار لقانون-mu) و<b>القانون-A</b> هما المعياران "
@@ -1013,13 +1013,13 @@ msgstr ""
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:67
 #, kde-format
 msgid "Signed Linear"
-msgstr "خطّي موقّع"
+msgstr "خطّي موقع"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:72
 #, kde-format
 msgid "Unsigned Linear"
-msgstr "خطّي غير موقّع"
+msgstr "خطّي غير موقع"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:77
@@ -7793,7 +7793,7 @@ msgstr "مجلّد جديد..."
 #: projects/k3bdataviewimpl.cpp:124
 #, kde-format
 msgid "Parent Folder"
-msgstr "المجلّد الأبّ"
+msgstr "المجلّد الأب"
 
 #: projects/k3bdataviewimpl.cpp:135
 #, kde-format
