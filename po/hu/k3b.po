@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-20 00:44+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2024-07-31 22:27+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -31,17 +31,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "ulysses@fsf.hu,biro.arpad@gmail.com,taszanto@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey's Audio (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Advanced Audio Coding (AAC)"
@@ -4201,7 +4201,7 @@ msgstr ""
 "</p><p>Csak akkor lépjen tovább, ha ennek ellenére is folytatni kívánja a "
 "műveletet.</p>"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "Figyelmeztetés"
@@ -5249,29 +5249,29 @@ msgstr ""
 "Egy művelet párbeszédablakának megjelenésekor betöltésre kerül ezen "
 "készletek egyike. Ez a beállítás adja meg, hogy melyik készlet legyen az."
 
-#: option/k3bmiscoptiontab.cpp:104
+#: option/k3bmiscoptiontab.cpp:106
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
 msgstr "\"%1\" könyvtár nem létezik. Létre szeretné hozni?"
 
-#: option/k3bmiscoptiontab.cpp:105
+#: option/k3bmiscoptiontab.cpp:107
 #, kde-format
 msgid "Create Folder"
 msgstr "Könyvtár létrehozása"
 
-#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: option/k3bmiscoptiontab.cpp:108 projects/k3bprojectburndialog.cpp:189
 #: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "Létrehozás"
 
-#: option/k3bmiscoptiontab.cpp:109 rip/k3bmassaudioencodingjob.cpp:285
+#: option/k3bmiscoptiontab.cpp:111 rip/k3bmassaudioencodingjob.cpp:285
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
 msgstr "Nem sikerült létrehozni \"%1\" könyvtárt."
 
-#: option/k3bmiscoptiontab.cpp:120
+#: option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
@@ -5280,7 +5280,7 @@ msgstr ""
 "Egy fájlt adott meg ideiglenes könyvtárnak. A K3b ennek a fájlnak a helyét "
 "(könyvtárát) fogja használni ideiglenes könyvtárként."
 
-#: option/k3bmiscoptiontab.cpp:129
+#: option/k3bmiscoptiontab.cpp:131
 #, kde-format
 msgid "You do not have permission to write to %1."
 msgstr "Nincs írási joga ehhez: %1."
@@ -5375,12 +5375,12 @@ msgstr "K3b - CD- és DVD-készítő"
 msgid "Drag or Type Theme URL"
 msgstr "Húzza ide vagy gépelje be a téma URL-jét"
 
-#: option/k3bthemeoptiontab.cpp:139
+#: option/k3bthemeoptiontab.cpp:138
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
 msgstr "%1 nevű ikontéma-archívum nem található."
 
-#: option/k3bthemeoptiontab.cpp:141
+#: option/k3bthemeoptiontab.cpp:140
 #, kde-format
 msgid ""
 "Unable to download the icon theme archive.\n"
@@ -5389,22 +5389,22 @@ msgstr ""
 "Nem sikerült letölteni az ikontéma-archívumot.\n"
 "Ellenőrizze, hogy helyes-e a(z) %1 cím."
 
-#: option/k3bthemeoptiontab.cpp:173
+#: option/k3bthemeoptiontab.cpp:175
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
 msgstr "A fájl nem egy érvényes K3b-témaarchívum."
 
-#: option/k3bthemeoptiontab.cpp:182
+#: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
 msgstr "Már létezik \"%1\" nevű téma. Szeretné azt felülírni?"
 
-#: option/k3bthemeoptiontab.cpp:184
+#: option/k3bthemeoptiontab.cpp:186
 #, kde-format
 msgid "Theme exists"
 msgstr "A téma létezik"
 
-#: option/k3bthemeoptiontab.cpp:202
+#: option/k3bthemeoptiontab.cpp:204
 #, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
@@ -5413,7 +5413,7 @@ msgstr ""
 "<qt>Biztosan el kívánja távolítani a(z) <strong>%1</strong> témát?"
 "<br><br>Ezzel a téma által telepített fájlok is törlődni fognak.</qt>"
 
-#: option/k3bthemeoptiontab.cpp:207
+#: option/k3bthemeoptiontab.cpp:209
 #, kde-format
 msgid "Delete"
 msgstr "Törlés"

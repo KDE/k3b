@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-20 00:44+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2026-02-04 00:37+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -28,17 +28,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "kde@peremen.name,daemul72@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey's Audio(APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Advanced Audio(AAC)"
@@ -4110,7 +4110,7 @@ msgstr ""
 "다면 다운로드가 아직 끝나지 않았을 수도 있습니다.</p><p>무엇을 하고 있는지 알"
 "고 있는 경우에만 계속 진행하십시오.</p>"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "경고"
@@ -5120,29 +5120,29 @@ msgstr ""
 "작업 대화 상자를 열면 이 중 하나의 설정을 불러 옵니다. 이 설정은 불러올 설정"
 "을 결정합니다."
 
-#: option/k3bmiscoptiontab.cpp:104
+#: option/k3bmiscoptiontab.cpp:106
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
 msgstr "폴더(%1)가 없습니다. 생성하시겠습니까?"
 
-#: option/k3bmiscoptiontab.cpp:105
+#: option/k3bmiscoptiontab.cpp:107
 #, kde-format
 msgid "Create Folder"
 msgstr "폴더 만들기"
 
-#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: option/k3bmiscoptiontab.cpp:108 projects/k3bprojectburndialog.cpp:189
 #: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "만들기"
 
-#: option/k3bmiscoptiontab.cpp:109 rip/k3bmassaudioencodingjob.cpp:285
+#: option/k3bmiscoptiontab.cpp:111 rip/k3bmassaudioencodingjob.cpp:285
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
 msgstr "폴더 %1을(를) 만들 수 없음|/|폴더 %1$[을를 %1] 만들 수 없음"
 
-#: option/k3bmiscoptiontab.cpp:120
+#: option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
@@ -5151,7 +5151,7 @@ msgstr ""
 "임시 폴더에 파일을 지정했습니다. K3b에서 해당 파일이 있는 폴더를 임시 폴더로 "
 "사용합니다."
 
-#: option/k3bmiscoptiontab.cpp:129
+#: option/k3bmiscoptiontab.cpp:131
 #, kde-format
 msgid "You do not have permission to write to %1."
 msgstr "%1에 쓸 수 있는 권한이 없습니다."
@@ -5246,12 +5246,12 @@ msgstr "K3b - CD/DVD 제작 프로그램"
 msgid "Drag or Type Theme URL"
 msgstr "테마 URL 드래그 또는 키보드 입력"
 
-#: option/k3bthemeoptiontab.cpp:139
+#: option/k3bthemeoptiontab.cpp:138
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
 msgstr "%1 아이콘 테마 압축 파일을 찾을 수 없습니다."
 
-#: option/k3bthemeoptiontab.cpp:141
+#: option/k3bthemeoptiontab.cpp:140
 #, kde-format
 msgid ""
 "Unable to download the icon theme archive.\n"
@@ -5260,22 +5260,22 @@ msgstr ""
 "아이콘 테마가 저장된 파일을 다운로드할 수 없습니다.\n"
 "주소 %1이(가) 올바른지 확인하십시오."
 
-#: option/k3bthemeoptiontab.cpp:173
+#: option/k3bthemeoptiontab.cpp:175
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
 msgstr "이 파일은 올바른 K3b 테마 압축 파일이 아닙니다."
 
-#: option/k3bthemeoptiontab.cpp:182
+#: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
 msgstr "이름이 '%1'인 테마가 이미 존재합니다. 덮어쓰시겠습니까?"
 
-#: option/k3bthemeoptiontab.cpp:184
+#: option/k3bthemeoptiontab.cpp:186
 #, kde-format
 msgid "Theme exists"
 msgstr "테마가 이미 존재함"
 
-#: option/k3bthemeoptiontab.cpp:202
+#: option/k3bthemeoptiontab.cpp:204
 #, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
@@ -5284,7 +5284,7 @@ msgstr ""
 "<qt>테마 <strong>%1</strong>을(를) 삭제하시겠습니까?<br><br>이 테마에서 설치"
 "한 파일을 삭제합니다.</qt>"
 
-#: option/k3bthemeoptiontab.cpp:207
+#: option/k3bthemeoptiontab.cpp:209
 #, kde-format
 msgid "Delete"
 msgstr "삭제"

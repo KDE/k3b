@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-20 00:44+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2026-01-14 22:35+0100\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -32,17 +32,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "luigi.toscano@tiscali.it,,"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey's Audio (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Codifica Avanzata Audio (AAC)"
@@ -4187,7 +4187,7 @@ msgstr ""
 "scaricamento sia stato completato.</p><p>Continua solo se sai esattamente "
 "cosa stai facendo.</p>"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "Attenzione"
@@ -5224,29 +5224,29 @@ msgstr ""
 "Una di queste impostazioni è caricata una volta che una finestra d'azione si "
 "è aperta. Questa impostazione definisce quale insieme sarà."
 
-#: option/k3bmiscoptiontab.cpp:104
+#: option/k3bmiscoptiontab.cpp:106
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
 msgstr "La cartella (%1) non esiste. Vuoi crearla?"
 
-#: option/k3bmiscoptiontab.cpp:105
+#: option/k3bmiscoptiontab.cpp:107
 #, kde-format
 msgid "Create Folder"
 msgstr "Crea cartella"
 
-#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: option/k3bmiscoptiontab.cpp:108 projects/k3bprojectburndialog.cpp:189
 #: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "Crea"
 
-#: option/k3bmiscoptiontab.cpp:109 rip/k3bmassaudioencodingjob.cpp:285
+#: option/k3bmiscoptiontab.cpp:111 rip/k3bmassaudioencodingjob.cpp:285
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
 msgstr "Impossibile creare la cartella %1"
 
-#: option/k3bmiscoptiontab.cpp:120
+#: option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
@@ -5255,7 +5255,7 @@ msgstr ""
 "Hai specificato un file come cartella temporanea. K3b utilizzerà il percorso "
 "base come cartella temporanea."
 
-#: option/k3bmiscoptiontab.cpp:129
+#: option/k3bmiscoptiontab.cpp:131
 #, kde-format
 msgid "You do not have permission to write to %1."
 msgstr "Non hai il permesso per scrivere su %1."
@@ -5350,12 +5350,12 @@ msgstr "K3b - Il creatore di CD/DVD"
 msgid "Drag or Type Theme URL"
 msgstr "Trascina o digita l'URL del tema"
 
-#: option/k3bthemeoptiontab.cpp:139
+#: option/k3bthemeoptiontab.cpp:138
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
 msgstr "Impossibile trovare l'archivio del tema di icone %1."
 
-#: option/k3bthemeoptiontab.cpp:141
+#: option/k3bthemeoptiontab.cpp:140
 #, kde-format
 msgid ""
 "Unable to download the icon theme archive.\n"
@@ -5364,22 +5364,22 @@ msgstr ""
 "Impossibile scaricare l'archivio del tema di icone.\n"
 "Controlla che l'indirizzo %1 sia corretto."
 
-#: option/k3bthemeoptiontab.cpp:173
+#: option/k3bthemeoptiontab.cpp:175
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
 msgstr "Il file non è un valido archivio di temi K3b."
 
-#: option/k3bthemeoptiontab.cpp:182
+#: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
 msgstr "Un tema con il nome «%1» esiste già. Vuoi sovrascriverlo?"
 
-#: option/k3bthemeoptiontab.cpp:184
+#: option/k3bthemeoptiontab.cpp:186
 #, kde-format
 msgid "Theme exists"
 msgstr "Il tema esiste"
 
-#: option/k3bthemeoptiontab.cpp:202
+#: option/k3bthemeoptiontab.cpp:204
 #, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
@@ -5388,7 +5388,7 @@ msgstr ""
 "<qt>Sei sicuro di valer rimuovere il tema <strong>%1</strong>?<br><br>Ciò "
 "cancellerà i file installati da questo tema.</qt>"
 
-#: option/k3bthemeoptiontab.cpp:207
+#: option/k3bthemeoptiontab.cpp:209
 #, kde-format
 msgid "Delete"
 msgstr "Cancella"

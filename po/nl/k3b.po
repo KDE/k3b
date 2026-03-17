@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-20 00:44+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2026-01-14 16:53+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -44,17 +44,17 @@ msgstr ""
 ",rinsedevries@kde.nl,,,ruurd@tiscali.nl,kristof.bal@gmail.com,"
 "freekdekruijf@kde.nl"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "Monkey's Audio (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Advanced Audio Coding (AAC)"
@@ -4200,7 +4200,7 @@ msgstr ""
 "kop van het bestand. Als het is gedownload, verzeker u ervan dat de download "
 "compleet is.</p><p>Ga alleen verder als u weet wat u doet.</p>"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "Waarschuwing"
@@ -5234,29 +5234,29 @@ msgstr ""
 "Een van deze sets wordt geladen als een actiedialoog wordt geopend. Deze "
 "instelling bepaalt welke set dat zal zijn."
 
-#: option/k3bmiscoptiontab.cpp:104
+#: option/k3bmiscoptiontab.cpp:106
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
 msgstr "Map (%1) bestaat niet. Wilt u deze aanmaken?"
 
-#: option/k3bmiscoptiontab.cpp:105
+#: option/k3bmiscoptiontab.cpp:107
 #, kde-format
 msgid "Create Folder"
 msgstr "Map aanmaken"
 
-#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: option/k3bmiscoptiontab.cpp:108 projects/k3bprojectburndialog.cpp:189
 #: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "Aanmaken"
 
-#: option/k3bmiscoptiontab.cpp:109 rip/k3bmassaudioencodingjob.cpp:285
+#: option/k3bmiscoptiontab.cpp:111 rip/k3bmassaudioencodingjob.cpp:285
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
 msgstr "Map %1 kon niet aangemaakt worden."
 
-#: option/k3bmiscoptiontab.cpp:120
+#: option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
@@ -5265,7 +5265,7 @@ msgstr ""
 "U hebt een bestand opgegeven als tijdelijke map. K3b zal het basispad ervan "
 "gebruiken als tijdelijke map."
 
-#: option/k3bmiscoptiontab.cpp:129
+#: option/k3bmiscoptiontab.cpp:131
 #, kde-format
 msgid "You do not have permission to write to %1."
 msgstr "U hebt geen rechten om naar %1 te schrijven."
@@ -5360,12 +5360,12 @@ msgstr "K3b - De CD/DVD Kreator"
 msgid "Drag or Type Theme URL"
 msgstr "Sleep of typ het adres van het thema"
 
-#: option/k3bthemeoptiontab.cpp:139
+#: option/k3bthemeoptiontab.cpp:138
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
 msgstr "Het pictogramthema-archief %1 is niet gevonden."
 
-#: option/k3bthemeoptiontab.cpp:141
+#: option/k3bthemeoptiontab.cpp:140
 #, kde-format
 msgid ""
 "Unable to download the icon theme archive.\n"
@@ -5374,22 +5374,22 @@ msgstr ""
 "Het pictogramthema-archief kon niet worden opgehaald.\n"
 "Controleer of het adres %1 correct is."
 
-#: option/k3bthemeoptiontab.cpp:173
+#: option/k3bthemeoptiontab.cpp:175
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
 msgstr "Het bestand is geen geldig K3b-thema-archief."
 
-#: option/k3bthemeoptiontab.cpp:182
+#: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
 msgstr "Een thema genaamd %1 bestaat reeds. Wilt u het overschrijven?"
 
-#: option/k3bthemeoptiontab.cpp:184
+#: option/k3bthemeoptiontab.cpp:186
 #, kde-format
 msgid "Theme exists"
 msgstr "Thema bestaat"
 
-#: option/k3bthemeoptiontab.cpp:202
+#: option/k3bthemeoptiontab.cpp:204
 #, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
@@ -5398,7 +5398,7 @@ msgstr ""
 "<qt>Wilt u het pictogramthema <strong>%1</strong> verwijderen?<br><br>Dit "
 "zal alle bestanden die door dit thema zijn geïnstalleerd verwijderen.</qt>"
 
-#: option/k3bthemeoptiontab.cpp:207
+#: option/k3bthemeoptiontab.cpp:209
 #, kde-format
 msgid "Delete"
 msgstr "Verwijderen"

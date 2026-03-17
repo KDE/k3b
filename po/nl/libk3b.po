@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2025-11-17 11:51+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2022-06-12 18:16+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -119,9 +119,9 @@ msgid_plural "%1 copies successfully created"
 msgstr[0] "1 kopie met succes aangemaakt"
 msgstr[1] "%1 kopieën met succes aangemaakt"
 
-#: jobs/k3bbinimagewritingjob.cpp:197 jobs/k3bcdcopyjob.cpp:1171
-#: jobs/k3bcdcopyjob.cpp:1173 jobs/k3bcdcopyjob.cpp:1176
-#: jobs/k3bcdcopyjob.cpp:1178
+#: jobs/k3bbinimagewritingjob.cpp:197 jobs/k3bcdcopyjob.cpp:1177
+#: jobs/k3bcdcopyjob.cpp:1179 jobs/k3bcdcopyjob.cpp:1182
+#: jobs/k3bcdcopyjob.cpp:1184
 #, kde-format
 msgid "Writing track %1 of %2"
 msgstr "Track %1 van %2 wordt geschreven"
@@ -336,7 +336,7 @@ msgstr "CDDB-informatie gebruiken"
 msgid "Preparing write process..."
 msgstr "Schrijfproces wordt voorbereid..."
 
-#: jobs/k3bcdcopyjob.cpp:533 jobs/k3bcdcopyjob.cpp:579
+#: jobs/k3bcdcopyjob.cpp:533 jobs/k3bcdcopyjob.cpp:581
 #: jobs/k3bdvdcopyjob.cpp:323
 #, kde-format
 msgid "Specified an unusable temporary path. Using default."
@@ -354,170 +354,170 @@ msgstr "De tijdelijke map '%1' kan niet worden aangemaakt."
 msgid "Using temporary folder %1."
 msgstr "De tijdelijke map '%1' wordt gebruikt."
 
-#: jobs/k3bcdcopyjob.cpp:574 jobs/k3bdvdcopyjob.cpp:318
+#: jobs/k3bcdcopyjob.cpp:576 jobs/k3bdvdcopyjob.cpp:318
 #, kde-format
 msgid "Do you want to overwrite %1?"
 msgstr "Wilt u %1 overschrijven?"
 
-#: jobs/k3bcdcopyjob.cpp:575 jobs/k3bdvdcopyjob.cpp:319
+#: jobs/k3bcdcopyjob.cpp:577 jobs/k3bdvdcopyjob.cpp:319
 #, kde-format
 msgid "File Exists"
 msgstr "Bestand bestaat al"
 
-#: jobs/k3bcdcopyjob.cpp:584 jobs/k3bdvdcopyjob.cpp:328
+#: jobs/k3bcdcopyjob.cpp:586 jobs/k3bdvdcopyjob.cpp:328
 #, kde-format
 msgid "Writing image file to %1."
 msgstr "Image wordt naar %1 geschreven."
 
-#: jobs/k3bcdcopyjob.cpp:600
+#: jobs/k3bcdcopyjob.cpp:602
 #, kde-format
 msgid "Reading Session %1"
 msgstr "Sessie %1 wordt gelezen"
 
-#: jobs/k3bcdcopyjob.cpp:602
+#: jobs/k3bcdcopyjob.cpp:604
 #, kde-format
 msgid "Reading Source Medium"
 msgstr "Bronschijf wordt gelezen"
 
-#: jobs/k3bcdcopyjob.cpp:605 jobs/k3bcdcopyjob.cpp:1193
+#: jobs/k3bcdcopyjob.cpp:607 jobs/k3bcdcopyjob.cpp:1199
 #, kde-format
 msgid "Reading track %1 of %2"
 msgstr "Track %1 van %2 wordt gelezen"
 
-#: jobs/k3bcdcopyjob.cpp:698
+#: jobs/k3bcdcopyjob.cpp:700
 #, kde-format
 msgid "Simulating Session %1"
 msgstr "Sessie %1 wordt gesimuleerd"
 
-#: jobs/k3bcdcopyjob.cpp:700
+#: jobs/k3bcdcopyjob.cpp:702
 #, kde-format
 msgid "Writing Copy %1 (Session %2)"
 msgstr "Kopie %1 (sessie %2) wordt geschreven"
 
-#: jobs/k3bcdcopyjob.cpp:702
+#: jobs/k3bcdcopyjob.cpp:704
 #, kde-format
 msgid "Writing Copy (Session %1)"
 msgstr "Kopie (sessie %1)  wordt geschreven"
 
-#: jobs/k3bcdcopyjob.cpp:706 projects/audiocd/k3baudiojob.cpp:642
+#: jobs/k3bcdcopyjob.cpp:708 projects/audiocd/k3baudiojob.cpp:642
 #: projects/datacd/k3bdatajob.cpp:427 projects/k3bcdrdaowriter.cpp:561
 #: projects/k3bcdrdaowriter.cpp:579 projects/k3bcdrecordwriter.cpp:441
 #: projects/k3bcdrskinwriter.cpp:453 projects/k3bgrowisofswriter.cpp:357
-#: projects/mixedcd/k3bmixedjob.cpp:1002
+#: projects/mixedcd/k3bmixedjob.cpp:1005
 #, kde-format
 msgid "Simulating"
 msgstr "Simulatie"
 
-#: jobs/k3bcdcopyjob.cpp:708 projects/audiocd/k3baudiojob.cpp:644
-#: projects/datacd/k3bdatajob.cpp:429 projects/mixedcd/k3bmixedjob.cpp:1004
+#: jobs/k3bcdcopyjob.cpp:710 projects/audiocd/k3baudiojob.cpp:644
+#: projects/datacd/k3bdatajob.cpp:429 projects/mixedcd/k3bmixedjob.cpp:1007
 #, kde-format
 msgid "Writing Copy %1"
 msgstr "Kopie %1 wordt geschreven"
 
-#: jobs/k3bcdcopyjob.cpp:710
+#: jobs/k3bcdcopyjob.cpp:712
 #, kde-format
 msgid "Writing Copy"
 msgstr "Kopie wordt geschreven"
 
-#: jobs/k3bcdcopyjob.cpp:714 jobs/k3bdvdbooktypejob.cpp:103
-#: projects/audiocd/k3baudiojob.cpp:649 projects/mixedcd/k3bmixedjob.cpp:1011
+#: jobs/k3bcdcopyjob.cpp:716 jobs/k3bdvdbooktypejob.cpp:103
+#: projects/audiocd/k3baudiojob.cpp:649 projects/mixedcd/k3bmixedjob.cpp:1014
 #, kde-format
 msgid "Waiting for media"
 msgstr "Wacht op schijf"
 
-#: jobs/k3bcdcopyjob.cpp:853 jobs/k3bmetawriter.cpp:475
+#: jobs/k3bcdcopyjob.cpp:859 jobs/k3bmetawriter.cpp:475
 #: projects/audiocd/k3baudiojob.cpp:293
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode."
 msgstr "Het is niet mogelijk om CD-tekst te schrijven in TAO-modus."
 
-#: jobs/k3bcdcopyjob.cpp:972
+#: jobs/k3bcdcopyjob.cpp:978
 #, kde-format
 msgid "Successfully read session %1."
 msgstr "Het lezen van sessie %1 is geslaagd."
 
-#: jobs/k3bcdcopyjob.cpp:974
+#: jobs/k3bcdcopyjob.cpp:980
 #, kde-format
 msgid "Successfully read source disk."
 msgstr "Het lezen van de bronschijf is geslaagd."
 
-#: jobs/k3bcdcopyjob.cpp:989
+#: jobs/k3bcdcopyjob.cpp:995
 #, kde-format
 msgid "K3b was unable to eject the source disk. Please do so manually."
 msgstr "K3b kon de cd niet uitwerpen. U kunt dit handmatig doen."
 
-#: jobs/k3bcdcopyjob.cpp:1006
+#: jobs/k3bcdcopyjob.cpp:1012
 #, kde-format
 msgid "Error while reading session %1."
 msgstr "Fout tijdens het lezen van sessie %1."
 
-#: jobs/k3bcdcopyjob.cpp:1034 jobs/k3bverificationjob.cpp:101
+#: jobs/k3bcdcopyjob.cpp:1040 jobs/k3bverificationjob.cpp:101
 #: projects/mixedcd/k3bmixedjob.cpp:519
 #, kde-format
 msgid "Need to reload medium to return to proper state."
 msgstr ""
 "De schijf dient te worden herladen om in de juiste staat terug te keren."
 
-#: jobs/k3bcdcopyjob.cpp:1035
+#: jobs/k3bcdcopyjob.cpp:1041
 #, kde-format
 msgid "Reloading the medium"
 msgstr "De schijf wordt herladen"
 
-#: jobs/k3bcdcopyjob.cpp:1053 projects/audiocd/k3baudiojob.cpp:411
+#: jobs/k3bcdcopyjob.cpp:1059 projects/audiocd/k3baudiojob.cpp:411
 #: projects/datacd/k3bdatajob.cpp:520 projects/mixedcd/k3bmixedjob.cpp:533
 #: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
 msgstr "K3b kon de cd niet uitwerpen. U kunt dit handmatig doen."
 
-#: jobs/k3bcdcopyjob.cpp:1091 jobs/k3bverificationjob.cpp:261
+#: jobs/k3bcdcopyjob.cpp:1097 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
 #: projects/mixedcd/k3bmixedjob.cpp:554
 #, kde-format
 msgid "Please reload the medium and press 'OK'"
 msgstr "Herlaad het medium en klik op 'OK'"
 
-#: jobs/k3bcdcopyjob.cpp:1092 jobs/k3bverificationjob.cpp:262
+#: jobs/k3bcdcopyjob.cpp:1098 jobs/k3bverificationjob.cpp:262
 #, kde-format
 msgid "Failed to reload the medium"
 msgstr "Het herladen van het medium is mislukt"
 
-#: jobs/k3bcdcopyjob.cpp:1106 projects/audiocd/k3baudiojob.cpp:687
+#: jobs/k3bcdcopyjob.cpp:1112 projects/audiocd/k3baudiojob.cpp:687
 #, kde-format
 msgid "Removing temporary files."
 msgstr "Tijdelijke bestanden worden verwijderd."
 
-#: jobs/k3bcdcopyjob.cpp:1112 jobs/k3bclonejob.cpp:339
+#: jobs/k3bcdcopyjob.cpp:1118 jobs/k3bclonejob.cpp:339
 #, kde-format
 msgid "Removing image files."
 msgstr "Imagebestanden worden verwijderd."
 
-#: jobs/k3bcdcopyjob.cpp:1201
+#: jobs/k3bcdcopyjob.cpp:1207
 #, kde-format
 msgid "Creating CD Image"
 msgstr "CD-image wordt aangemaakt"
 
-#: jobs/k3bcdcopyjob.cpp:1205
+#: jobs/k3bcdcopyjob.cpp:1211
 #, kde-format
 msgid "Simulating CD Copy On-The-Fly"
 msgstr "CD on-the-fly kopiëren wordt gesimuleerd"
 
-#: jobs/k3bcdcopyjob.cpp:1207
+#: jobs/k3bcdcopyjob.cpp:1213
 #, kde-format
 msgid "Simulating CD Copy"
 msgstr "CD-kopie wordt gesimuleerd"
 
-#: jobs/k3bcdcopyjob.cpp:1211
+#: jobs/k3bcdcopyjob.cpp:1217
 #, kde-format
 msgid "Copying CD On-The-Fly"
 msgstr "CD wordt on-the-fly gekopieerd"
 
-#: jobs/k3bcdcopyjob.cpp:1213
+#: jobs/k3bcdcopyjob.cpp:1219
 #, kde-format
 msgid "Copying CD"
 msgstr "CD kopiëren"
 
-#: jobs/k3bcdcopyjob.cpp:1220 jobs/k3bdvdcopyjob.cpp:955
+#: jobs/k3bcdcopyjob.cpp:1226 jobs/k3bdvdcopyjob.cpp:955
 #, kde-format
 msgid "Creating 1 copy"
 msgid_plural "Creating %1 copies"
@@ -551,7 +551,7 @@ msgstr "Kon %1 niet starten."
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:271
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:472
 #: projects/audiocd/k3baudionormalizejob.cpp:176
-#: projects/datacd/k3bisoimager.cpp:161 projects/k3bcdrdaowriter.cpp:759
+#: projects/datacd/k3bisoimager.cpp:161 projects/k3bcdrdaowriter.cpp:762
 #: projects/k3bcdrecordwriter.cpp:890 projects/k3bcdrskinwriter.cpp:903
 #: projects/videocd/k3bvcdjob.cpp:349
 #, kde-format
@@ -1221,14 +1221,14 @@ msgstr ""
 "Tracklengtes onder de 4 seconden voldoen niet aan de Red-Bookstandaard."
 
 #: jobs/k3bmetawriter.cpp:463 projects/audiocd/k3baudiojob.cpp:281
-#: projects/mixedcd/k3bmixedjob.cpp:1222
+#: projects/mixedcd/k3bmixedjob.cpp:1225
 #, kde-format
 msgid "On-the-fly writing with cdrecord < 2.01a13 not supported."
 msgstr ""
 "On-the-fly schrijven met cdrecord ouder dan 2.01a13 wordt niet ondersteund."
 
 #: jobs/k3bmetawriter.cpp:470 projects/audiocd/k3baudiojob.cpp:288
-#: projects/mixedcd/k3bmixedjob.cpp:1229
+#: projects/mixedcd/k3bmixedjob.cpp:1232
 #, kde-format
 msgid "Cdrecord %1 does not support CD-Text writing."
 msgstr "Cdrecord %1 biedt geen ondersteuning voor CDTEXT schrijven."
@@ -1702,7 +1702,7 @@ msgid "Unable to read track %1."
 msgstr "Kan track %1 niet lezen."
 
 #: projects/audiocd/k3baudioimager.cpp:102 projects/datacd/k3bdatajob.cpp:206
-#: projects/mixedcd/k3bmixedjob.cpp:1088
+#: projects/mixedcd/k3bmixedjob.cpp:1091
 #, kde-format
 msgid "Could not open %1 for writing"
 msgstr "Kon %1 niet openen voor schrijven"
@@ -1813,7 +1813,7 @@ msgstr ""
 msgid "I/O Error"
 msgstr "I/O-fout"
 
-#: projects/audiocd/k3baudiojob.cpp:581 projects/mixedcd/k3bmixedjob.cpp:870
+#: projects/audiocd/k3baudiojob.cpp:581 projects/mixedcd/k3bmixedjob.cpp:873
 #, kde-format
 msgid "Writing track %1 of %2%3"
 msgstr "Track %1 van %2%3 wordt geschreven"
@@ -1825,7 +1825,7 @@ msgstr "Track %1 van %2%3 wordt geschreven"
 msgid "Writing"
 msgstr "Schrijven"
 
-#: projects/audiocd/k3baudiojob.cpp:721 projects/mixedcd/k3bmixedjob.cpp:1267
+#: projects/audiocd/k3baudiojob.cpp:721 projects/mixedcd/k3bmixedjob.cpp:1270
 #, kde-format
 msgid "Normalizing volume levels"
 msgstr "Volumeniveaus worden genormaliseerd"
@@ -1843,7 +1843,7 @@ msgid_plural "%1 tracks (%2 minutes)"
 msgstr[0] "1 track (%2 minuten)"
 msgstr[1] "%1 tracks (%2 minuten)"
 
-#: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1353
+#: projects/audiocd/k3baudiojob.cpp:852 projects/mixedcd/k3bmixedjob.cpp:1356
 #: projects/videocd/k3bvcdjob.cpp:571 projects/videodvd/k3bvideodvdjob.cpp:58
 #, kde-format
 msgid " - %1 copy"
@@ -1901,37 +1901,37 @@ msgstr "Raw audio-cd-image"
 msgid "El Torito Boot image"
 msgstr "El Torito-bootimage"
 
-#: projects/datacd/k3bdatadoc.cpp:1197 projects/videocd/k3bvcddoc.cpp:407
+#: projects/datacd/k3bdatadoc.cpp:1198 projects/videocd/k3bvcddoc.cpp:407
 #, kde-format
 msgid "Could not find the following files:"
 msgstr "De volgende bestanden zijn niet gevonden:"
 
-#: projects/datacd/k3bdatadoc.cpp:1198 projects/videocd/k3bvcddoc.cpp:408
+#: projects/datacd/k3bdatadoc.cpp:1199 projects/videocd/k3bvcddoc.cpp:408
 #, kde-format
 msgid "Not Found"
 msgstr "Niet gevonden"
 
-#: projects/datacd/k3bdatadoc.cpp:1203
+#: projects/datacd/k3bdatadoc.cpp:1204
 #, kde-format
 msgid "No permission to read the following files:"
 msgstr "De volgende bestanden zijn ontoegankelijk:"
 
-#: projects/datacd/k3bdatadoc.cpp:1204
+#: projects/datacd/k3bdatadoc.cpp:1205
 #, kde-format
 msgid "No Read Permission"
 msgstr "Geen leesrechten"
 
-#: projects/datacd/k3bdatadoc.cpp:1361 projects/datacd/k3bdatadoc.cpp:1374
+#: projects/datacd/k3bdatadoc.cpp:1362 projects/datacd/k3bdatadoc.cpp:1375
 #, kde-format
 msgid "From previous session"
 msgstr "Van vorige sessie"
 
-#: projects/datacd/k3bdatadoc.cpp:1485
+#: projects/datacd/k3bdatadoc.cpp:1486
 #, kde-format
 msgid "El Torito boot catalog file"
 msgstr "El Torito bootcatalogus-bestand"
 
-#: projects/datacd/k3bdatadoc.cpp:1486
+#: projects/datacd/k3bdatadoc.cpp:1487
 #, kde-format
 msgid "Boot catalog"
 msgstr "Bootcatalogus"
@@ -2130,7 +2130,7 @@ msgstr ""
 "Door een fout in mkisofs is K3b niet in staat bestandsnamen te hanteren die "
 "meer dan één backslash bevatten:"
 
-#: projects/datacd/k3bisoimager.cpp:171 projects/k3bcdrdaowriter.cpp:770
+#: projects/datacd/k3bisoimager.cpp:171 projects/k3bcdrdaowriter.cpp:773
 #: projects/k3bcdrecordwriter.cpp:910 projects/k3bcdrskinwriter.cpp:923
 #, kde-format
 msgid "%1 crashed."
@@ -2173,14 +2173,14 @@ msgstr ""
 "ISO-niveau wordt op niveau 3 gezet om bestanden groter dan 4 GB te "
 "ondersteunen."
 
-#: projects/datacd/k3bisoimager.cpp:761
+#: projects/datacd/k3bisoimager.cpp:762
 #, kde-format
 msgid "Could not follow link %1 to non-existing file %2. Skipping..."
 msgstr ""
 "De koppeling %1 verwijst naar niet-bestaand bestand %2 en wordt "
 "overgeslagen..."
 
-#: projects/datacd/k3bisoimager.cpp:765
+#: projects/datacd/k3bisoimager.cpp:766
 #, kde-format
 msgid ""
 "Ignoring link %1 to folder %2. K3b is unable to follow links to folders."
@@ -2188,28 +2188,28 @@ msgstr ""
 "Koppeling %1 naar map %2 wordt genegeerd. K3b biedt geen ondersteuning voor "
 "het volgen van koppelingen naar mappen."
 
-#: projects/datacd/k3bisoimager.cpp:773
+#: projects/datacd/k3bisoimager.cpp:774
 #, kde-format
 msgid "Could not find file %1. Skipping..."
 msgstr "Bestand %1 is niet gevonden, en wordt overgeslagen..."
 
-#: projects/datacd/k3bisoimager.cpp:777
+#: projects/datacd/k3bisoimager.cpp:778
 #, kde-format
 msgid "Could not read file %1. Skipping..."
 msgstr "Bestand %1 is niet leesbaar, en wordt overgeslagen..."
 
-#: projects/datacd/k3bisoimager.cpp:830
+#: projects/datacd/k3bisoimager.cpp:834
 #, kde-format
 msgid "Failed to backup boot image file %1"
 msgstr "Er kon geen reservekopie worden aangemaakt van boot-image-bestand %1"
 
-#: projects/datacd/k3bisoimager.cpp:990 projects/datacd/k3bisoimager.cpp:1000
-#: projects/datacd/k3bisoimager.cpp:1007 projects/datacd/k3bisoimager.cpp:1013
+#: projects/datacd/k3bisoimager.cpp:1003 projects/datacd/k3bisoimager.cpp:1013
+#: projects/datacd/k3bisoimager.cpp:1020 projects/datacd/k3bisoimager.cpp:1026
 #, kde-format
 msgid "Could not write temporary file"
 msgstr "Het tijdelijke bestand kon niet geschreven worden"
 
-#: projects/datacd/k3bisoimager.cpp:994
+#: projects/datacd/k3bisoimager.cpp:1007
 #, kde-format
 msgid "No files to be written."
 msgstr "Geen bestanden om te schrijven."
@@ -2407,7 +2407,7 @@ msgstr "Wissen wordt gestart..."
 msgid "Blanking"
 msgstr "Wissen loopt"
 
-#: projects/k3bcdrdaowriter.cpp:702
+#: projects/k3bcdrdaowriter.cpp:705
 #, kde-format
 msgid ""
 "Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
@@ -2416,134 +2416,134 @@ msgstr ""
 "Door een bug in het cdrdao is het toc/cue-bestand %1 gewist. K3b was niet in "
 "staat om dit de herstellen vanuit reservekopie %2."
 
-#: projects/k3bcdrdaowriter.cpp:731 projects/k3bcdrecordwriter.cpp:787
+#: projects/k3bcdrdaowriter.cpp:734 projects/k3bcdrecordwriter.cpp:787
 #: projects/k3bcdrskinwriter.cpp:800 projects/k3bgrowisofswriter.cpp:515
 #, kde-format
 msgid "Simulation successfully completed"
 msgstr "Simulatie met succes voltooid"
 
-#: projects/k3bcdrdaowriter.cpp:736
+#: projects/k3bcdrdaowriter.cpp:739
 #, kde-format
 msgid "Reading successfully completed"
 msgstr "Lezen met succes voltooid"
 
-#: projects/k3bcdrdaowriter.cpp:739 projects/k3bcdrecordwriter.cpp:789
+#: projects/k3bcdrdaowriter.cpp:742 projects/k3bcdrecordwriter.cpp:789
 #: projects/k3bcdrskinwriter.cpp:802 projects/k3bgrowisofswriter.cpp:517
 #, kde-format
 msgid "Writing successfully completed"
 msgstr "Schrijven met succes voltooid"
 
-#: projects/k3bcdrdaowriter.cpp:742
+#: projects/k3bcdrdaowriter.cpp:745
 #, kde-format
 msgid "Copying successfully completed"
 msgstr "Kopiëren met succes voltooid"
 
-#: projects/k3bcdrdaowriter.cpp:745
+#: projects/k3bcdrdaowriter.cpp:748
 #, kde-format
 msgid "Blanking successfully completed"
 msgstr "Wissen met succes voltooid"
 
-#: projects/k3bcdrdaowriter.cpp:751 projects/k3bcdrecordwriter.cpp:793
+#: projects/k3bcdrdaowriter.cpp:754 projects/k3bcdrecordwriter.cpp:793
 #: projects/k3bcdrskinwriter.cpp:806 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
 msgstr "Gemiddelde totale brandsnelheid: %1 KB/s (%2x)"
 
-#: projects/k3bcdrdaowriter.cpp:761
+#: projects/k3bcdrdaowriter.cpp:764
 #, kde-format
 msgid "Please include the debugging output in your problem report."
 msgstr "Sluit de debugging-uitvoer in uw probleemrapport in."
 
-#: projects/k3bcdrdaowriter.cpp:788 projects/k3bcdrecordwriter.cpp:667
+#: projects/k3bcdrdaowriter.cpp:791 projects/k3bcdrecordwriter.cpp:667
 #: projects/k3bcdrskinwriter.cpp:680
 #, no-c-format, kde-format
 msgid "Medium or burner does not support writing at %1x speed"
 msgstr "Schijf of brander ondersteunt schrijven met snelheid %1x niet"
 
-#: projects/k3bcdrdaowriter.cpp:790
+#: projects/k3bcdrdaowriter.cpp:793
 #, no-c-format, kde-format
 msgid "Switching down burn speed to %1x"
 msgstr "Brandsnelheid wordt naar %1x verlaagd"
 
-#: projects/k3bcdrdaowriter.cpp:820
+#: projects/k3bcdrdaowriter.cpp:823
 #, kde-format
 msgid "Executing Power calibration"
 msgstr "Power-kalibratie wordt uitgevoerd"
 
-#: projects/k3bcdrdaowriter.cpp:824
+#: projects/k3bcdrdaowriter.cpp:827
 #, kde-format
 msgid "Power calibration successful"
 msgstr "Power-kalibratie succesvol"
 
-#: projects/k3bcdrdaowriter.cpp:825
+#: projects/k3bcdrdaowriter.cpp:828
 #, kde-format
 msgid "Preparing burn process..."
 msgstr "Brandproces wordt voorbereid..."
 
-#: projects/k3bcdrdaowriter.cpp:829
+#: projects/k3bcdrdaowriter.cpp:832
 #, kde-format
 msgid "Flushing cache"
 msgstr "Cache wordt gewist"
 
-#: projects/k3bcdrdaowriter.cpp:833
+#: projects/k3bcdrdaowriter.cpp:836
 #, kde-format
 msgid "Writing CD-Text lead-in..."
 msgstr "CD-tekst lead-in wordt geschreven..."
 
-#: projects/k3bcdrdaowriter.cpp:837
+#: projects/k3bcdrdaowriter.cpp:840
 #, kde-format
 msgid "Turning BURN-Proof on"
 msgstr "Burnproof wordt ingeschakeld"
 
-#: projects/k3bcdrdaowriter.cpp:845
+#: projects/k3bcdrdaowriter.cpp:848
 #, kde-format
 msgid "Found ISRC code"
 msgstr "ISRC-code gevonden"
 
-#: projects/k3bcdrdaowriter.cpp:849
+#: projects/k3bcdrdaowriter.cpp:852
 #, kde-format
 msgid "Found pregap: %1"
 msgstr "Pregap gevonden: %1"
 
-#: projects/k3bcdrdaowriter.cpp:862
+#: projects/k3bcdrdaowriter.cpp:865
 #, kde-format
 msgid "No cdrdao driver found."
 msgstr "Geen cdrdao-stuurprogramma gevonden."
 
-#: projects/k3bcdrdaowriter.cpp:863
+#: projects/k3bcdrdaowriter.cpp:866
 #, kde-format
 msgid "Please select one manually in the device settings."
 msgstr "Selecteer handmatig een in de apparaatinstellingen."
 
-#: projects/k3bcdrdaowriter.cpp:864
+#: projects/k3bcdrdaowriter.cpp:867
 #, kde-format
 msgid "For most current drives this would be 'generic-mmc'."
 msgstr "Voor de meeste recente stations zal dit 'generic-mmc' zijn."
 
-#: projects/k3bcdrdaowriter.cpp:873
+#: projects/k3bcdrdaowriter.cpp:876
 #, kde-format
 msgid "Device not ready, waiting."
 msgstr "Apparaat is nog niet gereed, even geduld a.u.b."
 
-#: projects/k3bcdrdaowriter.cpp:877
+#: projects/k3bcdrdaowriter.cpp:880
 #, kde-format
 msgid "Cue sheet not accepted."
 msgstr "Cue-sheet wordt niet geaccepteerd."
 
-#: projects/k3bcdrdaowriter.cpp:882 projects/k3bcdrecordwriter.cpp:611
+#: projects/k3bcdrdaowriter.cpp:885 projects/k3bcdrecordwriter.cpp:611
 #: projects/k3bcdrskinwriter.cpp:624
 #, kde-format
 msgid "No valid %1 option: %2"
 msgstr "Geen geldige %1-optie: %2"
 
-#: projects/k3bcdrdaowriter.cpp:887 projects/k3bcdrecordwriter.cpp:814
+#: projects/k3bcdrdaowriter.cpp:890 projects/k3bcdrecordwriter.cpp:814
 #: projects/k3bcdrskinwriter.cpp:827 projects/k3bgrowisofshandler.cpp:224
-#: projects/mixedcd/k3bmixedjob.cpp:1030
+#: projects/mixedcd/k3bmixedjob.cpp:1033
 #, kde-format
 msgid "Data does not fit on disk."
 msgstr "Gegevens passen niet op de schijf."
 
-#: projects/k3bcdrdaowriter.cpp:889 projects/k3bcdrecordwriter.cpp:816
+#: projects/k3bcdrdaowriter.cpp:892 projects/k3bcdrecordwriter.cpp:816
 #: projects/k3bcdrskinwriter.cpp:829
 #, kde-format
 msgid "Enable overburning in the advanced K3b settings to burn anyway."
@@ -2551,12 +2551,12 @@ msgstr ""
 "Activeer overbranden in de geavanceerde instellingen van K3b om toch te "
 "branden."
 
-#: projects/k3bcdrdaowriter.cpp:974
+#: projects/k3bcdrdaowriter.cpp:977
 #, kde-format
 msgid "Writing leadin"
 msgstr "Lead-in wordt geschreven"
 
-#: projects/k3bcdrdaowriter.cpp:980
+#: projects/k3bcdrdaowriter.cpp:983
 #, kde-format
 msgid "Writing leadout"
 msgstr "Lead-out wordt geschreven"
@@ -2652,7 +2652,7 @@ msgid "Reloading of medium required"
 msgstr "Herladen van de schijf is noodzakelijk"
 
 #: projects/k3bcdrecordwriter.cpp:603 projects/k3bcdrskinwriter.cpp:616
-#: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1027
+#: projects/k3bgrowisofshandler.cpp:85 projects/mixedcd/k3bmixedjob.cpp:1030
 #, kde-format
 msgid "Trying to write more than the official disk capacity"
 msgstr ""
@@ -3183,89 +3183,89 @@ msgstr "ISO-image is met succes aangemaakt."
 msgid "Audio images successfully created."
 msgstr "Audio-image met succes aangemaakt."
 
-#: projects/mixedcd/k3bmixedjob.cpp:877
+#: projects/mixedcd/k3bmixedjob.cpp:880
 #, kde-format
 msgid "Writing track %1 of %2 (%3)"
 msgstr "Track %1 van %2 (%3) wordt geschreven"
 
-#: projects/mixedcd/k3bmixedjob.cpp:880
+#: projects/mixedcd/k3bmixedjob.cpp:883
 #, kde-format
 msgid "ISO 9660 data"
 msgstr "ISO 9660-gegevens"
 
-#: projects/mixedcd/k3bmixedjob.cpp:986
+#: projects/mixedcd/k3bmixedjob.cpp:989
 #, kde-format
 msgid "Simulating second session"
 msgstr "Tweede sessie wordt gesimuleerd"
 
-#: projects/mixedcd/k3bmixedjob.cpp:988
+#: projects/mixedcd/k3bmixedjob.cpp:991
 #, kde-format
 msgid "Writing second session of copy %1"
 msgstr "Tweede sessie van kopie %1 wordt geschreven"
 
-#: projects/mixedcd/k3bmixedjob.cpp:990
+#: projects/mixedcd/k3bmixedjob.cpp:993
 #, kde-format
 msgid "Writing second session"
 msgstr "Tweede sessie wordt geschreven"
 
-#: projects/mixedcd/k3bmixedjob.cpp:994
+#: projects/mixedcd/k3bmixedjob.cpp:997
 #, kde-format
 msgid "Simulating first session"
 msgstr "Eerste sessie wordt gesimuleerd"
 
-#: projects/mixedcd/k3bmixedjob.cpp:996
+#: projects/mixedcd/k3bmixedjob.cpp:999
 #, kde-format
 msgid "Writing first session of copy %1"
 msgstr "Eerste sessie van kopie %1 wordt geschreven"
 
-#: projects/mixedcd/k3bmixedjob.cpp:998
+#: projects/mixedcd/k3bmixedjob.cpp:1001
 #, kde-format
 msgid "Writing first session"
 msgstr "Eerste sessie wordt geschreven"
 
-#: projects/mixedcd/k3bmixedjob.cpp:1076
+#: projects/mixedcd/k3bmixedjob.cpp:1079
 #, kde-format
 msgid "Creating ISO image file"
 msgstr "Image-bestand wordt aangemaakt"
 
-#: projects/mixedcd/k3bmixedjob.cpp:1077 projects/mixedcd/k3bmixedjob.cpp:1078
+#: projects/mixedcd/k3bmixedjob.cpp:1080 projects/mixedcd/k3bmixedjob.cpp:1081
 #, kde-format
 msgid "Creating ISO image in %1"
 msgstr "ISO-image wordt aangemaakt in %1"
 
-#: projects/mixedcd/k3bmixedjob.cpp:1118
+#: projects/mixedcd/k3bmixedjob.cpp:1121
 #, kde-format
 msgid "Removing buffer files."
 msgstr "Bufferbestanden worden verwijderd."
 
-#: projects/mixedcd/k3bmixedjob.cpp:1123
+#: projects/mixedcd/k3bmixedjob.cpp:1126
 #, kde-format
 msgid "Could not delete file %1."
 msgstr "Bestand %1 kon niet verwijderd worden."
 
-#: projects/mixedcd/k3bmixedjob.cpp:1231
+#: projects/mixedcd/k3bmixedjob.cpp:1234
 #, kde-format
 msgid "Cdrecord could not be found on your system."
 msgstr "Cdrecord was niet op uw systeem te vinden."
 
-#: projects/mixedcd/k3bmixedjob.cpp:1235
+#: projects/mixedcd/k3bmixedjob.cpp:1238
 #, kde-format
 msgid "It is not possible to write CD-Text in TAO mode. Try DAO or RAW."
 msgstr ""
 "Het is niet mogelijk om CD-tekst te schrijven in TAO-modus. Probeer DAO of "
 "RAW."
 
-#: projects/mixedcd/k3bmixedjob.cpp:1332
+#: projects/mixedcd/k3bmixedjob.cpp:1335
 #, kde-format
 msgid "Writing Enhanced Audio CD"
 msgstr "Enhanced Audio-CD wordt geschreven"
 
-#: projects/mixedcd/k3bmixedjob.cpp:1337
+#: projects/mixedcd/k3bmixedjob.cpp:1340
 #, kde-format
 msgid "Writing Mixed Mode CD"
 msgstr "Mixed Mode-CD wordt geschreven"
 
-#: projects/mixedcd/k3bmixedjob.cpp:1347
+#: projects/mixedcd/k3bmixedjob.cpp:1350
 #, kde-format
 msgctxt "%2 is of form XX:YY:ZZ, no pluralization needed"
 msgid "1 track (%2 minutes audio data, %3 ISO 9660 data)"
@@ -3296,7 +3296,7 @@ msgstr ""
 msgid "Could not find a valid eMovix installation."
 msgstr "Er is geen geldige eMovix-installatie gevonden."
 
-#: projects/movixcd/k3bmovixdocpreparer.cpp:199
+#: projects/movixcd/k3bmovixdocpreparer.cpp:205
 #: projects/movixcd/k3bmovixprogram.cpp:180
 #: projects/movixcd/k3bmovixprogram.cpp:212
 #: projects/movixcd/k3bmovixprogram.cpp:247
@@ -3312,7 +3312,7 @@ msgstr "Er is geen geldige eMovix-installatie gevonden."
 msgid "default"
 msgstr "standaard"
 
-#: projects/movixcd/k3bmovixdocpreparer.cpp:310
+#: projects/movixcd/k3bmovixdocpreparer.cpp:319
 #: projects/movixcd/k3bmovixprogram.cpp:192
 #: projects/movixcd/k3bmovixprogram.cpp:236
 #, kde-format

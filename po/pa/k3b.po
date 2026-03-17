@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-20 00:44+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2019-02-10 11:11-0800\n"
 "Last-Translator: A S Alam <alam.yellow@gmail.com>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -29,17 +29,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "alam.yellow@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "ਐਡਵਾਂਸ ਆਡੀਓ ਕੋਡਿੰਗ(AAC)"
@@ -3945,7 +3945,7 @@ msgstr ""
 "<p>ਇਹ ਈਮੇਜ਼ ਦਾ ਗਲਤ ਫਾਇਲ ਆਕਾਰ ਹੈ। ਜੇ ਇਹ ਡਾਊਨਲੋਡ ਕੀਤਾ ਗਿਆ ਹੈ ਤਾਂ ਜਾਂਚ ਲਵੋ ਕਿ ਡਾਊਨਲੋਡ ਪੂਰਾ "
 "ਹੈ। <p>ਜੇ ਤੁਹਾਨੂੰ ਭਰੋਸੇ ਹੋਵੇ ਕਿ ਤੁਸੀਂ ਕੀ ਕਰ ਰਹੇ ਹੋ ਤਾਂ ਹੀ ਅੱਗੇ ਜਾਵੋ।"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "ਚੇਤਾਵਨੀ"
@@ -4902,29 +4902,29 @@ msgid ""
 "defines which set it will be."
 msgstr ""
 
-#: option/k3bmiscoptiontab.cpp:104
+#: option/k3bmiscoptiontab.cpp:106
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
 msgstr "ਫੋਲਡਰ (%1) ਮੌਜੂਦ ਨਹੀਂ ਹੈ। ਕੀ ਬਣਾਉਣਾ ਹੈ?"
 
-#: option/k3bmiscoptiontab.cpp:105
+#: option/k3bmiscoptiontab.cpp:107
 #, kde-format
 msgid "Create Folder"
 msgstr "ਟਾਰਗੇਟ ਫੋਲਡਰ"
 
-#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: option/k3bmiscoptiontab.cpp:108 projects/k3bprojectburndialog.cpp:189
 #: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "ਬਣਾਓ"
 
-#: option/k3bmiscoptiontab.cpp:109 rip/k3bmassaudioencodingjob.cpp:285
+#: option/k3bmiscoptiontab.cpp:111 rip/k3bmassaudioencodingjob.cpp:285
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
 msgstr "ਫੋਲਡਰ '%1' ਬਣਾਉਣ ਲਈ ਅਸਮਰੱਥ"
 
-#: option/k3bmiscoptiontab.cpp:120
+#: option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
@@ -4932,7 +4932,7 @@ msgid ""
 msgstr ""
 "ਤੁਸੀਂ ਆਰਜ਼ੀ ਡਾਇਰੈਕਟਰੀ ਲਈ ਫਾਇਲ ਦਿੱਤੀ ਹੈ। K3b ਇਸ ਦੇ ਮੁੱਖ ਭਾਗ ਨੂੰ ਆਰਜ਼ੀ ਫੋਲਡਰ ਦੇ ਤੌਰ 'ਤੇ ਵਰਤੇਗਾ।"
 
-#: option/k3bmiscoptiontab.cpp:129
+#: option/k3bmiscoptiontab.cpp:131
 #, kde-format
 msgid "You do not have permission to write to %1."
 msgstr "ਤੁਹਾਨੂੰ %1 ਲਿਖਣ ਲਈ ਅਧਿਕਾਰ ਨਹੀਂ ਹਨ।"
@@ -5027,12 +5027,12 @@ msgstr "ਕੇ੩ਬੀ - CD/DVD ਕੇਰੀਏਟਰ"
 msgid "Drag or Type Theme URL"
 msgstr "ਸੁੱਟੋ ਜਾਂ ਕਿਸਮ ਥੀਮ URL"
 
-#: option/k3bthemeoptiontab.cpp:139
+#: option/k3bthemeoptiontab.cpp:138
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
 msgstr "ਆਈਕਾਨ ਥੀਮ ਅਕਾਇਵ %1 ਲੱਭਣ ਤੋਂ ਅਸਮਰੱਥ ਹੈ।"
 
-#: option/k3bthemeoptiontab.cpp:141
+#: option/k3bthemeoptiontab.cpp:140
 #, kde-format
 msgid ""
 "Unable to download the icon theme archive.\n"
@@ -5041,22 +5041,22 @@ msgstr ""
 "ਆਈਕਾਨ ਥੀਮ ਡਾਊਨਲੋਡ ਕਰਨ ਲਈ ਅਸਫ਼ਲ ਹੈ।\n"
 "ਜਾਂਚ ਕਰੋ ਕਿ ਐਡਰੈੱਸ %1 ਠੀਕ ਹੈ।"
 
-#: option/k3bthemeoptiontab.cpp:173
+#: option/k3bthemeoptiontab.cpp:175
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
 msgstr "ਫਾਇਲ ਇੱਕ ਠੀਕ K3b ਥੀਮ ਅਕਾਇਵ ਨਹੀਂ ਹੈ।"
 
-#: option/k3bthemeoptiontab.cpp:182
+#: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
 msgstr "'%1' ਨਾਂ ਨਾਲ ਥੀਮ ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ। ਕੀ ਤੁਸੀਂ ਉੱਤੇ ਲਿਖਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
-#: option/k3bthemeoptiontab.cpp:184
+#: option/k3bthemeoptiontab.cpp:186
 #, kde-format
 msgid "Theme exists"
 msgstr "ਥੀਮ ਮੌਜੂਦ ਹੈ"
 
-#: option/k3bthemeoptiontab.cpp:202
+#: option/k3bthemeoptiontab.cpp:204
 #, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
@@ -5065,7 +5065,7 @@ msgstr ""
 "<qt>ਕੀ ਤੁਸੀਂ ਆਈਕਾਨ ਥੀਮ <strong>%1</strong> ਨੂੰ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ? <br><br>ਇਹ ਇਸ ਥੀਮ "
 "ਦੀਆਂ ਇੰਸਟਾਲ ਫਾਇਲਾਂ ਨੂੰ ਹਟਾ ਦੇਵੇਗਾ।</qt>"
 
-#: option/k3bthemeoptiontab.cpp:207
+#: option/k3bthemeoptiontab.cpp:209
 #, kde-format
 msgid "Delete"
 msgstr "ਹਟਾਓ"

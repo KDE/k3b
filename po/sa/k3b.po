@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-20 00:44+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -29,17 +29,17 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "skkalwar999@gmail.com"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
 msgstr "WavPack इति"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr "वानरस्य श्रव्यः (APE)"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "उन्नत श्रव्य कोडिंग् (AAC) 1.1."
@@ -4098,7 +4098,7 @@ msgstr ""
 "अवतरणं कृतम् अस्ति तर्हि अवतरणं सम्पूर्णम् इति सुनिश्चितं कुर्वन्तु।</p><p> केवलं तदा एव निरन्तरं "
 "कुर्वन्तु यदा भवन्तः जानन्ति यत् भवन्तः किं कुर्वन्ति।</p>"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "चेतवानी"
@@ -5106,29 +5106,29 @@ msgstr ""
 "एतेषु एकः सेट् एकवारं क्रियासंवादः उद्घाटितः चेत् लोड् भवति । एतत् सेटिङ्ग् कः सेट् भविष्यति "
 "इति परिभाषयति ।"
 
-#: option/k3bmiscoptiontab.cpp:104
+#: option/k3bmiscoptiontab.cpp:106
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
 msgstr "पुटे (%1) नास्ति । निर्मियताम्?"
 
-#: option/k3bmiscoptiontab.cpp:105
+#: option/k3bmiscoptiontab.cpp:107
 #, kde-format
 msgid "Create Folder"
 msgstr "Folder रचयन्तु"
 
-#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: option/k3bmiscoptiontab.cpp:108 projects/k3bprojectburndialog.cpp:189
 #: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "निर्मियताम्"
 
-#: option/k3bmiscoptiontab.cpp:109 rip/k3bmassaudioencodingjob.cpp:285
+#: option/k3bmiscoptiontab.cpp:111 rip/k3bmassaudioencodingjob.cpp:285
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
 msgstr "%1 पुटं निर्मातुं असमर्थम्"
 
-#: option/k3bmiscoptiontab.cpp:120
+#: option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
@@ -5137,7 +5137,7 @@ msgstr ""
 "अस्थायीपुटस्य कृते भवता सञ्चिका निर्दिष्टा । K3b अस्थायीपुटरूपेण स्वस्य आधारमार्गस्य उपयोगं "
 "करिष्यति ।"
 
-#: option/k3bmiscoptiontab.cpp:129
+#: option/k3bmiscoptiontab.cpp:131
 #, kde-format
 msgid "You do not have permission to write to %1."
 msgstr "भवतः %1 इत्यत्र लेखनस्य अनुमतिः नास्ति ।"
@@ -5232,12 +5232,12 @@ msgstr "K3b - सीडी/डीवीडी निर्माता"
 msgid "Drag or Type Theme URL"
 msgstr "Theme URL खींचन्तु अथवा टङ्कयन्तु"
 
-#: option/k3bthemeoptiontab.cpp:139
+#: option/k3bthemeoptiontab.cpp:138
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
 msgstr "चिह्नविषयसङ्ग्रहं %1 अन्वेष्टुं असमर्थः ।"
 
-#: option/k3bthemeoptiontab.cpp:141
+#: option/k3bthemeoptiontab.cpp:140
 #, kde-format
 msgid ""
 "Unable to download the icon theme archive.\n"
@@ -5246,22 +5246,22 @@ msgstr ""
 "चिह्नविषयसङ्ग्रहं डाउनलोड् कर्तुं असमर्थः।\n"
 "कृपया %1 पता सम्यक् अस्ति इति पश्यन्तु ।"
 
-#: option/k3bthemeoptiontab.cpp:173
+#: option/k3bthemeoptiontab.cpp:175
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
 msgstr "सञ्चिका वैधः K3b विषयसङ्ग्रहः नास्ति ।"
 
-#: option/k3bthemeoptiontab.cpp:182
+#: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
 msgstr "'%1' इति नाम्ना विषयः पूर्वमेव अस्ति । किं भवन्तः तस्य अधिलेखनं कर्तुम् इच्छन्ति ?"
 
-#: option/k3bthemeoptiontab.cpp:184
+#: option/k3bthemeoptiontab.cpp:186
 #, kde-format
 msgid "Theme exists"
 msgstr "विषयः विद्यते"
 
-#: option/k3bthemeoptiontab.cpp:202
+#: option/k3bthemeoptiontab.cpp:204
 #, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
@@ -5270,7 +5270,7 @@ msgstr ""
 "<qt>किं भवान् निश्चितः यत् भवान् <strong>%1</strong> विषयवस्तुं हर्तुं इच्छति?<br><br> "
 "एतेन अस्मिन् विषयेण संस्थापिताः सञ्चिकाः विलोपिताः भविष्यन्ति ।</qt>"
 
-#: option/k3bthemeoptiontab.cpp:207
+#: option/k3bthemeoptiontab.cpp:209
 #, kde-format
 msgid "Delete"
 msgstr "लुप्"

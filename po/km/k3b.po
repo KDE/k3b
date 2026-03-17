@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-02-20 00:44+0000\n"
+"POT-Creation-Date: 2026-03-17 00:42+0000\n"
 "PO-Revision-Date: 2012-06-11 10:20+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -31,17 +31,17 @@ msgstr ""
 "khoemsokhem@khmeros.info,​​mornmet@khmeros.info,sutha@khmeros.info,"
 "ratanak@khmeros.info,sophea@khmeros.info"
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:216
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:218
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
 msgstr ""
 
-#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
+#: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
 #, kde-format
 msgid "Advanced Audio Coding (AAC)"
 msgstr "Advanced Audio Coding (AAC)"
@@ -4149,7 +4149,7 @@ msgstr ""
 "<p>ទំហំ​ឯកសារ​ពិត​មិន​ផ្គូផ្គង​នឹង​ទំហំ​ដែល​បាន​បញ្ជាក់​នៅ​ក្នុង​បឋម​កថា​របស់​ឯកសារ​ ។ បើ​វា​ត្រូវ​បាន​ទាញ​យក​ សូម​"
 "ប្រាកដ​ថា​ការ​ទាញ​យក​បាន​បញ្ចប់​ ។</p><p>បន្ត​ បើ​អ្នក​ដឹង​ថា​អ្នក​កំពុង​ធ្វើ​អ្វី ។</p>"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:122
+#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "ព្រមាន"
@@ -5161,29 +5161,29 @@ msgid ""
 "defines which set it will be."
 msgstr "សំណុំ​មួយ​ត្រូវ​បាន​ផ្ទុក​ នៅ​ពេល​បាន​បើក​ប្រអប់​សកម្មភាព ។ ការ​កំណត់​នេះ កំណត់​សំណុំ​ណាមួយ​ដែល​នឹង​ប្រើ ។"
 
-#: option/k3bmiscoptiontab.cpp:104
+#: option/k3bmiscoptiontab.cpp:106
 #, kde-format
 msgid "Folder (%1) does not exist. Create?"
 msgstr "មិន​មាន​ថត​ (%1) ។ បង្កើត​ឬ ?"
 
-#: option/k3bmiscoptiontab.cpp:105
+#: option/k3bmiscoptiontab.cpp:107
 #, kde-format
 msgid "Create Folder"
 msgstr "បង្កើត​ថត"
 
-#: option/k3bmiscoptiontab.cpp:106 projects/k3bprojectburndialog.cpp:189
+#: option/k3bmiscoptiontab.cpp:108 projects/k3bprojectburndialog.cpp:189
 #: rip/k3bvideocdrippingdialog.cpp:145
 #, kde-format
 msgid "Create"
 msgstr "បង្កើត"
 
-#: option/k3bmiscoptiontab.cpp:109 rip/k3bmassaudioencodingjob.cpp:285
+#: option/k3bmiscoptiontab.cpp:111 rip/k3bmassaudioencodingjob.cpp:285
 #: rip/k3bmassaudioencodingjob.cpp:400
 #, kde-format
 msgid "Unable to create folder %1"
 msgstr "មិន​អាច​បង្កើត​ថត %1 បានទេ"
 
-#: option/k3bmiscoptiontab.cpp:120
+#: option/k3bmiscoptiontab.cpp:122
 #, kde-format
 msgid ""
 "You specified a file for the temporary folder. K3b will use its base path as "
@@ -5191,7 +5191,7 @@ msgid ""
 msgstr ""
 "អ្នក​បាន​បញ្ជាក់​ឯកសារ​សម្រាប់​ថត​បណ្ដោះ​អាសន្ន​ ។ K3b នឹង​ប្រើ​​ផ្លូវ​មូលដ្ឋាន​របស់​វា​ជា​ថត​បណ្ដោះអាសន្ន​ ​​​។"
 
-#: option/k3bmiscoptiontab.cpp:129
+#: option/k3bmiscoptiontab.cpp:131
 #, kde-format
 msgid "You do not have permission to write to %1."
 msgstr "អ្នក​គ្មាន​សិទ្ធិ​សរសេរ​ទៅ​កាន់ %1 ទេ ។"
@@ -5286,12 +5286,12 @@ msgstr "K3b - ​កម្មវិធី​បង្កើត​ស៊ីឌី
 msgid "Drag or Type Theme URL"
 msgstr "អូស ឬ​វាយ​បញ្ចូល URL របស់​ស្បែក"
 
-#: option/k3bthemeoptiontab.cpp:139
+#: option/k3bthemeoptiontab.cpp:138
 #, kde-format
 msgid "Unable to find the icon theme archive %1."
 msgstr "មិន​អាច​ស្វែងរក​ប័ណ្ណសារ​​​​​ស្បែក​រូបតំណាង​ %1 បាន​ឡើយ​ ។"
 
-#: option/k3bthemeoptiontab.cpp:141
+#: option/k3bthemeoptiontab.cpp:140
 #, kde-format
 msgid ""
 "Unable to download the icon theme archive.\n"
@@ -5300,22 +5300,22 @@ msgstr ""
 "មិន​អាច​ទាញ​យក​ប័ណ្ណសារ​ស្បែក​រូបតំណាង​បាន​ឡើយ ។\n"
 "សូម​ពិនិត្យ​មើល​អាសយដ្ឋាន %1 ឲ្យ​បាន​ត្រឹមត្រូវ ។"
 
-#: option/k3bthemeoptiontab.cpp:173
+#: option/k3bthemeoptiontab.cpp:175
 #, kde-format
 msgid "The file is not a valid K3b theme archive."
 msgstr "ឯកសារ គឺ​មិនមែន​ជា​ប័ណ្ណសារ​ស្បែក K3b ត្រឹមត្រូវ​ទេ ។"
 
-#: option/k3bthemeoptiontab.cpp:182
+#: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
 msgstr "មាន​ស្បែក​​ដែល​មានឈ្មោះ '%1' រួច​ហើយ ។​ តើ​អ្នក​ចង់​សរសេរ​ជាន់​លើ​វា​ឬ ?"
 
-#: option/k3bthemeoptiontab.cpp:184
+#: option/k3bthemeoptiontab.cpp:186
 #, kde-format
 msgid "Theme exists"
 msgstr "មាន​ស្បែក​រួចហើយ"
 
-#: option/k3bthemeoptiontab.cpp:202
+#: option/k3bthemeoptiontab.cpp:204
 #, kde-format
 msgid ""
 "<qt>Are you sure you want to remove the <strong>%1</strong> theme?"
@@ -5324,7 +5324,7 @@ msgstr ""
 "<qt>តើ​អ្នក​ពិត​ជា​ចង់​យក​​ស្បែក​​ <strong>%1</strong> ចេញ​ឬ ?<br><br>វា​នឹង​លុប​ឯកសារ​ដែល​បាន​ដំឡើង​"
 "ដោយ​​ស្បែក​នេះ ។</qt>"
 
-#: option/k3bthemeoptiontab.cpp:207
+#: option/k3bthemeoptiontab.cpp:209
 #, kde-format
 msgid "Delete"
 msgstr "លុប"
