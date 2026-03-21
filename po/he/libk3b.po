@@ -6,13 +6,13 @@
 # tahmar1900 <tahmar1900@gmail.com>, 2009.
 # Diego Iastrubni <elcuco@kde.org>, 2012.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-17 00:42+0000\n"
-"PO-Revision-Date: 2025-11-02 14:33+0200\n"
+"PO-Revision-Date: 2026-03-20 08:13+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.08.2\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -672,7 +672,7 @@ msgstr "משיכת כל מפתחות ה־CSS נכשלה."
 #: jobs/k3bdatatrackreader.cpp:180
 #, kde-format
 msgid "Video DVD decryption failed."
-msgstr "פענוח וידאו DVD נכשל."
+msgstr "פיענוח וידאו DVD נכשל."
 
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
@@ -1678,7 +1678,7 @@ msgstr "לא ניתן לפתוח את %1 לכתיבה"
 #: projects/audiocd/k3baudioimager.cpp:140
 #, kde-format
 msgid "Error while decoding track %1."
-msgstr "שגיאה בפענוח רצועה %1."
+msgstr "שגיאה בפיענוח רצועה %1."
 
 #: projects/audiocd/k3baudiojob.cpp:165
 #: projects/datacd/k3bdatapreparationjob.cpp:174
