@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1609,7 +1609,7 @@ msgstr "Dokument sa nepodarilo otvoriť."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "Projekt <resource>%1</resource> obsahuje neuložené údaje."
 
 #: k3b.cpp:896
 #, kde-format
@@ -2378,34 +2378,29 @@ msgid "All Files"
 msgstr "Všetky súbory"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Nájdené súbory"
+msgstr "Zvukové súbory"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Nájdené súbory"
+msgstr "Zvukové súbory Wave"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Nájdené súbory"
+msgstr "Zvukové súbory MP3"
 
 #: k3bfileview.cpp:79
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |Zvukové súbory Ogg Vorbis"
+msgstr "Zvukové súbory Ogg Vorbis"
 
 #: k3bfileview.cpp:80
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |Video súbory MPEG"
+msgstr "Video súbory MPEG"
 
 #: k3bfileview.cpp:84
 #, kde-format
@@ -2473,8 +2468,7 @@ msgid "Overall progress:"
 msgstr "Celkový priebeh:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Zastaviť"
@@ -2522,28 +2516,26 @@ msgid "Finished with errors"
 msgstr "Dokončené s chybami"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Naozaj chcete vyčistiť aktuálny projekt?"
+msgstr "Naozaj chcete zastaviť aktuálne prebiehajúcu operáciu?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Potvrdiť zastavenie operácie"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Zastaviť operáciu"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Pokračovať vo viacerých reláciách "
+msgstr "Pokračovať v operácii"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
@@ -2600,7 +2592,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Ukončiť procesy?"
 
 #: k3blsofwrapperdialog.cpp:107
 #, kde-format
@@ -4046,22 +4038,19 @@ msgid "Image Files"
 msgstr "Súbory obrázkov"
 
 #: misc/k3bimagewritingdialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO 9660 súbory obrazu"
+msgstr "Súbory obrazu ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:452
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue súbor:"
+msgstr "Súbory Cue"
 
 #: misc/k3bimagewritingdialog.cpp:453
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|Cdrdao TOC súbory a klonované Cdrecord obrazy"
+msgstr "Cdrdao TOC súbory a klonované obrazy Cdrecord"
 
 #: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
@@ -5095,46 +5084,44 @@ msgid "Following programs could not be updated:"
 msgstr "Nasledovné programy nemohli byť aktualizované:"
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Nepodarilo sa spustiť akciu: %1"
+msgstr "Nepodarilo sa vykonať akciu<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Autorizácia zamietnutá"
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Žiadna oprava chýb"
+msgstr "Vyskytla sa chyba"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Neplatná akcia"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Autorizácia udelená"
 
 #: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Vyžaduje sa overenie totožnosti"
 
 #: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Používateľ zrušil overenie totožnosti"
 
 #: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Neznámy stav autorizácie %1"
 
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
@@ -7280,7 +7267,7 @@ msgstr "Vlastné (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) nájdené predvolené nastavenia: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -11149,7 +11136,6 @@ msgstr "Subpicture"
 #~ msgid "Overwrite"
 #~ msgstr "Prepísať"
 
-#~| msgid "M&anual settings:"
 #~ msgid "Manual settings:"
 #~ msgstr "Ručné nastavenie:"
 
