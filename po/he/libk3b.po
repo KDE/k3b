@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-17 00:42+0000\n"
-"PO-Revision-Date: 2026-03-20 08:13+0200\n"
+"PO-Revision-Date: 2026-04-13 21:38+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -108,7 +108,7 @@ msgstr "שגיאה בלתי ניתנת לתיקון בזמן העתקת רצוע
 #: jobs/k3bbinimagewritingjob.cpp:53
 #, kde-format
 msgid "Write Binary Image"
-msgstr "כתוב תמונת תקליטור בינארית"
+msgstr "צריבת תמונת תקליטור בינרית"
 
 #: jobs/k3bbinimagewritingjob.cpp:181
 #, kde-format
@@ -831,7 +831,7 @@ msgstr "היישום K3b מסתמך על הגודל שנשמר בכותרת ה־
 msgid ""
 "This might result in a corrupt copy if the source was mastered with buggy "
 "software."
-msgstr "זה עשוי להביא לעותק פגום אם המקור הופק על ידי תוכנה עם באגים."
+msgstr "זה עשוי להביא לעותק פגום אם המקור הופק על ידי תוכנה עם תקלות."
 
 #: jobs/k3bdvdcopyjob.cpp:290 jobs/k3bverificationjob.cpp:125
 #: jobs/k3bverificationjob.cpp:355
@@ -2363,7 +2363,7 @@ msgid ""
 "Due to a bug in cdrdao the toc/cue file %1 has been deleted. K3b was unable "
 "to restore it from the backup %2."
 msgstr ""
-"עקב באג ביישום cdrdao הקובץ toc/cue %1 נמחק. היישום K3b לא הצליח לשחזר אותו "
+"עקב תקלה ביישום cdrdao הקובץ toc/cue %1 נמחק. היישום K3b לא הצליח לשחזר אותו "
 "מהגיבוי %2."
 
 #: projects/k3bcdrdaowriter.cpp:734 projects/k3bcdrecordwriter.cpp:787
@@ -3354,7 +3354,7 @@ msgstr "תבנית קובץ לא נכונה"
 #: projects/videocd/k3bvcdjob.cpp:114 projects/videocd/k3bvcdjob.cpp:469
 #, kde-format
 msgid "Removing Binary file %1"
-msgstr "מסיר קובץ בינארי %1"
+msgstr "מסיר קובץ בינרי %1"
 
 #: projects/videocd/k3bvcdjob.cpp:124 projects/videocd/k3bvcdjob.cpp:479
 #, kde-format

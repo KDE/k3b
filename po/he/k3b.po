@@ -7,13 +7,13 @@
 # Tahmar1900 <tahmar1900@gmail.com>, 2010.
 # Diego Iastrubni <elcuco@kde.org>, 2010, 2012, 2013.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-17 00:42+0000\n"
-"PO-Revision-Date: 2025-12-30 11:33+0200\n"
+"PO-Revision-Date: 2026-04-13 21:29+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.0\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1466,7 +1466,7 @@ msgstr "חלץ רצועות מתוך וידאו CD"
 #: k3b.cpp:431
 #, kde-format
 msgid "Show Projects Header"
-msgstr "הצג את כותרת המסמך"
+msgstr "הצגת כותרת המיזמים"
 
 #: k3b.cpp:432
 #, kde-format
@@ -3187,7 +3187,7 @@ msgstr "סרגל כלים ראשי"
 #: k3bwelcomewidget.cpp:79
 #, kde-format
 msgid "More actions..."
-msgstr "עוד פעולות..."
+msgstr "פעולות נוספות…"
 
 #: k3bwelcomewidget.cpp:262
 #, fuzzy, kde-format
@@ -3284,7 +3284,7 @@ msgstr "התעלם"
 #: k3bwriterselectionwidget.cpp:306
 #, kde-format
 msgid "More..."
-msgstr "עוד..."
+msgstr "עוד…"
 
 #: k3bwriterselectionwidget.cpp:596
 #, kde-format
@@ -3644,7 +3644,7 @@ msgstr "Christoph Burger-Scheidlin"
 #: main.cpp:85
 #, kde-format
 msgid "For his neverending help cleaning out the K3b bug database."
-msgstr "על עזרתו הבלתי־נלאית בניקוי הבאגים של K3b."
+msgstr "על עזרתו הבלתי־נלאית בטיפול בתקלות של K3b."
 
 #: main.cpp:87
 #, kde-format
@@ -4360,13 +4360,13 @@ msgstr "הסתר חלון ראשי בעת כתיבה"
 #: option/base_k3bmiscoptiontab.ui:114
 #, kde-format
 msgid "Show the splash screen when K3b starts"
-msgstr "הצג מסך פתיחה בעת הפעלת K3b"
+msgstr "הצגת מסך פתיחה בעליית K3b"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowSplash)
 #: option/base_k3bmiscoptiontab.ui:117
 #, kde-format
 msgid "Show splash screen"
-msgstr "הצג מסך פתיחה"
+msgstr "הצגת מסך פתיחה"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkKeepDialogsOpen)
 #: option/base_k3bmiscoptiontab.ui:124
@@ -4405,7 +4405,7 @@ msgstr ""
 #: option/base_k3bpluginoptiontab.ui:21
 #, kde-format
 msgid "Configure..."
-msgstr "הגדר..."
+msgstr "הגדרה…"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: option/base_k3bpluginoptiontab.ui:47 option/k3bpluginoptiontab.cpp:31
@@ -4747,9 +4747,9 @@ msgid "Permissions"
 msgstr "צריבות:"
 
 #: option/k3bexternalbinpermissionmodel.cpp:288
-#, fuzzy, kde-format
+#, kde-format
 msgid "New permissions"
-msgstr "ערוך הרשאות..."
+msgstr "הרשאות חדשות"
 
 #: option/k3bexternalbinwidget.cpp:73
 #, kde-format
@@ -5385,7 +5385,7 @@ msgstr "העתק את כל הרצועות"
 #: rip/base_k3baudiorippingoptionwidget.ui:37
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:48
@@ -5464,7 +5464,7 @@ msgstr "מ&בצע:"
 #: projects/base_k3baudiocdtextwidget.ui:126
 #, kde-format
 msgid "More Fiel&ds..."
-msgstr "עוד ש&דות..."
+msgstr "ש&דות נוספים…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: projects/base_k3baudiotrackwidget.ui:15
@@ -6521,12 +6521,12 @@ msgstr "מקור לרצועה"
 #: projects/k3baudioviewimpl.cpp:82
 #, kde-format
 msgid "Split Track..."
-msgstr "פיצול רצועה..."
+msgstr "פיצול רצועה…"
 
 #: projects/k3baudioviewimpl.cpp:84
 #, kde-format
 msgid "Edit Source..."
-msgstr "עריכת מקור..."
+msgstr "עריכת מקור…"
 
 #: projects/k3baudioviewimpl.cpp:86
 #, kde-format
@@ -10007,7 +10007,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingview.cpp:79
 #, kde-format
 msgid "Show files"
-msgstr "הצג קבצים"
+msgstr "הצגת קבצים"
 
 #: rip/videodvd/k3bvideodvdrippingview.cpp:80
 #, kde-format
