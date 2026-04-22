@@ -67,7 +67,7 @@ void K3b::AdvancedOptionTab::setupGui()
 
     QGroupBox* groupMisc = new QGroupBox( i18n("Miscellaneous"), this );
     QVBoxLayout* groupMiscLayout = new QVBoxLayout( groupMisc );
-    m_checkEject = new QCheckBox( i18n("Do not &eject medium after write process"), groupMisc );
+    m_checkEject = new QCheckBox( i18n("Do not &eject medium after read/write process"), groupMisc );
     groupMiscLayout->addWidget( m_checkEject );
     m_checkAutoErasingRewritable = new QCheckBox( i18n("Automatically erase CD-RWs and DVD-RWs"), groupMisc );
     groupMiscLayout->addWidget( m_checkAutoErasingRewritable );
@@ -90,7 +90,7 @@ void K3b::AdvancedOptionTab::setupGui()
     m_checkOverburn->setToolTip( i18n("Allow burning more than the official media capacities") );
     m_checkShowForceGuiElements->setToolTip( i18n("Show advanced GUI elements like allowing to choose between cdrecord and cdrdao") );
     m_checkAutoErasingRewritable->setToolTip( i18n("Automatically erase CD-RWs and DVD-RWs without asking") );
-    m_checkEject->setToolTip( i18n("Do not eject the burn medium after a completed burn process") );
+    m_checkEject->setToolTip( i18n("Do not eject the medium after a completed burn/rip process") );
     m_checkForceUnsafeOperations->setToolTip( i18n("Force K3b to continue some operations otherwise deemed as unsafe") );
 
     m_checkShowForceGuiElements->setWhatsThis( i18n("<p>If this option is checked additional GUI "
@@ -122,10 +122,10 @@ void K3b::AdvancedOptionTab::setupGui()
                                                        "<p>If this option is checked the value specified will be used for both "
                                                        "CD and DVD burning.", 4, 32) );
 
-    m_checkEject->setWhatsThis( i18n("<p>If this option is checked K3b will not eject the medium once the burn process "
+    m_checkEject->setWhatsThis( i18n("<p>If this option is checked K3b will not eject the medium once the burn/rip process "
                                      "finishes. This can be helpful in case one leaves the computer after starting the "
-                                     "burning and does not want the tray to be open all the time."
-                                     "<p>However, on Linux systems a freshly burned medium has to be reloaded. Otherwise "
+                                     "burning/ripping and does not want the tray to be open all the time."
+                                     "<p>Note that on Linux systems a freshly burned medium has to be reloaded. Otherwise "
                                      "the system will not detect the changes and still treat it as an empty medium.") );
 
     m_checkForceUnsafeOperations->setWhatsThis( i18n("<p>If this option is checked K3b will continue in some situations "

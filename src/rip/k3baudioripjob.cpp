@@ -12,6 +12,8 @@
 #include "k3bcdparanoialib.h"
 #include "k3bcore.h"
 #include "k3bdevice.h"
+#include "k3bdevicehandler.h"
+#include "k3bglobalsettings.h"
 #include "k3btoc.h"
 #include "k3btrack.h"
 
@@ -211,6 +213,9 @@ void AudioRipJob::jobFinished( bool success )
 {
     k3bcore->unblockDevice( d->device );
     MassAudioEncodingJob::jobFinished( success );
+    if ( success && k3bcore->globalSettings()->ejectMedia() ) {
+        K3b::Device::eject( d->device );
+    }
 }
 
 
