@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-04-23 00:43+0000\n"
 "PO-Revision-Date: 2012-03-24 18:06-0700\n"
 "Last-Translator: Fumiaki Okushi <okushi@kde.gr.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -4812,8 +4812,9 @@ msgid "Miscellaneous"
 msgstr "その他"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, kde-format
-msgid "Do not &eject medium after write process"
+#, fuzzy, kde-format
+#| msgid "Do not &eject medium after write process"
+msgid "Do not &eject medium after read/write process"
 msgstr "書き込み完了後にメディアをイジェクトしない(&E)"
 
 # ACCELERATOR added by translator
@@ -4841,8 +4842,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "確認せずに CD-RW/DVD-RW を自動的に消去"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, kde-format
-msgid "Do not eject the burn medium after a completed burn process"
+#, fuzzy, kde-format
+#| msgid "Do not eject the burn medium after a completed burn process"
+msgid "Do not eject the medium after a completed burn/rip process"
 msgstr "書き込みが完了したメディアをイジェクトしない"
 
 #: option/k3badvancedoptiontab.cpp:94
@@ -4919,14 +4921,21 @@ msgstr ""
 "と、CD/DVD の書き込み時に指定された値を使用します。</p>"
 
 #: option/k3badvancedoptiontab.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>If this option is checked K3b will not eject the medium once the burn "
+#| "process finishes. This can be helpful in case one leaves the computer "
+#| "after starting the burning and does not want the tray to be open all the "
+#| "time.<p>However, on Linux systems a freshly burned medium has to be "
+#| "reloaded. Otherwise the system will not detect the changes and still "
+#| "treat it as an empty medium."
 msgid ""
-"<p>If this option is checked K3b will not eject the medium once the burn "
+"<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
-"starting the burning and does not want the tray to be open all the time."
-"<p>However, on Linux systems a freshly burned medium has to be reloaded. "
-"Otherwise the system will not detect the changes and still treat it as an "
-"empty medium."
+"starting the burning/ripping and does not want the tray to be open all the "
+"time.<p>Note that on Linux systems a freshly burned medium has to be "
+"reloaded. Otherwise the system will not detect the changes and still treat "
+"it as an empty medium."
 msgstr ""
 "<p>このオプションを有効にすると、K3b は書き込みが完了してもメディアをイジェク"
 "トしません。書き込みを開始してコンピュータから離れるときに、トレイを開いたま"
@@ -10112,67 +10121,67 @@ msgstr "トラック %1 を変換"
 msgid "Successfully converted track %1."
 msgstr "トラック %1 を変換しました。"
 
-#: rip/k3baudioripjob.cpp:91
+#: rip/k3baudioripjob.cpp:93
 #, kde-format
 msgid "Error while initializing audio ripping."
 msgstr "オーディオ吸い出しを初期化中にエラー"
 
-#: rip/k3baudioripjob.cpp:133
+#: rip/k3baudioripjob.cpp:135
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
 msgstr "トラック %1 を吸い出し中に回復不能なエラー"
 
-#: rip/k3baudioripjob.cpp:187
+#: rip/k3baudioripjob.cpp:189
 #, kde-format
 msgid "Ripping Audio Tracks"
 msgstr "オーディオトラックを吸い出し"
 
-#: rip/k3baudioripjob.cpp:189
+#: rip/k3baudioripjob.cpp:191
 #, kde-format
 msgid "Ripping Audio Tracks From '%1'"
 msgstr "“%1” のオーディオトラックを吸い出し"
 
-#: rip/k3baudioripjob.cpp:219
+#: rip/k3baudioripjob.cpp:224
 #, kde-format
 msgid "Extracting Digital Audio"
 msgstr "デジタルオーディオを吸い出し"
 
-#: rip/k3baudioripjob.cpp:226
+#: rip/k3baudioripjob.cpp:231
 #, kde-format
 msgid "Could not load libcdparanoia."
 msgstr "libcdparanoia をロードできませんでした。"
 
-#: rip/k3baudioripjob.cpp:237
+#: rip/k3baudioripjob.cpp:242
 #, kde-format
 msgid "Reading CD table of contents."
 msgstr "CD の内容一覧を読み込み"
 
-#: rip/k3baudioripjob.cpp:241
+#: rip/k3baudioripjob.cpp:246
 #, kde-format
 msgid "Could not open device %1"
 msgstr "デバイス %1 を開けませんでした"
 
-#: rip/k3baudioripjob.cpp:254
+#: rip/k3baudioripjob.cpp:259
 #, kde-format
 msgid "Searching index 0 for all tracks"
 msgstr "全トラックの index 0 を検索"
 
-#: rip/k3baudioripjob.cpp:258
+#: rip/k3baudioripjob.cpp:263
 #, kde-format
 msgid "Starting digital audio extraction (ripping)."
 msgstr "デジタルオーディオの吸い出しを開始"
 
-#: rip/k3baudioripjob.cpp:289
+#: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
 msgstr "トラック %1 (%2 - %3) を吸い出し"
 
-#: rip/k3baudioripjob.cpp:294
+#: rip/k3baudioripjob.cpp:299
 #, kde-format
 msgid "Ripping track %1"
 msgstr "トラック %1 を吸い出し"
 
-#: rip/k3baudioripjob.cpp:300
+#: rip/k3baudioripjob.cpp:305
 #, kde-format
 msgid "Successfully ripped track %1 to %2."
 msgstr "トラック %1 を ‘%2’ に吸い出しました。"

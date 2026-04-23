@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-04-23 00:43+0000\n"
 "PO-Revision-Date: 2026-02-04 00:37+0100\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -4683,8 +4683,9 @@ msgid "Miscellaneous"
 msgstr "기타 설정"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, kde-format
-msgid "Do not &eject medium after write process"
+#, fuzzy, kde-format
+#| msgid "Do not &eject medium after write process"
+msgid "Do not &eject medium after read/write process"
 msgstr "쓰기 작업이 끝난 뒤 미디어를 꺼내지 않기(&E)"
 
 #: option/k3badvancedoptiontab.cpp:72
@@ -4712,8 +4713,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "사용자에게 묻지 않고 CD-RW와 DVD-RW를 자동으로 지우기"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, kde-format
-msgid "Do not eject the burn medium after a completed burn process"
+#, fuzzy, kde-format
+#| msgid "Do not eject the burn medium after a completed burn process"
+msgid "Do not eject the medium after a completed burn/rip process"
 msgstr "기록 작업이 완료된 뒤에 기록된 미디어 꺼내지 않기"
 
 #: option/k3badvancedoptiontab.cpp:94
@@ -4781,14 +4783,21 @@ msgstr ""
 "나 DVD 기록 작업 시 지정된 크기의 버퍼를 사용합니다."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>If this option is checked K3b will not eject the medium once the burn "
+#| "process finishes. This can be helpful in case one leaves the computer "
+#| "after starting the burning and does not want the tray to be open all the "
+#| "time.<p>However, on Linux systems a freshly burned medium has to be "
+#| "reloaded. Otherwise the system will not detect the changes and still "
+#| "treat it as an empty medium."
 msgid ""
-"<p>If this option is checked K3b will not eject the medium once the burn "
+"<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
-"starting the burning and does not want the tray to be open all the time."
-"<p>However, on Linux systems a freshly burned medium has to be reloaded. "
-"Otherwise the system will not detect the changes and still treat it as an "
-"empty medium."
+"starting the burning/ripping and does not want the tray to be open all the "
+"time.<p>Note that on Linux systems a freshly burned medium has to be "
+"reloaded. Otherwise the system will not detect the changes and still treat "
+"it as an empty medium."
 msgstr ""
 "<p>이 옵션을 선택하면 기록 작업이 끝난 뒤에 미디어를 드라이브에서 꺼내지 않습"
 "니다. 이는 기록 작업을 시작해 놓고 자리를 떠나는 경우에 유용합니다. 또한, 기"
@@ -9750,67 +9759,67 @@ msgstr "%1번 트랙을 변환 중"
 msgid "Successfully converted track %1."
 msgstr "%1번 트랙을 변환했습니다."
 
-#: rip/k3baudioripjob.cpp:91
+#: rip/k3baudioripjob.cpp:93
 #, kde-format
 msgid "Error while initializing audio ripping."
 msgstr "오디오 추출을 초기화하는 동안 오류가 발생했습니다."
 
-#: rip/k3baudioripjob.cpp:133
+#: rip/k3baudioripjob.cpp:135
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
 msgstr "%1번 트랙을 추출하는 중 복구할 수 없는 오류가 발생했습니다."
 
-#: rip/k3baudioripjob.cpp:187
+#: rip/k3baudioripjob.cpp:189
 #, kde-format
 msgid "Ripping Audio Tracks"
 msgstr "오디오 트랙을 추출하는 중"
 
-#: rip/k3baudioripjob.cpp:189
+#: rip/k3baudioripjob.cpp:191
 #, kde-format
 msgid "Ripping Audio Tracks From '%1'"
 msgstr "'%1'에서 오디오 트랙을 추출하는 중"
 
-#: rip/k3baudioripjob.cpp:219
+#: rip/k3baudioripjob.cpp:224
 #, kde-format
 msgid "Extracting Digital Audio"
 msgstr "디지털 오디오를 추출하는 중"
 
-#: rip/k3baudioripjob.cpp:226
+#: rip/k3baudioripjob.cpp:231
 #, kde-format
 msgid "Could not load libcdparanoia."
 msgstr "libcdparaonia를 불러올 수 없습니다."
 
-#: rip/k3baudioripjob.cpp:237
+#: rip/k3baudioripjob.cpp:242
 #, kde-format
 msgid "Reading CD table of contents."
 msgstr "CD 목차를 읽는 중."
 
-#: rip/k3baudioripjob.cpp:241
+#: rip/k3baudioripjob.cpp:246
 #, kde-format
 msgid "Could not open device %1"
 msgstr "%1 장치를 열 수 없음"
 
-#: rip/k3baudioripjob.cpp:254
+#: rip/k3baudioripjob.cpp:259
 #, kde-format
 msgid "Searching index 0 for all tracks"
 msgstr "모든 트랙의 0번 색인 검색 중"
 
-#: rip/k3baudioripjob.cpp:258
+#: rip/k3baudioripjob.cpp:263
 #, kde-format
 msgid "Starting digital audio extraction (ripping)."
 msgstr "디지털 오디오 추출을 시작합니다."
 
-#: rip/k3baudioripjob.cpp:289
+#: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
 msgstr "트랙 %1 추출 중(%2 - %3)"
 
-#: rip/k3baudioripjob.cpp:294
+#: rip/k3baudioripjob.cpp:299
 #, kde-format
 msgid "Ripping track %1"
 msgstr "트랙 %1 추출 중"
 
-#: rip/k3baudioripjob.cpp:300
+#: rip/k3baudioripjob.cpp:305
 #, kde-format
 msgid "Successfully ripped track %1 to %2."
 msgstr "%1번 트랙을 %2(으)로 성공적으로 추출했습니다."

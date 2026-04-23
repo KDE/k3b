@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-04-23 00:43+0000\n"
 "PO-Revision-Date: 2026-01-15 11:23+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -4858,8 +4858,9 @@ msgid "Miscellaneous"
 msgstr "Divers"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, kde-format
-msgid "Do not &eject medium after write process"
+#, fuzzy, kde-format
+#| msgid "Do not &eject medium after write process"
+msgid "Do not &eject medium after read/write process"
 msgstr "Ne pas éj&ecter le média après la gravure"
 
 #: option/k3badvancedoptiontab.cpp:72
@@ -4889,8 +4890,9 @@ msgstr ""
 "Effacer automatiquement les CD-RW et les DVD-RW sans demander à l'utilisateur"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, kde-format
-msgid "Do not eject the burn medium after a completed burn process"
+#, fuzzy, kde-format
+#| msgid "Do not eject the burn medium after a completed burn process"
+msgid "Do not eject the medium after a completed burn/rip process"
 msgstr "Ne pas éjecter le média après la fin d'une gravure"
 
 #: option/k3badvancedoptiontab.cpp:94
@@ -4966,14 +4968,21 @@ msgstr ""
 "gravure des CD et des DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>If this option is checked K3b will not eject the medium once the burn "
+#| "process finishes. This can be helpful in case one leaves the computer "
+#| "after starting the burning and does not want the tray to be open all the "
+#| "time.<p>However, on Linux systems a freshly burned medium has to be "
+#| "reloaded. Otherwise the system will not detect the changes and still "
+#| "treat it as an empty medium."
 msgid ""
-"<p>If this option is checked K3b will not eject the medium once the burn "
+"<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
-"starting the burning and does not want the tray to be open all the time."
-"<p>However, on Linux systems a freshly burned medium has to be reloaded. "
-"Otherwise the system will not detect the changes and still treat it as an "
-"empty medium."
+"starting the burning/ripping and does not want the tray to be open all the "
+"time.<p>Note that on Linux systems a freshly burned medium has to be "
+"reloaded. Otherwise the system will not detect the changes and still treat "
+"it as an empty medium."
 msgstr ""
 "<p>Si cette option est cochée, K3b n'éjectera pas le média à la fin de la "
 "gravure. Ceci peut être utile dans le cas où vous ne vous trouvez pas devant "
@@ -10076,69 +10085,69 @@ msgstr "Conversion de la piste %1"
 msgid "Successfully converted track %1."
 msgstr "La conversion numérique de la piste %1 a été réalisée avec succès."
 
-#: rip/k3baudioripjob.cpp:91
+#: rip/k3baudioripjob.cpp:93
 #, kde-format
 msgid "Error while initializing audio ripping."
 msgstr ""
 "Erreur pendant l'initialisation de l'extraction numérique des pistes audio."
 
-#: rip/k3baudioripjob.cpp:133
+#: rip/k3baudioripjob.cpp:135
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
 msgstr "Erreur pendant l'extraction numérique de la piste %1."
 
-#: rip/k3baudioripjob.cpp:187
+#: rip/k3baudioripjob.cpp:189
 #, kde-format
 msgid "Ripping Audio Tracks"
 msgstr "Extraction des pistes audio"
 
-#: rip/k3baudioripjob.cpp:189
+#: rip/k3baudioripjob.cpp:191
 #, kde-format
 msgid "Ripping Audio Tracks From '%1'"
 msgstr "Extraction des pistes audio de « %1 »"
 
-#: rip/k3baudioripjob.cpp:219
+#: rip/k3baudioripjob.cpp:224
 #, kde-format
 msgid "Extracting Digital Audio"
 msgstr "Extraction numérique du CD audio"
 
-#: rip/k3baudioripjob.cpp:226
+#: rip/k3baudioripjob.cpp:231
 #, kde-format
 msgid "Could not load libcdparanoia."
 msgstr "Impossible de charger la bibliothèque « libcdparanoia »."
 
-#: rip/k3baudioripjob.cpp:237
+#: rip/k3baudioripjob.cpp:242
 #, kde-format
 msgid "Reading CD table of contents."
 msgstr "Lecture de la table des matières du CD."
 
-#: rip/k3baudioripjob.cpp:241
+#: rip/k3baudioripjob.cpp:246
 #, kde-format
 msgid "Could not open device %1"
 msgstr "Impossible d'ouvrir le périphérique « %1 »"
 
-#: rip/k3baudioripjob.cpp:254
+#: rip/k3baudioripjob.cpp:259
 #, kde-format
 msgid "Searching index 0 for all tracks"
 msgstr "Recherche de l'index 0 pour toutes les pistes"
 
-#: rip/k3baudioripjob.cpp:258
+#: rip/k3baudioripjob.cpp:263
 #, kde-format
 msgid "Starting digital audio extraction (ripping)."
 msgstr "Lancement de l'extraction numérique des pistes audio."
 
 # unreviewed-context
-#: rip/k3baudioripjob.cpp:289
+#: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
 msgstr "Extraction numérique de la piste %1 (%2 - %3)"
 
-#: rip/k3baudioripjob.cpp:294
+#: rip/k3baudioripjob.cpp:299
 #, kde-format
 msgid "Ripping track %1"
 msgstr "Extraction numérique de la piste %1"
 
-#: rip/k3baudioripjob.cpp:300
+#: rip/k3baudioripjob.cpp:305
 #, kde-format
 msgid "Successfully ripped track %1 to %2."
 msgstr ""

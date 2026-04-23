@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: __kde__extragear-multimedia__k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-04-23 00:43+0000\n"
 "PO-Revision-Date: 2015-02-25 18:09+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team:  <en@li.org>\n"
@@ -4786,8 +4786,9 @@ msgid "Miscellaneous"
 msgstr "Razno"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, kde-format
-msgid "Do not &eject medium after write process"
+#, fuzzy, kde-format
+#| msgid "Do not &eject medium after write process"
+msgid "Do not &eject medium after read/write process"
 msgstr "Ne izbacuj medij &poslije procesa pisanja"
 
 #: option/k3badvancedoptiontab.cpp:72
@@ -4814,8 +4815,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Automatski briši CD-RWe i DVD-RWe bez pitanja"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, kde-format
-msgid "Do not eject the burn medium after a completed burn process"
+#, fuzzy, kde-format
+#| msgid "Do not eject the burn medium after a completed burn process"
+msgid "Do not eject the medium after a completed burn/rip process"
 msgstr "Ne izbacuj narezani disk nakon završenog upisa"
 
 #: option/k3badvancedoptiontab.cpp:94
@@ -4893,14 +4895,21 @@ msgstr ""
 "označena navedena vrijednost će biti korištena i za CD i za DVD narezivanje."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>If this option is checked K3b will not eject the medium once the burn "
+#| "process finishes. This can be helpful in case one leaves the computer "
+#| "after starting the burning and does not want the tray to be open all the "
+#| "time.<p>However, on Linux systems a freshly burned medium has to be "
+#| "reloaded. Otherwise the system will not detect the changes and still "
+#| "treat it as an empty medium."
 msgid ""
-"<p>If this option is checked K3b will not eject the medium once the burn "
+"<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
-"starting the burning and does not want the tray to be open all the time."
-"<p>However, on Linux systems a freshly burned medium has to be reloaded. "
-"Otherwise the system will not detect the changes and still treat it as an "
-"empty medium."
+"starting the burning/ripping and does not want the tray to be open all the "
+"time.<p>Note that on Linux systems a freshly burned medium has to be "
+"reloaded. Otherwise the system will not detect the changes and still treat "
+"it as an empty medium."
 msgstr ""
 "<p>Ako je ova opcija označena K3b neće izbacivati disk kada se narezivanje "
 "završi. Ovo može biti korisno ako ste otišli od računara kada ste pokrenuli "
@@ -9969,67 +9978,67 @@ msgstr "Pretvaram numeru %1"
 msgid "Successfully converted track %1."
 msgstr "Uspješno pretvorena numera %1."
 
-#: rip/k3baudioripjob.cpp:91
+#: rip/k3baudioripjob.cpp:93
 #, kde-format
 msgid "Error while initializing audio ripping."
 msgstr "Greška prilikom incijalizacije audio skidanja."
 
-#: rip/k3baudioripjob.cpp:133
+#: rip/k3baudioripjob.cpp:135
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
 msgstr "Fatalna greška prilikom ripovanja staze %1."
 
-#: rip/k3baudioripjob.cpp:187
+#: rip/k3baudioripjob.cpp:189
 #, kde-format
 msgid "Ripping Audio Tracks"
 msgstr "Vadim sadržaj audio staze"
 
-#: rip/k3baudioripjob.cpp:189
+#: rip/k3baudioripjob.cpp:191
 #, kde-format
 msgid "Ripping Audio Tracks From '%1'"
 msgstr "Vadim sadržaj audio staza sa „%1“"
 
-#: rip/k3baudioripjob.cpp:219
+#: rip/k3baudioripjob.cpp:224
 #, kde-format
 msgid "Extracting Digital Audio"
 msgstr "Izdvajam digitalni audio (Digital Audio)"
 
-#: rip/k3baudioripjob.cpp:226
+#: rip/k3baudioripjob.cpp:231
 #, kde-format
 msgid "Could not load libcdparanoia."
 msgstr "Ne mogu učitati libcdparanoia."
 
-#: rip/k3baudioripjob.cpp:237
+#: rip/k3baudioripjob.cpp:242
 #, kde-format
 msgid "Reading CD table of contents."
 msgstr "Čitam sadržaj CD-a."
 
-#: rip/k3baudioripjob.cpp:241
+#: rip/k3baudioripjob.cpp:246
 #, kde-format
 msgid "Could not open device %1"
 msgstr "Ne mogu otvoriti uređaj %1"
 
-#: rip/k3baudioripjob.cpp:254
+#: rip/k3baudioripjob.cpp:259
 #, kde-format
 msgid "Searching index 0 for all tracks"
 msgstr "Pretražujem index 0 za sve staze"
 
-#: rip/k3baudioripjob.cpp:258
+#: rip/k3baudioripjob.cpp:263
 #, kde-format
 msgid "Starting digital audio extraction (ripping)."
 msgstr "Počinje digitalno audio skidanje (ripping)."
 
-#: rip/k3baudioripjob.cpp:289
+#: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
 msgstr "Vadim sadržaj staze %1 (%2 - %3)"
 
-#: rip/k3baudioripjob.cpp:294
+#: rip/k3baudioripjob.cpp:299
 #, kde-format
 msgid "Ripping track %1"
 msgstr "Vadim sadržaj staze %1"
 
-#: rip/k3baudioripjob.cpp:300
+#: rip/k3baudioripjob.cpp:305
 #, kde-format
 msgid "Successfully ripped track %1 to %2."
 msgstr "Uspješno izvađen sadržaj staze %1 u %2."

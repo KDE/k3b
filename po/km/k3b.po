@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-04-23 00:43+0000\n"
 "PO-Revision-Date: 2012-06-11 10:20+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer\n"
@@ -4721,8 +4721,9 @@ msgid "Miscellaneous"
 msgstr "ផ្សេងៗ"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, kde-format
-msgid "Do not &eject medium after write process"
+#, fuzzy, kde-format
+#| msgid "Do not &eject medium after write process"
+msgid "Do not &eject medium after read/write process"
 msgstr "កុំ​ច្រាន​ឧបករណ៍​ផ្ទុក​ចេញ​បន្ទាប់​ពី​សរសេរ​ចប់"
 
 #: option/k3badvancedoptiontab.cpp:72
@@ -4749,8 +4750,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "លុប​ស៊ីឌី​-អាន​សរសេរ និង​ឌីវីឌី​-អាន​សរសេរ​ដោយ​ពុំ​ចាំបាច់​សួរ​ដោយ​ស្វ័យ​ប្រវត្តិ"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, kde-format
-msgid "Do not eject the burn medium after a completed burn process"
+#, fuzzy, kde-format
+#| msgid "Do not eject the burn medium after a completed burn process"
+msgid "Do not eject the medium after a completed burn/rip process"
 msgstr "កុំ​ច្រាន​ឧបករណ៍​ផ្ទុក​ចេញ បន្ទាប់​ពី​ដុត​ចប់"
 
 #: option/k3badvancedoptiontab.cpp:94
@@ -4823,14 +4825,21 @@ msgstr ""
 "%2 មេកាបៃ​សម្រាប់​ឌីវីឌី ។<p>បើ​គូស​ធីក តម្លៃ​ដែល​​បញ្ជាក់​នឹង​ត្រូវ​បាន​ប្រើ​សម្រាប់​ការ​ដុត​ស៊ីឌី និង​ឌីវីឌី ។"
 
 #: option/k3badvancedoptiontab.cpp:125
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<p>If this option is checked K3b will not eject the medium once the burn "
+#| "process finishes. This can be helpful in case one leaves the computer "
+#| "after starting the burning and does not want the tray to be open all the "
+#| "time.<p>However, on Linux systems a freshly burned medium has to be "
+#| "reloaded. Otherwise the system will not detect the changes and still "
+#| "treat it as an empty medium."
 msgid ""
-"<p>If this option is checked K3b will not eject the medium once the burn "
+"<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
-"starting the burning and does not want the tray to be open all the time."
-"<p>However, on Linux systems a freshly burned medium has to be reloaded. "
-"Otherwise the system will not detect the changes and still treat it as an "
-"empty medium."
+"starting the burning/ripping and does not want the tray to be open all the "
+"time.<p>Note that on Linux systems a freshly burned medium has to be "
+"reloaded. Otherwise the system will not detect the changes and still treat "
+"it as an empty medium."
 msgstr ""
 "<p>បើ​គូស​ធីក​ជម្រើស​នេះ  K3b នឹង​មិន​ច្រាន​ឧបករណ៍​ផ្ទុក​ចេញ​ នៅ​ពេល​បញ្ចប់​ការ​ដុត​ទេ ។ វា​អាច​ជា​ជំនួយ​ដ៏​"
 "សំខាន់​ ក្នុង​ករណី​ដែល​អ្នក​ប្រើ​បិទ​កុំព្យូទ័រ​ ក្រោយ​​ពី​បាន​​​ដុត​ ហើយ​មិន​ចង់​ឲ្យ​ថាស​បើក​គ្រប់​ពេល​ ។<p> ទោះ​បី​យ៉ាង​ណា "
@@ -9910,67 +9919,67 @@ msgstr "បម្លែង​បទ​ %1"
 msgid "Successfully converted track %1."
 msgstr "បាន​បម្លែង​បទ %1 ដោយ​ជោគជ័យ ។"
 
-#: rip/k3baudioripjob.cpp:91
+#: rip/k3baudioripjob.cpp:93
 #, kde-format
 msgid "Error while initializing audio ripping."
 msgstr "កំហុស​ខណៈ​ពេល​ចាប់​ផ្ដើម​បម្លែង​​​អូឌីយ៉ូ​ ។"
 
-#: rip/k3baudioripjob.cpp:133
+#: rip/k3baudioripjob.cpp:135
 #, kde-format
 msgid "Unrecoverable error while ripping track %1."
 msgstr "មាន​កំហុស​មិន​អាច​សង្គ្រោះ​បាន​ ខណៈ​ពេល​បម្លែង​បទ %1 ។"
 
-#: rip/k3baudioripjob.cpp:187
+#: rip/k3baudioripjob.cpp:189
 #, kde-format
 msgid "Ripping Audio Tracks"
 msgstr "បម្លែង​​​បទ​​អូឌីយ៉ូ​"
 
-#: rip/k3baudioripjob.cpp:189
+#: rip/k3baudioripjob.cpp:191
 #, kde-format
 msgid "Ripping Audio Tracks From '%1'"
 msgstr "បម្លែង​​​បទ​​អូឌីយ៉ូ​​ពី '%1'"
 
-#: rip/k3baudioripjob.cpp:219
+#: rip/k3baudioripjob.cpp:224
 #, kde-format
 msgid "Extracting Digital Audio"
 msgstr "កំពុង​ស្រង់​អូឌីយ៉ូ​ឌីជីថល​ចេញ"
 
-#: rip/k3baudioripjob.cpp:226
+#: rip/k3baudioripjob.cpp:231
 #, kde-format
 msgid "Could not load libcdparanoia."
 msgstr "មិន​អាច​ផ្ទុក​ libcdparanoia ​បាន​ឡើយ ។"
 
-#: rip/k3baudioripjob.cpp:237
+#: rip/k3baudioripjob.cpp:242
 #, kde-format
 msgid "Reading CD table of contents."
 msgstr "អាន​តារាង​មាតិកា​ស៊ីឌី ។"
 
-#: rip/k3baudioripjob.cpp:241
+#: rip/k3baudioripjob.cpp:246
 #, kde-format
 msgid "Could not open device %1"
 msgstr "មិន​អាច​បើក​ឧបករណ៍ %1 បាន​ឡើយ"
 
-#: rip/k3baudioripjob.cpp:254
+#: rip/k3baudioripjob.cpp:259
 #, kde-format
 msgid "Searching index 0 for all tracks"
 msgstr "ស្វែងរក​លិបិក្រម ០ សម្រាប់​បទ​ទាំងអស់"
 
-#: rip/k3baudioripjob.cpp:258
+#: rip/k3baudioripjob.cpp:263
 #, kde-format
 msgid "Starting digital audio extraction (ripping)."
 msgstr "ចាប់​ផ្ដើម​ស្រង់​អូឌីយ៉ូ​ឌីជីថល​ចេញ (បម្លែង) ។"
 
-#: rip/k3baudioripjob.cpp:289
+#: rip/k3baudioripjob.cpp:294
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
 msgstr "កំពុង​បម្លែង​បទ %1 (%2 -%3)"
 
-#: rip/k3baudioripjob.cpp:294
+#: rip/k3baudioripjob.cpp:299
 #, kde-format
 msgid "Ripping track %1"
 msgstr "កំពុង​បម្លែង​បទ %1"
 
-#: rip/k3baudioripjob.cpp:300
+#: rip/k3baudioripjob.cpp:305
 #, kde-format
 msgid "Successfully ripped track %1 to %2."
 msgstr "បាន​បម្លែង​បទ %1 ទៅ​ជា​ %2 ដោយ​ជោគជ័យ​ ។"
