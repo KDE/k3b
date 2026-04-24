@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-03-18 03:15+0100\n"
+"PO-Revision-Date: 2026-04-23 06:31+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -4448,10 +4448,9 @@ msgid "Miscellaneous"
 msgstr "სხვადასხვა"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "&ნუ გამოიღებ მედიას ჩაწერის პროცესის შემდეგ"
+msgstr "&ნუ გამოიღებ მედიას ჩაწერის/წაკითხვის პროცესის შემდეგ"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4478,10 +4477,10 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "CD-RW და DVD-RW დისკების ავტომატური წაშლა კითხვის გარეშე"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "ნუ გამოიღებ ამომწვარ მედიას ამოწვის პროცესის დასრულების შემდეგ"
+msgstr ""
+"ნუ გამოიღებ ამომწვარ მედიას ამოწვის/დარიპვის პროცესის დასრულების შემდეგ"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format

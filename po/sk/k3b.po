@@ -4728,10 +4728,9 @@ msgid "Miscellaneous"
 msgstr "Rôzne"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "N&evysúvať médium po zápise"
+msgstr "N&evysúvať médium po čítaní/zápise"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4758,10 +4757,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Automaticky bez pýtania mazať CD-RW a DVD-RW"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "Nevysúvať médium po ukončení procesu napaľovania"
+msgstr "Nevysúvať médium po ukončení procesu napaľovania/ripovania"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4834,14 +4832,7 @@ msgstr ""
 "bude zadaná hodnota použitá pre napaľovanie CD aj DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4851,10 +4842,11 @@ msgid ""
 "it as an empty medium."
 msgstr ""
 "<p>Ak je táto možnosť začiarknutá, K3b nevysunie médium po skončení procesu "
-"napaľovania. Je to užitočné najmä v prípade, že spustíte napaľovanie a "
-"odídete, ale nechcete, aby ostala mechanika po celú dobu otvorená.<p>Na "
-"linuxových systémoch je však potrebné čerstvo napálené médium znovu načítať, "
-"inak sa bude systém stále chovať k nemu ako k prázdnemu médiu."
+"napaľovania/ripovania. Je to užitočné najmä v prípade, že spustíte "
+"napaľovanie/ripovanie a odídete, ale nechcete, aby ostala mechanika po celú "
+"dobu otvorená.<p>Na linuxových systémoch je však potrebné čerstvo napálené "
+"médium znovu načítať, inak sa bude systém stále chovať k nemu ako k "
+"prázdnemu médiu."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format

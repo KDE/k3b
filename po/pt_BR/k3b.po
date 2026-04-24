@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-01-14 06:19-0300\n"
+"PO-Revision-Date: 2026-04-23 07:34-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -4781,10 +4781,9 @@ msgid "Miscellaneous"
 msgstr "Diversas"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "Não &ejetar a mídia após o processo de gravação"
+msgstr "Não &ejetar a mídia após o processo de leitura/gravação"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4811,10 +4810,11 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Apaga automaticamente CD-RWs e DVD-RWs sem pedir confirmação"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "Não ejeta a mídia gravada após o processo de gravação ser concluído"
+msgstr ""
+"Não ejetar a mídia gravada após um processo de gravação/extração ser "
+"concluído"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4889,14 +4889,7 @@ msgstr ""
 "usado para gravação de CDs ou DVDs."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4906,11 +4899,12 @@ msgid ""
 "it as an empty medium."
 msgstr ""
 "<p>Se essa opção estiver selecionada, o K3b não irá ejetar a mídia quando o "
-"processo de gravação terminar. Isso pode ser útil no caso de alguém se "
-"afastar do computador após o início da gravação e não desejar que a bandeja "
-"fique aberta o tempo todo.<p>Entretanto, em sistemas Linux, uma mídia que "
-"acabou de ser gravada precisa ser recarregada. Caso contrário, o sistema não "
-"irá detectar as alterações e continuará tratando-a como uma mídia vazia."
+"processo de gravação/extração terminar. Isso pode ser útil no caso de alguém "
+"se afastar do computador após o início da gravação/extração e não desejar "
+"que a bandeja fique aberta o tempo todo.<p>Note que em sistemas Linux, uma "
+"mídia que acabou de ser gravada precisa ser recarregada. Caso contrário, o "
+"sistema não irá detectar as alterações e continuará tratando-a como uma "
+"mídia vazia."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format

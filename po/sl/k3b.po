@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-01-14 07:04+0100\n"
+"PO-Revision-Date: 2026-04-23 06:48+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1530,7 +1530,7 @@ msgstr "Odpre pogovorno okno za kopiranje nosilca"
 #: k3b.cpp:413 k3bdevicemenu.cpp:70
 #, kde-format
 msgid "Rip Audio CD..."
-msgstr "Zajemi zvočni CD ..."
+msgstr "Zajemi zvočni CD..."
 
 #: k3b.cpp:414
 #, kde-format
@@ -1540,7 +1540,7 @@ msgstr "Digitalno pretvori sledi z zvočnega CD-ja"
 #: k3b.cpp:419 k3bdevicemenu.cpp:71
 #, kde-format
 msgid "Rip Video DVD..."
-msgstr "Zajemi video DVD ..."
+msgstr "Zajemi video DVD..."
 
 #: k3b.cpp:420
 #, kde-format
@@ -1550,7 +1550,7 @@ msgstr "Prekodiraj naslove video DVD"
 #: k3b.cpp:425 k3bdevicemenu.cpp:72
 #, kde-format
 msgid "Rip Video CD..."
-msgstr "Zajemi Video CD ..."
+msgstr "Zajemi Video CD..."
 
 #: k3b.cpp:426
 #, kde-format
@@ -4739,10 +4739,9 @@ msgid "Miscellaneous"
 msgstr "Razno"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "Po zapisovanju ne &izvrzi nosilca"
+msgstr "Ne izvrzi nosilca po postopku branja/pisanja"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4769,10 +4768,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Samodejno, brez vprašanj, izbriši CD-RW-je in DVD-RW-je"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "Po zaključenem zapisovanju ne izvrzi nosilca"
+msgstr "Ne izvrzi nosilca po zaključenem postopku peke/zajemanja"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4842,14 +4840,7 @@ msgstr ""
 "nastavljena velikost uporabljena tako za CD-je kot tudi za DVD-je."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4858,11 +4849,12 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>Če omogočite to možnost, K3b po zaključenem zapisovanju ne bo izvrgel "
-"nosilca. To je uporabno če po začetku zapisovanja zapustite računalnik in ne "
-"želite, da pladenj zapisovalnika ostane odprt.<p>Vedite, da je potrebno na "
-"sistemu z Linuxom sveže zapisani nosilec naložiti znova, drugače sistem ne "
-"bo zaznal sprememb in bo nosilec še vedno prikazoval kot prazen."
+"<p>Če omogočite to možnost, K3b ne bo izvrgel nosilca po zaključenem "
+"postopku peke/zajemanja. To je uporabno če po začetku zapisovanja zapustite "
+"računalnik in ne želite, da pladenj zapisovalnika ostane ves čas odprt."
+"<p>Vedite, da je potrebno na sistemu z Linuxom sveže zapisani nosilec "
+"naložiti znova. Sistem sicer ne bo zaznal sprememb in bo nosilec še vedno "
+"obravnaval kot prazen."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format

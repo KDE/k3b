@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-01-14 09:00+0100\n"
+"PO-Revision-Date: 2026-04-23 09:16+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -4782,10 +4782,9 @@ msgid "Miscellaneous"
 msgstr "Miscel·lània"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "No &expulsis el suport després del procés d'escriptura"
+msgstr "No &expulsis el suport després del procés de lectura/escriptura"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4812,10 +4811,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Esborra automàticament els CD-RW i DVD-RW sense preguntar"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "No expulsar el suport en finalitzar el procés de gravació"
+msgstr "No expulsis el suport en finalitzar el procés de gravació/extracció"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4889,14 +4887,7 @@ msgstr ""
 "farà servir per a gravar tant els CD com els DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4906,11 +4897,12 @@ msgid ""
 "it as an empty medium."
 msgstr ""
 "<p>Si aquesta opció està marcada, el K3b no expulsarà el suport quan acabi "
-"el procés de gravació. Això pot ser útil en cas que hàgiu d'abandonar "
-"l'ordinador després d'iniciar la gravació i no vulgueu deixar la safata "
-"oberta tota l'estona. <p>Tanmateix, als sistemes Linux els suports gravats "
-"recentment s'han de tornar a carregar. En cas contrari, el sistema no "
-"detectarà els canvis i seguirà tractant-lo com si fos un suport buit."
+"el procés de gravació/extracció. Això pot ser útil en cas que hàgiu "
+"d'abandonar l'ordinador després d'iniciar la gravació/extracció i no vulgueu "
+"deixar la safata oberta tota l'estona. <p>Tingueu en compte que als sistemes "
+"Linux els suports gravats recentment s'han de tornar a carregar. En cas "
+"contrari, el sistema no detectarà els canvis i seguirà tractant-lo com si "
+"fos un suport buit."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format
