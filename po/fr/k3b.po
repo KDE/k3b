@@ -27,9 +27,9 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-01-15 11:23+0100\n"
+"PO-Revision-Date: 2026-04-23 20:29+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
-"Language-Team: \n"
+"Language-Team: fr\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -37,7 +37,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -10898,7 +10898,7 @@ msgstr "Titre %1 (%2)"
 #: rip/videodvd/k3bvideodvdaudiomodel.cpp:170
 #, kde-format
 msgid "%1 %2Ch (%3%4)"
-msgstr "%1 %2Ch (%3%4)"
+msgstr "%1 %2 Ch (%3 %4)"
 
 #: rip/videodvd/k3bvideodvdaudiomodel.cpp:174
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:45
@@ -10931,7 +10931,7 @@ msgstr "Taille de la vidéo"
 msgctxt "Ch is short for Channels"
 msgid "%1Ch"
 msgid_plural "%1Ch"
-msgstr[0] "%1Ch"
+msgstr[0] "%1 Ch"
 msgstr[1] "%1Ch"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:323
@@ -11215,7 +11215,7 @@ msgstr "Hauteur :"
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:41
 #, kde-format
 msgid "%1 %2Ch (%3)"
-msgstr "%1 %2Ch (%3)"
+msgstr "%1 %2 Ch (%3)"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:52
 #, kde-format
@@ -11230,7 +11230,7 @@ msgstr "Flux audio"
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:65
 #, kde-format
 msgid "%1 %2Ch (%3<em>%4</em>)"
-msgstr "%1 %2Ch (%3<em>%4</em>)"
+msgstr "%1 %2 Ch (%3 <em>%4</em>)"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:91
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:116
@@ -11279,7 +11279,7 @@ msgstr "letterboxed"
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:262
 #, kde-format
 msgid "anamorph"
-msgstr "anamorph"
+msgstr "anamorphe"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:308
 #, kde-format

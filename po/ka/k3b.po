@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-04-23 06:31+0200\n"
+"PO-Revision-Date: 2026-04-24 03:39+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2334,6 +2334,8 @@ msgid ""
 "<p>Load a set of settings either from the default K3b settings, settings "
 "saved before, or the last used ones."
 msgstr ""
+"<p>პარამეტრების ნაკრების ჩატვირთვა ნაგულისხმევი K3b-ის პარამეტრებიდან, ადრე "
+"შენახული პარამეტრებიდან, ან ბოლოს გამოყენებულებიდან."
 
 #: k3binteractiondialog.cpp:196
 #, kde-format
@@ -2949,6 +2951,8 @@ msgid ""
 "K3b needs write access to all the devices to perform certain tasks. Without "
 "it you might encounter problems with %1 - %2"
 msgstr ""
+"ზოგიერთი ამოცანის შესასრულებლად K3b-ს ყველა მოწყობილობაზე ჩაწერის უფლება "
+"სჭირდება. მათ გარეშე პრობლემები შეგექმნებათ %1-ისთან - %2"
 
 #: k3bsystemproblemdialog.cpp:494
 #, kde-format
@@ -2994,6 +2998,9 @@ msgid ""
 "To remove the user parameters for the external program %1 open the K3b "
 "settings page 'Programs' and choose the tab 'User Parameters'."
 msgstr ""
+"იმისათვის, რომ წაშალოთ მომხმარებლის პარამეტრები გარე პროგრამისთვის %1, "
+"გახსენით K3b-ის მორგების გვერდი 'პროგრამები' და აირჩიეთ ჩანართი "
+"'მომხმარებლის პარამეტრები'."
 
 #: k3bsystemproblemdialog.cpp:545
 #, kde-format
@@ -3037,6 +3044,9 @@ msgid ""
 "To properly set the locale charset make sure the LC_* environment variables "
 "are set. Normally the distribution setup tools take care of this."
 msgstr ""
+"იმისათვის, რომ ლოკალის სიმბოლოების ნაკრები სწორად დააყენოთ, დარწმუნდით, რომ "
+"LC_* გარემოს ცვლადები უკვე დაყენებულია. ჩვეულებრივ, ამაზე დისტრიბუტივის "
+"მორგების პროგრამები ზრუნავენ."
 
 #: k3bsystemproblemdialog.cpp:582
 #, kde-format
@@ -4308,6 +4318,8 @@ msgid ""
 "<p>If this option is checked K3b will hide the main window while displaying "
 "the progress dialog."
 msgstr ""
+"<p>თუ ეს ჩართულია, K3b მიმდინარეობის დიალოგის ჩვენებისას მთავარ ფანჯარას "
+"დამალავს."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkHideMainWindowWhileWriting)
 #: option/base_k3bmiscoptiontab.ui:107

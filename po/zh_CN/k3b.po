@@ -4588,10 +4588,9 @@ msgid "Miscellaneous"
 msgstr "杂项"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "写入完成后不弹出介质(&E)"
+msgstr ""
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4616,10 +4615,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "不询问而直接擦除 CD-RW 和 DVD-RW"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "写入完成后不弹出介质"
+msgstr ""
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4682,14 +4680,7 @@ msgstr ""
 "用指定值。"
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4698,9 +4689,6 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>如果选中这个选项 K3b 不会弹出介质一旦刻录过程结束。这有助于使启动刻录后离"
-"开电脑并不想托盘所有时间打开。<p>然而，在 Linux 系统上的一个刚刚刻录的介质必"
-"须重新加载。否则，系统将无法检测到的变化，仍然把它作为一个空的媒体。"
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format
