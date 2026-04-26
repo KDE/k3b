@@ -27,7 +27,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-04-23 20:29+0200\n"
+"PO-Revision-Date: 2026-04-24 09:08+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -4858,10 +4858,9 @@ msgid "Miscellaneous"
 msgstr "Divers"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "Ne pas éj&ecter le média après la gravure"
+msgstr "Ne pas éj&ecter le média après le processus de lecture / écriture"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4890,10 +4889,9 @@ msgstr ""
 "Effacer automatiquement les CD-RW et les DVD-RW sans demander à l'utilisateur"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "Ne pas éjecter le média après la fin d'une gravure"
+msgstr "Ne pas éjecter le média après la fin du processus de gravure / copie"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4968,14 +4966,7 @@ msgstr ""
 "gravure des CD et des DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4984,12 +4975,12 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>Si cette option est cochée, K3b n'éjectera pas le média à la fin de la "
-"gravure. Ceci peut être utile dans le cas où vous ne vous trouvez pas devant "
-"votre ordinateur et que vous ne voulez pas que le tiroir du graveur s'ouvre "
-"sans arrêt. <p>Cependant, sur les systèmes Linux, un média tout juste gravé "
-"doit être rechargé. Sinon, le système ne détectera pas les modifications et "
-"continuera de penser que le média est vide."
+"<p>Si cette option est cochée, K3b n'éjectera pas le média à la fin du "
+"processus de gravure /copie. Ceci peut être utile dans le cas où vous ne "
+"vous trouvez pas devant votre ordinateur et que vous ne voulez pas que le "
+"tiroir du graveur s'ouvre sans arrêt. <p>Cependant, sur les systèmes Linux, "
+"un média tout juste gravé doit être rechargé. Sinon, le système ne détectera "
+"pas les modifications et continuera à le considérer comme un média vide."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format

@@ -1,30 +1,31 @@
-# SPDX-FileCopyrightText: 2010, 2014, 2024 Johannes Obermayr <johannesobermayr@gmx.de>
 # SPDX-FileCopyrightText: 2003 Christoph Thielecke <crissi99@gmx.de>
-# SPDX-FileCopyrightText: 2003, 2004 Thomas Diehl <thd@kde.org>
 # SPDX-FileCopyrightText: 2003 Sebastian Trüg <trueg@k3b.org>
 # SPDX-FileCopyrightText: 2003 Thomas Fischer <th.fischer@gmx.net>
-# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008, 2009 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2003-2004 Thomas Diehl <thd@kde.org>
+# SPDX-FileCopyrightText: 2004-2009 Thomas Reitelbach <tr@erdfunkstelle.de>
 # SPDX-FileCopyrightText: 2005 Stephan Johach <hunsum@gmx.de>
-# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2016, 2020, 2022, 2023 Frederik Schwarzer <schwarzer@kde.org>
-# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
 # SPDX-FileCopyrightText: 2009 Jannick Kuhr <opensource@kuhr.org>
-# SPDX-FileCopyrightText: 2009, 2010 Markus Slopianka <markus.s@kdemail.net>
-# SPDX-FileCopyrightText: 2009, 2010 Panagiotis Papadopoulos <pano_90@gmx.net>
+# SPDX-FileCopyrightText: 2009-2010 Markus Slopianka <markus.s@kdemail.net>
+# SPDX-FileCopyrightText: 2009-2010 Panagiotis Papadopoulos <pano_90@gmx.net>
+# SPDX-FileCopyrightText: 2009-2014, 2016, 2020, 2022-2023 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2009-2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2010, 2014, 2024 Johannes Obermayr <johannesobermayr@gmx.de>
 # SPDX-FileCopyrightText: 2024 Frank Steinmetzger <dev-kde@felsenfleischer.de>
+# SPDX-FileCopyrightText: 2026 Alexander Becker <alex-at-kde-l10n-de@freenet.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2024-08-20 20:19+0200\n"
-"Last-Translator: Johannes Obermayr <johannesobermayr@gmx.de>\n"
+"PO-Revision-Date: 2026-04-21 22:39+0200\n"
+"Last-Translator: Alexander Becker <alex-at-kde-l10n-de@freenet.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 24.05.2\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -318,13 +319,13 @@ msgstr "Entfernen"
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:88
 #, kde-format
 msgid "Edit..."
-msgstr "Bearbeiten ..."
+msgstr "Bearbeiten …"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonAdd)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:95
 #, kde-format
 msgid "Add..."
-msgstr "Hinzufügen ..."
+msgstr "Hinzufügen …"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: ../plugins/encoder/external/base_k3bexternalencodereditdialog.ui:18
@@ -552,7 +553,7 @@ msgstr "Man&uelle Einstellungen:"
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:239
 #, kde-format
 msgid "Change Settings..."
-msgstr "Einstellungen ändern ..."
+msgstr "Einstellungen ändern …"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
@@ -1480,7 +1481,7 @@ msgstr "Erstellt ein neues Projekt"
 #: k3b.cpp:381
 #, kde-format
 msgid "&Add Files..."
-msgstr "&Dateien hinzufügen ..."
+msgstr "&Dateien hinzufügen …"
 
 #: k3b.cpp:382
 #, kde-format
@@ -1500,7 +1501,7 @@ msgstr "Das aktuelle Projekt leeren"
 #: k3b.cpp:393 k3bdevicemenu.cpp:69
 #, kde-format
 msgid "&Format/Erase rewritable disk..."
-msgstr "Wiederbeschreibbares Medium formatieren/löschen ..."
+msgstr "Wiederbeschreibbares Medium formatieren/löschen …"
 
 #: k3b.cpp:394
 #, kde-format
@@ -1515,7 +1516,7 @@ msgstr "Öffnet den Formatieren-/Löschen-Dialog"
 #: k3b.cpp:400
 #, kde-format
 msgid "&Burn Image..."
-msgstr "A&bbild schreiben ..."
+msgstr "A&bbild schreiben …"
 
 #: k3b.cpp:401
 #, kde-format
@@ -1525,7 +1526,7 @@ msgstr "Schreibt ein ISO-9660-, cue/bin-, oder Cdrecord-Klon-Abbild"
 #: k3b.cpp:406 k3bdevicemenu.cpp:68
 #, kde-format
 msgid "Copy &Medium..."
-msgstr "&Medium kopieren ..."
+msgstr "&Medium kopieren …"
 
 #: k3b.cpp:407 k3bdebuggingoutputdialog.cpp:50
 #, kde-format
@@ -1540,7 +1541,7 @@ msgstr "Öffnet den Kopieren-Dialog"
 #: k3b.cpp:413 k3bdevicemenu.cpp:70
 #, kde-format
 msgid "Rip Audio CD..."
-msgstr "Audio-CD auslesen ..."
+msgstr "Audio-CD auslesen …"
 
 #: k3b.cpp:414
 #, kde-format
@@ -1550,7 +1551,7 @@ msgstr "Audio-Titel digital von CD auslesen"
 #: k3b.cpp:419 k3bdevicemenu.cpp:71
 #, kde-format
 msgid "Rip Video DVD..."
-msgstr "Video-DVD auslesen ..."
+msgstr "Video-DVD auslesen …"
 
 #: k3b.cpp:420
 #, kde-format
@@ -1560,7 +1561,7 @@ msgstr "Video-DVD-Titel umwandeln"
 #: k3b.cpp:425 k3bdevicemenu.cpp:72
 #, kde-format
 msgid "Rip Video CD..."
-msgstr "Video-CD auslesen ..."
+msgstr "Video-CD auslesen …"
 
 #: k3b.cpp:426
 #, kde-format
@@ -1605,7 +1606,7 @@ msgstr "Adress&leiste"
 #: k3b.cpp:600 k3b.cpp:916 k3b.cpp:930
 #, kde-format
 msgid "Opening file..."
-msgstr "Datei wird geöffnet ..."
+msgstr "Datei wird geöffnet …"
 
 #: k3b.cpp:628
 #, kde-format
@@ -1621,7 +1622,7 @@ msgstr "Projekt <resource>%1</resource> enthält ungespeicherte Daten."
 #: k3b.cpp:896
 #, kde-format
 msgid "Closing Project"
-msgstr "Das Projekt wird geschlossen ..."
+msgstr "Das Projekt wird geschlossen …"
 
 #: k3b.cpp:919
 #, kde-format
@@ -1636,7 +1637,7 @@ msgstr "K3b-Projekte (*.k3b)"
 #: k3b.cpp:953
 #, kde-format
 msgid "Saving file..."
-msgstr "Datei wird gespeichert ..."
+msgstr "Datei wird gespeichert …"
 
 #: k3b.cpp:963 k3b.cpp:1003
 #, kde-format
@@ -1651,7 +1652,7 @@ msgstr "E/A-Fehler"
 #: k3b.cpp:980
 #, kde-format
 msgid "Saving file with a new filename..."
-msgstr "Datei wird unter neuem Namen gespeichert ..."
+msgstr "Datei wird unter neuem Namen gespeichert …"
 
 #: k3b.cpp:988
 #, kde-format
@@ -1661,7 +1662,7 @@ msgstr "Speichern unter"
 #: k3b.cpp:1022
 #, kde-format
 msgid "Closing file..."
-msgstr "Datei wird geschlossen ..."
+msgstr "Datei wird geschlossen …"
 
 #: k3b.cpp:1124
 #, kde-format
@@ -1706,7 +1707,7 @@ msgstr "Alle Dateien (*)"
 #: k3b.cpp:1300
 #, kde-format
 msgid "Please create a project before adding files"
-msgstr "Bitte erstellen Sie ein Projekt bevor Dateien hinzugefügt werden"
+msgstr "Bitte erstellen Sie ein Projekt, bevor Sie Dateien hinzufügen"
 
 #: k3b.cpp:1300
 #, kde-format
@@ -1772,7 +1773,7 @@ msgstr "&Laden"
 #: k3bappdevicemanager.cpp:59
 #, kde-format
 msgid "Set Read Speed..."
-msgstr "Lesegeschwindigkeit festlegen ..."
+msgstr "Lesegeschwindigkeit festlegen …"
 
 #: k3bappdevicemanager.cpp:62
 #, kde-format
@@ -2422,17 +2423,17 @@ msgstr "Lesezeichen anzeigen"
 #: k3binteractiondialog.cpp:70
 #, kde-format
 msgid "Load default settings"
-msgstr "K3b-Voreinstellungen laden"
+msgstr "Voreinstellungen laden"
 
 #: k3binteractiondialog.cpp:71
 #, kde-format
 msgid "Load saved settings"
-msgstr "Gespeicherte Einstellungen"
+msgstr "Gespeicherte Einstellungen laden"
 
 #: k3binteractiondialog.cpp:72
 #, kde-format
 msgid "Load last used settings"
-msgstr "Zuletzt benutzte Einstellungen"
+msgstr "Zuletzt verwendete Einstellungen laden"
 
 #: k3binteractiondialog.cpp:97 projects/k3bprojectburndialog.cpp:139
 #, kde-format
@@ -2447,7 +2448,7 @@ msgstr "Vorgang starten"
 #: k3binteractiondialog.cpp:189
 #, kde-format
 msgid "Load default or saved settings"
-msgstr "K3b-Voreinstellungen oder gespeicherte Einstellungen laden"
+msgstr "Voreinstellungen oder gespeicherte Einstellungen laden"
 
 #: k3binteractiondialog.cpp:190
 #, kde-format
@@ -2461,7 +2462,7 @@ msgid ""
 "saved before, or the last used ones."
 msgstr ""
 "<p>Lädt entweder die K3b-Voreinstellungen, vorher gespeicherte Einstellungen "
-"oder die zuletzt benutzen Einstellungen."
+"oder die zuletzt verwenden Einstellungen."
 
 #: k3binteractiondialog.cpp:196
 #, kde-format
@@ -2481,11 +2482,10 @@ msgid "Overall progress:"
 msgstr "Gesamtfortschritt:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
-msgstr "Stopp"
+msgstr "Anhalten"
 
 #: k3bjobprogressdialog.cpp:231
 #, kde-format
@@ -2530,28 +2530,26 @@ msgid "Finished with errors"
 msgstr "Abgeschlossen mit Fehlern"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Soll das aktuelle Projekt wirklich geleert werden?"
+msgstr "Möchten Sie den aktuell laufenden Vorgang wirklich anhalten?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "„Vorgang anhalten“ bestätigen"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Vorgang anhalten"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Mehrfachsitzung fortsetzen "
+msgstr "Vorgang fortsetzen"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
@@ -2761,7 +2759,7 @@ msgstr[1] "%1 Probleme"
 #: k3bsystemproblemdialog.cpp:98
 #, kde-format
 msgid "Configure K3b..."
-msgstr "K3b einrichten ..."
+msgstr "K3b einrichten …"
 
 #: k3bsystemproblemdialog.cpp:108
 #, kde-format
@@ -2806,7 +2804,7 @@ msgstr ""
 "K3b hat in Ihrem System keinen Brenner erkannt. Daher können Sie keine CDs "
 "oder DVDs beschreiben. Natürlich können Sie andere Funktionen wie das "
 "Auslesen von Audio-Titeln, Audio-Formatumwandlung oder das Erstellen eines "
-"ISO-Abbildes weiterhin benutzen."
+"ISO-Abbildes weiterhin verwenden."
 
 #: k3bsystemproblemdialog.cpp:201 k3bsystemproblemdialog.cpp:262
 #: k3bsystemproblemdialog.cpp:304
@@ -2827,9 +2825,9 @@ msgid ""
 "Permissions. If K3b's default value is set make sure you are member of "
 "\"%1\" group."
 msgstr ""
-"Bitte überprüfen Sie die Rechte über Einstellungen -> K3b einrichten ... -> "
-"Programme -> Berechtigungen. Bei Verwendung der Vorschlagswerte müssen Sie "
-"zudem der „%1“-Gruppe angehören."
+"Bitte überprüfen Sie die Berechtigungen unter Einstellungen → K3b "
+"einrichten … → Programme → Berechtigungen. Bei Verwendung der "
+"Voreinstellungen müssen Sie zudem der Gruppe „%1“ angehören."
 
 #: k3bsystemproblemdialog.cpp:208 k3bsystemproblemdialog.cpp:270
 #: k3bsystemproblemdialog.cpp:292 k3bsystemproblemdialog.cpp:314
@@ -2856,8 +2854,8 @@ msgid ""
 "Although K3b supports all cdrtools versions since 1.10 it is highly "
 "recommended to at least use version 2.0."
 msgstr ""
-"Obwohl K3b alle Versionen der cdrtools seit 1.10 unterstützt, wird dringend "
-"empfohlen, mindestens Version 2.0 zu benutzen."
+"Obwohl K3b alle Versionen von „cdrtools“ seit 1.10 unterstützt, wird "
+"dringend empfohlen, mindestens Version 2.0 zu verwenden."
 
 #: k3bsystemproblemdialog.cpp:220
 #, kde-format
@@ -2882,7 +2880,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:284
 #, kde-format
 msgid "Click \"Configure K3b...\" to solve this problem."
-msgstr "Klicken Sie auf „K3b einrichten ...“, um dieses Problem zu beheben."
+msgstr "Klicken Sie auf „K3b einrichten …“, um dieses Problem zu beheben."
 
 #: k3bsystemproblemdialog.cpp:247 k3bsystemproblemdialog.cpp:280
 #, kde-format
@@ -2991,7 +2989,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:360
 #, kde-format
 msgid "K3b uses dvd+rw-format to format DVD-RWs and DVD+RWs."
-msgstr "K3b benutzt dvd+rw-format, um DVD±RWs zu formatieren."
+msgstr "K3b verwendet dvd+rw-format, um DVD±RWs zu formatieren."
 
 #: k3bsystemproblemdialog.cpp:373
 #, kde-format
@@ -3026,8 +3024,8 @@ msgid ""
 "use a user-space mounting solution like pmount or ivman."
 msgstr ""
 "Ersetzen Sie bitte die entsprechenden Automount-Einträge in /etc/fstab durch "
-"die herkömmliche Einhänge-Methode oder benutzen Sie z. B. pmount oder ivman "
-"(die im Handlungsbereich des Benutzers funktionieren)"
+"die herkömmliche Einhänge-Methode oder verwenden Sie z. B. pmount oder "
+"ivman, die im Benutzerbereich funktionieren."
 
 #: k3bsystemproblemdialog.cpp:412
 #, kde-format
@@ -3127,8 +3125,8 @@ msgid ""
 "udev click \"Modify Permissions...\" and setup permissions by hand."
 msgstr ""
 "Bitte stellen Sie sicher, dass Schreibrechte auf %1 verfügbar sind. Falls "
-"kein devfs oder udev eingesetzt wird, können Sie unter „Berechtigungen "
-"ändern ...“ dies per Hand einrichten."
+"kein devfs oder udev eingesetzt wird, können Sie dies unter „Berechtigungen "
+"ändern …“ per Hand einrichten."
 
 #: k3bsystemproblemdialog.cpp:500
 #, kde-format
@@ -3265,7 +3263,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:587
 #, kde-format
 msgid "The latter can be done via \"Configure K3b...\"."
-msgstr "Das letztere kann unter „K3b einrichten ...“ erfolgen."
+msgstr "Letzteres kann unter „K3b einrichten …“ erfolgen."
 
 #: k3bsystemproblemdialog.cpp:617
 #, kde-format
@@ -3360,7 +3358,7 @@ msgstr "Haupt-Werkzeugleiste"
 #: k3bwelcomewidget.cpp:79
 #, kde-format
 msgid "More actions..."
-msgstr "Weitere Aktionen ..."
+msgstr "Weitere Aktionen …"
 
 #: k3bwelcomewidget.cpp:262
 #, kde-format
@@ -3471,7 +3469,7 @@ msgstr "Ignorieren"
 #: k3bwriterselectionwidget.cpp:306
 #, kde-format
 msgid "More..."
-msgstr "Mehr ..."
+msgstr "Mehr …"
 
 #: k3bwriterselectionwidget.cpp:596
 #, kde-format
@@ -3562,8 +3560,8 @@ msgstr ""
 "Eingeschränktes Überschreiben ermöglicht es, eine DVD-RW wie eine DVD-RAM "
 "oder DVD+RW zu verwenden. Das Medium kann einfach überschrieben werden. In "
 "diesem Modus können keine Mehrfachsitzung-DVD-RWs gebrannt werden, K3b "
-"benutzt jedoch growisofs, um das ISO-9660-Dateisystem in der ersten Sitzung "
-"zu erweitern und so Dateien zu einer bereits bestehenden Sitzung "
+"verwendet jedoch growisofs, um das ISO-9660-Dateisystem in der ersten "
+"Sitzung zu erweitern und so Dateien zu einer bereits bestehenden Sitzung "
 "hinzuzufügen."
 
 #: k3bwritingmodewidget.cpp:94
@@ -3642,7 +3640,7 @@ msgstr ""
 #: main.cpp:31
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
-msgstr "Copyright 1998–2018 K3b-Autoren"
+msgstr "© 1998–2018 Die K3b-Autoren"
 
 #: main.cpp:33
 #, kde-format
@@ -4256,7 +4254,7 @@ msgstr "Prüfsumme in die Zwischenablage kopieren"
 #: misc/k3bimagewritingdialog.cpp:1087
 #, kde-format
 msgid "Compare checksum..."
-msgstr "Prüfsumme vergleichen ..."
+msgstr "Prüfsumme vergleichen …"
 
 #: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
@@ -4700,7 +4698,7 @@ msgstr ""
 #: option/base_k3bpluginoptiontab.ui:21
 #, kde-format
 msgid "Configure..."
-msgstr "Einrichten ..."
+msgstr "Einrichten …"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: option/base_k3bpluginoptiontab.ui:47 option/k3bpluginoptiontab.cpp:31
@@ -4737,13 +4735,13 @@ msgstr "Kein Design ausgewählt"
 #: option/base_k3bthemeoptiontab.ui:119
 #, kde-format
 msgid "Get New Themes..."
-msgstr "Neue Designs holen ..."
+msgstr "Neue Designs holen …"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
 #, kde-format
 msgid "Install New Theme..."
-msgstr "Neues Design installieren ..."
+msgstr "Neues Design installieren …"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonRemoveTheme)
 #: option/base_k3bthemeoptiontab.ui:136
@@ -4764,7 +4762,7 @@ msgstr "&Überschreiben erlauben"
 #: option/k3badvancedoptiontab.cpp:53
 #, kde-format
 msgid "&Force unsafe operations"
-msgstr "Unsichere Vorgänge erzwingen"
+msgstr "Unsichere Vorgänge er&zwingen"
 
 #: option/k3badvancedoptiontab.cpp:54
 #, kde-format
@@ -5138,7 +5136,7 @@ msgstr "Wählen Sie die Programme, deren Zugriffsrechte geändert werden sollen:
 #: option/k3bexternalbinwidget.cpp:114
 #, kde-format
 msgid "Change Permissions..."
-msgstr "Berechtigungen ändern ..."
+msgstr "Berechtigungen ändern …"
 
 #: option/k3bexternalbinwidget.cpp:127
 #, kde-format
@@ -5147,7 +5145,7 @@ msgid ""
 "executable specify it in the search path.</qt>"
 msgstr ""
 "<qt><b>Tipp:</b> Um K3b zu zwingen, einen anderen Namen als den "
-"Standardnamen für die ausführbare Datei zu benutzen, können Sie diesen im "
+"Standardnamen für die ausführbare Datei zu verwenden, können Sie diesen im "
 "Suchpfad angeben.</qt>"
 
 #: option/k3bexternalbinwidget.cpp:135
@@ -5278,7 +5276,7 @@ msgid ""
 "the temporary folder."
 msgstr ""
 "Es wurde eine Datei als temporärer Ordner angeben. K3b wird den Basispfad "
-"der Datei als temporären Ordner benutzen."
+"der Datei als temporären Ordner verwenden."
 
 #: option/k3bmiscoptiontab.cpp:131
 #, kde-format
@@ -5889,7 +5887,7 @@ msgstr "&Interpret:"
 #: projects/base_k3baudiocdtextwidget.ui:126
 #, kde-format
 msgid "More Fiel&ds..."
-msgstr "&Weitere Felder ..."
+msgstr "&Weitere Felder …"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: projects/base_k3baudiotrackwidget.ui:15
@@ -6011,7 +6009,7 @@ msgstr "Neues Boot-Abbild hinzufügen"
 #: projects/base_k3bbootimagedialog.ui:39
 #, kde-format
 msgid "&New..."
-msgstr "&Neu ..."
+msgstr "&Neu …"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, m_buttonDelete)
 #: projects/base_k3bbootimagedialog.ui:46
@@ -6135,7 +6133,7 @@ msgstr "Datenträger-Name"
 #: projects/base_k3bdataimagesettings.ui:34
 #, kde-format
 msgid "&More fields..."
-msgstr "&Weitere Felder ..."
+msgstr "&Weitere Felder …"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupFileSystem)
 #: projects/base_k3bdataimagesettings.ui:44
@@ -6155,7 +6153,7 @@ msgstr "Dateisystem-Voreinstellungen"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:79
 #, kde-format
 msgid "&Custom..."
-msgstr "&Benutzerdefiniert ..."
+msgstr "&Benutzerdefiniert …"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupSymlinks)
 #: projects/base_k3bdataimagesettings.ui:75
@@ -6501,7 +6499,9 @@ msgstr "Kein &DMA verwenden"
 #: projects/base_k3bmovixoptionswidget.ui:84
 #, kde-format
 msgid "MPlayer options you want to be sure MPlayer will not use"
-msgstr "MPlayer-Einstellungen, die mit Sicherheit nicht benutzt werden sollen"
+msgstr ""
+"MPlayer-Einstellungen, die auf keinen Fall von MPlayer verwendet werden "
+"sollen"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, m_editUnwantedMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:89
@@ -6511,8 +6511,8 @@ msgid ""
 "<p>They have to be separated by spaces:\n"
 "<pre>opt1 opt2 opt3</pre>"
 msgstr ""
-"<p>Hier können Sie MPlayer-Einstellungen angeben, die in keinem Fall benutzt "
-"werden sollen.\n"
+"<p>Hier können Sie MPlayer-Einstellungen angeben, die auf keinen Fall "
+"verwendet werden sollen.\n"
 "<p>Die Einstellungen werden durch Leerzeichen getrennt:\n"
 "<pre>Option1 Option2 Option3</pre>"
 
@@ -6530,7 +6530,7 @@ msgid ""
 "<p>They have to be separated by spaces:\n"
 "<pre>opt1 opt2 opt3</pre>"
 msgstr ""
-"<p>MPlayer-Einstellungen, die in jedem Fall benutzt werden sollen.\n"
+"<p>MPlayer-Einstellungen, die auf jeden Fall verwendet werden sollen.\n"
 "<p>Die Einstellungen werden durch Leerzeichen getrennt:\n"
 "<pre>Option1 Option2 Option3</pre>"
 
@@ -6737,7 +6737,7 @@ msgid ""
 "<p>If this option is checked the PC will be shut down after MPlayer has "
 "finished playing."
 msgstr ""
-"<p>Wenn diese Einstellung aktiviert ist, wird der Rechner abgeschaltet, "
+"<p>Wenn diese Einstellung aktiviert ist, wird der Rechner heruntergefahren, "
 "nachdem MPlayer die Wiedergabe abgeschlossen hat."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShutdown)
@@ -6826,12 +6826,12 @@ msgstr ""
 #: projects/k3baudioburndialog.cpp:119 projects/k3baudioburndialog.cpp:120
 #, kde-format
 msgid "Rip Audio"
-msgstr "Audio auslesen ..."
+msgstr "Audio auslesen …"
 
 #: projects/k3baudioburndialog.cpp:121
 #, kde-format
 msgid "Only Rip Audio"
-msgstr "Nur Audio-CD auslesen ..."
+msgstr "Nur Audio auslesen …"
 
 #: projects/k3baudioburndialog.cpp:122
 #, kde-format
@@ -6944,12 +6944,12 @@ msgstr "Dateiname"
 #: projects/k3baudiotrackaddingdialog.cpp:47
 #, kde-format
 msgid "Please be patient..."
-msgstr "Bitte warten Sie ..."
+msgstr "Bitte warten Sie …"
 
 #: projects/k3baudiotrackaddingdialog.cpp:50
 #, kde-format
 msgid "Adding files to project \"%1\"..."
-msgstr "Dem Projekt „%1“ werden Dateien hinzugefügt ..."
+msgstr "Dem Projekt „%1“ werden Dateien hinzugefügt …"
 
 #: projects/k3baudiotrackaddingdialog.cpp:73
 #: projects/k3bdataurladdingdialog.cpp:801
@@ -6996,7 +6996,7 @@ msgstr "Beim Hinzufügen von Dateien zum Projekt ist ein Problem aufgetreten."
 #: projects/k3baudiotrackaddingdialog.cpp:146
 #, kde-format
 msgid "Analysing file '%1'..."
-msgstr "Datei „%1“ wird analysiert ..."
+msgstr "Datei „%1“ wird analysiert …"
 
 #: projects/k3baudiotrackdialog.cpp:38
 #, kde-format
@@ -7021,7 +7021,7 @@ msgstr "Pause"
 #: projects/k3baudiotrackplayer.cpp:144 projects/k3baudiotrackplayer.cpp:146
 #, kde-format
 msgid "Stop"
-msgstr "Stopp"
+msgstr "Anhalten"
 
 #: projects/k3baudiotrackplayer.cpp:147 projects/k3baudiotrackplayer.cpp:149
 #, kde-format
@@ -7062,7 +7062,7 @@ msgstr "Teil entfernen"
 #: projects/k3baudioviewimpl.cpp:76
 #, kde-format
 msgid "Add Silence..."
-msgstr "Stille einfügen ..."
+msgstr "Stille einfügen …"
 
 #: projects/k3baudioviewimpl.cpp:78
 #, kde-format
@@ -7077,12 +7077,12 @@ msgstr "Quelle des Titels"
 #: projects/k3baudioviewimpl.cpp:82
 #, kde-format
 msgid "Split Track..."
-msgstr "Titel auftrennen ..."
+msgstr "Titel auftrennen …"
 
 #: projects/k3baudioviewimpl.cpp:84
 #, kde-format
 msgid "Edit Source..."
-msgstr "Quelle bearbeiten ..."
+msgstr "Quelle bearbeiten …"
 
 #: projects/k3baudioviewimpl.cpp:86
 #, kde-format
@@ -7715,7 +7715,7 @@ msgstr "Keine Ordner"
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
 msgid "Moving files to project \"%1\"..."
-msgstr "Dateien werden zum Projekt „%1“ verschoben ..."
+msgstr "Dateien werden ins Projekt „%1“ verschoben …"
 
 #: projects/k3bdataurladdingdialog.cpp:92
 #, kde-format
@@ -7725,7 +7725,7 @@ msgstr "Dem Projekt „%1“ werden Dateien hinzugefügt"
 #: projects/k3bdataurladdingdialog.cpp:97
 #, kde-format
 msgid "Adding files to project '%1'..."
-msgstr "Dem Projekt „%1“ werden Dateien hinzugefügt ..."
+msgstr "Dem Projekt „%1“ werden Dateien hinzugefügt …"
 
 #: projects/k3bdataurladdingdialog.cpp:178
 #, kde-format
@@ -7929,7 +7929,7 @@ msgstr "Keine zu schreibenden Daten"
 #: projects/k3bdataviewimpl.cpp:106
 #, kde-format
 msgid "New Folder..."
-msgstr "Neuer Ordner ..."
+msgstr "Neuer Ordner …"
 
 #: projects/k3bdataviewimpl.cpp:124
 #, kde-format
@@ -7944,7 +7944,7 @@ msgstr "Öffnen"
 #: projects/k3bdataviewimpl.cpp:139
 #, kde-format
 msgid "&Import Session..."
-msgstr "Sitzung &importieren ..."
+msgstr "Sitzung &importieren …"
 
 #: projects/k3bdataviewimpl.cpp:140
 #, kde-format
@@ -7965,7 +7965,7 @@ msgstr ""
 #: projects/k3bdataviewimpl.cpp:150
 #, kde-format
 msgid "&Edit Boot Images..."
-msgstr "Boot-Abbilder b&earbeiten ..."
+msgstr "Boot-Abbilder b&earbeiten …"
 
 #: projects/k3bdataviewimpl.cpp:151
 #, kde-format
@@ -8037,12 +8037,12 @@ msgstr "%1 MB"
 #: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
 msgid "Custom..."
-msgstr "Benutzerdefiniert ..."
+msgstr "Benutzerdefiniert …"
 
 #: projects/k3bfillstatusdisplay.cpp:433
 #, kde-format
 msgid "From Medium..."
-msgstr "Von Medium ..."
+msgstr "Von Medium …"
 
 #: projects/k3bfillstatusdisplay.cpp:451
 #, kde-format
@@ -8124,7 +8124,7 @@ msgid ""
 "and <b>min</b> for <em>gigabytes</em>, <em>megabytes</em>, and <em>minutes</"
 "em> respectively."
 msgstr ""
-"<p>Bitte geben Sie die Größe des Mediums an. Bitte benutzen Sie die Suffixe "
+"<p>Bitte geben Sie die Größe des Mediums an. Bitte verwenden Sie die Suffixe "
 "<b>GB</b>, <b>MB</b> und <b>Min</b> für <em>Gigabytes</em>, <em>Megabytes</"
 "em> und <em>Minuten</em>."
 
@@ -8312,7 +8312,7 @@ msgstr "Untertitel-Datei entfernen"
 #: projects/k3bmovixview.cpp:66
 #, kde-format
 msgid "Add Subtitle File..."
-msgstr "Untertitel-Datei hinzufügen ..."
+msgstr "Untertitel-Datei hinzufügen …"
 
 #: projects/k3bmovixview.cpp:149
 #, kde-format
@@ -8437,7 +8437,7 @@ msgstr "Chinesische VCD3.0 Titel-Interpretation"
 #: projects/k3bvcdburndialog.cpp:102
 #, kde-format
 msgid "Use 2336 byte sectors for output"
-msgstr "2336-Byte Sektoren für Ausgabe benutzen"
+msgstr "2336-Byte-Sektoren für Ausgabe verwenden"
 
 #: projects/k3bvcdburndialog.cpp:104
 #, kde-format
@@ -8519,14 +8519,14 @@ msgid ""
 "Used to set the number of empty sectors added before the lead-out area "
 "begins."
 msgstr ""
-"Wird zum Setzen der Anzahl leerer Sektoren benutzt, die vor dem Beginn des "
-"Lead-out-Bereiches eingefügt werden."
+"Wird zum Festlegen der Anzahl leerer Sektoren verwendet, die vor dem Beginn "
+"des Lead-out-Bereiches eingefügt werden."
 
 #: projects/k3bvcdburndialog.cpp:119
 #, kde-format
 msgid "Used to set the track pre-gap for all tracks in sectors globally."
 msgstr ""
-"Wird benutzt, um die Lücke vor jedem Titel in Sektoren global festzulegen."
+"Wird verwendet, um die Lücke vor jedem Titel in Sektoren global festzulegen."
 
 #: projects/k3bvcdburndialog.cpp:120
 #, kde-format
@@ -9209,8 +9209,8 @@ msgstr ""
 msgid ""
 "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9."
 msgstr ""
-"Dies sind Pseudo-Tasten, die durch die numerischen Tasten 0, 1,..., 9 "
-"repräsentiert werden."
+"Dies sind Pseudo-Tasten, die die numerischen Tasten 0, 1, …, 9 "
+"repräsentieren."
 
 #: projects/k3bvcdtrackdialog.cpp:258
 #, kde-format
@@ -9277,7 +9277,7 @@ msgstr "Wiedergabekontrolle (für die gesamte CD) aktivieren"
 #: projects/k3bvcdtrackdialog.cpp:448
 #, kde-format
 msgid "Use numeric keys"
-msgstr "Numerische Tasten benutzen"
+msgstr "Numerische Tasten verwenden"
 
 #: projects/k3bvcdtrackdialog.cpp:450
 #, kde-format
@@ -9539,7 +9539,7 @@ msgstr "&M3U-Wiedergabeliste erstellen"
 #: rip/base_k3baudiorippingoptionwidget.ui:89
 #, kde-format
 msgid "Use relative paths instead of absolute"
-msgstr "Relative Pfade anstelle von absoluten Pfaden benutzen"
+msgstr "Relative Pfade anstelle von absoluten Pfaden verwenden"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkPlaylistRelative)
 #: rip/base_k3baudiorippingoptionwidget.ui:95
@@ -9562,7 +9562,7 @@ msgstr ""
 #: rip/base_k3baudiorippingoptionwidget.ui:98
 #, kde-format
 msgid "&Use relative paths"
-msgstr "&Relative Pfade benutzen"
+msgstr "&Relative Pfade verwenden"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSingleFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:107
@@ -9745,7 +9745,7 @@ msgstr "Soundtrack"
 #: rip/k3baudiocdview.cpp:143
 #, kde-format
 msgid "Searching for Artist information..."
-msgstr "Interpreten-Informationen werden gesucht ..."
+msgstr "Interpreten-Informationen werden gesucht …"
 
 #: rip/k3baudiocdview.cpp:177 rip/k3baudioprojectconvertingdialog.cpp:97
 #: rip/k3baudiorippingdialog.cpp:115 rip/k3bvideocdview.cpp:350
@@ -9763,7 +9763,7 @@ msgstr "Audio-CD"
 #: rip/k3baudiocdview.cpp:216
 #, kde-format
 msgid "Edit Track Info..."
-msgstr "Informationen des Titels bearbeiten ..."
+msgstr "Informationen des Titels bearbeiten …"
 
 #: rip/k3baudiocdview.cpp:217
 #, kde-format
@@ -9773,7 +9773,7 @@ msgstr "Informationen des aktuellen Titels bearbeiten"
 #: rip/k3baudiocdview.cpp:222
 #, kde-format
 msgid "Edit Album Info..."
-msgstr "Informationen des Albums bearbeiten ..."
+msgstr "Informationen des Albums bearbeiten …"
 
 #: rip/k3baudiocdview.cpp:223
 #, kde-format
@@ -10345,7 +10345,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:108
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "%1 %2 wird verwendet – Copyright © %3"
+msgstr "%1 %2 wird verwendet – © %3"
 
 #: rip/k3bvideocdrip.cpp:159
 #, kde-format
@@ -10480,7 +10480,7 @@ msgid ""
 "VCD') and use the <em>standard</em> PSD.</p>"
 msgstr ""
 "<p>Erweitertes PSD im ISO-9660-Dateisystem unter „/EXT/PSD_X.VCD“ ignorieren "
-"und stattdessen den <em>Standard</em>-PSD benutzen.</p>"
+"und stattdessen das <em>Standard</em>-PSD verwenden.</p>"
 
 #: rip/k3bvideocdrippingdialog.cpp:124
 #, kde-format
@@ -10857,7 +10857,7 @@ msgid ""
 "choose AC3 audio streams for all ripped titles."
 msgstr ""
 "<p>Wenn der <em>AC3-Durchreichmodus</em> verwendet wird, müssen alle "
-"ausgewählten Audioströme im AC3-Format vorliegen. Bitte benutzen Sie einen "
+"ausgewählten Audioströme im AC3-Format vorliegen. Bitte verwenden Sie einen "
 "anderen Audio-Codec oder wählen Sie AC3-Ströme für alle ausgelesenen Titel."
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:497

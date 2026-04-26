@@ -1,23 +1,24 @@
-# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008 Thomas Reitelbach <tr@erdfunkstelle.de>
-# SPDX-FileCopyrightText: 2009, 2011, 2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021 Burkhard Lück <lueck@hube-lueck.de>
-# SPDX-FileCopyrightText: 2009, 2010, 2011 Markus Slopianka <markus.s@kdemail.net>
-# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2020, 2022 Frederik Schwarzer <schwarzer@kde.org>
+# SPDX-FileCopyrightText: 2004-2008 Thomas Reitelbach <tr@erdfunkstelle.de>
+# SPDX-FileCopyrightText: 2009, 2011, 2013-2017, 2019-2021 Burkhard Lück <lueck@hube-lueck.de>
+# SPDX-FileCopyrightText: 2009-2011 Markus Slopianka <markus.s@kdemail.net>
+# SPDX-FileCopyrightText: 2009-2012, 2020, 2022 Frederik Schwarzer <schwarzer@kde.org>
 # SPDX-FileCopyrightText: 2010 Johannes Obermayr <johannesobermayr@gmx.de>
 # SPDX-FileCopyrightText: 2010 Panagiotis Papadopoulos <pano_90@gmx.net>
+# SPDX-FileCopyrightText: 2026 Alexander Becker <alex-at-kde-l10n-de@freenet.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-17 00:42+0000\n"
-"PO-Revision-Date: 2022-06-15 11:18+0200\n"
-"Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
+"PO-Revision-Date: 2026-04-21 22:19+0200\n"
+"Last-Translator: Alexander Becker <alex-at-kde-l10n-de@freenet.de>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 22.04.1\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -331,7 +332,7 @@ msgstr "CDDB-Eintrag verwenden"
 #: projects/k3bgrowisofswriter.cpp:332
 #, kde-format
 msgid "Preparing write process..."
-msgstr "Schreibvorgang wird vorbereitet ..."
+msgstr "Schreibvorgang wird vorbereitet …"
 
 #: jobs/k3bcdcopyjob.cpp:533 jobs/k3bcdcopyjob.cpp:581
 #: jobs/k3bdvdcopyjob.cpp:323
@@ -758,7 +759,7 @@ msgstr ""
 #: jobs/k3bdvdbooktypejob.cpp:207
 #, kde-format
 msgid "Ejecting DVD..."
-msgstr "DVD wird ausgeworfen ..."
+msgstr "DVD wird ausgeworfen …"
 
 #: jobs/k3bdvdbooktypejob.cpp:224
 #, kde-format
@@ -1070,7 +1071,7 @@ msgstr "Die Formatierung wird im Hintergrund beim Schreiben fortgesetzt."
 #: jobs/k3bdvdformattingjob.cpp:284
 #, kde-format
 msgid "Ejecting medium..."
-msgstr "Medium wird ausgeworfen ..."
+msgstr "Medium wird ausgeworfen …"
 
 #: jobs/k3bdvdformattingjob.cpp:296 projects/k3babstractwriter.cpp:75
 #, kde-format
@@ -1150,7 +1151,7 @@ msgstr ""
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "%1 %2 wird benutzt – Copyright © %3"
+msgstr "%1 %2 wird verwendet – © %3"
 
 #: jobs/k3bdvdformattingjob.cpp:503
 #, kde-format
@@ -2328,7 +2329,7 @@ msgstr "Das Medium ist entweder leer oder nicht anhängbar."
 #: projects/k3babstractwriter.cpp:44
 #, kde-format
 msgid "Unlocking drive..."
-msgstr "Gerät wird entsperrt ..."
+msgstr "Gerät wird entsperrt …"
 
 #: projects/k3babstractwriter.cpp:58
 #, kde-format
@@ -2364,34 +2365,32 @@ msgstr "TOC-Datei (Inhaltsverzeichnis) lässt sich nicht sichern."
 #: projects/k3bcdrdaowriter.cpp:516
 #, kde-format
 msgid "Preparing read process..."
-msgstr "Lesevorgang wird vorbereitet ..."
+msgstr "Lesevorgang wird vorbereitet …"
 
 #: projects/k3bcdrdaowriter.cpp:522
 #, kde-format
 msgid "Preparing copy process..."
-msgstr "Kopiervorgang wird vorbereitet ..."
+msgstr "Kopiervorgang wird vorbereitet …"
 
 #: projects/k3bcdrdaowriter.cpp:525
 #, kde-format
 msgid "Preparing blanking process..."
-msgstr "Löschvorgang wird vorbereitet ..."
+msgstr "Löschvorgang wird vorbereitet …"
 
 #: projects/k3bcdrdaowriter.cpp:559
 #, no-c-format, kde-format
 msgid "Starting DAO simulation at %1x speed..."
-msgstr ""
-"Simulation im DAO-Modus mit %1-facher Geschwindigkeit wird gestartet ..."
+msgstr "Simulation im DAO-Modus mit %1-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrdaowriter.cpp:566
 #, no-c-format, kde-format
 msgid "Starting DAO writing at %1x speed..."
-msgstr ""
-"Schreiben im DAO-Modus mit %1-facher Geschwindigkeit wird gestartet ..."
+msgstr "Schreiben im DAO-Modus mit %1-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrdaowriter.cpp:571
 #, kde-format
 msgid "Starting reading..."
-msgstr "Lesen wird gestartet ..."
+msgstr "Lesen wird gestartet …"
 
 #: projects/k3bcdrdaowriter.cpp:572
 #, kde-format
@@ -2401,12 +2400,12 @@ msgstr "Lesevorgang läuft"
 #: projects/k3bcdrdaowriter.cpp:578
 #, no-c-format, kde-format
 msgid "Starting simulation copy at %1x speed..."
-msgstr "Simulation der Kopie mit %1-facher Geschwindigkeit wird gestartet ..."
+msgstr "Simulation der Kopie mit %1-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrdaowriter.cpp:584
 #, no-c-format, kde-format
 msgid "Starting copy at %1x speed..."
-msgstr "Kopieren mit %1-facher Geschwindigkeit wird gestartet ..."
+msgstr "Kopieren mit %1-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrdaowriter.cpp:585
 #, kde-format
@@ -2416,7 +2415,7 @@ msgstr "Kopiervorgang läuft"
 #: projects/k3bcdrdaowriter.cpp:589
 #, kde-format
 msgid "Starting blanking..."
-msgstr "Löschvorgang wird gestartet ..."
+msgstr "Löschvorgang wird gestartet …"
 
 #: projects/k3bcdrdaowriter.cpp:590
 #, kde-format
@@ -2497,7 +2496,7 @@ msgstr "Leistungskalibrierung erfolgreich abgeschlossen"
 #: projects/k3bcdrdaowriter.cpp:828
 #, kde-format
 msgid "Preparing burn process..."
-msgstr "Schreibvorgang wird vorbereitet ..."
+msgstr "Schreibvorgang wird vorbereitet …"
 
 #: projects/k3bcdrdaowriter.cpp:832
 #, kde-format
@@ -2507,7 +2506,7 @@ msgstr "Zwischenspeicher wird geleert"
 #: projects/k3bcdrdaowriter.cpp:836
 #, kde-format
 msgid "Writing CD-Text lead-in..."
-msgstr "CD-Text Lead-in wird gebrannt ..."
+msgstr "CD-Text Lead-in wird geschrieben …"
 
 #: projects/k3bcdrdaowriter.cpp:840
 #, kde-format
@@ -2542,7 +2541,7 @@ msgstr "Für die meisten aktuellen Laufwerke ist dies „generic-mmc“."
 #: projects/k3bcdrdaowriter.cpp:876
 #, kde-format
 msgid "Device not ready, waiting."
-msgstr "Das Gerät ist nicht bereit. Warten ..."
+msgstr "Das Gerät ist nicht bereit. Warten …"
 
 #: projects/k3bcdrdaowriter.cpp:880
 #, kde-format
@@ -2620,22 +2619,22 @@ msgstr "Version %1 von cdrecord unterstützt kein Überschreiben."
 #: projects/k3bcdrecordwriter.cpp:444 projects/k3bcdrskinwriter.cpp:456
 #, no-c-format, kde-format
 msgid "Starting simulation at %1x speed..."
-msgstr "Simulation mit %1-facher Geschwindigkeit wird gestartet ..."
+msgstr "Simulation mit %1-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrecordwriter.cpp:446 projects/k3bcdrskinwriter.cpp:458
 #, kde-format
 msgid "Starting %1 simulation at %2x speed..."
-msgstr "%1-Simulation mit %2-facher Geschwindigkeit wird gestartet ..."
+msgstr "%1-Simulation mit %2-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrecordwriter.cpp:452 projects/k3bcdrskinwriter.cpp:464
 #, no-c-format, kde-format
 msgid "Starting writing at %1x speed..."
-msgstr "Schreiben mit %1-facher Geschwindigkeit wird gestartet ..."
+msgstr "Schreiben mit %1-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrecordwriter.cpp:454 projects/k3bcdrskinwriter.cpp:466
 #, kde-format
 msgid "Starting %1 writing at %2x speed..."
-msgstr "%1-Schreiben mit %2-facher Geschwindigkeit wird gestartet ..."
+msgstr "%1-Schreiben mit %2-facher Geschwindigkeit wird gestartet …"
 
 #: projects/k3bcdrecordwriter.cpp:549 projects/k3bcdrskinwriter.cpp:561
 #: projects/k3bgrowisofswriter.cpp:428
@@ -2933,23 +2932,23 @@ msgstr ""
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
 msgid "If you are running an unpatched cdrecord version..."
-msgstr "Wenn Sie eine ungepatchte Version von cdrecord verwenden ..."
+msgstr "Wenn Sie eine ungepatchte Version von „cdrecord“ verwenden …"
 
 #: projects/k3bcdrecordwriter.cpp:899 projects/k3bcdrskinwriter.cpp:912
 #, kde-format
 msgid "...and this error also occurs with high quality media..."
-msgstr "... und dieser Fehler auch mit hochqualitativen Medien auftritt ..."
+msgstr "… und dieser Fehler auch bei hochqualitativen Medien auftritt …"
 
 #: projects/k3bcdrecordwriter.cpp:900 projects/k3bcdrskinwriter.cpp:913
 #, kde-format
 msgid "...and the K3b FAQ does not help you..."
-msgstr "... und die K3b-FAQ nicht helfen sollte ..."
+msgstr "… und die K3b-FAQ nicht helfen sollten …"
 
 #: projects/k3bcdrecordwriter.cpp:901 projects/k3bcdrskinwriter.cpp:914
 #, kde-format
 msgid "...please include the debugging output in your problem report."
 msgstr ""
-"... senden Sie bitte einen Fehlerbericht mit den Ausgaben zur Fehlersuche."
+"… senden Sie bitte einen Fehlerbericht mit den Ausgaben zur Fehlersuche."
 
 #: projects/k3bcdrskinwriter.cpp:240
 #, kde-format
@@ -2979,7 +2978,7 @@ msgstr ""
 #: projects/k3bcdrskinwriter.cpp:911
 #, kde-format
 msgid "If you are running an unpatched cdrskin version..."
-msgstr "Wenn Sie eine ungepatchte Version von Cdrskin verwenden ..."
+msgstr "Wenn Sie eine ungepatchte Version von „cdrskin“ verwenden …"
 
 #: projects/k3bgrowisofshandler.cpp:72
 #, kde-format
@@ -3020,12 +3019,12 @@ msgstr "RMA wird aktualisiert"
 #: projects/k3bgrowisofshandler.cpp:130
 #, kde-format
 msgid "Updating RMA..."
-msgstr "RMA wird aktualisiert ..."
+msgstr "RMA wird aktualisiert …"
 
 #: projects/k3bgrowisofshandler.cpp:134
 #, kde-format
 msgid "Closing Session..."
-msgstr "Sitzung wird geschlossen ..."
+msgstr "Sitzung wird geschlossen …"
 
 #: projects/k3bgrowisofshandler.cpp:137
 #, kde-format
@@ -3081,7 +3080,8 @@ msgstr ""
 #, kde-format
 msgid "Report the problem if it persists anyway."
 msgstr ""
-"Bitte senden Sie einen Fehlerbericht ein falls das Problem weiterhin besteht."
+"Bitte senden Sie einen Fehlerbericht ein, falls das Problem weiterhin "
+"besteht."
 
 #: projects/k3bgrowisofshandler.cpp:228
 #, kde-format
@@ -3124,14 +3124,14 @@ msgstr ""
 #: projects/k3bgrowisofshandler.cpp:241
 #, kde-format
 msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
-msgstr "Er kann durch den Befehl „ulimit -l unlimited“ behoben werden ..."
+msgstr "Er kann durch den Befehl „ulimit -l unlimited“ behoben werden …"
 
 #: projects/k3bgrowisofshandler.cpp:242
 #, kde-format
 msgid ""
 "...or by lowering the used software buffer size in the advanced K3b settings."
 msgstr ""
-"... oder durch herabsetzen der Puffergröße in den erweiterten Einstellungen "
+"… oder durch Herabsetzen der Puffergröße in den erweiterten Einstellungen "
 "von K3b."
 
 #: projects/k3bgrowisofshandler.cpp:246
@@ -3182,12 +3182,12 @@ msgstr "Die Datei „%1“ lässt sich nicht öffnen"
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
 msgid "Starting simulation..."
-msgstr "Simulation wird gestartet ..."
+msgstr "Simulation wird gestartet …"
 
 #: projects/k3bgrowisofswriter.cpp:363
 #, kde-format
 msgid "Starting disc write..."
-msgstr "Schreibvorgang wird gestartet ..."
+msgstr "Schreibvorgang wird gestartet …"
 
 #: projects/mixedcd/k3bmixedjob.cpp:267
 #, kde-format
@@ -3474,7 +3474,7 @@ msgstr "Die XML-Datei lässt sich nicht korrekt erstellen."
 #: projects/videocd/k3bvcdjob.cpp:190
 #, kde-format
 msgid "Creating Cue/Bin files..."
-msgstr "Cue/Bin-Dateien werden erstellt ..."
+msgstr "Cue/Bin-Dateien werden erstellt …"
 
 #: projects/videocd/k3bvcdjob.cpp:195
 #, kde-format
@@ -3793,7 +3793,7 @@ msgstr ""
 #: tools/k3bdevicemodel.cpp:132
 #, kde-format
 msgid "Analyzing medium..."
-msgstr "Medium wird analysiert ..."
+msgstr "Medium wird analysiert …"
 
 #: tools/k3bdeviceselectiondialog.cpp:35
 #, kde-format
@@ -4307,7 +4307,7 @@ msgstr "Medium im „Disk at once“-Modus schreiben"
 #: tools/k3bstdguiitems.cpp:43
 #, kde-format
 msgid "Use Burnfree"
-msgstr "Burnfree benutzen"
+msgstr "Burnfree verwenden"
 
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
