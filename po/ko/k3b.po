@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-02-04 00:37+0100\n"
+"PO-Revision-Date: 2026-04-26 21:46+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
 "Language: ko\n"
@@ -4683,10 +4683,9 @@ msgid "Miscellaneous"
 msgstr "기타 설정"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "쓰기 작업이 끝난 뒤 미디어를 꺼내지 않기(&E)"
+msgstr "읽기/쓰기 작업이 끝난 뒤 미디어를 꺼내지 않기(&E)"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4713,10 +4712,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "사용자에게 묻지 않고 CD-RW와 DVD-RW를 자동으로 지우기"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "기록 작업이 완료된 뒤에 기록된 미디어 꺼내지 않기"
+msgstr "기록/추출 작업이 완료된 뒤에 미디어 꺼내지 않기"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4783,14 +4781,7 @@ msgstr ""
 "나 DVD 기록 작업 시 지정된 크기의 버퍼를 사용합니다."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4799,12 +4790,12 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>이 옵션을 선택하면 기록 작업이 끝난 뒤에 미디어를 드라이브에서 꺼내지 않습"
-"니다. 이는 기록 작업을 시작해 놓고 자리를 떠나는 경우에 유용합니다. 또한, 기"
-"록 작업이 끝난 뒤에 트레이가 열리지 않도록 하는 데에도 사용할 수 있습니다.<p>"
-"단, 리눅스 시스템에서는 새로 기록된 미디어가 다시 인식되도록 해야 합니다. 그"
-"렇지 않으면 시스템은 미디어의 상태가 바뀐 것을 알지 못하여 계속해서 빈 미디어"
-"로 처리하게 될 것입니다."
+"<p>이 옵션을 선택하면 기록/추출 작업이 끝난 뒤에 미디어를 드라이브에서 꺼내"
+"지 않습니다. 이는 기록/추출 작업을 시작해 놓고 자리를 떠나는 경우에 유용합니"
+"다. 또한, 기록 작업이 끝난 뒤에 트레이가 열리지 않도록 하는 데에도 사용할 수 "
+"있습니다.<p>단, 리눅스 시스템에서는 새로 기록된 미디어가 다시 인식되도록 해"
+"야 합니다. 그렇지 않으면 시스템은 미디어의 상태가 바뀐 것을 알지 못하여 계속"
+"해서 빈 미디어로 처리하게 될 것입니다."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format
