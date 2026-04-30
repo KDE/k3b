@@ -3893,7 +3893,7 @@ msgstr "Vytvoriť nový Video DVD projekt a pridať všetky zadané súbory"
 #: main.cpp:109
 #, kde-format
 msgid "Open the project burn dialog for the current project"
-msgstr "Otvoriť dialóg napaľovania pre aktuálny projekt"
+msgstr "Otvoriť dialóg napaľovania projektu pre aktuálny projekt"
 
 #: main.cpp:110
 #, kde-format
@@ -6211,7 +6211,7 @@ msgstr ""
 #: projects/base_k3bdataimagesettings.ui:169
 #, kde-format
 msgid "Strip"
-msgstr "Odstrániť"
+msgstr "Odobrať"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:174
@@ -6741,7 +6741,7 @@ msgstr "Použite kartu 'Ripovať audio' pre prípadné nastavenie cesty k obrazu
 #: projects/k3baudioburndialog.cpp:123
 #, kde-format
 msgid "Wri&te Rip Audio files to:"
-msgstr "&Zapísať súbory obrazov do:"
+msgstr "Zapísať súbory ripa zvuku &do:"
 
 #: projects/k3baudioburndialog.cpp:283 projects/k3bmixedburndialog.cpp:284
 #, kde-format
@@ -8160,7 +8160,7 @@ msgstr "Č."
 #, kde-format
 msgctxt "Movix File Title"
 msgid "Title"
-msgstr "Názov"
+msgstr "Titul"
 
 #: projects/k3bmovixprojectmodel.cpp:312
 #, kde-format
@@ -8789,7 +8789,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:252
 #, kde-format
 msgid "Generic"
-msgstr "Všeobecné"
+msgstr "Generické"
 
 #: projects/k3bvcdburndialog.cpp:254
 #, kde-format
@@ -8967,7 +8967,7 @@ msgstr "Muxrate"
 #, kde-format
 msgctxt "Video CD Track Duration"
 msgid "Duration"
-msgstr "Dĺžka"
+msgstr "Trvanie"
 
 #: projects/k3bvcdprojectmodel.cpp:244
 #, kde-format
@@ -9151,7 +9151,7 @@ msgstr "Prehrávanie"
 #: projects/k3bvcdtrackdialog.cpp:464
 #, kde-format
 msgid "Playing track"
-msgstr "Prehrať stopu"
+msgstr "Prehráva sa stopa"
 
 #: projects/k3bvcdtrackdialog.cpp:469
 #, kde-format
@@ -9221,7 +9221,7 @@ msgstr "Numerické klávesy"
 #: projects/k3bvcdtrackdialog.cpp:591 projects/k3bvcdtrackdialog.cpp:632
 #, kde-format
 msgid "Rate:"
-msgstr "Rýchlosť:"
+msgstr "Rýchlosť prenosu:"
 
 #: projects/k3bvcdtrackdialog.cpp:592
 #, kde-format
@@ -9477,7 +9477,7 @@ msgstr "Zapísať &cue súbor"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:133
 #, kde-format
 msgid "Target Folder"
-msgstr "Cieľový priečinok"
+msgstr "Cieľový adresár"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
@@ -9742,7 +9742,7 @@ msgstr "CDDB stopa %1"
 #: rip/k3baudiocdview.cpp:353 rip/k3baudiocdview.cpp:423
 #, kde-format
 msgid "Title:"
-msgstr "Názov:"
+msgstr "Titul:"
 
 #: rip/k3baudiocdview.cpp:355 rip/k3baudiocdview.cpp:424
 #, kde-format
@@ -10933,7 +10933,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:331
 #, kde-format
 msgid "Video Picture Size"
-msgstr "Veľkosť videa"
+msgstr "Veľkosť obrazu videa"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:333
 #, kde-format
