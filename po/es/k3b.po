@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-02-15 11:21+0100\n"
+"PO-Revision-Date: 2026-05-01 13:42+0100\n"
 "Last-Translator: Víctor Rodrigo Córdoba <vrcordoba@gmail.com>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -4778,10 +4778,9 @@ msgid "Miscellaneous"
 msgstr "Miscelánea"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "No &expulsar el CD al finalizar el proceso de grabación"
+msgstr "No &expulsar el medio tras el proceso de lectura/escritura"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4808,10 +4807,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Borrar automáticamente los CD-RW y DVD-RW sin preguntar"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "No expulsar el medio al finalizar el proceso de grabación"
+msgstr "No &expulsar el medio tras completar el proceso de grabación"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4887,14 +4885,7 @@ msgstr ""
 "para grabar tanto CD como DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4906,7 +4897,7 @@ msgstr ""
 "<p>Si esta opción está marcada, K3b no expulsará el medio una vez que "
 "termine el proceso de grabación. Esto puede ser útil en caso de que se deje "
 "el equipo después de iniciar la grabación y no se quiere que la bandeja se "
-"quede abierta.<p>Sin embargo, en sistemas Linux un medio recién grabado "
+"quede abierta.<p>Tenga en cuenta, en sistemas Linux un medio recién grabado "
 "tiene que volver a cargarse. De lo contrario el sistema no detectará los "
 "cambios y lo seguirá tratando como un medio vacío."
 

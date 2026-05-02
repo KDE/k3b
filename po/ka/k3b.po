@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-04-24 03:39+0200\n"
+"PO-Revision-Date: 2026-05-01 05:07+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -3325,6 +3325,9 @@ msgid ""
 "Incremental sequential is the default writing mode for DVD-R(W). It allows "
 "multisession DVD-R(W)s. It only applies to DVD-R(W)."
 msgstr ""
+"ზრდადი მიმდევრობა არის ნაგულისხმევი ცაწერის რეჟიმი DVD-R(W)-ებისთვის. მას "
+"ასევე აქვს მრავალსესიიანი DVD-R(W)-ების მხარდაჭერა. ეხება, მხოლოდ, DVD-R(W)-"
+"ებს."
 
 #: k3bwritingmodewidget.cpp:38
 #, kde-format
@@ -3352,6 +3355,8 @@ msgid ""
 "Be aware that the writing mode is ignored when writing DVD+R(W) and BD-R(E) "
 "since there is only one way to write them."
 msgstr ""
+"გაითვალისწინეთ, რომ DVD+R(W)-ების და BD-R(E)-ების ჩაწერისას ჩაწერის რეჟიმი "
+"გათვალისწინებული არაა, რადგან არსებობს მათი ჩაწერის, მხოლოდ, ერთი გზა."
 
 #: k3bwritingmodewidget.cpp:99
 #, kde-format
@@ -4653,6 +4658,8 @@ msgid ""
 "In order to give K3b full access to the writer device the current user needs "
 "be added to a group <em>%1</em>."
 msgstr ""
+"იმისათვის, რომ K3b-ს ჩამწერ მოწყობილობასთან სრული წვდომა ჰქონდეს, მიმდინარე "
+"მომხმარებელი უნდა ჩაამატოთ ჯგუფში <em>%1</em>."
 
 #: option/k3bdevicewidget.cpp:242 projects/k3bdataurladdingdialog.cpp:769
 #: projects/k3bdataurladdingdialog.cpp:786
@@ -4696,6 +4703,9 @@ msgid ""
 "Specify the paths to the external programs that K3b needs to work properly, "
 "or press \"Refresh\" to let K3b search for the programs."
 msgstr ""
+"მიუთითეთ ბილიკები გარე პროგრამებისთვის, რომლებიც K3b-ს სწორად სამუშაოდ "
+"სჭირდება, ან დააჭირეთ ღილაკს \"განახლება\", რომ K3b-მა ეს პროგრამები ხელით "
+"ეძებოს."
 
 #: option/k3bexternalbinparamsmodel.cpp:159
 #: option/k3bexternalbinpermissionmodel.cpp:286
@@ -4857,6 +4867,8 @@ msgid ""
 "One of these sets is loaded once an action dialog is opened. This setting "
 "defines which set it will be."
 msgstr ""
+"ერთ-ერთი ასეთი ნაკრები ჩაიტვირთება, როცა გაიხსნება ქმედებების დიალოგი. ეს "
+"პარამეტრი განსაზღვრავს, რომელი ნაკრები იქნება ეს."
 
 #: option/k3bmiscoptiontab.cpp:106
 #, kde-format
