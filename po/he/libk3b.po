@@ -6,13 +6,13 @@
 # tahmar1900 <tahmar1900@gmail.com>, 2009.
 # Diego Iastrubni <elcuco@kde.org>, 2012.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024-2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2026-04-13 21:38+0300\n"
+"PO-Revision-Date: 2026-05-07 09:21+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -1528,8 +1528,9 @@ msgid ""
 "codecs used these days. Its subproject libavcodec forms the basis for "
 "multimedia players such as xine or mplayer."
 msgstr ""
-"FFmpeg הוא פרוייקט קוד פתוח אשר מנסה לתמוך בכל הקודקים של שמע ווידאו הקיימים "
-"היום. הפרוייקט המשני libavcodec הוא הבסיס של הנגנים כמו xine ו mplayer."
+"FFmpeg הוא מיזם קוד פתוח שמנסה לתמוך ברוב מקודדי הווידאו והשמע שנפוצים "
+"בימינו אנו. תת־המיזם שלו libavcodec מגבש את יסודות נגני המולטימדיה כגון xine "
+"או mplayer."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:547
 #, kde-format
@@ -1546,8 +1547,8 @@ msgid ""
 "group of volunteer programmers after the OpenDivX source was closed in July "
 "2001."
 msgstr ""
-"XviD זהו קודק חופשי. XviD נוצר על ידי קבוצה של מפתחים מתנדבים אחרי שהפרוייקט "
-"OpenDivX נסגר ביולי 2001."
+"XviD הוא מפענח וידאו MPEG-4 חופשי בקוד פתוח. XviD נוצר על ידי קבוצה של "
+"מתכנתים מתנדבים אחרי ש־OpenDivX נסגר ביולי 2001."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:553
 #, kde-format
@@ -1688,8 +1689,7 @@ msgid ""
 "The following files could not be found. Do you want to remove them from the "
 "project and continue without adding them to the image?"
 msgstr ""
-"הקבצים הבאים לא נמצאו. האם אתה רוצה להסיר אותם מהפרוייקט ולהמשיך ביצירת "
-"התמונה בלי הקבצים?"
+"הקבצים הבאים לא נמצאו. להסיר אותם מהמיזם ולהמשיך ביצירת הדמות בלי הקבצים?"
 
 #: projects/audiocd/k3baudiojob.cpp:168
 #: projects/datacd/k3bdatapreparationjob.cpp:138
@@ -1706,7 +1706,7 @@ msgstr "אזהרה"
 #: projects/mixedcd/k3bmixedjob.cpp:182
 #, kde-format
 msgid "Remove missing files and continue"
-msgstr "הסר קבצים חסרים והמשך"
+msgstr "הסרת קבצים חסרים והמשך"
 
 #: projects/audiocd/k3baudiojob.cpp:170
 #: projects/datacd/k3bdatapreparationjob.cpp:164
@@ -1720,22 +1720,22 @@ msgstr "ביטול וחזרה אחורה"
 #: projects/audiocd/k3baudiojob.cpp:188 projects/mixedcd/k3bmixedjob.cpp:201
 #, kde-format
 msgid "Please add files to your project first."
-msgstr "אנא הוסף קבצים לפרוייקט שלך קודם."
+msgstr "נא להוסיף קבצים למיזם שלך קודם."
 
 #: projects/audiocd/k3baudiojob.cpp:194
 #, kde-format
 msgid "Unable to write on-the-fly with these audio sources."
-msgstr "לא יכול לכתוב \"On-The-Fly\" עם מקורות שמע אלו."
+msgstr "לא ניתן לכתוב בזמן אמת עם מקורות שמע אלו."
 
 #: projects/audiocd/k3baudiojob.cpp:303 projects/mixedcd/k3bmixedjob.cpp:236
 #, kde-format
 msgid "Determining maximum writing speed"
-msgstr "קובע מהירות מרבית לצריבה"
+msgstr "נקבעת מהירות מרבית לצריבה"
 
 #: projects/audiocd/k3baudiojob.cpp:338
 #, kde-format
 msgid "Creating image files in %1"
-msgstr "יוצר קבצי תמונה ב-%1"
+msgstr "נוצרים קבצי תמונה ב־%1"
 
 #: projects/audiocd/k3baudiojob.cpp:339 projects/videocd/k3bvcdjob.cpp:182
 #, kde-format
@@ -1938,7 +1938,7 @@ msgstr "שגיאה בזמן יצירת תמונת ISO"
 #: projects/datacd/k3bdatajob.cpp:694
 #, kde-format
 msgid "Internal Error: No medium type fits. This project cannot be burned."
-msgstr "שגיאה פנימית: סוג המדיה לא מתאים. אין אפשרות לצרוב את הפרוייקט."
+msgstr "שגיאה פנימית: סוג המדיה לא מתאים. אי אפשר לצרוב את המיזם."
 
 #: projects/datacd/k3bdatajob.cpp:698
 #, kde-format
@@ -1973,12 +1973,12 @@ msgstr "יוצר קובץ תמונת נתונים לתקליטור"
 #: projects/datacd/k3bdatajob.cpp:975
 #, kde-format
 msgid "Writing Data Project"
-msgstr "כותב פרוייקט צריבת נתונים"
+msgstr "מיזם צריבת נתונים מיזם"
 
 #: projects/datacd/k3bdatajob.cpp:981
 #, kde-format
 msgid "Writing Multisession Project"
-msgstr "כותב פרוייקט מרובה צריבות"
+msgstr "מיזם מרובה צריבות נכתב"
 
 #: projects/datacd/k3bdatajob.cpp:995
 #, kde-format
@@ -2077,8 +2077,8 @@ msgid ""
 "added to the project. Do you want to continue without writing the symbolic "
 "links to the image?"
 msgstr ""
-"היישום K3b אינו מסוגל לעקוב אחרי קישורים סימבוליים אל תיקיות אחרי שהן נוספו "
-"לפרוייקט. האם אתה רוצה להמשיך בלי לכתוב את הקישורים הסימבוליים לתמונה?"
+"היישום K3b לא מסוגל לעקוב אחרי קישורים סמליים לתיקיות אחרי שהן נוספו למיזם. "
+"להמשיך בלי לכתוב את הקישורים הסמליים לתמונה?"
 
 #: projects/datacd/k3bdatapreparationjob.cpp:200
 #, kde-format
@@ -3249,12 +3249,12 @@ msgstr "ללא"
 #: projects/movixcd/k3bmovixjob.cpp:105
 #, kde-format
 msgid "Writing eMovix Project"
-msgstr "כותב פרוייקט eMovix"
+msgstr "מיזם eMovix נכתב"
 
 #: projects/movixcd/k3bmovixjob.cpp:107
 #, kde-format
 msgid "Writing eMovix Project (%1)"
-msgstr "כותב פרוייקט eMovix (%1)"
+msgstr "מיזם eMovix‏ (%1) נכתב"
 
 #: projects/movixcd/k3bmovixjob.cpp:113
 #, kde-format
@@ -3322,14 +3322,14 @@ msgid ""
 "Please start a new Project for this filetype.\n"
 "Resample not implemented in K3b yet."
 msgstr ""
-"אתה לא יכול לערבב קבצי וידאו של MPEG1 ו MPEG2.\n"
-"אנא התחל פרויקט חדש עבור קובץ זה.\n"
-"דגימה מחדש לא מיושמת עדיין ב-K3b."
+"אי אפשר לערבב קובצי וידאו של MPEG1 ו MPEG2.\n"
+"נא להקים מיזם חדש עבור הקובץ הזה.\n"
+"דגימה מחדש לא מיושמת עדיין ב־K3b."
 
 #: projects/videocd/k3bvcddoc.cpp:235
 #, kde-format
 msgid "Wrong File Type for This Project"
-msgstr "סוג קובץ לא נכון עבור פרויקט זה"
+msgstr "סוג קובץ לא נכון עבור מיזם זה"
 
 #: projects/videocd/k3bvcddoc.cpp:246
 #, kde-format
@@ -3635,9 +3635,9 @@ msgid "Unable to link temporary file in folder <filename>%1</filename>."
 msgstr "לא יכול לקשר קובץ זמני בתיקייה %1."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "The project does not contain all necessary Video DVD files."
-msgstr "הפרויקט לא מכיל את כל הקבצים הדרושים ל VideoDVD."
+msgstr "המיזם הזה לא מכיל את כל קובצי וידאו ה־DVD ההכרחיים."
 
 #: projects/videodvd/k3bvideodvdimager.cpp:195
 #, kde-format

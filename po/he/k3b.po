@@ -7,13 +7,13 @@
 # Tahmar1900 <tahmar1900@gmail.com>, 2010.
 # Diego Iastrubni <elcuco@kde.org>, 2010, 2012, 2013.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
-# SPDX-FileCopyrightText: 2024, 2025, 2026 Yaron Shahrabani <sh.yaron@gmail.com>
+# SPDX-FileCopyrightText: 2024-2026 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-20 00:44+0000\n"
-"PO-Revision-Date: 2026-04-13 21:29+0300\n"
+"PO-Revision-Date: 2026-05-07 09:32+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1414,9 +1414,9 @@ msgid "&Burn Image..."
 msgstr "&צרוב תמונה..."
 
 #: k3b.cpp:401
-#, fuzzy, kde-format
+#, kde-format
 msgid "Write an ISO 9660, cue/bin, or cdrecord clone image to an optical disc"
-msgstr "כתוב כ-ISO9660 או cue/bin או שכפל תמונת תקליטור של cdrecord"
+msgstr "כתיבת דמות משובטת מסוג ISO 9660,‏ cue/bin, או cdrecord לדיסק אופטי"
 
 #: k3b.cpp:406 k3bdevicemenu.cpp:68
 #, kde-format
@@ -1484,9 +1484,9 @@ msgid "System Check"
 msgstr "בדיקת מערכת"
 
 #: k3b.cpp:447
-#, fuzzy, kde-format
+#, kde-format
 msgid "Checks system configuration"
-msgstr "&בדוק הגדרות המערכת"
+msgstr "בדיקת הגדרות מערכת"
 
 #: k3b.cpp:492
 #, kde-format
@@ -1525,9 +1525,9 @@ msgid "Open Files"
 msgstr "פתח קבצים"
 
 #: k3b.cpp:921 k3b.cpp:988
-#, fuzzy, kde-format
+#, kde-format
 msgid "K3b Projects (*.k3b)"
-msgstr "*.k3b|פרויקטים של K3b"
+msgstr "מיזמי K3b‏ (‎*.k3b)"
 
 #: k3b.cpp:953
 #, kde-format
@@ -1595,9 +1595,9 @@ msgid "Select Files to Add to Project"
 msgstr "נא לבחור קבצים להוספה למיזם"
 
 #: k3b.cpp:1293
-#, fuzzy, kde-format
+#, kde-format
 msgid "All Files (*)"
-msgstr "*|כל הקבצים"
+msgstr "כל הקבצים (*)"
 
 #: k3b.cpp:1300
 #, kde-format
@@ -1887,9 +1887,9 @@ msgid "Medium"
 msgstr "מדיה"
 
 #: k3bdiskinfoview.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 Filesystem Info"
-msgstr "מידע מערכת קבצים ISO9660"
+msgstr "פרטי מערכת קבצים מסוג ISO 9660"
 
 #: k3bdiskinfoview.cpp:119
 #, kde-format
@@ -2264,40 +2264,34 @@ msgid "Filter:"
 msgstr "מסנן:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|כל הקבצים"
+msgstr "כל הקבצים"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "נמצאו קבצים"
+msgstr "קובצי שמע"
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "נמצאו קבצים"
+msgstr "קובצי שמע Wave"
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "נמצאו קבצים"
+msgstr "קובצי שמע MP3"
 
 #: k3bfileview.cpp:79
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |קבצי שמע מסוג Ogg Vorbis"
+msgstr "קובצי שמע מסוג Ogg Vorbis"
 
 #: k3bfileview.cpp:80
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |קבצי וידאו מסוג MPEG"
+msgstr "קובצי וידאו מסוג MPEG"
 
 #: k3bfileview.cpp:84
 #, kde-format
@@ -2360,11 +2354,10 @@ msgid "Overall progress:"
 msgstr "התקדמות תהליך כולל:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
-msgstr "עצור"
+msgstr "עצירה"
 
 #: k3bjobprogressdialog.cpp:231
 #, kde-format
@@ -2426,10 +2419,10 @@ msgid "Stop operation"
 msgstr ""
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "המשך ריבוי צריבות"
+msgstr "המשך בפעולה"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
@@ -2646,9 +2639,9 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: k3bsystemproblemdialog.cpp:98
-#, fuzzy, kde-format
+#, kde-format
 msgid "Configure K3b..."
-msgstr "הגדר..."
+msgstr "הגדרת K3b…"
 
 #: k3bsystemproblemdialog.cpp:108
 #, kde-format
@@ -2698,7 +2691,7 @@ msgstr "הרשאות לא מספקות לקריאה של הקבצים הבאים
 #: k3bsystemproblemdialog.cpp:202 k3bsystemproblemdialog.cpp:209
 #, kde-format
 msgid "K3b uses cdrecord to actually write CDs."
-msgstr "K3b משתמש ב-cdrecord לכתיבת תקליטורים."
+msgstr "K3b משתמש ב־cdrecord לכתיבת תקליטורים."
 
 #: k3bsystemproblemdialog.cpp:203 k3bsystemproblemdialog.cpp:264
 #: k3bsystemproblemdialog.cpp:308
@@ -2777,12 +2770,12 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:263 k3bsystemproblemdialog.cpp:271
 #, kde-format
 msgid "K3b uses cdrdao to actually write CDs."
-msgstr "K3b משתמשת ב-cdrdao לכתיבת תקליטורים."
+msgstr "K3b משתמשת ב־cdrdao לכתיבת תקליטורים."
 
 #: k3bsystemproblemdialog.cpp:272
 #, kde-format
 msgid "Install the cdrdao package."
-msgstr "התקן את חבילת cdrdao."
+msgstr "נא להתקין את חבילת cdrdao."
 
 #: k3bsystemproblemdialog.cpp:281
 #, kde-format
@@ -2790,7 +2783,7 @@ msgid ""
 "It is highly recommended to configure cdrdao to run with root privileges to "
 "increase the overall stability of the burning process."
 msgstr ""
-"זה מאד מומלץ להגדיר את cdrdao לרוץ עם הרשאות של מנהל מערכת בכדי להגדיל את "
+"מאוד מומלץ להגדיר את cdrdao כך שירוץ עם הרשאות של הנהלת מערכת כדי להגדיל את "
 "היציבות הכללית של תהליך הצריבה."
 
 #: k3bsystemproblemdialog.cpp:293
@@ -2812,13 +2805,13 @@ msgid ""
 "K3b uses growisofs to actually write DVDs. Without growisofs you will not be "
 "able to write DVDs. Make sure to install at least version 5.10."
 msgstr ""
-"היישום K3b משתמש ב-growisofs בכדי לכתוב תקליטורי DVD. ללא growisofs לא תוכל "
-"לכתוב ל-DVD. אנא ודא התקנה של לפחות גרסה 5.10."
+"היישום K3b משתמש ב־growisofs כדי לכתוב תקליטורי DVD. ללא growisofs אי אפשר "
+"לכתוב ל־DVD. נא לוודא שמותקנת גרסה 5.10 לפחות."
 
 #: k3bsystemproblemdialog.cpp:318 k3bsystemproblemdialog.cpp:361
 #, kde-format
 msgid "Install the dvd+rw-tools package."
-msgstr "התקן את חבילת dvd+rw-tools."
+msgstr "להתקין את חבילת dvd+rw-tools."
 
 #: k3bsystemproblemdialog.cpp:324
 #, kde-format
@@ -2833,7 +2826,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:342 k3bsystemproblemdialog.cpp:375
 #, kde-format
 msgid "Install a more recent version of %1."
-msgstr "התקן גרסה יותר מעודכנת של %1."
+msgstr "יש להתקין גרסה עדכנית יותר של %1."
 
 #: k3bsystemproblemdialog.cpp:331
 #, kde-format
@@ -2872,7 +2865,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:397
 #, kde-format
 msgid "Device %1 - %2 is automounted."
-msgstr "התקן צריבה %1 - %2 נעגן אוטומטי."
+msgstr "ההתקן %1 - %2 מעוגן אוטומטי."
 
 #: k3bsystemproblemdialog.cpp:399
 #, kde-format
@@ -3190,9 +3183,9 @@ msgid "More actions..."
 msgstr "פעולות נוספות…"
 
 #: k3bwelcomewidget.cpp:262
-#, fuzzy, kde-format
+#, kde-format
 msgid "Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator"
-msgstr "<p align=\"center\">ברוכים הבאים ל-K3b הכלי לצריבת תקליטורי CD ו-DVD"
+msgstr "ברוך בואך ל־K3b &ndash; יוצר תקליטורים, DVD ו־Blu-ray"
 
 #: k3bwelcomewidget.cpp:264
 #, kde-format
@@ -3308,7 +3301,7 @@ msgstr "קבע מהירות צריבה בצורה ידנית"
 #: k3bwritingmodewidget.cpp:17
 #, kde-format
 msgid "Let K3b select the best-suited mode. This is the recommended selection."
-msgstr "תן ל-K3b לבחור את המצב המתאים ביותר. זוהי האפשרות המומלצת."
+msgstr "לאפשר ל־K3b לבחור את המצב המתאים ביותר. זו האפשרות המומלצת."
 
 #: k3bwritingmodewidget.cpp:19
 #, kde-format
@@ -3425,10 +3418,9 @@ msgid "Copyright © 1998–2018 K3b authors"
 msgstr ""
 
 #: main.cpp:33
-#, fuzzy, kde-format
-#| msgid "http://www.k3b.org"
+#, kde-format
 msgid "https://www.k3b.org"
-msgstr "http://www.k3b.org"
+msgstr "https://www.k3b.org"
 
 #: main.cpp:37
 #, kde-format
@@ -3456,9 +3448,9 @@ msgid "Sebastian Trüg"
 msgstr "Sebastian Trüg"
 
 #: main.cpp:39
-#, fuzzy, kde-format
+#, kde-format
 msgid "Main developer"
-msgstr "מפתח"
+msgstr "מפתח ראשי"
 
 #: main.cpp:40
 #, kde-format
@@ -3605,16 +3597,14 @@ msgid "For his work on the BSD port and some great patches."
 msgstr "For his work on the BSD port and some great patches."
 
 #: main.cpp:75
-#, fuzzy, kde-format
-#| msgid "Adriaan De Groot"
+#, kde-format
 msgid "Adriaan de Groot"
-msgstr "Adriaan De Groot"
+msgstr "אדריאן דה גרוט"
 
 #: main.cpp:76
-#, fuzzy, kde-format
-#| msgid "For his work on the BSD port."
+#, kde-format
 msgid "For his work on the FreeBSD port."
-msgstr "For his work on the BSD port."
+msgstr "על עבודתו על הסבה ל־FreeBSD."
 
 #: main.cpp:78
 #, kde-format
@@ -3857,10 +3847,9 @@ msgid "ISO 9660 Image Files"
 msgstr "קובצי דמות ISO 9660"
 
 #: misc/k3bimagewritingdialog.cpp:452
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "קובץ Cue:"
+msgstr "קובצי Cue"
 
 #: misc/k3bimagewritingdialog.cpp:453
 #, fuzzy, kde-format
@@ -4437,9 +4426,9 @@ msgstr "לא נבחרה ערכת נושא"
 
 #. i18n: ectx: property (text), widget (KNSWidgets::Button, m_buttonGetNewThemes)
 #: option/base_k3bthemeoptiontab.ui:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Get New Themes..."
-msgstr "התקן ערכת נושא חדשה..."
+msgstr "הורדת ערכות עיצוב חדשות…"
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
@@ -4652,7 +4641,7 @@ msgstr "גודל חוצץ:"
 #: option/k3bdevicewidget.cpp:190
 #, kde-format
 msgid "Supports Burnfree:"
-msgstr "תמיכה ב-Burnfree:"
+msgstr "תמיכה ב־Burnfree:"
 
 #: option/k3bdevicewidget.cpp:191
 #, kde-format
@@ -4693,9 +4682,9 @@ msgid "Please relogin to apply the changes."
 msgstr ""
 
 #: option/k3bdevicewidget.cpp:269
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to execute the action: %1 (Error code: %2)"
-msgstr "אין אפשרות ליצור תיקייה %1"
+msgstr "לא ניתן להריץ את הפעולה: %1 (קוד שגיאה: %2)"
 
 #: option/k3bdevicewidget.cpp:270
 #, kde-format
@@ -4703,9 +4692,9 @@ msgid "Retry"
 msgstr ""
 
 #: option/k3bexternalbinmodel.cpp:157
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 (not found)"
-msgstr " (לא נמצא)"
+msgstr "%1 (לא נמצא)"
 
 #: option/k3bexternalbinmodel.cpp:230
 #, kde-format
@@ -4736,15 +4725,15 @@ msgid "Parameters"
 msgstr "ערכים"
 
 #: option/k3bexternalbinpermissionmodel.cpp:231
-#, fuzzy, kde-format
+#, kde-format
 msgid "no change"
 msgstr "ללא שינוי"
 
 #: option/k3bexternalbinpermissionmodel.cpp:287
 #: option/k3bexternalbinwidget.cpp:119
-#, fuzzy, kde-format
+#, kde-format
 msgid "Permissions"
-msgstr "צריבות:"
+msgstr "הרשאות"
 
 #: option/k3bexternalbinpermissionmodel.cpp:288
 #, kde-format
@@ -4780,9 +4769,9 @@ msgid "Check the programs whose permissions you want to be changed:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:114
-#, fuzzy, kde-format
+#, kde-format
 msgid "Change Permissions..."
-msgstr "הגדרות קיצוץ"
+msgstr "החלפת הרשאות…"
 
 #: option/k3bexternalbinwidget.cpp:127
 #, kde-format
@@ -4804,9 +4793,9 @@ msgid "Following programs could not be updated:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "אין אפשרות ליצור תיקייה %1"
+msgstr "לא ניתן להריץ את הפעולה<br/>%1"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
@@ -4814,10 +4803,9 @@ msgid "Authorization denied"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "אין תיקון שגיאות"
+msgstr "אירעה שגיאה"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
@@ -4933,9 +4921,9 @@ msgid "Devices"
 msgstr "התקנים"
 
 #: option/k3boptiondialog.cpp:140
-#, fuzzy, kde-format
+#, kde-format
 msgid "Optical Devices"
-msgstr "הגדר התקנים"
+msgstr "התקנים אופטיים"
 
 #: option/k3boptiondialog.cpp:154
 #, kde-format
@@ -5167,9 +5155,9 @@ msgstr "שמור הרשאות קבצים (גיבוי)"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:110
-#, fuzzy, kde-format
+#, kde-format
 msgid "Set special ISO 9660 Filesystem preferences."
-msgstr "קביעת העדפות של מערכת קבצים מיוחדת ISO9660."
+msgstr "הגדרת העדפות מיוחדות למערכת קבצים מסוג ISO 9660."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:113
@@ -5179,9 +5167,9 @@ msgstr "מערכות קבצים"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupIsoSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:134
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 Settings"
-msgstr "הגדרות ISO9660"
+msgstr "הגדרות ISO 9660"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAllowUntranslatedFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:143
@@ -5191,9 +5179,9 @@ msgstr "כפה את כל האפשרויות למטה"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowUntranslatedFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:146
-#, fuzzy, kde-format
+#, kde-format
 msgid "Allow untranslated ISO 9660 filenames"
-msgstr "הרשה שמות קבצים לא מתורגמים של ISO9660"
+msgstr "לאפשר שמות קבצים לא מתורגמים של ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkOmitTrailingPeriod)
 #: projects/base_k3badvanceddataimagesettings.ui:153
@@ -5233,21 +5221,21 @@ msgstr "הרשה תווים עם אותיות קטנות בשמות קבצים �
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowOther)
 #: projects/base_k3badvanceddataimagesettings.ui:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "Allow ~ and # in ISO 9660 filenames"
-msgstr "הרשה ~ ו # בשמות קבצים של ISO9660"
+msgstr "לאפשר ~ ו־# בשמות קבצים ב־ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowFullAscii)
 #: projects/base_k3badvanceddataimagesettings.ui:202
-#, fuzzy, kde-format
+#, kde-format
 msgid "Allow full ASCII charset for ISO 9660 filenames"
-msgstr "הרשה ערכת תווים מלאה של ASCII עבור שמות קבצים של ISO9660"
+msgstr "לאפשר ערכת תווים מלאה של ASCII עבור שמות קבצים ב־ISO 9660"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowMaxLengthFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:209
-#, fuzzy, kde-format
+#, kde-format
 msgid "Allow max length ISO 9660 filenames (37 characters)"
-msgstr "הרשה אורך מקסימלי של שמות קבצים של ISO9660 (בעלת 37 תווים)"
+msgstr "לאפשר אורך מרבי של שמות קבצים ב־ISO 9660 (37 תווים)"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, m_groupIsoLevel)
 #: projects/base_k3badvanceddataimagesettings.ui:225
@@ -5269,27 +5257,27 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupIsoLevel)
 #: projects/base_k3badvanceddataimagesettings.ui:228
-#, fuzzy, kde-format
+#, kde-format
 msgid "ISO 9660 Level"
-msgstr "רמת ISO"
+msgstr "רמת ISO 9660"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel1)
 #: projects/base_k3badvanceddataimagesettings.ui:234
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Level 1"
-msgstr "רמה %1"
+msgstr "רמה &1"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel2)
 #: projects/base_k3badvanceddataimagesettings.ui:241
-#, fuzzy, kde-format
+#, kde-format
 msgid "Level &2"
-msgstr "רמה %1"
+msgstr "רמה &2"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel3)
 #: projects/base_k3badvanceddataimagesettings.ui:248
-#, fuzzy, kde-format
+#, kde-format
 msgid "Level &3"
-msgstr "רמה %1"
+msgstr "רמה &3"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupRockRidgeSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:258
@@ -5389,9 +5377,9 @@ msgstr "…"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:48
-#, fuzzy, kde-format
+#, kde-format
 msgid "Per&former:"
-msgstr "מ&בצע:"
+msgstr "מ&בצע/ת:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: projects/base_k3baudiocdtextallfieldsdialog.ui:88
@@ -5588,9 +5576,9 @@ msgstr "הדמיית כונן תקליטונים של 1440/2880 ק״ב"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioFloppy)
 #: projects/base_k3bbootimagedialog.ui:74
-#, fuzzy, kde-format
+#, kde-format
 msgid "&Floppy"
-msgstr "תקליטון"
+msgstr "&תקליטון"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:81
@@ -5600,9 +5588,9 @@ msgstr "הדמיית כונן קשיח"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:84
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hardd&isk"
-msgstr "דיסק קשיח"
+msgstr "&כונן קשיח"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioNoEmulation)
 #: projects/base_k3bbootimagedialog.ui:91
@@ -5856,9 +5844,9 @@ msgstr "קובץ ביבליוגרפי:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: projects/base_k3bdatavolumedescdialog.ui:31
-#, fuzzy, kde-format
+#, kde-format
 msgid "Appli&cation:"
-msgstr "יישום:"
+msgstr "יי&שום:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: projects/base_k3bdatavolumedescdialog.ui:51
@@ -5930,9 +5918,9 @@ msgstr "מ&ספר כרך:"
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel5)
 #: projects/base_k3bdatavolumedescdialog.ui:303
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sys&tem:"
-msgstr "מערכת:"
+msgstr "מ&ערכת:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: projects/base_k3bmovixoptionswidget.ui:18
@@ -5948,9 +5936,9 @@ msgstr "ערכת גופנים לכתוביות של MPLAYER:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboSubtitleFontset)
 #: projects/base_k3bmovixoptionswidget.ui:34
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select the font to be used to render subtitles"
-msgstr "בחר את קודק הוידאו אשר ישמש לקידוד רצועות DVD"
+msgstr "נא לבחור את הגופן שישמש לתיצוג כתוביות"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel7)
 #: projects/base_k3bmovixoptionswidget.ui:44
@@ -6005,7 +5993,7 @@ msgstr "&אל תשתמש ב-DMA"
 #: projects/base_k3bmovixoptionswidget.ui:84
 #, kde-format
 msgid "MPlayer options you want to be sure MPlayer will not use"
-msgstr "האפשרויות של MPLAYER שאתה לא רוצה ש-MPLAYER ישתמש בהן"
+msgstr "האפשרויות של MPlayer שחשוב לך לוודא ש־MPlayer לא ישתמש בהן"
 
 #. i18n: ectx: property (whatsThis), widget (QLineEdit, m_editUnwantedMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:89
@@ -6114,9 +6102,9 @@ msgstr "שפת האתחול של eMovix:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboBootMessageLanguage)
 #: projects/base_k3bmovixoptionswidget.ui:195
-#, fuzzy, kde-format
+#, kde-format
 msgid "Select the language of the eMovix help screens"
-msgstr "בחר את המצב עבור רצועת מידע"
+msgstr "נא לבחור את שפת מסכי העזרה של eMovix"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel5)
 #: projects/base_k3bmovixoptionswidget.ui:202
@@ -6710,13 +6698,13 @@ msgid "Custom"
 msgstr "התאמה אישית"
 
 #: projects/k3bdataimagesettingswidget.cpp:88
-#, fuzzy, kde-format
+#, kde-format
 msgctxt ""
 "This is the default volume identifier of a data project created by K3b. The "
 "string should not be longer than 16 characters to avoid warnings regarding "
 "Joiliet extensions which induce this restriction."
 msgid "K3b data project"
-msgstr "פרויקט מידע"
+msgstr "מיזם נתונים של K3b"
 
 #: projects/k3bdataimagesettingswidget.cpp:142
 #, kde-format
@@ -6905,7 +6893,7 @@ msgid "Please select a session to import."
 msgstr "אנא בחר הצריבה לייבוא."
 
 #: projects/k3bdataprojectmodel.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Symlink target shown in status bar"
 msgid "Link to %1"
 msgstr "קישור אל %1"
@@ -6959,14 +6947,14 @@ msgid "Local location:"
 msgstr "מיקום מקומי:"
 
 #: projects/k3bdatapropertiesdialog.cpp:99
-#, fuzzy, kde-format
+#, kde-format
 msgid "Local link target:"
-msgstr "שם מקומי:"
+msgstr "יעד קישור מקומי:"
 
 #: projects/k3bdatapropertiesdialog.cpp:120
-#, fuzzy, kde-format
+#, kde-format
 msgid "Hide on RockRidge"
-msgstr "הסתר ב-Rockridge"
+msgstr "הסתרה ב־Rockridge"
 
 #: projects/k3bdatapropertiesdialog.cpp:121
 #, kde-format
@@ -7077,9 +7065,9 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:298
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Files"
-msgstr "קבצים"
+msgstr "אין קבצים"
 
 #: projects/k3bdatapropertiesdialog.cpp:301
 #, fuzzy, kde-format
@@ -7091,9 +7079,9 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: projects/k3bdatapropertiesdialog.cpp:303
-#, fuzzy, kde-format
+#, kde-format
 msgid "No Folders"
-msgstr "תיקיות"
+msgstr "אין תיקיות"
 
 #: projects/k3bdataurladdingdialog.cpp:61
 #, kde-format
@@ -7106,9 +7094,9 @@ msgid "Adding files to project '%1'"
 msgstr "מוסף קבצים לפרויקט %1..."
 
 #: projects/k3bdataurladdingdialog.cpp:97
-#, fuzzy, kde-format
+#, kde-format
 msgid "Adding files to project '%1'..."
-msgstr "מוסף קבצים לפרויקט %1..."
+msgstr "נוספים קבצים למיזם ‚%1’…"
 
 #: projects/k3bdataurladdingdialog.cpp:178
 #, kde-format
@@ -7703,10 +7691,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr "תיקיית הדמויות ‚%1’ אינה קיימת. ש־K3b ייצור אותה?"
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "צור תיקייה"
+msgstr "ליצור תיקייה?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
@@ -8398,7 +8385,7 @@ msgstr "אלו למעשה מקשים מדומים, המייצגים את המק�
 #: projects/k3bvcdtrackdialog.cpp:258
 #, kde-format
 msgid "<p>If numeric keys enabled, you can overwrite the default settings."
-msgstr "<p>אם מקשים מספריים אופשרו, אתה יכול לשכתב את הגדרות ברירות המחדל."
+msgstr "<p>אם מקשים מספריים הופעלו, אפשר לשכתב את הגדרות ברירת המחדל."
 
 #: projects/k3bvcdtrackdialog.cpp:259
 #, kde-format
@@ -8901,13 +8888,13 @@ msgstr "מחפש מידע אודות אומן..."
 
 #: rip/k3baudiocdview.cpp:177 rip/k3baudioprojectconvertingdialog.cpp:97
 #: rip/k3baudiorippingdialog.cpp:115 rip/k3bvideocdview.cpp:350
-#, fuzzy, kde-format
+#, kde-format
 msgid "1 track (%2)"
 msgid_plural "%1 tracks (%2)"
-msgstr[0] "רצועה 1 (%2)"
-msgstr[1] "%1 רצועות (%2)"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "רצועה (%2)"
+msgstr[1] "שתי רצועות (%2)"
+msgstr[2] "%1 רצועות (%2)"
+msgstr[3] "%1 רצועות (%2)"
 
 #: rip/k3baudiocdview.cpp:199
 #, kde-format
@@ -8969,7 +8956,7 @@ msgstr ""
 #: rip/k3baudiocdview.cpp:246
 #, kde-format
 msgid "Load CD Info"
-msgstr ""
+msgstr "טעינת פרטי תקליטורים"
 
 #: rip/k3baudiocdview.cpp:247
 #, fuzzy, kde-format
@@ -9290,9 +9277,9 @@ msgid "Title"
 msgstr "שם כותר"
 
 #: rip/k3baudiotrackmodel.cpp:206
-#, fuzzy, kde-format
+#, kde-format
 msgid "Data Track"
-msgstr "מנגן רצועה"
+msgstr "רצועת נתונים"
 
 #: rip/k3bcddbpatternwidget.cpp:44
 #, kde-format
@@ -9377,13 +9364,13 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: rip/k3bmassaudioencodingjob.cpp:182
-#, fuzzy, kde-format
+#, kde-format
 msgid "1 track"
 msgid_plural "%1 tracks"
-msgstr[0] "רצועה 1"
-msgstr[1] "%1 רצועות"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "רצועה"
+msgstr[1] "שתי רצועות"
+msgstr[2] "%1 רצועות"
+msgstr[3] "%1 רצועות"
 
 #: rip/k3bmassaudioencodingjob.cpp:264
 #, kde-format
@@ -9459,9 +9446,9 @@ msgstr ""
 "org"
 
 #: rip/k3bvideocdrip.cpp:108
-#, fuzzy, kde-format
+#, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "משתמש ב-%1 %2 - זכויות יוצרים (C) %3"
+msgstr "נעשה שימוש ב־%1 %2 – זכויות יוצרים © %3"
 
 #: rip/k3bvideocdrip.cpp:159
 #, kde-format
@@ -9619,7 +9606,7 @@ msgid "Create XML description file."
 msgstr "צור קובץ תיאור של XML."
 
 #: rip/k3bvideocdrippingdialog.cpp:129
-#, kde-format
+#, fuzzy, kde-format
 msgid ""
 "<p>This option creates an XML description file with all video CD information."
 "</p><p>This file will always contain all of the information.</p><p>Example: "
@@ -9686,12 +9673,12 @@ msgstr "בטל בחירה"
 #: rip/k3bvideocdview.cpp:378
 #, kde-format
 msgid "View Files"
-msgstr ""
+msgstr "הצגת קבצים"
 
 #: rip/k3bvideocdview.cpp:379
 #, kde-format
 msgid "View plain data files"
-msgstr ""
+msgstr "הצגת קובצי נתונים פשוטים"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:21
@@ -9786,7 +9773,7 @@ msgstr "נתינת שמות לקובץ"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:415
 #, kde-format
 msgid "Replace all &blanks with:"
-msgstr "החלף את כל &הרווחים ב:"
+msgstr "החלפת כל &הרווחים ב:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkTwoPassEncoding)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:463
@@ -9866,7 +9853,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:509
 #, kde-format
 msgid "Resample Audio to &44.1 KHz"
-msgstr "דגום ל- 44.1 קילו־הרץ"
+msgstr "דגימה ל־&44.1 קילו־הרץ מחדש"
 
 #. i18n: ectx: property (shortcut), widget (QCheckBox, m_checkAudioResampling)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:512
@@ -9918,14 +9905,14 @@ msgid "Video Size"
 msgstr "גודל וידאו:"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:272
-#, fuzzy, no-c-format, kde-format
+#, no-c-format, kde-format
 msgctxt "Ch is short for Channels"
 msgid "%1Ch"
 msgid_plural "%1Ch"
-msgstr[0] "%1Ch"
-msgstr[1] "%1Ch"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "ערוץ"
+msgstr[1] "שני ערוצים"
+msgstr[2] "%1 ערוצים"
+msgstr[3] "%1 ערוצים"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:323
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:353
@@ -9934,13 +9921,13 @@ msgid "Video DVD Ripping"
 msgstr "קריעת תקליטור וידאו DVD"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:354
-#, fuzzy, kde-format
+#, kde-format
 msgid "1 title from %2"
 msgid_plural "%1 titles from %2"
-msgstr[0] "כותר אחד מ - %2"
-msgstr[1] "%1 כותרים מ - %2"
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "כותרת מתוך %2"
+msgstr[1] "שתי כותרות מתוך %2"
+msgstr[2] "%1 כותרות מתוך %2"
+msgstr[3] "%1 כותרות מתוך %2"
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:494
 #, kde-format
