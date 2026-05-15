@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-05-07 09:32+0300\n"
+"PO-Revision-Date: 2026-05-14 20:47+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -5968,13 +5968,13 @@ msgstr ""
 #: projects/base_k3bmovixoptionswidget.ui:62
 #, kde-format
 msgid "Pla&y files randomly"
-msgstr "נ&גן קבצים אקראית"
+msgstr "ני&גון קבצים אקראית"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkNoDma)
 #: projects/base_k3bmovixoptionswidget.ui:69
 #, kde-format
 msgid "Do not use DMA for media access"
-msgstr "אל תשתמש ב-DMA עבור גישה למדיה"
+msgstr "לא להשתמש ב־DMA לטובת גישה למדיה"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkNoDma)
 #: projects/base_k3bmovixoptionswidget.ui:72
@@ -5989,7 +5989,7 @@ msgstr ""
 #: projects/base_k3bmovixoptionswidget.ui:75
 #, kde-format
 msgid "&Do not use DMA"
-msgstr "&אל תשתמש ב-DMA"
+msgstr "ל&א להשתמש ב־DMA"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, m_editUnwantedMplayerOptions)
 #: projects/base_k3bmovixoptionswidget.ui:84
@@ -9485,7 +9485,7 @@ msgstr "%1 החזיר הודעת שגיאה לא ידועה (קוד %2)."
 #: rip/k3bvideocdrip.cpp:260
 #, kde-format
 msgid "Please send me an email with the last output..."
-msgstr "אנא שלח לי דואל אלקטרוני עם הפלט האחרון."
+msgstr "נא לשלוח לי הודעה בדוא״ל עם הפלט האחרון…"
 
 #: rip/k3bvideocdrip.cpp:266
 #, kde-format
@@ -9510,12 +9510,12 @@ msgstr "זוהה קובץ PBC מורחב של VCD2.0"
 #: rip/k3bvideocdrip.cpp:316 rip/k3bvideocdrip.cpp:334
 #, kde-format
 msgid "Extracting %1"
-msgstr "מחלץ %1"
+msgstr "%1 מחולץ"
 
 #: rip/k3bvideocdrip.cpp:327
 #, kde-format
 msgid "Extracting %1 to %2"
-msgstr "מחלץ מתוך %1 אל %2"
+msgstr "%1 מחולץ אל %2"
 
 #: rip/k3bvideocdrippingdialog.cpp:37
 #, kde-format
@@ -9530,7 +9530,7 @@ msgstr "תיקיית יעד"
 #: rip/k3bvideocdrippingdialog.cpp:66
 #, kde-format
 msgid "Rip files to:"
-msgstr "העתק קבצים אל:"
+msgstr "העתקת קבצים אל:"
 
 #: rip/k3bvideocdrippingdialog.cpp:73
 #, kde-format
@@ -9545,7 +9545,7 @@ msgstr "הגודל הנדרש לאחסון:"
 #: rip/k3bvideocdrippingdialog.cpp:91
 #, kde-format
 msgid "Ignore /EXT/PSD_X.VCD"
-msgstr "התעלם מ- EXT/PSD_X.VCD/"
+msgstr "התעלמות מ־EXT/PSD_X.VCD/"
 
 #: rip/k3bvideocdrippingdialog.cpp:92
 #, kde-format
@@ -9555,7 +9555,7 @@ msgstr "להשתמש בגודל מקטע של 2336 בתים לקובץ דמות 
 #: rip/k3bvideocdrippingdialog.cpp:96
 #, kde-format
 msgid "Extract XML structure"
-msgstr "חלץ מבנה XML"
+msgstr "חילוץ מבנה XML"
 
 #: rip/k3bvideocdrippingdialog.cpp:106
 #, kde-format
@@ -9575,16 +9575,16 @@ msgstr "מקום פנוי נדרש עבור הקבצים"
 #: rip/k3bvideocdrippingdialog.cpp:121
 #, kde-format
 msgid "Ignore extended PSD"
-msgstr "התעלם מ-PSD מורחב"
+msgstr "התעלמות מ־PSD מורחב"
 
 #: rip/k3bvideocdrippingdialog.cpp:122
-#, fuzzy, kde-format
+#, kde-format
 msgid ""
 "<p>Ignore extended PSD (located in the ISO 9660 filesystem under `/EXT/PSD_X."
 "VCD') and use the <em>standard</em> PSD.</p>"
 msgstr ""
-"<p>התעלם מ-PSD מורחב(ממוקם במערכת קבצים ISO-9660 תחת `/EXT/PSD_X.VCD') "
-"והשתמש ב-PSD <em>הסטנדרטי</em>.</p>"
+"<p>להתעלם מ־PSD מורחב (ממוקם במערכת הקבצים מסוגISO 9660 תחת `‎/EXT/PSD_X."
+"VCD') להשתמש ב־PSD <em>הרגיל</em>.</p>"
 
 #: rip/k3bvideocdrippingdialog.cpp:124
 #, kde-format
@@ -9890,9 +9890,9 @@ msgid "unknown language"
 msgstr "שפה לא ידועה"
 
 #: rip/videodvd/k3bvideodvdaudiomodel.cpp:181
-#, fuzzy, kde-format
+#, kde-format
 msgid "%1 (not supported)"
-msgstr "לא נתמך"
+msgstr "%1 (לא נתמך)"
 
 #: rip/videodvd/k3bvideodvdaudiomodel.cpp:251
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:76
