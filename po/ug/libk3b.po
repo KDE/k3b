@@ -8,14 +8,15 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-17 00:42+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-30 16:39-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -92,7 +93,7 @@ msgstr ""
 #: jobs/k3bdvdcopyjob.cpp:360
 #, kde-format
 msgid "Unable to open '%1' for writing."
-msgstr "‹%1› نى يېزىش ئۈچۈن ئاچقىلى بولمىدى."
+msgstr "«%1» نى يېزىش ئۈچۈن ئاچقىلى بولمىدى."
 
 #: jobs/k3baudiosessionreadingjob.cpp:235
 #, kde-format
@@ -144,10 +145,9 @@ msgid "Please insert a rewritable CD medium into drive<p><b>%1 %2 (%3)</b>."
 msgstr ""
 
 #: jobs/k3bblankingjob.cpp:143
-#, fuzzy, kde-format
-#| msgid "Blanking"
+#, kde-format
 msgid "Blanking error."
-msgstr "ئۆچۈرۈۋاتىدۇ"
+msgstr ""
 
 #: jobs/k3bblankingjob.cpp:144
 #, kde-format
@@ -267,16 +267,14 @@ msgid "Found corrupted CD-Text. Ignoring it."
 msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:386
-#, fuzzy, kde-format
-#| msgid "Not Found"
+#, kde-format
 msgid "No CD-Text found."
-msgstr "تېپىلمىدى"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:397
-#, fuzzy, kde-format
-#| msgid "Copying CD"
+#, kde-format
 msgid "Querying CDDB"
-msgstr "CD كۆچۈرۈش"
+msgstr ""
 
 #: jobs/k3bcdcopyjob.cpp:418
 #, kde-format
@@ -514,7 +512,7 @@ msgstr[0] ""
 #: projects/k3bgrowisofswriter.cpp:134 projects/videocd/k3bvcdjob.cpp:194
 #, kde-format
 msgid "Could not find %1 executable."
-msgstr "%1 دېگەن پروگراممىنى تاپالمىدى."
+msgstr "%1 دېگەن پىروگراممىنى تاپالمىدى."
 
 #: jobs/k3bcdda2wavreader.cpp:127 jobs/k3bdvdbooktypejob.cpp:325
 #: jobs/k3bdvdformattingjob.cpp:498
@@ -1221,7 +1219,7 @@ msgstr ""
 #, kde-format
 msgid "Most writers do not support writing multisession CDs in DAO mode."
 msgstr ""
-"كۆپ قىسىم CD يازغۇلار DAO ھالەتتە كۆپ ئەڭگىمەلىك CD غا يېزىشنى قوللىمايدۇ"
+"كۆپ قىسىم CD يازغۇلار DAO ھالەتتە كۆپ جەريانچاقلىق CD غا يېزىشنى قوللىمايدۇ."
 
 #: jobs/k3bmetawriter.cpp:785
 #, kde-format
@@ -1952,10 +1950,9 @@ msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:245
 #: projects/datacd/k3bmsinfofetcher.cpp:143
-#, fuzzy, kde-format
-#| msgid "Could not open file %1."
+#, kde-format
 msgid "Could not open ISO 9660 filesystem in %1."
-msgstr "ھۆججەت ‹%1› نى ئاچالمىدى."
+msgstr ""
 
 #: projects/datacd/k3bdatamultisessionparameterjob.cpp:277
 #: projects/k3bgrowisofswriter.cpp:197
@@ -2426,16 +2423,14 @@ msgid "Enable overburning in the advanced K3b settings to burn anyway."
 msgstr ""
 
 #: projects/k3bcdrdaowriter.cpp:977
-#, fuzzy, kde-format
-#| msgid "Writing leadin "
+#, kde-format
 msgid "Writing leadin"
-msgstr "leadin نى يېزىۋاتىدۇ "
+msgstr ""
 
 #: projects/k3bcdrdaowriter.cpp:983
-#, fuzzy, kde-format
-#| msgid "Writing leadout "
+#, kde-format
 msgid "Writing leadout"
-msgstr "leadout نى يېزىۋاتىدۇ "
+msgstr ""
 
 #: projects/k3bcdrecordwriter.cpp:229
 #, kde-format
@@ -2987,7 +2982,7 @@ msgstr ""
 #: projects/k3bgrowisofswriter.cpp:212
 #, kde-format
 msgid "Could not open file %1."
-msgstr "ھۆججەت ‹%1› نى ئاچالمىدى."
+msgstr "ھۆججەت «%1» نى ئاچالمىدى."
 
 #: projects/k3bgrowisofswriter.cpp:358
 #, kde-format
@@ -3187,7 +3182,7 @@ msgstr ""
 #: projects/videocd/k3bvcddoc.cpp:205
 #, kde-format
 msgid "VCD"
-msgstr "VCD"
+msgstr ""
 
 #: projects/videocd/k3bvcddoc.cpp:206 projects/videocd/k3bvcddoc.cpp:219
 #: projects/videocd/k3bvcddoc.cpp:248
@@ -3273,22 +3268,17 @@ msgid "To create Video CDs you have to install VcdImager version %1."
 msgstr ""
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"سىز بۇنى تارقىتىلما دىسكىسىدىن تاپالايسىز ياكى http://www.vcdimager.org دىن "
-"چۈشۈرەلەيسىز"
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
 msgstr ""
-"%1 پروگرامما بەك كونا ئىكەن. نەشرى %2 ياكى ئۇنىڭدىن يۇقىرىسى تەلەپ قىلىنىدۇ."
+"%1 پىروگرامما بەك كونا ئىكەن. نەشرى %2 ياكى ئۇنىڭدىن يۇقىرىسى تەلەپ قىلىنىدۇ."
 
 #: projects/videocd/k3bvcdjob.cpp:287
 #, kde-format
@@ -3393,7 +3383,7 @@ msgstr[0] "%1 MPEGs (%2)"
 #: projects/videocd/k3bvcdtrack.cpp:422
 #, kde-format
 msgid "n/a"
-msgstr "n/a"
+msgstr "ئىشلەتكىلى بولمايدۇ"
 
 #: projects/videocd/k3bvcdtrack.cpp:201 projects/videocd/k3bvcdtrack.cpp:290
 #, kde-format
@@ -3415,7 +3405,7 @@ msgstr "بەلگىلەنمىگەن"
 #: projects/videocd/k3bvcdtrack.cpp:303
 #, kde-format
 msgid "%1 Hz"
-msgstr "%1 Hz"
+msgstr ""
 
 #: projects/videocd/k3bvcdtrack.cpp:330 projects/videocd/k3bvcdtrack.cpp:332
 #, kde-format
@@ -3445,7 +3435,7 @@ msgstr "سۈرەت قەۋىتى %1"
 #: projects/videocd/k3bvcdtrack.cpp:389
 #, kde-format
 msgid "unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: projects/videocd/k3bvcdtrack.cpp:390
 #, kde-format
@@ -3659,7 +3649,7 @@ msgstr[0] ""
 #, kde-format
 msgid " and %1 session"
 msgid_plural " and %1 sessions"
-msgstr[0] " ۋە %1 ئەڭگىمە"
+msgstr[0] " ۋە %1 جەريانچاق"
 
 #: tools/k3bmedium.cpp:424
 #, kde-format
@@ -4249,12 +4239,12 @@ msgstr ""
 #: videodvd/k3bvideodvd.cpp:292
 #, kde-format
 msgid "AC3"
-msgstr "AC3"
+msgstr ""
 
 #: videodvd/k3bvideodvd.cpp:294
 #, kde-format
 msgid "MPEG1"
-msgstr "MPEG1"
+msgstr ""
 
 #: videodvd/k3bvideodvd.cpp:296
 #, kde-format
@@ -4279,7 +4269,7 @@ msgstr ""
 #: videodvd/k3bvideodvd.cpp:313
 #, kde-format
 msgid "Normal"
-msgstr "نورمال"
+msgstr "ئادەتتىكى"
 
 #: videodvd/k3bvideodvd.cpp:315
 #, kde-format
@@ -4304,7 +4294,7 @@ msgstr ""
 #: videodvd/k3bvideodvd.cpp:330
 #, kde-format
 msgid "RLE"
-msgstr "RLE"
+msgstr ""
 
 #: videodvd/k3bvideodvd.cpp:332
 #, kde-format

@@ -8,24 +8,25 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2013-09-08 07:04+0900\n"
-"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
+"PO-Revision-Date: 2026-05-30 16:38-0400\n"
+"Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "ئابدۇقادىر ئابلىز, غەيرەت كەنجى"
+msgstr "ئابدۇقادىر ئابلىز، غەيرەت كەنجى"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "sahran.ug@gmail.com,  gheyret@gmail.com"
+msgstr "sahranbay@gmail.com, gheyret@gmail.com"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
@@ -45,7 +46,7 @@ msgstr ""
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:366
 #, kde-format
 msgid "FLAC"
-msgstr "FLAC"
+msgstr ""
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:372
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:387
@@ -91,7 +92,7 @@ msgstr "تارقاتقۇچى"
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:334
 #, kde-format
 msgid "%1 Hz"
-msgstr "%1 Hz"
+msgstr ""
 
 #: ../plugins/decoder/flac/k3bflacdecoder.cpp:392
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:336
@@ -134,7 +135,7 @@ msgstr "ئەسلى"
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:436
 #, kde-format
 msgid "CRC"
-msgstr "CRC"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:389
@@ -155,7 +156,7 @@ msgstr "قوش(جۈپ)"
 #: ../plugins/encoder/lame/k3blametyes.h:87
 #, kde-format
 msgid "Joint Stereo"
-msgstr "بىرلەشمە سىتېرېئولۇق ئاۋاز"
+msgstr "بىرلەشمە ئىستېرېئولۇق ئاۋاز"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboMode)
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:395
@@ -163,7 +164,7 @@ msgstr "بىرلەشمە سىتېرېئولۇق ئاۋاز"
 #: ../plugins/encoder/lame/k3blametyes.h:86
 #, kde-format
 msgid "Stereo"
-msgstr "ستېرېئو"
+msgstr "ئىستېرېئو"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:404
 #, kde-format
@@ -198,7 +199,7 @@ msgstr ""
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:429
 #, kde-format
 msgid "Unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:433
 #: ../plugins/decoder/mp3/k3bmaddecoder.cpp:435
@@ -249,7 +250,7 @@ msgstr ""
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:317
 #, kde-format
 msgid "WAVE"
-msgstr "WAVE"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: ../plugins/encoder/external/base_k3bexternalencoderconfigwidget.ui:22
@@ -474,7 +475,7 @@ msgstr "ھۆججەت ئاتى بەلگىلەنمىگەن"
 #: rip/k3baudiorippingdialog.cpp:154 rip/k3bvideocdrippingdialog.cpp:90
 #, kde-format
 msgid "Settings"
-msgstr "تەڭشەكلەر"
+msgstr "تەڭشەك"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:40
@@ -507,10 +508,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioManual)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:172
-#, fuzzy, kde-format
-#| msgid "Quality Settings"
+#, kde-format
 msgid "Manua&l settings:"
-msgstr "سۈپەت تەڭشىكى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonManualSettings)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:239
@@ -640,23 +640,21 @@ msgstr "سۈپەت"
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioConstantBitrate)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Constant Bitrate"
+#, kde-format
 msgid "&Constant Bitrate"
-msgstr "تۇراقلىق بىت تېزلىكى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioVariableBitrate)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:56
-#, fuzzy, kde-format
-#| msgid "Variable Bitrate"
+#, kde-format
 msgid "&Variable Bitrate"
-msgstr "ئۆزگىرىشچان بىت نىسبىتى"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateMaximum)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:69
 #, kde-format
 msgid "Maximum bitrate:"
-msgstr "ئەڭ چوڭ بىت نىسبىتى"
+msgstr "ئەڭ چوڭ بىت نىسبىتى:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateAverage)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:89
@@ -964,7 +962,7 @@ msgstr ""
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:113
 #, kde-format
 msgid "14400"
-msgstr "14400"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel4)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:123
@@ -1048,7 +1046,7 @@ msgstr "CD-R"
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:326
 #, kde-format
 msgid "CVS"
-msgstr "CVS"
+msgstr ""
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:328
 #, kde-format
@@ -1093,7 +1091,7 @@ msgstr ""
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:344
 #, kde-format
 msgid "VMS"
-msgstr "VMS"
+msgstr ""
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:346
 #, kde-format
@@ -1113,7 +1111,7 @@ msgstr ""
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:352
 #, kde-format
 msgid "Raw"
-msgstr "خام"
+msgstr "ئەسلى"
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:354 k3b.cpp:628
 #, kde-format
@@ -1128,7 +1126,7 @@ msgstr ""
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:118
 #, kde-format
 msgid "Scan"
-msgstr "تەكشۈر"
+msgstr "تارا"
 
 #: ../plugins/project/audiometainforenamer/k3baudiometainforenamerplugin.cpp:123
 #, kde-format
@@ -1213,7 +1211,7 @@ msgstr ""
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:68
 #, kde-format
 msgid "Cancel"
-msgstr "ئەمەلدىن قالدۇر"
+msgstr "ۋاز كەچ"
 
 #: ../plugins/project/audioprojectcddb/k3baudioprojectcddbplugin.cpp:69
 #: projects/k3baudioburndialog.cpp:50
@@ -1269,7 +1267,7 @@ msgstr ""
 #: k3b.cpp:312
 #, kde-format
 msgid "Close All"
-msgstr "ھەممىنى تاقا"
+msgstr "ھەممىنى ياپ"
 
 #: k3b.cpp:313
 #, kde-format
@@ -1279,7 +1277,7 @@ msgstr ""
 #: k3b.cpp:319
 #, kde-format
 msgid "Quits the application"
-msgstr "پروگراممىنى ئاخىرلاشتۇرىدۇ"
+msgstr "پىروگراممىنى ئاخىرلاشتۇرىدۇ"
 
 #: k3b.cpp:322
 #, kde-format
@@ -1513,10 +1511,9 @@ msgid "Open Files"
 msgstr "ھۆججەت ئاچ"
 
 #: k3b.cpp:921 k3b.cpp:988
-#, fuzzy, kde-format
-#| msgid "Projects"
+#, kde-format
 msgid "K3b Projects (*.k3b)"
-msgstr "قۇرۇلۇش"
+msgstr ""
 
 #: k3b.cpp:953
 #, kde-format
@@ -1584,10 +1581,9 @@ msgid "Select Files to Add to Project"
 msgstr ""
 
 #: k3b.cpp:1293
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files (*)"
-msgstr "*|بارلىق ھۆججەتلەر"
+msgstr "ھەممە ھۆججەت(*)"
 
 #: k3b.cpp:1300
 #, kde-format
@@ -1644,7 +1640,7 @@ msgstr "ئېگەرلە(&M)"
 #: k3bemptydiscwaiter.cpp:519 k3bemptydiscwaiter.cpp:581
 #, kde-format
 msgid "&Eject"
-msgstr "چىقار(&E)"
+msgstr "قاڭقىت(&E)"
 
 #: k3bappdevicemanager.cpp:53
 #, kde-format
@@ -1828,7 +1824,7 @@ msgstr "ئۈسكۈنە(&D)"
 #: k3bdiroperator.cpp:44
 #, kde-format
 msgid "Bookmarks"
-msgstr "خەتكۈشلەر"
+msgstr "خەتكۈش"
 
 #: k3bdiroperator.cpp:48 k3bfiletreeview.cpp:90
 #, kde-format
@@ -1845,7 +1841,7 @@ msgstr ""
 #: k3bdirview.cpp:227
 #, kde-format
 msgid "Mount Failed"
-msgstr "mount قىلىش مەغلۇپ بولدى"
+msgstr "ئېگەرلىيەلمىدى"
 
 #: k3bdirview.cpp:228
 #, kde-format
@@ -1855,7 +1851,7 @@ msgstr ""
 #: k3bdirview.cpp:243
 #, kde-format
 msgid "Unmount Failed"
-msgstr "unmount قىلىش مەغلۇپ بولدى"
+msgstr "ئېگەرسىزلىيەلمىدى"
 
 #: k3bdirview.cpp:244
 #, kde-format
@@ -1914,7 +1910,7 @@ msgstr ""
 #: rip/categories.cpp:20 rip/k3baudiorippingdialog.cpp:404
 #, kde-format
 msgid "Data"
-msgstr "سانلىق-مەلۇمات"
+msgstr "سانلىق مەلۇمات"
 
 #: k3bdiskinfoview.cpp:208
 #, kde-format
@@ -1955,18 +1951,18 @@ msgstr ""
 #: k3bdiskinfoview.cpp:251 projects/k3bdatamultisessionimportdialog.cpp:207
 #, kde-format
 msgid "Session %1"
-msgstr "ئەڭگىمە %1"
+msgstr "جەريانچاق %1"
 
 #: k3bdiskinfoview.cpp:261 projects/k3bvcdburndialog.cpp:388
 #: rip/k3baudiorippingdialog.cpp:136
 #, kde-format
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #: k3bdiskinfoview.cpp:263
 #, kde-format
 msgid "Attributes"
-msgstr "خاسلىقلار"
+msgstr "خاسلىق"
 
 #: k3bdiskinfoview.cpp:265
 #, kde-format
@@ -1989,7 +1985,7 @@ msgstr ""
 #: projects/k3bvcdtrackdialog.cpp:590 projects/k3bvcdtrackdialog.cpp:631
 #, kde-format
 msgid "Type:"
-msgstr "تىپى:"
+msgstr "تۈرى:"
 
 #: k3bdiskinfoview.cpp:310 rip/k3baudioconvertingoptionwidget.cpp:217
 #: rip/k3baudioconvertingoptionwidget.cpp:251
@@ -2000,7 +1996,7 @@ msgstr "تىپى:"
 #: rip/k3bpatternparser.cpp:164 rip/videodvd/k3bvideodvdrippingwidget.cpp:269
 #, kde-format
 msgid "unknown"
-msgstr "نامەلۇم"
+msgstr "يوچۇن"
 
 #: k3bdiskinfoview.cpp:310
 #, kde-format
@@ -2142,7 +2138,7 @@ msgstr ""
 #, kde-format
 msgctxt "Size of one block, always 2048"
 msgid "%1 B"
-msgstr "%1 بايت"
+msgstr "%1 B"
 
 #: k3bdiskinfoview.cpp:391
 #, kde-format
@@ -2165,12 +2161,12 @@ msgstr ""
 #: k3bemptydiscwaiter.cpp:106
 #, kde-format
 msgid "Eject"
-msgstr "چىقار"
+msgstr "قاڭقىت"
 
 #: k3bemptydiscwaiter.cpp:110
 #, kde-format
 msgid "Load"
-msgstr "يۈك"
+msgstr "يۈكلە"
 
 #: k3bemptydiscwaiter.cpp:118
 #, kde-format
@@ -2245,28 +2241,24 @@ msgid "Filter:"
 msgstr "سۈزگۈچ:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|بارلىق ھۆججەتلەر"
+msgstr "بارلىق ھۆججەت"
 
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "No Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "ھۆججەت يوق"
+msgstr ""
 
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "Open Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "ھۆججەت ئاچ"
+msgstr ""
 
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "No Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "ھۆججەت يوق"
+msgstr ""
 
 #: k3bfileview.cpp:79
 #, kde-format
@@ -2286,7 +2278,7 @@ msgstr "خەتكۈچلەرنى كۆرسىتىش"
 #: k3binteractiondialog.cpp:70
 #, kde-format
 msgid "Load default settings"
-msgstr "Load default settings"
+msgstr ""
 
 #: k3binteractiondialog.cpp:71
 #, kde-format
@@ -2301,7 +2293,7 @@ msgstr ""
 #: k3binteractiondialog.cpp:97 projects/k3bprojectburndialog.cpp:139
 #, kde-format
 msgid "Start"
-msgstr "باشلاش"
+msgstr "باشلا"
 
 #: k3binteractiondialog.cpp:98
 #, kde-format
@@ -2339,8 +2331,7 @@ msgid "Overall progress:"
 msgstr "ئومۇمىي سۈرئىتى:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "توختا"
@@ -2351,12 +2342,10 @@ msgid "Show Debugging Output"
 msgstr ""
 
 #: k3bjobprogressdialog.cpp:297 k3bjobprogressdialog.cpp:319
-#, fuzzy, kde-format
-#| msgctxt "%1 and %2 are byte sizes formatted via KLocale::formatByteSize"
-#| msgid "%1 of %2"
+#, kde-format
 msgctxt "%1 and %2 are byte sizes formatted via KFormat::formatByteSize"
 msgid "%1 of %2"
-msgstr "%2 نىڭ %1"
+msgstr "%1 / %2"
 
 #: k3bjobprogressdialog.cpp:375 k3bjobprogressdialog.cpp:557
 #, kde-format
@@ -2367,7 +2356,7 @@ msgstr ""
 #: k3bjobprogressdialog.cpp:384
 #, kde-format
 msgid "Success."
-msgstr "s"
+msgstr "مۇۋەپپەقىيەتلىك."
 
 #: k3bjobprogressdialog.cpp:391
 #, kde-format
@@ -2390,10 +2379,9 @@ msgid "Finished with errors"
 msgstr ""
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to cancel?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "راستلا ۋاز كېچەمسىز؟"
+msgstr ""
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
@@ -2407,18 +2395,16 @@ msgid "Stop operation"
 msgstr ""
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "داۋاملاشتۇر"
+msgstr "مەشغۇلاتنى داۋاملاشتۇر"
 
 #: k3bjobprogressdialog.cpp:561
-#, fuzzy, kde-format
-#| msgid "Remaining:"
+#, kde-format
 msgctxt "@info %1 is a duration formatted"
 msgid "Remaining: %1"
-msgstr "قالغان ۋاقىت:"
+msgstr ""
 
 #: k3blsofwrapperdialog.cpp:39
 #, kde-format
@@ -2469,7 +2455,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "ئاخىرلاشتۇر"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -2491,7 +2477,7 @@ msgstr[0] ""
 #, kde-format
 msgid " and %1 session"
 msgid_plural " and %1 sessions"
-msgstr[0] " ۋە %1 ئەڭگىمە"
+msgstr[0] " ۋە %1 جەريانچاق"
 
 #: k3bmediumdelegate.cpp:151
 #, kde-format
@@ -2546,7 +2532,7 @@ msgstr "تېمپېراتۇرا:"
 #: k3bstatusbarmanager.cpp:115
 #, kde-format
 msgid "No info"
-msgstr ""
+msgstr "ئۇچۇر يوق"
 
 #: k3bstatusbarmanager.cpp:154
 #, kde-format
@@ -2617,7 +2603,7 @@ msgstr "قايتا كۆرسەتمە"
 #: k3bsystemproblemdialog.cpp:144
 #, kde-format
 msgid "Solution"
-msgstr "يېشىمى:"
+msgstr "يېشىمى"
 
 #: k3bsystemproblemdialog.cpp:179
 #, kde-format
@@ -3089,7 +3075,7 @@ msgstr "قۇرۇلۇش(&P)"
 #: k3bui.rc:9
 #, kde-format
 msgid "&Tools"
-msgstr "قوراللار(&T)"
+msgstr "قورال(&T)"
 
 #. i18n: ectx: Menu (help)
 #: k3bui.rc:27
@@ -3300,12 +3286,12 @@ msgstr ""
 #: k3bwritingmodewidget.cpp:157
 #, kde-format
 msgid "TAO"
-msgstr "TAO"
+msgstr ""
 
 #: k3bwritingmodewidget.cpp:159
 #, kde-format
 msgid "RAW"
-msgstr "RAW"
+msgstr ""
 
 #: k3bwritingmodewidget.cpp:161
 #, kde-format
@@ -3320,7 +3306,7 @@ msgstr ""
 #: main.cpp:22
 #, kde-format
 msgid "K3b"
-msgstr "K3b"
+msgstr "K3b نۇر دىسكا ئويغۇچ"
 
 #: main.cpp:23
 #, kde-format
@@ -3351,7 +3337,7 @@ msgstr ""
 #: main.cpp:37
 #, kde-format
 msgid "Maintainer"
-msgstr ""
+msgstr "ئاسرىغۇچى"
 
 #: main.cpp:38
 #, kde-format
@@ -3386,7 +3372,7 @@ msgstr ""
 #: main.cpp:41
 #, kde-format
 msgid "Montel Laurent"
-msgstr "Montel Laurent"
+msgstr ""
 
 #: main.cpp:41
 #, kde-format
@@ -3396,7 +3382,7 @@ msgstr ""
 #: main.cpp:42
 #, kde-format
 msgid "Ralf Habacker"
-msgstr "Ralf Habacker"
+msgstr ""
 
 #: main.cpp:42
 #, kde-format
@@ -3436,7 +3422,7 @@ msgstr ""
 #: main.cpp:51
 #, kde-format
 msgid "Christoph Thielecke"
-msgstr "Christoph Thielecke"
+msgstr ""
 
 #: main.cpp:52
 #, kde-format
@@ -3466,7 +3452,7 @@ msgstr ""
 #: main.cpp:60
 #, kde-format
 msgid "John Steele Scott"
-msgstr ""
+msgstr "John Steele Scott"
 
 #: main.cpp:61
 #, kde-format
@@ -3538,7 +3524,7 @@ msgstr ""
 #: main.cpp:81
 #, kde-format
 msgid "Marcel Dierkes"
-msgstr "Marcel Dierkes"
+msgstr ""
 
 #: main.cpp:82
 #, kde-format
@@ -3558,7 +3544,7 @@ msgstr ""
 #: main.cpp:87
 #, kde-format
 msgid "Robert Wadley"
-msgstr "Robert Wadley"
+msgstr ""
 
 #: main.cpp:88
 #, kde-format
@@ -3753,22 +3739,19 @@ msgid "Choose Image File"
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "سۈرەت ھۆججىتى:"
+msgstr "رەسىم ھۆججەتلەر"
 
 #: misc/k3bimagewritingdialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "Other Settings"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "باشقا تەڭشەك"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:452
-#, fuzzy, kde-format
-#| msgid "Open Files"
+#, kde-format
 msgid "Cue Files"
-msgstr "ھۆججەت ئاچ"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:453
 #, kde-format
@@ -3786,10 +3769,9 @@ msgid "Auto Detection"
 msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:465
-#, fuzzy, kde-format
-#| msgid "Other Settings"
+#, kde-format
 msgid "ISO 9660 filesystem image"
-msgstr "باشقا تەڭشەك"
+msgstr ""
 
 #: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
@@ -4098,7 +4080,7 @@ msgstr "CD-RW"
 #: misc/k3bmediaformattingdialog.cpp:41
 #, kde-format
 msgid "DVD±RW"
-msgstr "DVD±RW"
+msgstr ""
 
 #: misc/k3bmediaformattingdialog.cpp:41
 #, kde-format
@@ -4335,10 +4317,9 @@ msgstr "ئۆرنەك تاللانمىدى"
 
 #. i18n: ectx: property (text), widget (KNSWidgets::Button, m_buttonGetNewThemes)
 #: option/base_k3bthemeoptiontab.ui:119
-#, fuzzy, kde-format
-#| msgid "Install New Theme..."
+#, kde-format
 msgid "Get New Themes..."
-msgstr "يېڭى ئۆرنەك ئورنات…"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, m_buttonInstallTheme)
 #: option/base_k3bthemeoptiontab.ui:126
@@ -4375,7 +4356,7 @@ msgstr ""
 #: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:585
 #, kde-format
 msgid "MB"
-msgstr "مېگابايت"
+msgstr "MB"
 
 #: option/k3badvancedoptiontab.cpp:59
 #, kde-format
@@ -4385,7 +4366,7 @@ msgstr ""
 #: option/k3badvancedoptiontab.cpp:68 rip/categories.cpp:20
 #, kde-format
 msgid "Miscellaneous"
-msgstr "باشقىلار"
+msgstr "باشقا"
 
 #: option/k3badvancedoptiontab.cpp:70
 #, kde-format
@@ -4519,7 +4500,7 @@ msgstr ""
 #: option/k3bdevicewidget.cpp:141
 #, kde-format
 msgid "Vendor:"
-msgstr "زاۋۇت:"
+msgstr "تەمىنلىگۈچى:"
 
 #: option/k3bdevicewidget.cpp:147
 #, kde-format
@@ -4625,12 +4606,12 @@ msgstr ""
 #: option/k3bexternalbinpermissionmodel.cpp:286
 #, kde-format
 msgid "Program"
-msgstr "پروگرامما"
+msgstr "پىروگرامما"
 
 #: option/k3bexternalbinparamsmodel.cpp:160
 #, kde-format
 msgid "Parameters"
-msgstr "پارامېتىرلار"
+msgstr "پارامېتىر"
 
 #: option/k3bexternalbinpermissionmodel.cpp:231
 #, kde-format
@@ -4641,7 +4622,7 @@ msgstr "ئۆزگەرمىدى"
 #: option/k3bexternalbinwidget.cpp:119
 #, kde-format
 msgid "Permissions"
-msgstr "ئىمتىيازلار"
+msgstr "ئىجازەت"
 
 #: option/k3bexternalbinpermissionmodel.cpp:288
 #, kde-format
@@ -4659,7 +4640,7 @@ msgstr ""
 #: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
 #, kde-format
 msgid "Programs"
-msgstr "پروگرامما"
+msgstr "پىروگرامما"
 
 #: option/k3bexternalbinwidget.cpp:87
 #, kde-format
@@ -4699,25 +4680,24 @@ msgid "Following programs could not be updated:"
 msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to create folder %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "قىسقۇچ «%1» نى قۇرغىلى بولمىدى"
+msgstr ""
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "دەلىللەش رەت قىلىندى"
 
 #: option/k3bexternalbinwidget.cpp:264
 #, kde-format
 msgid "An error occurred"
-msgstr ""
+msgstr "خاتالىق كۆرۈلدى"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "ئىناۋەتسىز مەشغۇلات"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
@@ -4825,7 +4805,7 @@ msgstr "باشقا تەڭشەكلەر"
 #: option/k3boptiondialog.cpp:139
 #, kde-format
 msgid "Devices"
-msgstr "ئۈسكۈنىلەر"
+msgstr "ئۈسكۈنە"
 
 #: option/k3boptiondialog.cpp:140
 #, kde-format
@@ -4840,12 +4820,12 @@ msgstr ""
 #: option/k3boptiondialog.cpp:163
 #, kde-format
 msgid "Notifications"
-msgstr "ئۇقتۇرۇشلار"
+msgstr "ئۇقتۇرۇش"
 
 #: option/k3boptiondialog.cpp:164
 #, kde-format
 msgid "System Notifications"
-msgstr ""
+msgstr "سىستېما ئۇقتۇرۇشى"
 
 #: option/k3boptiondialog.cpp:173
 #, kde-format
@@ -4860,7 +4840,7 @@ msgstr ""
 #: option/k3boptiondialog.cpp:187
 #, kde-format
 msgid "Themes"
-msgstr "ئۆرنەكلەر"
+msgstr "ئۆرنەك"
 
 #: option/k3boptiondialog.cpp:188
 #, kde-format
@@ -4890,7 +4870,7 @@ msgstr "ئۆرنەك"
 #: option/k3bthememodel.cpp:95
 #, kde-format
 msgid "Author"
-msgstr "ئاپتور"
+msgstr "يازغۇچى"
 
 #: option/k3bthememodel.cpp:97
 #, kde-format
@@ -5072,10 +5052,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupIsoSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:134
-#, fuzzy, kde-format
-#| msgid "Other Settings"
+#, kde-format
 msgid "ISO 9660 Settings"
-msgstr "باشقا تەڭشەك"
+msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkAllowUntranslatedFilenames)
 #: projects/base_k3badvanceddataimagesettings.ui:143
@@ -5169,24 +5148,21 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel1)
 #: projects/base_k3badvanceddataimagesettings.ui:234
-#, fuzzy, kde-format
-#| msgid "Level 1"
+#, kde-format
 msgid "&Level 1"
-msgstr "دەرىجە 1"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel2)
 #: projects/base_k3badvanceddataimagesettings.ui:241
-#, fuzzy, kde-format
-#| msgid "Level 2"
+#, kde-format
 msgid "Level &2"
-msgstr "دەرىجە 2"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioIsoLevel3)
 #: projects/base_k3badvanceddataimagesettings.ui:248
-#, fuzzy, kde-format
-#| msgid "Level 3"
+#, kde-format
 msgid "Level &3"
-msgstr "دەرىجە 3"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupRockRidgeSettings)
 #: projects/base_k3badvanceddataimagesettings.ui:258
@@ -5485,10 +5461,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioFloppy)
 #: projects/base_k3bbootimagedialog.ui:74
-#, fuzzy, kde-format
-#| msgid "Floppy"
+#, kde-format
 msgid "&Floppy"
-msgstr "يۇمشاق دىسكا"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:81
@@ -5498,10 +5473,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, m_radioHarddisk)
 #: projects/base_k3bbootimagedialog.ui:84
-#, fuzzy, kde-format
-#| msgid "Harddisk"
+#, kde-format
 msgid "Hardd&isk"
-msgstr "قاتتىق دىسكا"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, m_radioNoEmulation)
 #: projects/base_k3bbootimagedialog.ui:91
@@ -5755,10 +5729,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel6)
 #: projects/base_k3bdatavolumedescdialog.ui:31
-#, fuzzy, kde-format
-#| msgid "Application:"
+#, kde-format
 msgid "Appli&cation:"
-msgstr "پروگرامما:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: projects/base_k3bdatavolumedescdialog.ui:51
@@ -5768,10 +5741,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel3)
 #: projects/base_k3bdatavolumedescdialog.ui:84
-#, fuzzy, kde-format
-#| msgid "&Publisher:"
+#, kde-format
 msgid "Publ&isher:"
-msgstr "تارقاتقۇچى(&P):"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: projects/base_k3bdatavolumedescdialog.ui:97
@@ -5788,10 +5760,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel2)
 #: projects/base_k3bdatavolumedescdialog.ui:134
-#, fuzzy, kde-format
-#| msgid "Volume Name:"
+#, kde-format
 msgid "Vo&lume set name:"
-msgstr "دىسكا ئاتى:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, m_buttonFindBiblio)
 #: projects/base_k3bdatavolumedescdialog.ui:156
@@ -5832,10 +5803,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, TextLabel5)
 #: projects/base_k3bdatavolumedescdialog.ui:303
-#, fuzzy, kde-format
-#| msgid "System:"
+#, kde-format
 msgid "Sys&tem:"
-msgstr "سىستېما:"
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox2)
 #: projects/base_k3bmovixoptionswidget.ui:18
@@ -6175,10 +6145,9 @@ msgid ""
 msgstr ""
 
 #: projects/k3baudioburndialog.cpp:119 projects/k3baudioburndialog.cpp:120
-#, fuzzy, kde-format
-#| msgid "Audio"
+#, kde-format
 msgid "Rip Audio"
-msgstr "ئۈن"
+msgstr ""
 
 #: projects/k3baudioburndialog.cpp:121
 #, kde-format
@@ -6251,7 +6220,7 @@ msgstr ""
 #, kde-format
 msgctxt "audio track number"
 msgid "No."
-msgstr "No."
+msgstr ""
 
 #: projects/k3baudioprojectmodel.cpp:294
 #, kde-format
@@ -6267,7 +6236,7 @@ msgstr ""
 #, kde-format
 msgctxt "audio type like mp3 or whatever"
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #: projects/k3baudioprojectmodel.cpp:300
 #, kde-format
@@ -6345,7 +6314,7 @@ msgstr ""
 #: projects/k3baudiotrackplayer.cpp:139 projects/k3baudiotrackplayer.cpp:140
 #, kde-format
 msgid "Play"
-msgstr "قوي"
+msgstr "ياڭرات"
 
 #: projects/k3baudiotrackplayer.cpp:141 projects/k3baudiotrackplayer.cpp:143
 #, kde-format
@@ -6390,7 +6359,7 @@ msgstr ""
 #: projects/k3baudiotracksplitdialog.cpp:97
 #, kde-format
 msgid "Remove part"
-msgstr "بۆلەكنى چىقىرىۋېتىش"
+msgstr "بۆلەكنى چىقىرىۋەت"
 
 #: projects/k3baudioviewimpl.cpp:76
 #, kde-format
@@ -6564,7 +6533,7 @@ msgstr ""
 #, kde-format
 msgid "Most writers do not support writing multisession CDs in DAO mode."
 msgstr ""
-"كۆپ قىسىم CD يازغۇلار DAO ھالەتتە كۆپ ئەڭگىمەلىك CD غا يېزىشنى قوللىمايدۇ"
+"كۆپ قىسىم CD يازغۇلار DAO ھالەتتە كۆپ جەريانچاقلىق CD غا يېزىشنى قوللىمايدۇ."
 
 #: projects/k3bdataburndialog.cpp:247
 #, kde-format
@@ -6656,7 +6625,7 @@ msgstr ""
 #: projects/k3bdataimagesettingswidget.cpp:214
 #, kde-format
 msgid "Joliet"
-msgstr "Joliet"
+msgstr ""
 
 #: projects/k3bdataimagesettingswidget.cpp:216
 #, kde-format
@@ -6803,7 +6772,7 @@ msgstr "ئاتى"
 #, kde-format
 msgctxt "file type"
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #: projects/k3bdataprojectmodel.cpp:256
 #, kde-format
@@ -7261,12 +7230,12 @@ msgstr ""
 #: projects/k3bfillstatusdisplay.cpp:500 projects/k3bfillstatusdisplay.cpp:501
 #, kde-format
 msgid "%1 MB"
-msgstr "%1 مېگابايت"
+msgstr "%1 MB"
 
 #: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
 msgid "Custom..."
-msgstr "ئادەت..."
+msgstr "ئىختىيارىي…"
 
 #: projects/k3bfillstatusdisplay.cpp:433
 #, kde-format
@@ -7328,7 +7297,7 @@ msgstr ""
 #: projects/k3bfillstatusdisplay.cpp:584
 #, kde-format
 msgid "GB"
-msgstr "گىگابايت"
+msgstr "GB"
 
 #: projects/k3bfillstatusdisplay.cpp:586
 #, kde-format
@@ -7476,7 +7445,7 @@ msgstr ""
 #, kde-format
 msgctxt "Movix File Position"
 msgid "No."
-msgstr "No."
+msgstr ""
 
 #: projects/k3bmovixprojectmodel.cpp:310
 #, kde-format
@@ -7488,7 +7457,7 @@ msgstr "ماۋزۇ"
 #, kde-format
 msgctxt "Movix File Type(ie. MPEG)"
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #: projects/k3bmovixprojectmodel.cpp:314
 #, kde-format
@@ -7564,10 +7533,9 @@ msgid "Image folder '%1' does not exist. Do you want K3b to create it?"
 msgstr ""
 
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "قىسقۇچ قۇر"
+msgstr ""
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
@@ -7991,7 +7959,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:266
 #, kde-format
 msgid "Gaps"
-msgstr "Gaps"
+msgstr ""
 
 #: projects/k3bvcdburndialog.cpp:271
 #, kde-format
@@ -8076,7 +8044,7 @@ msgstr "سىستېما:"
 #: projects/k3bvcdburndialog.cpp:451
 #, kde-format
 msgid "Application:"
-msgstr "پروگرامما:"
+msgstr "پىروگرامما:"
 
 #: projects/k3bvcdburndialog.cpp:460
 #, kde-format
@@ -8102,7 +8070,7 @@ msgstr "تارقاتقۇچى(&P):"
 #, kde-format
 msgctxt "Video CD Track Number"
 msgid "No."
-msgstr "No."
+msgstr ""
 
 #: projects/k3bvcdprojectmodel.cpp:229
 #, kde-format
@@ -8114,7 +8082,7 @@ msgstr "ماۋزۇ"
 #, kde-format
 msgctxt "Video CD Track Type (ie. MPEG1)"
 msgid "Type"
-msgstr "تىپى"
+msgstr "تۈرى"
 
 #: projects/k3bvcdprojectmodel.cpp:233
 #, kde-format
@@ -8691,12 +8659,12 @@ msgstr ""
 #: rip/categories.cpp:19
 #, kde-format
 msgid "Blues"
-msgstr "Blues"
+msgstr "كۆك"
 
 #: rip/categories.cpp:19
 #, kde-format
 msgid "Classical"
-msgstr "كلاسسىك"
+msgstr "كىلاسسىك"
 
 #: rip/categories.cpp:19
 #, kde-format
@@ -8717,22 +8685,22 @@ msgstr "جاز"
 #: rip/categories.cpp:21
 #, kde-format
 msgid "New Age"
-msgstr "يېڭى ئەسىر مۇزىكىسى"
+msgstr "يېڭى ئەسىر"
 
 #: rip/categories.cpp:21
 #, kde-format
 msgid "Reggae"
-msgstr "Reggae"
+msgstr "رېگگا"
 
 #: rip/categories.cpp:21
 #, kde-format
 msgid "Rock"
-msgstr "روك"
+msgstr "تولغىما ئۇسسۇل"
 
 #: rip/categories.cpp:21
 #, kde-format
 msgid "Soundtrack"
-msgstr "كىنو لېنتىسى"
+msgstr "قىستۇرما نەغمە"
 
 #: rip/k3baudiocdview.cpp:143
 #, kde-format
@@ -8908,7 +8876,7 @@ msgstr "يىلى:"
 #: rip/k3baudiocdview.cpp:429
 #, kde-format
 msgid "Category:"
-msgstr "تۈرى:"
+msgstr "سەھىپە:"
 
 #: rip/k3baudioconvertingoptionwidget.cpp:168
 #, kde-format
@@ -9016,7 +8984,7 @@ msgstr ""
 #: rip/k3baudioripjob.cpp:231
 #, kde-format
 msgid "Could not load libcdparanoia."
-msgstr "libcdparanoia نى ئوقۇيالمىدى."
+msgstr "libcdparanoia نى يۈكلىيەلمىدى."
 
 #: rip/k3baudioripjob.cpp:242
 #, kde-format
@@ -9221,7 +9189,7 @@ msgstr ""
 #: rip/k3bmassaudioencodingjob.cpp:329 rip/k3bmassaudioencodingjob.cpp:454
 #, kde-format
 msgid "Unable to open '%1' for writing."
-msgstr "‹%1› نى يېزىش ئۈچۈن ئاچقىلى بولمىدى."
+msgstr "«%1» نى يېزىش ئۈچۈن ئاچقىلى بولمىدى."
 
 #: rip/k3bmassaudioencodingjob.cpp:368
 #, kde-format
@@ -9246,7 +9214,7 @@ msgstr "ناخشا %1"
 #: rip/k3bvideocdrip.cpp:51
 #, kde-format
 msgid "Job canceled by user."
-msgstr "ۋەزىپە ئىشلەتكۈچى تەرىپىدىن ئەمەلدىن قالدۇرۇلدى"
+msgstr "ۋەزىپىنى ئىشلەتكۈچى ئەمەلدىن قالدۇردى."
 
 #: rip/k3bvideocdrip.cpp:80
 #, kde-format
@@ -9256,7 +9224,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:90
 #, kde-format
 msgid "Could not find %1 executable."
-msgstr "%1 دېگەن پروگراممىنى تاپالمىدى."
+msgstr "%1 دېگەن پىروگراممىنى تاپالمىدى."
 
 #: rip/k3bvideocdrip.cpp:91
 #, kde-format
@@ -9264,22 +9232,17 @@ msgid "To rip Video CDs you have to install VcdImager Version %1."
 msgstr ""
 
 #: rip/k3bvideocdrip.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"سىز بۇنى تارقىتىلما دىسكىسىدىن تاپالايسىز ياكى http://www.vcdimager.org دىن "
-"چۈشۈرەلەيسىز"
 
 #: rip/k3bvideocdrip.cpp:100
 #, kde-format
 msgid "%1 executable too old: need version %2 or greater."
 msgstr ""
-"%1 پروگرامما بەك كونا ئىكەن. نەشرى %2 ياكى ئۇنىڭدىن يۇقىرىسى تەلەپ قىلىنىدۇ."
+"%1 پىروگرامما بەك كونا ئىكەن. نەشرى %2 ياكى ئۇنىڭدىن يۇقىرىسى تەلەپ قىلىنىدۇ."
 
 #: rip/k3bvideocdrip.cpp:101
 #, kde-format
@@ -9489,7 +9452,7 @@ msgstr ""
 #: rip/k3bvideocdview.cpp:430
 #, kde-format
 msgid "Files"
-msgstr "ھۆججەتلەر"
+msgstr "ھۆججەت"
 
 #: rip/k3bvideocdview.cpp:276 rip/k3bvideocdview.cpp:436
 #, kde-format
@@ -9579,7 +9542,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:320
 #, kde-format
 msgid "Video Codec:"
-msgstr "سىن كودلىغۇچ-كودسىزلىغۇچ:"
+msgstr "سىن كودلىغۇچ:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboVideoCodec)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:330
@@ -9591,7 +9554,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:341
 #, kde-format
 msgid "Audio Codec:"
-msgstr ""
+msgstr "ئۈن كودلىغۇچ:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboAudioCodec)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:351
@@ -9640,7 +9603,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:474
 #, kde-format
 msgid "Alt+2"
-msgstr "Alt+2"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkAutoClipping)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:484
@@ -9695,7 +9658,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:512
 #, kde-format
 msgid "Alt+4"
-msgstr "Alt+4"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkLowPriority)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:522
@@ -9745,7 +9708,7 @@ msgstr ""
 msgctxt "Ch is short for Channels"
 msgid "%1Ch"
 msgid_plural "%1Ch"
-msgstr[0] "%1Ch"
+msgstr[0] ""
 
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:323
 #: rip/videodvd/k3bvideodvdrippingdialog.cpp:353
@@ -9995,7 +9958,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:116
 #, kde-format
 msgid "RLE"
-msgstr "RLE"
+msgstr ""
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:92
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:117
@@ -10016,7 +9979,7 @@ msgstr ""
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:220
 #, kde-format
 msgid "MPEG1"
-msgstr "MPEG1"
+msgstr ""
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:220
 #, kde-format
@@ -10050,7 +10013,6 @@ msgstr ""
 #~ msgid "Overwrite"
 #~ msgstr "قاپلا"
 
-#, fuzzy
 #~| msgid "Options"
 #~ msgid "CDDB Options"
 #~ msgstr "تاللانما"
@@ -10064,17 +10026,14 @@ msgstr ""
 #~ msgid "Directory"
 #~ msgstr "مۇندەرىجە"
 
-#, fuzzy
 #~| msgid "Directory"
 #~ msgid "Add directory"
 #~ msgstr "مۇندەرىجە"
 
-#, fuzzy
 #~| msgid "Remove part"
 #~ msgid "Remove directory"
 #~ msgstr "بۆلەكنى چىقىرىۋېتىش"
 
-#, fuzzy
 #~| msgid "Directory"
 #~ msgid "Move directory up"
 #~ msgstr "مۇندەرىجە"
@@ -10094,17 +10053,14 @@ msgstr ""
 #~ msgid "Port "
 #~ msgstr "ئېغىز "
 
-#, fuzzy
 #~| msgid "Server"
 #~ msgid "Add server"
 #~ msgstr "مۇلازىمېتىر"
 
-#, fuzzy
 #~| msgid "Remove Theme"
 #~ msgid "Remove server"
 #~ msgstr "ئۆرنەكنى چىقىرىۋەت"
 
-#, fuzzy
 #~| msgid "Path"
 #~ msgid "CGI Path"
 #~ msgstr "يول"
@@ -10112,17 +10068,14 @@ msgstr ""
 #~ msgid "Path:"
 #~ msgstr "يول:"
 
-#, fuzzy
 #~| msgid "Floppy"
 #~ msgid "Flopp&y"
 #~ msgstr "يۇمشاق دىسكا"
 
-#, fuzzy
 #~| msgid "&Publisher:"
 #~ msgid "P&ublisher:"
 #~ msgstr "تارقاتقۇچى(&P):"
 
-#, fuzzy
 #~| msgid "System:"
 #~ msgid "S&ystem:"
 #~ msgstr "سىستېما:"
