@@ -44,6 +44,7 @@
   <name xml:lang="sr-ijekavianlatin">K3b</name>
   <name xml:lang="sv">K3b</name>
   <name xml:lang="tr">K3b</name>
+  <name xml:lang="ug">K3b نۇر دىسكا ئويغۇچ</name>
   <name xml:lang="uk">K3b</name>
   <name xml:lang="zh-CN">K3b</name>
   <name xml:lang="zh-TW">K3b</name>
@@ -89,6 +90,7 @@
   <summary xml:lang="sr-ijekavianlatin">Rezanje diskova</summary>
   <summary xml:lang="sv">Skivbränning</summary>
   <summary xml:lang="tr">Disk Yazma</summary>
+  <summary xml:lang="ug">دىسكا ئويۇش</summary>
   <summary xml:lang="uk">Запис оптичних дисків</summary>
   <summary xml:lang="zh-CN">磁盘刻录</summary>
   <summary xml:lang="zh-TW">磁碟燒入</summary>
