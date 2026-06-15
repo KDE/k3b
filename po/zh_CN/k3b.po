@@ -4345,7 +4345,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:360
 #, kde-format
 msgid "Misc"
-msgstr "杂项"
+msgstr "其他"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, m_checkSaveOnExit)
 #: option/base_k3bmiscoptiontab.ui:26
@@ -4585,7 +4585,7 @@ msgstr "显示高级界面元件(&A)"
 #: option/k3badvancedoptiontab.cpp:68 rip/categories.cpp:20
 #, kde-format
 msgid "Miscellaneous"
-msgstr "杂项"
+msgstr "其他"
 
 #: option/k3badvancedoptiontab.cpp:70
 #, kde-format
@@ -5472,7 +5472,7 @@ msgstr "允许 103 个字符的 Joliet 文件名"
 #: projects/base_k3badvanceddataimagesettings.ui:297
 #, kde-format
 msgid "Misc Settings"
-msgstr "杂项设置"
+msgstr "其他设置"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkDoNotImportSession)
 #: projects/base_k3badvanceddataimagesettings.ui:303
