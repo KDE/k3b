@@ -11012,9 +11012,3 @@ msgstr "16:9"
 #, kde-format
 msgid "Subpicture"
 msgstr "Вторична картина"
-
-#~ msgid "Do you really want to cancel?"
-#~ msgstr "Наистина ли искате операцията да бъде отменена?"
-
-#~ msgid "Cancel Confirmation"
-#~ msgstr "Потвърждение за отмяна"
