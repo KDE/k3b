@@ -11,21 +11,21 @@
 # Alexander Potashev <aspotashev@gmail.com>, 2010, 2011, 2015, 2019.
 # Yuri Efremov <yur.arh@gmail.com>, 2011, 2012.
 # Alexander Lakhin <exclusion@gmail.com>, 2013.
-# SPDX-FileCopyrightText: 2019, 2020, 2026 Alexander Yavorsky <kekcuha@gmail.com>
+# SPDX-FileCopyrightText: 2019-2020, 2026 Alexander Yavorsky <kekcuha@gmail.com>
 # SPDX-FileCopyrightText: 2022, 2023, 2024 Olesya Gerasimenko <translation-team@basealt.ru>
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-01-31 11:24+0300\n"
-"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
+"PO-Revision-Date: 2026-06-26 20:43+0200\n"
+"Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.04.2\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -4777,10 +4777,9 @@ msgid "Miscellaneous"
 msgstr "Прочие"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "Не &извлекать диск после завершения записи"
+msgstr "Не &извлекать диск после завершения чтения или записи"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4806,10 +4805,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Автоматически очищать CD-RW и DVD-RW без предупреждения"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "Не извлекать диск после завершения процесса записи"
+msgstr "Не извлекать диск после завершения процесса записи/копирования"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4879,14 +4877,7 @@ msgstr ""
 "параметр включён, указанное значение используется при записи и CD, и DVD."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4895,12 +4886,12 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>Если этот параметр включён, K3b не будет выдвигать лоток диска после "
+"<p>Если этот параметр включён, K3b не будет выдвигать лоток диска после  "
 "завершения процесса записи. Это может быть полезным, если кто-то хочет "
-"отойти от компьютера после начала записи и не хочет, чтобы лоток привода "
-"оставался выдвинутым.<p>Тем не менее, на Linux-системах только что "
-"записанный диск должен быть перезагружен, иначе система не увидит изменений "
-"и по прежнему будет считать диск пустым."
+"отойти от компьютера после начала записи и не хочет, чтобы лоток привода  "
+"оставался выдвинутым.<p>Тем не менее, на Linux-системах только что  "
+"записанный диск должен быть перезагружен, иначе система не увидит изменений  "
+"и по-прежнему будет считать диск пустым."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format
