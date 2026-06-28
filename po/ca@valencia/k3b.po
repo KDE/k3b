@@ -367,19 +367,19 @@ msgstr ""
 "L'ordre ha de llegir àudio en brut «little endian» (vegeu <em>Intercanvia "
 "l'ordre dels bytes</em>) estèreo de 16 bits des de l'entrada estàndard.\n"
 "<p>Les cadenes següents seran substituïdes per K3b:<br>\n"
-"<b>%f</b> - El nom del fitxer resultant. Ací és on l'ordre ha d'escriure la "
+"<b>%f</b> – El nom del fitxer resultant. Ací és on l'ordre ha d'escriure la "
 "seua eixida.<br>\n"
 "<em> El que ve a continuació es referix a les metadades guardades, per "
 "exemple, en la marca ID3 d'un fitxer MP3 (cal tindre present que estos "
 "valors poden estar buits).</em><br>\n"
-"<b>%t</b> - Títol<br>\n"
-"<b>%a</b> - Artista<br>\n"
-"<b>%c</b> - Comentari<br>\n"
-"<b>%n</b> - Número de pista<br>\n"
-"<b>%m</b> - Títol de l'àlbum<br>\n"
-"<b>%r</b> - Artista de l'àlbum<br>\n"
-"<b>%x</b> - Comentari de l'àlbum<br>\n"
-"<b>%y</b> - Any de llançament"
+"<b>%t</b> – Títol<br>\n"
+"<b>%a</b> – Artista<br>\n"
+"<b>%c</b> – Comentari<br>\n"
+"<b>%n</b> – Número de pista<br>\n"
+"<b>%m</b> – Títol de l'àlbum<br>\n"
+"<b>%r</b> – Artista de l'àlbum<br>\n"
+"<b>%x</b> – Comentari de l'àlbum<br>\n"
+"<b>%y</b> – Any de llançament"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -1350,7 +1350,7 @@ msgstr "S'ha produït un error de CDDB"
 #: k3b.cpp:225
 #, kde-format
 msgid "K3b - The CD and DVD Kreator"
-msgstr "K3b - El Kreador de CD i DVD"
+msgstr "K3b – El Kreador de CD i DVD"
 
 #: k3b.cpp:287
 #, kde-format
@@ -1990,7 +1990,7 @@ msgstr "No s'ha pogut muntar"
 #, kde-format
 msgid "<p>K3b was unable to mount medium <b>%1</b> in device <em>%2 - %3</em>"
 msgstr ""
-"<p>K3b no ha pogut muntar el suport <b>%1</b> al dispositiu <em>%2 - %3</em>"
+"<p>K3b no ha pogut muntar el suport <b>%1</b> al dispositiu <em>%2 – %3</em>"
 
 #: k3bdirview.cpp:243
 #, kde-format
@@ -2002,7 +2002,7 @@ msgstr "No s'ha pogut desmuntar"
 msgid ""
 "<p>K3b was unable to unmount medium <b>%1</b> in device <em>%2 - %3</em>"
 msgstr ""
-"<p>K3b no ha pogut desmuntar el suport <b>%1</b> al dispositiu <em>%2 - %3</"
+"<p>K3b no ha pogut desmuntar el suport <b>%1</b> al dispositiu <em>%2 – %3</"
 "em>"
 
 #: k3bdiskinfoview.cpp:81
@@ -2325,7 +2325,7 @@ msgstr "Suport trobat:"
 #: k3bemptydiscwaiter.cpp:448
 #, kde-format
 msgid "Found %1 medium in %2 - %3. Should it be overwritten?"
-msgstr "S'ha trobat un suport %1 en %2 - %3. S'hauria de sobreescriure?"
+msgstr "S'ha trobat un suport %1 en %2 – %3. S'hauria de sobreescriure?"
 
 #: k3bemptydiscwaiter.cpp:272 k3bemptydiscwaiter.cpp:367
 #: k3bemptydiscwaiter.cpp:453 k3bemptydiscwaiter.cpp:517
@@ -2341,7 +2341,7 @@ msgstr "S'està preformatant el DVD+RW"
 #: k3bemptydiscwaiter.cpp:512
 #, kde-format
 msgid "Found %1 medium in %2 - %3. Should it be formatted?"
-msgstr "S'ha trobat un suport %1 en %2 - %3. S'hauria de formatar?"
+msgstr "S'ha trobat un suport %1 en %2 – %3. S'hauria de formatar?"
 
 #: k3bemptydiscwaiter.cpp:518
 #, kde-format
@@ -2356,7 +2356,7 @@ msgstr "S'està formatant el DVD-RW"
 #: k3bemptydiscwaiter.cpp:577
 #, kde-format
 msgid "Found rewritable medium in %1 - %2. Should it be erased?"
-msgstr "S'ha trobat un suport regravable en %1 - %2. S'hauria d'esborrar?"
+msgstr "S'ha trobat un suport regravable en %1 – %2. S'hauria d'esborrar?"
 
 #: k3bemptydiscwaiter.cpp:579
 #, kde-format
@@ -2826,7 +2826,7 @@ msgid ""
 "Permissions. If K3b's default value is set make sure you are member of "
 "\"%1\" group."
 msgstr ""
-"Comproveu els permisos via «Configuració -> Configura K3b… -> Programes -> "
+"Comproveu els permisos via «Configuració → Configura K3b… → Programes → "
 "Permisos». Si està definit el valor predeterminat de K3b, assegureu-vos que "
 "sou membre del grup «%1»."
 
@@ -3003,7 +3003,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:397
 #, kde-format
 msgid "Device %1 - %2 is automounted."
-msgstr "El dispositiu %1 - %2 s'ha muntat automàticament."
+msgstr "El dispositiu %1 – %2 s'ha muntat automàticament."
 
 #: k3bsystemproblemdialog.cpp:399
 #, kde-format
@@ -3116,7 +3116,7 @@ msgid ""
 "it you might encounter problems with %1 - %2"
 msgstr ""
 "K3b necessita permisos d'escriptura sobre tots els dispositius per tal de "
-"realitzar certes tasques. Sense ells podríeu trobar problemes amb %1 - %2"
+"realitzar certes tasques. Sense ells podríeu trobar problemes amb %1 – %2"
 
 #: k3bsystemproblemdialog.cpp:494
 #, kde-format
@@ -3131,7 +3131,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:500
 #, kde-format
 msgid "DMA disabled on device %1 - %2"
-msgstr "DMA desactivat en el dispositiu %1 - %2"
+msgstr "DMA desactivat en el dispositiu %1 – %2"
 
 #: k3bsystemproblemdialog.cpp:501
 #, kde-format
@@ -5338,7 +5338,7 @@ msgstr "Comentari"
 #: option/k3bthemeoptiontab.cpp:97
 #, kde-format
 msgid "K3b - The CD/DVD Kreator"
-msgstr "K3b - El kreador de CD/DVD"
+msgstr "K3b – El kreador de CD/DVD"
 
 #: option/k3bthemeoptiontab.cpp:117
 #, kde-format
@@ -6974,7 +6974,7 @@ msgstr "Propietats de la pista d'àudio"
 #: projects/k3baudiotrackplayer.cpp:78
 #, kde-format
 msgid "Playing track %1: %2 - %3"
-msgstr "S'està reproduint la pista %1: %2 - %3"
+msgstr "S'està reproduint la pista %1: %2 – %3"
 
 #: projects/k3baudiotrackplayer.cpp:139 projects/k3baudiotrackplayer.cpp:140
 #, kde-format
@@ -7340,7 +7340,7 @@ msgstr "A mida (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr "(K3b::DataImageSettingsWidget) ha trobat opcions predefinides: "
+msgstr "(K3b::DataImageSettingsWidget) ha trobat ajustaments predefinits: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7408,10 +7408,10 @@ msgstr ""
 "òmpliga tot el suport) i l'estat del suport inserit (si és afegible o no)."
 "<p><b>Sense multisessió</b><br>Crea un CD o DVD d'una sola sessió i tanca el "
 "disc. <p><b>Comença multisessió</b><br>Comença un CD o DVD multisessió, i no "
-"tanca el disc per tal de permetre afegir més sessions. <p><b>Continua "
+"tanca el disc per tal de permetre annexar més sessions. <p><b>Continua "
 "multisessió</b><br>Continua un CD de dades afegible (com ara un de creat en "
 "mode <em>Comença multisessió</em>) i afig una altra sessió sense tancar el "
-"disc per tal de permetre afegir més sessions. <p><b>Finalitzar multisessió</"
+"disc per tal de permetre annexar més sessions. <p><b>Finalitzar multisessió</"
 "b><br>Continua un CD de dades afegible (com ara un de creat en mode "
 "<em>Comença multisessió</em>), afig una altra sessió, i tanca el disc. "
 "<p><em>En el cas dels DVD+RW i DVD-RW en mode de sobreescriptura "
@@ -8607,8 +8607,8 @@ msgstr ""
 "complet subconjunt d'esta especificació <b>Súper Vídeo CD</b> com a "
 "<b>IEC-62107</b>.<p>El canvi més notable sobre Vídeo CD 2.0 és l'alteració "
 "que es realitzà de la codificació MPEG-1 CBR a la MPEG-2 VBR per a les "
-"seqüències de vídeo.<p>Les següents característiques noves - construïdes "
-"sobre l'especificació Vídeo CD 2.0 - són:<ul><li>L'ús de la codificació "
+"seqüències de vídeo.<p>Les següents característiques noves – construïdes "
+"sobre l'especificació Vídeo CD 2.0 – són:<ul><li>L'ús de la codificació "
 "MPEG-2 en comptes de la MPEG-1 per a les seqüències de vídeo.</"
 "li><li>Permetre la codificació VBR de les seqüències d'àudio MPEG-1.</"
 "li><li>Resolucions més grans (vegeu davall) per a les seqüències de vídeo.</"
@@ -9384,12 +9384,12 @@ msgstr "FI del CD de vídeo"
 #: projects/k3bvcdtrackkeysmodel.cpp:167
 #, kde-format
 msgid "Segment-%1 - %2"
-msgstr "Segment-%1 - %2"
+msgstr "Segment-%1 – %2"
 
 #: projects/k3bvcdtrackkeysmodel.cpp:169
 #, kde-format
 msgid "Sequence-%1 - %2"
-msgstr "Seqüència-%1 - %2"
+msgstr "Seqüència-%1 – %2"
 
 #: projects/k3bvcdview.cpp:92
 #, kde-format
@@ -9953,7 +9953,7 @@ msgstr "S'està iniciant la conversió d'àudio."
 #: rip/k3baudioprojectconvertingjob.cpp:85
 #, kde-format
 msgid "Converting track %1 (%2 - %3)"
-msgstr "S'està convertint la pista %1 (%2 - %3)"
+msgstr "S'està convertint la pista %1 (%2 – %3)"
 
 #: rip/k3baudioprojectconvertingjob.cpp:90
 #, kde-format
@@ -10018,7 +10018,7 @@ msgstr "S'està començant l'extracció digital d'àudio (extracció)."
 #: rip/k3baudioripjob.cpp:289
 #, kde-format
 msgid "Ripping track %1 (%2 - %3)"
-msgstr "S'extrau la pista %1 (%2 - %3)"
+msgstr "S'extrau la pista %1 (%2 – %3)"
 
 #: rip/k3baudioripjob.cpp:294
 #, kde-format
@@ -10119,27 +10119,27 @@ msgstr "Pista de dades"
 msgctxt ""
 "Please do NOT modify/translate the quotes, they are part of the pattern!"
 msgid "%A - %T/%n - !a='%A'{%a - }%t"
-msgstr "%A - %T/%n - !a='%A'{%a - }%t"
+msgstr "%A – %T/%n – !a='%A'{%a – }%t"
 
 #: rip/k3bcddbpatternwidget.cpp:45
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
-msgstr "%{albumartist} - %{albumtitle}/%{number} - %{artist} - %{title}"
+msgstr "%{albumartist} – %{albumtitle}/%{number} – %{artist} – %{title}"
 
 #: rip/k3bcddbpatternwidget.cpp:46
 #, kde-format
 msgid "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
-msgstr "%{genre}/%{albumartist} - %{albumtitle}/Track%{number}"
+msgstr "%{genre}/%{albumartist} – %{albumtitle}/Track%{number}"
 
 #: rip/k3bcddbpatternwidget.cpp:47
 #, kde-format
 msgid "music/ripped-tracks/%a - %t"
-msgstr "música/pistes-extretes/%a - %t"
+msgstr "música/pistes-extretes/%a – %t"
 
 #: rip/k3bcddbpatternwidget.cpp:49
 #, kde-format
 msgid "%{albumartist} - %{albumtitle}"
-msgstr "%{albumartist} - %{albumtitle}"
+msgstr "%{albumartist} – %{albumtitle}"
 
 #: rip/k3bcddbpatternwidget.cpp:51
 #, kde-format
