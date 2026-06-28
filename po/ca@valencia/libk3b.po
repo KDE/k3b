@@ -133,8 +133,8 @@ msgstr "S'està gravant la imatge CUE/BIN"
 #, kde-format
 msgid " - %1 Copy"
 msgid_plural " - %1 Copies"
-msgstr[0] " - %1 còpia"
-msgstr[1] " - %1 còpies"
+msgstr[0] " – %1 còpia"
+msgstr[1] " – %1 còpies"
 
 #: jobs/k3bblankingjob.cpp:65 jobs/k3bblankingjob.cpp:153
 #, kde-format
@@ -270,7 +270,7 @@ msgstr "S'està buscant el CD-Text"
 #: jobs/k3bcdcopyjob.cpp:376
 #, kde-format
 msgid "Found CD-Text (%1 - %2)."
-msgstr "S'ha trobat el CD-Text (%1 - %2)."
+msgstr "S'ha trobat el CD-Text (%1 – %2)."
 
 #: jobs/k3bcdcopyjob.cpp:381
 #, kde-format
@@ -290,7 +290,7 @@ msgstr "S'està consultant CDDB"
 #: jobs/k3bcdcopyjob.cpp:418
 #, kde-format
 msgid "Found CDDB entry (%1 - %2)."
-msgstr "S'ha trobat l'entrada CDDB (%1 - %2)."
+msgstr "S'ha trobat l'entrada CDDB (%1 – %2)."
 
 #: jobs/k3bcdcopyjob.cpp:441
 #, kde-format
@@ -308,7 +308,7 @@ msgid ""
 "Found CD-Text (%1 - %2) and CDDB (%3 - %4) entries. Which one should be used "
 "to generate the CD-Text on the new CD?"
 msgstr ""
-"S'han trobat entrades CD-Text (%1 - %2) i CDDB (%3 - %4). Quina voleu "
+"S'han trobat entrades CD-Text (%1 – %2) i CDDB (%3 – %4). Quina voleu "
 "utilitzar per a generar el CD-Text del CD nou?"
 
 #: jobs/k3bcdcopyjob.cpp:466
@@ -1297,7 +1297,7 @@ msgstr "S'està gravant el CD en mode cru."
 #: jobs/k3bmetawriter.cpp:897
 #, kde-format
 msgid "Appending session to CD"
-msgstr "S'està afegint la sessió al CD"
+msgstr "S'està annexant la sessió al CD"
 
 #: jobs/k3bmetawriter.cpp:904
 #, kde-format
@@ -1317,7 +1317,7 @@ msgstr "S'està gravant el CD regravable en mode cru."
 #: jobs/k3bmetawriter.cpp:911
 #, kde-format
 msgid "Appending session to rewritable CD."
-msgstr "S'està afegint la sessió al CD regravable."
+msgstr "S'està annexant la sessió al CD regravable."
 
 #: jobs/k3bmetawriter.cpp:918
 #, kde-format
@@ -1334,17 +1334,17 @@ msgstr ""
 #: jobs/k3bmetawriter.cpp:922
 #, kde-format
 msgid "Appending session to DVD+R."
-msgstr "S'està afegint la sessió al DVD+R."
+msgstr "S'està annexant la sessió al DVD+R."
 
 #: jobs/k3bmetawriter.cpp:924
 #, kde-format
 msgid "Appending session to Double Layer DVD+R."
-msgstr "S'està afegint la sessió al DVD+R de doble capa."
+msgstr "S'està annexant la sessió al DVD+R de doble capa."
 
 #: jobs/k3bmetawriter.cpp:926
 #, kde-format
 msgid "Appending session to %1."
-msgstr "S'està afegint la sessió a %1."
+msgstr "S'està annexant la sessió a %1."
 
 #: jobs/k3bmetawriter.cpp:932
 #, kde-format
@@ -1854,8 +1854,8 @@ msgstr[1] "%1 pistes (%2 minuts)"
 #, kde-format
 msgid " - %1 copy"
 msgid_plural " - %1 copies"
-msgstr[0] " - %1 còpia"
-msgstr[1] " - %1 còpies"
+msgstr[0] " – %1 còpia"
+msgstr[1] " – %1 còpies"
 
 #: projects/audiocd/k3baudionormalizejob.cpp:46
 #, kde-format
@@ -4446,7 +4446,7 @@ msgid ""
 "appended to the CD later.</p>"
 msgstr ""
 "<p>Si està marcada, K3b no tancarà el CD, i escriurà una taula de continguts "
-"temporal.</p> <p>Açò permet que s'afigen més sessions al CD posteriorment.</"
+"temporal.</p> <p>Açò permet que s'annexen més sessions al CD posteriorment.</"
 "p>"
 
 #: tools/k3bstdguiitems.cpp:155

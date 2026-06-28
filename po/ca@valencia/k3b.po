@@ -7341,7 +7341,7 @@ msgstr "A mida (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr "(K3b::DataImageSettingsWidget) ha trobat opcions predefinides: "
+msgstr "(K3b::DataImageSettingsWidget) ha trobat ajustaments predefinits: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7409,10 +7409,10 @@ msgstr ""
 "òmpliga tot el suport) i l'estat del suport inserit (si és afegible o no)."
 "<p><b>Sense multisessió</b><br>Crea un CD o DVD d'una sola sessió i tanca el "
 "disc. <p><b>Comença multisessió</b><br>Comença un CD o DVD multisessió, i no "
-"tanca el disc per tal de permetre afegir més sessions. <p><b>Continua "
+"tanca el disc per tal de permetre annexar més sessions. <p><b>Continua "
 "multisessió</b><br>Continua un CD de dades afegible (com ara un de creat en "
 "mode <em>Comença multisessió</em>) i afig una altra sessió sense tancar el "
-"disc per tal de permetre afegir més sessions. <p><b>Finalitzar multisessió</"
+"disc per tal de permetre annexar més sessions. <p><b>Finalitzar multisessió</"
 "b><br>Continua un CD de dades afegible (com ara un de creat en mode "
 "<em>Comença multisessió</em>), afig una altra sessió, i tanca el disc. "
 "<p><em>En el cas dels DVD+RW i DVD-RW en mode de sobreescriptura "
