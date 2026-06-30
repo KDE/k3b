@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2024-04-26 11:01+0200\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-06-29 14:39+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 24.02.2\n"
+"X-Generator: Poedit 3.9\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -875,7 +875,7 @@ msgstr "Zapisuje se kopie"
 #: jobs/k3bdvdcopyjob.cpp:573
 #, kde-format
 msgid "Successfully read source medium."
-msgstr "Zdrojový disk úspěšně načten"
+msgstr "Zdrojový disk úspěšně načten."
 
 #: jobs/k3bdvdcopyjob.cpp:585
 #, kde-format
@@ -1044,7 +1044,7 @@ msgstr "Formátování úspěšně dokončeno"
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
-msgstr "Nebuďte znepokojeni pokud se proces vypalování zastaví před 100%"
+msgstr "Nebuďte znepokojeni pokud se proces vypalování zastaví před 100%."
 
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
@@ -1272,7 +1272,7 @@ msgstr "CD je zapisováno v režimu Track At Once."
 #: jobs/k3bmetawriter.cpp:894
 #, kde-format
 msgid "Writing CD in Raw mode."
-msgstr "CD je zapisováno v režimu Raw"
+msgstr "CD je zapisováno v režimu Raw."
 
 #: jobs/k3bmetawriter.cpp:897
 #, kde-format
@@ -1414,7 +1414,7 @@ msgstr "Zapsaná data ověřena."
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:119
 #, kde-format
 msgid "%1 executable could not be found."
-msgstr "Spustitelný soubor %1 nelze nalézt"
+msgstr "Spustitelný soubor %1 nelze nalézt."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:89
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:125
@@ -2528,7 +2528,7 @@ msgstr "Cdrecord %1 nepodporuje zápis Blu-Ray."
 #: projects/k3bcdrecordwriter.cpp:253 projects/k3bcdrskinwriter.cpp:271
 #, kde-format
 msgid "Writer does not support disk at once (DAO) recording"
-msgstr "Vypalovačka nepodporuje DAO zápis."
+msgstr "Vypalovačka nepodporuje DAO zápis"
 
 #: projects/k3bcdrecordwriter.cpp:264 projects/k3bcdrskinwriter.cpp:280
 #, kde-format

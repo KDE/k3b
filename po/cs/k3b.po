@@ -4,21 +4,22 @@
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2024, 2026 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-02-20 00:44+0000\n"
-"PO-Revision-Date: 2026-03-17 10:18+0100\n"
-"Last-Translator:  Vít Pelčák <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-06-29 14:38+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -363,6 +364,23 @@ msgid ""
 "<b>%x</b> - Album comment<br>\n"
 "<b>%y</b> - Release Year"
 msgstr ""
+"Zadejte prosím příkaz použitý ke kódování zvukových dat. Příkaz musí číst ze "
+"standardního vstupu (stdin) nezpracované 16bitové stereofonní zvukové rámce "
+"v formátu little endian (viz <em>Swap Byte Order</em>).\n"
+"<p>Následující řetězce budou nahrazeny programem K3b:<br>\n"
+"<b>%f</b> – Název výsledného souboru. Sem musí příkaz zapsat svůj výstup."
+"<br>\n"
+"<em>Následující položky se vztahují k metadatům uloženým například v ID3 "
+"tagu souboru mp3 (mějte na paměti, že tyto hodnoty mohou být prázdné).</"
+"em><br>\n"
+"<b>%t</b> – Název<br>\n"
+"<b>%a</b> – Interpret<br>\n"
+"<b>%c</b> – Komentář<br>\n"
+"<b>%n</b> – Číslo skladby<br>\n"
+"<b>%m</b> – Název alba<br>\n"
+"<b>%r</b> – Interpret alba<br>\n"
+"<b>%x</b> – Komentář k albu<br>\n"
+"<b>%y</b> – Rok vydání"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox3)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -980,6 +998,28 @@ msgid ""
 "good quality. It is usually CPU intensive to work with GSM audio data.</p> "
 "<p><em>Description based on the SoX manpage</em></p>"
 msgstr ""
+"<p>Kódování vzorkových dat může být lineární se znaménkem (doplněk k 2), "
+"lineární bez znaménka, u-law (logaritmické), A-law (logaritmické), ADPCM, "
+"IMA_ADPCM, GSM nebo s plovoucí desetinnou čárkou.</p>\n"
+"<p><b>U-law</b> (ve skutečnosti zkratka pro mu-law) a <b>A-law</b> jsou "
+"americké a mezinárodní standardy pro logaritmickou kompresi telefonního "
+"zvuku. V nekomprimované podobě má u-law přibližně přesnost 14bitového PCM "
+"zvuku a A-law přibližně přesnost 13bitového PCM zvuku. Data formátů A-law a "
+"u-law se někdy kódují s obráceným pořadím bitů (tj. MSB se stává LSB).<br> "
+"<b>ADPCM </b> je forma komprese zvuku, která představuje dobrý kompromis "
+"mezi dobrou kvalitou zvuku a rychlým kódováním/dekódováním. Používá se pro "
+"kompresi telefonního zvuku a v situacích, kde není tak důležitá plná "
+"věrnost. V nekomprimované podobě má přibližně stejnou přesnost jako 16bitový "
+"zvuk ve formátu PCM. Mezi oblíbené verze ADPCM patří G.726, MS ADPCM a IMA "
+"ADPCM. V různých programech pro práci se soubory má tento formát odlišný "
+"význam. V souborech .wav představuje formát MS ADPCM, ve všech ostatních "
+"případech znamená G.726 ADPCM. <br> <b>IMA ADPCM</b> je specifická forma "
+"komprese ADPCM, o něco jednodušší a s mírně nižší věrností než varianta "
+"ADPCM od společnosti Microsoft. IMA ADPCM se také nazývá DVI ADPCM.<br> "
+"<b>GSM</b> je standard používaný pro kompresi telefonního zvuku v evropských "
+"zemích a díky své dobré kvalitě si získává na popularitě. Práce s audio daty "
+"ve formátu GSM je obvykle náročná na procesor.</p> <p><em>Popis vychází z "
+"manuálové stránky programu SoX</em></p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:67
@@ -2778,6 +2818,9 @@ msgid ""
 "Permissions. If K3b's default value is set make sure you are member of "
 "\"%1\" group."
 msgstr ""
+"Zkontrolujte oprávnění v nabídce Nastavení -> Nastavení K3b... -> Programy -"
+"> Oprávnění. Pokud je nastavena výchozí hodnota programu K3b, ujistěte se, "
+"že jste členem skupiny \"%1\"."
 
 #: k3bsystemproblemdialog.cpp:208 k3bsystemproblemdialog.cpp:270
 #: k3bsystemproblemdialog.cpp:292 k3bsystemproblemdialog.cpp:314
@@ -3196,7 +3239,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:587
 #, kde-format
 msgid "The latter can be done via \"Configure K3b...\"."
-msgstr ""
+msgstr "To lze provést pomocí položky \"Nastavit K3b...\"."
 
 #: k3bsystemproblemdialog.cpp:617
 #, kde-format
@@ -3555,6 +3598,12 @@ msgid ""
 "trying to be as simple as possible for novice users while also providing all "
 "features an advanced user might need."
 msgstr ""
+"<p>K3b je plně vybavená aplikace pro vypalování a ripování CD, DVD a Blu-ray."
+"<br/>Podporuje celou řadu typů projektů, kopírování optických médií, "
+"vypalování různých typů obrazů a ripování audio CD, video CD a video DVD.<br/"
+">Jeho přehledné uživatelské rozhraní je určeno pro všechny uživatele – snaží "
+"se být co nejjednodušší pro začátečníky a zároveň poskytuje všechny funkce, "
+"které by pokročilý uživatel mohl potřebovat."
 
 #: main.cpp:31
 #, kde-format
@@ -4074,6 +4123,21 @@ msgid ""
 "These images can be reused here.<p><b>Cdrdao TOC files</b><br/>K3b supports "
 "writing cdrdao's own image format, the toc files."
 msgstr ""
+"<p><b>Typy obrazů podporované programem K3b:</p><p><b>Obyčejný obraz</b><br/"
+">Obyčejné obrazy se zapisují na médium v nezměněné podobě pomocí jedné "
+"datové stopy. Typickými příklady obyčejných obrazů jsou obrazy ve formátu "
+"ISO vytvořené v rámci datového projektu programu K3b.<p><b>Obrazy Cue/bin</"
+"b><br/>Obrazy Cue/bin se skládají ze souboru cue popisujícího obsah nosiče a "
+"obrazového souboru, který obsahuje samotná data. Data se na nosič zapíší "
+"podle souboru cue.<p><b>Audio obraz Cue</b><br/>Audio Cue obrazy jsou "
+"zvláštním druhem Cue/Bin obrazů obsahujícím obraz audio CD. Skutečná audio "
+"data mohou být zakódována v jakémkoli audio formátu podporovaném programem "
+"K3b. Soubory Cue lze také importovat do audio projektů v programu K3b, což "
+"umožňuje měnit pořadí skladeb a přidávat či odebírat skladby.<p><b>Obrazy "
+"typu cdrecord clone</b><br/>Při kopírování CD v režimu klonování vytvoří K3b "
+"obraz typu cdrecord clone pro CD s jednou relací. Tyto obrazy lze zde znovu "
+"použít.<p><b>Soubory TOC pro cdrdao</b><br/>K3b podporuje zápis vlastního "
+"obrazového formátu cdrdao, tedy souborů TOC."
 
 #: misc/k3bimagewritingdialog.cpp:707
 #, kde-format
@@ -4492,6 +4556,9 @@ msgid ""
 "notification area. If K3b is run outside KDE environment a separate progress "
 "window may be shown instead.</p>"
 msgstr ""
+"<p>Je-li tato volba zaškrtnuta, K3b bude zobrazovat průběh v oznamovací "
+"oblasti KDE. Je-li K3b spuštěn mimo prostředí KDE, může se místo toho "
+"zobrazit samostatné okno s průběhem.</p>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkShowProgressOSD)
 #: option/base_k3bmiscoptiontab.ui:94
@@ -4704,6 +4771,12 @@ msgid ""
 "that K3b does not support all possible tools in all project types and "
 "actions.</b>"
 msgstr ""
+"<p>Je-li tato volba zaškrtnuta, zobrazí se další prvky grafického rozhraní, "
+"které umožňují ovlivnit chování programu K3b. Patří sem například ruční "
+"výběr použitého nástroje pro vypalování. (Při vypalování CD si můžete vybrat "
+"mezi cdrecord a cdrdao, při vypalování DVD/BD mezi cdrecord a "
+"growisofs.)<p><b>Upozorňujeme, že program K3b nepodporuje všechny možné "
+"nástroje pro všechny typy projektů a akce.</b>"
 
 #: option/k3badvancedoptiontab.cpp:104
 #, kde-format
@@ -5288,6 +5361,17 @@ msgid ""
 "<p><b>It is highly recommended to use Rock Ridge extensions on every data CD "
 "or DVD.</b>"
 msgstr ""
+"<p>Je-li tato volba zaškrtnuta, K3b vygeneruje záznamy SUSP (System Use "
+"Sharing Protocol) specifikované protokolem Rock Ridge Interchange Protocol "
+"(IEEE-P1282).\n"
+"<p>Rock Ridge rozšiřuje souborový systém ISO 9660 o funkce odpovídající "
+"souborovým systémům UNIX (oprávnění, symbolické odkazy, velmi dlouhé názvy "
+"souborů atd.). Používá znaky založené na ISO-8859 nebo UTF-16 a umožňuje 255 "
+"oktetů.\n"
+"<p>Rozšíření Rock Ridge se nacházejí na konci každého záznamu adresáře ISO "
+"9660. Díky tomu je strom Rock Ridge úzce propojen se stromem ISO 9660.\n"
+"<p><b>Důrazně se doporučuje používat rozšíření Rock Ridge na každém datovém "
+"CD nebo DVD.</b>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkRockRidge)
 #: projects/base_k3badvanceddataimagesettings.ui:33
@@ -5464,7 +5548,7 @@ msgstr "Povolit v názvech souborů ISO 9660 malá písmena"
 #: projects/base_k3badvanceddataimagesettings.ui:195
 #, kde-format
 msgid "Allow ~ and # in ISO 9660 filenames"
-msgstr "Povolit v názvech souborů ISO 9660 znaky ~  a # "
+msgstr "Povolit v názvech souborů ISO 9660 znaky ~ a #"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkAllowFullAscii)
 #: projects/base_k3badvanceddataimagesettings.ui:202
@@ -6097,6 +6181,21 @@ msgid ""
 "the specified characters.<br>\n"
 "Example: 'my good file.ext' becomes 'my_good_file.ext'"
 msgstr ""
+"<p><b>Beze změny</b><br>\n"
+"Je-li tato volba zaškrtnuta, K3b ponechá všechny mezery v názvech souborů "
+"beze změny.\n"
+"<p><b>Odstranit</b><br>\n"
+"Je-li tato volba zaškrtnuta, K3b odstraní všechny mezery ze všech názvů "
+"souborů.<br>\n"
+"Příklad: 'my good file.ext' se změní na 'jmygoodfile.ext'\n"
+"<p><b>Rozšířené odstranění mezer</b><br>\n"
+"Je-li tato volba zaškrtnuta, K3b odstraní všechny mezery ve všech názvech "
+"souborů a všechna písmena následující po mezeře převede na velká.<br>\n"
+"Příklad: 'my good file.ext' se změní na 'myGoodFile.ext'\n"
+"<p><b>Nahradit</b><br>\n"
+"Je-li tato volba zaškrtnuta, K3b nahradí všechny mezery ve všech názvech "
+"souborů zadanými znaky.<br>\n"
+"Příklad: 'my good file.ext' se změní na 'my_good_file.ext'"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboSpaceHandling)
 #: projects/base_k3bdataimagesettings.ui:169
@@ -6457,6 +6556,24 @@ msgid ""
 "<p>The <b>floppy</b> label makes eMovix boot from the local floppy drive "
 "instead of the medium."
 msgstr ""
+"<p><b>Spouštěcí štítky eMovix</b>\n"
+"<p>eMovix nabízí celou řadu různých spouštěcích konfigurací, které lze při "
+"spouštění systému vybrat pomocí spouštěcího štítku (podobně jako u Lilo nebo "
+"Grub). Tyto různé konfigurace spouštění ovlivňují především video výstup.\n"
+"<p>Štítky <b>default</b>, <b>movix</b> nebo <b>MoviX</b> spouštějí obecný "
+"video ovladač Vesa.\n"
+"<p>Štítky <b>TV</b> lze použít k přesměrování videa na TV výstup grafické "
+"karty. eMovix poskytuje ovladače TVout pro grafické karty různých značek.\n"
+"<p>Štítky <b>FB</b> odkazují na konfigurace, které spouštějí ovladač Frame "
+"Buffer v různých rozlišeních obrazovky.\n"
+"<p>Štítky <b>AA</b> způsobí, že eMovix vysílá video prostřednictvím knihovny "
+"ASCII-Art, která zobrazuje obraz v textovém režimu pomocí jednoduchých znaků "
+"ASCII.\n"
+"<p>Štítek <b>hd</b> způsobí, že se eMovix spustí z lokálního pevného disku "
+"namísto z nosiče. To lze použít k zabránění náhodnému spuštění nosiče "
+"eMovix.\n"
+"<p>Štítek <b>floppy</b> způsobí, že se eMovix spustí z lokální disketové "
+"mechaniky namísto z nosiče."
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboKeyboardLayout)
 #: projects/base_k3bmovixoptionswidget.ui:229
@@ -7131,7 +7248,7 @@ msgstr "Vlastní (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) nalezena přednastavení: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -7251,7 +7368,7 @@ msgstr "Varování importu sezení"
 #: projects/k3bdatamultisessionimportdialog.cpp:156
 #, kde-format
 msgid "Please insert an appendable medium"
-msgstr "prosím vložte připojitelné médium"
+msgstr "Prosím vložte připojitelné médium"
 
 #: projects/k3bdatamultisessionimportdialog.cpp:203
 #, kde-format
@@ -7922,6 +8039,16 @@ msgid ""
 "this is the recommended mode.<br>Some older CD-ROMs may have problems "
 "reading a blue book CD since it is a multisession CD."
 msgstr ""
+"<em>CD podle standardu Blue Book</em><br>Program K3b vytvoří víceúčelové CD "
+"se dvěma sekcemi. První sekce bude obsahovat všechny zvukové stopy a druhá "
+"sekce bude obsahovat datovou stopu v režimu 2, formátu 1.<br>Tento režim je "
+"založen na standardu <em>Blue Book</em> (známém také jako <em>Extended Audio "
+"CD</em>, <em>CD-Extra</em> nebo <em>CD Plus</em>) a má tu výhodu, že hi-fi "
+"přehrávač audio CD rozpozná pouze první sekci a druhou sekci s datovou "
+"stopou ignoruje.<br>Pokud je CD určeno k použití v hi-fi přehrávači audio "
+"CD, je tento režim doporučený.<br>Některé starší CD-ROM mechaniky mohou mít "
+"problémy se čtením CD ve formátu Blue Book, protože se jedná o víceúčelové "
+"CD."
 
 #: projects/k3bmixedburndialog.cpp:115
 #, kde-format
@@ -8531,6 +8658,17 @@ msgid ""
 "display parameters, such as display resolution and frame rate, relaxing the "
 "aps requirement may lead to non-working entry points."
 msgstr ""
+"<p>Sektor přístupového bodu (Access Point Sector, APS) je sektor videa ve "
+"formátu MPEG na disku VCD/SVCD, na který lze přímo přeskočit.<p>APS jsou "
+"nezbytné pro vstupní body a skenovatelné oblasti. APS musí splňovat "
+"požadavek, aby před každým I-snímkem předcházel záhlaví GOP, kterému zase "
+"musí předcházet záhlaví sekvence.<p>Počáteční kódy těchto tří prvků musí být "
+"obsaženy ve stejném balíčku/sektoru MPEG, čímž se vytvoří tzv. sektor "
+"přístupového bodu.<p>Tento požadavek lze zmírnit zapnutím volby relaxed aps, "
+"tj. každý sektor obsahující I-snímek bude považován za APS.<p><b>Upozornění:"
+"</b> Sekvenční hlavička je potřebná pro přehrávací zařízení k určení "
+"parametrů zobrazení, jako je rozlišení obrazovky a snímková frekvence; "
+"zmírnění požadavku na APS může vést k nefunkčním vstupním bodům."
 
 #: projects/k3bvcdburndialog.cpp:212
 #, kde-format
@@ -8645,7 +8783,7 @@ msgstr "Složka SEGMENT nesmí být vynechán"
 #: projects/k3bvcdburndialog.cpp:256
 #, kde-format
 msgid "Relaxed aps"
-msgstr "volné APS"
+msgstr "Volné APS"
 
 #: projects/k3bvcdburndialog.cpp:257
 #, kde-format
@@ -10698,6 +10836,12 @@ msgid ""
 "you intend to make a copy of the entire Video DVD including all menus and "
 "extras it is recommended to use the K3b Copy tool."
 msgstr ""
+"<p>Zkopíruje jednotlivé tituly z video DVD do komprimovaného formátu, jako "
+"je například XviD. Struktura menu je zcela ignorována.<p>Pokud chcete z DVD "
+"zkopírovat samotné soubory VOB z video DVD (včetně dešifrování) pro další "
+"zpracování v jiné aplikaci, použijte tlačítko \"Zobrazit soubory\".<p>Pokud "
+"chcete vytvořit kopii celého video DVD včetně všech nabídek a bonusového "
+"obsahu, doporučujeme použít nástroj K3b Copy."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:58
 msgid "Keep original dimensions"
