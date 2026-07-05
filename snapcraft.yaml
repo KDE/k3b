@@ -25,6 +25,7 @@ apps:
       - system-backup
       - udisks2
       - unity7
+      - block-devices
     environment:
       QTWEBENGINE_DISABLE_SANDBOX: 1
 slots:
