@@ -2,21 +2,21 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2024, 2026 Stefan Asserhäll <stefan.asserhall@gmail.com>
+# SPDX-FileCopyrightText: 2007-2010, 2024, 2026 Stefan Asserhäll <stefan.asserhall@gmail.com>
 # Stefan Asserhall <stefan.asserhall@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-01-20 20:44+0100\n"
+"PO-Revision-Date: 2026-07-05 16:36+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.12.1\n"
+"X-Generator: Lokalize 26.04.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -4739,10 +4739,9 @@ msgid "Miscellaneous"
 msgstr "Diverse"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "&Mata inte ut skivan efter skrivprocessen"
+msgstr "&Mata inte ut medium efter skrivprocessen"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4769,8 +4768,7 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Radera automatiskt cd-rw och dvd-rw utan att fråga"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
 msgstr "Mata inte ut mediet efter en färdig brännprocess"
 
@@ -4845,14 +4843,7 @@ msgstr ""
 "cd och dvd."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4861,12 +4852,12 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>Om alternativet är markerat kommer inte K3b att mata ut mediet när "
-"brännprocessen är färdig. Det kan vara till hjälp om man lämnar datorn när "
-"skrivningen har startats, och inte vill att luckan ska vara öppen hela tiden."
-"<p>Dock måste ett nyskrivet medium laddas om på Linux-system, annars "
-"detekterar inte systemet ändringarna och behandlar det fortfarande som ett "
-"tomt medium."
+"<p>Om alternativet är markerat kommer inte K3b att mata ut mediet när bränn- "
+"eller lagringsprocessen är färdig. Det kan vara till hjälp om man lämnar "
+"datorn när skrivningen eller läsningen har startats, och inte vill att "
+"luckan ska vara öppen hela tiden.<p>Observera att ett nyskrivet medium måste "
+"laddas om på Linux-system, annars detekterar inte systemet ändringarna och "
+"behandlar det fortfarande som ett tomt medium."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format
