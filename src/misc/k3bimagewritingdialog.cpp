@@ -44,7 +44,6 @@
 #include <KMessageBox>
 #include <KStandardGuiItem>
 #include <KUrlRequester>
-#include <kio_version.h>
 
 #include <QFile>
 #include <QFileInfo>

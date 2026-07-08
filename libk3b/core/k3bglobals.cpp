@@ -19,7 +19,6 @@
 #include "k3b_i18n.h"
 
 #include <KProcess>
-#include <kio_version.h>
 #include <KIO/Job>
 #include <KIO/StatJob>
 #include <KMountPoint>
