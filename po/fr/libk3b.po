@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-07-09 00:42+0000\n"
 "PO-Revision-Date: 2024-05-06 16:09+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -43,7 +43,7 @@ msgstr "Empêcher la mise en veille pendant la gravure"
 msgid "Disable inhibition for disc writing"
 msgstr "Ne rien empêcher pendant la gravure"
 
-#: core/k3bglobals.cpp:361
+#: core/k3bglobals.cpp:360
 #, kde-format
 msgid "Auto"
 msgstr "Auto"

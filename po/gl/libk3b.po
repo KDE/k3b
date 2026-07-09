@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-07-09 00:42+0000\n"
 "PO-Revision-Date: 2025-01-06 20:44+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -34,7 +34,7 @@ msgstr "Inhibir a hibernación para a escritura en disco."
 msgid "Disable inhibition for disc writing"
 msgstr "Desactivar a inhibición para a escritura en disco."
 
-#: core/k3bglobals.cpp:361
+#: core/k3bglobals.cpp:360
 #, kde-format
 msgid "Auto"
 msgstr "Automático"

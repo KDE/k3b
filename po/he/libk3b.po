@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-07-09 00:42+0000\n"
 "PO-Revision-Date: 2026-05-07 09:21+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -33,7 +33,7 @@ msgstr "מניעת שינה לטובת צריבת תקליטורים"
 msgid "Disable inhibition for disc writing"
 msgstr "ביטול מניעת שינה לטובת צריבת תקליטור"
 
-#: core/k3bglobals.cpp:361
+#: core/k3bglobals.cpp:360
 #, kde-format
 msgid "Auto"
 msgstr "אוטומטי"

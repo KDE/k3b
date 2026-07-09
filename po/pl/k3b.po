@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-23 00:43+0000\n"
+"POT-Creation-Date: 2026-07-09 00:42+0000\n"
 "PO-Revision-Date: 2026-01-18 16:14+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: pl\n"
@@ -517,7 +517,7 @@ msgstr "Nie podano nazwy pliku"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:539 misc/k3bimagewritingdialog.cpp:555
+#: misc/k3bimagewritingdialog.cpp:538 misc/k3bimagewritingdialog.cpp:554
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -572,7 +572,7 @@ msgstr "Zmień ustawienia..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:585 misc/k3bimagewritingdialog.cpp:968
+#: misc/k3bimagewritingdialog.cpp:584 misc/k3bimagewritingdialog.cpp:967
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -2255,37 +2255,37 @@ msgstr "Sesje:"
 msgid "Supported writing speeds:"
 msgstr "Obsługiwane szybkości nagrywania:"
 
-#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:194
+#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:193
 #, kde-format
 msgid "System Id:"
 msgstr "Identyfikator systemowy:"
 
-#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:202
+#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:201
 #, kde-format
 msgid "Volume Id:"
 msgstr "Identyfikator wolumenu:"
 
-#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:210
+#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:209
 #, kde-format
 msgid "Volume Set Id:"
 msgstr "Identyfikator zestawu wolumenów:"
 
-#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:218
+#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
 #, kde-format
 msgid "Publisher Id:"
 msgstr "Identyfikator wydawcy:"
 
-#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:226
+#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:225
 #, kde-format
 msgid "Preparer Id:"
 msgstr "Identyfikator osoby przygotowującej płytę:"
 
-#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:233
+#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:232
 #, kde-format
 msgid "Application Id:"
 msgstr "Identyfikator programu:"
 
-#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:184
+#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
 #, kde-format
 msgid "Volume Size:"
 msgstr "Rozmiar nośnika:"
@@ -2401,7 +2401,7 @@ msgstr "Wymazywanie płyty zakończyło się niepowodzeniem."
 msgid "Filter:"
 msgstr "Filtrowanie:"
 
-#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
+#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:453
 #, kde-format
 msgid "All Files"
 msgstr "Wszystkie pliki"
@@ -4013,59 +4013,59 @@ msgstr ""
 "Wybierz urządzenie które będzie domyślnie używane dla nowych projektów. (Ta "
 "opcja ma wpływ na obsługę pustych urządzeń)"
 
-#: misc/k3bimagewritingdialog.cpp:165 misc/k3bimagewritingdialog.cpp:245
-#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:303
+#: misc/k3bimagewritingdialog.cpp:164 misc/k3bimagewritingdialog.cpp:244
+#: misc/k3bimagewritingdialog.cpp:273 misc/k3bimagewritingdialog.cpp:302
 #, kde-format
 msgid "Detected:"
 msgstr "Wykryto:"
 
-#: misc/k3bimagewritingdialog.cpp:166
+#: misc/k3bimagewritingdialog.cpp:165
 #, kde-format
 msgid "ISO 9660 image"
 msgstr "Obraz ISO 9660"
 
-#: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
-#: misc/k3bimagewritingdialog.cpp:281
+#: misc/k3bimagewritingdialog.cpp:174 misc/k3bimagewritingdialog.cpp:251
+#: misc/k3bimagewritingdialog.cpp:280
 #, kde-format
 msgid "Filesize:"
 msgstr "Rozmiar pliku:"
 
-#: misc/k3bimagewritingdialog.cpp:179
+#: misc/k3bimagewritingdialog.cpp:178
 #, kde-format
 msgid "%1 (different than declared volume size)"
 msgstr "%1 (nie zgadza się z zadeklarowanym rozmiarem woluminu)"
 
-#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
+#: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:468
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "Obraz klonowania programu Cdrecord"
 
-#: misc/k3bimagewritingdialog.cpp:258 misc/k3bimagewritingdialog.cpp:287
+#: misc/k3bimagewritingdialog.cpp:257 misc/k3bimagewritingdialog.cpp:286
 #, kde-format
 msgid "Image file:"
 msgstr "Plik z obrazem:"
 
-#: misc/k3bimagewritingdialog.cpp:264
+#: misc/k3bimagewritingdialog.cpp:263
 #, kde-format
 msgid "TOC file:"
 msgstr "Plik TOC:"
 
-#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:466
+#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:465
 #, kde-format
 msgid "Cue/bin image"
 msgstr "Obraz Cue/bin"
 
-#: misc/k3bimagewritingdialog.cpp:293
+#: misc/k3bimagewritingdialog.cpp:292
 #, kde-format
 msgid "Cue file:"
 msgstr "Plik Cue:"
 
-#: misc/k3bimagewritingdialog.cpp:304
+#: misc/k3bimagewritingdialog.cpp:303
 #, kde-format
 msgid "Audio Cue Image"
 msgstr "Obraz Audio Cue"
 
-#: misc/k3bimagewritingdialog.cpp:310
+#: misc/k3bimagewritingdialog.cpp:309
 #, kde-format
 msgid "One track"
 msgid_plural "%1 tracks"
@@ -4073,100 +4073,100 @@ msgstr[0] "Jedna ścieżka"
 msgstr[1] "%1 ścieżki"
 msgstr[2] "%1 ścieżek"
 
-#: misc/k3bimagewritingdialog.cpp:324
+#: misc/k3bimagewritingdialog.cpp:323
 #, kde-format
 msgid "Track"
 msgstr "Ścieżka"
 
-#: misc/k3bimagewritingdialog.cpp:360
+#: misc/k3bimagewritingdialog.cpp:359
 #, kde-format
 msgid "Burn Image"
 msgstr "Nagraj obraz płyty"
 
-#: misc/k3bimagewritingdialog.cpp:443
+#: misc/k3bimagewritingdialog.cpp:442
 #, kde-format
 msgid "Image to Burn"
 msgstr "Obraz do nagrania"
 
-#: misc/k3bimagewritingdialog.cpp:448
+#: misc/k3bimagewritingdialog.cpp:447
 #, kde-format
 msgid "Choose Image File"
 msgstr "Wybierz plik z obrazem"
 
-#: misc/k3bimagewritingdialog.cpp:450
+#: misc/k3bimagewritingdialog.cpp:449
 #, kde-format
 msgid "Image Files"
 msgstr "Pliki obrazów"
 
-#: misc/k3bimagewritingdialog.cpp:451
+#: misc/k3bimagewritingdialog.cpp:450
 #, kde-format
 msgid "ISO 9660 Image Files"
 msgstr "Pliki obrazów ISO 9660"
 
-#: misc/k3bimagewritingdialog.cpp:452
+#: misc/k3bimagewritingdialog.cpp:451
 #, kde-format
 msgid "Cue Files"
 msgstr "Plik Cue"
 
-#: misc/k3bimagewritingdialog.cpp:453
+#: misc/k3bimagewritingdialog.cpp:452
 #, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "Pliki TOC Cdrdao i Klonowania Cdrecordem"
 
-#: misc/k3bimagewritingdialog.cpp:459
+#: misc/k3bimagewritingdialog.cpp:458
 #, kde-format
 msgid "Image Type"
 msgstr "Rodzaj obrazu"
 
-#: misc/k3bimagewritingdialog.cpp:464
+#: misc/k3bimagewritingdialog.cpp:463
 #, kde-format
 msgid "Auto Detection"
 msgstr "Samoczynne wykrywanie"
 
-#: misc/k3bimagewritingdialog.cpp:465
+#: misc/k3bimagewritingdialog.cpp:464
 #, kde-format
 msgid "ISO 9660 filesystem image"
 msgstr "Obraz systemu plików ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:467
+#: misc/k3bimagewritingdialog.cpp:466
 #, kde-format
 msgid "Audio cue file"
 msgstr "Plik Audio cue"
 
-#: misc/k3bimagewritingdialog.cpp:468
+#: misc/k3bimagewritingdialog.cpp:467
 #, kde-format
 msgid "Cdrdao TOC file"
 msgstr "Plik TOC programu cdrdao"
 
-#: misc/k3bimagewritingdialog.cpp:470
+#: misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Plain data image"
 msgstr "Zwykły obraz danych"
 
-#: misc/k3bimagewritingdialog.cpp:521 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:520 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "Tryb zapisu"
 
-#: misc/k3bimagewritingdialog.cpp:527 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:526 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "Kopie"
 
-#: misc/k3bimagewritingdialog.cpp:566 misc/k3bimagewritingdialog.cpp:990
+#: misc/k3bimagewritingdialog.cpp:565 misc/k3bimagewritingdialog.cpp:989
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "&Obraz"
 
-#: misc/k3bimagewritingdialog.cpp:579
+#: misc/k3bimagewritingdialog.cpp:578
 #, kde-format
 msgid "Data mode:"
 msgstr "Tryb danych:"
 
-#: misc/k3bimagewritingdialog.cpp:605
+#: misc/k3bimagewritingdialog.cpp:604
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -4199,7 +4199,7 @@ msgstr ""
 "być tutaj ponownie użyte.<p><b>Pliki TOC programu Cdrdao</b><br/>K3b "
 "obsługuje zapisywanie w formacie programu cdrdao, toc."
 
-#: misc/k3bimagewritingdialog.cpp:707
+#: misc/k3bimagewritingdialog.cpp:706
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -4210,93 +4210,93 @@ msgstr ""
 "nagłówku. Jeżeli został on pobrany z internetu, upewnij się, czy pobieranie "
 "zostało ukończone.</p><p>Kontynuuj tylko wtedy, gdy wiesz co robisz. </p>"
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
+#: misc/k3bimagewritingdialog.cpp:709 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr "Ostrzeżenie"
 
-#: misc/k3bimagewritingdialog.cpp:867
+#: misc/k3bimagewritingdialog.cpp:866
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 "Rodzaj obrazu pliku jest nierozpoznany. Czy chcesz go wypalić mimo tego?"
 
-#: misc/k3bimagewritingdialog.cpp:868
+#: misc/k3bimagewritingdialog.cpp:867
 #, kde-format
 msgid "Unknown image type"
 msgstr "Nieznany rodzaj obrazu"
 
-#: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:868 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "Nagrywanie"
 
-#: misc/k3bimagewritingdialog.cpp:879
+#: misc/k3bimagewritingdialog.cpp:878
 #, kde-format
 msgid "Unable to read image file"
 msgstr "Nie można wczytać pliku obrazu"
 
-#: misc/k3bimagewritingdialog.cpp:881
+#: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "Wygląda, że to nie jest nadający się do użytku obraz płyty."
 
-#: misc/k3bimagewritingdialog.cpp:897
+#: misc/k3bimagewritingdialog.cpp:896
 #, kde-format
 msgid "File not found"
 msgstr "Nie znaleziono pliku."
 
-#: misc/k3bimagewritingdialog.cpp:1028
+#: misc/k3bimagewritingdialog.cpp:1027
 #, kde-format
 msgid "MD5 Sum:"
 msgstr "Suma MD5:"
 
-#: misc/k3bimagewritingdialog.cpp:1068
+#: misc/k3bimagewritingdialog.cpp:1067
 #, kde-format
 msgid "Calculation canceled"
 msgstr "Zaniechano obliczania"
 
-#: misc/k3bimagewritingdialog.cpp:1070
+#: misc/k3bimagewritingdialog.cpp:1069
 #, kde-format
 msgid "Calculation failed"
 msgstr "Obliczanie nie powiodło się"
 
-#: misc/k3bimagewritingdialog.cpp:1086
+#: misc/k3bimagewritingdialog.cpp:1085
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "Skopiuj sumę sprawdzającą do schowka"
 
-#: misc/k3bimagewritingdialog.cpp:1087
+#: misc/k3bimagewritingdialog.cpp:1086
 #, kde-format
 msgid "Compare checksum..."
 msgstr "Porównaj sumę sprawdzającą..."
 
-#: misc/k3bimagewritingdialog.cpp:1094
+#: misc/k3bimagewritingdialog.cpp:1093
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "Sprawdzanie sumy MD5"
 
-#: misc/k3bimagewritingdialog.cpp:1095
+#: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "Proszę podać sumę MD5 do porównania:"
 
-#: misc/k3bimagewritingdialog.cpp:1101
+#: misc/k3bimagewritingdialog.cpp:1100
 #, kde-format
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "Sumy sprawdzające MD5 dla %1 zgadzają się."
 
-#: misc/k3bimagewritingdialog.cpp:1102
+#: misc/k3bimagewritingdialog.cpp:1101
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "Sumy sprawdzające MD5 są równe."
 
-#: misc/k3bimagewritingdialog.cpp:1104
+#: misc/k3bimagewritingdialog.cpp:1103
 #, kde-format
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "Suma sprawdzenia MD5 dla %1 nie jest równa podanej."
 
-#: misc/k3bimagewritingdialog.cpp:1105
+#: misc/k3bimagewritingdialog.cpp:1104
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "Obliczone sumy MD5 różnią się"

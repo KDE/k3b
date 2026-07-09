@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-17 00:42+0000\n"
+"POT-Creation-Date: 2026-07-09 00:42+0000\n"
 "PO-Revision-Date: 2024-07-31 22:22+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -30,7 +30,7 @@ msgstr "Alvó állapot tiltása lemezírás idejére"
 msgid "Disable inhibition for disc writing"
 msgstr "Tiltás kikapcsolása lemezírás idejére"
 
-#: core/k3bglobals.cpp:361
+#: core/k3bglobals.cpp:360
 #, kde-format
 msgid "Auto"
 msgstr "Automatikus"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-04-23 00:43+0000\n"
+"POT-Creation-Date: 2026-07-09 00:42+0000\n"
 "PO-Revision-Date: 2008-02-02 18:26+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -470,7 +470,7 @@ msgstr "Назва файла не выбрана"
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupOptions)
 #. i18n: ectx: attribute (title), widget (QWidget, tab1)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:34
-#: misc/k3bimagewritingdialog.cpp:539 misc/k3bimagewritingdialog.cpp:555
+#: misc/k3bimagewritingdialog.cpp:538 misc/k3bimagewritingdialog.cpp:554
 #: misc/k3bmediacopydialog.cpp:110 misc/k3bmediaformattingdialog.cpp:64
 #: option/k3boptiondialog.cpp:40 projects/base_k3bbootimagedialog.ui:110
 #: projects/k3baudioburndialog.cpp:66 projects/k3bdatapropertiesdialog.cpp:138
@@ -526,7 +526,7 @@ msgstr "Змяніць настаўленні..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab2)
 #: ../plugins/encoder/lame/base_k3blameencodersettingswidget.ui:265
-#: misc/k3bimagewritingdialog.cpp:585 misc/k3bimagewritingdialog.cpp:968
+#: misc/k3bimagewritingdialog.cpp:584 misc/k3bimagewritingdialog.cpp:967
 #: option/k3boptiondialog.cpp:207 projects/k3baudioburndialog.cpp:97
 #: projects/k3bdatapropertiesdialog.cpp:139 projects/k3bvcdburndialog.cpp:380
 #: rip/k3baudiorippingdialog.cpp:168
@@ -2146,37 +2146,37 @@ msgstr "Сесіі:"
 msgid "Supported writing speeds:"
 msgstr "Магчымыя хуткасці запісу:"
 
-#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:194
+#: k3bdiskinfoview.cpp:381 misc/k3bimagewritingdialog.cpp:193
 #, kde-format
 msgid "System Id:"
 msgstr "Id сістэмы:"
 
-#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:202
+#: k3bdiskinfoview.cpp:382 misc/k3bimagewritingdialog.cpp:201
 #, kde-format
 msgid "Volume Id:"
 msgstr "Id тома:"
 
-#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:210
+#: k3bdiskinfoview.cpp:383 misc/k3bimagewritingdialog.cpp:209
 #, kde-format
 msgid "Volume Set Id:"
 msgstr "Id набору тамоў:"
 
-#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:218
+#: k3bdiskinfoview.cpp:384 misc/k3bimagewritingdialog.cpp:217
 #, kde-format
 msgid "Publisher Id:"
 msgstr "Id выдальніка:"
 
-#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:226
+#: k3bdiskinfoview.cpp:385 misc/k3bimagewritingdialog.cpp:225
 #, kde-format
 msgid "Preparer Id:"
 msgstr "Id падрыхтоўшчыка:"
 
-#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:233
+#: k3bdiskinfoview.cpp:386 misc/k3bimagewritingdialog.cpp:232
 #, kde-format
 msgid "Application Id:"
 msgstr "Id праграмы:"
 
-#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:184
+#: k3bdiskinfoview.cpp:387 misc/k3bimagewritingdialog.cpp:183
 #, fuzzy, kde-format
 #| msgid "Volume Set Id:"
 msgid "Volume Size:"
@@ -2301,7 +2301,7 @@ msgstr "Ачыстка не атрымалася."
 msgid "Filter:"
 msgstr ""
 
-#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
+#: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:453
 #, fuzzy, kde-format
 #| msgid "*|All Files"
 msgid "All Files"
@@ -3781,60 +3781,60 @@ msgid ""
 "Manager.)"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:165 misc/k3bimagewritingdialog.cpp:245
-#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:303
+#: misc/k3bimagewritingdialog.cpp:164 misc/k3bimagewritingdialog.cpp:244
+#: misc/k3bimagewritingdialog.cpp:273 misc/k3bimagewritingdialog.cpp:302
 #, kde-format
 msgid "Detected:"
 msgstr "Вызначана:"
 
-#: misc/k3bimagewritingdialog.cpp:166
+#: misc/k3bimagewritingdialog.cpp:165
 #, fuzzy, kde-format
 #| msgid "ISO9660 Image"
 msgid "ISO 9660 image"
 msgstr "ISO9660-адбітак"
 
-#: misc/k3bimagewritingdialog.cpp:175 misc/k3bimagewritingdialog.cpp:252
-#: misc/k3bimagewritingdialog.cpp:281
+#: misc/k3bimagewritingdialog.cpp:174 misc/k3bimagewritingdialog.cpp:251
+#: misc/k3bimagewritingdialog.cpp:280
 #, kde-format
 msgid "Filesize:"
 msgstr "Памер файла:"
 
-#: misc/k3bimagewritingdialog.cpp:179
+#: misc/k3bimagewritingdialog.cpp:178
 #, kde-format
 msgid "%1 (different than declared volume size)"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:246 misc/k3bimagewritingdialog.cpp:469
+#: misc/k3bimagewritingdialog.cpp:245 misc/k3bimagewritingdialog.cpp:468
 #, kde-format
 msgid "Cdrecord clone image"
 msgstr "Адбітак-клон Cdrecord"
 
-#: misc/k3bimagewritingdialog.cpp:258 misc/k3bimagewritingdialog.cpp:287
+#: misc/k3bimagewritingdialog.cpp:257 misc/k3bimagewritingdialog.cpp:286
 #, kde-format
 msgid "Image file:"
 msgstr "Файл адбітка:"
 
-#: misc/k3bimagewritingdialog.cpp:264
+#: misc/k3bimagewritingdialog.cpp:263
 #, kde-format
 msgid "TOC file:"
 msgstr "TOC-файл:"
 
-#: misc/k3bimagewritingdialog.cpp:275 misc/k3bimagewritingdialog.cpp:466
+#: misc/k3bimagewritingdialog.cpp:274 misc/k3bimagewritingdialog.cpp:465
 #, kde-format
 msgid "Cue/bin image"
 msgstr "Расклад/двайковы файл"
 
-#: misc/k3bimagewritingdialog.cpp:293
+#: misc/k3bimagewritingdialog.cpp:292
 #, kde-format
 msgid "Cue file:"
 msgstr "Файл раскладу:"
 
-#: misc/k3bimagewritingdialog.cpp:304
+#: misc/k3bimagewritingdialog.cpp:303
 #, kde-format
 msgid "Audio Cue Image"
 msgstr "Файл аудыа-раскладу:"
 
-#: misc/k3bimagewritingdialog.cpp:310
+#: misc/k3bimagewritingdialog.cpp:309
 #, fuzzy, kde-format
 #| msgid "Playing track"
 msgid "One track"
@@ -3843,107 +3843,107 @@ msgstr[0] "Прайграванне трэка"
 msgstr[1] "Прайграванне трэка"
 msgstr[2] "Прайграванне трэка"
 
-#: misc/k3bimagewritingdialog.cpp:324
+#: misc/k3bimagewritingdialog.cpp:323
 #, kde-format
 msgid "Track"
 msgstr "Трэк"
 
-#: misc/k3bimagewritingdialog.cpp:360
+#: misc/k3bimagewritingdialog.cpp:359
 #, kde-format
 msgid "Burn Image"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:443
+#: misc/k3bimagewritingdialog.cpp:442
 #, kde-format
 msgid "Image to Burn"
 msgstr "Адбітак для выпальвання"
 
-#: misc/k3bimagewritingdialog.cpp:448
+#: misc/k3bimagewritingdialog.cpp:447
 #, kde-format
 msgid "Choose Image File"
 msgstr "Выберыце файл адбітка"
 
-#: misc/k3bimagewritingdialog.cpp:450
+#: misc/k3bimagewritingdialog.cpp:449
 #, fuzzy, kde-format
 #| msgid "Image file:"
 msgid "Image Files"
 msgstr "Файл адбітка:"
 
-#: misc/k3bimagewritingdialog.cpp:451
+#: misc/k3bimagewritingdialog.cpp:450
 #, fuzzy, kde-format
 #| msgid "*.iso *.ISO|ISO9660 Image Files"
 msgid "ISO 9660 Image Files"
 msgstr "*.iso *.ISO|адбітачныя файлы ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:452
+#: misc/k3bimagewritingdialog.cpp:451
 #, fuzzy, kde-format
 #| msgid "Cue file:"
 msgid "Cue Files"
 msgstr "Файл раскладу:"
 
-#: misc/k3bimagewritingdialog.cpp:453
+#: misc/k3bimagewritingdialog.cpp:452
 #, fuzzy, kde-format
 #| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
 msgstr "*.toc *.TOC|TOC-файлы Cdrdao і адбіткі-клоны Cdrecord"
 
-#: misc/k3bimagewritingdialog.cpp:459
+#: misc/k3bimagewritingdialog.cpp:458
 #, kde-format
 msgid "Image Type"
 msgstr "Тып адбітка"
 
-#: misc/k3bimagewritingdialog.cpp:464
+#: misc/k3bimagewritingdialog.cpp:463
 #, kde-format
 msgid "Auto Detection"
 msgstr "Аўтавызначэнне"
 
-#: misc/k3bimagewritingdialog.cpp:465
+#: misc/k3bimagewritingdialog.cpp:464
 #, fuzzy, kde-format
 #| msgid "ISO9660 Filesystem"
 msgid "ISO 9660 filesystem image"
 msgstr "Файлавая сістэма ISO9660"
 
-#: misc/k3bimagewritingdialog.cpp:467
+#: misc/k3bimagewritingdialog.cpp:466
 #, fuzzy, kde-format
 #| msgid "Audio Cue File"
 msgid "Audio cue file"
 msgstr "Файл аудыа-раскладу"
 
-#: misc/k3bimagewritingdialog.cpp:468
+#: misc/k3bimagewritingdialog.cpp:467
 #, fuzzy, kde-format
 #| msgid "Cdrdao TOC File"
 msgid "Cdrdao TOC file"
 msgstr "TOC-файл Cdrdao"
 
-#: misc/k3bimagewritingdialog.cpp:470
+#: misc/k3bimagewritingdialog.cpp:469
 #, kde-format
 msgid "Plain data image"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:521 misc/k3bmediacopydialog.cpp:95
+#: misc/k3bimagewritingdialog.cpp:520 misc/k3bmediacopydialog.cpp:95
 #: misc/k3bmediaformattingdialog.cpp:57 projects/k3bprojectburndialog.cpp:254
 #, kde-format
 msgid "Writing Mode"
 msgstr "Рэжым запісу"
 
-#: misc/k3bimagewritingdialog.cpp:527 misc/k3bmediacopydialog.cpp:100
+#: misc/k3bimagewritingdialog.cpp:526 misc/k3bmediacopydialog.cpp:100
 #: projects/k3bprojectburndialog.cpp:273
 #, kde-format
 msgid "Copies"
 msgstr "Копіі"
 
-#: misc/k3bimagewritingdialog.cpp:566 misc/k3bimagewritingdialog.cpp:990
+#: misc/k3bimagewritingdialog.cpp:565 misc/k3bimagewritingdialog.cpp:989
 #: misc/k3bmediacopydialog.cpp:144
 #, kde-format
 msgid "&Image"
 msgstr "&Адбітак"
 
-#: misc/k3bimagewritingdialog.cpp:579
+#: misc/k3bimagewritingdialog.cpp:578
 #, kde-format
 msgid "Data mode:"
 msgstr "Рэжым данняў:"
 
-#: misc/k3bimagewritingdialog.cpp:605
+#: misc/k3bimagewritingdialog.cpp:604
 #, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
@@ -3962,7 +3962,7 @@ msgid ""
 "writing cdrdao's own image format, the toc files."
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:707
+#: misc/k3bimagewritingdialog.cpp:706
 #, kde-format
 msgid ""
 "<p>The actual file size does not match the size declared in the file header. "
@@ -3970,98 +3970,98 @@ msgid ""
 "continue if you know what you are doing.</p>"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:710 option/k3bmiscoptiontab.cpp:124
+#: misc/k3bimagewritingdialog.cpp:709 option/k3bmiscoptiontab.cpp:124
 #, kde-format
 msgid "Warning"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:867
+#: misc/k3bimagewritingdialog.cpp:866
 #, kde-format
 msgid "Type of image file is not recognizable. Do you want to burn it anyway?"
 msgstr ""
 
-#: misc/k3bimagewritingdialog.cpp:868
+#: misc/k3bimagewritingdialog.cpp:867
 #, fuzzy, kde-format
 #| msgid "Unknown Disk Type"
 msgid "Unknown image type"
 msgstr "Невядомы тып дыска"
 
-#: misc/k3bimagewritingdialog.cpp:869 projects/k3bprojectburndialog.cpp:142
+#: misc/k3bimagewritingdialog.cpp:868 projects/k3bprojectburndialog.cpp:142
 #, kde-format
 msgid "Burn"
 msgstr "Выпаліць"
 
-#: misc/k3bimagewritingdialog.cpp:879
+#: misc/k3bimagewritingdialog.cpp:878
 #, fuzzy, kde-format
 #| msgid "Failed to create folder '%1'."
 msgid "Unable to read image file"
 msgstr "Немагчыма стварыць тэчку '%1'."
 
-#: misc/k3bimagewritingdialog.cpp:881
+#: misc/k3bimagewritingdialog.cpp:880
 #, kde-format
 msgid "Seems not to be a usable image"
 msgstr "Выглядае як невыкарыстальны адбітак"
 
-#: misc/k3bimagewritingdialog.cpp:897
+#: misc/k3bimagewritingdialog.cpp:896
 #, kde-format
 msgid "File not found"
 msgstr "Файл не знойдзены"
 
-#: misc/k3bimagewritingdialog.cpp:1028
+#: misc/k3bimagewritingdialog.cpp:1027
 #, fuzzy, kde-format
 #| msgid "Md5 Sum:"
 msgid "MD5 Sum:"
 msgstr "Md5-сума:"
 
-#: misc/k3bimagewritingdialog.cpp:1068
+#: misc/k3bimagewritingdialog.cpp:1067
 #, fuzzy, kde-format
 #| msgid "Calculation cancelled"
 msgid "Calculation canceled"
 msgstr "Падлік скасаваны"
 
-#: misc/k3bimagewritingdialog.cpp:1070
+#: misc/k3bimagewritingdialog.cpp:1069
 #, kde-format
 msgid "Calculation failed"
 msgstr "Падлік не атрымаўся"
 
-#: misc/k3bimagewritingdialog.cpp:1086
+#: misc/k3bimagewritingdialog.cpp:1085
 #, kde-format
 msgid "Copy checksum to clipboard"
 msgstr "Скапіяваць кантрольную суму ў буфер абмену"
 
-#: misc/k3bimagewritingdialog.cpp:1087
+#: misc/k3bimagewritingdialog.cpp:1086
 #, kde-format
 msgid "Compare checksum..."
 msgstr "Праверыць кантрольную суму..."
 
-#: misc/k3bimagewritingdialog.cpp:1094
+#: misc/k3bimagewritingdialog.cpp:1093
 #, kde-format
 msgid "MD5 Sum Check"
 msgstr "Праверка Md5-сумы"
 
-#: misc/k3bimagewritingdialog.cpp:1095
+#: misc/k3bimagewritingdialog.cpp:1094
 #, kde-format
 msgid "Please insert the MD5 Sum to compare:"
 msgstr "Калі ласка, устаўце Md5-суму для параўнання:"
 
-#: misc/k3bimagewritingdialog.cpp:1101
+#: misc/k3bimagewritingdialog.cpp:1100
 #, fuzzy, kde-format
 #| msgid "The MD5 Sum of %1 equals the specified."
 msgid "The MD5 Sum of %1 equals that specified."
 msgstr "Md5-сума %1 роўная выбранай"
 
-#: misc/k3bimagewritingdialog.cpp:1102
+#: misc/k3bimagewritingdialog.cpp:1101
 #, kde-format
 msgid "MD5 Sums Equal"
 msgstr "Md5-сумы роўныя"
 
-#: misc/k3bimagewritingdialog.cpp:1104
+#: misc/k3bimagewritingdialog.cpp:1103
 #, fuzzy, kde-format
 #| msgid "The MD5 Sum of %1 differs from the specified."
 msgid "The MD5 Sum of %1 differs from that specified."
 msgstr "Md5-сума %1 адрозная ад выбранай"
 
-#: misc/k3bimagewritingdialog.cpp:1105
+#: misc/k3bimagewritingdialog.cpp:1104
 #, kde-format
 msgid "MD5 Sums Differ"
 msgstr "Md5-сумы розныя"
