@@ -20,13 +20,13 @@
 # S.Çağlar Onur <caglar@uludag.org.tr>, 2004-2005.
 # obsoleteman <tulliana@gmail.com>, 2007-2009,2012.
 # Volkan Gezer <volkangezer@gmail.com>, 2013-2014, 2015, 2017.
-# SPDX-FileCopyrightText: 2022, 2023, 2024, 2025, 2026 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022-2026 Emir SARI <emir_sari@icloud.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-05-02 19:55+0300\n"
+"PO-Revision-Date: 2026-07-21 21:01+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 25.12.3\n"
+"X-Generator: Lokalize 26.04.2\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -1849,12 +1849,12 @@ msgstr "Okuma hızı ayarlanırken hata oluştu."
 #: k3bapplication.cpp:138
 #, kde-format
 msgid "K3b is busy"
-msgstr "K3b meşgul"
+msgstr "K3b meşgûl"
 
 #: k3bapplication.cpp:139
 #, kde-format
 msgid "K3b is currently busy and cannot start any other operations."
-msgstr "K3b şu anda meşgul ve başka bir işlem başlatamaz."
+msgstr "K3b şu anda meşgûl ve başka bir işlem başlatamaz."
 
 #: k3bburnprogressdialog.cpp:30
 #, kde-format
