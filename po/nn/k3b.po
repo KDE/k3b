@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-07-05 17:29+0200\n"
+"PO-Revision-Date: 2026-07-23 21:21+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
 "Language: nn\n"
@@ -8123,7 +8123,7 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:223
 #, kde-format
 msgid "<p>This option allows customization of Gaps and Margins."
-msgstr "<p>Dette tillet tilpassing av mellomrom og marginar."
+msgstr "<p>Dette tillèt tilpassing av mellomrom og marginar."
 
 #: projects/k3bvcdburndialog.cpp:224
 #, kde-format
