@@ -69,7 +69,7 @@
 ><title
 >Einleitung</title>
 <para
->Wenn Sie bereits ein Programm zum Brennen von CDs/DVDs wie zum Beispiel Nero unter Windows benutzt haben, werden Sie mit &k3b; keine Probleme haben. </para>
+>Wenn Sie bereits ein Programm zum Brennen von CDs/DVDs wie zum Beispiel Nero unter Windows verwendet haben, werden Sie mit &k3b; keine Probleme haben. </para>
 <para
 >Mit einer einfachen, aber dennoch leistungsfähigen grafischen Bedienungsoberfläche bietet &k3b; verschiedene Möglichkeiten, eine CD, DVD oder BD (Blue-ray-Disc) zu brennen. Verschiedene Arten von Projekten werden angeboten einschließlich Audio-, Daten- und Video-Projekten für DVD und VCD. Dazu auch weiter beschreibbare (Multi-Session) Mehrfachsitzungen und Medien mit gemischten Modi (Mixed-Mode). Mit &k3b; können Sie außerdem wieder beschreibbare Medium formatieren oder löschen und sowohl Video- wie auch Audiodaten kodieren und dekodieren.  </para>
 </chapter>
@@ -211,7 +211,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 <listitem
 ><para
 ><guilabel
->Burnfree benutzen</guilabel
+>Burnfree verwenden</guilabel
 > sollte aktiviert sein, damit wird verhindert, dass der Schreibpuffer leer läuft und das Medium nicht korrekt gebrannt wird. </para
 ></listitem>
 <listitem
@@ -255,7 +255,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 >Quellbereich</emphasis
 >, der wie ein Dateiverwaltungsprogramm funktioniert. Sie können hier normale Dateien von eingebundenen Datenträgern oder Titel von eingelegten Audio-CDs auswählen. Die Namen der Audio-Titel werden automatisch aus den CD-Text-Daten gelesen, wenn Ihr CD-Laufwerk diese Funktion unterstützt. Außerdem werden die Titel aus der <ulink url="http://libcddb.sourceforge.net/"
 >CDDB</ulink
->-Datenbank gelesen. Unterscheiden sich die Titel in beiden Quellen, erscheint ein Dialog, in dem Sie den richtigen Titel auswählen können. Ist der Titel falsch oder möchten Sie ihn ändern, benutzen Sie die Knöpfe in der Werkzeugleiste, Ihre Änderungen werden zwischengespeichert und zum Hauptarchiv auf <ulink url="http://www.freedb.org/"
+>-Datenbank gelesen. Unterscheiden sich die Titel in beiden Quellen, erscheint ein Dialog, in dem Sie den richtigen Titel auswählen können. Ist der Titel falsch oder möchten Sie ihn ändern, verwenden Sie die Knöpfe in der Werkzeugleiste, Ihre Änderungen werden zwischengespeichert und zum Hauptarchiv auf <ulink url="http://www.freedb.org/"
 >FreeDB</ulink
 > hochgeladen. </para>
 <tip>
@@ -265,14 +265,14 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 > ein und lassen die Einträge für die einzelnen Titelinterpreten leer. Speichern Sie dann die Eingaben in den CDDB-Zwischenspeicher und starten die Abfrage erneut. </para>
 </tip>
 <para
->Ziehen Sie nun alle Dateien und Ordner in den rechten Teil der unteren Hälfte des Fensters. Links wird dann eine Baumansicht der ausgewählten Dateien angezeigt. Um Dateien oder Ordner aus dem Projekt zu entfernen, wählen Sie einzelne Elemente oder benutzen die &Ctrl;taste für mehrere Elemente in der Liste. Dann verwenden Sie <guilabel
+>Ziehen Sie nun alle Dateien und Ordner in den rechten Teil der unteren Hälfte des Fensters. Links wird dann eine Baumansicht der ausgewählten Dateien angezeigt. Um Dateien oder Ordner aus dem Projekt zu entfernen, wählen Sie einzelne Elemente oder verwenden die &Ctrl;taste für mehrere Elemente in der Liste. Dann verwenden Sie <guilabel
 >Entfernen</guilabel
 > aus dem Kontextmenü. </para>
 <tip>
 <para
 >Möchten Sie Audiodaten komprimieren oder in andere Formate umwandeln, erstellen Sie ein neues Audio-CD-Projekt. Fügen Sie die zu ändernden Dateien zu diesem Projekt hinzu und drücken Sie auf <guilabel
 >Titel konvertieren</guilabel
->. Dann bleibt der Inhalt der CD, die Sie brennen, unverändert, aber Sie können die umgewandelten Dateien anderweitig benutzen. Achten Sie darauf, eine verlustfreie Umwandlung wie <emphasis
+>. Dann bleibt der Inhalt der CD, die Sie brennen, unverändert, aber Sie können die umgewandelten Dateien anderweitig verwenden. Achten Sie darauf, eine verlustfreie Umwandlung wie <emphasis
 >wav</emphasis
 > oder <emphasis
 >FLAC</emphasis
