@@ -1,6 +1,7 @@
 # Translation of k3b to Norwegian Nynorsk
 #
 # Håvard Korsvoll <korsvoll@skulelinux.no>, 2004, 2005, 2006, 2008.
+# Karl Ove Hufthammer <karl@huftis.org>, 2005, 2007, 2008, 2009, 2011, 2013, 2015, 2016, 2018, 2019, 2020, 2021, 2024, 2026.
 # Eirik U. Birkeland <eirbir@gmail.com>, 2008, 2009.
 msgid ""
 msgstr ""
