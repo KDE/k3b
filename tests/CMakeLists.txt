@@ -56,6 +56,12 @@ target_link_libraries(k3bdeviceglobalstest
     k3bdevice)
 add_test(NAME k3bdeviceglobalstest COMMAND k3bdeviceglobalstest)
 
+add_executable(k3bdefaultexternalprogramstest k3bdefaultexternalprogramstest.cpp)
+target_link_libraries(k3bdefaultexternalprogramstest
+    Qt6::Test
+    k3blib)
+add_test(NAME k3bdefaultexternalprogramstest COMMAND k3bdefaultexternalprogramstest)
+
 qt_generate_dbus_interface(${CMAKE_SOURCE_DIR}/src/k3bjobinterface.h org.k3b.Job.xml)
 qt_add_dbus_adaptor(dbus_sources ${CMAKE_CURRENT_BINARY_DIR}/org.k3b.Job.xml ${CMAKE_SOURCE_DIR}/src/k3bjobinterface.h K3b::JobInterface k3bjobinterfaceadaptor K3bJobInterfaceAdaptor)
 

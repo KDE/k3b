@@ -20,6 +20,8 @@
 #include <QStringList>
 #include <QTextStream>
 
+using namespace Qt::StringLiterals;
+
 
 void K3b::addDefaultPrograms( K3b::ExternalBinManager* m )
 {
@@ -64,6 +66,26 @@ void K3b::addVcdimagerPrograms( K3b::ExternalBinManager* m )
 
     for( int i = 0; vcdTools[i]; ++i )
         m->addProgram( new K3b::VcdbuilderProgram( vcdTools[i] ) );
+}
+
+
+bool K3b::containsWord( const QString& haystack, QStringView needle )
+{
+    if( needle.length() == 0 )
+        return true;
+
+    for( qsizetype index = 0;; ) {
+        index = haystack.indexOf( needle, index );
+        if( index == -1 )
+            return false;
+        if( index > 0 && !haystack[index - 1].isSpace() ) {
+            index += needle.length();
+            continue;
+        }
+        index += needle.length();
+        if( index >= haystack.length() || haystack[index].isSpace() )
+            return true;
+    }
 }
 
 
@@ -188,17 +210,17 @@ void K3b::CdrecordProgram::parseFeatures( const QString& output, ExternalBin& bi
         bin.setVersion( QString(bin.version().versionString()).remove("-dvd") );
     }
 
-    if( output.contains( "gracetime" ) )
+    if( containsWord( output, u"gracetime=#"_s ) )
         bin.addFeature( "gracetime" );
-    if( output.contains( "-overburn" ) )
+    if( containsWord( output, u"-overburn"_s ) )
         bin.addFeature( "overburn" );
-    if( output.contains( "-text" ) )
+    if( containsWord( output, u"-text"_s ) )
         bin.addFeature( "cdtext" );
-    if( output.contains( "-clone" ) )
+    if( containsWord( output, u"-clone"_s ) )
         bin.addFeature( "clone" );
-    if( output.contains( "-tao" ) )
+    if( containsWord( output, u"-tao"_s ) )
         bin.addFeature( "tao" );
-    if( output.contains( "cuefile=" ) &&
+    if( containsWord( output, u"cuefile=name"_s ) &&
         ( usingCdrkit( bin ) || bin.version() > K3b::Version( 2, 1, -1, "a14") ) ) // cuefile handling was still buggy in a14
         bin.addFeature( "cuefile" );
 
@@ -207,7 +229,7 @@ void K3b::CdrecordProgram::parseFeatures( const QString& output, ExternalBin& bi
     // just double-checked and the help page is proper but there is no harm in having
     // two checks)
     // and the version check does not handle versions like 2.01-dvd properly
-    if( output.contains( "-xamix" ) ||
+    if( containsWord( output, u"-xamix"_s ) ||
         bin.version() >= K3b::Version( 2, 1, -1, "a12" ) ||
         usingCdrkit( bin ) )
         bin.addFeature( "xamix" );
@@ -252,15 +274,15 @@ void K3b::MkisofsProgram::parseFeatures( const QString& output, ExternalBin& bin
     if( usingCdrkit( bin ) )
         bin.addFeature( "genisoimage" );
 
-    if( output.contains( "-udf" ) )
+    if( containsWord( output, u"-udf"_s ) )
         bin.addFeature( "udf" );
-    if( output.contains( "-dvd-video" ) )
+    if( containsWord( output, u"-dvd-video"_s ) )
         bin.addFeature( "dvd-video" );
-    if( output.contains( "-joliet-long" ) )
+    if( containsWord( output, u"-joliet-long"_s ) )
         bin.addFeature( "joliet-long" );
-    if( output.contains( "-xa" ) )
+    if( containsWord( output, u"-xa"_s ) )
         bin.addFeature( "xa" );
-    if( output.contains( "-sectype" ) )
+    if( containsWord( output, u"-sectype"_s ) )
         bin.addFeature( "sectype" );
 
     if( bin.version() < K3b::Version( 1, 14) && !usingCdrkit( bin ) )
@@ -288,7 +310,7 @@ void K3b::ReadcdProgram::parseFeatures( const QString& output, ExternalBin& bin 
     if( usingCdrkit( bin ) )
         bin.addFeature( "readom" );
 
-    if( output.contains( "-clone" ) )
+    if( containsWord( output, u"-clone"_s ) )
         bin.addFeature( "clone" );
 
     // FIXME: are these version correct?
@@ -309,15 +331,15 @@ void K3b::Cdda2wavProgram::parseFeatures( const QString& output, ExternalBin& bi
 {
     // features (we do this since the cdda2wav help says that the short
     //           options will disappear soon)
-    if( output.indexOf( "-info-only" ) )
+    if( containsWord( output, u"-info-only"_s ) )
         bin.addFeature( "info-only" ); // otherwise use the -J option
-    if( output.indexOf( "-no-infofile" ) )
+    if( containsWord( output, u"-no-infofile"_s ) )
         bin.addFeature( "no-infofile" ); // otherwise use the -H option
-    if( output.indexOf( "-gui" ) )
+    if( containsWord( output, u"-gui"_s ) )
         bin.addFeature( "gui" ); // otherwise use the -g option
-    if( output.indexOf( "-bulk" ) )
+    if( containsWord( output, u"-bulk"_s ) )
         bin.addFeature( "bulk" ); // otherwise use the -B option
-    if( output.indexOf( "dev=" ) )
+    if( containsWord( output, u"dev=device"_s ) )
         bin.addFeature( "dev" ); // otherwise use the -B option
 }
 
@@ -343,12 +365,12 @@ bool K3b::CdrdaoProgram::scanFeatures( ExternalBin& bin ) const
 
     if( fp.execute() >= 0 ) {
         QByteArray out = fp.readAll();
-        if( out.contains( "--overburn" ) )
+        if( containsWord( out, u"--overburn"_s ) )
             bin.addFeature( "overburn" );
-        if( out.contains( "--multi" ) )
+        if( containsWord( out, u"--multi"_s ) )
             bin.addFeature( "multisession" );
 
-        if( out.contains( "--buffer-under-run-protection" ) )
+        if( containsWord( out, u"--buffer-under-run-protection"_s ) )
             bin.addFeature( "disable-burnproof" );
 
         // SuSE 9.0 ships with a patched cdrdao 1.1.7 which contains an updated libschily
@@ -546,15 +568,15 @@ bool K3b::CdrskinProgram::scanFeatures(ExternalBin& bin) const
     if (fp.execute() >= 0) {
         QByteArray output = fp.readAll();
 
-        if (output.contains("gracetime"))
+        if (containsWord(output, u"gracetime=#"_s))
             bin.addFeature("gracetime");
-        if (output.contains("-overburn"))
+        if (containsWord(output, u"-overburn"_s))
             bin.addFeature("overburn");
-        if (output.contains("-text"))
+        if (containsWord(output, u"-text"_s))
             bin.addFeature("cdtext");
-        if (output.contains("-clone"))
+        if (containsWord(output, u"-clone"_s))
             bin.addFeature("clone");
-        if (output.contains("-tao"))
+        if (containsWord(output, u"-tao"_s))
             bin.addFeature("tao");
     }
 

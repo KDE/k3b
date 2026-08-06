@@ -20,6 +20,8 @@ namespace K3b {
     LIBK3B_EXPORT void addTranscodePrograms( ExternalBinManager* );
     LIBK3B_EXPORT void addVcdimagerPrograms( ExternalBinManager* );
 
+    LIBK3B_EXPORT bool containsWord( const QString& haystack, QStringView needle );
+
     class LIBK3B_EXPORT AbstractCdrtoolsProgram : public SimpleExternalProgram
     {
     public:
