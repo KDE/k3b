@@ -17,6 +17,28 @@
 #include <QMimeDatabase>
 
 
+namespace {
+    void handleReplacement( const K3b::DirItem* parent, K3b::DataItem* item )
+    {
+        if( !item->isFile() ) {
+            return;
+        }
+
+        if( K3b::DataItem* oldItem = parent->find( item->k3bName() );
+            oldItem != nullptr &&
+            !oldItem->isDir() &&
+            oldItem->isFromOldSession() )
+        {
+            // in this case we remove this item from it's parent and save it in the new one
+            // to be able to recover it
+            oldItem->take();
+            static_cast<K3b::SessionImportItem*>(oldItem)->setReplaceItem( static_cast<K3b::FileItem*>(item) );
+            static_cast<K3b::FileItem*>(item)->setReplacedItemFromOldSession( oldItem );
+        }
+    }
+} // namespace
+
+
 K3b::DirItem::DirItem(const QString& name, const ItemFlags& flags)
     : K3b::DataItem( flags | DIR ),
       m_size(0),
@@ -88,6 +110,8 @@ K3b::DirItem* K3b::DirItem::addDataItem( K3b::DataItem* item )
         // in DataProjectModel
         item->take();
 
+        handleReplacement( this, item );
+
         // inform the doc
         if( DataDoc* doc = getDoc() ) {
             doc->beginInsertItems( this, m_children.size(), m_children.size() );
@@ -115,6 +139,8 @@ void K3b::DirItem::addDataItems( const Children& items )
             // avoid situation when beginRemoveRows() is called after beginInsertRows()
             // in DataProjectModel
             item->take();
+
+            handleReplacement( this, item );
 
             newItems.push_back( item );
         }
@@ -204,8 +230,10 @@ K3b::DirItem::Children K3b::DirItem::takeDataItems( int start, int count )
         Q_FOREACH( DataItem* item, takenItems ) {
             if( item->isFile() ) {
                 // restore the item imported from an old session
-                if( DataItem* replaceItem = static_cast<FileItem*>(item)->replaceItemFromOldSession() )
+                if( DataItem* replaceItem = static_cast<FileItem*>(item)->replaceItemFromOldSession() ) {
+                    static_cast<K3b::SessionImportItem*>(replaceItem)->setReplaceItem( nullptr );
                     addDataItem( replaceItem );
+                }
             }
         }
     }
@@ -449,27 +477,16 @@ bool K3b::DirItem::canAddDataItem( DataItem* item ) const
 void K3b::DirItem::addDataItemImpl( DataItem* item )
 {
     if( item->isFile() ) {
-        // do we replace an old item?
         QString name = item->k3bName();
         int cnt = 1;
-        while( DataItem* oldItem = find( name ) ) {
-            if( !oldItem->isDir() && oldItem->isFromOldSession() ) {
-                // in this case we remove this item from it's parent and save it in the new one
-                // to be able to recover it
-                oldItem->take();
-                static_cast<SessionImportItem*>(oldItem)->setReplaceItem( static_cast<FileItem*>(item) );
-                static_cast<FileItem*>(item)->setReplacedItemFromOldSession( oldItem );
-                break;
-            }
-            else {
-                //
-                // add a counter to the filename
-                //
-                if( item->k3bName()[item->k3bName().length()-4] == '.' )
-                    name = item->k3bName().left( item->k3bName().length()-4 ) + QString::number(cnt++) + item->k3bName().right(4);
-                else
-                    name = item->k3bName() + QString::number(cnt++);
-            }
+        while( find( name ) ) {
+            //
+            // add a counter to the filename
+            //
+            if( item->k3bName()[item->k3bName().length()-4] == '.' )
+                name = item->k3bName().left( item->k3bName().length()-4 ) + QString::number(cnt++) + item->k3bName().right(4);
+            else
+                name = item->k3bName() + QString::number(cnt++);
         }
         item->setK3bName( name );
     }

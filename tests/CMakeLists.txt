@@ -2,6 +2,7 @@
 add_executable(k3bdataprojectmodeltest
     k3bdataprojectmodeltest.cpp
     k3btestutils.cpp
+    ${CMAKE_SOURCE_DIR}/libk3b/projects/datacd/k3bsessionimportitem.cpp
     ${CMAKE_SOURCE_DIR}/src/projects/k3bdataprojectmodel.cpp)
 target_include_directories(k3bdataprojectmodeltest PRIVATE
     ${CMAKE_BINARY_DIR}/libk3bdevice

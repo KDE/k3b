@@ -11,7 +11,10 @@
 #include <QObject>
 #include <QPointer>
 
-namespace K3b { class DataDoc; }
+namespace K3b {
+    class DataDoc;
+    class Iso9660;
+} // namespace K3b
 
 class DataProjectModelTest : public QObject
 {
@@ -19,16 +22,20 @@ class DataProjectModelTest : public QObject
 
 public:
     DataProjectModelTest();
+    ~DataProjectModelTest() override;
 
 private slots:
     void init(); // executed before each test function
-    void cleanp(); // executed after each test function
+    void cleanup(); // executed after each test function
     void testCreate();
     void testAdd();
     void testRemove();
+    void testReplace();
+    void testAddAndReplace();
 
 private:
     QPointer<K3b::DataDoc> m_doc;
+    K3b::Iso9660* m_iso;
 };
 
 #endif // K3B_DATA_PROJECT_MODEL_TEST_H
