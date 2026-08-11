@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-04-30 08:49+0400\n"
+"PO-Revision-Date: 2026-08-10 18:32+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2816,7 +2816,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:304
 #, kde-format
 msgid "Insufficient permissions for %1 executable: %2"
-msgstr "أذونات غير كافية لملفّ %1 التّنفيذيّ: %2"
+msgstr "أذون غير كافية لملفّ %1 التّنفيذيّ: %2"
 
 #: k3bsystemproblemdialog.cpp:202 k3bsystemproblemdialog.cpp:209
 #, kde-format
@@ -2831,8 +2831,8 @@ msgid ""
 "Permissions. If K3b's default value is set make sure you are member of "
 "\"%1\" group."
 msgstr ""
-"تحقّق من الأذونات عبر الإعدادات -> إعداد «كي3بي»... -> البرامج -> الأذونات. "
-"إذا كان إعداد «كي3بي» المبدئي مُحدَّدًا، فتأكّد من أنّك عضو في مجموعة \"%1\"."
+"تحقّق من الأذون عبر الإعدادات -> إعداد «كي3بي»... -> البرامج -> الأذون. إذا "
+"كان إعداد «كي3بي» المبدئي مُحدَّدًا، فتأكّد من أنّك عضو في مجموعة \"%1\"."
 
 #: k3bsystemproblemdialog.cpp:208 k3bsystemproblemdialog.cpp:270
 #: k3bsystemproblemdialog.cpp:292 k3bsystemproblemdialog.cpp:314
@@ -3115,7 +3115,7 @@ msgid ""
 "udev click \"Modify Permissions...\" and setup permissions by hand."
 msgstr ""
 "تأكّد من أنّ لديك وصول كتابة إلى %1. في حال كنت لا تستخدم devfs أو udev، فانقر "
-"\"عدّل الأذونات...\" وأعدّ الأذونات يدويًّا."
+"\"عدّل الأذون...\" وأعدّ الأذون يدويًّا."
 
 #: k3bsystemproblemdialog.cpp:500
 #, kde-format
@@ -3135,7 +3135,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:504
 #, kde-format
 msgid "Enable DMA temporarily as root with 'hdparm -d 1 %1'."
-msgstr "فعّل DMA مؤقّتًا بصلاحيات الجذر بـ 'hdparm -d 1 %1'."
+msgstr "فعّل DMA مؤقّتًا بأذون الجذر بـ 'hdparm -d 1 %1'."
 
 #: k3bsystemproblemdialog.cpp:519
 #, kde-format
@@ -3237,7 +3237,7 @@ msgid ""
 "Run K3b from a proper user account and setup the device and external tool "
 "permissions appropriately."
 msgstr ""
-"شغّل «كي3بي» من حساب مستخدم مناسب وأعدّ أذونات الجهاز والأداة الخارجيّة بشكل "
+"شغّل «كي3بي» من حساب مستخدم مناسب وأعدّ أذون الجهاز والأداة الخارجيّة بشكل "
 "مناسب."
 
 #: k3bsystemproblemdialog.cpp:587
@@ -5007,12 +5007,12 @@ msgstr "لا تغيير"
 #: option/k3bexternalbinwidget.cpp:119
 #, kde-format
 msgid "Permissions"
-msgstr "الأذونات"
+msgstr "الأذون"
 
 #: option/k3bexternalbinpermissionmodel.cpp:288
 #, kde-format
 msgid "New permissions"
-msgstr "الأذونات الجديدة"
+msgstr "الأذون الجديدة"
 
 #: option/k3bexternalbinwidget.cpp:73
 #, kde-format
@@ -5043,7 +5043,7 @@ msgstr "بارامترات المستخدم"
 #: option/k3bexternalbinwidget.cpp:106
 #, kde-format
 msgid "Check the programs whose permissions you want to be changed:"
-msgstr "حدّد البرامج التي تريد تغيير تصاريحها:"
+msgstr "حدّد البرامج التي تريد تغيير أذونها:"
 
 #: option/k3bexternalbinwidget.cpp:114
 #, kde-format
@@ -5356,7 +5356,7 @@ msgstr ""
 "<p>إذا اخترت هذا الخيار، سيقوم كي٣بي بإنشاء سجلات بروتوكول مشاركة استخدام "
 "النظام (SUSP) المحدّدة بواسطة بروتوكول تبادل Rock Ridge (IEEE-P1282).\n"
 "<p>يوسّع Rock Ridge نظام ملفات ISO 9660 بميزات مماثلة لأنظمة ملفات UNIX "
-"(تصاريح، روابط رمزيّة، أسماء ملفات طويلة جدًا، ...). يستخدم محارف تعتمد على "
+"(أذون، روابط رمزيّة، أسماء ملفات طويلة جدًا، ...). يستخدم محارف تعتمد على "
 "ISO-8859 أو UTF-16 ويسمح بـ 255 ثمانية بت.\n"
 "<p>تقع امتدادات Rock Ridge في نهاية كل سجل دليل ISO 9660. هذا يجعل شجرة Rock "
 "Ridge مرتبطة ارتباطًا وثيقًا بشجرة ISO 9660.\n"
@@ -5456,10 +5456,10 @@ msgid ""
 "not make much sense on other file systems; for example, if a user that owns "
 "a file on the CD or DVD does not exist."
 msgstr ""
-"<p>إذا اخترت هذا الخيار، ستكون لجميع الملفات في نظام الملفات الناتج نفس "
-"تصاريح الملفات المصدر تمامًا. (وإلا، ستكون لجميع الملفات تصاريح متساوية "
-"وستكون مملوكة للجذر).\n"
-"<p>هذا مفيد بشكل رئيسي للنسخ الاحتياطي.<p><b>تنبيه:</b> قد لا تكون التصاريح "
+"<p>إذا اخترت هذا الخيار، ستكون لجميع الملفات في نظام الملفات الناتج نفس أذون "
+"الملفات المصدر تمامًا. (وإلا، ستكون لجميع الملفات أذون متساوية وستكون مملوكة "
+"للجذر).\n"
+"<p>هذا مفيد بشكل رئيسي للنسخ الاحتياطي.<p><b>تنبيه:</b> قد لا تكون الأذون "
 "منطقية جدًا على أنظمة ملفات أخرى؛ على سبيل المثال، إذا لم يكن هناك مستخدم "
 "يملك ملفًا على القرص المضغوط أو قرص DVD."
 
@@ -5467,7 +5467,7 @@ msgstr ""
 #: projects/base_k3badvanceddataimagesettings.ui:87
 #, kde-format
 msgid "Preserve file permissions (bac&kup)"
-msgstr "احفظ تصاريح الملفات (ن&سخ احتياطي)"
+msgstr "احفظ أذون الملفات (ن&سخ احتياطي)"
 
 #. i18n: ectx: property (whatsThis), widget (QGroupBox, groupBox_3)
 #: projects/base_k3badvanceddataimagesettings.ui:110
@@ -6825,7 +6825,7 @@ msgstr "يضيف الملفّات إلى المشروع ”%1“..."
 #: projects/k3bdataurladdingdialog.cpp:801
 #, kde-format
 msgid "Insufficient permissions to read the following files"
-msgstr "الأذونات غير كافية لقراءة الملفّات الآتية"
+msgstr "الأذون غير كافية لقراءة الملفّات الآتية"
 
 #: projects/k3baudiotrackaddingdialog.cpp:77
 #: projects/k3bdataurladdingdialog.cpp:805
@@ -7165,8 +7165,8 @@ msgid ""
 "symbolic links, and POSIX compatible file permissions."
 msgstr ""
 "نظام الملفات محسّن للاستخدام في أنظمة لينكس/يونكس. يعني هذا بشكل أساسي أنه "
-"يستخدم إضافات Rock Ridge لتقديم أسماء ملفات طويلة، وروابط رمزية، وصلاحيات "
-"ملفات متوافقة مع POSIX."
+"يستخدم إضافات Rock Ridge لتقديم أسماء ملفات طويلة، وروابط رمزية، وأذون ملفات "
+"متوافقة مع POSIX."
 
 #: projects/k3bdataimagesettingswidget.cpp:150
 #, kde-format
@@ -7197,7 +7197,7 @@ msgid ""
 "permissions are supported."
 msgstr ""
 "نظام الملفات محسّن للتوافق مع الأنظمة القديمة. يعني هذا أن أسماء الملفات "
-"مقيدة بـ8.3 محارف ولا تدعم الروابط الرمزية أو صلاحيات الملفات."
+"مقيدة بـ8.3 محارف ولا تدعم الروابط الرمزية أو أذون الملفات."
 
 #: projects/k3bdataimagesettingswidget.cpp:212
 #, kde-format
