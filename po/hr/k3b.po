@@ -478,7 +478,8 @@ msgstr ""
 #: projects/k3bvcdburndialog.cpp:441 projects/k3bvcdtrackdialog.cpp:445
 #: rip/k3baudioprojectconvertingdialog.cpp:136
 #: rip/k3baudiorippingdialog.cpp:154 rip/k3bvideocdrippingdialog.cpp:90
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Settings"
 msgid "Settings"
 msgstr "Postavke"
 
@@ -4749,7 +4750,10 @@ msgid "Change Permissions..."
 msgstr "Promijeni dozvole…"
 
 #: option/k3bexternalbinwidget.cpp:127
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "<qt><b>Hint:</b> to force K3b to use another than the default name for "
+#| "the executable specify it in the search path.</qt>"
 msgid ""
 "<qt><b>Hint:</b> to force K3b to use another than the default name for the "
 "executable specify it in the search path.</qt>"
@@ -4894,7 +4898,8 @@ msgid "Miscellaneous Settings"
 msgstr ""
 
 #: option/k3boptiondialog.cpp:139
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Devices"
 msgid "Devices"
 msgstr "Uređaji"
 
