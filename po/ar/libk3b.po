@@ -440,7 +440,7 @@ msgstr "قُرئ القرص المصدر بنجاح."
 #: jobs/k3bcdcopyjob.cpp:995
 #, kde-format
 msgid "K3b was unable to eject the source disk. Please do so manually."
-msgstr "كي3بي لم يستطع إخراج القرص المصدر. يرجى إخراجه يدوياً."
+msgstr "كي3بي لم يستطع إخراج القرص المصدر. يرجى إخراجه يدويًا."
 
 #: jobs/k3bcdcopyjob.cpp:1012
 #, kde-format
@@ -463,7 +463,7 @@ msgstr "إعادة تحميل القرص"
 #: projects/videocd/k3bvcdjob.cpp:497
 #, kde-format
 msgid "K3b was unable to eject the written disk. Please do so manually."
-msgstr "كي3بي لم يستطع إخراج القرص المكتوب. يرجى إخراجه يدوياً."
+msgstr "كي3بي لم يستطع إخراج القرص المكتوب. يرجى إخراجه يدويًا."
 
 #: jobs/k3bcdcopyjob.cpp:1097 jobs/k3bverificationjob.cpp:261
 #: projects/k3bcdrecordwriter.cpp:729 projects/k3bcdrskinwriter.cpp:742
@@ -890,7 +890,7 @@ msgstr "قُرئ القرص المصدر بنجاح."
 #: jobs/k3bdvdcopyjob.cpp:585
 #, kde-format
 msgid "K3b was unable to eject the source medium. Please do so manually."
-msgstr "كي3بي لم يستطع إخراج القرص المصدر. يرجى إخراجه يدوياً."
+msgstr "كي3بي لم يستطع إخراج القرص المصدر. يرجى إخراجه يدويًا."
 
 #: jobs/k3bdvdcopyjob.cpp:646
 #, kde-format
@@ -910,7 +910,7 @@ msgstr "فحص النسخة"
 #: jobs/k3bdvdcopyjob.cpp:681 jobs/k3biso9660imagewritingjob.cpp:146
 #, kde-format
 msgid "K3b was unable to eject the written medium. Please do so manually."
-msgstr "كي3بي لم يستطع إخراج القرص المكتوب. يرجى إخراجه يدوياً."
+msgstr "كي3بي لم يستطع إخراج القرص المكتوب. يرجى إخراجه يدويًا."
 
 #: jobs/k3bdvdcopyjob.cpp:790
 #, kde-format
@@ -924,7 +924,7 @@ msgid ""
 "%1 media do not support write simulation. Do you really want to continue? "
 "The disc will actually be written to."
 msgstr ""
-"لا تدعم أقراص %1 محاكاة الكتابة. هل تريد حقاً المتابعة؟ القرص سوف يُكتب عليه "
+"لا تدعم أقراص %1 محاكاة الكتابة. هل تريد حقًا المتابعة؟ القرص سوف يُكتب عليه "
 "بالفعل."
 
 #: jobs/k3bdvdcopyjob.cpp:819 jobs/k3bdvdcopyjob.cpp:912
@@ -957,7 +957,7 @@ msgid ""
 "Your writer (%1 %2) does not support simulation with DVD-R(W) media. Do you "
 "really want to continue? The media will actually be written to."
 msgstr ""
-"الناسخ (%1 %2) لا يدعم المحاكاة مع أقراص DVD-R(W). هل تريد حقاً المتابعة؟ سوف "
+"الناسخ (%1 %2) لا يدعم المحاكاة مع أقراص DVD-R(W). هل تريد حقًا المتابعة؟ سوف "
 "يُكتب على القرص بالفعل."
 
 #: jobs/k3bdvdcopyjob.cpp:844 jobs/k3bmetawriter.cpp:517
@@ -1249,7 +1249,7 @@ msgid ""
 "DVD+R(W) media do not support write simulation. Do you really want to "
 "continue? The media will actually be written to."
 msgstr ""
-"لا تدعم أقراص DVD+R(W) محاكاة الكتابة. هل تريد حقاً المتابعة؟ سوف يُكتب على "
+"لا تدعم أقراص DVD+R(W) محاكاة الكتابة. هل تريد حقًا المتابعة؟ سوف يُكتب على "
 "القرص بالفعل."
 
 #: jobs/k3bmetawriter.cpp:506
@@ -1341,7 +1341,7 @@ msgstr "كتابة DVD+R مزدوج الطبقة."
 #: jobs/k3breadcdreader.cpp:115
 #, kde-format
 msgid "Using readcd %1 instead of default version for clone support."
-msgstr "استخدام readcd %1 بدلاً من الإصدار الافتراضي لدعم الاستنساخ."
+msgstr "استخدام readcd %1 بدلًا من الإصدار الافتراضي لدعم الاستنساخ."
 
 #: jobs/k3breadcdreader.cpp:122
 #, kde-format
@@ -1429,7 +1429,7 @@ msgstr "لم يُعثر على ملف %1 التنفيذي."
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:125
 #, kde-format
 msgid "%1 version %2 is too old."
-msgstr "إصدار %1 %2 قديم جداً."
+msgstr "إصدار %1 %2 قديم جدًا."
 
 #: jobs/k3bvideodvdtitledetectclippingjob.cpp:104
 #, kde-format
@@ -3682,7 +3682,7 @@ msgstr "المشروع لا يحتوي على جميع ملفات فيديو د�
 msgid ""
 "The resulting DVD will most likely not be playable on a Hifi DVD player."
 msgstr ""
-"على الأرجح، لن يكون قرص الـ DVD الناتج قابلاً للتشغيل على مشغل DVD Hi-Fi."
+"على الأرجح، لن يكون قرص الـ DVD الناتج قابلًا للتشغيل على مشغل DVD Hi-Fi."
 
 #: projects/videodvd/k3bvideodvdjob.cpp:43
 #, kde-format
@@ -4000,12 +4000,12 @@ msgstr "رجاءً، أدخل وسيطًا فارغًا بحجم %1 أو أكب�
 #: tools/k3bmedium.cpp:729
 #, kde-format
 msgid "Please insert an empty or appendable medium into drive<p><b>%1</b>"
-msgstr "رجاءً، أدخل وسيطًا فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
+msgstr "رجاءً، أدخل وسيطًا فارغًا أو قابلًا للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:731
 #, kde-format
 msgid "Please insert an empty or appendable medium"
-msgstr "رجاءً، أدخل وسيطًا فارغًا أو قابلاً للإضافة"
+msgstr "رجاءً، أدخل وسيطًا فارغًا أو قابلًا للإضافة"
 
 #: tools/k3bmedium.cpp:735
 #, kde-format
@@ -4013,57 +4013,57 @@ msgid ""
 "Please insert an empty or appendable DVD or Blu-ray medium into drive<p><b>"
 "%1</b>"
 msgstr ""
-"رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>"
+"رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا أو قابلًا للإضافة في محرك الأقراص<p><b>"
 "%1</b>"
 
 #: tools/k3bmedium.cpp:737
 #, kde-format
 msgid "Please insert an empty or appendable DVD or Blu-ray medium"
-msgstr "رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا أو قابلاً للإضافة"
+msgstr "رجاءً، أدخل وسيط DVD أو Blu-ray فارغًا أو قابلًا للإضافة"
 
 #: tools/k3bmedium.cpp:741
 #, kde-format
 msgid ""
 "Please insert an empty or appendable Blu-ray medium into drive<p><b>%1</b>"
 msgstr ""
-"رجاءً، أدخل وسيط Blu-ray فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
+"رجاءً، أدخل وسيط Blu-ray فارغًا أو قابلًا للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:743
 #, kde-format
 msgid "Please insert an empty or appendable Blu-ray medium"
-msgstr "رجاءً، أدخل وسيط Blu-ray فارغًا أو قابلاً للإضافة"
+msgstr "رجاءً، أدخل وسيط Blu-ray فارغًا أو قابلًا للإضافة"
 
 #: tools/k3bmedium.cpp:747
 #, kde-format
 msgid "Please insert an empty or appendable CD medium into drive<p><b>%1</b>"
-msgstr "رجاءً، أدخل وسيط CD فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
+msgstr "رجاءً، أدخل وسيط CD فارغًا أو قابلًا للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:749
 #, kde-format
 msgid "Please insert an empty or appendable CD medium"
-msgstr "رجاءً، أدخل وسيط CD فارغًا أو قابلاً للإضافة"
+msgstr "رجاءً، أدخل وسيط CD فارغًا أو قابلًا للإضافة"
 
 #: tools/k3bmedium.cpp:753
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium into drive<p><b>%1</b>"
-msgstr "رجاءً، أدخل وسيط DVD فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
+msgstr "رجاءً، أدخل وسيط DVD فارغًا أو قابلًا للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:755
 #, kde-format
 msgid "Please insert an empty or appendable DVD medium"
-msgstr "رجاءً، أدخل وسيط DVD فارغًا أو قابلاً للإضافة"
+msgstr "رجاءً، أدخل وسيط DVD فارغًا أو قابلًا للإضافة"
 
 #: tools/k3bmedium.cpp:759
 #, kde-format
 msgid ""
 "Please insert an empty or appendable DVD-DL medium into drive<p><b>%1</b>"
 msgstr ""
-"رجاءً، أدخل وسيط DVD-DL فارغًا أو قابلاً للإضافة في محرك الأقراص<p><b>%1</b>"
+"رجاءً، أدخل وسيط DVD-DL فارغًا أو قابلًا للإضافة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:761
 #, kde-format
 msgid "Please insert an empty or appendable DVD-DL medium"
-msgstr "رجاءً، أدخل وسيط DVD-DL فارغًا أو قابلاً للإضافة"
+msgstr "رجاءً، أدخل وسيط DVD-DL فارغًا أو قابلًا للإضافة"
 
 #: tools/k3bmedium.cpp:767
 #, kde-format
@@ -4079,22 +4079,22 @@ msgstr "رجاءً، أدخل وسيطًا غير فارغ"
 #, kde-format
 msgid "Please insert a non-empty rewritable medium into drive<p><b>%1</b>"
 msgstr ""
-"رجاءً، أدخل وسيطًا غير فارغ وقابلاً لإعادة الكتابة في محرك الأقراص<p><b>%1</b>"
+"رجاءً، أدخل وسيطًا غير فارغ وقابلًا لإعادة الكتابة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:775
 #, kde-format
 msgid "Please insert a non-empty rewritable medium"
-msgstr "رجاءً، أدخل وسيطًا غير فارغ وقابلاً لإعادة الكتابة"
+msgstr "رجاءً، أدخل وسيطًا غير فارغ وقابلًا لإعادة الكتابة"
 
 #: tools/k3bmedium.cpp:781
 #, kde-format
 msgid "Please insert a rewritable medium into drive<p><b>%1</b>"
-msgstr "رجاءً، أدخل وسيطًا قابلاً لإعادة الكتابة في محرك الأقراص<p><b>%1</b>"
+msgstr "رجاءً، أدخل وسيطًا قابلًا لإعادة الكتابة في محرك الأقراص<p><b>%1</b>"
 
 #: tools/k3bmedium.cpp:783
 #, kde-format
 msgid "Please insert a rewritable medium"
-msgstr "رجاءً، أدخل وسيطًا قابلاً لإعادة الكتابة"
+msgstr "رجاءً، أدخل وسيطًا قابلًا لإعادة الكتابة"
 
 #: tools/k3bmedium.cpp:789 tools/k3bmedium.cpp:835
 #, kde-format
@@ -4285,7 +4285,7 @@ msgstr ""
 #: tools/k3bstdguiitems.cpp:81 tools/k3bstdguiitems.cpp:103
 #, kde-format
 msgid "<p>It is recommended to try a simulation first."
-msgstr "<p>يوصى بتجربة المحاكاة أولاً."
+msgstr "<p>يوصى بتجربة المحاكاة أولًا."
 
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
@@ -4323,7 +4323,7 @@ msgid ""
 "the files directly to the CD/DVD.<p><b>Caution:</b> Although this should "
 "work on most systems, make sure the data is sent to the writer fast enough."
 msgstr ""
-"<p>إذا اخترت هذا الخيار، لن يقوم كي3بي بإنشاء صورة أولاً ولكنه سيكتب الملفات "
+"<p>إذا اخترت هذا الخيار، لن يقوم كي3بي بإنشاء صورة أولًا ولكنه سيكتب الملفات "
 "مباشرةً على القرص المدمج/دي في دي.<p><b>تحذير:</b> على الرغم من أن هذا يجب أن "
 "يعمل على معظم الأنظمة، تأكد من إرسال البيانات إلى الناسخ بالسرعة الكافية."
 
@@ -4356,7 +4356,7 @@ msgstr ""
 "<p>إذا اخترت هذا الخيار، سيستخدم كي3بي بعض المساحة غير المستخدمة في القرص "
 "الصوتي المدمج لتخزين معلومات إضافية، مثل اسم الفنان، أو عنوان القرص المدمج."
 "<p>نص القرص المدمج (CD-Text) هو امتداد لمعيار القرص الصوتي المدمج الذي قدمته "
-"شركة سوني.<p>لن يكون نص القرص المدمج قابلاً للاستخدام إلا على مشغلات الأقراص "
+"شركة سوني.<p>لن يكون نص القرص المدمج قابلًا للاستخدام إلا على مشغلات الأقراص "
 "المدمجة التي تدعم هذا الامتداد (خاصة مشغلات الأقراص المدمجة في السيارات)."
 "<p>بما أن القرص المدمج المعزز بنص القرص المدمج سيعمل في أي مشغل أقراص مدمجة، "
 "فليس من السيء أبدًا تمكينه (إذا حددت بيانات نص القرص المدمج)."
