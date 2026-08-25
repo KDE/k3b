@@ -2,12 +2,12 @@
 # KDE Finnish translation sprint participants:
 # Author: Artnay
 # Author: Lliehu
+# SPDX-FileCopyrightText: 2009, 2010, 2011, 2012, 2014, 2017, 2018, 2020, 2022, 2023, 2024, 2026 Tommi Nieminen <translator@legisign.org>
 # Teemu Rytilahti <teemu.rytilahti@kde-fi.org>, 2003.
 # Ilpo Kantonen <ilpo@iki.fi>, 2005, 2007.
 # Mikael Lammentausta <mikael.lammentausta@tekustudent.savonia-amk.fi>, 2006.
 # Mikael Lammentausta <mikael.lammentausta@student.savonia-amk.fi>, 2006.
 # Kim Enkovaara <kim.enkovaara@iki.fi>, 2006.
-# Tommi Nieminen <translator@legisign.org>, 2009, 2010, 2011, 2012, 2014, 2017, 2018, 2020, 2022, 2023, 2024.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Jiri Grönroos <jiri.gronroos+kde@iki.fi>, 2012.
 # Niklas Laxström <niklas.laxstrom+kdetrans@gmail.com>, 2012.
@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2024-04-08 20:06+0300\n"
+"PO-Revision-Date: 2026-02-25 14:00+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -24,6 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2469,8 +2470,7 @@ msgid "Overall progress:"
 msgstr "Kokonaisedistyminen:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Pysäytä"
@@ -2518,28 +2518,26 @@ msgid "Finished with errors"
 msgstr "Suoritettu, mutta virheitä tapahtui"
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Haluatko varmasti tyhjentää koko projektin?"
+msgstr "Haluatko varmasti lopettaa nykyisen toiminnan etenemisen?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Vahvista toiminnan pysäyttäminen"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Pysäytä toiminta"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Jatka jatkettavaa polttoa"
+msgstr "Jatka toimintaa"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
