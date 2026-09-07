@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-04-23 09:16+0200\n"
+"PO-Revision-Date: 2026-09-06 18:17+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -11013,11 +11013,11 @@ msgstr "Conserva les dimensions originals"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:59
 msgid "640x? (automatic height)"
-msgstr "640x? (alçada automàtica)"
+msgstr "640x? (altura automàtica)"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:60
 msgid "320x? (automatic height)"
-msgstr "320x? (alçada automàtica)"
+msgstr "320x? (altura automàtica)"
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:178
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:179
@@ -11082,10 +11082,10 @@ msgid ""
 "height to fixed values will result in no aspect ratio correction being "
 "performed."
 msgstr ""
-"<p>Trieu l'amplada i l'alçada del vídeo resultant. Si un valor s'estableix a "
+"<p>Trieu l'amplada i l'altura del vídeo resultant. Si un valor s'estableix a "
 "<em>Automàtic</em>, el K3b triarà el seu valor segons la relació d'aspecte "
 "de la imatge del vídeo. <br>Cal tenir present que establir tant l'amplada "
-"com l'alçada a valors fixos farà que no es realitzi cap mena de correcció en "
+"com l'altura a valors fixos farà que no es realitzi cap mena de correcció en "
 "la relació d'aspecte."
 
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:348
@@ -11096,7 +11096,7 @@ msgstr "Amplada:"
 #: rip/videodvd/k3bvideodvdrippingwidget.cpp:350
 #, kde-format
 msgid "Height:"
-msgstr "Alçada:"
+msgstr "Altura:"
 
 #: rip/videodvd/k3bvideodvdtitlemodel.cpp:41
 #, kde-format
