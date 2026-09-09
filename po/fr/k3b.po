@@ -5006,7 +5006,7 @@ msgstr "Impossible de charger le module de configuration de KCDDB."
 #: option/k3bdevicewidget.cpp:57 option/k3bexternalbinwidget.cpp:57
 #, kde-format
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Rafraichir"
 
 #: option/k3bdevicewidget.cpp:58
 #, kde-format
@@ -5136,7 +5136,7 @@ msgid ""
 msgstr ""
 "Veuillez spécifier les emplacements vers les programmes externes que K3b "
 "nécessite pour fonctionner correctement, ou appuyez sur le bouton "
-"« Rafraîchir » pour laisser K3b rechercher les programmes sur votre système."
+"« Rafraichir » pour laisser K3b rechercher les programmes sur votre système."
 
 #: option/k3bexternalbinparamsmodel.cpp:159
 #: option/k3bexternalbinpermissionmodel.cpp:286
@@ -9162,7 +9162,7 @@ msgstr "Haute résolution"
 #, kde-format
 msgctxt "Video CD Track Framerate"
 msgid "Framerate"
-msgstr "Taux de rafraîchissement"
+msgstr "Taux de rafraichissement"
 
 #: projects/k3bvcdprojectmodel.cpp:240
 #, kde-format
