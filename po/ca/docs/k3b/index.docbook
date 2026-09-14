@@ -206,7 +206,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 ><para
 >L'opció <guilabel
 >No expulsis el suport després del procés d'escriptura</guilabel
-> té un valor incalculable si la unitat és la que no es pot tancar amb la rapidesa suficient per a <guilabel
+> té un valor incalculable si la unitat és la que no es pot tancar prou ràpid per a <guilabel
 >Verificar</guilabel
 > el que passa. </para
 ></listitem>
@@ -377,7 +377,7 @@ Commit log is wrong here, this is FIXED-IN:2.0 branch
 <para
 >Inseriu un disc CD-R o CD-RW en blanc en la vostra gravadora de CD i feu clic a <guilabel
 >Grava</guilabel
->. Al proper diàleg marqueu si us agraden les opcions preestablertes i quan feu clic a <guilabel
+>. Al diàleg següent marqueu si us agraden les opcions preestablertes i quan feu clic a <guilabel
 >Grava</guilabel
 >. Es gravarà el CD. </para>
 </sect2>
