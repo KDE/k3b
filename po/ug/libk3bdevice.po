@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: libk3bdevice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:51+0000\n"
-"PO-Revision-Date: 2026-05-30 16:39-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,37 +21,37 @@ msgstr ""
 #: k3bdeviceglobals.cpp:18 k3bdeviceglobals.cpp:141
 #, kde-format
 msgid "CD-R"
-msgstr "CD-R"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:20 k3bdeviceglobals.cpp:143
 #, kde-format
 msgid "CD-RW"
-msgstr "CD-RW"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:22 k3bdeviceglobals.cpp:139
 #, kde-format
 msgid "CD-ROM"
-msgstr "CD-ROM"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:24 k3bdeviceglobals.cpp:108
 #, kde-format
 msgid "DVD-ROM"
-msgstr "DVD-ROM"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:26 k3bdeviceglobals.cpp:122
 #, kde-format
 msgid "DVD-RAM"
-msgstr "DVD-RAM"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:28 k3bdeviceglobals.cpp:111
 #, kde-format
 msgid "DVD-R"
-msgstr "DVD-R"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:30 k3bdeviceglobals.cpp:125
 #, kde-format
 msgid "DVD-RW"
-msgstr "DVD-RW"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:32
 #, kde-format
@@ -61,12 +61,12 @@ msgstr ""
 #: k3bdeviceglobals.cpp:34 k3bdeviceglobals.cpp:145
 #, kde-format
 msgid "HD DVD-ROM"
-msgstr "HD DVD-ROM"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:36 k3bdeviceglobals.cpp:147
 #, kde-format
 msgid "HD DVD-R"
-msgstr "HD DVD-R"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:38 k3bdeviceglobals.cpp:149
 #, kde-format
@@ -76,27 +76,27 @@ msgstr ""
 #: k3bdeviceglobals.cpp:40 k3bdeviceglobals.cpp:151
 #, kde-format
 msgid "BD-ROM"
-msgstr "BD-ROM"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:42 k3bdeviceglobals.cpp:154
 #, kde-format
 msgid "BD-R"
-msgstr "BD-R"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:44 k3bdeviceglobals.cpp:162
 #, kde-format
 msgid "BD-RE"
-msgstr "BD-RE"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:46 k3bdeviceglobals.cpp:133
 #, kde-format
 msgid "DVD+R"
-msgstr "DVD+R"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:48 k3bdeviceglobals.cpp:131
 #, kde-format
 msgid "DVD+RW"
-msgstr "DVD+RW"
+msgstr ""
 
 #: k3bdeviceglobals.cpp:50
 #, kde-format

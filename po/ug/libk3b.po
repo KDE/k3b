@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-05-30 16:39-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,7 +51,7 @@ msgstr ""
 #: jobs/k3baudiocuefilewritingjob.cpp:205
 #, kde-format
 msgid "Analysing the audio file failed. Corrupt file?"
-msgstr ""
+msgstr "Analysing the audio file failed. ھۆججەت بۇزۇقمۇ؟"
 
 #: jobs/k3baudiocuefilewritingjob.cpp:273
 #, kde-format
@@ -2076,7 +2076,7 @@ msgstr ""
 #: projects/datacd/k3bisoimager.cpp:778
 #, kde-format
 msgid "Could not read file %1. Skipping..."
-msgstr ""
+msgstr "ھۆججەت «%1» ئوقۇيالمىدى. Skipping..."
 
 #: projects/datacd/k3bisoimager.cpp:834
 #, kde-format
@@ -3114,7 +3114,7 @@ msgstr "يېڭى ھۆججەت ئاتى كىرگۈزۈش"
 #: projects/movixcd/k3bmovixdoc.cpp:83
 #, kde-format
 msgid "A file with that name already exists. Please enter a new name:"
-msgstr "بۇنداق ئاتلىق ھۆججەت مەۋجۇت. يېڭى ئات كىرگۈزۈڭ:"
+msgstr ""
 
 #: projects/movixcd/k3bmovixdoc.cpp:175
 #, kde-format
@@ -3372,7 +3372,7 @@ msgstr ""
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] "%1 MPEGs (%2)"
+msgstr[0] ""
 
 #: projects/videocd/k3bvcdtrack.cpp:170 projects/videocd/k3bvcdtrack.cpp:180
 #: projects/videocd/k3bvcdtrack.cpp:193 projects/videocd/k3bvcdtrack.cpp:206
@@ -3682,14 +3682,14 @@ msgstr "كۆكنۇر"
 msgctxt ""
 "To be shown when a CD is required but another type of medium is inserted."
 msgid "CD"
-msgstr "CD"
+msgstr ""
 
 #: tools/k3bmedium.cpp:602
 #, kde-format
 msgctxt ""
 "To be shown when a DVD is required but another type of medium is inserted."
 msgid "DVD"
-msgstr "DVD"
+msgstr ""
 
 #: tools/k3bmedium.cpp:604
 #, kde-format

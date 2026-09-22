@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-05-30 16:38-0400\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -670,7 +670,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:268
 #, kde-format
 msgid " kbps"
-msgstr " kbps"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateMinimum)
 #: ../plugins/encoder/lame/base_k3bmanualbitratesettingsdialog.ui:115
@@ -840,7 +840,7 @@ msgstr ""
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:276
 #, kde-format
 msgid "kbps"
-msgstr "kbps"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_checkBitrateNominal)
 #: ../plugins/encoder/ogg/base_k3boggvorbisencodersettingswidget.ui:292
@@ -950,7 +950,7 @@ msgstr ""
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:97
 #, kde-format
 msgid "GSM"
-msgstr "GSM"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:102
@@ -1041,7 +1041,7 @@ msgstr ""
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:324
 #, kde-format
 msgid "CD-R"
-msgstr "CD-R"
+msgstr ""
 
 #: ../plugins/encoder/sox/k3bsoxencoder.cpp:326
 #, kde-format
@@ -2138,7 +2138,7 @@ msgstr ""
 #, kde-format
 msgctxt "Size of one block, always 2048"
 msgid "%1 B"
-msgstr "%1 B"
+msgstr "%1 بايت"
 
 #: k3bdiskinfoview.cpp:391
 #, kde-format
@@ -3352,7 +3352,7 @@ msgstr ""
 #: main.cpp:39
 #, kde-format
 msgid "Sebastian Trüg"
-msgstr "Sebastian Trüg"
+msgstr ""
 
 #: main.cpp:39
 #, kde-format
@@ -3452,7 +3452,7 @@ msgstr ""
 #: main.cpp:60
 #, kde-format
 msgid "John Steele Scott"
-msgstr "John Steele Scott"
+msgstr ""
 
 #: main.cpp:61
 #, kde-format
@@ -4075,7 +4075,7 @@ msgstr ""
 #: misc/k3bmediaformattingdialog.cpp:41
 #, kde-format
 msgid "CD-RW"
-msgstr "CD-RW"
+msgstr ""
 
 #: misc/k3bmediaformattingdialog.cpp:41
 #, kde-format
@@ -4085,7 +4085,7 @@ msgstr ""
 #: misc/k3bmediaformattingdialog.cpp:41
 #, kde-format
 msgid "BD-RE"
-msgstr "BD-RE"
+msgstr ""
 
 #: misc/k3bmediaformattingdialog.cpp:65
 #, kde-format
@@ -4356,7 +4356,7 @@ msgstr ""
 #: option/k3badvancedoptiontab.cpp:58 projects/k3bfillstatusdisplay.cpp:585
 #, kde-format
 msgid "MB"
-msgstr "MB"
+msgstr ""
 
 #: option/k3badvancedoptiontab.cpp:59
 #, kde-format
@@ -4850,7 +4850,7 @@ msgstr ""
 #: option/k3boptiondialog.cpp:197
 #, kde-format
 msgid "CDDB"
-msgstr "CDDB"
+msgstr ""
 
 #: option/k3boptiondialog.cpp:198
 #, kde-format
@@ -4907,7 +4907,7 @@ msgstr ""
 #: option/k3bthemeoptiontab.cpp:184
 #, kde-format
 msgid "A theme with the name '%1' already exists. Do you want to overwrite it?"
-msgstr "ئاتى «%1» بولغان ئۆرنەك مەۋجۇت، قاپلامسىز؟"
+msgstr ""
 
 #: option/k3bthemeoptiontab.cpp:186
 #, kde-format
@@ -5507,7 +5507,7 @@ msgstr ""
 #: projects/base_k3bbootimagedialog.ui:148
 #, kde-format
 msgid "0"
-msgstr "0"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2_2)
 #: projects/base_k3bbootimagedialog.ui:158
@@ -7074,7 +7074,7 @@ msgstr "يېڭى ھۆججەت ئاتى كىرگۈزۈش"
 #: projects/k3bdataurladdingdialog.cpp:751
 #, kde-format
 msgid "A file with that name already exists. Please enter a new name:"
-msgstr "بۇنداق ئاتلىق ھۆججەت مەۋجۇت. يېڭى ئات كىرگۈزۈڭ:"
+msgstr ""
 
 #: projects/k3bdataurladdingdialog.cpp:768
 #, kde-format
@@ -7230,7 +7230,7 @@ msgstr ""
 #: projects/k3bfillstatusdisplay.cpp:500 projects/k3bfillstatusdisplay.cpp:501
 #, kde-format
 msgid "%1 MB"
-msgstr "%1 MB"
+msgstr ""
 
 #: projects/k3bfillstatusdisplay.cpp:431
 #, kde-format
@@ -7297,7 +7297,7 @@ msgstr ""
 #: projects/k3bfillstatusdisplay.cpp:584
 #, kde-format
 msgid "GB"
-msgstr "GB"
+msgstr ""
 
 #: projects/k3bfillstatusdisplay.cpp:586
 #, kde-format
@@ -7582,7 +7582,7 @@ msgstr "سىن CD"
 #, kde-format
 msgid "1 MPEG (%2)"
 msgid_plural "%1 MPEGs (%2)"
-msgstr[0] "%1 MPEGs (%2)"
+msgstr[0] ""
 
 #: projects/k3bvcdburndialog.cpp:95 projects/k3bvcdburndialog.cpp:96
 #: projects/k3bvcdburndialog.cpp:97 projects/k3bvcdburndialog.cpp:98
@@ -8601,7 +8601,7 @@ msgstr ""
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:175
 #, kde-format
 msgid "-"
-msgstr "-"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
