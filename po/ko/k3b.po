@@ -1,7 +1,7 @@
 # Translation of k3b.po to Korean.
 #
-# SPDX-FileCopyrightText: 2008, 2013, 2015, 2019, 2020, 2021, 2022, 2023, 2024, 2026 Shinjo Park <kde@peremen.name>
 # Sang-kyun Noh <freesky80@nate.com>, 2007.
+# SPDX-FileCopyrightText: 2008, 2013, 2015, 2019, 2020, 2021, 2022, 2023, 2024, 2026 Shinjo Park <kde@peremen.name>
 # JungHee Lee <daemul72@gmail.com>, 2019, 2020.
 msgid ""
 msgstr ""
