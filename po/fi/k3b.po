@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-02-25 14:00+0200\n"
+"PO-Revision-Date: 2026-09-05 10:41+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -4735,10 +4735,9 @@ msgid "Miscellaneous"
 msgstr "Sekalainen"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "Älä avaa as&eman kelkkaa polton valmistuttua"
+msgstr "Älä avaa as&eman kelkkaa luku- tai kirjoitusprosessin jälkeen"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4765,10 +4764,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Tyhjennä CD-RW- ja DVD-RW-levyt automaattisesti kysymättä"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "Älä poista levyä onnistuneen polton jälkeen"
+msgstr "Älä poista levyä onnistuneen kirjoittamisen tai purkamisen jälkeen"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -4839,14 +4837,7 @@ msgstr ""
 "polttoihin käytetään samaa arvoa."
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -4855,12 +4846,12 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>Kun tämä asetus on käytössä, K3b ei poista levyä asemasta sen "
-"kirjoitettuaan. Tästä voi olla hyötyä, jos esimerkiksi poistuu koneeltaan "
-"aloitettuaan levyn kirjoittamisen eikä halua levytarjottimen jäävä auki "
-"pitkäksi aikaa.<p>Linux-järjestelmissä vasta kirjoitettu levy täytyy "
-"kuitenkin ladata uudelleen, muuten järjestelmä ei huomaa minkään muuttuneen "
-"ja pitää levyä yhä tyhjänä tietovälineenä."
+"<p>Kun on valittu, K3b ei poista levyä asemasta kirjoittamisen tai "
+"purkamisen päätyttyä. Tästä voi olla apua, jos esimerkiksi poistuu "
+"koneeltaan aloitettuaan levyn kirjoittamisen tai purkamisen eikä halua "
+"levytarjottimen jäävän auki pitkäksi aikaa.<p>Linux-järjestelmissä vasta "
+"kirjoitettu levy täytyy kuitenkin ladata uudelleen, muuten järjestelmä ei "
+"huomaa minkään muuttuneen ja pitää levyä yhä tyhjänä tietovälineenä."
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format
