@@ -2,13 +2,14 @@
 # Slobodan Simic <slsimic@gmail.com>, 2007, 2008, 2009, 2010.
 # Chusslove Illich <caslav.ilic@gmx.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 # Dalibor Djuric <daliborddjuric@gmail.com>, 2010.
+# Nemanja Hiršl <nemhirsl@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2017-09-29 16:44+0200\n"
-"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"PO-Revision-Date: 2026-10-05 15:05+0200\n"
+"Last-Translator: Nemanja Hiršl <nemhirsl@gmail.com>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
 "Language: sr@latin\n"
 "MIME-Version: 1.0\n"
@@ -24,22 +25,22 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Slobodan Simić"
+msgstr "Slobodan Simić,Nemanja Hiršl"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "slsimic@gmail.com"
+msgstr "slsimic@gmail.com,nemhirsl@gmail.com"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:220
 #, kde-format
 msgid "WavPack"
-msgstr ""
+msgstr "WavPack"
 
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:222
 #, kde-format
 msgid "Monkey's Audio (APE)"
-msgstr ""
+msgstr "Monkey's Audio (APE)"
 
 # >> @item file type comment
 #: ../plugins/decoder/ffmpeg/k3bffmpegwrapper.cpp:224
@@ -985,11 +986,11 @@ msgstr ""
 "<p>Vorbisov audio kvalitet ne iskazuje se najbolje kilobitima u sekundi, već "
 "na skali od -1 do 10 po imenu <em>kvalitet</em>.</p><p>Za sada, kvalitet -1 "
 "grubo odgovara proseku od 45 kb/s, 5 je otprilike 160  kb/s, a 10 daje oko "
-"400  kb/s. Većina onih koji traže kvalitet vrlo blizak CD‑a kodiraju sa "
+"400  kb/s. Većina onih koji traže kvalitet vrlo blizak CD‑u kodiraju sa "
 "kvalitetom 5 ili, za stereo sprezanje bez gubitaka, 6. Kvalitet 3 pri "
 "približno 110  kb/s daje manje fajlove i značajno veću vernost od MP3 "
-"kompresije pri 128  kb/s.</p><p><em>Objašnjenje kopirano iz ČPP‑a na <a href="
-"\"www.vorbis.com\">www.vorbis.com</a>.</em></p>"
+"kompresije pri 128  kb/s.</p><p><em>Objašnjenje zasnovano na onom iz ČPP‑a "
+"na <a href=\"www.vorbis.com\">www.vorbis.com</a>.</em></p>"
 
 # >! Unpuzzle.
 # >> %1 is X kbps
@@ -1038,24 +1039,25 @@ msgid ""
 msgstr ""
 "<p>Kodiranje uzorkovanih podataka je označeno linearno (komplement 2), "
 "neoznačeno linearno, µ‑zakon (logaritamski), A‑zakon (logaritamski), ADPCM, "
-"IMA‑ov ADPCM, GSM ili u pokretom zarezu.</p><p><b>µ‑zakon</b> (često pisano "
-"kao u‑zakon) i <b>A‑zakon</b> predstavljaju američki i međunarodni standard "
-"za logaritamsku kompresiju telefonskog zvuka. Posle dekompresovanja, µ‑zakon "
-"ima otprilike preciznost 14‑bitnog PCM zvuka a A‑zakon 13‑bitnog PCM zvuka. "
-"Podaci po A‑zakonu i µ‑zakonu ponekad se kodiraju obrnutim redosledom bitova "
-"(npr. MSB postaje LSB).<br/><b>ADPCM</b> je oblik kompresije zvuka koji daje "
-"dobar kompromis između kvaliteta i brzog kodiranja/dekodiranja. Koristi se "
-"za telefonsku kompresiju zvuka i na mestima gde puna vernost nije tako "
-"važna. Posle dekompresovanja ima otprilike preciznost 16‑bitnog PCM zvuka. "
-"Popularne verzije ADPCM‑a uključuju G.726, MS‑ov ADPCM i IMA‑ov ADPCM. Ima "
-"različita značenja u različitim rukovaocima fajlova. U WAV fajlovima "
-"predstavlja MS‑ADPCM fajlove, u svim ostalim znači G.726 ADPCM. <br/"
-"><b>IMA‑ov ADPCM</b> je poseban oblik ADPCM kompresije, nešto jednostavniji "
-"i nešto manje vernosti od Microsoftove varijante ADPCM‑a. IMA‑ov ADPCM se "
-"takođe naziva DVI ADPCM.<br/><b>GSM</b> je standard za telefonsku kompresiju "
-"zvuka u evropskim državama i dobija na popularnosti zbog svog dobrog "
-"kvaliteta. Obično je procesorski zahtevno raditi sa GSM audio podacima.</"
-"p><p><em>Opis na osnovu uputne stranice SoXa.</em></p>"
+"IMA‑ov ADPCM, GSM ili u pokretnom zarezu.</p>\n"
+"<p><b>µ‑zakon</b> (često pisano kao u‑zakon) i <b>A‑zakon</b> predstavljaju "
+"američki i međunarodni standard za logaritamsku kompresiju telefonskog "
+"zvuka. Posle dekompresovanja, µ‑zakon ima otprilike preciznost 14‑bitnog PCM "
+"zvuka a A‑zakon 13‑bitnog PCM zvuka. Podaci po A‑zakonu i µ‑zakonu ponekad "
+"se kodiraju obrnutim redosledom bitova (npr. MSB postaje LSB).<br/><b>ADPCM</"
+"b> je oblik kompresije zvuka koji daje dobar kompromis između kvaliteta i "
+"brzog kodiranja/dekodiranja. Koristi se za telefonsku kompresiju zvuka i na "
+"mestima gde puna vernost nije tako važna. Posle dekompresovanja ima "
+"otprilike preciznost 16‑bitnog PCM zvuka. Popularne verzije ADPCM‑a "
+"uključuju G.726, MS‑ov ADPCM i IMA‑ov ADPCM. Ima različita značenja u "
+"različitim rukovaocima fajlova. U WAV fajlovima predstavlja MS‑ADPCM "
+"fajlove, u svim ostalim znači G.726 ADPCM. <br/><b>IMA‑ov ADPCM</b> je "
+"poseban oblik ADPCM kompresije, nešto jednostavniji i nešto manje vernosti "
+"od Microsoftove varijante ADPCM‑a. IMA‑ov ADPCM se takođe naziva DVI ADPCM."
+"<br/><b>GSM</b> je standard za telefonsku kompresiju zvuka u evropskim "
+"državama i dobija na popularnosti zbog svog dobrog kvaliteta. Obično je "
+"procesorski zahtevno raditi sa GSM audio podacima.</p><p><em>Opis na osnovu "
+"uputne stranice SoXa.</em></p>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_comboEncoding)
 #: ../plugins/encoder/sox/base_k3bsoxencoderconfigwidget.ui:67
@@ -1476,7 +1478,7 @@ msgstr "Novi projekat Video CD‑a"
 #: k3b.cpp:341
 #, kde-format
 msgid "Creates a new Video CD project"
-msgstr "Pravi novi projekat &Video CD‑a."
+msgstr "Pravi novi projekat Video CD‑a."
 
 #: k3b.cpp:346
 #, kde-format
@@ -1665,7 +1667,7 @@ msgstr "Ne mogu da otvorim dokument."
 #, kde-kuit-format
 msgctxt "@info"
 msgid "Project <resource>%1</resource> has unsaved data."
-msgstr ""
+msgstr "Projekat <resource>%1</resource> ima nesačuvane podatke."
 
 # >> @title:window
 #: k3b.cpp:896
@@ -2476,43 +2478,37 @@ msgid "Filter:"
 msgstr "Filter:"
 
 #: k3bfileview.cpp:75 misc/k3bimagewritingdialog.cpp:454
-#, fuzzy, kde-format
-#| msgid "*|All Files"
+#, kde-format
 msgid "All Files"
-msgstr "*|svi fajlovi"
+msgstr "svi fajlovi"
 
 # >> @title:group
 #: k3bfileview.cpp:76
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Sound Files"
-msgstr "Nađeni fajlovi"
+msgstr "zvučni fajlovi"
 
 # >> @title:group
 #: k3bfileview.cpp:77
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "Wave Sound Files"
-msgstr "Nađeni fajlovi"
+msgstr "WAV zvučni fajlovi"
 
 # >> @title:group
 #: k3bfileview.cpp:78
-#, fuzzy, kde-format
-#| msgid "Found Files"
+#, kde-format
 msgid "MP3 Sound Files"
-msgstr "Nađeni fajlovi"
+msgstr "MP3 zvučni fajlovi"
 
 #: k3bfileview.cpp:79
-#, fuzzy, kde-format
-#| msgid "application/x-ogg |Ogg Vorbis Sound Files"
+#, kde-format
 msgid "Ogg Vorbis Sound Files"
-msgstr "application/x-ogg |OGG Vorbis zvučni fajlovi"
+msgstr "OGG Vorbis zvučni fajlovi"
 
 #: k3bfileview.cpp:80
-#, fuzzy, kde-format
-#| msgid "video/mpeg |MPEG Video Files"
+#, kde-format
 msgid "MPEG Video Files"
-msgstr "video/mpeg |MPEG video fajlovi"
+msgstr "MPEG video fajlovi"
 
 #: k3bfileview.cpp:84
 #, kde-format
@@ -2580,8 +2576,7 @@ msgid "Overall progress:"
 msgstr "Ukupan napredak:"
 
 #: k3bjobprogressdialog.cpp:229
-#, fuzzy, kde-format
-#| msgid "Stop"
+#, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop"
 msgstr "Zaustavi"
@@ -2629,28 +2624,26 @@ msgid "Finished with errors"
 msgstr "Završeno sa greškama."
 
 #: k3bjobprogressdialog.cpp:486
-#, fuzzy, kde-format
-#| msgid "Do you really want to clear the current project?"
+#, kde-format
 msgid "Do you really want to stop the current operation in progress?"
-msgstr "Želite li zaista da očistite trenutni projekat?"
+msgstr "Želite li zaista da zaustavite postupak koji je u toku?"
 
 #: k3bjobprogressdialog.cpp:487
 #, kde-format
 msgid "Confirm Stop Operation"
-msgstr ""
+msgstr "Potvrda zaustavljanja postupka"
 
 #: k3bjobprogressdialog.cpp:488
 #, kde-format
 msgctxt "@action:button to stop the operation"
 msgid "Stop operation"
-msgstr ""
+msgstr "Zaustavi postupak"
 
 #: k3bjobprogressdialog.cpp:490
-#, fuzzy, kde-format
-#| msgid "Continue Multisession"
+#, kde-format
 msgctxt "@action:button to continue the operation"
 msgid "Continue operation"
-msgstr "Nastavi višesesijski"
+msgstr "Nastavi postupak"
 
 #: k3bjobprogressdialog.cpp:561
 #, kde-format
@@ -2696,7 +2689,7 @@ msgstr ""
 #: k3blsofwrapperdialog.cpp:103
 #, kde-format
 msgid "www"
-msgstr ""
+msgstr "www"
 
 #: k3blsofwrapperdialog.cpp:105
 #, kde-format
@@ -2707,12 +2700,12 @@ msgstr "<p>Želite li zaista da K3b ukine sledeće procese: <em>%1</em>?</p>"
 #: k3blsofwrapperdialog.cpp:106
 #, kde-format
 msgid "Kill the processes?"
-msgstr ""
+msgstr "Ukinuti procese?"
 
 #: k3blsofwrapperdialog.cpp:107
 #, kde-format
 msgid "Kill"
-msgstr ""
+msgstr "Ukini"
 
 #: k3bmediaselectiondialog.cpp:27
 #, kde-format
@@ -3118,8 +3111,8 @@ msgid ""
 "K3b needs at least mkisofs version 1.14. Older versions may introduce "
 "problems when creating data projects."
 msgstr ""
-"K3b zahteva mkisofs izdanja bar 1.14. Starija izdanja izazvati probleme pri "
-"stvaranju projekata sa podacima."
+"K3b zahteva mkisofs izdanja bar 1.14. Starija izdanja mogu izazvati probleme "
+"pri stvaranju projekata sa podacima."
 
 #: k3bsystemproblemdialog.cpp:397
 #, kde-format
@@ -3278,7 +3271,7 @@ msgid ""
 msgstr ""
 "Ponekad je neophodno zadati korisničke parametre u dodatak parametrima koje "
 "generiše K3b. Ovo je jednostavno upozorenje da proverite da li su ti "
-"parametri zaista potrebni, neće postati deo izveštaja o greški."
+"parametri zaista potrebni i da neće postati deo izveštaja o grešci."
 
 # rewrite-msgid: /K3b settings/K3b configuration dialog/
 #: k3bsystemproblemdialog.cpp:523
@@ -3351,7 +3344,7 @@ msgstr ""
 #: k3bsystemproblemdialog.cpp:582
 #, kde-format
 msgid "Running K3b as root user"
-msgstr "K3ba se izvršava pod korenim korisnikom."
+msgstr "K3b se izvršava pod korenim korisnikom."
 
 #: k3bsystemproblemdialog.cpp:583
 #, kde-format
@@ -3480,10 +3473,9 @@ msgid "Welcome to K3b &ndash; The CD, DVD, and Blu-ray Kreator"
 msgstr "Dobro došli u K3b, stvaralac CD‑ova i DVD‑ova"
 
 #: k3bwelcomewidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "K3b %1 Copyright &copy; 1998&ndash;2017 K3b authors"
+#, kde-format
 msgid "K3b %1 Copyright &copy; 1998&ndash;2018 K3b authors"
-msgstr "K3b %1, © 1998–2017, autori K3ba"
+msgstr "K3b %1, © 1998–2018, autori K3ba"
 
 #: k3bwelcomewidget.cpp:398
 #, kde-format
@@ -3665,13 +3657,7 @@ msgstr ""
 "Omogućava višesesijske DVD‑R‑ove. Važi samo za DVD‑R/DVD‑RW."
 
 #: k3bwritingmodewidget.cpp:38
-#, fuzzy, kde-format
-#| msgid ""
-#| "Restricted Overwrite allows to use a DVD-RW just like a DVD-RAM or a DVD"
-#| "+RW. The media may just be overwritten. It is not possible to write "
-#| "multisession DVD-RWs in this mode but K3b uses growisofs to grow an ISO "
-#| "9660 filesystem within the first session, thus allowing new files to be "
-#| "added to an already burned disk."
+#, kde-format
 msgid ""
 "Restricted Overwrite allows one to use a DVD-RW just like a DVD-RAM or a DVD"
 "+RW. The media may just be overwritten. It is not possible to write "
@@ -3764,16 +3750,14 @@ msgstr ""
 "korisnicima.</p>"
 
 #: main.cpp:31
-#, fuzzy, kde-format
-#| msgid "Copyright © 1998–2017 K3b authors"
+#, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
-msgstr "© 1998–2017, autori K3ba"
+msgstr "© 1998–2018, autori K3ba"
 
 #: main.cpp:33
-#, fuzzy, kde-format
-#| msgid "http://www.k3b.org"
+#, kde-format
 msgid "https://www.k3b.org"
-msgstr "http://www.k3b.org"
+msgstr "https://www.k3b.org"
 
 #: main.cpp:37
 #, kde-format
@@ -4201,28 +4185,24 @@ msgid "Choose Image File"
 msgstr "Izbor fajla odraza"
 
 #: misc/k3bimagewritingdialog.cpp:450
-#, fuzzy, kde-format
-#| msgid "Image file:"
+#, kde-format
 msgid "Image Files"
-msgstr "Odraz:"
+msgstr "fajlovi odraza"
 
 #: misc/k3bimagewritingdialog.cpp:451
-#, fuzzy, kde-format
-#| msgid "*.iso *.ISO|ISO 9660 Image Files"
+#, kde-format
 msgid "ISO 9660 Image Files"
-msgstr "*.iso *.ISO|ISO‑9660 odraz"
+msgstr "ISO‑9660 fajlovi odraza"
 
 #: misc/k3bimagewritingdialog.cpp:452
-#, fuzzy, kde-format
-#| msgid "Cue file:"
+#, kde-format
 msgid "Cue Files"
-msgstr "Cue fajl:"
+msgstr "cue fajlovi"
 
 #: misc/k3bimagewritingdialog.cpp:453
-#, fuzzy, kde-format
-#| msgid "*.toc *.TOC|Cdrdao TOC Files and Cdrecord Clone Images"
+#, kde-format
 msgid "Cdrdao TOC Files and Cdrecord Clone Images"
-msgstr "*.toc *.TOC|TOC fajlovi (cdrdao) i klonirani odrazi (cdrecord)"
+msgstr "TOC fajlovi (cdrdao) i klonirani odrazi (cdrecord)"
 
 #: misc/k3bimagewritingdialog.cpp:459
 #, kde-format
@@ -4283,22 +4263,7 @@ msgid "Data mode:"
 msgstr "Režim podataka:"
 
 #: misc/k3bimagewritingdialog.cpp:605
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
-#| "images are written as is to the medium using a single data track. Typical "
-#| "plain images are iso images as created by K3b's data project.<p><b>Cue/"
-#| "bin images</b><br/>Cue/bin images consist of a cue file describing the "
-#| "table of contents of the medium and an image file which contains the "
-#| "actual data. The data will be written to the medium according to the cue "
-#| "file.<p><b>Audio Cue image</b><br/>Audio cue images are a special kind of "
-#| "cue/bin image containing an image of an audio CD. The actual audio data "
-#| "can be encoded using any audio format supported by K3b. Audio cue files "
-#| "can also be imported into K3b audio projects which allows to change the "
-#| "order and add or remove tracks.<p><b>Cdrecord clone images</b><br/>K3b "
-#| "creates a cdrecord clone image of a single-session CD when copying a CD "
-#| "in clone mode. These images can be reused here.<p><b>Cdrdao TOC files</"
-#| "b><br/>K3b supports writing cdrdao's own image format, the toc files."
+#, kde-format
 msgid ""
 "<p><b>Image types supported by K3b:</p><p><b>Plain image</b><br/>Plain "
 "images are written as is to the medium using a single data track. Typical "
@@ -4315,7 +4280,7 @@ msgid ""
 "These images can be reused here.<p><b>Cdrdao TOC files</b><br/>K3b supports "
 "writing cdrdao's own image format, the toc files."
 msgstr ""
-"<p><b>Vrste odraza koje K3b podržava:;</b></p><p><i>običan odraz podataka</"
+"<p><b>Vrste odraza koje K3b podržava:</b></p><p><i>običan odraz podataka</"
 "i><br/>Obični odrazi upisuju se takvi kakvi su na disk, kao jedna staza "
 "podataka. Tipični obični odrazi su ISO odrazi, kakve pravi i projekat "
 "podataka K3ba.</p><p><i>Cue/bin odraz</i><br/>Cue/bin odrazi sastoje se od "
@@ -4647,8 +4612,8 @@ msgstr ""
 "Takođe može biti upotrebljeno za nametanje formatiranja DVD+RW, BD‑RE ili "
 "DVD‑RW diska u režimu ograničenog prebrisavanja.</p><p><b>Pažnja:</b> Nije "
 "preporučljivo često formatiranje DVD‑a, jer može postati neupotrebljiv nakon "
-"10-20 preformatiranja.</p><p>DVD+RW diskovi se formatiraju samo jednom. "
-"Nakon toga samo treba pisati preko postojećeg zapisa. Isto važi za "
+"10-20 preformatiranja.</p><p>DVD+RW i BD‑RE diskovi se formatiraju samo "
+"jednom. Nakon toga samo treba pisati preko postojećeg zapisa. Isto važi za "
 "DVD‑RW‑ove u režimu ograničenog prebrisavanja.</p>"
 
 #: misc/k3bmediaformattingdialog.cpp:91
@@ -4926,10 +4891,9 @@ msgid "Miscellaneous"
 msgstr "Razno"
 
 #: option/k3badvancedoptiontab.cpp:70
-#, fuzzy, kde-format
-#| msgid "Do not &eject medium after write process"
+#, kde-format
 msgid "Do not &eject medium after read/write process"
-msgstr "&Ne izbacuj disk nakon upisivanja"
+msgstr "&Ne izbacuj disk nakon čitanja/upisivanja"
 
 #: option/k3badvancedoptiontab.cpp:72
 #, kde-format
@@ -4955,10 +4919,9 @@ msgid "Automatically erase CD-RWs and DVD-RWs without asking"
 msgstr "Automatski briši CD‑RW‑ove i DVD‑RW‑ove bez pitanja"
 
 #: option/k3badvancedoptiontab.cpp:93
-#, fuzzy, kde-format
-#| msgid "Do not eject the burn medium after a completed burn process"
+#, kde-format
 msgid "Do not eject the medium after a completed burn/rip process"
-msgstr "Ne izbacuj narezani disk po završetku upisivanja"
+msgstr "Ne izbacuj disk po završetku rezanja/čupanja"
 
 #: option/k3badvancedoptiontab.cpp:94
 #, kde-format
@@ -5027,14 +4990,7 @@ msgstr ""
 "zadata vrednost biće korišćena pri rezanju i CD‑a i DVD‑a.</p>"
 
 #: option/k3badvancedoptiontab.cpp:125
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will not eject the medium once the burn "
-#| "process finishes. This can be helpful in case one leaves the computer "
-#| "after starting the burning and does not want the tray to be open all the "
-#| "time.<p>However, on Linux systems a freshly burned medium has to be "
-#| "reloaded. Otherwise the system will not detect the changes and still "
-#| "treat it as an empty medium."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will not eject the medium once the burn/rip "
 "process finishes. This can be helpful in case one leaves the computer after "
@@ -5043,12 +4999,12 @@ msgid ""
 "reloaded. Otherwise the system will not detect the changes and still treat "
 "it as an empty medium."
 msgstr ""
-"<p>Ako je ovo uključeno, K3b neće izbacivati disk kada se rezanje završi. "
-"Ovo može biti korisno ako ste otišli od računara pošto ste pokrenuli rezanje "
-"i ne želite da fioka ostane otvorena sve to vreme.</p><p>Međutim, na linux "
-"sistemima, sveže narezani diskovi moraju se izbaciti pa ubaciti. U "
-"suprotnom, sistem možda neće prepoznati promene i dalje će smatrati disk "
-"praznim.</p>"
+"<p>Ako je ovo uključeno, K3b neće izbacivati disk kada se rezanje ili "
+"čupanje završi. Ovo može biti korisno ako ste otišli od računara pošto ste "
+"pokrenuli rezanje ili čupanje i ne želite da fioka ostane otvorena sve to "
+"vreme.</p><p>Imajte u vidu da na linux sistemima sveže narezani diskovi "
+"moraju da se izbace pa ubace. U suprotnom, sistem možda neće prepoznati "
+"promene i dalje će smatrati disk praznim.</p>"
 
 #: option/k3badvancedoptiontab.cpp:131
 #, kde-format
@@ -5297,46 +5253,44 @@ msgid "Following programs could not be updated:"
 msgstr "Sledeći programi ne mogu da se ažuriraju:"
 
 #: option/k3bexternalbinwidget.cpp:248
-#, fuzzy, kde-format
-#| msgid "Unable to execute the action: %1"
+#, kde-format
 msgid "Unable to execute the action<br/>%1"
-msgstr "Ne mogu da izvršim radnju: %1"
+msgstr "<html>Ne mogu da izvršim radnju<br/>%1</html>"
 
 #: option/k3bexternalbinwidget.cpp:261
 #, kde-format
 msgid "Authorization denied"
-msgstr ""
+msgstr "Ovlašćenje odbijeno"
 
 #: option/k3bexternalbinwidget.cpp:264
-#, fuzzy, kde-format
-#| msgid "No error correction"
+#, kde-format
 msgid "An error occurred"
-msgstr "Bez korekcije grešaka"
+msgstr "Došlo je do greške"
 
 #: option/k3bexternalbinwidget.cpp:267
 #, kde-format
 msgid "Invalid action"
-msgstr ""
+msgstr "Loša radnja"
 
 #: option/k3bexternalbinwidget.cpp:270
 #, kde-format
 msgid "Authorization granted"
-msgstr ""
+msgstr "Ovlašćenje odobreno"
 
 #: option/k3bexternalbinwidget.cpp:273
 #, kde-format
 msgid "Authentication required"
-msgstr ""
+msgstr "Potrebna je autentifikacija"
 
 #: option/k3bexternalbinwidget.cpp:276
 #, kde-format
 msgid "User cancelled the authentication"
-msgstr ""
+msgstr "Korisnik je otkazao autentifikaciju"
 
 #: option/k3bexternalbinwidget.cpp:279
 #, kde-format
 msgid "Unknown authorization status %1"
-msgstr ""
+msgstr "Nepoznato stanje ovlašćenja %1"
 
 # >> @item:inlistbox
 #: option/k3bmiscoptiontab.cpp:38
@@ -7245,17 +7199,7 @@ msgid "Please Choose Boot Image"
 msgstr "Izbor podiznog odraza"
 
 #: projects/k3bbootimagedialog.cpp:102
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>The file you selected is not a floppy image (floppy images are of size "
-#| "1200 KB, 1440 KB, or 2880 KB). You may still use boot images of other "
-#| "sizes by emulating a harddisk or disabling emulation completely. <p>If "
-#| "you are not familiar with terms like 'harddisk emulation' you most likely "
-#| "want to use a floppy image here. Floppy images can be created by directly "
-#| "extracting them from a real floppy disk:<pre>dd if=/dev/floppy of=/tmp/"
-#| "floppy.img</pre>or by using one of the many boot floppy generators that "
-#| "can be found on <a href=\"http://www.google.com/search?q=linux+boot"
-#| "+floppy&ie=UTF-8&oe=UTF-8\">the Internet</a>."
+#, kde-format
 msgid ""
 "<p>The file you selected is not a floppy image (floppy images are of size "
 "1200 KB, 1440 KB, or 2880 KB). You may still use boot images of other sizes "
@@ -7274,7 +7218,7 @@ msgstr ""
 "želite odraz diskete. Odraz diskete se može napraviti neposrednim "
 "izvlačenjem sa fizičke diskete:</p><pre>dd if=/dev/floppy of=/tmp/floppy."
 "img</pre><p>ili pomoću nekog od generatora podiznih disketa koje možete naći "
-"na <a href=\"http://www.google.com/search?q=linux+boot+floppy\">Internetu</"
+"na <a href=\"https://www.google.com/search?q=linux+boot+floppy\">Internetu</"
 "a>.</p>"
 
 #: projects/k3bbootimagedialog.cpp:111
@@ -7488,7 +7432,7 @@ msgstr "poseban (%1)"
 #: projects/k3bdataimagesettingswidget.cpp:228
 #, kde-format
 msgid "(K3b::DataImageSettingsWidget) found preset settings: "
-msgstr ""
+msgstr "(K3b::DataImageSettingsWidget) nađene su unapred zadate postavke: "
 
 #: projects/k3bdataimagesettingswidget.cpp:237
 #, kde-format
@@ -8494,10 +8438,9 @@ msgstr "Fascikla odraza ‘%1’ ne postoji. Želite li da je K3b napravi?"
 
 # >> @title:window
 #: projects/k3bprojectburndialog.cpp:188 rip/k3bvideocdrippingdialog.cpp:144
-#, fuzzy, kde-format
-#| msgid "Create Folder"
+#, kde-format
 msgid "Create folder?"
-msgstr "Stvaranje fascikle"
+msgstr "Napraviti fasciklu?"
 
 #: projects/k3bprojectburndialog.cpp:192 rip/k3bvideocdrippingdialog.cpp:148
 #, kde-format
@@ -8625,7 +8568,7 @@ msgid ""
 "disc formats."
 msgstr ""
 "Upravljanje puštanjem, PBC, moguće je za formate Video CD‑a 2.0 i Super "
-"Video CD 1.0."
+"Video CD‑a 1.0."
 
 # >> @info:tooltip
 #: projects/k3bvcdburndialog.cpp:112
@@ -8651,10 +8594,7 @@ msgstr ""
 
 # >> @info:tooltip
 #: projects/k3bvcdburndialog.cpp:115
-#, fuzzy, kde-format
-#| msgid ""
-#| "This element allows to set viewing restrictions which may be interpreted "
-#| "by the playing device."
+#, kde-format
 msgid ""
 "This element allows one to set viewing restrictions which may be interpreted "
 "by the playing device."
@@ -8941,20 +8881,7 @@ msgstr ""
 "grešaka.</p>"
 
 #: projects/k3bvcdburndialog.cpp:206
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD "
-#| "which is suitable to be jumped to directly.<p>APS are required for entry "
-#| "points and scantables. APS have to fulfil the requirement to precede "
-#| "every I-frame by a GOP header which shall be preceded by a sequence "
-#| "header in its turn.<p>The start codes of these 3 items are required to be "
-#| "contained all in the same MPEG pack/sector, thus forming a so-called "
-#| "access point sector.<p>This requirement can be relaxed by enabling the "
-#| "relaxed aps option, i.e. every sector containing an I-frame will be "
-#| "regarded as an APS.<p><b>Warning:</b> The sequence header is needed for a "
-#| "playing device to figure out display parameters, such as display "
-#| "resolution and frame rate, relaxing the aps requirement may lead to non-"
-#| "working entry points."
+#, kde-format
 msgid ""
 "<p>An Access Point Sector, APS, is an MPEG video sector on the VCD/SVCD "
 "which is suitable to be jumped to directly.<p>APS are required for entry "
@@ -8998,13 +8925,7 @@ msgstr ""
 "skeniranja.</p>"
 
 #: projects/k3bvcdburndialog.cpp:216
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>Viewing Restriction may be interpreted by the playing device.<p>The "
-#| "allowed range goes from 0 to 3.<ul><li>0 = unrestricted, free to view for "
-#| "all</li><li>3 = restricted, content not suitable for ages under 18</li></"
-#| "ul><p>Actually, the exact meaning is not defined and is player dependant."
-#| "<p><b>Most players ignore that value.<b>"
+#, kde-format
 msgid ""
 "<p>Viewing Restriction may be interpreted by the playing device.<p>The "
 "allowed range goes from 0 to 3.<ul><li>0 = unrestricted, free to view for "
@@ -9024,15 +8945,7 @@ msgid "<p>This option allows customization of Gaps and Margins."
 msgstr "<p>Ova opcija omogućava prilagođavanje razmaka i margina.</p>"
 
 #: projects/k3bvcdburndialog.cpp:224
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>This option allows to set the number of empty sectors added before the "
-#| "lead-out area begins, i.e. the number of post-gap sectors.<p>The ECMA-130 "
-#| "specification requires the last data track before the lead-out to carry a "
-#| "post-gap of at least 150 sectors, which is used as default for this "
-#| "parameter.<p>Some operating systems may encounter I/O errors due to read-"
-#| "ahead issues when reading the last MPEG track if this parameter is set "
-#| "too low.<p>Allowed value content: [0..300]. Default: 150."
+#, kde-format
 msgid ""
 "<p>This option allows one to set the number of empty sectors added before "
 "the lead-out area begins, i.e. the number of post-gap sectors.<p>The "
@@ -9191,7 +9104,7 @@ msgstr "Sektori od 2336 bajtova"
 #: projects/k3bvcdburndialog.cpp:420
 #, kde-format
 msgid "Enable CD-i support"
-msgstr "Podrška za CD‑ija"
+msgstr "Podrška za CD‑i"
 
 # >> @title:group
 #: projects/k3bvcdburndialog.cpp:429
@@ -9502,7 +9415,7 @@ msgstr "beskonačno"
 #: projects/k3bvcdtrackdialog.cpp:480
 #, kde-format
 msgid "after timeout playing"
-msgstr "nakon što istekne vreme puštanja"
+msgstr "kada istekne vreme čekanja, puštaj"
 
 #: projects/k3bvcdtrackdialog.cpp:495
 #, kde-format
@@ -9615,11 +9528,7 @@ msgid "Sequence-%1 - %2"
 msgstr "Sekvenca-%1 — %2"
 
 #: projects/k3bvcdview.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "Could not find VcdImager executable. To create Video CDs you have to "
-#| "install VcdImager >= 0.7.12. You can find this on your distribution’s "
-#| "software repository or download it from http://www.vcdimager.org"
+#, kde-format
 msgid ""
 "Could not find VcdImager executable. To create Video CDs you have to install "
 "VcdImager >= 0.7.12. You can find this on your distribution’s software "
@@ -9627,7 +9536,7 @@ msgid ""
 msgstr ""
 "Ne mogu da nađem izvršni fajl VcdImagera. Za pravljenje Video CD‑ova morate "
 "instalirati VcdImager >= 0.7.12. Možete ga naći u softverskoj riznici svoje "
-"distribucije, ili ga preuzeti sa http://www.vcdimager.org ."
+"distribucije, ili ga preuzeti sa https://www.gnu.org/software/vcdimager/ ."
 
 #: projects/k3bvideodvdburndialog.cpp:37
 #, kde-format
@@ -9788,10 +9697,7 @@ msgstr "Upiši cue fajl"
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, m_checkWriteCueFile)
 #: rip/base_k3baudiorippingoptionwidget.ui:148
-#, fuzzy, kde-format
-#| msgid ""
-#| "<p>If this option is checked K3b will create a CDRWIN cue file which "
-#| "allows to easily write a copy of the audio CD on other systems."
+#, kde-format
 msgid ""
 "<p>If this option is checked K3b will create a CDRWIN cue file which allows "
 "one to easily write a copy of the audio CD on other systems."
@@ -10404,8 +10310,10 @@ msgstr ""
 "tr><tr><td>%g</td><td>žanr CD‑a</td><td>%{g} ili %{genre}</td></tr><tr><td>"
 "%A</td><td>izvođač albuma</td><td>%{A} ili %{albumartist}</td></tr><tr><td>"
 "%T</td><td>naslov albuma</td><td>%{T} ili %{albumtitle}</td></tr><tr><td>%C</"
-"td><td>prošireni podaci o CD‑a</td><td>%{C} ili %{albumcomment}</td></"
-"tr><tr><td>%d</td><td>tekući datum</td><td>%{d} ili %{date}</td></tr></table>"
+"td><td>prošireni podaci o CD‑u</td><td>%{C} ili %{albumcomment}</td></"
+"tr><tr><td>%d</td><td>tekući datum</td><td>%{d} ili %{date}</td></tr><tr><td>"
+"%e</td><td>nastavak fajla (ako se izostavi, dodaje se automatski)</td><td>"
+"%{e} ili %{ext}</td></tr></table>"
 
 #: rip/k3bcddbpatternwidget.cpp:144
 #, kde-format
@@ -10508,16 +10416,13 @@ msgid "To rip Video CDs you have to install VcdImager Version %1."
 msgstr "Za čupanje sa Video CD‑a morate instalirati VcdImager verzije %1."
 
 #: rip/k3bvideocdrip.cpp:92
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution’s software repository or download "
-#| "it from http://www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution’s software repository or download it "
 "from https://www.gnu.org/software/vcdimager/"
 msgstr ""
-"Možete ga naći na u softverskoj riznici svoje distribucije, ili ga preuzeti "
-"sa http://www.vcdimager.org ."
+"Možete ga naći u softverskoj riznici svoje distribucije, ili ga preuzeti sa "
+"https://www.gnu.org/software/vcdimager/ ."
 
 #: rip/k3bvideocdrip.cpp:100
 #, kde-format
@@ -11395,68 +11300,3 @@ msgstr "anamorfno"
 #, kde-format
 msgid "Subpicture"
 msgstr "podslika"
-
-#~ msgid "Do you really want to cancel?"
-#~ msgstr "Želite li zaista da otkažete?"
-
-# >> @title:window
-#~ msgid "Cancel Confirmation"
-#~ msgstr "Potvrda otkazivanja"
-
-#~ msgid "MusicBrainz Query"
-#~ msgstr "Upit MusicBrainza"
-
-#~ msgid "Track %1 was not found in the MusicBrainz database."
-#~ msgstr "Numera %1 nije nađena u bazi MusicBrainza."
-
-#~ msgid "Musicbrainz Lookup"
-#~ msgstr "Potraga na MusicBrainzu"
-
-#~ msgid "Try to determine meta information over the Internet"
-#~ msgstr "Pokušaj da odrediš metapodatke preko Interneta"
-
-#~ msgid "Please add an audio track."
-#~ msgstr "Dodajte bar jednu numeru."
-
-#~ msgid "Please select an audio track."
-#~ msgstr "Izaberite numeru."
-
-#~ msgid "Found multiple matches for track %1 (%2). Please select one."
-#~ msgstr "Nađeno je više poklapanja za numeru %1 (%2). Izaberite jedno."
-
-#~ msgid "Generating fingerprint for track %1."
-#~ msgstr "Pravim otisak za numeru %1.,,"
-
-#~ msgid "Querying MusicBrainz for track %1."
-#~ msgstr "Ispitujem MusicBrainz za numeru %1..."
-
-# >> @item file type comment
-# skip-rule: t-medium
-#~ msgid "Windows Media v1"
-#~ msgstr "windows medija v1"
-
-# >> @item file type comment
-# skip-rule: t-medium
-#~ msgid "Windows Media v2"
-#~ msgstr "windows medija v2"
-
-#~ msgid "%1 has unsaved data."
-#~ msgstr "%1 ima nesačuvane podatke."
-
-#~ msgid "K3b Bookmarks"
-#~ msgstr "K3bovi obeleživači"
-
-#~ msgid "audio/x-mp3 audio/x-wav application/x-ogg |Sound Files"
-#~ msgstr "audio/x-mp3 audio/x-wav application/x-ogg |zvučni fajlovi"
-
-#~ msgid "audio/x-wav |Wave Sound Files"
-#~ msgstr "audio/x-wav |WAV zvučni fajlovi"
-
-#~ msgid "audio/x-mp3 |MP3 Sound Files"
-#~ msgstr "audio/x-mp3 |MP3 zvučni fajlovi"
-
-#~ msgid "*.iso *.toc *.ISO *.TOC *.cue *.CUE|Image Files"
-#~ msgstr "*.iso *.toc *.ISO *.TOC *.cue *.CUE|odrazi"
-
-#~ msgid "*.cue *.CUE|Cue Files"
-#~ msgstr "*.cue *.CUE|cue fajlovi"

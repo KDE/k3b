@@ -2,13 +2,14 @@
 # Slobodan Simic <slsimic@gmail.com>, 2008, 2010.
 # Chusslove Illich <caslav.ilic@gmx.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 # Dalibor Djuric <daliborddjuric@gmail.com>, 2010.
+# Nemanja Hiršl <nemhirsl@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-17 00:42+0000\n"
-"PO-Revision-Date: 2017-10-30 23:08+0100\n"
-"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"PO-Revision-Date: 2026-10-05 15:05+0200\n"
+"Last-Translator: Nemanja Hiršl <nemhirsl@gmail.com>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
 "Language: sr@ijekavian\n"
 "MIME-Version: 1.0\n"
@@ -20,17 +21,17 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 "X-Environment: kde, k3b\n"
-"X-Associated-UI-Catalogs: k3b kwidgetsaddons5_qt\n"
+"X-Associated-UI-Catalogs: k3b kwidgetsaddons6_qt\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
 msgid "Inhibiting sleep for disc writing"
-msgstr "Спречи спавање при уписивању диска"
+msgstr "Спријечи спавање при уписивању диска"
 
 #: core/k3bcore.cpp:257
 #, kde-format
 msgid "Disable inhibition for disc writing"
-msgstr "Укини спречавање при уписивању диска"
+msgstr "Укини спрјечавање при уписивању диска"
 
 # >> @item writing mode
 #: core/k3bglobals.cpp:361
@@ -733,7 +734,7 @@ msgstr "Не могу да добавим све ЦСС кључеве."
 #: jobs/k3bdatatrackreader.cpp:180
 #, kde-format
 msgid "Video DVD decryption failed."
-msgstr "Дешифровање видео ДВД‑а није успело."
+msgstr "Дешифровање видео ДВД‑а није успјело."
 
 #: jobs/k3bdatatrackreader.cpp:204
 #, kde-format
@@ -782,7 +783,7 @@ msgstr "Игноришем грешку у читању на сектору %1."
 #: jobs/k3bdvdbooktypejob.cpp:74
 #, kde-format
 msgid "Changing DVD Booktype"
-msgstr "Мењам књиготип ДВД‑а."
+msgstr "Мијењам књиготип ДВД‑а."
 
 #: jobs/k3bdvdbooktypejob.cpp:92 jobs/k3bdvdformattingjob.cpp:114
 #, kde-format
@@ -1139,7 +1140,7 @@ msgstr "Форматирање је успјешно завршено."
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
-msgstr "Не треба да вас забрине ако напредак стане пре 100%."
+msgstr "Не треба да вас забрине ако напредак стане прије 100%."
 
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
@@ -1456,7 +1457,7 @@ msgstr "Уписујем двослојни ДВД+Р."
 #, kde-format
 msgid "Using readcd %1 instead of default version for clone support."
 msgstr ""
-"Користим readcd %1 уместо подразумијеваног издања ради подршке клонирања."
+"Користим readcd %1 умјесто подразумијеваног издања ради подршке клонирања."
 
 #: jobs/k3breadcdreader.cpp:122
 #, kde-format
@@ -1599,7 +1600,7 @@ msgstr "Лош аудио кодек: %1."
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:358
 #, kde-format
 msgid "Resizing picture of title %1 to %2x%3"
-msgstr "Мењам величину слике наслова %1 на %2×%3."
+msgstr "Мијењам величину слике наслова %1 на %2×%3."
 
 # >> @info:progress
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:381
@@ -1755,7 +1756,7 @@ msgstr ""
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:582
 #, kde-format
 msgid "Use this setting to preserve 5.1 channel sound from the DVD."
-msgstr "Употребите ову поставку да бисте очували 5.1 звук са ДВД‑а."
+msgstr "Употријебите ову поставку да бисте очували 5.1 звук са ДВД‑а."
 
 #: jobs/k3bvideodvdtitletranscodingjob.cpp:584
 #, kde-format
@@ -2406,19 +2407,16 @@ msgstr "Нађено неисправно кодирано име фајла „
 msgid ""
 "This may be caused by a system update which changed the local character set."
 msgstr ""
-"Ово може бити услед промијењеног локалног кодирања при ажурирању система."
+"Ово може бити усљед промијењеног локалног кодирања при ажурирању система."
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
-#, fuzzy, kde-format
-#| msgid ""
-#| "You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
-#| "encoding."
+#, kde-format
 msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr ""
-"Можете употребити convmv (http://j3e.de/linux/convmv/) да поправите кодирање "
-"имена фајла."
+"Можете употријебити convmv (https://j3e.de/linux/convmv/) да поправите "
+"кодирање имена фајла."
 
 #: projects/datacd/k3bmkisofshandler.cpp:111
 #, kde-format
@@ -2599,7 +2597,7 @@ msgstr "Брисање успјешно завршено."
 #: projects/k3bcdrskinwriter.cpp:806 projects/k3bgrowisofswriter.cpp:510
 #, kde-format
 msgid "Average overall write speed: %1 KB/s (%2x)"
-msgstr "Просечна брзина писања: %1 kB/s (%2×)"
+msgstr "Просјечна брзина писања: %1 kB/s (%2×)"
 
 #: projects/k3bcdrdaowriter.cpp:764
 #, kde-format
@@ -2988,7 +2986,7 @@ msgstr "%1 нема дозволе да отвори уређај."
 #: projects/k3bcdrecordwriter.cpp:849 projects/k3bcdrskinwriter.cpp:862
 #, kde-format
 msgid "Modify device settings in K3b to solve this problem."
-msgstr "Измените поставке уређаја у К3бу да бисте решили овај проблем."
+msgstr "Измијените поставке уређаја у К3бу да бисте ријешили овај проблем."
 
 #: projects/k3bcdrecordwriter.cpp:852 projects/k3bcdrskinwriter.cpp:865
 #, kde-format
@@ -3014,7 +3012,7 @@ msgstr "Нађени високобрзински диск није погода
 #: projects/k3bcdrskinwriter.cpp:873 projects/k3bcdrskinwriter.cpp:877
 #, kde-format
 msgid "Use the 'force unsafe operations' option to ignore this."
-msgstr "Употребите опцију „Наметни несигурне поступке“ за игнорисање овога."
+msgstr "Употријебите опцију „Наметни несигурне поступке“ за игнорисање овога."
 
 #: projects/k3bcdrecordwriter.cpp:863 projects/k3bcdrskinwriter.cpp:876
 #, kde-format
@@ -3059,7 +3057,8 @@ msgstr ""
 #, kde-format
 msgid ""
 "You may use K3b::Setup to solve this problem or remove the suid bit manually."
-msgstr "Употребите К3б‑поставу да решите овај проблем, или сами уклоните сУИД."
+msgstr ""
+"Употријебите К3б‑поставу да ријешите овај проблем, или сами уклоните сУИД."
 
 #: projects/k3bcdrecordwriter.cpp:898
 #, kde-format
@@ -3180,7 +3179,7 @@ msgstr "Уклањам упућивање на извод."
 #: projects/k3bgrowisofshandler.cpp:144
 #, kde-format
 msgid "Modifying ISO 9660 volume descriptor"
-msgstr "Мењам ИСО‑9660 описник издања."
+msgstr "Мијењам ИСО‑9660 описник издања."
 
 #: projects/k3bgrowisofshandler.cpp:151
 #, kde-format
@@ -3257,7 +3256,7 @@ msgstr ""
 #: projects/k3bgrowisofshandler.cpp:241
 #, kde-format
 msgid "It can be solved by issuing the command 'ulimit -l unlimited'..."
-msgstr "Може бити решена издавањем наредбе „ulimit -l unlimited“..."
+msgstr "Може бити ријешена издавањем наредбе „ulimit -l unlimited“..."
 
 #: projects/k3bgrowisofshandler.cpp:242
 #, kde-format
@@ -3424,7 +3423,7 @@ msgstr "Не могу да обришем фајл %1."
 #: projects/mixedcd/k3bmixedjob.cpp:1234
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "Не могу да нађем cdrecord на систему."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1238
 #, kde-format
@@ -3640,16 +3639,13 @@ msgstr ""
 "Да бисте правили видео ЦД‑ове морате инсталирати ВЦД‑имејџер издања %1."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"Може се наћи на дисковима дистрибуције или преузети са http://www.vcdimager."
-"org ."
+"Може се наћи на дисковима дистрибуције или преузети са https://www.gnu.org/"
+"software/vcdimager ."
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
@@ -4014,7 +4010,7 @@ msgstr "аудио ЦД"
 #: tools/k3bmedium.cpp:316
 #, kde-format
 msgid "Mixed CD"
-msgstr "мешани ЦД"
+msgstr "мијешани ЦД"
 
 # >> @item content type
 #: tools/k3bmedium.cpp:320
@@ -4458,7 +4454,7 @@ msgid ""
 "DVD+R(W) does not support simulated writing."
 msgstr ""
 "<p>Ако је ова опција укључена, К3б ће извршити све кораке писања са "
-"искљученим ласером.</p><p>Ово је корисно, на пример, за испробавање веће "
+"искљученим ласером.</p><p>Ово је корисно, на примјер, за испробавање веће "
 "брзине писања или да ли систем може да пише у лету.</p><p><b>Опрез:</b> ДВД"
 "+Р/ДВД+РВ не подржава симулирано писање.</p>"
 
@@ -4483,7 +4479,7 @@ msgstr ""
 "<p>Ако је ова опција укључена, К3б ће писати ЦД у режиму „диск "
 "одједном“ (ДАО), насупрот режиму „стаза одједном“ (ТАО).</p><p>Препоручљиво "
 "је користити ДАО кад год је могуће.</p><p><b>Опрез:</b> Предразмаци стаза "
-"дужине различите од две секунде подржани су само у режиму ДАО.</p>"
+"дужине различите од двије секунде подржани су само у режиму ДАО.</p>"
 
 #: tools/k3bstdguiitems.cpp:37
 #, kde-format
@@ -4499,7 +4495,7 @@ msgstr "Бернфри"
 #: tools/k3bstdguiitems.cpp:44
 #, kde-format
 msgid "Enable Burnfree (or Just Link) to avoid buffer underruns"
-msgstr "Активирај бернфри (или џастлинк) ради избегавања пражњења бафера"
+msgstr "Активирај бернфри (или џастлинк) ради избјегавања пражњења бафера"
 
 #: tools/k3bstdguiitems.cpp:45
 #, kde-format
@@ -4564,11 +4560,11 @@ msgid ""
 "writing on-the-fly should work on most systems, make sure the data is sent "
 "to the writer fast enough."
 msgstr ""
-"<p>Ако је ова опција укључена, К3б ће направити одраз пре уписивања фајлова "
-"на диск. Иначе ће подаци бити уписивани <em>у лету</em>, тј. неће бити "
-"прављен посредни одраз.</p><p><b>Пажња:</b> Иако би уписивање у лету требало "
-"да ради на већини система, провјерите да ли се подаци шаљу писачу довољно "
-"брзо.</p>"
+"<p>Ако је ова опција укључена, К3б ће направити одраз прије уписивања "
+"фајлова на диск. Иначе ће подаци бити уписивани <em>у лету</em>, тј. неће "
+"бити прављен посредни одраз.</p><p><b>Пажња:</b> Иако би уписивање у лету "
+"требало да ради на већини система, провјерите да ли се подаци шаљу писачу "
+"довољно брзо.</p>"
 
 #: tools/k3bstdguiitems.cpp:81 tools/k3bstdguiitems.cpp:103
 #, kde-format
@@ -4642,11 +4638,11 @@ msgid ""
 "in any CD player it is never a bad idea to enable this (if you specify CD-"
 "Text data.)"
 msgstr ""
-"<p>Ако је ова опција укључена, К3б ће употребити иначе неискоришћен простор "
-"на аудио ЦД‑у да упише додатне податке, као што су извођач или наслов ЦД‑а.</"
-"p><p>ЦД‑текст је проширење стандарда аудио ЦД‑а које је увео Сони.</"
-"p><p>ЦД‑текст ће бити употребљив само на ЦД уређајима који подржавају ту "
-"могућност (углавном ЦД уређаји у колима).</p><p>Пошто ће ЦД са ЦД‑текстом "
+"<p>Ако је ова опција укључена, К3б ће употријебити иначе неискоришћен "
+"простор на аудио ЦД‑у да упише додатне податке, као што су извођач или "
+"наслов ЦД‑а.</p><p>ЦД‑текст је проширење стандарда аудио ЦД‑а које је увео "
+"Сони.</p><p>ЦД‑текст ће бити употребљив само на ЦД уређајима који подржавају "
+"ту могућност (углавном ЦД уређаји у колима).</p><p>Пошто ће ЦД са ЦД‑текстом "
 "радити са сваким ЦД уређајем, никад није лоше укључити ово (ако сте навели "
 "податке за ЦД‑текст).</p>"
 
@@ -4712,7 +4708,7 @@ msgid ""
 msgstr ""
 "<p>Ако је ова опција укључена, К3б ће ускладити јачину звука свих стаза на "
 "стандардан ниво. Ово је корисно за прављење миксова, гдје због различитих "
-"нивоа снимања на различитим албумима јачина уме знатно да варира од пјесме "
+"нивоа снимања на различитим албумима јачина умије знатно да варира од пјесме "
 "до пјесме.</p><p><b>Пазите да К3б тренутно не подржава нормализацију када "
 "пише у лету.</b></p>"
 
