@@ -2,13 +2,14 @@
 # Slobodan Simic <slsimic@gmail.com>, 2008, 2010.
 # Chusslove Illich <caslav.ilic@gmx.net>, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 # Dalibor Djuric <daliborddjuric@gmail.com>, 2010.
+# Nemanja Hiršl <nemhirsl@gmail.com>, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2017-10-30 23:08+0100\n"
-"Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
+"PO-Revision-Date: 2026-10-05 15:05+0200\n"
+"Last-Translator: Nemanja Hiršl <nemhirsl@gmail.com>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
 "Language: sr@latin\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +21,7 @@ msgstr ""
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
 "X-Environment: kde, k3b\n"
-"X-Associated-UI-Catalogs: k3b kwidgetsaddons5_qt\n"
+"X-Associated-UI-Catalogs: k3b kwidgetsaddons6_qt\n"
 
 #: core/k3bcore.cpp:241
 #, kde-format
@@ -2409,15 +2410,12 @@ msgstr ""
 "Ovo može biti usled promenjenog lokalnog kodiranja pri ažuriranju sistema."
 
 #: projects/datacd/k3bmkisofshandler.cpp:107
-#, fuzzy, kde-format
-#| msgid ""
-#| "You may use convmv (http://j3e.de/linux/convmv/) to fix the filename "
-#| "encoding."
+#, kde-format
 msgid ""
 "You may use convmv (https://j3e.de/linux/convmv/) to fix the filename "
 "encoding."
 msgstr ""
-"Možete upotrebiti convmv (http://j3e.de/linux/convmv/) da popravite "
+"Možete upotrebiti convmv (https://j3e.de/linux/convmv/) da popravite "
 "kodiranje imena fajla."
 
 #: projects/datacd/k3bmkisofshandler.cpp:111
@@ -3426,7 +3424,7 @@ msgstr "Ne mogu da obrišem fajl %1."
 #: projects/mixedcd/k3bmixedjob.cpp:1234
 #, kde-format
 msgid "Cdrecord could not be found on your system."
-msgstr ""
+msgstr "Ne mogu da nađem cdrecord na sistemu."
 
 #: projects/mixedcd/k3bmixedjob.cpp:1238
 #, kde-format
@@ -3641,16 +3639,13 @@ msgid "To create Video CDs you have to install VcdImager version %1."
 msgstr "Da biste pravili video CD‑ove morate instalirati VcdImager izdanja %1."
 
 #: projects/videocd/k3bvcdjob.cpp:196 projects/videocd/k3bvcdjob.cpp:205
-#, fuzzy, kde-format
-#| msgid ""
-#| "You can find this on your distribution disks or download it from http://"
-#| "www.vcdimager.org"
+#, kde-format
 msgid ""
 "You can find this on your distribution disks or download it from https://www."
 "gnu.org/software/vcdimager"
 msgstr ""
-"Može se naći na diskovima distribucije ili preuzeti sa http://www.vcdimager."
-"org ."
+"Može se naći na diskovima distribucije ili preuzeti sa https://www.gnu.org/"
+"software/vcdimager ."
 
 #: projects/videocd/k3bvcdjob.cpp:204
 #, kde-format
