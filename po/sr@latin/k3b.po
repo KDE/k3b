@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-04-23 00:43+0000\n"
-"PO-Revision-Date: 2026-10-05 15:05+0200\n"
+"PO-Revision-Date: 2026-10-07 14:30+0200\n"
 "Last-Translator: Nemanja Hiršl <nemhirsl@gmail.com>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
 "Language: sr@latin\n"
@@ -7867,7 +7867,7 @@ msgstr "Zadrži postojeći fajl"
 #: projects/k3bdataurladdingdialog.cpp:636
 #, kde-format
 msgid "Ignore All"
-msgstr "Zanemari sve"
+msgstr "Ignoriši sve"
 
 #: projects/k3bdataurladdingdialog.cpp:399
 #: projects/k3bdataurladdingdialog.cpp:638
@@ -8254,7 +8254,7 @@ msgstr ""
 #: projects/k3bmixedburndialog.cpp:115
 #, kde-format
 msgid "Data in first track"
-msgstr "Podaci u prvoj stazi"
+msgstr "podaci u prvoj stazi"
 
 #: projects/k3bmixedburndialog.cpp:116
 #, kde-format
