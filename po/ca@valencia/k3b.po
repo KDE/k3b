@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-09-06 18:17+0200\n"
+"PO-Revision-Date: 2026-10-17 11:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -3641,7 +3641,7 @@ msgstr ""
 #: main.cpp:31
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
-msgstr "Copyright © 1998–2018 Autoria de K3b"
+msgstr "Drets d'autoria © 1998–2018 Autoria de K3b"
 
 #: main.cpp:33
 #, kde-format
@@ -5651,7 +5651,7 @@ msgstr ""
 "<p>Amb tots els nivells d'ISO 9660, els noms de fitxer estan restringits a "
 "majúscules, minúscules, números i caràcters «_». La mida màxima per al nom "
 "de fitxer és de 31 caràcters, els directoris estan restringits a 8 i els "
-"camins a 255. (Estes restriccions poden ser crebantades amb l'ISO 9660 que "
+"camins a 255. (Estes restriccions es poden incomplir amb l'ISO 9660 que "
 "oferix K3b)."
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupIsoLevel)
@@ -10308,7 +10308,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:108
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "Utilitzant %1 %2 – Copyright © %3"
+msgstr "Utilitzant %1 %2 – Drets d'autoria © %3"
 
 #: rip/k3bvideocdrip.cpp:159
 #, kde-format
