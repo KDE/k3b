@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-03-17 00:42+0000\n"
-"PO-Revision-Date: 2026-10-12 11:31+0300\n"
+"PO-Revision-Date: 2026-10-24 22:00+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -3238,7 +3238,7 @@ msgstr "Bu adda bir dosya hâlihazırda var. Lütfen başka bir ad girin:"
 msgid ""
 "Could not rename subtitle file. File with requested name %1 already exists."
 msgstr ""
-"Altyazı dosyasının adı değiştirilemedi. %1 adında bir dosya hâlihazırda var."
+"Alt yazı dosyasının adı değiştirilemedi. %1 adında bir dosya hâlihazırda var."
 
 #: projects/movixcd/k3bmovixdocpreparer.cpp:125
 #, kde-format
