@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-09 00:42+0000\n"
-"PO-Revision-Date: 2026-10-12 11:31+0300\n"
+"PO-Revision-Date: 2026-10-24 21:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -6386,13 +6386,13 @@ msgstr "Çalma Seçenekleri"
 #: projects/base_k3bmovixoptionswidget.ui:24
 #, kde-format
 msgid "MPlayer subtitle fontset:"
-msgstr "MPlayer altyazı yazıtipi kümesi:"
+msgstr "MPlayer alt yazı yazıtipi kümesi:"
 
 #. i18n: ectx: property (toolTip), widget (KComboBox, m_comboSubtitleFontset)
 #: projects/base_k3bmovixoptionswidget.ui:34
 #, kde-format
 msgid "Select the font to be used to render subtitles"
-msgstr "Altyazıları sunmada kullanılacak yazıtipini seç"
+msgstr "Alt yazıları oluşturmada kullanılacak yazıtipini seç"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel7)
 #: projects/base_k3bmovixoptionswidget.ui:44
@@ -8233,12 +8233,12 @@ msgstr "Bağlantı"
 #: projects/k3bmovixview.cpp:63
 #, kde-format
 msgid "Remove Subtitle File"
-msgstr "Altyazı Dosyasını Kaldır"
+msgstr "Alt Yazı Dosyasını Kaldır"
 
 #: projects/k3bmovixview.cpp:66
 #, kde-format
 msgid "Add Subtitle File..."
-msgstr "Altyazı Dosyası Ekle…"
+msgstr "Alt Yazı Dosyası Ekle…"
 
 #: projects/k3bmovixview.cpp:149
 #, kde-format
