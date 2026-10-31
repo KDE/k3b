@@ -3641,7 +3641,7 @@ msgstr ""
 #: main.cpp:31
 #, kde-format
 msgid "Copyright © 1998–2018 K3b authors"
-msgstr "Copyright © 1998–2018 Autoria de K3b"
+msgstr "Drets d'autoria © 1998–2018 Autoria de K3b"
 
 #: main.cpp:33
 #, kde-format
@@ -10308,7 +10308,7 @@ msgstr ""
 #: rip/k3bvideocdrip.cpp:108
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "Utilitzant %1 %2 – Copyright © %3"
+msgstr "Utilitzant %1 %2 – Drets d'autoria © %3"
 
 #: rip/k3bvideocdrip.cpp:159
 #, kde-format
