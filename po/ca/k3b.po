@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 00:12+0000\n"
-"PO-Revision-Date: 2026-10-17 11:47+0200\n"
+"PO-Revision-Date: 2026-11-11 17:28+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -252,7 +252,7 @@ msgstr "Taxa de bits inferior"
 #: ../plugins/encoder/ogg/k3boggvorbisencoder.cpp:407
 #, kde-format
 msgid "Ogg-Vorbis"
-msgstr "Ogg-Vorbis"
+msgstr "Ogg Vorbis"
 
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:317
 #, kde-format
@@ -885,7 +885,7 @@ msgid ""
 "was copied from the www.vorbis.com FAQ.</em>"
 msgstr ""
 "<p>La qualitat d'àudio de Vorbis no es mesura en kilobits per segon, sinó en "
-"una escala de 0 a 10 anomenada «qualitat».<p>Per ara, la qualitat -1 és més "
+"una escala de 0 a 10 anomenada «qualitat». <p>Per ara, la qualitat -1 és més "
 "o menys equivalent a una mitjana de 45 kbps, 5 és aproximadament 160 kbps, i "
 "10 dona uns 400 kbps. La majoria de la gent que cerca una codificació molt a "
 "prop de la qualitat d'un CD d'àudio fan servir una qualitat de 5 o, per a "
@@ -5434,7 +5434,7 @@ msgstr ""
 "Ridge (IEEE-P1282).\n"
 "<p>Rock Ridge estén el sistema de fitxers ISO 9660 amb característiques "
 "iguals a les dels sistemes de fitxers tipus UNIX (permisos, enllaços "
-"simbòlics, noms de fitxer més grans,...). Aquest fa servir caràcters basats "
+"simbòlics, noms de fitxer més grans...). Aquest fa servir caràcters basats "
 "en ISO-8859 o UTF-16 i permet bytes de 255.\n"
 "<p>L'extensió Rock Ridge està localitzada al final de cada registre de "
 "directori ISO 9660. Això fa que l'arbre Rock Ridge estigui estretament "
@@ -6840,8 +6840,8 @@ msgid ""
 msgstr ""
 "<p><b>El programa extern <em>normalize</em> no es troba instal·lat.</b><p>El "
 "K3b fa servir el <em>normalize</em> (http://normalize.nongnu.org/) per a "
-"normalitzar les pistes d'àudio. Per tal de poder fer servir aquesta "
-"funcionalitat, instal·leu-lo abans."
+"normalitzar les pistes d'àudio. Per a fer servir aquesta funcionalitat, "
+"instal·leu-lo abans."
 
 #: projects/k3baudioburndialog.cpp:290 projects/k3baudioburndialog.cpp:309
 #: projects/k3bmixedburndialog.cpp:291 projects/k3bmixedburndialog.cpp:310
@@ -9194,7 +9194,7 @@ msgid ""
 "These are actually pseudo keys, representing the numeric keys 0, 1, ..., 9."
 msgstr ""
 "Aquestes són en realitat pseudo tecles, representant les tecles numèriques "
-"0, 1,..., 9."
+"0, 1..., 9."
 
 #: projects/k3bvcdtrackdialog.cpp:258
 #, kde-format
