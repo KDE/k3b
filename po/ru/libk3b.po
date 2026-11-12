@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: libk3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-10 22:15+0000\n"
-"PO-Revision-Date: 2022-07-07 14:54+0300\n"
-"Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
+"PO-Revision-Date: 2026-11-11 20:47+0200\n"
+"Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1059,7 +1059,7 @@ msgstr "Форматирование завершено без ошибок"
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
-msgstr "Не предлагать остановить процесс до 100%."
+msgstr "Не предлагать остановить процесс до 100 %."
 
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
