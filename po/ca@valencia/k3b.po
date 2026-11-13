@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: k3b\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:56+0000\n"
-"PO-Revision-Date: 2026-10-17 11:47+0200\n"
+"PO-Revision-Date: 2026-11-11 17:28+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -252,7 +252,7 @@ msgstr "Taxa de bits inferior"
 #: ../plugins/encoder/ogg/k3boggvorbisencoder.cpp:407
 #, kde-format
 msgid "Ogg-Vorbis"
-msgstr "Ogg-Vorbis"
+msgstr "Ogg Vorbis"
 
 #: ../plugins/decoder/wave/k3bwavedecoder.cpp:317
 #, kde-format
@@ -884,7 +884,7 @@ msgid ""
 "was copied from the www.vorbis.com FAQ.</em>"
 msgstr ""
 "<p>La qualitat d'àudio de Vorbis no es mesura en kilobits per segon, sinó en "
-"una escala de 0 a 10 anomenada «qualitat».<p>Per ara, la qualitat -1 és més "
+"una escala de 0 a 10 anomenada «qualitat». <p>Per ara, la qualitat -1 és més "
 "o menys equivalent a una mitjana de 45 kbps, 5 és aproximadament 160 kbps, i "
 "10 dona uns 400 kbps. La majoria de la gent que busca una codificació molt a "
 "prop de la qualitat d'un CD d'àudio fan servir una qualitat de 5 o, per a "
@@ -6825,8 +6825,8 @@ msgid ""
 msgstr ""
 "<p><b>El programa extern <em>normalize</em> no es troba instal·lat.</"
 "b><p>K3b utilitza <em>normalize</em> (http://normalize.nongnu.org/) per a "
-"normalitzar les pistes d'àudio. Per tal de poder utilitzar esta "
-"característica, instal·leu-lo abans."
+"normalitzar les pistes d'àudio. Per a utilitzar esta característica, "
+"instal·leu-lo abans."
 
 #: projects/k3baudioburndialog.cpp:290 projects/k3baudioburndialog.cpp:309
 #: projects/k3bmixedburndialog.cpp:291 projects/k3bmixedburndialog.cpp:310
