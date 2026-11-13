@@ -1,0 +1,417 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN" "dtd/kdedbx45.dtd" [
+  <!ENTITY k3b "<application
+>K3b</application
+>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Arabic "INCLUDE">
+]>
+<book id="k3b" lang="&language;">
+<bookinfo>
+<title
+>دليل كي٣بي</title>
+<authorgroup>
+<author>
+<personname
+><firstname
+>حُوّلت هذه الوثائق من صفحة <ulink url="https://userbase.kde.org/K3b"
+>K3b</ulink
+> في قاعدة مستخدمي كيدي في 20-01-2011.</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<author>
+<personname
+><firstname
+>حدّثه إلى 2.0 فريق توثيق كيدي</firstname
+> <surname
+></surname
+> </personname>
+    </author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+    </authorgroup>
+<legalnotice
+>&FDLNotice;</legalnotice>
+<date
+>2012-01-06</date>
+    <releaseinfo
+>2.0 (كيدي 4.8)</releaseinfo>
+<abstract>
+<para
+></para>
+    </abstract>
+    <keywordset>
+<keyword
+>كيدي</keyword>
+</keywordset>
+</bookinfo>
+<!--userbase <timestamp
+>2011-01-20T10:52:41Z</timestamp
+>-->
+
+<!--userbase-content-->
+<chapter id="introduction"
+><title
+>مقدمة</title>
+<para
+>إذا كنت قد استخدمت برنامج حرق مثل Nero تحت ويندوز، فسيبدو كي3بي مألوفًا لك تمامًا. </para>
+<para
+>بواجهة رسومية بسيطة وقوية في آن واحد، يوفر كي3بي خيارات متنوعة لحرق الأقراص المضغوطة (CD) أو الرقمية (DVD) أو أقراص بلو راي (BD). يدعم أنواعًا مختلفة من المشاريع البصرية تشمل (على سبيل المثال لا الحصر) الصوت والبيانات، ومشاريع الفيديو لـ DVD وVCD، بالإضافة إلى الأقراص متعددة الجلسات والوضع المختلط. يمتلك كي3بي أيضًا القدرة على مسح الوسائط القابلة لإعادة الكتابة ويمكنه تنفيذ مهام أكثر تعقيدًا مثل الترميز وفك الترميز السمعي البصري. </para>
+</chapter>
+<!--
+Git commit 127d389fe61c77225eb8efab0c53ddf2ef704fdf by Michal Malek.
+Committed on 11/09/2011 at 17:56.
+Pushed by mmalek into branch 'master'.
+
+Moved K3bSetup functionality to K3b's config dialog
+
+K3bSetup never really belonged to SystemSettings. When user wanted
+to change device or programs permissions he'd needed to switch to
+SystemSettings which was not obvious. Hence this settings were moved
+to K3b settings window. Program permissions can now be changed in a new
+"Permissions" tab on "Programs" section.
+Modification of devices permissions has been removed altogether. In
+all (?) modern systems optical devices belongs to a certain user group
+(e.g. "cdrom"). If the current user does not belongs to this group,
+he's offered to add himself to it in "Devices" section of K3b settings
+window.
+
+FEATURE: 220040
+FIXED-IN: 2.1.0
+GUI: K3bSetup no longer exists
+
+Commit log is wrong here, this is FIXED-IN:2.0 branch
+  -->
+<chapter id="pre-setup"
+><title
+>ما قبل الإعداد</title>
+<para
+>عند تشغيل كي3بي للمرة الأولى، قد تجد إشعارًا يفيد بعدم العثور على مشغلات لكاتب الأقراص البصرية، مما يعني أنك لن تتمكن من الكتابة على أي أقراص. لا داعي للذعر، حيث سيفتح كي3بي لسان تبويب <guilabel
+>الأذون</guilabel
+> في صفحة <guilabel
+>البرامج</guilabel
+> من حوار الضبط، حيث يمكن تغيير الأذون. في جميع الأنظمة الحديثة، تنتمي الأجهزة البصرية إلى مجموعة مستخدمين معينة (مثل <quote
+>cdrom</quote
+>). إذا كان المستخدم الحالي لا ينتمي إلى هذه المجموعة، فسيُعرض عليه إضافة نفسه إليها في هذا اللسان. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bsetup.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+
+<chapter id="configuring-the-user-interface"
+><title
+>ضبط واجهة المستخدم</title>
+<para
+>عند بدء تشغيل كي3بي، تُعرض عليك بدايات سريعة للعمليات الثلاث الأكثر شيوعًا </para>
+<itemizedlist>
+<listitem
+><para
+><guilabel
+>مشروع بيانات جديد</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>مشروع قرص صوتي جديد</guilabel>
+</para
+></listitem>
+<listitem
+><para
+><guilabel
+>نسخ الوسيط</guilabel>
+</para
+></listitem>
+</itemizedlist>
+<para
+>يمكن لكي3بي القيام بأكثر من هذه المهام بكثير، لذا قد تجد أن بعض الاحتمالات الأخرى مفيدة لك تمامًا. ألقِ نظرة على هذه القائمة لتتعرف على الوظائف الأخرى المتاحة: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bMoreActions.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>ربما تكون البداية السريعة لواحدة أو أكثر من هذه المهام الأخرى مفيدة لك، لذا يمكن لكي3بي أن يوفر لك ذلك أيضًا. ببساطة انقر بزر الفأرة الأيمن على سطح مكتب التطبيق، وسترى قائمة لإضافة الأزرار: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAddButton.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+</chapter>
+<chapter id="configuring-the-internals"
+><title
+>ضبط الأجزاء الداخلية</title>
+<para
+>يمكن ترك معظم الإعدادات المبدئية كما هي. ومع ذلك، يُنصح بإلقاء نظرة على صفحة <guilabel
+>الإعدادات المتقدمة</guilabel
+>. هنا يمكنك ضبط إعدادات مهمة متنوعة إذا لزم الأمر. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bAdvancedSettings.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<itemizedlist>
+<listitem
+><para
+>ينبغي ضبط <guilabel
+>استخدم Burnfree</guilabel
+> - فهو يتحكم في الحرق، ويضمن عدم انخفاض المخزن المؤقت إلى مستوى خطر (مما يقلل من كمية عمليات الحرق الفاشلة). </para
+></listitem>
+<listitem
+><para
+>قد ترغب في مسح الأقراص القابلة لإعادة الكتابة آليًا. </para
+></listitem>
+<listitem
+><para
+>يُعد الخيار <guilabel
+>لا تخرج الوسائط بعد عملية الكتابة</guilabel
+> مفيدًا للغاية إذا كان محرك الأقراص الخاص بك لا يمكن إغلاقه بسرعة كافية لإجراء عملية <guilabel
+>التحقق</guilabel
+>. </para
+></listitem>
+</itemizedlist>
+</chapter>
+<chapter id="preparing-to-burn-a-disk"
+><title
+>التحضير لحرق قرص</title>
+<para
+>عند بدء مشروع جديد، يجب التأكد من أن كي3بي قد اكتشف الوسيط البصري الصحيح، مثل CD أو DVD. في سطر الحالة بأسفل الشاشة، يجب أن ترى حجم القرص المحدد حاليًا. إذا لم يكن هذا صحيحًا، أو كنت بحاجة إلى حجم مختلف، فما عليك سوى النقر بزر الفأرة الأيمن فوقه واضبط الحجم المفضل من القائمة المتوفرة: </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bDiskChoice.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>اختر الآن ما سيُحرق. </para>
+<para
+>النصف العلوي من الشاشة هو <emphasis
+>لوحة المصدر</emphasis
+>؛ وهي تعمل مثل مدير الملفات. يمكنك اختيار ملفات عادية من وحدات تخزين بيانات موصولة أو مسارات صوتية من أقراص صوتية مدخلة. تُقرأ أسماء المسارات الصوتية آليًا من بيانات CD-Text، إذا كان محرك الأقراص يدعم قراءتها، أو تُولّد باستخدام <ulink url="http://libcddb.sourceforge.net/"
+>CDDB</ulink
+>؛ ويُتحكم في التنسيق الدقيق بواسطة زر في اللوحة السفلية. إذا كانت الأسماء غير صحيحة أو ببساطة لا تطابق وصف القرص، يمكنك تحريرها باستخدام زر شريط الأدوات. ستُخزن تغييراتك في خبيئة محليًا وتُرسل إلى السجل الرئيسي في <ulink url="http://www.freedb.org/"
+>FreeDB</ulink
+>. </para>
+<tip>
+<para
+>إذا كان التسجيل بالكامل لنفس الفنان، فاترك إدخالات فنان المسار فارغة، واملأ <guilabel
+>فنان الألبوم</guilabel
+>، واحفظ في CDDB وأعد الاستعلام. </para>
+</tip>
+<para
+>الآن بعد أن أصبحت مصادرك في متناول يدك، ما عليك سوى سحب وإفلات الملفات والدلائل التي ترغب في حرقها في اللوحة الكبيرة الموجودة على اليمين في الأسفل؛ هذه هي <emphasis
+>لوحة النموذج</emphasis
+>. ستشاهد شجرة من الملفات المختارة تتشكل على اليسار. إذا كانت هناك بعض الملفات أو الدلائل التي لا ترغب في حرقها، فيمكن إزالتها بسهولة من المشروع ببساطة عن طريق إزالتها من اللوحة الموجودة في الأسفل. حدد الملف المراد إزالته (يمكنك الضغط على مفتاح Ctrl مع النقر لاختيار ملفات متعددة)، ثم اختر <guilabel
+>أزل</guilabel
+> من القائمة السياقية. </para>
+<tip>
+<para
+>إذا كنت بحاجة إلى ضغط الصوت، فأنشئ مشروع قرص صوتي جديد، وأضف الملفات المراد تحويلها واضغط على الزر <guilabel
+>حوّل المسارات</guilabel
+>. لن يؤثر هذا على محتويات القرص إذا قررت حرقه؛ ومع ذلك، ستتمكن من استخدام الملفات المضغوطة في مكان آخر. تأكد من أن الملفات الأصلية غير منقوصة (<emphasis
+>wav</emphasis
+> أو <emphasis
+>FLAC</emphasis
+>)، وإلا ستكون النتيجة غير مرضية. </para>
+</tip>
+<para
+>سيكون السطر العلوي هو عنوان القرص. في كثير من الحالات سيكون هذا مناسبًا، ولكن إذا كنت ترغب في تغيير هذا إلى شيء آخر، فما عليك سوى إعادة تسميته باستخدام القائمة السياقية. </para>
+</chapter>
+<chapter id="final-steps"
+><title
+>الخطوات النهائية</title>
+<para
+>أنت الآن جاهز للضغط على زر <guilabel
+>احرق</guilabel
+>. </para>
+<para>
+<screenshot>
+<screeninfo
+></screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="K3bSetVerify.png" format="PNG"/>
+    </imageobject>
+    <textobject>
+      <phrase
+></phrase>
+    </textobject>
+  </mediaobject>
+</screenshot>
+</para>
+<para
+>سترى في لقطة الشاشة الخاصة بي أنه لا يوجد قرص. عند إدخال القرص المناسب، سترى وصفًا له في ذلك السطر. </para>
+<para
+>لا تزال هناك خيارات أو خياران يجب اتخاذهما. <emphasis
+>أوصي</emphasis
+> بضبط <guilabel
+>تحقق من البيانات المكتوبة</guilabel
+>، ثم الضغط على أيقونة <guilabel
+>احفظ</guilabel
+> في أسفل الشاشة، لضمان أن يصبح هذا هو اختيارك المبدئي الشخصي. بالنسبة لمعظم محركات الأقراص الحديثة، من الآمن ترك الوضع والسرعة على <guilabel
+>آلي</guilabel
+>. إذا كنت ترغب في حرق نسخة أخرى من القرص في تاريخ لاحق، فحدد <guilabel
+>أنشئ صورة</guilabel
+>، مما سيوفر عليك عناء إعداد الحرق مرة أخرى. اضبط عدد النسخ التي تريد حرقها، ثم عندما تكون راضيًا، اضغط على <guilabel
+>احرق</guilabel
+>. </para>
+</chapter>
+
+<!--userbase-content-->
+
+<chapter id="burning-an-audio-cd"
+><title
+>حرق قرص صوتي</title>
+<sect1 id="k3b-audio-support"
+><title
+>بدء مشروع قرص صوتي</title>
+<para
+>يدعم كي3بي الكثير من التنسيقات الصوتية ويمكنه تحويلها آليًا لك. </para>
+<note
+><para
+>تقوم بعض التوزيعات بتقسيم هذه الإمكانية في كي3بي إلى حزمة منفصلة، فمثلًا في توزيعات دبيان وأوبونتو تحتاج إلى تثبيت الحزمة libk3b6-extracodecs، وفي أوبن سوزي اسم الحزمة هو k3b-codecs. في بعض التوزيعات (مثل ماندريفا) لا تحتاج إلى تثبيت أي حزم إضافية.</para
+></note>
+
+<sect2 id="selecting-files"
+><title
+>اختيار الملفات</title>
+<para
+>هناك طريقتان لاختيار الملفات الصوتية التي تريد حرقها على قرص صوتي:</para>
+<variablelist>
+<varlistentry>
+<term
+>استعمال كي٣بي</term>
+<listitem>
+<para
+>في النصف السفلي من نافذة كي3بي، انقر فوق <guilabel
+>مشروع قرص صوتي جديد</guilabel
+> وحدد الملفات التي تريد حرقها. </para>
+<para
+>بدلًا من ذلك، انتقل في لوحة المجلدات إلى موقع الملفات الصوتية. النقر المزدوج على ملف صوتي أو سحب وإفلات ملفات صوتية مختارة في الجزء السفلي من نافذة كي3بي يبدأ آليًا <guilabel
+>مشروع قرص صوتي جديد</guilabel
+> بهذه الملفات. </para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+>استخدام مدير الملفات</term>
+<listitem>
+<para
+>اذهب إلى المجلد الذي يحتوي على ملفات الموسيقى الخاصة بك في دولفين أو كنكرر؛</para>
+<para
+>اختر الملفات المراد حرقها وحدد <menuchoice
+><guimenu
+>إجراءات</guimenu
+><guimenuitem
+>أنشئ قرصًا صوتيًا باستخدام كي3بي</guimenuitem
+></menuchoice
+> من القائمة السياقية.</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+</sect2>
+
+<sect2 id="edit-the-title-information"
+><title
+>تحرير معلومات العنوان</title>
+<para
+>يمكنك تسمية عناوين المسارات أو استيرادها من <acronym
+>CDDB</acronym
+> (خدمة عبر الإنترنت لأسماء المسارات). للقيام بذلك، انقر نقرًا مزدوجًا على المسار (النصف السفلي من النافذة). </para>
+</sect2>
+<sect2 id="burn-the-cd"
+><title
+>حرق القرص</title>
+<para
+>أدخل قرص CD-R أو CD-RW فارغًا في كاتب الأقراص وانقر على <guilabel
+>احرق</guilabel
+>. في الحوار القادم، تحقق مما إذا كانت الإعدادات المسبقة تعجبك، وعند الانتهاء انقر فوق <guilabel
+>احرق</guilabel
+>. سيُحرق القرص الآن من أجلك. </para>
+</sect2>
+</sect1>
+
+</chapter>
+
+<chapter id="credits">
+<title
+>الحقوق والترخيص</title>
+    <para
+>حقوق نشر التوثيق انظر تاريخ صفحة كي3بي في قاعدة مستخدمي كيدي <ulink url="https://userbase.kde.org/index.php?title=K3b&amp;action=history"
+>K3b page history</ulink
+></para>
+    <para
+>الترجمة: زايد السعيدي <email
+>zayed.alsaidi@gmail.com</email
+></para
+> &underFDL; </chapter>
+&documentation.index;
+</book>
