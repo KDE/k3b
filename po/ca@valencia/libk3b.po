@@ -260,7 +260,7 @@ msgstr "S'està desmuntant el suport d'origen"
 #: jobs/k3bcdcopyjob.cpp:354
 #, kde-format
 msgid "Unable to read Table of contents"
-msgstr "No s'ha pogut llegir la taula de continguts"
+msgstr "No s'ha pogut llegir l'índex de continguts"
 
 #: jobs/k3bcdcopyjob.cpp:362
 #, kde-format
@@ -1059,7 +1059,7 @@ msgstr "La formatació ha acabat correctament"
 #: jobs/k3bdvdformattingjob.cpp:258
 #, kde-format
 msgid "Do not be concerned with the progress stopping before 100%."
-msgstr "No vos preocupeu si el progrés es para abans del 100%."
+msgstr "No vos preocupeu si el progrés es para abans del 100 %."
 
 #: jobs/k3bdvdformattingjob.cpp:259
 #, kde-format
@@ -1147,7 +1147,7 @@ msgstr ""
 #: projects/k3bgrowisofswriter.cpp:148 projects/videocd/k3bvcdjob.cpp:212
 #, kde-format
 msgid "Using %1 %2 – Copyright © %3"
-msgstr "S'està fent servir %1 %2 – Copyright © %3"
+msgstr "S'està fent servir %1 %2 – Drets d'autoria © %3"
 
 #: jobs/k3bdvdformattingjob.cpp:503
 #, kde-format
@@ -2350,7 +2350,7 @@ msgstr "«cdrdao» versió %1 no permet la sobregravació."
 #, kde-format
 msgid "Could not backup tocfile."
 msgstr ""
-"No s'ha pogut fer còpia de seguretat del fitxer de la taula de continguts "
+"No s'ha pogut fer còpia de seguretat del fitxer de l'índex de continguts "
 "(TOC)."
 
 #: projects/k3bcdrdaowriter.cpp:516
@@ -4445,7 +4445,7 @@ msgid ""
 "temporary table of contents.</p><p>This allows further sessions to be "
 "appended to the CD later.</p>"
 msgstr ""
-"<p>Si està marcada, K3b no tancarà el CD, i escriurà una taula de continguts "
+"<p>Si està marcada, K3b no tancarà el CD, i escriurà un índex de continguts "
 "temporal.</p> <p>Açò permet que s'annexen més sessions al CD posteriorment.</"
 "p>"
 

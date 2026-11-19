@@ -4167,7 +4167,7 @@ msgstr ""
 "imatges en pla s'escriuen en el suport utilitzant una sola pista de dades. "
 "Normalment les imatges en pla són imatges ISO creades com a projecte de "
 "dades de K3b.<p><b>Imatges Cue/bin</b><br/>Les imatges Cue/bin consistixen "
-"en un fitxer cue que descriu la taula de continguts del suport i un fitxer "
+"en un fitxer cue que descriu l'índex de continguts del suport i un fitxer "
 "d'imatge que conté les dades reals. Les dades s'escriuran en el suport "
 "d'acord amb el fitxer cue.<p><b>Imatge Cue d'àudio</b><br/>Les imatges cue "
 "d'àudio són un tipus especial d'imatge cue/bin que contenen la imatge d'un "
@@ -9999,7 +9999,7 @@ msgstr "No s'ha pogut carregar «libcdparanoia»."
 #: rip/k3baudioripjob.cpp:242
 #, kde-format
 msgid "Reading CD table of contents."
-msgstr "S'està llegint la taula de continguts del CD."
+msgstr "S'està llegint l'índex de continguts del CD."
 
 #: rip/k3baudioripjob.cpp:246
 #, kde-format
