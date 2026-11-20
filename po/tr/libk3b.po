@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-10 22:15+0000\n"
-"PO-Revision-Date: 2026-11-15 17:41+0300\n"
+"PO-Revision-Date: 2026-11-19 19:25+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -2453,7 +2453,7 @@ msgstr "Yazma işlemi hazırlanıyor…"
 #: projects/k3bcdrdaowriter.cpp:832
 #, kde-format
 msgid "Flushing cache"
-msgstr "Önbellek boşaltılıyor…"
+msgstr "Ön bellek boşaltılıyor…"
 
 #: projects/k3bcdrdaowriter.cpp:836
 #, kde-format
@@ -2924,12 +2924,12 @@ msgstr "Lütfen DAO yazma kipinde yazmayı deneyin."
 #: projects/k3bgrowisofshandler.cpp:113
 #, kde-format
 msgid "Flushing Cache"
-msgstr "Önbellek boşaltılıyor…"
+msgstr "Ön bellek boşaltılıyor…"
 
 #: projects/k3bgrowisofshandler.cpp:114
 #, kde-format
 msgid "Flushing the cache may take some time."
-msgstr "Önbelleğin boşaltılması biraz zaman alabilir."
+msgstr "Ön belleğin boşaltılması biraz zaman alabilir."
 
 #: projects/k3bgrowisofshandler.cpp:123
 #, kde-format
@@ -4273,7 +4273,7 @@ msgstr "<p>Önce benzetim yapılması tavsiye edilir."
 #: tools/k3bstdguiitems.cpp:82
 #, kde-format
 msgid "Cache the data to be written on the harddisk"
-msgstr "Sabit diske yazılacak veriyi önbellekte tut"
+msgstr "Sabit diske yazılacak veriyi ön bellekte tut"
 
 #: tools/k3bstdguiitems.cpp:88
 #, kde-format
