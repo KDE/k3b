@@ -26,7 +26,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-11-08 02:56+0000\n"
-"PO-Revision-Date: 2026-11-19 19:32+0300\n"
+"PO-Revision-Date: 2026-11-23 18:11+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -900,7 +900,7 @@ msgstr ""
 "yerine −1’den 10’a kadar ölçeklenen “kalite” birimi kullanılır. Kalite −1, "
 "kabaca 45 Kbit/saniye; 5 ise yaklaşık 160 Kbit/saniye ve 10 da yaklaşık 400 "
 "Kbit/saniyeyi ifade eder. Çoğu insan CD kalitesinde ses için 5 ölçeğinde bir "
-"kalite kullanır. 6, kayıpsız stereo için kullanılır. Öntanımlı tanımlanan "
+"kalite kullanır. 6, kayıpsız stereo için kullanılır. Varsayılan tanımlanan "
 "kalite, 100 Kbit/saniye dengi 3 olarak belirlenmiştir. Bu ölçek 128 Kbit "
 "MP3’ten daha iyi ve daha az yer kaplayan bir dosya yaratmaya yarar.<p><em>Bu "
 "açıklama, www.vorbis.com SSS (FAQ) sayfasından alınmıştır.</em>"
@@ -2432,7 +2432,7 @@ msgstr "Yer imlerini Göster"
 #: k3binteractiondialog.cpp:70
 #, kde-format
 msgid "Load default settings"
-msgstr "Öntanımlı ayarları yükle"
+msgstr "Varsayılan ayarları yükle"
 
 #: k3binteractiondialog.cpp:71
 #, kde-format
@@ -2457,7 +2457,7 @@ msgstr "Görevi başlat"
 #: k3binteractiondialog.cpp:189
 #, kde-format
 msgid "Load default or saved settings"
-msgstr "Öntanımlı veya kaydedilmiş ayarları yükle"
+msgstr "Varsayılan veya kaydedilmiş ayarları yükle"
 
 #: k3binteractiondialog.cpp:190
 #, kde-format
@@ -2470,7 +2470,7 @@ msgid ""
 "<p>Load a set of settings either from the default K3b settings, settings "
 "saved before, or the last used ones."
 msgstr ""
-"<p>Öntanımlı K3b ayarları, önceden kaydedilmiş ayarlar veya son kullanılan "
+"<p>Varsayılan K3b ayarları, önceden kaydedilmiş ayarlar veya son kullanılan "
 "ayarlardan birini yükle."
 
 #: k3binteractiondialog.cpp:196
@@ -2482,7 +2482,7 @@ msgid ""
 msgstr ""
 "<p>Eylem penceresinin şu anki ayarlarını kaydeder.<p>Bu ayarlar "
 "<em>Kaydedilmiş ayarları yükle</em> düğmesine basılarak yüklenebilir."
-"<p><b>Bu seçenek, K3b öntanımlı ayarlarının üzerine yazmaz.</b></b>"
+"<p><b>Bu seçenek, K3b varsayılan ayarlarının üzerine yazmaz.</b></b>"
 
 #: k3bjobprogressdialog.cpp:208
 #, kde-format
@@ -2833,7 +2833,7 @@ msgid ""
 "\"%1\" group."
 msgstr ""
 "İzinleri “Ayarlar → K3b Uygulamasını Yapılandır… → Programlar → İzinler” "
-"aracılığıyla denetleyin. K3b’nin öntanımlı değeri ayarlı ise “%1” grubunun "
+"aracılığıyla denetleyin. K3b’nin varsayılan değeri ayarlı ise “%1” grubunun "
 "üyesi olduğunuzdan emin olun."
 
 #: k3bsystemproblemdialog.cpp:208 k3bsystemproblemdialog.cpp:270
@@ -3091,7 +3091,7 @@ msgid ""
 msgstr ""
 "En iyi ve önerilen çözüm ide-scsi (SCSI öykünmesi) seçeneğini tüm aygıtlar "
 "için etkin hale getirmektir. Bu şekilde sorun yaşamazsınız. Veya %1 "
-"uygulamasının daha güncel bir sürümünü kurun (veya öntanımlı olarak "
+"uygulamasının daha güncel bir sürümünü kurun (veya varsayılan olarak "
 "ayarlayın)."
 
 #: k3bsystemproblemdialog.cpp:461
@@ -3553,7 +3553,7 @@ msgid ""
 "Incremental sequential is the default writing mode for DVD-R(W). It allows "
 "multisession DVD-R(W)s. It only applies to DVD-R(W)."
 msgstr ""
-"Artan sıralı kip, DVD-R(W) için öntanımlı yazma kipidir. Çok oturumlu, DVD-"
+"Artan sıralı kip, DVD-R(W) için varsayılan yazma kipidir. Çok oturumlu, DVD-"
 "R(W)’lar bu kipte oluşturulabilir. Yalnızca DVD-R(W)’lara uygulanabilir."
 
 #: k3bwritingmodewidget.cpp:38
@@ -4530,7 +4530,7 @@ msgstr "Çı&kışta projelerin kaydedilip kaydedilmeyeceğini sor"
 #: option/base_k3bmiscoptiontab.ui:38
 #, kde-format
 msgid "Default Temporary Directory:"
-msgstr "Öntanımlı Geçici Dizin:"
+msgstr "Varsayılan Geçici Dizin:"
 
 #. i18n: ectx: property (toolTip), widget (KUrlRequester, m_editTempDir)
 #: option/base_k3bmiscoptiontab.ui:48
@@ -4546,7 +4546,7 @@ msgid ""
 "temporary files such as iso images or decoded audio files.<p>Be aware that "
 "the temporary directory may also be changed in every project burn dialog."
 msgstr ""
-"<p>Bu, öntanımlı geçici dizindir. K3b burada, iso kalıpları veya çözülmüş "
+"<p>Bu, varsayılan geçici dizindir. K3b burada, iso kalıpları veya çözülmüş "
 "ses dosyaları gibi geçici dosyaları saklar.<p>Geçici dizini her projenin "
 "yazma penceresinde ayrı ayrı belirleyebileceğinizi unutmayın."
 
@@ -4664,7 +4664,7 @@ msgstr "İşlem pencerelerini açı&k tut"
 #: option/base_k3bmiscoptiontab.ui:139
 #, kde-format
 msgid "&Default action dialog settings:"
-msgstr "Ön&tanımlı eylem penceresi ayarları:"
+msgstr "&Varsayılan eylem penceresi ayarları:"
 
 #. i18n: ectx: property (toolTip), widget (K3b::IntMapComboBox, m_comboActionDialogSettings)
 #: option/base_k3bmiscoptiontab.ui:152
@@ -4859,7 +4859,7 @@ msgid ""
 "specified will be used for both CD and DVD burning."
 msgstr ""
 "<p>K3b yazma işlemi sırasında sisteme yüklenme olduğunda verilerde sorun "
-"olmaması için yazılım katmanında arabellek kullanır. Bu belleğin öntanımlı "
+"olmaması için yazılım katmanında arabellek kullanır. Bu belleğin varsayılan "
 "boyutu CD yazma için %1 MB ve DVD için %2 olarak belirlenmiştir.<p>Bu "
 "seçenek tercih edilirse CD ve DVD için aynı arabellek kullanılacaktır."
 
@@ -5071,8 +5071,8 @@ msgid ""
 "to change the default, check desired version on the list."
 msgstr ""
 "<p>Eğer K3b bir programın birden fazla kurulu sürümünü bulursaa, bir "
-"tanesini <em>öntanımlı</em> olarak seçecek ve bu program asıl işlemi yapmak "
-"üzere kullanılacaktır. Eğer öntanımlı olanı değiştirmek isterseniz listeden "
+"tanesini <em>varsayılan</em> olarak seçecek ve bu program asıl işlemi yapmak "
+"üzere kullanılacaktır. Eğer varsayılan olanı değiştirmek isterseniz listeden "
 "istenen sürümü denetleyin."
 
 #: option/k3bexternalbinwidget.cpp:81 option/k3boptiondialog.cpp:153
@@ -5163,12 +5163,12 @@ msgstr "Bilinmeyen kimlik doğrulama durumu %1"
 #: option/k3bmiscoptiontab.cpp:38
 #, kde-format
 msgid "Default Settings"
-msgstr "Öntanımlı Ayarlar"
+msgstr "Varsayılan Ayarlar"
 
 #: option/k3bmiscoptiontab.cpp:39
 #, kde-format
 msgid "Load the K3b Defaults at dialog startup."
-msgstr "Açılışta K3b öntanımlı ayarlarını yükle."
+msgstr "Açılışta K3b varsayılan ayarlarını yükle."
 
 #: option/k3bmiscoptiontab.cpp:41
 #, kde-format
@@ -6147,7 +6147,7 @@ msgid ""
 "\n"
 "<p><b>Caution:</b> Symbolic links require Rock Ridge extensions."
 msgstr ""
-"<p>Eğer Rock Ridge eklentileri etkinleştirilmişse (öntanımlı olarak "
+"<p>Eğer Rock Ridge eklentileri etkinleştirilmişse (varsayılan olarak "
 "etkindirler) K3b sembolik bağlar içeren ISO 9660 dosya sistemleri "
 "oluşturabilir. Bir K3b projesinde kullanılan sembolik bağların yolunu "
 "değiştirebilirsiniz.\n"
@@ -6582,7 +6582,7 @@ msgstr "Geçerli önyükleme (boot) etiketi:"
 #: projects/base_k3bmovixoptionswidget.ui:212
 #, kde-format
 msgid "Select the default Linux kernel configuration"
-msgstr "Öntanımlı Linux çekirdek yapılandırmasını seçin"
+msgstr "Varsayılan Linux çekirdek yapılandırmasını seçin"
 
 #. i18n: ectx: property (whatsThis), widget (KComboBox, m_comboDefaultBootLabel)
 #: projects/base_k3bmovixoptionswidget.ui:222
@@ -6612,7 +6612,7 @@ msgstr ""
 "<p>eMovix, bir önyükleme etiketi yardımıyla (Lilo veya Grub ile "
 "karşılaştırılabilir) çeşitli önyükleme yapılandırmaları sağlar. Çoğu farklı "
 "önyükleme yapılandırmaları genellikle Video çıktısını etkiler.\n"
-"<p><b>Öntanımlı</b>, <b>movix</b> veya <b>MoviX</b> etiketleri genel bir "
+"<p><b>Varsayılan</b>, <b>movix</b> veya <b>MoviX</b> etiketleri genel bir "
 "Vesa görüntü sürücüsü başlatırlar.\n"
 "<p><b>TV</b> etiketleri videoyu ekran kartının TV çıkışına yönlendirmede "
 "kullanılabilirler. eMovix farklı grafik kartı markaları için TV çıkış "
@@ -8187,7 +8187,7 @@ msgstr "Sistemde eMovix kurulu değil gibi görünüyor."
 #: projects/k3bmovixoptionswidget.cpp:35 projects/k3bmovixoptionswidget.cpp:47
 #, kde-format
 msgid "default"
-msgstr "öntanımlı"
+msgstr "varsayılan"
 
 #: projects/k3bmovixprojectmodel.cpp:291
 #, kde-format
@@ -8783,12 +8783,12 @@ msgid ""
 msgstr ""
 "<p>Bu seçenek disk sonu alanından önce yerleştirilecek boş dilimlerin "
 "sayısının ayarlanmasını sağlar, yazı boşluğu dilimlerinin sayısı.<p>ECMA-130 "
-"şartları disk sonu alanından önce bu parametre için öntanımlı olarak "
+"şartları disk sonu alanından önce bu parametre için varsayılan olarak "
 "kullanılan en az 150 dilimlük yazı boşluğunu kaldırmak için son veriye "
 "gereksinim duyar.<p>Bazı işletim sistemleri bu parametre çok düşük olarak "
 "ayarlanmışsa son MPEG parçasını okurken okuma sonrası sonuçlara bağlı olarak "
 "G/Ç hatalarıyla karşılaşabilirler.<p>İzin verilen içerik: [0..300]. "
-"Öntanımlı: 150."
+"Varsayılan: 150."
 
 #: projects/k3bvcdburndialog.cpp:229
 #, kde-format
@@ -8800,7 +8800,7 @@ msgstr ""
 "<p>Dilimlerdeki tüm parçalar için ayrıntılı olarak parça öncesi boşluğu "
 "ayarlamak için kullanılır.<p>Şartlar parça öncesi boşlukların en az 150 "
 "dilim uzunluğunda olmasını gerektirir.<p>İzin verilen içerik değeri: "
-"[0..300]. Öntanımlı: 150."
+"[0..300]. Varsayılan: 150."
 
 #: projects/k3bvcdburndialog.cpp:233
 #, kde-format
@@ -8814,8 +8814,9 @@ msgstr ""
 "Siyah çerçeveler, CD-ROM diskindeki hatalı dilim adresleme sorunlarını "
 "çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD’ler için "
 "terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 dilim "
-"uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Öntanımlı: 30, Video "
-"CD 1.0/1.1/2.0 için; aksi takdirde (Super Video CD 1.0 ve HQ-VCD 1.0 için) 0."
+"uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Varsayılan: 30, "
+"Video CD 1.0/1.1/2.0 için; aksi takdirde (Super Video CD 1.0 ve HQ-VCD 1.0 "
+"için) 0."
 
 #: projects/k3bvcdburndialog.cpp:237
 #, kde-format
@@ -8829,8 +8830,8 @@ msgstr ""
 "<p>Siyah çerçeveler, CD-ROM diskindeki hatalı dilim adresleme sorunlarını "
 "çözmek için kullanılır. İlginç bir şekilde, bunlar Super Video CD’ler için "
 "terk edilmiştir.<p>Video CD 1.0/1.1/2.0 için bu sınır en az 15 dilim "
-"uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Öntanımlı: 45, Video "
-"CD 1.0/1.1/2.0 için; aksi takdirde 0."
+"uzunluğunda olmalıdır.<p>İzin verilen içerik: [0..150]. Varsayılan: 45, "
+"Video CD 1.0/1.1/2.0 için; aksi takdirde 0."
 
 #: projects/k3bvcdburndialog.cpp:252
 #, kde-format
@@ -9075,7 +9076,7 @@ msgstr "Sayısal (Nümerik) düğmelerin kullanımını etkinleştir."
 #: projects/k3bvcdtrackdialog.cpp:246
 #, kde-format
 msgid "Overwrite default numeric keys."
-msgstr "Öntanımlı sayısal (nümerik) düğmelerin üzerine yaz."
+msgstr "Varsayılan sayısal (nümerik) düğmelerin üzerine yaz."
 
 #: projects/k3bvcdtrackdialog.cpp:247
 #, kde-format
@@ -9145,8 +9146,8 @@ msgstr ""
 "eylem veya bir “hemen atla” işlemi yapılmadan önce geciktirilir."
 "<p>Belirtilen sayıda yineleme tamamlandıktan sonra, sonsuz bir süreye "
 "ayrılmadığı takdirde <bekle> süresi saymaya başlar.<p>Eğer bu girdi boş "
-"bırakılmışsa öntanımlı olan “1” kullanılır. Böylece “Çalınan parça” yalnızca "
-"bir kez görüntülenecektir."
+"bırakılmışsa varsayılan olan “1” kullanılır. Böylece “Çalınan parça” "
+"yalnızca bir kez görüntülenecektir."
 
 #: projects/k3bvcdtrackdialog.cpp:263
 #, kde-format
@@ -9251,7 +9252,7 @@ msgstr "Dönüş:"
 #: projects/k3bvcdtrackdialog.cpp:500
 #, kde-format
 msgid "Default:"
-msgstr "Öntanımlı:"
+msgstr "Varsayılan:"
 
 #: projects/k3bvcdtrackdialog.cpp:521
 #, kde-format
@@ -9261,7 +9262,7 @@ msgstr "Çalma Denetimi"
 #: projects/k3bvcdtrackdialog.cpp:539
 #, kde-format
 msgid "Overwrite default assignment"
-msgstr "Öntanımlı atamanın üzerine yaz"
+msgstr "Varsayılan atamanın üzerine yaz"
 
 #: projects/k3bvcdtrackdialog.cpp:557
 #, kde-format
@@ -10021,9 +10022,9 @@ msgid ""
 msgstr ""
 "<p>Bu seçenek işaretliyse K3b önboşluklardaki ses verisini aktarmaz. Birçok "
 "ses parçası kendisine ait olmayan bir önboşluk içerir.</p><p>Neredeyse tüm "
-"ses aktarma yazılımlarının öntanımlı davranışı önboşlukları dahil etmek olsa "
-"da, çoğu CD’de yok saymak daha mantıklıdır. K3b ile ses projesi yaratılırken "
-"bu önboşluklar yeniden oluşturulur</p>"
+"ses aktarma yazılımlarının varsayılan davranışı önboşlukları dahil etmek "
+"olsa da, çoğu CD’de yok saymak daha mantıklıdır. K3b ile ses projesi "
+"yaratılırken bu önboşluklar yeniden oluşturulur</p>"
 
 #: rip/k3baudiorippingdialog.cpp:359
 #, kde-format
@@ -10415,7 +10416,7 @@ msgid ""
 msgstr ""
 "<p>Bu seçenek Video CD bilgilerini içeren bir XML açıklama dosyası oluşturur."
 "</p><p>Bu dosya her zaman tüm bilgileri içerir.</p> <p> Dosya adı Video CD "
-"ile aynı, uzantı xml olacaktır. Öntanımlı olarak VIDEOCD.xml "
+"ile aynı, uzantı xml olacaktır. Varsayılan olarak VIDEOCD.xml "
 "kullanılmaktadır.</p>"
 
 #: rip/k3bvideocdrippingdialog.cpp:164

@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: extragear-multimedia-kde4\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-10 22:15+0000\n"
-"PO-Revision-Date: 2026-11-19 19:25+0300\n"
+"PO-Revision-Date: 2026-11-23 17:57+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -344,7 +344,7 @@ msgstr "Yazma işlemi hazırlanıyor…"
 #: jobs/k3bdvdcopyjob.cpp:323
 #, kde-format
 msgid "Specified an unusable temporary path. Using default."
-msgstr "Kullanılamayacak bir geçici yol belirtildi. Öntanımlı kullanılacak."
+msgstr "Kullanılamayacak bir geçici yol belirtildi. Varsayılan kullanılacak."
 
 #: jobs/k3bcdcopyjob.cpp:544
 #, kde-format
@@ -1191,7 +1191,8 @@ msgstr "ISO 9660 kalıbı yazılıyor…"
 #: projects/datacd/k3bdatajob.cpp:792
 #, kde-format
 msgid "Cannot write %1 media using %2. Falling back to default application."
-msgstr "%2 kullanılarak %1 ortamına yazılamaz. Öntanımlı uygulamaya geçiliyor…"
+msgstr ""
+"%2 kullanılarak %1 ortamına yazılamaz. Varsayılan uygulamaya geçiliyor…"
 
 #: jobs/k3bmetawriter.cpp:310
 #, kde-format
@@ -1965,7 +1966,7 @@ msgstr "%1 yazılıyor…"
 #: projects/datacd/k3bdatajob.cpp:732
 #, kde-format
 msgid "Unable to determine the last track's datamode. Using default."
-msgstr "Son parçanın verikipi belirlenemiyor. Öntanımlı olan kullanılıyor…"
+msgstr "Son parçanın verikipi belirlenemiyor. Varsayılan olan kullanılıyor…"
 
 #: projects/datacd/k3bdatajob.cpp:826 projects/datacd/k3bdatajob.cpp:946
 #, kde-format
@@ -2120,7 +2121,7 @@ msgstr "Oluşturulan kalıp dosyasının boyutu belirlenemedi."
 #: projects/datacd/k3bisoimager.cpp:515
 #, kde-format
 msgid "No volume id specified. Using default."
-msgstr "Ses kimliği belirtilmedi. Öntanımlı olan kullanılıyor."
+msgstr "Ses kimliği belirtilmedi. Varsayılan olan kullanılıyor."
 
 #: projects/datacd/k3bisoimager.cpp:608
 #, kde-format
