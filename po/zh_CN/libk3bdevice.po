@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/k3b/libk3bdevice.pot\n"
-"X-Crowdin-File-ID: 53432\n"
+"X-Crowdin-File: /kf6-stable/messages/k3b/libk3bdevice.pot\n"
+"X-Crowdin-File-ID: 54842\n"
 
 #: k3bdeviceglobals.cpp:18 k3bdeviceglobals.cpp:141
 #, kde-format
