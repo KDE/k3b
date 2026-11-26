@@ -10491,7 +10491,7 @@ msgstr "Lütfen, her aktarılan başlığa eklenecek ses kanallarını seçin"
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:45
 #, kde-format
 msgid "Setti&ngs"
-msgstr "A&yarlar"
+msgstr "Ayar&lar"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox6)
 #: rip/videodvd/base_k3bvideodvdrippingwidget.ui:51
